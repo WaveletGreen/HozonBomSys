@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="sql.mapper.bom.i.HzBomLineRecordMapper">
+	<resultMap id="BaseResultMap" type="sql.pojo.bom.HzBomLineRecord">
+		<id column="P_PUID" jdbcType="VARCHAR" property="puid" />
+		<result column="P_PARENT_UID" jdbcType="VARCHAR"
+			property="parentUid" />
+		<result column="P_BOM_DIGIFAX_ID" jdbcType="VARCHAR"
+			property="bomDigifaxId" />
+		<result column="P_LINE_INDEX" jdbcType="VARCHAR"
+			property="lineIndex" />
+		<result column="P_BOM_LINE_IS_HAS" jdbcType="INTEGER"
+			property="isHas" />
+		<result column="P_BOM_LINE_PUID" jdbcType="VARCHAR"
+			property="linePuid" />
+		<result column="P_BOM_LINE_ID" jdbcType="VARCHAR"
+			property="lineID" />
+		<result column="P_BOM_LINE_IS_2Y" jdbcType="INTEGER"
+			property="is2Y" />
+		<result column="P_BOM_LINE_IS_PART" jdbcType="INTEGER"
+			property="isPart" />
+		<result column="P_BOM_ORDER_NUM" jdbcType="INTEGER"
+			property="orderNum" />
+	</resultMap>
+	<resultMap extends="BaseResultMap" id="ResultMapWithBLOBs"
+		type="sql.pojo.bom.HzBomLineRecord">
+		<result column="P_BOM_LINE_BLOCK" jdbcType="BLOB"
+			property="bomLineBlock" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		P_PUID, P_PARENT_UID, P_BOM_DIGIFAX_ID, P_LINE_INDEX,
+		P_BOM_LINE_IS_HAS, P_BOM_LINE_PUID,
+		P_BOM_LINE_ID,
+		P_BOM_LINE_IS_2Y,P_BOM_LINE_IS_PART,P_BOM_ORDER_NUM
+	</sql>
+	<sql id="Blob_Column_List">P_BOM_LINE_BLOCK</sql>
+	<sql id="values_by_batch">
+		#{item.puid,jdbcType=VARCHAR},#{item.parentUid,jdbcType=VARCHAR},#{item.bomDigifaxId,jdbcType=VARCHAR},
+		#{item.lineIndex,jdbcType=VARCHAR},#{item.isHas,jdbcType=INTEGER},#{item.linePuid,jdbcType=VARCHAR},
+		#{item.lineID,jdbcType=VARCHAR},#{item.is2Y,jdbcType=INTEGER},#{item.isPart,jdbcType=INTEGER},
+		#{item.orderNum,jdbcType=INTEGER},#{item.bomLineBlock,jdbcType=BLOB}
+	</sql>
+	<select id="selectByPrimaryKey"
+		parameterType="sql.pojo.bom.HzBomLineRecord"
+		resultMap="ResultMapWithBLOBs">
+		select
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from HZ_BOM_LINE_RECORD
+		where PUID = #{puid,jdbcType=VARCHAR}
+	</select>
+	<select id="selectByBomDigifaxId"
+		parameterType="sql.pojo.bom.HzBomLineRecord"
+		resultMap="ResultMapWithBLOBs">
+		select
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from HZ_BOM_LINE_RECORD
+		where P_BOM_DIGIFAX_ID =
+		#{bomDigifaxId,jdbcType=VARCHAR} order by P_BOM_ORDER_NUM
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">delete from
+		HZ_BOM_LINE_RECORD
+		where PUID = #{puid,jdbcType=VARCHAR}
+	</delete>
+	<insert id="insert" parameterType="sql.pojo.bom.HzBomLineRecord">
+		insert into HZ_BOM_LINE_RECORD
+		(
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		)
+		<!-- (PUID, LINE_INDEX,PARENT_UID, BOM_DIGIFAX_ID, BOM_LINE_IS_HAS,BOM_LINE_BLOCK) -->
+		values
+		(#{puid,jdbcType=VARCHAR},#{parentUid,jdbcType=VARCHAR},#{bomDigifaxId,jdbcType=VARCHAR},
+		#{lineIndex,jdbcType=VARCHAR},#{isHas,jdbcType=VARCHAR},#{linePuid,jdbcType=VARCHAR},
+		#{lineID,jdbcType=VARCHAR},#{bomLineBlock,jdbcType=BLOB})
+	</insert>
+	<insert id="insertByBatch" parameterType="java.util.List">
+		insert all
+		<foreach collection="list" item="item" index="index"
+			separator=" ">
+			into HZ_BOM_LINE_RECORD (
+			<include refid="Base_Column_List" />
+			,
+			<include refid="Blob_Column_List" />
+			) values (
+			<include refid="values_by_batch" />
+			)
+		</foreach>
+		select 1 from dual
+	</insert>
+</mapper>

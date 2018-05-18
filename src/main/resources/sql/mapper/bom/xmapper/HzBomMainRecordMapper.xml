@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="sql.mapper.bom.i.HzBomMainRecordMapper">
+	<resultMap id="BaseResultMap" type="sql.pojo.bom.HZBomMainRecord">
+		<id column="PUID" jdbcType="VARCHAR" property="puid" />
+		<result column="POST_DATE" jdbcType="TIMESTAMP"
+			property="postDate" />
+		<result column="POSTER" jdbcType="VARCHAR" property="poster" />
+		<result column="BOM_DIGIFAX" jdbcType="VARCHAR"
+			property="bomDigifax" />
+		<result column="BOM_ORG_PUID" jdbcType="VARCHAR"
+			property="bomOrgPuid" />
+
+	</resultMap>
+	<sql id="Base_Column_List">PUID, POST_DATE, POSTER, BOM_DIGIFAX,BOM_ORG_PUID</sql>
+	<select id="selectByPrimaryKey" parameterType="java.lang.String"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from HZ_BOM_MAIN_RECORD
+		where PUID = #{puid,jdbcType=VARCHAR}
+	</select>
+	<select id="selectByBomMainRecord"
+            parameterType="sql.pojo.bom.HZBomMainRecord" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from HZ_BOM_MAIN_RECORD
+		where BOM_ORG_PUID = #{bomOrgPuid,jdbcType=VARCHAR}
+	</select>
+	<select id="selectByOrgPuid"
+            parameterType="sql.pojo.bom.HZBomMainRecord" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from HZ_BOM_MAIN_RECORD
+		where BOM_ORG_PUID = #{bomOrgPuid,jdbcType=VARCHAR}
+	</select>
+	<insert id="insert" parameterType="sql.pojo.bom.HZBomMainRecord">
+		insert into HZ_BOM_MAIN_RECORD (
+		<include refid="Base_Column_List" />
+		) values (#{puid,jdbcType=VARCHAR}, #{postDate,jdbcType=TIMESTAMP},
+		#{poster,jdbcType=VARCHAR},
+		#{bomDigifax,jdbcType=VARCHAR},#{bomOrgPuid,jdbcType=VARCHAR})
+	</insert>
+	<update id="updateByPrimaryKey"
+		parameterType="sql.pojo.bom.HZBomMainRecord">
+		update HZ_BOM_MAIN_RECORD set POST_DATE =
+		#{postDate,jdbcType=TIMESTAMP}, POSTER =
+		#{poster,jdbcType=VARCHAR}
+		where PUID = #{puid,jdbcType=VARCHAR}
+	</update>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">delete
+		hz_bom_main_record
+		where PUID = #{puid,jdbcType=VARCHAR}
+	</delete>
+</mapper>

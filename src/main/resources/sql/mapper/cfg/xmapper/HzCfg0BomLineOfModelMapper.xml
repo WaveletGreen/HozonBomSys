@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="sql.mapper.cfg.i.HzCfg0BomLineOfModelMapper">
+    <resultMap id="BaseResultMap"
+               type="sql.pojo.cfg.HzCfg0BomLineOfModel">
+        <result column="OBJECT_NAME" jdbcType="OTHER"
+                property="objectName"/>
+        <result column="OBJECT_DESC" jdbcType="OTHER"
+                property="objectDesc"/>
+        <result column="P_CFG0_OPTION_VALUE" jdbcType="VARCHAR"
+                property="pCfg0OptionValue"/>
+        <result column="P_PARSE_LOGIC_VALUE" jdbcType="DECIMAL"
+                property="pParseLogicValue"/>
+        <result column="P_CFG0_OBJECT_ID" jdbcType="VARCHAR"
+                property="pCfg0ObjectId"/>
+        <result column="P_CFG0_DESC" jdbcType="VARCHAR"
+                property="pCfg0Desc"/>
+        <result column="P_CFG0_FAMILY_NAME" jdbcType="VARCHAR"
+                property="pCfg0FamilyName"/>
+        <result column="P_H9FEATURENAME" jdbcType="VARCHAR"
+                property="pH9featurename"/>
+        <result column="P_H9FEATUREENNAME" jdbcType="VARCHAR"
+                property="pH9featureenname"/>
+        <result column="P_H9FEATUREDESC" jdbcType="VARCHAR"
+                property="pH9featuredesc"/>
+        <result column="P_BOM_LINE_NAME" jdbcType="VARCHAR"
+                property="pBomLineName"/>
+        <result column="P_BOM_LINE_ID" jdbcType="OTHER"
+                property="pBomLineId"/>
+        <result column="P_BOM_OF_WHICH_DEPT" jdbcType="OTHER"
+                property="pBomOfWhichDept"/>
+        <result column="P_CFG0_MODEL_RECORD" jdbcType="OTHER"
+                property="modelPuid"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+		OBJECT_NAME, OBJECT_DESC, P_CFG0_OPTION_VALUE, P_PARSE_LOGIC_VALUE,
+		P_CFG0_OBJECT_ID,
+		P_CFG0_DESC, P_CFG0_FAMILY_NAME, P_H9FEATURENAME, P_H9FEATUREENNAME,
+		P_H9FEATUREDESC,
+		P_BOM_LINE_NAME, P_BOM_LINE_ID,P_BOM_OF_WHICH_DEPT,P_CFG0_MODEL_RECORD
+	</sql>
+    <select id="selectByModelMainId" parameterType="java.lang.String"
+            resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from GETCFG0BOMLINEOFMODEL2
+        where infodba.p_view_param.set_param(#{modelId})=#{modelId}
+    </select>
+</mapper>

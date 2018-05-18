@@ -1,0 +1,16 @@
+1.Tomcat的地址是192.168.1.124，端口是8888
+2.修改地址和端口：
+    2.1.修改文件application-dev.properties里的
+            server.port = 8888
+            server.address=192.168.1.124
+    2.2.同时修改static/js/bootstrap/tab/bootstrap-tab.js里的一句代码
+        $("#" + data[i].id).html("<iframe style='width: 100%;height:88%;boxder:none;'
+            frameborder='no' border='0' marginwidth='0' marginheight='0' scrolling='yes' allowtransparency='yes'
+
+            /**这句话限定的iframe的服务域，因此会造成跨域问题*/
+            src='http://192.168.1.124:8888/"+data[i].url+"' >
+
+        </iframe>");
+3.部署在tomcat上，只需修改war包的名为hozon即可，tomcat下的lib添加jdbc驱动包
+4.工程需要oracle数据库jdbc驱动，请手动添加
+5.$.ajax({})的url需要添加打包名，否则找不到服务，因此需要用相对路径./而非绝对路径/

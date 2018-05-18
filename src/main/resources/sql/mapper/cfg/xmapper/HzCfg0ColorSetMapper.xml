@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="sql.mapper.cfg.i.HzCfg0ColorSetMapper">
+    <resultMap id="BaseResultMap" type="sql.pojo.cfg.HzCfg0ColorSet">
+        <id column="PUID" jdbcType="VARCHAR" property="puid"/>
+        <result column="P_COLOR_OF_SET" jdbcType="VARCHAR" property="pColorOfSet"/>
+        <result column="P_COLOR_NAME" jdbcType="VARCHAR" property="pColorName"/>
+        <result column="P_COLOR_CODE" jdbcType="VARCHAR" property="pColorCode"/>
+        <result column="P_COLOR_COMMENT" jdbcType="VARCHAR" property="pColorComment"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    PUID, P_COLOR_OF_SET, P_COLOR_NAME, P_COLOR_CODE, P_COLOR_COMMENT
+  </sql>
+    <sql id="Base_Column_List_By_Batch">
+        #{item.puid,jdbcType=VARCHAR}
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="sql.pojo.cfg.HzCfg0ColorSet" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from HZ_CFG0_COLORSET where PUID=#{puid,jdbcType=VARCHAR}
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from HZ_CFG0_COLORSET
+    </select>
+    <insert id="insert" parameterType="sql.pojo.cfg.HzCfg0ColorSet">
+    insert into HZ_CFG0_COLORSET (PUID, P_COLOR_OF_SET, P_COLOR_NAME, 
+      P_COLOR_CODE, P_COLOR_COMMENT)
+    values (#{puid,jdbcType=VARCHAR}, #{pColorOfSet,jdbcType=VARCHAR}, #{pColorName,jdbcType=VARCHAR}, 
+      #{pColorCode,jdbcType=VARCHAR}, #{pColorComment,jdbcType=VARCHAR})
+  </insert>
+    <update id="updateByPrimaryKey" parameterType="sql.pojo.cfg.HzCfg0ColorSet">
+    update HZ_CFG0_COLORSET
+    set P_COLOR_OF_SET = #{pColorOfSet,jdbcType=VARCHAR},
+      P_COLOR_NAME = #{pColorName,jdbcType=VARCHAR},
+      P_COLOR_CODE = #{pColorCode,jdbcType=VARCHAR},
+      P_COLOR_COMMENT = #{pColorComment,jdbcType=VARCHAR}
+    where PUID = #{puid,jdbcType=VARCHAR}
+  </update>
+
+    <insert id="deleteByBatch" parameterType="java.util.List">
+        delete from HZ_CFG0_COLORSET where PUID in (
+        <foreach collection="list" item="item" index="index"
+                 separator=",">
+            <include refid="Base_Column_List_By_Batch"/>
+        </foreach>
+        )
+    </insert>
+
+</mapper>

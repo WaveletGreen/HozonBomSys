@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="sql.mapper.cfg.i.HzCfg0ModelDetailMapper">
+    <resultMap id="BaseResultMap" type="sql.pojo.cfg.HzCfg0ModelDetail">
+        <id column="PUID" jdbcType="VARCHAR" property="puid"/>
+        <result column="P_MODEL_PUID" jdbcType="VARCHAR" property="pModelPuid"/>
+        <result column="P_MODEL_NAME" jdbcType="VARCHAR" property="pModelName"/>
+        <result column="P_MODEL_DESC" jdbcType="VARCHAR" property="pModelDesc"/>
+        <result column="P_MODEL_SALE_AREA" jdbcType="VARCHAR" property="pModelSaleArea"/>
+        <result column="P_MODEL_BRAND" jdbcType="VARCHAR" property="pModelBrand"/>
+        <result column="P_MODEL_VEHICLE" jdbcType="VARCHAR" property="pModelVehicle"/>
+        <result column="P_MODEL_PLATFORM" jdbcType="VARCHAR" property="pModelPlatform"/>
+        <result column="P_MODEL_MOD" jdbcType="VARCHAR" property="pModelMod"/>
+        <result column="P_MODEL_ANNUAL" jdbcType="VARCHAR" property="pModelAnnual"/>
+        <result column="P_MODEL_VERSION" jdbcType="VARCHAR" property="pModelVersion"/>
+        <result column="P_MODEL_DRIVER_POSITION" jdbcType="VARCHAR" property="pModelDriverPosition"/>
+        <result column="P_MODEL_MEMBERS" jdbcType="VARCHAR" property="pModelMembers"/>
+        <result column="P_MODEL_SHAPE" jdbcType="VARCHAR" property="pModelShape"/>
+        <result column="P_MODEL_ANNOUNCEMENT" jdbcType="VARCHAR" property="pModelAnnouncement"/>
+        <result column="P_MODEL_POWERS" jdbcType="VARCHAR" property="pModelPowers"/>
+        <result column="P_MODEL_CFG_VERSION" jdbcType="VARCHAR" property="pModelCfgVersion"/>
+        <result column="P_MODEL_CFG_DESC" jdbcType="VARCHAR" property="pModelCfgDesc"/>
+        <result column="P_MODEL_TRAIL_NUM" jdbcType="VARCHAR" property="pModelTrailNum"/>
+        <result column="P_MODEL_GOODS_NUM" jdbcType="VARCHAR" property="pModelGoodsNum"/>
+        <result column="P_MODEL_TRANSFORM" jdbcType="VARCHAR" property="pModelTransform"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    PUID, P_MODEL_PUID, P_MODEL_NAME, P_MODEL_DESC, P_MODEL_SALE_AREA, P_MODEL_BRAND, 
+    P_MODEL_VEHICLE, P_MODEL_PLATFORM, P_MODEL_MOD, P_MODEL_ANNUAL, P_MODEL_VERSION, 
+    P_MODEL_DRIVER_POSITION, P_MODEL_MEMBERS, P_MODEL_SHAPE, P_MODEL_ANNOUNCEMENT, P_MODEL_POWERS, 
+    P_MODEL_CFG_VERSION, P_MODEL_CFG_DESC, P_MODEL_TRAIL_NUM, P_MODEL_GOODS_NUM,P_MODEL_TRANSFORM
+  </sql>
+    <select id="selectByModelId" parameterType="sql.pojo.cfg.HzCfg0ModelDetail" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from HZ_CFG0_MODEL_DETAIL
+        where P_MODEL_PUID = #{pModelPuid,jdbcType=VARCHAR}
+    </select>
+    <insert id="insert" parameterType="sql.pojo.cfg.HzCfg0ModelDetail">
+    insert into HZ_CFG0_MODEL_DETAIL (PUID, P_MODEL_PUID, P_MODEL_NAME, 
+      P_MODEL_DESC, P_MODEL_SALE_AREA, P_MODEL_BRAND, 
+      P_MODEL_VEHICLE, P_MODEL_PLATFORM, P_MODEL_MOD, 
+      P_MODEL_ANNUAL, P_MODEL_VERSION, P_MODEL_DRIVER_POSITION, 
+      P_MODEL_MEMBERS, P_MODEL_SHAPE, P_MODEL_ANNOUNCEMENT, 
+      P_MODEL_POWERS, P_MODEL_CFG_VERSION, P_MODEL_CFG_DESC, 
+      P_MODEL_TRAIL_NUM, P_MODEL_GOODS_NUM,P_MODEL_TRANSFORM)
+    values (#{puid,jdbcType=VARCHAR}, #{pModelPuid,jdbcType=VARCHAR}, #{pModelName,jdbcType=VARCHAR}, 
+      #{pModelDesc,jdbcType=VARCHAR}, #{pModelSaleArea,jdbcType=VARCHAR}, #{pModelBrand,jdbcType=VARCHAR}, 
+      #{pModelVehicle,jdbcType=VARCHAR}, #{pModelPlatform,jdbcType=VARCHAR}, #{pModelMod,jdbcType=VARCHAR}, 
+      #{pModelAnnual,jdbcType=VARCHAR}, #{pModelVersion,jdbcType=VARCHAR}, #{pModelDriverPosition,jdbcType=VARCHAR}, 
+      #{pModelMembers,jdbcType=VARCHAR}, #{pModelShape,jdbcType=VARCHAR}, #{pModelAnnouncement,jdbcType=VARCHAR}, 
+      #{pModelPowers,jdbcType=VARCHAR}, #{pModelCfgVersion,jdbcType=VARCHAR}, #{pModelCfgDesc,jdbcType=VARCHAR}, 
+      #{pModelTrailNum,jdbcType=VARCHAR}, #{pModelGoodsNum,jdbcType=VARCHAR},#{pModelTransform,jdbcType=VARCHAR})
+  </insert>
+    <update id="update" parameterType="sql.pojo.cfg.HzCfg0ModelDetail">
+    update HZ_CFG0_MODEL_DETAIL set
+      P_MODEL_PUID=#{pModelPuid,jdbcType=VARCHAR},
+      P_MODEL_NAME=#{pModelName,jdbcType=VARCHAR},
+      P_MODEL_DESC=#{pModelDesc,jdbcType=VARCHAR},
+      P_MODEL_SALE_AREA=#{pModelSaleArea,jdbcType=VARCHAR},
+      P_MODEL_BRAND=#{pModelBrand,jdbcType=VARCHAR},
+      P_MODEL_VEHICLE=#{pModelVehicle,jdbcType=VARCHAR},
+      P_MODEL_PLATFORM=#{pModelPlatform,jdbcType=VARCHAR},
+      P_MODEL_MOD=#{pModelMod,jdbcType=VARCHAR},
+      P_MODEL_ANNUAL=#{pModelAnnual,jdbcType=VARCHAR},
+      P_MODEL_VERSION=#{pModelVersion,jdbcType=VARCHAR},
+      P_MODEL_DRIVER_POSITION=#{pModelDriverPosition,jdbcType=VARCHAR},
+      P_MODEL_MEMBERS=#{pModelMembers,jdbcType=VARCHAR},
+      P_MODEL_SHAPE=#{pModelShape,jdbcType=VARCHAR},
+      P_MODEL_ANNOUNCEMENT=#{pModelAnnouncement,jdbcType=VARCHAR},
+      P_MODEL_POWERS=#{pModelPowers,jdbcType=VARCHAR},
+      P_MODEL_CFG_VERSION=#{pModelCfgVersion,jdbcType=VARCHAR},
+      P_MODEL_CFG_DESC=#{pModelCfgDesc,jdbcType=VARCHAR},
+      P_MODEL_TRAIL_NUM=#{pModelTrailNum,jdbcType=VARCHAR},
+      P_MODEL_GOODS_NUM=#{pModelGoodsNum,jdbcType=VARCHAR},
+      P_MODEL_TRANSFORM=#{pModelTransform,jdbcType=VARCHAR}
+      where  PUID=#{puid,jdbcType=VARCHAR}
+  </update>
+</mapper>

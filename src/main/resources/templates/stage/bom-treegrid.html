@@ -1,0 +1,44 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="include/ofbom-treegrid">
+    <meta charset="UTF-8">
+    <title>BOM视图</title>
+</head>
+<body class="content-body">
+<div class="panel-body">
+    <div class="col-lg-4">
+        <span class="infoToUser">请输入需要查询的bom数模行ID</span>
+        <div class="input-group">
+            <input id="text1" class="form-control" type="text" name="doSubmit1"
+                   placeholder="请输入需要查找的bom"
+                   value="d050cb5e-2f54-4782-92dc-6cf750e0b066"> <span
+                class="input-group-btn">
+					<button class="btn btn-default" id="doSubmit2" type="button">查询</button>
+					<button class="btn btn-default" id="treeExecutor" type="button">展开树形结构</button>
+				</span>
+        </div>
+    </div>
+    <div class="content col-lg-12" id="content2">
+        <table class="table table-striped tableNormalStyle" id="dataTable"></table>
+    </div>
+</div>
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-hidden="true">×
+                </button>
+                <h4 class="modal-title" id="myModalLabel">操作错误</h4>
+            </div>
+            <div class="modal-body">请输入正确的数模层ID</div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<script th:src="@{/js/stage/bom-treegrid.js}"></script>
+</body>
+</html>

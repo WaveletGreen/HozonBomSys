@@ -1,0 +1,39 @@
+.treegrid-indent {
+    width: 16px;
+    height: 16px;
+    display: inline-block;
+    position: relative
+}
+
+.treegrid-expander {
+    width: 16px;
+    /*heightllapsed{*/
+    /*background-image: url(expand.png)*/
+    /*};*/
+    background-size: 16px;
+    display: inline-block;
+    position: relative;
+    cursor: pointer
+}
+
+.treegrid-expander-expanded {
+    /*background-image: url(collapse.png);*/
+    background-size: 16px;
+}
+.is-expander-expanded{
+    background-image: url(expand.png) ;
+    background-size: 24px;
+    background-position:-8px -2px;
+    background-repeat:no-repeat;
+    background-color: #0f0f0f;
+
+}
+.is-expander-collapsed{
+    background-image: url(collapse.png);
+    background-size: 24px;
+    background-position:-8px -2px;
+    background-repeat:no-repeat;
+    background-color: #0f0f0f;
+}
+
+.treegrid-expander-co

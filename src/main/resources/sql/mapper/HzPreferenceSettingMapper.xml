@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="sql.mapper.HzPreferenceSettingMapper">
+	<resultMap id="BaseResultMap"
+		type="sql.pojo.HzPreferenceSetting">
+		<id column="PUID" jdbcType="VARCHAR" property="puid" />
+		<result column="SETTING_NAME" jdbcType="VARCHAR"
+			property="settingName" />
+		<result column="BOM_MAIN_RECORD_PUID" jdbcType="VARCHAR"
+			property="bomMainRecordPuid" />
+	</resultMap>
+	<resultMap extends="BaseResultMap" id="ResultMapWithBLOBs"
+		type="sql.pojo.HzPreferenceSetting">
+		<result column="PREFERENCESETTINGBLOCK" jdbcType="BLOB"
+			property="preferencesettingblock" />
+	</resultMap>
+	<sql id="Base_Column_List">PUID, SETTING_NAME, BOM_MAIN_RECORD_PUID</sql>
+	<sql id="Blob_Column_List">PREFERENCESETTINGBLOCK</sql>
+	<select id="selectByPrimaryKey" parameterType="java.lang.String"
+		resultMap="ResultMapWithBLOBs">
+		select
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from HZ_PREFERENCESETTING
+		where PUID = #{puid,jdbcType=VARCHAR}
+	</select>
+	<select id="selectByBomMainRecord"
+		parameterType="sql.pojo.HzPreferenceSetting"
+		resultMap="ResultMapWithBLOBs">
+		select
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from HZ_PREFERENCESETTING where BOM_MAIN_RECORD_PUID =
+		#{bomMainRecordPuid,jdbcType=VARCHAR}
+	</select>
+	<select id="selectSettingByNameWithMainRecord"
+		parameterType="sql.pojo.HzPreferenceSetting"
+		resultMap="ResultMapWithBLOBs">
+		select
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from HZ_PREFERENCESETTING where BOM_MAIN_RECORD_PUID =
+		#{bomMainRecordPuid,jdbcType=VARCHAR} and
+		SETTING_NAME=
+		#{settingName,jdbcType=VARCHAR}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">delete from
+		HZ_PREFERENCESETTING
+		where PUID = #{puid,jdbcType=VARCHAR}
+	</delete>
+	<insert id="insert" parameterType="sql.pojo.HzPreferenceSetting">
+		insert into
+		HZ_PREFERENCESETTING (PUID, SETTING_NAME, BOM_MAIN_RECORD_PUID,
+		PREFERENCESETTINGBLOCK)
+		values (#{puid,jdbcType=VARCHAR},
+		#{settingName,jdbcType=VARCHAR},
+		#{bomMainRecordPuid,jdbcType=VARCHAR},
+		#{preferencesettingblock,jdbcType=BLOB})
+	</insert>
+	<update id="updateByPrimaryKey"
+		parameterType="sql.pojo.HzPreferenceSetting">
+		update HZ_PREFERENCESETTING set PREFERENCESETTINGBLOCK =
+		#{preferencesettingblock,jdbcType=BLOB}
+		where PUID =
+		#{puid,jdbcType=VARCHAR}
+	</update>
+</mapper>
