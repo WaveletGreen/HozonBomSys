@@ -18,9 +18,14 @@
      */
     var hostPort = '127.0.0.1:8080';
     hostPort = document.location.host;
+    var URL = document.URL.split("/");
+    var address = URL[0] + "//" + URL[2] + "/" + URL[3];
     //这里检查可能有问题
     if (hostPort == null || hostPort == "") {
         hostPort = '127.0.0.1:8080';
+    }
+    if (address == null || address == "") {
+        address = '127.0.0.1:8080/hozon';
     }
     var pluginName = 'tabs';
     // 入口方法
@@ -120,7 +125,7 @@
         for (var i = 0; i < data.length; i++) {
             if (this.options.loadAll || this.options.showIndex == i) {
                 if (data[i].url) {
-                    $("#" + data[i].id).html("<iframe style='width: 100%;height:88%;boxder:none;' frameborder='no' border='0' marginwidth='0' marginheight='0' scrolling='yes' allowtransparency='yes' src='http://" + hostPort + "/" + data[i].url + "' ></iframe>");
+                    $("#" + data[i].id).html("<iframe style='width: 100%;height:88%;boxder:none;' frameborder='no' border='0' marginwidth='0' marginheight='0' scrolling='yes' allowtransparency='yes' src='" + address + "/" + data[i].url + "' ></iframe>");
                     this.stateObj[data[i].id] = true;
                 } else {
                     console.error("id=" + data[i].id + "的tab页未指定url");
@@ -131,7 +136,7 @@
                 (function (id, url) {
                     self.$element.find(".nav-tabs a[href='#" + id + "']").on('show.bs.tab', function () {
                         if (!self.stateObj[id]) {
-                            $("#" + id).html("<iframe style='width: 100%;height:88%;boxder:none;' frameborder='no' border='0' marginwidth='0' marginheight='0' scrolling='yes' allowtransparency='yes' src='http://" + hostPort + "/" + url + "' ></iframe>");
+                            $("#" + id).html("<iframe style='width: 100%;height:88%;boxder:none;' frameborder='no' border='0' marginwidth='0' marginheight='0' scrolling='yes' allowtransparency='yes' src='" + address + "/main' ></iframe>");
                             self.stateObj[id] = true;
                         }
                     });
@@ -188,7 +193,7 @@
             // div-content
             var div_content_panel = $(this.template.div_content_panel.format(obj.id));
             this.$element.find(".tab-content").append(div_content_panel);
-            $("#" + obj.id).html("<iframe style='width: 100%;height:88%;boxder:none;' frameborder='no' border='0' marginwidth='0' marginheight='0' scrolling='yes' allowtransparency='yes' src='http://" + hostPort + "/" + obj.url + "' ></iframe>");
+            $("#" + obj.id).html("<iframe style='width: 100%;height:88%;boxder:none;' frameborder='no' border='0' marginwidth='0' marginheight='0' scrolling='yes' allowtransparency='yes' src='" + address + "/" + obj.url + "' ></iframe>");
             this.stateObj[obj.id] = true;
 
             if (obj.closeable) {
