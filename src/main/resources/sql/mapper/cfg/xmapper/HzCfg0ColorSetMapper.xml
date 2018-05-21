@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="sql.mapper.cfg.i.HzCfg0ColorSetMapper">
+<mapper namespace="com.connor.hozon.bom.banchOfFancyears.dao.cfg.HzCfg0ColorSetDao">
     <resultMap id="BaseResultMap" type="sql.pojo.cfg.HzCfg0ColorSet">
         <id column="PUID" jdbcType="VARCHAR" property="puid"/>
         <result column="P_COLOR_OF_SET" jdbcType="VARCHAR" property="pColorOfSet"/>
@@ -24,7 +24,7 @@
         <include refid="Base_Column_List"/>
         from HZ_CFG0_COLORSET
     </select>
-    <insert id="insert" parameterType="sql.pojo.cfg.HzCfg0ColorSet">
+    <insert id="insertOne" parameterType="sql.pojo.cfg.HzCfg0ColorSet">
     insert into HZ_CFG0_COLORSET (PUID, P_COLOR_OF_SET, P_COLOR_NAME, 
       P_COLOR_CODE, P_COLOR_COMMENT)
     values (#{puid,jdbcType=VARCHAR}, #{pColorOfSet,jdbcType=VARCHAR}, #{pColorName,jdbcType=VARCHAR}, 

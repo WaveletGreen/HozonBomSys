@@ -1,7 +1,7 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
     <body>
-        <form id="colorForm" role="form" method="post" action="/hozon/colorSet/updateWithEntity">
+        <form id="colorForm" role="form" method="post" action="./colorSet/updateWithEntity">
             <input id="puid" name="puid" type="hidden" th:value="${entity.puid}"/>
             <div class="form-group">
                 <label for="pColorOfSet">色系</label>

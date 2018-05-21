@@ -1,4 +1,4 @@
-package sql.mapper.bom.i;
+package com.connor.hozon.bom.banchOfFancyears.dao.bom;
 
 import java.util.List;
 

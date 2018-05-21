@@ -80,9 +80,11 @@ public interface IBaseSQLUtil {
 
     /**
      * 查询数据 返回list
+     *
      * @param sqlMapId
      * @param param
      * @return
      */
     List findForList(final String sqlMapId, final Object param);
+
 }
