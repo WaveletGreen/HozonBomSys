@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.connor.hozon.bom.banchOfFancyears.dao.bom.HzBomMainRecordMapper">
+<mapper namespace="com.connor.hozon.bom.bomSystem.dao.bom.HzBomMainRecordMapper">
 	<resultMap id="BaseResultMap" type="sql.pojo.bom.HZBomMainRecord">
 		<id column="PUID" jdbcType="VARCHAR" property="puid" />
 		<result column="POST_DATE" jdbcType="TIMESTAMP"

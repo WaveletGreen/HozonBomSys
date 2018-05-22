@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.connor.hozon.bom.banchOfFancyears.dao.cfg.HzCfg0ColorSetDao">
+<mapper namespace="com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0ColorSetDao">
     <resultMap id="BaseResultMap" type="sql.pojo.cfg.HzCfg0ColorSet">
         <id column="PUID" jdbcType="VARCHAR" property="puid"/>
         <result column="P_COLOR_OF_SET" jdbcType="VARCHAR" property="pColorOfSet"/>

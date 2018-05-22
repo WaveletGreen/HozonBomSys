@@ -9,7 +9,7 @@
 <input id="text1" class="form-control" type="text" name="doSubmit1"
        placeholder="请输入需要查找的model" value="9deb81ea-9544-473b-aeb5-d7683c7753c3"/>
 <button id="myButton">请点击</button>
-
+<button id="myButton2"> Test</button>
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog"
      aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -73,6 +73,16 @@
                 }
             })
             ;
+        }),
+        $("#myButton2").click(function () {
+            var pModelPuid = "9b079c7a-e7b8-4b1b-a803-1b89bb9a7650";
+            window.Ewin.dialog({
+                url: "model/modModel?pModelPuid=" + pModelPuid,
+                title: "添加",
+                width: 500,
+                height: 400,
+                gridId: "addPageofModel"
+            })
         })
     );
 

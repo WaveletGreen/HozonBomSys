@@ -29,7 +29,7 @@ public abstract class GenericController<T, Q extends QueryBase> {
 	/**添加页面路径*/
 	public final static String ADDPAGE = "/add";
 	/**修改页面路径*/
-	public final static String UPDATEPAGE = "/updateOne";
+	public final static String UPDATEPAGE = "/update";
 
 	/**
 	 * Controller基路径

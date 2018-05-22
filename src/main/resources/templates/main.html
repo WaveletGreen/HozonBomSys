@@ -116,9 +116,11 @@
 <script th:inline="javascript">
     $(document).ready(
         (function () {
+            var URL = document.URL.split("/");
+            var contextPath = "/" + URL[3];
             // 页面加载完成以后开启websocket的连接
             var options = new Array();
-            options.sockurl = '/hozon/ricky-websocket';
+            options.sockurl = contextPath + '/ricky-websocket';
             options.stompClienturl = '/ricky/topic/greetings';
             options.login = [[${#authentication.name}]];
             options.success = function (greeting) {
@@ -141,7 +143,7 @@
                 loadAll: false
             })
             //
-            $.fn.bootstrapTree({url: "/hozon/user/mainTree", treeId: 'menu_tree', tabId: "tabContainer"});
+            $.fn.bootstrapTree({url: contextPath + "/user/mainTree", treeId: 'menu_tree', tabId: "tabContainer"});
             $.fn.dictUtil("/dict/loadDict");
         })
     );

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="include/includebase">
+</head>
+<meta charset="UTF-8">
+<title>合众颜色库</title>
+</head>
+<body class="content-body">
+<div class="panel-body">
+
+    <div class="content col-lg-5">
+        <span class="infoToUser">请输入需要查询的产品配置器ID</span>
+        <div class="input-group">
+            <input class="form-control" id="inputCfg0" type="text" placeholder="请输入产品配置器PUID"
+                   value="9deb81ea-9544-473b-aeb5-d7683c7753c3"/><span
+                class="input-group-btn">
+            <button class="btn btn-default" id="queryModelColorCfg" type="button">查询配色方案库</button>
+            <button class="btn btn-default" id="refreshModelColorCfg" type="button" disabled="disabled">刷新</button>
+        </span>
+        </div>
+    </div>
+    <div class="content col-lg-12">
+        <table class="table table-striped tableNormalStyle" id="modelColorCfgTable"></table>
+    </div>
+</div>
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-hidden="true">×
+                </button>
+                <h4 class="modal-title" id="myModalLabel">操作错误</h4>
+            </div>
+            <div class="modal-body">请输入正确的数模层ID</div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<script th:src="@{/js/cfg/modelColorCfg/modelColorCfg.js}"></script>
+</body>
+<script th:inline="javascript">
+    function doQuery() {
+        $('#modelColorCfgTable').bootstrapTable('refresh');    //刷新表格
+    }
+</script>
+</html>

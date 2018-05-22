@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0ModelRecordDao">
+    <resultMap id="BaseResultMap"
+               type="sql.pojo.cfg.HzCfg0ModelRecord">
+        <id column="PUID" jdbcType="VARCHAR" property="puid"/>
+        <result column="OBJECT_NAME" jdbcType="VARCHAR"
+                property="objectName"/>
+        <result column="OBJECT_DESC" jdbcType="VARCHAR"
+                property="objectDesc"/>
+        <result column="P_CFG0_MODEL_OF_MAIN_RECORD" jdbcType="VARCHAR"
+                property="pCfg0ModelOfMainRecord"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+		PUID, OBJECT_NAME, OBJECT_DESC, P_CFG0_MODEL_OF_MAIN_RECORD
+	</sql>
+    <select id="selectByPrimaryKey" parameterType="sql.pojo.cfg.HzCfg0ModelRecord"
+            resultMap="BaseResultMap"
+    >
+        select
+        <include refid="Base_Column_List"
+        />
+        from HZ_CFG0_MODEL_RECORD
+        where PUID=#{puid,jdbcType=VARCHAR}
+    </select>
+    <sql id="values_by_batch">
+		#{item.puid,jdbcType=VARCHAR},
+		#{item.objectName,jdbcType=VARCHAR},
+		#{item.objectDesc,jdbcType=VARCHAR},
+		#{item.pCfg0ModelOfMainRecord,jdbcType=VARCHAR}
+	</sql>
+    <insert id="insertByBatch" parameterType="java.util.List">
+        insert all
+        <foreach collection="list" item="item" index="index"
+                 separator=" ">
+            into HZ_CFG0_MODEL_RECORD (
+            <include refid="Base_Column_List"/>
+            ) values (
+            <include refid="values_by_batch"/>
+            )
+        </foreach>
+        select 1 from dual
+    </insert>
+</mapper>
