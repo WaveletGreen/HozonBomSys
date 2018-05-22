@@ -78,11 +78,15 @@ public class ColorSetController {
 
     @RequestMapping(value = "/addPage", method = RequestMethod.GET)
     public String addPage() {
-        return "cfg/color/addColor";
+		return "cfg/color/addColor";
     }
+    @RequestMapping(value = "/addPageOfModel", method = RequestMethod.GET)
+    public String addPageModel() {
 
+       return "bom/addModel";
+    }
     @RequestMapping(value = "/updateWithEntity", method = RequestMethod.POST)
-    @ResponseBody
+    
     public Boolean update(@RequestBody HzCfg0ColorSet set) {
         int result = baseSQLUtil.executeUpdate(set, "sql.mapper.cfg.i.HzCfg0ColorSetMapper.updateByPrimaryKey");
         if (result == 1)
