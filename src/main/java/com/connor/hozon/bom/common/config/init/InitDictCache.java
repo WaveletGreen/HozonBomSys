@@ -21,9 +21,9 @@ public class InitDictCache implements CommandLineRunner {
 
     private static final Logger logger = LoggerFactory.getLogger(InitDictCache.class);
 
-    @Inject
-    @SuppressWarnings("SpringJavaAutowiringInspection")
-    private DictDao dictDao;
+//    @Inject
+//    @SuppressWarnings("SpringJavaAutowiringInspection")
+//    private DictDao dictDao;
 
     @Override
     public void run(String... strings) throws Exception {

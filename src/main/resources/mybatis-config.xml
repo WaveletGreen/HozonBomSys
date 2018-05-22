@@ -26,5 +26,6 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 		<mapper resource="sql/mapper/cfg/xmapper/HzCfg0BomLineOfModelMapper.xml" />
 		<mapper resource="sql/mapper/cfg/xmapper/HzCfg0ModelDetailMapper.xml" />
 		<mapper resource="sql/mapper/cfg/xmapper/HzCfg0ColorSetMapper.xml" />
+		<mapper resource="sql/mapper/cfg/xmapper/HzCfg0RecordMapper.xml"/>
 	</mappers>
 </configuration>
