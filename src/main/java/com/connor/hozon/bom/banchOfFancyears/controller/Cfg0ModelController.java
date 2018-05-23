@@ -1,4 +1,4 @@
-package com.connor.hozon.bom.sys.controller;
+package com.connor.hozon.bom.banchOfFancyears.controller;
 
 import net.sf.json.JSONObject;
 import org.springframework.stereotype.Controller;

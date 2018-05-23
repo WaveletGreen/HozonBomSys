@@ -1,4 +1,4 @@
-package com.connor.hozon.bom.sys.controller.cfg;
+package com.connor.hozon.bom.banchOfFancyears.controller.cfg;
 
 
 import com.connor.hozon.bom.sys.commen.Error;
@@ -67,7 +67,7 @@ public class ColorSetController {
         entity = baseSQLUtil.executeQueryById(entity, "sql.mapper.cfg.i.HzCfg0ColorSetMapper.selectByPrimaryKey");
         if (entity == null) {
             Error error = new Error();
-            error.setMsg("???????????????????????????");
+            error.setMsg("查找不到颜色信息:" + entity.getpColorName());
             model.addAttribute("entity", error);
             return "error";
         } else {
@@ -102,7 +102,6 @@ public class ColorSetController {
         if (set.getPuid() == null || "".equals(set.getPuid())) {
             set.setPuid(UUID.randomUUID().toString());
         }
-        //???????
         while (true) {
             HzCfg0ColorSet entity = baseSQLUtil.executeQueryById(set, "sql.mapper.cfg.i.HzCfg0ColorSetMapper.selectByPrimaryKey");
             if (entity == null) {
@@ -114,10 +113,10 @@ public class ColorSetController {
         }
         if (resultFromDB == 1) {
             result.put("status", true);
-            result.put("msg", "???????????:" + set.getpColorName() + "???");
+            result.put("msg", "添加颜色信息:" + set.getpColorName() + "成功");
         } else {
             result.put("status", false);
-            result.put("msg", "???????????:" + set.getpColorName() + "???,????????????");
+            result.put("msg", "添加颜色信息:" + set.getpColorName() + "失败,请联系系统管理员");
         }
 
         return result;
@@ -135,10 +134,10 @@ public class ColorSetController {
         resultFromDB = baseSQLUtil.executeDelete(set, "sql.mapper.cfg.i.HzCfg0ColorSetMapper.deleteByBatch");
         if (resultFromDB >= 1) {
             result.put("status", true);
-            result.put("msg", "?????????????:" + sb + "????");
+            result.put("msg", "删除颜色信息:" + sb + "成功");
         } else {
             result.put("status", false);
-            result.put("msg", "?????????????:" + sb + "?????");
+            result.put("msg", "删除颜色信息:" + sb + "失败");
         }
         return result;
     }

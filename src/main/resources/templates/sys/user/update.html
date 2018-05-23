@@ -229,7 +229,7 @@
             }
         };
 
-        $.post("/group/loadGroupTree",function(info){
+        $.post("./group/loadGroupTree",function(info){
             var t = $("#groupZtree");
             t = $.fn.zTree.init(t, setting,info.data);
         })
