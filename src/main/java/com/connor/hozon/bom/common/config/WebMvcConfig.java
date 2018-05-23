@@ -38,8 +38,11 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         registry.addViewController("/bom-all-cfg").setViewName("/bom/bom-all-cfg");
         //颜色库
         registry.addViewController("/colorSet").setViewName("/cfg/color/colorSet");
-        registry.addViewController("/colorUpdate").setViewName("/cfg/color/colorUpdate");
-        registry.addViewController("/updateOfModel").setViewName("/bom/addModel");
+//        registry.addViewController("/colorUpdate").setViewName("/cfg/color/colorUpdate");
+        //配色方案
+        registry.addViewController("/modelColorCfg").setViewName("/cfg/modelColorCfg/modelColorCfg");
+        //特性
+        registry.addViewController("/featuresList").setViewName("/cfg/features/featuresList");
 
         registry.addViewController("/feature").setViewName("/bom/feature");
     }

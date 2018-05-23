@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE configuration
-PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
-"http://mybatis.org/dtd/mybatis-3-config.dtd">
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
 	<!--该文件请放到resource下，便于单独读到，不需要配置-->
 	<typeAliases>
@@ -26,6 +26,6 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 		<mapper resource="sql/mapper/cfg/xmapper/HzCfg0BomLineOfModelMapper.xml" />
 		<mapper resource="sql/mapper/cfg/xmapper/HzCfg0ModelDetailMapper.xml" />
 		<mapper resource="sql/mapper/cfg/xmapper/HzCfg0ColorSetMapper.xml" />
-		<mapper resource="sql/mapper/cfg/xmapper/HzCfg0RecordMapper.xml"/>
+		<mapper resource="sql/mapper/cfg/xmapper/HzCfg0RecordMapper.xml"></mapper>
 	</mappers>
 </configuration>

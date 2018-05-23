@@ -153,7 +153,7 @@ public class SQLHelper {
 //	public static void main(String[] args) throws IOException {
 //		@SuppressWarnings("unused")
 //		String sql = "select * from HZ_QUERY_SUPPLIERS";
-//		String sql2 = "insert into HZ_QUERY_SUPPLIERS t (suppliers_id,t.suppliers_name) values(?,?)";
+//		String sql2 = "insertOne into HZ_QUERY_SUPPLIERS t (suppliers_id,t.suppliers_name) values(?,?)";
 //		new SQLHelper().executeInsert(sql2, new String[] { "123", "��������Դ����" });
 //
 //	}

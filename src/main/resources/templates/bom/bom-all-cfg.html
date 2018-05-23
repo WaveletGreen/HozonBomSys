@@ -1,15 +1,12 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <head th:include="include/includebase">
-
     <meta charset="UTF-8">
-
     <title>全BOM配置一级清单</title>
 </head>
 <body>
-
 <input id="text1" class="form-control" type="text" name="doSubmit1"
-       placeholder="请输入需要查找的model" value="9deb81ea-9544-473b-aeb5-d7683c7753c3"/>
+             placeholder="请输入需要查找的model" value="9deb81ea-9544-473b-aeb5-d7683c7753c3"/>
 <button id="myButton">请点击</button>
 
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog"
@@ -30,99 +27,40 @@
         </div>
     </div>
 </div>
-    <div class="panel-body" style="padding-bottom:0px;">
-        <div class="panel panel-default" style="margin-top: 10px;">
-            <div class="panel-body">
-                <form class="form-inline" role="form"  style="float: left; width: 100%;margin-left: 20px;" method="post" id="queryLoadBom">
-                    <div class="form-group">
-                        <label for="platforms">车型平台:</label>
-                        <input type="text" class="form-control" name="platforms" id="platforms"  placeholder="请输入车型平台" />
-                    </div>
-                    <div class="form-group">
-                        <label for="modelnumber">车型项目编号:</label>
-                        <input type="text" class="form-control" name="modelnumber" id="modelnumber"  placeholder="请输入车型项目编号" />
-                    </div>
-                    <div class="form-group">
-                        <label for="modelyear">车型年:</label>
-                        <input type="text" class="form-control" name="modelyear" id="modelyear"  placeholder="请输入车型年" />
-                    </div>
-                    <div class="form-group">
-                        <button type="button" id="searchBtn" onclick="" class="btn btn-primary">搜索</button>
-                    </div>
-                </form>
-            </div>
+<div class="panel-body" style="padding-bottom:0px;">
+    <div class="panel panel-default" style="margin-top: 10px;">
+        <div class="panel-body">
+            <form class="form-inline" role="form" style="float: left; width: 100%;margin-left: 20px;" method="post"
+                  id="queryLoadBom">
+                <div class="form-group">
+                    <label for="platforms">车型平台:</label>
+                    <input type="text" class="form-control" name="platforms" id="platforms" placeholder="请输入车型平台"/>
+                </div>
+                <div class="form-group">
+                    <label for="modelnumber">车型项目编号:</label>
+                    <input type="text" class="form-control" name="modelnumber" id="modelnumber"
+                           placeholder="请输入车型项目编号"/>
+                </div>
+                <div class="form-group">
+                    <label for="modelyear">车型年:</label>
+                    <input type="text" class="form-control" name="modelyear" id="modelyear" placeholder="请输入车型年"/>
+                </div>
+                <div class="form-group">
+                    <button type="button" id="searchBtn" onclick="" class="btn btn-primary">搜索</button>
+                </div>
+            </form>
         </div>
     </div>
-
-    <div style="float: right; margin-bottom:0;">
-    <!-- <a id="conver_button" href="javascript:convertable()">转换</a> -->
-        <table id="cfg1Table" class="table table-striped" style="margin-top:0px; margin-bottom:0px;">
-<!--             <tr>
-                <td align="center" width="200px"><input type="checkbox"></td>
-                <td align="center" width="200px"><input type="checkbox"></td>
-                <td align="center" width="200px"><input type="checkbox"></td>
-                <td align="center" width="200px"><input type="checkbox"></td>
-            </tr>
-            <tr>
-                <td width="200px">销售区域</td>
-                <td width="200px">高续航豪华型1</td>
-                <td width="200px">高续航豪华型1</td>
-                <td width="200px">高续航豪华型1</td>
-            </tr>
-            <tr>
-                <td width="200px">品牌</td>
-                <td width="200px">高续航豪华型1</td>
-                <td width="200px">高续航豪华型1</td>
-                <td width="200px">高续航豪华型1</td>
-            </tr>
-            <tr>
-                <td width="200px">车型年份</td>
-                <td width="200px">高续航豪华型1</td>
-                <td width="200px">高续航豪华型1</td>
-                <td width="200px">高续航豪华型1</td>
-            </tr>
-            <tr>
-                <td width="200px">车型物料号</td>
-                <td width="200px">高续航豪华型1</td>
-                <td width="200px">高续航豪华型1</td>
-                <td width="200px">高续航豪华型1</td>
-            </tr>
-            <tr>
-                <td width="200px">配置级别</td>
-                <td width="200px"><a href="/update.html" onclick="ready()" target="_blank">高续航豪华型</a></td>
-                <td width="200px"><a href="">高续航舒适型</a></td>
-                <td width="200px"><a href="">低续航豪华型</a></td>
-            </tr>
-            <tr>
-                <td width="200px">驾驶位置</td>
-                <td width="200px">高续航豪华型1</td>
-                <td width="200px">高续航豪华型1</td>
-                <td width="200px">高续航豪华型1</td>
-            </tr>
-            <tr>
-                <td width="200px">乘员数</td>
-                <td width="200px">高续航豪华型1</td>
-                <td width="200px">高续航豪华型1</td>
-                <td width="200px">高续航豪华型1</td>
-            </tr>
-            <tr>
-                <td width="200px">车身形式</td>
-                <td width="200px">高续航豪华型1</td>
-                <td width="200px">高续航豪华型1</td>
-                <td width="200px">高续航豪华型1</td>
-            </tr> -->
-        </table>
-    	<div id="newtable"></div>
-    </div>
-    <table id="cfg0Table" class="table table-striped" style="margin-top: 0px;">
+</div>
+<div style="float: right; margin-bottom:0;">
+    <table id="cfg1Table" class="table table-striped" style="margin-top:0px; margin-bottom:0px;">
     </table>
-
-    <!--<table id="cfg1Table" style="...">-->
-    <!--</table>-->
+    <div id="newtable"></div>
+</div>
+<table id="cfg0Table" class="table table-striped" style="margin-top: 0px;">
+</table>
 </body>
 <script th:src="@{/js/stage/bom-all-cfg.js}"></script>
-
 <script th:inline="javascript">
-    
 </script>
 </html>

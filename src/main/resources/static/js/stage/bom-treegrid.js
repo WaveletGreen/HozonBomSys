@@ -11,7 +11,7 @@ $(document).ready(
             }
             $.ajax({
                 type: "GET",
-                url: "/hozon/loadBom/loadByID",
+                url: "./loadBom/loadByID",
                 data: {
                     "bdf": bdf
                 },

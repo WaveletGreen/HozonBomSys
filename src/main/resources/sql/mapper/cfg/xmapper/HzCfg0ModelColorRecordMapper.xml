@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0ModelColorDao">
+    <resultMap id="BaseResultMap" type="sql.pojo.cfg.HzCfg0ModelColor">
+        <id column="PUID" jdbcType="VARCHAR" property="puid"/>
+        <result column="P_CFG0_MAIN_RECORD_OF_MC" jdbcType="VARCHAR" property="pCfg0MainRecordOfMC"/>
+        <result column="P_CODE_OF_COLORFUL_MODEL" jdbcType="VARCHAR" property="pCodeOfColorfulModel"/>
+        <result column="P_DESC_OF_COLORFUL_MODEL" jdbcType="VARCHAR" property="pDescOfColorfulModel"/>
+    </resultMap>
+    <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs"
+               type="sql.pojo.cfg.HzCfg0ModelColor">
+        <result column="P_COLORFUL_MAP_BLOCK" jdbcType="BLOB"
+                property="pColorfulMapBlock"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    PUID, P_CFG0_MAIN_RECORD_OF_MC, P_CODE_OF_COLORFUL_MODEL, P_DESC_OF_COLORFUL_MODEL
+    </sql>
+    <sql id="Blob_Column_List">
+    P_DESC_OF_COLORFUL_MODEL
+    </sql>
+    <sql id="values">
+        #{puid,jdbcType=VARCHAR},
+        #{pCfg0MainRecordOfMC,jdbcType=VARCHAR},
+        #{pCodeOfColorfulModel,jdbcType=VARCHAR},
+        #{pDescOfColorfulModel,jdbcType=VARCHAR},
+        #{pColorfulMapBlock,jdbcType=BLOB}
+    </sql>
+    <sql id="reflect">
+        PUID = #{puid,jdbcType=VARCHAR},
+      P_CFG0_MAIN_RECORD_OF_MC = #{pCfg0MainRecordOfMC,jdbcType=VARCHAR},
+      P_CODE_OF_COLORFUL_MODEL = #{pCfg0MainRecordOfMC,jdbcType=VARCHAR},
+      P_DESC_OF_COLORFUL_MODEL = #{pCodeOfColorfulModel,jdbcType=VARCHAR},
+      P_COLORFUL_MAP_BLOCK = #{pColorComment,jdbcType=VARCHAR}
+    </sql>
+
+    <select id="selectByMainId" parameterType="sql.pojo.cfg.HzCfg0ModelColor" resultMap="ResultMapWithBLOBs">
+        select
+        <include refid="Base_Column_List"/>,
+        <include refid="Blob_Column_List"/>
+        from HZ_CFG0_MODEL_COLOR where P_CFG0_MAIN_RECORD_OF_MC=#{pCfg0MainRecordOfMC,jdbcType=VARCHAR}
+    </select>
+
+    <select id="selectByPrimaryKey" parameterType="sql.pojo.cfg.HzCfg0ModelColor" resultMap="ResultMapWithBLOBs">
+        select
+        <include refid="Base_Column_List"/>,
+        <include refid="Blob_Column_List"/>
+        from HZ_CFG0_MODEL_COLOR where PUID=#{puid,jdbcType=VARCHAR}
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>,
+        <include refid="Blob_Column_List"/>
+        from HZ_CFG0_MODEL_COLOR
+    </select>
+    <insert id="insertOne" parameterType="sql.pojo.cfg.HzCfg0ModelColor">
+        insert into HZ_CFG0_MODEL_COLOR
+        <include refid="Base_Column_List"/>,
+        <include refid="Blob_Column_List"/>
+        values (
+        <include refid="values"/>
+        )
+    </insert>
+    <update id="updateByPrimaryKey" parameterType="sql.pojo.cfg.HzCfg0ModelColor">
+        update HZ_CFG0_MODEL_COLOR
+        set
+        <include refid="reflect"/>
+        where PUID = #{puid,jdbcType=VARCHAR}
+    </update>
+
+    <insert id="deleteByBatch" parameterType="java.util.List">
+        delete from HZ_CFG0_MODEL_COLOR where PUID in (
+        <foreach collection="list" item="item" index="index"
+                 separator=",">
+            #{item.puid,jdbcType=VARCHAR}
+        </foreach>
+        )
+    </insert>
+
+</mapper>
