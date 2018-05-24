@@ -13,10 +13,32 @@ $(document).ready(
         $.ajax({
             url: "modelColor/getColumn?pCfg0MainRecordOfMC=" + pCfg0MainRecordOfMC,
             type: "GET",
-            success: function (data) {
-                column = data;
+            success: function (result) {
+                if (!result.status) {
+                    alert("查无数据，请联系管理员");
+                    return;
+                }
+                var data = result.data;
+                var column = [];
+                column.push({field: 'ck', checkbox: true});
+                column.push({field: 'puid', title: 'puid'});
+                column.push({field: 'codeOfColorModel', title: '车型颜色代码', align: 'center', valign: 'middle'});
+                column.push({field: 'descOfColorModel', title: '描述', align: 'center', valign: 'middle'});
+                for (var i = 0; i < data.length; i++) {
+                    var josn = {
+                        field: "s" + i,
+                        title:
+                            data[i],
+                        align:
+                            'center',
+                        valign:
+                            'middle',
+                    }
+                    column.push(josn);
+                }
                 $table.bootstrapTable({
                     url: "modelColor/loadAll",
+                    method: 'get',
                     height: $(window.parent.document).find("#wrapper").height() - 252,
                     width: $(window).width(),
                     showToggle: true,                   //是否显示详细视图和列表视图的切换按钮
@@ -32,10 +54,10 @@ $(document).ready(
                             handler: function () {
                                 window.Ewin.dialog({
                                     title: "添加",
-                                    url: "colorSet/addPage",
+                                    url: "modelColor/addPage?pCfg0MainRecordOfMC=" + pCfg0MainRecordOfMC,
                                     gridId: "gridId",
-                                    width: 350,
-                                    height: 500
+                                    width: 500,
+                                    height: 600
                                 })
                             }
                         },
@@ -51,7 +73,7 @@ $(document).ready(
                                 }
                                 window.Ewin.dialog({
                                     title: "修改",
-                                    url: "colorSet/update?puid=" + rows[0].puid,
+                                    url: "modelColor/modifyPage?puid=" + rows[0].puid,
                                     gridId: "gridId",
                                     width: 350,
                                     height: 450
@@ -90,12 +112,12 @@ $(document).ready(
                                         $.ajax({
                                             type: "POST",
                                             //ajax需要添加打包名
-                                            url: "./colorSet/delete",
+                                            url: "./modelColor/delete",
                                             data: JSON.stringify(rows),
                                             contentType: "application/json",
                                             success: function (result) {
-                                                if (result.status) {
-                                                    window.Ewin.alert({message: result.msg});
+                                                if (result) {
+                                                    window.Ewin.alert({message: "删除时数据成功"});
                                                     //刷新，会重新申请数据库数据
                                                 }
                                                 else {
@@ -113,51 +135,19 @@ $(document).ready(
                         }
                     ],
                     /**列信息，需要预先定义好*/
-                    columns: [
-                        {
-                            field: 'ck',
-                            checkbox: true
-                        },
-                        {
-                            field: 'pColorOfSet',
-                            title: '色系',
-                        },
-                        {
-                            field: 'pColorName',
-                            title: '颜色名称',
-                            align: 'center',
-                            valign: 'middle',
-                        },
-                        {
-                            field: 'pColorCode',
-                            title: '颜色代码',
-                            align: 'center',
-                            valign: 'middle',
-                        },
-                        {
-                            field: 'pColorComment',
-                            title: '备注',
-                            align: 'center',
-                            valign: 'middle',
-                        },
-                        {
-                            field: 'puid',
-                            title: 'puid',
-                            hide: false
-                        }
-                    ],
+                    columns: column,
                     // sortable: true,                     //是否启用排序
                     // sortOrder: "asc",                   //排序方式
                 });
-                $table.bootstrapTable('hideColumn', 'puid');
-                $table.bootstrapTable('hideColumn', 'pCfg0MainRecordOfMC');
+                // $table.bootstrapTable('hideColumn', 'puid');
+                // $table.bootstrapTable('hideColumn', 'pCfg0MainRecordOfMC');
 
             }
         });
 
     }),
     //手动刷新按钮
-    $("#refreshColorSet").click(function () {
-        $('#dataTable').bootstrapTable('refresh');
+    $("#refreshModelColorCfg").click(function () {
+        $('#modelColorCfgTable').bootstrapTable('refresh');
     })
 );

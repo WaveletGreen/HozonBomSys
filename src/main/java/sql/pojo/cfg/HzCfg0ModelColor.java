@@ -1,6 +1,7 @@
 package sql.pojo.cfg;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 /**
  * Created by IntelliJ IDEA.
@@ -14,7 +15,11 @@ public class HzCfg0ModelColor {
     private String pCodeOfColorfulModel;
     private String pDescOfColorfulModel;
     private byte[] pColorfulMapBlock;
-    private HashMap<String, String> mapOfCfg0;
+    private LinkedHashMap<String, String> mapOfCfg0;
+
+    public HzCfg0ModelColor() {
+        mapOfCfg0 = new LinkedHashMap<>();
+    }
 
     public String getpCfg0MainRecordOfMC() {
         return pCfg0MainRecordOfMC;
@@ -54,5 +59,13 @@ public class HzCfg0ModelColor {
 
     public void setpColorfulMapBlock(byte[] pColorfulMapBlock) {
         this.pColorfulMapBlock = pColorfulMapBlock;
+    }
+
+    public LinkedHashMap<String, String> getMapOfCfg0() {
+        return mapOfCfg0;
+    }
+
+    public void setMapOfCfg0(LinkedHashMap<String, String> mapOfCfg0) {
+        this.mapOfCfg0 = mapOfCfg0;
     }
 }

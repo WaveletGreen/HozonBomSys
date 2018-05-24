@@ -1,108 +1,101 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
-    <body>
-        <form id="colorForm" role="form" method="post" action="./colorSet/updateWithEntity">
-            <input id="puid" name="puid" type="hidden" th:value="${entity.puid}"/>
-            <div class="form-group">
-                <label for="pColorOfSet">色系</label>
-                <input class="form-control" id="pColorOfSet" name="pColorOfSet" type="text"
-                       th:value="${entity.pColorOfSet}"/>
-            </div>
-            <div class="form-group">
-                <label for="pColorName">颜色名称</label>
-                <input class="form-control" id="pColorName" name="pColorName" type="text"
-                       th:value="${entity.pColorName}"
-                       placeholder="请输入颜色名称"/>
-            </div>
-            <div class="form-group">
-                <label for="pColorCode">颜色代号</label>
-                <input class="form-control" id="pColorCode" name="pColorCode" type="text"
-                       th:value="${entity.pColorCode}"
-                       placeholder="请输入颜色代号"/>
-            </div>
-            <div class="form-group">
-                <label for="pColorComment">备注</label>
-                <input class="form-control" id="pColorComment" name="pColorComment" type="text"
-                       th:value="${entity.pColorComment}"
-                       placeholder="备注"/>
-            </div>
-        </form>
-        <script th:inline="javascript">
-            <![CDATA[
-            $(function () {
-                $('#colorForm').bootstrapValidator({
-                    message: 'This value is not valid',
-                    feedbackIcons: {
-                        valid: 'glyphicon glyphicon-ok',
-                        invalid: 'glyphicon glyphicon-remove',
-                        validating: 'glyphicon glyphicon-refresh'
-                    },
-                    fields: {
-                        pColorOfSet: {
-                            message: '颜色系列名称验证失败',
-                            validators: {
-                                notEmpty: {
-                                    message: '颜色系列名称不能为空'
-                                }
-                            }
-                        },
-                        pColorName: {
-                            message: '颜色名称验证失败',
-                            validators: {
-                                notEmpty: {
-                                    message: '颜色名称不能为空'
-                                }
-                            }
-                        },
-                        pColorCode: {
-                            message: '颜色代号验证失败',
-                            validators: {
-                                notEmpty: {
-                                    message: '颜色代号不能为空'
-                                }
-                            }
+<body>
+<meta charset=utf-8/>
+<form class="form-horizontal" id="modColorModelForm" role="form" method="post" action="./modelColor/updateColorModel">
+    <fieldset>
+        <input id="counter" name="count" type="hidden" th:value="${columnList.size()}"/>
+        <input id="puid" name="puid" type="hidden" th:value="${entity.puid}"/>
+        <div id="legend" class="">
+            <legend class="">更新颜色车型</legend>
+        </div>
+
+        <div class="form-group col-lg-10">
+            <label for="pCodeOfColorfulModel">车型颜色代码</label>
+            <input class="form-control" id="pCodeOfColorfulModel" name="pCodeOfColorfulModel" type="text"
+                   disabled="disabled" th:value="${entity.pCodeOfColorfulModel}"/>
+        </div>
+        <div class="form-group col-lg-10">
+            <label for="pDescOfColorfulModel">描述</label>
+            <input class="form-control" id="pDescOfColorfulModel" name="pDescOfColorfulModel" type="text"
+                   placeholder="请输入描述" th:value="${entity.pDescOfColorfulModel}"/>
+        </div>
+        <!--循环放入数据-->
+        <div class="form-group col-lg-10" th:each="column,c:${columnList}">
+            <label class="control-label" th:text="${column}"></label>
+            <select class="form-control input-small" th:name="${c.index}" data-style="btn-info"
+                    th:id="${'select'+c.index}"
+            >
+                <option th:each="color:${colorList}" th:value="${color.pColorName}"
+                        th:text="${color.pColorName}"
+                        th:selected="${orgValue.get((c.index))==color.pColorName? true :false}"
+                >
+                </option>
+            </select>
+        </div>
+    </fieldset>
+</form>
+<script th:inline="javascript">
+    <![CDATA[
+    $(function () {
+        $('#modColorModelForm').bootstrapValidator({
+            message: 'This value is not valid',
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            fields: {
+                pCodeOfColorfulModel: {
+                    message: '车型颜色代码验证失败',
+                    validators: {
+                        notEmpty: {
+                            message: '车型颜色代码不能为空'
                         }
                     }
-                });
-                // 绑定dialog的确定按钮的监听事件
-                $("#btnOk", window.top.document).click(function () {
-                    var bootstrapValidator = $("#colorForm", window.top.document).data('bootstrapValidator');
-                    bootstrapValidator.validate();
-                    if (bootstrapValidator.isValid()) {
-                        var url = $("#colorForm", window.top.document).attr('action');
-                        var myData = JSON.stringify({
-                            "pColorCode": $("#pColorCode").val(),
-                            "pColorComment": $("#pColorComment").val(),
-                            "pColorName": $("#pColorName").val(),
-                            "pColorOfSet": $("#pColorOfSet").val(),
-                            "puid": $("#puid").val()
-                        });
-                        $.ajax({
-                            contentType:
-                                "application/json",
-                            type:
-                                'POST',
-                            url: url,
-                            data: myData,
-                            success:
-                                function (result) {
-                                    $('.modal-dialog', window.top.document).parent('div').remove()
-                                    $('body', window.top.document).find('.modal-backdrop').remove();
-                                    // jquery 调用刷新当前操作的table页面的refresh方法
-                                    $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
-                                    if (result)
-                                        window.Ewin.alert({message: '修改数据成功!'});
-                                    else
-                                        window.Ewin.alert({message: '修改数据失败!'});
-                                },
-                            error: function (status) {
-                                window.Ewin.alert({message: status.status + ':修改数据失败!'});
-                            }
-                        });
+                }
+            }
+        });
+        // 绑定dialog的确定按钮的监听事件
+        $("#btnOk", window.top.document).click(function () {
+            var bootstrapValidator = $("#modColorModelForm", window.top.document).data('bootstrapValidator');
+            bootstrapValidator.validate();
+            if (bootstrapValidator.isValid()) {
+                var url = $("#modColorModelForm", window.top.document).attr('action');
+                var data = {};
+                data.puid = $("#puid").val();
+                data.pCodeOfColorfulModel = $("#pCodeOfColorfulModel").val();
+                data.pDescOfColorfulModel = $("#pDescOfColorfulModel").val();
+                var count = parseInt($("#counter").val());
+                for (var i = 0; i < count; i++) {
+                    eval(('data.s' + i + '=$("#select' + i + '").val()'));
+                }
+                $.ajax({
+                    contentType:
+                        "application/json",
+                    type:
+                        'POST',
+                    url: url,
+                    data: JSON.stringify(data),
+                    success:
+                        function (result) {
+                            $('.modal-dialog', window.top.document).parent('div').remove()
+                            $('body', window.top.document).find('.modal-backdrop').remove();
+                            // jquery 调用刷新当前操作的table页面的refresh方法
+                            $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
+                            if (result)
+                                window.Ewin.alert({message: '修改数据成功!'});
+                            else
+                                window.Ewin.alert({message: '修改数据失败!'});
+                        },
+                    error: function (status) {
+                        window.Ewin.alert({message: status.status + ':修改数据失败!'});
                     }
                 });
-            })
-            ]]>
-        </script>
-    </body>
+            }
+        });
+    })
+    ]]>
+</script>
+</body>
 </html>

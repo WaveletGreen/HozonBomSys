@@ -6,7 +6,6 @@ import sql.pojo.cfg.HzCfg0ColorSet;
 import java.util.List;
 
 /**
- * Created by IntelliJ IDEA.
  * User: Fancyears·Maylos·Mayways
  * Date: 2018/5/21
  * Time: 14:43

@@ -10,7 +10,6 @@ import sql.pojo.cfg.HzCfg0BomLineOfModel;
 import java.util.*;
 
 /**
- * Created by IntelliJ IDEA.
  * User: Fancyears·Maylos·Mayways
  * Date: 2018/5/21
  * Time: 18:14

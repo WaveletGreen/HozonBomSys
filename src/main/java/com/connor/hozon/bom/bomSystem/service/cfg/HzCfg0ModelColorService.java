@@ -1,17 +1,19 @@
 package com.connor.hozon.bom.bomSystem.service.cfg;
 
 import com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0ModelColorDao;
+import com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0OptionFamilyDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sql.pojo.cfg.HzCfg0ColorSet;
 import sql.pojo.cfg.HzCfg0ModelColor;
+import sql.pojo.cfg.HzCfg0OptionFamily;
+import sql.redis.SerializeUtil;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 /**
- * Created by IntelliJ IDEA.
  * User: Fancyears·Maylos·Mayways
  * Date: 2018/5/22
  * Time: 10:54
@@ -20,6 +22,8 @@ import java.util.Map;
 public class HzCfg0ModelColorService {
     @Autowired
     HzCfg0ModelColorDao hzCfg0ModelColorDao;
+    @Autowired
+    HzCfg0OptionFamilyDao hzCfg0OptionFamilyDao;
 
     public List<HzCfg0ModelColor> doLoadModelColorByMainId(HzCfg0ModelColor color) {
         return hzCfg0ModelColorDao.selectByMainId(color);
@@ -41,7 +45,22 @@ public class HzCfg0ModelColorService {
         Map<String, Object> result = new HashMap<>();
         List<HzCfg0ModelColor> colorSet = hzCfg0ModelColorDao.selectAll();
         result.put("totalCount", colorSet.size());
-        result.put("result", colorSet);
+        List<Map<String, String>> res = new ArrayList<>();
+        colorSet.forEach(color -> {
+            Map<String, String> _result = new HashMap<>();
+            _result.put("puid", color.getPuid());
+            _result.put("codeOfColorModel", color.getpCodeOfColorfulModel());
+            _result.put("descOfColorModel", color.getpDescOfColorfulModel());
+            Object o = SerializeUtil.unserialize(color.getpColorfulMapBlock());
+            if (o instanceof HashMap) {
+                HashMap<String, String> _map = (HashMap) o;
+                _map.forEach((key, value) ->
+                        _result.put(key, value)
+                );
+            }
+            res.add(_result);
+        });
+        result.put("result", res);
         return result;
     }
 

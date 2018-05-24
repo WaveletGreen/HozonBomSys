@@ -38,6 +38,7 @@ public interface IBaseSQLUtil {
      */
     <T, E> List<T> executeQueryByPass(T t, E pass, String by);
 
+
     /**
      * 执行插入，单个插入
      *
