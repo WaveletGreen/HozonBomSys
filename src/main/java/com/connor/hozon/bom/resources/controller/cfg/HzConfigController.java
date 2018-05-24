@@ -37,7 +37,7 @@ public class HzConfigController extends BaseController {
         if(ListUtil.isNotEmpty(recordList)){
             writeAjaxJSONResponse(ResultMessageBuilder.build(true,recordList),response);
         }else{
-            writeAjaxJSONResponse(ResultMessageBuilder.build(false,"网络错误！"),response);
+            writeAjaxJSONResponse(ResultMessageBuilder.build(false,"暂无数据！"),response);
         }
     }
 

@@ -23,6 +23,8 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 		<mapper resource="sql/mapper/HzPreferenceSettingMapper.xml" />
 		<mapper resource="sql/mapper/bom/xmapper/HzBomMainRecordMapper.xml" />
 		<mapper resource="sql/mapper/bom/xmapper/HzBomLineRecordMapper.xml" />
+		<mapper resource="sql/mapper/bom/xmapper/HzPbomMaintainRecordMapper.xml"/>
+		<mapper resource="sql/mapper/bom/xmapper/HzPbomLineMaintainRecordMapper.xml"/>
 		<mapper resource="sql/mapper/cfg/xmapper/HzCfg0BomLineOfModelMapper.xml" />
 		<mapper resource="sql/mapper/cfg/xmapper/HzCfg0ModelDetailMapper.xml" />
 		<mapper resource="sql/mapper/cfg/xmapper/HzCfg0ColorSetMapper.xml" />
