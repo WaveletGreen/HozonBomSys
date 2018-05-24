@@ -40,6 +40,9 @@
 		#{item.lineID,jdbcType=VARCHAR},#{item.is2Y,jdbcType=INTEGER},#{item.isPart,jdbcType=INTEGER},
 		#{item.orderNum,jdbcType=INTEGER},#{item.bomLineBlock,jdbcType=BLOB}
 	</sql>
+
+
+
 	<select id="selectByPrimaryKey"
 		parameterType="sql.pojo.bom.HzBomLineRecord"
 		resultMap="ResultMapWithBLOBs">
