@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<!--User: xulf Date: 2018/5/24 Time: 09:58-->
+<head th:include="include/includebase">
+<meta charset="UTF-8">
+<title>PBOM维护</title>
+</head>
+<body class="content-body">
+<input id="text1" class="form-control" type="text" name="doSubmit1"
+       placeholder="请输入需要查找的model" value="9deb81ea-9544-473b-aeb5-d7683c7753c3"/>
+<button id="myButton">请点击</button>
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-hidden="true">×
+                </button>
+                <h4 class="modal-title" id="myModalLabel">操作错误</h4>
+            </div>
+            <div class="modal-body">请输入正确的数模层ID</div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="panel-body" style="padding-bottom:0px;">
+    <div class="panel panel-default" style="margin-top: 10px;">
+        <div class="panel-body">
+            <form class="form-inline" role="form" style="float: left; width: 100%;margin-left: 20px;" method="post"
+                  id="queryLoadBom">
+                <div class="form-group">
+                    <label for="platforms">车型平台:</label>
+                    <input type="text" class="form-control" name="platforms" id="platforms" placeholder="请输入车型平台"/>
+                </div>
+                <div class="form-group">
+                    <label for="modelnumber">车型项目编号:</label>
+                    <input type="text" class="form-control" name="modelnumber" id="modelnumber"
+                           placeholder="请输入车型项目编号"/>
+                </div>
+                <div class="form-group">
+                    <label for="modelyear">车型年:</label>
+                    <input type="text" class="form-control" name="modelyear" id="modelyear" placeholder="请输入车型年"/>
+                </div>
+                <div class="form-group">
+                    <button type="button" id="searchBtn" onclick="" class="btn btn-primary">搜索</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<table id="pbomMaintenanceTable" class="table table-striped" style="margin-top: 0px;">
+</table>
+<script th:inline="javascript">
+    $(document).ready(
+        $("#myButton").click(function () {
+            var da = $("#text1").val();
+            if (da.length == 0) {
+                $("#myModal").modal('show');
+                return;
+            }
+
+            $.ajax({
+                url: 'config/getFeature',
+                type: 'GET',
+                data: {
+                    'pCfg0MainItemPuid': da
+                },
+                success: function (data) {
+                    var array = data.externalObject;
+                    var number = 1;
+                    var r = "<table>" +
+                        "<tr>" +
+                        "<th>序号</th>" +
+                        "<th>层级</th>" +
+                        "<th>专业</th>" +
+                        "<th>零件号</th>" +
+                        "<th>名称</th>" +
+                        "<th>备件</th>" +
+                        "<th>备件编号</th>" +
+                        "<th>工艺路线</th>" +
+                        "<th>人工工时</th>" +
+                        "<th>节拍</th>" +
+                        "<th>焊点</th>" +
+                        "<th>机物料</th>" +
+                        "<th>标准件</th>" +
+                        "<th>工具</th>" +
+                        "<th>废品</th>" +
+                        "<th>变更</th>" +
+                        "<th>变更号</th>" +
+                        "</tr>"
+                    for (var i = 0; i < array.length; i++) {
+                        var re = array[i];
+                        var v1 = re.pH9FeatureName
+                        var v2 = re.pH9FeatureDesc
+                        var v3 = re.pH9FeatureEnName
+                        var v4 = "10"
+                        var v5 = ""
+                        var v6 = re.pCfg0Desc
+                        r = r + "<tr>" +
+                            "<td>" + number++ + "</td>" +
+                            "<td>" + v2 + "</td>" +
+                            "<td>" + v3 + "</td>" +
+                            "<td>" + v4 + "</td>" +
+                            "<td>" + v6 + "</td>" +
+                            "<td></td>" +
+                            "<td></td>" +
+                            "<td></td>" +
+                            "<td></td>" +
+                            "<td></td>" +
+                            "<td></td>" +
+                            "<td></td>" +
+                            "<td></td>" +
+                            "<td></td>" +
+                            "<td></td>" +
+                            "<td></td>" +
+                            "<td></td>" +
+                            "</tr>"
+                    }
+                    var r = r + "</table>"
+                    var $rable = $("#pbomMaintenanceTable");
+                    $rable.html(r);
+                },
+                error: function (info) {
+                    alert(info);
+                }
+            })
+        })
+    )
+</script>
+</body>
+
+</html>

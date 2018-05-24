@@ -1,12 +1,12 @@
 package sql;
 
-import java.util.List;
-
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service("baseSQLUtil")
 public class BaseSQLUtil implements IBaseSQLUtil {
@@ -22,7 +22,7 @@ public class BaseSQLUtil implements IBaseSQLUtil {
             if (suppliers == null) {
                 result = (T) session.selectOne(by);
             } else {
-                // session.insert(by, suppliers);
+                // session.insertOne(by, suppliers);
                 result = (T) session.selectOne(by, suppliers);
             }
             // session.commit();
@@ -46,7 +46,7 @@ public class BaseSQLUtil implements IBaseSQLUtil {
             if (suppliers == null) {
                 result = session.insert(by);
             } else {
-                // session.insert(by, suppliers);
+                // session.insertOne(by, suppliers);
                 result = session.insert(by, suppliers);
             }
             session.commit();
@@ -201,4 +201,5 @@ public class BaseSQLUtil implements IBaseSQLUtil {
         }
         return result;
     }
+
 }

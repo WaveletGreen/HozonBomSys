@@ -511,7 +511,10 @@
             tModal = '<div class="modal-dialog modal-lg{rtl}" role="document">\n' +
                 '  <div class="modal-content">\n' +
                 '    <div class="modal-header">\n' +
-                '      <div class="kv-zoom-actions pull-right">{toggleheader}{fullscreen}{borderless}{close}</div>\n' +
+                '      <div class="kv-zoom-actions ' +
+                '' +
+                '' +
+                'pull-right">{toggleheader}{fullscreen}{borderless}{close}</div>\n' +
                 '      <h3 class="modal-title">{heading} <small><span class="kv-zoom-title"></span></small></h3>\n' +
                 '    </div>\n' +
                 '    <div class="modal-body">\n' +

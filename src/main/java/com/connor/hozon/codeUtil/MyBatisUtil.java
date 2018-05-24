@@ -107,7 +107,7 @@ public class MyBatisUtil {
 		sb.append("\t<!--保存-->\n");
 		if(primaryKeys.size()==1 && primaryKeys.get(0).isAutoIncrement()){
 			//自增主键，并返回主键值
-			sb.append("\t<insert id=\"save\" parameterType=\""+beanName+"\" useGeneratedKeys=\"true\" keyProperty=\""+primaryKeys.get(0).getFieldName()+"\">\n");
+			sb.append("\t<insertOne id=\"save\" parameterType=\""+beanName+"\" useGeneratedKeys=\"true\" keyProperty=\""+primaryKeys.get(0).getFieldName()+"\">\n");
 			sb.append("\t\tINSERT INTO "+table.getTableName()+"(");
 			for(ColumnModel cm : columnModelList){
 				if(!cm.isPrimaryKey()|| !cm.isAutoIncrement()){
@@ -125,10 +125,10 @@ public class MyBatisUtil {
 			}
 			sb.deleteCharAt(sb.length()-1);
 			sb.append(")\n");
-			sb.append("\t</insert>\n\n");
+			sb.append("\t</insertOne>\n\n");
 		}
 		else{
-			sb.append("\t<insert id=\"save\" parameterType=\""+beanName+"\">\n");
+			sb.append("\t<insertOne id=\"save\" parameterType=\""+beanName+"\">\n");
 			sb.append("\t\tINSERT INTO "+table.getTableName()+"(");
 			for(ColumnModel cm : columnModelList){
 				if(!cm.isAutoIncrement()){
@@ -146,7 +146,7 @@ public class MyBatisUtil {
 			}
 			sb.deleteCharAt(sb.length()-1);
 			sb.append(")\n");
-			sb.append("\t</insert>\n\n");
+			sb.append("\t</insertOne>\n\n");
 		}
 		return sb.toString();
 	}
@@ -156,7 +156,7 @@ public class MyBatisUtil {
 		List<ColumnModel> primaryKeys = table.getPrimaryKeyColumns();
 		StringBuffer sb = new StringBuffer();
 		sb.append("\t<!--保存-->\n");
-		sb.append("\t<insert id=\"save\" parameterType=\""+beanName+"\">\n");
+		sb.append("\t<insertOne id=\"save\" parameterType=\""+beanName+"\">\n");
 		if(primaryKeys.size()==1 && primaryKeys.get(0).isAutoIncrement()){
 			String sequence = null;
 			if(table.getTableName().toLowerCase().indexOf("t_")==0){
@@ -181,7 +181,7 @@ public class MyBatisUtil {
 		}
 		sb.deleteCharAt(sb.length()-1);
 		sb.append(")\n");
-		sb.append("\t</insert>\n\n");
+		sb.append("\t</insertOne>\n\n");
 		return sb.toString();
 	}
 	
@@ -190,7 +190,7 @@ public class MyBatisUtil {
 		List<ColumnModel> primaryKeys = table.getPrimaryKeyColumns();
 		StringBuffer sb = new StringBuffer();
 		sb.append("\t<!--修改-->\n");
-		sb.append("\t<update id=\"update\" parameterType=\""+beanName+"\">\n");
+		sb.append("\t<updateOne id=\"updateOne\" parameterType=\""+beanName+"\">\n");
 		sb.append("\t\tUPDATE "+table.getTableName()+" SET ");
 		for(ColumnModel cm : columnModelList){
 			if(!cm.isPrimaryKey()){
@@ -207,7 +207,7 @@ public class MyBatisUtil {
 				sb.append(" and ");
 			}
 		}
-		sb.append("\n\t</update>\n\n");
+		sb.append("\n\t</updateOne>\n\n");
 		return sb.toString();
 	}
 	

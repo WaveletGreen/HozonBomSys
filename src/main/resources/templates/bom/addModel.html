@@ -1,0 +1,182 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<body>
+<form id="modelForm" role="form" method="post" action="./model/saveModelData">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <input type="hidden" name="pModelPuid" id="pModelPuid" th:value="${entity.pModelPuid}"/>
+                <label for="pModelName">模型名称</label>
+                <input class="form-control" id="pModelName" name="pModelName" type="text"
+                       disabled="disabled" th:value="${entity.pModelName}"
+                />
+            </div>
+            <div class="form-group">
+                <label for="pModelDesc">模型描述</label>
+                <input class="form-control" id="pModelDesc" name="pModelDesc" type="text"
+                       placeholder="请输入模型描述" th:value="${entity.pModelDesc}"/>
+            </div>
+            <div class="form-group">
+                <label for="pModelSaleArea">销售地区</label>
+                <input class="form-control" id="pModelSaleArea" name="pModelSaleArea" type="text"
+                       placeholder="请输入销售地区" th:value="${entity.pModelSaleArea}"/>
+            </div>
+            <div class="form-group">
+                <label for="pModelBrand">品牌</label>
+                <input class="form-control" id="pModelBrand" name="pModelBrand" type="text"
+                       placeholder="请输入品牌" th:value="${entity.pModelBrand}"/>
+            </div>
+            <div class="form-group">
+                <label for="pModelVehicle">车辆</label>
+                <input class="form-control" id="pModelVehicle" name="pModelVehicle" type="text"
+                       placeholder="请输入车辆" th:value="${entity.pModelVehicle}"/>
+            </div>
+            <div class="form-group">
+                <label for="pModelPlatform">平台</label>
+                <input class="form-control" id="pModelPlatform" name="pModelPlatform" type="text"
+                       placeholder="请输入平台" th:value="${entity.pModelPlatform}"/>
+            </div>
+            <div class="form-group">
+                <label for="pModelMod">车型</label>
+                <input class="form-control" id="pModelMod" name="pModelMod" type="text"
+                       placeholder="请输入车型" th:value="${entity.pModelMod}"/>
+            </div>
+            <div class="form-group">
+                <label for="pModelTransform">变型</label>
+                <input class="form-control" id="pModelTransform" name="pModelTransform" type="text"
+                       placeholder="请输入变型" th:value="${entity.pModelTransform}"/>
+            </div>
+            <div class="form-group">
+                <label for="pModelAnnual">年型</label>
+                <input class="form-control" id="pModelAnnual" name="pModelAnnual" type="text"
+                       placeholder="请输入年型" th:value="${entity.pModelAnnual}"/>
+            </div>
+            <div class="form-group">
+                <label for="pModelVersion">版型</label>
+                <input class="form-control" id="pModelVersion" name="pModelVersion" type="text"
+                       placeholder="请输入版型" th:value="${entity.pModelVersion}"/>
+            </div>
+            <div class="form-group">
+                <label for="pModelDriverPosition">老司机位置</label>
+                <input class="form-control" id="pModelDriverPosition" name="pModelDriverPosition" type="text"
+                       placeholder="请输入老司机位置" th:value="${entity.pModelDriverPosition}"/>
+            </div>
+            <div class="form-group">
+                <label for="pModelMembers">乘客位置</label>
+                <input class="form-control" id="pModelMembers" name="pModelMembers" type="text"
+                       placeholder="请输入乘客位置" th:value="${entity.pModelMembers}"/>
+            </div>
+            <div class="form-group">
+                <label for="pModelShape">车身形式</label>
+                <input class="form-control" id="pModelShape" name="pModelShape" type="text"
+                       placeholder="请输入车身形式" th:value="${entity.pModelShape}"/>
+            </div>
+            <div class="form-group">
+                <label for="pModelAnnouncement">公告</label>
+                <input class="form-control" id="pModelAnnouncement" name="pModelAnnouncement" type="text"
+                       placeholder="请输入公告" th:value="${entity.pModelAnnouncement}"/>
+            </div>
+            <div class="form-group">
+                <label for="pModelPowers">动总</label>
+                <input class="form-control" id="pModelPowers" name="pModelPowers" type="text"
+                       placeholder="请输入动总" th:value="${entity.pModelPowers}"/>
+            </div>
+            <div class="form-group">
+                <label for="pModelCfgVersion">配置版本</label>
+                <input class="form-control" id="pModelCfgVersion" name="pModelCfgVersion" type="text"
+                       placeholder="请输入配置版本" th:value="${entity.pModelCfgVersion}"/>
+            </div>
+            <div class="form-group">
+                <label for="pModelCfgDesc">配置描述</label>
+                <input class="form-control" id="pModelCfgDesc" name="pModelCfgDesc" type="text"
+                       placeholder="请输入配置描述" th:value="${entity.pModelCfgDesc}"/>
+            </div>
+            <div class="form-group">
+                <label for="pModelTrailNum">试制号</label>
+                <input class="form-control" id="pModelTrailNum" name="pModelTrailNum" type="text"
+                       placeholder="请输入试制号" th:value="${entity.pModelTrailNum}"/>
+            </div>
+            <div class="form-group">
+                <label for="pModelGoodsNum">商品号</label>
+                <input class="form-control" id="pModelGoodsNum" name="pModelGoodsNum" type="text"
+                       placeholder="请输入商品号" th:value="${entity.pModelGoodsNum}"/>
+            </div>
+        </div>
+    </div>
+</form>
+<script th:inline="javascript">
+    <![CDATA[
+    $(function () {
+        $('#modelForm').bootstrapValidator({
+            message: 'This value is not valid',
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            fields: {
+                pModelName: {
+                    message: '模型名称验证失败',
+                    validators: {
+                        notEmpty: {
+                            message: '模型名称不能为空'
+                        }
+                    }
+                }
+            }
+        });
+        // 绑定dialog的确定按钮的监听事件
+        $("#btnOk", window.top.document).click(function () {
+            var bootstrapValidator = $("#modelForm", window.top.document).data('bootstrapValidator');
+            bootstrapValidator.validate();
+            if (bootstrapValidator.isValid()) {
+                var url = $("#modelForm", window.top.document).attr('action');
+                <!--其实不要puid，puid会在服务器上生成-->
+                var myData = JSON.stringify({
+                    "pModelPuid": $("#pModelPuid").val(),
+                    "pModelName": $("#pModelName").val(),
+                    "pModelDesc": $("#pModelDesc").val(),
+                    "pModelSaleArea": $("#pModelSaleArea").val(),
+                    "pModelBrand": $("#pModelBrand").val(),
+                    "pModelVehicle": $("#pModelVehicle").val(),
+                    "pModelPlatform": $("#pModelPlatform").val(),
+                    "pModelMod": $("#pModelMod").val(),
+                    "pModelTransform": $("#pModelTransform").val(),
+                    "pModelAnnual": $("#pModelAnnual").val(),
+                    "pModelVersion": $("#pModelVersion").val(),
+                    "pModelDriverPosition": $("#pModelDriverPosition").val(),
+                    "pModelMembers": $("#pModelMembers").val(),
+                    "pModelShape": $("#pModelShape").val(),
+                    "pModelAnnouncement": $("#pModelAnnouncement").val(),
+                    "pModelPowers": $("#pModelPowers").val(),
+                    "pModelCfgVersion": $("#pModelCfgVersion").val(),
+                    "pModelCfgDesc": $("#pModelCfgDesc").val(),
+                    "pModelTrailNum": $("#pModelTrailNum").val(),
+                    "pModelGoodsNum": $("#pModelGoodsNum").val(),
+                });
+                $.ajax({
+                    contentType:
+                        "application/json",
+                    type:
+                        'POST',
+                    url: url,
+                    data: myData,
+                    success:
+                        function (result) {
+                            $('.modal-dialog', window.top.document).parent('div').remove()
+                            $('body', window.top.document).find('.modal-backdrop').remove();
+                            // jquery 调用刷新当前操作的table页面的refresh方法
+                            // $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
+                            window.Ewin.alert({message: result.msg + '修改数据成功!'});
+                        },
+                    error: function (status) {
+                        window.Ewin.alert({message: status.status + '添加数据失败!'});
+                    }
+                });
+            }
+        });
+    })
+    ]]>
+</script>
+</body>
+</html>
