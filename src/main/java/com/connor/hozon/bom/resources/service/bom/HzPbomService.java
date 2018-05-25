@@ -1,7 +1,7 @@
 package com.connor.hozon.bom.resources.service.bom;
 
+import com.connor.hozon.bom.resources.dto.request.BatchInsertHzPbomMaintainRecordReqDTO;
 import com.connor.hozon.bom.resources.dto.response.HzPbomLineMaintainResponseDTO;
-import sql.pojo.bom.HzPbomLineMaintainRecord;
 
 import java.util.List;
 
@@ -14,4 +14,9 @@ public interface HzPbomService {
      * @return
      */
     List<HzPbomLineMaintainResponseDTO> getHzPbomMaintainRecord();
+
+    int insertPbomLineMaintainRecords(List<BatchInsertHzPbomMaintainRecordReqDTO> recordInsertBatchReqDTO);
+
+    
+
 }
