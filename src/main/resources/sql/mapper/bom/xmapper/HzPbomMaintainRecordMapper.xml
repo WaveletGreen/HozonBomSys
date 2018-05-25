@@ -21,6 +21,9 @@
     PUID, SPARE_PART, SPARE_PART_NUM, PROCESS_ROUTE, LABOR_HOUR, RHYTHM, SOLDER_JOINT,
     MACHINE_MATERIAL, STANDARD_PART, TOOLS, WASTER_PRODUCT, CHANGE, CHANGE_NUM, P_BOM_PUID
   </sql>
+
+
+
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />

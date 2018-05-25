@@ -5,6 +5,7 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import sql.redis.DatabaseException;
 
 import java.util.List;
 
@@ -179,22 +180,21 @@ public class BaseSQLUtil implements IBaseSQLUtil {
         return result;
     }
 
-    public List findForList(final String sql, final Object param) {
+    public List findForList(final String sqlMapId, final Object param) {
         SqlSession session = null;
         List result = null;
         try {
             SqlSessionFactory f = FactoryManager.getInstance();
             session = f.openSession();
-            logger.info("BaseSQLUtil execute sql:" + sql);
+            logger.info("BaseSQLUtil execute sql:" + sqlMapId);
             if (param == null) {
-                result = session.selectList(sql);
+                result = session.selectList(sqlMapId);
             } else {
-                result = session.selectList(sql, param);
+                result = session.selectList(sqlMapId, param);
             }
             // session.commit();
         } catch (Exception e) {
-            e.printStackTrace();
-            // session.rollback(true);
+           throw new DatabaseException("SQL执行出错"+sqlMapId,e);
         } finally {
             if (session != null)
                 session.close();
@@ -202,4 +202,77 @@ public class BaseSQLUtil implements IBaseSQLUtil {
         return result;
     }
 
+    /**
+     * 插入一个实体
+     *
+     * @param sqlMapId  mybatis 映射id
+     * @param object  实体参数
+     * @return
+     */
+    public int insert(final String sqlMapId, final Object object) {
+        SqlSession session = null;
+        try {
+            SqlSessionFactory f = FactoryManager.getInstance();
+            session = f.openSession();
+            int result = session.insert(sqlMapId, object);
+            session.commit();
+            return result;
+        } catch (Exception e) {
+            logger.error("SQL执行出错: " + sqlMapId, e);
+            throw new DatabaseException("SQL执行出错"+sqlMapId,e);
+        } finally {
+            if (session != null)
+                session.close();
+        }
+
+    }
+
+    /**
+     * 查询一个实体
+     *
+     * @param sqlMapId  mybatis 映射id
+     * @param param  实体参数
+     * @return
+     */
+    public Object findForObject(final String sqlMapId, final Object param){
+        SqlSession session = null;
+        try {
+            SqlSessionFactory f = FactoryManager.getInstance();
+            session = f.openSession();
+            if (param != null) {
+                return session.selectOne(sqlMapId, param);
+            } else {
+                return session.selectOne(sqlMapId);
+            }
+        } catch (Exception e) {
+            logger.error("SQL执行出错: " + sqlMapId, e);
+            throw new DatabaseException("SQL执行出错"+sqlMapId,e);
+        } finally {
+            if (session != null)
+                session.close();
+        }
+    }
+
+    /**
+     * 修改
+     * @param sqlMapId
+     * @param param
+     * @return
+     */
+    public int update(final String sqlMapId, final Object param){
+        SqlSession session = null;
+        try {
+            SqlSessionFactory f = FactoryManager.getInstance();
+            session = f.openSession();
+            int result = session.update(sqlMapId, param);
+            session.commit();
+            return result;
+        } catch (Exception e) {
+            logger.error("SQL执行出错: " + sqlMapId, e);
+            throw new DatabaseException("SQL执行出错"+sqlMapId,e);
+        } finally {
+            if (session != null)
+                session.close();
+        }
+    }
 }

@@ -1,5 +1,6 @@
 package com.connor.hozon.bom.resources.service.bom.impl;
 
+import com.connor.hozon.bom.resources.dto.request.BatchInsertHzPbomMaintainRecordReqDTO;
 import com.connor.hozon.bom.resources.dto.response.HzPbomLineMaintainResponseDTO;
 import com.connor.hozon.bom.resources.mybatis.bom.HzPbomMaintainRecordDAO;
 import com.connor.hozon.bom.resources.service.bom.HzPbomService;
@@ -71,5 +72,11 @@ public class HzPbomServiceImpl implements HzPbomService {
 
         return responseDTOS;
     }
+
+    @Override
+    public int insertPbomLineMaintainRecords(List<BatchInsertHzPbomMaintainRecordReqDTO> recordInsertBatchReqDTO) {
+        return 0;
+    }
+    
 
 }
