@@ -62,12 +62,12 @@ public class HzPbomMaintainRecord {
      */
     private String pBomPuid;
 
-    public String getpPuid() {
+    public String getPuid() {
         return puid;
     }
 
-    public void setpPuid(String pPuid) {
-        this.puid = pPuid == null ? null : pPuid.trim();
+    public void setPuid(String puid) {
+        this.puid = puid == null ? null : puid.trim();
     }
 
     public String getSparePart() {

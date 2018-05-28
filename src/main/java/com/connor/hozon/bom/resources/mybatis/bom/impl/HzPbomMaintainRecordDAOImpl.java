@@ -1,6 +1,5 @@
 package com.connor.hozon.bom.resources.mybatis.bom.impl;
 
-import com.connor.hozon.bom.resources.mybatis.base.BaseDAO;
 import com.connor.hozon.bom.resources.mybatis.bom.HzPbomMaintainRecordDAO;
 import org.springframework.stereotype.Service;
 import sql.BaseSQLUtil;

@@ -5,9 +5,9 @@ package com.connor.hozon.bom.resources.dto.request;
  */
 public class BatchInsertHzPbomMaintainRecordReqDTO {
     /**
-     * 主键 id
+     * 外键 id
      */
-    private String puid;
+    private String pBomPuid;
 
     /**
      * 备件
@@ -58,12 +58,12 @@ public class BatchInsertHzPbomMaintainRecordReqDTO {
      */
     private String changeNum;
 
-    public String getPuid() {
-        return puid;
+    public String getpBomPuid() {
+        return pBomPuid;
     }
 
-    public void setPuid(String puid) {
-        this.puid = puid;
+    public void setpBomPuid(String pBomPuid) {
+        this.pBomPuid = pBomPuid;
     }
 
     public String getSparePart() {

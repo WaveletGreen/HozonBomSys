@@ -5,7 +5,7 @@ import io.swagger.models.auth.In;
 /**
  * Created by haozt on 2018/5/24
  */
-public class HzPbomLineMaintainResponseDTO {
+public class HzPbomLineMaintainRespDTO {
     /**
      * PBOM id
      */

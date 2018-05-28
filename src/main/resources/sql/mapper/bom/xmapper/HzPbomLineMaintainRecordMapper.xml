@@ -13,6 +13,7 @@
     <result column="P_BOM_LINE_IS_2Y" jdbcType="INTEGER" property="is2Y" />
     <result column="P_BOM_LINE_IS_PART" jdbcType="INTEGER" property="isPart" />
     <result column="P_BOM_ORDER_NUM" jdbcType="INTEGER" property="orderNum" />
+    <result column="P_BOM_OF_WHICH_DEPT" jdbcType="INTEGER" property="pBomOfWhichDept" />
     <result column="P_PUID" jdbcType="VARCHAR" property="pPuid" />
     <result column="SPARE_PART" jdbcType="VARCHAR" property="sparePart" />
     <result column="SPARE_PART_NUM" jdbcType="VARCHAR" property="sparePartNum" />
