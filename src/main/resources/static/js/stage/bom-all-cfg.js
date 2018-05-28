@@ -51,6 +51,10 @@ $(document).ready(
                 var c = c + "</table>"
                 var $rable = $("#cfg1Table");
                 $rable.html(c);
+
+
+
+
                 var r, re;
                 var s = cfg1Table.outerHTML;
                 re = /<table(.[^>]*)>/i;
@@ -61,12 +65,17 @@ $(document).ready(
                     for (var k = 0; k < cfg1Table.rows.length; k++) {
                         tablehtml += cfg1Table.rows[k].cells[i].outerHTML
                     }
-                    tablehtml += "</tr>"
+                    tablehtml += "</wtr>"
                 }
                 tablehtml += "</table>"
                 newtable.innerHTML = tablehtml;
-                //下面这一句是让JS执行时隐藏原来的表格内容，达到新表格在原来的表格位置刷出来的效果。
+//下面这一句是让JS执行时隐藏原来的表格内容，达到新表格在原来的表格位置刷出来的效果。
                 document.getElementById("cfg1Table").style.display = "none";
+
+
+
+
+
                 var d = "<table>" +
                     "<tr>" +
                     "<th align='center'><input type='checkbox'></th>" +
@@ -176,4 +185,3 @@ function Botton(index) {
     // })
 //	window.location.href='update.html?backurl='+window.location.href;  
 }
-

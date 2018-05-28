@@ -55,7 +55,7 @@
 </div>
 <table id="pbomMaintenanceTable" class="table table-striped" style="margin-top: 0px;">
 </table>
-<script th:inline="javascript">
+<!--<script th:inline="javascript">
     $(document).ready(
         $("#myButton").click(function () {
             // var da = $("#text1").val();
@@ -144,7 +144,12 @@
             })
         })
     )
-</script>
+</script>-->
+<script th:src="@{/js/pom/pbomManage/pbomMaintenance.js}"></script>
 </body>
-
+<script th:inline="javascript">
+    function doQuery() {
+        $('#pbomMaintenanceTable').bootstrapTable('refresh');    //刷新表格
+    }
+</script>
 </html>
