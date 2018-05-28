@@ -13,10 +13,12 @@ public interface HzPbomMaintainRecordDAO {
      * 批量插入PBOM维护信息
      * @return
      */
-    int insertList();
+    int insertList(List<HzPbomMaintainRecord> records);
 
     /**
      * 查询PBOM信息 PBOM维护信息
      */
     List<HzPbomLineMaintainRecord> getPBomLineMaintainRecord();
+
+    int update(HzPbomLineMaintainRecord record);
 }
