@@ -23,6 +23,16 @@
                 <input class="form-control" id="pColorComment" name="pColorComment" type="text"
                        placeholder="备注"/>
             </div>
+            <div class="form-group">
+                <label>是否多色</label>
+                <select class="form-control input-small" data-style="btn-info"
+                        id="pColorIsMultiply">
+                    <option th:value="N" th:text="否">
+                    </option>
+                    <option th:value="Y" th:text="是">
+                    </option>
+                </select>
+            </div>
         </form>
         <script th:inline="javascript">
             <![CDATA[
@@ -73,6 +83,7 @@
                             "pColorComment": $("#pColorComment").val(),
                             "pColorName": $("#pColorName").val(),
                             "pColorOfSet": $("#pColorOfSet").val(),
+                            "pColorIsMultiply": $("#pColorIsMultiply").val()
                         });
                         $.ajax({
                             contentType:

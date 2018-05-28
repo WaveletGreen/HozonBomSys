@@ -163,7 +163,9 @@ public class HzCfg0ModelColorController {
                 } else if ("pDescOfColorfulModel".equals(key)) {
                     modelColor.setpDescOfColorfulModel(value);
                 } else if ("pCfg0MainRecordOfMC".equals(key)) {
-                    modelColor.setpCfg0MainRecordOfMC(form.get("pCfg0MainRecordOfMC"));
+                    modelColor.setpCfg0MainRecordOfMC(value);
+                } else if ("modelShell".equals(key)) {
+                    modelColor.setpModelShellOfColorfulModel(value);
                 } else {
                     modelColor.getMapOfCfg0().put(key, value);
                 }

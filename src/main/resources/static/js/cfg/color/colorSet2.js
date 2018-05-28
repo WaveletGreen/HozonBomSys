@@ -125,11 +125,17 @@ $(document).ready(
                     valign: 'middle',
                 },
                 {
+                    field: 'pColorIsMultiply',
+                    title: '是否多色',
+                    align: 'center',
+                    valign: 'middle',
+                },
+                {
                     field: 'puid',
                     title: 'puid',
                     hide: false
                 }
-            ],
+            ]
             // sortable: true,                     //是否启用排序
             // sortOrder: "asc",                   //排序方式
         });

@@ -20,10 +20,30 @@ $(document).ready(
                 }
                 var data = result.data;
                 var column = [];
-                column.push({field: 'ck', checkbox: true});
                 column.push({field: 'puid', title: 'puid'});
+                column.push({field: 'modeColorIsMultiply', title: 'modeColorIsMultiply'});
+                column.push({field: 'ck', checkbox: true, Width: 50});
                 column.push({field: 'codeOfColorModel', title: '车型颜色代码', align: 'center', valign: 'middle'});
                 column.push({field: 'descOfColorModel', title: '描述', align: 'center', valign: 'middle'});
+                column.push({
+                    field: 'modelShell',
+                    title: '油漆车身总成',
+                    align: 'center',
+                    valign: 'middle',
+                    formatter: function (value, row, index) {
+                        var rowValues = JSON.parse(JSON.stringify(row));
+                        if ("Y" === rowValues.modeColorIsMultiply) {
+                            return [
+                                '<a href="javascript:void(0)">' + value + '</a>'
+                            ].join("");
+                        }
+                        else {
+                            return [
+                                value
+                            ].join("");
+                        }
+                    }
+                });
                 for (var i = 0; i < data.length; i++) {
                     var josn = {
                         field: "s" + i,
@@ -32,8 +52,8 @@ $(document).ready(
                         align:
                             'center',
                         valign:
-                            'middle',
-                    }
+                            'middle'
+                    };
                     column.push(josn);
                 }
                 $table.bootstrapTable({
@@ -47,6 +67,10 @@ $(document).ready(
                     pagination: true,                   //是否显示分页（*）
                     clickToSelect: true,                // 单击某一行的时候选中某一条记录
                     formId: "hide",
+                    /**列信息，需要预先定义好*/
+                    columns: column,
+                    // sortable: true,                     //是否启用排序
+                    // sortOrder: "asc",                   //排序方式
                     toolbars: [
                         {
                             text: '添加',
@@ -90,19 +114,6 @@ $(document).ready(
                                     return false;
                                 }
                                 //测试数据
-                                // var obj = {
-                                //     "puid": rows[0].puid,
-                                //     "pColorOfSet": rows[0].pColorOfSet,
-                                //     "pColorName": rows[0].pColorName,
-                                //     "pColorCode": rows[0].pColorCode,
-                                //     "pColorComment": rows[0].pColorComment,
-                                // };
-                                // var array = [];
-                                // array.push(obj);
-                                // array.push(obj);
-                                // var data = JSON.stringify(array);
-                                //data = data.replace(new RegExp('\\"', "gm"), '"');
-                                //测试数据
                                 window.Ewin.confirm({
                                     title: '提示',
                                     message: '是否要删除您所选择的记录？',
@@ -133,15 +144,10 @@ $(document).ready(
                                 });
                             }
                         }
-                    ],
-                    /**列信息，需要预先定义好*/
-                    columns: column,
-                    // sortable: true,                     //是否启用排序
-                    // sortOrder: "asc",                   //排序方式
+                    ]
                 });
-                // $table.bootstrapTable('hideColumn', 'puid');
-                // $table.bootstrapTable('hideColumn', 'pCfg0MainRecordOfMC');
-
+                $table.bootstrapTable('hideColumn', 'puid');
+                $table.bootstrapTable('hideColumn', 'modeColorIsMultiply');
             }
         });
 

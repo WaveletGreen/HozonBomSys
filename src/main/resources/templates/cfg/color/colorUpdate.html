@@ -26,6 +26,16 @@
                        th:value="${entity.pColorComment}"
                        placeholder="备注"/>
             </div>
+            <div class="form-group">
+                <label>是否多色</label>
+                <select class="form-control input-small" data-style="btn-info"
+                        id="pColorIsMultiply">
+                    <option th:value="N" th:text="否" th:selected="${entity.pColorIsMultiply=='N'?true:false}">
+                    </option>
+                    <option th:value="Y" th:text="是" th:selected="${entity.pColorIsMultiply=='Y'?true:false}">
+                    </option>
+                </select>
+            </div>
         </form>
         <script th:inline="javascript">
             <![CDATA[
@@ -75,7 +85,8 @@
                             "pColorComment": $("#pColorComment").val(),
                             "pColorName": $("#pColorName").val(),
                             "pColorOfSet": $("#pColorOfSet").val(),
-                            "puid": $("#puid").val()
+                            "puid": $("#puid").val(),
+                            "pColorIsMultiply": $("#pColorIsMultiply").val()
                         });
                         $.ajax({
                             contentType:

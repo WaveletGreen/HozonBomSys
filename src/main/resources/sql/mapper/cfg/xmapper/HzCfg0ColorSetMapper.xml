@@ -7,9 +7,10 @@
         <result column="P_COLOR_NAME" jdbcType="VARCHAR" property="pColorName"/>
         <result column="P_COLOR_CODE" jdbcType="VARCHAR" property="pColorCode"/>
         <result column="P_COLOR_COMMENT" jdbcType="VARCHAR" property="pColorComment"/>
+        <result column="P_COLOR_IS_MULTIPLY" jdbcType="VARCHAR" property="pColorIsMultiply"/>
     </resultMap>
     <sql id="Base_Column_List">
-    PUID, P_COLOR_OF_SET, P_COLOR_NAME, P_COLOR_CODE, P_COLOR_COMMENT
+    PUID, P_COLOR_OF_SET, P_COLOR_NAME, P_COLOR_CODE, P_COLOR_COMMENT,P_COLOR_IS_MULTIPLY
   </sql>
     <sql id="Base_Column_List_By_Batch">
         #{item.puid,jdbcType=VARCHAR}
@@ -26,16 +27,18 @@
     </select>
     <insert id="insertOne" parameterType="sql.pojo.cfg.HzCfg0ColorSet">
     insert into HZ_CFG0_COLORSET (PUID, P_COLOR_OF_SET, P_COLOR_NAME, 
-      P_COLOR_CODE, P_COLOR_COMMENT)
+      P_COLOR_CODE, P_COLOR_COMMENT,P_COLOR_IS_MULTIPLY)
     values (#{puid,jdbcType=VARCHAR}, #{pColorOfSet,jdbcType=VARCHAR}, #{pColorName,jdbcType=VARCHAR}, 
-      #{pColorCode,jdbcType=VARCHAR}, #{pColorComment,jdbcType=VARCHAR})
+      #{pColorCode,jdbcType=VARCHAR}, #{pColorComment,jdbcType=VARCHAR},#{pColorIsMultiply,jdbcType=VARCHAR}
+      )
   </insert>
     <update id="updateByPrimaryKey" parameterType="sql.pojo.cfg.HzCfg0ColorSet">
     update HZ_CFG0_COLORSET
     set P_COLOR_OF_SET = #{pColorOfSet,jdbcType=VARCHAR},
       P_COLOR_NAME = #{pColorName,jdbcType=VARCHAR},
       P_COLOR_CODE = #{pColorCode,jdbcType=VARCHAR},
-      P_COLOR_COMMENT = #{pColorComment,jdbcType=VARCHAR}
+      P_COLOR_COMMENT = #{pColorComment,jdbcType=VARCHAR},
+      P_COLOR_IS_MULTIPLY = #{pColorIsMultiply,jdbcType=VARCHAR}
     where PUID = #{puid,jdbcType=VARCHAR}
   </update>
 

@@ -21,13 +21,24 @@
             <input class="form-control" id="pDescOfColorfulModel" name="pDescOfColorfulModel" type="text"
                    placeholder="请输入描述"/>
         </div>
+        <div class="form-group col-lg-10">
+            <label>油漆车身总成</label>
+            <select class="form-control input-small" data-style="btn-info"
+                    th:id="modelShell" th:name="modelShell">
+                <option th:each="color:${colorList}" th:value="${color.pColorCode}"
+                        th:text="${color.pColorCode+' -- '+color.pColorName+' -- '+color.getpColorComment()+' -- '+color.getpColorOfSet()}"
+                >
+                </option>
+            </select>
+        </div>
         <!--循环放入数据-->
         <div class="form-group col-lg-10" th:each="column,c:${columnList}">
             <label class="control-label" th:text="${column}"></label>
             <select class="form-control input-small" th:name="${c.index}" data-style="btn-info"
                     th:id="${'select'+c.index}">
-                <option th:each="color:${colorList}" th:value="${color.pColorName}"
-                        th:text="${color.pColorName}">
+                <option th:each="color:${colorList}" th:value="${color.pColorCode}"
+                        th:text="${color.pColorCode+' -- '+color.pColorName+' -- '+color.getpColorComment()+' -- '+color.getpColorOfSet()}"
+                >
                 </option>
             </select>
         </div>
@@ -37,62 +48,81 @@
 <script th:inline="javascript">
     <![CDATA[
     $(function () {
-        $('#colorModelForm').bootstrapValidator({
-            message: 'This value is not valid',
-            feedbackIcons: {
-                valid: 'glyphicon glyphicon-ok',
-                invalid: 'glyphicon glyphicon-remove',
-                validating: 'glyphicon glyphicon-refresh'
-            },
-            fields: {
-                pCodeOfColorfulModel: {
-                    message: '车型颜色代码验证失败',
-                    validators: {
-                        notEmpty: {
-                            message: '车型颜色代码不能为空'
+            $('#colorModelForm').bootstrapValidator({
+                message: 'This value is not valid',
+                feedbackIcons: {
+                    valid: 'glyphicon glyphicon-ok',
+                    invalid: 'glyphicon glyphicon-remove',
+                    validating: 'glyphicon glyphicon-refresh'
+                },
+                fields: {
+                    pCodeOfColorfulModel: {
+                        message: '车型颜色代码验证失败',
+                        validators: {
+                            notEmpty: {
+                                message: '车型颜色代码不能为空'
+                            }
+                        }
+                    },
+                    modelShell: {
+                        validators: {
+                            callback: {
+                                message: '油漆车身总成验证失败,不能选无色',
+                                callback: function () {
+                                    if ($('#modelShell').val() == '-')
+                                        return false;
+                                    return true;
+                                }
+                            }
                         }
                     }
                 }
-            }
-        });
-        // 绑定dialog的确定按钮的监听事件<!--th:selected="${c.index}==${color.pColorName}"-->
-        $("#btnOk", window.top.document).click(function () {
-            var count = parseInt($("#counter").val());
-            var data = {};
-            <!--其实不要puid，puid会在服务器上生成-->
-            data.pCodeOfColorfulModel = $("#pCodeOfColorfulModel").val();
-            data.pDescOfColorfulModel = $("#pDescOfColorfulModel").val();
-            data.pCfg0MainRecordOfMC = $("#pCfg0MainRecordOfMC").val();
-            for (var i = 0; i < count; i++) {
-                eval(('data.s' + i + '=$("#select' + i + '").val()'));
-            }
-            var bootstrapValidator = $("#colorModelForm", window.top.document).data('bootstrapValidator');
-            bootstrapValidator.validate();
-            if (bootstrapValidator.isValid()) {
-                var url = $("#colorModelForm", window.top.document).attr('action');
-                $.ajax({
-                    contentType:
-                        "application/json",
-                    type:
-                        'POST',
-                    url: url,
-                    data: JSON.stringify(data),
-                    success:
-                        function (result) {
-                            $('.modal-dialog', window.top.document).parent('div').remove()
-                            $('body', window.top.document).find('.modal-backdrop').remove();
-                            // jquery 调用刷新当前操作的table页面的refresh方法
-                            $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
-                            if (result)
-                                window.Ewin.alert({message: "添加数据成功"});
-                        },
-                    error: function (status) {
-                        window.Ewin.alert({message: status.status + ':添加数据失败!'});
-                    }
-                });
-            }
-        });
-    })
+            });
+            // 绑定dialog的确定按钮的监听事件
+            <!--th:selected="${c.index}==${color.pColorName}"-->
+            $("#btnOk", window.top.document).click(function () {
+                var count = parseInt($("#counter").val());
+                var data = {};
+                <!--其实不要puid，puid会在服务器上生成-->
+                data.pCodeOfColorfulModel = $("#pCodeOfColorfulModel").val();
+                data.pDescOfColorfulModel = $("#pDescOfColorfulModel").val();
+                data.pCfg0MainRecordOfMC = $("#pCfg0MainRecordOfMC").val();
+                data.modelShell = $("#modelShell").val();
+                for (var i = 0; i < count; i++) {
+                    eval(('data.s' + i + '=$("#select' + i + '").val()'));
+                }
+                var bootstrapValidator = $("#colorModelForm", window.top.document).data('bootstrapValidator');
+                bootstrapValidator.validate();
+                if (bootstrapValidator.isValid()) {
+                    var url = $("#colorModelForm", window.top.document).attr('action');
+                    $.ajax({
+                        contentType:
+                            "application/json",
+                        type:
+                            'POST',
+                        url: url,
+                        data: JSON.stringify(data),
+                        success:
+                            function (result) {
+                                $('.modal-dialog', window.top.document).parent('div').remove()
+                                $('body', window.top.document).find('.modal-backdrop').remove();
+                                // jquery 调用刷新当前操作的table页面的refresh方法
+                                $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
+                                if (result)
+                                    window.Ewin.alert({message: "添加数据成功"});
+                            },
+                        error: function (status) {
+                            window.Ewin.alert({message: status.status + ':添加数据失败!'});
+                        }
+                    });
+                }
+            });
+        },
+        $("#modelShell").change(function () {
+            $("#pDescOfColorfulModel").val($("#pCodeOfColorfulModel").val() + $('#modelShell option:selected').text().split(' -- ')[1]);
+            console.log("已选择油漆车身颜色");
+        })
+    )
     ]]>
 </script>
 </body>

@@ -6,23 +6,33 @@
         <result column="P_CFG0_MAIN_RECORD_OF_MC" jdbcType="VARCHAR" property="pCfg0MainRecordOfMC"/>
         <result column="P_CODE_OF_COLORFUL_MODEL" jdbcType="VARCHAR" property="pCodeOfColorfulModel"/>
         <result column="P_DESC_OF_COLORFUL_MODEL" jdbcType="VARCHAR" property="pDescOfColorfulModel"/>
+        <result column="P_MODEL_SHELL" jdbcType="VARCHAR" property="pModelShellOfColorfulModel"/>
     </resultMap>
     <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs"
                type="sql.pojo.cfg.HzCfg0ModelColor">
         <result column="P_COLORFUL_MAP_BLOCK" jdbcType="BLOB"
                 property="pColorfulMapBlock"/>
     </resultMap>
+    <resultMap extends="ResultMapWithBLOBs" id="ResultMapWithColorJudge"
+               type="sql.pojo.cfg.HzCfg0ModelColor">
+        <result column="P_COLOR_IS_MULTIPLY" jdbcType="VARCHAR" property="pColorIsMultiply"/>
+    </resultMap>
+
     <sql id="Base_Column_List">
-    PUID, P_CFG0_MAIN_RECORD_OF_MC, P_CODE_OF_COLORFUL_MODEL, P_DESC_OF_COLORFUL_MODEL
+    PUID, P_CFG0_MAIN_RECORD_OF_MC, P_CODE_OF_COLORFUL_MODEL, P_DESC_OF_COLORFUL_MODEL,P_MODEL_SHELL
     </sql>
     <sql id="Blob_Column_List">
     P_COLORFUL_MAP_BLOCK
+    </sql>
+    <sql id="Color_Is_Multiply">
+    P_COLOR_IS_MULTIPLY
     </sql>
     <sql id="values">
         #{puid,jdbcType=VARCHAR},
         #{pCfg0MainRecordOfMC,jdbcType=VARCHAR},
         #{pCodeOfColorfulModel,jdbcType=VARCHAR},
         #{pDescOfColorfulModel,jdbcType=VARCHAR},
+        #{pModelShellOfColorfulModel,jdbcType=VARCHAR},
         #{pColorfulMapBlock,jdbcType=BLOB}
     </sql>
     <sql id="reflect">
@@ -43,11 +53,15 @@
         <include refid="Blob_Column_List"/>
         from HZ_CFG0_MODEL_COLOR_RECORD where PUID=#{puid,jdbcType=VARCHAR}
     </select>
-    <select id="selectAll" resultMap="ResultMapWithBLOBs">
+    <select id="selectAll" resultMap="ResultMapWithColorJudge">
         select
+        t.
         <include refid="Base_Column_List"/>,
-        <include refid="Blob_Column_List"/>
-        from HZ_CFG0_MODEL_COLOR_RECORD
+        <include refid="Blob_Column_List"/>,
+        t2.
+        <include refid="Color_Is_Multiply"/>
+        from HZ_CFG0_MODEL_COLOR_RECORD t
+        left join HZ_CFG0_COLORSET t2 on p_model_shell=t2.p_color_code
     </select>
     <insert id="insertOne" parameterType="sql.pojo.cfg.HzCfg0ModelColor">
         insert into HZ_CFG0_MODEL_COLOR_RECORD

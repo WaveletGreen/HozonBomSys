@@ -14,12 +14,26 @@ public class HzCfg0ModelColor {
     private String pCfg0MainRecordOfMC;
     private String pCodeOfColorfulModel;
     private String pDescOfColorfulModel;
+    /**
+     * 油漆车身总成
+     */
+    private String pModelShellOfColorfulModel;
     private byte[] pColorfulMapBlock;
     private LinkedHashMap<String, String> mapOfCfg0;
+    private String pColorIsMultiply;
 
     public HzCfg0ModelColor() {
         mapOfCfg0 = new LinkedHashMap<>();
     }
+
+    public String getpModelShellOfColorfulModel() {
+        return pModelShellOfColorfulModel;
+    }
+
+    public void setpModelShellOfColorfulModel(String pModelShellOfColorfulModel) {
+        this.pModelShellOfColorfulModel = pModelShellOfColorfulModel;
+    }
+
 
     public String getpCfg0MainRecordOfMC() {
         return pCfg0MainRecordOfMC;
@@ -67,5 +81,13 @@ public class HzCfg0ModelColor {
 
     public void setMapOfCfg0(LinkedHashMap<String, String> mapOfCfg0) {
         this.mapOfCfg0 = mapOfCfg0;
+    }
+
+    public String getpColorIsMultiply() {
+        return pColorIsMultiply;
+    }
+
+    public void setpColorIsMultiply(String pColorIsMultiply) {
+        this.pColorIsMultiply = pColorIsMultiply;
     }
 }

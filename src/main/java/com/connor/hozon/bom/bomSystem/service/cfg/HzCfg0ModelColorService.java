@@ -51,6 +51,8 @@ public class HzCfg0ModelColorService {
             _result.put("puid", color.getPuid());
             _result.put("codeOfColorModel", color.getpCodeOfColorfulModel());
             _result.put("descOfColorModel", color.getpDescOfColorfulModel());
+            _result.put("modelShell", color.getpModelShellOfColorfulModel());
+            _result.put("modeColorIsMultiply", color.getpColorIsMultiply());
             Object o = SerializeUtil.unserialize(color.getpColorfulMapBlock());
             if (o instanceof HashMap) {
                 HashMap<String, String> _map = (HashMap) o;
