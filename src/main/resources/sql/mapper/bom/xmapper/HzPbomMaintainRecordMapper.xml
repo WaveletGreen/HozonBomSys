@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="sql.mapper.imapper.HzPbomMaintainRecordMapper">
+<mapper namespace="HzPbomMaintainRecord">
   <resultMap id="BaseResultMap" type="sql.pojo.bom.HzPbomMaintainRecord">
     <id column="PUID" jdbcType="VARCHAR" property="puid" />
     <result column="SPARE_PART" jdbcType="VARCHAR" property="sparePart" />
@@ -21,6 +21,9 @@
     PUID, SPARE_PART, SPARE_PART_NUM, PROCESS_ROUTE, LABOR_HOUR, RHYTHM, SOLDER_JOINT,
     MACHINE_MATERIAL, STANDARD_PART, TOOLS, WASTER_PRODUCT, CHANGE, CHANGE_NUM, P_BOM_PUID
   </sql>
+
+
+
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />
@@ -31,18 +34,28 @@
     delete from HZ_PBOM_MAINTAIN_RECORD
     where PUID = #{puid,jdbcType=VARCHAR}
   </delete>
-  <insert id="insert" parameterType="sql.pojo.bom.HzPbomMaintainRecord">
+
+  <!--批量插入-->
+  <insert id="HzPbomMaintainRecordDAOImpl_insertList"  useGeneratedKeys="false" parameterType="java.util.List">
     insert into HZ_PBOM_MAINTAIN_RECORD (PUID, SPARE_PART, SPARE_PART_NUM,
       PROCESS_ROUTE, LABOR_HOUR, RHYTHM,
       SOLDER_JOINT, MACHINE_MATERIAL, STANDARD_PART,
       TOOLS, WASTER_PRODUCT, CHANGE,
       CHANGE_NUM, P_BOM_PUID)
-    values (#{puid,jdbcType=VARCHAR}, #{sparePart,jdbcType=VARCHAR}, #{sparePartNum,jdbcType=VARCHAR},
-      #{processRoute,jdbcType=VARCHAR}, #{laborHour,jdbcType=VARCHAR}, #{rhythm,jdbcType=VARCHAR},
-      #{solderJoint,jdbcType=VARCHAR}, #{machineMaterial,jdbcType=VARCHAR}, #{standardPart,jdbcType=VARCHAR},
-      #{tools,jdbcType=VARCHAR}, #{wasterProduct,jdbcType=VARCHAR}, #{change,jdbcType=VARCHAR},
-      #{changeNum,jdbcType=VARCHAR}, #{pBomPuid,jdbcType=VARCHAR})
+    <foreach collection="list" item="item" index="index"  separator="UNION ALL" >
+      select
+      #{item.puid,jdbcType=VARCHAR}, #{item.sparePart,jdbcType=VARCHAR}, #{item.sparePartNum,jdbcType=VARCHAR},
+      #{item.processRoute,jdbcType=VARCHAR}, #{item.laborHour,jdbcType=VARCHAR}, #{item.rhythm,jdbcType=VARCHAR},
+      #{item.solderJoint,jdbcType=VARCHAR}, #{item.machineMaterial,jdbcType=VARCHAR}, #{item.standardPart,jdbcType=VARCHAR},
+      #{item.tools,jdbcType=VARCHAR}, #{item.wasterProduct,jdbcType=VARCHAR}, #{item.change,jdbcType=VARCHAR},
+      #{item.changeNum,jdbcType=VARCHAR}, #{item.pBomPuid,jdbcType=VARCHAR}
+      from DUAL
+    </foreach>
   </insert>
+
+
+
+
   <insert id="insertSelective" parameterType="sql.pojo.bom.HzPbomMaintainRecord">
     insert into HZ_PBOM_MAINTAIN_RECORD
     <trim prefix="(" suffix=")" suffixOverrides=",">

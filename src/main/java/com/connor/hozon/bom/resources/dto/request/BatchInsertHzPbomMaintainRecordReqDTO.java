@@ -1,13 +1,13 @@
-package sql.pojo.bom;
+package com.connor.hozon.bom.resources.dto.request;
 
 /**
  * Created by haozt on 2018/5/24
  */
-public class HzPbomMaintainRecord {
+public class BatchInsertHzPbomMaintainRecordReqDTO {
     /**
-     * 主键id
+     * 外键 id
      */
-    private String puid;
+    private String pBomPuid;
 
     /**
      * 备件
@@ -22,7 +22,7 @@ public class HzPbomMaintainRecord {
      */
     private String processRoute;
     /**
-     * 人工工时
+     * 人工工时 ms
      */
     private String laborHour;
     /**
@@ -57,17 +57,13 @@ public class HzPbomMaintainRecord {
      * 变更编号
      */
     private String changeNum;
-    /**
-     * 外键
-     */
-    private String pBomPuid;
 
-    public String getPuid() {
-        return puid;
+    public String getpBomPuid() {
+        return pBomPuid;
     }
 
-    public void setPuid(String puid) {
-        this.puid = puid == null ? null : puid.trim();
+    public void setpBomPuid(String pBomPuid) {
+        this.pBomPuid = pBomPuid;
     }
 
     public String getSparePart() {
@@ -75,7 +71,7 @@ public class HzPbomMaintainRecord {
     }
 
     public void setSparePart(String sparePart) {
-        this.sparePart = sparePart == null ? null : sparePart.trim();
+        this.sparePart = sparePart;
     }
 
     public String getSparePartNum() {
@@ -83,7 +79,7 @@ public class HzPbomMaintainRecord {
     }
 
     public void setSparePartNum(String sparePartNum) {
-        this.sparePartNum = sparePartNum == null ? null : sparePartNum.trim();
+        this.sparePartNum = sparePartNum;
     }
 
     public String getProcessRoute() {
@@ -91,7 +87,7 @@ public class HzPbomMaintainRecord {
     }
 
     public void setProcessRoute(String processRoute) {
-        this.processRoute = processRoute == null ? null : processRoute.trim();
+        this.processRoute = processRoute;
     }
 
     public String getLaborHour() {
@@ -99,7 +95,7 @@ public class HzPbomMaintainRecord {
     }
 
     public void setLaborHour(String laborHour) {
-        this.laborHour = laborHour == null ? null : laborHour.trim();
+        this.laborHour = laborHour;
     }
 
     public String getRhythm() {
@@ -107,7 +103,7 @@ public class HzPbomMaintainRecord {
     }
 
     public void setRhythm(String rhythm) {
-        this.rhythm = rhythm == null ? null : rhythm.trim();
+        this.rhythm = rhythm;
     }
 
     public String getSolderJoint() {
@@ -115,9 +111,8 @@ public class HzPbomMaintainRecord {
     }
 
     public void setSolderJoint(String solderJoint) {
-        this.solderJoint = solderJoint == null ? null : solderJoint.trim();
+        this.solderJoint = solderJoint;
     }
-
 
     public String getMachineMaterial() {
         return machineMaterial;
@@ -132,7 +127,7 @@ public class HzPbomMaintainRecord {
     }
 
     public void setStandardPart(String standardPart) {
-        this.standardPart = standardPart == null ? null : standardPart.trim();
+        this.standardPart = standardPart;
     }
 
     public String getTools() {
@@ -140,7 +135,7 @@ public class HzPbomMaintainRecord {
     }
 
     public void setTools(String tools) {
-        this.tools = tools == null ? null : tools.trim();
+        this.tools = tools;
     }
 
     public String getWasterProduct() {
@@ -148,7 +143,7 @@ public class HzPbomMaintainRecord {
     }
 
     public void setWasterProduct(String wasterProduct) {
-        this.wasterProduct = wasterProduct == null ? null : wasterProduct.trim();
+        this.wasterProduct = wasterProduct;
     }
 
     public String getChange() {
@@ -156,7 +151,7 @@ public class HzPbomMaintainRecord {
     }
 
     public void setChange(String change) {
-        this.change = change == null ? null : change.trim();
+        this.change = change;
     }
 
     public String getChangeNum() {
@@ -164,14 +159,6 @@ public class HzPbomMaintainRecord {
     }
 
     public void setChangeNum(String changeNum) {
-        this.changeNum = changeNum == null ? null : changeNum.trim();
-    }
-
-    public String getpBomPuid() {
-        return pBomPuid;
-    }
-
-    public void setpBomPuid(String pBomPuid) {
-        this.pBomPuid = pBomPuid == null ? null : pBomPuid.trim();
+        this.changeNum = changeNum;
     }
 }

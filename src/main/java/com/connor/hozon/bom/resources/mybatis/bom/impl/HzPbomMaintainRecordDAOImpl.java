@@ -15,12 +15,17 @@ import java.util.List;
 public class HzPbomMaintainRecordDAOImpl extends BaseSQLUtil implements HzPbomMaintainRecordDAO {
 
     @Override
-    public int insertList() {
-        return 0;
+    public int insertList(List<HzPbomMaintainRecord> list) {
+        return super.insert("HzPbomMaintainRecordDAOImpl_insertList",list);
     }
 
     @Override
     public List<HzPbomLineMaintainRecord> getPBomLineMaintainRecord() {
         return super.findForList("HzPbomMaintainRecordDAOImpl_getPBomLineMaintainRecord",null);
+    }
+
+    @Override
+    public int update(HzPbomLineMaintainRecord record) {
+        return 0;
     }
 }
