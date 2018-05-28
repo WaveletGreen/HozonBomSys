@@ -3,6 +3,7 @@ package com.connor.hozon.bom.resources.mybatis.bom.impl;
 import com.connor.hozon.bom.resources.mybatis.bom.HzPbomMaintainRecordDAO;
 import org.springframework.stereotype.Service;
 import sql.BaseSQLUtil;
+import sql.pojo.bom.HzBomLineRecord;
 import sql.pojo.bom.HzPbomLineMaintainRecord;
 import sql.pojo.bom.HzPbomMaintainRecord;
 
@@ -27,5 +28,10 @@ public class HzPbomMaintainRecordDAOImpl extends BaseSQLUtil implements HzPbomMa
     @Override
     public int update(HzPbomLineMaintainRecord record) {
         return 0;
+    }
+
+    @Override
+    public List<HzPbomLineMaintainRecord> searchPbomMaintainDetail(HzBomLineRecord record) {
+        return super.findForList("HzPbomMaintainRecordDAOImpl_searchPbomMaintainDetail",record);
     }
 }

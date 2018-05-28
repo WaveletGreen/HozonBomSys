@@ -100,5 +100,14 @@ public class HzPbomController  extends BaseController {
         writeAjaxJSONResponse(ResultMessageBuilder.build(respDTOS),response);
     }
 
+    /**
+     * EBOM  PBOM
+     * 基础信息 继承自EBOM 维护信息在PBOM端
+     * 数据库建表头字段维护  新增列 删除列操作
+     * EBOM表头    PBOM表头放到一张表 使用外键区分  PBOM表头 PBOM维护表头
+     *
+     * 外键在哪？ 表名 表列 表id 没想到这么做的好处
+     */
+    
 
 }
