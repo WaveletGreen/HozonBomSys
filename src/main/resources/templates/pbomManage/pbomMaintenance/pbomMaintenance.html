@@ -58,19 +58,20 @@
 <script th:inline="javascript">
     $(document).ready(
         $("#myButton").click(function () {
-            var da = $("#text1").val();
-            if (da.length == 0) {
-                $("#myModal").modal('show');
-                return;
-            }
+            // var da = $("#text1").val();
+            // if (da.length == 0) {
+            //     $("#myModal").modal('show');
+            //     return;
+            // }
 
             $.ajax({
-                url: 'config/getFeature',
+                url: 'pbom/getMaintain/detail',
                 type: 'GET',
-                data: {
-                    'pCfg0MainItemPuid': da
-                },
+                // data: {
+                //      'pCfg0MainItemPuid': da
+                // },
                 success: function (data) {
+                    console.log(data)
                     var array = data.externalObject;
                     var number = 1;
                     var r = "<table>" +
@@ -95,30 +96,42 @@
                         "</tr>"
                     for (var i = 0; i < array.length; i++) {
                         var re = array[i];
-                        var v1 = re.pH9FeatureName
-                        var v2 = re.pH9FeatureDesc
-                        var v3 = re.pH9FeatureEnName
-                        var v4 = "10"
-                        var v5 = ""
-                        var v6 = re.pCfg0Desc
+                        var v1 = re.pBomPuid
+                        var v2 = re.level
+                        var v3 = re.pBomOfWhichDept
+                        var v4 = re.lineId
+                        var v5 = re.bomDigifaxId
+                        var v6 = re.sparePart
+                        var v7 = re.sparePartNum
+                        var v8 = re.processRoute
+                        var v9 = re.laborHour
+                        var v10 = re.rhythm
+                        var v11 = re.solderJoint
+                        var v12 = re.machineMaterial
+                        var v13 = re.standardPart
+                        var v14 = re.tools
+                        var v15 = re.wasterProduct
+                        var v16 = re.change
+                        var v17 = re.changeNum
                         r = r + "<tr>" +
                             "<td>" + number++ + "</td>" +
+                            "<input type='hidden' value='"+v1+"'>"+
                             "<td>" + v2 + "</td>" +
                             "<td>" + v3 + "</td>" +
                             "<td>" + v4 + "</td>" +
+                            "<td>" + v5 + "</td>" +
                             "<td>" + v6 + "</td>" +
-                            "<td></td>" +
-                            "<td></td>" +
-                            "<td></td>" +
-                            "<td></td>" +
-                            "<td></td>" +
-                            "<td></td>" +
-                            "<td></td>" +
-                            "<td></td>" +
-                            "<td></td>" +
-                            "<td></td>" +
-                            "<td></td>" +
-                            "<td></td>" +
+                            "<td>" + v7 + "</td>" +
+                            "<td>" + v8 + "</td>" +
+                            "<td>" + v9 + "</td>" +
+                            "<td>" + v10 + "</td>" +
+                            "<td>" + v11 + "</td>" +
+                            "<td>" + v12 + "</td>" +
+                            "<td>" + v13 + "</td>" +
+                            "<td>" + v14 + "</td>" +
+                            "<td>" + v15 + "</td>" +
+                            "<td>" + v16 + "</td>" +
+                            "<td>" + v17 + "</td>" +
                             "</tr>"
                     }
                     var r = r + "</table>"

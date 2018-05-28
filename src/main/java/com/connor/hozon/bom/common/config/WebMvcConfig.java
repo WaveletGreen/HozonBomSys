@@ -51,6 +51,8 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         registry.addViewController("/processRoute").setViewName("/pbomManage/processRoute/processRoute");
         //PBOM定义Make/Buy
         registry.addViewController("/defineMake").setViewName("/pbomManage/defineMake/defineMake");
+        //PBOM
+        registry.addViewController("/pbomMain").setViewName("/pbomManage/pbomMain");
     }
 
 
