@@ -31,7 +31,6 @@ public class HzPbomServiceImpl implements HzPbomService {
     private HzPbomRecordDAO hzPbomRecordDAO;
     @Override
     public List<HzPbomLineMaintainRespDTO> getHzPbomMaintainRecord() {
-        List<HzPbomLineMaintainRespDTO> responseDTOS = new ArrayList<>();
         List<HzPbomLineMaintainRecord> records = recordDAO.getPBomLineMaintainRecord();
         if(ListUtil.isEmpty(records)){
             return null;
@@ -77,22 +76,22 @@ public class HzPbomServiceImpl implements HzPbomService {
 
     @Override
     public List<HzPbomLineMaintainRespDTO> searchPbomLineMaintainRecord(SearchPbomDetailReqDTO reqDTO) {
+
         // 3Y---1.1.3    8Y   判断 带Y  和不带Y  前面的数字
-        //SELECT *
-        //
-        //  FROM HZ_BOM_LINE_RECORD WHERE p_bom_line_is_2y=1 AND LENGTH(p_line_index)-1=2;
         HzBomLineRecord record = new HzBomLineRecord();
         record.setLineID(reqDTO.getLineId());
         record.setpBomOfWhichDept(reqDTO.getpBomOfWhichDept());
-        String level = reqDTO.getLevel().toUpperCase();
-        //这里+1 为了和数据库sql length函数做对应
-        int length = level.split("\\.").length+1;
-        if(level.endsWith("Y")){
-            record.setIs2Y(new Integer(1));
-        }else{
-            record.setIs2Y(new Integer(0));
+        String level = reqDTO.getLevel();
+        if(null!=level){
+            //这里+1 为了和数据库sql length函数做对应
+            int length = level.charAt(0)-48;
+            if(level.toUpperCase().endsWith("Y")){
+                record.setIsHas(new Integer(1));
+            }else{
+                record.setIsHas(new Integer(0));
+            }
+            record.setLineIndex(String.valueOf(2*length-1));
         }
-        record.setLineIndex(String.valueOf(length));
         //reqDTO.getName();//这个字段数据库表中暂时没有
         List<HzPbomLineMaintainRecord> records = recordDAO.searchPbomMaintainDetail(record);
         if(ListUtil.isEmpty(records)){
@@ -101,10 +100,38 @@ public class HzPbomServiceImpl implements HzPbomService {
         return pbomLineMaintailRecordToRespDTOS(records);
     }
 
-    //这个没写完 明天继续
     @Override
     public List<HzPbomLineRespDTO> searchPbomLineManageRecord(SearchPbomDetailReqDTO reqDTO) {
         HzBomLineRecord record = new HzBomLineRecord();
+        record.setLineID(reqDTO.getLineId());
+        record.setpBomOfWhichDept(reqDTO.getpBomOfWhichDept());
+        //分组号和零件分类暂时没有 后期加
+        Integer rank = reqDTO.getRank();
+        String level = reqDTO.getLevel();
+        if(rank!=null && level!=null){
+            int length = level.charAt(0)-48;
+            if(!rank.equals(length)){
+                return null;
+            }
+        }
+        if(level!=null){
+            int length = level.charAt(0)-48;
+            if(level.toUpperCase().endsWith("Y")){
+                record.setIsHas(Integer.valueOf(1));
+            }else{
+                record.setIsHas(Integer.valueOf(0));
+            }
+            //1.1 3   1.1.1 5    2.2.2.2.2 9  1.1.1.1 7  2.2.2.2.2.2 11
+            //2-3  3-5  4-7  5-9 6-11
+            // an = 2n-1
+            record.setLineIndex(String.valueOf(2*length-1));
+        }
+        if(rank!=null){
+            //2  3y/3   1.1.1      2.1.1  3.1.1  5
+            //4  5y/5  1.1.1.1.1   1.2.3.1.1  2.2.1.1.1 9
+            //5  6y/6  11
+            record.setLineIndex(String.valueOf(2*rank+1));
+        }
         List<HzPbomLineRecord> records = hzPbomRecordDAO.searchPbomLineDetail(record);
         if(ListUtil.isEmpty(records)){
             return null;
@@ -129,10 +156,10 @@ public class HzPbomServiceImpl implements HzPbomService {
         }else if(null!= is2Y && is2Y.equals(0)){
             if(hasChildren!=null && hasChildren.equals(1)){
                 line =level+"Y";
-                rank = level;
+                rank = level-1;
             }else if(hasChildren!= null && hasChildren.equals(0)){
                 line = String.valueOf(level);
-                rank = level;
+                rank = level-1;
             }else{
                 line ="/";//错误数据
             }
@@ -230,5 +257,5 @@ public class HzPbomServiceImpl implements HzPbomService {
         }
         return null;
     }
-    
+
 }

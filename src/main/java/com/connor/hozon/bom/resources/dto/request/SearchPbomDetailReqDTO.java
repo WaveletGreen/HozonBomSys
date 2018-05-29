@@ -24,7 +24,7 @@ public class SearchPbomDetailReqDTO {
     /**
      * 级别
      */
-    private String rank;
+    private Integer rank;
     /**
      * 分组号
      */
@@ -67,11 +67,11 @@ public class SearchPbomDetailReqDTO {
         this.name = name;
     }
 
-    public String getRank() {
+    public Integer getRank() {
         return rank;
     }
 
-    public void setRank(String rank) {
+    public void setRank(Integer rank) {
         this.rank = rank;
     }
 

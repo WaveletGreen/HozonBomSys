@@ -1,7 +1,5 @@
 package com.connor.hozon.bom.resources.dto.response;
 
-import io.swagger.models.auth.In;
-
 /**
  * Created by haozt on 2018/5/24
  */

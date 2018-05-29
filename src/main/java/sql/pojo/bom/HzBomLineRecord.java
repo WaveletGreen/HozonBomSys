@@ -9,9 +9,9 @@ public class HzBomLineRecord {
 	private String lineIndex;
 	private String linePuid;
 	private String lineID;
-	private int isHas;
+	private Integer isHas;
 	private byte[] bomLineBlock;
-	private int is2Y;
+	private Integer is2Y;
 	private int isPart;
 	private int orderNum;
 	private String pBomOfWhichDept;
@@ -63,12 +63,20 @@ public class HzBomLineRecord {
 		this.lineIndex = lineIndex;
 	}
 
-	public int getIsHas() {
+	public Integer getIsHas() {
 		return isHas;
 	}
 
-	public void setIsHas(int isHas) {
+	public void setIsHas(Integer isHas) {
 		this.isHas = isHas;
+	}
+
+	public Integer getIs2Y() {
+		return is2Y;
+	}
+
+	public void setIs2Y(Integer is2Y) {
+		this.is2Y = is2Y;
 	}
 
 	public void setHasChildren(boolean isHas) {
@@ -91,13 +99,7 @@ public class HzBomLineRecord {
 		this.lineID = lineID;
 	}
 
-	public int getIs2Y() {
-		return is2Y;
-	}
 
-	public void setIs2Y(int is2y) {
-		is2Y = is2y;
-	}
 
 	public int getIsPart() {
 		return isPart;
