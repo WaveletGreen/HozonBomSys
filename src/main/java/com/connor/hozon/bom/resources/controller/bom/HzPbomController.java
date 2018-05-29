@@ -1,6 +1,7 @@
 package com.connor.hozon.bom.resources.controller.bom;
 
 import com.connor.hozon.bom.resources.controller.BaseController;
+import com.connor.hozon.bom.resources.dto.request.SearchPbomDetailReqDTO;
 import com.connor.hozon.bom.resources.dto.response.HzPbomLineMaintainRespDTO;
 import com.connor.hozon.bom.resources.dto.response.HzPbomLineRespDTO;
 import com.connor.hozon.bom.resources.service.bom.HzPbomService;
@@ -91,6 +92,7 @@ public class HzPbomController  extends BaseController {
         writeAjaxJSONResponse(ResultMessageBuilder.build(tableTitle),response);
     }
 
+
     @RequestMapping(value = "insert/batch",method = RequestMethod.POST)
     public void insertPbomLineMaintainRecord(HttpServletResponse response){
         writeAjaxJSONResponse(ResultMessageBuilder.build(false,"接口后续在定义"),response);
@@ -118,6 +120,11 @@ public class HzPbomController  extends BaseController {
         tableTitle.put("16","颜色件");
         writeAjaxJSONResponse(ResultMessageBuilder.build(tableTitle),response);
     }
+
+    /**
+     * 查询PBOM管理信息
+     * @param response
+     */
     @RequestMapping(value = "getBomManage",method = RequestMethod.GET)
     public void getPbomLineRecord(HttpServletResponse response){
         List<HzPbomLineRespDTO> respDTOS = hzPbomService.getHzPbomLineRecord();
@@ -127,7 +134,34 @@ public class HzPbomController  extends BaseController {
         writeAjaxJSONResponse(ResultMessageBuilder.build(respDTOS),response);
     }
 
+    /**
+     * 搜索PBOM在线维护
+     * @param reqDTO
+     * @param response
+     */
+    @RequestMapping(value = "searchMaintain/detail",method = RequestMethod.GET)
+    public void searchPbomMaintainRecord(SearchPbomDetailReqDTO reqDTO,HttpServletResponse response){
+        List<HzPbomLineMaintainRespDTO> respDTOS = hzPbomService.searchPbomLineMaintainRecord(reqDTO);
+        if(ListUtil.isEmpty(respDTOS)){
+            writeAjaxJSONResponse(ResultMessageBuilder.build(false,"暂无数据"),response);
+        }
+        writeAjaxJSONResponse(ResultMessageBuilder.build(respDTOS),response);
+    }
 
-    
+    /**
+     * 搜索PBOM管理维护信息
+     * @param reqDTO
+     * @param response
+     */
+    @RequestMapping(value = "searchManage/detail",method = RequestMethod.GET)
+    public void searchPbomManageRecord(SearchPbomDetailReqDTO reqDTO,HttpServletResponse response){
+        List<HzPbomLineRespDTO> respDTOS = hzPbomService.searchPbomLineManageRecord(reqDTO);
+        if(ListUtil.isEmpty(respDTOS)){
+            writeAjaxJSONResponse(ResultMessageBuilder.build(false,"暂无数据"),response);
+        }
+        writeAjaxJSONResponse(ResultMessageBuilder.build(respDTOS),response);
+    }
+
+
 
 }

@@ -1,5 +1,6 @@
 package com.connor.hozon.bom.resources.mybatis.bom;
 
+import sql.pojo.bom.HzBomLineRecord;
 import sql.pojo.bom.HzPbomLineMaintainRecord;
 import sql.pojo.bom.HzPbomMaintainRecord;
 
@@ -20,5 +21,16 @@ public interface HzPbomMaintainRecordDAO {
      */
     List<HzPbomLineMaintainRecord> getPBomLineMaintainRecord();
 
+    /**
+     * 更新PBOM维护信息
+     * @param record
+     * @return
+     */
     int update(HzPbomLineMaintainRecord record);
+
+    /**
+     * 按条件搜索PBOM在线维护信息
+     * @return
+     */
+    List<HzPbomLineMaintainRecord> searchPbomMaintainDetail(HzBomLineRecord record);
 }

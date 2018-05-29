@@ -1,16 +1,16 @@
 package com.connor.hozon.bom.resources.service.bom.impl;
 
-import com.connor.hozon.bom.resources.dto.request.BatchInsertHzPbomMaintainRecordReqDTO;
+import com.connor.hozon.bom.resources.dto.request.InsertHzPbomMaintainRecordReqDTO;
+import com.connor.hozon.bom.resources.dto.request.SearchPbomDetailReqDTO;
 import com.connor.hozon.bom.resources.dto.response.HzPbomLineMaintainRespDTO;
 import com.connor.hozon.bom.resources.dto.response.HzPbomLineRespDTO;
 import com.connor.hozon.bom.resources.mybatis.bom.HzPbomMaintainRecordDAO;
 import com.connor.hozon.bom.resources.mybatis.bom.HzPbomRecordDAO;
-import com.connor.hozon.bom.resources.mybatis.bom.impl.HzPbomRecordDAOImpl;
 import com.connor.hozon.bom.resources.service.bom.HzPbomService;
 import com.connor.hozon.bom.resources.util.ListUtil;
-import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import sql.pojo.bom.HzBomLineRecord;
 import sql.pojo.bom.HzPbomLineMaintainRecord;
 import sql.pojo.bom.HzPbomLineRecord;
 import sql.pojo.bom.HzPbomMaintainRecord;
@@ -31,48 +31,18 @@ public class HzPbomServiceImpl implements HzPbomService {
     private HzPbomRecordDAO hzPbomRecordDAO;
     @Override
     public List<HzPbomLineMaintainRespDTO> getHzPbomMaintainRecord() {
-        List<HzPbomLineMaintainRespDTO> responseDTOS = new ArrayList<>();
         List<HzPbomLineMaintainRecord> records = recordDAO.getPBomLineMaintainRecord();
         if(ListUtil.isEmpty(records)){
             return null;
         }
-        for(HzPbomLineMaintainRecord record :records){
-            HzPbomLineMaintainRespDTO responseDTO = new HzPbomLineMaintainRespDTO();
-            //层级
-            String lineIndex = record.getLineIndex();
-            Integer is2Y = record.getIs2Y();
-            Integer hasChildren = record.getIsHas();
-            String[] strings = getLevelAndRank(lineIndex,is2Y,hasChildren);
-            responseDTO.setLevel(strings[0]);
-            responseDTO.setOrderNum(record.getOrderNum());
-            responseDTO.setChange(record.getChange()==null?"":record.getChange());
-            responseDTO.setWasterProduct(record.getWasterProduct()==null?"":record.getWasterProduct());
-            responseDTO.setTools(record.getTools()==null?"":record.getTools());
-            responseDTO.setChangeNum(record.getChangeNum()==null?"":record.getChangeNum());
-            //这里需要转换一下，数据库存储毫秒值  暂时不知道页面显示为分钟还是小时 待定
-            responseDTO.setLaborHour(record.getLaborHour()==null?"":record.getLaborHour());
-            responseDTO.setMachineMaterial(record.getMachineMaterial()==null?"":record.getMachineMaterial());
-            responseDTO.setBomDigifaxId(record.getBomDigifaxId()==null?"":record.getBomDigifaxId());
-            responseDTO.setLineId(record.getLineID()==null?"":record.getLineID());//零件号
-            responseDTO.setpBomPuid(record.getpPuid());
-            responseDTO.setStandardPart(record.getStandardPart()==null?"":record.getStandardPart());
-            responseDTO.setSparePartNum(record.getSparePartNum()==null?"":record.getSparePartNum());
-            responseDTO.setSolderJoint(record.getSolderJoint()==null?"":record.getSolderJoint());
-            responseDTO.setRhythm(record.getRhythm()==null?"":record.getRhythm());
-            responseDTO.setSparePart(record.getSparePart()==null?"":record.getSparePart());
-            responseDTO.setpBomOfWhichDept(record.getpBomOfWhichDept()==null?"":record.getpBomOfWhichDept());
-            responseDTO.setProcessRoute(record.getProcessRoute()==null?"":record.getProcessRoute());
-            responseDTOS.add(responseDTO);
-        }
-
-        return responseDTOS;
+        return pbomLineMaintailRecordToRespDTOS(records);
     }
 
     @Override
-    public int insertPbomLineMaintainRecords(List<BatchInsertHzPbomMaintainRecordReqDTO> recordInsertBatchReqDTO) {
+    public int insertPbomLineMaintainRecords(List<InsertHzPbomMaintainRecordReqDTO> recordInsertBatchReqDTO) {
 
        List<HzPbomMaintainRecord> records = new ArrayList<>();
-       for(BatchInsertHzPbomMaintainRecordReqDTO recordReqDTO:recordInsertBatchReqDTO){
+       for(InsertHzPbomMaintainRecordReqDTO recordReqDTO:recordInsertBatchReqDTO){
            HzPbomMaintainRecord record = new HzPbomMaintainRecord();
            record.setChange(recordReqDTO.getChange());
            record.setChangeNum(recordReqDTO.getChangeNum());
@@ -101,6 +71,138 @@ public class HzPbomServiceImpl implements HzPbomService {
         if(ListUtil.isEmpty(records)){
             return null;
         }
+        return pbomLineRecordToRespDTOS(records);
+    }
+
+    @Override
+    public List<HzPbomLineMaintainRespDTO> searchPbomLineMaintainRecord(SearchPbomDetailReqDTO reqDTO) {
+
+        // 3Y---1.1.3    8Y   判断 带Y  和不带Y  前面的数字
+        HzBomLineRecord record = new HzBomLineRecord();
+        record.setLineID(reqDTO.getLineId());
+        record.setpBomOfWhichDept(reqDTO.getpBomOfWhichDept());
+        String level = reqDTO.getLevel();
+        if(null!=level){
+            //这里+1 为了和数据库sql length函数做对应
+            int length = level.charAt(0)-48;
+            if(level.toUpperCase().endsWith("Y")){
+                record.setIsHas(new Integer(1));
+            }else{
+                record.setIsHas(new Integer(0));
+            }
+            record.setLineIndex(String.valueOf(2*length-1));
+        }
+        //reqDTO.getName();//这个字段数据库表中暂时没有
+        List<HzPbomLineMaintainRecord> records = recordDAO.searchPbomMaintainDetail(record);
+        if(ListUtil.isEmpty(records)){
+            return null;
+        }
+        return pbomLineMaintailRecordToRespDTOS(records);
+    }
+
+    @Override
+    public List<HzPbomLineRespDTO> searchPbomLineManageRecord(SearchPbomDetailReqDTO reqDTO) {
+        HzBomLineRecord record = new HzBomLineRecord();
+        record.setLineID(reqDTO.getLineId());
+        record.setpBomOfWhichDept(reqDTO.getpBomOfWhichDept());
+        //分组号和零件分类暂时没有 后期加
+        Integer rank = reqDTO.getRank();
+        String level = reqDTO.getLevel();
+        if(rank!=null && level!=null){
+            int length = level.charAt(0)-48;
+            if(!rank.equals(length)){
+                return null;
+            }
+        }
+        if(level!=null){
+            int length = level.charAt(0)-48;
+            if(level.toUpperCase().endsWith("Y")){
+                record.setIsHas(Integer.valueOf(1));
+            }else{
+                record.setIsHas(Integer.valueOf(0));
+            }
+            //1.1 3   1.1.1 5    2.2.2.2.2 9  1.1.1.1 7  2.2.2.2.2.2 11
+            //2-3  3-5  4-7  5-9 6-11
+            // an = 2n-1
+            record.setLineIndex(String.valueOf(2*length-1));
+        }
+        if(rank!=null){
+            //2  3y/3   1.1.1      2.1.1  3.1.1  5
+            //4  5y/5  1.1.1.1.1   1.2.3.1.1  2.2.1.1.1 9
+            //5  6y/6  11
+            record.setLineIndex(String.valueOf(2*rank+1));
+        }
+        List<HzPbomLineRecord> records = hzPbomRecordDAO.searchPbomLineDetail(record);
+        if(ListUtil.isEmpty(records)){
+            return null;
+        }
+        return pbomLineRecordToRespDTOS(records);
+    }
+
+    /**
+     * 获取bom系统的层级和级别
+     * @param lineIndex
+     * @param is2Y
+     * @param hasChildren
+     * @return String[0]层级  String[1]级别
+     */
+    public String[] getLevelAndRank(String lineIndex,Integer is2Y,Integer hasChildren){
+        int level = (lineIndex.split("\\.")).length;
+        String line="";
+        int rank = 0;
+        if(null != is2Y && is2Y.equals(1)){
+            line = "2Y";
+            rank =1;
+        }else if(null!= is2Y && is2Y.equals(0)){
+            if(hasChildren!=null && hasChildren.equals(1)){
+                line =level+"Y";
+                rank = level-1;
+            }else if(hasChildren!= null && hasChildren.equals(0)){
+                line = String.valueOf(level);
+                rank = level-1;
+            }else{
+                line ="/";//错误数据
+            }
+        }else{
+            line ="/";
+        }
+        return new String[]{line,String.valueOf(rank)};
+    }
+
+    private List<HzPbomLineMaintainRespDTO> pbomLineMaintailRecordToRespDTOS(List<HzPbomLineMaintainRecord> records){
+        List<HzPbomLineMaintainRespDTO> respDTOS = new ArrayList<>();
+        for(HzPbomLineMaintainRecord record :records){
+            HzPbomLineMaintainRespDTO responseDTO = new HzPbomLineMaintainRespDTO();
+            //层级
+            String lineIndex = record.getLineIndex();
+            Integer is2Y = record.getIs2Y();
+            Integer hasChildren = record.getIsHas();
+            String[] strings = getLevelAndRank(lineIndex,is2Y,hasChildren);
+            responseDTO.setLevel(strings[0]);
+            responseDTO.setOrderNum(record.getOrderNum());
+            responseDTO.setChange(record.getChange()==null?"":record.getChange());
+            responseDTO.setWasterProduct(record.getWasterProduct()==null?"":record.getWasterProduct());
+            responseDTO.setTools(record.getTools()==null?"":record.getTools());
+            responseDTO.setChangeNum(record.getChangeNum()==null?"":record.getChangeNum());
+            //这里需要转换一下，数据库存储毫秒值  暂时不知道页面显示为分钟还是小时 待定
+            responseDTO.setLaborHour(record.getLaborHour()==null?"":record.getLaborHour());
+            responseDTO.setMachineMaterial(record.getMachineMaterial()==null?"":record.getMachineMaterial());
+            responseDTO.setBomDigifaxId(record.getBomDigifaxId()==null?"":record.getBomDigifaxId());
+            responseDTO.setLineId(record.getLineID()==null?"":record.getLineID());//零件号
+            responseDTO.setpBomPuid(record.getpPuid());
+            responseDTO.setStandardPart(record.getStandardPart()==null?"":record.getStandardPart());
+            responseDTO.setSparePartNum(record.getSparePartNum()==null?"":record.getSparePartNum());
+            responseDTO.setSolderJoint(record.getSolderJoint()==null?"":record.getSolderJoint());
+            responseDTO.setRhythm(record.getRhythm()==null?"":record.getRhythm());
+            responseDTO.setSparePart(record.getSparePart()==null?"":record.getSparePart());
+            responseDTO.setpBomOfWhichDept(record.getpBomOfWhichDept()==null?"":record.getpBomOfWhichDept());
+            responseDTO.setProcessRoute(record.getProcessRoute()==null?"":record.getProcessRoute());
+            respDTOS.add(responseDTO);
+        }
+        return respDTOS;
+    }
+
+    private List<HzPbomLineRespDTO> pbomLineRecordToRespDTOS(List<HzPbomLineRecord> records){
         try{
             List<HzPbomLineRespDTO> respDTOS = new ArrayList<>();
             for(HzPbomLineRecord record:records){
@@ -156,33 +258,4 @@ public class HzPbomServiceImpl implements HzPbomService {
         return null;
     }
 
-    /**
-     * 获取bom系统的层级和级别
-     * @param lineIndex
-     * @param is2Y
-     * @param hasChildren
-     * @return String[0] 层级  String[1]级别
-     */
-    public String[] getLevelAndRank(String lineIndex,Integer is2Y,Integer hasChildren){
-        int level = (lineIndex.split("\\.")).length;
-        String line="";
-        int rank = 0;
-        if(null != is2Y && is2Y.equals(1)){
-            line = "2Y";
-            rank =1;
-        }else if(null!= is2Y && is2Y.equals(0)){
-            if(hasChildren!=null && hasChildren.equals(1)){
-                line =level+"Y";
-                rank = level;
-            }else if(hasChildren!= null && hasChildren.equals(0)){
-                line = String.valueOf(level);
-                rank = level;
-            }else{
-                line ="/";//错误数据
-            }
-        }else{
-            line ="/";
-        }
-        return new String[]{line,String.valueOf(rank)};
-    }
 }

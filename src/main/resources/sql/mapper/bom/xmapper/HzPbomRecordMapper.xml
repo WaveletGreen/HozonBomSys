@@ -22,7 +22,7 @@
     <result column="P_BOM_LINE_IS_HAS" jdbcType="INTEGER" property="isHas" />
     <result column="P_BOM_LINE_ID" jdbcType="VARCHAR" property="lineId" />
     <result column="P_BOM_LINE_IS_2Y" jdbcType="INTEGER" property="is2Y" />
-    <result column="P_BOM_OF_WHICH_DEPT" jdbcType="INTEGER" property="pBomOfWhichDept" />
+    <result column="P_BOM_OF_WHICH_DEPT" jdbcType="VARCHAR" property="pBomOfWhichDept" />
   </resultMap>
 
   <sql id="Pbom_List">
@@ -43,6 +43,30 @@
     <include refid="Pbom_List" />,t2.*
     from HZ_BOM_LINE_RECORD t1 LEFT OUTER JOIN HZ_PBOM_RECORD t2
     on t1.P_PUID = t2.E_BOM_PUID
+  </select>
+
+
+  <!--模糊搜索的分组号 零件号 暂时没有 模糊匹配后期需要加-->
+  <select id="HzPbomRecordDAOImpl_searchPbomLineDetail" parameterType="sql.pojo.bom.HzPbomLineRecord" resultMap="HzPbomLineRecord">
+    select
+    <include refid="Pbom_List" />,t2.*
+    from HZ_BOM_LINE_RECORD t1 LEFT OUTER JOIN HZ_PBOM_RECORD t2
+    on t1.P_PUID = t2.E_BOM_PUID
+  <where>
+    1=1
+    <if test="pBomOfWhichDept != null and  pBomOfWhichDept!='' " >
+      and t1.P_BOM_OF_WHICH_DEPT = #{pBomOfWhichDept,jdbcType=VARCHAR}
+    </if>
+    <if test="lineID != null and  lineID!=''">
+      and t1.P_BOM_LINE_ID = #{lineID,jdbcType=VARCHAR}
+    </if>
+    <if test="isHas != null">
+    and t1.P_BOM_LINE_IS_HAS = #{isHas,jdbcType=INTEGER}
+    </if>
+    <if test="lineIndex != null and  lineIndex!=''">
+      and length(t1.P_LINE_INDEX) = #{lineIndex,jdbcType=VARCHAR}
+    </if>
+  </where>
   </select>
 
 

@@ -43,4 +43,28 @@
     from HZ_BOM_LINE_RECORD t1 LEFT OUTER JOIN HZ_PBOM_MAINTAIN_RECORD t2
     on t1.P_PUID = t2.P_BOM_PUID
   </select>
+
+
+  <!--模糊搜索的名称暂时没有 模糊匹配后期需要加-->
+  <select id="HzPbomMaintainRecordDAOImpl_searchPbomMaintainDetail" parameterType="sql.pojo.bom.HzPbomLineRecord" resultMap="PbomResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from HZ_BOM_LINE_RECORD t1 LEFT OUTER JOIN HZ_PBOM_MAINTAIN_RECORD t2
+    on t1.P_PUID = t2.P_BOM_PUID
+    <where>
+      1=1
+      <if test="pBomOfWhichDept != null and  pBomOfWhichDept!='' " >
+        and t1.P_BOM_OF_WHICH_DEPT = #{pBomOfWhichDept,jdbcType=VARCHAR}
+      </if>
+      <if test="lineID != null and  lineID!=''">
+        and t1.P_BOM_LINE_ID = #{lineID,jdbcType=VARCHAR}
+      </if>
+      <if test="isHas != null">
+        and t1.P_BOM_LINE_IS_HAS = #{isHas,jdbcType=INTEGER}
+      </if>
+      <if test="lineIndex != null and  lineIndex!=''">
+        and length(t1.P_LINE_INDEX) = #{lineIndex,jdbcType=VARCHAR}
+      </if>
+    </where>
+  </select>
 </mapper>
