@@ -162,6 +162,5 @@ public class HzPbomController  extends BaseController {
         writeAjaxJSONResponse(ResultMessageBuilder.build(respDTOS),response);
     }
 
-
-
+    
 }
