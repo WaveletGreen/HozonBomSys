@@ -7,7 +7,6 @@ import sql.IBaseSQLUtil;
 import sql.pojo.cfg.HzCfg0ModelRecord;
 
 /**
- * Created by IntelliJ IDEA.
  * User: Fancyears·Maylos·Mayways
  * Date: 2018/5/22
  * Time: 14:53

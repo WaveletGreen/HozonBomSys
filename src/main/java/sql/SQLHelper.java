@@ -1,11 +1,15 @@
 package sql;
 
+import sql.redis.SerializeUtil;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 public class SQLHelper {
@@ -149,12 +153,4 @@ public class SQLHelper {
             }
         }
     }
-
-//	public static void main(String[] args) throws IOException {
-//		@SuppressWarnings("unused")
-//		String sql = "select * from HZ_QUERY_SUPPLIERS";
-//		String sql2 = "insertOne into HZ_QUERY_SUPPLIERS t (suppliers_id,t.suppliers_name) values(?,?)";
-//		new SQLHelper().executeInsert(sql2, new String[] { "123", "��������Դ����" });
-//
-//	}
 }

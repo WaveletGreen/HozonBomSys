@@ -1,63 +1,37 @@
 var firstLoad = true;
 $(document).ready(
-    $("#queryModelColorCfg").click(function () {
-        //必须输入一个配置的puid
-        var pCfg0MainRecordOfMC = $("#inputCfg0").val();
-        if (pCfg0MainRecordOfMC.length <= 0) {
-            $("#myModal").modal('show');
-            return;
-        }
-        var $table = $("#modelColorCfgTable");
+    $("#queryPbomMaintenance").click(function () {
+        var $table = $("#pbomMaintenanceTable");
         var column = [];
-        $("#refreshModelColorCfg").removeAttr("disabled");
+        $("#refreshPbomMaintenance").removeAttr("disabled");
         $.ajax({
-            url: "modelColor/getColumn?pCfg0MainRecordOfMC=" + pCfg0MainRecordOfMC,
+            url: "pbom/maintain/title",
             type: "GET",
             success: function (result) {
-                if (!result.status) {
-                    alert("查无数据，请联系管理员");
-                    return;
-                }
-                var data = result.data;
                 var column = [];
-                column.push({field: 'puid', title: 'puid'});
-                column.push({field: 'modeColorIsMultiply', title: 'modeColorIsMultiply'});
+                column.push({field: 'pBomPuid', title: 'puid'});
                 column.push({field: 'ck', checkbox: true, Width: 50});
-                column.push({field: 'codeOfColorModel', title: '车型颜色代码', align: 'center', valign: 'middle'});
-                column.push({field: 'descOfColorModel', title: '描述', align: 'center', valign: 'middle'});
-                column.push({
-                    field: 'modelShell',
-                    title: '油漆车身总成',
-                    align: 'center',
-                    valign: 'middle',
-                    formatter: function (value, row, index) {
-                        var rowValues = JSON.parse(JSON.stringify(row));
-                        if ("Y" === rowValues.modeColorIsMultiply) {
-                            return [
-                                '<a href="javascript:void(0)">' + value + '</a>'
-                            ].join("");
-                        }
-                        else {
-                            return [
-                                value
-                            ].join("");
-                        }
+                // column.push({field:'id',title:'序号',align:'center',valign:'middle'});
+                var data = result.data;
+                console.log(data);
+                var keys = [];
+                var values;
+                for (var key in data) {
+                    if (data.hasOwnProperty(key)) {
+                        // keys.push(key);
+                        var json = {
+                           field: key,
+                            title: data[key],
+                            align:
+                                'center',
+                            valign:
+                                'middle'
+                        };
+                        column.push(json);
                     }
-                });
-                for (var i = 0; i < data.length; i++) {
-                    var josn = {
-                        field: "s" + i,
-                        title:
-                            data[i],
-                        align:
-                            'center',
-                        valign:
-                            'middle'
-                    };
-                    column.push(josn);
                 }
                 $table.bootstrapTable({
-                    url: "modelColor/loadAll",
+                    url: "pbom/getMaintain/detail",
                     method: 'get',
                     height: $(window.parent.document).find("#wrapper").height() - 252,
                     width: $(window).width(),
@@ -69,8 +43,8 @@ $(document).ready(
                     formId: "hide",
                     /**列信息，需要预先定义好*/
                     columns: column,
-                    // sortable: true,                     //是否启用排序
-                    // sortOrder: "asc",                   //排序方式
+                    sortable: true,                     //是否启用排序
+                    sortOrder: "asc",                   //排序方式
                     toolbars: [
                         {
                             text: '添加',
@@ -78,7 +52,7 @@ $(document).ready(
                             handler: function () {
                                 window.Ewin.dialog({
                                     title: "添加",
-                                    url: "modelColor/addPage?pCfg0MainRecordOfMC=" + pCfg0MainRecordOfMC,
+                                    url: "pbom/addPage?pCfg0MainRecordOfMC=" + pCfg0MainRecordOfMC,
                                     gridId: "gridId",
                                     width: 500,
                                     height: 600
@@ -97,7 +71,7 @@ $(document).ready(
                                 }
                                 window.Ewin.dialog({
                                     title: "修改",
-                                    url: "modelColor/modifyPage?puid=" + rows[0].puid,
+                                    url: "pbom/modifyPage?puid=" + rows[0].puid,
                                     gridId: "gridId",
                                     width: 350,
                                     height: 450
@@ -123,7 +97,7 @@ $(document).ready(
                                         $.ajax({
                                             type: "POST",
                                             //ajax需要添加打包名
-                                            url: "./modelColor/delete",
+                                            url: "./pbom/delete",
                                             data: JSON.stringify(rows),
                                             contentType: "application/json",
                                             success: function (result) {
@@ -146,14 +120,12 @@ $(document).ready(
                         }
                     ]
                 });
-                $table.bootstrapTable('hideColumn', 'puid');
-                $table.bootstrapTable('hideColumn', 'modeColorIsMultiply');
+                $table.bootstrapTable('hideColumn', 'pBomPuid');
             }
         });
-
     }),
     //手动刷新按钮
-    $("#refreshModelColorCfg").click(function () {
-        $('#modelColorCfgTable').bootstrapTable('refresh');
+    $("#refreshPbomMaintenance").click(function () {
+        $('#pbomMaintenanceTable').bootstrapTable('refresh');
     })
 );

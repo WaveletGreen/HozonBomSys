@@ -1,7 +1,7 @@
 package com.connor.hozon.bom.bomSystem.controller.cfg;
 
 
-import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0ColorSerService;
+import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0ColorSetService;
 import com.connor.hozon.bom.sys.commen.Error;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +22,7 @@ import java.util.UUID;
 public class HzCfg0ColorSetController {
 
     @Autowired
-    HzCfg0ColorSerService colorSerService;
+    HzCfg0ColorSetService colorSerService;
 
 //    @RequestMapping(value = "/queryAll", method = RequestMethod.GET)
 //    @ResponseBody

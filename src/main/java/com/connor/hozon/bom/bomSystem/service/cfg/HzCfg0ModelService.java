@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 import sql.pojo.cfg.HzCfg0ModelDetail;
 
 /**
- * Created by IntelliJ IDEA.
  * User: Fancyears·Maylos·Mayways
  * Date: 2018/5/21
  * Time: 14:42

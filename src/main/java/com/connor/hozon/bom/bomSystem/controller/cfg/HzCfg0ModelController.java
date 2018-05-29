@@ -99,9 +99,9 @@ public class HzCfg0ModelController {
         System.out.println();
     }
 
-    @Deprecated
-    public static void main(String[] args) {
-        HzCfg0ModelController controller = new HzCfg0ModelController();
-        saveModelDetailToDB(controller);
-    }
+//    @Deprecated
+//    public static void main(String[] args) {
+//        HzCfg0ModelController controller = new HzCfg0ModelController();
+//        saveModelDetailToDB(controller);
+//    }
 }

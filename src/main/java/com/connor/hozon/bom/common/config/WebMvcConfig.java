@@ -53,6 +53,10 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         registry.addViewController("/defineMake").setViewName("/pbomManage/defineMake/defineMake");
         //PBOM
         registry.addViewController("/pbomMain").setViewName("/pbomManage/pbomMain");
+//        registry.addViewController("/colorUpdate").setViewName("/cfg/color/colorUpdate");
+        //配色方案
+        registry.addViewController("/modelColorCfg").setViewName("/cfg/modelColorCfg/modelColorCfg");
+
     }
 
 

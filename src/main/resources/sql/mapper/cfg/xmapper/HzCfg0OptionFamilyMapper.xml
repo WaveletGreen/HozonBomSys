@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0OptionFamilyDao">
+    <resultMap id="BaseResultMap" type="sql.pojo.cfg.HzCfg0OptionFamily">
+        <id column="PUID" jdbcType="VARCHAR" property="puid"/>
+        <result column="P_OF_CFG0_MAIN" jdbcType="VARCHAR" property="pOfCfg0Main"/>
+        <result column="P_OPTIONFAMILY_NAME" jdbcType="VARCHAR" property="pOptionfamilyName"/>
+    </resultMap>
+
+    <resultMap id="FamilyName" type="java.lang.String">
+        <result column="P_OPTIONFAMILY_NAME" jdbcType="VARCHAR" property="pOptionfamilyName"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+    PUID, P_OF_CFG0_MAIN, P_OPTIONFAMILY_NAME
+  </sql>
+    <select id="selectByPrimaryKey" parameterType="sql.pojo.cfg.HzCfg0OptionFamily" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from HZ_CFG0_OPTIONFAMILY_RECORD
+        where PUID = #{puid,jdbcType=VARCHAR}
+    </select>
+
+    <select id="selectNameByMainId" parameterType="java.lang.String" resultMap="FamilyName">
+        select P_OPTIONFAMILY_NAME
+        from HZ_CFG0_OPTIONFAMILY_RECORD
+        where P_OF_CFG0_MAIN = #{mainId}  order by P_OF_CFG0_MAIN ASC
+    </select>
+</mapper>

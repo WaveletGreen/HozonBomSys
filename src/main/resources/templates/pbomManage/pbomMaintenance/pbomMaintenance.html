@@ -1,15 +1,55 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <!--User: xulf Date: 2018/5/24 Time: 09:58-->
-<head th:include="include/includebase">
+<head th:include="include/includebase"></head>
+<link th:href="@{/css/stage/bom-stage.css}" rel="stylesheet"/>
 <meta charset="UTF-8">
 <title>PBOM维护</title>
 </head>
 <body class="content-body">
-<input id="text1" class="form-control" type="text" name="doSubmit1"
-       placeholder="请输入需要查找的model" value="9deb81ea-9544-473b-aeb5-d7683c7753c3"/>
-<button id="myButton">请点击</button>
-
+<div class="panel-body">
+    <div class="content col-lg-5">
+        <span class="infoToUser">请输入需要查询的产品配置器ID</span>
+        <div class="input-group">
+            <input class="form-control" id="inputCfg0" type="text" placeholder="请输入产品配置器PUID"
+                   value="9deb81ea-9544-473b-aeb5-d7683c7753c3"/>
+            <span class="input-group-btn">
+                                    <button class="btn btn-default" id="queryPbomMaintenance"
+                                            type="button">查询PBOM维护</button>
+                                    <button class="btn btn-default" id="refreshPbomMaintenance" type="button"
+                                            disabled="disabled">刷新</button>
+                                </span>
+        </div>
+    </div>
+    <div class="panel-body" style="padding-bottom:0px;">
+        <div class="panel panel-default" style="margin-top: 10px;">
+            <div class="panel-body">
+                <form class="form-inline" role="form" style="float: left; width: 100%;margin-left: 20px;" method="post"
+                      id="queryLoadBom">
+                    <div class="form-group">
+                        <label for="platforms">车型平台:</label>
+                        <input type="text" class="form-control" name="platforms" id="platforms" placeholder="请输入车型平台"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="modelnumber">车型项目编号:</label>
+                        <input type="text" class="form-control" name="modelnumber" id="modelnumber"
+                               placeholder="请输入车型项目编号"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="modelyear">车型年:</label>
+                        <input type="text" class="form-control" name="modelyear" id="modelyear" placeholder="请输入车型年"/>
+                    </div>
+                    <div class="form-group">
+                        <button type="button" id="searchBtn" onclick="" class="btn btn-primary">搜索</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="content col-lg-12">
+        <table class="table table-striped tableNormalStyle" id="pbomMaintenanceTable"></table>
+    </div>
+</div>
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog"
      aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -28,124 +68,7 @@
         </div>
     </div>
 </div>
-<div class="panel-body" style="padding-bottom:0px;">
-    <div class="panel panel-default" style="margin-top: 10px;">
-        <div class="panel-body">
-            <form class="form-inline" role="form" style="float: left; width: 100%;margin-left: 20px;" method="post"
-                  id="queryLoadBom">
-                <div class="form-group">
-                    <label for="platforms">车型平台:</label>
-                    <input type="text" class="form-control" name="platforms" id="platforms" placeholder="请输入车型平台"/>
-                </div>
-                <div class="form-group">
-                    <label for="modelnumber">车型项目编号:</label>
-                    <input type="text" class="form-control" name="modelnumber" id="modelnumber"
-                           placeholder="请输入车型项目编号"/>
-                </div>
-                <div class="form-group">
-                    <label for="modelyear">车型年:</label>
-                    <input type="text" class="form-control" name="modelyear" id="modelyear" placeholder="请输入车型年"/>
-                </div>
-                <div class="form-group">
-                    <button type="button" id="searchBtn" onclick="" class="btn btn-primary">搜索</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-<table id="pbomMaintenanceTable" class="table table-striped" style="margin-top: 0px;">
-</table>
-<!--<script th:inline="javascript">
-    $(document).ready(
-        $("#myButton").click(function () {
-            // var da = $("#text1").val();
-            // if (da.length == 0) {
-            //     $("#myModal").modal('show');
-            //     return;
-            // }
-
-            $.ajax({
-                url: 'pbom/getMaintain/detail',
-                type: 'GET',
-                // data: {
-                //      'pCfg0MainItemPuid': da
-                // },
-                success: function (data) {
-                    console.log(data)
-                    var array = data.externalObject;
-                    var number = 1;
-                    var r = "<table>" +
-                        "<tr>" +
-                        "<th>序号</th>" +
-                        "<th>层级</th>" +
-                        "<th>专业</th>" +
-                        "<th>零件号</th>" +
-                        "<th>名称</th>" +
-                        "<th>备件</th>" +
-                        "<th>备件编号</th>" +
-                        "<th>工艺路线</th>" +
-                        "<th>人工工时</th>" +
-                        "<th>节拍</th>" +
-                        "<th>焊点</th>" +
-                        "<th>机物料</th>" +
-                        "<th>标准件</th>" +
-                        "<th>工具</th>" +
-                        "<th>废品</th>" +
-                        "<th>变更</th>" +
-                        "<th>变更号</th>" +
-                        "</tr>"
-                    for (var i = 0; i < array.length; i++) {
-                        var re = array[i];
-                        var v1 = re.pBomPuid
-                        var v2 = re.level
-                        var v3 = re.pBomOfWhichDept
-                        var v4 = re.lineId
-                        var v5 = re.bomDigifaxId
-                        var v6 = re.sparePart
-                        var v7 = re.sparePartNum
-                        var v8 = re.processRoute
-                        var v9 = re.laborHour
-                        var v10 = re.rhythm
-                        var v11 = re.solderJoint
-                        var v12 = re.machineMaterial
-                        var v13 = re.standardPart
-                        var v14 = re.tools
-                        var v15 = re.wasterProduct
-                        var v16 = re.change
-                        var v17 = re.changeNum
-                        r = r + "<tr>" +
-                            "<td>" + number++ + "</td>" +
-                            "<input type='hidden' value='"+v1+"'>"+
-                            "<td>" + v2 + "</td>" +
-                            "<td>" + v3 + "</td>" +
-                            "<td>" + v4 + "</td>" +
-                            "<td>" + v5 + "</td>" +
-                            "<td>" + v6 + "</td>" +
-                            "<td>" + v7 + "</td>" +
-                            "<td>" + v8 + "</td>" +
-                            "<td>" + v9 + "</td>" +
-                            "<td>" + v10 + "</td>" +
-                            "<td>" + v11 + "</td>" +
-                            "<td>" + v12 + "</td>" +
-                            "<td>" + v13 + "</td>" +
-                            "<td>" + v14 + "</td>" +
-                            "<td>" + v15 + "</td>" +
-                            "<td>" + v16 + "</td>" +
-                            "<td>" + v17 + "</td>" +
-                            "</tr>"
-                    }
-                    var r = r + "</table>"
-                    var $rable = $("#pbomMaintenanceTable");
-                    $rable.html(r);
-                },
-                error: function (info) {
-                    alert(info);
-                }
-            })
-        })
-    )
-</script>-->
-<script th:src="@{/js/pom/pbomManage/pbomMaintenance.js}"></script>
+<script th:src="@{/js/pbom/pbomMaintenance.js}"></script>
 </body>
 <script th:inline="javascript">
     function doQuery() {

@@ -10,7 +10,6 @@ import sql.pojo.bom.HzBomLineRecord;
 import java.util.List;
 
 /**
- * Created by IntelliJ IDEA.
  * User: Fancyears·Maylos·Mayways
  * Date: 2018/5/21
  * Time: 17:35

@@ -10,6 +10,7 @@ public class HzCfg0ColorSet {
     private String pColorCode;
 
     private String pColorComment;
+    private String pColorIsMultiply;
 
     public String getPuid() {
         return puid;
@@ -49,5 +50,14 @@ public class HzCfg0ColorSet {
 
     public void setpColorComment(String pColorComment) {
         this.pColorComment = pColorComment;
+    }
+
+
+    public String getpColorIsMultiply() {
+        return pColorIsMultiply;
+    }
+
+    public void setpColorIsMultiply(String pColorIsMultiply) {
+        this.pColorIsMultiply = pColorIsMultiply;
     }
 }

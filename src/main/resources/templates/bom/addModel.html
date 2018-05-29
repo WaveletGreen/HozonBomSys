@@ -104,6 +104,7 @@
         </div>
     </div>
 </form>
+
 <script th:inline="javascript">
     <![CDATA[
     $(function () {
@@ -124,6 +125,7 @@
                     }
                 }
             }
+
         });
         // 绑定dialog的确定按钮的监听事件
         $("#btnOk", window.top.document).click(function () {
@@ -167,10 +169,10 @@
                             $('body', window.top.document).find('.modal-backdrop').remove();
                             // jquery 调用刷新当前操作的table页面的refresh方法
                             // $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
-                            window.Ewin.alert({message: result.msg + '修改数据成功!'});
+                            window.Ewin.alert({message: result.msg});
                         },
                     error: function (status) {
-                        window.Ewin.alert({message: status.status + '添加数据失败!'});
+                        window.Ewin.alert({message: status.status + ':添加数据失败!'});
                     }
                 });
             }
