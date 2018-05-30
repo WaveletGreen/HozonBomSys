@@ -262,9 +262,26 @@ public class BaseSQLUtil implements IBaseSQLUtil {
     public int update(final String sqlMapId, final Object param){
         SqlSession session = null;
         try {
+            SqlSessionFactory factory = FactoryManager.getInstance();
+            session = factory.openSession();
+            int result = session.update(sqlMapId, param);
+            session.commit();
+            return result;
+        } catch (Exception e) {
+            logger.error("SQL执行出错: " + sqlMapId, e);
+            throw new DatabaseException("SQL执行出错"+sqlMapId,e);
+        } finally {
+            if (session != null)
+                session.close();
+        }
+    }
+
+    public int delete(final String sqlMapId, final Object param){
+        SqlSession session = null;
+        try {
             SqlSessionFactory f = FactoryManager.getInstance();
             session = f.openSession();
-            int result = session.update(sqlMapId, param);
+            int result = session.delete(sqlMapId, param);
             session.commit();
             return result;
         } catch (Exception e) {

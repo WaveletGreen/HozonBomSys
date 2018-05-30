@@ -26,7 +26,14 @@ public interface HzPbomMaintainRecordDAO {
      * @param record
      * @return
      */
-    int update(HzPbomLineMaintainRecord record);
+    int update(HzPbomMaintainRecord record);
+
+    /**
+     * 删除PBOM维护 通过外键删除
+     * @param pPuid
+     * @return
+     */
+    int deleteByForeignId(String pPuid);
 
     /**
      * 按条件搜索PBOM在线维护信息

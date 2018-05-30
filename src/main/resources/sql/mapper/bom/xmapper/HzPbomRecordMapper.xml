@@ -2,18 +2,18 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="HzPbomRecord">
   <resultMap id="BaseResultMap" type="sql.pojo.bom.HzPbomRecord">
-    <id column="PUID" jdbcType="VARCHAR" property="puid" />
-    <result column="ITEM_RESOURCE" jdbcType="VARCHAR" property="itemResource" />
-    <result column="RESOURCE" jdbcType="VARCHAR" property="resource" />
-    <result column="TYPE" jdbcType="DECIMAL" property="type" />
-    <result column="BUY_UNIT" jdbcType="DECIMAL" property="buyUnit" />
-    <result column="WORK_SHOP1" jdbcType="VARCHAR" property="workShop1" />
-    <result column="WORK_SHOP2" jdbcType="VARCHAR" property="workShop2" />
-    <result column="PRODUCT_LINE" jdbcType="VARCHAR" property="productLine" />
-    <result column="MOULD_TYPE" jdbcType="VARCHAR" property="mouldType" />
-    <result column="OUTER_PART" jdbcType="VARCHAR" property="outerPart" />
-    <result column="COLOR_PART" jdbcType="DECIMAL" property="colorPart" />
-    <result column="E_BOM_PUID" jdbcType="VARCHAR" property="eBomPuid" />
+    <id column="P_PUID" jdbcType="VARCHAR" property="puid" />
+    <result column="P_ITEM_RESOURCE" jdbcType="VARCHAR" property="itemResource" />
+    <result column="P_RESOURCE" jdbcType="VARCHAR" property="resource" />
+    <result column="P_TYPE" jdbcType="DECIMAL" property="type" />
+    <result column="P_BUY_UNIT" jdbcType="DECIMAL" property="buyUnit" />
+    <result column="P_WORK_SHOP1" jdbcType="VARCHAR" property="workShop1" />
+    <result column="P_WORK_SHOP2" jdbcType="VARCHAR" property="workShop2" />
+    <result column="P_PRODUCT_LINE" jdbcType="VARCHAR" property="productLine" />
+    <result column="P_MOULD_TYPE" jdbcType="VARCHAR" property="mouldType" />
+    <result column="P_OUTER_PART" jdbcType="VARCHAR" property="outerPart" />
+    <result column="P_COLOR_PART" jdbcType="DECIMAL" property="colorPart" />
+    <result column="P_E_BOM_PUID" jdbcType="VARCHAR" property="eBomPuid" />
   </resultMap>
 
   <resultMap extends="BaseResultMap"  id="HzPbomLineRecord" type="sql.pojo.bom.HzPbomLineRecord">
@@ -31,8 +31,8 @@
 
 
   <sql id="Base_Column_List">
-    PUID, ITEM_RESOURCE, RESOURCE, TYPE, BUY_UNIT, WORK_SHOP1, WORK_SHOP2, PRODUCT_LINE, 
-    MOULD_TYPE, OUTER_PART, COLOR_PART, E_BOM_PUID
+    P_PUID, P_ITEM_RESOURCE, P_RESOURCE, P_TYPE, P_BUY_UNIT, P_WORK_SHOP1, P_WORK_SHOP2, P_PRODUCT_LINE,
+    P_MOULD_TYPE, P_OUTER_PART, P_COLOR_PART, P_E_BOM_PUID
   </sql>
 
 
@@ -42,7 +42,7 @@
     select
     <include refid="Pbom_List" />,t2.*
     from HZ_BOM_LINE_RECORD t1 LEFT OUTER JOIN HZ_PBOM_RECORD t2
-    on t1.P_PUID = t2.E_BOM_PUID
+    on t1.P_PUID = t2.P_E_BOM_PUID
   </select>
 
 
@@ -51,7 +51,7 @@
     select
     <include refid="Pbom_List" />,t2.*
     from HZ_BOM_LINE_RECORD t1 LEFT OUTER JOIN HZ_PBOM_RECORD t2
-    on t1.P_PUID = t2.E_BOM_PUID
+    on t1.P_PUID = t2.P_E_BOM_PUID
   <where>
     1=1
     <if test="pBomOfWhichDept != null and  pBomOfWhichDept!='' " >
@@ -77,17 +77,17 @@
     select 
     <include refid="Base_Column_List" />
     from HZ_PBOM_RECORD
-    where PUID = #{puid,jdbcType=VARCHAR}
+    where P_PUID = #{puid,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from HZ_PBOM_RECORD
-    where PUID = #{puid,jdbcType=VARCHAR}
+    where P_PUID = #{puid,jdbcType=VARCHAR}
   </delete>
   <insert id="insert" parameterType="sql.pojo.bom.HzPbomRecord">
-    insert into HZ_PBOM_RECORD (PUID, ITEM_RESOURCE, RESOURCE, 
-      TYPE, BUY_UNIT, WORK_SHOP1, 
-      WORK_SHOP2, PRODUCT_LINE, MOULD_TYPE, 
-      OUTER_PART, COLOR_PART, E_BOM_PUID
+    insert into HZ_PBOM_RECORD (P_PUID, P_ITEM_RESOURCE, P_RESOURCE,
+      P_TYPE, P_BUY_UNIT, P_WORK_SHOP1,
+      P_WORK_SHOP2, P_PRODUCT_LINE, P_MOULD_TYPE,
+      P_OUTER_PART, P_COLOR_PART, P_E_BOM_PUID
       )
     values (#{puid,jdbcType=VARCHAR}, #{itemResource,jdbcType=VARCHAR}, #{resource,jdbcType=VARCHAR}, 
       #{type,jdbcType=DECIMAL}, #{buyUnit,jdbcType=DECIMAL}, #{workShop1,jdbcType=VARCHAR}, 
@@ -99,40 +99,40 @@
     insert into HZ_PBOM_RECORD
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="puid != null">
-        PUID,
+        P_PUID,
       </if>
       <if test="itemResource != null">
-        ITEM_RESOURCE,
+        P_ITEM_RESOURCE,
       </if>
       <if test="resource != null">
-        RESOURCE,
+        P_RESOURCE,
       </if>
       <if test="type != null">
-        TYPE,
+        P_TYPE,
       </if>
       <if test="buyUnit != null">
-        BUY_UNIT,
+        P_BUY_UNIT,
       </if>
       <if test="workShop1 != null">
-        WORK_SHOP1,
+        P_WORK_SHOP1,
       </if>
       <if test="workShop2 != null">
-        WORK_SHOP2,
+        P_WORK_SHOP2,
       </if>
       <if test="productLine != null">
-        PRODUCT_LINE,
+        P_PRODUCT_LINE,
       </if>
       <if test="mouldType != null">
-        MOULD_TYPE,
+        P_MOULD_TYPE,
       </if>
       <if test="outerPart != null">
-        OUTER_PART,
+        P_OUTER_PART,
       </if>
       <if test="colorPart != null">
-        COLOR_PART,
+        P_COLOR_PART,
       </if>
       <if test="eBomPuid != null">
-        E_BOM_PUID,
+        P_E_BOM_PUID,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -178,54 +178,54 @@
     update HZ_PBOM_RECORD
     <set>
       <if test="itemResource != null">
-        ITEM_RESOURCE = #{itemResource,jdbcType=VARCHAR},
+        P_ITEM_RESOURCE = #{itemResource,jdbcType=VARCHAR},
       </if>
       <if test="resource != null">
-        RESOURCE = #{resource,jdbcType=VARCHAR},
+        P_RESOURCE = #{resource,jdbcType=VARCHAR},
       </if>
       <if test="type != null">
-        TYPE = #{type,jdbcType=DECIMAL},
+        P_TYPE = #{type,jdbcType=DECIMAL},
       </if>
       <if test="buyUnit != null">
-        BUY_UNIT = #{buyUnit,jdbcType=DECIMAL},
+        P_BUY_UNIT = #{buyUnit,jdbcType=DECIMAL},
       </if>
       <if test="workShop1 != null">
-        WORK_SHOP1 = #{workShop1,jdbcType=VARCHAR},
+        P_WORK_SHOP1 = #{workShop1,jdbcType=VARCHAR},
       </if>
       <if test="workShop2 != null">
-        WORK_SHOP2 = #{workShop2,jdbcType=VARCHAR},
+        P_WORK_SHOP2 = #{workShop2,jdbcType=VARCHAR},
       </if>
       <if test="productLine != null">
-        PRODUCT_LINE = #{productLine,jdbcType=VARCHAR},
+        P_PRODUCT_LINE = #{productLine,jdbcType=VARCHAR},
       </if>
       <if test="mouldType != null">
-        MOULD_TYPE = #{mouldType,jdbcType=VARCHAR},
+        P_MOULD_TYPE = #{mouldType,jdbcType=VARCHAR},
       </if>
       <if test="outerPart != null">
-        OUTER_PART = #{outerPart,jdbcType=VARCHAR},
+        P_OUTER_PART = #{outerPart,jdbcType=VARCHAR},
       </if>
       <if test="colorPart != null">
-        COLOR_PART = #{colorPart,jdbcType=DECIMAL},
+        P_COLOR_PART = #{colorPart,jdbcType=DECIMAL},
       </if>
       <if test="eBomPuid != null">
-        E_BOM_PUID = #{eBomPuid,jdbcType=VARCHAR},
+        P_E_BOM_PUID = #{eBomPuid,jdbcType=VARCHAR},
       </if>
     </set>
-    where PUID = #{puid,jdbcType=VARCHAR}
+    where P_PUID = #{puid,jdbcType=VARCHAR}
   </update>
   <update id="updateByPrimaryKey" parameterType="sql.pojo.bom.HzPbomRecord">
     update HZ_PBOM_RECORD
-    set ITEM_RESOURCE = #{itemResource,jdbcType=VARCHAR},
-      RESOURCE = #{resource,jdbcType=VARCHAR},
-      TYPE = #{type,jdbcType=DECIMAL},
-      BUY_UNIT = #{buyUnit,jdbcType=DECIMAL},
-      WORK_SHOP1 = #{workShop1,jdbcType=VARCHAR},
-      WORK_SHOP2 = #{workShop2,jdbcType=VARCHAR},
-      PRODUCT_LINE = #{productLine,jdbcType=VARCHAR},
-      MOULD_TYPE = #{mouldType,jdbcType=VARCHAR},
-      OUTER_PART = #{outerPart,jdbcType=VARCHAR},
-      COLOR_PART = #{colorPart,jdbcType=DECIMAL},
-      E_BOM_PUID = #{eBomPuid,jdbcType=VARCHAR}
-    where PUID = #{puid,jdbcType=VARCHAR}
+    set P_ITEM_RESOURCE = #{itemResource,jdbcType=VARCHAR},
+      P_RESOURCE = #{resource,jdbcType=VARCHAR},
+      P_TYPE = #{type,jdbcType=DECIMAL},
+      P_BUY_UNIT = #{buyUnit,jdbcType=DECIMAL},
+      P_WORK_SHOP1 = #{workShop1,jdbcType=VARCHAR},
+      P_WORK_SHOP2 = #{workShop2,jdbcType=VARCHAR},
+      P_PRODUCT_LINE = #{productLine,jdbcType=VARCHAR},
+      P_MOULD_TYPE = #{mouldType,jdbcType=VARCHAR},
+      P_OUTER_PART = #{outerPart,jdbcType=VARCHAR},
+      P_COLOR_PART = #{colorPart,jdbcType=DECIMAL},
+      P_E_BOM_PUID = #{eBomPuid,jdbcType=VARCHAR}
+    where P_PUID = #{puid,jdbcType=VARCHAR}
   </update>
 </mapper>
