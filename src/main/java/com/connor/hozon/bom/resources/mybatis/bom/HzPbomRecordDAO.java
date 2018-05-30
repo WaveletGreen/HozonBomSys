@@ -2,6 +2,7 @@ package com.connor.hozon.bom.resources.mybatis.bom;
 
 import sql.pojo.bom.HzBomLineRecord;
 import sql.pojo.bom.HzPbomLineRecord;
+import sql.pojo.bom.HzPbomRecord;
 
 import java.util.List;
 
@@ -20,4 +21,25 @@ public interface HzPbomRecordDAO {
      * @return
      */
     List<HzPbomLineRecord> searchPbomLineDetail(HzBomLineRecord record);
+
+    /**
+     * 插入 PBOM管理信息
+     * @param record
+     * @return
+     */
+    int insert(HzPbomRecord record);
+
+    /**
+     * 编辑 PBOM管理信息
+     * @param record
+     * @return
+     */
+    int update(HzPbomRecord record);
+
+    /**
+     * 删除PBOM管理 通过外键删除
+     * @param ePuid
+     * @return
+     */
+    int deleteByForeignId(String ePuid);
 }

@@ -1,7 +1,6 @@
 package com.connor.hozon.bom.resources.service.bom;
 
-import com.connor.hozon.bom.resources.dto.request.InsertHzPbomMaintainRecordReqDTO;
-import com.connor.hozon.bom.resources.dto.request.SearchPbomDetailReqDTO;
+import com.connor.hozon.bom.resources.dto.request.*;
 import com.connor.hozon.bom.resources.dto.response.HzPbomLineMaintainRespDTO;
 import com.connor.hozon.bom.resources.dto.response.HzPbomLineRespDTO;
 
@@ -25,6 +24,20 @@ public interface HzPbomService {
     int insertPbomLineMaintainRecords(List<InsertHzPbomMaintainRecordReqDTO> recordInsertBatchReqDTO);
 
     /**
+     * PBOM在线维护 编辑BOM信息
+     * @param recordReqDTO
+     * @return
+     */
+    int updatePbomLineMaintainRecord(UpdateHzPbomMaintainRecordReqDTO recordReqDTO);
+
+    /**
+     * PBOM 在线维护 删除BOM信息
+     * @param foreignPuid
+     * @return
+     */
+    int deletePbomLineMaintainByForeignId(String foreignPuid);
+
+    /**
      * 获取PBOM信息
      * @return
      */
@@ -44,4 +57,24 @@ public interface HzPbomService {
      */
     List<HzPbomLineRespDTO> searchPbomLineManageRecord(SearchPbomDetailReqDTO reqDTO);
 
+    /**
+     * 插入PBOM维护信息   获取当前登陆者的信息 需要进行权限判断
+     * @param recordReqDTO
+     * @return
+     */
+    int insertHzPbomRecord(InsertHzPbomRecordReqDTO recordReqDTO);
+
+    /**
+     * PBOM维护 编辑 获取当前登录这信息 进行权限判断
+     * @param recordReqDTO
+     * @return
+     */
+    int updateHzPbomRecord(UpdateHzPbomRecordReqDTO recordReqDTO);
+
+    /**
+     * PBOM维护 删除  获取当前登录者的信息 进行权限判断
+     * @param foreignPuid
+     * @return
+     */
+    int deleteHzPbomRecordByForeignId(String foreignPuid);
 }

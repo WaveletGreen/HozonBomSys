@@ -26,8 +26,13 @@ public class HzPbomMaintainRecordDAOImpl extends BaseSQLUtil implements HzPbomMa
     }
 
     @Override
-    public int update(HzPbomLineMaintainRecord record) {
-        return 0;
+    public int update(HzPbomMaintainRecord record) {
+        return super.update("HzPbomMaintainRecordDAOImpl_update",record);
+    }
+
+    @Override
+    public int deleteByForeignId(String pPuid) {
+        return super.delete("HzPbomMaintainRecordDAOImpl_deleteByForeignId",pPuid);
     }
 
     @Override

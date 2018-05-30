@@ -1,7 +1,6 @@
 package com.connor.hozon.bom.resources.service.bom.impl;
 
-import com.connor.hozon.bom.resources.dto.request.InsertHzPbomMaintainRecordReqDTO;
-import com.connor.hozon.bom.resources.dto.request.SearchPbomDetailReqDTO;
+import com.connor.hozon.bom.resources.dto.request.*;
 import com.connor.hozon.bom.resources.dto.response.HzPbomLineMaintainRespDTO;
 import com.connor.hozon.bom.resources.dto.response.HzPbomLineRespDTO;
 import com.connor.hozon.bom.resources.mybatis.bom.HzPbomMaintainRecordDAO;
@@ -64,6 +63,17 @@ public class HzPbomServiceImpl implements HzPbomService {
 
         return recordDAO.insertList(records);
     }
+
+    @Override
+    public int updatePbomLineMaintainRecord(UpdateHzPbomMaintainRecordReqDTO recordReqDTO) {
+        return 0;
+    }
+
+    @Override
+    public int deletePbomLineMaintainByForeignId(String foreignPuid) {
+        return 0;
+    }
+
 
     @Override
     public List<HzPbomLineRespDTO> getHzPbomLineRecord() {
@@ -138,6 +148,22 @@ public class HzPbomServiceImpl implements HzPbomService {
         }
         return pbomLineRecordToRespDTOS(records);
     }
+
+    @Override
+    public int insertHzPbomRecord(InsertHzPbomRecordReqDTO recordReqDTO) {
+        return 0;
+    }
+
+    @Override
+    public int updateHzPbomRecord(UpdateHzPbomRecordReqDTO recordReqDTO) {
+        return 0;
+    }
+
+    @Override
+    public int deleteHzPbomRecordByForeignId(String foreignPuid) {
+        return 0;
+    }
+
 
     /**
      * 获取bom系统的层级和级别
@@ -257,5 +283,6 @@ public class HzPbomServiceImpl implements HzPbomService {
         }
         return null;
     }
+
 
 }

@@ -2,24 +2,25 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="HzPbomMaintainRecord">
   <resultMap id="BaseResultMap" type="sql.pojo.bom.HzPbomMaintainRecord">
-    <id column="PUID" jdbcType="VARCHAR" property="puid" />
-    <result column="SPARE_PART" jdbcType="VARCHAR" property="sparePart" />
-    <result column="SPARE_PART_NUM" jdbcType="VARCHAR" property="sparePartNum" />
-    <result column="PROCESS_ROUTE" jdbcType="VARCHAR" property="processRoute" />
-    <result column="LABOR_HOUR" jdbcType="VARCHAR" property="laborHour" />
-    <result column="RHYTHM" jdbcType="VARCHAR" property="rhythm" />
-    <result column="SOLDER_JOINT" jdbcType="VARCHAR" property="solderJoint" />
-    <result column="MACHINE_MATERIAL" jdbcType="VARCHAR" property="machineMaterial" />
-    <result column="STANDARD_PART" jdbcType="VARCHAR" property="standardPart" />
-    <result column="TOOLS" jdbcType="VARCHAR" property="tools" />
-    <result column="WASTER_PRODUCT" jdbcType="VARCHAR" property="wasterProduct" />
-    <result column="CHANGE" jdbcType="VARCHAR" property="change" />
-    <result column="CHANGE_NUM" jdbcType="VARCHAR" property="changeNum" />
+    <id column="P_PUID" jdbcType="VARCHAR" property="puid" />
+    <result column="P_SPARE_PART" jdbcType="VARCHAR" property="sparePart" />
+    <result column="P_SPARE_PART_NUM" jdbcType="VARCHAR" property="sparePartNum" />
+    <result column="P_PROCESS_ROUTE" jdbcType="VARCHAR" property="processRoute" />
+    <result column="P_LABOR_HOUR" jdbcType="VARCHAR" property="laborHour" />
+    <result column="P_RHYTHM" jdbcType="VARCHAR" property="rhythm" />
+    <result column="P_SOLDER_JOINT" jdbcType="VARCHAR" property="solderJoint" />
+    <result column="P_MACHINE_MATERIAL" jdbcType="VARCHAR" property="machineMaterial" />
+    <result column="P_STANDARD_PART" jdbcType="VARCHAR" property="standardPart" />
+    <result column="P_TOOLS" jdbcType="VARCHAR" property="tools" />
+    <result column="P_WASTER_PRODUCT" jdbcType="VARCHAR" property="wasterProduct" />
+    <result column="P_CHANGE" jdbcType="VARCHAR" property="change" />
+    <result column="P_CHANGE_NUM" jdbcType="VARCHAR" property="changeNum" />
     <result column="P_BOM_PUID" jdbcType="VARCHAR" property="pBomPuid" />
   </resultMap>
   <sql id="Base_Column_List">
-    PUID, SPARE_PART, SPARE_PART_NUM, PROCESS_ROUTE, LABOR_HOUR, RHYTHM, SOLDER_JOINT,
-    MACHINE_MATERIAL, STANDARD_PART, TOOLS, WASTER_PRODUCT, CHANGE, CHANGE_NUM, P_BOM_PUID
+    P_PUID, P_SPARE_PART, P_SPARE_PART_NUM, P_PROCESS_ROUTE, P_LABOR_HOUR, P_RHYTHM,
+    P_SOLDER_JOINT, P_MACHINE_MATERITAL, P_STANDARD_PART, P_TOOLS, P_WASTER_PRODUCT,
+    P_CHANGE, P_CHANGE_NUM, P_BOM_PUID
   </sql>
 
 
@@ -28,20 +29,20 @@
     select
     <include refid="Base_Column_List" />
     from HZ_PBOM_MAINTAIN_RECORD
-    where PUID = #{puid,jdbcType=VARCHAR}
+    where P_PUID = #{puid,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from HZ_PBOM_MAINTAIN_RECORD
-    where PUID = #{puid,jdbcType=VARCHAR}
+    where P_PUID = #{puid,jdbcType=VARCHAR}
   </delete>
 
   <!--批量插入-->
   <insert id="HzPbomMaintainRecordDAOImpl_insertList"  useGeneratedKeys="false" parameterType="java.util.List">
-    insert into HZ_PBOM_MAINTAIN_RECORD (PUID, SPARE_PART, SPARE_PART_NUM,
-      PROCESS_ROUTE, LABOR_HOUR, RHYTHM,
-      SOLDER_JOINT, MACHINE_MATERIAL, STANDARD_PART,
-      TOOLS, WASTER_PRODUCT, CHANGE,
-      CHANGE_NUM, P_BOM_PUID)
+    insert into HZ_PBOM_MAINTAIN_RECORD (P_PUID, P_SPARE_PART, P_SPARE_PART_NUM,
+    P_PROCESS_ROUTE, P_LABOR_HOUR, P_RHYTHM,
+    P_SOLDER_JOINT, P_MACHINE_MATERIAL, P_STANDARD_PART,
+    P_TOOLS, P_WASTER_PRODUCT, P_CHANGE,
+    P_CHANGE_NUM, P_BOM_PUID)
     <foreach collection="list" item="item" index="index"  separator="UNION ALL" >
       select
       #{item.puid,jdbcType=VARCHAR}, #{item.sparePart,jdbcType=VARCHAR}, #{item.sparePartNum,jdbcType=VARCHAR},
@@ -59,44 +60,44 @@
   <insert id="insertSelective" parameterType="sql.pojo.bom.HzPbomMaintainRecord">
     insert into HZ_PBOM_MAINTAIN_RECORD
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="puid != null">
-        PUID,
+      <if test="pPuid != null">
+        P_PUID,
       </if>
-      <if test="sparePart != null">
-        SPARE_PART,
+      <if test="pSparePart != null">
+        P_SPARE_PART,
       </if>
-      <if test="sparePartNum != null">
-        SPARE_PART_NUM,
+      <if test="pSparePartNum != null">
+        P_SPARE_PART_NUM,
       </if>
-      <if test="processRoute != null">
-        PROCESS_ROUTE,
+      <if test="pProcessRoute != null">
+        P_PROCESS_ROUTE,
       </if>
-      <if test="laborHour != null">
-        LABOR_HOUR,
+      <if test="pLaborHour != null">
+        P_LABOR_HOUR,
       </if>
-      <if test="rhythm != null">
-        RHYTHM,
+      <if test="pRhythm != null">
+        P_RHYTHM,
       </if>
-      <if test="solderJoint != null">
-        SOLDER_JOINT,
+      <if test="pSolderJoint != null">
+        P_SOLDER_JOINT,
       </if>
-      <if test="machineMaterial != null">
-        MACHINE_MATERIAL,
+      <if test="pMachineMaterital != null">
+        P_MACHINE_MATERITAL,
       </if>
-      <if test="standardPart != null">
-        STANDARD_PART,
+      <if test="pStandardPart != null">
+        P_STANDARD_PART,
       </if>
-      <if test="tools != null">
-        TOOLS,
+      <if test="pTools != null">
+        P_TOOLS,
       </if>
-      <if test="wasterProduct != null">
-        WASTER_PRODUCT,
+      <if test="pWasterProduct != null">
+        P_WASTER_PRODUCT,
       </if>
-      <if test="change != null">
-        CHANGE,
+      <if test="pChange != null">
+        P_CHANGE,
       </if>
-      <if test="changeNum != null">
-        CHANGE_NUM,
+      <if test="pChangeNum != null">
+        P_CHANGE_NUM,
       </if>
       <if test="pBomPuid != null">
         P_BOM_PUID,
@@ -151,62 +152,62 @@
     update HZ_PBOM_MAINTAIN_RECORD
     <set>
       <if test="sparePart != null">
-        SPARE_PART = #{sparePart,jdbcType=VARCHAR},
+        P_SPARE_PART = #{sparePart,jdbcType=VARCHAR},
       </if>
       <if test="sparePartNum != null">
-        SPARE_PART_NUM = #{sparePartNum,jdbcType=VARCHAR},
+        P_SPARE_PART_NUM = #{sparePartNum,jdbcType=VARCHAR},
       </if>
       <if test="processRoute != null">
-        PROCESS_ROUTE = #{processRoute,jdbcType=VARCHAR},
+        P_PROCESS_ROUTE = #{processRoute,jdbcType=VARCHAR},
       </if>
       <if test="laborHour != null">
-        LABOR_HOUR = #{laborHour,jdbcType=VARCHAR},
+        P_LABOR_HOUR = #{laborHour,jdbcType=VARCHAR},
       </if>
       <if test="rhythm != null">
-        RHYTHM = #{rhythm,jdbcType=VARCHAR},
+        P_RHYTHM = #{rhythm,jdbcType=VARCHAR},
       </if>
       <if test="solderJoint != null">
-        SOLDER_JOINT = #{solderJoint,jdbcType=VARCHAR},
+        P_SOLDER_JOINT = #{solderJoint,jdbcType=VARCHAR},
       </if>
       <if test="machineMaterial != null">
-        MACHINE_MATERIAL = #{machineMaterial,jdbcType=VARCHAR},
+        P_MACHINE_MATERIAL = #{machineMaterial,jdbcType=VARCHAR},
       </if>
       <if test="standardPart != null">
-        STANDARD_PART = #{standardPart,jdbcType=VARCHAR},
+        P_STANDARD_PART = #{standardPart,jdbcType=VARCHAR},
       </if>
       <if test="tools != null">
-        TOOLS = #{tools,jdbcType=VARCHAR},
+        P_TOOLS = #{tools,jdbcType=VARCHAR},
       </if>
       <if test="wasterProduct != null">
-        WASTER_PRODUCT = #{wasterProduct,jdbcType=VARCHAR},
+        P_WASTER_PRODUCT = #{wasterProduct,jdbcType=VARCHAR},
       </if>
       <if test="change != null">
-        CHANGE = #{change,jdbcType=VARCHAR},
+        P_CHANGE = #{change,jdbcType=VARCHAR},
       </if>
       <if test="changeNum != null">
-        CHANGE_NUM = #{changeNum,jdbcType=VARCHAR},
+        P_CHANGE_NUM = #{changeNum,jdbcType=VARCHAR},
       </if>
       <if test="pBomPuid != null">
-        P_BOM_PUID = #{pBomPuid,jdbcType=VARCHAR},
+        P_P_BOM_PUID = #{pBomPuid,jdbcType=VARCHAR},
       </if>
     </set>
-    where PUID = #{puid,jdbcType=VARCHAR}
+    where P_PUID = #{puid,jdbcType=VARCHAR}
   </update>
   <update id="updateByPrimaryKey" parameterType="sql.pojo.bom.HzPbomMaintainRecord">
     update HZ_PBOM_MAINTAIN_RECORD
-    set SPARE_PART = #{sparePart,jdbcType=VARCHAR},
-      SPARE_PART_NUM = #{sparePartNum,jdbcType=VARCHAR},
-      PROCESS_ROUTE = #{processRoute,jdbcType=VARCHAR},
-      LABOR_HOUR = #{laborHour,jdbcType=VARCHAR},
-      RHYTHM = #{rhythm,jdbcType=VARCHAR},
-      SOLDER_JOINT = #{solderJoint,jdbcType=VARCHAR},
-      MACHINE_MATERIAL = #{machineMaterial,jdbcType=VARCHAR},
-      STANDARD_PART = #{standardPart,jdbcType=VARCHAR},
-      TOOLS = #{tools,jdbcType=VARCHAR},
-      WASTER_PRODUCT = #{wasterProduct,jdbcType=VARCHAR},
-      CHANGE = #{change,jdbcType=VARCHAR},
-      CHANGE_NUM = #{changeNum,jdbcType=VARCHAR},
-      P_BOM_PUID = #{pBomPuid,jdbcType=VARCHAR}
-    where PUID = #{puid,jdbcType=VARCHAR}
+    set P_SPARE_PART = #{sparePart,jdbcType=VARCHAR},
+      P_SPARE_PART_NUM = #{sparePartNum,jdbcType=VARCHAR},
+      P_PROCESS_ROUTE = #{processRoute,jdbcType=VARCHAR},
+      P_LABOR_HOUR = #{laborHour,jdbcType=VARCHAR},
+      P_RHYTHM = #{rhythm,jdbcType=VARCHAR},
+      P_SOLDER_JOINT = #{solderJoint,jdbcType=VARCHAR},
+      P_MACHINE_MATERIAL = #{machineMaterial,jdbcType=VARCHAR},
+      P_STANDARD_PART = #{standardPart,jdbcType=VARCHAR},
+      P_TOOLS = #{tools,jdbcType=VARCHAR},
+      P_WASTER_PRODUCT = #{wasterProduct,jdbcType=VARCHAR},
+      P_CHANGE = #{change,jdbcType=VARCHAR},
+      P_CHANGE_NUM = #{changeNum,jdbcType=VARCHAR},
+      P_P_BOM_PUID = #{pBomPuid,jdbcType=VARCHAR}
+    where P_PUID = #{puid,jdbcType=VARCHAR}
   </update>
 </mapper>
