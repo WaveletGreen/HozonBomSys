@@ -11,7 +11,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 @Configuration
 public class WebMvcConfig extends WebMvcConfigurerAdapter {
 
-    /**
+    /**w
      * 重写方法描述：实现在url中输入相应的地址的时候直接跳转到某个地址
      *
      * @param registry
@@ -52,8 +52,7 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         //PBOM定义Make/Buy
         registry.addViewController("/defineMake").setViewName("/pbomManage/defineMake/defineMake");
         //PBOM
-        registry.addViewController("/pbomMain").setViewName("/pbomManage/pbomMain");
-//        registry.addViewController("/colorUpdate").setViewName("/cfg/color/colorUpdate");
+        registry.addViewController("/pbomManage").setViewName("/pbomManage/pbomManage");
         //配色方案
         registry.addViewController("/modelColorCfg").setViewName("/cfg/modelColorCfg/modelColorCfg");
 

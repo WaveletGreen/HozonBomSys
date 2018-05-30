@@ -1,14 +1,22 @@
 var firstLoad = true;
 $(document).ready(
-    $("#queryPbomMaintenance").click(function () {
-        var $table = $("#pbomMaintenanceTable");
+    $("#PbomManage").click(function () {
+        var $table = $("#pbomManageTable");
         var column = [];
         $.ajax({
-            url: "pbom/maintain/title",
+            url:"pbom/getBomManage",
+            type:"GET",
+            success:function (data) {
+                var xxx = data.data;
+                console.log(xxx);
+            }
+        })
+        $.ajax({
+            url: "pbom/manage/title",
             type: "GET",
             success: function (result) {
                 var column = [];
-                column.push({field: 'pBomPuid', title: 'puid'});
+                column.push({field: 'eBomPuid', title: 'puid'});
                 column.push({field: 'ck', checkbox: true, Width: 50});
                 column.push({field: '',
                     title: '序号',
@@ -25,9 +33,8 @@ $(document).ready(
                 var values;
                 for (var key in data) {
                     if (data.hasOwnProperty(key)) {
-                        // keys.push(key);
                         var json = {
-                           field: key,
+                            field: key,
                             title: data[key],
                             align:
                                 'center',
@@ -38,7 +45,7 @@ $(document).ready(
                     }
                 }
                 $table.bootstrapTable({
-                    url: "pbom/getMaintain/detail",
+                    url: "pbom/getBomManage",
                     method: 'get',
                     height: $(window.parent.document).find("#wrapper").height() - 252,
                     width: $(window).width(),
@@ -127,28 +134,8 @@ $(document).ready(
                         }
                     ]
                 });
-                $table.bootstrapTable('hideColumn', 'pBomPuid');
+                $table.bootstrapTable('hideColumn', 'eBomPuid');
             }
         });
     }),
-
-
-    $("#queryBtn").click(function () {
-        var myData = JSON.stringify({
-            "level": $("#level").val(),
-            "pBomOfWhichDept": $("#pBomOfWhichDept").val(),
-            "lineId": $("#lineId").val(),
-        });
-        $.ajax({
-            contentType: "application/json",
-            type:"get",
-            url:"pbom/searchMaintain/detail",
-            data:myData,
-            success:
-            function (data) {
-                var result = data.data;
-                console.log(result);
-            }
-        })
-    })
 );
