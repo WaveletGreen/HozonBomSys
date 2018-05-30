@@ -213,6 +213,7 @@ public class HzPbomController  extends BaseController {
         writeAjaxJSONResponse(ResultMessageBuilder.build(respDTOS),response);
     }
 
+    
     @RequestMapping(value = "insert/manage",method = RequestMethod.POST)
     public void insertPbomManageRecord(InsertHzPbomRecordReqDTO reqDTO, HttpServletResponse response){
         writeAjaxJSONResponse(ResultMessageBuilder.build(false,"接口后续在定义"),response);
