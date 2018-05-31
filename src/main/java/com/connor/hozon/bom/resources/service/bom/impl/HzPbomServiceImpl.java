@@ -215,7 +215,7 @@ public class HzPbomServiceImpl implements HzPbomService {
             responseDTO.setMachineMaterial(record.getMachineMaterial()==null?"":record.getMachineMaterial());
             responseDTO.setBomDigifaxId(record.getBomDigifaxId()==null?"":record.getBomDigifaxId());
             responseDTO.setLineId(record.getLineID()==null?"":record.getLineID());//零件号
-            responseDTO.setpBomPuid(record.getpPuid());
+            responseDTO.setpBomPuid(record.getPuid());
             responseDTO.setStandardPart(record.getStandardPart()==null?"":record.getStandardPart());
             responseDTO.setSparePartNum(record.getSparePartNum()==null?"":record.getSparePartNum());
             responseDTO.setSolderJoint(record.getSolderJoint()==null?"":record.getSolderJoint());
@@ -269,6 +269,7 @@ public class HzPbomServiceImpl implements HzPbomService {
                 }else{
                     respDTO.setColorPart("/");
                 }
+                respDTO.seteBomPuid(record.getpPuid()==null?"":record.getpPuid());
                 respDTO.setProductLine(record.getProductLine()==null?"":record.getProductLine());
                 respDTO.setWorkShop1(record.getWorkShop1()==null?"":record.getWorkShop1());
                 respDTO.setWorkShop2(record.getWorkShop2()==null?"":record.getWorkShop2());

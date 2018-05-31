@@ -1,0 +1,172 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<!--User: xulf Date: 2018/5/31 Time: 15:29-->
+<body>
+<form id="pbomMainForm" role="form" method="post" action="./pbom/update/manage">
+    <input id="eBomPuid" name="eBomPuid" type="hidden" /><!--th:value="${entity.eBomPuid}"-->
+    <div class="form-group">
+        <label for="level">层级</label>
+        <input class="form-control" id="level" name="level" type="text"  disabled="disabled"
+
+               placeholder="请输入层级"/><!--th:value="${entity.level}"-->
+    </div>
+    <div class="form-group">
+        <label for="pBomOfWhichDept">专业</label>
+        <input class="form-control" id="pBomOfWhichDept" name="pBomOfWhichDept" type="text"  disabled="disabled"
+
+               placeholder="请输入专业"/><!--th:value="${entity.pBomOfWhichDept}"-->
+    </div>
+    <div class="form-group">
+        <label for="groupNum">分组号</label>
+        <input class="form-control" id="groupNum" name="groupNum" type="text"  disabled="disabled"
+
+               placeholder="请输入分组号号"/><!--th:value="${entity.groupNum}"-->
+    </div>
+    <div class="form-group">
+        <label for="lineId">零件号</label>
+        <input class="form-control" id="lineId" name="lineId" type="text" disabled="disabled"
+
+               placeholder="请输入零件号"/><!--th:value="${entity.lineId}"-->
+    </div>
+    <div class="form-group">
+        <label for="itemType">零件分类</label>
+        <input class="form-control" id="itemType" name="itemType" type="text" disabled="disabled"
+
+               placeholder="请输入零件分类"/><!--th:value="${entity.itemType}"-->
+    </div>
+    <div class="form-group">
+        <label for="itemResource">零部件来源</label>
+        <input class="form-control" id="itemResource" name="itemResource" type="text"
+
+               placeholder="请输入零部件来源"/><!--th:value="${entity.itemResource}"-->
+    </div>
+    <div class="form-group">
+        <label for="processRoute">自制/采购</label>
+        <input class="form-control" id="processRoute" name="processRoute" type="text"
+
+               placeholder="请输入来源"/><!--th:value="${entity.processRoute}"-->
+    </div>
+    <div class="form-group">
+        <label for="type">焊接/装配</label>
+        <input class="form-control" id="type" name="type" type="text" disabled="disabled"
+
+               placeholder="请输入类型"/><!--th:value="${entity.type}"-->
+    </div>
+    <div class="form-group">
+        <label for="buyUnit">采购单元</label>
+        <input class="form-control" id="buyUnit" name="buyUnit" type="text" disabled="disabled"
+
+               placeholder="请输入采购单元"/><!--th:value="${entity.buyUnit}"-->
+    </div>
+    <div class="form-group">
+        <label for="workShop1">车间1</label>
+        <input class="form-control" id="workShop1" name="workShop1" type="text" disabled="disabled"
+
+               placeholder="请输入车间1"/><!--th:value="${entity.workShop1}"-->
+    </div>
+    <div class="form-group">
+        <label for="workShop2">车间2</label>
+        <input class="form-control" id="workShop2" name="workShop2" type="text" disabled="disabled"
+
+               placeholder="请输入车间2"/><!--th:value="${entity.workShop2}"-->
+    </div>
+    <div class="form-group">
+        <label for="productLine">生产线</label>
+        <input class="form-control" id="productLine" name="productLine" type="text" disabled="disabled"
+
+               placeholder="请输入生产线"/><!--th:value="${entity.productLine}"-->
+    </div>
+    <div class="form-group">
+        <label for="mouldType">模具类别</label>
+        <input class="form-control" id="mouldType" name="mouldType" type="text" disabled="disabled"
+
+               placeholder="请输入模具类别"/><!--th:value="${entity.mouldType}"-->
+    </div>
+    <div class="form-group">
+        <label for="outerPart">外委件</label>
+        <input class="form-control" id="outerPart" name="outerPart" type="text" disabled="disabled"
+
+               placeholder="请输入外委件"/><!--th:value="${entity.outerPart}"-->
+    </div>
+    <div class="form-group">
+        <label for="colorPart">颜色件</label>
+        <input class="form-control" id="colorPart" name="colorPart" type="text" disabled="disabled"
+
+               placeholder="请输入颜色件"/><!--th:value="${entity.colorPart}"-->
+    </div>
+</form>
+
+<script th:inline="javascript">
+    <![CDATA[
+    $(function () {
+        $('#pbomMainForm').bootstrapValidator({
+            message: 'This value is not valid',
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            fields: {
+                level: {
+                    message: '层级验证失败',
+                    validators: {
+                        notEmpty: {
+                            message: '层级不能为空'
+                        }
+                    }
+                },
+            }
+        });
+        // 绑定dialog的确定按钮的监听事件
+        $("#btnOk", window.top.document).click(function () {
+            var bootstrapValidator = $("#pbomMainForm", window.top.document).data('bootstrapValidator');
+            bootstrapValidator.validate();
+            if (bootstrapValidator.isValid()) {
+                var url = $("#pbomMainForm", window.top.document).attr('action');
+                var myData = JSON.stringify({
+                    "eBomPuid": $("#eBomPuid").val(),
+                    "level": $("#level").val(),
+                    "pBomOfWhichDept": $("#pBomOfWhichDept").val(),
+                    "groupNum": $("#groupNum").val(),
+                    "lineId": $("#lineId").val(),
+                    "itemType": $("#itemType").val(),
+                    "itemResource": $("#itemResource").val(),
+                    "processRoute": $("#processRoute").val(),
+                    "type": $("#type").val(),
+                    "buyUnit": $("#buyUnit").val(),
+                    "workShop1": $("#workShop1").val(),
+                    "workShop2": $("#workShop2").val(),
+                    "productLine": $("#productLine").val(),
+                    "mouldType": $("#mouldType").val(),
+                    "outerPart": $("#outerPart").val(),
+                    "colorPart": $("#colorPart").val(),
+                });
+                $.ajax({
+                    contentType:
+                        "application/json",
+                    type:
+                        'POST',
+                    url: url,
+                    data: myData,
+                    success:
+                        function (result) {
+                            $('.modal-dialog', window.top.document).parent('div').remove()
+                            $('body', window.top.document).find('.modal-backdrop').remove();
+                            // jquery 调用刷新当前操作的table页面的refresh方法
+                            $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
+                            if (result)
+                                window.Ewin.alert({message: '修改数据成功!'});
+                            else
+                                window.Ewin.alert({message: '修改数据失败!'});
+                        },
+                    error: function (status) {
+                        window.Ewin.alert({message: status.status + ':修改数据失败!'});
+                    }
+                });
+            }
+        });
+    })
+    ]]>
+</script>
+</body>
+</html>

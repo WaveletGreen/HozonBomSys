@@ -9,6 +9,7 @@ import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.resources.util.ResultMessageBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -38,6 +39,7 @@ public class HzPbomController  extends BaseController {
         List<Map<String,String>> _list=new ArrayList<>();
         responseDTOList.forEach(dto->{
             Map<String,String> _res=new HashMap<>();
+            _res.put("pBomPuid",dto.getpBomPuid());
             _res.put("level",dto.getLevel());
             _res.put("pBomOfWhichDept",dto.getpBomOfWhichDept());
             _res.put("lineId",dto.getLineId());
@@ -92,13 +94,47 @@ public class HzPbomController  extends BaseController {
         writeAjaxJSONResponse(ResultMessageBuilder.build(tableTitle),response);
     }
 
+
+    @RequestMapping(value = "insert/list/maintain",method = RequestMethod.GET)
+    public String insertPbomLineMaintainRecordList(){
+        return "pbomManage/pbomMaintenance/addPbomMaintenance";
+    }
+
+
     /**
      * 新增
      * @param response
      */
     @RequestMapping(value = "insert/maintain",method = RequestMethod.POST)
     public void insertPbomLineMaintainRecord(InsertHzPbomMaintainRecordReqDTO reqDTO,HttpServletResponse response){
+        System.out.println("++++++++————————+——+————（）*（（（");
         writeAjaxJSONResponse(ResultMessageBuilder.build(false,"接口后续在定义"),response);
+    }
+
+    @RequestMapping(value = "update/list/maintain",method = RequestMethod.GET)
+    public  String updatePbomLineMaintainRecordList(Model model){
+        Map<String ,String> map =  new HashMap<>();
+        map.put("","");
+        map.put("","");
+        map.put("","");
+        map.put("","");
+        map.put("","");
+        map.put("","");
+        map.put("","");
+        map.put("","");
+        map.put("","");
+        map.put("","");
+        map.put("","");
+        map.put("","");
+        map.put("","");
+        map.put("","");
+        map.put("","");
+        map.put("","");
+        map.put("","");
+        map.put("","");
+        map.put("","");
+        model.addAttribute("entity");
+        return "pbomManage/pbomMaintenance/updatePbomMaintenance";
     }
 
     /**
@@ -108,6 +144,7 @@ public class HzPbomController  extends BaseController {
      */
     @RequestMapping(value = "update/maintain",method = RequestMethod.POST)
     public void updatePbomLineMaintainRecord(UpdateHzPbomMaintainRecordReqDTO reqDTO ,HttpServletResponse response){
+        System.out.println("社会猪，小佩奇");
         writeAjaxJSONResponse(ResultMessageBuilder.build(false,"接口后续在定义"),response);
     }
 
@@ -217,6 +254,14 @@ public class HzPbomController  extends BaseController {
     @RequestMapping(value = "insert/manage",method = RequestMethod.POST)
     public void insertPbomManageRecord(InsertHzPbomRecordReqDTO reqDTO, HttpServletResponse response){
         writeAjaxJSONResponse(ResultMessageBuilder.build(false,"接口后续在定义"),response);
+    }
+    @RequestMapping(value = "updateManageProcess",method = RequestMethod.GET)
+    public  String updatePbomManageRecordProcess(){
+        return "pbom/pbomManage/updateProcess";
+    }
+    @RequestMapping(value = "updateManageBom",method = RequestMethod.GET)
+    public  String updatePbomManageRecordBom(){
+        return "pbom/pbomManage/updateBom";
     }
     @RequestMapping(value = "update/manage",method = RequestMethod.POST)
     public void updatePbomManageRecord(UpdateHzPbomRecordReqDTO reqDTO,HttpServletResponse response){

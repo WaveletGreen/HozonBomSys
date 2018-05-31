@@ -53,19 +53,26 @@ $(document).ready(
                     sortable: true,                     //是否启用排序
                     sortOrder: "asc",                   //排序方式
                     toolbars: [
-                        {
+                        /*{
                             text: '添加',
                             iconCls: 'glyphicon glyphicon-plus',
                             handler: function () {
+                                var rows = $table.bootstrapTable('getSelections');
+                                //只能选一条
+                                if (rows.length != 1) {
+                                    window.Ewin.alert({message: '请选择一条需要添加的数据!'});
+                                    return false;
+                                }
                                 window.Ewin.dialog({
                                     title: "添加",
-                                    url: "pbom/addPage?pCfg0MainRecordOfMC=" + pCfg0MainRecordOfMC,
+                                    url: "pbom/insert/list/maintain?pBomPuid=" + rows[0].pBomPuid,
+                                    //url:"pbom/insert/list/maintain",
                                     gridId: "gridId",
                                     width: 500,
                                     height: 600
                                 })
                             }
-                        },
+                        },*/
                         {
                             text: '修改',
                             iconCls: 'glyphicon glyphicon-pencil',
@@ -78,14 +85,14 @@ $(document).ready(
                                 }
                                 window.Ewin.dialog({
                                     title: "修改",
-                                    url: "pbom/modifyPage?puid=" + rows[0].puid,
+                                    url: "pbom/update/list/maintain?pBomPuid=" + rows[0].pBomPuid,
                                     gridId: "gridId",
-                                    width: 350,
-                                    height: 450
+                                    width: 500,
+                                    height: 600
                                 });
                             }
                         },
-                        {
+                        /*{
                             text: '删除',
                             iconCls: 'glyphicon glyphicon-remove',
                             handler: function () {
@@ -104,7 +111,7 @@ $(document).ready(
                                         $.ajax({
                                             type: "POST",
                                             //ajax需要添加打包名
-                                            url: "./pbom/delete",
+                                            url: "./pbom/delete/maintain",
                                             data: JSON.stringify(rows),
                                             contentType: "application/json",
                                             success: function (result) {
@@ -124,10 +131,10 @@ $(document).ready(
                                     }
                                 });
                             }
-                        }
+                        }*/
                     ]
                 });
-                $table.bootstrapTable('hideColumn', 'pBomPuid');
+                // $table.bootstrapTable('hideColumn', 'pBomPuid');
             }
         });
     }),
@@ -141,13 +148,16 @@ $(document).ready(
         });
         $.ajax({
             contentType: "application/json",
-            type:"get",
+            type:"GET",
             url:"pbom/searchMaintain/detail",
             data:myData,
             success:
             function (data) {
                 var result = data.data;
                 console.log(result);
+            },
+            error:function (info) {
+                alert(info);
             }
         })
     })

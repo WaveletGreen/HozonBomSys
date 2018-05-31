@@ -60,10 +60,11 @@ $(document).ready(
                     sortable: true,                     //是否启用排序
                     sortOrder: "asc",                   //排序方式
                     toolbars: [
-                        {
+                        /*{
                             text: '添加',
                             iconCls: 'glyphicon glyphicon-plus',
                             handler: function () {
+
                                 window.Ewin.dialog({
                                     title: "添加",
                                     url: "pbom/addPage?pCfg0MainRecordOfMC=" + pCfg0MainRecordOfMC,
@@ -72,9 +73,9 @@ $(document).ready(
                                     height: 600
                                 })
                             }
-                        },
+                        },*/
                         {
-                            text: '修改',
+                            text: '工艺修改',
                             iconCls: 'glyphicon glyphicon-pencil',
                             handler: function () {
                                 var rows = $table.bootstrapTable('getSelections');
@@ -84,15 +85,34 @@ $(document).ready(
                                     return false;
                                 }
                                 window.Ewin.dialog({
-                                    title: "修改",
-                                    url: "pbom/modifyPage?puid=" + rows[0].puid,
+                                    title: "工艺修改",
+                                    url: "pbom/updateManageProcess?puid=" + rows[0].puid,
                                     gridId: "gridId",
-                                    width: 350,
-                                    height: 450
+                                    width: 650,
+                                    height: 800
                                 });
                             }
                         },
                         {
+                            text: 'BOM修改',
+                            iconCls: 'glyphicon glyphicon-pencil',
+                            handler: function () {
+                                var rows = $table.bootstrapTable('getSelections');
+                                //只能选一条
+                                if (rows.length != 1) {
+                                    window.Ewin.alert({message: '请选择一条需要修改的数据!'});
+                                    return false;
+                                }
+                                window.Ewin.dialog({
+                                    title: "BOM修改",
+                                    url: "pbom/updateManageBom?puid=" + rows[0].puid,
+                                    gridId: "gridId",
+                                    width: 650,
+                                    height: 800
+                                });
+                            }
+                        },
+                        /*{
                             text: '删除',
                             iconCls: 'glyphicon glyphicon-remove',
                             handler: function () {
@@ -131,10 +151,10 @@ $(document).ready(
                                     }
                                 });
                             }
-                        }
+                        }*/
                     ]
                 });
-                $table.bootstrapTable('hideColumn', 'eBomPuid');
+                // $table.bootstrapTable('hideColumn', 'eBomPuid');
             }
         });
     }),
