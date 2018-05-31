@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.connor.hozon.bom.bomSystem.dao.project.HzProjectLibsDao">
+    <resultMap id="BaseResultMap" type="sql.pojo.project.HzProjectLibs">
+        <id column="PUID" jdbcType="VARCHAR" property="puid"/>
+        <result column="P_PROJECT_NAME" jdbcType="OTHER" property="pProjectName"/>
+        <result column="P_PROJECT_STRING" jdbcType="OTHER" property="pProjectString"/>
+        <result column="P_PROJECT_OBJECT_TYPE" jdbcType="OTHER" property="pProjectObjectType"/>
+        <result column="P_PROJECT_ITEM_ID" jdbcType="VARCHAR" property="pProjectItemId"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    PUID, P_PROJECT_NAME, P_PROJECT_STRING, P_PROJECT_OBJECT_TYPE, P_PROJECT_ITEM_ID
+  </sql>
+    <select id="selectByPrimaryKey" parameterType="sql.pojo.project.HzProjectLibs" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from HZ_PROJECT_LIBS
+        where PUID = #{puid,jdbcType=VARCHAR}
+    </select>
+    <select id="selectAllProject" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from HZ_PROJECT_LIBS
+    </select>
+
+</mapper>

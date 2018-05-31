@@ -19,6 +19,11 @@
                 <property name="url" value="jdbc:oracle:thin:@localhost:1521:TC10"/>
                 <property name="username" value="HOZON"/>
                 <property name="password" value="HOZON"/>
+
+                <property name="poolMaximumIdleConnections" value="12"/>
+                <property name="poolMaximumActiveConnections" value="2000"/>
+                <property name="poolPingQuery" value="SELECT 1 FROM DUAL"/>
+                <property name="poolPingEnabled" value="true"/>
             </dataSource>
         </environment>
     </environments>
@@ -31,6 +36,7 @@
         <mapper resource="sql/mapper/bom/xmapper/HzBomLineRecordMapper.xml"/>
 
         <!--配置-->
+        <mapper resource="sql/mapper/cfg/xmapper/HzCfg0MainRecordMapper.xml"/>
         <mapper resource="sql/mapper/cfg/xmapper/HzCfg0BomLineOfModelMapper.xml"/>
         <mapper resource="sql/mapper/cfg/xmapper/HzCfg0ModelDetailMapper.xml"/>
         <mapper resource="sql/mapper/cfg/xmapper/HzCfg0ColorSetMapper.xml"/>
