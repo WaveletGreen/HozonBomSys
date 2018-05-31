@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE generatorConfiguration PUBLIC
+        "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+    <classPathEntry
+            location="C:\app\Administrator\product\11.2.0\dbhome_1\jdbc\lib\ojdbc6.jar"/>
+    <context id="context1">
+        <commentGenerator>
+            <!-- 抑制警告 -->
+            <property name="suppressTypeWarnings" value="true"/>
+            <!-- 是否去除自动生成的注释 true：是 ： false:否 -->
+            <property name="suppressAllComments" value="true"/>
+            <!-- 是否生成注释代时间戳 -->
+            <property name="suppressDate" value="true"/>
+        </commentGenerator>
+        <!--数据库连接的信息：驱动类、连接地址、用户名、密码 -->
+        <jdbcConnection
+                connectionURL="jdbc:oracle:thin:@127.0.0.1:1521:TC10"
+                driverClass="oracle.jdbc.driver.OracleDriver" password="HOZON"
+                userId="HOZON"/>
+        <!-- 默认false，把JDBC DECIMAL 和 NUMERIC 类型解析为 Integer，为 true时把JDBC DECIMAL
+            和 NUMERIC 类型解析为java.math.BigDecimal -->
+        <javaTypeResolver>
+            <property name="forceBigDecimals" value="false"/>
+        </javaTypeResolver>
+        <!-- targetProject:生成PO类的位置 -->
+        <javaModelGenerator targetPackage="sql.pojo.project"
+                            targetProject="E:\ideaproject\new3\fancyears-bomsys_server-client-base_lilc\bomsys_server-client\src\main\java">
+            <!-- enableSubPackages:是否让schema作为包的后缀 -->
+            <property name="enableSubPackages" value="false"/>
+            <!-- 从数据库返回的值被清理前后的空格 -->
+            <property name="trimStrings" value="true"/>
+        </javaModelGenerator>
+        <!-- targetProject:mapper映射文件生成的位置 -->
+        <sqlMapGenerator
+                targetPackage="com.connor.hozon.bom.bomSystem.dao.project"
+                targetProject="E:\ideaproject\new3\fancyears-bomsys_server-client-base_lilc\bomsys_server-client\src\main\java">
+            <!-- enableSubPackages:是否让schema作为包的后缀 -->
+            <property name="enableSubPackages" value="false"/>
+        </sqlMapGenerator>
+        <!-- targetPackage：mapper接口生成的位置 -->
+        <javaClientGenerator type="XMLMAPPER"
+                             targetPackage="com.connor.hozon.bom.bomSystem.dao.project"
+                             targetProject="E:\ideaproject\new3\fancyears-bomsys_server-client-base_lilc\bomsys_server-client\src\main\java">
+            <property name="enableSubPackages" value="false"/>
+        </javaClientGenerator>
+        <!-- tableName:用于自动生成代码的数据库表；domainObjectName:对应于数据库表的javaBean类名 -->
+        <!-- <table schema="untodo" tableName="T_USER" domainObjectName="User"/> -->
+        <!-- 要生成那些表(更改tableName和domainObjectName就可以) -->
+        <!-- <table schema="untodo" tableName="T_USER" domainObjectName="User"
+            enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"
+            enableSelectByExample="false" selectByExampleQueryId="false"/> -->
+        <!--<table tableName="HZ_CFG0_OPTIONFAMILY_RECORD" domainObjectName="HzCfg0OptionFamily">-->
+        <!--<property name="useActualColumnNames" value="false"/>-->
+        <!--</table>-->
+        <!-- <table tableName="HZ_TEMPMAINRECORD" domainObjectName="HzTempMainRecord"> -->
+        <!-- <property name="useActualColumnNames" value="false" /> -->
+        <!-- </table> -->
+        <!-- <table tableName="HZ_TEMPITEMRECORD" domainObjectName="HzTempItemRecord"> -->
+        <!-- <property name="useActualColumnNames" value="false" /> -->
+        <!-- </table> -->
+        <!-- <table tableName="HZ_TEMPDOCUMENTRECORD" domainObjectName="HzTempDocumentRecord"> -->
+        <!-- <property name="useActualColumnNames" value="false" /> -->
+        <!-- </table> -->
+        <!-- <table tableName="HZ_BOM_MAIN_RECORD" domainObjectName="HZBomMainRecord"> -->
+        <!-- <property name="useActualColumnNames" value="false" /> -->
+        <!-- </table> -->
+        <!-- <table tableName="HZ_BOM_LINE_RECORD" domainObjectName="HzBomLineRecord"> -->
+        <!-- <property name="useActualColumnNames" value="false" /> -->
+        <!-- </table> -->
+        <!-- <table tableName="HZ_PREFERENCESETTING" domainObjectName="HzPreferenceSetting"> -->
+        <!-- <property name="useActualColumnNames" value="false" /> -->
+        <!-- </table> -->
+        <!-- <table tableName="HZ_BOM_2Y_RECORD" domainObjectName="HzBom2YEntity"> -->
+        <!-- <property name="useActualColumnNames" value="false" /> -->
+        <!-- </table> -->
+        <!-- <table tableName="HZ_CFG0_OF_BOMLINE_RECORD" -->
+        <!-- domainObjectName="HzCfg0OfBomlineRecord"> -->
+        <!-- <property name="useActualColumnNames" value="false" /> -->
+        <!-- </table> -->
+        <!-- <table tableName="HZ_CFG0_TO_MODEL_RECORD" -->
+        <!-- domainObjectName="HzCfg0ToModelRecord"> -->
+        <!-- <property name="useActualColumnNames" value="false" /> -->
+        <!-- </table> -->
+        <!-- <table tableName="HZ_CFG0_MODEL_RECORD" -->
+        <!-- domainObjectName="HzCfg0ModelRecord"> -->
+        <!-- <property name="useActualColumnNames" value="false" /> -->
+        <!-- </table> -->
+        <!-- <table tableName="HZ_CFG0_RECORD" -->
+        <!-- domainObjectName="HzCfg0Record"> -->
+        <!-- <property name="useActualColumnNames" value="false" /> -->
+        <!-- </table> -->
+        <!-- <table tableName="HZ_CFG0_MAIN_RECORD" -->
+        <!-- domainObjectName="HzCfg0MainRecord"> -->
+        <!-- <property name="useActualColumnNames" value="false" /> -->
+        <!-- </table> -->
+        <!-- <table tableName="HZ_BOM_DEPT_LEVEL" -->
+        <!-- domainObjectName="HzBomDepyLevel"> -->
+        <!-- <property name="useActualColumnNames" value="false" /> -->
+        <!-- </table> -->
+        <!--<table tableName="HZ_CFG0_COLORSET"-->
+        <!--domainObjectName="HzCfg0ColorSet">-->
+        <!--<property name="useActualColumnNames" value="false" />-->
+        <!--</table>-->
+
+        <!--生成对应表及类名 schema="general" 数据库用的是Oracle,SqlServer需要去掉schema属性,MySQL则不需要去掉 -->
+
+        <!-- <table tableName="GRANTUSER" domainObjectName="GrantUser"> -->
+        <!-- <property name="useActualColumnNames" value="false" /> -->
+
+        <!-- </table> -->
+        <!-- <table tableName="USERAUTHORIZATION" domainObjectName="UserAuthorization"> -->
+        <!-- <property name="useActualColumnNames" value="false" /> -->
+
+         <!--</table> -->
+         <table tableName="HZ_PROJECT_LIBS" domainObjectName="HzProjectLibs">
+         <property name="useActualColumnNames" value="false" />
+
+         </table>
+        <!-- <table tableName="HZ_RELEASE_FILE_RECORD" domainObjectName="HzReleaseFileRecord"> -->
+        <!-- <property name="useActualColumnNames" value="false" /> -->
+        <!-- </table> -->
+        <!-- <table tableName="USERAUTHORIZATION" domainObjectName="UserAuthorization"> -->
+        <!-- <property name="useActualColumnNames" value="false" /> -->
+        <!-- </table> -->
+        <!-- </table> -->
+    </context>
+</generatorConfiguration>

@@ -2,7 +2,7 @@ var firstLoad = true;
 $(document).ready(
     $("#queryModelColorCfg").click(function () {
         //必须输入一个配置的puid
-        var pCfg0MainRecordOfMC = $("#inputCfg0").val();
+        var pCfg0MainRecordOfMC = $("#project", window.top.document).val();
         if (pCfg0MainRecordOfMC.length <= 0) {
             $("#myModal").modal('show');
             return;

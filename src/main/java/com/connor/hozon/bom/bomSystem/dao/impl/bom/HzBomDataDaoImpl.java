@@ -20,8 +20,8 @@ public class HzBomDataDaoImpl implements HzBomDataDao {
     BaseSQLUtil baseSQLUtil;
 
     @Override
-    public List<HzBomLineRecord> selectByBomDigifaxId(HzBomLineRecord bomLineRecord) {
-        return baseSQLUtil.executeQuery(bomLineRecord, "com.connor.hozon.bom.bomSystem.dao.bom.HzBomLineRecordMapper.selectByBomDigifaxId");
+    public List<HzBomLineRecord> selectByProjectPuid(HzBomLineRecord bomLineRecord) {
+        return baseSQLUtil.executeQuery(bomLineRecord, "com.connor.hozon.bom.bomSystem.dao.bom.HzBomDataDao.selectByProjectPuid");
     }
 
     @Override

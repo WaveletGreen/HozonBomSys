@@ -22,7 +22,7 @@ public interface HzBomDataDao {
      * @param bomLineRecord
      * @return
      */
-    List<HzBomLineRecord> selectByBomDigifaxId(HzBomLineRecord bomLineRecord);
+    List<HzBomLineRecord> selectByProjectPuid(HzBomLineRecord bomLineRecord);
 
     /**
      * Author: Fancyears·Maylos·Mayways

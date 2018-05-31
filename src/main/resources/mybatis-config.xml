@@ -24,14 +24,20 @@
     </environments>
     <!--映射文件：描述某个实体和数据库表的对应关系 -->
     <mappers>
+        <!--共有项-->
         <mapper resource="sql/mapper/HzPreferenceSettingMapper.xml"/>
+        <!--bom-->
         <mapper resource="sql/mapper/bom/xmapper/HzBomMainRecordMapper.xml"/>
         <mapper resource="sql/mapper/bom/xmapper/HzBomLineRecordMapper.xml"/>
+
+        <!--配置-->
         <mapper resource="sql/mapper/cfg/xmapper/HzCfg0BomLineOfModelMapper.xml"/>
         <mapper resource="sql/mapper/cfg/xmapper/HzCfg0ModelDetailMapper.xml"/>
         <mapper resource="sql/mapper/cfg/xmapper/HzCfg0ColorSetMapper.xml"/>
         <mapper resource="sql/mapper/cfg/xmapper/HzCfg0ModelRecordMapper.xml"/>
         <mapper resource="sql/mapper/cfg/xmapper/HzCfg0ModelColorRecordMapper.xml"/>
         <mapper resource="sql/mapper/cfg/xmapper/HzCfg0OptionFamilyMapper.xml"/>
+        <!--项目-->
+        <mapper resource="sql/mapper/project.xmapper/HzProjectLibsMapper.xml"/>
     </mappers>
 </configuration>

@@ -1,7 +1,8 @@
 $(document).ready(
     $("#doSubmit1").click(
         function () {
-            var x = $("#text1").val();
+            var project = $("#project", window.top.document);
+            var x = project.val();
             if (x.length == 0) {
                 $("#myModal").modal('show');
                 return;

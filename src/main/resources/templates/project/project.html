@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="include/includebase"></head>
+<title>项目库</title>
+<body>
+<div class="panel-body">
+    <div class="content col-lg-3">
+        <span>请选择工作项目</span>
+        <select class="form-control input-small" data-style="btn-info"
+                th:id="projectSelector">
+        </select>
+    </div>
+</div>
+<script>
+    ($.ajax({
+            url: "./project/loadAll",
+            type: "GET",
+            success: function (data) {
+                var _data = data;
+                for (var i in _data) {
+                    if (i == 0) {
+                        $("#project", window.top.document).val(_data[i].puid);
+                    }
+                    $("#projectSelector").append('<option value="' + _data[i].puid + '">' + _data[i].pProjectName + ' ' + _data[i].pProjectString + '</option>');
+                }
+                console.log("加载项目成功");
+            },
+            error: function (err) {
+                alert(err.status);
+            }
+        })
+
+    );
+    $(document).ready(
+        function () {
+            $("#projectSelector").change(function () {
+                var projValue = $("#projectSelector option:selected").val();
+                var project = $("#project", window.top.document);
+                project.val(projValue);
+                console.log(project.val());
+            })
+        }
+    );
+
+</script>
+</body>
+</html>
