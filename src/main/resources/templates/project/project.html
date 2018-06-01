@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="include/includebase"></head>
+<title>项目库</title>
+<body>
+
+<div class="panel-body">
+    <div class="content row-fluid col-md-3 col-lg-3">
+        <button id="setCurrentProject">设置为当前工作项目</button>
+        <ul id="menu_tree" class="ztree" style="width:560px; overflow:auto;"></ul>
+    </div>
+    <div class="content col-lg-3">
+        <span>请选择工作项目</span>
+        <select class="form-control input-small" data-style="btn-info"
+                th:id="projectSelector">
+        </select>
+    </div>
+</div>
+<script>
+    ($.ajax({
+            url: "./project/loadAll",
+            type: "GET",
+            success: function (data) {
+                var _data = data;
+                for (var i in _data) {
+                    if (i == 0) {
+                        $("#project", window.top.document).val(_data[i].puid);
+                    }
+                    $("#projectSelector").append('<option value="' + _data[i].puid + '">' + _data[i].pProjectName + ' ' + _data[i].pProjectString + '</option>');
+                }
+                console.log("加载项目成功");
+            },
+            error: function (err) {
+                alert(err.status);
+            }
+        })
+
+    );
+    $(document).ready(
+        function () {
+            $("#projectSelector").change(function () {
+                var projValue = $("#projectSelector option:selected").val();
+                var project = $("#project", window.top.document);
+                project.val(projValue);
+                console.log(project.val());
+            })
+        }
+    );
+</script>
+<script th:inline="javascript">
+    var zTree;
+    var demoIframe;
+    var selectNode;
+
+    function addHoverDom(treeId, treeNode) {
+        var sObj = $("#" + treeNode.tId + "_span");
+        if (treeNode.editNameFlag || $("#addBtn_" + treeNode.tId).length > 0) return;
+        var addStr = "<span class='button remove' id='removeBtn_" + treeNode.tId + "' title='add node' onfocus='this.blur();'></span>";
+        addStr += "<span class='button add' id='addBtn_" + treeNode.tId + "'></span>";
+        addStr += "<span class='button edit' id='editBtn_" + treeNode.tId + "'></span>";
+        if (treeNode.isParent) {
+            addStr += "<span class='button add' id='addParentBtn_" + treeNode.tId + "'></span>";
+        }
+        sObj.after(addStr);
+        //添加按钮
+        var btn = $("#addBtn_" + treeNode.tId);
+        if (btn) btn.bind("click", function () {
+            zTree = $.fn.zTree.getZTreeObj("menu_tree");
+            selectNode = treeNode;
+            window.Ewin.dialog({title: "添加", url: "tree/addTreePage?id=" + treeNode.puid, width: 400, height: 650})
+            return false;
+        });
+        //删除按钮
+        var remove_btn = $("#removeBtn_" + treeNode.tId);
+        if (remove_btn) remove_btn.bind("click", function () {
+            zTree = $.fn.zTree.getZTreeObj("menu_tree");
+            if (treeNode.isParent) {
+                window.Ewin.alert({message: "请先删除当前菜单节点底下的子菜单！"});
+            } else {
+                window.Ewin.confirm({title: '提示', message: '是否要删除您当前选中的菜单节点？', width: 500}).on(function (e) {
+                    if (e) {
+                        $.post("./tree/remove", {id: treeNode.puid}, function (e) {
+                            if (e.result) {
+                                zTree.removeNode(treeNode);
+                                window.Ewin.alert({message: "删除成功"});
+                            } else {
+                                window.Ewin.alert({message: "删除成功" + e.status});
+                            }
+                        })
+                    }
+                });
+            }
+            return false;
+        });
+        //编辑按钮
+        var edit_btn = $("#editBtn_" + treeNode.tId);
+        if (edit_btn) edit_btn.bind("click", function () {
+            zTree = $.fn.zTree.getZTreeObj("menu_tree");
+            selectNode = treeNode;
+            window.Ewin.dialog({title: "修改", url: "tree/updateTreePage?id=" + treeNode.id, width: 400, height: 650})
+            return false;
+        });
+        //给父级添加
+        var add_parent_btn = $("#addParentBtn_" + treeNode.tId);
+        if (add_parent_btn) add_parent_btn.bind("click", function () {
+            zTree = $.fn.zTree.getZTreeObj("menu_tree");
+            selectNode = null;
+            window.Ewin.dialog({title: "添加", url: "tree/addTreePage", width: 400, height: 650})
+            return false;
+        })
+    };
+
+    function removeHoverDom(treeId, treeNode) {
+        $("#addBtn_" + treeNode.tId).unbind().remove();
+        $("#removeBtn_" + treeNode.tId).unbind().remove();
+        $("#editBtn_" + treeNode.tId).unbind().remove();
+        $("#addParentBtn_" + treeNode.tId).unbind().remove();
+    };
+
+    var setting = {
+        //设置
+        check: {
+            enable: true
+        },
+        view: {
+            addHoverDom: addHoverDom,
+            removeHoverDom: removeHoverDom,
+            dblClickExpand: false,
+            showLine: true,
+            selectedMulti: false
+        },
+        data: {
+            simpleData: {
+                enable: true,
+                idKey: "puid",
+                pIdKey: "pPuid",
+                rootPId: "#"
+            }
+        },
+        //回调函数
+        callback: {
+            beforeClick: function (treeId, treeNode) {
+                var zTree = $.fn.zTree.getZTreeObj('menu_tree');
+                if (treeNode.isParent) {
+                    zTree.expandNode(treeNode);
+                    return false;
+                } else {
+                    return true;
+                }
+            },
+        }
+    };
+
+    function loadReady() {
+        var bodyH = demoIframe.contents().find("body").get(0).scrollHeight,
+            htmlH = demoIframe.contents().find("html").get(0).scrollHeight,
+            maxH = Math.max(bodyH, htmlH), minH = Math.min(bodyH, htmlH),
+            h = demoIframe.height() >= maxH ? minH : maxH;
+        if (h < 530) {
+            h = 530;
+        }
+        demoIframe.height(h);
+    }
+
+    $(function () {
+            $.post("./project/loadProjectTree", function (info) {
+                var t = $("#menu_tree");
+                t = $.fn.zTree.init(t, setting, info.data);
+            })
+        }
+    );
+    $(document).ready(
+        $("#setCurrentProject").click(function () {
+            var zTree = $.fn.zTree.getZTreeObj("menu_tree");
+            var changedNodes = zTree.getChangeCheckedNodes();
+            var selectedProject;
+            if (changedNodes.length > 1) {
+                for (var i = 0; i < changedNodes.length; i++) {
+                    if (null == changedNodes[i].children) {
+                        selectedProject = changedNodes[i];
+                        break;
+                    }
+                }
+            }
+            else if (changedNodes.length <= 0) {
+                return;
+            }
+            else if (changedNodes.length == 1) {
+                if ("#" == changedNodes[0].pPuid) {
+                    alert("您选择的是品牌，不是项目，请选择一个项目");
+                }
+            }
+            alert("当前选择的工作项目是:" + selectedProject.name);
+            console.log(selectedProject);
+            console.log(selectedProject[0].tId);
+            console.log(selectedProject[0].puid);
+            console.log(selectedProject[0].pPuid);
+        })
+    );
+
+</script>
+</body>
+</html>
