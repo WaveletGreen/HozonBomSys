@@ -41,14 +41,15 @@ public interface IBaseSQLUtil {
 
     /**
      * 通过条件对象搜索目标对象
-     * @param t 需要搜索的对象
+     *
+     * @param t    需要搜索的对象
      * @param pass 需要执行的sql语句
-     * @param by 需要执行的sql语句
-     * @param b 只是用来判断这个函数的补充条件
+     * @param by   需要执行的sql语句
+     * @param b    只是用来判断这个函数的补充条件
      * @param <T>
      * @return
      */
-    <T> T executeQueryByPass(T t, String pass, String by,boolean b);
+    <T> T executeQueryByPass(T t, String pass, String by, boolean b);
 
     /**
      * 执行插入，单个插入
@@ -89,6 +90,15 @@ public interface IBaseSQLUtil {
      * @return
      */
     <T> int executeDelete(List<T> ts, String by);
+
+    /**
+     * 根据主键直接删除对象
+     *
+     * @param puid
+     * @param by
+     * @return
+     */
+    int executeDeleteByPass(String puid, String by);
 
     /**
      * 查询数据 返回list

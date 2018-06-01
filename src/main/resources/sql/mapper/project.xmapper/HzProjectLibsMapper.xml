@@ -3,13 +3,19 @@
 <mapper namespace="com.connor.hozon.bom.bomSystem.dao.project.HzProjectLibsDao">
     <resultMap id="BaseResultMap" type="sql.pojo.project.HzProjectLibs">
         <id column="PUID" jdbcType="VARCHAR" property="puid"/>
-        <result column="P_PROJECT_NAME" jdbcType="OTHER" property="pProjectName"/>
-        <result column="P_PROJECT_STRING" jdbcType="OTHER" property="pProjectString"/>
-        <result column="P_PROJECT_OBJECT_TYPE" jdbcType="OTHER" property="pProjectObjectType"/>
+        <result column="P_PROJECT_NAME" jdbcType="VARCHAR" property="pProjectName"/>
+        <result column="P_PROJECT_STRING" jdbcType="VARCHAR" property="pProjectString"/>
+        <result column="P_PROJECT_OBJECT_TYPE" jdbcType="VARCHAR" property="pProjectObjectType"/>
         <result column="P_PROJECT_ITEM_ID" jdbcType="VARCHAR" property="pProjectItemId"/>
+        <result column="P_PROJECT_PERTAIN_TO_PLATFORM" jdbcType="VARCHAR" property="pProjectPertainToPlatform"/>
     </resultMap>
     <sql id="Base_Column_List">
-    PUID, P_PROJECT_NAME, P_PROJECT_STRING, P_PROJECT_OBJECT_TYPE, P_PROJECT_ITEM_ID
+    PUID,
+    P_PROJECT_NAME,
+    P_PROJECT_STRING,
+    P_PROJECT_OBJECT_TYPE,
+    P_PROJECT_ITEM_ID,
+    P_PROJECT_PERTAIN_TO_PLATFORM
   </sql>
     <select id="selectByPrimaryKey" parameterType="sql.pojo.project.HzProjectLibs" resultMap="BaseResultMap">
         select

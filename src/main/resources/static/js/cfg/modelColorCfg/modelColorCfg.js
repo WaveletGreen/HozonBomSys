@@ -1,4 +1,9 @@
 var firstLoad = true;
+function modeVehicle(puid){
+    // $.ajax({
+    //
+    // })
+}
 $(document).ready(
     $("#queryModelColorCfg").click(function () {
         //必须输入一个配置的puid
@@ -34,7 +39,7 @@ $(document).ready(
                         var rowValues = JSON.parse(JSON.stringify(row));
                         if ("Y" === rowValues.modeColorIsMultiply) {
                             return [
-                                '<a href="javascript:void(0)">' + value + '</a>'
+                                '<a href="javascript:void(0)" onclick="modeVehicle('+row[0].puid+')">' + value + '</a>'
                             ].join("");
                         }
                         else {
@@ -156,4 +161,5 @@ $(document).ready(
     $("#refreshModelColorCfg").click(function () {
         $('#modelColorCfgTable').bootstrapTable('refresh');
     })
+
 );

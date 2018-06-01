@@ -1,22 +1,80 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:include="include/includebase"></head>
+<link th:href="@{/css/stage/project.css}" rel="stylesheet"/>
 <title>项目库</title>
 <body>
 
 <div class="panel-body">
     <div class="content row-fluid col-md-3 col-lg-3">
-        <button id="setCurrentProject">设置为当前工作项目</button>
-        <ul id="menu_tree" class="ztree" style="width:560px; overflow:auto;"></ul>
+        <button class="btn btn-default" th:width="300" id="setCurrentProject" type="button">设置为当前工作项目</button>
+        <h2><span class="label label-info">当前工作项目</span> <span class="label label-success" id="currentProject"></span>
+        </h2>
+        <ul id="menu_tree" class="ztree  col-md-4" style="width:560px; overflow:auto;"></ul>
     </div>
     <div class="content col-lg-3">
-        <span>请选择工作项目</span>
-        <select class="form-control input-small" data-style="btn-info"
-                th:id="projectSelector">
-        </select>
+        <!--<span>请选择工作项目</span>-->
+        <!--<select class="form-control input-small" data-style="btn-info"-->
+        <!--th:id="projectSelector">-->
+        <!--</select>-->
+        <table class="table table-striped tableNormalStyle" id="detailTable" style="visibility: hidden">
+            <tr>
+                <td>品牌代码</td>
+                <td id="pBrandCode"></td>
+                <td>中文品牌</td>
+                <td id="pBrandName"></td>
+            </tr>
+            <tr>
+                <td>平台代码</td>
+                <td id="pPlatformCode"></td>
+                <td>平台名称</td>
+                <td id="pPlatformName"></td>
+            </tr>
+            <tr>
+                <td>车型代码</td>
+                <td id="projVehicleCode"></td>
+                <td>车型名称</td>
+                <td id="projVehicleName"></td>
+            </tr>
+            <tr>
+                <td>车身形式代码</td>
+                <td id="projVehicleShapeCode"></td>
+                <td>车身变形名称</td>
+                <td id="projVehicleTranName"></td>
+            </tr>
+            <tr>
+                <td>车型年代码</td>
+                <td id="projVehicleAnnualCode"></td>
+                <td>年型年</td>
+                <td id="projVehicleAnnual"></td>
+            </tr>
+            <tr>
+                <td>项目编号</td>
+                <td id="puid"></td>
+                <td>项目名称</td>
+                <td id="pProjectName"></td>
+            </tr>
+        </table>
     </div>
 </div>
 <script>
+    // $(document).ready(
+    //     function () {
+    //         $("#projectSelector").change(function () {
+    //             var projValue = $("#projectSelector option:selected").val();
+    //             var project = $("#project", window.top.document);
+    //             project.val(projValue);
+    //             console.log(project.val());
+    //         })
+    //     }
+    // );
+</script>
+<script th:inline="javascript">
+    var zTree;
+    var demoIframe;
+    var selectNode;
+    var localSelectedNode;
+    var localProjectDetail;
     ($.ajax({
             url: "./project/loadAll",
             type: "GET",
@@ -25,8 +83,9 @@
                 for (var i in _data) {
                     if (i == 0) {
                         $("#project", window.top.document).val(_data[i].puid);
+                        break;
                     }
-                    $("#projectSelector").append('<option value="' + _data[i].puid + '">' + _data[i].pProjectName + ' ' + _data[i].pProjectString + '</option>');
+                    // $("#projectSelector").append('<option value="' + _data[i].puid + '">' + _data[i].pProjectName + ' ' + _data[i].pProjectString + '</option>');
                 }
                 console.log("加载项目成功");
             },
@@ -36,21 +95,6 @@
         })
 
     );
-    $(document).ready(
-        function () {
-            $("#projectSelector").change(function () {
-                var projValue = $("#projectSelector option:selected").val();
-                var project = $("#project", window.top.document);
-                project.val(projValue);
-                console.log(project.val());
-            })
-        }
-    );
-</script>
-<script th:inline="javascript">
-    var zTree;
-    var demoIframe;
-    var selectNode;
 
     function addHoverDom(treeId, treeNode) {
         var sObj = $("#" + treeNode.tId + "_span");
@@ -118,38 +162,78 @@
     };
 
     var setting = {
-        //设置
-        check: {
-            enable: true
-        },
-        view: {
-            addHoverDom: addHoverDom,
-            removeHoverDom: removeHoverDom,
-            dblClickExpand: false,
-            showLine: true,
-            selectedMulti: false
-        },
-        data: {
-            simpleData: {
-                enable: true,
-                idKey: "puid",
-                pIdKey: "pPuid",
-                rootPId: "#"
+            //设置
+            check: {
+                enable: false,
+                //不会有任何自动关联勾选的操作
+                chkboxType: {"Y": "", "N": ""}
             }
-        },
-        //回调函数
-        callback: {
-            beforeClick: function (treeId, treeNode) {
-                var zTree = $.fn.zTree.getZTreeObj('menu_tree');
-                if (treeNode.isParent) {
-                    zTree.expandNode(treeNode);
-                    return false;
-                } else {
-                    return true;
+            ,
+            view: {
+                addHoverDom: addHoverDom,
+                removeHoverDom:
+                removeHoverDom,
+                dblClickExpand:
+                    false,
+                showLine:
+                    true,
+                selectedMulti:
+                    false
+            }
+            ,
+            data: {
+                simpleData: {
+                    enable: true,
+                    idKey:
+                        "puid",
+                    pIdKey:
+                        "pPuid",
+                    rootPId:
+                        "#"
                 }
-            },
+            }
+            ,
+            //回调函数
+            callback: {
+                //展开父节点
+                beforeClick: function (treeId, treeNode) {
+                    var zTree = $.fn.zTree.getZTreeObj('menu_tree');
+                    //有子层节点的都不是项目节点，返回false则不会触发onClick事件
+                    if (treeNode.isParent) {
+                        zTree.expandNode(treeNode);
+                        return false;
+                    } else {
+                        return true;
+                    }
+                }
+                ,
+                onClick: function (event, treeId, treeNode) {
+                    var zTree = $.fn.zTree.getZTreeObj('menu_tree');
+                    //品牌的父id只有#
+                    if (treeNode.level != 2) {
+                        return;
+                    }
+                    //beforeClick排除了有子层的节点，
+                    else {
+                        //绑定本地选择的子节点
+                        localSelectedNode = treeNode;
+                        $.ajax({
+                            url: "./project/getProjectDetailById?puid=" + localSelectedNode.puid,
+                            type: "GET",
+                            success: function (data) {
+                                localProjectDetail = data;
+                                $("#detailTable").css("visibility", "visible");
+                                changeView(data);
+                            },
+                            error: function (err) {
+                                alert(err.status);
+                            }
+                        })
+                    }
+                }
+            }
         }
-    };
+    ;
 
     function loadReady() {
         var bodyH = demoIframe.contents().find("body").get(0).scrollHeight,
@@ -171,33 +255,31 @@
     );
     $(document).ready(
         $("#setCurrentProject").click(function () {
-            var zTree = $.fn.zTree.getZTreeObj("menu_tree");
-            var changedNodes = zTree.getChangeCheckedNodes();
-            var selectedProject;
-            if (changedNodes.length > 1) {
-                for (var i = 0; i < changedNodes.length; i++) {
-                    if (null == changedNodes[i].children) {
-                        selectedProject = changedNodes[i];
-                        break;
-                    }
-                }
-            }
-            else if (changedNodes.length <= 0) {
-                return;
-            }
-            else if (changedNodes.length == 1) {
-                if ("#" == changedNodes[0].pPuid) {
-                    alert("您选择的是品牌，不是项目，请选择一个项目");
-                }
-            }
-            alert("当前选择的工作项目是:" + selectedProject.name);
-            console.log(selectedProject);
-            console.log(selectedProject[0].tId);
-            console.log(selectedProject[0].puid);
-            console.log(selectedProject[0].pPuid);
+            var project = $("#project", window.top.document);
+            var projValue = localSelectedNode.puid;
+            project.val(projValue);
+            $("#currentProject").text(localProjectDetail.proj.pProjectName);
+            alert("当前选择的工作项目是:" + localProjectDetail.proj.pProjectName);
         })
     );
 
+    function changeView(data) {
+        console.log(data);
+        $("#pBrandCode").text(data.brand.pBrandCode);
+        $("#pBrandName").text(data.brand.pBrandName);
+        $("#pPlatformCode").text(data.platform.pPlatformCode);
+        $("#pPlatformName").text(data.platform.pPlatformName);
+
+        $("#projVehicleCode").text(data.proj.pProjectString);
+        $("#projVehicleName").text(data.proj.pProjectString);
+        $("#projVehicleShapeCode").text(data.proj.pProjectString);
+        $("#projVehicleTranName").text(data.proj.pProjectString);
+        $("#projVehicleAnnualCode").text(data.proj.pProjectString);
+        $("#projVehicleAnnual").text(data.proj.pProjectString);
+
+        $("#puid").text(data.proj.pProjectString);
+        $("#pProjectName").text(data.proj.pProjectName);
+    }
 </script>
 </body>
 </html>
