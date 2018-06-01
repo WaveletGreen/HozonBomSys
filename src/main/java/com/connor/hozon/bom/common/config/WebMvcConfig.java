@@ -55,6 +55,8 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         registry.addViewController("/pbomManage").setViewName("/pbom/pbomManage/pbomManage");
         //配色方案
         registry.addViewController("/modelColorCfg").setViewName("/cfg/modelColorCfg/modelColorCfg");
+        //EBOM页面
+        registry.addViewController("/ebomManage").setViewName("/ebom/ebomManage/ebomManage");
 
     }
 

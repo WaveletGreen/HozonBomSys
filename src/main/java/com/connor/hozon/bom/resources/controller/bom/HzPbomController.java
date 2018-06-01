@@ -125,6 +125,9 @@ public class HzPbomController  extends BaseController {
         map.put("","");
         map.put("","");
         map.put("","");
+
+
+
         map.put("","");
         map.put("","");
         map.put("","");
@@ -133,8 +136,8 @@ public class HzPbomController  extends BaseController {
         map.put("","");
         map.put("","");
         map.put("","");
-        model.addAttribute("entity");
-        return "pbomManage/pbomMaintenance/updatePbomMaintenance";
+        model.addAttribute("entity",map);
+        return "pbom/pbomMaintenance/updatePbomMaintenance";
     }
 
     /**
