@@ -8,8 +8,7 @@
 <div class="panel-body">
     <div class="content row-fluid col-md-3 col-lg-3">
         <button class="btn btn-default" th:width="300" id="setCurrentProject" type="button">设置为当前工作项目</button>
-        <h2><span class="label label-info">当前工作项目</span> <span class="label label-success" id="currentProject"></span>
-        </h2>
+        <h2><span class="label label-success" id="currentProject"></span></h2>
         <ul id="menu_tree" class="ztree  col-md-4" style="width:560px; overflow:auto;"></ul>
     </div>
     <div class="content col-lg-3">
@@ -57,24 +56,13 @@
         </table>
     </div>
 </div>
-<script>
-    // $(document).ready(
-    //     function () {
-    //         $("#projectSelector").change(function () {
-    //             var projValue = $("#projectSelector option:selected").val();
-    //             var project = $("#project", window.top.document);
-    //             project.val(projValue);
-    //             console.log(project.val());
-    //         })
-    //     }
-    // );
-</script>
 <script th:inline="javascript">
     var zTree;
     var demoIframe;
     var selectNode;
     var localSelectedNode;
     var localProjectDetail;
+    var coach = [];
     ($.ajax({
             url: "./project/loadAll",
             type: "GET",
@@ -83,9 +71,10 @@
                 for (var i in _data) {
                     if (i == 0) {
                         $("#project", window.top.document).val(_data[i].puid);
+                        $("#currentProject").text("当前工作项目:"+_data[i].pProjectName);
+                        $("#currentProjectHead", window.top.document).text(_data[i].pProjectName);
                         break;
                     }
-                    // $("#projectSelector").append('<option value="' + _data[i].puid + '">' + _data[i].pProjectName + ' ' + _data[i].pProjectString + '</option>');
                 }
                 console.log("加载项目成功");
             },
@@ -208,27 +197,34 @@
                 }
                 ,
                 onClick: function (event, treeId, treeNode) {
-                    var zTree = $.fn.zTree.getZTreeObj('menu_tree');
-                    //品牌的父id只有#
                     if (treeNode.level != 2) {
                         return;
                     }
-                    //beforeClick排除了有子层的节点，
-                    else {
+                    // var zTree = $.fn.zTree.getZTreeObj('menu_tree');
+                    //品牌的父id只有#
+                    if (null == coach[treeNode.puid]) {
+                        //beforeClick排除了有子层的节点，
                         //绑定本地选择的子节点
                         localSelectedNode = treeNode;
                         $.ajax({
                             url: "./project/getProjectDetailById?puid=" + localSelectedNode.puid,
                             type: "GET",
                             success: function (data) {
+                                var puid = localSelectedNode.puid;
                                 localProjectDetail = data;
+                                coach[puid] = localProjectDetail;
+                                // eval("coach." + puid + "=" + data);
+                                changeView(localProjectDetail);
                                 $("#detailTable").css("visibility", "visible");
-                                changeView(data);
                             },
                             error: function (err) {
                                 alert(err.status);
                             }
                         })
+                    }
+                    else {
+                        localProjectDetail = coach[treeNode.puid];
+                        changeView(localProjectDetail);
                     }
                 }
             }
@@ -255,10 +251,13 @@
     );
     $(document).ready(
         $("#setCurrentProject").click(function () {
+            if (undefined == localSelectedNode)
+                return;
             var project = $("#project", window.top.document);
             var projValue = localSelectedNode.puid;
             project.val(projValue);
-            $("#currentProject").text(localProjectDetail.proj.pProjectName);
+            $("#currentProject").text("当前工作项目:"+localProjectDetail.proj.pProjectName);
+            $("#currentProjectHead", window.top.document).text(localProjectDetail.proj.pProjectName);
             alert("当前选择的工作项目是:" + localProjectDetail.proj.pProjectName);
         })
     );
