@@ -1,22 +1,15 @@
 var firstLoad = true;
-$(document).ready(
-    $("#PbomManage").click(function () {
-        var $table = $("#pbomManageTable");
+window.onload=function(){
+// $(document).ready(
+    // $("#queryPbomMaintenance").click(function () {
+        var $table = $("#pbomMaintenanceTable");
         var column = [];
         $.ajax({
-            url:"pbom/getBomManage",
-            type:"GET",
-            success:function (data) {
-                var xxx = data.data;
-                console.log(xxx);
-            }
-        })
-        $.ajax({
-            url: "pbom/manage/title",
+            url: "pbom/maintain/title",
             type: "GET",
             success: function (result) {
                 var column = [];
-                column.push({field: 'eBomPuid', title: 'puid'});
+                column.push({field: 'pBomPuid', title: 'puid'});
                 column.push({field: 'ck', checkbox: true, Width: 50});
                 column.push({field: '',
                     title: '序号',
@@ -33,8 +26,9 @@ $(document).ready(
                 var values;
                 for (var key in data) {
                     if (data.hasOwnProperty(key)) {
+                        // keys.push(key);
                         var json = {
-                            field: key,
+                           field: key,
                             title: data[key],
                             align:
                                 'center',
@@ -45,9 +39,9 @@ $(document).ready(
                     }
                 }
                 $table.bootstrapTable({
-                    url: "pbom/getBomManage",
+                    url: "pbom/getMaintain/detail",
                     method: 'get',
-                    height: $(window.parent.document).find("#wrapper").height() - 252,
+                    //height: $(window.parent.document).find("#wrapper").height() - 252,
                     width: $(window).width(),
                     showToggle: true,                   //是否显示详细视图和列表视图的切换按钮
                     showRefresh: true,                  //是否显示刷新按钮
@@ -59,23 +53,29 @@ $(document).ready(
                     columns: column,
                     sortable: true,                     //是否启用排序
                     sortOrder: "asc",                   //排序方式
-                    toolbars: [
-                        /*{
+                    /*toolbars: [
+                        /!*{
                             text: '添加',
                             iconCls: 'glyphicon glyphicon-plus',
                             handler: function () {
-
+                                var rows = $table.bootstrapTable('getSelections');
+                                //只能选一条
+                                if (rows.length != 1) {
+                                    window.Ewin.alert({message: '请选择一条需要添加的数据!'});
+                                    return false;
+                                }
                                 window.Ewin.dialog({
                                     title: "添加",
-                                    url: "pbom/addPage?pCfg0MainRecordOfMC=" + pCfg0MainRecordOfMC,
+                                    url: "pbom/insert/list/maintain?pBomPuid=" + rows[0].pBomPuid,
+                                    //url:"pbom/insert/list/maintain",
                                     gridId: "gridId",
                                     width: 500,
                                     height: 600
                                 })
                             }
-                        },*/
-                        {
-                            text: '工艺修改',
+                        },*!/
+                       /!* {
+                            text: '修改',
                             iconCls: 'glyphicon glyphicon-pencil',
                             handler: function () {
                                 var rows = $table.bootstrapTable('getSelections');
@@ -85,34 +85,15 @@ $(document).ready(
                                     return false;
                                 }
                                 window.Ewin.dialog({
-                                    title: "工艺修改",
-                                    url: "pbom/updateManageProcess?puid=" + rows[0].puid,
+                                    title: "修改",
+                                    url: "pbom/update/list/maintain?pBomPuid=" + rows[0].pBomPuid,
                                     gridId: "gridId",
-                                    width: 650,
-                                    height: 800
+                                    width: 500,
+                                    height: 600
                                 });
                             }
-                        },
-                        {
-                            text: 'BOM修改',
-                            iconCls: 'glyphicon glyphicon-pencil',
-                            handler: function () {
-                                var rows = $table.bootstrapTable('getSelections');
-                                //只能选一条
-                                if (rows.length != 1) {
-                                    window.Ewin.alert({message: '请选择一条需要修改的数据!'});
-                                    return false;
-                                }
-                                window.Ewin.dialog({
-                                    title: "BOM修改",
-                                    url: "pbom/updateManageBom?puid=" + rows[0].puid,
-                                    gridId: "gridId",
-                                    width: 650,
-                                    height: 800
-                                });
-                            }
-                        },
-                        /*{
+                        },*!/
+                        /!*{
                             text: '删除',
                             iconCls: 'glyphicon glyphicon-remove',
                             handler: function () {
@@ -131,7 +112,7 @@ $(document).ready(
                                         $.ajax({
                                             type: "POST",
                                             //ajax需要添加打包名
-                                            url: "./pbom/delete",
+                                            url: "./pbom/delete/maintain",
                                             data: JSON.stringify(rows),
                                             contentType: "application/json",
                                             success: function (result) {
@@ -151,11 +132,35 @@ $(document).ready(
                                     }
                                 });
                             }
-                        }*/
-                    ]
+                        }*!/
+                    ]*/
                 });
-                // $table.bootstrapTable('hideColumn', 'eBomPuid');
+                 $table.bootstrapTable('hideColumn', 'pBomPuid');
             }
         });
-    }),
-);
+    // }),
+
+
+    $("#queryBtn").click(function () {
+        var myData = JSON.stringify({
+            "level": $("#level").val(),
+            "pBomOfWhichDept": $("#pBomOfWhichDept").val(),
+            "lineId": $("#lineId").val(),
+        });
+        $.ajax({
+            contentType: "application/json",
+            type:"GET",
+            url:"pbom/searchMaintain/detail",
+            data:myData,
+            success:
+            function (data) {
+                var result = data.data;
+                console.log(result);
+            },
+            error:function (info) {
+                alert(info);
+            }
+        })
+    })
+// );
+}
