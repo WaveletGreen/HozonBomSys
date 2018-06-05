@@ -131,30 +131,6 @@ public class BaseSQLUtil implements IBaseSQLUtil {
         return result;
     }
 
-    @Override
-    public <T> T executeQueryByPass(T t, String pass, String by, boolean b) {
-        SqlSession session = null;
-        T result = null;
-        try {
-            SqlSessionFactory f = FactoryManager.getInstance();
-            session = f.openSession();
-            logger.info("BaseSQLUtil execute sql:" + by);
-            if (t == null) {
-                result = session.selectOne(by);
-            } else {
-                result = session.selectOne(by, pass);
-            }
-            // session.commit(true);
-        } catch (Exception e) {
-            e.printStackTrace();
-            // session.rollback(true);
-        } finally {
-            // if (session != null)
-            // session.close();
-        }
-        return result;
-    }
-
     public <T> int executeUpdate(T suppliers, String by) {
         SqlSession session = null;
         int result = 0;
@@ -227,6 +203,30 @@ public class BaseSQLUtil implements IBaseSQLUtil {
         }
         return result;
     }
+
+    public int executeDeleteByPass(String puid, String by) {
+        SqlSession session = null;
+        int result = 0;
+        try {
+            SqlSessionFactory f = FactoryManager.getInstance();
+            session = f.openSession();
+            System.out.println("执行sql方法:" + by);
+            if (puid == null) {
+                result = session.delete(by);
+            } else {
+                result = session.delete(by, puid);
+            }
+            session.commit(true);
+        } catch (Exception e) {
+            session.rollback(true);
+            e.printStackTrace();
+        } finally {
+            if (session != null)
+                session.close();
+        }
+        return result;
+    }
+
 
     /**
      * follows
