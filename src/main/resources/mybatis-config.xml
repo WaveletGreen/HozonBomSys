@@ -30,5 +30,9 @@
 		<mapper resource="sql/mapper/cfg/xmapper/HzCfg0ModelDetailMapper.xml" />
 		<mapper resource="sql/mapper/cfg/xmapper/HzCfg0ColorSetMapper.xml" />
 		<mapper resource="sql/mapper/cfg/xmapper/HzCfg0RecordMapper.xml"></mapper>
+
+		<!--EPL-->
+		<mapper resource="sql/mapper/epl.xmapper/HzEplBomManageMapper.xml"/>
+		<mapper resource="sql/mapper/epl.xmapper/HzEplManageMapper.xml"/>
 	</mappers>
 </configuration>

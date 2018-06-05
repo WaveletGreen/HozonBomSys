@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.*;
@@ -30,12 +31,40 @@ public class HzPbomController  extends BaseController {
      * @param response
      */
     @RequestMapping(value = "getMaintain/detail", method = RequestMethod.GET)
-    public void getPbomLineMaintainDetail(HttpServletResponse response){
+    @ResponseBody
+    public Map<String,Object> getPbomLineMaintainDetail(HttpServletResponse response){
         List<HzPbomLineMaintainRespDTO> responseDTOList = hzPbomService.getHzPbomMaintainRecord();
-        if(ListUtil.isEmpty(responseDTOList)){
-            writeAjaxJSONResponse(ResultMessageBuilder.build(false,"暂无符合数据！"),response);
-        }
-        writeAjaxJSONResponse(ResultMessageBuilder.build(responseDTOList),response);
+        Map<String,Object> ret=new HashMap<>();
+        List<Map<String,String>> _list=new ArrayList<>();
+        responseDTOList.forEach(dto->{
+            Map<String,String> _res=new HashMap<>();
+            _res.put("pBomPuid",dto.getpBomPuid());
+            _res.put("level",dto.getLevel());
+            _res.put("pBomOfWhichDept",dto.getpBomOfWhichDept());
+            _res.put("lineId",dto.getLineId());
+            _res.put("bomDigifaxId",dto.getBomDigifaxId());
+            _res.put("sparePart",dto.getSparePart());
+            _res.put("sparePartNum",dto.getSparePartNum());
+            _res.put("processRoute",dto.getProcessRoute());
+            _res.put("laborHour",dto.getLaborHour());
+            _res.put("rhythm",dto.getRhythm());
+            _res.put("solderJoint",dto.getSolderJoint());
+            _res.put("machineMaterial",dto.getMachineMaterial());
+            _res.put("standardPart",dto.getStandardPart());
+            _res.put("tools",dto.getTools());
+            _res.put("wasterProduct",dto.getWasterProduct());
+            _res.put("change",dto.getChange());
+            _res.put("changeNum",dto.getChangeNum());
+            _list.add(_res);
+        });
+        ret.put("totalCount",responseDTOList.size());
+        ret.put("result",_list);
+        return ret;
+//        if(ListUtil.isEmpty(responseDTOList)){
+//            writeAjaxJSONResponse(ResultMessageBuilder.build(false,"暂无符合数据！"),response);
+//        }
+//        return responseDTOList;
+//        writeAjaxJSONResponse(ResultMessageBuilder.build(responseDTOList),response);
     }
 
     /**
@@ -44,26 +73,32 @@ public class HzPbomController  extends BaseController {
      */
     @RequestMapping(value = "maintain/title")
     public void getPbomMaintainTitle(HttpServletResponse response){
-        Map<String,String> tableTitle = new HashMap<>();
-        tableTitle.put("1","序号");
-        tableTitle.put("2","层级");
-        tableTitle.put("3","专业");
-        tableTitle.put("4","零件号");
-        tableTitle.put("5","名称");//这个字段暂时是一个替代品，后续要改
-        tableTitle.put("6","备件");
-        tableTitle.put("7","备件编号");
-        tableTitle.put("8","工艺路线");
-        tableTitle.put("9","人工工时");
-        tableTitle.put("10","节拍");
-        tableTitle.put("11","焊点");
-        tableTitle.put("12","机物料");
-        tableTitle.put("13","标准件");
-        tableTitle.put("14","工艺");
-        tableTitle.put("15","废品");
-        tableTitle.put("16","变更");
-        tableTitle.put("17","变更号");
+        LinkedHashMap<String,String> tableTitle = new LinkedHashMap<>();
+        tableTitle.put("level","层级");
+        tableTitle.put("pBomOfWhichDept","专业");
+        tableTitle.put("lineId","零件号");
+        tableTitle.put("bomDigifaxId","名称");//这个字段暂时是一个替代品，后续要改
+        tableTitle.put("sparePart","备件");
+        tableTitle.put("sparePartNum","备件编号");
+        tableTitle.put("processRoute","工艺路线");
+        tableTitle.put("laborHour","人工工时");
+        tableTitle.put("rhythm","节拍");
+        tableTitle.put("solderJoint","焊点");
+        tableTitle.put("machineMaterial","机物料");
+        tableTitle.put("standardPart","标准件");
+        tableTitle.put("tools","工艺");
+        tableTitle.put("wasterProduct","废品");
+        tableTitle.put("change","变更");
+        tableTitle.put("changeNum","变更号");
         writeAjaxJSONResponse(ResultMessageBuilder.build(tableTitle),response);
     }
+
+
+    @RequestMapping(value = "insert/list/maintain",method = RequestMethod.GET)
+    public String insertPbomLineMaintainRecordList(){
+        return "pbomManage/pbomMaintenance/addPbomMaintenance";
+    }
+
 
     /**
      * 新增
@@ -71,6 +106,7 @@ public class HzPbomController  extends BaseController {
      */
     @RequestMapping(value = "insert/maintain",method = RequestMethod.POST)
     public void insertPbomLineMaintainRecord(InsertHzPbomMaintainRecordReqDTO reqDTO,HttpServletResponse response){
+        System.out.println("++++++++————————+——+————（）*（（（");
         writeAjaxJSONResponse(ResultMessageBuilder.build(false,"接口后续在定义"),response);
     }
 
@@ -97,23 +133,23 @@ public class HzPbomController  extends BaseController {
 
     @RequestMapping(value = "manage/title",method = RequestMethod.GET)
     public void getPbomLineTitle(HttpServletResponse response){
-        Map<String,String> tableTitle = new HashMap<>();
-        tableTitle.put("1","层级");
-        tableTitle.put("2","专业");
-        tableTitle.put("3","级别");
-        tableTitle.put("4","分组号");
-        tableTitle.put("5","零件号");//这个字段暂时是一个替代品，后续要改
-        tableTitle.put("6","零件分类");
-        tableTitle.put("7","零部件来源");
-        tableTitle.put("8","自制/采购");
-        tableTitle.put("9","焊接/装配");
-        tableTitle.put("10","采购单元");
-        tableTitle.put("11","车间1");
-        tableTitle.put("12","车间2");
-        tableTitle.put("13","生产线");
-        tableTitle.put("14","模具类别");
-        tableTitle.put("15","外委件");
-        tableTitle.put("16","颜色件");
+        LinkedHashMap<String,String> tableTitle = new LinkedHashMap<>();
+        tableTitle.put("level","层级");
+        tableTitle.put("pBomOfWhichDept","专业");
+        tableTitle.put("rank","级别");
+        tableTitle.put("groupNum","分组号");
+        tableTitle.put("lineId","零件号");//这个字段暂时是一个替代品，后续要改
+        tableTitle.put("itemType","零件分类");
+        tableTitle.put("itemResource","零部件来源");
+        tableTitle.put("resource","自制/采购");
+        tableTitle.put("type","焊接/装配");
+        tableTitle.put("buyUnit","采购单元");
+        tableTitle.put("workShop1","车间1");
+        tableTitle.put("workShop2","车间2");
+        tableTitle.put("productLine","生产线");
+        tableTitle.put("mouldType","模具类别");
+        tableTitle.put("outerPart","外委件");
+        tableTitle.put("colorPart","颜色件");
         writeAjaxJSONResponse(ResultMessageBuilder.build(tableTitle),response);
     }
 
@@ -122,12 +158,40 @@ public class HzPbomController  extends BaseController {
      * @param response
      */
     @RequestMapping(value = "getBomManage",method = RequestMethod.GET)
-    public void getPbomLineRecord(HttpServletResponse response){
+    @ResponseBody
+    public Map<String, Object> getPbomLineRecord(HttpServletResponse response) {
         List<HzPbomLineRespDTO> respDTOS = hzPbomService.getHzPbomLineRecord();
-        if(ListUtil.isEmpty(respDTOS)){
-            writeAjaxJSONResponse(ResultMessageBuilder.build(false,"暂无符合数据"),response);
-        }
-        writeAjaxJSONResponse(ResultMessageBuilder.build(respDTOS),response);
+        Map<String, Object> ret = new HashMap<>();
+        List<Map<String, String>> _list = new ArrayList<>();
+        respDTOS.forEach(dto -> {
+            Map<String, String> _res = new HashMap<>();
+            _res.put("eBomPuid", dto.geteBomPuid());
+            _res.put("level", dto.getLevel());
+            _res.put("pBomOfWhichDept", dto.getpBomOfWhichDept());
+            _res.put("rank", dto.getRank());
+            _res.put("groupNum", dto.getGroupNum());
+            _res.put("lineId", dto.getLineId());
+            _res.put("itemType", dto.getItemType());
+            _res.put("itemResource", dto.getItemResource());
+            _res.put("resource", dto.getResource());
+            _res.put("type", dto.getType());
+            _res.put("buyUnit", dto.getBuyUnit());
+            _res.put("workShop1", dto.getWorkShop1());
+            _res.put("workShop2", dto.getWorkShop2());
+            _res.put("productLine", dto.getMouldType());
+            _res.put("mouldType", dto.getMouldType());
+            _res.put("outerPart", dto.getOuterPart());
+            _res.put("colorPart", dto.getColorPart());
+            _list.add(_res);
+        });
+        ret.put("totalCount", respDTOS.size());
+        ret.put("result", _list);
+        return ret;
+//        if(ListUtil.isEmpty(respDTOS)){
+//            writeAjaxJSONResponse(ResultMessageBuilder.build(false,"暂无符合数据"),response);
+//        }
+//        writeAjaxJSONResponse(ResultMessageBuilder.build(respDTOS),response);
+//    }
     }
 
     /**
@@ -158,9 +222,19 @@ public class HzPbomController  extends BaseController {
         writeAjaxJSONResponse(ResultMessageBuilder.build(respDTOS),response);
     }
 
+
+
     @RequestMapping(value = "insert/manage",method = RequestMethod.POST)
     public void insertPbomManageRecord(InsertHzPbomRecordReqDTO reqDTO, HttpServletResponse response){
         writeAjaxJSONResponse(ResultMessageBuilder.build(false,"接口后续在定义"),response);
+    }
+    @RequestMapping(value = "updateManageProcess",method = RequestMethod.GET)
+    public  String updatePbomManageRecordProcess(){
+        return "pbom/pbomManage/updateProcess";
+    }
+    @RequestMapping(value = "updateManageBom",method = RequestMethod.GET)
+    public  String updatePbomManageRecordBom(){
+        return "pbom/pbomManage/updateBom";
     }
     @RequestMapping(value = "update/manage",method = RequestMethod.POST)
     public void updatePbomManageRecord(UpdateHzPbomRecordReqDTO reqDTO,HttpServletResponse response){
@@ -170,4 +244,6 @@ public class HzPbomController  extends BaseController {
     public void deletePbomManageRecord(String eBomPuid,HttpServletResponse response){
         writeAjaxJSONResponse(ResultMessageBuilder.build(false,"接口后续在定义"),response);
     }
+
+
 }
