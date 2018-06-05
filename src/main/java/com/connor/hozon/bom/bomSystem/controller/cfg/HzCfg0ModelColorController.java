@@ -1,6 +1,7 @@
 package com.connor.hozon.bom.bomSystem.controller.cfg;
 
 import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0ColorSetService;
+import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0MainService;
 import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0ModelColorService;
 import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0OptionFaamilyService;
 import net.sf.json.JSONObject;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import sql.pojo.cfg.HzCfg0ColorSet;
+import sql.pojo.cfg.HzCfg0MainRecord;
 import sql.pojo.cfg.HzCfg0ModelColor;
 import sql.redis.SerializeUtil;
 
@@ -31,10 +33,12 @@ public class HzCfg0ModelColorController {
     private final HzCfg0ModelColorService hzCfg0ModelColorService;
     private final HzCfg0OptionFaamilyService hzCfg0OptionFaamilyService;
     private final HzCfg0ColorSetService hzCfg0ColorSetService;
+    private final HzCfg0MainService hzCfg0MainService;
     private Logger logger;
 
     @Autowired
-    public HzCfg0ModelColorController(HzCfg0ModelColorService hzCfg0ModelColorService, HzCfg0OptionFaamilyService hzCfg0OptionFaamilyService, HzCfg0ColorSetService hzCfg0ColorSetService) {
+    public HzCfg0ModelColorController(HzCfg0ModelColorService hzCfg0ModelColorService, HzCfg0OptionFaamilyService hzCfg0OptionFaamilyService, HzCfg0ColorSetService hzCfg0ColorSetService, HzCfg0MainService hzCfg0MainService) {
+        this.hzCfg0MainService = hzCfg0MainService;
         logger = LoggerFactory.getLogger(this.getClass());
         this.hzCfg0ModelColorService = hzCfg0ModelColorService;
         this.hzCfg0OptionFaamilyService = hzCfg0OptionFaamilyService;
@@ -163,7 +167,8 @@ public class HzCfg0ModelColorController {
                 } else if ("pDescOfColorfulModel".equals(key)) {
                     modelColor.setpDescOfColorfulModel(value);
                 } else if ("pCfg0MainRecordOfMC".equals(key)) {
-                    modelColor.setpCfg0MainRecordOfMC(value);
+                    HzCfg0MainRecord mainRecord = hzCfg0MainService.doGetbyProjectPuid(value);
+                    modelColor.setpCfg0MainRecordOfMC(mainRecord.getPuid());
                 } else if ("modelShell".equals(key)) {
                     modelColor.setpModelShellOfColorfulModel(value);
                 } else {

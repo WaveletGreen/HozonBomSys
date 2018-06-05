@@ -107,6 +107,30 @@ public class BaseSQLUtil implements IBaseSQLUtil {
         return result;
     }
 
+    @Override
+    public <T> T executeQueryByPass(T t, String pass, String by, boolean b) {
+        SqlSession session = null;
+        T result = null;
+        try {
+            SqlSessionFactory f = FactoryManager.getInstance();
+            session = f.openSession();
+            logger.info("BaseSQLUtil execute sql:" + by);
+            if (t == null) {
+                result = session.selectOne(by);
+            } else {
+                result = session.selectOne(by, pass);
+            }
+            // session.commit(true);
+        } catch (Exception e) {
+            e.printStackTrace();
+            // session.rollback(true);
+        } finally {
+            // if (session != null)
+            // session.close();
+        }
+        return result;
+    }
+
     public <T> int executeUpdate(T suppliers, String by) {
         SqlSession session = null;
         int result = 0;
@@ -179,78 +203,49 @@ public class BaseSQLUtil implements IBaseSQLUtil {
         }
         return result;
     }
-
-    public List findForList(final String sqlMapId, final Object param) {
+    public int executeDeleteByPass(String puid, String by) {
         SqlSession session = null;
-        List result = null;
+        int result = 0;
         try {
             SqlSessionFactory f = FactoryManager.getInstance();
             session = f.openSession();
-            logger.info("BaseSQLUtil execute sql:" + sqlMapId);
-            if (param == null) {
-                result = session.selectList(sqlMapId);
+            System.out.println("执行sql方法:" + by);
+            if (puid == null) {
+                result = session.delete(by);
             } else {
-                result = session.selectList(sqlMapId, param);
+                result = session.delete(by, puid);
             }
-            // session.commit();
+            session.commit(true);
         } catch (Exception e) {
-           throw new DatabaseException("SQL执行出错"+sqlMapId,e);
+            session.rollback(true);
+            e.printStackTrace();
         } finally {
             if (session != null)
                 session.close();
         }
         return result;
     }
-
-    /**
-     * 插入一个实体
-     *
-     * @param sqlMapId  mybatis 映射id
-     * @param object  实体参数
-     * @return
-     */
-    public int insert(final String sqlMapId, final Object object) {
+    public List findForList(final String sql, final Object param) {
         SqlSession session = null;
+        List result = null;
         try {
             SqlSessionFactory f = FactoryManager.getInstance();
             session = f.openSession();
-            int result = session.insert(sqlMapId, object);
-            session.commit();
-            return result;
-        } catch (Exception e) {
-            logger.error("SQL执行出错: " + sqlMapId, e);
-            throw new DatabaseException("SQL执行出错"+sqlMapId,e);
-        } finally {
-            if (session != null)
-                session.close();
-        }
-
-    }
-
-    /**
-     * 查询一个实体
-     *
-     * @param sqlMapId  mybatis 映射id
-     * @param param  实体参数
-     * @return
-     */
-    public Object findForObject(final String sqlMapId, final Object param){
-        SqlSession session = null;
-        try {
-            SqlSessionFactory f = FactoryManager.getInstance();
-            session = f.openSession();
-            if (param != null) {
-                return session.selectOne(sqlMapId, param);
+            logger.info("BaseSQLUtil execute sql:" + sql);
+            if (param == null) {
+                result = session.selectList(sql);
             } else {
-                return session.selectOne(sqlMapId);
+                result = session.selectList(sql, param);
             }
+            // session.commit();
         } catch (Exception e) {
-            logger.error("SQL执行出错: " + sqlMapId, e);
-            throw new DatabaseException("SQL执行出错"+sqlMapId,e);
+            e.printStackTrace();
+            // session.rollback(true);
         } finally {
             if (session != null)
                 session.close();
         }
+        return result;
     }
 
     /**
@@ -291,5 +286,29 @@ public class BaseSQLUtil implements IBaseSQLUtil {
             if (session != null)
                 session.close();
         }
+    }
+    /**
+     * 插入一个实体
+     *
+     * @param sqlMapId  mybatis 映射id
+     * @param object  实体参数
+     * @return
+     */
+    public int insert(final String sqlMapId, final Object object) {
+        SqlSession session = null;
+        try {
+            SqlSessionFactory f = FactoryManager.getInstance();
+            session = f.openSession();
+            int result = session.insert(sqlMapId, object);
+            session.commit();
+            return result;
+        } catch (Exception e) {
+            logger.error("SQL执行出错: " + sqlMapId, e);
+            throw new DatabaseException("SQL执行出错"+sqlMapId,e);
+        } finally {
+            if (session != null)
+                session.close();
+        }
+
     }
 }
