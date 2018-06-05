@@ -37,6 +37,7 @@ public class HzPbomServiceImpl implements HzPbomService {
         return pbomLineMaintailRecordToRespDTOS(records);
     }
 
+    //走流程 这个比较麻烦
     @Override
     public int insertPbomLineMaintainRecords(List<InsertHzPbomMaintainRecordReqDTO> recordInsertBatchReqDTO) {
 
@@ -172,7 +173,7 @@ public class HzPbomServiceImpl implements HzPbomService {
      * @param hasChildren
      * @return String[0]层级  String[1]级别
      */
-    public String[] getLevelAndRank(String lineIndex,Integer is2Y,Integer hasChildren){
+    public static String[] getLevelAndRank(String lineIndex,Integer is2Y,Integer hasChildren){
         int level = (lineIndex.split("\\.")).length;
         String line="";
         int rank = 0;
