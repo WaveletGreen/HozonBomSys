@@ -7,6 +7,7 @@ import com.connor.hozon.bom.resources.mybatis.epl.impl.HzEplManageRecordDAOImpl;
 import com.connor.hozon.bom.resources.service.bom.impl.HzPbomServiceImpl;
 import com.connor.hozon.bom.resources.service.epl.HzEPLManageRecordService;
 import com.connor.hozon.bom.resources.util.ListUtil;
+import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sql.pojo.epl.HzEPLManageRecord;
@@ -52,13 +53,14 @@ public class HzEPLManageRecordServiceImpl implements HzEPLManageRecordService {
                 Integer pState = record.getpState();
                 if(pState == null){
                     recordRespDTO.setpState("/");
-                }else if(pState==(new Integer(0))){
+                }else if(pState.equals(0)){
                     recordRespDTO.setpState("A");
-                }else if(pState==new Integer(1)){
+                }else if(pState.equals(1)){
                     recordRespDTO.setpState("U");
-                }else if(pState==new Integer(2)){
+                }else if(pState.equals(2)){
                     recordRespDTO.setpState("D");
                 }
+
                 recordRespDTO.setpUnit(record.getpUnit()==null?"":record.getpUnit());
                 recordRespDTO.setpRentLow(record.getpRentLow()==null?"":record.getpRentLow());
                 recordRespDTO.setpRentHigh(record.getpRentHigh()==null?"":record.getpRentHigh());
@@ -95,6 +97,7 @@ public class HzEPLManageRecordServiceImpl implements HzEPLManageRecordService {
                 recordRespDTO.setpRemark(record.getpRemark()==null?"":record.getpRemark());
                 recordRespDTO.setpItemClassification(record.getpItemClassification()==null?"":record.getpItemClassification());
                 recordRespDTO.setpItemResource(record.getpItemResource()==null?"":record.getpItemResource());
+                recordRespDTO.setpImportance(record.getpImportance()==null?"":record.getpImportance());
                 Integer supplyState = record.getpSupplyState();
                 if(supplyState == null){
                     recordRespDTO.setpSupplyState("/");
