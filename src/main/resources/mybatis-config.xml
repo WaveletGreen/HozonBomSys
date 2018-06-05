@@ -26,6 +26,7 @@
 		<mapper resource="sql/mapper/bom/xmapper/HzPbomMaintainRecordMapper.xml"/>
 		<mapper resource="sql/mapper/bom/xmapper/HzPbomLineMaintainRecordMapper.xml"/>
 		<mapper resource="sql/mapper/bom/xmapper/HzPbomRecordMapper.xml"/>
+
 		<mapper resource="sql/mapper/cfg/xmapper/HzCfg0BomLineOfModelMapper.xml" />
 		<mapper resource="sql/mapper/cfg/xmapper/HzCfg0ModelDetailMapper.xml" />
 		<mapper resource="sql/mapper/cfg/xmapper/HzCfg0ColorSetMapper.xml" />
@@ -36,5 +37,6 @@
 		<!--EPL-->
 		<mapper resource="sql/mapper/epl.xmapper/HzEplBomManageMapper.xml"/>
 		<mapper resource="sql/mapper/epl.xmapper/HzEplManageMapper.xml"/>
+		<mapper resource="sql/mapper/cfg/xmapper/HzCfg0MainRecordMapper.xml"></mapper>
 	</mappers>
 </configuration>

@@ -44,20 +44,21 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         //特性表页面
         registry.addViewController("/featuresList").setViewName("/cfg/features/featuresList");
         //PBOM维护页面
-        registry.addViewController("/pbomMaintenance").setViewName("/pbom/pbomMaintenance/pbomMaintenance");
+        registry.addViewController("/pbomMaintenance").setViewName("/bomManage/pbom/pbomMaintenance/pbomMaintenance");
         //PBOM其他信息维护页面
-        registry.addViewController("/otherInformation").setViewName("/pbom/otherInformation/otherInformation");
+        registry.addViewController("/otherInformation").setViewName("/bomManage/pbom/otherInformation/otherInformation");
         //PBOM工艺路线维护页面
-        registry.addViewController("/processRoute").setViewName("/pbom/processRoute/processRoute");
+        registry.addViewController("/processRoute").setViewName("/bomManage/pbom/processRoute/processRoute");
         //PBOM定义Make/Buy
-        registry.addViewController("/defineMake").setViewName("/pbom/defineMake/defineMake");
+        registry.addViewController("/defineMake").setViewName("/bomManage/pbom/defineMake/defineMake");
         //PBOM
-        registry.addViewController("/pbomManage").setViewName("/pbom/pbomManage/pbomManage");
+        registry.addViewController("/pbomManage").setViewName("/bomManage/pbom/pbomManage/pbomManage");
         //配色方案
         registry.addViewController("/modelColorCfg").setViewName("/cfg/modelColorCfg/modelColorCfg");
         //EBOM页面
-        registry.addViewController("/ebomManage").setViewName("/ebom/ebomManage/ebomManage");
-
+        registry.addViewController("/ebomManage").setViewName("/bomManage/ebom/ebomManage/ebomManage");
+        //EPL页面
+        registry.addViewController("/eplManage").setViewName("/bomManage/epl/eplManage");
     }
 
 
