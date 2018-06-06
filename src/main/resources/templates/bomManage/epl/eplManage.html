@@ -3,24 +3,17 @@
 <!--User: xulf Date: 2018/6/4 Time: 15:40-->
 <head th:include="include/includebase">
 </head>
-<!--<link th:href="@{/css/stage/bom-stage.css}" rel="stylesheet"/>-->
+<link th:href="@{/css/stage/bom-stage.css}" rel="stylesheet"/>
+<!--<link th:href="@{/css/bom/epl/epl.css}" rel="stylesheet">-->
 <meta charset="UTF-8">
 <title>EPL管理</title>
 </head>
 <body>
-<!--<div class="panel-body">-->
-    <!--<div class="content col-lg-12">-->
-        <table class="table table-striped tableNormalStyle" id="eplTable"></table>
-    <!--</div>-->
-<!--</div>-->
+
+        <table  class="table table-striped tableNormalStyle" id="eplTable"></table>
+
 <script th:src="@{/js/bom/epl/eplManage.js}"></script>
-<!--<script th:src="@{/js/jq.resizableColumns.js}"></script>-->
 <script th:inline="javascript">
-    $(function(){
-        $("table").resizableColumns({});
-    });
-
-
 </script>
 </body>
 </html>
