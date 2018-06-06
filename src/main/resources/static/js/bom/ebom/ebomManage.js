@@ -1,7 +1,7 @@
 var firstLoad = true;
 // $(document).ready(
 //     $("#ebomManage").click(function () {
-    window.onload = function(){
+window.onload = function(){
         var $table = $("#ebomManageTable");
         var column = [];
         $.ajax({
@@ -40,7 +40,7 @@ var firstLoad = true;
                 $table.bootstrapTable({
                     url: "",
                     method: 'get',
-                    height: $(window.parent.document).find("#wrapper").height() - 252,
+                    height: $(window.parent.document).find("#wrapper").height(),
                     width: $(window).width(),
                     showToggle: true,                   //是否显示详细视图和列表视图的切换按钮
                     showRefresh: true,                  //是否显示刷新按钮
@@ -404,8 +404,8 @@ var firstLoad = true;
         align: 'center',
         valign: 'middle',
     });*/
-            }
-        });
-/*    }),
-);*/
-    }
+         }
+     });
+//     }),
+// );
+}
