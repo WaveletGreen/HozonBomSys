@@ -59,6 +59,10 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         registry.addViewController("/ebomManage").setViewName("/bomManage/ebom/ebomManage/ebomManage");
         //EPL页面
         registry.addViewController("/eplManage").setViewName("/bomManage/epl/eplManage");
+        //Mbom的超级BOM页面
+        registry.addViewController("/superBom").setViewName("/bomManage/mbom/superBom/superBom");
+        //MBOM的工艺中心主数据页面
+        registry.addViewController("/workCenter").setViewName("/bomManage/mbom/workCenter/workCenter");
     }
 
 
