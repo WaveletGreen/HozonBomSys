@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <!--User: xulf Date: 2018/6/4 Time: 15:40-->
-<head th:include="include/includebase">
+<head th:include="include/ofbom">
 </head>
-<link th:href="@{/css/stage/bom-stage.css}" rel="stylesheet"/>
+<!--<link th:href="@{/css/stage/bom-stage.css}" rel="stylesheet"/>-->
 <!--<link th:href="@{/css/bom/epl/epl.css}" rel="stylesheet">-->
 <meta charset="UTF-8">
 <title>EPL管理</title>
@@ -14,6 +14,9 @@
 
 <script th:src="@{/js/bom/epl/eplManage.js}"></script>
 <script th:inline="javascript">
+    function doQuery() {
+        $('#eplTable').bootstrapTable('refresh');    //刷新表格
+    }
 </script>
 </body>
 </html>
