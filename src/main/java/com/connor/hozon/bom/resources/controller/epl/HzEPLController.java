@@ -3,6 +3,7 @@ package com.connor.hozon.bom.resources.controller.epl;
 import com.connor.hozon.bom.resources.controller.BaseController;
 import com.connor.hozon.bom.resources.dto.request.FindHzEPLRecordReqDTO;
 import com.connor.hozon.bom.resources.dto.response.HzEPLRecordRespDTO;
+import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.service.epl.HzEPLManageRecordService;
 import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.resources.util.ResultMessageBuilder;
@@ -25,10 +26,23 @@ public class HzEPLController extends BaseController {
     @Autowired
     private HzEPLManageRecordService hzEPLManageRecordService;
 
+    @RequestMapping(value = "record/page",method = RequestMethod.GET)
+    public void getHzEplRecordByPage(FindHzEPLRecordReqDTO recordReqDTO, HttpServletResponse response){
+        Page<HzEPLRecordRespDTO> recordRespDTOPage = hzEPLManageRecordService.getHzEPLRecordForPage(recordReqDTO);
+        List<HzEPLRecordRespDTO> recordRespDTOS =  recordRespDTOPage.getResult();
+        if (ListUtil.isEmpty(recordRespDTOS)) {
+            writeAjaxJSONResponse(ResultMessageBuilder.build(false,"暂无数据",new Page<>(recordReqDTO.getPageNum(),recordReqDTO.getPageSize(),0)),response);
+
+        }
+        writeAjaxJSONResponse(ResultMessageBuilder.build(recordRespDTOPage),response);
+    }
+
+
     @RequestMapping(value = "record",method = RequestMethod.GET)
     @ResponseBody
     public Map<String, Object> getHzEplRecord(FindHzEPLRecordReqDTO recordReqDTO, HttpServletResponse response){
-        List<HzEPLRecordRespDTO> recordRespDTOS =  hzEPLManageRecordService.getHzEPLRecord(recordReqDTO);
+        Page<HzEPLRecordRespDTO> recordRespDTOPage = hzEPLManageRecordService.getHzEPLRecordForPage(recordReqDTO);
+        List<HzEPLRecordRespDTO> recordRespDTOS =  recordRespDTOPage.getResult();
 //        if(ListUtil.isEmpty(recordRespDTOS)){
 //            writeAjaxJSONResponse(ResultMessageBuilder.build(false,"暂无符合数据"),response);
 //        }
@@ -110,10 +124,10 @@ public class HzEPLController extends BaseController {
             _res.put("changeNum",dto.getChangeNum());
             _list.add(_res);
         });
-        ret.put("totalCount", recordRespDTOS.size());
+        ret.put("totalCount", recordRespDTOPage.getTotalCount());
         ret.put("result", _list);
         return ret;
-    }
+        }
 
     @RequestMapping(value = "title")
     public void getEplTitle(HttpServletResponse response){

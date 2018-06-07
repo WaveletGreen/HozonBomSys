@@ -1,5 +1,8 @@
 package sql;
 
+import com.connor.hozon.bom.resources.page.Page;
+import com.connor.hozon.bom.resources.page.PageRequest;
+import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.slf4j.Logger;
@@ -7,7 +10,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import sql.redis.DatabaseException;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service("baseSQLUtil")
 public class BaseSQLUtil implements IBaseSQLUtil {
@@ -350,5 +356,53 @@ public class BaseSQLUtil implements IBaseSQLUtil {
             if (session != null)
                 session.close();
         }
+    }
+    /**
+     * 带有分页信息的查询
+     *
+     * @param sqlMapId  mybatis映射id
+     * @param pageRequest  分页请求参数信息
+     * @return
+     */
+    public Page findForPage(String sqlMapId,final String totalMapId, PageRequest pageRequest) {
+
+        // 查询总数
+        Number totalCount = (Number) findForObject(totalMapId,null);
+        if (totalCount == null || totalCount.intValue() <= 0) {
+            return new Page(pageRequest, 0);
+        }
+        if (totalCount != null && totalCount.intValue() <= (pageRequest.getPageNumber() - 1) * pageRequest.getPageSize()) {
+            return new Page(pageRequest.getPageNumber(), pageRequest.getPageSize(), totalCount.intValue(), new ArrayList(0));
+        }
+        Map filters = new HashMap();
+        filters.putAll(pageRequest.getFilters());
+        Page page = new Page(pageRequest, totalCount.intValue());
+        List list = findForList(sqlMapId, filters, page.getFirstResult(), page.getPageSize());
+
+        page.setResult(list);
+
+        return page;
+    }
+
+    /**
+     * 查询列表
+     *
+     * @param sqlMapId  mybatis映射id
+     * @param param  查询参数
+     * @param offset  查询起始位置(偏移量),从1开始
+     * @param limit  查询数量,必须大于0
+     * @return
+     */
+    public List findForList(final String sqlMapId, final Object param, final int offset, final int limit) {
+        SqlSession session = null;
+        try {
+            SqlSessionFactory f = FactoryManager.getInstance();
+            session = f.openSession();
+            return session.selectList(sqlMapId, param, new RowBounds(offset, limit));
+        } catch (Exception e) {
+            logger.error("SQL执行出错: " + sqlMapId, e);
+            throw new DatabaseException("SQL执行出错: " + sqlMapId, e);
+        }
+
     }
 }

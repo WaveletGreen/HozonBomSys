@@ -44,8 +44,8 @@ $(document).ready((function () {
                     width: $(window).width(),
                     showToggle: true,                   //是否显示详细视图和列表视图的切换按钮
                     showRefresh: true,                  //是否显示刷新按钮
-                    // pageSize: 10,
-                    pagination: false,                   //是否显示分页（*）
+                    pageSize: 50,
+                    pagination: true,                   //是否显示分页（*）
                     clickToSelect: true,                // 单击某一行的时候选中某一条记录
                     formId: "formId",
                     /**列信息，需要预先定义好*/
