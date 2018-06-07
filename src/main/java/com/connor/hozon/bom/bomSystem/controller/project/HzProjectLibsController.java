@@ -1,12 +1,10 @@
 package com.connor.hozon.bom.bomSystem.controller.project;
 
 import com.connor.hozon.bom.bomSystem.bean.HzProjectBean;
-import com.connor.hozon.bom.bomSystem.dao.project.HzBrandRecordDao;
 import com.connor.hozon.bom.bomSystem.service.project.HzBrandService;
 import com.connor.hozon.bom.bomSystem.service.project.HzPlatformService;
 import com.connor.hozon.bom.bomSystem.service.project.HzProjectLibsService;
 import com.connor.hozon.bom.common.base.constant.SystemStaticConst;
-import com.connor.hozon.bom.sys.entity.Tree;
 import com.connor.hozon.bom.sys.mapper.TreeMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -67,68 +65,35 @@ public class HzProjectLibsController {
     @ResponseBody
     public Map<String, Object> loadUserTree() {
         Map<String, Object> result = new HashMap<String, Object>();
-        List<Tree> treeList = new ArrayList<>();
-        Tree tree = new Tree();
-
-        tree.setId(1);
-//        tree.setCode("#");
-        tree.setName("哪吒");
-        tree.setpId(0);
-//        tree.setTreeOrder(10000);
-//        tree.setState("1");
-
-        Tree tree2 = new Tree();
-
-        tree2.setId(2);
-//        tree2.setCode("platform");
-        tree2.setName("平台");
-        tree2.setpId(1);
-//        tree2.setTreeOrder(20000);
-//        tree2.setState("1");
-
-        Tree tree3 = new Tree();
-
-        tree3.setId(3);
-//        tree3.setCode("platform");
-        tree3.setName("项目(车型)");
-        tree3.setpId(2);
-//        tree3.setTreeOrder(30000);
-//        tree3.setState("1");
-
-        treeList.add(tree);
-        treeList.add(tree2);
-        treeList.add(tree3);
-
-
         List<HzProjectBean> beans = new ArrayList<>();
-        HzProjectBean bean = new HzProjectBean();
-        HzProjectBean bean2 = new HzProjectBean();
-        HzProjectBean bean3 = new HzProjectBean();
-        HzProjectBean bean4 = new HzProjectBean();
 
-        bean.setPuid("dasds");
-        bean.setpPuid("#");
-        bean.setName("品牌");
+        List<HzBrandRecord> brands= hzBrandService.doGetAllBrand();
+        List<HzPlatformRecord> platforms= hzPlatformService.doGetAllPlatform();
+        List<HzProjectLibs> projects= hzProjectLibsService.doLoadAllProjectLibs();
+        brands.forEach(brand->{
+            HzProjectBean bean = new HzProjectBean();
+            bean.setpPuid("#");
+            bean.setPuid(brand.getPuid());
+            bean.setName(brand.getpBrandName());
+            beans.add(bean);
+        });
+        platforms.forEach(platform->{
+            HzProjectBean bean = new HzProjectBean();
+            bean.setpPuid(platform.getpPertainToBrandPuid());
+            bean.setPuid(platform.getPuid());
+            bean.setName(platform.getpPlatformName());
+            beans.add(bean);
+        });
+        projects.forEach(project->{
+            HzProjectBean bean = new HzProjectBean();
+            bean.setpPuid(project.getpProjectPertainToPlatform());
+            bean.setPuid(project.getPuid());
+            bean.setName(project.getpProjectName());
+            beans.add(bean);
+        });
 
-        bean2.setPuid("das");
-        bean2.setpPuid("dasds");
-        bean2.setName("平台");
-
-        bean3.setPuid("giQtAHNv46t5TA");
-        bean3.setpPuid("das");
-        bean3.setName("EP11");
-
-        bean4.setPuid("QaatAHSl46t5TA");
-        bean4.setpPuid("das");
-        bean4.setName("EP10项目");
-
-        beans.add(bean);
-        beans.add(bean2);
-        beans.add(bean3);
-        beans.add(bean4);
         result.put(SystemStaticConst.RESULT, SystemStaticConst.SUCCESS);
         result.put(SystemStaticConst.MSG, "加载菜单数据成功！");
-//        result.put("data", treeMapper.treesToTressDTOs(treeList));
         result.put("data", beans);
         return result;
     }

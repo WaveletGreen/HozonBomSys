@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sql.pojo.project.HzBrandRecord;
 
+import java.util.List;
+
 /*************************************************************************************************************************
  *                                  Author: Fancyears·Maylos·Mayways
  * Date: 2018/6/1 11:30
@@ -33,4 +35,7 @@ public class HzBrandService {
         return hzBrandRecordDao.deleteByPrimaryKey(puid) > 0 ? true : false;
     }
 
+    public List<HzBrandRecord> doGetAllBrand(){
+        return hzBrandRecordDao.selectAll();
+    };
 }

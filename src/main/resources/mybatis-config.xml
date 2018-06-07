@@ -43,6 +43,7 @@
         <mapper resource="sql/mapper/cfg/xmapper/HzCfg0ModelRecordMapper.xml"/>
         <mapper resource="sql/mapper/cfg/xmapper/HzCfg0ModelColorRecordMapper.xml"/>
         <mapper resource="sql/mapper/cfg/xmapper/HzCfg0OptionFamilyMapper.xml"/>
+        <mapper resource="sql/mapper/cfg/xmapper/HzCfg0RecordMapper.xml"/>
         <!--项目-->
         <mapper resource="sql/mapper/project.xmapper/HzProjectLibsMapper.xml"/>
         <mapper resource="sql/mapper/project.xmapper/HzBrandRecordMapper.xml"/>

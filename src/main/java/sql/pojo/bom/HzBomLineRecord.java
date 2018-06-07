@@ -3,32 +3,17 @@ package sql.pojo.bom;
 public class HzBomLineRecord {
     private String puid;
 
-	private String parentUid;
-
-	private String bomDigifaxId;
-	private String lineIndex;
-	private String linePuid;
-	private String lineID;
-	private Integer isHas;
-	private byte[] bomLineBlock;
-	private Integer is2Y;
-	private int isPart;
-	private int orderNum;
-	private String pBomOfWhichDept;
-	public String getPuid() {
-		return puid;
-	}
     private String parentUid;
     private String isDept;
     private String bomDigifaxId;
     private String lineIndex;
     private String linePuid;
     private String lineID;
-    private int isHas;
+    private Integer isHas;
     private byte[] bomLineBlock;
-    private int is2Y;
-    private int isPart;
-    private int orderNum;
+    private Integer is2Y;
+    private Integer isPart;
+    private Integer orderNum;
     private String pBomOfWhichDept;
     private String projectPuid;
     private String pBomLinePartName;
@@ -62,78 +47,75 @@ public class HzBomLineRecord {
         return bomLineBlock;
     }
 
-	public void setBomLineBlock(byte[] bomLineBlock) {
-		this.bomLineBlock = bomLineBlock;
-	}
+    public void setBomLineBlock(byte[] bomLineBlock) {
+        this.bomLineBlock = bomLineBlock;
+    }
 
-	public String getIndex() {
-		return lineIndex;
-	}
+    public String getIndex() {
+        return lineIndex;
+    }
 
-	public void setIndex(String lineIndex) {
-		this.lineIndex = lineIndex;
-	}
+    public void setIndex(String lineIndex) {
+        this.lineIndex = lineIndex;
+    }
 
-	public String getLineIndex() {
-		return lineIndex;
-	}
+    public String getLineIndex() {
+        return lineIndex;
+    }
 
-	public void setLineIndex(String lineIndex) {
-		this.lineIndex = lineIndex;
-	}
+    public void setLineIndex(String lineIndex) {
+        this.lineIndex = lineIndex;
+    }
 
+    public Integer getIsHas() {
+        return isHas;
+    }
 
-	public Integer getIsHas() {
-		return isHas;
-	}
+    public void setIsHas(Integer isHas) {
+        this.isHas = isHas;
+    }
 
-	public void setIsHas(Integer isHas) {
-		this.isHas = isHas;
-	}
+    public void setHasChildren(boolean isHas) {
+        this.setIsHas(isHas ? 1 : 0);
+    }
 
-	public Integer getIs2Y() {
-		return is2Y;
-	}
+    public String getLinePuid() {
+        return linePuid;
+    }
 
-	public void setIs2Y(Integer is2Y) {
-		this.is2Y = is2Y;
-	}
+    public void setLinePuid(String linePuid) {
+        this.linePuid = linePuid;
+    }
 
-	public void setHasChildren(boolean isHas) {
-		this.setIsHas(isHas ? 1 : 0);
-	}
+    public String getLineID() {
+        return lineID;
+    }
 
-	public String getLinePuid() {
-		return linePuid;
-	}
+    public void setLineID(String lineID) {
+        this.lineID = lineID;
+    }
 
-	public void setLinePuid(String linePuid) {
-		this.linePuid = linePuid;
-	}
+    public Integer getIs2Y() {
+        return is2Y;
+    }
 
-	public String getLineID() {
-		return lineID;
-	}
+    public void setIs2Y(Integer is2y) {
+        is2Y = is2y;
+    }
 
-	public void setLineID(String lineID) {
-		this.lineID = lineID;
-	}
-
-
-
-    public int getIsPart() {
+    public Integer getIsPart() {
         return isPart;
     }
 
-    public void setIsPart(int isPart) {
+    public void setIsPart(Integer isPart) {
         this.isPart = isPart;
     }
 
-    public int getOrderNum() {
+    public Integer getOrderNum() {
         return orderNum;
     }
 
-    public void setOrderNum(int orderNum) {
+    public void setOrderNum(Integer orderNum) {
         this.orderNum = orderNum;
     }
 
