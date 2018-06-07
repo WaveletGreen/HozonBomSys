@@ -1,105 +1,179 @@
-// $(document).ready(
-//     alert("花QQQQQ"),
-window.onload = function () {
+$(document).ready((function (){
+    var  $table =  $("#workCenterTable");
+    var  column = [];
     $.ajax({
-        url: "epl/record",
-        type: "GET",
-        success: function (data) {
-            var data = data.data;
+        url:"mbom/titel",
+        type:"GET",
+        success:function(result){
+            var column = [];
+            column.push({field: 'Puid', title: 'puid'});
+            // column.push({field: 'ck', checkbox: true, Width: 50});
+            column.push({field: '',
+                title: '序号',
+                formatter: function (value, row, index) {
+                    return index+1;},
+                align:
+                    'center',
+                valign:
+                    'middle'
+            });
+            var data = result.data;
             console.log(data);
-            var num = 1;
-            var re = "<tr>" +  // style='position:fixed; background-color:#9FB6CD '
-                "<th>序号</th>" + "<th>状态</th>" + "<th>层级</th>" + "<th>专业</th>" + "<th>级别</th>" + "<th>分组号</th>" +
-                "<th>零件号</th>" + "<th>名称</th>" + "<th>英文名称</th>" + "<th>单位</th>" + "<th>分时租赁低配</th>" + "<th>分时租赁高配</th>" +
-                "<th>图号</th>" + "<th>安装图号</th>" + "<th>图幅</th>" + "<th>料厚</th>" + "<th>材料1</th>" + "<th>材料2</th>" +
-                "<th>材料3</th>" + "<th>密度</th>" + "<th>材料标准</th>" + "<th>表面处理</th>" + "<th>纹理编号/色彩编号</th>" + "<th>制造工艺</th>" +
-                "<th>对称</th>" + "<th>重要度</th>" + "<th>是否法规件</th>" + "<th>法规件型号</th>" + "<th>黑白灰匣子件</th>" + "<th>开发类型</th>" +
-                "<th>数据版本</th>" + "<th>目标重量</th>" + "<th>预估重量</th>" + "<th>实际重量</th>" + "<th>紧固件</th>" + "<th>紧固件规格</th>" +
-                "<th>紧固件性能等级</th>" + "<th>扭矩</th>" + "<th>专业部门</th>" + "<th>责任工程师</th>" + "<th>供应商</th>" + "<th>供应商代码</th>" +
-                "<th>采购工程师</th>" + "<th>备注</th>" + "<th>零件分类</th>" + "<th>零部件来源</th>" + "<th>自制/采购</th>" + "<th>焊接/装配</th>" +
-                "<th>采购单元</th>" + "<th>车间1</th>" + "<th>车间2</th>" + "<th>生产线</th>" + "<th>工位</th>" + "<th>模具类别</th>" +
-                "<th>外委件</th>" + "<th>颜色件</th>" + "<th>备件</th>" + "<th>备件编号</th>" + "<th>工艺路线</th>" + "<th>人工工时</th>" +
-                "<th>节拍</th>" + "<th>焊点</th>" + "<th>机物料</th>" + "<th>标准件</th>" + "<th>工具</th>" + "<th>废品</th>" + "<th>供货状态</th>" +
-                "<th>变更</th>"+"<th>变更号</th>"
-                "</tr>";
-            for (var i = 0; i < data.length; i++) {
-                re = re + "<tr align='center'>" +
-                    "<td>"+num+++"</td>"+
-                    "<td>"+data[i].pState+"</td>"+
-                    "<td>"+data[i].level+"</td>"+
-                    "<td>"+data[i].pBomOfWhichDept+"</td>"+
-                    "<td>"+data[i].rank+"</td>"+
-                    "<td>"+data[i].groupNum+"</td>"+
-                    "<td>"+data[i].lineId+"</td>"+
-                    "<td>"+data[i].nameZh+"</td>"+
-                    "<td>"+data[i].nameEn+"</td>"+
-                    "<td>"+data[i].pUnit+"</td>"+
-                    "<td>"+data[i].pRentLow+"</td>"+
-                    "<td>"+data[i].pRentHigh+"</td>"+
-                    "<td>"+data[i].pPictureNo+"</td>"+
-                    "<td>"+data[i].pInstallPictureNo+"</td>"+
-                    "<td>"+data[i].pMap+"</td>"+
-                    "<td>"+data[i].pMaterialHigh+"</td>"+
-                    "<td>"+data[i].pMaterial1+"</td>"+
-                    "<td>"+data[i].pMaterial2+"</td>"+
-                    "<td>"+data[i].pMaterial3+"</td>"+
-                    "<td>"+data[i].pDensity+"</td>"+
-                    "<td>"+data[i].pMaterialStandard+"</td>"+
-                    "<td>"+data[i].pSurfaceManage+"</td>"+
-                    "<td>"+data[i].pTextureNo+"</td>"+
-                    "<td>"+data[i].pMadeArt+"</td>"+
-                    "<td>"+data[i].pSymmetric+"</td>"+
-                    "<td>"+data[i].pImportance+"</td>"+
-                    "<td>"+data[i].pIsRulePart+"</td>"+
-                    "<td>"+data[i].pRulePartNo+"</td>"+
-                    "<td>"+data[i].pCasketPart+"</td>"+
-                    "<td>"+data[i].pDevelopType+"</td>"+
-                    "<td>"+data[i].pDataVersion+"</td>"+
-                    "<td>"+data[i].pTargetHeight+"</td>"+
-                    "<td>"+data[i].pEstimateHeight+"</td>"+
-                    "<td>"+data[i].pActualHeight+"</td>"+
-                    "<td>"+data[i].pFixture+"</td>"+
-                    "<td>"+data[i].pFixtureSpec+"</td>"+
-                    "<td>"+data[i].pFixtureLevel+"</td>"+
-                    "<td>"+data[i].pTorque+"</td>"+
-                    "<td>"+data[i].pMajorDept+"</td>"+
-                    "<td>"+data[i].pDutyEngineer+"</td>"+
-                    "<td>"+data[i].pSupplier+"</td>"+
-                    "<td>"+data[i].pSupplierNo+"</td>"+
-                    "<td>"+data[i].pBuyEngineer+"</td>"+
-                    "<td>"+data[i].pRemark+"</td>"+
-                    "<td>"+data[i].pItemClassification+"</td>"+
-                    "<td>"+data[i].pItemResource+"</td>"+
-                    "<td>"+data[i].resource+"</td>"+
-                    "<td>"+data[i].type+"</td>"+
-                    "<td>"+data[i].buyUnit+"</td>"+
-                    "<td>"+data[i].workShop1+"</td>"+
-                    "<td>"+data[i].workShop2+"</td>"+
-                    "<td>"+data[i].productLine+"</td>"+
-                    "<td>"+data[i].station+"</td>"+
-                    "<td>"+data[i].mouldType+"</td>"+
-                    "<td>"+data[i].outerPart+"</td>"+
-                    "<td>"+data[i].colorPart+"</td>"+
-                    "<td>"+data[i].sparePart+"</td>"+
-                    "<td>"+data[i].sparePartNum+"</td>"+
-                    "<td>"+data[i].processRoute+"</td>"+
-                    "<td>"+data[i].laborHour+"</td>"+
-                    "<td>"+data[i].rhythm+"</td>"+
-                    "<td>"+data[i].solderJoint+"</td>"+
-                    "<td>"+data[i].machineMaterial+"</td>"+
-                    "<td>"+data[i].standardPart+"</td>"+
-                    "<td>"+data[i].tools+"</td>"+
-                    "<td>"+data[i].wasterProduct+"</td>"+
-                    "<td>"+data[i].pSupplyState+"</td>"+
-                    "<td>"+data[i].change+"</td>"+
-                    "<td>"+data[i].changeNum+"</td>"+
-                    "</tr>"
-
-            }
-            var table = $("#eplTable");
-            table.html(re);
+            var keys = [];
+            var values;
+            for (var key in data) {
+                if (data.hasOwnProperty(key)) {
+                    var json = {
+                        field: key,
+                        title: data[key],
+                        align:
+                            'center',
+                        valign:
+                            'middle'
+                    };
+                    column.push(json);
+                }
+            };
+            $table.bootstrapTable({
+                url: "epl/record",
+                method: 'get',
+                toolbar: "#toolbar",
+                striped: true, //是否显示行间隔色
+                height:300,
+                sortable: false,//是否排序
+                search: true, //是否显示表格搜索，此搜索是客户端搜索，不会进服务端
+                strictSearch: true, //是否显示刷新
+                showColumns: true, //是否显示所有的列
+                showRefresh: true, //是否显示刷新按钮
+                minimumCountColumns: 2, //最少允许的列数
+                showToggle:true, //是否显示详细视图和列表视图的切换按钮
+                cardView: false, //
+                columns: column,
+                sortable: true,                     //是否启用排序
+                sortOrder: "asc",                   //排序方式
+            });
+            $table.bootstrapTable('hideColumn', 'Puid');
         }
     })
+
+}))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// // $(document).ready(
+// //     alert("花QQQQQ"),
+// window.onload = function () {
+//     $.ajax({
+//         url: "epl/record",
+//         type: "GET",
+//         success: function (data) {
+//             var data = data.data;
+//             console.log(data);
+//             var num = 1;
+//             var re = "<tr>" +  // style='position:fixed; background-color:#9FB6CD '
+//                 "<th>序号</th>" + "<th>状态</th>" + "<th>层级</th>" + "<th>专业</th>" + "<th>级别</th>" + "<th>分组号</th>" +
+//                 "<th>零件号</th>" + "<th>名称</th>" + "<th>英文名称</th>" + "<th>单位</th>" + "<th>分时租赁低配</th>" + "<th>分时租赁高配</th>" +
+//                 "<th>图号</th>" + "<th>安装图号</th>" + "<th>图幅</th>" + "<th>料厚</th>" + "<th>材料1</th>" + "<th>材料2</th>" +
+//                 "<th>材料3</th>" + "<th>密度</th>" + "<th>材料标准</th>" + "<th>表面处理</th>" + "<th>纹理编号/色彩编号</th>" + "<th>制造工艺</th>" +
+//                 "<th>对称</th>" + "<th>重要度</th>" + "<th>是否法规件</th>" + "<th>法规件型号</th>" + "<th>黑白灰匣子件</th>" + "<th>开发类型</th>" +
+//                 "<th>数据版本</th>" + "<th>目标重量</th>" + "<th>预估重量</th>" + "<th>实际重量</th>" + "<th>紧固件</th>" + "<th>紧固件规格</th>" +
+//                 "<th>紧固件性能等级</th>" + "<th>扭矩</th>" + "<th>专业部门</th>" + "<th>责任工程师</th>" + "<th>供应商</th>" + "<th>供应商代码</th>" +
+//                 "<th>采购工程师</th>" + "<th>备注</th>" + "<th>零件分类</th>" + "<th>零部件来源</th>" + "<th>自制/采购</th>" + "<th>焊接/装配</th>" +
+//                 "<th>采购单元</th>" + "<th>车间1</th>" + "<th>车间2</th>" + "<th>生产线</th>" + "<th>工位</th>" + "<th>模具类别</th>" +
+//                 "<th>外委件</th>" + "<th>颜色件</th>" + "<th>备件</th>" + "<th>备件编号</th>" + "<th>工艺路线</th>" + "<th>人工工时</th>" +
+//                 "<th>节拍</th>" + "<th>焊点</th>" + "<th>机物料</th>" + "<th>标准件</th>" + "<th>工具</th>" + "<th>废品</th>" + "<th>供货状态</th>" +
+//                 "<th>变更</th>"+"<th>变更号</th>"
+//                 "</tr>";
+//             for (var i = 0; i < data.length; i++) {
+//                 re = re + "<tr align='center'>" +
+//                     "<td>"+num+++"</td>"+
+//                     "<td>"+data[i].pState+"</td>"+
+//                     "<td>"+data[i].level+"</td>"+
+//                     "<td>"+data[i].pBomOfWhichDept+"</td>"+
+//                     "<td>"+data[i].rank+"</td>"+
+//                     "<td>"+data[i].groupNum+"</td>"+
+//                     "<td>"+data[i].lineId+"</td>"+
+//                     "<td>"+data[i].nameZh+"</td>"+
+//                     "<td>"+data[i].nameEn+"</td>"+
+//                     "<td>"+data[i].pUnit+"</td>"+
+//                     "<td>"+data[i].pRentLow+"</td>"+
+//                     "<td>"+data[i].pRentHigh+"</td>"+
+//                     "<td>"+data[i].pPictureNo+"</td>"+
+//                     "<td>"+data[i].pInstallPictureNo+"</td>"+
+//                     "<td>"+data[i].pMap+"</td>"+
+//                     "<td>"+data[i].pMaterialHigh+"</td>"+
+//                     "<td>"+data[i].pMaterial1+"</td>"+
+//                     "<td>"+data[i].pMaterial2+"</td>"+
+//                     "<td>"+data[i].pMaterial3+"</td>"+
+//                     "<td>"+data[i].pDensity+"</td>"+
+//                     "<td>"+data[i].pMaterialStandard+"</td>"+
+//                     "<td>"+data[i].pSurfaceManage+"</td>"+
+//                     "<td>"+data[i].pTextureNo+"</td>"+
+//                     "<td>"+data[i].pMadeArt+"</td>"+
+//                     "<td>"+data[i].pSymmetric+"</td>"+
+//                     "<td>"+data[i].pImportance+"</td>"+
+//                     "<td>"+data[i].pIsRulePart+"</td>"+
+//                     "<td>"+data[i].pRulePartNo+"</td>"+
+//                     "<td>"+data[i].pCasketPart+"</td>"+
+//                     "<td>"+data[i].pDevelopType+"</td>"+
+//                     "<td>"+data[i].pDataVersion+"</td>"+
+//                     "<td>"+data[i].pTargetHeight+"</td>"+
+//                     "<td>"+data[i].pEstimateHeight+"</td>"+
+//                     "<td>"+data[i].pActualHeight+"</td>"+
+//                     "<td>"+data[i].pFixture+"</td>"+
+//                     "<td>"+data[i].pFixtureSpec+"</td>"+
+//                     "<td>"+data[i].pFixtureLevel+"</td>"+
+//                     "<td>"+data[i].pTorque+"</td>"+
+//                     "<td>"+data[i].pMajorDept+"</td>"+
+//                     "<td>"+data[i].pDutyEngineer+"</td>"+
+//                     "<td>"+data[i].pSupplier+"</td>"+
+//                     "<td>"+data[i].pSupplierNo+"</td>"+
+//                     "<td>"+data[i].pBuyEngineer+"</td>"+
+//                     "<td>"+data[i].pRemark+"</td>"+
+//                     "<td>"+data[i].pItemClassification+"</td>"+
+//                     "<td>"+data[i].pItemResource+"</td>"+
+//                     "<td>"+data[i].resource+"</td>"+
+//                     "<td>"+data[i].type+"</td>"+
+//                     "<td>"+data[i].buyUnit+"</td>"+
+//                     "<td>"+data[i].workShop1+"</td>"+
+//                     "<td>"+data[i].workShop2+"</td>"+
+//                     "<td>"+data[i].productLine+"</td>"+
+//                     "<td>"+data[i].station+"</td>"+
+//                     "<td>"+data[i].mouldType+"</td>"+
+//                     "<td>"+data[i].outerPart+"</td>"+
+//                     "<td>"+data[i].colorPart+"</td>"+
+//                     "<td>"+data[i].sparePart+"</td>"+
+//                     "<td>"+data[i].sparePartNum+"</td>"+
+//                     "<td>"+data[i].processRoute+"</td>"+
+//                     "<td>"+data[i].laborHour+"</td>"+
+//                     "<td>"+data[i].rhythm+"</td>"+
+//                     "<td>"+data[i].solderJoint+"</td>"+
+//                     "<td>"+data[i].machineMaterial+"</td>"+
+//                     "<td>"+data[i].standardPart+"</td>"+
+//                     "<td>"+data[i].tools+"</td>"+
+//                     "<td>"+data[i].wasterProduct+"</td>"+
+//                     "<td>"+data[i].pSupplyState+"</td>"+
+//                     "<td>"+data[i].change+"</td>"+
+//                     "<td>"+data[i].changeNum+"</td>"+
+//                     "</tr>"
+//
+//             }
+//             var table = $("#eplTable");
+//             table.html(re);
+//         }
+//     })
 // )
 //
 //     var tTD; //用来存储当前更改宽度的Table Cell,避免快速移动鼠标的问题

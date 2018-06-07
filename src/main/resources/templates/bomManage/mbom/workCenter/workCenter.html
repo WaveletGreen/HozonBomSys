@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<!--User: xulf Date: 2018/6/6 Time: 16:21-->
+<head th:include="include/includebase">
+</head>
+<link th:href="@{/css/stage/bom-stage.css}" rel="stylesheet"/>
+    <meta charset="UTF-8">
+    <title>工艺中心主数据</title>
+</head>
+<body>
+<form class="form-inline" role="form" style="float: left; width: 100%;margin-left: 20px;" method="post"
+      id="queryEbomManage">
+    <div class="form-group">
+        <label for="level">层级:</label>
+        <input type="text" class="form-control" name="level" id="level" placeholder="请输入层级"/>
+    </div>
+    <div class="form-group">
+        <label for="pBomOfWhichDept">专业:</label>
+        <input type="text" class="form-control" name="pBomOfWhichDept" id="pBomOfWhichDept"
+               placeholder="请输入专业"/>
+    </div>
+    <div class="form-group">
+        <label for="rank">级别:</label>
+        <input type="text" class="form-control" name="rank" id="rank" placeholder="请输入零件号"/>
+    </div>
+    <div class="form-group">
+        <label for="groupNum">分组号:</label>
+        <input type="text" class="form-control" name="groupNum" id="groupNum" placeholder="请输入零件号"/>
+    </div>
+    <div class="form-group">
+        <button type="button" id="queryBtn" onclick="doQuery();" class="btn btn-primary">查询</button>
+    </div>
+</form>
+<div class="content col-lg-12">
+    <table class="table table-striped tableNormalStyle" id="workCenterTable"></table>
+</div>
+<script th:src="@{/js/bom/mbom/workCenter.js}"></script>
+</body>
+<script th:inline="javascript">
+    function doQuery() {
+        $('#workCenterTable').bootstrapTable('refresh');    //刷新表格
+    }
+</script>
+</html>
