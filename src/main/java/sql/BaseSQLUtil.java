@@ -224,6 +224,31 @@ public class BaseSQLUtil implements IBaseSQLUtil {
         }
         return result;
     }
+
+    @Override
+    public int executeDeleteBySome(String by, String... condition) {
+        SqlSession session = null;
+        int result = 0;
+        try {
+            SqlSessionFactory f = FactoryManager.getInstance();
+            session = f.openSession();
+            System.out.println("执行sql方法:" + by);
+            if (condition == null) {
+                result = session.delete(by);
+            } else {
+                result = session.delete(by, condition);
+            }
+            session.commit(true);
+        } catch (Exception e) {
+            session.rollback(true);
+            e.printStackTrace();
+        } finally {
+            if (session != null)
+                session.close();
+        }
+        return result;
+    }
+
     public List findForList(final String sql, final Object param) {
         SqlSession session = null;
         List result = null;

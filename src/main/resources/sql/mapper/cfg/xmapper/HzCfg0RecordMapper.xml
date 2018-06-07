@@ -28,26 +28,37 @@
     <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
-        from HZ_CFG0_RECORD
+        from ${whichTable}
         where PUID = #{puid,jdbcType=VARCHAR}
     </select>
-    <select id="selectByProjectPuid" parameterType="java.lang.String" resultMap="BaseResultMap">
+
+    <select id="selectListByProjectPuid" parameterType="java.lang.String" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
-        from HZ_CFG0_RECORD t where
+        from ${whichTable} t where
         t.p_cfg0_main_item_puid=(
-          select t2.puid
-            from Hz_Cfg0_Main_Record t2
-            where t2.p_cfg0_of_which_project_puid=#{projectPuid,jdbcType=VARCHAR}
+        select t2.puid
+        from Hz_Cfg0_Main_Record t2
+        where t2.p_cfg0_of_which_project_puid=#{projectPuid,jdbcType=VARCHAR}
         )
     </select>
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
-    delete from HZ_CFG0_RECORD
+    delete from ${0}
     where PUID = #{puid,jdbcType=VARCHAR}
-  </delete>
+    </delete>
+    <delete id="deleteAddedCfgByList" parameterType="java.util.List">
+        delete from HZ_CFG0_ADD_CFG_RECORD
+        where PUID in(
+        <foreach collection="list" item="item" index="index"
+                 separator=",">
+            #{item.puid,jdbcType=VARCHAR}
+        </foreach>
+        )
+
+    </delete>
     <insert id="insert" parameterType="sql.pojo.cfg.HzCfg0Record">
-    insert into HZ_CFG0_RECORD (PUID, P_CFG0_OBJECT_ID, P_CFG0_DESC, 
+    insert into ${whichTable} (PUID, P_CFG0_OBJECT_ID, P_CFG0_DESC,
       P_CFG0_FAMILY_NAME, P_CFG0_FAMILY_PUID, P_CFG0_MAIN_ITEM_PUID, 
       P_H9FEATURENAME, P_H9FEATUREENNAME, P_H9FEATUREDESC, 
       P_CFG0_FAMILY_DESC)
@@ -57,7 +68,7 @@
       #{pCfg0FamilyDesc,jdbcType=VARCHAR})
   </insert>
     <update id="updateByPrimaryKey" parameterType="sql.pojo.cfg.HzCfg0Record">
-    update HZ_CFG0_RECORD
+    update ${whichTable}
     set P_CFG0_OBJECT_ID = #{pCfg0ObjectId,jdbcType=VARCHAR},
       P_CFG0_DESC = #{pCfg0Desc,jdbcType=VARCHAR},
       P_CFG0_FAMILY_NAME = #{pCfg0FamilyName,jdbcType=VARCHAR},
