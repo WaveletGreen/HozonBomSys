@@ -6,7 +6,7 @@ public class HzCfg0OptionFamily {
     private String pOfCfg0Main;
 
     private String pOptionfamilyName;
-
+    private String pOptionfamilyDesc;
     public String getPuid() {
         return puid;
     }
@@ -29,5 +29,13 @@ public class HzCfg0OptionFamily {
 
     public void setpOptionfamilyName(String pOptionfamilyName) {
         this.pOptionfamilyName = pOptionfamilyName == null ? null : pOptionfamilyName.trim();
+    }
+
+    public String getpOptionfamilyDesc() {
+        return pOptionfamilyDesc;
+    }
+
+    public void setpOptionfamilyDesc(String pOptionfamilyDesc) {
+        this.pOptionfamilyDesc = pOptionfamilyDesc;
     }
 }

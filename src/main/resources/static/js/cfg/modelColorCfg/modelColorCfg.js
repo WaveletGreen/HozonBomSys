@@ -6,6 +6,7 @@ function modeVehicle(puid){
 }
 $(document).ready(
     $("#queryModelColorCfg").click(function () {
+
         //必须输入一个配置的puid
         var pCfg0MainRecordOfMC = $("#project", window.top.document).val();
         if (pCfg0MainRecordOfMC.length <= 0) {
@@ -13,6 +14,7 @@ $(document).ready(
             return;
         }
         var $table = $("#modelColorCfgTable");
+        $table.bootstrapTable('destroy');
         var column = [];
         $("#refreshModelColorCfg").removeAttr("disabled");
         $.ajax({
@@ -39,8 +41,8 @@ $(document).ready(
                         var rowValues = JSON.parse(JSON.stringify(row));
                         if ("Y" === rowValues.modeColorIsMultiply) {
                             return [
-                                '<a href="javascript:void(0)" onclick="modeVehicle('+row[0].puid+')">' + value + '</a>'
-                            ].join("");
+                                '<a href="javascript:void(0)" onclick="modeVehicle('+row.puid+')">' + value + '</a>'
+                            ].join("");z
                         }
                         else {
                             return [

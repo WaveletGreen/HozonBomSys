@@ -5,14 +5,15 @@
         <id column="PUID" jdbcType="VARCHAR" property="puid"/>
         <result column="P_OF_CFG0_MAIN" jdbcType="VARCHAR" property="pOfCfg0Main"/>
         <result column="P_OPTIONFAMILY_NAME" jdbcType="VARCHAR" property="pOptionfamilyName"/>
+        <result column="P_OPTIONFAMILY_DESC" jdbcType="VARCHAR" property="pOptionfamilyDesc"/>
     </resultMap>
 
     <resultMap id="FamilyName" type="java.lang.String">
-        <result column="P_OPTIONFAMILY_NAME" jdbcType="VARCHAR" property="pOptionfamilyName"/>
+        <result column="P_OPTIONFAMILY_DESC" jdbcType="VARCHAR" property="pOptionfamilyDesc"/>
     </resultMap>
 
     <sql id="Base_Column_List">
-    PUID, P_OF_CFG0_MAIN, P_OPTIONFAMILY_NAME
+    PUID, P_OF_CFG0_MAIN, P_OPTIONFAMILY_NAME,P_OPTIONFAMILY_DESC
   </sql>
     <select id="selectByPrimaryKey" parameterType="sql.pojo.cfg.HzCfg0OptionFamily" resultMap="BaseResultMap">
         select
@@ -22,7 +23,8 @@
     </select>
 
     <select id="selectNameByMainId" parameterType="java.lang.String" resultMap="FamilyName">
-        select P_OPTIONFAMILY_NAME
+        select
+       P_OPTIONFAMILY_DESC
         from HZ_CFG0_OPTIONFAMILY_RECORD
         where P_OF_CFG0_MAIN = (
           select t2.puid

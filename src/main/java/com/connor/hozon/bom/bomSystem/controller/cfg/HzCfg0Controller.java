@@ -36,4 +36,14 @@ public class HzCfg0Controller {
         result.put("result", records);
         return result;
     }
+
+    @RequestMapping("/loadRelevance")
+    @ResponseBody
+    public  Map<String,Object> loadRelevance(@RequestParam("projectPuid") String projectPuid) {
+        Map<String,Object> result=new HashMap<>();
+        List<HzCfg0Record> records=hzCfg0Service.doLoadCfgByProjectPuid(projectPuid);
+        result.put("totalCount", records.size());
+        result.put("result", records);
+        return result;
+    }
 }
