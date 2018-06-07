@@ -34,18 +34,18 @@
 
   <select id="HzPbomMaintainRecordDAOImpl_getPBomLineMaintainRecord" resultMap="PbomResultMap">
     select
-    <include refid="Base_Column_List" />,t1.P_PUID,t2.*
+    <include refid="Base_Column_List" />,t1.PUID,t2.*
     from HZ_BOM_LINE_RECORD t1 LEFT OUTER JOIN HZ_PBOM_MAINTAIN_RECORD t2
-    on t1.P_PUID = t2.P_BOM_PUID
+    on t1.PUID = t2.P_BOM_PUID
   </select>
 
 
   <!--模糊搜索的名称暂时没有 模糊匹配后期需要加-->
   <select id="HzPbomMaintainRecordDAOImpl_searchPbomMaintainDetail" parameterType="sql.pojo.bom.HzPbomLineRecord" resultMap="PbomResultMap">
     select
-    t1.P_PUID,<include refid="Base_Column_List" />,t2.*
+    t1.PUID,<include refid="Base_Column_List" />,t2.*
     from HZ_BOM_LINE_RECORD t1 LEFT OUTER JOIN HZ_PBOM_MAINTAIN_RECORD t2
-    on t1.P_PUID = t2.P_BOM_PUID
+    on t1.PUID = t2.P_BOM_PUID
     <where>
       1=1
       <if test="pBomOfWhichDept != null and  pBomOfWhichDept!='' " >

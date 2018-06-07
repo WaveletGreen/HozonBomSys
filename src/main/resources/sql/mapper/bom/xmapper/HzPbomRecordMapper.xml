@@ -42,9 +42,9 @@
   <!--联表查询 EBOM PBOM信息-->
   <select id="HzPbomRecordDAOImpl_getPbomRecord" resultMap="HzPbomLineRecord">
     select
-    t1.P_PUID,<include refid="Pbom_List" />,t2.*
+    t1.PUID,<include refid="Pbom_List" />,t2.*
     from HZ_BOM_LINE_RECORD t1 LEFT OUTER JOIN HZ_PBOM_RECORD t2
-    on t1.P_PUID = t2.P_E_BOM_PUID
+    on t1.PUID = t2.P_E_BOM_PUID
   </select>
 
 

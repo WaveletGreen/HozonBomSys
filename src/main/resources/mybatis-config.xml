@@ -16,7 +16,7 @@
             <transactionManager type="JDBC"/>
             <dataSource type="POOLED">
                 <property name="driver" value="oracle.jdbc.OracleDriver"/>
-                <property name="url" value="jdbc:oracle:thin:@localhost:1521:TC10"/>
+                <property name="url" value="jdbc:oracle:thin:@192.168.1.107:1521:TC10"/>
                 <property name="username" value="HOZON"/>
                 <property name="password" value="HOZON"/>
 
@@ -34,6 +34,9 @@
         <!--bom-->
         <mapper resource="sql/mapper/bom/xmapper/HzBomMainRecordMapper.xml"/>
         <mapper resource="sql/mapper/bom/xmapper/HzBomLineRecordMapper.xml"/>
+        <mapper resource="sql/mapper/bom/xmapper/HzPbomMaintainRecordMapper.xml"/>
+        <mapper resource="sql/mapper/bom/xmapper/HzPbomLineMaintainRecordMapper.xml"/>
+        <mapper resource="sql/mapper/bom/xmapper/HzPbomRecordMapper.xml"/>
 
         <!--配置-->
         <mapper resource="sql/mapper/cfg/xmapper/HzCfg0MainRecordMapper.xml"/>
@@ -48,37 +51,10 @@
         <mapper resource="sql/mapper/project.xmapper/HzProjectLibsMapper.xml"/>
         <mapper resource="sql/mapper/project.xmapper/HzBrandRecordMapper.xml"/>
         <mapper resource="sql/mapper/project.xmapper/HzPlatformRecordMapper.xml"/>
+
+        <!--EPL-->
+        <mapper resource="sql/mapper/epl.xmapper/HzEplBomManageMapper.xml"/>
+        <mapper resource="sql/mapper/epl.xmapper/HzEplManageMapper.xml"/>
+        <mapper resource="sql/mapper/cfg/xmapper/HzCfg0MainRecordMapper.xml"/>
     </mappers>
-	<environments default="development">
-		<environment id="development">
-			<transactionManager type="JDBC" />
-			<dataSource type="POOLED">
-				<property name="driver" value="oracle.jdbc.OracleDriver" />
-				<property name="url" value="jdbc:oracle:thin:@localhost:1521:TC10" />
-				<property name="username" value="HOZON" />
-				<property name="password" value="HOZON" />
-			</dataSource>
-		</environment>
-	</environments>
-	<!--映射文件：描述某个实体和数据库表的对应关系 -->
-	<mappers>
-		<mapper resource="sql/mapper/HzPreferenceSettingMapper.xml" />
-		<mapper resource="sql/mapper/bom/xmapper/HzBomMainRecordMapper.xml" />
-		<mapper resource="sql/mapper/bom/xmapper/HzBomLineRecordMapper.xml" />
-		<mapper resource="sql/mapper/bom/xmapper/HzPbomMaintainRecordMapper.xml"/>
-		<mapper resource="sql/mapper/bom/xmapper/HzPbomLineMaintainRecordMapper.xml"/>
-		<mapper resource="sql/mapper/bom/xmapper/HzPbomRecordMapper.xml"/>
-
-		<mapper resource="sql/mapper/cfg/xmapper/HzCfg0BomLineOfModelMapper.xml" />
-		<mapper resource="sql/mapper/cfg/xmapper/HzCfg0ModelDetailMapper.xml" />
-		<mapper resource="sql/mapper/cfg/xmapper/HzCfg0ColorSetMapper.xml" />
-		<mapper resource="sql/mapper/cfg/xmapper/HzCfg0RecordMapper.xml"></mapper>
-		<mapper resource="sql/mapper/cfg/xmapper/HzCfg0OptionFamilyMapper.xml"></mapper>
-		<mapper resource="sql/mapper/cfg/xmapper/HzCfg0ModelColorRecordMapper.xml"></mapper>
-
-		<!--EPL-->
-		<mapper resource="sql/mapper/epl.xmapper/HzEplBomManageMapper.xml"/>
-		<mapper resource="sql/mapper/epl.xmapper/HzEplManageMapper.xml"/>
-		<mapper resource="sql/mapper/cfg/xmapper/HzCfg0MainRecordMapper.xml"></mapper>
-	</mappers>
 </configuration>
