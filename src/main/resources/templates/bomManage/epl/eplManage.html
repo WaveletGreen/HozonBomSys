@@ -10,9 +10,12 @@
 </head>
 <body>
 
-        <table  class="table table-striped tableNormalStyle" id="eplTable"></table>
+<table class="table table-striped tableNormalStyle" id="eplTable"
+       data-use-row-attr-func="true" data-reorderable-rows="true"></table>
 
 <script th:src="@{/js/bom/epl/eplManage.js}"></script>
+//
+<script th:src="@{/js/jq.resizableColumns.js}"></script>
 <script th:inline="javascript">
     function doQuery() {
         $('#eplTable').bootstrapTable('refresh');    //刷新表格
