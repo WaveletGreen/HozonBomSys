@@ -1,204 +1,72 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="HzConfigRecordDAO">
-  <resultMap id="BaseResultMap" type="com.connor.hozon.bom.resources.dbdo.config.HzCfg0Record">
-    <id column="PUID" jdbcType="VARCHAR" property="puid" />
-    <result column="P_CFG0_OBJECT_ID" jdbcType="VARCHAR" property="pCfg0ObjectId" />
-    <result column="P_CFG0_DESC" jdbcType="VARCHAR" property="pCfg0Desc" />
-    <result column="P_CFG0_FAMILY_NAME" jdbcType="VARCHAR" property="pCfg0FamilyName" />
-    <result column="P_CFG0_FAMILY_PUID" jdbcType="VARCHAR" property="pCfg0FamilyPuid" />
-    <result column="P_CFG0_MAIN_ITEM_PUID" jdbcType="VARCHAR" property="pCfg0MainItemPuid" />
-    <result column="P_H9FEATURENAME" jdbcType="VARCHAR" property="pH9FeatureName" />
-    <result column="P_H9FEATUREENNAME" jdbcType="VARCHAR" property="pH9FeatureEnName" />
-    <result column="P_H9FEATUREDESC" jdbcType="VARCHAR" property="pH9FeatureDesc" />
-  </resultMap>
-
-  <sql id="Base_Column_List">
-    PUID, P_CFG0_OBJECT_ID, P_CFG0_DESC, P_CFG0_FAMILY_NAME, P_CFG0_FAMILY_PUID, P_CFG0_MAIN_ITEM_PUID, 
-    P_H9FEATURENAME, P_H9FEATUREENNAME, P_H9FEATUREDESC
+<mapper namespace="com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0RecordDao">
+    <resultMap id="BaseResultMap" type="sql.pojo.cfg.HzCfg0Record">
+        <id column="PUID" jdbcType="VARCHAR" property="puid"/>
+        <result column="P_CFG0_OBJECT_ID" jdbcType="VARCHAR" property="pCfg0ObjectId"/>
+        <result column="P_CFG0_DESC" jdbcType="VARCHAR" property="pCfg0Desc"/>
+        <result column="P_CFG0_FAMILY_NAME" jdbcType="VARCHAR" property="pCfg0FamilyName"/>
+        <result column="P_CFG0_FAMILY_PUID" jdbcType="VARCHAR" property="pCfg0FamilyPuid"/>
+        <result column="P_CFG0_MAIN_ITEM_PUID" jdbcType="VARCHAR" property="pCfg0MainItemPuid"/>
+        <result column="P_H9FEATURENAME" jdbcType="VARCHAR" property="pH9featurename"/>
+        <result column="P_H9FEATUREENNAME" jdbcType="VARCHAR" property="pH9featureenname"/>
+        <result column="P_H9FEATUREDESC" jdbcType="VARCHAR" property="pH9featuredesc"/>
+        <result column="P_CFG0_FAMILY_DESC" jdbcType="VARCHAR" property="pCfg0FamilyDesc"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        PUID,
+        P_CFG0_OBJECT_ID,
+        P_CFG0_DESC,
+        P_CFG0_FAMILY_NAME,
+        P_CFG0_FAMILY_PUID,
+        P_CFG0_MAIN_ITEM_PUID,
+        P_H9FEATURENAME,
+        P_H9FEATUREENNAME,
+        P_H9FEATUREDESC,
+        P_CFG0_FAMILY_DESC
   </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from HZ_CFG0_RECORD
+        where PUID = #{puid,jdbcType=VARCHAR}
+    </select>
+    <select id="selectByProjectPuid" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from HZ_CFG0_RECORD t where
+        t.p_cfg0_main_item_puid=(
+          select t2.puid
+            from Hz_Cfg0_Main_Record t2
+            where t2.p_cfg0_of_which_project_puid=#{projectPuid,jdbcType=VARCHAR}
+        )
+    </select>
 
-
-  <select id="HzConfigRecordDAOImpl_selectHzFeatureConfig" parameterType="com.connor.hozon.bom.resources.dto.request.FindHzFeatureConfigReqDTO" resultMap="BaseResultMap">
-    select
-    <include refid="Base_Column_List" />
-    from HZ_CFG0_RECORD
-    where P_CFG0_MAIN_ITEM_PUID = #{pCfg0MainItemPuid,jdbcType=VARCHAR}
-  </select>
-
-  <!--<select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">-->
-    <!--select -->
-    <!--<include refid="Base_Column_List" />-->
-    <!--from HZ_CFG0_RECORD-->
-    <!--where PUID = #{puid,jdbcType=VARCHAR}-->
-  <!--</select>-->
-  <!--<delete id="deleteByPrimaryKey" parameterType="java.lang.String">-->
-    <!--delete from HZ_CFG0_RECORD-->
-    <!--where PUID = #{puid,jdbcType=VARCHAR}-->
-  <!--</delete>-->
-
-  <!--<insert id="insert" parameterType="com.connor.hozon.bom.resources.dbdo.config.HzCfg0Record">-->
-    <!--insert into HZ_CFG0_RECORD (PUID, P_CFG0_OBJECT_ID, P_CFG0_DESC, -->
-      <!--P_CFG0_FAMILY_NAME, P_CFG0_FAMILY_PUID, P_CFG0_MAIN_ITEM_PUID, -->
-      <!--P_H9FEATURENAME, P_H9FEATUREENNAME, P_H9FEATUREDESC-->
-      <!--)-->
-    <!--values (#{puid,jdbcType=VARCHAR}, #{pCfg0ObjectId,jdbcType=VARCHAR}, #{pCfg0Desc,jdbcType=VARCHAR}, -->
-      <!--#{pCfg0FamilyName,jdbcType=VARCHAR}, #{pCfg0FamilyPuid,jdbcType=VARCHAR}, #{pCfg0MainItemPuid,jdbcType=VARCHAR}, -->
-      <!--#{pH9featurename,jdbcType=VARCHAR}, #{pH9featureenname,jdbcType=VARCHAR}, #{pH9featuredesc,jdbcType=VARCHAR}-->
-      <!--)-->
-  <!--</insert>-->
-  <!--<insert id="insertSelective" parameterType="com.connor.hozon.bom.resources.dbdo.config.HzCfg0Record">-->
-    <!--insert into HZ_CFG0_RECORD-->
-    <!--<trim prefix="(" suffix=")" suffixOverrides=",">-->
-      <!--<if test="puid != null">-->
-        <!--PUID,-->
-      <!--</if>-->
-      <!--<if test="pCfg0ObjectId != null">-->
-        <!--P_CFG0_OBJECT_ID,-->
-      <!--</if>-->
-      <!--<if test="pCfg0Desc != null">-->
-        <!--P_CFG0_DESC,-->
-      <!--</if>-->
-      <!--<if test="pCfg0FamilyName != null">-->
-        <!--P_CFG0_FAMILY_NAME,-->
-      <!--</if>-->
-      <!--<if test="pCfg0FamilyPuid != null">-->
-        <!--P_CFG0_FAMILY_PUID,-->
-      <!--</if>-->
-      <!--<if test="pCfg0MainItemPuid != null">-->
-        <!--P_CFG0_MAIN_ITEM_PUID,-->
-      <!--</if>-->
-      <!--<if test="pH9featurename != null">-->
-        <!--P_H9FEATURENAME,-->
-      <!--</if>-->
-      <!--<if test="pH9featureenname != null">-->
-        <!--P_H9FEATUREENNAME,-->
-      <!--</if>-->
-      <!--<if test="pH9featuredesc != null">-->
-        <!--P_H9FEATUREDESC,-->
-      <!--</if>-->
-    <!--</trim>-->
-    <!--<trim prefix="values (" suffix=")" suffixOverrides=",">-->
-      <!--<if test="puid != null">-->
-        <!--#{puid,jdbcType=VARCHAR},-->
-      <!--</if>-->
-      <!--<if test="pCfg0ObjectId != null">-->
-        <!--#{pCfg0ObjectId,jdbcType=VARCHAR},-->
-      <!--</if>-->
-      <!--<if test="pCfg0Desc != null">-->
-        <!--#{pCfg0Desc,jdbcType=VARCHAR},-->
-      <!--</if>-->
-      <!--<if test="pCfg0FamilyName != null">-->
-        <!--#{pCfg0FamilyName,jdbcType=VARCHAR},-->
-      <!--</if>-->
-      <!--<if test="pCfg0FamilyPuid != null">-->
-        <!--#{pCfg0FamilyPuid,jdbcType=VARCHAR},-->
-      <!--</if>-->
-      <!--<if test="pCfg0MainItemPuid != null">-->
-        <!--#{pCfg0MainItemPuid,jdbcType=VARCHAR},-->
-      <!--</if>-->
-      <!--<if test="pH9featurename != null">-->
-        <!--#{pH9featurename,jdbcType=VARCHAR},-->
-      <!--</if>-->
-      <!--<if test="pH9featureenname != null">-->
-        <!--#{pH9featureenname,jdbcType=VARCHAR},-->
-      <!--</if>-->
-      <!--<if test="pH9featuredesc != null">-->
-        <!--#{pH9featuredesc,jdbcType=VARCHAR},-->
-      <!--</if>-->
-    <!--</trim>-->
-  <!--</insert>-->
-
-  <!--<update id="updateByExampleSelective" parameterType="map">-->
-    <!--update HZ_CFG0_RECORD-->
-    <!--<set>-->
-      <!--<if test="record.puid != null">-->
-        <!--PUID = #{record.puid,jdbcType=VARCHAR},-->
-      <!--</if>-->
-      <!--<if test="record.pCfg0ObjectId != null">-->
-        <!--P_CFG0_OBJECT_ID = #{record.pCfg0ObjectId,jdbcType=VARCHAR},-->
-      <!--</if>-->
-      <!--<if test="record.pCfg0Desc != null">-->
-        <!--P_CFG0_DESC = #{record.pCfg0Desc,jdbcType=VARCHAR},-->
-      <!--</if>-->
-      <!--<if test="record.pCfg0FamilyName != null">-->
-        <!--P_CFG0_FAMILY_NAME = #{record.pCfg0FamilyName,jdbcType=VARCHAR},-->
-      <!--</if>-->
-      <!--<if test="record.pCfg0FamilyPuid != null">-->
-        <!--P_CFG0_FAMILY_PUID = #{record.pCfg0FamilyPuid,jdbcType=VARCHAR},-->
-      <!--</if>-->
-      <!--<if test="record.pCfg0MainItemPuid != null">-->
-        <!--P_CFG0_MAIN_ITEM_PUID = #{record.pCfg0MainItemPuid,jdbcType=VARCHAR},-->
-      <!--</if>-->
-      <!--<if test="record.pH9featurename != null">-->
-        <!--P_H9FEATURENAME = #{record.pH9featurename,jdbcType=VARCHAR},-->
-      <!--</if>-->
-      <!--<if test="record.pH9featureenname != null">-->
-        <!--P_H9FEATUREENNAME = #{record.pH9featureenname,jdbcType=VARCHAR},-->
-      <!--</if>-->
-      <!--<if test="record.pH9featuredesc != null">-->
-        <!--P_H9FEATUREDESC = #{record.pH9featuredesc,jdbcType=VARCHAR},-->
-      <!--</if>-->
-    <!--</set>-->
-    <!--<if test="_parameter != null">-->
-      <!--<include refid="Update_By_Example_Where_Clause" />-->
-    <!--</if>-->
-  <!--</update>-->
-  <!--<update id="updateByExample" parameterType="map">-->
-    <!--update HZ_CFG0_RECORD-->
-    <!--set PUID = #{record.puid,jdbcType=VARCHAR},-->
-      <!--P_CFG0_OBJECT_ID = #{record.pCfg0ObjectId,jdbcType=VARCHAR},-->
-      <!--P_CFG0_DESC = #{record.pCfg0Desc,jdbcType=VARCHAR},-->
-      <!--P_CFG0_FAMILY_NAME = #{record.pCfg0FamilyName,jdbcType=VARCHAR},-->
-      <!--P_CFG0_FAMILY_PUID = #{record.pCfg0FamilyPuid,jdbcType=VARCHAR},-->
-      <!--P_CFG0_MAIN_ITEM_PUID = #{record.pCfg0MainItemPuid,jdbcType=VARCHAR},-->
-      <!--P_H9FEATURENAME = #{record.pH9featurename,jdbcType=VARCHAR},-->
-      <!--P_H9FEATUREENNAME = #{record.pH9featureenname,jdbcType=VARCHAR},-->
-      <!--P_H9FEATUREDESC = #{record.pH9featuredesc,jdbcType=VARCHAR}-->
-    <!--<if test="_parameter != null">-->
-      <!--<include refid="Update_By_Example_Where_Clause" />-->
-    <!--</if>-->
-  <!--</update>-->
-  <!--<update id="updateByPrimaryKeySelective" parameterType="com.connor.hozon.bom.resources.dbdo.config.HzCfg0Record">-->
-    <!--update HZ_CFG0_RECORD-->
-    <!--<set>-->
-      <!--<if test="pCfg0ObjectId != null">-->
-        <!--P_CFG0_OBJECT_ID = #{pCfg0ObjectId,jdbcType=VARCHAR},-->
-      <!--</if>-->
-      <!--<if test="pCfg0Desc != null">-->
-        <!--P_CFG0_DESC = #{pCfg0Desc,jdbcType=VARCHAR},-->
-      <!--</if>-->
-      <!--<if test="pCfg0FamilyName != null">-->
-        <!--P_CFG0_FAMILY_NAME = #{pCfg0FamilyName,jdbcType=VARCHAR},-->
-      <!--</if>-->
-      <!--<if test="pCfg0FamilyPuid != null">-->
-        <!--P_CFG0_FAMILY_PUID = #{pCfg0FamilyPuid,jdbcType=VARCHAR},-->
-      <!--</if>-->
-      <!--<if test="pCfg0MainItemPuid != null">-->
-        <!--P_CFG0_MAIN_ITEM_PUID = #{pCfg0MainItemPuid,jdbcType=VARCHAR},-->
-      <!--</if>-->
-      <!--<if test="pH9featurename != null">-->
-        <!--P_H9FEATURENAME = #{pH9featurename,jdbcType=VARCHAR},-->
-      <!--</if>-->
-      <!--<if test="pH9featureenname != null">-->
-        <!--P_H9FEATUREENNAME = #{pH9featureenname,jdbcType=VARCHAR},-->
-      <!--</if>-->
-      <!--<if test="pH9featuredesc != null">-->
-        <!--P_H9FEATUREDESC = #{pH9featuredesc,jdbcType=VARCHAR},-->
-      <!--</if>-->
-    <!--</set>-->
-    <!--where PUID = #{puid,jdbcType=VARCHAR}-->
-  <!--</update>-->
-  <!--<update id="updateByPrimaryKey" parameterType="com.connor.hozon.bom.resources.dbdo.config.HzCfg0Record">-->
-    <!--update HZ_CFG0_RECORD-->
-    <!--set P_CFG0_OBJECT_ID = #{pCfg0ObjectId,jdbcType=VARCHAR},-->
-      <!--P_CFG0_DESC = #{pCfg0Desc,jdbcType=VARCHAR},-->
-      <!--P_CFG0_FAMILY_NAME = #{pCfg0FamilyName,jdbcType=VARCHAR},-->
-      <!--P_CFG0_FAMILY_PUID = #{pCfg0FamilyPuid,jdbcType=VARCHAR},-->
-      <!--P_CFG0_MAIN_ITEM_PUID = #{pCfg0MainItemPuid,jdbcType=VARCHAR},-->
-      <!--P_H9FEATURENAME = #{pH9featurename,jdbcType=VARCHAR},-->
-      <!--P_H9FEATUREENNAME = #{pH9featureenname,jdbcType=VARCHAR},-->
-      <!--P_H9FEATUREDESC = #{pH9featuredesc,jdbcType=VARCHAR}-->
-    <!--where PUID = #{puid,jdbcType=VARCHAR}-->
-  <!--</update>-->
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from HZ_CFG0_RECORD
+    where PUID = #{puid,jdbcType=VARCHAR}
+  </delete>
+    <insert id="insert" parameterType="sql.pojo.cfg.HzCfg0Record">
+    insert into HZ_CFG0_RECORD (PUID, P_CFG0_OBJECT_ID, P_CFG0_DESC,
+      P_CFG0_FAMILY_NAME, P_CFG0_FAMILY_PUID, P_CFG0_MAIN_ITEM_PUID,
+      P_H9FEATURENAME, P_H9FEATUREENNAME, P_H9FEATUREDESC,
+      P_CFG0_FAMILY_DESC)
+    values (#{puid,jdbcType=VARCHAR}, #{pCfg0ObjectId,jdbcType=VARCHAR}, #{pCfg0Desc,jdbcType=VARCHAR},
+      #{pCfg0FamilyName,jdbcType=VARCHAR}, #{pCfg0FamilyPuid,jdbcType=VARCHAR}, #{pCfg0MainItemPuid,jdbcType=VARCHAR},
+      #{pH9featurename,jdbcType=VARCHAR}, #{pH9featureenname,jdbcType=VARCHAR}, #{pH9featuredesc,jdbcType=VARCHAR},
+      #{pCfg0FamilyDesc,jdbcType=VARCHAR})
+  </insert>
+    <update id="updateByPrimaryKey" parameterType="sql.pojo.cfg.HzCfg0Record">
+    update HZ_CFG0_RECORD
+    set P_CFG0_OBJECT_ID = #{pCfg0ObjectId,jdbcType=VARCHAR},
+      P_CFG0_DESC = #{pCfg0Desc,jdbcType=VARCHAR},
+      P_CFG0_FAMILY_NAME = #{pCfg0FamilyName,jdbcType=VARCHAR},
+      P_CFG0_FAMILY_PUID = #{pCfg0FamilyPuid,jdbcType=VARCHAR},
+      P_CFG0_MAIN_ITEM_PUID = #{pCfg0MainItemPuid,jdbcType=VARCHAR},
+      P_H9FEATURENAME = #{pH9featurename,jdbcType=VARCHAR},
+      P_H9FEATUREENNAME = #{pH9featureenname,jdbcType=VARCHAR},
+      P_H9FEATUREDESC = #{pH9featuredesc,jdbcType=VARCHAR},
+      P_CFG0_FAMILY_DESC = #{pCfg0FamilyDesc,jdbcType=VARCHAR}
+    where PUID = #{puid,jdbcType=VARCHAR}
+  </update>
 </mapper>

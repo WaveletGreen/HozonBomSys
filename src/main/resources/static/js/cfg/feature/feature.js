@@ -16,7 +16,7 @@ $(document).ready(
             pageSize: 10,
             pagination: true,                   //是否显示分页（*）
             clickToSelect: true,                // 单击某一行的时候选中某一条记录
-            formId: "hide",
+            formId: "puid",
             toolbars: [
                 {
                     text: '添加',
@@ -131,9 +131,9 @@ $(document).ready(
                     title: 'puid',
                     hide: false
                 }
-            ]
-            // sortable: true,                     //是否启用排序
-            // sortOrder: "asc",                   //排序方式
+            ],
+            sortable: true,                     //是否启用排序
+            sortOrder: "asc",                   //排序方式
         });
         $table.bootstrapTable('hideColumn', 'puid');
     }),
