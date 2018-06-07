@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sql.pojo.project.HzPlatformRecord;
 
+import java.util.List;
+
 /*************************************************************************************************************************
  *                                  Author: Fancyears·Maylos·Mayways
  * Date: 2018/6/1 11:30
@@ -31,5 +33,9 @@ public class HzPlatformService {
 
     public boolean doDeleteByPuid(String puid) {
         return hzPlatformRecordDao.deleteByPrimaryKey(puid) > 0 ? true : false;
+    }
+
+    public List<HzPlatformRecord> doGetAllPlatform(){
+        return hzPlatformRecordDao.selectAll();
     }
 }

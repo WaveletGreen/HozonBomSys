@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 import sql.IBaseSQLUtil;
 import sql.pojo.project.HzBrandRecord;
 
+import java.util.List;
+
 /*************************************************************************************************************************
  *                                  Author: Fancyears·Maylos·Mayways
  * Date: 2018/6/1 11:17
@@ -36,6 +38,11 @@ public class HzBrandRecordDaoImpl implements HzBrandRecordDao {
     @Override
     public int updateByPrimaryKey(HzBrandRecord record) {
         return baseSQLUtil.executeUpdate(record, "com.connor.hozon.bom.bomSystem.dao.project.HzBrandRecordDao.updateByPrimaryKey");
+    }
+
+    @Override
+    public List<HzBrandRecord> selectAll() {
+        return baseSQLUtil.executeQuery(new HzBrandRecord(),"com.connor.hozon.bom.bomSystem.dao.project.HzBrandRecordDao.selectAll");
     }
 
 }

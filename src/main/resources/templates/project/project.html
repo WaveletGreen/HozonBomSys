@@ -49,7 +49,7 @@
             </tr>
             <tr>
                 <td>项目编号</td>
-                <td id="puid"></td>
+                <td id="pProjectCode"></td>
                 <td>项目名称</td>
                 <td id="pProjectName"></td>
             </tr>
@@ -226,6 +226,7 @@
                         localProjectDetail = coach[treeNode.puid];
                         changeView(localProjectDetail);
                     }
+                    localSelectedNode=treeNode;
                 }
             }
         }
@@ -269,14 +270,14 @@
         $("#pPlatformCode").text(data.platform.pPlatformCode);
         $("#pPlatformName").text(data.platform.pPlatformName);
 
-        $("#projVehicleCode").text(data.proj.pProjectString);
-        $("#projVehicleName").text(data.proj.pProjectString);
-        $("#projVehicleShapeCode").text(data.proj.pProjectString);
-        $("#projVehicleTranName").text(data.proj.pProjectString);
-        $("#projVehicleAnnualCode").text(data.proj.pProjectString);
-        $("#projVehicleAnnual").text(data.proj.pProjectString);
+        $("#projVehicleCode").text(data.proj.pVehicleCode);
+        $("#projVehicleName").text(data.proj.pVehicleName);
+        $("#projVehicleShapeCode").text(data.proj.pVehicleShapeCode);
+        $("#projVehicleTranName").text(data.proj.pVehicleTranName);
+        $("#projVehicleAnnualCode").text(data.proj.pVehicleAnnualCode);
+        $("#projVehicleAnnual").text(data.proj.pVehicleAnnual);
 
-        $("#puid").text(data.proj.pProjectString);
+        $("#pProjectCode").text(data.proj.pProjectCode);
         $("#pProjectName").text(data.proj.pProjectName);
     }
 </script>

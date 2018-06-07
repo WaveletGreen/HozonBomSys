@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 import sql.IBaseSQLUtil;
 import sql.pojo.project.HzPlatformRecord;
 
+import java.util.List;
+
 /*************************************************************************************************************************
  *                                  Author: Fancyears·Maylos·Mayways
  * Date: 2018/6/1 11:17
@@ -36,5 +38,10 @@ public class HzPlatformRecordDaoImpl implements HzPlatformRecordDao {
     @Override
     public int updateByPrimaryKey(HzPlatformRecord record) {
         return baseSQLUtil.executeUpdate(record, "com.connor.hozon.bom.bomSystem.dao.project.HzPlatformRecordDao.updateByPrimaryKey");
+    }
+
+    @Override
+    public List<HzPlatformRecord> selectAll() {
+        return baseSQLUtil.executeQuery(new HzPlatformRecord(),"com.connor.hozon.bom.bomSystem.dao.project.HzPlatformRecordDao.selectAll");
     }
 }

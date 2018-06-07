@@ -4,18 +4,34 @@
     <resultMap id="BaseResultMap" type="sql.pojo.project.HzProjectLibs">
         <id column="PUID" jdbcType="VARCHAR" property="puid"/>
         <result column="P_PROJECT_NAME" jdbcType="VARCHAR" property="pProjectName"/>
-        <result column="P_PROJECT_STRING" jdbcType="VARCHAR" property="pProjectString"/>
-        <result column="P_PROJECT_OBJECT_TYPE" jdbcType="VARCHAR" property="pProjectObjectType"/>
-        <result column="P_PROJECT_ITEM_ID" jdbcType="VARCHAR" property="pProjectItemId"/>
         <result column="P_PROJECT_PERTAIN_TO_PLATFORM" jdbcType="VARCHAR" property="pProjectPertainToPlatform"/>
+        <result column="P_PROJECT_CREATE_DATE" jdbcType="TIMESTAMP" property="pProjectCreateDate"/>
+        <result column="P_PROJECT_LAST_MOD_DATE" jdbcType="TIMESTAMP" property="pProjectLastModDate"/>
+        <result column="P_PROJECT_CODE" jdbcType="VARCHAR" property="pProjectCode"/>
+        <result column="P_VEHICLE_CODE" jdbcType="VARCHAR" property="pVehicleCode"/>
+        <result column="P_VEHICLE_NAME" jdbcType="VARCHAR" property="pVehicleName"/>
+        <result column="P_VEHICLE_SHAPE_CODE" jdbcType="VARCHAR" property="pVehicleShapeCode"/>
+        <result column="P_VEHICLE_TRAN_NAME" jdbcType="VARCHAR" property="pVehicleTranName"/>
+        <result column="P_VEHICLE_ANNUAL_CODE" jdbcType="VARCHAR" property="pVehicleAnnualCode"/>
+        <result column="P_VEHICLE_ANNUAL" jdbcType="VARCHAR" property="pVehicleAnnual"/>
+        <result column="P_PROJECT_OWNING_USER" jdbcType="VARCHAR" property="pProjectOwningUser"/>
+        <result column="P_PROJECT_DISCONTINUATION_DATE" jdbcType="TIMESTAMP" property="pProjectDiscontinuationDate"/>
     </resultMap>
     <sql id="Base_Column_List">
-    PUID,
-    P_PROJECT_NAME,
-    P_PROJECT_STRING,
-    P_PROJECT_OBJECT_TYPE,
-    P_PROJECT_ITEM_ID,
-    P_PROJECT_PERTAIN_TO_PLATFORM
+        PUID,
+        P_PROJECT_NAME,
+        P_PROJECT_PERTAIN_TO_PLATFORM,
+        P_PROJECT_CREATE_DATE,
+        P_PROJECT_LAST_MOD_DATE,
+        P_PROJECT_CODE,
+        P_VEHICLE_CODE,
+        P_VEHICLE_NAME,
+        P_VEHICLE_SHAPE_CODE,
+        P_VEHICLE_TRAN_NAME,
+        P_VEHICLE_ANNUAL_CODE,
+        P_VEHICLE_ANNUAL,
+        P_PROJECT_OWNING_USER,
+        P_PROJECT_DISCONTINUATION_DATE
   </sql>
     <select id="selectByPrimaryKey" parameterType="sql.pojo.project.HzProjectLibs" resultMap="BaseResultMap">
         select
