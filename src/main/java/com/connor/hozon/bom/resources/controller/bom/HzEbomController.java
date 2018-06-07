@@ -80,7 +80,7 @@ public class HzEbomController extends BaseController {
         tableTitle.put("pItemClassification", "零件分类");
         tableTitle.put("pItemResource", "零部件来源");
         tableTitle.put("pSupplyState", "供货状态");
-    writeAjaxJSONResponse(ResultMessageBuilder.build(tableTitle), response);
+        writeAjaxJSONResponse(ResultMessageBuilder.build(tableTitle), response);
     }
 
 

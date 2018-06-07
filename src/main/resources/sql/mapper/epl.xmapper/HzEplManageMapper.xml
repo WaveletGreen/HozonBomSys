@@ -107,6 +107,16 @@
   </select>
 
 
+  <!--联表查询 EBOM全信息-->
+  <select id="HzEbomRecordDAOImpl_getHzEbomList" resultMap="EPLManageRecord">
+     SELECT t1.*,t2.*,t3.* from HZ_BOM_LINE_RECORD t1
+
+     LEFT OUTER JOIN HZ_EPL_BOM_MANAGE t2 on T1.P_PUID = T2.P_BOM_PUID
+
+     LEFT OUTER JOIN HZ_EPL_MANAGE  t3 on t1.P_PUID=t3.P_BOM_PUID
+  </select>
+
+
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />

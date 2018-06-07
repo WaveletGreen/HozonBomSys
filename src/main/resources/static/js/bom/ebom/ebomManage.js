@@ -38,7 +38,7 @@ window.onload = function(){
                     }
                 }
                 $table.bootstrapTable({
-                    url: "",
+                    url: "ebom/getEBom/list",
                     method: 'get',
                     height: $(window.parent.document).find("#wrapper").height(),
                     width: $(window).width(),
