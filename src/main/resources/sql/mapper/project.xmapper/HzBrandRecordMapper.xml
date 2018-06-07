@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.connor.hozon.bom.bomSystem.dao.project.HzBrandRecordDao">
+    <resultMap id="BaseResultMap" type="sql.pojo.project.HzBrandRecord">
+        <id column="PUID" jdbcType="VARCHAR" property="puid"/>
+        <result column="P_BRAND_CODE" jdbcType="OTHER" property="pBrandCode"/>
+        <result column="P_BRAND_NAME" jdbcType="OTHER" property="pBrandName"/>
+        <result column="P_BRAND_CREATE_DATE" jdbcType="TIMESTAMP" property="pBrandCreateDate"/>
+        <result column="P_BRAND_LAST_MOD_DATE" jdbcType="TIMESTAMP" property="pBrandLastModDate"/>
+        <result column="P_BRAND_COMMENT" jdbcType="OTHER" property="pBrandComment"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    PUID, P_BRAND_CODE, P_BRAND_NAME, P_BRAND_CREATE_DATE, P_BRAND_LAST_MOD_DATE, P_BRAND_COMMENT
+  </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from HZ_BRAND_RECORD
+        where PUID = #{puid,jdbcType=VARCHAR}
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from HZ_BRAND_RECORD
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from HZ_BRAND_RECORD
+    where PUID = #{puid,jdbcType=VARCHAR}
+  </delete>
+    <insert id="insert" parameterType="sql.pojo.project.HzBrandRecord">
+    insert into HZ_BRAND_RECORD (PUID, P_BRAND_CODE, P_BRAND_NAME, 
+      P_BRAND_CREATE_DATE, P_BRAND_LAST_MOD_DATE, 
+      P_BRAND_COMMENT)
+    values (#{puid,jdbcType=VARCHAR}, #{pBrandCode,jdbcType=OTHER}, #{pBrandName,jdbcType=OTHER}, 
+      #{pBrandCreateDate,jdbcType=TIMESTAMP}, #{pBrandLastModDate,jdbcType=TIMESTAMP}, 
+      #{pBrandComment,jdbcType=OTHER})
+  </insert>
+    <update id="updateByPrimaryKey" parameterType="sql.pojo.project.HzBrandRecord">
+    update HZ_BRAND_RECORD
+    set P_BRAND_CODE = #{pBrandCode,jdbcType=OTHER},
+      P_BRAND_NAME = #{pBrandName,jdbcType=OTHER},
+      P_BRAND_CREATE_DATE = #{pBrandCreateDate,jdbcType=TIMESTAMP},
+      P_BRAND_LAST_MOD_DATE = #{pBrandLastModDate,jdbcType=TIMESTAMP},
+      P_BRAND_COMMENT = #{pBrandComment,jdbcType=OTHER}
+    where PUID = #{puid,jdbcType=VARCHAR}
+  </update>
+</mapper>

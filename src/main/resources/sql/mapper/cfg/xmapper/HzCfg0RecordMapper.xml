@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0RecordDao">
+    <resultMap id="BaseResultMap" type="sql.pojo.cfg.HzCfg0Record">
+        <id column="PUID" jdbcType="VARCHAR" property="puid"/>
+        <result column="P_CFG0_OBJECT_ID" jdbcType="VARCHAR" property="pCfg0ObjectId"/>
+        <result column="P_CFG0_DESC" jdbcType="VARCHAR" property="pCfg0Desc"/>
+        <result column="P_CFG0_FAMILY_NAME" jdbcType="VARCHAR" property="pCfg0FamilyName"/>
+        <result column="P_CFG0_FAMILY_PUID" jdbcType="VARCHAR" property="pCfg0FamilyPuid"/>
+        <result column="P_CFG0_MAIN_ITEM_PUID" jdbcType="VARCHAR" property="pCfg0MainItemPuid"/>
+        <result column="P_H9FEATURENAME" jdbcType="VARCHAR" property="pH9featurename"/>
+        <result column="P_H9FEATUREENNAME" jdbcType="VARCHAR" property="pH9featureenname"/>
+        <result column="P_H9FEATUREDESC" jdbcType="VARCHAR" property="pH9featuredesc"/>
+        <result column="P_CFG0_FAMILY_DESC" jdbcType="VARCHAR" property="pCfg0FamilyDesc"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        PUID,
+        P_CFG0_OBJECT_ID,
+        P_CFG0_DESC,
+        P_CFG0_FAMILY_NAME,
+        P_CFG0_FAMILY_PUID,
+        P_CFG0_MAIN_ITEM_PUID,
+        P_H9FEATURENAME,
+        P_H9FEATUREENNAME,
+        P_H9FEATUREDESC,
+        P_CFG0_FAMILY_DESC
+  </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from HZ_CFG0_RECORD
+        where PUID = #{puid,jdbcType=VARCHAR}
+    </select>
+    <select id="selectByProjectPuid" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from HZ_CFG0_RECORD t where
+        t.p_cfg0_main_item_puid=(
+          select t2.puid
+            from Hz_Cfg0_Main_Record t2
+            where t2.p_cfg0_of_which_project_puid=#{projectPuid,jdbcType=VARCHAR}
+        )
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from HZ_CFG0_RECORD
+    where PUID = #{puid,jdbcType=VARCHAR}
+  </delete>
+    <insert id="insert" parameterType="sql.pojo.cfg.HzCfg0Record">
+    insert into HZ_CFG0_RECORD (PUID, P_CFG0_OBJECT_ID, P_CFG0_DESC, 
+      P_CFG0_FAMILY_NAME, P_CFG0_FAMILY_PUID, P_CFG0_MAIN_ITEM_PUID, 
+      P_H9FEATURENAME, P_H9FEATUREENNAME, P_H9FEATUREDESC, 
+      P_CFG0_FAMILY_DESC)
+    values (#{puid,jdbcType=VARCHAR}, #{pCfg0ObjectId,jdbcType=VARCHAR}, #{pCfg0Desc,jdbcType=VARCHAR}, 
+      #{pCfg0FamilyName,jdbcType=VARCHAR}, #{pCfg0FamilyPuid,jdbcType=VARCHAR}, #{pCfg0MainItemPuid,jdbcType=VARCHAR}, 
+      #{pH9featurename,jdbcType=VARCHAR}, #{pH9featureenname,jdbcType=VARCHAR}, #{pH9featuredesc,jdbcType=VARCHAR}, 
+      #{pCfg0FamilyDesc,jdbcType=VARCHAR})
+  </insert>
+    <update id="updateByPrimaryKey" parameterType="sql.pojo.cfg.HzCfg0Record">
+    update HZ_CFG0_RECORD
+    set P_CFG0_OBJECT_ID = #{pCfg0ObjectId,jdbcType=VARCHAR},
+      P_CFG0_DESC = #{pCfg0Desc,jdbcType=VARCHAR},
+      P_CFG0_FAMILY_NAME = #{pCfg0FamilyName,jdbcType=VARCHAR},
+      P_CFG0_FAMILY_PUID = #{pCfg0FamilyPuid,jdbcType=VARCHAR},
+      P_CFG0_MAIN_ITEM_PUID = #{pCfg0MainItemPuid,jdbcType=VARCHAR},
+      P_H9FEATURENAME = #{pH9featurename,jdbcType=VARCHAR},
+      P_H9FEATUREENNAME = #{pH9featureenname,jdbcType=VARCHAR},
+      P_H9FEATUREDESC = #{pH9featuredesc,jdbcType=VARCHAR},
+      P_CFG0_FAMILY_DESC = #{pCfg0FamilyDesc,jdbcType=VARCHAR}
+    where PUID = #{puid,jdbcType=VARCHAR}
+  </update>
+</mapper>
