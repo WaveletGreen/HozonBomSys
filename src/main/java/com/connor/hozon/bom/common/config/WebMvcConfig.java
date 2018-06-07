@@ -48,13 +48,7 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         registry.addViewController("/featuresList").setViewName("/cfg/features/featuresList");
         //PBOM维护页面
         registry.addViewController("/pbomMaintenance").setViewName("/bomManage/pbom/pbomMaintenance/pbomMaintenance");
-        //PBOM其他信息维护页面
-        registry.addViewController("/otherInformation").setViewName("/bomManage/pbom/otherInformation/otherInformation");
-        //PBOM工艺路线维护页面
-        registry.addViewController("/processRoute").setViewName("/bomManage/pbom/processRoute/processRoute");
-        //PBOM定义Make/Buy
-        registry.addViewController("/defineMake").setViewName("/bomManage/pbom/defineMake/defineMake");
-        //PBOM
+        //PBOM管理页面
         registry.addViewController("/pbomManage").setViewName("/bomManage/pbom/pbomManage/pbomManage");
         //配色方案
         registry.addViewController("/modelColorCfg").setViewName("/cfg/modelColorCfg/modelColorCfg");
@@ -66,6 +60,8 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         registry.addViewController("/superBom").setViewName("/bomManage/mbom/superBom/superBom");
         //MBOM的工艺中心主数据页面
         registry.addViewController("/workCenter").setViewName("/bomManage/mbom/workCenter/workCenter");
+        //PBOM工艺合件页面
+        registry.addViewController("/processOfFitting").setViewName("/bomManage/pbom/processOfFitting/processOfFitting");
     }
 
 
