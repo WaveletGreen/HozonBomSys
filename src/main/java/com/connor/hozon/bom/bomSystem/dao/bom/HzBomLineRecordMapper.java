@@ -2,25 +2,14 @@ package com.connor.hozon.bom.bomSystem.dao.bom;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
 import sql.pojo.bom.HzBomLineRecord;
 
 public interface HzBomLineRecordMapper {
 
-	int deleteByPrimaryKey(String puid);
+    HzBomLineRecord selectByPrimaryKey(HzBomLineRecord puid);
 
-	int insert(HzBomLineRecord record);
+    List<HzBomLineRecord> selectByProjectPuid(@Param("projectPuid") String projectPuid);
 
-	int insertByBatch(List<HzBomLineRecord> record);
-
-	int insertSelective(HzBomLineRecord record);
-
-	HzBomLineRecord selectByPrimaryKey(HzBomLineRecord puid);
-
-	List<HzBomLineRecord> selectByBomDigifaxId(HzBomLineRecord puid);
-	List<HzBomLineRecord> selectDeptByDigifax(HzBomLineRecord puid);
-	int updateByPrimaryKeySelective(HzBomLineRecord record);
-
-	int updateByPrimaryKeyWithBLOBs(HzBomLineRecord record);
-
-	int updateByPrimaryKey(HzBomLineRecord record);
+    int updateByPrimaryKey(HzBomLineRecord record);
 }

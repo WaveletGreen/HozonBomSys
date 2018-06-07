@@ -51,7 +51,6 @@ public interface IBaseSQLUtil {
      */
     <T> T executeQueryByPass(T t, String pass, String by, boolean b);
 
-
     /**
      * 执行插入，单个插入
      *

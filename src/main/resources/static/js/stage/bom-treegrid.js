@@ -4,7 +4,8 @@ $(document).ready(
     $("#doSubmit2").click(
         function () {
             var $table = $("#dataTable");
-            var bdf = $("#text1").val();
+            var project = $("#project", window.top.document);
+            var bdf = project.val();
             if (bdf.length <= 0) {
                 $("#myModal").modal('show');
                 return;
@@ -106,9 +107,9 @@ function addToTable($table, result, myColumns) {
 function toTree($table, isExpand) {
     $table.treegrid({
         initialState: isExpand,//收缩collapsed展开expanded
-        treeColumn: 0,//指明第几列数据改为树形is-expander-expandedis-expander-collapsed
-        expanderExpandedClass: 'glyphicon glyphicon-triangle-bottom ',//有关于折叠图标的问题，由于字体集文件无法跨域调用，因此需要将fonts文件夹中的文件放到与bootstrap.xxx.css统计目录下，并修改@font-face的字体集路径
-        expanderCollapsedClass: 'glyphicon glyphicon-triangle-right ',
+        treeColumn: 0,//指明第几列数据改为树形is-expander-expandedis-expander-collapsedglyphicon-triangle-bottom glyphicon glyphicon-triangle-right
+        expanderExpandedClass: 'glyphicon glyphicon-minus',//有关于折叠图标的问题，由于字体集文件无法跨域调用，因此需要将fonts文件夹中的文件放到与bootstrap.xxx.css统计目录下，并修改@font-face的字体集路径
+        expanderCollapsedClass: 'glyphicon glyphicon-plus',
         onChange: function () {
             $table.bootstrapTable('resetWidth');
         }

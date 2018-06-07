@@ -11,7 +11,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 @Configuration
 public class WebMvcConfig extends WebMvcConfigurerAdapter {
 
-    /**w
+    /**
      * 重写方法描述：实现在url中输入相应的地址的时候直接跳转到某个地址
      *
      * @param registry
@@ -41,6 +41,8 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
 //        registry.addViewController("/colorUpdate").setViewName("/cfg/color/colorUpdate");
         //配色方案
         registry.addViewController("/modelColorCfg").setViewName("/cfg/modelColorCfg/modelColorCfg");
+        registry.addViewController("/project").setViewName("/project/project");
+
         //特性表页面
         registry.addViewController("/featuresList").setViewName("/cfg/features/featuresList");
         //PBOM维护页面

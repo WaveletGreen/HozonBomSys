@@ -23,7 +23,7 @@
 	<!--根据主键获取对象-->
 	<select id="get" parameterType="com.connor.hozon.bom.sys.entity.Tree" resultMap="TreeMap">
 		SELECT id,code,icon,name,p_id,tree_order,url,state FROM tree 
-		WHERE id=#{id}
+		WHERE id=#{id} order by tree_order
 	</select>
 
 	<!--保存-->

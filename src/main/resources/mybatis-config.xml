@@ -3,10 +3,51 @@
         PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
-	<!--该文件请放到resource下，便于单独读到，不需要配置-->
-	<typeAliases>
-	</typeAliases>
+    <settings>
+        <!-- 打印查询语句 -->
+        <setting name="logImpl" value="STDOUT_LOGGING"/> <!--最好是放在最上面即紧跟configuration节点,注意顺序-->
+    </settings>
+    <!--该文件请放到resource下，便于单独读到，不需要配置-->
+    <typeAliases>
+    </typeAliases>
 
+    <environments default="development">
+        <environment id="development">
+            <transactionManager type="JDBC"/>
+            <dataSource type="POOLED">
+                <property name="driver" value="oracle.jdbc.OracleDriver"/>
+                <property name="url" value="jdbc:oracle:thin:@localhost:1521:TC10"/>
+                <property name="username" value="HOZON"/>
+                <property name="password" value="HOZON"/>
+
+                <property name="poolMaximumIdleConnections" value="12"/>
+                <property name="poolMaximumActiveConnections" value="2000"/>
+                <property name="poolPingQuery" value="SELECT 1 FROM DUAL"/>
+                <property name="poolPingEnabled" value="true"/>
+            </dataSource>
+        </environment>
+    </environments>
+    <!--映射文件：描述某个实体和数据库表的对应关系 -->
+    <mappers>
+        <!--共有项-->
+        <mapper resource="sql/mapper/HzPreferenceSettingMapper.xml"/>
+        <!--bom-->
+        <mapper resource="sql/mapper/bom/xmapper/HzBomMainRecordMapper.xml"/>
+        <mapper resource="sql/mapper/bom/xmapper/HzBomLineRecordMapper.xml"/>
+
+        <!--配置-->
+        <mapper resource="sql/mapper/cfg/xmapper/HzCfg0MainRecordMapper.xml"/>
+        <mapper resource="sql/mapper/cfg/xmapper/HzCfg0BomLineOfModelMapper.xml"/>
+        <mapper resource="sql/mapper/cfg/xmapper/HzCfg0ModelDetailMapper.xml"/>
+        <mapper resource="sql/mapper/cfg/xmapper/HzCfg0ColorSetMapper.xml"/>
+        <mapper resource="sql/mapper/cfg/xmapper/HzCfg0ModelRecordMapper.xml"/>
+        <mapper resource="sql/mapper/cfg/xmapper/HzCfg0ModelColorRecordMapper.xml"/>
+        <mapper resource="sql/mapper/cfg/xmapper/HzCfg0OptionFamilyMapper.xml"/>
+        <!--项目-->
+        <mapper resource="sql/mapper/project.xmapper/HzProjectLibsMapper.xml"/>
+        <mapper resource="sql/mapper/project.xmapper/HzBrandRecordMapper.xml"/>
+        <mapper resource="sql/mapper/project.xmapper/HzPlatformRecordMapper.xml"/>
+    </mappers>
 	<environments default="development">
 		<environment id="development">
 			<transactionManager type="JDBC" />

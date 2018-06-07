@@ -13,6 +13,13 @@
         </div>
         <!-- Top Menu Items -->
         <ul class="nav navbar-right top-nav">
+            <li>
+                <a href="" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i>
+                    <font>当前工作项目:</font>
+                    <!--<mark class="caret">：</mark>-->
+                    <font id="currentProjectHead"></font>
+                </a>
+            </li>
             <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-envelope"></i> <b
                         class="caret"></b></a>
@@ -83,13 +90,13 @@
         </ul>
         <!-- Sidebar Menu Items - These collapse to the responsive navigation menu on small screens -->
         <div class="collapse navbar-collapse navbar-ex1-collapse">
-            <ul class="nav navbar-nav side-nav" id="menu_tree">
-
+            <ul class="nav navbar-nav side-nav" id="menu_tree">]
             </ul>
         </div>
         <!-- /.navbar-collapse -->
     </nav>
     <div id="page-wrapper" style="border-radius:5px 5px 0 0;">
+        <input type="hidden" id="project" value="EP10项目"/>
         <div id="tabContainer"></div>
     </div>
 </div>
@@ -136,7 +143,7 @@
                 data: [{
                     id: '99999999',
                     text: '首页',
-                    url: "modelColorCfg",
+                    url: "project",
                     closeable: false
                 }],
                 showIndex: 0,

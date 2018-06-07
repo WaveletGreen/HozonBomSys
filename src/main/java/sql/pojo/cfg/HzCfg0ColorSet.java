@@ -45,7 +45,7 @@ public class HzCfg0ColorSet {
     }
 
     public String getpColorComment() {
-        return pColorComment;
+        return pColorComment == null ? "" : pColorComment;
     }
 
     public void setpColorComment(String pColorComment) {

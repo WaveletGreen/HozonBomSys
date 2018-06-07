@@ -11,6 +11,7 @@ import sql.pojo.HzPreferenceSetting;
 import sql.pojo.bom.HzBomLineRecord;
 import sql.redis.SerializeUtil;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 
 /**
@@ -33,8 +34,9 @@ public class HzBomDataService {
         HzBomLineRecord bomLineRecord = new HzBomLineRecord();
         HzPreferenceSetting setting = new HzPreferenceSetting();
         setting.setSettingName("Hz_ExportBomPreferenceRedis");
-        bomLineRecord.setBomDigifaxId(bdf.trim());
-        result = hzBomDataDao.selectByBomDigifaxId(bomLineRecord);
+        bomLineRecord.setProjectPuid(bdf.trim());
+        result = hzBomDataDao.selectByProjectPuid(bomLineRecord);
+
         JSONArray array = new JSONArray();
         if (result.size() > 0) {
             HzBomLineRecord hbrForSetting = result.get(0);
@@ -65,6 +67,7 @@ public class HzBomDataService {
 //
 //                array.add(0, appendTrueName);
 //                array.add(1, appendLocalName);
+
                 array.add(0, trueName);
                 array.add(1, localName);
             }
@@ -82,16 +85,22 @@ public class HzBomDataService {
                 }
                 byte[] xx = hbr.getBomLineBlock();
                 Object obj = SerializeUtil.unserialize(xx);
-                if (obj instanceof RedisBomBean) {
+                if (obj instanceof LinkedHashMap) {
+                    if (((LinkedHashMap) obj).size() > 0) {
+                        ((LinkedHashMap) obj).forEach((key, value) -> {
+                            object.put(key, value);
+                        });
+                    }
+                } else if (obj instanceof RedisBomBean) {
                     List<String> pSets = ((RedisBomBean) obj).getpSets();
                     List<String> pValues = ((RedisBomBean) obj).getpValues();
-                    if (pSets != null && pSets.size() > 0) {
+                    if (null != pSets && pSets.size() > 0 && null != pValues && pValues.size() > 0)
                         for (int i = 0; i < pSets.size(); i++) {
                             object.put(pSets.get(i), pValues.get(i));
                         }
-                    }
-                    array.add(object);
                 }
+                array.add(object);
+
             }
         }
         return array;
