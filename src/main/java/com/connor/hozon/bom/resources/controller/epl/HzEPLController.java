@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.*;
@@ -25,6 +26,7 @@ public class HzEPLController extends BaseController {
     private HzEPLManageRecordService hzEPLManageRecordService;
 
     @RequestMapping(value = "record",method = RequestMethod.GET)
+    @ResponseBody
     public Map<String, Object> getHzEplRecord(FindHzEPLRecordReqDTO recordReqDTO, HttpServletResponse response){
         List<HzEPLRecordRespDTO> recordRespDTOS =  hzEPLManageRecordService.getHzEPLRecord(recordReqDTO);
 //        if(ListUtil.isEmpty(recordRespDTOS)){
