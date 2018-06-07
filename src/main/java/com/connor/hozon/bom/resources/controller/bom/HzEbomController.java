@@ -1,15 +1,23 @@
 package com.connor.hozon.bom.resources.controller.bom;
 
+import com.alibaba.fastjson.JSON;
+import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.resources.controller.BaseController;
+import com.connor.hozon.bom.resources.dto.request.FindHzEbomRecordReqDTO;
+import com.connor.hozon.bom.resources.dto.response.HzEbomRespDTO;
+import com.connor.hozon.bom.resources.dto.response.HzPbomLineRespDTO;
+import com.connor.hozon.bom.resources.service.bom.HzEbomService;
+import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.resources.util.ResultMessageBuilder;
+import com.connor.hozon.bom.sys.entity.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * \* User: xulf
@@ -21,7 +29,10 @@ import java.util.Map;
 @RequestMapping(value = "/ebom")
 public class HzEbomController extends BaseController {
 
-@RequestMapping(value = "/ebomTitle",method = RequestMethod.GET)
+    @Autowired
+    private HzEbomService hzEbomService;
+
+    @RequestMapping(value = "/ebomTitle",method = RequestMethod.GET)
     public void getEbomTitle(HttpServletResponse response) {
         LinkedHashMap<String, String> tableTitle = new LinkedHashMap<>();
         tableTitle.put("level", "层级");
@@ -69,6 +80,81 @@ public class HzEbomController extends BaseController {
         tableTitle.put("pItemClassification", "零件分类");
         tableTitle.put("pItemResource", "零部件来源");
         tableTitle.put("pSupplyState", "供货状态");
-    writeAjaxJSONResponse(ResultMessageBuilder.build(tableTitle), response);
+        writeAjaxJSONResponse(ResultMessageBuilder.build(tableTitle), response);
+    }
+
+
+    @RequestMapping(value = "getEBom/list", method = RequestMethod.GET)
+    @ResponseBody
+    public Map<String, Object> getEbomList(FindHzEbomRecordReqDTO reqDTO) {
+        List<HzEbomRespDTO> respDTOS = hzEbomService.getHzEbomList(reqDTO);
+        Map<String, Object> ret = new HashMap<>();
+        if (ListUtil.isEmpty(respDTOS)) {
+            return ret;
+        }
+        List<Map<String, String>> _list = new ArrayList<>();
+        respDTOS.forEach(dto -> {
+            Map<String, String> _res = new HashMap<>();
+            _res.put("puid", dto.getPuid());
+            _res.put("level", dto.getLevel());
+            _res.put("pBomOfWhichDept", dto.getpBomOfWhichDept());
+            _res.put("rank", dto.getRank());
+            _res.put("groupNum",dto.getGroupNum() );
+            _res.put("lineId",dto.getLineId() );
+            _res.put("nameZh", dto.getNameZh());
+            _res.put("nameEn",dto.getNameEn() );
+            _res.put("pUnit",dto.getpUnit() );
+            _res.put("pRentLow",dto.getpRentLow()) ;
+            _res.put("pRentHigh",dto.getpRentHigh() );
+            _res.put("pPictureNo",dto.getpPictureNo() );
+            _res.put("pInstallPictureNo",dto.getpInstallPictureNo() );
+            _res.put("pMap",dto.getpMap() );
+            _res.put("pMaterialHigh",dto.getpMaterialHigh() );
+            _res.put("pMaterial1",dto.getpMaterial1());
+            _res.put("pMaterial2",dto.getpMaterial2());
+            _res.put("pMaterial3",dto.getpMaterial3() );
+            _res.put("pDensity",dto.getpDensity() );
+            _res.put("pMaterialStandard",dto.getpMaterialStandard() );
+            _res.put("pSurfaceManage",dto.getpSurfaceManage() );
+            _res.put("pTextureNo",dto.getpTextureNo());
+            _res.put("pMadeArt", dto.getpMadeArt());
+            _res.put("pSymmetric",dto.getpSymmetric());
+            _res.put("pImportance", dto.getpImportance());
+            _res.put("pIsRulePart",dto.getpIsRulePart());
+            _res.put("pRulePartNo",dto.getpRulePartNo() );
+            _res.put("pCasketPart",dto.getpCasketPart() );
+            _res.put("pDevelopType",dto.getpDevelopType() );
+            _res.put("pDataVersion", dto.getpDataVersion());
+            _res.put("pTargetHeight", dto.getpTargetHeight());
+            _res.put("pEstimateHeight", dto.getpEstimateHeight());
+            _res.put("pActualHeight",dto.getpActualHeight() );
+            _res.put("pFixture", dto.getpFixture());
+            _res.put("pFixtureSpec", dto.getpFixtureSpec());
+            _res.put("pFixtureLevel", dto.getpFixtureLevel());
+            _res.put("pTorque",dto.getpTorque() );
+            _res.put("pMajorDept",dto.getpMajorDept() );
+            _res.put("pDutyEngineer", dto.getpDutyEngineer());
+            _res.put("pSupplier", dto.getpSupplier());
+            _res.put("pSupplierNo", dto.getpSupplierNo());
+            _res.put("pBuyEngineer", dto.getpBuyEngineer());
+            _res.put("pRemark", dto.getpRemark());
+            _res.put("pItemClassification", dto.getpItemClassification());
+            _res.put("pItemResource", dto.getpItemResource());
+            _res.put("pSupplyState", dto.getpSupplyState());
+            _list.add(_res);
+        });
+        ret.put("totalCount", respDTOS.size());
+        ret.put("result", _list);
+        return ret;
+    }
+
+    /**
+     * 获取当前登录用户信息
+     */
+    @RequestMapping(value = "/getUser",method = RequestMethod.GET)
+    public void getUser(HttpServletResponse  response){
+        User user = UserInfo.getUser();
+        writeAjaxJSONResponse(ResultMessageBuilder.build(user),response);
+        System.out.println(JSON.toJSONString(user));
     }
 }
