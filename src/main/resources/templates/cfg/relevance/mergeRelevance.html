@@ -1,0 +1,78 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<body>
+<form id="featureForm" role="form" method="post" th:action="${action}">
+    <input class="form-control" id="puid" name="puid" type="hidden" th:value="${entity.puid}"/>
+    <input class="form-control" id="_table" name="_table" type="hidden" th:value="${entity._table}"/>
+    <div class="form-group">
+        <label for="relevance">相关性</label>
+        <input class="form-control" id="relevance" name="relevance" type="text" th:value="${entity.relevance}"
+               placeholder="请输入特性名称" disabled="disabled"
+        />
+    </div>
+    <div class="form-group">
+        <label for="relevanceDesc">相关性描述</label>
+        <input class="form-control" id="relevanceDesc" name="relevanceDesc" type="text"
+               th:value="${entity.relevanceCode}"
+               placeholder="请输入特性描述" disabled="disabled"
+        />
+    </div>
+    <div class="form-group">
+        <label for="relevanceCode">相关性代码</label>
+        <input class="form-control" id="relevanceCode" name="relevanceCode" type="text"
+               th:value="${entity.relevanceCode}"
+               placeholder="请输入相关性代码"
+        />
+    </div>
+</form>
+<script th:inline="javascript">
+    <![CDATA[
+    $(function () {
+        $('#featureForm').bootstrapValidator({
+            message: 'This value is not valid',
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            }
+        });
+        // 绑定dialog的确定按钮的监听事件
+        $("#btnOk", window.top.document).click(function () {
+            var bootstrapValidator = $("#featureForm", window.top.document).data('bootstrapValidator');
+            bootstrapValidator.validate();
+            if (bootstrapValidator.isValid()) {
+                var url = $("#featureForm", window.top.document).attr('action');
+                <!--其实不要puid，puid会在服务器上生成-->
+                var myData = JSON.stringify({
+                    "puid": $("#puid").val(),
+                    "_table": $("#_table").val(),
+                    "relevanceCode": $("#relevanceCode").val()
+                });
+                $.ajax({
+                    contentType:
+                        "application/json",
+                    type:
+                        'POST',
+                    url: url,
+                    data: myData,
+                    success:
+                        function (result) {
+                            $('.modal-dialog', window.top.document).parent('div').remove()
+                            $('body', window.top.document).find('.modal-backdrop').remove();
+                            // jquery 调用刷新当前操作的table页面的refresh方法
+                            $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
+                            if (result) {
+                                window.Ewin.alert({message: "修改相关性数据成功"});
+                            }
+                        },
+                    error: function (status) {
+                        window.Ewin.alert({message: status.status + ':修改相关性数据失败!'});
+                    }
+                });
+            }
+        });
+    })
+    ]]>
+</script>
+</body>
+</html>

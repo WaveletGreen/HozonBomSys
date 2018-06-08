@@ -1,9 +1,11 @@
 package com.connor.hozon.bom.bomSystem.service.cfg;
 
+import com.connor.hozon.bom.bomSystem.bean.HzRelevanceBean;
 import com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0RecordDao;
 import org.springframework.stereotype.Service;
 import sql.pojo.cfg.HzCfg0Record;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -67,4 +69,33 @@ public class HzCfg0Service {
     public boolean doDeleteAddedCfgById(HzCfg0Record record) {
         return hzCfg0RecordDao.deleteAddCfgByPrimaryKey(record.getPuid()) > 0 ? true : false;
     }
+
+    /***
+     * 根据table，进行查询并拼接成相关性值
+     * @param projectPuid 项目puid
+     * @param _list 存储结果的list
+     * @param _index 序号，使用封装类进行引用从而可以修改引用数据
+     * @param _table 取数据的表：HZ_CFG0_RECORD是原数据，HZ_CFG0_ADD_CFG_RECORD是添加的数据
+     */
+    public void doLoadRelevance(String projectPuid, List<HzRelevanceBean> _list, List<Integer> _index, String _table) {
+        List<HzCfg0Record> records = null;
+        if ("HZ_CFG0_RECORD".equals(_table)) {
+            records = doLoadCfgListByProjectPuid(projectPuid);
+        } else if ("HZ_CFG0_ADD_CFG_RECORD".equals(_table)) {
+            records = doLoadAddedCfgListByProjectPuid(projectPuid);
+        }
+        int index = _index.get(0);
+        for (HzCfg0Record record : records) {
+            HzRelevanceBean bean = new HzRelevanceBean();
+            bean.set_table(_table);
+            bean.setIndex(++index);
+            bean.setPuid(record.getPuid());
+            bean.setRelevance(record.getpCfg0FamilyName() + "-" + record.getpCfg0ObjectId());
+            bean.setRelevanceDesc((record.getpCfg0FamilyDesc() == null ? "" : record.getpCfg0FamilyDesc()) + "-" + (record.getpCfg0Desc() == null ? "" : record.getpCfg0Desc()));
+            bean.setRelevanceCode(record.getpCfg0Relevance());
+            _list.add(bean);
+        }
+        _index.set(0, index);
+    }
+
 }

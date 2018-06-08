@@ -43,11 +43,17 @@ public class HzCfg0Record {
      * 组的描述
      */
     private String pCfg0FamilyDesc;
-
-    /**类中特有的，对应是新加进来的特性值还是原有的那张值表，目前有2个值：HZ_CFG0_RECORD和HZ_CFG0_ADD_CFG_RECORD*/
+    /**
+     * 类中特有的，对应是新加进来的特性值还是原有的那张值表，目前有2个值：HZ_CFG0_RECORD和HZ_CFG0_ADD_CFG_RECORD
+     */
     private String whichTable;
-
+    /**
+     * 归属项目，类中特有的
+     */
     private String projectPuid;
+    /**相关性代码，目前手输入*/
+    private String pCfg0Relevance;
+
     public String getPuid() {
         return puid;
     }
@@ -154,4 +160,11 @@ public class HzCfg0Record {
         this.projectPuid = projectPuid;
     }
 
+    public String getpCfg0Relevance() {
+        return pCfg0Relevance;
+    }
+
+    public void setpCfg0Relevance(String pCfg0Relevance) {
+        this.pCfg0Relevance = pCfg0Relevance;
+    }
 }

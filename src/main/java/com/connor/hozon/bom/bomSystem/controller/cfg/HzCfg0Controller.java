@@ -1,5 +1,6 @@
 package com.connor.hozon.bom.bomSystem.controller.cfg;
 
+import com.connor.hozon.bom.bomSystem.bean.HzRelevanceBean;
 import com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0MainRecordDao;
 import com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0OptionFamilyDao;
 import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0Service;
@@ -32,22 +33,13 @@ public class HzCfg0Controller {
         this.hzCfg0OptionFamilyDao = hzCfg0OptionFamilyDao;
     }
 
+    /******************************************特性表***********************************************/
     @RequestMapping("/loadFeature")
     @ResponseBody
     public Map<String, Object> loadCfg0(@RequestParam("projectPuid") String projectPuid) {
         Map<String, Object> result = new HashMap<>();
         List<HzCfg0Record> records = hzCfg0Service.doLoadCfgListByProjectPuid(projectPuid);
         records.addAll(hzCfg0Service.doLoadAddedCfgListByProjectPuid(projectPuid));
-        result.put("totalCount", records.size());
-        result.put("result", records);
-        return result;
-    }
-
-    @RequestMapping("/loadRelevance")
-    @ResponseBody
-    public Map<String, Object> loadRelevance(@RequestParam("projectPuid") String projectPuid) {
-        Map<String, Object> result = new HashMap<>();
-        List<HzCfg0Record> records = hzCfg0Service.doLoadCfgListByProjectPuid(projectPuid);
         result.put("totalCount", records.size());
         result.put("result", records);
         return result;
@@ -122,17 +114,107 @@ public class HzCfg0Controller {
             else {
                 if (hzCfg0Service.doSelectOneAddedCfgByPuid(record.getPuid()) != null) {
                     toDelete.add(record);
-                } else {
+                }
+//                else if(hzCfg0Service.doSelectOneByPuid(record.getPuid()) != null){
+//                    //如果需要删除原数据
+//                    result.put("status", false);
+//                    result.put("msg", "目前不允许删除原数据，请重试或联系系统管理员");
+//                    return result;
+//                }
+                else {
                     result.put("status", false);
                     result.put("msg", "目前不允许删除原数据，请重试或联系系统管理员");
                     return result;
                 }
             }
-
         }
         result.put("status", hzCfg0Service.doDeleteAddedCfgByList(toDelete));
         result.put("msg", "删除成功");
         return result;
+    }
+
+    /******************************************相关性**********************************************/
+    @RequestMapping("/loadRelevance")
+    @ResponseBody
+    public Map<String, Object> loadRelevance(@RequestParam("projectPuid") String projectPuid) {
+        Map<String, Object> result = new HashMap<>();
+        List<HzRelevanceBean> _list = new ArrayList<>();
+        List<Integer> _index = new ArrayList();
+        _index.add(0);
+        hzCfg0Service.doLoadRelevance(projectPuid, _list, _index, "HZ_CFG0_RECORD");
+        hzCfg0Service.doLoadRelevance(projectPuid, _list, _index, "HZ_CFG0_ADD_CFG_RECORD");
+        result.put("totalCount", _list.size());
+        result.put("result", _list);
+        return result;
+    }
+
+    @RequestMapping(value = "/relModify", method = RequestMethod.POST)
+    @ResponseBody
+    public boolean relOption(@RequestBody HzRelevanceBean bean) {
+        if (bean == null || "".equalsIgnoreCase(bean.getPuid()) || null == bean.getPuid()) {
+            return false;
+        }
+        HzCfg0Record record = null;
+/*        if ("HZ_CFG0_RECORD".equals(bean.get_table())) {
+            record = hzCfg0Service.doSelectOneByPuid(bean.getPuid());
+            if(record==null){
+                return false;
+            }
+            record.setpCfg0Relevance(bean.getRelevanceCode());
+            return hzCfg0Service.doUpdate(record);
+        } else if ("HZ_CFG0_ADD_CFG_RECORD".equals(bean.get_table())) {
+            if(record==null){
+                return false;
+            }
+            record.setpCfg0Relevance(bean.getRelevanceCode());
+            return hzCfg0Service.doUpdateAddedCfg(record);
+        }*/
+        record = hzCfg0Service.doSelectOneByPuid(bean.getPuid());
+        if (record != null) {
+            record = hzCfg0Service.doSelectOneByPuid(bean.getPuid());
+            record.setpCfg0Relevance(bean.getRelevanceCode());
+            return hzCfg0Service.doUpdate(record);
+        } else if ((record = hzCfg0Service.doSelectOneAddedCfgByPuid(record.getPuid())) != null) {
+            record.setpCfg0Relevance(bean.getRelevanceCode());
+            return hzCfg0Service.doUpdateAddedCfg(record);
+        } else {
+            return false;
+        }
+    }
+
+    @RequestMapping("/relModifyPage")
+    public String relPage(@RequestParam("uid") String uid, @RequestParam("page") String page, Model model) {
+        HzRelevanceBean bean = new HzRelevanceBean();
+        //其实没有添加的页面
+        if ("addPage".equals(page)) {
+            HzCfg0MainRecord mainRecord = hzCfg0MainRecordDao.selectByProjectPuid(uid);
+            if (mainRecord == null) {
+                return "error";
+            }
+            model.addAttribute("action", "./cfg0/relModify");
+        } else if ("modifyPage".equals(page)) {
+            HzCfg0Record record = hzCfg0Service.doSelectOneByPuid(uid);
+            if (record == null) {
+                record = hzCfg0Service.doSelectOneAddedCfgByPuid(uid);
+                if (record == null) {
+                    model.addAttribute("msg", "没有找到对应的特性数据，请重试或联系系统管理员!");
+                    return "errorWithEntity";
+                }
+                record.setWhichTable("HZ_CFG0_ADD_CFG_RECORD");
+            } else {
+                record.setWhichTable("HZ_CFG0_RECORD");
+            }
+
+            bean.setPuid(record.getPuid());
+            bean.setRelevance(record.getpCfg0FamilyName() + "-" + record.getpCfg0ObjectId());
+            bean.setRelevanceDesc((record.getpCfg0FamilyDesc() == null ? "" : record.getpCfg0FamilyDesc()) + "-" + (record.getpCfg0Desc() == null ? "" : record.getpCfg0Desc()));
+            bean.setRelevanceCode(record.getpCfg0Relevance());
+            bean.set_table(record.getWhichTable());
+
+            model.addAttribute("action", "./cfg0/relModify");
+        }
+        model.addAttribute("entity", bean);
+        return "cfg/relevance/mergeRelevance";
     }
 
 }

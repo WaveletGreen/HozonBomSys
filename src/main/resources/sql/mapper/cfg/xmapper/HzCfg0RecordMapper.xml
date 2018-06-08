@@ -12,6 +12,7 @@
         <result column="P_H9FEATUREENNAME" jdbcType="VARCHAR" property="pH9featureenname"/>
         <result column="P_H9FEATUREDESC" jdbcType="VARCHAR" property="pH9featuredesc"/>
         <result column="P_CFG0_FAMILY_DESC" jdbcType="VARCHAR" property="pCfg0FamilyDesc"/>
+        <result column="P_CFG0_RELEVANCE" jdbcType="VARCHAR" property="pCfg0Relevance"/>
     </resultMap>
     <sql id="Base_Column_List">
         PUID,
@@ -23,13 +24,15 @@
         P_H9FEATURENAME,
         P_H9FEATUREENNAME,
         P_H9FEATUREDESC,
-        P_CFG0_FAMILY_DESC
+        P_CFG0_FAMILY_DESC,
+        P_CFG0_RELEVANCE
   </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from ${whichTable}
         where PUID = #{puid,jdbcType=VARCHAR}
+        order by P_CFG0_FAMILY_NAME
     </select>
 
     <select id="selectListByProjectPuid" parameterType="java.lang.String" resultMap="BaseResultMap">
@@ -41,6 +44,7 @@
         from Hz_Cfg0_Main_Record t2
         where t2.p_cfg0_of_which_project_puid=#{projectPuid,jdbcType=VARCHAR}
         )
+        order by P_CFG0_FAMILY_NAME
     </select>
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
@@ -58,26 +62,48 @@
 
     </delete>
     <insert id="insert" parameterType="sql.pojo.cfg.HzCfg0Record">
-    insert into ${whichTable} (PUID, P_CFG0_OBJECT_ID, P_CFG0_DESC,
-      P_CFG0_FAMILY_NAME, P_CFG0_FAMILY_PUID, P_CFG0_MAIN_ITEM_PUID, 
-      P_H9FEATURENAME, P_H9FEATUREENNAME, P_H9FEATUREDESC, 
-      P_CFG0_FAMILY_DESC)
-    values (#{puid,jdbcType=VARCHAR}, #{pCfg0ObjectId,jdbcType=VARCHAR}, #{pCfg0Desc,jdbcType=VARCHAR}, 
-      #{pCfg0FamilyName,jdbcType=VARCHAR}, #{pCfg0FamilyPuid,jdbcType=VARCHAR}, #{pCfg0MainItemPuid,jdbcType=VARCHAR}, 
-      #{pH9featurename,jdbcType=VARCHAR}, #{pH9featureenname,jdbcType=VARCHAR}, #{pH9featuredesc,jdbcType=VARCHAR}, 
-      #{pCfg0FamilyDesc,jdbcType=VARCHAR})
+    insert into ${whichTable}
+      (
+        PUID,
+        P_CFG0_OBJECT_ID,
+        P_CFG0_DESC,
+        P_CFG0_FAMILY_NAME,
+        P_CFG0_FAMILY_PUID,
+        P_CFG0_MAIN_ITEM_PUID,
+        P_H9FEATURENAME,
+        P_H9FEATUREENNAME,
+        P_H9FEATUREDESC,
+        P_CFG0_FAMILY_DESC,
+        P_CFG0_RELEVANCE
+        )
+    values (
+        #{puid,jdbcType=VARCHAR},
+        #{pCfg0ObjectId,jdbcType=VARCHAR},
+        #{pCfg0Desc,jdbcType=VARCHAR},
+        #{pCfg0FamilyName,jdbcType=VARCHAR},
+        #{pCfg0FamilyPuid,jdbcType=VARCHAR},
+        #{pCfg0MainItemPuid,jdbcType=VARCHAR},
+        #{pH9featurename,jdbcType=VARCHAR},
+        #{pH9featureenname,jdbcType=VARCHAR},
+        #{pH9featuredesc,jdbcType=VARCHAR},
+        #{pCfg0FamilyDesc,jdbcType=VARCHAR},
+        #{pCfg0Relevance,jdbcType=VARCHAR}
+        )
   </insert>
     <update id="updateByPrimaryKey" parameterType="sql.pojo.cfg.HzCfg0Record">
     update ${whichTable}
-    set P_CFG0_OBJECT_ID = #{pCfg0ObjectId,jdbcType=VARCHAR},
-      P_CFG0_DESC = #{pCfg0Desc,jdbcType=VARCHAR},
-      P_CFG0_FAMILY_NAME = #{pCfg0FamilyName,jdbcType=VARCHAR},
-      P_CFG0_FAMILY_PUID = #{pCfg0FamilyPuid,jdbcType=VARCHAR},
-      P_CFG0_MAIN_ITEM_PUID = #{pCfg0MainItemPuid,jdbcType=VARCHAR},
-      P_H9FEATURENAME = #{pH9featurename,jdbcType=VARCHAR},
-      P_H9FEATUREENNAME = #{pH9featureenname,jdbcType=VARCHAR},
-      P_H9FEATUREDESC = #{pH9featuredesc,jdbcType=VARCHAR},
-      P_CFG0_FAMILY_DESC = #{pCfg0FamilyDesc,jdbcType=VARCHAR}
-    where PUID = #{puid,jdbcType=VARCHAR}
+    set
+          P_CFG0_OBJECT_ID = #{pCfg0ObjectId,jdbcType=VARCHAR},
+          P_CFG0_DESC = #{pCfg0Desc,jdbcType=VARCHAR},
+          P_CFG0_FAMILY_NAME = #{pCfg0FamilyName,jdbcType=VARCHAR},
+          P_CFG0_FAMILY_PUID = #{pCfg0FamilyPuid,jdbcType=VARCHAR},
+          P_CFG0_MAIN_ITEM_PUID = #{pCfg0MainItemPuid,jdbcType=VARCHAR},
+          P_H9FEATURENAME = #{pH9featurename,jdbcType=VARCHAR},
+          P_H9FEATUREENNAME = #{pH9featureenname,jdbcType=VARCHAR},
+          P_H9FEATUREDESC = #{pH9featuredesc,jdbcType=VARCHAR},
+          P_CFG0_FAMILY_DESC = #{pCfg0FamilyDesc,jdbcType=VARCHAR},
+          P_CFG0_RELEVANCE = #{pCfg0Relevance,jdbcType=VARCHAR}
+    where
+          PUID = #{puid,jdbcType=VARCHAR}
   </update>
 </mapper>

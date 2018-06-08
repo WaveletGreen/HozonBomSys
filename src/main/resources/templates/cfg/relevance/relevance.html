@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="include/includebase"></head>
+<title>Hz-相关性表</title>
+<body>
+<div class="panel-body">
+    <div class="content col-lg-6">
+        <button class="btn btn-default" id="query" type="button">查询相关性表</button>
+        <button class="btn btn-default" id="refresh" type="button" disabled="disabled">刷新</button>
+        <table class="table table-striped" id="dataTable"></table>
+    </div>
+</div>
+<script th:src="@{/js/cfg/relevance/relevance.js}"></script>
+</body>
+<script th:inline="javascript">
+    function doQuery() {
+        $('#dataTable').bootstrapTable('refresh');    //刷新表格
+    }
+</script>
+</html>

@@ -18,10 +18,12 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
      */
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
+        //登陆界面
         registry.addViewController("/login").setViewName("login");
+        //主界面
         registry.addViewController("/main").setViewName("main");
+        //统一出错界面
         registry.addViewController("/Error").setViewName("error");
-        registry.addViewController("/home").setViewName("home");
         // 跳转到菜单管理页面
         registry.addViewController("/treeList").setViewName("/sys/tree/treeList");
         // 跳转到角色管理页面
@@ -34,15 +36,23 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         registry.addViewController("/dictList").setViewName("/sys/dict/dictList");
         // 注册bom视图
         registry.addViewController("/bom").setViewName("/stage/bom");
+        //bom的树型结构
         registry.addViewController("/bom-treegrid").setViewName("/stage/bom-treegrid");
+        //一级配置表
         registry.addViewController("/bom-all-cfg").setViewName("/bom/bom-all-cfg");
         //颜色库
         registry.addViewController("/colorSet").setViewName("/cfg/color/colorSet");
 //        registry.addViewController("/colorUpdate").setViewName("/cfg/color/colorUpdate");
         //配色方案
         registry.addViewController("/modelColorCfg").setViewName("/cfg/modelColorCfg/modelColorCfg");
+        //项目，应该作为首页
         registry.addViewController("/project").setViewName("/project/project");
+        //特性表
         registry.addViewController("/feature").setViewName("/cfg/feature/feature");
+        //相关性表
+        registry.addViewController("/relevance").setViewName("/cfg/relevance/relevance");
+        /**物料配置表*/
+        registry.addViewController("/materielFeature").setViewName("/cfg/materielFeature/materielFeature");
 
     }
 

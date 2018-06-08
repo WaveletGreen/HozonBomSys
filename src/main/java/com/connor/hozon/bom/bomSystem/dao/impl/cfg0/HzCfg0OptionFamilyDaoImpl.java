@@ -24,7 +24,7 @@ public class HzCfg0OptionFamilyDaoImpl implements HzCfg0OptionFamilyDao {
     }
 
     @Override
-    public List<String> selectNameByMainId(String mainId) {
-        return baseSQLUtil.executeQuery(mainId, "com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0OptionFamilyDao.selectNameByMainId");
+    public List<HzCfg0OptionFamily> selectNameByMainId(String mainId) {
+        return baseSQLUtil.executeQueryByPass(new HzCfg0OptionFamily(),mainId, "com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0OptionFamilyDao.selectNameByMainId");
     }
 }
