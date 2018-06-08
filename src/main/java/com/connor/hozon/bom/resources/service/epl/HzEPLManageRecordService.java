@@ -2,6 +2,7 @@ package com.connor.hozon.bom.resources.service.epl;
 
 import com.connor.hozon.bom.resources.dto.request.FindHzEPLRecordReqDTO;
 import com.connor.hozon.bom.resources.dto.response.HzEPLRecordRespDTO;
+import com.connor.hozon.bom.resources.page.Page;
 
 import java.util.List;
 
@@ -9,5 +10,10 @@ import java.util.List;
  * Created by haozt on 2018/06/05
  */
 public interface HzEPLManageRecordService {
-    List<HzEPLRecordRespDTO> getHzEPLRecord(FindHzEPLRecordReqDTO recordReqDTO);
+    /**
+     * 分页获取epl信息
+     * @param recordReqDTO
+     * @return
+     */
+    Page<HzEPLRecordRespDTO> getHzEPLRecordForPage(FindHzEPLRecordReqDTO recordReqDTO);
 }

@@ -3,6 +3,7 @@ package com.connor.hozon.bom.resources.service.epl.impl;
 import com.connor.hozon.bom.resources.dto.request.FindHzEPLRecordReqDTO;
 import com.connor.hozon.bom.resources.dto.response.HzEPLRecordRespDTO;
 import com.connor.hozon.bom.resources.mybatis.epl.HzEplMangeRecordDAO;
+import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.service.bom.impl.HzPbomServiceImpl;
 import com.connor.hozon.bom.resources.service.epl.HzEPLManageRecordService;
 import com.connor.hozon.bom.resources.util.ListUtil;
@@ -22,13 +23,14 @@ public class HzEPLManageRecordServiceImpl implements HzEPLManageRecordService {
     @Autowired
     private HzEplMangeRecordDAO hzEplMangeRecordDAO;
 
-    public  static void main(String[] args){
-    }
-
     @Override
-    public List<HzEPLRecordRespDTO> getHzEPLRecord(FindHzEPLRecordReqDTO recordReqDTO) {
+    public Page<HzEPLRecordRespDTO> getHzEPLRecordForPage(FindHzEPLRecordReqDTO recordReqDTO) {
         List<HzEPLRecordRespDTO> recordRespDTOS = new ArrayList<>();
-        List<HzEPLManageRecord> records =  hzEplMangeRecordDAO.getHzEplManageRecord();
+        Page<HzEPLManageRecord> eplPage = hzEplMangeRecordDAO.getEPLListForPage(recordReqDTO);
+        if(eplPage == null){
+            return new Page<>(recordReqDTO.getPageNum(),recordReqDTO.getPageSize(),0);
+        }
+        List<HzEPLManageRecord> records =  eplPage.getResult();
         if(ListUtil.isEmpty(records)){
             return null;
         }
@@ -149,7 +151,8 @@ public class HzEPLManageRecordServiceImpl implements HzEPLManageRecordService {
                 recordRespDTO.setProcessRoute(record.getProcessRoute()==null?"":record.getProcessRoute());
                 recordRespDTOS.add(recordRespDTO);
             }
-            return recordRespDTOS;
+
+            return  new Page<HzEPLRecordRespDTO>(recordReqDTO.getPageNum(),recordReqDTO.getPageSize(),eplPage.getTotalCount(),recordRespDTOS);
         }catch (Exception e){
             return null;
         }
