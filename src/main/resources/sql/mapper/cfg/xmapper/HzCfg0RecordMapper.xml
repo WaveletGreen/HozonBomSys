@@ -14,6 +14,20 @@
         <result column="P_CFG0_FAMILY_DESC" jdbcType="VARCHAR" property="pCfg0FamilyDesc"/>
         <result column="P_CFG0_RELEVANCE" jdbcType="VARCHAR" property="pCfg0Relevance"/>
     </resultMap>
+
+    <resultMap id="MaterielFeatureMap" type="com.connor.hozon.bom.bomSystem.bean.HzMaterielFeatureBean">
+        <id column="PUID" jdbcType="VARCHAR" property="puid"/>
+        <result column="P_CFG0_OBJECT_ID" jdbcType="VARCHAR" property="pCfg0ObjectId"/>
+        <result column="P_CFG0_DESC" jdbcType="VARCHAR" property="pCfg0Desc"/>
+        <result column="P_CFG0_FAMILY_NAME" jdbcType="VARCHAR" property="pCfg0FamilyName"/>
+        <result column="P_CFG0_FAMILY_DESC" jdbcType="VARCHAR" property="pCfg0FamilyDesc"/>
+        <result column="OBJECT_NAME" jdbcType="VARCHAR" property="objectName"/>
+        <result column="P_CFG0_MODEL_RECORD" jdbcType="VARCHAR" property="pCfg0ModelRecord"/>
+        <result column="P_OF_CFG0_MAIN_RECORD" jdbcType="VARCHAR" property="pOfCfg0MainRecord"/>
+        <result column="P_CFG0_MODEL_BASIC_DETAIL" jdbcType="VARCHAR" property="pCfg0ModelBasicDetail"/>
+
+    </resultMap>
+
     <sql id="Base_Column_List">
         PUID,
         P_CFG0_OBJECT_ID,
@@ -26,6 +40,17 @@
         P_H9FEATUREDESC,
         P_CFG0_FAMILY_DESC,
         P_CFG0_RELEVANCE
+  </sql>
+    <sql id="Materiel_Feature_Column_List">
+        t.PUID,
+        t.P_CFG0_OBJECT_ID,
+        t.P_CFG0_DESC,
+        t.P_CFG0_FAMILY_NAME,
+        t.P_CFG0_FAMILY_DESC,
+        t4.OBJECT_NAME,
+        t3.P_CFG0_MODEL_RECORD,
+        t3.P_OF_CFG0_MAIN_RECORD,
+        t4.p_cfg0_model_basic_detail
   </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
         select
@@ -45,6 +70,20 @@
         where t2.p_cfg0_of_which_project_puid=#{projectPuid,jdbcType=VARCHAR}
         )
         order by P_CFG0_FAMILY_NAME
+    </select>
+
+    <select id="selectMaterielFeatureByProjectPuid" parameterType="java.lang.String" resultMap="MaterielFeatureMap">
+        select
+        <include refid="Materiel_Feature_Column_List"/>
+        from HZ_CFG0_RECORD t
+            left outer join HZ_CFG0_TO_MODEL_RECORD t3 on t.puid=t3.p_cfg0_id_record
+            left outer join HZ_CFG0_MODEL_RECORD t4 on t4.puid=t3.p_cfg0_model_record
+                where
+                t.P_CFG0_MAIN_ITEM_PUID=(
+                        select puid from Hz_Cfg0_Main_Record t2
+                        where t2.p_cfg0_of_which_project_puid=#{projectPuid,jdbcType=VARCHAR}
+                )
+        order by t4.puid
     </select>
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.String">

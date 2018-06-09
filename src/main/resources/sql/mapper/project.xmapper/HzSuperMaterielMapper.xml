@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.connor.hozon.bom.bomSystem.dao.project.HzSuperMaterielDao">
+    <resultMap id="BaseResultMap" type="sql.pojo.project.HzSuperMateriel">
+        <id column="PUID" jdbcType="VARCHAR" property="puid"/>
+        <result column="P_MATERIEL_CODE" jdbcType="OTHER" property="pMaterielCode"/>
+        <result column="P_MATERIEL_TYPE" jdbcType="OTHER" property="pMaterielType"/>
+        <result column="P_MATERIEL_WERK" jdbcType="OTHER" property="pMaterielWerk"/>
+        <result column="P_MATERIEL_DESC" jdbcType="OTHER" property="pMaterielDesc"/>
+        <result column="P_PERTAIN_TO_PROJECT_PUID" jdbcType="VARCHAR" property="pPertainToProjectPuid"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    PUID, P_MATERIEL_CODE, P_MATERIEL_TYPE, P_MATERIEL_WERK, P_MATERIEL_DESC, P_PERTAIN_TO_PROJECT_PUID
+  </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from HZ_SUPER_MATERIEL_RECORD
+        where PUID = #{puid,jdbcType=VARCHAR}
+    </select>
+    <select id="selectByProjectPuid" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from HZ_SUPER_MATERIEL_RECORD
+        where P_PERTAIN_TO_PROJECT_PUID = #{pPertainToProjectPuid,jdbcType=VARCHAR}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from HZ_SUPER_MATERIEL_RECORD
+    where PUID = #{puid,jdbcType=VARCHAR}
+  </delete>
+    <insert id="insert" parameterType="sql.pojo.project.HzSuperMateriel">
+    insert into HZ_SUPER_MATERIEL_RECORD (PUID, P_MATERIEL_CODE, P_MATERIEL_TYPE, 
+      P_MATERIEL_WERK, P_MATERIEL_DESC, P_PERTAIN_TO_PROJECT_PUID
+      )
+    values (#{puid,jdbcType=VARCHAR}, #{pMaterielCode,jdbcType=OTHER}, #{pMaterielType,jdbcType=OTHER}, 
+      #{pMaterielWerk,jdbcType=OTHER}, #{pMaterielDesc,jdbcType=OTHER}, #{pPertainToProjectPuid,jdbcType=VARCHAR}
+      )
+  </insert>
+    <update id="updateByPrimaryKey" parameterType="sql.pojo.project.HzSuperMateriel">
+    update HZ_SUPER_MATERIEL_RECORD
+    set P_MATERIEL_CODE = #{pMaterielCode,jdbcType=OTHER},
+      P_MATERIEL_TYPE = #{pMaterielType,jdbcType=OTHER},
+      P_MATERIEL_WERK = #{pMaterielWerk,jdbcType=OTHER},
+      P_MATERIEL_DESC = #{pMaterielDesc,jdbcType=OTHER},
+      P_PERTAIN_TO_PROJECT_PUID = #{pPertainToProjectPuid,jdbcType=VARCHAR}
+    where PUID = #{puid,jdbcType=VARCHAR}
+  </update>
+</mapper>

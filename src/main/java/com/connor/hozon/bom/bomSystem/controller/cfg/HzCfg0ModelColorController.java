@@ -45,13 +45,13 @@ public class HzCfg0ModelColorController {
 
     @RequestMapping(value = "/loadAll", method = RequestMethod.GET)
     @ResponseBody
-    public Map<String, Object> loadAll() {
-        return hzCfg0ModelColorService.doLoadAll();
+    public Map<String, Object> loadAll(@RequestParam String projectPuid) {
+        return hzCfg0ModelColorService.doLoadAll(projectPuid);
     }
 
     @RequestMapping(value = "/addPage", method = RequestMethod.GET)
-    public String addPage(String pCfg0MainRecordOfMC, Model model) {
-        List<String> columnList = hzCfg0OptionFaamilyService.doGetColumn(pCfg0MainRecordOfMC);
+    public String addPage(@RequestParam String projectPuid, Model model) {
+        List<String> columnList = hzCfg0OptionFaamilyService.doGetColumn(projectPuid);
         List<HzCfg0ColorSet> colorList = hzCfg0ColorSetService.doGetAll();
         //添加一个无色
         HzCfg0ColorSet set = new HzCfg0ColorSet();
@@ -63,7 +63,7 @@ public class HzCfg0ModelColorController {
         colorList.add(0, set);
         model.addAttribute("colorList", colorList);
         model.addAttribute("columnList", columnList);
-        model.addAttribute("pCfg0MainRecordOfMC", pCfg0MainRecordOfMC);
+        model.addAttribute("pCfg0MainRecordOfMC", projectPuid);
         return "cfg/modelColorCfg/addModelColorCfg";
     }
 
@@ -75,10 +75,9 @@ public class HzCfg0ModelColorController {
         if (color == null) {
             return "cfg/modelColorCfg/addModelColorCfg";
         }
-
-        List<String> columnList = hzCfg0OptionFaamilyService.doGetColumn(color.getpCfg0MainRecordOfMC());
+        HzCfg0MainRecord main = hzCfg0MainService.doGetByPrimaryKey(color.getpCfg0MainRecordOfMC());
+        List<String> columnList = hzCfg0OptionFaamilyService.doGetColumn(main.getpCfg0OfWhichProjectPuid());
         List<HzCfg0ColorSet> colorList = hzCfg0ColorSetService.doGetAll();
-
         ArrayList<String> orgValue = new ArrayList<>();
 
         Object obj = SerializeUtil.unserialize(color.getpColorfulMapBlock());
@@ -135,14 +134,14 @@ public class HzCfg0ModelColorController {
 
     @RequestMapping(value = "/getColumn", method = RequestMethod.GET)
     @ResponseBody
-    public JSONObject getColumn(HzCfg0ModelColor color) {
+    public JSONObject getColumn(@RequestParam String projectPuid) {
         JSONObject object = new JSONObject();
         List<String> column;
-        if (color.getpCfg0MainRecordOfMC() == null) {
+        if (projectPuid == null || "".equals(projectPuid)) {
             object.put("status", false);
         } else {
             object.put("status", true);
-            column = hzCfg0OptionFaamilyService.doGetColumn(color.getpCfg0MainRecordOfMC());
+            column = hzCfg0OptionFaamilyService.doGetColumn(projectPuid);
             object.put("data", column);
         }
         return object;

@@ -1,5 +1,6 @@
 package com.connor.hozon.bom.bomSystem.dao.impl.cfg0;
 
+import com.connor.hozon.bom.bomSystem.bean.HzMaterielFeatureBean;
 import com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0RecordDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,7 +22,7 @@ public class HzCfg0RecordDaoImpl implements HzCfg0RecordDao {
 
     @Override
     public int deleteByPrimaryKey(String puid) {
-        return baseSQLUtil.executeDeleteBySome("com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0RecordDao.deleteByPrimaryKey",puid,"HZ_CFG0_RECORD");
+        return baseSQLUtil.executeDeleteBySome("com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0RecordDao.deleteByPrimaryKey", puid, "HZ_CFG0_RECORD");
 
 //        HzCfg0Record record = new HzCfg0Record();
 //        record.setPuid(puid);
@@ -31,7 +32,7 @@ public class HzCfg0RecordDaoImpl implements HzCfg0RecordDao {
 
     @Override
     public int deleteAddCfgByPrimaryKey(String puid) {
-        return baseSQLUtil.executeDeleteBySome("com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0RecordDao.deleteByPrimaryKey",puid,"HZ_CFG0_ADD_CFG_RECORD");
+        return baseSQLUtil.executeDeleteBySome("com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0RecordDao.deleteByPrimaryKey", puid, "HZ_CFG0_ADD_CFG_RECORD");
 //        HzCfg0Record record = new HzCfg0Record();
 //        record.setPuid(puid);
 //        record.setWhichTable("HZ_CFG0_ADD_CFG_RECORD");
@@ -53,7 +54,7 @@ public class HzCfg0RecordDaoImpl implements HzCfg0RecordDao {
     @Override
     public int updateByPrimaryKey(HzCfg0Record record) {
         record.setWhichTable("HZ_CFG0_RECORD");
-        return baseSQLUtil.executeUpdate(record, "com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0RecordDao.updateByPrimaryKey") ;
+        return baseSQLUtil.executeUpdate(record, "com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0RecordDao.updateByPrimaryKey");
     }
 
     @Override
@@ -64,7 +65,7 @@ public class HzCfg0RecordDaoImpl implements HzCfg0RecordDao {
 
     @Override
     public int deleteAddedCfgByList(List<HzCfg0Record> records) {
-        return baseSQLUtil.executeDelete(records,"com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0RecordDao.deleteAddedCfgByList");
+        return baseSQLUtil.executeDelete(records, "com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0RecordDao.deleteAddedCfgByList");
     }
 
     @Override
@@ -81,6 +82,11 @@ public class HzCfg0RecordDaoImpl implements HzCfg0RecordDao {
         record.setProjectPuid(projectPuid);
         record.setWhichTable("HZ_CFG0_ADD_CFG_RECORD");
         return baseSQLUtil.executeQuery(record, "com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0RecordDao.selectListByProjectPuid");
+    }
+
+    @Override
+    public List<HzMaterielFeatureBean> selectMaterielFeatureByProjectPuid(String projectPuid) {
+        return baseSQLUtil.executeQueryByPass(new HzMaterielFeatureBean(), projectPuid, "com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0RecordDao.selectMaterielFeatureByProjectPuid");
     }
 
     @Override

@@ -1,7 +1,9 @@
 package com.connor.hozon.bom.bomSystem.dao.cfg;
 
+import com.connor.hozon.bom.bomSystem.bean.HzMaterielFeatureBean;
 import org.apache.ibatis.annotations.Param;
 import sql.pojo.cfg.HzCfg0Record;
+import sql.pojo.project.HzSuperMateriel;
 
 import java.util.List;
 
@@ -44,6 +46,7 @@ public interface HzCfg0RecordDao {
      */
     List<HzCfg0Record> selectAddedCfgListByProjectPuid(@Param("projectPuid") String projectPuid);
 
+    List<HzMaterielFeatureBean> selectMaterielFeatureByProjectPuid(@Param("projectPuid") String projectPuid);
     /***
      * 根据puid查找1条特性数据
      * @param puid

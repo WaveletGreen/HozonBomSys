@@ -20,16 +20,15 @@ public class HzCfg0OptionFaamilyService {
     HzCfg0OptionFamilyDao hzCfg0OptionFamilyDao;
 
     public List<HzCfg0OptionFamily> doCfg0OptionFamilyListByProjectPuid(String mainId) {
-        List<HzCfg0OptionFamily> families = hzCfg0OptionFamilyDao.selectNameByMainId(mainId);
-        return families;
+        return hzCfg0OptionFamilyDao.selectNameByMainId(mainId);
     }
 
     public List<String> doGetColumn(String mainId) {
         List<HzCfg0OptionFamily> families = doCfg0OptionFamilyListByProjectPuid(mainId);
-        if(families==null||families.isEmpty())
+        if (families == null || families.isEmpty())
             return null;
         List<String> result = new ArrayList<>();
-        families.stream().filter(f->f!=null).collect(Collectors.toList()).forEach(f -> result.add(f.getpOptionfamilyName()));
+        families.stream().filter(f -> f != null).collect(Collectors.toList()).forEach(f ->result.add(f.getpOptionfamilyDesc()+"\n"+f.getpOptionfamilyName()));
         return result;
     }
 

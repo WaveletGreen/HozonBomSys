@@ -8,8 +8,8 @@ $(document).ready(
     $("#queryModelColorCfg").click(function () {
 
         //必须输入一个配置的puid
-        var pCfg0MainRecordOfMC = $("#project", window.top.document).val();
-        if (pCfg0MainRecordOfMC.length <= 0) {
+        var projectPuid = $("#project", window.top.document).val();
+        if (projectPuid.length <= 0) {
             $("#myModal").modal('show');
             return;
         }
@@ -18,7 +18,7 @@ $(document).ready(
         var column = [];
         $("#refreshModelColorCfg").removeAttr("disabled");
         $.ajax({
-            url: "modelColor/getColumn?pCfg0MainRecordOfMC=" + pCfg0MainRecordOfMC,
+            url: "modelColor/getColumn?projectPuid=" + projectPuid,
             type: "GET",
             success: function (result) {
                 if (!result.status) {
@@ -64,7 +64,7 @@ $(document).ready(
                     column.push(josn);
                 }
                 $table.bootstrapTable({
-                    url: "modelColor/loadAll",
+                    url: "modelColor/loadAll?projectPuid=" + projectPuid,
                     method: 'get',
                     height: $(window.parent.document).find("#wrapper").height() - 252,
                     width: $(window).width(),
@@ -85,7 +85,7 @@ $(document).ready(
                             handler: function () {
                                 window.Ewin.dialog({
                                     title: "添加",
-                                    url: "modelColor/addPage?pCfg0MainRecordOfMC=" + pCfg0MainRecordOfMC,
+                                    url: "modelColor/addPage?projectPuid=" + projectPuid,
                                     gridId: "gridId",
                                     width: 500,
                                     height: 600
@@ -160,7 +160,7 @@ $(document).ready(
 
     }),
     //手动刷新按钮
-    $("#refreshModelColorCfg").click(function () {
+    $("#refresh").click(function () {
         $('#modelColorCfgTable').bootstrapTable('refresh');
     })
 

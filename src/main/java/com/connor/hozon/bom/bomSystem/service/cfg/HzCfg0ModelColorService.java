@@ -41,9 +41,9 @@ public class HzCfg0ModelColorService {
         return hzCfg0ModelColorDao.selectByPrimaryKey(color);
     }
 
-    public Map<String, Object> doLoadAll() {
+    public Map<String, Object> doLoadAll(String projectPuid) {
         Map<String, Object> result = new HashMap<>();
-        List<HzCfg0ModelColor> colorSet = hzCfg0ModelColorDao.selectAll();
+        List<HzCfg0ModelColor> colorSet = hzCfg0ModelColorDao.selectAll(projectPuid);
         result.put("totalCount", colorSet.size());
         List<Map<String, String>> res = new ArrayList<>();
         colorSet.forEach(color -> {

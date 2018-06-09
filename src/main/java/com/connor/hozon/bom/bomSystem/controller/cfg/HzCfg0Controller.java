@@ -139,9 +139,8 @@ public class HzCfg0Controller {
     public Map<String, Object> loadRelevance(@RequestParam("projectPuid") String projectPuid) {
         Map<String, Object> result = new HashMap<>();
         List<HzRelevanceBean> _list = new ArrayList<>();
-        List<Integer> _index = new ArrayList();
-        _index.add(0);
-        hzCfg0Service.doLoadRelevance(projectPuid, _list, _index, "HZ_CFG0_RECORD");
+        int _index = 0;
+        _index = hzCfg0Service.doLoadRelevance(projectPuid, _list, _index, "HZ_CFG0_RECORD");
         hzCfg0Service.doLoadRelevance(projectPuid, _list, _index, "HZ_CFG0_ADD_CFG_RECORD");
         result.put("totalCount", _list.size());
         result.put("result", _list);
@@ -155,20 +154,7 @@ public class HzCfg0Controller {
             return false;
         }
         HzCfg0Record record = null;
-/*        if ("HZ_CFG0_RECORD".equals(bean.get_table())) {
-            record = hzCfg0Service.doSelectOneByPuid(bean.getPuid());
-            if(record==null){
-                return false;
-            }
-            record.setpCfg0Relevance(bean.getRelevanceCode());
-            return hzCfg0Service.doUpdate(record);
-        } else if ("HZ_CFG0_ADD_CFG_RECORD".equals(bean.get_table())) {
-            if(record==null){
-                return false;
-            }
-            record.setpCfg0Relevance(bean.getRelevanceCode());
-            return hzCfg0Service.doUpdateAddedCfg(record);
-        }*/
+
         record = hzCfg0Service.doSelectOneByPuid(bean.getPuid());
         if (record != null) {
             record = hzCfg0Service.doSelectOneByPuid(bean.getPuid());
@@ -182,6 +168,14 @@ public class HzCfg0Controller {
         }
     }
 
+    /**
+     * 相关性获取页面。根据<strong>page</strong>的值来进行判断，以此进行相关页面的返回
+     *
+     * @param uid   可以是项目的puid，或者配置值的puid
+     * @param page  相关页面，addPage或者modifyPage
+     * @param model
+     * @return 返回下对应的前端页面
+     */
     @RequestMapping("/relModifyPage")
     public String relPage(@RequestParam("uid") String uid, @RequestParam("page") String page, Model model) {
         HzRelevanceBean bean = new HzRelevanceBean();
