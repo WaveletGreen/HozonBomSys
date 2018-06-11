@@ -8,13 +8,9 @@
 <body>
 <h1>工艺合件大Tree图</h1>
 <div class="col-lg-3">
-    <div class="form-group">
-        <label for="lineId">零件号:</label>
-        <input type="text" class="form-control" name="lineId" id="lineId" placeholder="请输入要查询零件号"/>
-    </div>
-    <div class="form-group">
-        <button type="button" id="queryBtn" onclick="doQuery();" class="btn btn-primary">查询</button>
-    </div>
+    <label for="lineId">零件号:</label>
+    <input type="text" class="form-control" name="lineId" id="lineId" placeholder="请输入要查询零件号"/>
+    <button type="button" id="queryBtn" onclick="doQuery();" class="btn btn-primary">查询</button>
     <ul id="menu_tree" class="ztree  col-md-4" style="width:560px; overflow:auto;"></ul>
 </div>
 <div class="col-lg-1">

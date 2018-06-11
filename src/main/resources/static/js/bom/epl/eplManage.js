@@ -172,11 +172,11 @@ $(document).ready((function () {
             column.push({field: 'puid', title: 'Puid'});
             // column.push({field: 'ck', checkbox: true, Width: 50});
             column.push({
-                field: '',
+                field: 'No',
                 title: '序号',
-                formatter: function (value, row, index) {
-                    return index + 1;
-                },
+                // formatter: function (value, row, index) {
+                //     return index + 1;
+                // },
                 align:
                     'center',
                 valign:
@@ -200,42 +200,19 @@ $(document).ready((function () {
                 }
             };
             $table.bootstrapTable({
-                ajax : function (request) {
-                    $.ajax({
-                        type : "GET",
-                        url : "epl/record",
-                        contentType: "application/json;charset=utf-8",
-                        data:'queryParams',
-                        success : function (msg) {
-                            request.success({
-                                row : msg
-                            });
-                            $table.bootstrapTable('load', msg);
-                        },
-                        error:function(){
-                            alert("错误");
-                        }
-                    });
-                },
+                url:"epl/record",
+                method: 'get',
                 height: $(window.parent.document).find("#wrapper").height(),
                 width: $(window).width(),
                 showToggle: true,                   //是否显示详细视图和列表视图的切换按钮
                 showRefresh: true,                  //是否显示刷新按钮
                 pagination: true,                   //是否显示分页（*）
-                pageSize:50,
+                pageSize:10,
                 pageNumber:1,
                 pageList : [ 10, 25, 50, 100,200,300,500, ], //可供选择的每页的行数（*）
-                paginationPreText: '‹',//指定分页条中上一页按钮的图标或文字,这里是<
-                paginationNextText: '›',//指定分页条中下一页按钮的图标或文字,这里是>
                 sidePagination : "server", //分页方式：client客户端分页，server服务端分页（*）
-                queryParamsType : '',
-                queryParams: function (params) {//自定义参数，这里的参数是传给后台的，我这是是分页用的
-                    return {//这里的params是table提供的
-                        pageNum: params.offset,//从数据库第几条记录开始
-                        pageSize: params.limit//找多少条
-                    };
-                },
                 clickToSelect: true,                // 单击某一行的时候选中某一条记录
+                showExport: true,
                 formId: "formId",
                 /**列信息，需要预先定义好*/
                 columns: column,
