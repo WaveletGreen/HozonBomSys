@@ -31,7 +31,7 @@ public class HzEPLController extends BaseController {
         Page<HzEPLRecordRespDTO> recordRespDTOPage = hzEPLManageRecordService.getHzEPLRecordForPage(recordReqDTO);
         List<HzEPLRecordRespDTO> recordRespDTOS =  recordRespDTOPage.getResult();
         if (ListUtil.isEmpty(recordRespDTOS)) {
-            writeAjaxJSONResponse(ResultMessageBuilder.build(false,"暂无数据",new Page<>(recordReqDTO.getPageNum(),recordReqDTO.getPageSize(),0)),response);
+            writeAjaxJSONResponse(ResultMessageBuilder.build(false,"暂无数据",new Page<>(recordReqDTO.getPage(),recordReqDTO.getLimit(),0)),response);
 
         }
         writeAjaxJSONResponse(ResultMessageBuilder.build(recordRespDTOPage),response);
@@ -51,9 +51,9 @@ public class HzEPLController extends BaseController {
         if (ListUtil.isEmpty(recordRespDTOS)) {
             return ret;
         }
-        List<Map<String, String>> _list = new ArrayList<>();
+        List<Map<String, Object>> _list = new ArrayList<>();
         recordRespDTOS.forEach(dto -> {
-            Map<String, String> _res = new HashMap<>();
+            Map<String, Object> _res = new HashMap<>();
             _res.put("puid", dto.getPuid());
             _res.put("level", dto.getLevel());
             _res.put("pBomOfWhichDept", dto.getpBomOfWhichDept());
@@ -122,6 +122,7 @@ public class HzEPLController extends BaseController {
             _res.put("wasterProduct",dto.getWasterProduct());
             _res.put("change", dto.getChange());
             _res.put("changeNum",dto.getChangeNum());
+            _res.put("No",dto.getNo());
             _list.add(_res);
         });
         ret.put("totalCount", recordRespDTOPage.getTotalCount());

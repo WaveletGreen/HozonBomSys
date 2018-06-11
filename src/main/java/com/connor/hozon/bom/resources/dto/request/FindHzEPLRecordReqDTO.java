@@ -9,10 +9,14 @@ public class FindHzEPLRecordReqDTO {
      * 项目id
      */
     private String projectId;
-
-    private int pageSize;
-
-    private int pageNum;
+    /**
+     * 页码
+     */
+    private int page;
+    /**
+     * 条数
+     */
+    private int limit;
 
     public String getProjectId() {
         return projectId;
@@ -22,19 +26,19 @@ public class FindHzEPLRecordReqDTO {
         this.projectId = projectId;
     }
 
-    public int getPageSize() {
-        return pageSize;
+    public int getPage() {
+        return page;
     }
 
-    public void setPageSize(int pageSize) {
-        this.pageSize = pageSize;
+    public void setPage(int page) {
+        this.page = page;
     }
 
-    public int getPageNum() {
-        return pageNum;
+    public int getLimit() {
+        return limit;
     }
 
-    public void setPageNum(int pageNum) {
-        this.pageNum = pageNum;
+    public void setLimit(int limit) {
+        this.limit = limit;
     }
 }

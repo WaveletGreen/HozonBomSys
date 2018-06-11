@@ -10,6 +10,8 @@ public class HzEPLRecordRespDTO {
      * bom表的puid
      */
     private String puid;
+
+    private Integer No;
     /**
      * 级别 以2Y层为相对 第1级
      */
@@ -848,5 +850,13 @@ public class HzEPLRecordRespDTO {
 
     public void setChangeNum(String changeNum) {
         this.changeNum = changeNum;
+    }
+
+    public Integer getNo() {
+        return No;
+    }
+
+    public void setNo(Integer no) {
+        No = no;
     }
 }

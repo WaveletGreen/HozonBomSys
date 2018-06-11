@@ -28,13 +28,14 @@ public class HzEPLManageRecordServiceImpl implements HzEPLManageRecordService {
         List<HzEPLRecordRespDTO> recordRespDTOS = new ArrayList<>();
         Page<HzEPLManageRecord> eplPage = hzEplMangeRecordDAO.getEPLListForPage(recordReqDTO);
         if(eplPage == null){
-            return new Page<>(recordReqDTO.getPageNum(),recordReqDTO.getPageSize(),0);
+            return new Page<>(recordReqDTO.getPage(),recordReqDTO.getLimit(),0);
         }
         List<HzEPLManageRecord> records =  eplPage.getResult();
         if(ListUtil.isEmpty(records)){
             return null;
         }
         try{
+            int i = (recordReqDTO.getPage()-1)*recordReqDTO.getLimit()+1;
             for(HzEPLManageRecord record:records){
                 HzEPLRecordRespDTO recordRespDTO = new HzEPLRecordRespDTO();
                 recordRespDTO.setPuid(record.getpPuid());
@@ -149,10 +150,11 @@ public class HzEPLManageRecordServiceImpl implements HzEPLManageRecordService {
                 recordRespDTO.setRhythm(record.getRhythm()==null?"":record.getRhythm());
                 recordRespDTO.setSparePart(record.getSparePart()==null?"":record.getSparePart());
                 recordRespDTO.setProcessRoute(record.getProcessRoute()==null?"":record.getProcessRoute());
+                recordRespDTO.setNo(i++);
                 recordRespDTOS.add(recordRespDTO);
             }
 
-            return  new Page<HzEPLRecordRespDTO>(recordReqDTO.getPageNum(),recordReqDTO.getPageSize(),eplPage.getTotalCount(),recordRespDTOS);
+            return  new Page<HzEPLRecordRespDTO>(recordReqDTO.getPage(),recordReqDTO.getLimit(),eplPage.getTotalCount(),recordRespDTOS);
         }catch (Exception e){
             return null;
         }
