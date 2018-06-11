@@ -27,8 +27,8 @@ public class HzEplManageRecordDAOImpl extends BaseSQLUtil implements HzEplMangeR
         PageRequest request = new PageRequest();
         Map map = new HashMap();
 //        map.put("projectId",recordReqDTO.getProjectId());
-        request.setPageNumber(recordReqDTO.getPageNum());
-        request.setPageSize(recordReqDTO.getPageSize());
+        request.setPageNumber(recordReqDTO.getPage());
+        request.setPageSize(recordReqDTO.getLimit());
         request.setFilters(map);
         return super.findForPage("HzEplManageRecordDAOImpl_getHzEplManageRecord","HzEplManageRecordDAOImpl_findTotalCount",request);
 

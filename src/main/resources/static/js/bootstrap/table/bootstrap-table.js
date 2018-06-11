@@ -2080,8 +2080,13 @@
                 page : this.pageNumber,// 起始页面
                 limit : this.pageSize // 页面大小
             }
+            // if(formId!=undefined||formId!=''){
+            //     $.each($("#"+formId).find("input"),function(index,info){
+            //         param[info.name] = info.value;
+            //     })
+            // }
             if(formId!=undefined||formId!=''){
-                $.each($("#"+formId).find("input"),function(index,info){
+                $.each($(formId).find("input"),function(index,info){
                     param[info.name] = info.value;
                 })
             }

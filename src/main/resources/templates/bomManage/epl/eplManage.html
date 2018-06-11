@@ -1,22 +1,17 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<!--User: xulf Date: 2018/6/4 Time: 15:40-->
-<head th:include="include/ofbom">
-</head>
-<!--<link th:href="@{/css/stage/bom-stage.css}" rel="stylesheet"/>-->
+<html  xmlns:th="http://www.thymeleaf.org">
+<head th:include="include/ofBom">
+<link th:href="@{/css/stage/bom-stage.css}" rel="stylesheet"/>
 <!--<link th:href="@{/css/bom/epl/epl.css}" rel="stylesheet">-->
-<meta charset="UTF-8">
+<script th:src="@{/js/jq.resizableColumns.js}"></script>
+        <meta charset="UTF-8">
 <title>EPL管理</title>
 </head>
 <body>
-
         <table  class="table table-striped tableNormalStyle" id="eplTable"></table>
 
-<script th:src="@{/js/bom/epl/eplManage.js}"></script>
-<script th:inline="javascript">
-    function doQuery() {
-        $('#eplTable').bootstrapTable('refresh');    //刷新表格
-    }
+<script th:src="@{/js/bom/epl/epl.js}"></script>
+<script type="text/javascript">
 </script>
 </body>
 </html>
