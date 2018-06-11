@@ -74,8 +74,9 @@ $(document).ready(
                                     return false;
                                 }
                                 window.Ewin.dialog({
+                                    // 这个puid就是车型模型的puid，直接修改了车型模型的基本信息（在bom系统维护的字段）
                                     title: "修改基本信息",
-                                    url: "materiel/modifyPage?puid=" + rows[0].puid,
+                                    url: "materiel/modifyPage?puid=" + rows[0].puid + "&page=model",
                                     gridId: "gridId",
                                     width: 350,
                                     height: 450
@@ -94,7 +95,8 @@ $(document).ready(
                                 }
                                 window.Ewin.dialog({
                                     title: "修改超级物料",
-                                    url: "materiel/modifyPage?cfg0MainPuid=" + rows[0].cfg0MainPuid,
+                                    //直接修改了超级物料表的数据，要根据配置器的puid找，否则就不能根据所见即所改
+                                    url: "materiel/modifyPage?puid=" + rows[0].cfg0MainPuid + "&page=superMateriel",
                                     gridId: "gridId",
                                     width: 350,
                                     height: 450

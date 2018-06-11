@@ -1,7 +1,7 @@
 package com.connor.hozon.bom.bomSystem.controller.cfg;
 
 import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0ModelService;
-import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0modelRecordService;
+import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0ModelRecordService;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,7 +22,7 @@ public class HzCfg0ModelController {
     @Autowired
     HzCfg0ModelService hzCfg0ColorSerService;
     @Autowired
-    HzCfg0modelRecordService hzCfg0modelRecordService;
+    HzCfg0ModelRecordService hzCfg0modelRecordService;
 
     @RequestMapping(value = "/saveModelData", method = RequestMethod.POST)
     @ResponseBody
@@ -57,7 +57,7 @@ public class HzCfg0ModelController {
         if (fromDBDetail == null) {
             HzCfg0ModelRecord record = new HzCfg0ModelRecord();
             record.setPuid(detail.getpModelPuid());
-            record = hzCfg0modelRecordService.doGetById(record);
+            record = hzCfg0modelRecordService.doGetById(detail.getPuid());
             if (record == null) {
                 return "error";
             } else {

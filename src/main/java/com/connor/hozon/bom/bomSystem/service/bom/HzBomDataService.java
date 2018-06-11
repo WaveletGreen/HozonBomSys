@@ -50,26 +50,26 @@ public class HzBomDataService {
                 String[] appendLocalName = new String[localName.length + appendCount];
                 String[] appendTrueName = new String[trueName.length + appendCount];
 
-//                appendLocalName[0] = "序号";
-//                appendLocalName[1] = "˳顺序号";
-//                appendLocalName[2] = "ID";
-//                appendLocalName[3] = "父层ID";
-//                appendLocalName[4] = "是否是2Y层";
-//
-//                appendTrueName[0] = "index";
-//                appendTrueName[1] = "on";
-//                appendTrueName[2] = "id";
-//                appendTrueName[3] = "pid";
-//                appendTrueName[4] = "is2Y";
-//
-//                System.arraycopy(localName, 0, appendLocalName, appendCount, localName.length);
-//                System.arraycopy(trueName, 0, appendTrueName, appendCount, trueName.length);
-//
-//                array.add(0, appendTrueName);
-//                array.add(1, appendLocalName);
+                appendLocalName[0] = "序号";
+                appendLocalName[1] = "顺序号";
+                appendLocalName[2] = "ID";
+                appendLocalName[3] = "父层ID";
+                appendLocalName[4] = "是否是2Y层";
 
-                array.add(0, trueName);
-                array.add(1, localName);
+                appendTrueName[0] = "index";
+                appendTrueName[1] = "on";
+                appendTrueName[2] = "id";
+                appendTrueName[3] = "pid";
+                appendTrueName[4] = "is2Y";
+
+                System.arraycopy(localName, 0, appendLocalName, appendCount, localName.length);
+                System.arraycopy(trueName, 0, appendTrueName, appendCount, trueName.length);
+
+                array.add(0, appendTrueName);
+                array.add(1, appendLocalName);
+
+//                array.add(0, trueName);
+//                array.add(1, localName);
             }
             for (HzBomLineRecord hbr : result) {
                 JSONObject object = new JSONObject();

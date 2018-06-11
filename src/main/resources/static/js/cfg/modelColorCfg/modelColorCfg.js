@@ -16,7 +16,7 @@ $(document).ready(
         var $table = $("#modelColorCfgTable");
         $table.bootstrapTable('destroy');
         var column = [];
-        $("#refreshModelColorCfg").removeAttr("disabled");
+        $("#refresh").removeAttr("disabled");
         $.ajax({
             url: "modelColor/getColumn?projectPuid=" + projectPuid,
             type: "GET",

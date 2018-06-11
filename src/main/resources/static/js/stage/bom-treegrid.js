@@ -11,7 +11,7 @@ $(document).ready(
                 return;
             }
             $.ajax({
-                type: "GET",
+                type: "POST",
                 url: "./loadBom/loadByID",
                 data: {
                     "bdf": bdf
@@ -90,8 +90,8 @@ function addToTable($table, result, myColumns) {
             showRefresh: true,                  //是否显示刷新按钮
             search: true,                       //是否显示表格搜索，此搜索是客户端搜索，不会进服务端，所以，个人感觉意义不大
             // pagination: isPagination,                   //是否显示分页（*）
-            sortable: true,                     //是否启用排序
-            sortOrder: "asc",                   //排序方式
+            // sortable: true,                     //是否启用排序
+            // sortOrder: "asc",                   //排序方式
             clickToSelect: true  //点击表格项即可选择
         });
     }
@@ -99,7 +99,7 @@ function addToTable($table, result, myColumns) {
         //重新载入数据，清空之前的，用load，用refresh不成功
         $table.bootstrapTable("load", result);
     }
-    toTree($table, "collapsed");
+    toTree($table, "expanded");
     firstLoad = false;
 
 }

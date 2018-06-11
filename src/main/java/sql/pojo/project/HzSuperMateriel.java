@@ -13,6 +13,7 @@ public class HzSuperMateriel {
 
     private String pPertainToProjectPuid;
 
+
     public String getPuid() {
         return puid;
     }

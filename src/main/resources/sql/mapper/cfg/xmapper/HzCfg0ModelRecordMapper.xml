@@ -42,7 +42,7 @@
         </foreach>
         select 1 from dual
     </insert>
-    <update id="updateBasicDetailByPuid">
+    <update id="updateBasicByPuid">
         update HZ_CFG0_MODEL_RECORD t
           set t.P_CFG0_MODEL_BASIC_DETAIL=#{pCfg0ModelBasicDetail,jdbcType=VARCHAR}
         where t.PUID=#{puid,jdbcType=VARCHAR}

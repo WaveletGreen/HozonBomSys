@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
  * Time: 9:44
  */
 @Service("hzCfg0OptionFamilyService")
-public class HzCfg0OptionFaamilyService {
+public class HzCfg0OptionFamilyService {
     @Autowired
     HzCfg0OptionFamilyDao hzCfg0OptionFamilyDao;
 

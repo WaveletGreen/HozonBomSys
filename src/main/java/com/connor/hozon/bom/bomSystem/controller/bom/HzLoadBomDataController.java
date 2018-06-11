@@ -22,7 +22,7 @@ public class HzLoadBomDataController {
         return hzCfg0BomLineOfModelService.parse(bdf);
     }
 
-    @RequestMapping(value = "/loadByID", method = RequestMethod.GET)
+    @RequestMapping(value = "/loadByID", method = RequestMethod.POST)
     @ResponseBody
     public JSONArray getLineRecords(@RequestParam String bdf) {
         return hzBomDataService.load(bdf);

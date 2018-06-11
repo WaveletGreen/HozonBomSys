@@ -160,7 +160,7 @@ public class HzCfg0Controller {
             record = hzCfg0Service.doSelectOneByPuid(bean.getPuid());
             record.setpCfg0Relevance(bean.getRelevanceCode());
             return hzCfg0Service.doUpdate(record);
-        } else if ((record = hzCfg0Service.doSelectOneAddedCfgByPuid(record.getPuid())) != null) {
+        } else if ((record = hzCfg0Service.doSelectOneAddedCfgByPuid(bean.getPuid())) != null) {
             record.setpCfg0Relevance(bean.getRelevanceCode());
             return hzCfg0Service.doUpdateAddedCfg(record);
         } else {

@@ -19,11 +19,23 @@
                 <property name="url" value="jdbc:oracle:thin:@localhost:1521:TC10"/>
                 <property name="username" value="HOZON"/>
                 <property name="password" value="HOZON"/>
-
+                <!--最大的活动连接数，活动连接，就是正在与数据库交互的连接，默认是10-->
                 <property name="poolMaximumIdleConnections" value="12"/>
+                <!--空闲连接数，就是没有处理请求的连接，默认是5-->
                 <property name="poolMaximumActiveConnections" value="2000"/>
+                <!--在被强制返回之前，连接池中被检查的时间，默认值为20000毫秒-->
+                <property name="poolMaximumCheckoutTime" value="20000"/>
+                <!--给连接池一个打印日志状态机会的低层次设置，还有重新尝试获取连接，这些情况往往会需要很长时间。
+                为了避免连接池没有配置时静默失败。默认值20000毫秒-->
+                <property name="poolTimeToWait" value="20000"/>
+                <!-- 	发送到数据的侦测查询，用来验证连接是否正常工作，并且准备接受请求。默认为“NO PING QUERY SET”，
+                这会引起许多数据库驱动连接由一个错误信息而导致失败-->
                 <property name="poolPingQuery" value="SELECT 1 FROM DUAL"/>
+                <!--这是开启或禁用侦测查询，如果开启，必须用一个合法的SQL语句，设置poolPingQuery属性，默认值为false-->
                 <property name="poolPingEnabled" value="true"/>
+                <!--用来配置poolPingQuery多长时间被调用一次。可以被设置匹配标准的数据库链接超时时间，
+                来避免不必要的侦测。默认值0（也就是所有链接每一时刻都被侦测到，但仅仅当poolPingEnabled为true时适用-->
+                <property name="poolPingConnectionsNotUsedFor" value="0"/>
             </dataSource>
         </environment>
     </environments>
@@ -45,6 +57,7 @@
         <mapper resource="sql/mapper/cfg/xmapper/HzCfg0OptionFamilyMapper.xml"/>
         <mapper resource="sql/mapper/cfg/xmapper/HzCfg0RecordMapper.xml"/>
         <!--项目-->
+        <mapper resource="sql/mapper/project.xmapper/HzSuperMaterielMapper.xml"/>
         <mapper resource="sql/mapper/project.xmapper/HzProjectLibsMapper.xml"/>
         <mapper resource="sql/mapper/project.xmapper/HzBrandRecordMapper.xml"/>
         <mapper resource="sql/mapper/project.xmapper/HzPlatformRecordMapper.xml"/>
