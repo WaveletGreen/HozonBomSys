@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<!--User: xulf Date: 2018/6/7 Time: 16:51-->
+<head th:include="include/includebase"></head>
+<meta charset="UTF-8">
+<title>工艺合件</title>
+</head>
+<body>
+<h1>工艺合件大Tree图</h1>
+<div class="col-lg-3">
+    <div class="form-group">
+        <label for="lineId">零件号:</label>
+        <input type="text" class="form-control" name="lineId" id="lineId" placeholder="请输入要查询零件号"/>
+    </div>
+    <div class="form-group">
+        <button type="button" id="queryBtn" onclick="doQuery();" class="btn btn-primary">查询</button>
+    </div>
+    <ul id="menu_tree" class="ztree  col-md-4" style="width:560px; overflow:auto;"></ul>
+</div>
+<div class="col-lg-1">
+</div>
+<div class="col-lg-3">
+    <ul id="tree2" class="ztree col-lg-4"></ul>
+</div>
+<script th:src="@{/js//bom/pbom/processOfFitting.js}"></script>
+<script th:inline="javascript">
+
+/*
+    function addHoverDom(treeId, treeNode) {
+        var sObj = $("#" + treeNode.tId + "_span");
+        if (treeNode.editNameFlag || $("#addBtn_" + treeNode.tId).length > 0) return;
+        var addStr = "<span class='button remove' id='removeBtn_" + treeNode.tId + "' title='add node' onfocus='this.blur();'></span>";
+        addStr += "<span class='button add' id='addBtn_" + treeNode.tId + "'></span>";
+        addStr += "<span class='button edit' id='editBtn_" + treeNode.tId + "'></span>";
+        if (treeNode.isParent) {
+            addStr += "<span class='button add' id='addParentBtn_" + treeNode.tId + "'></span>";
+        }
+        sObj.after(addStr);
+        //添加按钮
+        var btn = $("#addBtn_" + treeNode.tId);
+        if (btn) btn.bind("click", function () {
+            zTree = $.fn.zTree.getZTreeObj("menu_tree");
+            selectNode = treeNode;
+            window.Ewin.dialog({title: "添加", url: "tree/addTreePage?id=" + treeNode.puid, width: 400, height: 650})
+            return false;
+        });
+        //删除按钮
+        var remove_btn = $("#removeBtn_" + treeNode.tId);
+        if (remove_btn) remove_btn.bind("click", function () {
+            zTree = $.fn.zTree.getZTreeObj("menu_tree");
+            if (treeNode.isParent) {
+                window.Ewin.alert({message: "请先删除当前菜单节点底下的子菜单！"});
+            } else {
+                window.Ewin.confirm({title: '提示', message: '是否要删除您当前选中的菜单节点？', width: 500}).on(function (e) {
+                    if (e) {
+                        $.post("./tree/remove", {id: treeNode.puid}, function (e) {
+                            if (e.result) {
+                                zTree.removeNode(treeNode);
+                                window.Ewin.alert({message: "删除成功"});
+                            } else {
+                                window.Ewin.alert({message: "删除成功" + e.status});
+                            }
+                        })
+                    }
+                });
+            }
+            return false;
+        });
+        //编辑按钮
+        var edit_btn = $("#editBtn_" + treeNode.tId);
+        if (edit_btn) edit_btn.bind("click", function () {
+            zTree = $.fn.zTree.getZTreeObj("menu_tree");
+            selectNode = treeNode;
+            window.Ewin.dialog({title: "修改", url: "tree/updateTreePage?id=" + treeNode.id, width: 400, height: 650})
+            return false;
+        });
+        //给父级添加
+        var add_parent_btn = $("#addParentBtn_" + treeNode.tId);
+        if (add_parent_btn) add_parent_btn.bind("click", function () {
+            zTree = $.fn.zTree.getZTreeObj("menu_tree");
+            selectNode = null;
+            window.Ewin.dialog({title: "添加", url: "tree/addTreePage", width: 400, height: 650})
+            return false;
+        })
+    };
+
+    function removeHoverDom(treeId, treeNode) {
+        $("#addBtn_" + treeNode.tId).unbind().remove();
+        $("#removeBtn_" + treeNode.tId).unbind().remove();
+        $("#editBtn_" + treeNode.tId).unbind().remove();
+        $("#addParentBtn_" + treeNode.tId).unbind().remove();
+    };
+*/
+
+   /* var setting = {
+            //设置
+            check: {
+                enable: false,
+                //不会有任何自动关联勾选的操作
+                chkboxType: {"Y": "", "N": ""}
+            }
+            ,
+            view: {
+                addHoverDom: addHoverDom,
+                removeHoverDom:
+                removeHoverDom,
+                dblClickExpand:
+                    false,
+                showLine:
+                    true,
+                selectedMulti:
+                    false
+            }
+            ,
+            data: {
+                simpleData: {
+                    enable: true,
+                    idKey:
+                        "puid",
+                    pIdKey:
+                        "pPuid",
+                    rootPId:
+                        "#"
+                }
+            }
+            ,
+            //回调函数
+            callback: {
+                //展开父节点
+                beforeClick: function (treeId, treeNode) {
+                    var zTree = $.fn.zTree.getZTreeObj('menu_tree');
+                    //有子层节点的都不是项目节点，返回false则不会触发onClick事件
+                    if (treeNode.isParent) {
+                        zTree.expandNode(treeNode);
+                        return false;
+                    } else {
+                        return true;
+                    }
+                }
+                ,
+                onClick: function (event, treeId, treeNode) {
+                    if (treeNode.level != 2) {
+                        return;
+                    }
+                    // var zTree = $.fn.zTree.getZTreeObj('menu_tree');
+                    //品牌的父id只有#
+                    if (null == coach[treeNode.puid]) {
+                        //beforeClick排除了有子层的节点，
+                        //绑定本地选择的子节点
+                        localSelectedNode = treeNode;
+                        $.ajax({
+                            url: "pbom/getPBom?puid=" + localSelectedNode.puid,
+                            type: "GET",
+                            success: function (data) {
+                                var puid = localSelectedNode.puid;
+                                localProjectDetail = data;
+                                coach[puid] = localProjectDetail;
+                                // eval("coach." + puid + "=" + data);
+                                changeView(localProjectDetail);
+                                $("#detailTable").css("visibility", "visible");
+                            },
+                            error: function (err) {
+                                alert(err.status);
+                            }
+                        })
+                    }
+                    else {
+                        localProjectDetail = coach[treeNode.puid];
+                        changeView(localProjectDetail);
+                    }
+                    localSelectedNode=treeNode;
+                }
+            }
+        }
+    ;
+    function loadReady() {
+        var bodyH = demoIframe.contents().find("body").get(0).scrollHeight,
+            htmlH = demoIframe.contents().find("html").get(0).scrollHeight,
+            maxH = Math.max(bodyH, htmlH), minH = Math.min(bodyH, htmlH),
+            h = demoIframe.height() >= maxH ? minH : maxH;
+        if (h < 530) {
+            h = 530;
+        }
+        demoIframe.height(h);
+    }
+
+    $(function () {
+            $.post("pbom/getPBom", function (info) {
+                var t = $("#menu_tree");
+                t = $.fn.zTree.init(t, setting, info.data);
+            })
+        }
+    );*/
+    /*function changeView(data) {
+        console.log(data);
+        $("#pBrandCode").text(data.brand.pBrandCode);
+        $("#pBrandName").text(data.brand.pBrandName);
+        $("#pPlatformCode").text(data.platform.pPlatformCode);
+        $("#pPlatformName").text(data.platform.pPlatformName);
+
+        $("#projVehicleCode").text(data.proj.pVehicleCode);
+        $("#projVehicleName").text(data.proj.pVehicleName);
+        $("#projVehicleShapeCode").text(data.proj.pVehicleShapeCode);
+        $("#projVehicleTranName").text(data.proj.pVehicleTranName);
+        $("#projVehicleAnnualCode").text(data.proj.pVehicleAnnualCode);
+        $("#projVehicleAnnual").text(data.proj.pVehicleAnnual);
+
+        $("#pProjectCode").text(data.proj.pProjectCode);
+        $("#pProjectName").text(data.proj.pProjectName);
+    }*/
+
+/*   $(function(){
+
+       var setting = {
+           data: {
+               simpleData: {
+                   enable: true,
+                   idKey:"id",
+                   idPKey:"pId",
+               }
+           },
+           async: {
+               enable: true, //开启异步加载
+               url:"pbom/getPBom", //设置获取异步动态加载的数据
+               dataType: "text",
+               autoParam:["id"],
+               otherParam: { },
+               dataFilter: filter
+           },
+
+           callback: {
+               onClick: onClick  //回调函数为单击操作
+           }
+       };
+//滤波
+       function filter(treeId, parentNode, childNodes) {
+           var array = childNodes;
+           return array;
+       }
+
+
+//单击操作---------------------------------------------------------------------------------------------
+       function onClick(event, treeId, treeNode, clickFlag) {
+           if (treeNode.isParent) {
+               var zTree = $.fn.zTree.getZTreeObj(treeId);
+               //扩展所有子节点
+               zTree.expandNode(treeNode);
+           }
+           //单击后在标题处 重新拼接html,显示为***部门的任务信息概览
+           document.getElementById('dg_h').innerHTML = '<h5>['+treeNode.name+']任务信息概览</h5>';
+
+           //单击后的操作
+           onClickAjax(treeNode.name);
+       }
+
+//初始化操作---严格按照头文件加载，否则会出现init函数没有定义这种情况-------------------------------------------------------------------------------------
+       function init(){
+           $.post("pbom/getPBom",{id:3},function(data){  //id=3是初始输入，确立根节点的id=3
+               var result= $.parseJSON(data);
+               rw_tree=$.fn.zTree.init($("#tree1"),setting, result); //将得到的数据解析并填充到ZTree上
+
+           });
+       }
+       init();
+   });
+
+   /!**
+    * =====点击节点的操作来获取相应的信息的后台请求操作=======================
+    * =============================
+    * *!/
+   function onClickAjax(treeNodeName) {
+
+
+       $.ajax({
+           url:"pbom/getPBom",
+           data:{ ORG_NAME:treeNodeName}, //向后台传递的数据是名字 也可以是id 可以根据实际情况来定
+           type : 'post',
+           async : false,
+           dataType : "json", //返回的数据类型是json
+           success: function(data){
+               console.log(data)
+               //alert('got it!');
+               $('#dg').datagrid('loadData', data);//回调成功后重新加载表格的数据 ，前提是表格的字段已经确定
+           },
+       });
+
+
+
+   }*/
+
+</script>
+</body>
+</html>

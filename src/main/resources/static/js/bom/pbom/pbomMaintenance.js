@@ -8,7 +8,7 @@ window.onload=function(){
             success: function (result) {
                 var column = [];
                 column.push({field: 'pBomPuid', title: 'puid'});
-                column.push({field: 'ck', checkbox: true, Width: 50});
+                // column.push({field: 'ck', checkbox: true, Width: 50});
                 column.push({field: '',
                     title: '序号',
                     formatter: function (value, row, index) {
@@ -39,10 +39,8 @@ window.onload=function(){
                 $table.bootstrapTable({
                     url: "pbom/getMaintain/detail",
                     method: 'get',
-                    //height: $(window.parent.document).find("#wrapper").height() - 252,
-                    //width: $(window).width(),
-                    height:'100%',
-                    width:'100%',
+                    height: $(window.parent.document).find("#wrapper").height() + 252,
+                    width: $(window).width(),
                     showToggle: true,                   //是否显示详细视图和列表视图的切换按钮
                     showRefresh: true,                  //是否显示刷新按钮
                     pagination: false,                   //是否显示分页（*）
@@ -64,7 +62,7 @@ window.onload=function(){
         });
 
 
-    $("#queryBtn").click(function () {
+    /*$("#queryBtn").click(function () {
         var myData = JSON.stringify({
             "level": $("#level").val(),
             "pBomOfWhichDept": $("#pBomOfWhichDept").val(),
@@ -84,5 +82,5 @@ window.onload=function(){
                 alert(info);
             }
         })
-    })
+    })*/
 }

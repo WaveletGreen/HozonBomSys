@@ -298,7 +298,6 @@ public class HzPbomController extends BaseController {
     @RequestMapping(value = "getPBom", method = RequestMethod.GET)
     @ResponseBody
     public Map<String, Object> getPbom(HttpServletResponse response) {
-
         Map<String, Object> ret = new HashMap<>();
         List<Map<String, Object>> _list = new ArrayList<>();
         for(int i=0;i<6;i++){
@@ -365,6 +364,9 @@ public class HzPbomController extends BaseController {
 //        writeAjaxJSONResponse(ResultMessageBuilder.build(respDTOS),response);
 //    }
     }
+
+
+
 
 
 }

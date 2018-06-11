@@ -14,9 +14,12 @@
        data-use-row-attr-func="true" data-reorderable-rows="true"></table>
 
 <script th:src="@{/js/bom/epl/eplManage.js}"></script>
-//
 <script th:src="@{/js/jq.resizableColumns.js}"></script>
 <script th:inline="javascript">
+    // $(function() {
+    //     initTable();
+    //     $('#eplTable').bootstrapTable('hideColumn', 'puid');
+    // });
     function doQuery() {
         $('#eplTable').bootstrapTable('refresh');    //刷新表格
     }

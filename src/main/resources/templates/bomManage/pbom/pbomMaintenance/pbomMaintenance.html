@@ -6,7 +6,7 @@
 <meta charset="UTF-8">
 <title>PBOM维护</title>
 </head>
-<body scroll="no" >
+<body>
 <!--<div class="panel-body">-->
    <!-- <div class="content col-lg-5">
         <span class="infoToUser">请输入需要查询的产品配置器ID</span>
@@ -48,7 +48,7 @@
     <!--</div>-->
     <!--<div class="content col-lg-12">-->
         <!--<table class="table table-striped tableNormalStyle" id="pbomMaintenanceTable"></table>-->
-        <table class="table listext" id="pbomMaintenanceTable" data-resizable-columns-id="demo-table"></table>
+        <table class="table table-striped tableNormalStyle" id="pbomMaintenanceTable"></table>
     <!--</div>-->
 <!--</div>-->
 <!--<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
@@ -76,9 +76,9 @@
     function doQuery() {
         $('#pbomMaintenanceTable').bootstrapTable('refresh');    //刷新表格
     }
-    $(function(){
+    /*$(function(){
         $("pbomMaintenanceTable").resizableColumns({});
-    });
+    });*/
 
 </script>
 </html>
