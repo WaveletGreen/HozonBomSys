@@ -9,6 +9,16 @@ public class HzPbomLineRecord {
      * EBOM 表主键
      */
     private String pPuid;
+    private String parentUid;
+    private String isDept;
+    private String bomDigifaxId;
+    private String linePuid;
+    private byte[] bomLineBlock;
+    private Integer isPart;
+    private Integer orderNum;
+    private String projectPuid;
+    private String pBomLinePartName;
+    private String pBomLinePartClass;
 
     /**
      * BOM行编号 根据这个来计算层级
@@ -210,5 +220,86 @@ public class HzPbomLineRecord {
 
     public void setColorPart(Integer colorPart) {
         this.colorPart = colorPart;
+    }
+
+    public String getParentUid() {
+        return parentUid;
+    }
+
+    public void setParentUid(String parentUid) {
+        this.parentUid = parentUid;
+    }
+
+    public String getIsDept() {
+        return isDept;
+    }
+
+    public void setIsDept(String isDept) {
+        this.isDept = isDept;
+    }
+
+    public String getBomDigifaxId() {
+        return bomDigifaxId;
+    }
+
+    public void setBomDigifaxId(String bomDigifaxId) {
+        this.bomDigifaxId = bomDigifaxId;
+    }
+
+    public String getLinePuid() {
+        return linePuid;
+    }
+
+    public void setLinePuid(String linePuid) {
+        this.linePuid = linePuid;
+    }
+
+
+    public byte[] getBomLineBlock() {
+        return bomLineBlock;
+    }
+
+    public void setBomLineBlock(byte[] bomLineBlock) {
+        this.bomLineBlock = bomLineBlock;
+    }
+
+    public Integer getIsPart() {
+        return isPart;
+    }
+
+    public void setIsPart(Integer isPart) {
+        this.isPart = isPart;
+    }
+
+    public Integer getOrderNum() {
+        return orderNum;
+    }
+
+    public void setOrderNum(Integer orderNum) {
+        this.orderNum = orderNum;
+    }
+
+    public String getProjectPuid() {
+        return projectPuid;
+    }
+
+    public void setProjectPuid(String projectPuid) {
+        this.projectPuid = projectPuid;
+    }
+
+    public String getpBomLinePartName() {
+        return pBomLinePartName;
+    }
+
+    public void setpBomLinePartName(String pBomLinePartName) {
+        this.pBomLinePartName = pBomLinePartName;
+    }
+
+    public String getpBomLinePartClass() {
+        return pBomLinePartClass;
+    }
+
+    public void setpBomLinePartClass(String pBomLinePartClass) {
+        this.pBomLinePartClass = pBomLinePartClass;
     }
 }

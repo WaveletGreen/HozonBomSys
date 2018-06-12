@@ -1,6 +1,11 @@
 package com.connor.hozon.bom.resources.service.bom.impl;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.connor.hozon.bom.bomSystem.dao.bom.HzBomDataDao;
+import com.connor.hozon.bom.bomSystem.dao.impl.bom.HzBomDataDaoImpl;
 import com.connor.hozon.bom.resources.dto.request.*;
+import com.connor.hozon.bom.resources.dto.response.HzPbomComposeRespDTO;
 import com.connor.hozon.bom.resources.dto.response.HzPbomLineMaintainRespDTO;
 import com.connor.hozon.bom.resources.dto.response.HzPbomLineRespDTO;
 import com.connor.hozon.bom.resources.mybatis.bom.HzPbomMaintainRecordDAO;
@@ -9,14 +14,16 @@ import com.connor.hozon.bom.resources.service.bom.HzPbomService;
 import com.connor.hozon.bom.resources.util.ListUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import share.bean.PreferenceSetting;
+import share.bean.RedisBomBean;
+import sql.pojo.HzPreferenceSetting;
 import sql.pojo.bom.HzBomLineRecord;
 import sql.pojo.bom.HzPbomLineMaintainRecord;
 import sql.pojo.bom.HzPbomLineRecord;
 import sql.pojo.bom.HzPbomMaintainRecord;
+import sql.redis.SerializeUtil;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Created by haozt on 2018/5/24
@@ -28,6 +35,9 @@ public class HzPbomServiceImpl implements HzPbomService {
 
     @Autowired
     private HzPbomRecordDAO hzPbomRecordDAO;
+
+    @Autowired
+    private HzBomDataDao hzBomDataDao;
     @Override
     public List<HzPbomLineMaintainRespDTO> getHzPbomMaintainRecord() {
         List<HzPbomLineMaintainRecord> records = recordDAO.getPBomLineMaintainRecord();
@@ -78,7 +88,7 @@ public class HzPbomServiceImpl implements HzPbomService {
 
     @Override
     public List<HzPbomLineRespDTO> getHzPbomLineRecord() {
-        List<HzPbomLineRecord> records = hzPbomRecordDAO.getPbomRecord();
+        List<HzPbomLineRecord> records = hzPbomRecordDAO.getPbomRecord(null);
         if(ListUtil.isEmpty(records)){
             return null;
         }
@@ -165,6 +175,181 @@ public class HzPbomServiceImpl implements HzPbomService {
         return 0;
     }
 
+
+    @Override
+    public JSONArray getHzPbomRecord(HzPbomProcessComposeReqDTO reqDTO) {
+        Map<String,Object> map  = new HashMap<>();
+        map.put("projectId",reqDTO.getProjectId());
+        HzPreferenceSetting setting = new HzPreferenceSetting();
+        setting.setSettingName("Hz_ExportBomPreferenceRedis");
+        List<HzPbomLineRecord> pbomLineRecords = hzPbomRecordDAO.getPbomRecord(map);
+        if(ListUtil.isEmpty(pbomLineRecords)){
+            return null;
+        }
+        try{
+            JSONArray jsonArray = new JSONArray();
+            setting.setBomMainRecordPuid(pbomLineRecords.get(0).getBomDigifaxId());
+            hzBomDataDao = new HzBomDataDaoImpl();
+            setting = hzBomDataDao.loadSetting(setting);
+            byte[] btOfSetting = setting.getPreferencesettingblock();
+            Object objOfSetting = SerializeUtil.unserialize(btOfSetting);
+            if (objOfSetting instanceof PreferenceSetting) {
+                String[] localName = ((PreferenceSetting) objOfSetting).getPreferenceLocal();
+                String[] trueName = ((PreferenceSetting) objOfSetting).getPreferences();
+                jsonArray.add(0,localName);
+                jsonArray.add(1,trueName);
+            }
+            for(HzPbomLineRecord record:pbomLineRecords){
+                JSONObject jsonObject = new JSONObject();
+                Integer is2Y = record.getIs2Y();
+                Integer hasChildren =  record.getIsHas();
+                String lineIndex = record.getLineIndex();
+                String[] strings = getLevelAndRank(lineIndex,is2Y,hasChildren);
+                jsonObject.put("level",strings[0]);
+                jsonObject.put("rank",strings[1]);
+                jsonObject.put("pBomOfWhichDept",record.getpBomOfWhichDept());
+                //需要截取 计算而得
+                String lineId = record.getLineId();
+                jsonObject.put("groupNum",record.getLineId());
+                jsonObject.put("type", record.getType());
+                jsonObject.put("puid",record.getpPuid());
+                jsonObject.put("eBomPuid", record.getPuid()==null?"":record.getPuid());
+                jsonObject.put("lineId", record.getLineId());
+                jsonObject.put("resource", record.getResource()==null?"/":record.getResource());
+                jsonObject.put("type", record.getType()==null?"":record.getType());
+                jsonObject.put("buyUnit", record.getBuyUnit()==null?"":record.getBuyUnit());
+                jsonObject.put("workShop1", record.getWorkShop1()==null?"":record.getWorkShop1());
+                jsonObject.put("workShop2", record.getWorkShop2()==null?"":record.getWorkShop2());
+                jsonObject.put("productLine", record.getProductLine()==null?"":record.getProductLine());
+                jsonObject.put("mouldType", record.getMouldType()==null?"":record.getMouldType());
+                jsonObject.put("outerPart", record.getOuterPart()==null?"":record.getOuterPart());
+                jsonObject.put("colorPart", record.getColorPart()==null?"":record.getColorPart());
+
+
+
+                byte[] bomLineBlock = record.getBomLineBlock();
+                Object obj = SerializeUtil.unserialize(bomLineBlock);
+                if (obj instanceof LinkedHashMap) {
+                    if (((LinkedHashMap) obj).size() > 0) {
+                        ((LinkedHashMap) obj).forEach((key, value) -> {
+
+                            jsonObject.put((String) key, value);
+                        });
+                    }
+                } else if (obj instanceof RedisBomBean) {
+                    List<String> pSets = ((RedisBomBean) obj).getpSets();
+                    List<String> pValues = ((RedisBomBean) obj).getpValues();
+                    if (null != pSets && pSets.size() > 0 && null != pValues && pValues.size() > 0)
+                        for (int i = 0; i < pSets.size(); i++) {
+                            jsonObject.put(pSets.get(i), pValues.get(i));
+                        }
+                }
+                jsonArray.add(jsonObject);
+            }
+            return jsonArray;
+
+        }catch(Exception e){
+            return null;
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+    @Override
+    public JSONArray getPbomForProcessCompose(HzPbomProcessComposeReqDTO reqDTO) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("projectId",reqDTO.getProjectId());
+        map.put("lineId",reqDTO.getLineId());
+        List<HzPbomLineRecord> records = hzPbomRecordDAO.getPbomRecord(map);
+       if(ListUtil.isEmpty(records)){
+           return null;
+       }
+        try{
+            HzPbomLineRecord record = records.get(0);
+            List<HzPbomLineRecord> recordList = getChildLineRecord(reqDTO.getProjectId(),record,new ArrayList<>());
+            JSONArray jsonArray = new JSONArray();
+            for(HzPbomLineRecord lineRecord:recordList){
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("puid",lineRecord.getpPuid());
+                jsonObject.put("parentUid",lineRecord.getParentUid());
+                jsonObject.put("hasChildren",lineRecord.getIsHas());
+                Integer is2Y = lineRecord.getIs2Y();
+                Integer hasChildren =  lineRecord.getIsHas();
+                String lineIndex = lineRecord.getLineIndex();
+                String[] strings = getLevelAndRank(lineIndex,is2Y,hasChildren);
+                jsonObject.put("level",strings[0]);
+                jsonObject.put("rank",strings[1]);
+                jsonObject.put("pBomOfWhichDept",lineRecord.getpBomOfWhichDept());
+                jsonObject.put("groupNum",lineRecord.getLineId());
+                jsonObject.put("eBomPuid", lineRecord.getPuid());
+                jsonObject.put("lineId", lineRecord.getLineId());
+                jsonObject.put("itemName",lineRecord.getpBomLinePartName());
+                jsonObject.put("itemPart",lineRecord.getpBomLinePartClass());
+                jsonObject.put("resource", lineRecord.getResource());
+                jsonObject.put("type", lineRecord.getType());
+                jsonObject.put("buyUnit", lineRecord.getBuyUnit());
+                jsonObject.put("workShop1", lineRecord.getWorkShop1());
+                jsonObject.put("workShop2", lineRecord.getWorkShop2());
+                jsonObject.put("productLine", lineRecord.getProductLine());
+                jsonObject.put("mouldType", lineRecord.getMouldType());
+                jsonObject.put("outerPart", lineRecord.getOuterPart());
+                jsonObject.put("colorPart", lineRecord.getColorPart());
+
+                byte[] bomLineBlock = lineRecord.getBomLineBlock();
+                Object obj = SerializeUtil.unserialize(bomLineBlock);
+                if (obj instanceof LinkedHashMap) {
+                    if (((LinkedHashMap) obj).size() > 0) {
+                        ((LinkedHashMap) obj).forEach((key, value) -> {
+
+                            jsonObject.put((String) key, value);
+                        });
+                    }
+                } else if (obj instanceof RedisBomBean) {
+                    List<String> pSets = ((RedisBomBean) obj).getpSets();
+                    List<String> pValues = ((RedisBomBean) obj).getpValues();
+                    if (null != pSets && pSets.size() > 0 && null != pValues && pValues.size() > 0)
+                        for (int i = 0; i < pSets.size(); i++) {
+                            jsonObject.put(pSets.get(i), pValues.get(i));
+                        }
+                }
+                jsonArray.add(jsonObject);
+            }
+            return jsonArray;
+        }catch (Exception e){
+           return null;
+        }
+    }
+
+
+    /**
+     * 根据id 获取所有的子bom
+     * @return
+     */
+    public  List<HzPbomLineRecord> getChildLineRecord(String projectId,HzPbomLineRecord record,List<HzPbomLineRecord> recordList){
+        Integer hasChildren = record.getIsHas();
+        recordList.add(record);
+        if(hasChildren.equals(1)){
+            Map<String,Object> map = new HashMap<>();
+            map.put("projectId",projectId);
+            map.put("parentUid",record.getpPuid());
+            List<HzPbomLineRecord> records = hzPbomRecordDAO.getHzPbomById(map) ;
+            if(ListUtil.isNotEmpty(records)){
+                for(HzPbomLineRecord lineRecord:records){
+                    getChildLineRecord(projectId,lineRecord,recordList);
+                }
+            }
+        }
+
+        return recordList;
+    }
 
     /**
      * 获取bom系统的层级和级别
@@ -285,6 +470,5 @@ public class HzPbomServiceImpl implements HzPbomService {
         }
         return null;
     }
-
 
 }

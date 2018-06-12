@@ -1,9 +1,9 @@
 package com.connor.hozon.bom.resources.controller.bom;
 
+import com.alibaba.fastjson.JSONArray;
 import com.connor.hozon.bom.bomSystem.dao.bom.HzBomDataDao;
 import com.connor.hozon.bom.resources.controller.BaseController;
 import com.connor.hozon.bom.resources.dto.request.*;
-import com.connor.hozon.bom.resources.dto.response.HzPbomComposeRespDTO;
 import com.connor.hozon.bom.resources.dto.response.HzPbomLineMaintainRespDTO;
 import com.connor.hozon.bom.resources.dto.response.HzPbomLineRespDTO;
 import com.connor.hozon.bom.resources.service.bom.HzPbomService;
@@ -15,9 +15,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import share.bean.PreferenceSetting;
-import sql.pojo.HzPreferenceSetting;
-import sql.redis.SerializeUtil;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.*;
@@ -367,4 +364,16 @@ public class HzPbomController extends BaseController {
     }
 
 
+    @RequestMapping(value = "processComposeTree",method = RequestMethod.GET)
+    public void findProcessComposeTree(HzPbomProcessComposeReqDTO reqDTO,HttpServletResponse response){
+        if(reqDTO==null){
+            writeAjaxJSONResponse(ResultMessageBuilder.build(false,"非法参数！"),response);
+        }
+        if(reqDTO.getProjectId() == null ||reqDTO.getLineId()==null){
+            writeAjaxJSONResponse(ResultMessageBuilder.build(false,"非法参数！"),response);
+
+        }
+        JSONArray jsonArray = hzPbomService.getPbomForProcessCompose(reqDTO);
+        writeAjaxJSONResponse(jsonArray,response);
+    }
 }

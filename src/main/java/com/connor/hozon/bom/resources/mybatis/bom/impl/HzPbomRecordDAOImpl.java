@@ -8,6 +8,7 @@ import sql.pojo.bom.HzPbomLineRecord;
 import sql.pojo.bom.HzPbomRecord;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by haozt on 2018/5/25
@@ -17,9 +18,9 @@ public class HzPbomRecordDAOImpl extends BaseSQLUtil implements HzPbomRecordDAO 
 
 
     @Override
-    public List<HzPbomLineRecord> getPbomRecord() {
+    public List<HzPbomLineRecord> getPbomRecord(Map<String,Object> map) {
 
-        return super.findForList("HzPbomRecordDAOImpl_getPbomRecord",null);
+        return super.findForList("HzPbomRecordDAOImpl_getPbomRecord",map);
     }
 
     @Override
@@ -43,4 +44,10 @@ public class HzPbomRecordDAOImpl extends BaseSQLUtil implements HzPbomRecordDAO 
     public int deleteByForeignId(String ePuid) {
         return super.delete("HzPbomRecordDAOImpl_deleteByForeignId",ePuid);
     }
+
+    @Override
+    public List<HzPbomLineRecord> getHzPbomById(Map<String, Object> map) {
+        return super.findForList("HzPbomRecordDAOImpl_getHzPbomById",map);
+    }
+
 }
