@@ -1,6 +1,8 @@
 package com.connor.hozon.bom.resources.service.bom;
 
+import com.alibaba.fastjson.JSONArray;
 import com.connor.hozon.bom.resources.dto.request.*;
+import com.connor.hozon.bom.resources.dto.response.HzPbomComposeRespDTO;
 import com.connor.hozon.bom.resources.dto.response.HzPbomLineMaintainRespDTO;
 import com.connor.hozon.bom.resources.dto.response.HzPbomLineRespDTO;
 
@@ -77,4 +79,19 @@ public interface HzPbomService {
      * @return
      */
     int deleteHzPbomRecordByForeignId(String foreignPuid);
+
+    /**
+     *  获取pbom全部信息
+     * @return
+     */
+    JSONArray getHzPbomRecord(HzPbomProcessComposeReqDTO reqDTO);
+
+    /**
+     * 获取PBOM信息 工艺合件
+     * @param reqDTO
+     * @return
+     */
+    JSONArray getPbomForProcessCompose(HzPbomProcessComposeReqDTO reqDTO);
+
+
 }
