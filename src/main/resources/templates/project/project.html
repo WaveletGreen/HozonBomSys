@@ -100,7 +100,7 @@
         if (btn) btn.bind("click", function () {
             zTree = $.fn.zTree.getZTreeObj("menu_tree");
             selectNode = treeNode;
-            window.Ewin.dialog({title: "添加", url: "tree/addTreePage?id=" + treeNode.puid, width: 400, height: 650})
+            window.Ewin.dialog({title: "添加", url: "tree/addTreePage?id=" + treeNode.puid, width: 400, height: 650});
             return false;
         });
         //删除按钮
@@ -130,7 +130,7 @@
         if (edit_btn) edit_btn.bind("click", function () {
             zTree = $.fn.zTree.getZTreeObj("menu_tree");
             selectNode = treeNode;
-            window.Ewin.dialog({title: "修改", url: "tree/updateTreePage?id=" + treeNode.id, width: 400, height: 650})
+            window.Ewin.dialog({title: "修改", url: "tree/updateTreePage?id=" + treeNode.id, width: 400, height: 650});
             return false;
         });
         //给父级添加
@@ -138,18 +138,16 @@
         if (add_parent_btn) add_parent_btn.bind("click", function () {
             zTree = $.fn.zTree.getZTreeObj("menu_tree");
             selectNode = null;
-            window.Ewin.dialog({title: "添加", url: "tree/addTreePage", width: 400, height: 650})
+            window.Ewin.dialog({title: "添加", url: "tree/addTreePage", width: 400, height: 650});
             return false;
         })
-    };
-
+    }
     function removeHoverDom(treeId, treeNode) {
         $("#addBtn_" + treeNode.tId).unbind().remove();
         $("#removeBtn_" + treeNode.tId).unbind().remove();
         $("#editBtn_" + treeNode.tId).unbind().remove();
         $("#addParentBtn_" + treeNode.tId).unbind().remove();
-    };
-
+    }
     var setting = {
             //设置
             check: {
@@ -179,7 +177,7 @@
                         "pPuid",
                     rootPId:
                         "#"
-                }
+                } 
             }
             ,
             //回调函数

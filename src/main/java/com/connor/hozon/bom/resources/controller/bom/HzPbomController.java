@@ -1,5 +1,8 @@
 package com.connor.hozon.bom.resources.controller.bom;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.connor.hozon.bom.bomSystem.dao.bom.HzBomDataDao;
 import com.connor.hozon.bom.resources.controller.BaseController;
 import com.connor.hozon.bom.resources.dto.request.*;
@@ -366,7 +369,134 @@ public class HzPbomController extends BaseController {
     }
 
 
+    @RequestMapping(value = "getTree", method = RequestMethod.GET)
+    public void getTree(HttpServletResponse response) {
+        Map<String, Object> ret = new HashMap<>();
+        List<Map<String, Object>> _list = new ArrayList<>();
+        for (int i = 0; i < 6; i++) {
+            Map<String, Object> map = new HashMap<>();
+            if (i == 0) {
+                map.put("level", "2Y");
+                map.put("puid", "10");
+                map.put("hasChildren", true);
+                _list.add(map);
+            }
+            if (i == 1) {
+                map.put("level", "3Y");
+                map.put("puid", "7");
+                map.put("parentPuid", "10");
+                map.put("hasChildren", false);
+                map.put("outerPart", "111");
+                map.put("colorPart", "222");
+                map.put("mouldType", "444");
+                _list.add(map);
+            }
+            if (i == 2) {
+                map.put("level", "3");
+                map.put("puid", "6");
+                map.put("parentPuid", "10");
+                map.put("hasChildren", false);
+                map.put("outerPart", "111");
+                map.put("colorPart", "222");
+                map.put("mouldType", "444");
+                _list.add(map);
+            }
+
+            if (i == 3) {
+                map.put("level", "2Y");
+                map.put("puid", "21");
+                map.put("hasChildren", true);
+                _list.add(map);
+            }
+            if (i == 4) {
+                map.put("level", "3Y");
+                map.put("puid", "1");
+                map.put("parentPuid", "21");
+                map.put("hasChildren", false);
+                map.put("outerPart", "111");
+                map.put("colorPart", "222");
+                map.put("mouldType", "444");
+                _list.add(map);
+            }
+            if (i == 5) {
+                map.put("level", "3");
+                map.put("puid", "2");
+                map.put("parentPuid", "21");
+                map.put("hasChildren", false);
+                map.put("outerPart", "111");
+                map.put("colorPart", "222");
+                map.put("mouldType", "444");
+                _list.add(map);
+            }
+        }
+        ret.put("result", _list);
+        writeAjaxJSONResponse(ResultMessageBuilder.build(ret), response);
+
+    }
 
 
+    @RequestMapping(value = "getTree2", method = RequestMethod.GET)
+    @ResponseBody
+    public Object getP(HttpServletResponse response) {
+        Map<String, Object> ret = new HashMap<>();
+        List<Map<String, Object>> _list = new ArrayList<>();
+        for (int i = 0; i < 6; i++) {
+            Map<String, Object> map = new HashMap<>();
+            if (i == 0) {
+                map.put("level", "2Y");
+                map.put("puid", "10");
+                map.put("hasChildren", true);
+                _list.add(map);
+            }
+            if (i == 1) {
+                map.put("level", "3Y");
+                map.put("puid", "7");
+                map.put("parentPuid", "10");
+                map.put("hasChildren", false);
+                map.put("outerPart", "111");
+                map.put("colorPart", "222");
+                map.put("mouldType", "444");
+                _list.add(map);
+            }
+            if (i == 2) {
+                map.put("level", "3");
+                map.put("puid", "6");
+                map.put("parentPuid", "10");
+                map.put("hasChildren", false);
+                map.put("outerPart", "111");
+                map.put("colorPart", "222");
+                map.put("mouldType", "444");
+                _list.add(map);
+            }
 
+            if (i == 3) {
+                map.put("level", "2Y");
+                map.put("puid", "21");
+                map.put("hasChildren", true);
+                _list.add(map);
+            }
+            if (i == 4) {
+                map.put("level", "3Y");
+                map.put("puid", "1");
+                map.put("parentPuid", "21");
+                map.put("hasChildren", false);
+                map.put("outerPart", "111");
+                map.put("colorPart", "222");
+                map.put("mouldType", "444");
+                _list.add(map);
+            }
+            if (i == 5) {
+                map.put("level", "3");
+                map.put("puid", "2");
+                map.put("parentPuid", "21");
+                map.put("hasChildren", false);
+                map.put("outerPart", "111");
+                map.put("colorPart", "222");
+                map.put("mouldType", "444");
+                _list.add(map);
+            }
+        }
+        ret.put("result", _list);
+        return JSON.toJSON(ret);
+    }
 }
