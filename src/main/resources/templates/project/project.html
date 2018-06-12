@@ -71,7 +71,7 @@
                 for (var i in _data) {
                     if (i == 1) {
                         $("#project", window.top.document).val(_data[i].puid);
-                        $("#currentProject").text("当前工作项目:"+_data[i].pProjectName);
+                        $("#currentProject").text("当前工作项目:" + _data[i].pProjectName);
                         $("#currentProjectHead", window.top.document).text(_data[i].pProjectName);
                         break;
                     }
@@ -86,62 +86,131 @@
     );
 
     function addHoverDom(treeId, treeNode) {
+        //根据层级添加按钮
         var sObj = $("#" + treeNode.tId + "_span");
-        if (treeNode.editNameFlag || $("#addBtn_" + treeNode.tId).length > 0) return;
-        var addStr = "<span class='button remove' id='removeBtn_" + treeNode.tId + "' title='add node' onfocus='this.blur();'></span>";
-        addStr += "<span class='button add' id='addBtn_" + treeNode.tId + "'></span>";
-        addStr += "<span class='button edit' id='editBtn_" + treeNode.tId + "'></span>";
-        if (treeNode.isParent) {
-            addStr += "<span class='button add' id='addParentBtn_" + treeNode.tId + "'></span>";
+        if (treeNode.editNameFlag || $("#editBtn_" + treeNode.tId).length > 0) return;
+        var addStr = "<span class='button edit' id='editBtn_" + treeNode.tId + "' title='修改' onfocus='this.blur();'></span>";
+        //处理第一层和第二层
+        // if (treeNode.isParent) {
+        // //第二层可以添加项目
+        if (1 == treeNode.level) {
+            addStr += "<span class='button add' id='addBtn_" + treeNode.tId + "' title='添加项目'></span>";
+            addStr += "<span class='button remove' id='removeBtn_" + treeNode.tId + "' title='删除平台'></span>";
         }
+        // //第一层可以添加品牌和平台
+        else if (0 == treeNode.level) {
+            addStr += "<span class='button add' id='addBtn_" + treeNode.tId + "' title='添加平台'></span>";
+            addStr += "<span class='button remove' id='removeBtn_" + treeNode.tId + "' title='删除品牌'></span>";
+            addStr += "<span class='button add' id='addParentBtn_" + treeNode.tId + "' title='添加品牌'></span>";
+        }
+        // }
+        else if (2 == treeNode.level) {
+            addStr += "<span class='button remove' id='removeBtn_" + treeNode.tId + "' title='删除项目'></span>";
+        }
+
         sObj.after(addStr);
+
         //添加按钮
         var btn = $("#addBtn_" + treeNode.tId);
-        if (btn) btn.bind("click", function () {
-            zTree = $.fn.zTree.getZTreeObj("menu_tree");
-            selectNode = treeNode;
-            window.Ewin.dialog({title: "添加", url: "tree/addTreePage?id=" + treeNode.puid, width: 400, height: 650})
-            return false;
-        });
+        if (btn) {
+            btn.bind("click", function () {
+                zTree = $.fn.zTree.getZTreeObj("menu_tree");
+                selectNode = treeNode;
+                if (treeNode.level == 1) {
+                    //添加项目
+                    window.Ewin.dialog({
+                        title: "添加",
+                        url: "project/addPage?id=" + treeNode.puid + "&page=project",
+                        width: 400,
+                        height: 650
+                    })
+                }
+                else if (treeNode.level == 0) {
+                    //添加平台
+                    window.Ewin.dialog({
+                        title: "添加",
+                        url: "project/addPage?id=" + treeNode.puid + "&page=platform",
+                        width: 400,
+                        height: 650
+                    })
+                }
+                return false;
+            });
+        }
+
+
         //删除按钮
         var remove_btn = $("#removeBtn_" + treeNode.tId);
-        if (remove_btn) remove_btn.bind("click", function () {
-            zTree = $.fn.zTree.getZTreeObj("menu_tree");
-            if (treeNode.isParent) {
-                window.Ewin.alert({message: "请先删除当前菜单节点底下的子菜单！"});
-            } else {
-                window.Ewin.confirm({title: '提示', message: '是否要删除您当前选中的菜单节点？', width: 500}).on(function (e) {
-                    if (e) {
-                        $.post("./tree/remove", {id: treeNode.puid}, function (e) {
-                            if (e.result) {
-                                zTree.removeNode(treeNode);
-                                window.Ewin.alert({message: "删除成功"});
-                            } else {
-                                window.Ewin.alert({message: "删除成功" + e.status});
-                            }
-                        })
-                    }
-                });
-            }
-            return false;
-        });
+        if (remove_btn) {
+            remove_btn.bind("click", function () {
+                zTree = $.fn.zTree.getZTreeObj("menu_tree");
+                if (treeNode.isParent) {
+                    window.Ewin.alert({message: "请先删除当前菜单节点底下的子菜单！"});
+                } else {
+                    window.Ewin.confirm({title: '提示', message: '是否要删除您当前选中的菜单节点？', width: 500}).on(function (e) {
+                        if (e) {
+                            $.post("./tree/remove", {id: treeNode.puid}, function (e) {
+                                if (e.result) {
+                                    zTree.removeNode(treeNode);
+                                    window.Ewin.alert({message: "删除成功"});
+                                } else {
+                                    window.Ewin.alert({message: "删除成功" + e.status});
+                                }
+                            })
+                        }
+                    });
+                }
+                return false;
+            });
+        }
+
         //编辑按钮
         var edit_btn = $("#editBtn_" + treeNode.tId);
-        if (edit_btn) edit_btn.bind("click", function () {
-            zTree = $.fn.zTree.getZTreeObj("menu_tree");
-            selectNode = treeNode;
-            window.Ewin.dialog({title: "修改", url: "tree/updateTreePage?id=" + treeNode.id, width: 400, height: 650})
-            return false;
-        });
+        if (edit_btn) {
+            edit_btn.bind("click", function () {
+                zTree = $.fn.zTree.getZTreeObj("menu_tree");
+                selectNode = treeNode;
+                if (0 == treeNode.level) {
+                    window.Ewin.dialog({
+                        title: "修改品牌信息",
+                        url: "project/modifyPage?id=" + treeNode.id + "&page=brand",
+                        width: 400,
+                        height: 650
+                    });
+                }
+                else if (1 == treeNode.level) {
+                    window.Ewin.dialog({
+                        title: "修改平台信息",
+                        url: "project/modifyPage?id=" + treeNode.id + "&page=platform",
+                        width: 400,
+                        height: 650
+                    });
+                }
+                else if (2 == treeNode.level) {
+                    window.Ewin.dialog({
+                        title: "修改项目信息",
+                        url: "project/modifyPage?id=" + treeNode.id + "&page=project",
+                        width: 400,
+                        height: 650
+                    });
+                }
+                return false;
+            });
+        }
+
+
         //给父级添加
         var add_parent_btn = $("#addParentBtn_" + treeNode.tId);
-        if (add_parent_btn) add_parent_btn.bind("click", function () {
-            zTree = $.fn.zTree.getZTreeObj("menu_tree");
-            selectNode = null;
-            window.Ewin.dialog({title: "添加", url: "tree/addTreePage", width: 400, height: 650})
-            return false;
-        })
-    };
+        //添加品牌
+        if (add_parent_btn) {
+            add_parent_btn.bind("click", function () {
+                zTree = $.fn.zTree.getZTreeObj("menu_tree");
+                selectNode = null;
+                window.Ewin.dialog({title: "添加", url: "project/addPage?id=&page=brand", width: 400, height: 650})
+                return false;
+            })
+        }
+    }
 
     function removeHoverDom(treeId, treeNode) {
         $("#addBtn_" + treeNode.tId).unbind().remove();
@@ -151,86 +220,81 @@
     };
 
     var setting = {
-            //设置
-            check: {
-                enable: false,
-                //不会有任何自动关联勾选的操作
-                chkboxType: {"Y": "", "N": ""}
-            }
-            ,
-            view: {
-                addHoverDom: addHoverDom,
-                removeHoverDom:
-                removeHoverDom,
-                dblClickExpand:
-                    false,
-                showLine:
-                    true,
-                selectedMulti:
-                    false
-            }
-            ,
-            data: {
-                simpleData: {
-                    enable: true,
-                    idKey:
-                        "puid",
-                    pIdKey:
-                        "pPuid",
-                    rootPId:
-                        "#"
-                }
-            }
-            ,
-            //回调函数
-            callback: {
-                //展开父节点
-                beforeClick: function (treeId, treeNode) {
-                    var zTree = $.fn.zTree.getZTreeObj('menu_tree');
-                    //有子层节点的都不是项目节点，返回false则不会触发onClick事件
-                    if (treeNode.isParent) {
-                        zTree.expandNode(treeNode);
-                        return false;
-                    } else {
-                        return true;
-                    }
-                }
-                ,
-                onClick: function (event, treeId, treeNode) {
-                    if (treeNode.level != 2) {
-                        return;
-                    }
-                    // var zTree = $.fn.zTree.getZTreeObj('menu_tree');
-                    //品牌的父id只有#
-                    if (null == coach[treeNode.puid]) {
-                        //beforeClick排除了有子层的节点，
-                        //绑定本地选择的子节点
-                        localSelectedNode = treeNode;
-                        $.ajax({
-                            url: "./project/getProjectDetailById?puid=" + localSelectedNode.puid,
-                            type: "GET",
-                            success: function (data) {
-                                var puid = localSelectedNode.puid;
-                                localProjectDetail = data;
-                                coach[puid] = localProjectDetail;
-                                // eval("coach." + puid + "=" + data);
-                                changeView(localProjectDetail);
-                                $("#detailTable").css("visibility", "visible");
-                            },
-                            error: function (err) {
-                                alert(err.status);
-                            }
-                        })
-                    }
-                    else {
-                        localProjectDetail = coach[treeNode.puid];
-                        changeView(localProjectDetail);
-                    }
-                    localSelectedNode=treeNode;
-                }
+        //设置
+        check: {
+            enable: false,
+            //不会有任何自动关联勾选的操作
+            chkboxType: {"Y": "", "N": ""}
+        }
+        ,
+        view: {
+            addHoverDom: addHoverDom,
+            removeHoverDom: removeHoverDom,
+            dblClickExpand: false,
+            showLine: true,
+            selectedMulti: false
+        }
+        ,
+        data: {
+            simpleData: {
+                enable: true,
+                idKey:
+                    "puid",
+                pIdKey:
+                    "pPuid",
+                rootPId:
+                    "#"
             }
         }
-    ;
+        ,
+        //回调函数
+        callback: {
+            //展开父节点
+            beforeClick: function (treeId, treeNode) {
+                var zTree = $.fn.zTree.getZTreeObj('menu_tree');
+                //有子层节点的都不是项目节点，返回false则不会触发onClick事件
+                if (treeNode.isParent) {
+                    zTree.expandNode(treeNode);
+                    return false;
+                } else {
+                    return true;
+                }
+            }
+            ,
+            onClick: function (event, treeId, treeNode) {
+                if (treeNode.level != 2) {
+                    return;
+                }
+                // var zTree = $.fn.zTree.getZTreeObj('menu_tree');
+                //品牌的父id只有#
+                if (null == coach[treeNode.puid]) {
+                    //beforeClick排除了有子层的节点，
+                    //绑定本地选择的子节点
+                    localSelectedNode = treeNode;
+                    $.ajax({
+                        url: "./project/getProjectDetailById?puid=" + localSelectedNode.puid,
+                        type: "GET",
+                        success: function (data) {
+                            var puid = localSelectedNode.puid;
+                            localProjectDetail = data;
+                            coach[puid] = localProjectDetail;
+                            // eval("coach." + puid + "=" + data);
+                            changeView(localProjectDetail);
+                            $("#detailTable").css("visibility", "visible");
+                        },
+                        error: function (err) {
+                            alert(err.status);
+                        }
+                    })
+                }
+                else {
+                    localProjectDetail = coach[treeNode.puid];
+                    changeView(localProjectDetail);
+                }
+                localSelectedNode = treeNode;
+            }
+        }
+    };
 
     function loadReady() {
         var bodyH = demoIframe.contents().find("body").get(0).scrollHeight,
@@ -241,7 +305,7 @@
             h = 530;
         }
         demoIframe.height(h);
-    }
+    };
 
     $(function () {
             $.post("./project/loadProjectTree", function (info) {
@@ -257,7 +321,7 @@
             var project = $("#project", window.top.document);
             var projValue = localSelectedNode.puid;
             project.val(projValue);
-            $("#currentProject").text("当前工作项目:"+localProjectDetail.proj.pProjectName);
+            $("#currentProject").text("当前工作项目:" + localProjectDetail.proj.pProjectName);
             $("#currentProjectHead", window.top.document).text(localProjectDetail.proj.pProjectName);
             alert("当前选择的工作项目是:" + localProjectDetail.proj.pProjectName);
         })

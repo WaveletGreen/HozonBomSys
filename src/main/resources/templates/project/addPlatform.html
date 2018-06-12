@@ -1,0 +1,115 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<body>
+<form id="form" role="form" method="post" th:action="${action}">
+    <input class="form-control" id="pPertainToBrandPuid" name="pPertainToBrandPuid" type="text"
+           th:value="${brand.getPuid()}" hidden="hidden"
+    />
+    <div class="form-group">
+        <label for="pBrandCode">品牌代码</label>
+        <input class="form-control" id="pBrandCode" name="pBrandCode" type="text"
+               placeholder="请输入品牌代码" th:value="${brand.getpBrandCode()}" disabled="disabled"
+        />
+    </div>
+    <div class="form-group">
+        <label for="pBrandName">中文品牌</label>
+        <input class="form-control" id="pBrandName" name="pBrandName" type="text"
+               placeholder="请输入中文品牌" th:value="${brand.getpBrandName()}" disabled="disabled"
+        />
+    </div>
+    <div class="form-group">
+        <label for="pPlatformCode">平台代码</label>
+        <input class="form-control" id="pPlatformCode" name="pPlatformCode" type="text"
+               placeholder="请输入平台代码"
+        />
+    </div>
+    </div>
+    <div class="form-group">
+        <label for="pPlatformName">平台名称</label>
+        <input class="form-control" id="pPlatformName" name="pPlatformName" type="text"
+               placeholder="请输入平台名称"
+        />
+    </div>
+</form>
+<script th:inline="javascript">
+    <![CDATA[
+    $(function () {
+        $('#form').bootstrapValidator({
+            message: 'This value is not valid',
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            fields: {
+                pPlatformName: {
+                    message: '平台名称验证失败',
+                    validators: {
+                        notEmpty: {
+                            message: '平台名称不能为空'
+                        }
+                    }
+                },
+                pPlatformCode: {
+                    message: '平台代码验证失败',
+                    validators: {
+                        notEmpty: {
+                            message: '平台代码不能为空'
+                        }
+                    }
+                }
+            }
+        });
+        // 绑定dialog的确定按钮的监听事件
+        $("#btnOk", window.top.document).click(function () {
+            var bootstrapValidator = $("#form", window.top.document).data('bootstrapValidator');
+            bootstrapValidator.validate();
+            if (bootstrapValidator.isValid()) {
+                var url = $("#form", window.top.document).attr('action');
+                <!--其实不要puid，puid会在服务器上生成-->
+                var data = {};
+                var _d = $("#form").serializeArray();
+                for (var p in _d) {
+                    data[_d[p].name] = _d[p].value;
+                }
+                $.ajax({
+                    contentType:
+                        "application/json",
+                    type:
+                        'POST',
+                    url: url,
+                    data: JSON.stringify(data),
+                    success:
+                        function (result) {
+                            $('.modal-dialog', window.top.document).parent('div').remove()
+                            $('body', window.top.document).find('.modal-backdrop').remove();
+                            // jquery 调用刷新当前操作的table页面的refresh方法
+                            var zTree = $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.zTree;
+                            var selectNode = $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.selectNode;
+                            if (result.status == 1) {
+                                var entity = result.entity;
+                                zTree.addNodes(selectNode, {
+                                    puid: entity.puid,
+                                    pPuid: entity.pPertainToBrandPuid,
+                                    name: entity.pPlatformName
+                                });
+                                window.Ewin.alert({message: "添加平台成功"});
+                            }
+                            else if (result.status == 0) {
+                                window.Ewin.alert({message: "已存在的平台代码，请修改或者更换平台代码"});
+                            }
+                            else {
+                                window.Ewin.alert({message: "添加失败，请联系管理员"});
+                            }
+                        },
+                    error: function (status) {
+                        window.Ewin.alert({message: status.status + ':添加数据失败!'});
+                    }
+                });
+            }
+        });
+    })
+    ]]>
+</script>
+</body>
+</html>

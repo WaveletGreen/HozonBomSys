@@ -3,45 +3,78 @@
 <mapper namespace="com.connor.hozon.bom.bomSystem.dao.project.HzBrandRecordDao">
     <resultMap id="BaseResultMap" type="sql.pojo.project.HzBrandRecord">
         <id column="PUID" jdbcType="VARCHAR" property="puid"/>
-        <result column="P_BRAND_CODE" jdbcType="OTHER" property="pBrandCode"/>
-        <result column="P_BRAND_NAME" jdbcType="OTHER" property="pBrandName"/>
+        <result column="P_BRAND_CODE" jdbcType="VARCHAR" property="pBrandCode"/>
+        <result column="P_BRAND_NAME" jdbcType="VARCHAR" property="pBrandName"/>
         <result column="P_BRAND_CREATE_DATE" jdbcType="TIMESTAMP" property="pBrandCreateDate"/>
         <result column="P_BRAND_LAST_MOD_DATE" jdbcType="TIMESTAMP" property="pBrandLastModDate"/>
-        <result column="P_BRAND_COMMENT" jdbcType="OTHER" property="pBrandComment"/>
+        <result column="P_BRAND_COMMENT" jdbcType="VARCHAR" property="pBrandComment"/>
     </resultMap>
     <sql id="Base_Column_List">
     PUID, P_BRAND_CODE, P_BRAND_NAME, P_BRAND_CREATE_DATE, P_BRAND_LAST_MOD_DATE, P_BRAND_COMMENT
-  </sql>
+    </sql>
+    <!--根据主键进行查询-->
     <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from HZ_BRAND_RECORD
         where PUID = #{puid,jdbcType=VARCHAR}
     </select>
+    <!--根据品牌代码进行查询-->
+    <select id="selectByBrandCode" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from HZ_BRAND_RECORD
+        where P_BRAND_CODE = #{pBrandCode,jdbcType=VARCHAR}
+    </select>
+    <!--查询所有品牌-->
     <select id="selectAll" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from HZ_BRAND_RECORD
     </select>
+    <!--根据主键删除品牌-->
     <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from HZ_BRAND_RECORD
     where PUID = #{puid,jdbcType=VARCHAR}
-  </delete>
+    </delete>
+    <!--插入1个品牌-->
     <insert id="insert" parameterType="sql.pojo.project.HzBrandRecord">
-    insert into HZ_BRAND_RECORD (PUID, P_BRAND_CODE, P_BRAND_NAME, 
-      P_BRAND_CREATE_DATE, P_BRAND_LAST_MOD_DATE, 
+    insert into HZ_BRAND_RECORD (PUID, P_BRAND_CODE, P_BRAND_NAME,
+      P_BRAND_CREATE_DATE, P_BRAND_LAST_MOD_DATE,
       P_BRAND_COMMENT)
-    values (#{puid,jdbcType=VARCHAR}, #{pBrandCode,jdbcType=OTHER}, #{pBrandName,jdbcType=OTHER}, 
-      #{pBrandCreateDate,jdbcType=TIMESTAMP}, #{pBrandLastModDate,jdbcType=TIMESTAMP}, 
-      #{pBrandComment,jdbcType=OTHER})
-  </insert>
+    values (#{puid,jdbcType=VARCHAR}, #{pBrandCode,jdbcType=VARCHAR}, #{pBrandName,jdbcType=VARCHAR},
+      #{pBrandCreateDate,jdbcType=TIMESTAMP}, #{pBrandLastModDate,jdbcType=TIMESTAMP},
+      #{pBrandComment,jdbcType=VARCHAR})
+    </insert>
+    <!--根据主键更新品牌-->
     <update id="updateByPrimaryKey" parameterType="sql.pojo.project.HzBrandRecord">
     update HZ_BRAND_RECORD
-    set P_BRAND_CODE = #{pBrandCode,jdbcType=OTHER},
-      P_BRAND_NAME = #{pBrandName,jdbcType=OTHER},
+    set P_BRAND_CODE = #{pBrandCode,jdbcType=VARCHAR},
+      P_BRAND_NAME = #{pBrandName,jdbcType=VARCHAR},
       P_BRAND_CREATE_DATE = #{pBrandCreateDate,jdbcType=TIMESTAMP},
       P_BRAND_LAST_MOD_DATE = #{pBrandLastModDate,jdbcType=TIMESTAMP},
-      P_BRAND_COMMENT = #{pBrandComment,jdbcType=OTHER}
+      P_BRAND_COMMENT = #{pBrandComment,jdbcType=VARCHAR}
     where PUID = #{puid,jdbcType=VARCHAR}
-  </update>
+    </update>
+    <!--根据主键更新品牌-->
+    <update id="updateSelective" parameterType="sql.pojo.project.HzBrandRecord">
+        update HZ_BRAND_RECORD
+        set
+        <if test="pBrandCode !=null">
+            P_BRAND_CODE = #{pBrandCode,jdbcType=VARCHAR},
+        </if>
+        <if test="pBrandName !=null">
+            P_BRAND_NAME = #{pBrandName,jdbcType=VARCHAR},
+        </if>
+        <if test="pBrandCreateDate !=null">
+            P_BRAND_CREATE_DATE = #{pBrandCreateDate,jdbcType=TIMESTAMP},
+        </if>
+        <if test="pBrandComment !=null">
+            P_BRAND_COMMENT = #{pBrandComment,jdbcType=VARCHAR}
+        </if>
+        <if test="pBrandLastModDate !=null">
+            P_BRAND_LAST_MOD_DATE = #{pBrandLastModDate,jdbcType=TIMESTAMP},
+        </if>
+        where PUID = #{puid,jdbcType=VARCHAR}
+    </update>
 </mapper>

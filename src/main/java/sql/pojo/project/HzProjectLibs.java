@@ -4,8 +4,10 @@ import java.util.Date;
 
 public class HzProjectLibs {
     private String puid;
+
     private String pProjectName;
     private String pProjectPertainToPlatform;
+
     private String pProjectCode;
     private String pVehicleCode;
     private String pVehicleName;
@@ -13,6 +15,8 @@ public class HzProjectLibs {
     private String pVehicleTranName;
     private String pVehicleAnnualCode;
     private String pVehicleAnnual;
+
+
     private String pProjectOwningUser;
     private Date pProjectCreateDate;
     private Date pProjectLastModDate;
@@ -129,4 +133,5 @@ public class HzProjectLibs {
     public void setpProjectDiscontinuationDate(Date pProjectDiscontinuationDate) {
         this.pProjectDiscontinuationDate = pProjectDiscontinuationDate;
     }
+
 }
