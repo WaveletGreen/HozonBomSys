@@ -5,6 +5,7 @@ import sql.pojo.bom.HzPbomLineRecord;
 import sql.pojo.bom.HzPbomRecord;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by haozt on 2018/5/25
@@ -14,7 +15,7 @@ public interface HzPbomRecordDAO {
      * 获取PBOM管理维护信息
      * @return
      */
-    List<HzPbomLineRecord> getPbomRecord();
+    List<HzPbomLineRecord> getPbomRecord(Map<String,Object> map);
 
     /**
      * 按条件搜索Pbom管理维护信息
@@ -42,4 +43,11 @@ public interface HzPbomRecordDAO {
      * @return
      */
     int deleteByForeignId(String ePuid);
+
+    /**
+     * 根据项目id 和id 获取所有的pbom
+     * @return
+     */
+    List<HzPbomLineRecord> getHzPbomById(Map<String,Object> map);
+
 }

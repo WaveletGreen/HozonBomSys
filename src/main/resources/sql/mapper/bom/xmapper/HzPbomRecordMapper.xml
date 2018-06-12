@@ -19,12 +19,21 @@
   </resultMap>
 
   <resultMap extends="BaseResultMap"  id="HzPbomLineRecord" type="sql.pojo.bom.HzPbomLineRecord">
-    <id column="P_PUID" jdbcType="VARCHAR" property="pPuid" />
+    <id column="PUID" jdbcType="VARCHAR" property="pPuid" />
     <result column="P_LINE_INDEX" jdbcType="VARCHAR" property="lineIndex" />
     <result column="P_BOM_LINE_IS_HAS" jdbcType="INTEGER" property="isHas" />
     <result column="P_BOM_LINE_ID" jdbcType="VARCHAR" property="lineId" />
     <result column="P_BOM_LINE_IS_2Y" jdbcType="INTEGER" property="is2Y" />
     <result column="P_BOM_OF_WHICH_DEPT" jdbcType="VARCHAR" property="pBomOfWhichDept" />
+    <result column="P_PARENT_UID" jdbcType="VARCHAR" property="parentUid"/>
+    <result column="P_BOM_DIGIFAX_ID" jdbcType="VARCHAR" property="bomDigifaxId"/>
+    <result column="P_BOM_LINE_PUID" jdbcType="VARCHAR" property="linePuid"/>
+    <result column="P_BOM_LINE_IS_PART" jdbcType="INTEGER" property="isPart"/>
+    <result column="P_BOM_ORDER_NUM" jdbcType="INTEGER" property="orderNum"/>
+    <result column="P_BOM_LINE_IS_DEPT" jdbcType="INTEGER" property="isDept"/>
+    <result column="P_BOM_LINE_PART_NAME" jdbcType="VARCHAR" property="pBomLinePartName"/>
+    <result column="P_BOM_LINE_PART_CLASS" jdbcType="VARCHAR" property="pBomLinePartClass"/>
+    <result column="P_BOM_LINE_BLOCK" jdbcType="BLOB" property="bomLineBlock"/>
   </resultMap>
 
   <sql id="Pbom_List">
@@ -40,12 +49,38 @@
 
 
   <!--联表查询 EBOM PBOM信息-->
-  <select id="HzPbomRecordDAOImpl_getPbomRecord" resultMap="HzPbomLineRecord">
-    select
-    t1.PUID,<include refid="Pbom_List" />,t2.*
-    from HZ_BOM_LINE_RECORD t1 LEFT OUTER JOIN HZ_PBOM_RECORD t2
-    on t1.PUID = t2.P_E_BOM_PUID
+  <select id="HzPbomRecordDAOImpl_getPbomRecord" resultMap="HzPbomLineRecord" parameterType="java.util.HashMap">
+
+    select t.*,t6.* from HZ_BOM_LINE_RECORD t LEFT OUTER JOIN HZ_PBOM_RECORD t6 ON  t.puid = T6.p_E_BOM_PUID
+    where t.p_bom_digifax_id=(
+    select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(
+    select t2.puid from Hz_project_libs t2
+    <where>
+      t2.puid=#{projectId,jdbcType=VARCHAR}))
+      <if test="lineId != null and  lineId!='' " >
+        and t.P_BOM_LINE_ID = #{lineId,jdbcType=VARCHAR}
+      </if>
+    </where>
   </select>
+
+  <!--查询PBOM子节点信息-->
+  <select id="HzPbomRecordDAOImpl_getHzPbomById" resultMap="HzPbomLineRecord" parameterType="java.util.HashMap">
+
+    select t.*,t6.* from HZ_BOM_LINE_RECORD t LEFT OUTER JOIN HZ_PBOM_RECORD t6 ON  t.puid = T6.p_E_BOM_PUID
+    where t.p_bom_digifax_id=(
+    select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(
+    select t2.puid from Hz_project_libs t2
+    <where>
+      t2.puid=#{projectId,jdbcType=VARCHAR}))
+      <if test="parentUid != null and  parentUid!='' " >
+        and t.P_PARENT_UID = #{parentUid,jdbcType=VARCHAR}
+      </if>
+    </where>
+  </select>
+
+
+
+
 
 
   <!--模糊搜索的分组号 零件号 暂时没有 模糊匹配后期需要加-->
@@ -70,6 +105,7 @@
     </if>
   </where>
   </select>
+
 
 
 
