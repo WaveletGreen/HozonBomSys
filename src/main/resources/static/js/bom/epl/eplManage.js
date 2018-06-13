@@ -207,7 +207,7 @@ $(document).ready((function () {
                 showToggle: true,                   //是否显示详细视图和列表视图的切换按钮
                 showRefresh: true,                  //是否显示刷新按钮
                 pagination: true,                   //是否显示分页（*）
-                pageSize:10,
+                pageSize:20,
                 pageNumber:1,
                 pageList : [ 20, 50, 100,200,300,500, ], //可供选择的每页的行数（*）
                 sidePagination : "server", //分页方式：client客户端分页，server服务端分页（*）

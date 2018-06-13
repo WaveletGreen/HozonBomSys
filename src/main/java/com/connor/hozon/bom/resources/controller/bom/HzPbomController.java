@@ -299,13 +299,13 @@ public class HzPbomController extends BaseController {
      */
     @RequestMapping(value = "processComposeTree",method = RequestMethod.GET)
     public void findProcessComposeTree(HzPbomProcessComposeReqDTO reqDTO,HttpServletResponse response){
-        if(reqDTO==null){
+         if(reqDTO==null){
             writeAjaxJSONResponse(ResultMessageBuilder.build(false,"非法参数！"),response);
         }
-//        if(reqDTO.getProjectId() == null ||reqDTO.getLineId()==null){
-//            writeAjaxJSONResponse(ResultMessageBuilder.build(false,"非法参数！"),response);
-//
-//        }
+        if(reqDTO.getProjectId() == null ||reqDTO.getLineId()==null){
+            writeAjaxJSONResponse(ResultMessageBuilder.build(false,"非法参数！"),response);
+
+        }
         JSONArray jsonArray = hzPbomService.getPbomForProcessCompose(reqDTO);
         writeAjaxJSONResponse(jsonArray,response);
     }

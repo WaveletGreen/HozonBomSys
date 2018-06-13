@@ -150,7 +150,7 @@ $(function() {
                             enable: true
                         },
                         //回调函数
-                        callback: {
+                      /*  callback: {
                             //展开父节点
                             beforeClick: function (treeId, treeNode) {
                                 var zTree = $.fn.zTree.getZTreeObj('Ztree1');
@@ -174,12 +174,12 @@ $(function() {
                                     //绑定本地选择的子节点
                                     localSelectedNode = treeNode;
                                     $.ajax({
-                                        url: "./project/getProjectDetailById?puid=" + localSelectedNode.puid,
+                                        url: "pbom/detail?lineId=" + localSelectedNode.lineId +  "&projectId="+projectId,
                                         type: "GET",
                                         success: function (data) {
-                                            var puid = localSelectedNode.puid;
+                                            var lineId = localSelectedNode.lineId;
                                             localProjectDetail = data;
-                                            coach[puid] = localProjectDetail;
+                                            coach[lineId] = localProjectDetail;
                                             // eval("coach." + puid + "=" + data);
                                             changeView(localProjectDetail);
                                             $("#detailTable").css("visibility", "visible");
@@ -190,12 +190,12 @@ $(function() {
                                     })
                                 }
                                 else {
-                                    localProjectDetail = coach[treeNode.puid];
+                                    localProjectDetail = coach[treeNode.lineId];
                                     changeView(localProjectDetail);
                                 }
                                 localSelectedNode=treeNode;
                             }
-                        }
+                        }*/
                     };
 
                     var zNodes =data;
@@ -204,7 +204,7 @@ $(function() {
                         $.fn.zTree.init($("#Ztree1"), setting, zNodes);
                     });
 
-                    /*var newCount = 1;
+                    var newCount = 1;
                     function addHoverDom(treeId, treeNode) {
                         var sObj = $("#" + treeNode.tId + "_span");
                         if (treeNode.editNameFlag || $("#addBtn_"+treeNode.tId).length>0) return;
@@ -220,7 +220,7 @@ $(function() {
                     }
                     function removeHoverDom(treeId, treeNode) {
                         $("#addBtn_"+treeNode.tId).unbind().remove();
-                    }*/
+                    }
                 },
                 error: function (info) {
                     alert(info);
