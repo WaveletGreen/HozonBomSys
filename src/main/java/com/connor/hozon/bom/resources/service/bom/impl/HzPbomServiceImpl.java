@@ -280,46 +280,46 @@ public class HzPbomServiceImpl implements HzPbomService {
                 JSONObject jsonObject = new JSONObject();
                 jsonObject.put("puid",lineRecord.getpPuid());
                 jsonObject.put("parentUid",lineRecord.getParentUid());
-                jsonObject.put("hasChildren",lineRecord.getIsHas());
-                Integer is2Y = lineRecord.getIs2Y();
-                Integer hasChildren =  lineRecord.getIsHas();
-                String lineIndex = lineRecord.getLineIndex();
-                String[] strings = getLevelAndRank(lineIndex,is2Y,hasChildren);
-                jsonObject.put("level",strings[0]);
-                jsonObject.put("rank",strings[1]);
-                jsonObject.put("pBomOfWhichDept",lineRecord.getpBomOfWhichDept());
+//                jsonObject.put("hasChildren",lineRecord.getIsHas());
+//                Integer is2Y = lineRecord.getIs2Y();
+//                Integer hasChildren =  lineRecord.getIsHas();
+//                String lineIndex = lineRecord.getLineIndex();
+//                String[] strings = getLevelAndRank(lineIndex,is2Y,hasChildren);
+//                jsonObject.put("level",strings[0]);
+//                jsonObject.put("rank",strings[1]);
+//                jsonObject.put("pBomOfWhichDept",lineRecord.getpBomOfWhichDept());
                 jsonObject.put("groupNum",lineRecord.getLineId());
-                jsonObject.put("eBomPuid", lineRecord.getPuid());
+//                jsonObject.put("eBomPuid", lineRecord.getPuid());
                 jsonObject.put("lineId", lineRecord.getLineId());
                 jsonObject.put("itemName",lineRecord.getpBomLinePartName());
-                jsonObject.put("itemPart",lineRecord.getpBomLinePartClass());
-                jsonObject.put("resource", lineRecord.getResource());
-                jsonObject.put("type", lineRecord.getType());
-                jsonObject.put("buyUnit", lineRecord.getBuyUnit());
-                jsonObject.put("workShop1", lineRecord.getWorkShop1());
-                jsonObject.put("workShop2", lineRecord.getWorkShop2());
-                jsonObject.put("productLine", lineRecord.getProductLine());
-                jsonObject.put("mouldType", lineRecord.getMouldType());
-                jsonObject.put("outerPart", lineRecord.getOuterPart());
-                jsonObject.put("colorPart", lineRecord.getColorPart());
+//                jsonObject.put("itemPart",lineRecord.getpBomLinePartClass());
+//                jsonObject.put("resource", lineRecord.getResource());
+//                jsonObject.put("type", lineRecord.getType());
+//                jsonObject.put("buyUnit", lineRecord.getBuyUnit());
+//                jsonObject.put("workShop1", lineRecord.getWorkShop1());
+//                jsonObject.put("workShop2", lineRecord.getWorkShop2());
+//                jsonObject.put("productLine", lineRecord.getProductLine());
+//                jsonObject.put("mouldType", lineRecord.getMouldType());
+//                jsonObject.put("outerPart", lineRecord.getOuterPart());
+//                jsonObject.put("colorPart", lineRecord.getColorPart());
 
-                byte[] bomLineBlock = lineRecord.getBomLineBlock();
-                Object obj = SerializeUtil.unserialize(bomLineBlock);
-                if (obj instanceof LinkedHashMap) {
-                    if (((LinkedHashMap) obj).size() > 0) {
-                        ((LinkedHashMap) obj).forEach((key, value) -> {
-
-                            jsonObject.put((String) key, value);
-                        });
-                    }
-                } else if (obj instanceof RedisBomBean) {
-                    List<String> pSets = ((RedisBomBean) obj).getpSets();
-                    List<String> pValues = ((RedisBomBean) obj).getpValues();
-                    if (null != pSets && pSets.size() > 0 && null != pValues && pValues.size() > 0)
-                        for (int i = 0; i < pSets.size(); i++) {
-                            jsonObject.put(pSets.get(i), pValues.get(i));
-                        }
-                }
+//                byte[] bomLineBlock = lineRecord.getBomLineBlock();
+//                Object obj = SerializeUtil.unserialize(bomLineBlock);
+//                if (obj instanceof LinkedHashMap) {
+//                    if (((LinkedHashMap) obj).size() > 0) {
+//                        ((LinkedHashMap) obj).forEach((key, value) -> {
+//
+//                            jsonObject.put((String) key, value);
+//                        });
+//                    }
+//                } else if (obj instanceof RedisBomBean) {
+//                    List<String> pSets = ((RedisBomBean) obj).getpSets();
+//                    List<String> pValues = ((RedisBomBean) obj).getpValues();
+//                    if (null != pSets && pSets.size() > 0 && null != pValues && pValues.size() > 0)
+//                        for (int i = 0; i < pSets.size(); i++) {
+//                            jsonObject.put(pSets.get(i), pValues.get(i));
+//                        }
+//                }
                 jsonArray.add(jsonObject);
             }
             return jsonArray;

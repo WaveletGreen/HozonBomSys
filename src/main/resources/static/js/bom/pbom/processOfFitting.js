@@ -109,14 +109,15 @@ $(function () {
 $(function() {
     $('#lineId1').keyup(function () {
         var val = $(this).val();
+        var projectId=$("#project", window.top.document).val();
+        console.log(projectId);
         if (val != "") {
             $.ajax({
                 type: "GET",
-                url: "",
-                data: {val: val},
-                dataType: "json",
+                url: "pbom/processComposeTree?lineId=" +val+"&projectId="+projectId,
                 undefinedText: "",//当数据为 undefined 时显示的字符
                 success: function (data) {
+                    console.log(data);
                     var setting = {
                         view: {
                             addHoverDom: addHoverDom,
@@ -128,11 +129,72 @@ $(function() {
                         },
                         data: {
                             simpleData: {
-                                enable: true
+                                enable: true,
+                                idKey:
+                                    "puid",
+                                pIdKey:
+                                    "parentUid",
+                                rootPId:
+                                    "#"
+                            },
+                            key: {
+                                checked:
+                                    "CHECKED",
+                                name:
+                                    "lineId",
+                                // name:"groupNum"
                             }
-                        },
+                        }
+                        ,
                         edit: {
                             enable: true
+                        },
+                        //回调函数
+                        callback: {
+                            //展开父节点
+                            beforeClick: function (treeId, treeNode) {
+                                var zTree = $.fn.zTree.getZTreeObj('Ztree1');
+                                //有子层节点的都不是项目节点，返回false则不会触发onClick事件
+                                if (treeNode.isParent) {
+                                    zTree.expandNode(treeNode);
+                                    return false;
+                                } else {
+                                    return true;
+                                }
+                            }
+                            ,
+                            onClick: function (event, treeId, treeNode) {
+                                if (treeNode.level != 2) {
+                                    return;
+                                }
+                                // var zTree = $.fn.zTree.getZTreeObj('menu_tree');
+                                //品牌的父id只有#
+                                if (null == coach[treeNode.puid]) {
+                                    //beforeClick排除了有子层的节点，
+                                    //绑定本地选择的子节点
+                                    localSelectedNode = treeNode;
+                                    $.ajax({
+                                        url: "./project/getProjectDetailById?puid=" + localSelectedNode.puid,
+                                        type: "GET",
+                                        success: function (data) {
+                                            var puid = localSelectedNode.puid;
+                                            localProjectDetail = data;
+                                            coach[puid] = localProjectDetail;
+                                            // eval("coach." + puid + "=" + data);
+                                            changeView(localProjectDetail);
+                                            $("#detailTable").css("visibility", "visible");
+                                        },
+                                        error: function (err) {
+                                            alert(err.status);
+                                        }
+                                    })
+                                }
+                                else {
+                                    localProjectDetail = coach[treeNode.puid];
+                                    changeView(localProjectDetail);
+                                }
+                                localSelectedNode=treeNode;
+                            }
                         }
                     };
 
@@ -142,7 +204,7 @@ $(function() {
                         $.fn.zTree.init($("#Ztree1"), setting, zNodes);
                     });
 
-                    var newCount = 1;
+                    /*var newCount = 1;
                     function addHoverDom(treeId, treeNode) {
                         var sObj = $("#" + treeNode.tId + "_span");
                         if (treeNode.editNameFlag || $("#addBtn_"+treeNode.tId).length>0) return;
@@ -158,7 +220,7 @@ $(function() {
                     }
                     function removeHoverDom(treeId, treeNode) {
                         $("#addBtn_"+treeNode.tId).unbind().remove();
-                    }
+                    }*/
                 },
                 error: function (info) {
                     alert(info);
