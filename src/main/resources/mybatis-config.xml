@@ -20,14 +20,14 @@
                 <property name="username" value="HOZON"/>
                 <property name="password" value="HOZON"/>
                 <!--最大的活动连接数，活动连接，就是正在与数据库交互的连接，默认是10-->
-                <property name="poolMaximumIdleConnections" value="12"/>
+                <property name="poolMaximumIdleConnections" value="0"/>
                 <!--空闲连接数，就是没有处理请求的连接，默认是5-->
                 <property name="poolMaximumActiveConnections" value="2000"/>
                 <!--在被强制返回之前，连接池中被检查的时间，默认值为20000毫秒-->
-                <property name="poolMaximumCheckoutTime" value="20000"/>
+                <property name="poolMaximumCheckoutTime" value="10000"/>
                 <!--给连接池一个打印日志状态机会的低层次设置，还有重新尝试获取连接，这些情况往往会需要很长时间。
                 为了避免连接池没有配置时静默失败。默认值20000毫秒-->
-                <property name="poolTimeToWait" value="20000"/>
+                <property name="poolTimeToWait" value="10000"/>
                 <!-- 	发送到数据的侦测查询，用来验证连接是否正常工作，并且准备接受请求。默认为“NO PING QUERY SET”，
                 这会引起许多数据库驱动连接由一个错误信息而导致失败-->
                 <property name="poolPingQuery" value="SELECT 1 FROM DUAL"/>

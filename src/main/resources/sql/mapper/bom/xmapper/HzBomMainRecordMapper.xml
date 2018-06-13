@@ -19,7 +19,6 @@
                 property="pCfg0LastModDate"/>
         <result column="P_CFG0_ORG_POSTER" jdbcType="VARCHAR"
                 property="pCfg0OrgPoster"/>
-
     </resultMap>
     <sql id="Base_Column_List">
 		PUID,
@@ -33,11 +32,11 @@
 		P_CFG0_ORG_POSTER
 	</sql>
     <select id="selectByProjectPuid"
-            parameterType="sql.pojo.bom.HZBomMainRecord" resultMap="BaseResultMap">
+            parameterType="java.lang.String"  resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from HZ_BOM_MAIN_RECORD
         where P_CFG0_OF_WHICH_PROJECT_PUID =
-        #{pCfg0OfWhichProjectPuid,jdbcType=VARCHAR}
+        #{projectPuid,jdbcType=VARCHAR}
     </select>
 </mapper>

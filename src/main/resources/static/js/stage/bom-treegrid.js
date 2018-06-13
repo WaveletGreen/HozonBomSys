@@ -1,20 +1,21 @@
 var firstLoad = true;
 var isExpand = false;
 $(document).ready(
-    $("#doSubmit2").click(
+    // $("#doSubmit2").click(
+    (
         function () {
             var $table = $("#dataTable");
             var project = $("#project", window.top.document);
-            var bdf = project.val();
-            if (bdf.length <= 0) {
+            var projectPuid = project.val();
+            if (projectPuid.length <= 0) {
                 $("#myModal").modal('show');
                 return;
             }
             $.ajax({
                 type: "POST",
-                url: "./loadBom/loadByID",
+                url: "./loadBom/loadColumns",
                 data: {
-                    "bdf": bdf
+                    "projectPuid": projectPuid
                 },
                 success: function (result) {
                     var toJson = JSON.stringify(result);
@@ -34,8 +35,9 @@ $(document).ready(
                         };
                         myColumns.push(temp);
                     }
-                    var data = thisResult.slice(2, thisResult.length);
-                    addToTable($table, data, myColumns);
+                    $table.bootstrapTable('destroy');
+                    // var data = thisResult.slice(2, thisResult.length);
+                    addToTable($table, projectPuid, myColumns);
                 },
                 error: function (result) {
                     var xx = JSON.stringify(result);
@@ -75,30 +77,27 @@ $(document).ready(
 //     )
 )
 
-function addToTable($table, result, myColumns) {
-    if (firstLoad) {
-        $table.bootstrapTable({
-            striped: true,
-            data: result,
-            columns: myColumns,
-            idField: 'id',
-            parentIdField: 'pid',
-            treeShowField: 'object_string',
-            striped: true,
-            showToggle: true,                    //是否显示详细视图和列表视图的切换按钮
-            showColumns: true,                  //是否显示所有的列
-            showRefresh: true,                  //是否显示刷新按钮
-            search: true,                       //是否显示表格搜索，此搜索是客户端搜索，不会进服务端，所以，个人感觉意义不大
-            // pagination: isPagination,                   //是否显示分页（*）
-            // sortable: true,                     //是否启用排序
-            // sortOrder: "asc",                   //排序方式
-            clickToSelect: true  //点击表格项即可选择
-        });
-    }
-    else {
-        //重新载入数据，清空之前的，用load，用refresh不成功
-        $table.bootstrapTable("load", result);
-    }
+function addToTable($table, projectPuid, myColumns) {
+    $table.bootstrapTable({
+        striped: true,
+        url: "loadBom/loadByID?projectPuid=" + projectPuid,
+        method: "POST",
+        columns: myColumns,
+        idField: 'id',
+        parentIdField: 'pid',
+        treeShowField: 'object_string',
+        height: $(window.parent.document).find("#wrapper").height() - document.body.offsetHeight - 45,
+        width: $(window).width(),
+        striped: true,
+        showToggle: true,                    //是否显示详细视图和列表视图的切换按钮
+        showColumns: true,                  //是否显示所有的列
+        showRefresh: true,                  //是否显示刷新按钮
+        search: true,                       //是否显示表格搜索，此搜索是客户端搜索，不会进服务端，所以，个人感觉意义不大
+        // pagination: isPagination,                   //是否显示分页（*）
+        // sortable: true,                     //是否启用排序
+        // sortOrder: "asc",                   //排序方式
+        clickToSelect: true  //点击表格项即可选择
+    });
     toTree($table, "expanded");
     firstLoad = false;
 

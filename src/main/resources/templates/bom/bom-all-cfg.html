@@ -1,15 +1,14 @@
-<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
-<head th:include="include/includebase"></head>
-<meta charset="UTF-8">
-<title>Title</title>
+<head th:include="include/includebase">
+    <meta charset="UTF-8">
+    <title>全BOM配置一级清单</title>
 </head>
 <body>
 <input id="text1" class="form-control" type="text" name="doSubmit1"
-       placeholder="请输入需要查找的model" value="9deb81ea-9544-473b-aeb5-d7683c7753c3"/>
+             placeholder="请输入需要查找的model" value="9deb81ea-9544-473b-aeb5-d7683c7753c3"/>
 <button id="myButton">请点击</button>
-<button id="myButton2"> Test</button>
+
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog"
      aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -28,64 +27,40 @@
         </div>
     </div>
 </div>
-<script>
-    $(document).ready(
-        $("#myButton").click(function () {
-            var data = $("#text1").val();
-            if (data.length == 0) {
-                $("#myModal").modal('show');
-                return;
-            }
-            $.ajax({
-                url: './model/saveModelData',
-                type: 'POST',
-                contentType: "application/json",
-                data:
-                //需要转换为JSON.stringify
-                    JSON.stringify({
-                        "puid": "",
-                        "pModelPuid": "046adedc-09b2-43ca-a49c-a99d47c9fa3e",//模型puid，隐藏域
-                        "pModelName": "模型名称",//模型名
-                        "pModelDesc": "模型描述",//模型描述
-                        "pModelSaleArea": "销售地区",//销售地区
-                        "pModelBrand": "品牌",//品牌
-                        "pModelVehicle": "车辆",//车辆
-                        "pModelPlatform": "平台",//平台
-                        "pModelMod": "车型",//车型
-                        "pModelTransform": "变型",//变型
-                        "pModelAnnual": "年型",//年型
-                        "pModelVersion": "版型",//版型
-                        "pModelDriverPosition": "老司机位置",//老司机位置
-                        "pModelMembers": "乘客位置",//乘客位置
-                        "pModelShape": "车身形式",//车身形式
-                        "pModelAnnouncement": "公告",//公告
-                        "pModelPowers": "动总",//动总
-                        "pModelCfgVersion": "配置版本",//配置版本
-                        "pModelCfgDesc": "配置描述",//配置描述
-                        "pModelTrailNum": "试制号",//试制号
-                        "pModelGoodsNum": "商品号"//商品号
-                    }),
-                success: function (data) {
-                    alert("成功" + data.msg);
-                },
-                error: function (info) {
-                    alert("失败" + info.status);
-                }
-            })
-            ;
-        }),
-        $("#myButton2").click(function () {
-            var pModelPuid = "9b079c7a-e7b8-4b1b-a803-1b89bb9a7650";
-            window.Ewin.dialog({
-                url: "model/modModel?pModelPuid=" + pModelPuid,
-                title: "添加",
-                width: 500,
-                height: 400,
-                gridId: "addPageofModel"
-            })
-        })
-    );
-
-</script>
+<div class="panel-body" style="padding-bottom:0px;">
+    <div class="panel panel-default" style="margin-top: 10px;">
+        <div class="panel-body">
+            <form class="form-inline" role="form" style="float: left; width: 100%;margin-left: 20px;" method="post"
+                  id="queryLoadBom">
+                <div class="form-group">
+                    <label for="platforms">车型平台:</label>
+                    <input type="text" class="form-control" name="platforms" id="platforms" placeholder="请输入车型平台"/>
+                </div>
+                <div class="form-group">
+                    <label for="modelnumber">车型项目编号:</label>
+                    <input type="text" class="form-control" name="modelnumber" id="modelnumber"
+                           placeholder="请输入车型项目编号"/>
+                </div>
+                <div class="form-group">
+                    <label for="modelyear">车型年:</label>
+                    <input type="text" class="form-control" name="modelyear" id="modelyear" placeholder="请输入车型年"/>
+                </div>
+                <div class="form-group">
+                    <button type="button" id="searchBtn" onclick="" class="btn btn-primary">搜索</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div style="float: right; margin-bottom:0;">
+    <table id="cfg1Table" class="table table-striped" style="margin-top:0px; margin-bottom:0px;">
+    </table>
+    <div id="newtable"></div>
+</div>
+<table id="cfg0Table" class="table table-striped" style="margin-top: 0px;">
+</table>
 </body>
+<script th:src="@{/js/stage/bom-all-cfg.js}"></script>
+<script th:inline="javascript">
+</script>
 </html>

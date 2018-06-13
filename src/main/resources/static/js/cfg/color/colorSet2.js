@@ -1,11 +1,12 @@
 var firstLoad = true;
 $(document).ready(
-    $("#queryColorSet").click(function () {
+    // $("#queryColorSet").click(function () {
+    (function () {
         var $table = $("#dataTable");
         $("#refreshColorSet").removeAttr("disabled");
         $table.bootstrapTable({
             url: "colorSet/queryAll2",
-            height: $(window.parent.document).find("#wrapper").height() - 252,
+            height: $(window.parent.document).find("#wrapper").height() - document.body.offsetHeight - 45,
             width: $(window).width(),
             showToggle: true,                   //是否显示详细视图和列表视图的切换按钮
             showRefresh: true,                  //是否显示刷新按钮

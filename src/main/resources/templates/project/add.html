@@ -2,8 +2,8 @@
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <body>
 <form id="form" role="form" method="post" th:action="${action}">
-    <input class="form-control" id="pProjectPertainToPlatform" name="pProjectPertainToPlatform" type="text"
-           th:value="${platform.getPuid()}" hidden="hidden"
+    <input class="form-control" id="pProjectPertainToPlatform" name="pProjectPertainToPlatform" type="hidden"
+           th:value="${platform.getPuid()}"
     />
     <div class="form-group">
         <label for="pBrandCode">品牌代码</label>

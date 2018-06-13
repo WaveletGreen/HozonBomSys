@@ -54,8 +54,8 @@ public class BaseSQLUtil implements IBaseSQLUtil {
             session.rollback(true);
             e.printStackTrace();
         } finally {
-            if (session != null)
-                session.close();
+//            if (session != null)
+//                session.close();
         }
         return result;
     }
@@ -150,8 +150,8 @@ public class BaseSQLUtil implements IBaseSQLUtil {
             e.printStackTrace();
 
         } finally {
-            if (session != null)
-                session.close();
+//            if (session != null)
+//                session.close();
         }
         return result;
     }
@@ -173,8 +173,8 @@ public class BaseSQLUtil implements IBaseSQLUtil {
             session.rollback(true);
             e.printStackTrace();
         } finally {
-            if (session != null)
-                session.close();
+//            if (session != null)
+//                session.close();
         }
         return result;
     }
@@ -197,8 +197,8 @@ public class BaseSQLUtil implements IBaseSQLUtil {
             session.rollback(true);
             e.printStackTrace();
         } finally {
-            if (session != null)
-                session.close();
+//            if (session != null)
+//                session.close();
         }
         return result;
     }
@@ -219,8 +219,8 @@ public class BaseSQLUtil implements IBaseSQLUtil {
             session.rollback(true);
             e.printStackTrace();
         } finally {
-            if (session != null)
-                session.close();
+//            if (session != null)
+//                session.close();
         }
         return result;
     }
@@ -243,8 +243,8 @@ public class BaseSQLUtil implements IBaseSQLUtil {
             session.rollback(true);
             e.printStackTrace();
         } finally {
-            if (session != null)
-                session.close();
+//            if (session != null)
+//                session.close();
         }
         return result;
     }
@@ -266,8 +266,8 @@ public class BaseSQLUtil implements IBaseSQLUtil {
             e.printStackTrace();
             // session.rollback(true);
         } finally {
-            if (session != null)
-                session.close();
+//            if (session != null)
+//                session.close();
         }
         return result;
     }

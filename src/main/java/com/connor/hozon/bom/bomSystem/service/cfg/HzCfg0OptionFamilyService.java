@@ -28,7 +28,25 @@ public class HzCfg0OptionFamilyService {
         if (families == null || families.isEmpty())
             return null;
         List<String> result = new ArrayList<>();
-        families.stream().filter(f -> f != null).collect(Collectors.toList()).forEach(f ->result.add(f.getpOptionfamilyDesc()+"\n"+f.getpOptionfamilyName()));
+        families.stream().filter(f -> f != null).collect(Collectors.toList()).forEach(f -> result.add(f.getpOptionfamilyDesc() + "<br/>" + f.getpOptionfamilyName()));
+        return result;
+    }
+
+    public List<String> doGetColumn2(String mainId) {
+        List<HzCfg0OptionFamily> families = doCfg0OptionFamilyListByProjectPuid(mainId);
+        if (families == null || families.isEmpty())
+            return null;
+        List<String> result = new ArrayList<>();
+        families.stream().filter(f -> f != null).collect(Collectors.toList()).forEach(f -> result.add(f.getpOptionfamilyDesc() + "\t" + f.getpOptionfamilyName()));
+        return result;
+    }
+
+    public List<String> doGetColumnDef(String mainId, String def) {
+        List<HzCfg0OptionFamily> families = doCfg0OptionFamilyListByProjectPuid(mainId);
+        if (families == null || families.isEmpty())
+            return null;
+        List<String> result = new ArrayList<>();
+        families.stream().filter(f -> f != null).collect(Collectors.toList()).forEach(f -> result.add(f.getpOptionfamilyDesc() + def + f.getpOptionfamilyName()));
         return result;
     }
 

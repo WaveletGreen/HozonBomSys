@@ -67,7 +67,23 @@ public class HzProjectLibsService {
         return hzProjectLibsDao.selectByProjectCode(projectCode);
     }
 
+    /**
+     * 插入一个新项目
+     *
+     * @param project
+     * @return
+     */
     public boolean doInsertOne(HzProjectLibs project) {
         return hzProjectLibsDao.insert(project) > 0 ? true : false;
+    }
+
+    /**
+     * 根据主键删除项目
+     *
+     * @param puid 项目puid
+     * @return
+     */
+    public boolean doDeleteByPuid(String puid) {
+        return hzProjectLibsDao.deleteByPrimaryKey(puid) > 0 ? true : false;
     }
 }

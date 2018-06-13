@@ -283,7 +283,7 @@ public class HzProjectLibsController {
      * @param brand 品牌对象
      * @return 数据信息，添加成功则连同品牌一起返回和标识符，反之则只返回标识符
      */
-    @RequestMapping(value = "/addBrand", method = RequestMethod.POST)
+    @RequestMapping(value = "/modifyBrand", method = RequestMethod.POST)
     @ResponseBody
     public JSONObject modifyBrand(@RequestBody HzBrandRecord brand) {
         JSONObject result = new JSONObject();
@@ -302,6 +302,31 @@ public class HzProjectLibsController {
             result.put("status", 0);
         }
         return result;
+    }
+
+    /**
+     * 根据类型和主键进行删除
+     *
+     * @param puid 主键
+     * @param type 类型，分别是brand，plaatform和project
+     * @return
+     */
+    @RequestMapping(value = "/delete", method = RequestMethod.POST)
+    @ResponseBody
+    public boolean delete(@RequestParam String puid, @RequestParam String type) {
+        if (null == puid || type == null || "".equals(puid) || "".equals(type)) {
+            return false;
+        }
+        switch (type) {
+            case "brand":
+                return hzBrandService.doDeleteByPuid(puid);
+            case "platform":
+                return hzPlatformService.doDeleteByPuid(puid);
+            case "project":
+                return hzProjectLibsService.doDeleteByPuid(puid);
+            default:
+                return false;
+        }
     }
 
 }

@@ -7,7 +7,8 @@ function modeVehicle(puid) {
 }
 
 $(document).ready(
-    $("#query").click(function () {
+    // $("#query").click(function () {
+    (function () {
         //必须输入一个配置的puid
         var projectPuid = $("#project", window.top.document).val();
         if (projectPuid.length <= 0) {
@@ -50,7 +51,7 @@ $(document).ready(
                 $table.bootstrapTable({
                     url: "materiel/loadAllByProjectPuid?projectPuid=" + projectPuid,
                     method: 'get',
-                    height: $(window.parent.document).find("#wrapper").height() - 252,
+                    height: $(window.parent.document).find("#wrapper").height() - document.body.offsetHeight - 45,
                     width: $(window).width(),
                     showToggle: true,                   //是否显示详细视图和列表视图的切换按钮
                     showRefresh: true,                  //是否显示刷新按钮

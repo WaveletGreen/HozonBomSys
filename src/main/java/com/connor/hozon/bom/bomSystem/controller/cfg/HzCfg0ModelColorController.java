@@ -50,7 +50,7 @@ public class HzCfg0ModelColorController {
 
     @RequestMapping(value = "/addPage", method = RequestMethod.GET)
     public String addPage(@RequestParam String projectPuid, Model model) {
-        List<String> columnList = hzCfg0OptionFamilyService.doGetColumn(projectPuid);
+        List<String> columnList = hzCfg0OptionFamilyService.doGetColumnDef(projectPuid,"\t");
         List<HzCfg0ColorSet> colorList = hzCfg0ColorSetService.doGetAll();
         //添加一个无色
         HzCfg0ColorSet set = new HzCfg0ColorSet();
@@ -75,7 +75,7 @@ public class HzCfg0ModelColorController {
             return "cfg/modelColorCfg/addModelColorCfg";
         }
         HzCfg0MainRecord main = hzCfg0MainService.doGetByPrimaryKey(color.getpCfg0MainRecordOfMC());
-        List<String> columnList = hzCfg0OptionFamilyService.doGetColumn(main.getpCfg0OfWhichProjectPuid());
+        List<String> columnList = hzCfg0OptionFamilyService.doGetColumnDef(main.getpCfg0OfWhichProjectPuid(),"\t");
         List<HzCfg0ColorSet> colorList = hzCfg0ColorSetService.doGetAll();
         ArrayList<String> orgValue = new ArrayList<>();
 
@@ -140,7 +140,7 @@ public class HzCfg0ModelColorController {
             object.put("status", false);
         } else {
             object.put("status", true);
-            column = hzCfg0OptionFamilyService.doGetColumn(projectPuid);
+            column = hzCfg0OptionFamilyService.doGetColumnDef(projectPuid,"<br/>");
             object.put("data", column);
         }
         return object;

@@ -1,6 +1,7 @@
 var firstLoad = true;
 $(document).ready(
-    $("#query").click(function () {
+    // $("#query").click(function () {
+    (function () {
         var $table = $("#dataTable");
         $table.bootstrapTable('destroy');
         $("#refresh").removeAttr("disabled");
@@ -8,7 +9,7 @@ $(document).ready(
         $table.bootstrapTable({
             url: "cfg0/loadRelevance?projectPuid=" + projectPuid,
             method: "GET",
-            height: $(window.parent.document).find("#wrapper").height() - 252,
+            height: $(window.parent.document).find("#wrapper").height() - document.body.offsetHeight - 45,
             width: $(window).width(),
             showToggle: true,                   //是否显示详细视图和列表视图的切换按钮
             // showColumns: true,                  //是否显示所有的列
@@ -30,7 +31,7 @@ $(document).ready(
                         }
                         window.Ewin.dialog({
                             title: "修改",
-                            url: "cfg0/relModifyPage?uid=" + rows[0].puid+"&page="+"modifyPage",
+                            url: "cfg0/relModifyPage?uid=" + rows[0].puid + "&page=" + "modifyPage",
                             gridId: "gridId",
                             width: 400,
                             height: 500

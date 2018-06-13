@@ -1,12 +1,14 @@
 var firstLoad = true;
-function modeVehicle(puid){
+
+function modeVehicle(puid) {
     // $.ajax({
     //
     // })
 }
-$(document).ready(
-    $("#queryModelColorCfg").click(function () {
 
+$(document).ready(
+    // $("#queryModelColorCfg").click(function () {
+    (function () {
         //必须输入一个配置的puid
         var projectPuid = $("#project", window.top.document).val();
         if (projectPuid.length <= 0) {
@@ -41,8 +43,9 @@ $(document).ready(
                         var rowValues = JSON.parse(JSON.stringify(row));
                         if ("Y" === rowValues.modeColorIsMultiply) {
                             return [
-                                '<a href="javascript:void(0)" onclick="modeVehicle('+row.puid+')">' + value + '</a>'
-                            ].join("");z
+                                '<a href="javascript:void(0)" onclick="modeVehicle(' + row.puid + ')">' + value + '</a>'
+                            ].join("");
+                            z
                         }
                         else {
                             return [
@@ -66,7 +69,7 @@ $(document).ready(
                 $table.bootstrapTable({
                     url: "modelColor/loadAll?projectPuid=" + projectPuid,
                     method: 'get',
-                    height: $(window.parent.document).find("#wrapper").height() - 252,
+                    height: $(window.parent.document).find("#wrapper").height() - document.body.offsetHeight - 45,
                     width: $(window).width(),
                     showToggle: true,                   //是否显示详细视图和列表视图的切换按钮
                     showRefresh: true,                  //是否显示刷新按钮
@@ -163,5 +166,4 @@ $(document).ready(
     $("#refresh").click(function () {
         $('#modelColorCfgTable').bootstrapTable('refresh');
     })
-
 );

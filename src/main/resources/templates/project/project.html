@@ -143,13 +143,33 @@
         var remove_btn = $("#removeBtn_" + treeNode.tId);
         if (remove_btn) {
             remove_btn.bind("click", function () {
+                var type = "";
+                var typeName = "";
+                var name = treeNode.name;
                 zTree = $.fn.zTree.getZTreeObj("menu_tree");
+                switch (treeNode.level) {
+                    case 0:
+                        type = "brand";
+                        typeName = "平台";
+                        break;
+                    case 1:
+                        type = "platform";
+                        typeName = "项目";
+                        break;
+                    case 2:
+                        type = "project";
+                        break;
+                }
                 if (treeNode.isParent) {
-                    window.Ewin.alert({message: "请先删除当前菜单节点底下的子菜单！"});
+                    window.Ewin.alert({message: "请先删除下级" + typeName});
                 } else {
-                    window.Ewin.confirm({title: '提示', message: '是否要删除您当前选中的菜单节点？', width: 500}).on(function (e) {
+                    window.Ewin.confirm({
+                        title: '提示',
+                        message: '是否要删除您当前选中的' + typeName + ":" + name + "?",
+                        width: 500
+                    }).on(function (e) {
                         if (e) {
-                            $.post("./tree/remove", {id: treeNode.puid}, function (e) {
+                            $.post("./project/delete", {id: treeNode.puid, type: type}, function (e) {
                                 if (e.result) {
                                     zTree.removeNode(treeNode);
                                     window.Ewin.alert({message: "删除成功"});
