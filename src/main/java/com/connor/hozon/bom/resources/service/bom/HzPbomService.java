@@ -1,6 +1,7 @@
 package com.connor.hozon.bom.resources.service.bom;
 
 import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.connor.hozon.bom.resources.dto.request.*;
 import com.connor.hozon.bom.resources.dto.response.HzPbomComposeRespDTO;
 import com.connor.hozon.bom.resources.dto.response.HzPbomLineMaintainRespDTO;
@@ -93,5 +94,5 @@ public interface HzPbomService {
      */
     JSONArray getPbomForProcessCompose(HzPbomProcessComposeReqDTO reqDTO);
 
-
+    JSONObject getPbomByLineId(HzPbomProcessComposeReqDTO reqDTO);
 }

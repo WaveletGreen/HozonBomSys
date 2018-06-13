@@ -1,6 +1,7 @@
 package com.connor.hozon.bom.resources.controller.bom;
 
 import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.connor.hozon.bom.bomSystem.dao.bom.HzBomDataDao;
 import com.connor.hozon.bom.resources.controller.BaseController;
 import com.connor.hozon.bom.resources.dto.request.*;
@@ -291,79 +292,11 @@ public class HzPbomController extends BaseController {
         writeAjaxJSONResponse(ResultMessageBuilder.build(false, "接口后续在定义"), response);
     }
 
-
-    @RequestMapping(value = "getPBom", method = RequestMethod.GET)
-    @ResponseBody
-    public Map<String, Object> getPbom(HttpServletResponse response) {
-
-        Map<String, Object> ret = new HashMap<>();
-        List<Map<String, Object>> _list = new ArrayList<>();
-        for(int i=0;i<6;i++){
-            Map<String,Object> map = new HashMap<>();
-            if(i==0){
-                map.put("level","2Y");
-                map.put("puid","10");
-                map.put("hasChildren",true);
-                _list.add(map);
-            }
-            if(i==1){
-                map.put("level","3Y");
-                map.put("puid","7");
-                map.put("parentPuid","10");
-                map.put("hasChildren",false);
-                map.put("outerPart","111");
-                map.put("colorPart","222");
-                map.put("mouldType","444");
-                _list.add(map);
-            }
-            if(i==2){
-                map.put("level","3");
-                map.put("puid","6");
-                map.put("parentPuid","10");
-                map.put("hasChildren",false);
-                map.put("outerPart","111");
-                map.put("colorPart","222");
-                map.put("mouldType","444");
-                _list.add(map);
-            }
-
-            if(i==3){
-                map.put("level","2Y");
-                map.put("puid","21");
-                map.put("hasChildren",true);
-                _list.add(map);
-            }
-            if(i==4){
-                map.put("level","3Y");
-                map.put("puid","1");
-                map.put("parentPuid","21");
-                map.put("hasChildren",false);
-                map.put("outerPart","111");
-                map.put("colorPart","222");
-                map.put("mouldType","444");
-                _list.add(map);
-            }
-            if(i==5){
-                map.put("level","3");
-                map.put("puid","2");
-                map.put("parentPuid","21");
-                map.put("hasChildren",false);
-                map.put("outerPart","111");
-                map.put("colorPart","222");
-                map.put("mouldType","444");
-                _list.add(map);
-            }
-        }
-        ret.put("result",_list);
-        return ret;
-//        if(ListUtil.isEmpty(respDTOS)){
-//            writeAjaxJSONResponse(ResultMessageBuilder.build(false,"暂无符合数据"),response);
-//        }
-//        writeAjaxJSONResponse(ResultMessageBuilder.build(respDTOS),response);
-//    }
-    }
-
-
+    /**
+     * 获取PBOM结构树
+     * @param reqDTO
+     * @param response
+     */
     @RequestMapping(value = "processComposeTree",method = RequestMethod.GET)
     public void findProcessComposeTree(HzPbomProcessComposeReqDTO reqDTO,HttpServletResponse response){
         if(reqDTO==null){
@@ -376,4 +309,23 @@ public class HzPbomController extends BaseController {
         JSONArray jsonArray = hzPbomService.getPbomForProcessCompose(reqDTO);
         writeAjaxJSONResponse(jsonArray,response);
     }
+
+    /**
+     * 获取一条PBOM 信息
+     * @param reqDTO
+     * @param response
+     */
+    @RequestMapping(value = "detail",method = RequestMethod.GET)
+    public void findPbomDetail(HzPbomProcessComposeReqDTO reqDTO,HttpServletResponse response){
+        if(reqDTO==null){
+            writeAjaxJSONResponse(ResultMessageBuilder.build(false,"非法参数！"),response);
+        }
+        if(reqDTO.getProjectId() == null ||reqDTO.getLineId()==null){
+            writeAjaxJSONResponse(ResultMessageBuilder.build(false,"非法参数！"),response);
+
+        }
+        JSONObject object = hzPbomService.getPbomByLineId(reqDTO);
+        writeAjaxJSONResponse(ResultMessageBuilder.build(true,object),response);
+    }
+
 }

@@ -71,7 +71,7 @@
     select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(
     select t2.puid from Hz_project_libs t2
     <where>
-      t2.puid=#{projectId,jdbcType=VARCHAR}))
+        t2.puid = #{projectId,jdbcType=VARCHAR}))
       <if test="parentUid != null and  parentUid!='' " >
         and t.P_PARENT_UID = #{parentUid,jdbcType=VARCHAR}
       </if>
@@ -121,6 +121,8 @@
     delete from HZ_PBOM_RECORD
     where P_PUID = #{puid,jdbcType=VARCHAR}
   </delete>
+
+
   <insert id="insert" parameterType="sql.pojo.bom.HzPbomRecord">
     insert into HZ_PBOM_RECORD (P_PUID, P_ITEM_RESOURCE, P_RESOURCE,
       P_TYPE, P_BUY_UNIT, P_WORK_SHOP1,
@@ -133,7 +135,9 @@
       #{outerPart,jdbcType=VARCHAR}, #{colorPart,jdbcType=DECIMAL}, #{eBomPuid,jdbcType=VARCHAR}
       )
   </insert>
-  <insert id="insertSelective" parameterType="sql.pojo.bom.HzPbomRecord">
+
+
+  <insert id="HzPbomRecordDAOImpl_insert" parameterType="sql.pojo.bom.HzPbomRecord">
     insert into HZ_PBOM_RECORD
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="puid != null">

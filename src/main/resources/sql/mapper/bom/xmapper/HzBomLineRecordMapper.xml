@@ -99,7 +99,8 @@
 		HZ_BOM_LINE_RECORD
 		where PUID = #{puid,jdbcType=VARCHAR}
 	</delete>
-    <insert id="insert" parameterType="sql.pojo.bom.HzBomLineRecord">
+
+    <insert id="HzBomLineRecordDaoImpl_insert" parameterType="sql.pojo.bom.HzBomLineRecord">
         insert into HZ_BOM_LINE_RECORD
         (
         <include refid="Base_Column_List"/>
@@ -110,8 +111,15 @@
         values
         (#{puid,jdbcType=VARCHAR},#{parentUid,jdbcType=VARCHAR},#{bomDigifaxId,jdbcType=VARCHAR},
         #{lineIndex,jdbcType=VARCHAR},#{isHas,jdbcType=VARCHAR},#{linePuid,jdbcType=VARCHAR},
-        #{lineID,jdbcType=VARCHAR},#{bomLineBlock,jdbcType=BLOB})
+        #{lineID,jdbcType=VARCHAR},#{bomLineBlock,jdbcType=BLOB},
+        #{is2Y,jdbcType=VARCHAR},#{isPart,jdbcType=VARCHAR},
+        #{orderNum,jdbcType=VARCHAR},#{isDept,jdbcType=VARCHAR},
+        #{pBomOfWhichDept,jdbcType=VARCHAR},#{pBomLinePartName,jdbcType=VARCHAR},#{pBomLinePartClass,jdbcType=VARCHAR}
+      )
     </insert>
+
+
+
     <insert id="insertByBatch" parameterType="java.util.List">
         insert all
         <foreach collection="list" item="item" index="index"
@@ -126,4 +134,6 @@
         </foreach>
         select 1 from dual
     </insert>
+
+
 </mapper>
