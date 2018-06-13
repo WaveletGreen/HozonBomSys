@@ -94,5 +94,5 @@ public interface HzPbomService {
      */
     JSONArray getPbomForProcessCompose(HzPbomProcessComposeReqDTO reqDTO);
 
-    JSONObject getPbomByLineId(HzPbomProcessComposeReqDTO reqDTO);
+    JSONArray getPbomByLineId(HzPbomProcessComposeReqDTO reqDTO);
 }
