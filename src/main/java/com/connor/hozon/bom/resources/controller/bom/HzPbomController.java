@@ -324,7 +324,7 @@ public class HzPbomController extends BaseController {
             writeAjaxJSONResponse(ResultMessageBuilder.build(false,"非法参数！"),response);
 
         }
-        JSONObject object = hzPbomService.getPbomByLineId(reqDTO);
+        JSONArray object = hzPbomService.getPbomByLineId(reqDTO);
         writeAjaxJSONResponse(ResultMessageBuilder.build(true,object),response);
     }
 

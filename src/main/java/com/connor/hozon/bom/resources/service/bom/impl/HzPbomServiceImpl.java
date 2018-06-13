@@ -320,7 +320,7 @@ public class HzPbomServiceImpl implements HzPbomService {
 //                            jsonObject.put(pSets.get(i), pValues.get(i));
 //                        }
 //                }
-//                jsonArray.add(jsonObject);
+                jsonArray.add(jsonObject);
             }
             return jsonArray;
         }catch (Exception e){
@@ -329,16 +329,30 @@ public class HzPbomServiceImpl implements HzPbomService {
     }
 
     @Override
-    public JSONObject getPbomByLineId(HzPbomProcessComposeReqDTO reqDTO) {
+    public JSONArray getPbomByLineId(HzPbomProcessComposeReqDTO reqDTO) {
         Map<String,Object> map = new HashMap<>();
         map.put("projectId",reqDTO.getProjectId());
         map.put("lineId",reqDTO.getLineId());
+        HzPreferenceSetting setting = new HzPreferenceSetting();
+        setting.setSettingName("Hz_ExportBomPreferenceRedis");
         List<HzPbomLineRecord> records = hzPbomRecordDAO.getHzPbomById(map);
         if(ListUtil.isEmpty(records)){
             return null;
         }
         try {
             HzPbomLineRecord lineRecord = records.get(0);
+            JSONArray jsonArray = new JSONArray();
+            setting.setBomMainRecordPuid(lineRecord.getBomDigifaxId());
+            hzBomDataDao = new HzBomDataDaoImpl();
+            setting = hzBomDataDao.loadSetting(setting);
+            byte[] btOfSetting = setting.getPreferencesettingblock();
+            Object objOfSetting = SerializeUtil.unserialize(btOfSetting);
+            if (objOfSetting instanceof PreferenceSetting) {
+                String[] localName = ((PreferenceSetting) objOfSetting).getPreferenceLocal();
+                String[] trueName = ((PreferenceSetting) objOfSetting).getPreferences();
+                jsonArray.add(0,localName);
+                jsonArray.add(1,trueName);
+            }
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("puid",lineRecord.getpPuid());
             jsonObject.put("parentUid",lineRecord.getParentUid());
@@ -382,8 +396,8 @@ public class HzPbomServiceImpl implements HzPbomService {
                         jsonObject.put(pSets.get(i), pValues.get(i));
                     }
             }
-
-            return jsonObject;
+            jsonArray.add(jsonObject);
+            return jsonArray;
         }catch (Exception e){
             return null;
         }
