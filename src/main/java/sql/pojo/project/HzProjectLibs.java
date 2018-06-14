@@ -1,22 +1,46 @@
 package sql.pojo.project;
 
+import java.util.Calendar;
 import java.util.Date;
 
 public class HzProjectLibs {
     private String puid;
-
+    /***
+     * 项目名
+     */
     private String pProjectName;
+    /**
+     * 归属平台
+     */
     private String pProjectPertainToPlatform;
-
+    /***
+     * 项目编号
+     */
     private String pProjectCode;
+    /**
+     * 车型代码
+     */
     private String pVehicleCode;
+    /***
+     * 车型名称
+     */
     private String pVehicleName;
+    /**
+     * 车身形式代码
+     */
     private String pVehicleShapeCode;
+    /**
+     * 车身变形名称
+     */
     private String pVehicleTranName;
+    /**
+     * 车型年代码
+     */
     private String pVehicleAnnualCode;
+    /**
+     * 年型年
+     */
     private String pVehicleAnnual;
-
-
     private String pProjectOwningUser;
     private Date pProjectCreateDate;
     private Date pProjectLastModDate;
@@ -131,7 +155,12 @@ public class HzProjectLibs {
     }
 
     public void setpProjectDiscontinuationDate(Date pProjectDiscontinuationDate) {
-        this.pProjectDiscontinuationDate = pProjectDiscontinuationDate;
+        if (pProjectDiscontinuationDate == null) {
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(9998, 12, 31, 23, 59, 59);
+            this.pProjectDiscontinuationDate = calendar.getTime();
+        } else
+            this.pProjectDiscontinuationDate = pProjectDiscontinuationDate;
     }
 
 }

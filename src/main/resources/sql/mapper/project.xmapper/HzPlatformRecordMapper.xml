@@ -52,10 +52,9 @@
     <!--根据主键更新-->
     <update id="updateByPrimaryKey" parameterType="sql.pojo.project.HzPlatformRecord">
     update HZ_PLATFORM_RECORD
-    set P_PERTAIN_TO_BRAND_PUID = #{pPertainToBrandPuid,jdbcType=VARCHAR},
+    set
       P_PLATFORM_CODE = #{pPlatformCode,jdbcType=VARCHAR},
       P_PLATFORM_NAME = #{pPlatformName,jdbcType=VARCHAR},
-      P_PLATFORM_CREATE_DATE = #{pPlatformCreateDate,jdbcType=TIMESTAMP},
       P_PLATFORM_LAST_MOD_DATE = #{pPlatformLastModDate,jdbcType=TIMESTAMP},
       P_PLATFORM_COMMENT = #{pPlatformComment,jdbcType=VARCHAR}
     where PUID = #{puid,jdbcType=VARCHAR}

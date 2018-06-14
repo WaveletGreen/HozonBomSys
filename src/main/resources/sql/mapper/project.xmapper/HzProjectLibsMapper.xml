@@ -80,4 +80,19 @@
     <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
         delete HZ_PROJECT_LIBS where PUID=#{puid,jdbcType=VARCHAR}
     </delete>
+
+    <update id="updateByPrimaryKey" parameterType="sql.pojo.project.HzProjectLibs">
+      update HZ_PROJECT_LIBS
+      set
+      P_PROJECT_NAME = #{pProjectName,jdbcType=VARCHAR},
+      P_PROJECT_CODE = #{pProjectCode,jdbcType=VARCHAR},
+      P_VEHICLE_CODE = #{pProjectCode,jdbcType=VARCHAR},
+      P_VEHICLE_NAME = #{pVehicleName,jdbcType=VARCHAR},
+      P_VEHICLE_SHAPE_CODE = #{pVehicleShapeCode,jdbcType=VARCHAR},
+      P_VEHICLE_TRAN_NAME = #{pVehicleTranName,jdbcType=VARCHAR},
+      P_VEHICLE_ANNUAL_CODE = #{pVehicleAnnualCode,jdbcType=VARCHAR},
+      P_VEHICLE_ANNUAL = #{pVehicleAnnual,jdbcType=VARCHAR},
+      P_PROJECT_LAST_MOD_DATE = #{pProjectLastModDate,jdbcType=TIMESTAMP}
+    where PUID = #{puid,jdbcType=VARCHAR}
+    </update>
 </mapper>
