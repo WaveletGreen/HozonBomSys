@@ -46,7 +46,11 @@ public class HzCfg0OptionFamilyService {
         if (families == null || families.isEmpty())
             return null;
         List<String> result = new ArrayList<>();
-        families.stream().filter(f -> f != null).collect(Collectors.toList()).forEach(f -> result.add(f.getpOptionfamilyDesc() + def + f.getpOptionfamilyName()));
+        families.stream().filter(f -> f != null).collect(Collectors.toList()).forEach(f ->
+                result.add(
+                        f.getpOptionfamilyDesc()==null?f.getpOptionfamilyName():f.getpOptionfamilyDesc() +
+                        def +
+                        f.getpOptionfamilyName()==null?"":f.getpOptionfamilyName()));
         return result;
     }
 
