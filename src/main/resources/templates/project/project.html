@@ -193,12 +193,12 @@
                         return true;
                     }
                 }
+
                 ,
                 onClick: function (event, treeId, treeNode) {
                     if (treeNode.level != 2) {
                         return;
                     }
-                    // var zTree = $.fn.zTree.getZTreeObj('menu_tree');
                     //品牌的父id只有#
                     if (null == coach[treeNode.puid]) {
                         //beforeClick排除了有子层的节点，

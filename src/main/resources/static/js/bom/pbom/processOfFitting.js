@@ -109,6 +109,9 @@ $(function () {
 $(function() {
     $('#lineId1').keyup(function () {
         var val = $(this).val();
+        var localSelectedNode;
+        var localProjectDetail;
+        var coach = [];
         var projectId=$("#project", window.top.document).val();
         console.log(projectId);
         if (val != "") {
@@ -120,12 +123,16 @@ $(function() {
                     console.log(data);
                     var setting = {
                         view: {
-                            addHoverDom: addHoverDom,
-                            removeHoverDom: removeHoverDom,
-                            selectedMulti: false
+                            /*addHoverDom: addHoverDom,
+                            removeHoverDom: removeHoverDom,*/
+                            selectedMulti: false,
+                            dblClickExpand:
+                                false,
+                            showLine:
+                                true,
                         },
                         check: {
-                            enable: true
+                            enable: false
                         },
                         data: {
                             simpleData: {
@@ -150,7 +157,7 @@ $(function() {
                             enable: true
                         },
                         //回调函数
-                      /*  callback: {
+                        callback: {
                             //展开父节点
                             beforeClick: function (treeId, treeNode) {
                                 var zTree = $.fn.zTree.getZTreeObj('Ztree1');
@@ -177,12 +184,41 @@ $(function() {
                                         url: "pbom/detail?lineId=" + localSelectedNode.lineId +  "&projectId="+projectId,
                                         type: "GET",
                                         success: function (data) {
+                                            console.log(data);
+                                            var result = data.externalObject;
                                             var lineId = localSelectedNode.lineId;
-                                            localProjectDetail = data;
+                                            var titleName = result[0];
+                                            var titleEName = result[1];
+                                            var value = result[2];
+                                            var titleNameAll = "";
+                                            var valueAll = "";
+
+                                            
+
+
+
+
+                                            for (var i = 0; i < titleName.length; i++) {
+                                                var titleName1 = "<th>"+titleName[i]+"</th>";
+
+                                                // var tableValue = "<td>"+value.titleEname[i]+"</td>"
+                                                titleNameAll += titleName1;
+                                            }
+                                            for (var i = 0; i < value.length; i++) {
+                                                var value1 = "<td>"+value[i]+"</td>";
+                                                valueAll += value1;
+                                            }
+                                            alert(valueAll);
+                                            var rel = "<table>"+
+                                                            "<tr>"+titleNameAll+"</tr>"+
+                                                            "<tr>"+valueAll+"</tr>"+
+                                                        "</table>";
+                                            $("#detailTable").html(rel);
+                                            /*localProjectDetail = data;
                                             coach[lineId] = localProjectDetail;
                                             // eval("coach." + puid + "=" + data);
                                             changeView(localProjectDetail);
-                                            $("#detailTable").css("visibility", "visible");
+                                            $("#detailTable").css("visibility", "visible");*/
                                         },
                                         error: function (err) {
                                             alert(err.status);
@@ -195,7 +231,8 @@ $(function() {
                                 }
                                 localSelectedNode=treeNode;
                             }
-                        }*/
+
+                        }
                     };
 
                     var zNodes =data;
@@ -204,7 +241,7 @@ $(function() {
                         $.fn.zTree.init($("#Ztree1"), setting, zNodes);
                     });
 
-                    var newCount = 1;
+                    /*var newCount = 1;
                     function addHoverDom(treeId, treeNode) {
                         var sObj = $("#" + treeNode.tId + "_span");
                         if (treeNode.editNameFlag || $("#addBtn_"+treeNode.tId).length>0) return;
@@ -220,7 +257,7 @@ $(function() {
                     }
                     function removeHoverDom(treeId, treeNode) {
                         $("#addBtn_"+treeNode.tId).unbind().remove();
-                    }
+                    }*/
                 },
                 error: function (info) {
                     alert(info);
