@@ -136,4 +136,25 @@
     </insert>
 
 
+
+    <update id="HzBomLineRecordDaoImpl_update" parameterType="sql.pojo.bom.HzBomLineRecord">
+        update HZ_BOM_LINE_RECORD
+        set
+        P_PARENT_UID=#{parentUid,jdbcType=VARCHAR},
+        P_BOM_DIGIFAX_ID=#{bomDigifaxId,jdbcType=VARCHAR},
+        P_LINE_INDEX=#{lineIndex,jdbcType=VARCHAR},
+        P_BOM_LINE_IS_HAS=#{isHas,jdbcType=VARCHAR},
+        P_BOM_LINE_PUID=#{linePuid,jdbcType=VARCHAR},
+        P_BOM_LINE_ID=#{lineID,jdbcType=VARCHAR},
+        P_BOM_LINE_IS_2Y=#{is2Y,jdbcType=VARCHAR},
+        P_BOM_LINE_IS_PART=#{isPart,jdbcType=VARCHAR},
+        P_BOM_ORDER_NUM=#{orderNum,jdbcType=VARCHAR},
+        P_BOM_LINE_IS_DEPT=#{isDept,jdbcType=VARCHAR},
+        P_BOM_OF_WHICH_DEPT=#{pBomOfWhichDept,jdbcType=VARCHAR},
+        P_BOM_LINE_PART_NAME#{pBomLinePartName,jdbcType=VARCHAR},
+        P_BOM_LINE_PART_CLASS#{pBomLinePartClass,jdbcType=VARCHAR}
+        where PUID = #{puid,jdbcType=VARCHAR}
+    </update>
+
+
 </mapper>

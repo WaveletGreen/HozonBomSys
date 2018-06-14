@@ -4,10 +4,12 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.connor.hozon.bom.bomSystem.dao.bom.HzBomDataDao;
 import com.connor.hozon.bom.bomSystem.dao.impl.bom.HzBomDataDaoImpl;
+import com.connor.hozon.bom.bomSystem.service.bom.HzBomLineRecordService;
 import com.connor.hozon.bom.resources.dto.request.*;
 import com.connor.hozon.bom.resources.dto.response.HzPbomComposeRespDTO;
 import com.connor.hozon.bom.resources.dto.response.HzPbomLineMaintainRespDTO;
 import com.connor.hozon.bom.resources.dto.response.HzPbomLineRespDTO;
+import com.connor.hozon.bom.resources.mybatis.bom.HzBomStateDAO;
 import com.connor.hozon.bom.resources.mybatis.bom.HzPbomMaintainRecordDAO;
 import com.connor.hozon.bom.resources.mybatis.bom.HzPbomRecordDAO;
 import com.connor.hozon.bom.resources.service.bom.HzPbomService;
@@ -30,6 +32,10 @@ import java.util.*;
  */
 @Service("HzPbomService")
 public class HzPbomServiceImpl implements HzPbomService {
+
+    @Autowired
+    private HzBomLineRecordService hzBomLineRecordService;
+
     @Autowired
     private HzPbomMaintainRecordDAO recordDAO;
 
@@ -38,6 +44,9 @@ public class HzPbomServiceImpl implements HzPbomService {
 
     @Autowired
     private HzBomDataDao hzBomDataDao;
+
+    @Autowired
+    private HzBomStateDAO hzBomStateDAO;
     @Override
     public List<HzPbomLineMaintainRespDTO> getHzPbomMaintainRecord() {
         List<HzPbomLineMaintainRecord> records = recordDAO.getPBomLineMaintainRecord();
@@ -401,6 +410,33 @@ public class HzPbomServiceImpl implements HzPbomService {
         }catch (Exception e){
             return null;
         }
+    }
+
+    /**
+     * 添加工艺合件信息到bom
+     * @param reqDTO
+     * @return
+     */
+    @Override
+    public int AddPbomProcessCompose(AddProcessComposeReqDTO reqDTO) {
+        HzBomLineRecord hzBomLineRecord = new HzBomLineRecord();
+        hzBomLineRecord.setBomDigifaxId(reqDTO.getBomDigifaxId());
+
+
+        /**
+         * 工艺合件
+         * 1.获取合件的信息 零件信息 层级关系  需要更新父层的状态信息 haschildren 和ispart
+         *   存数据库表里 返回id信息
+         * 2.状态值存另一张表里 外键为 返回的id 需要采用事物管理机制
+         * 3.存储数据库 默认为haschildren为0 ispart为1
+         * 4.根据传进来的父id 计算层级关系 存数据库 2y
+         * 5.lineindex 值 找出所有的父的子 看是否有下一层  有：列表全部显示 找出所有的lineindex 最大值 增0.1
+         *   无：直接加1
+         */
+
+
+        hzBomLineRecordService.insert(hzBomLineRecord);
+        return 0;
     }
 
 
