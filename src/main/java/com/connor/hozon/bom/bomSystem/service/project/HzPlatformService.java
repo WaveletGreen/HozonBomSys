@@ -56,7 +56,24 @@ public class HzPlatformService {
     }
 
     /**
+     * 验证平台是否符合要求
+     * <p>
+     * 只验证平台代码和平台名称
+     *
+     * @param platform 平台对象
+     * @return
+     */
+    public boolean modifyValidate(HzPlatformRecord platform) {
+        //平台代号和名称不能为空
+        if (validate(platform) || null == platform.getPuid() || "".equals(platform.getPuid())) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
      * 根据平台代号查找平台数据
+     *
      * @param platformCode
      * @return
      */

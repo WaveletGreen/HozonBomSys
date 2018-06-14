@@ -70,10 +70,10 @@
             P_BRAND_CREATE_DATE = #{pBrandCreateDate,jdbcType=TIMESTAMP},
         </if>
         <if test="pBrandComment !=null">
-            P_BRAND_COMMENT = #{pBrandComment,jdbcType=VARCHAR}
+            P_BRAND_COMMENT = #{pBrandComment,jdbcType=VARCHAR},
         </if>
         <if test="pBrandLastModDate !=null">
-            P_BRAND_LAST_MOD_DATE = #{pBrandLastModDate,jdbcType=TIMESTAMP},
+            P_BRAND_LAST_MOD_DATE = #{pBrandLastModDate,jdbcType=TIMESTAMP}
         </if>
         where PUID = #{puid,jdbcType=VARCHAR}
     </update>

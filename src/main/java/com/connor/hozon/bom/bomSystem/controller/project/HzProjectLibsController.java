@@ -254,24 +254,32 @@ public class HzProjectLibsController {
                     model.addAttribute("msg", "找不到品牌数据，请联系管理员");
                     return "errorWithEntity";
                 } else {
-                    model.addAttribute("entity", brand_b);
+                    model.addAttribute("brand", brand_b);
                     model.addAttribute("action", "./project/modifyBrand");
                     return "project/modifyBrand";
                 }
                 //加平台
             case "platform":
-                HzBrandRecord brand_p = hzBrandService.doGetByPuid(id);
+                HzPlatformRecord platform_p = hzPlatformService.doGetByPuid(id);
+                HzBrandRecord brand_p = hzBrandService.doGetByPuid(platform_p.getpPertainToBrandPuid());
                 model.addAttribute("brand", brand_p);
-                model.addAttribute("action", "./project/addPlatform");
-                return "project/addPlatform";
+                model.addAttribute("platform", platform_p);
+                model.addAttribute("action", "./project/modifyPlatform");
+                return "project/modifyPlatform";
             //加入项目
             case "project":
-                HzPlatformRecord platform = hzPlatformService.doGetByPuid(id);
+                HzProjectLibs project = hzProjectLibsService.doLoadProjectLibsById(id);
+                if (project == null) {
+                    model.addAttribute("msg", "找不到项目");
+                    return "errorWithEntity";
+                }
+                HzPlatformRecord platform = hzPlatformService.doGetByPuid(project.getpProjectPertainToPlatform());
                 HzBrandRecord brand = hzBrandService.doGetByPuid(platform.getpPertainToBrandPuid());
                 model.addAttribute("brand", brand);
                 model.addAttribute("platform", platform);
-                model.addAttribute("action", "./project/addProject");
-                return "project/add";
+                model.addAttribute("project", project);
+                model.addAttribute("action", "./project/modifyProject");
+                return "project/modifyProject";
             //传入错误
             default:
                 return "error";
@@ -290,14 +298,86 @@ public class HzProjectLibsController {
         if (!hzBrandService.validate(brand)) {
             result.put("status", -1);
         }
-        if (null == hzBrandService.doGetByBrandCode(brand.getpBrandCode())) {
+        if (null != hzBrandService.doGetByPuid(brand.getPuid())) {
+//            if (null != hzBrandService.doGetByBrandCode(brand.getpBrandCode())) {
+//                result.put("status", -1);
+//            } else {
             brand.setpBrandLastModDate(new Date());
             if (hzBrandService.doUpdateSelective(brand)) {
                 result.put("status", 1);
+                brand = hzBrandService.doGetByPuid(brand.getPuid());
+//                brand.setpBrandCreateDate(new Date());
                 result.put("entity", brand);
             } else {
                 result.put("status", -1);
             }
+//            }
+        } else {
+            result.put("status", 0);
+        }
+        return result;
+    }
+
+    /***
+     * 添加品牌
+     * @param project 品牌对象
+     * @return 数据信息，添加成功则连同品牌一起返回和标识符，反之则只返回标识符
+     */
+    @RequestMapping(value = "/modifyProject", method = RequestMethod.POST)
+    @ResponseBody
+    public JSONObject modifyProject(@RequestBody HzProjectLibs project) {
+        JSONObject result = new JSONObject();
+        if (!hzProjectLibsService.modifyValidate(project)) {
+            result.put("status", -1);
+        }
+        if (null != hzProjectLibsService.doLoadProjectLibsById(project.getPuid())) {
+//            if (null != hzProjectLibsService.doGetByProjectCode(project.getpProjectCode())) {
+//                result.put("status", -1);
+//            } else {
+            project.setpProjectLastModDate(new Date());
+            if (hzProjectLibsService.doUpdateByPrimaryKey(project)) {
+                result.put("status", 1);
+                project = hzProjectLibsService.doLoadProjectLibsById(project.getPuid());
+                //不能传空值，空值可能来源于数据库
+//                hzProjectLibsService.toDTO(project);
+                result.put("entity", project);
+            } else {
+                result.put("status", -1);
+            }
+//            }
+        } else {
+            result.put("status", 0);
+        }
+        return result;
+    }
+
+    /***
+     * 添加品牌
+     * @param platform 平台
+     * @return 数据信息，添加成功则连同平台一起返回和标识符，反之则只返回标识符
+     */
+    @RequestMapping(value = "/modifyPlatform", method = RequestMethod.POST)
+    @ResponseBody
+    public JSONObject modifyPlatform(@RequestBody HzPlatformRecord platform) {
+        JSONObject result = new JSONObject();
+        if (!hzPlatformService.modifyValidate(platform)) {
+            result.put("status", -1);
+        }
+        if (null != hzPlatformService.doGetByPuid(platform.getPuid())) {
+//            if (null != hzPlatformService.doGetByPlatformCode(platform.getpPlatformCode())) {
+//                result.put("status", -1);
+//            } else {
+            platform.setpPlatformLastModDate(new Date());
+            if (hzPlatformService.doUpdate(platform)) {
+                result.put("status", 1);
+//                platform.setpPlatformCreateDate(new Date());
+//                platform.setpPertainToBrandPuid("");
+                platform = hzPlatformService.doGetByPuid(platform.getPuid());
+                result.put("entity", platform);
+            } else {
+                result.put("status", -1);
+            }
+//            }
         } else {
             result.put("status", 0);
         }
@@ -328,5 +408,6 @@ public class HzProjectLibsController {
                 return false;
         }
     }
+
 
 }

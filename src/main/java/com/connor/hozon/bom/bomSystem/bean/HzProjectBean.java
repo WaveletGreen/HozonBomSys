@@ -11,6 +11,7 @@ public class HzProjectBean {
     private String puid;
     private String pPuid;
     private String name;
+
     public String getPuid() {
         return puid;
     }
