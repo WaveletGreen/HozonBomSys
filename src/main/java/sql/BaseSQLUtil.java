@@ -233,18 +233,7 @@ public class BaseSQLUtil implements IBaseSQLUtil {
     }
 
 
-    /**
-     * follows
-     * author haozt
-     */
 
-    /**
-     * 查询一个list
-     * @param sqlMapId
-     * @param param
-     * @return
-     */
-    public List findForList(final String sqlMapId, final Object param) {
 
     @Override
     public int executeDeleteBySome(String by, String... condition) {
@@ -270,7 +259,18 @@ public class BaseSQLUtil implements IBaseSQLUtil {
         return result;
     }
 
-    public List findForList(final String sql, final Object param) {
+    /**
+     * follows
+     * author haozt
+     */
+
+    /**
+     * 查询一个list
+     * @param sqlMapId
+     * @param param
+     * @return
+     */
+    public List findForList(final String sqlMapId, final Object param) {
         SqlSession session = null;
         List result = null;
         try {
