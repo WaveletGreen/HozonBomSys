@@ -2,6 +2,8 @@ var firstLoad = true;
 window.onload=function() {
     var $table = $("#pbomManageTable");
     var column = [];
+    var projectId=$("#project", window.top.document).val();
+    console.log(projectId);
     $.ajax({
         url: "pbom/getBomManage",
         type: "GET",

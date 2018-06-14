@@ -201,8 +201,8 @@ public class HzPbomController extends BaseController {
      */
     @RequestMapping(value = "getBomManage", method = RequestMethod.GET)
     @ResponseBody
-    public Map<String, Object> getPbomLineRecord(HttpServletResponse response) {
-        List<HzPbomLineRespDTO> respDTOS = hzPbomService.getHzPbomLineRecord();
+    public Map<String, Object> getPbomLineRecord(HzPbomProcessComposeReqDTO reqDTO,HttpServletResponse response) {
+        List<HzPbomLineRespDTO> respDTOS = hzPbomService.getHzPbomLineRecord(reqDTO);
         Map<String, Object> ret = new HashMap<>();
         List<Map<String, String>> _list = new ArrayList<>();
         respDTOS.forEach(dto -> {

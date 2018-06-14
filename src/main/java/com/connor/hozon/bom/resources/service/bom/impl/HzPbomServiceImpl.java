@@ -87,8 +87,10 @@ public class HzPbomServiceImpl implements HzPbomService {
 
 
     @Override
-    public List<HzPbomLineRespDTO> getHzPbomLineRecord() {
-        List<HzPbomLineRecord> records = hzPbomRecordDAO.getPbomRecord(null);
+    public List<HzPbomLineRespDTO> getHzPbomLineRecord(HzPbomProcessComposeReqDTO reqDTO) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("projectId",reqDTO.getProjectId());
+        List<HzPbomLineRecord> records = hzPbomRecordDAO.getPbomRecord(map);
         if(ListUtil.isEmpty(records)){
             return null;
         }
@@ -189,7 +191,6 @@ public class HzPbomServiceImpl implements HzPbomService {
         try{
             JSONArray jsonArray = new JSONArray();
             setting.setBomMainRecordPuid(pbomLineRecords.get(0).getBomDigifaxId());
-            hzBomDataDao = new HzBomDataDaoImpl();
             setting = hzBomDataDao.loadSetting(setting);
             byte[] btOfSetting = setting.getPreferencesettingblock();
             Object objOfSetting = SerializeUtil.unserialize(btOfSetting);
@@ -335,7 +336,7 @@ public class HzPbomServiceImpl implements HzPbomService {
         map.put("lineId",reqDTO.getLineId());
         HzPreferenceSetting setting = new HzPreferenceSetting();
         setting.setSettingName("Hz_ExportBomPreferenceRedis");
-        List<HzPbomLineRecord> records = hzPbomRecordDAO.getHzPbomById(map);
+        List<HzPbomLineRecord> records = hzPbomRecordDAO.getPbomRecord(map);
         if(ListUtil.isEmpty(records)){
             return null;
         }
@@ -343,7 +344,6 @@ public class HzPbomServiceImpl implements HzPbomService {
             HzPbomLineRecord lineRecord = records.get(0);
             JSONArray jsonArray = new JSONArray();
             setting.setBomMainRecordPuid(lineRecord.getBomDigifaxId());
-            hzBomDataDao = new HzBomDataDaoImpl();
             setting = hzBomDataDao.loadSetting(setting);
             byte[] btOfSetting = setting.getPreferencesettingblock();
             Object objOfSetting = SerializeUtil.unserialize(btOfSetting);

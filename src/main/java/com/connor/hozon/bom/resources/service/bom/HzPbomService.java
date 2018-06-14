@@ -44,7 +44,7 @@ public interface HzPbomService {
      * 获取PBOM信息
      * @return
      */
-    List<HzPbomLineRespDTO> getHzPbomLineRecord();
+    List<HzPbomLineRespDTO> getHzPbomLineRecord(HzPbomProcessComposeReqDTO reqDTO);
 
     /**
      * 按条件搜索PBOM 在线维护信息
@@ -94,5 +94,10 @@ public interface HzPbomService {
      */
     JSONArray getPbomForProcessCompose(HzPbomProcessComposeReqDTO reqDTO);
 
+    /**
+     * 获取一条PBOM详情 通过零件号
+     * @param reqDTO
+     * @return
+     */
     JSONArray getPbomByLineId(HzPbomProcessComposeReqDTO reqDTO);
 }
