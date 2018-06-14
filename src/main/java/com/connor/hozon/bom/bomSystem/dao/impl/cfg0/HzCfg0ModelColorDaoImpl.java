@@ -34,8 +34,8 @@ public class HzCfg0ModelColorDaoImpl implements HzCfg0ModelColorDao {
     }
 
     @Override
-    public List<HzCfg0ModelColor> selectAll() {
-        return baseSQLUtil.executeQuery(new HzCfg0ModelColor(), "com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0ModelColorDao.selectAll");
+    public List<HzCfg0ModelColor> selectAll(String projectPuid) {
+        return baseSQLUtil.executeQueryByPass(new HzCfg0ModelColor(), projectPuid, "com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0ModelColorDao.selectAll");
     }
 
     @Override

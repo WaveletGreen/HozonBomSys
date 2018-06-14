@@ -1,22 +1,69 @@
 package sql.pojo.bom;
 
 public class HzBomLineRecord {
+    /**
+     * puid
+     */
     private String puid;
-
+    /**
+     * 父层puid
+     */
     private String parentUid;
+    /**
+     * 是否部门层
+     */
     private String isDept;
+    /**
+     * 数模层PUID
+     */
     private String bomDigifaxId;
+    /**
+     * Bom行的层级索引
+     */
     private String lineIndex;
+    /**
+     * 记录TC的BOMLine的Puid，用于快速session.stringToTCObject
+     */
     private String linePuid;
+    /**
+     * Bom行对应的零件号
+     */
     private String lineID;
+    /**
+     * 是否有子层
+     */
     private Integer isHas;
+    /**
+     * 属性集合，是一个LinkedHashMap，需要转换
+     */
     private byte[] bomLineBlock;
+    /**
+     * 是否2Y层
+     */
     private Integer is2Y;
+    /**
+     * 是否零件
+     */
     private Integer isPart;
+    /**
+     * 在Bom结构中的顺序号
+     */
     private Integer orderNum;
+    /**
+     * 2Y层归属哪个部门
+     */
     private String pBomOfWhichDept;
+    /**
+     * 项目的puid，只是方便根据项目查找数据，并不存在数据库中，做项目映射应该使用bomDigifaxId字段对应数模层，再对应项目
+     */
     private String projectPuid;
+    /**
+     * Bom行对应的零件名
+     */
     private String pBomLinePartName;
+    /**
+     * Bom行对应的零件类别
+     */
     private String pBomLinePartClass;
 
     public String getPuid() {

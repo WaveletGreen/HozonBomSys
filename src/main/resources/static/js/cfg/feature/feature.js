@@ -1,14 +1,15 @@
 var firstLoad = true;
 $(document).ready(
-    $("#query").click(function () {
+    // $("#query").click(function () {
+    (function () {
         var $table = $("#dataTable");
         $table.bootstrapTable('destroy');
         $("#refresh").removeAttr("disabled");
-        var projectPuid=$("#project", window.top.document).val();
+        var projectPuid = $("#project", window.top.document).val();
         $table.bootstrapTable({
-            url: "cfg0/loadFeature?projectPuid="+   projectPuid,
-            method:"GET",
-            height: $(window.parent.document).find("#wrapper").height() - 252,
+            url: "cfg0/loadFeature?projectPuid=" + projectPuid,
+            method: "GET",
+            height: $(window.parent.document).find("#wrapper").height() - document.body.offsetHeight - 45,
             width: $(window).width(),
             showToggle: true,                   //是否显示详细视图和列表视图的切换按钮
             showColumns: true,                  //是否显示所有的列
@@ -24,9 +25,9 @@ $(document).ready(
                     handler: function () {
                         window.Ewin.dialog({
                             title: "添加",
-                            url: "colorSet/addPage",
+                            url: "cfg0/addPage?projectPuid=" + projectPuid,
                             gridId: "gridId",
-                            width: 350,
+                            width: 400,
                             height: 500
                         })
                     }
@@ -43,10 +44,10 @@ $(document).ready(
                         }
                         window.Ewin.dialog({
                             title: "修改",
-                            url: "colorSet/update?puid=" + rows[0].puid,
+                            url: "cfg0/modifyPage?projectPuid=" + rows[0].puid,
                             gridId: "gridId",
-                            width: 350,
-                            height: 450
+                            width: 400,
+                            height: 500
                         });
                     }
                 },
@@ -64,7 +65,7 @@ $(document).ready(
                                 $.ajax({
                                     type: "POST",
                                     //ajax需要添加打包名
-                                    url: "./colorSet/delete",
+                                    url: "./cfg0/deleteByPuid",
                                     data: JSON.stringify(rows),
                                     contentType: "application/json",
                                     success: function (result) {

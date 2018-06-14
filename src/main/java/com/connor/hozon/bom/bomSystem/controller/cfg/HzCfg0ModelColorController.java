@@ -3,9 +3,8 @@ package com.connor.hozon.bom.bomSystem.controller.cfg;
 import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0ColorSetService;
 import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0MainService;
 import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0ModelColorService;
-import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0OptionFaamilyService;
+import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0OptionFamilyService;
 import net.sf.json.JSONObject;
-import org.apache.ibatis.annotations.Param;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,29 +28,29 @@ import java.util.*;
 @RequestMapping("/modelColor")
 public class HzCfg0ModelColorController {
     private final HzCfg0ModelColorService hzCfg0ModelColorService;
-    private final HzCfg0OptionFaamilyService hzCfg0OptionFaamilyService;
+    private final HzCfg0OptionFamilyService hzCfg0OptionFamilyService;
     private final HzCfg0ColorSetService hzCfg0ColorSetService;
     private final HzCfg0MainService hzCfg0MainService;
     private Logger logger;
 
     @Autowired
-    public HzCfg0ModelColorController(HzCfg0ModelColorService hzCfg0ModelColorService, HzCfg0OptionFaamilyService hzCfg0OptionFaamilyService, HzCfg0ColorSetService hzCfg0ColorSetService, HzCfg0MainService hzCfg0MainService) {
+    public HzCfg0ModelColorController(HzCfg0ModelColorService hzCfg0ModelColorService, HzCfg0OptionFamilyService hzCfg0OptionFamilyService, HzCfg0ColorSetService hzCfg0ColorSetService, HzCfg0MainService hzCfg0MainService) {
         this.hzCfg0MainService = hzCfg0MainService;
         logger = LoggerFactory.getLogger(this.getClass());
         this.hzCfg0ModelColorService = hzCfg0ModelColorService;
-        this.hzCfg0OptionFaamilyService = hzCfg0OptionFaamilyService;
+        this.hzCfg0OptionFamilyService = hzCfg0OptionFamilyService;
         this.hzCfg0ColorSetService = hzCfg0ColorSetService;
     }
 
     @RequestMapping(value = "/loadAll", method = RequestMethod.GET)
     @ResponseBody
-    public Map<String, Object> loadAll() {
-        return hzCfg0ModelColorService.doLoadAll();
+    public Map<String, Object> loadAll(@RequestParam String projectPuid) {
+        return hzCfg0ModelColorService.doLoadAll(projectPuid);
     }
 
     @RequestMapping(value = "/addPage", method = RequestMethod.GET)
-    public String addPage(String pCfg0MainRecordOfMC, Model model) {
-        List<String> columnList = hzCfg0OptionFaamilyService.doGetColumn(pCfg0MainRecordOfMC);
+    public String addPage(@RequestParam String projectPuid, Model model) {
+        List<String> columnList = hzCfg0OptionFamilyService.doGetColumnDef(projectPuid,"\t");
         List<HzCfg0ColorSet> colorList = hzCfg0ColorSetService.doGetAll();
         //添加一个无色
         HzCfg0ColorSet set = new HzCfg0ColorSet();
@@ -63,7 +62,7 @@ public class HzCfg0ModelColorController {
         colorList.add(0, set);
         model.addAttribute("colorList", colorList);
         model.addAttribute("columnList", columnList);
-        model.addAttribute("pCfg0MainRecordOfMC", pCfg0MainRecordOfMC);
+        model.addAttribute("pCfg0MainRecordOfMC", projectPuid);
         return "cfg/modelColorCfg/addModelColorCfg";
     }
 
@@ -75,10 +74,9 @@ public class HzCfg0ModelColorController {
         if (color == null) {
             return "cfg/modelColorCfg/addModelColorCfg";
         }
-
-        List<String> columnList = hzCfg0OptionFaamilyService.doGetColumn(color.getpCfg0MainRecordOfMC());
+        HzCfg0MainRecord main = hzCfg0MainService.doGetByPrimaryKey(color.getpCfg0MainRecordOfMC());
+        List<String> columnList = hzCfg0OptionFamilyService.doGetColumnDef(main.getpCfg0OfWhichProjectPuid(),"\t");
         List<HzCfg0ColorSet> colorList = hzCfg0ColorSetService.doGetAll();
-
         ArrayList<String> orgValue = new ArrayList<>();
 
         Object obj = SerializeUtil.unserialize(color.getpColorfulMapBlock());
@@ -135,14 +133,14 @@ public class HzCfg0ModelColorController {
 
     @RequestMapping(value = "/getColumn", method = RequestMethod.GET)
     @ResponseBody
-    public JSONObject getColumn(HzCfg0ModelColor color) {
+    public JSONObject getColumn(@RequestParam String projectPuid) {
         JSONObject object = new JSONObject();
         List<String> column;
-        if (color.getpCfg0MainRecordOfMC() == null) {
+        if (projectPuid == null || "".equals(projectPuid)) {
             object.put("status", false);
         } else {
             object.put("status", true);
-            column = hzCfg0OptionFaamilyService.doGetColumn(color.getpCfg0MainRecordOfMC());
+            column = hzCfg0OptionFamilyService.doGetColumnDef(projectPuid,"<br/>");
             object.put("data", column);
         }
         return object;

@@ -44,4 +44,9 @@ public class HzPlatformRecordDaoImpl implements HzPlatformRecordDao {
     public List<HzPlatformRecord> selectAll() {
         return baseSQLUtil.executeQuery(new HzPlatformRecord(),"com.connor.hozon.bom.bomSystem.dao.project.HzPlatformRecordDao.selectAll");
     }
+
+    @Override
+    public HzPlatformRecord selectByPlatformCode(String platformCode) {
+        return baseSQLUtil.executeQueryByPass(new HzPlatformRecord(),platformCode,"com.connor.hozon.bom.bomSystem.dao.project.HzPlatformRecordDao.selectByPlatformCode",true);
+    }
 }

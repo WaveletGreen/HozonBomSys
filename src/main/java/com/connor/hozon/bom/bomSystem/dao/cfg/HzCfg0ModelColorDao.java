@@ -1,5 +1,6 @@
 package com.connor.hozon.bom.bomSystem.dao.cfg;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.context.annotation.Configuration;
 import sql.pojo.cfg.HzCfg0ModelColor;
 
@@ -49,7 +50,7 @@ public interface HzCfg0ModelColorDao {
      *
      * @return
      */
-    List<HzCfg0ModelColor> selectAll();
+    List<HzCfg0ModelColor> selectAll(@Param("projectPuid") String projectPuid);
 
     /**
      * Author: Fancyears·Maylos·Mayways

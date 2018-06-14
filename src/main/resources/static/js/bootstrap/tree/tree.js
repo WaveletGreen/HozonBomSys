@@ -14,6 +14,8 @@ $(function () {
                 child_menu_ul.setAttribute("aria-expanded", "false");
                 child_menu_ul.setAttribute("class", "collapse");
                 for(var j=0;j<child.length;j++){
+
+
                     var child_menu_ul_li = document.createElement("li");
                     if(child[j].icon!=''&&child[j].icon!=undefined){
                         $(child_menu_ul_li).append("<a href='javascript:void(0)' ><i class='"+child[j].icon+"'></i> "+child[j].name+"</a>")

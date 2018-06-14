@@ -1,6 +1,7 @@
 package com.connor.hozon.bom.bomSystem.service.bom;
 
 import com.connor.hozon.bom.bomSystem.dao.bom.HzBomDataDao;
+import com.connor.hozon.bom.bomSystem.dao.bom.HzBomMainRecordDao;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 import share.bean.PreferenceSetting;
 import share.bean.RedisBomBean;
 import sql.pojo.HzPreferenceSetting;
+import sql.pojo.bom.HZBomMainRecord;
 import sql.pojo.bom.HzBomLineRecord;
 import sql.redis.SerializeUtil;
 
@@ -24,53 +26,61 @@ import java.util.List;
 public class HzBomDataService {
     @Autowired
     HzBomDataDao hzBomDataDao;
+    @Autowired
+    HzBomMainRecordDao hzBomMainRecordDao;
 
-    public JSONArray load(String bdf) {
-        /*
-         * d050cb5e-2f54-4782-92dc-6cf750e0b066
-         */
+    /**
+     * 根据项目puid获取到bom列的设置
+     *
+     * @param bdf 项目puid
+     * @return
+     */
+    public JSONArray doLoadColumns(String bdf) {
         int appendCount = 5;
-        List<HzBomLineRecord> result = null;
-        HzBomLineRecord bomLineRecord = new HzBomLineRecord();
+        JSONArray array = new JSONArray();
         HzPreferenceSetting setting = new HzPreferenceSetting();
         setting.setSettingName("Hz_ExportBomPreferenceRedis");
+        HZBomMainRecord main = hzBomMainRecordDao.selectByProjectPuid(bdf);
+        setting.setBomMainRecordPuid(main.getPuid());
+        setting = hzBomDataDao.loadSetting(setting);
+        byte[] btOfSetting = setting.getPreferencesettingblock();
+        Object objOfSetting = SerializeUtil.unserialize(btOfSetting);
+        if (objOfSetting instanceof PreferenceSetting) {
+            String[] localName = ((PreferenceSetting) objOfSetting).getPreferenceLocal();
+            String[] trueName = ((PreferenceSetting) objOfSetting).getPreferences();
+            String[] appendLocalName = new String[localName.length + appendCount];
+            String[] appendTrueName = new String[trueName.length + appendCount];
+
+            appendLocalName[0] = "序号";
+            appendLocalName[1] = "顺序号";
+            appendLocalName[2] = "ID";
+            appendLocalName[3] = "父层ID";
+            appendLocalName[4] = "是否是2Y层";
+
+            appendTrueName[0] = "index";
+            appendTrueName[1] = "on";
+            appendTrueName[2] = "id";
+            appendTrueName[3] = "pid";
+            appendTrueName[4] = "is2Y";
+
+            System.arraycopy(localName, 0, appendLocalName, appendCount, localName.length);
+            System.arraycopy(trueName, 0, appendTrueName, appendCount, trueName.length);
+
+            array.add(0, appendTrueName);
+            array.add(1, appendLocalName);
+//                array.add(0, trueName);
+//                array.add(1, localName);
+        }
+        return array;
+    }
+
+    public JSONArray load(String bdf) {
+        List<HzBomLineRecord> result = null;
+        HzBomLineRecord bomLineRecord = new HzBomLineRecord();
         bomLineRecord.setProjectPuid(bdf.trim());
         result = hzBomDataDao.selectByProjectPuid(bomLineRecord);
-
         JSONArray array = new JSONArray();
         if (result.size() > 0) {
-            HzBomLineRecord hbrForSetting = result.get(0);
-            setting.setBomMainRecordPuid(hbrForSetting.getBomDigifaxId());
-            setting = hzBomDataDao.loadSetting(setting);
-            byte[] btOfSetting = setting.getPreferencesettingblock();
-            Object objOfSetting = SerializeUtil.unserialize(btOfSetting);
-            if (objOfSetting instanceof PreferenceSetting) {
-                String[] localName = ((PreferenceSetting) objOfSetting).getPreferenceLocal();
-                String[] trueName = ((PreferenceSetting) objOfSetting).getPreferences();
-                String[] appendLocalName = new String[localName.length + appendCount];
-                String[] appendTrueName = new String[trueName.length + appendCount];
-
-//                appendLocalName[0] = "序号";
-//                appendLocalName[1] = "˳顺序号";
-//                appendLocalName[2] = "ID";
-//                appendLocalName[3] = "父层ID";
-//                appendLocalName[4] = "是否是2Y层";
-//
-//                appendTrueName[0] = "index";
-//                appendTrueName[1] = "on";
-//                appendTrueName[2] = "id";
-//                appendTrueName[3] = "pid";
-//                appendTrueName[4] = "is2Y";
-//
-//                System.arraycopy(localName, 0, appendLocalName, appendCount, localName.length);
-//                System.arraycopy(trueName, 0, appendTrueName, appendCount, trueName.length);
-//
-//                array.add(0, appendTrueName);
-//                array.add(1, appendLocalName);
-
-                array.add(0, trueName);
-                array.add(1, localName);
-            }
             for (HzBomLineRecord hbr : result) {
                 JSONObject object = new JSONObject();
                 object.put("index", hbr.getIndex());
@@ -100,7 +110,6 @@ public class HzBomDataService {
                         }
                 }
                 array.add(object);
-
             }
         }
         return array;

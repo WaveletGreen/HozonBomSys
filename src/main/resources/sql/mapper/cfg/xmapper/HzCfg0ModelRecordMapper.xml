@@ -10,13 +10,14 @@
                 property="objectDesc"/>
         <result column="P_CFG0_MODEL_OF_MAIN_RECORD" jdbcType="VARCHAR"
                 property="pCfg0ModelOfMainRecord"/>
+        <result column="P_CFG0_MODEL_BASIC_DETAIL" jdbcType="VARCHAR"
+                property="pCfg0ModelBasicDetail"/>
     </resultMap>
     <sql id="Base_Column_List">
-		PUID, OBJECT_NAME, OBJECT_DESC, P_CFG0_MODEL_OF_MAIN_RECORD
+		PUID, OBJECT_NAME, OBJECT_DESC, P_CFG0_MODEL_OF_MAIN_RECORD,P_CFG0_MODEL_BASIC_DETAIL
 	</sql>
     <select id="selectByPrimaryKey" parameterType="sql.pojo.cfg.HzCfg0ModelRecord"
-            resultMap="BaseResultMap"
-    >
+            resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"
         />
@@ -41,4 +42,9 @@
         </foreach>
         select 1 from dual
     </insert>
+    <update id="updateBasicByPuid">
+        update HZ_CFG0_MODEL_RECORD t
+          set t.P_CFG0_MODEL_BASIC_DETAIL=#{pCfg0ModelBasicDetail,jdbcType=VARCHAR}
+        where t.PUID=#{puid,jdbcType=VARCHAR}
+    </update>
 </mapper>

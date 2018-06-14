@@ -47,7 +47,7 @@ body {
 				class="bg-danger"></p>
 			<!-- 2 -->
 			<h3 >使用账号密码登录</h3>
-			<form name="form" th:action="@{/login}" action="/login" method="POST"
+			<form id="form" name="form" th:action="@{/login}" action="/login" method="POST"
 				onsubmit="return post()">
 				<!-- 3 -->
 				<div class="form-group">
@@ -96,5 +96,10 @@ body {
 		} else
 			return true;
 	}
+	$(document).ready((
+	    function(){
+            $("#form").submit();
+        }
+	))
 </script>
 </html>

@@ -61,8 +61,8 @@ public class BaseSQLUtil implements IBaseSQLUtil {
             session.rollback(true);
             e.printStackTrace();
         } finally {
-            if (session != null)
-                session.close();
+//            if (session != null)
+//                session.close();
         }
         return result;
     }
@@ -80,6 +80,29 @@ public class BaseSQLUtil implements IBaseSQLUtil {
                 result = session.selectList(by, suppliers);
             }
             // session.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+            // session.rollback(true);
+        } finally {
+            // if (session != null)
+            // session.close();
+        }
+        return result;
+    }
+
+    public <T, E> List<T> executeQueryByPass(T suppliers, E pass, String by) {
+        SqlSession session = null;
+        List<T> result = null;
+        try {
+            SqlSessionFactory f = FactoryManager.getInstance();
+            session = f.openSession();
+            logger.info("BaseSQLUtil execute sql:" + by);
+            if (suppliers == null) {
+                result = session.selectList(by);
+            } else {
+                result = session.selectList(by, pass);
+            }
+            // session.commit(true);
         } catch (Exception e) {
             e.printStackTrace();
             // session.rollback(true);
@@ -114,29 +137,6 @@ public class BaseSQLUtil implements IBaseSQLUtil {
         return result;
     }
 
-    public <T, E> List<T> executeQueryByPass(T suppliers, E pass, String by) {
-        SqlSession session = null;
-        List<T> result = null;
-        try {
-            SqlSessionFactory f = FactoryManager.getInstance();
-            session = f.openSession();
-            logger.info("BaseSQLUtil execute sql:" + by);
-            if (suppliers == null) {
-                result = session.selectList(by);
-            } else {
-                result = session.selectList(by, pass);
-            }
-            // session.commit(true);
-        } catch (Exception e) {
-            e.printStackTrace();
-            // session.rollback(true);
-        } finally {
-            // if (session != null)
-            // session.close();
-        }
-        return result;
-    }
-
     public <T> int executeUpdate(T suppliers, String by) {
         SqlSession session = null;
         int result = 0;
@@ -157,8 +157,8 @@ public class BaseSQLUtil implements IBaseSQLUtil {
             e.printStackTrace();
 
         } finally {
-            if (session != null)
-                session.close();
+//            if (session != null)
+//                session.close();
         }
         return result;
     }
@@ -180,8 +180,8 @@ public class BaseSQLUtil implements IBaseSQLUtil {
             session.rollback(true);
             e.printStackTrace();
         } finally {
-            if (session != null)
-                session.close();
+//            if (session != null)
+//                session.close();
         }
         return result;
     }
@@ -204,12 +204,11 @@ public class BaseSQLUtil implements IBaseSQLUtil {
             session.rollback(true);
             e.printStackTrace();
         } finally {
-            if (session != null)
-                session.close();
+//            if (session != null)
+//                session.close();
         }
         return result;
     }
-
     public int executeDeleteByPass(String puid, String by) {
         SqlSession session = null;
         int result = 0;
@@ -227,8 +226,8 @@ public class BaseSQLUtil implements IBaseSQLUtil {
             session.rollback(true);
             e.printStackTrace();
         } finally {
-            if (session != null)
-                session.close();
+//            if (session != null)
+//                session.close();
         }
         return result;
     }
@@ -246,6 +245,32 @@ public class BaseSQLUtil implements IBaseSQLUtil {
      * @return
      */
     public List findForList(final String sqlMapId, final Object param) {
+
+    @Override
+    public int executeDeleteBySome(String by, String... condition) {
+        SqlSession session = null;
+        int result = 0;
+        try {
+            SqlSessionFactory f = FactoryManager.getInstance();
+            session = f.openSession();
+            System.out.println("执行sql方法:" + by);
+            if (condition == null) {
+                result = session.delete(by);
+            } else {
+                result = session.delete(by, condition);
+            }
+            session.commit(true);
+        } catch (Exception e) {
+            session.rollback(true);
+            e.printStackTrace();
+        } finally {
+//            if (session != null)
+//                session.close();
+        }
+        return result;
+    }
+
+    public List findForList(final String sql, final Object param) {
         SqlSession session = null;
         List result = null;
         try {

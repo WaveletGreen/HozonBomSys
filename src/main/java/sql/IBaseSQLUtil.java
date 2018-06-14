@@ -101,6 +101,15 @@ public interface IBaseSQLUtil {
     int executeDeleteByPass(String puid, String by);
 
     /**
+     * 根据主键直接删除对象
+     *
+     * @param condition
+     * @param by
+     * @return
+     */
+    int executeDeleteBySome(String by, String... condition);
+
+    /**
      * 查询数据 返回list
      *
      * @param sqlMapId

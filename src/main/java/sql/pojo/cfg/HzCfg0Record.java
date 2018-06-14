@@ -1,30 +1,64 @@
 package sql.pojo.cfg;
 
 public class HzCfg0Record {
+    /**
+     * PUId，主键
+     */
     private String puid;
-
+    /**
+     * 配置值
+     */
     private String pCfg0ObjectId;
-
+    /**
+     * 配置值的描述
+     */
     private String pCfg0Desc;
-
+    /**
+     * 组值，也是组的ID
+     */
     private String pCfg0FamilyName;
-
+    /**
+     * 对应数据库的puid
+     */
     private String pCfg0FamilyPuid;
-
+    /**
+     * 产品配置器的数据库puid
+     */
     private String pCfg0MainItemPuid;
-
+    /**
+     * 需要被废弃
+     */
+    @Deprecated
     private String pH9featurename;
-
+    /**
+     * 特性英文名称
+     */
     private String pH9featureenname;
-
+    /**
+     * 需要被废弃
+     */
+    @Deprecated
     private String pH9featuredesc;
-
+    /**
+     * 组的描述
+     */
     private String pCfg0FamilyDesc;
+    /**
+     * 类中特有的，对应是新加进来的特性值还是原有的那张值表，目前有2个值：HZ_CFG0_RECORD和HZ_CFG0_ADD_CFG_RECORD
+     */
+    private String whichTable;
+    /**
+     * 归属项目，类中特有的
+     */
+    private String projectPuid;
+    /**相关性代码，目前手输入*/
+    private String pCfg0Relevance;
 
     public String getPuid() {
         return puid;
     }
-    private Integer length=10;
+
+    private Integer length = 10;
 
     public void setPuid(String puid) {
         this.puid = puid == null ? null : puid.trim();
@@ -108,5 +142,29 @@ public class HzCfg0Record {
 
     public void setLength(Integer length) {
         this.length = length;
+    }
+
+    public String getWhichTable() {
+        return whichTable;
+    }
+
+    public void setWhichTable(String whichTable) {
+        this.whichTable = whichTable;
+    }
+
+    public String getProjectPuid() {
+        return projectPuid;
+    }
+
+    public void setProjectPuid(String projectPuid) {
+        this.projectPuid = projectPuid;
+    }
+
+    public String getpCfg0Relevance() {
+        return pCfg0Relevance;
+    }
+
+    public void setpCfg0Relevance(String pCfg0Relevance) {
+        this.pCfg0Relevance = pCfg0Relevance;
     }
 }

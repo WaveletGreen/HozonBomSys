@@ -11,9 +11,13 @@ public interface HzBrandRecordDao {
 
     int insert(HzBrandRecord record);
 
-    HzBrandRecord selectByPrimaryKey(@Param("puid")String puid);
+    HzBrandRecord selectByPrimaryKey(@Param("puid") String puid);
+
+    HzBrandRecord selectByBrandCode(@Param("pBrandCode") String pBrandCode);
 
     int updateByPrimaryKey(HzBrandRecord record);
+
+    int updateSelective(HzBrandRecord record);
 
     List<HzBrandRecord> selectAll();
 }

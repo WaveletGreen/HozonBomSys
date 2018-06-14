@@ -17,7 +17,12 @@ public class HzCfg0ModelRecordDaoImpl implements HzCfg0ModelRecordDao {
     IBaseSQLUtil baseSQLUtil;
 
     @Override
-    public HzCfg0ModelRecord selectByPrimaryKey(HzCfg0ModelRecord record) {
-        return baseSQLUtil.executeQueryById(record, "com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0ModelRecordDao.selectByPrimaryKey");
+    public HzCfg0ModelRecord selectByPrimaryKey(String puid) {
+        return baseSQLUtil.executeQueryByPass(new HzCfg0ModelRecord(), puid, "com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0ModelRecordDao.selectByPrimaryKey", true);
+    }
+
+    @Override
+    public int updateBasicByPuid(HzCfg0ModelRecord modelRecord) {
+        return baseSQLUtil.executeUpdate(modelRecord, "com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0ModelRecordDao.updateBasicByPuid");
     }
 }

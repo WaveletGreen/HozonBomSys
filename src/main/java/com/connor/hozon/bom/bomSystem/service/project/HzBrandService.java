@@ -27,6 +27,10 @@ public class HzBrandService {
         return hzBrandRecordDao.updateByPrimaryKey(record) > 0 ? true : false;
     }
 
+    public boolean doUpdateSelective(HzBrandRecord record) {
+        return hzBrandRecordDao.updateSelective(record) > 0 ? true : false;
+    }
+
     public boolean doInsertOne(HzBrandRecord record) {
         return hzBrandRecordDao.insert(record) > 0 ? true : false;
     }
@@ -35,7 +39,30 @@ public class HzBrandService {
         return hzBrandRecordDao.deleteByPrimaryKey(puid) > 0 ? true : false;
     }
 
-    public List<HzBrandRecord> doGetAllBrand(){
+    public List<HzBrandRecord> doGetAllBrand() {
         return hzBrandRecordDao.selectAll();
-    };
+    }
+
+    /**
+     * 验证品牌是否符合要求
+     * 只验证品牌代码和品牌名称
+     *
+     * @param brand 品牌对象
+     * @return
+     */
+    public boolean validate(HzBrandRecord brand) {
+        //品牌代号和名称不能为空
+        if (null == brand.getpBrandCode() || null == brand.getpBrandName() || "".equals(brand.getpBrandCode()) || "".equals(brand.getpBrandName())) {
+            return false;
+        } else return true;
+    }
+
+    /***
+     * 根据品牌代码查询品牌
+     * @param brandCode 品牌代码
+     * @return
+     */
+    public HzBrandRecord doGetByBrandCode(String brandCode) {
+        return hzBrandRecordDao.selectByBrandCode(brandCode);
+    }
 }

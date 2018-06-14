@@ -32,17 +32,52 @@
         P_VEHICLE_ANNUAL,
         P_PROJECT_OWNING_USER,
         P_PROJECT_DISCONTINUATION_DATE
-  </sql>
+    </sql>
+    <!--根据主键找项目-->
     <select id="selectByPrimaryKey" parameterType="sql.pojo.project.HzProjectLibs" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from HZ_PROJECT_LIBS
         where PUID = #{puid,jdbcType=VARCHAR}
     </select>
+    <!--根据项目的编号找项目-->
+    <select id="selectByProjectCode" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from HZ_PROJECT_LIBS
+        where P_PROJECT_CODE = #{pProjectCode,jdbcType=VARCHAR}
+    </select>
+    <!--查找所有项目-->
     <select id="selectAllProject" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from HZ_PROJECT_LIBS
     </select>
-
+    <!--添加1条项目-->
+    <select id="insert" parameterType="sql.pojo.project.HzProjectLibs" resultMap="BaseResultMap">
+        insert into HZ_PROJECT_LIBS
+        (
+        <include refid="Base_Column_List"/>
+        )
+        values (
+        #{puid,jdbcType=VARCHAR},
+        #{pProjectName,jdbcType=VARCHAR},
+        #{pProjectPertainToPlatform,jdbcType=VARCHAR},
+        #{pProjectCreateDate,jdbcType=VARCHAR},
+        #{pProjectLastModDate,jdbcType=TIMESTAMP},
+        #{pProjectCode,jdbcType=TIMESTAMP},
+        #{pVehicleCode,jdbcType=VARCHAR},
+        #{pVehicleName,jdbcType=VARCHAR},
+        #{pVehicleShapeCode,jdbcType=VARCHAR},
+        #{pVehicleTranName,jdbcType=VARCHAR},
+        #{pVehicleAnnualCode,jdbcType=VARCHAR},
+        #{pVehicleAnnual,jdbcType=VARCHAR},
+        #{pProjectOwningUser,jdbcType=VARCHAR},
+        #{pProjectDiscontinuationDate,jdbcType=VARCHAR}
+        )
+    </select>
+    <!--根据主键删除项目-->
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+        delete HZ_PROJECT_LIBS where PUID=#{puid,jdbcType=VARCHAR}
+    </delete>
 </mapper>

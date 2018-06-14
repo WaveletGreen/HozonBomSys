@@ -36,13 +36,23 @@ public class HzBrandRecordDaoImpl implements HzBrandRecordDao {
     }
 
     @Override
+    public HzBrandRecord selectByBrandCode(String pBrandCode) {
+        return baseSQLUtil.executeQueryByPass(new HzBrandRecord(), pBrandCode, "com.connor.hozon.bom.bomSystem.dao.project.HzBrandRecordDao.selectByBrandCode", true);
+    }
+
+    @Override
     public int updateByPrimaryKey(HzBrandRecord record) {
         return baseSQLUtil.executeUpdate(record, "com.connor.hozon.bom.bomSystem.dao.project.HzBrandRecordDao.updateByPrimaryKey");
     }
 
     @Override
+    public int updateSelective(HzBrandRecord record) {
+        return baseSQLUtil.executeUpdate(record, "com.connor.hozon.bom.bomSystem.dao.project.HzBrandRecordDao.updateSelective");
+    }
+
+    @Override
     public List<HzBrandRecord> selectAll() {
-        return baseSQLUtil.executeQuery(new HzBrandRecord(),"com.connor.hozon.bom.bomSystem.dao.project.HzBrandRecordDao.selectAll");
+        return baseSQLUtil.executeQuery(new HzBrandRecord(), "com.connor.hozon.bom.bomSystem.dao.project.HzBrandRecordDao.selectAll");
     }
 
 }

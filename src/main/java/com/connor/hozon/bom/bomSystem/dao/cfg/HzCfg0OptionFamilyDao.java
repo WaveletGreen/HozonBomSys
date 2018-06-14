@@ -31,5 +31,5 @@ public interface HzCfg0OptionFamilyDao {
      * @param mainId 产品配置器的puid
      * @return 返回一组系统名称
      */
-    List<String> selectNameByMainId(@Param("mainId") String mainId);
+    List<HzCfg0OptionFamily> selectNameByMainId(@Param("mainId") String mainId);
 }

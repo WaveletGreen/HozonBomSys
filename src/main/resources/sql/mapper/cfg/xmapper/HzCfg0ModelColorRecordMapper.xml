@@ -62,6 +62,12 @@
         <include refid="Color_Is_Multiply"/>
         from HZ_CFG0_MODEL_COLOR_RECORD t
         left join HZ_CFG0_COLORSET t2 on p_model_shell=t2.p_color_code
+        where t.p_cfg0_main_record_of_mc=
+          (select puid
+              from hz_cfg0_main_record t3
+          where t3.p_cfg0_of_which_project_puid=#{projectPuid}
+        )
+
     </select>
     <insert id="insertOne" parameterType="sql.pojo.cfg.HzCfg0ModelColor">
         insert into HZ_CFG0_MODEL_COLOR_RECORD

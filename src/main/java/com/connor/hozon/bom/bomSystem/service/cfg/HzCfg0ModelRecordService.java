@@ -11,12 +11,15 @@ import sql.pojo.cfg.HzCfg0ModelRecord;
  * Time: 14:55
  */
 @Service("hzCfg0modelRecordService")
-public class HzCfg0modelRecordService {
+public class HzCfg0ModelRecordService {
     @Autowired
     HzCfg0ModelRecordDao hzCfg0ModelRecordDao;
 
-    public HzCfg0ModelRecord doGetById(HzCfg0ModelRecord record) {
-        return hzCfg0ModelRecordDao.selectByPrimaryKey(record);
+    public HzCfg0ModelRecord doGetById(String puid) {
+        return hzCfg0ModelRecordDao.selectByPrimaryKey(puid);
     }
 
+    public boolean doUpdateBasic(HzCfg0ModelRecord modelRecord) {
+        return hzCfg0ModelRecordDao.updateBasicByPuid(modelRecord) > 0 ? true : false;
+    }
 }

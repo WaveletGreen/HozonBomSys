@@ -45,4 +45,19 @@ public class HzProjectLibsDaoImpl implements HzProjectLibsDao {
     public List<HzProjectLibs> selectAllProject() {
         return baseSQLUtil.executeQuery(new HzProjectLibs(), "com.connor.hozon.bom.bomSystem.dao.project.HzProjectLibsDao.selectAllProject");
     }
+
+    @Override
+    public HzProjectLibs selectByProjectCode(String pProjectCode) {
+        return baseSQLUtil.executeQueryByPass(new HzProjectLibs(), pProjectCode, "com.connor.hozon.bom.bomSystem.dao.project.HzProjectLibsDao.selectByProjectCode", true);
+    }
+
+    @Override
+    public int insert(HzProjectLibs project) {
+        return baseSQLUtil.executeInsert(project, "com.connor.hozon.bom.bomSystem.dao.project.HzProjectLibsDao.insert");
+    }
+
+    @Override
+    public int deleteByPrimaryKey(String puid) {
+        return baseSQLUtil.executeDeleteByPass(puid, "com.connor.hozon.bom.bomSystem.dao.project.HzProjectLibsDao.deleteByPrimaryKey");
+    }
 }

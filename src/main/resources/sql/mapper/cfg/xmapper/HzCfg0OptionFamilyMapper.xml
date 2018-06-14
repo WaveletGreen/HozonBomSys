@@ -22,9 +22,9 @@
         where PUID = #{puid,jdbcType=VARCHAR}
     </select>
 
-    <select id="selectNameByMainId" parameterType="java.lang.String" resultMap="FamilyName">
+    <select id="selectNameByMainId" parameterType="java.lang.String" resultMap="BaseResultMap">
         select
-       P_OPTIONFAMILY_DESC
+        <include refid="Base_Column_List"/>
         from HZ_CFG0_OPTIONFAMILY_RECORD
         where P_OF_CFG0_MAIN = (
           select t2.puid

@@ -12,9 +12,11 @@ public interface HzPlatformRecordDao {
     int insert(HzPlatformRecord record);
 
 
-    HzPlatformRecord selectByPrimaryKey(@Param("puid")String puid);
+    HzPlatformRecord selectByPrimaryKey(@Param("puid") String puid);
 
     int updateByPrimaryKey(HzPlatformRecord record);
 
     List<HzPlatformRecord> selectAll();
+
+    HzPlatformRecord selectByPlatformCode(@Param("pPlatformCode") String pPlatformCode);
 }

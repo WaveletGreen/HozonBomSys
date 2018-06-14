@@ -1,17 +1,18 @@
 $(document).ready(
-    $("#doSubmit1").click(
+    // $("#doSubmit1").click(
+    (
         function () {
             var project = $("#project", window.top.document);
-            var x = project.val();
-            if (x.length == 0) {
+            var projectPuid = project.val();
+            if (projectPuid.length == 0) {
                 $("#myModal").modal('show');
                 return;
             }
             $.ajax({
-                type: 'GET',
-                url: './loadBom/loadByID',
+                type: 'POST',
+                url: './loadBom/loadByID2',
                 data: {
-                    "bdf": x
+                    "projectPuid": projectPuid
                 },
                 success: function (result) {
                     var toJson = JSON.stringify(result);
@@ -40,5 +41,7 @@ $(document).ready(
                     alert("网络发生错误，请稍后重试");
                 }
             });
-        })
+        }
+
+    )
 );

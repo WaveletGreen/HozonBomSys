@@ -1,0 +1,138 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<body>
+暂时用不到
+<form id="featureForm" role="form" method="post" action="./cfg0/add">
+    <input class="form-control" id="pCfg0MainItemPuid" name="pCfg0MainItemPuid" type="hidden" th:value="${entity.puid}"/>
+    <div class="form-group">
+        <label for="pCfg0FamilyName">特性名称</label>
+        <input class="form-control" id="pCfg0FamilyName" name="pCfg0FamilyName" type="text"
+               placeholder="请输入特性名称"
+        />
+    </div>
+    <div class="form-group">
+        <label for="pCfg0FamilyDesc">特性描述</label>
+        <input class="form-control" id="pCfg0FamilyDesc" name="pCfg0FamilyDesc" type="text"
+               placeholder="请输入特性描述"/>
+    </div>
+    <div class="form-group">
+        <label for="pH9featureenname">特性英文名称</label>
+        <input class="form-control" id="pH9featureenname" name="pH9featureenname" type="text"
+               placeholder="请输入特性英文名称"/>
+    </div>
+    </div>
+    <div class="form-group">
+        <label for="pCfg0ObjectId">特性值/配置代码</label>
+        <input class="form-control" id="pCfg0ObjectId" name="pCfg0ObjectId" type="text"
+               placeholder="请输入特性值/配置代码"/>
+    </div>
+    <div class="form-group">
+        <label for="pCfg0Desc">特性值/配置(描述)</label>
+        <input class="form-control" id="pCfg0Desc" name="pCfg0Desc" type="text"
+               placeholder="请输入特性值/配置(描述)"/>
+    </div>
+    <div class="form-group">
+        <label for="length">字符长度</label>
+        <input class="form-control" id="length" name="length" type="text" value="10"
+               placeholder="请输入字符长度"/>
+    </div>
+</form>
+<script th:inline="javascript">
+    <![CDATA[
+    $(function () {
+        $('#featureForm').bootstrapValidator({
+            message: 'This value is not valid',
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            fields: {
+                pCfg0FamilyName: {
+                    message: '特性名称验证失败',
+                    validators: {
+                        notEmpty: {
+                            message: '特性名称不能为空'
+                        }
+                    }
+                },
+                pCfg0FamilyDesc: {
+                    message: '特性描述验证失败',
+                    validators: {
+                        notEmpty: {
+                            message: '特性描述不能为空'
+                        }
+                    }
+                },
+                pCfg0ObjectId: {
+                    message: '特性值/配置代码验证失败',
+                    validators: {
+                        notEmpty: {
+                            message: '特性值/配置代码不能为空'
+                        }
+                    }
+                },
+                pCfg0Desc: {
+                    message: '特性值/配置(描述)验证失败',
+                    validators: {
+                        notEmpty: {
+                            message: '特性值/配置(描述)不能为空'
+                        }
+                    }
+                },
+                length: {
+                    message: '字符长度验证失败',
+                    validators: {
+                        digits: {
+                            message: '长度只能是整数'
+                        }
+                    }
+                },
+            }
+        });
+        // 绑定dialog的确定按钮的监听事件
+        $("#btnOk", window.top.document).click(function () {
+            var bootstrapValidator = $("#featureForm", window.top.document).data('bootstrapValidator');
+            bootstrapValidator.validate();
+            if (bootstrapValidator.isValid()) {
+                var url = $("#featureForm", window.top.document).attr('action');
+                <!--其实不要puid，puid会在服务器上生成-->
+                var myData = JSON.stringify({
+                    "pCfg0FamilyName": $("#pCfg0FamilyName").val(),
+                    "pCfg0FamilyDesc": $("#pCfg0FamilyDesc").val(),
+                    "pCfg0ObjectId": $("#pCfg0ObjectId").val(),
+                    "pCfg0Desc": $("#pCfg0Desc").val(),
+                    "pH9featureenname": $("#pH9featureenname").val(),
+                    "length": $("#length").val(),
+                    "pCfg0MainItemPuid": $("#pCfg0MainItemPuid").val()
+                });
+                $.ajax({
+                    contentType:
+                        "application/json",
+                    type:
+                        'POST',
+                    url: url,
+                    data: myData,
+                    success:
+                        function (result) {
+                            $('.modal-dialog', window.top.document).parent('div').remove()
+                            $('body', window.top.document).find('.modal-backdrop').remove();
+                            // jquery 调用刷新当前操作的table页面的refresh方法
+                            $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
+                            if(result){
+                                window.Ewin.alert({message: "添加特性数据成功"});
+
+                            }
+
+                        },
+                    error: function (status) {
+                        window.Ewin.alert({message: status.status + ':添加数据失败!'});
+                    }
+                });
+            }
+        });
+    })
+    ]]>
+</script>
+</body>
+</html>
