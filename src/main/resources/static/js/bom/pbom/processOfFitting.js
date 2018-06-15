@@ -192,28 +192,59 @@ $(function() {
                                             var value = result[2];
                                             var titleNameAll = "";
                                             var valueAll = "";
-
-                                            
-
-
-
-
                                             for (var i = 0; i < titleName.length; i++) {
-                                                var titleName1 = "<th>"+titleName[i]+"</th>";
-
-                                                // var tableValue = "<td>"+value.titleEname[i]+"</td>"
+                                                var titleName1 = "<td>"+titleName[i]+"</td>";
                                                 titleNameAll += titleName1;
                                             }
-                                            for (var i = 0; i < value.length; i++) {
-                                                var value1 = "<td>"+value[i]+"</td>";
+                                           /* for (var i = 0; i < value.length; i++) {
+                                                var value1 = "<td>"+value.titelEName[i]+"</td>";
                                                 valueAll += value1;
-                                            }
-                                            alert(valueAll);
+                                            }*/
                                             var rel = "<table>"+
+                                                            "<input type='checkbox'>"+
                                                             "<tr>"+titleNameAll+"</tr>"+
-                                                            "<tr>"+valueAll+"</tr>"+
+                                                            // "<tr>"+valueAll+"</tr>"+
+                                                            "<tr>"+
+                                                                "<td>"+value.current_name+"</td>"+
+                                                                "<td>"+value.object_string+"</td>"+
+                                                                "<td>"+value.bl_item_object_type+"</td>"+
+                                                                "<td>"+value.bl_sequence_no+"</td>"+
+                                                                "<td>"+value.bl_formula+"</td>"+
+                                                                "<td>"+value.mfg0realRevision+"</td>"+
+                                                                "<td>"+value.bl_config_string+"</td>"+
+                                                                "<td>"+value.bl_rev_ps_children+"</td>"+
+                                                                "<td>"+value.bl_rev_owning_user+"</td>"+
+                                                                "<td>"+value.bl_rev_owning_group+"</td>"+
+                                                                "<td>"+value.bl_rev_object_name+"</td>"+
+                                                                "<td>"+value.bl_line_object+"</td>"+
+                                                                "<td>"+value.bl_line_name+"</td>"+
+                                                                "<td>"+value.bl_item_item_id+"</td>"+
+                                                                "<td>"+value.bl_item_uom_tag+"</td>"+
+                                                                "<td>"+value.bl_formatted_ancestor_name+"</td>"+
+                                                                "<td>"+value.bl_rev_item_revision_id+"</td>"+
+                                                                "<td>"+value.bl_item_item_id+"</td>"+
+                                                                "<td>"+value.bl_pack_count+"</td>"+
+                                                                "<td>"+value.bl_item_Smc0HasVariantConfigContext+"</td>"+
+                                                                "<td>"+value.bl_formatted_title+"</td>"+
+                                                                "</tr>"
                                                         "</table>";
                                             $("#detailTable").html(rel);
+                                            var r, re;
+                                            var s = detailTable.outerHTML;
+                                            re = /<table(.[^>]*)>/i;
+                                            r = s.match(re)[0].replace(" id=", " oldid=");
+                                            var tablehtml = r
+                                            for (var i = 0; i < detailTable.rows[0].cells.length; i++) {
+                                                tablehtml += "<tr>"
+                                                for (var k = 0; k < detailTable.rows.length; k++) {
+                                                    tablehtml += detailTable.rows[k].cells[i].outerHTML
+                                                }
+                                                tablehtml += "</wtr>"
+                                            }
+                                            tablehtml += "</table>"
+                                            newtable.innerHTML = tablehtml;
+//下面这一句是让JS执行时隐藏原来的表格内容，达到新表格在原来的表格位置刷出来的效果。
+                                            document.getElementById("detailTable").style.display = "none";
                                             /*localProjectDetail = data;
                                             coach[lineId] = localProjectDetail;
                                             // eval("coach." + puid + "=" + data);
