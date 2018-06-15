@@ -4,34 +4,28 @@
     <resultMap id="BaseResultMap" type="sql.pojo.project.HzProjectLibs">
         <id column="PUID" jdbcType="VARCHAR" property="puid"/>
         <result column="P_PROJECT_NAME" jdbcType="VARCHAR" property="pProjectName"/>
-        <result column="P_PROJECT_PERTAIN_TO_PLATFORM" jdbcType="VARCHAR" property="pProjectPertainToPlatform"/>
+        <result column="P_PROJECT_PERTAIN_TO_VEHICLE" jdbcType="VARCHAR" property="pProjectPertainToVehicle"/>
         <result column="P_PROJECT_CREATE_DATE" jdbcType="TIMESTAMP" property="pProjectCreateDate"/>
         <result column="P_PROJECT_LAST_MOD_DATE" jdbcType="TIMESTAMP" property="pProjectLastModDate"/>
         <result column="P_PROJECT_CODE" jdbcType="VARCHAR" property="pProjectCode"/>
-        <result column="P_VEHICLE_CODE" jdbcType="VARCHAR" property="pVehicleCode"/>
-        <result column="P_VEHICLE_NAME" jdbcType="VARCHAR" property="pVehicleName"/>
-        <result column="P_VEHICLE_SHAPE_CODE" jdbcType="VARCHAR" property="pVehicleShapeCode"/>
-        <result column="P_VEHICLE_TRAN_NAME" jdbcType="VARCHAR" property="pVehicleTranName"/>
-        <result column="P_VEHICLE_ANNUAL_CODE" jdbcType="VARCHAR" property="pVehicleAnnualCode"/>
-        <result column="P_VEHICLE_ANNUAL" jdbcType="VARCHAR" property="pVehicleAnnual"/>
         <result column="P_PROJECT_OWNING_USER" jdbcType="VARCHAR" property="pProjectOwningUser"/>
         <result column="P_PROJECT_DISCONTINUATION_DATE" jdbcType="TIMESTAMP" property="pProjectDiscontinuationDate"/>
+        <result column="P_PROJECT_MANAGER" jdbcType="VARCHAR" property="pProjectManager"/>
+        <result column="P_PROJECT_DETAIL" jdbcType="VARCHAR" property="pProjectDetail"/>
+        <result column="P_PROJECT_LAST_MODIFIER" jdbcType="VARCHAR" property="pProjectLastModifier"/>
     </resultMap>
     <sql id="Base_Column_List">
         PUID,
         P_PROJECT_NAME,
-        P_PROJECT_PERTAIN_TO_PLATFORM,
+        P_PROJECT_PERTAIN_TO_VEHICLE,
         P_PROJECT_CREATE_DATE,
         P_PROJECT_LAST_MOD_DATE,
         P_PROJECT_CODE,
-        P_VEHICLE_CODE,
-        P_VEHICLE_NAME,
-        P_VEHICLE_SHAPE_CODE,
-        P_VEHICLE_TRAN_NAME,
-        P_VEHICLE_ANNUAL_CODE,
-        P_VEHICLE_ANNUAL,
         P_PROJECT_OWNING_USER,
-        P_PROJECT_DISCONTINUATION_DATE
+        P_PROJECT_DISCONTINUATION_DATE,
+        P_PROJECT_MANAGER,
+        P_PROJECT_DETAIL,
+        P_PROJECT_LAST_MODIFIER
     </sql>
     <!--根据主键找项目-->
     <select id="selectByPrimaryKey" parameterType="sql.pojo.project.HzProjectLibs" resultMap="BaseResultMap">
@@ -62,37 +56,31 @@
         values (
         #{puid,jdbcType=VARCHAR},
         #{pProjectName,jdbcType=VARCHAR},
-        #{pProjectPertainToPlatform,jdbcType=VARCHAR},
-        #{pProjectCreateDate,jdbcType=VARCHAR},
+        #{pProjectPertainToVehicle,jdbcType=VARCHAR},
+        #{pProjectCreateDate,jdbcType=TIMESTAMP},
         #{pProjectLastModDate,jdbcType=TIMESTAMP},
-        #{pProjectCode,jdbcType=TIMESTAMP},
-        #{pVehicleCode,jdbcType=VARCHAR},
-        #{pVehicleName,jdbcType=VARCHAR},
-        #{pVehicleShapeCode,jdbcType=VARCHAR},
-        #{pVehicleTranName,jdbcType=VARCHAR},
-        #{pVehicleAnnualCode,jdbcType=VARCHAR},
-        #{pVehicleAnnual,jdbcType=VARCHAR},
+        #{pProjectCode,jdbcType=VARCHAR},
         #{pProjectOwningUser,jdbcType=VARCHAR},
-        #{pProjectDiscontinuationDate,jdbcType=VARCHAR}
+        #{pProjectDiscontinuationDate,jdbcType=TIMESTAMP},
+        #{pProjectManager,jdbcType=VARCHAR},
+        #{pProjectDetail,jdbcType=VARCHAR}
+        #{pProjectLastModifier,jdbcType=VARCHAR}
         )
     </select>
     <!--根据主键删除项目-->
     <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
         delete HZ_PROJECT_LIBS where PUID=#{puid,jdbcType=VARCHAR}
     </delete>
-
+    <!--更新项目名称，项目代号和详细信息，并记录更改时间-->
     <update id="updateByPrimaryKey" parameterType="sql.pojo.project.HzProjectLibs">
       update HZ_PROJECT_LIBS
       set
       P_PROJECT_NAME = #{pProjectName,jdbcType=VARCHAR},
       P_PROJECT_CODE = #{pProjectCode,jdbcType=VARCHAR},
-      P_VEHICLE_CODE = #{pProjectCode,jdbcType=VARCHAR},
-      P_VEHICLE_NAME = #{pVehicleName,jdbcType=VARCHAR},
-      P_VEHICLE_SHAPE_CODE = #{pVehicleShapeCode,jdbcType=VARCHAR},
-      P_VEHICLE_TRAN_NAME = #{pVehicleTranName,jdbcType=VARCHAR},
-      P_VEHICLE_ANNUAL_CODE = #{pVehicleAnnualCode,jdbcType=VARCHAR},
-      P_VEHICLE_ANNUAL = #{pVehicleAnnual,jdbcType=VARCHAR},
-      P_PROJECT_LAST_MOD_DATE = #{pProjectLastModDate,jdbcType=TIMESTAMP}
+      P_PROJECT_LAST_MOD_DATE = #{pProjectLastModDate,jdbcType=TIMESTAMP},
+      P_PROJECT_DETAIL = #{pProjectDetail,jdbcType=VARCHAR},
+      P_PROJECT_MANAGER = #{pProjectManager,jdbcType=VARCHAR},
+      P_PROJECT_LAST_MODIFIER = #{pProjectLastModifier,jdbcType=VARCHAR}
     where PUID = #{puid,jdbcType=VARCHAR}
     </update>
 </mapper>

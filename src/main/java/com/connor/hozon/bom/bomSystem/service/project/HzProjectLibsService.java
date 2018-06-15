@@ -52,7 +52,7 @@ public class HzProjectLibsService {
     public boolean validate(HzProjectLibs project) {
         //项目编号和项目名称不能为空
         if (null == project.getpProjectCode() || null == project.getpProjectName() || "".equals(project.getpProjectCode()) || "".equals(project.getpProjectName())
-                || null == project.getpProjectPertainToPlatform() || "".equals(project.getpProjectPertainToPlatform())
+                || null == project.getpProjectPertainToVehicle() || "".equals(project.getpProjectPertainToVehicle())
                 ) {
             return false;
         } else return true;
@@ -115,26 +115,5 @@ public class HzProjectLibsService {
     }
 
     public void toDTO(HzProjectLibs project) {
-        if (null == project.getpProjectCode()) {
-            project.setpProjectCode("");
-        }
-        if (null == project.getpProjectName()) {
-            project.setpProjectName("");
-        }
-        if (null == project.getpProjectCreateDate()) {
-            project.setpProjectCreateDate(new Date());
-        }
-        if (null == project.getpProjectDiscontinuationDate()) {
-            project.setpProjectDiscontinuationDate(new Date());
-        }
-        if (null == project.getpVehicleTranName()) {
-            project.setpVehicleTranName("");
-        }
-        if (null == project.getpVehicleAnnual()) {
-            project.setpVehicleAnnual("");
-        }
-        if (null == project.getpVehicleAnnualCode()) {
-            project.setpVehicleAnnualCode("");
-        }
     }
 }

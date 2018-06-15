@@ -57,7 +57,7 @@ public class HzCfg0ModelColorService {
             if (o instanceof HashMap) {
                 HashMap<String, String> _map = (HashMap) o;
                 _map.forEach((key, value) ->
-                        _result.put(key==null?"":key, value==null?"":key)
+                        _result.put(key==null?"":key, value==null?"-":value)
                 );
             }
             res.add(_result);

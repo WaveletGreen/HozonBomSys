@@ -1,6 +1,6 @@
 package com.connor.hozon.bom.bomSystem.controller.cfg;
 
-import com.connor.hozon.bom.bomSystem.bean.HzRelevanceBean;
+import com.connor.hozon.bom.bomSystem.dto.HzRelevanceBean;
 import com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0MainRecordDao;
 import com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0OptionFamilyDao;
 import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0Service;

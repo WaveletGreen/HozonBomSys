@@ -10,121 +10,41 @@ public class HzProjectLibs {
      */
     private String pProjectName;
     /**
-     * 归属平台
+     * 归属车型
      */
-    private String pProjectPertainToPlatform;
+    private String pProjectPertainToVehicle;
     /***
      * 项目编号
      */
     private String pProjectCode;
-    /**
-     * 车型代码
-     */
-    private String pVehicleCode;
     /***
-     * 车型名称
+     * 创建者
      */
-    private String pVehicleName;
-    /**
-     * 车身形式代码
-     */
-    private String pVehicleShapeCode;
-    /**
-     * 车身变形名称
-     */
-    private String pVehicleTranName;
-    /**
-     * 车型年代码
-     */
-    private String pVehicleAnnualCode;
-    /**
-     * 年型年
-     */
-    private String pVehicleAnnual;
     private String pProjectOwningUser;
+    /***
+     * 创建时间
+     */
     private Date pProjectCreateDate;
+    /***
+     * 最后一次修时间
+     */
     private Date pProjectLastModDate;
+    /**
+     * 停产时间
+     */
     private Date pProjectDiscontinuationDate;
-
-    public String getpProjectCode() {
-        return pProjectCode;
-    }
-
-    public void setpProjectCode(String pProjectCode) {
-        this.pProjectCode = pProjectCode;
-    }
-
-    public String getPuid() {
-        return puid;
-    }
-
-    public void setPuid(String puid) {
-        this.puid = puid;
-    }
-
-    public String getpProjectName() {
-        return pProjectName;
-    }
-
-    public void setpProjectName(String pProjectName) {
-        this.pProjectName = pProjectName;
-    }
-
-    public String getpProjectPertainToPlatform() {
-        return pProjectPertainToPlatform;
-    }
-
-    public void setpProjectPertainToPlatform(String pProjectPertainToPlatform) {
-        this.pProjectPertainToPlatform = pProjectPertainToPlatform;
-    }
-
-    public String getpVehicleCode() {
-        return pVehicleCode;
-    }
-
-    public void setpVehicleCode(String pVehicleCode) {
-        this.pVehicleCode = pVehicleCode;
-    }
-
-    public String getpVehicleName() {
-        return pVehicleName;
-    }
-
-    public void setpVehicleName(String pVehicleName) {
-        this.pVehicleName = pVehicleName;
-    }
-
-    public String getpVehicleShapeCode() {
-        return pVehicleShapeCode;
-    }
-
-    public void setpVehicleShapeCode(String pVehicleShapeCode) {
-        this.pVehicleShapeCode = pVehicleShapeCode;
-    }
-
-    public String getpVehicleTranName() {
-        return pVehicleTranName;
-    }
-
-    public void setpVehicleTranName(String pVehicleTranName) {
-        this.pVehicleTranName = pVehicleTranName;
-    }
-
-    public String getpVehicleAnnualCode() {
-        return pVehicleAnnualCode;
-    }
-
-    public void setpVehicleAnnualCode(String pVehicleAnnualCode) {
-        this.pVehicleAnnualCode = pVehicleAnnualCode;
-    }
-
-    public String getpVehicleAnnual() {
-        return pVehicleAnnual;
-    }
-
-    public void setpVehicleAnnual(String pVehicleAnnual) {
-        this.pVehicleAnnual = pVehicleAnnual;
-    }
+    /**
+     * 项目经理
+     */
+    private String pProjectManager;
+    /**
+     * 最后一次修改人
+     */
+    private String pProjectLastModifier;
+    /**
+     * 项目详细信息
+     */
+    private String pProjectDetail;
 
     public String getpProjectOwningUser() {
         return pProjectOwningUser;
@@ -163,4 +83,59 @@ public class HzProjectLibs {
             this.pProjectDiscontinuationDate = pProjectDiscontinuationDate;
     }
 
+    public String getPuid() {
+        return puid;
+    }
+
+    public void setPuid(String puid) {
+        this.puid = puid;
+    }
+
+    public String getpProjectName() {
+        return pProjectName;
+    }
+
+    public void setpProjectName(String pProjectName) {
+        this.pProjectName = pProjectName;
+    }
+
+    public String getpProjectPertainToVehicle() {
+        return pProjectPertainToVehicle;
+    }
+
+    public void setpProjectPertainToVehicle(String pProjectPertainToVehicle) {
+        this.pProjectPertainToVehicle = pProjectPertainToVehicle;
+    }
+
+    public String getpProjectCode() {
+        return pProjectCode;
+    }
+
+    public void setpProjectCode(String pProjectCode) {
+        this.pProjectCode = pProjectCode;
+    }
+
+    public String getpProjectManager() {
+        return pProjectManager;
+    }
+
+    public void setpProjectManager(String pProjectManager) {
+        this.pProjectManager = pProjectManager;
+    }
+
+    public String getpProjectLastModifier() {
+        return pProjectLastModifier;
+    }
+
+    public void setpProjectLastModifier(String pProjectLastModifier) {
+        this.pProjectLastModifier = pProjectLastModifier;
+    }
+
+    public String getpProjectDetail() {
+        return pProjectDetail;
+    }
+
+    public void setpProjectDetail(String pProjectDetail) {
+        this.pProjectDetail = pProjectDetail;
+    }
 }

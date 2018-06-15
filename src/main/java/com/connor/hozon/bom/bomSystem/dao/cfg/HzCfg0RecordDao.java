@@ -1,9 +1,8 @@
 package com.connor.hozon.bom.bomSystem.dao.cfg;
 
-import com.connor.hozon.bom.bomSystem.bean.HzMaterielFeatureBean;
+import com.connor.hozon.bom.bomSystem.dto.HzMaterielFeatureBean;
 import org.apache.ibatis.annotations.Param;
 import sql.pojo.cfg.HzCfg0Record;
-import sql.pojo.project.HzSuperMateriel;
 
 import java.util.List;
 

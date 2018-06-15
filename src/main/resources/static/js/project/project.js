@@ -29,158 +29,190 @@ $(document).ready(
 
 /*鼠标移入操作*/
 function addHoverDom(treeId, treeNode) {
-    //根据层级添加按钮
-    var sObj = $("#" + treeNode.tId + "_span");
-    if (treeNode.editNameFlag || $("#editBtn_" + treeNode.tId).length > 0) {
-        return;
-    }
-    var addStr = "<span class='button edit' id='editBtn_" + treeNode.tId + "' title='修改' onfocus='this.blur();'></span>";
-    //处理第一层和第二层
-    // //第二层可以添加项目
-    if (1 == treeNode.level) {
-        addStr += "<span class='button add' id='addBtn_" + treeNode.tId + "' title='添加项目'></span>";
-        addStr += "<span class='button remove' id='removeBtn_" + treeNode.tId + "' title='删除平台'></span>";
-    }
-    // //第一层可以添加品牌和平台
-    else if (0 == treeNode.level) {
-        addStr += "<span class='button add' id='addBtn_" + treeNode.tId + "' title='添加平台'></span>";
-        addStr += "<span class='button remove' id='removeBtn_" + treeNode.tId + "' title='删除品牌'></span>";
-        addStr += "<span class='button add' id='addParentBtn_" + treeNode.tId + "' title='添加品牌'></span>";
-    }
-    else if (2 == treeNode.level) {
-        addStr += "<span class='button remove' id='removeBtn_" + treeNode.tId + "' title='删除项目'></span>";
-    }
-    sObj.after(addStr);
+    //根据权限设置能否有某种操作
+    if (true) {
+        //根据层级添加按钮
+        var sObj = $("#" + treeNode.tId + "_span");
+        if (treeNode.editNameFlag || $("#editBtn_" + treeNode.tId).length > 0) {
+            return;
+        }
+        var addStr = "<span class='button edit' id='editBtn_" + treeNode.tId + "' title='修改' onfocus='this.blur();'></span>";
+        //处理第一层和第二层
+        // //第二层可以添加项目
+        if (0 == treeNode.level) {
+            addStr += "<span class='button add' id='addBtn_" + treeNode.tId + "' title='添加平台'></span>";
+            addStr += "<span class='button remove' id='removeBtn_" + treeNode.tId + "' title='删除品牌'></span>";
+            addStr += "<span class='button add' id='addParentBtn_" + treeNode.tId + "' title='添加品牌'></span>";
+        }
+        else if (1 == treeNode.level) {
+            addStr += "<span class='button add' id='addBtn_" + treeNode.tId + "' title='添加车型'></span>";
+            addStr += "<span class='button remove' id='removeBtn_" + treeNode.tId + "' title='删除平台'></span>";
+        }
+        // //第一层可以添加品牌和平台
 
-    //添加按钮
-    var btn = $("#addBtn_" + treeNode.tId);
-    if (btn) {
-        btn.bind("click", function () {
-            zTree = $.fn.zTree.getZTreeObj("menu_tree");
-            selectNode = treeNode;
-            if (treeNode.level == 1) {
-                //添加项目
-                window.Ewin.dialog({
-                    title: "添加",
-                    url: "project/addPage?id=" + treeNode.puid + "&page=project",
-                    width: 400,
-                    height: 650
-                })
-            }
-            else if (treeNode.level == 0) {
-                //添加平台
-                window.Ewin.dialog({
-                    title: "添加",
-                    url: "project/addPage?id=" + treeNode.puid + "&page=platform",
-                    width: 400,
-                    height: 650
-                })
-            }
-            return false;
-        });
-    }
-    //删除按钮
-    var remove_btn = $("#removeBtn_" + treeNode.tId);
-    if (remove_btn) {
-        remove_btn.bind("click", function () {
-            var type = "";
-            var typeName = "";
-            var name = treeNode.name;
-            var downer = "";
-            zTree = $.fn.zTree.getZTreeObj("menu_tree");
-            switch (treeNode.level) {
-                case 0:
-                    type = "brand";
-                    downer = "平台";
-                    typeName = "品牌";
-                    break;
-                case 1:
-                    type = "platform";
-                    downer = "项目";
-                    typeName = "平台";
-                    break;
-                case 2:
-                    type = "project";
-                    downer = "";
-                    typeName = "项目";
-                    break;
-            }
-            if (treeNode.isParent) {
-                window.Ewin.alert({message: "请先删除下级" + downer});
-            } else {
-                window.Ewin.confirm({
-                    title: '提示',
-                    message: '是否要删除您当前选中的' + typeName + ":" + name + "?",
-                    width: 500
-                }).on(function (e) {
-                    if (e) {
-                        $.post("./project/delete", {puid: treeNode.puid, type: type}, function (e) {
-                            if (e) {
-                                zTree.removeNode(treeNode);
-                                window.Ewin.alert({message: "成功删除"});
-                            } else {
-                                window.Ewin.alert({message: "删除失败" + typeName + ":" + name});
-                            }
-                        })
-                    }
-                });
-            }
-            return false;
-        });
-    }
-    //编辑按钮
-    var edit_btn = $("#editBtn_" + treeNode.tId);
-    if (edit_btn) {
-        edit_btn.bind("click", function () {
-            zTree = $.fn.zTree.getZTreeObj("menu_tree");
-            selectNode = treeNode;
-            if (0 == treeNode.level) {
-                window.Ewin.dialog({
-                    title: "修改品牌信息",
-                    url: "project/modifyPage?id=" + treeNode.puid + "&page=brand",
-                    width: 400,
-                    height: 650
-                });
-            }
-            else if (1 == treeNode.level) {
-                window.Ewin.dialog({
-                    title: "修改平台信息",
-                    url: "project/modifyPage?id=" + treeNode.puid + "&page=platform",
-                    width: 400,
-                    height: 650
-                });
-            }
-            else if (2 == treeNode.level) {
-                window.Ewin.dialog({
-                    title: "修改项目信息",
-                    url: "project/modifyPage?id=" + treeNode.puid + "&page=project",
-                    width: 400,
-                    height: 650
-                });
-            }
-            var puid = selectNode.puid;
-            coach[puid] = null;
-            return false;
-        });
-    }
-    //给父级添加
-    var add_parent_btn = $("#addParentBtn_" + treeNode.tId);
-    //添加品牌
-    if (add_parent_btn) {
-        add_parent_btn.bind("click", function () {
-            zTree = $.fn.zTree.getZTreeObj("menu_tree");
-            selectNode = null;
-            window.Ewin.dialog({title: "添加", url: "project/addPage?id=&page=brand", width: 400, height: 650})
-            return false;
-        })
+        else if (2 == treeNode.level) {
+            addStr += "<span class='button add' id='addBtn_" + treeNode.tId + "' title='添加项目'></span>";
+            addStr += "<span class='button remove' id='removeBtn_" + treeNode.tId + "' title='删除车型'></span>";
+        }
+        else if (3 == treeNode.level) {
+            addStr += "<span class='button remove' id='removeBtn_" + treeNode.tId + "' title='删除项目'></span>";
+        }
+
+        sObj.after(addStr);
+        //添加按钮
+        var btn = $("#addBtn_" + treeNode.tId);
+        if (btn) {
+            btn.bind("click", function () {
+                zTree = $.fn.zTree.getZTreeObj("menu_tree");
+                selectNode = treeNode;
+                if (0 == treeNode.level) {
+                    //添加平台
+                    window.Ewin.dialog({
+                        title: "添加",
+                        url: "project/addPage?id=" + treeNode.puid + "&page=platform",
+                        width: 400,
+                        height: 650
+                    })
+                }
+                else if (1 == treeNode.level) {
+                    //添加项目
+                    window.Ewin.dialog({
+                        title: "添加",
+                        url: "project/addPage?id=" + treeNode.puid + "&page=vehicle",
+                        width: 400,
+                        height: 650
+                    })
+                }
+                else if (2 == treeNode.level) {
+                    window.Ewin.dialog({
+                        title: "添加",
+                        url: "project/addPage?id=" + treeNode.puid + "&page=project",
+                        width: 400,
+                        height: 650
+                    })
+                }
+                return false;
+            });
+        }
+        //删除按钮
+        var remove_btn = $("#removeBtn_" + treeNode.tId);
+        if (remove_btn) {
+            remove_btn.bind("click", function () {
+                var type = "";
+                var typeName = "";
+                var name = treeNode.name;
+                var downer = "";
+                zTree = $.fn.zTree.getZTreeObj("menu_tree");
+                switch (treeNode.level) {
+                    case 0:
+                        type = "brand";
+                        downer = "平台";
+                        typeName = "品牌";
+                        break;
+                    case 1:
+                        type = "platform";
+                        downer = "项目";
+                        typeName = "平台";
+                        break;
+                    case 2:
+                        type = "vehicle";
+                        downer = "项目";
+                        typeName = "车型";
+                        break;
+                    case 3:
+                        type = "project";
+                        downer = "";
+                        typeName = "项目";
+                        break;
+                }
+                if (treeNode.isParent) {
+                    window.Ewin.alert({message: "请先删除下级" + downer});
+                } else {
+                    window.Ewin.confirm({
+                        title: '提示',
+                        message: '是否要删除您当前选中的' + typeName + ":" + name + "?",
+                        width: 500
+                    }).on(function (e) {
+                        if (e) {
+                            $.post("./project/delete", {puid: treeNode.puid, type: type}, function (e) {
+                                if (e) {
+                                    zTree.removeNode(treeNode);
+                                    window.Ewin.alert({message: "成功删除"});
+                                } else {
+                                    window.Ewin.alert({message: "删除失败" + typeName + ":" + name});
+                                }
+                            })
+                        }
+                    });
+                }
+                return false;
+            });
+        }
+        //编辑按钮
+        var edit_btn = $("#editBtn_" + treeNode.tId);
+        if (edit_btn) {
+            edit_btn.bind("click", function () {
+                zTree = $.fn.zTree.getZTreeObj("menu_tree");
+                selectNode = treeNode;
+                if (0 == treeNode.level) {
+                    window.Ewin.dialog({
+                        title: "修改品牌信息",
+                        url: "project/modifyPage?id=" + treeNode.puid + "&page=brand",
+                        width: 400,
+                        height: 650
+                    });
+                }
+                else if (1 == treeNode.level) {
+                    window.Ewin.dialog({
+                        title: "修改平台信息",
+                        url: "project/modifyPage?id=" + treeNode.puid + "&page=platform",
+                        width: 400,
+                        height: 650
+                    });
+                }
+                else if (2 == treeNode.level) {
+                    window.Ewin.dialog({
+                        title: "修改项目信息",
+                        url: "project/modifyPage?id=" + treeNode.puid + "&page=vehicle",
+                        width: 400,
+                        height: 650
+                    });
+                }
+                else if (3 == treeNode.level) {
+                    window.Ewin.dialog({
+                        title: "修改项目信息",
+                        url: "project/modifyPage?id=" + treeNode.puid + "&page=project",
+                        width: 400,
+                        height: 650
+                    });
+                }
+                var puid = selectNode.puid;
+                coach[puid] = null;
+                return false;
+            });
+        }
+        //给父级添加
+        var add_parent_btn = $("#addParentBtn_" + treeNode.tId);
+        //添加品牌
+        if (add_parent_btn) {
+            add_parent_btn.bind("click", function () {
+                zTree = $.fn.zTree.getZTreeObj("menu_tree");
+                selectNode = null;
+                window.Ewin.dialog({title: "添加", url: "project/addPage?id=&page=brand", width: 400, height: 650})
+                return false;
+            })
+        }
     }
 };
 
 function removeHoverDom(treeId, treeNode) {
-    $("#addBtn_" + treeNode.tId).unbind().remove();
-    $("#removeBtn_" + treeNode.tId).unbind().remove();
-    $("#editBtn_" + treeNode.tId).unbind().remove();
-    $("#addParentBtn_" + treeNode.tId).unbind().remove();
+    //根据权限设置能否有某种操作
+    if (true) {
+        $("#addBtn_" + treeNode.tId).unbind().remove();
+        $("#removeBtn_" + treeNode.tId).unbind().remove();
+        $("#editBtn_" + treeNode.tId).unbind().remove();
+        $("#addParentBtn_" + treeNode.tId).unbind().remove();
+    }
 };
 
 var setting = {
@@ -213,11 +245,11 @@ var setting = {
             }
         },
         onClick: function (event, treeId, treeNode) {
-            console.log("正在展开节点");
-            if (treeNode.level != 2) {
+            if (treeNode.level != 3) {
                 console.log("项目节点。不再展开");
                 return false;
             }
+            console.log("正在展开节点");
             //品牌的父id只有#
             if (null == coach[treeNode.puid]) {
                 //beforeClick排除了有子层的节点，
@@ -248,17 +280,6 @@ var setting = {
     }
 };
 
-// function loadReady() {
-//     var bodyH = demoIframe.contents().find("body").get(0).scrollHeight,
-//         htmlH = demoIframe.contents().find("html").get(0).scrollHeight,
-//         maxH = Math.max(bodyH, htmlH), minH = Math.min(bodyH, htmlH),
-//         h = demoIframe.height() >= maxH ? minH : maxH;
-//     if (h < 530) {
-//         h = 530;
-//     }
-//     demoIframe.height(h);
-// }
-
 $(function () {
     $.post("./project/loadProjectTree", function (info) {
         var t = $("#menu_tree");
@@ -277,7 +298,8 @@ $(document).ready(
         $("#currentProjectHead", window.top.document).text(localProjectDetail.proj.pProjectName);
         alert("当前选择的工作项目是:" + localProjectDetail.proj.pProjectName);
     })
-);
+)
+;
 
 function changeView(data) {
     //品牌
@@ -287,13 +309,13 @@ function changeView(data) {
     $("#pPlatformCode").text(data.platform.pPlatformCode);
     $("#pPlatformName").text(data.platform.pPlatformName);
     //车型
-    $("#projVehicleCode").text(data.proj.pVehicleCode);
-    $("#projVehicleName").text(data.proj.pVehicleName);
-    $("#projVehicleShapeCode").text(data.proj.pVehicleShapeCode);
-    $("#projVehicleTranName").text(data.proj.pVehicleTranName);
-    $("#projVehicleAnnualCode").text(data.proj.pVehicleAnnualCode);
-    $("#projVehicleAnnual").text(data.proj.pVehicleAnnual);
+    $("#projVehicleCode").text(data.vehicle.pVehicleName);
+    $("#projVehicleName").text(data.vehicle.pVehicleCode);
+    $("#projVehicleShapeCode").text(data.vehicle.pVehicleShapeCode);
+    $("#projVehicleTranName").text(data.vehicle.pVehicleTranName);
+    $("#projVehicleAnnualCode").text(data.vehicle.pVehicleAnnualCode);
+    $("#projVehicleAnnual").text(data.vehicle.pVehicleAnnual);
     //项目
-    $("#pProjectCode").text(data.proj.pProjectCode);
-    $("#pProjectName").text(data.proj.pProjectName);
+    $("#pProjectCode").text(data.project.pProjectCode);
+    $("#pProjectName").text(data.project.pProjectName);
 }

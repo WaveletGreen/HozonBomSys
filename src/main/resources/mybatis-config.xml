@@ -65,6 +65,7 @@
         <mapper resource="sql/mapper/project.xmapper/HzProjectLibsMapper.xml"/>
         <mapper resource="sql/mapper/project.xmapper/HzBrandRecordMapper.xml"/>
         <mapper resource="sql/mapper/project.xmapper/HzPlatformRecordMapper.xml"/>
+        <mapper resource="sql/mapper/project.xmapper/HzVehicleRecordMapper.xml"/>
         <!--EPL-->
         <mapper resource="sql/mapper/epl.xmapper/HzEplBomManageMapper.xml"/>
         <mapper resource="sql/mapper/epl.xmapper/HzEplManageMapper.xml"/>

@@ -1,6 +1,6 @@
 package com.connor.hozon.bom.bomSystem.dao.impl.cfg0;
 
-import com.connor.hozon.bom.bomSystem.bean.HzMaterielFeatureBean;
+import com.connor.hozon.bom.bomSystem.dto.HzMaterielFeatureBean;
 import com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0RecordDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

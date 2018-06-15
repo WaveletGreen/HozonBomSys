@@ -3,17 +3,34 @@ package sql.pojo.project;
 import java.util.Date;
 
 public class HzBrandRecord {
+    /**
+     * puid
+     */
     private String puid;
-
+    /**
+     * 品牌代号
+     */
     private String pBrandCode;
-
+    /**
+     * 品牌名称
+     */
     private String pBrandName;
-
+    /**
+     * 创建时间
+     */
     private Date pBrandCreateDate;
-
+    /**
+     * 最后一次修改时间
+     */
     private Date pBrandLastModDate;
-
+    /**
+     * 品牌备注
+     */
     private String pBrandComment;
+    /**
+     * 最后修改人
+     */
+    private String pBrandLastModifier;
 
     public String getPuid() {
         return puid;
@@ -61,5 +78,13 @@ public class HzBrandRecord {
 
     public void setpBrandComment(String pBrandComment) {
         this.pBrandComment = pBrandComment;
+    }
+
+    public String getpBrandLastModifier() {
+        return pBrandLastModifier;
+    }
+
+    public void setpBrandLastModifier(String pBrandLastModifier) {
+        this.pBrandLastModifier = pBrandLastModifier;
     }
 }

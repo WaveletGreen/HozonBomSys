@@ -1,6 +1,7 @@
 package com.connor.hozon.bom.bomSystem.controller.project;
 
-import com.connor.hozon.bom.bomSystem.bean.HzProjectBean;
+import com.connor.hozon.bom.bomSystem.dto.HzProjectBean;
+import com.connor.hozon.bom.bomSystem.service.iservice.project.IHzVehicleService;
 import com.connor.hozon.bom.bomSystem.service.project.HzBrandService;
 import com.connor.hozon.bom.bomSystem.service.project.HzPlatformService;
 import com.connor.hozon.bom.bomSystem.service.project.HzProjectLibsService;
@@ -8,6 +9,8 @@ import com.connor.hozon.bom.common.base.constant.SystemStaticConst;
 import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.sys.entity.User;
 import net.sf.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -16,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import sql.pojo.project.HzBrandRecord;
 import sql.pojo.project.HzPlatformRecord;
 import sql.pojo.project.HzProjectLibs;
+import sql.pojo.project.HzVehicleRecord;
 
 import java.util.*;
 
@@ -36,12 +40,18 @@ public class HzProjectLibsController {
     private final HzBrandService hzBrandService;
     /***平台服务*/
     private final HzPlatformService hzPlatformService;
+    /***车型服务*/
+    private final IHzVehicleService hzVehicleService;
+    /***日志*/
+    private final Logger logger;
 
     @Autowired
-    public HzProjectLibsController(HzProjectLibsService hzProjectLibsService, HzBrandService hzBrandService, HzPlatformService hzPlatformService) {
+    public HzProjectLibsController(HzProjectLibsService hzProjectLibsService, HzBrandService hzBrandService, HzPlatformService hzPlatformService, IHzVehicleService hzVehicleService) {
         this.hzProjectLibsService = hzProjectLibsService;
         this.hzBrandService = hzBrandService;
         this.hzPlatformService = hzPlatformService;
+        this.hzVehicleService = hzVehicleService;
+        logger = LoggerFactory.getLogger(this.getClass());
     }
 
     /**
@@ -65,10 +75,13 @@ public class HzProjectLibsController {
     public Map<String, Object> loadUserTree() {
         Map<String, Object> result = new HashMap<>();
         List<HzProjectBean> beans = new ArrayList<>();
+        Set<String> vehicleSet = new HashSet<>();
 
         List<HzBrandRecord> brands = hzBrandService.doGetAllBrand();
         List<HzPlatformRecord> platforms = hzPlatformService.doGetAllPlatform();
+        List<HzVehicleRecord> vehicles = hzVehicleService.doGetAllVehicle();
         List<HzProjectLibs> projects = hzProjectLibsService.doLoadAllProjectLibs();
+        //品牌
         brands.forEach(brand -> {
             HzProjectBean bean = new HzProjectBean();
             bean.setpPuid("#");
@@ -76,6 +89,7 @@ public class HzProjectLibsController {
             bean.setName(brand.getpBrandName());
             beans.add(bean);
         });
+        //平台
         platforms.forEach(platform -> {
             HzProjectBean bean = new HzProjectBean();
             bean.setpPuid(platform.getpPertainToBrandPuid());
@@ -83,9 +97,19 @@ public class HzProjectLibsController {
             bean.setName(platform.getpPlatformName());
             beans.add(bean);
         });
+        //车型
+        vehicles.forEach(vehicle -> {
+            HzProjectBean bean = new HzProjectBean();
+            bean.setpPuid(vehicle.getpVehiclePertainToPlatform());
+            bean.setPuid(vehicle.getPuid());
+            bean.setName(vehicle.getpVehicleName());
+            beans.add(bean);
+        });
+
+        //项目
         projects.forEach(project -> {
             HzProjectBean bean = new HzProjectBean();
-            bean.setpPuid(project.getpProjectPertainToPlatform());
+            bean.setpPuid(project.getpProjectPertainToVehicle());
             bean.setPuid(project.getPuid());
             bean.setName(project.getpProjectName());
             beans.add(bean);
@@ -106,10 +130,12 @@ public class HzProjectLibsController {
     @ResponseBody
     public Map<String, Object> getProjectDetailById(@RequestParam String puid) {
         Map<String, Object> result = new HashMap<>();
-        HzProjectLibs proj = hzProjectLibsService.doLoadProjectLibsById(puid);
-        HzPlatformRecord platform = hzPlatformService.doGetByPuid(proj.getpProjectPertainToPlatform());
+        HzProjectLibs project = hzProjectLibsService.doLoadProjectLibsById(puid);
+        HzVehicleRecord vehicle = hzVehicleService.doGetByPuid(project.getpProjectPertainToVehicle());
+        HzPlatformRecord platform = hzPlatformService.doGetByPuid(vehicle.getpVehiclePertainToPlatform());
         HzBrandRecord brand = hzBrandService.doGetByPuid(platform.getpPertainToBrandPuid());
-        result.put("proj", proj);
+        result.put("project", project);
+        result.put("vehicle", vehicle);
         result.put("platform", platform);
         result.put("brand", brand);
         return result;
@@ -126,29 +152,47 @@ public class HzProjectLibsController {
     public String addPage(@RequestParam String id, @RequestParam String page, Model model) {
         if (page == null)
             return "error";
-        switch (page) {
-            //加入品牌
-            case "brand":
-                model.addAttribute("action", "./project/addBrand");
-                return "project/addBrand";
-            //加平台
-            case "platform":
-                HzBrandRecord brand_p = hzBrandService.doGetByPuid(id);
-                model.addAttribute("brand", brand_p);
-                model.addAttribute("action", "./project/addPlatform");
-                return "project/addPlatform";
-            //加入项目
-            case "project":
-                HzPlatformRecord platform = hzPlatformService.doGetByPuid(id);
-                HzBrandRecord brand = hzBrandService.doGetByPuid(platform.getpPertainToBrandPuid());
-                model.addAttribute("brand", brand);
-                model.addAttribute("platform", platform);
-                model.addAttribute("action", "./project/addProject");
-                return "project/add";
-            //传入错误
-            default:
-                return "error";
+        try {
+            switch (page) {
+                //加入品牌
+                case "brand":
+                    model.addAttribute("action", "./project/addBrand");
+                    return "project/addBrand";
+                //加平台
+                case "platform":
+                    HzBrandRecord brand_p = hzBrandService.doGetByPuid(id);
+                    model.addAttribute("brand", brand_p);
+                    model.addAttribute("action", "./project/addPlatform");
+                    return "project/addPlatform";
+                //加入车型
+                case "vehicle":
+                    HzPlatformRecord platform_v = hzPlatformService.doGetByPuid(id);
+                    HzBrandRecord brand_v = hzBrandService.doGetByPuid(platform_v.getpPertainToBrandPuid());
+                    model.addAttribute("brand", brand_v);
+                    model.addAttribute("platform", platform_v);
+                    model.addAttribute("action", "./project/addProject");
+                    return "project/add";
+                //加入项目
+                case "project":
+                    HzVehicleRecord vehicle = hzVehicleService.doGetByPuid(id);
+                    HzPlatformRecord platform = hzPlatformService.doGetByPuid(vehicle.getpVehiclePertainToPlatform());
+                    HzBrandRecord brand = hzBrandService.doGetByPuid(platform.getpPertainToBrandPuid());
+                    model.addAttribute("brand", brand);
+                    model.addAttribute("platform", platform);
+                    model.addAttribute("vehicle", vehicle);
+                    model.addAttribute("action", "./project/addProject");
+                    return "project/add";
+                //传入错误
+                default:
+                    model.addAttribute("msg", "发生错误，请联系管理员");
+                    return "errorWithEntity";
+            }
+        } catch (Exception e) {
+            logger.error("发生错误", e);
+            model.addAttribute("msg", "发生错误，请联系管理员");
+            return "errorWithEntity";
         }
+
     }
 
     /***
@@ -266,6 +310,16 @@ public class HzProjectLibsController {
                 model.addAttribute("platform", platform_p);
                 model.addAttribute("action", "./project/modifyPlatform");
                 return "project/modifyPlatform";
+            case "vehicle":
+                HzVehicleRecord vehicle_v = hzVehicleService.doGetByPuid(id);
+                HzPlatformRecord platform_v = hzPlatformService.doGetByPuid(vehicle_v.getpVehiclePertainToPlatform());
+                HzBrandRecord brand_v = hzBrandService.doGetByPuid(platform_v.getpPertainToBrandPuid());
+                model.addAttribute("brand", brand_v);
+                model.addAttribute("platform", platform_v);
+                model.addAttribute("vehicle", vehicle_v);
+                model.addAttribute("action", "./project/modifyVehicle");
+                return "project/modifyVehicle";
+
             //加入项目
             case "project":
                 HzProjectLibs project = hzProjectLibsService.doLoadProjectLibsById(id);
@@ -273,10 +327,12 @@ public class HzProjectLibsController {
                     model.addAttribute("msg", "找不到项目");
                     return "errorWithEntity";
                 }
-                HzPlatformRecord platform = hzPlatformService.doGetByPuid(project.getpProjectPertainToPlatform());
+                HzVehicleRecord vehicle = hzVehicleService.doGetByPuid(project.getpProjectPertainToVehicle());
+                HzPlatformRecord platform = hzPlatformService.doGetByPuid(vehicle.getpVehiclePertainToPlatform());
                 HzBrandRecord brand = hzBrandService.doGetByPuid(platform.getpPertainToBrandPuid());
                 model.addAttribute("brand", brand);
                 model.addAttribute("platform", platform);
+                model.addAttribute("vehicle", vehicle);
                 model.addAttribute("project", project);
                 model.addAttribute("action", "./project/modifyProject");
                 return "project/modifyProject";
