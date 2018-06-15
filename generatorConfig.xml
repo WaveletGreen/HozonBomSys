@@ -3,7 +3,7 @@
         "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
 <generatorConfiguration>
     <classPathEntry
-            location="C:\app\Administrator\product\11.2.0\dbhome_1\jdbc\lib\ojdbc6.jar"/>
+            location="I:\app\product\11.2.0\dbhome_1\jdbc\lib\ojdbc6.jar"/>
     <context id="context1">
         <commentGenerator>
             <!-- 抑制警告 -->
