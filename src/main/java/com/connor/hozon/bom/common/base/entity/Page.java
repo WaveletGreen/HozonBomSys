@@ -5,7 +5,6 @@ import java.util.List;
 /**
  * 分页实体类
  * */
-@SuppressWarnings("rawtypes")
 public class Page {
 	private List rows;
 	private long total;

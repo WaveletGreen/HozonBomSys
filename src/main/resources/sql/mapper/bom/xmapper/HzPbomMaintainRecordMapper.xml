@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="HzPbomMaintainRecord">
+  <resultMap id="BaseResultMap" type="sql.pojo.bom.HzPbomMaintainRecord">
+    <id column="P_PUID" jdbcType="VARCHAR" property="puid" />
+    <result column="P_SPARE_PART" jdbcType="VARCHAR" property="sparePart" />
+    <result column="P_SPARE_PART_NUM" jdbcType="VARCHAR" property="sparePartNum" />
+    <result column="P_PROCESS_ROUTE" jdbcType="VARCHAR" property="processRoute" />
+    <result column="P_LABOR_HOUR" jdbcType="VARCHAR" property="laborHour" />
+    <result column="P_RHYTHM" jdbcType="VARCHAR" property="rhythm" />
+    <result column="P_SOLDER_JOINT" jdbcType="VARCHAR" property="solderJoint" />
+    <result column="P_MACHINE_MATERIAL" jdbcType="VARCHAR" property="machineMaterial" />
+    <result column="P_STANDARD_PART" jdbcType="VARCHAR" property="standardPart" />
+    <result column="P_TOOLS" jdbcType="VARCHAR" property="tools" />
+    <result column="P_WASTER_PRODUCT" jdbcType="VARCHAR" property="wasterProduct" />
+    <result column="P_CHANGE" jdbcType="VARCHAR" property="change" />
+    <result column="P_CHANGE_NUM" jdbcType="VARCHAR" property="changeNum" />
+    <result column="P_BOM_PUID" jdbcType="VARCHAR" property="pBomPuid" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    P_PUID, P_SPARE_PART, P_SPARE_PART_NUM, P_PROCESS_ROUTE, P_LABOR_HOUR, P_RHYTHM,
+    P_SOLDER_JOINT, P_MACHINE_MATERITAL, P_STANDARD_PART, P_TOOLS, P_WASTER_PRODUCT,
+    P_CHANGE, P_CHANGE_NUM, P_BOM_PUID
+  </sql>
+
+
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from HZ_PBOM_MAINTAIN_RECORD
+    where P_PUID = #{puid,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from HZ_PBOM_MAINTAIN_RECORD
+    where P_PUID = #{puid,jdbcType=VARCHAR}
+  </delete>
+
+  <!--批量插入-->
+  <insert id="HzPbomMaintainRecordDAOImpl_insertList"  useGeneratedKeys="false" parameterType="java.util.List">
+    insert into HZ_PBOM_MAINTAIN_RECORD (P_PUID, P_SPARE_PART, P_SPARE_PART_NUM,
+    P_PROCESS_ROUTE, P_LABOR_HOUR, P_RHYTHM,
+    P_SOLDER_JOINT, P_MACHINE_MATERIAL, P_STANDARD_PART,
+    P_TOOLS, P_WASTER_PRODUCT, P_CHANGE,
+    P_CHANGE_NUM, P_BOM_PUID)
+    <foreach collection="list" item="item" index="index"  separator="UNION ALL" >
+      select
+      #{item.puid,jdbcType=VARCHAR}, #{item.sparePart,jdbcType=VARCHAR}, #{item.sparePartNum,jdbcType=VARCHAR},
+      #{item.processRoute,jdbcType=VARCHAR}, #{item.laborHour,jdbcType=VARCHAR}, #{item.rhythm,jdbcType=VARCHAR},
+      #{item.solderJoint,jdbcType=VARCHAR}, #{item.machineMaterial,jdbcType=VARCHAR}, #{item.standardPart,jdbcType=VARCHAR},
+      #{item.tools,jdbcType=VARCHAR}, #{item.wasterProduct,jdbcType=VARCHAR}, #{item.change,jdbcType=VARCHAR},
+      #{item.changeNum,jdbcType=VARCHAR}, #{item.pBomPuid,jdbcType=VARCHAR}
+      from DUAL
+    </foreach>
+  </insert>
+
+
+
+
+  <insert id="insertSelective" parameterType="sql.pojo.bom.HzPbomMaintainRecord">
+    insert into HZ_PBOM_MAINTAIN_RECORD
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="pPuid != null">
+        P_PUID,
+      </if>
+      <if test="pSparePart != null">
+        P_SPARE_PART,
+      </if>
+      <if test="pSparePartNum != null">
+        P_SPARE_PART_NUM,
+      </if>
+      <if test="pProcessRoute != null">
+        P_PROCESS_ROUTE,
+      </if>
+      <if test="pLaborHour != null">
+        P_LABOR_HOUR,
+      </if>
+      <if test="pRhythm != null">
+        P_RHYTHM,
+      </if>
+      <if test="pSolderJoint != null">
+        P_SOLDER_JOINT,
+      </if>
+      <if test="pMachineMaterital != null">
+        P_MACHINE_MATERITAL,
+      </if>
+      <if test="pStandardPart != null">
+        P_STANDARD_PART,
+      </if>
+      <if test="pTools != null">
+        P_TOOLS,
+      </if>
+      <if test="pWasterProduct != null">
+        P_WASTER_PRODUCT,
+      </if>
+      <if test="pChange != null">
+        P_CHANGE,
+      </if>
+      <if test="pChangeNum != null">
+        P_CHANGE_NUM,
+      </if>
+      <if test="pBomPuid != null">
+        P_BOM_PUID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="puid != null">
+        #{puid,jdbcType=VARCHAR},
+      </if>
+      <if test="sparePart != null">
+        #{sparePart,jdbcType=VARCHAR},
+      </if>
+      <if test="sparePartNum != null">
+        #{sparePartNum,jdbcType=VARCHAR},
+      </if>
+      <if test="processRoute != null">
+        #{processRoute,jdbcType=VARCHAR},
+      </if>
+      <if test="laborHour != null">
+        #{laborHour,jdbcType=VARCHAR},
+      </if>
+      <if test="rhythm != null">
+        #{rhythm,jdbcType=VARCHAR},
+      </if>
+      <if test="solderJoint != null">
+        #{solderJoint,jdbcType=VARCHAR},
+      </if>
+      <if test="machineMaterial != null">
+        #{machineMaterial,jdbcType=VARCHAR},
+      </if>
+      <if test="standardPart != null">
+        #{standardPart,jdbcType=VARCHAR},
+      </if>
+      <if test="tools != null">
+        #{tools,jdbcType=VARCHAR},
+      </if>
+      <if test="wasterProduct != null">
+        #{wasterProduct,jdbcType=VARCHAR},
+      </if>
+      <if test="change != null">
+        #{change,jdbcType=VARCHAR},
+      </if>
+      <if test="changeNum != null">
+        #{changeNum,jdbcType=VARCHAR},
+      </if>
+      <if test="pBomPuid != null">
+        #{pBomPuid,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="sql.pojo.bom.HzPbomMaintainRecord">
+    update HZ_PBOM_MAINTAIN_RECORD
+    <set>
+      <if test="sparePart != null">
+        P_SPARE_PART = #{sparePart,jdbcType=VARCHAR},
+      </if>
+      <if test="sparePartNum != null">
+        P_SPARE_PART_NUM = #{sparePartNum,jdbcType=VARCHAR},
+      </if>
+      <if test="processRoute != null">
+        P_PROCESS_ROUTE = #{processRoute,jdbcType=VARCHAR},
+      </if>
+      <if test="laborHour != null">
+        P_LABOR_HOUR = #{laborHour,jdbcType=VARCHAR},
+      </if>
+      <if test="rhythm != null">
+        P_RHYTHM = #{rhythm,jdbcType=VARCHAR},
+      </if>
+      <if test="solderJoint != null">
+        P_SOLDER_JOINT = #{solderJoint,jdbcType=VARCHAR},
+      </if>
+      <if test="machineMaterial != null">
+        P_MACHINE_MATERIAL = #{machineMaterial,jdbcType=VARCHAR},
+      </if>
+      <if test="standardPart != null">
+        P_STANDARD_PART = #{standardPart,jdbcType=VARCHAR},
+      </if>
+      <if test="tools != null">
+        P_TOOLS = #{tools,jdbcType=VARCHAR},
+      </if>
+      <if test="wasterProduct != null">
+        P_WASTER_PRODUCT = #{wasterProduct,jdbcType=VARCHAR},
+      </if>
+      <if test="change != null">
+        P_CHANGE = #{change,jdbcType=VARCHAR},
+      </if>
+      <if test="changeNum != null">
+        P_CHANGE_NUM = #{changeNum,jdbcType=VARCHAR},
+      </if>
+      <if test="pBomPuid != null">
+        P_P_BOM_PUID = #{pBomPuid,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where P_PUID = #{puid,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="sql.pojo.bom.HzPbomMaintainRecord">
+    update HZ_PBOM_MAINTAIN_RECORD
+    set P_SPARE_PART = #{sparePart,jdbcType=VARCHAR},
+      P_SPARE_PART_NUM = #{sparePartNum,jdbcType=VARCHAR},
+      P_PROCESS_ROUTE = #{processRoute,jdbcType=VARCHAR},
+      P_LABOR_HOUR = #{laborHour,jdbcType=VARCHAR},
+      P_RHYTHM = #{rhythm,jdbcType=VARCHAR},
+      P_SOLDER_JOINT = #{solderJoint,jdbcType=VARCHAR},
+      P_MACHINE_MATERIAL = #{machineMaterial,jdbcType=VARCHAR},
+      P_STANDARD_PART = #{standardPart,jdbcType=VARCHAR},
+      P_TOOLS = #{tools,jdbcType=VARCHAR},
+      P_WASTER_PRODUCT = #{wasterProduct,jdbcType=VARCHAR},
+      P_CHANGE = #{change,jdbcType=VARCHAR},
+      P_CHANGE_NUM = #{changeNum,jdbcType=VARCHAR},
+      P_P_BOM_PUID = #{pBomPuid,jdbcType=VARCHAR}
+    where P_PUID = #{puid,jdbcType=VARCHAR}
+  </update>
+</mapper>

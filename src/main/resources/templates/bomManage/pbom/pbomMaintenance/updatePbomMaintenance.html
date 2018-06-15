@@ -1,0 +1,179 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<!--User: xulf Date: 2018/5/30 Time: 14:22-->
+<body>
+<form id="pbomMainForm" role="form" method="post" action="./pbom/update/maintain">
+    <input id="pBomPuid" name="pBomPuid" type="hidden" /><!--th:value="${entity.pBomPuid}"-->
+    <div class="form-group">
+        <label for="level">层级</label>
+        <input class="form-control" id="level" name="level" type="text"  disabled="disabled"
+
+               placeholder="请输入层级"/><!--th:value="${entity.level}"-->
+    </div>
+    <div class="form-group">
+        <label for="pBomOfWhichDept">专业</label>
+        <input class="form-control" id="pBomOfWhichDept" name="pBomOfWhichDept" type="text"  disabled="disabled"
+
+               placeholder="请输入专业"/><!--th:value="${entity.pBomOfWhichDept}"-->
+    </div>
+    <div class="form-group">
+        <label for="lineId">零件号</label>
+        <input class="form-control" id="lineId" name="lineId" type="text"  disabled="disabled"
+
+               placeholder="请输入零件号"/><!--th:value="${entity.lineId}"-->
+    </div>
+    <div class="form-group">
+        <label for="bomDigifaxId">名称</label>
+        <input class="form-control" id="bomDigifaxId" name="bomDigifaxId" type="text" disabled="disabled"
+
+               placeholder="请输入名称"/><!--th:value="${entity.bomDigifaxId}"-->
+    </div>
+    <div class="form-group">
+        <label for="sparePart">备件</label>
+        <input class="form-control" id="sparePart" name="sparePart" type="text"
+
+               placeholder="请输入备件"/><!--th:value="${entity.sparePart}"-->
+    </div>
+    <div class="form-group">
+        <label for="sparePartNum">备件编号</label>
+        <input class="form-control" id="sparePartNum" name="sparePartNum" type="text"
+
+               placeholder="请输入备件编号"/><!--th:value="${entity.sparePartNum}"-->
+    </div>
+    <div class="form-group">
+        <label for="processRoute">工艺路线</label>
+        <input class="form-control" id="processRoute" name="processRoute" type="text"
+
+               placeholder="请输入工艺路线"/><!--th:value="${entity.processRoute}"-->
+    </div>
+    <div class="form-group">
+        <label for="laborHour">人工工时</label>
+        <input class="form-control" id="laborHour" name="laborHour" type="text"
+
+               placeholder="请输入人工工时"/><!--th:value="${entity.laborHour}"-->
+    </div>
+    <div class="form-group">
+        <label for="rhythm">节拍</label>
+        <input class="form-control" id="rhythm" name="rhythm" type="text"
+
+               placeholder="请输入节拍"/><!--th:value="${entity.rhythm}"-->
+    </div>
+    <div class="form-group">
+        <label for="solderJoint">焊点</label>
+        <input class="form-control" id="solderJoint" name="solderJoint" type="text"
+
+               placeholder="请输入焊点"/><!--th:value="${entity.solderJoint}"-->
+    </div>
+    <div class="form-group">
+        <label for="machineMaterial">机物料</label>
+        <input class="form-control" id="machineMaterial" name="machineMaterial" type="text"
+
+               placeholder="请输入机物料"/><!--th:value="${entity.machineMaterial}"-->
+    </div>
+    <div class="form-group">
+        <label for="standardPart">标准件</label>
+        <input class="form-control" id="standardPart" name="standardPart" type="text"
+
+               placeholder="请输入标准件"/><!--th:value="${entity.standardPart}"-->
+    </div>
+    <div class="form-group">
+        <label for="tools">工具</label>
+        <input class="form-control" id="tools" name="tools" type="text"
+
+               placeholder="请输入工具"/><!--th:value="${entity.tools}"-->
+    </div>
+    <div class="form-group">
+        <label for="wasterProduct">废品</label>
+        <input class="form-control" id="wasterProduct" name="wasterProduct" type="text"
+
+               placeholder="请输入废品"/><!--th:value="${entity.wasterProduct}"-->
+    </div>
+    <div class="form-group">
+        <label for="change">变更</label>
+        <input class="form-control" id="change" name="change" type="text"
+
+               placeholder="请输入变更"/><!--th:value="${entity.change}"-->
+    </div>
+    <div class="form-group">
+        <label for="changeNum">变更号</label>
+        <input class="form-control" id="changeNum" name="changeNum" type="text"
+
+               placeholder="请输入变更号"/><!--th:value="${entity.changeNum}"-->
+    </div>
+</form>
+
+<script th:inline="javascript">
+    <![CDATA[
+    $(function () {
+        $('#pbomMainForm').bootstrapValidator({
+            message: 'This value is not valid',
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            fields: {
+                level: {
+                    message: '层级验证失败',
+                    validators: {
+                        notEmpty: {
+                            message: '层级不能为空'
+                        }
+                    }
+                },
+            }
+        });
+        // 绑定dialog的确定按钮的监听事件
+        $("#btnOk", window.top.document).click(function () {
+            var bootstrapValidator = $("#pbomMainForm", window.top.document).data('bootstrapValidator');
+            bootstrapValidator.validate();
+            if (bootstrapValidator.isValid()) {
+                var url = $("#pbomMainForm", window.top.document).attr('action');
+                var myData = JSON.stringify({
+                    "pBomPuid": $("#pBomPuid").val(),
+                    "level": $("#level").val(),
+                    "pBomOfWhichDept": $("#pBomOfWhichDept").val(),
+                    "lineId": $("#lineId").val(),
+                    "bomDigifaxId": $("#bomDigifaxId").val(),
+                    "sparePart": $("#sparePart").val(),
+                    "sparePartNum": $("#sparePartNum").val(),
+                    "processRoute": $("#processRoute").val(),
+                    "laborHour": $("#laborHour").val(),
+                    "rhythm": $("#rhythm").val(),
+                    "solderJoint": $("#solderJoint").val(),
+                    "machineMaterial": $("#machineMaterial").val(),
+                    "standardPart": $("#standardPart").val(),
+                    "tools": $("#tools").val(),
+                    "wasterProduct": $("#wasterProduct").val(),
+                    "change": $("#change").val(),
+                    "changeNum": $("#changeNum").val()
+                });
+                $.ajax({
+                    contentType:
+                        "application/json",
+                    type:
+                        'POST',
+                    url: url,
+                    data: myData,
+                    success:
+                        function (result) {
+                            $('.modal-dialog', window.top.document).parent('div').remove()
+                            $('body', window.top.document).find('.modal-backdrop').remove();
+                            // jquery 调用刷新当前操作的table页面的refresh方法
+                            $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
+                            if (result)
+                                window.Ewin.alert({message: '修改数据成功!'});
+                            else
+                                window.Ewin.alert({message: '修改数据失败!'});
+                        },
+                    error: function (status) {
+                        window.Ewin.alert({message: status.status + ':修改数据失败!'});
+                    }
+                });
+            }
+        });
+    })
+    ]]>
+</script>
+</body>
+</html>

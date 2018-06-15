@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="HzBomStateMapper">
+  <resultMap id="BaseResultMap" type="sql.pojo.bom.HzBomState">
+    <id column="PUID" jdbcType="VARCHAR" property="puid" />
+    <result column="P_BOM_ID" jdbcType="VARCHAR" property="pBomId" />
+    <result column="P_BOM_STATE" jdbcType="DECIMAL" property="pBomState" />
+    <result column="P_BOM_FLOW_STATE" jdbcType="DECIMAL" property="pBomFlowState" />
+    <result column="P_BOM_FLOW_ID" jdbcType="VARCHAR" property="pBomFlowId" />
+    <result column="P_BOM_FLOW_POINT_NAME" jdbcType="VARCHAR" property="pBomFlowPointName" />
+    <result column="P_VALID_FLAG" jdbcType="DECIMAL" property="pValidFlag" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    PUID, P_BOM_ID, P_BOM_STATE, P_BOM_FLOW_STATE, P_BOM_FLOW_ID, P_BOM_FLOW_POINT_NAME, 
+    P_VALID_FLAG
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from HZ_BOM_STATE
+    where PUID = #{puid,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from HZ_BOM_STATE
+    where PUID = #{puid,jdbcType=VARCHAR}
+  </delete>
+
+  <insert id="insert" parameterType="sql.pojo.bom.HzBomState">
+    insert into HZ_BOM_STATE (PUID, P_BOM_ID, P_BOM_STATE, 
+      P_BOM_FLOW_STATE, P_BOM_FLOW_ID, P_BOM_FLOW_POINT_NAME, 
+      P_VALID_FLAG)
+    values (#{puid,jdbcType=VARCHAR}, #{pBomId,jdbcType=VARCHAR}, #{pBomState,jdbcType=DECIMAL}, 
+      #{pBomFlowState,jdbcType=DECIMAL}, #{pBomFlowId,jdbcType=VARCHAR}, #{pBomFlowPointName,jdbcType=VARCHAR}, 
+      #{pValidFlag,jdbcType=DECIMAL})
+  </insert>
+
+  <!--新增-->
+  <insert id="HzBomStateDAOImpl_insert" parameterType="sql.pojo.bom.HzBomState">
+    insert into HZ_BOM_STATE
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="puid != null">
+        PUID,
+      </if>
+      <if test="pBomId != null">
+        P_BOM_ID,
+      </if>
+      <if test="pBomState != null">
+        P_BOM_STATE,
+      </if>
+      <if test="pBomFlowState != null">
+        P_BOM_FLOW_STATE,
+      </if>
+      <if test="pBomFlowId != null">
+        P_BOM_FLOW_ID,
+      </if>
+      <if test="pBomFlowPointName != null">
+        P_BOM_FLOW_POINT_NAME,
+      </if>
+      <if test="pValidFlag != null">
+        P_VALID_FLAG,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="puid != null">
+        #{puid,jdbcType=VARCHAR},
+      </if>
+      <if test="pBomId != null">
+        #{pBomId,jdbcType=VARCHAR},
+      </if>
+      <if test="pBomState != null">
+        #{pBomState,jdbcType=DECIMAL},
+      </if>
+      <if test="pBomFlowState != null">
+        #{pBomFlowState,jdbcType=DECIMAL},
+      </if>
+      <if test="pBomFlowId != null">
+        #{pBomFlowId,jdbcType=VARCHAR},
+      </if>
+      <if test="pBomFlowPointName != null">
+        #{pBomFlowPointName,jdbcType=VARCHAR},
+      </if>
+      <if test="pValidFlag != null">
+        #{pValidFlag,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+
+  <!--更新-->
+  <update id="HzBomStateDAOImpl_update" parameterType="sql.pojo.bom.HzBomState">
+    update HZ_BOM_STATE
+    <set>
+      <if test="pBomId != null">
+        P_BOM_ID = #{pBomId,jdbcType=VARCHAR},
+      </if>
+      <if test="pBomState != null">
+        P_BOM_STATE = #{pBomState,jdbcType=DECIMAL},
+      </if>
+      <if test="pBomFlowState != null">
+        P_BOM_FLOW_STATE = #{pBomFlowState,jdbcType=DECIMAL},
+      </if>
+      <if test="pBomFlowId != null">
+        P_BOM_FLOW_ID = #{pBomFlowId,jdbcType=VARCHAR},
+      </if>
+      <if test="pBomFlowPointName != null">
+        P_BOM_FLOW_POINT_NAME = #{pBomFlowPointName,jdbcType=VARCHAR},
+      </if>
+      <if test="pValidFlag != null">
+        P_VALID_FLAG = #{pValidFlag,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where PUID = #{puid,jdbcType=VARCHAR}
+  </update>
+
+
+  <update id="updateByPrimaryKey" parameterType="sql.pojo.bom.HzBomState">
+    update HZ_BOM_STATE
+    set P_BOM_ID = #{pBomId,jdbcType=VARCHAR},
+      P_BOM_STATE = #{pBomState,jdbcType=DECIMAL},
+      P_BOM_FLOW_STATE = #{pBomFlowState,jdbcType=DECIMAL},
+      P_BOM_FLOW_ID = #{pBomFlowId,jdbcType=VARCHAR},
+      P_BOM_FLOW_POINT_NAME = #{pBomFlowPointName,jdbcType=VARCHAR},
+      P_VALID_FLAG = #{pValidFlag,jdbcType=DECIMAL}
+    where PUID = #{puid,jdbcType=VARCHAR}
+  </update>
+</mapper>

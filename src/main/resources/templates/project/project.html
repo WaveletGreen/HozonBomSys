@@ -6,47 +6,47 @@
 <body>
 <div id="content" class="row-fluid">
     <!--bootstrap网格系统只能貌似只能使用同种网格系统-->
-    <div class="col-md-5" style="margin-top: 10px;">
+    <div class="col-md-4" style="margin-top: 10px;">
         <button class="btn btn-default" th:width="300" id="setCurrentProject" type="button">设置为当前工作项目</button>
         <h2><span class="label label-success" id="currentProject"></span></h2>
         <ul id="menu_tree" class="ztree" style="width:560px; overflow:auto;"></ul>
     </div>
-    <div class="col-md-5">
+    <div class="col-md-4">
         <table class="table table-striped tableNormalStyle" id="detailTable" style="visibility: hidden">
             <tr>
-                <td>品牌代码</td>
+                <th>品牌代码</th>
                 <td id="pBrandCode"></td>
-                <td>中文品牌</td>
+                <th>中文品牌</th>
                 <td id="pBrandName"></td>
             </tr>
             <tr>
-                <td>平台代码</td>
+                <th>平台代码</th>
                 <td id="pPlatformCode"></td>
-                <td>平台名称</td>
+                <th>平台名称</th>
                 <td id="pPlatformName"></td>
             </tr>
             <tr>
-                <td>车型代码</td>
+                <th>车型代码</th>
                 <td id="projVehicleCode"></td>
-                <td>车型名称</td>
+                <th>车型名称</th>
                 <td id="projVehicleName"></td>
             </tr>
             <tr>
-                <td>车身形式代码</td>
+                <th>车身形式代码</th>
                 <td id="projVehicleShapeCode"></td>
-                <td>车身变形名称</td>
+                <th>车身变形名称</th>
                 <td id="projVehicleTranName"></td>
             </tr>
             <tr>
-                <td>车型年代码</td>
+                <th>车型年代码</th>
                 <td id="projVehicleAnnualCode"></td>
-                <td>年型年</td>
+                <th>年型年</th>
                 <td id="projVehicleAnnual"></td>
             </tr>
             <tr>
-                <td>项目编号</td>
+                <th>项目编号</th>
                 <td id="pProjectCode"></td>
-                <td>项目名称</td>
+                <th>项目名称</th>
                 <td id="pProjectName"></td>
             </tr>
         </table>

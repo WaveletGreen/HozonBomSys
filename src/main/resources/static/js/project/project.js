@@ -158,6 +158,8 @@ function addHoverDom(treeId, treeNode) {
                     height: 650
                 });
             }
+            var puid = selectNode.puid;
+            coach[puid] = null;
             return false;
         });
     }

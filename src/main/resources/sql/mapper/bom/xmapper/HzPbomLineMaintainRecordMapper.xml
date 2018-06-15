@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="PbomLineMaintainRecord">
+  <!--查询全PBOM信息-->
+  <resultMap id="PbomResultMap" type="sql.pojo.bom.HzPbomLineMaintainRecord">
+    <id column="P_PUID" jdbcType="VARCHAR" property="puid" />
+    <result column="P_BOM_DIGIFAX_ID" jdbcType="VARCHAR" property="bomDigifaxId" />
+    <result column="P_LINE_INDEX" jdbcType="VARCHAR" property="lineIndex" />
+    <result column="P_BOM_LINE_IS_HAS" jdbcType="INTEGER" property="isHas" />
+    <result column="P_BOM_LINE_ID" jdbcType="VARCHAR" property="lineID" />
+    <result column="P_BOM_LINE_IS_2Y" jdbcType="INTEGER" property="is2Y" />
+    <result column="P_BOM_LINE_IS_PART" jdbcType="INTEGER" property="isPart" />
+    <result column="P_BOM_ORDER_NUM" jdbcType="INTEGER" property="orderNum" />
+    <result column="P_BOM_OF_WHICH_DEPT" jdbcType="INTEGER" property="pBomOfWhichDept" />
+    <result column="P_SPARE_PART" jdbcType="VARCHAR" property="sparePart" />
+    <result column="P_SPARE_PART_NUM" jdbcType="VARCHAR" property="sparePartNum" />
+    <result column="P_PROCESS_ROUTE" jdbcType="VARCHAR" property="processRoute" />
+    <result column="P_LABOR_HOUR" jdbcType="VARCHAR" property="laborHour" />
+    <result column="P_RHYTHM" jdbcType="VARCHAR" property="rhythm" />
+    <result column="P_SOLDER_JOINT" jdbcType="VARCHAR" property="solderJoint" />
+    <result column="P_MACHINE_MATERIAL" jdbcType="VARCHAR" property="machineMaterial" />
+    <result column="P_STANDARD_PART" jdbcType="VARCHAR" property="standardPart" />
+    <result column="P_TOOLS" jdbcType="VARCHAR" property="tools" />
+    <result column="P_WASTER_PRODUCT" jdbcType="VARCHAR" property="wasterProduct" />
+    <result column="P_CHANGE" jdbcType="VARCHAR" property="change" />
+    <result column="P_CHANGE_NUM" jdbcType="VARCHAR" property="changeNum" />
+  </resultMap>
+
+
+  <sql id="Base_Column_List">
+    P_BOM_DIGIFAX_ID,P_LINE_INDEX,P_BOM_LINE_IS_HAS,
+    P_BOM_LINE_ID,P_BOM_LINE_IS_2Y,P_BOM_LINE_IS_PART,P_BOM_ORDER_NUM,P_BOM_OF_WHICH_DEPT
+  </sql>
+
+  <select id="HzPbomMaintainRecordDAOImpl_getPBomLineMaintainRecord" resultMap="PbomResultMap">
+    select
+    <include refid="Base_Column_List" />,t1.PUID,t2.*
+    from HZ_BOM_LINE_RECORD t1 LEFT OUTER JOIN HZ_PBOM_MAINTAIN_RECORD t2
+    on t1.PUID = t2.P_BOM_PUID
+  </select>
+
+
+  <!--模糊搜索的名称暂时没有 模糊匹配后期需要加-->
+  <select id="HzPbomMaintainRecordDAOImpl_searchPbomMaintainDetail" parameterType="sql.pojo.bom.HzPbomLineRecord" resultMap="PbomResultMap">
+    select
+    t1.PUID,<include refid="Base_Column_List" />,t2.*
+    from HZ_BOM_LINE_RECORD t1 LEFT OUTER JOIN HZ_PBOM_MAINTAIN_RECORD t2
+    on t1.PUID = t2.P_BOM_PUID
+    <where>
+      1=1
+      <if test="pBomOfWhichDept != null and  pBomOfWhichDept!='' " >
+        and t1.P_BOM_OF_WHICH_DEPT = #{pBomOfWhichDept,jdbcType=VARCHAR}
+      </if>
+      <if test="lineID != null and  lineID!=''">
+        and t1.P_BOM_LINE_ID = #{lineID,jdbcType=VARCHAR}
+      </if>
+      <if test="isHas != null">
+        and t1.P_BOM_LINE_IS_HAS = #{isHas,jdbcType=INTEGER}
+      </if>
+      <if test="lineIndex != null and  lineIndex!=''">
+        and length(t1.P_LINE_INDEX) = #{lineIndex,jdbcType=VARCHAR}
+      </if>
+    </where>
+  </select>
+</mapper>

@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="HzEplBomManageMapper">
+  <resultMap id="BaseResultMap" type="sql.pojo.epl.HzEPLBomManage">
+    <id column="P_PUID" jdbcType="VARCHAR" property="pPuid" />
+    <result column="P_CASKET_PART" jdbcType="VARCHAR" property="pCasketPart" />
+    <result column="P_DEVELOP_TYPE" jdbcType="VARCHAR" property="pDevelopType" />
+    <result column="P_DATA_VERSION" jdbcType="VARCHAR" property="pDataVersion" />
+    <result column="P_TARGET_HEIGHT" jdbcType="VARCHAR" property="pTargetHeight" />
+    <result column="P_ESTIMATE_HEIGHT" jdbcType="VARCHAR" property="pEstimateHeight" />
+    <result column="P_ACTUAL_HEIGHT" jdbcType="VARCHAR" property="pActualHeight" />
+    <result column="P_FIXTURE" jdbcType="VARCHAR" property="pFixture" />
+    <result column="P_FIXTURE_SPEC" jdbcType="VARCHAR" property="pFixtureSpec" />
+    <result column="P_FIXTURE_LEVEL" jdbcType="VARCHAR" property="pFixtureLevel" />
+    <result column="P_TORQUE" jdbcType="VARCHAR" property="pTorque" />
+    <result column="P_MAJOR_DEPT" jdbcType="VARCHAR" property="pMajorDept" />
+    <result column="P_DUTY_ENGINEER" jdbcType="VARCHAR" property="pDutyEngineer" />
+    <result column="P_SUPPLIER" jdbcType="VARCHAR" property="pSupplier" />
+    <result column="P_SUPPLIER_NO" jdbcType="VARCHAR" property="pSupplierNo" />
+    <result column="P_BUY_ENGINEER" jdbcType="VARCHAR" property="pBuyEngineer" />
+    <result column="P_REMARK" jdbcType="VARCHAR" property="pRemark" />
+    <result column="P_ITEM_CLASSIFICATION" jdbcType="VARCHAR" property="pItemClassification" />
+    <result column="P_ITEM_RESOURCE" jdbcType="VARCHAR" property="pItemResource" />
+    <result column="P_BOM_PUID" jdbcType="VARCHAR" property="pBomPuid" />
+    <result column="P_SUPPLY_STATE" jdbcType="DECIMAL" property="pSupplyState" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    P_PUID, P_CASKET_PART, P_DEVELOP_TYPE, P_DATA_VERSION, P_TARGET_HEIGHT, P_ESTIMATE_HEIGHT, 
+    P_ACTUAL_HEIGHT, P_FIXTURE, P_FIXTURE_SPEC, P_FIXTURE_LEVEL, P_TORQUE, P_MAJOR_DEPT, 
+    P_DUTY_ENGINEER, P_SUPPLIER, P_SUPPLIER_NO, P_BUY_ENGINEER, P_REMARK, P_ITEM_CLASSIFICATION, 
+    P_ITEM_RESOURCE, P_BOM_PUID, P_SUPPLY_STATE
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from HZ_EPL_BOM_MANAGE
+    where P_PUID = #{pPuid,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from HZ_EPL_BOM_MANAGE
+    where P_PUID = #{pPuid,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="sql.pojo.epl.HzEPLBomManage">
+    insert into HZ_EPL_BOM_MANAGE (P_PUID, P_CASKET_PART, P_DEVELOP_TYPE, 
+      P_DATA_VERSION, P_TARGET_HEIGHT, P_ESTIMATE_HEIGHT, 
+      P_ACTUAL_HEIGHT, P_FIXTURE, P_FIXTURE_SPEC, 
+      P_FIXTURE_LEVEL, P_TORQUE, P_MAJOR_DEPT, 
+      P_DUTY_ENGINEER, P_SUPPLIER, P_SUPPLIER_NO, 
+      P_BUY_ENGINEER, P_REMARK, P_ITEM_CLASSIFICATION, 
+      P_ITEM_RESOURCE, P_BOM_PUID, P_SUPPLY_STATE
+      )
+    values (#{pPuid,jdbcType=VARCHAR}, #{pCasketPart,jdbcType=VARCHAR}, #{pDevelopType,jdbcType=VARCHAR}, 
+      #{pDataVersion,jdbcType=VARCHAR}, #{pTargetHeight,jdbcType=VARCHAR}, #{pEstimateHeight,jdbcType=VARCHAR}, 
+      #{pActualHeight,jdbcType=VARCHAR}, #{pFixture,jdbcType=VARCHAR}, #{pFixtureSpec,jdbcType=VARCHAR}, 
+      #{pFixtureLevel,jdbcType=VARCHAR}, #{pTorque,jdbcType=VARCHAR}, #{pMajorDept,jdbcType=VARCHAR}, 
+      #{pDutyEngineer,jdbcType=VARCHAR}, #{pSupplier,jdbcType=VARCHAR}, #{pSupplierNo,jdbcType=VARCHAR}, 
+      #{pBuyEngineer,jdbcType=VARCHAR}, #{pRemark,jdbcType=VARCHAR}, #{pItemClassification,jdbcType=VARCHAR}, 
+      #{pItemResource,jdbcType=VARCHAR}, #{pBomPuid,jdbcType=VARCHAR}, #{pSupplyState,jdbcType=DECIMAL}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="sql.pojo.epl.HzEPLBomManage">
+    insert into HZ_EPL_BOM_MANAGE
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="pPuid != null">
+        P_PUID,
+      </if>
+      <if test="pCasketPart != null">
+        P_CASKET_PART,
+      </if>
+      <if test="pDevelopType != null">
+        P_DEVELOP_TYPE,
+      </if>
+      <if test="pDataVersion != null">
+        P_DATA_VERSION,
+      </if>
+      <if test="pTargetHeight != null">
+        P_TARGET_HEIGHT,
+      </if>
+      <if test="pEstimateHeight != null">
+        P_ESTIMATE_HEIGHT,
+      </if>
+      <if test="pActualHeight != null">
+        P_ACTUAL_HEIGHT,
+      </if>
+      <if test="pFixture != null">
+        P_FIXTURE,
+      </if>
+      <if test="pFixtureSpec != null">
+        P_FIXTURE_SPEC,
+      </if>
+      <if test="pFixtureLevel != null">
+        P_FIXTURE_LEVEL,
+      </if>
+      <if test="pTorque != null">
+        P_TORQUE,
+      </if>
+      <if test="pMajorDept != null">
+        P_MAJOR_DEPT,
+      </if>
+      <if test="pDutyEngineer != null">
+        P_DUTY_ENGINEER,
+      </if>
+      <if test="pSupplier != null">
+        P_SUPPLIER,
+      </if>
+      <if test="pSupplierNo != null">
+        P_SUPPLIER_NO,
+      </if>
+      <if test="pBuyEngineer != null">
+        P_BUY_ENGINEER,
+      </if>
+      <if test="pRemark != null">
+        P_REMARK,
+      </if>
+      <if test="pItemClassification != null">
+        P_ITEM_CLASSIFICATION,
+      </if>
+      <if test="pItemResource != null">
+        P_ITEM_RESOURCE,
+      </if>
+      <if test="pBomPuid != null">
+        P_BOM_PUID,
+      </if>
+      <if test="pSupplyState != null">
+        P_SUPPLY_STATE,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="pPuid != null">
+        #{pPuid,jdbcType=VARCHAR},
+      </if>
+      <if test="pCasketPart != null">
+        #{pCasketPart,jdbcType=VARCHAR},
+      </if>
+      <if test="pDevelopType != null">
+        #{pDevelopType,jdbcType=VARCHAR},
+      </if>
+      <if test="pDataVersion != null">
+        #{pDataVersion,jdbcType=VARCHAR},
+      </if>
+      <if test="pTargetHeight != null">
+        #{pTargetHeight,jdbcType=VARCHAR},
+      </if>
+      <if test="pEstimateHeight != null">
+        #{pEstimateHeight,jdbcType=VARCHAR},
+      </if>
+      <if test="pActualHeight != null">
+        #{pActualHeight,jdbcType=VARCHAR},
+      </if>
+      <if test="pFixture != null">
+        #{pFixture,jdbcType=VARCHAR},
+      </if>
+      <if test="pFixtureSpec != null">
+        #{pFixtureSpec,jdbcType=VARCHAR},
+      </if>
+      <if test="pFixtureLevel != null">
+        #{pFixtureLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="pTorque != null">
+        #{pTorque,jdbcType=VARCHAR},
+      </if>
+      <if test="pMajorDept != null">
+        #{pMajorDept,jdbcType=VARCHAR},
+      </if>
+      <if test="pDutyEngineer != null">
+        #{pDutyEngineer,jdbcType=VARCHAR},
+      </if>
+      <if test="pSupplier != null">
+        #{pSupplier,jdbcType=VARCHAR},
+      </if>
+      <if test="pSupplierNo != null">
+        #{pSupplierNo,jdbcType=VARCHAR},
+      </if>
+      <if test="pBuyEngineer != null">
+        #{pBuyEngineer,jdbcType=VARCHAR},
+      </if>
+      <if test="pRemark != null">
+        #{pRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="pItemClassification != null">
+        #{pItemClassification,jdbcType=VARCHAR},
+      </if>
+      <if test="pItemResource != null">
+        #{pItemResource,jdbcType=VARCHAR},
+      </if>
+      <if test="pBomPuid != null">
+        #{pBomPuid,jdbcType=VARCHAR},
+      </if>
+      <if test="pSupplyState != null">
+        #{pSupplyState,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="sql.pojo.epl.HzEPLBomManage">
+    update HZ_EPL_BOM_MANAGE
+    <set>
+      <if test="pCasketPart != null">
+        P_CASKET_PART = #{pCasketPart,jdbcType=VARCHAR},
+      </if>
+      <if test="pDevelopType != null">
+        P_DEVELOP_TYPE = #{pDevelopType,jdbcType=VARCHAR},
+      </if>
+      <if test="pDataVersion != null">
+        P_DATA_VERSION = #{pDataVersion,jdbcType=VARCHAR},
+      </if>
+      <if test="pTargetHeight != null">
+        P_TARGET_HEIGHT = #{pTargetHeight,jdbcType=VARCHAR},
+      </if>
+      <if test="pEstimateHeight != null">
+        P_ESTIMATE_HEIGHT = #{pEstimateHeight,jdbcType=VARCHAR},
+      </if>
+      <if test="pActualHeight != null">
+        P_ACTUAL_HEIGHT = #{pActualHeight,jdbcType=VARCHAR},
+      </if>
+      <if test="pFixture != null">
+        P_FIXTURE = #{pFixture,jdbcType=VARCHAR},
+      </if>
+      <if test="pFixtureSpec != null">
+        P_FIXTURE_SPEC = #{pFixtureSpec,jdbcType=VARCHAR},
+      </if>
+      <if test="pFixtureLevel != null">
+        P_FIXTURE_LEVEL = #{pFixtureLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="pTorque != null">
+        P_TORQUE = #{pTorque,jdbcType=VARCHAR},
+      </if>
+      <if test="pMajorDept != null">
+        P_MAJOR_DEPT = #{pMajorDept,jdbcType=VARCHAR},
+      </if>
+      <if test="pDutyEngineer != null">
+        P_DUTY_ENGINEER = #{pDutyEngineer,jdbcType=VARCHAR},
+      </if>
+      <if test="pSupplier != null">
+        P_SUPPLIER = #{pSupplier,jdbcType=VARCHAR},
+      </if>
+      <if test="pSupplierNo != null">
+        P_SUPPLIER_NO = #{pSupplierNo,jdbcType=VARCHAR},
+      </if>
+      <if test="pBuyEngineer != null">
+        P_BUY_ENGINEER = #{pBuyEngineer,jdbcType=VARCHAR},
+      </if>
+      <if test="pRemark != null">
+        P_REMARK = #{pRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="pItemClassification != null">
+        P_ITEM_CLASSIFICATION = #{pItemClassification,jdbcType=VARCHAR},
+      </if>
+      <if test="pItemResource != null">
+        P_ITEM_RESOURCE = #{pItemResource,jdbcType=VARCHAR},
+      </if>
+      <if test="pBomPuid != null">
+        P_BOM_PUID = #{pBomPuid,jdbcType=VARCHAR},
+      </if>
+      <if test="pSupplyState != null">
+        P_SUPPLY_STATE = #{pSupplyState,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where P_PUID = #{pPuid,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="sql.pojo.epl.HzEPLBomManage">
+    update HZ_EPL_BOM_MANAGE
+    set P_CASKET_PART = #{pCasketPart,jdbcType=VARCHAR},
+      P_DEVELOP_TYPE = #{pDevelopType,jdbcType=VARCHAR},
+      P_DATA_VERSION = #{pDataVersion,jdbcType=VARCHAR},
+      P_TARGET_HEIGHT = #{pTargetHeight,jdbcType=VARCHAR},
+      P_ESTIMATE_HEIGHT = #{pEstimateHeight,jdbcType=VARCHAR},
+      P_ACTUAL_HEIGHT = #{pActualHeight,jdbcType=VARCHAR},
+      P_FIXTURE = #{pFixture,jdbcType=VARCHAR},
+      P_FIXTURE_SPEC = #{pFixtureSpec,jdbcType=VARCHAR},
+      P_FIXTURE_LEVEL = #{pFixtureLevel,jdbcType=VARCHAR},
+      P_TORQUE = #{pTorque,jdbcType=VARCHAR},
+      P_MAJOR_DEPT = #{pMajorDept,jdbcType=VARCHAR},
+      P_DUTY_ENGINEER = #{pDutyEngineer,jdbcType=VARCHAR},
+      P_SUPPLIER = #{pSupplier,jdbcType=VARCHAR},
+      P_SUPPLIER_NO = #{pSupplierNo,jdbcType=VARCHAR},
+      P_BUY_ENGINEER = #{pBuyEngineer,jdbcType=VARCHAR},
+      P_REMARK = #{pRemark,jdbcType=VARCHAR},
+      P_ITEM_CLASSIFICATION = #{pItemClassification,jdbcType=VARCHAR},
+      P_ITEM_RESOURCE = #{pItemResource,jdbcType=VARCHAR},
+      P_BOM_PUID = #{pBomPuid,jdbcType=VARCHAR},
+      P_SUPPLY_STATE = #{pSupplyState,jdbcType=DECIMAL}
+    where P_PUID = #{pPuid,jdbcType=VARCHAR}
+  </update>
+</mapper>

@@ -99,7 +99,8 @@
 		HZ_BOM_LINE_RECORD
 		where PUID = #{puid,jdbcType=VARCHAR}
 	</delete>
-    <insert id="insert" parameterType="sql.pojo.bom.HzBomLineRecord">
+
+    <insert id="HzBomLineRecordDaoImpl_insert" parameterType="sql.pojo.bom.HzBomLineRecord">
         insert into HZ_BOM_LINE_RECORD
         (
         <include refid="Base_Column_List"/>
@@ -110,8 +111,15 @@
         values
         (#{puid,jdbcType=VARCHAR},#{parentUid,jdbcType=VARCHAR},#{bomDigifaxId,jdbcType=VARCHAR},
         #{lineIndex,jdbcType=VARCHAR},#{isHas,jdbcType=VARCHAR},#{linePuid,jdbcType=VARCHAR},
-        #{lineID,jdbcType=VARCHAR},#{bomLineBlock,jdbcType=BLOB})
+        #{lineID,jdbcType=VARCHAR},#{bomLineBlock,jdbcType=BLOB},
+        #{is2Y,jdbcType=VARCHAR},#{isPart,jdbcType=VARCHAR},
+        #{orderNum,jdbcType=VARCHAR},#{isDept,jdbcType=VARCHAR},
+        #{pBomOfWhichDept,jdbcType=VARCHAR},#{pBomLinePartName,jdbcType=VARCHAR},#{pBomLinePartClass,jdbcType=VARCHAR}
+      )
     </insert>
+
+
+
     <insert id="insertByBatch" parameterType="java.util.List">
         insert all
         <foreach collection="list" item="item" index="index"
@@ -126,4 +134,27 @@
         </foreach>
         select 1 from dual
     </insert>
+
+
+
+    <update id="HzBomLineRecordDaoImpl_update" parameterType="sql.pojo.bom.HzBomLineRecord">
+        update HZ_BOM_LINE_RECORD
+        set
+        P_PARENT_UID=#{parentUid,jdbcType=VARCHAR},
+        P_BOM_DIGIFAX_ID=#{bomDigifaxId,jdbcType=VARCHAR},
+        P_LINE_INDEX=#{lineIndex,jdbcType=VARCHAR},
+        P_BOM_LINE_IS_HAS=#{isHas,jdbcType=VARCHAR},
+        P_BOM_LINE_PUID=#{linePuid,jdbcType=VARCHAR},
+        P_BOM_LINE_ID=#{lineID,jdbcType=VARCHAR},
+        P_BOM_LINE_IS_2Y=#{is2Y,jdbcType=VARCHAR},
+        P_BOM_LINE_IS_PART=#{isPart,jdbcType=VARCHAR},
+        P_BOM_ORDER_NUM=#{orderNum,jdbcType=VARCHAR},
+        P_BOM_LINE_IS_DEPT=#{isDept,jdbcType=VARCHAR},
+        P_BOM_OF_WHICH_DEPT=#{pBomOfWhichDept,jdbcType=VARCHAR},
+        P_BOM_LINE_PART_NAME#{pBomLinePartName,jdbcType=VARCHAR},
+        P_BOM_LINE_PART_CLASS#{pBomLinePartClass,jdbcType=VARCHAR}
+        where PUID = #{puid,jdbcType=VARCHAR}
+    </update>
+
+
 </mapper>
