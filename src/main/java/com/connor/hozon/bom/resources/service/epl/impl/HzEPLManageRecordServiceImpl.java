@@ -48,7 +48,7 @@ public class HzEPLManageRecordServiceImpl implements HzEPLManageRecordService {
                 recordRespDTO.setLevel(strings[0]==null?"":strings[0]);
                 recordRespDTO.setLineId(record.getLineId()==null?"":record.getLineId());
                 recordRespDTO.setpBomOfWhichDept(record.getpBomOfWhichDept()==null?"":record.getpBomOfWhichDept());
-                recordRespDTO.setGroupNum("暂时不知道怎么解析");
+                recordRespDTO.setGroupNum("-");
                 recordRespDTO.setNameZh("中文名称");
                 recordRespDTO.setNameEn("英文名称");
                 Integer pState = record.getpState();

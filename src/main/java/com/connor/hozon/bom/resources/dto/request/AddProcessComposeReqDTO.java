@@ -1,6 +1,5 @@
 package com.connor.hozon.bom.resources.dto.request;
 
-import java.util.List;
 
 public class AddProcessComposeReqDTO {
 
@@ -18,6 +17,8 @@ public class AddProcessComposeReqDTO {
     private String projectPuid;
     private String pBomLinePartName;
     private String pBomLinePartClass;
+
+    private String rank;
 
     /**
      * 数据版本
@@ -600,5 +601,13 @@ public class AddProcessComposeReqDTO {
 
     public void setPuid(String puid) {
         this.puid = puid;
+    }
+
+    public String getRank() {
+        return rank;
+    }
+
+    public void setRank(String rank) {
+        this.rank = rank;
     }
 }

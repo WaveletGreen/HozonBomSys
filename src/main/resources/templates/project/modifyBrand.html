@@ -75,18 +75,21 @@
                     data: JSON.stringify(data),
                     success:
                         function (result) {
-                            $('.modal-dialog', window.top.document).parent('div').remove()
+                            $('.modal-dialog', window.top.document).parent('div').remove();
                             $('body', window.top.document).find('.modal-backdrop').remove();
                             // jquery 调用刷新当前操作的table页面的refresh方法
                             var zTree = $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.zTree;
                             var selectNode = $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.selectNode;
                             if (result.status == 1) {
                                 var entity = result.entity;
-                                zTree.addNodes(selectNode, {
-                                    puid: entity.puid,
-                                    pPuid: "#",
-                                    name: entity.pBrandName
-                                });
+                                selectNode.name = entity.pBrandName;
+                                zTree.updateNode(selectNode);
+
+                                // zTree.addNodes(selectNode, {
+                                //     puid: entity.puid,
+                                //     pPuid: "#",
+                                //     name: entity.pBrandName
+                                // });
                                 window.Ewin.alert({message: "修改品牌信息成功"});
                             }
                             else if (result.status == 0) {

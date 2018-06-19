@@ -20,6 +20,8 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
     public void addViewControllers(ViewControllerRegistry registry) {
         //登陆界面
         registry.addViewController("/login").setViewName("login");
+        //首页
+        registry.addViewController("/index").setViewName("index");
         //主界面
         registry.addViewController("/main").setViewName("main");
         //统一出错界面
@@ -46,7 +48,8 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         //配色方案
         registry.addViewController("/modelColorCfg").setViewName("/cfg/modelColorCfg/modelColorCfg");
         //项目，应该作为首页
-        registry.addViewController("/project").setViewName("/project/project");
+        registry.addViewController("/project").setViewName("project/project");
+        registry.addViewController("/project2").setViewName("project/project2");
         //特性表
         registry.addViewController("/feature").setViewName("/cfg/feature/feature");
         //相关性表

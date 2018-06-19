@@ -1,6 +1,6 @@
 package com.connor.hozon.bom.bomSystem.controller.cfg;
 
-import com.connor.hozon.bom.bomSystem.bean.HzMaterielFeatureBean;
+import com.connor.hozon.bom.bomSystem.dto.HzMaterielFeatureBean;
 import com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0ModelColorDao;
 import com.connor.hozon.bom.bomSystem.service.cfg.*;
 import com.connor.hozon.bom.bomSystem.service.project.HzSuperMaterielService;

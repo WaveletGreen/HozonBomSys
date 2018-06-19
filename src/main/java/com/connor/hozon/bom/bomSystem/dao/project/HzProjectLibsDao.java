@@ -18,4 +18,6 @@ public interface HzProjectLibsDao {
     int insert(HzProjectLibs project);
 
     int deleteByPrimaryKey(@Param("puid") String puid);
+
+    int updateByPrimaryKey(HzProjectLibs project);
 }

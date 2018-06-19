@@ -3,19 +3,38 @@ package sql.pojo.project;
 import java.util.Date;
 
 public class HzPlatformRecord {
+    /**
+     * puid
+     */
     private String puid;
-
+    /**
+     * 归属品牌
+     */
     private String pPertainToBrandPuid;
-
+    /**
+     * 平台代号
+     */
     private String pPlatformCode;
-
+    /**
+     * 平台名称
+     */
     private String pPlatformName;
-
+    /**
+     * 创建时间
+     */
     private Date pPlatformCreateDate;
-
+    /**
+     * 最后修改时间
+     */
     private Date pPlatformLastModDate;
-
+    /**
+     * 备注
+     */
     private String pPlatformComment;
+    /**
+     * 最后一次修改人
+     */
+    private String pPlatformLastModifier;
 
     public String getPuid() {
         return puid;
@@ -71,5 +90,13 @@ public class HzPlatformRecord {
 
     public void setpPlatformComment(String pPlatformComment) {
         this.pPlatformComment = pPlatformComment;
+    }
+
+    public String getpPlatformLastModifier() {
+        return pPlatformLastModifier;
+    }
+
+    public void setpPlatformLastModifier(String pPlatformLastModifier) {
+        this.pPlatformLastModifier = pPlatformLastModifier;
     }
 }

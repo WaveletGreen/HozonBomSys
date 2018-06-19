@@ -1,8 +1,8 @@
 var firstLoad = true;
 var isExpand = false;
 $(document).ready(
-    // $("#doSubmit2").click(
-    (
+    $("#doSubmit2").click(
+    // (
         function () {
             var $table = $("#dataTable");
             var project = $("#project", window.top.document);

@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sql.pojo.project.HzProjectLibs;
 
+import java.util.Date;
 import java.util.List;
 
 /***
@@ -51,7 +52,29 @@ public class HzProjectLibsService {
     public boolean validate(HzProjectLibs project) {
         //项目编号和项目名称不能为空
         if (null == project.getpProjectCode() || null == project.getpProjectName() || "".equals(project.getpProjectCode()) || "".equals(project.getpProjectName())
-                || null == project.getpProjectPertainToPlatform() || "".equals(project.getpProjectPertainToPlatform())
+                || null == project.getpProjectPertainToVehicle() || "".equals(project.getpProjectPertainToVehicle())
+                ) {
+            return false;
+        } else return true;
+    }
+
+    /**
+     * 修改检查
+     * 不修改平台信息，所以不用检查平台
+     * <p>
+     * 分别验证项目代号，项目名称
+     *
+     * @param project 项目对象
+     * @return
+     */
+    public boolean modifyValidate(HzProjectLibs project) {
+        //项目编号和项目名称不能为空
+        if (null == project.getpProjectCode() ||
+                null == project.getpProjectName() ||
+                "".equals(project.getpProjectCode()) ||
+                "".equals(project.getpProjectName()) ||
+                null == project.getPuid() ||
+                "".equals(project.getPuid())
                 ) {
             return false;
         } else return true;
@@ -85,5 +108,12 @@ public class HzProjectLibsService {
      */
     public boolean doDeleteByPuid(String puid) {
         return hzProjectLibsDao.deleteByPrimaryKey(puid) > 0 ? true : false;
+    }
+
+    public boolean doUpdateByPrimaryKey(HzProjectLibs project) {
+        return hzProjectLibsDao.updateByPrimaryKey(project) > 0 ? true : false;
+    }
+
+    public void toDTO(HzProjectLibs project) {
     }
 }

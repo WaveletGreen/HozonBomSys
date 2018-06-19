@@ -7,38 +7,80 @@ import sql.pojo.project.HzBrandRecord;
 
 import java.util.List;
 
-/*************************************************************************************************************************
+/**
  *                                  Author: Fancyears·Maylos·Mayways
  * Date: 2018/6/1 11:30
  *
  * Description:
  *
- * ***********************************************************************************************************************/
+ */
 @Service("hzBrandService")
 public class HzBrandService {
-    @Autowired
-    HzBrandRecordDao hzBrandRecordDao;
+    /**
+     * 品牌dao层
+     */
+    private final HzBrandRecordDao hzBrandRecordDao;
 
+    @Autowired
+    public HzBrandService(HzBrandRecordDao hzBrandRecordDao) {
+        this.hzBrandRecordDao = hzBrandRecordDao;
+    }
+
+    /**
+     * 根据主键筛选1条品牌数据
+     *
+     * @param puid
+     * @return
+     */
     public HzBrandRecord doGetByPuid(String puid) {
         return hzBrandRecordDao.selectByPrimaryKey(puid);
     }
 
+    /**
+     * 更新所有数据
+     *
+     * @param record
+     * @return
+     */
     public boolean doUpdate(HzBrandRecord record) {
         return hzBrandRecordDao.updateByPrimaryKey(record) > 0 ? true : false;
     }
 
+    /**
+     * 选择性更新，为空的不更新，不为空的才更新
+     *
+     * @param record
+     * @return
+     */
     public boolean doUpdateSelective(HzBrandRecord record) {
         return hzBrandRecordDao.updateSelective(record) > 0 ? true : false;
     }
 
+    /**
+     * 插入1条品牌信息
+     *
+     * @param record
+     * @return
+     */
     public boolean doInsertOne(HzBrandRecord record) {
         return hzBrandRecordDao.insert(record) > 0 ? true : false;
     }
 
+    /**
+     * 根据主键删除品牌信息
+     *
+     * @param puid
+     * @return
+     */
     public boolean doDeleteByPuid(String puid) {
         return hzBrandRecordDao.deleteByPrimaryKey(puid) > 0 ? true : false;
     }
 
+    /**
+     * 加载所有品牌信息
+     *
+     * @return
+     */
     public List<HzBrandRecord> doGetAllBrand() {
         return hzBrandRecordDao.selectAll();
     }

@@ -6,18 +6,6 @@
            th:value="${brand.getPuid()}"
     />
     <div class="form-group">
-        <label for="pBrandCode">品牌代码</label>
-        <input class="form-control" id="pBrandCode" name="pBrandCode" type="text"
-               placeholder="请输入品牌代码" th:value="${brand.getpBrandCode()}" disabled="disabled"
-        />
-    </div>
-    <div class="form-group">
-        <label for="pBrandName">中文品牌</label>
-        <input class="form-control" id="pBrandName" name="pBrandName" type="text"
-               placeholder="请输入中文品牌" th:value="${brand.getpBrandName()}" disabled="disabled"
-        />
-    </div>
-    <div class="form-group">
         <label for="pPlatformCode">平台代码</label>
         <input class="form-control" id="pPlatformCode" name="pPlatformCode" type="text"
                placeholder="请输入平台代码"
@@ -28,6 +16,24 @@
         <label for="pPlatformName">平台名称</label>
         <input class="form-control" id="pPlatformName" name="pPlatformName" type="text"
                placeholder="请输入平台名称"
+        />
+    </div>
+    <div class="form-group">
+        <label for="pPlatformComment">备注</label>
+        <input class="form-control" id="pPlatformComment" name="pPlatformComment" type="text"
+               placeholder="请输入备注"
+        />
+    </div>
+    <div class="form-group">
+        <label for="pBrandCode">品牌代码</label>
+        <input class="form-control" id="pBrandCode" name="pBrandCode" type="text"
+               th:value="${brand.getpBrandCode()}" disabled="disabled"
+        />
+    </div>
+    <div class="form-group">
+        <label for="pBrandName">中文品牌</label>
+        <input class="form-control" id="pBrandName" name="pBrandName" type="text"
+               th:value="${brand.getpBrandName()}" disabled="disabled"
         />
     </div>
 </form>

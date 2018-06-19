@@ -2,34 +2,9 @@
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <body>
 <form id="form" role="form" method="post" th:action="${action}">
-    <input class="form-control" id="pProjectPertainToPlatform" name="pProjectPertainToPlatform" type="hidden"
-           th:value="${platform.getPuid()}"
+    <input class="form-control" id="pProjectPertainToVehicle" name="pProjectPertainToVehicle" type="hidden"
+           th:value="${vehicle.getPuid()}"
     />
-    <div class="form-group">
-        <label for="pBrandCode">品牌代码</label>
-        <input class="form-control" id="pBrandCode" name="pBrandCode" type="text"
-               placeholder="请输入品牌代码" th:value="${brand.getpBrandCode()}" disabled="disabled"
-        />
-    </div>
-    <div class="form-group">
-        <label for="pBrandName">中文品牌</label>
-        <input class="form-control" id="pBrandName" name="pBrandName" type="text"
-               placeholder="请输入中文品牌" th:value="${brand.getpBrandName()}" disabled="disabled"
-        />
-    </div>
-    <div class="form-group">
-        <label for="pPlatformCode">平台代码</label>
-        <input class="form-control" id="pPlatformCode" name="pPlatformCode" type="text"
-               placeholder="请输入平台代码" th:value="${platform.getpPlatformCode()}" disabled="disabled"
-        />
-    </div>
-    </div>
-    <div class="form-group">
-        <label for="pPlatformName">平台名称</label>
-        <input class="form-control" id="pPlatformName" name="pPlatformName" type="text"
-               placeholder="请输入平台名称" th:value="${platform.getpPlatformName()}" disabled="disabled"
-        />
-    </div>
 
     <div class="form-group">
         <label for="pProjectCode">项目编号</label>
@@ -41,36 +16,81 @@
         <input class="form-control" id="pProjectName" name="pProjectName" type="text"
                placeholder="请输入项目名称"/>
     </div>
-
     <div class="form-group">
-        <label for="projVehicleCode">车型代码</label>
-        <input class="form-control" id="projVehicleCode" name="projVehicleCode" type="text"
-               placeholder="请输入车型代码"/>
+        <label for="pProjectManager">项目经理</label>
+        <input class="form-control" id="pProjectManager" name="pProjectManager" type="text"
+               placeholder="请输入项目名称"
+        />
     </div>
     <div class="form-group">
-        <label for="projVehicleName">车型名称</label>
-        <input class="form-control" id="projVehicleName" name="projVehicleName" type="text"
-               placeholder="请输入车型名称"/>
+        <label for="pProjectDetail">项目描述</label>
+        <input class="form-control" id="pProjectDetail" name="pProjectDetail" type="text"
+               placeholder="请输入项目名称"
+        />
+    </div>
+    <!--不可编辑部分-->
+    <div class="form-group">
+        <label for="pVehicleCode">车型代码</label>
+        <input class="form-control" id="pVehicleCode" name="pVehicleCode" type="text"
+               th:value="${vehicle.getpVehicleCode()}" disabled="disabled"
+        />
     </div>
     <div class="form-group">
-        <label for="projVehicleShapeCode">车身形式代码</label>
-        <input class="form-control" id="projVehicleShapeCode" name="projVehicleShapeCode" type="text"
-               placeholder="请输入车身形式代码"/>
+        <label for="pVehicleName">车型名称</label>
+        <input class="form-control" id="pVehicleName" name="pVehicleName" type="text"
+               th:value="${vehicle.getpVehicleName()}" disabled="disabled"
+        />
     </div>
     <div class="form-group">
-        <label for="projVehicleTranName">车身变形名称</label>
-        <input class="form-control" id="projVehicleTranName" name="projVehicleTranName" type="text"
-               placeholder="请输入车身变形名称"/>
+        <label for="pVehicleShapeCode">车身形式代码</label>
+        <input class="form-control" id="pVehicleShapeCode" name="pVehicleShapeCode" type="text"
+               th:value="${vehicle.getpVehicleShapeCode()}" disabled="disabled"
+        />
     </div>
     <div class="form-group">
-        <label for="projVehicleAnnualCode">车型年代码</label>
-        <input class="form-control" id="projVehicleAnnualCode" name="projVehicleAnnualCode" type="text"
-               placeholder="请输入车型年代码"/>
+        <label for="pVehicleTranName">车身变形名称</label>
+        <input class="form-control" id="pVehicleTranName" name="pVehicleTranName" type="text"
+               th:value="${vehicle.getpVehicleTranName()}" disabled="disabled"
+        />
     </div>
     <div class="form-group">
-        <label for="projVehicleAnnual">年型年</label>
-        <input class="form-control" id="projVehicleAnnual" name="projVehicleAnnual" type="text"
-               placeholder="请输入年型年"/>
+        <label for="pVehicleAnnualCode">车型年代码</label>
+        <input class="form-control" id="pVehicleAnnualCode" name="pVehicleAnnualCode" type="text"
+               th:value="${vehicle.getpVehicleAnnualCode()}" disabled="disabled"
+        />
+    </div>
+    <div class="form-group">
+        <label for="pVehicleAnnual">年型年</label>
+        <input class="form-control" id="pVehicleAnnual" name="pVehicleAnnual" type="text"
+               th:value="${vehicle.getpVehicleAnnual()}" disabled="disabled"
+        />
+    </div>
+    <!--平台-->
+    <div class="form-group">
+        <label for="pPlatformCode">平台代码</label>
+        <input class="form-control" id="pPlatformCode" name="pPlatformCode" type="text"
+               th:value="${platform.getpPlatformCode()}" disabled="disabled"
+        />
+    </div>
+    </div>
+    <div class="form-group">
+        <label for="pPlatformName">平台名称</label>
+        <input class="form-control" id="pPlatformName" name="pPlatformName" type="text"
+               th:value="${platform.getpPlatformName()}" disabled="disabled"
+        />
+    </div>
+    <!--品牌-->
+    <div class="form-group">
+        <label for="pBrandCode">品牌代码</label>
+        <input class="form-control" id="pBrandCode" name="pBrandCode" type="text"
+               th:value="${brand.getpBrandCode()}" disabled="disabled"
+        />
+    </div>
+    <div class="form-group">
+        <label for="pBrandName">中文品牌</label>
+        <input class="form-control" id="pBrandName" name="pBrandName" type="text"
+               th:value="${brand.getpBrandName()}" disabled="disabled"
+        />
     </div>
 </form>
 <script th:inline="javascript">
@@ -135,7 +155,7 @@
                                 var entity = result.entity;
                                 zTree.addNodes(selectNode, {
                                     puid: entity.puid,
-                                    pPuid: entity.pProjectPertainToPlatform,
+                                    pPuid: entity.pProjectPertainToVehicle,
                                     name: entity.pProjectName
                                 });
                                 window.Ewin.alert({message: "添加项目成功"});

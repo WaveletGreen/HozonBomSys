@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="sql.mapper.imapper.HzFlowManageMapper">
+  <resultMap id="BaseResultMap" type="sql.pojo.flow.HzFlowManage">
+    <id column="PUID" jdbcType="VARCHAR" property="puid" />
+    <result column="P_FLOW_NAME" jdbcType="VARCHAR" property="pFlowName" />
+    <result column="P_FLOW_CREATOR" jdbcType="VARCHAR" property="pFlowCreator" />
+    <result column="P_FLOW_CREATE_TIME" jdbcType="DATE" property="pFlowCreateTime" />
+    <result column="P_FLOW_UPDATE_TIME" jdbcType="DATE" property="pFlowUpdateTime" />
+    <result column="P_FLOW_UPDATER" jdbcType="VARCHAR" property="pFlowUpdater" />
+    <result column="P_PROJECT_ID" jdbcType="VARCHAR" property="pProjectId" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    PUID, P_FLOW_NAME, P_FLOW_CREATOR, P_FLOW_CREATE_TIME, P_FLOW_UPDATE_TIME, P_FLOW_UPDATER, 
+    P_PROJECT_ID
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from HZ_FLOW_MANAGE
+    where PUID = #{puid,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from HZ_FLOW_MANAGE
+    where PUID = #{puid,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="sql.pojo.flow.HzFlowManage">
+    insert into HZ_FLOW_MANAGE (PUID, P_FLOW_NAME, P_FLOW_CREATOR, 
+      P_FLOW_CREATE_TIME, P_FLOW_UPDATE_TIME, P_FLOW_UPDATER, 
+      P_PROJECT_ID)
+    values (#{puid,jdbcType=VARCHAR}, #{pFlowName,jdbcType=VARCHAR}, #{pFlowCreator,jdbcType=VARCHAR}, 
+      #{pFlowCreateTime,jdbcType=DATE}, #{pFlowUpdateTime,jdbcType=DATE}, #{pFlowUpdater,jdbcType=VARCHAR}, 
+      #{pProjectId,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="sql.pojo.flow.HzFlowManage">
+    insert into HZ_FLOW_MANAGE
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="puid != null">
+        PUID,
+      </if>
+      <if test="pFlowName != null">
+        P_FLOW_NAME,
+      </if>
+      <if test="pFlowCreator != null">
+        P_FLOW_CREATOR,
+      </if>
+      <if test="pFlowCreateTime != null">
+        P_FLOW_CREATE_TIME,
+      </if>
+      <if test="pFlowUpdateTime != null">
+        P_FLOW_UPDATE_TIME,
+      </if>
+      <if test="pFlowUpdater != null">
+        P_FLOW_UPDATER,
+      </if>
+      <if test="pProjectId != null">
+        P_PROJECT_ID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="puid != null">
+        #{puid,jdbcType=VARCHAR},
+      </if>
+      <if test="pFlowName != null">
+        #{pFlowName,jdbcType=VARCHAR},
+      </if>
+      <if test="pFlowCreator != null">
+        #{pFlowCreator,jdbcType=VARCHAR},
+      </if>
+      <if test="pFlowCreateTime != null">
+        #{pFlowCreateTime,jdbcType=DATE},
+      </if>
+      <if test="pFlowUpdateTime != null">
+        #{pFlowUpdateTime,jdbcType=DATE},
+      </if>
+      <if test="pFlowUpdater != null">
+        #{pFlowUpdater,jdbcType=VARCHAR},
+      </if>
+      <if test="pProjectId != null">
+        #{pProjectId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="sql.pojo.flow.HzFlowManage">
+    update HZ_FLOW_MANAGE
+    <set>
+      <if test="pFlowName != null">
+        P_FLOW_NAME = #{pFlowName,jdbcType=VARCHAR},
+      </if>
+      <if test="pFlowCreator != null">
+        P_FLOW_CREATOR = #{pFlowCreator,jdbcType=VARCHAR},
+      </if>
+      <if test="pFlowCreateTime != null">
+        P_FLOW_CREATE_TIME = #{pFlowCreateTime,jdbcType=DATE},
+      </if>
+      <if test="pFlowUpdateTime != null">
+        P_FLOW_UPDATE_TIME = #{pFlowUpdateTime,jdbcType=DATE},
+      </if>
+      <if test="pFlowUpdater != null">
+        P_FLOW_UPDATER = #{pFlowUpdater,jdbcType=VARCHAR},
+      </if>
+      <if test="pProjectId != null">
+        P_PROJECT_ID = #{pProjectId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where PUID = #{puid,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="sql.pojo.flow.HzFlowManage">
+    update HZ_FLOW_MANAGE
+    set P_FLOW_NAME = #{pFlowName,jdbcType=VARCHAR},
+      P_FLOW_CREATOR = #{pFlowCreator,jdbcType=VARCHAR},
+      P_FLOW_CREATE_TIME = #{pFlowCreateTime,jdbcType=DATE},
+      P_FLOW_UPDATE_TIME = #{pFlowUpdateTime,jdbcType=DATE},
+      P_FLOW_UPDATER = #{pFlowUpdater,jdbcType=VARCHAR},
+      P_PROJECT_ID = #{pProjectId,jdbcType=VARCHAR}
+    where PUID = #{puid,jdbcType=VARCHAR}
+  </update>
+</mapper>

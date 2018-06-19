@@ -15,7 +15,7 @@
         <result column="P_CFG0_RELEVANCE" jdbcType="VARCHAR" property="pCfg0Relevance"/>
     </resultMap>
 
-    <resultMap id="MaterielFeatureMap" type="com.connor.hozon.bom.bomSystem.bean.HzMaterielFeatureBean">
+    <resultMap id="MaterielFeatureMap" type="com.connor.hozon.bom.bomSystem.dto.HzMaterielFeatureBean">
         <id column="PUID" jdbcType="VARCHAR" property="puid"/>
         <result column="P_CFG0_OBJECT_ID" jdbcType="VARCHAR" property="pCfg0ObjectId"/>
         <result column="P_CFG0_DESC" jdbcType="VARCHAR" property="pCfg0Desc"/>

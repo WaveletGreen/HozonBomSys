@@ -100,4 +100,12 @@ public interface HzPbomService {
      * @return
      */
     JSONArray getPbomByLineId(HzPbomProcessComposeReqDTO reqDTO);
+
+    /**
+     * 添加工艺合件信息到bom
+     * @param reqDTO
+     * @return
+     */
+    int AddPbomProcessCompose(AddProcessComposeReqDTO reqDTO);
+
 }

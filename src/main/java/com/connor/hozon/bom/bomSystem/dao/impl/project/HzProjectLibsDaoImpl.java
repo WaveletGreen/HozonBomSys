@@ -60,4 +60,9 @@ public class HzProjectLibsDaoImpl implements HzProjectLibsDao {
     public int deleteByPrimaryKey(String puid) {
         return baseSQLUtil.executeDeleteByPass(puid, "com.connor.hozon.bom.bomSystem.dao.project.HzProjectLibsDao.deleteByPrimaryKey");
     }
+
+    @Override
+    public int updateByPrimaryKey(HzProjectLibs project) {
+        return baseSQLUtil.executeUpdate(project, "com.connor.hozon.bom.bomSystem.dao.project.HzProjectLibsDao.updateByPrimaryKey");
+    }
 }

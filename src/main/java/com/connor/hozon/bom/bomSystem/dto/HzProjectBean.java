@@ -1,4 +1,4 @@
-package com.connor.hozon.bom.bomSystem.bean;
+package com.connor.hozon.bom.bomSystem.dto;
 
 /*************************************************************************************************************************
  *                                  Author: Fancyears·Maylos·Mayways
@@ -11,6 +11,7 @@ public class HzProjectBean {
     private String puid;
     private String pPuid;
     private String name;
+
     public String getPuid() {
         return puid;
     }

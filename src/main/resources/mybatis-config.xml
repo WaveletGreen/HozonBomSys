@@ -49,6 +49,7 @@
         <mapper resource="sql/mapper/bom/xmapper/HzPbomMaintainRecordMapper.xml"/>
         <mapper resource="sql/mapper/bom/xmapper/HzPbomLineMaintainRecordMapper.xml"/>
         <mapper resource="sql/mapper/bom/xmapper/HzPbomRecordMapper.xml"/>
+        <mapper resource="sql/mapper/bom/xmapper/HzBomStateMapper.xml"/>
 
         <!--配置-->
         <mapper resource="sql/mapper/cfg/xmapper/HzCfg0MainRecordMapper.xml"/>
@@ -64,10 +65,13 @@
         <mapper resource="sql/mapper/project.xmapper/HzProjectLibsMapper.xml"/>
         <mapper resource="sql/mapper/project.xmapper/HzBrandRecordMapper.xml"/>
         <mapper resource="sql/mapper/project.xmapper/HzPlatformRecordMapper.xml"/>
-
+        <mapper resource="sql/mapper/project.xmapper/HzVehicleRecordMapper.xml"/>
         <!--EPL-->
         <mapper resource="sql/mapper/epl.xmapper/HzEplBomManageMapper.xml"/>
         <mapper resource="sql/mapper/epl.xmapper/HzEplManageMapper.xml"/>
         <mapper resource="sql/mapper/cfg/xmapper/HzCfg0MainRecordMapper.xml"/>
+        <!--flow 流程-->
+        <mapper resource="sql/mapper/flow.xmapper/HzFlowManageMapper.xml"/>
+        <mapper resource="sql/mapper/flow.xmapper/HzFlowPointInfoMapper.xml"/>
     </mappers>
 </configuration>

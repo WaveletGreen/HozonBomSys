@@ -1,4 +1,4 @@
-package com.connor.hozon.bom.bomSystem.bean;
+package com.connor.hozon.bom.bomSystem.dto;
 
 /*************************************************************************************************************************
  *                                  Author: Fancyears·Maylos·Mayways

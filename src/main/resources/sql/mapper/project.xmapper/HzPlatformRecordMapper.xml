@@ -9,11 +9,18 @@
         <result column="P_PLATFORM_CREATE_DATE" jdbcType="TIMESTAMP" property="pPlatformCreateDate"/>
         <result column="P_PLATFORM_LAST_MOD_DATE" jdbcType="TIMESTAMP" property="pPlatformLastModDate"/>
         <result column="P_PLATFORM_COMMENT" jdbcType="VARCHAR" property="pPlatformComment"/>
+        <result column="P_PLATFORM_LAST_MODIFIER" jdbcType="VARCHAR" property="pPlatformLastModifier"/>
     </resultMap>
     <!--列信息-->
     <sql id="Base_Column_List">
-    PUID, P_PERTAIN_TO_BRAND_PUID, P_PLATFORM_CODE, P_PLATFORM_NAME, P_PLATFORM_CREATE_DATE,
-    P_PLATFORM_LAST_MOD_DATE, P_PLATFORM_COMMENT
+    PUID,
+    P_PERTAIN_TO_BRAND_PUID,
+    P_PLATFORM_CODE,
+    P_PLATFORM_NAME,
+    P_PLATFORM_CREATE_DATE,
+    P_PLATFORM_LAST_MOD_DATE,
+    P_PLATFORM_COMMENT,
+    P_PLATFORM_LAST_MODIFIER
     </sql>
     <!--根据主键找-->
     <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
@@ -42,22 +49,36 @@
     </delete>
     <!--插入1个平台信息-->
     <insert id="insert" parameterType="sql.pojo.project.HzPlatformRecord">
-    insert into HZ_PLATFORM_RECORD (PUID, P_PERTAIN_TO_BRAND_PUID, P_PLATFORM_CODE,
-      P_PLATFORM_NAME, P_PLATFORM_CREATE_DATE, P_PLATFORM_LAST_MOD_DATE,
-      P_PLATFORM_COMMENT)
-    values (#{puid,jdbcType=VARCHAR}, #{pPertainToBrandPuid,jdbcType=VARCHAR}, #{pPlatformCode,jdbcType=VARCHAR},
-      #{pPlatformName,jdbcType=VARCHAR}, #{pPlatformCreateDate,jdbcType=TIMESTAMP}, #{pPlatformLastModDate,jdbcType=TIMESTAMP},
-      #{pPlatformComment,jdbcType=VARCHAR})
+    insert into HZ_PLATFORM_RECORD (
+    PUID,
+    P_PERTAIN_TO_BRAND_PUID,
+    P_PLATFORM_CODE,
+    P_PLATFORM_NAME,
+    P_PLATFORM_CREATE_DATE,
+    P_PLATFORM_LAST_MOD_DATE,
+    P_PLATFORM_COMMENT,
+    P_PLATFORM_LAST_MODIFIER
+    )
+    values (
+    #{puid,jdbcType=VARCHAR},
+    #{pPertainToBrandPuid,jdbcType=VARCHAR},
+    #{pPlatformCode,jdbcType=VARCHAR},
+    #{pPlatformName,jdbcType=VARCHAR},
+    #{pPlatformCreateDate,jdbcType=TIMESTAMP},
+    #{pPlatformLastModDate,jdbcType=TIMESTAMP},
+    #{pPlatformComment,jdbcType=VARCHAR},
+    #{pPlatformLastModifier,jdbcType=VARCHAR}
+    )
     </insert>
     <!--根据主键更新-->
     <update id="updateByPrimaryKey" parameterType="sql.pojo.project.HzPlatformRecord">
     update HZ_PLATFORM_RECORD
-    set P_PERTAIN_TO_BRAND_PUID = #{pPertainToBrandPuid,jdbcType=VARCHAR},
-      P_PLATFORM_CODE = #{pPlatformCode,jdbcType=VARCHAR},
-      P_PLATFORM_NAME = #{pPlatformName,jdbcType=VARCHAR},
-      P_PLATFORM_CREATE_DATE = #{pPlatformCreateDate,jdbcType=TIMESTAMP},
-      P_PLATFORM_LAST_MOD_DATE = #{pPlatformLastModDate,jdbcType=TIMESTAMP},
-      P_PLATFORM_COMMENT = #{pPlatformComment,jdbcType=VARCHAR}
+    set
+    P_PLATFORM_CODE = #{pPlatformCode,jdbcType=VARCHAR},
+    P_PLATFORM_NAME = #{pPlatformName,jdbcType=VARCHAR},
+    P_PLATFORM_LAST_MOD_DATE = #{pPlatformLastModDate,jdbcType=TIMESTAMP},
+    P_PLATFORM_COMMENT = #{pPlatformComment,jdbcType=VARCHAR},
+    P_PLATFORM_LAST_MODIFIER = #{pPlatformLastModifier,jdbcType=VARCHAR}
     where PUID = #{puid,jdbcType=VARCHAR}
     </update>
 </mapper>
