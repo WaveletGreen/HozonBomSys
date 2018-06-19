@@ -21,7 +21,7 @@ public interface IHzVehicleService {
      * @param vehicle 车型数据
      * @return
      */
-    public int doInsertOne(HzVehicleRecord vehicle);
+    public boolean doInsertOne(HzVehicleRecord vehicle);
 
     /**
      * 根据主键删除1条数据
@@ -29,7 +29,7 @@ public interface IHzVehicleService {
      * @param puid 主键
      * @return
      */
-    public int doDeleteByPuid(String puid);
+    public boolean doDeleteByPuid(String puid);
 
     /**
      * 根据主键更1条车型数据
@@ -37,7 +37,7 @@ public interface IHzVehicleService {
      * @param vehicle 车型数据，自带主键
      * @return
      */
-    public int doUpdateByPuid(HzVehicleRecord vehicle);
+    public boolean doUpdateByPuid(HzVehicleRecord vehicle);
 
     /**
      * 验证数据是否正确
@@ -53,4 +53,11 @@ public interface IHzVehicleService {
      * @return
      */
     List<HzVehicleRecord> doGetAllVehicle();
+
+    /**
+     * 根据车型代码，寻找车型信息
+     * @param s 代码
+     * @return
+     */
+    HzVehicleRecord doGetByVehicleCode(String s);
 }

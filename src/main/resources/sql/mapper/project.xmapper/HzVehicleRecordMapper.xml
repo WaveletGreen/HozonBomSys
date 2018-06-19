@@ -34,6 +34,12 @@
         from HZ_VEHICLE_RECORD
         where PUID = #{puid,jdbcType=VARCHAR}
     </select>
+    <select id="selectByCode" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from HZ_VEHICLE_RECORD
+        where P_VEHICLE_CODE = #{pVehicleCode,jdbcType=VARCHAR}
+    </select>
     <select id="selectAll" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
@@ -77,8 +83,6 @@
     <update id="updateByPrimaryKey" parameterType="sql.pojo.project.HzVehicleRecord">
     update HZ_VEHICLE_RECORD
     set P_VEHICLE_NAME = #{pVehicleName,jdbcType=OTHER},
-      P_VEHICLE_PERTAIN_TO_PLATFORM = #{pVehiclePertainToPlatform,jdbcType=VARCHAR},
-      P_VEHICLE_CREATE_DATE = #{pVehicleCreateDate,jdbcType=TIMESTAMP},
       P_VEHICLE_LAST_MOD_DATE = #{pVehicleLastModDate,jdbcType=TIMESTAMP},
       P_VEHICLE_CODE = #{pVehicleCode,jdbcType=VARCHAR},
       P_VEHICLE_SHAPE_CODE = #{pVehicleShapeCode,jdbcType=OTHER},

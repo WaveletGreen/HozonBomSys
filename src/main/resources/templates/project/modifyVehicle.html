@@ -3,34 +3,8 @@
 <body>
 <form id="form" role="form" method="post" th:action="${action}">
     <input class="form-control" id="puid" name="puid" type="hidden"
-           th:value="${project.getPuid()}"
+           th:value="${vehicle.getPuid()}"
     />
-    <div class="form-group">
-        <label for="pBrandCode">品牌代码</label>
-        <input class="form-control" id="pBrandCode" name="pBrandCode" type="text"
-               placeholder="请输入品牌代码" th:value="${brand.getpBrandCode()}" disabled="disabled"
-        />
-    </div>
-    <div class="form-group">
-        <label for="pBrandName">中文品牌</label>
-        <input class="form-control" id="pBrandName" name="pBrandName" type="text"
-               placeholder="请输入中文品牌" th:value="${brand.getpBrandName()}" disabled="disabled"
-        />
-    </div>
-    <div class="form-group">
-        <label for="pProjectPertainToPlatform">平台代码</label>
-        <input class="form-control" id="pProjectPertainToPlatform" name="pProjectPertainToPlatform" type="text"
-               placeholder="请输入平台代码" th:value="${platform.getpPlatformCode()}" disabled="disabled"
-        />
-    </div>
-    </div>
-    <div class="form-group">
-        <label for="pPlatformName">平台名称</label>
-        <input class="form-control" id="pPlatformName" name="pPlatformName" type="text"
-               placeholder="请输入平台名称" th:value="${platform.getpPlatformName()}" disabled="disabled"
-        />
-    </div>
-
     <div class="form-group">
         <label for="pVehicleCode">车型代码</label>
         <input class="form-control" id="pVehicleCode" name="pVehicleCode" type="text"
@@ -65,6 +39,33 @@
         <label for="pVehicleAnnual">年型年</label>
         <input class="form-control" id="pVehicleAnnual" name="pVehicleAnnual" type="text"
                placeholder="请输入年型年" th:value="${vehicle.getpVehicleAnnual()}"
+        />
+    </div>
+    <!--平台-->
+    <div class="form-group">
+        <label for="pProjectPertainToPlatform">平台代码</label>
+        <input class="form-control" id="pProjectPertainToPlatform" name="pProjectPertainToPlatform" type="text"
+               placeholder="需要平台代码" th:value="${platform.getpPlatformCode()}" disabled="disabled"
+        />
+    </div>
+    </div>
+    <div class="form-group">
+        <label for="pPlatformName">平台名称</label>
+        <input class="form-control" id="pPlatformName" name="pPlatformName" type="text"
+               placeholder="需要平台名称" th:value="${platform.getpPlatformName()}" disabled="disabled"
+        />
+    </div>
+    <!--品牌-->
+    <div class="form-group">
+        <label for="pBrandCode">品牌代码</label>
+        <input class="form-control" id="pBrandCode" name="pBrandCode" type="text"
+               placeholder="需要品牌代码" th:value="${brand.getpBrandCode()}" disabled="disabled"
+        />
+    </div>
+    <div class="form-group">
+        <label for="pBrandName">中文品牌</label>
+        <input class="form-control" id="pBrandName" name="pBrandName" type="text"
+               placeholder="需要中文品牌" th:value="${brand.getpBrandName()}" disabled="disabled"
         />
     </div>
 </form>
@@ -128,12 +129,12 @@
                             var selectNode = $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.selectNode;
                             if (result.status == 1) {
                                 var entity = result.entity;
-                                selectNode.name = entity.pProjectName;
+                                selectNode.name = entity.pVehicleName;
                                 zTree.updateNode(selectNode);
                                 window.Ewin.alert({message: "项目修改信息成功"});
                             }
                             else if (result.status == 0) {
-                                window.Ewin.alert({message: "已存在的项目代码，请修改或者更换项目代码"});
+                                window.Ewin.alert({message: "已存在的车型代码，请修改或者更换车型代码"});
                             }
                             else {
                                 window.Ewin.alert({message: "修改失败，请联系管理员"});

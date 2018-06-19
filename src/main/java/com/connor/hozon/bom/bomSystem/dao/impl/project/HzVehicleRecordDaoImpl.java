@@ -42,4 +42,9 @@ public class HzVehicleRecordDaoImpl implements HzVehicleRecordDao {
     public List<HzVehicleRecord> selectAll() {
         return baseSQLUtil.executeQuery(new HzVehicleRecord(), "com.connor.hozon.bom.bomSystem.dao.project.HzVehicleRecordDao.selectAll");
     }
+
+    @Override
+    public HzVehicleRecord selectByCode(String pVehicleCode) {
+        return baseSQLUtil.executeQueryByPass(new HzVehicleRecord(), pVehicleCode, "com.connor.hozon.bom.bomSystem.dao.project.HzVehicleRecordDao.selectByCode", true);
+    }
 }

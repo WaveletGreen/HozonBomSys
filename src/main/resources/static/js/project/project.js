@@ -294,9 +294,9 @@ $(document).ready(
         var project = $("#project", window.top.document);
         var projValue = localSelectedNode.puid;
         project.val(projValue);
-        $("#currentProject").text("当前工作项目:" + localProjectDetail.proj.pProjectName);
-        $("#currentProjectHead", window.top.document).text(localProjectDetail.proj.pProjectName);
-        alert("当前选择的工作项目是:" + localProjectDetail.proj.pProjectName);
+        $("#currentProject").text("当前工作项目:" + localProjectDetail.project.pProjectName);
+        $("#currentProjectHead", window.top.document).text(localProjectDetail.project.pProjectName);
+        alert("当前选择的工作项目是:" + localProjectDetail.project.pProjectName);
     })
 )
 ;

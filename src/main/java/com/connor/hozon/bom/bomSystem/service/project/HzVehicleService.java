@@ -23,27 +23,27 @@ public class HzVehicleService implements IHzVehicleService {
     }
 
     @Override
-    public int doInsertOne(HzVehicleRecord vehicle) {
-        return hzVehicleRecordDao.insert(vehicle);
+    public boolean doInsertOne(HzVehicleRecord vehicle) {
+        return hzVehicleRecordDao.insert(vehicle)>0?true:false;
     }
 
     @Override
-    public int doDeleteByPuid(String puid) {
-        return hzVehicleRecordDao.deleteByPrimaryKey(puid);
+    public boolean doDeleteByPuid(String puid) {
+        return hzVehicleRecordDao.deleteByPrimaryKey(puid)>0?true:false;
     }
 
     @Override
-    public int doUpdateByPuid(HzVehicleRecord vehicle) {
-        return hzVehicleRecordDao.updateByPrimaryKey(vehicle);
+    public boolean doUpdateByPuid(HzVehicleRecord vehicle) {
+        return hzVehicleRecordDao.updateByPrimaryKey(vehicle)>0?true:false;
     }
 
     @Override
     public boolean validate(HzVehicleRecord vehicle) {
         if (null == vehicle ||
-                null == vehicle.getPuid() ||
+//                null == vehicle.getPuid() ||
                 null == vehicle.getpVehicleCode() ||
                 null == vehicle.getpVehicleName() ||
-                "".equals(vehicle.getPuid()) ||
+//                "".equals(vehicle.getPuid()) ||
                 "".equals(vehicle.getpVehicleCode()) ||
                 "".equals(vehicle.getpVehicleName())
                 )
@@ -54,5 +54,10 @@ public class HzVehicleService implements IHzVehicleService {
     @Override
     public List<HzVehicleRecord> doGetAllVehicle() {
         return hzVehicleRecordDao.selectAll();
+    }
+
+    @Override
+    public HzVehicleRecord doGetByVehicleCode(String s) {
+        return hzVehicleRecordDao.selectByCode(s);
     }
 }

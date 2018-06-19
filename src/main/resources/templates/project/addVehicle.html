@@ -2,26 +2,58 @@
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <body>
 <form id="form" role="form" method="post" th:action="${action}">
-    <input class="form-control" id="pPertainToBrandPuid" name="pPertainToBrandPuid" type="hidden"
-           th:value="${brand.getPuid()}"
+    <input class="form-control" id="pVehiclePertainToPlatform" name="pVehiclePertainToPlatform" type="hidden"
+           th:value="${platform.getPuid()}"
     />
+    <!--可编辑部分-->
+    <div class="form-group">
+        <label for="pVehicleCode">车型代码</label>
+        <input class="form-control" id="pVehicleCode" name="pVehicleCode" type="text"
+               placeholder="请输入车型代码"
+        />
+    </div>
+    <div class="form-group">
+        <label for="pVehicleName">车型名称</label>
+        <input class="form-control" id="pVehicleName" name="pVehicleName" type="text"
+               placeholder="请输入车型名称"
+        />
+    </div>
+    <div class="form-group">
+        <label for="pVehicleShapeCode">车身形式代码</label>
+        <input class="form-control" id="pVehicleShapeCode" name="pVehicleShapeCode" type="text"
+               placeholder="请输入车身形式代码"
+        />
+    </div>
+    <div class="form-group">
+        <label for="pVehicleTranName">车身变形名称</label>
+        <input class="form-control" id="pVehicleTranName" name="pVehicleTranName" type="text"
+               placeholder="请输入车身变形名称"
+        />
+    </div>
+    <div class="form-group">
+        <label for="pVehicleAnnualCode">车型年代码</label>
+        <input class="form-control" id="pVehicleAnnualCode" name="pVehicleAnnualCode" type="text"
+               placeholder="请输入车型年代码"
+        />
+    </div>
+    <div class="form-group">
+        <label for="pVehicleAnnual">年型年</label>
+        <input class="form-control" id="pVehicleAnnual" name="pVehicleAnnual" type="text"
+               placeholder="请输入年型年"
+        />
+    </div>
+    <!--不可编辑部分-->
     <div class="form-group">
         <label for="pPlatformCode">平台代码</label>
         <input class="form-control" id="pPlatformCode" name="pPlatformCode" type="text"
-               placeholder="请输入平台代码"
+               th:value="${platform.getpPlatformCode()}" disabled="disabled"
         />
     </div>
     </div>
     <div class="form-group">
         <label for="pPlatformName">平台名称</label>
         <input class="form-control" id="pPlatformName" name="pPlatformName" type="text"
-               placeholder="请输入平台名称"
-        />
-    </div>
-    <div class="form-group">
-        <label for="pPlatformComment">备注</label>
-        <input class="form-control" id="pPlatformComment" name="pPlatformComment" type="text"
-               placeholder="请输入备注"
+               th:value="${platform.getpPlatformName()}" disabled="disabled"
         />
     </div>
     <div class="form-group">
@@ -48,19 +80,19 @@
                 validating: 'glyphicon glyphicon-refresh'
             },
             fields: {
-                pPlatformName: {
-                    message: '平台名称验证失败',
+                pProjectCode: {
+                    message: '项目编号验证失败',
                     validators: {
                         notEmpty: {
-                            message: '平台名称不能为空'
+                            message: '项目编号不能为空'
                         }
                     }
                 },
-                pPlatformCode: {
-                    message: '平台代码验证失败',
+                pProjectName: {
+                    message: '项目名称验证失败',
                     validators: {
                         notEmpty: {
-                            message: '平台代码不能为空'
+                            message: '项目名称不能为空'
                         }
                     }
                 }
@@ -78,11 +110,14 @@
                 for (var p in _d) {
                     data[_d[p].name] = _d[p].value;
                 }
+                // data.pProjectPertainToPlatform=$("#pProjectPertainToPlatform").val();
+                console.log(data);
+                console.log(JSON.stringify(data));
                 $.ajax({
-                    contentType:
-                        "application/json",
                     type:
                         'POST',
+                    contentType:
+                        "application/json",
                     url: url,
                     data: JSON.stringify(data),
                     success:
@@ -96,17 +131,18 @@
                                 var entity = result.entity;
                                 zTree.addNodes(selectNode, {
                                     puid: entity.puid,
-                                    pPuid: entity.pPertainToBrandPuid,
-                                    name: entity.pPlatformName
+                                    pPuid: entity.pProjectPertainToPlatform,
+                                    name: entity.pVehicleName
                                 });
-                                window.Ewin.alert({message: "添加平台成功"});
+                                window.Ewin.alert({message: "添加车型成功"});
                             }
                             else if (result.status == 0) {
-                                window.Ewin.alert({message: "已存在的平台代码，请修改或者更换平台代码"});
+                                window.Ewin.alert({message: "已存在的车型信息，请修改或者更换项目代码"});
                             }
                             else {
                                 window.Ewin.alert({message: "添加失败，请联系管理员"});
                             }
+
                         },
                     error: function (status) {
                         window.Ewin.alert({message: status.status + ':添加数据失败!'});

@@ -170,8 +170,8 @@ public class HzProjectLibsController {
                     HzBrandRecord brand_v = hzBrandService.doGetByPuid(platform_v.getpPertainToBrandPuid());
                     model.addAttribute("brand", brand_v);
                     model.addAttribute("platform", platform_v);
-                    model.addAttribute("action", "./project/addProject");
-                    return "project/add";
+                    model.addAttribute("action", "./project/addVehicle");
+                    return "project/addVehicle";
                 //加入项目
                 case "project":
                     HzVehicleRecord vehicle = hzVehicleService.doGetByPuid(id);
@@ -204,6 +204,7 @@ public class HzProjectLibsController {
     @ResponseBody
     public JSONObject addBrand(@RequestBody HzBrandRecord brand) {
         JSONObject result = new JSONObject();
+        User user = UserInfo.getUser();
         if (!hzBrandService.validate(brand)) {
             result.put("status", -1);
         }
@@ -212,6 +213,7 @@ public class HzProjectLibsController {
             brand.setPuid(UUID.randomUUID().toString());
             brand.setpBrandCreateDate(date);
             brand.setpBrandLastModDate(date);
+            brand.setpBrandLastModifier(user.getUsername());
             if (hzBrandService.doInsertOne(brand)) {
                 result.put("status", 1);
                 result.put("entity", brand);
@@ -228,6 +230,7 @@ public class HzProjectLibsController {
     @ResponseBody
     public JSONObject addPlatform(@RequestBody HzPlatformRecord platform) {
         JSONObject result = new JSONObject();
+        User user = UserInfo.getUser();
         if (!hzPlatformService.validate(platform)) {
             result.put("status", -1);
         }
@@ -236,9 +239,39 @@ public class HzProjectLibsController {
             platform.setPuid(UUID.randomUUID().toString());
             platform.setpPlatformCreateDate(date);
             platform.setpPlatformLastModDate(date);
+            platform.setpPlatformLastModifier(user.getUsername());
             if (hzPlatformService.doInsertOne(platform)) {
                 result.put("status", 1);
                 result.put("entity", platform);
+            } else {
+                result.put("status", -1);
+            }
+        } else {
+            result.put("status", 0);
+        }
+        return result;
+    }
+
+    @RequestMapping(value = "/addVehicle", method = RequestMethod.POST)
+    @ResponseBody
+    public JSONObject addVehicle(@RequestBody HzVehicleRecord vehicle) {
+        JSONObject result = new JSONObject();
+        User user = UserInfo.getUser();
+        if (!hzVehicleService.validate(vehicle) || user == null) {
+            result.put("status", -1);
+            return result;
+        }
+        if (null == hzVehicleService.doGetByVehicleCode(vehicle.getpVehicleCode())) {
+            Date date = new Date();
+            vehicle.setPuid(UUID.randomUUID().toString());
+            vehicle.setpVehicleCreateDate(date);
+            vehicle.setpVehicleLastModDate(date);
+            vehicle.setpVehicleLastModifier(user.getUsername());
+            //设置创建者
+            vehicle.setpVehicleLastModifier(user.getUsername());
+            if (hzVehicleService.doInsertOne(vehicle)) {
+                result.put("status", 1);
+                result.put("entity", vehicle);
             } else {
                 result.put("status", -1);
             }
@@ -263,6 +296,7 @@ public class HzProjectLibsController {
             project.setpProjectLastModDate(date);
             //设置创建者
             project.setpProjectOwningUser(user.getUsername());
+            project.setpProjectLastModifier(user.getUsername());
             //设置失效年份为9999年12月31日23时59分59秒
             Calendar calendar = Calendar.getInstance();
             calendar.set(9998, 12, 31, 23, 59, 59);
@@ -351,6 +385,8 @@ public class HzProjectLibsController {
     @ResponseBody
     public JSONObject modifyBrand(@RequestBody HzBrandRecord brand) {
         JSONObject result = new JSONObject();
+        User user = UserInfo.getUser();
+
         if (!hzBrandService.validate(brand)) {
             result.put("status", -1);
         }
@@ -358,12 +394,83 @@ public class HzProjectLibsController {
 //            if (null != hzBrandService.doGetByBrandCode(brand.getpBrandCode())) {
 //                result.put("status", -1);
 //            } else {
+            brand.setpBrandLastModifier(user.getUsername());
             brand.setpBrandLastModDate(new Date());
             if (hzBrandService.doUpdateSelective(brand)) {
                 result.put("status", 1);
                 brand = hzBrandService.doGetByPuid(brand.getPuid());
 //                brand.setpBrandCreateDate(new Date());
                 result.put("entity", brand);
+            } else {
+                result.put("status", -1);
+            }
+//            }
+        } else {
+            result.put("status", 0);
+        }
+        return result;
+    }
+
+    /***
+     * 添加品牌
+     * @param platform 平台
+     * @return 数据信息，添加成功则连同平台一起返回和标识符，反之则只返回标识符
+     */
+    @RequestMapping(value = "/modifyPlatform", method = RequestMethod.POST)
+    @ResponseBody
+    public JSONObject modifyPlatform(@RequestBody HzPlatformRecord platform) {
+        JSONObject result = new JSONObject();
+        User user = UserInfo.getUser();
+        if (!hzPlatformService.modifyValidate(platform)) {
+            result.put("status", -1);
+        }
+        if (null != hzPlatformService.doGetByPuid(platform.getPuid())) {
+//            if (null != hzPlatformService.doGetByPlatformCode(platform.getpPlatformCode())) {
+//                result.put("status", -1);
+//            } else {
+            platform.setpPlatformLastModDate(new Date());
+            platform.setpPlatformLastModifier(user.getUsername());
+            if (hzPlatformService.doUpdate(platform)) {
+                result.put("status", 1);
+//                platform.setpPlatformCreateDate(new Date());
+//                platform.setpPertainToBrandPuid("");
+                platform = hzPlatformService.doGetByPuid(platform.getPuid());
+                result.put("entity", platform);
+            } else {
+                result.put("status", -1);
+            }
+//            }
+        } else {
+            result.put("status", 0);
+        }
+        return result;
+    }
+
+    /***
+     * 添加品牌
+     * @param vehicle 车型对象
+     * @return 数据信息，添加成功则连同品牌一起返回和标识符，反之则只返回标识符
+     */
+    @RequestMapping(value = "/modifyVehicle", method = RequestMethod.POST)
+    @ResponseBody
+    public JSONObject modifyVehicle(@RequestBody HzVehicleRecord vehicle) {
+        JSONObject result = new JSONObject();
+        User user = UserInfo.getUser();
+        if (!hzVehicleService.validate(vehicle)) {
+            result.put("status", -1);
+        }
+        if (null != hzVehicleService.doGetByPuid(vehicle.getPuid())) {
+//            if (null != hzProjectLibsService.doGetByProjectCode(project.getpProjectCode())) {
+//                result.put("status", -1);
+//            } else {
+            vehicle.setpVehicleLastModDate(new Date());
+            vehicle.setpVehicleLastModifier(user.getUsername());
+            if (hzVehicleService.doUpdateByPuid(vehicle)) {
+                result.put("status", 1);
+                vehicle = hzVehicleService.doGetByPuid(vehicle.getPuid());
+                //不能传空值，空值可能来源于数据库
+//                hzProjectLibsService.toDTO(project);
+                result.put("entity", vehicle);
             } else {
                 result.put("status", -1);
             }
@@ -407,39 +514,6 @@ public class HzProjectLibsController {
         return result;
     }
 
-    /***
-     * 添加品牌
-     * @param platform 平台
-     * @return 数据信息，添加成功则连同平台一起返回和标识符，反之则只返回标识符
-     */
-    @RequestMapping(value = "/modifyPlatform", method = RequestMethod.POST)
-    @ResponseBody
-    public JSONObject modifyPlatform(@RequestBody HzPlatformRecord platform) {
-        JSONObject result = new JSONObject();
-        if (!hzPlatformService.modifyValidate(platform)) {
-            result.put("status", -1);
-        }
-        if (null != hzPlatformService.doGetByPuid(platform.getPuid())) {
-//            if (null != hzPlatformService.doGetByPlatformCode(platform.getpPlatformCode())) {
-//                result.put("status", -1);
-//            } else {
-            platform.setpPlatformLastModDate(new Date());
-            if (hzPlatformService.doUpdate(platform)) {
-                result.put("status", 1);
-//                platform.setpPlatformCreateDate(new Date());
-//                platform.setpPertainToBrandPuid("");
-                platform = hzPlatformService.doGetByPuid(platform.getPuid());
-                result.put("entity", platform);
-            } else {
-                result.put("status", -1);
-            }
-//            }
-        } else {
-            result.put("status", 0);
-        }
-        return result;
-    }
-
     /**
      * 根据类型和主键进行删除
      *
@@ -460,6 +534,8 @@ public class HzProjectLibsController {
                 return hzPlatformService.doDeleteByPuid(puid);
             case "project":
                 return hzProjectLibsService.doDeleteByPuid(puid);
+            case "vehicle":
+                return hzVehicleService.doDeleteByPuid(puid);
             default:
                 return false;
         }

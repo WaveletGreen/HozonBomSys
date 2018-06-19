@@ -46,4 +46,11 @@ public interface HzVehicleRecordDao {
      * @return
      */
     List<HzVehicleRecord> selectAll();
+
+    /**
+     * 根据车型代码寻找车型信息
+     * @param pVehicleCode 车型代码
+     * @return
+     */
+    HzVehicleRecord selectByCode(@Param("pVehicleCode") String pVehicleCode);
 }

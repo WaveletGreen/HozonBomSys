@@ -63,7 +63,7 @@
         #{pProjectOwningUser,jdbcType=VARCHAR},
         #{pProjectDiscontinuationDate,jdbcType=TIMESTAMP},
         #{pProjectManager,jdbcType=VARCHAR},
-        #{pProjectDetail,jdbcType=VARCHAR}
+        #{pProjectDetail,jdbcType=VARCHAR},
         #{pProjectLastModifier,jdbcType=VARCHAR}
         )
     </select>

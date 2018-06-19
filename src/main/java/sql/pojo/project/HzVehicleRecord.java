@@ -1,5 +1,6 @@
 package sql.pojo.project;
 
+import java.util.Calendar;
 import java.util.Date;
 
 public class HzVehicleRecord {
@@ -86,7 +87,13 @@ public class HzVehicleRecord {
     }
 
     public void setpVehicleLastModDate(Date pVehicleLastModDate) {
-        this.pVehicleLastModDate = pVehicleLastModDate;
+
+        if (pVehicleLastModDate == null) {
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(9998, 12, 31, 23, 59, 59);
+            this.pVehicleLastModDate = calendar.getTime();
+        } else
+            this.pVehicleLastModDate = pVehicleLastModDate;
     }
 
     public String getpVehicleCode() {

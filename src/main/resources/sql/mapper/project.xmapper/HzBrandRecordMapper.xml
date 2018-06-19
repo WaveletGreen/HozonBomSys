@@ -62,7 +62,7 @@
       #{pBrandCreateDate,jdbcType=TIMESTAMP},
       #{pBrandLastModDate,jdbcType=TIMESTAMP},
       #{pBrandComment,jdbcType=VARCHAR},
-      #{pBrandLastModifier,jdbcType=VARCHAR},
+      #{pBrandLastModifier,jdbcType=VARCHAR}
       )
     </insert>
     <!--根据主键更新品牌-->
@@ -94,7 +94,7 @@
             P_BRAND_COMMENT = #{pBrandComment,jdbcType=VARCHAR},
         </if>
         <if test="pBrandLastModDate !=null">
-            P_BRAND_LAST_MOD_DATE = #{pBrandLastModDate,jdbcType=TIMESTAMP}
+            P_BRAND_LAST_MOD_DATE = #{pBrandLastModDate,jdbcType=TIMESTAMP},
         </if>
         <if test="pBrandLastModifier !=null">
             P_BRAND_LAST_MODIFIER = #{pBrandLastModifier,jdbcType=VARCHAR}
