@@ -3,7 +3,7 @@ package sql.pojo.flow;
 import java.util.Date;
 
 /**
- * @Auther: haozt
+ * @Author: haozt
  * @Date: 2018/6/14
  * @Description: 流程节点信息
  */

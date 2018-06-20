@@ -106,6 +106,6 @@ public interface HzPbomService {
      * @param reqDTO
      * @return
      */
-    int AddPbomProcessCompose(AddProcessComposeReqDTO reqDTO);
+    int addPbomProcessCompose(AddProcessComposeReqDTO reqDTO);
 
 }

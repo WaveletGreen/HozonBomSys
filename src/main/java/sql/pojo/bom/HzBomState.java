@@ -1,7 +1,7 @@
 package sql.pojo.bom;
 
 /**
- * @Auther: haozt
+ * @Author: haozt
  * @Date: 2018/6/14
  */
 public class HzBomState {
@@ -32,10 +32,6 @@ public class HzBomState {
      */
     private String pBomFlowPointName;
 
-    /**
-     * 当前BOM删除标志位 0删除 1未删除
-     */
-    private Integer pValidFlag;
 
     public String getPuid() {
         return puid;
@@ -85,11 +81,4 @@ public class HzBomState {
         this.pBomFlowPointName = pBomFlowPointName;
     }
 
-    public Integer getpValidFlag() {
-        return pValidFlag;
-    }
-
-    public void setpValidFlag(Integer pValidFlag) {
-        this.pValidFlag = pValidFlag;
-    }
 }

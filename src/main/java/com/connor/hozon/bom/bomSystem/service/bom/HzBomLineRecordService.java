@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import sql.pojo.bom.HzBomLineRecord;
 
 /**
- * @Auther: haozt
+ * @Author: haozt
  * @Date: 2018/6/14
  * @Description:
  */
@@ -23,4 +23,5 @@ public class HzBomLineRecordService {
     public int insert(HzBomLineRecord record){
          return recordDao.insert(record);
     }
+
 }

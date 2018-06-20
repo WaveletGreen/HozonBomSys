@@ -6,7 +6,7 @@ import sql.BaseSQLUtil;
 import sql.pojo.bom.HzBomState;
 
 /**
- * @Auther: haozt
+ * @Author: haozt
  * @Date: 2018/6/14
  * @Description:
  */
@@ -21,5 +21,10 @@ public class HzBomStateDAOImpl extends BaseSQLUtil implements HzBomStateDAO {
     @Override
     public int update(HzBomState hzBomState) {
         return super.update("HzBomStateDAOImpl_update",hzBomState);
+    }
+
+    @Override
+    public HzBomState findStateById(String puid) {
+        return (HzBomState) super.findForObject("HzBomStateDAOImpl_findStateById",puid);
     }
 }

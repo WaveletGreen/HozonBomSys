@@ -19,11 +19,11 @@ import java.util.List;
 public class HzEbomServiceImpl implements HzEbomService {
 
     @Autowired
-    private HzEbomRecordDAO recordDAO;
+    private HzEbomRecordDAO hzEbomRecordDAO;
 
     @Override
     public List<HzEbomRespDTO> getHzEbomList(FindHzEbomRecordReqDTO reqDTO) {
-        List<HzEPLManageRecord> records = recordDAO.getHzEbomList(reqDTO);
+        List<HzEPLManageRecord> records = hzEbomRecordDAO.getHzEbomList(reqDTO);
         if(ListUtil.isEmpty(records)){
             return null;
         }
