@@ -226,7 +226,8 @@ $(document).ready((function () {
                 minimumCountColumns: 4,//设置最小列数
             });
             $table.bootstrapTable('hideColumn', 'puid');
-
+            $table.bootstrapTable('hideColumn', 'level');
+            $table.bootstrapTable('hideColumn', 'groupNum');
         }
     })
 }))

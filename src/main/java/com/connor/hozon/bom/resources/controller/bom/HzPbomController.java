@@ -328,4 +328,18 @@ public class HzPbomController extends BaseController {
         writeAjaxJSONResponse(ResultMessageBuilder.build(true,object),response);
     }
 
+    /**
+     * 合成工艺合件
+     * @param reqDTO
+     * @param response
+     */
+    @RequestMapping(value = "/add/processCompose",method = RequestMethod.POST)
+    public void addProcessCompose(AddProcessComposeReqDTO reqDTO,HttpServletResponse response){
+        int i = hzPbomService.addPbomProcessCompose(reqDTO);
+        if(i!=1){
+            writeAjaxJSONResponse(ResultMessageBuilder.build(false,"出错啦！"),response);
+        }
+        writeAjaxJSONResponse(ResultMessageBuilder.build(true,"操作成功！"),response);
+
+    }
 }

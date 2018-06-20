@@ -2,23 +2,23 @@ package com.connor.hozon.bom.resources.dto.request;
 
 
 public class AddProcessComposeReqDTO {
-
     private String parentUid;
-    private String isDept;
     private String bomDigifaxId;
     private String lineIndex;
+    //以上属性是其父的属性
+
     private String linePuid;
     private String lineId;
-    private Integer isHas;
-    private Integer is2Y;
-    private Integer isPart;
-    private Integer orderNum;
-    private String pBomOfWhichDept;
     private String projectPuid;
     private String pBomLinePartName;
     private String pBomLinePartClass;
 
     private String rank;
+
+    /**
+     * EBOM中的零件内容，是一个json串
+     */
+    private String eBomContent;
 
     /**
      * 数据版本
@@ -179,20 +179,20 @@ public class AddProcessComposeReqDTO {
      */
     private String puid;
 
+    public String geteBomContent() {
+        return eBomContent;
+    }
+
+    public void seteBomContent(String eBomContent) {
+        this.eBomContent = eBomContent;
+    }
+
     public String getParentUid() {
         return parentUid;
     }
 
     public void setParentUid(String parentUid) {
         this.parentUid = parentUid;
-    }
-
-    public String getIsDept() {
-        return isDept;
-    }
-
-    public void setIsDept(String isDept) {
-        this.isDept = isDept;
     }
 
     public String getBomDigifaxId() {
@@ -225,46 +225,6 @@ public class AddProcessComposeReqDTO {
 
     public void setLineId(String lineId) {
         this.lineId = lineId;
-    }
-
-    public Integer getIsHas() {
-        return isHas;
-    }
-
-    public void setIsHas(Integer isHas) {
-        this.isHas = isHas;
-    }
-
-    public Integer getIs2Y() {
-        return is2Y;
-    }
-
-    public void setIs2Y(Integer is2Y) {
-        this.is2Y = is2Y;
-    }
-
-    public Integer getIsPart() {
-        return isPart;
-    }
-
-    public void setIsPart(Integer isPart) {
-        this.isPart = isPart;
-    }
-
-    public Integer getOrderNum() {
-        return orderNum;
-    }
-
-    public void setOrderNum(Integer orderNum) {
-        this.orderNum = orderNum;
-    }
-
-    public String getpBomOfWhichDept() {
-        return pBomOfWhichDept;
-    }
-
-    public void setpBomOfWhichDept(String pBomOfWhichDept) {
-        this.pBomOfWhichDept = pBomOfWhichDept;
     }
 
     public String getProjectPuid() {

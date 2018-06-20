@@ -103,17 +103,18 @@
     <insert id="HzBomLineRecordDaoImpl_insert" parameterType="sql.pojo.bom.HzBomLineRecord">
         insert into HZ_BOM_LINE_RECORD
         (
-        <include refid="Base_Column_List"/>
-        ,
-        <include refid="Blob_Column_List"/>
+        PUID,P_PARENT_UID,P_BOM_DIGIFAX_ID,P_LINE_INDEX,P_BOM_LINE_IS_HAS,P_BOM_LINE_PUID,P_BOM_LINE_ID,
+        P_BOM_LINE_BLOCK,
+        P_BOM_LINE_IS_2Y,P_BOM_LINE_IS_PART,P_BOM_ORDER_NUM,P_BOM_LINE_IS_DEPT,P_BOM_OF_WHICH_DEPT,
+        P_BOM_LINE_PART_NAME,P_BOM_LINE_PART_CLASS
         )
         <!-- (PUID, LINE_INDEX,PARENT_UID, BOM_DIGIFAX_ID, BOM_LINE_IS_HAS,BOM_LINE_BLOCK) -->
         values
         (#{puid,jdbcType=VARCHAR},#{parentUid,jdbcType=VARCHAR},#{bomDigifaxId,jdbcType=VARCHAR},
-        #{lineIndex,jdbcType=VARCHAR},#{isHas,jdbcType=VARCHAR},#{linePuid,jdbcType=VARCHAR},
+        #{lineIndex,jdbcType=VARCHAR},#{isHas,jdbcType=INTEGER},#{linePuid,jdbcType=VARCHAR},
         #{lineID,jdbcType=VARCHAR},#{bomLineBlock,jdbcType=BLOB},
-        #{is2Y,jdbcType=VARCHAR},#{isPart,jdbcType=VARCHAR},
-        #{orderNum,jdbcType=VARCHAR},#{isDept,jdbcType=VARCHAR},
+        #{is2Y,jdbcType=INTEGER},#{isPart,jdbcType=INTEGER},
+        #{orderNum,jdbcType=INTEGER},#{isDept,jdbcType=INTEGER},
         #{pBomOfWhichDept,jdbcType=VARCHAR},#{pBomLinePartName,jdbcType=VARCHAR},#{pBomLinePartClass,jdbcType=VARCHAR}
       )
     </insert>
@@ -156,5 +157,21 @@
         where PUID = #{puid,jdbcType=VARCHAR}
     </update>
 
+    <!--查询一条bom信息-->
+    <select id="HzBomLineRecordDaoImpl_findBobLineByPuid" parameterType="java.util.Map" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from HZ_BOM_LINE_RECORD
+        where P_BOM_DIGIFAX_ID =(
+        select t2.puid from Hz_Bom_Main_Record t2
+        where
+        t2.p_cfg0_of_which_project_puid=#{projectId,jdbcType=VARCHAR}
+        ) and PUID=#{puid,jdbcType=VARCHAR}
+    </select>
+
+    <!--查询orderNum的最大值信息-->
+    <select id="HzBomLineRecordDaoImpl_findMaxBomOrderNum"  resultType="int">
+        select max(P_BOM_ORDER_NUM) from HZ_BOM_LINE_RECORD
+    </select>
 
 </mapper>

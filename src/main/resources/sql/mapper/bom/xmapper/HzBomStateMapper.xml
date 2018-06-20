@@ -8,11 +8,9 @@
     <result column="P_BOM_FLOW_STATE" jdbcType="DECIMAL" property="pBomFlowState" />
     <result column="P_BOM_FLOW_ID" jdbcType="VARCHAR" property="pBomFlowId" />
     <result column="P_BOM_FLOW_POINT_NAME" jdbcType="VARCHAR" property="pBomFlowPointName" />
-    <result column="P_VALID_FLAG" jdbcType="DECIMAL" property="pValidFlag" />
   </resultMap>
   <sql id="Base_Column_List">
-    PUID, P_BOM_ID, P_BOM_STATE, P_BOM_FLOW_STATE, P_BOM_FLOW_ID, P_BOM_FLOW_POINT_NAME, 
-    P_VALID_FLAG
+    PUID, P_BOM_ID, P_BOM_STATE, P_BOM_FLOW_STATE, P_BOM_FLOW_ID, P_BOM_FLOW_POINT_NAME
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
@@ -27,11 +25,9 @@
 
   <insert id="insert" parameterType="sql.pojo.bom.HzBomState">
     insert into HZ_BOM_STATE (PUID, P_BOM_ID, P_BOM_STATE, 
-      P_BOM_FLOW_STATE, P_BOM_FLOW_ID, P_BOM_FLOW_POINT_NAME, 
-      P_VALID_FLAG)
+      P_BOM_FLOW_STATE, P_BOM_FLOW_ID, P_BOM_FLOW_POINT_NAME)
     values (#{puid,jdbcType=VARCHAR}, #{pBomId,jdbcType=VARCHAR}, #{pBomState,jdbcType=DECIMAL}, 
-      #{pBomFlowState,jdbcType=DECIMAL}, #{pBomFlowId,jdbcType=VARCHAR}, #{pBomFlowPointName,jdbcType=VARCHAR}, 
-      #{pValidFlag,jdbcType=DECIMAL})
+      #{pBomFlowState,jdbcType=DECIMAL}, #{pBomFlowId,jdbcType=VARCHAR}, #{pBomFlowPointName,jdbcType=VARCHAR}
   </insert>
 
   <!--新增-->
@@ -56,9 +52,6 @@
       <if test="pBomFlowPointName != null">
         P_BOM_FLOW_POINT_NAME,
       </if>
-      <if test="pValidFlag != null">
-        P_VALID_FLAG,
-      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="puid != null">
@@ -78,9 +71,6 @@
       </if>
       <if test="pBomFlowPointName != null">
         #{pBomFlowPointName,jdbcType=VARCHAR},
-      </if>
-      <if test="pValidFlag != null">
-        #{pValidFlag,jdbcType=DECIMAL},
       </if>
     </trim>
   </insert>
@@ -104,9 +94,6 @@
       <if test="pBomFlowPointName != null">
         P_BOM_FLOW_POINT_NAME = #{pBomFlowPointName,jdbcType=VARCHAR},
       </if>
-      <if test="pValidFlag != null">
-        P_VALID_FLAG = #{pValidFlag,jdbcType=DECIMAL},
-      </if>
     </set>
     where PUID = #{puid,jdbcType=VARCHAR}
   </update>
@@ -119,7 +106,6 @@
       P_BOM_FLOW_STATE = #{pBomFlowState,jdbcType=DECIMAL},
       P_BOM_FLOW_ID = #{pBomFlowId,jdbcType=VARCHAR},
       P_BOM_FLOW_POINT_NAME = #{pBomFlowPointName,jdbcType=VARCHAR},
-      P_VALID_FLAG = #{pValidFlag,jdbcType=DECIMAL}
     where PUID = #{puid,jdbcType=VARCHAR}
   </update>
 </mapper>

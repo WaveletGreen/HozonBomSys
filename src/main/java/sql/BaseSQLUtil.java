@@ -18,6 +18,11 @@ import java.util.Map;
 @Service("baseSQLUtil")
 public class BaseSQLUtil implements IBaseSQLUtil {
     private static final Logger logger = LoggerFactory.getLogger(BaseSQLUtil.class);
+    private static SqlSession  session = null;
+    static{
+        SqlSessionFactory f = FactoryManager.getInstance();
+        session = f.openSession();
+    }
 
     public <T> T executeQueryById(T suppliers, String by) {
         SqlSession session = null;
@@ -271,11 +276,11 @@ public class BaseSQLUtil implements IBaseSQLUtil {
      * @return
      */
     public List findForList(final String sqlMapId, final Object param) {
-        SqlSession session = null;
+//        SqlSession session = null;
         List result = null;
         try {
-            SqlSessionFactory f = FactoryManager.getInstance();
-            session = f.openSession();
+//            SqlSessionFactory f = FactoryManager.getInstance();
+//            session = f.openSession();
             logger.info("BaseSQLUtil execute sql:" + sqlMapId);
             if (param == null) {
                 result = session.selectList(sqlMapId);
@@ -286,8 +291,8 @@ public class BaseSQLUtil implements IBaseSQLUtil {
         } catch (Exception e) {
            throw new DatabaseException("SQL执行出错"+sqlMapId,e);
         } finally {
-            if (session != null)
-                session.close();
+//            if (session != null)
+//                session.close();
         }
         return result;
     }
