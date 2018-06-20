@@ -8,17 +8,17 @@ public class AddProcessComposeReqDTO {
     //以上属性是其父的属性
 
     private String linePuid;
-    private String lineId;
-    private String projectPuid;
-    private String pBomLinePartName;
-    private String pBomLinePartClass;
+    private String lineId;//1
+    private String projectPuid;//2
+    private String pBomLinePartName;//3
+    private String pBomLinePartClass;//4
 
     private String rank;
 
     /**
      * EBOM中的零件内容，是一个json串
      */
-    private String eBomContent;
+    private String eBomContent;//5
 
     /**
      * 数据版本
@@ -177,7 +177,7 @@ public class AddProcessComposeReqDTO {
     /**
      * 外键id 对应EBOM表的id
      */
-    private String puid;
+    private String puid;//6
 
     public String geteBomContent() {
         return eBomContent;

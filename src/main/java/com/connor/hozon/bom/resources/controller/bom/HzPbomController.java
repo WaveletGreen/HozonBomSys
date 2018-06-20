@@ -13,9 +13,7 @@ import com.connor.hozon.bom.resources.util.ResultMessageBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.*;
@@ -330,11 +328,14 @@ public class HzPbomController extends BaseController {
 
     /**
      * 合成工艺合件
-     * @param reqDTO
+     * @param
      * @param response
+     * AddProcessComposeReqDTO reqDTO,
      */
     @RequestMapping(value = "/add/processCompose",method = RequestMethod.POST)
-    public void addProcessCompose(AddProcessComposeReqDTO reqDTO,HttpServletResponse response){
+    public void addProcessCompose(@RequestBody  Map<String,String> obj, AddProcessComposeReqDTO reqDTO1, HttpServletResponse response){
+        System.out.println(JSONArray.toJSONString(obj));
+        AddProcessComposeReqDTO reqDTO=new AddProcessComposeReqDTO();
         int i = hzPbomService.addPbomProcessCompose(reqDTO);
         if(i!=1){
             writeAjaxJSONResponse(ResultMessageBuilder.build(false,"出错啦！"),response);

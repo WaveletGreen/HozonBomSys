@@ -100,24 +100,21 @@ $(function () {
 */
 
 
-
-
-
 /**
  *  第一个树型结构的demo
  */
-$(function() {
+$(function () {
     $('#lineId1').keyup(function () {
         var val = $(this).val();
         var localSelectedNode;
         var localProjectDetail;
         var coach = [];
-        var projectId=$("#project", window.top.document).val();
+        var projectId = $("#project", window.top.document).val();
         console.log(projectId);
         if (val != "") {
             $.ajax({
                 type: "GET",
-                url: "pbom/processComposeTree?lineId=" +val+"&projectId="+projectId,
+                url: "pbom/processComposeTree?lineId=" + val + "&projectId=" + projectId,
                 undefinedText: "",//当数据为 undefined 时显示的字符
                 success: function (data) {
                     console.log(data);
@@ -178,7 +175,7 @@ $(function() {
                                     //绑定本地选择的子节点
                                     localSelectedNode = treeNode;
                                     $.ajax({
-                                        url: "pbom/detail?lineId=" + localSelectedNode.lineId +  "&projectId="+projectId,
+                                        url: "pbom/detail?lineId=" + localSelectedNode.lineId + "&projectId=" + projectId,
                                         type: "GET",
                                         success: function (data) {
                                             console.log(data);
@@ -187,36 +184,17 @@ $(function() {
                                             var titleName = result[0];
                                             var titleEName = result[1];
                                             var value = result[2];
-                                            var titleNameAll = "";
-                                            var ck = "";
-                                            for (var i = 0; i < titleName.length; i++) {
-                                                var checkbox = "<td><input type='checkbox'id='checkbox'></td>"
-                                                var titleName1 ="<td>"+titleName[i]+"</td>";
-                                                titleNameAll += titleName1;
-                                                ck += checkbox;
+                                            var rel = "<table class='table table-striped tableNormalStyle'>"
+                                            for (var i = 0; i < titleEName.length; i++) {
+                                                var a = eval(("value." + (titleEName[i])))
+                                                rel += "<tr>" +
+                                                    "<td><input type='checkbox' name='checkbox'value='" + titleEName[i] + ":" + a + "'></td>" +
+                                                    "<th>" + titleName[i] + "</th>" +
+                                                    "<td>" + a + "</td>" +
+                                                    "</tr>";
                                             }
-                                            var rel = "<table>"+ "<tr>"+ck+"</tr>"+"<tr>"+titleNameAll+"</tr>"+ "<tr>";
-
-                                            for (var i = 0; i <titleEName.length ; i++) {
-                                                rel+= "<td>"+eval(("value."+(titleEName[i])))+"</td>";
-                                            }
+                                            rel += "</table>"
                                             $("#detailTable").html(rel);
-                                            var r, re;
-                                            var s = detailTable.outerHTML;
-                                            re = /<table(.[^>]*)>/i;
-                                            r = s.match(re)[0].replace(" id=", " oldid=");
-                                            var tablehtml = r
-                                            for (var i = 0; i < detailTable.rows[0].cells.length; i++) {
-                                                tablehtml += "<tr>"
-                                                for (var k = 0; k < detailTable.rows.length; k++) {
-                                                    tablehtml += detailTable.rows[k].cells[i].outerHTML
-                                                }
-                                                tablehtml += "</wtr>"
-                                            }
-                                            tablehtml += "</table>"
-                                            newtable.innerHTML = tablehtml;
-//下面这一句是让JS执行时隐藏原来的表格内容，达到新表格在原来的表格位置刷出来的效果。
-                                            document.getElementById("detailTable").style.display = "none";
                                         },
                                         error: function (err) {
                                             alert(err.status);
@@ -227,22 +205,22 @@ $(function() {
                                     localProjectDetail = coach[treeNode.lineId];
                                     changeView(localProjectDetail);
                                 }
-                                localSelectedNode=treeNode;
+                                localSelectedNode = treeNode;
                             }
 
                         }
                     };
 
-                    var zNodes =data;
+                    var zNodes = data;
 
-                    $(document).ready(function(){
+                    $(document).ready(function () {
                         $.fn.zTree.init($("#Ztree1"), setting, zNodes);
                     });
 
                 },
-                error: function (info) {
+                /*error: function (info) {
                     alert(info);
-                }
+                }*/
             });
         }
     });
@@ -252,18 +230,20 @@ $(function() {
 /**
  *  第二个树型结构的demo
  */
-$(function() {
+
+var localSelectedNode;
+$(function () {
     $('#lineId3').keyup(function () {
         var val = $(this).val();
-        var localSelectedNode;
+
         var localProjectDetail;
         var coach = [];
-        var projectId=$("#project", window.top.document).val();
+        var projectId = $("#project", window.top.document).val();
         console.log(projectId);
         if (val != "") {
             $.ajax({
                 type: "GET",
-                url: "pbom/processComposeTree?lineId=" +val+"&projectId="+projectId,
+                url: "pbom/processComposeTree?lineId=" + val + "&projectId=" + projectId,
                 undefinedText: "",//当数据为 undefined 时显示的字符
                 success: function (data) {
                     console.log(data);
@@ -272,11 +252,11 @@ $(function() {
                             /*addHoverDom: addHoverDom,
                             removeHoverDom: removeHoverDom,*/
                             selectedMulti: false,
-                            dblClickExpand: false,
+                            dblClickExpand: true,
                             showLine: true,
                         },
                         check: {
-                            enable: true,
+                            enable: false,
                         },
                         data: {
                             simpleData: {
@@ -291,26 +271,97 @@ $(function() {
                                 // name:"groupNum"
                             }
                         },
-                    };
-                    var zNodes =data;
+                        callback: {
+                            beforeClick: function (treeId, treeNode) {
+                                var zTree = $.fn.zTree.getZTreeObj('Ztree3');
+                                if (treeNode.isParent) {
+                                    zTree.expandNode(treeNode);
+                                    return true;
+                                } else {
+                                    return true;
+                                }
+                            },
+                            onClick: function (event, treeId, treeNode) {
 
-                    $(document).ready(function(){
+                                //品牌的父id只有#
+                                if (null == coach[treeNode.idKey]) {
+                                    //beforeClick排除了有子层的节点，
+                                    //绑定本地选择的子节点
+                                    localSelectedNode = treeNode;
+                                    // alert(
+                                    //     localSelectedNode.puid
+                                    // );
+                                }
+                                else {
+                                    localProjectDetail = coach[treeNode.puid];
+                                    changeView(localProjectDetail);
+                                }
+                                localSelectedNode = treeNode;
+                                // alert(localSelectedNode.puid)
+                            }
+                        }
+
+                    };
+                    var zNodes = data;
+
+                    $(document).ready(function () {
                         $.fn.zTree.init($("#Ztree3"), setting, zNodes);
                     });
-                    function onCheck(e,treeId,treeNode) {
-                        var treeObj = $.fn.zTree.getZTreeObj("treeDemo"),
-                            nodes = treeObj.getCheckedNodes(true),
-                            v = "";
-                        for (var i = 0; i < nodes.length; i++) {
-                            v += nodes[i].name + ",";
-                            alert(nodes[i].pIdKey); //获取选中节点的值
-                        }
-                    }
                 },
-                error: function (info) {
+                /*error: function (info) {
                     alert(info);
-                }
+                }*/
             });
         }
     });
 });
+
+
+/**
+ * 合成操作指定合成位置
+ */
+function doSubmit() {
+    var obj = document.getElementsByName("checkbox");
+    localSelectedNode.puid;
+    localSelectedNode.parentId;
+    var check_val = [];
+    var data = {};
+    var compound;
+    var puid;
+    var eBomContent;
+    var _eBomContent = [];
+    for (var k in obj) {
+        if (obj[k].checked)
+            check_val.push(obj[k].value);
+    }
+    for (var d in check_val) {
+        var temp = check_val[d].split(":");
+        data[temp[0]] = temp[1];
+    }
+    // eBomContent = JSON.stringify(data);//勾选需要合成的零件json字符串
+    // eBomContent=JSON.parse(eBomContent);
+    _eBomContent.push(data);
+    //console.log("ck是："+ck);
+    puid = localSelectedNode.puid;
+    compound = $("#compoundLineId").val();//获取合成后的零件号
+
+    var projectId = "projectPuid="
+    projectId += $("#project", window.top.document).val();
+    var url = "pbom/add/processCompose" + "?lineId=" + compound + "&puid=" + puid + "&" + projectId;
+    console.log(url);
+    $.ajax({
+        url: url,
+        type: "POST",
+        contentType: "application/json",
+        data: JSON.stringify(data),
+        // dataType: "json",
+        success: function (result) {
+            window.Ewin.alert({message: result.msg});
+        },
+        error: function (status) {
+            window.Ewin.alert({message: status.status + ':合成零件失败!'});
+        }
+    })
+
+
+}
