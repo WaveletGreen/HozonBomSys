@@ -14,14 +14,14 @@ import sql.pojo.bom.HzBomLineRecord;
 @Service("HzBomLineRecordService")
 public class HzBomLineRecordService {
     @Autowired
-    private HzBomLineRecordDaoImpl recordDao;
+    private HzBomLineRecordDaoImpl hzBomLineRecordDao;
     /**
      * 插入一条数据
      * @param record
      * @return
      */
     public int insert(HzBomLineRecord record){
-         return recordDao.insert(record);
+         return hzBomLineRecordDao.insert(record);
     }
 
 }

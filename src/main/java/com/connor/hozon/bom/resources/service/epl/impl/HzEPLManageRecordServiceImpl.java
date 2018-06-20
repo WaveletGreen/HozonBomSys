@@ -1,7 +1,13 @@
 package com.connor.hozon.bom.resources.service.epl.impl;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.connor.hozon.bom.bomSystem.dao.bom.HzBomDataDao;
+import com.connor.hozon.bom.bomSystem.dao.bom.HzBomMainRecordDao;
+import com.connor.hozon.bom.bomSystem.dao.impl.bom.HzBomLineRecordDaoImpl;
 import com.connor.hozon.bom.resources.dto.request.FindHzEPLRecordReqDTO;
 import com.connor.hozon.bom.resources.dto.response.HzEPLRecordRespDTO;
+import com.connor.hozon.bom.resources.mybatis.bom.HzPbomRecordDAO;
 import com.connor.hozon.bom.resources.mybatis.epl.HzEplMangeRecordDAO;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.service.bom.impl.HzPbomServiceImpl;
@@ -9,10 +15,17 @@ import com.connor.hozon.bom.resources.service.epl.HzEPLManageRecordService;
 import com.connor.hozon.bom.resources.util.ListUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import share.bean.PreferenceSetting;
+import share.bean.RedisBomBean;
+import sql.pojo.HzPreferenceSetting;
+import sql.pojo.bom.HZBomMainRecord;
+import sql.pojo.bom.HzBomLineRecord;
 import sql.pojo.epl.HzEPLManageRecord;
+import sql.redis.SerializeUtil;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+
+import static com.connor.hozon.bom.resources.service.bom.impl.HzPbomServiceImpl.getLevelAndRank;
 
 /**
  * Created by haozt on 2018/06/05
@@ -23,141 +36,230 @@ public class HzEPLManageRecordServiceImpl implements HzEPLManageRecordService {
     @Autowired
     private HzEplMangeRecordDAO hzEplMangeRecordDAO;
 
+    @Autowired
+    private HzBomDataDao hzBomDataDao;
+
+    @Autowired
+    private HzBomMainRecordDao hzBomMainRecordDao;
+
+    @Autowired
+    private HzBomLineRecordDaoImpl hzBomLineRecordDao;
     @Override
     public Page<HzEPLRecordRespDTO> getHzEPLRecordForPage(FindHzEPLRecordReqDTO recordReqDTO) {
-        List<HzEPLRecordRespDTO> recordRespDTOS = new ArrayList<>();
-        Page<HzEPLManageRecord> eplPage = hzEplMangeRecordDAO.getEPLListForPage(recordReqDTO);
-        if(eplPage == null){
-            return new Page<>(recordReqDTO.getPage(),recordReqDTO.getLimit(),0);
-        }
-        List<HzEPLManageRecord> records =  eplPage.getResult();
-        if(ListUtil.isEmpty(records)){
-            return null;
-        }
         try{
-            int i = (recordReqDTO.getPage()-1)*recordReqDTO.getLimit()+1;
+            int num = (recordReqDTO.getPage()-1)*recordReqDTO.getLimit();
+            HzEPLRecordRespDTO recordRespDTO = new HzEPLRecordRespDTO();
+            JSONArray array = new JSONArray();
+            List<HzEPLRecordRespDTO> recordRespDTOList = new ArrayList<>();
+            Page<HzEPLManageRecord> recordPage = hzEplMangeRecordDAO.getEPLListForPage(recordReqDTO);
+            if(recordPage == null || recordPage.getResult() == null || recordPage.getResult().size()==0){
+                return new Page<>(recordReqDTO.getPage(),recordReqDTO.getLimit(),0);
+            }
+            List<HzEPLManageRecord> records = recordPage.getResult();
             for(HzEPLManageRecord record:records){
-                HzEPLRecordRespDTO recordRespDTO = new HzEPLRecordRespDTO();
-                recordRespDTO.setPuid(record.getpPuid());
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("puid", record.getPuid());
+                jsonObject.put("parentUid", record.getParentUid());
                 Integer is2Y = record.getIs2Y();
                 Integer hasChildren = record.getIsHas();
                 String lineIndex = record.getLineIndex();
-                //strings[0] 层级 strings[1] 级别
-                String[] strings = HzPbomServiceImpl.getLevelAndRank(lineIndex,is2Y,hasChildren);
-                recordRespDTO.setRank(strings[1]==null?"":strings[1]);
-                recordRespDTO.setLevel(strings[0]==null?"":strings[0]);
-                recordRespDTO.setLineId(record.getLineId()==null?"":record.getLineId());
-                recordRespDTO.setpBomOfWhichDept(record.getpBomOfWhichDept()==null?"":record.getpBomOfWhichDept());
-                recordRespDTO.setGroupNum("-");
-                recordRespDTO.setNameZh("中文名称");
-                recordRespDTO.setNameEn("英文名称");
-                Integer pState = record.getpState();
-                if(pState == null){
-                    recordRespDTO.setpState("/");
-                }else if(pState.equals(0)){
-                    recordRespDTO.setpState("A");
-                }else if(pState.equals(1)){
-                    recordRespDTO.setpState("U");
-                }else if(pState.equals(2)){
-                    recordRespDTO.setpState("D");
-                }
+                String[] strings = getLevelAndRank(lineIndex, is2Y, hasChildren);
+                jsonObject.put("No",++num);
+                jsonObject.put("level", strings[0]);
+                jsonObject.put("rank", strings[1]);
+                Integer state =record.getpState();
+                String pState="";
 
-                recordRespDTO.setpUnit(record.getpUnit()==null?"":record.getpUnit());
-                recordRespDTO.setpRentLow(record.getpRentLow()==null?"":record.getpRentLow());
-                recordRespDTO.setpRentHigh(record.getpRentHigh()==null?"":record.getpRentHigh());
-                recordRespDTO.setpPictureNo(record.getpPictureNo()==null?"":record.getpPictureNo());
-                recordRespDTO.setpInstallPictureNo(record.getpInstallPictureNo()==null?"":record.getpInstallPictureNo());
-                recordRespDTO.setpMap(record.getpMap()==null?"":record.getpMap());
-                recordRespDTO.setpMaterialHigh(record.getpMaterialHigh()==null?"":record.getpMaterialHigh());
-                recordRespDTO.setpMaterial1(record.getpMaterial1()==null?"":record.getpMaterial1());
-                recordRespDTO.setpMaterial2(record.getpMaterial2()==null?"":record.getpMaterial2());
-                recordRespDTO.setpMaterial3(record.getpMaterial3()==null?"":record.getpMaterial3());
-                recordRespDTO.setpDensity(record.getpDensity()==null?"":record.getpDensity());
-                recordRespDTO.setpMaterialStandard(record.getpMaterialStandard()==null?"":record.getpMaterialStandard());
-                recordRespDTO.setpSurfaceManage(record.getpSurfaceManage()==null?"":record.getpSurfaceManage());
-                recordRespDTO.setpTextureNo(record.getpTextureNo()==null?"":record.getpTextureNo());
-                recordRespDTO.setpMadeArt(record.getpMadeArt()==null?"":record.getpMadeArt());
-                recordRespDTO.setpSymmetric(record.getpSymmetric()==null?"":record.getpSymmetric());
-                recordRespDTO.setpIsRulePart(record.getpIsRulePart()==null?"":record.getpIsRulePart());
-                recordRespDTO.setpRulePartNo(record.getpRulePartNo()==null?"":record.getpRulePartNo());
-                recordRespDTO.setpCasketPart(record.getpCasketPart()==null?"":record.getpCasketPart());
-                recordRespDTO.setpDevelopType(record.getpDevelopType()==null?"":record.getpDevelopType());
-                recordRespDTO.setpDataVersion(record.getpDataVersion()==null?"":record.getpDataVersion());
-                recordRespDTO.setpTargetHeight(record.getpTargetHeight()==null?"":record.getpTargetHeight());
-                recordRespDTO.setpEstimateHeight(record.getpEstimateHeight()==null?"":record.getpEstimateHeight());
-                recordRespDTO.setpActualHeight(record.getpActualHeight()==null?"":record.getpActualHeight());
-                recordRespDTO.setpFixture(record.getpFixture()==null?"":record.getpFixture());
-                recordRespDTO.setpFixtureSpec(record.getpFixtureSpec()==null?"":record.getpFixtureSpec());
-                recordRespDTO.setpFixtureLevel(record.getpFixtureLevel()==null?"":record.getpFixtureLevel());
-                recordRespDTO.setpTorque(record.getpTorque()==null?"":record.getpTorque());
-                recordRespDTO.setpMajorDept(record.getpMajorDept()==null?"":record.getpMajorDept());
-                recordRespDTO.setpDutyEngineer(record.getpDutyEngineer()==null?"":record.getpDutyEngineer());
-                recordRespDTO.setpSupplier(record.getpSupplier()==null?"":record.getpSupplier());
-                recordRespDTO.setpSupplierNo(record.getpSupplierNo()==null?"":record.getpSupplierNo());
-                recordRespDTO.setpBuyEngineer(record.getpBuyEngineer()==null?"":record.getpBuyEngineer());
-                recordRespDTO.setpRemark(record.getpRemark()==null?"":record.getpRemark());
-                recordRespDTO.setpItemClassification(record.getpItemClassification()==null?"":record.getpItemClassification());
-                recordRespDTO.setpItemResource(record.getpItemResource()==null?"":record.getpItemResource());
-                recordRespDTO.setpImportance(record.getpImportance()==null?"":record.getpImportance());
-                Integer supplyState = record.getpSupplyState();
-                if(supplyState == null){
-                    recordRespDTO.setpSupplyState("/");
+                if(state==null){
+                    pState = "-";
+                }else if(state .equals(0)){
+                    pState ="A";
+                }else if(state.equals(1)){
+                    pState ="U";
                 }else{
-                    recordRespDTO.setpSupplyState(supplyState.equals(new Integer(0))?"Y":"N");
+                    pState="D";
                 }
+                jsonObject.put("pState",pState);
+                jsonObject.put("pBomOfWhichDept", record.getpBomOfWhichDept());
+                //获取分组号
+                String groupNum = record.getLineID();
 
-                recordRespDTO.setResource(record.getResource()==null?"":record.getResource());
-                Integer type = record.getType();
-                Integer buyUnit = record.getBuyUnit();
-                Integer colorPart = record.getColorPart();
-                if(Integer.valueOf(0).equals(type)){
-                    recordRespDTO.setType("Y");
-                }else if(Integer.valueOf(1).equals(type)){
-                    recordRespDTO.setType("N");
+                //这里在做一个递归查询
+                if(groupNum.contains("-")){
+                    groupNum =groupNum.split("-")[1].substring(0,4);
                 }else{
-                    recordRespDTO.setType("/");
+                    String parentId = record.getParentUid();
+                    groupNum = getGroupNum(recordReqDTO.getProjectId(),parentId);
                 }
-                if(Integer.valueOf(0).equals(buyUnit)){
-                    recordRespDTO.setBuyUnit("Y");
-                }else if(Integer.valueOf(1).equals(buyUnit)){
-                    recordRespDTO.setBuyUnit("N");
-                }else{
-                    recordRespDTO.setBuyUnit("/");
+                jsonObject.put("groupNum", groupNum);
+                jsonObject.put("lineId", record.getLineID());
+                jsonObject.put("itemName", record.getpBomLinePartName());
+                jsonObject.put("itemPart", record.getpBomLinePartClass());
+                jsonObject.put("resource", record.getResource());
+                jsonObject.put("type", record.getType());
+                jsonObject.put("buyUnit", record.getBuyUnit());
+                jsonObject.put("workShop1", record.getWorkShop1());
+                jsonObject.put("workShop2", record.getWorkShop2());
+                jsonObject.put("productLine", record.getProductLine());
+                jsonObject.put("mouldType", record.getMouldType());
+                jsonObject.put("outerPart", record.getOuterPart());
+                jsonObject.put("colorPart", record.getColorPart());
+
+                jsonObject.put("sparePart", record.getSparePart());
+                jsonObject.put("sparePartNum", record.getSparePartNum());
+                jsonObject.put("processRoute", record.getProcessRoute());
+                jsonObject.put("laborHour", record.getLaborHour());
+                jsonObject.put("rhythm", record.getRhythm());
+                jsonObject.put("solderJoint", record.getSolderJoint());
+                jsonObject.put("machineMaterial", record.getMachineMaterial());
+                jsonObject.put("standardPart", record.getStandardPart());
+                jsonObject.put("tools", record.getTools());
+                jsonObject.put("wasterProduct", record.getWasterProduct());
+                jsonObject.put("change", record.getChange());
+                jsonObject.put("changeNum", record.getChangeNum());
+                byte[] bomLineBlock = record.getBomLineBlock();
+                Object obj = SerializeUtil.unserialize(bomLineBlock);
+                if (obj instanceof LinkedHashMap) {
+                    if (((LinkedHashMap) obj).size() > 0) {
+                        ((LinkedHashMap) obj).forEach((key, value) -> {
+
+                            jsonObject.put((String) key, value);
+                        });
+                    }
+                } else if (obj instanceof RedisBomBean) {
+                    List<String> pSets = ((RedisBomBean) obj).getpSets();
+                    List<String> pValues = ((RedisBomBean) obj).getpValues();
+                    if (null != pSets && pSets.size() > 0 && null != pValues && pValues.size() > 0)
+                        for (int i = 0; i < pSets.size(); i++) {
+                            jsonObject.put(pSets.get(i), pValues.get(i));
+                        }
                 }
-                if(Integer.valueOf(0).equals(colorPart)){
-                    recordRespDTO.setColorPart("Y");
-                }else if(Integer.valueOf(1).equals(colorPart)){
-                    recordRespDTO.setColorPart("N");
-                }else{
-                    recordRespDTO.setColorPart("/");
-                }
-                recordRespDTO.setProductLine(record.getProductLine()==null?"":record.getProductLine());
-                recordRespDTO.setWorkShop1(record.getWorkShop1()==null?"":record.getWorkShop1());
-                recordRespDTO.setWorkShop2(record.getWorkShop2()==null?"":record.getWorkShop2());
-                recordRespDTO.setMouldType(record.getMouldType()==null?"":record.getMouldType());
-                recordRespDTO.setOuterPart(record.getOuterPart()==null?"":record.getOuterPart());
-                recordRespDTO.setStation("工位");
-                recordRespDTO.setChange(record.getChange()==null?"":record.getChange());
-                recordRespDTO.setWasterProduct(record.getWasterProduct()==null?"":record.getWasterProduct());
-                recordRespDTO.setTools(record.getTools()==null?"":record.getTools());
-                recordRespDTO.setChangeNum(record.getChangeNum()==null?"":record.getChangeNum());
-                //这里需要转换一下，数据库存储毫秒值  暂时不知道页面显示为分钟还是小时 待定
-                recordRespDTO.setLaborHour(record.getLaborHour()==null?"":record.getLaborHour());
-                recordRespDTO.setMachineMaterial(record.getMachineMaterial()==null?"":record.getMachineMaterial());
-                recordRespDTO.setStandardPart(record.getStandardPart()==null?"":record.getStandardPart());
-                recordRespDTO.setSparePartNum(record.getSparePartNum()==null?"":record.getSparePartNum());
-                recordRespDTO.setSolderJoint(record.getSolderJoint()==null?"":record.getSolderJoint());
-                recordRespDTO.setRhythm(record.getRhythm()==null?"":record.getRhythm());
-                recordRespDTO.setSparePart(record.getSparePart()==null?"":record.getSparePart());
-                recordRespDTO.setProcessRoute(record.getProcessRoute()==null?"":record.getProcessRoute());
-                recordRespDTO.setNo(i++);
-                recordRespDTOS.add(recordRespDTO);
+                array.add(jsonObject);
             }
-
-            return  new Page<HzEPLRecordRespDTO>(recordReqDTO.getPage(),recordReqDTO.getLimit(),eplPage.getTotalCount(),recordRespDTOS);
+            recordRespDTO.setJsonArray(array);
+            recordRespDTOList.add(recordRespDTO);
+            return new Page<>(recordReqDTO.getPage(),recordReqDTO.getLimit(),recordPage.getTotalCount(),recordRespDTOList);
         }catch (Exception e){
             return null;
         }
 
+    }
+
+    @Override
+    public JSONArray getEPLTittle(FindHzEPLRecordReqDTO recordReqDTO) {
+        try{
+            JSONArray array = new JSONArray();
+            int appendCount = 29;
+            HzPreferenceSetting setting = new HzPreferenceSetting();
+            setting.setSettingName("Hz_ExportBomPreferenceRedis");
+            HZBomMainRecord main = hzBomMainRecordDao.selectByProjectPuid(recordReqDTO.getProjectId());
+            if(main == null){
+                return null;
+            }
+            setting.setBomMainRecordPuid(main.getPuid());
+            setting = hzBomDataDao.loadSetting(setting);
+            byte[] btOfSetting = setting.getPreferencesettingblock();
+            Object objOfSetting = SerializeUtil.unserialize(btOfSetting);
+            if (objOfSetting instanceof PreferenceSetting) {
+                String[] localName = ((PreferenceSetting) objOfSetting).getPreferenceLocal();
+                String[] trueName = ((PreferenceSetting) objOfSetting).getPreferences();
+                String[] appendLocalName = new String[localName.length + appendCount];
+                String[] appendTrueName = new String[trueName.length + appendCount];
+                appendLocalName[0] = "序号";
+                appendLocalName[1] = "状态值";
+                appendLocalName[2] = "层级";
+                appendLocalName[3] = "专业";
+                appendLocalName[4] = "级别";
+                appendLocalName[5] = "分组号";
+
+                appendTrueName[0] = "No";
+                appendTrueName[1] = "pState";
+                appendTrueName[2] = "level";
+                appendTrueName[3] = "pBomOfWhichDept";
+                appendTrueName[4] = "rank";
+                appendTrueName[5] = "groupNum";
+
+
+                appendLocalName[6] = "专业部门";
+                appendLocalName[7] = "自制/采购";
+                appendLocalName[8] = "焊接/装配";
+                appendLocalName[9] = "采购单元";
+                appendLocalName[10] = "车间1";
+
+                appendTrueName[6] = "deptPart";//鬼知道它现在有没有
+                appendTrueName[7] = "resource";
+                appendTrueName[8] = "type";
+                appendTrueName[9] = "buyUnit";
+                appendTrueName[10] = "workShop1";
+
+                appendLocalName[11] = "车间2";
+                appendLocalName[12] = "生产线";
+                appendLocalName[13] = "模具类别";
+                appendLocalName[14] = "外委件";
+                appendLocalName[15] = "颜色件";
+
+                appendTrueName[11] = "workShop2";
+                appendTrueName[12] = "productLine";
+                appendTrueName[13] = "mouldType";
+                appendTrueName[14] = "outerPart";
+                appendTrueName[15] = "colorPart";
+
+                appendLocalName[16] = "工位";
+                appendLocalName[17] = "备件";
+                appendLocalName[18] = "备件编号";
+                appendLocalName[19] = "工艺路线";
+                appendLocalName[20] = "人工工时";
+
+                appendTrueName[16] = "gongwei";//数据库暂时没有
+                appendTrueName[17] = "sparePart";
+                appendTrueName[18] = "sparePartNum";
+                appendTrueName[19] = "processRoute";
+                appendTrueName[20] = "laborHour";
+
+
+                appendLocalName[21] = "节拍";
+                appendLocalName[22] = "焊点";
+                appendLocalName[23] = "机物料";
+                appendLocalName[24] = "标准件";
+                appendLocalName[25] = "工具";
+
+                appendTrueName[21] = "rhythm";
+                appendTrueName[22] = "solderJoint";
+                appendTrueName[23] = "machineMaterial";
+                appendTrueName[24] = "standardPart";
+                appendTrueName[25] = "tools";
+
+                appendLocalName[26] = "废品";
+                appendLocalName[27] = "变更";
+                appendLocalName[28] = "变更号";
+
+                appendTrueName[26] = "wasterProduct";
+                appendTrueName[27] = "change";
+                appendTrueName[28] = "changeNum";
+
+
+                System.arraycopy(localName, 0, appendLocalName, appendCount, localName.length);
+                System.arraycopy(trueName, 0, appendTrueName, appendCount, trueName.length);
+
+                array.add(0, appendLocalName);
+                array.add(1, appendTrueName);
+            }
+            return array;
+        }catch (Exception e){
+            return null;
+        }
+    }
+
+    public String  getGroupNum(String projectId,String parentId){
+        Map<String,Object> map = new HashMap<>();
+        map.put("projectId",projectId);
+        map.put("puid",parentId);
+        HzBomLineRecord record =hzBomLineRecordDao.findBobLineByPuid(map);
+        String groupNum = record.getLineID();
+        if(groupNum.contains("-")){
+            return groupNum.split("-")[1].substring(0,4);
+        }else{
+            return getGroupNum(projectId,record.getParentUid());
+        }
     }
 }

@@ -1,54 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="HzEplManageRecord">
-  <resultMap id="BaseResultMap" type="sql.pojo.epl.HzEPLManage">
+  <resultMap id="BaseResultMap" type="sql.pojo.epl.HzEPLManageRecord">
     <id column="P_PUID" jdbcType="VARCHAR" property="pPuid" />
-    <result column="P_UNIT" jdbcType="VARCHAR" property="pUnit" />
-    <result column="P_RENT_LOW" jdbcType="VARCHAR" property="pRentLow" />
-    <result column="P_RENT_HIGH" jdbcType="VARCHAR" property="pRentHigh" />
-    <result column="P_PICTURE_NO" jdbcType="VARCHAR" property="pPictureNo" />
-    <result column="P_INSTALL_PICTURE_NO" jdbcType="VARCHAR" property="pInstallPictureNo" />
-    <result column="P_MAP" jdbcType="VARCHAR" property="pMap" />
-    <result column="P_MATERIAL_HIGH" jdbcType="VARCHAR" property="pMaterialHigh" />
-    <result column="P_MATERIAL1" jdbcType="VARCHAR" property="pMaterial1" />
-    <result column="P_MATERIAL2" jdbcType="VARCHAR" property="pMaterial2" />
-    <result column="P_MATERIAL3" jdbcType="VARCHAR" property="pMaterial3" />
-    <result column="P_DENSITY" jdbcType="VARCHAR" property="pDensity" />
-    <result column="P_MATERIAL_STANDARD" jdbcType="VARCHAR" property="pMaterialStandard" />
-    <result column="P_SURFACE_MANAGE" jdbcType="VARCHAR" property="pSurfaceManage" />
-    <result column="P_TEXTURE_NO" jdbcType="VARCHAR" property="pTextureNo" />
-    <result column="P_MADE_ART" jdbcType="VARCHAR" property="pMadeArt" />
-    <result column="P_SYMMETRIC" jdbcType="VARCHAR" property="pSymmetric" />
-    <result column="P_IMPORTANCE" jdbcType="VARCHAR" property="pImportance" />
-    <result column="P_IS_RULE_PART" jdbcType="VARCHAR" property="pIsRulePart" />
-    <result column="P_RULE_PART_NO" jdbcType="VARCHAR" property="pRulePartNo" />
-    <result column="P_BOM_PUID" jdbcType="VARCHAR" property="pBomPuid" />
-    <result column="P_STATE" jdbcType="DECIMAL" property="pState" />
-  </resultMap>
-
-
-  <resultMap extends="BaseResultMap" id="EPLManageRecord" type="sql.pojo.epl.HzEPLManageRecord">
-    <id column="P_PUID" jdbcType="VARCHAR" property="pPuid" />
-    <result column="P_UNIT" jdbcType="VARCHAR" property="pUnit" />
-    <result column="P_RENT_LOW" jdbcType="VARCHAR" property="pRentLow" />
-    <result column="P_RENT_HIGH" jdbcType="VARCHAR" property="pRentHigh" />
-    <result column="P_PICTURE_NO" jdbcType="VARCHAR" property="pPictureNo" />
-    <result column="P_INSTALL_PICTURE_NO" jdbcType="VARCHAR" property="pInstallPictureNo" />
-    <result column="P_MAP" jdbcType="VARCHAR" property="pMap" />
-    <result column="P_MATERIAL_HIGH" jdbcType="VARCHAR" property="pMaterialHigh" />
-    <result column="P_MATERIAL1" jdbcType="VARCHAR" property="pMaterial1" />
-    <result column="P_MATERIAL2" jdbcType="VARCHAR" property="pMaterial2" />
-    <result column="P_MATERIAL3" jdbcType="VARCHAR" property="pMaterial3" />
-    <result column="P_DENSITY" jdbcType="VARCHAR" property="pDensity" />
-    <result column="P_MATERIAL_STANDARD" jdbcType="VARCHAR" property="pMaterialStandard" />
-    <result column="P_SURFACE_MANAGE" jdbcType="VARCHAR" property="pSurfaceManage" />
-    <result column="P_TEXTURE_NO" jdbcType="VARCHAR" property="pTextureNo" />
-    <result column="P_MADE_ART" jdbcType="VARCHAR" property="pMadeArt" />
-    <result column="P_SYMMETRIC" jdbcType="VARCHAR" property="pSymmetric" />
-    <result column="P_IMPORTANCE" jdbcType="VARCHAR" property="pImportance" />
-    <result column="P_IS_RULE_PART" jdbcType="VARCHAR" property="pIsRulePart" />
-    <result column="P_RULE_PART_NO" jdbcType="VARCHAR" property="pRulePartNo" />
-    <result column="P_BOM_PUID" jdbcType="VARCHAR" property="pBomPuid" />
+    <result column="P_LINE_INDEX" jdbcType="VARCHAR" property="lineIndex" />
+    <result column="P_BOM_LINE_IS_HAS" jdbcType="INTEGER" property="isHas" />
+    <result column="P_BOM_LINE_ID" jdbcType="VARCHAR" property="lineID" />
+    <result column="P_BOM_LINE_IS_2Y" jdbcType="INTEGER" property="is2Y" />
+    <result column="P_BOM_OF_WHICH_DEPT" jdbcType="VARCHAR" property="pBomOfWhichDept" />
+    <result column="P_PARENT_UID" jdbcType="VARCHAR" property="parentUid"/>
+    <result column="P_BOM_DIGIFAX_ID" jdbcType="VARCHAR" property="bomDigifaxId"/>
+    <result column="P_BOM_LINE_PUID" jdbcType="VARCHAR" property="linePuid"/>
+    <result column="P_BOM_LINE_IS_PART" jdbcType="INTEGER" property="isPart"/>
+    <result column="P_BOM_ORDER_NUM" jdbcType="INTEGER" property="orderNum"/>
+    <result column="P_BOM_LINE_IS_DEPT" jdbcType="INTEGER" property="isDept"/>
+    <result column="P_BOM_LINE_PART_NAME" jdbcType="VARCHAR" property="pBomLinePartName"/>
+    <result column="P_BOM_LINE_PART_CLASS" jdbcType="VARCHAR" property="pBomLinePartClass"/>
+    <result column="P_BOM_LINE_BLOCK" jdbcType="BLOB" property="bomLineBlock"/>
     <result column="P_STATE" jdbcType="DECIMAL" property="pState" />
     <!--PBOM-->
     <result column="P_ITEM_RESOURCE" jdbcType="VARCHAR" property="itemResource" />
@@ -74,12 +42,6 @@
     <result column="P_WASTER_PRODUCT" jdbcType="VARCHAR" property="wasterProduct" />
     <result column="P_CHANGE" jdbcType="VARCHAR" property="change" />
     <result column="P_CHANGE_NUM" jdbcType="VARCHAR" property="changeNum" />
-    <!--bomLine-->
-    <result column="P_LINE_INDEX" jdbcType="VARCHAR" property="lineIndex" />
-    <result column="P_BOM_LINE_IS_HAS" jdbcType="INTEGER" property="isHas" />
-    <result column="P_BOM_LINE_ID" jdbcType="VARCHAR" property="lineId" />
-    <result column="P_BOM_LINE_IS_2Y" jdbcType="INTEGER" property="is2Y" />
-    <result column="P_BOM_OF_WHICH_DEPT" jdbcType="VARCHAR" property="pBomOfWhichDept" />
   </resultMap>
 
 
@@ -94,21 +56,16 @@
     <!--P_PUID,P_LINE_INDEX,P_BOM_LINE_IS_HAS,P_BOM_LINE_ID,P_BOM_LINE_IS_2Y,P_BOM_OF_WHICH_DEPT-->
   <!--</sql>-->
   <!--联表查询 EPL全信息-->
-  <select id="HzEplManageRecordDAOImpl_getHzEplManageRecord" resultMap="EPLManageRecord">
-     SELECT t1.*,t2.*,t3.*,t4.*,t5.* from HZ_BOM_LINE_RECORD t1
-
-     LEFT OUTER JOIN HZ_EPL_BOM_MANAGE t2 on T1.PUID = T2.P_BOM_PUID
-
-     LEFT OUTER JOIN HZ_EPL_MANAGE  t3 on t1.PUID=t3.P_BOM_PUID
-
+  <select id="HzEplManageRecordDAOImpl_getHzEplManageRecord" resultMap="BaseResultMap">
+     SELECT t1.*,t2.*,t4.*,t5.* from HZ_BOM_LINE_RECORD t1
+     LEFT OUTER JOIN HZ_BOM_STATE t2 on t1.puid = t2.P_BOM_ID
      LEFT OUTER JOIN HZ_PBOM_MAINTAIN_RECORD t4 on t1.Puid = t4.P_BOM_PUID
-
      LEFT OUTER JOIN HZ_PBOM_RECORD t5 on t1.PUID=t5.P_E_BOM_PUID
   </select>
 
 
   <!--联表查询 EBOM全信息-->
-  <select id="HzEbomRecordDAOImpl_getHzEbomList" resultMap="EPLManageRecord">
+  <select id="HzEbomRecordDAOImpl_getHzEbomList" resultMap="BaseResultMap">
      SELECT t1.*,t2.*,t3.* from HZ_BOM_LINE_RECORD t1
 
      LEFT OUTER JOIN HZ_EPL_BOM_MANAGE t2 on T1.PUID = T2.P_BOM_PUID
@@ -118,15 +75,10 @@
 
   <!--查询EPL信息总数-->
   <select id="HzEplManageRecordDAOImpl_findTotalCount" resultType="java.lang.Integer" parameterType="java.util.HashMap">
-       select count(*) from HZ_BOM_LINE_RECORD t1 LEFT OUTER JOIN HZ_EPL_BOM_MANAGE t2 on T1.PUID = T2.P_BOM_PUID
+       select count(*) from HZ_BOM_LINE_RECORD t1
+     LEFT OUTER JOIN HZ_EPL_BOM_MANAGE t2 on T1.PUID = T2.P_BOM_PUID
 
-        LEFT OUTER JOIN HZ_PBOM_RECORD t5 on t1.PUID=t5.P_E_BOM_PUID
-
-
-        LEFT OUTER JOIN HZ_EPL_MANAGE  t3 on t1.PUID=t3.P_BOM_PUID
-
-        LEFT OUTER JOIN HZ_PBOM_MAINTAIN_RECORD t4 on t1.Puid = t4.P_BOM_PUID
-
+     LEFT OUTER JOIN HZ_EPL_MANAGE  t3 on t1.PUID=t3.P_BOM_PUID
   </select>
 
 

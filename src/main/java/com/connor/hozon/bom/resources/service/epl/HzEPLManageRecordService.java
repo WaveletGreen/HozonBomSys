@@ -1,5 +1,6 @@
 package com.connor.hozon.bom.resources.service.epl;
 
+import com.alibaba.fastjson.JSONArray;
 import com.connor.hozon.bom.resources.dto.request.FindHzEPLRecordReqDTO;
 import com.connor.hozon.bom.resources.dto.response.HzEPLRecordRespDTO;
 import com.connor.hozon.bom.resources.page.Page;
@@ -16,4 +17,6 @@ public interface HzEPLManageRecordService {
      * @return
      */
     Page<HzEPLRecordRespDTO> getHzEPLRecordForPage(FindHzEPLRecordReqDTO recordReqDTO);
+
+    JSONArray getEPLTittle(FindHzEPLRecordReqDTO recordReqDTO);
 }

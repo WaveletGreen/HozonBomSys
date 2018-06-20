@@ -333,9 +333,17 @@ public class HzPbomController extends BaseController {
      * AddProcessComposeReqDTO reqDTO,
      */
     @RequestMapping(value = "/add/processCompose",method = RequestMethod.POST)
-    public void addProcessCompose(@RequestBody  Map<String,String> obj, AddProcessComposeReqDTO reqDTO1, HttpServletResponse response){
-        System.out.println(JSONArray.toJSONString(obj));
+    public void addProcessCompose(@RequestBody  Map<String,Object> obj, AddProcessComposeReqDTO reqDTO1, HttpServletResponse response){
+        if(reqDTO1.getProjectPuid()==null || reqDTO1.getLineId() == null || obj == null){
+            writeAjaxJSONResponse(ResultMessageBuilder.build(false,"非法参数！"),response);
+        }
         AddProcessComposeReqDTO reqDTO=new AddProcessComposeReqDTO();
+        reqDTO.seteBomContent(obj);
+        reqDTO.setLineId(reqDTO1.getLineId());
+        reqDTO.setPuid(reqDTO1.getPuid());
+        reqDTO.setProjectPuid(reqDTO1.getProjectPuid());
+        reqDTO.setpBomLinePartClass(reqDTO1.getpBomLinePartClass());
+        reqDTO.setpBomLinePartName(reqDTO1.getpBomLinePartName());
         int i = hzPbomService.addPbomProcessCompose(reqDTO);
         if(i!=1){
             writeAjaxJSONResponse(ResultMessageBuilder.build(false,"出错啦！"),response);

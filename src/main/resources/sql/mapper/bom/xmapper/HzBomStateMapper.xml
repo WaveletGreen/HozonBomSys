@@ -12,15 +12,17 @@
   <sql id="Base_Column_List">
     PUID, P_BOM_ID, P_BOM_STATE, P_BOM_FLOW_STATE, P_BOM_FLOW_ID, P_BOM_FLOW_POINT_NAME
   </sql>
-  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+
+  <select id="HzBomStateDAOImpl_findStateById" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
     from HZ_BOM_STATE
     where PUID = #{puid,jdbcType=VARCHAR}
   </select>
+
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from HZ_BOM_STATE
-    where PUID = #{puid,jdbcType=VARCHAR}
+    where P_BOM_ID = #{puid,jdbcType=VARCHAR}
   </delete>
 
   <insert id="insert" parameterType="sql.pojo.bom.HzBomState">

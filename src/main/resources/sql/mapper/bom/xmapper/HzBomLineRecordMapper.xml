@@ -152,8 +152,8 @@
         P_BOM_ORDER_NUM=#{orderNum,jdbcType=VARCHAR},
         P_BOM_LINE_IS_DEPT=#{isDept,jdbcType=VARCHAR},
         P_BOM_OF_WHICH_DEPT=#{pBomOfWhichDept,jdbcType=VARCHAR},
-        P_BOM_LINE_PART_NAME#{pBomLinePartName,jdbcType=VARCHAR},
-        P_BOM_LINE_PART_CLASS#{pBomLinePartClass,jdbcType=VARCHAR}
+        P_BOM_LINE_PART_NAME=#{pBomLinePartName,jdbcType=VARCHAR},
+        P_BOM_LINE_PART_CLASS=#{pBomLinePartClass,jdbcType=VARCHAR}
         where PUID = #{puid,jdbcType=VARCHAR}
     </update>
 

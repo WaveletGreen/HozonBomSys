@@ -8,37 +8,29 @@ function doQuery(params){
 }
 
 function initTable(){
+    var projectPuid = $("#project", window.top.document).val();
     var $table = $("#eplTable");
     var column = [];
-    var eplUrl = "epl/record";
-    var eplTitleUrl = "epl/title";
+    var eplUrl = "epl/record?projectId="+projectPuid;
+    var eplTitleUrl = "epl/title?projectId="+projectPuid;
     $.ajax({
         url:eplTitleUrl,
         type: "GET",
         success: function (result) {
+            console.log(result)
             var column = [];
             column.push({field: 'puid', title: 'Puid'});
-            column.push({
-                field: 'No',
-                title: '序号',
-                // formatter: function (pageNum, pageSize) {
-                //     var i = (pageNum-1)*pageSize+1;
-                //     return i++;
-                // },
-                align:
-                    'center',
-                valign:
-                    'middle'
-            });
             var data = result.data;
+            var nameZh =data[0];
+            var nameEn = data[1];
             console.log(data);
             var keys = [];
             var values;
-            for (var key in data) {
-                if (data.hasOwnProperty(key)) {
+            for (var key in nameEn) {
+                if (nameEn.hasOwnProperty(key)) {
                     var json = {
-                        field: key,
-                        title: data[key],
+                        field: nameEn[key],
+                        title: nameZh[key],
                         align:
                             'center',
                         valign:
@@ -78,6 +70,8 @@ function initTable(){
                 minimumCountColumns:4
             });
             $table.bootstrapTable('hideColumn', 'puid');
+            $table.bootstrapTable('hideColumn', 'level');
+            $table.bootstrapTable('hideColumn', 'groupNum');
         }
     })
 

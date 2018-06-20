@@ -2,6 +2,7 @@ package com.connor.hozon.bom.bomSystem.dao.impl.bom;
 
 import com.connor.hozon.bom.bomSystem.dao.bom.HzBomLineRecordMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import sql.BaseSQLUtil;
 import sql.pojo.bom.HzBomLineRecord;
 
