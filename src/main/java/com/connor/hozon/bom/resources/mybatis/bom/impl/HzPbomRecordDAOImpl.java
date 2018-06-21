@@ -1,12 +1,16 @@
 package com.connor.hozon.bom.resources.mybatis.bom.impl;
 
+import com.connor.hozon.bom.resources.dto.request.FindForPageReqDTO;
 import com.connor.hozon.bom.resources.mybatis.bom.HzPbomRecordDAO;
+import com.connor.hozon.bom.resources.page.Page;
+import com.connor.hozon.bom.resources.page.PageRequest;
 import org.springframework.stereotype.Service;
 import sql.BaseSQLUtil;
 import sql.pojo.bom.HzBomLineRecord;
 import sql.pojo.bom.HzPbomLineRecord;
 import sql.pojo.bom.HzPbomRecord;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -48,6 +52,17 @@ public class HzPbomRecordDAOImpl extends BaseSQLUtil implements HzPbomRecordDAO 
     @Override
     public List<HzPbomLineRecord> getHzPbomById(Map<String, Object> map) {
         return super.findForList("HzPbomRecordDAOImpl_getHzPbomById",map);
+    }
+
+    @Override
+    public Page<HzPbomLineRecord> getHzPbomRecordByPage(FindForPageReqDTO reqDTO) {
+        PageRequest request = new PageRequest();
+        Map map = new HashMap();
+        map.put("projectId",reqDTO.getProjectId());
+        request.setPageNumber(reqDTO.getPage());
+        request.setPageSize(reqDTO.getLimit());
+        request.setFilters(map);
+        return super.findForPage("HzPbomRecordDAOImpl_getPbomRecord","HzPbomRecordDAOImpl_getTotalCount",request);
     }
 
 }

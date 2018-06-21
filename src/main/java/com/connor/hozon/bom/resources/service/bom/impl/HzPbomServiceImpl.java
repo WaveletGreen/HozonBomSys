@@ -1,45 +1,30 @@
 package com.connor.hozon.bom.resources.service.bom.impl;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.connor.hozon.bom.bomSystem.dao.bom.HzBomDataDao;
 import com.connor.hozon.bom.bomSystem.dao.bom.HzBomMainRecordDao;
-import com.connor.hozon.bom.bomSystem.dao.impl.bom.HzBomDataDaoImpl;
 import com.connor.hozon.bom.bomSystem.dao.impl.bom.HzBomLineRecordDaoImpl;
-import com.connor.hozon.bom.bomSystem.service.bom.HzBomLineRecordService;
 import com.connor.hozon.bom.resources.dto.request.*;
-import com.connor.hozon.bom.resources.dto.response.HzPbomComposeRespDTO;
-import com.connor.hozon.bom.resources.dto.response.HzPbomLineMaintainRespDTO;
+import com.connor.hozon.bom.resources.dto.response.HzMbomRecordRespDTO;
 import com.connor.hozon.bom.resources.dto.response.HzPbomLineRespDTO;
 import com.connor.hozon.bom.resources.mybatis.bom.HzBomStateDAO;
-import com.connor.hozon.bom.resources.mybatis.bom.HzPbomMaintainRecordDAO;
+import com.connor.hozon.bom.resources.mybatis.bom.HzMbomRecordDAO;
 import com.connor.hozon.bom.resources.mybatis.bom.HzPbomRecordDAO;
+import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.service.bom.HzPbomService;
+import com.connor.hozon.bom.resources.service.epl.HzEPLManageRecordService;
 import com.connor.hozon.bom.resources.util.ListUtil;
-import org.apache.ibatis.binding.BindingException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.annotation.Isolation;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
-import org.springframework.transaction.support.DefaultTransactionDefinition;
-import org.springframework.transaction.support.TransactionCallback;
-import org.springframework.transaction.support.TransactionTemplate;
 import share.bean.PreferenceSetting;
 import share.bean.RedisBomBean;
 import sql.pojo.HzPreferenceSetting;
 import sql.pojo.bom.*;
-import sql.redis.DatabaseException;
 import sql.redis.SerializeUtil;
 
-import javax.annotation.Resource;
-import java.text.DecimalFormat;
 import java.util.*;
 
 /**
@@ -51,7 +36,7 @@ public class HzPbomServiceImpl implements HzPbomService {
     private HzBomLineRecordDaoImpl hzBomLineRecordDao;
 
     @Autowired
-    private HzPbomMaintainRecordDAO hzPbomMaintainRecordDAO;
+    private HzMbomRecordDAO hzMbomRecordDAO;
 
     @Autowired
     private HzPbomRecordDAO hzPbomRecordDAO;
@@ -65,22 +50,16 @@ public class HzPbomServiceImpl implements HzPbomService {
     @Autowired
     private HzBomMainRecordDao hzBomMainRecordDao;
 
-    @Override
-    public List<HzPbomLineMaintainRespDTO> getHzPbomMaintainRecord() {
-        List<HzPbomLineMaintainRecord> records = hzPbomMaintainRecordDAO.getPBomLineMaintainRecord();
-        if (ListUtil.isEmpty(records)) {
-            return null;
-        }
-        return pbomLineMaintailRecordToRespDTOS(records);
-    }
+    @Autowired
+    private HzEPLManageRecordService hzEPLManageRecordService;
 
     //走流程 这个比较麻烦
     @Override
-    public int insertPbomLineMaintainRecords(List<InsertHzPbomMaintainRecordReqDTO> recordInsertBatchReqDTO) {
+    public int insertPbomLineMaintainRecords(List<InsertHzMbomMaintainRecordReqDTO> recordInsertBatchReqDTO) {
 
-        List<HzPbomMaintainRecord> records = new ArrayList<>();
-        for (InsertHzPbomMaintainRecordReqDTO recordReqDTO : recordInsertBatchReqDTO) {
-            HzPbomMaintainRecord record = new HzPbomMaintainRecord();
+        List<HzMbomRecord> records = new ArrayList<>();
+        for (InsertHzMbomMaintainRecordReqDTO recordReqDTO : recordInsertBatchReqDTO) {
+            HzMbomRecord record = new HzMbomRecord();
             record.setChange(recordReqDTO.getChange());
             record.setChangeNum(recordReqDTO.getChangeNum());
             //这里需要注意一下  到时候转换成毫秒值存到数据库中
@@ -99,7 +78,7 @@ public class HzPbomServiceImpl implements HzPbomService {
             records.add(record);
         }
 
-        return hzPbomMaintainRecordDAO.insertList(records);
+        return hzMbomRecordDAO.insertList(records);
     }
 
     @Override
@@ -107,10 +86,6 @@ public class HzPbomServiceImpl implements HzPbomService {
         return 0;
     }
 
-    @Override
-    public int deletePbomLineMaintainByForeignId(String foreignPuid) {
-        return 0;
-    }
 
 
     @Override
@@ -121,11 +96,11 @@ public class HzPbomServiceImpl implements HzPbomService {
         if (ListUtil.isEmpty(records)) {
             return null;
         }
-        return pbomLineRecordToRespDTOS(records);
+        return pbomLineRecordToRespDTOS(records,"",0);
     }
 
     @Override
-    public List<HzPbomLineMaintainRespDTO> searchPbomLineMaintainRecord(SearchPbomDetailReqDTO reqDTO) {
+    public List<HzMbomRecordRespDTO> searchPbomLineMaintainRecord(SearchPbomDetailReqDTO reqDTO) {
 
         // 3Y---1.1.3    8Y   判断 带Y  和不带Y  前面的数字
         HzBomLineRecord record = new HzBomLineRecord();
@@ -143,7 +118,7 @@ public class HzPbomServiceImpl implements HzPbomService {
             record.setLineIndex(String.valueOf(2 * length - 1));
         }
         //reqDTO.getName();//这个字段数据库表中暂时没有
-        List<HzPbomLineMaintainRecord> records = hzPbomMaintainRecordDAO.searchPbomMaintainDetail(record);
+        List<HzMbomLineRecord> records = hzMbomRecordDAO.searchMbomMaintainDetail(record);
         if (ListUtil.isEmpty(records)) {
             return null;
         }
@@ -151,7 +126,7 @@ public class HzPbomServiceImpl implements HzPbomService {
     }
 
     @Override
-    public List<HzPbomLineRespDTO> searchPbomLineManageRecord(SearchPbomDetailReqDTO reqDTO) {
+    public List<HzPbomLineRespDTO> searchPbomManageRecord(SearchPbomDetailReqDTO reqDTO) {
         HzBomLineRecord record = new HzBomLineRecord();
         record.setLineID(reqDTO.getLineId());
         record.setpBomOfWhichDept(reqDTO.getpBomOfWhichDept());
@@ -186,7 +161,7 @@ public class HzPbomServiceImpl implements HzPbomService {
         if (ListUtil.isEmpty(records)) {
             return null;
         }
-        return pbomLineRecordToRespDTOS(records);
+        return pbomLineRecordToRespDTOS(records,"",0);
     }
 
     @Override
@@ -508,6 +483,23 @@ public class HzPbomServiceImpl implements HzPbomService {
         return 0;
     }
 
+    @Override
+    public Page<HzPbomLineRespDTO> getHzPbomRecordPage(FindForPageReqDTO reqDTO) {
+        Page<HzPbomLineRecord> recordPage =hzPbomRecordDAO.getHzPbomRecordByPage(reqDTO);
+        if(recordPage == null || recordPage.getResult() == null){
+            return  null;
+        }
+        try {
+            List<HzPbomLineRecord> records = recordPage.getResult();
+            int num = (reqDTO.getPage()-1)*reqDTO.getLimit();
+            List<HzPbomLineRespDTO> respDTOS = pbomLineRecordToRespDTOS(records,reqDTO.getProjectId(),num);
+            return new Page<>(reqDTO.getPage(),reqDTO.getLimit(),recordPage.getTotalCount(),respDTOS);
+        }catch (Exception e){
+            return null;
+        }
+    }
+
+
 
     /**
      * 根据id 获取所有的子bom
@@ -563,17 +555,16 @@ public class HzPbomServiceImpl implements HzPbomService {
         return new String[]{line, String.valueOf(rank)};
     }
 
-    private List<HzPbomLineMaintainRespDTO> pbomLineMaintailRecordToRespDTOS(List<HzPbomLineMaintainRecord> records) {
-        List<HzPbomLineMaintainRespDTO> respDTOS = new ArrayList<>();
-        for (HzPbomLineMaintainRecord record : records) {
-            HzPbomLineMaintainRespDTO responseDTO = new HzPbomLineMaintainRespDTO();
+    private List<HzMbomRecordRespDTO> pbomLineMaintailRecordToRespDTOS(List<HzMbomLineRecord> records) {
+        List<HzMbomRecordRespDTO> respDTOS = new ArrayList<>();
+        for (HzMbomLineRecord record : records) {
+            HzMbomRecordRespDTO responseDTO = new HzMbomRecordRespDTO();
             //层级
             String lineIndex = record.getLineIndex();
             Integer is2Y = record.getIs2Y();
             Integer hasChildren = record.getIsHas();
             String[] strings = getLevelAndRank(lineIndex, is2Y, hasChildren);
             responseDTO.setLevel(strings[0]);
-            responseDTO.setOrderNum(record.getOrderNum());
             responseDTO.setChange(record.getChange() == null ? "" : record.getChange());
             responseDTO.setWasterProduct(record.getWasterProduct() == null ? "" : record.getWasterProduct());
             responseDTO.setTools(record.getTools() == null ? "" : record.getTools());
@@ -581,9 +572,8 @@ public class HzPbomServiceImpl implements HzPbomService {
             //这里需要转换一下，数据库存储毫秒值  暂时不知道页面显示为分钟还是小时 待定
             responseDTO.setLaborHour(record.getLaborHour() == null ? "" : record.getLaborHour());
             responseDTO.setMachineMaterial(record.getMachineMaterial() == null ? "" : record.getMachineMaterial());
-            responseDTO.setBomDigifaxId(record.getBomDigifaxId() == null ? "" : record.getBomDigifaxId());
             responseDTO.setLineId(record.getLineID() == null ? "" : record.getLineID());//零件号
-            responseDTO.setpBomPuid(record.getPuid());
+            responseDTO.setEbomPuid(record.getpPuid());
             responseDTO.setStandardPart(record.getStandardPart() == null ? "" : record.getStandardPart());
             responseDTO.setSparePartNum(record.getSparePartNum() == null ? "" : record.getSparePartNum());
             responseDTO.setSolderJoint(record.getSolderJoint() == null ? "" : record.getSolderJoint());
@@ -596,7 +586,7 @@ public class HzPbomServiceImpl implements HzPbomService {
         return respDTOS;
     }
 
-    private List<HzPbomLineRespDTO> pbomLineRecordToRespDTOS(List<HzPbomLineRecord> records) {
+    private List<HzPbomLineRespDTO> pbomLineRecordToRespDTOS(List<HzPbomLineRecord> records,String projectId,int num) {
         try {
             List<HzPbomLineRespDTO> respDTOS = new ArrayList<>();
             for (HzPbomLineRecord record : records) {
@@ -609,9 +599,30 @@ public class HzPbomServiceImpl implements HzPbomService {
                 respDTO.setRank(strings[1] == null ? "" : strings[1]);
                 respDTO.setLineId(record.getLineId() == null ? "" : record.getLineId());
                 respDTO.setpBomOfWhichDept(record.getpBomOfWhichDept() == null ? "" : record.getpBomOfWhichDept());
-                respDTO.setGroupNum("/");//这个暂时没有
-                respDTO.setItemType("/");//这个暂时没有
-                respDTO.setItemResource(record.getItemResource() == null ? "" : record.getItemResource());
+                //获取分组号
+                String groupNum = record.getLineId();
+                //这里在做一个递归查询
+                if(groupNum.contains("-")){
+                    groupNum =groupNum.split("-")[1].substring(0,4);
+                }else{
+                    String parentId = record.getParentUid();
+                    groupNum = hzEPLManageRecordService.getGroupNum(projectId,parentId);
+                }
+                respDTO.setGroupNum(groupNum);//这个暂时没有
+
+                byte[] bomLineBlock =record.getBomLineBlock();
+                Object obj = SerializeUtil.unserialize(bomLineBlock);
+                Object h9_IsCommon = null;
+                Object H9_Mat_Status =null;
+                if (obj instanceof LinkedHashMap) {
+                    if (((LinkedHashMap) obj).size() > 0) {
+                         h9_IsCommon =((LinkedHashMap) obj).get("h9_IsCommon");
+                         H9_Mat_Status =((LinkedHashMap) obj).get("H9_Mat_Status");
+                    }
+                }
+                respDTO.setH9_IsCommon(h9_IsCommon);
+                respDTO.setH9_Mat_Status(H9_Mat_Status);
+                respDTO.setNo(++num);
                 respDTO.setResource(record.getResource() == null ? "/" : record.getResource());
                 Integer type = record.getType();
                 Integer buyUnit = record.getBuyUnit();

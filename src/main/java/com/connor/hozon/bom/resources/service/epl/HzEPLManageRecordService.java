@@ -19,4 +19,7 @@ public interface HzEPLManageRecordService {
     Page<HzEPLRecordRespDTO> getHzEPLRecordForPage(FindHzEPLRecordReqDTO recordReqDTO);
 
     JSONArray getEPLTittle(FindHzEPLRecordReqDTO recordReqDTO);
+
+    String  getGroupNum(String projectId,String parentId);
+
 }

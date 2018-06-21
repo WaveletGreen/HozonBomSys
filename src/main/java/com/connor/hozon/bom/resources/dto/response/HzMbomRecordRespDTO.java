@@ -1,14 +1,40 @@
-package sql.pojo.bom;
+package com.connor.hozon.bom.resources.dto.response;
 
 /**
  * Created by haozt on 2018/5/24
  */
-public class HzPbomMaintainRecord {
+public class HzMbomRecordRespDTO {
     /**
-     * 主键id
+     * id
      */
     private String puid;
 
+    /**
+     * 层级
+     */
+    private String level;
+    /**
+     * 专业
+     */
+    private String pBomOfWhichDept;
+    /**
+     * 零件号
+     */
+    private String lineId;
+    /**
+     * 名称
+     */
+    private String object_name;
+
+    /**
+     * bom排列序号
+     */
+    private Integer No;
+
+    /**
+     * 外键id
+     */
+    private String ebomPuid;
     /**
      * 备件
      */
@@ -57,17 +83,61 @@ public class HzPbomMaintainRecord {
      * 变更编号
      */
     private String changeNum;
-    /**
-     * 外键
-     */
-    private String pBomPuid;
 
     public String getPuid() {
         return puid;
     }
 
     public void setPuid(String puid) {
-        this.puid = puid == null ? null : puid.trim();
+        this.puid = puid;
+    }
+
+    public Integer getNo() {
+        return No;
+    }
+
+    public void setNo(Integer no) {
+        No = no;
+    }
+
+    public String getEbomPuid() {
+        return ebomPuid;
+    }
+
+    public void setEbomPuid(String ebomPuid) {
+        this.ebomPuid = ebomPuid;
+    }
+
+    public String getLevel() {
+        return level;
+    }
+
+    public void setLevel(String level) {
+        this.level = level;
+    }
+
+    public String getpBomOfWhichDept() {
+        return pBomOfWhichDept;
+    }
+
+    public void setpBomOfWhichDept(String pBomOfWhichDept) {
+        this.pBomOfWhichDept = pBomOfWhichDept;
+    }
+
+    public String getLineId() {
+        return lineId;
+    }
+
+    public void setLineId(String lineId) {
+        this.lineId = lineId;
+    }
+
+    public String getObject_name() {
+        return object_name;
+    }
+
+    public void setObject_name(String object_name) {
+        this.object_name = object_name;
     }
 
     public String getSparePart() {
@@ -75,7 +145,7 @@ public class HzPbomMaintainRecord {
     }
 
     public void setSparePart(String sparePart) {
-        this.sparePart = sparePart == null ? null : sparePart.trim();
+        this.sparePart = sparePart;
     }
 
     public String getSparePartNum() {
@@ -83,7 +153,7 @@ public class HzPbomMaintainRecord {
     }
 
     public void setSparePartNum(String sparePartNum) {
-        this.sparePartNum = sparePartNum == null ? null : sparePartNum.trim();
+        this.sparePartNum = sparePartNum;
     }
 
     public String getProcessRoute() {
@@ -91,7 +161,7 @@ public class HzPbomMaintainRecord {
     }
 
     public void setProcessRoute(String processRoute) {
-        this.processRoute = processRoute == null ? null : processRoute.trim();
+        this.processRoute = processRoute;
     }
 
     public String getLaborHour() {
@@ -99,7 +169,7 @@ public class HzPbomMaintainRecord {
     }
 
     public void setLaborHour(String laborHour) {
-        this.laborHour = laborHour == null ? null : laborHour.trim();
+        this.laborHour = laborHour;
     }
 
     public String getRhythm() {
@@ -107,7 +177,7 @@ public class HzPbomMaintainRecord {
     }
 
     public void setRhythm(String rhythm) {
-        this.rhythm = rhythm == null ? null : rhythm.trim();
+        this.rhythm = rhythm;
     }
 
     public String getSolderJoint() {
@@ -115,9 +185,8 @@ public class HzPbomMaintainRecord {
     }
 
     public void setSolderJoint(String solderJoint) {
-        this.solderJoint = solderJoint == null ? null : solderJoint.trim();
+        this.solderJoint = solderJoint;
     }
-
 
     public String getMachineMaterial() {
         return machineMaterial;
@@ -132,7 +201,7 @@ public class HzPbomMaintainRecord {
     }
 
     public void setStandardPart(String standardPart) {
-        this.standardPart = standardPart == null ? null : standardPart.trim();
+        this.standardPart = standardPart;
     }
 
     public String getTools() {
@@ -140,7 +209,7 @@ public class HzPbomMaintainRecord {
     }
 
     public void setTools(String tools) {
-        this.tools = tools == null ? null : tools.trim();
+        this.tools = tools;
     }
 
     public String getWasterProduct() {
@@ -148,7 +217,7 @@ public class HzPbomMaintainRecord {
     }
 
     public void setWasterProduct(String wasterProduct) {
-        this.wasterProduct = wasterProduct == null ? null : wasterProduct.trim();
+        this.wasterProduct = wasterProduct;
     }
 
     public String getChange() {
@@ -156,7 +225,7 @@ public class HzPbomMaintainRecord {
     }
 
     public void setChange(String change) {
-        this.change = change == null ? null : change.trim();
+        this.change = change;
     }
 
     public String getChangeNum() {
@@ -164,14 +233,8 @@ public class HzPbomMaintainRecord {
     }
 
     public void setChangeNum(String changeNum) {
-        this.changeNum = changeNum == null ? null : changeNum.trim();
+        this.changeNum = changeNum;
     }
 
-    public String getpBomPuid() {
-        return pBomPuid;
-    }
 
-    public void setpBomPuid(String pBomPuid) {
-        this.pBomPuid = pBomPuid == null ? null : pBomPuid.trim();
-    }
 }

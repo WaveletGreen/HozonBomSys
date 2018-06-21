@@ -1,6 +1,7 @@
 package com.connor.hozon.bom.resources.mybatis.bom;
 
-import com.connor.hozon.bom.resources.dto.request.FindHzEbomRecordReqDTO;
+import com.connor.hozon.bom.resources.dto.request.FindForPageReqDTO;
+import com.connor.hozon.bom.resources.page.Page;
 import sql.pojo.epl.HzEPLManageRecord;
 
 import java.util.List;
@@ -14,5 +15,7 @@ public interface HzEbomRecordDAO {
      * @param reqDTO
      * @return
      */
-    List<HzEPLManageRecord> getHzEbomList(FindHzEbomRecordReqDTO reqDTO);
+    List<HzEPLManageRecord> getHzEbomList(FindForPageReqDTO reqDTO);
+
+    Page<HzEPLManageRecord> getHzEbomPage(FindForPageReqDTO recordReqDTO);
 }

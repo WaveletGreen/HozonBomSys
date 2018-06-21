@@ -45,8 +45,12 @@ public class HzEPLController extends BaseController {
     @ResponseBody
     public Map<String, Object> getHzEplRecord(FindHzEPLRecordReqDTO recordReqDTO){
         Page<HzEPLRecordRespDTO> recordRespDTOPage = hzEPLManageRecordService.getHzEPLRecordForPage(recordReqDTO);
-        List<HzEPLRecordRespDTO> recordRespDTOS =  recordRespDTOPage.getResult();
         Map<String, Object> ret = new HashMap<>();
+        if(recordRespDTOPage == null){
+            return  ret;
+        }
+        List<HzEPLRecordRespDTO> recordRespDTOS =  recordRespDTOPage.getResult();
+
         if (ListUtil.isEmpty(recordRespDTOS)) {
             return ret;
         }

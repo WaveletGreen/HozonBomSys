@@ -45,10 +45,7 @@ public class HzPbomLineRecord {
      *主键id
      */
     private String puid;
-    /**
-     *零件来源（自制总成/采购拆分等）
-     */
-    private String itemResource;
+
     /**
      * 来源（自制/采购）
      */
@@ -140,14 +137,6 @@ public class HzPbomLineRecord {
 
     public void setPuid(String puid) {
         this.puid = puid;
-    }
-
-    public String getItemResource() {
-        return itemResource;
-    }
-
-    public void setItemResource(String itemResource) {
-        this.itemResource = itemResource;
     }
 
     public String getResource() {
