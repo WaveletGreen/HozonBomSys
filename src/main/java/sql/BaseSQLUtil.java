@@ -395,17 +395,17 @@ public class BaseSQLUtil implements IBaseSQLUtil {
      * @return
      */
     public Page findForPage(String sqlMapId,final String totalMapId, PageRequest pageRequest) {
-
+        Map filters = new HashMap();
+        filters.putAll(pageRequest.getFilters());
         // 查询总数
-        Number totalCount = (Number) findForObject(totalMapId,null);
+        Number totalCount = (Number) findForObject(totalMapId,filters);
         if (totalCount == null || totalCount.intValue() <= 0) {
             return new Page(pageRequest, 0);
         }
         if (totalCount != null && totalCount.intValue() <= (pageRequest.getPageNumber() - 1) * pageRequest.getPageSize()) {
             return new Page(pageRequest.getPageNumber(), pageRequest.getPageSize(), totalCount.intValue(), new ArrayList(0));
         }
-        Map filters = new HashMap();
-        filters.putAll(pageRequest.getFilters());
+
         Page page = new Page(pageRequest, totalCount.intValue());
         List list = findForList(sqlMapId, filters, page.getFirstResult(), page.getPageSize());
 

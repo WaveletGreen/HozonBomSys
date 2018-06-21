@@ -6,6 +6,8 @@ package com.connor.hozon.bom.resources.dto.response;
  */
 public class HzPbomLineRespDTO {
 
+    private int No;
+
     /**
      * 级别 以2Y层为相对 第1级
      */
@@ -26,14 +28,14 @@ public class HzPbomLineRespDTO {
     private String pBomOfWhichDept;
 
     /**
-     * 分组号  这个暂时没有
+     * 分组号
      */
     private String groupNum;
 
     /**
      * 零件分类  这个暂时也没有 表字段加了该更过来
      */
-    private String  itemType;
+    private Object  h9_IsCommon;
 
     /**
      *PBOM主键id
@@ -42,7 +44,7 @@ public class HzPbomLineRespDTO {
     /**
      *零件来源（自制总成/采购拆分等）
      */
-    private String itemResource;
+    private Object H9_Mat_Status;
     /**
      * 来源（自制/采购）
      */
@@ -124,14 +126,6 @@ public class HzPbomLineRespDTO {
         this.groupNum = groupNum;
     }
 
-    public String getItemType() {
-        return itemType;
-    }
-
-    public void setItemType(String itemType) {
-        this.itemType = itemType;
-    }
-
     public String getPuid() {
         return puid;
     }
@@ -140,12 +134,21 @@ public class HzPbomLineRespDTO {
         this.puid = puid;
     }
 
-    public String getItemResource() {
-        return itemResource;
+
+    public Object getH9_IsCommon() {
+        return h9_IsCommon;
     }
 
-    public void setItemResource(String itemResource) {
-        this.itemResource = itemResource;
+    public void setH9_IsCommon(Object h9_IsCommon) {
+        this.h9_IsCommon = h9_IsCommon;
+    }
+
+    public Object getH9_Mat_Status() {
+        return H9_Mat_Status;
+    }
+
+    public void setH9_Mat_Status(Object h9_Mat_Status) {
+        H9_Mat_Status = h9_Mat_Status;
     }
 
     public String getResource() {
@@ -226,5 +229,13 @@ public class HzPbomLineRespDTO {
 
     public String getColorPart() {
         return colorPart;
+    }
+
+    public int getNo() {
+        return No;
+    }
+
+    public void setNo(int no) {
+        No = no;
     }
 }

@@ -250,6 +250,7 @@ public class HzEPLManageRecordServiceImpl implements HzEPLManageRecordService {
         }
     }
 
+    @Override
     public String  getGroupNum(String projectId,String parentId){
         Map<String,Object> map = new HashMap<>();
         map.put("projectId",projectId);

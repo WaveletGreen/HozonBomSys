@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="HzPbomMaintainRecord">
-  <resultMap id="BaseResultMap" type="sql.pojo.bom.HzPbomMaintainRecord">
+  <resultMap id="BaseResultMap" type="sql.pojo.bom.HzMbomRecord">
     <id column="P_PUID" jdbcType="VARCHAR" property="puid" />
     <result column="P_SPARE_PART" jdbcType="VARCHAR" property="sparePart" />
     <result column="P_SPARE_PART_NUM" jdbcType="VARCHAR" property="sparePartNum" />
@@ -37,7 +37,7 @@
   </delete>
 
   <!--批量插入-->
-  <insert id="HzPbomMaintainRecordDAOImpl_insertList"  useGeneratedKeys="false" parameterType="java.util.List">
+  <insert id="HzMbomRecordDAOImpl_insertList"  useGeneratedKeys="false" parameterType="java.util.List">
     insert into HZ_PBOM_MAINTAIN_RECORD (P_PUID, P_SPARE_PART, P_SPARE_PART_NUM,
     P_PROCESS_ROUTE, P_LABOR_HOUR, P_RHYTHM,
     P_SOLDER_JOINT, P_MACHINE_MATERIAL, P_STANDARD_PART,
@@ -57,7 +57,7 @@
 
 
 
-  <insert id="insertSelective" parameterType="sql.pojo.bom.HzPbomMaintainRecord">
+  <insert id="insertSelective" parameterType="sql.pojo.bom.HzMbomRecord">
     insert into HZ_PBOM_MAINTAIN_RECORD
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="pPuid != null">
@@ -148,7 +148,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="sql.pojo.bom.HzPbomMaintainRecord">
+  <update id="updateByPrimaryKeySelective" parameterType="sql.pojo.bom.HzMbomRecord">
     update HZ_PBOM_MAINTAIN_RECORD
     <set>
       <if test="sparePart != null">
@@ -193,7 +193,7 @@
     </set>
     where P_PUID = #{puid,jdbcType=VARCHAR}
   </update>
-  <update id="updateByPrimaryKey" parameterType="sql.pojo.bom.HzPbomMaintainRecord">
+  <update id="updateByPrimaryKey" parameterType="sql.pojo.bom.HzMbomRecord">
     update HZ_PBOM_MAINTAIN_RECORD
     set P_SPARE_PART = #{sparePart,jdbcType=VARCHAR},
       P_SPARE_PART_NUM = #{sparePartNum,jdbcType=VARCHAR},

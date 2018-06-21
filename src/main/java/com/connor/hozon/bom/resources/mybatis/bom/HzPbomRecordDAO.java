@@ -1,5 +1,7 @@
 package com.connor.hozon.bom.resources.mybatis.bom;
 
+import com.connor.hozon.bom.resources.dto.request.FindForPageReqDTO;
+import com.connor.hozon.bom.resources.page.Page;
 import sql.pojo.bom.HzBomLineRecord;
 import sql.pojo.bom.HzPbomLineRecord;
 import sql.pojo.bom.HzPbomRecord;
@@ -51,4 +53,5 @@ public interface HzPbomRecordDAO {
     List<HzPbomLineRecord> getHzPbomById(Map<String,Object> map);
 
 
+    Page<HzPbomLineRecord>  getHzPbomRecordByPage(FindForPageReqDTO reqDTO);
 }
