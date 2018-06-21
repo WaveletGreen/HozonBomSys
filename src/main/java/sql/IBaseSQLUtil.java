@@ -52,6 +52,17 @@ public interface IBaseSQLUtil {
     <T> T executeQueryByPass(T t, String pass, String by, boolean b);
 
     /**
+     * 通过条件对象搜索目标对象
+     *
+     * @param t    需要搜索的对象
+     * @param pass 需要执行的sql参数
+     * @param by   需要执行的sql语句
+     * @param <T>
+     * @return
+     */
+    <T> T executeQueryByPass(T t, String by, String... pass);
+
+    /**
      * 执行插入，单个插入
      *
      * @param t   需要插入的对象，如果该对象的某个值不应该为空，而传入了控制，有可能报数据库插入异常

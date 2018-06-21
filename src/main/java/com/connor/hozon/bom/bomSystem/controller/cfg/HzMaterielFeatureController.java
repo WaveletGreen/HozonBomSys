@@ -3,6 +3,7 @@ package com.connor.hozon.bom.bomSystem.controller.cfg;
 import com.connor.hozon.bom.bomSystem.dto.HzMaterielFeatureBean;
 import com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0ModelColorDao;
 import com.connor.hozon.bom.bomSystem.service.cfg.*;
+import com.connor.hozon.bom.bomSystem.service.iservice.cfg.IHzCfg0ModelFeatureService;
 import com.connor.hozon.bom.bomSystem.service.project.HzSuperMaterielService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import sql.pojo.cfg.HzCfg0MainRecord;
+import sql.pojo.cfg.HzCfg0ModelFeature;
 import sql.pojo.cfg.HzCfg0ModelRecord;
 import sql.pojo.project.HzSuperMateriel;
 
@@ -25,13 +27,38 @@ import java.util.*;
 @Controller
 @RequestMapping("/materiel")
 public class HzMaterielFeatureController {
+    /**
+     * 族层服务
+     */
     private final HzCfg0OptionFamilyService hzCfg0OptionFamilyService;
+    /**
+     * 车身颜色服务
+     */
     private final HzCfg0ModelColorService hzCfg0ModelColorService;
+    /**
+     * 颜色车型dao层
+     */
     private final HzCfg0ModelColorDao hzCfg0ModelColorDao;
+    /**
+     * 配置值服务层
+     */
     private final HzCfg0Service hzCfg0Service;
+    /**
+     * 超级物料服务层
+     */
     private final HzSuperMaterielService hzSuperMaterielService;
+    /**
+     * 车型模型服务层
+     */
     private final HzCfg0ModelRecordService hzCfg0ModelRecordService;
+    /**
+     * 配置主模型服务层
+     */
     private final HzCfg0MainService hzCfg0MainService;
+    /**
+     * 模型特性数据服务
+     */
+    private final IHzCfg0ModelFeatureService hzCfg0ModelFeatureService;
 
     @Autowired
     public HzMaterielFeatureController(HzCfg0OptionFamilyService hzCfg0OptionFamilyService,
@@ -40,7 +67,8 @@ public class HzMaterielFeatureController {
                                        HzCfg0Service hzCfg0Service,
                                        HzSuperMaterielService hzSuperMaterielService,
                                        HzCfg0ModelRecordService hzCfg0ModelRecordService,
-                                       HzCfg0MainService hzCfg0MainService) {
+                                       HzCfg0MainService hzCfg0MainService,
+                                       IHzCfg0ModelFeatureService hzCfg0ModelFeatureService) {
         this.hzCfg0OptionFamilyService = hzCfg0OptionFamilyService;
         this.hzCfg0ModelColorService = hzCfg0ModelColorService;
         this.hzCfg0ModelColorDao = hzCfg0ModelColorDao;
@@ -48,20 +76,25 @@ public class HzMaterielFeatureController {
         this.hzSuperMaterielService = hzSuperMaterielService;
         this.hzCfg0ModelRecordService = hzCfg0ModelRecordService;
         this.hzCfg0MainService = hzCfg0MainService;
+        this.hzCfg0ModelFeatureService = hzCfg0ModelFeatureService;
     }
 
+    /**
+     * 根据项目的puid，获取到配置物料特性表的列设置
+     *
+     * @param projectPuid 项目puid
+     * @return 列信息
+     */
     @RequestMapping("/loadColumnByProjectPuid")
     @ResponseBody
     public Map<String, Object> getColumn(@RequestParam("projectPuid") String projectPuid) {
         Map<String, Object> result = new HashMap<>();
         List<String> column = new ArrayList<>();
         List<String> _result;
-//        column.add("基本信息");
-//        column.add("工厂");
-//        column.add("基本信息");
-//        column.add("超级物料");
-        if ((_result = hzCfg0OptionFamilyService.doGetColumn(projectPuid)) != null) {
+        if ((_result = hzCfg0OptionFamilyService.doGetColumnDef(projectPuid, "<br/>")) != null) {
             column.addAll(_result);
+            //附加列信息
+            appendColumn(column);
             result.put("status", true);
             result.put("data", column);
         } else {
@@ -70,6 +103,24 @@ public class HzMaterielFeatureController {
         return result;
     }
 
+    /**
+     * 单独添加列信息
+     *
+     * @param column
+     */
+    private void appendColumn(List<String> column) {
+        //添加中文描述
+        column.add("中文描述");
+        //添加单车配置吗
+        column.add("单车配置码");
+    }
+
+    /**
+     * 根据项目puid，加载所有的配置物料特性数据
+     *
+     * @param projectPuid 项目puid
+     * @return
+     */
     @RequestMapping("/loadAllByProjectPuid")
     @ResponseBody
     public Map<String, Object> loadAllByProjectPuid(@RequestParam String projectPuid) {
@@ -98,12 +149,34 @@ public class HzMaterielFeatureController {
             return result;
         } else {
             //在此修改各个模型对应的颜色或者模型数量=模型X颜色等
-            hzMaterielFeatureBeans.forEach(bean -> model.put(bean.getpCfg0ModelRecord(), bean));
+            hzMaterielFeatureBeans.stream()
+                    .filter(bean -> bean.getpCfg0ModelRecord() != null)
+                    .forEach(bean -> model.put(bean.getpCfg0ModelRecord(), bean));
+
             model.forEach((key, value) -> {
                 Map<String, Object> _result = new HashMap<>();
+                int index = 0;
                 for (int j = 0; j < column.size(); j++) {
                     _result.put("s" + j, hzMaterielFeatureBeans.get(j).getpCfg0ObjectId());
+                    index = j;
                 }
+
+                //单独获取模型特性信息
+                HzCfg0ModelFeature hzCfg0ModelFeature = hzCfg0ModelFeatureService.doSelectByModelPuid(key);
+                if (hzCfg0ModelFeature == null) {
+                    _result.put("s" + ++index, "-");
+                    _result.put("s" + ++index, "-");
+                    _result.put("puidOfModelFeature", "");
+
+                } else {
+                    //获取中文描述
+                    _result.put("s" + ++index, hzCfg0ModelFeature.getpFeatureCnDesc());
+                    //获取单车配置码
+                    _result.put("s" + ++index, hzCfg0ModelFeature.getpFeatureSingleVehicleCode());
+                    _result.put("puidOfModelFeature", hzCfg0ModelFeature.getPuid());
+                }
+
+                //
                 _result.put("puid", value.getpCfg0ModelRecord());
                 _result.put("cfg0MainPuid", value.getpOfCfg0MainRecord());
                 _result.put("modeBasiceDetail", value.getpCfg0ModelBasicDetail());
@@ -164,15 +237,35 @@ public class HzMaterielFeatureController {
         return data;
     }
 
+    /**
+     * 根据车型模型进行更新数据
+     *
+     * @param puid               车型模型puid
+     * @param puidOfModelFeature 车型特性的puid
+     * @param page               申请页面
+     * @param model
+     * @return
+     */
     @RequestMapping("/modifyPage")
-    public String modPage(@RequestParam String puid, @RequestParam String page, Model model) {
+    public String modPage(@RequestParam String puid, @RequestParam String puidOfModelFeature, @RequestParam String page, Model model) {
         //啥也不做
         if (page == null || puid == null)
             ;
             //修改基本信息
         else if ("model".equals(page)) {
             HzCfg0ModelRecord modelRecord = hzCfg0ModelRecordService.doGetById(puid);
+            HzCfg0ModelFeature hzCfg0ModelFeature;
+            //判断是否为空
+            if (puidOfModelFeature == null || "".equals(puidOfModelFeature))
+                hzCfg0ModelFeature = new HzCfg0ModelFeature();
+            else
+                hzCfg0ModelFeature = hzCfg0ModelFeatureService.doSelectByPrimaryKey(puidOfModelFeature);
+            //没有找到
+            if (hzCfg0ModelFeature == null)
+                hzCfg0ModelFeature = new HzCfg0ModelFeature();
             model.addAttribute("entity", modelRecord);
+            model.addAttribute("modelFeature", hzCfg0ModelFeature);
+
             model.addAttribute("action", "./materiel/updateModelBasic");
             return "cfg/materielFeature/updateModelBasic";
         }
@@ -199,8 +292,27 @@ public class HzMaterielFeatureController {
 
     @RequestMapping("/updateModelBasic")
     @ResponseBody
-    public boolean updateModelBasic(@RequestBody HzCfg0ModelRecord modelRecord) {
-        return hzCfg0ModelRecordService.doUpdateBasic(modelRecord);
+    public boolean updateModelBasic(@RequestBody HzCfg0ModelRecord modelRecord,
+                                    @RequestParam String pFeatureCnDesc,
+                                    @RequestParam String pFeatureSingleVehicleCode,
+                                    @RequestParam String modelFeaturePuid) {
+        boolean result = hzCfg0ModelRecordService.doUpdateBasic(modelRecord);
+        if (result == false)
+            return false;
+        HzCfg0ModelFeature hzCfg0ModelFeature = new HzCfg0ModelFeature();
+        if (modelFeaturePuid == null || "".equals(modelFeaturePuid)) {
+            hzCfg0ModelFeature.setPuid(UUID.randomUUID().toString());
+            hzCfg0ModelFeature.setpFeatureCnDesc(pFeatureCnDesc);
+            hzCfg0ModelFeature.setpFeatureSingleVehicleCode(pFeatureSingleVehicleCode);
+            hzCfg0ModelFeature.setpPertainToModel(modelRecord.getPuid());
+            result = hzCfg0ModelFeatureService.doInsert(hzCfg0ModelFeature);
+        } else if (null != (hzCfg0ModelFeature = hzCfg0ModelFeatureService.doSelectByPrimaryKey(modelFeaturePuid))) {
+            hzCfg0ModelFeature.setpFeatureCnDesc(pFeatureCnDesc);
+            hzCfg0ModelFeature.setpFeatureSingleVehicleCode(pFeatureSingleVehicleCode);
+            hzCfg0ModelFeature.setpPertainToModel(modelRecord.getPuid());
+            result = hzCfg0ModelFeatureService.doUpdateByPrimaryKey(hzCfg0ModelFeature);
+        } else return false;
+        return result;
     }
 
     @RequestMapping("/updateSuperMateriel")

@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -61,8 +62,19 @@ public class HzProjectLibsController {
      */
     @RequestMapping(value = "/loadAll", method = RequestMethod.GET)
     @ResponseBody
-    public List<HzProjectLibs> loadAll() {
-        return hzProjectLibsService.doLoadAllProjectLibs();
+    public Map<String, Object> loadAll() {
+        Map<String, Object> result = new HashMap<>();
+        User user = UserInfo.getUser();
+        Collection<? extends GrantedAuthority> authorities = user.getAuthorities();
+        for (GrantedAuthority authority : authorities) {
+            //只有管理员才能快速操作，后续可能改成多个组成员能快速操作
+            if ("ROLE_ADMIN".equals(authority.getAuthority())) {
+                result.put("auth", true);
+                break;
+            }
+        }
+        result.put("data", hzProjectLibsService.doLoadAllProjectLibs());
+        return result;
     }
 
     /**

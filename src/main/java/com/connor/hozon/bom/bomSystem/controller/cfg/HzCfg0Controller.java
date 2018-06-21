@@ -192,7 +192,7 @@ public class HzCfg0Controller {
                 record = hzCfg0Service.doSelectOneAddedCfgByPuid(uid);
                 if (record == null) {
                     model.addAttribute("msg", "没有找到对应的特性数据，请重试或联系系统管理员!");
-                    return "errorWithEntity";
+                        return "errorWithEntity";
                 }
                 record.setWhichTable("HZ_CFG0_ADD_CFG_RECORD");
             } else {

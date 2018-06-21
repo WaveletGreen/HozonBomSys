@@ -42,6 +42,8 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         registry.addViewController("/bom-treegrid").setViewName("/stage/bom-treegrid");
         //一级配置表
         registry.addViewController("/bom-all-cfg").setViewName("/bom/bom-all-cfg");
+        //一级配置表
+        registry.addViewController("/bom-all-cfg1").setViewName("/bom/bom-all-cfg1");
         //颜色库
         registry.addViewController("/colorSet").setViewName("/cfg/color/colorSet");
 //        registry.addViewController("/colorUpdate").setViewName("/cfg/color/colorUpdate");
