@@ -6,10 +6,7 @@ import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import sql.pojo.cfg.HzCfg0ModelDetail;
 import sql.pojo.cfg.HzCfg0ModelRecord;
 
@@ -19,8 +16,14 @@ import java.util.UUID;
 @Controller
 @RequestMapping("/model")
 public class HzCfg0ModelController {
+    /**
+     * 模型的详细信息
+     */
     @Autowired
-    HzCfg0ModelService hzCfg0ColorSerService;
+    HzCfg0ModelService hzCfg0ModelService;
+    /**
+     * 数据库中的车型模型，没有详细信息
+     */
     @Autowired
     HzCfg0ModelRecordService hzCfg0modelRecordService;
 
@@ -35,36 +38,40 @@ public class HzCfg0ModelController {
             result.put("msg", "没有找到模型信息，请联系管理员");
             return result;
         }
-        HzCfg0ModelDetail fromDBDetail = hzCfg0ColorSerService.getOneByModelId(detail);
+        HzCfg0ModelDetail fromDBDetail = hzCfg0ModelService.getOneByModelId(detail);
         if (fromDBDetail != null) {
             detail.setpModelPuid(fromDBDetail.getpModelPuid());
             detail.setPuid(fromDBDetail.getPuid());
-            isSuccess = hzCfg0ColorSerService.doUpdateOne(detail);
-            sb.append("updateOne");
+            isSuccess = hzCfg0ModelService.doUpdateOne(detail);
+            sb.append("更新");
         } else {
             detail.setPuid(UUID.randomUUID().toString());
-            isSuccess = hzCfg0ColorSerService.doInsertOne(detail);
-            sb.append("record");
+            isSuccess = hzCfg0ModelService.doInsertOne(detail);
+            sb.append("数据");
         }
-        result.put("msg", sb + detail.getpModelName() + "success");
+        result.put("msg", sb + detail.getpModelName() + "成功");
         result.put("state", isSuccess);
         return result;
     }
 
     @RequestMapping(value = "/modModel", method = RequestMethod.GET)
-    public String modifyModel(HzCfg0ModelDetail detail, Model model) {
-        HzCfg0ModelDetail fromDBDetail = hzCfg0ColorSerService.getOneByModelId(detail);
+    public String modifyModel(@RequestParam String pModelPuid, Model model) {
+        HzCfg0ModelDetail fromDBDetail = new HzCfg0ModelDetail();
+        fromDBDetail.setpModelPuid(pModelPuid);
+        fromDBDetail = hzCfg0ModelService.getOneByModelId(fromDBDetail);
         if (fromDBDetail == null) {
-            HzCfg0ModelRecord record = new HzCfg0ModelRecord();
-            record.setPuid(detail.getpModelPuid());
-            record = hzCfg0modelRecordService.doGetById(detail.getPuid());
+            HzCfg0ModelRecord record = hzCfg0modelRecordService.doGetById(pModelPuid);
             if (record == null) {
                 return "error";
             } else {
-                detail.setpModelPuid(record.getPuid());
-                detail.setpModelName(record.getObjectName());
-                detail.setpModelDesc(record.getObjectDesc());
-                model.addAttribute("entity", detail);
+                fromDBDetail = new HzCfg0ModelDetail();
+                fromDBDetail.setpModelPuid(record.getPuid());
+                fromDBDetail.setpModelName(record.getObjectName());
+                fromDBDetail.setpModelDesc(record.getObjectDesc());
+//                detail.setpModelPuid(record.getPuid());
+//                detail.setpModelName(record.getObjectName());
+//                detail.setpModelDesc(record.getObjectDesc());
+                model.addAttribute("entity", fromDBDetail);
             }
         } else {
             model.addAttribute("entity", fromDBDetail);
@@ -99,9 +106,4 @@ public class HzCfg0ModelController {
         System.out.println();
     }
 
-//    @Deprecated
-//    public static void main(String[] args) {
-//        HzCfg0ModelController controller = new HzCfg0ModelController();
-//        saveModelDetailToDB(controller);
-//    }
 }

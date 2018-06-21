@@ -5,8 +5,6 @@
     <title>全BOM配置一级清单</title>
 </head>
 <body>
-<input id="text1" class="form-control" type="text" name="doSubmit1"
-             placeholder="请输入需要查找的model" value="9deb81ea-9544-473b-aeb5-d7683c7753c3"/>
 <button id="myButton">请点击</button>
 
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog"
@@ -19,7 +17,7 @@
                 </button>
                 <h4 class="modal-title" id="myModalLabel">操作错误</h4>
             </div>
-            <div class="modal-body">请输入正确的数模层ID</div>
+            <div class="modal-body">请选择一个项目</div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">关闭
                 </button>
@@ -53,12 +51,14 @@
     </div>
 </div>
 <div style="float: right; margin-bottom:0;">
-    <table id="cfg1Table" class="table table-striped" style="margin-top:0px; margin-bottom:0px;">
+    <table id="cfg1Table" class="table table-striped col-md-4" style="margin-top:0px; margin-bottom:0px;">
     </table>
     <div id="newtable"></div>
 </div>
-<table id="cfg0Table" class="table table-striped" style="margin-top: 0px;">
-</table>
+<div>
+    <table class="table table-striped col-md-12" id="cfg0Table"  style="margin-top: 0px;">
+    </table>
+</div>
 </body>
 <script th:src="@{/js/stage/bom-all-cfg.js}"></script>
 <script th:inline="javascript">

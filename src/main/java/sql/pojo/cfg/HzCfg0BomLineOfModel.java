@@ -1,38 +1,70 @@
 package sql.pojo.cfg;
 
 public class HzCfg0BomLineOfModel {
+
     private String objectName;
-
+    /**
+     * 车型模型描述
+     */
     private String objectDesc;
-
+    /**
+     * 选项值
+     */
     private String pCfg0OptionValue;
-
+    /**
+     * 本地解析变量，用于打点图，与=1，或=0，非=-1，用于解析是否是
+     */
     private Short pParseLogicValue;
-
+    /**
+     * 配置项的值
+     */
     private String pCfg0ObjectId;
-
+    /**
+     * 配置项描述
+     */
     private String pCfg0Desc;
-
+    /**
+     * 族值
+     */
     private String pCfg0FamilyName;
-
+    /**
+     * 特性值，已废除，用pCfg0ObjectId代替
+     */
+    @Deprecated
     private String pH9featurename;
-
+    /**
+     * 特性英文名稱
+     */
     private String pH9featureenname;
-
+    /**
+     * 特性描述，已废除，用pCfg0Desc代替
+     */
+    @Deprecated
     private String pH9featuredesc;
-
+    /**
+     * 对应的bom行名
+     */
     private String pBomLineName;
-
+    /**
+     * 对应的bom行id
+     */
     private String pBomLineId;
+    /**
+     * bom行归属的部门
+     */
     private String pBomOfWhichDept;
+    /**
+     * 归属的的模型
+     */
     private String modelPuid;
+
     public String getObjectName() {
         return objectName;
     }
 
     public static final String[] selfDesc =
             {
-                    "系统", "总成零件号", "总成零件名称", "总成英文名称", "配置(描述)", "配置代码", "备注"
+                    "pBomOfWhichDept", "pBomLineId", "pBomLineName", "pH9featureenname", "pCfg0Desc", "pCfg0ObjectId", "comment"
             };
 
     public void setObjectName(String objectName) {

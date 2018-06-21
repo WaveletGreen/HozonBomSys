@@ -5,6 +5,7 @@
 <form class="form-horizontal" id="form" role="form" method="post" th:action="${action}">
     <fieldset>
         <input id="puid" name="puid" type="hidden" th:value="${entity.puid}"/>
+        <input id="modelFeaturePuid" name="modelFeaturePuid" type="hidden" th:value="${modelFeature.puid}"/>
         <div id="legend" class="">
             <legend class="">更新车型模型详细信息</legend>
         </div>
@@ -27,6 +28,18 @@
                    th:value="${entity.pCfg0ModelBasicDetail}"
             />
         </div>
+        <div class="form-group col-lg-10">
+            <label for="pFeatureCnDesc">中文描述</label>
+            <input class="form-control" id="pFeatureCnDesc" name="pFeatureCnDesc" type="text"
+                   th:value="${modelFeature.getpFeatureCnDesc()}"
+            />
+        </div>
+        <div class="form-group col-lg-10">
+            <label for="pFeatureSingleVehicleCode">单车配置码</label>
+            <input class="form-control" id="pFeatureSingleVehicleCode" name="pFeatureSingleVehicleCode" type="text"
+                   th:value="${modelFeature.getpFeatureSingleVehicleCode()}"
+            />
+        </div>
     </fieldset>
 </form>
 <script th:inline="javascript">
@@ -46,12 +59,13 @@
             // bootstrapValidator.validate();
             // if (bootstrapValidator.isValid()) {
             var url = $("#form", window.top.document).attr('action');
+            url += "?";
             var data = {};
-            var _d = $("#form").serializeArray();
-            for( var p in _d ){
-                //会将disabled的字段排除掉，如果需要，要手动加上
-                data[_d[p].name] = _d[p].value;
-            }
+            data.puid = $("#puid").val();
+            data.pCfg0ModelBasicDetail = $("#pCfg0ModelBasicDetail").val();
+            url += "pFeatureCnDesc=" + $("#pFeatureCnDesc").val()
+                + "&pFeatureSingleVehicleCode=" + $("#pFeatureSingleVehicleCode").val()
+                + "&modelFeaturePuid=" + $("#modelFeaturePuid").val();
             $.ajax({
                 contentType:
                     "application/json",

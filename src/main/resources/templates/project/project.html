@@ -7,7 +7,11 @@
 <div id="content" class="row-fluid">
     <!--bootstrap网格系统只能貌似只能使用同种网格系统-->
     <div class="col-md-4" style="margin-top: 10px;">
-        <button class="btn btn-default" th:width="300" id="setCurrentProject" type="button">设置为当前工作项目</button>
+        <button class="btn btn-default" style="width: 250px" id="setCurrentProject" type="button">设置为当前工作项目</button>
+        <h2>
+            <lable id="labHidden" hidden="hidden">快速操作</lable>
+            <select  id="fastOption" hidden="hidden" style="width: 250px"></select>
+        </h2>
         <h2><span class="label label-success" id="currentProject"></span></h2>
         <ul id="menu_tree" class="ztree" style="width:560px; overflow:auto;"></ul>
     </div>
