@@ -461,7 +461,7 @@ public class HzPbomServiceImpl implements HzPbomService {
             hzBomLineRecord.setLinePuid(puid);
             hzBomLineRecord.setPuid(puid);
             hzBomLineRecord.setIsDept(0);
-            hzBomLineRecord.setLineID(puid);
+            hzBomLineRecord.setLineID(reqDTO.getLineId());
             hzBomLineRecord.setpBomLinePartClass(reqDTO.getpBomLinePartClass());
             hzBomLineRecord.setpBomLinePartName(reqDTO.getpBomLinePartName());
             int i = hzBomLineRecordDao.insert(hzBomLineRecord);
