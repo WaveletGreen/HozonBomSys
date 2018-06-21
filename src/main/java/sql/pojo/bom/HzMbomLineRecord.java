@@ -1,13 +1,12 @@
-package sql.pojo.epl;
+package sql.pojo.bom;
 
 /**
- * Created by haozt on 2018/06/05
- * EPL管理全字段
+ * Created by haozt on 2018/5/24
+ * 2张表的数据 前端数据显示为一张表 这里做一个关联查询
  */
-public class HzEPLManageRecord {
-
+public class HzMbomLineRecord {
     /**
-     * puid
+     * 主键id
      */
     private String puid;
     /**
@@ -70,50 +69,10 @@ public class HzEPLManageRecord {
      * Bom行对应的零件类别
      */
     private String pBomLinePartClass;
-
-
-    private Integer pState;
-
     /**
-     *零件来源（自制总成/采购拆分等）
+     * 外键id
      */
-    private String itemResource;
-    /**
-     * 来源（自制/采购）
-     */
-    private String resource;
-    /**
-     * 类型 是否为焊接/装配（0是  1不是 2不明确）
-     */
-    private Integer type;
-    /**
-     * 是否采购单元 （0是  1不是 2不明确）
-     */
-    private Integer buyUnit;
-    /**
-     *车间1
-     */
-    private String workShop1;
-    /**
-     *车间2
-     */
-    private String workShop2;
-    /**
-     *生产线
-     */
-    private String productLine;
-    /**
-     * 模具类型
-     */
-    private String mouldType;
-    /**
-     * 外委件
-     */
-    private String outerPart;
-    /**
-     * 颜色件
-     */
-    private Integer colorPart;
+    private String pPuid;
 
     /**
      * 备件
@@ -180,14 +139,6 @@ public class HzEPLManageRecord {
         this.parentUid = parentUid;
     }
 
-    public Integer getIsDept() {
-        return isDept;
-    }
-
-    public void setIsDept(Integer isDept) {
-        this.isDept = isDept;
-    }
-
     public String getBomDigifaxId() {
         return bomDigifaxId;
     }
@@ -224,7 +175,7 @@ public class HzEPLManageRecord {
         return isHas;
     }
 
-    public void setIsHas(Integer isHas) {
+    public void setIsHas(int isHas) {
         this.isHas = isHas;
     }
 
@@ -240,23 +191,23 @@ public class HzEPLManageRecord {
         return is2Y;
     }
 
-    public void setIs2Y(Integer is2Y) {
+    public void setIs2Y(int is2Y) {
         this.is2Y = is2Y;
     }
 
-    public Integer getIsPart() {
+    public int getIsPart() {
         return isPart;
     }
 
-    public void setIsPart(Integer isPart) {
+    public void setIsPart(int isPart) {
         this.isPart = isPart;
     }
 
-    public Integer getOrderNum() {
+    public int getOrderNum() {
         return orderNum;
     }
 
-    public void setOrderNum(Integer orderNum) {
+    public void setOrderNum(int orderNum) {
         this.orderNum = orderNum;
     }
 
@@ -268,108 +219,12 @@ public class HzEPLManageRecord {
         this.pBomOfWhichDept = pBomOfWhichDept;
     }
 
-    public String getProjectPuid() {
-        return projectPuid;
+    public String getpPuid() {
+        return pPuid;
     }
 
-    public void setProjectPuid(String projectPuid) {
-        this.projectPuid = projectPuid;
-    }
-
-    public String getpBomLinePartName() {
-        return pBomLinePartName;
-    }
-
-    public void setpBomLinePartName(String pBomLinePartName) {
-        this.pBomLinePartName = pBomLinePartName;
-    }
-
-    public String getpBomLinePartClass() {
-        return pBomLinePartClass;
-    }
-
-    public void setpBomLinePartClass(String pBomLinePartClass) {
-        this.pBomLinePartClass = pBomLinePartClass;
-    }
-
-    public String getItemResource() {
-        return itemResource;
-    }
-
-    public void setItemResource(String itemResource) {
-        this.itemResource = itemResource;
-    }
-
-    public String getResource() {
-        return resource;
-    }
-
-    public void setResource(String resource) {
-        this.resource = resource;
-    }
-
-    public Integer getType() {
-        return type;
-    }
-
-    public void setType(Integer type) {
-        this.type = type;
-    }
-
-    public Integer getBuyUnit() {
-        return buyUnit;
-    }
-
-    public void setBuyUnit(Integer buyUnit) {
-        this.buyUnit = buyUnit;
-    }
-
-    public String getWorkShop1() {
-        return workShop1;
-    }
-
-    public void setWorkShop1(String workShop1) {
-        this.workShop1 = workShop1;
-    }
-
-    public String getWorkShop2() {
-        return workShop2;
-    }
-
-    public void setWorkShop2(String workShop2) {
-        this.workShop2 = workShop2;
-    }
-
-    public String getProductLine() {
-        return productLine;
-    }
-
-    public void setProductLine(String productLine) {
-        this.productLine = productLine;
-    }
-
-    public String getMouldType() {
-        return mouldType;
-    }
-
-    public void setMouldType(String mouldType) {
-        this.mouldType = mouldType;
-    }
-
-    public String getOuterPart() {
-        return outerPart;
-    }
-
-    public void setOuterPart(String outerPart) {
-        this.outerPart = outerPart;
-    }
-
-    public Integer getColorPart() {
-        return colorPart;
-    }
-
-    public void setColorPart(Integer colorPart) {
-        this.colorPart = colorPart;
+    public void setpPuid(String pPuid) {
+        this.pPuid = pPuid;
     }
 
     public String getSparePart() {
@@ -468,11 +323,51 @@ public class HzEPLManageRecord {
         this.changeNum = changeNum;
     }
 
-    public Integer getpState() {
-        return pState;
+    public Integer getIsDept() {
+        return isDept;
     }
 
-    public void setpState(Integer pState) {
-        this.pState = pState;
+    public void setIsDept(Integer isDept) {
+        this.isDept = isDept;
+    }
+
+    public void setIsHas(Integer isHas) {
+        this.isHas = isHas;
+    }
+
+    public void setIs2Y(Integer is2Y) {
+        this.is2Y = is2Y;
+    }
+
+    public void setIsPart(Integer isPart) {
+        this.isPart = isPart;
+    }
+
+    public void setOrderNum(Integer orderNum) {
+        this.orderNum = orderNum;
+    }
+
+    public String getProjectPuid() {
+        return projectPuid;
+    }
+
+    public void setProjectPuid(String projectPuid) {
+        this.projectPuid = projectPuid;
+    }
+
+    public String getpBomLinePartName() {
+        return pBomLinePartName;
+    }
+
+    public void setpBomLinePartName(String pBomLinePartName) {
+        this.pBomLinePartName = pBomLinePartName;
+    }
+
+    public String getpBomLinePartClass() {
+        return pBomLinePartClass;
+    }
+
+    public void setpBomLinePartClass(String pBomLinePartClass) {
+        this.pBomLinePartClass = pBomLinePartClass;
     }
 }

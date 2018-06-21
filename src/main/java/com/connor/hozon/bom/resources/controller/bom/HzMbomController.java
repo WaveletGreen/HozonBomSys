@@ -1,15 +1,19 @@
 package com.connor.hozon.bom.resources.controller.bom;
 
 import com.connor.hozon.bom.resources.controller.BaseController;
+import com.connor.hozon.bom.resources.dto.request.FindForPageReqDTO;
+import com.connor.hozon.bom.resources.dto.response.HzMbomRecordRespDTO;
+import com.connor.hozon.bom.resources.page.Page;
+import com.connor.hozon.bom.resources.service.bom.HzMbomService;
 import com.connor.hozon.bom.resources.util.ResultMessageBuilder;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * \* User: xulf
@@ -21,6 +25,9 @@ import java.util.Map;
 @Controller
 @RequestMapping(value = "/mbom")
 public class HzMbomController extends BaseController {
+
+    @Autowired
+    private HzMbomService hzMbomService;
 
     @RequestMapping(value = "superBomTitel",method = RequestMethod.GET)
     public void getMbomSuperBomGetTitel(HttpServletResponse response){
@@ -61,4 +68,78 @@ public class HzMbomController extends BaseController {
         titel.put("endTime","结束时间");
         writeAjaxJSONResponse(ResultMessageBuilder.build(titel),response);
     }
+
+
+    /**
+     * MBOM管理标题
+     * @param response
+     */
+    @RequestMapping(value = "manage/title", method = RequestMethod.GET)
+    public void getPbomLineTitle(HttpServletResponse response) {
+        LinkedHashMap<String, String> tableTitle = new LinkedHashMap<>();
+        tableTitle.put("No", "序号");
+        tableTitle.put("level", "层级");
+        tableTitle.put("pBomOfWhichDept", "专业");
+        tableTitle.put("lineId", "零件号");
+        tableTitle.put("object_name", "名称");
+
+        tableTitle.put("sparePart", "备件");
+        tableTitle.put("sparePartNum", "备件编号");
+        tableTitle.put("processRoute", "工艺路线");
+        tableTitle.put("laborHour", "人工工时");
+        tableTitle.put("rhythm", "节拍");
+        tableTitle.put("solderJoint", "焊点");
+        tableTitle.put("machineMaterial", "机物料");
+        tableTitle.put("standardPart", "标准件");
+        tableTitle.put("tools", "工具");
+        tableTitle.put("wasterProduct", "废品");
+        tableTitle.put("change", "变更");
+        tableTitle.put("changeNum", "变更号");
+        writeAjaxJSONResponse(ResultMessageBuilder.build(tableTitle), response);
+    }
+
+
+    /**
+     * 分页获取MBOM 记录
+     * @param reqDTO
+     * @return
+     */
+    @RequestMapping(value = "record",method = RequestMethod.GET)
+    @ResponseBody
+    public Map<String, Object> getMbomLineRecord(FindForPageReqDTO reqDTO) {
+        Page<HzMbomRecordRespDTO> page = hzMbomService.fingHzMbomForPage(reqDTO);
+        if(page == null){
+            return  new HashMap<>();
+        }
+        List<HzMbomRecordRespDTO> list = page.getResult();
+        Map<String, Object> ret = new HashMap<>();
+        List<Map<String, Object>> _list = new ArrayList<>();
+        list.forEach(dto -> {
+            Map<String, Object> _res = new HashMap<>();
+            _res.put("eBomPuid", dto.getEbomPuid());
+            _res.put("puid",dto.getPuid());
+            _res.put("No",dto.getNo());
+            _res.put("level", dto.getLevel());
+            _res.put("pBomOfWhichDept", dto.getpBomOfWhichDept());
+            _res.put("lineId", dto.getLineId());
+            _res.put("object_name",dto.getObject_name());
+            _res.put("sparePart", dto.getSparePart());
+            _res.put("sparePartNum", dto.getSparePartNum());
+            _res.put("processRoute", dto.getProcessRoute());
+            _res.put("laborHour", dto.getLaborHour());
+            _res.put("rhythm", dto.getRhythm());
+            _res.put("solderJoint", dto.getSolderJoint());
+            _res.put("machineMaterial", dto.getMachineMaterial());
+            _res.put("standardPart", dto.getStandardPart());
+            _res.put("tools", dto.getTools());
+            _res.put("wasterProduct", dto.getWasterProduct());
+            _res.put("change", dto.getChange());
+            _res.put("changeNum", dto.getChangeNum());
+            _list.add(_res);
+        });
+        ret.put("totalCount", page.getTotalCount());
+        ret.put("result", _list);
+        return ret;
+    }
+
 }

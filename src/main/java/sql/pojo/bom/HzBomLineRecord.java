@@ -12,7 +12,7 @@ public class HzBomLineRecord {
     /**
      * 是否部门层
      */
-    private String isDept;
+    private Integer isDept;
     /**
      * 数模层PUID
      */
@@ -182,11 +182,11 @@ public class HzBomLineRecord {
         this.projectPuid = projectPuid;
     }
 
-    public String getIsDept() {
+    public Integer getIsDept() {
         return isDept;
     }
 
-    public void setIsDept(String isDept) {
+    public void setIsDept(Integer isDept) {
         this.isDept = isDept;
     }
 

@@ -18,6 +18,11 @@ import java.util.Map;
 @Service("baseSQLUtil")
 public class BaseSQLUtil implements IBaseSQLUtil {
     private static final Logger logger = LoggerFactory.getLogger(BaseSQLUtil.class);
+    private static SqlSession  session = null;
+    static{
+        SqlSessionFactory f = FactoryManager.getInstance();
+        session = f.openSession();
+    }
 
     public <T> T executeQueryById(T suppliers, String by) {
         SqlSession session = null;
@@ -137,30 +142,6 @@ public class BaseSQLUtil implements IBaseSQLUtil {
         return result;
     }
 
-    @Override
-    public <T> T executeQueryByPass(T t, String by, String... pass) {
-        SqlSession session = null;
-        T result = null;
-        try {
-            SqlSessionFactory f = FactoryManager.getInstance();
-            session = f.openSession();
-            logger.info("BaseSQLUtil execute sql:" + by);
-            if (t == null) {
-                result = session.selectOne(by);
-            } else {
-                result = session.selectOne(by, pass);
-            }
-            // session.commit(true);
-        } catch (Exception e) {
-            e.printStackTrace();
-            // session.rollback(true);
-        } finally {
-            // if (session != null)
-            // session.close();
-        }
-        return result;
-    }
-
     public <T> int executeUpdate(T suppliers, String by) {
         SqlSession session = null;
         int result = 0;
@@ -233,7 +214,6 @@ public class BaseSQLUtil implements IBaseSQLUtil {
         }
         return result;
     }
-
     public int executeDeleteByPass(String puid, String by) {
         SqlSession session = null;
         int result = 0;
@@ -256,6 +236,8 @@ public class BaseSQLUtil implements IBaseSQLUtil {
         }
         return result;
     }
+
+
 
 
     @Override
@@ -289,17 +271,16 @@ public class BaseSQLUtil implements IBaseSQLUtil {
 
     /**
      * 查询一个list
-     *
      * @param sqlMapId
      * @param param
      * @return
      */
     public List findForList(final String sqlMapId, final Object param) {
-        SqlSession session = null;
+//        SqlSession session = null;
         List result = null;
         try {
-            SqlSessionFactory f = FactoryManager.getInstance();
-            session = f.openSession();
+//            SqlSessionFactory f = FactoryManager.getInstance();
+//            session = f.openSession();
             logger.info("BaseSQLUtil execute sql:" + sqlMapId);
             if (param == null) {
                 result = session.selectList(sqlMapId);
@@ -308,10 +289,10 @@ public class BaseSQLUtil implements IBaseSQLUtil {
             }
             // session.commit();
         } catch (Exception e) {
-            throw new DatabaseException("SQL执行出错" + sqlMapId, e);
+           throw new DatabaseException("SQL执行出错"+sqlMapId,e);
         } finally {
-            if (session != null)
-                session.close();
+//            if (session != null)
+//                session.close();
         }
         return result;
     }
@@ -319,8 +300,8 @@ public class BaseSQLUtil implements IBaseSQLUtil {
     /**
      * 插入一个实体
      *
-     * @param sqlMapId mybatis 映射id
-     * @param object   实体参数
+     * @param sqlMapId  mybatis 映射id
+     * @param object  实体参数
      * @return
      */
     public int insert(final String sqlMapId, final Object object) {
@@ -333,7 +314,7 @@ public class BaseSQLUtil implements IBaseSQLUtil {
             return result;
         } catch (Exception e) {
             logger.error("SQL执行出错: " + sqlMapId, e);
-            throw new DatabaseException("SQL执行出错" + sqlMapId, e);
+            throw new DatabaseException("SQL执行出错"+sqlMapId,e);
         } finally {
             if (session != null)
                 session.close();
@@ -344,11 +325,11 @@ public class BaseSQLUtil implements IBaseSQLUtil {
     /**
      * 查询一个实体
      *
-     * @param sqlMapId mybatis 映射id
-     * @param param    实体参数
+     * @param sqlMapId  mybatis 映射id
+     * @param param  实体参数
      * @return
      */
-    public Object findForObject(final String sqlMapId, final Object param) {
+    public Object findForObject(final String sqlMapId, final Object param){
         SqlSession session = null;
         try {
             SqlSessionFactory f = FactoryManager.getInstance();
@@ -360,7 +341,7 @@ public class BaseSQLUtil implements IBaseSQLUtil {
             }
         } catch (Exception e) {
             logger.error("SQL执行出错: " + sqlMapId, e);
-            throw new DatabaseException("SQL执行出错" + sqlMapId, e);
+            throw new DatabaseException("SQL执行出错"+sqlMapId,e);
         } finally {
             if (session != null)
                 session.close();
@@ -369,12 +350,11 @@ public class BaseSQLUtil implements IBaseSQLUtil {
 
     /**
      * 修改
-     *
      * @param sqlMapId
      * @param param
      * @return
      */
-    public int update(final String sqlMapId, final Object param) {
+    public int update(final String sqlMapId, final Object param){
         SqlSession session = null;
         try {
             SqlSessionFactory factory = FactoryManager.getInstance();
@@ -384,14 +364,14 @@ public class BaseSQLUtil implements IBaseSQLUtil {
             return result;
         } catch (Exception e) {
             logger.error("SQL执行出错: " + sqlMapId, e);
-            throw new DatabaseException("SQL执行出错" + sqlMapId, e);
+            throw new DatabaseException("SQL执行出错"+sqlMapId,e);
         } finally {
             if (session != null)
                 session.close();
         }
     }
 
-    public int delete(final String sqlMapId, final Object param) {
+    public int delete(final String sqlMapId, final Object param){
         SqlSession session = null;
         try {
             SqlSessionFactory f = FactoryManager.getInstance();
@@ -401,32 +381,31 @@ public class BaseSQLUtil implements IBaseSQLUtil {
             return result;
         } catch (Exception e) {
             logger.error("SQL执行出错: " + sqlMapId, e);
-            throw new DatabaseException("SQL执行出错" + sqlMapId, e);
+            throw new DatabaseException("SQL执行出错"+sqlMapId,e);
         } finally {
             if (session != null)
                 session.close();
         }
     }
-
     /**
      * 带有分页信息的查询
      *
-     * @param sqlMapId    mybatis映射id
-     * @param pageRequest 分页请求参数信息
+     * @param sqlMapId  mybatis映射id
+     * @param pageRequest  分页请求参数信息
      * @return
      */
-    public Page findForPage(String sqlMapId, final String totalMapId, PageRequest pageRequest) {
-
+    public Page findForPage(String sqlMapId,final String totalMapId, PageRequest pageRequest) {
+        Map filters = new HashMap();
+        filters.putAll(pageRequest.getFilters());
         // 查询总数
-        Number totalCount = (Number) findForObject(totalMapId, null);
+        Number totalCount = (Number) findForObject(totalMapId,filters);
         if (totalCount == null || totalCount.intValue() <= 0) {
             return new Page(pageRequest, 0);
         }
         if (totalCount != null && totalCount.intValue() <= (pageRequest.getPageNumber() - 1) * pageRequest.getPageSize()) {
             return new Page(pageRequest.getPageNumber(), pageRequest.getPageSize(), totalCount.intValue(), new ArrayList(0));
         }
-        Map filters = new HashMap();
-        filters.putAll(pageRequest.getFilters());
+
         Page page = new Page(pageRequest, totalCount.intValue());
         List list = findForList(sqlMapId, filters, page.getFirstResult(), page.getPageSize());
 
@@ -438,10 +417,10 @@ public class BaseSQLUtil implements IBaseSQLUtil {
     /**
      * 查询列表
      *
-     * @param sqlMapId mybatis映射id
-     * @param param    查询参数
-     * @param offset   查询起始位置(偏移量),从1开始
-     * @param limit    查询数量,必须大于0
+     * @param sqlMapId  mybatis映射id
+     * @param param  查询参数
+     * @param offset  查询起始位置(偏移量),从1开始
+     * @param limit  查询数量,必须大于0
      * @return
      */
     public List findForList(final String sqlMapId, final Object param, final int offset, final int limit) {
