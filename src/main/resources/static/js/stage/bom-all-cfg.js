@@ -86,7 +86,7 @@ function loadData() {
                 "<tr>" +
                 "<th width='50px' align='center'><input type='checkbox'></th>" +
                 "<th width='50px'>序号</th>" +
-                "<th width='100px'>操作类型</th>" +
+                // "<th width='100px'>操作类型</th>" +
                 "<th width='100px'>系统</th>" +
                 "<th width='200px'>总成零件号</th>" +
                 "<th width='200px'>总成零件名称</th>" +

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0ModelFeatureDao">
+    <resultMap id="BaseResultMap" type="sql.pojo.cfg.HzCfg0ModelFeature">
+        <!--主键-->
+        <id column="PUID" jdbcType="VARCHAR" property="puid"/>
+        <!--归属车型模型-->
+        <result column="P_PERTAIN_TO_MODEL" jdbcType="VARCHAR" property="pPertainToModel"/>
+        <!--归属颜色车身-->
+        <result column="P_PERTAIN_TO_COLOR_MODEL" jdbcType="VARCHAR" property="pPertainToColorModel"/>
+        <!--中文描述-->
+        <result column="P_FEATURE_CN_DESC" jdbcType="VARCHAR" property="pFeatureCnDesc"/>
+        <!--单车配置码-->
+        <result column="P_FEATURE_SINGLE_VEHICLE_CODE" jdbcType="VARCHAR" property="pFeatureSingleVehicleCode"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        PUID,
+        P_PERTAIN_TO_MODEL,
+        P_PERTAIN_TO_COLOR_MODEL,
+        P_FEATURE_CN_DESC,
+        P_FEATURE_SINGLE_VEHICLE_CODE
+  </sql>
+    <!--根据主键查找-->
+    <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from HZ_CFG0_MODEL_FEATURE
+        where PUID = #{puid,jdbcType=VARCHAR}
+    </select>
+    <!--根据车型模型puid找-->
+    <select id="selectByModelPuid" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from HZ_CFG0_MODEL_FEATURE
+        where P_PERTAIN_TO_MODEL = #{pPertainToModel,jdbcType=VARCHAR}
+    </select>
+    <!--根据颜色车身查找-->
+    <select id="selectByModelColorPuid" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from HZ_CFG0_MODEL_FEATURE
+        where P_PERTAIN_TO_COLOR_MODEL = #{pPertainToColorModel,jdbcType=VARCHAR}
+    </select>
+    <!--根据车型模型和颜色车身查找-->
+    <select id="selectByModelAndColorPuids" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from HZ_CFG0_MODEL_FEATURE
+        where
+        P_PERTAIN_TO_MODEL = #{pPertainToModel,jdbcType=VARCHAR}
+        AND P_PERTAIN_TO_COLOR_MODEL = #{pPertainToColorModel,jdbcType=VARCHAR}
+    </select>
+    <!--根据主键删除-->
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+        delete from HZ_CFG0_MODEL_FEATURE
+        where PUID = #{puid,jdbcType=VARCHAR}
+  </delete>
+    <!--插入1条车型特性数据，1阶段不包含颜色车身-->
+    <insert id="insert" parameterType="sql.pojo.cfg.HzCfg0ModelFeature">
+        insert into
+        HZ_CFG0_MODEL_FEATURE (
+        <include refid="Base_Column_List"/>
+        )
+        values (
+        #{puid,jdbcType=VARCHAR},
+        #{pPertainToModel,jdbcType=VARCHAR},
+        #{pPertainToColorModel,jdbcType=VARCHAR},
+        #{pFeatureCnDesc,jdbcType=VARCHAR},
+        #{pFeatureSingleVehicleCode,jdbcType=VARCHAR}
+        )
+    </insert>
+    <!--根据主键更新1条车型特性数据-->
+    <update id="updateByPrimaryKey" parameterType="sql.pojo.cfg.HzCfg0ModelFeature">
+    update HZ_CFG0_MODEL_FEATURE
+        set
+          P_PERTAIN_TO_MODEL = #{pPertainToModel,jdbcType=VARCHAR},
+          P_FEATURE_CN_DESC = #{pFeatureCnDesc,jdbcType=VARCHAR},
+          P_FEATURE_SINGLE_VEHICLE_CODE = #{pFeatureSingleVehicleCode,jdbcType=VARCHAR}
+        where PUID = #{puid,jdbcType=VARCHAR}
+  </update>
+    <update id="updateByModelPuidWithBasic" parameterType="sql.pojo.cfg.HzCfg0ModelFeature">
+    update HZ_CFG0_MODEL_FEATURE
+        set
+          P_PERTAIN_TO_MODEL = #{pPertainToModel,jdbcType=VARCHAR},
+          P_PERTAIN_TO_COLOR_MODEL = #{pPertainToColorModel,jdbcType=VARCHAR},
+          P_FEATURE_CN_DESC = #{pFeatureCnDesc,jdbcType=VARCHAR},
+          P_FEATURE_SINGLE_VEHICLE_CODE = #{pFeatureSingleVehicleCode,jdbcType=VARCHAR}
+        where PUID = #{puid,jdbcType=VARCHAR}
+  </update>
+</mapper>

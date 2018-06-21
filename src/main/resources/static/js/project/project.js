@@ -23,7 +23,7 @@ $(document).ready(
                 var ok = true;
                 if (_data) {
                     for (var i in _data) {
-                        if (i == 1 && ok) {
+                        if (i == 0 && ok) {
                             $("#project", window.top.document).val(_data[i].puid);
                             $("#currentProject").text("当前工作项目:" + _data[i].pProjectName);
                             $("#currentProjectHead", window.top.document).text(_data[i].pProjectName);
