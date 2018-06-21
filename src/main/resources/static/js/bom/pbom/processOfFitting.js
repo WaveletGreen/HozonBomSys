@@ -307,6 +307,34 @@ $(function () {
                     $(document).ready(function () {
                         $.fn.zTree.init($("#Ztree3"), setting, zNodes);
                     });
+                    /**
+                     * 刷新当前节点
+                     */
+                    function refreshNode() {
+                        /*根据 treeId 获取 zTree 对象*/
+                        var zTree = $.fn.zTree.getZTreeObj("Ztree3"),
+                            type = "refresh",
+                            silent = false,
+                            /*获取 zTree 当前被选中的节点数据集合*/
+                            nodes = zTree.getSelectedNodes();
+                        /*强行异步加载父节点的子节点。[setting.async.enable = true 时有效]*/
+                        zTree.reAsyncChildNodes(nodes[0], type, silent);
+                    }
+
+                    /**
+                     * 刷新当前选择节点的父节点
+                     */
+                    function refreshParentNode() {
+                        var zTree = $.fn.zTree.getZTreeObj("Ztree3"),
+                            type = "refresh",
+                            silent = false,
+                            nodes = zTree.getSelectedNodes();
+                        /*根据 zTree 的唯一标识 tId 快速获取节点 JSON 数据对象*/
+                        var parentNode = zTree.getNodeByTId(nodes[0].parentTId);
+                        /*选中指定节点*/
+                        zTree.selectNode(parentNode);
+                        zTree.reAsyncChildNodes(parentNode, type, silent);
+                    }
                 },
                 /*error: function (info) {
                     alert(info);
@@ -355,13 +383,25 @@ function doSubmit() {
         contentType: "application/json",
         data: JSON.stringify(data),
         // dataType: "json",
-        success: function (result) {
-            window.Ewin.alert({message: result.msg});
+        success: function (response) {
+            window.Ewin.alert({message: response.msg + ':合成零件成功'});
         },
-        error: function (status) {
-            window.Ewin.alert({message: status.status + ':合成零件失败!'});
+        error: function (response) {
+            window.Ewin.alert({message: response.status + ':合成零件失败!'});
         }
     })
+}
 
-
+/**
+ * 刷新节点操作
+ */
+function refreshNode() {
+    /*根据 treeId 获取 zTree 对象*/
+    var zTree = $.fn.zTree.getZTreeObj("Ztree3"),
+        type = "refresh",
+        silent = false,
+        /*获取 zTree 当前被选中的节点数据集合*/
+        nodes = zTree.getSelectedNodes();
+    /*强行异步加载父节点的子节点。[setting.async.enable = true 时有效]*/
+    zTree.reAsyncChildNodes(nodes[0], type, silent);
 }

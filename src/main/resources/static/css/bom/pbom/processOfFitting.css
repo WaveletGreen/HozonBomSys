@@ -10,12 +10,12 @@
 
 .tableNormalStyle tr td {
     /* 	调整单个单元格的大小 */
-    min-width: 140px;
+    min-width: 100px;
     text-align: center;
 }
 
 .tableNormalStyle tr th {
     border: 1px solid #CCC;
-    min-width: 140px;
+    min-width: 100px;
     text-align: center;
 }
