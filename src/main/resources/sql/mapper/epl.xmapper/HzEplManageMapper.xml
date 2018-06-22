@@ -80,6 +80,9 @@
       select t2.puid from Hz_project_libs t2
       <where>
         t2.puid=#{projectId,jdbcType=VARCHAR}))
+        <if test="puid != null">
+          and t1.puid = #{puid,jdbcType=VARCHAR}
+        </if>
       </where>
   </select>
 
