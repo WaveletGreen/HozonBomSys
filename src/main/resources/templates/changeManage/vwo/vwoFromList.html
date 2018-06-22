@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<!--User: xulf Date: 2018/6/21 Time: 13:09-->
+<head th:include="include/includebase"></head>
+<link th:href="@{/css/stage/bom-stage.css}" rel="stylesheet"/>
+<meta charset="UTF-8">
+<title>VWO表单</title>
+</head>
+<body>
+<h1>VWO表单</h1>
+<div class="panel-body" style="padding-bottom:0px;">
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="form-group" style="width: 25%">
+                <label for="name" align="center">VWO号:</label>
+                <input type="text" class="form-control" name="name" id="name" placeholder="" style="width: 70%"/>
+            </div>
+            <div class="form-group">
+                <label for="roleName">创建时间:</label>
+                <input type="text" class="form-control" name="roleName" id="roleName" placeholder=""/>
+            </div>
+            <div class="form-group">
+                <label for="roleName">流程状态:</label>
+                <input type="text" class="form-control" name="roleName" id="roleName" placeholder=""/>
+            </div>
+            <div class="form-group">
+                <label for="roleName">标题:</label>
+                <input type="text" class="form-control" name="roleName" id="roleName" placeholder=""/>
+            </div>
+            <div class="form-group">
+                <label for="roleName">部门:</label>
+                <input type="text" class="form-control" name="roleName" id="roleName" placeholder=""/>
+            </div>
+        </div>
+    </div>
+    <table id="vwo-table" style="margin-top: -50px;">
+    </table>
+</div>
+</body>
+</html>
