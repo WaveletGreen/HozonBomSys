@@ -3,6 +3,7 @@
 <!--User: xulf Date: 2018/6/21 Time: 13:09-->
 <head th:include="include/includebase"></head>
 <link th:href="@{/css/stage/bom-stage.css}" rel="stylesheet"/>
+<link th:href="@{/css/changeManage/vwo/vwoFromList.css}"/>
 <meta charset="UTF-8">
 <title>VWO表单</title>
 </head>
@@ -10,27 +11,101 @@
 <h1>VWO表单</h1>
 <div class="panel-body" style="padding-bottom:0px;">
     <div class="panel panel-default">
-        <div class="panel-body">
-            <div class="form-group" style="width: 25%">
-                <label for="name" align="center">VWO号:</label>
-                <input type="text" class="form-control" name="name" id="name" placeholder="" style="width: 70%"/>
-            </div>
-            <div class="form-group">
-                <label for="roleName">创建时间:</label>
-                <input type="text" class="form-control" name="roleName" id="roleName" placeholder=""/>
-            </div>
-            <div class="form-group">
-                <label for="roleName">流程状态:</label>
-                <input type="text" class="form-control" name="roleName" id="roleName" placeholder=""/>
-            </div>
-            <div class="form-group">
-                <label for="roleName">标题:</label>
-                <input type="text" class="form-control" name="roleName" id="roleName" placeholder=""/>
-            </div>
-            <div class="form-group">
-                <label for="roleName">部门:</label>
-                <input type="text" class="form-control" name="roleName" id="roleName" placeholder=""/>
-            </div>
+        <div class="panel-body" style="background-color:#E0FFFF">
+            <form class="form-inline" role="form" style="float: left; width: 100%;margin-left: 20px;" method="get"
+                  id="queryPbomManage">
+                <div class="form-group">
+                    <label for="VWOnum">VWO号:&nbsp;&nbsp;</label>
+                    <input type="text" class="form-control" name="level" id="VWOnum" placeholder=""/>
+                </div>
+                <div class="form-group  ">
+                    <label for="creatTime">创建时间:&emsp;&emsp;</label>
+                    <input type="text" class="form-control" name="pBomOfWhichDept" id="creatTime"
+                           placeholder=""/>
+                </div>
+                <div class="form-group  ">
+                    <label for="processState">流程状态:</label>
+                    <input type="text" class="form-control" name="rank" id="processState" placeholder=""/>
+                </div>
+                <div class="form-group  ">
+                    <label for="title">标题:&emsp;&emsp;&emsp;&emsp;</label>
+                    <input type="text" class="form-control" name="groupNum" id="title" placeholder=""/>
+                </div>
+                <div class="form-group  ">
+                    <label for="dept">部门:&emsp;&emsp;</label>
+                    <input type="text" class="form-control" name="lineId" id="dept" placeholder=""/>
+                </div>
+                <div class="form-group">
+                    <label for="initiator">发起人:&emsp;&emsp;&emsp;</label>
+                    <input type="text" class="form-control" name="itemType" id="initiator" placeholder=""/>
+                </div>
+                <div class="form-group">
+                    <label for="phone">联系电话:</label>
+                    <input type="text" class="form-control" name="itemType" id="phone" placeholder=""/>
+                </div>
+                <div class="form-group">
+                    <label for="finishTime">要求完成时间:</label>
+                    <input type="text" class="form-control" name="itemType" id="finishTime" placeholder=""/>
+                </div>
+                <div class="form-group">
+                    <label for="changeType">变更类型:</label>
+                    <input type="text" class="form-control" name="itemType" id="changeType" placeholder=""/>
+                </div>
+                <div class="form-group">
+                    <label for="expenseDept">费用承担部门:</label>
+                    <select class="form-control" name="" id="expenseDept" style="width: 13.65em">
+                        <option>车身技术部门</option>
+                        <option>电子电器技术部门</option>
+                        <option>底盘技术部门</option>
+                        <option>系统集成技术部门</option>
+                        <option>内外饰技术部门</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="listedType">上市类型:</label>
+                    <input type="text" class="form-control" name="itemType" id="listedType" placeholder=""/>
+                </div>
+                <div class="form-group">
+                    <label for="relevanceVWONum">关联VWO号:&nbsp;&nbsp;</label>
+                    <input type="text" class="form-control" name="itemType" id="relevanceVWONum" placeholder=""/>
+                </div>
+                <div class="form-group">
+                    <label for="ReasonPhrase">原因描述:</label>
+                    <input type="text" class="form-control" style="width: 74em" name="itemType" id="ReasonPhrase"
+                           placeholder=""/>
+                </div>
+                <div class="form-group">
+                    <label for="platform" style="text-align: center">平台</label>
+                    <input type="text" class="form-control" style="width: 16em" name="itemType" id="platform"
+                           placeholder=""/>
+                </div>
+                <div class="form-group">
+                    <label for="modelCode" style="text-align: center">车型代号</label>
+                    <input type="text" class="form-control" style="width: 16em" name="itemType" id="modelCode"
+                           placeholder=""/>
+                </div>
+                <div class="form-group">
+                    <label for="projectCode" style="text-align: center">项目代号</label>
+                    <input type="text" class="form-control" style="width: 16em" name="itemType" id="projectCode"
+                           placeholder=""/>
+                </div>
+                <div class="form-group">
+                    <label for="commonTime" style="text-align: center">启动生效时间</label>
+                    <input type="text" class="form-control" style="width: 16em" name="itemType" id="commonTime"
+                           placeholder=""/>
+                </div>
+                <div class="form-group">
+                    <label for="endTime" style="text-align: center">终止生效时间</label>
+                    <input type="text" class="form-control" style="width: 16em" name="itemType" id="endTime"
+                           placeholder=""/>
+                </div>
+                <div class="form-group">
+                    <label for="projectPhase" style="text-align: center">项目所属阶段</label>
+                    <input type="text" class="form-control" style="width: 16em" name="itemType" id="projectPhase "
+                           placeholder=""/>
+                </div>
+            </form>
+
         </div>
     </div>
     <table id="vwo-table" style="margin-top: -50px;">

@@ -77,6 +77,8 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         registry.addViewController("/processOfFitting").setViewName("/bomManage/pbom/processOfFitting/processOfFitting");
         //PBOM工艺辅料页面
         registry.addViewController("/processAids").setViewName("/bomManage/pbom/processAids/processAids");
+        //变更管理VWO表单
+        registry.addViewController("/vwoFromList").setViewName("/changeManage/vwo/vwoFromList");
     }
 
 
