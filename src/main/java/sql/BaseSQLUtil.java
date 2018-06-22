@@ -142,6 +142,30 @@ public class BaseSQLUtil implements IBaseSQLUtil {
         return result;
     }
 
+    @Override
+    public <T> T executeQueryByPass(T t, String by, String... pass) {
+        SqlSession session = null;
+        T result = null;
+        try {
+            SqlSessionFactory f = FactoryManager.getInstance();
+            session = f.openSession();
+            logger.info("BaseSQLUtil execute sql:" + by);
+            if (t == null) {
+                result = session.selectOne(by);
+            } else {
+                result = session.selectOne(by, pass);
+            }
+            // session.commit(true);
+        } catch (Exception e) {
+            e.printStackTrace();
+            // session.rollback(true);
+        } finally {
+            // if (session != null)
+            // session.close();
+        }
+        return result;
+    }
+
     public <T> int executeUpdate(T suppliers, String by) {
         SqlSession session = null;
         int result = 0;

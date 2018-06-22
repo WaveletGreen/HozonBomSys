@@ -81,17 +81,17 @@ public class HzEPLManageRecordServiceImpl implements HzEPLManageRecordService {
                 }
                 jsonObject.put("pState",pState);
                 jsonObject.put("pBomOfWhichDept", record.getpBomOfWhichDept());
-                //获取分组号
-                String groupNum = record.getLineID();
-
-                //这里在做一个递归查询
-                if(groupNum.contains("-")){
-                    groupNum =groupNum.split("-")[1].substring(0,4);
-                }else{
-                    String parentId = record.getParentUid();
-                    groupNum = getGroupNum(recordReqDTO.getProjectId(),parentId);
-                }
-                jsonObject.put("groupNum", groupNum);
+//                //获取分组号
+//                String groupNum = record.getLineID();
+//
+//                //这里在做一个递归查询
+//                if(groupNum.contains("-")){
+//                    groupNum =groupNum.split("-")[1].substring(0,4);
+//                }else{
+//                    String parentId = record.getParentUid();
+//                    groupNum = getGroupNum(recordReqDTO.getProjectId(),parentId);
+//                }
+                jsonObject.put("groupNum", record.getLineID());
                 jsonObject.put("lineId", record.getLineID());
                 jsonObject.put("itemName", record.getpBomLinePartName());
                 jsonObject.put("itemPart", record.getpBomLinePartClass());

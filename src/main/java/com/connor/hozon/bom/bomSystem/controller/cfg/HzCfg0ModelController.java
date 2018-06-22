@@ -1,16 +1,28 @@
 package com.connor.hozon.bom.bomSystem.controller.cfg;
 
+import com.connor.hozon.bom.bomSystem.helper.ProjectHelper;
+import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0MainService;
 import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0ModelService;
 import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0ModelRecordService;
+import com.connor.hozon.bom.bomSystem.service.iservice.project.IHzVehicleService;
+import com.connor.hozon.bom.bomSystem.service.project.HzBrandService;
+import com.connor.hozon.bom.bomSystem.service.project.HzPlatformService;
+import com.connor.hozon.bom.bomSystem.service.project.HzProjectLibsService;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import sql.pojo.cfg.HzCfg0MainRecord;
 import sql.pojo.cfg.HzCfg0ModelDetail;
 import sql.pojo.cfg.HzCfg0ModelRecord;
+import sql.pojo.project.HzBrandRecord;
+import sql.pojo.project.HzPlatformRecord;
+import sql.pojo.project.HzProjectLibs;
+import sql.pojo.project.HzVehicleRecord;
 
 import javax.validation.constraints.NotNull;
+import java.util.List;
 import java.util.UUID;
 
 @Controller
@@ -26,6 +38,14 @@ public class HzCfg0ModelController {
      */
     @Autowired
     HzCfg0ModelRecordService hzCfg0modelRecordService;
+    /**
+     * 配置主数据服务层
+     */
+    @Autowired
+    HzCfg0MainService cfg0MainService;
+
+    @Autowired
+    ProjectHelper projectHelper;
 
     @RequestMapping(value = "/saveModelData", method = RequestMethod.POST)
     @ResponseBody
@@ -49,7 +69,15 @@ public class HzCfg0ModelController {
             isSuccess = hzCfg0ModelService.doInsertOne(detail);
             sb.append("数据");
         }
-        result.put("msg", sb + detail.getpModelName() + "成功");
+        if (isSuccess) {
+            HzCfg0ModelRecord modelRecord = hzCfg0modelRecordService.doGetById(detail.getpModelPuid());
+            //更新车型模型名，如果有修改
+            if(!(modelRecord.getObjectName().equals(detail.getpModelVersion()))){
+                modelRecord.setObjectName(detail.getpModelVersion());
+                isSuccess = hzCfg0modelRecordService.doUpdateModelName(modelRecord);
+            }
+        }
+        result.put("msg", sb + detail.getpModelVersion() + "成功");
         result.put("state", isSuccess);
         return result;
     }
@@ -59,6 +87,19 @@ public class HzCfg0ModelController {
         HzCfg0ModelDetail fromDBDetail = new HzCfg0ModelDetail();
         fromDBDetail.setpModelPuid(pModelPuid);
         fromDBDetail = hzCfg0ModelService.getOneByModelId(fromDBDetail);
+        HzCfg0ModelRecord hzCfg0ModelRecord = hzCfg0modelRecordService.doGetById(pModelPuid);
+        HzCfg0MainRecord hzCfg0MainRecord = cfg0MainService.doGetByPrimaryKey(hzCfg0ModelRecord.getpCfg0ModelOfMainRecord());
+
+        projectHelper.doGetProjectTreeByProjectId(hzCfg0MainRecord.getpCfg0OfWhichProjectPuid());
+
+        if (projectHelper.getProject() == null ||
+                projectHelper.getVehicle() == null ||
+                projectHelper.getPlatform() == null ||
+                projectHelper.getBrand() == null
+                ) {
+            model.addAttribute("msg", "无法查询项目结构，请确保选中项目或保证车型模型在项目中");
+            return "errorWithEntity";
+        }
         if (fromDBDetail == null) {
             HzCfg0ModelRecord record = hzCfg0modelRecordService.doGetById(pModelPuid);
             if (record == null) {
@@ -66,9 +107,12 @@ public class HzCfg0ModelController {
             } else {
                 fromDBDetail = new HzCfg0ModelDetail();
                 fromDBDetail.setpModelPuid(record.getPuid());
-                fromDBDetail.setpModelName(record.getObjectName());
+                fromDBDetail.setpModelBrand(projectHelper.getBrand().getpBrandName());
+                fromDBDetail.setpModelPlatform(projectHelper.getPlatform().getpPlatformName());
+                fromDBDetail.setpModelMod(projectHelper.getVehicle().getpVehicleName());
+                fromDBDetail.setpModelVersion(record.getObjectName());
                 fromDBDetail.setpModelDesc(record.getObjectDesc());
-//                detail.setpModelPuid(record.getPuid());
+                fromDBDetail.setpModelPuid(hzCfg0ModelRecord.getPuid());
 //                detail.setpModelName(record.getObjectName());
 //                detail.setpModelDesc(record.getObjectDesc());
                 model.addAttribute("entity", fromDBDetail);
@@ -76,7 +120,7 @@ public class HzCfg0ModelController {
         } else {
             model.addAttribute("entity", fromDBDetail);
         }
-        return "bom/addModel";
+        return "bom/modifyPage";
     }
 
 

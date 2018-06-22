@@ -25,4 +25,9 @@ public class HzCfg0ModelRecordDaoImpl implements HzCfg0ModelRecordDao {
     public int updateBasicByPuid(HzCfg0ModelRecord modelRecord) {
         return baseSQLUtil.executeUpdate(modelRecord, "com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0ModelRecordDao.updateBasicByPuid");
     }
+
+    @Override
+    public int updateModelName(HzCfg0ModelRecord modelRecord) {
+        return baseSQLUtil.executeUpdate(modelRecord, "com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0ModelRecordDao.updateModelName");
+    }
 }
