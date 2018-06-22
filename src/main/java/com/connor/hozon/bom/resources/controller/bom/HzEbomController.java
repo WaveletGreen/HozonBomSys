@@ -91,7 +91,7 @@ public class HzEbomController extends BaseController {
 
 
     @RequestMapping(value = "addEbom",method = RequestMethod.GET)
-    public String getEbomyId(String projectId,Model model) {
+    public String addEbom(String projectId,Model model) {
         if(projectId == null){
             return "";
         }
@@ -139,9 +139,63 @@ public class HzEbomController extends BaseController {
         jsonArray.add(strings1);
         jsonArray.add(strings2);
         model.addAttribute("data",jsonArray);
-        return "bomManage/ebom/ebomManage/addEbom";
+
+        return "bomManage/ebom/ebomManage/addebomManage";
     }
 
+    @RequestMapping(value = "updateEbom",method = RequestMethod.GET)
+    public String updateEbom(String projectId,String puid,Model model) {
+        if(projectId == null || puid == null){
+            return "";
+        }
+        JSONArray array = hzEbomService.getEbomTitle(projectId);
+        if(array == null){
+            return "";
+        }
+        //过滤掉没必要的标题
+        JSONArray jsonArray = new JSONArray();
+        String[] strings1 = (String[]) array.get(0);
+        String[] strings2 = (String[]) array.get(1);
+
+        List<String> list1 = Arrays.asList(strings1);
+        List<String> list2 = Arrays.asList(strings2);
+        List<String> arrayList1=new ArrayList<String>(list1);
+        List<String> arrayList2=new ArrayList<String>(list2);
+
+        if(list1.contains("序号")){
+            arrayList1.remove("序号");
+        }
+        if(list1.contains("级别")){
+            arrayList1.remove("级别");
+        }
+        if(list1.contains("分组号")){
+            arrayList1.remove("分组号");
+        }
+
+        if(list2.contains("No")){
+            arrayList2.remove("No");
+        }
+        if(list2.contains("rank")){
+            arrayList2.remove("rank");
+        }
+        if(list2.contains("groupNum")){
+            arrayList2.remove("groupNum");
+        }
+
+        strings1 = arrayList1.toArray(new String[0]);
+        strings2 = arrayList2.toArray(new String[0]);
+        jsonArray.add(strings1);
+        jsonArray.add(strings2);
+
+        HzEbomRespDTO recordRespDTO = hzEbomService.fingEbomById(puid,projectId);
+
+        JSONArray array1 = recordRespDTO.getJsonArray();
+        JSONObject object = array1.getJSONObject(0);
+        jsonArray.add(object);
+        model.addAttribute("data",jsonArray);
+
+        return "bomManage/ebom/ebomManage/updateebomManage";
+    }
     /**
      * 获取当前登录用户信息
      */
