@@ -18,4 +18,12 @@ public interface HzEbomRecordDAO {
     List<HzEPLManageRecord> getHzEbomList(FindForPageReqDTO reqDTO);
 
     Page<HzEPLManageRecord> getHzEbomPage(FindForPageReqDTO recordReqDTO);
+
+    /**
+     * 找一条EBOM EBOM  EBOM是EPL子集 这里直接返回EPL 全信息了
+     * @param puid
+     * @param projectId
+     * @return
+     */
+    HzEPLManageRecord findEbomById(String puid,String projectId);
 }

@@ -6,6 +6,7 @@ import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sql.pojo.cfg.HzCfg0BomLineOfModel;
+import sql.pojo.cfg.HzCfg0MainRecord;
 
 import java.util.*;
 
@@ -18,6 +19,8 @@ import java.util.*;
 public class HzCfg0BomLineOfModelService {
     @Autowired
     HzCfg0BomLineOfModelDao hzCfg0BomLineOfModelDao;
+    @Autowired
+    HzCfg0MainService hzCfg0MainService;
 
     /**
      * @param bdf 数模层ID
@@ -38,7 +41,8 @@ public class HzCfg0BomLineOfModelService {
      * Date: 2018/5/21 18:27
      */
     public JSONObject parse(String bdf) {
-        List<HzCfg0BomLineOfModel> hzCfg0BomlineOfModels = doLoadByModelMainId(bdf);
+        HzCfg0MainRecord mainRecord = hzCfg0MainService.doGetbyProjectPuid(bdf);
+        List<HzCfg0BomLineOfModel> hzCfg0BomlineOfModels = doLoadByModelMainId(mainRecord.getPuid());
         if (hzCfg0BomlineOfModels == null || hzCfg0BomlineOfModels.size() <= 0)
             return null;
         JSONObject respond = new JSONObject();
@@ -73,7 +77,7 @@ public class HzCfg0BomLineOfModelService {
             data.put(HzCfg0BomLineOfModel.selfDesc[0], withBomLine.getpBomOfWhichDept());
             data.put(HzCfg0BomLineOfModel.selfDesc[1], withBomLine.getpBomLineId());
             data.put(HzCfg0BomLineOfModel.selfDesc[2], withBomLine.getpBomLineName());
-            data.put(HzCfg0BomLineOfModel.selfDesc[3], withBomLine.getpBomLineName());
+            data.put(HzCfg0BomLineOfModel.selfDesc[3], withBomLine.getpH9featureenname() == null ? "" : withBomLine.getpH9featureenname());
             data.put(HzCfg0BomLineOfModel.selfDesc[4], withBomLine.getpCfg0Desc() != null ? withBomLine.getpCfg0Desc() : "");
             data.put(HzCfg0BomLineOfModel.selfDesc[5], withBomLine.getpCfg0ObjectId());
             data.put(HzCfg0BomLineOfModel.selfDesc[6], withBomLine.getpCfg0Desc() != null ? withBomLine.getpCfg0Desc() : "");

@@ -12,5 +12,7 @@ public interface HzEbomService {
 
     Page<HzEbomRespDTO> getHzEbomPage(FindForPageReqDTO recordReqDTO);
 
-    JSONArray getEbomTitle(FindForPageReqDTO recordReqDTO);
+    JSONArray getEbomTitle(String projectId);
+
+    HzEbomRespDTO fingEbomById(String puid,String projectId);
 }

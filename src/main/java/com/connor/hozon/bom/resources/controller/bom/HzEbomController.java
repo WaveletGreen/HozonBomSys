@@ -14,6 +14,7 @@ import com.connor.hozon.bom.resources.util.ResultMessageBuilder;
 import com.connor.hozon.bom.sys.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -35,16 +36,16 @@ public class HzEbomController extends BaseController {
     private HzEbomService hzEbomService;
 
     @RequestMapping(value = "/ebomTitle",method = RequestMethod.GET)
-    public void getEbomTitle(FindForPageReqDTO recordReqDTO, HttpServletResponse response) {
-        if(recordReqDTO.getProjectId()==null){
+    public void getEbomTitle(String projectId, HttpServletResponse response) {
+        if(projectId==null){
             writeAjaxJSONResponse(ResultMessageBuilder.build(false,"非法参数！"), response);
         }
-        JSONArray array = hzEbomService.getEbomTitle(recordReqDTO);
+        JSONArray array = hzEbomService.getEbomTitle(projectId);
         if(array==null){
-            writeAjaxJSONResponse(ResultMessageBuilder.build(false,"网络错误！"), response);
-        }
-        writeAjaxJSONResponse(ResultMessageBuilder.build(array), response);
+        writeAjaxJSONResponse(ResultMessageBuilder.build(false,"网络错误！"), response);
     }
+    writeAjaxJSONResponse(ResultMessageBuilder.build(array), response);
+}
 
     @RequestMapping(value = "getEBom/list", method = RequestMethod.GET)
     @ResponseBody
@@ -69,6 +70,38 @@ public class HzEbomController extends BaseController {
         ret.put("totalCount", recordRespDTOPage.getTotalCount());
         ret.put("result", list);
         return ret;
+    }
+
+    @RequestMapping(value = "getEBom", method = RequestMethod.GET)
+    @ResponseBody
+    public Map<String, Object> getEbomById(String puid,String projectId ) {
+        Map<String, Object> ret = new HashMap<>();
+        if(puid == null || projectId == null){
+            return ret;
+        }
+        HzEbomRespDTO recordRespDTO = hzEbomService.fingEbomById(puid,projectId);
+        if(recordRespDTO == null){
+            return ret;
+        }
+        JSONArray array = recordRespDTO.getJsonArray();
+        JSONObject object = array.getJSONObject(0);
+        ret = object;
+        return ret;
+    }
+
+
+    @RequestMapping(value = "addEbom",method = RequestMethod.GET)
+    @ResponseBody
+    public String getEbomyId(String projectId,Model model) {
+        if(projectId == null){
+            return "";
+        }
+        JSONArray array = hzEbomService.getEbomTitle(projectId);
+        if(array == null){
+            return "";
+        }
+        model.addAttribute("data",array);
+        return "bomManage/ebom/ebomManage/addEbom";
     }
 
     /**

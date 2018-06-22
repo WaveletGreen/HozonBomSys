@@ -4,22 +4,46 @@ var selectNode;
 var coach = [];
 var localSelectedNode;
 var localProjectDetail;
+
+function selectEvent() {
+    var selectedOption = $("#fastOption").find("option:selected");
+    $("#project", window.top.document).val(selectedOption.val());
+    $("#currentProject").text("当前工作项目:" + selectedOption.text());
+    $("#currentProjectHead", window.top.document).text(selectedOption.text());
+}
+
 // 异步加载项目数据
 $(document).ready(
     ($.ajax({
             url: "./project/loadAll",
             type: "GET",
             success: function (data) {
-                var _data = data;
-                for (var i in _data) {
-                    if (i == 1) {
-                        $("#project", window.top.document).val(_data[i].puid);
-                        $("#currentProject").text("当前工作项目:" + _data[i].pProjectName);
-                        $("#currentProjectHead", window.top.document).text(_data[i].pProjectName);
-                        break;
+                var auth = data.auth;
+                var _data = data.data;
+                var ok = true;
+                if (_data) {
+                    for (var i in _data) {
+                        if (i == 0 && ok) {
+                            $("#project", window.top.document).val(_data[i].puid);
+                            $("#currentProject").text("当前工作项目:" + _data[i].pProjectName);
+                            $("#currentProjectHead", window.top.document).text(_data[i].pProjectName);
+                            ok = false;
+                            if (!auth) {
+                                break;
+                            }
+                        }
+                        if (auth) {
+                            $("#fastOption").append("<option value='" + _data[i].puid + "'>" + _data[i].pProjectName + "</option>");
+                        }
                     }
+                    console.log("加载项目成功");
                 }
-                console.log("加载项目成功");
+                if (auth) {
+                    $("#fastOption").removeAttr("hidden");
+                    $("#fastOption").addClass("form-control");
+                    $("#fastOption").bind("change", selectEvent);
+                    $("#labHidden").removeAttr("hidden");
+                }
             },
             error: function (err) {
                 alert(err.status);

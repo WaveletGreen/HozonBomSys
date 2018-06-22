@@ -166,7 +166,7 @@ public class HzPbomController extends BaseController {
     /**
      * 查询PBOM管理信息
      *
-     * @param response
+     * @param
      */
     @RequestMapping(value = "getBomManage", method = RequestMethod.GET)
     @ResponseBody

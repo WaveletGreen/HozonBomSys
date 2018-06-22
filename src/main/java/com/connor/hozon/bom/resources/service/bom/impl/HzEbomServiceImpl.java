@@ -56,6 +56,10 @@ public class HzEbomServiceImpl implements HzEbomService {
             }
             List<HzEPLManageRecord> records = recordPage.getResult();
             for(HzEPLManageRecord record:records){
+                //过滤删除掉的ebom信息
+                if(Integer.valueOf(2).equals(record.getpState())){
+                    continue;
+                }
                 JSONObject jsonObject = new JSONObject();
                 jsonObject.put("puid", record.getPuid());
                 Integer is2Y = record.getIs2Y();
@@ -105,13 +109,13 @@ public class HzEbomServiceImpl implements HzEbomService {
     }
 
     @Override
-    public JSONArray getEbomTitle(FindForPageReqDTO recordReqDTO) {
+    public JSONArray getEbomTitle(String projectId) {
         try{
             JSONArray array = new JSONArray();
             int appendCount = 6;
             HzPreferenceSetting setting = new HzPreferenceSetting();
             setting.setSettingName("Hz_ExportBomPreferenceRedis");
-            HZBomMainRecord main = hzBomMainRecordDao.selectByProjectPuid(recordReqDTO.getProjectId());
+            HZBomMainRecord main = hzBomMainRecordDao.selectByProjectPuid(projectId);
             if(main == null){
                 return null;
             }
@@ -146,6 +150,49 @@ public class HzEbomServiceImpl implements HzEbomService {
                 array.add(1, appendTrueName);
             }
             return array;
+        }catch (Exception e){
+            return null;
+        }
+    }
+
+    @Override
+    public HzEbomRespDTO fingEbomById(String puid,String projectId) {
+        try{
+            HzEPLManageRecord record = hzEbomRecordDAO.findEbomById(puid,projectId);
+            HzEbomRespDTO respDTO = new HzEbomRespDTO();
+            if(record!=null && !record.getpState().equals(2)){
+                JSONArray jsonArray = new JSONArray();
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("puid", record.getPuid());
+                Integer is2Y = record.getIs2Y();
+                Integer hasChildren = record.getIsHas();
+                String lineIndex = record.getLineIndex();
+                String[] strings = getLevelAndRank(lineIndex, is2Y, hasChildren);
+                jsonObject.put("level", strings[0]);
+                jsonObject.put("rank", strings[1]);
+                jsonObject.put("pBomOfWhichDept", record.getpBomOfWhichDept());
+                jsonObject.put("lineId", record.getLineID());
+                byte[] bomLineBlock = record.getBomLineBlock();
+                Object obj = SerializeUtil.unserialize(bomLineBlock);
+                if (obj instanceof LinkedHashMap) {
+                    if (((LinkedHashMap) obj).size() > 0) {
+                        ((LinkedHashMap) obj).forEach((key, value) -> {
+
+                            jsonObject.put((String) key, value);
+                        });
+                    }
+                } else if (obj instanceof RedisBomBean) {
+                    List<String> pSets = ((RedisBomBean) obj).getpSets();
+                    List<String> pValues = ((RedisBomBean) obj).getpValues();
+                    if (null != pSets && pSets.size() > 0 && null != pValues && pValues.size() > 0)
+                        for (int i = 0; i < pSets.size(); i++) {
+                            jsonObject.put(pSets.get(i), pValues.get(i));
+                        }
+                }
+                jsonArray.add(jsonObject);
+                respDTO.setJsonArray(jsonArray);
+            }
+            return respDTO;
         }catch (Exception e){
             return null;
         }
