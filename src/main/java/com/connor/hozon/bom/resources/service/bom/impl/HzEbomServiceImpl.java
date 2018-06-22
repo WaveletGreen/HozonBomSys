@@ -4,6 +4,8 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.connor.hozon.bom.bomSystem.dao.bom.HzBomDataDao;
 import com.connor.hozon.bom.bomSystem.dao.bom.HzBomMainRecordDao;
+import com.connor.hozon.bom.bomSystem.dao.impl.bom.HzBomLineRecordDaoImpl;
+import com.connor.hozon.bom.resources.dto.request.AddEbomReqDTO;
 import com.connor.hozon.bom.resources.dto.request.FindForPageReqDTO;
 import com.connor.hozon.bom.resources.dto.response.HzEbomRespDTO;
 import com.connor.hozon.bom.resources.mybatis.bom.HzEbomRecordDAO;
@@ -16,6 +18,7 @@ import share.bean.PreferenceSetting;
 import share.bean.RedisBomBean;
 import sql.pojo.HzPreferenceSetting;
 import sql.pojo.bom.HZBomMainRecord;
+import sql.pojo.bom.HzBomLineRecord;
 import sql.pojo.epl.HzEPLManageRecord;
 import sql.redis.SerializeUtil;
 
@@ -42,6 +45,9 @@ public class HzEbomServiceImpl implements HzEbomService {
 
     @Autowired
     private HzEPLManageRecordService hzEPLManageRecordService;
+
+    @Autowired
+    private HzBomLineRecordDaoImpl hzBomLineRecordDao;
     @Override
     public Page<HzEbomRespDTO> getHzEbomPage(FindForPageReqDTO recordReqDTO) {
         try{
@@ -160,7 +166,7 @@ public class HzEbomServiceImpl implements HzEbomService {
         try{
             HzEPLManageRecord record = hzEbomRecordDAO.findEbomById(puid,projectId);
             HzEbomRespDTO respDTO = new HzEbomRespDTO();
-            if(record!=null && !record.getpState().equals(2)){
+            if(record!=null && !(Integer.valueOf(2).equals(record.getpState()))){
                 JSONArray jsonArray = new JSONArray();
                 JSONObject jsonObject = new JSONObject();
                 jsonObject.put("puid", record.getPuid());
@@ -196,5 +202,20 @@ public class HzEbomServiceImpl implements HzEbomService {
         }catch (Exception e){
             return null;
         }
+    }
+
+    @Override
+    public int addHzEbomRecord(AddEbomReqDTO reqDTO) {
+        try{
+            HzBomLineRecord hzBomLineRecord = new HzBomLineRecord();
+            HZBomMainRecord hzBomMainRecord = hzBomMainRecordDao.selectByProjectPuid(reqDTO.getProjectId());
+            if(hzBomMainRecord == null){
+                return 0;
+            }
+
+        }catch (Exception e){
+            return  0;
+        }
+        return 0;
     }
 }

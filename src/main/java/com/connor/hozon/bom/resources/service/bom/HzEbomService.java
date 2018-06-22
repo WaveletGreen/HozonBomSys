@@ -1,6 +1,7 @@
 package com.connor.hozon.bom.resources.service.bom;
 
 import com.alibaba.fastjson.JSONArray;
+import com.connor.hozon.bom.resources.dto.request.AddEbomReqDTO;
 import com.connor.hozon.bom.resources.dto.request.FindForPageReqDTO;
 import com.connor.hozon.bom.resources.dto.response.HzEbomRespDTO;
 import com.connor.hozon.bom.resources.page.Page;
@@ -15,4 +16,6 @@ public interface HzEbomService {
     JSONArray getEbomTitle(String projectId);
 
     HzEbomRespDTO fingEbomById(String puid,String projectId);
+
+    int addHzEbomRecord(AddEbomReqDTO reqDTO);
 }
