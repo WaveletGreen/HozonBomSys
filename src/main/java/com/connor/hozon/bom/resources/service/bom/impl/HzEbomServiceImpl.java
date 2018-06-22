@@ -6,11 +6,15 @@ import com.connor.hozon.bom.bomSystem.dao.bom.HzBomDataDao;
 import com.connor.hozon.bom.bomSystem.dao.bom.HzBomMainRecordDao;
 import com.connor.hozon.bom.bomSystem.dao.impl.bom.HzBomLineRecordDaoImpl;
 import com.connor.hozon.bom.resources.dto.request.AddEbomReqDTO;
+import com.connor.hozon.bom.resources.dto.request.AddProcessComposeReqDTO;
 import com.connor.hozon.bom.resources.dto.request.FindForPageReqDTO;
 import com.connor.hozon.bom.resources.dto.response.HzEbomRespDTO;
+import com.connor.hozon.bom.resources.mybatis.bom.HzBomStateDAO;
 import com.connor.hozon.bom.resources.mybatis.bom.HzEbomRecordDAO;
+import com.connor.hozon.bom.resources.mybatis.bom.HzPbomRecordDAO;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.service.bom.HzEbomService;
+import com.connor.hozon.bom.resources.service.bom.HzPbomService;
 import com.connor.hozon.bom.resources.service.epl.HzEPLManageRecordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,12 +23,11 @@ import share.bean.RedisBomBean;
 import sql.pojo.HzPreferenceSetting;
 import sql.pojo.bom.HZBomMainRecord;
 import sql.pojo.bom.HzBomLineRecord;
+import sql.pojo.bom.HzBomState;
 import sql.pojo.epl.HzEPLManageRecord;
 import sql.redis.SerializeUtil;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
+import java.util.*;
 
 import static com.connor.hozon.bom.resources.service.bom.impl.HzPbomServiceImpl.getLevelAndRank;
 
@@ -48,6 +51,15 @@ public class HzEbomServiceImpl implements HzEbomService {
 
     @Autowired
     private HzBomLineRecordDaoImpl hzBomLineRecordDao;
+
+    @Autowired
+    private HzBomStateDAO hzBomStateDAO;
+
+    @Autowired
+    private HzPbomService hzPbomService;
+
+    @Autowired
+    private HzPbomRecordDAO hzPbomRecordDAO;
     @Override
     public Page<HzEbomRespDTO> getHzEbomPage(FindForPageReqDTO recordReqDTO) {
         try{
@@ -204,20 +216,44 @@ public class HzEbomServiceImpl implements HzEbomService {
         }
     }
 
+    /**
+     * 添加EBOM  最好使用事务
+     * @param reqDTO
+     * @return
+     */
     @Override
     public int addHzEbomRecord(AddEbomReqDTO reqDTO) {
         try{
-            HzBomLineRecord hzBomLineRecord = new HzBomLineRecord();
-            HZBomMainRecord hzBomMainRecord = hzBomMainRecordDao.selectByProjectPuid(reqDTO.getProjectId());
-            if(hzBomMainRecord == null){
-                return 0;
-            }
-            hzBomLineRecord.setBomDigifaxId(hzBomMainRecord.getBomDigifax());
+            String parentId = reqDTO.getParentPuid();
+            if(parentId != null){
+                //增加到当前父结构下面
+                AddProcessComposeReqDTO addProcessComposeReqDTO = new AddProcessComposeReqDTO();
+                addProcessComposeReqDTO.setPuid(parentId);
+                addProcessComposeReqDTO.setProjectPuid(reqDTO.getProjectId());
+                addProcessComposeReqDTO.setpBomOfWhichDept(reqDTO.getpBomOfWhichDept());
+                addProcessComposeReqDTO.seteBomContent(reqDTO.getMap());
+              int i = hzPbomService.addPbomProcessCompose(addProcessComposeReqDTO);
+            }else{
+                //自己搭建父结构 默认为2层 有子层是更新为2Y层
+                HzBomLineRecord hzBomLineRecord = new HzBomLineRecord();
+                HZBomMainRecord hzBomMainRecord = hzBomMainRecordDao.selectByProjectPuid(reqDTO.getProjectId());
+                if(hzBomMainRecord == null){
+                    return 0;
+                }
+                hzBomLineRecord.setBomDigifaxId(hzBomMainRecord.getBomDigifax());
+                Map<String, Object> objectMap = reqDTO.getMap();
+                byte[] bytes = SerializeUtil.serialize(objectMap);
+                hzBomLineRecord.setBomLineBlock(bytes);
+                hzBomLineRecord.setIsPart(1);
+                hzBomLineRecord.setIsHas(0);
 
-            int i =hzBomLineRecordDao.insert(hzBomLineRecord);
-            if(i==0){
-                return 0;
+
+
             }
+//            int i =hzBomLineRecordDao.insert(hzBomLineRecord);
+//            if(i==0){
+//                return 0;
+//            }
             return 1;
         }catch (Exception e){
             return  0;

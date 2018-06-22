@@ -53,4 +53,12 @@ public class AddEbomReqDTO {
     public void setMap(Map<String, Object> map) {
         this.map = map;
     }
+
+    public String getParentPuid() {
+        return parentPuid;
+    }
+
+    public void setParentPuid(String parentPuid) {
+        this.parentPuid = parentPuid;
+    }
 }
