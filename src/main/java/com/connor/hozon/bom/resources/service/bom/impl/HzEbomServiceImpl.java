@@ -212,10 +212,16 @@ public class HzEbomServiceImpl implements HzEbomService {
             if(hzBomMainRecord == null){
                 return 0;
             }
+            hzBomLineRecord.setBomDigifaxId(hzBomMainRecord.getBomDigifax());
 
+            int i =hzBomLineRecordDao.insert(hzBomLineRecord);
+            if(i==0){
+                return 0;
+            }
+            return 1;
         }catch (Exception e){
             return  0;
         }
-        return 0;
     }
+
 }

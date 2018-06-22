@@ -10,14 +10,14 @@ import java.util.Map;
 public class AddEbomReqDTO {
 
     /**
+     * 父puid
+     */
+    private String parentPuid;
+
+    /**
      * 项目id
      */
     private String projectId;
-
-    /**
-     * 层级
-     */
-    private String level;
 
     /**
      * 专业
@@ -36,14 +36,6 @@ public class AddEbomReqDTO {
 
     public void setProjectId(String projectId) {
         this.projectId = projectId;
-    }
-
-    public String getLevel() {
-        return level;
-    }
-
-    public void setLevel(String level) {
-        this.level = level;
     }
 
     public String getpBomOfWhichDept() {

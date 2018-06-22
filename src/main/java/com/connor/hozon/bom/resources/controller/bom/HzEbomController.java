@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.resources.controller.BaseController;
+import com.connor.hozon.bom.resources.dto.request.AddEbomReqDTO;
 import com.connor.hozon.bom.resources.dto.request.FindForPageReqDTO;
 import com.connor.hozon.bom.resources.dto.response.HzEbomRespDTO;
 import com.connor.hozon.bom.resources.page.Page;
@@ -149,7 +150,8 @@ public class HzEbomController extends BaseController {
             return "";
         }
         JSONArray array = hzEbomService.getEbomTitle(projectId);
-        if(array == null){
+        HzEbomRespDTO recordRespDTO = hzEbomService.fingEbomById(puid,projectId);
+        if(array == null ||recordRespDTO == null){
             return "";
         }
         //过滤掉没必要的标题
@@ -168,6 +170,9 @@ public class HzEbomController extends BaseController {
         if(list1.contains("级别")){
             arrayList1.remove("级别");
         }
+        if(list1.contains("层级")){
+            arrayList1.remove("层级");
+        }
         if(list1.contains("分组号")){
             arrayList1.remove("分组号");
         }
@@ -178,6 +183,9 @@ public class HzEbomController extends BaseController {
         if(list2.contains("rank")){
             arrayList2.remove("rank");
         }
+        if(list2.contains("level")){
+            arrayList2.remove("level");
+        }
         if(list2.contains("groupNum")){
             arrayList2.remove("groupNum");
         }
@@ -187,15 +195,43 @@ public class HzEbomController extends BaseController {
         jsonArray.add(strings1);
         jsonArray.add(strings2);
 
-        HzEbomRespDTO recordRespDTO = hzEbomService.fingEbomById(puid,projectId);
-
         JSONArray array1 = recordRespDTO.getJsonArray();
         JSONObject object = array1.getJSONObject(0);
-        jsonArray.add(object);
+        String[] strings3 = new String[strings2.length];
+        for(int i =0 ;i<strings2.length;i++){
+            strings3[i] = object.getString(strings2[i])==null?"":object.getString(strings2[i]);
+        }
+        jsonArray.add(strings3);
         model.addAttribute("data",jsonArray);
 
         return "bomManage/ebom/ebomManage/updateebomManage";
     }
+    /**
+     * 添加ebom信息
+     * @param reqDTO
+     * @param map
+     * @param response
+     */
+    @RequestMapping("add/ebom")
+    public void addEbomToDb(AddEbomReqDTO reqDTO,Map<String,Object> map, HttpServletResponse response){
+        if(reqDTO.getProjectId()==null){
+            writeAjaxJSONResponse(ResultMessageBuilder.build(false,"非法参数！"), response);
+        }
+        User user = UserInfo.getUser();
+        if(user.getGroupId()!=9){//管理员权限
+            writeAjaxJSONResponse(ResultMessageBuilder.build(false,"您没有权限进行当前操作！"), response);
+        }
+        AddEbomReqDTO dto = new AddEbomReqDTO();
+        dto.setMap(map);
+        dto.setpBomOfWhichDept(reqDTO.getProjectId());
+        dto.setProjectId(reqDTO.getProjectId());
+        int i = hzEbomService.addHzEbomRecord(dto);
+        if(i==0){
+            writeAjaxJSONResponse(ResultMessageBuilder.build(false,"操作失败！"), response);
+        }
+        writeAjaxJSONResponse(ResultMessageBuilder.build(true,"操作成功！"), response);
+    }
+
     /**
      * 获取当前登录用户信息
      */
