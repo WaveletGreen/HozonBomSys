@@ -224,15 +224,30 @@ public class HzEbomServiceImpl implements HzEbomService {
     @Override
     public int addHzEbomRecord(AddHzEbomReqDTO reqDTO) {
         try{
-            String parentId = reqDTO.getParentPuid();
+            Map<String,Object> ebomContent = reqDTO.getMap();
+            String pBomOfWhichDept="";
+            String itemId = "";
+            String parentPuid ="";
+            if(ebomContent.containsKey("pBomOfWhichDept")){
+                pBomOfWhichDept = (String)ebomContent.get("pBomOfWhichDept");
+                ebomContent.remove("pBomOfWhichDept");
+            }
+            if(ebomContent.containsKey("item_id")){
+                itemId = (String)ebomContent.get("item_id");
+            }
+            if(ebomContent.containsKey("puid")){
+                parentPuid = (String)ebomContent.get("puid");
+            }
+            String parentId =parentPuid;
             int i;
             if(parentId != null && parentId!=""){
                 //增加到当前父结构下面
                 AddProcessComposeReqDTO addProcessComposeReqDTO = new AddProcessComposeReqDTO();
                 addProcessComposeReqDTO.setPuid(parentId);
                 addProcessComposeReqDTO.setProjectPuid(reqDTO.getProjectId());
-                addProcessComposeReqDTO.setpBomOfWhichDept(reqDTO.getpBomOfWhichDept());
-                addProcessComposeReqDTO.seteBomContent(reqDTO.getMap());
+                addProcessComposeReqDTO.setpBomOfWhichDept(pBomOfWhichDept);
+                addProcessComposeReqDTO.seteBomContent(ebomContent);
+                addProcessComposeReqDTO.setLineId(itemId);
                 i = hzPbomService.addPbomProcessCompose(addProcessComposeReqDTO);
                 if(i>0){
                     return 1;
@@ -245,9 +260,8 @@ public class HzEbomServiceImpl implements HzEbomService {
                     return 0;
                 }
                 hzBomLineRecord.setBomDigifaxId(hzBomMainRecord.getBomDigifax());
-                Map<String, Object> objectMap = reqDTO.getMap();
 
-                byte[] bytes = SerializeUtil.serialize(objectMap);
+                byte[] bytes = SerializeUtil.serialize(ebomContent);
                 hzBomLineRecord.setBomLineBlock(bytes);
                 hzBomLineRecord.setIsPart(1);
                 hzBomLineRecord.setIsHas(0);
@@ -272,8 +286,9 @@ public class HzEbomServiceImpl implements HzEbomService {
                 hzBomLineRecord.setOrderNum(++maxGroupNum);
                 String puid = UUID.randomUUID().toString();
                 hzBomLineRecord.setPuid(puid);
-                hzBomLineRecord.setpBomOfWhichDept(reqDTO.getpBomOfWhichDept());
-                hzBomLineRecord.setLineID((String) objectMap.get("item_id"));
+                hzBomLineRecord.setpBomOfWhichDept(pBomOfWhichDept);
+
+                hzBomLineRecord.setLineID(itemId);
                 hzBomLineRecord.setIsDept(0);
                 i = hzBomLineRecordDao.insert(hzBomLineRecord);
                 HzBomState hzBomState = new HzBomState();
@@ -294,18 +309,30 @@ public class HzEbomServiceImpl implements HzEbomService {
     @Override
     public int updateHzEbomRecord(UpdateHzEbomReqDTO reqDTO) {
         try{
+            Map<String,Object> ebomContent = reqDTO.getUpdateContent();
+            String puid = "";
+            String pBomOfWhichDept = "";
+            if(ebomContent.containsKey("puid")){
+                puid = (String)ebomContent.get("puid");
+                ebomContent.remove("puid");
+            }
+            if(ebomContent.containsKey("pBomOfWhichDept")){
+                pBomOfWhichDept = (String)ebomContent.get("pBomOfWhichDept");
+                ebomContent.remove("pBomOfWhichDept");
+            }
             HZBomMainRecord hzBomMainRecord = hzBomMainRecordDao.selectByProjectPuid(reqDTO.getProjectId());
             HzBomLineRecord hzBomLineRecord = new HzBomLineRecord();
             hzBomLineRecord.setBomDigifaxId(hzBomMainRecord.getBomDigifax());
-            Map<String,Object> map = new HashMap<>();
-            byte[] bytes = SerializeUtil.serialize(map);
-            hzBomLineRecord.setLineID((String)map.get("item_id"));
-            hzBomLineRecord.setpBomOfWhichDept(reqDTO.getpBomOfWhichDept());
+
+
+            byte[] bytes = SerializeUtil.serialize(ebomContent);
+            hzBomLineRecord.setLineID((String)ebomContent.get("item_id"));
+            hzBomLineRecord.setpBomOfWhichDept(pBomOfWhichDept);
             hzBomLineRecord.setBomLineBlock(bytes);
-            hzBomLineRecord.setPuid(reqDTO.getPuid());
+            hzBomLineRecord.setPuid(puid);
             int i =hzBomLineRecordDao.update(hzBomLineRecord);
             HzBomState hzBomState = new HzBomState();
-            hzBomState.setpBomId(reqDTO.getPuid());
+            hzBomState.setpBomId(puid);
             hzBomState.setpBomState(1);
             int j =hzBomStateDAO.update(hzBomState);
             if(i>0 && j>0){

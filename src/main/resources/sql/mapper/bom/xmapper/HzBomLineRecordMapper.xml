@@ -157,7 +157,7 @@
         where PUID = #{puid,jdbcType=VARCHAR}
     </update>
 
-    <!--查询一条bom信息-->
+    <!--查询一条bom信息    本sql没加入状态值 要作废 转EPL sql表查询对应的状态值-->
     <select id="HzBomLineRecordDaoImpl_findBomLineByPuid" parameterType="java.util.Map" resultMap="BaseResultMap">
         SELECT
         <include refid="Base_Column_List"/>

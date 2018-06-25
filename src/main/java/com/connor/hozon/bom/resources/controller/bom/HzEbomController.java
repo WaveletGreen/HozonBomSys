@@ -255,7 +255,6 @@ public class HzEbomController extends BaseController {
         }
         AddHzEbomReqDTO dto = new AddHzEbomReqDTO();
         dto.setMap(map);
-        dto.setpBomOfWhichDept(reqDTO.getProjectId());
         dto.setProjectId(reqDTO.getProjectId());
         int i = hzEbomService.addHzEbomRecord(dto);
         if(i==0){
@@ -282,7 +281,6 @@ public class HzEbomController extends BaseController {
         }
         UpdateHzEbomReqDTO dto = new UpdateHzEbomReqDTO();
         dto.setUpdateContent(map);
-        dto.setpBomOfWhichDept(reqDTO.getProjectId());
         dto.setProjectId(reqDTO.getProjectId());
         int i = hzEbomService.updateHzEbomRecord(dto);
         if(i==0){

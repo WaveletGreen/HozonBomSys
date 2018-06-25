@@ -8,14 +8,6 @@ import java.util.Map;
  * @Description:
  */
 public class UpdateHzEbomReqDTO {
-    /**
-     * puid
-     */
-    private String puid;
-    /**
-     * 专业
-     */
-    private String pBomOfWhichDept;
 
     /**
      * 项目id
@@ -26,22 +18,6 @@ public class UpdateHzEbomReqDTO {
      * 需要更改的内容
      */
     private Map<String,Object> updateContent;
-
-    public String getPuid() {
-        return puid;
-    }
-
-    public void setPuid(String puid) {
-        this.puid = puid;
-    }
-
-    public String getpBomOfWhichDept() {
-        return pBomOfWhichDept;
-    }
-
-    public void setpBomOfWhichDept(String pBomOfWhichDept) {
-        this.pBomOfWhichDept = pBomOfWhichDept;
-    }
 
     public String getProjectId() {
         return projectId;

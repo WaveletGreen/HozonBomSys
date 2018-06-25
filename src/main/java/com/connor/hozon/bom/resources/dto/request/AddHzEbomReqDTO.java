@@ -10,19 +10,9 @@ import java.util.Map;
 public class AddHzEbomReqDTO {
 
     /**
-     * 父puid
-     */
-    private String parentPuid;
-
-    /**
      * 项目id
      */
     private String projectId;
-
-    /**
-     * 专业
-     */
-    private String pBomOfWhichDept;
 
     /**
      * EBOM 信息
@@ -38,13 +28,6 @@ public class AddHzEbomReqDTO {
         this.projectId = projectId;
     }
 
-    public String getpBomOfWhichDept() {
-        return pBomOfWhichDept;
-    }
-
-    public void setpBomOfWhichDept(String pBomOfWhichDept) {
-        this.pBomOfWhichDept = pBomOfWhichDept;
-    }
 
     public Map<String, Object> getMap() {
         return map;
@@ -54,11 +37,4 @@ public class AddHzEbomReqDTO {
         this.map = map;
     }
 
-    public String getParentPuid() {
-        return parentPuid;
-    }
-
-    public void setParentPuid(String parentPuid) {
-        this.parentPuid = parentPuid;
-    }
 }
