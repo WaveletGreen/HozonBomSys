@@ -14,6 +14,7 @@ import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.service.bom.HzEbomService;
 import com.connor.hozon.bom.resources.service.bom.HzPbomService;
 import com.connor.hozon.bom.resources.service.epl.HzEPLManageRecordService;
+import com.connor.hozon.bom.resources.util.ListUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import share.bean.PreferenceSetting;
@@ -328,7 +329,7 @@ public class HzEbomServiceImpl implements HzEbomService {
                 map1.put("projectId",reqDTO.getProjectId());
                 map1.put("parentUid",record.getPuid());
                 List<HzEPLManageRecord> records = hzEbomRecordDAO.getHzBomLineChildren(map1);
-                if(records == null){
+                if(ListUtil.isEmpty(records)){
                     return 0;
                 }
                 List<HzEPLManageRecord> recordList = new ArrayList<>();
@@ -338,9 +339,7 @@ public class HzEbomServiceImpl implements HzEbomService {
                         recordList.add(eplManageRecord);
                     }
                 }
-                if(recordList.size()==1){
 
-                }
             }
 
             hzBomLineRecordDao.update(record);
@@ -352,6 +351,35 @@ public class HzEbomServiceImpl implements HzEbomService {
             return  0;
         }
         return 0;
+    }
+
+    @Override
+    public List<HzEPLManageRecord> findCurrentBomChildren(Map<String, Object> map) {
+        List<HzEPLManageRecord> recordList = new ArrayList<>();
+        HzBomLineRecord record = hzBomLineRecordDao.findBomLineByPuid(map);
+        if(record == null){
+            return recordList;
+        }
+
+        if(record.getIsHas().equals(1)){
+            Map<String,Object> map1 = new HashMap<>();
+            map1.put("projectId",map.get("projectId"));
+            map1.put("parentUid",record.getPuid());
+            List<HzEPLManageRecord> records = hzEbomRecordDAO.getHzBomLineChildren(map1);
+            //过滤掉已删除的bom
+            for(HzEPLManageRecord eplManageRecord :records){
+                if(!eplManageRecord.getpState().equals(2)){
+                    recordList.add(eplManageRecord);
+                }
+            }
+
+            for(HzEPLManageRecord record1 :recordList){
+
+            }
+        }
+
+
+        return null;
     }
 
 }

@@ -159,14 +159,14 @@
 
     <!--查询一条bom信息-->
     <select id="HzBomLineRecordDaoImpl_findBobLineByPuid" parameterType="java.util.Map" resultMap="BaseResultMap">
-        select
-        <include refid="Base_Column_List"/>
-        from HZ_BOM_LINE_RECORD
+        SELECT t1.*,t6.* from HZ_BOM_LINE_RECORD t1
+        LEFT OUTER JOIN HZ_BOM_STATE t6 on t1.puid = t6.P_BOM_ID
         where P_BOM_DIGIFAX_ID =(
         select t2.puid from Hz_Bom_Main_Record t2
         where
         t2.p_cfg0_of_which_project_puid=#{projectId,jdbcType=VARCHAR}
         ) and PUID=#{puid,jdbcType=VARCHAR}
+        and  t6.P_BOM_STATE!=2
     </select>
 
     <!--查询orderNum的最大值信息-->

@@ -49,7 +49,7 @@ public class HzEbomRecordDAOImpl extends BaseSQLUtil implements HzEbomRecordDAO 
      * @return
      */
     public List<HzEPLManageRecord> getHzBomLineChildren(Map map){
-        return super.findForList("HzBomLineRecordDaoImpl_getHzBomLineChildren",map);
+        return super.findForList("HzEbomRecordDAOImpl_getHzBomLineChildren",map);
     }
 
 }

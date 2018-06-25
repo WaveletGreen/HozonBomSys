@@ -100,7 +100,7 @@
 
 
   <!--查询bomLine的子bom 信息-->
-  <select id="HzBomLineRecordDaoImpl_getHzBomLineChildren"  resultMap="BaseResultMap" parameterType="java.util.HashMap">
+  <select id="HzEbomRecordDAOImpl_getHzBomLineChildren"  resultMap="BaseResultMap" parameterType="java.util.HashMap">
     SELECT t1.*,t6.* from HZ_BOM_LINE_RECORD t1
     LEFT OUTER JOIN HZ_BOM_STATE t6 on t1.puid = t6.P_BOM_ID
     where t1.p_bom_digifax_id=(
@@ -111,4 +111,5 @@
      and t1.P_PARENT_UID = #{parentUid,jdbcType=VARCHAR}
     </where>
   </select>
+
 </mapper>

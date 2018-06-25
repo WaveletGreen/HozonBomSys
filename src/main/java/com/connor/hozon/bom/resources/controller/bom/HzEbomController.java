@@ -7,6 +7,7 @@ import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.resources.controller.BaseController;
 import com.connor.hozon.bom.resources.dto.request.AddHzEbomReqDTO;
 import com.connor.hozon.bom.resources.dto.request.FindForPageReqDTO;
+import com.connor.hozon.bom.resources.dto.request.UpdateHzEbomReqDTO;
 import com.connor.hozon.bom.resources.dto.response.HzEbomRespDTO;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.service.bom.HzEbomService;
@@ -122,6 +123,9 @@ public class HzEbomController extends BaseController {
         if(list1.contains("分组号")){
             arrayList1.remove("分组号");
         }
+        if(list1.contains("层级")){
+            arrayList1.remove("层级");
+        }
 
         if(list2.contains("puid")){
             arrayList2.remove("puid");
@@ -135,7 +139,9 @@ public class HzEbomController extends BaseController {
         if(list2.contains("groupNum")){
             arrayList2.remove("groupNum");
         }
-
+        if(list2.contains("level")){
+            arrayList2.remove("level");
+        }
         strings1 = arrayList1.toArray(new String[0]);
         strings2 = arrayList2.toArray(new String[0]);
         jsonArray.add(strings1);
@@ -242,6 +248,34 @@ public class HzEbomController extends BaseController {
         }
         writeAjaxJSONResponse(ResultMessageBuilder.build(true,"操作成功！"), response);
     }
+
+
+    /**
+     * 添加ebom信息
+     * @param reqDTO
+     * @param map
+     * @param response
+     */
+    @RequestMapping("update/ebom")
+    public void updateEbomToDB(UpdateHzEbomReqDTO reqDTO, @RequestBody Map<String,Object> map, HttpServletResponse response){
+        if(reqDTO.getProjectId()==null){
+            writeAjaxJSONResponse(ResultMessageBuilder.build(false,"非法参数！"), response);
+        }
+        User user = UserInfo.getUser();
+        if(user.getGroupId()!=9){//管理员权限
+            writeAjaxJSONResponse(ResultMessageBuilder.build(false,"您没有权限进行当前操作！"), response);
+        }
+        UpdateHzEbomReqDTO dto = new UpdateHzEbomReqDTO();
+        dto.setUpdateContent(map);
+        dto.setpBomOfWhichDept(reqDTO.getProjectId());
+        dto.setProjectId(reqDTO.getProjectId());
+        int i = hzEbomService.updateHzEbomRecord(dto);
+        if(i==0){
+            writeAjaxJSONResponse(ResultMessageBuilder.build(false,"操作失败！"), response);
+        }
+        writeAjaxJSONResponse(ResultMessageBuilder.build(true,"操作成功！"), response);
+    }
+
 
     /**
      * 获取当前登录用户信息
