@@ -15,7 +15,7 @@
     <result column="P_COLOR_PART" jdbcType="DECIMAL" property="colorPart" />
     <result column="P_E_BOM_PUID" jdbcType="VARCHAR" property="eBomPuid" />
     <result column="P_PBOM_STATUS" jdbcType="DECIMAL" property="pbomStatus" />
-    <result column="P_STATION" jdbcType="DECIMAL" property="station" />
+    <result column="P_STATION" jdbcType="VARCHAR" property="station" />
   </resultMap>
 
   <resultMap extends="BaseResultMap"  id="HzPbomLineRecord" type="sql.pojo.bom.HzPbomLineRecord">

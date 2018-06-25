@@ -44,16 +44,16 @@ window.onload=function() {
                 dataType:'json',
                 cache: false,
                 striped: true,                              //是否显示行间隔色
-                sidePagination: "server",           //分页方式：client客户端分页，server服务端分页（*）
+                // sidePagination: "server",           //分页方式：client客户端分页，server服务端分页（*）
                 height: $(window.parent.document).find("#wrapper").height() - 90,
                 width: $(window).width(),
                 pagination:true,
-                pageNumber:1,                       //初始化加载第一页，默认第一页
+                // pageNumber:1,                       //初始化加载第一页，默认第一页
                 pageSize: 20,                       //每页的记录行数（*）
-                pageList: [20, 50,100,200],        //可供选择的每页的行数（*）
+                // pageList: [20, 50,100,200],        //可供选择的每页的行数（*）
                 uniqueId: "puid",                     //每一行的唯一标识，一般为主键列
                 showExport: true,
-                exportDataType: 'all',
+                //exportDataType: 'all',
                 columns: column,
                 sortable: true,                     //是否启用排序
                 sortOrder: "asc",                   //排序方式
@@ -64,7 +64,7 @@ window.onload=function() {
                 fixedNumber:1,*/
                 showToggle: false,                   //是否显示详细视图和列表视图的切换按钮
                 showRefresh: true,                  //是否显示刷新按钮
-                minimumCountColumns:4,
+                //minimumCountColumns:4,
                 toolbars: [
                     {
                         text: '添加',
@@ -72,7 +72,7 @@ window.onload=function() {
                         handler: function () {
                             window.Ewin.dialog({
                                 title: "添加",
-                                url: "ebom/addEbom?projectId=" + projectPuid,
+                                url: "pbom/addPbomManage",
                                 gridId: "gridId",
                                 width: 500,
                                 height: 650
@@ -91,10 +91,10 @@ window.onload=function() {
                             }
                             window.Ewin.dialog({
                                 title: "修改",
-                                url: "cfg0/modifyPage?projectId=" + rows[0].puid,
+                                url: "pbom/updatePbomManage",
                                 gridId: "gridId",
-                                width: 400,
-                                height: 500
+                                width: 500,
+                                height: 650
                             });
                         }
                     },
@@ -117,11 +117,11 @@ window.onload=function() {
                                         contentType: "application/json",
                                         success: function (result) {
                                             if (result.status) {
-                                                window.Ewin.alert({message: result.msg});
+                                                window.Ewin.alert({message: result.errMsg});
                                                 //刷新，会重新申请数据库数据
                                             }
                                             else {
-                                                window.Ewin.alert({message: "操作删除失败:" + result.msg});
+                                                window.Ewin.alert({message: ":" + result.errMsg});
                                             }
                                             $table.bootstrapTable("refresh");
                                         },

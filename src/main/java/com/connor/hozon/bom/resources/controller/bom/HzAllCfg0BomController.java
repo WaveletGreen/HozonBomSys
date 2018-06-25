@@ -32,7 +32,7 @@ public class HzAllCfg0BomController {
         map.putAll(getPbomTitle());
         map.putAll(getMbomTitle());
         model.addAttribute("entity", map);
-        return "pbom/pbomMaintenance/updatePbomMaintenance";
+        return "pbom/mbomMaintenance/updatePbomMaintenance";
     }
 
     public Map<String, String> getEbomTitle() {

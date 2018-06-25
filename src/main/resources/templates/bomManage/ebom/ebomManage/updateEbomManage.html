@@ -29,7 +29,7 @@
                 var url = $("#ebomMainForm", window.top.document).attr('action');
                 var projectPuid = $("#project", window.top.document).val();
                 var puid = $("#puid").val();
-                alert(puid);
+                // alert(puid);
                 /*var myData = JSON.stringify({
                     "pBomPuid": $("#pBomPuid").val(),
                     "level": $("#level").val(),
@@ -69,10 +69,11 @@
                             $('body', window.top.document).find('.modal-backdrop').remove();
                             // jquery 调用刷新当前操作的table页面的refresh方法
                             $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
-                            if (result)
+                            /*if (result)
                                 window.Ewin.alert({message: '修改数据成功!'});
                             else
-                                window.Ewin.alert({message: '修改数据失败!'});
+                                window.Ewin.alert({message: '修改数据失败!'});*/
+                            window.Ewin.alert({message:result.errMsg})
                         },
                     error: function (status) {
                         window.Ewin.alert({message: status.status + ':修改数据失败!'});

@@ -285,6 +285,16 @@
                 valid: 'glyphicon glyphicon-ok',
                 invalid: 'glyphicon glyphicon-remove',
                 validating: 'glyphicon glyphicon-refresh'
+            },
+            fields: {
+                bl_item_item_id: {
+                    message: '零组件验证失败',
+                    validators: {
+                        notEmpty: {
+                            message: '零组件不能为空'
+                        }
+                    }
+                },
             }
         });
         // 绑定dialog的确定按钮的监听事件
@@ -336,7 +346,7 @@
                                 $('body', window.top.document).find('.modal-backdrop').remove();
                                 // jquery 调用刷新当前操作的table页面的refresh方法
                                 $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
-                                window.Ewin.alert({message: result.errMsg + ':添加数据成功！'});
+                                window.Ewin.alert({message: result.errMsg });
                             },
                         error: function (status) {
                             window.Ewin.alert({message: status.status + ':添加数据失败!'});
