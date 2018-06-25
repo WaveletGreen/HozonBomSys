@@ -5,8 +5,9 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.resources.controller.BaseController;
-import com.connor.hozon.bom.resources.dto.request.AddEbomReqDTO;
+import com.connor.hozon.bom.resources.dto.request.AddHzEbomReqDTO;
 import com.connor.hozon.bom.resources.dto.request.FindForPageReqDTO;
+import com.connor.hozon.bom.resources.dto.request.UpdateHzEbomReqDTO;
 import com.connor.hozon.bom.resources.dto.response.HzEbomRespDTO;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.service.bom.HzEbomService;
@@ -170,9 +171,6 @@ public class HzEbomController extends BaseController {
         List<String> arrayList1=new ArrayList<String>(list1);
         List<String> arrayList2=new ArrayList<String>(list2);
 
-        if(list1.contains("puid")){
-            arrayList1.remove("puid");
-        }
         if(list1.contains("序号")){
             arrayList1.remove("序号");
         }
@@ -185,7 +183,9 @@ public class HzEbomController extends BaseController {
         if(list1.contains("分组号")){
             arrayList1.remove("分组号");
         }
-
+        if(list1.contains("puid")){
+            arrayList1.remove("puid");
+        }
         if(list2.contains("No")){
             arrayList2.remove("No");
         }
@@ -201,26 +201,26 @@ public class HzEbomController extends BaseController {
         if(list2.contains("puid")){
             arrayList2.remove("puid");
         }
-        strings1 = arrayList1.toArray(new String[0]);
-        strings2 = arrayList2.toArray(new String[0]);
-        jsonArray.add(strings1);
-        jsonArray.add(strings2);
+        String[] strings3 =arrayList1.toArray(new String[0]);;
+        String[] strings4 = arrayList2.toArray(new String[0]);
+        jsonArray.add(strings3);
+        jsonArray.add(strings4);
 
 
         JSONArray array1 = recordRespDTO.getJsonArray();
         JSONObject object = array1.getJSONObject(0);
-        String[] strings3 = new String[strings2.length];
+        String[] strings5 = new String[strings2.length];
         for(int i =0 ;i<strings2.length;i++){
             if("puid".equals(strings2[i])){
                 model.addAttribute("puid",object.getString(strings2[i]));
                 continue;
             }
-            strings3[i] = object.getString(strings2[i])==null?"":object.getString(strings2[i]);
+            strings5[i] = object.getString(strings2[i])==null?"":object.getString(strings2[i]);
         }
-        jsonArray.add(strings3);
+        jsonArray.add(strings5);
         model.addAttribute("data",jsonArray);
 
-        return "bomManage/ebom/ebomManage/updateebomManage";
+        return "bomManage/ebom/ebomManage/updateEbomManage";
     }
     /**
      * 添加ebom信息

@@ -2,7 +2,7 @@
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <!--User: xulf Date: 2018/6/4 Time: 15:10-->
 <body>
-<form id="ebomMainForm" role="form" method="post" action="./pbom/update/manage">
+<form id="ebomMainForm" role="form" method="post" action="ebom/update/ebom">
     <input id="puid" name="puid" type="text" th:value="${puid}"/>
     <div class="form-group" th:each="_data,c:${data.get(0)}">
         <label class="control-label" th:text="${_data}"></label>
@@ -13,31 +13,23 @@
 <script th:inline="javascript">
     <![CDATA[
     $(function () {
-        $('#pbomMainForm').bootstrapValidator({
+        $('#ebomMainForm').bootstrapValidator({
             message: 'This value is not valid',
             feedbackIcons: {
                 valid: 'glyphicon glyphicon-ok',
                 invalid: 'glyphicon glyphicon-remove',
                 validating: 'glyphicon glyphicon-refresh'
             },
-            fields: {
-                level: {
-                    message: '层级验证失败',
-                    validators: {
-                        notEmpty: {
-                            message: '层级不能为空'
-                        }
-                    }
-                },
-            }
         });
         // 绑定dialog的确定按钮的监听事件
         $("#btnOk", window.top.document).click(function () {
-            var bootstrapValidator = $("#pbomMainForm", window.top.document).data('bootstrapValidator');
+            var bootstrapValidator = $("#ebomMainForm", window.top.document).data('bootstrapValidator');
             bootstrapValidator.validate();
             if (bootstrapValidator.isValid()) {
-                var url = $("#pbomMainForm", window.top.document).attr('action');
+                var url = $("#ebomMainForm", window.top.document).attr('action');
                 var projectPuid = $("#project", window.top.document).val();
+                var puid = $("#puid").val();
+                alert(puid);
                 /*var myData = JSON.stringify({
                     "pBomPuid": $("#pBomPuid").val(),
                     "level": $("#level").val(),
@@ -69,7 +61,7 @@
                         "application/json",
                     type:
                         'POST',
-                    url: url,
+                    url: url+"?projectId="+projectPuid,
                     data: JSON.stringify(data),
                     success:
                         function (result) {

@@ -7,6 +7,10 @@ import com.connor.hozon.bom.resources.dto.request.FindForPageReqDTO;
 import com.connor.hozon.bom.resources.dto.request.UpdateHzEbomReqDTO;
 import com.connor.hozon.bom.resources.dto.response.HzEbomRespDTO;
 import com.connor.hozon.bom.resources.page.Page;
+import sql.pojo.epl.HzEPLManageRecord;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by haozt on 2018/06/06
@@ -55,4 +59,6 @@ public interface HzEbomService {
      * @return
      */
     int deleteHzEbomRecordById(DeleteHzEbomReqDTO reqDTO);
+
+    List<HzEPLManageRecord> findCurrentBomChildren(Map<String, Object> map);
 }
