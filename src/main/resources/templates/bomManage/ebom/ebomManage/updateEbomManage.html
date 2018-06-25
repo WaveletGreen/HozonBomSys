@@ -37,6 +37,7 @@
             bootstrapValidator.validate();
             if (bootstrapValidator.isValid()) {
                 var url = $("#pbomMainForm", window.top.document).attr('action');
+                var projectPuid = $("#project", window.top.document).val();
                 /*var myData = JSON.stringify({
                     "pBomPuid": $("#pBomPuid").val(),
                     "level": $("#level").val(),
@@ -61,8 +62,8 @@
                 for (var p in _d) {
                     data[_d[p].name] = _d[p].value;
                 }
-                console.log(data);
-                console.log(JSON.stringify(data));
+                // console.log(data);
+                // console.log(JSON.stringify(data));
                 $.ajax({
                     contentType:
                         "application/json",

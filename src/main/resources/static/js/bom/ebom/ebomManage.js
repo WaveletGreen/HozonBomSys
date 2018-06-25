@@ -54,7 +54,7 @@ window.onload = function(){
                     showColumns: true, //是否显示所有的列
                     // fixedColumns: true,
                     // fixedNumber:2,
-                    showToggle: true,                   //是否显示详细视图和列表视图的切换按钮
+                    showToggle: false,                   //是否显示详细视图和列表视图的切换按钮
                     showRefresh: true,                  //是否显示刷新按钮
                     //minimumCountColumns:4,
                     toolbars: [

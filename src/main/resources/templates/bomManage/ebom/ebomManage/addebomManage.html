@@ -291,20 +291,21 @@
             // var bootstrapValidator = $("#ebomMainForm", window.top.document).data('bootstrapValidator');
             // bootstrapValidator.validate();
             // if (bootstrapValidator.isValid()) {
+                var projectPuid = $("#project", window.top.document).val();
                 var url = $("#ebomMainForm", window.top.document).attr('action');
                 var data = {};
                 var _d = $("#ebomMainForm").serializeArray();
                 for (var p in _d) {
                     data[_d[p].name] = _d[p].value;
                 }
-                console.log("data属性是："+data);
-                console.log("JSON.stringify(data)的属性的："+JSON.stringify(data));
+                // console.log("data属性是："+data);
+                // console.log("JSON.stringify(data)的属性的："+JSON.stringify(data));
                 $.ajax({
                     contentType:
                         "application/json",
                     type:
                         'POST',
-                    url: url,
+                    url: url+"?projectId="+projectPuid,
                     data: JSON.stringify(data),
                     success:
                         function (result) {

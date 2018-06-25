@@ -44,7 +44,7 @@ window.onload=function(){
                     cache: false,
                     striped: true,                              //是否显示行间隔色
                     sidePagination: "server",           //分页方式：client客户端分页，server服务端分页（*）
-                    height: $(window.parent.document).find("#wrapper").height(),
+                    height: $(window.parent.document).find("#wrapper").height() - 90,
                     width: $(window).width(),
                     pagination:true,
                     pageNumber:1,                       //初始化加载第一页，默认第一页
@@ -59,9 +59,9 @@ window.onload=function(){
                     striped: true, //是否显示行间隔色
                     search: true, //是否显示表格搜索，此搜索是客户端搜索，不会进服务端
                     showColumns: true, //是否显示所有的列
-                    fixedColumns: true,
-                    fixedNumber:1,
-                    showToggle: true,                   //是否显示详细视图和列表视图的切换按钮
+                    /*fixedColumns: true,
+                    fixedNumber:1,*/
+                    showToggle: false,                   //是否显示详细视图和列表视图的切换按钮
                     showRefresh: true,                  //是否显示刷新按钮
                     minimumCountColumns:4
                 });

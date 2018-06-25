@@ -16,6 +16,7 @@ import com.connor.hozon.bom.sys.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -216,7 +217,7 @@ public class HzEbomController extends BaseController {
      * @param response
      */
     @RequestMapping("add/ebom")
-    public void addEbomToDb(AddEbomReqDTO reqDTO,Map<String,Object> map, HttpServletResponse response){
+    public void addEbomToDb(AddEbomReqDTO reqDTO, @RequestBody Map<String,Object> map, HttpServletResponse response){
         if(reqDTO.getProjectId()==null){
             writeAjaxJSONResponse(ResultMessageBuilder.build(false,"非法参数！"), response);
         }
