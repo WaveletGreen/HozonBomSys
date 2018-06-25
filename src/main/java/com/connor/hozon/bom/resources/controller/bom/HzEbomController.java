@@ -6,6 +6,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.resources.controller.BaseController;
 import com.connor.hozon.bom.resources.dto.request.AddHzEbomReqDTO;
+import com.connor.hozon.bom.resources.dto.request.DeleteHzEbomReqDTO;
 import com.connor.hozon.bom.resources.dto.request.FindForPageReqDTO;
 import com.connor.hozon.bom.resources.dto.request.UpdateHzEbomReqDTO;
 import com.connor.hozon.bom.resources.dto.response.HzEbomRespDTO;
@@ -250,7 +251,7 @@ public class HzEbomController extends BaseController {
 
 
     /**
-     * 添加ebom信息
+     * 更新ebom信息
      * @param reqDTO
      * @param map
      * @param response
@@ -269,6 +270,29 @@ public class HzEbomController extends BaseController {
         dto.setpBomOfWhichDept(reqDTO.getProjectId());
         dto.setProjectId(reqDTO.getProjectId());
         int i = hzEbomService.updateHzEbomRecord(dto);
+        if(i==0){
+            writeAjaxJSONResponse(ResultMessageBuilder.build(false,"操作失败！"), response);
+        }
+        writeAjaxJSONResponse(ResultMessageBuilder.build(true,"操作成功！"), response);
+    }
+
+
+    /**
+     * 删除ebom信息
+     * @param reqDTO
+     * @param
+     * @param response
+     */
+    @RequestMapping("delete/ebom")
+    public void updateEbomToDB(DeleteHzEbomReqDTO reqDTO, HttpServletResponse response){
+        if(reqDTO.getProjectId()==null){
+            writeAjaxJSONResponse(ResultMessageBuilder.build(false,"非法参数！"), response);
+        }
+        User user = UserInfo.getUser();
+        if(user.getGroupId()!=9){//管理员权限
+            writeAjaxJSONResponse(ResultMessageBuilder.build(false,"您没有权限进行当前操作！"), response);
+        }
+        int i = hzEbomService.deleteHzEbomRecordById(reqDTO);
         if(i==0){
             writeAjaxJSONResponse(ResultMessageBuilder.build(false,"操作失败！"), response);
         }

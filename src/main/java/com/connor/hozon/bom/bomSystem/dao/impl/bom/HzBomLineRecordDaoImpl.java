@@ -49,7 +49,7 @@ public class HzBomLineRecordDaoImpl extends BaseSQLUtil {
      * @return
      */
     public HzBomLineRecord findBomLineByPuid(Map map){
-        return (HzBomLineRecord)super.findForObject("HzBomLineRecordDaoImpl_findBobLineByPuid",map);
+        return (HzBomLineRecord)super.findForObject("HzBomLineRecordDaoImpl_findBomLineByPuid",map);
     }
 
     /**
