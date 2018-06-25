@@ -199,12 +199,15 @@ public class HzEbomController extends BaseController {
         JSONObject object = array1.getJSONObject(0);
         String[] strings3 = new String[strings2.length];
         for(int i =0 ;i<strings2.length;i++){
+            if("puid".equals(strings2[i])){
+                model.addAttribute("puid",object.getString(strings2[i]));
+                continue;
+            }
             strings3[i] = object.getString(strings2[i])==null?"":object.getString(strings2[i]);
         }
         jsonArray.add(strings3);
         model.addAttribute("data",jsonArray);
-
-        return "bomManage/ebom/ebomManage/updateebomManage";
+        return "bomManage/ebom/ebomManage/updateEbomManage";
     }
     /**
      * 添加ebom信息

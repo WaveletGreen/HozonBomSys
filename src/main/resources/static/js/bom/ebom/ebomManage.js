@@ -33,27 +33,27 @@ window.onload = function(){
                     method: 'get',
                     dataType:'json',
                     //cache: false,
-                    striped: true,                              //是否显示行间隔色
-                    clickToSelect:true,
-                    disabled : true,//设置是否可用
-                    checked : true,//设置选中
-                    sidePagination: "server",           //分页方式：client客户端分页，server服务端分页（*）
-                    height: $(window.parent.document).find("#wrapper").height(),
+                    //striped: true,                              //是否显示行间隔色
+                    //sidePagination: "server",           //分页方式：client客户端分页，server服务端分页（*）
+                    height: $(window.parent.document).find("#wrapper").height() - 90,
                     width: $(window).width(),
-                    pagination:true,
-                    pageNumber:1,                       //初始化加载第一页，默认第一页
-                    pageSize: 20,                       //每页的记录行数（*）
-                    pageList: [20, 50,100,200],        //可供选择的每页的行数（*）
+                     pagination:true,
+                    // pageNumber:1,                       //初始化加载第一页，默认第一页
+                     pageSize: 20,                       //每页的记录行数（*）
+                    // pageList: [20, 50,100,200],        //可供选择的每页的行数（*）
                     //uniqueId: "puid",                     //每一行的唯一标识，一般为主键列
                     //showExport: true,
                     //exportDataType: 'all',
                     columns: column,
-                    sortable: true,                     //是否启用排序
-                    sortOrder: "asc",                   //排序方式
+                    formId:"queryEbomManage",
+                    sortName : 'id',
+                    // sortable: true,                     //是否启用排序
+                    sortOrder: "desc",                   //排序方式
+                    clickToSelect: true,// 单击某一行的时候选中某一条记录
                     search: true, //是否显示表格搜索，此搜索是客户端搜索，不会进服务端
                     showColumns: true, //是否显示所有的列
-                    fixedColumns: true,
-                    fixedNumber:2,
+                    // fixedColumns: true,
+                    // fixedNumber:2,
                     showToggle: true,                   //是否显示详细视图和列表视图的切换按钮
                     showRefresh: true,                  //是否显示刷新按钮
                     //minimumCountColumns:4,
@@ -75,7 +75,7 @@ window.onload = function(){
                             text: '修改',
                             iconCls: 'glyphicon glyphicon-pencil',
                             handler: function () {
-                                var rows = $("#ebomManageTable").bootstrapTable('getSelections');
+                                var rows = $table.bootstrapTable('getSelections');
                                 //只能选一条
                                 if (rows.length != 1) {
                                     window.Ewin.alert({message: '请选择一条需要修改的数据!'});
@@ -83,7 +83,7 @@ window.onload = function(){
                                 }
                                 window.Ewin.dialog({
                                     title: "修改",
-                                    url: "ebom/updateEbom?projectId="+projectPuid +"puid="+ rows[0].puid ,
+                                    url: "ebom/updateEbom?projectId="+projectPuid +"&puid="+ rows[0].puid ,
                                     gridId: "gridId",
                                     width: 500,
                                     height: 650
