@@ -129,7 +129,7 @@ window.onload = function(){
                                                     //刷新，会重新申请数据库数据
                                                 }
                                                 else {
-                                                    window.Ewin.alert({message: ":" + result.errMsg});
+                                                    window.Ewin.alert({message: + result.errMsg});
                                                 }
                                                 $table.bootstrapTable("refresh");
                                             },
