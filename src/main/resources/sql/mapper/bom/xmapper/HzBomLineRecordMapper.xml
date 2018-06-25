@@ -158,7 +158,7 @@
     </update>
 
     <!--查询一条bom信息-->
-    <select id="HzBomLineRecordDaoImpl_findBobLineByPuid" parameterType="java.util.Map" resultMap="BaseResultMap">
+    <select id="HzBomLineRecordDaoImpl_findBomLineByPuid" parameterType="java.util.Map" resultMap="BaseResultMap">
         SELECT
         <include refid="Base_Column_List"/>
         ,

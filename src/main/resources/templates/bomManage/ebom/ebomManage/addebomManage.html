@@ -268,6 +268,7 @@
 
                placeholder="请输入零部件来源"/>&lt;!&ndash;th:value="${entity.}"&ndash;&gt;
     </div>-->
+    <input id="puid" name="puid" type="text" th:value="${puid}"/>
     <!--循环放入数据-->
     <div class="form-group " th:each="_data,c:${data[0]}">
         <label class="control-label" th:text="${_data}"></label>
@@ -293,6 +294,7 @@
             // if (bootstrapValidator.isValid()) {
                 var projectPuid = $("#project", window.top.document).val();
                 var url = $("#ebomMainForm", window.top.document).attr('action');
+                var puid =$("#puid").val;
                 var data = {};
                 var _d = $("#ebomMainForm").serializeArray();
                 for (var p in _d) {
@@ -300,25 +302,47 @@
                 }
                 // console.log("data属性是："+data);
                 // console.log("JSON.stringify(data)的属性的："+JSON.stringify(data));
-                $.ajax({
-                    contentType:
-                        "application/json",
-                    type:
-                        'POST',
-                    url: url+"?projectId="+projectPuid,
-                    data: JSON.stringify(data),
-                    success:
-                        function (result) {
-                            $('.modal-dialog', window.top.document).parent('div').remove()
-                            $('body', window.top.document).find('.modal-backdrop').remove();
-                            // jquery 调用刷新当前操作的table页面的refresh方法
-                            $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
-                            window.Ewin.alert({message: result.msg + ':添加数据成功！'});
-                        },
-                    error: function (status) {
-                        window.Ewin.alert({message: status.status + ':添加数据失败!'});
-                    }
-                });
+                if (puid=""){
+                    $.ajax({
+                        contentType:
+                            "application/json",
+                        type:
+                            'POST',
+                        url: url+"?projectId="+projectPuid,
+                        data: JSON.stringify(data),
+                        success:
+                            function (result) {
+                                $('.modal-dialog', window.top.document).parent('div').remove()
+                                $('body', window.top.document).find('.modal-backdrop').remove();
+                                // jquery 调用刷新当前操作的table页面的refresh方法
+                                $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
+                                window.Ewin.alert({message: result.msg + ':添加数据成功！'});
+                            },
+                        error: function (status) {
+                            window.Ewin.alert({message: status.status + ':添加数据失败!'});
+                        }
+                    });
+                } else {
+                    $.ajax({
+                        contentType:
+                            "application/json",
+                        type:
+                            'POST',
+                        url: url+"?projectId="+projectPuid+"&puid="+puid,
+                        data: JSON.stringify(data),
+                        success:
+                            function (result) {
+                                $('.modal-dialog', window.top.document).parent('div').remove()
+                                $('body', window.top.document).find('.modal-backdrop').remove();
+                                // jquery 调用刷新当前操作的table页面的refresh方法
+                                $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
+                                window.Ewin.alert({message: result.errMsg + ':添加数据成功！'});
+                            },
+                        error: function (status) {
+                            window.Ewin.alert({message: status.status + ':添加数据失败!'});
+                        }
+                    });
+                }
             // }
         });
     })

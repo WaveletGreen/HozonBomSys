@@ -3,7 +3,7 @@
 <!--User: xulf Date: 2018/6/4 Time: 15:10-->
 <body>
 <form id="ebomMainForm" role="form" method="post" action="ebom/update/ebom">
-    <input id="puid" name="puid" type="text" th:value="${puid}"/>
+    <input id="puid" name="puid" type="hidden" th:value="${puid}"/>
     <div class="form-group" th:each="_data,c:${data.get(0)}">
         <label class="control-label" th:text="${_data}"></label>
         <input class="form-control" th:id="${data.get(1)[c.index]}" th:name="${data.get(1)[c.index]}" type="text"

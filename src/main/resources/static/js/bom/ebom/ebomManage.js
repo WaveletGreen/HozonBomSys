@@ -62,13 +62,29 @@ window.onload = function(){
                             text: '添加',
                             iconCls: 'glyphicon glyphicon-plus',
                             handler: function () {
+                                var rows = $table.bootstrapTable('getSelections');
+                                if (rows.length > 1) {
+                                    window.Ewin.alert({message: '只能选择一个父级!'});
+                                    return false;
+                                }
+                                else if (rows.length==1) {
                                 window.Ewin.dialog({
                                     title: "添加",
-                                    url: "ebom/addEbom?projectId=" + projectPuid,
+                                    url: "ebom/addEbom?projectId=" + projectPuid + "&puid=" + rows[0].puid,
                                     gridId: "gridId",
                                     width: 500,
                                     height: 650
                                 })
+                            }
+                                else if (rows.length==0) {
+                                    window.Ewin.dialog({
+                                        title: "添加",
+                                        url: "ebom/addEbom?projectId=" + projectPuid,
+                                        gridId: "gridId",
+                                        width: 500,
+                                        height: 650
+                                    })
+                                }
                             }
                         },
                         {
@@ -104,21 +120,22 @@ window.onload = function(){
                                         $.ajax({
                                             type: "POST",
                                             //ajax需要添加打包名
-                                            url: "./cfg0/deleteByPuid",
-                                            data: JSON.stringify(rows),
-                                            contentType: "application/json",
+                                            url: "ebom/delete/ebom?puid="+rows[0].puid+"&projectId="+projectPuid,
+                                            //data: JSON.stringify(rows),
+                                            //contentType: "application/json",
                                             success: function (result) {
                                                 if (result.status) {
-                                                    window.Ewin.alert({message: result.msg});
+                                                    window.Ewin.alert({message: result.errMsg});
                                                     //刷新，会重新申请数据库数据
                                                 }
                                                 else {
-                                                    window.Ewin.alert({message: "操作删除失败:" + result.msg});
+                                                    window.Ewin.alert({message: ":" + result.errMsg});
                                                 }
                                                 $table.bootstrapTable("refresh");
                                             },
                                             error: function (info) {
-                                                window.Ewin.alert({message: "操作删除:" + info.status});
+                                                console.log(info)
+                                                window.Ewin.alert({message: ":" + info.status});
                                             }
                                         })
                                     }

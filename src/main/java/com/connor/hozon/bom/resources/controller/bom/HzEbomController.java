@@ -244,7 +244,7 @@ public class HzEbomController extends BaseController {
      * @param map
      * @param response
      */
-    @RequestMapping("add/ebom")
+    @RequestMapping(value = "add/ebom",method = RequestMethod.POST)
     public void addEbomToDB(AddHzEbomReqDTO reqDTO, @RequestBody Map<String,Object> map, HttpServletResponse response){
         if(reqDTO.getProjectId()==null){
             writeAjaxJSONResponse(ResultMessageBuilder.build(false,"非法参数！"), response);
@@ -271,7 +271,7 @@ public class HzEbomController extends BaseController {
      * @param map
      * @param response
      */
-    @RequestMapping("update/ebom")
+    @RequestMapping(value = "update/ebom",method = RequestMethod.POST)
     public void updateEbomToDB(UpdateHzEbomReqDTO reqDTO, @RequestBody Map<String,Object> map, HttpServletResponse response){
         if(reqDTO.getProjectId()==null){
             writeAjaxJSONResponse(ResultMessageBuilder.build(false,"非法参数！"), response);
@@ -298,7 +298,7 @@ public class HzEbomController extends BaseController {
      * @param
      * @param response
      */
-    @RequestMapping("delete/ebom")
+    @RequestMapping(value = "delete/ebom",method = RequestMethod.POST)
     public void updateEbomToDB(DeleteHzEbomReqDTO reqDTO, HttpServletResponse response){
         if(reqDTO.getProjectId()==null){
             writeAjaxJSONResponse(ResultMessageBuilder.build(false,"非法参数！"), response);
