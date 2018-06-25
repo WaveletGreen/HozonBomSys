@@ -60,8 +60,6 @@ public class HzEbomServiceImpl implements HzEbomService {
     @Autowired
     private HzPbomService hzPbomService;
 
-    @Autowired
-    private HzPbomRecordDAO hzPbomRecordDAO;
     @Override
     public Page<HzEbomRespDTO> getHzEbomPage(FindForPageReqDTO recordReqDTO) {
         try{
@@ -228,7 +226,7 @@ public class HzEbomServiceImpl implements HzEbomService {
         try{
             String parentId = reqDTO.getParentPuid();
             int i;
-            if(parentId != null){
+            if(parentId != null && parentId!=""){
                 //增加到当前父结构下面
                 AddProcessComposeReqDTO addProcessComposeReqDTO = new AddProcessComposeReqDTO();
                 addProcessComposeReqDTO.setPuid(parentId);

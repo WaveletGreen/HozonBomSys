@@ -608,7 +608,7 @@ public class HzPbomServiceImpl implements HzPbomService {
                     String parentId = record.getParentUid();
                     groupNum = hzEPLManageRecordService.getGroupNum(projectId,parentId);
                 }
-                respDTO.setGroupNum(groupNum);//这个暂时没有
+                respDTO.setGroupNum(groupNum);
 
                 byte[] bomLineBlock =record.getBomLineBlock();
                 Object obj = SerializeUtil.unserialize(bomLineBlock);

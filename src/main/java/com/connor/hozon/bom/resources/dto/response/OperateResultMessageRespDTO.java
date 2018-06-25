@@ -22,4 +22,12 @@ public class OperateResultMessageRespDTO {
     public void setErrMsg(String errMsg) {
         this.errMsg = errMsg;
     }
+
+    public Long getErrCode() {
+        return errCode;
+    }
+
+    public void setErrCode(Long errCode) {
+        this.errCode = errCode;
+    }
 }

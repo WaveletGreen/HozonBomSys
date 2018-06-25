@@ -95,7 +95,7 @@ public class HzEbomController extends BaseController {
 
 
     @RequestMapping(value = "addEbom",method = RequestMethod.GET)
-    public String addEbom(String projectId,Model model) {
+    public String addEbom(String projectId,String puid,Model model) {
         if(projectId == null){
             return "";
         }
@@ -103,6 +103,7 @@ public class HzEbomController extends BaseController {
         if(array == null){
             return "";
         }
+
         //过滤掉没必要的标题
         JSONArray jsonArray = new JSONArray();
         String[] strings1 = (String[]) array.get(0);
@@ -143,10 +144,24 @@ public class HzEbomController extends BaseController {
         if(list2.contains("level")){
             arrayList2.remove("level");
         }
-        strings1 = arrayList1.toArray(new String[0]);
-        strings2 = arrayList2.toArray(new String[0]);
-        jsonArray.add(strings1);
-        jsonArray.add(strings2);
+        if(puid!=null){
+            HzEbomRespDTO recordRespDTO = hzEbomService.fingEbomById(puid,projectId);
+            if(array == null ||recordRespDTO == null){
+                return "";
+            }
+            JSONArray array1 = recordRespDTO.getJsonArray();
+            JSONObject object = array1.getJSONObject(0);
+            for(int i =0 ;i<strings2.length;i++){
+                if("puid".equals(strings2[i])){
+                    model.addAttribute("puid",object.getString(strings2[i]));
+
+                }
+            }
+        }
+        String[] strings3 = arrayList1.toArray(new String[0]);
+        String[] strings4 = arrayList2.toArray(new String[0]);
+        jsonArray.add(strings3);
+        jsonArray.add(strings4);
         model.addAttribute("data",jsonArray);
 
         return "bomManage/ebom/ebomManage/addebomManage";
