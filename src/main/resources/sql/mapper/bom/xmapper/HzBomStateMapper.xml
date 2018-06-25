@@ -17,12 +17,12 @@
     select 
     <include refid="Base_Column_List" />
     from HZ_BOM_STATE
-    where PUID = #{puid,jdbcType=VARCHAR}
+    where P_BOM_ID = #{pBomId,jdbcType=VARCHAR}
   </select>
 
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from HZ_BOM_STATE
-    where P_BOM_ID = #{puid,jdbcType=VARCHAR}
+    where P_BOM_ID = #{pBomId,jdbcType=VARCHAR}
   </delete>
 
   <insert id="insert" parameterType="sql.pojo.bom.HzBomState">

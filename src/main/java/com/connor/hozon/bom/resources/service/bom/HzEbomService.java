@@ -7,6 +7,11 @@ import com.connor.hozon.bom.resources.dto.request.FindForPageReqDTO;
 import com.connor.hozon.bom.resources.dto.request.UpdateHzEbomReqDTO;
 import com.connor.hozon.bom.resources.dto.response.HzEbomRespDTO;
 import com.connor.hozon.bom.resources.page.Page;
+import sql.pojo.bom.HzBomLineRecord;
+import sql.pojo.epl.HzEPLManageRecord;
+
+import java.util.List;
+import java.util.Map;
 import sql.pojo.epl.HzEPLManageRecord;
 
 import java.util.List;
@@ -60,5 +65,11 @@ public interface HzEbomService {
      */
     int deleteHzEbomRecordById(DeleteHzEbomReqDTO reqDTO);
 
-    List<HzEPLManageRecord> findCurrentBomChildren(Map<String, Object> map);
+    /**
+     * 找出当前bom的全部子bom  递归查找
+     * @param
+     * @return
+     */
+    List<HzEPLManageRecord> findCurrentBomChildren(String projectId,HzEPLManageRecord record);
+
 }
