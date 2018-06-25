@@ -369,7 +369,7 @@ public class HzPbomServiceImpl implements HzPbomService {
             Map<String, Object> map = new HashMap<>();
             map.put("puid", reqDTO.getPuid());
             map.put("projectId", reqDTO.getProjectPuid());
-            HzBomLineRecord record = hzBomLineRecordDao.findBobLineByPuid(map);
+            HzBomLineRecord record = hzBomLineRecordDao.findBomLineByPuid(map);
             if (record != null) {
                 if (record.getIsHas().equals(0) || record.getIsPart().equals(1)) {
                     record.setIsHas(new Integer(1));
@@ -452,7 +452,7 @@ public class HzPbomServiceImpl implements HzPbomService {
                 hzBomLineRecord.setLineIndex(new StringBuffer(lineIndex).append("." + max).toString());
             }
             //只有2Y层有这个玩意
-//            hzBomLineRecord.setpBomOfWhichDept(reqDTO.getpBomOfWhichDept());
+            hzBomLineRecord.setpBomOfWhichDept(reqDTO.getpBomOfWhichDept());
             int orderNum = hzBomLineRecordDao.findMaxBomOrderNum();
             hzBomLineRecord.setOrderNum(++orderNum);
             hzBomLineRecord.setParentUid(reqDTO.getPuid());

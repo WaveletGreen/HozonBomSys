@@ -48,7 +48,16 @@ public class HzBomLineRecordDaoImpl extends BaseSQLUtil {
      * @param map 过滤器
      * @return
      */
-    public HzBomLineRecord findBobLineByPuid(Map map){
+    public HzBomLineRecord findBomLineByPuid(Map map){
         return (HzBomLineRecord)super.findForObject("HzBomLineRecordDaoImpl_findBobLineByPuid",map);
     }
+
+    /**
+     * 找出全部的2或者2Y层级结构
+     * @return
+     */
+    public List<String> findBomLineIndex(Map map){
+        return super.findForList("HzBomLineRecordDaoImpl_findBomLineIndex",map);
+    }
+
 }

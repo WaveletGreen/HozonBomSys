@@ -5,6 +5,7 @@ import com.connor.hozon.bom.resources.page.Page;
 import sql.pojo.epl.HzEPLManageRecord;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by haozt on 2018/06/06
@@ -26,4 +27,12 @@ public interface HzEbomRecordDAO {
      * @return
      */
     HzEPLManageRecord findEbomById(String puid,String projectId);
+
+    /**
+     * 找出一条bomLine的全部子bom
+     * @param map
+     * @return
+     */
+    List<HzEPLManageRecord> getHzBomLineChildren(Map map);
+
 }

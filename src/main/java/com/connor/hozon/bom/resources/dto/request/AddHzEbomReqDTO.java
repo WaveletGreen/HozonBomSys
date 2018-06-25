@@ -7,7 +7,7 @@ import java.util.Map;
  * @Date: 2018/6/22
  * @Description: 新增一条EBOM
  */
-public class AddEbomReqDTO {
+public class AddHzEbomReqDTO {
 
     /**
      * 父puid
@@ -52,5 +52,13 @@ public class AddEbomReqDTO {
 
     public void setMap(Map<String, Object> map) {
         this.map = map;
+    }
+
+    public String getParentPuid() {
+        return parentPuid;
+    }
+
+    public void setParentPuid(String parentPuid) {
+        this.parentPuid = parentPuid;
     }
 }

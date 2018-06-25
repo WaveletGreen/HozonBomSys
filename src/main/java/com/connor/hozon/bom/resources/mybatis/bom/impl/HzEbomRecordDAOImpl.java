@@ -43,5 +43,13 @@ public class HzEbomRecordDAOImpl extends BaseSQLUtil implements HzEbomRecordDAO 
         return (HzEPLManageRecord) super.findForObject("HzEbomRecordDAOImpl_getHzEbomList",map);
     }
 
+    /**
+     * 找出一条bomLine的全部子bom
+     * @param map
+     * @return
+     */
+    public List<HzEPLManageRecord> getHzBomLineChildren(Map map){
+        return super.findForList("HzEbomRecordDAOImpl_getHzBomLineChildren",map);
+    }
 
 }

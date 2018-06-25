@@ -5,13 +5,16 @@ import com.alibaba.fastjson.JSONObject;
 import com.connor.hozon.bom.bomSystem.dao.bom.HzBomDataDao;
 import com.connor.hozon.bom.bomSystem.dao.bom.HzBomMainRecordDao;
 import com.connor.hozon.bom.bomSystem.dao.impl.bom.HzBomLineRecordDaoImpl;
-import com.connor.hozon.bom.resources.dto.request.AddEbomReqDTO;
-import com.connor.hozon.bom.resources.dto.request.FindForPageReqDTO;
+import com.connor.hozon.bom.resources.dto.request.*;
 import com.connor.hozon.bom.resources.dto.response.HzEbomRespDTO;
+import com.connor.hozon.bom.resources.mybatis.bom.HzBomStateDAO;
 import com.connor.hozon.bom.resources.mybatis.bom.HzEbomRecordDAO;
+import com.connor.hozon.bom.resources.mybatis.bom.HzPbomRecordDAO;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.service.bom.HzEbomService;
+import com.connor.hozon.bom.resources.service.bom.HzPbomService;
 import com.connor.hozon.bom.resources.service.epl.HzEPLManageRecordService;
+import com.connor.hozon.bom.resources.util.ListUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import share.bean.PreferenceSetting;
@@ -19,12 +22,11 @@ import share.bean.RedisBomBean;
 import sql.pojo.HzPreferenceSetting;
 import sql.pojo.bom.HZBomMainRecord;
 import sql.pojo.bom.HzBomLineRecord;
+import sql.pojo.bom.HzBomState;
 import sql.pojo.epl.HzEPLManageRecord;
 import sql.redis.SerializeUtil;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
+import java.util.*;
 
 import static com.connor.hozon.bom.resources.service.bom.impl.HzPbomServiceImpl.getLevelAndRank;
 
@@ -48,6 +50,15 @@ public class HzEbomServiceImpl implements HzEbomService {
 
     @Autowired
     private HzBomLineRecordDaoImpl hzBomLineRecordDao;
+
+    @Autowired
+    private HzBomStateDAO hzBomStateDAO;
+
+    @Autowired
+    private HzPbomService hzPbomService;
+
+    @Autowired
+    private HzPbomRecordDAO hzPbomRecordDAO;
     @Override
     public Page<HzEbomRespDTO> getHzEbomPage(FindForPageReqDTO recordReqDTO) {
         try{
@@ -204,24 +215,171 @@ public class HzEbomServiceImpl implements HzEbomService {
         }
     }
 
+    /**
+     * 添加EBOM  最好使用事务
+     * @param reqDTO
+     * @return
+     */
     @Override
-    public int addHzEbomRecord(AddEbomReqDTO reqDTO) {
+    public int addHzEbomRecord(AddHzEbomReqDTO reqDTO) {
         try{
-            HzBomLineRecord hzBomLineRecord = new HzBomLineRecord();
-            HZBomMainRecord hzBomMainRecord = hzBomMainRecordDao.selectByProjectPuid(reqDTO.getProjectId());
-            if(hzBomMainRecord == null){
-                return 0;
-            }
-            hzBomLineRecord.setBomDigifaxId(hzBomMainRecord.getBomDigifax());
+            String parentId = reqDTO.getParentPuid();
+            int i;
+            if(parentId != null){
+                //增加到当前父结构下面
+                AddProcessComposeReqDTO addProcessComposeReqDTO = new AddProcessComposeReqDTO();
+                addProcessComposeReqDTO.setPuid(parentId);
+                addProcessComposeReqDTO.setProjectPuid(reqDTO.getProjectId());
+                addProcessComposeReqDTO.setpBomOfWhichDept(reqDTO.getpBomOfWhichDept());
+                addProcessComposeReqDTO.seteBomContent(reqDTO.getMap());
+                i = hzPbomService.addPbomProcessCompose(addProcessComposeReqDTO);
+                if(i>0){
+                    return 1;
+                }
+            }else{
+                //自己搭建父结构 默认为2层 有子层时更新为2Y层
+                HzBomLineRecord hzBomLineRecord = new HzBomLineRecord();
+                HZBomMainRecord hzBomMainRecord = hzBomMainRecordDao.selectByProjectPuid(reqDTO.getProjectId());
+                if(hzBomMainRecord == null){
+                    return 0;
+                }
+                hzBomLineRecord.setBomDigifaxId(hzBomMainRecord.getBomDigifax());
+                Map<String, Object> objectMap = reqDTO.getMap();
 
-            int i =hzBomLineRecordDao.insert(hzBomLineRecord);
-            if(i==0){
-                return 0;
+                byte[] bytes = SerializeUtil.serialize(objectMap);
+                hzBomLineRecord.setBomLineBlock(bytes);
+                hzBomLineRecord.setIsPart(1);
+                hzBomLineRecord.setIsHas(0);
+                Map<String,Object> map = new HashMap();
+                map.put("projectId",reqDTO.getProjectId());
+                //找出全部的2y或者2层信息，新增的EBOM的层级 按2y或者2层的最大值开始增
+                List<String> list = hzBomLineRecordDao.findBomLineIndex(map);
+                List<Integer> lists = new ArrayList<>();
+                for(String str:list){
+                    lists.add(Integer.valueOf(str.split("\\.")[0]));
+                }
+                Integer max = 0;
+                for(Integer in:lists){
+                    if(max<in){
+                        max = in;
+                    }
+                }
+                max = max+1;
+                StringBuffer buffer = new StringBuffer(String.valueOf(max));
+                hzBomLineRecord.setLineIndex(buffer.append(".1").toString());
+                int maxGroupNum =hzBomLineRecordDao.findMaxBomOrderNum();
+                hzBomLineRecord.setOrderNum(++maxGroupNum);
+                String puid = UUID.randomUUID().toString();
+                hzBomLineRecord.setPuid(puid);
+                hzBomLineRecord.setpBomOfWhichDept(reqDTO.getpBomOfWhichDept());
+                hzBomLineRecord.setLineID((String) objectMap.get("item_id"));
+                hzBomLineRecord.setIsDept(0);
+                i = hzBomLineRecordDao.insert(hzBomLineRecord);
+                HzBomState hzBomState = new HzBomState();
+                hzBomState.setpBomId(puid);
+                hzBomState.setPuid(UUID.randomUUID().toString());
+                hzBomState.setpBomState(0);
+               int j =  hzBomStateDAO.insert(hzBomState);
+               if(i>0 && j>0){
+                   return 1;
+               }
             }
-            return 1;
+            return 0;
         }catch (Exception e){
             return  0;
         }
+    }
+
+    @Override
+    public int updateHzEbomRecord(UpdateHzEbomReqDTO reqDTO) {
+        try{
+            HZBomMainRecord hzBomMainRecord = hzBomMainRecordDao.selectByProjectPuid(reqDTO.getProjectId());
+            HzBomLineRecord hzBomLineRecord = new HzBomLineRecord();
+            hzBomLineRecord.setBomDigifaxId(hzBomMainRecord.getBomDigifax());
+            Map<String,Object> map = new HashMap<>();
+            byte[] bytes = SerializeUtil.serialize(map);
+            hzBomLineRecord.setLineID((String)map.get("item_id"));
+            hzBomLineRecord.setpBomOfWhichDept(reqDTO.getpBomOfWhichDept());
+            hzBomLineRecord.setBomLineBlock(bytes);
+            hzBomLineRecord.setPuid(reqDTO.getPuid());
+            int i =hzBomLineRecordDao.update(hzBomLineRecord);
+            HzBomState hzBomState = new HzBomState();
+            hzBomState.setpBomId(reqDTO.getPuid());
+            hzBomState.setpBomState(1);
+            int j =hzBomStateDAO.update(hzBomState);
+            if(i>0 && j>0){
+                return 1;
+            }
+        }catch (Exception e){
+            return 0;
+        }
+        return 0;
+    }
+
+    @Override
+    public int deleteHzEbomRecordById(DeleteHzEbomReqDTO reqDTO) {
+        try{
+            Map<String, Object> map = new HashMap<>();
+            map.put("puid", reqDTO.getPuid());
+            map.put("projectId", reqDTO.getProjectId());
+            HzBomLineRecord record = hzBomLineRecordDao.findBomLineByPuid(map);
+            //判断当前bom下有没有子，需要调整层级关系
+            if(record != null){
+                Map<String,Object> map1 = new HashMap<>();
+                map1.put("projectId",reqDTO.getProjectId());
+                map1.put("parentUid",record.getPuid());
+                List<HzEPLManageRecord> records = hzEbomRecordDAO.getHzBomLineChildren(map1);
+                if(ListUtil.isEmpty(records)){
+                    return 0;
+                }
+                List<HzEPLManageRecord> recordList = new ArrayList<>();
+                //过滤掉已删除的bom
+                for(HzEPLManageRecord eplManageRecord :records){
+                    if(!eplManageRecord.getpState().equals(2)){
+                        recordList.add(eplManageRecord);
+                    }
+                }
+
+            }
+
+            hzBomLineRecordDao.update(record);
+            HzBomState hzBomState = new HzBomState();
+            hzBomState.setpBomId(record.getPuid());
+            hzBomState.setpBomState(2);
+            hzBomStateDAO.update(hzBomState);
+        }catch (Exception e){
+            return  0;
+        }
+        return 0;
+    }
+
+    @Override
+    public List<HzEPLManageRecord> findCurrentBomChildren(Map<String, Object> map) {
+        List<HzEPLManageRecord> recordList = new ArrayList<>();
+        HzBomLineRecord record = hzBomLineRecordDao.findBomLineByPuid(map);
+        if(record == null){
+            return recordList;
+        }
+
+        if(record.getIsHas().equals(1)){
+            Map<String,Object> map1 = new HashMap<>();
+            map1.put("projectId",map.get("projectId"));
+            map1.put("parentUid",record.getPuid());
+            List<HzEPLManageRecord> records = hzEbomRecordDAO.getHzBomLineChildren(map1);
+            //过滤掉已删除的bom
+            for(HzEPLManageRecord eplManageRecord :records){
+                if(!eplManageRecord.getpState().equals(2)){
+                    recordList.add(eplManageRecord);
+                }
+            }
+
+            for(HzEPLManageRecord record1 :recordList){
+
+            }
+        }
+
+
+        return null;
     }
 
 }

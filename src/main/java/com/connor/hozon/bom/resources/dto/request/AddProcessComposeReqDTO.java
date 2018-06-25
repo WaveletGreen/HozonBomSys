@@ -10,6 +10,7 @@ public class AddProcessComposeReqDTO {
     private String pBomLinePartName;//3
     private String pBomLinePartClass;//4
     private String puid;
+    private String pBomOfWhichDept;
 
     /**
      * EBOM中的零件内容，是一个json串
@@ -62,5 +63,13 @@ public class AddProcessComposeReqDTO {
 
     public void setPuid(String puid) {
         this.puid = puid;
+    }
+
+    public String getpBomOfWhichDept() {
+        return pBomOfWhichDept;
+    }
+
+    public void setpBomOfWhichDept(String pBomOfWhichDept) {
+        this.pBomOfWhichDept = pBomOfWhichDept;
     }
 }
