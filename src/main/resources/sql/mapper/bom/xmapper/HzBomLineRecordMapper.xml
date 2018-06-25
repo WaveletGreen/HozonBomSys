@@ -175,7 +175,7 @@
     </select>
 
     <!--查询全部的2y或者2层的 lineindex 信息-->
-    <select id="HzBomLineRecordDaoImpl_findBomLineIndex"  resultType="java.util.List">
+    <select id="HzBomLineRecordDaoImpl_findBomLineIndex"  resultType="java.util.List" parameterType="java.util.HashMap">
         select
         P_LINE_INDEX
         from HZ_BOM_LINE_RECORD
@@ -185,4 +185,5 @@
         t2.p_cfg0_of_which_project_puid=#{projectId,jdbcType=VARCHAR}
         ) and LENGTH(TRANSLATE(P_LINE_INDEX,',0123456789','.'))=1
     </select>
+
 </mapper>

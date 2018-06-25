@@ -7,7 +7,7 @@ import java.util.Map;
  * @Date: 2018/6/22
  * @Description: 新增一条EBOM
  */
-public class AddEbomReqDTO {
+public class AddHzEbomReqDTO {
 
     /**
      * 父puid

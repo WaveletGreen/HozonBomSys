@@ -5,7 +5,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.resources.controller.BaseController;
-import com.connor.hozon.bom.resources.dto.request.AddEbomReqDTO;
+import com.connor.hozon.bom.resources.dto.request.AddHzEbomReqDTO;
 import com.connor.hozon.bom.resources.dto.request.FindForPageReqDTO;
 import com.connor.hozon.bom.resources.dto.response.HzEbomRespDTO;
 import com.connor.hozon.bom.resources.page.Page;
@@ -165,6 +165,9 @@ public class HzEbomController extends BaseController {
         List<String> arrayList1=new ArrayList<String>(list1);
         List<String> arrayList2=new ArrayList<String>(list2);
 
+        if(list1.contains("puid")){
+            arrayList1.remove("puid");
+        }
         if(list1.contains("序号")){
             arrayList1.remove("序号");
         }
@@ -190,16 +193,23 @@ public class HzEbomController extends BaseController {
         if(list2.contains("groupNum")){
             arrayList2.remove("groupNum");
         }
-
+        if(list2.contains("puid")){
+            arrayList2.remove("puid");
+        }
         strings1 = arrayList1.toArray(new String[0]);
         strings2 = arrayList2.toArray(new String[0]);
         jsonArray.add(strings1);
         jsonArray.add(strings2);
 
+
         JSONArray array1 = recordRespDTO.getJsonArray();
         JSONObject object = array1.getJSONObject(0);
         String[] strings3 = new String[strings2.length];
         for(int i =0 ;i<strings2.length;i++){
+            if(strings2[i].equals("puid")) {
+                model.addAttribute("puid",strings2[i]);
+                continue;
+            }
             strings3[i] = object.getString(strings2[i])==null?"":object.getString(strings2[i]);
         }
         jsonArray.add(strings3);
@@ -214,7 +224,7 @@ public class HzEbomController extends BaseController {
      * @param response
      */
     @RequestMapping("add/ebom")
-    public void addEbomToDb(AddEbomReqDTO reqDTO, @RequestBody Map<String,Object> map, HttpServletResponse response){
+    public void addEbomToDB(AddHzEbomReqDTO reqDTO, @RequestBody Map<String,Object> map, HttpServletResponse response){
         if(reqDTO.getProjectId()==null){
             writeAjaxJSONResponse(ResultMessageBuilder.build(false,"非法参数！"), response);
         }
@@ -222,7 +232,7 @@ public class HzEbomController extends BaseController {
         if(user.getGroupId()!=9){//管理员权限
             writeAjaxJSONResponse(ResultMessageBuilder.build(false,"您没有权限进行当前操作！"), response);
         }
-        AddEbomReqDTO dto = new AddEbomReqDTO();
+        AddHzEbomReqDTO dto = new AddHzEbomReqDTO();
         dto.setMap(map);
         dto.setpBomOfWhichDept(reqDTO.getProjectId());
         dto.setProjectId(reqDTO.getProjectId());

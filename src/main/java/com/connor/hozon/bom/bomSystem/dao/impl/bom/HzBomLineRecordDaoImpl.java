@@ -59,4 +59,5 @@ public class HzBomLineRecordDaoImpl extends BaseSQLUtil {
     public List<String> findBomLineIndex(Map map){
         return super.findForList("HzBomLineRecordDaoImpl_findBomLineIndex",map);
     }
+
 }
