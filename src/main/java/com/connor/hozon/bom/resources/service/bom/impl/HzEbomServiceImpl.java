@@ -232,8 +232,8 @@ public class HzEbomServiceImpl implements HzEbomService {
                 pBomOfWhichDept = (String)ebomContent.get("pBomOfWhichDept");
                 ebomContent.remove("pBomOfWhichDept");
             }
-            if(ebomContent.containsKey("item_id")){
-                itemId = (String)ebomContent.get("item_id");
+            if(ebomContent.containsKey("bl_item_item_id")){
+                itemId = (String)ebomContent.get("bl_item_item_id");
             }
             if(ebomContent.containsKey("puid")){
                 parentPuid = (String)ebomContent.get("puid");
@@ -312,6 +312,7 @@ public class HzEbomServiceImpl implements HzEbomService {
             Map<String,Object> ebomContent = reqDTO.getUpdateContent();
             String puid = "";
             String pBomOfWhichDept = "";
+            String itemId="";
             if(ebomContent.containsKey("puid")){
                 puid = (String)ebomContent.get("puid");
                 ebomContent.remove("puid");
@@ -320,13 +321,18 @@ public class HzEbomServiceImpl implements HzEbomService {
                 pBomOfWhichDept = (String)ebomContent.get("pBomOfWhichDept");
                 ebomContent.remove("pBomOfWhichDept");
             }
+
+            if(ebomContent.containsKey("bl_item_item_Id")){
+                itemId = (String)ebomContent.get("bl_item_item_Id");
+                ebomContent.remove("bl_item_item_Id");
+            }
             HZBomMainRecord hzBomMainRecord = hzBomMainRecordDao.selectByProjectPuid(reqDTO.getProjectId());
             HzBomLineRecord hzBomLineRecord = new HzBomLineRecord();
             hzBomLineRecord.setBomDigifaxId(hzBomMainRecord.getBomDigifax());
 
 
             byte[] bytes = SerializeUtil.serialize(ebomContent);
-            hzBomLineRecord.setLineID((String)ebomContent.get("item_id"));
+            hzBomLineRecord.setLineID(itemId);
             hzBomLineRecord.setpBomOfWhichDept(pBomOfWhichDept);
             hzBomLineRecord.setBomLineBlock(bytes);
             hzBomLineRecord.setPuid(puid);
