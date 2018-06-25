@@ -131,14 +131,21 @@ public class HzPbomController extends BaseController {
         writeAjaxJSONResponse(ResultMessageBuilder.build(false, "接口后续在定义"), response);
     }
 
-    @RequestMapping(value = "updateManageProcess", method = RequestMethod.GET)
+    /**
+     * 跳转到PBOM管理添加页面
+     * @return
+     */
+    @RequestMapping(value = "addPbomManage", method = RequestMethod.GET)
     public String updatePbomManageRecordProcess() {
-        return "bomManage/pbom/pbomManage/updateProcess";
+        return "bomManage/pbom/pbomManage/addPbomManage";
     }
-
-    @RequestMapping(value = "updateManageBom", method = RequestMethod.GET)
+    /**
+     * 跳转到PBOM管理修改页面
+     * @return
+     */
+    @RequestMapping(value = "updatePbomManage", method = RequestMethod.GET)
     public String updatePbomManageRecordBom() {
-        return "bomManage/pbom/pbomManage/updateBom";
+        return "bomManage/pbom/pbomManage/updatePbomManage";
     }
 
     @RequestMapping(value = "update/manage", method = RequestMethod.POST)
