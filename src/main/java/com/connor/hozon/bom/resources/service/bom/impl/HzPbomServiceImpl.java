@@ -501,10 +501,18 @@ public class HzPbomServiceImpl implements HzPbomService {
 
     @Override
     public HzPbomLineRespDTO getHzPbomByPuid(String projectId, String puid) {
-        Map<String,Object> map = new HashMap<>();
-        map.put("projectId",projectId);
-        map.put("puid",puid);
-        hzPbomRecordDAO.getPbomRecord(map);
+        try{
+            Map<String,Object> map = new HashMap<>();
+            map.put("projectId",projectId);
+            map.put("pPuid",puid);
+            List<HzPbomLineRecord> list = hzPbomRecordDAO.getPbomRecord(map);
+            if(ListUtil.isNotEmpty(list)){
+                List<HzPbomLineRespDTO> respDTOS = pbomLineRecordToRespDTOS(list,projectId,0);
+                return respDTOS.get(0);
+            }
+        }catch (Exception e){
+            return  null;
+        }
         return null;
     }
 
