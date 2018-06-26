@@ -20,6 +20,16 @@
                 invalid: 'glyphicon glyphicon-remove',
                 validating: 'glyphicon glyphicon-refresh'
             },
+            fields: {
+                item_id: {
+                    message: '零组件验证失败',
+                    validators: {
+                        notEmpty: {
+                            message: '零组件不能为空'
+                        }
+                    }
+                },
+            }
         });
         // 绑定dialog的确定按钮的监听事件
         $("#btnOk", window.top.document).click(function () {
