@@ -279,7 +279,7 @@
 <script th:inline="javascript">
     <![CDATA[
     $(function () {
-        $('#pbomMainForm').bootstrapValidator({
+        $('#ebomMainForm').bootstrapValidator({
             message: 'This value is not valid',
             feedbackIcons: {
                 valid: 'glyphicon glyphicon-ok',
@@ -287,7 +287,7 @@
                 validating: 'glyphicon glyphicon-refresh'
             },
             fields: {
-                bl_item_item_id: {
+                item_id: {
                     message: '零组件验证失败',
                     validators: {
                         notEmpty: {
@@ -299,61 +299,61 @@
         });
         // 绑定dialog的确定按钮的监听事件
         $("#btnOk", window.top.document).click(function () {
-            // var bootstrapValidator = $("#ebomMainForm", window.top.document).data('bootstrapValidator');
-            // bootstrapValidator.validate();
-            // if (bootstrapValidator.isValid()) {
-                var projectPuid = $("#project", window.top.document).val();
-                var url = $("#ebomMainForm", window.top.document).attr('action');
-                var puid =$("#puid").val;
-                var data = {};
-                var _d = $("#ebomMainForm").serializeArray();
-                for (var p in _d) {
-                    data[_d[p].name] = _d[p].value;
-                }
-                // console.log("data属性是："+data);
-                // console.log("JSON.stringify(data)的属性的："+JSON.stringify(data));
-                if (puid=""){
-                    $.ajax({
-                        contentType:
-                            "application/json",
-                        type:
-                            'POST',
-                        url: url+"?projectId="+projectPuid,
-                        data: JSON.stringify(data),
-                        success:
-                            function (result) {
-                                $('.modal-dialog', window.top.document).parent('div').remove()
-                                $('body', window.top.document).find('.modal-backdrop').remove();
-                                // jquery 调用刷新当前操作的table页面的refresh方法
-                                $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
-                                window.Ewin.alert({message: result.msg + ':添加数据成功！'});
-                            },
-                        error: function (status) {
-                            window.Ewin.alert({message: status.status + ':添加数据失败!'});
-                        }
-                    });
-                } else {
-                    $.ajax({
-                        contentType:
-                            "application/json",
-                        type:
-                            'POST',
-                        url: url+"?projectId="+projectPuid+"&puid="+puid,
-                        data: JSON.stringify(data),
-                        success:
-                            function (result) {
-                                $('.modal-dialog', window.top.document).parent('div').remove()
-                                $('body', window.top.document).find('.modal-backdrop').remove();
-                                // jquery 调用刷新当前操作的table页面的refresh方法
-                                $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
-                                window.Ewin.alert({message: result.errMsg });
-                            },
-                        error: function (status) {
-                            window.Ewin.alert({message: status.status + ':添加数据失败!'});
-                        }
-                    });
-                }
-            // }
+            var bootstrapValidator = $("#ebomMainForm", window.top.document).data('bootstrapValidator');
+            bootstrapValidator.validate();
+            if (bootstrapValidator.isValid()) {
+            var projectPuid = $("#project", window.top.document).val();
+            var url = $("#ebomMainForm", window.top.document).attr('action');
+            var puid = $("#puid").val;
+            var data = {};
+            var _d = $("#ebomMainForm").serializeArray();
+            for (var p in _d) {
+                data[_d[p].name] = _d[p].value;
+            }
+            // console.log("data属性是："+data);
+            // console.log("JSON.stringify(data)的属性的："+JSON.stringify(data));
+            if (puid = "") {
+                $.ajax({
+                    contentType:
+                        "application/json",
+                    type:
+                        'POST',
+                    url: url + "?projectId=" + projectPuid,
+                    data: JSON.stringify(data),
+                    success:
+                        function (result) {
+                            $('.modal-dialog', window.top.document).parent('div').remove()
+                            $('body', window.top.document).find('.modal-backdrop').remove();
+                            // jquery 调用刷新当前操作的table页面的refresh方法
+                            $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
+                            window.Ewin.alert({message: result.msg + ':添加数据成功！'});
+                        },
+                    error: function (status) {
+                        window.Ewin.alert({message: status.status + ':添加数据失败!'});
+                    }
+                });
+            } else {
+                $.ajax({
+                    contentType:
+                        "application/json",
+                    type:
+                        'POST',
+                    url: url + "?projectId=" + projectPuid + "&puid=" + puid,
+                    data: JSON.stringify(data),
+                    success:
+                        function (result) {
+                            $('.modal-dialog', window.top.document).parent('div').remove()
+                            $('body', window.top.document).find('.modal-backdrop').remove();
+                            // jquery 调用刷新当前操作的table页面的refresh方法
+                            $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
+                            window.Ewin.alert({message: result.errMsg});
+                        },
+                    error: function (status) {
+                        window.Ewin.alert({message: status.status + ':添加数据失败!'});
+                    }
+                });
+            }
+            }
         });
     })
     ]]>
