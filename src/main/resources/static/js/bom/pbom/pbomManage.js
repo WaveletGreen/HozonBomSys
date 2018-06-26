@@ -1,5 +1,12 @@
-var firstLoad = true;
-window.onload = function () {
+$(document).ready((function () {
+    initTable();
+}))
+
+function doQuery() {
+    $('#pbomManageTable').bootstrapTable('refresh');    //刷新表格
+}
+
+function initTable() {
     var $table = $("#pbomManageTable");
     var column = [];
     var projectId = $("#project", window.top.document).val();
@@ -47,6 +54,7 @@ window.onload = function () {
                 // sidePagination: "server",           //分页方式：client客户端分页，server服务端分页（*）
                 height: $(window.parent.document).find("#wrapper").height() - 180,
                 width: $(window).width(),
+                formId: "queryPbomManage",
                 pagination: true,
                 // pageNumber:1,                       //初始化加载第一页，默认第一页
                 pageSize: 20,                       //每页的记录行数（*）
@@ -57,6 +65,7 @@ window.onload = function () {
                 columns: column,
                 sortable: true,                     //是否启用排序
                 sortOrder: "asc",                   //排序方式
+                clickToSelect: true,// 单击某一行的时候选中某一条记录
                 striped: true, //是否显示行间隔色
                 //search: true, //是否显示表格搜索，此搜索是客户端搜索，不会进服务端
                 showColumns: true, //是否显示所有的列
@@ -78,7 +87,7 @@ window.onload = function () {
                             }
                             window.Ewin.dialog({
                                 title: "添加",
-                                url: "pbom/addPbomManage?projectId="+projectId+"&eBomPuid="+rows[0].eBomPuid,
+                                url: "pbom/addPbomManage?projectId=" + projectId + "&eBomPuid=" + rows[0].eBomPuid,
                                 gridId: "gridId",
                                 width: 500,
                                 height: 650
@@ -97,7 +106,7 @@ window.onload = function () {
                             }
                             window.Ewin.dialog({
                                 title: "修改",
-                                url: "pbom/updatePbomManage?projectId="+projectId+"&eBomPuid="+rows[0].eBomPuid,
+                                url: "pbom/updatePbomManage?projectId=" + projectId + "&eBomPuid=" + rows[0].eBomPuid,
                                 gridId: "gridId",
                                 width: 500,
                                 height: 650

@@ -40,15 +40,15 @@
                placeholder="请输入零件来源"/><!--th:value="${entity.level}"-->
     </div>
     <div class="form-group">
-        <label for="resource">来源</label>
-        <select class="form-control" name="resource" id="resource" placeholder="请选择来源" th:value="${data.resource}">
+        <label for="resource">自制/采购</label>
+        <select class="form-control" name="resource" id="resource" placeholder="请选择来源">
             <option th:selected="${data.getResource()=='MAKE'?true:false}">MAKE</option>
             <option th:selected="${data.getResource()=='BUY'?true:false}">BUY</option>
             <option th:selected="${data.getResource()=='/'?true:false}">/</option>
         </select>
     </div>
     <div class="form-group">
-        <label for="type">类型</label>
+        <label for="type">焊接/装配</label>
         <select class="form-control" name="type" id="type" placeholder="请选择是否为焊接类型">
             <option th:selected="${data.getType()=='Y'?true:false}">Y</option>
             <option th:selected="${data.getType()=='N'?true:false}">N</option>
@@ -59,33 +59,33 @@
         <label for="buyUnit">采购单元</label>
         <select class="form-control" name="buyUnit" id="buyUnit" placeholder="请选择是否为采购单元">
             <option th:selected="${data.getBuyUnit()=='Y'?true:false}">Y</option>
-            <option th:selected="${data.getBuyUnit()=='N'?true:false}">>N</option>
-            <option th:selected="${data.getBuyUnit()=='/'?true:false}">>/</option>
+            <option th:selected="${data.getBuyUnit()=='N'?true:false}">N</option>
+            <option th:selected="${data.getBuyUnit()=='/'?true:false}">/</option>
         </select>
     </div>
     <div class="form-group">
         <label for="workShop1">车间1</label>
-        <input class="form-control" id="workShop1" name="workShop1" type="text"
+        <input class="form-control" id="workShop1" name="workShop1" type="text" th:value="${data.workShop1}"
                placeholder="请输入车间1"/><!--th:value="${entity.level}"-->
     </div>
     <div class="form-group">
         <label for="workShop2">车间2</label>
-        <input class="form-control" id="workShop2" name="workShop2" type="text"
+        <input class="form-control" id="workShop2" name="workShop2" type="text" th:value="${data.workShop2}"
                placeholder="请输入车间2"/><!--th:value="${entity.level}"-->
     </div>
     <div class="form-group">
         <label for="productLine">生产线</label>
-        <input class="form-control" id="productLine" name="productLine" type="text"
+        <input class="form-control" id="productLine" name="productLine" type="text" th:value="${data.productLine}"
                placeholder="请输入生产线"/><!--th:value="${entity.level}"-->
     </div>
     <div class="form-group">
         <label for="mouldType">模具类型</label>
-        <input class="form-control" id="mouldType" name="mouldType" type="text"
+        <input class="form-control" id="mouldType" name="mouldType" type="text" th:value="${data.mouldType}"
                placeholder="请输入模具类型"/><!--th:value="${entity.level}"-->
     </div>
     <div class="form-group">
         <label for="outerPart">外委件</label>
-        <input class="form-control" id="outerPart" name="outerPart" type="text"
+        <input class="form-control" id="outerPart" name="outerPart" type="text" th:value="${data.outerPart}"
                placeholder="请输入外委件"/><!--th:value="${entity.level}"-->
     </div>
     <div class="form-group">
@@ -98,7 +98,7 @@
     </div>
     <div class="form-group">
         <label for="station">工位</label>
-        <input class="form-control" id="station" name="station" type="text"
+        <input class="form-control" id="station" name="station" type="text" th:value="${data.station}"
                placeholder="请输入工位"/><!--th:value="${entity.level}"-->
     </div>
 </form>

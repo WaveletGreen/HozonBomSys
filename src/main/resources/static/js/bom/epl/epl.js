@@ -3,7 +3,7 @@ $(document).ready((function () {
 }))
 
 
-function doQuery(params){
+function doQuery(){
     $('#eplTable').bootstrapTable('refresh');    //刷新表格
 }
 
@@ -48,6 +48,7 @@ function initTable(){
                 url:eplUrl,
                 height: $(window.parent.document).find("#wrapper").height() - 180,
                 width: $(window).width(),
+                formId :"queryEplManage",
                 pagination:true,
                 //pageNumber:1,                       //初始化加载第一页，默认第一页
                 pageSize: 20,                       //每页的记录行数（*）
