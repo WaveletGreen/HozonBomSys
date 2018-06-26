@@ -86,4 +86,22 @@
       </if>
     </where>
   </select>
+
+  <!--批量插入-->
+  <insert id="HzMbomRecordDAOImpl_insertList"  useGeneratedKeys="false" parameterType="java.util.List">
+    insert into HZ_PBOM_MAINTAIN_RECORD (P_PUID, P_SPARE_PART, P_SPARE_PART_NUM,
+    P_PROCESS_ROUTE, P_LABOR_HOUR, P_RHYTHM,
+    P_SOLDER_JOINT, P_MACHINE_MATERIAL, P_STANDARD_PART,
+    P_TOOLS, P_WASTER_PRODUCT, P_CHANGE,
+    P_CHANGE_NUM, P_BOM_PUID)
+    <foreach collection="list" item="item" index="index"  separator="UNION ALL" >
+      select
+      #{item.puid,jdbcType=VARCHAR}, #{item.sparePart,jdbcType=VARCHAR}, #{item.sparePartNum,jdbcType=VARCHAR},
+      #{item.processRoute,jdbcType=VARCHAR}, #{item.laborHour,jdbcType=VARCHAR}, #{item.rhythm,jdbcType=VARCHAR},
+      #{item.solderJoint,jdbcType=VARCHAR}, #{item.machineMaterial,jdbcType=VARCHAR}, #{item.standardPart,jdbcType=VARCHAR},
+      #{item.tools,jdbcType=VARCHAR}, #{item.wasterProduct,jdbcType=VARCHAR}, #{item.change,jdbcType=VARCHAR},
+      #{item.changeNum,jdbcType=VARCHAR}, #{item.pBomPuid,jdbcType=VARCHAR}
+      from DUAL
+    </foreach>
+  </insert>
 </mapper>

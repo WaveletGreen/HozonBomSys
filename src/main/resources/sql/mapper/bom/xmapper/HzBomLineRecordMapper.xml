@@ -148,10 +148,10 @@
                 P_BOM_DIGIFAX_ID = #{bomDigifaxId,jdbcType=VARCHAR},
             </if>
             <if test="lineIndex != null">
-                P_LINE_INDEX = #{lineIndex,jdbcType=DECIMAL},
+                P_LINE_INDEX = #{lineIndex,jdbcType=INTEGER},
             </if>
             <if test="isHas != null">
-                P_BOM_LINE_IS_HAS = #{isHas,jdbcType=DECIMAL},
+                P_BOM_LINE_IS_HAS = #{isHas,jdbcType=INTEGER},
             </if>
             <if test="linePuid != null">
                 P_BOM_LINE_PUID = #{linePuid,jdbcType=VARCHAR},
@@ -169,7 +169,7 @@
                 P_BOM_LINE_IS_DEPT = #{isDept,jdbcType=VARCHAR},
             </if>
             <if test="pBomLinePartName != null">
-                P_BOM_LINE_PART_NAME = #{pBomLinePartName,jdbcType=DECIMAL},
+                P_BOM_LINE_PART_NAME = #{pBomLinePartName,jdbcType=INTEGER},
             </if>
             <if test="pBomLinePartClass != null">
                 P_BOM_LINE_PART_CLASS = #{pBomLinePartClass,jdbcType=VARCHAR},
@@ -182,6 +182,10 @@
             <if test="pBomOfWhichDept != null">
                 P_BOM_OF_WHICH_DEPT = #{pBomOfWhichDept,jdbcType=VARCHAR},
             </if>
+            <if test="bomLineBlock != null">
+                P_BOM_LINE_BLOCK = #{bomLineBlock,jdbcType=VARCHAR},
+            </if>
+
         </set>
         where PUID = #{puid,jdbcType=VARCHAR}
     </update>

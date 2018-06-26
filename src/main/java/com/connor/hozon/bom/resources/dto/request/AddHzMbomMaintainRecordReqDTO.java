@@ -3,7 +3,7 @@ package com.connor.hozon.bom.resources.dto.request;
 /**
  * Created by haozt on 2018/5/24
  */
-public class InsertHzMbomMaintainRecordReqDTO {
+public class AddHzMbomMaintainRecordReqDTO {
     /**
      * 外键 id
      */

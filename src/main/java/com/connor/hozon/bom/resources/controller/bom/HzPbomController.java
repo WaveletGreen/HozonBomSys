@@ -6,6 +6,7 @@ import com.connor.hozon.bom.resources.controller.BaseController;
 import com.connor.hozon.bom.resources.dto.request.*;
 import com.connor.hozon.bom.resources.dto.response.HzMbomRecordRespDTO;
 import com.connor.hozon.bom.resources.dto.response.HzPbomLineRespDTO;
+import com.connor.hozon.bom.resources.dto.response.OperateResultMessageRespDTO;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.service.bom.HzPbomService;
 import com.connor.hozon.bom.resources.util.ListUtil;
@@ -85,7 +86,7 @@ public class HzPbomController extends BaseController {
             _res.put("buyUnit", dto.getBuyUnit());
             _res.put("workShop1", dto.getWorkShop1());
             _res.put("workShop2", dto.getWorkShop2());
-            _res.put("productLine", dto.getMouldType());
+            _res.put("productLine", dto.getProductLine());
             _res.put("mouldType", dto.getMouldType());
             _res.put("outerPart", dto.getOuterPart());
             _res.put("colorPart", dto.getColorPart());
@@ -128,12 +129,6 @@ public class HzPbomController extends BaseController {
         writeAjaxJSONResponse(ResultMessageBuilder.build(respDTOS), response);
     }
 
-
-    @RequestMapping(value = "insert/manage", method = RequestMethod.POST)
-    public void insertPbomManageRecord(InsertHzPbomRecordReqDTO reqDTO, HttpServletResponse response) {
-        writeAjaxJSONResponse(ResultMessageBuilder.build(false, "接口后续在定义"), response);
-    }
-
     /**
      * 跳转到PBOM管理添加页面
      * @return
@@ -145,6 +140,7 @@ public class HzPbomController extends BaseController {
             return "";
         }
         HzPbomLineRespDTO hzPbomLineRespDTO = new HzPbomLineRespDTO();
+        hzPbomLineRespDTO.setLineId(respDTO.getLineId());
         hzPbomLineRespDTO.seteBomPuid(respDTO.geteBomPuid());
         hzPbomLineRespDTO.setGroupNum(respDTO.getGroupNum());
         hzPbomLineRespDTO.setpBomOfWhichDept(respDTO.getpBomOfWhichDept());
@@ -171,19 +167,24 @@ public class HzPbomController extends BaseController {
 
 
 
+    @RequestMapping(value = "insert", method = RequestMethod.POST)
+    public void addPbomToDB(@RequestBody AddHzPbomRecordReqDTO reqDTO, HttpServletResponse response) {
+        OperateResultMessageRespDTO respDTO = hzPbomService.insertHzPbomRecord(reqDTO);
+        writeAjaxJSONResponse(ResultMessageBuilder.build(OperateResultMessageRespDTO.isSuccess(respDTO), respDTO.getErrMsg()), response);
+    }
 
-
-    @RequestMapping(value = "update/manage", method = RequestMethod.POST)
-    public void updatePbomManageRecord(UpdateHzPbomRecordReqDTO reqDTO, HttpServletResponse response) {
-        writeAjaxJSONResponse(ResultMessageBuilder.build(false, "接口后续在定义"), response);
+    @RequestMapping(value = "update", method = RequestMethod.POST)
+    public void updatePbomRecord(@RequestBody UpdateHzPbomRecordReqDTO reqDTO, HttpServletResponse response) {
+        OperateResultMessageRespDTO respDTO =hzPbomService.updateHzPbomRecord(reqDTO);
+        writeAjaxJSONResponse(ResultMessageBuilder.build(OperateResultMessageRespDTO.isSuccess(respDTO), respDTO.getErrMsg()), response);
     }
 
 
-    @RequestMapping(value = "delete/manage", method = RequestMethod.POST)
-    public void deletePbomManageRecord(String eBomPuid, HttpServletResponse response) {
-        writeAjaxJSONResponse(ResultMessageBuilder.build(false, "接口后续在定义"), response);
+    @RequestMapping(value = "delete", method = RequestMethod.POST)
+    public void deletePbomRecord(String eBomPuid, HttpServletResponse response) {
+        OperateResultMessageRespDTO respDTO = hzPbomService.deleteHzPbomRecordByForeignId(eBomPuid);
+        writeAjaxJSONResponse(ResultMessageBuilder.build(OperateResultMessageRespDTO.isSuccess(respDTO), respDTO.getErrMsg()), response);
     }
-
 
 
     /**

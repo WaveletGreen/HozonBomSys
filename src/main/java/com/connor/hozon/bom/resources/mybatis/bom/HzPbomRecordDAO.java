@@ -13,12 +13,9 @@ import java.util.Map;
  * Created by haozt on 2018/5/25
  */
 public interface HzPbomRecordDAO {
-    /**
-     * 获取PBOM管理维护信息
-     * @return
-     */
-    List<HzPbomLineRecord> getPbomRecord(Map<String,Object> map);
 
+
+    HzPbomLineRecord getPbomById(Map<String,Object> map);
     /**
      * 按条件搜索Pbom管理维护信息
      * @return
@@ -54,4 +51,6 @@ public interface HzPbomRecordDAO {
 
 
     Page<HzPbomLineRecord>  getHzPbomRecordByPage(FindForPageReqDTO reqDTO);
+
+    HzPbomRecord getHzPbomByEbomPuid(String eBomPuid);
 }

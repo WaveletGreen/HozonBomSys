@@ -4,14 +4,7 @@ package com.connor.hozon.bom.resources.dto.request;
  * Created by haozt on 2018/5/29
  */
 public class UpdateHzPbomRecordReqDTO {
-    /**
-     * 主键id
-     */
-    private String puid;
-    /**
-     *零件来源（自制总成/采购拆分等）
-     */
-    private String itemResource;
+
     /**
      * 来源（自制/采购）
      */
@@ -53,12 +46,15 @@ public class UpdateHzPbomRecordReqDTO {
      */
     private String eBomPuid;
 
-    public String getItemResource() {
-        return itemResource;
+    private String station;
+
+
+    public String getStation() {
+        return station;
     }
 
-    public void setItemResource(String itemResource) {
-        this.itemResource = itemResource;
+    public void setStation(String station) {
+        this.station = station;
     }
 
     public String getResource() {
@@ -141,11 +137,4 @@ public class UpdateHzPbomRecordReqDTO {
         this.eBomPuid = eBomPuid;
     }
 
-    public String getPuid() {
-        return puid;
-    }
-
-    public void setPuid(String puid) {
-        this.puid = puid;
-    }
 }

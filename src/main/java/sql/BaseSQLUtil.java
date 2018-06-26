@@ -329,10 +329,10 @@ public class BaseSQLUtil implements IBaseSQLUtil {
      * @return
      */
     public int insert(final String sqlMapId, final Object object) {
-        SqlSession session = null;
+//        SqlSession session = null;
         try {
-            SqlSessionFactory f = FactoryManager.getInstance();
-            session = f.openSession();
+//            SqlSessionFactory f = FactoryManager.getInstance();
+//            session = f.openSession();
             int result = session.insert(sqlMapId, object);
             session.commit();
             return result;
@@ -340,8 +340,8 @@ public class BaseSQLUtil implements IBaseSQLUtil {
             logger.error("SQL执行出错: " + sqlMapId, e);
             throw new DatabaseException("SQL执行出错" + sqlMapId, e);
         } finally {
-            if (session != null)
-                session.close();
+//            if (session != null)
+//                session.close();
         }
 
     }
@@ -354,10 +354,10 @@ public class BaseSQLUtil implements IBaseSQLUtil {
      * @return
      */
     public Object findForObject(final String sqlMapId, final Object param) {
-        SqlSession session = null;
+//        SqlSession session = null;
         try {
-            SqlSessionFactory f = FactoryManager.getInstance();
-            session = f.openSession();
+//            SqlSessionFactory f = FactoryManager.getInstance();
+//            session = f.openSession();
             if (param != null) {
                 return session.selectOne(sqlMapId, param);
             } else {
@@ -367,8 +367,8 @@ public class BaseSQLUtil implements IBaseSQLUtil {
             logger.error("SQL执行出错: " + sqlMapId, e);
             throw new DatabaseException("SQL执行出错" + sqlMapId, e);
         } finally {
-            if (session != null)
-                session.close();
+//            if (session != null)
+//                session.close();
         }
     }
 
@@ -379,10 +379,10 @@ public class BaseSQLUtil implements IBaseSQLUtil {
      * @return
      */
     public int update(final String sqlMapId, final Object param) {
-        SqlSession session = null;
+//        SqlSession session = null;
         try {
-            SqlSessionFactory factory = FactoryManager.getInstance();
-            session = factory.openSession();
+//            SqlSessionFactory factory = FactoryManager.getInstance();
+//            session = factory.openSession();
             int result = session.update(sqlMapId, param);
             session.commit();
             return result;
@@ -390,16 +390,16 @@ public class BaseSQLUtil implements IBaseSQLUtil {
             logger.error("SQL执行出错: " + sqlMapId, e);
             throw new DatabaseException("SQL执行出错" + sqlMapId, e);
         } finally {
-            if (session != null)
-                session.close();
+//            if (session != null)
+//                session.close();
         }
     }
 
     public int delete(final String sqlMapId, final Object param) {
         SqlSession session = null;
         try {
-            SqlSessionFactory f = FactoryManager.getInstance();
-            session = f.openSession();
+//            SqlSessionFactory f = FactoryManager.getInstance();
+//            session = f.openSession();
             int result = session.delete(sqlMapId, param);
             session.commit();
             return result;
@@ -407,8 +407,8 @@ public class BaseSQLUtil implements IBaseSQLUtil {
             logger.error("SQL执行出错: " + sqlMapId, e);
             throw new DatabaseException("SQL执行出错" + sqlMapId, e);
         } finally {
-            if (session != null)
-                session.close();
+//            if (session != null)
+//                session.close();
         }
     }
     /**
@@ -448,10 +448,10 @@ public class BaseSQLUtil implements IBaseSQLUtil {
      * @return
      */
     public List findForList(final String sqlMapId, final Object param, final int offset, final int limit) {
-        SqlSession session = null;
+//        SqlSession session = null;
         try {
-            SqlSessionFactory f = FactoryManager.getInstance();
-            session = f.openSession();
+//            SqlSessionFactory f = FactoryManager.getInstance();
+//            session = f.openSession();
             return session.selectList(sqlMapId, param, new RowBounds(offset, limit));
         } catch (Exception e) {
             logger.error("SQL执行出错: " + sqlMapId, e);

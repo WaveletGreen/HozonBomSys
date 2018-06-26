@@ -1,5 +1,7 @@
 package sql.pojo.bom;
 
+import java.util.Date;
+
 /**
  * Created by haozt on 2018/5/25
  * EBOM 和PBOM 两张表信息  继承自EBOM  维护PBOM
@@ -20,6 +22,7 @@ public class HzPbomLineRecord {
     private String pBomLinePartName;
     private String pBomLinePartClass;
 
+    private String eBomPuid;
     /**
      * BOM行编号 根据这个来计算层级
      */
@@ -82,6 +85,41 @@ public class HzPbomLineRecord {
      * 颜色件
      */
     private Integer colorPart;
+
+    /**
+     * 工位
+     */
+    private String station;
+
+    /**
+     * 删除标志位 1未删除 0 删除
+     */
+    private Integer status;
+
+    /**
+     * 创建时间
+     */
+    private Date createTime;
+    /**
+     * 更新时间
+     */
+    private Date updateTime;
+    /**
+     * 创建者
+     */
+    private String createName;
+    /**
+     * 更改者
+     */
+    private String updateName;
+
+    public String geteBomPuid() {
+        return eBomPuid;
+    }
+
+    public void seteBomPuid(String eBomPuid) {
+        this.eBomPuid = eBomPuid;
+    }
 
     public String getpPuid() {
         return pPuid;
@@ -290,5 +328,53 @@ public class HzPbomLineRecord {
 
     public void setpBomLinePartClass(String pBomLinePartClass) {
         this.pBomLinePartClass = pBomLinePartClass;
+    }
+
+    public String getStation() {
+        return station;
+    }
+
+    public void setStation(String station) {
+        this.station = station;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
+    }
+
+    public String getCreateName() {
+        return createName;
+    }
+
+    public void setCreateName(String createName) {
+        this.createName = createName;
+    }
+
+    public String getUpdateName() {
+        return updateName;
+    }
+
+    public void setUpdateName(String updateName) {
+        this.updateName = updateName;
     }
 }

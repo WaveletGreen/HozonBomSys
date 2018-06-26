@@ -20,11 +20,10 @@ import java.util.Map;
 @Service("HzPbomRecordDAO")
 public class HzPbomRecordDAOImpl extends BaseSQLUtil implements HzPbomRecordDAO {
 
-
     @Override
-    public List<HzPbomLineRecord> getPbomRecord(Map<String,Object> map) {
+    public HzPbomLineRecord getPbomById(Map<String, Object> map) {
 
-        return super.findForList("HzPbomRecordDAOImpl_getPbomRecord",map);
+        return (HzPbomLineRecord)super.findForObject("HzPbomRecordDAOImpl_getPbomById",map);
     }
 
     @Override
@@ -46,7 +45,7 @@ public class HzPbomRecordDAOImpl extends BaseSQLUtil implements HzPbomRecordDAO 
 
     @Override
     public int deleteByForeignId(String ePuid) {
-        return super.delete("HzPbomRecordDAOImpl_deleteByForeignId",ePuid);
+        return super.update("HzPbomRecordDAOImpl_deleteByForeignId",ePuid);
     }
 
     @Override
@@ -63,6 +62,12 @@ public class HzPbomRecordDAOImpl extends BaseSQLUtil implements HzPbomRecordDAO 
         request.setPageSize(reqDTO.getLimit());
         request.setFilters(map);
         return super.findForPage("HzPbomRecordDAOImpl_getPbomRecord","HzPbomRecordDAOImpl_getTotalCount",request);
+    }
+
+    @Override
+    public HzPbomRecord getHzPbomByEbomPuid(String eBomPuid) {
+
+        return (HzPbomRecord) super.findForObject("HzPbomRecordDAOImpl_getHzPbomByEbomPuid",eBomPuid);
     }
 
 }
