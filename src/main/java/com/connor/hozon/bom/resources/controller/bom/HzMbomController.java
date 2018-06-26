@@ -29,49 +29,50 @@ public class HzMbomController extends BaseController {
     @Autowired
     private HzMbomService hzMbomService;
 
-    @RequestMapping(value = "superBomTitel",method = RequestMethod.GET)
-    public void getMbomSuperBomGetTitel(HttpServletResponse response){
-        LinkedHashMap<String,String> titel = new LinkedHashMap<>();
-        titel.put("sparePart","备件");
-        titel.put("sparePartNum","备件编号");
-        titel.put("processRoute","工艺路线");
-        titel.put("laborHour","人工工时");
-        titel.put("rhythm","节拍");
-        titel.put("solderJoint","焊点");
-        titel.put("machineMaterial","机物料");
-        titel.put("standardPart","标准件");
-        titel.put("tools","工具");
-        titel.put("wasterProduct","废品");
-        writeAjaxJSONResponse(ResultMessageBuilder.build(titel),response);
+    @RequestMapping(value = "superBomTitel", method = RequestMethod.GET)
+    public void getMbomSuperBomGetTitel(HttpServletResponse response) {
+        LinkedHashMap<String, String> titel = new LinkedHashMap<>();
+        titel.put("sparePart", "备件");
+        titel.put("sparePartNum", "备件编号");
+        titel.put("processRoute", "工艺路线");
+        titel.put("laborHour", "人工工时");
+        titel.put("rhythm", "节拍");
+        titel.put("solderJoint", "焊点");
+        titel.put("machineMaterial", "机物料");
+        titel.put("standardPart", "标准件");
+        titel.put("tools", "工具");
+        titel.put("wasterProduct", "废品");
+        writeAjaxJSONResponse(ResultMessageBuilder.build(titel), response);
     }
 
 
-    @RequestMapping(value = "workCenterTitel",method = RequestMethod.GET)
-    public void getMbomWorkCenterTitel(HttpServletResponse response){
-        LinkedHashMap<String,String> titel = new LinkedHashMap<>();
-        titel.put("factory","工厂");
-        titel.put("workHours","工作工时");
-        titel.put("jobCentreCategory","工作中心类别");
-        titel.put("describe","描述");
-        titel.put("use","用途");
-        titel.put("standardCode","标准值码");
-        titel.put("controlCode","控制码");
-        titel.put("directLabor","直接人工");
-        titel.put("indirectLabor","间接人工");
-        titel.put("machineHour","机器工时 ");
-        titel.put("combustion","燃动");
-        titel.put("machineMaterial","机物料");
-        titel.put("otherCosts","其它费用");
-        titel.put("processingFormula","加工公式");
-        titel.put("powerType","能力类别");
-        titel.put("startTime","开始时间");
-        titel.put("endTime","结束时间");
-        writeAjaxJSONResponse(ResultMessageBuilder.build(titel),response);
+    @RequestMapping(value = "workCenterTitel", method = RequestMethod.GET)
+    public void getMbomWorkCenterTitel(HttpServletResponse response) {
+        LinkedHashMap<String, String> titel = new LinkedHashMap<>();
+        titel.put("factory", "工厂");
+        titel.put("workHours", "工作工时");
+        titel.put("jobCentreCategory", "工作中心类别");
+        titel.put("describe", "描述");
+        titel.put("use", "用途");
+        titel.put("standardCode", "标准值码");
+        titel.put("controlCode", "控制码");
+        titel.put("directLabor", "直接人工");
+        titel.put("indirectLabor", "间接人工");
+        titel.put("machineHour", "机器工时 ");
+        titel.put("combustion", "燃动");
+        titel.put("machineMaterial", "机物料");
+        titel.put("otherCosts", "其它费用");
+        titel.put("processingFormula", "加工公式");
+        titel.put("powerType", "能力类别");
+        titel.put("startTime", "开始时间");
+        titel.put("endTime", "结束时间");
+        writeAjaxJSONResponse(ResultMessageBuilder.build(titel), response);
     }
 
 
     /**
      * MBOM管理标题
+     *
      * @param response
      */
     @RequestMapping(value = "manage/title", method = RequestMethod.GET)
@@ -101,15 +102,16 @@ public class HzMbomController extends BaseController {
 
     /**
      * 分页获取MBOM 记录
+     *
      * @param reqDTO
      * @return
      */
-    @RequestMapping(value = "record",method = RequestMethod.GET)
+    @RequestMapping(value = "record", method = RequestMethod.GET)
     @ResponseBody
     public Map<String, Object> getMbomLineRecord(FindForPageReqDTO reqDTO) {
         Page<HzMbomRecordRespDTO> page = hzMbomService.fingHzMbomForPage(reqDTO);
-        if(page == null){
-            return  new HashMap<>();
+        if (page == null) {
+            return new HashMap<>();
         }
         List<HzMbomRecordRespDTO> list = page.getResult();
         Map<String, Object> ret = new HashMap<>();
@@ -117,12 +119,12 @@ public class HzMbomController extends BaseController {
         list.forEach(dto -> {
             Map<String, Object> _res = new HashMap<>();
             _res.put("eBomPuid", dto.getEbomPuid());
-            _res.put("puid",dto.getPuid());
-            _res.put("No",dto.getNo());
+            _res.put("puid", dto.getPuid());
+            _res.put("No", dto.getNo());
             _res.put("level", dto.getLevel());
             _res.put("pBomOfWhichDept", dto.getpBomOfWhichDept());
             _res.put("lineId", dto.getLineId());
-            _res.put("object_name",dto.getObject_name());
+            _res.put("object_name", dto.getObject_name());
             _res.put("sparePart", dto.getSparePart());
             _res.put("sparePartNum", dto.getSparePartNum());
             _res.put("processRoute", dto.getProcessRoute());
@@ -142,4 +144,17 @@ public class HzMbomController extends BaseController {
         return ret;
     }
 
+    /**
+     * 跳转到MBOM管理的添加页面
+     * @return
+     */
+    @RequestMapping(value = "getAddMBom", method = RequestMethod.GET)
+    public String getMBomManageAddToPage() {
+        return"bomManage/mbom/mbomMaintenance/addMbomMaintenance";
+    }
+
+    @RequestMapping(value = "getUpdateMBom", method = RequestMethod.GET)
+    public String getMBomManageUpdateToPage() {
+        return"bomManage/mbom/mbomMaintenance/updateMbomMaintenance";
+    }
 }

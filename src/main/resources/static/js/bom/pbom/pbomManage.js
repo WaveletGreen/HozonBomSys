@@ -57,6 +57,7 @@ window.onload = function () {
                 columns: column,
                 sortable: true,                     //是否启用排序
                 sortOrder: "asc",                   //排序方式
+                clickToSelect: true,// 单击某一行的时候选中某一条记录
                 striped: true, //是否显示行间隔色
                 //search: true, //是否显示表格搜索，此搜索是客户端搜索，不会进服务端
                 showColumns: true, //是否显示所有的列
