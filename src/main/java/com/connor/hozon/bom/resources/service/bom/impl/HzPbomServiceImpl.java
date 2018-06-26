@@ -499,6 +499,14 @@ public class HzPbomServiceImpl implements HzPbomService {
         }
     }
 
+    @Override
+    public HzPbomLineRespDTO getHzPbomByPuid(String projectId, String puid) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("projectId",projectId);
+        map.put("puid",puid);
+        hzPbomRecordDAO.getPbomRecord(map);
+        return null;
+    }
 
 
     /**

@@ -138,7 +138,8 @@ public class HzPbomController extends BaseController {
      * @return
      */
     @RequestMapping(value = "addPbomManage", method = RequestMethod.GET)
-    public String updatePbomManageRecordProcess() {
+    public String addPbomManageRecordToPage() {
+
         return "bomManage/pbom/pbomManage/addPbomManage";
     }
     /**
@@ -146,19 +147,27 @@ public class HzPbomController extends BaseController {
      * @return
      */
     @RequestMapping(value = "updatePbomManage", method = RequestMethod.GET)
-    public String updatePbomManageRecordBom() {
+    public String updatePbomManageRecordToPage(String projectId,String ebomPuid) {
+
         return "bomManage/pbom/pbomManage/updatePbomManage";
     }
+
+
+
+
 
     @RequestMapping(value = "update/manage", method = RequestMethod.POST)
     public void updatePbomManageRecord(UpdateHzPbomRecordReqDTO reqDTO, HttpServletResponse response) {
         writeAjaxJSONResponse(ResultMessageBuilder.build(false, "接口后续在定义"), response);
     }
 
+
     @RequestMapping(value = "delete/manage", method = RequestMethod.POST)
     public void deletePbomManageRecord(String eBomPuid, HttpServletResponse response) {
         writeAjaxJSONResponse(ResultMessageBuilder.build(false, "接口后续在定义"), response);
     }
+
+
 
     /**
      * 获取PBOM结构树
@@ -169,10 +178,11 @@ public class HzPbomController extends BaseController {
     public void findProcessComposeTree(HzPbomProcessComposeReqDTO reqDTO,HttpServletResponse response){
          if(reqDTO==null){
             writeAjaxJSONResponse(ResultMessageBuilder.build(false,"非法参数！"),response);
-        }
+             return;
+         }
         if(reqDTO.getProjectId() == null ||reqDTO.getLineId()==null){
             writeAjaxJSONResponse(ResultMessageBuilder.build(false,"非法参数！"),response);
-
+            return;
         }
         JSONArray jsonArray = hzPbomService.getPbomForProcessCompose(reqDTO);
         writeAjaxJSONResponse(jsonArray,response);
@@ -187,10 +197,11 @@ public class HzPbomController extends BaseController {
     public void findPbomDetail(HzPbomProcessComposeReqDTO reqDTO,HttpServletResponse response){
         if(reqDTO==null){
             writeAjaxJSONResponse(ResultMessageBuilder.build(false,"非法参数！"),response);
+            return;
         }
         if(reqDTO.getProjectId() == null ||reqDTO.getLineId()==null){
             writeAjaxJSONResponse(ResultMessageBuilder.build(false,"非法参数！"),response);
-
+            return;
         }
         JSONArray object = hzPbomService.getPbomByLineId(reqDTO);
         writeAjaxJSONResponse(ResultMessageBuilder.build(true,object),response);
@@ -206,6 +217,7 @@ public class HzPbomController extends BaseController {
     public void addProcessCompose(@RequestBody  Map<String,Object> obj, AddProcessComposeReqDTO reqDTO1, HttpServletResponse response){
         if(reqDTO1.getProjectPuid()==null || reqDTO1.getLineId() == null || obj == null){
             writeAjaxJSONResponse(ResultMessageBuilder.build(false,"非法参数！"),response);
+            return;
         }
         AddProcessComposeReqDTO reqDTO=new AddProcessComposeReqDTO();
         reqDTO.seteBomContent(obj);

@@ -83,7 +83,7 @@ public interface HzPbomService {
     JSONArray getPbomForProcessCompose(HzPbomProcessComposeReqDTO reqDTO);
 
     /**
-     * 获取一条PBOM详情 通过零件号
+     * 获取一条PBOM详情 通过零件号或者puid
      * @param reqDTO
      * @return
      */
@@ -99,4 +99,11 @@ public interface HzPbomService {
 
     Page<HzPbomLineRespDTO> getHzPbomRecordPage(FindForPageReqDTO reqDTO);
 
+    /**
+     * 获取一条pbom信息（包含部分ebom信息）
+     * @param projectId
+     * @param puid
+     * @return
+     */
+    HzPbomLineRespDTO getHzPbomByPuid(String projectId,String puid);
 }

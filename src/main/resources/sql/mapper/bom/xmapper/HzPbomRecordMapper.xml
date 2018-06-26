@@ -60,6 +60,9 @@
       <if test="lineId != null and  lineId!='' " >
         and t.P_BOM_LINE_ID = #{lineId,jdbcType=VARCHAR}
       </if>
+      <if test="pPuid != null and  pPuid!='' " >
+        and t.PUID = #{pPuid,jdbcType=VARCHAR}
+      </if>
     </where>
   </select>
 

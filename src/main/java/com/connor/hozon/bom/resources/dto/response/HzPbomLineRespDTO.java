@@ -33,7 +33,7 @@ public class HzPbomLineRespDTO {
     private String groupNum;//1
 
     /**
-     * 零件分类  这个暂时也没有 表字段加了该更过来
+     * 零件分类
      */
     private Object  h9_IsCommon;//1
 

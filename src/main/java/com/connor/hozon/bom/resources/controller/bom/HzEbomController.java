@@ -43,6 +43,7 @@ public class HzEbomController extends BaseController {
     public void getEbomTitle(String projectId, HttpServletResponse response) {
         if(projectId==null){
             writeAjaxJSONResponse(ResultMessageBuilder.build(false,"非法参数！"), response);
+            return;
         }
         JSONArray array = hzEbomService.getEbomTitle(projectId);
         if(array==null){
@@ -253,10 +254,19 @@ public class HzEbomController extends BaseController {
     public void addEbomToDB(AddHzEbomReqDTO reqDTO, @RequestBody Map<String,Object> map, HttpServletResponse response){
         if(reqDTO.getProjectId()==null){
             writeAjaxJSONResponse(ResultMessageBuilder.build(false,"非法参数！"), response);
+            return;
+        }
+        if(map.containsKey("item_id")||map.containsKey("bl_item_item_id")){
+            String itemId = (String)map.get("item_id");
+            String itemID = (String)map.get("bl_item_item_id");
+            if(itemID ==null || itemID=="" || itemId ==""||itemId == null)
+                writeAjaxJSONResponse(ResultMessageBuilder.build(false,"零件号不能为空！"), response);
+            return;
         }
         User user = UserInfo.getUser();
         if(user.getGroupId()!=9){//管理员权限
             writeAjaxJSONResponse(ResultMessageBuilder.build(false,"您没有权限进行当前操作！"), response);
+            return;
         }
         AddHzEbomReqDTO dto = new AddHzEbomReqDTO();
         dto.setMap(map);
@@ -281,10 +291,19 @@ public class HzEbomController extends BaseController {
     public void updateEbomToDB(UpdateHzEbomReqDTO reqDTO, @RequestBody Map<String,Object> map, HttpServletResponse response){
         if(reqDTO.getProjectId()==null){
             writeAjaxJSONResponse(ResultMessageBuilder.build(false,"非法参数！"), response);
+            return;
+        }
+        if(map.containsKey("item_id")||map.containsKey("bl_item_item_id")){
+            String itemId = (String)map.get("item_id");
+            String itemID = (String)map.get("bl_item_item_id");
+            if(itemID ==null || itemID=="" || itemId ==""||itemId == null)
+            writeAjaxJSONResponse(ResultMessageBuilder.build(false,"零件号不能为空！"), response);
+            return;
         }
         User user = UserInfo.getUser();
         if(user.getGroupId()!=9){//管理员权限
             writeAjaxJSONResponse(ResultMessageBuilder.build(false,"您没有权限进行当前操作！"), response);
+            return;
         }
         UpdateHzEbomReqDTO dto = new UpdateHzEbomReqDTO();
         dto.setUpdateContent(map);
@@ -309,10 +328,12 @@ public class HzEbomController extends BaseController {
     public void updateEbomToDB(DeleteHzEbomReqDTO reqDTO, HttpServletResponse response){
         if(reqDTO.getProjectId()==null){
             writeAjaxJSONResponse(ResultMessageBuilder.build(false,"非法参数！"), response);
+            return;
         }
         User user = UserInfo.getUser();
         if(user.getGroupId()!=9){//管理员权限
             writeAjaxJSONResponse(ResultMessageBuilder.build(false,"您没有权限进行当前操作！"), response);
+            return;
         }
         int i = hzEbomService.deleteHzEbomRecordById(reqDTO);
         if(i==0){

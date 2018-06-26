@@ -235,6 +235,9 @@ public class HzEbomServiceImpl implements HzEbomService {
             if(ebomContent.containsKey("bl_item_item_id")){
                 itemId = (String)ebomContent.get("bl_item_item_id");
             }
+            if(ebomContent.containsKey("item_id")){
+                itemId = (String)ebomContent.get("item_id");
+            }
             if(ebomContent.containsKey("puid")){
                 parentPuid = (String)ebomContent.get("puid");
                 ebomContent.remove("puid");
@@ -326,6 +329,9 @@ public class HzEbomServiceImpl implements HzEbomService {
 
             if(ebomContent.containsKey("bl_item_item_id")){
                 itemId = (String)ebomContent.get("bl_item_item_id");
+            }
+            if(ebomContent.containsKey("item_id")){
+                itemId = (String)ebomContent.get("item_id");
             }
             HZBomMainRecord hzBomMainRecord = hzBomMainRecordDao.selectByProjectPuid(reqDTO.getProjectId());
             HzBomLineRecord hzBomLineRecord = new HzBomLineRecord();

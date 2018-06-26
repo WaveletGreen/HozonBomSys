@@ -71,10 +71,12 @@ public class HzEPLController extends BaseController {
     public void getEplTitle(FindHzEPLRecordReqDTO recordReqDTO,HttpServletResponse response){
         if(recordReqDTO.getProjectId()==null){
             writeAjaxJSONResponse(ResultMessageBuilder.build(false,"非法参数！"), response);
+            return;
         }
         JSONArray array = hzEPLManageRecordService.getEPLTittle(recordReqDTO);
         if(array==null){
             writeAjaxJSONResponse(ResultMessageBuilder.build(false,"网络错误！"), response);
+            return;
         }
         writeAjaxJSONResponse(ResultMessageBuilder.build(array), response);
     }
