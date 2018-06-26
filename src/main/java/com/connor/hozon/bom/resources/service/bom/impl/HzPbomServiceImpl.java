@@ -228,7 +228,6 @@ public class HzPbomServiceImpl implements HzPbomService {
             if(user.getGroupId()!=9){
                 respDTO.setErrMsg("你当前没有权限执行此操作");
                 respDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
-
                 return respDTO;
             }
             HzPbomRecord hzPbomRecord = new HzPbomRecord();
@@ -267,18 +266,12 @@ public class HzPbomServiceImpl implements HzPbomService {
             hzPbomRecord.setWorkShop2(recordReqDTO.getWorkShop2());
             int i = hzPbomRecordDAO.update(hzPbomRecord);
             if(i>0){
-                respDTO.setErrMsg("操作成功！");
-                respDTO.setErrCode(OperateResultMessageRespDTO.SUCCESS_CODE);
-                return  respDTO;
+                return OperateResultMessageRespDTO.getSuccessResult();
             }else {
-                respDTO.setErrMsg("操作失败，请稍后重试！");
-                respDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
-                return respDTO;
+                return OperateResultMessageRespDTO.getFailResult();
             }
         }catch (Exception e){
-            respDTO.setErrMsg("操作失败，请稍后重试！");
-            respDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
-            return respDTO;
+            return OperateResultMessageRespDTO.getFailResult();
         }
     }
 
@@ -292,20 +285,24 @@ public class HzPbomServiceImpl implements HzPbomService {
                 respDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
                 return respDTO;
             }
+            HzPbomRecord record = hzPbomRecordDAO.getHzPbomByEbomPuid(eBomPuid);
+            if(record == null){
+                record.seteBomPuid(eBomPuid);
+                record.setPuid(UUID.randomUUID().toString());
+                record.setStatus(1);
+                int i =hzPbomRecordDAO.insert(record);
+                if(i<0){
+                    return OperateResultMessageRespDTO.getFailResult();
+                }
+            }
             int i = hzPbomRecordDAO.deleteByForeignId(eBomPuid);
             if(i>0){
-                respDTO.setErrMsg("操作成功！");
-                respDTO.setErrCode(OperateResultMessageRespDTO.SUCCESS_CODE);
-                return  respDTO;
+                return OperateResultMessageRespDTO.getSuccessResult();
             }
         }catch (Exception e){
-            respDTO.setErrMsg("操作失败，请稍后重试！");
-            respDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
-            return respDTO;
+            return OperateResultMessageRespDTO.getFailResult();
         }
-        respDTO.setErrMsg("操作失败，请稍后重试！");
-        respDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
-        return respDTO;
+        return OperateResultMessageRespDTO.getFailResult();
     }
 
 
@@ -717,12 +714,13 @@ public class HzPbomServiceImpl implements HzPbomService {
                 } else {
                     respDTO.setColorPart("/");
                 }
-                respDTO.seteBomPuid(record.getpPuid() == null ? "" : record.getpPuid());
-                respDTO.setProductLine(record.getProductLine() == null ? "" : record.getProductLine());
-                respDTO.setWorkShop1(record.getWorkShop1() == null ? "" : record.getWorkShop1());
-                respDTO.setWorkShop2(record.getWorkShop2() == null ? "" : record.getWorkShop2());
-                respDTO.setMouldType(record.getMouldType() == null ? "" : record.getMouldType());
-                respDTO.setOuterPart(record.getOuterPart() == null ? "" : record.getOuterPart());
+                respDTO.seteBomPuid(record.getpPuid());
+                respDTO.setProductLine(record.getProductLine());
+                respDTO.setWorkShop1(record.getWorkShop1() );
+                respDTO.setWorkShop2(record.getWorkShop2());
+                respDTO.setMouldType(record.getMouldType() );
+                respDTO.setOuterPart(record.getOuterPart());
+                respDTO.setStation(record.getStation());
                 respDTOS.add(respDTO);
             }
             return respDTOS;
