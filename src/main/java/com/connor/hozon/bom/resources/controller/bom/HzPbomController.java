@@ -52,6 +52,7 @@ public class HzPbomController extends BaseController {
         tableTitle.put("mouldType", "模具类别");
         tableTitle.put("outerPart", "外委件");
         tableTitle.put("colorPart", "颜色件");
+        tableTitle.put("station","工位");
         writeAjaxJSONResponse(ResultMessageBuilder.build(tableTitle), response);
     }
 
@@ -90,6 +91,7 @@ public class HzPbomController extends BaseController {
             _res.put("mouldType", dto.getMouldType());
             _res.put("outerPart", dto.getOuterPart());
             _res.put("colorPart", dto.getColorPart());
+            _res.put("station",dto.getStation());
             _list.add(_res);
         });
         ret.put("totalCount", respDTOPage.getTotalCount());
