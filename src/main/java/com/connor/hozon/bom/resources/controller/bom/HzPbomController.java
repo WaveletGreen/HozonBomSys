@@ -12,6 +12,7 @@ import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.resources.util.ResultMessageBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -138,8 +139,20 @@ public class HzPbomController extends BaseController {
      * @return
      */
     @RequestMapping(value = "addPbomManage", method = RequestMethod.GET)
-    public String addPbomManageRecordToPage() {
-
+    public String addPbomManageRecordToPage(String eBomPuid, String projectId, Model model) {
+        HzPbomLineRespDTO respDTO = hzPbomService.getHzPbomByPuid(projectId,eBomPuid);
+        if(respDTO == null){
+            return "";
+        }
+        HzPbomLineRespDTO hzPbomLineRespDTO = new HzPbomLineRespDTO();
+        hzPbomLineRespDTO.seteBomPuid(respDTO.geteBomPuid());
+        hzPbomLineRespDTO.setGroupNum(respDTO.getGroupNum());
+        hzPbomLineRespDTO.setpBomOfWhichDept(respDTO.getpBomOfWhichDept());
+        hzPbomLineRespDTO.setRank(respDTO.getRank());
+        hzPbomLineRespDTO.setLevel(respDTO.getLevel());
+        hzPbomLineRespDTO.setH9_IsCommon(respDTO.getH9_IsCommon());
+        hzPbomLineRespDTO.setH9_Mat_Status(respDTO.getH9_Mat_Status());
+        model.addAttribute("data",hzPbomLineRespDTO);
         return "bomManage/pbom/pbomManage/addPbomManage";
     }
     /**
@@ -147,8 +160,12 @@ public class HzPbomController extends BaseController {
      * @return
      */
     @RequestMapping(value = "updatePbomManage", method = RequestMethod.GET)
-    public String updatePbomManageRecordToPage(String projectId,String ebomPuid) {
-
+    public String updatePbomManageRecordToPage(String projectId,String eBomPuid,Model model) {
+        HzPbomLineRespDTO respDTO = hzPbomService.getHzPbomByPuid(projectId,eBomPuid);
+        if(respDTO == null){
+            return "";
+        }
+        model.addAttribute("data",respDTO);
         return "bomManage/pbom/pbomManage/updatePbomManage";
     }
 
