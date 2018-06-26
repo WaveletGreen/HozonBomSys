@@ -1,5 +1,12 @@
-var firstLoad = true;
-window.onload = function () {
+$(document).ready((function () {
+    initTable();
+}))
+
+
+function doQuery(){
+    $('#eplTable').bootstrapTable('refresh');    //刷新表格
+}
+function initTable(){
     var projectPuid = $("#project", window.top.document).val();
     var $table = $("#pbomMaintenanceTable");
     var column = [];
@@ -46,6 +53,7 @@ window.onload = function () {
                 //sidePagination: "server",           //分页方式：client客户端分页，server服务端分页（*）
                 height: $(window.parent.document).find("#wrapper").height() - 180,
                 width: $(window).width(),
+                formId :"queryMbomMain",
                 pagination: true,
                 //pageNumber:1,                       //初始化加载第一页，默认第一页
                 pageSize: 20,                       //每页的记录行数（*）
@@ -119,7 +127,7 @@ window.onload = function () {
                                         type: "POST",
                                         //ajax需要添加打包名
                                         url: "./cfg0/deleteByPuid",
-                                        data: JSON.stringify(rows),
+                                        //data: JSON.stringify(rows),
                                         contentType: "application/json",
                                         success: function (result) {
                                             /*if (result.status) {
