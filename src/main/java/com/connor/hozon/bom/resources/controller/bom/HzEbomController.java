@@ -47,8 +47,9 @@ public class HzEbomController extends BaseController {
         JSONArray array = hzEbomService.getEbomTitle(projectId);
         if(array==null){
         writeAjaxJSONResponse(ResultMessageBuilder.build(false,"网络错误！"), response);
-    }
-    writeAjaxJSONResponse(ResultMessageBuilder.build(array), response);
+    }else{
+            writeAjaxJSONResponse(ResultMessageBuilder.build(array), response);
+        }
 }
 
     @RequestMapping(value = "getEBom/list", method = RequestMethod.GET)
@@ -154,7 +155,7 @@ public class HzEbomController extends BaseController {
             for(int i =0 ;i<strings2.length;i++){
                 if("puid".equals(strings2[i])){
                     model.addAttribute("puid",object.getString(strings2[i]));
-
+                    break;
                 }
             }
         }
@@ -225,14 +226,18 @@ public class HzEbomController extends BaseController {
 
         JSONArray array1 = recordRespDTO.getJsonArray();
         JSONObject object = array1.getJSONObject(0);
-        String[] strings5 = new String[strings2.length];
+        String[] strings5 = new String[strings4.length];
         for(int i =0 ;i<strings2.length;i++){
             if("puid".equals(strings2[i])){
                 model.addAttribute("puid",object.getString(strings2[i]));
-                continue;
+                break;
             }
-            strings5[i] = object.getString(strings2[i])==null?"":object.getString(strings2[i]);
         }
+
+        for(int i =0;i<strings4.length;i++){
+            strings5[i] = object.getString(strings4[i])==null?"":object.getString(strings4[i]);
+        }
+
         jsonArray.add(strings5);
         model.addAttribute("data",jsonArray);
 
@@ -259,8 +264,10 @@ public class HzEbomController extends BaseController {
         int i = hzEbomService.addHzEbomRecord(dto);
         if(i==0){
             writeAjaxJSONResponse(ResultMessageBuilder.build(false,"操作失败！"), response);
+        }else{
+            writeAjaxJSONResponse(ResultMessageBuilder.build(true,"操作成功！"), response);
+
         }
-        writeAjaxJSONResponse(ResultMessageBuilder.build(true,"操作成功！"), response);
     }
 
 
@@ -285,8 +292,10 @@ public class HzEbomController extends BaseController {
         int i = hzEbomService.updateHzEbomRecord(dto);
         if(i==0){
             writeAjaxJSONResponse(ResultMessageBuilder.build(false,"操作失败！"), response);
+        }else{
+            writeAjaxJSONResponse(ResultMessageBuilder.build(true,"操作成功！"), response);
+
         }
-        writeAjaxJSONResponse(ResultMessageBuilder.build(true,"操作成功！"), response);
     }
 
 
@@ -308,8 +317,10 @@ public class HzEbomController extends BaseController {
         int i = hzEbomService.deleteHzEbomRecordById(reqDTO);
         if(i==0){
             writeAjaxJSONResponse(ResultMessageBuilder.build(false,"操作失败！"), response);
+        }else{
+            writeAjaxJSONResponse(ResultMessageBuilder.build(true,"操作成功！"), response);
+
         }
-        writeAjaxJSONResponse(ResultMessageBuilder.build(true,"操作成功！"), response);
     }
 
 

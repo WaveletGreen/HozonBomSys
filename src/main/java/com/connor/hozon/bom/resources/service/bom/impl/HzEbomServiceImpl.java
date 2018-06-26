@@ -237,6 +237,7 @@ public class HzEbomServiceImpl implements HzEbomService {
             }
             if(ebomContent.containsKey("puid")){
                 parentPuid = (String)ebomContent.get("puid");
+                ebomContent.remove("puid");
             }
             String parentId =parentPuid;
             int i;
@@ -259,7 +260,7 @@ public class HzEbomServiceImpl implements HzEbomService {
                 if(hzBomMainRecord == null){
                     return 0;
                 }
-                hzBomLineRecord.setBomDigifaxId(hzBomMainRecord.getBomDigifax());
+                hzBomLineRecord.setBomDigifaxId(hzBomMainRecord.getPuid());
 
                 byte[] bytes = SerializeUtil.serialize(ebomContent);
                 hzBomLineRecord.setBomLineBlock(bytes);
@@ -287,9 +288,10 @@ public class HzEbomServiceImpl implements HzEbomService {
                 String puid = UUID.randomUUID().toString();
                 hzBomLineRecord.setPuid(puid);
                 hzBomLineRecord.setpBomOfWhichDept(pBomOfWhichDept);
-
+                hzBomLineRecord.setLinePuid(puid);
                 hzBomLineRecord.setLineID(itemId);
                 hzBomLineRecord.setIsDept(0);
+                hzBomLineRecord.setIs2Y(0);
                 i = hzBomLineRecordDao.insert(hzBomLineRecord);
                 HzBomState hzBomState = new HzBomState();
                 hzBomState.setpBomId(puid);
@@ -322,13 +324,12 @@ public class HzEbomServiceImpl implements HzEbomService {
                 ebomContent.remove("pBomOfWhichDept");
             }
 
-            if(ebomContent.containsKey("bl_item_item_Id")){
-                itemId = (String)ebomContent.get("bl_item_item_Id");
-                ebomContent.remove("bl_item_item_Id");
+            if(ebomContent.containsKey("bl_item_item_id")){
+                itemId = (String)ebomContent.get("bl_item_item_id");
             }
             HZBomMainRecord hzBomMainRecord = hzBomMainRecordDao.selectByProjectPuid(reqDTO.getProjectId());
             HzBomLineRecord hzBomLineRecord = new HzBomLineRecord();
-            hzBomLineRecord.setBomDigifaxId(hzBomMainRecord.getBomDigifax());
+            hzBomLineRecord.setBomDigifaxId(hzBomMainRecord.getPuid());
 
 
             byte[] bytes = SerializeUtil.serialize(ebomContent);
@@ -337,10 +338,18 @@ public class HzEbomServiceImpl implements HzEbomService {
             hzBomLineRecord.setBomLineBlock(bytes);
             hzBomLineRecord.setPuid(puid);
             int i =hzBomLineRecordDao.update(hzBomLineRecord);
-            HzBomState hzBomState = new HzBomState();
-            hzBomState.setpBomId(puid);
-            hzBomState.setpBomState(1);
-            int j =hzBomStateDAO.update(hzBomState);
+
+            HzBomState bomState = new HzBomState();
+            bomState.setpBomId(puid);
+            bomState.setpBomState(2);
+            HzBomState hzBomState = hzBomStateDAO.findStateById(puid);
+            int j = 0;
+            if (hzBomState == null) {
+                bomState.setPuid(UUID.randomUUID().toString());
+                j = hzBomStateDAO.insert(bomState);
+            } else {
+               j =  hzBomStateDAO.update(bomState);
+            }
             if(i>0 && j>0){
                 return 1;
             }
@@ -363,16 +372,19 @@ public class HzEbomServiceImpl implements HzEbomService {
                 List<HzEPLManageRecord> recordList = new ArrayList<>();
                 //过滤掉已删除的bom
                 for(HzEPLManageRecord eplManageRecord :records){
-                    if(!eplManageRecord.getpState().equals(2)){
+                    if(!Integer.valueOf(2).equals(eplManageRecord.getpState())){
                         recordList.add(eplManageRecord);
                     }
                 }
+                int i=0;
+                int j = 0;
                 for(HzEPLManageRecord eplManageRecord :recordList){
-                    hzBomLineRecord.setBomDigifaxId(hzBomMainRecord.getBomDigifax());
+                    hzBomLineRecord.setBomDigifaxId(hzBomMainRecord.getPuid());
                     hzBomLineRecord.setPuid(eplManageRecord.getPuid());
                     hzBomLineRecord.setIsHas(0);
                     hzBomLineRecord.setIsPart(1);
                     hzBomLineRecordDao.update(hzBomLineRecord);
+                    i++;
                     //状态值更新
                     HzBomState bomState = new HzBomState();
                     bomState.setpBomId(eplManageRecord.getPuid());
@@ -381,10 +393,15 @@ public class HzEbomServiceImpl implements HzEbomService {
                     if (hzBomState == null) {
                         bomState.setPuid(UUID.randomUUID().toString());
                         hzBomStateDAO.insert(bomState);
+                        j++;
                     } else {
                         hzBomStateDAO.update(bomState);
+                        j++;
                     }
 
+                }
+                if(i>0&&j>0){
+                    return 1;
                 }
             }
         }catch (Exception e){

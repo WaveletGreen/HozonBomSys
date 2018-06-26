@@ -256,6 +256,9 @@ public class HzEPLManageRecordServiceImpl implements HzEPLManageRecordService {
         map.put("projectId",projectId);
         map.put("puid",parentId);
         HzBomLineRecord record =hzBomLineRecordDao.findBomLineByPuid(map);
+        if(record == null){
+            return "-";
+        }
         String groupNum = record.getLineID();
         if(groupNum.contains("-")){
             return groupNum.split("-")[1].substring(0,4);

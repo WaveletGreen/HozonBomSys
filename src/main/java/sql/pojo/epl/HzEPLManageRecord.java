@@ -71,7 +71,9 @@ public class HzEPLManageRecord {
      */
     private String pBomLinePartClass;
 
-
+    /**
+     * bom 状态
+     */
     private Integer pState;
 
     /**

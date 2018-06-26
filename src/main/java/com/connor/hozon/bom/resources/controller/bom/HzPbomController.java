@@ -106,8 +106,10 @@ public class HzPbomController extends BaseController {
         List<HzMbomRecordRespDTO> respDTOS = hzPbomService.searchPbomLineMaintainRecord(reqDTO);
         if (ListUtil.isEmpty(respDTOS)) {
             writeAjaxJSONResponse(ResultMessageBuilder.build(false, "暂无数据"), response);
+        }else {
+            writeAjaxJSONResponse(ResultMessageBuilder.build(respDTOS), response);
+
         }
-        writeAjaxJSONResponse(ResultMessageBuilder.build(respDTOS), response);
     }
 
     /**
@@ -121,7 +123,7 @@ public class HzPbomController extends BaseController {
         List<HzPbomLineRespDTO> respDTOS = hzPbomService.searchPbomManageRecord(reqDTO);
         if (ListUtil.isEmpty(respDTOS)) {
             writeAjaxJSONResponse(ResultMessageBuilder.build(false, "暂无数据"), response);
-        }
+        }else
         writeAjaxJSONResponse(ResultMessageBuilder.build(respDTOS), response);
     }
 
@@ -215,7 +217,7 @@ public class HzPbomController extends BaseController {
         int i = hzPbomService.addPbomProcessCompose(reqDTO);
         if(i!=1){
             writeAjaxJSONResponse(ResultMessageBuilder.build(false,"出错啦！"),response);
-        }
+        }else
         writeAjaxJSONResponse(ResultMessageBuilder.build(true,"操作成功！"),response);
 
     }

@@ -268,7 +268,7 @@
 
                placeholder="请输入零部件来源"/>&lt;!&ndash;th:value="${entity.}"&ndash;&gt;
     </div>-->
-    <input id="puid" name="puid" type="text" th:value="${puid}"/>
+    <input id="puid" name="puid" type="hidden" th:value="${puid}"/>
     <!--循环放入数据-->
     <div class="form-group " th:each="_data,c:${data[0]}">
         <label class="control-label" th:text="${_data}"></label>

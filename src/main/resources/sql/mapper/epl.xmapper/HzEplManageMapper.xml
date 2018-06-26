@@ -17,7 +17,7 @@
     <result column="P_BOM_LINE_PART_NAME" jdbcType="VARCHAR" property="pBomLinePartName"/>
     <result column="P_BOM_LINE_PART_CLASS" jdbcType="VARCHAR" property="pBomLinePartClass"/>
     <result column="P_BOM_LINE_BLOCK" jdbcType="BLOB" property="bomLineBlock"/>
-    <result column="P_STATE" jdbcType="DECIMAL" property="pState" />
+    <result column="P_BOM_STATE" jdbcType="DECIMAL" property="pState" />
     <!--PBOM-->
     <result column="P_ITEM_RESOURCE" jdbcType="VARCHAR" property="itemResource" />
     <result column="P_RESOURCE" jdbcType="VARCHAR" property="resource" />
