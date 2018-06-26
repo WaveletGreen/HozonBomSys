@@ -35,7 +35,7 @@ window.onload = function(){
                     //cache: false,
                     //striped: true,                              //是否显示行间隔色
                     //sidePagination: "server",           //分页方式：client客户端分页，server服务端分页（*）
-                    height: $(window.parent.document).find("#wrapper").height() - 90,
+                    height: $(window.parent.document).find("#wrapper").height() - 180,
                     width: $(window).width(),
                      pagination:true,
                     // pageNumber:1,                       //初始化加载第一页，默认第一页
@@ -50,7 +50,7 @@ window.onload = function(){
                     // sortable: true,                     //是否启用排序
                     sortOrder: "desc",                   //排序方式
                     clickToSelect: true,// 单击某一行的时候选中某一条记录
-                    search: true, //是否显示表格搜索，此搜索是客户端搜索，不会进服务端
+                    //search: true, //是否显示表格搜索，此搜索是客户端搜索，不会进服务端
                     showColumns: true, //是否显示所有的列
                     // fixedColumns: true,
                     // fixedNumber:2,

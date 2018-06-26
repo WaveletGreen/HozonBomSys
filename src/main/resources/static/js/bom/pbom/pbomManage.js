@@ -1,10 +1,10 @@
 var firstLoad = true;
-window.onload=function() {
+window.onload = function () {
     var $table = $("#pbomManageTable");
     var column = [];
-    var projectId=$("#project", window.top.document).val();
+    var projectId = $("#project", window.top.document).val();
     $.ajax({
-        url: "pbom/manage/title?project="+projectId,
+        url: "pbom/manage/title?project=" + projectId,
         type: "GET",
         success: function (result) {
             var column = [];
@@ -39,15 +39,15 @@ window.onload=function() {
                 }
             }
             $table.bootstrapTable({
-                url: "pbom/getBomManage?projectId="+projectId,
-                method:'GET',
-                dataType:'json',
+                url: "pbom/getBomManage?projectId=" + projectId,
+                method: 'GET',
+                dataType: 'json',
                 cache: false,
                 striped: true,                              //是否显示行间隔色
                 // sidePagination: "server",           //分页方式：client客户端分页，server服务端分页（*）
-                height: $(window.parent.document).find("#wrapper").height() - 90,
+                height: $(window.parent.document).find("#wrapper").height() - 180,
                 width: $(window).width(),
-                pagination:true,
+                pagination: true,
                 // pageNumber:1,                       //初始化加载第一页，默认第一页
                 pageSize: 20,                       //每页的记录行数（*）
                 // pageList: [20, 50,100,200],        //可供选择的每页的行数（*）
@@ -58,7 +58,7 @@ window.onload=function() {
                 sortable: true,                     //是否启用排序
                 sortOrder: "asc",                   //排序方式
                 striped: true, //是否显示行间隔色
-                search: true, //是否显示表格搜索，此搜索是客户端搜索，不会进服务端
+                //search: true, //是否显示表格搜索，此搜索是客户端搜索，不会进服务端
                 showColumns: true, //是否显示所有的列
                 /*fixedColumns: true,
                 fixedNumber:1,*/
@@ -70,9 +70,15 @@ window.onload=function() {
                         text: '添加',
                         iconCls: 'glyphicon glyphicon-plus',
                         handler: function () {
+                            var rows = $table.bootstrapTable('getSelections');
+                            //只能选一条
+                            if (rows.length != 1) {
+                                window.Ewin.alert({message: '请选择一条需要添加的数据!'});
+                                return false;
+                            }
                             window.Ewin.dialog({
                                 title: "添加",
-                                url: "pbom/addPbomManage",
+                                url: "pbom/addPbomManage?projectId="+projectId+"&eBomPuid="+rows[0].eBomPuid,
                                 gridId: "gridId",
                                 width: 500,
                                 height: 650
@@ -91,7 +97,7 @@ window.onload=function() {
                             }
                             window.Ewin.dialog({
                                 title: "修改",
-                                url: "pbom/updatePbomManage",
+                                url: "pbom/updatePbomManage?projectId="+projectId+"&eBomPuid="+rows[0].eBomPuid,
                                 gridId: "gridId",
                                 width: 500,
                                 height: 650
@@ -116,13 +122,14 @@ window.onload=function() {
                                         data: JSON.stringify(rows),
                                         contentType: "application/json",
                                         success: function (result) {
-                                            if (result.status) {
+                                            /*if (result.status) {
                                                 window.Ewin.alert({message: result.errMsg});
                                                 //刷新，会重新申请数据库数据
                                             }
                                             else {
                                                 window.Ewin.alert({message: ":" + result.errMsg});
-                                            }
+                                            }*/
+                                            window.Ewin.alert({message: result.errMsg});
                                             $table.bootstrapTable("refresh");
                                         },
                                         error: function (info) {

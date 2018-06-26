@@ -2,82 +2,47 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <!--User: xulf Date: 2018/5/25 Time: 15:37-->
 <head th:include="include/headBom"></head>
-    <link th:href="@{/css/stage/bom-stage.css}" rel="stylesheet"/>
-    <meta charset="UTF-8">
-    <title>PBOM</title>
+<link th:href="@{/css/stage/bom-stage.css}" rel="stylesheet"/>
+<meta charset="UTF-8">
+<title>PBOM</title>
 </head>
 <body>
-<!--<div class="panel-body">-->
-    <!--<div class="content col-lg-5">
-        <span class="infoToUser">请输入需要查询的产品配置器ID</span>
-        <div class="input-group">
-            <input class="form-control" id="inputCfg0" type="text" placeholder="请输入产品配置器PUID"
-                   value="9deb81ea-9544-473b-aeb5-d7683c7753c3"/>
-            <span class="input-group-btn">
-                                    <button class="btn btn-default" id="PbomManage"
-                                            type="button">查询PBOM</button>
-                                </span>
-        </div>
-    </div>-->
-    <!--<div class="panel-body" style="padding-bottom:0px;">-->
-        <!--<div class="panel panel-default" style="margin-top: 10px;">-->
-            <!--<div class="panel-body">-->
-                <form class="form-inline" role="form" style="float: left; width: 100%;margin-left: 20px;" method="get"
-                      id="queryPbomManage">
-                    <div class="form-group">
-                        <label for="level">层级:</label>
-                        <input type="text" class="form-control" name="level" id="level" placeholder="请输入层级"/>
-                    </div>
-                    <div class="form-group">
-                        <label for="pBomOfWhichDept">专业:</label>
-                        <input type="text" class="form-control" name="pBomOfWhichDept" id="pBomOfWhichDept"
-                               placeholder="请输入专业"/>
-                    </div>
-                    <div class="form-group">
-                        <label for="rank">级别:</label>
-                        <input type="text" class="form-control" name="rank" id="rank" placeholder="请输入零件号"/>
-                    </div>
-                    <div class="form-group">
-                        <label for="groupNum">分组号:</label>
-                        <input type="text" class="form-control" name="groupNum" id="groupNum" placeholder="请输入零件号"/>
-                    </div>
-                    <!--<div class="form-group">
-                        <label for="lineId">零件号:</label>
-                        <input type="text" class="form-control" name="lineId" id="lineId" placeholder="请输入零件号"/>
-                    </div>
-                    <div class="form-group">
-                        <label for="itemType">零件分类:</label>
-                        <input type="text" class="form-control" name="itemType" id="itemType" placeholder="请输入零件号"/>
-                    </div>-->
-                    <div class="form-group">
-                        <button type="button" id="queryBtn" onclick="doQuery();" class="btn btn-primary">查询</button>
-                    </div>
-                </form>
-            <!--</div>-->
-        <!--</div>-->
-    <!--</div>-->
-    <!--<div class="content col-lg-12">-->
-        <table class="table table-striped tableNormalStyle" id="pbomManageTable"></table>
-    <!--</div>-->
-<!--</div>-->
-<!--<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
-     aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal"
-                        aria-hidden="true">×
-                </button>
-                <h4 class="modal-title" id="myModalLabel">操作错误</h4>
-            </div>
-            <div class="modal-body">请输入正确的数模层ID</div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">关闭
-                </button>
-            </div>
+<div class="panel-body" style="padding-bottom:0px;">
+    <div class="panel panel-default" style="margin-top: 10px;">
+        <div class="panel-body">
+            <form class="form-inline" role="form" style="float: left; width: 100%;margin-left: 20px;" method="get"
+                  id="queryPbomManage">
+                <div class="form-group">
+                    <label for="level">层级:</label>
+                    <input type="text" class="form-control" name="level" id="level" placeholder="请输入层级"/>
+                </div>
+                <div class="form-group">
+                    <label for="pBomOfWhichDept">专业:</label>
+                    <input type="text" class="form-control" name="pBomOfWhichDept" id="pBomOfWhichDept"
+                           placeholder="请输入专业"/>
+                </div>
+                <div class="form-group">
+                    <label for="lineId">零件号:</label>
+                    <input type="text" class="form-control" name="lineId" id="lineId" placeholder="请输入零件号"/>
+                </div>
+                <!--<div class="form-group">
+                    <label for="lineId">零件号:</label>
+                    <input type="text" class="form-control" name="lineId" id="lineId" placeholder="请输入零件号"/>
+                </div>
+                <div class="form-group">
+                    <label for="itemType">零件分类:</label>
+                    <input type="text" class="form-control" name="itemType" id="itemType" placeholder="请输入零件号"/>
+                </div>-->
+                <div class="form-group">
+                    <button type="button" id="queryBtn" onclick="doQuery();" class="btn btn-primary">查询</button>
+                </div>
+            </form>
         </div>
     </div>
-</div>-->
+</div>
+<div class="content col-lg-12">
+    <table class="table table-striped tableNormalStyle" id="pbomManageTable"></table>
+</div>
 <script th:src="@{/js/bom/pbom/pbomManage.js}"></script>
 </body>
 <script th:inline="javascript">
