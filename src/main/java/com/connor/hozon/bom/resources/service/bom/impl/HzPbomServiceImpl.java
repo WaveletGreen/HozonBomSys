@@ -286,7 +286,8 @@ public class HzPbomServiceImpl implements HzPbomService {
                 return respDTO;
             }
             HzPbomRecord record = hzPbomRecordDAO.getHzPbomByEbomPuid(eBomPuid);
-            if(record == null){
+            if(null == record){
+                record = new HzPbomRecord();
                 record.seteBomPuid(eBomPuid);
                 record.setPuid(UUID.randomUUID().toString());
                 record.setStatus(1);
