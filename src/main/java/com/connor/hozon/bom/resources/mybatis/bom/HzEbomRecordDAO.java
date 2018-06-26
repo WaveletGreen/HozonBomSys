@@ -11,12 +11,7 @@ import java.util.Map;
  * Created by haozt on 2018/06/06
  */
 public interface HzEbomRecordDAO {
-    /**
-     * 查询EBOM 全属性
-     * @param reqDTO
-     * @return
-     */
-    List<HzEPLManageRecord> getHzEbomList(FindForPageReqDTO reqDTO);
+
 
     Page<HzEPLManageRecord> getHzEbomPage(FindForPageReqDTO recordReqDTO);
 

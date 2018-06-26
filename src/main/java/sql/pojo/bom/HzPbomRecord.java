@@ -1,6 +1,8 @@
 package sql.pojo.bom;
 
 
+import java.util.Date;
+
 /**
  * Created by haozt on 2018/5/25
  */
@@ -10,9 +12,9 @@ public class HzPbomRecord {
      */
     private String puid;
     /**
-     *零件来源（自制总成/采购拆分等）
+     *工位
      */
-    private String itemResource;
+    private String station;
     /**
      * 来源（自制/采购）
      */
@@ -54,6 +56,33 @@ public class HzPbomRecord {
      */
     private String eBomPuid;
 
+    /**
+     * 创建时间
+     */
+    private Date createTime;
+    /**
+     * 更新时间
+     */
+    private Date updateTime;
+    /**
+     * 创建者
+     */
+    private String createName;
+    /**
+     * 更改者
+     */
+    private String updateName;
+
+    private Integer status;
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
     public String getPuid() {
         return puid;
     }
@@ -62,12 +91,12 @@ public class HzPbomRecord {
         this.puid = puid;
     }
 
-    public String getItemResource() {
-        return itemResource;
+    public String getStation() {
+        return station;
     }
 
-    public void setItemResource(String itemResource) {
-        this.itemResource = itemResource;
+    public void setStation(String station) {
+        this.station = station;
     }
 
     public String getResource() {
@@ -148,5 +177,37 @@ public class HzPbomRecord {
 
     public void seteBomPuid(String eBomPuid) {
         this.eBomPuid = eBomPuid;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
+    }
+
+    public String getCreateName() {
+        return createName;
+    }
+
+    public void setCreateName(String createName) {
+        this.createName = createName;
+    }
+
+    public String getUpdateName() {
+        return updateName;
+    }
+
+    public void setUpdateName(String updateName) {
+        this.updateName = updateName;
     }
 }

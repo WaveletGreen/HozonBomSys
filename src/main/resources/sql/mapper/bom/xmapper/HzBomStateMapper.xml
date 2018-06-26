@@ -4,8 +4,8 @@
   <resultMap id="BaseResultMap" type="sql.pojo.bom.HzBomState">
     <id column="PUID" jdbcType="VARCHAR" property="puid" />
     <result column="P_BOM_ID" jdbcType="VARCHAR" property="pBomId" />
-    <result column="P_BOM_STATE" jdbcType="DECIMAL" property="pBomState" />
-    <result column="P_BOM_FLOW_STATE" jdbcType="DECIMAL" property="pBomFlowState" />
+    <result column="P_BOM_STATE" jdbcType="INTEGER" property="pBomState" />
+    <result column="P_BOM_FLOW_STATE" jdbcType="INTEGER" property="pBomFlowState" />
     <result column="P_BOM_FLOW_ID" jdbcType="VARCHAR" property="pBomFlowId" />
     <result column="P_BOM_FLOW_POINT_NAME" jdbcType="VARCHAR" property="pBomFlowPointName" />
   </resultMap>
@@ -28,8 +28,8 @@
   <insert id="insert" parameterType="sql.pojo.bom.HzBomState">
     insert into HZ_BOM_STATE (PUID, P_BOM_ID, P_BOM_STATE, 
       P_BOM_FLOW_STATE, P_BOM_FLOW_ID, P_BOM_FLOW_POINT_NAME)
-    values (#{puid,jdbcType=VARCHAR}, #{pBomId,jdbcType=VARCHAR}, #{pBomState,jdbcType=DECIMAL}, 
-      #{pBomFlowState,jdbcType=DECIMAL}, #{pBomFlowId,jdbcType=VARCHAR}, #{pBomFlowPointName,jdbcType=VARCHAR}
+    values (#{puid,jdbcType=VARCHAR}, #{pBomId,jdbcType=VARCHAR}, #{pBomState,jdbcType=INTEGER}, 
+      #{pBomFlowState,jdbcType=INTEGER}, #{pBomFlowId,jdbcType=VARCHAR}, #{pBomFlowPointName,jdbcType=VARCHAR}
   </insert>
 
   <!--新增-->
@@ -63,10 +63,10 @@
         #{pBomId,jdbcType=VARCHAR},
       </if>
       <if test="pBomState != null">
-        #{pBomState,jdbcType=DECIMAL},
+        #{pBomState,jdbcType=INTEGER},
       </if>
       <if test="pBomFlowState != null">
-        #{pBomFlowState,jdbcType=DECIMAL},
+        #{pBomFlowState,jdbcType=INTEGER},
       </if>
       <if test="pBomFlowId != null">
         #{pBomFlowId,jdbcType=VARCHAR},
@@ -82,10 +82,10 @@
     update HZ_BOM_STATE
     <set>
       <if test="pBomState != null">
-        P_BOM_STATE = #{pBomState,jdbcType=DECIMAL},
+        P_BOM_STATE = #{pBomState,jdbcType=INTEGER},
       </if>
       <if test="pBomFlowState != null">
-        P_BOM_FLOW_STATE = #{pBomFlowState,jdbcType=DECIMAL},
+        P_BOM_FLOW_STATE = #{pBomFlowState,jdbcType=INTEGER},
       </if>
       <if test="pBomFlowId != null">
         P_BOM_FLOW_ID = #{pBomFlowId,jdbcType=VARCHAR},
@@ -101,8 +101,8 @@
   <update id="updateByPrimaryKey" parameterType="sql.pojo.bom.HzBomState">
     update HZ_BOM_STATE
     set P_BOM_ID = #{pBomId,jdbcType=VARCHAR},
-      P_BOM_STATE = #{pBomState,jdbcType=DECIMAL},
-      P_BOM_FLOW_STATE = #{pBomFlowState,jdbcType=DECIMAL},
+      P_BOM_STATE = #{pBomState,jdbcType=INTEGER},
+      P_BOM_FLOW_STATE = #{pBomFlowState,jdbcType=INTEGER},
       P_BOM_FLOW_ID = #{pBomFlowId,jdbcType=VARCHAR},
       P_BOM_FLOW_POINT_NAME = #{pBomFlowPointName,jdbcType=VARCHAR},
     where PUID = #{puid,jdbcType=VARCHAR}

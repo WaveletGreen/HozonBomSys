@@ -9,6 +9,7 @@ import com.connor.hozon.bom.bomSystem.dao.impl.bom.HzBomDataDaoImpl;
 import com.connor.hozon.bom.bomSystem.dao.impl.bom.HzBomLineRecordDaoImpl;
 import com.connor.hozon.bom.resources.dto.request.*;
 import com.connor.hozon.bom.resources.dto.response.HzEbomRespDTO;
+import com.connor.hozon.bom.resources.dto.response.OperateResultMessageRespDTO;
 import com.connor.hozon.bom.resources.mybatis.bom.HzBomStateDAO;
 import com.connor.hozon.bom.resources.mybatis.bom.HzEbomRecordDAO;
 import com.connor.hozon.bom.resources.mybatis.bom.HzPbomRecordDAO;
@@ -75,9 +76,9 @@ public class HzEbomServiceImpl implements HzEbomService {
             List<HzEPLManageRecord> records = recordPage.getResult();
             for(HzEPLManageRecord record:records){
                 //过滤删除掉的ebom信息
-                if(Integer.valueOf(2).equals(record.getpState())){
-                    continue;
-                }
+//                if(Integer.valueOf(2).equals(record.getpState())){
+//                    continue;
+//                }
                 JSONObject jsonObject = new JSONObject();
                 jsonObject.put("puid", record.getPuid());
                 Integer is2Y = record.getIs2Y();
@@ -222,7 +223,7 @@ public class HzEbomServiceImpl implements HzEbomService {
      * @return
      */
     @Override
-    public int addHzEbomRecord(AddHzEbomReqDTO reqDTO) {
+    public OperateResultMessageRespDTO addHzEbomRecord(AddHzEbomReqDTO reqDTO) {
         try{
             Map<String,Object> ebomContent = reqDTO.getMap();
             String pBomOfWhichDept="";
@@ -254,14 +255,14 @@ public class HzEbomServiceImpl implements HzEbomService {
                 addProcessComposeReqDTO.setLineId(itemId);
                 i = hzPbomService.addPbomProcessCompose(addProcessComposeReqDTO);
                 if(i>0){
-                    return 1;
+                    return OperateResultMessageRespDTO.getSuccessResult();
                 }
             }else{
                 //自己搭建父结构 默认为2层 有子层时更新为2Y层
                 HzBomLineRecord hzBomLineRecord = new HzBomLineRecord();
                 HZBomMainRecord hzBomMainRecord = hzBomMainRecordDao.selectByProjectPuid(reqDTO.getProjectId());
                 if(hzBomMainRecord == null){
-                    return 0;
+                    return OperateResultMessageRespDTO.getFailResult();
                 }
                 hzBomLineRecord.setBomDigifaxId(hzBomMainRecord.getPuid());
 
@@ -302,17 +303,17 @@ public class HzEbomServiceImpl implements HzEbomService {
                 hzBomState.setpBomState(0);
                int j =  hzBomStateDAO.insert(hzBomState);
                if(i>0 && j>0){
-                   return 1;
+                   return OperateResultMessageRespDTO.getSuccessResult();
                }
             }
-            return 0;
+            return OperateResultMessageRespDTO.getFailResult();
         }catch (Exception e){
-            return  0;
+            return  OperateResultMessageRespDTO.getFailResult();
         }
     }
 
     @Override
-    public int updateHzEbomRecord(UpdateHzEbomReqDTO reqDTO) {
+    public OperateResultMessageRespDTO updateHzEbomRecord(UpdateHzEbomReqDTO reqDTO) {
         try{
             Map<String,Object> ebomContent = reqDTO.getUpdateContent();
             String puid = "";
@@ -347,7 +348,7 @@ public class HzEbomServiceImpl implements HzEbomService {
 
             HzBomState bomState = new HzBomState();
             bomState.setpBomId(puid);
-            bomState.setpBomState(2);
+            bomState.setpBomState(1);
             HzBomState hzBomState = hzBomStateDAO.findStateById(puid);
             int j = 0;
             if (hzBomState == null) {
@@ -357,16 +358,16 @@ public class HzEbomServiceImpl implements HzEbomService {
                j =  hzBomStateDAO.update(bomState);
             }
             if(i>0 && j>0){
-                return 1;
+                return OperateResultMessageRespDTO.getSuccessResult();
             }
         }catch (Exception e){
-            return 0;
+            return OperateResultMessageRespDTO.getFailResult();
         }
-        return 0;
+        return OperateResultMessageRespDTO.getFailResult();
     }
 
     @Override
-    public int deleteHzEbomRecordById(DeleteHzEbomReqDTO reqDTO) {
+    public OperateResultMessageRespDTO deleteHzEbomRecordById(DeleteHzEbomReqDTO reqDTO) {
         try{
             //删除数据时 需要把当前bom下的所有子层数据一起删除
             HzEPLManageRecord record = hzEbomRecordDAO.findEbomById(reqDTO.getPuid(),reqDTO.getProjectId());
@@ -407,13 +408,13 @@ public class HzEbomServiceImpl implements HzEbomService {
 
                 }
                 if(i>0&&j>0){
-                    return 1;
+                    return OperateResultMessageRespDTO.getSuccessResult();
                 }
             }
         }catch (Exception e){
-            return  0;
+            return  OperateResultMessageRespDTO.getFailResult();
         }
-        return 0;
+        return OperateResultMessageRespDTO.getFailResult();
     }
 
     @Override

@@ -19,11 +19,6 @@ import java.util.Map;
 public class HzEbomRecordDAOImpl extends BaseSQLUtil implements HzEbomRecordDAO {
 
     @Override
-    public List<HzEPLManageRecord> getHzEbomList(FindForPageReqDTO reqDTO) {
-        return super.findForList("HzEbomRecordDAOImpl_getHzEbomList",null);
-    }
-
-    @Override
     public Page<HzEPLManageRecord> getHzEbomPage(FindForPageReqDTO recordReqDTO) {
         PageRequest request = new PageRequest();
         Map map = new HashMap();
@@ -40,7 +35,7 @@ public class HzEbomRecordDAOImpl extends BaseSQLUtil implements HzEbomRecordDAO 
         Map<String,Object> map = new HashMap<>();
         map.put("puid",puid);
         map.put("projectId",projectId);
-        return (HzEPLManageRecord) super.findForObject("HzEbomRecordDAOImpl_getHzEbomList",map);
+        return (HzEPLManageRecord) super.findForObject("HzEbomRecordDAOImpl_findEbomById",map);
     }
 
     /**

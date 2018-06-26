@@ -6,6 +6,11 @@ package com.connor.hozon.bom.resources.dto.response;
  * @Description:
  */
 public class OperateResultMessageRespDTO {
+
+    public static final String SUCCESS_MSG ="操作成功！";
+    public static final String FAILED_MSG ="操作失败,请稍后重试！";
+    public static final Long SUCCESS_CODE = 1000L;
+    public static final Long FAILED_CODE = 1001L;
     /**
      * 错误信息
      */
@@ -15,7 +20,16 @@ public class OperateResultMessageRespDTO {
      */
     private Long errCode;
 
-    public String getErrMsg() {
+    public static boolean isSuccess(OperateResultMessageRespDTO dto) {
+
+        if(dto != null && Long.valueOf(1000L).equals(dto.getErrCode())) {
+
+            return true;
+        }
+        return false;
+    }
+
+    public  String getErrMsg() {
         return errMsg;
     }
 
@@ -29,5 +43,19 @@ public class OperateResultMessageRespDTO {
 
     public void setErrCode(Long errCode) {
         this.errCode = errCode;
+    }
+
+    public static OperateResultMessageRespDTO getSuccessResult(){
+        OperateResultMessageRespDTO respDTO = new OperateResultMessageRespDTO();
+        respDTO.setErrMsg(SUCCESS_MSG);
+        respDTO.setErrCode(SUCCESS_CODE);
+        return respDTO;
+    }
+
+    public static OperateResultMessageRespDTO getFailResult(){
+        OperateResultMessageRespDTO respDTO = new OperateResultMessageRespDTO();
+        respDTO.setErrMsg(FAILED_MSG);
+        respDTO.setErrCode(FAILED_CODE);
+        return respDTO;
     }
 }
