@@ -55,7 +55,9 @@
   <!--联表查询 EBOM PBOM信息-->
   <select id="HzPbomRecordDAOImpl_getPbomRecord" resultMap="HzPbomLineRecord" parameterType="java.util.HashMap">
 
-    select t.*,t6.* from HZ_BOM_LINE_RECORD t LEFT OUTER JOIN HZ_PBOM_RECORD t6 ON  t.puid = T6.p_E_BOM_PUID
+    select t.*,t5.* from HZ_BOM_LINE_RECORD t
+    LEFT OUTER JOIN HZ_BOM_STATE t6 on t.puid = t6.P_BOM_ID
+    LEFT OUTER JOIN HZ_PBOM_RECORD t5 ON  t.puid = T5.p_E_BOM_PUID
     where t.p_bom_digifax_id=(
     select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(
     select t2.puid from Hz_project_libs t2
@@ -67,7 +69,8 @@
       <if test="pPuid != null and  pPuid!='' " >
         and t.PUID = #{pPuid,jdbcType=VARCHAR}
       </if>
-      and t6.P_PBOM_STATUS IS NULL OR t6.P_PBOM_STATUS=1
+      and (t6.P_BOM_STATE is null or t6.P_BOM_STATE  <![CDATA[!= ]]>2)
+      and (t5.P_PBOM_STATUS IS NULL OR t5.P_PBOM_STATUS=1)
     </where>
   </select>
 
@@ -75,7 +78,9 @@
   <!--联表查询PBOM 总数-->
   <select id="HzPbomRecordDAOImpl_getTotalCount" resultType="java.lang.Integer" parameterType="java.util.HashMap">
 
-    select count(*) from HZ_BOM_LINE_RECORD t LEFT OUTER JOIN HZ_PBOM_RECORD t6 ON  t.puid = T6.p_E_BOM_PUID
+    select count(*) from HZ_BOM_LINE_RECORD t
+    LEFT OUTER JOIN HZ_BOM_STATE t6 on t.puid = t6.P_BOM_ID
+    LEFT OUTER JOIN HZ_PBOM_RECORD t5 ON  t.puid = T5.p_E_BOM_PUID
     where t.p_bom_digifax_id=(
     select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(
     select t2.puid from Hz_project_libs t2
@@ -84,7 +89,8 @@
       <if test="lineId != null and  lineId!='' " >
         and t.P_BOM_LINE_ID = #{lineId,jdbcType=VARCHAR}
       </if>
-      and t6.P_PBOM_STATUS IS NULL OR t6.P_PBOM_STATUS=1
+      and (t6.P_BOM_STATE is null or t6.P_BOM_STATE  <![CDATA[!= ]]>2)
+      and (t5.P_PBOM_STATUS IS NULL OR t5.P_PBOM_STATUS=1)
     </where>
   </select>
 
@@ -130,9 +136,6 @@
     </if>
   </where>
   </select>
-
-
-
 
 
 
