@@ -1,6 +1,5 @@
 package com.connor.hozon.bom.resources.mybatis.bom.impl;
 
-import com.connor.hozon.bom.resources.dto.request.FindForPageReqDTO;
 import com.connor.hozon.bom.resources.mybatis.bom.HzPbomRecordDAO;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.page.PageRequest;
@@ -25,13 +24,6 @@ public class HzPbomRecordDAOImpl extends BaseSQLUtil implements HzPbomRecordDAO 
     public HzPbomLineRecord getPbomById(Map<String, Object> map) {
 
         return (HzPbomLineRecord)super.findForObject("HzPbomRecordDAOImpl_getPbomById",map);
-    }
-
-    @Override
-    public List<HzPbomLineRecord> searchPbomLineDetail(HzBomLineRecord record) {
-
-       return super.findForList("HzPbomRecordDAOImpl_searchPbomLineDetail",record);
-
     }
 
     @Override

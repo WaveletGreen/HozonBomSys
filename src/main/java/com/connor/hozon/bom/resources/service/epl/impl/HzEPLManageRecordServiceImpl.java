@@ -5,15 +5,11 @@ import com.alibaba.fastjson.JSONObject;
 import com.connor.hozon.bom.bomSystem.dao.bom.HzBomDataDao;
 import com.connor.hozon.bom.bomSystem.dao.bom.HzBomMainRecordDao;
 import com.connor.hozon.bom.bomSystem.dao.impl.bom.HzBomLineRecordDaoImpl;
-import com.connor.hozon.bom.resources.dto.request.FindHzEPLRecordReqDTO;
 import com.connor.hozon.bom.resources.dto.response.HzEPLRecordRespDTO;
-import com.connor.hozon.bom.resources.mybatis.bom.HzPbomRecordDAO;
 import com.connor.hozon.bom.resources.mybatis.epl.HzEplMangeRecordDAO;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.query.HzEPLByPageQuery;
-import com.connor.hozon.bom.resources.service.bom.impl.HzPbomServiceImpl;
 import com.connor.hozon.bom.resources.service.epl.HzEPLManageRecordService;
-import com.connor.hozon.bom.resources.util.ListUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import share.bean.PreferenceSetting;
@@ -162,14 +158,14 @@ public class HzEPLManageRecordServiceImpl implements HzEPLManageRecordService {
     }
 
     @Override
-    public JSONArray getEPLTittle(FindHzEPLRecordReqDTO recordReqDTO) {
+    public JSONArray getEPLTittle(String projectId) {
         try{
             JSONArray array = new JSONArray();
             int appendCount = 6;
             int appendNum = 23;
             HzPreferenceSetting setting = new HzPreferenceSetting();
             setting.setSettingName("Hz_ExportBomPreferenceRedis");
-            HZBomMainRecord main = hzBomMainRecordDao.selectByProjectPuid(recordReqDTO.getProjectId());
+            HZBomMainRecord main = hzBomMainRecordDao.selectByProjectPuid(projectId);
             if(main == null){
                 return null;
             }

@@ -1,15 +1,11 @@
 package com.connor.hozon.bom.resources.service.bom;
 
 import com.connor.hozon.bom.resources.dto.request.AddMbomReqDTO;
-import com.connor.hozon.bom.resources.dto.request.FindForPageReqDTO;
-import com.connor.hozon.bom.resources.dto.request.UpdateHzEbomReqDTO;
 import com.connor.hozon.bom.resources.dto.request.UpdateMbomReqDTO;
 import com.connor.hozon.bom.resources.dto.response.HzMbomRecordRespDTO;
 import com.connor.hozon.bom.resources.dto.response.OperateResultMessageRespDTO;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.query.HzMbomByPageQuery;
-import sql.pojo.bom.HzMbomLineRecord;
-import sql.pojo.bom.HzMbomRecord;
 
 /**
  * @Author: haozt
