@@ -148,7 +148,7 @@ public class HzMaterielFeatureController {
 
         Map<String, HzMaterielFeatureBean> sortedBean = new HashMap<>();
 
-        hzMaterielFeatureBeans.stream().filter(_b -> _b.getpCfg0ModelRecord() != null).forEach(_b -> sortedBean.put(_b.getpCfg0ModelRecord()+"="+_b.getpCfg0FamilyDesc() + "<br/>" + _b.getpCfg0FamilyName(), _b));
+        hzMaterielFeatureBeans.stream().filter(_b -> _b.getpCfg0ModelRecord() != null).forEach(_b -> sortedBean.put(_b.getpCfg0FamilyDesc() + "<br/>" + _b.getpCfg0FamilyName(), _b));
 
         if (hzMaterielFeatureBeans == null || column == null || column.size() == 0) {
             result.put("status", false);
@@ -163,7 +163,7 @@ public class HzMaterielFeatureController {
                 Map<String, Object> _result = new HashMap<>();
                 int index = 0;
                 for (int j = 0; j < column.size(); j++) {
-                    _result.put("s" + j, sortedBean.get(value.getpCfg0ModelRecord()+"="+column.get(j)) == null ? "-" : sortedBean.get(value.getpCfg0ModelRecord()+"="+column.get(j)).getpCfg0ObjectId());
+                    _result.put("s" + j, sortedBean.get(column.get(j)) == null ? "-" : sortedBean.get(column.get(j)).getpCfg0ObjectId());
                     index = j;
                 }
 
