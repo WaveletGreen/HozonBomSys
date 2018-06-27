@@ -101,7 +101,7 @@ function initTable(pBomUrl) {
                             }
                             window.Ewin.dialog({
                                 title: "添加",
-                                url: "pbom/addPbomManage?projectId=" + projectId + "&eBomPuid=" + rows[0].eBomPuid,
+                                url: "pbom/addPbomManage?projectId=" + projectPuid + "&eBomPuid=" + rows[0].eBomPuid,
                                 gridId: "gridId",
                                 width: 500,
                                 height: 650
@@ -120,7 +120,7 @@ function initTable(pBomUrl) {
                             }
                             window.Ewin.dialog({
                                 title: "修改",
-                                url: "pbom/updatePbomManage?projectId=" + projectId + "&eBomPuid=" + rows[0].eBomPuid,
+                                url: "pbom/updatePbomManage?projectId=" + projectPuid + "&eBomPuid=" + rows[0].eBomPuid,
                                 gridId: "gridId",
                                 width: 500,
                                 height: 650
