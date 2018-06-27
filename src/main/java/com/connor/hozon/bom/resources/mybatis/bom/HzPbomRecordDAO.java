@@ -1,6 +1,5 @@
 package com.connor.hozon.bom.resources.mybatis.bom;
 
-import com.connor.hozon.bom.resources.dto.request.FindForPageReqDTO;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.query.HzPbomByPageQuery;
 import sql.pojo.bom.HzBomLineRecord;
@@ -17,11 +16,6 @@ public interface HzPbomRecordDAO {
 
 
     HzPbomLineRecord getPbomById(Map<String,Object> map);
-    /**
-     * 按条件搜索Pbom管理维护信息
-     * @return
-     */
-    List<HzPbomLineRecord> searchPbomLineDetail(HzBomLineRecord record);
 
     /**
      * 插入 PBOM管理信息

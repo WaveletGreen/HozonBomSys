@@ -56,7 +56,6 @@ public class HzPbomController extends BaseController {
         tableTitle.put("station","工位");
         writeAjaxJSONResponse(ResultMessageBuilder.build(tableTitle), response);
     }
-
     /**
      * 查询PBOM管理信息
      *
@@ -100,37 +99,8 @@ public class HzPbomController extends BaseController {
         return ret;
     }
 
-    /**
-     * 搜索PBOM在线维护
-     *
-     * @param reqDTO
-     * @param response
-     */
-    @RequestMapping(value = "searchMaintain/detail", method = RequestMethod.GET)
-    public void searchPbomMaintainRecord(SearchPbomDetailReqDTO reqDTO, HttpServletResponse response) {
-        List<HzMbomRecordRespDTO> respDTOS = hzPbomService.searchPbomLineMaintainRecord(reqDTO);
-        if (ListUtil.isEmpty(respDTOS)) {
-            writeAjaxJSONResponse(ResultMessageBuilder.build(false, "暂无数据"), response);
-        }else {
-            writeAjaxJSONResponse(ResultMessageBuilder.build(respDTOS), response);
 
-        }
-    }
 
-    /**
-     * 搜索PBOM管理维护信息
-     *
-     * @param reqDTO
-     * @param response
-     */
-    @RequestMapping(value = "searchManage/detail", method = RequestMethod.GET)
-    public void searchPbomManageRecord(SearchPbomDetailReqDTO reqDTO, HttpServletResponse response) {
-        List<HzPbomLineRespDTO> respDTOS = hzPbomService.searchPbomManageRecord(reqDTO);
-        if (ListUtil.isEmpty(respDTOS)) {
-            writeAjaxJSONResponse(ResultMessageBuilder.build(false, "暂无数据"), response);
-        }else
-        writeAjaxJSONResponse(ResultMessageBuilder.build(respDTOS), response);
-    }
 
     /**
      * 跳转到PBOM管理添加页面

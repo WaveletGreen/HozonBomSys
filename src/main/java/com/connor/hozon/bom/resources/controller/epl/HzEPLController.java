@@ -1,10 +1,8 @@
 package com.connor.hozon.bom.resources.controller.epl;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.connor.hozon.bom.resources.controller.BaseController;
-import com.connor.hozon.bom.resources.dto.request.FindHzEPLRecordReqDTO;
 import com.connor.hozon.bom.resources.dto.response.HzEPLRecordRespDTO;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.query.HzEPLByPageQuery;
@@ -69,12 +67,12 @@ public class HzEPLController extends BaseController {
         }
 
     @RequestMapping(value = "title",method = RequestMethod.GET)
-    public void getEplTitle(FindHzEPLRecordReqDTO recordReqDTO,HttpServletResponse response){
-        if(recordReqDTO.getProjectId()==null){
+    public void getEplTitle(String projectId ,HttpServletResponse response){
+        if(projectId == null){
             writeAjaxJSONResponse(ResultMessageBuilder.build(false,"非法参数！"), response);
             return;
         }
-        JSONArray array = hzEPLManageRecordService.getEPLTittle(recordReqDTO);
+        JSONArray array = hzEPLManageRecordService.getEPLTittle(projectId);
         if(array==null){
             writeAjaxJSONResponse(ResultMessageBuilder.build(false,"网络错误！"), response);
             return;

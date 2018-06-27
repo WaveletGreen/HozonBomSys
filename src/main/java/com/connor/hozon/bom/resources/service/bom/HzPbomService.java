@@ -16,27 +16,6 @@ import java.util.List;
 public interface HzPbomService {
 
     /**
-     * PBOM在线维护 批量新增
-     * @param recordInsertBatchReqDTO
-     * @return
-     */
-    int insertPbomLineMaintainRecords(List<AddHzMbomMaintainRecordReqDTO> recordInsertBatchReqDTO);
-
-    /**
-     * 按条件搜索MBOM 在线维护信息 要迁移
-     * @param reqDTO
-     * @return
-     */
-    List<HzMbomRecordRespDTO> searchPbomLineMaintainRecord(SearchPbomDetailReqDTO reqDTO);
-
-    /**
-     * 按条件搜索PBOM 管理信息
-     * @param reqDTO
-     * @return
-     */
-    List<HzPbomLineRespDTO> searchPbomManageRecord(SearchPbomDetailReqDTO reqDTO);
-
-    /**
      * 插入PBOM维护信息   获取当前登陆者的信息 需要进行权限判断
      * @param recordReqDTO
      * @return
