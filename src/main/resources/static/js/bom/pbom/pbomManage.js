@@ -1,17 +1,30 @@
 $(document).ready((function () {
-    initTable();
+    var projectPuid = $("#project", window.top.document).val();
+    var pBomUrl ="pbom/getBomManage?projectId=" + projectPuid;
+    initTable(pBomUrl);
 }))
 
 function doQuery() {
-    $('#pbomManageTable').bootstrapTable('refresh');    //刷新表格
+    //$('#pbomManageTable').bootstrapTable('refresh');    //刷新表格
+    var projectPuid = $("#project", window.top.document).val();
+    var pBomUrl ="pbom/getBomManage?projectId=" + projectPuid;
+    var level = $("#level").val();
+    pBomUrl+="&level="+level;
+    var pBomOfWhichDept = $("#pBomOfWhichDept").val();
+    pBomUrl+="&pBomOfWhichDept="+pBomOfWhichDept;
+    var lineId = $("#lineId").val();
+    pBomUrl += "&lineId="+lineId;
+    initTable(pBomUrl);
+    $('#pbomManageTable').bootstrapTable('destroy');
+    console.log("有搜索框的参数是："+pBomUrl)
 }
 
-function initTable() {
+function initTable(pBomUrl) {
     var $table = $("#pbomManageTable");
     var column = [];
-    var projectId = $("#project", window.top.document).val();
+    var projectPuid = $("#project", window.top.document).val();
     $.ajax({
-        url: "pbom/manage/title?project=" + projectId,
+        url: "pbom/manage/title?project=" + projectPuid,
         type: "GET",
         success: function (result) {
             var column = [];
@@ -46,7 +59,7 @@ function initTable() {
                 }
             }
             $table.bootstrapTable({
-                url: "pbom/getBomManage?projectId=" + projectId,
+                url:pBomUrl,
                 method: 'GET',
                 dataType: 'json',
                 cache: false,
@@ -55,6 +68,7 @@ function initTable() {
                 height: $(window.parent.document).find("#wrapper").height() - 180,
                 width: $(window).width(),
                 formId: "queryPbomManage",
+                undefinedText: "",//当数据为 undefined 时显示的字符
                 pagination: true,
                 // pageNumber:1,                       //初始化加载第一页，默认第一页
                 pageSize: 20,                       //每页的记录行数（*）
@@ -87,7 +101,7 @@ function initTable() {
                             }
                             window.Ewin.dialog({
                                 title: "添加",
-                                url: "pbom/addPbomManage?projectId=" + projectId + "&eBomPuid=" + rows[0].eBomPuid,
+                                url: "pbom/addPbomManage?projectId=" + projectPuid + "&eBomPuid=" + rows[0].eBomPuid,
                                 gridId: "gridId",
                                 width: 500,
                                 height: 650
@@ -106,7 +120,7 @@ function initTable() {
                             }
                             window.Ewin.dialog({
                                 title: "修改",
-                                url: "pbom/updatePbomManage?projectId=" + projectId + "&eBomPuid=" + rows[0].eBomPuid,
+                                url: "pbom/updatePbomManage?projectId=" + projectPuid + "&eBomPuid=" + rows[0].eBomPuid,
                                 gridId: "gridId",
                                 width: 500,
                                 height: 650

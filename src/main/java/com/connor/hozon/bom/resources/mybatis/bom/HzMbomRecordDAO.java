@@ -35,10 +35,10 @@ public interface HzMbomRecordDAO {
 
     /**
      * 删除BOM维护 通过外键删除
-     * @param pPuid
+     * @param eBomPuid
      * @return
      */
-    int deleteByForeignId(String pPuid);
+    int deleteByForeignId(String eBomPuid);
 
     /**
      * 按条件搜索MBOM在线维护信息

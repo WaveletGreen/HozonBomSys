@@ -1,21 +1,34 @@
 $(document).ready((function () {
-    initTable();
+    var projectPuid = $("#project", window.top.document).val();
+    var mBomUrl = "mbom/record?projectId=" + projectPuid;
+    initTable(mBomUrl);
 }))
 
 
 function doQuery(){
-    $('#eplTable').bootstrapTable('refresh');    //刷新表格
-}
-function initTable(){
+    //$('#eplTable').bootstrapTable('refresh');    //刷新表格
     var projectPuid = $("#project", window.top.document).val();
-    var $table = $("#pbomMaintenanceTable");
+    var mBomUrl = "mbom/record?projectId=" + projectPuid;
+    var level = $("#level").val();
+    mBomUrl+="&level="+level;
+    var pBomOfWhichDept = $("#pBomOfWhichDept").val();
+    mBomUrl+="&pBomOfWhichDept="+pBomOfWhichDept;
+    var lineId = $("#lineId").val();
+    mBomUrl += "&lineId="+lineId;
+    initTable(mBomUrl);
+    $('#mbomMaintenanceTable').bootstrapTable('destroy');
+    console.log("有搜索框的参数是："+mBomUrl)
+}
+function initTable(mBomUrl){
+    var projectPuid = $("#project", window.top.document).val();
+    var $table = $("#mbomMaintenanceTable");
     var column = [];
     $.ajax({
         url: "mbom/manage/title?projectId=" + projectPuid,
         type: "GET",
         success: function (result) {
             var column = [];
-            column.push({field: 'pBomPuid', title: 'puid'});
+            column.push({field: 'eBomPuid', title: 'puid'});
             column.push({field: 'ck', checkbox: true, Width: 50});
             // column.push({field: '',
             //     title: '序号',
@@ -45,7 +58,7 @@ function initTable(){
                 }
             }
             $table.bootstrapTable({
-                url: "mbom/record?projectId=" + projectPuid,
+                url: mBomUrl,
                 method: 'GET',
                 dataType: 'json',
                 cache: false,
@@ -54,6 +67,7 @@ function initTable(){
                 height: $(window.parent.document).find("#wrapper").height() - 180,
                 width: $(window).width(),
                 formId :"queryMbomMain",
+                undefinedText: "",//当数据为 undefined 时显示的字符
                 pagination: true,
                 //pageNumber:1,                       //初始化加载第一页，默认第一页
                 pageSize: 20,                       //每页的记录行数（*）
@@ -79,6 +93,7 @@ function initTable(){
                         iconCls: 'glyphicon glyphicon-plus',
                         handler: function () {
                             var rows = $table.bootstrapTable('getSelections');
+                            console.log(rows);
                             //只能选一条
                             if (rows.length != 1) {
                                 window.Ewin.alert({message: '请选择一条需要添加的数据!'});
@@ -86,7 +101,7 @@ function initTable(){
                             }
                             window.Ewin.dialog({
                                 title: "添加",
-                                url: "mbom/getAddMBom", /*?projectId="+projectId+"&eBomPuid="+rows[0].eBomPuid,*/
+                                url: "mbom/addMBom?projectId="+projectPuid+"&eBomPuid="+rows[0].eBomPuid,
                                 gridId: "gridId",
                                 width: 500,
                                 height: 650
@@ -105,7 +120,7 @@ function initTable(){
                             }
                             window.Ewin.dialog({
                                 title: "修改",
-                                url: "mbom/getUpdateMBom", /*?projectId="+projectId+"&eBomPuid="+rows[0].eBomPuid,*/
+                                url: "mbom/updateMBom?projectId="+projectPuid+"&eBomPuid="+rows[0].eBomPuid,
                                 gridId: "gridId",
                                 width: 500,
                                 height: 650
@@ -126,7 +141,7 @@ function initTable(){
                                     $.ajax({
                                         type: "POST",
                                         //ajax需要添加打包名
-                                        url: "./cfg0/deleteByPuid",
+                                        url: "mbom/delete?eBomPuid="+rows[0].eBomPuid,
                                         //data: JSON.stringify(rows),
                                         contentType: "application/json",
                                         success: function (result) {
@@ -150,7 +165,7 @@ function initTable(){
                     }
                 ],
             });
-            $table.bootstrapTable('hideColumn', 'pBomPuid');
+            $table.bootstrapTable('hideColumn', 'eBomPuid');
         }
     });
 }

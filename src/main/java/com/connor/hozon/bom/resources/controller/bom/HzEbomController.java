@@ -264,11 +264,23 @@ public class HzEbomController extends BaseController {
                 writeAjaxJSONResponse(ResultMessageBuilder.build(false, "零件号不能为空！"), response);
                 return;
             }
+            if(itemId.contains("-")){
+                if(itemId.split("-")[1].length()<4){
+                    writeAjaxJSONResponse(ResultMessageBuilder.build(false, "零件号-后面的长度不能小于4！"), response);
+                    return;
+                }
+            }
         } else if(map.containsKey("bl_item_item_id")){
             String itemID = (String)map.get("bl_item_item_id");
             if(itemID ==null || itemID=="") {
                 writeAjaxJSONResponse(ResultMessageBuilder.build(false, "零件号不能为空！"), response);
                 return;
+            }
+            if(itemID.contains("-")){
+                if(itemID.split("-")[1].length()<4){
+                    writeAjaxJSONResponse(ResultMessageBuilder.build(false, "零件号-后面的长度不能小于4！"), response);
+                    return;
+                }
             }
         }
         User user = UserInfo.getUser();
@@ -302,11 +314,24 @@ public class HzEbomController extends BaseController {
                 writeAjaxJSONResponse(ResultMessageBuilder.build(false, "零件号不能为空！"), response);
                 return;
             }
+            if(itemId.contains("-")){
+                if(itemId.split("-")[1].length()<4){
+                    writeAjaxJSONResponse(ResultMessageBuilder.build(false, "零件号-后面的长度不能小于4！"), response);
+                    return;
+                }
+            }
+
         } else if(map.containsKey("bl_item_item_id")){
             String itemID = (String)map.get("bl_item_item_id");
             if(itemID ==null || itemID=="") {
                 writeAjaxJSONResponse(ResultMessageBuilder.build(false, "零件号不能为空！"), response);
                 return;
+            }
+            if(itemID.contains("-")){
+                if(itemID.split("-")[1].length()<4){
+                    writeAjaxJSONResponse(ResultMessageBuilder.build(false, "零件号-后面的长度不能小于4！"), response);
+                    return;
+                }
             }
         }
         User user = UserInfo.getUser();

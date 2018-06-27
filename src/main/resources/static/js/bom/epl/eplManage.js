@@ -204,6 +204,7 @@ $(document).ready((function () {
                 method: 'get',
                 height: $(window.parent.document).find("#wrapper").height() - 90,
                 width: $(window).width(),
+                undefinedText: "",//当数据为 undefined 时显示的字符
                 showToggle: false,                   //是否显示详细视图和列表视图的切换按钮
                 showRefresh: true,                  //是否显示刷新按钮
                 pagination: true,                   //是否显示分页（*）

@@ -2,30 +2,30 @@
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <!--User: xulf Date: 2018/5/30 Time: 10:46-->
 <body>
-<form id="mbomMainForm" role="form" method="post" action="./pbom/insert/maintain">
-    <input id="eBomPuid" name="eBomPuid" type="text" /><!--th:value="${entity.pBomPuid}"-->
+<form id="mbomMainForm" role="form" method="post" action="mbom/add">
+    <input id="eBomPuid" name="eBomPuid" type="hidden" th:value="${data.eBomPuid}"/><!--th:value="${entity.pBomPuid}"-->
     <div class="form-group">
         <label for="level">层级</label>
-        <input class="form-control" id="level" name="level" type="text"  disabled="disabled"
-
-                placeholder="请输入层级"/><!--th:value="${entity.level}"-->
+        <input class="form-control" id="level" name="level" type="text" disabled="disabled"
+               th:value="${data.level}"
+               placeholder="请输入层级"/><!--th:value="${entity.level}"-->
     </div>
     <div class="form-group">
         <label for="pBomOfWhichDept">专业</label>
-        <input class="form-control" id="pBomOfWhichDept" name="pBomOfWhichDept" type="text"  disabled="disabled"
-
+        <input class="form-control" id="pBomOfWhichDept" name="pBomOfWhichDept" type="text" disabled="disabled"
+               th:value="${data.pBomOfWhichDept}"
                placeholder="请输入专业"/><!--th:value="${entity.pBomOfWhichDept}"-->
     </div>
     <div class="form-group">
         <label for="lineId">零件号</label>
-        <input class="form-control" id="lineId" name="lineId" type="text"  disabled="disabled"
-
+        <input class="form-control" id="lineId" name="lineId" type="text" disabled="disabled"
+               th:value="${data.lineId}"
                placeholder="请输入零件号"/><!--th:value="${entity.lineId}"-->
     </div>
     <div class="form-group">
-        <label for="bomDigifaxId">名称</label>
-        <input class="form-control" id="bomDigifaxId" name="bomDigifaxId" type="text" disabled="disabled"
-
+        <label for="object_name">名称</label>
+        <input class="form-control" id="object_name" name="object_name" type="text" disabled="disabled"
+               th:value="${data.object_name}"
                placeholder="请输入名称"/><!--th:value="${entity.bomDigifaxId}"-->
     </div>
     <div class="form-group">
@@ -131,10 +131,10 @@
                 var url = $("#mbomMainForm", window.top.document).attr('action');
                 var myData = JSON.stringify({
                     "eBomPuid": $("#eBomPuid").val(),
-                    "level": $("#level").val(),
-                    "pBomOfWhichDept": $("#pBomOfWhichDept").val(),
-                    "lineId": $("#lineId").val(),
-                    "bomDigifaxId": $("#bomDigifaxId").val(),
+                    // "level": $("#level").val(),
+                    // "pBomOfWhichDept": $("#pBomOfWhichDept").val(),
+                    // "lineId": $("#lineId").val(),
+                    // "object_name": $("#object_name").val(),
                     "sparePart": $("#sparePart").val(),
                     "sparePartNum": $("#sparePartNum").val(),
                     "processRoute": $("#processRoute").val(),

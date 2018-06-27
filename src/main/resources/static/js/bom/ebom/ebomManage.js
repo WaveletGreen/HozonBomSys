@@ -1,11 +1,27 @@
 $(document).ready((function () {
-    initTable();
-}))
-function doQuery(){
-    $('#ebomManageTable').bootstrapTable('refresh');    //刷新表格
-}
-function initTable(){
     var projectPuid = $("#project", window.top.document).val();
+    var eBomUrl ="ebom/getEBom/list?projectId=" + projectPuid;
+    initTable(eBomUrl);
+}))
+
+
+function doQuery(){
+    //$('#ebomManageTable').bootstrapTable('refresh');    //刷新表格
+    var projectPuid = $("#project", window.top.document).val();
+    var eBomUrl ="ebom/getEBom/list?projectId=" + projectPuid;
+    var level = $("#level").val();
+    eBomUrl+="&level="+level;
+    var pBomOfWhichDept = $("#pBomOfWhichDept").val();
+    eBomUrl+="&pBomOfWhichDept="+pBomOfWhichDept;
+    var lineId = $("#lineId").val();
+    eBomUrl += "&lineId="+lineId;
+    initTable(eBomUrl);
+    $('#ebomManageTable').bootstrapTable('destroy');
+    console.log("有搜索框的参数是："+eBomUrl)
+}
+function initTable(eBomUrl){
+    var projectPuid = $("#project", window.top.document).val();
+    //var eBomUrl ="ebom/getEBom/list?projectId=" + projectPuid
     var $table = $("#ebomManageTable");
     var column = [];
     $.ajax({
@@ -34,14 +50,16 @@ function initTable(){
                 }
             }
             $table.bootstrapTable({
-                url: "ebom/getEBom/list?projectId=" + projectPuid,
-                method: 'get',
+                url: eBomUrl,
+                method: 'GET',
                 dataType: 'json',
                 //cache: false,
                 //striped: true,                              //是否显示行间隔色
                 //sidePagination: "server",           //分页方式：client客户端分页，server服务端分页（*）
                 height: $(window.parent.document).find("#wrapper").height() - 180,
                 width: $(window).width(),
+                formId: "queryEbomManage",
+                undefinedText: "",//当数据为 undefined 时显示的字符
                 pagination: true,
                 // pageNumber:1,                       //初始化加载第一页，默认第一页
                 pageSize: 20,                       //每页的记录行数（*）
@@ -50,10 +68,9 @@ function initTable(){
                 //showExport: true,
                 //exportDataType: 'all',
                 columns: column,
-                formId: "queryEbomManage",
-                sortName: 'id',
+                //sortName: 'id',
                 // sortable: true,                     //是否启用排序
-                sortOrder: "desc",                   //排序方式
+                sortOrder: "asc",                   //排序方式
                 clickToSelect: true,// 单击某一行的时候选中某一条记录
                 //search: true, //是否显示表格搜索，此搜索是客户端搜索，不会进服务端
                 showColumns: true, //是否显示所有的列
