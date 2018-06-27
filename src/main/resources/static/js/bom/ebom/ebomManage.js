@@ -59,6 +59,7 @@ function initTable(eBomUrl){
                 height: $(window.parent.document).find("#wrapper").height() - 180,
                 width: $(window).width(),
                 formId: "queryEbomManage",
+                undefinedText: "",//当数据为 undefined 时显示的字符
                 pagination: true,
                 // pageNumber:1,                       //初始化加载第一页，默认第一页
                 pageSize: 20,                       //每页的记录行数（*）

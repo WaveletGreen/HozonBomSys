@@ -39,7 +39,7 @@ public class HzMbomServiceImpl implements HzMbomService {
                 HzMbomRecordRespDTO respDTO= new HzMbomRecordRespDTO();
                 respDTO.setNo(++num);
                 respDTO.setPuid(record.getPuid());
-                respDTO.seteBomPuid(record.getPuid());
+                respDTO.seteBomPuid(record.getpPuid());
                 Integer is2Y = record.getIs2Y();
                 Integer hasChildren = record.getIsHas();
                 String lineIndex = record.getLineIndex();
