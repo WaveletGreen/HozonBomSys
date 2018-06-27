@@ -10,9 +10,7 @@ import org.springframework.stereotype.Service;
 import sql.pojo.bom.HzMbomLineRecord;
 import sql.redis.SerializeUtil;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
+import java.util.*;
 
 import static com.connor.hozon.bom.resources.service.bom.impl.HzPbomServiceImpl.getLevelAndRank;
 
@@ -41,7 +39,7 @@ public class HzMbomServiceImpl implements HzMbomService {
                 HzMbomRecordRespDTO respDTO= new HzMbomRecordRespDTO();
                 respDTO.setNo(++num);
                 respDTO.setPuid(record.getPuid());
-                respDTO.setEbomPuid(record.getPuid());
+                respDTO.seteBomPuid(record.getPuid());
                 Integer is2Y = record.getIs2Y();
                 Integer hasChildren = record.getIsHas();
                 String lineIndex = record.getLineIndex();
@@ -75,5 +73,53 @@ public class HzMbomServiceImpl implements HzMbomService {
         }catch (Exception e){
             return null;
         }
+    }
+
+
+    @Override
+    public HzMbomRecordRespDTO findHzMbomByPuid(String projectId, String puid) {
+        try{
+            Map<String,Object> map = new HashMap<>();
+            map.put("projectId",projectId);
+            map.put("pPuid",puid);
+            HzMbomLineRecord record = hzMbomRecordDAO.findHzMbomByPuid(map);
+            if(record != null){
+                HzMbomRecordRespDTO respDTO = new HzMbomRecordRespDTO();
+                respDTO.setPuid(record.getPuid());
+                respDTO.seteBomPuid(record.getpPuid());
+                Integer is2Y = record.getIs2Y();
+                Integer hasChildren = record.getIsHas();
+                String lineIndex = record.getLineIndex();
+                String[] strings = getLevelAndRank(lineIndex, is2Y, hasChildren);
+                respDTO.setLevel(strings[0]);//层级
+                respDTO.setLineId(record.getLineID());
+                respDTO.setpBomOfWhichDept(record.getpBomOfWhichDept());
+                byte[] bytes = record.getBomLineBlock();
+                Object obj = SerializeUtil.unserialize(bytes);
+                Object name = null;
+                if (obj instanceof LinkedHashMap) {
+                    if (((LinkedHashMap) obj).size() > 0) {
+                        name =((LinkedHashMap) obj).get("object_name");
+                    }
+                }
+                respDTO.setObject_name((String) name);
+                respDTO.setSparePart(record.getSparePart());
+                respDTO.setSparePartNum(record.getSparePartNum());
+                respDTO.setLaborHour(record.getLaborHour());
+                respDTO.setRhythm(record.getRhythm());
+                respDTO.setSolderJoint(record.getSolderJoint());
+                respDTO.setMachineMaterial(record.getMachineMaterial());
+                respDTO.setStandardPart(record.getStandardPart());
+                respDTO.setTools(record.getTools());
+                respDTO.setWasterProduct(record.getWasterProduct());
+                respDTO.setChange(record.getChange());
+                respDTO.setChangeNum(record.getChangeNum());
+                return  respDTO;
+            }
+
+        }catch (Exception e){
+            return null;
+        }
+        return null;
     }
 }

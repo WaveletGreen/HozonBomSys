@@ -8,6 +8,7 @@ import com.connor.hozon.bom.resources.service.bom.HzMbomService;
 import com.connor.hozon.bom.resources.util.ResultMessageBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -83,7 +84,6 @@ public class HzMbomController extends BaseController {
         tableTitle.put("pBomOfWhichDept", "专业");
         tableTitle.put("lineId", "零件号");
         tableTitle.put("object_name", "名称");
-
         tableTitle.put("sparePart", "备件");
         tableTitle.put("sparePartNum", "备件编号");
         tableTitle.put("processRoute", "工艺路线");
@@ -118,7 +118,7 @@ public class HzMbomController extends BaseController {
         List<Map<String, Object>> _list = new ArrayList<>();
         list.forEach(dto -> {
             Map<String, Object> _res = new HashMap<>();
-            _res.put("eBomPuid", dto.getEbomPuid());
+            _res.put("eBomPuid", dto.geteBomPuid());
             _res.put("puid", dto.getPuid());
             _res.put("No", dto.getNo());
             _res.put("level", dto.getLevel());
@@ -148,13 +148,29 @@ public class HzMbomController extends BaseController {
      * 跳转到MBOM管理的添加页面
      * @return
      */
-    @RequestMapping(value = "getAddMBom", method = RequestMethod.GET)
-    public String getMBomManageAddToPage() {
+    @RequestMapping(value = "addMBom", method = RequestMethod.GET)
+    public String addMBomToPage(String projectId, String eBomPuid, Model model) {
+        HzMbomRecordRespDTO respDTO = hzMbomService.findHzMbomByPuid(projectId,eBomPuid);
+        if(respDTO == null){
+            return "";
+        }
+        HzMbomRecordRespDTO hzMbomRecordRespDTO = new HzMbomRecordRespDTO();
+        hzMbomRecordRespDTO.seteBomPuid(respDTO.geteBomPuid());
+        hzMbomRecordRespDTO.setObject_name(respDTO.getObject_name());
+        hzMbomRecordRespDTO.setLevel(respDTO.getLevel());
+        hzMbomRecordRespDTO.setLineId(respDTO.getLineId());
+        hzMbomRecordRespDTO.setpBomOfWhichDept(respDTO.getpBomOfWhichDept());
+        model.addAttribute("data",hzMbomRecordRespDTO);
         return"bomManage/mbom/mbomMaintenance/addMbomMaintenance";
     }
 
-    @RequestMapping(value = "getUpdateMBom", method = RequestMethod.GET)
-    public String getMBomManageUpdateToPage() {
+    @RequestMapping(value = "updateMBom", method = RequestMethod.GET)
+    public String updateMbomToPage(String projectId,String eBomPuid,Model model) {
+        HzMbomRecordRespDTO respDTO =hzMbomService.findHzMbomByPuid(projectId,eBomPuid);
+        if(respDTO== null){
+            return "";
+        }
+        model.addAttribute("data",respDTO);
         return"bomManage/mbom/mbomMaintenance/updateMbomMaintenance";
     }
 }
