@@ -240,6 +240,12 @@ public class HzPbomController extends BaseController {
             writeAjaxJSONResponse(ResultMessageBuilder.build(false,"非法参数！"),response);
             return;
         }
+        if(reqDTO1.getLineId().contains("-")){
+            if(reqDTO1.getLineId().split("-")[1].length()<4){
+                writeAjaxJSONResponse(ResultMessageBuilder.build(false, "零件号-后面的长度不能小于4！"), response);
+                return;
+            }
+        }
         AddProcessComposeReqDTO reqDTO=new AddProcessComposeReqDTO();
         reqDTO.seteBomContent(obj);
         reqDTO.setLineId(reqDTO1.getLineId());

@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="HzEplManageRecord">
   <resultMap id="BaseResultMap" type="sql.pojo.epl.HzEPLManageRecord">
-    <id column="P_PUID" jdbcType="VARCHAR" property="pPuid" />
+    <id column="PUID" jdbcType="VARCHAR" property="puid" />
     <result column="P_LINE_INDEX" jdbcType="VARCHAR" property="lineIndex" />
     <result column="P_BOM_LINE_IS_HAS" jdbcType="INTEGER" property="isHas" />
     <result column="P_BOM_LINE_ID" jdbcType="VARCHAR" property="lineID" />
