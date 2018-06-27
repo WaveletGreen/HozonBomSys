@@ -70,7 +70,7 @@
         and LENGTH(TRANSLATE(t.P_LINE_INDEX,',0123456789','.'))=#{lineIndex,jdbcType=VARCHAR}
       </if>
       <if test="isHas != null and isHas==0">
-        and (t.P_BOM_LINE_IS_HAS = 0 or t1.P_BOM_LINE_IS_HAS = 1)
+        and (t.P_BOM_LINE_IS_HAS = 0 or t.P_BOM_LINE_IS_HAS = 1)
       </if>
       <if test="isHas != null and isHas==1">
         and t.P_BOM_LINE_IS_HAS = 1
@@ -102,7 +102,7 @@
         and LENGTH(TRANSLATE(t.P_LINE_INDEX,',0123456789','.'))=#{lineIndex,jdbcType=VARCHAR}
       </if>
       <if test="isHas != null and isHas==0">
-        and (t.P_BOM_LINE_IS_HAS = 0 or t1.P_BOM_LINE_IS_HAS = 1)
+        and (t.P_BOM_LINE_IS_HAS = 0 or t.P_BOM_LINE_IS_HAS = 1)
       </if>
       <if test="isHas != null and isHas==1">
         and t.P_BOM_LINE_IS_HAS = 1
