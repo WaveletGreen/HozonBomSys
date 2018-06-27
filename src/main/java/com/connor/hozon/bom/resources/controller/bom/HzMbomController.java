@@ -7,6 +7,7 @@ import com.connor.hozon.bom.resources.dto.request.UpdateMbomReqDTO;
 import com.connor.hozon.bom.resources.dto.response.HzMbomRecordRespDTO;
 import com.connor.hozon.bom.resources.dto.response.OperateResultMessageRespDTO;
 import com.connor.hozon.bom.resources.page.Page;
+import com.connor.hozon.bom.resources.query.HzMbomByPageQuery;
 import com.connor.hozon.bom.resources.service.bom.HzMbomService;
 import com.connor.hozon.bom.resources.util.ResultMessageBuilder;
 import jdk.nashorn.internal.runtime.regexp.joni.constants.OPCode;
@@ -108,13 +109,13 @@ public class HzMbomController extends BaseController {
     /**
      * 分页获取MBOM 记录
      *
-     * @param reqDTO
+     * @param query
      * @return
      */
     @RequestMapping(value = "record", method = RequestMethod.GET)
     @ResponseBody
-    public Map<String, Object> getMbomLineRecord(FindForPageReqDTO reqDTO) {
-        Page<HzMbomRecordRespDTO> page = hzMbomService.fingHzMbomForPage(reqDTO);
+    public Map<String, Object> getMbomLineRecord(HzMbomByPageQuery query) {
+        Page<HzMbomRecordRespDTO> page = hzMbomService.fingHzMbomForPage(query);
         if (page == null) {
             return new HashMap<>();
         }

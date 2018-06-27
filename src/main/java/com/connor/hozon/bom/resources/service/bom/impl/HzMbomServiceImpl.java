@@ -9,6 +9,7 @@ import com.connor.hozon.bom.resources.dto.response.HzMbomRecordRespDTO;
 import com.connor.hozon.bom.resources.dto.response.OperateResultMessageRespDTO;
 import com.connor.hozon.bom.resources.mybatis.bom.HzMbomRecordDAO;
 import com.connor.hozon.bom.resources.page.Page;
+import com.connor.hozon.bom.resources.query.HzMbomByPageQuery;
 import com.connor.hozon.bom.resources.service.bom.HzMbomService;
 import com.connor.hozon.bom.sys.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,12 +34,26 @@ public class HzMbomServiceImpl implements HzMbomService {
 
 
     @Override
-    public Page<HzMbomRecordRespDTO> fingHzMbomForPage(FindForPageReqDTO reqDTO) {
+    public Page<HzMbomRecordRespDTO> fingHzMbomForPage(HzMbomByPageQuery query) {
         try {
-            Page<HzMbomLineRecord> recordPage =hzMbomRecordDAO.findMbomForPage(reqDTO);
-            int num = (reqDTO.getPage()-1)*reqDTO.getLimit();
+            String level = query.getLevel();
+            if (level != null && level!="") {
+                if(level.length()==1 && level.toUpperCase().endsWith("Y")){
+                    query.setIsHas(Integer.valueOf(1));
+                }else {
+                    int length = level.charAt(0) - 48;
+                    if (level.toUpperCase().endsWith("Y")) {
+                        query.setIsHas(Integer.valueOf(1));
+                    } else {
+                        query.setIsHas(Integer.valueOf(0));
+                    }
+                    query.setLineIndex(String.valueOf(length - 1));
+                }
+            }
+            Page<HzMbomLineRecord> recordPage =hzMbomRecordDAO.findMbomForPage(query);
+            int num = (query.getPage()-1)*query.getLimit();
             if(recordPage == null || recordPage.getResult() == null){
-                return  new Page<>(reqDTO.getPage(),reqDTO.getLimit(),0);
+                return  new Page<>(query.getPage(),query.getLimit(),0);
             }
             List<HzMbomLineRecord> lineRecords = recordPage.getResult();
             List<HzMbomRecordRespDTO> respDTOList = new ArrayList<>();
@@ -76,7 +91,7 @@ public class HzMbomServiceImpl implements HzMbomService {
                 respDTO.setChangeNum(record.getChangeNum());
                 respDTOList.add(respDTO);
             }
-            return new Page<>(reqDTO.getPage(),reqDTO.getLimit(),recordPage.getTotalCount(),respDTOList);
+            return new Page<>(query.getPage(),query.getLimit(),recordPage.getTotalCount(),respDTOList);
         }catch (Exception e){
             return null;
         }

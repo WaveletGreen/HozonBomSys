@@ -74,27 +74,74 @@
   </sql>
 
 
+
+
   <!--查询Mbom信息 分页-->
   <select id="HzMbomRecordDAOImpl_getMBomRecord" resultMap="MbomResultMap" parameterType="java.util.HashMap">
-    select t.*,t6.* from HZ_BOM_LINE_RECORD t LEFT OUTER JOIN HZ_MBOM_RECORD t6 ON  t.puid = t6.P_BOM_PUID
+    select t.*,t5.* from HZ_BOM_LINE_RECORD t
+    LEFT OUTER JOIN HZ_BOM_STATE t6 on t.puid = t6.P_BOM_ID
+    LEFT OUTER JOIN HZ_MBOM_RECORD t5 ON  t.puid = T5.P_BOM_PUID
     where t.p_bom_digifax_id=(
     select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(
     select t2.puid from Hz_project_libs t2
     <where>
       t2.puid=#{projectId,jdbcType=VARCHAR}))
+      <if test="pPuid != null and  pPuid!='' " >
+        and t.PUID = #{pPuid,jdbcType=VARCHAR}
+      </if>
+      <if test="lineIndex != null and lineIndex!=''">
+        and LENGTH(TRANSLATE(t.P_LINE_INDEX,',0123456789','.'))=#{lineIndex,jdbcType=VARCHAR}
+      </if>
+      <if test="isHas != null and isHas==0">
+        and (t.P_BOM_LINE_IS_HAS = 0 or t1.P_BOM_LINE_IS_HAS = 1)
+      </if>
+      <if test="isHas != null and isHas==1">
+        and t.P_BOM_LINE_IS_HAS = 1
+      </if>
+      <if test="lineId != null and lineId!=''" >
+        and t.P_BOM_LINE_ID like CONCAT(CONCAT('%',#{lineId,jdbcType=VARCHAR}),'%')
+      </if>
+      <if test="pBomOfWhichDept != null and  pBomOfWhichDept!='' " >
+        and t.P_BOM_OF_WHICH_DEPT like CONCAT(CONCAT('%',#{pBomOfWhichDept,jdbcType=VARCHAR}),'%')
+      </if>
+      and (t6.P_BOM_STATE is null or t6.P_BOM_STATE  <![CDATA[!= ]]>2)
+      and (t5.P_MBOM_STATUS IS NULL OR t5.P_MBOM_STATUS=1)
     </where>
   </select>
 
+
+
+
   <!--查询Mbom信息 总数分页-->
   <select id="HzMbomRecordDAOImpl_getTotalCount" resultType="java.lang.Integer" parameterType="java.util.HashMap">
-    select count(*) from HZ_BOM_LINE_RECORD t LEFT OUTER JOIN HZ_MBOM_RECORD t6 ON  t.puid = t6.P_BOM_PUID
+    select count(*) from HZ_BOM_LINE_RECORD t
+    LEFT OUTER JOIN HZ_BOM_STATE t6 on t.puid = t6.P_BOM_ID
+    LEFT OUTER JOIN HZ_MBOM_RECORD t5 ON  t.puid = T5.P_BOM_PUID
     where t.p_bom_digifax_id=(
     select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(
     select t2.puid from Hz_project_libs t2
     <where>
       t2.puid=#{projectId,jdbcType=VARCHAR}))
+      <if test="lineIndex != null and lineIndex!=''">
+        and LENGTH(TRANSLATE(t.P_LINE_INDEX,',0123456789','.'))=#{lineIndex,jdbcType=VARCHAR}
+      </if>
+      <if test="isHas != null and isHas==0">
+        and (t.P_BOM_LINE_IS_HAS = 0 or t1.P_BOM_LINE_IS_HAS = 1)
+      </if>
+      <if test="isHas != null and isHas==1">
+        and t.P_BOM_LINE_IS_HAS = 1
+      </if>
+      <if test="lineId != null and lineId!=''" >
+        and t.P_BOM_LINE_ID like CONCAT(CONCAT('%',#{lineId,jdbcType=VARCHAR}),'%')
+      </if>
+      <if test="pBomOfWhichDept != null and  pBomOfWhichDept!='' " >
+        and t.P_BOM_OF_WHICH_DEPT like CONCAT(CONCAT('%',#{pBomOfWhichDept,jdbcType=VARCHAR}),'%')
+      </if>
+      and (t6.P_BOM_STATE is null or t6.P_BOM_STATE  <![CDATA[!= ]]>2)
+      and (t5.P_MBOM_STATUS IS NULL OR t5.P_MBOM_STATUS=1)
     </where>
   </select>
+
 
 
 
@@ -121,6 +168,8 @@
       </if>
     </where>
   </select>
+
+
 
   <!--获取一条 EBOM&MBOM信息-->
   <select id="HzMbomRecordDAOImpl_findHzMbomByPuid" resultMap="MbomResultMap" parameterType="java.util.HashMap">
