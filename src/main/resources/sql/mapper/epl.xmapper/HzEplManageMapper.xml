@@ -69,14 +69,17 @@
       <if test="lineIndex != null and lineIndex!=''">
         and LENGTH(TRANSLATE(t1.P_LINE_INDEX,',0123456789','.'))=#{lineIndex,jdbcType=VARCHAR}
       </if>
-      <if test="isHas != null">
-          and t1.P_BOM_LINE_IS_HAS = #{isHas,jdbcType=INTEGER}
+      <if test="isHas != null and isHas==0">
+          and (t1.P_BOM_LINE_IS_HAS = 0 or t1.P_BOM_LINE_IS_HAS = 1)
+      </if>
+      <if test="isHas != null and isHas==1">
+          and t1.P_BOM_LINE_IS_HAS = 1
       </if>
       <if test="lineId != null and lineId!=''" >
-          and t1.P_BOM_LINE_ID = #{lineId,jdbcType=VARCHAR}
+          and t1.P_BOM_LINE_ID like CONCAT(CONCAT('%',#{lineId,jdbcType=VARCHAR}),'%')
       </if>
       <if test="pBomOfWhichDept != null and  pBomOfWhichDept!='' " >
-          and t1.P_BOM_OF_WHICH_DEPT = #{pBomOfWhichDept,jdbcType=VARCHAR}
+          and t1.P_BOM_OF_WHICH_DEPT like CONCAT(CONCAT('%',#{pBomOfWhichDept,jdbcType=VARCHAR}),'%')
       </if>
       </where>
   </select>
@@ -95,14 +98,17 @@
       <if test="lineIndex != null and lineIndex!=''">
           and LENGTH(TRANSLATE(t1.P_LINE_INDEX,',0123456789','.'))=#{lineIndex,jdbcType=VARCHAR}
       </if>
-      <if test="isHas != null">
-          and t1.P_BOM_LINE_IS_HAS = #{isHas,jdbcType=INTEGER}
+      <if test="isHas != null and isHas==0">
+          and (t1.P_BOM_LINE_IS_HAS = 0 or t1.P_BOM_LINE_IS_HAS = 1)
+      </if>
+      <if test="isHas != null and isHas==1">
+          and t1.P_BOM_LINE_IS_HAS = 1
       </if>
       <if test="lineId != null and lineId!=''" >
-          and t1.P_BOM_LINE_ID = #{lineId,jdbcType=VARCHAR}
+          and t1.P_BOM_LINE_ID like CONCAT(CONCAT('%',#{lineId,jdbcType=VARCHAR}),'%')
       </if>
       <if test="pBomOfWhichDept != null and  pBomOfWhichDept!='' " >
-          and t1.P_BOM_OF_WHICH_DEPT = #{pBomOfWhichDept,jdbcType=VARCHAR}
+          and t1.P_BOM_OF_WHICH_DEPT like CONCAT(CONCAT('%',#{pBomOfWhichDept,jdbcType=VARCHAR}),'%')
       </if>
       </where>
   </select>

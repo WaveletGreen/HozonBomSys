@@ -55,13 +55,17 @@ public class HzEPLManageRecordServiceImpl implements HzEPLManageRecordService {
             //需要加入搜索功能
             String level = query.getLevel();
             if (level != null && level!="") {
-                int length = level.charAt(0) - 48;
-                if (level.toUpperCase().endsWith("Y")) {
+                if(level.length()==1 && level.toUpperCase().endsWith("Y")){
                     query.setIsHas(Integer.valueOf(1));
-                } else {
-                    query.setIsHas(Integer.valueOf(0));
+                }else {
+                    int length = level.charAt(0) - 48;
+                    if (level.toUpperCase().endsWith("Y")) {
+                        query.setIsHas(Integer.valueOf(1));
+                    } else {
+                        query.setIsHas(Integer.valueOf(0));
+                    }
+                    query.setLineIndex(String.valueOf(length - 1));
                 }
-                query.setLineIndex(String.valueOf(length-1));
             }
             Page<HzEPLManageRecord> recordPage = hzEplMangeRecordDAO.getEPLListForPage(query);
             if(recordPage == null || recordPage.getResult() == null || recordPage.getResult().size()==0){
