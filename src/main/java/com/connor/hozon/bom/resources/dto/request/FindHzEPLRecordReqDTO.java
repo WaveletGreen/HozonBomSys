@@ -4,7 +4,7 @@ package com.connor.hozon.bom.resources.dto.request;
  * Created by haozt on 2018/06/05
  *
  */
-public class FindHzEPLRecordReqDTO {
+public class FindHzEPLRecordReqDTO extends FindForPageReqDTO{
     /**
      * 项目id
      */

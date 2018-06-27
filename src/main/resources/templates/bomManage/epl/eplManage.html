@@ -1,14 +1,39 @@
 <!DOCTYPE html>
-<html  xmlns:th="http://www.thymeleaf.org">
-<head th:include="include/ofBom">
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="include/headBom"></head>
 <link th:href="@{/css/stage/bom-stage.css}" rel="stylesheet"/>
 <!--<link th:href="@{/css/bom/epl/epl.css}" rel="stylesheet">-->
 <script th:src="@{/js/jq.resizableColumns.js}"></script>
-        <meta charset="UTF-8">
+<meta charset="UTF-8">
 <title>EPL管理</title>
 </head>
 <body>
-        <table  class="table table-striped tableNormalStyle" id="eplTable"></table>
+<div class="panel-body" style="padding-bottom:0px;">
+    <div class="panel panel-default" style="margin-top: 10px;">
+        <div class="panel-body">
+            <form class="form-inline" role="form" style="float: left; width: 100%;margin-left: 20px;" method="get"
+                  id="queryEplManage">
+                <div class="form-group">
+                    <label for="level">层级:</label>
+                    <input type="text" class="form-control" name="level" id="level" placeholder="请输入层级"/>
+                </div>
+                <div class="form-group">
+                    <label for="pBomOfWhichDept">专业:</label>
+                    <input type="text" class="form-control" name="pBomOfWhichDept" id="pBomOfWhichDept"
+                           placeholder="请输入专业"/>
+                </div>
+                <div class="form-group">
+                    <label for="lineId">零件号:</label>
+                    <input type="text" class="form-control" name="lineId" id="lineId" placeholder="请输入零件号"/>
+                </div>
+                <div class="form-group">
+                    <button type="button" id="queryBtn" onclick="doQuery();" class="btn btn-primary">查询</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<table class="table table-striped tableNormalStyle" id="eplTable"></table>
 
 <script th:src="@{/js/bom/epl/epl.js}"></script>
 <script type="text/javascript">

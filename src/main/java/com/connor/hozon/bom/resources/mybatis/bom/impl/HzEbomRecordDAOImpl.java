@@ -4,6 +4,7 @@ import com.connor.hozon.bom.resources.dto.request.FindForPageReqDTO;
 import com.connor.hozon.bom.resources.mybatis.bom.HzEbomRecordDAO;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.page.PageRequest;
+import com.connor.hozon.bom.resources.query.HzEbomByPageQuery;
 import org.springframework.stereotype.Service;
 import sql.BaseSQLUtil;
 import sql.pojo.epl.HzEPLManageRecord;
@@ -19,21 +20,44 @@ import java.util.Map;
 public class HzEbomRecordDAOImpl extends BaseSQLUtil implements HzEbomRecordDAO {
 
     @Override
-    public List<HzEPLManageRecord> getHzEbomList(FindForPageReqDTO reqDTO) {
-        return super.findForList("HzEbomRecordDAOImpl_getHzEbomList",null);
-    }
-
-    @Override
-    public Page<HzEPLManageRecord> getHzEbomPage(FindForPageReqDTO recordReqDTO) {
+    public Page<HzEPLManageRecord> getHzEbomPage(HzEbomByPageQuery query) {
         PageRequest request = new PageRequest();
         Map map = new HashMap();
-        map.put("projectId",recordReqDTO.getProjectId());
-        request.setPageNumber(recordReqDTO.getPage());
-        request.setPageSize(recordReqDTO.getLimit());
+        map.put("projectId",query.getProjectId());
+        map.put("isHas",query.getIsHas());
+        map.put("pBomOfWhichDept",query.getpBomOfWhichDept());
+        map.put("lineIndex",query.getLineIndex());
+        map.put("lineId",query.getLineId());
+        request.setPageNumber(query.getPage());
+        request.setPageSize(query.getLimit());
         request.setFilters(map);
         return super.findForPage("HzEbomRecordDAOImpl_getHzEbomList","HzEbomRecordDAOImpl_findTotalCount",request);
 
     }
 
+    @Override
+    public HzEPLManageRecord findEbomById(String puid,String projectId) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("puid",puid);
+        map.put("projectId",projectId);
+        return (HzEPLManageRecord) super.findForObject("HzEbomRecordDAOImpl_findEbomById",map);
+    }
+
+    /**
+     * 找出一条bomLine的全部子bom
+     * @param map
+     * @return
+     */
+    public List<HzEPLManageRecord> getHzBomLineChildren(Map map){
+        return super.findForList("HzEbomRecordDAOImpl_getHzBomLineChildren",map);
+    }
+
+    @Override
+    public boolean checkItemIdIsRepeat(String projectId, String lineId) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("projectId",projectId);
+        map.put("lineID",lineId);
+        return (int)super.findForObject("HzEbomRecordDAOImpl_checkItemIdIsRepeat",map)>0;
+    }
 
 }

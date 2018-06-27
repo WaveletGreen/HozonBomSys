@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.connor.hozon.bom.resources.dto.request.FindHzEPLRecordReqDTO;
 import com.connor.hozon.bom.resources.dto.response.HzEPLRecordRespDTO;
 import com.connor.hozon.bom.resources.page.Page;
+import com.connor.hozon.bom.resources.query.HzEPLByPageQuery;
 
 import java.util.List;
 
@@ -13,10 +14,10 @@ import java.util.List;
 public interface HzEPLManageRecordService {
     /**
      * 分页获取epl信息
-     * @param recordReqDTO
+     * @param query
      * @return
      */
-    Page<HzEPLRecordRespDTO> getHzEPLRecordForPage(FindHzEPLRecordReqDTO recordReqDTO);
+    Page<HzEPLRecordRespDTO> getHzEPLRecordForPage(HzEPLByPageQuery query);
 
     JSONArray getEPLTittle(FindHzEPLRecordReqDTO recordReqDTO);
 

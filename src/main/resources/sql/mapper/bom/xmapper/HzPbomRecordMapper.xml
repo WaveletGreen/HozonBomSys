@@ -3,19 +3,22 @@
 <mapper namespace="HzPbomRecord">
   <resultMap id="BaseResultMap" type="sql.pojo.bom.HzPbomRecord">
     <id column="P_PUID" jdbcType="VARCHAR" property="puid" />
-    <result column="P_ITEM_RESOURCE" jdbcType="VARCHAR" property="itemResource" />
     <result column="P_RESOURCE" jdbcType="VARCHAR" property="resource" />
-    <result column="P_TYPE" jdbcType="DECIMAL" property="type" />
-    <result column="P_BUY_UNIT" jdbcType="DECIMAL" property="buyUnit" />
+    <result column="P_TYPE" jdbcType="INTEGER" property="type" />
+    <result column="P_BUY_UNIT" jdbcType="INTEGER" property="buyUnit" />
     <result column="P_WORK_SHOP1" jdbcType="VARCHAR" property="workShop1" />
     <result column="P_WORK_SHOP2" jdbcType="VARCHAR" property="workShop2" />
     <result column="P_PRODUCT_LINE" jdbcType="VARCHAR" property="productLine" />
     <result column="P_MOULD_TYPE" jdbcType="VARCHAR" property="mouldType" />
     <result column="P_OUTER_PART" jdbcType="VARCHAR" property="outerPart" />
-    <result column="P_COLOR_PART" jdbcType="DECIMAL" property="colorPart" />
+    <result column="P_COLOR_PART" jdbcType="INTEGER" property="colorPart" />
+    <result column="P_STATION" jdbcType="VARCHAR" property="station" />
+    <result column="P_CREATE_TIME" jdbcType="DATE" property="createTime" />
+    <result column="P_UPDATE_TIME" jdbcType="DATE" property="updateTime" />
+    <result column="P_CREATE_NAME" jdbcType="VARCHAR" property="createName" />
+    <result column="P_UPDATE_NAME" jdbcType="VARCHAR" property="updateName" />
+    <result column="P_PBOM_STATUS" jdbcType="INTEGER" property="status" />
     <result column="P_E_BOM_PUID" jdbcType="VARCHAR" property="eBomPuid" />
-    <result column="P_PBOM_STATUS" jdbcType="DECIMAL" property="pbomStatus" />
-    <result column="P_STATION" jdbcType="DECIMAL" property="station" />
   </resultMap>
 
   <resultMap extends="BaseResultMap"  id="HzPbomLineRecord" type="sql.pojo.bom.HzPbomLineRecord">
@@ -42,8 +45,9 @@
 
 
   <sql id="Base_Column_List">
-    P_PUID, P_ITEM_RESOURCE, P_RESOURCE, P_TYPE, P_BUY_UNIT, P_WORK_SHOP1, P_WORK_SHOP2, P_PRODUCT_LINE,
-    P_MOULD_TYPE, P_OUTER_PART, P_COLOR_PART, P_E_BOM_PUID,P_PBOM_STATUS,P_STATION
+    P_PUID, P_STATION, P_RESOURCE, P_TYPE, P_BUY_UNIT, P_WORK_SHOP1, P_WORK_SHOP2, P_PRODUCT_LINE,
+    P_MOULD_TYPE, P_OUTER_PART, P_COLOR_PART, P_E_BOM_PUID,P_PBOM_STATUS,P_CREATE_TIME,P_UPDATE_TIME
+    P_CREATE_NAME,P_UPDATE_NAME,P_PBOM_STATUS
   </sql>
 
 
@@ -51,15 +55,34 @@
   <!--联表查询 EBOM PBOM信息-->
   <select id="HzPbomRecordDAOImpl_getPbomRecord" resultMap="HzPbomLineRecord" parameterType="java.util.HashMap">
 
-    select t.*,t6.* from HZ_BOM_LINE_RECORD t LEFT OUTER JOIN HZ_PBOM_RECORD t6 ON  t.puid = T6.p_E_BOM_PUID
+    select t.*,t5.* from HZ_BOM_LINE_RECORD t
+    LEFT OUTER JOIN HZ_BOM_STATE t6 on t.puid = t6.P_BOM_ID
+    LEFT OUTER JOIN HZ_PBOM_RECORD t5 ON  t.puid = T5.p_E_BOM_PUID
     where t.p_bom_digifax_id=(
     select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(
     select t2.puid from Hz_project_libs t2
     <where>
       t2.puid=#{projectId,jdbcType=VARCHAR}))
-      <if test="lineId != null and  lineId!='' " >
-        and t.P_BOM_LINE_ID = #{lineId,jdbcType=VARCHAR}
+      <if test="pPuid != null and  pPuid!='' " >
+        and t.PUID = #{pPuid,jdbcType=VARCHAR}
       </if>
+      <if test="lineIndex != null and lineIndex!=''">
+        and LENGTH(TRANSLATE(t.P_LINE_INDEX,',0123456789','.'))=#{lineIndex,jdbcType=VARCHAR}
+      </if>
+      <if test="isHas != null and isHas==0">
+        and (t.P_BOM_LINE_IS_HAS = 0 or t1.P_BOM_LINE_IS_HAS = 1)
+      </if>
+      <if test="isHas != null and isHas==1">
+        and t.P_BOM_LINE_IS_HAS = 1
+      </if>
+      <if test="lineId != null and lineId!=''" >
+        and t.P_BOM_LINE_ID like CONCAT(CONCAT('%',#{lineId,jdbcType=VARCHAR}),'%')
+      </if>
+      <if test="pBomOfWhichDept != null and  pBomOfWhichDept!='' " >
+        and t.P_BOM_OF_WHICH_DEPT like CONCAT(CONCAT('%',#{pBomOfWhichDept,jdbcType=VARCHAR}),'%')
+      </if>
+      and (t6.P_BOM_STATE is null or t6.P_BOM_STATE  <![CDATA[!= ]]>2)
+      and (t5.P_PBOM_STATUS IS NULL OR t5.P_PBOM_STATUS=1)
     </where>
   </select>
 
@@ -67,15 +90,31 @@
   <!--联表查询PBOM 总数-->
   <select id="HzPbomRecordDAOImpl_getTotalCount" resultType="java.lang.Integer" parameterType="java.util.HashMap">
 
-    select count(*) from HZ_BOM_LINE_RECORD t LEFT OUTER JOIN HZ_PBOM_RECORD t6 ON  t.puid = T6.p_E_BOM_PUID
+    select count(*) from HZ_BOM_LINE_RECORD t
+    LEFT OUTER JOIN HZ_BOM_STATE t6 on t.puid = t6.P_BOM_ID
+    LEFT OUTER JOIN HZ_PBOM_RECORD t5 ON  t.puid = T5.p_E_BOM_PUID
     where t.p_bom_digifax_id=(
     select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(
     select t2.puid from Hz_project_libs t2
     <where>
       t2.puid=#{projectId,jdbcType=VARCHAR}))
-      <if test="lineId != null and  lineId!='' " >
-        and t.P_BOM_LINE_ID = #{lineId,jdbcType=VARCHAR}
+      <if test="lineIndex != null and lineIndex!=''">
+        and LENGTH(TRANSLATE(t.P_LINE_INDEX,',0123456789','.'))=#{lineIndex,jdbcType=VARCHAR}
       </if>
+      <if test="isHas != null and isHas==0">
+        and (t.P_BOM_LINE_IS_HAS = 0 or t1.P_BOM_LINE_IS_HAS = 1)
+      </if>
+      <if test="isHas != null and isHas==1">
+        and t.P_BOM_LINE_IS_HAS = 1
+      </if>
+      <if test="lineId != null and lineId!=''" >
+        and t.P_BOM_LINE_ID like CONCAT(CONCAT('%',#{lineId,jdbcType=VARCHAR}),'%')
+      </if>
+      <if test="pBomOfWhichDept != null and  pBomOfWhichDept!='' " >
+        and t.P_BOM_OF_WHICH_DEPT like CONCAT(CONCAT('%',#{pBomOfWhichDept,jdbcType=VARCHAR}),'%')
+      </if>
+      and (t6.P_BOM_STATE is null or t6.P_BOM_STATE  <![CDATA[!= ]]>2)
+      and (t5.P_PBOM_STATUS IS NULL OR t5.P_PBOM_STATUS=1)
     </where>
   </select>
 
@@ -124,43 +163,41 @@
 
 
 
+  <!--获取一条 EBOM&PBOM信息-->
+  <select id="HzPbomRecordDAOImpl_getPbomById" resultMap="HzPbomLineRecord" parameterType="java.util.HashMap">
 
-
-
-  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
-    from HZ_PBOM_RECORD
-    where P_PUID = #{puid,jdbcType=VARCHAR}
+    select t.*,t6.* from HZ_BOM_LINE_RECORD t LEFT OUTER JOIN HZ_PBOM_RECORD t6 ON  t.puid = T6.p_E_BOM_PUID
+    where t.p_bom_digifax_id=(
+    select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(
+    select t2.puid from Hz_project_libs t2
+    <where>
+      t2.puid=#{projectId,jdbcType=VARCHAR}))
+      <if test="lineId != null and  lineId!='' " >
+        and t.P_BOM_LINE_ID = #{lineId,jdbcType=VARCHAR}
+      </if>
+      <if test="pPuid != null and  pPuid!='' " >
+        and t.PUID = #{pPuid,jdbcType=VARCHAR}
+      </if>
+    </where>
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
-    delete from HZ_PBOM_RECORD
-    where P_PUID = #{puid,jdbcType=VARCHAR}
-  </delete>
 
 
-  <insert id="insert" parameterType="sql.pojo.bom.HzPbomRecord">
-    insert into HZ_PBOM_RECORD (P_PUID, P_ITEM_RESOURCE, P_RESOURCE,
-      P_TYPE, P_BUY_UNIT, P_WORK_SHOP1,
-      P_WORK_SHOP2, P_PRODUCT_LINE, P_MOULD_TYPE,
-      P_OUTER_PART, P_COLOR_PART, P_E_BOM_PUID
-      )
-    values (#{puid,jdbcType=VARCHAR}, #{itemResource,jdbcType=VARCHAR}, #{resource,jdbcType=VARCHAR}, 
-      #{type,jdbcType=DECIMAL}, #{buyUnit,jdbcType=DECIMAL}, #{workShop1,jdbcType=VARCHAR}, 
-      #{workShop2,jdbcType=VARCHAR}, #{productLine,jdbcType=VARCHAR}, #{mouldType,jdbcType=VARCHAR}, 
-      #{outerPart,jdbcType=VARCHAR}, #{colorPart,jdbcType=DECIMAL}, #{eBomPuid,jdbcType=VARCHAR}
-      )
-  </insert>
+  <!--获取一条 PBOM记录-->
+  <select id="HzPbomRecordDAOImpl_getHzPbomByEbomPuid" resultMap="BaseResultMap" parameterType="java.lang.String">
 
+    SELECT * FROM HZ_PBOM_RECORD WHERE P_E_BOM_PUID = #{eBomPuid,jdbcType=VARCHAR} AND P_PBOM_STATUS=1
 
+  </select>
+
+  <!--插入-->
   <insert id="HzPbomRecordDAOImpl_insert" parameterType="sql.pojo.bom.HzPbomRecord">
     insert into HZ_PBOM_RECORD
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="puid != null">
         P_PUID,
       </if>
-      <if test="itemResource != null">
-        P_ITEM_RESOURCE,
+      <if test="station != null">
+        P_STATION,
       </if>
       <if test="resource != null">
         P_RESOURCE,
@@ -192,22 +229,31 @@
       <if test="eBomPuid != null">
         P_E_BOM_PUID,
       </if>
+        P_CREATE_TIME,
+        P_UPDATE_TIME,
+      <if test="createName != null">
+        P_CREATE_NAME,
+      </if>
+      <if test="updateName != null">
+        P_UPDATE_NAME,
+      </if>
+        P_PBOM_STATUS
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="puid != null">
         #{puid,jdbcType=VARCHAR},
       </if>
-      <if test="itemResource != null">
-        #{itemResource,jdbcType=VARCHAR},
+      <if test="station != null">
+        #{station,jdbcType=VARCHAR},
       </if>
       <if test="resource != null">
         #{resource,jdbcType=VARCHAR},
       </if>
       <if test="type != null">
-        #{type,jdbcType=DECIMAL},
+        #{type,jdbcType=INTEGER},
       </if>
       <if test="buyUnit != null">
-        #{buyUnit,jdbcType=DECIMAL},
+        #{buyUnit,jdbcType=INTEGER},
       </if>
       <if test="workShop1 != null">
         #{workShop1,jdbcType=VARCHAR},
@@ -225,27 +271,38 @@
         #{outerPart,jdbcType=VARCHAR},
       </if>
       <if test="colorPart != null">
-        #{colorPart,jdbcType=DECIMAL},
+        #{colorPart,jdbcType=INTEGER},
       </if>
       <if test="eBomPuid != null">
         #{eBomPuid,jdbcType=VARCHAR},
       </if>
+      sysdate,
+      sysdate,
+      <if test="createName != null">
+          #{createName,jdbcType=VARCHAR},
+      </if>
+      <if test="updateName != null">
+          #{updateName,jdbcType=VARCHAR},
+      </if>
+      1
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="sql.pojo.bom.HzPbomRecord">
+
+  <!--更新-->
+  <update id="HzPbomRecordDAOImpl_update" parameterType="sql.pojo.bom.HzPbomRecord">
     update HZ_PBOM_RECORD
     <set>
-      <if test="itemResource != null">
-        P_ITEM_RESOURCE = #{itemResource,jdbcType=VARCHAR},
+      <if test="station != null">
+        P_STATION = #{station,jdbcType=VARCHAR},
       </if>
       <if test="resource != null">
         P_RESOURCE = #{resource,jdbcType=VARCHAR},
       </if>
       <if test="type != null">
-        P_TYPE = #{type,jdbcType=DECIMAL},
+        P_TYPE = #{type,jdbcType=INTEGER},
       </if>
       <if test="buyUnit != null">
-        P_BUY_UNIT = #{buyUnit,jdbcType=DECIMAL},
+        P_BUY_UNIT = #{buyUnit,jdbcType=INTEGER},
       </if>
       <if test="workShop1 != null">
         P_WORK_SHOP1 = #{workShop1,jdbcType=VARCHAR},
@@ -263,27 +320,21 @@
         P_OUTER_PART = #{outerPart,jdbcType=VARCHAR},
       </if>
       <if test="colorPart != null">
-        P_COLOR_PART = #{colorPart,jdbcType=DECIMAL},
+        P_COLOR_PART = #{colorPart,jdbcType=INTEGER},
       </if>
-      <if test="eBomPuid != null">
-        P_E_BOM_PUID = #{eBomPuid,jdbcType=VARCHAR},
+       P_UPDATE_TIME =sysdate,
+      <if test="updateName != null">
+          P_UPDATE_NAME = #{updateName,jdbcType=VARCHAR},
       </if>
     </set>
-    where P_PUID = #{puid,jdbcType=VARCHAR}
+    where P_E_BOM_PUID = #{eBomPuid,jdbcType=VARCHAR}
   </update>
-  <update id="updateByPrimaryKey" parameterType="sql.pojo.bom.HzPbomRecord">
+
+
+<!--删除一条记录-->
+  <update id="HzPbomRecordDAOImpl_deleteByForeignId" parameterType="java.lang.String">
     update HZ_PBOM_RECORD
-    set P_ITEM_RESOURCE = #{itemResource,jdbcType=VARCHAR},
-      P_RESOURCE = #{resource,jdbcType=VARCHAR},
-      P_TYPE = #{type,jdbcType=DECIMAL},
-      P_BUY_UNIT = #{buyUnit,jdbcType=DECIMAL},
-      P_WORK_SHOP1 = #{workShop1,jdbcType=VARCHAR},
-      P_WORK_SHOP2 = #{workShop2,jdbcType=VARCHAR},
-      P_PRODUCT_LINE = #{productLine,jdbcType=VARCHAR},
-      P_MOULD_TYPE = #{mouldType,jdbcType=VARCHAR},
-      P_OUTER_PART = #{outerPart,jdbcType=VARCHAR},
-      P_COLOR_PART = #{colorPart,jdbcType=DECIMAL},
-      P_E_BOM_PUID = #{eBomPuid,jdbcType=VARCHAR}
-    where P_PUID = #{puid,jdbcType=VARCHAR}
-  </update>
+    set P_PBOM_STATUS = 0
+    where P_E_BOM_PUID = #{eBomPuid,jdbcType=VARCHAR}
+ </update>
 </mapper>

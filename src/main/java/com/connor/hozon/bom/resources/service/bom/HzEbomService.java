@@ -1,16 +1,77 @@
 package com.connor.hozon.bom.resources.service.bom;
 
 import com.alibaba.fastjson.JSONArray;
+import com.connor.hozon.bom.resources.dto.request.AddHzEbomReqDTO;
+import com.connor.hozon.bom.resources.dto.request.DeleteHzEbomReqDTO;
 import com.connor.hozon.bom.resources.dto.request.FindForPageReqDTO;
+import com.connor.hozon.bom.resources.dto.request.UpdateHzEbomReqDTO;
 import com.connor.hozon.bom.resources.dto.response.HzEbomRespDTO;
+import com.connor.hozon.bom.resources.dto.response.OperateResultMessageRespDTO;
 import com.connor.hozon.bom.resources.page.Page;
+import com.connor.hozon.bom.resources.query.HzEbomByPageQuery;
+import sql.pojo.bom.HzBomLineRecord;
+import sql.pojo.epl.HzEPLManageRecord;
+
+import java.util.List;
+import java.util.Map;
+import sql.pojo.epl.HzEPLManageRecord;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by haozt on 2018/06/06
  */
 public interface HzEbomService {
 
-    Page<HzEbomRespDTO> getHzEbomPage(FindForPageReqDTO recordReqDTO);
+    /**
+     * 分页获取EBOM信息
+     * @param query
+     * @return
+     */
+    Page<HzEbomRespDTO> getHzEbomPage(HzEbomByPageQuery query);
 
-    JSONArray getEbomTitle(FindForPageReqDTO recordReqDTO);
+    /**
+     * 获取EBOM标题信息
+     * @param projectId
+     * @return
+     */
+    JSONArray getEbomTitle(String projectId);
+
+    /**
+     * 查询一条bom信息
+     * @param puid
+     * @param projectId
+     * @return
+     */
+    HzEbomRespDTO fingEbomById(String puid,String projectId);
+
+    /**
+     * 新增EBOM
+     * @param reqDTO
+     * @return
+     */
+    OperateResultMessageRespDTO addHzEbomRecord(AddHzEbomReqDTO reqDTO);
+
+    /**
+     * 更新EBOM
+     * @param reqDTO
+     * @return
+     */
+    OperateResultMessageRespDTO updateHzEbomRecord(UpdateHzEbomReqDTO reqDTO);
+
+    /**
+     * 删除EBOM
+     * @param reqDTO
+     * @return
+     */
+    OperateResultMessageRespDTO deleteHzEbomRecordById(DeleteHzEbomReqDTO reqDTO);
+
+    /**
+     * 找出当前bom的全部子bom  递归查找
+     * @param
+     * @return
+     */
+    List<HzEPLManageRecord> findCurrentBomChildren(String projectId,HzEPLManageRecord record);
+
 }

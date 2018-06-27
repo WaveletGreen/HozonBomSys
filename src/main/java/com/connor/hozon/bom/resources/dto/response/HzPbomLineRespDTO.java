@@ -6,36 +6,36 @@ package com.connor.hozon.bom.resources.dto.response;
  */
 public class HzPbomLineRespDTO {
 
-    private int No;
+    private int No;//1
 
     /**
      * 级别 以2Y层为相对 第1级
      */
-    private String rank;
+    private String rank;//1
 
     /**
      * 层级
      */
-    private String level;
+    private String level;//1
     /**
      * 零件号
      */
-    private String lineId;
+    private String lineId;//1
 
     /**
      * 专业
      */
-    private String pBomOfWhichDept;
+    private String pBomOfWhichDept;//1
 
     /**
      * 分组号
      */
-    private String groupNum;
+    private String groupNum;//1
 
     /**
-     * 零件分类  这个暂时也没有 表字段加了该更过来
+     * 零件分类
      */
-    private Object  h9_IsCommon;
+    private Object  h9_IsCommon;//1
 
     /**
      *PBOM主键id
@@ -44,7 +44,7 @@ public class HzPbomLineRespDTO {
     /**
      *零件来源（自制总成/采购拆分等）
      */
-    private Object H9_Mat_Status;
+    private Object H9_Mat_Status;//1
     /**
      * 来源（自制/采购）
      */
@@ -84,7 +84,19 @@ public class HzPbomLineRespDTO {
     /**
      * 外键id 对应EBOM表的id
      */
-    private String eBomPuid;
+    private String eBomPuid;//1
+    /**
+     * 工位
+     */
+    private String station;
+
+    public String getStation() {
+        return station;
+    }
+
+    public void setStation(String station) {
+        this.station = station;
+    }
 
     public String getRank() {
         return rank;

@@ -1,14 +1,14 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
-<!--User: xulf Date: 2018/5/30 Time: 14:22-->
+<!--User: xulf Date: 2018/5/30 Time: 10:46-->
 <body>
-<form id="pbomMainForm" role="form" method="post" action="./pbom/update/maintain">
-    <input id="pBomPuid" name="pBomPuid" type="hidden" /><!--th:value="${entity.pBomPuid}"-->
+<form id="mbomMainForm" role="form" method="post" action="./pbom/insert/maintain">
+    <input id="eBomPuid" name="eBomPuid" type="text" /><!--th:value="${entity.pBomPuid}"-->
     <div class="form-group">
         <label for="level">层级</label>
         <input class="form-control" id="level" name="level" type="text"  disabled="disabled"
 
-               placeholder="请输入层级"/><!--th:value="${entity.level}"-->
+                placeholder="请输入层级"/><!--th:value="${entity.level}"-->
     </div>
     <div class="form-group">
         <label for="pBomOfWhichDept">专业</label>
@@ -105,7 +105,7 @@
 <script th:inline="javascript">
     <![CDATA[
     $(function () {
-        $('#pbomMainForm').bootstrapValidator({
+        $('#mbomMainForm').bootstrapValidator({
             message: 'This value is not valid',
             feedbackIcons: {
                 valid: 'glyphicon glyphicon-ok',
@@ -125,12 +125,12 @@
         });
         // 绑定dialog的确定按钮的监听事件
         $("#btnOk", window.top.document).click(function () {
-            var bootstrapValidator = $("#pbomMainForm", window.top.document).data('bootstrapValidator');
+            var bootstrapValidator = $("#mbomMainForm", window.top.document).data('bootstrapValidator');
             bootstrapValidator.validate();
             if (bootstrapValidator.isValid()) {
-                var url = $("#pbomMainForm", window.top.document).attr('action');
+                var url = $("#mbomMainForm", window.top.document).attr('action');
                 var myData = JSON.stringify({
-                    "pBomPuid": $("#pBomPuid").val(),
+                    "eBomPuid": $("#eBomPuid").val(),
                     "level": $("#level").val(),
                     "pBomOfWhichDept": $("#pBomOfWhichDept").val(),
                     "lineId": $("#lineId").val(),
@@ -148,6 +148,7 @@
                     "change": $("#change").val(),
                     "changeNum": $("#changeNum").val()
                 });
+                console.log(myData);
                 $.ajax({
                     contentType:
                         "application/json",
@@ -161,13 +162,10 @@
                             $('body', window.top.document).find('.modal-backdrop').remove();
                             // jquery 调用刷新当前操作的table页面的refresh方法
                             $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
-                            if (result)
-                                window.Ewin.alert({message: '修改数据成功!'});
-                            else
-                                window.Ewin.alert({message: '修改数据失败!'});
+                            window.Ewin.alert({message: result.errMsg});
                         },
                     error: function (status) {
-                        window.Ewin.alert({message: status.status + ':修改数据失败!'});
+                        window.Ewin.alert({message: status.status + ':添加数据失败!'});
                     }
                 });
             }

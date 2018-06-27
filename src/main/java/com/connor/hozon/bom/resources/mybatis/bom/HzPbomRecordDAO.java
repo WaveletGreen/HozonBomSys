@@ -2,6 +2,7 @@ package com.connor.hozon.bom.resources.mybatis.bom;
 
 import com.connor.hozon.bom.resources.dto.request.FindForPageReqDTO;
 import com.connor.hozon.bom.resources.page.Page;
+import com.connor.hozon.bom.resources.query.HzPbomByPageQuery;
 import sql.pojo.bom.HzBomLineRecord;
 import sql.pojo.bom.HzPbomLineRecord;
 import sql.pojo.bom.HzPbomRecord;
@@ -13,12 +14,9 @@ import java.util.Map;
  * Created by haozt on 2018/5/25
  */
 public interface HzPbomRecordDAO {
-    /**
-     * 获取PBOM管理维护信息
-     * @return
-     */
-    List<HzPbomLineRecord> getPbomRecord(Map<String,Object> map);
 
+
+    HzPbomLineRecord getPbomById(Map<String,Object> map);
     /**
      * 按条件搜索Pbom管理维护信息
      * @return
@@ -52,6 +50,17 @@ public interface HzPbomRecordDAO {
      */
     List<HzPbomLineRecord> getHzPbomById(Map<String,Object> map);
 
+    /**
+     * 分页获取pbom信息
+     * @param query
+     * @return
+     */
+    Page<HzPbomLineRecord>  getHzPbomRecordByPage(HzPbomByPageQuery query);
 
-    Page<HzPbomLineRecord>  getHzPbomRecordByPage(FindForPageReqDTO reqDTO);
+    /**
+     * 查询一条pbom 根据外键id
+     * @param eBomPuid
+     * @return
+     */
+    HzPbomRecord getHzPbomByEbomPuid(String eBomPuid);
 }

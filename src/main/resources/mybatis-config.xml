@@ -45,7 +45,6 @@
         <!--bom-->
         <mapper resource="sql/mapper/bom/xmapper/HzBomMainRecordMapper.xml"/>
         <mapper resource="sql/mapper/bom/xmapper/HzBomLineRecordMapper.xml"/>
-        <mapper resource="sql/mapper/bom/xmapper/HzPbomMaintainRecordMapper.xml"/>
         <mapper resource="sql/mapper/bom/xmapper/HzPbomRecordMapper.xml"/>
         <mapper resource="sql/mapper/bom/xmapper/HzMbomRecordMapper.xml"/>
         <mapper resource="sql/mapper/bom/xmapper/HzBomStateMapper.xml"/>

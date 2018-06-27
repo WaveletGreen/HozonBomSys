@@ -4,6 +4,7 @@ import com.connor.hozon.bom.resources.dto.request.FindForPageReqDTO;
 import com.connor.hozon.bom.resources.mybatis.bom.HzMbomRecordDAO;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.page.PageRequest;
+import com.connor.hozon.bom.resources.query.HzMbomByPageQuery;
 import org.springframework.stereotype.Service;
 import sql.BaseSQLUtil;
 import sql.pojo.bom.HzBomLineRecord;
@@ -27,9 +28,8 @@ public class HzMbomRecordDAOImpl extends BaseSQLUtil implements HzMbomRecordDAO 
     }
 
     @Override
-    public List<HzMbomLineRecord> getMBomMaintainRecord() {
-        return super.findForList("HzMbomRecordDAOImpl_getMBomRecord",null);
-
+    public int insert(HzMbomRecord record) {
+        return super.insert("HzMbomRecordDAOImpl_insert",record);
     }
 
     @Override
@@ -46,14 +46,29 @@ public class HzMbomRecordDAOImpl extends BaseSQLUtil implements HzMbomRecordDAO 
     }
 
     @Override
-    public Page<HzMbomLineRecord> findMbomForPage(FindForPageReqDTO reqDTO) {
+    public Page<HzMbomLineRecord> findMbomForPage(HzMbomByPageQuery query) {
         PageRequest request = new PageRequest();
         Map map = new HashMap();
-        map.put("projectId",reqDTO.getProjectId());
-        request.setPageNumber(reqDTO.getPage());
-        request.setPageSize(reqDTO.getLimit());
+        map.put("projectId",query.getProjectId());
+        map.put("isHas",query.getIsHas());
+        map.put("pBomOfWhichDept",query.getpBomOfWhichDept());
+        map.put("lineIndex",query.getLineIndex());
+        map.put("lineId",query.getLineId());
+        request.setPageNumber(query.getPage());
+        request.setPageSize(query.getLimit());
         request.setFilters(map);
         return super.findForPage("HzMbomRecordDAOImpl_getMBomRecord","HzMbomRecordDAOImpl_getTotalCount",request);
 
+    }
+
+    @Override
+    public HzMbomLineRecord findHzMbomByPuid(Map<String, Object> map) {
+        return (HzMbomLineRecord) super.findForObject("HzMbomRecordDAOImpl_findHzMbomByPuid",map);
+    }
+
+    @Override
+    public HzMbomRecord findHzMbomByeBomPuid(String eBomPuid) {
+
+        return (HzMbomRecord)super.findForObject("HzMbomRecordDAOImpl_findHzMbomByeBomPuid",eBomPuid);
     }
 }

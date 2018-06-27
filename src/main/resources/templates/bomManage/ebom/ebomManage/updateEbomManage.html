@@ -2,277 +2,18 @@
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <!--User: xulf Date: 2018/6/4 Time: 15:10-->
 <body>
-<form id="ebomMainForm" role="form" method="post" action="./pbom/update/manage">
-    <input id="eBomPuid" name="eBomPuid" type="hidden" /><!--th:value="${entity.eBomPuid}"-->
-    <div class="form-group">
-        <label for="level">层级</label>
-        <input class="form-control" id="level" name="level" type="text"
-
-               placeholder="请输入层级"/><!--th:value="${entity.level}"-->
-    </div>
-    <div class="form-group">
-        <label for="pBomOfWhichDept">专业</label>
-        <input class="form-control" id="pBomOfWhichDept" name="pBomOfWhichDept" type="text"
-
-               placeholder="请输入专业"/><!--th:value="${entity.pBomOfWhichDept}"-->
-    </div>
-    <div class="form-group">
-        <label for="">级别</label>
-        <input class="form-control" id="" name="" type="text"
-
-               placeholder="请输入级别"/><!--th:value="${entity.}"-->
-    </div>
-    <div class="form-group">
-        <label for="groupNum">分组号</label>
-        <input class="form-control" id="groupNum" name="groupNum" type="text"
-
-               placeholder="请输入分组号号"/><!--th:value="${entity.groupNum}"-->
-    </div>
-    <div class="form-group">
-        <label for="lineId">零件号</label>
-        <input class="form-control" id="lineId" name="lineId" type="text"
-
-               placeholder="请输入零件号"/><!--th:value="${entity.lineId}"-->
-    </div>
-    <div class="form-group">
-        <label for="">名称</label>
-        <input class="form-control" id="" name="" type="text"
-
-               placeholder="请输入名称"/><!--th:value="${entity.}"-->
-    </div>
-    <div class="form-group">
-        <label for="">英文名称</label>
-        <input class="form-control" id="" name="" type="text"
-
-               placeholder="请输入英文名称"/><!--th:value="${entity.}"-->
-    </div>
-    <div class="form-group">
-        <label for="">单位</label>
-        <input class="form-control" id="" name="" type="text"
-
-               placeholder="请输入单位"/><!--th:value="${entity.}"-->
-    </div>
-    <div class="form-group">
-        <label for="">分时租赁低配</label>
-        <input class="form-control" id="" name="" type="text"
-
-               placeholder="请输入分时租赁低配"/><!--th:value="${entity.}"-->
-    </div>
-    <div class="form-group">
-        <label for="">分时租赁高配</label>
-        <input class="form-control" id="" name="" type="text"
-
-               placeholder="请输入分时租赁高配"/><!--th:value="${entity.}"-->
-    </div>
-    <div class="form-group">
-        <label for="">图号</label>
-        <input class="form-control" id="" name="" type="text"
-
-               placeholder="请输入图号"/><!--th:value="${entity.}"-->
-    </div>
-    <div class="form-group">
-        <label for="">安装图号</label>
-        <input class="form-control" id="" name="" type="text"
-
-               placeholder="请输入安装图号"/><!--th:value="${entity.}"-->
-    </div>
-    <div class="form-group">
-        <label for="">图幅</label>
-        <input class="form-control" id="" name="" type="text"
-
-               placeholder="请输入图幅"/><!--th:value="${entity.}"-->
-    </div>
-    <div class="form-group">
-        <label for="">规格</label>
-        <input class="form-control" id="" name="" type="text"
-
-               placeholder="请输入规格"/><!--th:value="${entity.}"-->
-    </div>
-    <div class="form-group">
-        <label for="">料厚</label>
-        <input class="form-control" id="" name="" type="text"
-
-               placeholder="请输入料厚"/><!--th:value="${entity.}"-->
-    </div>
-    <div class="form-group">
-        <label for="">材料1</label>
-        <input class="form-control" id="" name="" type="text"
-
-               placeholder="请输入材料1"/><!--th:value="${entity.}"-->
-    </div>
-    <div class="form-group">
-        <label for="">材料2</label>
-        <input class="form-control" id="" name="" type="text"
-
-               placeholder="请输入材料2"/><!--th:value="${entity.}"-->
-    </div>
-    <div class="form-group">
-        <label for="">材料3</label>
-        <input class="form-control" id="" name="" type="text"
-
-               placeholder="请输入材料3"/><!--th:value="${entity.}"-->
-    </div>
-    <div class="form-group">
-        <label for="">密度</label>
-        <input class="form-control" id="" name="" type="text"
-
-               placeholder="请输入密度"/><!--th:value="${entity.}"-->
-    </div>
-    <div class="form-group">
-        <label for="">材料标准</label>
-        <input class="form-control" id="" name="" type="text"
-
-               placeholder="请输入材料标准"/><!--th:value="${entity.}"-->
-    </div>
-    <div class="form-group">
-        <label for="">表面处理</label>
-        <input class="form-control" id="" name="" type="text"
-
-               placeholder="请输入表面处理"/><!--th:value="${entity.}"-->
-    </div>
-    <div class="form-group">
-        <label for="">纹理编号/色彩编号</label>
-        <input class="form-control" id="" name="" type="text"
-
-               placeholder="请输入纹理编号/色彩编号"/><!--th:value="${entity.}"-->
-    </div>
-    <div class="form-group">
-        <label for="">制造工艺</label>
-        <input class="form-control" id="" name="" type="text"
-
-               placeholder="请输入制造工艺"/><!--th:value="${entity.}"-->
-    </div>
-    <div class="form-group">
-        <label for="">对称</label>
-        <input class="form-control" id="" name="" type="text"
-
-               placeholder="请输入对称"/><!--th:value="${entity.}"-->
-    </div>
-    <div class="form-group">
-        <label for="">重要度</label>
-        <input class="form-control" id="" name="" type="text"
-
-               placeholder="请输入重要度"/><!--th:value="${entity.}"-->
-    </div>
-    <div class="form-group">
-        <label for="">是否法规件</label>
-        <input class="form-control" id="" name="" type="text"
-
-               placeholder="请输入是否法规件"/><!--th:value="${entity.}"-->
-    </div>
-    <div class="form-group">
-        <label for="">法规件型号</label>
-        <input class="form-control" id="" name="" type="text"
-
-               placeholder="请输入法规件型号"/><!--th:value="${entity.}"-->
-    </div>
-    <div class="form-group">
-        <label for="">黑白灰匣子件</label>
-        <input class="form-control" id="" name="" type="text"
-
-               placeholder="请输入黑白灰匣子件"/><!--th:value="${entity.}"-->
-    </div>
-    <div class="form-group">
-        <label for="">开发类型</label>
-        <input class="form-control" id="" name="" type="text"
-
-               placeholder="请输入开发类型"/><!--th:value="${entity.}"-->
-    </div>
-    <div class="form-group">
-        <label for="">数据版本</label>
-        <input class="form-control" id="" name="" type="text"
-
-               placeholder="请输入数据版本"/><!--th:value="${entity.}"-->
-    </div>
-    <div class="form-group">
-        <label for="">目标重量</label>
-        <input class="form-control" id="" name="" type="text"
-
-               placeholder="请输入目标重量"/><!--th:value="${entity.}"-->
-    </div>
-    <div class="form-group">
-        <label for="">预估重量</label>
-        <input class="form-control" id="" name="" type="text"
-
-               placeholder="请输入预估重量"/><!--th:value="${entity.}"-->
-    </div>
-    <div class="form-group">
-        <label for="">实际重量</label>
-        <input class="form-control" id="" name="" type="text"
-
-               placeholder="请输入实际重量"/><!--th:value="${entity.}"-->
-    </div>
-    <div class="form-group">
-        <label for="">紧固件规格</label>
-        <input class="form-control" id="" name="" type="text"
-
-               placeholder="请输入紧固件规格"/><!--th:value="${entity.}"-->
-    </div>
-    <div class="form-group">
-        <label for="">紧固件性能等级</label>
-        <input class="form-control" id="" name="" type="text"
-
-               placeholder="请输入紧固件性能等级"/><!--th:value="${entity.}"-->
-    </div>
-    <div class="form-group">
-        <label for="">扭矩</label>
-        <input class="form-control" id="" name="" type="text"
-
-               placeholder="请输入扭矩"/><!--th:value="${entity.}"-->
-    </div>
-    <div class="form-group">
-        <label for="">专业部门</label>
-        <input class="form-control" id="" name="" type="text"
-
-               placeholder="请输入专业部门"/><!--th:value="${entity.}"-->
-    </div>
-    <div class="form-group">
-        <label for="">责任工程师</label>
-        <input class="form-control" id="" name="" type="text"
-
-               placeholder="请输入责任工程师"/><!--th:value="${entity.}"-->
-    </div>
-    <div class="form-group">
-        <label for="">供应商</label>
-        <input class="form-control" id="" name="" type="text"
-
-               placeholder="请输入供应商"/><!--th:value="${entity.}"-->
-    </div>
-    <div class="form-group">
-        <label for="">供应商代码</label>
-        <input class="form-control" id="" name="" type="text"
-
-               placeholder="请输入供应商代码"/><!--th:value="${entity.}"-->
-    </div>
-    <div class="form-group">
-        <label for="">采购工程师</label>
-        <input class="form-control" id="" name="" type="text"
-
-               placeholder="请输入采购工程师"/><!--th:value="${entity.}"-->
-    </div>
-    <div class="form-group">
-        <label for="">备注</label>
-        <input class="form-control" id="" name="" type="text"
-
-               placeholder="请输入备注"/><!--th:value="${entity.}"-->
-    </div>
-    <div class="form-group">
-        <label for="">零件分类</label>
-        <input class="form-control" id="" name="" type="text"
-
-               placeholder="请输入零件分类"/><!--th:value="${entity.}"-->
-    </div>
-    <div class="form-group">
-        <label for="">零部件来源</label>
-        <input class="form-control" id="" name="" type="text"
-
-               placeholder="请输入零部件来源"/><!--th:value="${entity.}"-->
+<form id="ebomMainForm" role="form" method="post" action="ebom/update/ebom">
+    <input id="puid" name="puid" type="hidden" th:value="${puid}"/>
+    <div class="form-group" th:each="_data,c:${data.get(0)}">
+        <label class="control-label" th:text="${_data}"></label>
+        <input class="form-control" th:id="${data.get(1)[c.index]}" th:name="${data.get(1)[c.index]}" type="text"
+         th:value="${data.get(2)[c.index]}"      th:placeholder="${'请输入'+_data}"/><!--th:value="${entity.level}"-->
     </div>
 </form>
 <script th:inline="javascript">
     <![CDATA[
     $(function () {
-        $('#pbomMainForm').bootstrapValidator({
+        $('#ebomMainForm').bootstrapValidator({
             message: 'This value is not valid',
             feedbackIcons: {
                 valid: 'glyphicon glyphicon-ok',
@@ -280,11 +21,11 @@
                 validating: 'glyphicon glyphicon-refresh'
             },
             fields: {
-                level: {
-                    message: '层级验证失败',
+                item_id: {
+                    message: '零组件验证失败',
                     validators: {
                         notEmpty: {
-                            message: '层级不能为空'
+                            message: '零组件不能为空'
                         }
                     }
                 },
@@ -292,11 +33,14 @@
         });
         // 绑定dialog的确定按钮的监听事件
         $("#btnOk", window.top.document).click(function () {
-            var bootstrapValidator = $("#pbomMainForm", window.top.document).data('bootstrapValidator');
+            var bootstrapValidator = $("#ebomMainForm", window.top.document).data('bootstrapValidator');
             bootstrapValidator.validate();
             if (bootstrapValidator.isValid()) {
-                var url = $("#pbomMainForm", window.top.document).attr('action');
-                var myData = JSON.stringify({
+                var url = $("#ebomMainForm", window.top.document).attr('action');
+                var projectPuid = $("#project", window.top.document).val();
+                var puid = $("#puid").val();
+                // alert(puid);
+                /*var myData = JSON.stringify({
                     "pBomPuid": $("#pBomPuid").val(),
                     "level": $("#level").val(),
                     "pBomOfWhichDept": $("#pBomOfWhichDept").val(),
@@ -314,24 +58,32 @@
                     "wasterProduct": $("#wasterProduct").val(),
                     "change": $("#change").val(),
                     "changeNum": $("#changeNum").val()
-                });
+                });*/
+                var data = {};
+                var _d = $("#ebomMainForm").serializeArray();
+                for (var p in _d) {
+                    data[_d[p].name] = _d[p].value;
+                }
+                // console.log(data);
+                // console.log(JSON.stringify(data));
                 $.ajax({
                     contentType:
                         "application/json",
                     type:
                         'POST',
-                    url: url,
-                    data: myData,
+                    url: url+"?projectId="+projectPuid,
+                    data: JSON.stringify(data),
                     success:
                         function (result) {
                             $('.modal-dialog', window.top.document).parent('div').remove()
                             $('body', window.top.document).find('.modal-backdrop').remove();
                             // jquery 调用刷新当前操作的table页面的refresh方法
                             $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
-                            if (result)
+                            /*if (result)
                                 window.Ewin.alert({message: '修改数据成功!'});
                             else
-                                window.Ewin.alert({message: '修改数据失败!'});
+                                window.Ewin.alert({message: '修改数据失败!'});*/
+                            window.Ewin.alert({message:result.errMsg})
                         },
                     error: function (status) {
                         window.Ewin.alert({message: status.status + ':修改数据失败!'});

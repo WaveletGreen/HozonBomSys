@@ -3,11 +3,7 @@ package com.connor.hozon.bom.resources.dto.request;
 /**
  * Created by haozt on 2018/5/29
  */
-public class InsertHzPbomRecordReqDTO {
-    /**
-     *零件来源（自制总成/采购拆分等）
-     */
-    private String itemResource;
+public class AddHzPbomRecordReqDTO {
     /**
      * 来源（自制/采购）
      */
@@ -49,12 +45,17 @@ public class InsertHzPbomRecordReqDTO {
      */
     private String eBomPuid;
 
-    public String getItemResource() {
-        return itemResource;
+    /**
+     * 工位
+     */
+    private  String station;
+
+    public String getStation() {
+        return station;
     }
 
-    public void setItemResource(String itemResource) {
-        this.itemResource = itemResource;
+    public void setStation(String station) {
+        this.station = station;
     }
 
     public String getResource() {

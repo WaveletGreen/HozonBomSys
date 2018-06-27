@@ -4,7 +4,9 @@ import com.alibaba.fastjson.JSONArray;
 import com.connor.hozon.bom.resources.dto.request.*;
 import com.connor.hozon.bom.resources.dto.response.HzMbomRecordRespDTO;
 import com.connor.hozon.bom.resources.dto.response.HzPbomLineRespDTO;
+import com.connor.hozon.bom.resources.dto.response.OperateResultMessageRespDTO;
 import com.connor.hozon.bom.resources.page.Page;
+import com.connor.hozon.bom.resources.query.HzPbomByPageQuery;
 
 import java.util.List;
 
@@ -18,21 +20,7 @@ public interface HzPbomService {
      * @param recordInsertBatchReqDTO
      * @return
      */
-    int insertPbomLineMaintainRecords(List<InsertHzMbomMaintainRecordReqDTO> recordInsertBatchReqDTO);
-
-    /**
-     * PBOM在线维护 编辑BOM信息
-     * @param recordReqDTO
-     * @return
-     */
-    int updatePbomLineMaintainRecord(UpdateHzPbomMaintainRecordReqDTO recordReqDTO);
-
-
-    /**
-     * 获取PBOM信息
-     * @return
-     */
-    List<HzPbomLineRespDTO> getHzPbomLineRecord(HzPbomProcessComposeReqDTO reqDTO);
+    int insertPbomLineMaintainRecords(List<AddHzMbomMaintainRecordReqDTO> recordInsertBatchReqDTO);
 
     /**
      * 按条件搜索MBOM 在线维护信息 要迁移
@@ -53,28 +41,21 @@ public interface HzPbomService {
      * @param recordReqDTO
      * @return
      */
-    int insertHzPbomRecord(InsertHzPbomRecordReqDTO recordReqDTO);
+    OperateResultMessageRespDTO insertHzPbomRecord(AddHzPbomRecordReqDTO recordReqDTO);
 
     /**
      * PBOM维护 编辑 获取当前登录这信息 进行权限判断
      * @param recordReqDTO
      * @return
      */
-    int updateHzPbomRecord(UpdateHzPbomRecordReqDTO recordReqDTO);
+    OperateResultMessageRespDTO updateHzPbomRecord(UpdateHzPbomRecordReqDTO recordReqDTO);
 
     /**
      * PBOM维护 删除  获取当前登录者的信息 进行权限判断
-     * @param foreignPuid
+     * @param ebomPuid
      * @return
      */
-    int deleteHzPbomRecordByForeignId(String foreignPuid);
-
-    /**
-     *  获取pbom全部信息
-     * @return
-     */
-    JSONArray getHzPbomRecord(HzPbomProcessComposeReqDTO reqDTO);
-
+    OperateResultMessageRespDTO deleteHzPbomRecordByForeignId(String ebomPuid);
     /**
      * 获取PBOM信息 工艺合件
      * @param reqDTO
@@ -83,7 +64,7 @@ public interface HzPbomService {
     JSONArray getPbomForProcessCompose(HzPbomProcessComposeReqDTO reqDTO);
 
     /**
-     * 获取一条PBOM详情 通过零件号
+     * 获取一条PBOM详情 通过零件号或者puid
      * @param reqDTO
      * @return
      */
@@ -97,6 +78,18 @@ public interface HzPbomService {
     int addPbomProcessCompose(AddProcessComposeReqDTO reqDTO);
 
 
-    Page<HzPbomLineRespDTO> getHzPbomRecordPage(FindForPageReqDTO reqDTO);
+    /**
+     * 分页获取pbom信息
+     * @param query
+     * @return
+     */
+    Page<HzPbomLineRespDTO> getHzPbomRecordPage(HzPbomByPageQuery query);
 
+    /**
+     * 获取一条pbom信息（包含部分ebom信息）
+     * @param projectId
+     * @param puid
+     * @return
+     */
+    HzPbomLineRespDTO getHzPbomByPuid(String projectId,String puid);
 }

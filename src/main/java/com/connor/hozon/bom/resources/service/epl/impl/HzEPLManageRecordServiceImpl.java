@@ -10,6 +10,7 @@ import com.connor.hozon.bom.resources.dto.response.HzEPLRecordRespDTO;
 import com.connor.hozon.bom.resources.mybatis.bom.HzPbomRecordDAO;
 import com.connor.hozon.bom.resources.mybatis.epl.HzEplMangeRecordDAO;
 import com.connor.hozon.bom.resources.page.Page;
+import com.connor.hozon.bom.resources.query.HzEPLByPageQuery;
 import com.connor.hozon.bom.resources.service.bom.impl.HzPbomServiceImpl;
 import com.connor.hozon.bom.resources.service.epl.HzEPLManageRecordService;
 import com.connor.hozon.bom.resources.util.ListUtil;
@@ -45,15 +46,30 @@ public class HzEPLManageRecordServiceImpl implements HzEPLManageRecordService {
     @Autowired
     private HzBomLineRecordDaoImpl hzBomLineRecordDao;
     @Override
-    public Page<HzEPLRecordRespDTO> getHzEPLRecordForPage(FindHzEPLRecordReqDTO recordReqDTO) {
+    public Page<HzEPLRecordRespDTO> getHzEPLRecordForPage(HzEPLByPageQuery query) {
         try{
-            int num = (recordReqDTO.getPage()-1)*recordReqDTO.getLimit();
+            int num = (query.getPage()-1)*query.getLimit();
             HzEPLRecordRespDTO recordRespDTO = new HzEPLRecordRespDTO();
             JSONArray array = new JSONArray();
             List<HzEPLRecordRespDTO> recordRespDTOList = new ArrayList<>();
-            Page<HzEPLManageRecord> recordPage = hzEplMangeRecordDAO.getEPLListForPage(recordReqDTO);
+            //需要加入搜索功能
+            String level = query.getLevel();
+            if (level != null && level!="") {
+                if(level.length()==1 && level.toUpperCase().endsWith("Y")){
+                    query.setIsHas(Integer.valueOf(1));
+                }else {
+                    int length = level.charAt(0) - 48;
+                    if (level.toUpperCase().endsWith("Y")) {
+                        query.setIsHas(Integer.valueOf(1));
+                    } else {
+                        query.setIsHas(Integer.valueOf(0));
+                    }
+                    query.setLineIndex(String.valueOf(length - 1));
+                }
+            }
+            Page<HzEPLManageRecord> recordPage = hzEplMangeRecordDAO.getEPLListForPage(query);
             if(recordPage == null || recordPage.getResult() == null || recordPage.getResult().size()==0){
-                return new Page<>(recordReqDTO.getPage(),recordReqDTO.getLimit(),0);
+                return new Page<>(query.getPage(),query.getLimit(),0);
             }
             List<HzEPLManageRecord> records = recordPage.getResult();
             for(HzEPLManageRecord record:records){
@@ -81,17 +97,17 @@ public class HzEPLManageRecordServiceImpl implements HzEPLManageRecordService {
                 }
                 jsonObject.put("pState",pState);
                 jsonObject.put("pBomOfWhichDept", record.getpBomOfWhichDept());
-//                //获取分组号
-//                String groupNum = record.getLineID();
-//
-//                //这里在做一个递归查询
-//                if(groupNum.contains("-")){
-//                    groupNum =groupNum.split("-")[1].substring(0,4);
-//                }else{
-//                    String parentId = record.getParentUid();
-//                    groupNum = getGroupNum(recordReqDTO.getProjectId(),parentId);
-//                }
-                jsonObject.put("groupNum", record.getLineID());
+                //获取分组号
+                String groupNum = record.getLineID();
+
+                //这里在做一个递归查询
+                if(groupNum.contains("-")){
+                    groupNum =groupNum.split("-")[1].substring(0,4);
+                }else{
+                    String parentId = record.getParentUid();
+                    groupNum = getGroupNum(query.getProjectId(),parentId);
+                }
+                jsonObject.put("groupNum", groupNum);
                 jsonObject.put("lineId", record.getLineID());
                 jsonObject.put("itemName", record.getpBomLinePartName());
                 jsonObject.put("itemPart", record.getpBomLinePartClass());
@@ -138,7 +154,7 @@ public class HzEPLManageRecordServiceImpl implements HzEPLManageRecordService {
             }
             recordRespDTO.setJsonArray(array);
             recordRespDTOList.add(recordRespDTO);
-            return new Page<>(recordReqDTO.getPage(),recordReqDTO.getLimit(),recordPage.getTotalCount(),recordRespDTOList);
+            return new Page<>(query.getPage(),query.getLimit(),recordPage.getTotalCount(),recordRespDTOList);
         }catch (Exception e){
             return null;
         }
@@ -149,7 +165,8 @@ public class HzEPLManageRecordServiceImpl implements HzEPLManageRecordService {
     public JSONArray getEPLTittle(FindHzEPLRecordReqDTO recordReqDTO) {
         try{
             JSONArray array = new JSONArray();
-            int appendCount = 29;
+            int appendCount = 6;
+            int appendNum = 23;
             HzPreferenceSetting setting = new HzPreferenceSetting();
             setting.setSettingName("Hz_ExportBomPreferenceRedis");
             HZBomMainRecord main = hzBomMainRecordDao.selectByProjectPuid(recordReqDTO.getProjectId());
@@ -163,8 +180,17 @@ public class HzEPLManageRecordServiceImpl implements HzEPLManageRecordService {
             if (objOfSetting instanceof PreferenceSetting) {
                 String[] localName = ((PreferenceSetting) objOfSetting).getPreferenceLocal();
                 String[] trueName = ((PreferenceSetting) objOfSetting).getPreferences();
+
+
                 String[] appendLocalName = new String[localName.length + appendCount];
                 String[] appendTrueName = new String[trueName.length + appendCount];
+
+                String[] appendLastLocalName = new String[appendLocalName.length + appendNum];
+                String[] appendLastTrueName = new String[appendTrueName.length + appendNum];
+
+                int i =appendLocalName.length-1;
+                int j = appendTrueName.length-1;
+
                 appendLocalName[0] = "序号";
                 appendLocalName[1] = "状态值";
                 appendLocalName[2] = "层级";
@@ -180,69 +206,74 @@ public class HzEPLManageRecordServiceImpl implements HzEPLManageRecordService {
                 appendTrueName[5] = "groupNum";
 
 
-                appendLocalName[6] = "专业部门";
-                appendLocalName[7] = "自制/采购";
-                appendLocalName[8] = "焊接/装配";
-                appendLocalName[9] = "采购单元";
-                appendLocalName[10] = "车间1";
+                appendLastLocalName[++i] = "专业部门";
+                appendLastLocalName[++i] = "自制/采购";
+                appendLastLocalName[++i] = "焊接/装配";
+                appendLastLocalName[++i] = "采购单元";
+                appendLastLocalName[++i] = "车间1";
 
-                appendTrueName[6] = "deptPart";//鬼知道它现在有没有
-                appendTrueName[7] = "resource";
-                appendTrueName[8] = "type";
-                appendTrueName[9] = "buyUnit";
-                appendTrueName[10] = "workShop1";
+                appendLastTrueName[++j] = "deptPart";//鬼知道它现在有没有
+                appendLastTrueName[++j] = "resource";
+                appendLastTrueName[++j] = "type";
+                appendLastTrueName[++j] = "buyUnit";
+                appendLastTrueName[++j] = "workShop1";
 
-                appendLocalName[11] = "车间2";
-                appendLocalName[12] = "生产线";
-                appendLocalName[13] = "模具类别";
-                appendLocalName[14] = "外委件";
-                appendLocalName[15] = "颜色件";
+                appendLastLocalName[++i] = "车间2";
+                appendLastLocalName[++i] = "生产线";
+                appendLastLocalName[++i] = "模具类别";
+                appendLastLocalName[++i] = "外委件";
+                appendLastLocalName[++i] = "颜色件";
 
-                appendTrueName[11] = "workShop2";
-                appendTrueName[12] = "productLine";
-                appendTrueName[13] = "mouldType";
-                appendTrueName[14] = "outerPart";
-                appendTrueName[15] = "colorPart";
+                appendLastTrueName[++j] = "workShop2";
+                appendLastTrueName[++j] = "productLine";
+                appendLastTrueName[++j] = "mouldType";
+                appendLastTrueName[++j] = "outerPart";
+                appendLastTrueName[++j] = "colorPart";
 
-                appendLocalName[16] = "工位";
-                appendLocalName[17] = "备件";
-                appendLocalName[18] = "备件编号";
-                appendLocalName[19] = "工艺路线";
-                appendLocalName[20] = "人工工时";
+                appendLastLocalName[++i] = "工位";
+                appendLastLocalName[++i] = "备件";
+                appendLastLocalName[++i] = "备件编号";
+                appendLastLocalName[++i] = "工艺路线";
+                appendLastLocalName[++i] = "人工工时";
 
-                appendTrueName[16] = "gongwei";//数据库暂时没有
-                appendTrueName[17] = "sparePart";
-                appendTrueName[18] = "sparePartNum";
-                appendTrueName[19] = "processRoute";
-                appendTrueName[20] = "laborHour";
+                appendLastTrueName[++j] = "station";
+                appendLastTrueName[++j] = "sparePart";
+                appendLastTrueName[++j] = "sparePartNum";
+                appendLastTrueName[++j] = "processRoute";
+                appendLastTrueName[++j] = "laborHour";
 
 
-                appendLocalName[21] = "节拍";
-                appendLocalName[22] = "焊点";
-                appendLocalName[23] = "机物料";
-                appendLocalName[24] = "标准件";
-                appendLocalName[25] = "工具";
+                appendLastLocalName[++i] = "节拍";
+                appendLastLocalName[++i] = "焊点";
+                appendLastLocalName[++i] = "机物料";
+                appendLastLocalName[++i] = "标准件";
+                appendLastLocalName[++i] = "工具";
 
-                appendTrueName[21] = "rhythm";
-                appendTrueName[22] = "solderJoint";
-                appendTrueName[23] = "machineMaterial";
-                appendTrueName[24] = "standardPart";
-                appendTrueName[25] = "tools";
+                appendLastTrueName[++j] = "rhythm";
+                appendLastTrueName[++j] = "solderJoint";
+                appendLastTrueName[++j] = "machineMaterial";
+                appendLastTrueName[++j] = "standardPart";
+                appendLastTrueName[++j] = "tools";
 
-                appendLocalName[26] = "废品";
-                appendLocalName[27] = "变更";
-                appendLocalName[28] = "变更号";
+                appendLastLocalName[++i] = "废品";
+                appendLastLocalName[++i] = "变更";
+                appendLastLocalName[++i] = "变更号";
 
-                appendTrueName[26] = "wasterProduct";
-                appendTrueName[27] = "change";
-                appendTrueName[28] = "changeNum";
+                appendLastTrueName[++j] = "wasterProduct";
+                appendLastTrueName[++j] = "change";
+                appendLastTrueName[++j] = "changeNum";
 
 
                 System.arraycopy(localName, 0, appendLocalName, appendCount, localName.length);
                 System.arraycopy(trueName, 0, appendTrueName, appendCount, trueName.length);
 
-                array.add(0, appendLocalName);
-                array.add(1, appendTrueName);
+
+                System.arraycopy(appendLocalName, 0, appendLastLocalName, 0, appendLocalName.length);
+                System.arraycopy(appendTrueName, 0, appendLastTrueName, 0, appendTrueName.length);
+
+
+                array.add(0, appendLastLocalName);
+                array.add(1, appendLastTrueName);
             }
             return array;
         }catch (Exception e){
@@ -255,7 +286,10 @@ public class HzEPLManageRecordServiceImpl implements HzEPLManageRecordService {
         Map<String,Object> map = new HashMap<>();
         map.put("projectId",projectId);
         map.put("puid",parentId);
-        HzBomLineRecord record =hzBomLineRecordDao.findBobLineByPuid(map);
+        HzBomLineRecord record =hzBomLineRecordDao.findBomLineByPuid(map);
+        if(record == null){
+            return "-";
+        }
         String groupNum = record.getLineID();
         if(groupNum.contains("-")){
             return groupNum.split("-")[1].substring(0,4);

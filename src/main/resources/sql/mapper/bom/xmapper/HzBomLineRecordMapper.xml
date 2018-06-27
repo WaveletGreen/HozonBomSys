@@ -52,6 +52,7 @@
 		P_BOM_LINE_PART_CLASS
 	</sql>
     <sql id="Blob_Column_List">P_BOM_LINE_BLOCK</sql>
+
     <sql id="values_by_batch">
 		#{item.puid,jdbcType=VARCHAR},
 		#{item.parentUid,jdbcType=VARCHAR},
@@ -140,27 +141,62 @@
 
     <update id="HzBomLineRecordDaoImpl_update" parameterType="sql.pojo.bom.HzBomLineRecord">
         update HZ_BOM_LINE_RECORD
-        set
-        P_PARENT_UID=#{parentUid,jdbcType=VARCHAR},
-        P_BOM_DIGIFAX_ID=#{bomDigifaxId,jdbcType=VARCHAR},
-        P_LINE_INDEX=#{lineIndex,jdbcType=VARCHAR},
-        P_BOM_LINE_IS_HAS=#{isHas,jdbcType=VARCHAR},
-        P_BOM_LINE_PUID=#{linePuid,jdbcType=VARCHAR},
-        P_BOM_LINE_ID=#{lineID,jdbcType=VARCHAR},
-        P_BOM_LINE_IS_2Y=#{is2Y,jdbcType=VARCHAR},
-        P_BOM_LINE_IS_PART=#{isPart,jdbcType=VARCHAR},
-        P_BOM_ORDER_NUM=#{orderNum,jdbcType=VARCHAR},
-        P_BOM_LINE_IS_DEPT=#{isDept,jdbcType=VARCHAR},
-        P_BOM_OF_WHICH_DEPT=#{pBomOfWhichDept,jdbcType=VARCHAR},
-        P_BOM_LINE_PART_NAME=#{pBomLinePartName,jdbcType=VARCHAR},
-        P_BOM_LINE_PART_CLASS=#{pBomLinePartClass,jdbcType=VARCHAR}
+        <set>
+            <if test="parentUid != null">
+                P_PARENT_UID = #{parentUid,jdbcType=VARCHAR},
+            </if>
+            <if test="bomDigifaxId != null">
+                P_BOM_DIGIFAX_ID = #{bomDigifaxId,jdbcType=VARCHAR},
+            </if>
+            <if test="lineIndex != null">
+                P_LINE_INDEX = #{lineIndex,jdbcType=INTEGER},
+            </if>
+            <if test="isHas != null">
+                P_BOM_LINE_IS_HAS = #{isHas,jdbcType=INTEGER},
+            </if>
+            <if test="linePuid != null">
+                P_BOM_LINE_PUID = #{linePuid,jdbcType=VARCHAR},
+            </if>
+            <if test="is2Y != null">
+                P_BOM_LINE_IS_2Y = #{is2Y,jdbcType=VARCHAR},
+            </if>
+            <if test="isPart != null">
+                P_BOM_LINE_IS_PART = #{isPart,jdbcType=VARCHAR},
+            </if>
+            <if test="orderNum != null">
+                P_BOM_ORDER_NUM = #{orderNum,jdbcType=VARCHAR},
+            </if>
+            <if test="isDept != null">
+                P_BOM_LINE_IS_DEPT = #{isDept,jdbcType=VARCHAR},
+            </if>
+            <if test="pBomLinePartName != null">
+                P_BOM_LINE_PART_NAME = #{pBomLinePartName,jdbcType=INTEGER},
+            </if>
+            <if test="pBomLinePartClass != null">
+                P_BOM_LINE_PART_CLASS = #{pBomLinePartClass,jdbcType=VARCHAR},
+            </if>
+
+            <if test="lineID != null">
+                P_BOM_LINE_ID = #{lineID,jdbcType=VARCHAR},
+            </if>
+
+            <if test="pBomOfWhichDept != null">
+                P_BOM_OF_WHICH_DEPT = #{pBomOfWhichDept,jdbcType=VARCHAR},
+            </if>
+            <if test="bomLineBlock != null">
+                P_BOM_LINE_BLOCK = #{bomLineBlock,jdbcType=VARCHAR},
+            </if>
+
+        </set>
         where PUID = #{puid,jdbcType=VARCHAR}
     </update>
 
-    <!--查询一条bom信息-->
-    <select id="HzBomLineRecordDaoImpl_findBobLineByPuid" parameterType="java.util.Map" resultMap="BaseResultMap">
-        select
+    <!--查询一条bom信息    本sql没加入状态值 要作废 转EPL sql表查询对应的状态值-->
+    <select id="HzBomLineRecordDaoImpl_findBomLineByPuid" parameterType="java.util.Map" resultMap="BaseResultMap">
+        SELECT
         <include refid="Base_Column_List"/>
+        ,
+        <include refid="Blob_Column_List"/>
         from HZ_BOM_LINE_RECORD
         where P_BOM_DIGIFAX_ID =(
         select t2.puid from Hz_Bom_Main_Record t2
@@ -172,6 +208,18 @@
     <!--查询orderNum的最大值信息-->
     <select id="HzBomLineRecordDaoImpl_findMaxBomOrderNum"  resultType="int">
         select max(P_BOM_ORDER_NUM) from HZ_BOM_LINE_RECORD
+    </select>
+
+    <!--查询全部的2y或者2层的 lineindex 信息-->
+    <select id="HzBomLineRecordDaoImpl_findBomLineIndex"  resultType="java.lang.String" parameterType="java.util.HashMap">
+        select
+        P_LINE_INDEX
+        from HZ_BOM_LINE_RECORD
+        where P_BOM_DIGIFAX_ID =(
+        select t2.puid from Hz_Bom_Main_Record t2
+        where
+        t2.p_cfg0_of_which_project_puid=#{projectId,jdbcType=VARCHAR}
+        ) and LENGTH(TRANSLATE(P_LINE_INDEX,',0123456789','.'))=1
     </select>
 
 </mapper>
