@@ -2,9 +2,9 @@ $(document).ready((function () {
     var projectPuid = $("#project", window.top.document).val();
     var eplUrl = "epl/record?projectId="+projectPuid;
     initTable(eplUrl);
-    $("#eplTable").bootstrapTable('hideColumn', 'puid');
+   /* $("#eplTable").bootstrapTable('hideColumn', 'puid');
     $("#eplTable").bootstrapTable('hideColumn', 'rank');
-    $("#eplTable").bootstrapTable('hideColumn', 'groupNum');
+    $("#eplTable").bootstrapTable('hideColumn', 'groupNum');*/
 }))
 
 
@@ -13,7 +13,7 @@ function doQuery(){
     var projectPuid = $("#project", window.top.document).val();
     var eplUrl = "epl/record?projectId="+projectPuid;
     var level = $("#level").val();
-    eplUrl+="?level="+level;
+    eplUrl+="&level="+level;
     var pBomOfWhichDept = $("#pBomOfWhichDept").val();
     eplUrl+="&pBomOfWhichDept="+pBomOfWhichDept;
     var lineId = $("#lineId").val();
@@ -92,7 +92,9 @@ function initTable(eplUrl){
                 showRefresh: true,                  //是否显示刷新按钮
                 //minimumCountColumns:4
             });
-
+            $table.bootstrapTable('hideColumn', 'puid');
+            $table.bootstrapTable('hideColumn', 'rank');
+            $table.bootstrapTable('hideColumn', 'groupNum');
         }
     })
 
