@@ -2,7 +2,7 @@
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <!--User: xulf Date: 2018/5/30 Time: 10:46-->
 <body>
-<form id="mbomMainForm" role="form" method="post" action="./pbom/insert/maintain">
+<form id="mbomMainForm" role="form" method="post" action="mbom/add">
     <input id="eBomPuid" name="eBomPuid" type="hidden" th:value="${data.eBomPuid}"/><!--th:value="${entity.pBomPuid}"-->
     <div class="form-group">
         <label for="level">层级</label>
@@ -131,10 +131,10 @@
                 var url = $("#mbomMainForm", window.top.document).attr('action');
                 var myData = JSON.stringify({
                     "eBomPuid": $("#eBomPuid").val(),
-                    "level": $("#level").val(),
-                    "pBomOfWhichDept": $("#pBomOfWhichDept").val(),
-                    "lineId": $("#lineId").val(),
-                    "object_name": $("#object_name").val(),
+                    // "level": $("#level").val(),
+                    // "pBomOfWhichDept": $("#pBomOfWhichDept").val(),
+                    // "lineId": $("#lineId").val(),
+                    // "object_name": $("#object_name").val(),
                     "sparePart": $("#sparePart").val(),
                     "sparePartNum": $("#sparePartNum").val(),
                     "processRoute": $("#processRoute").val(),

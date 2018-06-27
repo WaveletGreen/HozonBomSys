@@ -141,7 +141,7 @@ function initTable(mBomUrl){
                                     $.ajax({
                                         type: "POST",
                                         //ajax需要添加打包名
-                                        url: "./cfg0/deleteByPuid?eBomPuid="+rows[0].eBomPuid,
+                                        url: "mbom/delete?eBomPuid="+rows[0].eBomPuid,
                                         //data: JSON.stringify(rows),
                                         contentType: "application/json",
                                         success: function (result) {
