@@ -159,13 +159,13 @@ public class HzPbomServiceImpl implements HzPbomService {
         try {
             User user = UserInfo.getUser();
             if(user.getGroupId()!=9){
-                respDTO.setErrMsg("你当前没有权限执行此操作");
+                respDTO.setErrMsg("你当前没有权限执行此操作!");
                 respDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
                 return respDTO;
             }
             HzPbomRecord record = hzPbomRecordDAO.getHzPbomByEbomPuid(recordReqDTO.geteBomPuid());
             if(record!=null){
-                respDTO.setErrMsg("当前插入的对象已存在！编辑属性请点击修改按钮进行操作");
+                respDTO.setErrMsg("当前插入的对象已存在,编辑属性请点击修改按钮进行操作!");
                 respDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
                 return respDTO;
             }
@@ -227,7 +227,7 @@ public class HzPbomServiceImpl implements HzPbomService {
         try {
             User user = UserInfo.getUser();
             if(user.getGroupId()!=9){
-                respDTO.setErrMsg("你当前没有权限执行此操作");
+                respDTO.setErrMsg("你当前没有权限执行此操作!");
                 respDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
                 return respDTO;
             }
@@ -282,7 +282,7 @@ public class HzPbomServiceImpl implements HzPbomService {
         try {
             User user = UserInfo.getUser();
             if(user.getGroupId()!=9){
-                respDTO.setErrMsg("你当前没有权限执行此操作");
+                respDTO.setErrMsg("你当前没有权限执行此操作!");
                 respDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
                 return respDTO;
             }

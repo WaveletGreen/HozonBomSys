@@ -166,4 +166,174 @@
       from DUAL
     </foreach>
   </insert>
+
+
+  <!--插入数据-->
+  <insert id="HzMbomRecordDAOImpl_insert" parameterType="sql.pojo.bom.HzMbomRecord">
+    insert into HZ_MBOM_RECORD
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="puid != null">
+        P_PUID,
+      </if>
+      <if test="sparePart != null">
+        P_SPARE_PART,
+      </if>
+      <if test="sparePartNum != null">
+        P_SPARE_PART_NUM,
+      </if>
+      <if test="processRoute != null">
+        P_PROCESS_ROUTE,
+      </if>
+      <if test="laborHour != null">
+        P_LABOR_HOUR,
+      </if>
+      <if test="rhythm != null">
+        P_RHYTHM,
+      </if>
+      <if test="solderJoint != null">
+        P_SOLDER_JOINT,
+      </if>
+      <if test="machineMaterial != null">
+        P_MACHINE_MATERITAL,
+      </if>
+      <if test="standardPart != null">
+        P_STANDARD_PART,
+      </if>
+      <if test="tools != null">
+        P_TOOLS,
+      </if>
+      <if test="wasterProduct != null">
+        P_WASTER_PRODUCT,
+      </if>
+      <if test="change != null">
+        P_CHANGE,
+      </if>
+      <if test="changeNum != null">
+        P_CHANGE_NUM,
+      </if>
+      <if test="eBomPuid != null">
+        P_BOM_PUID,
+      </if>
+        P_MBOM_STATUS,
+        P_CREATE_TIME,
+        P_UPDATE_TIME,
+      <if test="createName != null">
+        P_CREATE_NAME,
+      </if>
+      <if test="updateName != null">
+        P_UPDATE_NAME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="puid != null">
+        #{puid,jdbcType=VARCHAR},
+      </if>
+      <if test="sparePart != null">
+        #{sparePart,jdbcType=VARCHAR},
+      </if>
+      <if test="sparePartNum != null">
+        #{sparePartNum,jdbcType=VARCHAR},
+      </if>
+      <if test="processRoute != null">
+        #{processRoute,jdbcType=VARCHAR},
+      </if>
+      <if test="laborHour != null">
+        #{laborHour,jdbcType=VARCHAR},
+      </if>
+      <if test="rhythm != null">
+        #{rhythm,jdbcType=VARCHAR},
+      </if>
+      <if test="solderJoint != null">
+        #{solderJoint,jdbcType=VARCHAR},
+      </if>
+      <if test="machineMaterial != null">
+        #{machineMaterial,jdbcType=VARCHAR},
+      </if>
+      <if test="standardPart != null">
+        #{standardPart,jdbcType=VARCHAR},
+      </if>
+      <if test="tools != null">
+        #{tools,jdbcType=VARCHAR},
+      </if>
+      <if test="wasterProduct != null">
+        #{wasterProduct,jdbcType=VARCHAR},
+      </if>
+      <if test="change != null">
+        #{change,jdbcType=VARCHAR},
+      </if>
+      <if test="changeNum != null">
+        #{changeNum,jdbcType=VARCHAR},
+      </if>
+      <if test="eBomPuid != null">
+        #{eBomPuid,jdbcType=VARCHAR},
+      </if>
+        1,
+        sysdate,
+        sysdate,
+      <if test="createName != null">
+        #{createName,jdbcType=VARCHAR},
+      </if>
+      <if test="updateName != null">
+        #{updateName,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+
+  <!--更新数据-->
+  <update id="HzMbomRecordDAOImpl_update" parameterType="sql.pojo.bom.HzMbomRecord">
+    update HZ_MBOM_RECORD
+    <set>
+      <if test="sparePart != null">
+        P_SPARE_PART = #{sparePart,jdbcType=VARCHAR},
+      </if>
+      <if test="sparePartNum != null">
+        P_SPARE_PART_NUM = #{sparePartNum,jdbcType=VARCHAR},
+      </if>
+      <if test="processRoute != null">
+        P_PROCESS_ROUTE = #{processRoute,jdbcType=VARCHAR},
+      </if>
+      <if test="laborHour != null">
+        P_LABOR_HOUR = #{laborHour,jdbcType=VARCHAR},
+      </if>
+      <if test="rhythm != null">
+        P_RHYTHM = #{rhythm,jdbcType=VARCHAR},
+      </if>
+      <if test="solderJoint != null">
+        P_SOLDER_JOINT = #{solderJoint,jdbcType=VARCHAR},
+      </if>
+      <if test="machineMaterial != null">
+        P_MACHINE_MATERITAL = #{machineMaterial,jdbcType=VARCHAR},
+      </if>
+      <if test="standardPart != null">
+        P_STANDARD_PART = #{standardPart,jdbcType=VARCHAR},
+      </if>
+      <if test="tools != null">
+        P_TOOLS = #{tools,jdbcType=VARCHAR},
+      </if>
+      <if test="wasterProduct != null">
+        P_WASTER_PRODUCT = #{wasterProduct,jdbcType=VARCHAR},
+      </if>
+      <if test="change != null">
+        P_CHANGE = #{change,jdbcType=VARCHAR},
+      </if>
+      <if test="changeNum != null">
+        P_CHANGE_NUM = #{changeNum,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        P_UPDATE_TIME = sysdate,
+      </if>
+      <if test="updateName != null">
+        P_UPDATE_NAME = #{updateName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where P_BOM_PUID = #{eBomPuid,jdbcType=VARCHAR}
+  </update>
+
+  <!--删除数据-->
+  <update id="HzMbomRecordDAOImpl_deleteByForeignId" parameterType="java.lang.String">
+    update HZ_MBOM_RECORD
+    set P_PBOM_STATUS = 0
+    where P_BOM_PUID = #{eBomPuid,jdbcType=VARCHAR}
+ </update>
 </mapper>

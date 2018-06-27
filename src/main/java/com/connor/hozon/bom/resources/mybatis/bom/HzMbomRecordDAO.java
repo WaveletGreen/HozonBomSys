@@ -20,10 +20,11 @@ public interface HzMbomRecordDAO {
     int insertList(List<HzMbomRecord> records);
 
     /**
-     * 查询MBOM信息 MBOM维护信息
+     * 插入单条记录
+     * @param record
+     * @return
      */
-    List<HzMbomLineRecord> getMBomMaintainRecord();
-
+    int insert(HzMbomRecord record);
     /**
      * 更新MBOM维护信息
      * @param record
@@ -44,6 +45,7 @@ public interface HzMbomRecordDAO {
      */
     List<HzMbomLineRecord> searchMbomMaintainDetail(HzBomLineRecord record);
 
+
     Page<HzMbomLineRecord> findMbomForPage(FindForPageReqDTO reqDTO);
 
     /**
@@ -55,9 +57,9 @@ public interface HzMbomRecordDAO {
 
     /**
      * 查询一条MBOM信息 MBOM表
-     * @param map
+     * @param eBomPuid
      * @return
      */
-    HzMbomRecord findHzMbomByeBomPuid(Map<String,Object> map);
+    HzMbomRecord findHzMbomByeBomPuid(String eBomPuid);
 
 }
