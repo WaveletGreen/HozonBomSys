@@ -33,19 +33,9 @@
     </div>
 </div>
 <div class="content col-lg-12">
-    <table class="table table-striped tableNormalStyle" id="pbomMaintenanceTable"></table>
+    <table class="table table-striped tableNormalStyle" id="mbomMaintenanceTable"></table>
 </div>
 <script th:src="@{/js/bom/mbom/mbomMaintenance.js}"></script>
 <script th:src="@{/js/jq.resizableColumns.js}"></script>
 </body>
-<script th:inline="javascript">
-    function doQuery() {
-        $('#pbomMaintenanceTable').bootstrapTable('refresh');    //刷新表格
-    }
-
-    /*$(function(){
-        $("pbomMaintenanceTable").resizableColumns({});
-    });*/
-
-</script>
 </html>
