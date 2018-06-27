@@ -54,7 +54,7 @@ public class HzEPLManageRecordServiceImpl implements HzEPLManageRecordService {
             List<HzEPLRecordRespDTO> recordRespDTOList = new ArrayList<>();
             //需要加入搜索功能
             String level = query.getLevel();
-            if (level != null) {
+            if (level != null && level!="") {
                 int length = level.charAt(0) - 48;
                 if (level.toUpperCase().endsWith("Y")) {
                     query.setIsHas(Integer.valueOf(1));
