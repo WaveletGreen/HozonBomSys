@@ -1,6 +1,5 @@
 package com.connor.hozon.bom.resources.mybatis.bom.impl;
 
-import com.connor.hozon.bom.resources.dto.request.FindForPageReqDTO;
 import com.connor.hozon.bom.resources.mybatis.bom.HzMbomRecordDAO;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.page.PageRequest;
@@ -37,12 +36,8 @@ public class HzMbomRecordDAOImpl extends BaseSQLUtil implements HzMbomRecordDAO 
         return super.update("HzMbomRecordDAOImpl_update",record);
     }
     @Override
-    public int deleteByForeignId(String pPuid) {
-        return super.delete("HzMbomRecordDAOImpl_deleteByForeignId",pPuid);
-    }
-    @Override
-    public List<HzMbomLineRecord> searchMbomMaintainDetail(HzBomLineRecord record) {
-        return super.findForList("HzMbomRecordDAOImpl_searchMbomMaintainDetail",record);
+    public int deleteByForeignId(String eBomPuid) {
+        return super.update("HzMbomRecordDAOImpl_deleteByForeignId",eBomPuid);
     }
 
     @Override

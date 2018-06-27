@@ -1,6 +1,5 @@
 package com.connor.hozon.bom.resources.mybatis.bom;
 
-import com.connor.hozon.bom.resources.dto.request.FindForPageReqDTO;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.query.HzMbomByPageQuery;
 import sql.pojo.bom.HzBomLineRecord;
@@ -35,18 +34,16 @@ public interface HzMbomRecordDAO {
 
     /**
      * 删除BOM维护 通过外键删除
-     * @param pPuid
+     * @param eBomPuid
      * @return
      */
-    int deleteByForeignId(String pPuid);
+    int deleteByForeignId(String eBomPuid);
 
     /**
-     * 按条件搜索MBOM在线维护信息
+     * 获取MBOM信息 分页查询
+     * @param query
      * @return
      */
-    List<HzMbomLineRecord> searchMbomMaintainDetail(HzBomLineRecord record);
-
-
     Page<HzMbomLineRecord> findMbomForPage(HzMbomByPageQuery query);
 
     /**

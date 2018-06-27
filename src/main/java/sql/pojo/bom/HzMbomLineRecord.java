@@ -77,7 +77,7 @@ public class HzMbomLineRecord {
     private String pPuid;
 
 
-    private String ebomPuid;
+    private String eBomPuid;
     /**
      * 备件
      */
@@ -149,12 +149,12 @@ public class HzMbomLineRecord {
      */
     private String updateName;
 
-    public String getEbomPuid() {
-        return ebomPuid;
+    public String geteBomPuid() {
+        return eBomPuid;
     }
 
-    public void setEbomPuid(String ebomPuid) {
-        this.ebomPuid = ebomPuid;
+    public void seteBomPuid(String eBomPuid) {
+        this.eBomPuid = eBomPuid;
     }
 
     public Integer getStatus() {
