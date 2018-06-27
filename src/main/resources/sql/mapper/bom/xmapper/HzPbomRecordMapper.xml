@@ -323,9 +323,6 @@
         P_COLOR_PART = #{colorPart,jdbcType=INTEGER},
       </if>
        P_UPDATE_TIME =sysdate,
-      <if test="createName != null">
-          P_CREATE_NAME = #{createName,jdbcType=VARCHAR},
-      </if>
       <if test="updateName != null">
           P_UPDATE_NAME = #{updateName,jdbcType=VARCHAR},
       </if>

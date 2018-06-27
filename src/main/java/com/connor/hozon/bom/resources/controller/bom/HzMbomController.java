@@ -1,14 +1,19 @@
 package com.connor.hozon.bom.resources.controller.bom;
 
 import com.connor.hozon.bom.resources.controller.BaseController;
+import com.connor.hozon.bom.resources.dto.request.AddMbomReqDTO;
 import com.connor.hozon.bom.resources.dto.request.FindForPageReqDTO;
+import com.connor.hozon.bom.resources.dto.request.UpdateMbomReqDTO;
 import com.connor.hozon.bom.resources.dto.response.HzMbomRecordRespDTO;
+import com.connor.hozon.bom.resources.dto.response.OperateResultMessageRespDTO;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.service.bom.HzMbomService;
 import com.connor.hozon.bom.resources.util.ResultMessageBuilder;
+import jdk.nashorn.internal.runtime.regexp.joni.constants.OPCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -172,5 +177,38 @@ public class HzMbomController extends BaseController {
         }
         model.addAttribute("data",respDTO);
         return"bomManage/mbom/mbomMaintenance/updateMbomMaintenance";
+    }
+
+    /**
+     * 插入一条记录
+     * @param reqDTO
+     * @param response
+     */
+    @RequestMapping(value = "add",method = RequestMethod.POST)
+    public void addMbomToDB(@RequestBody AddMbomReqDTO reqDTO,HttpServletResponse response){
+        OperateResultMessageRespDTO respDTO = hzMbomService.insertMbomRecord(reqDTO);
+        writeAjaxJSONResponse(ResultMessageBuilder.build(OperateResultMessageRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
+    }
+
+    /**
+     * 编辑一条记录
+     * @param reqDTO
+     * @param response
+     */
+    @RequestMapping(value = "update",method = RequestMethod.POST)
+    public void updateMbomToDB(@RequestBody UpdateMbomReqDTO reqDTO,HttpServletResponse response){
+        OperateResultMessageRespDTO respDTO = hzMbomService.updateMbomRecord(reqDTO);
+        writeAjaxJSONResponse(ResultMessageBuilder.build(OperateResultMessageRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
+    }
+
+    /**
+     * 删除一条记录
+     * @param eBomPuid
+     * @param response
+     */
+    @RequestMapping(value = "delete",method = RequestMethod.POST)
+    public void deleteMbom(String eBomPuid,HttpServletResponse response){
+       OperateResultMessageRespDTO respDTO =  hzMbomService.deleteMbomRecord(eBomPuid);
+        writeAjaxJSONResponse(ResultMessageBuilder.build(OperateResultMessageRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
     }
 }

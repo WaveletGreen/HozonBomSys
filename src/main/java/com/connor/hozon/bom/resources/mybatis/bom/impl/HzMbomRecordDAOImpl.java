@@ -27,9 +27,8 @@ public class HzMbomRecordDAOImpl extends BaseSQLUtil implements HzMbomRecordDAO 
     }
 
     @Override
-    public List<HzMbomLineRecord> getMBomMaintainRecord() {
-        return super.findForList("HzMbomRecordDAOImpl_getMBomRecord",null);
-
+    public int insert(HzMbomRecord record) {
+        return super.insert("HzMbomRecordDAOImpl_insert",record);
     }
 
     @Override
@@ -63,8 +62,8 @@ public class HzMbomRecordDAOImpl extends BaseSQLUtil implements HzMbomRecordDAO 
     }
 
     @Override
-    public HzMbomRecord findHzMbomByeBomPuid(Map<String, Object> map) {
+    public HzMbomRecord findHzMbomByeBomPuid(String eBomPuid) {
 
-        return (HzMbomRecord)super.findForObject("HzMbomRecordDAOImpl_findHzMbomByeBomPuid",map);
+        return (HzMbomRecord)super.findForObject("HzMbomRecordDAOImpl_findHzMbomByeBomPuid",eBomPuid);
     }
 }
