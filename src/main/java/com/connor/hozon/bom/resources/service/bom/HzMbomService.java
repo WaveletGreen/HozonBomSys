@@ -19,4 +19,5 @@ public interface HzMbomService {
      */
     Page<HzMbomRecordRespDTO> fingHzMbomForPage(FindForPageReqDTO reqDTO);
 
+    HzMbomRecordRespDTO findHzMbomByPuid(String projectId,String puid);
 }

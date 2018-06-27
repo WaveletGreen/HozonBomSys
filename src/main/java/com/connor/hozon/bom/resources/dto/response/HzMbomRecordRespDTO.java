@@ -34,7 +34,7 @@ public class HzMbomRecordRespDTO {
     /**
      * 外键id
      */
-    private String ebomPuid;
+    private String eBomPuid;
     /**
      * 备件
      */
@@ -100,12 +100,12 @@ public class HzMbomRecordRespDTO {
         No = no;
     }
 
-    public String getEbomPuid() {
-        return ebomPuid;
+    public String geteBomPuid() {
+        return eBomPuid;
     }
 
-    public void setEbomPuid(String ebomPuid) {
-        this.ebomPuid = ebomPuid;
+    public void seteBomPuid(String eBomPuid) {
+        this.eBomPuid = eBomPuid;
     }
 
     public String getLevel() {

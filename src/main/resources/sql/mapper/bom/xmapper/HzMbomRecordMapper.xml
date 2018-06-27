@@ -1,25 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="MbomLineMaintainRecord">
-  <!--查询全MBOM信息-->
-  <resultMap id="MbomResultMap" type="sql.pojo.bom.HzMbomLineRecord">
-    <id column="PUID" jdbcType="VARCHAR" property="pPuid" />
-    <result column="P_LINE_INDEX" jdbcType="VARCHAR" property="lineIndex" />
-    <result column="P_BOM_LINE_IS_HAS" jdbcType="INTEGER" property="isHas" />
-    <result column="P_BOM_LINE_ID" jdbcType="VARCHAR" property="lineID" />
-    <result column="P_BOM_LINE_IS_2Y" jdbcType="INTEGER" property="is2Y" />
-    <result column="P_BOM_OF_WHICH_DEPT" jdbcType="VARCHAR" property="pBomOfWhichDept" />
-    <result column="P_PARENT_UID" jdbcType="VARCHAR" property="parentUid"/>
-    <result column="P_BOM_DIGIFAX_ID" jdbcType="VARCHAR" property="bomDigifaxId"/>
-    <result column="P_BOM_LINE_PUID" jdbcType="VARCHAR" property="linePuid"/>
-    <result column="P_BOM_LINE_IS_PART" jdbcType="INTEGER" property="isPart"/>
-    <result column="P_BOM_ORDER_NUM" jdbcType="INTEGER" property="orderNum"/>
-    <result column="P_BOM_LINE_IS_DEPT" jdbcType="INTEGER" property="isDept"/>
-    <result column="P_BOM_LINE_PART_NAME" jdbcType="VARCHAR" property="pBomLinePartName"/>
-    <result column="P_BOM_LINE_PART_CLASS" jdbcType="VARCHAR" property="pBomLinePartClass"/>
-    <result column="P_BOM_LINE_BLOCK" jdbcType="BLOB" property="bomLineBlock"/>
 
-
+  <resultMap id="BaseResultMap" type="sql.pojo.bom.HzMbomRecord">
     <result column="P_PUID" jdbcType="VARCHAR" property="puid" />
     <result column="P_BOM_PUID" jdbcType="VARCHAR" property="eBomPuid" />
     <result column="P_SPARE_PART" jdbcType="VARCHAR" property="sparePart" />
@@ -40,6 +23,29 @@
     <result column="P_CREATE_NAME" jdbcType="VARCHAR" property="createName" />
     <result column="P_UPDATE_NAME" jdbcType="VARCHAR" property="updateName" />
   </resultMap>
+
+
+
+  <!--查询全MBOM信息-->
+  <resultMap extends="BaseResultMap" id="MbomResultMap" type="sql.pojo.bom.HzMbomLineRecord">
+    <id column="PUID" jdbcType="VARCHAR" property="pPuid" />
+    <result column="P_LINE_INDEX" jdbcType="VARCHAR" property="lineIndex" />
+    <result column="P_BOM_LINE_IS_HAS" jdbcType="INTEGER" property="isHas" />
+    <result column="P_BOM_LINE_ID" jdbcType="VARCHAR" property="lineID" />
+    <result column="P_BOM_LINE_IS_2Y" jdbcType="INTEGER" property="is2Y" />
+    <result column="P_BOM_OF_WHICH_DEPT" jdbcType="VARCHAR" property="pBomOfWhichDept" />
+    <result column="P_PARENT_UID" jdbcType="VARCHAR" property="parentUid"/>
+    <result column="P_BOM_DIGIFAX_ID" jdbcType="VARCHAR" property="bomDigifaxId"/>
+    <result column="P_BOM_LINE_PUID" jdbcType="VARCHAR" property="linePuid"/>
+    <result column="P_BOM_LINE_IS_PART" jdbcType="INTEGER" property="isPart"/>
+    <result column="P_BOM_ORDER_NUM" jdbcType="INTEGER" property="orderNum"/>
+    <result column="P_BOM_LINE_IS_DEPT" jdbcType="INTEGER" property="isDept"/>
+    <result column="P_BOM_LINE_PART_NAME" jdbcType="VARCHAR" property="pBomLinePartName"/>
+    <result column="P_BOM_LINE_PART_CLASS" jdbcType="VARCHAR" property="pBomLinePartClass"/>
+    <result column="P_BOM_LINE_BLOCK" jdbcType="BLOB" property="bomLineBlock"/>
+  </resultMap>
+
+
 
 
   <sql id="Base_Column_List">
@@ -115,6 +121,32 @@
       </if>
     </where>
   </select>
+
+  <!--获取一条 EBOM&MBOM信息-->
+  <select id="HzMbomRecordDAOImpl_findHzMbomByPuid" resultMap="MbomResultMap" parameterType="java.util.HashMap">
+    select t.*,t6.* from HZ_BOM_LINE_RECORD t LEFT OUTER JOIN HZ_MBOM_RECORD t6 ON  t.puid = T6.P_BOM_PUID
+    where t.p_bom_digifax_id=(
+    select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(
+    select t2.puid from Hz_project_libs t2
+    <where>
+      t2.puid=#{projectId,jdbcType=VARCHAR}))
+      <if test="lineId != null and  lineId!='' " >
+        and t.P_BOM_LINE_ID = #{lineId,jdbcType=VARCHAR}
+      </if>
+      <if test="pPuid != null and  pPuid!='' " >
+        and t.PUID = #{pPuid,jdbcType=VARCHAR}
+      </if>
+    </where>
+  </select>
+
+
+  <!--获取一条 MBOM记录-->
+  <select id="HzMbomRecordDAOImpl_findHzMbomByeBomPuid" resultMap="BaseResultMap" parameterType="java.lang.String">
+
+    SELECT * FROM HZ_MBOM_RECORD WHERE P_BOM_PUID = #{eBomPuid,jdbcType=VARCHAR} AND P_PBOM_STATUS=1
+
+  </select>
+
 
 
   <!--批量插入-->

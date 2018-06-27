@@ -657,7 +657,7 @@ public class HzPbomServiceImpl implements HzPbomService {
             responseDTO.setLaborHour(record.getLaborHour() == null ? "" : record.getLaborHour());
             responseDTO.setMachineMaterial(record.getMachineMaterial() == null ? "" : record.getMachineMaterial());
             responseDTO.setLineId(record.getLineID() == null ? "" : record.getLineID());//零件号
-            responseDTO.setEbomPuid(record.getpPuid());
+            responseDTO.seteBomPuid(record.getpPuid());
             responseDTO.setStandardPart(record.getStandardPart() == null ? "" : record.getStandardPart());
             responseDTO.setSparePartNum(record.getSparePartNum() == null ? "" : record.getSparePartNum());
             responseDTO.setSolderJoint(record.getSolderJoint() == null ? "" : record.getSolderJoint());
