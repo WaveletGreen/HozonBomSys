@@ -47,4 +47,12 @@ public class HzEbomRecordDAOImpl extends BaseSQLUtil implements HzEbomRecordDAO 
         return super.findForList("HzEbomRecordDAOImpl_getHzBomLineChildren",map);
     }
 
+    @Override
+    public boolean checkItemIdIsRepeat(String projectId, String lineId) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("projectId",projectId);
+        map.put("lineID",lineId);
+        return (int)super.findForObject("HzEbomRecordDAOImpl_checkItemIdIsRepeat",map)>0;
+    }
+
 }

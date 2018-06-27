@@ -7,6 +7,7 @@ import com.connor.hozon.bom.resources.controller.BaseController;
 import com.connor.hozon.bom.resources.dto.request.FindHzEPLRecordReqDTO;
 import com.connor.hozon.bom.resources.dto.response.HzEPLRecordRespDTO;
 import com.connor.hozon.bom.resources.page.Page;
+import com.connor.hozon.bom.resources.query.HzEPLByPageQuery;
 import com.connor.hozon.bom.resources.service.epl.HzEPLManageRecordService;
 import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.resources.util.ResultMessageBuilder;
@@ -30,12 +31,12 @@ public class HzEPLController extends BaseController {
     private HzEPLManageRecordService hzEPLManageRecordService;
 
     @RequestMapping(value = "record/page",method = RequestMethod.GET)
-    public void getHzEplRecordByPage(FindHzEPLRecordReqDTO recordReqDTO, HttpServletResponse response){
-        Page<HzEPLRecordRespDTO> recordRespDTOPage = hzEPLManageRecordService.getHzEPLRecordForPage(recordReqDTO);
+    public void getHzEplRecordByPage(HzEPLByPageQuery query, HttpServletResponse response){
+        Page<HzEPLRecordRespDTO> recordRespDTOPage = hzEPLManageRecordService.getHzEPLRecordForPage(query);
         List<HzEPLRecordRespDTO> recordRespDTOS =  recordRespDTOPage.getResult();
         if (ListUtil.isEmpty(recordRespDTOS)) {
-            writeAjaxJSONResponse(ResultMessageBuilder.build(false,"暂无数据",new Page<>(recordReqDTO.getPage(),recordReqDTO.getLimit(),0)),response);
-
+            writeAjaxJSONResponse(ResultMessageBuilder.build(false,"暂无数据",new Page<>(query.getPage(),query.getLimit(),0)),response);
+            return;
         }
         writeAjaxJSONResponse(ResultMessageBuilder.build(recordRespDTOPage),response);
     }
@@ -43,8 +44,8 @@ public class HzEPLController extends BaseController {
 
     @RequestMapping(value = "record",method = RequestMethod.GET)
     @ResponseBody
-    public Map<String, Object> getHzEplRecord(FindHzEPLRecordReqDTO recordReqDTO){
-        Page<HzEPLRecordRespDTO> recordRespDTOPage = hzEPLManageRecordService.getHzEPLRecordForPage(recordReqDTO);
+    public Map<String, Object> getHzEplRecord(HzEPLByPageQuery query){
+        Page<HzEPLRecordRespDTO> recordRespDTOPage = hzEPLManageRecordService.getHzEPLRecordForPage(query);
         Map<String, Object> ret = new HashMap<>();
         if(recordRespDTOPage == null){
             return  ret;

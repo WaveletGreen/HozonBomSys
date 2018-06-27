@@ -5,6 +5,7 @@ import com.connor.hozon.bom.resources.dto.request.FindHzEPLRecordReqDTO;
 import com.connor.hozon.bom.resources.mybatis.epl.HzEplMangeRecordDAO;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.page.PageRequest;
+import com.connor.hozon.bom.resources.query.HzEPLByPageQuery;
 import org.springframework.stereotype.Service;
 import sql.BaseSQLUtil;
 import sql.pojo.epl.HzEPLManageRecord;
@@ -23,12 +24,16 @@ public class HzEplManageRecordDAOImpl extends BaseSQLUtil implements HzEplMangeR
         return super.findForList("HzEplManageRecordDAOImpl_getHzEplManageRecord",null);
     }
 
-    public Page<HzEPLManageRecord> getEPLListForPage(FindHzEPLRecordReqDTO recordReqDTO){
+    public Page<HzEPLManageRecord> getEPLListForPage(HzEPLByPageQuery query){
         PageRequest request = new PageRequest();
         Map map = new HashMap();
-        map.put("projectId",recordReqDTO.getProjectId());
-        request.setPageNumber(recordReqDTO.getPage());
-        request.setPageSize(recordReqDTO.getLimit());
+        map.put("projectId",query.getProjectId());
+        map.put("isHas",query.getIsHas());
+        map.put("pBomOfWhichDept",query.getpBomOfWhichDept());
+        map.put("lineIndex",query.getLineIndex());
+        map.put("lineId",query.getLineId());
+        request.setPageNumber(query.getPage());
+        request.setPageSize(query.getLimit());
         request.setFilters(map);
         return super.findForPage("HzEplManageRecordDAOImpl_getHzEplManageRecord","HzEplManageRecordDAOImpl_findTotalCount",request);
 

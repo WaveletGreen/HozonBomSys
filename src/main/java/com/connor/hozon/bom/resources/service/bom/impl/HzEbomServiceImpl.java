@@ -244,6 +244,13 @@ public class HzEbomServiceImpl implements HzEbomService {
                 ebomContent.remove("puid");
             }
             String parentId =parentPuid;
+            boolean isRepeat = hzEbomRecordDAO.checkItemIdIsRepeat(reqDTO.getProjectId(),itemId);
+            if(isRepeat){
+                OperateResultMessageRespDTO respDTO = new OperateResultMessageRespDTO();
+                respDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
+                respDTO.setErrMsg("当前零件号已存在,请重新添加！");
+                return respDTO;
+            }
             int i;
             if(parentId != null && parentId!=""){
                 //增加到当前父结构下面
@@ -333,6 +340,13 @@ public class HzEbomServiceImpl implements HzEbomService {
             }
             if(ebomContent.containsKey("item_id")){
                 itemId = (String)ebomContent.get("item_id");
+            }
+            boolean isRepeat = hzEbomRecordDAO.checkItemIdIsRepeat(reqDTO.getProjectId(),itemId);
+            if(isRepeat){
+                OperateResultMessageRespDTO respDTO = new OperateResultMessageRespDTO();
+                respDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
+                respDTO.setErrMsg("当前零件号已存在,请重新添加！");
+                return respDTO;
             }
             HZBomMainRecord hzBomMainRecord = hzBomMainRecordDao.selectByProjectPuid(reqDTO.getProjectId());
             HzBomLineRecord hzBomLineRecord = new HzBomLineRecord();

@@ -66,6 +66,18 @@
       select t2.puid from Hz_project_libs t2
       <where>
         t2.puid=#{projectId,jdbcType=VARCHAR}))
+      <if test="lineIndex != null and lineIndex!=''">
+        and LENGTH(TRANSLATE(t1.P_LINE_INDEX,',0123456789','.'))=#{lineIndex,jdbcType=VARCHAR}
+      </if>
+      <if test="isHas != null">
+          and t1.P_BOM_LINE_IS_HAS = #{isHas,jdbcType=INTEGER}
+      </if>
+      <if test="lineId != null and lineId!=''" >
+          and t1.P_BOM_LINE_ID = #{lineId,jdbcType=VARCHAR}
+      </if>
+      <if test="pBomOfWhichDept != null and  pBomOfWhichDept!='' " >
+          and t1.P_BOM_OF_WHICH_DEPT = #{pBomOfWhichDept,jdbcType=VARCHAR}
+      </if>
       </where>
   </select>
 
@@ -79,7 +91,19 @@
       select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(
       select t2.puid from Hz_project_libs t2
       <where>
-        t2.puid=#{projectId,jdbcType=VARCHAR}))
+          t2.puid=#{projectId,jdbcType=VARCHAR}))
+      <if test="lineIndex != null and lineIndex!=''">
+          and LENGTH(TRANSLATE(t1.P_LINE_INDEX,',0123456789','.'))=#{lineIndex,jdbcType=VARCHAR}
+      </if>
+      <if test="isHas != null">
+          and t1.P_BOM_LINE_IS_HAS = #{isHas,jdbcType=INTEGER}
+      </if>
+      <if test="lineId != null and lineId!=''" >
+          and t1.P_BOM_LINE_ID = #{lineId,jdbcType=VARCHAR}
+      </if>
+      <if test="pBomOfWhichDept != null and  pBomOfWhichDept!='' " >
+          and t1.P_BOM_OF_WHICH_DEPT = #{pBomOfWhichDept,jdbcType=VARCHAR}
+      </if>
       </where>
   </select>
 
@@ -139,4 +163,17 @@
         </where>
     </select>
 
+    <!-- 查找重名 -->
+    <select id="HzEbomRecordDAOImpl_checkItemIdIsRepeat" parameterType="map" resultType="int">
+        SELECT count(*) from HZ_BOM_LINE_RECORD t1
+        LEFT OUTER JOIN HZ_BOM_STATE t6 on t1.puid = t6.P_BOM_ID
+        where t1.p_bom_digifax_id=(
+        select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(
+        select t2.puid from Hz_project_libs t2
+        <where>
+            t2.puid=#{projectId,jdbcType=VARCHAR}))
+            and
+            t1.P_BOM_LINE_ID = #{lineID,jdbcType=VARCHAR}
+        </where>
+    </select>
 </mapper>

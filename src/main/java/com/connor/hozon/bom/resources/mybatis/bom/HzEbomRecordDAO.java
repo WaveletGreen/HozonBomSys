@@ -30,4 +30,12 @@ public interface HzEbomRecordDAO {
      */
     List<HzEPLManageRecord> getHzBomLineChildren(Map map);
 
+    /**
+     * 查询零件号是否重复
+     * @param projectId
+     * @param lineId
+     * @return
+     */
+    boolean checkItemIdIsRepeat(String projectId,String lineId);
+
 }
