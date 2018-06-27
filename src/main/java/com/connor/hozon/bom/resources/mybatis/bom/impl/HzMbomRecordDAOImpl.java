@@ -56,4 +56,15 @@ public class HzMbomRecordDAOImpl extends BaseSQLUtil implements HzMbomRecordDAO 
         return super.findForPage("HzMbomRecordDAOImpl_getMBomRecord","HzMbomRecordDAOImpl_getTotalCount",request);
 
     }
+
+    @Override
+    public HzMbomLineRecord findHzMbomByPuid(Map<String, Object> map) {
+        return (HzMbomLineRecord) super.findForObject("HzMbomRecordDAOImpl_findHzMbomByPuid",map);
+    }
+
+    @Override
+    public HzMbomRecord findHzMbomByeBomPuid(Map<String, Object> map) {
+
+        return (HzMbomRecord)super.findForObject("HzMbomRecordDAOImpl_findHzMbomByeBomPuid",map);
+    }
 }

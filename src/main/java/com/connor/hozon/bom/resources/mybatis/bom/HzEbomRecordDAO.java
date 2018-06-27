@@ -2,6 +2,7 @@ package com.connor.hozon.bom.resources.mybatis.bom;
 
 import com.connor.hozon.bom.resources.dto.request.FindForPageReqDTO;
 import com.connor.hozon.bom.resources.page.Page;
+import com.connor.hozon.bom.resources.query.HzEbomByPageQuery;
 import sql.pojo.epl.HzEPLManageRecord;
 
 import java.util.List;
@@ -13,7 +14,7 @@ import java.util.Map;
 public interface HzEbomRecordDAO {
 
 
-    Page<HzEPLManageRecord> getHzEbomPage(FindForPageReqDTO recordReqDTO);
+    Page<HzEPLManageRecord> getHzEbomPage(HzEbomByPageQuery query);
 
     /**
      * 找一条EBOM EBOM  EBOM是EPL子集 这里直接返回EPL 全信息了

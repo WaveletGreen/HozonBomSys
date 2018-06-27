@@ -4,6 +4,7 @@ import com.connor.hozon.bom.resources.dto.request.FindForPageReqDTO;
 import com.connor.hozon.bom.resources.mybatis.bom.HzPbomRecordDAO;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.page.PageRequest;
+import com.connor.hozon.bom.resources.query.HzPbomByPageQuery;
 import org.springframework.stereotype.Service;
 import sql.BaseSQLUtil;
 import sql.pojo.bom.HzBomLineRecord;
@@ -54,12 +55,16 @@ public class HzPbomRecordDAOImpl extends BaseSQLUtil implements HzPbomRecordDAO 
     }
 
     @Override
-    public Page<HzPbomLineRecord> getHzPbomRecordByPage(FindForPageReqDTO reqDTO) {
+    public Page<HzPbomLineRecord> getHzPbomRecordByPage(HzPbomByPageQuery query) {
         PageRequest request = new PageRequest();
         Map map = new HashMap();
-        map.put("projectId",reqDTO.getProjectId());
-        request.setPageNumber(reqDTO.getPage());
-        request.setPageSize(reqDTO.getLimit());
+        map.put("projectId",query.getProjectId());
+        map.put("isHas",query.getIsHas());
+        map.put("pBomOfWhichDept",query.getpBomOfWhichDept());
+        map.put("lineIndex",query.getLineIndex());
+        map.put("lineId",query.getLineId());
+        request.setPageNumber(query.getPage());
+        request.setPageSize(query.getLimit());
         request.setFilters(map);
         return super.findForPage("HzPbomRecordDAOImpl_getPbomRecord","HzPbomRecordDAOImpl_getTotalCount",request);
     }

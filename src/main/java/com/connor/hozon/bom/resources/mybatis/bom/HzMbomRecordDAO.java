@@ -7,6 +7,7 @@ import sql.pojo.bom.HzMbomLineRecord;
 import sql.pojo.bom.HzMbomRecord;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by haozt on 2018/5/24
@@ -44,4 +45,19 @@ public interface HzMbomRecordDAO {
     List<HzMbomLineRecord> searchMbomMaintainDetail(HzBomLineRecord record);
 
     Page<HzMbomLineRecord> findMbomForPage(FindForPageReqDTO reqDTO);
+
+    /**
+     * 查询一条Mbom信息 EBOM表和MBOM表
+     * @param map
+     * @return
+     */
+    HzMbomLineRecord findHzMbomByPuid(Map<String,Object> map);
+
+    /**
+     * 查询一条MBOM信息 MBOM表
+     * @param map
+     * @return
+     */
+    HzMbomRecord findHzMbomByeBomPuid(Map<String,Object> map);
+
 }

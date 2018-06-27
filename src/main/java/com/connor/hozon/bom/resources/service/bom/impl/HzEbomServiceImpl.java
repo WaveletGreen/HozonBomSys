@@ -15,6 +15,7 @@ import com.connor.hozon.bom.resources.mybatis.bom.HzEbomRecordDAO;
 import com.connor.hozon.bom.resources.mybatis.bom.HzPbomRecordDAO;
 import com.connor.hozon.bom.resources.mybatis.bom.impl.HzBomStateDAOImpl;
 import com.connor.hozon.bom.resources.page.Page;
+import com.connor.hozon.bom.resources.query.HzEbomByPageQuery;
 import com.connor.hozon.bom.resources.service.bom.HzEbomService;
 import com.connor.hozon.bom.resources.service.bom.HzPbomService;
 import com.connor.hozon.bom.resources.service.epl.HzEPLManageRecordService;
@@ -62,16 +63,30 @@ public class HzEbomServiceImpl implements HzEbomService {
     private HzPbomService hzPbomService;
 
     @Override
-    public Page<HzEbomRespDTO> getHzEbomPage(FindForPageReqDTO recordReqDTO) {
+    public Page<HzEbomRespDTO> getHzEbomPage(HzEbomByPageQuery query) {
         try{
-            int num = (recordReqDTO.getPage()-1)*recordReqDTO.getLimit();
+            int num = (query.getPage()-1)*query.getLimit();
             HzEbomRespDTO recordRespDTO = new HzEbomRespDTO();
             JSONArray array = new JSONArray();
             List<HzEbomRespDTO> recordRespDTOList = new ArrayList<>();
+            String level = query.getLevel();
+            if (level != null && level!="") {
+                if(level.length()==1 && level.toUpperCase().endsWith("Y")){
+                    query.setIsHas(Integer.valueOf(1));
+                }else {
+                    int length = level.charAt(0) - 48;
+                    if (level.toUpperCase().endsWith("Y")) {
+                        query.setIsHas(Integer.valueOf(1));
+                    } else {
+                        query.setIsHas(Integer.valueOf(0));
+                    }
+                    query.setLineIndex(String.valueOf(length - 1));
+                }
+            }
 
-            Page<HzEPLManageRecord> recordPage = hzEbomRecordDAO.getHzEbomPage(recordReqDTO);
+            Page<HzEPLManageRecord> recordPage = hzEbomRecordDAO.getHzEbomPage(query);
             if(recordPage == null || recordPage.getResult() == null || recordPage.getResult().size()==0){
-                return new Page<>(recordReqDTO.getPage(),recordReqDTO.getLimit(),0);
+                return new Page<>(query.getPage(),query.getLimit(),0);
             }
             List<HzEPLManageRecord> records = recordPage.getResult();
             for(HzEPLManageRecord record:records){
@@ -96,7 +111,7 @@ public class HzEbomServiceImpl implements HzEbomService {
                     groupNum =groupNum.split("-")[1].substring(0,4);
                 }else{
                     String parentId = record.getParentUid();
-                    groupNum = hzEPLManageRecordService.getGroupNum(recordReqDTO.getProjectId(),parentId);
+                    groupNum = hzEPLManageRecordService.getGroupNum(query.getProjectId(),parentId);
                 }
                 jsonObject.put("groupNum", groupNum);
                 jsonObject.put("lineId", record.getLineID());
@@ -121,7 +136,7 @@ public class HzEbomServiceImpl implements HzEbomService {
             }
             recordRespDTO.setJsonArray(array);
             recordRespDTOList.add(recordRespDTO);
-            return new Page<>(recordReqDTO.getPage(),recordReqDTO.getLimit(),recordPage.getTotalCount(),recordRespDTOList);
+            return new Page<>(query.getPage(),query.getLimit(),recordPage.getTotalCount(),recordRespDTOList);
         }catch (Exception e){
             return null;
         }
