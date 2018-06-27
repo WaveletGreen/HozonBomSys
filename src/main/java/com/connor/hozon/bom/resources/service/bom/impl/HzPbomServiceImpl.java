@@ -15,6 +15,7 @@ import com.connor.hozon.bom.resources.mybatis.bom.HzMbomRecordDAO;
 import com.connor.hozon.bom.resources.mybatis.bom.HzPbomRecordDAO;
 import com.connor.hozon.bom.resources.mybatis.bom.impl.HzPbomRecordDAOImpl;
 import com.connor.hozon.bom.resources.page.Page;
+import com.connor.hozon.bom.resources.query.HzPbomByPageQuery;
 import com.connor.hozon.bom.resources.service.bom.HzPbomService;
 import com.connor.hozon.bom.resources.service.epl.HzEPLManageRecordService;
 import com.connor.hozon.bom.resources.util.ListUtil;
@@ -78,7 +79,7 @@ public class HzPbomServiceImpl implements HzPbomService {
             record.setStandardPart(recordReqDTO.getStandardPart());
             record.setTools(recordReqDTO.getTools());
             record.setWasterProduct(recordReqDTO.getWasterProduct());
-            record.setpBomPuid(recordReqDTO.getpBomPuid());
+            record.seteBomPuid(recordReqDTO.getpBomPuid());
             record.setPuid(UUID.randomUUID().toString());
             records.add(record);
         }
@@ -533,16 +534,32 @@ public class HzPbomServiceImpl implements HzPbomService {
     }
 
     @Override
-    public Page<HzPbomLineRespDTO> getHzPbomRecordPage(FindForPageReqDTO reqDTO) {
-        Page<HzPbomLineRecord> recordPage =hzPbomRecordDAO.getHzPbomRecordByPage(reqDTO);
+    public Page<HzPbomLineRespDTO> getHzPbomRecordPage(HzPbomByPageQuery query) {
+
+        String level = query.getLevel();
+        if (level != null && level!="") {
+            if(level.length()==1 && level.toUpperCase().endsWith("Y")){
+                query.setIsHas(Integer.valueOf(1));
+            }else {
+                int length = level.charAt(0) - 48;
+                if (level.toUpperCase().endsWith("Y")) {
+                    query.setIsHas(Integer.valueOf(1));
+                } else {
+                    query.setIsHas(Integer.valueOf(0));
+                }
+                query.setLineIndex(String.valueOf(length - 1));
+            }
+        }
+        Page<HzPbomLineRecord> recordPage =hzPbomRecordDAO.getHzPbomRecordByPage(query);
         if(recordPage == null || recordPage.getResult() == null){
             return  null;
         }
         try {
+
             List<HzPbomLineRecord> records = recordPage.getResult();
-            int num = (reqDTO.getPage()-1)*reqDTO.getLimit();
-            List<HzPbomLineRespDTO> respDTOS = pbomLineRecordToRespDTOS(records,reqDTO.getProjectId(),num);
-            return new Page<>(reqDTO.getPage(),reqDTO.getLimit(),recordPage.getTotalCount(),respDTOS);
+            int num = (query.getPage()-1)*query.getLimit();
+            List<HzPbomLineRespDTO> respDTOS = pbomLineRecordToRespDTOS(records,query.getProjectId(),num);
+            return new Page<>(query.getPage(),query.getLimit(),recordPage.getTotalCount(),respDTOS);
         }catch (Exception e){
             return null;
         }

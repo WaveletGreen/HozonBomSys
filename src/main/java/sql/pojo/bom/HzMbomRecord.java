@@ -1,5 +1,7 @@
 package sql.pojo.bom;
 
+import java.util.Date;
+
 /**
  * Created by haozt on 2018/5/24
  */
@@ -60,7 +62,29 @@ public class HzMbomRecord {
     /**
      * 外键
      */
-    private String pBomPuid;
+    private String eBomPuid;
+
+    /**
+     * 删除标志位 1未删除 0 删除
+     */
+    private Integer status;
+
+    /**
+     * 创建时间
+     */
+    private Date createTime;
+    /**
+     * 更新时间
+     */
+    private Date updateTime;
+    /**
+     * 创建者
+     */
+    private String createName;
+    /**
+     * 更改者
+     */
+    private String updateName;
 
     public String getPuid() {
         return puid;
@@ -167,11 +191,51 @@ public class HzMbomRecord {
         this.changeNum = changeNum == null ? null : changeNum.trim();
     }
 
-    public String getpBomPuid() {
-        return pBomPuid;
+    public String geteBomPuid() {
+        return eBomPuid;
     }
 
-    public void setpBomPuid(String pBomPuid) {
-        this.pBomPuid = pBomPuid == null ? null : pBomPuid.trim();
+    public void seteBomPuid(String eBomPuid) {
+        this.eBomPuid = eBomPuid;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
+    }
+
+    public String getCreateName() {
+        return createName;
+    }
+
+    public void setCreateName(String createName) {
+        this.createName = createName;
+    }
+
+    public String getUpdateName() {
+        return updateName;
+    }
+
+    public void setUpdateName(String updateName) {
+        this.updateName = updateName;
     }
 }

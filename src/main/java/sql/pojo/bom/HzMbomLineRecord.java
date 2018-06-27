@@ -1,5 +1,7 @@
 package sql.pojo.bom;
 
+import java.util.Date;
+
 /**
  * Created by haozt on 2018/5/24
  * 2张表的数据 前端数据显示为一张表 这里做一个关联查询
@@ -74,6 +76,8 @@ public class HzMbomLineRecord {
      */
     private String pPuid;
 
+
+    private String ebomPuid;
     /**
      * 备件
      */
@@ -122,6 +126,76 @@ public class HzMbomLineRecord {
      * 变更编号
      */
     private String changeNum;
+
+    /**
+     * 删除标志位 1未删除 0 删除
+     */
+    private Integer status;
+
+    /**
+     * 创建时间
+     */
+    private Date createTime;
+    /**
+     * 更新时间
+     */
+    private Date updateTime;
+    /**
+     * 创建者
+     */
+    private String createName;
+    /**
+     * 更改者
+     */
+    private String updateName;
+
+    public String getEbomPuid() {
+        return ebomPuid;
+    }
+
+    public void setEbomPuid(String ebomPuid) {
+        this.ebomPuid = ebomPuid;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
+    }
+
+    public String getCreateName() {
+        return createName;
+    }
+
+    public void setCreateName(String createName) {
+        this.createName = createName;
+    }
+
+    public String getUpdateName() {
+        return updateName;
+    }
+
+    public void setUpdateName(String updateName) {
+        this.updateName = updateName;
+    }
 
     public String getPuid() {
         return puid;

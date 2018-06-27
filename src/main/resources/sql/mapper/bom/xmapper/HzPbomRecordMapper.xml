@@ -63,11 +63,23 @@
     select t2.puid from Hz_project_libs t2
     <where>
       t2.puid=#{projectId,jdbcType=VARCHAR}))
-      <if test="lineId != null and  lineId!='' " >
-        and t.P_BOM_LINE_ID = #{lineId,jdbcType=VARCHAR}
-      </if>
       <if test="pPuid != null and  pPuid!='' " >
         and t.PUID = #{pPuid,jdbcType=VARCHAR}
+      </if>
+      <if test="lineIndex != null and lineIndex!=''">
+        and LENGTH(TRANSLATE(t.P_LINE_INDEX,',0123456789','.'))=#{lineIndex,jdbcType=VARCHAR}
+      </if>
+      <if test="isHas != null and isHas==0">
+        and (t.P_BOM_LINE_IS_HAS = 0 or t1.P_BOM_LINE_IS_HAS = 1)
+      </if>
+      <if test="isHas != null and isHas==1">
+        and t.P_BOM_LINE_IS_HAS = 1
+      </if>
+      <if test="lineId != null and lineId!=''" >
+        and t.P_BOM_LINE_ID like CONCAT(CONCAT('%',#{lineId,jdbcType=VARCHAR}),'%')
+      </if>
+      <if test="pBomOfWhichDept != null and  pBomOfWhichDept!='' " >
+        and t.P_BOM_OF_WHICH_DEPT like CONCAT(CONCAT('%',#{pBomOfWhichDept,jdbcType=VARCHAR}),'%')
       </if>
       and (t6.P_BOM_STATE is null or t6.P_BOM_STATE  <![CDATA[!= ]]>2)
       and (t5.P_PBOM_STATUS IS NULL OR t5.P_PBOM_STATUS=1)
@@ -86,8 +98,20 @@
     select t2.puid from Hz_project_libs t2
     <where>
       t2.puid=#{projectId,jdbcType=VARCHAR}))
-      <if test="lineId != null and  lineId!='' " >
-        and t.P_BOM_LINE_ID = #{lineId,jdbcType=VARCHAR}
+      <if test="lineIndex != null and lineIndex!=''">
+        and LENGTH(TRANSLATE(t.P_LINE_INDEX,',0123456789','.'))=#{lineIndex,jdbcType=VARCHAR}
+      </if>
+      <if test="isHas != null and isHas==0">
+        and (t.P_BOM_LINE_IS_HAS = 0 or t1.P_BOM_LINE_IS_HAS = 1)
+      </if>
+      <if test="isHas != null and isHas==1">
+        and t.P_BOM_LINE_IS_HAS = 1
+      </if>
+      <if test="lineId != null and lineId!=''" >
+        and t.P_BOM_LINE_ID like CONCAT(CONCAT('%',#{lineId,jdbcType=VARCHAR}),'%')
+      </if>
+      <if test="pBomOfWhichDept != null and  pBomOfWhichDept!='' " >
+        and t.P_BOM_OF_WHICH_DEPT like CONCAT(CONCAT('%',#{pBomOfWhichDept,jdbcType=VARCHAR}),'%')
       </if>
       and (t6.P_BOM_STATE is null or t6.P_BOM_STATE  <![CDATA[!= ]]>2)
       and (t5.P_PBOM_STATUS IS NULL OR t5.P_PBOM_STATUS=1)

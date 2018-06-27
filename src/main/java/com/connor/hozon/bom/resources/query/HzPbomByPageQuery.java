@@ -25,6 +25,27 @@ public class HzPbomByPageQuery extends DefaultPageQuery {
      */
     private String pBomOfWhichDept;
 
+
+    private Integer isHas;
+
+    private String lineIndex;
+
+    public Integer getIsHas() {
+        return isHas;
+    }
+
+    public void setIsHas(Integer isHas) {
+        this.isHas = isHas;
+    }
+
+    public String getLineIndex() {
+        return lineIndex;
+    }
+
+    public void setLineIndex(String lineIndex) {
+        this.lineIndex = lineIndex;
+    }
+
     public String getProjectId() {
         return projectId;
     }

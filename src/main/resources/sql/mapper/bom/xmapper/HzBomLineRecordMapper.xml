@@ -52,6 +52,7 @@
 		P_BOM_LINE_PART_CLASS
 	</sql>
     <sql id="Blob_Column_List">P_BOM_LINE_BLOCK</sql>
+
     <sql id="values_by_batch">
 		#{item.puid,jdbcType=VARCHAR},
 		#{item.parentUid,jdbcType=VARCHAR},

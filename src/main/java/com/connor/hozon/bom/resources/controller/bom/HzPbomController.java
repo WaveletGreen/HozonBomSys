@@ -8,6 +8,7 @@ import com.connor.hozon.bom.resources.dto.response.HzMbomRecordRespDTO;
 import com.connor.hozon.bom.resources.dto.response.HzPbomLineRespDTO;
 import com.connor.hozon.bom.resources.dto.response.OperateResultMessageRespDTO;
 import com.connor.hozon.bom.resources.page.Page;
+import com.connor.hozon.bom.resources.query.HzPbomByPageQuery;
 import com.connor.hozon.bom.resources.service.bom.HzPbomService;
 import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.resources.util.ResultMessageBuilder;
@@ -63,8 +64,8 @@ public class HzPbomController extends BaseController {
      */
     @RequestMapping(value = "getBomManage", method = RequestMethod.GET)
     @ResponseBody
-    public Map<String, Object> getPbomLineRecord(FindForPageReqDTO reqDTO) {
-        Page<HzPbomLineRespDTO> respDTOPage = hzPbomService.getHzPbomRecordPage(reqDTO);
+    public Map<String, Object> getPbomLineRecord(HzPbomByPageQuery query) {
+        Page<HzPbomLineRespDTO> respDTOPage = hzPbomService.getHzPbomRecordPage(query);
         List<HzPbomLineRespDTO> respDTOS = respDTOPage.getResult();
         if(respDTOS == null){
             return new HashMap<>();

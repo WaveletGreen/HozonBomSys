@@ -8,6 +8,7 @@ import com.connor.hozon.bom.resources.dto.request.UpdateHzEbomReqDTO;
 import com.connor.hozon.bom.resources.dto.response.HzEbomRespDTO;
 import com.connor.hozon.bom.resources.dto.response.OperateResultMessageRespDTO;
 import com.connor.hozon.bom.resources.page.Page;
+import com.connor.hozon.bom.resources.query.HzEbomByPageQuery;
 import sql.pojo.bom.HzBomLineRecord;
 import sql.pojo.epl.HzEPLManageRecord;
 
@@ -25,10 +26,10 @@ public interface HzEbomService {
 
     /**
      * 分页获取EBOM信息
-     * @param recordReqDTO
+     * @param query
      * @return
      */
-    Page<HzEbomRespDTO> getHzEbomPage(FindForPageReqDTO recordReqDTO);
+    Page<HzEbomRespDTO> getHzEbomPage(HzEbomByPageQuery query);
 
     /**
      * 获取EBOM标题信息
