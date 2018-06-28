@@ -3,7 +3,6 @@ $(document).ready((function () {
     var url = "mbom/super/record?projectId="+projectPuid;
     initTable(url);
 }))
-
 function doQuery() {
     //$('#superMBomTable').bootstrapTable('refresh');    //刷新表格
     var projectPuid = $("#project", window.top.document).val();
@@ -14,6 +13,9 @@ function doQuery() {
     url+="&pBomOfWhichDept="+pBomOfWhichDept;
     var lineId = $("#lineId").val();
     url += "&lineId="+lineId;
+    var objectName = $("#objectName").val();
+    console.log("选取的value是"+objectName);
+    url += "&objectName="+objectName;
     initTable(url);
     $('#superMBomTable').bootstrapTable('destroy');
     console.log("有搜索框的参数是："+url)
@@ -25,7 +27,7 @@ function initTable(url) {
     var $table = $("#superMBomTable");
     var column = [];
     $.ajax({
-        url: "mbom/superMbomTitle",
+        url: "mbom/superMbomTitle?projectId="+projectPuid,
         type: "GET",
         success: function (result) {
             var column = [];
@@ -40,8 +42,11 @@ function initTable(url) {
                 valign:
                     'middle'
             });*/
-            // var _model = result.model;
-            // $("#objectName").append("<option value='" + _model.cfg0ModelRecordId + "'>" + _model.objectName + "</option>");
+            var _model = result.model;
+            for(var i = 0 ; i < _model.length; i++) {
+                $("#objectName").append("<option value='" + _model[i].cfg0ModelRecordId + "'>" + _model[i].objectName + "</option>");
+            }
+
             var data = result.data;
             console.log(data);
             var keys = [];
@@ -78,6 +83,7 @@ function initTable(url) {
                 //pageList: [20, 50,100,200],        //可供选择的每页的行数（*）
                 uniqueId: "puid",                     //每一行的唯一标识，一般为主键列
                 showExport: true,
+                // responseHandler:responseHandler,
                 //exportDataType: 'all',
                 columns: column,
                 sortable: true,                     //是否启用排序
@@ -91,8 +97,21 @@ function initTable(url) {
                 showToggle: false,                   //是否显示详细视图和列表视图的切换按钮
                 showRefresh: true,                  //是否显示刷新按钮
                 //minimumCountColumns: 4,
+
+
             });
+            function responseHandler(result){
+                var model = result.model;
+                var data = result.result;
+                console.log(data);
+                console.log(model)
+                //如果没有错误则返回数据，渲染表格
+                return {
+                    model:result.model
+                }
+            }
             // $table.bootstrapTable('hideColumn', 'Puid');
         }
+
     })
 }
