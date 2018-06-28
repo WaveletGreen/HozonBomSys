@@ -4,11 +4,14 @@ import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.resources.dto.request.AddMbomReqDTO;
 import com.connor.hozon.bom.resources.dto.request.UpdateMbomReqDTO;
 import com.connor.hozon.bom.resources.dto.response.HzMbomRecordRespDTO;
+import com.connor.hozon.bom.resources.dto.response.HzSuperMbomRecordRespDTO;
+import com.connor.hozon.bom.resources.dto.response.HzVehicleModelRespDTO;
 import com.connor.hozon.bom.resources.dto.response.OperateResultMessageRespDTO;
 import com.connor.hozon.bom.resources.mybatis.bom.HzMbomRecordDAO;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.query.HzMbomByPageQuery;
 import com.connor.hozon.bom.resources.service.bom.HzMbomService;
+import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.sys.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -250,5 +253,108 @@ public class HzMbomServiceImpl implements HzMbomService {
             return OperateResultMessageRespDTO.getFailResult();
         }
         return OperateResultMessageRespDTO.getFailResult();
+    }
+
+    @Override
+    public Page<HzSuperMbomRecordRespDTO> getHzSuperMbomPage(HzMbomByPageQuery query) {
+        try{
+            Page<HzMbomLineRecord> recordPage =hzMbomRecordDAO.getHzSuberMbomByPage(query);
+            int num = (query.getPage()-1)*query.getLimit();
+            if(recordPage == null || recordPage.getResult() == null){
+                return  new Page<>(query.getPage(),query.getLimit(),0);
+            }
+            Map<String,Object> map = new HashMap<>();
+            map.put("projectId",query.getProjectId());
+            List<HzMbomLineRecord> records = recordPage.getResult();
+            List<HzSuperMbomRecordRespDTO> respDTOS = new ArrayList<>();
+            String cfg0Desc ="";//配置描述
+            String cfg0FamilyName = "";//选项族名称
+            String cfg0FamilyDesc ="";//选项族描述
+            String objectName ="";//车型名称
+            String objectDesc="";//车型描述
+            String cfg0ModelBasicDetail="";//基本信息
+            for(HzMbomLineRecord record :records){
+             HzSuperMbomRecordRespDTO respDTO = new HzSuperMbomRecordRespDTO();
+                respDTO.setNo(++num);
+                respDTO.setPuid(record.getPuid());
+                respDTO.seteBomPuid(record.getpPuid());
+                Integer is2Y = record.getIs2Y();
+                Integer hasChildren = record.getIsHas();
+                String lineIndex = record.getLineIndex();
+                String[] strings = getLevelAndRank(lineIndex, is2Y, hasChildren);
+                respDTO.setLevel(strings[0]);//层级
+                respDTO.setLineId(record.getLineID());
+                respDTO.setpBomOfWhichDept(record.getpBomOfWhichDept());
+                byte[] bytes = record.getBomLineBlock();
+                Object obj = SerializeUtil.unserialize(bytes);
+                Object name = null;
+                if (obj instanceof LinkedHashMap) {
+                    if (((LinkedHashMap) obj).size() > 0) {
+                        name =((LinkedHashMap) obj).get("object_name");
+                    }
+                }
+                respDTO.setObject_name((String) name);
+                respDTO.setSparePart(record.getSparePart());
+                respDTO.setSparePartNum(record.getSparePartNum());
+                respDTO.setLaborHour(record.getLaborHour());
+                respDTO.setRhythm(record.getRhythm());
+                respDTO.setSolderJoint(record.getSolderJoint());
+                respDTO.setMachineMaterial(record.getMachineMaterial());
+                respDTO.setStandardPart(record.getStandardPart());
+                respDTO.setTools(record.getTools());
+                respDTO.setWasterProduct(record.getWasterProduct());
+                respDTO.setChange(record.getChange());
+                respDTO.setChangeNum(record.getChangeNum());
+                if(null !=record.getCfg0Desc()){
+                    cfg0Desc = record.getCfg0Desc();
+                }
+                if(null != record.getCfg0FamilyName()){
+                    cfg0FamilyName = record.getCfg0FamilyName();
+                }
+                if(null!=record.getCfg0FamilyDesc()){
+                    cfg0FamilyDesc = record.getCfg0FamilyDesc();
+                }
+                if(null != record.getObjectName()){
+                    objectName = record.getObjectName();
+                }
+                if(null != record.getObjectDesc()){
+                    objectDesc = record.getObjectDesc();
+                }
+                if(null !=record.getCfg0ModelBasicDetail()){
+                    cfg0ModelBasicDetail = record.getCfg0ModelBasicDetail();
+                }
+                respDTO.setCfg0Desc(cfg0Desc);
+                respDTO.setCfg0FamilyDesc(cfg0FamilyDesc);
+                respDTO.setCfg0FamilyName(cfg0FamilyName);
+                respDTO.setCfg0ModelBasicDetail(cfg0ModelBasicDetail);
+                respDTO.setObjectName(objectName);
+                respDTO.setObjectDesc(objectDesc);
+                respDTOS.add(respDTO);
+            }
+            return new Page<>(query.getPage(),query.getLimit(),recordPage.getTotalCount(),respDTOS);
+        }catch (Exception e){
+            return null;
+        }
+
+    }
+
+    @Override
+    public List<HzVehicleModelRespDTO> getHzVehicleModelByProjectId(String projectId) {
+        try {
+            List<HzMbomLineRecord> records = hzMbomRecordDAO.getHzVehicleModelName(projectId);
+            List<HzVehicleModelRespDTO> respDTOS = new ArrayList<>();
+            if(ListUtil.isNotEmpty(records)){
+                for(HzMbomLineRecord record:records){
+                    HzVehicleModelRespDTO vehicleModelRespDTO = new HzVehicleModelRespDTO();
+                    vehicleModelRespDTO.setObjectName(record.getObjectName());
+                    vehicleModelRespDTO.setCfg0ModelRecordId(record.getCfg0ModelRecordId());
+                    respDTOS.add(vehicleModelRespDTO);
+                }
+                return respDTOS;
+            }
+        }catch (Exception e){
+            return null;
+        }
+        return null;
     }
 }
