@@ -1,13 +1,27 @@
 $(document).ready((function () {
-    initTable();
+    var projectPuid = $("#project", window.top.document).val();
+    var url = "mbom/super/record?projectId="+projectPuid;
+    initTable(url);
 }))
 
 function doQuery() {
-    $('#superMBomTable').bootstrapTable('refresh');    //刷新表格
+    //$('#superMBomTable').bootstrapTable('refresh');    //刷新表格
+    var projectPuid = $("#project", window.top.document).val();
+    var url = "mbom/super/record?projectId="+projectPuid;
+    var level = $("#level").val();
+    url+="&level="+level;
+    var pBomOfWhichDept = $("#pBomOfWhichDept").val();
+    url+="&pBomOfWhichDept="+pBomOfWhichDept;
+    var lineId = $("#lineId").val();
+    url += "&lineId="+lineId;
+    initTable(url);
+    $('#superMBomTable').bootstrapTable('destroy');
+    console.log("有搜索框的参数是："+url)
 }
 
-function initTable() {
+function initTable(url) {
     var projectPuid = $("#project", window.top.document).val();
+    var url = "mbom/super/record?projectId="+projectPuid;
     var $table = $("#superMBomTable");
     var column = [];
     $.ajax({
@@ -26,6 +40,8 @@ function initTable() {
                 valign:
                     'middle'
             });*/
+            var _model = result.model;
+            $("#objectName").append("<option value='" + _model.cfg0ModelRecordId + "'>" + _model.objectName + "</option>");
             var data = result.data;
             console.log(data);
             var keys = [];
@@ -46,7 +62,7 @@ function initTable() {
             ;
             $table.bootstrapTable({
 
-                url: "mbom/super/record?projectId="+projectPuid,
+                url: url,
                 method: 'GET',
                 dataType: 'json',
                 cache: false,
