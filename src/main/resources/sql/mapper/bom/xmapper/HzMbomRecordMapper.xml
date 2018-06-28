@@ -378,49 +378,52 @@
     <!--分页获取超级MBOM数据信息-->
     <select id="HzMbomRecordDAOImpl_getHzSuberMbomByPage" parameterType="java.util.HashMap" resultMap="MbomResultMap">
        select m7.*,m6.P_CFG0_DESC,m6.P_CFG0_FAMILY_NAME,m6.P_CFG0_FAMILY_DESC,m2.OBJECT_NAME,
-           m2.OBJECT_DESC,m2.P_CFG0_MODEL_BASIC_DETAIL,m9.*
-       from HZ_BOM_LINE_RECORD m7
-       LEFT JOIN HZ_BOM_STATE m8 on m7.puid = m8.P_BOM_ID
-       LEFT OUTER JOIN HZ_MBOM_RECORD m9 ON  m7.puid = m9.P_BOM_PUID
-       left join HZ_CFG0_OF_BOMLINE_RECORD m5 on m5.p_bomlinepuid=m7.puid
-       left join Hz_Cfg0_Record m6 on m6.puid=m5.p_to_cfg0_id_of_bl
-       left join HZ_CFG0_TO_MODEL_RECORD m3 on m3.p_cfg0_id_record=m6.puid
-       left join Hz_Cfg0_Model_Record m2 on m2.puid=m3.p_cfg0_model_record
-       left join HZ_CFG0_MAIN_RECORD m4 on m4.puid=m2.p_cfg0_model_of_main_record
-       WHERE (m8.P_BOM_STATE is null or m8.P_BOM_STATE <![CDATA[!= ]]>2)
-       and (m9.P_MBOM_STATUS IS NULL OR m9.P_MBOM_STATUS=1)
-           start with m7.PUID in(
-      select t7.PUID
-      from HZ_BOM_LINE_RECORD t7
-      left join HZ_CFG0_OF_BOMLINE_RECORD t5 on t5.p_bomlinepuid=t7.puid
-      left join Hz_Cfg0_Record t6 on t6.puid=t5.p_to_cfg0_id_of_bl
-      left join HZ_CFG0_TO_MODEL_RECORD t3 on t3.p_cfg0_id_record=t6.puid
-      left join Hz_Cfg0_Model_Record t2 on t2.puid=t3.p_cfg0_model_record
-      left join HZ_CFG0_MAIN_RECORD t4 on t4.puid=t2.p_cfg0_model_of_main_record
-      <where>
-          t4.p_cfg0_of_which_project_puid=#{projectId,jdbcType=VARCHAR}
-      <if test="lineIndex != null and lineIndex!=''">
-          and LENGTH(TRANSLATE(m7.P_LINE_INDEX,',0123456789','.'))=#{lineIndex,jdbcType=VARCHAR}
-      </if>
-      <if test="isHas != null and isHas==0">
-          and (m7.P_BOM_LINE_IS_HAS = 0 or m7.P_BOM_LINE_IS_HAS = 1)
-      </if>
-      <if test="isHas != null and isHas==1">
-          and m7.P_BOM_LINE_IS_HAS = 1
-      </if>
-      <if test="lineId != null and lineId!=''">
-          and m7.P_BOM_LINE_ID like CONCAT(CONCAT('%',#{lineId,jdbcType=VARCHAR}),'%')
-      </if>
-      <if test="pBomOfWhichDept != null and  pBomOfWhichDept!='' ">
-          and m7.P_BOM_OF_WHICH_DEPT like CONCAT(CONCAT('%',#{pBomOfWhichDept,jdbcType=VARCHAR}),'%')
-      </if>
-      <if test="cfg0ModelRecordId != null and  cfg0ModelRecordId!='' ">
-          and m3.P_CFG0_MODEL_RECORD =#{cfg0ModelRecordId,jdbcType=VARCHAR})
-      </if>
-      </where>
+        m2.OBJECT_DESC,m2.P_CFG0_MODEL_BASIC_DETAIL,m9.*
+        from HZ_BOM_LINE_RECORD m7
+        LEFT JOIN HZ_BOM_STATE m8 on m7.puid = m8.P_BOM_ID
+        LEFT OUTER JOIN HZ_MBOM_RECORD m9 ON  m7.puid = m9.P_BOM_PUID
+        left join HZ_CFG0_OF_BOMLINE_RECORD m5 on m5.p_bomlinepuid=m7.puid
+        left join Hz_Cfg0_Record m6 on m6.puid=m5.p_to_cfg0_id_of_bl
+        left join HZ_CFG0_TO_MODEL_RECORD m3 on m3.p_cfg0_id_record=m6.puid
+        left join Hz_Cfg0_Model_Record m2 on m2.puid=m3.p_cfg0_model_record
+        left join HZ_CFG0_MAIN_RECORD m4 on m4.puid=m2.p_cfg0_model_of_main_record
+        <where>
+            (m8.P_BOM_STATE is null or m8.P_BOM_STATE <![CDATA[!= ]]>2)
+            and (m9.P_MBOM_STATUS IS NULL OR m9.P_MBOM_STATUS=1)
+            <if test="lineIndex != null and lineIndex!=''">
+                and LENGTH(TRANSLATE(m7.P_LINE_INDEX,',0123456789','.'))=#{lineIndex,jdbcType=VARCHAR}
+            </if>
+            <if test="isHas != null and isHas==0">
+                and (m7.P_BOM_LINE_IS_HAS = 0 or m7.P_BOM_LINE_IS_HAS = 1)
+            </if>
+            <if test="isHas != null and isHas==1">
+                and m7.P_BOM_LINE_IS_HAS = 1
+            </if>
+            <if test="lineId != null and lineId!=''">
+                and m7.P_BOM_LINE_ID like CONCAT(CONCAT('%',#{lineId,jdbcType=VARCHAR}),'%')
+            </if>
+            <if test="pBomOfWhichDept != null and  pBomOfWhichDept!='' ">
+                and m7.P_BOM_OF_WHICH_DEPT like CONCAT(CONCAT('%',#{pBomOfWhichDept,jdbcType=VARCHAR}),'%')
+            </if>
 
-)
- connect by prior m7.PUID=m7.P_PARENT_UID
+        </where>
+        start with m7.PUID in(
+        select t7.PUID
+        from HZ_BOM_LINE_RECORD t7
+        left join HZ_CFG0_OF_BOMLINE_RECORD t5 on t5.p_bomlinepuid=t7.puid
+        left join Hz_Cfg0_Record t6 on t6.puid=t5.p_to_cfg0_id_of_bl
+        left join HZ_CFG0_TO_MODEL_RECORD t3 on t3.p_cfg0_id_record=t6.puid
+        left join Hz_Cfg0_Model_Record t2 on t2.puid=t3.p_cfg0_model_record
+        left join HZ_CFG0_MAIN_RECORD t4 on t4.puid=t2.p_cfg0_model_of_main_record
+        <where>
+            t4.p_cfg0_of_which_project_puid=#{projectId,jdbcType=VARCHAR}
+            <if test="cfg0ModelRecordId != null and  cfg0ModelRecordId!='' ">
+                and m3.P_CFG0_MODEL_RECORD =#{cfg0ModelRecordId,jdbcType=VARCHAR}
+            </if>
+        </where>
+
+        )
+        connect by prior m7.PUID=m7.P_PARENT_UID
     </select>
 
 
@@ -437,18 +440,9 @@
        left join HZ_CFG0_TO_MODEL_RECORD m3 on m3.p_cfg0_id_record=m6.puid
        left join Hz_Cfg0_Model_Record m2 on m2.puid=m3.p_cfg0_model_record
        left join HZ_CFG0_MAIN_RECORD m4 on m4.puid=m2.p_cfg0_model_of_main_record
-       WHERE (m8.P_BOM_STATE is null or m8.P_BOM_STATE <![CDATA[!= ]]>2)
-       and (m9.P_MBOM_STATUS IS NULL OR m9.P_MBOM_STATUS=1)
-           start with m7.PUID in(
-      select t7.PUID
-      from HZ_BOM_LINE_RECORD t7
-      left join HZ_CFG0_OF_BOMLINE_RECORD t5 on t5.p_bomlinepuid=t7.puid
-      left join Hz_Cfg0_Record t6 on t6.puid=t5.p_to_cfg0_id_of_bl
-      left join HZ_CFG0_TO_MODEL_RECORD t3 on t3.p_cfg0_id_record=t6.puid
-      left join Hz_Cfg0_Model_Record t2 on t2.puid=t3.p_cfg0_model_record
-      left join HZ_CFG0_MAIN_RECORD t4 on t4.puid=t2.p_cfg0_model_of_main_record
     <where>
-        t4.p_cfg0_of_which_project_puid=#{projectId,jdbcType=VARCHAR}
+        (m8.P_BOM_STATE is null or m8.P_BOM_STATE <![CDATA[!= ]]>2)
+        and (m9.P_MBOM_STATUS IS NULL OR m9.P_MBOM_STATUS=1)
         <if test="lineIndex != null and lineIndex!=''">
             and LENGTH(TRANSLATE(m7.P_LINE_INDEX,',0123456789','.'))=#{lineIndex,jdbcType=VARCHAR}
         </if>
@@ -464,10 +458,22 @@
         <if test="pBomOfWhichDept != null and  pBomOfWhichDept!='' ">
             and m7.P_BOM_OF_WHICH_DEPT like CONCAT(CONCAT('%',#{pBomOfWhichDept,jdbcType=VARCHAR}),'%')
         </if>
-        <if test="cfg0ModelRecordId != null and  cfg0ModelRecordId!='' ">
-            and m3.P_CFG0_MODEL_RECORD =#{cfg0ModelRecordId,jdbcType=VARCHAR})
-        </if>
+
     </where>
+           start with m7.PUID in(
+      select t7.PUID
+      from HZ_BOM_LINE_RECORD t7
+      left join HZ_CFG0_OF_BOMLINE_RECORD t5 on t5.p_bomlinepuid=t7.puid
+      left join Hz_Cfg0_Record t6 on t6.puid=t5.p_to_cfg0_id_of_bl
+      left join HZ_CFG0_TO_MODEL_RECORD t3 on t3.p_cfg0_id_record=t6.puid
+      left join Hz_Cfg0_Model_Record t2 on t2.puid=t3.p_cfg0_model_record
+      left join HZ_CFG0_MAIN_RECORD t4 on t4.puid=t2.p_cfg0_model_of_main_record
+      <where>
+          t4.p_cfg0_of_which_project_puid=#{projectId,jdbcType=VARCHAR}
+          <if test="cfg0ModelRecordId != null and  cfg0ModelRecordId!='' ">
+              and m3.P_CFG0_MODEL_RECORD =#{cfg0ModelRecordId,jdbcType=VARCHAR}
+          </if>
+      </where>
 )
  connect by prior m7.PUID=m7.P_PARENT_UID
     </select>
