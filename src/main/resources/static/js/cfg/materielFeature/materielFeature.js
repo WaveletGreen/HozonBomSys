@@ -110,7 +110,7 @@ function loadData() {
                             window.Ewin.dialog({
                                 title: "修改超级物料",
                                 //直接修改了超级物料表的数据，要根据配置器的puid找，否则就不能根据所见即所改
-                                url: "materiel/modifyPage?puid=" + rows[0].cfg0MainPuid + "&page=superMateriel",
+                                url: "materiel/modifyPage?puid=" + rows[0].cfg0MainPuid + "&puidOfModelFeature="+rows[0].puidOfModelFeature+"&page=superMateriel",
                                 gridId: "gridId",
                                 width: 350,
                                 height: 450
