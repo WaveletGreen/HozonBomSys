@@ -4,6 +4,8 @@ import com.connor.hozon.bom.resources.controller.BaseController;
 import com.connor.hozon.bom.resources.dto.request.AddMbomReqDTO;
 import com.connor.hozon.bom.resources.dto.request.UpdateMbomReqDTO;
 import com.connor.hozon.bom.resources.dto.response.HzMbomRecordRespDTO;
+import com.connor.hozon.bom.resources.dto.response.HzSuperMbomRecordRespDTO;
+import com.connor.hozon.bom.resources.dto.response.HzVehicleModelRespDTO;
 import com.connor.hozon.bom.resources.dto.response.OperateResultMessageRespDTO;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.query.HzMbomByPageQuery;
@@ -33,6 +35,89 @@ public class HzMbomController extends BaseController {
 
     @Autowired
     private HzMbomService hzMbomService;
+
+    @RequestMapping(value = "superMbomTitle", method = RequestMethod.GET)
+    public void getHzSuperMBomTitle(HttpServletResponse response) {
+        LinkedHashMap<String, String> tableTitle = new LinkedHashMap<>();
+        tableTitle.put("No", "序号");
+        tableTitle.put("level", "层级");
+        tableTitle.put("pBomOfWhichDept", "专业");
+        tableTitle.put("lineId", "零件号");
+        tableTitle.put("object_name", "名称");
+        tableTitle.put("objectName", "车型名称");
+        tableTitle.put("objectDesc", "车型描述");
+        tableTitle.put("cfg0Desc", "配置描述");
+        tableTitle.put("cfg0FamilyName", "选项族名称");
+        tableTitle.put("cfg0FamilyDesc", "选项族描述");
+        tableTitle.put("cfg0ModelBasicDetail", "基本信息");
+        tableTitle.put("sparePart", "备件");
+        tableTitle.put("sparePartNum", "备件编号");
+        tableTitle.put("processRoute", "工艺路线");
+        tableTitle.put("laborHour", "人工工时");
+        tableTitle.put("rhythm", "节拍");
+        tableTitle.put("solderJoint", "焊点");
+        tableTitle.put("machineMaterial", "机物料");
+        tableTitle.put("standardPart", "标准件");
+        tableTitle.put("tools", "工具");
+        tableTitle.put("wasterProduct", "废品");
+        tableTitle.put("change", "变更");
+        tableTitle.put("changeNum", "变更号");
+        writeAjaxJSONResponse(ResultMessageBuilder.build(tableTitle), response);
+    }
+
+
+    /**
+     * 分页获取MBOM 记录
+     *
+     * @param query
+     * @return
+     */
+    @RequestMapping(value = "super/record", method = RequestMethod.GET)
+    @ResponseBody
+    public Map<String, Object> getSuperMbomRecord(HzMbomByPageQuery query) {
+        Page<HzSuperMbomRecordRespDTO> page = hzMbomService.getHzSuperMbomPage(query);
+        if (page == null) {
+            return new HashMap<>();
+        }
+        List<HzVehicleModelRespDTO> respDTOS = hzMbomService.getHzVehicleModelByProjectId(query.getProjectId());
+        List<HzSuperMbomRecordRespDTO> list = page.getResult();
+        Map<String, Object> ret = new HashMap<>();
+        List<Map<String, Object>> _list = new ArrayList<>();
+        list.forEach(dto -> {
+            Map<String, Object> _res = new HashMap<>();
+            _res.put("eBomPuid", dto.geteBomPuid());
+            _res.put("No", dto.getNo());
+            _res.put("level", dto.getLevel());
+            _res.put("pBomOfWhichDept", dto.getpBomOfWhichDept());
+            _res.put("lineId", dto.getLineId());
+            _res.put("object_name", dto.getObject_name());
+            _res.put("sparePart", dto.getSparePart());
+            _res.put("sparePartNum", dto.getSparePartNum());
+            _res.put("processRoute", dto.getProcessRoute());
+            _res.put("laborHour", dto.getLaborHour());
+            _res.put("rhythm", dto.getRhythm());
+            _res.put("solderJoint", dto.getSolderJoint());
+            _res.put("machineMaterial", dto.getMachineMaterial());
+            _res.put("standardPart", dto.getStandardPart());
+            _res.put("tools", dto.getTools());
+            _res.put("wasterProduct", dto.getWasterProduct());
+            _res.put("change", dto.getChange());
+            _res.put("changeNum", dto.getChangeNum());
+            _res.put("cfg0Desc", dto.getCfg0Desc());
+            _res.put("cfg0FamilyName", dto.getCfg0FamilyName());
+            _res.put("cfg0FamilyDesc", dto.getCfg0FamilyDesc());
+            _res.put("objectName", dto.getObjectName());
+            _res.put("objectDesc", dto.getObjectDesc());
+            _res.put("cfg0ModelBasicDetail",dto.getCfg0ModelBasicDetail());
+            _list.add(_res);
+        });
+        ret.put("totalCount", page.getTotalCount());
+        ret.put("result", _list);
+        ret.put("model",respDTOS);
+        return ret;
+    }
+
+
 
     /**
      * MBOM管理标题
@@ -168,26 +253,6 @@ public class HzMbomController extends BaseController {
     public void deleteMbom(String eBomPuid,HttpServletResponse response){
        OperateResultMessageRespDTO respDTO =  hzMbomService.deleteMbomRecord(eBomPuid);
         writeAjaxJSONResponse(ResultMessageBuilder.build(OperateResultMessageRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
-    }
-
-    /**
-     * 超级MBOM标题
-     * @param response
-     */
-    @RequestMapping(value = "superMBomTitel", method = RequestMethod.GET)
-    public void getMbomSuperMBomGetTitel(HttpServletResponse response) {
-        LinkedHashMap<String, String> titel = new LinkedHashMap<>();
-        titel.put("sparePart", "备件");
-        titel.put("sparePartNum", "备件编号");
-        titel.put("processRoute", "工艺路线");
-        titel.put("laborHour", "人工工时");
-        titel.put("rhythm", "节拍");
-        titel.put("solderJoint", "焊点");
-        titel.put("machineMaterial", "机物料");
-        titel.put("standardPart", "标准件");
-        titel.put("tools", "工具");
-        titel.put("wasterProduct", "废品");
-        writeAjaxJSONResponse(ResultMessageBuilder.build(titel), response);
     }
 
     /**

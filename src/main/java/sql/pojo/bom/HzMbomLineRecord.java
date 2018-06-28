@@ -4,7 +4,7 @@ import java.util.Date;
 
 /**
  * Created by haozt on 2018/5/24
- * 2张表的数据 前端数据显示为一张表 这里做一个关联查询
+ * 多张表的数据 前端数据显示为一张表 这里做一个关联查询
  */
 public class HzMbomLineRecord {
     /**
@@ -148,6 +148,94 @@ public class HzMbomLineRecord {
      * 更改者
      */
     private String updateName;
+
+    /**加入配置属性 车型属性*/
+
+    /**
+     * 配置描述
+     */
+    private String cfg0Desc;
+    /**
+     * 选项族的名称
+     */
+    private String cfg0FamilyName;
+    /**
+     * 选项族的描述
+     */
+    private String cfg0FamilyDesc;
+    /**
+     * 车型名称
+     */
+    private String objectName;
+    /**
+     * 车型描述
+     */
+    private String objectDesc;
+    /**
+     * 基本信息
+     */
+    private String cfg0ModelBasicDetail;
+
+    /**
+     * 车型配置模型id
+     */
+    private String cfg0ModelRecordId;
+
+    public String getCfg0ModelRecordId() {
+        return cfg0ModelRecordId;
+    }
+
+    public void setCfg0ModelRecordId(String cfg0ModelRecordId) {
+        this.cfg0ModelRecordId = cfg0ModelRecordId;
+    }
+
+    public String getCfg0Desc() {
+        return cfg0Desc;
+    }
+
+    public void setCfg0Desc(String cfg0Desc) {
+        this.cfg0Desc = cfg0Desc;
+    }
+
+    public String getCfg0FamilyName() {
+        return cfg0FamilyName;
+    }
+
+    public void setCfg0FamilyName(String cfg0FamilyName) {
+        this.cfg0FamilyName = cfg0FamilyName;
+    }
+
+    public String getCfg0FamilyDesc() {
+        return cfg0FamilyDesc;
+    }
+
+    public void setCfg0FamilyDesc(String cfg0FamilyDesc) {
+        this.cfg0FamilyDesc = cfg0FamilyDesc;
+    }
+
+    public String getObjectName() {
+        return objectName;
+    }
+
+    public void setObjectName(String objectName) {
+        this.objectName = objectName;
+    }
+
+    public String getObjectDesc() {
+        return objectDesc;
+    }
+
+    public void setObjectDesc(String objectDesc) {
+        this.objectDesc = objectDesc;
+    }
+
+    public String getCfg0ModelBasicDetail() {
+        return cfg0ModelBasicDetail;
+    }
+
+    public void setCfg0ModelBasicDetail(String cfg0ModelBasicDetail) {
+        this.cfg0ModelBasicDetail = cfg0ModelBasicDetail;
+    }
 
     public String geteBomPuid() {
         return eBomPuid;

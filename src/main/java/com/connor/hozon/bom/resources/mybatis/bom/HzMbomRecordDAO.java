@@ -60,4 +60,7 @@ public interface HzMbomRecordDAO {
      */
     HzMbomRecord findHzMbomByeBomPuid(String eBomPuid);
 
+    List<HzMbomLineRecord> getHzVehicleModelName(String projectId);
+
+    Page<HzMbomLineRecord> getHzSuberMbomByPage(HzMbomByPageQuery query);
 }

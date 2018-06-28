@@ -7,14 +7,15 @@ function doQuery() {
 }
 
 function initTable() {
+    var projectPuid = $("#project", window.top.document).val();
     var $table = $("#superMBomTable");
     var column = [];
     $.ajax({
-        url: "mbom/superMBomTitel",
+        url: "mbom/superMbomTitle",
         type: "GET",
         success: function (result) {
             var column = [];
-            column.push({field: 'Puid', title: 'puid'});
+            // column.push({field: 'Puid', title: 'puid'});
             // column.push({field: 'ck', checkbox: true, Width: 50});
             /*column.push({field: '',
                 title: '序号',
@@ -44,7 +45,8 @@ function initTable() {
             }
             ;
             $table.bootstrapTable({
-                url: "",
+
+                url: "mbom/super/record?projectId="+projectPuid,
                 method: 'GET',
                 dataType: 'json',
                 cache: false,
