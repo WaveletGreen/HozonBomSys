@@ -1,3 +1,4 @@
+let count = 1;
 $(document).ready((function () {
     var projectPuid = $("#project", window.top.document).val();
     var url = "mbom/super/record?projectId="+projectPuid;
@@ -13,15 +14,17 @@ function doQuery() {
     url+="&pBomOfWhichDept="+pBomOfWhichDept;
     var lineId = $("#lineId").val();
     url += "&lineId="+lineId;
-    var objectName = $("#objectName").val();
+    var cfg0ModelRecordId = $("#objectName").val();
     console.log("选取的value是"+objectName);
-    url += "&objectName="+objectName;
+    url += "&cfg0ModelRecordId="+cfg0ModelRecordId;
     initTable(url);
     $('#superMBomTable').bootstrapTable('destroy');
     console.log("有搜索框的参数是："+url)
+    count++;
 }
 
 function initTable(url) {
+    console.log(url)
     var projectPuid = $("#project", window.top.document).val();
     //var url = "mbom/super/record?projectId="+projectPuid;
     var $table = $("#superMBomTable");
@@ -42,11 +45,13 @@ function initTable(url) {
                 valign:
                     'middle'
             });*/
-            var _model = result.model;
-            for(var i = 0 ; i < _model.length; i++) {
-                $("#objectName").append("<option value='" + _model[i].cfg0ModelRecordId + "'>" + _model[i].objectName + "</option>");
-            }
 
+            var _model = result.model;
+            if(count<2){
+                for(var i = 0 ; i < _model.length; i++) {
+                    $("#objectName").append("<option value='" + _model[i].cfg0ModelRecordId + "'>" + _model[i].objectName + "</option>");
+                }
+            }
             var data = result.data;
             console.log(data);
             var keys = [];

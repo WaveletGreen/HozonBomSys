@@ -78,6 +78,11 @@ public class HzMbomRecordDAOImpl extends BaseSQLUtil implements HzMbomRecordDAO 
         PageRequest pageRequest = new PageRequest();
         Map map = new HashMap();
         map.put("projectId",query.getProjectId());
+        map.put("isHas",query.getIsHas());
+        map.put("pBomOfWhichDept",query.getpBomOfWhichDept());
+        map.put("lineIndex",query.getLineIndex());
+        map.put("lineId",query.getLineId());
+        map.put("cfg0ModelRecordId",query.getCfg0ModelRecordId());
         pageRequest.setPageNumber(query.getPage());
         pageRequest.setPageSize(query.getLimit());
         pageRequest.setFilters(map);

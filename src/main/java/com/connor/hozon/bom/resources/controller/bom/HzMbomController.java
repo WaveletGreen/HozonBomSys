@@ -80,7 +80,7 @@ public class HzMbomController extends BaseController {
      */
     @RequestMapping(value = "super/record", method = RequestMethod.GET)
     @ResponseBody
-    public Map<String, Object> getSuperMbomRecord(@RequestBody HzMbomByPageQuery query) {
+    public Map<String, Object> getSuperMbomRecord(HzMbomByPageQuery query) {
         Page<HzSuperMbomRecordRespDTO> page = hzMbomService.getHzSuperMbomPage(query);
         if (page == null) {
             return new HashMap<>();
