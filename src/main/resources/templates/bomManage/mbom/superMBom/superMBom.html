@@ -23,12 +23,13 @@
                            placeholder="请输入专业"/>
                 </div>
                 <div class="form-group">
-                    <label for="rank">级别:</label>
-                    <input type="text" class="form-control" name="rank" id="rank" placeholder="请输入零件号"/>
+                    <label for="lineId">零件号:</label>
+                    <input type="text" class="form-control" name="lineId" id="lineId" placeholder="请输入零件号"/>
                 </div>
                 <div class="form-group">
-                    <label for="groupNum">分组号:</label>
-                    <input type="text" class="form-control" name="groupNum" id="groupNum" placeholder="请输入零件号"/>
+                    <label for="objectName">车型名称:</label>
+                    <select class="form-control" style="min-width: 180px" name="objectName" id="objectName" placeholder="请选择车型名称">
+                    </select>
                 </div>
                 <div class="form-group">
                     <button type="button" id="queryBtn" onclick="doQuery();" class="btn btn-primary">查询</button>
