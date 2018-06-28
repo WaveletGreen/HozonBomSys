@@ -58,7 +58,6 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         registry.addViewController("/relevance").setViewName("/cfg/relevance/relevance");
         /**物料配置表*/
         registry.addViewController("/materielFeature").setViewName("/cfg/materielFeature/materielFeature");
-
         //特性表页面
         registry.addViewController("/featuresList").setViewName("/cfg/features/featuresList");
         //PBOM管理页面
@@ -69,18 +68,26 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         registry.addViewController("/ebomManage").setViewName("/bomManage/ebom/ebomManage/ebomManage");
         //EPL页面
         registry.addViewController("/eplManage").setViewName("/bomManage/epl/eplManage");
-        //Mbom的超级BOM页面
-        registry.addViewController("/superBom").setViewName("/bomManage/mbom/superBom/superBom");
-        //MBOM的工艺中心主数据页面
-        registry.addViewController("/workCenter").setViewName("/bomManage/mbom/workCenter/workCenter");
         //PBOM工艺合件页面
         registry.addViewController("/processOfFitting").setViewName("/bomManage/pbom/processOfFitting/processOfFitting");
         //PBOM工艺辅料页面
         registry.addViewController("/processAids").setViewName("/bomManage/pbom/processAids/processAids");
-        //变更管理VWO表单
-        registry.addViewController("/vwoFromList").setViewName("/changeManage/vwo/vwoFromList");
         //MBOM维护页面
         registry.addViewController("/mbomMaintenance").setViewName("/bomManage/mbom/mbomMaintenance/mbomMaintenance");
+        //Mbom的超级MBOM页面
+        registry.addViewController("/superMBom").setViewName("/bomManage/mbom/superMBom/superMBom");
+        //MBOM物料数据类别页面
+        registry.addViewController("/materialData").setViewName("/bomManage/mbom/materialData/materialData");
+        //MBOM的工艺中心主数据页面
+        registry.addViewController("/processCenter").setViewName("/bomManage/mbom/processCenter/processCenter");
+
+
+
+
+
+
+        //变更管理VWO表单
+        registry.addViewController("/vwoFromList").setViewName("/changeManage/vwo/vwoFromList");
     }
 
 

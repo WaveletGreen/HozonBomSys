@@ -34,47 +34,6 @@ public class HzMbomController extends BaseController {
     @Autowired
     private HzMbomService hzMbomService;
 
-    @RequestMapping(value = "superBomTitel", method = RequestMethod.GET)
-    public void getMbomSuperBomGetTitel(HttpServletResponse response) {
-        LinkedHashMap<String, String> titel = new LinkedHashMap<>();
-        titel.put("sparePart", "备件");
-        titel.put("sparePartNum", "备件编号");
-        titel.put("processRoute", "工艺路线");
-        titel.put("laborHour", "人工工时");
-        titel.put("rhythm", "节拍");
-        titel.put("solderJoint", "焊点");
-        titel.put("machineMaterial", "机物料");
-        titel.put("standardPart", "标准件");
-        titel.put("tools", "工具");
-        titel.put("wasterProduct", "废品");
-        writeAjaxJSONResponse(ResultMessageBuilder.build(titel), response);
-    }
-
-
-    @RequestMapping(value = "workCenterTitel", method = RequestMethod.GET)
-    public void getMbomWorkCenterTitel(HttpServletResponse response) {
-        LinkedHashMap<String, String> titel = new LinkedHashMap<>();
-        titel.put("factory", "工厂");
-        titel.put("workHours", "工作工时");
-        titel.put("jobCentreCategory", "工作中心类别");
-        titel.put("describe", "描述");
-        titel.put("use", "用途");
-        titel.put("standardCode", "标准值码");
-        titel.put("controlCode", "控制码");
-        titel.put("directLabor", "直接人工");
-        titel.put("indirectLabor", "间接人工");
-        titel.put("machineHour", "机器工时 ");
-        titel.put("combustion", "燃动");
-        titel.put("machineMaterial", "机物料");
-        titel.put("otherCosts", "其它费用");
-        titel.put("processingFormula", "加工公式");
-        titel.put("powerType", "能力类别");
-        titel.put("startTime", "开始时间");
-        titel.put("endTime", "结束时间");
-        writeAjaxJSONResponse(ResultMessageBuilder.build(titel), response);
-    }
-
-
     /**
      * MBOM管理标题
      *
@@ -209,5 +168,89 @@ public class HzMbomController extends BaseController {
     public void deleteMbom(String eBomPuid,HttpServletResponse response){
        OperateResultMessageRespDTO respDTO =  hzMbomService.deleteMbomRecord(eBomPuid);
         writeAjaxJSONResponse(ResultMessageBuilder.build(OperateResultMessageRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
+    }
+
+    /**
+     * 超级MBOM标题
+     * @param response
+     */
+    @RequestMapping(value = "superMBomTitel", method = RequestMethod.GET)
+    public void getMbomSuperMBomGetTitel(HttpServletResponse response) {
+        LinkedHashMap<String, String> titel = new LinkedHashMap<>();
+        titel.put("sparePart", "备件");
+        titel.put("sparePartNum", "备件编号");
+        titel.put("processRoute", "工艺路线");
+        titel.put("laborHour", "人工工时");
+        titel.put("rhythm", "节拍");
+        titel.put("solderJoint", "焊点");
+        titel.put("machineMaterial", "机物料");
+        titel.put("standardPart", "标准件");
+        titel.put("tools", "工具");
+        titel.put("wasterProduct", "废品");
+        writeAjaxJSONResponse(ResultMessageBuilder.build(titel), response);
+    }
+
+    /**
+     * 物料数据标题
+     * @param response
+     */
+    @RequestMapping(value = "materialDataTitel", method = RequestMethod.GET)
+    public void getMbomMaterialDataGetTitel(HttpServletResponse response) {
+        LinkedHashMap<String, String> titel = new LinkedHashMap<>();
+        titel.put("sparePart", "备件");
+        titel.put("sparePartNum", "备件编号");
+        titel.put("processRoute", "工艺路线");
+        titel.put("laborHour", "人工工时");
+        titel.put("rhythm", "节拍");
+        titel.put("solderJoint", "焊点");
+        titel.put("machineMaterial", "机物料");
+        titel.put("standardPart", "标准件");
+        titel.put("tools", "工具");
+        titel.put("wasterProduct", "废品");
+        writeAjaxJSONResponse(ResultMessageBuilder.build(titel), response);
+    }
+    /**
+     * 工艺中心主数据标题
+     * @param response
+     */
+    @RequestMapping(value = "processCenterTitel", method = RequestMethod.GET)
+    public void getMbomProcessCenterTitel(HttpServletResponse response) {
+        LinkedHashMap<String, String> titel = new LinkedHashMap<>();
+        titel.put("factory", "工厂");
+        titel.put("workHours", "工作工时");
+        titel.put("jobCentreCategory", "工作中心类别");
+        titel.put("describe", "描述");
+        titel.put("use", "用途");
+        titel.put("standardCode", "标准值码");
+        titel.put("controlCode", "控制码");
+        titel.put("directLabor", "直接人工");
+        titel.put("indirectLabor", "间接人工");
+        titel.put("machineHour", "机器工时 ");
+        titel.put("combustion", "燃动");
+        titel.put("machineMaterial", "机物料");
+        titel.put("otherCosts", "其它费用");
+        titel.put("processingFormula", "加工公式");
+        titel.put("powerType", "能力类别");
+        titel.put("startTime", "开始时间");
+        titel.put("endTime", "结束时间");
+        writeAjaxJSONResponse(ResultMessageBuilder.build(titel), response);
+    }
+
+    /**
+     * 跳转到工艺中心主数据添加页面
+     * @return
+     */
+    @RequestMapping(value = "addProcessCenter",method = RequestMethod.GET)
+    public String addMBomProcessCenterToPage(){
+        return  "bomManage/mbom/processCenter/addProcessCenter";
+    }
+
+    /**
+     * 跳转到工艺中心主数据修改页面
+     * @return
+     */
+    @RequestMapping(value = "updateProcessCenter",method = RequestMethod.GET)
+    public String updateMBomProcessCenterToPage(){
+        return  "bomManage/mbom/processCenter/updateProcessCenter";
     }
 }

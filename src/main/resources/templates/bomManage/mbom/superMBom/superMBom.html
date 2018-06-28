@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<!--User: xulf Date: 2018/6/6 Time: 11:19-->
+<head th:include="include/headBom">
+</head>
+<link th:href="@{/css/stage/bom-stage.css}" rel="stylesheet"/>
+<meta charset="UTF-8">
+<title>超级MBOM</title>
+</head>
+<body>
+<div class="panel-body" style="padding-bottom:0px;">
+    <div class="panel panel-default" style="margin-top: 10px;">
+        <div class="panel-body">
+            <form class="form-inline" role="form" style="float: left; width: 100%;margin-left: 20px;" method="get"
+                  id="querySuperMBom">
+                <div class="form-group">
+                    <label for="level">层级:</label>
+                    <input type="text" class="form-control" name="level" id="level" placeholder="请输入层级"/>
+                </div>
+                <div class="form-group">
+                    <label for="pBomOfWhichDept">专业:</label>
+                    <input type="text" class="form-control" name="pBomOfWhichDept" id="pBomOfWhichDept"
+                           placeholder="请输入专业"/>
+                </div>
+                <div class="form-group">
+                    <label for="rank">级别:</label>
+                    <input type="text" class="form-control" name="rank" id="rank" placeholder="请输入零件号"/>
+                </div>
+                <div class="form-group">
+                    <label for="groupNum">分组号:</label>
+                    <input type="text" class="form-control" name="groupNum" id="groupNum" placeholder="请输入零件号"/>
+                </div>
+                <div class="form-group">
+                    <button type="button" id="queryBtn" onclick="doQuery();" class="btn btn-primary">查询</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="content col-lg-12">
+    <table class="table table-striped tableNormalStyle" id="superMBomTable"></table>
+</div>
+<script th:src="@{/js/bom/mbom/superMBom.js}"></script>
+</body>
+</html>

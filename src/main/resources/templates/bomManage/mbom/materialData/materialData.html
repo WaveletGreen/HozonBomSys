@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<!--User: xulf Date: 2018/6/28 Time: 10:21-->
+<head th:include="include/headBom">
+</head>
+<link th:href="@{/css/stage/bom-stage.css}" rel="stylesheet"/>
+<meta charset="UTF-8">
+<title>物料数据表</title>
+</head>
+<body>
+<div class="panel-body" style="padding-bottom:0px;">
+    <div class="panel panel-default" style="margin-top: 10px;">
+        <div class="panel-body">
+            <form class="form-inline" role="form" style="float: left; width: 100%;margin-left: 20px;" method="get"
+                  id="queryMaterialData">
+                <div class="form-group">
+                    <label for="level">层级:</label>
+                    <input type="text" class="form-control" name="level" id="level" placeholder="请输入层级"/>
+                </div>
+                <div class="form-group">
+                    <label for="pBomOfWhichDept">专业:</label>
+                    <input type="text" class="form-control" name="pBomOfWhichDept" id="pBomOfWhichDept"
+                           placeholder="请输入专业"/>
+                </div>
+                <div class="form-group">
+                    <label for="rank">级别:</label>
+                    <input type="text" class="form-control" name="rank" id="rank" placeholder="请输入零件号"/>
+                </div>
+                <div class="form-group">
+                    <label for="groupNum">分组号:</label>
+                    <input type="text" class="form-control" name="groupNum" id="groupNum" placeholder="请输入零件号"/>
+                </div>
+                <div class="form-group">
+                    <button type="button" id="queryBtn" onclick="doQuery();" class="btn btn-primary">查询</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<form class="form-inline" role="form" style="float: left; width: 100%;margin-left: 20px;" method="get"
+      id="materialTypeFrom">
+    <div class="form-group">
+        <label for="materialType">物料类别:</label>
+        <select class="form-control" name="materialType" id="materialType">
+            <option>车型项目物料总表</option>
+            <option>整车超级物料主数据</option>
+            <option>整车衍生物料主数据</option>
+            <option>虚拟物料主数据</option>
+            <option>半成品物料主数据</option>
+            <option>生产性外购物料主数据</option>
+            <option>自制备件物料主数据</option>
+        </select>
+    </div>
+</form>
+<div class="content col-lg-12">
+    <table class="table table-striped tableNormalStyle" id="materialDataTable"></table>
+</div>
+<script th:src="@{/js/bom/mbom/materialData.js}"></script>
+</body>
+</html>
