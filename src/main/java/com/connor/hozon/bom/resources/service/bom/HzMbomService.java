@@ -68,5 +68,6 @@ public interface HzMbomService {
      */
     List<HzVehicleModelRespDTO> getHzVehicleModelByProjectId(String projectId);
 
+    HzMbomLineRecord getHzSuperMbomByPuid(String projectId,String puid);
 
 }

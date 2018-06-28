@@ -63,4 +63,14 @@ public interface HzMbomRecordDAO {
     List<HzMbomLineRecord> getHzVehicleModelName(String projectId);
 
     Page<HzMbomLineRecord> getHzSuberMbomByPage(HzMbomByPageQuery query);
+
+    /**
+     * 获取一条超级MBOM信息
+     * @param projectId
+     * @param pPuid
+     * @return
+     */
+    HzMbomLineRecord getHzSuperMbomByPuid(String projectId,String pPuid);
+
+    HzMbomLineRecord getHzMbom(String projectId,String parentPuid);
 }

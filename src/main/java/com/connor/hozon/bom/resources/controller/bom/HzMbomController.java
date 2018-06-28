@@ -1,5 +1,7 @@
 package com.connor.hozon.bom.resources.controller.bom;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.connor.hozon.bom.resources.controller.BaseController;
 import com.connor.hozon.bom.resources.dto.request.AddMbomReqDTO;
 import com.connor.hozon.bom.resources.dto.request.UpdateMbomReqDTO;
@@ -37,7 +39,7 @@ public class HzMbomController extends BaseController {
     private HzMbomService hzMbomService;
 
     @RequestMapping(value = "superMbomTitle", method = RequestMethod.GET)
-    public void getHzSuperMBomTitle(HttpServletResponse response) {
+    public void getHzSuperMBomTitle(String projectId,HttpServletResponse response) {
         LinkedHashMap<String, String> tableTitle = new LinkedHashMap<>();
         tableTitle.put("No", "序号");
         tableTitle.put("level", "层级");
@@ -62,7 +64,11 @@ public class HzMbomController extends BaseController {
         tableTitle.put("wasterProduct", "废品");
         tableTitle.put("change", "变更");
         tableTitle.put("changeNum", "变更号");
-        writeAjaxJSONResponse(ResultMessageBuilder.build(tableTitle), response);
+        List<HzVehicleModelRespDTO> respDTOS = hzMbomService.getHzVehicleModelByProjectId(projectId);
+        JSONObject object = new JSONObject();
+        object.put("model",respDTOS);
+        object.put("data",tableTitle);
+        writeAjaxJSONResponse(object, response);
     }
 
 

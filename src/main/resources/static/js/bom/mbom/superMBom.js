@@ -40,8 +40,8 @@ function initTable(url) {
                 valign:
                     'middle'
             });*/
-            var _model = result.model;
-            $("#objectName").append("<option value='" + _model.cfg0ModelRecordId + "'>" + _model.objectName + "</option>");
+            // var _model = result.model;
+            // $("#objectName").append("<option value='" + _model.cfg0ModelRecordId + "'>" + _model.objectName + "</option>");
             var data = result.data;
             console.log(data);
             var keys = [];
