@@ -21,7 +21,7 @@ function doQuery() {
 
 function initTable(url) {
     var projectPuid = $("#project", window.top.document).val();
-    var url = "mbom/super/record?projectId="+projectPuid;
+    //var url = "mbom/super/record?projectId="+projectPuid;
     var $table = $("#superMBomTable");
     var column = [];
     $.ajax({
@@ -92,7 +92,7 @@ function initTable(url) {
                 showRefresh: true,                  //是否显示刷新按钮
                 //minimumCountColumns: 4,
             });
-            $table.bootstrapTable('hideColumn', 'Puid');
+            // $table.bootstrapTable('hideColumn', 'Puid');
         }
     })
 }
