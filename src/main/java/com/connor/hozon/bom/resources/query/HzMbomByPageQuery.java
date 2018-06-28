@@ -25,6 +25,8 @@ public class HzMbomByPageQuery extends DefaultPageQuery {
      */
     private String pBomOfWhichDept;
 
+    private String objectName;
+
     private Integer isHas;
 
     private String lineIndex;
@@ -75,5 +77,13 @@ public class HzMbomByPageQuery extends DefaultPageQuery {
 
     public void setpBomOfWhichDept(String pBomOfWhichDept) {
         this.pBomOfWhichDept = pBomOfWhichDept;
+    }
+
+    public String getObjectName() {
+        return objectName;
+    }
+
+    public void setObjectName(String objectName) {
+        this.objectName = objectName;
     }
 }

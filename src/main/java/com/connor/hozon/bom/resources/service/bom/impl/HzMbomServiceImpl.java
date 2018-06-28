@@ -258,6 +258,20 @@ public class HzMbomServiceImpl implements HzMbomService {
     @Override
     public Page<HzSuperMbomRecordRespDTO> getHzSuperMbomPage(HzMbomByPageQuery query) {
         try{
+            String level = query.getLevel();
+            if (level != null && level!="") {
+                if(level.length()==1 && level.toUpperCase().endsWith("Y")){
+                    query.setIsHas(Integer.valueOf(1));
+                }else {
+                    int length = level.charAt(0) - 48;
+                    if (level.toUpperCase().endsWith("Y")) {
+                        query.setIsHas(Integer.valueOf(1));
+                    } else {
+                        query.setIsHas(Integer.valueOf(0));
+                    }
+                    query.setLineIndex(String.valueOf(length - 1));
+                }
+            }
             Page<HzMbomLineRecord> recordPage =hzMbomRecordDAO.getHzSuberMbomByPage(query);
             int num = (query.getPage()-1)*query.getLimit();
             if(recordPage == null || recordPage.getResult() == null){
@@ -267,12 +281,6 @@ public class HzMbomServiceImpl implements HzMbomService {
             map.put("projectId",query.getProjectId());
             List<HzMbomLineRecord> records = recordPage.getResult();
             List<HzSuperMbomRecordRespDTO> respDTOS = new ArrayList<>();
-            String cfg0Desc ="";//配置描述
-            String cfg0FamilyName = "";//选项族名称
-            String cfg0FamilyDesc ="";//选项族描述
-            String objectName ="";//车型名称
-            String objectDesc="";//车型描述
-            String cfg0ModelBasicDetail="";//基本信息
             for(HzMbomLineRecord record :records){
              HzSuperMbomRecordRespDTO respDTO = new HzSuperMbomRecordRespDTO();
                 respDTO.setNo(++num);
@@ -305,30 +313,23 @@ public class HzMbomServiceImpl implements HzMbomService {
                 respDTO.setWasterProduct(record.getWasterProduct());
                 respDTO.setChange(record.getChange());
                 respDTO.setChangeNum(record.getChangeNum());
-                if(null !=record.getCfg0Desc()){
-                    cfg0Desc = record.getCfg0Desc();
+                if(null == record.getObjectName()){
+                    HzMbomLineRecord lineRecord = getHzSuperMbomByPuid(query.getProjectId(),record.getParentUid());
+                    respDTO.setCfg0Desc(lineRecord.getCfg0Desc());
+                    respDTO.setCfg0FamilyDesc(lineRecord.getCfg0FamilyDesc());
+                    respDTO.setCfg0FamilyName(lineRecord.getCfg0FamilyName());
+                    respDTO.setCfg0ModelBasicDetail(lineRecord.getCfg0ModelBasicDetail());
+                    respDTO.setObjectName(lineRecord.getObjectName());
+                    respDTO.setObjectDesc(lineRecord.getObjectDesc());
+
+                }else{
+                    respDTO.setCfg0Desc(record.getCfg0Desc());
+                    respDTO.setCfg0FamilyDesc(record.getCfg0FamilyDesc());
+                    respDTO.setCfg0FamilyName(record.getCfg0FamilyName());
+                    respDTO.setCfg0ModelBasicDetail(record.getCfg0ModelBasicDetail());
+                    respDTO.setObjectName(record.getObjectName());
+                    respDTO.setObjectDesc(record.getObjectDesc());
                 }
-                if(null != record.getCfg0FamilyName()){
-                    cfg0FamilyName = record.getCfg0FamilyName();
-                }
-                if(null!=record.getCfg0FamilyDesc()){
-                    cfg0FamilyDesc = record.getCfg0FamilyDesc();
-                }
-                if(null != record.getObjectName()){
-                    objectName = record.getObjectName();
-                }
-                if(null != record.getObjectDesc()){
-                    objectDesc = record.getObjectDesc();
-                }
-                if(null !=record.getCfg0ModelBasicDetail()){
-                    cfg0ModelBasicDetail = record.getCfg0ModelBasicDetail();
-                }
-                respDTO.setCfg0Desc(cfg0Desc);
-                respDTO.setCfg0FamilyDesc(cfg0FamilyDesc);
-                respDTO.setCfg0FamilyName(cfg0FamilyName);
-                respDTO.setCfg0ModelBasicDetail(cfg0ModelBasicDetail);
-                respDTO.setObjectName(objectName);
-                respDTO.setObjectDesc(objectDesc);
                 respDTOS.add(respDTO);
             }
             return new Page<>(query.getPage(),query.getLimit(),recordPage.getTotalCount(),respDTOS);
@@ -356,5 +357,19 @@ public class HzMbomServiceImpl implements HzMbomService {
             return null;
         }
         return null;
+    }
+
+    @Override
+    public HzMbomLineRecord getHzSuperMbomByPuid(String projectId, String puid) {
+        HzMbomLineRecord record = hzMbomRecordDAO.getHzSuperMbomByPuid(projectId,puid);
+        if(record != null){
+            return record;
+        }else {
+            record = hzMbomRecordDAO.getHzMbom(projectId,puid);
+            if(record == null){
+                return null;
+            }
+            return  getHzSuperMbomByPuid(projectId,record.getParentUid());
+        }
     }
 }

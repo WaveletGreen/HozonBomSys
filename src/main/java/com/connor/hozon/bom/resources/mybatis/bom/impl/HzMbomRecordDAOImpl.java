@@ -83,4 +83,20 @@ public class HzMbomRecordDAOImpl extends BaseSQLUtil implements HzMbomRecordDAO 
         pageRequest.setFilters(map);
         return super.findForPage("HzMbomRecordDAOImpl_getHzSuberMbomByPage","HzMbomRecordDAOImpl_getHzSuberMbomTotalCount",pageRequest);
     }
+
+    @Override
+    public HzMbomLineRecord getHzSuperMbomByPuid(String projectId, String pPuid) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("projectId",projectId);
+        map.put("pPuid",pPuid);
+        return(HzMbomLineRecord) super.findForObject("HzMbomRecordDAOImpl_getHzSuberMbomByPuid",map);
+    }
+
+    @Override
+    public HzMbomLineRecord getHzMbom(String projectId, String parentPuid) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("projectId",projectId);
+        map.put("parentUid",parentPuid);
+        return (HzMbomLineRecord) super.findForObject("HzMbomRecordDAOImpl_getHzMbom",map);
+    }
 }
