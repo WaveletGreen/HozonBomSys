@@ -74,7 +74,7 @@ public class HzMbomController extends BaseController {
      */
     @RequestMapping(value = "super/record", method = RequestMethod.GET)
     @ResponseBody
-    public Map<String, Object> getSuperMbomRecord(HzMbomByPageQuery query) {
+    public Map<String, Object> getSuperMbomRecord(HzMbomByPageQuery query,Model model) {
         Page<HzSuperMbomRecordRespDTO> page = hzMbomService.getHzSuperMbomPage(query);
         if (page == null) {
             return new HashMap<>();
@@ -113,7 +113,7 @@ public class HzMbomController extends BaseController {
         });
         ret.put("totalCount", page.getTotalCount());
         ret.put("result", _list);
-        ret.put("model",respDTOS);
+        model.addAttribute("model",respDTOS);
         return ret;
     }
 
