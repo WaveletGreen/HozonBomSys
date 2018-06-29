@@ -25,12 +25,11 @@ public class HzMbomByPageQuery extends DefaultPageQuery {
      */
     private String pBomOfWhichDept;
 
-    private String objectName;
-
     private Integer isHas;
 
     private String lineIndex;
 
+    private  String cfg0ModelRecordId;
     public Integer getIsHas() {
         return isHas;
     }
@@ -79,11 +78,11 @@ public class HzMbomByPageQuery extends DefaultPageQuery {
         this.pBomOfWhichDept = pBomOfWhichDept;
     }
 
-    public String getObjectName() {
-        return objectName;
+    public String getCfg0ModelRecordId() {
+        return cfg0ModelRecordId;
     }
 
-    public void setObjectName(String objectName) {
-        this.objectName = objectName;
+    public void setCfg0ModelRecordId(String cfg0ModelRecordId) {
+        this.cfg0ModelRecordId = cfg0ModelRecordId;
     }
 }
