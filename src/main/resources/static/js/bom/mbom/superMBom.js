@@ -1,4 +1,4 @@
-let count = 1;
+var count = 1;
 $(document).ready((function () {
     var projectPuid = $("#project", window.top.document).val();
     var url = "mbom/super/record?projectId="+projectPuid;
@@ -15,8 +15,13 @@ function doQuery() {
     var lineId = $("#lineId").val();
     url += "&lineId="+lineId;
     var cfg0ModelRecordId = $("#objectName").val();
-    console.log("选取的value是"+objectName);
-    url += "&cfg0ModelRecordId="+cfg0ModelRecordId;
+    if (cfg0ModelRecordId=="请选择车型名称") {
+        url += "&cfg0ModelRecordId="+"";
+    }
+    else {
+        url += "&cfg0ModelRecordId="+cfg0ModelRecordId;
+    }
+
     initTable(url);
     $('#superMBomTable').bootstrapTable('destroy');
     console.log("有搜索框的参数是："+url)
@@ -47,7 +52,9 @@ function initTable(url) {
             });*/
 
             var _model = result.model;
+
             if(count<2){
+                $("#objectName").append("<option>请选择车型名称</option>");
                 for(var i = 0 ; i < _model.length; i++) {
                     $("#objectName").append("<option value='" + _model[i].cfg0ModelRecordId + "'>" + _model[i].objectName + "</option>");
                 }
