@@ -80,7 +80,8 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         registry.addViewController("/materialData").setViewName("/bomManage/mbom/materialData/materialData");
         //MBOM的工艺中心主数据页面
         registry.addViewController("/processCenter").setViewName("/bomManage/mbom/processCenter/processCenter");
-
+        //MBOM的整车工艺路线页面
+        registry.addViewController("/carRouting").setViewName("/bomManage/mbom/carRouting/carRouting");
 
 
 

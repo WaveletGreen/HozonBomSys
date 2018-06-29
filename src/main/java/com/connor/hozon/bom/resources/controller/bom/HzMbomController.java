@@ -324,4 +324,32 @@ public class HzMbomController extends BaseController {
     public String updateMBomProcessCenterToPage(){
         return  "bomManage/mbom/processCenter/updateProcessCenter";
     }
+
+    /**
+     * 整车工艺路线标题
+     * @param response
+     */
+    @RequestMapping(value = "carRoutingTitel", method = RequestMethod.GET)
+    public void getMbomCarRoutingTitel(HttpServletResponse response) {
+        LinkedHashMap<String, String> titel = new LinkedHashMap<>();
+        titel.put("1", "物料");
+        titel.put("2", "工厂");
+        titel.put("3", "用途");
+        titel.put("4", "状态");
+        titel.put("5", "工序号");
+        titel.put("6", "工作中心");
+        titel.put("7", "工作中心描述");
+        titel.put("8", "控制码");
+        titel.put("9", "工序描述");
+        titel.put("10", "基本数量 ");
+        titel.put("11", "直接人工时间");
+        titel.put("12", "间接人工时间");
+        titel.put("13", "机器时间");
+        titel.put("14", "燃动能");
+        titel.put("15", "机物料消耗");
+        titel.put("16", "其他费用");
+        writeAjaxJSONResponse(ResultMessageBuilder.build(titel), response);
+    }
 }
+
+

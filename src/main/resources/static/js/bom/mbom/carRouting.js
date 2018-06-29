@@ -1,17 +1,18 @@
 $(document).ready((function (){
-    initTable();  
-    }))
+    initTable();
+}))
 
 function doQuery() {
-    $('#processCenterTable').bootstrapTable('refresh');    //刷新表格
+    $('#carRoutingTable').bootstrapTable('refresh');    //刷新表格
 }
 
 
 function initTable() {
-    var  $table =  $("#processCenterTable");
+    var projectPuid = $("#project", window.top.document).val();
+    var  $table =  $("#carRoutingTable");
     var  column = [];
     $.ajax({
-        url:"mbom/processCenterTitel",
+        url:"mbom/carRoutingTitel",
         type:"GET",
         success:function(result){
             var column = [];
@@ -52,7 +53,7 @@ function initTable() {
                 //sidePagination: "server",           //分页方式：client客户端分页，server服务端分页（*）
                 height: $(window.parent.document).find("#wrapper").height() - 180,
                 width: $(window).width(),
-                formId :"queryProcessCenter",
+                formId :"queryCarRouting",
                 undefinedText: "",//当数据为 undefined 时显示的字符
                 pagination: true,
                 //pageNumber:1,                       //初始化加载第一页，默认第一页
