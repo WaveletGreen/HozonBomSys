@@ -10,9 +10,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import sql.pojo.bom.HzBomLineRecord;
 import webservice.Author;
-import webservice.maindatas.*;
+import webservice.base.maindatas.*;
 
-import javax.jws.WebParam;
 import javax.xml.ws.Holder;
 import java.util.HashMap;
 import java.util.Map;
@@ -27,7 +26,7 @@ public class MatserMaterielTest extends Author{
 
 
     @Test
-    public void main() {
+    public void main() throws CloneNotSupportedException {
         Map<String, String> cond = new HashMap<>();
         cond.put("projectId", "514762CB57204113BFAC56A5740AF1F8");//projectpuid
         cond.put("puid", "8ca372e3-27d0-4080-a8c9-3bc1114dea6f");//PUID
@@ -39,6 +38,7 @@ public class MatserMaterielTest extends Author{
         }
 
         ZPPTCI001 zpptci001 = new ZPPTCI001();
+        ZPPTCI001 zpptci002;
         ZPPTCO001 zpptco001 = new ZPPTCO001();
 
         //服务
@@ -79,8 +79,10 @@ public class MatserMaterielTest extends Author{
 //        zpptci001.setZBESKZ("E");//采购类型
 //        zpptci001.setZMATKL("SADasD");//虚拟机标识
 
-
+        zpptci002= (ZPPTCI001) zpptci001.clone();
+        zpptci002.setGUID("QERTYUI");
         tableofzpptci001.getItem().add(zpptci001);
+        tableofzpptci001.getItem().add(zpptci002);
         input.value=tableofzpptci001;
 
 

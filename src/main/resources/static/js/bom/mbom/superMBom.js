@@ -1,4 +1,4 @@
-let count = 1;
+var count = 1;
 $(document).ready((function () {
     var projectPuid = $("#project", window.top.document).val();
     var url = "mbom/super/record?projectId="+projectPuid;
