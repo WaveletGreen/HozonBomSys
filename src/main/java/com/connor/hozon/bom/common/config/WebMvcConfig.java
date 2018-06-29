@@ -82,7 +82,8 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         registry.addViewController("/processCenter").setViewName("/bomManage/mbom/processCenter/processCenter");
         //MBOM的整车工艺路线页面
         registry.addViewController("/carRouting").setViewName("/bomManage/mbom/carRouting/carRouting");
-
+        //MBOM的整车工艺路线页面
+        registry.addViewController("/assemblyRouting").setViewName("/bomManage/mbom/assemblyRouting/assemblyRouting");
 
 
 
