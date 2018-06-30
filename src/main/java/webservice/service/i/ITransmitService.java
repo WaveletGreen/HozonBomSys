@@ -2,8 +2,6 @@ package webservice.service.i;
 
 import org.springframework.context.annotation.Configuration;
 
-import javax.xml.ws.Holder;
-
 /**
  * 该服务传输主数据到SAP，只需要传入输出参数即可，不用传入输出参数，
  * 输出参数会从SAP根据输入参数返回，但是输出参数还是要定义的，否则会报错
@@ -19,5 +17,5 @@ public interface ITransmitService {
      * <p>
      * <strong>如果输出参数没有，则返回null</strong>
      */
-    <T> Holder<T> execute();
+    <T> T execute();
 }

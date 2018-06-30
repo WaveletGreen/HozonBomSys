@@ -1,6 +1,8 @@
 
 package webservice.base.maindatas;
 
+import webservice.service.i.IExecutor;
+
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebService;
@@ -12,7 +14,7 @@ import javax.xml.ws.ResponseWrapper;
  * 发送数据的接口层，调用函数即可
  */
 @WebService(name = "ZPP_TC_SAP_001", targetNamespace = "urn:sap-com:document:sap:rfc:functions")
-public interface ZPPTCSAP001 {
+public interface ZPPTCSAP001{
 
     /**
      * @param output 输出参数
@@ -24,5 +26,4 @@ public interface ZPPTCSAP001 {
     public void zppTCSAP001(
             @WebParam(name = "INPUT", targetNamespace = "", mode = WebParam.Mode.INOUT) Holder<TABLEOFZPPTCI001> input,
             @WebParam(name = "OUTPUT", targetNamespace = "", mode = WebParam.Mode.INOUT) Holder<TABLEOFZPPTCO001> output);
-
 }

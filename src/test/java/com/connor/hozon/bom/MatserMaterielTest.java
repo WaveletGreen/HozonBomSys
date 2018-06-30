@@ -43,6 +43,7 @@ public class MatserMaterielTest extends Author {
         }
 
         ZPPTCI001 zpptci001 = new ZPPTCI001();
+        ZPPTCI001 zpptci002;
 
 
         Map<String, String> uuidRecord = new HashMap<>();
@@ -67,7 +68,14 @@ public class MatserMaterielTest extends Author {
 
         service.getInput().getItem().add(zpptci001);
         service.execute();
-        System.out.println(service.getOut().getItem().get(0).getMESSAGE());
+
+        zpptci002 = (ZPPTCI001) zpptci001.clone();
+        zpptci002.setGUID("QERTYUI");
+        service.getInput().getItem().add(zpptci001);
+        service.getInput().getItem().add(zpptci002);
+        service.execute();
+
+        System.out.println(service.getOut().getItem().get(0).getTYPE());
         System.out.println();
 
     }

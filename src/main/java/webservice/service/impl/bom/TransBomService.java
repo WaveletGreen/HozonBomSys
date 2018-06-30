@@ -1,7 +1,8 @@
-package webservice.service.impl.masterMaterial;
+package webservice.service.impl.bom;
 
 import org.springframework.stereotype.Service;
 import webservice.Author;
+import webservice.base.bom.*;
 import webservice.base.maindatas.*;
 import webservice.service.i.ITransmitService;
 
@@ -13,49 +14,49 @@ import javax.xml.ws.Holder;
  * Date: 2018/6/6 16:55
  */
 @Service("transMasterMaterialService")
-public class TransMasterMaterialService extends Author implements ITransmitService {
+public class TransBomService extends Author implements ITransmitService {
     /**
      * webservice调用的服务
      */
-    private ZPPTCSAP001_Service service;
+    private ZPPTCSAP005_Service service;
     /**
      * webservice调用的服务
      */
-    private ZPPTCSAP001 serviceExecutor;
+    private ZPPTCSAP005 serviceExecutor;
     /**
      * 输入参数容器
      */
-    private Holder<TABLEOFZPPTCI001> inputContainer;
+    private Holder<TABLEOFZPPTCI005> inputContainer;
     /**
      * 输入参数
      */
-    private TABLEOFZPPTCI001 input;
+    private TABLEOFZPPTCI005 input;
 
 
     /**
      * 输出参数:临时的输出参数容器，需要一个临时输出参数容器，否则传不到SAP，该参数不应该有setter和getter
      */
-    private TABLEOFZPPTCO001 out;
+    private TABLEOFZPPTCO005 out;
     /**
      * 输出参数:临时变量
      */
-    private ZPPTCO001 t;
+    private ZPPTCO005 t;
     /**
      * 输出参数:输出参数容器，要有setter和getter给调用方
      */
-    private Holder<TABLEOFZPPTCO001> outputContainer;
+    private Holder<TABLEOFZPPTCO005> outputContainer;
 
-    public TransMasterMaterialService() {
-        service = new ZPPTCSAP001_Service();
-        serviceExecutor = service.getZPPTCSAP001();
+    public TransBomService() {
+        service = new ZPPTCSAP005_Service();
+        serviceExecutor = service.getZPPTCSAP005();
         //输入参数
         inputContainer = new Holder<>();
-        input = new TABLEOFZPPTCI001();
+        input = new TABLEOFZPPTCI005();
 
         //输出参数
         outputContainer = new Holder<>();
-        out = new TABLEOFZPPTCO001();
-        t = new ZPPTCO001();
+        out = new TABLEOFZPPTCO005();
+        t = new ZPPTCO005();
         out.getItem().add(t);
     }
 
@@ -65,14 +66,14 @@ public class TransMasterMaterialService extends Author implements ITransmitServi
      * @return 请看接口@{@link ITransmitService}定义
      */
     @Override
-    public TABLEOFZPPTCO001 execute() {
+    public TABLEOFZPPTCO005 execute() {
         if (t == null) {
-            out.getItem().add(t = new ZPPTCO001());
+            out.getItem().add(t = new ZPPTCO005());
         }
         inputContainer.value = input;
         outputContainer.value = out;
         if (validateInput(inputContainer)) {
-            serviceExecutor.zppTCSAP001(inputContainer, outputContainer);
+            serviceExecutor.zppTCSAP005(inputContainer, outputContainer);
             if (validateOutput(outputContainer)) {
                 out = outputContainer.value;
                 return out;
@@ -91,7 +92,7 @@ public class TransMasterMaterialService extends Author implements ITransmitServi
      *
      * @return
      */
-    public TABLEOFZPPTCI001 getInput() {
+    public TABLEOFZPPTCI005 getInput() {
         return input;
     }
 
@@ -99,7 +100,7 @@ public class TransMasterMaterialService extends Author implements ITransmitServi
      * 设置输入参数，在执行@execute之前设置输入参数，否则无法发送数据
      * @param input
      */
-    public void setInput(TABLEOFZPPTCI001 input) {
+    public void setInput(TABLEOFZPPTCI005 input) {
         this.input = input;
     }
 
@@ -108,7 +109,7 @@ public class TransMasterMaterialService extends Author implements ITransmitServi
      *
      * @return @out，执行@execute之后获取的输出参数
      */
-    public TABLEOFZPPTCO001 getOut() {
+    public TABLEOFZPPTCO005 getOut() {
         return out;
     }
 
