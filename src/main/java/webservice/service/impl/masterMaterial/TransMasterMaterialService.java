@@ -12,7 +12,7 @@ import javax.xml.ws.Holder;
  * Description:传输主数据到SAP系统
  * Date: 2018/6/6 16:55
  */
-@Service("tranBomService")
+@Service("transMasterMaterialService")
 public class TransMasterMaterialService extends Author implements ITransmitService {
     /**
      * webservice调用的服务
@@ -57,6 +57,7 @@ public class TransMasterMaterialService extends Author implements ITransmitServi
         //输出参数
         outputContainer = new Holder<>();
         out = new TABLEOFZPPTCO001();
+        t = new ZPPTCO001();
         out.getItem().add(t);
     }
 
@@ -66,6 +67,9 @@ public class TransMasterMaterialService extends Author implements ITransmitServi
      * @return 请看接口@{@link ITransmitService}定义
      */
     public Holder<TABLEOFZPPTCO001> execute() {
+        if (t == null) {
+            out.getItem().add(t = new ZPPTCO001());
+        }
         inputContainer.value = input;
         outputContainer.value = out;
         if (validateInput(inputContainer)) {
@@ -82,14 +86,28 @@ public class TransMasterMaterialService extends Author implements ITransmitServi
         }
     }
 
+    /**
+     * 获取输入参数
+     *
+     * @return
+     */
     public TABLEOFZPPTCI001 getInput() {
         return input;
     }
 
+    /***
+     * 设置输入参数，在执行@execute之前设置输入参数，否则无法发送数据
+     * @param input
+     */
     public void setInput(TABLEOFZPPTCI001 input) {
         this.input = input;
     }
 
+    /**
+     * 获取输出参数
+     *
+     * @return @out，执行@execute之后获取的输出参数
+     */
     public TABLEOFZPPTCO001 getOut() {
         return out;
     }

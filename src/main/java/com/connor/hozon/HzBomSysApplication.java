@@ -16,7 +16,7 @@ import javax.sql.DataSource;
  * 需要告知扫描的包名
  * 启动事物扫描
  */
-@SpringBootApplication(scanBasePackages = {"sql", "com.connor.hozon"})
+@SpringBootApplication(scanBasePackages = {"sql","webservice.service", "com.connor.hozon"})
 @EnableTransactionManagement
 public class HzBomSysApplication extends SpringBootServletInitializer {
 
