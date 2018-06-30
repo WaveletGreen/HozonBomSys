@@ -18,7 +18,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "ZPP_TCI002", propOrder = {"zpackno", "zitem", "zactionid", "zatnam", "zatbez", "zatwrt", "zatwtb",
         "reserve01", "reserve02", "reserve03", "reserve04", "reserve05"})
-public class ZPPTCI002 {
+public class ZPPTCI002 implements Cloneable{
     /**
      * 数据包号
      */
@@ -79,6 +79,11 @@ public class ZPPTCI002 {
      */
     @XmlElement(name = "RESERVE05", required = true)
     protected String reserve05;
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
 
     /**
      * Gets the value of the zpackno property.

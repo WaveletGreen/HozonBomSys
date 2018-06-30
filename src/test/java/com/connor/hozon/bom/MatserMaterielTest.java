@@ -10,8 +10,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import sql.pojo.bom.HzBomLineRecord;
 import webservice.Author;
-import webservice.base.maindatas.*;
-import webservice.service.impl.masterMaterial.TransMasterMaterialService;
+import webservice.base.bom.ZPPTCI005;
+import webservice.base.masterMaterial.*;
+import webservice.service.impl.bom5.TransBomService;
+import webservice.service.impl.masterMaterial1.TransMasterMaterialService;
 
 import javax.xml.ws.Holder;
 import java.util.HashMap;
@@ -29,6 +31,61 @@ public class MatserMaterielTest extends Author {
     @Autowired
     TransMasterMaterialService service;
 
+    @Autowired
+    TransBomService bomService;
+
+    @Test
+    public void testBom() {
+        Map<String, String> cond = new HashMap<>();
+        cond.put("projectId", "514762CB57204113BFAC56A5740AF1F8");//projectpuid
+        cond.put("puid", "8ca372e3-27d0-4080-a8c9-3bc1114dea6f");//PUID
+        HzBomLineRecord hzBomLineRecord = hzBomLineRecordDao.findBomLineByPuid(cond);
+
+        if (hzBomLineRecord == null) {
+            System.out.println("没有找到对象");
+            return;
+        }
+
+        Map<String, String> uuidRecord = new HashMap<>();
+
+        String puid = hzBomLineRecord.getPuid().replaceAll("-", "");
+        String tempPuid = UUID.randomUUID().toString().replaceAll("-", "");
+        uuidRecord.put(tempPuid, puid);
+
+
+        ZPPTCI005 zpptci005 = new ZPPTCI005();
+        zpptci005.setZPACKNO(tempPuid);//数据包号.Test，包好最长32，已确认
+        zpptci005.setZITEM(hzBomLineRecord.getPuid().substring(0, 5));//行号,Test，最长6位，已确认
+
+        zpptci005.setZACTIONID("A");//动作描述代码
+        zpptci005.setZAENNR("02");//更改编号
+        zpptci005.setZAETXT("");//工程更改号描述
+        zpptci005.setZPCNNO("");//TC系统更改号
+        zpptci005.setZWERKS("1001");//工厂
+        zpptci005.setZUSE("1");//BOM类型---1or6
+        zpptci005.setZMATNR(hzBomLineRecord.getLineID());//表头物料编码，可以与主数据的MATNR一样
+        /*都是1吗？*/
+        zpptci005.setZBASEQ("1");//基本数据，
+        zpptci005.setZSORTF(hzBomLineRecord.getOrderNum().toString());//BOM序号
+
+        zpptci005.setZMATNRC(hzBomLineRecord.getLineID());//组件物料编码
+
+        zpptci005.setZMENGE("1");//数量
+        zpptci005.setZMEINS("EA");//单位
+        /**        填CP04却返回null，库存地址应该传什么*/
+        zpptci005.setZLOCATION("CP04");//发料库存地点             //
+        zpptci005.setZKNBLK("");//相关性（选配条件）
+        zpptci005.setZSUBPR("");//采购件下级件标识
+        zpptci005.setZZPWZ("总装");//装配位置
+        zpptci005.setZWORKS("");//使用车间
+        zpptci005.setZSTATION("");//工位
+        zpptci005.setZGUID("");//事物标识
+
+        bomService.getInput().getItem().add(zpptci005);
+        bomService.execute();
+        bomService.getOut().getItem().get(0).getMESSAGE();
+        System.out.println();
+    }
 
     @Test
     public void main2() throws CloneNotSupportedException {
@@ -58,7 +115,7 @@ public class MatserMaterielTest extends Author {
         zpptci001.setZITEM(hzBomLineRecord.getPuid().substring(0, 5));//行号，最长6位
         zpptci001.setZWERKS("1001");//工厂
         zpptci001.setZMATNR(hzBomLineRecord.getLineID());//物料编码
-        zpptci001.setZACTIONID("U");//动作描述代码A/D/U
+        zpptci001.setZACTIONID("A");//动作描述代码A/D/U
         zpptci001.setZMAKTX(hzBomLineRecord.getpBomLinePartName());//物料中文描述
         zpptci001.setZMEINS("EA");//基本计量单位
         zpptci001.setZMTART("A006");//物料类型
@@ -69,11 +126,11 @@ public class MatserMaterielTest extends Author {
         service.getInput().getItem().add(zpptci001);
         service.execute();
 
-        zpptci002 = (ZPPTCI001) zpptci001.clone();
-        zpptci002.setGUID("QERTYUI");
-        service.getInput().getItem().add(zpptci001);
-        service.getInput().getItem().add(zpptci002);
-        service.execute();
+//        zpptci002 = (ZPPTCI001) zpptci001.clone();
+//        zpptci002.setGUID("QERTYUI");
+//        service.getInput().getItem().add(zpptci001);
+//        service.getInput().getItem().add(zpptci002);
+//        service.execute();
 
         System.out.println(service.getOut().getItem().get(0).getTYPE());
         System.out.println();

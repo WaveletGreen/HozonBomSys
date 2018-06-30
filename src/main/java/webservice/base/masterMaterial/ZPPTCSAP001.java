@@ -1,7 +1,5 @@
 
-package webservice.base.maindatas;
-
-import webservice.service.i.IExecutor;
+package webservice.base.masterMaterial;
 
 import javax.jws.WebMethod;
 import javax.jws.WebParam;

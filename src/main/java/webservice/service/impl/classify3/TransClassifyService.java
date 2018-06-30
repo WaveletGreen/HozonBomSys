@@ -1,10 +1,12 @@
-package webservice.service.impl.bom;
+package webservice.service.impl.classify3;
 
 import org.springframework.stereotype.Service;
 import webservice.Author;
-import webservice.base.bom.*;
-import webservice.base.maindatas.*;
+import webservice.base.bom.TABLEOFZPPTCI005;
+import webservice.base.bom.TABLEOFZPPTCO005;
+import webservice.base.bom.ZPPTCO005;
 import webservice.service.i.ITransmitService;
+import webservice.service.impl.bom5.ZPPTCSAP005Service;
 
 import javax.xml.ws.Holder;
 
@@ -13,16 +15,12 @@ import javax.xml.ws.Holder;
  * Description:传输主数据到SAP系统
  * Date: 2018/6/6 16:55
  */
-@Service("transMasterMaterialService")
-public class TransBomService extends Author implements ITransmitService {
+@Service("transBomService")
+public class TransClassifyService extends Author implements ITransmitService {
     /**
-     * webservice调用的服务
+     * 调用服务方
      */
-    private ZPPTCSAP005_Service service;
-    /**
-     * webservice调用的服务
-     */
-    private ZPPTCSAP005 serviceExecutor;
+    private ZPPTCSAP005Service serviceExecutor;
     /**
      * 输入参数容器
      */
@@ -46,9 +44,8 @@ public class TransBomService extends Author implements ITransmitService {
      */
     private Holder<TABLEOFZPPTCO005> outputContainer;
 
-    public TransBomService() {
-        service = new ZPPTCSAP005_Service();
-        serviceExecutor = service.getZPPTCSAP005();
+    public TransClassifyService() {
+        serviceExecutor = new ZPPTCSAP005Service();
         //输入参数
         inputContainer = new Holder<>();
         input = new TABLEOFZPPTCI005();
@@ -67,24 +64,23 @@ public class TransBomService extends Author implements ITransmitService {
      */
     @Override
     public TABLEOFZPPTCO005 execute() {
+        //一定要有一个输出参数，否则报错
         if (t == null) {
             out.getItem().add(t = new ZPPTCO005());
         }
         inputContainer.value = input;
         outputContainer.value = out;
-        if (validateInput(inputContainer)) {
-            serviceExecutor.zppTCSAP005(inputContainer, outputContainer);
-            if (validateOutput(outputContainer)) {
-                out = outputContainer.value;
-                return out;
-            } else {
-                System.out.println("接受方没有返回数据");
-                return null;
-            }
-        } else {
-            System.out.println("发送方没有输入参数");
-            return null;
+        //执行服务
+        if (super.execute(serviceExecutor, inputContainer, outputContainer) != null)
+            out = outputContainer.value;
+        else {
+            out = null;
         }
+        //如果需要在每次execute之后清空input，则需要设置clearEachTime=true
+        if (setClearInputEachTime) {
+            input.getItem().clear();
+        }
+        return out;
     }
 
     /**

@@ -56,7 +56,7 @@ import java.math.BigDecimal;
 @XmlType(name = "ZPP_TCI006", propOrder = { "zpackno", "zitem", "zactionid", "zwerks", "zmatnr", "zbased", "zdate",
 		"zuse", "zsta", "znumber", "zwork", "zcon", "zrout", "zdata1", "zdata2", "zdata3", "zdata4", "zdata5", "zdata6",
 		"reserve01", "reserve02", "reserve03", "reserve04", "reserve05" })
-public class ZPPTCI006 {
+public class ZPPTCI006 implements Cloneable{
 
 	@XmlElement(name = "ZPACKNO", required = true)
 	protected String zpackno;
@@ -106,6 +106,11 @@ public class ZPPTCI006 {
 	protected String reserve04;
 	@XmlElement(name = "RESERVE05", required = true)
 	protected String reserve05;
+
+	@Override
+	protected Object clone() throws CloneNotSupportedException {
+		return super.clone();
+	}
 
 	/**
 	 * Gets the value of the zpackno property.

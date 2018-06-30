@@ -1,6 +1,8 @@
 
 package webservice.base.cfg;
 
+import webservice.service.i.ICommon;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
@@ -31,7 +33,7 @@ import java.util.List;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "TABLE_OF_ZPP_TCO002", propOrder = { "item" })
-public class TABLEOFZPPTCO002 {
+public class TABLEOFZPPTCO002 implements ICommon{
 
 	protected List<ZPPTCO002> item;
 

@@ -1,5 +1,5 @@
 
-package webservice.base.maindatas;
+package webservice.base.masterMaterial;
 
 import javax.xml.bind.annotation.*;
 

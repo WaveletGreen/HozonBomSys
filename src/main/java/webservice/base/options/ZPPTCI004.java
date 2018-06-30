@@ -45,7 +45,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "ZPP_TCI004", propOrder = { "zpackno", "zitem", "zactionid", "zknnam", "zknktx", "zknart", "zknsta",
 		"zknedt", "zknadt", "zknnamcode", "reserve01", "reserve02", "reserve03", "reserve04", "reserve05" })
-public class ZPPTCI004 {
+public class ZPPTCI004 implements Cloneable{
 
 	@XmlElement(name = "ZPACKNO", required = true)
 	protected String zpackno;
@@ -77,6 +77,11 @@ public class ZPPTCI004 {
 	protected String reserve04;
 	@XmlElement(name = "RESERVE05", required = true)
 	protected String reserve05;
+
+	@Override
+	protected Object clone() throws CloneNotSupportedException {
+		return super.clone();
+	}
 
 	/**
 	 * Gets the value of the zpackno property.
