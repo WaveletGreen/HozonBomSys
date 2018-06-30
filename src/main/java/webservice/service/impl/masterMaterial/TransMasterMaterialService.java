@@ -75,6 +75,7 @@ public class TransMasterMaterialService extends Author implements ITransmitServi
         if (validateInput(inputContainer)) {
             serviceExecutor.zppTCSAP001(inputContainer, outputContainer);
             if (validateOutput(outputContainer)) {
+                out = outputContainer.value;
                 return outputContainer;
             } else {
                 System.out.println("接受方没有返回数据");

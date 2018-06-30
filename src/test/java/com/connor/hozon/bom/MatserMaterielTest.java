@@ -16,10 +16,11 @@ import webservice.service.impl.masterMaterial.TransMasterMaterialService;
 import javax.xml.ws.Holder;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
-public class MatserMaterielTest extends Author{
+public class MatserMaterielTest extends Author {
     @Autowired
     HzEbomRecordDAO hzEbomRecordDAO;
     @Autowired
@@ -43,25 +44,35 @@ public class MatserMaterielTest extends Author{
 
         ZPPTCI001 zpptci001 = new ZPPTCI001();
 
+
+        Map<String, String> uuidRecord = new HashMap<>();
+
+        String puid = hzBomLineRecord.getPuid().replaceAll("-", "");
+        String tempPuid = UUID.randomUUID().toString().replaceAll("-", "");
+        uuidRecord.put(tempPuid, puid);
         //设置数据
         //最长32？
-        zpptci001.setGUID(hzBomLineRecord.getPuid().replaceAll("-", ""));
+        zpptci001.setGUID(tempPuid);
         //最长6位？
-        zpptci001.setZITEM(hzBomLineRecord.getPuid().substring(0,5));//行号，最长6位
+        zpptci001.setZITEM(hzBomLineRecord.getPuid().substring(0, 5));//行号，最长6位
         zpptci001.setZWERKS("1001");//工厂
         zpptci001.setZMATNR(hzBomLineRecord.getLineID());//物料编码
-        zpptci001.setZACTIONID("A");//动作描述代码A/D/U
+        zpptci001.setZACTIONID("U");//动作描述代码A/D/U
         zpptci001.setZMAKTX(hzBomLineRecord.getpBomLinePartName());//物料中文描述
         zpptci001.setZMEINS("EA");//基本计量单位
         zpptci001.setZMTART("A006");//物料类型
         zpptci001.setZMRPC("Z01");//MRP控制者
         zpptci001.setZBESKZ("E");//采购类型
-        zpptci001.setZMATKL(hzBomLineRecord.getIs2Y()==1?"Y":"N");//虚拟机标识
+        zpptci001.setZMATKL(hzBomLineRecord.getIs2Y() == 1 ? "Y" : "N");//虚拟机标识
 
-
+        service.getInput().getItem().add(zpptci001);
+        service.execute();
+        System.out.println(service.getOut().getItem().get(0).getMESSAGE());
+        System.out.println();
 
     }
-//    @Test
+
+    //    @Test
     public void main() throws CloneNotSupportedException {
         Map<String, String> cond = new HashMap<>();
         cond.put("projectId", "514762CB57204113BFAC56A5740AF1F8");//projectpuid
@@ -87,12 +98,12 @@ public class MatserMaterielTest extends Author{
         Holder<TABLEOFZPPTCO001> output = new Holder<>();
         TABLEOFZPPTCO001 tableofzpptco001 = new TABLEOFZPPTCO001();
         tableofzpptco001.getItem().add(zpptco001);
-        output.value=tableofzpptco001;
+        output.value = tableofzpptco001;
         //设置数据
         //最长32？
         zpptci001.setGUID(hzBomLineRecord.getPuid().replaceAll("-", ""));
         //最长6位？
-        zpptci001.setZITEM(hzBomLineRecord.getPuid().substring(0,5));//行号，最长6位
+        zpptci001.setZITEM(hzBomLineRecord.getPuid().substring(0, 5));//行号，最长6位
         zpptci001.setZWERKS("1001");//工厂
         zpptci001.setZMATNR(hzBomLineRecord.getLineID());//物料编码
         zpptci001.setZACTIONID("A");//动作描述代码A/D/U
@@ -101,7 +112,7 @@ public class MatserMaterielTest extends Author{
         zpptci001.setZMTART("A006");//物料类型
         zpptci001.setZMRPC("Z01");//MRP控制者
         zpptci001.setZBESKZ("E");//采购类型
-        zpptci001.setZMATKL(hzBomLineRecord.getIs2Y()==1?"Y":"N");//虚拟机标识
+        zpptci001.setZMATKL(hzBomLineRecord.getIs2Y() == 1 ? "Y" : "N");//虚拟机标识
 
 //        zpptci001.setGUID("625ad9d3b71f49eb98faa6844bbc7a67");//数据包号，最长32位
 //        zpptci001.setZITEM("yCehB");//行号，最长6位
@@ -115,11 +126,11 @@ public class MatserMaterielTest extends Author{
 //        zpptci001.setZBESKZ("E");//采购类型
 //        zpptci001.setZMATKL("SADasD");//虚拟机标识
 
-        zpptci002= (ZPPTCI001) zpptci001.clone();
+        zpptci002 = (ZPPTCI001) zpptci001.clone();
         zpptci002.setGUID("QERTYUI");
         tableofzpptci001.getItem().add(zpptci001);
         tableofzpptci001.getItem().add(zpptci002);
-        input.value=tableofzpptci001;
+        input.value = tableofzpptci001;
 
 
         zpptcsap001.zppTCSAP001(input, output);
