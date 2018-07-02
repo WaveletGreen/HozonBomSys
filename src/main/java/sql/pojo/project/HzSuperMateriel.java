@@ -1,16 +1,29 @@
 package sql.pojo.project;
 
 public class HzSuperMateriel {
+    /**
+     * puid
+     */
     private String puid;
-
+    /**
+     * 超级物料编码
+     */
     private Object pMaterielCode;
-
+    /**
+     * 超级物料类型
+     */
     private Object pMaterielType;
-
+    /**
+     * 工厂
+     */
     private Object pMaterielWerk;
-
+    /**
+     * 物料描述
+     */
     private Object pMaterielDesc;
-
+    /**
+     * 归属项目
+     */
     private String pPertainToProjectPuid;
 
 

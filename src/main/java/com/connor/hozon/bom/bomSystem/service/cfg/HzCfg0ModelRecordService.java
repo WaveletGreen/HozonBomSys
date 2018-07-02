@@ -26,4 +26,5 @@ public class HzCfg0ModelRecordService {
     public boolean doUpdateModelName(HzCfg0ModelRecord modelRecord) {
         return hzCfg0ModelRecordDao.updateModelName(modelRecord) > 0 ? true : false;
     }
+
 }

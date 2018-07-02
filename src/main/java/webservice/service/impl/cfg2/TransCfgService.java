@@ -18,7 +18,7 @@ import javax.xml.ws.Holder;
  * Description:传输主数据到SAP系统
  * Date: 2018/6/6 16:55
  */
-@Service("transBomService")
+@Service("transCfgService")
 public class TransCfgService extends Author implements ITransmitService {
     /**
      * 调用服务方

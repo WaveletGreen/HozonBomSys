@@ -14,7 +14,7 @@ import javax.xml.ws.Holder;
  * Description:传输主数据到SAP系统
  * Date: 2018/6/6 16:77
  */
-@Service("transBomService")
+@Service("transProductAttrService")
 public class TransProductAttrService extends Author implements ITransmitService {
     /**
      * 调用服务方
