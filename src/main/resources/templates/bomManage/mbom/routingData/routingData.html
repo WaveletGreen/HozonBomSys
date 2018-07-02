@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<!--User: xulf Date: 2018/6/28 Time: 10:21-->
+<!--User: xulf Date: 2018/7/2 Time: 10:48-->
 <head th:include="include/headBom">
 </head>
 <link th:href="@{/css/stage/bom-stage.css}" rel="stylesheet"/>
 <meta charset="UTF-8">
-<title>物料数据表</title>
+<title>工艺路线数据</title>
 </head>
 <body>
 <div class="panel-body" style="padding-bottom:0px;">
     <div class="panel panel-default" style="margin-top: 10px;">
         <div class="panel-body">
             <form class="form-inline" role="form" style="float: left; width: 100%;margin-left: 20px;" method="get"
-                  id="queryMaterialData">
+                  id="queryRoutingData">
                 <div class="form-group">
                     <label for="level">层级:</label>
                     <input type="text" class="form-control" name="level" id="level" placeholder="请输入层级"/>
@@ -23,21 +23,19 @@
                            placeholder="请输入专业"/>
                 </div>
                 <div class="form-group">
-                    <label for="rank">级别:</label>
-                    <input type="text" class="form-control" name="rank" id="rank" placeholder="请输入零件号"/>
+                    <label for="lineId">零件号:</label>
+                    <input type="text" class="form-control" name="lineId" id="lineId" placeholder="请输入零件号"/>
                 </div>
                 <div class="form-group">
-                    <label for="materialType">物料类别:</label>
-                    <select class="form-control" name="materialType" id="materialType">
-                        <option>请选择物料类别</option>
-                        <option>车型项目物料总表</option>
-                        <option>整车超级物料主数据</option>
-                        <option>整车衍生物料主数据</option>
-                        <option>虚拟物料主数据</option>
-                        <option>半成品物料主数据</option>
-                        <option>生产性外购物料主数据</option>
-                        <option>自制备件物料主数据</option>
+                    <label for="routing">工艺路线:</label>
+                    <select class="form-control" style="min-width: 180px" name="routing" id="routing" placeholder="请选择工艺路线">
+                        <option>请选择工艺路线</option>
+                        <option>工艺中心主数据</option>
+                        <option>整车工艺路线</option>
+                        <option>总成分总成工艺路线</option>
+                        <option>半成品工艺路线</option>
                     </select>
+                </div>
                 <div class="form-group">
                     <button type="button" id="queryBtn" onclick="doQuery();" class="btn btn-primary">查询</button>
                 </div>
@@ -46,8 +44,8 @@
     </div>
 </div>
 <div class="content col-lg-12">
-    <table class="table table-striped tableNormalStyle" id="materialDataTable"></table>
+    <table class="table table-striped tableNormalStyle" id="routingDataTable"></table>
 </div>
-<script th:src="@{/js/bom/mbom/materialData.js}"></script>
+<script th:src="@{/js/bom/mbom/routingData.js}"></script>
 </body>
 </html>
