@@ -1,24 +1,21 @@
-package com.connor.hozon.bom.resources.dto.response;
+package com.connor.hozon.bom.resources.dto.request;
 
 /**
- * @Author: haozt
- * @Date: 2018/6/30
- * @Description:
+ * \* User: xulf
+ * \* Date: 2018/7/2
+ * \* Time: 19:48
+ * \
  */
-public class HzWorkCenterRespFTO {
-    /**
-     * 工厂代码
-     */
-    private String factoryCode;
-    /**
-     * 工厂id
-     */
-    private String factoryId;
+public class UpdateWorkCenterReqDTO {
 
     /**
      * id
      */
     private String puid;
+    /**
+     * 工程代码
+     */
+    private String factoryCode;
     /**
      * 工作中心代码
      */
@@ -148,28 +145,20 @@ public class HzWorkCenterRespFTO {
      */
     private String pExperssion6;
 
-    public String getFactoryCode() {
-        return factoryCode;
-    }
-
-    public void setFactoryCode(String factoryCode) {
-        this.factoryCode = factoryCode;
-    }
-
-    public String getFactoryId() {
-        return factoryId;
-    }
-
-    public void setFactoryId(String factoryId) {
-        this.factoryId = factoryId;
-    }
-
     public String getPuid() {
         return puid;
     }
 
     public void setPuid(String puid) {
         this.puid = puid;
+    }
+
+    public String getFactoryCode() {
+        return factoryCode;
+    }
+
+    public void setFactoryCode(String factoryCode) {
+        this.factoryCode = factoryCode;
     }
 
     public String getpWorkCode() {

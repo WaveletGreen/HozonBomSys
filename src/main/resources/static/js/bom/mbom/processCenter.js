@@ -9,13 +9,15 @@ function doQuery() {
 
 function initTable() {
     var  $table =  $("#processCenterTable");
+    var projectId =  $("#project", window.top.document).val();
+    var url = "work/record?projectId="+projectId;
     var  column = [];
     $.ajax({
-        url:"mbom/processCenterTitel",
+        url:"work/titel",
         type:"GET",
         success:function(result){
             var column = [];
-            column.push({field: 'Puid', title: 'puid'});
+            column.push({field: 'puid', title: 'puid'});
             column.push({field: 'ck', checkbox: true, Width: 50});
             /*column.push({field: '',
                 title: '序号',
@@ -44,13 +46,13 @@ function initTable() {
                 }
             };
             $table.bootstrapTable({
-                url: "",
+                url: url,
                 method: 'GET',
                 dataType: 'json',
                 cache: false,
                 striped: true,                       //是否显示行间隔色
                 //sidePagination: "server",           //分页方式：client客户端分页，server服务端分页（*）
-                height: $(window.parent.document).find("#wrapper").height() - 180,
+                height: $(window.parent.document).find("#wrapper").height()-45,
                 width: $(window).width(),
                 formId :"queryProcessCenter",
                 undefinedText: "",                  //当数据为 undefined 时显示的字符
@@ -80,7 +82,7 @@ function initTable() {
                         handler: function () {
                             window.Ewin.dialog({
                                 title: "添加",
-                                url: "mbom/addMBom?projectId="+projectPuid+"&eBomPuid="+rows[0].eBomPuid,
+                                url: "work/addWork",
                                 gridId: "gridId",
                                 width: 500,
                                 height: 650
@@ -99,7 +101,7 @@ function initTable() {
                             }
                             window.Ewin.dialog({
                                 title: "修改",
-                                url: "mbom/updateMBom?projectId="+projectPuid+"&eBomPuid="+rows[0].eBomPuid,
+                                url: "work/updateWork?projectId="+projectId+"&puid="+rows[0].puid,
                                 gridId: "gridId",
                                 width: 500,
                                 height: 650
@@ -144,7 +146,7 @@ function initTable() {
                     }
                 ],
             });
-            $table.bootstrapTable('hideColumn', 'Puid');
+            $table.bootstrapTable('hideColumn', 'puid');
         }
     })
 }

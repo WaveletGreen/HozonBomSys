@@ -138,4 +138,278 @@ public class AddWorkCenterReqDTO {
      * 公式6
      */
     private String pExperssion6;
+
+    private String projectId;
+
+    public String getProjectId() {
+        return projectId;
+    }
+
+    public void setProjectId(String projectId) {
+        this.projectId = projectId;
+    }
+
+    public String getFactoryCode() {
+        return factoryCode;
+    }
+
+    public void setFactoryCode(String factoryCode) {
+        this.factoryCode = factoryCode;
+    }
+
+    public String getpWorkCode() {
+        return pWorkCode;
+    }
+
+    public void setpWorkCode(String pWorkCode) {
+        this.pWorkCode = pWorkCode;
+    }
+
+    public String getpWorkDesc() {
+        return pWorkDesc;
+    }
+
+    public void setpWorkDesc(String pWorkDesc) {
+        this.pWorkDesc = pWorkDesc;
+    }
+
+    public String getpWorkType() {
+        return pWorkType;
+    }
+
+    public void setpWorkType(String pWorkType) {
+        this.pWorkType = pWorkType;
+    }
+
+    public String getpPurpose() {
+        return pPurpose;
+    }
+
+    public void setpPurpose(String pPurpose) {
+        this.pPurpose = pPurpose;
+    }
+
+    public String getpStandardCode() {
+        return pStandardCode;
+    }
+
+    public void setpStandardCode(String pStandardCode) {
+        this.pStandardCode = pStandardCode;
+    }
+
+    public String getpControlCode() {
+        return pControlCode;
+    }
+
+    public void setpControlCode(String pControlCode) {
+        this.pControlCode = pControlCode;
+    }
+
+    public String getpDirectLabor() {
+        return pDirectLabor;
+    }
+
+    public void setpDirectLabor(String pDirectLabor) {
+        this.pDirectLabor = pDirectLabor;
+    }
+
+    public String getpIndirectLabor() {
+        return pIndirectLabor;
+    }
+
+    public void setpIndirectLabor(String pIndirectLabor) {
+        this.pIndirectLabor = pIndirectLabor;
+    }
+
+    public String getpMachineLabor() {
+        return pMachineLabor;
+    }
+
+    public void setpMachineLabor(String pMachineLabor) {
+        this.pMachineLabor = pMachineLabor;
+    }
+
+    public String getpBurn() {
+        return pBurn;
+    }
+
+    public void setpBurn(String pBurn) {
+        this.pBurn = pBurn;
+    }
+
+    public String getpMachineMaterial() {
+        return pMachineMaterial;
+    }
+
+    public void setpMachineMaterial(String pMachineMaterial) {
+        this.pMachineMaterial = pMachineMaterial;
+    }
+
+    public String getpOtherCost() {
+        return pOtherCost;
+    }
+
+    public void setpOtherCost(String pOtherCost) {
+        this.pOtherCost = pOtherCost;
+    }
+
+    public String getpProcessExression() {
+        return pProcessExression;
+    }
+
+    public void setpProcessExression(String pProcessExression) {
+        this.pProcessExression = pProcessExression;
+    }
+
+    public String getpAbilityType() {
+        return pAbilityType;
+    }
+
+    public void setpAbilityType(String pAbilityType) {
+        this.pAbilityType = pAbilityType;
+    }
+
+    public String getpStartTime() {
+        return pStartTime;
+    }
+
+    public void setpStartTime(String pStartTime) {
+        this.pStartTime = pStartTime;
+    }
+
+    public String getpEndTime() {
+        return pEndTime;
+    }
+
+    public void setpEndTime(String pEndTime) {
+        this.pEndTime = pEndTime;
+    }
+
+    public String getpRestTime() {
+        return pRestTime;
+    }
+
+    public void setpRestTime(String pRestTime) {
+        this.pRestTime = pRestTime;
+    }
+
+    public String getpAbilityCount() {
+        return pAbilityCount;
+    }
+
+    public void setpAbilityCount(String pAbilityCount) {
+        this.pAbilityCount = pAbilityCount;
+    }
+
+    public String getpDispatchExpression() {
+        return pDispatchExpression;
+    }
+
+    public void setpDispatchExpression(String pDispatchExpression) {
+        this.pDispatchExpression = pDispatchExpression;
+    }
+
+    public String getpCostCenter() {
+        return pCostCenter;
+    }
+
+    public void setpCostCenter(String pCostCenter) {
+        this.pCostCenter = pCostCenter;
+    }
+
+    public String getpTaskType1() {
+        return pTaskType1;
+    }
+
+    public void setpTaskType1(String pTaskType1) {
+        this.pTaskType1 = pTaskType1;
+    }
+
+    public String getpTaskType2() {
+        return pTaskType2;
+    }
+
+    public void setpTaskType2(String pTaskType2) {
+        this.pTaskType2 = pTaskType2;
+    }
+
+    public String getpTaskType3() {
+        return pTaskType3;
+    }
+
+    public void setpTaskType3(String pTaskType3) {
+        this.pTaskType3 = pTaskType3;
+    }
+
+    public String getpTaskType4() {
+        return pTaskType4;
+    }
+
+    public void setpTaskType4(String pTaskType4) {
+        this.pTaskType4 = pTaskType4;
+    }
+
+    public String getpTaskType5() {
+        return pTaskType5;
+    }
+
+    public void setpTaskType5(String pTaskType5) {
+        this.pTaskType5 = pTaskType5;
+    }
+
+    public String getpTaskType6() {
+        return pTaskType6;
+    }
+
+    public void setpTaskType6(String pTaskType6) {
+        this.pTaskType6 = pTaskType6;
+    }
+
+    public String getpExperssion1() {
+        return pExperssion1;
+    }
+
+    public void setpExperssion1(String pExperssion1) {
+        this.pExperssion1 = pExperssion1;
+    }
+
+    public String getpExperssion2() {
+        return pExperssion2;
+    }
+
+    public void setpExperssion2(String pExperssion2) {
+        this.pExperssion2 = pExperssion2;
+    }
+
+    public String getpExperssion3() {
+        return pExperssion3;
+    }
+
+    public void setpExperssion3(String pExperssion3) {
+        this.pExperssion3 = pExperssion3;
+    }
+
+    public String getpExperssion4() {
+        return pExperssion4;
+    }
+
+    public void setpExperssion4(String pExperssion4) {
+        this.pExperssion4 = pExperssion4;
+    }
+
+    public String getpExperssion5() {
+        return pExperssion5;
+    }
+
+    public void setpExperssion5(String pExperssion5) {
+        this.pExperssion5 = pExperssion5;
+    }
+
+    public String getpExperssion6() {
+        return pExperssion6;
+    }
+
+    public void setpExperssion6(String pExperssion6) {
+        this.pExperssion6 = pExperssion6;
+    }
 }
