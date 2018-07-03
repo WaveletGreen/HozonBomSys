@@ -1,5 +1,7 @@
 package com.connor.hozon.bom.resources.mybatis.factory;
 
+import com.connor.hozon.bom.resources.page.Page;
+import com.connor.hozon.bom.resources.query.HzWorkByPageQuery;
 import sql.pojo.factory.HzFactory;
 
 /**
@@ -14,4 +16,6 @@ public interface HzFactoryDAO {
      * @return
      */
     int insert(HzFactory hzFactory);
+
+    HzFactory findFactory(String puid,String factoryCode);
 }
