@@ -419,6 +419,7 @@
     where PUID = #{puid,jdbcType=VARCHAR}
   </update>
 
+
   <update id="HzWorkCenterDAOImpl_delete">
     update HZ_WORK_CENTER
     set P_STATUS = 0

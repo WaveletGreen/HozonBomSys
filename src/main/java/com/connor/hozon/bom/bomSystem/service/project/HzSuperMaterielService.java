@@ -3,7 +3,7 @@ package com.connor.hozon.bom.bomSystem.service.project;
 import com.connor.hozon.bom.bomSystem.dao.project.HzSuperMaterielDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sql.pojo.project.HzSuperMateriel;
+import sql.pojo.project.HzMaterielRecord;
 
 /**
  * Created by Fancyears·Maylos·Mayways
@@ -23,19 +23,19 @@ public class HzSuperMaterielService {
         return hzSuperMaterielDao.deleteByPrimaryKey(puid) > 0 ? true : false;
     }
 
-    public boolean doInsertOne(HzSuperMateriel record) {
+    public boolean doInsertOne(HzMaterielRecord record) {
         return hzSuperMaterielDao.insert(record) > 0 ? true : false;
     }
 
-    public HzSuperMateriel doSelectByPrimaryKey(String puid) {
+    public HzMaterielRecord doSelectByPrimaryKey(String puid) {
         return hzSuperMaterielDao.selectByPrimaryKey(puid);
     }
 
-    public HzSuperMateriel doSelectByProjectPuid(String projectPuid) {
+    public HzMaterielRecord doSelectByProjectPuid(String projectPuid) {
         return hzSuperMaterielDao.selectByProjectPuid(projectPuid);
     }
 
-    public boolean doUpdateByPrimaryKey(HzSuperMateriel record) {
+    public boolean doUpdateByPrimaryKey(HzMaterielRecord record) {
         return hzSuperMaterielDao.updateByPrimaryKey(record) > 0 ? true : false;
     }
 }
