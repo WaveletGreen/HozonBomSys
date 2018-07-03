@@ -411,11 +411,11 @@ public class BaseSQLUtil implements IBaseSQLUtil {
 //                session.close();
         }
     }
+
     /**
      * 带有分页信息的查询
-     *
      * @param sqlMapId  mybatis映射id
-     * @param pageRequest  分页请求参数信息
+     * @param pageRequest  分页请求参数信息 逻辑分页
      * @return
      */
     public Page findForPage(String sqlMapId,final String totalMapId, PageRequest pageRequest) {
@@ -438,6 +438,31 @@ public class BaseSQLUtil implements IBaseSQLUtil {
         return page;
     }
 
+    /**
+     * 带有分页信息的查询  物理分页
+     *
+     * @param sqlMapId  mybatis映射id
+     * @param pageRequest  分页请求参数信息
+     * @return
+     */
+    public Page findPage(String sqlMapId,final String totalMapId, PageRequest pageRequest) {
+        Map filters = new HashMap();
+        filters.putAll(pageRequest.getFilters());
+        // 查询总数
+        Number totalCount = (Number) findForObject(totalMapId,filters);
+        if (totalCount == null || totalCount.intValue() <= 0) {
+            return new Page(pageRequest, 0);
+        }
+        if (totalCount != null && totalCount.intValue() <= (pageRequest.getPageNumber() - 1) * pageRequest.getPageSize()) {
+            return new Page(pageRequest.getPageNumber(), pageRequest.getPageSize(), totalCount.intValue(), new ArrayList(0));
+        }
+        Page page = new Page(pageRequest, totalCount.intValue());
+        filters.put("offset",(pageRequest.getPageNumber() - 1) * pageRequest.getPageSize());
+        filters.put("limit",pageRequest.getPageNumber()*pageRequest.getPageSize());
+        List list = findForList(sqlMapId,filters);
+        page.setResult(list);
+        return page;
+    }
     /**
      * 查询列表
      *
