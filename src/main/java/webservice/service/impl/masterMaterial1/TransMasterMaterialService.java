@@ -5,9 +5,11 @@ import webservice.Author;
 import webservice.base.masterMaterial.TABLEOFZPPTCI001;
 import webservice.base.masterMaterial.TABLEOFZPPTCO001;
 import webservice.base.masterMaterial.ZPPTCO001;
+import webservice.logic.MasterMaterial;
 import webservice.service.i.ITransmitService;
 
 import javax.xml.ws.Holder;
+import java.util.List;
 
 /**
  * Created by Fancyears·Maylos·Mayways
@@ -28,8 +30,10 @@ public class TransMasterMaterialService extends Author implements ITransmitServi
      * 输入参数
      */
     private TABLEOFZPPTCI001 input;
-
-
+    /***
+     * 封装好的映射bean，采用集合收集
+     */
+    private List<MasterMaterial> listOfMasterMaterial;
     /**
      * 输出参数:临时的输出参数容器，需要一个临时输出参数容器，否则传不到SAP，该参数不应该有setter和getter
      */
@@ -108,4 +112,16 @@ public class TransMasterMaterialService extends Author implements ITransmitServi
         return out;
     }
 
+    public List<MasterMaterial> getListOfMasterMaterial() {
+        return listOfMasterMaterial;
+    }
+
+    public void setListOfMasterMaterial(List<MasterMaterial> listOfMasterMaterial) {
+        this.listOfMasterMaterial = listOfMasterMaterial;
+
+        for (MasterMaterial m :
+                listOfMasterMaterial) {
+            input.getItem().add(m.getZpptci001());
+        }
+    }
 }
