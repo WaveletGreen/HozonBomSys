@@ -24,52 +24,7 @@ public enum MaterialOption {
     /**
      * 辅料
      */
-    MATERIAL_ACCESSORIES("A004"),
-    ///////////////////////////采购类型/////////////////////////
-    /**
-     * 采购类型:自制件，对应TC系统：make
-     */
-
-    PURCHASE_MAKE("E"),
-    /**
-     * 采购件，对应TC系统：buy
-     */
-    PURCHASE_BUY("F"),
-    /**
-     * 特殊采购件
-     */
-    PURCHASE_SPECIAL("50"),
-    /**
-     * 不是采购件，留空
-     */
-    PURCHASE_EMPTY(""),
-
-    ///////////////////////////MRP控制者////////////////////////////
-    /**
-     * 整车
-     */
-    MRP_VEHICLE("Z02"),
-    /**
-     * 虚拟件
-     */
-    MRP_FICTITIOUS("Z04"),
-    /**
-     * 总成/分总成
-     */
-    MRP_ASSEMBLY("Z06"),
-    /**
-     * 冲压
-     */
-    MRP_STAMPING("Z07"),
-    /**
-     * 自制备件
-     */
-    MRP_SELF_MADE_SPARE_PARTS("Z08"),
-    /**
-     * 采购件
-     */
-    MRP_PURCHASE("Z10");
-
+    MATERIAL_ACCESSORIES("A004");
 
     /***
      * 描述

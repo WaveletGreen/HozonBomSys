@@ -6,9 +6,7 @@ import sql.pojo.bom.HzMbomRecord;
 import webservice.Author;
 import webservice.logic.Bom;
 import webservice.logic.MasterMaterial;
-import webservice.option.ActionFlagOption;
-import webservice.option.BomOption;
-import webservice.option.MaterialOption;
+import webservice.option.*;
 import webservice.service.impl.bom5.TransBomService;
 import webservice.service.impl.masterMaterial1.TransMasterMaterialService;
 
@@ -40,9 +38,9 @@ public class Test extends Author {
         masterMaterial.setFactory("1001");
         masterMaterial.setMaterialCode("S00-15212SDA");
         masterMaterial.setMaterialName("普通物料");
-        masterMaterial.setMRPController(MaterialOption.MRP_ASSEMBLY);
+        masterMaterial.setMRPController(MRPControlOption.MRP_ASSEMBLY);
         masterMaterial.setUnit("EA");
-        masterMaterial.setPurchaseType(MaterialOption.PURCHASE_EMPTY);
+        masterMaterial.setPurchaseType(PurchaseOption.PURCHASE_EMPTY);
         masterMaterial.setMaterialType(MaterialOption.MATERIAL_ACCESSORIES);
         masterMaterial.setVertureFlag("50");
 

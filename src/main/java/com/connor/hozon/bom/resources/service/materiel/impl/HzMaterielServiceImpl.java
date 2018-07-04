@@ -1,7 +1,6 @@
 package com.connor.hozon.bom.resources.service.materiel.impl;
 
 import com.connor.hozon.bom.common.util.user.UserInfo;
-import com.connor.hozon.bom.resources.config.MaterielType;
 import com.connor.hozon.bom.resources.dto.request.AddHzMaterielReqDTO;
 import com.connor.hozon.bom.resources.dto.request.UpdateHzMaterielReqDTO;
 import com.connor.hozon.bom.resources.dto.response.HzMaterielRespDTO;
@@ -13,18 +12,14 @@ import com.connor.hozon.bom.resources.query.HzMaterielByPageQuery;
 import com.connor.hozon.bom.resources.service.materiel.HzMaterielService;
 import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.sys.entity.User;
-import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sql.pojo.bom.HzMbomLineRecord;
 import sql.pojo.cfg.HzCfg0ModelRecord;
 import sql.pojo.factory.HzFactory;
 import sql.pojo.project.HzMaterielRecord;
-import sql.redis.SerializeUtil;
 
 import java.util.*;
-
-import static com.connor.hozon.bom.resources.config.MaterielType.SUPER_MATERIEL_DATA;
 
 /**
  * @Author: haozt
@@ -38,36 +33,37 @@ public class HzMaterielServiceImpl implements HzMaterielService {
 
     @Autowired
     private HzFactoryDAO hzFactoryDAO;
+
     @Override
     public OperateResultMessageRespDTO addHzMateriel(AddHzMaterielReqDTO addHzMaterielReqDTO) {
         OperateResultMessageRespDTO respDTO = new OperateResultMessageRespDTO();
-        if(null == addHzMaterielReqDTO.getpPertainToProjectPuid() || addHzMaterielReqDTO.getpPertainToProjectPuid().equals("")){
+        if (null == addHzMaterielReqDTO.getpPertainToProjectPuid() || addHzMaterielReqDTO.getpPertainToProjectPuid().equals("")) {
             respDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
             respDTO.setErrMsg("请选择项目！");
             return respDTO;
         }
-        try{
+        try {
             User user = UserInfo.getUser();
-            if(user.getGroupId()!=9l){
+            if (user.getGroupId() != 9l) {
                 respDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
                 respDTO.setErrMsg("您当前没有权限进行此操作！");
                 return respDTO;
             }
             HzMaterielRecord record = new HzMaterielRecord();
-            HzFactory hzFactory = hzFactoryDAO.findFactory("",addHzMaterielReqDTO.getFactoryCode());
-            if(hzFactory == null){
+            HzFactory hzFactory = hzFactoryDAO.findFactory("", addHzMaterielReqDTO.getFactoryCode());
+            if (hzFactory == null) {
                 String puid = UUID.randomUUID().toString();
-                hzFactory =  new HzFactory();
+                hzFactory = new HzFactory();
                 hzFactory.setPuid(puid);
                 hzFactory.setpFactoryCode(addHzMaterielReqDTO.getFactoryCode());
                 hzFactory.setpUpdateName(user.getUserName());
                 hzFactory.setpCreateName(user.getUserName());
                 int i = hzFactoryDAO.insert(hzFactory);
-                if(i<0){
+                if (i < 0) {
                     return OperateResultMessageRespDTO.getFailResult();
                 }
                 record.setpFactoryPuid(puid);
-            }else{
+            } else {
                 record.setpFactoryPuid(hzFactory.getPuid());
             }
             record.setPuid(UUID.randomUUID().toString());
@@ -83,15 +79,14 @@ public class HzMaterielServiceImpl implements HzMaterielService {
             record.setpMrpController(addHzMaterielReqDTO.getpMrpController());
 
 
-
             record.setpUpdateName(user.getUserName());
             record.setpMaterielCode(addHzMaterielReqDTO.getpMaterielCode());
             record.setpMaterielType(addHzMaterielReqDTO.getpMaterielType());
             int i = hzMaterielDAO.insert(record);
-            if(i>0){
+            if (i > 0) {
                 return OperateResultMessageRespDTO.getSuccessResult();
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             return null;
         }
 
@@ -101,7 +96,7 @@ public class HzMaterielServiceImpl implements HzMaterielService {
     @Override
     public OperateResultMessageRespDTO updateHzMateriel(UpdateHzMaterielReqDTO updateHzMaterielReqDTO) {
         OperateResultMessageRespDTO respDTO = new OperateResultMessageRespDTO();
-        if(null == updateHzMaterielReqDTO.getpPertainToProjectPuid() || updateHzMaterielReqDTO.getpPertainToProjectPuid().equals("")){
+        if (null == updateHzMaterielReqDTO.getpPertainToProjectPuid() || updateHzMaterielReqDTO.getpPertainToProjectPuid().equals("")) {
             respDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
             respDTO.setErrMsg("请选择项目！");
             return respDTO;
@@ -141,10 +136,10 @@ public class HzMaterielServiceImpl implements HzMaterielService {
             record.setpMaterielCode(updateHzMaterielReqDTO.getpMaterielCode());
             record.setpMaterielType(updateHzMaterielReqDTO.getpMaterielType());
             int i = hzMaterielDAO.update(record);
-            if(i>0){
-                return  OperateResultMessageRespDTO.getSuccessResult();
+            if (i > 0) {
+                return OperateResultMessageRespDTO.getSuccessResult();
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             return null;
         }
         return OperateResultMessageRespDTO.getFailResult();
@@ -152,9 +147,9 @@ public class HzMaterielServiceImpl implements HzMaterielService {
 
     @Override
     public OperateResultMessageRespDTO deleteHzMateriel(String puid) {
-        try{
+        try {
             OperateResultMessageRespDTO respDTO = new OperateResultMessageRespDTO();
-            if(null == puid || puid.equals("")){
+            if (null == puid || puid.equals("")) {
                 respDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
                 respDTO.setErrMsg("请选择一条需要删除的数据！");
                 return respDTO;
@@ -166,10 +161,10 @@ public class HzMaterielServiceImpl implements HzMaterielService {
                 return respDTO;
             }
             int i = hzMaterielDAO.delete(puid);
-            if(i>0){
+            if (i > 0) {
                 return OperateResultMessageRespDTO.getSuccessResult();
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             return OperateResultMessageRespDTO.getFailResult();
         }
         return OperateResultMessageRespDTO.getFailResult();
@@ -190,33 +185,32 @@ public class HzMaterielServiceImpl implements HzMaterielService {
          */
         int type = query.getpMaterielDataType();
         //默认工厂为1001工厂
-        HzFactory factory = hzFactoryDAO.findFactory("","1001");
+        HzFactory factory = hzFactoryDAO.findFactory("", "1001");
         String puid = UUID.randomUUID().toString();
-        if(factory == null) {
+        if (factory == null) {
             factory = new HzFactory();
             factory.setPuid(puid);
             factory.setpFactoryCode("1001");
             hzFactoryDAO.insert(factory);
         }
         List<HzMaterielRecord> list = new ArrayList<>();
-        switch (type){
+        switch (type) {
             case 11:
                 break;
             case 21:
                 List<HzCfg0ModelRecord> cfg0ModelRecords = hzMaterielDAO.findHzCfg0ModelRecord(query);
-                if(ListUtil.isNotEmpty(cfg0ModelRecords)){
-                    for(HzCfg0ModelRecord record :cfg0ModelRecords){
+                if (ListUtil.isNotEmpty(cfg0ModelRecords)) {
+                    for (HzCfg0ModelRecord record : cfg0ModelRecords) {
                         HzMaterielRecord hzMaterielRecord = new HzMaterielRecord();
-                        Map<String,Object> map = new HashMap<>();
-                        map.put("",record.getPuid());
+                        Map<String, Object> map = new HashMap<>();
+                        map.put("", record.getPuid());
                         boolean b = hzMaterielDAO.HzMaterielIsExist(map);
-                        if(b){
+                        if (b) {
                             continue;
-                        }else{
-                            if(factory!=null){
+                        } else {
+                            if (factory != null) {
                                 hzMaterielRecord.setpFactoryPuid(factory.getPuid());
-                            }
-                            else{
+                            } else {
                                 hzMaterielRecord.setpFactoryPuid(puid);
                             }
                             hzMaterielRecord.setpMaterielType("A001");
@@ -234,13 +228,12 @@ public class HzMaterielServiceImpl implements HzMaterielService {
 
             case 31:
                 List<HzMbomLineRecord> hzMbomLineRecords = hzMaterielDAO.findHz2YMbomRecord(query);
-                if(ListUtil.isNotEmpty(hzMbomLineRecords)){
-                    for(HzMbomLineRecord record :hzMbomLineRecords){
+                if (ListUtil.isNotEmpty(hzMbomLineRecords)) {
+                    for (HzMbomLineRecord record : hzMbomLineRecords) {
                         HzMaterielRecord hzMaterielRecord = new HzMaterielRecord();
-                        if(factory!=null){
+                        if (factory != null) {
                             hzMaterielRecord.setpFactoryPuid(factory.getPuid());
-                        }
-                        else{
+                        } else {
                             hzMaterielRecord.setpFactoryPuid(puid);
                         }
                         hzMaterielRecord.setpMaterielCode(record.getLineID());
@@ -259,23 +252,22 @@ public class HzMaterielServiceImpl implements HzMaterielService {
             case 61:
                 hzMaterielDAO.findHzMadeBySelfSpareMbomRecord(query);
                 break;
-            default:break;
+            default:
+                break;
         }
-
-
 
 
         Page<HzMaterielRecord> page = hzMaterielDAO.findHzMaterielForPage(query);
-        if(page == null || page.getResult() == null){
-            return new Page<>(query.getPage(),query.getLimit(),0);
+        if (page == null || page.getResult() == null) {
+            return new Page<>(query.getPage(), query.getLimit(), 0);
         }
-        try{
+        try {
             List<HzMaterielRecord> recordList = page.getResult();
             List<HzMaterielRespDTO> respDTOS = new ArrayList<>();
-            for(HzMaterielRecord record:recordList){
+            for (HzMaterielRecord record : recordList) {
                 HzMaterielRespDTO respDTO = new HzMaterielRespDTO();
-                HzFactory hzFactory = hzFactoryDAO.findFactory(record.getpFactoryPuid(),"");
-                if(factory !=null){
+                HzFactory hzFactory = hzFactoryDAO.findFactory(record.getpFactoryPuid(), "");
+                if (factory != null) {
                     respDTO.setFactoryCode(hzFactory.getpFactoryCode());
                 }
                 respDTO.setpBasicUnitMeasure(record.getpBasicUnitMeasure());
@@ -288,8 +280,8 @@ public class HzMaterielServiceImpl implements HzMaterielService {
                 respDTO.setPuid(record.getPuid());
                 respDTOS.add(respDTO);
             }
-            return new Page<>(query.getPage(),query.getLimit(),page.getTotalCount(),respDTOS);
-        }catch (Exception e){
+            return new Page<>(query.getPage(), query.getLimit(), page.getTotalCount(), respDTOS);
+        } catch (Exception e) {
             return null;
         }
     }

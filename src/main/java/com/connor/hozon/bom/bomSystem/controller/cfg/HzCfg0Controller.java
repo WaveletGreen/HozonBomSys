@@ -12,9 +12,13 @@ import org.springframework.web.bind.annotation.*;
 import sql.pojo.cfg.HzCfg0MainRecord;
 import sql.pojo.cfg.HzCfg0Record;
 import webservice.base.cfg.ZPPTCO002;
+import webservice.base.options.ZPPTCO004;
+import webservice.logic.Correlate;
 import webservice.logic.Features;
 import webservice.option.ActionFlagOption;
+import webservice.option.CorrelateTypeOption;
 import webservice.service.impl.cfg2.TransCfgService;
+import webservice.service.impl.options4.TransOptionsService;
 
 import java.util.*;
 
@@ -29,9 +33,16 @@ public class HzCfg0Controller {
     private final HzCfg0Service hzCfg0Service;
     private final HzCfg0MainRecordDao hzCfg0MainRecordDao;
     private final HzCfg0OptionFamilyDao hzCfg0OptionFamilyDao;
-
+    /**
+     * 特性传输服务
+     */
     @Autowired
     TransCfgService transCfgService;
+    /***
+     * 相关性传输服务
+     */
+    @Autowired
+    TransOptionsService transOptionsService;
 
     @Autowired
     public HzCfg0Controller(HzCfg0Service hzCfg0Service, HzCfg0MainRecordDao hzCfg0MainRecordDao, HzCfg0OptionFamilyDao hzCfg0OptionFamilyDao) {
@@ -143,6 +154,7 @@ public class HzCfg0Controller {
     @RequestMapping(value = "/sendToERP", method = RequestMethod.POST)
     @ResponseBody
     public JSONObject sendToERP(@RequestBody List<HzCfg0Record> records) {
+        transCfgService.setClearInputEachTime(true);
         List<HzCfg0Record> toSend = new ArrayList<>();
         List<Features> featuresList = new ArrayList<>();
         Map<String, HzCfg0Record> _mapCoach = new HashMap<>();
@@ -156,7 +168,7 @@ public class HzCfg0Controller {
 
         if (records == null || records.size() <= 0) {
             result.put("status", false);
-            result.put("msg", "选择的列为空，请至少选择1列做删除");
+            result.put("msg", "选择的列为空，请至少选择1列发送");
             return result;
         }
         records.forEach(_r -> {
@@ -287,5 +299,72 @@ public class HzCfg0Controller {
         model.addAttribute("entity", bean);
         return "cfg/relevance/mergeRelevance";
     }
+
+    @RequestMapping(value = "/sendRelToERP", method = RequestMethod.POST)
+    @ResponseBody
+    public JSONObject sendRelToERP(@RequestBody List<HzRelevanceBean> beans) {
+        //清空上次传输的内容
+        transOptionsService.setClearInputEachTime(true);
+        Map<String, HzRelevanceBean> _mapCoach = new HashMap<>();
+        JSONObject result = new JSONObject();
+        StringBuilder sbs = new StringBuilder();
+        sbs.append("发送成功:<br/>");
+        StringBuilder sbf = new StringBuilder();
+        sbf.append("发送失败:<br/>");
+
+        boolean hasFail = false;
+        if (beans == null || beans.size() <= 0) {
+            result.put("status", false);
+            result.put("msg", "选择的列为空，请至少选择1列发送");
+            return result;
+        }
+
+
+        beans.forEach(bean -> {
+            Correlate correlate = new Correlate();
+            String packnum = UUID.randomUUID().toString().replaceAll("-", "");
+            correlate.setPackNo(packnum);
+            correlate.setLineNum(bean.getPuid().substring(0, 5));
+            //动作描述代码
+            correlate.setActionFlag(ActionFlagOption.ADD);
+            //相关性
+            correlate.setCorrelate(bean.getRelevance());
+            //相关性描述
+            correlate.setCorrelateDescript(bean.getRelevanceDesc());
+            //相关性状态
+            correlate.setCorrelateState("5");
+            //创建日期
+            correlate.setCreateDate(new Date());
+            //相关性类型
+            correlate.setCorrelateType(CorrelateTypeOption.CorrelateType_1);
+            //相关性代码
+            correlate.setCorrelateCode(bean.getRelevanceCode());
+            _mapCoach.put(packnum, bean);
+            transOptionsService.getInput().getItem().add(correlate.getZpptci004());
+        });
+        transOptionsService.execute();
+        List<ZPPTCO004> list = transOptionsService.getOut().getItem();
+        if (list != null && list.size() > 0) {
+            result.put("status", true);
+            for (ZPPTCO004 _l : list) {
+                if ("S".equalsIgnoreCase(_l.getTYPE())) {
+                    sbs.append("&emsp;&emsp;&emsp;&emsp;" + _mapCoach.get(_l.getZPACKNO()).getRelevance() + "<br/>");
+                } else {
+                    if (_mapCoach.get(_l.getZPACKNO()) == null) {
+                        continue;
+                    }
+                    sbf.append("&emsp;&emsp;&emsp;&emsp;" + _mapCoach.get(_l.getZPACKNO()).getRelevance() + "(" + _l.getMESSAGE() + ")<br/>");
+                    hasFail = true;
+                }
+            }
+        }
+        if (hasFail) {
+            result.put("msg", sbs.append("<br/>" + sbf).toString());
+        } else {
+            result.put("msg", sbs.toString());
+        }
+        return result;
+    }
+
 
 }
