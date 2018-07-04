@@ -177,6 +177,7 @@ public class HzMaterielServiceImpl implements HzMaterielService {
 
     @Override
     public Page<HzMaterielRespDTO> findHzMaterielForPage(HzMaterielByPageQuery query) {
+        User user = UserInfo.getUser();
         //先找出对应的物料类型，添加到物料类型表，将其数据自动带出
 
         /**
@@ -196,6 +197,8 @@ public class HzMaterielServiceImpl implements HzMaterielService {
             factory = new HzFactory();
             factory.setPuid(puid);
             factory.setpFactoryCode("1001");
+            factory.setpUpdateName(user.getUserName());
+            factory.setpCreateName(user.getUserName());
             hzFactoryDAO.insert(factory);
         }
         List<HzMaterielRecord> list = new ArrayList<>();
@@ -208,7 +211,9 @@ public class HzMaterielServiceImpl implements HzMaterielService {
                     for(HzCfg0ModelRecord record :cfg0ModelRecords){
                         HzMaterielRecord hzMaterielRecord = new HzMaterielRecord();
                         Map<String,Object> map = new HashMap<>();
+                        //外键id
                         map.put("",record.getPuid());
+                        map.put("projectId",query.getProjectId());
                         boolean b = hzMaterielDAO.HzMaterielIsExist(map);
                         if(b){
                             continue;
@@ -224,6 +229,8 @@ public class HzMaterielServiceImpl implements HzMaterielService {
                             hzMaterielRecord.setpMaterielDesc(record.getObjectDesc());
                             hzMaterielRecord.setpMaterielDescEn("");
                             hzMaterielRecord.setpMaterielDataType(21);
+                            hzMaterielRecord.setpPertainToProjectPuid(query.getProjectId());
+                            hzMaterielRecord.setPuid(UUID.randomUUID().toString());
                             list.add(hzMaterielRecord);
 
                         }
@@ -237,33 +244,127 @@ public class HzMaterielServiceImpl implements HzMaterielService {
                 if(ListUtil.isNotEmpty(hzMbomLineRecords)){
                     for(HzMbomLineRecord record :hzMbomLineRecords){
                         HzMaterielRecord hzMaterielRecord = new HzMaterielRecord();
-                        if(factory!=null){
-                            hzMaterielRecord.setpFactoryPuid(factory.getPuid());
+                        Map<String,Object> map = new HashMap<>();
+                        map.put("",record.getPuid());
+                        map.put("projectId",query.getProjectId());
+                        boolean b = hzMaterielDAO.HzMaterielIsExist(map);
+                        if(b){
+                            continue;
+                        }else{
+                            if(factory!=null){
+                                hzMaterielRecord.setpFactoryPuid(factory.getPuid());
+                            }
+                            else{
+                                hzMaterielRecord.setpFactoryPuid(puid);
+                            }
+                            hzMaterielRecord.setpMaterielCode(record.getLineID());
+                            hzMaterielRecord.setpMaterielDesc(record.getpBomLinePartName());
+                            hzMaterielRecord.setpMaterielDescEn(record.getpBomLinePartEnName());
+                            hzMaterielRecord.setpMaterielType("A002");
+                            hzMaterielRecord.setpPertainToProjectPuid(query.getProjectId());
+                            hzMaterielRecord.setpMaterielDataType(31);
+                            hzMaterielRecord.setPuid(UUID.randomUUID().toString());
+                            list.add(hzMaterielRecord);
                         }
-                        else{
-                            hzMaterielRecord.setpFactoryPuid(puid);
-                        }
-                        hzMaterielRecord.setpMaterielCode(record.getLineID());
-
-                        hzMaterielRecord.setpMaterielDesc(record.getObjectDesc());
-
                     }
+                    hzMaterielDAO.insertList(list);
                 }
                 break;
             case 41:
-                hzMaterielDAO.findHzResourceMakeSingleMbomRecord(query);
+                List<HzMbomLineRecord> lineRecords = hzMaterielDAO.findHzResourceMakeSingleMbomRecord(query);
+                if(ListUtil.isNotEmpty(lineRecords)){
+                    for(HzMbomLineRecord record:lineRecords){
+                        HzMaterielRecord hzMaterielRecord = new HzMaterielRecord();
+                        Map<String,Object> map = new HashMap<>();
+                        map.put("",record.getPuid());
+                        map.put("projectId",query.getProjectId());
+                        boolean b = hzMaterielDAO.HzMaterielIsExist(map);
+                        if(b){
+                            continue;
+                        }else{
+                            if(factory!=null){
+                                hzMaterielRecord.setpFactoryPuid(factory.getPuid());
+                            }
+                            else{
+                                hzMaterielRecord.setpFactoryPuid(puid);
+                            }
+                            hzMaterielRecord.setpMaterielCode(record.getLineID());
+                            hzMaterielRecord.setpMaterielDesc(record.getpBomLinePartName());
+                            hzMaterielRecord.setpMaterielDescEn(record.getpBomLinePartEnName());
+                            hzMaterielRecord.setpMaterielType("A002");
+                            hzMaterielRecord.setpPertainToProjectPuid(query.getProjectId());
+                            hzMaterielRecord.setpMaterielDataType(41);
+                            hzMaterielRecord.setPuid(UUID.randomUUID().toString());
+                            list.add(hzMaterielRecord);
+                        }
+                    }
+                    hzMaterielDAO.insertList(list);
+                }
                 break;
             case 51:
-                hzMaterielDAO.findHzResourceBuyMbomRecord(query);
+                List<HzMbomLineRecord> lineRecordList = hzMaterielDAO.findHzResourceBuyMbomRecord(query);
+                if(ListUtil.isNotEmpty(lineRecordList)){
+                    for(HzMbomLineRecord record:lineRecordList){
+                        HzMaterielRecord hzMaterielRecord = new HzMaterielRecord();
+                        Map<String,Object> map = new HashMap<>();
+                        map.put("",record.getPuid());
+                        map.put("projectId",query.getProjectId());
+                        boolean b = hzMaterielDAO.HzMaterielIsExist(map);
+                        if(b){
+                            continue;
+                        }else{
+                            if(factory!=null){
+                                hzMaterielRecord.setpFactoryPuid(factory.getPuid());
+                            }
+                            else{
+                                hzMaterielRecord.setpFactoryPuid(puid);
+                            }
+                            hzMaterielRecord.setpMaterielCode(record.getLineID());
+                            hzMaterielRecord.setpMaterielDesc(record.getpBomLinePartName());
+                            hzMaterielRecord.setpMaterielDescEn(record.getpBomLinePartEnName());
+                            hzMaterielRecord.setpMaterielType("A002");
+                            hzMaterielRecord.setpPertainToProjectPuid(query.getProjectId());
+                            hzMaterielRecord.setpMaterielDataType(51);
+                            hzMaterielRecord.setPuid(UUID.randomUUID().toString());
+                            list.add(hzMaterielRecord);
+                        }
+                    }
+                    hzMaterielDAO.insertList(list);
+                }
                 break;
             case 61:
-                hzMaterielDAO.findHzMadeBySelfSpareMbomRecord(query);
+                List<HzMbomLineRecord> mbomLineRecords = hzMaterielDAO.findHzMadeBySelfSpareMbomRecord(query);
+                if(ListUtil.isNotEmpty(mbomLineRecords)){
+                    for(HzMbomLineRecord record:mbomLineRecords){
+                        HzMaterielRecord hzMaterielRecord = new HzMaterielRecord();
+                        Map<String,Object> map = new HashMap<>();
+                        map.put("",record.getPuid());
+                        map.put("projectId",query.getProjectId());
+                        boolean b = hzMaterielDAO.HzMaterielIsExist(map);
+                        if(b){
+                            continue;
+                        }else{
+                            if(factory!=null){
+                                hzMaterielRecord.setpFactoryPuid(factory.getPuid());
+                            }
+                            else{
+                                hzMaterielRecord.setpFactoryPuid(puid);
+                            }
+                            hzMaterielRecord.setpMaterielCode(record.getLineID());
+                            hzMaterielRecord.setpMaterielDesc(record.getpBomLinePartName());
+                            hzMaterielRecord.setpMaterielDescEn(record.getpBomLinePartEnName());
+                            hzMaterielRecord.setpMaterielType("A002");
+                            hzMaterielRecord.setpPertainToProjectPuid(query.getProjectId());
+                            hzMaterielRecord.setpMaterielDataType(61);
+                            hzMaterielRecord.setPuid(UUID.randomUUID().toString());
+                            list.add(hzMaterielRecord);
+                        }
+                    }
+                    hzMaterielDAO.insertList(list);
+                }
                 break;
             default:break;
         }
-
-
-
 
         Page<HzMaterielRecord> page = hzMaterielDAO.findHzMaterielForPage(query);
         if(page == null || page.getResult() == null){
@@ -284,8 +385,55 @@ public class HzMaterielServiceImpl implements HzMaterielService {
                 respDTO.setpMaterielDescEn(record.getpMaterielDescEn());
                 respDTO.setpMaterielType(record.getpMaterielType());
                 respDTO.setpMrpController(record.getpMrpController());
-                respDTO.setpPertainToProjectPuid(record.getpPertainToProjectPuid());
                 respDTO.setPuid(record.getPuid());
+                Integer p3CPartFlag = record.getP3cPartFlag();
+                Integer colorPart = record.getpColorPart();
+                Integer inOutSideFlag = record.getpInOutSideFlag();
+                Integer inventedFlag = record.getpInventedPart();
+                Integer loosePartFlag = record.getpLoosePartFlag();
+                if (Integer.valueOf(0).equals(p3CPartFlag)) {
+                    respDTO.setP3cPartFlag("Y");
+                } else if (Integer.valueOf(1).equals(p3CPartFlag)) {
+                    respDTO.setP3cPartFlag("N");
+                } else {
+                    respDTO.setP3cPartFlag("/");
+                }
+
+                if (Integer.valueOf(0).equals(inventedFlag)) {
+                    respDTO.setpInventedPart("Y");
+                } else if (Integer.valueOf(1).equals(inventedFlag)) {
+                    respDTO.setpInventedPart("N");
+                } else {
+                    respDTO.setpInventedPart("/");
+                }
+
+                if (Integer.valueOf(0).equals(colorPart)) {
+                    respDTO.setpColorPart("Y");
+                } else if (Integer.valueOf(1).equals(colorPart)) {
+                    respDTO.setpColorPart("N");
+                } else {
+                    respDTO.setpColorPart("/");
+                }
+
+                if (Integer.valueOf(0).equals(inOutSideFlag)) {
+                    respDTO.setpInOutSideFlag("内饰件");
+                } else if (Integer.valueOf(1).equals(inOutSideFlag)) {
+                    respDTO.setpInOutSideFlag("外饰件");
+                } else {
+                    respDTO.setpInOutSideFlag("/");
+                }
+
+                if (Integer.valueOf(0).equals(loosePartFlag)) {
+                    respDTO.setpLoosePartFlag("Y");
+                } else if (Integer.valueOf(1).equals(loosePartFlag)) {
+                    respDTO.setpLoosePartFlag("N");
+                } else {
+                    respDTO.setpLoosePartFlag("/");
+                }
+                respDTO.setpHeight(record.getpHeight());
+                respDTO.setpPartImportantDegree(record.getpPartImportantDegree());
+                respDTO.setpSpareMaterial(record.getpSpareMaterial());
+                respDTO.setpVinPerNo(record.getpVinPerNo());
                 respDTOS.add(respDTO);
             }
             return new Page<>(query.getPage(),query.getLimit(),page.getTotalCount(),respDTOS);
