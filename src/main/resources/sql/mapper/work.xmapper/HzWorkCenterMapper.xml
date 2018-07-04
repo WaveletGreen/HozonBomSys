@@ -449,9 +449,8 @@
     </set>
     where PUID = #{puid,jdbcType=VARCHAR}
   </update>
+
 <!--删除一条数据逻辑删除-->
-
-
   <update id="HzWorkCenterDAOImpl_delete">
     update HZ_WORK_CENTER
     set P_STATUS = 0
