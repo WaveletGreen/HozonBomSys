@@ -60,14 +60,14 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         registry.addViewController("/materielFeature").setViewName("/cfg/materielFeature/materielFeature");
         //特性表页面
         registry.addViewController("/featuresList").setViewName("/cfg/features/featuresList");
-        //PBOM管理页面
-        registry.addViewController("/pbomManage").setViewName("/bomManage/pbom/pbomManage/pbomManage");
         //配色方案
         registry.addViewController("/modelColorCfg").setViewName("/cfg/modelColorCfg/modelColorCfg");
-        //EBOM页面
-        registry.addViewController("/ebomManage").setViewName("/bomManage/ebom/ebomManage/ebomManage");
         //EPL页面
         registry.addViewController("/eplManage").setViewName("/bomManage/epl/eplManage");
+        //EBOM页面
+        registry.addViewController("/ebomManage").setViewName("/bomManage/ebom/ebomManage/ebomManage");
+        //PBOM管理页面
+        registry.addViewController("/pbomManage").setViewName("/bomManage/pbom/pbomManage/pbomManage");
         //PBOM工艺合件页面
         registry.addViewController("/processOfFitting").setViewName("/bomManage/pbom/processOfFitting/processOfFitting");
         //PBOM工艺辅料页面
@@ -80,9 +80,14 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         registry.addViewController("/materialData").setViewName("/bomManage/mbom/materialData/materialData");
         //MBOM的工艺中心主数据页面
         registry.addViewController("/processCenter").setViewName("/bomManage/mbom/processCenter/processCenter");
-
-
-
+        //MBOM的整车工艺路线页面
+        registry.addViewController("/carRouting").setViewName("/bomManage/mbom/carRouting/carRouting");
+        //MBOM的整车工艺路线页面
+        registry.addViewController("/assemblyRouting").setViewName("/bomManage/mbom/assemblyRouting/assemblyRouting");
+        //MBOM的半成品工艺路线页面
+        registry.addViewController("/halfRouting").setViewName("/bomManage/mbom/halfRouting/halfRouting");
+        //MBOM的工艺路线页面
+        registry.addViewController("/routingData").setViewName("/bomManage/mbom/routingData/routingData");
 
 
 

@@ -30,7 +30,7 @@ public class HzEbomRecordDAOImpl extends BaseSQLUtil implements HzEbomRecordDAO 
         request.setPageNumber(query.getPage());
         request.setPageSize(query.getLimit());
         request.setFilters(map);
-        return super.findForPage("HzEbomRecordDAOImpl_getHzEbomList","HzEbomRecordDAOImpl_findTotalCount",request);
+        return super.findPage("HzEbomRecordDAOImpl_getHzEbomList","HzEbomRecordDAOImpl_findTotalCount",request);
 
     }
 

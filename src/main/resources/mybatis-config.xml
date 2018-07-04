@@ -61,16 +61,20 @@
         <mapper resource="sql/mapper/cfg/xmapper/HzCfg0ModelFeatureMapper.xml"/>
         <mapper resource="sql/mapper/cfg/xmapper/HzFcfgBomLvl1ListOperationMapper.xml"/>
         <!--项目-->
-        <mapper resource="sql/mapper/project.xmapper/HzSuperMaterielMapper.xml"/>
+        <mapper resource="sql/mapper/project.xmapper/HzMaterielMapper.xml"/>
         <mapper resource="sql/mapper/project.xmapper/HzProjectLibsMapper.xml"/>
         <mapper resource="sql/mapper/project.xmapper/HzBrandRecordMapper.xml"/>
         <mapper resource="sql/mapper/project.xmapper/HzPlatformRecordMapper.xml"/>
         <mapper resource="sql/mapper/project.xmapper/HzVehicleRecordMapper.xml"/>
         <!--EPL-->
         <mapper resource="sql/mapper/epl.xmapper/HzEplManageMapper.xml"/>
-        <mapper resource="sql/mapper/cfg/xmapper/HzCfg0MainRecordMapper.xml"/>
         <!--flow 流程-->
         <mapper resource="sql/mapper/flow.xmapper/HzFlowManageMapper.xml"/>
         <mapper resource="sql/mapper/flow.xmapper/HzFlowPointInfoMapper.xml"/>
+        <!--工厂-->
+        <mapper resource="sql/mapper/factory.xmapper/HzFactoryMapper.xml"/>
+        <!--工作中心-->
+        <mapper resource="sql/mapper/work.xmapper/HzWorkCenterMapper.xml"/>
+        <mapper resource="sql/mapper/work.xmapper/HzWorkProcedureMapper.xml"/>
     </mappers>
 </configuration>

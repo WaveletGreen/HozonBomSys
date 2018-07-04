@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="HzWorkProcedureMapper">
+  <resultMap id="BaseResultMap" type="sql.pojo.work.HzWorkProcedure">
+    <id column="PUID" jdbcType="VARCHAR" property="puid" />
+    <result column="P_WORK_PUID" jdbcType="VARCHAR" property="pWorkPuid" />
+    <result column="P_PROCEDURE_CODE" jdbcType="VARCHAR" property="pProcedureCode" />
+    <result column="P_PROCEDURE_DESC" jdbcType="VARCHAR" property="pProcedureDesc" />
+    <result column="P_DIRECT_LABOR" jdbcType="VARCHAR" property="pDirectLabor" />
+    <result column="P_INDIRECT_LABOR" jdbcType="VARCHAR" property="pIndirectLabor" />
+    <result column="P_MACHINE_LABOR" jdbcType="VARCHAR" property="pMachineLabor" />
+    <result column="P_BURN" jdbcType="VARCHAR" property="pBurn" />
+    <result column="P_MACHINE_MATERIAL_LABOR" jdbcType="VARCHAR" property="pMachineMaterialLabor" />
+    <result column="P_OTHER_COST" jdbcType="VARCHAR" property="pOtherCost" />
+    <result column="P_COUNT" jdbcType="VARCHAR" property="pCount" />
+    <result column="P_TYPE" jdbcType="INTEGER" property="pType" />
+    <result column="P_CREATE_TIME" jdbcType="DATE" property="pCreateTime" />
+    <result column="P_UPDATE_TIME" jdbcType="DATE" property="pUpdateTime" />
+    <result column="P_CREATE_NAME" jdbcType="VARCHAR" property="pCreateName" />
+    <result column="P_UPDATE_NAME" jdbcType="VARCHAR" property="pUpdateName" />
+    <result column="P_STATUS" jdbcType="INTEGER" property="pStatus" />
+    <result column="P_PROJECT_PUID" jdbcType="VARCHAR" property="projectId" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    PUID, P_WORK_PUID, P_PROCEDURE_CODE, P_PROCEDURE_DESC, P_DIRECT_LABOR, P_INDIRECT_LABOR, 
+    P_MACHINE_LABOR, P_BURN, P_MACHINE_MATERIAL_LABOR, P_OTHER_COST, P_COUNT, P_TYPE, 
+    P_CREATE_TIME, P_UPDATE_TIME, P_CREATE_NAME, P_UPDATE_NAME, P_STATUS,P_PROJECT_PUID
+  </sql>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from HZ_WORK_PROCEDURE
+    where PUID = #{puid,jdbcType=VARCHAR}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from HZ_WORK_PROCEDURE
+    where PUID = #{puid,jdbcType=VARCHAR}
+  </delete>
+
+
+  <insert id="insertSelective" parameterType="sql.pojo.work.HzWorkProcedure">
+    insert into HZ_WORK_PROCEDURE
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="puid != null">
+        PUID,
+      </if>
+      <if test="pWorkPuid != null">
+        P_WORK_PUID,
+      </if>
+      <if test="pProcedureCode != null">
+        P_PROCEDURE_CODE,
+      </if>
+      <if test="pProcedureDesc != null">
+        P_PROCEDURE_DESC,
+      </if>
+      <if test="pDirectLabor != null">
+        P_DIRECT_LABOR,
+      </if>
+      <if test="pIndirectLabor != null">
+        P_INDIRECT_LABOR,
+      </if>
+      <if test="pMachineLabor != null">
+        P_MACHINE_LABOR,
+      </if>
+      <if test="pBurn != null">
+        P_BURN,
+      </if>
+      <if test="pMachineMaterialLabor != null">
+        P_MACHINE_MATERIAL_LABOR,
+      </if>
+      <if test="pOtherCost != null">
+        P_OTHER_COST,
+      </if>
+      <if test="pCount != null">
+        P_COUNT,
+      </if>
+      <if test="pType != null">
+        P_TYPE,
+      </if>
+      <if test="pCreateTime != null">
+        P_CREATE_TIME,
+      </if>
+      <if test="pUpdateTime != null">
+        P_UPDATE_TIME,
+      </if>
+      <if test="pCreateName != null">
+        P_CREATE_NAME,
+      </if>
+      <if test="pUpdateName != null">
+        P_UPDATE_NAME,
+      </if>
+      <if test="pStatus != null">
+        P_STATUS,
+      </if>
+      <if test="projectId != null">
+        P_PROJECT_PUID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="puid != null">
+        #{puid,jdbcType=VARCHAR},
+      </if>
+      <if test="pWorkPuid != null">
+        #{pWorkPuid,jdbcType=VARCHAR},
+      </if>
+      <if test="pProcedureCode != null">
+        #{pProcedureCode,jdbcType=VARCHAR},
+      </if>
+      <if test="pProcedureDesc != null">
+        #{pProcedureDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="pDirectLabor != null">
+        #{pDirectLabor,jdbcType=VARCHAR},
+      </if>
+      <if test="pIndirectLabor != null">
+        #{pIndirectLabor,jdbcType=VARCHAR},
+      </if>
+      <if test="pMachineLabor != null">
+        #{pMachineLabor,jdbcType=VARCHAR},
+      </if>
+      <if test="pBurn != null">
+        #{pBurn,jdbcType=VARCHAR},
+      </if>
+      <if test="pMachineMaterialLabor != null">
+        #{pMachineMaterialLabor,jdbcType=VARCHAR},
+      </if>
+      <if test="pOtherCost != null">
+        #{pOtherCost,jdbcType=VARCHAR},
+      </if>
+      <if test="pCount != null">
+        #{pCount,jdbcType=VARCHAR},
+      </if>
+      <if test="pType != null">
+        #{pType,jdbcType=INTEGER},
+      </if>
+      <if test="pCreateTime != null">
+        #{pCreateTime,jdbcType=DATE},
+      </if>
+      <if test="pUpdateTime != null">
+        #{pUpdateTime,jdbcType=DATE},
+      </if>
+      <if test="pCreateName != null">
+        #{pCreateName,jdbcType=VARCHAR},
+      </if>
+      <if test="pUpdateName != null">
+        #{pUpdateName,jdbcType=VARCHAR},
+      </if>
+      <if test="pStatus != null">
+        #{pStatus,jdbcType=INTEGER},
+      </if>
+      <if test="projectId != null">
+        #{projectId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="sql.pojo.work.HzWorkProcedure">
+    update HZ_WORK_PROCEDURE
+    <set>
+      <if test="pWorkPuid != null">
+        P_WORK_PUID = #{pWorkPuid,jdbcType=VARCHAR},
+      </if>
+      <if test="pProcedureCode != null">
+        P_PROCEDURE_CODE = #{pProcedureCode,jdbcType=VARCHAR},
+      </if>
+      <if test="pProcedureDesc != null">
+        P_PROCEDURE_DESC = #{pProcedureDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="pDirectLabor != null">
+        P_DIRECT_LABOR = #{pDirectLabor,jdbcType=VARCHAR},
+      </if>
+      <if test="pIndirectLabor != null">
+        P_INDIRECT_LABOR = #{pIndirectLabor,jdbcType=VARCHAR},
+      </if>
+      <if test="pMachineLabor != null">
+        P_MACHINE_LABOR = #{pMachineLabor,jdbcType=VARCHAR},
+      </if>
+      <if test="pBurn != null">
+        P_BURN = #{pBurn,jdbcType=VARCHAR},
+      </if>
+      <if test="pMachineMaterialLabor != null">
+        P_MACHINE_MATERIAL_LABOR = #{pMachineMaterialLabor,jdbcType=VARCHAR},
+      </if>
+      <if test="pOtherCost != null">
+        P_OTHER_COST = #{pOtherCost,jdbcType=VARCHAR},
+      </if>
+      <if test="pCount != null">
+        P_COUNT = #{pCount,jdbcType=VARCHAR},
+      </if>
+      <if test="pType != null">
+        P_TYPE = #{pType,jdbcType=INTEGER},
+      </if>
+      <if test="pCreateTime != null">
+        P_CREATE_TIME = #{pCreateTime,jdbcType=DATE},
+      </if>
+      <if test="pUpdateTime != null">
+        P_UPDATE_TIME = #{pUpdateTime,jdbcType=DATE},
+      </if>
+      <if test="pCreateName != null">
+        P_CREATE_NAME = #{pCreateName,jdbcType=VARCHAR},
+      </if>
+      <if test="pUpdateName != null">
+        P_UPDATE_NAME = #{pUpdateName,jdbcType=VARCHAR},
+      </if>
+      <if test="pStatus != null">
+        P_STATUS = #{pStatus,jdbcType=INTEGER},
+      </if>
+      <if test="projectId != null">
+        P_PROJECT_PUID = #{projectId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where PUID = #{puid,jdbcType=VARCHAR}
+  </update>
+
+</mapper>

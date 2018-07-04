@@ -1,21 +1,36 @@
 $(document).ready((function (){
-    initTable();  
+    var projectId =  $("#project", window.top.document).val();
+    var url = "work/record?projectId="+projectId;
+    initTable(url);
     }))
 
 function doQuery() {
-    $('#processCenterTable').bootstrapTable('refresh');    //刷新表格
+    //$('#processCenterTable').bootstrapTable('refresh');    //刷新表格
+    var projectId =  $("#project", window.top.document).val();
+    var url = "work/record?projectId="+projectId;
+    var factoryCode = $("#factoryCode").val();
+    url+="&factoryCode="+factoryCode;
+    var pWorkCode = $("#pWorkCode").val();
+    url+="&pWorkCode="+pWorkCode;
+    var pPurpose = $("#pPurpose").val();
+    url += "&pPurpose="+pPurpose;
+    initTable(url);
+    $('#processCenterTable').bootstrapTable('destroy');
+    console.log("有搜索框的参数是："+url)
 }
 
 
-function initTable() {
+function initTable(url) {
     var  $table =  $("#processCenterTable");
+    var projectId =  $("#project", window.top.document).val();
+    //var url = "work/record?projectId="+projectId;
     var  column = [];
     $.ajax({
-        url:"mbom/processCenterTitel",
+        url:"work/title",
         type:"GET",
         success:function(result){
             var column = [];
-            column.push({field: 'Puid', title: 'puid'});
+            column.push({field: 'puid', title: 'puid'});
             column.push({field: 'ck', checkbox: true, Width: 50});
             /*column.push({field: '',
                 title: '序号',
@@ -44,50 +59,43 @@ function initTable() {
                 }
             };
             $table.bootstrapTable({
-                url: "",
+                url: url,
                 method: 'GET',
                 dataType: 'json',
                 cache: false,
-                striped: true,                              //是否显示行间隔色
+                striped: true,                       //是否显示行间隔色
                 //sidePagination: "server",           //分页方式：client客户端分页，server服务端分页（*）
-                height: $(window.parent.document).find("#wrapper").height() - 180,
+                height: $(window.parent.document).find("#wrapper").height()-75,
                 width: $(window).width(),
                 formId :"queryProcessCenter",
-                undefinedText: "",//当数据为 undefined 时显示的字符
+                undefinedText: "",                  //当数据为 undefined 时显示的字符
                 pagination: true,
                 //pageNumber:1,                       //初始化加载第一页，默认第一页
-                pageSize: 20,                       //每页的记录行数（*）
-                //pageList: [20, 50,100,200],        //可供选择的每页的行数（*）
-                uniqueId: "puid",                     //每一行的唯一标识，一般为主键列
+                pageSize: 20,                        //每页的记录行数（*）
+                //pageList: [20, 50,100,200],         //可供选择的每页的行数（*）
+                uniqueId: "puid",                   //每一行的唯一标识，一般为主键列
                 showExport: true,
                 //exportDataType: 'all',
                 columns: column,
                 sortable: true,                     //是否启用排序
                 sortOrder: "asc",                   //排序方式
-                clickToSelect: true,// 单击某一行的时候选中某一条记录
-                striped: true, //是否显示行间隔色
-                //search: true, //是否显示表格搜索，此搜索是客户端搜索，不会进服务端
-                showColumns: true, //是否显示所有的列
+                clickToSelect: true,               //单击某一行的时候选中某一条记录
+                striped: true,                      //是否显示行间隔色
+                //search: true,                      //是否显示表格搜索，此搜索是客户端搜索，不会进服务端
+                showColumns: true,                 //是否显示所有的列
                 /*fixedColumns: true,
                 fixedNumber:1,*/
-                showToggle: false,                   //是否显示详细视图和列表视图的切换按钮
-                showRefresh: true,                  //是否显示刷新按钮
+                showToggle: false,                 //是否显示详细视图和列表视图的切换按钮
+                showRefresh: true,                 //是否显示刷新按钮
                 //minimumCountColumns: 4,
                 toolbars: [
                     {
                         text: '添加',
                         iconCls: 'glyphicon glyphicon-plus',
                         handler: function () {
-                            var rows = $table.bootstrapTable('getSelections');
-                            console.log(rows);
-                            //只能选一条
-                            if (rows.length != 1) {
-                                window.Ewin.alert({message: '请选择一条需要添加的数据!'});
-                                return false;
-                            }
                             window.Ewin.dialog({
                                 title: "添加",
-                                url: "mbom/addMBom?projectId="+projectPuid+"&eBomPuid="+rows[0].eBomPuid,
+                                url: "work/addWork",
                                 gridId: "gridId",
                                 width: 500,
                                 height: 650
@@ -106,7 +114,7 @@ function initTable() {
                             }
                             window.Ewin.dialog({
                                 title: "修改",
-                                url: "mbom/updateMBom?projectId="+projectPuid+"&eBomPuid="+rows[0].eBomPuid,
+                                url: "work/updateWork?projectId="+projectId+"&puid="+rows[0].puid,
                                 gridId: "gridId",
                                 width: 500,
                                 height: 650
@@ -127,7 +135,7 @@ function initTable() {
                                     $.ajax({
                                         type: "POST",
                                         //ajax需要添加打包名
-                                        url: "mbom/delete?eBomPuid="+rows[0].eBomPuid,
+                                        url: "work/delete?puid="+rows[0].puid,
                                         //data: JSON.stringify(rows),
                                         contentType: "application/json",
                                         success: function (result) {
@@ -151,7 +159,7 @@ function initTable() {
                     }
                 ],
             });
-            $table.bootstrapTable('hideColumn', 'Puid');
+            $table.bootstrapTable('hideColumn', 'puid');
         }
     })
 }

@@ -1,0 +1,189 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<!--User: xulf Date: 2018/6/30 Time: 11:02-->
+<body>
+<form id="halfRoutingForm" role="form" method="post" action="mbom/add">
+    <input id="eBomPuid" name="eBomPuid" type="text"/><!--th:value="${entity.pBomPuid}"-->
+    <div class="form-group">
+        <label for="factory">工厂</label>
+        <input class="form-control" id="factory" name="factory" type="text"
+
+               placeholder="请输入工厂"/><!--th:value="${entity.level}"-->
+    </div>
+    <div class="form-group">
+        <label for="workHours">工作工时</label>
+        <input class="form-control" id="workHours" name="workHours" type="text"
+
+               placeholder="请输入工作工时"/><!--th:value="${entity.level}"-->
+    </div>
+    <div class="form-group">
+        <label for="jobCentreCategory">工作中心类别</label>
+        <input class="form-control" id="jobCentreCategory" name="jobCentreCategory" type="text"
+
+               placeholder="请输入工作中心类别"/><!--th:value="${entity.level}"-->
+    </div>
+    <div class="form-group">
+        <label for="describe">描述</label>
+        <input class="form-control" id="describe" name="describe" type="text"
+
+               placeholder="请输入描述"/><!--th:value="${entity.level}"-->
+    </div>
+    <div class="form-group">
+        <label for="use">用途</label>
+        <input class="form-control" id="use" name="use" type="text"
+
+               placeholder="请输入用途"/><!--th:value="${entity.level}"-->
+    </div>
+    <div class="form-group">
+        <label for="standardCode">标准值码</label>
+        <input class="form-control" id="standardCode" name="standardCode" type="text" disabled="disabled"
+
+               placeholder="请输入标准值码"/><!--th:value="${entity.level}"-->
+    </div>
+    <div class="form-group">
+        <label for="controlCode">控制码</label>
+        <input class="form-control" id="controlCode" name="controlCode" type="text"
+
+               placeholder="请输入控制码"/><!--th:value="${entity.level}"-->
+    </div>
+    <div class="form-group">
+        <label for="directLabor">直接人工</label>
+        <input class="form-control" id="directLabor" name="directLabor" type="text"
+
+               placeholder="请输入直接人工"/><!--th:value="${entity.level}"-->
+    </div>
+    <div class="form-group">
+        <label for="indirectLabor">间接人工</label>
+        <input class="form-control" id="indirectLabor" name="indirectLabor" type="text"
+
+               placeholder="请输入间接人工"/><!--th:value="${entity.level}"-->
+    </div>
+    <div class="form-group">
+        <label for="machineHour">机器工时</label>
+        <input class="form-control" id="machineHour" name="machineHour" type="text"
+
+               placeholder="请输入机器工时"/><!--th:value="${entity.level}"-->
+    </div>
+    <div class="form-group">
+        <label for="combustion">燃动</label>
+        <input class="form-control" id="combustion" name="combustion" type="text"
+
+               placeholder="请输入燃动"/><!--th:value="${entity.level}"-->
+    </div>
+    <div class="form-group">
+        <label for="machineMaterial">机物料</label>
+        <input class="form-control" id="machineMaterial" name="machineMaterial" type="text"
+
+               placeholder="请输入机物料"/><!--th:value="${entity.level}"-->
+    </div>
+
+    <div class="form-group">
+        <label for="otherCosts">其它费用</label>
+        <input class="form-control" id="otherCosts" name="otherCosts" type="text"
+
+               placeholder="请输入其它费用"/><!--th:value="${entity.level}"-->
+    </div>
+    <div class="form-group">
+        <label for="processingFormula">加工公式</label>
+        <input class="form-control" id="processingFormula" name="processingFormula" type="text"
+
+               placeholder="请输入加工公式"/><!--th:value="${entity.level}"-->
+    </div>
+    <div class="form-group">
+        <label for="powerType">能力类别</label>
+        <input class="form-control" id="powerType" name="powerType" type="text"
+
+               placeholder="请输入能力类别"/><!--th:value="${entity.level}"-->
+    </div>
+    <div class="form-group">
+        <label for="startTime">开始时间</label>
+        <input class="form-control" id="startTime" name="startTime" type="text"
+
+               placeholder="请输入开始时间"/><!--th:value="${entity.level}"-->
+    </div>
+    <div class="form-group">
+        <label for="endTime">结束时间</label>
+        <input class="form-control" id="endTime" name="endTime" type="text"
+
+               placeholder="请输入结束时间"/><!--th:value="${entity.level}"-->
+    </div>
+</form>
+
+<script th:inline="javascript">
+    <![CDATA[
+    $(function () {
+        $('#halfRoutingForm').bootstrapValidator({
+            message: 'This value is not valid',
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            /* fields: {
+                 level: {
+                     message: '层级验证失败',
+                     validators: {
+                         notEmpty: {
+                             message: '层级不能为空'
+                         }
+                     }
+                 },
+             }*/
+        });
+        // 绑定dialog的确定按钮的监听事件
+        $("#btnOk", window.top.document).click(function () {
+            var bootstrapValidator = $("#halfRoutingForm", window.top.document).data('bootstrapValidator');
+            bootstrapValidator.validate();
+            if (bootstrapValidator.isValid()) {
+                var url = $("#halfRoutingForm ", window.top.document).attr('action');
+                var myData = JSON.stringify({
+                    "eBomPuid": $("#eBomPuid").val(),
+                    "level": $("#level").val(),
+                    "pBomOfWhichDept": $("#pBomOfWhichDept").val(),
+                    "lineId": $("#lineId").val(),
+                    "object_name": $("#object_name").val(),
+                    "sparePart": $("#sparePart").val(),
+                    "sparePartNum": $("#sparePartNum").val(),
+                    "processRoute": $("#processRoute").val(),
+                    "laborHour": $("#laborHour").val(),
+                    "rhythm": $("#rhythm").val(),
+                    "solderJoint": $("#solderJoint").val(),
+                    "machineMaterial": $("#machineMaterial").val(),
+                    "standardPart": $("#standardPart").val(),
+                    "tools": $("#tools").val(),
+                    "wasterProduct": $("#wasterProduct").val(),
+                    "change": $("#change").val(),
+                    "changeNum": $("#changeNum").val()
+                });
+                console.log(myData);
+                $.ajax({
+                    contentType:
+                        "application/json",
+                    type:
+                        'POST',
+                    url: url,
+                    data: myData,
+                    success:
+                        function (result) {
+                            $('.modal-dialog', window.top.document).parent('div').remove()
+                            $('body', window.top.document).find('.modal-backdrop').remove();
+                            // jquery 调用刷新当前操作的table页面的refresh方法
+                            $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
+                            /*if (result)
+                                window.Ewin.alert({message: '修改数据成功!'});
+                            else
+                                window.Ewin.alert({message: '修改数据失败!'});*/
+                            window.Ewin.alert({message: result.errMsg});
+                        },
+                    error: function (status) {
+                        window.Ewin.alert({message: status.status + ':修改数据失败!'});
+                    }
+                });
+            }
+        });
+    })
+    ]]>
+</script>
+
+</body>
+</html>

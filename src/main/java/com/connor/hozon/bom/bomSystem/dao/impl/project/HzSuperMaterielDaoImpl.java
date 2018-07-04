@@ -4,7 +4,7 @@ import com.connor.hozon.bom.bomSystem.dao.project.HzSuperMaterielDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sql.IBaseSQLUtil;
-import sql.pojo.project.HzSuperMateriel;
+import sql.pojo.project.HzMaterielRecord;
 
 /**
  * Created by Fancyears·Maylos·Mayways
@@ -26,22 +26,22 @@ public class HzSuperMaterielDaoImpl implements HzSuperMaterielDao {
     }
 
     @Override
-    public int insert(HzSuperMateriel record) {
+    public int insert(HzMaterielRecord record) {
         return baseSQLUtil.executeInsert(record, "com.connor.hozon.bom.bomSystem.dao.project.HzSuperMaterielDao.insert");
     }
 
     @Override
-    public HzSuperMateriel selectByPrimaryKey(String puid) {
-        return baseSQLUtil.executeQueryByPass(new HzSuperMateriel(), puid, "com.connor.hozon.bom.bomSystem.dao.project.HzSuperMaterielDao.selectByPrimaryKey", true);
+    public HzMaterielRecord selectByPrimaryKey(String puid) {
+        return baseSQLUtil.executeQueryByPass(new HzMaterielRecord(), puid, "com.connor.hozon.bom.bomSystem.dao.project.HzSuperMaterielDao.selectByPrimaryKey", true);
     }
 
     @Override
-    public HzSuperMateriel selectByProjectPuid(String projectPuid) {
-        return baseSQLUtil.executeQueryByPass(new HzSuperMateriel(), projectPuid, "com.connor.hozon.bom.bomSystem.dao.project.HzSuperMaterielDao.selectByProjectPuid", true);
+    public HzMaterielRecord selectByProjectPuid(String projectPuid) {
+        return baseSQLUtil.executeQueryByPass(new HzMaterielRecord(), projectPuid, "com.connor.hozon.bom.bomSystem.dao.project.HzSuperMaterielDao.selectByProjectPuid", true);
     }
 
     @Override
-    public int updateByPrimaryKey(HzSuperMateriel record) {
+    public int updateByPrimaryKey(HzMaterielRecord record) {
         return baseSQLUtil.executeUpdate(record, "com.connor.hozon.bom.bomSystem.dao.project.HzSuperMaterielDao.updateByPrimaryKey");
     }
 }

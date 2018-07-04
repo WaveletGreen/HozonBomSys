@@ -369,7 +369,7 @@
             body.outerHTML = dirty;
         }
 
-        /* Work on whole document or just its body */
+        /* work on whole document or just its body */
         if (typeof doc.getElementsByTagName === 'function') {
             return doc.getElementsByTagName(
                 WHOLE_DOCUMENT ? 'html' : 'body')[0];

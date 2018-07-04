@@ -38,6 +38,11 @@ public class HzMbomController extends BaseController {
     @Autowired
     private HzMbomService hzMbomService;
 
+    /**
+     * 超级MBOM标题
+     * @param projectId
+     * @param response
+     */
     @RequestMapping(value = "superMbomTitle", method = RequestMethod.GET)
     public void getHzSuperMBomTitle(String projectId,HttpServletResponse response) {
         LinkedHashMap<String, String> tableTitle = new LinkedHashMap<>();
@@ -73,7 +78,7 @@ public class HzMbomController extends BaseController {
 
 
     /**
-     * 分页获取MBOM 记录
+     * 分页获取超级MBOM 记录
      *
      * @param query
      * @return
@@ -218,6 +223,13 @@ public class HzMbomController extends BaseController {
         return"bomManage/mbom/mbomMaintenance/addMbomMaintenance";
     }
 
+    /**
+     * 跳转到MBOM管理的修改页面
+     * @param projectId
+     * @param eBomPuid
+     * @param model
+     * @return
+     */
     @RequestMapping(value = "updateMBom", method = RequestMethod.GET)
     public String updateMbomToPage(String projectId,String eBomPuid,Model model) {
         HzMbomRecordRespDTO respDTO =hzMbomService.findHzMbomByPuid(projectId,eBomPuid);
@@ -324,4 +336,73 @@ public class HzMbomController extends BaseController {
     public String updateMBomProcessCenterToPage(){
         return  "bomManage/mbom/processCenter/updateProcessCenter";
     }
+
+    /**
+     * 整车工艺路线标题
+     * @param response
+     */
+    @RequestMapping(value = "carRoutingTitel", method = RequestMethod.GET)
+    public void getMbomCarRoutingTitel(HttpServletResponse response) {
+        LinkedHashMap<String, String> titel = new LinkedHashMap<>();
+        titel.put("1", "物料");
+        titel.put("2", "工厂");
+        titel.put("3", "用途");
+        titel.put("4", "状态");
+        titel.put("5", "工序号");
+        titel.put("6", "工作中心");
+        titel.put("7", "工作中心描述");
+        titel.put("8", "控制码");
+        titel.put("9", "工序描述");
+        titel.put("10", "基本数量 ");
+        titel.put("11", "直接人工时间");
+        titel.put("12", "间接人工时间");
+        titel.put("13", "机器时间");
+        titel.put("14", "燃动能");
+        titel.put("15", "机物料消耗");
+        titel.put("16", "其他费用");
+        writeAjaxJSONResponse(ResultMessageBuilder.build(titel), response);
+    }
+
+    /**
+     * 跳转到整车工艺路线添加页面
+     * @return
+     */
+    @RequestMapping(value = "addCarRouting",method = RequestMethod.GET)
+    public String addMBomCarRoutingToPage(){ return  "bomManage/mbom/carRouting/addCarRouting"; }
+    /**
+     * 跳转到整车工艺路线修改页面
+     * @return
+     */
+    @RequestMapping(value = "updateCarRouting",method = RequestMethod.GET)
+    public String updateMBomCarRoutingToPage(){ return  "bomManage/mbom/carRouting/updateCarRouting"; }
+
+    /**
+     * 总成分总成工艺路线的标题
+     * @param response
+     */
+    @RequestMapping(value = "assemblyRoutingTitel",method = RequestMethod.GET)
+    public void getMbomAssemblyRoutingTitel(HttpServletResponse response) {
+        LinkedHashMap<String, String> titel = new LinkedHashMap<>();
+        titel.put("1", "物料");
+        titel.put("2","物料名称");
+        titel.put("3", "工厂");
+        titel.put("4", "用途");
+        titel.put("5", "状态");
+        titel.put("6", "工序号");
+        titel.put("7", "工作中心");
+        titel.put("8", "工作中心描述");
+        titel.put("9", "控制码");
+        titel.put("10", "工序描述");
+        titel.put("11", "基本数量 ");
+        titel.put("12", "直接人工时间");
+        titel.put("13", "间接人工时间");
+        titel.put("14", "机器时间");
+        titel.put("15", "燃动能");
+        titel.put("16", "机物料消耗");
+        titel.put("17", "其他费用");
+        writeAjaxJSONResponse(ResultMessageBuilder.build(titel), response);
+    }
+
 }
+
+
