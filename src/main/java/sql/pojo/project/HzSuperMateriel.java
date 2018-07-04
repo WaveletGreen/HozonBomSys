@@ -26,6 +26,7 @@ public class HzSuperMateriel {
      */
     private String pPertainToProjectPuid;
 
+    private Integer pMaterielDataType;
 
     public String getPuid() {
         return puid;
@@ -73,5 +74,13 @@ public class HzSuperMateriel {
 
     public void setpPertainToProjectPuid(String pPertainToProjectPuid) {
         this.pPertainToProjectPuid = pPertainToProjectPuid == null ? null : pPertainToProjectPuid.trim();
+    }
+
+    public Integer getpMaterielDataType() {
+        return pMaterielDataType;
+    }
+
+    public void setpMaterielDataType(Integer pMaterielDataType) {
+        this.pMaterielDataType = pMaterielDataType;
     }
 }

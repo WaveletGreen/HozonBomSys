@@ -66,6 +66,14 @@ public class MasterMaterial {
      */
     private String MRPController;
 
+    /**
+     * 公告号,ZGGH
+     */
+    private String annount;
+
+
+
+
     public String getGUID() {
         return GUID;
     }
@@ -168,4 +176,5 @@ public class MasterMaterial {
     public ZPPTCI001 getZpptci001() {
         return zpptci001;
     }
+
 }

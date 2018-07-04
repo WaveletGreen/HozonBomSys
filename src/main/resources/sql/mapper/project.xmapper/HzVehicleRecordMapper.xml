@@ -3,16 +3,16 @@
 <mapper namespace="com.connor.hozon.bom.bomSystem.dao.project.HzVehicleRecordDao">
     <resultMap id="BaseResultMap" type="sql.pojo.project.HzVehicleRecord">
         <id column="PUID" jdbcType="VARCHAR" property="puid"/>
-        <result column="P_VEHICLE_NAME" jdbcType="OTHER" property="pVehicleName"/>
+        <result column="P_VEHICLE_NAME" jdbcType="VARCHAR" property="pVehicleName"/>
         <result column="P_VEHICLE_PERTAIN_TO_PLATFORM" jdbcType="VARCHAR" property="pVehiclePertainToPlatform"/>
         <result column="P_VEHICLE_CREATE_DATE" jdbcType="TIMESTAMP" property="pVehicleCreateDate"/>
         <result column="P_VEHICLE_LAST_MOD_DATE" jdbcType="TIMESTAMP" property="pVehicleLastModDate"/>
         <result column="P_VEHICLE_CODE" jdbcType="VARCHAR" property="pVehicleCode"/>
-        <result column="P_VEHICLE_SHAPE_CODE" jdbcType="OTHER" property="pVehicleShapeCode"/>
-        <result column="P_VEHICLE_TRAN_NAME" jdbcType="OTHER" property="pVehicleTranName"/>
+        <result column="P_VEHICLE_SHAPE_CODE" jdbcType="VARCHAR" property="pVehicleShapeCode"/>
+        <result column="P_VEHICLE_TRAN_NAME" jdbcType="VARCHAR" property="pVehicleTranName"/>
         <result column="P_VEHICLE_ANNUAL_CODE" jdbcType="VARCHAR" property="pVehicleAnnualCode"/>
         <result column="P_VEHICLE_ANNUAL" jdbcType="VARCHAR" property="pVehicleAnnual"/>
-        <result column="P_VEHICLE_LAST_MODIFIER" jdbcType="OTHER" property="pVehicleLastModifier"/>
+        <result column="P_VEHICLE_LAST_MODIFIER" jdbcType="VARCHAR" property="pVehicleLastModifier"/>
     </resultMap>
     <sql id="Base_Column_List">
         PUID,
@@ -67,29 +67,29 @@
         )
     values (
         #{puid,jdbcType=VARCHAR},
-        #{pVehicleName,jdbcType=OTHER},
+        #{pVehicleName,jdbcType=VARCHAR},
         #{pVehiclePertainToPlatform,jdbcType=VARCHAR},
         #{pVehicleCreateDate,jdbcType=TIMESTAMP},
         #{pVehicleLastModDate,jdbcType=TIMESTAMP},
         #{pVehicleCode,jdbcType=VARCHAR},
-        #{pVehicleShapeCode,jdbcType=OTHER},
-        #{pVehicleTranName,jdbcType=OTHER},
+        #{pVehicleShapeCode,jdbcType=VARCHAR},
+        #{pVehicleTranName,jdbcType=VARCHAR},
         #{pVehicleAnnualCode,jdbcType=VARCHAR},
         #{pVehicleAnnual,jdbcType=VARCHAR},
-        #{pVehicleLastModifier,jdbcType=OTHER}
+        #{pVehicleLastModifier,jdbcType=VARCHAR}
           )
     </insert>
     <!--根据主键更新车型信息，必要的信息不更新-->
     <update id="updateByPrimaryKey" parameterType="sql.pojo.project.HzVehicleRecord">
     update HZ_VEHICLE_RECORD
-    set P_VEHICLE_NAME = #{pVehicleName,jdbcType=OTHER},
+    set P_VEHICLE_NAME = #{pVehicleName,jdbcType=VARCHAR},
       P_VEHICLE_LAST_MOD_DATE = #{pVehicleLastModDate,jdbcType=TIMESTAMP},
       P_VEHICLE_CODE = #{pVehicleCode,jdbcType=VARCHAR},
-      P_VEHICLE_SHAPE_CODE = #{pVehicleShapeCode,jdbcType=OTHER},
-      P_VEHICLE_TRAN_NAME = #{pVehicleTranName,jdbcType=OTHER},
+      P_VEHICLE_SHAPE_CODE = #{pVehicleShapeCode,jdbcType=VARCHAR},
+      P_VEHICLE_TRAN_NAME = #{pVehicleTranName,jdbcType=VARCHAR},
       P_VEHICLE_ANNUAL_CODE = #{pVehicleAnnualCode,jdbcType=VARCHAR},
       P_VEHICLE_ANNUAL = #{pVehicleAnnual,jdbcType=VARCHAR},
-      P_VEHICLE_LAST_MODIFIER = #{pVehicleLastModifier,jdbcType=OTHER}
+      P_VEHICLE_LAST_MODIFIER = #{pVehicleLastModifier,jdbcType=VARCHAR}
     where PUID = #{puid,jdbcType=VARCHAR}
   </update>
 </mapper>

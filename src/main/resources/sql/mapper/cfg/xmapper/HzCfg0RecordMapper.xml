@@ -71,18 +71,29 @@
         )
         order by P_CFG0_FAMILY_NAME
     </select>
+    <select id="selectCfg0ListByPuids" parameterType="java.util.List" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from ${whichTable} t where
+        t.p_cfg0_main_item_puid=(
+        select t2.puid
+        from Hz_Cfg0_Main_Record t2
+        where t2.p_cfg0_of_which_project_puid=#{projectPuid,jdbcType=VARCHAR}
+        )
+        order by P_CFG0_FAMILY_NAME
+    </select>
 
     <select id="selectMaterielFeatureByProjectPuid" parameterType="java.lang.String" resultMap="MaterielFeatureMap">
         select
         <include refid="Materiel_Feature_Column_List"/>
         from HZ_CFG0_RECORD t
-            left outer join HZ_CFG0_TO_MODEL_RECORD t3 on t.puid=t3.p_cfg0_id_record
-            left outer join HZ_CFG0_MODEL_RECORD t4 on t4.puid=t3.p_cfg0_model_record
-                where
-                t.P_CFG0_MAIN_ITEM_PUID=(
-                        select puid from Hz_Cfg0_Main_Record t2
-                        where t2.p_cfg0_of_which_project_puid=#{projectPuid,jdbcType=VARCHAR}
-                )
+        left outer join HZ_CFG0_TO_MODEL_RECORD t3 on t.puid=t3.p_cfg0_id_record
+        left outer join HZ_CFG0_MODEL_RECORD t4 on t4.puid=t3.p_cfg0_model_record
+        where
+        t.P_CFG0_MAIN_ITEM_PUID=(
+        select puid from Hz_Cfg0_Main_Record t2
+        where t2.p_cfg0_of_which_project_puid=#{projectPuid,jdbcType=VARCHAR}
+        )
         order by t4.puid
     </select>
 

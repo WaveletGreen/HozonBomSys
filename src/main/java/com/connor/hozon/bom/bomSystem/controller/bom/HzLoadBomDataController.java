@@ -7,6 +7,9 @@ import net.sf.json.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 @Controller
 @RequestMapping("/loadBom")
 public class HzLoadBomDataController {
@@ -21,6 +24,7 @@ public class HzLoadBomDataController {
     @RequestMapping(value = "/loadCfg0BomLineOfModel", method = RequestMethod.GET)
     @ResponseBody
     public JSONObject loadCfg0BomLineOfModel(@RequestParam String bdf) {
+        SimpleDateFormat.getInstance().format(new Date());
         return hzCfg0BomLineOfModelService.parse(bdf);
     }
 

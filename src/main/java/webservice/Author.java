@@ -6,13 +6,15 @@ import webservice.service.i.IExecutor;
 import webservice.service.i.ITransmitService;
 
 import javax.xml.ws.Holder;
+import java.net.Authenticator;
 import java.net.PasswordAuthentication;
 import java.util.Properties;
 
 public class Author {
     private final static PropertyLoader LOADER = new PropertyLoader();
     private final static Properties properties = LOADER.getProperties();
-    private static PasswordAuthentication author;
+    private static PasswordAuthentication author = new PasswordAuthentication(properties.getProperty("username"),
+            properties.getProperty("password").toCharArray());
 
     /**
      * 每次执行@execute的时候都会清空input，默认不清空，可以多次带着input执行execute多次

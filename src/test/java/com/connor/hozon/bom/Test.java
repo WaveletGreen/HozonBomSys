@@ -3,6 +3,7 @@ package com.connor.hozon.bom;
 import com.connor.hozon.bom.resources.mybatis.bom.HzMbomRecordDAO;
 import com.connor.hozon.bom.resources.mybatis.bom.impl.HzMbomRecordDAOImpl;
 import sql.pojo.bom.HzMbomRecord;
+import webservice.Author;
 import webservice.logic.Bom;
 import webservice.logic.MasterMaterial;
 import webservice.option.ActionFlagOption;
@@ -13,18 +14,18 @@ import webservice.service.impl.masterMaterial1.TransMasterMaterialService;
 
 import java.util.UUID;
 
-public class Test {
+public class Test extends Author {
 
     public static void main(String[] args) {
         MasterMaterial masterMaterial = new MasterMaterial();
 
         String guid = UUID.randomUUID().toString().replaceAll("-", "");
 
-        HzMbomRecordDAO mbomRecordDAO=new HzMbomRecordDAOImpl();
+        HzMbomRecordDAO mbomRecordDAO = new HzMbomRecordDAOImpl();
 
-        HzMbomRecord mbomRecord= mbomRecordDAO.findHzMbomByeBomPuid("Q_YpLyl446t5TA");
+        HzMbomRecord mbomRecord = mbomRecordDAO.findHzMbomByeBomPuid("Q_YpLyl446t5TA");
 
-        if(mbomRecord!=null){
+        if (mbomRecord != null) {
             String guid3 = UUID.randomUUID().toString().replaceAll("-", "");
             MasterMaterial masterMaterial2 = new MasterMaterial();
         }
@@ -32,7 +33,10 @@ public class Test {
 
         masterMaterial.setGUID(guid);
         masterMaterial.setLineNum("S00123");
+
         masterMaterial.setActionFlag(ActionFlagOption.ADD);
+
+
         masterMaterial.setFactory("1001");
         masterMaterial.setMaterialCode("S00-15212SDA");
         masterMaterial.setMaterialName("普通物料");
