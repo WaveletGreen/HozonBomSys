@@ -7,6 +7,8 @@ import com.connor.hozon.bom.resources.query.HzMaterielByPageQuery;
 import com.connor.hozon.bom.resources.query.HzMaterielQuery;
 import org.springframework.stereotype.Service;
 import sql.BaseSQLUtil;
+import sql.pojo.bom.HzMbomLineRecord;
+import sql.pojo.cfg.HzCfg0ModelRecord;
 import sql.pojo.project.HzMaterielRecord;
 
 import java.util.HashMap;
@@ -37,8 +39,8 @@ public class HzMaterielDAOImpl extends BaseSQLUtil implements HzMaterielDAO {
     }
 
     @Override
-    public int insertList(List<HzMaterielRecord> hzMaterielRecord) {
-        return 0;
+    public int insertList(List<HzMaterielRecord> hzMaterielRecords) {
+        return super.insert("HzMaterialDAOImpl_insertList",hzMaterielRecords);
     }
 
     @Override
@@ -48,12 +50,73 @@ public class HzMaterielDAOImpl extends BaseSQLUtil implements HzMaterielDAO {
         pageRequest.setPageSize(query.getLimit());
         Map map = new HashMap<>();
         map.put("pPertainToProjectPuid",query.getProjectId());
+        map.put("pMaterielDataType",query.getpMaterielDataType());
         pageRequest.setFilters(map);
         return super.findPage("HzMaterialDAOImpl_findHzMaterielForPage","HzMaterialDAOImpl_findHzMaterielTotalCount",pageRequest);
     }
 
+
+
+
     @Override
     public List<HzMaterielRecord> findHzMaterielForList(HzMaterielQuery query) {
-        return super.findForList("",query);
+        Map<String,Object> map = new HashMap<>();
+        map.put("projectId",query.getProjectId());
+        map.put("puid",query.getPuid());
+        map.put("pMaterielDataType",query.getpMaterielDataType());
+        return super.findForList("HzMaterialDAOImpl_findHzMaterielForList",query);
+    }
+
+    @Override
+    public List<HzCfg0ModelRecord> findHzCfg0ModelRecord(HzMaterielByPageQuery query) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("projectId",query.getProjectId());
+        map.put("pMaterielDataType",query.getpMaterielDataType());
+        return super.findForList("HzMaterialDAOImpl_findHzCfg0ModelRecord",map);
+    }
+
+    @Override
+    public List<HzMbomLineRecord> findHz2YMbomRecord(HzMaterielByPageQuery query) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("projectId",query.getProjectId());
+        map.put("pMaterielDataType",query.getpMaterielDataType());
+        return super.findForList("HzMaterialDAOImpl_findHz2YMbomRecord",map);
+    }
+
+    @Override
+    public List<HzMbomLineRecord> findHzResourceMakeSingleMbomRecord(HzMaterielByPageQuery query) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("projectId",query.getProjectId());
+        map.put("pMaterielDataType",query.getpMaterielDataType());
+        return super.findForList("HzMaterialDAOImpl_findHzResourceMakeSingleMbomRecord",map);
+    }
+
+    @Override
+    public List<HzMbomLineRecord> findHzResourceBuyMbomRecord(HzMaterielByPageQuery query) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("projectId",query.getProjectId());
+        map.put("pMaterielDataType",query.getpMaterielDataType());
+        return super.findForList("HzMaterialDAOImpl_findHzResourceBuyMbomRecord",map);
+    }
+
+    @Override
+    public List<HzMbomLineRecord> findHzMadeBySelfSpareMbomRecord(HzMaterielByPageQuery query) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("projectId",query.getProjectId());
+        map.put("pMaterielDataType",query.getpMaterielDataType());
+        return super.findForList("HzMaterialDAOImpl_findHzMadeBySelfSpareMbomRecord",map);
+    }
+
+    @Override
+    public boolean HzMaterielIsExist(Map<String, Object> map) {
+        return false;
+    }
+
+    @Override
+    public HzMaterielRecord getHzMaterielRecord(String puid, String projectId) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("puid",puid);
+        map.put("projectId",projectId);
+        return (HzMaterielRecord)super.findForObject("HzMaterialDAOImpl_getHzMaterielRecord",map);
     }
 }

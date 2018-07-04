@@ -544,4 +544,21 @@
     <select id="ssss" parameterType="java.util.HashMap" resultMap="HzMbomRecordMap">
 
     </select>
+
+
+    <!--查询一条物料数据-->
+    <select id="HzMaterialDAOImpl_getHzMaterielRecord" parameterType="java.util.HashMap" resultMap="HzMaterielRecordMap">
+      select <include refid="Base_Column_List"/>
+       from HZ_MATERIEL_RECORD
+        <where>
+            1=1
+            <if test="puid != null and puid!=''">
+                and PUID = #{puid,jdbcType=VARCHAR}
+            </if>
+            <if test="projectId != null and projectId!=''">
+                and P_PERTAIN_TO_PROJECT_PUID = #{projectId,jdbcType=VARCHAR}
+            </if>
+        </where>
+    </select>
+
 </mapper>
