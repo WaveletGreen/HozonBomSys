@@ -1,10 +1,6 @@
 package com.connor.hozon.bom.resources.mybatis.factory.impl;
 
 import com.connor.hozon.bom.resources.mybatis.factory.HzFactoryDAO;
-import com.connor.hozon.bom.resources.page.Page;
-import com.connor.hozon.bom.resources.page.PageRequest;
-import com.connor.hozon.bom.resources.query.HzWorkByPageQuery;
-import org.mapstruct.ap.shaded.freemarker.ext.beans.HashAdapter;
 import org.springframework.stereotype.Service;
 import sql.BaseSQLUtil;
 import sql.pojo.factory.HzFactory;
@@ -18,7 +14,7 @@ import java.util.Map;
  * @Description:
  */
 @Service("HzFactoryDAO")
-public class HzFactoryDAOImpl extends BaseSQLUtil implements HzFactoryDAO {
+public class HzFactoryDAOImpl  extends BaseSQLUtil implements HzFactoryDAO {
     @Override
     public int insert(HzFactory hzFactory) {
         return super.insert("HzFactoryDAOImpl_insert",hzFactory);

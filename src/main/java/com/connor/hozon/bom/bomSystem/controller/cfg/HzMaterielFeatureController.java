@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import sql.pojo.cfg.HzCfg0MainRecord;
 import sql.pojo.cfg.HzCfg0ModelFeature;
 import sql.pojo.cfg.HzCfg0ModelRecord;
-import sql.pojo.project.HzSuperMateriel;
+import sql.pojo.project.HzMaterielRecord;
 
 import java.util.*;
 
@@ -142,7 +142,7 @@ public class HzMaterielFeatureController {
         List<Map<String, Object>> data = new ArrayList<>();
         List<String> column = hzCfg0OptionFamilyService.doGetColumn(projectPuid);
         List<HzMaterielFeatureBean> hzMaterielFeatureBeans = hzCfg0Service.doSelectMaterielFeatureByProjectPuid(projectPuid);
-        HzSuperMateriel superMateriel = hzSuperMaterielService.doSelectByProjectPuid(projectPuid);
+        HzMaterielRecord superMateriel = hzSuperMaterielService.doSelectByProjectPuid(projectPuid);
 
         if (hzMaterielFeatureBeans == null || column == null || column.size() == 0) {
             result.put("status", false);
@@ -204,7 +204,7 @@ public class HzMaterielFeatureController {
         List<Map<String, Object>> data = new ArrayList<>();
         List<String> column = hzCfg0OptionFamilyService.doGetColumn(projectPuid);
         List<HzMaterielFeatureBean> hzMaterielFeatureBeans = hzCfg0Service.doSelectMaterielFeatureByProjectPuid(projectPuid);
-        HzSuperMateriel superMateriel = hzSuperMaterielService.doSelectByProjectPuid(projectPuid);
+        HzMaterielRecord superMateriel = hzSuperMaterielService.doSelectByProjectPuid(projectPuid);
 
         if (hzMaterielFeatureBeans == null || column == null || column.size() == 0) {
             result.put("status", false);
@@ -273,9 +273,9 @@ public class HzMaterielFeatureController {
         else if ("superMateriel".equals(page)) {
             HzCfg0MainRecord mainRecord = hzCfg0MainService.doGetByPrimaryKey(puid);
             if (mainRecord != null) {
-                HzSuperMateriel superMateriel = hzSuperMaterielService.doSelectByProjectPuid(mainRecord.getpCfg0OfWhichProjectPuid());
+                HzMaterielRecord superMateriel = hzSuperMaterielService.doSelectByProjectPuid(mainRecord.getpCfg0OfWhichProjectPuid());
                 if (superMateriel == null) {
-                    superMateriel = new HzSuperMateriel();
+                    superMateriel = new HzMaterielRecord();
                 }
                 //设置项目puid
                 if (superMateriel.getpPertainToProjectPuid() == null || "".equals(superMateriel.getpPertainToProjectPuid())) {
@@ -317,12 +317,12 @@ public class HzMaterielFeatureController {
 
     @RequestMapping("/updateSuperMateriel")
     @ResponseBody
-    public boolean updateSuperMateriel(@RequestBody HzSuperMateriel superMateriel) {
+    public boolean updateSuperMateriel(@RequestBody HzMaterielRecord superMateriel) {
         if (superMateriel == null)
             return false;
         if (superMateriel.getpPertainToProjectPuid() == null || "".equals(superMateriel.getpPertainToProjectPuid()))
             return false;
-        HzSuperMateriel sm = hzSuperMaterielService.doSelectByProjectPuid(superMateriel.getpPertainToProjectPuid());
+        HzMaterielRecord sm = hzSuperMaterielService.doSelectByProjectPuid(superMateriel.getpPertainToProjectPuid());
         if (sm == null && (superMateriel.getPuid() == null || "".equals(superMateriel.getPuid()))) {
             superMateriel.setPuid(UUID.randomUUID().toString());
             return hzSuperMaterielService.doInsertOne(superMateriel);
