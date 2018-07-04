@@ -3,13 +3,12 @@ package com.connor.hozon.bom.resources.service.materiel.impl;
 import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.resources.dto.request.AddHzMaterielReqDTO;
 import com.connor.hozon.bom.resources.dto.request.UpdateHzMaterielReqDTO;
-import com.connor.hozon.bom.resources.dto.request.UpdateMbomReqDTO;
 import com.connor.hozon.bom.resources.dto.response.HzMaterielRespDTO;
 import com.connor.hozon.bom.resources.dto.response.OperateResultMessageRespDTO;
 import com.connor.hozon.bom.resources.mybatis.factory.HzFactoryDAO;
 import com.connor.hozon.bom.resources.mybatis.materiel.HzMaterielDAO;
 import com.connor.hozon.bom.resources.page.Page;
-import com.connor.hozon.bom.resources.query.HzMaterialByPageQuery;
+import com.connor.hozon.bom.resources.query.HzMaterielByPageQuery;
 import com.connor.hozon.bom.resources.service.materiel.HzMaterielService;
 import com.connor.hozon.bom.sys.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -270,7 +269,8 @@ public class HzMaterielServiceImpl implements HzMaterielService {
     }
 
     @Override
-    public Page<HzMaterielRespDTO> findHzMaterielForPage(HzMaterialByPageQuery query) {
+    public Page<HzMaterielRespDTO> findHzMaterielForPage(HzMaterielByPageQuery query) {
+        //先找出对应的物料类型，添加到物料类型表，将其数据自动带出
         Page<HzMaterielRecord> page = hzMaterielDAO.findHzMaterielForPage(query);
         if(page == null || page.getResult() == null){
             return new Page<>(query.getPage(),query.getLimit(),0);
@@ -351,4 +351,5 @@ public class HzMaterielServiceImpl implements HzMaterielService {
             return null;
         }
     }
+    
 }

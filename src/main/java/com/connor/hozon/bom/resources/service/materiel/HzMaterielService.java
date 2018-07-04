@@ -2,11 +2,11 @@ package com.connor.hozon.bom.resources.service.materiel;
 
 import com.connor.hozon.bom.resources.dto.request.AddHzMaterielReqDTO;
 import com.connor.hozon.bom.resources.dto.request.UpdateHzMaterielReqDTO;
-import com.connor.hozon.bom.resources.dto.request.UpdateMbomReqDTO;
 import com.connor.hozon.bom.resources.dto.response.HzMaterielRespDTO;
 import com.connor.hozon.bom.resources.dto.response.OperateResultMessageRespDTO;
 import com.connor.hozon.bom.resources.page.Page;
-import com.connor.hozon.bom.resources.query.HzMaterialByPageQuery;
+import com.connor.hozon.bom.resources.query.HzMaterielByPageQuery;
+import sql.pojo.project.HzMaterielRecord;
 
 /**
  * @Author: haozt
@@ -40,5 +40,6 @@ public interface HzMaterielService {
      * @param query
      * @return
      */
-    Page<HzMaterielRespDTO> findHzMaterielForPage(HzMaterialByPageQuery query);
+    Page<HzMaterielRespDTO> findHzMaterielForPage(HzMaterielByPageQuery query);
+
 }

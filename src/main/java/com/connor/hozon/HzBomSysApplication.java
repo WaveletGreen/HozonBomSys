@@ -18,6 +18,7 @@ import javax.sql.DataSource;
  */
 @SpringBootApplication(scanBasePackages = {"sql", "com.connor.hozon"})
 @EnableTransactionManagement
+
 public class HzBomSysApplication extends SpringBootServletInitializer {
 
     @Override

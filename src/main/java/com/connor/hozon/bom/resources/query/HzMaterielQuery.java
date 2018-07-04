@@ -2,14 +2,18 @@ package com.connor.hozon.bom.resources.query;
 
 /**
  * @Author: haozt
- * @Date: 2018/7/2
+ * @Date: 2018/7/4
  * @Description:
  */
-public class HzMaterialByPageQuery extends DefaultPageQuery {
+public class HzMaterielQuery {
     /**
      * 项目id
      */
     private String projectId;
+    /**
+     * puid
+     */
+    private String puid;
     /**
      * 物料类型  严格按照注释来读写数据
      * （11 整车超级物料主数据
@@ -21,19 +25,27 @@ public class HzMaterialByPageQuery extends DefaultPageQuery {
      */
     private Integer pMaterielDataType;
 
-    public Integer getpMaterielDataType() {
-        return pMaterielDataType;
-    }
-
-    public void setpMaterielDataType(Integer pMaterielDataType) {
-        this.pMaterielDataType = pMaterielDataType;
-    }
-
     public String getProjectId() {
         return projectId;
     }
 
     public void setProjectId(String projectId) {
         this.projectId = projectId;
+    }
+
+    public String getPuid() {
+        return puid;
+    }
+
+    public void setPuid(String puid) {
+        this.puid = puid;
+    }
+
+    public Integer getpMaterielDataType() {
+        return pMaterielDataType;
+    }
+
+    public void setpMaterielDataType(Integer pMaterielDataType) {
+        this.pMaterielDataType = pMaterielDataType;
     }
 }
