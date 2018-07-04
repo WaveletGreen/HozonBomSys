@@ -8,27 +8,23 @@
 <title>工艺中心主数据</title>
 </head>
 <body>
-<div class="panel-body" style="padding-bottom:0px;">
+<!--<div class="panel-body" style="padding-bottom:0px;">
     <div class="panel panel-default" style="margin-top: 10px;">
         <div class="panel-body">
             <form class="form-inline" role="form" style="float: left; width: 100%;margin-left: 20px;" method="get"
                   id="queryProcessCenter">
                 <div class="form-group">
-                    <label for="level">层级:</label>
-                    <input type="text" class="form-control" name="level" id="level" placeholder="请输入层级"/>
+                    <label for="factoryCode">工厂代码:</label>
+                    <input type="text" class="form-control" name="factoryCode" id="factoryCode" placeholder="请输入工厂代码"/>
                 </div>
                 <div class="form-group">
-                    <label for="pBomOfWhichDept">专业:</label>
-                    <input type="text" class="form-control" name="pBomOfWhichDept" id="pBomOfWhichDept"
-                           placeholder="请输入专业"/>
+                    <label for="pWorkCode">工作中心代码:</label>
+                    <input type="text" class="form-control" name="pWorkCode" id="pWorkCode"
+                           placeholder="请输入工作中心代码"/>
                 </div>
                 <div class="form-group">
-                    <label for="rank">级别:</label>
-                    <input type="text" class="form-control" name="rank" id="rank" placeholder="请输入零件号"/>
-                </div>
-                <div class="form-group">
-                    <label for="groupNum">分组号:</label>
-                    <input type="text" class="form-control" name="groupNum" id="groupNum" placeholder="请输入零件号"/>
+                    <label for="pPurpose">用途:</label>
+                    <input type="text" class="form-control" name="pPurpose" id="pPurpose" placeholder="请输入用途"/>
                 </div>
                 <div class="form-group">
                     <button type="button" id="queryBtn" onclick="doQuery();" class="btn btn-primary">查询</button>
@@ -36,7 +32,7 @@
             </form>
         </div>
     </div>
-</div>
+</div>-->
 <div class="content col-lg-12">
     <table class="table table-striped tableNormalStyle" id="processCenterTable"></table>
 </div>

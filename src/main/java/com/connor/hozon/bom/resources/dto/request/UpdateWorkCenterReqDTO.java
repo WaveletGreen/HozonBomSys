@@ -1,11 +1,17 @@
 package com.connor.hozon.bom.resources.dto.request;
 
 /**
- * @Author: haozt
- * @Date: 2018/6/30
- * @Description:
+ * \* User: xulf
+ * \* Date: 2018/7/2
+ * \* Time: 19:48
+ * \
  */
-public class AddWorkCenterReqDTO {
+public class UpdateWorkCenterReqDTO {
+
+    /**
+     * id
+     */
+    private String puid;
     /**
      * 工程代码
      */
@@ -139,14 +145,12 @@ public class AddWorkCenterReqDTO {
      */
     private String pExperssion6;
 
-    private String projectId;
-
-    public String getProjectId() {
-        return projectId;
+    public String getPuid() {
+        return puid;
     }
 
-    public void setProjectId(String projectId) {
-        this.projectId = projectId;
+    public void setPuid(String puid) {
+        this.puid = puid;
     }
 
     public String getFactoryCode() {

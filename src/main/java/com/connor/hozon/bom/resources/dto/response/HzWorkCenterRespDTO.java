@@ -5,7 +5,11 @@ package com.connor.hozon.bom.resources.dto.response;
  * @Date: 2018/6/30
  * @Description:
  */
-public class HzWorkCenterRespFTO {
+public class HzWorkCenterRespDTO {
+    /**
+     * 序号
+     */
+    private Integer No;
     /**
      * 工厂代码
      */
@@ -146,6 +150,14 @@ public class HzWorkCenterRespFTO {
     /**
      * 公式6
      */
+
+    public Integer getNo() {
+        return No;
+    }
+
+    public void setNo(Integer no) {
+        No = no;
+    }
     private String pExperssion6;
 
     public String getFactoryCode() {

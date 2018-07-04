@@ -52,18 +52,49 @@
     P_EXPERSSION3, P_EXPERSSION4, P_EXPERSSION5, P_EXPERSSION6, P_CREATE_TIME, P_UPDATE_TIME, 
     P_CREATE_NAME, P_UPDATE_NAME, P_STATUS,P_PROJECT_PUID
   </sql>
-  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+  <!-- 根据id查询一条数据-->
+  <select id="HzWorkCenterDAOImpl_selectByPrimaryKey" parameterType="java.util.HashMap" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
     from HZ_WORK_CENTER
     where PUID = #{puid,jdbcType=VARCHAR}
   </select>
+
+
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from HZ_WORK_CENTER
     where PUID = #{puid,jdbcType=VARCHAR}
   </delete>
 
+    <!--分页获取工作中心主数据-->
+  <select id="HzWorkCenterDAOImpl_findWorkCenterForPage" parameterType="java.util.HashMap" resultMap="BaseResultMap">
+      SELECT  <include refid="Base_Column_List" /> FROM
+      (SELECT  <include refid="Base_Column_List" />,ROWNUM as rn FROM
+      (SELECT  <include refid="Base_Column_List" /> FROM HZ_WORK_CENTER
+        <where>
+            <if test="projectId != null and  projectId !=''">
+                P_PROJECT_PUID= #{projectId,jdbcType=VARCHAR}
+            </if>
+            and P_STATUS=1
+        </where>
+        ORDER BY
+      P_UPDATE_TIME DESC
+      )
+      WHERE ROWNUM &lt;=#{limit,jdbcType=INTEGER}) where rn &gt;#{offset,jdbcType=INTEGER}
+  </select>
 
+
+    <!--获取工作中心主数据总数-->
+    <select id="HzWorkCenterDAOImpl_findWorkCenterTotalCount" parameterType="java.util.HashMap" resultType="java.lang.Integer">
+        SELECT  count(*) FROM HZ_WORK_CENTER
+        <where>
+            <if test="projectId != null and  projectId !=''">
+                P_PROJECT_PUID= #{projectId,jdbcType=VARCHAR}
+            </if>
+            and P_STATUS=1
+        </where>
+    </select>
+<!-- 添加一条数据-->
   <insert id="HzWorkCenterDAOImpl_insert" parameterType="sql.pojo.work.HzWorkCenter">
     insert into HZ_WORK_CENTER
     <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -302,7 +333,7 @@
     </trim>
   </insert>
 
-
+<!-- 修改一条数据-->
   <update id="HzWorkCenterDAOImpl_update" parameterType="sql.pojo.work.HzWorkCenter">
     update HZ_WORK_CENTER
     <set>
@@ -418,12 +449,11 @@
     </set>
     where PUID = #{puid,jdbcType=VARCHAR}
   </update>
-
-
+<!--删除一条数据逻辑删除-->
   <update id="HzWorkCenterDAOImpl_delete">
     update HZ_WORK_CENTER
     set P_STATUS = 0
-    where where PUID = #{puid,jdbcType=VARCHAR}
+    where PUID = #{puid,jdbcType=VARCHAR}
   </update>
 
 </mapper>

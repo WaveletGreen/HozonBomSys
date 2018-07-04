@@ -1,6 +1,7 @@
 package com.connor.hozon.bom.resources.mybatis.work;
 
 import com.connor.hozon.bom.resources.page.Page;
+import com.connor.hozon.bom.resources.query.HzWorkByPageQuery;
 import sql.pojo.work.HzWorkCenter;
 
 import java.util.Map;
@@ -27,10 +28,10 @@ public interface HzWorkCenterDAO {
 
     /**
      * 查询工作中心主数据 分页
-     * @param map
+     * @param query
      * @return
      */
-    Page findWorkCenterForPage(Map<String,Object> map);
+    Page findWorkCenterForPage(HzWorkByPageQuery query);
 
     /**
      * 删除工作中心主数据
@@ -38,4 +39,12 @@ public interface HzWorkCenterDAO {
      * @return
      */
     int delete(String puid);
+
+    /**
+     * 查询一条数据
+     * @param projectId
+     * @param puid
+     * @return
+     */
+    HzWorkCenter findWorkCenterById(String projectId,String puid);
 }
