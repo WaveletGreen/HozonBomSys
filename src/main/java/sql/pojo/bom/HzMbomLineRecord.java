@@ -67,6 +67,8 @@ public class HzMbomLineRecord {
      * Bom行对应的零件名
      */
     private String pBomLinePartName;
+
+    private String pBomLinePartEnName;
     /**
      * Bom行对应的零件类别
      */
@@ -180,6 +182,14 @@ public class HzMbomLineRecord {
      * 车型配置模型id
      */
     private String cfg0ModelRecordId;
+
+    public String getpBomLinePartEnName() {
+        return pBomLinePartEnName;
+    }
+
+    public void setpBomLinePartEnName(String pBomLinePartEnName) {
+        this.pBomLinePartEnName = pBomLinePartEnName;
+    }
 
     public String getCfg0ModelRecordId() {
         return cfg0ModelRecordId;
