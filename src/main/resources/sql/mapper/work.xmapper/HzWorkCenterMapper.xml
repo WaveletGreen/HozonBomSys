@@ -453,7 +453,7 @@
   <update id="HzWorkCenterDAOImpl_delete">
     update HZ_WORK_CENTER
     set P_STATUS = 0
-    where where PUID = #{puid,jdbcType=VARCHAR}
+    where PUID = #{puid,jdbcType=VARCHAR}
   </update>
 
 </mapper>

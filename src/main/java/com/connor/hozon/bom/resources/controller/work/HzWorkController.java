@@ -38,7 +38,7 @@ public class HzWorkController extends BaseController {
      * @param projectId
      * @param response
      */
-    @RequestMapping(value = "titel",method = RequestMethod.GET)
+    @RequestMapping(value = "title",method = RequestMethod.GET)
     public void getWorkTitel(String projectId,HttpServletResponse response){
         LinkedHashMap<String, String> tableTitle = new LinkedHashMap<>();
         tableTitle.put("No","序号");
@@ -181,6 +181,17 @@ public class HzWorkController extends BaseController {
     @RequestMapping(value = "update",method = RequestMethod.POST)
     public void updateWorkToDB(@RequestBody UpdateWorkCenterReqDTO reqDTO, HttpServletResponse response){
         OperateResultMessageRespDTO respDTO = hzWorkService.updateHzWorkRecord(reqDTO);
+        writeAjaxJSONResponse(ResultMessageBuilder.build(OperateResultMessageRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
+    }
+
+    /**
+     * 删除一条数据
+     * @param puid
+     * @param response
+     */
+    @RequestMapping(value = "delete",method = RequestMethod.POST)
+    public void deleteWork(String puid,HttpServletResponse response){
+        OperateResultMessageRespDTO respDTO = hzWorkService.deleteHzWorkRecord(puid);
         writeAjaxJSONResponse(ResultMessageBuilder.build(OperateResultMessageRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
     }
 }

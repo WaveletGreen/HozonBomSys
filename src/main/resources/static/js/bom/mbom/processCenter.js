@@ -1,19 +1,32 @@
 $(document).ready((function (){
-    initTable();  
+    var projectId =  $("#project", window.top.document).val();
+    var url = "work/record?projectId="+projectId;
+    initTable(url);
     }))
 
 function doQuery() {
-    $('#processCenterTable').bootstrapTable('refresh');    //刷新表格
+    //$('#processCenterTable').bootstrapTable('refresh');    //刷新表格
+    var projectId =  $("#project", window.top.document).val();
+    var url = "work/record?projectId="+projectId;
+    var factoryCode = $("#factoryCode").val();
+    url+="&factoryCode="+factoryCode;
+    var pWorkCode = $("#pWorkCode").val();
+    url+="&pWorkCode="+pWorkCode;
+    var pPurpose = $("#pPurpose").val();
+    url += "&pPurpose="+pPurpose;
+    initTable(url);
+    $('#processCenterTable').bootstrapTable('destroy');
+    console.log("有搜索框的参数是："+url)
 }
 
 
-function initTable() {
+function initTable(url) {
     var  $table =  $("#processCenterTable");
     var projectId =  $("#project", window.top.document).val();
-    var url = "work/record?projectId="+projectId;
+    //var url = "work/record?projectId="+projectId;
     var  column = [];
     $.ajax({
-        url:"work/titel",
+        url:"work/title",
         type:"GET",
         success:function(result){
             var column = [];
@@ -52,7 +65,7 @@ function initTable() {
                 cache: false,
                 striped: true,                       //是否显示行间隔色
                 //sidePagination: "server",           //分页方式：client客户端分页，server服务端分页（*）
-                height: $(window.parent.document).find("#wrapper").height()-45,
+                height: $(window.parent.document).find("#wrapper").height()-75,
                 width: $(window).width(),
                 formId :"queryProcessCenter",
                 undefinedText: "",                  //当数据为 undefined 时显示的字符
@@ -122,7 +135,7 @@ function initTable() {
                                     $.ajax({
                                         type: "POST",
                                         //ajax需要添加打包名
-                                        url: "mbom/delete?eBomPuid="+rows[0].eBomPuid,
+                                        url: "work/delete?puid="+rows[0].puid,
                                         //data: JSON.stringify(rows),
                                         contentType: "application/json",
                                         success: function (result) {

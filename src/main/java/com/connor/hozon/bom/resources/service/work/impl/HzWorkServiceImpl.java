@@ -314,7 +314,22 @@ public class HzWorkServiceImpl implements HzWorkService {
      */
     @Override
     public OperateResultMessageRespDTO deleteHzWorkRecord(String puid) {
-        return null;
+        OperateResultMessageRespDTO respDTO = new OperateResultMessageRespDTO();
+        try {
+            User user = UserInfo.getUser();
+            if (user.getGroupId() != 9) {
+                respDTO.setErrMsg("你当前没有权限执行此操作");
+                respDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
+                return respDTO;
+            }
+            int i = hzWorkCenterDAO.delete(puid);
+            if (i>0){
+                return OperateResultMessageRespDTO.getSuccessResult();
+            }
+        } catch (Exception e) {
+            return OperateResultMessageRespDTO.getFailResult();
+        }
+        return OperateResultMessageRespDTO.getFailResult();
     }
 
 }
