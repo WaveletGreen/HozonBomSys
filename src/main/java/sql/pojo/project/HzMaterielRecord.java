@@ -1,7 +1,5 @@
 package sql.pojo.project;
 
-import java.util.Date;
-
 public class HzMaterielRecord {
     /**
      * 主键id

@@ -194,9 +194,9 @@ public class HzCfg0Controller {
             result.put("status", true);
             for (ZPPTCO002 _l : list) {
                 if ("S".equalsIgnoreCase(_l.getTYPE())) {
-                    sbs.append(_mapCoach.get(_l.getZPACKNO()).getpCfg0Desc() + "<br/>");
+                    sbs.append("&emsp;&emsp;&emsp;&emsp;" + _mapCoach.get(_l.getZPACKNO()).getpCfg0ObjectId() + "<br/>");
                 } else {
-                    sbf.append(_mapCoach.get(_l.getZPACKNO()).getpCfg0Desc() + "(" + _l.getMESSAGE() + ")<br/>");
+                    sbf.append("&emsp;&emsp;&emsp;&emsp;" + _mapCoach.get(_l.getZPACKNO()).getpCfg0ObjectId() + "(" + _l.getMESSAGE() + ")<br/>");
                     hasFail = true;
                 }
             }
