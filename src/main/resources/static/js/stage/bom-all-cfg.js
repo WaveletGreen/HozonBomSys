@@ -42,16 +42,16 @@ function loadData() {
                     // "<td width='100px'  align='center'><input type='checkbox'></td>"+
                     "<input id='hidden" + i + "' type='hidden' value='" + v1 + "'>" +
                     //品牌
-                    "<td width='100px'>"+dModel.brand+"</td>" +
+                    "<td width='100px'>" + dModel.brand + "</td>" +
                     //平台
-                    "<td width='100px'>"+dModel.platform+"</td>" +
+                    "<td width='100px'>" + dModel.platform + "</td>" +
                     //车型
-                    "<td width='100px'>"+dModel.vehicle+"</td>" +
+                    "<td width='100px'>" + dModel.vehicle + "</td>" +
                     "<td width='120px'><a href='javascript:void(0);' onclick='Botton(\"" + v1 + "\")'>" + v0 + "</a></td>" +
-                    "<td width='100px'>"+dModel.pModelShape+"</td>" +
-                    "<td width='100px'>"+dModel.pModelAnnouncement+"</td>" +
-                    "<td width='100px'>"+dModel.pModelCfgDesc+"</td>" +
-                    "<td width='100px'>"+dModel.pModelCfgMng+"</td>" +
+                    "<td width='100px'>" + dModel.pModelShape + "</td>" +
+                    "<td width='100px'>" + dModel.pModelAnnouncement + "</td>" +
+                    "<td width='100px'>" + dModel.pModelCfgDesc + "</td>" +
+                    "<td width='100px'>" + dModel.pModelCfgMng + "</td>" +
                     "</tr>"
             }
             var c = c + "</table>"
@@ -129,6 +129,7 @@ function loadData() {
 }
 
 $(document).ready(
+    (loadData()),
     $("#myButton").click(function () {
         loadData();
     })
