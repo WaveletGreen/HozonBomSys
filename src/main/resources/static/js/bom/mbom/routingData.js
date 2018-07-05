@@ -81,7 +81,7 @@ function initTable() {
                         handler: function () {
                             window.Ewin.dialog({
                                 title: "添加",
-                                url: "mbom/addMBom?projectId="+projectPuid+"&eBomPuid="+rows[0].eBomPuid,
+                                url: "work/process/addWorkProcess?projectId="+projectPuid+"&eBomPuid="+rows[0].eBomPuid,
                                 gridId: "gridId",
                                 width: 500,
                                 height: 650
@@ -100,7 +100,7 @@ function initTable() {
                             }
                             window.Ewin.dialog({
                                 title: "修改",
-                                url: "mbom/updateMBom?projectId="+projectPuid+"&eBomPuid="+rows[0].eBomPuid,
+                                url: "work/process/updateWorkProcess?projectId="+projectPuid+"&eBomPuid="+rows[0].eBomPuid,
                                 gridId: "gridId",
                                 width: 500,
                                 height: 650
@@ -121,7 +121,7 @@ function initTable() {
                                     $.ajax({
                                         type: "POST",
                                         //ajax需要添加打包名
-                                        url: "mbom/delete?eBomPuid="+rows[0].eBomPuid,
+                                        url: "work/process/delete?eBomPuid="+rows[0].eBomPuid,
                                         //data: JSON.stringify(rows),
                                         contentType: "application/json",
                                         success: function (result) {

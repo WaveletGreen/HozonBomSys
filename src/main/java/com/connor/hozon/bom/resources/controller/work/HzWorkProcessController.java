@@ -43,4 +43,24 @@ public class HzWorkProcessController extends BaseController {
         title.put("pOtherCost", "其他费用");
         writeAjaxJSONResponse(ResultMessageBuilder.build(title), response);
     }
+
+
+
+
+    /**
+     * 跳转到工艺路线添加页面
+     * @return
+     */
+    @RequestMapping(value = "addWorkProcess",method = RequestMethod.GET)
+    public String addWorkProcessToPage(){
+        return  "bomManage/mbom/routingData/addRoutingData";
+    }
+    /**
+     * 跳转到工艺路线修改页面
+     * @return
+     */
+    @RequestMapping(value = "updateWorkProcess",method = RequestMethod.GET)
+    public String updateWorkProcessToPage(){
+      return  "bomManage/mbom/routingData/updateRoutingData";
+    }
 }
