@@ -12,7 +12,7 @@ function initTable() {
     var  $table =  $("#routingDataTable");
     var  column = [];
     $.ajax({
-        url:"mbom/carRoutingTitel",
+        url:"work/process/title",
         type:"GET",
         success:function(result){
             var column = [];

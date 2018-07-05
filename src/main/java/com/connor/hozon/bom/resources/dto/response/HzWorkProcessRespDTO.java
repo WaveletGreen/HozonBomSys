@@ -79,6 +79,42 @@ public class HzWorkProcessRespDTO {
      * 工作中心描述
      */
     private String workCenterDesc;
+    /**
+     * 用途
+     */
+    private String purpose;
+    /**
+     * 状态
+     */
+    private String state;
+    /**
+     * 控制码
+     */
+    private String controlCode;
+
+    public String getControlCode() {
+        return controlCode;
+    }
+
+    public void setControlCode(String controlCode) {
+        this.controlCode = controlCode;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public String getPurpose() {
+        return purpose;
+    }
+
+    public void setPurpose(String purpose) {
+        this.purpose = purpose;
+    }
 
     public String getPuid() {
         return puid;
