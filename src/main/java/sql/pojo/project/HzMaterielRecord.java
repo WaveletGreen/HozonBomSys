@@ -95,10 +95,40 @@ public class HzMaterielRecord {
      * 更新者
      */
     private String pUpdateName;
+
+    private Date pCreateTime;
+
+    private Date pUpdateTime;
     /**
      * 工厂id
      */
     private String pFactoryPuid;
+
+    private String resource;
+
+    public Date getpCreateTime() {
+        return pCreateTime;
+    }
+
+    public void setpCreateTime(Date pCreateTime) {
+        this.pCreateTime = pCreateTime;
+    }
+
+    public Date getpUpdateTime() {
+        return pUpdateTime;
+    }
+
+    public void setpUpdateTime(Date pUpdateTime) {
+        this.pUpdateTime = pUpdateTime;
+    }
+
+    public String getResource() {
+        return resource;
+    }
+
+    public void setResource(String resource) {
+        this.resource = resource;
+    }
 
     public String getPuid() {
         return puid;
