@@ -19,7 +19,11 @@ public enum PurchaseOption {
     /**
      * 不是采购件，留空
      */
-    PURCHASE_EMPTY("");
+    PURCHASE_EMPTY(""),
+    /**
+     * 只有总成和分总成才有X
+     */
+    PURCHASE_X("X");
     /***
      * 描述
      */

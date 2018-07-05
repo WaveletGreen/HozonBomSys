@@ -1,5 +1,7 @@
 package sql.pojo.project;
 
+import java.util.Date;
+
 public class HzMaterielRecord {
     /**
      * 主键id
@@ -8,20 +10,20 @@ public class HzMaterielRecord {
     /**
      * 物料代码
      */
-    private Object pMaterielCode;
+    private String pMaterielCode;
     /**
      * 物料类型
      */
-    private Object pMaterielType;
+    private String pMaterielType;
     /**
      * 工厂 已废弃字段 工厂信息需要从工厂表来读取
      */
     @Deprecated
-    private Object pMaterielWerk;
+    private String pMaterielWerk;
     /**
      * 物料中文描述
      */
-    private Object pMaterielDesc;
+    private String pMaterielDesc;
     /**
      * 项目id
      */
@@ -101,7 +103,9 @@ public class HzMaterielRecord {
      * 工厂id
      */
     private String pFactoryPuid;
-
+    /**
+     * 采购类型
+     */
     private String resource;
 
     public Date getpCreateTime() {
@@ -136,35 +140,35 @@ public class HzMaterielRecord {
         this.puid = puid;
     }
 
-    public Object getpMaterielCode() {
+    public String getpMaterielCode() {
         return pMaterielCode;
     }
 
-    public void setpMaterielCode(Object pMaterielCode) {
+    public void setpMaterielCode(String pMaterielCode) {
         this.pMaterielCode = pMaterielCode;
     }
 
-    public Object getpMaterielType() {
+    public String getpMaterielType() {
         return pMaterielType;
     }
 
-    public void setpMaterielType(Object pMaterielType) {
+    public void setpMaterielType(String pMaterielType) {
         this.pMaterielType = pMaterielType;
     }
 
-    public Object getpMaterielWerk() {
+    public String getpMaterielWerk() {
         return pMaterielWerk;
     }
 
-    public void setpMaterielWerk(Object pMaterielWerk) {
+    public void setpMaterielWerk(String pMaterielWerk) {
         this.pMaterielWerk = pMaterielWerk;
     }
 
-    public Object getpMaterielDesc() {
+    public String getpMaterielDesc() {
         return pMaterielDesc;
     }
 
-    public void setpMaterielDesc(Object pMaterielDesc) {
+    public void setpMaterielDesc(String pMaterielDesc) {
         this.pMaterielDesc = pMaterielDesc;
     }
 

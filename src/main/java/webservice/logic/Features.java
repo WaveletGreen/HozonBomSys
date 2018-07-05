@@ -3,6 +3,9 @@ package webservice.logic;
 import webservice.base.cfg.ZPPTCI002;
 import webservice.option.ActionFlagOption;
 
+/**
+ * 特性映射
+ */
 public class Features {
     /**
      * 对应的SAP接口DTO

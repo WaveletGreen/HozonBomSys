@@ -190,4 +190,5 @@ public class HzMaterielController  extends BaseController {
         OperateResultMessageRespDTO respDTO =  hzMaterielService.deleteHzMateriel(puid);
         writeAjaxJSONResponse(ResultMessageBuilder.build(OperateResultMessageRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
     }
+
 }

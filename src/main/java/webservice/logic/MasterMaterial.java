@@ -123,6 +123,10 @@ public class MasterMaterial {
      * 预留字段5
      */
     private String reservedField5;
+    /**
+     * 公告号，新加入的,注意：SAP没有发布新的字段
+     */
+    private String announcement;
 
     public String getGUID() {
         return GUID;
@@ -196,6 +200,11 @@ public class MasterMaterial {
         this.materialType = materialType.GetDesc();
     }
 
+    public void setMaterialType(String materialType) {
+        this.materialType = materialType;
+        zpptci001.setZMTART(materialType);
+
+    }
 
     public String getVertureFlag() {
         return vertureFlag;
@@ -219,9 +228,9 @@ public class MasterMaterial {
         return MRPController;
     }
 
-    public void setMRPController(MaterialOption MRPController) {
-        zpptci001.setZMRPC(MRPController.GetDesc());
-        this.MRPController = MRPController.GetDesc();
+    public void setMRPController(String MRPController) {
+        zpptci001.setZMRPC(MRPController);
+        this.MRPController = MRPController;
     }
 
     public ZPPTCI001 getZpptci001() {
@@ -373,5 +382,16 @@ public class MasterMaterial {
         this.purchaseType = purchaseEmpty.GetDesc();
     }
 
+    public void setPurchaseType(String purchaseType) {
+        zpptci001.setZBESKZ(purchaseType);
+        this.purchaseType = purchaseType;
+    }
 
+    public String getAnnouncement() {
+        return announcement;
+    }
+
+    public void setAnnouncement(String announcement) {
+        this.announcement = announcement;
+    }
 }

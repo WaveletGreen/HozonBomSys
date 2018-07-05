@@ -6,7 +6,9 @@ import webservice.option.CorrelateTypeOption;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
+/**
+ * 相关信息
+ */
 public class Correlate {
     /**
      * 对应的SAP接口DTO

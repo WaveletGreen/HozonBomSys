@@ -272,7 +272,7 @@ public class HzMaterielFeatureController {
             model.addAttribute("entity", modelRecord);
             model.addAttribute("modelFeature", hzCfg0ModelFeature);
 
-            model.addAttribute("action", "./materiel/updateModelBasic");
+            model.addAttribute("action", "./integrate/updateModelBasic");
             return "cfg/materielFeature/updateModelBasic";
         }
         //修改超级物料
@@ -288,7 +288,7 @@ public class HzMaterielFeatureController {
                     superMateriel.setpPertainToProjectPuid(mainRecord.getpCfg0OfWhichProjectPuid());
                 }
                 model.addAttribute("entity", superMateriel);
-                model.addAttribute("action", "./materiel/updateSuperMateriel");
+                model.addAttribute("action", "./integrate/updateSuperMateriel");
                 return "cfg/materielFeature/updateSuperMateriel";
             }
         }

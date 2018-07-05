@@ -15,15 +15,15 @@ public class UpdateHzMaterielReqDTO {
     /**
      * 物料代码
      */
-    private Object pMaterielCode;
+    private String pMaterielCode;
     /**
      * 物料类型
      */
-    private Object pMaterielType;
+    private String pMaterielType;
     /**
      * 物料中文描述
      */
-    private Object pMaterielDesc;
+    private String pMaterielDesc;
     /**
      * 项目id
      */
@@ -99,27 +99,27 @@ public class UpdateHzMaterielReqDTO {
         this.puid = puid;
     }
 
-    public Object getpMaterielCode() {
+    public String getpMaterielCode() {
         return pMaterielCode;
     }
 
-    public void setpMaterielCode(Object pMaterielCode) {
+    public void setpMaterielCode(String pMaterielCode) {
         this.pMaterielCode = pMaterielCode;
     }
 
-    public Object getpMaterielType() {
+    public String getpMaterielType() {
         return pMaterielType;
     }
 
-    public void setpMaterielType(Object pMaterielType) {
+    public void setpMaterielType(String pMaterielType) {
         this.pMaterielType = pMaterielType;
     }
 
-    public Object getpMaterielDesc() {
+    public String getpMaterielDesc() {
         return pMaterielDesc;
     }
 
-    public void setpMaterielDesc(Object pMaterielDesc) {
+    public void setpMaterielDesc(String pMaterielDesc) {
         this.pMaterielDesc = pMaterielDesc;
     }
 
