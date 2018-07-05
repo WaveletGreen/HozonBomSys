@@ -57,6 +57,11 @@ public class HzPbomRecord {
     private String eBomPuid;
 
     /**
+     * 排序号
+     */
+    private Integer orderNum;
+
+    /**
      * 创建时间
      */
     private Date createTime;
@@ -74,6 +79,14 @@ public class HzPbomRecord {
     private String updateName;
 
     private Integer status;
+
+    public Integer getOrderNum() {
+        return orderNum;
+    }
+
+    public void setOrderNum(Integer orderNum) {
+        this.orderNum = orderNum;
+    }
 
     public Integer getStatus() {
         return status;

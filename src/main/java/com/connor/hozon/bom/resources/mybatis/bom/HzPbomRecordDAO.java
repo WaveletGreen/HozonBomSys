@@ -61,9 +61,12 @@ public interface HzPbomRecordDAO {
     HzPbomRecord getHzPbomByEbomPuid(String eBomPuid);
 
     /**
-     * 获取所有的bomLine数据
+     * 获取Pbom 总数
      * @param
      * @return
      */
     int getHzBomLineCount(String projectId);
+
+    int getHzPbomMaxOrderNum();
+
 }
