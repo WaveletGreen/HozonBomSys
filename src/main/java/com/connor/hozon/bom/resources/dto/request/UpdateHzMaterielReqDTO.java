@@ -8,10 +8,10 @@ import java.util.Date;
  * @Description:
  */
 public class UpdateHzMaterielReqDTO {
-    /**
-     * 主键id
-     */
     private String puid;
+
+    private String projectId;
+
     /**
      * 物料代码
      */
@@ -25,10 +25,6 @@ public class UpdateHzMaterielReqDTO {
      */
     private String pMaterielDesc;
     /**
-     * 项目id
-     */
-    private String pPertainToProjectPuid;
-    /**
      * 物料描述 英文
      */
     private String pMaterielDescEn;
@@ -39,7 +35,7 @@ public class UpdateHzMaterielReqDTO {
     /**
      * 虚拟件标识(1 ,0 )
      */
-    private Integer pInventedPart;
+    private String pInventedPart;
     /**
      * 备件&原材料双属性标示
      */
@@ -51,7 +47,7 @@ public class UpdateHzMaterielReqDTO {
     /**
      * 颜色件标识
      */
-    private Integer pColorPart;
+    private String pColorPart;
     /**
      * 毛重
      */
@@ -59,11 +55,11 @@ public class UpdateHzMaterielReqDTO {
     /**
      * 内外饰标识
      */
-    private Integer pInOutSideFlag;
+    private String pInOutSideFlag;
     /**
      * 3C件标识
      */
-    private Integer p3cPartFlag;
+    private String p3cPartFlag;
     /**
      * MRP控制者
      */
@@ -75,7 +71,7 @@ public class UpdateHzMaterielReqDTO {
     /**
      * 散件标志
      */
-    private Integer pLoosePartFlag;
+    private String pLoosePartFlag;
     /**
      * 物料类型  严格按照注释来读写数据
      * （11 整车超级物料主数据
@@ -86,10 +82,13 @@ public class UpdateHzMaterielReqDTO {
      * 61自制备件物料主数据）
      */
     private Integer pMaterielDataType;
+
     /**
      * 工厂代码
      */
     private String factoryCode;
+
+    private String resource;
 
     public String getPuid() {
         return puid;
@@ -99,7 +98,15 @@ public class UpdateHzMaterielReqDTO {
         this.puid = puid;
     }
 
-    public String getpMaterielCode() {
+    public String getProjectId() {
+        return projectId;
+    }
+
+    public void setProjectId(String projectId) {
+        this.projectId = projectId;
+    }
+
+    public Object getpMaterielCode() {
         return pMaterielCode;
     }
 
@@ -123,14 +130,6 @@ public class UpdateHzMaterielReqDTO {
         this.pMaterielDesc = pMaterielDesc;
     }
 
-    public String getpPertainToProjectPuid() {
-        return pPertainToProjectPuid;
-    }
-
-    public void setpPertainToProjectPuid(String pPertainToProjectPuid) {
-        this.pPertainToProjectPuid = pPertainToProjectPuid;
-    }
-
     public String getpMaterielDescEn() {
         return pMaterielDescEn;
     }
@@ -147,11 +146,11 @@ public class UpdateHzMaterielReqDTO {
         this.pBasicUnitMeasure = pBasicUnitMeasure;
     }
 
-    public Integer getpInventedPart() {
+    public String getpInventedPart() {
         return pInventedPart;
     }
 
-    public void setpInventedPart(Integer pInventedPart) {
+    public void setpInventedPart(String pInventedPart) {
         this.pInventedPart = pInventedPart;
     }
 
@@ -171,11 +170,11 @@ public class UpdateHzMaterielReqDTO {
         this.pVinPerNo = pVinPerNo;
     }
 
-    public Integer getpColorPart() {
+    public String getpColorPart() {
         return pColorPart;
     }
 
-    public void setpColorPart(Integer pColorPart) {
+    public void setpColorPart(String pColorPart) {
         this.pColorPart = pColorPart;
     }
 
@@ -187,19 +186,19 @@ public class UpdateHzMaterielReqDTO {
         this.pHeight = pHeight;
     }
 
-    public Integer getpInOutSideFlag() {
+    public String getpInOutSideFlag() {
         return pInOutSideFlag;
     }
 
-    public void setpInOutSideFlag(Integer pInOutSideFlag) {
+    public void setpInOutSideFlag(String pInOutSideFlag) {
         this.pInOutSideFlag = pInOutSideFlag;
     }
 
-    public Integer getP3cPartFlag() {
+    public String getP3cPartFlag() {
         return p3cPartFlag;
     }
 
-    public void setP3cPartFlag(Integer p3cPartFlag) {
+    public void setP3cPartFlag(String p3cPartFlag) {
         this.p3cPartFlag = p3cPartFlag;
     }
 
@@ -219,11 +218,11 @@ public class UpdateHzMaterielReqDTO {
         this.pPartImportantDegree = pPartImportantDegree;
     }
 
-    public Integer getpLoosePartFlag() {
+    public String getpLoosePartFlag() {
         return pLoosePartFlag;
     }
 
-    public void setpLoosePartFlag(Integer pLoosePartFlag) {
+    public void setpLoosePartFlag(String pLoosePartFlag) {
         this.pLoosePartFlag = pLoosePartFlag;
     }
 
@@ -241,5 +240,13 @@ public class UpdateHzMaterielReqDTO {
 
     public void setFactoryCode(String factoryCode) {
         this.factoryCode = factoryCode;
+    }
+
+    public String getResource() {
+        return resource;
+    }
+
+    public void setResource(String resource) {
+        this.resource = resource;
     }
 }

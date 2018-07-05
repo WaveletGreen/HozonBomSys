@@ -42,7 +42,7 @@ public class HzMaterielServiceImpl implements HzMaterielService {
     @Override
     public OperateResultMessageRespDTO addHzMateriel(AddHzMaterielReqDTO addHzMaterielReqDTO) {
         OperateResultMessageRespDTO respDTO = new OperateResultMessageRespDTO();
-        if(null == addHzMaterielReqDTO.getpPertainToProjectPuid() || addHzMaterielReqDTO.getpPertainToProjectPuid().equals("")){
+        if(null == addHzMaterielReqDTO.getProjectId() || addHzMaterielReqDTO.getProjectId().equals("")){
             respDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
             respDTO.setErrMsg("请选择项目！");
             return respDTO;
@@ -72,7 +72,7 @@ public class HzMaterielServiceImpl implements HzMaterielService {
                 record.setpFactoryPuid(hzFactory.getPuid());
             }
             record.setPuid(UUID.randomUUID().toString());
-            record.setpPertainToProjectPuid(addHzMaterielReqDTO.getpPertainToProjectPuid());
+            record.setpPertainToProjectPuid(addHzMaterielReqDTO.getProjectId());
 
             record.setpBasicUnitMeasure(addHzMaterielReqDTO.getpBasicUnitMeasure());
 
@@ -102,7 +102,7 @@ public class HzMaterielServiceImpl implements HzMaterielService {
     @Override
     public OperateResultMessageRespDTO updateHzMateriel(UpdateHzMaterielReqDTO updateHzMaterielReqDTO) {
         OperateResultMessageRespDTO respDTO = new OperateResultMessageRespDTO();
-        if(null == updateHzMaterielReqDTO.getpPertainToProjectPuid() || updateHzMaterielReqDTO.getpPertainToProjectPuid().equals("")){
+        if(null == updateHzMaterielReqDTO.getProjectId() || updateHzMaterielReqDTO.getProjectId().equals("")){
             respDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
             respDTO.setErrMsg("请选择项目！");
             return respDTO;
@@ -132,7 +132,7 @@ public class HzMaterielServiceImpl implements HzMaterielService {
                 record.setpFactoryPuid(hzFactory.getPuid());
             }
             record.setPuid(updateHzMaterielReqDTO.getPuid());
-            record.setpPertainToProjectPuid(updateHzMaterielReqDTO.getpPertainToProjectPuid());
+            record.setpPertainToProjectPuid(updateHzMaterielReqDTO.getProjectId());
             record.setpBasicUnitMeasure(updateHzMaterielReqDTO.getpBasicUnitMeasure());
             record.setpCreateName(user.getUserName());
             record.setpMaterielDataType(updateHzMaterielReqDTO.getpMaterielDataType());

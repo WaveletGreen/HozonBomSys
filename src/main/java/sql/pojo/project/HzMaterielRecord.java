@@ -108,6 +108,16 @@ public class HzMaterielRecord {
      */
     private String resource;
 
+    private Integer pValidFlag;
+
+    public Integer getpValidFlag() {
+        return pValidFlag;
+    }
+
+    public void setpValidFlag(Integer pValidFlag) {
+        this.pValidFlag = pValidFlag;
+    }
+
     public Date getpCreateTime() {
         return pCreateTime;
     }
