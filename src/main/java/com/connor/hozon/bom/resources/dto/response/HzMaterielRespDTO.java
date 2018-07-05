@@ -8,6 +8,8 @@ import java.util.Date;
  * @Description:
  */
 public class HzMaterielRespDTO {
+
+    private Integer No;
     /**
      * 主键id
      */
@@ -81,6 +83,26 @@ public class HzMaterielRespDTO {
      */
     private String factoryCode;
 
+    /**
+     * 采购类型
+     */
+    private String resource;
+
+    public String getResource() {
+        return resource;
+    }
+
+    public void setResource(String resource) {
+        this.resource = resource;
+    }
+
+    public Integer getNo() {
+        return No;
+    }
+
+    public void setNo(Integer no) {
+        No = no;
+    }
 
     public String getPuid() {
         return puid;

@@ -6,6 +6,7 @@ import com.connor.hozon.bom.resources.dto.response.HzMaterielRespDTO;
 import com.connor.hozon.bom.resources.dto.response.OperateResultMessageRespDTO;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.query.HzMaterielByPageQuery;
+import com.connor.hozon.bom.resources.query.HzMaterielQuery;
 import sql.pojo.project.HzMaterielRecord;
 
 /**
@@ -42,4 +43,5 @@ public interface HzMaterielService {
      */
     Page<HzMaterielRespDTO> findHzMaterielForPage(HzMaterielByPageQuery query);
 
+    HzMaterielRespDTO getHzMateriel(HzMaterielQuery query);
 }

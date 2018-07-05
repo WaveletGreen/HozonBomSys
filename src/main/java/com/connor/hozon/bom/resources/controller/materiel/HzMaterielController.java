@@ -1,12 +1,25 @@
 package com.connor.hozon.bom.resources.controller.materiel;
 
+import com.connor.hozon.bom.resources.controller.BaseController;
+import com.connor.hozon.bom.resources.dto.request.AddHzMaterielReqDTO;
+import com.connor.hozon.bom.resources.dto.request.UpdateHzMaterielReqDTO;
+import com.connor.hozon.bom.resources.dto.response.HzMaterielRespDTO;
+import com.connor.hozon.bom.resources.dto.response.OperateResultMessageRespDTO;
+import com.connor.hozon.bom.resources.page.Page;
+import com.connor.hozon.bom.resources.query.HzMaterielByPageQuery;
+import com.connor.hozon.bom.resources.query.HzMaterielQuery;
+import com.connor.hozon.bom.resources.service.materiel.HzMaterielService;
+import com.connor.hozon.bom.resources.util.ResultMessageBuilder;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.HashMap;
-import java.util.Map;
+import javax.servlet.http.HttpServletResponse;
+import java.util.*;
 
 /**
  * @Author: haozt
@@ -15,8 +28,10 @@ import java.util.Map;
  */
 @Controller
 @RequestMapping(value = "materiel")
-public class HzMaterielController {
+public class HzMaterielController  extends BaseController {
 
+    @Autowired
+    private HzMaterielService hzMaterielService;
     @RequestMapping("type")
     @ResponseBody
     public Map<String,Object> getMaterielType(){
@@ -39,4 +54,140 @@ public class HzMaterielController {
         return map;
     }
 
+    /**
+     * 物料标题
+     * @param response
+     */
+    @RequestMapping(value = "title", method = RequestMethod.GET)
+    public void getPbomLineTitle(HttpServletResponse response) {
+        LinkedHashMap<String, String> tableTitle = new LinkedHashMap<>();
+        tableTitle.put("No", "序号");
+        tableTitle.put("puid", "puid");
+        tableTitle.put("pMaterielCode", "物料编码");
+        tableTitle.put("pMaterielType", "物料类型");
+        tableTitle.put("factoryCode","工厂");
+        tableTitle.put("pMaterielDesc", "物料描述（中文）");
+        tableTitle.put("pMaterielDescEn", "物料描述（英文）");
+        tableTitle.put("pBasicUnitMeasure", "单位");
+        tableTitle.put("pInventedPart", "虚拟件标识");
+        tableTitle.put("resource","采购类型");
+        tableTitle.put("pSpareMaterial", "备件&原材料双属性标识");
+        tableTitle.put("pVinPerNo", "VIN前置号");
+        tableTitle.put("pColorPart", "颜色件标识");
+        tableTitle.put("pHeight", "实际重量");
+        tableTitle.put("pInOutSideFlag", "内外饰标识");
+        tableTitle.put("p3cPartFlag", "3C件标识");
+        tableTitle.put("pMrpController", "MRP控制者");
+        tableTitle.put("pPartImportantDegree", "零件重要度");
+        tableTitle.put("pLoosePartFlag", "散件标识");
+        writeAjaxJSONResponse(ResultMessageBuilder.build(tableTitle), response);
+    }
+    /**
+     * 分页获取物料管理信息
+     *
+     * @param
+     */
+    @RequestMapping(value = "getMateriel", method = RequestMethod.GET)
+    @ResponseBody
+    public Map<String, Object> getPbomLineRecord(HzMaterielByPageQuery query) {
+        Page<HzMaterielRespDTO> respDTOPage = hzMaterielService.findHzMaterielForPage(query);
+        List<HzMaterielRespDTO> respDTOS = respDTOPage.getResult();
+        if(respDTOS == null){
+            return new HashMap<>();
+        }
+        Map<String, Object> ret = new HashMap<>();
+        List<Map<String, Object>> _list = new ArrayList<>();
+        respDTOS.forEach(dto -> {
+            Map<String, Object> _res = new HashMap<>();
+            _res.put("No",dto.getNo());
+            _res.put("puid",dto.getPuid());
+            _res.put("resource",dto.getResource());
+            _res.put("pMaterielCode",dto.getpMaterielCode());
+            _res.put("pMaterielType",dto.getpMaterielType());
+            _res.put("pMaterielDesc",dto.getpMaterielDesc());
+            _res.put("pMaterielDescEn",dto.getpMaterielDescEn());
+            _res.put("pBasicUnitMeasure",dto.getpBasicUnitMeasure());
+            _res.put("pInventedPart",dto.getpInventedPart());
+            _res.put("pSpareMaterial",dto.getpSpareMaterial());
+            _res.put("pVinPerNo",dto.getpVinPerNo());
+            _res.put("pColorPart",dto.getpBasicUnitMeasure());
+            _res.put("pHeight",dto.getpInventedPart());
+            _res.put("pInOutSideFlag",dto.getpSpareMaterial());
+            _res.put("p3cPartFlag",dto.getpVinPerNo());
+            _res.put("pMrpController",dto.getpBasicUnitMeasure());
+            _res.put("pPartImportantDegree",dto.getpInventedPart());
+            _res.put("pLoosePartFlag",dto.getpSpareMaterial());
+            _res.put("factoryCode",dto.getpVinPerNo());
+            _list.add(_res);
+        });
+        ret.put("totalCount", respDTOPage.getTotalCount());
+        ret.put("result", _list);
+        return ret;
+    }
+
+    /**
+     * 跳转到物料数据的添加页面
+     * @param query
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "addMateriel", method = RequestMethod.GET)
+    public String addMaterielToPage(HzMaterielQuery query,Model model) {
+        HzMaterielRespDTO respDTO = hzMaterielService.getHzMateriel(query);
+        if(respDTO== null){
+            return "";
+        }
+        model.addAttribute("data",respDTO);
+        return"bomManage/mbom/mbomMaintenance/updateMbomMaintenance";
+    }
+
+    /**
+     * 跳转到物料数据的修改页面
+     * @param query
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "updateMBom", method = RequestMethod.GET)
+    public String updateMaterielToPage(HzMaterielQuery query,Model model) {
+        HzMaterielRespDTO respDTO = hzMaterielService.getHzMateriel(query);
+        if(respDTO== null){
+            return "";
+        }
+        model.addAttribute("data",respDTO);
+        return"bomManage/mbom/mbomMaintenance/updateMbomMaintenance";
+    }
+
+
+    /**
+     * 插入一条记录
+     * @param reqDTO
+     * @param response
+     */
+    @RequestMapping(value = "add",method = RequestMethod.POST)
+    public void addMaterielToDB(@RequestBody AddHzMaterielReqDTO reqDTO, HttpServletResponse response){
+        OperateResultMessageRespDTO respDTO = hzMaterielService.addHzMateriel(reqDTO);
+        writeAjaxJSONResponse(ResultMessageBuilder.build(OperateResultMessageRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
+    }
+
+    /**
+     * 编辑一条记录
+     * @param reqDTO
+     * @param response
+     */
+    @RequestMapping(value = "update",method = RequestMethod.POST)
+    public void updateMaterielToDB(@RequestBody UpdateHzMaterielReqDTO reqDTO, HttpServletResponse response){
+        OperateResultMessageRespDTO respDTO = hzMaterielService.updateHzMateriel(reqDTO);
+        writeAjaxJSONResponse(ResultMessageBuilder.build(OperateResultMessageRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
+    }
+
+    /**
+     * 删除一条记录
+     * @param puid
+     * @param response
+     */
+    @RequestMapping(value = "delete",method = RequestMethod.POST)
+    public void deleteMateriel(String puid,HttpServletResponse response){
+        OperateResultMessageRespDTO respDTO =  hzMaterielService.deleteHzMateriel(puid);
+        writeAjaxJSONResponse(ResultMessageBuilder.build(OperateResultMessageRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
+    }
 }

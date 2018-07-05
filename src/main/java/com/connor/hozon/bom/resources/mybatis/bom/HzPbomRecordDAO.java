@@ -3,6 +3,7 @@ package com.connor.hozon.bom.resources.mybatis.bom;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.query.HzPbomByPageQuery;
 import sql.pojo.bom.HzBomLineRecord;
+import sql.pojo.bom.HzMbomLineRecord;
 import sql.pojo.bom.HzPbomLineRecord;
 import sql.pojo.bom.HzPbomRecord;
 
@@ -24,6 +25,7 @@ public interface HzPbomRecordDAO {
      */
     int insert(HzPbomRecord record);
 
+    int insertList(List<HzPbomLineRecord> records);
     /**
      * 编辑 PBOM管理信息
      * @param record
@@ -57,4 +59,11 @@ public interface HzPbomRecordDAO {
      * @return
      */
     HzPbomRecord getHzPbomByEbomPuid(String eBomPuid);
+
+    /**
+     * 获取所有的bomLine数据
+     * @param
+     * @return
+     */
+    int getHzBomLineCount(String projectId);
 }
