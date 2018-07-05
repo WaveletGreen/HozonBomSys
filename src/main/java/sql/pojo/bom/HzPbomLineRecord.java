@@ -1,5 +1,7 @@
 package sql.pojo.bom;
 
+import io.swagger.models.auth.In;
+
 import java.util.Date;
 
 /**
@@ -12,7 +14,7 @@ public class HzPbomLineRecord {
      */
     private String pPuid;
     private String parentUid;
-    private String isDept;
+    private Integer isDept;
     private String bomDigifaxId;
     private String linePuid;
     private byte[] bomLineBlock;
@@ -21,6 +23,8 @@ public class HzPbomLineRecord {
     private String projectPuid;
     private String pBomLinePartName;
     private String pBomLinePartClass;
+    private String pBomLinePartEnName;
+    private String pBomLinePartResource;
 
     private String eBomPuid;
     /**
@@ -112,6 +116,22 @@ public class HzPbomLineRecord {
      * 更改者
      */
     private String updateName;
+
+    public String getpBomLinePartEnName() {
+        return pBomLinePartEnName;
+    }
+
+    public void setpBomLinePartEnName(String pBomLinePartEnName) {
+        this.pBomLinePartEnName = pBomLinePartEnName;
+    }
+
+    public String getpBomLinePartResource() {
+        return pBomLinePartResource;
+    }
+
+    public void setpBomLinePartResource(String pBomLinePartResource) {
+        this.pBomLinePartResource = pBomLinePartResource;
+    }
 
     public String geteBomPuid() {
         return eBomPuid;
@@ -257,11 +277,11 @@ public class HzPbomLineRecord {
         this.parentUid = parentUid;
     }
 
-    public String getIsDept() {
+    public Integer getIsDept() {
         return isDept;
     }
 
-    public void setIsDept(String isDept) {
+    public void setIsDept(Integer isDept) {
         this.isDept = isDept;
     }
 

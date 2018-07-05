@@ -68,6 +68,9 @@ public class HzMbomLineRecord {
      */
     private String pBomLinePartName;
 
+    /**
+     * 英文名称
+     */
     private String pBomLinePartEnName;
     /**
      * Bom行对应的零件类别

@@ -31,6 +31,7 @@
         <result column="P_CREATE_NAME" jdbcType="VARCHAR" property="pCreateName" />
         <result column="P_UPDATE_NAME" jdbcType="VARCHAR" property="pUpdateName" />
         <result column="P_FACTORY_PUID" jdbcType="VARCHAR" property="pFactoryPuid" />
+        <result column="P_RESOURCE" jdbcType="VARCHAR" property="resource" />
     </resultMap>
 
     <!--整车衍生物料主数据-->
@@ -93,7 +94,7 @@
 
     <!--物料主数据-->
     <sql id="HzMaterielRecordList">
-     PUID, P_MATERIEL_CODE, P_MATERIEL_TYPE, P_MATERIEL_WERK, P_MATERIEL_DESC, P_PERTAIN_TO_PROJECT_PUID,
+     PUID, P_MATERIEL_CODE,P_RESOURCE, P_MATERIEL_TYPE, P_MATERIEL_WERK, P_MATERIEL_DESC, P_PERTAIN_TO_PROJECT_PUID,
     P_MATERIEL_DESC_EN, P_BASIC_UNIT_MEASURE, P_INVENTED_PART, P_SPARE_MATERIAL, P_VIN_PER_NO,
     P_COLOR_PART, P_HEIGHT, P_IN_OUT_SIDE_FLAG, P_3C_PART_FLAG, P_MRP_CONTROLLER, P_PART_IMPORTANT_DEGREE,
     P_LOOSE_PART_FLAG, P_VALID_FLAG, P_MATERIEL_DATA_TYPE, P_CREATE_TIME, P_UPDATE_TIME,
@@ -398,7 +399,7 @@
 
 
     <!--分页获取物料主数据-->
-    <select id="HzMaterialDAOImpl_findHzMaterielForPage" parameterType="java.util.HashMap" resultMap="BaseResultMap">
+    <select id="HzMaterialDAOImpl_findHzMaterielForPage" parameterType="java.util.HashMap" resultMap="HzMaterielRecordMap">
         select * from
         (select t.*,ROWNUM as rn from
         (select
@@ -418,7 +419,7 @@
     </select>
 
     <!--获取物料主数据总数-->
-    <select id="HzMaterialDAOImpl_findHzMaterielTotalCount" parameterType="java.util.HashMap" resultMap="BaseResultMap">
+    <select id="HzMaterialDAOImpl_findHzMaterielTotalCount" parameterType="java.util.HashMap" resultType="java.lang.Integer">
         select
         count(*)
         from HZ_MATERIEL_RECORD
@@ -557,6 +558,9 @@
             </if>
             <if test="projectId != null and projectId!=''">
                 and P_PERTAIN_TO_PROJECT_PUID = #{projectId,jdbcType=VARCHAR}
+            </if>
+            <if test="pMaterielDataType != null">
+                and P_MATERIEL_DATA_TYPE = #{pMaterielDataType,jdbcType=VARCHAR}
             </if>
         </where>
     </select>
