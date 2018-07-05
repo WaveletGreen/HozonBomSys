@@ -190,7 +190,7 @@ public class HzMaterielServiceImpl implements HzMaterielService {
          * 51 生产性外购物料主数据
          * 61自制备件物料主数据）
          */
-        int type = query.getpMaterielDataType();
+        Integer type = query.getpMaterielDataType();
         //默认工厂为1001工厂
         HzFactory factory = hzFactoryDAO.findFactory("","1001");
         String puid = UUID.randomUUID().toString();
@@ -203,170 +203,171 @@ public class HzMaterielServiceImpl implements HzMaterielService {
             hzFactoryDAO.insert(factory);
         }
         List<HzMaterielRecord> list = new ArrayList<>();
-        switch (type){
-            case 11:
-                break;
-            case 21:
-                List<HzCfg0ModelRecord> cfg0ModelRecords = hzMaterielDAO.findHzCfg0ModelRecord(query);
-                if(ListUtil.isNotEmpty(cfg0ModelRecords)){
-                    for(HzCfg0ModelRecord record :cfg0ModelRecords){
-                        HzMaterielRecord hzMaterielRecord = new HzMaterielRecord();
-                        Map<String,Object> map = new HashMap<>();
-                        //外键id
-                        map.put("",record.getPuid());
-                        map.put("projectId",query.getProjectId());
-                        boolean b = hzMaterielDAO.HzMaterielIsExist(map);
-                        if(b){
-                            continue;
-                        }else{
-                            if(factory!=null){
-                                hzMaterielRecord.setpFactoryPuid(factory.getPuid());
-                            }
-                            else{
-                                hzMaterielRecord.setpFactoryPuid(puid);
-                            }
-                            hzMaterielRecord.setpMaterielType("A001");
-                            hzMaterielRecord.setpMaterielCode(record.getpCfg0ModelBasicDetail());
-                            hzMaterielRecord.setpMaterielDesc(record.getObjectDesc());
-                            hzMaterielRecord.setpMaterielDescEn("");
-                            hzMaterielRecord.setpMaterielDataType(21);
-                            hzMaterielRecord.setpPertainToProjectPuid(query.getProjectId());
-                            hzMaterielRecord.setPuid(UUID.randomUUID().toString());
-                            list.add(hzMaterielRecord);
+        if(type!=null){
+            switch (type){
+                case 11:
+                    break;
+                case 21:
+                    List<HzCfg0ModelRecord> cfg0ModelRecords = hzMaterielDAO.findHzCfg0ModelRecord(query);
+                    if(ListUtil.isNotEmpty(cfg0ModelRecords)){
+                        for(HzCfg0ModelRecord record :cfg0ModelRecords){
+                            HzMaterielRecord hzMaterielRecord = new HzMaterielRecord();
+                            Map<String,Object> map = new HashMap<>();
+                            //外键id
+                            map.put("",record.getPuid());
+                            map.put("projectId",query.getProjectId());
+                            boolean b = hzMaterielDAO.HzMaterielIsExist(map);
+                            if(b){
+                                continue;
+                            }else{
+                                if(factory!=null){
+                                    hzMaterielRecord.setpFactoryPuid(factory.getPuid());
+                                }
+                                else{
+                                    hzMaterielRecord.setpFactoryPuid(puid);
+                                }
+                                hzMaterielRecord.setpMaterielType("A001");
+                                hzMaterielRecord.setpMaterielCode(record.getpCfg0ModelBasicDetail());
+                                hzMaterielRecord.setpMaterielDesc(record.getObjectDesc());
+                                hzMaterielRecord.setpMaterielDescEn("");
+                                hzMaterielRecord.setpMaterielDataType(21);
+                                hzMaterielRecord.setpPertainToProjectPuid(query.getProjectId());
+                                hzMaterielRecord.setPuid(UUID.randomUUID().toString());
+                                list.add(hzMaterielRecord);
 
+                            }
                         }
+                        hzMaterielDAO.insertList(list);
                     }
-                    hzMaterielDAO.insertList(list);
-                }
-                break;
+                    break;
 
-            case 31:
-                List<HzMbomLineRecord> hzMbomLineRecords = hzMaterielDAO.findHz2YMbomRecord(query);
-                if(ListUtil.isNotEmpty(hzMbomLineRecords)){
-                    for(HzMbomLineRecord record :hzMbomLineRecords){
-                        HzMaterielRecord hzMaterielRecord = new HzMaterielRecord();
-                        Map<String,Object> map = new HashMap<>();
-                        map.put("",record.getPuid());
-                        map.put("projectId",query.getProjectId());
-                        boolean b = hzMaterielDAO.HzMaterielIsExist(map);
-                        if(b){
-                            continue;
-                        }else{
-                            if(factory!=null){
-                                hzMaterielRecord.setpFactoryPuid(factory.getPuid());
+                case 31:
+                    List<HzMbomLineRecord> hzMbomLineRecords = hzMaterielDAO.findHz2YMbomRecord(query);
+                    if(ListUtil.isNotEmpty(hzMbomLineRecords)){
+                        for(HzMbomLineRecord record :hzMbomLineRecords){
+                            HzMaterielRecord hzMaterielRecord = new HzMaterielRecord();
+                            Map<String,Object> map = new HashMap<>();
+                            map.put("",record.getPuid());
+                            map.put("projectId",query.getProjectId());
+                            boolean b = hzMaterielDAO.HzMaterielIsExist(map);
+                            if(b){
+                                continue;
+                            }else{
+                                if(factory!=null){
+                                    hzMaterielRecord.setpFactoryPuid(factory.getPuid());
+                                }
+                                else{
+                                    hzMaterielRecord.setpFactoryPuid(puid);
+                                }
+                                hzMaterielRecord.setpMaterielCode(record.getLineID());
+                                hzMaterielRecord.setpMaterielDesc(record.getpBomLinePartName());
+                                hzMaterielRecord.setpMaterielDescEn(record.getpBomLinePartEnName());
+                                hzMaterielRecord.setpMaterielType("A002");
+                                hzMaterielRecord.setpPertainToProjectPuid(query.getProjectId());
+                                hzMaterielRecord.setpMaterielDataType(31);
+                                hzMaterielRecord.setPuid(UUID.randomUUID().toString());
+                                list.add(hzMaterielRecord);
                             }
-                            else{
-                                hzMaterielRecord.setpFactoryPuid(puid);
-                            }
-                            hzMaterielRecord.setpMaterielCode(record.getLineID());
-                            hzMaterielRecord.setpMaterielDesc(record.getpBomLinePartName());
-                            hzMaterielRecord.setpMaterielDescEn(record.getpBomLinePartEnName());
-                            hzMaterielRecord.setpMaterielType("A002");
-                            hzMaterielRecord.setpPertainToProjectPuid(query.getProjectId());
-                            hzMaterielRecord.setpMaterielDataType(31);
-                            hzMaterielRecord.setPuid(UUID.randomUUID().toString());
-                            list.add(hzMaterielRecord);
                         }
+                        hzMaterielDAO.insertList(list);
                     }
-                    hzMaterielDAO.insertList(list);
-                }
-                break;
-            case 41:
-                List<HzMbomLineRecord> lineRecords = hzMaterielDAO.findHzResourceMakeSingleMbomRecord(query);
-                if(ListUtil.isNotEmpty(lineRecords)){
-                    for(HzMbomLineRecord record:lineRecords){
-                        HzMaterielRecord hzMaterielRecord = new HzMaterielRecord();
-                        Map<String,Object> map = new HashMap<>();
-                        map.put("",record.getPuid());
-                        map.put("projectId",query.getProjectId());
-                        boolean b = hzMaterielDAO.HzMaterielIsExist(map);
-                        if(b){
-                            continue;
-                        }else{
-                            if(factory!=null){
-                                hzMaterielRecord.setpFactoryPuid(factory.getPuid());
+                    break;
+                case 41:
+                    List<HzMbomLineRecord> lineRecords = hzMaterielDAO.findHzResourceMakeSingleMbomRecord(query);
+                    if(ListUtil.isNotEmpty(lineRecords)){
+                        for(HzMbomLineRecord record:lineRecords){
+                            HzMaterielRecord hzMaterielRecord = new HzMaterielRecord();
+                            Map<String,Object> map = new HashMap<>();
+                            map.put("",record.getPuid());
+                            map.put("projectId",query.getProjectId());
+                            boolean b = hzMaterielDAO.HzMaterielIsExist(map);
+                            if(b){
+                                continue;
+                            }else{
+                                if(factory!=null){
+                                    hzMaterielRecord.setpFactoryPuid(factory.getPuid());
+                                }
+                                else{
+                                    hzMaterielRecord.setpFactoryPuid(puid);
+                                }
+                                hzMaterielRecord.setpMaterielCode(record.getLineID());
+                                hzMaterielRecord.setpMaterielDesc(record.getpBomLinePartName());
+                                hzMaterielRecord.setpMaterielDescEn(record.getpBomLinePartEnName());
+                                hzMaterielRecord.setpMaterielType("A002");
+                                hzMaterielRecord.setpPertainToProjectPuid(query.getProjectId());
+                                hzMaterielRecord.setpMaterielDataType(41);
+                                hzMaterielRecord.setPuid(UUID.randomUUID().toString());
+                                list.add(hzMaterielRecord);
                             }
-                            else{
-                                hzMaterielRecord.setpFactoryPuid(puid);
-                            }
-                            hzMaterielRecord.setpMaterielCode(record.getLineID());
-                            hzMaterielRecord.setpMaterielDesc(record.getpBomLinePartName());
-                            hzMaterielRecord.setpMaterielDescEn(record.getpBomLinePartEnName());
-                            hzMaterielRecord.setpMaterielType("A002");
-                            hzMaterielRecord.setpPertainToProjectPuid(query.getProjectId());
-                            hzMaterielRecord.setpMaterielDataType(41);
-                            hzMaterielRecord.setPuid(UUID.randomUUID().toString());
-                            list.add(hzMaterielRecord);
                         }
+                        hzMaterielDAO.insertList(list);
                     }
-                    hzMaterielDAO.insertList(list);
-                }
-                break;
-            case 51:
-                List<HzMbomLineRecord> lineRecordList = hzMaterielDAO.findHzResourceBuyMbomRecord(query);
-                if(ListUtil.isNotEmpty(lineRecordList)){
-                    for(HzMbomLineRecord record:lineRecordList){
-                        HzMaterielRecord hzMaterielRecord = new HzMaterielRecord();
-                        Map<String,Object> map = new HashMap<>();
-                        map.put("",record.getPuid());
-                        map.put("projectId",query.getProjectId());
-                        boolean b = hzMaterielDAO.HzMaterielIsExist(map);
-                        if(b){
-                            continue;
-                        }else{
-                            if(factory!=null){
-                                hzMaterielRecord.setpFactoryPuid(factory.getPuid());
+                    break;
+                case 51:
+                    List<HzMbomLineRecord> lineRecordList = hzMaterielDAO.findHzResourceBuyMbomRecord(query);
+                    if(ListUtil.isNotEmpty(lineRecordList)){
+                        for(HzMbomLineRecord record:lineRecordList){
+                            HzMaterielRecord hzMaterielRecord = new HzMaterielRecord();
+                            Map<String,Object> map = new HashMap<>();
+                            map.put("",record.getPuid());
+                            map.put("projectId",query.getProjectId());
+                            boolean b = hzMaterielDAO.HzMaterielIsExist(map);
+                            if(b){
+                                continue;
+                            }else{
+                                if(factory!=null){
+                                    hzMaterielRecord.setpFactoryPuid(factory.getPuid());
+                                }
+                                else{
+                                    hzMaterielRecord.setpFactoryPuid(puid);
+                                }
+                                hzMaterielRecord.setpMaterielCode(record.getLineID());
+                                hzMaterielRecord.setpMaterielDesc(record.getpBomLinePartName());
+                                hzMaterielRecord.setpMaterielDescEn(record.getpBomLinePartEnName());
+                                hzMaterielRecord.setpMaterielType("A002");
+                                hzMaterielRecord.setpPertainToProjectPuid(query.getProjectId());
+                                hzMaterielRecord.setpMaterielDataType(51);
+                                hzMaterielRecord.setPuid(UUID.randomUUID().toString());
+                                list.add(hzMaterielRecord);
                             }
-                            else{
-                                hzMaterielRecord.setpFactoryPuid(puid);
-                            }
-                            hzMaterielRecord.setpMaterielCode(record.getLineID());
-                            hzMaterielRecord.setpMaterielDesc(record.getpBomLinePartName());
-                            hzMaterielRecord.setpMaterielDescEn(record.getpBomLinePartEnName());
-                            hzMaterielRecord.setpMaterielType("A002");
-                            hzMaterielRecord.setpPertainToProjectPuid(query.getProjectId());
-                            hzMaterielRecord.setpMaterielDataType(51);
-                            hzMaterielRecord.setPuid(UUID.randomUUID().toString());
-                            list.add(hzMaterielRecord);
                         }
+                        hzMaterielDAO.insertList(list);
                     }
-                    hzMaterielDAO.insertList(list);
-                }
-                break;
-            case 61:
-                List<HzMbomLineRecord> mbomLineRecords = hzMaterielDAO.findHzMadeBySelfSpareMbomRecord(query);
-                if(ListUtil.isNotEmpty(mbomLineRecords)){
-                    for(HzMbomLineRecord record:mbomLineRecords){
-                        HzMaterielRecord hzMaterielRecord = new HzMaterielRecord();
-                        Map<String,Object> map = new HashMap<>();
-                        map.put("",record.getPuid());
-                        map.put("projectId",query.getProjectId());
-                        boolean b = hzMaterielDAO.HzMaterielIsExist(map);
-                        if(b){
-                            continue;
-                        }else{
-                            if(factory!=null){
-                                hzMaterielRecord.setpFactoryPuid(factory.getPuid());
+                    break;
+                case 61:
+                    List<HzMbomLineRecord> mbomLineRecords = hzMaterielDAO.findHzMadeBySelfSpareMbomRecord(query);
+                    if(ListUtil.isNotEmpty(mbomLineRecords)){
+                        for(HzMbomLineRecord record:mbomLineRecords){
+                            HzMaterielRecord hzMaterielRecord = new HzMaterielRecord();
+                            Map<String,Object> map = new HashMap<>();
+                            map.put("",record.getPuid());
+                            map.put("projectId",query.getProjectId());
+                            boolean b = hzMaterielDAO.HzMaterielIsExist(map);
+                            if(b){
+                                continue;
+                            }else{
+                                if(factory!=null){
+                                    hzMaterielRecord.setpFactoryPuid(factory.getPuid());
+                                }
+                                else{
+                                    hzMaterielRecord.setpFactoryPuid(puid);
+                                }
+                                hzMaterielRecord.setpMaterielCode(record.getLineID());
+                                hzMaterielRecord.setpMaterielDesc(record.getpBomLinePartName());
+                                hzMaterielRecord.setpMaterielDescEn(record.getpBomLinePartEnName());
+                                hzMaterielRecord.setpMaterielType("A002");
+                                hzMaterielRecord.setpPertainToProjectPuid(query.getProjectId());
+                                hzMaterielRecord.setpMaterielDataType(61);
+                                hzMaterielRecord.setPuid(UUID.randomUUID().toString());
+                                list.add(hzMaterielRecord);
                             }
-                            else{
-                                hzMaterielRecord.setpFactoryPuid(puid);
-                            }
-                            hzMaterielRecord.setpMaterielCode(record.getLineID());
-                            hzMaterielRecord.setpMaterielDesc(record.getpBomLinePartName());
-                            hzMaterielRecord.setpMaterielDescEn(record.getpBomLinePartEnName());
-                            hzMaterielRecord.setpMaterielType("A002");
-                            hzMaterielRecord.setpPertainToProjectPuid(query.getProjectId());
-                            hzMaterielRecord.setpMaterielDataType(61);
-                            hzMaterielRecord.setPuid(UUID.randomUUID().toString());
-                            list.add(hzMaterielRecord);
                         }
+                        hzMaterielDAO.insertList(list);
                     }
-                    hzMaterielDAO.insertList(list);
-                }
-                break;
-            default:break;
+                    break;
+                default:break;
+            }
         }
-
         Page<HzMaterielRecord> page = hzMaterielDAO.findHzMaterielForPage(query);
         if(page == null || page.getResult() == null){
             return new Page<>(query.getPage(),query.getLimit(),0);
