@@ -1,23 +1,27 @@
-package sql.pojo.work;
-
-import io.swagger.models.auth.In;
-
-import java.util.Date;
+package com.connor.hozon.bom.resources.dto.request;
 
 /**
  * @Author: haozt
- * @Date: 2018/6/29
- * @Description: 加工工序
+ * @Date: 2018/7/5
+ * @Description:
  */
-public class HzWorkProcedure {
+public class UpdateHzProcessReqDTO {
     /**
-     * 主键id
+     * 工厂代码
      */
-    private String puid;
+    private String factoryCode;
     /**
-     * 工作中心id
+     * 用途
      */
-    private String pWorkPuid;
+    private String purpose;
+    /**
+     * 工作中心代码
+     */
+    private String pWorkCode;
+    /**
+     * 工作中心描述
+     */
+    private String pWorkDesc;
     /**
      * 工序代码
      */
@@ -54,39 +58,10 @@ public class HzWorkProcedure {
      * 基本数量
      */
     private Integer pCount;
-    /**
-     * 类型 （1 半成品工艺路线 2整车工艺路线  3总成分总成工艺路线  ）
-     */
-    private Integer pType;
-
-    /**
-     * 创建时间
-     */
-    private Date pCreateTime;
-    /**
-     * 更新时间
-     */
-    private Date pUpdateTime;
-
-    /**
-     * 创建人
-     */
-    private String pCreateName;
-
-    /**
-     * 更改人
-     */
-    private String pUpdateName;
-    /**
-     * 删除标志位
-     */
-    private Integer pStatus;
 
     private String projectId;
 
     private String materielId;
-
-    private String purpose;
 
     /**
      * 状态
@@ -97,12 +72,12 @@ public class HzWorkProcedure {
      */
     private String controlCode;
 
-    public String getState() {
-        return state;
+    public String getFactoryCode() {
+        return factoryCode;
     }
 
-    public void setState(String state) {
-        this.state = state;
+    public void setFactoryCode(String factoryCode) {
+        this.factoryCode = factoryCode;
     }
 
     public String getPurpose() {
@@ -113,36 +88,20 @@ public class HzWorkProcedure {
         this.purpose = purpose;
     }
 
-    public String getMaterielId() {
-        return materielId;
+    public String getpWorkCode() {
+        return pWorkCode;
     }
 
-    public void setMaterielId(String materielId) {
-        this.materielId = materielId;
+    public void setpWorkCode(String pWorkCode) {
+        this.pWorkCode = pWorkCode;
     }
 
-    public String getProjectId() {
-        return projectId;
+    public String getpWorkDesc() {
+        return pWorkDesc;
     }
 
-    public void setProjectId(String projectId) {
-        this.projectId = projectId;
-    }
-
-    public String getPuid() {
-        return puid;
-    }
-
-    public void setPuid(String puid) {
-        this.puid = puid;
-    }
-
-    public String getpWorkPuid() {
-        return pWorkPuid;
-    }
-
-    public void setpWorkPuid(String pWorkPuid) {
-        this.pWorkPuid = pWorkPuid;
+    public void setpWorkDesc(String pWorkDesc) {
+        this.pWorkDesc = pWorkDesc;
     }
 
     public String getpProcedureCode() {
@@ -217,51 +176,35 @@ public class HzWorkProcedure {
         this.pCount = pCount;
     }
 
-    public Integer getpType() {
-        return pType;
+    public String getProjectId() {
+        return projectId;
     }
 
-    public void setpType(Integer pType) {
-        this.pType = pType;
+    public void setProjectId(String projectId) {
+        this.projectId = projectId;
     }
 
-    public Date getpCreateTime() {
-        return pCreateTime;
+    public String getMaterielId() {
+        return materielId;
     }
 
-    public void setpCreateTime(Date pCreateTime) {
-        this.pCreateTime = pCreateTime;
+    public void setMaterielId(String materielId) {
+        this.materielId = materielId;
     }
 
-    public Date getpUpdateTime() {
-        return pUpdateTime;
+    public String getState() {
+        return state;
     }
 
-    public void setpUpdateTime(Date pUpdateTime) {
-        this.pUpdateTime = pUpdateTime;
+    public void setState(String state) {
+        this.state = state;
     }
 
-    public String getpCreateName() {
-        return pCreateName;
+    public String getControlCode() {
+        return controlCode;
     }
 
-    public void setpCreateName(String pCreateName) {
-        this.pCreateName = pCreateName;
-    }
-
-    public String getpUpdateName() {
-        return pUpdateName;
-    }
-
-    public void setpUpdateName(String pUpdateName) {
-        this.pUpdateName = pUpdateName;
-    }
-
-    public Integer getpStatus() {
-        return pStatus;
-    }
-
-    public void setpStatus(Integer pStatus) {
-        this.pStatus = pStatus;
+    public void setControlCode(String controlCode) {
+        this.controlCode = controlCode;
     }
 }

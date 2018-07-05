@@ -1,15 +1,14 @@
 package sql.pojo.work;
 
-import io.swagger.models.auth.In;
-
 import java.util.Date;
 
 /**
  * @Author: haozt
- * @Date: 2018/6/29
- * @Description: 加工工序
+ * @Date: 2018/7/5
+ * @Description: 工艺
  */
-public class HzWorkProcedure {
+public class HzWorkProcess {
+
     /**
      * 主键id
      */
@@ -59,33 +58,39 @@ public class HzWorkProcedure {
      */
     private Integer pType;
 
-    /**
-     * 创建时间
-     */
-    private Date pCreateTime;
-    /**
-     * 更新时间
-     */
-    private Date pUpdateTime;
 
     /**
-     * 创建人
+     * 外键 物料信息id
      */
-    private String pCreateName;
-
-    /**
-     * 更改人
-     */
-    private String pUpdateName;
-    /**
-     * 删除标志位
-     */
-    private Integer pStatus;
-
-    private String projectId;
-
     private String materielId;
 
+    /**
+     * 物料代码
+     */
+    private Object pMaterielCode;
+
+    /**
+     * 物料中文描述
+     */
+    private Object pMaterielDesc;
+    /**
+     * 工厂代码
+     */
+    private String factoryCode;
+
+    /**
+     * 工作中心代码
+     */
+    private String workCenterCode;
+
+    /**
+     * 工作中心描述
+     */
+    private String workCenterDesc;
+
+    /**
+     * 用途
+     */
     private String purpose;
 
     /**
@@ -105,28 +110,20 @@ public class HzWorkProcedure {
         this.state = state;
     }
 
+    public String getControlCode() {
+        return controlCode;
+    }
+
+    public void setControlCode(String controlCode) {
+        this.controlCode = controlCode;
+    }
+
     public String getPurpose() {
         return purpose;
     }
 
     public void setPurpose(String purpose) {
         this.purpose = purpose;
-    }
-
-    public String getMaterielId() {
-        return materielId;
-    }
-
-    public void setMaterielId(String materielId) {
-        this.materielId = materielId;
-    }
-
-    public String getProjectId() {
-        return projectId;
-    }
-
-    public void setProjectId(String projectId) {
-        this.projectId = projectId;
     }
 
     public String getPuid() {
@@ -225,43 +222,51 @@ public class HzWorkProcedure {
         this.pType = pType;
     }
 
-    public Date getpCreateTime() {
-        return pCreateTime;
+    public String getMaterielId() {
+        return materielId;
     }
 
-    public void setpCreateTime(Date pCreateTime) {
-        this.pCreateTime = pCreateTime;
+    public void setMaterielId(String materielId) {
+        this.materielId = materielId;
     }
 
-    public Date getpUpdateTime() {
-        return pUpdateTime;
+    public Object getpMaterielCode() {
+        return pMaterielCode;
     }
 
-    public void setpUpdateTime(Date pUpdateTime) {
-        this.pUpdateTime = pUpdateTime;
+    public void setpMaterielCode(Object pMaterielCode) {
+        this.pMaterielCode = pMaterielCode;
     }
 
-    public String getpCreateName() {
-        return pCreateName;
+    public Object getpMaterielDesc() {
+        return pMaterielDesc;
     }
 
-    public void setpCreateName(String pCreateName) {
-        this.pCreateName = pCreateName;
+    public void setpMaterielDesc(Object pMaterielDesc) {
+        this.pMaterielDesc = pMaterielDesc;
     }
 
-    public String getpUpdateName() {
-        return pUpdateName;
+    public String getFactoryCode() {
+        return factoryCode;
     }
 
-    public void setpUpdateName(String pUpdateName) {
-        this.pUpdateName = pUpdateName;
+    public void setFactoryCode(String factoryCode) {
+        this.factoryCode = factoryCode;
     }
 
-    public Integer getpStatus() {
-        return pStatus;
+    public String getWorkCenterCode() {
+        return workCenterCode;
     }
 
-    public void setpStatus(Integer pStatus) {
-        this.pStatus = pStatus;
+    public void setWorkCenterCode(String workCenterCode) {
+        this.workCenterCode = workCenterCode;
+    }
+
+    public String getWorkCenterDesc() {
+        return workCenterDesc;
+    }
+
+    public void setWorkCenterDesc(String workCenterDesc) {
+        this.workCenterDesc = workCenterDesc;
     }
 }

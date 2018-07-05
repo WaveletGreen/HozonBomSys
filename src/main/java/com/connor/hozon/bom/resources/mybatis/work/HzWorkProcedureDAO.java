@@ -1,6 +1,9 @@
 package com.connor.hozon.bom.resources.mybatis.work;
 
+import com.connor.hozon.bom.resources.page.Page;
+import com.connor.hozon.bom.resources.query.HzWorkProcessByPageQuery;
 import sql.pojo.work.HzWorkProcedure;
+import sql.pojo.work.HzWorkProcess;
 
 /**
  * @Author: haozt
@@ -14,4 +17,5 @@ public interface HzWorkProcedureDAO {
 
     int delete(String puid);
 
+    Page<HzWorkProcess> findHzWorkProcessByPage(HzWorkProcessByPageQuery query);
 }

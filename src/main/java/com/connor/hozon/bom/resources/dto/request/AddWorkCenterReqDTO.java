@@ -7,7 +7,7 @@ package com.connor.hozon.bom.resources.dto.request;
  */
 public class AddWorkCenterReqDTO {
     /**
-     * 工程代码
+     * 工厂代码
      */
     private String factoryCode;
     /**
