@@ -14,20 +14,18 @@
     <resultMap  extends="BaseResultMap" id="HzMaterielRecordMap" type="sql.pojo.project.HzMaterielRecord">
         <result column="P_MATERIEL_DESC_EN" jdbcType="VARCHAR" property="pMaterielDescEn" />
         <result column="P_BASIC_UNIT_MEASURE" jdbcType="VARCHAR" property="pBasicUnitMeasure" />
-        <result column="P_INVENTED_PART" jdbcType="DECIMAL" property="pInventedPart" />
+        <result column="P_INVENTED_PART" jdbcType="INTEGER" property="pInventedPart" />
         <result column="P_SPARE_MATERIAL" jdbcType="VARCHAR" property="pSpareMaterial" />
         <result column="P_VIN_PER_NO" jdbcType="VARCHAR" property="pVinPerNo" />
-        <result column="P_COLOR_PART" jdbcType="DECIMAL" property="pColorPart" />
+        <result column="P_COLOR_PART" jdbcType="INTEGER" property="pColorPart" />
         <result column="P_HEIGHT" jdbcType="VARCHAR" property="pHeight" />
-        <result column="P_IN_OUT_SIDE_FLAG" jdbcType="DECIMAL" property="pInOutSideFlag" />
-        <result column="P_3C_PART_FLAG" jdbcType="DECIMAL" property="p3cPartFlag" />
+        <result column="P_IN_OUT_SIDE_FLAG" jdbcType="INTEGER" property="pInOutSideFlag" />
+        <result column="P_3C_PART_FLAG" jdbcType="INTEGER" property="p3cPartFlag" />
         <result column="P_MRP_CONTROLLER" jdbcType="VARCHAR" property="pMrpController" />
         <result column="P_PART_IMPORTANT_DEGREE" jdbcType="VARCHAR" property="pPartImportantDegree" />
-        <result column="P_LOOSE_PART_FLAG" jdbcType="DECIMAL" property="pLoosePartFlag" />
-        <result column="P_VALID_FLAG" jdbcType="DECIMAL" property="pValidFlag" />
-        <result column="P_MATERIEL_DATA_TYPE" jdbcType="DECIMAL" property="pMaterielDataType" />
-        <result column="P_CREATE_TIME" jdbcType="DATE" property="pCreateTime" />
-        <result column="P_UPDATE_TIME" jdbcType="DATE" property="pUpdateTime" />
+        <result column="P_LOOSE_PART_FLAG" jdbcType="INTEGER" property="pLoosePartFlag" />
+        <result column="P_VALID_FLAG" jdbcType="INTEGER" property="pValidFlag" />
+        <result column="P_MATERIEL_DATA_TYPE" jdbcType="INTEGER" property="pMaterielDataType" />
         <result column="P_CREATE_NAME" jdbcType="VARCHAR" property="pCreateName" />
         <result column="P_UPDATE_NAME" jdbcType="VARCHAR" property="pUpdateName" />
         <result column="P_FACTORY_PUID" jdbcType="VARCHAR" property="pFactoryPuid" />
@@ -245,7 +243,7 @@
                 #{pBasicUnitMeasure,jdbcType=VARCHAR},
             </if>
             <if test="pInventedPart != null">
-                #{pInventedPart,jdbcType=DECIMAL},
+                #{pInventedPart,jdbcType=INTEGER},
             </if>
             <if test="pSpareMaterial != null">
                 #{pSpareMaterial,jdbcType=VARCHAR},
@@ -254,16 +252,16 @@
                 #{pVinPerNo,jdbcType=VARCHAR},
             </if>
             <if test="pColorPart != null">
-                #{pColorPart,jdbcType=DECIMAL},
+                #{pColorPart,jdbcType=INTEGER},
             </if>
             <if test="pHeight != null">
                 #{pHeight,jdbcType=VARCHAR},
             </if>
             <if test="pInOutSideFlag != null">
-                #{pInOutSideFlag,jdbcType=DECIMAL},
+                #{pInOutSideFlag,jdbcType=INTEGER},
             </if>
             <if test="p3cPartFlag != null">
-                #{p3cPartFlag,jdbcType=DECIMAL},
+                #{p3cPartFlag,jdbcType=INTEGER},
             </if>
             <if test="pMrpController != null">
                 #{pMrpController,jdbcType=VARCHAR},
@@ -272,11 +270,11 @@
                 #{pPartImportantDegree,jdbcType=VARCHAR},
             </if>
             <if test="pLoosePartFlag != null">
-                #{pLoosePartFlag,jdbcType=DECIMAL},
+                #{pLoosePartFlag,jdbcType=INTEGER},
             </if>
               1,
             <if test="pMaterielDataType != null">
-                #{pMaterielDataType,jdbcType=DECIMAL},
+                #{pMaterielDataType,jdbcType=INTEGER},
             </if>
             sysdate,
             syadate,
@@ -319,7 +317,7 @@
                 P_BASIC_UNIT_MEASURE = #{pBasicUnitMeasure,jdbcType=VARCHAR},
             </if>
             <if test="pInventedPart != null">
-                P_INVENTED_PART = #{pInventedPart,jdbcType=DECIMAL},
+                P_INVENTED_PART = #{pInventedPart,jdbcType=INTEGER},
             </if>
             <if test="pSpareMaterial != null">
                 P_SPARE_MATERIAL = #{pSpareMaterial,jdbcType=VARCHAR},
@@ -328,16 +326,16 @@
                 P_VIN_PER_NO = #{pVinPerNo,jdbcType=VARCHAR},
             </if>
             <if test="pColorPart != null">
-                P_COLOR_PART = #{pColorPart,jdbcType=DECIMAL},
+                P_COLOR_PART = #{pColorPart,jdbcType=INTEGER},
             </if>
             <if test="pHeight != null">
                 P_HEIGHT = #{pHeight,jdbcType=VARCHAR},
             </if>
             <if test="pInOutSideFlag != null">
-                P_IN_OUT_SIDE_FLAG = #{pInOutSideFlag,jdbcType=DECIMAL},
+                P_IN_OUT_SIDE_FLAG = #{pInOutSideFlag,jdbcType=INTEGER},
             </if>
             <if test="p3cPartFlag != null">
-                P_3C_PART_FLAG = #{p3cPartFlag,jdbcType=DECIMAL},
+                P_3C_PART_FLAG = #{p3cPartFlag,jdbcType=INTEGER},
             </if>
             <if test="pMrpController != null">
                 P_MRP_CONTROLLER = #{pMrpController,jdbcType=VARCHAR},
@@ -346,11 +344,11 @@
                 P_PART_IMPORTANT_DEGREE = #{pPartImportantDegree,jdbcType=VARCHAR},
             </if>
             <if test="pLoosePartFlag != null">
-                P_LOOSE_PART_FLAG = #{pLoosePartFlag,jdbcType=DECIMAL},
+                P_LOOSE_PART_FLAG = #{pLoosePartFlag,jdbcType=INTEGER},
             </if>
 
             <if test="pMaterielDataType != null">
-                P_MATERIEL_DATA_TYPE = #{pMaterielDataType,jdbcType=DECIMAL},
+                P_MATERIEL_DATA_TYPE = #{pMaterielDataType,jdbcType=INTEGER},
             </if>
                 P_UPDATE_TIME = sysdate,
             <if test="pCreateName != null">

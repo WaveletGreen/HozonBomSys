@@ -138,7 +138,7 @@ public class HzMaterielController  extends BaseController {
             return "";
         }
         model.addAttribute("data",respDTO);
-        return"bomManage/mbom/mbomMaintenance/updateMbomMaintenance";
+        return"bomManage/mbom/materialData/addMaterialData";
     }
 
     /**
@@ -154,7 +154,7 @@ public class HzMaterielController  extends BaseController {
             return "";
         }
         model.addAttribute("data",respDTO);
-        return"bomManage/mbom/mbomMaintenance/updateMbomMaintenance";
+        return"bomManage/mbom/materialData/updateMaterialData";
     }
 
 

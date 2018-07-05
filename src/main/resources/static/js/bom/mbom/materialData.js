@@ -1,21 +1,39 @@
 $(document).ready((function () {
-    initTable();
+    var projectId =  $("#project", window.top.document).val();
+    var url = "materiel/getMateriel?projectId="+projectId;
+    initTable(url);
 }))
 
 function doQuery() {
-    $('#materialDataTable').bootstrapTable('refresh');    //刷新表格
+    //$('#materialDataTable').bootstrapTable('refresh');    //刷新表格
+    var projectId =  $("#project", window.top.document).val();
+    var url = "materiel/getMateriel?projectId="+projectId;
+    var pMaterielCode = $("#pMaterielCode").val();
+    url+="&pMaterielCode="+pMaterielCode;
+    var pMaterielType = $("#pMaterielType").val();
+    url+="&pMaterielType="+pMaterielType;
+    var pMaterielDataType = $("#pMaterielDataType").val();
+    if (pMaterielDataType=="车型项目物料总表") {
+        url += "&pMaterielDataType="+"";
+    }
+    else {
+        url += "&pMaterielDataType="+pMaterielDataType;
+    }
+    initTable(url);
+    $('#materialDataTable').bootstrapTable('destroy');
+    console.log("有搜索框的参数是："+url)
 }
 
-function initTable() {
+function initTable(url) {
+    var projectId =  $("#project", window.top.document).val();
     var $table = $("#materialDataTable");
     var column = [];
     $.ajax({
-        url: "mbom/materialDataTitel",
+        url: "materiel/title",
         type: "GET",
         success: function (result) {
             var column = [];
-            column.push({field: 'Puid', title: 'puid'});
-            // column.push({field: 'ck', checkbox: true, Width: 50});
+            column.push({field: 'ck', checkbox: true, Width: 50});
             /*column.push({field: '',
                 title: '序号',
                 formatter: function (value, row, index) {
@@ -44,7 +62,7 @@ function initTable() {
             }
             ;
             $table.bootstrapTable({
-                url: "",
+                url: url,
                 method: 'GET',
                 dataType: 'json',
                 cache: false,
@@ -78,9 +96,15 @@ function initTable() {
                         text: '添加',
                         iconCls: 'glyphicon glyphicon-plus',
                         handler: function () {
+                            var rows = $table.bootstrapTable('getSelections');
+                            //只能选一条
+                            if (rows.length != 1) {
+                                window.Ewin.alert({message: '请选择一条需要添加的数据!'});
+                                return false;
+                            }
                             window.Ewin.dialog({
                                 title: "添加",
-                                url: "mbom/addMBom?projectId=" + projectPuid + "&eBomPuid=" + rows[0].eBomPuid,
+                                url: "materiel/addMateriel?projectId=" + projectId + "&puid=" + rows[0].puid,
                                 gridId: "gridId",
                                 width: 500,
                                 height: 650
@@ -99,7 +123,7 @@ function initTable() {
                             }
                             window.Ewin.dialog({
                                 title: "修改",
-                                url: "mbom/updateMBom?projectId=" + projectPuid + "&eBomPuid=" + rows[0].eBomPuid,
+                                url: "materiel/updateMBom?projectId=" + projectId + "&puid=" + rows[0].puid,
                                 gridId: "gridId",
                                 width: 500,
                                 height: 650
@@ -120,7 +144,43 @@ function initTable() {
                                     $.ajax({
                                         type: "POST",
                                         //ajax需要添加打包名
-                                        url: "mbom/delete?eBomPuid=" + rows[0].eBomPuid,
+                                        url: "materiel/delete?puid=" + rows[0].puid,
+                                        //data: JSON.stringify(rows),
+                                        contentType: "application/json",
+                                        success: function (result) {
+                                            /*if (result.status) {
+                                                window.Ewin.alert({message: result.errMsg});
+                                                //刷新，会重新申请数据库数据
+                                            }
+                                            else {
+                                                window.Ewin.alert({message: ":" + result.errMsg});
+                                            }*/
+                                            window.Ewin.alert({message: result.errMsg});
+                                            $table.bootstrapTable("refresh");
+                                        },
+                                        error: function (info) {
+                                            window.Ewin.alert({message: "操作删除:" + info.status});
+                                        }
+                                    })
+                                }
+                            });
+                        }
+                    },
+                    {
+                        text: '发送SAP',
+                        iconCls: 'glyphicon glyphicon-remove',
+                        handler: function () {
+                            var rows = $table.bootstrapTable('getSelections');
+                            if (rows.length == 0) {
+                                window.Ewin.alert({message: '请选择需要发送的数据!'});
+                                return false;
+                            }
+                            window.Ewin.confirm({title: '提示', message: '是否要发送您所选择的记录？', width: 500}).on(function (e) {
+                                if (e) {
+                                    $.ajax({
+                                        type: "POST",
+                                        //ajax需要添加打包名
+                                        url: "materiel/delete?puid=" + rows[0].puid,
                                         //data: JSON.stringify(rows),
                                         contentType: "application/json",
                                         success: function (result) {
@@ -144,7 +204,7 @@ function initTable() {
                     }
                 ],
             });
-            $table.bootstrapTable('hideColumn', 'Puid');
+            $table.bootstrapTable('hideColumn', 'puid');
         }
     })
 }
