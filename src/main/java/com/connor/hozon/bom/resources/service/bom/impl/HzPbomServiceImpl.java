@@ -76,6 +76,7 @@ public class HzPbomServiceImpl implements HzPbomService {
                 respDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
                 return respDTO;
             }
+            int maxOrderNum = hzPbomRecordDAO.getHzPbomMaxOrderNum();
             HzPbomRecord hzPbomRecord = new HzPbomRecord();
             hzPbomRecord.setCreateName(UserInfo.getUser().getUserName());
             hzPbomRecord.setUpdateName(UserInfo.getUser().getUserName());
@@ -110,6 +111,7 @@ public class HzPbomServiceImpl implements HzPbomService {
             hzPbomRecord.setStation(recordReqDTO.getStation());
             hzPbomRecord.setWorkShop1(recordReqDTO.getWorkShop1());
             hzPbomRecord.setWorkShop2(recordReqDTO.getWorkShop2());
+            hzPbomRecord.setOrderNum(++maxOrderNum);
             int i = hzPbomRecordDAO.update(hzPbomRecord);
             if(i>0){
                respDTO.setErrMsg("操作成功！");
@@ -462,7 +464,7 @@ public class HzPbomServiceImpl implements HzPbomService {
             List<HzBomLineRecord> lineRecords = hzBomLineRecordDao.getAllBomLineRecordByProjectId(query.getProjectId());
             if(ListUtil.isNotEmpty(lineRecords)){
                 int size = lineRecords.size();
-                //分批插入数据
+                //分批插入数据 一次1000条
                 int i =0;
                 if(size>1000){
                     for(i =0;i<size/1000;i++){
@@ -535,6 +537,7 @@ public class HzPbomServiceImpl implements HzPbomService {
         hzPbomLineRecord.setpBomOfWhichDept(record.getpBomOfWhichDept());
         hzPbomLineRecord.setpBomLinePartEnName(record.getpBomLinePartEnName());
         hzPbomLineRecord.setpBomLinePartResource(record.getpBomLinePartResource());
+        hzPbomLineRecord.setOrderNum(record.getOrderNum());
         return hzPbomLineRecord;
     }
 
@@ -694,6 +697,7 @@ public class HzPbomServiceImpl implements HzPbomService {
                 respDTO.setMouldType(record.getMouldType() );
                 respDTO.setOuterPart(record.getOuterPart());
                 respDTO.setStation(record.getStation());
+                respDTO.setOrderNum(record.getOrderNum());
                 respDTOS.add(respDTO);
             }
             return respDTOS;

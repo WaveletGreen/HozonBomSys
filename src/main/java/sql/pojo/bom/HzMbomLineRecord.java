@@ -186,6 +186,16 @@ public class HzMbomLineRecord {
      */
     private String cfg0ModelRecordId;
 
+    private String resource;
+
+    public String getResource() {
+        return resource;
+    }
+
+    public void setResource(String resource) {
+        this.resource = resource;
+    }
+
     public String getpBomLinePartEnName() {
         return pBomLinePartEnName;
     }

@@ -80,4 +80,9 @@ public class HzPbomRecordDAOImpl extends BaseSQLUtil implements HzPbomRecordDAO 
         return (int)super.findForObject("HzPbomRecordDAOImpl_getTotalCount",map);
     }
 
+    @Override
+    public int getHzPbomMaxOrderNum() {
+        return(int) super.findForObject("HzPbomRecordDAOImpl_findMaxOrderNum",null);
+    }
+
 }
