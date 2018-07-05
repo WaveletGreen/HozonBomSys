@@ -102,6 +102,51 @@ public class HzWorkProcess {
      */
     private String controlCode;
 
+    /**
+     * 创建者
+     */
+    private String pCreateName;
+    /**
+     * 更新者
+     */
+    private String pUpdateName;
+
+    private Date pCreateTime;
+
+    private Date pUpdateTime;
+
+    public String getpCreateName() {
+        return pCreateName;
+    }
+
+    public void setpCreateName(String pCreateName) {
+        this.pCreateName = pCreateName;
+    }
+
+    public String getpUpdateName() {
+        return pUpdateName;
+    }
+
+    public void setpUpdateName(String pUpdateName) {
+        this.pUpdateName = pUpdateName;
+    }
+
+    public Date getpCreateTime() {
+        return pCreateTime;
+    }
+
+    public void setpCreateTime(Date pCreateTime) {
+        this.pCreateTime = pCreateTime;
+    }
+
+    public Date getpUpdateTime() {
+        return pUpdateTime;
+    }
+
+    public void setpUpdateTime(Date pUpdateTime) {
+        this.pUpdateTime = pUpdateTime;
+    }
+
     public String getState() {
         return state;
     }

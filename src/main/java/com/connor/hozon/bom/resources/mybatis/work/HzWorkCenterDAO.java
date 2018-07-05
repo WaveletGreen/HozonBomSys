@@ -47,4 +47,12 @@ public interface HzWorkCenterDAO {
      * @return
      */
     HzWorkCenter findWorkCenterById(String projectId,String puid);
+
+    /**
+     * 查询一条数据
+     * @param pWorkCode
+     * @param projectId
+     * @return
+     */
+    HzWorkCenter findWorkCenter(String projectId,String pWorkCode);
 }

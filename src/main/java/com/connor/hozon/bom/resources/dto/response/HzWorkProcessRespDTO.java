@@ -6,6 +6,7 @@ package com.connor.hozon.bom.resources.dto.response;
  * @Description:
  */
 public class HzWorkProcessRespDTO {
+    private Integer No;
     /**
      * 主键id
      */
@@ -73,11 +74,12 @@ public class HzWorkProcessRespDTO {
     /**
      * 工作中心代码
      */
-    private String workCenterCode;
+    private String pWorkCode;
 
     /**
      * 工作中心描述
      */
+    private String pWorkDesc;
     private String workCenterDesc;
     /**
      * 用途
@@ -91,6 +93,14 @@ public class HzWorkProcessRespDTO {
      * 控制码
      */
     private String controlCode;
+
+    public Integer getNo() {
+        return No;
+    }
+
+    public void setNo(Integer no) {
+        No = no;
+    }
 
     public String getControlCode() {
         return controlCode;
@@ -236,19 +246,19 @@ public class HzWorkProcessRespDTO {
         this.factoryCode = factoryCode;
     }
 
-    public String getWorkCenterCode() {
-        return workCenterCode;
+    public String getpWorkCode() {
+        return pWorkCode;
     }
 
-    public void setWorkCenterCode(String workCenterCode) {
-        this.workCenterCode = workCenterCode;
+    public void setpWorkCode(String pWorkCode) {
+        this.pWorkCode = pWorkCode;
     }
 
-    public String getWorkCenterDesc() {
-        return workCenterDesc;
+    public String getpWorkDesc() {
+        return pWorkDesc;
     }
 
-    public void setWorkCenterDesc(String workCenterDesc) {
-        this.workCenterDesc = workCenterDesc;
+    public void setpWorkDesc(String pWorkDesc) {
+        this.pWorkDesc = pWorkDesc;
     }
 }

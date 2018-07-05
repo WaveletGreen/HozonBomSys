@@ -459,6 +459,7 @@ public class HzMaterielServiceImpl implements HzMaterielService {
         respDTO.setpPartImportantDegree(record.getpPartImportantDegree());
         respDTO.setpSpareMaterial(record.getpSpareMaterial());
         respDTO.setpVinPerNo(record.getpVinPerNo());
+        respDTO.setResource(record.getResource());
         return respDTO;
     }
 }

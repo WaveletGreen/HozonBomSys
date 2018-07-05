@@ -18,4 +18,6 @@ public interface HzWorkProcedureDAO {
     int delete(String puid);
 
     Page<HzWorkProcess> findHzWorkProcessByPage(HzWorkProcessByPageQuery query);
+
+    HzWorkProcess getHzWorkProcess(String materielId,String projectId);
 }

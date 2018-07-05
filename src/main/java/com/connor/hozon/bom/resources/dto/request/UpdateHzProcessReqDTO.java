@@ -59,7 +59,6 @@ public class UpdateHzProcessReqDTO {
      */
     private Integer pCount;
 
-    private String projectId;
 
     private String materielId;
 
@@ -174,14 +173,6 @@ public class UpdateHzProcessReqDTO {
 
     public void setpCount(Integer pCount) {
         this.pCount = pCount;
-    }
-
-    public String getProjectId() {
-        return projectId;
-    }
-
-    public void setProjectId(String projectId) {
-        this.projectId = projectId;
     }
 
     public String getMaterielId() {

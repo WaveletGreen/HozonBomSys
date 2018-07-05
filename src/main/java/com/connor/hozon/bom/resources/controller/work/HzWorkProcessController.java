@@ -1,13 +1,28 @@
 package com.connor.hozon.bom.resources.controller.work;
 
 import com.connor.hozon.bom.resources.controller.BaseController;
+import com.connor.hozon.bom.resources.dto.request.AddHzProcessReqDTO;
+import com.connor.hozon.bom.resources.dto.request.AddMbomReqDTO;
+import com.connor.hozon.bom.resources.dto.request.UpdateHzProcessReqDTO;
+import com.connor.hozon.bom.resources.dto.request.UpdateMbomReqDTO;
+import com.connor.hozon.bom.resources.dto.response.HzMbomRecordRespDTO;
+import com.connor.hozon.bom.resources.dto.response.HzWorkProcessRespDTO;
+import com.connor.hozon.bom.resources.dto.response.OperateResultMessageRespDTO;
+import com.connor.hozon.bom.resources.page.Page;
+import com.connor.hozon.bom.resources.query.HzMbomByPageQuery;
+import com.connor.hozon.bom.resources.query.HzWorkProcessByPageQuery;
+import com.connor.hozon.bom.resources.service.work.HzWorkProcessService;
 import com.connor.hozon.bom.resources.util.ResultMessageBuilder;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.LinkedHashMap;
+import java.util.*;
 
 /**
  * @Author: haozt
@@ -17,6 +32,9 @@ import java.util.LinkedHashMap;
 @Controller
 @RequestMapping(value = "work/process")
 public class HzWorkProcessController extends BaseController {
+
+    @Autowired
+    private HzWorkProcessService hzWorkProcessService;
     /**
      * 工艺路线的标题
      * @param response
@@ -24,6 +42,7 @@ public class HzWorkProcessController extends BaseController {
     @RequestMapping(value = "title",method = RequestMethod.GET)
     public void HzWorkProcessTitle(HttpServletResponse response) {
         LinkedHashMap<String, String> title = new LinkedHashMap<>();
+        title.put("No", "序号");
         title.put("pMaterielCode", "物料");
         title.put("pMaterielDesc","物料名称");
         title.put("factoryCode", "工厂");
@@ -52,7 +71,9 @@ public class HzWorkProcessController extends BaseController {
      * @return
      */
     @RequestMapping(value = "addWorkProcess",method = RequestMethod.GET)
-    public String addWorkProcessToPage(){
+    public String addWorkProcessToPage(String materielId, String projectId, Model model){
+        HzWorkProcessRespDTO respDTO = hzWorkProcessService.findHzWorkProcess(materielId,projectId);
+        model.addAttribute("data",respDTO);
         return  "bomManage/mbom/routingData/addRoutingData";
     }
     /**
@@ -60,7 +81,89 @@ public class HzWorkProcessController extends BaseController {
      * @return
      */
     @RequestMapping(value = "updateWorkProcess",method = RequestMethod.GET)
-    public String updateWorkProcessToPage(){
+    public String updateWorkProcessToPage(String materielId, String projectId, Model model){
+        HzWorkProcessRespDTO respDTO = hzWorkProcessService.findHzWorkProcess(materielId,projectId);
+        model.addAttribute("data",respDTO);
       return  "bomManage/mbom/routingData/updateRoutingData";
     }
+
+
+    /**
+     * 插入一条记录
+     * @param reqDTO
+     * @param response
+     */
+    @RequestMapping(value = "add",method = RequestMethod.POST)
+    public void addHzWorkProcessToDB(@RequestBody AddHzProcessReqDTO reqDTO, HttpServletResponse response){
+        OperateResultMessageRespDTO respDTO = hzWorkProcessService.addHzWorkProcess(reqDTO);
+        writeAjaxJSONResponse(ResultMessageBuilder.build(OperateResultMessageRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
+    }
+
+    /**
+     * 编辑一条记录
+     * @param reqDTO
+     * @param response
+     */
+    @RequestMapping(value = "update",method = RequestMethod.POST)
+    public void updateHzWorkProcessToDB(@RequestBody UpdateHzProcessReqDTO reqDTO, HttpServletResponse response){
+        OperateResultMessageRespDTO respDTO = hzWorkProcessService.updateHzWorkProcess(reqDTO);
+        writeAjaxJSONResponse(ResultMessageBuilder.build(OperateResultMessageRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
+    }
+
+    /**
+     * 删除一条记录
+     * @param puid
+     * @param response
+     */
+    @RequestMapping(value = "delete",method = RequestMethod.POST)
+    public void deleteHzWorkProcess(String puid,HttpServletResponse response){
+        OperateResultMessageRespDTO respDTO =  hzWorkProcessService.deleteHzWorkProcess(puid);
+        writeAjaxJSONResponse(ResultMessageBuilder.build(OperateResultMessageRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
+    }
+
+    /**
+     * 分页获取工艺数据 记录
+     *
+     * @param query
+     * @return
+     */
+    @RequestMapping(value = "record/page", method = RequestMethod.GET)
+    @ResponseBody
+    public Map<String, Object> getHzWorkProcessRecordForPage(HzWorkProcessByPageQuery query) {
+        Page<HzWorkProcessRespDTO> page = hzWorkProcessService.findHzWorkProcessForPage(query);
+        if (page == null) {
+            return new HashMap<>();
+        }
+        List<HzWorkProcessRespDTO> list = page.getResult();
+        Map<String, Object> ret = new HashMap<>();
+        List<Map<String, Object>> _list = new ArrayList<>();
+        list.forEach(dto -> {
+            Map<String, Object> _res = new HashMap<>();
+            _res.put("No", dto.getNo());
+            _res.put("materielId", dto.getMaterielId());
+            _res.put("pMaterielCode", dto.getpMaterielCode());
+            _res.put("pMaterielDesc", dto.getpMaterielDesc());
+            _res.put("factoryCode", dto.getFactoryCode());
+            _res.put("purpose", dto.getPurpose());
+            _res.put("state", dto.getState());
+            _res.put("pProcedureCode", dto.getpProcedureCode());
+            _res.put("workCenterCode", dto.getpWorkCode());
+            _res.put("workCenterDesc", dto.getpWorkDesc());
+            _res.put("controlCode", dto.getControlCode());
+            _res.put("pProcedureDesc", dto.getpProcedureDesc());
+            _res.put("pCount", dto.getpCount());
+            _res.put("pDirectLabor", dto.getpDirectLabor());
+            _res.put("pIndirectLabor", dto.getpIndirectLabor());
+            _res.put("pMachineLabor", dto.getpMachineLabor());
+            _res.put("pBurn", dto.getpBurn());
+            _res.put("pMachineMaterialLabor", dto.getpMachineMaterialLabor());
+            _res.put("pOtherCost", dto.getpOtherCost());
+
+            _list.add(_res);
+        });
+        ret.put("totalCount", page.getTotalCount());
+        ret.put("result", _list);
+        return ret;
+    }
+
 }
