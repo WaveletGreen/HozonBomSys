@@ -28,12 +28,20 @@
     P_CREATE_TIME, P_UPDATE_TIME, P_CREATE_NAME, P_UPDATE_NAME, P_STATUS,P_PROJECT_PUID
   </sql>
 
+
+  
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
     from HZ_WORK_PROCEDURE
     where PUID = #{puid,jdbcType=VARCHAR}
   </select>
+
+
+
+
+
+
 
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from HZ_WORK_PROCEDURE
