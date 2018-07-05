@@ -107,7 +107,7 @@ function loadData() {
             },
             {
                 text: '发送到ERP',
-                iconCls: 'glyphicon glyphicon-remove',
+                iconCls: 'glyphicon glyphicon-send',
                 handler: function () {
                     var rows = $table.bootstrapTable('getSelections');
                     if (rows.length == 0) {

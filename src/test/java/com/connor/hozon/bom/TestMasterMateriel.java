@@ -42,10 +42,10 @@ public class TestMasterMateriel {
         //设置工厂
         reflectMateriel.setFactory(hzFactory == null ? "1001" : hzFactory.getpFactoryCode());
         //设置动作描述代码
-        reflectMateriel.setActionFlagOption(ActionFlagOption.ADD);
+        reflectMateriel.setActionFlagOption(ActionFlagOption.DELETE);
         //设置MRP控制者，公告号和采购类型
         reflectMateriel.setMRPAndPurchase(MRPControlOption.MRP_FICTITIOUS.GetDesc(),
-                PurchaseOption.PURCHASE_MAKE.GetDesc(),
+                /*PurchaseOption.PURCHASE_MAKE.GetDesc()*/null,
                 "公告号");
         String uuid = UUIDHelper.generateUpperUid();
         String lineNum = uuid.substring(0, 5);

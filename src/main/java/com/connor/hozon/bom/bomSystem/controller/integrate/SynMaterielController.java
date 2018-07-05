@@ -1,11 +1,11 @@
 package com.connor.hozon.bom.bomSystem.controller.integrate;
 
 import com.connor.hozon.bom.bomSystem.service.iservice.integrate.ISynMaterielService;
+import com.connor.hozon.bom.resources.dto.request.UpdateHzMaterielReqDTO;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -22,40 +22,43 @@ public class SynMaterielController {
     /**
      * 删除物料主数据
      *
-     * @param puids
+     * @param dtos
      * @return
      */
     @RequestMapping("/deleteByPuids")
-    public JSONObject deleteByPuids(List<String> puids) {
-        return iSynMaterielService.deleteByPuids(puids);
+    @ResponseBody
+    public JSONObject deleteByPuids(List<UpdateHzMaterielReqDTO> dtos) {
+        return iSynMaterielService.deleteByPuids(dtos);
     }
 
     /**
      * 更新物料主数据
      *
-     * @param puids
+     * @param dtos
      * @return
      */
-    @RequestMapping("/updateByPuids")
-    public JSONObject updateByPuids(List<String> puids) {
-        return iSynMaterielService.updateByPuids(puids);
+    @RequestMapping(value = "/updateByPuids", method = RequestMethod.POST)
+    @ResponseBody
+    public JSONObject updateByPuids(@RequestBody List<UpdateHzMaterielReqDTO> dtos) {
+        return iSynMaterielService.updateByPuids(dtos);
     }
 
     /**
      * 一开始触发同步所有数据
      *
-     * @param projectPuid
+     * @param projectId
      * @return
      */
-    @RequestMapping("/synAllByProjectPuid")
-    public JSONObject synAllByProjectPuid(@RequestParam("projectPuid") String projectPuid) {
+    @RequestMapping(value = "/synAllByProjectPuid", method = RequestMethod.POST)
+    @ResponseBody
+    public JSONObject synAllByProjectPuid(@RequestParam("projectId") String projectId) {
         JSONObject result = new JSONObject();
-        if (projectPuid == null || "".equalsIgnoreCase(projectPuid)) {
+        if (projectId == null || "".equalsIgnoreCase(projectId)) {
             result.put("status", false);
             result.put("result", "请选择项目再操作!");
             return result;
         }
-        return iSynMaterielService.synAllByProjectPuid(projectPuid);
+        return iSynMaterielService.synAllByProjectPuid(projectId);
     }
 
 }

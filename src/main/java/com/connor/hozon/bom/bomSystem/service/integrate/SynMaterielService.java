@@ -1,6 +1,7 @@
 package com.connor.hozon.bom.bomSystem.service.integrate;
 
 import com.connor.hozon.bom.bomSystem.service.iservice.integrate.ISynMaterielService;
+import com.connor.hozon.bom.resources.dto.request.UpdateHzMaterielReqDTO;
 import com.connor.hozon.bom.resources.mybatis.factory.HzFactoryDAO;
 import com.connor.hozon.bom.resources.mybatis.materiel.HzMaterielDAO;
 import com.connor.hozon.bom.resources.query.HzMaterielQuery;
@@ -45,23 +46,23 @@ public class SynMaterielService implements ISynMaterielService {
     /**
      * 更新操作
      *
-     * @param puids
+     * @param dtos
      * @return
      */
     @Override
-    public JSONObject updateByPuids(List<String> puids) {
-        return updateOrDelete(puids, ActionFlagOption.UPDATE_EMPTY);
+    public JSONObject updateByPuids(List<UpdateHzMaterielReqDTO> dtos) {
+        return updateOrDelete(dtos, ActionFlagOption.UPDATE_EMPTY);
     }
 
     /**
      * 删除操作
      *
-     * @param puids
+     * @param dtos
      * @return
      */
     @Override
-    public JSONObject deleteByPuids(List<String> puids) {
-        return updateOrDelete(puids, ActionFlagOption.DELETE);
+    public JSONObject deleteByPuids(List<UpdateHzMaterielReqDTO> dtos) {
+        return updateOrDelete(dtos, ActionFlagOption.DELETE);
     }
 
     /**
@@ -88,13 +89,13 @@ public class SynMaterielService implements ISynMaterielService {
     }
 
     /**
-     * @param puids
+     * @param dtos
      * @param option 操作标识符，更新可传
      * @return
      */
-    private JSONObject updateOrDelete(List<String> puids, ActionFlagOption option) {
+    private JSONObject updateOrDelete(List<UpdateHzMaterielReqDTO> dtos, ActionFlagOption option) {
         JSONObject result;
-        if (puids == null || puids.isEmpty()) {
+        if (dtos == null || dtos.isEmpty()) {
             result = new JSONObject();
             result.put("status", false);
             result.put("msg", "查无数据");
@@ -106,6 +107,9 @@ public class SynMaterielService implements ISynMaterielService {
 
 
         List<HzMaterielRecord> sorted = new ArrayList<>();
+        List<String> puids = new ArrayList<>();
+
+        dtos.forEach(dto -> puids.add(dto.getPuid()));
 
         for (String puid : puids) {
             //拒绝为空
@@ -131,6 +135,7 @@ public class SynMaterielService implements ISynMaterielService {
      * @return
      */
     private JSONObject execute(List<HzMaterielRecord> sorted, ActionFlagOption option) {
+        transMasterMaterialService.setClearInputEachTime(true);
         StringBuilder sbs = new StringBuilder();
         StringBuilder sbf = new StringBuilder();
         JSONObject result = new JSONObject();
@@ -139,7 +144,7 @@ public class SynMaterielService implements ISynMaterielService {
         Map<String, String> _factoryCoach = new HashMap<>();
 
         sbs.append("更新成功项:<br/>");
-        sbs.append("更新失败项:<br/>");
+        sbf.append("更新失败项:<br/>");
 
         boolean hasFail = false;
 

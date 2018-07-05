@@ -115,7 +115,7 @@ public class AddHzMaterielReqDTO {
         this.resource = resource;
     }
 
-    public Object getpMaterielCode() {
+    public String getpMaterielCode() {
         return pMaterielCode;
     }
 

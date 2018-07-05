@@ -106,7 +106,7 @@ public class UpdateHzMaterielReqDTO {
         this.projectId = projectId;
     }
 
-    public Object getpMaterielCode() {
+    public String getpMaterielCode() {
         return pMaterielCode;
     }
 
