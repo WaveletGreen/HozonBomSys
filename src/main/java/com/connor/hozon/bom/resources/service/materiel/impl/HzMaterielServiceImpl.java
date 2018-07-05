@@ -259,7 +259,7 @@ public class HzMaterielServiceImpl implements HzMaterielService {
                                 else{
                                     hzMaterielRecord.setpFactoryPuid(puid);
                                 }
-                                hzMaterielRecord.setpMaterielCode(record.getLineID());
+                                hzMaterielRecord.setpMaterielCode(record.getLineId());
                                 hzMaterielRecord.setpMaterielDesc(record.getpBomLinePartName());
                                 hzMaterielRecord.setpMaterielDescEn(record.getpBomLinePartEnName());
                                 hzMaterielRecord.setpMaterielType("A002");
@@ -290,7 +290,7 @@ public class HzMaterielServiceImpl implements HzMaterielService {
                                 else{
                                     hzMaterielRecord.setpFactoryPuid(puid);
                                 }
-                                hzMaterielRecord.setpMaterielCode(record.getLineID());
+                                hzMaterielRecord.setpMaterielCode(record.getLineId());
                                 hzMaterielRecord.setpMaterielDesc(record.getpBomLinePartName());
                                 hzMaterielRecord.setpMaterielDescEn(record.getpBomLinePartEnName());
                                 hzMaterielRecord.setpMaterielType("A002");
@@ -321,7 +321,7 @@ public class HzMaterielServiceImpl implements HzMaterielService {
                                 else{
                                     hzMaterielRecord.setpFactoryPuid(puid);
                                 }
-                                hzMaterielRecord.setpMaterielCode(record.getLineID());
+                                hzMaterielRecord.setpMaterielCode(record.getLineId());
                                 hzMaterielRecord.setpMaterielDesc(record.getpBomLinePartName());
                                 hzMaterielRecord.setpMaterielDescEn(record.getpBomLinePartEnName());
                                 hzMaterielRecord.setpMaterielType("A002");
@@ -352,7 +352,7 @@ public class HzMaterielServiceImpl implements HzMaterielService {
                                 else{
                                     hzMaterielRecord.setpFactoryPuid(puid);
                                 }
-                                hzMaterielRecord.setpMaterielCode(record.getLineID());
+                                hzMaterielRecord.setpMaterielCode(record.getLineId());
                                 hzMaterielRecord.setpMaterielDesc(record.getpBomLinePartName());
                                 hzMaterielRecord.setpMaterielDescEn(record.getpBomLinePartEnName());
                                 hzMaterielRecord.setpMaterielType("A002");

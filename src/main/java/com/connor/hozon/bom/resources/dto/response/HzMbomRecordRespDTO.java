@@ -22,9 +22,23 @@ public class HzMbomRecordRespDTO {
      */
     private String lineId;
     /**
-     * 名称
+     * Bom行对应的零件名
      */
-    private String object_name;
+    private String pBomLinePartName;
+
+    /**
+     * 英文名称
+     */
+    private String pBomLinePartEnName;
+    /**
+     * Bom行对应的零件类别
+     */
+    private String pBomLinePartClass;
+
+    /**
+     * 零件来源
+     */
+    private String pBomLinePartResource;
 
     /**
      * bom排列序号
@@ -84,6 +98,16 @@ public class HzMbomRecordRespDTO {
      */
     private String changeNum;
 
+    private String object_name;
+
+    public String getObject_name() {
+        return object_name;
+    }
+
+    public void setObject_name(String object_name) {
+        this.object_name = object_name;
+    }
+
     public String getPuid() {
         return puid;
     }
@@ -132,12 +156,36 @@ public class HzMbomRecordRespDTO {
         this.lineId = lineId;
     }
 
-    public String getObject_name() {
-        return object_name;
+    public String getpBomLinePartEnName() {
+        return pBomLinePartEnName;
     }
 
-    public void setObject_name(String object_name) {
-        this.object_name = object_name;
+    public void setpBomLinePartEnName(String pBomLinePartEnName) {
+        this.pBomLinePartEnName = pBomLinePartEnName;
+    }
+
+    public String getpBomLinePartClass() {
+        return pBomLinePartClass;
+    }
+
+    public void setpBomLinePartClass(String pBomLinePartClass) {
+        this.pBomLinePartClass = pBomLinePartClass;
+    }
+
+    public String getpBomLinePartResource() {
+        return pBomLinePartResource;
+    }
+
+    public void setpBomLinePartResource(String pBomLinePartResource) {
+        this.pBomLinePartResource = pBomLinePartResource;
+    }
+
+    public String getpBomLinePartName() {
+        return pBomLinePartName;
+    }
+
+    public void setpBomLinePartName(String pBomLinePartName) {
+        this.pBomLinePartName = pBomLinePartName;
     }
 
     public String getSparePart() {

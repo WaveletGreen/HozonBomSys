@@ -183,7 +183,7 @@ public class HzMbomController extends BaseController {
             _res.put("level", dto.getLevel());
             _res.put("pBomOfWhichDept", dto.getpBomOfWhichDept());
             _res.put("lineId", dto.getLineId());
-            _res.put("object_name", dto.getObject_name());
+            _res.put("object_name", dto.getpBomLinePartName());
             _res.put("sparePart", dto.getSparePart());
             _res.put("sparePartNum", dto.getSparePartNum());
             _res.put("processRoute", dto.getProcessRoute());
@@ -215,7 +215,7 @@ public class HzMbomController extends BaseController {
         }
         HzMbomRecordRespDTO hzMbomRecordRespDTO = new HzMbomRecordRespDTO();
         hzMbomRecordRespDTO.seteBomPuid(respDTO.geteBomPuid());
-        hzMbomRecordRespDTO.setObject_name(respDTO.getObject_name());
+        hzMbomRecordRespDTO.setObject_name(respDTO.getpBomLinePartName());
         hzMbomRecordRespDTO.setLevel(respDTO.getLevel());
         hzMbomRecordRespDTO.setLineId(respDTO.getLineId());
         hzMbomRecordRespDTO.setpBomOfWhichDept(respDTO.getpBomOfWhichDept());

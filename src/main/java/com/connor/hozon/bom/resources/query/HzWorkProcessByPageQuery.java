@@ -8,6 +8,9 @@ package com.connor.hozon.bom.resources.query;
 public class HzWorkProcessByPageQuery extends DefaultPageQuery {
     private String projectId;
 
+    /**
+     *
+     */
     private Integer type;
 
     public Integer getType() {

@@ -22,7 +22,7 @@ import java.util.Map;
 public class HzMbomRecordDAOImpl extends BaseSQLUtil implements HzMbomRecordDAO {
 
     @Override
-    public int insertList(List<HzMbomRecord> list) {
+    public int insertList(List<HzMbomLineRecord> list) {
         return super.insert("HzMbomRecordDAOImpl_insertList",list);
     }
 
@@ -103,5 +103,17 @@ public class HzMbomRecordDAOImpl extends BaseSQLUtil implements HzMbomRecordDAO 
         map.put("projectId",projectId);
         map.put("parentUid",parentPuid);
         return (HzMbomLineRecord) super.findForObject("HzMbomRecordDAOImpl_getHzMbom",map);
+    }
+
+    @Override
+    public Integer getHzMbomTotalCount(String projectId) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("projectId",projectId);
+        return (Integer) super.findForObject("HzMbomRecordDAOImpl_getTotalCount",map);
+    }
+
+    @Override
+    public Integer getHzMbomMaxOrderNum(String projectId) {
+        return (Integer) super.findForObject("HzMbomRecordDAOImpl_getHzMbomMaxOrderNum",projectId);
     }
 }

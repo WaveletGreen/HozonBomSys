@@ -595,37 +595,6 @@ public class HzPbomServiceImpl implements HzPbomService {
         return new String[]{line, String.valueOf(rank)};
     }
 
-    private List<HzMbomRecordRespDTO> pbomLineMaintailRecordToRespDTOS(List<HzMbomLineRecord> records) {
-        List<HzMbomRecordRespDTO> respDTOS = new ArrayList<>();
-        for (HzMbomLineRecord record : records) {
-            HzMbomRecordRespDTO responseDTO = new HzMbomRecordRespDTO();
-            //层级
-            String lineIndex = record.getLineIndex();
-            Integer is2Y = record.getIs2Y();
-            Integer hasChildren = record.getIsHas();
-            String[] strings = getLevelAndRank(lineIndex, is2Y, hasChildren);
-            responseDTO.setLevel(strings[0]);
-            responseDTO.setChange(record.getChange() == null ? "" : record.getChange());
-            responseDTO.setWasterProduct(record.getWasterProduct() == null ? "" : record.getWasterProduct());
-            responseDTO.setTools(record.getTools() == null ? "" : record.getTools());
-            responseDTO.setChangeNum(record.getChangeNum() == null ? "" : record.getChangeNum());
-            //这里需要转换一下，数据库存储毫秒值  暂时不知道页面显示为分钟还是小时 待定
-            responseDTO.setLaborHour(record.getLaborHour() == null ? "" : record.getLaborHour());
-            responseDTO.setMachineMaterial(record.getMachineMaterial() == null ? "" : record.getMachineMaterial());
-            responseDTO.setLineId(record.getLineID() == null ? "" : record.getLineID());//零件号
-            responseDTO.seteBomPuid(record.getpPuid());
-            responseDTO.setStandardPart(record.getStandardPart() == null ? "" : record.getStandardPart());
-            responseDTO.setSparePartNum(record.getSparePartNum() == null ? "" : record.getSparePartNum());
-            responseDTO.setSolderJoint(record.getSolderJoint() == null ? "" : record.getSolderJoint());
-            responseDTO.setRhythm(record.getRhythm() == null ? "" : record.getRhythm());
-            responseDTO.setSparePart(record.getSparePart() == null ? "" : record.getSparePart());
-            responseDTO.setpBomOfWhichDept(record.getpBomOfWhichDept() == null ? "" : record.getpBomOfWhichDept());
-            responseDTO.setProcessRoute(record.getProcessRoute() == null ? "" : record.getProcessRoute());
-            respDTOS.add(responseDTO);
-        }
-        return respDTOS;
-    }
-
     private List<HzPbomLineRespDTO> pbomLineRecordToRespDTOS(List<HzPbomLineRecord> records,String projectId,int num) {
         try {
             List<HzPbomLineRespDTO> respDTOS = new ArrayList<>();
