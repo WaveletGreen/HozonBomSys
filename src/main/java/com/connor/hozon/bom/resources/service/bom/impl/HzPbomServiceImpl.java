@@ -79,8 +79,6 @@ public class HzPbomServiceImpl implements HzPbomService {
             HzPbomRecord hzPbomRecord = new HzPbomRecord();
             hzPbomRecord.setCreateName(UserInfo.getUser().getUserName());
             hzPbomRecord.setUpdateName(UserInfo.getUser().getUserName());
-            hzPbomRecord.seteBomPuid(recordReqDTO.geteBomPuid());
-            hzPbomRecord.setPuid(UUID.randomUUID().toString());
             String buyUnit = recordReqDTO.getBuyUnit();
             String colorPart = recordReqDTO.getColorPart();
             String type = recordReqDTO.getType();
@@ -105,13 +103,14 @@ public class HzPbomServiceImpl implements HzPbomService {
             }else{
                 hzPbomRecord.setType(2);
             }
+            hzPbomRecord.seteBomPuid(recordReqDTO.geteBomPuid());
             hzPbomRecord.setMouldType(recordReqDTO.getMouldType());
             hzPbomRecord.setOuterPart(recordReqDTO.getOuterPart());
             hzPbomRecord.setProductLine(recordReqDTO.getProductLine());
             hzPbomRecord.setStation(recordReqDTO.getStation());
             hzPbomRecord.setWorkShop1(recordReqDTO.getWorkShop1());
             hzPbomRecord.setWorkShop2(recordReqDTO.getWorkShop2());
-            int i = hzPbomRecordDAO.insert(hzPbomRecord);
+            int i = hzPbomRecordDAO.update(hzPbomRecord);
             if(i>0){
                respDTO.setErrMsg("操作成功！");
                respDTO.setErrCode(OperateResultMessageRespDTO.SUCCESS_CODE);
@@ -457,12 +456,39 @@ public class HzPbomServiceImpl implements HzPbomService {
                 query.setLineIndex(String.valueOf(length - 1));
             }
         }
-        Page<HzPbomLineRecord> recordPage =hzPbomRecordDAO.getHzPbomRecordByPage(query);
-        if(recordPage == null || recordPage.getResult() == null){
-            return  null;
+
+        int count = hzPbomRecordDAO.getHzBomLineCount(query.getProjectId());
+        if(count<=0){
+            List<HzBomLineRecord> lineRecords = hzBomLineRecordDao.getAllBomLineRecordByProjectId(query.getProjectId());
+            if(ListUtil.isNotEmpty(lineRecords)){
+                int size = lineRecords.size();
+                //分批插入数据
+                int i =0;
+                if(size>1000){
+                    for(i =0;i<size/1000;i++){
+                        List<HzPbomLineRecord> list = new ArrayList<>();
+                        for(int j = 0;j<1000;j++){
+                            HzPbomLineRecord hzPbomLineRecord =bomLineToPbomLine(lineRecords.get(j));
+                            list.add(hzPbomLineRecord);
+                        }
+                        hzPbomRecordDAO.insertList(list);
+                    }
+                }
+                if(i*1000<size){
+                    List<HzPbomLineRecord> list = new ArrayList<>();
+                    for(int j = 0;j<size-i*1000;j++){
+                        HzPbomLineRecord hzPbomLineRecord =bomLineToPbomLine(lineRecords.get(j));
+                        list.add(hzPbomLineRecord);
+                    }
+                    hzPbomRecordDAO.insertList(list);
+                }
+            }
         }
         try {
-
+            Page<HzPbomLineRecord> recordPage =hzPbomRecordDAO.getHzPbomRecordByPage(query);
+            if(recordPage == null || recordPage.getResult() == null){
+                return null;
+            }
             List<HzPbomLineRecord> records = recordPage.getResult();
             int num = (query.getPage()-1)*query.getLimit();
             List<HzPbomLineRespDTO> respDTOS = pbomLineRecordToRespDTOS(records,query.getProjectId(),num);
@@ -491,6 +517,26 @@ public class HzPbomServiceImpl implements HzPbomService {
         return null;
     }
 
+
+    private HzPbomLineRecord bomLineToPbomLine(HzBomLineRecord record){
+        HzPbomLineRecord hzPbomLineRecord = new HzPbomLineRecord();
+        hzPbomLineRecord.setPuid(UUID.randomUUID().toString());
+        hzPbomLineRecord.setIsHas(record.getIsHas());
+        hzPbomLineRecord.setBomDigifaxId(record.getBomDigifaxId());
+        hzPbomLineRecord.seteBomPuid(record.getPuid());
+        hzPbomLineRecord.setIsDept(record.getIsDept());
+        hzPbomLineRecord.setLineId(record.getLineID());
+        hzPbomLineRecord.setIsPart(record.getIsPart());
+        hzPbomLineRecord.setIs2Y(record.getIs2Y());
+        hzPbomLineRecord.setLineIndex(record.getLineIndex());
+        hzPbomLineRecord.setParentUid(record.getPuid());
+        hzPbomLineRecord.setpBomLinePartClass(record.getpBomLinePartClass());
+        hzPbomLineRecord.setpBomLinePartName(record.getpBomLinePartName());
+        hzPbomLineRecord.setpBomOfWhichDept(record.getpBomOfWhichDept());
+        hzPbomLineRecord.setpBomLinePartEnName(record.getpBomLinePartEnName());
+        hzPbomLineRecord.setpBomLinePartResource(record.getpBomLinePartResource());
+        return hzPbomLineRecord;
+    }
 
     /**
      * 根据id 获取所有的子bom
@@ -601,18 +647,20 @@ public class HzPbomServiceImpl implements HzPbomService {
                 }
                 respDTO.setGroupNum(groupNum);
 
-                byte[] bomLineBlock =record.getBomLineBlock();
-                Object obj = SerializeUtil.unserialize(bomLineBlock);
-                Object h9_IsCommon = null;
-                Object H9_Mat_Status =null;
-                if (obj instanceof LinkedHashMap) {
-                    if (((LinkedHashMap) obj).size() > 0) {
-                         h9_IsCommon =((LinkedHashMap) obj).get("h9_IsCommon");
-                         H9_Mat_Status =((LinkedHashMap) obj).get("H9_Mat_Status");
-                    }
-                }
-                respDTO.setH9_IsCommon(h9_IsCommon);
-                respDTO.setH9_Mat_Status(H9_Mat_Status);
+//                byte[] bomLineBlock =record.getBomLineBlock();
+//                Object obj = SerializeUtil.unserialize(bomLineBlock);
+//                Object h9_IsCommon = null;
+//                Object H9_Mat_Status =null;
+//                if (obj instanceof LinkedHashMap) {
+//                    if (((LinkedHashMap) obj).size() > 0) {
+//                         h9_IsCommon =((LinkedHashMap) obj).get("h9_IsCommon");
+//                         H9_Mat_Status =((LinkedHashMap) obj).get("H9_Mat_Status");
+//                    }
+//                }
+                respDTO.setpBomLinePartClass(record.getpBomLinePartClass());
+                respDTO.setpBomLinePartResource(record.getpBomLinePartResource());
+//                respDTO.setH9_IsCommon(h9_IsCommon);
+//                respDTO.setH9_Mat_Status(H9_Mat_Status);
                 respDTO.setNo(++num);
                 respDTO.setResource(record.getResource() == null ? "/" : record.getResource());
                 Integer type = record.getType();
@@ -639,7 +687,7 @@ public class HzPbomServiceImpl implements HzPbomService {
                 } else {
                     respDTO.setColorPart("/");
                 }
-                respDTO.seteBomPuid(record.getpPuid());
+                respDTO.seteBomPuid(record.geteBomPuid());
                 respDTO.setProductLine(record.getProductLine());
                 respDTO.setWorkShop1(record.getWorkShop1() );
                 respDTO.setWorkShop2(record.getWorkShop2());

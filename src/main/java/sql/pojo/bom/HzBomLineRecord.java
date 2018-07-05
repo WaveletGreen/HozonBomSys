@@ -66,6 +66,26 @@ public class HzBomLineRecord {
      */
     private String pBomLinePartClass;
 
+    private String pBomLinePartEnName;
+
+    private String pBomLinePartResource;
+
+    public String getpBomLinePartEnName() {
+        return pBomLinePartEnName;
+    }
+
+    public void setpBomLinePartEnName(String pBomLinePartEnName) {
+        this.pBomLinePartEnName = pBomLinePartEnName;
+    }
+
+    public String getpBomLinePartResource() {
+        return pBomLinePartResource;
+    }
+
+    public void setpBomLinePartResource(String pBomLinePartResource) {
+        this.pBomLinePartResource = pBomLinePartResource;
+    }
+
     public String getPuid() {
         return puid;
     }

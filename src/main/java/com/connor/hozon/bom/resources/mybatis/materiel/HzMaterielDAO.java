@@ -103,9 +103,8 @@ public interface HzMaterielDAO {
 
     /**
      * 根据id获取一条物料数据
-     * @param puid
-     * @param projectId
+     * @param query
      * @return
      */
-    HzMaterielRecord getHzMaterielRecord(String puid,String projectId);
+    HzMaterielRecord getHzMaterielRecord(HzMaterielQuery query);
 }

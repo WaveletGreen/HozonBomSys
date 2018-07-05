@@ -37,6 +37,8 @@ public class HzPbomLineRespDTO {
      */
     private Object  h9_IsCommon;//1
 
+   private String pBomLinePartClass;
+
     /**
      *PBOM主键id
      */
@@ -45,6 +47,10 @@ public class HzPbomLineRespDTO {
      *零件来源（自制总成/采购拆分等）
      */
     private Object H9_Mat_Status;//1
+    /**
+     *零件来源（自制总成/采购拆分等）
+     */
+    private  String pBomLinePartResource;
     /**
      * 来源（自制/采购）
      */
@@ -89,6 +95,22 @@ public class HzPbomLineRespDTO {
      * 工位
      */
     private String station;
+
+    public String getpBomLinePartClass() {
+        return pBomLinePartClass;
+    }
+
+    public void setpBomLinePartClass(String pBomLinePartClass) {
+        this.pBomLinePartClass = pBomLinePartClass;
+    }
+
+    public String getpBomLinePartResource() {
+        return pBomLinePartResource;
+    }
+
+    public void setpBomLinePartResource(String pBomLinePartResource) {
+        this.pBomLinePartResource = pBomLinePartResource;
+    }
 
     public String getStation() {
         return station;

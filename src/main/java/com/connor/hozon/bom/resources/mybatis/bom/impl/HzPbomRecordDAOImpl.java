@@ -7,6 +7,7 @@ import com.connor.hozon.bom.resources.query.HzPbomByPageQuery;
 import org.springframework.stereotype.Service;
 import sql.BaseSQLUtil;
 import sql.pojo.bom.HzBomLineRecord;
+import sql.pojo.bom.HzMbomLineRecord;
 import sql.pojo.bom.HzPbomLineRecord;
 import sql.pojo.bom.HzPbomRecord;
 
@@ -29,6 +30,11 @@ public class HzPbomRecordDAOImpl extends BaseSQLUtil implements HzPbomRecordDAO 
     @Override
     public int insert(HzPbomRecord record) {
         return super.insert("HzPbomRecordDAOImpl_insert",record);
+    }
+
+    @Override
+    public int insertList(List<HzPbomLineRecord> records) {
+        return super.insert("HzPbomRecordDAOImpl_insertList",records);
     }
 
     @Override
@@ -65,6 +71,13 @@ public class HzPbomRecordDAOImpl extends BaseSQLUtil implements HzPbomRecordDAO 
     public HzPbomRecord getHzPbomByEbomPuid(String eBomPuid) {
 
         return (HzPbomRecord) super.findForObject("HzPbomRecordDAOImpl_getHzPbomByEbomPuid",eBomPuid);
+    }
+
+    @Override
+    public int  getHzBomLineCount(String projectId) {
+       Map<String,Object> map = new HashMap<>();
+       map.put("projectId",projectId);
+        return (int)super.findForObject("HzPbomRecordDAOImpl_getTotalCount",map);
     }
 
 }
