@@ -2,111 +2,112 @@
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <!--User: xulf Date: 2018/7/2 Time: 11:42-->
 <body>
-<form id="materialDataForm" role="form" method="post" action="mbom/add">
-    <input id="eBomPuid" name="eBomPuid" type="text"/><!--th:value="${entity.pBomPuid}"-->
+<form id="materialDataForm" role="form" method="post" action="materiel/add">
+    <input id="puid" name="puid" type="text"th:value="${data.puid}"/><!--th:value="${entity.pBomPuid}"-->
     <div class="form-group">
-        <label for="factory">工厂</label>
-        <input class="form-control" id="factory" name="factory" type="text"
-
-               placeholder="请输入工厂"/><!--th:value="${entity.level}"-->
+        <label for="pMaterielCode">物料代码</label>
+        <input class="form-control" id="pMaterielCode" name="pMaterielCode" type="text"disabled="disabled"
+                th:value="${data.pMaterielCode}"
+               placeholder="请输入物料代码"/><!--th:value="${entity.level}"-->
     </div>
     <div class="form-group">
-        <label for="workHours">工作工时</label>
-        <input class="form-control" id="workHours" name="workHours" type="text"
-
-               placeholder="请输入工作工时"/><!--th:value="${entity.level}"-->
+        <label for="pMaterielType">物料类型</label>
+        <input class="form-control" id="pMaterielType" name="pMaterielType" type="text"disabled="disabled"
+               th:value="${data.pMaterielType}"
+               placeholder="请输入物料类型"/><!--th:value="${entity.level}"-->
     </div>
     <div class="form-group">
-        <label for="jobCentreCategory">工作中心类别</label>
-        <input class="form-control" id="jobCentreCategory" name="jobCentreCategory" type="text"
+        <label for="factoryCode">工厂代码</label>
+        <input class="form-control" id="factoryCode" name="factoryCode" type="text"
 
-               placeholder="请输入工作中心类别"/><!--th:value="${entity.level}"-->
+               placeholder="请输入工厂代码"/><!--th:value="${entity.level}"-->
     </div>
     <div class="form-group">
-        <label for="describe">描述</label>
-        <input class="form-control" id="describe" name="describe" type="text"
-
-               placeholder="请输入描述"/><!--th:value="${entity.level}"-->
+        <label for="pMaterielDesc">物料中文描述</label>
+        <input class="form-control" id="pMaterielDesc" name="pMaterielDesc" type="text"disabled="disabled"
+               th:value="${data.pMaterielDesc}"
+               placeholder="请输入物料中文描述"/><!--th:value="${entity.level}"-->
     </div>
     <div class="form-group">
-        <label for="use">用途</label>
-        <input class="form-control" id="use" name="use" type="text"
-
-               placeholder="请输入用途"/><!--th:value="${entity.level}"-->
+        <label for="pMaterielDescEn">物料描述英文</label>
+        <input class="form-control" id="pMaterielDescEn" name="pMaterielDescEn" type="text"disabled="disabled"
+               th:value="${data.pMaterielDescEn}"
+               placeholder="请输入物料描述英文"/><!--th:value="${entity.level}"-->
     </div>
     <div class="form-group">
-        <label for="standardCode">标准值码</label>
-        <input class="form-control" id="standardCode" name="standardCode" type="text" disabled="disabled"
-
-               placeholder="请输入标准值码"/><!--th:value="${entity.level}"-->
+        <label for="pBasicUnitMeasure">基本计量单位</label>
+        <input class="form-control" id="pBasicUnitMeasure" name="pBasicUnitMeasure" type="text" disabled="disabled"
+               th:value="${data.pBasicUnitMeasure}"
+               placeholder="请输入基本计量单位"/><!--th:value="${entity.level}"-->
     </div>
     <div class="form-group">
-        <label for="controlCode">控制码</label>
-        <input class="form-control" id="controlCode" name="controlCode" type="text"
-
-               placeholder="请输入控制码"/><!--th:value="${entity.level}"-->
+        <label for="pInventedPart">虚拟件标识</label>
+        <input class="form-control" id="pInventedPart" name="pInventedPart" type="text"disabled="disabled"
+               th:value="${data.pInventedPart}"
+               placeholder="请输入虚拟件标识"/><!--th:value="${entity.level}"-->
     </div>
     <div class="form-group">
-        <label for="directLabor">直接人工</label>
-        <input class="form-control" id="directLabor" name="directLabor" type="text"
-
-               placeholder="请输入直接人工"/><!--th:value="${entity.level}"-->
+        <label for="resource">采购类型</label>
+        <input class="form-control" id="resource" name="resource" type="text"disabled="disabled"
+               th:value="${data.resource}"
+               placeholder="请输入采购类型"/><!--th:value="${entity.level}"-->
     </div>
     <div class="form-group">
-        <label for="indirectLabor">间接人工</label>
-        <input class="form-control" id="indirectLabor" name="indirectLabor" type="text"
-
-               placeholder="请输入间接人工"/><!--th:value="${entity.level}"-->
+        <label for="pSpareMaterial">备件&原材料双属性标识</label>
+        <select class="form-control" name="pSpareMaterial" id="pSpareMaterial" placeholder="请选择备件&原材料双属性标识">
+            <option>/</option> <!--th:selected="${data.getResource()=='MAKE'?true:false}"-->
+            <option>Make&Buy</option>
+        </select>
     </div>
     <div class="form-group">
-        <label for="machineHour">机器工时</label>
-        <input class="form-control" id="machineHour" name="machineHour" type="text"
+        <label for="pVinPerNo">VIN前置号</label>
+        <input class="form-control" id="pVinPerNo" name="pVinPerNo" type="text"
 
-               placeholder="请输入机器工时"/><!--th:value="${entity.level}"-->
+               placeholder="请输入VIN前置号"/><!--th:value="${entity.level}"-->
     </div>
     <div class="form-group">
-        <label for="combustion">燃动</label>
-        <input class="form-control" id="combustion" name="combustion" type="text"
-
-               placeholder="请输入燃动"/><!--th:value="${entity.level}"-->
+        <label for="pColorPart">颜色件标识</label>
+        <input class="form-control" id="pColorPart" name="pColorPart" type="text"disabled="disabled"
+               th:value="${data.pColorPart}"
+               placeholder="请输入颜色件标识"/><!--th:value="${entity.level}"-->
+    </div>
+    <div class="form-group">
+        <label for="pHeight">实际重量</label>
+        <input class="form-control" id="pHeight" name="pHeight" type="text"disabled="disabled"
+               th:value="${data.pHeight}"
+               placeholder="请输入实际重量"/><!--th:value="${entity.level}"-->
     </div>
 
     <div class="form-group">
-        <label for="machineMaterial">机物料</label>
-        <input class="form-control" id="machineMaterial" name="machineMaterial" type="text"
-
-               placeholder="请输入机物料"/><!--th:value="${entity.level}"-->
+        <label for="pInOutSideFlag">内外饰标识</label>
+        <input class="form-control" id="pInOutSideFlag" name="pInOutSideFlag" type="text"disabled="disabled"
+               th:value="${data.pInOutSideFlag}"
+               placeholder="请输入内外饰标识"/><!--th:value="${entity.level}"-->
     </div>
 
     <div class="form-group">
-        <label for="otherCosts">其它费用</label>
-        <input class="form-control" id="otherCosts" name="otherCosts" type="text"
-
-               placeholder="请输入其它费用"/><!--th:value="${entity.level}"-->
+        <label for="p3cPartFlag">3C件标识</label>
+        <input class="form-control" id="p3cPartFlag" name="p3cPartFlag" type="text"disabled="disabled"
+               th:value="${data.p3cPartFlag}"
+               placeholder="请输入3C件标识"/><!--th:value="${entity.level}"-->
     </div>
     <div class="form-group">
-        <label for="processingFormula">加工公式</label>
-        <input class="form-control" id="processingFormula" name="processingFormula" type="text"
-
-               placeholder="请输入加工公式"/><!--th:value="${entity.level}"-->
+        <label for="pPartImportantDegree">零件重要度</label>
+        <input class="form-control" id="pPartImportantDegree" name="pPartImportantDegree" type="text"disabled="disabled"
+               th:value="${data.pPartImportantDegree}"
+               placeholder="请输入零件重要度"/><!--th:value="${entity.level}"-->
     </div>
     <div class="form-group">
-        <label for="powerType">能力类别</label>
-        <input class="form-control" id="powerType" name="powerType" type="text"
+        <label for="pMrpController">MRP控制者</label>
+        <input class="form-control" id="pMrpController" name="pMrpController" type="text"
 
-               placeholder="请输入能力类别"/><!--th:value="${entity.level}"-->
+               placeholder="请输入MRP控制者"/><!--th:value="${entity.level}"-->
     </div>
     <div class="form-group">
-        <label for="startTime">开始时间</label>
-        <input class="form-control" id="startTime" name="startTime" type="text"
+        <label for="pLoosePartFlag">散件标志</label>
+        <input class="form-control" id="pLoosePartFlag" name="pLoosePartFlag" type="text"
 
-               placeholder="请输入开始时间"/><!--th:value="${entity.level}"-->
-    </div>
-    <div class="form-group">
-        <label for="endTime">结束时间</label>
-        <input class="form-control" id="endTime" name="endTime" type="text"
-
-               placeholder="请输入结束时间"/><!--th:value="${entity.level}"-->
+               placeholder="请输入散件标志"/><!--th:value="${entity.level}"-->
     </div>
 </form>
 <script th:inline="javascript">
@@ -137,23 +138,26 @@
             if (bootstrapValidator.isValid()) {
                 var url = $("#materialDataForm", window.top.document).attr('action');
                 var myData = JSON.stringify({
-                    "eBomPuid": $("#eBomPuid").val(),
-                    "level": $("#level").val(),
-                    "pBomOfWhichDept": $("#pBomOfWhichDept").val(),
-                    "lineId": $("#lineId").val(),
-                    "object_name": $("#object_name").val(),
-                    "sparePart": $("#sparePart").val(),
-                    "sparePartNum": $("#sparePartNum").val(),
-                    "processRoute": $("#processRoute").val(),
-                    "laborHour": $("#laborHour").val(),
-                    "rhythm": $("#rhythm").val(),
-                    "solderJoint": $("#solderJoint").val(),
-                    "machineMaterial": $("#machineMaterial").val(),
-                    "standardPart": $("#standardPart").val(),
-                    "tools": $("#tools").val(),
-                    "wasterProduct": $("#wasterProduct").val(),
-                    "change": $("#change").val(),
-                    "changeNum": $("#changeNum").val()
+                    "puid": $("#puid").val(),
+                    "pMaterielCode": $("#pMaterielCode").val(),
+                    "pMaterielType": $("#pMaterielType").val(),
+                    "factoryCode": $("#factoryCode").val(),
+                    "pMaterielDesc": $("#pMaterielDesc").val(),
+                    "pMaterielDescEn": $("#pMaterielDescEn").val(),
+                    "pBasicUnitMeasure": $("#pBasicUnitMeasure").val(),
+
+                    "pInventedPart": $("#pInventedPart").val(),
+                    "resource": $("#resource").val(),
+                    "pSpareMaterial": $("#pSpareMaterial").val(),
+                    "pVinPerNo": $("#pVinPerNo").val(),
+                    "pColorPart": $("#pColorPart").val(),
+                    "pHeight": $("#pHeight").val(),
+                    "pInOutSideFlag": $("#pInOutSideFlag").val(),
+                    "p3cPartFlag": $("#p3cPartFlag").val(),
+                    "pPartImportantDegree": $("#pPartImportantDegree").val(),
+                    "pMrpController": $("#pMrpController").val(),
+                    "pLoosePartFlag": $("#pLoosePartFlag").val(),
+                    "projectId":$("#project", window.top.document).val()
                 });
                 console.log(myData);
                 $.ajax({
