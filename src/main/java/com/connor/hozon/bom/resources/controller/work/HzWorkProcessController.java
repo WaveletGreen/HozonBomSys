@@ -172,4 +172,13 @@ public class HzWorkProcessController extends BaseController {
     public String getMBomToPage(){
         return "bomManage/mbom/mbomMaintenance/mbomMaintenance";
     }
+
+    /**
+     * 一键同步MBom数据到物料主数据
+     */
+    @RequestMapping(value = "apply/oneKey",method = RequestMethod.POST)
+    public void applyMbomDataToHzMaterielOneKey(String mbomPuids,HttpServletResponse response){
+        OperateResultMessageRespDTO respDTO =  hzWorkProcessService.applyMbomDataToHzMaterielOneKey(mbomPuids);
+        writeAjaxJSONResponse(ResultMessageBuilder.build(OperateResultMessageRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
+    }
 }

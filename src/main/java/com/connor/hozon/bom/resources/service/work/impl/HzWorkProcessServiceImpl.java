@@ -152,4 +152,10 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
         }
         return null;
     }
+
+    @Override
+    public OperateResultMessageRespDTO applyMbomDataToHzMaterielOneKey(String mbomPuids) {
+
+        return OperateResultMessageRespDTO.getFailResult();
+    }
 }

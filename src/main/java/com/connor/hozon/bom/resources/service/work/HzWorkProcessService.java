@@ -42,4 +42,6 @@ public interface HzWorkProcessService {
     Page<HzWorkProcessRespDTO> findHzWorkProcessForPage(HzWorkProcessByPageQuery query);
 
     HzWorkProcessRespDTO findHzWorkProcess(String materielId,String projectId);
+
+    OperateResultMessageRespDTO applyMbomDataToHzMaterielOneKey(String mbomPuids);
 }

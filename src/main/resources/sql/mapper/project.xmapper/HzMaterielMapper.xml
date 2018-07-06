@@ -30,6 +30,7 @@
         <result column="P_UPDATE_NAME" jdbcType="VARCHAR" property="pUpdateName" />
         <result column="P_FACTORY_PUID" jdbcType="VARCHAR" property="pFactoryPuid" />
         <result column="P_RESOURCE" jdbcType="VARCHAR" property="resource" />
+        <result column="P_TYPE" jdbcType="INTEGER" property="type" />
     </resultMap>
 
     <!--整车衍生物料主数据-->
@@ -384,12 +385,12 @@
     <insert id="HzMaterialDAOImpl_insertList" useGeneratedKeys="false" parameterType="java.util.List">
         insert into HZ_MATERIEL_RECORD (PUID, P_MATERIEL_CODE, P_MATERIEL_TYPE,
         P_MATERIEL_DESC, P_PERTAIN_TO_PROJECT_PUID, P_MATERIEL_DESC_EN,P_MATERIEL_DATA_TYPE,
-        P_FACTORY_PUID)
+        P_FACTORY_PUID,P_TYPE)
         <foreach collection="list" item="item" index="index" separator="UNION ALL">
             select
             #{item.puid,jdbcType=VARCHAR}, #{item.pMaterielCode,jdbcType=VARCHAR}, #{item.pMaterielType,jdbcType=VARCHAR},
             #{item.pMaterielDesc,jdbcType=VARCHAR}, #{item.pPertainToProjectPuid,jdbcType=VARCHAR}, #{item.pMaterielDescEn,jdbcType=VARCHAR},
-            #{item.pMaterielDataType,jdbcType=VARCHAR}, #{item.pFactoryPuid,jdbcType=VARCHAR}
+            #{item.pMaterielDataType,jdbcType=VARCHAR}, #{item.pFactoryPuid,jdbcType=VARCHAR},#{item.type,jdbcType=INTEGER}
             from DUAL
         </foreach>
     </insert>

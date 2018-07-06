@@ -108,6 +108,19 @@ public class HzMaterielRecord {
 
     private Integer pValidFlag;
 
+    /**
+     * 类型（1 半成品工艺路线 2整车工艺路线  3总成分总成工艺路线  ）
+     */
+    private Integer type;
+
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
+    }
+
     public Integer getpValidFlag() {
         return pValidFlag;
     }
