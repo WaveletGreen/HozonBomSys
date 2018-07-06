@@ -29,7 +29,7 @@
         select
         <include refid="Base_Column_List"/>
         from HZ_MATERIEL_RECORD
-        where P_PERTAIN_TO_PROJECT_PUID = #{pPertainToProjectPuid,jdbcType=VARCHAR}
+        where P_PERTAIN_TO_PROJECT_PUID = #{pPertainToProjectPuid,jdbcType=VARCHAR} AND P_MATERIEL_DATA_TYPE=11
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from HZ_MATERIEL_RECORD

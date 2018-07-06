@@ -147,6 +147,10 @@ public class ReflectMateriel {
      * 设置MRP控制者，公告号和采购类型
      */
     public void setMRPAndPurchase(String mrp, String purchase, String announcement) {
+        //默认时采购件
+        if (mrp == null) {
+            mrp = "Z10";
+        }
         this.MRPController = mrp;
         //设置采购类型
         switch (mrp) {

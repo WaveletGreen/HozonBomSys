@@ -134,26 +134,39 @@
         select
         <include refid="Base_Column_List"/>
         from HZ_MATERIEL_RECORD
-        where P_PERTAIN_TO_PROJECT_PUID = #{pPertainToProjectPuid,jdbcType=VARCHAR}
+        where P_PERTAIN_TO_PROJECT_PUID = #{pPertainToProjectPuid,jdbcType=VARCHAR} AND P_MATERIEL_DATA_TYPE=11
     </select>
 
 
     <insert id="insert" parameterType="sql.pojo.project.HzMaterielRecord">
-    insert into HZ_MATERIEL_RECORD (PUID, P_MATERIEL_CODE, P_MATERIEL_TYPE, 
-      P_MATERIEL_WERK, P_MATERIEL_DESC, P_PERTAIN_TO_PROJECT_PUID
+   insert into HZ_MATERIEL_RECORD (
+      PUID,
+      P_MATERIEL_CODE,
+      P_MATERIEL_TYPE,
+      P_MATERIEL_WERK,
+      P_MATERIEL_DESC,
+      P_PERTAIN_TO_PROJECT_PUID,
+      P_MATERIEL_DATA_TYPE
       )
-    values (#{puid,jdbcType=VARCHAR}, #{pMaterielCode,jdbcType=OTHER}, #{pMaterielType,jdbcType=OTHER}, 
-      #{pMaterielWerk,jdbcType=OTHER}, #{pMaterielDesc,jdbcType=OTHER}, #{pPertainToProjectPuid,jdbcType=VARCHAR}
+    values (
+      #{puid,jdbcType=VARCHAR},
+      #{pMaterielCode,jdbcType=VARCHAR},
+      'A006',
+      #{pMaterielWerk,jdbcType=VARCHAR},
+      #{pMaterielDesc,jdbcType=VARCHAR},
+      #{pPertainToProjectPuid,jdbcType=VARCHAR},
+      11
       )
   </insert>
 
     <update id="updateByPrimaryKey" parameterType="sql.pojo.project.HzMaterielRecord">
     update HZ_MATERIEL_RECORD
-    set P_MATERIEL_CODE = #{pMaterielCode,jdbcType=OTHER},
-      P_MATERIEL_TYPE = #{pMaterielType,jdbcType=OTHER},
-      P_MATERIEL_WERK = #{pMaterielWerk,jdbcType=OTHER},
-      P_MATERIEL_DESC = #{pMaterielDesc,jdbcType=OTHER},
-      P_PERTAIN_TO_PROJECT_PUID = #{pPertainToProjectPuid,jdbcType=VARCHAR}
+    set P_MATERIEL_CODE = #{pMaterielCode,jdbcType=VARCHAR},
+      P_MATERIEL_TYPE = 'A006',
+      P_MATERIEL_WERK = #{pMaterielWerk,jdbcType=VARCHAR},
+      P_MATERIEL_DESC = #{pMaterielDesc,jdbcType=VARCHAR},
+      P_PERTAIN_TO_PROJECT_PUID = #{pPertainToProjectPuid,jdbcType=VARCHAR},
+      P_MATERIEL_DATA_TYPE = 11
     where PUID = #{puid,jdbcType=VARCHAR}
   </update>
 
@@ -371,7 +384,7 @@
             <if test="pMaterielDataType != null">
                 P_MATERIEL_DATA_TYPE = #{pMaterielDataType,jdbcType=INTEGER},
             </if>
-                P_UPDATE_TIME = sysdate,
+            P_UPDATE_TIME = sysdate,
             <if test="pCreateName != null">
                 P_CREATE_NAME = #{pCreateName,jdbcType=VARCHAR},
             </if>
