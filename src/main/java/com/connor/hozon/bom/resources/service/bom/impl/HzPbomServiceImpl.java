@@ -76,7 +76,7 @@ public class HzPbomServiceImpl implements HzPbomService {
                 respDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
                 return respDTO;
             }
-            int maxOrderNum = hzPbomRecordDAO.getHzPbomMaxOrderNum();
+
             HzPbomRecord hzPbomRecord = new HzPbomRecord();
             hzPbomRecord.setCreateName(UserInfo.getUser().getUserName());
             hzPbomRecord.setUpdateName(UserInfo.getUser().getUserName());
@@ -104,15 +104,29 @@ public class HzPbomServiceImpl implements HzPbomService {
             }else{
                 hzPbomRecord.setType(2);
             }
-            hzPbomRecord.seteBomPuid(recordReqDTO.geteBomPuid());
             hzPbomRecord.setMouldType(recordReqDTO.getMouldType());
             hzPbomRecord.setOuterPart(recordReqDTO.getOuterPart());
             hzPbomRecord.setProductLine(recordReqDTO.getProductLine());
             hzPbomRecord.setStation(recordReqDTO.getStation());
             hzPbomRecord.setWorkShop1(recordReqDTO.getWorkShop1());
             hzPbomRecord.setWorkShop2(recordReqDTO.getWorkShop2());
+            hzPbomRecord.seteBomPuid(recordReqDTO.geteBomPuid());
+            Map<String,Object> map = new HashMap<>();
+            map.put("pPuid",recordReqDTO.geteBomPuid());
+            map.put("projectId",recordReqDTO.getProjectId());
+            HzPbomLineRecord hzPbomLineRecord= hzPbomRecordDAO.getPbomById(map);
+            if(hzPbomLineRecord!=null){
+                int i = hzPbomRecordDAO.update(hzPbomRecord);
+                if(i>0){
+                    return OperateResultMessageRespDTO.getSuccessResult();
+                }else {
+                   return OperateResultMessageRespDTO.getFailResult();
+                }
+            }
+            hzPbomRecord.setPuid(UUID.randomUUID().toString());
+            int maxOrderNum = hzPbomRecordDAO.getHzPbomMaxOrderNum();
             hzPbomRecord.setOrderNum(++maxOrderNum);
-            int i = hzPbomRecordDAO.update(hzPbomRecord);
+            int i = hzPbomRecordDAO.insert(hzPbomRecord);
             if(i>0){
                respDTO.setErrMsg("操作成功！");
                respDTO.setErrCode(OperateResultMessageRespDTO.SUCCESS_CODE);
@@ -142,7 +156,7 @@ public class HzPbomServiceImpl implements HzPbomService {
             HzPbomRecord hzPbomRecord = new HzPbomRecord();
             hzPbomRecord.setUpdateName(UserInfo.getUser().getUserName());
             hzPbomRecord.seteBomPuid(recordReqDTO.geteBomPuid());
-            hzPbomRecord.setPuid(UUID.randomUUID().toString());
+//            hzPbomRecord.setPuid(UUID.randomUUID().toString());
             String buyUnit = recordReqDTO.getBuyUnit();
             String colorPart = recordReqDTO.getColorPart();
             String type = recordReqDTO.getType();
@@ -466,12 +480,15 @@ public class HzPbomServiceImpl implements HzPbomService {
                 int size = lineRecords.size();
                 //分批插入数据 一次1000条
                 int i =0;
+                int cou = 0;
                 if(size>1000){
                     for(i =0;i<size/1000;i++){
                         List<HzPbomLineRecord> list = new ArrayList<>();
+
                         for(int j = 0;j<1000;j++){
-                            HzPbomLineRecord hzPbomLineRecord =bomLineToPbomLine(lineRecords.get(j));
+                            HzPbomLineRecord hzPbomLineRecord =bomLineToPbomLine(lineRecords.get(cou));
                             list.add(hzPbomLineRecord);
+                            cou++;
                         }
                         hzPbomRecordDAO.insertList(list);
                     }
@@ -479,8 +496,9 @@ public class HzPbomServiceImpl implements HzPbomService {
                 if(i*1000<size){
                     List<HzPbomLineRecord> list = new ArrayList<>();
                     for(int j = 0;j<size-i*1000;j++){
-                        HzPbomLineRecord hzPbomLineRecord =bomLineToPbomLine(lineRecords.get(j));
+                        HzPbomLineRecord hzPbomLineRecord =bomLineToPbomLine(lineRecords.get(cou));
                         list.add(hzPbomLineRecord);
+                        cou++;
                     }
                     hzPbomRecordDAO.insertList(list);
                 }

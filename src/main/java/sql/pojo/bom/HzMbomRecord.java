@@ -86,6 +86,16 @@ public class HzMbomRecord {
      */
     private String updateName;
 
+    private Integer orderNum;
+
+    public Integer getOrderNum() {
+        return orderNum;
+    }
+
+    public void setOrderNum(Integer orderNum) {
+        this.orderNum = orderNum;
+    }
+
     public String getPuid() {
         return puid;
     }

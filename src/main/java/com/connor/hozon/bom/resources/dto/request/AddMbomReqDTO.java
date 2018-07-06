@@ -7,6 +7,8 @@ package com.connor.hozon.bom.resources.dto.request;
  */
 public class AddMbomReqDTO {
 
+    private String projectId;
+
     private String eBomPuid;
     /**
      * 备件
@@ -56,6 +58,14 @@ public class AddMbomReqDTO {
      * 变更编号
      */
     private String changeNum;
+
+    public String getProjectId() {
+        return projectId;
+    }
+
+    public void setProjectId(String projectId) {
+        this.projectId = projectId;
+    }
 
     public String geteBomPuid() {
         return eBomPuid;

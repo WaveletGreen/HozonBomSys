@@ -63,12 +63,14 @@ public class HzMbomServiceImpl implements HzMbomService {
                     int size = lineRecords.size();
                     //分批插入数据 一次1000条
                     int i =0;
+                    int cout = 0;
                     if(size>1000){
                         for(i =0;i<size/1000;i++){
                             List<HzMbomLineRecord> list = new ArrayList<>();
                             for(int j = 0;j<1000;j++){
-                                HzMbomLineRecord hzPbomLineRecord =bomLineToMbomLine(lineRecords.get(j));
+                                HzMbomLineRecord hzPbomLineRecord =bomLineToMbomLine(lineRecords.get(cout));
                                 list.add(hzPbomLineRecord);
+                                cout++;
                             }
                             hzMbomRecordDAO.insertList(list);
                         }
@@ -76,8 +78,9 @@ public class HzMbomServiceImpl implements HzMbomService {
                     if(i*1000<size){
                         List<HzMbomLineRecord> list = new ArrayList<>();
                         for(int j = 0;j<size-i*1000;j++){
-                            HzMbomLineRecord hzPbomLineRecord =bomLineToMbomLine(lineRecords.get(j));
+                            HzMbomLineRecord hzPbomLineRecord =bomLineToMbomLine(lineRecords.get(cout));
                             list.add(hzPbomLineRecord);
+                            cout++;
                         }
                         hzMbomRecordDAO.insertList(list);
                     }
@@ -137,7 +140,7 @@ public class HzMbomServiceImpl implements HzMbomService {
             if(record != null){
                 HzMbomRecordRespDTO respDTO = new HzMbomRecordRespDTO();
                 respDTO.setPuid(record.getPuid());
-                respDTO.seteBomPuid(record.getpPuid());
+                respDTO.seteBomPuid(record.geteBomPuid());
                 Integer is2Y = record.getIs2Y();
                 Integer hasChildren = record.getIsHas();
                 String lineIndex = record.getLineIndex();
@@ -189,6 +192,8 @@ public class HzMbomServiceImpl implements HzMbomService {
                 operateResultMessageRespDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
                 return operateResultMessageRespDTO;
             }
+
+
             HzMbomRecord hzMbomRecord = new HzMbomRecord();
             hzMbomRecord.seteBomPuid(reqDTO.geteBomPuid());
             hzMbomRecord.setChange(reqDTO.getChange());
@@ -206,7 +211,21 @@ public class HzMbomServiceImpl implements HzMbomService {
             hzMbomRecord.setCreateName(user.getUserName());
             hzMbomRecord.setStatus(1);
             hzMbomRecord.setUpdateName(user.getUserName());
+            Map<String,Object> map = new HashMap<>();
+            map.put("pPuid",reqDTO.geteBomPuid());
+            map.put("projectId",reqDTO.getProjectId());
+            HzMbomLineRecord lineRecord = hzMbomRecordDAO.findHzMbomByPuid(map);
+            if(lineRecord!=null){
+                int i = hzMbomRecordDAO.update(hzMbomRecord);
+                if(i>0){
+                    return  OperateResultMessageRespDTO.getSuccessResult();
+                }else{
+                    return OperateResultMessageRespDTO.getFailResult();
+                }
+            }
             hzMbomRecord.setPuid(UUID.randomUUID().toString());
+            int maxOrderNum = hzMbomRecordDAO.getHzMbomMaxOrderNum(reqDTO.getProjectId());
+            hzMbomRecord.setOrderNum(++maxOrderNum);
             int i = hzMbomRecordDAO.insert(hzMbomRecord);
             if(i>0){
                 return OperateResultMessageRespDTO.getSuccessResult();
