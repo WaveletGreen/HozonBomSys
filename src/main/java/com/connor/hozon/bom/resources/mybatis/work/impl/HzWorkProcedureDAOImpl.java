@@ -44,6 +44,8 @@ public class HzWorkProcedureDAOImpl  extends BaseSQLUtil implements HzWorkProced
         Map<String,Object> map = new HashMap<>();
         map.put("projectId",query.getProjectId());
         map.put("type",query.getType());
+        map.put("pMaterielCode",query.getpMaterielCode());
+        map.put("pMaterielDesc",query.getpMaterielDesc());
         pageRequest.setFilters(map);
         return super.findPage("HzWorkProcedureDAOImpl_findHzWorkProcessByPage","HzWorkProcedureDAOImpl_getTotalCount",pageRequest);
     }

@@ -1,8 +1,7 @@
 package com.connor.hozon.bom.resources.controller.materiel;
 
 import com.connor.hozon.bom.resources.controller.BaseController;
-import com.connor.hozon.bom.resources.dto.request.AddHzMaterielReqDTO;
-import com.connor.hozon.bom.resources.dto.request.UpdateHzMaterielReqDTO;
+import com.connor.hozon.bom.resources.dto.request.EditHzMaterielReqDTO;
 import com.connor.hozon.bom.resources.dto.response.HzMaterielRespDTO;
 import com.connor.hozon.bom.resources.dto.response.OperateResultMessageRespDTO;
 import com.connor.hozon.bom.resources.page.Page;
@@ -158,14 +157,9 @@ public class HzMaterielController  extends BaseController {
     }
 
 
-    /**
-     * 插入一条记录
-     * @param reqDTO
-     * @param response
-     */
     @RequestMapping(value = "add",method = RequestMethod.POST)
-    public void addMaterielToDB(@RequestBody AddHzMaterielReqDTO reqDTO, HttpServletResponse response){
-        OperateResultMessageRespDTO respDTO = hzMaterielService.addHzMateriel(reqDTO);
+    public void addMaterielToDB(@RequestBody EditHzMaterielReqDTO reqDTO, HttpServletResponse response){
+        OperateResultMessageRespDTO respDTO = hzMaterielService.editHzMateriel(reqDTO);
         writeAjaxJSONResponse(ResultMessageBuilder.build(OperateResultMessageRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
     }
 
@@ -175,8 +169,8 @@ public class HzMaterielController  extends BaseController {
      * @param response
      */
     @RequestMapping(value = "update",method = RequestMethod.POST)
-    public void updateMaterielToDB(@RequestBody UpdateHzMaterielReqDTO reqDTO, HttpServletResponse response){
-        OperateResultMessageRespDTO respDTO = hzMaterielService.updateHzMateriel(reqDTO);
+    public void updateMaterielToDB(@RequestBody EditHzMaterielReqDTO reqDTO, HttpServletResponse response){
+        OperateResultMessageRespDTO respDTO = hzMaterielService.editHzMateriel(reqDTO);
         writeAjaxJSONResponse(ResultMessageBuilder.build(OperateResultMessageRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
     }
 

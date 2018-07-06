@@ -112,6 +112,19 @@ public class HzMaterielRecord {
      * 类型（1 半成品工艺路线 2整车工艺路线  3总成分总成工艺路线  ）
      */
     private Integer type;
+    /**
+     * 物料来源id
+     */
+
+    private String materielResourceId;
+
+    public String getMaterielResourceId() {
+        return materielResourceId;
+    }
+
+    public void setMaterielResourceId(String materielResourceId) {
+        this.materielResourceId = materielResourceId;
+    }
 
     public Integer getType() {
         return type;

@@ -25,6 +25,19 @@ public class HzMaterielQuery {
      */
     private Integer pMaterielDataType;
 
+    /**
+     * 物料来源id
+     */
+    private String materielResourceId;
+
+    public String getMaterielResourceId() {
+        return materielResourceId;
+    }
+
+    public void setMaterielResourceId(String materielResourceId) {
+        this.materielResourceId = materielResourceId;
+    }
+
     public String getProjectId() {
         return projectId;
     }

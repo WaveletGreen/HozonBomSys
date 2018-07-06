@@ -31,6 +31,8 @@
         <result column="P_FACTORY_PUID" jdbcType="VARCHAR" property="pFactoryPuid" />
         <result column="P_RESOURCE" jdbcType="VARCHAR" property="resource" />
         <result column="P_TYPE" jdbcType="INTEGER" property="type" />
+        <result column="P_MATERIEL_RESOURCE_ID" jdbcType="VARCHAR" property="materielResourceId" />
+
     </resultMap>
 
     <!--整车衍生物料主数据-->
@@ -44,22 +46,45 @@
 
     <!--半成品、虚拟件、生产性外购、自制备件物料主数据-->
     <resultMap id="HzMbomRecordMap" type="sql.pojo.bom.HzMbomLineRecord">
-        <id column="PUID" jdbcType="VARCHAR" property="pPuid"/>
-        <result column="P_LINE_INDEX" jdbcType="VARCHAR" property="lineIndex"/>
-        <result column="P_BOM_LINE_IS_HAS" jdbcType="INTEGER" property="isHas"/>
-        <result column="P_BOM_LINE_ID" jdbcType="VARCHAR" property="lineID"/>
-        <result column="P_BOM_LINE_IS_2Y" jdbcType="INTEGER" property="is2Y"/>
-        <result column="P_BOM_OF_WHICH_DEPT" jdbcType="VARCHAR" property="pBomOfWhichDept"/>
-        <result column="P_PARENT_UID" jdbcType="VARCHAR" property="parentUid"/>
-        <result column="P_BOM_DIGIFAX_ID" jdbcType="VARCHAR" property="bomDigifaxId"/>
-        <result column="P_BOM_LINE_PUID" jdbcType="VARCHAR" property="linePuid"/>
-        <result column="P_BOM_LINE_IS_PART" jdbcType="INTEGER" property="isPart"/>
-        <result column="P_BOM_ORDER_NUM" jdbcType="INTEGER" property="orderNum"/>
-        <result column="P_BOM_LINE_IS_DEPT" jdbcType="INTEGER" property="isDept"/>
-        <result column="P_BOM_LINE_BLOCK" jdbcType="BLOB" property="bomLineBlock"/>
-
+        <result column="PUID" jdbcType="VARCHAR" property="puid"/>
+        <result column="P_BOM_PUID" jdbcType="VARCHAR" property="eBomPuid"/>
         <result column="P_SPARE_PART" jdbcType="VARCHAR" property="sparePart"/>
         <result column="P_SPARE_PART_NUM" jdbcType="VARCHAR" property="sparePartNum"/>
+        <result column="P_PROCESS_ROUTE" jdbcType="VARCHAR" property="processRoute"/>
+        <result column="P_LABOR_HOUR" jdbcType="VARCHAR" property="laborHour"/>
+        <result column="P_RHYTHM" jdbcType="VARCHAR" property="rhythm"/>
+        <result column="P_SOLDER_JOINT" jdbcType="VARCHAR" property="solderJoint"/>
+        <result column="P_MACHINE_MATERIAL" jdbcType="VARCHAR" property="machineMaterial"/>
+        <result column="P_STANDARD_PART" jdbcType="VARCHAR" property="standardPart"/>
+        <result column="P_TOOLS" jdbcType="VARCHAR" property="tools"/>
+        <result column="P_WASTER_PRODUCT" jdbcType="VARCHAR" property="wasterProduct"/>
+        <result column="P_CHANGE" jdbcType="VARCHAR" property="change"/>
+        <result column="P_MBOM_STATUS" jdbcType="INTEGER" property="status"/>
+        <result column="P_CHANGE_NUM" jdbcType="VARCHAR" property="changeNum"/>
+        <result column="P_CREATE_TIME" jdbcType="DATE" property="createTime"/>
+        <result column="P_UPDATE_TIME" jdbcType="DATE" property="updateTime"/>
+        <result column="P_CREATE_NAME" jdbcType="VARCHAR" property="createName"/>
+        <result column="P_UPDATE_NAME" jdbcType="VARCHAR" property="updateName"/>
+
+        <result column="P_PARENT_UID" jdbcType="VARCHAR" property="parentUid" />
+        <result column="P_BOM_DIGIFAX_ID" jdbcType="VARCHAR" property="bomDigifaxId" />
+        <result column="P_LINE_INDEX" jdbcType="VARCHAR" property="lineIndex" />
+        <result column="P_BOM_LINE_IS_HAS" jdbcType="INTEGER" property="isHas" />
+        <result column="P_BOM_LINE_PUID" jdbcType="VARCHAR" property="linePuid" />
+        <result column="P_BOM_LINE_ID" jdbcType="VARCHAR" property="lineId" />
+        <result column="P_BOM_LINE_IS_2Y" jdbcType="INTEGER" property="is2Y" />
+        <result column="P_BOM_LINE_IS_PART" jdbcType="INTEGER" property="isPart" />
+        <result column="P_BOM_LINE_IS_DEPT" jdbcType="INTEGER" property="isDept" />
+        <result column="P_BOM_OF_WHICH_DEPT" jdbcType="VARCHAR" property="pBomOfWhichDept" />
+        <result column="P_BOM_LINE_PART_NAME" jdbcType="VARCHAR" property="pBomLinePartName" />
+        <result column="P_BOM_LINE_PART_CLASS" jdbcType="VARCHAR" property="pBomLinePartClass" />
+        <result column="P_BOM_LINE_PART_EN_NAME" jdbcType="VARCHAR" property="pBomLinePartEnName" />
+        <result column="P_BOM_LINE_PART_RESOURCE" jdbcType="VARCHAR" property="pBomLinePartResource" />
+        <result column="P_BOM_ORDER_NUM" jdbcType="INTEGER" property="orderNum" />
+
+        <result column="P_BOM_TYPE" jdbcType="DECIMAL" property="pBomType" />
+        <result column="P_STOCK_LOCATION" jdbcType="VARCHAR" property="pStockLocation" />
+        <result column="P_FACTORY_ID" jdbcType="VARCHAR" property="pFactoryId" />
     </resultMap>
 
 
@@ -75,20 +100,13 @@
 
     <!--半成品、虚拟件、生产性外购、自制备件物料主数据-->
     <sql id="HzMbomRecordList">
-        PUID,
-		P_PARENT_UID,
-		P_BOM_DIGIFAX_ID,
-		P_LINE_INDEX,
-		P_BOM_LINE_IS_HAS,
-		P_BOM_LINE_PUID,
-		P_BOM_LINE_ID,
-		P_BOM_LINE_IS_2Y,
-		P_BOM_LINE_IS_PART,
-		P_BOM_ORDER_NUM,
-		P_BOM_LINE_IS_DEPT,
-		P_BOM_OF_WHICH_DEPT,
-		P_BOM_LINE_BLOCK，
-		P_SPARE_PART, P_SPARE_PART_NUM
+        PUID, P_SPARE_PART, P_SPARE_PART_NUM, P_PROCESS_ROUTE, P_LABOR_HOUR, P_RHYTHM,
+        P_SOLDER_JOINT, P_MACHINE_MATERITAL, P_STANDARD_PART, P_TOOLS, P_WASTER_PRODUCT,
+        P_CHANGE, P_CHANGE_NUM, P_BOM_PUID, P_MBOM_STATUS, P_CREATE_TIME, P_UPDATE_TIME,
+        P_CREATE_NAME, P_UPDATE_NAME, P_PARENT_UID, P_BOM_DIGIFAX_ID, P_LINE_INDEX, P_BOM_LINE_IS_HAS,
+        P_BOM_LINE_PUID, P_BOM_LINE_ID, P_BOM_LINE_IS_2Y, P_BOM_LINE_IS_PART, P_BOM_LINE_IS_DEPT,
+        P_BOM_OF_WHICH_DEPT, P_BOM_LINE_PART_NAME, P_BOM_LINE_PART_CLASS, P_BOM_LINE_PART_EN_NAME,
+        P_BOM_LINE_PART_RESOURCE, P_BOM_ORDER_NUM,P_BOM_TYPE, P_STOCK_LOCATION,P_FACTORY_ID
 	</sql>
 
     <!--物料主数据-->
@@ -97,7 +115,7 @@
     P_MATERIEL_DESC_EN, P_BASIC_UNIT_MEASURE, P_INVENTED_PART, P_SPARE_MATERIAL, P_VIN_PER_NO,
     P_COLOR_PART, P_HEIGHT, P_IN_OUT_SIDE_FLAG, P_3C_PART_FLAG, P_MRP_CONTROLLER, P_PART_IMPORTANT_DEGREE,
     P_LOOSE_PART_FLAG, P_VALID_FLAG, P_MATERIEL_DATA_TYPE, P_CREATE_TIME, P_UPDATE_TIME,
-    P_CREATE_NAME, P_UPDATE_NAME, P_FACTORY_PUID
+    P_CREATE_NAME, P_UPDATE_NAME, P_FACTORY_PUID,P_MATERIEL_RESOURCE_ID,P_TYPE
   </sql>
     
     <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
@@ -137,224 +155,23 @@
     where PUID = #{puid,jdbcType=VARCHAR}
   </update>
 
-
-    <!--新增一条数据-->
-    <insert id="HzMaterialDAOImpl_insert" parameterType="sql.pojo.project.HzMaterielRecord">
-        insert into HZ_MATERIEL_RECORD
-        <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="puid != null">
-                PUID,
-            </if>
-            <if test="pMaterielCode != null">
-                P_MATERIEL_CODE,
-            </if>
-            <if test="pMaterielType != null">
-                P_MATERIEL_TYPE,
-            </if>
-            <if test="pMaterielWerk != null">
-                P_MATERIEL_WERK,
-            </if>
-            <if test="pMaterielDesc != null">
-                P_MATERIEL_DESC,
-            </if>
-            <if test="pPertainToProjectPuid != null">
-                P_PERTAIN_TO_PROJECT_PUID,
-            </if>
-            <if test="pMaterielDescEn != null">
-                P_MATERIEL_DESC_EN,
-            </if>
-            <if test="pBasicUnitMeasure != null">
-                P_BASIC_UNIT_MEASURE,
-            </if>
-            <if test="pInventedPart != null">
-                P_INVENTED_PART,
-            </if>
-            <if test="pSpareMaterial != null">
-                P_SPARE_MATERIAL,
-            </if>
-            <if test="pVinPerNo != null">
-                P_VIN_PER_NO,
-            </if>
-            <if test="pColorPart != null">
-                P_COLOR_PART,
-            </if>
-            <if test="pHeight != null">
-                P_HEIGHT,
-            </if>
-            <if test="pInOutSideFlag != null">
-                P_IN_OUT_SIDE_FLAG,
-            </if>
-            <if test="p3cPartFlag != null">
-                P_3C_PART_FLAG,
-            </if>
-            <if test="pMrpController != null">
-                P_MRP_CONTROLLER,
-            </if>
-            <if test="pPartImportantDegree != null">
-                P_PART_IMPORTANT_DEGREE,
-            </if>
-            <if test="pLoosePartFlag != null">
-                P_LOOSE_PART_FLAG,
-            </if>
-            <if test="pValidFlag != null">
-                P_VALID_FLAG,
-            </if>
-            <if test="pMaterielDataType != null">
-                P_MATERIEL_DATA_TYPE,
-            </if>
-            <if test="pCreateTime != null">
-                P_CREATE_TIME,
-            </if>
-            <if test="pUpdateTime != null">
-                P_UPDATE_TIME,
-            </if>
-            <if test="pCreateName != null">
-                P_CREATE_NAME,
-            </if>
-            <if test="pUpdateName != null">
-                P_UPDATE_NAME,
-            </if>
-            <if test="pFactoryPuid != null">
-                P_FACTORY_PUID,
-            </if>
-        </trim>
-        <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="puid != null">
-                #{puid,jdbcType=VARCHAR},
-            </if>
-            <if test="pMaterielCode != null">
-                #{pMaterielCode,jdbcType=OTHER},
-            </if>
-            <if test="pMaterielType != null">
-                #{pMaterielType,jdbcType=OTHER},
-            </if>
-            <if test="pMaterielWerk != null">
-                #{pMaterielWerk,jdbcType=OTHER},
-            </if>
-            <if test="pMaterielDesc != null">
-                #{pMaterielDesc,jdbcType=OTHER},
-            </if>
-            <if test="pPertainToProjectPuid != null">
-                #{pPertainToProjectPuid,jdbcType=VARCHAR},
-            </if>
-            <if test="pMaterielDescEn != null">
-                #{pMaterielDescEn,jdbcType=VARCHAR},
-            </if>
-            <if test="pBasicUnitMeasure != null">
-                #{pBasicUnitMeasure,jdbcType=VARCHAR},
-            </if>
-            <if test="pInventedPart != null">
-                #{pInventedPart,jdbcType=INTEGER},
-            </if>
-            <if test="pSpareMaterial != null">
-                #{pSpareMaterial,jdbcType=VARCHAR},
-            </if>
-            <if test="pVinPerNo != null">
-                #{pVinPerNo,jdbcType=VARCHAR},
-            </if>
-            <if test="pColorPart != null">
-                #{pColorPart,jdbcType=INTEGER},
-            </if>
-            <if test="pHeight != null">
-                #{pHeight,jdbcType=VARCHAR},
-            </if>
-            <if test="pInOutSideFlag != null">
-                #{pInOutSideFlag,jdbcType=INTEGER},
-            </if>
-            <if test="p3cPartFlag != null">
-                #{p3cPartFlag,jdbcType=INTEGER},
-            </if>
-            <if test="pMrpController != null">
-                #{pMrpController,jdbcType=VARCHAR},
-            </if>
-            <if test="pPartImportantDegree != null">
-                #{pPartImportantDegree,jdbcType=VARCHAR},
-            </if>
-            <if test="pLoosePartFlag != null">
-                #{pLoosePartFlag,jdbcType=INTEGER},
-            </if>
-              1,
-            <if test="pMaterielDataType != null">
-                #{pMaterielDataType,jdbcType=INTEGER},
-            </if>
-            sysdate,
-            syadate,
-            <if test="pCreateName != null">
-                #{pCreateName,jdbcType=VARCHAR},
-            </if>
-            <if test="pUpdateName != null">
-                #{pUpdateName,jdbcType=VARCHAR},
-            </if>
-            <if test="pFactoryPuid != null">
-                #{pFactoryPuid,jdbcType=VARCHAR},
-            </if>
-        </trim>
-    </insert>
-
-
     <!--编辑一条记录-->
     <update id="HzMaterialDAOImpl_update" parameterType="sql.pojo.project.HzMaterielRecord">
         update HZ_MATERIEL_RECORD
         <set>
-            <if test="pMaterielCode != null">
-                P_MATERIEL_CODE = #{pMaterielCode,jdbcType=OTHER},
-            </if>
-            <if test="pMaterielType != null">
-                P_MATERIEL_TYPE = #{pMaterielType,jdbcType=OTHER},
-            </if>
-            <if test="pMaterielWerk != null">
-                P_MATERIEL_WERK = #{pMaterielWerk,jdbcType=OTHER},
-            </if>
-            <if test="pMaterielDesc != null">
-                P_MATERIEL_DESC = #{pMaterielDesc,jdbcType=OTHER},
-            </if>
-            <if test="pPertainToProjectPuid != null">
-                P_PERTAIN_TO_PROJECT_PUID = #{pPertainToProjectPuid,jdbcType=VARCHAR},
-            </if>
-            <if test="pMaterielDescEn != null">
-                P_MATERIEL_DESC_EN = #{pMaterielDescEn,jdbcType=VARCHAR},
-            </if>
-            <if test="pBasicUnitMeasure != null">
-                P_BASIC_UNIT_MEASURE = #{pBasicUnitMeasure,jdbcType=VARCHAR},
-            </if>
-            <if test="pInventedPart != null">
-                P_INVENTED_PART = #{pInventedPart,jdbcType=INTEGER},
-            </if>
             <if test="pSpareMaterial != null">
                 P_SPARE_MATERIAL = #{pSpareMaterial,jdbcType=VARCHAR},
             </if>
             <if test="pVinPerNo != null">
                 P_VIN_PER_NO = #{pVinPerNo,jdbcType=VARCHAR},
             </if>
-            <if test="pColorPart != null">
-                P_COLOR_PART = #{pColorPart,jdbcType=INTEGER},
-            </if>
-            <if test="pHeight != null">
-                P_HEIGHT = #{pHeight,jdbcType=VARCHAR},
-            </if>
-            <if test="pInOutSideFlag != null">
-                P_IN_OUT_SIDE_FLAG = #{pInOutSideFlag,jdbcType=INTEGER},
-            </if>
-            <if test="p3cPartFlag != null">
-                P_3C_PART_FLAG = #{p3cPartFlag,jdbcType=INTEGER},
-            </if>
             <if test="pMrpController != null">
                 P_MRP_CONTROLLER = #{pMrpController,jdbcType=VARCHAR},
-            </if>
-            <if test="pPartImportantDegree != null">
-                P_PART_IMPORTANT_DEGREE = #{pPartImportantDegree,jdbcType=VARCHAR},
             </if>
             <if test="pLoosePartFlag != null">
                 P_LOOSE_PART_FLAG = #{pLoosePartFlag,jdbcType=INTEGER},
             </if>
-
-            <if test="pMaterielDataType != null">
-                P_MATERIEL_DATA_TYPE = #{pMaterielDataType,jdbcType=INTEGER},
-            </if>
                 P_UPDATE_TIME = sysdate,
-            <if test="pCreateName != null">
-                P_CREATE_NAME = #{pCreateName,jdbcType=VARCHAR},
-            </if>
             <if test="pUpdateName != null">
                 P_UPDATE_NAME = #{pUpdateName,jdbcType=VARCHAR},
             </if>
@@ -385,12 +202,13 @@
     <insert id="HzMaterialDAOImpl_insertList" useGeneratedKeys="false" parameterType="java.util.List">
         insert into HZ_MATERIEL_RECORD (PUID, P_MATERIEL_CODE, P_MATERIEL_TYPE,
         P_MATERIEL_DESC, P_PERTAIN_TO_PROJECT_PUID, P_MATERIEL_DESC_EN,P_MATERIEL_DATA_TYPE,
-        P_FACTORY_PUID,P_TYPE)
+        P_FACTORY_PUID,P_TYPE,P_MATERIEL_RESOURCE_ID)
         <foreach collection="list" item="item" index="index" separator="UNION ALL">
             select
             #{item.puid,jdbcType=VARCHAR}, #{item.pMaterielCode,jdbcType=VARCHAR}, #{item.pMaterielType,jdbcType=VARCHAR},
             #{item.pMaterielDesc,jdbcType=VARCHAR}, #{item.pPertainToProjectPuid,jdbcType=VARCHAR}, #{item.pMaterielDescEn,jdbcType=VARCHAR},
-            #{item.pMaterielDataType,jdbcType=VARCHAR}, #{item.pFactoryPuid,jdbcType=VARCHAR},#{item.type,jdbcType=INTEGER}
+            #{item.pMaterielDataType,jdbcType=VARCHAR}, #{item.pFactoryPuid,jdbcType=VARCHAR},#{item.type,jdbcType=INTEGER},
+            #{item.materielResourceId,jdbcType=INTEGER}
             from DUAL
         </foreach>
     </insert>
@@ -412,6 +230,12 @@
             <if test="pMaterielDataType != null">
                 and P_MATERIEL_DATA_TYPE = #{pMaterielDataType,jdbcType=INTEGER}
             </if>
+            <if test="pMaterielCode != null">
+                and P_MATERIEL_CODE like CONCAT(CONCAT('%',#{pMaterielCode,jdbcType=VARCHAR}),'%')
+            </if>
+            <if test="pMaterielType != null">
+                and P_MATERIEL_TYPE like CONCAT(CONCAT('%',#{pMaterielType,jdbcType=VARCHAR}),'%')
+            </if>
         </where>
         )t
         WHERE ROWNUM &lt;=#{limit,jdbcType=INTEGER}) where rn &gt;#{offset,jdbcType=INTEGER}
@@ -430,8 +254,15 @@
             <if test="pMaterielDataType != null">
                 and P_MATERIEL_DATA_TYPE = #{pMaterielDataType,jdbcType=INTEGER}
             </if>
+            <if test="pMaterielCode != null">
+                and P_MATERIEL_CODE like CONCAT(CONCAT('%',#{pMaterielCode,jdbcType=VARCHAR}),'%')
+            </if>
+            <if test="pMaterielType != null">
+                and P_MATERIEL_TYPE like CONCAT(CONCAT('%',#{pMaterielType,jdbcType=VARCHAR}),'%')
+            </if>
         </where>
     </select>
+
 
 
     <!--获取物料主数据-->
@@ -461,7 +292,7 @@
     <select id="HzMaterialDAOImpl_findHzCfg0ModelRecord" parameterType="java.util.HashMap" resultMap="HzCfg0ModelRecordMap">
          select * from
         (select t.*,ROWNUM as rn from
-        (SELECT t1.* FROM HZ_CFG0_MODEL_RECORD t1 WHERE P_CFG0_MODEL_OF_MAIN_RECORD =
+        (SELECT t1.* FROM HZ_CFG0_MODEL_RECORD t1 WHERE t1.P_CFG0_MODEL_OF_MAIN_RECORD =
         (SELECT PUID FROM HZ_CFG0_MAIN_RECORD t2
         WHERE t2.P_CFG0_OF_WHICH_PROJECT_PUID=#{projectId,jdbcType=VARCHAR}))t
         WHERE ROWNUM &lt;=#{limit,jdbcType=INTEGER}) where rn &gt;#{offset,jdbcType=INTEGER}
@@ -469,6 +300,12 @@
     </select>
 
 
+    <!--查询整车衍生物料主数据全部-->
+    <select id="HzMaterialDAOImpl_findHzCfg0ModelRecordAll" parameterType="java.util.HashMap" resultMap="HzCfg0ModelRecordMap">
+        SELECT t1.* FROM HZ_CFG0_MODEL_RECORD t1 WHERE t1.P_CFG0_MODEL_OF_MAIN_RECORD =
+        (SELECT PUID FROM HZ_CFG0_MAIN_RECORD t2
+        WHERE t2.P_CFG0_OF_WHICH_PROJECT_PUID=#{projectId,jdbcType=VARCHAR})
+    </select>
 
     <!--分页查询虚拟件物料主数据 所有2y层级的-->
     <select id="HzMaterialDAOImpl_findHz2YMbomRecord" parameterType="java.util.HashMap" resultMap="HzMbomRecordMap">
@@ -476,16 +313,32 @@
         (select t.*,ROWNUM as rn from
         (select
         <include refid="HzMbomRecordList" />
-        from HZ_BOM_LINE_RECORD t1
-        where P_BOM_DIGIFAX_ID =(
+        from HZ_MBOM_RECORD t1
+        where t1.P_BOM_DIGIFAX_ID =(
         select t2.puid from Hz_Bom_Main_Record t2
         where
         t2.p_cfg0_of_which_project_puid=#{projectId,jdbcType=VARCHAR}
         ) and LENGTH(TRANSLATE(P_LINE_INDEX,',0123456789','.'))=1
-         and t1.P_BOM_LINE_IS_HAS=1)
+         and t1.P_BOM_LINE_IS_HAS=1)t
         WHERE ROWNUM &lt;=#{limit,jdbcType=INTEGER}) where rn &gt;#{offset,jdbcType=INTEGER}
     </select>
 
+
+
+    <!--查询虚拟件物料主数据全部 所有2y层级的-->
+    <select id="HzMaterialDAOImpl_findHz2YMbomRecordAll" parameterType="java.util.HashMap" resultMap="HzMbomRecordMap">
+
+        select
+        <include refid="HzMbomRecordList" />
+        from HZ_MBOM_RECORD t1
+        where t1.P_BOM_DIGIFAX_ID =(
+        select t2.puid from Hz_Bom_Main_Record t2
+        where
+        t2.p_cfg0_of_which_project_puid=#{projectId,jdbcType=VARCHAR}
+        ) and LENGTH(TRANSLATE(P_LINE_INDEX,',0123456789','.'))=1
+        and t1.P_BOM_LINE_IS_HAS=1
+
+    </select>
 
 
     <!--分页查询半成品物料主数据  零件来源为自制单件-->
@@ -494,14 +347,32 @@
         (select t.*,ROWNUM as rn from
         (select
         <include refid="HzMbomRecordList" />
-        from HZ_BOM_LINE_RECORD t1
-        where P_BOM_DIGIFAX_ID =(
+        from HZ_MBOM_RECORD t1
+        where t1.P_BOM_DIGIFAX_ID =(
         select t2.puid from Hz_Bom_Main_Record t2
         where
         t2.p_cfg0_of_which_project_puid=#{projectId,jdbcType=VARCHAR}
         )
-        )
+        and T1.P_BOM_LINE_PART_RESOURCE='自制单件'
+        )t
         WHERE ROWNUM &lt;=#{limit,jdbcType=INTEGER}) where rn &gt;#{offset,jdbcType=INTEGER}
+    </select>
+
+
+
+    <!--查询半成品物料主数据  零件来源为自制单件-->
+    <select id="HzMaterialDAOImpl_findHzResourceMakeSingleMbomRecordAll" parameterType="java.util.HashMap" resultMap="HzMbomRecordMap">
+
+        select
+        <include refid="HzMbomRecordList" />
+        from HZ_MBOM_RECORD t1
+        where t1.P_BOM_DIGIFAX_ID =(
+        select t2.puid from Hz_Bom_Main_Record t2
+        where
+        t2.p_cfg0_of_which_project_puid=#{projectId,jdbcType=VARCHAR}
+        )
+        and T1.P_BOM_LINE_PART_RESOURCE='自制单件'
+
     </select>
 
 
@@ -511,38 +382,96 @@
         (select t.*,ROWNUM as rn from
         (select
         <include refid="HzMbomRecordList" />
-        from HZ_BOM_LINE_RECORD t1
+        from HZ_MBOM_RECORD t1
         where P_BOM_DIGIFAX_ID =(
         select t2.puid from Hz_Bom_Main_Record t2
         where
         t2.p_cfg0_of_which_project_puid=#{projectId,jdbcType=VARCHAR}
         )
-        )
+        and T1.P_BOM_LINE_PART_RESOURCE='采购件'
+        )t
         WHERE ROWNUM &lt;=#{limit,jdbcType=INTEGER}) where rn &gt;#{offset,jdbcType=INTEGER}
     </select>
+
+
+
+    <!--查询生产性外购物料主数据全部 零件来源为采购件-->
+    <select id="HzMaterialDAOImpl_findHzResourceBuyMbomRecordAll" parameterType="java.util.HashMap" resultMap="HzMbomRecordMap">
+       select
+        <include refid="HzMbomRecordList" />
+        from HZ_MBOM_RECORD t1
+        where P_BOM_DIGIFAX_ID =(
+        select t2.puid from Hz_Bom_Main_Record t2
+        where
+        t2.p_cfg0_of_which_project_puid=#{projectId,jdbcType=VARCHAR}
+        )
+        and T1.P_BOM_LINE_PART_RESOURCE='采购件'
+    </select>
+
 
     <!--分页查询自制备件物料主数据 备件信息为自制 物料前需加DY标志-->
     <select id="HzMaterialDAOImpl_findHzMadeBySelfSpareMbomRecord" parameterType="java.util.HashMap" resultMap="HzMbomRecordMap">
         select * from
         (select t.*,ROWNUM as rn from
-        ( select t.*,t5.* from HZ_BOM_LINE_RECORD t
-        LEFT OUTER JOIN HZ_BOM_STATE t6 on t.puid = t6.P_BOM_ID
-        LEFT OUTER JOIN HZ_MBOM_RECORD t5 ON t.puid = T5.P_BOM_PUID
-        where t.p_bom_digifax_id=(
+        ( select t5.* from HZ_MBOM_RECORD t5
+        where t5.p_bom_digifax_id=(
         select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(
         select t2.puid from Hz_project_libs t2
         <where>
             t2.puid=#{projectId,jdbcType=VARCHAR}))
-            and (t6.P_BOM_STATE is null or t6.P_BOM_STATE  <![CDATA[!= ]]>2)
+            and t5.P_SPARE_PART ='自制'
             and (t5.P_MBOM_STATUS IS NULL OR t5.P_MBOM_STATUS=1)
         </where>
-        )
+        )t
         WHERE ROWNUM &lt;=#{limit,jdbcType=INTEGER}) where rn &gt;#{offset,jdbcType=INTEGER}
     </select>
 
-    <!--根据外键查询一条记录-->
-    <select id="ssss" parameterType="java.util.HashMap" resultMap="HzMbomRecordMap">
 
+    <!--查询自制备件物料主数据全部 备件信息为自制 物料前需加DY标志-->
+    <select id="HzMaterialDAOImpl_findHzMadeBySelfSpareMbomRecordAll" parameterType="java.util.HashMap" resultMap="HzMbomRecordMap">
+
+        select t5.* from HZ_MBOM_RECORD t5
+        where t5.p_bom_digifax_id=(
+        select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(
+        select t2.puid from Hz_project_libs t2
+        <where>
+            t2.puid=#{projectId,jdbcType=VARCHAR}))
+            and t5.P_SPARE_PART ='自制'
+            and (t5.P_MBOM_STATUS IS NULL OR t5.P_MBOM_STATUS=1)
+        </where>
+    </select>
+
+
+    <!--分页查询自制总成物料主数据-->
+    <select id="HzMaterialDAOImpl_findHzMadeBySelfAssemblyMbomRecord" parameterType="java.util.HashMap" resultMap="HzMbomRecordMap">
+        select * from
+        (select t.*,ROWNUM as rn from
+        ( select t5.* from HZ_MBOM_RECORD t5
+        where t5.p_bom_digifax_id=(
+        select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(
+        select t2.puid from Hz_project_libs t2
+        <where>
+            t2.puid=#{projectId,jdbcType=VARCHAR}))
+            and t5.P_BOM_LINE_PART_RESOURCE ='自制总成'
+            and (t5.P_MBOM_STATUS IS NULL OR t5.P_MBOM_STATUS=1)
+        </where>
+        )t
+        WHERE ROWNUM &lt;=#{limit,jdbcType=INTEGER}) where rn &gt;#{offset,jdbcType=INTEGER}
+    </select>
+
+
+    <!--查询自制总成物料主数据全部-->
+    <select id="HzMaterialDAOImpl_findHzMadeBySelfAssemblyMbomRecordAll" parameterType="java.util.HashMap" resultMap="HzMbomRecordMap">
+
+        select t5.* from HZ_MBOM_RECORD t5
+        where t5.p_bom_digifax_id=(
+        select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(
+        select t2.puid from Hz_project_libs t2
+        <where>
+            t2.puid=#{projectId,jdbcType=VARCHAR}))
+            and t5.P_BOM_LINE_PART_RESOURCE ='自制总成'
+            and (t5.P_MBOM_STATUS IS NULL OR t5.P_MBOM_STATUS=1)
+        </where>
     </select>
 
 
@@ -564,4 +493,14 @@
         </where>
     </select>
 
+    <!--查找重复-->
+    <select id="HzMaterialDAOImpl_HzMaterielIsExist" parameterType="java.util.HashMap" resultType="java.lang.Integer">
+        select count(*) from HZ_MATERIEL_RECORD
+        <where>
+            P_MATERIEL_RESOURCE_ID = #{materielResourceId,jdbcType=VARCHAR}
+            <if test="projectId != null">
+                and P_PERTAIN_TO_PROJECT_PUID = #{projectId,jdbcType=VARCHAR}
+            </if>
+        </where>
+    </select>
 </mapper>
