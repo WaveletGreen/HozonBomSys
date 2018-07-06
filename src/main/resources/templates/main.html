@@ -80,7 +80,7 @@
                         th:text="${#authentication.name}"></font> <b class="caret"></b></a>
                 <ul class="dropdown-menu">
                     <!--<li>-->
-                        <!--<a href="#"><i class="fa fa-fw fa-gear"></i> 修改密码 </a>-->
+                    <!--<a href="#"><i class="fa fa-fw fa-gear"></i> 修改密码 </a>-->
                     <!--</li>-->
                     <li class="divider"></li>
                     <li>
@@ -180,8 +180,8 @@
 
                             $("#projectList").append(
                                 "<li>" +
-                                "<a href='javascript:void(0)' class='project'><i class='fa fa-fw fa-gear'></i> "+_data[i].pProjectName+" </a>" +
-                                "</li>"+
+                                "<a href='javascript:void(0)' class='project'><i class='fa fa-fw fa-gear'></i> " + _data[i].pProjectName + " </a>" +
+                                "</li>" +
                                 "<li class='divider'></li>"
                             );
                         }
@@ -190,7 +190,7 @@
                     if (auth) {
                         $("#fastOption").removeAttr("hidden");
                         $("#fastOption").addClass("form-control");
-                        $("#fastOption").bind("change", selectEvent);
+                        // $("#fastOption").bind("change", selectEvent);
                         $("#labHidden").removeAttr("hidden");
                     }
                 },

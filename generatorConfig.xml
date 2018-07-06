@@ -3,7 +3,7 @@
         "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
 <generatorConfiguration>
     <classPathEntry
-            location="I:\app\product\11.2.0\dbhome_1\jdbc\lib\ojdbc6.jar"/>
+            location="E:\oracle\product\11.2.0\dbhome_1\jdbc\lib\ojdbc6.jar"/>
     <context id="context1">
         <commentGenerator>
             <!-- 抑制警告 -->
@@ -15,7 +15,7 @@
         </commentGenerator>
         <!--数据库连接的信息：驱动类、连接地址、用户名、密码 -->
         <jdbcConnection
-                connectionURL="jdbc:oracle:thin:@127.0.0.1:1521:TC10"
+                connectionURL="jdbc:oracle:thin:@192.168.1.121:1521:TC10"
                 driverClass="oracle.jdbc.driver.OracleDriver" password="HOZON"
                 userId="HOZON"/>
         <!-- 默认false，把JDBC DECIMAL 和 NUMERIC 类型解析为 Integer，为 true时把JDBC DECIMAL
@@ -25,7 +25,7 @@
         </javaTypeResolver>
         <!-- targetProject:生成PO类的位置 -->
         <javaModelGenerator targetPackage="sql.pojo.cfg"
-                            targetProject="H:\IntelliJIdeaWorkSpace\hozon\bom\HozonBomSys\src\main\java">
+                            targetProject="J:\IntelliJIdeaWorkSpace\hozon\bs\HozonBomSys\src\main\java">
             <!-- enableSubPackages:是否让schema作为包的后缀 -->
             <property name="enableSubPackages" value="false"/>
             <!-- 从数据库返回的值被清理前后的空格 -->
@@ -34,14 +34,14 @@
         <!-- targetProject:mapper映射文件生成的位置 -->
         <sqlMapGenerator
                 targetPackage="com.connor.hozon.bom.bomSystem.dao.cfg"
-                targetProject="H:\IntelliJIdeaWorkSpace\hozon\bom\HozonBomSys\src\main\java">
+                targetProject="J:\IntelliJIdeaWorkSpace\hozon\bs\HozonBomSys\src\main\java">
             <!-- enableSubPackages:是否让schema作为包的后缀 -->
             <property name="enableSubPackages" value="false"/>
         </sqlMapGenerator>
         <!-- targetPackage：mapper接口生成的位置 -->
         <javaClientGenerator type="XMLMAPPER"
                              targetPackage="com.connor.hozon.bom.bomSystem.dao.cfg"
-                             targetProject="H:\IntelliJIdeaWorkSpace\hozon\bom\HozonBomSys\src\main\java">
+                             targetProject="J:\IntelliJIdeaWorkSpace\hozon\bs\HozonBomSys\src\main\java">
             <property name="enableSubPackages" value="false"/>
         </javaClientGenerator>
         <!-- tableName:用于自动生成代码的数据库表；domainObjectName:对应于数据库表的javaBean类名 -->
