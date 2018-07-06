@@ -1,6 +1,7 @@
 package com.connor.hozon.bom.resources.service.work;
 
 import com.connor.hozon.bom.resources.dto.request.AddHzProcessReqDTO;
+import com.connor.hozon.bom.resources.dto.request.ApplyMbomDataTOHzMaterielReqDTO;
 import com.connor.hozon.bom.resources.dto.request.UpdateHzProcessReqDTO;
 import com.connor.hozon.bom.resources.dto.response.HzWorkProcessRespDTO;
 import com.connor.hozon.bom.resources.dto.response.OperateResultMessageRespDTO;
@@ -43,5 +44,5 @@ public interface HzWorkProcessService {
 
     HzWorkProcessRespDTO findHzWorkProcess(String materielId,String projectId);
 
-    OperateResultMessageRespDTO applyMbomDataToHzMaterielOneKey(String mbomPuids);
+    OperateResultMessageRespDTO applyMbomDataToHzMaterielOneKey(ApplyMbomDataTOHzMaterielReqDTO reqDTO);
 }

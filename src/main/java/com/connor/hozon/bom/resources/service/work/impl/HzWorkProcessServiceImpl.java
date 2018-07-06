@@ -2,6 +2,7 @@ package com.connor.hozon.bom.resources.service.work.impl;
 
 import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.resources.dto.request.AddHzProcessReqDTO;
+import com.connor.hozon.bom.resources.dto.request.ApplyMbomDataTOHzMaterielReqDTO;
 import com.connor.hozon.bom.resources.dto.request.UpdateHzProcessReqDTO;
 import com.connor.hozon.bom.resources.dto.response.HzWorkProcessRespDTO;
 import com.connor.hozon.bom.resources.dto.response.OperateResultMessageRespDTO;
@@ -154,7 +155,7 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
     }
 
     @Override
-    public OperateResultMessageRespDTO applyMbomDataToHzMaterielOneKey(String mbomPuids) {
+    public OperateResultMessageRespDTO applyMbomDataToHzMaterielOneKey(ApplyMbomDataTOHzMaterielReqDTO reqDTO) {
 
         return OperateResultMessageRespDTO.getFailResult();
     }
