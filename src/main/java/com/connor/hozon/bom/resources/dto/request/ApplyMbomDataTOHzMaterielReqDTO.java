@@ -1,11 +1,17 @@
 package com.connor.hozon.bom.resources.dto.request;
 
+import com.connor.hozon.bom.resources.dto.response.HzMbomRecordRespDTO;
+
+import java.util.List;
+
 /**
  * @Author: haozt
  * @Date: 2018/7/6
  * @Description:
  */
 public class ApplyMbomDataTOHzMaterielReqDTO {
+
+    List<HzMbomRecordRespDTO> mbomRecordRespDTOS;
     /**
      * MBOM  puid 中间用，隔开 英文逗号
      */
@@ -18,6 +24,14 @@ public class ApplyMbomDataTOHzMaterielReqDTO {
      * 项目id
      */
     private String projectId;
+
+    public List<HzMbomRecordRespDTO> getMbomRecordRespDTOS() {
+        return mbomRecordRespDTOS;
+    }
+
+    public void setMbomRecordRespDTOS(List<HzMbomRecordRespDTO> mbomRecordRespDTOS) {
+        this.mbomRecordRespDTOS = mbomRecordRespDTOS;
+    }
 
     public String getMbomPuids() {
         return mbomPuids;

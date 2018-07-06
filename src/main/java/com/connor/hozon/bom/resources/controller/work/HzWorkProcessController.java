@@ -4,6 +4,7 @@ import com.connor.hozon.bom.resources.controller.BaseController;
 import com.connor.hozon.bom.resources.dto.request.AddHzProcessReqDTO;
 import com.connor.hozon.bom.resources.dto.request.ApplyMbomDataTOHzMaterielReqDTO;
 import com.connor.hozon.bom.resources.dto.request.UpdateHzProcessReqDTO;
+import com.connor.hozon.bom.resources.dto.response.HzMbomRecordRespDTO;
 import com.connor.hozon.bom.resources.dto.response.HzWorkProcessRespDTO;
 import com.connor.hozon.bom.resources.dto.response.OperateResultMessageRespDTO;
 import com.connor.hozon.bom.resources.page.Page;
@@ -178,8 +179,10 @@ public class HzWorkProcessController extends BaseController {
      * 一键同步MBom数据到物料主数据
      */
     @RequestMapping(value = "apply/oneKey",method = RequestMethod.POST)
-    public void applyMbomDataToHzMaterielOneKey(ApplyMbomDataTOHzMaterielReqDTO reqDTO, HttpServletResponse response){
+    public void applyMbomDataToHzMaterielOneKey(@RequestBody List<HzMbomRecordRespDTO> mbomRecordRespDTOS,String projectId,Integer type, HttpServletResponse response){
+        ApplyMbomDataTOHzMaterielReqDTO reqDTO = new ApplyMbomDataTOHzMaterielReqDTO();
         OperateResultMessageRespDTO respDTO =  hzWorkProcessService.applyMbomDataToHzMaterielOneKey(reqDTO);
         writeAjaxJSONResponse(ResultMessageBuilder.build(OperateResultMessageRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
     }
+
 }

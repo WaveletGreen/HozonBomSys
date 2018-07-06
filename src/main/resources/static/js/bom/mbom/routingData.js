@@ -145,8 +145,8 @@ function initTable(url) {
                                     $.ajax({
                                         type: "POST",
                                         //ajax需要添加打包名
-                                        url: "work/process/delete?puid="+rows[0].puid,
-                                        //data: JSON.stringify(rows),
+                                        url: "work/process/delete",
+                                        data: JSON.stringify(rows),
                                         contentType: "application/json",
                                         success: function (result) {
                                             /*if (result.status) {
@@ -171,15 +171,29 @@ function initTable(url) {
                         text: '选取数据',
                         iconCls: 'glyphicon glyphicon-save',
                         handler: function () {
-                            window.Ewin.dialog({
-                                title: "选取数据",
-                                url: "work/process/getMBom",
-                                gridId: "gridId",
-                                width: $(window).width() -200,
-                                height: $(window.parent.document).find("#wrapper").height()
-                            })
-                        }
-                    },
+                                    window.Ewin.dialog({
+                                        title: "选取数据",
+                                        url: "work/process/getMBom",
+                                        gridId: "gridId2",
+                                        width: 700,
+                                        height:650
+                                    })
+                                }
+                    }
+                    // ,
+                    // {
+                    //     text: '选取数据',
+                    //     iconCls: 'glyphicon glyphicon-save',
+                    //     handler: function () {
+                    //         window.Ewin.dialog({
+                    //             title: "选取数据",
+                    //             url: "work/process/getMBom",
+                    //             gridId: "gridId",
+                    //             width: 500,
+                    //             height:650
+                    //         })
+                    //     }
+                    // },
                 ],
             });
             $table.bootstrapTable('hideColumn', 'materielId');

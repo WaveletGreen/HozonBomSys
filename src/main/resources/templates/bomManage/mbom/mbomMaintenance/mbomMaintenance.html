@@ -39,10 +39,42 @@
 <script th:src="@{/js/jq.resizableColumns.js}"></script>
 <script th:inline="javascript">
     $(document).ready((function () {
+        var $table = $("#mbomMaintenanceTable");
+        var selectionIds = [];	//保存选中ids
         var projectPuid = $("#project", window.top.document).val();
         var mBomUrl = "mbom/record?projectId=" + projectPuid;
         initTable(mBomUrl);
+        //选中事件操作数组
+        // var union = function(array,ids){
+        //     $.each(ids, function (i, id) {
+        //         if($.inArray(id,array)==-1){
+        //             array[array.length] = id;
+        //         }
+        //     });
+        //     return array;
+        // };
+        // //取消选中事件操作数组
+        // var difference = function(array,ids){
+        //     $.each(ids, function (i, id) {
+        //         var index = $.inArray(id,array);
+        //         if(index!=-1){
+        //             array.splice(index, 1);
+        //         }
+        //     });
+        //     return array;
+        // };
+        // var _ = {"union":union,"difference":difference};
+        // //绑定选中事件、取消事件、全部选中、全部取消
+        // $table.on('check.bs.table check-all.bs.table uncheck.bs.table uncheck-all.bs.table', function (e, rows) {
+        //     var ids = $.map(!$.isArray(rows) ? [rows] : rows, function (row) {
+        //         return row.id;
+        //     });
+        //     func = $.inArray(e.type, ['check', 'check-all']) > -1 ? 'union' : 'difference';
+        //     selectionIds = _[func](selectionIds, ids);
+        // });
+
     }))
+
 
 
     function doQuery(){
@@ -103,7 +135,7 @@
                     dataType: 'json',
                     cache: false,
                     striped: true,                              //是否显示行间隔色
-                    //sidePagination: "server",           //分页方式：client客户端分页，server服务端分页（*）
+                    sidePagination: "server",           //分页方式：client客户端分页，server服务端分页（*）
                     height: $(window.parent.document).find("#wrapper").height() - 180,
                     width: $(window).width(),
                     formId :"queryMbomMain",
@@ -127,6 +159,7 @@
                     showToggle: false,                   //是否显示详细视图和列表视图的切换按钮
                     showRefresh: true,                  //是否显示刷新按钮
                     minimumCountColumns: 4,
+                    //responseHandler:responseHandler, //在渲染页面数据之前执行的方法，此配置很重要!!!!!!!
                     toolbars: [
                         {
                             text: '添加',
@@ -204,7 +237,7 @@
                             }
                         },
                         {
-                            text: '发送到工艺路线',
+                            text: '发送到整车路线',
                             iconCls: 'glyphicon glyphicon-send',
                             handler: function () {
                                 var rows = $table.bootstrapTable('getSelections');
@@ -217,8 +250,44 @@
                                         $.ajax({
                                             type: "POST",
                                             //ajax需要添加打包名
-                                            url: "/delete?eBomPuid="+rows[0].eBomPuid,
-                                            //data: JSON.stringify(rows),
+                                            url: "work/process/apply/oneKey?projectId="+projectPuid+"&type=2",
+                                            data: JSON.stringify(rows),
+                                            contentType: "application/json",
+                                            success: function (result) {
+                                                /*if (result.status) {
+                                                    window.Ewin.alert({message: result.errMsg});
+                                                    //刷新，会重新申请数据库数据
+                                                }
+                                                else {
+                                                    window.Ewin.alert({message: ":" + result.errMsg});
+                                                }*/
+                                                window.Ewin.alert({message: result.errMsg});
+                                                $table.bootstrapTable("refresh");
+                                            },
+                                            error: function (info) {
+                                                window.Ewin.alert({message: "操作删除:" + info.status});
+                                            }
+                                        })
+                                    }
+                                });
+                            }
+                        },
+                        {
+                            text: '发送到总成路线',
+                            iconCls: 'glyphicon glyphicon-send',
+                            handler: function () {
+                                var rows = $table.bootstrapTable('getSelections');
+                                if (rows.length == 0) {
+                                    window.Ewin.alert({message: '请选择需要发送的数据!'});
+                                    return false;
+                                }
+                                window.Ewin.confirm({title: '提示', message: '是否要发送您所选择的记录？', width: 500}).on(function (e) {
+                                    if (e) {
+                                        $.ajax({
+                                            type: "POST",
+                                            //ajax需要添加打包名
+                                            url: "work/process/apply/oneKey?projectId="+projectPuid+"&type=3",
+                                            data: JSON.stringify(rows),
                                             contentType: "application/json",
                                             success: function (result) {
                                                 /*if (result.status) {
@@ -244,6 +313,13 @@
                 $table.bootstrapTable('hideColumn', 'eBomPuid');
             }
         });
+        //表格分页之前处理多选框数据
+        // function responseHandler(res) {
+        //     $.each(res.rows, function (i, row) {
+        //         row.checkStatus = $.inArray(row.id, selectionIds) != -1;	//判断当前行的数据id是否存在与选中的数组，存在则将多选框状态变为true
+        //     });
+        //     return res;
+        // }
     }
 </script>
 
