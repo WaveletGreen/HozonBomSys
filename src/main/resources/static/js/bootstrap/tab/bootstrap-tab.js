@@ -58,7 +58,7 @@
     // 结构模板
     BaseTab.prototype.template = {
         ul_nav: '<ul  class="nav nav-tabs"></ul>',
-        ul_li: '<li><a href="#{0}" data-toggle="tab"><span>{1}</span></a></li>',
+        ul_li: '<li><a  href="#{0}" data-toggle="tab"><span>{1}</span></a></li>',
         ul_li_close: '<i class="fa fa-remove closeable" title="关闭"></i>',
         div_content: '<div  class="tab-content"></div>',
         div_content_panel: '<div class="tab-pane fade" id="{0}"></div>'
