@@ -121,6 +121,10 @@ public class HzMbomServiceImpl implements HzMbomService {
                 respDTO.setWasterProduct(record.getWasterProduct());
                 respDTO.setChange(record.getChange());
                 respDTO.setChangeNum(record.getChangeNum());
+
+                respDTO.setpBomType(record.getpBomType());
+                respDTO.setpFactoryCode("1001");
+                respDTO.setpStockLocation(record.getpStockLocation());
                 respDTOList.add(respDTO);
             }
             return new Page<>(query.getPage(),query.getLimit(),recordPage.getTotalCount(),respDTOList);

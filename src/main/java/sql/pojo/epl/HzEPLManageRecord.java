@@ -165,6 +165,18 @@ public class HzEPLManageRecord {
      * 变更编号
      */
     private String changeNum;
+    /**
+     * FNA信息
+     */
+    private String fna;
+
+    public String getFna() {
+        return fna;
+    }
+
+    public void setFna(String fna) {
+        this.fna = fna;
+    }
 
     public String getPuid() {
         return puid;

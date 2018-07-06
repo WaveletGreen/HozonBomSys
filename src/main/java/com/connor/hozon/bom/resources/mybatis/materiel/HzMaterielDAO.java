@@ -107,4 +107,6 @@ public interface HzMaterielDAO {
      * @return
      */
     HzMaterielRecord getHzMaterielRecord(HzMaterielQuery query);
+
+    Integer getHzMaterielCount(String projectId,Integer pMaterielDataType );
 }

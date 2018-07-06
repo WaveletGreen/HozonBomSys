@@ -97,6 +97,43 @@ public class HzMbomRecordRespDTO {
      * 变更编号
      */
     private String changeNum;
+    /**
+     * bom类型
+     */
+    private Integer pBomType;
+    /**
+     * 发货料库存地点
+     */
+    private String pStockLocation;
+
+    /**
+     * 工厂
+     */
+    private String pFactoryCode;
+
+    public Integer getpBomType() {
+        return pBomType;
+    }
+
+    public void setpBomType(Integer pBomType) {
+        this.pBomType = pBomType;
+    }
+
+    public String getpStockLocation() {
+        return pStockLocation;
+    }
+
+    public void setpStockLocation(String pStockLocation) {
+        this.pStockLocation = pStockLocation;
+    }
+
+    public String getpFactoryCode() {
+        return pFactoryCode;
+    }
+
+    public void setpFactoryCode(String pFactoryCode) {
+        this.pFactoryCode = pFactoryCode;
+    }
 
     private String object_name;
 

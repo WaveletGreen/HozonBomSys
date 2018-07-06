@@ -43,6 +43,9 @@
         <result column="P_BOM_LINE_PART_RESOURCE" jdbcType="VARCHAR" property="pBomLinePartResource" />
         <result column="P_BOM_ORDER_NUM" jdbcType="INTEGER" property="orderNum" />
 
+        <result column="P_BOM_TYPE" jdbcType="DECIMAL" property="pBomType" />
+        <result column="P_STOCK_LOCATION" jdbcType="VARCHAR" property="pStockLocation" />
+        <result column="P_FACTORY_ID" jdbcType="VARCHAR" property="pFactoryId" />
 
         <!--插入配置信息 车型信息-->
         <result column="P_CFG0_MODEL_RECORD" jdbcType="VARCHAR" property="cfg0ModelRecordId"/>
@@ -69,7 +72,7 @@
         P_CREATE_NAME, P_UPDATE_NAME, P_PARENT_UID, P_BOM_DIGIFAX_ID, P_LINE_INDEX, P_BOM_LINE_IS_HAS,
         P_BOM_LINE_PUID, P_BOM_LINE_ID, P_BOM_LINE_IS_2Y, P_BOM_LINE_IS_PART, P_BOM_LINE_IS_DEPT,
         P_BOM_OF_WHICH_DEPT, P_BOM_LINE_PART_NAME, P_BOM_LINE_PART_CLASS, P_BOM_LINE_PART_EN_NAME,
-        P_BOM_LINE_PART_RESOURCE, P_BOM_ORDER_NUM
+        P_BOM_LINE_PART_RESOURCE, P_BOM_ORDER_NUM,P_BOM_TYPE, P_STOCK_LOCATION,P_FACTORY_ID
   </sql>
 
 
