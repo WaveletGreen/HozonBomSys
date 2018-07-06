@@ -86,6 +86,54 @@ public class HzMbomRecord {
      */
     private String updateName;
 
+    private Integer orderNum;
+
+    /**
+     * bom类型
+     */
+    private Integer pBomType;
+    /**
+     * 发货料库存地点
+     */
+    private String pStockLocation;
+
+    /**
+     * 工厂
+     */
+    private String pFactoryId;
+
+    public Integer getpBomType() {
+        return pBomType;
+    }
+
+    public void setpBomType(Integer pBomType) {
+        this.pBomType = pBomType;
+    }
+
+    public String getpStockLocation() {
+        return pStockLocation;
+    }
+
+    public void setpStockLocation(String pStockLocation) {
+        this.pStockLocation = pStockLocation;
+    }
+
+    public String getpFactoryId() {
+        return pFactoryId;
+    }
+
+    public void setpFactoryId(String pFactoryId) {
+        this.pFactoryId = pFactoryId;
+    }
+
+    public Integer getOrderNum() {
+        return orderNum;
+    }
+
+    public void setOrderNum(Integer orderNum) {
+        this.orderNum = orderNum;
+    }
+
     public String getPuid() {
         return puid;
     }

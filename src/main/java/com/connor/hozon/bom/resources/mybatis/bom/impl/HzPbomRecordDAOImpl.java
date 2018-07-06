@@ -77,7 +77,7 @@ public class HzPbomRecordDAOImpl extends BaseSQLUtil implements HzPbomRecordDAO 
     public int  getHzBomLineCount(String projectId) {
        Map<String,Object> map = new HashMap<>();
        map.put("projectId",projectId);
-        return (int)super.findForObject("HzPbomRecordDAOImpl_getTotalCount",map);
+       return (int)super.findForObject("HzPbomRecordDAOImpl_getTotalCount",map);
     }
 
     @Override

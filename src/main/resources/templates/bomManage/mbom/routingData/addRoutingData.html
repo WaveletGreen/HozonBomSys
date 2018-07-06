@@ -2,43 +2,55 @@
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <!--User: xulf Date: 2018/7/2 Time: 10:58-->
 <body>
-<form id="routingDataForm" role="form" method="post" action="mbom/add">
-    <input id="eBomPuid" name="eBomPuid" type="text"/><!--th:value="${entity.pBomPuid}"-->
+<form id="routingDataForm" role="form" method="post" action="work/process/add">
+    <input id="materielId" name="materielId" type="text" th:value="${data.materielId}"/><!--th:value="${entity.pBomPuid}"-->
     <div class="form-group">
-        <label for="factory">工厂</label>
-        <input class="form-control" id="factory" name="factory" type="text"
+        <label for="pMaterielCode">物料</label>
+        <input class="form-control" id="pMaterielCode" name="pMaterielCode" type="text"disabled="disabled"
+               th:value="${data.pMaterielCode}"
+               placeholder="请输入物料"/><!--th:value="${entity.level}"-->
+    </div>
+    <div class="form-group">
+        <label for="pMaterielDesc">物料名称</label>
+        <input class="form-control" id="pMaterielDesc" name="pMaterielDesc" type="text"disabled="disabled"
+               th:value="${data.pMaterielDesc}"
+               placeholder="请输入物料名称"/><!--th:value="${entity.level}"-->
+    </div>
+    <div class="form-group">
+        <label for="factoryCode">工厂</label>
+        <input class="form-control" id="factoryCode" name="factoryCode" type="text"
 
                placeholder="请输入工厂"/><!--th:value="${entity.level}"-->
     </div>
     <div class="form-group">
-        <label for="workHours">工作工时</label>
-        <input class="form-control" id="workHours" name="workHours" type="text"
-
-               placeholder="请输入工作工时"/><!--th:value="${entity.level}"-->
-    </div>
-    <div class="form-group">
-        <label for="jobCentreCategory">工作中心类别</label>
-        <input class="form-control" id="jobCentreCategory" name="jobCentreCategory" type="text"
-
-               placeholder="请输入工作中心类别"/><!--th:value="${entity.level}"-->
-    </div>
-    <div class="form-group">
-        <label for="describe">描述</label>
-        <input class="form-control" id="describe" name="describe" type="text"
-
-               placeholder="请输入描述"/><!--th:value="${entity.level}"-->
-    </div>
-    <div class="form-group">
-        <label for="use">用途</label>
-        <input class="form-control" id="use" name="use" type="text"
+        <label for="purpose">用途</label>
+        <input class="form-control" id="purpose" name="purpose" type="text"
 
                placeholder="请输入用途"/><!--th:value="${entity.level}"-->
     </div>
     <div class="form-group">
-        <label for="standardCode">标准值码</label>
-        <input class="form-control" id="standardCode" name="standardCode" type="text" disabled="disabled"
+        <label for="state">状态</label>
+        <input class="form-control" id="state" name="state" type="text"
 
-               placeholder="请输入标准值码"/><!--th:value="${entity.level}"-->
+               placeholder="请输入状态"/><!--th:value="${entity.level}"-->
+    </div>
+    <div class="form-group">
+        <label for="pProcedureCode">工序号</label>
+        <input class="form-control" id="pProcedureCode" name="pProcedureCode" type="text"
+
+               placeholder="请输入工序号"/><!--th:value="${entity.level}"-->
+    </div>
+    <div class="form-group">
+        <label for="pWorkCode">工作中心</label>
+        <input class="form-control" id="pWorkCode" name="pWorkCode" type="text"
+
+               placeholder="请输入工作中心"/><!--th:value="${entity.level}"-->
+    </div>
+    <div class="form-group">
+        <label for="pWorkDesc">工作中心描述</label>
+        <input class="form-control" id="pWorkDesc" name="pWorkDesc" type="text"
+
+               placeholder="请输入工作中心描述"/><!--th:value="${entity.level}"-->
     </div>
     <div class="form-group">
         <label for="controlCode">控制码</label>
@@ -47,66 +59,54 @@
                placeholder="请输入控制码"/><!--th:value="${entity.level}"-->
     </div>
     <div class="form-group">
-        <label for="directLabor">直接人工</label>
-        <input class="form-control" id="directLabor" name="directLabor" type="text"
+        <label for="pProcedureDesc">工序描述</label>
+        <input class="form-control" id="pProcedureDesc" name="pProcedureDesc" type="text"
 
-               placeholder="请输入直接人工"/><!--th:value="${entity.level}"-->
+               placeholder="请输入工序描述"/><!--th:value="${entity.level}"-->
     </div>
     <div class="form-group">
-        <label for="indirectLabor">间接人工</label>
-        <input class="form-control" id="indirectLabor" name="indirectLabor" type="text"
+        <label for="pCount">基本数量</label>
+        <input class="form-control" id="pCount" name="pCount" type="text"
 
-               placeholder="请输入间接人工"/><!--th:value="${entity.level}"-->
-    </div>
-    <div class="form-group">
-        <label for="machineHour">机器工时</label>
-        <input class="form-control" id="machineHour" name="machineHour" type="text"
-
-               placeholder="请输入机器工时"/><!--th:value="${entity.level}"-->
-    </div>
-    <div class="form-group">
-        <label for="combustion">燃动</label>
-        <input class="form-control" id="combustion" name="combustion" type="text"
-
-               placeholder="请输入燃动"/><!--th:value="${entity.level}"-->
+               placeholder="请输入基本数量"/><!--th:value="${entity.level}"-->
     </div>
 
     <div class="form-group">
-        <label for="machineMaterial">机物料</label>
-        <input class="form-control" id="machineMaterial" name="machineMaterial" type="text"
+        <label for="pDirectLabor">直接人工时间</label>
+        <input class="form-control" id="pDirectLabor" name="pDirectLabor" type="text"
 
-               placeholder="请输入机物料"/><!--th:value="${entity.level}"-->
+               placeholder="请输入直接人工时间"/><!--th:value="${entity.level}"-->
     </div>
 
     <div class="form-group">
-        <label for="otherCosts">其它费用</label>
-        <input class="form-control" id="otherCosts" name="otherCosts" type="text"
+        <label for="pIndirectLabor">间接人工时间</label>
+        <input class="form-control" id="pIndirectLabor" name="pIndirectLabor" type="text"
 
-               placeholder="请输入其它费用"/><!--th:value="${entity.level}"-->
+               placeholder="请输入间接人工时间"/><!--th:value="${entity.level}"-->
     </div>
     <div class="form-group">
-        <label for="processingFormula">加工公式</label>
-        <input class="form-control" id="processingFormula" name="processingFormula" type="text"
+        <label for="pMachineLabor">机器时间</label>
+        <input class="form-control" id="pMachineLabor" name="pMachineLabor" type="text"
 
-               placeholder="请输入加工公式"/><!--th:value="${entity.level}"-->
+               placeholder="请输入机器时间"/><!--th:value="${entity.level}"-->
     </div>
     <div class="form-group">
-        <label for="powerType">能力类别</label>
-        <input class="form-control" id="powerType" name="powerType" type="text"
+        <label for="pBurn">燃动能</label>
+        <input class="form-control" id="pBurn" name="pBurn" type="text"
 
-               placeholder="请输入能力类别"/><!--th:value="${entity.level}"-->
+               placeholder="请输入燃动能"/><!--th:value="${entity.level}"-->
     </div>
     <div class="form-group">
-        <label for="startTime">开始时间</label>
-        <input class="form-control" id="startTime" name="startTime" type="text"
+        <label for="pMachineMaterialLabor">机物料消耗</label>
+        <input class="form-control" id="pMachineMaterialLabor" name="pMachineMaterialLabor" type="text"
 
-               placeholder="请输入开始时间"/><!--th:value="${entity.level}"-->
+               placeholder="请输入机物料消耗"/><!--th:value="${entity.level}"-->
     </div>
     <div class="form-group">
-        <label for="endTime">结束时间</label>
-        <input class="form-control" id="endTime" name="endTime" type="text"
+        <label for="pOtherCost">其他费用</label>
+        <input class="form-control" id="pOtherCost" name="pOtherCost" type="text"
 
-               placeholder="请输入结束时间"/><!--th:value="${entity.level}"-->
+               placeholder="请输入其他费用"/><!--th:value="${entity.level}"-->
     </div>
 </form>
 <script th:inline="javascript">
@@ -137,23 +137,25 @@
             if (bootstrapValidator.isValid()) {
                 var url = $("#routingDataForm", window.top.document).attr('action');
                 var myData = JSON.stringify({
-                    "eBomPuid": $("#eBomPuid").val(),
-                    "level": $("#level").val(),
-                    "pBomOfWhichDept": $("#pBomOfWhichDept").val(),
-                    "lineId": $("#lineId").val(),
-                    "object_name": $("#object_name").val(),
-                    "sparePart": $("#sparePart").val(),
-                    "sparePartNum": $("#sparePartNum").val(),
-                    "processRoute": $("#processRoute").val(),
-                    "laborHour": $("#laborHour").val(),
-                    "rhythm": $("#rhythm").val(),
-                    "solderJoint": $("#solderJoint").val(),
-                    "machineMaterial": $("#machineMaterial").val(),
-                    "standardPart": $("#standardPart").val(),
-                    "tools": $("#tools").val(),
-                    "wasterProduct": $("#wasterProduct").val(),
-                    "change": $("#change").val(),
-                    "changeNum": $("#changeNum").val()
+                    "materielId": $("#materielId").val(),
+                    "pMaterielCode": $("#pMaterielCode").val(),
+                    "pMaterielDesc": $("#pMaterielDesc").val(),
+                    "factoryCode": $("#factoryCode").val(),
+                    "purpose": $("#purpose").val(),
+                    "state": $("#state").val(),
+                    "pProcedureCode": $("#pProcedureCode").val(),
+                    "pWorkCode": $("#pWorkCode").val(),
+                    "pWorkDesc": $("#pWorkDesc").val(),
+                    "controlCode": $("#controlCode").val(),
+                    "pProcedureDesc": $("#pProcedureDesc").val(),
+                    "pCount": $("#pCount").val(),
+                    "pDirectLabor": $("#pDirectLabor").val(),
+                    "pIndirectLabor": $("#pIndirectLabor").val(),
+                    "pMachineLabor": $("#pMachineLabor").val(),
+                    "pBurn": $("#pBurn").val(),
+                    "pMachineMaterialLabor": $("#pMachineMaterialLabor").val(),
+                    "pOtherCost": $("#pOtherCost").val(),
+                    "projectId":$("#project", window.top.document).val()
                 });
                 console.log(myData);
                 $.ajax({

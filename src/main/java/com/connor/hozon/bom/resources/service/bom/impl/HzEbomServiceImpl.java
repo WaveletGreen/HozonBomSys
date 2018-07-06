@@ -115,6 +115,7 @@ public class HzEbomServiceImpl implements HzEbomService {
                 }
                 jsonObject.put("groupNum", groupNum);
                 jsonObject.put("lineId", record.getLineID());
+                jsonObject.put("fna",record.getFna());
                 byte[] bomLineBlock = record.getBomLineBlock();
                 Object obj = SerializeUtil.unserialize(bomLineBlock);
                 if (obj instanceof LinkedHashMap) {
@@ -146,7 +147,7 @@ public class HzEbomServiceImpl implements HzEbomService {
     public JSONArray getEbomTitle(String projectId) {
         try{
             JSONArray array = new JSONArray();
-            int appendCount = 6;
+            int appendCount = 7;
             HzPreferenceSetting setting = new HzPreferenceSetting();
             setting.setSettingName("Hz_ExportBomPreferenceRedis");
             HZBomMainRecord main = hzBomMainRecordDao.selectByProjectPuid(projectId);
@@ -169,6 +170,7 @@ public class HzEbomServiceImpl implements HzEbomService {
                 appendLocalName[3] = "专业";
                 appendLocalName[4] = "级别";
                 appendLocalName[5] = "分组号";
+                appendLocalName[6] = "FNA信息";
 
                 appendTrueName[0] = "No";
                 appendTrueName[1] = "puid";
@@ -176,7 +178,7 @@ public class HzEbomServiceImpl implements HzEbomService {
                 appendTrueName[3] = "pBomOfWhichDept";
                 appendTrueName[4] = "rank";
                 appendTrueName[5] = "groupNum";
-
+                appendTrueName[6] = "fna";
                 System.arraycopy(localName, 0, appendLocalName, appendCount, localName.length);
                 System.arraycopy(trueName, 0, appendTrueName, appendCount, trueName.length);
 

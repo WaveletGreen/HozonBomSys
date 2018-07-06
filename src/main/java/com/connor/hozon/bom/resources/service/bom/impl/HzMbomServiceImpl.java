@@ -1,5 +1,6 @@
 package com.connor.hozon.bom.resources.service.bom.impl;
 
+import com.connor.hozon.bom.bomSystem.dao.impl.bom.HzBomLineRecordDaoImpl;
 import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.resources.dto.request.AddMbomReqDTO;
 import com.connor.hozon.bom.resources.dto.request.UpdateMbomReqDTO;
@@ -15,6 +16,7 @@ import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.sys.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import sql.pojo.bom.HzBomLineRecord;
 import sql.pojo.bom.HzMbomLineRecord;
 import sql.pojo.bom.HzMbomRecord;
 import sql.redis.SerializeUtil;
@@ -33,6 +35,8 @@ public class HzMbomServiceImpl implements HzMbomService {
     @Autowired
     private HzMbomRecordDAO hzMbomRecordDAO;
 
+    @Autowired
+    private HzBomLineRecordDaoImpl hzBomLineRecordDao;
 
     @Override
     public Page<HzMbomRecordRespDTO> fingHzMbomForPage(HzMbomByPageQuery query) {
@@ -51,6 +55,37 @@ public class HzMbomServiceImpl implements HzMbomService {
                     query.setLineIndex(String.valueOf(length - 1));
                 }
             }
+
+            int count = hzMbomRecordDAO.getHzMbomTotalCount(query.getProjectId());
+            if(count<=0){
+                List<HzBomLineRecord> lineRecords = hzBomLineRecordDao.getAllBomLineRecordByProjectId(query.getProjectId());
+                if(ListUtil.isNotEmpty(lineRecords)){
+                    int size = lineRecords.size();
+                    //分批插入数据 一次1000条
+                    int i =0;
+                    int cout = 0;
+                    if(size>1000){
+                        for(i =0;i<size/1000;i++){
+                            List<HzMbomLineRecord> list = new ArrayList<>();
+                            for(int j = 0;j<1000;j++){
+                                HzMbomLineRecord hzPbomLineRecord =bomLineToMbomLine(lineRecords.get(cout));
+                                list.add(hzPbomLineRecord);
+                                cout++;
+                            }
+                            hzMbomRecordDAO.insertList(list);
+                        }
+                    }
+                    if(i*1000<size){
+                        List<HzMbomLineRecord> list = new ArrayList<>();
+                        for(int j = 0;j<size-i*1000;j++){
+                            HzMbomLineRecord hzPbomLineRecord =bomLineToMbomLine(lineRecords.get(cout));
+                            list.add(hzPbomLineRecord);
+                            cout++;
+                        }
+                        hzMbomRecordDAO.insertList(list);
+                    }
+                }
+            }
             Page<HzMbomLineRecord> recordPage =hzMbomRecordDAO.findMbomForPage(query);
             int num = (query.getPage()-1)*query.getLimit();
             if(recordPage == null || recordPage.getResult() == null){
@@ -62,23 +97,19 @@ public class HzMbomServiceImpl implements HzMbomService {
                 HzMbomRecordRespDTO respDTO= new HzMbomRecordRespDTO();
                 respDTO.setNo(++num);
                 respDTO.setPuid(record.getPuid());
-                respDTO.seteBomPuid(record.getpPuid());
+                respDTO.seteBomPuid(record.geteBomPuid());
                 Integer is2Y = record.getIs2Y();
                 Integer hasChildren = record.getIsHas();
                 String lineIndex = record.getLineIndex();
                 String[] strings = getLevelAndRank(lineIndex, is2Y, hasChildren);
                 respDTO.setLevel(strings[0]);//层级
-                respDTO.setLineId(record.getLineID());
+                respDTO.setLineId(record.getLineId());
                 respDTO.setpBomOfWhichDept(record.getpBomOfWhichDept());
-                byte[] bytes = record.getBomLineBlock();
-                Object obj = SerializeUtil.unserialize(bytes);
-                Object name = null;
-                if (obj instanceof LinkedHashMap) {
-                    if (((LinkedHashMap) obj).size() > 0) {
-                        name =((LinkedHashMap) obj).get("object_name");
-                    }
-                }
-                respDTO.setObject_name((String) name);
+                respDTO.setpBomLinePartClass(record.getpBomLinePartClass());
+                respDTO.setpBomLinePartEnName(record.getpBomLinePartEnName());
+                respDTO.setpBomLinePartName(record.getpBomLinePartName());
+                respDTO.setpBomLinePartResource(record.getpBomLinePartResource());
+
                 respDTO.setSparePart(record.getSparePart());
                 respDTO.setSparePartNum(record.getSparePartNum());
                 respDTO.setLaborHour(record.getLaborHour());
@@ -90,6 +121,10 @@ public class HzMbomServiceImpl implements HzMbomService {
                 respDTO.setWasterProduct(record.getWasterProduct());
                 respDTO.setChange(record.getChange());
                 respDTO.setChangeNum(record.getChangeNum());
+
+                respDTO.setpBomType(record.getpBomType());
+                respDTO.setpFactoryCode("1001");
+                respDTO.setpStockLocation(record.getpStockLocation());
                 respDTOList.add(respDTO);
             }
             return new Page<>(query.getPage(),query.getLimit(),recordPage.getTotalCount(),respDTOList);
@@ -109,23 +144,22 @@ public class HzMbomServiceImpl implements HzMbomService {
             if(record != null){
                 HzMbomRecordRespDTO respDTO = new HzMbomRecordRespDTO();
                 respDTO.setPuid(record.getPuid());
-                respDTO.seteBomPuid(record.getpPuid());
+                respDTO.seteBomPuid(record.geteBomPuid());
                 Integer is2Y = record.getIs2Y();
                 Integer hasChildren = record.getIsHas();
                 String lineIndex = record.getLineIndex();
                 String[] strings = getLevelAndRank(lineIndex, is2Y, hasChildren);
                 respDTO.setLevel(strings[0]);//层级
-                respDTO.setLineId(record.getLineID());
+                respDTO.setLineId(record.getLineId());
                 respDTO.setpBomOfWhichDept(record.getpBomOfWhichDept());
-                byte[] bytes = record.getBomLineBlock();
-                Object obj = SerializeUtil.unserialize(bytes);
-                Object name = null;
-                if (obj instanceof LinkedHashMap) {
-                    if (((LinkedHashMap) obj).size() > 0) {
-                        name =((LinkedHashMap) obj).get("object_name");
-                    }
-                }
-                respDTO.setObject_name((String) name);
+
+
+                respDTO.setObject_name(record.getpBomLinePartName());
+                respDTO.setpBomLinePartClass(record.getpBomLinePartClass());
+                respDTO.setpBomLinePartEnName(record.getpBomLinePartEnName());
+                respDTO.setpBomLinePartName(record.getpBomLinePartName());
+                respDTO.setpBomLinePartResource(record.getpBomLinePartResource());
+
                 respDTO.setSparePart(record.getSparePart());
                 respDTO.setSparePartNum(record.getSparePartNum());
                 respDTO.setLaborHour(record.getLaborHour());
@@ -162,6 +196,8 @@ public class HzMbomServiceImpl implements HzMbomService {
                 operateResultMessageRespDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
                 return operateResultMessageRespDTO;
             }
+
+
             HzMbomRecord hzMbomRecord = new HzMbomRecord();
             hzMbomRecord.seteBomPuid(reqDTO.geteBomPuid());
             hzMbomRecord.setChange(reqDTO.getChange());
@@ -179,7 +215,21 @@ public class HzMbomServiceImpl implements HzMbomService {
             hzMbomRecord.setCreateName(user.getUserName());
             hzMbomRecord.setStatus(1);
             hzMbomRecord.setUpdateName(user.getUserName());
+            Map<String,Object> map = new HashMap<>();
+            map.put("pPuid",reqDTO.geteBomPuid());
+            map.put("projectId",reqDTO.getProjectId());
+            HzMbomLineRecord lineRecord = hzMbomRecordDAO.findHzMbomByPuid(map);
+            if(lineRecord!=null){
+                int i = hzMbomRecordDAO.update(hzMbomRecord);
+                if(i>0){
+                    return  OperateResultMessageRespDTO.getSuccessResult();
+                }else{
+                    return OperateResultMessageRespDTO.getFailResult();
+                }
+            }
             hzMbomRecord.setPuid(UUID.randomUUID().toString());
+            int maxOrderNum = hzMbomRecordDAO.getHzMbomMaxOrderNum(reqDTO.getProjectId());
+            hzMbomRecord.setOrderNum(++maxOrderNum);
             int i = hzMbomRecordDAO.insert(hzMbomRecord);
             if(i>0){
                 return OperateResultMessageRespDTO.getSuccessResult();
@@ -291,7 +341,7 @@ public class HzMbomServiceImpl implements HzMbomService {
                 String lineIndex = record.getLineIndex();
                 String[] strings = getLevelAndRank(lineIndex, is2Y, hasChildren);
                 respDTO.setLevel(strings[0]);//层级
-                respDTO.setLineId(record.getLineID());
+                respDTO.setLineId(record.getLineId());
                 respDTO.setpBomOfWhichDept(record.getpBomOfWhichDept());
                 byte[] bytes = record.getBomLineBlock();
                 Object obj = SerializeUtil.unserialize(bytes);
@@ -372,4 +422,26 @@ public class HzMbomServiceImpl implements HzMbomService {
             return  getHzSuperMbomByPuid(projectId,record.getParentUid());
         }
     }
+
+    private HzMbomLineRecord bomLineToMbomLine(HzBomLineRecord record){
+        HzMbomLineRecord hzMbomLineRecord = new HzMbomLineRecord();
+        hzMbomLineRecord.setPuid(UUID.randomUUID().toString());
+        hzMbomLineRecord.setIsHas(record.getIsHas());
+        hzMbomLineRecord.setBomDigifaxId(record.getBomDigifaxId());
+        hzMbomLineRecord.seteBomPuid(record.getPuid());
+        hzMbomLineRecord.setIsDept(record.getIsDept());
+        hzMbomLineRecord.setLineId(record.getLineID());
+        hzMbomLineRecord.setIsPart(record.getIsPart());
+        hzMbomLineRecord.setIs2Y(record.getIs2Y());
+        hzMbomLineRecord.setLineIndex(record.getLineIndex());
+        hzMbomLineRecord.setParentUid(record.getPuid());
+        hzMbomLineRecord.setpBomLinePartClass(record.getpBomLinePartClass());
+        hzMbomLineRecord.setpBomLinePartName(record.getpBomLinePartName());
+        hzMbomLineRecord.setpBomOfWhichDept(record.getpBomOfWhichDept());
+        hzMbomLineRecord.setpBomLinePartEnName(record.getpBomLinePartEnName());
+        hzMbomLineRecord.setpBomLinePartResource(record.getpBomLinePartResource());
+        hzMbomLineRecord.setOrderNum(record.getOrderNum());
+        return hzMbomLineRecord;
+    }
+
 }

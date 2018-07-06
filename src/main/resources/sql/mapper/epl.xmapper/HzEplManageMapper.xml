@@ -18,6 +18,7 @@
     <result column="P_BOM_LINE_PART_CLASS" jdbcType="VARCHAR" property="pBomLinePartClass"/>
     <result column="P_BOM_LINE_BLOCK" jdbcType="BLOB" property="bomLineBlock"/>
     <result column="P_BOM_STATE" jdbcType="INTEGER" property="pState" />
+      <result column="P_FNA_INFO" jdbcType="VARCHAR" property="fna" />
     <!--PBOM-->
     <result column="P_ITEM_RESOURCE" jdbcType="VARCHAR" property="itemResource" />
     <result column="P_RESOURCE" jdbcType="VARCHAR" property="resource" />
@@ -43,14 +44,6 @@
     <result column="P_CHANGE" jdbcType="VARCHAR" property="change" />
     <result column="P_CHANGE_NUM" jdbcType="VARCHAR" property="changeNum" />
   </resultMap>
-
-
-  <sql id="Base_Column_List">
-    P_PUID, P_UNIT, P_RENT_LOW, P_RENT_HIGH, P_PICTURE_NO, P_INSTALL_PICTURE_NO, P_MAP, 
-    P_MATERIAL_HIGH, P_MATERIAL1, P_MATERIAL2, P_MATERIAL3, P_DENSITY, P_MATERIAL_STANDARD, 
-    P_SURFACE_MANAGE, P_TEXTURE_NO, P_MADE_ART, P_SYMMETRIC, P_IMPORTANCE, P_IS_RULE_PART, 
-    P_RULE_PART_NO, P_BOM_PUID, P_STATE
-  </sql>
 
   <!--<sql id="Pbom_List">-->
     <!--P_PUID,P_LINE_INDEX,P_BOM_LINE_IS_HAS,P_BOM_LINE_ID,P_BOM_LINE_IS_2Y,P_BOM_OF_WHICH_DEPT-->

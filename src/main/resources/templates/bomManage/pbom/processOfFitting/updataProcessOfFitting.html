@@ -1,0 +1,218 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<!--User: xulf Date: 2018/7/4 Time: 14:29-->
+<body>
+<form id="pbomManageForm" role="form" method="post" action="pbom/insert">
+    <input id="puid" name="puid" type="text"/><!--th:value="${entity.eBomPuid}"-->
+    <div class="form-group">
+        <label for="level">层级</label>
+        <input class="form-control" id="level" name="level" type="text"
+               placeholder="请输入层级"/><!--th:value="${entity.level}"-->
+    </div>
+    <div class="form-group">
+        <label for="pBomOfWhichDept">专业</label>
+        <input class="form-control" id="pBomOfWhichDept" name="pBomOfWhichDept" type="text"
+               placeholder="请输入专业"/><!--th:value="${entity.level}"-->
+    </div>
+    <div class="form-group">
+        <label for="rank">级别</label>
+        <input class="form-control" id="rank" name="rank" type="text"
+               placeholder="请输入级别"/><!--th:value="${entity.level}"-->
+    </div>
+    <div class="form-group">
+        <label for="groupNum">分组号</label>
+        <input class="form-control" id="groupNum" name="groupNum" type="text"
+               placeholder="请输入分组号"/><!--th:value="${entity.level}"-->
+    </div>
+    <div class="form-group">
+        <label for="current_name">对象名称</label>
+        <input class="form-control" id="current_name" name="current_name" type="text"
+               placeholder="请输入对象名称"/><!--th:value="${entity.level}"-->
+    </div>
+    <div class="form-group">
+        <label for="object_string">对象</label>
+        <input class="form-control" id="object_string" name="object_string" type="text"
+               placeholder="请输入对象"/><!--th:value="${entity.level}"-->
+    </div>
+    <div class="form-group">
+        <label for="bl_item_object_type">零组件类型</label>
+        <input class="form-control" id="bl_item_object_type" name="bl_item_object_type" type="text"
+               placeholder="请输入零组件类型"/><!--th:value="${entity.level}"-->
+    </div>
+    <div class="form-group">
+        <label for="bl_sequence_no">查找编号</label>
+        <input class="form-control" id="bl_sequence_no" name="bl_sequence_no" type="text"
+               placeholder="请输入查找编号"/><!--th:value="${entity.level}"-->
+    </div>
+    <div class="form-group">
+        <label for="bl_formula">变量公式</label>
+        <input class="form-control" id="bl_formula" name="bl_formula" type="text"
+               placeholder="请输入变量公式"/><!--th:value="${entity.level}"-->
+    </div>
+    <div class="form-group">
+        <label for="mfg0realRevision">主版本已配置</label>
+        <input class="form-control" id="mfg0realRevision" name="mfg0realRevision" type="text"
+               placeholder="请输入主版本已配置"/><!--th:value="${entity.level}"-->
+    </div>
+    <div class="form-group">
+        <label for="bl_config_string">规则配置依据</label>
+        <input class="form-control" id="bl_config_string" name="bl_config_string" type="text"
+               placeholder="请输入规则配置依据"/><!--th:value="${entity.level}"-->
+    </div>
+    <div class="form-group">
+        <label for="object_string">对象</label>
+        <input class="form-control" id="object_string" name="object_string" type="text"
+               placeholder="请输入对象"/><!--th:value="${entity.level}"-->
+    </div>
+    <div class="form-group">
+        <label for="object_string">对象</label>
+        <input class="form-control" id="object_string" name="object_string" type="text"
+               placeholder="请输入对象"/><!--th:value="${entity.level}"-->
+    </div>
+    <div class="form-group">
+        <label for="object_string">对象</label>
+        <input class="form-control" id="object_string" name="object_string" type="text"
+               placeholder="请输入对象"/><!--th:value="${entity.level}"-->
+    </div>
+    <div class="form-group">
+        <label for="object_string">对象</label>
+        <input class="form-control" id="object_string" name="object_string" type="text"
+               placeholder="请输入对象"/><!--th:value="${entity.level}"-->
+    </div>
+    <div class="form-group">
+        <label for="object_string">对象</label>
+        <input class="form-control" id="object_string" name="object_string" type="text"
+               placeholder="请输入对象"/><!--th:value="${entity.level}"-->
+    </div>
+    <div class="form-group">
+        <label for="object_string">对象</label>
+        <input class="form-control" id="object_string" name="object_string" type="text"
+               placeholder="请输入对象"/><!--th:value="${entity.level}"-->
+    </div>
+    <div class="form-group">
+        <label for="object_string">对象</label>
+        <input class="form-control" id="object_string" name="object_string" type="text"
+               placeholder="请输入对象"/><!--th:value="${entity.level}"-->
+    </div>
+    <div class="form-group">
+        <label for="object_string">对象</label>
+        <input class="form-control" id="object_string" name="object_string" type="text"
+               placeholder="请输入对象"/><!--th:value="${entity.level}"-->
+    </div>
+    <div class="form-group">
+        <label for="object_string">对象</label>
+        <input class="form-control" id="object_string" name="object_string" type="text"
+               placeholder="请输入对象"/><!--th:value="${entity.level}"-->
+    </div>
+    <div class="form-group">
+        <label for="object_string">对象</label>
+        <input class="form-control" id="object_string" name="object_string" type="text"
+               placeholder="请输入对象"/><!--th:value="${entity.level}"-->
+    </div>
+    <div class="form-group">
+        <label for="object_string">对象</label>
+        <input class="form-control" id="object_string" name="object_string" type="text"
+               placeholder="请输入对象"/><!--th:value="${entity.level}"-->
+    </div>
+    <div class="form-group">
+        <label for="object_string">对象</label>
+        <input class="form-control" id="object_string" name="object_string" type="text"
+               placeholder="请输入对象"/><!--th:value="${entity.level}"-->
+    </div>
+    <div class="form-group">
+        <label for="object_string">对象</label>
+        <input class="form-control" id="object_string" name="object_string" type="text"
+               placeholder="请输入对象"/><!--th:value="${entity.level}"-->
+    </div>
+    <div class="form-group">
+        <label for="object_string">对象</label>
+        <input class="form-control" id="object_string" name="object_string" type="text"
+               placeholder="请输入对象"/><!--th:value="${entity.level}"-->
+    </div>
+    <div class="form-group">
+        <label for="object_string">对象</label>
+        <input class="form-control" id="object_string" name="object_string" type="text"
+               placeholder="请输入对象"/><!--th:value="${entity.level}"-->
+    </div>
+</form>
+<script th:inline="javascript">
+    <![CDATA[
+    $(function () {
+        $('#pbomManageForm').bootstrapValidator({
+            message: 'This value is not valid',
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            fields: {
+                level: {
+                    message: '层级验证失败',
+                    validators: {
+                        notEmpty: {
+                            message: '层级不能为空'
+                        }
+                    }
+                },
+            }
+        });
+        // 绑定dialog的确定按钮的监听事件
+        $("#btnOk", window.top.document).click(function () {
+            var bootstrapValidator = $("#pbomManageForm", window.top.document).data('bootstrapValidator');
+            bootstrapValidator.validate();
+            if (bootstrapValidator.isValid()) {
+                var url = $("#pbomManageForm", window.top.document).attr('action');
+                var projectId = $("#project", window.top.document).val();
+                var pBomPuid = $("#pBomPuid").val();
+                var myData = JSON.stringify({
+                    "eBomPuid": $("#eBomPuid").val(),
+                    // "rank": $("#rank").val(),
+                    // "level": $("#level").val(),
+                    // "lineId": $("#lineId").val(),
+                    // "pBomOfWhichDept": $("#pBomOfWhichDept").val(),
+                    // "groupNum": $("#groupNum").val(),
+                    // "h9_IsCommon": $("#h9_IsCommon").val(),
+                    // "H9_Mat_Status": $("#H9_Mat_Status").val(),
+                    // "resource": $("#resource").val(),
+                    "type": $("#type").val(),
+                    "buyUnit": $("#buyUnit").val(),
+                    "workShop1": $("#workShop1").val(),
+                    "workShop2": $("#workShop2").val(),
+                    "productLine": $("#productLine").val(),
+                    "mouldType": $("#mouldType").val(),
+                    "outerPart": $("#outerPart").val(),
+                    "colorPart": $("#colorPart").val(),
+                    "station": $("#station").val(),
+                });
+                console.log(myData);
+                $.ajax({
+                    contentType:
+                        "application/json",
+                    type:
+                        'POST',
+                    url: url,
+                    data: myData,
+                    success:
+                        function (result) {
+                            $('.modal-dialog', window.top.document).parent('div').remove()
+                            $('body', window.top.document).find('.modal-backdrop').remove();
+                            // jquery 调用刷新当前操作的table页面的refresh方法
+                            $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
+
+                            window.Ewin.alert({message: result.errMsg});
+                            /*if (result)
+                                window.Ewin.alert({message: '修改数据成功!'});
+                            else
+                                window.Ewin.alert({message: '修改数据失败!'});*/
+                        },
+                    error: function (status) {
+                        window.Ewin.alert({message: status.status + ':修改数据失败!'});
+                    }
+                });
+            }
+        });
+    })
+    ]]>
+</script>
+</body>
+</html>

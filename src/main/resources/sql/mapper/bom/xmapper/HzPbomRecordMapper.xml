@@ -114,7 +114,7 @@
   </select>
 
 
-  <!--查询PBOM子节点信息-->
+  <!--查询PBOM子层信息-->
   <select id="HzPbomRecordDAOImpl_getHzPbomById" resultMap="HzPbomLineRecord" parameterType="java.util.HashMap">
 
     select t.* from HZ_PBOM_RECORD t
@@ -122,7 +122,10 @@
     select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(
     select t2.puid from Hz_project_libs t2
     <where>
-        t2.puid = #{projectId,jdbcType=VARCHAR}))
+      1=1
+      <if test="projectId != null and  projectId!='' " >
+         and t2.puid = #{projectId,jdbcType=VARCHAR}))
+      </if>
       <if test="parentUid != null and  parentUid!='' " >
         and t.P_PARENT_UID = #{parentUid,jdbcType=VARCHAR}
       </if>
@@ -139,7 +142,10 @@
     select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(
     select t2.puid from Hz_project_libs t2
     <where>
-      t2.puid=#{projectId,jdbcType=VARCHAR}))
+      1=1
+      <if test="projectId != null and  projectId!='' " >
+        and t2.puid = #{projectId,jdbcType=VARCHAR}))
+      </if>
       <if test="lineId != null and  lineId!='' " >
         and t6.P_BOM_LINE_ID = #{lineId,jdbcType=VARCHAR}
       </if>

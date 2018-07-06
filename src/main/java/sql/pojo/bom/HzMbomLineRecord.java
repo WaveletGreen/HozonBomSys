@@ -34,7 +34,7 @@ public class HzMbomLineRecord {
     /**
      * Bom行对应的零件号
      */
-    private String lineID;
+    private String lineId;
     /**
      * 是否有子层
      */
@@ -76,6 +76,12 @@ public class HzMbomLineRecord {
      * Bom行对应的零件类别
      */
     private String pBomLinePartClass;
+
+    /**
+     * 零件来源
+     */
+    private String pBomLinePartResource;
+
     /**
      * 外键id
      */
@@ -185,8 +191,56 @@ public class HzMbomLineRecord {
      * 车型配置模型id
      */
     private String cfg0ModelRecordId;
-
+    /**
+     * 采购件类型
+     */
     private String resource;
+
+    /**
+     * bom类型
+     */
+    private Integer pBomType;
+    /**
+     * 发货料库存地点
+     */
+    private String pStockLocation;
+
+    /**
+     * 工厂
+     */
+    private String pFactoryId;
+
+    public Integer getpBomType() {
+        return pBomType;
+    }
+
+    public void setpBomType(Integer pBomType) {
+        this.pBomType = pBomType;
+    }
+
+    public String getpStockLocation() {
+        return pStockLocation;
+    }
+
+    public void setpStockLocation(String pStockLocation) {
+        this.pStockLocation = pStockLocation;
+    }
+
+    public String getpFactoryId() {
+        return pFactoryId;
+    }
+
+    public void setpFactoryId(String pFactoryId) {
+        this.pFactoryId = pFactoryId;
+    }
+
+    public String getpBomLinePartResource() {
+        return pBomLinePartResource;
+    }
+
+    public void setpBomLinePartResource(String pBomLinePartResource) {
+        this.pBomLinePartResource = pBomLinePartResource;
+    }
 
     public String getResource() {
         return resource;
@@ -348,12 +402,12 @@ public class HzMbomLineRecord {
         this.linePuid = linePuid;
     }
 
-    public String getLineID() {
-        return lineID;
+    public String getLineId() {
+        return lineId;
     }
 
-    public void setLineID(String lineID) {
-        this.lineID = lineID;
+    public void setLineId(String lineId) {
+        this.lineId = lineId;
     }
 
     public Integer getIsHas() {

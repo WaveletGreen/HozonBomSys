@@ -155,6 +155,9 @@ public class HzMbomController extends BaseController {
         tableTitle.put("wasterProduct", "废品");
         tableTitle.put("change", "变更");
         tableTitle.put("changeNum", "变更号");
+        tableTitle.put("pFactoryCode", "工厂代码");
+        tableTitle.put("pStockLocation", "发货料库存地点");
+        tableTitle.put("pBomType", "bom类型");
         writeAjaxJSONResponse(ResultMessageBuilder.build(tableTitle), response);
     }
 
@@ -183,7 +186,7 @@ public class HzMbomController extends BaseController {
             _res.put("level", dto.getLevel());
             _res.put("pBomOfWhichDept", dto.getpBomOfWhichDept());
             _res.put("lineId", dto.getLineId());
-            _res.put("object_name", dto.getObject_name());
+            _res.put("object_name", dto.getpBomLinePartName());
             _res.put("sparePart", dto.getSparePart());
             _res.put("sparePartNum", dto.getSparePartNum());
             _res.put("processRoute", dto.getProcessRoute());
@@ -196,6 +199,9 @@ public class HzMbomController extends BaseController {
             _res.put("wasterProduct", dto.getWasterProduct());
             _res.put("change", dto.getChange());
             _res.put("changeNum", dto.getChangeNum());
+            _res.put("pFactoryCode", dto.getpFactoryCode());
+            _res.put("pStockLocation",dto.getpStockLocation());
+            _res.put("pBomType", dto.getpBomType());
             _list.add(_res);
         });
         ret.put("totalCount", page.getTotalCount());
@@ -215,7 +221,7 @@ public class HzMbomController extends BaseController {
         }
         HzMbomRecordRespDTO hzMbomRecordRespDTO = new HzMbomRecordRespDTO();
         hzMbomRecordRespDTO.seteBomPuid(respDTO.geteBomPuid());
-        hzMbomRecordRespDTO.setObject_name(respDTO.getObject_name());
+        hzMbomRecordRespDTO.setObject_name(respDTO.getpBomLinePartName());
         hzMbomRecordRespDTO.setLevel(respDTO.getLevel());
         hzMbomRecordRespDTO.setLineId(respDTO.getLineId());
         hzMbomRecordRespDTO.setpBomOfWhichDept(respDTO.getpBomOfWhichDept());

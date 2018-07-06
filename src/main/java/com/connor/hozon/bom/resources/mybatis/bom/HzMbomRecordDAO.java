@@ -17,7 +17,7 @@ public interface HzMbomRecordDAO {
      * 批量插入MBOM维护信息
      * @return
      */
-    int insertList(List<HzMbomRecord> records);
+    int insertList(List<HzMbomLineRecord> records);
 
     /**
      * 插入单条记录
@@ -73,4 +73,8 @@ public interface HzMbomRecordDAO {
     HzMbomLineRecord getHzSuperMbomByPuid(String projectId,String pPuid);
 
     HzMbomLineRecord getHzMbom(String projectId,String parentPuid);
+
+    Integer getHzMbomTotalCount(String projectId);
+
+    Integer getHzMbomMaxOrderNum(String projectId);
 }

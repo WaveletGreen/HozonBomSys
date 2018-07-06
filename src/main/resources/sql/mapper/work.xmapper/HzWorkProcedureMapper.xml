@@ -12,7 +12,7 @@
     <result column="P_BURN" jdbcType="VARCHAR" property="pBurn" />
     <result column="P_MACHINE_MATERIAL_LABOR" jdbcType="VARCHAR" property="pMachineMaterialLabor" />
     <result column="P_OTHER_COST" jdbcType="VARCHAR" property="pOtherCost" />
-    <result column="P_COUNT" jdbcType="VARCHAR" property="pCount" />
+    <result column="P_COUNT" jdbcType="INTEGER" property="pCount" />
     <result column="P_TYPE" jdbcType="INTEGER" property="pType" />
     <result column="P_CREATE_TIME" jdbcType="DATE" property="pCreateTime" />
     <result column="P_UPDATE_TIME" jdbcType="DATE" property="pUpdateTime" />
@@ -20,7 +20,26 @@
     <result column="P_UPDATE_NAME" jdbcType="VARCHAR" property="pUpdateName" />
     <result column="P_STATUS" jdbcType="INTEGER" property="pStatus" />
     <result column="P_PROJECT_PUID" jdbcType="VARCHAR" property="projectId" />
+    <result column="P_MATERIEL_PUID" jdbcType="VARCHAR" property="materielId" />
+    <result column="P_PURPOSE" jdbcType="VARCHAR" property="purpose" />
+    <result column="P_STATE" jdbcType="VARCHAR" property="state" />
+    <result column="P_CONTROL_CODE" jdbcType="VARCHAR" property="controlCode" />
+
   </resultMap>
+
+
+  <resultMap extends="BaseResultMap" id="HzWorkProcessMap" type="sql.pojo.work.HzWorkProcess">
+    <result column="P_MATERIEL_CODE" jdbcType="OTHER" property="pMaterielCode"/>
+    <result column="P_MATERIEL_DESC" jdbcType="OTHER" property="pMaterielDesc"/>
+    <result column="P_FACTORY_CODE" jdbcType="VARCHAR" property="factoryCode" />
+    <result column="P_WORK_CODE" jdbcType="VARCHAR" property="workCenterCode" />
+    <result column="P_WORK_DESC" jdbcType="VARCHAR" property="workCenterDesc" />
+  </resultMap>
+
+
+
+
+
 
   <sql id="Base_Column_List">
     PUID, P_WORK_PUID, P_PROCEDURE_CODE, P_PROCEDURE_DESC, P_DIRECT_LABOR, P_INDIRECT_LABOR, 
@@ -29,7 +48,7 @@
   </sql>
 
 
-  
+
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
@@ -37,6 +56,32 @@
     where PUID = #{puid,jdbcType=VARCHAR}
   </select>
 
+
+  <!--查询工艺路线-->
+  <select id="HzWorkProcedureDAOImpl_findHzWorkProcessByPage" parameterType="java.util.HashMap" resultMap="HzWorkProcessMap">
+   SELECT t1.*,t4.P_FACTORY_CODE FROM HZ_MATERIEL_RECORD t1 LEFT OUTER JOIN HZ_WORK_PROCEDURE t2 On T1.puid = T2.P_MATERIEL_PUID
+   LEFT OUTER JOIN HZ_WORK_CENTER t3 ON t2.P_Work_PUID=t3.PUID
+   LEFT OUTER JOIN HZ_FACTORY t4 ON t1.P_Factory_PUID = t4.PUID
+   <where>
+       1=1
+       <if test="projectId != null">
+           and t1.P_PERTAIN_TO_PROJECT_PUID = #{projectId,jdbcType=VARCHAR}
+       </if>
+   </where>
+  </select>
+
+  <!--查询工艺路线总数-->
+  <select id="HzWorkProcedureDAOImpl_getTotalCount" parameterType="java.util.HashMap" resultType="java.lang.Integer">
+   SELECT count(*) FROM HZ_MATERIEL_RECORD t1 LEFT OUTER JOIN HZ_WORK_PROCEDURE t2 On T1.puid = T2.P_MATERIEL_PUID
+   LEFT OUTER JOIN HZ_WORK_CENTER t3 ON t2.P_Work_PUID=t3.PUID
+   LEFT OUTER JOIN HZ_FACTORY t4 ON t1.P_Factory_PUID = t4.PUID
+      <where>
+          1=1
+          <if test="projectId != null">
+            and t1.P_PERTAIN_TO_PROJECT_PUID = #{projectId,jdbcType=VARCHAR}
+          </if>
+      </where>
+  </select>
 
 
 
@@ -195,7 +240,7 @@
         P_OTHER_COST = #{pOtherCost,jdbcType=VARCHAR},
       </if>
       <if test="pCount != null">
-        P_COUNT = #{pCount,jdbcType=VARCHAR},
+        P_COUNT = #{pCount,jdbcType=INTEGER},
       </if>
       <if test="pType != null">
         P_TYPE = #{pType,jdbcType=INTEGER},
@@ -221,5 +266,21 @@
     </set>
     where PUID = #{puid,jdbcType=VARCHAR}
   </update>
+
+  <!--查询一条工艺主数据-->
+  <select id="HzWorkProcedureDAOImpl_getHzWorkProcess" parameterType="java.util.HashMap" resultMap="HzWorkProcessMap">
+    SELECT t1.*,t2.* FROM HZ_MATERIEL_RECORD t1 LEFT OUTER JOIN HZ_WORK_PROCEDURE t2 On T1.puid = T2.P_MATERIEL_PUID
+   LEFT OUTER JOIN HZ_WORK_CENTER t3 ON t2.P_Work_PUID=t3.PUID
+   LEFT OUTER JOIN HZ_FACTORY t4 ON t1.P_Factory_PUID = t4.PUID
+   <where>
+     1=1
+     <if test="projectId != null">
+       and t1.P_PERTAIN_TO_PROJECT_PUID = #{projectId,jdbcType=VARCHAR}
+     </if>
+     <if test="materielId != null">
+       and t1.PUID = #{materielId,jdbcType=VARCHAR}
+     </if>
+   </where>
+  </select>
 
 </mapper>
