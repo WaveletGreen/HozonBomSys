@@ -1,14 +1,32 @@
 $(document).ready((function (){
-    initTable();
+    var projectId = $("#project", window.top.document).val();
+    var url = "work/process/record/page?projectId="+projectId;
+    initTable(url);
 }))
 
 function doQuery() {
-    $('#routingDataTable').bootstrapTable('refresh');    //刷新表格
+    //$('#routingDataTable').bootstrapTable('refresh');    //刷新表格
+    var projectId = $("#project", window.top.document).val();
+    var url = "work/process/record/page?projectId="+projectId;
+    var pMaterielCode = $("#pMaterielCode").val();
+    url+="&pMaterielCode="+pMaterielCode;
+    var pMaterielDesc = $("#pMaterielDesc").val();
+    url+="&pMaterielDesc="+pMaterielDesc;
+    var type = $("#type").val();
+    if (type=="请选择工艺路线") {
+        url += "&type="+"";
+    }
+    else {
+        url += "&type="+type;
+    }
+    initTable(url);
+    $('#routingDataTable').bootstrapTable('destroy');
+    console.log("有搜索框的参数是："+url)
 }
 
 
-function initTable() {
-    var projectPuid = $("#project", window.top.document).val();
+function initTable(url) {
+    var projectId = $("#project", window.top.document).val();
     var  $table =  $("#routingDataTable");
     var  column = [];
     $.ajax({
@@ -16,7 +34,7 @@ function initTable() {
         type:"GET",
         success:function(result){
             var column = [];
-            column.push({field: 'Puid', title: 'puid'});
+            column.push({field: 'materielId', title: 'puid'});
             column.push({field: 'ck', checkbox: true, Width: 50});
             /*column.push({field: '',
                 title: '序号',
@@ -45,12 +63,12 @@ function initTable() {
                 }
             };
             $table.bootstrapTable({
-                url: "",
+                url: url,
                 method: 'GET',
                 dataType: 'json',
                 cache: false,
                 striped: true,                              //是否显示行间隔色
-                //sidePagination: "server",           //分页方式：client客户端分页，server服务端分页（*）
+                sidePagination: "server",           //分页方式：client客户端分页，server服务端分页（*）
                 height: $(window.parent.document).find("#wrapper").height() - 180,
                 width: $(window).width(),
                 formId :"queryRoutingData",
@@ -79,9 +97,15 @@ function initTable() {
                         text: '添加',
                         iconCls: 'glyphicon glyphicon-plus',
                         handler: function () {
+                            var rows = $table.bootstrapTable('getSelections');
+                            //只能选一条
+                            if (rows.length != 1) {
+                                window.Ewin.alert({message: '请选择一条需要添加的数据!'});
+                                return false;
+                            }
                             window.Ewin.dialog({
                                 title: "添加",
-                                url: "work/process/addWorkProcess?projectId="+projectPuid+"&eBomPuid="+rows[0].eBomPuid,
+                                url: "work/process/addWorkProcess?projectId="+projectId+"&materielId="+rows[0].materielId,
                                 gridId: "gridId",
                                 width: 500,
                                 height: 650
@@ -100,7 +124,7 @@ function initTable() {
                             }
                             window.Ewin.dialog({
                                 title: "修改",
-                                url: "work/process/updateWorkProcess?projectId="+projectPuid+"&eBomPuid="+rows[0].eBomPuid,
+                                url: "work/process/updateWorkProcess?projectId="+projectId+"&materielId="+rows[0].materielId,
                                 gridId: "gridId",
                                 width: 500,
                                 height: 650
@@ -121,7 +145,7 @@ function initTable() {
                                     $.ajax({
                                         type: "POST",
                                         //ajax需要添加打包名
-                                        url: "work/process/delete?eBomPuid="+rows[0].eBomPuid,
+                                        url: "work/process/delete?puid="+rows[0].puid,
                                         //data: JSON.stringify(rows),
                                         contentType: "application/json",
                                         success: function (result) {
@@ -142,10 +166,23 @@ function initTable() {
                                 }
                             });
                         }
-                    }
+                    },
+                    {
+                        text: '选取数据',
+                        iconCls: 'glyphicon glyphicon-save',
+                        handler: function () {
+                            window.Ewin.dialog({
+                                title: "选取数据",
+                                url: "work/process/getMBom",
+                                gridId: "gridId",
+                                width: $(window).width() -200,
+                                height: $(window.parent.document).find("#wrapper").height()
+                            })
+                        }
+                    },
                 ],
             });
-            $table.bootstrapTable('hideColumn', 'Puid');
+            $table.bootstrapTable('hideColumn', 'materielId');
         }
     })
 }

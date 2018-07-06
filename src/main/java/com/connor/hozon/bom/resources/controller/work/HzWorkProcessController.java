@@ -49,8 +49,8 @@ public class HzWorkProcessController extends BaseController {
         title.put("purpose", "用途");
         title.put("state", "状态");
         title.put("pProcedureCode", "工序号");
-        title.put("workCenterCode", "工作中心");
-        title.put("workCenterDesc", "工作中心描述");
+        title.put("pWorkCode", "工作中心");
+        title.put("pWorkDesc", "工作中心描述");
         title.put("controlCode", "控制码");
         title.put("pProcedureDesc", "工序描述");
         title.put("pCount", "基本数量 ");
@@ -140,6 +140,7 @@ public class HzWorkProcessController extends BaseController {
         list.forEach(dto -> {
             Map<String, Object> _res = new HashMap<>();
             _res.put("No", dto.getNo());
+            _res.put("puid",dto.getPuid());
             _res.put("materielId", dto.getMaterielId());
             _res.put("pMaterielCode", dto.getpMaterielCode());
             _res.put("pMaterielDesc", dto.getpMaterielDesc());
@@ -147,8 +148,8 @@ public class HzWorkProcessController extends BaseController {
             _res.put("purpose", dto.getPurpose());
             _res.put("state", dto.getState());
             _res.put("pProcedureCode", dto.getpProcedureCode());
-            _res.put("workCenterCode", dto.getpWorkCode());
-            _res.put("workCenterDesc", dto.getpWorkDesc());
+            _res.put("pWorkCode", dto.getpWorkCode());
+            _res.put("pWorkDesc", dto.getpWorkDesc());
             _res.put("controlCode", dto.getControlCode());
             _res.put("pProcedureDesc", dto.getpProcedureDesc());
             _res.put("pCount", dto.getpCount());
@@ -166,4 +167,13 @@ public class HzWorkProcessController extends BaseController {
         return ret;
     }
 
+
+    /**
+     * 跳转到MBom选取数据
+     * @return
+     */
+    @RequestMapping(value = "getMBom" ,method = RequestMethod.GET)
+    public String getMBomToPage(){
+        return "bomManage/mbom/mbomMaintenance/mbomMaintenance";
+    }
 }
