@@ -1,7 +1,7 @@
 package com.connor.hozon.bom.bomSystem.service.integrate;
 
 import com.connor.hozon.bom.bomSystem.service.iservice.integrate.ISynMaterielService;
-import com.connor.hozon.bom.resources.dto.request.UpdateHzMaterielReqDTO;
+import com.connor.hozon.bom.resources.dto.request.EditHzMaterielReqDTO;
 import com.connor.hozon.bom.resources.mybatis.factory.HzFactoryDAO;
 import com.connor.hozon.bom.resources.mybatis.materiel.HzMaterielDAO;
 import com.connor.hozon.bom.resources.query.HzMaterielQuery;
@@ -50,7 +50,7 @@ public class SynMaterielService implements ISynMaterielService {
      * @return
      */
     @Override
-    public JSONObject updateByPuids(List<UpdateHzMaterielReqDTO> dtos) {
+    public JSONObject updateByPuids(List<EditHzMaterielReqDTO> dtos) {
         return updateOrDelete(dtos, ActionFlagOption.UPDATE_EMPTY);
     }
 
@@ -61,7 +61,7 @@ public class SynMaterielService implements ISynMaterielService {
      * @return
      */
     @Override
-    public JSONObject deleteByPuids(List<UpdateHzMaterielReqDTO> dtos) {
+    public JSONObject deleteByPuids(List<EditHzMaterielReqDTO> dtos) {
         return updateOrDelete(dtos, ActionFlagOption.DELETE);
     }
 
@@ -93,7 +93,7 @@ public class SynMaterielService implements ISynMaterielService {
      * @param option 操作标识符，更新可传
      * @return
      */
-    private JSONObject updateOrDelete(List<UpdateHzMaterielReqDTO> dtos, ActionFlagOption option) {
+    private JSONObject updateOrDelete(List<EditHzMaterielReqDTO> dtos, ActionFlagOption option) {
         JSONObject result;
         if (dtos == null || dtos.isEmpty()) {
             result = new JSONObject();
@@ -149,6 +149,8 @@ public class SynMaterielService implements ISynMaterielService {
         boolean hasFail = false;
 
         for (HzMaterielRecord record : sorted) {
+            if (null == record.getpMaterielDesc() || "".equalsIgnoreCase(record.getpMaterielDesc()))
+                continue;
             ReflectMateriel reflectMateriel = new ReflectMateriel(record);
             /////////////////////////////////////////////////////手动设置一些必填参数////////////////////////////////////////////////////
             //设置包号

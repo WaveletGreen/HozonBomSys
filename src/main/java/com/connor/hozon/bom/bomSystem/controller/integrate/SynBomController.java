@@ -1,7 +1,7 @@
 package com.connor.hozon.bom.bomSystem.controller.integrate;
 
 import com.connor.hozon.bom.bomSystem.service.iservice.integrate.ISynBomService;
-import com.connor.hozon.bom.resources.dto.request.UpdateHzMaterielReqDTO;
+import com.connor.hozon.bom.resources.dto.request.EditHzMaterielReqDTO;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -50,7 +50,7 @@ public class SynBomController {
      */
     @RequestMapping("/deleteByUids")
     @ResponseBody
-    public JSONObject deleteByUids(@RequestBody List<UpdateHzMaterielReqDTO> dtos, @RequestParam("projectUid") String projectUid) {
+    public JSONObject deleteByUids(@RequestBody List<EditHzMaterielReqDTO> dtos, @RequestParam("projectUid") String projectUid) {
         JSONObject result = new JSONObject();
         return bomService.deleteByUids(dtos);
     }
@@ -63,7 +63,7 @@ public class SynBomController {
      */
     @RequestMapping("/updateByUids")
     @ResponseBody
-    public JSONObject updateByUids(@RequestBody List<UpdateHzMaterielReqDTO> dtos, @RequestParam("projectUid") String projectUid) {
+    public JSONObject updateByUids(@RequestBody List<EditHzMaterielReqDTO> dtos, @RequestParam("projectUid") String projectUid) {
         JSONObject result = new JSONObject();
         return bomService.updateByUids(dtos);
     }

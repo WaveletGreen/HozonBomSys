@@ -2,7 +2,7 @@ package com.connor.hozon.bom.bomSystem.service.integrate;
 
 import com.connor.hozon.bom.bomSystem.dao.bom.HzMBomToERPDao;
 import com.connor.hozon.bom.bomSystem.service.iservice.integrate.ISynBomService;
-import com.connor.hozon.bom.resources.dto.request.UpdateHzMaterielReqDTO;
+import com.connor.hozon.bom.resources.dto.request.EditHzMaterielReqDTO;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -14,10 +14,7 @@ import webservice.logic.ReflectBom;
 import webservice.option.ActionFlagOption;
 import webservice.service.impl.bom5.TransBomService;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Configuration
 public class SynBomService implements ISynBomService {
@@ -39,7 +36,7 @@ public class SynBomService implements ISynBomService {
      * @return
      */
     @Override
-    public JSONObject updateByUids(List<UpdateHzMaterielReqDTO> dtos) {
+    public JSONObject updateByUids(List<EditHzMaterielReqDTO> dtos) {
         return null;
     }
 
@@ -50,7 +47,7 @@ public class SynBomService implements ISynBomService {
      * @return
      */
     @Override
-    public JSONObject deleteByUids(List<UpdateHzMaterielReqDTO> dtos) {
+    public JSONObject deleteByUids(List<EditHzMaterielReqDTO> dtos) {
         return null;
     }
 
@@ -61,7 +58,7 @@ public class SynBomService implements ISynBomService {
      * @return
      */
     @Override
-        public JSONObject synAllByProjectUid(String projectPuid) {
+    public JSONObject synAllByProjectUid(String projectPuid) {
         //每次都清空缓存
         transBomService.setClearInputEachTime(true);
         StringBuilder sbs = new StringBuilder();
@@ -74,6 +71,18 @@ public class SynBomService implements ISynBomService {
 
         List<HzMBomToERPBean> beanListIs2Y = hzMBomToERPDao.selectByProjectUidWithCondition(projectPuid, 1);
         List<HzMBomToERPBean> beanListIsnot2Y = hzMBomToERPDao.selectByProjectUidWithCondition(projectPuid, 0);
+
+        //所有数据
+        List<HzMBomToERPBean> all = hzMBomToERPDao.selectByProjectUidWithCondition(projectPuid, 3);
+
+        //筛选所有父id和子id
+        List<String> children = new ArrayList<>();
+        Set<String> parents = new HashSet<>();
+
+        all.stream().filter(a -> a.getParentUID() != null && !("".equalsIgnoreCase(a.getParentUID()))).forEach(a -> {
+            children.add(a.getPuid());
+            parents.add(a.getParentUID());
+        });
 
         List<String> isNot2YUids = new ArrayList<>();
         List<String> is2YUids = new ArrayList<>();
@@ -141,9 +150,9 @@ public class SynBomService implements ISynBomService {
 
         for (ZPPTCO005 zpptco005 : resultPool) {
             if ("S".equalsIgnoreCase(zpptco005.getTYPE())) {
-                sbs.append("&emsp;&emsp;&emsp;&emsp;" + lineNumofBean.get(zpptco005.getZITEM()).getBomLineId() + "<br/>");
+                sbs.append("&emsp;&emsp;&emsp;&emsp;" +  /*lineNumofBean.get(zpptco005.getZITEM()).getBomLineId()*/ zpptco005.getMESSAGE() + "<br/>");
             } else {
-                sbf.append("&emsp;&emsp;&emsp;&emsp;" + lineNumofBean.get(zpptco005.getZITEM()).getBomLineId() + "(" + zpptco005.getMESSAGE() + ")<br/>");
+                sbf.append("&emsp;&emsp;&emsp;&emsp;"/* + lineNumofBean.get(zpptco005.getZITEM()).getBomLineId() */ + "(" + zpptco005.getMESSAGE() + ")<br/>");
                 hasFail = true;
             }
         }
