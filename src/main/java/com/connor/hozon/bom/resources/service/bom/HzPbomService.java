@@ -67,7 +67,7 @@ public interface HzPbomService {
     Page<HzPbomLineRespDTO> getHzPbomRecordPage(HzPbomByPageQuery query);
 
     /**
-     * 获取一条pbom信息（包含部分ebom信息）
+     * 获取一条pbom信息
      * @param projectId
      * @param puid
      * @return

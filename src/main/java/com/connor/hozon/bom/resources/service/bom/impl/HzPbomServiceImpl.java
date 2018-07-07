@@ -43,13 +43,7 @@ public class HzPbomServiceImpl implements HzPbomService {
     private HzBomLineRecordDaoImpl hzBomLineRecordDao;
 
     @Autowired
-    private HzMbomRecordDAO hzMbomRecordDAO;
-
-    @Autowired
     private HzPbomRecordDAO hzPbomRecordDAO;
-
-    @Autowired
-    private HzBomDataDao hzBomDataDao;
 
     @Autowired
     private HzBomStateDAO hzBomStateDAO;
@@ -115,8 +109,8 @@ public class HzPbomServiceImpl implements HzPbomService {
             Map<String,Object> map = new HashMap<>();
             map.put("pPuid",recordReqDTO.geteBomPuid());
             map.put("projectId",recordReqDTO.getProjectId());
-            HzPbomLineRecord hzPbomLineRecord= hzPbomRecordDAO.getPbomById(map);
-            if(hzPbomLineRecord!=null){
+            List<HzPbomLineRecord> hzPbomLineRecords= hzPbomRecordDAO.getPbomById(map);
+            if(ListUtil.isNotEmpty(hzPbomLineRecords)){
                 int i = hzPbomRecordDAO.update(hzPbomRecord);
                 if(i>0){
                     return OperateResultMessageRespDTO.getSuccessResult();
@@ -236,12 +230,13 @@ public class HzPbomServiceImpl implements HzPbomService {
         Map<String, Object> map = new HashMap<>();
         map.put("projectId", reqDTO.getProjectId());
         map.put("lineId", reqDTO.getLineId());
-        HzPbomLineRecord record = hzPbomRecordDAO.getPbomById(map);
-        if (record == null) {
+        List<HzPbomLineRecord> records = hzPbomRecordDAO.getPbomById(map);
+        if (ListUtil.isEmpty(records)) {
             return null;
         }
 
         try {
+            HzPbomLineRecord record = records.get(0);
             HzPbomTreeQuery query = new HzPbomTreeQuery();
             query.setProjectId(reqDTO.getProjectId());
             query.setPuid(record.geteBomPuid());
@@ -266,24 +261,13 @@ public class HzPbomServiceImpl implements HzPbomService {
         Map<String, Object> map = new HashMap<>();
         map.put("projectId", reqDTO.getProjectId());
         map.put("lineId", reqDTO.getLineId());
-        HzPreferenceSetting setting = new HzPreferenceSetting();
-        setting.setSettingName("Hz_ExportBomPreferenceRedis");
-        HzPbomLineRecord record = hzPbomRecordDAO.getPbomById(map);
-        if (record == null) {
+        List<HzPbomLineRecord> records = hzPbomRecordDAO.getPbomById(map);
+        if (ListUtil.isEmpty(records)) {
             return null;
         }
         try {
+            HzPbomLineRecord record = records.get(0);
             JSONArray jsonArray = new JSONArray();
-            setting.setBomMainRecordPuid(record.getBomDigifaxId());
-            setting = hzBomDataDao.loadSetting(setting);
-            byte[] btOfSetting = setting.getPreferencesettingblock();
-            Object objOfSetting = SerializeUtil.unserialize(btOfSetting);
-            if (objOfSetting instanceof PreferenceSetting) {
-                String[] localName = ((PreferenceSetting) objOfSetting).getPreferenceLocal();
-                String[] trueName = ((PreferenceSetting) objOfSetting).getPreferences();
-                jsonArray.add(0, localName);
-                jsonArray.add(1, trueName);
-            }
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("puid", record.getpPuid());
             jsonObject.put("parentUid", record.getParentUid());
@@ -296,7 +280,7 @@ public class HzPbomServiceImpl implements HzPbomService {
             jsonObject.put("rank", strings[1]);
             jsonObject.put("pBomOfWhichDept", record.getpBomOfWhichDept());
             jsonObject.put("groupNum", record.getLineId());
-            jsonObject.put("eBomPuid", record.getPuid());
+            jsonObject.put("eBomPuid", record.geteBomPuid());
             jsonObject.put("lineId", record.getLineId());
             jsonObject.put("itemName", record.getpBomLinePartName());
             jsonObject.put("itemPart", record.getpBomLinePartClass());
@@ -309,24 +293,6 @@ public class HzPbomServiceImpl implements HzPbomService {
             jsonObject.put("mouldType", record.getMouldType());
             jsonObject.put("outerPart", record.getOuterPart());
             jsonObject.put("colorPart", record.getColorPart());
-
-            byte[] bomLineBlock = record.getBomLineBlock();
-            Object obj = SerializeUtil.unserialize(bomLineBlock);
-            if (obj instanceof LinkedHashMap) {
-                if (((LinkedHashMap) obj).size() > 0) {
-                    ((LinkedHashMap) obj).forEach((key, value) -> {
-
-                        jsonObject.put((String) key, value);
-                    });
-                }
-            } else if (obj instanceof RedisBomBean) {
-                List<String> pSets = ((RedisBomBean) obj).getpSets();
-                List<String> pValues = ((RedisBomBean) obj).getpValues();
-                if (null != pSets && pSets.size() > 0 && null != pValues && pValues.size() > 0)
-                    for (int i = 0; i < pSets.size(); i++) {
-                        jsonObject.put(pSets.get(i), pValues.get(i));
-                    }
-            }
             jsonArray.add(jsonObject);
             return jsonArray;
         } catch (Exception e) {
@@ -530,9 +496,10 @@ public class HzPbomServiceImpl implements HzPbomService {
             Map<String,Object> map = new HashMap<>();
             map.put("projectId",projectId);
             map.put("pPuid",puid);
-            HzPbomLineRecord record = hzPbomRecordDAO.getPbomById(map);
-            if(record!=null){
-                List<HzPbomLineRecord> records = new ArrayList<>();
+            List<HzPbomLineRecord> records = hzPbomRecordDAO.getPbomById(map);
+            if(ListUtil.isNotEmpty(records)){
+                HzPbomLineRecord record = records.get(0);
+                records = new ArrayList<>();
                 records.add(record);
                 List<HzPbomLineRespDTO> respDTOS = pbomLineRecordToRespDTOS(records,projectId,0);
                 return respDTOS.get(0);
@@ -624,20 +591,8 @@ public class HzPbomServiceImpl implements HzPbomService {
                 }
                 respDTO.setGroupNum(groupNum);
 
-//                byte[] bomLineBlock =record.getBomLineBlock();
-//                Object obj = SerializeUtil.unserialize(bomLineBlock);
-//                Object h9_IsCommon = null;
-//                Object H9_Mat_Status =null;
-//                if (obj instanceof LinkedHashMap) {
-//                    if (((LinkedHashMap) obj).size() > 0) {
-//                         h9_IsCommon =((LinkedHashMap) obj).get("h9_IsCommon");
-//                         H9_Mat_Status =((LinkedHashMap) obj).get("H9_Mat_Status");
-//                    }
-//                }
                 respDTO.setpBomLinePartClass(record.getpBomLinePartClass());
                 respDTO.setpBomLinePartResource(record.getpBomLinePartResource());
-//                respDTO.setH9_IsCommon(h9_IsCommon);
-//                respDTO.setH9_Mat_Status(H9_Mat_Status);
                 respDTO.setNo(++num);
                 respDTO.setResource(record.getResource() == null ? "/" : record.getResource());
                 Integer type = record.getType();

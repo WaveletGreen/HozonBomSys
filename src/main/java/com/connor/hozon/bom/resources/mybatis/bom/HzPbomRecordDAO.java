@@ -17,7 +17,7 @@ import java.util.Map;
 public interface HzPbomRecordDAO {
 
 
-    HzPbomLineRecord getPbomById(Map<String,Object> map);
+    List<HzPbomLineRecord> getPbomById(Map<String,Object> map);
 
     /**
      * 插入 PBOM管理信息

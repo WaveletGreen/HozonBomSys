@@ -23,9 +23,9 @@ import java.util.Map;
 public class HzPbomRecordDAOImpl extends BaseSQLUtil implements HzPbomRecordDAO {
 
     @Override
-    public HzPbomLineRecord getPbomById(Map<String, Object> map) {
+    public List<HzPbomLineRecord> getPbomById(Map<String, Object> map) {
 
-        return (HzPbomLineRecord)super.findForObject("HzPbomRecordDAOImpl_getPbomById",map);
+        return super.findForList("HzPbomRecordDAOImpl_getPbomById",map);
     }
 
     @Override
