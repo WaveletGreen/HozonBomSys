@@ -150,8 +150,8 @@ function initTable(url) {
                                     $.ajax({
                                         type: "POST",
                                         //ajax需要添加打包名
-                                        url: "work/process/delete",
-                                        data: JSON.stringify(rows),
+                                        url: "work/process/delete?materielId="+rows[0].materielId,
+                                        // data: JSON.stringify(rows),
                                         contentType: "application/json",
                                         success: function (result) {
                                             /*if (result.status) {

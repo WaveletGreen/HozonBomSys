@@ -202,13 +202,13 @@
     <insert id="HzMaterialDAOImpl_insertList" useGeneratedKeys="false" parameterType="java.util.List">
         insert into HZ_MATERIEL_RECORD (PUID, P_MATERIEL_CODE, P_MATERIEL_TYPE,
         P_MATERIEL_DESC, P_PERTAIN_TO_PROJECT_PUID, P_MATERIEL_DESC_EN,P_MATERIEL_DATA_TYPE,
-        P_FACTORY_PUID,P_TYPE,P_MATERIEL_RESOURCE_ID)
+        P_FACTORY_PUID,P_TYPE,P_MATERIEL_RESOURCE_ID,P_VALID_FLAG)
         <foreach collection="list" item="item" index="index" separator="UNION ALL">
             select
             #{item.puid,jdbcType=VARCHAR}, #{item.pMaterielCode,jdbcType=VARCHAR}, #{item.pMaterielType,jdbcType=VARCHAR},
             #{item.pMaterielDesc,jdbcType=VARCHAR}, #{item.pPertainToProjectPuid,jdbcType=VARCHAR}, #{item.pMaterielDescEn,jdbcType=VARCHAR},
             #{item.pMaterielDataType,jdbcType=VARCHAR}, #{item.pFactoryPuid,jdbcType=VARCHAR},#{item.type,jdbcType=INTEGER},
-            #{item.materielResourceId,jdbcType=INTEGER}
+            #{item.materielResourceId,jdbcType=INTEGER},1
             from DUAL
         </foreach>
     </insert>
@@ -236,6 +236,7 @@
             <if test="pMaterielType != null">
                 and P_MATERIEL_TYPE like CONCAT(CONCAT('%',#{pMaterielType,jdbcType=VARCHAR}),'%')
             </if>
+            and P_VALID_FLAG =1
         </where>
         )t
         WHERE ROWNUM &lt;=#{limit,jdbcType=INTEGER}) where rn &gt;#{offset,jdbcType=INTEGER}
@@ -260,6 +261,7 @@
             <if test="pMaterielType != null">
                 and P_MATERIEL_TYPE like CONCAT(CONCAT('%',#{pMaterielType,jdbcType=VARCHAR}),'%')
             </if>
+            and P_VALID_FLAG =1
         </where>
     </select>
 
@@ -281,6 +283,7 @@
             <if test="pMaterielDataType != null">
                and P_MATERIEL_DATA_TYPE = #{pMaterielDataType,jdbcType=INTEGER}
             </if>
+            and P_VALID_FLAG =1
         </where>
     </select>
 
@@ -319,7 +322,7 @@
         where
         t2.p_cfg0_of_which_project_puid=#{projectId,jdbcType=VARCHAR}
         ) and LENGTH(TRANSLATE(P_LINE_INDEX,',0123456789','.'))=1
-         and t1.P_BOM_LINE_IS_HAS=1)t
+         and t1.P_BOM_LINE_IS_HAS=1 and t1.P_MBOM_STATUS=1)t
         WHERE ROWNUM &lt;=#{limit,jdbcType=INTEGER}) where rn &gt;#{offset,jdbcType=INTEGER}
     </select>
 
@@ -336,7 +339,7 @@
         where
         t2.p_cfg0_of_which_project_puid=#{projectId,jdbcType=VARCHAR}
         ) and LENGTH(TRANSLATE(P_LINE_INDEX,',0123456789','.'))=1
-        and t1.P_BOM_LINE_IS_HAS=1
+        and t1.P_BOM_LINE_IS_HAS=1 and t1.P_MBOM_STATUS =1
 
     </select>
 
@@ -353,7 +356,7 @@
         where
         t2.p_cfg0_of_which_project_puid=#{projectId,jdbcType=VARCHAR}
         )
-        and T1.P_BOM_LINE_PART_RESOURCE='自制单件'
+        and T1.P_BOM_LINE_PART_RESOURCE='自制单件' and t1.P_MBOM_STATUS =1
         )t
         WHERE ROWNUM &lt;=#{limit,jdbcType=INTEGER}) where rn &gt;#{offset,jdbcType=INTEGER}
     </select>
@@ -371,7 +374,7 @@
         where
         t2.p_cfg0_of_which_project_puid=#{projectId,jdbcType=VARCHAR}
         )
-        and T1.P_BOM_LINE_PART_RESOURCE='自制单件'
+        and T1.P_BOM_LINE_PART_RESOURCE='自制单件'and t1.P_MBOM_STATUS =1
 
     </select>
 
@@ -388,7 +391,7 @@
         where
         t2.p_cfg0_of_which_project_puid=#{projectId,jdbcType=VARCHAR}
         )
-        and T1.P_BOM_LINE_PART_RESOURCE='采购件'
+        and T1.P_BOM_LINE_PART_RESOURCE='采购件' and t1.P_MBOM_STATUS =1
         )t
         WHERE ROWNUM &lt;=#{limit,jdbcType=INTEGER}) where rn &gt;#{offset,jdbcType=INTEGER}
     </select>
@@ -405,7 +408,7 @@
         where
         t2.p_cfg0_of_which_project_puid=#{projectId,jdbcType=VARCHAR}
         )
-        and T1.P_BOM_LINE_PART_RESOURCE='采购件'
+        and T1.P_BOM_LINE_PART_RESOURCE='采购件'and t1.P_MBOM_STATUS =1
     </select>
 
 
@@ -420,7 +423,7 @@
         <where>
             t2.puid=#{projectId,jdbcType=VARCHAR}))
             and t5.P_SPARE_PART ='自制'
-            and (t5.P_MBOM_STATUS IS NULL OR t5.P_MBOM_STATUS=1)
+            and t5.P_MBOM_STATUS=1
         </where>
         )t
         WHERE ROWNUM &lt;=#{limit,jdbcType=INTEGER}) where rn &gt;#{offset,jdbcType=INTEGER}
@@ -437,7 +440,7 @@
         <where>
             t2.puid=#{projectId,jdbcType=VARCHAR}))
             and t5.P_SPARE_PART ='自制'
-            and (t5.P_MBOM_STATUS IS NULL OR t5.P_MBOM_STATUS=1)
+            and t5.P_MBOM_STATUS=1
         </where>
     </select>
 
@@ -453,7 +456,7 @@
         <where>
             t2.puid=#{projectId,jdbcType=VARCHAR}))
             and t5.P_BOM_LINE_PART_RESOURCE ='自制总成'
-            and (t5.P_MBOM_STATUS IS NULL OR t5.P_MBOM_STATUS=1)
+            and t5.P_MBOM_STATUS=1
         </where>
         )t
         WHERE ROWNUM &lt;=#{limit,jdbcType=INTEGER}) where rn &gt;#{offset,jdbcType=INTEGER}
@@ -470,7 +473,7 @@
         <where>
             t2.puid=#{projectId,jdbcType=VARCHAR}))
             and t5.P_BOM_LINE_PART_RESOURCE ='自制总成'
-            and (t5.P_MBOM_STATUS IS NULL OR t5.P_MBOM_STATUS=1)
+            and t5.P_MBOM_STATUS=1
         </where>
     </select>
 
@@ -490,6 +493,7 @@
             <if test="pMaterielDataType != null">
                 and P_MATERIEL_DATA_TYPE = #{pMaterielDataType,jdbcType=VARCHAR}
             </if>
+            and P_VALID_FLAG=1
         </where>
     </select>
 
@@ -497,10 +501,17 @@
     <select id="HzMaterialDAOImpl_HzMaterielIsExist" parameterType="java.util.HashMap" resultType="java.lang.Integer">
         select count(*) from HZ_MATERIEL_RECORD
         <where>
-            P_MATERIEL_RESOURCE_ID = #{materielResourceId,jdbcType=VARCHAR}
-            <if test="projectId != null">
+            1=1
+            <if test="materielResourceId != null and materielResourceId!=''">
+                and P_MATERIEL_RESOURCE_ID = #{materielResourceId,jdbcType=VARCHAR}
+            </if>
+            <if test="projectId != null and projectId !=''">
                 and P_PERTAIN_TO_PROJECT_PUID = #{projectId,jdbcType=VARCHAR}
             </if>
+            <if test="type != null">
+                and P_TYPE = #{type,jdbcType=VARCHAR}
+            </if>
+            and P_VALID_FLAG=1
         </where>
     </select>
 </mapper>

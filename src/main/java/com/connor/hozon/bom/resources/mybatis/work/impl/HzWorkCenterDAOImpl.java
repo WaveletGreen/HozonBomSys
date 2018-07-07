@@ -9,6 +9,7 @@ import sql.BaseSQLUtil;
 import sql.pojo.work.HzWorkCenter;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -55,11 +56,11 @@ public class HzWorkCenterDAOImpl extends BaseSQLUtil implements HzWorkCenterDAO 
 
 
     @Override
-    public HzWorkCenter findWorkCenter(String projectId, String pWorkCode) {
+    public List<HzWorkCenter> findWorkCenter(String projectId, String pWorkCode) {
         Map<String,Object> map = new HashMap<>();
         map.put("pWorkCode",pWorkCode);
         map.put("projectId",projectId);
-        return (HzWorkCenter)super.findForObject("",map);
+        return super.findForList("HzWorkCenterDAOImpl_findWorkCenter",map);
     }
 
 

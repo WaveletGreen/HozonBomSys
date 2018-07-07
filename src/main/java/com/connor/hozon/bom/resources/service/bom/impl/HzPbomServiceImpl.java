@@ -70,12 +70,12 @@ public class HzPbomServiceImpl implements HzPbomService {
                 respDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
                 return respDTO;
             }
-            HzPbomRecord record = hzPbomRecordDAO.getHzPbomByEbomPuid(recordReqDTO.geteBomPuid());
-            if(record!=null){
-                respDTO.setErrMsg("当前插入的对象已存在,编辑属性请点击修改按钮进行操作!");
-                respDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
-                return respDTO;
-            }
+//            HzPbomRecord record = hzPbomRecordDAO.getHzPbomByEbomPuid(recordReqDTO.geteBomPuid());
+//            if(record!=null){
+//                respDTO.setErrMsg("当前插入的对象已存在,编辑属性请点击修改按钮进行操作!");
+//                respDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
+//                return respDTO;
+//            }
 
             HzPbomRecord hzPbomRecord = new HzPbomRecord();
             hzPbomRecord.setCreateName(UserInfo.getUser().getUserName());
@@ -549,7 +549,7 @@ public class HzPbomServiceImpl implements HzPbomService {
         hzPbomLineRecord.setIsPart(record.getIsPart());
         hzPbomLineRecord.setIs2Y(record.getIs2Y());
         hzPbomLineRecord.setLineIndex(record.getLineIndex());
-        hzPbomLineRecord.setParentUid(record.getPuid());
+        hzPbomLineRecord.setParentUid(record.getParentUid());
         hzPbomLineRecord.setpBomLinePartClass(record.getpBomLinePartClass());
         hzPbomLineRecord.setpBomLinePartName(record.getpBomLinePartName());
         hzPbomLineRecord.setpBomOfWhichDept(record.getpBomOfWhichDept());

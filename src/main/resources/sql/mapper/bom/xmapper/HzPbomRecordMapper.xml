@@ -80,7 +80,7 @@
       <if test="pBomOfWhichDept != null and  pBomOfWhichDept!='' " >
         and t.P_BOM_OF_WHICH_DEPT like CONCAT(CONCAT('%',#{pBomOfWhichDept,jdbcType=VARCHAR}),'%')
       </if>
-      and (t.P_PBOM_STATUS IS NULL OR t.P_PBOM_STATUS=1)
+      and t.P_PBOM_STATUS=1
     </where>
   </select>
 
@@ -109,7 +109,7 @@
       <if test="pBomOfWhichDept != null and  pBomOfWhichDept!='' " >
         and t.P_BOM_OF_WHICH_DEPT like CONCAT(CONCAT('%',#{pBomOfWhichDept,jdbcType=VARCHAR}),'%')
       </if>
-      and (t.P_PBOM_STATUS IS NULL OR t.P_PBOM_STATUS=1)
+      and t.P_PBOM_STATUS=1
     </where>
   </select>
 
@@ -129,6 +129,7 @@
       <if test="parentUid != null and  parentUid!='' " >
         and t.P_PARENT_UID = #{parentUid,jdbcType=VARCHAR}
       </if>
+      and t.P_PBOM_STATUS=1
     </where>
   </select>
 
@@ -152,6 +153,7 @@
       <if test="pPuid != null and  pPuid!='' " >
         and t6.P_E_BOM_PUID = #{pPuid,jdbcType=VARCHAR}
       </if>
+      and t.P_PBOM_STATUS=1
     </where>
   </select>
 
@@ -161,7 +163,7 @@
     insert into HZ_PBOM_RECORD (PUID,P_PARENT_UID,P_BOM_DIGIFAX_ID,P_E_BOM_PUID,
     P_LINE_INDEX,P_BOM_LINE_IS_HAS,P_BOM_LINE_PUID,P_BOM_LINE_ID,P_BOM_LINE_IS_2Y,
     P_BOM_LINE_IS_PART,P_BOM_LINE_IS_DEPT,P_BOM_OF_WHICH_DEPT,P_BOM_LINE_PART_NAME,
-    P_BOM_LINE_PART_CLASS,P_BOM_LINE_PART_EN_NAME,P_BOM_LINE_PART_RESOURCE,P_BOM_ORDER_NUM)
+    P_BOM_LINE_PART_CLASS,P_BOM_LINE_PART_EN_NAME,P_BOM_LINE_PART_RESOURCE,P_BOM_ORDER_NUM,P_PBOM_STATUS)
     <foreach collection="list" item="item" index="index" separator="UNION ALL">
       select
       #{item.puid,jdbcType=VARCHAR},#{item.parentUid,jdbcType=VARCHAR},
@@ -172,7 +174,7 @@
       #{item.linePuid,jdbcType=VARCHAR}, #{item.lineId,jdbcType=VARCHAR}, #{item.is2Y,jdbcType=INTEGER},
       #{item.isPart,jdbcType=INTEGER}, #{item.isDept,jdbcType=INTEGER}, #{item.pBomOfWhichDept,jdbcType=VARCHAR},
       #{item.pBomLinePartName,jdbcType=VARCHAR}, #{item.pBomLinePartClass,jdbcType=VARCHAR}, #{item.pBomLinePartEnName,jdbcType=VARCHAR},
-      #{item.pBomLinePartResource,jdbcType=VARCHAR}，#{item.orderNum,jdbcType=INTEGER}
+      #{item.pBomLinePartResource,jdbcType=VARCHAR}，#{item.orderNum,jdbcType=INTEGER},1
       from DUAL
     </foreach>
   </insert>
@@ -321,7 +323,6 @@
       </if>
         P_CREATE_TIME = sysdate,
         P_UPDATE_TIME =sysdate,
-        P_PBOM_STATUS = 1,
       <if test="createName != null">
         P_CREATE_NAME = #{createName,jdbcType=VARCHAR},
       </if>
