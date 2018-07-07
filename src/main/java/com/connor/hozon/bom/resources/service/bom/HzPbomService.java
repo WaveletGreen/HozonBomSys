@@ -7,6 +7,8 @@ import com.connor.hozon.bom.resources.dto.response.HzPbomLineRespDTO;
 import com.connor.hozon.bom.resources.dto.response.OperateResultMessageRespDTO;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.query.HzPbomByPageQuery;
+import com.connor.hozon.bom.resources.query.HzPbomTreeQuery;
+import sql.pojo.bom.HzPbomLineRecord;
 
 import java.util.List;
 
@@ -71,4 +73,11 @@ public interface HzPbomService {
      * @return
      */
     HzPbomLineRespDTO getHzPbomByPuid(String projectId,String puid);
+
+    /**
+     * 获取pbom结构树
+     * @param query
+     * @return
+     */
+    List<HzPbomLineRecord> getHzPbomLineTree(HzPbomTreeQuery query);
 }
