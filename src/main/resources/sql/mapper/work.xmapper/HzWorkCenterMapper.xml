@@ -61,6 +61,25 @@
   </select>
 
 
+  <!-- 根据id查询一条数据-->
+  <select id="HzWorkCenterDAOImpl_findWorkCenter" parameterType="java.util.HashMap" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from HZ_WORK_CENTER
+    <where>
+      1=1
+      <if test="projectId != null and  projectId !=''">
+        and P_PROJECT_PUID= #{projectId,jdbcType=VARCHAR}
+      </if>
+      <if test="pWorkCode != null and  pWorkCode !=''">
+        and P_WORK_CODE= #{pWorkCode,jdbcType=VARCHAR}
+      </if>
+    </where>
+  </select>
+
+
+
+
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from HZ_WORK_CENTER
     where PUID = #{puid,jdbcType=VARCHAR}

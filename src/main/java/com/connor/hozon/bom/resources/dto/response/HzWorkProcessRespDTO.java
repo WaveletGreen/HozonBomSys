@@ -80,7 +80,6 @@ public class HzWorkProcessRespDTO {
      * 工作中心描述
      */
     private String pWorkDesc;
-    private String workCenterDesc;
     /**
      * 用途
      */

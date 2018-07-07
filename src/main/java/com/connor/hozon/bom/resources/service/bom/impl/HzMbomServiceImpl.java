@@ -190,12 +190,12 @@ public class HzMbomServiceImpl implements HzMbomService {
                 operateResultMessageRespDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
                 return operateResultMessageRespDTO;
             }
-            HzMbomRecord record = hzMbomRecordDAO.findHzMbomByeBomPuid(reqDTO.geteBomPuid());
-            if(record != null){
-                operateResultMessageRespDTO.setErrMsg("当前插入的对象已存在,编辑属性请点击修改按钮进行操作!");
-                operateResultMessageRespDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
-                return operateResultMessageRespDTO;
-            }
+//            HzMbomRecord record = hzMbomRecordDAO.findHzMbomByeBomPuid(reqDTO.geteBomPuid());
+//            if(record != null){
+//                operateResultMessageRespDTO.setErrMsg("当前插入的对象已存在,编辑属性请点击修改按钮进行操作!");
+//                operateResultMessageRespDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
+//                return operateResultMessageRespDTO;
+//            }
 
 
             HzMbomRecord hzMbomRecord = new HzMbomRecord();
@@ -434,7 +434,7 @@ public class HzMbomServiceImpl implements HzMbomService {
         hzMbomLineRecord.setIsPart(record.getIsPart());
         hzMbomLineRecord.setIs2Y(record.getIs2Y());
         hzMbomLineRecord.setLineIndex(record.getLineIndex());
-        hzMbomLineRecord.setParentUid(record.getPuid());
+        hzMbomLineRecord.setParentUid(record.getParentUid());
         hzMbomLineRecord.setpBomLinePartClass(record.getpBomLinePartClass());
         hzMbomLineRecord.setpBomLinePartName(record.getpBomLinePartName());
         hzMbomLineRecord.setpBomOfWhichDept(record.getpBomOfWhichDept());

@@ -13,13 +13,9 @@ public class ApplyMbomDataTOHzMaterielReqDTO {
 
     List<HzMbomRecordRespDTO> mbomRecordRespDTOS;
     /**
-     * MBOM  puid 中间用，隔开 英文逗号
-     */
-    private String mbomPuids;
-    /**
      * 类型（1 半成品工艺路线 2整车工艺路线  3总成分总成工艺路线  ）
      */
-    private String type;
+    private Integer type;
     /**
      * 项目id
      */
@@ -33,19 +29,11 @@ public class ApplyMbomDataTOHzMaterielReqDTO {
         this.mbomRecordRespDTOS = mbomRecordRespDTOS;
     }
 
-    public String getMbomPuids() {
-        return mbomPuids;
-    }
-
-    public void setMbomPuids(String mbomPuids) {
-        this.mbomPuids = mbomPuids;
-    }
-
-    public String getType() {
+    public Integer getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(Integer type) {
         this.type = type;
     }
 

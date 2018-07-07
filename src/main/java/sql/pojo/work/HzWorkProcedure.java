@@ -55,11 +55,6 @@ public class HzWorkProcedure {
      */
     private Integer pCount;
     /**
-     * 类型 （1 半成品工艺路线 2整车工艺路线  3总成分总成工艺路线  ）
-     */
-    private Integer pType;
-
-    /**
      * 创建时间
      */
     private Date pCreateTime;
@@ -96,6 +91,14 @@ public class HzWorkProcedure {
      * 控制码
      */
     private String controlCode;
+
+    public String getControlCode() {
+        return controlCode;
+    }
+
+    public void setControlCode(String controlCode) {
+        this.controlCode = controlCode;
+    }
 
     public String getState() {
         return state;
@@ -215,14 +218,6 @@ public class HzWorkProcedure {
 
     public void setpCount(Integer pCount) {
         this.pCount = pCount;
-    }
-
-    public Integer getpType() {
-        return pType;
-    }
-
-    public void setpType(Integer pType) {
-        this.pType = pType;
     }
 
     public Date getpCreateTime() {

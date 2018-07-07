@@ -9,9 +9,29 @@ public class HzWorkProcessByPageQuery extends DefaultPageQuery {
     private String projectId;
 
     /**
-     *类型（1 半成品工艺路线 2整车工艺路线  3总成分总成工艺路线  ）
+     *类型（1整车工艺路线 2半成品工艺路线 3总成分总成工艺路线  ）
      */
     private Integer type;
+
+    private String pMaterielCode;
+
+    private String pMaterielDesc;
+
+    public String getpMaterielCode() {
+        return pMaterielCode;
+    }
+
+    public void setpMaterielCode(String pMaterielCode) {
+        this.pMaterielCode = pMaterielCode;
+    }
+
+    public String getpMaterielDesc() {
+        return pMaterielDesc;
+    }
+
+    public void setpMaterielDesc(String pMaterielDesc) {
+        this.pMaterielDesc = pMaterielDesc;
+    }
 
     public Integer getType() {
         return type;

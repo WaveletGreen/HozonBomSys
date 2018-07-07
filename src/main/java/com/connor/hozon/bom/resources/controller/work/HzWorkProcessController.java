@@ -110,12 +110,12 @@ public class HzWorkProcessController extends BaseController {
 
     /**
      * 删除一条记录
-     * @param puid
+     * @param materielId
      * @param response
      */
     @RequestMapping(value = "delete",method = RequestMethod.POST)
-    public void deleteHzWorkProcess(String puid,HttpServletResponse response){
-        OperateResultMessageRespDTO respDTO =  hzWorkProcessService.deleteHzWorkProcess(puid);
+    public void deleteHzWorkProcess(String materielId,HttpServletResponse response){
+        OperateResultMessageRespDTO respDTO =  hzWorkProcessService.deleteHzWorkProcess(materielId);
         writeAjaxJSONResponse(ResultMessageBuilder.build(OperateResultMessageRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
     }
 
@@ -138,7 +138,6 @@ public class HzWorkProcessController extends BaseController {
         list.forEach(dto -> {
             Map<String, Object> _res = new HashMap<>();
             _res.put("No", dto.getNo());
-            _res.put("puid",dto.getPuid());
             _res.put("materielId", dto.getMaterielId());
             _res.put("pMaterielCode", dto.getpMaterielCode());
             _res.put("pMaterielDesc", dto.getpMaterielDesc());
@@ -181,6 +180,9 @@ public class HzWorkProcessController extends BaseController {
     @RequestMapping(value = "apply/oneKey",method = RequestMethod.POST)
     public void applyMbomDataToHzMaterielOneKey(@RequestBody List<HzMbomRecordRespDTO> mbomRecordRespDTOS,String projectId,Integer type, HttpServletResponse response){
         ApplyMbomDataTOHzMaterielReqDTO reqDTO = new ApplyMbomDataTOHzMaterielReqDTO();
+        reqDTO.setMbomRecordRespDTOS(mbomRecordRespDTOS);
+        reqDTO.setProjectId(projectId);
+        reqDTO.setType(type);
         OperateResultMessageRespDTO respDTO =  hzWorkProcessService.applyMbomDataToHzMaterielOneKey(reqDTO);
         writeAjaxJSONResponse(ResultMessageBuilder.build(OperateResultMessageRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
     }

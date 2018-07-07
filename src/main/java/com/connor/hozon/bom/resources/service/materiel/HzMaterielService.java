@@ -1,13 +1,11 @@
 package com.connor.hozon.bom.resources.service.materiel;
 
-import com.connor.hozon.bom.resources.dto.request.AddHzMaterielReqDTO;
-import com.connor.hozon.bom.resources.dto.request.UpdateHzMaterielReqDTO;
+import com.connor.hozon.bom.resources.dto.request.EditHzMaterielReqDTO;
 import com.connor.hozon.bom.resources.dto.response.HzMaterielRespDTO;
 import com.connor.hozon.bom.resources.dto.response.OperateResultMessageRespDTO;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.query.HzMaterielByPageQuery;
 import com.connor.hozon.bom.resources.query.HzMaterielQuery;
-import sql.pojo.project.HzMaterielRecord;
 
 /**
  * @Author: haozt
@@ -16,18 +14,11 @@ import sql.pojo.project.HzMaterielRecord;
  */
 public interface HzMaterielService {
     /**
-     * 插入一条物料记录
-     * @param addHzMaterielReqDTO
+     * 编辑一条物料记录
+     * @param editHzMaterielReqDTO
      * @return
      */
-    OperateResultMessageRespDTO addHzMateriel(AddHzMaterielReqDTO addHzMaterielReqDTO);
-
-    /**
-     * 更新一条物料记录
-     * @param updateHzMaterielReqDTO
-     * @return
-     */
-    OperateResultMessageRespDTO updateHzMateriel(UpdateHzMaterielReqDTO updateHzMaterielReqDTO);
+    OperateResultMessageRespDTO editHzMateriel(EditHzMaterielReqDTO editHzMaterielReqDTO);
 
     /**
      * 删除一条记录
