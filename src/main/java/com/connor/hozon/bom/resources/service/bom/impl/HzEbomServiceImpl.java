@@ -1,6 +1,5 @@
 package com.connor.hozon.bom.resources.service.bom.impl;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.connor.hozon.bom.bomSystem.dao.bom.HzBomDataDao;

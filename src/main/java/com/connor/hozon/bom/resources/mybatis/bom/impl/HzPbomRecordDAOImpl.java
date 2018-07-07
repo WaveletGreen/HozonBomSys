@@ -4,6 +4,7 @@ import com.connor.hozon.bom.resources.mybatis.bom.HzPbomRecordDAO;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.page.PageRequest;
 import com.connor.hozon.bom.resources.query.HzPbomByPageQuery;
+import com.connor.hozon.bom.resources.query.HzPbomTreeQuery;
 import org.springframework.stereotype.Service;
 import sql.BaseSQLUtil;
 import sql.pojo.bom.HzBomLineRecord;
@@ -83,6 +84,14 @@ public class HzPbomRecordDAOImpl extends BaseSQLUtil implements HzPbomRecordDAO 
     @Override
     public int getHzPbomMaxOrderNum() {
         return(int) super.findForObject("HzPbomRecordDAOImpl_findMaxOrderNum",null);
+    }
+
+    @Override
+    public List<HzPbomLineRecord> getHzPbomTree(HzPbomTreeQuery query) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("projectId",query.getProjectId());
+        map.put("puid",query.getPuid());
+        return super.findForList("HzPbomRecordDAOImpl_getHzPbomTree",map);
     }
 
 }

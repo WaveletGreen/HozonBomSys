@@ -16,6 +16,7 @@ import com.connor.hozon.bom.resources.mybatis.bom.HzPbomRecordDAO;
 import com.connor.hozon.bom.resources.mybatis.bom.impl.HzPbomRecordDAOImpl;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.query.HzPbomByPageQuery;
+import com.connor.hozon.bom.resources.query.HzPbomTreeQuery;
 import com.connor.hozon.bom.resources.service.bom.HzPbomService;
 import com.connor.hozon.bom.resources.service.epl.HzEPLManageRecordService;
 import com.connor.hozon.bom.resources.util.ListUtil;
@@ -239,12 +240,17 @@ public class HzPbomServiceImpl implements HzPbomService {
         if (record == null) {
             return null;
         }
+
         try {
-            List<HzPbomLineRecord> recordList = getChildLineRecord(reqDTO.getProjectId(), record, new ArrayList<>());
+            HzPbomTreeQuery query = new HzPbomTreeQuery();
+            query.setProjectId(reqDTO.getProjectId());
+            query.setPuid(record.geteBomPuid());
+            List<HzPbomLineRecord> recordList = getHzPbomLineTree(query);
+//            List<HzPbomLineRecord> recordList =getChildLineRecord(reqDTO.getProjectId(),record,new ArrayList<>());
             JSONArray jsonArray = new JSONArray();
             for (HzPbomLineRecord lineRecord : recordList) {
                 JSONObject jsonObject = new JSONObject();
-                jsonObject.put("puid", lineRecord.getpPuid());
+                jsonObject.put("puid", lineRecord.geteBomPuid());
                 jsonObject.put("parentUid", lineRecord.getParentUid());
                 jsonObject.put("lineId", lineRecord.getLineId());
                 jsonArray.add(jsonObject);
@@ -537,6 +543,10 @@ public class HzPbomServiceImpl implements HzPbomService {
         return null;
     }
 
+    @Override
+    public List<HzPbomLineRecord> getHzPbomLineTree(HzPbomTreeQuery query) {
+        return hzPbomRecordDAO.getHzPbomTree(query);
+    }
 
     private HzPbomLineRecord bomLineToPbomLine(HzBomLineRecord record){
         HzPbomLineRecord hzPbomLineRecord = new HzPbomLineRecord();
@@ -557,29 +567,6 @@ public class HzPbomServiceImpl implements HzPbomService {
         hzPbomLineRecord.setpBomLinePartResource(record.getpBomLinePartResource());
         hzPbomLineRecord.setOrderNum(record.getOrderNum());
         return hzPbomLineRecord;
-    }
-
-    /**
-     * 根据id 获取所有的子bom
-     *
-     * @return
-     */
-    public List<HzPbomLineRecord> getChildLineRecord(String projectId, HzPbomLineRecord record, List<HzPbomLineRecord> recordList) {
-        Integer hasChildren = record.getIsHas();
-        recordList.add(record);
-        if (hasChildren.equals(1)) {
-            Map<String, Object> map = new HashMap<>();
-            map.put("projectId", projectId);
-            map.put("parentUid", record.getpPuid());
-            List<HzPbomLineRecord> records = hzPbomRecordDAO.getHzPbomById(map);
-            if (ListUtil.isNotEmpty(records)) {
-                for (HzPbomLineRecord lineRecord : records) {
-                    getChildLineRecord(projectId, lineRecord, recordList);
-                }
-            }
-        }
-
-        return recordList;
     }
 
     /**

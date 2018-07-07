@@ -153,7 +153,7 @@
       <if test="pPuid != null and  pPuid!='' " >
         and t6.P_E_BOM_PUID = #{pPuid,jdbcType=VARCHAR}
       </if>
-      and t.P_PBOM_STATUS=1
+      and t6.P_PBOM_STATUS=1
     </where>
   </select>
 
@@ -345,4 +345,23 @@
   <select id="HzPbomRecordDAOImpl_findMaxOrderNum" resultType="java.lang.Integer">
     select max(P_BOM_ORDER_NUM) from HZ_PBOM_RECORD
  </select>
+
+    <!--获取PBOM结构树-->
+<select id="HzPbomRecordDAOImpl_getHzPbomTree" parameterType="java.util.HashMap" resultMap="HzPbomLineRecord">
+    select * from HZ_PBOM_RECORD t
+    where t.p_bom_digifax_id=(
+    select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(
+    select t2.puid from Hz_project_libs t2
+    <where>
+    1=1
+    <if test="projectId != null and  projectId!='' " >
+        and t2.puid = #{projectId,jdbcType=VARCHAR}))
+    </if>
+    </where>
+    start with t.P_E_BOM_PUID = #{puid,jdbcType=VARCHAR}
+    connect by prior t.P_E_BOM_PUID = t.p_parent_uid
+</select>
+
+
+
 </mapper>
