@@ -92,6 +92,14 @@ public class HzWorkProcedure {
      */
     private String controlCode;
 
+    public String getControlCode() {
+        return controlCode;
+    }
+
+    public void setControlCode(String controlCode) {
+        this.controlCode = controlCode;
+    }
+
     public String getState() {
         return state;
     }

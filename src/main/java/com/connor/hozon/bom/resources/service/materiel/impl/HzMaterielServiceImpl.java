@@ -749,7 +749,9 @@ public class HzMaterielServiceImpl implements HzMaterielService {
     }
     private HzMaterielRecord m6(HzMbomLineRecord record,String projectId){
         HzMaterielRecord hzMaterielRecord = new HzMaterielRecord();
-        hzMaterielRecord.setpMaterielCode(record.getLineId());
+        String lineId = record.getLineId();
+        lineId+="-DY";
+        hzMaterielRecord.setpMaterielCode(lineId);
         hzMaterielRecord.setpMaterielDesc(record.getpBomLinePartName());
         hzMaterielRecord.setpMaterielDescEn(record.getpBomLinePartEnName());
         hzMaterielRecord.setpMaterielType("A002");

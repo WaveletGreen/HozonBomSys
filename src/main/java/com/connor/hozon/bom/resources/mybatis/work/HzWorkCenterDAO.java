@@ -4,6 +4,7 @@ import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.query.HzWorkByPageQuery;
 import sql.pojo.work.HzWorkCenter;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -54,5 +55,5 @@ public interface HzWorkCenterDAO {
      * @param projectId
      * @return
      */
-    HzWorkCenter findWorkCenter(String projectId,String pWorkCode);
+    List<HzWorkCenter> findWorkCenter(String projectId, String pWorkCode);
 }

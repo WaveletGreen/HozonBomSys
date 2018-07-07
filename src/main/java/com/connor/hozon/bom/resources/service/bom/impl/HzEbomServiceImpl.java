@@ -358,17 +358,16 @@ public class HzEbomServiceImpl implements HzEbomService {
             if(ebomContent.containsKey("item_id")){
                 itemId = (String)ebomContent.get("item_id");
             }
-            boolean isRepeat = hzEbomRecordDAO.checkItemIdIsRepeat(reqDTO.getProjectId(),itemId);
-            if(isRepeat){
-                OperateResultMessageRespDTO respDTO = new OperateResultMessageRespDTO();
-                respDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
-                respDTO.setErrMsg("当前零件号已存在,请重新添加！");
-                return respDTO;
-            }
+//            boolean isRepeat = hzEbomRecordDAO.checkItemIdIsRepeat(reqDTO.getProjectId(),itemId);
+//            if(isRepeat){
+//                OperateResultMessageRespDTO respDTO = new OperateResultMessageRespDTO();
+//                respDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
+//                respDTO.setErrMsg("当前零件号已存在,请重新添加！");
+//                return respDTO;
+//            }
             HZBomMainRecord hzBomMainRecord = hzBomMainRecordDao.selectByProjectPuid(reqDTO.getProjectId());
             HzBomLineRecord hzBomLineRecord = new HzBomLineRecord();
             hzBomLineRecord.setBomDigifaxId(hzBomMainRecord.getPuid());
-
 
             byte[] bytes = SerializeUtil.serialize(ebomContent);
             hzBomLineRecord.setLineID(itemId);

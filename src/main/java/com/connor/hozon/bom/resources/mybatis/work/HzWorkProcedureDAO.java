@@ -20,4 +20,6 @@ public interface HzWorkProcedureDAO {
     Page<HzWorkProcess> findHzWorkProcessByPage(HzWorkProcessByPageQuery query);
 
     HzWorkProcess getHzWorkProcess(String materielId,String projectId);
+
+    HzWorkProcedure getHzWorkProcessByMaterielId(String materielId);
 }
