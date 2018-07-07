@@ -37,10 +37,10 @@
 </div>
 <!--<script th:src="@{/js/bom/mbom/mbomMaintenance.js}"></script>-->
 <script th:src="@{/js/jq.resizableColumns.js}"></script>
+<script th:src="@{/js/lodash.min.js}"></script>
 <script th:inline="javascript">
     $(document).ready((function () {
         var $table = $("#mbomMaintenanceTable");
-        var selectionIds = [];	//保存选中ids
         var projectPuid = $("#project", window.top.document).val();
         var mBomUrl = "mbom/record?projectId=" + projectPuid;
         initTable(mBomUrl);
@@ -72,6 +72,7 @@
         //     func = $.inArray(e.type, ['check', 'check-all']) > -1 ? 'union' : 'difference';
         //     selectionIds = _[func](selectionIds, ids);
         // });
+
 
     }))
 
@@ -136,7 +137,7 @@
                     cache: false,
                     striped: true,                              //是否显示行间隔色
                     sidePagination: "server",           //分页方式：client客户端分页，server服务端分页（*）
-                    height: $(window.parent.document).find("#wrapper").height() - 180,
+                    height: $(window.parent.document).find("#wrapper").height() - 135,
                     width: $(window).width(),
                     formId :"queryMbomMain",
                     undefinedText: "",//当数据为 undefined 时显示的字符
@@ -313,15 +314,7 @@
                 $table.bootstrapTable('hideColumn', 'eBomPuid');
             }
         });
-        //表格分页之前处理多选框数据
-        // function responseHandler(res) {
-        //     $.each(res.rows, function (i, row) {
-        //         row.checkStatus = $.inArray(row.id, selectionIds) != -1;	//判断当前行的数据id是否存在与选中的数组，存在则将多选框状态变为true
-        //     });
-        //     return res;
-        // }
     }
 </script>
-
 </body>
 </html>
