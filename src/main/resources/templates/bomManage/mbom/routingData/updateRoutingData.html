@@ -3,7 +3,7 @@
 <!--User: xulf Date: 2018/7/2 Time: 10:58-->
 <body>
 <form id="routingDataForm" role="form" method="post" action="work/process/update">
-    <input id="materielId" name="materielId" type="text" th:value="${data.materielId}"/><!--th:value="${entity.pBomPuid}"-->
+    <input id="materielId" name="materielId" type="hidden" th:value="${data.materielId}"/><!--th:value="${entity.pBomPuid}"-->
     <div class="form-group">
         <label for="pMaterielCode">物料</label>
         <input class="form-control" id="pMaterielCode" name="pMaterielCode" type="text"disabled="disabled"

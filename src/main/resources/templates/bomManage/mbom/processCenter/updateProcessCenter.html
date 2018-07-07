@@ -3,7 +3,7 @@
 <!--User: xulf Date: 2018/6/28 Time: 14:52-->
 <body>
 <form id="processCenterForm" role="form" method="post" action="work/update">
-    <input id="puid" name="puid" type="text" th:value="${data.puid}"/>
+    <input id="puid" name="puid" type="hidden" th:value="${data.puid}"/>
 <div class="form-group">
     <label for="factoryCode">工厂代码</label>
     <input class="form-control" id="factoryCode" name="factoryCode" type="text"

@@ -3,7 +3,7 @@
 <!--User: xulf Date: 2018/7/2 Time: 11:42-->
 <body>
 <form id="materialDataForm" role="form" method="post" action="materiel/add">
-    <input id="puid" name="puid" type="text"th:value="${data.puid}"/><!--th:value="${entity.pBomPuid}"-->
+    <input id="puid" name="puid" type="hidden"th:value="${data.puid}"/><!--th:value="${entity.pBomPuid}"-->
     <div class="form-group">
         <label for="pMaterielCode">物料代码</label>
         <input class="form-control" id="pMaterielCode" name="pMaterielCode" type="text"disabled="disabled"

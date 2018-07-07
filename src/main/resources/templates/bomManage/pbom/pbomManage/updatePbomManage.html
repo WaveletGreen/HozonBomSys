@@ -3,7 +3,7 @@
 <!--User: xulf Date: 2018/5/31 Time: 15:29-->
 <body>
 <form id="pbomManageForm" role="4form" method="post" action="pbom/update">
-    <input id="eBomPuid" name="eBomPuid" type="text" th:value="${data.eBomPuid}"/><!--th:value="${entity.eBomPuid}"-->
+    <input id="eBomPuid" name="eBomPuid" type="hidden" th:value="${data.eBomPuid}"/><!--th:value="${entity.eBomPuid}"-->
     <div class="form-group">
         <label for="rank">级别</label>
         <input class="form-control" id="rank" name="rank" type="text" disabled="disabled" th:value="${data.rank}"

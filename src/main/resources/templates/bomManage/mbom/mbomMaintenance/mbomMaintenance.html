@@ -96,6 +96,8 @@
         var projectPuid = $("#project", window.top.document).val();
         var $table = $("#mbomMaintenanceTable");
         var column = [];
+        selections = [];
+
         $.ajax({
             url: "mbom/manage/title?projectId=" + projectPuid,
             type: "GET",
@@ -266,7 +268,7 @@
                                                 $table.bootstrapTable("refresh");
                                             },
                                             error: function (info) {
-                                                window.Ewin.alert({message: "操作删除:" + info.status});
+                                                window.Ewin.alert({message: "发送失败:" + info.status});
                                             }
                                         })
                                     }
