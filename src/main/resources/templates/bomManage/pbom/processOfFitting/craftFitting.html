@@ -24,9 +24,11 @@
     </div>
     <div class="content col-lg-7">
         <div class="form-group">
-            <button type="button" id="synthetic" onclick="doSubmit()" class="btn btn-primary" style="width: 300px"
+            <button type="button" id="synthetic" onclick="doSubmit()" class="btn btn-primary" style="width: 150px"
                     data-toggle="modal" data-target="#myModal">生成工艺合件
             </button>
+            <ul id="Ztree2" class="ztree  col-md-5"
+                style="width:300px;overflow-y: scroll;height: 500px; overflow:auto;"></ul>
         </div>
 
 
@@ -36,9 +38,9 @@
                 <div class="modal-content">
                     <div class="modal-body">
                         <div class="form-group">
-                            <label for="lineId">零件号</label>
+                            <label for="lineId">合成零件号</label>
                             <input class="form-control" id="lineId" name="lineId" type="text"
-                                   placeholder="请输入零件号"/><!--th:value="${entity.level}"-->
+                                   placeholder="请输入合成零件号"/><!--th:value="${entity.level}"-->
                         </div>
                         <div class="form-group">
                             <label for="pBomOfWhichDept">专业</label>
