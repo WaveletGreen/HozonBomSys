@@ -1,18 +1,21 @@
 package webservice.logic;
 
+import sql.pojo.bom.HzMBomToERPBean;
+import sql.redis.SerializeUtil;
 import webservice.base.bom.ZPPTCI005;
 import webservice.option.ActionFlagOption;
 import webservice.option.BomOption;
 
-public class Bom {
+import java.util.LinkedHashMap;
+
+/**
+ * 从MBOM中数据映射到SAP传输的DTO上，父层的物料编号需要单独设置，预料字段没有做对应
+ */
+public class ReflectBom {
     /**
      * 对应的SAP接口DTO
      */
     private ZPPTCI005 zpptci005;
-
-    public Bom() {
-        zpptci005 = new ZPPTCI005();
-    }
 
     /**
      * 数据包号，随机数产生，ZPACKNO
@@ -33,6 +36,15 @@ public class Bom {
      */
     private String modifyCode;
     /**
+     * 工程更改号描述
+     */
+    private String modifyDesc;
+    /**
+     * TC系统更改号
+     */
+    private String TCModifyCode;
+
+    /**
      * 工厂,ZWERKS
      */
     private String factory;
@@ -44,6 +56,10 @@ public class Bom {
      * bomline首行,ZMATNR
      */
     private String headOfBomLine;
+    /**
+     * 表头的基本数量，默认是1
+     */
+    private String baseNumOfHead;
 
     /**
      * bomline下的子行,ZMATNR_C
@@ -66,7 +82,14 @@ public class Bom {
      * 发料库存地点，Zlocation
      */
     private String stockLocation;
-
+    /**
+     * 相关性（选配条件）
+     */
+    private String relevance;
+    /**
+     * 采购件下级件标识，TC系统传输02或空，SAP系统会将02转化为L
+     */
+    private String purchaseFlag;
     /**
      * 装配位置，ZZPWZ
      */
@@ -81,6 +104,58 @@ public class Bom {
      * 工位,P_STATION
      */
     private String station;
+
+    private HzMBomToERPBean bomToERPBean;
+
+    public ReflectBom(HzMBomToERPBean bomToERPBean) {
+        this.bomToERPBean = bomToERPBean;
+        zpptci005 = new ZPPTCI005();
+
+        //更改编号
+        setModifyCode(bomToERPBean.getChangeNum());
+        //工程更改号描述
+        setModifyDesc(bomToERPBean.getChange());
+        //TC系统更改号
+        setTCModifyCode(bomToERPBean.getChangeNum());
+        //工厂
+        setFactory(bomToERPBean.getFactoryCode());
+        //BOM类型,默认设置为生产
+        if (bomToERPBean.getBomType() == null || "".equalsIgnoreCase(bomToERPBean.getBomType())) {
+            setBomType(BomOption.BOM_TYPE_PRODUCTION);
+        } else {
+            setBomType(bomToERPBean.getBomType());
+        }
+        //表头物料编码单独获取
+
+        //基本数量，默认是1
+        setBaseNumOfHead("1");
+        //BOM序号
+        setOrderOfBomLine(bomToERPBean.getBomOrderNum());
+        //子物料编码
+        setChildOfBomLine(bomToERPBean.getBomLineId());
+        //数量，也默认1条条传
+        setNumber("1");
+        //单位，如果没有则默认设为EA
+        Object obj = SerializeUtil.unserialize(bomToERPBean.getBomLineBlock());
+        if (obj instanceof LinkedHashMap) {
+            setUnit((String) ((LinkedHashMap) obj).get("h9_Gross_Unit"));
+        } else {
+            setUnit("EA");
+        }
+        //发料库存地点
+        setStockLocation(bomToERPBean.getStockLocation());
+        //相关性（选配条件）
+        setRelevance(bomToERPBean.getCfg0Relevance());
+        //采购件下级件标识,TC系统传输02或空，SAP系统会将02转化为L
+        setPurchaseFlag("");
+        //装配位置
+        setAssemblyPoint(bomToERPBean.getFNAInfo());
+        //使用车间
+        setUseWorkshop(bomToERPBean.getWorkShop());
+        //工位
+        setStation(bomToERPBean.getStation());
+
+    }
 
 
     /////////////////////////////////////////setter/////////////////////////////
@@ -115,9 +190,20 @@ public class Bom {
         zpptci005.setZUSE(bomType.GetDesc());
     }
 
+    public void setBomType(String bomType) {
+        this.bomType = bomType;
+        zpptci005.setZUSE(bomType);
+
+    }
+
     public void setHeadOfBomLine(String headOfBomLine) {
         zpptci005.setZMATNR(headOfBomLine);
         this.headOfBomLine = headOfBomLine;
+    }
+
+    public void setBaseNumOfHead(String baseNumOfHead) {
+        zpptci005.setZBASEQ(baseNumOfHead);
+        this.baseNumOfHead = baseNumOfHead;
     }
 
     public void setChildOfBomLine(String childOfBomLine) {
@@ -145,6 +231,15 @@ public class Bom {
         this.stockLocation = stockLocation;
     }
 
+    public void setRelevance(String relevance) {
+        this.relevance = relevance;
+        zpptci005.setZKNBLK(relevance);
+    }
+
+    public void setPurchaseFlag(String purchaseFlag) {
+        this.purchaseFlag = purchaseFlag;
+    }
+
     public void setAssemblyPoint(String assemblyPoint) {
         zpptci005.setZZPWZ(assemblyPoint);
         this.assemblyPoint = assemblyPoint;
@@ -160,6 +255,15 @@ public class Bom {
         this.station = station;
     }
 
+    public void setModifyDesc(String modifyDesc) {
+        zpptci005.setZAETXT(modifyDesc);
+        this.modifyDesc = modifyDesc;
+    }
+
+    public void setTCModifyCode(String TCModifyCode) {
+        this.TCModifyCode = TCModifyCode;
+        zpptci005.setZPCNNO(TCModifyCode);
+    }
 
     /////////////////////////////////////////getter/////////////////////////////
 
@@ -215,6 +319,14 @@ public class Bom {
         return stockLocation;
     }
 
+    public String getRelevance() {
+        return relevance;
+    }
+
+    public String getPurchaseFlag() {
+        return purchaseFlag;
+    }
+
     public String getAssemblyPoint() {
         return assemblyPoint;
     }
@@ -225,5 +337,13 @@ public class Bom {
 
     public String getStation() {
         return station;
+    }
+
+    public String getModifyDesc() {
+        return modifyDesc;
+    }
+
+    public String getTCModifyCode() {
+        return TCModifyCode;
     }
 }

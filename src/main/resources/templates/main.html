@@ -149,7 +149,17 @@
                 }],
                 showIndex: 0,
                 loadAll: false
-            })
+            }),
+                $("#tabContainer").tabs({
+                    data: [{
+                        id: '99999998',
+                        text: '首页',
+                        url: "project",
+                        closeable: true
+                    }],
+                    showIndex: 1,
+                    loadAll: false
+                })
             //
             $.fn.bootstrapTree({url: contextPath + "/user/mainTree", treeId: 'menu_tree', tabId: "tabContainer"});
             $.fn.dictUtil("/dict/loadDict");

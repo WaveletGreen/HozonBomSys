@@ -109,11 +109,32 @@
         SELECT T4.PUID FROM HZ_BOM_MAIN_RECORD T4 WHERE T4.P_CFG0_OF_WHICH_PROJECT_PUID=(
         SELECT T5.PUID FROM HZ_PROJECT_LIBS T5
         WHERE T5.PUID =#{projectUid,jdbcType=VARCHAR}
-        AND T.PUID IN
-        <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
-            #{item,jdbcType=VARCHAR}
-        </foreach>
+        AND ${flag} IN
+        <if test="list!=null">
+            <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+                #{item,jdbcType=VARCHAR}
+            </foreach>
+        </if>
+        <if test="list==null">
+            ('')
+        </if>
         )
         )
     </select>
+    <select id="selectByProjectUidWithCondition"
+            parameterType="java.util.Map"
+            resultMap="ResultMapWithBLOBs">
+        select
+        t.PUID,t.P_PARENT_UID,t.P_BOM_PUID
+        from Hz_Mbom_Record t where t.p_bom_digifax_id=(
+        select puid from Hz_Bom_Main_Record t2 where t2.p_cfg0_of_which_project_puid=#{projectUid,jdbcType=VARCHAR}
+        )
+        <if test="is2Y==0">
+            and t.p_bom_line_is_2y=0
+        </if>
+        <if test="is2Y==1">
+            and t.p_bom_line_is_2y=1
+        </if>
+    </select>
+
 </mapper>

@@ -177,8 +177,8 @@ function initTable(url) {
                                 if (rows.length == 0) {
                                     window.Ewin.confirm({
                                         title: '提示',
-                                        message: '您未选择任何一条数据，是否将当前项目' + currentProjectHead + '下的所有物料数据发送到ERP系统?' +
-                                        '<p style="color: red">注意：该操作将很耗时</p>',
+                                        message: '<p ><strong style="color: red">注意：正在进行耗时操作</strong></p>' +
+                                        '您未选择任何一条数据，是否将当前项目' + currentProjectHead + '下的所有物料数据发送到ERP系统?',
                                         width: 600
                                     }).on(function (e) {
                                         //发送全部
