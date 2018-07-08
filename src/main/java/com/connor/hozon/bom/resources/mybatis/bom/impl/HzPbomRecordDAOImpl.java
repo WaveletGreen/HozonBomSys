@@ -39,7 +39,7 @@ public class HzPbomRecordDAOImpl extends BaseSQLUtil implements HzPbomRecordDAO 
     }
 
     @Override
-    public int update(HzPbomRecord record) {
+    public int update(HzPbomLineRecord record) {
         return super.update("HzPbomRecordDAOImpl_update",record);
     }
 
@@ -48,10 +48,6 @@ public class HzPbomRecordDAOImpl extends BaseSQLUtil implements HzPbomRecordDAO 
         return super.update("HzPbomRecordDAOImpl_deleteByForeignId",ePuid);
     }
 
-    @Override
-    public List<HzPbomLineRecord> getHzPbomById(Map<String, Object> map) {
-        return super.findForList("HzPbomRecordDAOImpl_getHzPbomById",map);
-    }
 
     @Override
     public Page<HzPbomLineRecord> getHzPbomRecordByPage(HzPbomByPageQuery query) {
@@ -94,4 +90,16 @@ public class HzPbomRecordDAOImpl extends BaseSQLUtil implements HzPbomRecordDAO 
         return super.findForList("HzPbomRecordDAOImpl_getHzPbomTree",map);
     }
 
+    @Override
+    public int getMaxLineIndexFirstNum(String projectId) {
+        return (int)super.findForObject("HzPbomRecordDAOImpl_getMaxLineIndexFirstNum",projectId);
+    }
+
+    @Override
+    public boolean checkItemIdIsRepeat(String projectId, String lineId) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("projectId",projectId);
+        map.put("lineId",lineId);
+        return (int)super.findForObject("HzPbomRecordDAOImpl_checkItemIdIsRepeat",map)>0;
+    }
 }

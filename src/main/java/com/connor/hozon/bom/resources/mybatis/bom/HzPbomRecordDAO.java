@@ -16,7 +16,11 @@ import java.util.Map;
  */
 public interface HzPbomRecordDAO {
 
-
+    /**
+     * 获取pbom信息 根据项目id puid或者零件号
+     * @param map
+     * @return
+     */
     List<HzPbomLineRecord> getPbomById(Map<String,Object> map);
 
     /**
@@ -26,13 +30,14 @@ public interface HzPbomRecordDAO {
      */
     int insert(HzPbomRecord record);
 
+
     int insertList(List<HzPbomLineRecord> records);
     /**
      * 编辑 PBOM管理信息
      * @param record
      * @return
      */
-    int update(HzPbomRecord record);
+    int update(HzPbomLineRecord record);
 
     /**
      * 删除PBOM管理 通过外键删除
@@ -40,12 +45,6 @@ public interface HzPbomRecordDAO {
      * @return
      */
     int deleteByForeignId(String ePuid);
-
-    /**
-     * 根据项目id 和id 获取所有的pbom
-     * @return
-     */
-    List<HzPbomLineRecord> getHzPbomById(Map<String,Object> map);
 
     /**
      * 分页获取pbom信息
@@ -71,4 +70,8 @@ public interface HzPbomRecordDAO {
     int getHzPbomMaxOrderNum();
 
     List<HzPbomLineRecord> getHzPbomTree(HzPbomTreeQuery query);
+
+    int getMaxLineIndexFirstNum(String projectId);
+
+    boolean checkItemIdIsRepeat(String projectId, String lineId);
 }

@@ -50,40 +50,51 @@ public class AddHzPbomRecordReqDTO {
      */
     private  String station;
 
+    /**
+     * 项目id
+     */
     private String projectId;
 
     /**
-     * 是否为父层
+     * 是否为父层 工艺合件参数
      */
     private Integer isParent;
 
     /**
-     * 专业
+     * 专业 工艺合件参数
      */
     private String pBomOfWhichDept;
 
     /**
-     * 零件来源
+     * 零件来源 工艺合件参数
      */
     private String pBomLinePartResource;
     /**
-     * 零件分类
+     * 零件分类 工艺合件参数
      */
     private String pBomLinePartClass;
     /**
-     * Bom行对应的零件名
+     * Bom行对应的零件名 工艺合件参数
      */
     private String pBomLinePartName;
 
     /**
-     * 英文名称
+     * 英文名称 工艺合件参数
      */
     private String pBomLinePartEnName;
 
     /**
-     * 父层puid
+     * 零件号 工艺合件参数
      */
-    private String parentId;
+    private String lineId;
+
+    public String getLineId() {
+        return lineId;
+    }
+
+    public void setLineId(String lineId) {
+        this.lineId = lineId;
+    }
 
     public Integer getIsParent() {
         return isParent;
@@ -133,13 +144,6 @@ public class AddHzPbomRecordReqDTO {
         this.pBomLinePartEnName = pBomLinePartEnName;
     }
 
-    public String getParentId() {
-        return parentId;
-    }
-
-    public void setParentId(String parentId) {
-        this.parentId = parentId;
-    }
 
     public String getProjectId() {
         return projectId;

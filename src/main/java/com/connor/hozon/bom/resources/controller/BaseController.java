@@ -18,11 +18,6 @@ import java.io.PrintWriter;
  */
 public abstract class BaseController {
 
-    protected static final int DEFAULT_PAGESIZE = 10;// 默认每页10条
-
-    protected static final int DEFAULT_PAGENUM = 1;// 默认第一页
-
-    protected static final String ERROR_MSG_KEY = "errMsg";
     /**
      * 验证失败时返回信息
      * @param result
@@ -35,11 +30,7 @@ public abstract class BaseController {
             return;
         }
     }
-    /**
-     *
-     * @param response
-     * @return
-     */
+
     protected PrintWriter getWriter(HttpServletResponse response) {
         if (response == null)
             return null;
@@ -77,25 +68,7 @@ public abstract class BaseController {
         }
     }
 
-
     /**
-     * description:send the ajax response back to the client side.
-     *
-     * @param response
-     */
-    protected void writeAjaxJSONResponseRaw(String jsonStr,HttpServletResponse response){
-        response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1
-        response.setHeader("Pragma", "no-cache"); // HTTP 1.0
-        response.setHeader("Access-Control-Allow-Origin", "*");
-        response.setDateHeader("Expires", 0); // Proxies.
-        response.setCharacterEncoding("UTF-8");
-        response.setContentType("application/json;charset=UTF-8");
-
-        writeAjaxResponse(jsonStr, response);
-    }
-
-    /**
-     * description:send the ajax response back to the client side.
      * @param writer
      */
     protected void writeAjaxJSONResponse(Object responseObj, PrintWriter writer) {
@@ -111,7 +84,6 @@ public abstract class BaseController {
     }
 
     /**
-     * description:send the ajax response back to the client side. DisableCircularReferenceDetect true or false
      * @param responseObj
      * @param cirReferDetect
      */
@@ -135,9 +107,6 @@ public abstract class BaseController {
     }
 
     /**
-     * description:send the ajax response back to the client side (Date object
-     * will be formatted as per the given <code>dateFormat</code>).
-     *
      * @param responseObj
      * @param writer
      * @param dateFormat
@@ -157,8 +126,6 @@ public abstract class BaseController {
     }
 
     /**
-     * description:send the ajax response back to the client side.
-     *
      * @param responseObj
      * @param response
      */

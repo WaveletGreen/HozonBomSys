@@ -212,36 +212,18 @@ public class HzPbomController extends BaseController {
      * 合成工艺合件
      * @param
      * @param response
-     * AddProcessComposeReqDTO reqDTO,
      */
     @RequestMapping(value = "/add/processCompose",method = RequestMethod.POST)
-    public void addProcessCompose(@RequestBody  Map<String,Object> obj, AddProcessComposeReqDTO reqDTO1, HttpServletResponse response){
-        if(reqDTO1.getProjectPuid()==null || reqDTO1.getLineId() == null || obj == null){
+    public void addProcessCompose(@RequestBody List<AddHzPbomRecordReqDTO> recordReqDTOS,String projectId,  HttpServletResponse response){
+        if(projectId==null){
             writeAjaxJSONResponse(ResultMessageBuilder.build(false,"非法参数！"),response);
             return;
         }
-        if(reqDTO1.getLineId().contains("-")){
-            if(reqDTO1.getLineId().split("-")[1].length()<4){
-                writeAjaxJSONResponse(ResultMessageBuilder.build(false, "零件号-后面的长度不能小于4！"), response);
-                return;
-            }
-        }
-        AddProcessComposeReqDTO reqDTO=new AddProcessComposeReqDTO();
-        reqDTO.seteBomContent(obj);
-        reqDTO.setLineId(reqDTO1.getLineId());
-        reqDTO.setPuid(reqDTO1.getPuid());
-        reqDTO.setProjectPuid(reqDTO1.getProjectPuid());
-        reqDTO.setpBomLinePartClass(reqDTO1.getpBomLinePartClass());
-        reqDTO.setpBomLinePartName(reqDTO1.getpBomLinePartName());
-        int i = hzPbomService.addPbomProcessCompose(reqDTO);
-        if(i!=1){
-            writeAjaxJSONResponse(ResultMessageBuilder.build(false,"出错啦！"),response);
-        }else
-        writeAjaxJSONResponse(ResultMessageBuilder.build(true,"操作成功！"),response);
+        OperateResultMessageRespDTO operateResultMessageRespDTO = hzPbomService.andProcessCompose(recordReqDTOS,projectId);
+
+        writeAjaxJSONResponse(ResultMessageBuilder.build(OperateResultMessageRespDTO.isSuccess(operateResultMessageRespDTO),operateResultMessageRespDTO.getErrMsg()),response);
 
     }
-
-
 
 
 }

@@ -51,13 +51,6 @@ public interface HzPbomService {
      */
     JSONArray getPbomByLineId(HzPbomProcessComposeReqDTO reqDTO);
 
-    /**
-     * 添加工艺合件信息到bom
-     * @param reqDTO
-     * @return
-     */
-    int addPbomProcessCompose(AddProcessComposeReqDTO reqDTO);
-
 
     /**
      * 分页获取pbom信息
@@ -80,4 +73,11 @@ public interface HzPbomService {
      * @return
      */
     List<HzPbomLineRecord> getHzPbomLineTree(HzPbomTreeQuery query);
+
+    /**
+     * 创建工艺合件
+     * @param recordReqDTOs
+     * @return
+     */
+    OperateResultMessageRespDTO andProcessCompose(List<AddHzPbomRecordReqDTO> recordReqDTOs,String projectId);
 }
