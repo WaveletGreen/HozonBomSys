@@ -169,7 +169,7 @@ public class HzEbomServiceImpl implements HzEbomService {
                 appendLocalName[3] = "专业";
                 appendLocalName[4] = "级别";
                 appendLocalName[5] = "分组号";
-                appendLocalName[6] = "FNA信息";
+                appendLocalName[6] = "FNA";
 
                 appendTrueName[0] = "No";
                 appendTrueName[1] = "puid";
@@ -539,20 +539,14 @@ public class HzEbomServiceImpl implements HzEbomService {
 
     @Override
     public List<HzEPLManageRecord> findCurrentBomChildren(String projectId,HzEPLManageRecord record) {
-        List<HzEPLManageRecord> recordList = new ArrayList<>();
-        recordList.add(record);
-        if(record.getIsHas().equals(1)){
-            Map<String,Object> map1 = new HashMap<>();
-            map1.put("projectId",projectId);
-            map1.put("parentUid",record.getPuid());
-            List<HzEPLManageRecord> records = hzEbomRecordDAO.getHzBomLineChildren(map1);
-            if(ListUtil.isNotEmpty(records)){
-                for(HzEPLManageRecord eplManageRecord:records){
-                    findCurrentBomChildren(projectId,eplManageRecord);
-                }
-            }
+        Map<String,Object> map1 = new HashMap<>();
+        map1.put("projectId",projectId);
+        map1.put("puid",record.getPuid());
+        List<HzEPLManageRecord> records = hzEbomRecordDAO.getHzBomLineChildren(map1);
+        if(ListUtil.isEmpty(records)){
+            return null;
         }
-        return recordList;
+        return records;
     }
 
 }

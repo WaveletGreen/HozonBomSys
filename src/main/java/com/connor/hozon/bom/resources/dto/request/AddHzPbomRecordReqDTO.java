@@ -41,7 +41,7 @@ public class AddHzPbomRecordReqDTO {
      */
     private String colorPart;
     /**
-     * 外键id 对应EBOM表的id
+     * 外键id
      */
     private String eBomPuid;
 
@@ -51,6 +51,95 @@ public class AddHzPbomRecordReqDTO {
     private  String station;
 
     private String projectId;
+
+    /**
+     * 是否为父层
+     */
+    private Integer isParent;
+
+    /**
+     * 专业
+     */
+    private String pBomOfWhichDept;
+
+    /**
+     * 零件来源
+     */
+    private String pBomLinePartResource;
+    /**
+     * 零件分类
+     */
+    private String pBomLinePartClass;
+    /**
+     * Bom行对应的零件名
+     */
+    private String pBomLinePartName;
+
+    /**
+     * 英文名称
+     */
+    private String pBomLinePartEnName;
+
+    /**
+     * 父层puid
+     */
+    private String parentId;
+
+    public Integer getIsParent() {
+        return isParent;
+    }
+
+    public void setIsParent(Integer isParent) {
+        this.isParent = isParent;
+    }
+
+    public String getpBomOfWhichDept() {
+        return pBomOfWhichDept;
+    }
+
+    public void setpBomOfWhichDept(String pBomOfWhichDept) {
+        this.pBomOfWhichDept = pBomOfWhichDept;
+    }
+
+    public String getpBomLinePartResource() {
+        return pBomLinePartResource;
+    }
+
+    public void setpBomLinePartResource(String pBomLinePartResource) {
+        this.pBomLinePartResource = pBomLinePartResource;
+    }
+
+    public String getpBomLinePartClass() {
+        return pBomLinePartClass;
+    }
+
+    public void setpBomLinePartClass(String pBomLinePartClass) {
+        this.pBomLinePartClass = pBomLinePartClass;
+    }
+
+    public String getpBomLinePartName() {
+        return pBomLinePartName;
+    }
+
+    public void setpBomLinePartName(String pBomLinePartName) {
+        this.pBomLinePartName = pBomLinePartName;
+    }
+
+    public String getpBomLinePartEnName() {
+        return pBomLinePartEnName;
+    }
+
+    public void setpBomLinePartEnName(String pBomLinePartEnName) {
+        this.pBomLinePartEnName = pBomLinePartEnName;
+    }
+
+    public String getParentId() {
+        return parentId;
+    }
+
+    public void setParentId(String parentId) {
+        this.parentId = parentId;
+    }
 
     public String getProjectId() {
         return projectId;

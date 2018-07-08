@@ -24,7 +24,7 @@ public interface HzEbomRecordDAO {
     HzEPLManageRecord findEbomById(String puid,String projectId);
 
     /**
-     * 找出一条bomLine的全部子bom
+     * 找出一条bomLine的全部子bom sql递归查找
      * @param map
      * @return
      */

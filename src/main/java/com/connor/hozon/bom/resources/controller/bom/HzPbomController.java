@@ -41,9 +41,13 @@ public class HzPbomController extends BaseController {
         tableTitle.put("pBomOfWhichDept", "专业");
         tableTitle.put("rank", "级别");
         tableTitle.put("groupNum", "分组号");
-        tableTitle.put("lineId", "零件号");//这个字段暂时是一个替代品，后续要改
-        tableTitle.put("h9_IsCommon", "零件分类");
-        tableTitle.put("H9_Mat_Status", "零部件来源");
+        tableTitle.put("lineId", "零件号");
+
+        tableTitle.put("pBomLinePartName", "名称");
+        tableTitle.put("pBomLinePartEnName", "英文名称");
+        tableTitle.put("pBomLinePartClass", "零件分类");
+        tableTitle.put("pBomLinePartResource", "零部件来源");
+
         tableTitle.put("resource", "自制/采购");
         tableTitle.put("type", "焊接/装配");
         tableTitle.put("buyUnit", "采购单元");
@@ -73,6 +77,7 @@ public class HzPbomController extends BaseController {
         List<Map<String, Object>> _list = new ArrayList<>();
         respDTOS.forEach(dto -> {
             Map<String, Object> _res = new HashMap<>();
+            _res.put("puid",dto.getPuid());
             _res.put("eBomPuid", dto.geteBomPuid());
             _res.put("No",dto.getNo());
             _res.put("level", dto.getLevel());
@@ -80,8 +85,12 @@ public class HzPbomController extends BaseController {
             _res.put("rank", dto.getRank());
             _res.put("groupNum", dto.getGroupNum());
             _res.put("lineId", dto.getLineId());
-            _res.put("h9_IsCommon",dto.getH9_IsCommon());
-            _res.put("H9_Mat_Status",dto.getH9_Mat_Status());
+
+            _res.put("pBomLinePartName",dto.getpBomLinePartName());
+            _res.put("pBomLinePartEnName",dto.getpBomLinePartEnName());
+            _res.put("pBomLinePartClass",dto.getpBomLinePartClass());
+            _res.put("pBomLinePartResource",dto.getpBomLinePartResource());
+
             _res.put("resource", dto.getResource());
             _res.put("type", dto.getType());
             _res.put("buyUnit", dto.getBuyUnit());
@@ -119,8 +128,8 @@ public class HzPbomController extends BaseController {
         hzPbomLineRespDTO.setpBomOfWhichDept(respDTO.getpBomOfWhichDept());
         hzPbomLineRespDTO.setRank(respDTO.getRank());
         hzPbomLineRespDTO.setLevel(respDTO.getLevel());
-        hzPbomLineRespDTO.setH9_IsCommon(respDTO.getH9_IsCommon());
-        hzPbomLineRespDTO.setH9_Mat_Status(respDTO.getH9_Mat_Status());
+        hzPbomLineRespDTO.setpBomLinePartClass(respDTO.getpBomLinePartClass());
+        hzPbomLineRespDTO.setpBomLinePartResource(respDTO.getpBomLinePartResource());
         model.addAttribute("data",hzPbomLineRespDTO);
         return "bomManage/pbom/pbomManage/addPbomManage";
     }
@@ -190,10 +199,11 @@ public class HzPbomController extends BaseController {
             writeAjaxJSONResponse(ResultMessageBuilder.build(false,"非法参数！"),response);
             return;
         }
-        if(reqDTO.getProjectId() == null ||reqDTO.getLineId()==null){
+        if(reqDTO.getProjectId() == null ||reqDTO.getPuid()==null){
             writeAjaxJSONResponse(ResultMessageBuilder.build(false,"非法参数！"),response);
             return;
         }
+
         JSONArray object = hzPbomService.getPbomByLineId(reqDTO);
         writeAjaxJSONResponse(ResultMessageBuilder.build(true,object),response);
     }

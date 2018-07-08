@@ -26,7 +26,7 @@ public class HzMbomRecordRespDTO {
      */
     private String pBomLinePartName;
 
-    /**
+     /**
      * 英文名称
      */
     private String pBomLinePartEnName;

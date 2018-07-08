@@ -261,6 +261,7 @@ public class HzPbomServiceImpl implements HzPbomService {
         Map<String, Object> map = new HashMap<>();
         map.put("projectId", reqDTO.getProjectId());
         map.put("lineId", reqDTO.getLineId());
+        map.put("pPuid",reqDTO.getPuid());
         List<HzPbomLineRecord> records = hzPbomRecordDAO.getPbomById(map);
         if (ListUtil.isEmpty(records)) {
             return null;
@@ -269,9 +270,7 @@ public class HzPbomServiceImpl implements HzPbomService {
             HzPbomLineRecord record = records.get(0);
             JSONArray jsonArray = new JSONArray();
             JSONObject jsonObject = new JSONObject();
-            jsonObject.put("puid", record.getpPuid());
-            jsonObject.put("parentUid", record.getParentUid());
-            jsonObject.put("hasChildren", record.getIsHas());
+            jsonObject.put("puid", record.getPuid());
             Integer is2Y = record.getIs2Y();
             Integer hasChildren = record.getIsHas();
             String lineIndex = record.getLineIndex();
@@ -282,8 +281,12 @@ public class HzPbomServiceImpl implements HzPbomService {
             jsonObject.put("groupNum", record.getLineId());
             jsonObject.put("eBomPuid", record.geteBomPuid());
             jsonObject.put("lineId", record.getLineId());
-            jsonObject.put("itemName", record.getpBomLinePartName());
-            jsonObject.put("itemPart", record.getpBomLinePartClass());
+
+            jsonObject.put("pBomLinePartName", record.getpBomLinePartName());
+            jsonObject.put("pBomLinePartClass", record.getpBomLinePartClass());
+            jsonObject.put("pBomLinePartResource", record.getpBomLinePartResource());
+            jsonObject.put("pBomLinePartEnName", record.getpBomLinePartEnName());
+
             jsonObject.put("resource", record.getResource());
             jsonObject.put("type", record.getType());
             jsonObject.put("buyUnit", record.getBuyUnit());
@@ -620,6 +623,7 @@ public class HzPbomServiceImpl implements HzPbomService {
                     respDTO.setColorPart("/");
                 }
                 respDTO.seteBomPuid(record.geteBomPuid());
+                respDTO.setPuid(record.getPuid());
                 respDTO.setProductLine(record.getProductLine());
                 respDTO.setWorkShop1(record.getWorkShop1() );
                 respDTO.setWorkShop2(record.getWorkShop2());
