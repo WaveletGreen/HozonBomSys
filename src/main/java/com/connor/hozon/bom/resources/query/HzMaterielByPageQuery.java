@@ -27,9 +27,10 @@ public class HzMaterielByPageQuery extends DefaultPageQuery {
     private String pMaterielCode;
 
     /**
-     * 物料描述
+     * 物料类型
      */
     private String pMaterielType;
+
 
     public String getpMaterielCode() {
         return pMaterielCode;

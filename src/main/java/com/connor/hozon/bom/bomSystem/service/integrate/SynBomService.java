@@ -2,7 +2,7 @@ package com.connor.hozon.bom.bomSystem.service.integrate;
 
 import com.connor.hozon.bom.bomSystem.dao.bom.HzMBomToERPDao;
 import com.connor.hozon.bom.bomSystem.service.iservice.integrate.ISynBomService;
-import com.connor.hozon.bom.resources.dto.request.UpdateHzMaterielReqDTO;
+import com.connor.hozon.bom.resources.dto.request.EditHzMaterielReqDTO;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -39,7 +39,7 @@ public class SynBomService implements ISynBomService {
      * @return
      */
     @Override
-    public JSONObject updateByUids(List<UpdateHzMaterielReqDTO> dtos) {
+    public JSONObject updateByUids(List<EditHzMaterielReqDTO> dtos) {
         return null;
     }
 
@@ -50,7 +50,7 @@ public class SynBomService implements ISynBomService {
      * @return
      */
     @Override
-    public JSONObject deleteByUids(List<UpdateHzMaterielReqDTO> dtos) {
+    public JSONObject deleteByUids(List<EditHzMaterielReqDTO> dtos) {
         return null;
     }
 

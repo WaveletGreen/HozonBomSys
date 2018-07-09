@@ -55,19 +55,28 @@ public interface HzMbomService {
     OperateResultMessageRespDTO deleteMbomRecord(String puid);
 
     /**
-     * 获取超级Mbom信息
+     * 获取超级Mbom信息 作废
      * @param query
      * @return
      */
+    @Deprecated
     Page<HzSuperMbomRecordRespDTO> getHzSuperMbomPage(HzMbomByPageQuery query);
 
     /**
-     * 获取车辆模型信息
+     * 获取车辆模型信息 作废
      * @param projectId
      * @return
      */
+    @Deprecated
     List<HzVehicleModelRespDTO> getHzVehicleModelByProjectId(String projectId);
 
+    /**
+     * 获取超级MBOM信息 作废
+     * @param projectId
+     * @param puid
+     * @return
+     */
+    @Deprecated
     HzMbomLineRecord getHzSuperMbomByPuid(String projectId,String puid);
 
 }

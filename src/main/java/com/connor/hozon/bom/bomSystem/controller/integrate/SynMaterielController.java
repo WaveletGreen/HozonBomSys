@@ -1,7 +1,7 @@
 package com.connor.hozon.bom.bomSystem.controller.integrate;
 
 import com.connor.hozon.bom.bomSystem.service.iservice.integrate.ISynMaterielService;
-import com.connor.hozon.bom.resources.dto.request.UpdateHzMaterielReqDTO;
+import com.connor.hozon.bom.resources.dto.request.EditHzMaterielReqDTO;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -27,7 +27,7 @@ public class SynMaterielController {
      */
     @RequestMapping("/deleteByPuids")
     @ResponseBody
-    public JSONObject deleteByPuids(List<UpdateHzMaterielReqDTO> dtos) {
+    public JSONObject deleteByPuids(List<EditHzMaterielReqDTO> dtos) {
         return iSynMaterielService.deleteByPuids(dtos);
     }
 
@@ -39,7 +39,7 @@ public class SynMaterielController {
      */
     @RequestMapping(value = "/updateByPuids", method = RequestMethod.POST)
     @ResponseBody
-    public JSONObject updateByPuids(@RequestBody List<UpdateHzMaterielReqDTO> dtos) {
+    public JSONObject updateByPuids(@RequestBody List<EditHzMaterielReqDTO> dtos) {
         return iSynMaterielService.updateByPuids(dtos);
     }
 

@@ -1,6 +1,6 @@
 package com.connor.hozon.bom.bomSystem.service.iservice.integrate;
 
-import com.connor.hozon.bom.resources.dto.request.UpdateHzMaterielReqDTO;
+import com.connor.hozon.bom.resources.dto.request.EditHzMaterielReqDTO;
 import net.sf.json.JSONObject;
 import org.springframework.context.annotation.Configuration;
 
@@ -14,7 +14,7 @@ public interface ISynBomService {
      * @param dtos
      * @return
      */
-    JSONObject updateByUids(List<UpdateHzMaterielReqDTO> dtos);
+    JSONObject updateByUids(List<EditHzMaterielReqDTO> dtos);
 
     /**
      * 删除时候传
@@ -22,7 +22,7 @@ public interface ISynBomService {
      * @param dtos
      * @return
      */
-    JSONObject deleteByUids(List<UpdateHzMaterielReqDTO> dtos);
+    JSONObject deleteByUids(List<EditHzMaterielReqDTO> dtos);
 
     /**
      * 一开始同步所有数据到ERP

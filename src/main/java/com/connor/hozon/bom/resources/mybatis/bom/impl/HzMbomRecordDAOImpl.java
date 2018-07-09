@@ -116,4 +116,40 @@ public class HzMbomRecordDAOImpl extends BaseSQLUtil implements HzMbomRecordDAO 
     public Integer getHzMbomMaxOrderNum(String projectId) {
         return (Integer) super.findForObject("HzMbomRecordDAOImpl_getHzMbomMaxOrderNum",projectId);
     }
+
+    @Override
+    public List<HzMbomLineRecord> findHz2YMbomRecord(HzMbomByPageQuery query) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("projectId",query.getProjectId());
+        map.put("offset",(query.getPage() - 1) * query.getLimit());
+        map.put("limit",query.getPage()*query.getLimit());
+        return super.findForList("HzMbomRecordDAOImpl_findHz2YMbomRecord",map);
+    }
+
+    @Override
+    public List<HzMbomLineRecord> findHzMbomByResource(HzMbomByPageQuery query) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("projectId",query.getProjectId());
+        map.put("offset",(query.getPage() - 1) * query.getLimit());
+        map.put("limit",query.getPage()*query.getLimit());
+        map.put("pBomLinePartResource",query.getpBomLinePartResource());
+        map.put("sparePart",query.getSparePart());
+        return super.findForList("HzMbomRecordDAOImpl_findHzMbomByResource",map);
+    }
+
+    @Override
+    public List<HzMbomLineRecord> findHz2YMbomRecordAll(HzMbomByPageQuery query) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("projectId",query.getProjectId());
+        return super.findForList("HzMbomRecordDAOImpl_findHz2YMbomRecordAll",map);
+    }
+
+    @Override
+    public List<HzMbomLineRecord> findHzMbomByResourceAll(HzMbomByPageQuery query) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("projectId",query.getProjectId());
+        map.put("pBomLinePartResource",query.getpBomLinePartResource());
+        map.put("sparePart",query.getSparePart());
+        return super.findForList("HzMbomRecordDAOImpl_findHzMbomByResourceAll",map);
+    }
 }

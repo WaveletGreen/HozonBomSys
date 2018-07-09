@@ -79,51 +79,6 @@ public class HzMaterielDAOImpl extends BaseSQLUtil implements HzMaterielDAO {
     }
 
     @Override
-    public List<HzMbomLineRecord> findHz2YMbomRecord(HzMaterielByPageQuery query) {
-        Map<String,Object> map = new HashMap<>();
-        map.put("projectId",query.getProjectId());
-        map.put("offset",(query.getPage() - 1) * query.getLimit());
-        map.put("limit",query.getPage()*query.getLimit());
-        return super.findForList("HzMaterialDAOImpl_findHz2YMbomRecord",map);
-    }
-
-    @Override
-    public List<HzMbomLineRecord> findHzResourceMakeSingleMbomRecord(HzMaterielByPageQuery query) {
-        Map<String,Object> map = new HashMap<>();
-        map.put("projectId",query.getProjectId());
-        map.put("offset",(query.getPage() - 1) * query.getLimit());
-        map.put("limit",query.getPage()*query.getLimit());
-        return super.findForList("HzMaterialDAOImpl_findHzResourceMakeSingleMbomRecord",map);
-    }
-
-    @Override
-    public List<HzMbomLineRecord> findHzResourceBuyMbomRecord(HzMaterielByPageQuery query) {
-        Map<String,Object> map = new HashMap<>();
-        map.put("projectId",query.getProjectId());
-        map.put("offset",(query.getPage() - 1) * query.getLimit());
-        map.put("limit",query.getPage()*query.getLimit());
-        return super.findForList("HzMaterialDAOImpl_findHzResourceBuyMbomRecord",map);
-    }
-
-    @Override
-    public List<HzMbomLineRecord> findHzMadeBySelfSpareMbomRecord(HzMaterielByPageQuery query) {
-        Map<String,Object> map = new HashMap<>();
-        map.put("projectId",query.getProjectId());
-        map.put("offset",(query.getPage() - 1) * query.getLimit());
-        map.put("limit",query.getPage()*query.getLimit());
-        return super.findForList("HzMaterialDAOImpl_findHzMadeBySelfSpareMbomRecord",map);
-    }
-
-    @Override
-    public List<HzMbomLineRecord> findHzMadeBySelfAssemblyMbomRecord(HzMaterielByPageQuery query) {
-        Map<String,Object> map = new HashMap<>();
-        map.put("projectId",query.getProjectId());
-        map.put("offset",(query.getPage() - 1) * query.getLimit());
-        map.put("limit",query.getPage()*query.getLimit());
-        return super.findForList("HzMaterialDAOImpl_findHzMadeBySelfAssemblyMbomRecord",map);
-    }
-
-    @Override
     public boolean HzMaterielIsExist(Map<String, Object> map) {
         return (int)super.findForObject("HzMaterialDAOImpl_HzMaterielIsExist",map)>0;
     }
@@ -151,41 +106,5 @@ public class HzMaterielDAOImpl extends BaseSQLUtil implements HzMaterielDAO {
         Map<String,Object> map = new HashMap<>();
         map.put("projectId",query.getProjectId());
         return super.findForList("HzMaterialDAOImpl_findHzCfg0ModelRecordAll",map);
-    }
-
-    @Override
-    public List<HzMbomLineRecord> findHz2YMbomRecordAll(HzMaterielByPageQuery query) {
-        Map<String,Object> map = new HashMap<>();
-        map.put("projectId",query.getProjectId());
-        return super.findForList("HzMaterialDAOImpl_findHz2YMbomRecordAll",map);
-    }
-
-    @Override
-    public List<HzMbomLineRecord> findHzResourceMakeSingleMbomRecordAll(HzMaterielByPageQuery query) {
-        Map<String,Object> map = new HashMap<>();
-        map.put("projectId",query.getProjectId());
-        return super.findForList("HzMaterialDAOImpl_findHzResourceMakeSingleMbomRecordAll",map);
-    }
-
-    @Override
-    public List<HzMbomLineRecord> findHzResourceBuyMbomRecordAll(HzMaterielByPageQuery query) {
-        Map<String,Object> map = new HashMap<>();
-        map.put("projectId",query.getProjectId());
-        return super.findForList("HzMaterialDAOImpl_findHzResourceBuyMbomRecordAll",map);
-    }
-
-    @Override
-    public List<HzMbomLineRecord> findHzMadeBySelfSpareMbomRecordAll(HzMaterielByPageQuery query) {
-        Map<String,Object> map = new HashMap<>();
-        map.put("projectId",query.getProjectId());
-        return super.findForList("HzMaterialDAOImpl_findHzMadeBySelfSpareMbomRecordAll",map);
-    }
-
-    @Override
-    public List<HzMbomLineRecord> findHzMadeBySelfAssemblyMbomRecordAll(HzMaterielByPageQuery query) {
-        Map<String,Object> map = new HashMap<>();
-        map.put("projectId",query.getProjectId());
-        return super.findForList("HzMaterialDAOImpl_findHzMadeBySelfAssemblyMbomRecordAll",map);
-
     }
 }

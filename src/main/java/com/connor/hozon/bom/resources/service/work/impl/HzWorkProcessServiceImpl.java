@@ -13,6 +13,7 @@ import com.connor.hozon.bom.resources.mybatis.materiel.HzMaterielDAO;
 import com.connor.hozon.bom.resources.mybatis.work.HzWorkCenterDAO;
 import com.connor.hozon.bom.resources.mybatis.work.HzWorkProcedureDAO;
 import com.connor.hozon.bom.resources.page.Page;
+import com.connor.hozon.bom.resources.query.HzMaterielQuery;
 import com.connor.hozon.bom.resources.query.HzWorkProcessByPageQuery;
 import com.connor.hozon.bom.resources.service.work.HzWorkProcessService;
 import com.connor.hozon.bom.resources.util.ListUtil;
@@ -42,6 +43,9 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
 
     @Autowired
     private HzMaterielDAO hzMaterielDAO;
+
+    @Autowired
+    private HzFactoryDAO hzFactoryDAO;
     @Override
     public OperateResultMessageRespDTO addHzWorkProcess(AddHzProcessReqDTO reqDTO) {
         try{
@@ -60,6 +64,34 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
                 respDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
                 return respDTO;
             }
+            String factoryCode = reqDTO.getFactoryCode();
+            if(factoryCode != null && !factoryCode.equals("")){
+                HzFactory hzFactory = hzFactoryDAO.findFactory("",factoryCode);
+                String puid = UUID.randomUUID().toString();
+                if(hzFactory == null){
+                    hzFactory.setPuid(puid);
+                    hzFactory.setpFactoryCode(factoryCode);
+                    int i = hzFactoryDAO.insert(hzFactory);
+                    if(i<0){
+                        return OperateResultMessageRespDTO.getFailResult();
+                    }
+                }else{
+                    puid = hzFactory.getPuid();
+                }
+                HzMaterielQuery query = new HzMaterielQuery();
+                query.setProjectId(reqDTO.getProjectId());
+                query.setPuid(reqDTO.getMaterielId());
+                HzMaterielRecord hzMaterielRecord = hzMaterielDAO.getHzMaterielRecord(query);
+                if(hzMaterielRecord == null){
+                    return OperateResultMessageRespDTO.getFailResult();
+                }
+                hzMaterielRecord.setpFactoryPuid(puid);
+                int i = hzMaterielDAO.update(hzMaterielRecord);
+                if(i<0){
+                    return OperateResultMessageRespDTO.getFailResult();
+                }
+            }
+
             hzWorkProcedure.setMaterielId(reqDTO.getMaterielId());
             hzWorkProcedure.setControlCode( reqDTO.getControlCode());
             hzWorkProcedure.setpBurn(reqDTO.getpBurn());
@@ -79,7 +111,7 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
             hzWorkProcedure.setPuid(UUID.randomUUID().toString());
             List<HzWorkCenter> hzWorkCenterList = hzWorkCenterDAO.findWorkCenter(reqDTO.getProjectId(),reqDTO.getpWorkCode());
             if(hzWorkCenterList != null && hzWorkCenterList.size()>0){
-                hzWorkProcedure.setpWorkPuid(hzWorkCenterList.get(0).getPuid());
+                hzWorkProcedure.setpWorkPuid("");
             }else {
                 String puid = UUID.randomUUID().toString();
                 HzWorkCenter hzWorkCenter = new HzWorkCenter();
@@ -114,6 +146,33 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
             respDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
             respDTO.setErrMsg("当前编辑的对象不存在，请添加后再执行此操作！");
             return respDTO;
+        }
+        String factoryCode = reqDTO.getFactoryCode();
+        if(factoryCode != null && !factoryCode.equals("")){
+            HzFactory hzFactory = hzFactoryDAO.findFactory("",factoryCode);
+            String puid = UUID.randomUUID().toString();
+            if(hzFactory == null){
+                hzFactory.setPuid(puid);
+                hzFactory.setpFactoryCode(factoryCode);
+                int i = hzFactoryDAO.insert(hzFactory);
+                if(i<0){
+                    return OperateResultMessageRespDTO.getFailResult();
+                }
+            }else{
+                puid = hzFactory.getPuid();
+            }
+            HzMaterielQuery query = new HzMaterielQuery();
+            query.setProjectId(reqDTO.getProjectId());
+            query.setPuid(reqDTO.getMaterielId());
+            HzMaterielRecord hzMaterielRecord = hzMaterielDAO.getHzMaterielRecord(query);
+            if(hzMaterielRecord == null){
+                return OperateResultMessageRespDTO.getFailResult();
+            }
+            hzMaterielRecord.setpFactoryPuid(puid);
+            int i = hzMaterielDAO.update(hzMaterielRecord);
+            if(i<0){
+                return OperateResultMessageRespDTO.getFailResult();
+            }
         }
         HzWorkProcedure hzWorkProcedure = new HzWorkProcedure();
         hzWorkProcedure.setMaterielId(reqDTO.getMaterielId());
@@ -192,7 +251,11 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
             for(HzWorkProcess process:list){
                 HzWorkProcessRespDTO respDTO = new HzWorkProcessRespDTO();
                 respDTO.setNo(++num);
-                respDTO.setFactoryCode(process.getFactoryCode());
+                if(process.getFactoryCode() == null){
+                    respDTO.setFactoryCode("1001");
+                }else{
+                    respDTO.setFactoryCode(process.getFactoryCode());
+                }
                 respDTO.setpBurn(process.getpBurn());
                 respDTO.setpCount(process.getpCount());
                 respDTO.setpDirectLabor(process.getpDirectLabor());
