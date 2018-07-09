@@ -2,9 +2,10 @@
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <body>
 <meta charset=utf-8/>
-<form class="form-horizontal" id="form" role="form" method="post"th:action="${action}">
+<form class="form-horizontal" id="form" role="form" method="post" th:action="${action}">
     <fieldset>
-        <input id="pPertainToProjectPuid" name="pPertainToProjectPuid" type="hidden" th:value="${entity.pPertainToProjectPuid}"/>
+        <input id="pPertainToProjectPuid" name="pPertainToProjectPuid" type="hidden"
+               th:value="${entity.pPertainToProjectPuid}"/>
         <input id="puid" name="puid" type="hidden" th:value="${puid}"/>
         <div id="legend" class="">
             <legend class="">更新超级物料信息</legend>
@@ -28,7 +29,8 @@
         <div class="form-group col-lg-10">
             <label for="pMaterielType">物料类型</label>
             <input class="form-control" id="pMaterielType" name="pMaterielType" type="text"
-                   th:value="${entity.pMaterielType}"/>
+                   th:value="${entity.pMaterielType}" disabled="disabled"
+            />
         </div>
     </fieldset>
 </form>

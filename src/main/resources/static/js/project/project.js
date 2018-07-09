@@ -12,6 +12,44 @@ function selectEvent() {
     $("#currentProjectHead", window.top.document).text(selectedOption.text());
 }
 
+$(document).ready(
+    $("#tsada").click(
+        function (e) {
+            var tabContainer = $("#tabContainer", window.top.document);
+
+            var tabc = $(".nav-tabs li a[href='#82']").tab("show");
+            // tabc.tabs({
+            //     data: [{
+            //         id: '93',
+            //         text: 'MBOM管理',
+            //         url: "modelColorCfg",
+            //         closeable: true
+            //     }],
+            // })
+            // if (tabContainer != null || tabContainer != undefined)
+            //     var xxx = tabc.data("tabs");
+            // xxx.addTab({
+            //     // data: [{
+            //     //     id: '93',
+            //     //     text: 'MBOM管理',
+            //     //     url: "modelColorCfg",
+            //     //     closeable: true
+            //     // }]
+            //     id: 93,
+            //     text: "MBOM管理",
+            //     closeable: true,
+            //     url: 'modelColorCfg'
+            // })
+            // // tabContainer.data("tabs").addTab({
+            // //     id: 93,
+            // //     text: "MBOM管理",
+            // //     closeable: true,
+            // //     url: 'modelColorCfg'
+            // // })
+        }
+    )
+)
+
 // 异步加载项目数据
 $(document).ready(
     ($.ajax({

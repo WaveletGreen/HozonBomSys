@@ -104,6 +104,41 @@ function loadData() {
                         }
                     });
                 }
+            },
+            {
+                text: '发送到ERP',
+                iconCls: 'glyphicon glyphicon-send',
+                handler: function () {
+                    var rows = $table.bootstrapTable('getSelections');
+                    if (rows.length == 0) {
+                        window.Ewin.alert({message: '请至少选择一条需要发送的数据!'});
+                        return false;
+                    }
+                    window.Ewin.confirm({title: '提示', message: '是否要发送您所选择的记录？', width: 500}).on(function (e) {
+                        if (e) {
+                            $.ajax({
+                                type: "POST",
+                                //ajax需要添加打包名
+                                url: "./cfg0/sendToERP",
+                                data: JSON.stringify(rows),
+                                contentType: "application/json",
+                                success: function (result) {
+                                    if (result.status) {
+                                        window.Ewin.alert({message: result.msg});
+                                        //刷新，会重新申请数据库数据
+                                    }
+                                    else {
+                                        window.Ewin.alert({message: "操作发送失败:" + result.msg});
+                                    }
+                                    $table.bootstrapTable("refresh");
+                                },
+                                error: function (info) {
+                                    window.Ewin.alert({message: "操作发送失败:" + info.status});
+                                }
+                            })
+                        }
+                    });
+                }
             }
         ],
         /**列信息，需要预先定义好*/

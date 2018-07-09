@@ -78,4 +78,6 @@ public interface HzCfg0RecordDao {
     int updateAddedCfgByPrimaryKey(HzCfg0Record record);
 
     int deleteAddedCfgByList(List<HzCfg0Record> records);
+
+    List<HzCfg0Record> selectCfg0ListByPuids(List<HzCfg0Record> records);
 }

@@ -77,24 +77,25 @@
     }))
 
 
-
-    function doQuery(){
+    function doQuery() {
         //$('#eplTable').bootstrapTable('refresh');    //刷新表格
         var projectPuid = $("#project", window.top.document).val();
         var mBomUrl = "mbom/record?projectId=" + projectPuid;
         var level = $("#level").val();
-        mBomUrl+="&level="+level;
+        mBomUrl += "&level=" + level;
         var pBomOfWhichDept = $("#pBomOfWhichDept").val();
-        mBomUrl+="&pBomOfWhichDept="+pBomOfWhichDept;
+        mBomUrl += "&pBomOfWhichDept=" + pBomOfWhichDept;
         var lineId = $("#lineId").val();
-        mBomUrl += "&lineId="+lineId;
+        mBomUrl += "&lineId=" + lineId;
         initTable(mBomUrl);
         $('#mbomMaintenanceTable').bootstrapTable('destroy');
-        console.log("有搜索框的参数是："+mBomUrl)
+        console.log("有搜索框的参数是：" + mBomUrl)
     }
-    function initTable(mBomUrl){
+
+    function initTable(mBomUrl) {
         var projectPuid = $("#project", window.top.document).val();
         var $table = $("#mbomMaintenanceTable");
+        var currentProjectHead = $("#currentProjectHead", window.top.document).val();
         var column = [];
         selections = [];
 
@@ -141,7 +142,7 @@
                     sidePagination: "server",           //分页方式：client客户端分页，server服务端分页（*）
                     height: $(window.parent.document).find("#wrapper").height() - 135,
                     width: $(window).width(),
-                    formId :"queryMbomMain",
+                    formId: "queryMbomMain",
                     undefinedText: "",//当数据为 undefined 时显示的字符
                     pagination: true,
                     //pageNumber:1,                       //初始化加载第一页，默认第一页
@@ -177,7 +178,7 @@
                                 }
                                 window.Ewin.dialog({
                                     title: "添加",
-                                    url: "mbom/addMBom?projectId="+projectPuid+"&eBomPuid="+rows[0].eBomPuid,
+                                    url: "mbom/addMBom?projectId=" + projectPuid + "&eBomPuid=" + rows[0].eBomPuid,
                                     gridId: "gridId",
                                     width: 500,
                                     height: 650
@@ -196,7 +197,7 @@
                                 }
                                 window.Ewin.dialog({
                                     title: "修改",
-                                    url: "mbom/updateMBom?projectId="+projectPuid+"&eBomPuid="+rows[0].eBomPuid,
+                                    url: "mbom/updateMBom?projectId=" + projectPuid + "&eBomPuid=" + rows[0].eBomPuid,
                                     gridId: "gridId",
                                     width: 500,
                                     height: 650
@@ -212,12 +213,16 @@
                                     window.Ewin.alert({message: '请选择一条需要删除的数据!'});
                                     return false;
                                 }
-                                window.Ewin.confirm({title: '提示', message: '是否要删除您所选择的记录？', width: 500}).on(function (e) {
+                                window.Ewin.confirm({
+                                    title: '提示',
+                                    message: '是否要删除您所选择的记录？',
+                                    width: 500
+                                }).on(function (e) {
                                     if (e) {
                                         $.ajax({
                                             type: "POST",
                                             //ajax需要添加打包名
-                                            url: "mbom/delete?eBomPuid="+rows[0].eBomPuid,
+                                            url: "mbom/delete?eBomPuid=" + rows[0].eBomPuid,
                                             //data: JSON.stringify(rows),
                                             contentType: "application/json",
                                             success: function (result) {
@@ -248,12 +253,16 @@
                                     window.Ewin.alert({message: '请选择需要发送的数据!'});
                                     return false;
                                 }
-                                window.Ewin.confirm({title: '提示', message: '是否要发送您所选择的记录？', width: 500}).on(function (e) {
+                                window.Ewin.confirm({
+                                    title: '提示',
+                                    message: '是否要发送您所选择的记录？',
+                                    width: 500
+                                }).on(function (e) {
                                     if (e) {
                                         $.ajax({
                                             type: "POST",
                                             //ajax需要添加打包名
-                                            url: "work/process/apply/oneKey?projectId="+projectPuid+"&type=2",
+                                            url: "work/process/apply/oneKey?projectId=" + projectPuid + "&type=2",
                                             data: JSON.stringify(rows),
                                             contentType: "application/json",
                                             success: function (result) {
@@ -284,12 +293,16 @@
                                     window.Ewin.alert({message: '请选择需要发送的数据!'});
                                     return false;
                                 }
-                                window.Ewin.confirm({title: '提示', message: '是否要发送您所选择的记录？', width: 500}).on(function (e) {
+                                window.Ewin.confirm({
+                                    title: '提示',
+                                    message: '是否要发送您所选择的记录？',
+                                    width: 500
+                                }).on(function (e) {
                                     if (e) {
                                         $.ajax({
                                             type: "POST",
                                             //ajax需要添加打包名
-                                            url: "work/process/apply/oneKey?projectId="+projectPuid+"&type=3",
+                                            url: "work/process/apply/oneKey?projectId=" + projectPuid + "&type=3",
                                             data: JSON.stringify(rows),
                                             contentType: "application/json",
                                             success: function (result) {
@@ -310,7 +323,87 @@
                                     }
                                 });
                             }
+                        },
+                        {
+                            text: '发送MBOM到SAP',
+                            iconCls: 'glyphicon glyphicon-send',
+                            handler: function () {
+                                var rows = $table.bootstrapTable('getSelections');
+                                var confirm = undefined;
+                                var localUrl = "";
+                                var datas = null;
+                                if (rows.length == 0) {
+                                    window.Ewin.confirm({
+                                        title: '提示',
+                                        message: '<p ><strong style="color: red">注意：正在进行耗时操作</strong></p>' +
+                                        '您未选择任何一条数据，是否将当前项目' + currentProjectHead + '下的所有物料数据发送到ERP系统?'
+                                        ,
+                                        width: 600
+                                    }).on(function (e) {
+                                        //发送全部
+                                        if (e) {
+                                            localUrl = "synBom/synAllBomByProjectPuid?projectUid=" + projectPuid;
+                                            datas = null;
+                                            $.ajax({
+                                                type: "POST",
+                                                //ajax需要添加打包名
+                                                url: localUrl,
+                                                data: datas,
+                                                contentType: "application/json",
+                                                success: function (result) {
+                                                    // if (result.status) {
+                                                    //     window.Ewin.alert({message: result.msg});
+                                                    //     //刷新，会重新申请数据库数据
+                                                    // }
+                                                    // else {
+                                                    //     window.Ewin.alert({message: ":" + result.errMsg});
+                                                    // }
+                                                    window.Ewin.alert({message: result.msg});
+                                                    $table.bootstrapTable("refresh");
+                                                },
+                                                error: function (info) {
+                                                    window.Ewin.alert({message: "操作删除:" + info.status});
+                                                }
+                                            })
+                                        }
+                                    });
+                                }
+                                else {
+                                    window.Ewin.confirm({
+                                        title: '提示',
+                                        message: '是否要重新发送您所选择的记录？',
+                                        width: 600
+                                    }).on(function (e) {
+                                        if (e) {
+                                            localUrl = "synBom/updateByPuids";
+                                            datas = JSON.stringify(rows);
+                                            $.ajax({
+                                                type: "POST",
+                                                //ajax需要添加打包名
+                                                url: localUrl,
+                                                data: datas,
+                                                contentType: "application/json",
+                                                success: function (result) {
+                                                    // if (result.status) {
+                                                    //     window.Ewin.alert({message: result.msg});
+                                                    //     //刷新，会重新申请数据库数据
+                                                    // }
+                                                    // else {
+                                                    //     window.Ewin.alert({message: ":" + result.errMsg});
+                                                    // }
+                                                    window.Ewin.alert({message: result.msg});
+                                                    $table.bootstrapTable("refresh");
+                                                },
+                                                error: function (info) {
+                                                    window.Ewin.alert({message: "操作删除:" + info.status});
+                                                }
+                                            })
+                                        }
+                                    });
+                                }
+                            }
                         }
+
                     ],
                 });
                 $table.bootstrapTable('hideColumn', 'eBomPuid');

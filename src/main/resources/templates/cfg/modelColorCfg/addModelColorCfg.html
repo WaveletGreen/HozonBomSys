@@ -33,7 +33,9 @@
         </div>
         <!--循环放入数据-->
         <div class="form-group col-lg-10" th:each="column,c:${columnList}">
+
             <label class="control-label" th:text="${column}"></label>
+
             <select class="form-control input-small" th:name="${c.index}" data-style="btn-info"
                     th:id="${'select'+c.index}">
                 <option th:each="color:${colorList}" th:value="${color.pColorCode}"

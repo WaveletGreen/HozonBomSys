@@ -139,10 +139,16 @@ public class HzMaterielFeatureController {
 //        Map<String, Object> stringObjectMap = hzCfg0ModelColorService.doLoadAll(projectPuid);
         Map<String, Object> result = new HashMap<>();
         Map<String, HzMaterielFeatureBean> model = new HashMap();
+
         List<Map<String, Object>> data = new ArrayList<>();
         List<String> column = hzCfg0OptionFamilyService.doGetColumn(projectPuid);
         List<HzMaterielFeatureBean> hzMaterielFeatureBeans = hzCfg0Service.doSelectMaterielFeatureByProjectPuid(projectPuid);
+
         HzMaterielRecord superMateriel = hzSuperMaterielService.doSelectByProjectPuid(projectPuid);
+
+        Map<String, HzMaterielFeatureBean> sortedBean = new HashMap<>();
+
+        hzMaterielFeatureBeans.stream().filter(_b -> _b.getpCfg0ModelRecord() != null).forEach(_b -> sortedBean.put(_b.getpCfg0ModelRecord()+"="+_b.getpCfg0FamilyDesc() + "<br/>" + _b.getpCfg0FamilyName(), _b));
 
         if (hzMaterielFeatureBeans == null || column == null || column.size() == 0) {
             result.put("status", false);
@@ -157,7 +163,7 @@ public class HzMaterielFeatureController {
                 Map<String, Object> _result = new HashMap<>();
                 int index = 0;
                 for (int j = 0; j < column.size(); j++) {
-                    _result.put("s" + j, hzMaterielFeatureBeans.get(j).getpCfg0ObjectId());
+                    _result.put("s" + j, sortedBean.get(value.getpCfg0ModelRecord()+"="+column.get(j)) == null ? "-" : sortedBean.get(value.getpCfg0ModelRecord()+"="+column.get(j)).getpCfg0ObjectId());
                     index = j;
                 }
 

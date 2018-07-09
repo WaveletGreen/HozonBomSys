@@ -338,7 +338,7 @@ public class BaseSQLUtil implements IBaseSQLUtil {
             return result;
         } catch (Exception e) {
             logger.error("SQL执行出错: " + sqlMapId, e);
-            throw new DatabaseException("SQL执行出错" + sqlMapId, e);
+            throw new DatabaseException("SQL执行出错"+sqlMapId,e);
         } finally {
 //            if (session != null)
 //                session.close();
@@ -349,11 +349,11 @@ public class BaseSQLUtil implements IBaseSQLUtil {
     /**
      * 查询一个实体
      *
-     * @param sqlMapId mybatis 映射id
-     * @param param    实体参数
+     * @param sqlMapId  mybatis 映射id
+     * @param param  实体参数
      * @return
      */
-    public Object findForObject(final String sqlMapId, final Object param) {
+    public Object findForObject(final String sqlMapId, final Object param){
 //        SqlSession session = null;
         try {
 //            SqlSessionFactory f = FactoryManager.getInstance();
@@ -388,14 +388,14 @@ public class BaseSQLUtil implements IBaseSQLUtil {
             return result;
         } catch (Exception e) {
             logger.error("SQL执行出错: " + sqlMapId, e);
-            throw new DatabaseException("SQL执行出错" + sqlMapId, e);
+            throw new DatabaseException("SQL执行出错"+sqlMapId,e);
         } finally {
 //            if (session != null)
 //                session.close();
         }
     }
 
-    public int delete(final String sqlMapId, final Object param) {
+    public int delete(final String sqlMapId, final Object param){
         SqlSession session = null;
         try {
 //            SqlSessionFactory f = FactoryManager.getInstance();
@@ -405,7 +405,7 @@ public class BaseSQLUtil implements IBaseSQLUtil {
             return result;
         } catch (Exception e) {
             logger.error("SQL执行出错: " + sqlMapId, e);
-            throw new DatabaseException("SQL执行出错" + sqlMapId, e);
+            throw new DatabaseException("SQL执行出错"+sqlMapId,e);
         } finally {
 //            if (session != null)
 //                session.close();

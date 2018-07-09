@@ -4,9 +4,7 @@
     <meta charset="UTF-8">
     <title>全BOM配置一级清单</title>
 </head>
-<body>
-<button id="myButton">请点击</button>
-
+<body class="content-body">
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog"
      aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -25,8 +23,13 @@
         </div>
     </div>
 </div>
-<div class="panel-body" style="padding-bottom:0px;">
-    <div class="panel panel-default" style="margin-top: 10px;">
+<div class="panel-body content col-lg-4">
+    <div class="input-group">
+        <button class="btn btn-default" id="myButton" type="button">刷新</button>
+    </div>
+</div>
+<div class="panel-body" >
+    <div class="panel panel-default" style="margin-top: 50px;">
         <div class="panel-body">
             <form class="form-inline" role="form" style="float: left; width: 100%;margin-left: 20px;" method="post"
                   id="queryLoadBom">
@@ -62,5 +65,9 @@
 </body>
 <script th:src="@{/js/stage/bom-all-cfg.js}"></script>
 <script th:inline="javascript">
+    function doQuery() {
+        $("#myButton").trigger('click');
+        // $('#dataTable').bootstrapTable('refresh');    //刷新表格
+    }
 </script>
 </html>

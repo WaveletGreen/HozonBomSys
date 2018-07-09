@@ -32,5 +32,4 @@ public class HzFactoryDAOImpl extends BaseSQLUtil implements HzFactoryDAO {
         return (HzFactory) super.findForObject("HzFactoryDAOImpl_selectFactoryById",map);
     }
 
-
 }

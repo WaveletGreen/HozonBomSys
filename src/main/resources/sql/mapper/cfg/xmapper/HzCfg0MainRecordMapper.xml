@@ -5,12 +5,12 @@
         <id column="PUID" jdbcType="VARCHAR" property="puid"/>
         <result column="P_ITEM_NAME" jdbcType="VARCHAR" property="pItemName"/>
         <result column="POST_DATE" jdbcType="TIMESTAMP" property="postDate"/>
-        <result column="POSTER" jdbcType="OTHER" property="poster"/>
+        <result column="POSTER" jdbcType="VARCHAR" property="poster"/>
         <result column="P_CFG0_ORG_PUID" jdbcType="VARCHAR" property="pCfg0OrgPuid"/>
         <result column="P_CFG0_OF_WHICH_PROJECT" jdbcType="VARCHAR" property="pCfg0OfWhichProject"/>
         <result column="P_CFG0_OF_WHICH_PROJECT_PUID" jdbcType="VARCHAR" property="pCfg0OfWhichProjectPuid"/>
         <result column="P_CFG0_LAST_MOD_DATE" jdbcType="TIMESTAMP" property="pCfg0LastModDate"/>
-        <result column="P_CFG0_ORG_POSTER" jdbcType="OTHER" property="pCfg0OrgPoster"/>
+        <result column="P_CFG0_ORG_POSTER" jdbcType="VARCHAR" property="pCfg0OrgPoster"/>
     </resultMap>
     <sql id="Base_Column_List">
     PUID, P_ITEM_NAME, POST_DATE, POSTER, P_CFG0_ORG_PUID, P_CFG0_OF_WHICH_PROJECT, P_CFG0_OF_WHICH_PROJECT_PUID, 

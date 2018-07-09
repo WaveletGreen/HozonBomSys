@@ -28,7 +28,7 @@ function loadData() {
                 "<th width='100px'>平台</th>" +
                 "<th width='100px'>车型</th>" +
                 "<th width='100px'>版型</th>" +
-                "<th width='120px'>车身形式</th>" +
+                "<th width='100px'>车身形式</th>" +
                 "<th width='100px'>公告</th>" +
                 "<th width='100px'>配置描述</th>" +
                 "<th width='100px'>配置管理</th>" +
@@ -41,14 +41,17 @@ function loadData() {
                 c = c + "<tr>" +
                     // "<td width='100px'  align='center'><input type='checkbox'></td>"+
                     "<input id='hidden" + i + "' type='hidden' value='" + v1 + "'>" +
-                    "<td width='100px'></td>" +
-                    "<td width='100px'></td>" +
-                    "<td width='100px'></td>" +
+                    //品牌
+                    "<td width='100px'>" + dModel.brand + "</td>" +
+                    //平台
+                    "<td width='100px'>" + dModel.platform + "</td>" +
+                    //车型
+                    "<td width='100px'>" + dModel.vehicle + "</td>" +
                     "<td width='120px'><a href='javascript:void(0);' onclick='Botton(\"" + v1 + "\")'>" + v0 + "</a></td>" +
-                    "<td width='100px'></td>" +
-                    "<td width='100px'></td>" +
-                    "<td width='100px'></td>" +
-                    "<td width='100px'></td>" +
+                    "<td width='100px'>" + dModel.pModelShape + "</td>" +
+                    "<td width='100px'>" + dModel.pModelAnnouncement + "</td>" +
+                    "<td width='100px'>" + dModel.pModelCfgDesc + "</td>" +
+                    "<td width='100px'>" + dModel.pModelCfgMng + "</td>" +
                     "</tr>"
             }
             var c = c + "</table>"
@@ -86,15 +89,15 @@ function loadData() {
                 "<tr>" +
                 "<th width='50px' align='center'><input type='checkbox'></th>" +
                 "<th width='50px'>序号</th>" +
-                // "<th width='100px'>操作类型</th>" +
+                "<th width='100px'>操作类型</th>" +
                 "<th width='100px'>系统</th>" +
                 "<th width='200px'>总成零件号</th>" +
-                "<th width='200px'>总成零件名称</th>" +
+                "<th width='180px'>总成零件名称</th>" +
                 "<th width='200px'>总成英文名称</th>" +
                 //描述的宽度应该大一点，保持可用
                 "<th width='200px'>配置描述</th>" +
                 "<th width='100px'>配置代码</th>" +
-                "<th width='120px'>备注</th>";
+                "<th width='100px'>备注</th>";
             if (dddModel.length > 0)
                 for (var i = 0; i < dddModel.length; i++) {
                     //为保持与车型对齐，设置的宽度与车型的单元格宽度一致
@@ -126,6 +129,7 @@ function loadData() {
 }
 
 $(document).ready(
+    (loadData()),
     $("#myButton").click(function () {
         loadData();
     })

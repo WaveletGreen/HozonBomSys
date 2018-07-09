@@ -11,6 +11,14 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import sql.pojo.cfg.HzCfg0MainRecord;
 import sql.pojo.cfg.HzCfg0Record;
+import webservice.base.cfg.ZPPTCO002;
+import webservice.base.options.ZPPTCO004;
+import webservice.logic.Correlate;
+import webservice.logic.Features;
+import webservice.option.ActionFlagOption;
+import webservice.option.CorrelateTypeOption;
+import webservice.service.impl.cfg2.TransCfgService;
+import webservice.service.impl.options4.TransOptionsService;
 
 import java.util.*;
 
@@ -25,6 +33,16 @@ public class HzCfg0Controller {
     private final HzCfg0Service hzCfg0Service;
     private final HzCfg0MainRecordDao hzCfg0MainRecordDao;
     private final HzCfg0OptionFamilyDao hzCfg0OptionFamilyDao;
+    /**
+     * 特性传输服务
+     */
+    @Autowired
+    TransCfgService transCfgService;
+    /***
+     * 相关性传输服务
+     */
+    @Autowired
+    TransOptionsService transOptionsService;
 
     @Autowired
     public HzCfg0Controller(HzCfg0Service hzCfg0Service, HzCfg0MainRecordDao hzCfg0MainRecordDao, HzCfg0OptionFamilyDao hzCfg0OptionFamilyDao) {
@@ -133,6 +151,77 @@ public class HzCfg0Controller {
         return result;
     }
 
+    @RequestMapping(value = "/sendToERP", method = RequestMethod.POST)
+    @ResponseBody
+    public JSONObject sendToERP(@RequestBody List<HzCfg0Record> records) {
+        transCfgService.setClearInputEachTime(true);
+        List<HzCfg0Record> toSend = new ArrayList<>();
+        List<Features> featuresList = new ArrayList<>();
+        Map<String, HzCfg0Record> _mapCoach = new HashMap<>();
+        JSONObject result = new JSONObject();
+        StringBuilder sbs = new StringBuilder();
+        sbs.append("发送成功:<br/>");
+        StringBuilder sbf = new StringBuilder();
+        sbf.append("发送失败:<br/>");
+
+        boolean hasFail = false;
+
+        if (records == null || records.size() <= 0) {
+            result.put("status", false);
+            result.put("msg", "选择的列为空，请至少选择1列发送");
+            return result;
+        }
+        records.forEach(_r -> {
+            HzCfg0Record record = null;
+            if ((record = hzCfg0Service.doSelectOneByPuid(_r.getPuid())) != null
+                    || (record = hzCfg0Service.doSelectOneAddedCfgByPuid(_r.getPuid())) != null) {
+                toSend.add(record);
+            }
+        });
+
+        toSend.forEach(_s -> {
+            Features features = new Features();
+            String packnum = UUID.randomUUID().toString().replaceAll("-", "");
+            //数据包号
+            features.setPackNo(packnum);
+            //行号
+            features.setLineNum(packnum.substring(0, 5));
+            //动作描述代码
+            features.setActionFlag(ActionFlagOption.ADD);
+            //特性编码
+            features.setFeaturesCode(_s.getpCfg0FamilyName());
+            //特性描述
+            features.setFeaturesDescribe(_s.getpCfg0FamilyDesc());
+            //特性值编码
+            features.setPropertyValuesCode(_s.getpCfg0ObjectId());
+            //特性值描述
+            features.setPropertyValuesDescribe(_s.getpCfg0Desc());
+            //            featuresList.add(features);
+            transCfgService.getInput().getItem().add(features.getZpptci002());
+            _mapCoach.put(packnum, _s);
+        });
+        transCfgService.execute();
+        List<ZPPTCO002> list = transCfgService.getOut().getItem();
+        if (list != null && list.size() > 0) {
+            result.put("status", true);
+            for (ZPPTCO002 _l : list) {
+                if ("S".equalsIgnoreCase(_l.getTYPE())) {
+                    sbs.append("&emsp;&emsp;&emsp;&emsp;" + _mapCoach.get(_l.getZPACKNO()).getpCfg0ObjectId() + "<br/>");
+                } else {
+                    sbf.append("&emsp;&emsp;&emsp;&emsp;" + _mapCoach.get(_l.getZPACKNO()).getpCfg0ObjectId() + "(" + _l.getMESSAGE() + ")<br/>");
+                    hasFail = true;
+                }
+            }
+        }
+        if (hasFail) {
+            result.put("msg", sbs.append("<br/>" + sbf).toString());
+        } else {
+            result.put("msg", sbs.toString());
+        }
+        return result;
+    }
+
+
     /******************************************相关性**********************************************/
     @RequestMapping("/loadRelevance")
     @ResponseBody
@@ -192,7 +281,7 @@ public class HzCfg0Controller {
                 record = hzCfg0Service.doSelectOneAddedCfgByPuid(uid);
                 if (record == null) {
                     model.addAttribute("msg", "没有找到对应的特性数据，请重试或联系系统管理员!");
-                        return "errorWithEntity";
+                    return "errorWithEntity";
                 }
                 record.setWhichTable("HZ_CFG0_ADD_CFG_RECORD");
             } else {
@@ -210,5 +299,72 @@ public class HzCfg0Controller {
         model.addAttribute("entity", bean);
         return "cfg/relevance/mergeRelevance";
     }
+
+    @RequestMapping(value = "/sendRelToERP", method = RequestMethod.POST)
+    @ResponseBody
+    public JSONObject sendRelToERP(@RequestBody List<HzRelevanceBean> beans) {
+        //清空上次传输的内容
+        transOptionsService.setClearInputEachTime(true);
+        Map<String, HzRelevanceBean> _mapCoach = new HashMap<>();
+        JSONObject result = new JSONObject();
+        StringBuilder sbs = new StringBuilder();
+        sbs.append("发送成功:<br/>");
+        StringBuilder sbf = new StringBuilder();
+        sbf.append("发送失败:<br/>");
+
+        boolean hasFail = false;
+        if (beans == null || beans.size() <= 0) {
+            result.put("status", false);
+            result.put("msg", "选择的列为空，请至少选择1列发送");
+            return result;
+        }
+
+
+        beans.forEach(bean -> {
+            Correlate correlate = new Correlate();
+            String packnum = UUID.randomUUID().toString().replaceAll("-", "");
+            correlate.setPackNo(packnum);
+            correlate.setLineNum(bean.getPuid().substring(0, 5));
+            //动作描述代码
+            correlate.setActionFlag(ActionFlagOption.ADD);
+            //相关性
+            correlate.setCorrelate(bean.getRelevance());
+            //相关性描述
+            correlate.setCorrelateDescript(bean.getRelevanceDesc());
+            //相关性状态
+            correlate.setCorrelateState("5");
+            //创建日期
+            correlate.setCreateDate(new Date());
+            //相关性类型
+            correlate.setCorrelateType(CorrelateTypeOption.CorrelateType_1);
+            //相关性代码
+            correlate.setCorrelateCode(bean.getRelevanceCode());
+            _mapCoach.put(packnum, bean);
+            transOptionsService.getInput().getItem().add(correlate.getZpptci004());
+        });
+        transOptionsService.execute();
+        List<ZPPTCO004> list = transOptionsService.getOut().getItem();
+        if (list != null && list.size() > 0) {
+            result.put("status", true);
+            for (ZPPTCO004 _l : list) {
+                if ("S".equalsIgnoreCase(_l.getTYPE())) {
+                    sbs.append("&emsp;&emsp;&emsp;&emsp;" + _mapCoach.get(_l.getZPACKNO()).getRelevance() + "<br/>");
+                } else {
+                    if (_mapCoach.get(_l.getZPACKNO()) == null) {
+                        continue;
+                    }
+                    sbf.append("&emsp;&emsp;&emsp;&emsp;" + _mapCoach.get(_l.getZPACKNO()).getRelevance() + "(" + _l.getMESSAGE() + ")<br/>");
+                    hasFail = true;
+                }
+            }
+        }
+        if (hasFail) {
+            result.put("msg", sbs.append("<br/>" + sbf).toString());
+        } else {
+            result.put("msg", sbs.toString());
+        }
+        return result;
+    }
+
 
 }

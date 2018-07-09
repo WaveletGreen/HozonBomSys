@@ -46,6 +46,39 @@ public class HzProjectLibs {
      */
     private String pProjectDetail;
 
+    /**
+     * 内饰颜色代码
+     */
+    private String pInColorCode;
+    /**
+     * 内饰颜色代码
+     */
+    private String pInColorName;
+    /**
+     * 内饰颜色名称
+     */
+    private String pColorCode;
+    /**
+     * 颜色名称
+     */
+    private String pColorName;
+    /**
+     * 电池型号
+     */
+    private String pBaterryCode;
+    /**
+     * 电机型号
+     */
+    private String pMotorCode;
+    /**
+     * 车型年代码
+     */
+    private String pModelYearCode;
+    /**
+     * 车型年
+     */
+    private String pModelYear;
+
     public String getpProjectOwningUser() {
         return pProjectOwningUser;
     }
@@ -138,4 +171,69 @@ public class HzProjectLibs {
     public void setpProjectDetail(String pProjectDetail) {
         this.pProjectDetail = pProjectDetail;
     }
+
+    public String getpInColorCode() {
+        return pInColorCode;
+    }
+
+    public void setpInColorCode(String pInColorCode) {
+        this.pInColorCode = pInColorCode;
+    }
+
+    public String getpInColorName() {
+        return pInColorName;
+    }
+
+    public void setpInColorName(String pInColorName) {
+        this.pInColorName = pInColorName;
+    }
+
+    public String getpColorCode() {
+        return pColorCode;
+    }
+
+    public void setpColorCode(String pColorCode) {
+        this.pColorCode = pColorCode;
+    }
+
+    public String getpColorName() {
+        return pColorName;
+    }
+
+    public void setpColorName(String pColorName) {
+        this.pColorName = pColorName;
+    }
+
+    public String getpBaterryCode() {
+        return pBaterryCode;
+    }
+
+    public void setpBaterryCode(String pBaterryCode) {
+        this.pBaterryCode = pBaterryCode;
+    }
+
+    public String getpMotorCode() {
+        return pMotorCode;
+    }
+
+    public void setpMotorCode(String pMotorCode) {
+        this.pMotorCode = pMotorCode;
+    }
+
+    public String getpModelYearCode() {
+        return pModelYearCode;
+    }
+
+    public void setpModelYearCode(String pModelYearCode) {
+        this.pModelYearCode = pModelYearCode;
+    }
+
+    public String getpModelYear() {
+        return pModelYear;
+    }
+
+    public void setpModelYear(String pModelYear) {
+        this.pModelYear = pModelYear;
+    }
+
 }

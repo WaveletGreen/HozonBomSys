@@ -90,7 +90,7 @@ function loadData() {
                             window.Ewin.dialog({
                                 // 这个puid就是车型模型的puid，直接修改了车型模型的基本信息（在bom系统维护的字段）
                                 title: "修改基本信息",
-                                url: "materiel/modifyPage?puid=" + rows[0].puid + "&puidOfModelFeature=" + rows[0].puidOfModelFeature + "&page=model",
+                                url: "project/modifyPage?puid=" + rows[0].puid + "&puidOfModelFeature=" + rows[0].puidOfModelFeature + "&page=model",
                                 gridId: "gridId",
                                 width: 350,
                                 height: 450
@@ -110,7 +110,7 @@ function loadData() {
                             window.Ewin.dialog({
                                 title: "修改超级物料",
                                 //直接修改了超级物料表的数据，要根据配置器的puid找，否则就不能根据所见即所改
-                                url: "materiel/modifyPage?puid=" + rows[0].cfg0MainPuid + "&page=superMateriel",
+                                url: "materiel/modifyPage?puid=" + rows[0].cfg0MainPuid + "&puidOfModelFeature="+rows[0].puidOfModelFeature+"&page=superMateriel",
                                 gridId: "gridId",
                                 width: 350,
                                 height: 450

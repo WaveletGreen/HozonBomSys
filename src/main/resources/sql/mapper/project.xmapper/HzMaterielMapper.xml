@@ -117,41 +117,52 @@
     P_LOOSE_PART_FLAG, P_VALID_FLAG, P_MATERIEL_DATA_TYPE, P_CREATE_TIME, P_UPDATE_TIME,
     P_CREATE_NAME, P_UPDATE_NAME, P_FACTORY_PUID,P_MATERIEL_RESOURCE_ID,P_TYPE
   </sql>
-    
+
     <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from HZ_MATERIEL_RECORD
         where PUID = #{puid,jdbcType=VARCHAR}
     </select>
-    
-    
+
+
     <select id="selectByProjectPuid" parameterType="java.lang.String" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from HZ_MATERIEL_RECORD
-        where P_PERTAIN_TO_PROJECT_PUID = #{pPertainToProjectPuid,jdbcType=VARCHAR}
+        where P_PERTAIN_TO_PROJECT_PUID = #{pPertainToProjectPuid,jdbcType=VARCHAR} AND P_MATERIEL_DATA_TYPE=11
     </select>
-    
-    
-    
-    
+
+
     <insert id="insert" parameterType="sql.pojo.project.HzMaterielRecord">
-    insert into HZ_MATERIEL_RECORD (PUID, P_MATERIEL_CODE, P_MATERIEL_TYPE, 
-      P_MATERIEL_WERK, P_MATERIEL_DESC, P_PERTAIN_TO_PROJECT_PUID
+   insert into HZ_MATERIEL_RECORD (
+      PUID,
+      P_MATERIEL_CODE,
+      P_MATERIEL_TYPE,
+      P_MATERIEL_WERK,
+      P_MATERIEL_DESC,
+      P_PERTAIN_TO_PROJECT_PUID,
+      P_MATERIEL_DATA_TYPE
       )
-    values (#{puid,jdbcType=VARCHAR}, #{pMaterielCode,jdbcType=OTHER}, #{pMaterielType,jdbcType=OTHER}, 
-      #{pMaterielWerk,jdbcType=OTHER}, #{pMaterielDesc,jdbcType=OTHER}, #{pPertainToProjectPuid,jdbcType=VARCHAR}
+    values (
+      #{puid,jdbcType=VARCHAR},
+      #{pMaterielCode,jdbcType=VARCHAR},
+      'A006',
+      #{pMaterielWerk,jdbcType=VARCHAR},
+      #{pMaterielDesc,jdbcType=VARCHAR},
+      #{pPertainToProjectPuid,jdbcType=VARCHAR},
+      11
       )
   </insert>
-    
+
     <update id="updateByPrimaryKey" parameterType="sql.pojo.project.HzMaterielRecord">
     update HZ_MATERIEL_RECORD
-    set P_MATERIEL_CODE = #{pMaterielCode,jdbcType=OTHER},
-      P_MATERIEL_TYPE = #{pMaterielType,jdbcType=OTHER},
-      P_MATERIEL_WERK = #{pMaterielWerk,jdbcType=OTHER},
-      P_MATERIEL_DESC = #{pMaterielDesc,jdbcType=OTHER},
-      P_PERTAIN_TO_PROJECT_PUID = #{pPertainToProjectPuid,jdbcType=VARCHAR}
+    set P_MATERIEL_CODE = #{pMaterielCode,jdbcType=VARCHAR},
+      P_MATERIEL_TYPE = 'A006',
+      P_MATERIEL_WERK = #{pMaterielWerk,jdbcType=VARCHAR},
+      P_MATERIEL_DESC = #{pMaterielDesc,jdbcType=VARCHAR},
+      P_PERTAIN_TO_PROJECT_PUID = #{pPertainToProjectPuid,jdbcType=VARCHAR},
+      P_MATERIEL_DATA_TYPE = 11
     where PUID = #{puid,jdbcType=VARCHAR}
   </update>
 
@@ -193,7 +204,7 @@
     <!--查询一条记录-->
     <select id="selectByPrimaryKey111" parameterType="java.lang.String" resultMap="BaseResultMap">
         select
-        <include refid="HzMaterielRecordList" />
+        <include refid="HzMaterielRecordList"/>
         from HZ_MATERIEL_RECORD
         where PUID = #{puid,jdbcType=VARCHAR}
     </select>

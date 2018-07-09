@@ -23,4 +23,11 @@ public interface HzCfg0ModelRecordDao {
      * @return
      */
     int updateBasicByPuid(HzCfg0ModelRecord modelRecord);
+
+    /**
+     * 根据主键修改车型模型名
+     * @param modelRecord 车型模型，只包含puid和车型模型名即可
+     * @return
+     */
+    int updateModelName(HzCfg0ModelRecord modelRecord);
 }

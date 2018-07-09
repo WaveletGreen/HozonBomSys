@@ -102,4 +102,7 @@ public class HzCfg0Service {
         return index;
     }
 
+    public List<HzCfg0Record> doLoadListByPuids(List<HzCfg0Record> records) {
+        return hzCfg0RecordDao.selectCfg0ListByPuids(records);
+    }
 }

@@ -17,7 +17,9 @@
                     <font>当前工作项目:</font>
                     <!--<mark class="caret">：</mark>-->
                     <font id="currentProjectHead"></font>
+
                 </a>
+                <ul class="dropdown-menu" id="projectList"></ul>
             </li>
             <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-envelope"></i> <b
@@ -78,7 +80,7 @@
                         th:text="${#authentication.name}"></font> <b class="caret"></b></a>
                 <ul class="dropdown-menu">
                     <!--<li>-->
-                        <!--<a href="#"><i class="fa fa-fw fa-gear"></i> 修改密码 </a>-->
+                    <!--<a href="#"><i class="fa fa-fw fa-gear"></i> 修改密码 </a>-->
                     <!--</li>-->
                     <li class="divider"></li>
                     <li>
@@ -147,11 +149,65 @@
                 }],
                 showIndex: 0,
                 loadAll: false
-            })
+            }),
+                $("#tabContainer").tabs({
+                    data: [{
+                        id: '99999998',
+                        text: '首页',
+                        url: "project",
+                        closeable: true
+                    }],
+                    showIndex: 1,
+                    loadAll: false
+                })
             //
             $.fn.bootstrapTree({url: contextPath + "/user/mainTree", treeId: 'menu_tree', tabId: "tabContainer"});
             $.fn.dictUtil("/dict/loadDict");
         })
     );
+    $(document).ready(
+        ($.ajax({
+                url: "./project/loadAll",
+                type: "GET",
+                success: function (data) {
+                    var auth = data.auth;
+                    var _data = data.data;
+                    var ok = true;
+                    if (_data) {
+                        for (var i in _data) {
+                            // if (i == 0 && ok) {
+                            //     $("#projectList", window.top.document).val(_data[i].puid);
+                            //     $("#currentProject").text("当前工作项目:" + _data[i].pProjectName);
+                            //     $("#currentProjectHead", window.top.document).text(_data[i].pProjectName);
+                            //     ok = false;
+                            //     if (!auth) {
+                            //         break;
+                            //     }
+                            // }
+                            // if (auth) {
+                            //     $("#fastOption").append("<option value='" + _data[i].puid + "'>" + _data[i].pProjectName + "</option>");
+                            // }
+
+                            $("#projectList").append(
+                                "<li>" +
+                                "<a href='javascript:void(0)' class='project'><i class='fa fa-fw fa-gear'></i> " + _data[i].pProjectName + " </a>" +
+                                "</li>" +
+                                "<li class='divider'></li>"
+                            );
+                        }
+                        console.log("加载项目成功");
+                    }
+                    if (auth) {
+                        $("#fastOption").removeAttr("hidden");
+                        $("#fastOption").addClass("form-control");
+                        // $("#fastOption").bind("change", selectEvent);
+                        $("#labHidden").removeAttr("hidden");
+                    }
+                },
+                error: function (err) {
+                    alert(err.status);
+                }
+            })
+        ))
 </script>
 </html>

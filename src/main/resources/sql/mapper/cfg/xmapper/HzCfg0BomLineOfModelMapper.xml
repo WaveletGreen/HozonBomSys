@@ -3,9 +3,9 @@
 <mapper namespace="com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0BomLineOfModelDao">
     <resultMap id="BaseResultMap"
                type="sql.pojo.cfg.HzCfg0BomLineOfModel">
-        <result column="OBJECT_NAME" jdbcType="OTHER"
+        <result column="OBJECT_NAME" jdbcType="VARCHAR"
                 property="objectName"/>
-        <result column="OBJECT_DESC" jdbcType="OTHER"
+        <result column="OBJECT_DESC" jdbcType="VARCHAR"
                 property="objectDesc"/>
         <result column="P_CFG0_OPTION_VALUE" jdbcType="VARCHAR"
                 property="pCfg0OptionValue"/>
@@ -25,11 +25,11 @@
                 property="pH9featuredesc"/>
         <result column="P_BOM_LINE_NAME" jdbcType="VARCHAR"
                 property="pBomLineName"/>
-        <result column="P_BOM_LINE_ID" jdbcType="OTHER"
+        <result column="P_BOM_LINE_ID" jdbcType="VARCHAR"
                 property="pBomLineId"/>
-        <result column="P_BOM_OF_WHICH_DEPT" jdbcType="OTHER"
+        <result column="P_BOM_OF_WHICH_DEPT" jdbcType="VARCHAR"
                 property="pBomOfWhichDept"/>
-        <result column="P_CFG0_MODEL_RECORD" jdbcType="OTHER"
+        <result column="P_CFG0_MODEL_RECORD" jdbcType="VARCHAR"
                 property="modelPuid"/>
     </resultMap>
     <sql id="Base_Column_List">

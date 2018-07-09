@@ -3,25 +3,14 @@ package sql.pojo.cfg;
 import java.util.Date;
 
 public class HzFcfgBomLvl1ListOperation {
-    /**
-     * 主键
-     */
     private String puid;
-    /**
-     * 操作类型
-     */
+
     private Object pOprationTypeName;
-    /**
-     * 操作人
-     */
+
     private Object pOprator;
-    /**
-     * 操作日期
-     */
+
     private Date pOprationDate;
-    /**
-     * 操作信息的状态
-     */
+
     private Short pOprationStatus;
 
     public String getPuid() {

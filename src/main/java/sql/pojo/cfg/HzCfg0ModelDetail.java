@@ -1,47 +1,109 @@
 package sql.pojo.cfg;
 
+import org.springframework.data.rest.core.annotation.Description;
+
 public class HzCfg0ModelDetail {
+    /***
+     * 主键
+     */
     private String puid;
-
+    /**
+     * 车型模型的puid
+     */
     private String pModelPuid;
-
+    /***
+     * 车型模型名
+     */
     private String pModelName;
-
+    /***
+     * 车型模型描述
+     */
     private String pModelDesc;
-
-    private String pModelSaleArea;
-
+    /**
+     * 品牌
+     */
     private String pModelBrand;
-
+    /**
+     * 车型
+     */
+    @Deprecated
     private String pModelVehicle;
-
+    /**
+     * 平台
+     */
     private String pModelPlatform;
 
-    private String pModelMod;
-
-    private String pModelAnnual;
-
-    private String pModelVersion;
-
-    private String pModelDriverPosition;
-
-    private String pModelMembers;
-
+    /**
+     * 车身形式
+     */
     private String pModelShape;
-
+    /**
+     * 公告
+     */
     private String pModelAnnouncement;
-
-    private String pModelPowers;
-
-    private String pModelCfgVersion;
-
+    /**
+     * 配置描述
+     */
     private String pModelCfgDesc;
-
+    /**
+     * 配置管理
+     */
+    private String pModelCfgMng;
+    /**
+     * 销售地区
+     */
+    @Deprecated
+    private String pModelSaleArea;
+    /**
+     * 车型
+     */
+    private String pModelMod;
+    /**
+     * 年型
+     */
+    @Deprecated
+    private String pModelAnnual;
+    /**
+     * 版型
+     */
+    @Deprecated
+    private String pModelVersion;
+    /**
+     * 老司机位置
+     */
+    @Deprecated
+    private String pModelDriverPosition;
+    /**
+     * 成员数
+     */
+    @Deprecated
+    private String pModelMembers;
+    /**
+     * 动总
+     */
+    @Deprecated
+    private String pModelPowers;
+    /**
+     * 配置版本
+     */
+    @Deprecated
+    private String pModelCfgVersion;
+    /**
+     * 试制号
+     */
+    @Deprecated
     private String pModelTrailNum;
-
+    /**
+     * 商品号
+     */
+    @Deprecated
     private String pModelGoodsNum;
-
+    /**
+     * 变形
+     */
+    @Deprecated
     private String pModelTransform;
+
     public String getPuid() {
         return puid;
     }
@@ -208,5 +270,13 @@ public class HzCfg0ModelDetail {
 
     public void setpModelTransform(String pModelTransform) {
         this.pModelTransform = pModelTransform;
+    }
+
+    public String getpModelCfgMng() {
+        return pModelCfgMng;
+    }
+
+    public void setpModelCfgMng(String pModelCfgMng) {
+        this.pModelCfgMng = pModelCfgMng;
     }
 }

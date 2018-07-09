@@ -2,10 +2,6 @@ package com.connor.hozon;
 
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.support.SpringBootServletInitializer;
-import sql.redis.SerializeUtil;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * 其实没什么用
