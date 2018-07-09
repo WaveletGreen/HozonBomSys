@@ -2,8 +2,8 @@
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <!--User: xulf Date: 2018/7/4 Time: 14:29-->
 <body>
-<form id="pbomManageForm" role="form" method="post" action="pbom/insert">
-    <input id="puids" name="puids" type="text" th:value="${data.puids}"/><!--th:value="${entity.eBomPuid}"-->
+<form id="pbomManageForm" role="form" method="post" action="pbom/add/processCompose">
+    <input id="puids" name="puids" type="hidden" th:value="${data.puids}"/><!--th:value="${entity.eBomPuid}"-->
     <div class="form-group">
         <label for="lineId">合成零件号</label>
         <input class="form-control" id="lineId" name="lineId" type="text"
@@ -15,8 +15,8 @@
                placeholder="请输入专业"/><!--th:value="${entity.level}"-->
     </div>
     <div class="form-group">
-        <label for="h9_IsCommon">零件分类</label>
-        <select class="form-control" name="h9_IsCommon" id="h9_IsCommon" placeholder="请选择零件分类">
+        <label for="pBomLinePartClass">零件分类</label>
+        <select class="form-control" name="pBomLinePartClass" id="pBomLinePartClass" placeholder="请选择零件分类">
             <option>自制</option>
             <option>外协</option>
             <option>标准件</option>
@@ -25,8 +25,8 @@
         </select>
     </div>
     <div class="form-group">
-        <label for="H9_Mat_Status">零件来源</label>
-        <select class="form-control" name="H9_Mat_Status" id="H9_Mat_Status" placeholder="请选择零件来源">
+        <label for="pBomLinePartResource">零件来源</label>
+        <select class="form-control" name="pBomLinePartResource" id="pBomLinePartResource" placeholder="请选择零件来源">
             <option>采购拆分总成件</option>
             <option>采购拆分标准件</option>
             <option>采购拆分非标件</option>
@@ -110,6 +110,16 @@
                 invalid: 'glyphicon glyphicon-remove',
                 validating: 'glyphicon glyphicon-refresh'
             },
+            fields: {
+                lineId: {
+                    message: '零件号验证失败',
+                    validators: {
+                        notEmpty: {
+                            message: '零件号不能为空'
+                        },
+                    }
+                },
+            }
         });
         // 绑定dialog的确定按钮的监听事件
         $("#btnOk", window.top.document).click(function () {
@@ -117,18 +127,13 @@
             bootstrapValidator.validate();
             if (bootstrapValidator.isValid()) {
                 var url = $("#pbomManageForm", window.top.document).attr('action');
-                var projectId = $("#project", window.top.document).val();
-                var pBomPuid = $("#pBomPuid").val();
                 var myData = JSON.stringify({
-                    "eBomPuid": $("#eBomPuid").val(),
-                    // "rank": $("#rank").val(),
-                    // "level": $("#level").val(),
-                    // "lineId": $("#lineId").val(),
-                    // "pBomOfWhichDept": $("#pBomOfWhichDept").val(),
-                    // "groupNum": $("#groupNum").val(),
-                    // "h9_IsCommon": $("#h9_IsCommon").val(),
-                    // "H9_Mat_Status": $("#H9_Mat_Status").val(),
-                    // "resource": $("#resource").val(),
+                    "puids": $("#puids").val(),
+                    "lineId": $("#lineId").val(),
+                    "pBomOfWhichDept": $("#pBomOfWhichDept").val(),
+                    "pBomLinePartClass": $("#pBomLinePartClass").val(),
+                    "pBomLinePartResource": $("#pBomLinePartResource").val(),
+                    "resource": $("#resource").val(),
                     "type": $("#type").val(),
                     "buyUnit": $("#buyUnit").val(),
                     "workShop1": $("#workShop1").val(),
@@ -138,6 +143,7 @@
                     "outerPart": $("#outerPart").val(),
                     "colorPart": $("#colorPart").val(),
                     "station": $("#station").val(),
+                    "projectId": $("#project", window.top.document).val()
                 });
                 console.log(myData);
                 $.ajax({
@@ -155,13 +161,9 @@
                             $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
 
                             window.Ewin.alert({message: result.errMsg});
-                            /*if (result)
-                                window.Ewin.alert({message: '修改数据成功!'});
-                            else
-                                window.Ewin.alert({message: '修改数据失败!'});*/
                         },
                     error: function (status) {
-                        window.Ewin.alert({message: status.status + ':修改数据失败!'});
+                        window.Ewin.alert({message: status.status + ':生成工艺合件失败!'});
                     }
                 });
             }

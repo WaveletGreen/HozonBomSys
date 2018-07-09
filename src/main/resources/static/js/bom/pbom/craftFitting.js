@@ -15,7 +15,6 @@ $(document).ready(function () {
                 url: "pbom/processComposeTree?lineId=" + val + "&projectId=" + projectId,
                 undefinedText: "",//当数据为 undefined 时显示的字符
                 success: function (data) {
-                    console.log(data);
                     var setting = {
                         view: {
                             selectedMulti: false,
@@ -53,12 +52,6 @@ $(document).ready(function () {
                             onCheck: function (e, treeId, treeNode) {
                                 var treeObj = $.fn.zTree.getZTreeObj("Ztree1");
                                 var nodes = treeObj.getCheckedNodes(true);
-                                // var treeNodeP = treeNode.parentTId ? treeNode.getParentNode():null;
-                                // for(var i=0;i<treeNode.children.length;i++) {
-                                //     var childNode = treeNode.children[i];
-                                //     alert('childNode.name: '+childNode.name);
-                                // }
-                                //nodes=treeObj.getCheckedNodes(true);
                                 for (var i = 0; i < nodes.length; i++) {
                                     if (!nodes[i].isParent) {
                                         puids+=nodes[nodes.length - 1].puid+",";
