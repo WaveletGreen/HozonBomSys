@@ -3,11 +3,11 @@
 <!--User: xulf Date: 2018/7/4 Time: 14:29-->
 <body>
 <form id="pbomManageForm" role="form" method="post" action="pbom/insert">
-    <input id="puid" name="puid" type="text"/><!--th:value="${entity.eBomPuid}"-->
+    <input id="puids" name="puids" type="text" th:value="${data.puids}"/><!--th:value="${entity.eBomPuid}"-->
     <div class="form-group">
-        <label for="level">层级</label>
-        <input class="form-control" id="level" name="level" type="text"
-               placeholder="请输入层级"/><!--th:value="${entity.level}"-->
+        <label for="lineId">合成零件号</label>
+        <input class="form-control" id="lineId" name="lineId" type="text"
+               placeholder="请输入合成零件号"/><!--th:value="${entity.level}"-->
     </div>
     <div class="form-group">
         <label for="pBomOfWhichDept">专业</label>
@@ -15,124 +15,89 @@
                placeholder="请输入专业"/><!--th:value="${entity.level}"-->
     </div>
     <div class="form-group">
-        <label for="rank">级别</label>
-        <input class="form-control" id="rank" name="rank" type="text"
-               placeholder="请输入级别"/><!--th:value="${entity.level}"-->
+        <label for="h9_IsCommon">零件分类</label>
+        <select class="form-control" name="h9_IsCommon" id="h9_IsCommon" placeholder="请选择零件分类">
+            <option>自制</option>
+            <option>外协</option>
+            <option>标准件</option>
+            <option>非标件</option>
+            <option>虚拟总成</option>
+        </select>
     </div>
     <div class="form-group">
-        <label for="groupNum">分组号</label>
-        <input class="form-control" id="groupNum" name="groupNum" type="text"
-               placeholder="请输入分组号"/><!--th:value="${entity.level}"-->
+        <label for="H9_Mat_Status">零件来源</label>
+        <select class="form-control" name="H9_Mat_Status" id="H9_Mat_Status" placeholder="请选择零件来源">
+            <option>采购拆分总成件</option>
+            <option>采购拆分标准件</option>
+            <option>采购拆分非标件</option>
+            <option>自制总成</option>
+            <option>自制单件</option>
+            <option>自用标准件</option>
+            <option>自用非标件</option>
+            <option>虚拟总成</option>
+        </select>
     </div>
     <div class="form-group">
-        <label for="current_name">对象名称</label>
-        <input class="form-control" id="current_name" name="current_name" type="text"
-               placeholder="请输入对象名称"/><!--th:value="${entity.level}"-->
+        <label for="resource">自制/采购</label>
+        <select class="form-control" name="resource" id="resource" placeholder="请选择来源">
+            <option>MAKE</option>
+            <option>BUY</option>
+            <option>/</option>
+        </select>
     </div>
     <div class="form-group">
-        <label for="object_string">对象</label>
-        <input class="form-control" id="object_string" name="object_string" type="text"
-               placeholder="请输入对象"/><!--th:value="${entity.level}"-->
+        <label for="type">焊接/装配</label>
+        <select class="form-control" name="type" id="type" placeholder="请选择是否为焊接类型">
+            <option>Y</option>
+            <option>N</option>
+            <option>/</option>
+        </select>
     </div>
     <div class="form-group">
-        <label for="bl_item_object_type">零组件类型</label>
-        <input class="form-control" id="bl_item_object_type" name="bl_item_object_type" type="text"
-               placeholder="请输入零组件类型"/><!--th:value="${entity.level}"-->
+        <label for="buyUnit">采购单元</label>
+        <select class="form-control" name="buyUnit" id="buyUnit" placeholder="请选择是否为采购单元">
+            <option>Y</option>
+            <option>N</option>
+            <option>/</option>
+        </select>
     </div>
     <div class="form-group">
-        <label for="bl_sequence_no">查找编号</label>
-        <input class="form-control" id="bl_sequence_no" name="bl_sequence_no" type="text"
-               placeholder="请输入查找编号"/><!--th:value="${entity.level}"-->
+        <label for="workShop1">车间1</label>
+        <input class="form-control" id="workShop1" name="workShop1" type="text"
+               placeholder="请输入车间1"/><!--th:value="${entity.level}"-->
     </div>
     <div class="form-group">
-        <label for="bl_formula">变量公式</label>
-        <input class="form-control" id="bl_formula" name="bl_formula" type="text"
-               placeholder="请输入变量公式"/><!--th:value="${entity.level}"-->
+        <label for="workShop2">车间2</label>
+        <input class="form-control" id="workShop2" name="workShop2" type="text"
+               placeholder="请输入车间2"/><!--th:value="${entity.level}"-->
     </div>
     <div class="form-group">
-        <label for="mfg0realRevision">主版本已配置</label>
-        <input class="form-control" id="mfg0realRevision" name="mfg0realRevision" type="text"
-               placeholder="请输入主版本已配置"/><!--th:value="${entity.level}"-->
+        <label for="productLine">生产线</label>
+        <input class="form-control" id="productLine" name="productLine" type="text"
+               placeholder="请输入生产线"/><!--th:value="${entity.level}"-->
     </div>
     <div class="form-group">
-        <label for="bl_config_string">规则配置依据</label>
-        <input class="form-control" id="bl_config_string" name="bl_config_string" type="text"
-               placeholder="请输入规则配置依据"/><!--th:value="${entity.level}"-->
+        <label for="mouldType">模具类型</label>
+        <input class="form-control" id="mouldType" name="mouldType" type="text"
+               placeholder="请输入模具类型"/><!--th:value="${entity.level}"-->
     </div>
     <div class="form-group">
-        <label for="object_string">对象</label>
-        <input class="form-control" id="object_string" name="object_string" type="text"
-               placeholder="请输入对象"/><!--th:value="${entity.level}"-->
+        <label for="outerPart">外委件</label>
+        <input class="form-control" id="outerPart" name="outerPart" type="text"
+               placeholder="请输入外委件"/><!--th:value="${entity.level}"-->
     </div>
     <div class="form-group">
-        <label for="object_string">对象</label>
-        <input class="form-control" id="object_string" name="object_string" type="text"
-               placeholder="请输入对象"/><!--th:value="${entity.level}"-->
+        <label for="colorPart">颜色件</label>
+        <select class="form-control" name="colorPart" id="colorPart" placeholder="请选择是否为颜色件">
+            <option>Y</option>
+            <option>N</option>
+            <option>/</option>
+        </select>
     </div>
     <div class="form-group">
-        <label for="object_string">对象</label>
-        <input class="form-control" id="object_string" name="object_string" type="text"
-               placeholder="请输入对象"/><!--th:value="${entity.level}"-->
-    </div>
-    <div class="form-group">
-        <label for="object_string">对象</label>
-        <input class="form-control" id="object_string" name="object_string" type="text"
-               placeholder="请输入对象"/><!--th:value="${entity.level}"-->
-    </div>
-    <div class="form-group">
-        <label for="object_string">对象</label>
-        <input class="form-control" id="object_string" name="object_string" type="text"
-               placeholder="请输入对象"/><!--th:value="${entity.level}"-->
-    </div>
-    <div class="form-group">
-        <label for="object_string">对象</label>
-        <input class="form-control" id="object_string" name="object_string" type="text"
-               placeholder="请输入对象"/><!--th:value="${entity.level}"-->
-    </div>
-    <div class="form-group">
-        <label for="object_string">对象</label>
-        <input class="form-control" id="object_string" name="object_string" type="text"
-               placeholder="请输入对象"/><!--th:value="${entity.level}"-->
-    </div>
-    <div class="form-group">
-        <label for="object_string">对象</label>
-        <input class="form-control" id="object_string" name="object_string" type="text"
-               placeholder="请输入对象"/><!--th:value="${entity.level}"-->
-    </div>
-    <div class="form-group">
-        <label for="object_string">对象</label>
-        <input class="form-control" id="object_string" name="object_string" type="text"
-               placeholder="请输入对象"/><!--th:value="${entity.level}"-->
-    </div>
-    <div class="form-group">
-        <label for="object_string">对象</label>
-        <input class="form-control" id="object_string" name="object_string" type="text"
-               placeholder="请输入对象"/><!--th:value="${entity.level}"-->
-    </div>
-    <div class="form-group">
-        <label for="object_string">对象</label>
-        <input class="form-control" id="object_string" name="object_string" type="text"
-               placeholder="请输入对象"/><!--th:value="${entity.level}"-->
-    </div>
-    <div class="form-group">
-        <label for="object_string">对象</label>
-        <input class="form-control" id="object_string" name="object_string" type="text"
-               placeholder="请输入对象"/><!--th:value="${entity.level}"-->
-    </div>
-    <div class="form-group">
-        <label for="object_string">对象</label>
-        <input class="form-control" id="object_string" name="object_string" type="text"
-               placeholder="请输入对象"/><!--th:value="${entity.level}"-->
-    </div>
-    <div class="form-group">
-        <label for="object_string">对象</label>
-        <input class="form-control" id="object_string" name="object_string" type="text"
-               placeholder="请输入对象"/><!--th:value="${entity.level}"-->
-    </div>
-    <div class="form-group">
-        <label for="object_string">对象</label>
-        <input class="form-control" id="object_string" name="object_string" type="text"
-               placeholder="请输入对象"/><!--th:value="${entity.level}"-->
+        <label for="station">工位</label>
+        <input class="form-control" id="station" name="station" type="text"
+               placeholder="请输入工位"/><!--th:value="${entity.level}"-->
     </div>
 </form>
 <script th:inline="javascript">
@@ -145,16 +110,6 @@
                 invalid: 'glyphicon glyphicon-remove',
                 validating: 'glyphicon glyphicon-refresh'
             },
-            fields: {
-                level: {
-                    message: '层级验证失败',
-                    validators: {
-                        notEmpty: {
-                            message: '层级不能为空'
-                        }
-                    }
-                },
-            }
         });
         // 绑定dialog的确定按钮的监听事件
         $("#btnOk", window.top.document).click(function () {
