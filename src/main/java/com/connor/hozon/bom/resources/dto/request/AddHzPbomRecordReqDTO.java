@@ -5,6 +5,10 @@ package com.connor.hozon.bom.resources.dto.request;
  */
 public class AddHzPbomRecordReqDTO {
     /**
+     * 合成零件的puid 中间用英文逗号隔开
+     */
+    private String puids;
+    /**
      * 来源（自制/采购）
      */
     private String resource;
@@ -87,6 +91,14 @@ public class AddHzPbomRecordReqDTO {
      * 零件号 工艺合件参数
      */
     private String lineId;
+
+    public String getPuids() {
+        return puids;
+    }
+
+    public void setPuids(String puids) {
+        this.puids = puids;
+    }
 
     public String getLineId() {
         return lineId;

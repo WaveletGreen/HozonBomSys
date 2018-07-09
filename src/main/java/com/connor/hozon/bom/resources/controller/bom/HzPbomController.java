@@ -222,14 +222,16 @@ public class HzPbomController extends BaseController {
      * @param response
      */
     @RequestMapping(value = "/add/processCompose",method = RequestMethod.POST)
-    public void addProcessCompose(@RequestBody List<AddHzPbomRecordReqDTO> recordReqDTOS,String projectId,  HttpServletResponse response){
-        if(projectId==null){
-            writeAjaxJSONResponse(ResultMessageBuilder.build(false,"非法参数！"),response);
-            return;
-        }
-        OperateResultMessageRespDTO operateResultMessageRespDTO = hzPbomService.andProcessCompose(recordReqDTOS,projectId);
+    public void addProcessCompose(@RequestBody AddHzPbomRecordReqDTO recordReqDTO,HttpServletResponse response){
 
-        writeAjaxJSONResponse(ResultMessageBuilder.build(OperateResultMessageRespDTO.isSuccess(operateResultMessageRespDTO),operateResultMessageRespDTO.getErrMsg()),response);
+
+        //        if(projectId==null){
+//            writeAjaxJSONResponse(ResultMessageBuilder.build(false,"非法参数！"),response);
+//            return;
+//        }
+        OperateResultMessageRespDTO operateResultMessageRespDTO = new OperateResultMessageRespDTO();
+        operateResultMessageRespDTO.setOtherParam(recordReqDTO.getLineId());
+        writeAjaxJSONResponse(ResultMessageBuilder.build(operateResultMessageRespDTO),response);
 
     }
 

@@ -1,4 +1,5 @@
 $(document).ready(function () {
+    var count =0;
     var localSelectedNode;
     var localDetail;
     var coach = [];
@@ -54,11 +55,32 @@ $(document).ready(function () {
                                 var nodes = treeObj.getCheckedNodes(true);
                                 for (var i = 0; i < nodes.length; i++) {
                                     if (!nodes[i].isParent) {
-                                        puids+=nodes[nodes.length - 1].puid+",";
                                         coach.push(nodes[nodes.length - 1].puid);
+                                        puids +=nodes[nodes.length - 1].puid+",";
                                         break;
+                                    }else{
+                                        count++;//记录父节点个数
                                     }
                                 }
+                                //1.一下选择父节点 带出所有子节点
+                                //2.逐一选择子节点
+                                //3.选择子节点 有取消部分已选择子节点
+                                //4.选择父节点 又放弃选择
+                                if(nodes.length == 0){
+                                    coach.splice(0,coach.length);
+                                    puids = "";
+                                }else if(count+coach.length!=nodes.length){
+                                    coach.splice(0,coach.length);
+                                    puids ="";
+                                    for(var i = 0;i<nodes.length;i++){
+                                        if (!nodes[i].isParent) {
+                                            coach.push(nodes[i].puid);
+                                            puids+=nodes[i].puid+",";
+                                        }
+                                    }
+                                }
+                                // console.log(coach);
+                                // console.log(puids);
                             },
                             onClick: function (event, treeId, treeNode) {
                                 if (treeNode.level != 2) {
@@ -144,11 +166,9 @@ $(document).ready(function () {
                                     }
                                 })
                                 localSelectedNode = treeNode;
-                            }
-
+                            },
                         }
                     };
-
                     function zTreeBeforeCheck(treeId, treeNode) {
                         return !treeNode.isParent;//当是父节点 返回false 不让选取
                     }
