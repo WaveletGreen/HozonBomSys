@@ -105,6 +105,16 @@ public class HzPbomLineRespDTO {
 
     private Integer orderNum;
 
+    private String puids;
+
+    public String getPuids() {
+        return puids;
+    }
+
+    public void setPuids(String puids) {
+        this.puids = puids;
+    }
+
     public Integer getOrderNum() {
         return orderNum;
     }

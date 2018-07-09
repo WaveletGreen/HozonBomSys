@@ -205,7 +205,15 @@ public class HzPbomController extends BaseController {
         }
 
         JSONArray object = hzPbomService.getPbomByLineId(reqDTO);
-        writeAjaxJSONResponse(ResultMessageBuilder.build(true,object),response);
+        writeAjaxJSONResponse(ResultMessageBuilder.build(object),response);
+    }
+
+    @RequestMapping(value = "updataProcessOfFitting", method = RequestMethod.GET)
+    public String updateRecordToPage(String puids,Model model) {
+        HzPbomLineRespDTO respDTO = new HzPbomLineRespDTO();
+        respDTO.setPuids(puids);
+        model.addAttribute("data",respDTO);
+        return "bomManage/pbom/processOfFitting/updataProcessOfFitting";
     }
 
     /**

@@ -7,13 +7,13 @@
 <title>工艺合件</title>
 </head>
 <body>
-<div id="content" class="row-fluid"style="height:auto">
+<div id="content" class="row-fluid" style="height:auto">
     <div class="content row-fluid col-md-5 col-lg-5">
         <h4>请选择您要合成的零件</h4>
         <form class="form-inline">
             <div class="form-group">
-                <label for="lineId1">零件号:</label>
-                <input type="text" class="form-control" name="lineId" id="lineId1" placeholder="请输入查询的零件号"/>
+                <label for="queryLineId">零件号:</label>
+                <input type="text" class="form-control" name="queryLineId" id="queryLineId" placeholder="请输入查询的零件号"/>
             </div>
             <div class="form-group">
                 <button type="button" id="queryBtn1" class="btn btn-primary">查询</button>
@@ -24,15 +24,16 @@
     </div>
     <div class="content col-lg-7">
         <div class="form-group">
-            <button type="button" id="synthetic" onclick="doSubmit()" class="btn btn-primary" style="width: 150px"
-                    data-toggle="modal" data-target="#myModal">生成工艺合件
-            </button>
-            <ul id="Ztree2" class="ztree  col-md-5"
-                style="width:300px;overflow-y: scroll;height: 500px; overflow:auto;"></ul>
+            <!--<button type="button" id="synthetic"  class="btn btn-primary" style="width: 150px"-->
+            <!--data-toggle="modal" data-target="#myModal">生成工艺合件-->
+            <!--</button>-->
+            <button type="button" id="synthetic" class="btn btn-primary" style="width: 150px">生成工艺合件</button>
+            <!--<ul id="Ztree2" class="ztree  col-md-5"
+                style="width:300px;overflow-y: scroll;height: 500px; overflow:auto;"></ul>-->
         </div>
 
 
-        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+       <!-- <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
              aria-hidden="true">
             <div class="modal-dialog" style="width: 500px;height: 650px;overflow: auto;">
                 <div class="modal-content">
@@ -40,12 +41,12 @@
                         <div class="form-group">
                             <label for="lineId">合成零件号</label>
                             <input class="form-control" id="lineId" name="lineId" type="text"
-                                   placeholder="请输入合成零件号"/><!--th:value="${entity.level}"-->
+                                   placeholder="请输入合成零件号"/>&lt;!&ndash;th:value="${entity.level}"&ndash;&gt;
                         </div>
                         <div class="form-group">
                             <label for="pBomOfWhichDept">专业</label>
                             <input class="form-control" id="pBomOfWhichDept" name="pBomOfWhichDept" type="text"
-                                   placeholder="请输入专业"/><!--th:value="${entity.level}"-->
+                                   placeholder="请输入专业"/>&lt;!&ndash;th:value="${entity.level}"&ndash;&gt;
                         </div>
                         <div class="form-group">
                             <label for="h9_IsCommon">零件分类</label>
@@ -97,27 +98,27 @@
                         <div class="form-group">
                             <label for="workShop1">车间1</label>
                             <input class="form-control" id="workShop1" name="workShop1" type="text"
-                                   placeholder="请输入车间1"/><!--th:value="${entity.level}"-->
+                                   placeholder="请输入车间1"/>&lt;!&ndash;th:value="${entity.level}"&ndash;&gt;
                         </div>
                         <div class="form-group">
                             <label for="workShop2">车间2</label>
                             <input class="form-control" id="workShop2" name="workShop2" type="text"
-                                   placeholder="请输入车间2"/><!--th:value="${entity.level}"-->
+                                   placeholder="请输入车间2"/>&lt;!&ndash;th:value="${entity.level}"&ndash;&gt;
                         </div>
                         <div class="form-group">
                             <label for="productLine">生产线</label>
                             <input class="form-control" id="productLine" name="productLine" type="text"
-                                   placeholder="请输入生产线"/><!--th:value="${entity.level}"-->
+                                   placeholder="请输入生产线"/>&lt;!&ndash;th:value="${entity.level}"&ndash;&gt;
                         </div>
                         <div class="form-group">
                             <label for="mouldType">模具类型</label>
                             <input class="form-control" id="mouldType" name="mouldType" type="text"
-                                   placeholder="请输入模具类型"/><!--th:value="${entity.level}"-->
+                                   placeholder="请输入模具类型"/>&lt;!&ndash;th:value="${entity.level}"&ndash;&gt;
                         </div>
                         <div class="form-group">
                             <label for="outerPart">外委件</label>
                             <input class="form-control" id="outerPart" name="outerPart" type="text"
-                                   placeholder="请输入外委件"/><!--th:value="${entity.level}"-->
+                                   placeholder="请输入外委件"/>&lt;!&ndash;th:value="${entity.level}"&ndash;&gt;
                         </div>
                         <div class="form-group">
                             <label for="colorPart">颜色件</label>
@@ -130,7 +131,7 @@
                         <div class="form-group">
                             <label for="station">工位</label>
                             <input class="form-control" id="station" name="station" type="text"
-                                   placeholder="请输入工位"/><!--th:value="${entity.level}"-->
+                                   placeholder="请输入工位"/>&lt;!&ndash;th:value="${entity.level}"&ndash;&gt;
                         </div>
                         </form>
                     </div>
@@ -138,18 +139,77 @@
                         <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
                         <button type="button" class="btn btn-primary">确定</button>
                     </div>
-                </div><!-- /.modal-content -->
-            </div><!-- /.modal -->
-        </div>
-
-
+                </div>&lt;!&ndash; /.modal-content &ndash;&gt;
+            </div>&lt;!&ndash; /.modal &ndash;&gt;
+        </div>-->
         <div style="width:450px;height: 550px;overflow-y:scroll; overflow:auto;">
             <table align="center" valign="center" class="table table-striped tableNormalStyle" id="detailTable">
+                <!-- <tr>
+                     <th>序号</th>
+                     <td id="No1"></td>
+                     <th>层级</th>
+                     <td id="level1"></td>
+                 </tr>
+                 <tr>
+                     <th>专业</th>
+                     <td id="pBomOfWhichDept1"></td>
+                     <th>级别</th>
+                     <td id="rank1"></td>
+                 </tr>
+                 <tr>
+                     <th>分组号</th>
+                     <td id="groupNum1"></td>
+                     <th>零件号</th>
+                     <td id="lineId1"></td>
+                 </tr>
+
+                 <tr>
+                     <th>名称</th>
+                     <td id="pBomLinePartName1"></td>
+                     <th>英文名称</th>
+                     <td id="pBomLinePartEnName1"></td>
+                 </tr>
+                 <tr>
+                     <th>零件分类</th>
+                     <td id="pBomLinePartClass1"></td>
+                     <th>零部件来源</th>
+                     <td id="pBomLinePartResource1"></td>
+                 </tr>
+                 <tr>
+                     <th>自制/采购</th>
+                     <td id="resource1"></td>
+                     <th>焊接/装配</th>
+                     <td id="type1"></td>
+                 </tr>
+                 <tr>
+                     <th>采购单元</th>
+                     <td id="buyUnit1"></td>
+                     <th>车间1</th>
+                     <td id="workShop11"></td>
+                 </tr>
+                 <tr>
+                     <th>车间2</th>
+                     <td id="workShop21"></td>
+                     <th>生产线</th>
+                     <td id="productLine1"></td>
+                 </tr>
+                 <tr>
+                     <th>模具类别</th>
+                     <td id="mouldType1"></td>
+                     <th>外委件</th>
+                     <td id="outerPart1"></td>
+                 </tr>
+                 <tr>
+                     <th>颜色件</th>
+                     <td id="colorPart1"></td>
+                     <th>工位</th>
+                     <td id="station1"></td>
+                 </tr>-->
             </table>
         </div>
         <!--<div id="newtable"></div>-->
     </div>
 </div>
-<script th:src="@{/js//bom/pbom/craftFitting.js}"></script>
+<script th:src="@{/js/bom/pbom/craftFitting.js}"></script>
 </body>
 </html>
