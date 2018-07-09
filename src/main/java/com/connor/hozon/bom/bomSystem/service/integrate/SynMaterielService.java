@@ -68,7 +68,7 @@ public class SynMaterielService implements ISynMaterielService {
     /**
      * 发送全部
      *
-     * @param projectPuid
+     * @param projectPuid 006567
      * @return
      */
     @Override
@@ -83,7 +83,9 @@ public class SynMaterielService implements ISynMaterielService {
         transMasterMaterialService.setClearInputEachTime(true);
         HzMaterielQuery query = new HzMaterielQuery();
         query.setProjectId(projectPuid);
-        List<HzMaterielRecord> sorted = hzMaterielDAO.findHzMaterielForList(query);
+        List<HzMaterielRecord> src = hzMaterielDAO.findHzMaterielForList(query);
+        List<HzMaterielRecord> sorted = new ArrayList<>();
+        src.stream().filter(_s -> _s.getpMaterielType() != null).forEach(_s -> sorted.add(_s));
         result = execute(sorted, ActionFlagOption.ADD);
         return result;
     }
@@ -131,7 +133,7 @@ public class SynMaterielService implements ISynMaterielService {
      * 执行操作
      *
      * @param sorted
-     * @param option
+     * @param option     
      * @return
      */
     private JSONObject execute(List<HzMaterielRecord> sorted, ActionFlagOption option) {
@@ -149,7 +151,7 @@ public class SynMaterielService implements ISynMaterielService {
         boolean hasFail = false;
 
         for (HzMaterielRecord record : sorted) {
-            if (null == record.getpMaterielDesc() || "".equalsIgnoreCase(record.getpMaterielDesc()))
+            if (!validate(record))
                 continue;
             ReflectMateriel reflectMateriel = new ReflectMateriel(record);
             /////////////////////////////////////////////////////手动设置一些必填参数////////////////////////////////////////////////////
@@ -175,14 +177,24 @@ public class SynMaterielService implements ISynMaterielService {
         }
         transMasterMaterialService.execute();
         List<ZPPTCO001> resultPool = transMasterMaterialService.getOut().getItem();
-
+        int counter = 0;
+        String br = "&emsp;&emsp;";
         for (ZPPTCO001 zpptco001 : resultPool) {
             if ("S".equalsIgnoreCase(zpptco001.getTYPE())) {
-                sbs.append("&emsp;&emsp;&emsp;&emsp;" + _mapCoach.get(zpptco001.getGUID()).getpMaterielCode() + "<br/>");
+                //3开始断行
+                if (counter % 3 == 0) {
+                    br = "<br/>";
+                    counter = 0;
+                }
+                sbs.append("&emsp;&emsp;&emsp;&emsp;" + _mapCoach.get(zpptco001.getGUID()).getpMaterielCode() + br);
             } else {
                 sbf.append("&emsp;&emsp;&emsp;&emsp;" + _mapCoach.get(zpptco001.getGUID()).getpMaterielCode() + "(" + zpptco001.getMESSAGE() + ")<br/>");
                 hasFail = true;
             }
+            if (br.equals("<br/>")) {
+                br = "&emsp;&emsp;";
+            }
+            counter++;
         }
         if (hasFail) {
             result.put("msg", sbs.append("<br/>" + sbf).toString());
@@ -193,4 +205,11 @@ public class SynMaterielService implements ISynMaterielService {
         return result;
     }
 
+    private boolean validate(HzMaterielRecord record) {
+        if (null == record.getpMaterielDesc() || "".equalsIgnoreCase(record.getpMaterielDesc()) || null == record.getpFactoryPuid() || "".equals(record.getpFactoryPuid())) {
+            return false;
+        } else {
+            return true;
+        }
+    }
 }

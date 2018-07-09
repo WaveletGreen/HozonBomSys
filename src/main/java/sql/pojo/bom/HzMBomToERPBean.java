@@ -38,6 +38,10 @@ public class HzMBomToERPBean {
      */
     private String bomOrderNum;
     /**
+     * 是否是2Y层
+     */
+    private String is2Y;
+    /**
      * 库存地点
      */
     private String stockLocation;
@@ -128,6 +132,14 @@ public class HzMBomToERPBean {
 
     public String getBomOrderNum() {
         return bomOrderNum;
+    }
+
+    public String getIs2Y() {
+        return is2Y;
+    }
+
+    public void setIs2Y(String is2Y) {
+        this.is2Y = is2Y;
     }
 
     public void setBomOrderNum(String bomOrderNum) {

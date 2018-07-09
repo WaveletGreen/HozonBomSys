@@ -51,8 +51,11 @@ public class SynBomController {
     @RequestMapping("/deleteByUids")
     @ResponseBody
     public JSONObject deleteByUids(@RequestBody List<EditHzMaterielReqDTO> dtos, @RequestParam("projectUid") String projectUid) {
-        JSONObject result = new JSONObject();
-        return bomService.deleteByUids(dtos);
+        JSONObject result = validate(dtos, projectUid);
+        if (!result.getBoolean("status")) {
+            return result;
+        }
+        return bomService.deleteByUids(dtos.get(0).getPuid(), projectUid);
     }
 
     /**
@@ -64,8 +67,26 @@ public class SynBomController {
     @RequestMapping("/updateByUids")
     @ResponseBody
     public JSONObject updateByUids(@RequestBody List<EditHzMaterielReqDTO> dtos, @RequestParam("projectUid") String projectUid) {
+        JSONObject result = validate(dtos, projectUid);
+        if (!result.getBoolean("status")) {
+            return result;
+        }
+        return bomService.updateByUids(dtos.get(0).getPuid(), projectUid);
+    }
+
+    private JSONObject validate(List<EditHzMaterielReqDTO> dtos, String projectUid) {
         JSONObject result = new JSONObject();
-        return bomService.updateByUids(dtos);
+        if (dtos == null || dtos.isEmpty()) {
+            result.put("status", false);
+            result.put("msg", "没有选择任何1条MBOM行数据");
+            return result;
+        } else if (projectUid == null || "".equals(projectUid)) {
+            result.put("status", false);
+            result.put("msg", "请选择项目再进行操作!");
+            return result;
+        }
+        result.put("status", true);
+        return result;
     }
 
 }

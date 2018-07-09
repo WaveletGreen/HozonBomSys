@@ -138,22 +138,23 @@ public class ReflectBom {
         //单位，如果没有则默认设为EA
         Object obj = SerializeUtil.unserialize(bomToERPBean.getBomLineBlock());
         if (obj instanceof LinkedHashMap) {
-            setUnit((String) ((LinkedHashMap) obj).get("h9_Gross_Unit"));
+            String unit = (String) ((LinkedHashMap) obj).get("h9_Gross_Unit");
+            setUnit((unit == null || "".equals(unit) ? "EA" : unit));
         } else {
             setUnit("EA");
         }
         //发料库存地点
-        setStockLocation(bomToERPBean.getStockLocation());
+        setStockLocation(bomToERPBean.getStockLocation() == null ? "ZP02" : bomToERPBean.getStockLocation());
         //相关性（选配条件）
         setRelevance(bomToERPBean.getCfg0Relevance());
         //采购件下级件标识,TC系统传输02或空，SAP系统会将02转化为L
         setPurchaseFlag("");
         //装配位置
-        setAssemblyPoint(bomToERPBean.getFNAInfo());
+        setAssemblyPoint(bomToERPBean.getFNAInfo() == null ? "FNA" : bomToERPBean.getFNAInfo());
         //使用车间
-        setUseWorkshop(bomToERPBean.getWorkShop());
+        setUseWorkshop(bomToERPBean.getWorkShop() == null ? "1" : bomToERPBean.getWorkShop());
         //工位
-        setStation(bomToERPBean.getStation());
+        setStation(bomToERPBean.getStation() == null ? "1" : bomToERPBean.getStation());
 
     }
 
@@ -207,7 +208,7 @@ public class ReflectBom {
     }
 
     public void setChildOfBomLine(String childOfBomLine) {
-        zpptci005.setZMATNRC(headOfBomLine);
+        zpptci005.setZMATNRC(childOfBomLine);
         this.childOfBomLine = childOfBomLine;
     }
 
