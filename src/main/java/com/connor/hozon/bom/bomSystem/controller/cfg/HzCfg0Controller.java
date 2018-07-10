@@ -153,7 +153,7 @@ public class HzCfg0Controller {
 
     @RequestMapping(value = "/sendToERP", method = RequestMethod.POST)
     @ResponseBody
-    public JSONObject sendToERP(@RequestBody List<HzCfg0Record> records) {
+    public JSONObject sendToERP(@RequestBody List<HzCfg0Record> records) throws Exception {
         transCfgService.setClearInputEachTime(true);
         List<HzCfg0Record> toSend = new ArrayList<>();
         List<Features> featuresList = new ArrayList<>();
@@ -302,7 +302,7 @@ public class HzCfg0Controller {
 
     @RequestMapping(value = "/sendRelToERP", method = RequestMethod.POST)
     @ResponseBody
-    public JSONObject sendRelToERP(@RequestBody List<HzRelevanceBean> beans) {
+    public JSONObject sendRelToERP(@RequestBody List<HzRelevanceBean> beans) throws Exception {
         //清空上次传输的内容
         transOptionsService.setClearInputEachTime(true);
         Map<String, HzRelevanceBean> _mapCoach = new HashMap<>();

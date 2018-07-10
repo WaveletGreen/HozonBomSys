@@ -105,12 +105,17 @@ public class ReflectBom {
      */
     private String station;
 
+    /***
+     * 对应数据库的puid
+     */
+    private String puid;
+
     private HzMBomToERPBean bomToERPBean;
 
     public ReflectBom(HzMBomToERPBean bomToERPBean) {
         this.bomToERPBean = bomToERPBean;
         zpptci005 = new ZPPTCI005();
-
+        this.puid = bomToERPBean.getPuid();
         //更改编号
         setModifyCode(bomToERPBean.getChangeNum());
         //工程更改号描述
@@ -346,5 +351,13 @@ public class ReflectBom {
 
     public String getTCModifyCode() {
         return TCModifyCode;
+    }
+
+    public String getPuid() {
+        return puid;
+    }
+
+    public void setPuid(String puid) {
+        this.puid = puid;
     }
 }

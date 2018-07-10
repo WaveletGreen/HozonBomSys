@@ -5,6 +5,7 @@ import com.connor.hozon.bom.resources.dto.request.EditHzMaterielReqDTO;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -24,12 +25,14 @@ public class SynBomController {
     @Autowired
     ISynBomService bomService;
 
+    /*   */
+
     /**
      * 根据项目同步所有数据
      *
      * @param projectUid
      * @return
-     */
+     *//*
     @RequestMapping("/synAllBomByProjectPuid")
     @ResponseBody
     public JSONObject synAllBomByProjectPuid(@RequestParam("projectUid") String projectUid) {
@@ -40,6 +43,21 @@ public class SynBomController {
             return result;
         }
         return bomService.synAllByProjectUid(projectUid);
+    }*/
+    @RequestMapping("/synAllBomByProjectPuid")
+    public String synAllBomByProjectPuid(@RequestParam("projectUid") String projectUid, Model model) {
+        if (projectUid == null || "".equals(projectUid)) {
+            model.addAttribute("msg", "未选择项目进行操作，请选择一个项目再操作!");
+            return "errorWithEntity";
+        }
+
+        JSONObject entities = bomService.synAllByProjectUid(projectUid);
+
+        model.addAttribute("msgOfSuccess", "发送成功项");
+        model.addAttribute("msgOfFail", "发送失败项");
+        model.addAttribute("success", entities.get("success"));
+        model.addAttribute("fail", entities.get("fail"));
+        return "stage/templateOfIntegrate";
     }
 
     /**

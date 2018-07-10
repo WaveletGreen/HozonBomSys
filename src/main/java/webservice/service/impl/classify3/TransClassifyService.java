@@ -63,8 +63,11 @@ public class TransClassifyService extends Author implements ITransmitService {
      * @return 请看接口@{@link ITransmitService}定义
      */
     @Override
-    public TABLEOFZPPTCO005 execute() {
+    public TABLEOFZPPTCO005 execute() throws Exception {
         //一定要有一个输出参数，否则报错
+        if (setClearInputEachTime) {
+            out.getItem().clear();
+        }
         if (t == null) {
             out.getItem().add(t = new ZPPTCO005());
         }

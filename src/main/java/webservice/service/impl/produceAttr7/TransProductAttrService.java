@@ -62,7 +62,10 @@ public class TransProductAttrService extends Author implements ITransmitService 
      * @return 请看接口@{@link ITransmitService}定义
      */
     @Override
-    public TABLEOFZPPTCO007 execute() {
+    public TABLEOFZPPTCO007 execute() throws Exception {
+        if (setClearInputEachTime) {
+            out.getItem().clear();
+        }
         //一定要有一个输出参数，否则报错
         if (t == null) {
             out.getItem().add(t = new ZPPTCO007());

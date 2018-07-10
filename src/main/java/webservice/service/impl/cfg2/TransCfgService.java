@@ -69,8 +69,11 @@ public class TransCfgService extends Author implements ITransmitService {
      * @return 请看接口@{@link ITransmitService}定义
      */
     @Override
-    public TABLEOFZPPTCO002 execute() {
+    public TABLEOFZPPTCO002 execute() throws Exception {
         //一定要有一个输出参数，否则报错
+        if (setClearInputEachTime) {
+            out.getItem().clear();
+        }
         if (t == null) {
             out.getItem().add(t = new ZPPTCO002());
         }
@@ -115,7 +118,7 @@ public class TransCfgService extends Author implements ITransmitService {
         return out;
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         TransCfgService transCfgService=new TransCfgService();
         Features features = new Features();
         String packnum = UUID.randomUUID().toString().replaceAll("-", "");

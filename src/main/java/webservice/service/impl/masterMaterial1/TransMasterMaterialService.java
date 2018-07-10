@@ -68,7 +68,9 @@ public class TransMasterMaterialService extends Author implements ITransmitServi
     @Override
     public TABLEOFZPPTCO001 execute() {
         try {
-
+            if (setClearInputEachTime) {
+                out.getItem().clear();
+            }
             //一定要有一个输出参数，否则报错
             if (t == null) {
                 out.getItem().add(t = new ZPPTCO001());

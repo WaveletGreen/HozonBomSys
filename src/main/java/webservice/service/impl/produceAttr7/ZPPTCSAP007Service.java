@@ -12,7 +12,7 @@ import javax.xml.ws.Holder;
  */
 public class ZPPTCSAP007Service extends ZPPTCSAP007_Service implements IExecutor {
     @Override
-    public <T, E> void doExecute(Holder<T> input, Holder<E> output) {
+    public <T, E> void doExecute(Holder<T> input, Holder<E> output)throws Exception{
         super.getZPPTCSAP007().zppTCSAP007((Holder<TABLEOFZPPTCI007>) input, (Holder<TABLEOFZPPTCO007>) output);
     }
 }

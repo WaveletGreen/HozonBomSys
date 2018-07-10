@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<!--<head th:include="include/ofBom">-->
+<!--</head>-->
+<title>传输结果</title>
+<meta charset="UTF-8">
+<body class="content-body">
+<div class="panel-body">
+    <div style="overflow:scroll;max-height: 400px;width: inherit;">
+        <table class="table table-striped tableNormalStyle"
+               id="dataOfSuccessTable">
+            <tr>
+                <th th:text="${msgOfSuccess}" style="text-align: left"></th>
+                <th style="text-align: left">消息</th>
+            </tr>
+            <tr th:each="entity,index:${success}">
+                <td th:text="${entity.itemId}"></td>
+                <td th:text="${entity.msg}"></td>
+                <!--<td hidden="hidden"></td>-->
+            </tr>
+        </table>
+    </div>
+    <div style="overflow:scroll;max-height: 400px;width: inherit;">
+        <table class="table table-striped tableNormalStyle" id="dataOfFailTable">
+            <tr>
+                <th th:text="${msgOfFail}" style="text-align: left"></th>
+                <th style="text-align: left">消息</th>
+            </tr>
+            <tr th:each="entity,index:${fail}">
+                <td th:text="${entity.itemId}"></td>
+                <td th:text="${entity.msg}"></td>
+                <!--<td hidden="hidden"></td>-->
+            </tr>
+        </table>
+    </div>
+</div>
+
+</body>
+</html>

@@ -70,7 +70,7 @@ public class Author {
     public Holder<? extends ICommon> execute(
             IExecutor serviceExecutor,
             Holder<? extends ICommon> inputContainer,
-            Holder<? extends ICommon> outputContainer) {
+            Holder<? extends ICommon> outputContainer) throws Exception {
         if (validateInput(inputContainer)) {
             serviceExecutor.doExecute(inputContainer, outputContainer);
             if (validateOutput(outputContainer)) {

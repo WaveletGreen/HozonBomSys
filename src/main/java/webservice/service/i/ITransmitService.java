@@ -17,5 +17,5 @@ public interface ITransmitService {
      * <p>
      * <strong>如果输出参数没有，则返回null</strong>
      */
-    <T> T execute();
+    <T> T execute() throws Exception;
 }
