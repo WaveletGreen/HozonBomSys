@@ -5,6 +5,7 @@ import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.page.PageRequest;
 import com.connor.hozon.bom.resources.query.HzPbomByPageQuery;
 import com.connor.hozon.bom.resources.query.HzPbomTreeQuery;
+import org.mapstruct.ap.shaded.freemarker.ext.beans.HashAdapter;
 import org.springframework.stereotype.Service;
 import sql.BaseSQLUtil;
 import sql.pojo.bom.HzBomLineRecord;
@@ -65,9 +66,11 @@ public class HzPbomRecordDAOImpl extends BaseSQLUtil implements HzPbomRecordDAO 
     }
 
     @Override
-    public HzPbomRecord getHzPbomByEbomPuid(String eBomPuid) {
-
-        return (HzPbomRecord) super.findForObject("HzPbomRecordDAOImpl_getHzPbomByEbomPuid",eBomPuid);
+    public HzPbomLineRecord getHzPbomByEbomPuid(String eBomPuid,String projectId) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("projectId",projectId);
+        map.put("ebomPuid",eBomPuid);
+        return (HzPbomLineRecord) super.findForObject("HzPbomRecordDAOImpl_getHzPbomByEbomPuid",map);
     }
 
     @Override

@@ -9,8 +9,8 @@
 <body>
 <div id="content" class="row-fluid" style="height:auto">
     <div class="content row-fluid col-md-4 col-lg-4">
-        <h3><p class="text-primary">请选择您要合成的零件</p></h3>
-        <form class="form-inline">
+        <h3><p class="text-primary" id="demo1">请选择您要合成的零件</p></h3>
+        <form class="form-inline" id="demo2">
             <div class="form-group">
                 <label for="queryLineId">零件号:</label>
                 <input type="text" class="form-control" name="queryLineId" id="queryLineId" placeholder="请输入查询的零件号"/>
@@ -48,5 +48,6 @@
     </div>
 </div>
 <script th:src="@{/js/bom/pbom/craftFitting.js}"></script>
+<script th:src="@{/js/bom/pbom/demo.js}"></script>
 </body>
 </html>

@@ -58,7 +58,7 @@ public interface HzPbomRecordDAO {
      * @param eBomPuid
      * @return
      */
-    HzPbomRecord getHzPbomByEbomPuid(String eBomPuid);
+    HzPbomLineRecord getHzPbomByEbomPuid(String eBomPuid,String projectId);
 
     /**
      * 获取Pbom 总数

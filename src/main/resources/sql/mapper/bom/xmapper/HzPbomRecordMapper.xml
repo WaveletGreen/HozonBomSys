@@ -188,10 +188,22 @@
 
 
   <!--获取一条 PBOM记录-->
-  <select id="HzPbomRecordDAOImpl_getHzPbomByEbomPuid" resultMap="BaseResultMap" parameterType="java.lang.String">
+  <select id="HzPbomRecordDAOImpl_getHzPbomByEbomPuid" resultMap="HzPbomLineRecord" parameterType="java.util.HashMap">
 
-    SELECT * FROM HZ_PBOM_RECORD WHERE P_E_BOM_PUID = #{eBomPuid,jdbcType=VARCHAR} AND P_PBOM_STATUS=1
-
+    SELECT * FROM HZ_PBOM_RECORD
+    where  p_bom_digifax_id=(
+    select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(
+    select t2.puid from Hz_project_libs t2
+    <where>
+    1=1
+    <if test="projectId != null and  projectId!='' " >
+      and t2.puid = #{projectId,jdbcType=VARCHAR}))
+    </if>
+    <if test="eBomPuid != null and  eBomPuid!='' " >
+      and P_E_BOM_PUID = #{eBomPuid,jdbcType=VARCHAR}
+    </if>
+     and P_PBOM_STATUS=1
+    </where>
   </select>
   
 

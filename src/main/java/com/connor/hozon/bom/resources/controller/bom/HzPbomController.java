@@ -9,7 +9,6 @@ import com.connor.hozon.bom.resources.dto.response.HzPbomLineRespDTO;
 import com.connor.hozon.bom.resources.dto.response.OperateResultMessageRespDTO;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.query.HzPbomByPageQuery;
-import com.connor.hozon.bom.resources.query.HzPbomTreeQuery;
 import com.connor.hozon.bom.resources.service.bom.HzPbomService;
 import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.resources.util.ResultMessageBuilder;
@@ -214,34 +213,26 @@ public class HzPbomController extends BaseController {
         HzPbomLineRespDTO respDTO = new HzPbomLineRespDTO();
         respDTO.setPuids(puids);
         model.addAttribute("data",respDTO);
-        return "bomManage/pbom/processOfFitting/updateProcessOfFitting";
+        return "bomManage/pbom/processOfFitting/updataProcessOfFitting";
     }
 
     /**
      * 合成工艺合件
      * @param
-     * @param
+     * @param response
      */
     @RequestMapping(value = "/add/processCompose",method = RequestMethod.POST)
     public void addProcessCompose(@RequestBody AddHzPbomRecordReqDTO recordReqDTO,HttpServletResponse response){
+//        OperateResultMessageRespDTO operateResultMessageRespDTO = hzPbomService.andProcessCompose(recordReqDTO);
+//        operateResultMessageRespDTO.setOtherParam(recordReqDTO.getLineId());
         HzPbomProcessComposeReqDTO reqDTO = new HzPbomProcessComposeReqDTO();
+        reqDTO.setLineId("S00-6107001");
         reqDTO.setProjectId(recordReqDTO.getProjectId());
-        reqDTO.setLineId("S00-5402130");
         JSONArray jsonArray = hzPbomService.getPbomForProcessCompose(reqDTO);
         writeAjaxJSONResponse(jsonArray,response);
+//        writeAjaxJSONResponse(ResultMessageBuilder.build(recordReqDTO),response);
+
     }
 
-    /**
-     * 合成工艺合件
-     * @param
-     * @param
-     */
-//    @RequestMapping(value = "/add/processCompose",method = RequestMethod.POST)
-//    public void addProcessqCompose(@RequestBody AddHzPbomRecordReqDTO recordReqDTO,Model model){
-//        OperateResultMessageRespDTO operateResultMessageRespDTO = new OperateResultMessageRespDTO();
-//        operateResultMessageRespDTO.setOtherParam(recordReqDTO.getLineId());
-//        model.addAttribute("data",operateResultMessageRespDTO);
-//
-//    }
 
 }

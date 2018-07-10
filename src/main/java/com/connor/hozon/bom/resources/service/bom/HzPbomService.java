@@ -76,8 +76,8 @@ public interface HzPbomService {
 
     /**
      * 创建工艺合件
-     * @param recordReqDTOs
+     * @param recordReqDTO
      * @return
      */
-    OperateResultMessageRespDTO andProcessCompose(List<AddHzPbomRecordReqDTO> recordReqDTOs,String projectId);
+    OperateResultMessageRespDTO andProcessCompose(AddHzPbomRecordReqDTO recordReqDTO);
 }
