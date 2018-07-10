@@ -42,7 +42,6 @@ $(function () {
                 "station": $("#station").val(),
                 "projectId": $("#project", window.top.document).val()
             });
-            console.log(myData);
             $.ajax({
                 contentType:
                     "application/json",

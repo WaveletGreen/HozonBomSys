@@ -200,49 +200,39 @@ $(document).ready(function () {
             })
         }
     })
-
-
-
-  /*  var data1='${data}';
-    console.log(data1)
-    var setting = {
-        view: {
-            selectedMulti: false,
-            dblClickExpand:
-                false,
-            showLine:
-                true,
-        },
-        check: {
-            enable: true
-        },
-        data: {
-            simpleData: {
-                enable: true,
-                idKey:
-                    "puid",
-                pIdKey:
-                    "parentUid",
-                rootPId:
-                    "#"
-            },
-            key: {
-                checked:
-                    "CHECKED",
-                name:
-                    "lineId",
-            }
+    $("#synthetic1").click(function () {
+        if (coach1.length!=0){
+            var myData = JSON.stringify({
+                "eBomPuid" :coach1,
+                "puids":puids
+            })
+            console.log(myData)
+            $.ajax({
+                url:"pbom/add/processCompose",
+                data:myData,
+                type:"POST",
+                contentType: "application/json",
+                success: function (result) {
+                    window.Ewin.alert({message: result.errMsg});
+                    refreshParentNode();
+                },
+                error: function (status) {
+                    window.Ewin.alert({message: status.status + ':生成工艺合件失败!'});
+                }
+            })
         }
+    })
+    function refreshParentNode() {
+        var zTree = $.fn.zTree.getZTreeObj("Ztree3"),
+            type = "refresh",
+            silent = false,
+            nodes = zTree.getSelectedNodes();
+        /*根据 zTree 的唯一标识 tId 快速获取节点 JSON 数据对象*/
+        var parentNode = zTree.getNodeByTId(nodes[0].parentTId);
+        /*选中指定节点*/
+        zTree.selectNode(parentNode);
+        zTree.reAsyncChildNodes(parentNode, type, silent);
     }
-    var zNodes = data1;
-
-    $(document).ready(function () {
-        $.fn.zTree.init($("#Ztree1"), setting, zNodes);
-    });
-*/
-
-
-
     $("#queryBtn2").click(function () {
         var val = $("#queryLineId2").val();
         if (val == "") {

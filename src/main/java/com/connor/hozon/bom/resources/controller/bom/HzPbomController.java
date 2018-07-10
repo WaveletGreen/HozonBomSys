@@ -213,7 +213,7 @@ public class HzPbomController extends BaseController {
         HzPbomLineRespDTO respDTO = new HzPbomLineRespDTO();
         respDTO.setPuids(puids);
         model.addAttribute("data",respDTO);
-        return "bomManage/pbom/processOfFitting/updataProcessOfFitting";
+        return "bomManage/pbom/processOfFitting/updateProcessOfFitting";
     }
 
     /**
@@ -226,7 +226,7 @@ public class HzPbomController extends BaseController {
 //        OperateResultMessageRespDTO operateResultMessageRespDTO = hzPbomService.andProcessCompose(recordReqDTO);
 //        operateResultMessageRespDTO.setOtherParam(recordReqDTO.getLineId());
         HzPbomProcessComposeReqDTO reqDTO = new HzPbomProcessComposeReqDTO();
-        reqDTO.setLineId("S00-6107001");
+        reqDTO.setLineId("S00-5402180");
         reqDTO.setProjectId(recordReqDTO.getProjectId());
         JSONArray jsonArray = hzPbomService.getPbomForProcessCompose(reqDTO);
         writeAjaxJSONResponse(jsonArray,response);
