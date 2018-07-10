@@ -9,6 +9,7 @@ import com.connor.hozon.bom.resources.dto.response.HzPbomLineRespDTO;
 import com.connor.hozon.bom.resources.dto.response.OperateResultMessageRespDTO;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.query.HzPbomByPageQuery;
+import com.connor.hozon.bom.resources.query.HzPbomTreeQuery;
 import com.connor.hozon.bom.resources.service.bom.HzPbomService;
 import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.resources.util.ResultMessageBuilder;
@@ -213,27 +214,34 @@ public class HzPbomController extends BaseController {
         HzPbomLineRespDTO respDTO = new HzPbomLineRespDTO();
         respDTO.setPuids(puids);
         model.addAttribute("data",respDTO);
-        return "bomManage/pbom/processOfFitting/updataProcessOfFitting";
+        return "bomManage/pbom/processOfFitting/updateProcessOfFitting";
     }
 
     /**
      * 合成工艺合件
      * @param
-     * @param response
+     * @param
      */
     @RequestMapping(value = "/add/processCompose",method = RequestMethod.POST)
     public void addProcessCompose(@RequestBody AddHzPbomRecordReqDTO recordReqDTO,HttpServletResponse response){
-
-
-        //        if(projectId==null){
-//            writeAjaxJSONResponse(ResultMessageBuilder.build(false,"非法参数！"),response);
-//            return;
-//        }
-        OperateResultMessageRespDTO operateResultMessageRespDTO = new OperateResultMessageRespDTO();
-        operateResultMessageRespDTO.setOtherParam(recordReqDTO.getLineId());
-        writeAjaxJSONResponse(ResultMessageBuilder.build(operateResultMessageRespDTO),response);
-
+        HzPbomProcessComposeReqDTO reqDTO = new HzPbomProcessComposeReqDTO();
+        reqDTO.setProjectId(recordReqDTO.getProjectId());
+        reqDTO.setLineId("S00-5402130");
+        JSONArray jsonArray = hzPbomService.getPbomForProcessCompose(reqDTO);
+        writeAjaxJSONResponse(jsonArray,response);
     }
 
+    /**
+     * 合成工艺合件
+     * @param
+     * @param
+     */
+//    @RequestMapping(value = "/add/processCompose",method = RequestMethod.POST)
+//    public void addProcessqCompose(@RequestBody AddHzPbomRecordReqDTO recordReqDTO,Model model){
+//        OperateResultMessageRespDTO operateResultMessageRespDTO = new OperateResultMessageRespDTO();
+//        operateResultMessageRespDTO.setOtherParam(recordReqDTO.getLineId());
+//        model.addAttribute("data",operateResultMessageRespDTO);
+//
+//    }
 
 }

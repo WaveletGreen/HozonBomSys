@@ -153,15 +153,15 @@
                         'POST',
                     url: url,
                     data: myData,
-                    success:
-                        function (result) {
-                            $('.modal-dialog', window.top.document).parent('div').remove()
-                            $('body', window.top.document).find('.modal-backdrop').remove();
-                            // jquery 调用刷新当前操作的table页面的refresh方法
-                            $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
-
-                            window.Ewin.alert({message: result.errMsg});
-                        },
+                    success: function (result) {
+                        var data = JSON.stringify(result);
+                        var da = JSON.parse(data)
+                        $('.modal-dialog', window.top.document).parent('div').remove()
+                        $('body', window.top.document).find('.modal-backdrop').remove();
+                        // jquery 调用刷新当前操作的table页面的refresh方法
+                        // $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
+                        window.Ewin.alert({message: result.errMsg});
+                    },
                     error: function (status) {
                         window.Ewin.alert({message: status.status + ':生成工艺合件失败!'});
                     }
