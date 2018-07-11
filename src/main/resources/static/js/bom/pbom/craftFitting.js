@@ -207,7 +207,7 @@ $(document).ready(function () {
     $("#synthetic1").click(function () {
         allPuids = document.getElementById("demo3").innerText;
         if(allPuids == null || allPuids == ""){
-            window.Ewin.alert("勾一下嘛~");
+            window.Ewin.alert({message: "请选择您要生成工艺合件的零件号"});
             return;
         }
         puids = allPuids;
@@ -225,12 +225,186 @@ $(document).ready(function () {
                 contentType: "application/json",
                 success: function (result) {
                     window.Ewin.alert({message: result.errMsg});
-                    refreshParentNode();
+                    if(result.success){//成功
+                        var zTreeObj = $.fn.zTree.getZTreeObj("Ztree1");
+                        zTreeObj.destroy();
+                        $("#demo4").html("<p>"+""+"</p>")
+                        $("#demo3").html( "<p>"+""+"</p>");
+                        var zTree = $.fn.zTree.getZTreeObj("Ztree3");
+                        zTree.destroy();
+                        var val = $("#queryLineId2").val();
+                        $.ajax({
+                            type: "GET",
+                            url: "pbom/processComposeTree?lineId=" + val + "&projectId=" + projectId,
+                            undefinedText: "",//当数据为 undefined 时显示的字符
+                            success: function (data) {
+                                if(!data.success){
+                                    window.Ewin.alert({message: data.errMsg});
+                                    return;
+                                }
+                                var setting = {
+                                    view: {
+                                        selectedMulti: false,
+                                        dblClickExpand:
+                                            false,
+                                        showLine:
+                                            true,
+                                    },
+                                    check: {
+                                        enable: true,
+                                        chkStyle: "radio"
+                                    },
+                                    data: {
+                                        simpleData: {
+                                            enable: true,
+                                            idKey:
+                                                "puid",
+                                            pIdKey:
+                                                "parentUid",
+                                            rootPId:
+                                                "#"
+                                        },
+                                        key: {
+                                            checked:
+                                                "CHECKED",
+                                            name:
+                                                "lineId",
+                                        }
+                                    }
+                                    ,
+                                    //回调函数
+                                    callback: {
+                                        /*beforeClick:function(treeId, treeNode) {
+                                            return !treeNode.isParent;//当是父节点 返回false 不让选取
+                                        },*/
+                                        onCheck: function (e, treeId, treeNode) {
+                                            var treeObj = $.fn.zTree.getZTreeObj("Ztree3");
+                                            var nodes =
+                                                // treeObj.getSelectedNodes();
+                                                treeObj.getCheckedNodes(true);
+                                            console.log(nodes.length);
+
+                                            if (nodes.length>1){
+                                                window.Ewin.alert({message: "只能指定一个工艺合件的位置"});
+                                                for(var k=0;k<nodes.length;k++){
+                                                    treeObj.checkNode(nodes[k]);
+                                                }
+                                                return;
+                                            }
+                                            else if (nodes.length>0&&nodes.length<2) {
+                                                coach1.splice(0,coach1.length);
+                                                coach1.push(nodes[0].puid);
+                                            }else {
+                                                coach1.splice(0,coach1.length);
+                                            }
+                                        },
+                                        onClick: function (event, treeId, treeNode) {
+                                            // if (treeNode.level != 2) {
+                                            //     alert("该节点下有子节点,请选取子节点")
+                                            //     return;
+                                            // }
+                                            localSelectedNode1 = treeNode;
+                                            $.ajax({
+                                                url: "pbom/detail?puid=" + localSelectedNode1.puid + "&projectId=" + projectId,
+                                                type: "GET",
+                                                undefinedText: "",//当数据为 undefined 时显示的字符
+                                                success: function (data) {
+                                                    var result = JSON.stringify(data);
+                                                    var ddd = JSON.parse(result);
+                                                    var date = ddd.data;
+                                                    var va = date[0];
+                                                    var rel = "<table>"
+                                                    rel += "<tr>" +
+                                                        "<th>序号</th>" +
+                                                        "<td></td>" +
+                                                        "</tr><tr>"+
+                                                        "<th>层级</th>" +
+                                                        "<td>" + va.level + "</td>" +
+                                                        "</tr><tr>" +
+                                                        "<th>专业</th>" +
+                                                        "<td>" + va.pBomOfWhichDept + "</td>" +
+                                                        "</tr><tr>" +
+                                                        "<th>级别</th>" +
+                                                        "<td>" + va.rank + "</td>" +
+                                                        "</tr><tr>" +
+                                                        "<th>分组号</th>" +
+                                                        "<td>" + va.groupNum + "</td>" +
+                                                        "</tr><tr>" +
+                                                        "<th>零件号</th>" +
+                                                        "<td>" + va.lineId + "</td>" +
+                                                        "</tr><tr>" +
+                                                        "<th>名称</th>" +
+                                                        "<td>" + va.pBomLinePartName + "</td>" +
+                                                        "</tr><tr>" +
+                                                        "<th>英文名称</th>" +
+                                                        "<td>" + va.pBomLinePartEnName + "</td>" +
+                                                        "</tr><tr>" +
+                                                        "<th>零件分类</th>" +
+                                                        "<td>" + va.pBomLinePartClass + "</td>" +
+                                                        "</tr><tr>" +
+                                                        "<th>零部件来源</th>" +
+                                                        "<td>" + va.pBomLinePartResource + "</td>" +
+                                                        "</tr><tr>" +
+                                                        "<th>自制/采购</th>" +
+                                                        "<td>" + va.resource + "</td>" +
+                                                        "</tr><tr>" +
+                                                        "<th>焊接/装配</th>" +
+                                                        "<td>" + va.type + "</td>" +
+                                                        "</tr><tr>" +
+                                                        "<th>采购单元</th>" +
+                                                        "<td>" + va.buyUnit + "</td>" +
+                                                        "</tr><tr>" +
+                                                        "<th>车间1</th>" +
+                                                        "<td>" + va.workShop1 + "</td>" +
+                                                        "</tr><tr>" +
+                                                        "<th>车间2</th>" +
+                                                        "<td>" + va.workShop2 + "</td>" +
+                                                        "</tr><tr>" +
+                                                        "<th>生产线</th>" +
+                                                        "<td>" + va.productLine + "</td>" +
+                                                        "</tr><tr>" +
+                                                        "<th>模具类别</th>" +
+                                                        "<td>" + va.mouldType + "</td>" +
+                                                        "</tr><tr>" +
+                                                        "<th>外委件</th>" +
+                                                        "<td>" + va.outerPart + "</td>" +
+                                                        "</tr><tr>" +
+                                                        "<th>颜色件</th>" +
+                                                        "<td>" + va.colorPart + "</td>" +
+                                                        "</tr><tr>" +
+                                                        "<th>工位</th>" +
+                                                        "<td>" + va.station + "</td>" +
+                                                        "</tr>"
+                                                    rel += "</table>"
+                                                    $("#detailTable").html(rel);
+                                                },
+                                                error: function (err) {
+                                                    window.Ewin.alert({message: err.status});
+                                                }
+                                            })
+                                            localSelectedNode1 = treeNode;
+                                        },
+                                    }
+                                };
+                                var zNodes = data.externalObject;
+
+                                $(document).ready(function () {
+                                    $.fn.zTree.init($("#Ztree3"), setting, zNodes);
+                                });
+                            },
+                        });
+                    }
+                    if(!result.success){//失败
+
+                    }
+
                 },
                 error: function (status) {
                     window.Ewin.alert({message: status.status + ':生成工艺合件失败!'});
                 }
             })
+        }else {
+            window.Ewin.alert({message: "请指定您要合成的位置"});
         }
     })
     function refreshParentNode() {

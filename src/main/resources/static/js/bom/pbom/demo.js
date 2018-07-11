@@ -134,60 +134,61 @@ $(document).ready(function () {
                                                 rel += "<tr>" +
                                                     "<th>序号</th>" +
                                                     "<td></td>" +
+                                                    "</tr><tr>"+
                                                     "<th>层级</th>" +
                                                     "<td>" + va.level + "</td>" +
-                                                    "</tr>" +
-                                                    "<tr>" +
+                                                    "</tr><tr>" +
                                                     "<th>专业</th>" +
                                                     "<td>" + va.pBomOfWhichDept + "</td>" +
+                                                    "</tr><tr>" +
                                                     "<th>级别</th>" +
                                                     "<td>" + va.rank + "</td>" +
-                                                    "</tr>" +
-                                                    "<tr>" +
+                                                    "</tr><tr>" +
                                                     "<th>分组号</th>" +
                                                     "<td>" + va.groupNum + "</td>" +
+                                                    "</tr><tr>" +
                                                     "<th>零件号</th>" +
                                                     "<td>" + va.lineId + "</td>" +
-                                                    "</tr>" +
-                                                    "<tr>" +
+                                                    "</tr><tr>" +
                                                     "<th>名称</th>" +
                                                     "<td>" + va.pBomLinePartName + "</td>" +
+                                                    "</tr><tr>" +
                                                     "<th>英文名称</th>" +
                                                     "<td>" + va.pBomLinePartEnName + "</td>" +
-                                                    "</tr>" +
-                                                    "<tr>" +
+                                                    "</tr><tr>" +
                                                     "<th>零件分类</th>" +
                                                     "<td>" + va.pBomLinePartClass + "</td>" +
+                                                    "</tr><tr>" +
                                                     "<th>零部件来源</th>" +
                                                     "<td>" + va.pBomLinePartResource + "</td>" +
-                                                    "</tr>" +
-                                                    "<tr>" +
+                                                    "</tr><tr>" +
                                                     "<th>自制/采购</th>" +
                                                     "<td>" + va.resource + "</td>" +
+                                                    "</tr><tr>" +
                                                     "<th>焊接/装配</th>" +
                                                     "<td>" + va.type + "</td>" +
-                                                    "</tr>" +
-                                                    "<tr>" +
+                                                    "</tr><tr>" +
                                                     "<th>采购单元</th>" +
                                                     "<td>" + va.buyUnit + "</td>" +
+                                                    "</tr><tr>" +
                                                     "<th>车间1</th>" +
                                                     "<td>" + va.workShop1 + "</td>" +
-                                                    "</tr>" +
-                                                    "<tr>" +
+                                                    "</tr><tr>" +
                                                     "<th>车间2</th>" +
                                                     "<td>" + va.workShop2 + "</td>" +
+                                                    "</tr><tr>" +
                                                     "<th>生产线</th>" +
                                                     "<td>" + va.productLine + "</td>" +
-                                                    "</tr>" +
-                                                    "<tr>" +
+                                                    "</tr><tr>" +
                                                     "<th>模具类别</th>" +
                                                     "<td>" + va.mouldType + "</td>" +
+                                                    "</tr><tr>" +
                                                     "<th>外委件</th>" +
                                                     "<td>" + va.outerPart + "</td>" +
-                                                    "</tr>" +
-                                                    "<tr>" +
+                                                    "</tr><tr>" +
                                                     "<th>颜色件</th>" +
                                                     "<td>" + va.colorPart + "</td>" +
+                                                    "</tr><tr>" +
                                                     "<th>工位</th>" +
                                                     "<td>" + va.station + "</td>" +
                                                     "</tr>"
@@ -202,14 +203,18 @@ $(document).ready(function () {
                                     },
                                 }
                             };
-                            $("#demo1").html( "<p class=\"text-primary\">"+"合成结果：</p>");
-                            $("#demo2").html("");
+
 
                             console.log(document.getElementById("demo3").innerText);
                             var zNodes = result.data;
-                            $(document).ready(function () {
-                                $.fn.zTree.init($("#Ztree1"), setting, zNodes);
-                            });
+                            if(result.success){
+                                $("#demo1").html( "<p class=\"text-primary\">"+"合成结果：</p>");
+                                $("#demo2").html("");
+                                $(document).ready(function () {
+                                    $.fn.zTree.init($("#Ztree1"), setting, zNodes);
+                                });
+                            }
+
                         },
                     error: function (status) {
                         window.Ewin.alert({message: status.status + ':生成工艺合件失败!'});
