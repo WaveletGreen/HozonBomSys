@@ -132,6 +132,14 @@ function initTable(mBomUrl){
                         iconCls: 'glyphicon glyphicon-remove',
                         handler: function () {
                             var rows = $table.bootstrapTable('getSelections');
+                            var puids = "";
+                            for (var i = 0 ; i<rows.length;i++){
+                                puids += rows[i].eBomPuid+",";
+                            };
+                            var myData = JSON.stringify({
+                                "projectId": $("#project", window.top.document).val(),
+                                "puids":puids,
+                            });
                             if (rows.length == 0) {
                                 window.Ewin.alert({message: '请选择一条需要删除的数据!'});
                                 return false;
@@ -141,8 +149,8 @@ function initTable(mBomUrl){
                                     $.ajax({
                                         type: "POST",
                                         //ajax需要添加打包名
-                                        url: "mbom/delete?eBomPuid="+rows[0].eBomPuid,
-                                        //data: JSON.stringify(rows),
+                                        url: "mbom/delete",
+                                        data: myData,
                                         contentType: "application/json",
                                         success: function (result) {
                                             /*if (result.status) {
