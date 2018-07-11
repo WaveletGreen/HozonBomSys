@@ -61,7 +61,7 @@ public interface HzEbomService {
     OperateResultMessageRespDTO deleteHzEbomRecordById(DeleteHzEbomReqDTO reqDTO);
 
     /**
-     * 找出当前bom的全部子bom  递归查找
+     * 找出当前bom的全部子bom  递归查找 bom结构树
      * @param
      * @return
      */

@@ -179,8 +179,10 @@
     select t2.puid from Hz_project_libs t2
     <where>
       t2.puid=#{projectId,jdbcType=VARCHAR}))
-     and t1.P_PARENT_UID = #{parentUid,jdbcType=VARCHAR}
+     and (t6.P_BOM_STATE IS NULL OR t6.P_BOM_STATE=0 OR t6.P_BOM_STATE=1)
     </where>
+      start with t1.puid = #{puid,jdbcType=VARCHAR}
+      connect by prior t1.puid = t1.p_parent_uid
   </select>
 
     <!--联表查询 一条EBOM全信息-->

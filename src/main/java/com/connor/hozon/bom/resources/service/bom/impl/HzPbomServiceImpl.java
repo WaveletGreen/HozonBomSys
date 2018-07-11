@@ -16,6 +16,7 @@ import com.connor.hozon.bom.resources.mybatis.bom.HzPbomRecordDAO;
 import com.connor.hozon.bom.resources.mybatis.bom.impl.HzPbomRecordDAOImpl;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.query.HzPbomByPageQuery;
+import com.connor.hozon.bom.resources.query.HzPbomTreeQuery;
 import com.connor.hozon.bom.resources.service.bom.HzPbomService;
 import com.connor.hozon.bom.resources.service.epl.HzEPLManageRecordService;
 import com.connor.hozon.bom.resources.util.ListUtil;
@@ -42,13 +43,7 @@ public class HzPbomServiceImpl implements HzPbomService {
     private HzBomLineRecordDaoImpl hzBomLineRecordDao;
 
     @Autowired
-    private HzMbomRecordDAO hzMbomRecordDAO;
-
-    @Autowired
     private HzPbomRecordDAO hzPbomRecordDAO;
-
-    @Autowired
-    private HzBomDataDao hzBomDataDao;
 
     @Autowired
     private HzBomStateDAO hzBomStateDAO;
@@ -77,7 +72,7 @@ public class HzPbomServiceImpl implements HzPbomService {
 //                return respDTO;
 //            }
 
-            HzPbomRecord hzPbomRecord = new HzPbomRecord();
+            HzPbomLineRecord hzPbomRecord = new HzPbomLineRecord();
             hzPbomRecord.setCreateName(UserInfo.getUser().getUserName());
             hzPbomRecord.setUpdateName(UserInfo.getUser().getUserName());
             String buyUnit = recordReqDTO.getBuyUnit();
@@ -114,8 +109,8 @@ public class HzPbomServiceImpl implements HzPbomService {
             Map<String,Object> map = new HashMap<>();
             map.put("pPuid",recordReqDTO.geteBomPuid());
             map.put("projectId",recordReqDTO.getProjectId());
-            HzPbomLineRecord hzPbomLineRecord= hzPbomRecordDAO.getPbomById(map);
-            if(hzPbomLineRecord!=null){
+            List<HzPbomLineRecord> hzPbomLineRecords= hzPbomRecordDAO.getPbomById(map);
+            if(ListUtil.isNotEmpty(hzPbomLineRecords)){
                 int i = hzPbomRecordDAO.update(hzPbomRecord);
                 if(i>0){
                     return OperateResultMessageRespDTO.getSuccessResult();
@@ -126,7 +121,9 @@ public class HzPbomServiceImpl implements HzPbomService {
             hzPbomRecord.setPuid(UUID.randomUUID().toString());
             int maxOrderNum = hzPbomRecordDAO.getHzPbomMaxOrderNum();
             hzPbomRecord.setOrderNum(++maxOrderNum);
-            int i = hzPbomRecordDAO.insert(hzPbomRecord);
+            List<HzPbomLineRecord> records = new ArrayList<>();
+            records.add(hzPbomRecord);
+            int i = hzPbomRecordDAO.insertList(records);
             if(i>0){
                respDTO.setErrMsg("操作成功！");
                respDTO.setErrCode(OperateResultMessageRespDTO.SUCCESS_CODE);
@@ -153,7 +150,7 @@ public class HzPbomServiceImpl implements HzPbomService {
                 respDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
                 return respDTO;
             }
-            HzPbomRecord hzPbomRecord = new HzPbomRecord();
+            HzPbomLineRecord hzPbomRecord = new HzPbomLineRecord();
             hzPbomRecord.setUpdateName(UserInfo.getUser().getUserName());
             hzPbomRecord.seteBomPuid(recordReqDTO.geteBomPuid());
 //            hzPbomRecord.setPuid(UUID.randomUUID().toString());
@@ -208,17 +205,17 @@ public class HzPbomServiceImpl implements HzPbomService {
                 respDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
                 return respDTO;
             }
-            HzPbomRecord record = hzPbomRecordDAO.getHzPbomByEbomPuid(eBomPuid);
-            if(null == record){
-                record = new HzPbomRecord();
-                record.seteBomPuid(eBomPuid);
-                record.setPuid(UUID.randomUUID().toString());
-                record.setStatus(1);
-                int i =hzPbomRecordDAO.insert(record);
-                if(i<0){
-                    return OperateResultMessageRespDTO.getFailResult();
-                }
-            }
+//            HzPbomRecord record = hzPbomRecordDAO.getHzPbomByEbomPuid(eBomPuid);
+//            if(null == record){
+//                record = new HzPbomRecord();
+//                record.seteBomPuid(eBomPuid);
+//                record.setPuid(UUID.randomUUID().toString());
+//                record.setStatus(1);
+//                int i =hzPbomRecordDAO.insert(record);
+//                if(i<0){
+//                    return OperateResultMessageRespDTO.getFailResult();
+//                }
+//            }
             int i = hzPbomRecordDAO.deleteByForeignId(eBomPuid);
             if(i>0){
                 return OperateResultMessageRespDTO.getSuccessResult();
@@ -235,16 +232,22 @@ public class HzPbomServiceImpl implements HzPbomService {
         Map<String, Object> map = new HashMap<>();
         map.put("projectId", reqDTO.getProjectId());
         map.put("lineId", reqDTO.getLineId());
-        HzPbomLineRecord record = hzPbomRecordDAO.getPbomById(map);
-        if (record == null) {
+        List<HzPbomLineRecord> records = hzPbomRecordDAO.getPbomById(map);
+        if (ListUtil.isEmpty(records)) {
             return null;
         }
+
         try {
-            List<HzPbomLineRecord> recordList = getChildLineRecord(reqDTO.getProjectId(), record, new ArrayList<>());
+            HzPbomLineRecord record = records.get(0);
+            HzPbomTreeQuery query = new HzPbomTreeQuery();
+            query.setProjectId(reqDTO.getProjectId());
+            query.setPuid(record.geteBomPuid());
+            List<HzPbomLineRecord> recordList = getHzPbomLineTree(query);
+//            List<HzPbomLineRecord> recordList =getChildLineRecord(reqDTO.getProjectId(),record,new ArrayList<>());
             JSONArray jsonArray = new JSONArray();
             for (HzPbomLineRecord lineRecord : recordList) {
                 JSONObject jsonObject = new JSONObject();
-                jsonObject.put("puid", lineRecord.getpPuid());
+                jsonObject.put("puid", lineRecord.geteBomPuid());
                 jsonObject.put("parentUid", lineRecord.getParentUid());
                 jsonObject.put("lineId", lineRecord.getLineId());
                 jsonArray.add(jsonObject);
@@ -260,28 +263,16 @@ public class HzPbomServiceImpl implements HzPbomService {
         Map<String, Object> map = new HashMap<>();
         map.put("projectId", reqDTO.getProjectId());
         map.put("lineId", reqDTO.getLineId());
-        HzPreferenceSetting setting = new HzPreferenceSetting();
-        setting.setSettingName("Hz_ExportBomPreferenceRedis");
-        HzPbomLineRecord record = hzPbomRecordDAO.getPbomById(map);
-        if (record == null) {
+        map.put("pPuid",reqDTO.getPuid());
+        List<HzPbomLineRecord> records = hzPbomRecordDAO.getPbomById(map);
+        if (ListUtil.isEmpty(records)) {
             return null;
         }
         try {
+            HzPbomLineRecord record = records.get(0);
             JSONArray jsonArray = new JSONArray();
-            setting.setBomMainRecordPuid(record.getBomDigifaxId());
-            setting = hzBomDataDao.loadSetting(setting);
-            byte[] btOfSetting = setting.getPreferencesettingblock();
-            Object objOfSetting = SerializeUtil.unserialize(btOfSetting);
-            if (objOfSetting instanceof PreferenceSetting) {
-                String[] localName = ((PreferenceSetting) objOfSetting).getPreferenceLocal();
-                String[] trueName = ((PreferenceSetting) objOfSetting).getPreferences();
-                jsonArray.add(0, localName);
-                jsonArray.add(1, trueName);
-            }
             JSONObject jsonObject = new JSONObject();
-            jsonObject.put("puid", record.getpPuid());
-            jsonObject.put("parentUid", record.getParentUid());
-            jsonObject.put("hasChildren", record.getIsHas());
+            jsonObject.put("puid", record.getPuid());
             Integer is2Y = record.getIs2Y();
             Integer hasChildren = record.getIsHas();
             String lineIndex = record.getLineIndex();
@@ -290,10 +281,14 @@ public class HzPbomServiceImpl implements HzPbomService {
             jsonObject.put("rank", strings[1]);
             jsonObject.put("pBomOfWhichDept", record.getpBomOfWhichDept());
             jsonObject.put("groupNum", record.getLineId());
-            jsonObject.put("eBomPuid", record.getPuid());
+            jsonObject.put("eBomPuid", record.geteBomPuid());
             jsonObject.put("lineId", record.getLineId());
-            jsonObject.put("itemName", record.getpBomLinePartName());
-            jsonObject.put("itemPart", record.getpBomLinePartClass());
+
+            jsonObject.put("pBomLinePartName", record.getpBomLinePartName());
+            jsonObject.put("pBomLinePartClass", record.getpBomLinePartClass());
+            jsonObject.put("pBomLinePartResource", record.getpBomLinePartResource());
+            jsonObject.put("pBomLinePartEnName", record.getpBomLinePartEnName());
+
             jsonObject.put("resource", record.getResource());
             jsonObject.put("type", record.getType());
             jsonObject.put("buyUnit", record.getBuyUnit());
@@ -303,24 +298,6 @@ public class HzPbomServiceImpl implements HzPbomService {
             jsonObject.put("mouldType", record.getMouldType());
             jsonObject.put("outerPart", record.getOuterPart());
             jsonObject.put("colorPart", record.getColorPart());
-
-            byte[] bomLineBlock = record.getBomLineBlock();
-            Object obj = SerializeUtil.unserialize(bomLineBlock);
-            if (obj instanceof LinkedHashMap) {
-                if (((LinkedHashMap) obj).size() > 0) {
-                    ((LinkedHashMap) obj).forEach((key, value) -> {
-
-                        jsonObject.put((String) key, value);
-                    });
-                }
-            } else if (obj instanceof RedisBomBean) {
-                List<String> pSets = ((RedisBomBean) obj).getpSets();
-                List<String> pValues = ((RedisBomBean) obj).getpValues();
-                if (null != pSets && pSets.size() > 0 && null != pValues && pValues.size() > 0)
-                    for (int i = 0; i < pSets.size(); i++) {
-                        jsonObject.put(pSets.get(i), pValues.get(i));
-                    }
-            }
             jsonArray.add(jsonObject);
             return jsonArray;
         } catch (Exception e) {
@@ -328,132 +305,6 @@ public class HzPbomServiceImpl implements HzPbomService {
         }
     }
 
-    /**
-     * 添加工艺合件信息到bom
-     * @param reqDTO
-     * @return
-     *  当前代码的事务 貌似并没起作用 原因正在找...
-     */
-    @Transactional(rollbackFor=Exception.class)
-    @Override
-    public int addPbomProcessCompose(final AddProcessComposeReqDTO reqDTO) {
-        try {
-            Map<String, Object> map = new HashMap<>();
-            map.put("puid", reqDTO.getPuid());
-            map.put("projectId", reqDTO.getProjectPuid());
-            HzBomLineRecord record = hzBomLineRecordDao.findBomLineByPuid(map);
-            if (record != null) {
-                if (record.getIsHas().equals(0) || record.getIsPart().equals(1)) {
-                    record.setIsHas(new Integer(1));
-                    record.setIsPart(new Integer(0));
-                    if (record.getLineIndex().length() == 1) {
-                        record.setIs2Y(1);
-                    }
-                    //更新数据
-                    hzBomLineRecordDao.update(record);
-                    //状态值也要更新
-                    HzBomState bomState = new HzBomState();
-                    bomState.setpBomId(record.getPuid());
-                    bomState.setpBomState(1);
-                    HzBomState hzBomState = hzBomStateDAO.findStateById(record.getPuid());
-                    if (hzBomState == null) {
-                        bomState.setPuid(UUID.randomUUID().toString());
-                        hzBomStateDAO.insert(bomState);
-                    } else {
-                        hzBomStateDAO.update(bomState);
-                    }
-                }
-            } else {
-                return 0;
-            }
-
-            /**
-             * 工艺合件
-             * 1.获取合件的信息 零件信息 层级关系  需要更新父层的状态信息 haschildren 和ispart
-             *   存数据库表里 返回id信息
-             * 2.状态值存另一张表里 外键为 返回的id 需要采用事物管理机制
-             * 3.存储数据库 默认为haschildren为0 ispart为1
-             * 4.根据传进来的父id 计算层级关系 存数据库 2y
-             * 5.lineindex 值 找出所有的父的子 看是否有下一层  有：列表全部显示 找出所有的lineindex 最大值 增0.1
-             *   无：直接加1
-             */
-
-            //存工艺合件信息
-            HzBomLineRecord hzBomLineRecord = new HzBomLineRecord();
-            HZBomMainRecord hzBomMainRecord = hzBomMainRecordDao.selectByProjectPuid(reqDTO.getProjectPuid());
-            if (hzBomMainRecord != null) {
-                hzBomLineRecord.setBomDigifaxId(hzBomMainRecord.getPuid());
-            } else {
-                return 0;
-            }
-            //EBOM的零件信息存大对象 P_BOM_LINE_BLOCK 中
-            Map<String, Object> objectMap = reqDTO.geteBomContent();
-            byte[] bytes = SerializeUtil.serialize(objectMap);
-            hzBomLineRecord.setBomLineBlock(bytes);
-            hzBomLineRecord.setIsPart(1);
-            hzBomLineRecord.setIsHas(0);
-            //获取当前对象的所有的子层 lineIndex值存长度相等的子层最大值末尾自增
-            String lineIndex = record.getLineIndex();
-            Map map1 = new HashMap();
-            map1.put("projectId", reqDTO.getProjectPuid());
-            map1.put("parentUid", record.getPuid());
-            List<HzPbomLineRecord> bomLineRecords = hzPbomRecordDAO.getHzPbomById(map1);
-            if (ListUtil.isEmpty(bomLineRecords)) {
-                //1.1-1.1.1  1.2.2.2 -1.2.2.2.1
-                StringBuffer stringBuffer = new StringBuffer(lineIndex);
-                stringBuffer = stringBuffer.append(".1");
-                hzBomLineRecord.setLineIndex(stringBuffer.toString());
-            } else {
-                int length = lineIndex.split("\\.").length + 1;
-                List<String> list = new ArrayList<>();
-                for (HzPbomLineRecord lineRecord : bomLineRecords) {
-                    int len = lineRecord.getLineIndex().split("\\.").length;
-                    if (length == len) {
-                        list.add(lineRecord.getLineIndex());
-                    }
-                }
-                Integer max = 0;
-                //找出lineindex 末尾最大值
-                for (int i = 0; i < list.size() - 1; i++) {
-                    String str = list.get(i).split("\\.")[list.get(i).split("\\.").length - 1];
-                    if (max < Integer.valueOf(str)) {
-                        max = Integer.valueOf(str);
-                    }
-                }
-                max = max + 1;
-                hzBomLineRecord.setLineIndex(new StringBuffer(lineIndex).append("." + max).toString());
-            }
-            //只有2Y层有这个玩意
-            hzBomLineRecord.setpBomOfWhichDept(reqDTO.getpBomOfWhichDept());
-            int orderNum = hzBomLineRecordDao.findMaxBomOrderNum();
-            hzBomLineRecord.setOrderNum(++orderNum);
-            hzBomLineRecord.setParentUid(reqDTO.getPuid());
-            hzBomLineRecord.setIs2Y(0);
-            String puid = UUID.randomUUID().toString();
-            hzBomLineRecord.setLinePuid(puid);
-            hzBomLineRecord.setPuid(puid);
-            hzBomLineRecord.setIsDept(0);
-            hzBomLineRecord.setLineID(reqDTO.getLineId());
-            hzBomLineRecord.setpBomLinePartClass(reqDTO.getpBomLinePartClass());
-            hzBomLineRecord.setpBomLinePartName(reqDTO.getpBomLinePartName());
-            int i = hzBomLineRecordDao.insert(hzBomLineRecord);
-            //状态表中添加数据
-            HzBomState state = new HzBomState();
-            // 0 新增 1 更新 2 删除
-            state.setpBomState(0);
-            state.setPuid(UUID.randomUUID().toString());
-            state.setpBomId(puid);
-            int j = hzBomStateDAO.insert(state);
-            //pbom表中添加数据否？ 暂时未定 后续测试出问题了再加进去
-            if (i > 0 && j > 0) {
-                return 1;
-            }
-        }catch (Exception e){
-            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-            return 0;
-        }
-        return 0;
-    }
 
     @Override
     public Page<HzPbomLineRespDTO> getHzPbomRecordPage(HzPbomByPageQuery query) {
@@ -524,9 +375,10 @@ public class HzPbomServiceImpl implements HzPbomService {
             Map<String,Object> map = new HashMap<>();
             map.put("projectId",projectId);
             map.put("pPuid",puid);
-            HzPbomLineRecord record = hzPbomRecordDAO.getPbomById(map);
-            if(record!=null){
-                List<HzPbomLineRecord> records = new ArrayList<>();
+            List<HzPbomLineRecord> records = hzPbomRecordDAO.getPbomById(map);
+            if(ListUtil.isNotEmpty(records)){
+                HzPbomLineRecord record = records.get(0);
+                records = new ArrayList<>();
                 records.add(record);
                 List<HzPbomLineRespDTO> respDTOS = pbomLineRecordToRespDTOS(records,projectId,0);
                 return respDTOS.get(0);
@@ -537,6 +389,290 @@ public class HzPbomServiceImpl implements HzPbomService {
         return null;
     }
 
+    @Override
+    public List<HzPbomLineRecord> getHzPbomLineTree(HzPbomTreeQuery query) {
+        return hzPbomRecordDAO.getHzPbomTree(query);
+    }
+
+    @Transactional(rollbackFor=Exception.class)
+    @Override
+    public OperateResultMessageRespDTO andProcessCompose(AddHzPbomRecordReqDTO recordReqDTO) {
+        OperateResultMessageRespDTO operateResultMessageRespDTO = new OperateResultMessageRespDTO();
+        try {
+            if (recordReqDTO.getProjectId() == null || recordReqDTO.getProjectId().equals("")) {
+                operateResultMessageRespDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
+                operateResultMessageRespDTO.setErrMsg("非法参数！");
+            }
+
+            if (recordReqDTO.getPuids() == null || recordReqDTO.getPuids().equals("")) {
+                operateResultMessageRespDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
+                operateResultMessageRespDTO.setErrMsg("请至少选择一个合成零件！");
+                return operateResultMessageRespDTO;
+            }
+            if (recordReqDTO.getLineId() != null) {//第一次合成 选择零件添加到新将要合成零件编号下
+                if (recordReqDTO.getLineId().contains("-")) {
+                    if (recordReqDTO.getLineId().split("-")[1].length() < 4) {
+                        operateResultMessageRespDTO.setErrMsg("零件号-后面的长度不能小于4！");
+                        operateResultMessageRespDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
+                        return operateResultMessageRespDTO;
+                    }
+                }
+                boolean b = hzPbomRecordDAO.checkItemIdIsRepeat(recordReqDTO.getProjectId(), recordReqDTO.getLineId());
+                if (b) {
+                    operateResultMessageRespDTO.setErrMsg("当前零件号已存在，请重新输入！");
+                    operateResultMessageRespDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
+                    return operateResultMessageRespDTO;
+                }
+                String puid = UUID.randomUUID().toString();
+                HzPbomLineRecord hzPbomLineRecord = new HzPbomLineRecord();
+                HZBomMainRecord hzBomMainRecord = hzBomMainRecordDao.selectByProjectPuid(recordReqDTO.getProjectId());
+                if (hzBomMainRecord != null) {
+                    return OperateResultMessageRespDTO.getFailResult();
+                }
+                hzPbomLineRecord.setIs2Y(1);
+                hzPbomLineRecord.setIsPart(0);
+                hzPbomLineRecord.setIsHas(1);
+                hzPbomLineRecord.setPuid(puid);
+                hzPbomLineRecord.setpBomLinePartResource(recordReqDTO.getpBomLinePartResource());
+                hzPbomLineRecord.setpBomLinePartEnName(recordReqDTO.getpBomLinePartEnName());
+                hzPbomLineRecord.setpBomOfWhichDept(recordReqDTO.getpBomOfWhichDept());
+                hzPbomLineRecord.setpBomLinePartName(recordReqDTO.getpBomLinePartName());
+                hzPbomLineRecord.setpBomLinePartClass(recordReqDTO.getpBomLinePartClass());
+                int num = hzPbomRecordDAO.getHzPbomMaxOrderNum();
+                hzPbomLineRecord.setOrderNum(++num);
+                hzPbomLineRecord.seteBomPuid(puid);
+                int maxLineIndexFirstNum = hzPbomRecordDAO.getMaxLineIndexFirstNum(recordReqDTO.getProjectId());
+                hzPbomLineRecord.setLineIndex(new StringBuffer(++maxLineIndexFirstNum).append(".1").toString());
+                String lineId = recordReqDTO.getLineId();
+                hzPbomLineRecord.setLineId(lineId);
+                hzPbomLineRecord.setIsDept(0);
+                hzPbomLineRecord.setBomDigifaxId(hzBomMainRecord.getPuid());
+                hzPbomLineRecord.setCreateName(UserInfo.getUser().getUserName());
+                hzPbomLineRecord.setUpdateName(UserInfo.getUser().getUserName());
+                String buyUnit = recordReqDTO.getBuyUnit();
+                String colorPart = recordReqDTO.getColorPart();
+                String type = recordReqDTO.getType();
+                if ("Y".equals(buyUnit)) {
+                    hzPbomLineRecord.setBuyUnit(0);
+                } else if ("N".equals(buyUnit)) {
+                    hzPbomLineRecord.setBuyUnit(1);
+                } else {
+                    hzPbomLineRecord.setBuyUnit(2);
+                }
+                if ("Y".equals(colorPart)) {
+                    hzPbomLineRecord.setColorPart(0);
+                } else if ("N".equals(colorPart)) {
+                    hzPbomLineRecord.setColorPart(1);
+                } else {
+                    hzPbomLineRecord.setColorPart(2);
+                }
+                if ("Y".equals(type)) {
+                    hzPbomLineRecord.setType(0);
+                } else if ("N".equals(type)) {
+                    hzPbomLineRecord.setType(1);
+                } else {
+                    hzPbomLineRecord.setType(2);
+                }
+                hzPbomLineRecord.setMouldType(recordReqDTO.getMouldType());
+                hzPbomLineRecord.setOuterPart(recordReqDTO.getOuterPart());
+                hzPbomLineRecord.setProductLine(recordReqDTO.getProductLine());
+                hzPbomLineRecord.setStation(recordReqDTO.getStation());
+                hzPbomLineRecord.setWorkShop1(recordReqDTO.getWorkShop1());
+                hzPbomLineRecord.setWorkShop2(recordReqDTO.getWorkShop2());
+                hzPbomLineRecord.setStation(recordReqDTO.getStation());
+                hzPbomLineRecord.setProductLine(recordReqDTO.getProductLine());
+                hzPbomLineRecord.setResource(recordReqDTO.getResource());
+                List<HzPbomLineRecord> list = new ArrayList<>();
+                list.add(hzPbomLineRecord);
+                int i = hzPbomRecordDAO.insertList(list);
+                if (i < 0) {
+                    return OperateResultMessageRespDTO.getFailResult();
+                }
+                String[] puids = recordReqDTO.getPuids().split(",");
+                for (String puidStr : puids) {
+                    HzPbomLineRecord record = hzPbomRecordDAO.getHzPbomByEbomPuid(puidStr, recordReqDTO.getProjectId());
+                    if (record == null) {
+                        if (recordReqDTO.getPuids() == null || recordReqDTO.getPuids().equals("")) {
+                            operateResultMessageRespDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
+                            operateResultMessageRespDTO.setErrMsg("选择要合成的零件不存在！");
+                            continue;
+                        }
+
+                    }
+                    //判断要合成的零件号的父的子的情况
+                    HzPbomTreeQuery query = new HzPbomTreeQuery();
+                    query.setProjectId(recordReqDTO.getProjectId());
+                    query.setPuid(record.getParentUid());
+                    List<HzPbomLineRecord> recordList = getHzPbomLineTree(query);
+                    if (recordList.size() <= 1) {
+                        HzPbomLineRecord pbomLineRecord = recordList.get(0);
+                        pbomLineRecord.setIsHas(0);
+                        pbomLineRecord.setIsPart(1);
+                        if (pbomLineRecord.getIs2Y().equals(1)) {
+                            pbomLineRecord.setIs2Y(0);
+                        }
+                        hzPbomRecordDAO.update(pbomLineRecord);
+
+                    }
+                    record.setParentUid(puid);
+                    record.setIs2Y(0);
+                    record.setIsPart(1);
+                    record.setIsHas(0);
+                    //找出目标位置信息 计算将要添加零件号所属的层级关系
+                    query = new HzPbomTreeQuery();
+                    query.setProjectId(record.getProjectPuid());
+                    query.setPuid(puid);
+                    recordList = getHzPbomLineTree(query);
+                    if (ListUtil.isNotEmpty(recordList)) {
+                        int length = recordList.get(0).getLineIndex().split("\\.").length + 1;
+                        List<String> list1 = new ArrayList<>();
+                        for (HzPbomLineRecord lineRecord : recordList) {
+                            int len = lineRecord.getLineIndex().split("\\.").length;
+                            if (length == len) {
+                                list1.add(lineRecord.getLineIndex());
+                            }
+                        }
+                        Integer max = 0;
+                        //找出lineindex 末尾最大值
+                        for (int j = 0; j < list.size() - 1; j++) {
+                            String str = list1.get(j).split("\\.")[list1.get(j).split("\\.").length - 1];
+                            if (max < Integer.valueOf(str)) {
+                                max = Integer.valueOf(str);
+                            }
+                        }
+                        max = max + 1;
+                        record.setLineIndex(new StringBuffer(recordList.get(0).getLineIndex()).append("." + max).toString());
+                        hzPbomRecordDAO.update(record);
+                    } else {
+                        return OperateResultMessageRespDTO.getFailResult();
+                    }
+                }
+                return OperateResultMessageRespDTO.getSuccessResult();
+            } else {//第二次合成
+                //2 puid(父)  puids(子)
+                String parentId = recordReqDTO.geteBomPuid();
+                String childrenIds = recordReqDTO.getPuids();//需要找出他们的父 2Y层为父
+                String parentLineIndex = "";//第一次合成后的lineIndex进行转换为第二次合成结束的lineIndex
+                //父
+                HzPbomLineRecord record = hzPbomRecordDAO.getHzPbomByEbomPuid(parentId, recordReqDTO.getProjectId());
+                if (null != record) {
+                    String lineIndex = record.getLineIndex();
+                    if (record.getIsHas().equals(0) || record.getIsPart().equals(1)) {
+                        record.setIsHas(new Integer(1));
+                        record.setIsPart(new Integer(0));
+                        record.setUpdateName(UserInfo.getUser().getUserName());
+                        int length = record.getLineIndex().split("\\.").length;
+                        if (record.getIs2Y().equals(0) && length == 2) {
+                            record.setIs2Y(1);
+                        }
+                        int i = hzPbomRecordDAO.update(record);
+                        if (i < 0) {
+                            return OperateResultMessageRespDTO.getFailResult();
+                        }
+                    }
+
+                    String[] children = childrenIds.split(",");
+                    HzPbomTreeQuery hzPbomTreeQuery = new HzPbomTreeQuery();
+                    hzPbomTreeQuery.setPuid(record.geteBomPuid());
+                    hzPbomTreeQuery.setProjectId(recordReqDTO.getProjectId());
+                    List<HzPbomLineRecord> records = getHzPbomLineTree(hzPbomTreeQuery);
+                    for (int k = 0; k < children.length; k++) {
+                        HzPbomLineRecord childRecord = hzPbomRecordDAO.getHzPbomByEbomPuid(children[k], recordReqDTO.getProjectId());
+                        if (childRecord.getLineIndex().split("\\.").length == 2) {//找合成的父层
+                            childRecord.setParentUid(record.geteBomPuid());
+                            List<String> list = new ArrayList<>();
+                            int length = lineIndex.split("\\.").length + 1;
+                            if (ListUtil.isNotEmpty(records)) {
+                                for (HzPbomLineRecord lineRecord : records) {
+                                    int len = lineRecord.getLineIndex().split("\\.").length;
+                                    if (length == len) {
+                                        list.add(lineRecord.getLineIndex());
+                                    }
+                                }
+                                Integer max = 0;
+                                //找出lineindex 末尾最大值
+                                for (int i = 0; i < list.size() - 1; i++) {
+                                    String str = list.get(i).split("\\.")[list.get(i).split("\\.").length - 1];
+                                    if (max < Integer.valueOf(str)) {
+                                        max = Integer.valueOf(str);
+                                    }
+                                }
+                                max = max + 1;
+                                parentLineIndex = new StringBuffer(lineIndex).append("." + max).toString();
+                                childRecord.setLineIndex(parentLineIndex);
+                            } else {
+                                operateResultMessageRespDTO.setErrMsg("要合成的节点不存在，请核对改节点是否被删除！");
+                                operateResultMessageRespDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
+                                return operateResultMessageRespDTO;
+                            }
+                            hzPbomRecordDAO.update(childRecord);
+                            break;
+                        } else {
+                            if (k == children.length - 1) {
+                                for (String child : children) {//直接从A bom 剪切数据 到B bom
+                                    childRecord = hzPbomRecordDAO.getHzPbomByEbomPuid(child, recordReqDTO.getProjectId());
+                                    //判断要合成的零件号的父的子的情况
+                                    HzPbomTreeQuery query = new HzPbomTreeQuery();
+                                    query.setProjectId(recordReqDTO.getProjectId());
+                                    query.setPuid(childRecord.getParentUid());
+                                    List<HzPbomLineRecord> recordList = getHzPbomLineTree(query);
+                                    if (recordList.size() <= 1) {
+                                        HzPbomLineRecord pbomLineRecord = recordList.get(0);
+                                        pbomLineRecord.setIsHas(0);
+                                        pbomLineRecord.setIsPart(1);
+                                        if (pbomLineRecord.getIs2Y().equals(1)) {
+                                            pbomLineRecord.setIs2Y(0);
+                                        }
+                                        hzPbomRecordDAO.update(pbomLineRecord);
+                                    }
+                                    childRecord.setParentUid(record.geteBomPuid());
+                                    List<String> list = new ArrayList<>();
+                                    int length = lineIndex.split("\\.").length + 1;
+                                    for (HzPbomLineRecord lineRecord : records) {
+                                        int len = lineRecord.getLineIndex().split("\\.").length;
+                                        if (length == len) {
+                                            list.add(lineRecord.getLineIndex());
+                                        }
+                                    }
+                                    Integer max = 0;
+                                    //找出lineindex 末尾最大值
+                                    for (int i = 0; i < list.size() - 1; i++) {
+                                        String str = list.get(i).split("\\.")[list.get(i).split("\\.").length - 1];
+                                        if (max < Integer.valueOf(str)) {
+                                            max = Integer.valueOf(str);
+                                        }
+                                    }
+                                    max = max + 1;
+                                    parentLineIndex = new StringBuffer(lineIndex).append("." + max).toString();
+                                    childRecord.setLineIndex(parentLineIndex);
+                                    hzPbomRecordDAO.update(childRecord);
+                                }
+                            }
+                        }
+                    }
+                    int count = 1;
+                    for (String child : children) {
+                        HzPbomLineRecord childRecord = hzPbomRecordDAO.getHzPbomByEbomPuid(child, recordReqDTO.getProjectId());
+                        if (childRecord.getLineIndex().split("\\.").length > 2) {//找合成 子层
+                            StringBuffer buffer = new StringBuffer(parentLineIndex);
+                            buffer.append("." + count);
+                            count++;
+                            childRecord.setLineIndex(buffer.toString());
+                            hzPbomRecordDAO.update(childRecord);
+                        }
+                    }
+                } else {
+                    operateResultMessageRespDTO.setErrMsg("要合成的节点不存在，请核对改节点是否被删除！");
+                    operateResultMessageRespDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
+                    return operateResultMessageRespDTO;
+                }
+            }
+            return OperateResultMessageRespDTO.getSuccessResult();
+        }catch (Exception e){
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            return OperateResultMessageRespDTO.getFailResult();
+        }
+    }
 
     private HzPbomLineRecord bomLineToPbomLine(HzBomLineRecord record){
         HzPbomLineRecord hzPbomLineRecord = new HzPbomLineRecord();
@@ -557,29 +693,6 @@ public class HzPbomServiceImpl implements HzPbomService {
         hzPbomLineRecord.setpBomLinePartResource(record.getpBomLinePartResource());
         hzPbomLineRecord.setOrderNum(record.getOrderNum());
         return hzPbomLineRecord;
-    }
-
-    /**
-     * 根据id 获取所有的子bom
-     *
-     * @return
-     */
-    public List<HzPbomLineRecord> getChildLineRecord(String projectId, HzPbomLineRecord record, List<HzPbomLineRecord> recordList) {
-        Integer hasChildren = record.getIsHas();
-        recordList.add(record);
-        if (hasChildren.equals(1)) {
-            Map<String, Object> map = new HashMap<>();
-            map.put("projectId", projectId);
-            map.put("parentUid", record.getpPuid());
-            List<HzPbomLineRecord> records = hzPbomRecordDAO.getHzPbomById(map);
-            if (ListUtil.isNotEmpty(records)) {
-                for (HzPbomLineRecord lineRecord : records) {
-                    getChildLineRecord(projectId, lineRecord, recordList);
-                }
-            }
-        }
-
-        return recordList;
     }
 
     /**
@@ -637,20 +750,8 @@ public class HzPbomServiceImpl implements HzPbomService {
                 }
                 respDTO.setGroupNum(groupNum);
 
-//                byte[] bomLineBlock =record.getBomLineBlock();
-//                Object obj = SerializeUtil.unserialize(bomLineBlock);
-//                Object h9_IsCommon = null;
-//                Object H9_Mat_Status =null;
-//                if (obj instanceof LinkedHashMap) {
-//                    if (((LinkedHashMap) obj).size() > 0) {
-//                         h9_IsCommon =((LinkedHashMap) obj).get("h9_IsCommon");
-//                         H9_Mat_Status =((LinkedHashMap) obj).get("H9_Mat_Status");
-//                    }
-//                }
                 respDTO.setpBomLinePartClass(record.getpBomLinePartClass());
                 respDTO.setpBomLinePartResource(record.getpBomLinePartResource());
-//                respDTO.setH9_IsCommon(h9_IsCommon);
-//                respDTO.setH9_Mat_Status(H9_Mat_Status);
                 respDTO.setNo(++num);
                 respDTO.setResource(record.getResource() == null ? "/" : record.getResource());
                 Integer type = record.getType();
@@ -678,6 +779,7 @@ public class HzPbomServiceImpl implements HzPbomService {
                     respDTO.setColorPart("/");
                 }
                 respDTO.seteBomPuid(record.geteBomPuid());
+                respDTO.setPuid(record.getPuid());
                 respDTO.setProductLine(record.getProductLine());
                 respDTO.setWorkShop1(record.getWorkShop1() );
                 respDTO.setWorkShop2(record.getWorkShop2());
@@ -694,4 +796,5 @@ public class HzPbomServiceImpl implements HzPbomService {
         }
         return null;
     }
+
 }

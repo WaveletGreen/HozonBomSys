@@ -7,6 +7,8 @@ import com.connor.hozon.bom.resources.dto.response.HzPbomLineRespDTO;
 import com.connor.hozon.bom.resources.dto.response.OperateResultMessageRespDTO;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.query.HzPbomByPageQuery;
+import com.connor.hozon.bom.resources.query.HzPbomTreeQuery;
+import sql.pojo.bom.HzPbomLineRecord;
 
 import java.util.List;
 
@@ -49,13 +51,6 @@ public interface HzPbomService {
      */
     JSONArray getPbomByLineId(HzPbomProcessComposeReqDTO reqDTO);
 
-    /**
-     * 添加工艺合件信息到bom
-     * @param reqDTO
-     * @return
-     */
-    int addPbomProcessCompose(AddProcessComposeReqDTO reqDTO);
-
 
     /**
      * 分页获取pbom信息
@@ -65,10 +60,24 @@ public interface HzPbomService {
     Page<HzPbomLineRespDTO> getHzPbomRecordPage(HzPbomByPageQuery query);
 
     /**
-     * 获取一条pbom信息（包含部分ebom信息）
+     * 获取一条pbom信息
      * @param projectId
      * @param puid
      * @return
      */
     HzPbomLineRespDTO getHzPbomByPuid(String projectId,String puid);
+
+    /**
+     * 获取pbom结构树
+     * @param query
+     * @return
+     */
+    List<HzPbomLineRecord> getHzPbomLineTree(HzPbomTreeQuery query);
+
+    /**
+     * 创建工艺合件
+     * @param recordReqDTO
+     * @return
+     */
+    OperateResultMessageRespDTO andProcessCompose(AddHzPbomRecordReqDTO recordReqDTO);
 }

@@ -30,6 +30,32 @@ public class HzMbomByPageQuery extends DefaultPageQuery {
     private String lineIndex;
 
     private  String cfg0ModelRecordId;
+
+    /**
+     * 备件
+     */
+    private String sparePart;
+    /**
+     * 零件来源
+     */
+    private String pBomLinePartResource;
+
+    public String getSparePart() {
+        return sparePart;
+    }
+
+    public void setSparePart(String sparePart) {
+        this.sparePart = sparePart;
+    }
+
+    public String getpBomLinePartResource() {
+        return pBomLinePartResource;
+    }
+
+    public void setpBomLinePartResource(String pBomLinePartResource) {
+        this.pBomLinePartResource = pBomLinePartResource;
+    }
+
     public Integer getIsHas() {
         return isHas;
     }

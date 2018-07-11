@@ -12,6 +12,20 @@ public class HzPbomProcessComposeReqDTO {
      */
     private String lineId;
 
+    /**
+     * puid
+     */
+    private String puid;
+
+
+    public String getPuid() {
+        return puid;
+    }
+
+    public void setPuid(String puid) {
+        this.puid = puid;
+    }
+
     public String getProjectId() {
         return projectId;
     }

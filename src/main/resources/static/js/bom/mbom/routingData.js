@@ -3,7 +3,12 @@ $(document).ready((function (){
     var url = "work/process/record/page?projectId="+projectId;
     initTable(url);
 }))
-
+/*function doJump() {
+    window.location.href="work/process/getMBom"
+    $.get({
+        url:"work/process/getMBom",
+    })
+}*/
 function doQuery() {
     //$('#routingDataTable').bootstrapTable('refresh');    //刷新表格
     var projectId = $("#project", window.top.document).val();
@@ -167,7 +172,7 @@ function initTable(url) {
                             });
                         }
                     },
-                    {
+                    /*{
                         text: '选取数据',
                         iconCls: 'glyphicon glyphicon-save',
                         handler: function () {
@@ -179,7 +184,7 @@ function initTable(url) {
                                         height:650
                                     })
                                 }
-                    }
+                    }*/
                     // ,
                     // {
                     //     text: '选取数据',

@@ -3,7 +3,7 @@
 <!--User: xulf Date: 2018/5/31 Time: 15:29-->
 <body>
 <form id="pbomManageForm" role="4form" method="post" action="pbom/update">
-    <input id="eBomPuid" name="eBomPuid" type="text" th:value="${data.eBomPuid}"/><!--th:value="${entity.eBomPuid}"-->
+    <input id="eBomPuid" name="eBomPuid" type="hidden" th:value="${data.eBomPuid}"/><!--th:value="${entity.eBomPuid}"-->
     <div class="form-group">
         <label for="rank">级别</label>
         <input class="form-control" id="rank" name="rank" type="text" disabled="disabled" th:value="${data.rank}"
@@ -30,13 +30,13 @@
                placeholder="请输入分组号"/><!--th:value="${entity.level}"-->
     </div>
     <div class="form-group">
-        <label for="h9_IsCommon">零件分类</label>
-        <input class="form-control" id="h9_IsCommon" name="h9_IsCommon" type="text" disabled="disabled" th:value="${data.h9_IsCommon}"
+        <label for="pBomLinePartClass">零件分类</label>
+        <input class="form-control" id="pBomLinePartClass" name="pBomLinePartClass" type="text" disabled="disabled" th:value="${data.pBomLinePartClass}"
                placeholder="请输入零件分类"/><!--th:value="${entity.level}"-->
     </div>
     <div class="form-group">
-        <label for="H9_Mat_Status">零件来源</label>
-        <input class="form-control" id="H9_Mat_Status" name="H9_Mat_Status" type="text" disabled="disabled" th:value="${data.h9_Mat_Status}"
+        <label for="pBomLinePartResource">零件来源</label>
+        <input class="form-control" id="pBomLinePartResource" name="pBomLinePartResource" type="text" disabled="disabled" th:value="${data.pBomLinePartResource}"
                placeholder="请输入零件来源"/><!--th:value="${entity.level}"-->
     </div>
     <div class="form-group">

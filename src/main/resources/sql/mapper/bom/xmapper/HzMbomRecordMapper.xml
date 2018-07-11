@@ -523,4 +523,84 @@
         select  max(P_BOM_ORDER_NUM) from HZ_MBOM_RECORD;
     </select>
 
+
+    <!--分页查询虚拟件物料主数据 所有2y层级的-->
+    <select id="HzMbomRecordDAOImpl_findHz2YMbomRecord" parameterType="java.util.HashMap" resultMap="MbomResultMap">
+        select * from
+        (select t.*,ROWNUM as rn from
+        (select
+        <include refid="Mbom_Column_List" />
+        from HZ_MBOM_RECORD t1
+        where t1.P_BOM_DIGIFAX_ID =(
+        select t2.puid from Hz_Bom_Main_Record t2
+        where
+        t2.p_cfg0_of_which_project_puid=#{projectId,jdbcType=VARCHAR}
+        ) and LENGTH(TRANSLATE(P_LINE_INDEX,',0123456789','.'))=1
+        and t1.P_BOM_LINE_IS_HAS=1 and t1.P_MBOM_STATUS=1)t
+        WHERE ROWNUM &lt;=#{limit,jdbcType=INTEGER}) where rn &gt;#{offset,jdbcType=INTEGER}
+    </select>
+
+
+    <!--查询虚拟件物料主数据全部 所有2y层级的-->
+    <select id="HzMbomRecordDAOImpl_findHz2YMbomRecordAll" parameterType="java.util.HashMap" resultMap="MbomResultMap">
+
+        select
+        <include refid="Mbom_Column_List" />
+        from HZ_MBOM_RECORD t1
+        where t1.P_BOM_DIGIFAX_ID =(
+        select t2.puid from Hz_Bom_Main_Record t2
+        where
+        t2.p_cfg0_of_which_project_puid=#{projectId,jdbcType=VARCHAR}
+        ) and LENGTH(TRANSLATE(P_LINE_INDEX,',0123456789','.'))=1
+        and t1.P_BOM_LINE_IS_HAS=1 and t1.P_MBOM_STATUS =1
+
+    </select>
+
+
+
+
+    <!--分页查询MBOM数据 根据零件来源-->
+    <select id="HzMbomRecordDAOImpl_findHzMbomByResource" parameterType="java.util.HashMap" resultMap="MbomResultMap">
+        select * from
+        (select t.*,ROWNUM as rn from
+        (select
+        <include refid="Mbom_Column_List" />
+        from HZ_MBOM_RECORD t1
+        where t1.P_BOM_DIGIFAX_ID =(
+        select t2.puid from Hz_Bom_Main_Record t2
+        where
+        t2.p_cfg0_of_which_project_puid=#{projectId,jdbcType=VARCHAR}
+        )
+        <if test="pBomLinePartResource != null and  pBomLinePartResource!='' " >
+            and T1.P_BOM_LINE_PART_RESOURCE=#{pBomLinePartResource,jdbcType=VARCHAR}
+        </if>
+        <if test="sparePart != null and  sparePart!='' " >
+            and t1.P_SPARE_PART = #{sparePart,jdbcType=VARCHAR}
+        </if>
+        and t1.P_MBOM_STATUS =1
+        )t
+        WHERE ROWNUM &lt;=#{limit,jdbcType=INTEGER}) where rn &gt;#{offset,jdbcType=INTEGER}
+    </select>
+
+
+    <!--查询MBOM全部 根据零件来源-->
+    <select id="HzMbomRecordDAOImpl_findHzMbomByResourceAll" parameterType="java.util.HashMap" resultMap="MbomResultMap">
+
+        select
+        <include refid="Mbom_Column_List" />
+        from HZ_MBOM_RECORD t1
+        where t1.P_BOM_DIGIFAX_ID =(
+        select t2.puid from Hz_Bom_Main_Record t2
+        where
+        t2.p_cfg0_of_which_project_puid=#{projectId,jdbcType=VARCHAR}
+        )
+        <if test="pBomLinePartResource != null and  pBomLinePartResource!='' " >
+            and T1.P_BOM_LINE_PART_RESOURCE=#{pBomLinePartResource,jdbcType=VARCHAR}
+        </if>
+        <if test="sparePart != null and  sparePart!='' " >
+            and t1.P_SPARE_PART = #{sparePart,jdbcType=VARCHAR}
+        </if>
+        and t1.P_MBOM_STATUS =1
+
+    </select>
 </mapper>

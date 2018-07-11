@@ -41,9 +41,13 @@ public class HzPbomController extends BaseController {
         tableTitle.put("pBomOfWhichDept", "专业");
         tableTitle.put("rank", "级别");
         tableTitle.put("groupNum", "分组号");
-        tableTitle.put("lineId", "零件号");//这个字段暂时是一个替代品，后续要改
-        tableTitle.put("h9_IsCommon", "零件分类");
-        tableTitle.put("H9_Mat_Status", "零部件来源");
+        tableTitle.put("lineId", "零件号");
+
+        tableTitle.put("pBomLinePartName", "名称");
+        tableTitle.put("pBomLinePartEnName", "英文名称");
+        tableTitle.put("pBomLinePartClass", "零件分类");
+        tableTitle.put("pBomLinePartResource", "零部件来源");
+
         tableTitle.put("resource", "自制/采购");
         tableTitle.put("type", "焊接/装配");
         tableTitle.put("buyUnit", "采购单元");
@@ -73,6 +77,7 @@ public class HzPbomController extends BaseController {
         List<Map<String, Object>> _list = new ArrayList<>();
         respDTOS.forEach(dto -> {
             Map<String, Object> _res = new HashMap<>();
+            _res.put("puid",dto.getPuid());
             _res.put("eBomPuid", dto.geteBomPuid());
             _res.put("No",dto.getNo());
             _res.put("level", dto.getLevel());
@@ -80,8 +85,12 @@ public class HzPbomController extends BaseController {
             _res.put("rank", dto.getRank());
             _res.put("groupNum", dto.getGroupNum());
             _res.put("lineId", dto.getLineId());
-            _res.put("h9_IsCommon",dto.getH9_IsCommon());
-            _res.put("H9_Mat_Status",dto.getH9_Mat_Status());
+
+            _res.put("pBomLinePartName",dto.getpBomLinePartName());
+            _res.put("pBomLinePartEnName",dto.getpBomLinePartEnName());
+            _res.put("pBomLinePartClass",dto.getpBomLinePartClass());
+            _res.put("pBomLinePartResource",dto.getpBomLinePartResource());
+
             _res.put("resource", dto.getResource());
             _res.put("type", dto.getType());
             _res.put("buyUnit", dto.getBuyUnit());
@@ -119,8 +128,8 @@ public class HzPbomController extends BaseController {
         hzPbomLineRespDTO.setpBomOfWhichDept(respDTO.getpBomOfWhichDept());
         hzPbomLineRespDTO.setRank(respDTO.getRank());
         hzPbomLineRespDTO.setLevel(respDTO.getLevel());
-        hzPbomLineRespDTO.setH9_IsCommon(respDTO.getH9_IsCommon());
-        hzPbomLineRespDTO.setH9_Mat_Status(respDTO.getH9_Mat_Status());
+        hzPbomLineRespDTO.setpBomLinePartClass(respDTO.getpBomLinePartClass());
+        hzPbomLineRespDTO.setpBomLinePartResource(respDTO.getpBomLinePartResource());
         model.addAttribute("data",hzPbomLineRespDTO);
         return "bomManage/pbom/pbomManage/addPbomManage";
     }
@@ -190,44 +199,40 @@ public class HzPbomController extends BaseController {
             writeAjaxJSONResponse(ResultMessageBuilder.build(false,"非法参数！"),response);
             return;
         }
-        if(reqDTO.getProjectId() == null ||reqDTO.getLineId()==null){
+        if(reqDTO.getProjectId() == null ||reqDTO.getPuid()==null){
             writeAjaxJSONResponse(ResultMessageBuilder.build(false,"非法参数！"),response);
             return;
         }
+
         JSONArray object = hzPbomService.getPbomByLineId(reqDTO);
-        writeAjaxJSONResponse(ResultMessageBuilder.build(true,object),response);
+        writeAjaxJSONResponse(ResultMessageBuilder.build(object),response);
+    }
+
+    @RequestMapping(value = "updataProcessOfFitting", method = RequestMethod.GET)
+    public String updateRecordToPage(String puids,Model model) {
+        HzPbomLineRespDTO respDTO = new HzPbomLineRespDTO();
+        respDTO.setPuids(puids);
+        model.addAttribute("data",respDTO);
+        return "bomManage/pbom/processOfFitting/updataProcessOfFitting";
     }
 
     /**
      * 合成工艺合件
      * @param
      * @param response
-     * AddProcessComposeReqDTO reqDTO,
      */
     @RequestMapping(value = "/add/processCompose",method = RequestMethod.POST)
-    public void addProcessCompose(@RequestBody  Map<String,Object> obj, AddProcessComposeReqDTO reqDTO1, HttpServletResponse response){
-        if(reqDTO1.getProjectPuid()==null || reqDTO1.getLineId() == null || obj == null){
-            writeAjaxJSONResponse(ResultMessageBuilder.build(false,"非法参数！"),response);
-            return;
-        }
-        if(reqDTO1.getLineId().contains("-")){
-            if(reqDTO1.getLineId().split("-")[1].length()<4){
-                writeAjaxJSONResponse(ResultMessageBuilder.build(false, "零件号-后面的长度不能小于4！"), response);
-                return;
-            }
-        }
-        AddProcessComposeReqDTO reqDTO=new AddProcessComposeReqDTO();
-        reqDTO.seteBomContent(obj);
-        reqDTO.setLineId(reqDTO1.getLineId());
-        reqDTO.setPuid(reqDTO1.getPuid());
-        reqDTO.setProjectPuid(reqDTO1.getProjectPuid());
-        reqDTO.setpBomLinePartClass(reqDTO1.getpBomLinePartClass());
-        reqDTO.setpBomLinePartName(reqDTO1.getpBomLinePartName());
-        int i = hzPbomService.addPbomProcessCompose(reqDTO);
-        if(i!=1){
-            writeAjaxJSONResponse(ResultMessageBuilder.build(false,"出错啦！"),response);
-        }else
-        writeAjaxJSONResponse(ResultMessageBuilder.build(true,"操作成功！"),response);
+    public void addProcessCompose(@RequestBody AddHzPbomRecordReqDTO recordReqDTO,HttpServletResponse response){
+//        OperateResultMessageRespDTO operateResultMessageRespDTO = hzPbomService.andProcessCompose(recordReqDTO);
+//        operateResultMessageRespDTO.setOtherParam(recordReqDTO.getLineId());
+        HzPbomProcessComposeReqDTO reqDTO = new HzPbomProcessComposeReqDTO();
+        reqDTO.setLineId("S00-6107001");
+        reqDTO.setProjectId(recordReqDTO.getProjectId());
+        JSONArray jsonArray = hzPbomService.getPbomForProcessCompose(reqDTO);
+        writeAjaxJSONResponse(jsonArray,response);
+//        writeAjaxJSONResponse(ResultMessageBuilder.build(recordReqDTO),response);
 
     }
+
+
 }

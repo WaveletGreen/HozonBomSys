@@ -35,22 +35,29 @@ public class HzPbomLineRespDTO {
     /**
      * 零件分类
      */
-    private Object  h9_IsCommon;//1
-
    private String pBomLinePartClass;
 
     /**
      *PBOM主键id
      */
     private String puid;
+
+
     /**
-     *零件来源（自制总成/采购拆分等）
+     * 零件来源
      */
-    private Object H9_Mat_Status;//1
+    private String pBomLinePartResource;
+
     /**
-     *零件来源（自制总成/采购拆分等）
+     * Bom行对应的零件名
      */
-    private  String pBomLinePartResource;
+    private String pBomLinePartName;
+
+    /**
+     * 英文名称
+     */
+    private String pBomLinePartEnName;
+
     /**
      * 来源（自制/采购）
      */
@@ -97,6 +104,16 @@ public class HzPbomLineRespDTO {
     private String station;
 
     private Integer orderNum;
+
+    private String puids;
+
+    public String getPuids() {
+        return puids;
+    }
+
+    public void setPuids(String puids) {
+        this.puids = puids;
+    }
 
     public Integer getOrderNum() {
         return orderNum;
@@ -178,21 +195,20 @@ public class HzPbomLineRespDTO {
         this.puid = puid;
     }
 
-
-    public Object getH9_IsCommon() {
-        return h9_IsCommon;
+    public String getpBomLinePartName() {
+        return pBomLinePartName;
     }
 
-    public void setH9_IsCommon(Object h9_IsCommon) {
-        this.h9_IsCommon = h9_IsCommon;
+    public void setpBomLinePartName(String pBomLinePartName) {
+        this.pBomLinePartName = pBomLinePartName;
     }
 
-    public Object getH9_Mat_Status() {
-        return H9_Mat_Status;
+    public String getpBomLinePartEnName() {
+        return pBomLinePartEnName;
     }
 
-    public void setH9_Mat_Status(Object h9_Mat_Status) {
-        H9_Mat_Status = h9_Mat_Status;
+    public void setpBomLinePartEnName(String pBomLinePartEnName) {
+        this.pBomLinePartEnName = pBomLinePartEnName;
     }
 
     public String getResource() {

@@ -1,10 +1,14 @@
 package com.connor.hozon.bom.resources.mybatis.bom;
 
 import com.connor.hozon.bom.resources.page.Page;
+import com.connor.hozon.bom.resources.query.HzMaterielByPageQuery;
+import com.connor.hozon.bom.resources.query.HzMaterielQuery;
 import com.connor.hozon.bom.resources.query.HzMbomByPageQuery;
 import sql.pojo.bom.HzBomLineRecord;
 import sql.pojo.bom.HzMbomLineRecord;
 import sql.pojo.bom.HzMbomRecord;
+import sql.pojo.cfg.HzCfg0ModelRecord;
+import sql.pojo.project.HzMaterielRecord;
 
 import java.util.List;
 import java.util.Map;
@@ -60,21 +64,74 @@ public interface HzMbomRecordDAO {
      */
     HzMbomRecord findHzMbomByeBomPuid(String eBomPuid);
 
+    /**
+     * 查询MBOM对应车型信息
+     * @param projectId
+     * @return
+     */
     List<HzMbomLineRecord> getHzVehicleModelName(String projectId);
 
+    /**
+     * 获取超级MBOM 作废
+     * @param query
+     * @return
+     */
+    @Deprecated
     Page<HzMbomLineRecord> getHzSuberMbomByPage(HzMbomByPageQuery query);
 
     /**
-     * 获取一条超级MBOM信息
+     * 获取一条超级MBOM信息 作废
      * @param projectId
      * @param pPuid
      * @return
      */
+    @Deprecated
     HzMbomLineRecord getHzSuperMbomByPuid(String projectId,String pPuid);
 
+    @Deprecated
     HzMbomLineRecord getHzMbom(String projectId,String parentPuid);
 
+    /**
+     * 获取MBOM的数量
+     * @param projectId
+     * @return
+     */
     Integer getHzMbomTotalCount(String projectId);
 
+    /**
+     * 获取MBOM最大排序值
+     * @param projectId
+     * @return
+     */
     Integer getHzMbomMaxOrderNum(String projectId);
+
+    /**
+     * 获取2Y层 分页获取 MBOM数据 （虚拟物料主数据）
+     * @param query
+     * @return
+     */
+    List<HzMbomLineRecord> findHz2YMbomRecord(HzMbomByPageQuery query);
+
+    /**
+     * 根据BOM来源获取不同bom 分页获取
+     * @param query
+     * @return
+     */
+    List<HzMbomLineRecord> findHzMbomByResource(HzMbomByPageQuery query);
+
+
+    /**
+     * 获取2Y层 全部获取 MBOM数据 （虚拟物料主数据）
+     * @param query
+     * @return
+     */
+    List<HzMbomLineRecord> findHz2YMbomRecordAll(HzMbomByPageQuery query);
+
+    /**
+     * 根据BOM来源获取不同bom 全部获取
+     * @param query
+     * @return
+     */
+    List<HzMbomLineRecord> findHzMbomByResourceAll(HzMbomByPageQuery query);
+
 }

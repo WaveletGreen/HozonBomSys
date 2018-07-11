@@ -4,6 +4,8 @@ import com.connor.hozon.bom.resources.mybatis.bom.HzPbomRecordDAO;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.page.PageRequest;
 import com.connor.hozon.bom.resources.query.HzPbomByPageQuery;
+import com.connor.hozon.bom.resources.query.HzPbomTreeQuery;
+import org.mapstruct.ap.shaded.freemarker.ext.beans.HashAdapter;
 import org.springframework.stereotype.Service;
 import sql.BaseSQLUtil;
 import sql.pojo.bom.HzBomLineRecord;
@@ -22,9 +24,9 @@ import java.util.Map;
 public class HzPbomRecordDAOImpl extends BaseSQLUtil implements HzPbomRecordDAO {
 
     @Override
-    public HzPbomLineRecord getPbomById(Map<String, Object> map) {
+    public List<HzPbomLineRecord> getPbomById(Map<String, Object> map) {
 
-        return (HzPbomLineRecord)super.findForObject("HzPbomRecordDAOImpl_getPbomById",map);
+        return super.findForList("HzPbomRecordDAOImpl_getPbomById",map);
     }
 
     @Override
@@ -38,7 +40,7 @@ public class HzPbomRecordDAOImpl extends BaseSQLUtil implements HzPbomRecordDAO 
     }
 
     @Override
-    public int update(HzPbomRecord record) {
+    public int update(HzPbomLineRecord record) {
         return super.update("HzPbomRecordDAOImpl_update",record);
     }
 
@@ -47,10 +49,6 @@ public class HzPbomRecordDAOImpl extends BaseSQLUtil implements HzPbomRecordDAO 
         return super.update("HzPbomRecordDAOImpl_deleteByForeignId",ePuid);
     }
 
-    @Override
-    public List<HzPbomLineRecord> getHzPbomById(Map<String, Object> map) {
-        return super.findForList("HzPbomRecordDAOImpl_getHzPbomById",map);
-    }
 
     @Override
     public Page<HzPbomLineRecord> getHzPbomRecordByPage(HzPbomByPageQuery query) {
@@ -68,9 +66,11 @@ public class HzPbomRecordDAOImpl extends BaseSQLUtil implements HzPbomRecordDAO 
     }
 
     @Override
-    public HzPbomRecord getHzPbomByEbomPuid(String eBomPuid) {
-
-        return (HzPbomRecord) super.findForObject("HzPbomRecordDAOImpl_getHzPbomByEbomPuid",eBomPuid);
+    public HzPbomLineRecord getHzPbomByEbomPuid(String eBomPuid,String projectId) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("projectId",projectId);
+        map.put("ebomPuid",eBomPuid);
+        return (HzPbomLineRecord) super.findForObject("HzPbomRecordDAOImpl_getHzPbomByEbomPuid",map);
     }
 
     @Override
@@ -85,4 +85,24 @@ public class HzPbomRecordDAOImpl extends BaseSQLUtil implements HzPbomRecordDAO 
         return(int) super.findForObject("HzPbomRecordDAOImpl_findMaxOrderNum",null);
     }
 
+    @Override
+    public List<HzPbomLineRecord> getHzPbomTree(HzPbomTreeQuery query) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("projectId",query.getProjectId());
+        map.put("puid",query.getPuid());
+        return super.findForList("HzPbomRecordDAOImpl_getHzPbomTree",map);
+    }
+
+    @Override
+    public int getMaxLineIndexFirstNum(String projectId) {
+        return (int)super.findForObject("HzPbomRecordDAOImpl_getMaxLineIndexFirstNum",projectId);
+    }
+
+    @Override
+    public boolean checkItemIdIsRepeat(String projectId, String lineId) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("projectId",projectId);
+        map.put("lineId",lineId);
+        return (int)super.findForObject("HzPbomRecordDAOImpl_checkItemIdIsRepeat",map)>0;
+    }
 }

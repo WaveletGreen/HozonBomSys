@@ -67,40 +67,6 @@ public interface HzMaterielDAO {
     List<HzCfg0ModelRecord> findHzCfg0ModelRecord(HzMaterielByPageQuery query);
 
     /**
-     * 获取虚拟物料主数据
-     * @param query
-     * @return
-     */
-    List<HzMbomLineRecord> findHz2YMbomRecord(HzMaterielByPageQuery query);
-
-    /**
-     * 获取半成品物料主数据  零件来源为自制单件
-     * @param query
-     * @return
-     */
-    List<HzMbomLineRecord> findHzResourceMakeSingleMbomRecord(HzMaterielByPageQuery query);
-
-    /**
-     * 获取生产性外购物料主数据  零件来源为采购件
-     * @param query
-     * @return
-     */
-    List<HzMbomLineRecord> findHzResourceBuyMbomRecord(HzMaterielByPageQuery query);
-
-    /**
-     * 获取自制备件物料主数据
-     * @param query
-     * @return
-     */
-    List<HzMbomLineRecord> findHzMadeBySelfSpareMbomRecord(HzMaterielByPageQuery query);
-
-    /**
-     * 获取自制总成物料
-     * @param query
-     * @return
-     */
-    List<HzMbomLineRecord> findHzMadeBySelfAssemblyMbomRecord(HzMaterielByPageQuery query);
-    /**
      * 查询物料数据是否存在（根据外键来查询）
      * @param map
      * @return
@@ -129,39 +95,5 @@ public interface HzMaterielDAO {
      */
     List<HzCfg0ModelRecord> findHzCfg0ModelRecordAll(HzMaterielByPageQuery query);
 
-    /**
-     * 获取虚拟物料主数据全部
-     * @param query
-     * @return
-     */
-    List<HzMbomLineRecord> findHz2YMbomRecordAll(HzMaterielByPageQuery query);
-
-    /**
-     * 获取半成品物料主数据全部  零件来源为自制单件
-     * @param query
-     * @return
-     */
-    List<HzMbomLineRecord> findHzResourceMakeSingleMbomRecordAll(HzMaterielByPageQuery query);
-
-    /**
-     * 获取生产性外购物料主数据全部  零件来源为采购件
-     * @param query
-     * @return
-     */
-    List<HzMbomLineRecord> findHzResourceBuyMbomRecordAll(HzMaterielByPageQuery query);
-
-    /**
-     * 获取自制备件物料主数据全部
-     * @param query
-     * @return
-     */
-    List<HzMbomLineRecord> findHzMadeBySelfSpareMbomRecordAll(HzMaterielByPageQuery query);
-
-    /**
-     * 获取全部的自制总成物料
-     * @param query
-     * @return
-     */
-    List<HzMbomLineRecord> findHzMadeBySelfAssemblyMbomRecordAll(HzMaterielByPageQuery query);
 
 }

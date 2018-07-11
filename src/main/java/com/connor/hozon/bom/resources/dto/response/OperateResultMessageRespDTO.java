@@ -20,6 +20,11 @@ public class OperateResultMessageRespDTO {
      */
     private Long errCode;
 
+    /**
+     * 其他参数
+     */
+    private String otherParam;
+
     public static boolean isSuccess(OperateResultMessageRespDTO dto) {
 
         if(dto != null && Long.valueOf(1000L).equals(dto.getErrCode())) {
@@ -43,6 +48,14 @@ public class OperateResultMessageRespDTO {
 
     public void setErrCode(Long errCode) {
         this.errCode = errCode;
+    }
+
+    public String getOtherParam() {
+        return otherParam;
+    }
+
+    public void setOtherParam(String otherParam) {
+        this.otherParam = otherParam;
     }
 
     public static OperateResultMessageRespDTO getSuccessResult(){
