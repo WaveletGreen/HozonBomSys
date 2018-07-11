@@ -5,12 +5,11 @@ $(document).ready(function () {
     var coach = [];
     var puids="";
     var coach1 = [];
-    var puids1="";
     var projectId = $("#project", window.top.document).val();
     $("#queryBtn1").click(function () {
         var val = $("#queryLineId").val();
         if (val == "") {
-            alert("请输入您要查询的零件号")
+            window.Ewin.alert({message: "请输入您要查询的零件号"});
         }
         else {
             $.ajax({
@@ -171,7 +170,7 @@ $(document).ready(function () {
                         $("#detailTable").html(rel);
                     },
                     error: function (err) {
-                        alert(err.status);
+                        window.Ewin.alert({message: err.status});
                     }
                 })
                 localSelectedNode = treeNode;
@@ -188,7 +187,7 @@ $(document).ready(function () {
     }
     $("#synthetic").click(function () {
         if (coach.length < 2) {
-            alert("请至少选择两个零件生成工艺合件")
+            window.Ewin.alert({message: "请至少选择两个零件生成工艺合件"});
         }
         else {
             window.Ewin.dialog({
@@ -202,11 +201,11 @@ $(document).ready(function () {
     })
     $("#synthetic1").click(function () {
         if (coach1.length!=0){
+            var puids2=document.getElementById("puids1").innerText;
             var myData = JSON.stringify({
                 "eBomPuid" :coach1,
-                "puids":puids
+                "puids1":puids2,
             })
-            console.log(myData)
             $.ajax({
                 url:"pbom/add/processCompose",
                 data:myData,
@@ -236,7 +235,7 @@ $(document).ready(function () {
     $("#queryBtn2").click(function () {
         var val = $("#queryLineId2").val();
         if (val == "") {
-            alert("请输入您要查询的零件号")
+            window.Ewin.alert({message: "请输入您要查询的零件号"});
         }
         else {
             $.ajax({
@@ -254,7 +253,7 @@ $(document).ready(function () {
                         },
                         check: {
                             enable: true,
-                            chkStyle: "radio"
+                            chkStyle: "radio",
                         },
                         data: {
                             simpleData: {
@@ -282,8 +281,11 @@ $(document).ready(function () {
                             onCheck: function (e, treeId, treeNode) {
                                 var treeObj = $.fn.zTree.getZTreeObj("Ztree3");
                                 var nodes = treeObj.getCheckedNodes(true);
-                                if (nodes.length>1){
-                                    alert("只能指定一个工艺合件的位置")
+                                if (nodes.length>2){
+                                    treeObj.cancelSelectedNode(nodes[0]);
+                                    //treeObj.checkAllNodes(true);
+                                    window.Ewin.alert({message: "只能指定一个工艺合件的位置"});
+                                    //return;
                                 }
                                 else if (nodes.length>0&&nodes.length<2) {
                                     coach1.splice(0,coach1.length);
@@ -373,7 +375,7 @@ $(document).ready(function () {
                                         $("#detailTable").html(rel);
                                     },
                                     error: function (err) {
-                                        alert(err.status);
+                                        window.Ewin.alert({message: err.status});
                                     }
                                 })
                                 localSelectedNode1 = treeNode;
