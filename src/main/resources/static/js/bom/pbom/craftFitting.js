@@ -4,6 +4,7 @@ $(document).ready(function () {
     var localSelectedNode1;
     var coach = [];
     var puids="";
+    var allPuids="";
     var coach1 = [];
     var projectId = $("#project", window.top.document).val();
     $("#queryBtn1").click(function () {
@@ -17,7 +18,11 @@ $(document).ready(function () {
                 url: "pbom/processComposeTree?lineId=" + val + "&projectId=" + projectId,
                 undefinedText: "",//当数据为 undefined 时显示的字符
                 success: function (data) {
-                    var zNodes = data;
+                    if(!data.success){
+                        window.Ewin.alert({message: data.errMsg});
+                        return;
+                    }
+                    var zNodes = data.externalObject;
                     initZtree(zNodes);
                 },
             });
@@ -200,12 +205,19 @@ $(document).ready(function () {
         }
     })
     $("#synthetic1").click(function () {
+        allPuids = document.getElementById("demo3").innerText;
+        if(allPuids == null || allPuids == ""){
+            window.Ewin.alert("勾一下嘛~");
+            return;
+        }
+        puids = allPuids;
         if (coach1.length!=0){
-            var puids2=document.getElementById("puids1").innerText;
             var myData = JSON.stringify({
-                "eBomPuid" :coach1,
-                "puids1":puids2,
+                "eBomPuid" :coach1[0],
+                "projectId": $("#project", window.top.document).val(),
+                "puids":puids
             })
+            console.log(myData)
             $.ajax({
                 url:"pbom/add/processCompose",
                 data:myData,
@@ -243,6 +255,10 @@ $(document).ready(function () {
                 url: "pbom/processComposeTree?lineId=" + val + "&projectId=" + projectId,
                 undefinedText: "",//当数据为 undefined 时显示的字符
                 success: function (data) {
+                    if(!data.success){
+                        window.Ewin.alert({message: data.errMsg});
+                        return;
+                    }
                     var setting = {
                         view: {
                             selectedMulti: false,
@@ -253,7 +269,7 @@ $(document).ready(function () {
                         },
                         check: {
                             enable: true,
-                            chkStyle: "radio",
+                            chkStyle: "radio"
                         },
                         data: {
                             simpleData: {
@@ -280,12 +296,17 @@ $(document).ready(function () {
                             },*/
                             onCheck: function (e, treeId, treeNode) {
                                 var treeObj = $.fn.zTree.getZTreeObj("Ztree3");
-                                var nodes = treeObj.getCheckedNodes(true);
-                                if (nodes.length>2){
-                                    treeObj.cancelSelectedNode(nodes[0]);
-                                    //treeObj.checkAllNodes(true);
+                                var nodes =
+                                    // treeObj.getSelectedNodes();
+                                treeObj.getCheckedNodes(true);
+                                console.log(nodes.length);
+
+                                if (nodes.length>1){
                                     window.Ewin.alert({message: "只能指定一个工艺合件的位置"});
-                                    //return;
+                                    for(var k=0;k<nodes.length;k++){
+                                        treeObj.checkNode(nodes[k]);
+                                    }
+                                    return;
                                 }
                                 else if (nodes.length>0&&nodes.length<2) {
                                     coach1.splice(0,coach1.length);
@@ -382,7 +403,7 @@ $(document).ready(function () {
                             },
                         }
                     };
-                    var zNodes = data;
+                    var zNodes = data.externalObject;
 
                     $(document).ready(function () {
                         $.fn.zTree.init($("#Ztree3"), setting, zNodes);
