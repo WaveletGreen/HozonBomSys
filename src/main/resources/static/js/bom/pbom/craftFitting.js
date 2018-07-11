@@ -91,8 +91,6 @@ $(document).ready(function () {
                         }
                     }
                 }
-                // console.log(coach);
-                // console.log(puids);
             },
             onClick: function (event, treeId, treeNode) {
                 // if (treeNode.level != 1) {
@@ -217,7 +215,6 @@ $(document).ready(function () {
                 "projectId": $("#project", window.top.document).val(),
                 "puids":puids
             })
-            console.log(myData)
             $.ajax({
                 url:"pbom/add/processCompose",
                 data:myData,
@@ -282,8 +279,6 @@ $(document).ready(function () {
                                             var nodes =
                                                 // treeObj.getSelectedNodes();
                                                 treeObj.getCheckedNodes(true);
-                                            console.log(nodes.length);
-
                                             if (nodes.length>1){
                                                 window.Ewin.alert({message: "只能指定一个工艺合件的位置"});
                                                 for(var k=0;k<nodes.length;k++){
@@ -473,8 +468,6 @@ $(document).ready(function () {
                                 var nodes =
                                     // treeObj.getSelectedNodes();
                                 treeObj.getCheckedNodes(true);
-                                console.log(nodes.length);
-
                                 if (nodes.length>1){
                                     window.Ewin.alert({message: "只能指定一个工艺合件的位置"});
                                     for(var k=0;k<nodes.length;k++){

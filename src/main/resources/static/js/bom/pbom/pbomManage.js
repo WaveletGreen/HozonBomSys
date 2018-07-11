@@ -16,7 +16,6 @@ function doQuery() {
     pBomUrl += "&lineId="+lineId;
     initTable(pBomUrl);
     $('#pbomManageTable').bootstrapTable('destroy');
-    console.log("有搜索框的参数是："+pBomUrl)
 }
 
 function initTable(pBomUrl) {
@@ -42,7 +41,6 @@ function initTable(pBomUrl) {
             //         'middle'
             // });
             var data = result.data;
-            console.log(data);
             var keys = [];
             var values;
             for (var key in data) {

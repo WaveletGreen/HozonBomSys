@@ -46,7 +46,6 @@ $(document).ready(function () {
                     "station": $("#station", window.top.document).val(),
                     "projectId": $("#project", window.top.document).val()
                 });
-                console.log(myData);
                 $.ajax({
                     contentType:
                         "application/json",
@@ -98,7 +97,6 @@ $(document).ready(function () {
                                     onCheck: function (e, treeId, treeNode) {
                                         var treeObj = $.fn.zTree.getZTreeObj("Ztree1");
                                         var nodes = treeObj.getCheckedNodes(true);
-                                        console.log(nodes.length)
                                         for(var i=0;i<nodes.length;i++){
                                             arr.push(nodes[i].puid);
                                             allPuids+=nodes[i].puid+","
@@ -117,7 +115,6 @@ $(document).ready(function () {
                                             }
                                             $("#demo3").html( "<p>"+allPuids+"</p>");
                                         }
-                                        console.log(arr);
                                     },
                                     onClick: function (event, treeId, treeNode) {
                                         localSelectedNode = treeNode;
@@ -205,7 +202,6 @@ $(document).ready(function () {
                             };
 
 
-                            console.log(document.getElementById("demo3").innerText);
                             var zNodes = result.data;
                             if(result.success){
                                 $("#demo1").html( "<p class=\"text-primary\">"+"合成结果：</p>");

@@ -17,7 +17,6 @@ function doQuery(){
     mBomUrl += "&lineId="+lineId;
     initTable(mBomUrl);
     $('#mbomMaintenanceTable').bootstrapTable('destroy');
-    console.log("有搜索框的参数是："+mBomUrl)
 }
 function initTable(mBomUrl){
     var projectPuid = $("#project", window.top.document).val();
@@ -40,7 +39,6 @@ function initTable(mBomUrl){
             //         'middle'
             // });
             var data = result.data;
-            console.log(data);
             var keys = [];
             var values;
             for (var key in data) {
@@ -93,7 +91,6 @@ function initTable(mBomUrl){
                         iconCls: 'glyphicon glyphicon-plus',
                         handler: function () {
                             var rows = $table.bootstrapTable('getSelections');
-                            console.log(rows);
                             //只能选一条
                             if (rows.length != 1) {
                                 window.Ewin.alert({message: '请选择一条需要添加的数据!'});

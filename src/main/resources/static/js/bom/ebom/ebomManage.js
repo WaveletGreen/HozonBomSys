@@ -17,7 +17,6 @@ function doQuery(){
     eBomUrl += "&lineId="+lineId;
     initTable(eBomUrl);
     $('#ebomManageTable').bootstrapTable('destroy');
-    console.log("有搜索框的参数是："+eBomUrl)
 }
 function initTable(eBomUrl){
     var projectPuid = $("#project", window.top.document).val();
@@ -165,7 +164,6 @@ function initTable(eBomUrl){
                                             $table.bootstrapTable("refresh");
                                         },
                                         error: function (info) {
-                                            console.log(info)
                                             window.Ewin.alert({message: ":" + info.status});
                                         }
                                     })

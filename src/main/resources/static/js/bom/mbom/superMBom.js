@@ -24,12 +24,10 @@ function doQuery() {
 
     initTable(url);
     $('#superMBomTable').bootstrapTable('destroy');
-    console.log("有搜索框的参数是："+url)
     count++;
 }
 
 function initTable(url) {
-    console.log(url)
     var projectPuid = $("#project", window.top.document).val();
     //var url = "mbom/super/record?projectId="+projectPuid;
     var $table = $("#superMBomTable");
@@ -60,7 +58,6 @@ function initTable(url) {
                 }
             }
             var data = result.data;
-            console.log(data);
             var keys = [];
             var values;
             for (var key in data) {
@@ -115,8 +112,6 @@ function initTable(url) {
             function responseHandler(result){
                 var model = result.model;
                 var data = result.result;
-                console.log(data);
-                console.log(model)
                 //如果没有错误则返回数据，渲染表格
                 return {
                     model:result.model
