@@ -185,7 +185,11 @@ public class HzPbomController extends BaseController {
             return;
         }
         JSONArray jsonArray = hzPbomService.getPbomForProcessCompose(reqDTO);
-        writeAjaxJSONResponse(jsonArray,response);
+         if(jsonArray == null){
+             writeAjaxJSONResponse(ResultMessageBuilder.build(false,"查无结果！"),response);
+             return;
+         }
+        writeAjaxJSONResponse(ResultMessageBuilder.build(true,jsonArray),response);
     }
 
     /**
@@ -223,15 +227,16 @@ public class HzPbomController extends BaseController {
      */
     @RequestMapping(value = "/add/processCompose",method = RequestMethod.POST)
     public void addProcessCompose(@RequestBody AddHzPbomRecordReqDTO recordReqDTO,HttpServletResponse response){
-//        OperateResultMessageRespDTO operateResultMessageRespDTO = hzPbomService.andProcessCompose(recordReqDTO);
-//        operateResultMessageRespDTO.setOtherParam(recordReqDTO.getLineId());
-        HzPbomProcessComposeReqDTO reqDTO = new HzPbomProcessComposeReqDTO();
-        reqDTO.setLineId("S00-5402180");
-        reqDTO.setProjectId(recordReqDTO.getProjectId());
-        JSONArray jsonArray = hzPbomService.getPbomForProcessCompose(reqDTO);
-        writeAjaxJSONResponse(jsonArray,response);
-//        writeAjaxJSONResponse(ResultMessageBuilder.build(recordReqDTO),response);
-
+        OperateResultMessageRespDTO operateResultMessageRespDTO = hzPbomService.andProcessCompose(recordReqDTO);
+        JSONArray jsonArray= new JSONArray();
+        if(OperateResultMessageRespDTO.isSuccess(operateResultMessageRespDTO)){
+            HzPbomProcessComposeReqDTO reqDTO = new HzPbomProcessComposeReqDTO();
+            reqDTO.setLineId(recordReqDTO.getLineId());
+            reqDTO.setProjectId(recordReqDTO.getProjectId());
+            jsonArray = hzPbomService.getPbomForProcessCompose(reqDTO);
+        }
+        writeAjaxJSONResponse(ResultMessageBuilder.build(
+                OperateResultMessageRespDTO.isSuccess(operateResultMessageRespDTO),operateResultMessageRespDTO.getErrMsg(),jsonArray),response);
     }
 
 

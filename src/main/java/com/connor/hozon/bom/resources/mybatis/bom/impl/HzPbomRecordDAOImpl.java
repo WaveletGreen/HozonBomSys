@@ -69,7 +69,7 @@ public class HzPbomRecordDAOImpl extends BaseSQLUtil implements HzPbomRecordDAO 
     public HzPbomLineRecord getHzPbomByEbomPuid(String eBomPuid,String projectId) {
         Map<String,Object> map = new HashMap<>();
         map.put("projectId",projectId);
-        map.put("ebomPuid",eBomPuid);
+        map.put("eBomPuid",eBomPuid);
         return (HzPbomLineRecord) super.findForObject("HzPbomRecordDAOImpl_getHzPbomByEbomPuid",map);
     }
 
