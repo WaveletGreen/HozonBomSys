@@ -1,6 +1,5 @@
 package com.connor.hozon.bom.bomSystem.service.iservice.integrate;
 
-import com.connor.hozon.bom.resources.dto.request.EditHzMaterielReqDTO;
 import net.sf.json.JSONObject;
 import org.springframework.context.annotation.Configuration;
 
@@ -19,10 +18,10 @@ public interface ISynBomService {
     /**
      * 删除时候传
      *
-     * @param puidOfDelete 需要删除的数据的puid
+     * @param puidsOfDelete 需要删除的数据的puid
      * @return
      */
-    JSONObject deleteByUids(String projectPuid, String puidOfDelete);
+    JSONObject deleteByUids(String projectPuid, List<String> puidsOfDelete);
 
     /**
      * 添加1行

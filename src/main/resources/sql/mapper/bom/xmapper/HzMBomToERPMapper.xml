@@ -28,8 +28,11 @@
         <!--BOM顺序号-->
         <result column="P_BOM_ORDER_NUM" jdbcType="VARCHAR"
                 property="bomOrderNum"/>
+        <!--BOM顺序号-->
+        <result column="P_LINE_INDEX" jdbcType="VARCHAR"
+                property="lineIndex"/>
         <!--是否2Y-->
-        <result column="T.P_BOM_LINE_IS_2Y" jdbcType="VARCHAR"
+        <result column="P_BOM_LINE_IS_2Y" jdbcType="INTEGER"
                 property="is2Y"/>
         <!--库存地点-->
         <result column="P_STOCK_LOCATION" jdbcType="VARCHAR"
@@ -87,6 +90,7 @@
         T.P_BOM_ORDER_NUM,/*BOM顺序号*/
         T.P_BOM_LINE_IS_2Y,/**是否2Yceng*/
         T3.P_BOM_LINE_BLOCK, /* 从这里找单位*/
+        T3.P_LINE_INDEX,/**真实顺序号*/
         T.P_STOCK_LOCATION,/*发料库存地点*/
         T8.P_CFG0_RELEVANCE, /*相关性*/
         T3.P_FNA_INFO,/*FNA（装配位置）*/
@@ -124,6 +128,7 @@
         </if>
         )
         )
+        order by T.p_bom_order_num
     </select>
     <select id="selectByProjectUidWithCondition"
             parameterType="java.util.Map"

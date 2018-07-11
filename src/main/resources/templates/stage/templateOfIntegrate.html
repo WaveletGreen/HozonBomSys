@@ -6,30 +6,55 @@
 <meta charset="UTF-8">
 <body class="content-body">
 <div class="panel-body">
-    <div style="overflow:scroll;max-height: 400px;width: inherit;">
+    <div style="overflow:scroll;max-height: 300px;width: inherit">
         <table class="table table-striped tableNormalStyle"
                id="dataOfSuccessTable">
             <tr>
                 <th th:text="${msgOfSuccess}" style="text-align: left"></th>
                 <th style="text-align: left">消息</th>
             </tr>
-            <tr th:each="entity,index:${success}">
+            <tr th:each="entity:${success}">
                 <td th:text="${entity.itemId}"></td>
                 <td th:text="${entity.msg}"></td>
                 <!--<td hidden="hidden"></td>-->
             </tr>
         </table>
     </div>
-    <div style="overflow:scroll;max-height: 400px;width: inherit;">
+    <div style="overflow:scroll;max-height: 300px;width: inherit">
         <table class="table table-striped tableNormalStyle" id="dataOfFailTable">
             <tr>
                 <th th:text="${msgOfFail}" style="text-align: left"></th>
                 <th style="text-align: left">消息</th>
             </tr>
-            <tr th:each="entity,index:${fail}">
+            <tr th:each="entity:${fail}">
                 <td th:text="${entity.itemId}"></td>
                 <td th:text="${entity.msg}"></td>
                 <!--<td hidden="hidden"></td>-->
+            </tr>
+        </table>
+    </div>
+    <div style="overflow:scroll;max-height: 200px;width: inherit">
+        <table class="table table-striped tableNormalStyle" id="totalTable">
+            <tr>
+                <th style="text-align: left">总计执行行数</th>
+                <td th:text="${total}"></td>
+            </tr>
+            <tr>
+                <th style="text-align: left">总计成功行数</th>
+                <td th:text="${totalOfSuccess}"></td>
+            </tr>
+            <tr>
+                <th style="text-align: left">总计失败行数</th>
+                <td th:text="${totalOfFail}"></td>
+
+            </tr>
+            <tr>
+                <th style="text-align: left">总计无父节点行数</th>
+                <td th:text="${totalOfOutOfParent}"></td>
+            </tr>
+            <tr>
+                <th style="text-align: left">总计未知错误行数</th>
+                <td th:text="${totalOfUnknown}"></td>
             </tr>
         </table>
     </div>

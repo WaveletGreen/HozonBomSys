@@ -71,6 +71,8 @@ public class TransBomService extends Author implements ITransmitService {
             //一定要有一个输出参数，否则报错
             if (t == null) {
                 out.getItem().add(t = new ZPPTCO005());
+            } else {
+                out.getItem().add(t);
             }
             inputContainer.value = input;
             outputContainer.value = out;

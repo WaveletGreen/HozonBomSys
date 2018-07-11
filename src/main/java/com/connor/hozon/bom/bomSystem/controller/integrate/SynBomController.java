@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -52,11 +53,7 @@ public class SynBomController {
         }
 
         JSONObject entities = bomService.synAllByProjectUid(projectUid);
-
-        model.addAttribute("msgOfSuccess", "发送成功项");
-        model.addAttribute("msgOfFail", "发送失败项");
-        model.addAttribute("success", entities.get("success"));
-        model.addAttribute("fail", entities.get("fail"));
+        addToModel(entities, model);
         return "stage/templateOfIntegrate";
     }
 
@@ -73,7 +70,9 @@ public class SynBomController {
         if (!result.getBoolean("status")) {
             return result;
         }
-        return bomService.deleteByUids(dtos.get(0).getPuid(), projectUid);
+        List<String> puids = new ArrayList<>();
+        dtos.forEach(dto -> puids.add(dto.getPuid()));
+        return bomService.deleteByUids(projectUid, puids);
     }
 
     /**
@@ -83,13 +82,33 @@ public class SynBomController {
      * @return
      */
     @RequestMapping("/updateByUids")
-    @ResponseBody
-    public JSONObject updateByUids(@RequestBody List<EditHzMaterielReqDTO> dtos, @RequestParam("projectUid") String projectUid) {
+    public String updateByUids(@RequestBody List<EditHzMaterielReqDTO> dtos, @RequestParam("projectUid") String projectUid, Model model) {
         JSONObject result = validate(dtos, projectUid);
         if (!result.getBoolean("status")) {
-            return result;
+            model.addAttribute("msg", result.get("msg"));
+            return "errorWithEntity";
         }
-        return bomService.updateByUids(dtos.get(0).getPuid(), projectUid);
+        JSONObject entities = bomService.updateByUids(projectUid, dtos.get(0).getPuid());
+        addToModel(entities, model);
+        return "stage/templateOfIntegrate";
+    }
+
+    /**
+     * 添加进model中
+     *
+     * @param entities
+     * @param model
+     */
+    private void addToModel(JSONObject entities, Model model) {
+        model.addAttribute("msgOfSuccess", "发送成功项");
+        model.addAttribute("msgOfFail", "发送失败项");
+        model.addAttribute("success", entities.get("success"));
+        model.addAttribute("fail", entities.get("fail"));
+        model.addAttribute("total", entities.get("total"));
+        model.addAttribute("totalOfSuccess", entities.get("totalOfSuccess"));
+        model.addAttribute("totalOfFail", entities.get("totalOfFail"));
+        model.addAttribute("totalOfOutOfParent", entities.get("totalOfOutOfParent"));
+        model.addAttribute("totalOfUnknown", entities.get("totalOfUnknown"));
     }
 
     private JSONObject validate(List<EditHzMaterielReqDTO> dtos, String projectUid) {

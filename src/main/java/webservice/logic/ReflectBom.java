@@ -135,7 +135,7 @@ public class ReflectBom {
         //基本数量，默认是1
         setBaseNumOfHead("1");
         //BOM序号
-        setOrderOfBomLine(bomToERPBean.getBomOrderNum());
+        setOrderOfBomLine(bomToERPBean.getLineIndex().substring(bomToERPBean.getLineIndex().lastIndexOf(".")+1));
         //子物料编码
         setChildOfBomLine(bomToERPBean.getBomLineId());
         //数量，也默认1条条传
