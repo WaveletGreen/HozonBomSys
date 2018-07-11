@@ -2,17 +2,16 @@ package com.connor.hozon.bom.bomSystem.service.integrate;
 
 import com.connor.hozon.bom.bomSystem.dao.bom.HzMBomToERPDao;
 import com.connor.hozon.bom.bomSystem.helper.IntegrateMsgDTO;
+import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
 import com.connor.hozon.bom.bomSystem.service.iservice.integrate.ISynBomService;
-import net.sf.json.JSONArray;
+import integration.base.bom.ZPPTCO005;
+import integration.logic.ReflectBom;
+import integration.option.ActionFlagOption;
+import integration.service.impl.bom5.TransBomService;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import sql.pojo.bom.HzMBomToERPBean;
-import webservice.base.bom.ZPPTCO005;
-import webservice.base.helper.UUIDHelper;
-import webservice.logic.ReflectBom;
-import webservice.option.ActionFlagOption;
-import webservice.service.impl.bom5.TransBomService;
 
 import java.util.*;
 
@@ -238,8 +237,8 @@ public class SynBomService implements ISynBomService {
             int index = 0;
             coach.clear();
             for (String k : mapOfPackNo.get(key).keySet()) {
-                mapOfPackNo.get(key).get(k).getZpptci005().setZITEM(String.valueOf(index));
-                mapOfPackNo.get(key).get(k).getZpptci005().setZSORTF(String.valueOf(index));
+                mapOfPackNo.get(key).get(k).getZpptci005().setPITEM(String.valueOf(index));
+                mapOfPackNo.get(key).get(k).getZpptci005().setPSORTF(String.valueOf(index));
                 transBomService.getInput().getItem().add(mapOfPackNo.get(key).get(k).getZpptci005());
                 coach.put(String.valueOf(index), mapOfPackNo.get(key).get(k));
                 index++;
@@ -251,21 +250,21 @@ public class SynBomService implements ISynBomService {
             total += mapOfPackNo.get(key).size();
             List<ZPPTCO005> resultPool = transBomService.getOut().getItem();
             for (ZPPTCO005 zpptco005 : resultPool) {
-                if (null == zpptco005.getTYPE()) {
+                if (null == zpptco005.getPTYPE()) {
                     totalOfUnknown++;
                     continue;
                 }
-                ReflectBom bean = coach.get(zpptco005.getZITEM());
+                ReflectBom bean = coach.get(zpptco005.getPZITEM());
                 if (bean == null) {
                     totalOfUnknown++;
                     continue;
                 }
                 IntegrateMsgDTO msgDTO = new IntegrateMsgDTO();
-                msgDTO.setMsg(zpptco005.getMESSAGE());
+                msgDTO.setMsg(zpptco005.getPMESSAGE());
                 msgDTO.setItemId(bean.getChildOfBomLine());
                 msgDTO.setPuid(bean.getPuid());
 
-                if ("S".equalsIgnoreCase(zpptco005.getTYPE())) {
+                if ("S".equalsIgnoreCase(zpptco005.getPTYPE())) {
                     success.add(msgDTO);
                     totalOfSuccess++;
                 } else {
@@ -547,22 +546,22 @@ public class SynBomService implements ISynBomService {
         for (ZPPTCO005 zpptco005 : resultPool) {
             //总数自增
             total++;
-            if (zpptco005 == null || zpptco005.getTYPE() == null || "".equals(zpptco005.getTYPE())) {
+            if (zpptco005 == null || zpptco005.getPTYPE() == null || "".equals(zpptco005.getPTYPE())) {
                 //未知错误数自增
                 totalOfUnknown++;
                 continue;
             }
-            ReflectBom bean = packNumMap.get(zpptco005.getZPACKNO());
+            ReflectBom bean = packNumMap.get(zpptco005.getPPACKNO());
             if (bean == null) {
                 //未知错误数自增
                 totalOfUnknown++;
                 continue;
             }
             IntegrateMsgDTO msgDTO = new IntegrateMsgDTO();
-            msgDTO.setMsg(zpptco005.getMESSAGE());
+            msgDTO.setMsg(zpptco005.getPMESSAGE());
             msgDTO.setItemId(bean.getChildOfBomLine());
             msgDTO.setPuid(bean.getPuid());
-            if ("S".equalsIgnoreCase(zpptco005.getTYPE())) {
+            if ("S".equalsIgnoreCase(zpptco005.getPTYPE())) {
                 success.add(msgDTO);
                 //成功数自增
                 totalOfSuccess++;

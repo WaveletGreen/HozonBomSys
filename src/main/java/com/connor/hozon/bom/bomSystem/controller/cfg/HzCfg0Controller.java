@@ -1,9 +1,17 @@
 package com.connor.hozon.bom.bomSystem.controller.cfg;
 
-import com.connor.hozon.bom.bomSystem.dto.HzRelevanceBean;
 import com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0MainRecordDao;
 import com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0OptionFamilyDao;
+import com.connor.hozon.bom.bomSystem.dto.HzRelevanceBean;
 import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0Service;
+import integration.base.feature.ZPPTCO002;
+import integration.base.relevance.ZPPTCO004;
+import integration.logic.Correlate;
+import integration.logic.Features;
+import integration.option.ActionFlagOption;
+import integration.option.CorrelateTypeOption;
+import integration.service.impl.cfg2.TransCfgService;
+import integration.service.impl.feature4.TransOptionsService;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -11,14 +19,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import sql.pojo.cfg.HzCfg0MainRecord;
 import sql.pojo.cfg.HzCfg0Record;
-import webservice.base.cfg.ZPPTCO002;
-import webservice.base.options.ZPPTCO004;
-import webservice.logic.Correlate;
-import webservice.logic.Features;
-import webservice.option.ActionFlagOption;
-import webservice.option.CorrelateTypeOption;
-import webservice.service.impl.cfg2.TransCfgService;
-import webservice.service.impl.options4.TransOptionsService;
 
 import java.util.*;
 
@@ -205,10 +205,10 @@ public class HzCfg0Controller {
         if (list != null && list.size() > 0) {
             result.put("status", true);
             for (ZPPTCO002 _l : list) {
-                if ("S".equalsIgnoreCase(_l.getTYPE())) {
-                    sbs.append("&emsp;&emsp;&emsp;&emsp;" + _mapCoach.get(_l.getZPACKNO()).getpCfg0ObjectId() + "<br/>");
+                if ("S".equalsIgnoreCase(_l.getPTYPE())) {
+                    sbs.append("&emsp;&emsp;&emsp;&emsp;" + _mapCoach.get(_l.getPPACKNO()).getpCfg0ObjectId() + "<br/>");
                 } else {
-                    sbf.append("&emsp;&emsp;&emsp;&emsp;" + _mapCoach.get(_l.getZPACKNO()).getpCfg0ObjectId() + "(" + _l.getMESSAGE() + ")<br/>");
+                    sbf.append("&emsp;&emsp;&emsp;&emsp;" + _mapCoach.get(_l.getPPACKNO()).getpCfg0ObjectId() + "(" + _l.getPMESSAGE() + ")<br/>");
                     hasFail = true;
                 }
             }
@@ -347,13 +347,13 @@ public class HzCfg0Controller {
         if (list != null && list.size() > 0) {
             result.put("status", true);
             for (ZPPTCO004 _l : list) {
-                if ("S".equalsIgnoreCase(_l.getTYPE())) {
-                    sbs.append("&emsp;&emsp;&emsp;&emsp;" + _mapCoach.get(_l.getZPACKNO()).getRelevance() + "<br/>");
+                if ("S".equalsIgnoreCase(_l.getPTYPE())) {
+                    sbs.append("&emsp;&emsp;&emsp;&emsp;" + _mapCoach.get(_l.getPPACKNO()).getRelevance() + "<br/>");
                 } else {
-                    if (_mapCoach.get(_l.getZPACKNO()) == null) {
+                    if (_mapCoach.get(_l.getPPACKNO()) == null) {
                         continue;
                     }
-                    sbf.append("&emsp;&emsp;&emsp;&emsp;" + _mapCoach.get(_l.getZPACKNO()).getRelevance() + "(" + _l.getMESSAGE() + ")<br/>");
+                    sbf.append("&emsp;&emsp;&emsp;&emsp;" + _mapCoach.get(_l.getPPACKNO()).getRelevance() + "(" + _l.getPMESSAGE() + ")<br/>");
                     hasFail = true;
                 }
             }

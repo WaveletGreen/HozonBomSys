@@ -1,20 +1,20 @@
 package com.connor.hozon.bom.bomSystem.service.integrate;
 
+import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
 import com.connor.hozon.bom.bomSystem.service.iservice.integrate.ISynMaterielService;
 import com.connor.hozon.bom.resources.dto.request.EditHzMaterielReqDTO;
 import com.connor.hozon.bom.resources.mybatis.factory.HzFactoryDAO;
 import com.connor.hozon.bom.resources.mybatis.materiel.HzMaterielDAO;
 import com.connor.hozon.bom.resources.query.HzMaterielQuery;
+import integration.base.masterMaterial.ZPPTCO001;
+import integration.logic.ReflectMateriel;
+import integration.option.ActionFlagOption;
+import integration.service.impl.masterMaterial1.TransMasterMaterialService;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sql.pojo.factory.HzFactory;
 import sql.pojo.project.HzMaterielRecord;
-import webservice.base.helper.UUIDHelper;
-import webservice.base.masterMaterial.ZPPTCO001;
-import webservice.logic.ReflectMateriel;
-import webservice.option.ActionFlagOption;
-import webservice.service.impl.masterMaterial1.TransMasterMaterialService;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -180,15 +180,15 @@ public class SynMaterielService implements ISynMaterielService {
         int counter = 0;
         String br = "&emsp;&emsp;";
         for (ZPPTCO001 zpptco001 : resultPool) {
-            if ("S".equalsIgnoreCase(zpptco001.getTYPE())) {
+            if ("S".equalsIgnoreCase(zpptco001.getPTYPE())) {
                 //3开始断行
                 if (counter % 3 == 0) {
                     br = "<br/>";
                     counter = 0;
                 }
-                sbs.append("&emsp;&emsp;&emsp;&emsp;" + _mapCoach.get(zpptco001.getGUID()).getpMaterielCode() + br);
+                sbs.append("&emsp;&emsp;&emsp;&emsp;" + _mapCoach.get(zpptco001.getPGUID()).getpMaterielCode() + br);
             } else {
-                sbf.append("&emsp;&emsp;&emsp;&emsp;" + _mapCoach.get(zpptco001.getGUID()).getpMaterielCode() + "(" + zpptco001.getMESSAGE() + ")<br/>");
+                sbf.append("&emsp;&emsp;&emsp;&emsp;" + _mapCoach.get(zpptco001.getPGUID()).getpMaterielCode() + "(" + zpptco001.getPMESSAGE() + ")<br/>");
                 hasFail = true;
             }
             if (br.equals("<br/>")) {

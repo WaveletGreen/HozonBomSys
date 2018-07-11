@@ -1,25 +1,25 @@
 //package com.connor.hozon.bom;
 //
 //import webservice.Author;
-//import webservice.base.bom.TABLEOFZPPTCI005;
-//import webservice.base.bom.TABLEOFZPPTCO005;
-//import webservice.base.bom.ZPPTCI005;
-//import webservice.base.bom.ZPPTCO005;
-//import webservice.base.cfg.*;
-//import webservice.base.classify.*;
-//import webservice.base.maindatas.*;
-//import webservice.base.options.TABLEOFZPPTCI004;
-//import webservice.base.options.TABLEOFZPPTCO004;
-//import webservice.base.options.ZPPTCI004;
-//import webservice.base.options.ZPPTCO004;
-//import webservice.base.processRoute.TABLEOFZPPTCI006;
-//import webservice.base.processRoute.TABLEOFZPPTCO006;
-//import webservice.base.processRoute.ZPPTCI006;
-//import webservice.base.processRoute.ZPPTCO006;
-//import webservice.base.productAttributes.TABLEOFZPPTCI007;
-//import webservice.base.productAttributes.TABLEOFZPPTCO007;
-//import webservice.base.productAttributes.ZPPTCI007;
-//import webservice.base.productAttributes.ZPPTCO007;
+//import webservice.integrate.TABLEOFZPPTCI005;
+//import webservice.integrate.TABLEOFZPPTCO005;
+//import webservice.integrate.ZPPTCI005;
+//import webservice.integrate.ZPPTCO005;
+//import webservice.integrate.base.cfg.*;
+//import webservice.integrate.base.classify.*;
+//import webservice.integrate.base.maindatas.*;
+//import webservice.integrate.base.options.TABLEOFZPPTCI004;
+//import webservice.integrate.base.options.TABLEOFZPPTCO004;
+//import webservice.integrate.base.options.ZPPTCI004;
+//import webservice.integrate.base.options.ZPPTCO004;
+//import webservice.integrate.TABLEOFZPPTCI006;
+//import webservice.integrate.TABLEOFZPPTCO006;
+//import webservice.integrate.ZPPTCI006;
+//import webservice.integrate.ZPPTCO006;
+//import webservice.integrate.TABLEOFZPPTCI007;
+//import webservice.integrate.TABLEOFZPPTCO007;
+//import webservice.integrate.ZPPTCI007;
+//import webservice.integrate.ZPPTCO007;
 //
 //import javax.xml.ws.Holder;
 //import java.math.BigDecimal;
@@ -37,7 +37,7 @@
 ////        testService();
 //
 //        //testMasterData();//001-物料主数据接口
-//        //testFeature();//002-特性/特性值接口
+//        testFeature();//002-特性/特性值接口
 //        testCorrelation();//004-相关性接口
 //        testBom();//005-BOM接口：要添加更改编号
 //        //testVehicleMaterial();//007-整车物料属性接口：（如属性CAB的值指定为CAB1时，传输数据为A、整车属性、CAB、CAB1）

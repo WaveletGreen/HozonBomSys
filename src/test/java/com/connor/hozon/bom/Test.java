@@ -1,11 +1,11 @@
 package com.connor.hozon.bom;
 
-import webservice.Author;
-import webservice.base.bom.TABLEOFZPPTCI005;
-import webservice.base.bom.TABLEOFZPPTCO005;
-import webservice.base.bom.ZPPTCI005;
-import webservice.base.bom.ZPPTCO005;
-import webservice.service.impl.bom5.TransBomService;
+import integration.Author;
+import integration.base.bom.TABLEOFZPPTCI005;
+import integration.base.bom.TABLEOFZPPTCO005;
+import integration.base.bom.ZPPTCI005;
+import integration.base.bom.ZPPTCO005;
+import integration.service.impl.bom5.TransBomService;
 
 import javax.xml.ws.Holder;
 
@@ -79,26 +79,26 @@ public class Test extends Author {
         Holder<TABLEOFZPPTCI005> input = new Holder<TABLEOFZPPTCI005>();
         TABLEOFZPPTCI005 tableofzpptci005 = new TABLEOFZPPTCI005();
         ZPPTCI005 zpptci005 = new ZPPTCI005();
-        zpptci005.setZPACKNO("KLFDS");//数据包号
-        zpptci005.setZITEM("DSFD");//行号
-        zpptci005.setZACTIONID("A");//动作描述代码
-        zpptci005.setZAENNR("01");//更改编号
-        //zpptci005.setZAETXT("");//工程更改号描述
-        //zpptci005.setZPCNNO("");//TC系统更改号
-        zpptci005.setZWERKS("1001");//工厂
-        zpptci005.setZUSE("1");//BOM类型---1or6
-        zpptci005.setZMATNR("S00-5000010");//表头物料编码
-        zpptci005.setZBASEQ("1");//基本数据
-        zpptci005.setZSORTF("0010");//BOM序号
-        zpptci005.setZMATNRC("S00-5000000AABA");//组件物料编码
-        zpptci005.setZMENGE("1");//数量
-        zpptci005.setZMEINS("EA");//单位
-        zpptci005.setZLOCATION("BJ01");//发料库存地点
-        //zpptci005.setZKNBLK("");//相关性（选配条件）
-        //zpptci005.setZSUBPR("");//采购件下级件标识
-        zpptci005.setZZPWZ("总装");//装配位置
-        zpptci005.setZWORKS("dfd");//使用车间
-        zpptci005.setZSTATION("1");//工位
+        zpptci005.setPPACKNO("KLFDS");//数据包号
+        zpptci005.setPITEM("DSFD");//行号
+        zpptci005.setPACTIONID("A");//动作描述代码
+        zpptci005.setPAENNR("01");//更改编号
+        //zpptci005.setPAETXT("");//工程更改号描述
+        //zpptci005.setPPCNNO("");//TC系统更改号
+        zpptci005.setPWERKS("1001");//工厂
+        zpptci005.setPUSE("1");//BOM类型---1or6
+        zpptci005.setPMATNR("S00-5000010");//表头物料编码
+        zpptci005.setPBASEQ("1");//基本数据
+        zpptci005.setPSORTF("0010");//BOM序号
+        zpptci005.setPMATNRC("S00-5000000AABA");//组件物料编码
+        zpptci005.setPMENGE("1");//数量
+        zpptci005.setPMEINS("EA");//单位
+        zpptci005.setPLOCATION("BJ01");//发料库存地点
+        //zpptci005.setPKNBLK("");//相关性（选配条件）
+        //zpptci005.setPSUBPR("");//采购件下级件标识
+        zpptci005.setPZPWZ("总装");//装配位置
+        zpptci005.setPWORKS("dfd");//使用车间
+        zpptci005.setPSTATION("1");//工位
         //zpptci005.setZGUID("");//事物标识
         tableofzpptci005.getItem().add(zpptci005);
         input.value = tableofzpptci005;//
@@ -114,7 +114,7 @@ public class Test extends Author {
         bomService.execute();
         //boolean success = iMasterDataService.delete(input,output);
         //boolean success = iMasterDataService.update(input,output);
-        System.out.println(output.value.getItem().get(0).getTYPE());
+        System.out.println(output.value.getItem().get(0).getPTYPE());
 
 
         System.out.println();
