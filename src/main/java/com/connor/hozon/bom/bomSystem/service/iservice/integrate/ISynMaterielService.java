@@ -3,7 +3,6 @@ package com.connor.hozon.bom.bomSystem.service.iservice.integrate;
 import com.connor.hozon.bom.resources.dto.request.EditHzMaterielReqDTO;
 import net.sf.json.JSONObject;
 import org.springframework.context.annotation.Configuration;
-import webservice.option.ActionFlagOption;
 
 import java.util.List;
 

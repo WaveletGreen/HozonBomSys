@@ -198,7 +198,10 @@ function addHoverDom(treeId, treeNode) {
                         if (e) {
                             $.post("./project/delete", {puid: treeNode.puid, type: type}, function (e) {
                                 if (e) {
+                                    /**删除指定节点*/
                                     zTree.removeNode(treeNode);
+                                    // zTree.destroy();
+                                    // (initZTree());
                                     window.Ewin.alert({message: "成功删除"});
                                 } else {
                                     window.Ewin.alert({message: "删除失败" + typeName + ":" + name});
@@ -342,12 +345,15 @@ var setting = {
     }
 };
 
-$(function () {
-    $.post("./project/loadProjectTree", function (info) {
-        var t = $("#menu_tree");
-        t = $.fn.zTree.init(t, setting, info.data);
-    })
-});
+$(
+    initZTree = function () {
+        $.post("./project/loadProjectTree", function (info) {
+            var t = $("#menu_tree");
+            t = $.fn.zTree.init(t, setting, info.data);
+        })
+    }
+)
+;
 
 $(document).ready(
     $("#setCurrentProject").click(function () {

@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
  * 需要告知扫描的包名
  * 启动事物扫描
  */
-@SpringBootApplication(scanBasePackages = {"sql", "webservice.service", "com.connor.hozon"})
+@SpringBootApplication(scanBasePackages = {"sql", "integration.service", "com.connor.hozon"})
 @EnableTransactionManagement
 //@ServletComponentScan
 public class HzBomSysApplication extends SpringBootServletInitializer {

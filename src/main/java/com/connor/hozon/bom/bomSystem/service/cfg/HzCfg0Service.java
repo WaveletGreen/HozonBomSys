@@ -6,6 +6,7 @@ import com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0RecordDao;
 import org.springframework.stereotype.Service;
 import sql.pojo.cfg.HzCfg0Record;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -84,6 +85,7 @@ public class HzCfg0Service {
      */
     public int doLoadRelevance(String projectPuid, List<HzRelevanceBean> _list, int index, String _table) {
         List<HzCfg0Record> records = null;
+        List<HzCfg0Record> needToUpdate = new ArrayList<>();
         if ("HZ_CFG0_RECORD".equals(_table)) {
             records = doLoadCfgListByProjectPuid(projectPuid);
         } else if ("HZ_CFG0_ADD_CFG_RECORD".equals(_table)) {
@@ -96,6 +98,10 @@ public class HzCfg0Service {
             bean.setPuid(record.getPuid());
             bean.setRelevance(record.getpCfg0FamilyName() + "-" + record.getpCfg0ObjectId());
             bean.setRelevanceDesc((record.getpCfg0FamilyDesc() == null ? "" : record.getpCfg0FamilyDesc()) + "-" + (record.getpCfg0Desc() == null ? "" : record.getpCfg0Desc()));
+            if (record.getpCfg0Relevance() == null) {
+                record.setpCfg0Relevance("$ROOT." + record.getpCfg0FamilyName() + " = '" + record.getpCfg0ObjectId() + "'");
+                needToUpdate.add(record);
+            }
             bean.setRelevanceCode(record.getpCfg0Relevance());
             _list.add(bean);
         }

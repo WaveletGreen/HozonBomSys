@@ -38,6 +38,10 @@ public class HzMBomToERPBean {
      */
     private String bomOrderNum;
     /**
+     * 是否是2Y层
+     */
+    private Integer is2Y;
+    /**
      * 库存地点
      */
     private String stockLocation;
@@ -61,6 +65,10 @@ public class HzMBomToERPBean {
      * 大对象
      */
     private byte[] bomLineBlock;
+    /**
+     * 真实顺序序号
+     */
+    private String lineIndex;
 
     public String getPuid() {
         return puid;
@@ -130,6 +138,14 @@ public class HzMBomToERPBean {
         return bomOrderNum;
     }
 
+    public Integer getIs2Y() {
+        return is2Y;
+    }
+
+    public void setIs2Y(Integer is2Y) {
+        this.is2Y = is2Y;
+    }
+
     public void setBomOrderNum(String bomOrderNum) {
         this.bomOrderNum = bomOrderNum;
     }
@@ -180,5 +196,13 @@ public class HzMBomToERPBean {
 
     public void setBomLineBlock(byte[] bomLineBlock) {
         this.bomLineBlock = bomLineBlock;
+    }
+
+    public String getLineIndex() {
+        return lineIndex;
+    }
+
+    public void setLineIndex(String lineIndex) {
+        this.lineIndex = lineIndex;
     }
 }

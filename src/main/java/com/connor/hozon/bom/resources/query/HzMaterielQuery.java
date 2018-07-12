@@ -26,6 +26,10 @@ public class HzMaterielQuery {
     private Integer pMaterielDataType;
 
     /**
+     * 1整车工艺路线 2半成品工艺路线 3总成分总成工艺路线
+     */
+    private Integer type;
+    /**
      * 物料来源id
      */
     private String materielResourceId;
@@ -60,5 +64,13 @@ public class HzMaterielQuery {
 
     public void setpMaterielDataType(Integer pMaterielDataType) {
         this.pMaterielDataType = pMaterielDataType;
+    }
+
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
     }
 }

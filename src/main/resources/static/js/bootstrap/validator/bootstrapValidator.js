@@ -2003,12 +2003,12 @@ if (typeof jQuery === 'undefined') {
 }(window.jQuery));
 ;(function($) {
     $.fn.bootstrapValidator.i18n.base64 = $.extend($.fn.bootstrapValidator.i18n.base64 || {}, {
-        'default': 'Please enter a valid base 64 encoded'
+        'default': 'Please enter a valid integrate.base 64 encoded'
     });
 
     $.fn.bootstrapValidator.validators.base64 = {
         /**
-         * Return true if the input value is a base 64 encoded string.
+         * Return true if the input value is a integrate.base 64 encoded string.
          *
          * @param {BootstrapValidator} validator The validator plugin instance
          * @param {jQuery} $field Field element
@@ -4835,7 +4835,7 @@ if (typeof jQuery === 'undefined') {
             var year      = parseInt(value.substr(1, 2), 10),
                 month     = parseInt(value.substr(3, 2), 10),
                 day       = parseInt(value.substr(5, 2), 10),
-                // The year of date is determined base on the gender
+                // The year of date is determined integrate.base on the gender
                 centuries = {
                     '1': 1900,  // Male born between 1900 and 1999
                     '2': 1900,  // Female born between 1900 and 1999
@@ -5582,7 +5582,7 @@ if (typeof jQuery === 'undefined') {
                     // Strip any non-hex chars
                     value = value.replace(/[- ]/g, '');
 
-                    // If it's all digits, luhn base 10 is used
+                    // If it's all digits, luhn integrate.base 10 is used
                     if (value.match(/^\d*$/i)) {
                         return $.fn.bootstrapValidator.helpers.luhn(value);
                     }
@@ -6197,7 +6197,7 @@ if (typeof jQuery === 'undefined') {
          * @param {BootstrapValidator} validator The validator plugin instance
          * @param {jQuery} $field Field element
          * @param {Object} options Can consist of the following keys:
-         * - baseValue: The base value
+         * - baseValue: The integrate.base value
          * - step: The step
          * - message: The invalid message
          * @returns {Boolean|Object}

@@ -5,11 +5,13 @@ import com.connor.hozon.bom.resources.dto.request.EditHzMaterielReqDTO;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -24,12 +26,14 @@ public class SynBomController {
     @Autowired
     ISynBomService bomService;
 
+    /*   */
+
     /**
      * 根据项目同步所有数据
      *
      * @param projectUid
      * @return
-     */
+     *//*
     @RequestMapping("/synAllBomByProjectPuid")
     @ResponseBody
     public JSONObject synAllBomByProjectPuid(@RequestParam("projectUid") String projectUid) {
@@ -40,6 +44,17 @@ public class SynBomController {
             return result;
         }
         return bomService.synAllByProjectUid(projectUid);
+    }*/
+    @RequestMapping("/synAllBomByProjectPuid")
+    public String synAllBomByProjectPuid(@RequestParam("projectUid") String projectUid, Model model) {
+        if (projectUid == null || "".equals(projectUid)) {
+            model.addAttribute("msg", "未选择项目进行操作，请选择一个项目再操作!");
+            return "errorWithEntity";
+        }
+
+        JSONObject entities = bomService.synAllByProjectUid(projectUid);
+        addToModel(entities, model);
+        return "stage/templateOfIntegrate";
     }
 
     /**
@@ -51,8 +66,13 @@ public class SynBomController {
     @RequestMapping("/deleteByUids")
     @ResponseBody
     public JSONObject deleteByUids(@RequestBody List<EditHzMaterielReqDTO> dtos, @RequestParam("projectUid") String projectUid) {
-        JSONObject result = new JSONObject();
-        return bomService.deleteByUids(dtos);
+        JSONObject result = validate(dtos, projectUid);
+        if (!result.getBoolean("status")) {
+            return result;
+        }
+        List<String> puids = new ArrayList<>();
+        dtos.forEach(dto -> puids.add(dto.getPuid()));
+        return bomService.deleteByUids(projectUid, puids);
     }
 
     /**
@@ -62,10 +82,48 @@ public class SynBomController {
      * @return
      */
     @RequestMapping("/updateByUids")
-    @ResponseBody
-    public JSONObject updateByUids(@RequestBody List<EditHzMaterielReqDTO> dtos, @RequestParam("projectUid") String projectUid) {
+    public String updateByUids(@RequestBody List<EditHzMaterielReqDTO> dtos, @RequestParam("projectUid") String projectUid, Model model) {
+        JSONObject result = validate(dtos, projectUid);
+        if (!result.getBoolean("status")) {
+            model.addAttribute("msg", result.get("msg"));
+            return "errorWithEntity";
+        }
+        JSONObject entities = bomService.updateByUids(projectUid, dtos.get(0).getPuid());
+        addToModel(entities, model);
+        return "stage/templateOfIntegrate";
+    }
+
+    /**
+     * 添加进model中
+     *
+     * @param entities
+     * @param model
+     */
+    private void addToModel(JSONObject entities, Model model) {
+        model.addAttribute("msgOfSuccess", "发送成功项");
+        model.addAttribute("msgOfFail", "发送失败项");
+        model.addAttribute("success", entities.get("success"));
+        model.addAttribute("fail", entities.get("fail"));
+        model.addAttribute("total", entities.get("total"));
+        model.addAttribute("totalOfSuccess", entities.get("totalOfSuccess"));
+        model.addAttribute("totalOfFail", entities.get("totalOfFail"));
+        model.addAttribute("totalOfOutOfParent", entities.get("totalOfOutOfParent"));
+        model.addAttribute("totalOfUnknown", entities.get("totalOfUnknown"));
+    }
+
+    private JSONObject validate(List<EditHzMaterielReqDTO> dtos, String projectUid) {
         JSONObject result = new JSONObject();
-        return bomService.updateByUids(dtos);
+        if (dtos == null || dtos.isEmpty()) {
+            result.put("status", false);
+            result.put("msg", "没有选择任何1条MBOM行数据");
+            return result;
+        } else if (projectUid == null || "".equals(projectUid)) {
+            result.put("status", false);
+            result.put("msg", "请选择项目再进行操作!");
+            return result;
+        }
+        result.put("status", true);
+        return result;
     }
 
 }

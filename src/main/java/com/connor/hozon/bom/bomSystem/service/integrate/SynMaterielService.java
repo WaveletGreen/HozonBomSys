@@ -1,20 +1,20 @@
 package com.connor.hozon.bom.bomSystem.service.integrate;
 
+import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
 import com.connor.hozon.bom.bomSystem.service.iservice.integrate.ISynMaterielService;
 import com.connor.hozon.bom.resources.dto.request.EditHzMaterielReqDTO;
 import com.connor.hozon.bom.resources.mybatis.factory.HzFactoryDAO;
 import com.connor.hozon.bom.resources.mybatis.materiel.HzMaterielDAO;
 import com.connor.hozon.bom.resources.query.HzMaterielQuery;
+import integration.base.masterMaterial.ZPPTCO001;
+import integration.logic.ReflectMateriel;
+import integration.option.ActionFlagOption;
+import integration.service.impl.masterMaterial1.TransMasterMaterialService;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sql.pojo.factory.HzFactory;
 import sql.pojo.project.HzMaterielRecord;
-import webservice.base.helper.UUIDHelper;
-import webservice.base.masterMaterial.ZPPTCO001;
-import webservice.logic.ReflectMateriel;
-import webservice.option.ActionFlagOption;
-import webservice.service.impl.masterMaterial1.TransMasterMaterialService;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -68,7 +68,7 @@ public class SynMaterielService implements ISynMaterielService {
     /**
      * 发送全部
      *
-     * @param projectPuid
+     * @param projectPuid 006567
      * @return
      */
     @Override
@@ -83,7 +83,9 @@ public class SynMaterielService implements ISynMaterielService {
         transMasterMaterialService.setClearInputEachTime(true);
         HzMaterielQuery query = new HzMaterielQuery();
         query.setProjectId(projectPuid);
-        List<HzMaterielRecord> sorted = hzMaterielDAO.findHzMaterielForList(query);
+        List<HzMaterielRecord> src = hzMaterielDAO.findHzMaterielForList(query);
+        List<HzMaterielRecord> sorted = new ArrayList<>();
+        src.stream().filter(_s -> _s.getpMaterielType() != null).forEach(_s -> sorted.add(_s));
         result = execute(sorted, ActionFlagOption.ADD);
         return result;
     }
@@ -131,7 +133,7 @@ public class SynMaterielService implements ISynMaterielService {
      * 执行操作
      *
      * @param sorted
-     * @param option
+     * @param option     
      * @return
      */
     private JSONObject execute(List<HzMaterielRecord> sorted, ActionFlagOption option) {
@@ -149,6 +151,8 @@ public class SynMaterielService implements ISynMaterielService {
         boolean hasFail = false;
 
         for (HzMaterielRecord record : sorted) {
+            if (!validate(record))
+                continue;
             ReflectMateriel reflectMateriel = new ReflectMateriel(record);
             /////////////////////////////////////////////////////手动设置一些必填参数////////////////////////////////////////////////////
             //设置包号
@@ -173,14 +177,24 @@ public class SynMaterielService implements ISynMaterielService {
         }
         transMasterMaterialService.execute();
         List<ZPPTCO001> resultPool = transMasterMaterialService.getOut().getItem();
-
+        int counter = 0;
+        String br = "&emsp;&emsp;";
         for (ZPPTCO001 zpptco001 : resultPool) {
-            if ("S".equalsIgnoreCase(zpptco001.getTYPE())) {
-                sbs.append("&emsp;&emsp;&emsp;&emsp;" + _mapCoach.get(zpptco001.getGUID()).getpMaterielCode() + "<br/>");
+            if ("S".equalsIgnoreCase(zpptco001.getPTYPE())) {
+                //3开始断行
+                if (counter % 3 == 0) {
+                    br = "<br/>";
+                    counter = 0;
+                }
+                sbs.append("&emsp;&emsp;&emsp;&emsp;" + _mapCoach.get(zpptco001.getPGUID()).getpMaterielCode() + br);
             } else {
-                sbf.append("&emsp;&emsp;&emsp;&emsp;" + _mapCoach.get(zpptco001.getGUID()).getpMaterielCode() + "(" + zpptco001.getMESSAGE() + ")<br/>");
+                sbf.append("&emsp;&emsp;&emsp;&emsp;" + _mapCoach.get(zpptco001.getPGUID()).getpMaterielCode() + "(" + zpptco001.getPMESSAGE() + ")<br/>");
                 hasFail = true;
             }
+            if (br.equals("<br/>")) {
+                br = "&emsp;&emsp;";
+            }
+            counter++;
         }
         if (hasFail) {
             result.put("msg", sbs.append("<br/>" + sbf).toString());
@@ -191,4 +205,11 @@ public class SynMaterielService implements ISynMaterielService {
         return result;
     }
 
+    private boolean validate(HzMaterielRecord record) {
+        if (null == record.getpMaterielDesc() || "".equalsIgnoreCase(record.getpMaterielDesc()) || null == record.getpFactoryPuid() || "".equals(record.getpFactoryPuid())) {
+            return false;
+        } else {
+            return true;
+        }
+    }
 }

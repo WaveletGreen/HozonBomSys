@@ -3,7 +3,6 @@
 <head th:include="include/includebase"></head>
 <!--<link th:href="@{/css/stage/bom-stage.css}" rel="stylesheet"/>-->
 <title>Hz-特性表</title>
-<body>
 <!--<div class="panel-body">-->
 <!--<div class="content col-lg-6">-->
 <!--<button class="btn btn-default" id="query" type="button">查询特性库</button>-->
@@ -45,10 +44,10 @@
 </div>
 
 <script th:src="@{/js/cfg/feature/feature.js}"></script>
-</body>
 <script th:inline="javascript">
     function doQuery() {
         $('#dataTable').bootstrapTable('refresh');    //刷新表格
     }
 </script>
+</body>
 </html>

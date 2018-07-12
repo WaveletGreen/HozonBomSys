@@ -157,7 +157,7 @@ function initTable(url) {
                                                 $table.bootstrapTable("refresh");
                                             },
                                             error: function (info) {
-                                                window.Ewin.alert({message: "操作删除:" + info.status});
+                                                window.Ewin.alert({message: "操作失败:" + info.status});
                                             }
                                         })
                                     }
@@ -234,7 +234,7 @@ function initTable(url) {
                                                     $table.bootstrapTable("refresh");
                                                 },
                                                 error: function (info) {
-                                                    window.Ewin.alert({message: "操作删除:" + info.status});
+                                                    window.Ewin.alert({message: "操作失败:" + info.status});
                                                 }
                                             })
                                         }
