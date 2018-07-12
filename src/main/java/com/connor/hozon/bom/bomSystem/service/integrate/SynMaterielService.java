@@ -1,5 +1,6 @@
 package com.connor.hozon.bom.bomSystem.service.integrate;
 
+import com.connor.hozon.bom.bomSystem.helper.IntegrateMsgDTO;
 import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
 import com.connor.hozon.bom.bomSystem.service.iservice.integrate.ISynMaterielService;
 import com.connor.hozon.bom.resources.dto.request.EditHzMaterielReqDTO;
@@ -138,6 +139,25 @@ public class SynMaterielService implements ISynMaterielService {
      */
     private JSONObject execute(List<HzMaterielRecord> sorted, ActionFlagOption option) {
         transMasterMaterialService.setClearInputEachTime(true);
+
+        /**
+         * 成功项
+         */
+        List<IntegrateMsgDTO> success = new ArrayList<>();
+        /**
+         * 失败项
+         */
+        List<IntegrateMsgDTO> fail = new ArrayList<>();
+
+        /***
+         * 计数
+         */
+        int total = 0;
+        int totalOfSuccess = 0;
+        int totalOfFail = 0;
+        int totalOfOutOfParent = 0;
+        int totalOfUnknown = 0;
+
         StringBuilder sbs = new StringBuilder();
         StringBuilder sbf = new StringBuilder();
         JSONObject result = new JSONObject();
@@ -201,7 +221,16 @@ public class SynMaterielService implements ISynMaterielService {
         } else {
             result.put("msg", sbs.toString());
         }
+
         result.put("status", true);
+        result.put("success", success);
+        result.put("fail", fail);
+
+        result.put("total", total);
+        result.put("totalOfSuccess", totalOfSuccess);
+        result.put("totalOfFail", totalOfFail);
+        result.put("totalOfOutOfParent", totalOfOutOfParent);
+        result.put("totalOfUnknown", totalOfUnknown);
         return result;
     }
 
