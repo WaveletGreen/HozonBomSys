@@ -197,7 +197,7 @@ function initTable(url) {
                                                     // else {
                                                     //     window.Ewin.alert({message: ":" + result.errMsg});
                                                     // }
-                                                    window.Ewin.alert({message: result.msg});
+                                                    window.Ewin.alert({message: result, width: 800});
                                                     $table.bootstrapTable("refresh");
                                                 },
                                                 error: function (info) {
@@ -214,7 +214,7 @@ function initTable(url) {
                                         width: 600
                                     }).on(function (e) {
                                         if (e) {
-                                            localUrl = "synMateriel/updateByPuids";
+                                            localUrl = "synMateriel/updateOrAddByUids";
                                             datas = JSON.stringify(rows);
                                             $.ajax({
                                                 type: "POST",
@@ -230,7 +230,7 @@ function initTable(url) {
                                                     // else {
                                                     //     window.Ewin.alert({message: ":" + result.errMsg});
                                                     // }
-                                                    window.Ewin.alert({message: result.msg});
+                                                    window.Ewin.alert({message: result, width: 800});
                                                     $table.bootstrapTable("refresh");
                                                 },
                                                 error: function (info) {

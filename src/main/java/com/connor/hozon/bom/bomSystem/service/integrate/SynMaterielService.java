@@ -22,6 +22,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.connor.hozon.bom.bomSystem.helper.StringHelper.checkStringIsEmpty;
+
 /**
  * 同步主数据
  */
@@ -32,6 +34,11 @@ public class SynMaterielService implements ISynMaterielService {
      */
     @Autowired
     TransMasterMaterialService transMasterMaterialService;
+
+    /***
+     * sql语句in的容量
+     */
+    private final static int capacity = 1000;
     /**
      * 物料服务
      */
@@ -51,7 +58,7 @@ public class SynMaterielService implements ISynMaterielService {
      * @return
      */
     @Override
-    public JSONObject updateByPuids(List<EditHzMaterielReqDTO> dtos) {
+    public JSONObject updateOrAddByUids(List<EditHzMaterielReqDTO> dtos) {
         return updateOrDelete(dtos, ActionFlagOption.UPDATE_EMPTY);
     }
 
@@ -97,6 +104,7 @@ public class SynMaterielService implements ISynMaterielService {
      * @return
      */
     private JSONObject updateOrDelete(List<EditHzMaterielReqDTO> dtos, ActionFlagOption option) {
+
         JSONObject result;
         if (dtos == null || dtos.isEmpty()) {
             result = new JSONObject();
@@ -104,10 +112,10 @@ public class SynMaterielService implements ISynMaterielService {
             result.put("msg", "查无数据");
             return result;
         }
+
         //每一次调用都清空缓存
         transMasterMaterialService.setClearInputEachTime(true);
         HzMaterielQuery query = new HzMaterielQuery();
-
 
         List<HzMaterielRecord> sorted = new ArrayList<>();
         List<String> puids = new ArrayList<>();
@@ -163,21 +171,39 @@ public class SynMaterielService implements ISynMaterielService {
         Map<String, HzMaterielRecord> _mapCoach = new HashMap<>();
         Map<String, String> _factoryCoach = new HashMap<>();
 
-        boolean hasFail = false;
+        List<HzMaterielRecord> toUpdate = new ArrayList<>();
+        List<String> puids = new ArrayList<>();
 
         for (HzMaterielRecord record : sorted) {
-            if (!validate(record))
+            if (!validate(record)) {
+                totalOfUnknown++;
                 continue;
+            }
             ReflectMateriel reflectMateriel = new ReflectMateriel(record);
             /////////////////////////////////////////////////////手动设置一些必填参数////////////////////////////////////////////////////
             //设置包号
             String packNo = UUIDHelper.generateUpperUid();
             reflectMateriel.setPackNo(packNo);
-            //设置行号
-            reflectMateriel.setLineNum(packNo.substring(0, 5));
+            //            //设置行号
+            //            reflectMateriel.setLineNum(packNo.substring(0, 5));
 
-            //更新操作
-            reflectMateriel.setActionFlagOption(option);
+            //已经发送过了，设置为更新
+            if (record.getSendSapFlag() != null && record.getSendSapFlag() == 1) {
+                //更新操作或删除操作
+                reflectMateriel.setActionFlagOption(option);
+            }
+            //没有发送过，执行新增操作
+            else {
+                //更新操作或新增操作
+                if (option == ActionFlagOption.UPDATE_EMPTY || option == ActionFlagOption.ADD) {
+                    reflectMateriel.setActionFlagOption(ActionFlagOption.ADD);
+                }
+                //没有，不允许删除
+                else {
+                    totalOfUnknown++;
+                    continue;
+                }
+            }
             if (!_factoryCoach.containsKey(record.getpFactoryPuid())) {
                 HzFactory factory = hzFactoryDAO.findFactory(record.getpFactoryPuid(), null);
                 _factoryCoach.put(record.getpFactoryPuid(), factory.getpFactoryCode());
@@ -196,11 +222,33 @@ public class SynMaterielService implements ISynMaterielService {
         List<ZPPTCO001> resultPool = transMasterMaterialService.getOut().getItem();
 
         for (ZPPTCO001 zpptco001 : resultPool) {
+            total++;
+            if (zpptco001 == null || checkStringIsEmpty(zpptco001.getPGUID())) {
+                totalOfUnknown++;
+                continue;
+            }
+            HzMaterielRecord record = _mapCoach.get(zpptco001.getPGUID());
+            IntegrateMsgDTO msgDTO = new IntegrateMsgDTO();
+            msgDTO.setMsg(zpptco001.getPMESSAGE());
+            msgDTO.setItemId(record.getpMaterielCode());
+            msgDTO.setPuid(record.getPuid());
+
             if ("S".equalsIgnoreCase(zpptco001.getPTYPE())) {
-                //3开始断行
+                success.add(msgDTO);
+                totalOfSuccess++;
+                toUpdate.add(record);
             } else {
+                fail.add(msgDTO);
+                totalOfFail++;
             }
         }
+
+        /**
+         * 更新信息
+         */
+        toUpdate.forEach(to -> puids.add(to.getPuid()));
+        splitListThenUpdate(puids);
+
         result.put("status", true);
         result.put("success", success);
         result.put("fail", fail);
@@ -211,6 +259,47 @@ public class SynMaterielService implements ISynMaterielService {
         result.put("totalOfOutOfParent", totalOfOutOfParent);
         result.put("totalOfUnknown", totalOfUnknown);
         return result;
+    }
+
+    /**
+     * 拆分list，然后查询数据库
+     *
+     * @param list uid集合
+     * @return
+     */
+    public int splitListThenUpdate(List<String> list) {
+        int intCount = list.size() / capacity;
+        int index = 0;
+        int endIndex;
+        int result = 0;
+
+        if (intCount == 0) {
+            return executeByType(list);
+        } else if (intCount > 0) {
+            endIndex = index + capacity;
+            while (true) {
+                //第一次查0-1000，以后都从1000-2000...查
+                result = executeByType(list.subList(index, endIndex));
+                //向后截列表
+                index += capacity;
+                //加1000
+                endIndex = index + capacity;
+                if (endIndex >= list.size()) {
+                    endIndex = list.size();
+                    result = executeByType(list.subList(index, endIndex));
+                    break;
+                }
+                if (result < capacity) {
+                    result = -1;
+                    break;
+                }
+            }
+        }
+        return result;
+    }
+
+    private int executeByType(List<String> list) {
+        return hzMaterielDAO.updateByBatch(list);
     }
 
     private boolean validate(HzMaterielRecord record) {

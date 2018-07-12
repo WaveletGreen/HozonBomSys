@@ -19,6 +19,7 @@ public interface HzMaterielDAO {
 
     /**
      * 插入一条数据
+     *
      * @param hzMaterielRecord
      * @return
      */
@@ -26,6 +27,7 @@ public interface HzMaterielDAO {
 
     /**
      * 更改一条数据
+     *
      * @param hzMaterielRecord
      * @return
      */
@@ -33,6 +35,7 @@ public interface HzMaterielDAO {
 
     /**
      * 删除一条数据
+     *
      * @param puid
      * @return
      */
@@ -40,6 +43,7 @@ public interface HzMaterielDAO {
 
     /**
      * 批量插入 内部直接调用插入 对外增加 走单个插入
+     *
      * @param hzMaterielRecords
      * @return
      */
@@ -47,6 +51,7 @@ public interface HzMaterielDAO {
 
     /**
      * 分页获取物料数据
+     *
      * @param query
      * @return
      */
@@ -54,6 +59,7 @@ public interface HzMaterielDAO {
 
     /**
      * 获取物料数据 list
+     *
      * @param query
      * @return
      */
@@ -61,6 +67,7 @@ public interface HzMaterielDAO {
 
     /**
      * 获取整车衍生物料主数据
+     *
      * @param query
      * @return
      */
@@ -68,13 +75,15 @@ public interface HzMaterielDAO {
 
     /**
      * 查询物料数据是否存在（根据外键来查询）
+     *
      * @param map
      * @return
      */
-    boolean HzMaterielIsExist(Map<String,Object> map);
+    boolean HzMaterielIsExist(Map<String, Object> map);
 
     /**
      * 根据id获取一条物料数据
+     *
      * @param query
      * @return
      */
@@ -82,18 +91,26 @@ public interface HzMaterielDAO {
 
     /**
      * 获取不同类别物料的数量
+     *
      * @param projectId
      * @param pMaterielDataType
      * @return
      */
-    Integer getHzMaterielCount(String projectId,Integer pMaterielDataType );
+    Integer getHzMaterielCount(String projectId, Integer pMaterielDataType);
 
     /**
      * 获取整车衍生物料主数据全部
+     *
      * @param query
      * @return
      */
     List<HzCfg0ModelRecord> findHzCfg0ModelRecordAll(HzMaterielByPageQuery query);
 
-
+    /**
+     * 批量更新数据
+     *
+     * @param list
+     * @return
+     */
+    int updateByBatch(List<String> list);
 }

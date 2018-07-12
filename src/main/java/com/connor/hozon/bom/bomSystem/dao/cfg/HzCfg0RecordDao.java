@@ -80,4 +80,6 @@ public interface HzCfg0RecordDao {
     int deleteAddedCfgByList(List<HzCfg0Record> records);
 
     List<HzCfg0Record> selectCfg0ListByPuids(List<HzCfg0Record> records);
+
+    List<HzCfg0Record>  selectByCodeAndDesc(HzCfg0Record record);
 }

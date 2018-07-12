@@ -4,6 +4,7 @@ import com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0MainRecordDao;
 import com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0OptionFamilyDao;
 import com.connor.hozon.bom.bomSystem.dto.HzRelevanceBean;
 import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0Service;
+import com.connor.hozon.bom.bomSystem.service.iservice.integrate.ISynFeatureService;
 import integration.base.feature.ZPPTCO002;
 import integration.base.relevance.ZPPTCO004;
 import integration.logic.Correlate;
@@ -12,6 +13,7 @@ import integration.option.ActionFlagOption;
 import integration.option.CorrelateTypeOption;
 import integration.service.impl.cfg2.TransCfgService;
 import integration.service.impl.feature4.TransOptionsService;
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,6 +23,8 @@ import sql.pojo.cfg.HzCfg0MainRecord;
 import sql.pojo.cfg.HzCfg0Record;
 
 import java.util.*;
+
+import static com.connor.hozon.bom.bomSystem.helper.StringHelper.checkString;
 
 /**
  * Created by Fancyears·Maylos·Mayways
@@ -33,6 +37,8 @@ public class HzCfg0Controller {
     private final HzCfg0Service hzCfg0Service;
     private final HzCfg0MainRecordDao hzCfg0MainRecordDao;
     private final HzCfg0OptionFamilyDao hzCfg0OptionFamilyDao;
+    @Autowired
+    ISynFeatureService iSynFeatureService;
     /**
      * 特性传输服务
      */
@@ -75,12 +81,31 @@ public class HzCfg0Controller {
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     @ResponseBody
-    public boolean add(@RequestBody HzCfg0Record record) {
+    public JSONObject add(@RequestBody HzCfg0Record record) {
+        JSONObject result = new JSONObject();
         /**因为没有关联组，所以要新生成组的puid*/
         record.setpCfg0FamilyPuid(UUID.randomUUID().toString());
         /**生成自身的puid*/
         record.setPuid(UUID.randomUUID().toString());
-        return hzCfg0Service.doInsertAddCfg(record);
+        record.setpCfg0FamilyName(record.getpCfg0FamilyName().toUpperCase());
+        record.setpCfg0ObjectId(record.getpCfg0ObjectId().toUpperCase());
+        if (!hzCfg0Service.preCheck(record)) {
+            result.put("status", false);
+            result.put("msg", "已存在的特性值");
+            return result;
+        }
+
+        if (!checkString(record.getpCfg0Relevance())) {
+            record.setpCfg0Relevance("$ROOT." + record.getpCfg0FamilyName() + " = '" + record.getpCfg0ObjectId() + "'");
+        }
+        if (hzCfg0Service.doInsertAddCfg(record)) {
+            result.put("status", true);
+            result.put("msg", "添加特性值" + record.getpCfg0ObjectId() + "成功");
+        } else {
+            result.put("status", false);
+            result.put("msg", "添加特性值" + record.getpCfg0ObjectId() + "失败，请联系系统管理员");
+        }
+        return result;
     }
 
     @RequestMapping("/modifyPage")
@@ -100,16 +125,41 @@ public class HzCfg0Controller {
 
     @RequestMapping(value = "/modify", method = RequestMethod.POST)
     @ResponseBody
-    public boolean modify(@RequestBody HzCfg0Record record) {
-        if (record == null || "".equalsIgnoreCase(record.getPuid()) || null == record.getPuid())
-            return false;
-        if (hzCfg0Service.doSelectOneByPuid(record.getPuid()) != null) {
-            return hzCfg0Service.doUpdate(record);
-        } else if (hzCfg0Service.doSelectOneAddedCfgByPuid(record.getPuid()) != null) {
-            return hzCfg0Service.doUpdateAddedCfg(record);
-        } else {
-            return false;
+    public JSONObject modify(@RequestBody HzCfg0Record record) {
+        JSONObject result = new JSONObject();
+        result.put("status", true);
+        if (record == null || "".equalsIgnoreCase(record.getPuid()) || null == record.getPuid()) {
+            result.put("status", false);
+            result.put("msg", "没有选择任何1条数据，请选择1条数据");
+            return result;
         }
+        record.setpCfg0FamilyName(record.getpCfg0FamilyName().toUpperCase());
+        record.setpCfg0ObjectId(record.getpCfg0ObjectId().toUpperCase());
+        if (!hzCfg0Service.preCheck(record)) {
+            result.put("status", false);
+            result.put("msg", "已存在的特性值");
+            return result;
+        }
+
+        if (!checkString(record.getpCfg0Relevance())) {
+            record.setpCfg0Relevance("$ROOT." + record.getpCfg0FamilyName() + " = '" + record.getpCfg0ObjectId() + "'");
+        }
+        if (hzCfg0Service.doSelectOneByPuid(record.getPuid()) != null) {
+            if (hzCfg0Service.doUpdate(record)) {
+                result.put("msg", "更新特性值" + record.getpCfg0ObjectId() + "成功");
+            } else {
+                result.put("msg", "更新特性值" + record.getpCfg0ObjectId() + "失败");
+            }
+        } else if (hzCfg0Service.doSelectOneAddedCfgByPuid(record.getPuid()) != null) {
+            if (hzCfg0Service.doUpdateAddedCfg(record)) {
+                result.put("msg", "更新特性值" + record.getpCfg0ObjectId() + "成功");
+            } else {
+                result.put("msg", "更新特性值" + record.getpCfg0ObjectId() + "失败");
+            }
+        } else {
+            result.put("msg", "更新特性值" + record.getpCfg0ObjectId() + "时发生错误，请联系系统管理员");
+        }
+        return result;
     }
 
     @RequestMapping(value = "/deleteByPuid", method = RequestMethod.POST)
@@ -153,72 +203,8 @@ public class HzCfg0Controller {
 
     @RequestMapping(value = "/sendToERP", method = RequestMethod.POST)
     @ResponseBody
-    public JSONObject sendToERP(@RequestBody List<HzCfg0Record> records) throws Exception {
-        transCfgService.setClearInputEachTime(true);
-        List<HzCfg0Record> toSend = new ArrayList<>();
-        List<Features> featuresList = new ArrayList<>();
-        Map<String, HzCfg0Record> _mapCoach = new HashMap<>();
-        JSONObject result = new JSONObject();
-        StringBuilder sbs = new StringBuilder();
-        sbs.append("发送成功:<br/>");
-        StringBuilder sbf = new StringBuilder();
-        sbf.append("发送失败:<br/>");
-
-        boolean hasFail = false;
-
-        if (records == null || records.size() <= 0) {
-            result.put("status", false);
-            result.put("msg", "选择的列为空，请至少选择1列发送");
-            return result;
-        }
-        records.forEach(_r -> {
-            HzCfg0Record record = null;
-            if ((record = hzCfg0Service.doSelectOneByPuid(_r.getPuid())) != null
-                    || (record = hzCfg0Service.doSelectOneAddedCfgByPuid(_r.getPuid())) != null) {
-                toSend.add(record);
-            }
-        });
-
-        toSend.forEach(_s -> {
-            Features features = new Features();
-            String packnum = UUID.randomUUID().toString().replaceAll("-", "");
-            //数据包号
-            features.setPackNo(packnum);
-            //行号
-            features.setLineNum(packnum.substring(0, 5));
-            //动作描述代码
-            features.setActionFlag(ActionFlagOption.ADD);
-            //特性编码
-            features.setFeaturesCode(_s.getpCfg0FamilyName());
-            //特性描述
-            features.setFeaturesDescribe(_s.getpCfg0FamilyDesc());
-            //特性值编码
-            features.setPropertyValuesCode(_s.getpCfg0ObjectId());
-            //特性值描述
-            features.setPropertyValuesDescribe(_s.getpCfg0Desc());
-            //            featuresList.add(features);
-            transCfgService.getInput().getItem().add(features.getZpptci002());
-            _mapCoach.put(packnum, _s);
-        });
-        transCfgService.execute();
-        List<ZPPTCO002> list = transCfgService.getOut().getItem();
-        if (list != null && list.size() > 0) {
-            result.put("status", true);
-            for (ZPPTCO002 _l : list) {
-                if ("S".equalsIgnoreCase(_l.getPTYPE())) {
-                    sbs.append("&emsp;&emsp;&emsp;&emsp;" + _mapCoach.get(_l.getPPACKNO()).getpCfg0ObjectId() + "<br/>");
-                } else {
-                    sbf.append("&emsp;&emsp;&emsp;&emsp;" + _mapCoach.get(_l.getPPACKNO()).getpCfg0ObjectId() + "(" + _l.getPMESSAGE() + ")<br/>");
-                    hasFail = true;
-                }
-            }
-        }
-        if (hasFail) {
-            result.put("msg", sbs.append("<br/>" + sbf).toString());
-        } else {
-            result.put("msg", sbs.toString());
-        }
-        return result;
+    public JSONObject sendToERP(@RequestBody List<HzCfg0Record> records, Model model) throws Exception {
+        return iSynFeatureService.addFeature(records);
     }
 
 
@@ -242,7 +228,7 @@ public class HzCfg0Controller {
         if (bean == null || "".equalsIgnoreCase(bean.getPuid()) || null == bean.getPuid()) {
             return false;
         }
-        HzCfg0Record record = null;
+        HzCfg0Record record;
 
         record = hzCfg0Service.doSelectOneByPuid(bean.getPuid());
         if (record != null) {

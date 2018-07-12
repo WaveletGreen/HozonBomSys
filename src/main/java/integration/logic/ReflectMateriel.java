@@ -8,6 +8,8 @@ import integration.option.PurchaseOption;
 import integration.service.impl.masterMaterial1.TransMasterMaterialService;
 import sql.pojo.project.HzMaterielRecord;
 
+import static com.connor.hozon.bom.bomSystem.helper.StringHelper.checkString;
+
 /**
  * 映射物料主数据
  */
@@ -95,6 +97,8 @@ public class ReflectMateriel {
             mm.setDoubleAttribute("X");
             mm.setMaterialType("X");
         }
+        //设置行号，默认都是1，一个包号对应一个行号
+        mm.setLineNum("1");
     }
 
     /**
@@ -147,11 +151,10 @@ public class ReflectMateriel {
      * 设置MRP控制者，公告号和采购类型
      */
     public void setMRPAndPurchase(String mrp, String purchase, String announcement) {
-        //默认时采购件
-        if (mrp == null) {
+        //没有定义则默认时采购件
+        if (mrp == null || "".equals(mrp)) {
             mrp = "Z10";
         }
-        this.MRPController = mrp;
         //设置采购类型
         switch (mrp) {
             //整车
@@ -184,13 +187,16 @@ public class ReflectMateriel {
                 //设置采购类型
                 mm.setPurchaseType(purchase);
                 //设置公告，只有MRP=整车（Z02）才有公告，否则留空或不传
-                if (announcement == null) {
+                if (!checkString(announcement)) {
                     mm.setAnnouncement("");
                 } else {
                     mm.setAnnouncement(announcement);
                 }
                 break;
             default:
+                //依然有默认值
+                mrp = "Z10";
+                mm.setPurchaseType(PurchaseOption.PURCHASE_BUY);
                 break;
         }
         this.purchaseType = mm.getPurchaseType();

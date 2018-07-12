@@ -3,32 +3,38 @@
 <body>
 <form id="featureForm" role="form" method="post" th:action="${action}">
     <input class="form-control" id="puid" name="puid" type="hidden" th:value="${entity.puid}"/>
-    <input class="form-control" id="pCfg0MainItemPuid" name="pCfg0MainItemPuid" type="hidden" th:value="${entity.pCfg0MainItemPuid}"/>
-    <input class="form-control" id="pCfg0FamilyPuid" name="pCfg0FamilyPuid" type="hidden" th:value="${entity.pCfg0FamilyPuid}"/>
+    <input class="form-control" id="pCfg0MainItemPuid" name="pCfg0MainItemPuid" type="hidden"
+           th:value="${entity.pCfg0MainItemPuid}"/>
+    <input class="form-control" id="pCfg0FamilyPuid" name="pCfg0FamilyPuid" type="hidden"
+           th:value="${entity.pCfg0FamilyPuid}"/>
     <div class="form-group">
-        <label for="pCfg0FamilyName">特性名称</label>
-        <input class="form-control" id="pCfg0FamilyName" name="pCfg0FamilyName" type="text" th:value="${entity.pCfg0FamilyName}"
+        <label for="pCfg0FamilyName">特性名称<span style="color: red">⭐</span></label>
+        <input class="form-control" id="pCfg0FamilyName" name="pCfg0FamilyName" type="text"
+               th:value="${entity.pCfg0FamilyName}"
                placeholder="请输入特性名称"
         />
     </div>
     <div class="form-group">
-        <label for="pCfg0FamilyDesc">特性描述</label>
-        <input class="form-control" id="pCfg0FamilyDesc" name="pCfg0FamilyDesc" type="text" th:value="${entity.pCfg0FamilyDesc}"
+        <label for="pCfg0FamilyDesc">特性描述<span style="color: red">⭐</span></label>
+        <input class="form-control" id="pCfg0FamilyDesc" name="pCfg0FamilyDesc" type="text"
+               th:value="${entity.pCfg0FamilyDesc}"
                placeholder="请输入特性描述"/>
     </div>
     <div class="form-group">
         <label for="pH9featureenname">特性英文名称</label>
-        <input class="form-control" id="pH9featureenname" name="pH9featureenname" type="text" th:value="${entity.pH9featureenname}"
+        <input class="form-control" id="pH9featureenname" name="pH9featureenname" type="text"
+               th:value="${entity.pH9featureenname}"
                placeholder="请输入特性英文名称"/>
     </div>
     </div>
     <div class="form-group">
-        <label for="pCfg0ObjectId">特性值/配置代码</label>
-        <input class="form-control" id="pCfg0ObjectId" name="pCfg0ObjectId" type="text" th:value="${entity.pCfg0ObjectId}"
+        <label for="pCfg0ObjectId">特性值/配置代码<span style="color: red">⭐</span></label>
+        <input class="form-control" id="pCfg0ObjectId" name="pCfg0ObjectId" type="text"
+               th:value="${entity.pCfg0ObjectId}"
                placeholder="请输入特性值/配置代码"/>
     </div>
     <div class="form-group">
-        <label for="pCfg0Desc">特性值/配置(描述)</label>
+        <label for="pCfg0Desc">特性值/配置(描述)<span style="color: red">⭐</span></label>
         <input class="form-control" id="pCfg0Desc" name="pCfg0Desc" type="text" th:value="${entity.pCfg0Desc}"
                placeholder="请输入特性值/配置(描述)"/>
     </div>
@@ -54,6 +60,11 @@
                     validators: {
                         notEmpty: {
                             message: '特性名称不能为空'
+                        },
+                        //正则校验
+                        regexp: {
+                            regexp: /^[a-zA-Z][a-zA-Z0-9]*$/, /* ^ 指的是匹配字符串开始的位置 + 匹配一个或者多个*/
+                            message: '特性只能以英文开头，加英文和数字，不允许有英文和数字以外的字符'
                         }
                     }
                 },
@@ -70,6 +81,11 @@
                     validators: {
                         notEmpty: {
                             message: '特性值/配置代码不能为空'
+                        },
+                        //正则校验
+                        regexp: {
+                            regexp: /[a-zA-Z0-9]+$/, /* ^ 指的是匹配字符串开始的位置 + 匹配一个或者多个*/
+                            message: '特性值只能以数字/英文开头，加英文和数字，不允许有英文和数字以外的字符'
                         }
                     }
                 },
@@ -122,11 +138,7 @@
                             $('body', window.top.document).find('.modal-backdrop').remove();
                             // jquery 调用刷新当前操作的table页面的refresh方法
                             $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
-                            if(result){
-                                window.Ewin.alert({message: "修改特性数据成功"});
-
-                            }
-
+                            window.Ewin.alert({message: result.msg});
                         },
                     error: function (status) {
                         window.Ewin.alert({message: status.status + ':修改数据失败!'});
