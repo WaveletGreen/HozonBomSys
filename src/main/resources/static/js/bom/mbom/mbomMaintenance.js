@@ -17,7 +17,6 @@ function doQuery(){
     mBomUrl += "&lineId="+lineId;
     initTable(mBomUrl);
     $('#mbomMaintenanceTable').bootstrapTable('destroy');
-    console.log("有搜索框的参数是："+mBomUrl)
 }
 function initTable(mBomUrl){
     var projectPuid = $("#project", window.top.document).val();
@@ -40,7 +39,6 @@ function initTable(mBomUrl){
             //         'middle'
             // });
             var data = result.data;
-            console.log(data);
             var keys = [];
             var values;
             for (var key in data) {
@@ -93,7 +91,6 @@ function initTable(mBomUrl){
                         iconCls: 'glyphicon glyphicon-plus',
                         handler: function () {
                             var rows = $table.bootstrapTable('getSelections');
-                            console.log(rows);
                             //只能选一条
                             if (rows.length != 1) {
                                 window.Ewin.alert({message: '请选择一条需要添加的数据!'});
@@ -132,6 +129,14 @@ function initTable(mBomUrl){
                         iconCls: 'glyphicon glyphicon-remove',
                         handler: function () {
                             var rows = $table.bootstrapTable('getSelections');
+                            var puids = "";
+                            for (var i = 0 ; i<rows.length;i++){
+                                puids += rows[i].eBomPuid+",";
+                            };
+                            var myData = JSON.stringify({
+                                "projectId": $("#project", window.top.document).val(),
+                                "puids":puids,
+                            });
                             if (rows.length == 0) {
                                 window.Ewin.alert({message: '请选择一条需要删除的数据!'});
                                 return false;
@@ -141,8 +146,8 @@ function initTable(mBomUrl){
                                     $.ajax({
                                         type: "POST",
                                         //ajax需要添加打包名
-                                        url: "mbom/delete?eBomPuid="+rows[0].eBomPuid,
-                                        //data: JSON.stringify(rows),
+                                        url: "mbom/delete",
+                                        data: myData,
                                         contentType: "application/json",
                                         success: function (result) {
                                             /*if (result.status) {

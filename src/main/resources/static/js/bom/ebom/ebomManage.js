@@ -17,7 +17,6 @@ function doQuery(){
     eBomUrl += "&lineId="+lineId;
     initTable(eBomUrl);
     $('#ebomManageTable').bootstrapTable('destroy');
-    console.log("有搜索框的参数是："+eBomUrl)
 }
 function initTable(eBomUrl){
     var projectPuid = $("#project", window.top.document).val();
@@ -133,6 +132,14 @@ function initTable(eBomUrl){
                         iconCls: 'glyphicon glyphicon-remove',
                         handler: function () {
                             var rows = $table.bootstrapTable('getSelections');
+                            var puids = "";
+                            for (var i = 0 ; i<rows.length;i++){
+                                puids += rows[i].puid+",";
+                            };
+                            var myData = JSON.stringify({
+                                "projectId": $("#project", window.top.document).val(),
+                                "puids":puids,
+                            });
                             if (rows.length == 0) {
                                 window.Ewin.alert({message: '请选择一条需要删除的数据!'});
                                 return false;
@@ -142,9 +149,9 @@ function initTable(eBomUrl){
                                     $.ajax({
                                         type: "POST",
                                         //ajax需要添加打包名
-                                        url: "ebom/delete/ebom?puid=" + rows[0].puid + "&projectId=" + projectPuid,
-                                        //data: JSON.stringify(rows),
-                                        //contentType: "application/json",
+                                        url: "ebom/delete/ebom",
+                                        data:myData,
+                                        contentType: "application/json",
                                         success: function (result) {
                                             // if (result.status) {
                                             //     window.Ewin.alert({message: result.errMsg});
@@ -157,7 +164,6 @@ function initTable(eBomUrl){
                                             $table.bootstrapTable("refresh");
                                         },
                                         error: function (info) {
-                                            console.log(info)
                                             window.Ewin.alert({message: ":" + info.status});
                                         }
                                     })

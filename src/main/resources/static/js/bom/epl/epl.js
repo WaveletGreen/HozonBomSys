@@ -20,7 +20,6 @@ function doQuery(){
     eplUrl += "&lineId="+lineId;
     initTable(eplUrl);
     $('#eplTable').bootstrapTable('destroy');
-    console.log("有搜索框的参数是："+eplUrl)
 }
 
 function initTable(eplUrl){
@@ -33,13 +32,11 @@ function initTable(eplUrl){
         url:eplTitleUrl,
         type: "GET",
         success: function (result) {
-            console.log(result)
             var column = [];
             column.push({field: 'puid', title: 'Puid'});
             var data = result.data;
             var nameZh =data[0];
             var nameEn = data[1];
-            console.log(data);
             var myData=JSON.stringify({
                 "level": $("#level").val(),
                 "lineId": $("#lineId").val(),

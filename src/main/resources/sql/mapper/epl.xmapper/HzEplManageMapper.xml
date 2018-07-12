@@ -50,10 +50,10 @@
   <!--</sql>-->
   <!--联表查询 EPL全信息-->
   <select id="HzEplManageRecordDAOImpl_getHzEplManageRecord" resultMap="BaseResultMap">
-      SELECT t1.*,t2.*,t4.*,t5.* from HZ_BOM_LINE_RECORD t1
-      LEFT OUTER JOIN HZ_BOM_STATE t2 on t1.puid = t2.P_BOM_ID
-      LEFT OUTER JOIN HZ_MBOM_RECORD t4 on t1.Puid = t4.P_BOM_PUID
-      LEFT OUTER JOIN HZ_PBOM_RECORD t5 on t1.PUID=t5.P_E_BOM_PUID
+      SELECT t1.*,t6.* from HZ_BOM_LINE_RECORD t1
+      LEFT OUTER JOIN HZ_BOM_STATE t6 on t1.puid = t6.P_BOM_ID
+--       LEFT OUTER JOIN HZ_MBOM_RECORD t4 on t1.Puid = t4.P_BOM_PUID
+--       LEFT OUTER JOIN HZ_PBOM_RECORD t5 on t1.PUID=t5.P_E_BOM_PUID
       where t1.p_bom_digifax_id=(
       select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(
       select t2.puid from Hz_project_libs t2
@@ -80,9 +80,9 @@
   <!--查询EPL信息总数-->
   <select id="HzEplManageRecordDAOImpl_findTotalCount" resultType="java.lang.Integer" parameterType="java.util.HashMap">
       select count(*) from HZ_BOM_LINE_RECORD t1
-      LEFT OUTER JOIN HZ_BOM_STATE t2 on t1.puid = t2.P_BOM_ID
-      LEFT OUTER JOIN HZ_MBOM_RECORD t4 on t1.Puid = t4.P_BOM_PUID
-      LEFT OUTER JOIN HZ_PBOM_RECORD t5 on t1.PUID=t5.P_E_BOM_PUID
+      LEFT OUTER JOIN HZ_BOM_STATE t6 on t1.puid = t6.P_BOM_ID
+--       LEFT OUTER JOIN HZ_MBOM_RECORD t4 on t1.Puid = t4.P_BOM_PUID
+--       LEFT OUTER JOIN HZ_PBOM_RECORD t5 on t1.PUID=t5.P_E_BOM_PUID
       where t1.p_bom_digifax_id=(
       select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(
       select t2.puid from Hz_project_libs t2

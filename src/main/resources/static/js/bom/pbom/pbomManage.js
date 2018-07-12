@@ -16,7 +16,6 @@ function doQuery() {
     pBomUrl += "&lineId="+lineId;
     initTable(pBomUrl);
     $('#pbomManageTable').bootstrapTable('destroy');
-    console.log("有搜索框的参数是："+pBomUrl)
 }
 
 function initTable(pBomUrl) {
@@ -42,7 +41,6 @@ function initTable(pBomUrl) {
             //         'middle'
             // });
             var data = result.data;
-            console.log(data);
             var keys = [];
             var values;
             for (var key in data) {
@@ -132,8 +130,16 @@ function initTable(pBomUrl) {
                         iconCls: 'glyphicon glyphicon-remove',
                         handler: function () {
                             var rows = $table.bootstrapTable('getSelections');
+                            var puids = "";
+                            for (var i = 0 ; i<rows.length;i++){
+                                puids += rows[i].eBomPuid+",";
+                            };
+                            var myData = JSON.stringify({
+                                "projectId": $("#project", window.top.document).val(),
+                                "puids":puids,
+                            });
                             if (rows.length == 0) {
-                                window.Ewin.alert({message: '请选择一条需要删除的数据!'});
+                                window.Ewin.alert({message: '请至少选择一条需要删除的数据!'});
                                 return false;
                             }
                             window.Ewin.confirm({title: '提示', message: '是否要删除您所选择的记录？', width: 500}).on(function (e) {
@@ -141,8 +147,8 @@ function initTable(pBomUrl) {
                                     $.ajax({
                                         type: "POST",
                                         //ajax需要添加打包名
-                                        url: "pbom/delete?eBomPuid="+rows[0].eBomPuid,
-                                        // data: JSON.stringify(rows),
+                                        url: "pbom/delete",
+                                        data: myData,
                                         contentType: "application/json",
                                         success: function (result) {
                                             /*if (result.status) {

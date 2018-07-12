@@ -28,7 +28,6 @@ function initTable() {
                     'middle'
             });*/
             var data = result.data;
-            console.log(data);
             var keys = [];
             var values;
             for (var key in data) {

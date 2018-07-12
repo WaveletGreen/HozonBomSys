@@ -154,14 +154,6 @@
     </select>
 
 
-    <!--获取一条 MBOM记录-->
-    <select id="HzMbomRecordDAOImpl_findHzMbomByeBomPuid" resultMap="BaseResultMap" parameterType="java.lang.String">
-
-    SELECT * FROM HZ_MBOM_RECORD WHERE P_BOM_PUID = #{eBomPuid,jdbcType=VARCHAR} AND P_MBOM_STATUS=1
-
-  </select>
-
-
     <!--批量插入 同步EBOM数据-->
     <insert id="HzMbomRecordDAOImpl_insertList" useGeneratedKeys="false" parameterType="java.util.List">
         insert into HZ_MBOM_RECORD (PUID,P_PARENT_UID,P_BOM_DIGIFAX_ID,P_BOM_PUID,
@@ -303,7 +295,7 @@
 
 
     <!--更新数据-->
-    <update id="HzMbomRecordDAOImpl_update" parameterType="sql.pojo.bom.HzMbomRecord">
+    <update id="HzMbomRecordDAOImpl_update" parameterType="sql.pojo.bom.HzMbomLineRecord">
         update HZ_MBOM_RECORD
         <set>
             <if test="sparePart != null">
@@ -342,11 +334,49 @@
             <if test="changeNum != null">
                 P_CHANGE_NUM = #{changeNum,jdbcType=VARCHAR},
             </if>
-            <if test="updateTime != null">
                 P_UPDATE_TIME = sysdate,
-            </if>
             <if test="updateName != null">
                 P_UPDATE_NAME = #{updateName,jdbcType=VARCHAR},
+            </if>
+            <if test="parentUid != null">
+                P_PARENT_UID = #{parentUid,jdbcType=VARCHAR},
+            </if>
+            <if test="bomDigifaxId != null">
+                P_BOM_DIGIFAX_ID = #{bomDigifaxId,jdbcType=VARCHAR},
+            </if>
+            <if test="lineIndex != null">
+                P_LINE_INDEX = #{lineIndex,jdbcType=VARCHAR},
+            </if>
+            <if test="isHas != null">
+                P_BOM_LINE_IS_HAS = #{isHas,jdbcType=DECIMAL},
+            </if>
+
+            <if test="lineId != null">
+                P_BOM_LINE_ID = #{lineId,jdbcType=VARCHAR},
+            </if>
+            <if test="is2Y != null">
+                P_BOM_LINE_IS_2Y = #{is2Y,jdbcType=DECIMAL},
+            </if>
+            <if test="isPart != null">
+                P_BOM_LINE_IS_PART = #{isPart,jdbcType=DECIMAL},
+            </if>
+            <if test="isDept != null">
+                P_BOM_LINE_IS_DEPT = #{isDept,jdbcType=DECIMAL},
+            </if>
+            <if test="pBomOfWhichDept != null">
+                P_BOM_OF_WHICH_DEPT = #{pBomOfWhichDept,jdbcType=VARCHAR},
+            </if>
+            <if test="pBomLinePartName != null">
+                P_BOM_LINE_PART_NAME = #{pBomLinePartName,jdbcType=VARCHAR},
+            </if>
+            <if test="pBomLinePartClass != null">
+                P_BOM_LINE_PART_CLASS = #{pBomLinePartClass,jdbcType=VARCHAR},
+            </if>
+            <if test="pBomLinePartEnName != null">
+                P_BOM_LINE_PART_EN_NAME = #{pBomLinePartEnName,jdbcType=VARCHAR},
+            </if>
+            <if test="pBomLinePartResource != null">
+                P_BOM_LINE_PART_RESOURCE = #{pBomLinePartResource,jdbcType=VARCHAR},
             </if>
         </set>
         where P_BOM_PUID = #{eBomPuid,jdbcType=VARCHAR}
@@ -603,4 +633,33 @@
         and t1.P_MBOM_STATUS =1
 
     </select>
+
+
+
+    <!--获取MBOM结构树-->
+    <select id="HzMbomRecordDAOImpl_getHzMbomTree" parameterType="java.util.HashMap" resultMap="MbomResultMap">
+        select * from HZ_MBOM_RECORD t
+        where t.p_bom_digifax_id=(
+        select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(
+        select t2.puid from Hz_project_libs t2
+        <where>
+            t2.puid = #{projectId,jdbcType=VARCHAR}))
+            and t.P_MBOM_STATUS = 1
+        </where>
+        start with t.P_BOM_PUID = #{puid,jdbcType=VARCHAR}
+        connect by prior t.P_BOM_PUID = t.p_parent_uid
+    </select>
+
+
+
+    <!--批量删除-->
+    <update id="HzMbomRecordDAOImpl_deleteList"  parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" open="begin" close=";end;" separator=";">
+            update HZ_MBOM_RECORD
+            <set>
+                P_MBOM_STATUS=0
+            </set>
+            where P_BOM_PUID = #{item.puid,jdbcType=VARCHAR}
+        </foreach>
+    </update>
 </mapper>

@@ -430,10 +430,6 @@ public class HzMbomLineRecord {
         return is2Y;
     }
 
-    public void setIs2Y(int is2Y) {
-        this.is2Y = is2Y;
-    }
-
     public int getIsPart() {
         return isPart;
     }

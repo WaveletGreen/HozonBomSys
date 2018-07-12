@@ -120,6 +120,19 @@ public class HzMaterielRecord {
 
     private String materielResourceId;
 
+    /**
+     * 发送到SAP 成功标志 （1 成功 0 失败）
+     */
+    private String sendSapFlag;
+
+    public String getSendSapFlag() {
+        return sendSapFlag;
+    }
+
+    public void setSendSapFlag(String sendSapFlag) {
+        this.sendSapFlag = sendSapFlag;
+    }
+
     public String getMaterielResourceId() {
         return materielResourceId;
     }

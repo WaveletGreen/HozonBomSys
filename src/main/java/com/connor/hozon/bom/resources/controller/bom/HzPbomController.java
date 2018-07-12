@@ -163,8 +163,8 @@ public class HzPbomController extends BaseController {
 
 
     @RequestMapping(value = "delete", method = RequestMethod.POST)
-    public void deletePbomRecord(String eBomPuid, HttpServletResponse response) {
-        OperateResultMessageRespDTO respDTO = hzPbomService.deleteHzPbomRecordByForeignId(eBomPuid);
+    public void deletePbomRecord(@RequestBody DeleteHzPbomReqDTO reqDTO, HttpServletResponse response) {
+        OperateResultMessageRespDTO respDTO = hzPbomService.deleteHzPbomRecordByForeignId(reqDTO);
         writeAjaxJSONResponse(ResultMessageBuilder.build(OperateResultMessageRespDTO.isSuccess(respDTO), respDTO.getErrMsg()), response);
     }
 
@@ -185,7 +185,11 @@ public class HzPbomController extends BaseController {
             return;
         }
         JSONArray jsonArray = hzPbomService.getPbomForProcessCompose(reqDTO);
-        writeAjaxJSONResponse(jsonArray,response);
+         if(jsonArray == null){
+             writeAjaxJSONResponse(ResultMessageBuilder.build(false,"查无结果！"),response);
+             return;
+         }
+        writeAjaxJSONResponse(ResultMessageBuilder.build(true,jsonArray),response);
     }
 
     /**
@@ -213,7 +217,7 @@ public class HzPbomController extends BaseController {
         HzPbomLineRespDTO respDTO = new HzPbomLineRespDTO();
         respDTO.setPuids(puids);
         model.addAttribute("data",respDTO);
-        return "bomManage/pbom/processOfFitting/updataProcessOfFitting";
+        return "bomManage/pbom/processOfFitting/updateProcessOfFitting";
     }
 
     /**
@@ -223,15 +227,18 @@ public class HzPbomController extends BaseController {
      */
     @RequestMapping(value = "/add/processCompose",method = RequestMethod.POST)
     public void addProcessCompose(@RequestBody AddHzPbomRecordReqDTO recordReqDTO,HttpServletResponse response){
-//        OperateResultMessageRespDTO operateResultMessageRespDTO = hzPbomService.andProcessCompose(recordReqDTO);
-//        operateResultMessageRespDTO.setOtherParam(recordReqDTO.getLineId());
-        HzPbomProcessComposeReqDTO reqDTO = new HzPbomProcessComposeReqDTO();
-        reqDTO.setLineId("S00-6107001");
-        reqDTO.setProjectId(recordReqDTO.getProjectId());
-        JSONArray jsonArray = hzPbomService.getPbomForProcessCompose(reqDTO);
-        writeAjaxJSONResponse(jsonArray,response);
-//        writeAjaxJSONResponse(ResultMessageBuilder.build(recordReqDTO),response);
-
+        OperateResultMessageRespDTO operateResultMessageRespDTO = hzPbomService.andProcessCompose(recordReqDTO);
+        JSONArray jsonArray= new JSONArray();
+        if(OperateResultMessageRespDTO.isSuccess(operateResultMessageRespDTO)){
+            HzPbomProcessComposeReqDTO reqDTO = new HzPbomProcessComposeReqDTO();
+            if(recordReqDTO.getLineId() !=null){
+                reqDTO.setLineId(recordReqDTO.getLineId());
+            }
+            reqDTO.setProjectId(recordReqDTO.getProjectId());
+            jsonArray = hzPbomService.getPbomForProcessCompose(reqDTO);
+        }
+        writeAjaxJSONResponse(ResultMessageBuilder.build(
+                OperateResultMessageRespDTO.isSuccess(operateResultMessageRespDTO),operateResultMessageRespDTO.getErrMsg(),jsonArray),response);
     }
 
 

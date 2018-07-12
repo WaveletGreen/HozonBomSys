@@ -16,7 +16,6 @@ function doQuery() {
     url += "&pPurpose="+pPurpose;
     initTable(url);
     $('#processCenterTable').bootstrapTable('destroy');
-    console.log("有搜索框的参数是："+url)
 }
 
 
@@ -42,7 +41,6 @@ function initTable(url) {
                     'middle'
             });*/
             var data = result.data;
-            console.log(data);
             var keys = [];
             var values;
             for (var key in data) {

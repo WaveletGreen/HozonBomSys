@@ -160,8 +160,7 @@
 
   <!--批量插入-->
   <insert id="HzPbomRecordDAOImpl_insertList" useGeneratedKeys="false" parameterType="java.util.List">
-    insert into HZ_PBOM_RECORD (PUID,P_RESOURCE, P_COLOR_PART,
-    P_E_BOM_PUID, P_PBOM_STATUS, P_TYPE,
+    insert into HZ_PBOM_RECORD (PUID,P_RESOURCE, P_COLOR_PART,P_TYPE,
     P_BUY_UNIT, P_WORK_SHOP1, P_WORK_SHOP2,
     P_PRODUCT_LINE, P_MOULD_TYPE, P_OUTER_PART,
     P_CREATE_TIME, P_UPDATE_TIME, P_CREATE_NAME,
@@ -171,12 +170,11 @@
     P_BOM_LINE_PART_CLASS,P_BOM_LINE_PART_EN_NAME,P_BOM_LINE_PART_RESOURCE,P_BOM_ORDER_NUM,P_PBOM_STATUS)
     <foreach collection="list" item="item" index="index" separator="UNION ALL">
       select
-      #{item.puid,jdbcType=VARCHAR},#{item.pResource,jdbcType=VARCHAR}, #{item.pColorPart,jdbcType=INTEGER},
-      #{item.pEBomPuid,jdbcType=VARCHAR}, #{item.pPbomStatus,jdbcType=INTEGER}, #{item.pType,jdbcType=INTEGER},
-      #{item.pBuyUnit,jdbcType=INTEGER}, #{item.pWorkShop1,jdbcType=VARCHAR}, #{item.pWorkShop2,jdbcType=VARCHAR},
-      #{item.pProductLine,jdbcType=VARCHAR}, #{item.pMouldType,jdbcType=VARCHAR}, #{item.pOuterPart,jdbcType=VARCHAR},
-      #{item.pCreateTime,jdbcType=DATE}, #{item.pUpdateTime,jdbcType=DATE}, #{item.pCreateName,jdbcType=VARCHAR},
-      #{item.pUpdateName,jdbcType=VARCHAR}, #{item.pStation,jdbcType=VARCHAR},#{item.parentUid,jdbcType=VARCHAR},
+      #{item.puid,jdbcType=VARCHAR},#{item.resource,jdbcType=VARCHAR}, #{item.colorPart,jdbcType=INTEGER},
+      #{item.type,jdbcType=INTEGER},#{item.buyUnit,jdbcType=INTEGER}, #{item.workShop1,jdbcType=VARCHAR},
+      #{item.workShop2,jdbcType=VARCHAR},#{item.productLine,jdbcType=VARCHAR}, #{item.mouldType,jdbcType=VARCHAR},
+      #{item.outerPart,jdbcType=VARCHAR},sysdate, sysdate, #{item.createName,jdbcType=VARCHAR},
+      #{item.updateName,jdbcType=VARCHAR}, #{item.station,jdbcType=VARCHAR},#{item.parentUid,jdbcType=VARCHAR},
       #{item.bomDigifaxId,jdbcType=VARCHAR},#{item.eBomPuid,jdbcType=VARCHAR},#{item.lineIndex,jdbcType=VARCHAR},
       #{item.isHas,jdbcType=INTEGER},#{item.linePuid,jdbcType=VARCHAR}, #{item.lineId,jdbcType=VARCHAR}, #{item.is2Y,jdbcType=INTEGER},
       #{item.isPart,jdbcType=INTEGER}, #{item.isDept,jdbcType=INTEGER}, #{item.pBomOfWhichDept,jdbcType=VARCHAR},
@@ -410,10 +408,7 @@
     select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(
     select t2.puid from Hz_project_libs t2
     <where>
-    1=1
-    <if test="projectId != null and  projectId!='' " >
-        and t2.puid = #{projectId,jdbcType=VARCHAR}))
-    </if>
+      t2.puid = #{projectId,jdbcType=VARCHAR}))
       and t.P_PBOM_STATUS = 1
     </where>
     start with t.P_E_BOM_PUID = #{puid,jdbcType=VARCHAR}
@@ -446,5 +441,16 @@
       and t1.P_PBOM_STATUS = 1
     </where>
   </select>
+
+  <!--批量删除-->
+  <update id="HzPbomRecordDAOImpl_deleteList"  parameterType="java.util.List">
+    <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+      update HZ_PBOM_RECORD
+      <set>
+        P_PBOM_STATUS=0
+      </set>
+      where P_E_BOM_PUID = #{item.eBomPuid,jdbcType=VARCHAR}
+    </foreach>
+  </update>
 
 </mapper>

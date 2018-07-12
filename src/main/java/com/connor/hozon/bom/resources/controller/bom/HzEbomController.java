@@ -353,7 +353,7 @@ public class HzEbomController extends BaseController {
      * @param response
      */
     @RequestMapping(value = "delete/ebom",method = RequestMethod.POST)
-    public void updateEbomToDB(DeleteHzEbomReqDTO reqDTO, HttpServletResponse response){
+    public void deleteEbomToDB(@RequestBody DeleteHzEbomReqDTO reqDTO, HttpServletResponse response){
         if(reqDTO.getProjectId()==null){
             writeAjaxJSONResponse(ResultMessageBuilder.build(false,"非法参数！"), response);
             return;

@@ -20,7 +20,6 @@
 //                         'middle'
 //                 });
 //                 var data = result.data;
-//                 console.log(data);
 //                 var keys = [];
 //                 var values;
 //                 for (var key in data) {
@@ -104,7 +103,6 @@ $(document).ready((function () {
                         'middle'
                 });
                 var data = result.data;
-                console.log(data);
                 var keys = [];
                 var values;
                 for (var key in data) {
@@ -183,7 +181,6 @@ $(document).ready((function () {
                     'middle'
             });
             var data = result.data;
-            console.log(data);
             var keys = [];
             var values;
             for (var key in data) {

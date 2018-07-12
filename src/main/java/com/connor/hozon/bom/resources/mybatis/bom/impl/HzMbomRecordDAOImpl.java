@@ -1,9 +1,11 @@
 package com.connor.hozon.bom.resources.mybatis.bom.impl;
 
+import com.connor.hozon.bom.resources.dto.request.DeleteHzMbomReqDTO;
 import com.connor.hozon.bom.resources.mybatis.bom.HzMbomRecordDAO;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.page.PageRequest;
 import com.connor.hozon.bom.resources.query.HzMbomByPageQuery;
+import com.connor.hozon.bom.resources.query.HzMbomTreeQuery;
 import org.springframework.stereotype.Service;
 import sql.BaseSQLUtil;
 import sql.pojo.bom.HzBomLineRecord;
@@ -32,12 +34,17 @@ public class HzMbomRecordDAOImpl extends BaseSQLUtil implements HzMbomRecordDAO 
     }
 
     @Override
-    public int update(HzMbomRecord record) {
+    public int update(HzMbomLineRecord record) {
         return super.update("HzMbomRecordDAOImpl_update",record);
     }
     @Override
     public int deleteByForeignId(String eBomPuid) {
         return super.update("HzMbomRecordDAOImpl_deleteByForeignId",eBomPuid);
+    }
+
+    @Override
+    public int deleteList(List<DeleteHzMbomReqDTO> reqDTOS) {
+        return super.update("HzMbomRecordDAOImpl_deleteList",reqDTOS);
     }
 
     @Override
@@ -59,12 +66,6 @@ public class HzMbomRecordDAOImpl extends BaseSQLUtil implements HzMbomRecordDAO 
     @Override
     public HzMbomLineRecord findHzMbomByPuid(Map<String, Object> map) {
         return (HzMbomLineRecord) super.findForObject("HzMbomRecordDAOImpl_findHzMbomByPuid",map);
-    }
-
-    @Override
-    public HzMbomRecord findHzMbomByeBomPuid(String eBomPuid) {
-
-        return (HzMbomRecord)super.findForObject("HzMbomRecordDAOImpl_findHzMbomByeBomPuid",eBomPuid);
     }
 
     @Override
@@ -151,5 +152,13 @@ public class HzMbomRecordDAOImpl extends BaseSQLUtil implements HzMbomRecordDAO 
         map.put("pBomLinePartResource",query.getpBomLinePartResource());
         map.put("sparePart",query.getSparePart());
         return super.findForList("HzMbomRecordDAOImpl_findHzMbomByResourceAll",map);
+    }
+
+    @Override
+    public List<HzMbomLineRecord> getHzMbomTree(HzMbomTreeQuery query) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("projectId",query.getProjectId());
+        map.put("puid",query.getPuid());
+        return super.findForList("HzMbomRecordDAOImpl_getHzMbomTree",map);
     }
 }

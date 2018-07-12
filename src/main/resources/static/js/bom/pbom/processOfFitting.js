@@ -110,14 +110,12 @@ $(function () {
         var localProjectDetail;
         var coach = [];
         var projectId = $("#project", window.top.document).val();
-        console.log(projectId);
         if (val != "") {
             $.ajax({
                 type: "GET",
                 url: "pbom/processComposeTree?lineId=" + val + "&projectId=" + projectId,
                 undefinedText: "",//当数据为 undefined 时显示的字符
                 success: function (data) {
-                    console.log(data);
                     var setting = {
                         view: {
                             /*addHoverDom: addHoverDom,
@@ -178,7 +176,6 @@ $(function () {
                                         url: "pbom/detail?lineId=" + localSelectedNode.lineId + "&projectId=" + projectId,
                                         type: "GET",
                                         success: function (data) {
-                                            console.log(data);
                                             var result = data.externalObject;
                                             var lineId = localSelectedNode.lineId;
                                             var titleName = result[0];
@@ -239,14 +236,12 @@ $(function () {
         var localProjectDetail;
         var coach = [];
         var projectId = $("#project", window.top.document).val();
-        console.log(projectId);
         if (val != "") {
             $.ajax({
                 type: "GET",
                 url: "pbom/processComposeTree?lineId=" + val + "&projectId=" + projectId,
                 undefinedText: "",//当数据为 undefined 时显示的字符
                 success: function (data) {
-                    console.log(data);
                     var setting = {
                         view: {
                             /*addHoverDom: addHoverDom,
@@ -369,14 +364,12 @@ function doSubmit() {
     // eBomContent = JSON.stringify(data);//勾选需要合成的零件json字符串
     // eBomContent=JSON.parse(eBomContent);
     _eBomContent.push(data);
-    //console.log("ck是："+ck);
     puid = localSelectedNode.puid;
     compound = $("#compoundLineId").val();//获取合成后的零件号
 
     var projectId = "projectPuid="
     projectId += $("#project", window.top.document).val();
     var url = "pbom/add/processCompose" + "?lineId=" + compound + "&puid=" + puid + "&" + projectId;
-    console.log(url);
     $.ajax({
         url: url,
         type: "POST",

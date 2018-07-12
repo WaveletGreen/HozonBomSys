@@ -1,6 +1,7 @@
 package com.connor.hozon.bom.resources.service.bom;
 
 import com.connor.hozon.bom.resources.dto.request.AddMbomReqDTO;
+import com.connor.hozon.bom.resources.dto.request.DeleteHzMbomReqDTO;
 import com.connor.hozon.bom.resources.dto.request.UpdateMbomReqDTO;
 import com.connor.hozon.bom.resources.dto.response.HzMbomRecordRespDTO;
 import com.connor.hozon.bom.resources.dto.response.HzSuperMbomRecordRespDTO;
@@ -8,6 +9,7 @@ import com.connor.hozon.bom.resources.dto.response.HzVehicleModelRespDTO;
 import com.connor.hozon.bom.resources.dto.response.OperateResultMessageRespDTO;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.query.HzMbomByPageQuery;
+import com.connor.hozon.bom.resources.query.HzMbomTreeQuery;
 import sql.pojo.bom.HzMbomLineRecord;
 
 import java.util.List;
@@ -49,10 +51,10 @@ public interface HzMbomService {
 
     /**
      * 删除一条MBOM
-     * @param puid
+     * @param
      * @return
      */
-    OperateResultMessageRespDTO deleteMbomRecord(String puid);
+    OperateResultMessageRespDTO deleteMbomRecord(DeleteHzMbomReqDTO reqDTO);
 
     /**
      * 获取超级Mbom信息 作废
@@ -79,4 +81,10 @@ public interface HzMbomService {
     @Deprecated
     HzMbomLineRecord getHzSuperMbomByPuid(String projectId,String puid);
 
+    /**
+     * 获取MBOM树
+     * @param query
+     * @return
+     */
+    List<HzMbomLineRecord> getHzMbomTree(HzMbomTreeQuery query);
 }

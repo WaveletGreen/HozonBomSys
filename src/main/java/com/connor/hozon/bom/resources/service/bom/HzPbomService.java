@@ -33,10 +33,10 @@ public interface HzPbomService {
 
     /**
      * PBOM维护 删除  获取当前登录者的信息 进行权限判断
-     * @param ebomPuid
+     * @param reqDTO
      * @return
      */
-    OperateResultMessageRespDTO deleteHzPbomRecordByForeignId(String ebomPuid);
+    OperateResultMessageRespDTO deleteHzPbomRecordByForeignId(DeleteHzPbomReqDTO reqDTO);
     /**
      * 获取PBOM信息 工艺合件
      * @param reqDTO

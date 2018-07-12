@@ -1,5 +1,7 @@
 package com.connor.hozon.bom.resources.mybatis.bom;
 
+import com.connor.hozon.bom.resources.dto.request.DeleteHzEbomReqDTO;
+import com.connor.hozon.bom.resources.dto.request.DeleteHzPbomReqDTO;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.query.HzPbomByPageQuery;
 import com.connor.hozon.bom.resources.query.HzPbomTreeQuery;
@@ -10,6 +12,7 @@ import sql.pojo.bom.HzPbomRecord;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by haozt on 2018/5/25
@@ -47,6 +50,13 @@ public interface HzPbomRecordDAO {
     int deleteByForeignId(String ePuid);
 
     /**
+     * 批量删除
+     * @param list
+     * @return
+     */
+    int deleteList(List<DeleteHzPbomReqDTO> list);
+
+    /**
      * 分页获取pbom信息
      * @param query
      * @return
@@ -69,6 +79,11 @@ public interface HzPbomRecordDAO {
 
     int getHzPbomMaxOrderNum();
 
+    /**
+     * 获取PBOM结构树
+     * @param query
+     * @return
+     */
     List<HzPbomLineRecord> getHzPbomTree(HzPbomTreeQuery query);
 
     int getMaxLineIndexFirstNum(String projectId);
