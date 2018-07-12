@@ -63,7 +63,7 @@ function initTable(pBomUrl) {
                 cache: false,
                 striped: true,                              //是否显示行间隔色
                 // sidePagination: "server",           //分页方式：client客户端分页，server服务端分页（*）
-                height: $(window.parent.document).find("#wrapper").height() - 180,
+                // height: $(window.parent.document).find("#wrapper").height() - 180,
                 width: $(window).width(),
                 formId: "queryPbomManage",
                 undefinedText: "",//当数据为 undefined 时显示的字符
