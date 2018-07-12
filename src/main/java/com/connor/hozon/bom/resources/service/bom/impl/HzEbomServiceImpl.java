@@ -489,52 +489,54 @@ public class HzEbomServiceImpl implements HzEbomService {
     @Override
     public OperateResultMessageRespDTO deleteHzEbomRecordById(DeleteHzEbomReqDTO reqDTO) {
         try{
-            //删除数据时 需要把当前bom下的所有子层数据一起删除
-            HzEPLManageRecord record = hzEbomRecordDAO.findEbomById(reqDTO.getPuid(),reqDTO.getProjectId());
-            HzBomLineRecord hzBomLineRecord = new HzBomLineRecord();
-            HZBomMainRecord hzBomMainRecord = hzBomMainRecordDao.selectByProjectPuid(reqDTO.getProjectId());
-            //判断当前bom下有没有子，需要调整层级关系
-            if(record != null){
-                List<HzEPLManageRecord> records = findCurrentBomChildren(reqDTO.getProjectId(),record);
-                List<HzEPLManageRecord> recordList = new ArrayList<>();
-                //过滤掉已删除的bom
-                for(HzEPLManageRecord eplManageRecord :records){
-                    if(!Integer.valueOf(2).equals(eplManageRecord.getpState())){
-                        recordList.add(eplManageRecord);
+            String puids[] = reqDTO.getPuids().trim().split(",");
+            for(String puid:puids){
+                //删除数据时 需要把当前bom下的所有子层数据一起删除
+                HzEPLManageRecord record = hzEbomRecordDAO.findEbomById(puid,reqDTO.getProjectId());
+                HzBomLineRecord hzBomLineRecord = new HzBomLineRecord();
+                HZBomMainRecord hzBomMainRecord = hzBomMainRecordDao.selectByProjectPuid(reqDTO.getProjectId());
+                //判断当前bom下有没有子，需要调整层级关系
+                if(record != null){
+                    List<HzEPLManageRecord> records = findCurrentBomChildren(reqDTO.getProjectId(),record);//自己
+                    int j = 0;
+                    for(HzEPLManageRecord eplManageRecord :records){
+                        Map<String,Object> map  = new HashMap<>();
+                        map.put("projectId",reqDTO.getProjectId());
+                        map.put("puid",records.get(0).getParentUid());
+                        List<HzEPLManageRecord> record1s = hzEbomRecordDAO.getHzBomLineChildren(map);//父亲
+                        if(record1s.size() -records.size() ==1){
+                            HzEPLManageRecord hzEPLManageRecord = record1s.get(0);
+                            hzBomLineRecord.setIsHas(0);
+                            hzBomLineRecord.setIsPart(1);
+                            hzBomLineRecord.setBomDigifaxId(hzBomMainRecord.getPuid());
+                            hzBomLineRecord.setPuid(hzEPLManageRecord.getPuid());
+                            if(hzEPLManageRecord.getIs2Y().equals(1)){
+                                hzBomLineRecord.setIs2Y(0);
+                            }
+//                        hzBomLineRecord.setIsHas(0);
+//                        hzBomLineRecord.setIsPart(1);
+                            hzBomLineRecordDao.update(hzBomLineRecord);
+                        }
+                        //状态值更新
+                        HzBomState bomState = new HzBomState();
+                        bomState.setpBomId(eplManageRecord.getPuid());
+                        bomState.setpBomState(2);
+                        HzBomState hzBomState = hzBomStateDAO.findStateById(eplManageRecord.getPuid());
+                        if (hzBomState == null) {
+                            bomState.setPuid(UUID.randomUUID().toString());
+                            hzBomStateDAO.insert(bomState);
+                            j++;
+                        } else {
+                            hzBomStateDAO.update(bomState);
+                            j++;
+                        }
                     }
-                }
-                int i=0;
-                int j = 0;
-                for(HzEPLManageRecord eplManageRecord :recordList){
-                    hzBomLineRecord.setBomDigifaxId(hzBomMainRecord.getPuid());
-                    hzBomLineRecord.setPuid(eplManageRecord.getPuid());
-                    hzBomLineRecord.setIsHas(0);
-                    hzBomLineRecord.setIsPart(1);
-                    hzBomLineRecordDao.update(hzBomLineRecord);
-                    i++;
-                    //状态值更新
-                    HzBomState bomState = new HzBomState();
-                    bomState.setpBomId(eplManageRecord.getPuid());
-                    bomState.setpBomState(2);
-                    HzBomState hzBomState = hzBomStateDAO.findStateById(eplManageRecord.getPuid());
-                    if (hzBomState == null) {
-                        bomState.setPuid(UUID.randomUUID().toString());
-                        hzBomStateDAO.insert(bomState);
-                        j++;
-                    } else {
-                        hzBomStateDAO.update(bomState);
-                        j++;
-                    }
-
-                }
-                if(i>0&&j>0){
-                    return OperateResultMessageRespDTO.getSuccessResult();
                 }
             }
+            return OperateResultMessageRespDTO.getSuccessResult();
         }catch (Exception e){
             return  OperateResultMessageRespDTO.getFailResult();
         }
-        return OperateResultMessageRespDTO.getFailResult();
     }
 
     @Override

@@ -3,6 +3,7 @@ package com.connor.hozon.bom.resources.service.bom.impl;
 import com.connor.hozon.bom.bomSystem.dao.impl.bom.HzBomLineRecordDaoImpl;
 import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.resources.dto.request.AddMbomReqDTO;
+import com.connor.hozon.bom.resources.dto.request.DeleteHzMbomReqDTO;
 import com.connor.hozon.bom.resources.dto.request.UpdateMbomReqDTO;
 import com.connor.hozon.bom.resources.dto.response.HzMbomRecordRespDTO;
 import com.connor.hozon.bom.resources.dto.response.HzSuperMbomRecordRespDTO;
@@ -11,6 +12,7 @@ import com.connor.hozon.bom.resources.dto.response.OperateResultMessageRespDTO;
 import com.connor.hozon.bom.resources.mybatis.bom.HzMbomRecordDAO;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.query.HzMbomByPageQuery;
+import com.connor.hozon.bom.resources.query.HzMbomTreeQuery;
 import com.connor.hozon.bom.resources.service.bom.HzMbomService;
 import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.sys.entity.User;
@@ -198,7 +200,7 @@ public class HzMbomServiceImpl implements HzMbomService {
 //            }
 
 
-            HzMbomRecord hzMbomRecord = new HzMbomRecord();
+            HzMbomLineRecord hzMbomRecord = new HzMbomLineRecord();
             hzMbomRecord.seteBomPuid(reqDTO.geteBomPuid());
             hzMbomRecord.setChange(reqDTO.getChange());
             hzMbomRecord.setChangeNum(reqDTO.getChangeNum());
@@ -213,7 +215,6 @@ public class HzMbomServiceImpl implements HzMbomService {
             hzMbomRecord.setTools(reqDTO.getTools());
             hzMbomRecord.setWasterProduct(reqDTO.getWasterProduct());
             hzMbomRecord.setCreateName(user.getUserName());
-            hzMbomRecord.setStatus(1);
             hzMbomRecord.setUpdateName(user.getUserName());
             Map<String,Object> map = new HashMap<>();
             map.put("pPuid",reqDTO.geteBomPuid());
@@ -226,13 +227,6 @@ public class HzMbomServiceImpl implements HzMbomService {
                 }else{
                     return OperateResultMessageRespDTO.getFailResult();
                 }
-            }
-            hzMbomRecord.setPuid(UUID.randomUUID().toString());
-            int maxOrderNum = hzMbomRecordDAO.getHzMbomMaxOrderNum(reqDTO.getProjectId());
-            hzMbomRecord.setOrderNum(++maxOrderNum);
-            int i = hzMbomRecordDAO.insert(hzMbomRecord);
-            if(i>0){
-                return OperateResultMessageRespDTO.getSuccessResult();
             }
             return OperateResultMessageRespDTO.getFailResult();
         }catch (Exception e){
@@ -250,7 +244,7 @@ public class HzMbomServiceImpl implements HzMbomService {
                 operateResultMessageRespDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
                 return operateResultMessageRespDTO;
             }
-            HzMbomRecord record = new HzMbomRecord();
+            HzMbomLineRecord record = new HzMbomLineRecord();
             record.setUpdateName(user.getUserName());
             record.setWasterProduct(reqDTO.getWasterProduct());
             record.setTools(reqDTO.getTools());
@@ -276,7 +270,7 @@ public class HzMbomServiceImpl implements HzMbomService {
     }
 
     @Override
-    public OperateResultMessageRespDTO deleteMbomRecord(String puid) {
+    public OperateResultMessageRespDTO deleteMbomRecord(DeleteHzMbomReqDTO reqDTO) {
         OperateResultMessageRespDTO respDTO = new OperateResultMessageRespDTO();
         try {
             User user = UserInfo.getUser();
@@ -285,24 +279,52 @@ public class HzMbomServiceImpl implements HzMbomService {
                 respDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
                 return respDTO;
             }
-            HzMbomRecord record = hzMbomRecordDAO.findHzMbomByeBomPuid(puid);
-            if (null == record) {
-                record = new HzMbomRecord();
-                record.seteBomPuid(puid);
-                record.setPuid(UUID.randomUUID().toString());
-                int i = hzMbomRecordDAO.insert(record);
-                if (i < 0) {
-                    return OperateResultMessageRespDTO.getFailResult();
+            if(reqDTO.getPuids() == null || reqDTO.getPuids().equals("") || reqDTO.getProjectId() ==null || reqDTO.getProjectId().equals("")){
+                respDTO.setErrMsg("非法参数！");
+                respDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
+                return respDTO;
+            }
+            String bomPuids[] = reqDTO.getPuids().trim().split(",");
+            //需要判断层级关系 并更改层级关系
+            for(String puid :bomPuids){
+                HzMbomTreeQuery treeQuery = new HzMbomTreeQuery();
+                treeQuery.setProjectId(reqDTO.getProjectId());
+                treeQuery.setPuid(puid);
+                List<HzMbomLineRecord> lineRecords = hzMbomRecordDAO.getHzMbomTree(treeQuery);//自己
+                Set<String> set = new HashSet<>();//去除重复
+                if(ListUtil.isNotEmpty(lineRecords)){
+                    for(int i = 0;i<lineRecords.size();i++){
+                        HzMbomTreeQuery hzMbomTreeQuery = new HzMbomTreeQuery();
+                        hzMbomTreeQuery.setPuid(lineRecords.get(0).getParentUid());
+                        hzMbomTreeQuery.setProjectId(reqDTO.getProjectId());
+                        List<HzMbomLineRecord> records = hzMbomRecordDAO.getHzMbomTree(hzMbomTreeQuery);//父亲
+                        if(ListUtil.isNotEmpty(records)){
+                            if(records.size() -lineRecords.size()==1){
+                                HzMbomLineRecord hzMbomLineRecord = records.get(0);
+                                hzMbomLineRecord.setIsHas(0);
+                                hzMbomLineRecord.setIsPart(1);
+                                if(hzMbomLineRecord.getIs2Y().equals(1)){
+                                    hzMbomLineRecord.setIs2Y(0);
+                                }
+                                hzMbomRecordDAO.update(hzMbomLineRecord);
+                            }
+
+                        }
+                        set.add(lineRecords.get(i).geteBomPuid());
+                    }
                 }
+                List<DeleteHzMbomReqDTO> list = new ArrayList<>();
+                for(String s:set){
+                    DeleteHzMbomReqDTO deleteHzPbomReqDTO = new DeleteHzMbomReqDTO();
+                    deleteHzPbomReqDTO.setPuid(s);
+                    list.add(deleteHzPbomReqDTO);
+                }
+                hzMbomRecordDAO.deleteList(list);//mabatis 做批量更新时 返回值为-1 所以这里根据异常情况来判断成功与否
             }
-            int i = hzMbomRecordDAO.deleteByForeignId(puid);
-            if (i > 0) {
-                return OperateResultMessageRespDTO.getSuccessResult();
-            }
+            return OperateResultMessageRespDTO.getSuccessResult();
         } catch (Exception e) {
             return OperateResultMessageRespDTO.getFailResult();
         }
-        return OperateResultMessageRespDTO.getFailResult();
     }
 
     @Override
@@ -421,6 +443,11 @@ public class HzMbomServiceImpl implements HzMbomService {
             }
             return  getHzSuperMbomByPuid(projectId,record.getParentUid());
         }
+    }
+
+    @Override
+    public List<HzMbomLineRecord> getHzMbomTree(HzMbomTreeQuery query) {
+        return hzMbomRecordDAO.getHzMbomTree(query);
     }
 
     private HzMbomLineRecord bomLineToMbomLine(HzBomLineRecord record){

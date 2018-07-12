@@ -1,9 +1,11 @@
 package com.connor.hozon.bom.resources.mybatis.bom;
 
+import com.connor.hozon.bom.resources.dto.request.DeleteHzMbomReqDTO;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.query.HzMaterielByPageQuery;
 import com.connor.hozon.bom.resources.query.HzMaterielQuery;
 import com.connor.hozon.bom.resources.query.HzMbomByPageQuery;
+import com.connor.hozon.bom.resources.query.HzMbomTreeQuery;
 import sql.pojo.bom.HzBomLineRecord;
 import sql.pojo.bom.HzMbomLineRecord;
 import sql.pojo.bom.HzMbomRecord;
@@ -34,7 +36,7 @@ public interface HzMbomRecordDAO {
      * @param record
      * @return
      */
-    int update(HzMbomRecord record);
+    int update(HzMbomLineRecord record);
 
     /**
      * 删除BOM维护 通过外键删除
@@ -42,6 +44,13 @@ public interface HzMbomRecordDAO {
      * @return
      */
     int deleteByForeignId(String eBomPuid);
+
+    /**
+     * 批量删除
+     * @param reqDTOS
+     * @return
+     */
+    int deleteList(List<DeleteHzMbomReqDTO> reqDTOS);
 
     /**
      * 获取MBOM信息 分页查询
@@ -57,12 +66,6 @@ public interface HzMbomRecordDAO {
      */
     HzMbomLineRecord findHzMbomByPuid(Map<String,Object> map);
 
-    /**
-     * 查询一条MBOM信息 MBOM表
-     * @param eBomPuid
-     * @return
-     */
-    HzMbomRecord findHzMbomByeBomPuid(String eBomPuid);
 
     /**
      * 查询MBOM对应车型信息
@@ -133,5 +136,12 @@ public interface HzMbomRecordDAO {
      * @return
      */
     List<HzMbomLineRecord> findHzMbomByResourceAll(HzMbomByPageQuery query);
+
+    /**
+     * 获取MBOM结构树 sql递归获取
+     * @param query
+     * @return
+     */
+    List<HzMbomLineRecord> getHzMbomTree(HzMbomTreeQuery query);
 
 }

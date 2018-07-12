@@ -163,8 +163,8 @@ public class HzPbomController extends BaseController {
 
 
     @RequestMapping(value = "delete", method = RequestMethod.POST)
-    public void deletePbomRecord(String eBomPuid, HttpServletResponse response) {
-        OperateResultMessageRespDTO respDTO = hzPbomService.deleteHzPbomRecordByForeignId(eBomPuid);
+    public void deletePbomRecord(@RequestBody DeleteHzPbomReqDTO reqDTO, HttpServletResponse response) {
+        OperateResultMessageRespDTO respDTO = hzPbomService.deleteHzPbomRecordByForeignId(reqDTO);
         writeAjaxJSONResponse(ResultMessageBuilder.build(OperateResultMessageRespDTO.isSuccess(respDTO), respDTO.getErrMsg()), response);
     }
 
@@ -231,7 +231,9 @@ public class HzPbomController extends BaseController {
         JSONArray jsonArray= new JSONArray();
         if(OperateResultMessageRespDTO.isSuccess(operateResultMessageRespDTO)){
             HzPbomProcessComposeReqDTO reqDTO = new HzPbomProcessComposeReqDTO();
-            reqDTO.setLineId(recordReqDTO.getLineId());
+            if(recordReqDTO.getLineId() !=null){
+                reqDTO.setLineId(recordReqDTO.getLineId());
+            }
             reqDTO.setProjectId(recordReqDTO.getProjectId());
             jsonArray = hzPbomService.getPbomForProcessCompose(reqDTO);
         }

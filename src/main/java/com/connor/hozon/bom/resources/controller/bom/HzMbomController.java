@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.connor.hozon.bom.resources.controller.BaseController;
 import com.connor.hozon.bom.resources.dto.request.AddMbomReqDTO;
+import com.connor.hozon.bom.resources.dto.request.DeleteHzMbomReqDTO;
 import com.connor.hozon.bom.resources.dto.request.UpdateMbomReqDTO;
 import com.connor.hozon.bom.resources.dto.response.HzMbomRecordRespDTO;
 import com.connor.hozon.bom.resources.dto.response.HzSuperMbomRecordRespDTO;
@@ -269,13 +270,13 @@ public class HzMbomController extends BaseController {
     }
 
     /**
-     * 删除一条记录
-     * @param eBomPuid
+     * 批量删除记录
+     * @param reqDTO
      * @param response
      */
     @RequestMapping(value = "delete",method = RequestMethod.POST)
-    public void deleteMbom(String eBomPuid,HttpServletResponse response){
-       OperateResultMessageRespDTO respDTO =  hzMbomService.deleteMbomRecord(eBomPuid);
+    public void deleteMbom(@RequestBody DeleteHzMbomReqDTO reqDTO, HttpServletResponse response){
+       OperateResultMessageRespDTO respDTO =  hzMbomService.deleteMbomRecord(reqDTO);
         writeAjaxJSONResponse(ResultMessageBuilder.build(OperateResultMessageRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
     }
 }
