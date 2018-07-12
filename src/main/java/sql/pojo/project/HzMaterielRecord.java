@@ -123,13 +123,13 @@ public class HzMaterielRecord {
     /**
      * 发送到SAP 成功标志 （1 成功 0 失败）
      */
-    private String sendSapFlag;
+    private Integer sendSapFlag;
 
-    public String getSendSapFlag() {
+    public Integer getSendSapFlag() {
         return sendSapFlag;
     }
 
-    public void setSendSapFlag(String sendSapFlag) {
+    public void setSendSapFlag(Integer sendSapFlag) {
         this.sendSapFlag = sendSapFlag;
     }
 
