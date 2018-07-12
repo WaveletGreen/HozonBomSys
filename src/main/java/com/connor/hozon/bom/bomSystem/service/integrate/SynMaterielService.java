@@ -134,7 +134,7 @@ public class SynMaterielService implements ISynMaterielService {
      * 执行操作
      *
      * @param sorted
-     * @param option     
+     * @param option
      * @return
      */
     private JSONObject execute(List<HzMaterielRecord> sorted, ActionFlagOption option) {
@@ -158,15 +158,10 @@ public class SynMaterielService implements ISynMaterielService {
         int totalOfOutOfParent = 0;
         int totalOfUnknown = 0;
 
-        StringBuilder sbs = new StringBuilder();
-        StringBuilder sbf = new StringBuilder();
         JSONObject result = new JSONObject();
 
         Map<String, HzMaterielRecord> _mapCoach = new HashMap<>();
         Map<String, String> _factoryCoach = new HashMap<>();
-
-        sbs.append("更新成功项:<br/>");
-        sbf.append("更新失败项:<br/>");
 
         boolean hasFail = false;
 
@@ -195,33 +190,17 @@ public class SynMaterielService implements ISynMaterielService {
             //加入缓存
             _mapCoach.put(packNo, record);
         }
+        //执行
         transMasterMaterialService.execute();
+
         List<ZPPTCO001> resultPool = transMasterMaterialService.getOut().getItem();
-        int counter = 0;
-        String br = "&emsp;&emsp;";
+
         for (ZPPTCO001 zpptco001 : resultPool) {
             if ("S".equalsIgnoreCase(zpptco001.getPTYPE())) {
                 //3开始断行
-                if (counter % 3 == 0) {
-                    br = "<br/>";
-                    counter = 0;
-                }
-                sbs.append("&emsp;&emsp;&emsp;&emsp;" + _mapCoach.get(zpptco001.getPGUID()).getpMaterielCode() + br);
             } else {
-                sbf.append("&emsp;&emsp;&emsp;&emsp;" + _mapCoach.get(zpptco001.getPGUID()).getpMaterielCode() + "(" + zpptco001.getPMESSAGE() + ")<br/>");
-                hasFail = true;
             }
-            if (br.equals("<br/>")) {
-                br = "&emsp;&emsp;";
-            }
-            counter++;
         }
-        if (hasFail) {
-            result.put("msg", sbs.append("<br/>" + sbf).toString());
-        } else {
-            result.put("msg", sbs.toString());
-        }
-
         result.put("status", true);
         result.put("success", success);
         result.put("fail", fail);
