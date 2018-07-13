@@ -95,7 +95,7 @@ function initTable(url) {
                                 title: "添加",
                                 url: "work/addWork",
                                 gridId: "gridId",
-                                width: 500,
+                                width: 800,
                                 height: 650
                             })
                         }

@@ -23,7 +23,7 @@ import javax.xml.ws.WebServiceClient;
  * </p>
  * 
  */
-@WebServiceClient(name = "SAPForTCProxy", targetNamespace = "urn:sap-com:document:sap:rfc:functions", wsdlLocation = "http://10.0.6.71:8280/services/SAPForTCProxy?wsdl")
+@WebServiceClient(name = "SAPForTCProxy", targetNamespace = "urn:sap-com:document:sap:rfc:functions", wsdlLocation = "http://10.0.6.72:8280/services/SAPForTCProxy?wsdl")
 public class SAPForTCProxy extends Service {
 
 	private final static URL SAPFORTCPROXY_WSDL_LOCATION;
@@ -34,10 +34,10 @@ public class SAPForTCProxy extends Service {
 		try {
 			URL baseUrl;
 			baseUrl = SAPForTCProxy.class.getResource(".");
-			url = new URL(baseUrl, "http://10.0.6.71:8280/services/SAPForTCProxy?wsdl");
+			url = new URL(baseUrl, "http://10.0.6.72:8280/services/SAPForTCProxy?wsdl");
 		} catch (MalformedURLException e) {
 			logger.warning(
-					"Failed to create URL for the wsdl Location: 'http://10.0.6.71:8280/services/SAPForTCProxy?wsdl', retrying as a local file");
+					"Failed to create URL for the wsdl Location: 'http://10.0.6.72:8280/services/SAPForTCProxy?wsdl', retrying as a local file");
 			logger.warning(e.getMessage());
 		}
 		SAPFORTCPROXY_WSDL_LOCATION = url;
