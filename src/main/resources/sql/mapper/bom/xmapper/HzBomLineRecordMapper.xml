@@ -196,6 +196,7 @@
         where
         t2.p_cfg0_of_which_project_puid=#{projectId,jdbcType=VARCHAR}
         ) and PUID=#{puid,jdbcType=VARCHAR}
+        and P_EBOM_STATUS=1
     </select>
 
     <!--查询orderNum的最大值信息-->
@@ -213,6 +214,7 @@
         where
         t2.p_cfg0_of_which_project_puid=#{projectId,jdbcType=VARCHAR}
         ) and LENGTH(TRANSLATE(P_LINE_INDEX,',0123456789','.'))=1
+        and P_EBOM_STATUS=1
     </select>
 
 
@@ -221,13 +223,12 @@
         select
         t.<include refid="Base_Column_List" />
         from HZ_BOM_LINE_RECORD t
-        LEFT OUTER JOIN HZ_BOM_STATE t6 on t.puid = t6.P_BOM_ID
         where t.p_bom_digifax_id=(
         select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(
         select t2.puid from Hz_project_libs t2
         <where>
             t2.puid = #{projectId,jdbcType=VARCHAR}))
         </where>
-        and (t6.P_BOM_STATE is null or t6.P_BOM_STATE  <![CDATA[!= ]]>2)
+        and t.P_EBOM_STATUS=1
     </select>
 </mapper>

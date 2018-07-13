@@ -16,6 +16,7 @@ import com.connor.hozon.bom.resources.mybatis.bom.HzMbomRecordDAO;
 import com.connor.hozon.bom.resources.mybatis.bom.HzPbomRecordDAO;
 import com.connor.hozon.bom.resources.mybatis.bom.impl.HzPbomRecordDAOImpl;
 import com.connor.hozon.bom.resources.page.Page;
+import com.connor.hozon.bom.resources.query.HzBomRecycleByPageQuery;
 import com.connor.hozon.bom.resources.query.HzPbomByPageQuery;
 import com.connor.hozon.bom.resources.query.HzPbomTreeQuery;
 import com.connor.hozon.bom.resources.service.bom.HzPbomService;
@@ -245,7 +246,9 @@ public class HzPbomServiceImpl implements HzPbomService {
                     deleteHzPbomReqDTO.seteBomPuid(s);
                     list.add(deleteHzPbomReqDTO);
                 }
-                hzPbomRecordDAO.deleteList(list);//mabatis 做批量更新时 返回值为-1 所以这里根据异常情况来判断成功与否
+                if(ListUtil.isNotEmpty(list)){
+                    hzPbomRecordDAO.deleteList(list);//mabatis 做批量更新时 返回值为-1 所以这里根据异常情况来判断成功与否
+                }
             }
             return OperateResultMessageRespDTO.getSuccessResult();
         }catch (Exception e){
@@ -388,9 +391,9 @@ public class HzPbomServiceImpl implements HzPbomService {
                 return null;
             }
             List<HzPbomLineRecord> records = recordPage.getResult();
-            int num = (query.getPage()-1)*query.getLimit();
+            int num = (recordPage.getPageNumber()-1)*recordPage.getPageSize();
             List<HzPbomLineRespDTO> respDTOS = pbomLineRecordToRespDTOS(records,query.getProjectId(),num);
-            return new Page<>(query.getPage(),query.getLimit(),recordPage.getTotalCount(),respDTOS);
+            return new Page<>(recordPage.getPageNumber(),recordPage.getPageSize(),recordPage.getTotalCount(),respDTOS);
         }catch (Exception e){
             return null;
         }
@@ -712,6 +715,22 @@ public class HzPbomServiceImpl implements HzPbomService {
         }
     }
 
+    @Override
+    public Page<HzPbomLineRespDTO> getHzPbomRecycleByPage(HzBomRecycleByPageQuery query) {
+        try {
+            Page<HzPbomLineRecord> recordPage =hzPbomRecordDAO.getHzPbomRecycleRecord(query);
+            if(recordPage == null || recordPage.getResult() == null){
+                return null;
+            }
+            List<HzPbomLineRecord> records = recordPage.getResult();
+            int num = (recordPage.getPageNumber()-1)*recordPage.getPageSize();
+            List<HzPbomLineRespDTO> respDTOS = pbomLineRecordToRespDTOS(records,query.getProjectId(),num);
+            return new Page<>(recordPage.getPageNumber(),recordPage.getPageSize(),recordPage.getTotalCount(),respDTOS);
+        }catch (Exception e){
+            return null;
+        }
+    }
+
     private HzPbomLineRecord bomLineToPbomLine(HzBomLineRecord record){
         HzPbomLineRecord hzPbomLineRecord = new HzPbomLineRecord();
         hzPbomLineRecord.setPuid(UUID.randomUUID().toString());
@@ -825,6 +844,8 @@ public class HzPbomServiceImpl implements HzPbomService {
                 respDTO.setOuterPart(record.getOuterPart());
                 respDTO.setStation(record.getStation());
                 respDTO.setOrderNum(record.getOrderNum());
+                respDTO.setpBomLinePartName(record.getpBomLinePartName());
+                respDTO.setpBomLinePartEnName(record.getpBomLinePartEnName());
                 respDTOS.add(respDTO);
             }
             return respDTOS;

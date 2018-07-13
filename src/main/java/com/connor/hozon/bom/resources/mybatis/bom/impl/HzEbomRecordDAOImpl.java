@@ -1,9 +1,12 @@
 package com.connor.hozon.bom.resources.mybatis.bom.impl;
 
+import com.connor.hozon.bom.resources.dto.request.DeleteHzEbomReqDTO;
 import com.connor.hozon.bom.resources.mybatis.bom.HzEbomRecordDAO;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.page.PageRequest;
+import com.connor.hozon.bom.resources.query.HzBomRecycleByPageQuery;
 import com.connor.hozon.bom.resources.query.HzEbomByPageQuery;
+import com.connor.hozon.bom.resources.query.HzEbomTreeQuery;
 import org.springframework.stereotype.Service;
 import sql.BaseSQLUtil;
 import sql.pojo.epl.HzEPLManageRecord;
@@ -28,7 +31,7 @@ public class HzEbomRecordDAOImpl extends BaseSQLUtil implements HzEbomRecordDAO 
         map.put("lineIndex",query.getLineIndex());
         map.put("lineId",query.getLineId());
         request.setPageNumber(query.getPage());
-        request.setPageSize(query.getLimit());
+        request.setPageSize(query.getPageSize());
         request.setFilters(map);
         return super.findPage("HzEbomRecordDAOImpl_getHzEbomList","HzEbomRecordDAOImpl_findTotalCount",request);
 
@@ -44,10 +47,13 @@ public class HzEbomRecordDAOImpl extends BaseSQLUtil implements HzEbomRecordDAO 
 
     /**
      * 找出一条bomLine的全部子bom
-     * @param map
+     * @param query
      * @return
      */
-    public List<HzEPLManageRecord> getHzBomLineChildren(Map map){
+    public List<HzEPLManageRecord> getHzBomLineChildren(HzEbomTreeQuery query){
+        Map<String,Object> map = new HashMap<>();
+        map.put("projectId",query.getProjectId());
+        map.put("puid",query.getPuid());
         return super.findForList("HzEbomRecordDAOImpl_getHzBomLineChildren",map);
     }
 
@@ -57,6 +63,23 @@ public class HzEbomRecordDAOImpl extends BaseSQLUtil implements HzEbomRecordDAO 
         map.put("projectId",projectId);
         map.put("lineID",lineId);
         return (int)super.findForObject("HzEbomRecordDAOImpl_checkItemIdIsRepeat",map)>0;
+    }
+
+    @Override
+    public int deleteList(List<DeleteHzEbomReqDTO> reqDTOs) {
+
+        return super.update("HzEbomRecordDAOImpl_deleteList",reqDTOs);
+    }
+
+    @Override
+    public Page<HzEPLManageRecord> getHzRecycleRecord(HzBomRecycleByPageQuery query) {
+        PageRequest request = new PageRequest();
+        Map map = new HashMap();
+        map.put("projectId",query.getProjectId());
+        request.setPageNumber(query.getPage());
+        request.setPageSize(query.getPageSize());
+        request.setFilters(map);
+        return super.findPage("HzEbomRecordDAOImpl_getHzRecycleRecord","HzEbomRecordDAOImpl_findRecycleTotalCount",request);
     }
 
 }

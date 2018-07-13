@@ -8,6 +8,7 @@ import com.connor.hozon.bom.resources.dto.response.HzSuperMbomRecordRespDTO;
 import com.connor.hozon.bom.resources.dto.response.HzVehicleModelRespDTO;
 import com.connor.hozon.bom.resources.dto.response.OperateResultMessageRespDTO;
 import com.connor.hozon.bom.resources.page.Page;
+import com.connor.hozon.bom.resources.query.HzBomRecycleByPageQuery;
 import com.connor.hozon.bom.resources.query.HzMbomByPageQuery;
 import com.connor.hozon.bom.resources.query.HzMbomTreeQuery;
 import sql.pojo.bom.HzMbomLineRecord;
@@ -87,4 +88,6 @@ public interface HzMbomService {
      * @return
      */
     List<HzMbomLineRecord> getHzMbomTree(HzMbomTreeQuery query);
+
+    Page<HzMbomRecordRespDTO> getHzMbomRecycleByPage(HzBomRecycleByPageQuery query);
 }

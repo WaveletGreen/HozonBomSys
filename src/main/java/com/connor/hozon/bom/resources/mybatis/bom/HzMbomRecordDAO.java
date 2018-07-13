@@ -2,10 +2,7 @@ package com.connor.hozon.bom.resources.mybatis.bom;
 
 import com.connor.hozon.bom.resources.dto.request.DeleteHzMbomReqDTO;
 import com.connor.hozon.bom.resources.page.Page;
-import com.connor.hozon.bom.resources.query.HzMaterielByPageQuery;
-import com.connor.hozon.bom.resources.query.HzMaterielQuery;
-import com.connor.hozon.bom.resources.query.HzMbomByPageQuery;
-import com.connor.hozon.bom.resources.query.HzMbomTreeQuery;
+import com.connor.hozon.bom.resources.query.*;
 import sql.pojo.bom.HzBomLineRecord;
 import sql.pojo.bom.HzMbomLineRecord;
 import sql.pojo.bom.HzMbomRecord;
@@ -144,4 +141,6 @@ public interface HzMbomRecordDAO {
      */
     List<HzMbomLineRecord> getHzMbomTree(HzMbomTreeQuery query);
 
+
+    Page<HzMbomLineRecord> getHzMbomRecycleRecord(HzBomRecycleByPageQuery query);
 }

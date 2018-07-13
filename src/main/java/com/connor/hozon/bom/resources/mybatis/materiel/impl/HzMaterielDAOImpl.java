@@ -47,7 +47,7 @@ public class HzMaterielDAOImpl extends BaseSQLUtil implements HzMaterielDAO {
     public Page<HzMaterielRecord> findHzMaterielForPage(HzMaterielByPageQuery query) {
         PageRequest pageRequest = new PageRequest();
         pageRequest.setPageNumber(query.getPage());
-        pageRequest.setPageSize(query.getLimit());
+        pageRequest.setPageSize(query.getPageSize());
         Map map = new HashMap<>();
         map.put("projectId",query.getProjectId());
         map.put("pMaterielDataType",query.getpMaterielDataType());
@@ -72,8 +72,8 @@ public class HzMaterielDAOImpl extends BaseSQLUtil implements HzMaterielDAO {
     @Override
     public List<HzCfg0ModelRecord> findHzCfg0ModelRecord(HzMaterielByPageQuery query) {
         Map<String,Object> map = new HashMap<>();
-        map.put("offset",(query.getPage() - 1) * query.getLimit());
-        map.put("limit",query.getPage()*query.getLimit());
+        map.put("offset",(query.getPage() - 1) * query.getPageSize());
+        map.put("limit",query.getPage()*query.getPageSize());
         map.put("projectId",query.getProjectId());
         return super.findForList("HzMaterialDAOImpl_findHzCfg0ModelRecord",map);
     }

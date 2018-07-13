@@ -128,6 +128,13 @@ public class HzWorkProcessController extends BaseController {
     @RequestMapping(value = "record/page", method = RequestMethod.GET)
     @ResponseBody
     public Map<String, Object> getHzWorkProcessRecordForPage(HzWorkProcessByPageQuery query) {
+        HzWorkProcessByPageQuery ebomByPageQuery = query;
+        ebomByPageQuery.setPageSize(0);
+        try{
+            ebomByPageQuery.setPageSize(Integer.valueOf(query.getLimit()));
+        }catch (Exception e){
+
+        }
         Page<HzWorkProcessRespDTO> page = hzWorkProcessService.findHzWorkProcessForPage(query);
         if (page == null) {
             return new HashMap<>();

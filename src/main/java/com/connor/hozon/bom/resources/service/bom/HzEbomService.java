@@ -7,7 +7,9 @@ import com.connor.hozon.bom.resources.dto.request.UpdateHzEbomReqDTO;
 import com.connor.hozon.bom.resources.dto.response.HzEbomRespDTO;
 import com.connor.hozon.bom.resources.dto.response.OperateResultMessageRespDTO;
 import com.connor.hozon.bom.resources.page.Page;
+import com.connor.hozon.bom.resources.query.HzBomRecycleByPageQuery;
 import com.connor.hozon.bom.resources.query.HzEbomByPageQuery;
+import com.connor.hozon.bom.resources.query.HzEbomTreeQuery;
 import sql.pojo.epl.HzEPLManageRecord;
 
 import java.util.List;
@@ -65,6 +67,8 @@ public interface HzEbomService {
      * @param
      * @return
      */
-    List<HzEPLManageRecord> findCurrentBomChildren(String projectId,HzEPLManageRecord record);
+    List<HzEPLManageRecord> findCurrentBomChildren(HzEbomTreeQuery query);
+
+    Page<HzEbomRespDTO> getHzEbomRecycleByPage(HzBomRecycleByPageQuery query);
 
 }

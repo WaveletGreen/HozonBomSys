@@ -11,6 +11,7 @@ import com.connor.hozon.bom.resources.dto.request.UpdateHzEbomReqDTO;
 import com.connor.hozon.bom.resources.dto.response.HzEbomRespDTO;
 import com.connor.hozon.bom.resources.dto.response.OperateResultMessageRespDTO;
 import com.connor.hozon.bom.resources.page.Page;
+import com.connor.hozon.bom.resources.query.DefaultPageQuery;
 import com.connor.hozon.bom.resources.query.HzEbomByPageQuery;
 import com.connor.hozon.bom.resources.service.bom.HzEbomService;
 import com.connor.hozon.bom.resources.util.ListUtil;
@@ -57,7 +58,14 @@ public class HzEbomController extends BaseController {
     @RequestMapping(value = "getEBom/list", method = RequestMethod.GET)
     @ResponseBody
     public Map<String, Object> getEbomList(HzEbomByPageQuery query) {
-        Page<HzEbomRespDTO> recordRespDTOPage = hzEbomService.getHzEbomPage(query);
+        HzEbomByPageQuery ebomByPageQuery = query;
+        ebomByPageQuery.setPageSize(0);
+        try{
+            ebomByPageQuery.setPageSize(Integer.valueOf(query.getLimit()));
+        }catch (Exception e){
+
+        }
+        Page<HzEbomRespDTO> recordRespDTOPage = hzEbomService.getHzEbomPage(ebomByPageQuery);
         Map<String, Object> ret = new HashMap<>();
         if(recordRespDTOPage == null){
             return ret;

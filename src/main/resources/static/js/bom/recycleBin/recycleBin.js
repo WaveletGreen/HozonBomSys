@@ -8,6 +8,7 @@ function doQuery() {
     var projectPuid = $("#project", window.top.document).val();
     var $table = $("#recycleBinTable");
     var type = $("#type").val();
+    var bomUrl = "recycle/record/?projectId=" + projectPuid+"&type="+type;
     if (type == 1) {
         // function initTable() {
         $table.bootstrapTable('destroy');
@@ -16,7 +17,6 @@ function doQuery() {
             type: "GET",
             success: function (result) {
                 var column = [];
-                var eBomUrl = "ebom/getEBom/list?projectId=" + projectPuid;
                 // column.push({field: 'eBomPuid', title: 'puid'});
                 column.push({field: 'ck', checkbox: true});
                 var data = result.data;
@@ -38,7 +38,7 @@ function doQuery() {
                     }
                 }
                 $table.bootstrapTable({
-                    url: eBomUrl,
+                    url: bomUrl,
                     method: 'GET',
                     dataType: 'json',
                     sidePagination: "server",           //分页方式：client客户端分页，server服务端分页（*）
@@ -59,7 +59,7 @@ function doQuery() {
                     toolbars: [
                         {
                             text: '还原',
-                            iconCls: 'glyphicon glyphicon-remove',
+                            iconCls: 'glyphicon glyphicon-share',
                             handler: function () {
                                 var rows = $table.bootstrapTable('getSelections');
                                 var myData = JSON.stringify({
@@ -107,7 +107,6 @@ function doQuery() {
     else if (type == 2) {
         $table.bootstrapTable('destroy');
         // function initTable() {
-        var pBomUrl = "pbom/getBomManage?projectId=" + projectPuid;
         $.ajax({
             url: "pbom/manage/title?project=" + projectPuid,
             type: "GET",
@@ -132,7 +131,7 @@ function doQuery() {
                     }
                 }
                 $table.bootstrapTable({
-                    url: pBomUrl,
+                    url: bomUrl,
                     method: 'GET',
                     dataType: 'json',
                     cache: false,
@@ -159,7 +158,7 @@ function doQuery() {
                     toolbars: [
                         {
                             text: '还原',
-                            iconCls: 'glyphicon glyphicon-remove',
+                            iconCls: 'glyphicon glyphicon-share',
                             handler: function () {
                                 var rows = $table.bootstrapTable('getSelections');
                                 var myData = JSON.stringify({
@@ -215,7 +214,6 @@ function doQuery() {
                 var column = [];
                 column.push({field: 'eBomPuid', title: 'puid'});
                 column.push({field: 'ck', checkbox: true, Width: 50});
-                var mBomUrl = "mbom/record?projectId=" + projectPuid;
                 var data = result.data;
                 var keys = [];
                 var values;
@@ -234,7 +232,7 @@ function doQuery() {
                     }
                 }
                 $table.bootstrapTable({
-                    url: mBomUrl,
+                    url: bomUrl,
                     method: 'GET',
                     dataType: 'json',
                     cache: false,
@@ -266,7 +264,7 @@ function doQuery() {
                     toolbars: [
                         {
                             text: '还原',
-                            iconCls: 'glyphicon glyphicon-remove',
+                            iconCls: 'glyphicon glyphicon-share',
                             handler: function () {
                                 var rows = $table.bootstrapTable('getSelections');
 

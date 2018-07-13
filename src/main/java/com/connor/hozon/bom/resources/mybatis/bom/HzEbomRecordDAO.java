@@ -1,7 +1,10 @@
 package com.connor.hozon.bom.resources.mybatis.bom;
 
+import com.connor.hozon.bom.resources.dto.request.DeleteHzEbomReqDTO;
 import com.connor.hozon.bom.resources.page.Page;
+import com.connor.hozon.bom.resources.query.HzBomRecycleByPageQuery;
 import com.connor.hozon.bom.resources.query.HzEbomByPageQuery;
+import com.connor.hozon.bom.resources.query.HzEbomTreeQuery;
 import sql.pojo.epl.HzEPLManageRecord;
 
 import java.util.List;
@@ -25,10 +28,10 @@ public interface HzEbomRecordDAO {
 
     /**
      * 找出一条bomLine的全部子bom sql递归查找
-     * @param map
+     * @param query
      * @return
      */
-    List<HzEPLManageRecord> getHzBomLineChildren(Map map);
+    List<HzEPLManageRecord> getHzBomLineChildren(HzEbomTreeQuery query);
 
     /**
      * 查询零件号是否重复
@@ -38,4 +41,17 @@ public interface HzEbomRecordDAO {
      */
     boolean checkItemIdIsRepeat(String projectId,String lineId);
 
+    /**
+     * 批量删除
+     * @param reqDTOs
+     * @return
+     */
+    int deleteList(List<DeleteHzEbomReqDTO> reqDTOs);
+
+    /**
+     * 查询回收站
+     * @param query
+     * @return
+     */
+    Page<HzEPLManageRecord> getHzRecycleRecord(HzBomRecycleByPageQuery query);
 }

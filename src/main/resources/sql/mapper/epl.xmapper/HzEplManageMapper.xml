@@ -17,8 +17,8 @@
     <result column="P_BOM_LINE_PART_NAME" jdbcType="VARCHAR" property="pBomLinePartName"/>
     <result column="P_BOM_LINE_PART_CLASS" jdbcType="VARCHAR" property="pBomLinePartClass"/>
     <result column="P_BOM_LINE_BLOCK" jdbcType="BLOB" property="bomLineBlock"/>
-    <result column="P_BOM_STATE" jdbcType="INTEGER" property="pState" />
-      <result column="P_FNA_INFO" jdbcType="VARCHAR" property="fna" />
+    <result column="P_FNA_INFO" jdbcType="VARCHAR" property="fna" />
+
     <!--PBOM-->
     <result column="P_ITEM_RESOURCE" jdbcType="VARCHAR" property="itemResource" />
     <result column="P_RESOURCE" jdbcType="VARCHAR" property="resource" />
@@ -45,15 +45,21 @@
     <result column="P_CHANGE_NUM" jdbcType="VARCHAR" property="changeNum" />
   </resultMap>
 
+    <sql id="EBOM_COLUMN">
+    PUID, P_PARENT_UID, P_BOM_DIGIFAX_ID, P_LINE_INDEX, P_BOM_LINE_IS_HAS, P_BOM_LINE_PUID,
+    P_BOM_LINE_ID, P_BOM_LINE_IS_2Y, P_BOM_LINE_IS_PART, P_BOM_ORDER_NUM, P_BOM_LINE_IS_DEPT,
+    P_BOM_OF_WHICH_DEPT, P_BOM_LINE_PART_NAME, P_BOM_LINE_PART_CLASS, P_BOM_LINE_PART_EN_NAME,
+    P_BOM_LINE_PART_RESOURCE,P_BOM_LINE_BLOCK
+  </sql>
+
   <!--<sql id="Pbom_List">-->
     <!--P_PUID,P_LINE_INDEX,P_BOM_LINE_IS_HAS,P_BOM_LINE_ID,P_BOM_LINE_IS_2Y,P_BOM_OF_WHICH_DEPT-->
   <!--</sql>-->
   <!--联表查询 EPL全信息-->
   <select id="HzEplManageRecordDAOImpl_getHzEplManageRecord" resultMap="BaseResultMap">
-      SELECT t1.*,t6.* from HZ_BOM_LINE_RECORD t1
-      LEFT OUTER JOIN HZ_BOM_STATE t6 on t1.puid = t6.P_BOM_ID
---       LEFT OUTER JOIN HZ_MBOM_RECORD t4 on t1.Puid = t4.P_BOM_PUID
---       LEFT OUTER JOIN HZ_PBOM_RECORD t5 on t1.PUID=t5.P_E_BOM_PUID
+      SELECT t1.* from HZ_BOM_LINE_RECORD t1
+      LEFT OUTER JOIN HZ_MBOM_RECORD t4 on t1.Puid = t4.P_BOM_PUID
+      LEFT OUTER JOIN HZ_PBOM_RECORD t5 on t1.PUID=t5.P_E_BOM_PUID
       where t1.p_bom_digifax_id=(
       select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(
       select t2.puid from Hz_project_libs t2
@@ -80,9 +86,8 @@
   <!--查询EPL信息总数-->
   <select id="HzEplManageRecordDAOImpl_findTotalCount" resultType="java.lang.Integer" parameterType="java.util.HashMap">
       select count(*) from HZ_BOM_LINE_RECORD t1
-      LEFT OUTER JOIN HZ_BOM_STATE t6 on t1.puid = t6.P_BOM_ID
---       LEFT OUTER JOIN HZ_MBOM_RECORD t4 on t1.Puid = t4.P_BOM_PUID
---       LEFT OUTER JOIN HZ_PBOM_RECORD t5 on t1.PUID=t5.P_E_BOM_PUID
+      LEFT OUTER JOIN HZ_MBOM_RECORD t4 on t1.Puid = t4.P_BOM_PUID
+      LEFT OUTER JOIN HZ_PBOM_RECORD t5 on t1.PUID=t5.P_E_BOM_PUID
       where t1.p_bom_digifax_id=(
       select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(
       select t2.puid from Hz_project_libs t2
@@ -110,41 +115,39 @@
   <select id="HzEbomRecordDAOImpl_getHzEbomList" resultMap="BaseResultMap" parameterType="java.util.HashMap">
       select * FROM
       (SELECT u.*,rownum as rn from
-      (SELECT t1.*from HZ_BOM_LINE_RECORD t1
-     LEFT OUTER JOIN HZ_BOM_STATE t6 on t1.puid = t6.P_BOM_ID
-      where t1.p_bom_digifax_id=(
+      (SELECT <include refid="EBOM_COLUMN"/> from HZ_BOM_LINE_RECORD
+      where p_bom_digifax_id=(
       select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(
       select t2.puid from Hz_project_libs t2
       <where>
         t2.puid=#{projectId,jdbcType=VARCHAR}))
       <if test="puid != null">
-           and t1.puid = #{puid,jdbcType=VARCHAR}
+           and puid = #{puid,jdbcType=VARCHAR}
       </if>
       <if test="lineIndex != null and lineIndex!=''">
-          and LENGTH(TRANSLATE(t1.P_LINE_INDEX,',0123456789','.'))=#{lineIndex,jdbcType=VARCHAR}
+          and LENGTH(TRANSLATE(P_LINE_INDEX,',0123456789','.'))=#{lineIndex,jdbcType=VARCHAR}
       </if>
       <if test="isHas != null and isHas==0">
-          and (t1.P_BOM_LINE_IS_HAS = 0 or t1.P_BOM_LINE_IS_HAS = 1)
+          and (P_BOM_LINE_IS_HAS = 0 or P_BOM_LINE_IS_HAS = 1)
       </if>
       <if test="isHas != null and isHas==1">
-          and t1.P_BOM_LINE_IS_HAS = 1
+          and P_BOM_LINE_IS_HAS = 1
       </if>
       <if test="lineId != null and lineId!=''" >
-          and t1.P_BOM_LINE_ID like CONCAT(CONCAT('%',#{lineId,jdbcType=VARCHAR}),'%')
+          and P_BOM_LINE_ID like CONCAT(CONCAT('%',#{lineId,jdbcType=VARCHAR}),'%')
       </if>
       <if test="pBomOfWhichDept != null and  pBomOfWhichDept!='' " >
-          and t1.P_BOM_OF_WHICH_DEPT like CONCAT(CONCAT('%',#{pBomOfWhichDept,jdbcType=VARCHAR}),'%')
+          and P_BOM_OF_WHICH_DEPT like CONCAT(CONCAT('%',#{pBomOfWhichDept,jdbcType=VARCHAR}),'%')
       </if>
-          and (t6.P_BOM_STATE IS NULL OR t6.P_BOM_STATE=0 OR t6.P_BOM_STATE=1))u
+          and P_EBOM_STATUS=1)u
       </where>
          WHERE ROWNUM &lt;=#{limit,jdbcType=INTEGER}) where rn &gt;#{offset,jdbcType=INTEGER}
   </select>
 
 
-  <!--联表查询 EBOM总数-->
+  <!--查询 EBOM总数-->
   <select id="HzEbomRecordDAOImpl_findTotalCount" resultType="java.lang.Integer" parameterType="java.util.HashMap">
     SELECT count(*) from HZ_BOM_LINE_RECORD t1
-    LEFT OUTER JOIN HZ_BOM_STATE t6 on t1.puid = t6.P_BOM_ID
     where t1.p_bom_digifax_id=(
     select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(
     select t2.puid from Hz_project_libs t2
@@ -165,43 +168,40 @@
     <if test="pBomOfWhichDept != null and  pBomOfWhichDept!='' " >
         and t1.P_BOM_OF_WHICH_DEPT like CONCAT(CONCAT('%',#{pBomOfWhichDept,jdbcType=VARCHAR}),'%')
     </if>
-      and (t6.P_BOM_STATE IS NULL OR t6.P_BOM_STATE=0 OR t6.P_BOM_STATE=1)
+     and t1.P_EBOM_STATUS=1
     </where>
   </select>
 
 
   <!--查询bomLine的子bom 信息-->
   <select id="HzEbomRecordDAOImpl_getHzBomLineChildren"  resultMap="BaseResultMap" parameterType="java.util.HashMap">
-    SELECT t1.*,t6.* from HZ_BOM_LINE_RECORD t1
-    LEFT OUTER JOIN HZ_BOM_STATE t6 on t1.puid = t6.P_BOM_ID
+    SELECT t1.* from HZ_BOM_LINE_RECORD t1
     where t1.p_bom_digifax_id=(
     select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(
     select t2.puid from Hz_project_libs t2
     <where>
       t2.puid=#{projectId,jdbcType=VARCHAR}))
-     and (t6.P_BOM_STATE IS NULL OR t6.P_BOM_STATE=0 OR t6.P_BOM_STATE=1)
     </where>
-      start with t1.puid = #{puid,jdbcType=VARCHAR}
-      connect by prior t1.puid = t1.p_parent_uid
+      start with t1.puid = #{puid,jdbcType=VARCHAR} and t1.P_EBOM_STATUS=1
+      connect by prior t1.puid = t1.p_parent_uid  and t1.P_EBOM_STATUS=1
   </select>
 
     <!--联表查询 一条EBOM全信息-->
     <select id="HzEbomRecordDAOImpl_findEbomById" resultMap="BaseResultMap" parameterType="java.util.HashMap">
-        SELECT t1.*,t6.* from HZ_BOM_LINE_RECORD t1
-        LEFT OUTER JOIN HZ_BOM_STATE t6 on t1.puid = t6.P_BOM_ID
+        SELECT t1.*from HZ_BOM_LINE_RECORD t1
         where t1.p_bom_digifax_id=(
         select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(
         select t2.puid from Hz_project_libs t2
         <where>
           t2.puid=#{projectId,jdbcType=VARCHAR}))
           and t1.puid = #{puid,jdbcType=VARCHAR}
+          and t1.P_EBOM_STATUS=1
         </where>
     </select>
 
     <!-- 查找重名 -->
     <select id="HzEbomRecordDAOImpl_checkItemIdIsRepeat" parameterType="map" resultType="int">
         SELECT count(*) from HZ_BOM_LINE_RECORD t1
-        LEFT OUTER JOIN HZ_BOM_STATE t6 on t1.puid = t6.P_BOM_ID
         where t1.p_bom_digifax_id=(
         select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(
         select t2.puid from Hz_project_libs t2
@@ -209,6 +209,66 @@
             t2.puid=#{projectId,jdbcType=VARCHAR}))
             and
             t1.P_BOM_LINE_ID = #{lineID,jdbcType=VARCHAR}
+            and t1.P_EBOM_STATUS=1
         </where>
     </select>
+
+    <!--批量删除EBOM-->
+    <update id="HzEbomRecordDAOImpl_deleteList"  parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" open="begin" close=";end;" separator=";">
+            update HZ_BOM_LINE_RECORD
+            <set>
+                P_EBOM_STATUS=0，
+                P_UPDATE_TIME =sysdate
+            </set>
+            where PUID = #{item.puid,jdbcType=VARCHAR}
+        </foreach>
+    </update>
+
+
+
+
+
+
+
+
+
+
+
+
+    <!--分页查询 EBOM全信息 回收站-->
+    <select id="HzEbomRecordDAOImpl_getHzRecycleRecord" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+        select * FROM
+        (SELECT u.*,rownum as rn from
+        (SELECT <include refid="EBOM_COLUMN"/> from HZ_BOM_LINE_RECORD
+        where p_bom_digifax_id=(
+        select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(
+        select t2.puid from Hz_project_libs t2
+        <where>
+            t2.puid=#{projectId,jdbcType=VARCHAR}))
+            and (P_UPDATE_TIME BETWEEN
+            (SYSDATE-7) and
+            (sysdate)) and
+            P_EBOM_STATUS = 0 ORDER BY P_UPDATE_TIME DESC)u
+        </where>
+        WHERE ROWNUM &lt;=#{limit,jdbcType=INTEGER}) where rn &gt;#{offset,jdbcType=INTEGER}
+    </select>
+
+
+    <!--查询 EBOM总数 回收站-->
+    <select id="HzEbomRecordDAOImpl_findRecycleTotalCount" resultType="java.lang.Integer" parameterType="java.util.HashMap">
+        SELECT count(*) from HZ_BOM_LINE_RECORD t1
+        where t1.p_bom_digifax_id=(
+        select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(
+        select t2.puid from Hz_project_libs t2
+        <where>
+            t2.puid=#{projectId,jdbcType=VARCHAR}))
+            and  (t1.P_UPDATE_TIME BETWEEN
+            (SYSDATE-7) and
+            (sysdate)) and
+            t1.P_EBOM_STATUS = 0
+        </where>
+    </select>
+
+
 </mapper>

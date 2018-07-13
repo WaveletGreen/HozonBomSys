@@ -6,6 +6,7 @@ import com.connor.hozon.bom.resources.dto.response.HzMbomRecordRespDTO;
 import com.connor.hozon.bom.resources.dto.response.HzPbomLineRespDTO;
 import com.connor.hozon.bom.resources.dto.response.OperateResultMessageRespDTO;
 import com.connor.hozon.bom.resources.page.Page;
+import com.connor.hozon.bom.resources.query.HzBomRecycleByPageQuery;
 import com.connor.hozon.bom.resources.query.HzPbomByPageQuery;
 import com.connor.hozon.bom.resources.query.HzPbomTreeQuery;
 import sql.pojo.bom.HzPbomLineRecord;
@@ -80,4 +81,6 @@ public interface HzPbomService {
      * @return
      */
     OperateResultMessageRespDTO andProcessCompose(AddHzPbomRecordReqDTO recordReqDTO);
+
+    Page<HzPbomLineRespDTO> getHzPbomRecycleByPage(HzBomRecycleByPageQuery query);
 }

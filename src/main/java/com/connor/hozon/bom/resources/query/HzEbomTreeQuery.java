@@ -1,15 +1,19 @@
-package com.connor.hozon.bom.resources.dto.request;
+package com.connor.hozon.bom.resources.query;
 
 /**
  * @Author: haozt
- * @Date: 2018/6/25
+ * @Date: 2018/7/12
  * @Description:
  */
-public class DeleteHzEbomReqDTO {
-    private String puids;
-
+public class HzEbomTreeQuery {
+    /**
+     * 项目id
+     */
     private String projectId;
 
+    /**
+     * 当前查询树结构的根节点
+     */
     private String puid;
 
     public String getPuid() {
@@ -18,14 +22,6 @@ public class DeleteHzEbomReqDTO {
 
     public void setPuid(String puid) {
         this.puid = puid;
-    }
-
-    public String getPuids() {
-        return puids;
-    }
-
-    public void setPuids(String puids) {
-        this.puids = puids;
     }
 
     public String getProjectId() {

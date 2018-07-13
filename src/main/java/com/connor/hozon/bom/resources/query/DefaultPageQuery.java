@@ -14,7 +14,20 @@ public abstract class DefaultPageQuery {
     /**
      * 每页条数
      */
-    private int limit;
+    private int  pageSize ;
+
+    /**
+     * 页面传进来的pageSize 有字符串类型
+     */
+    private  String limit;
+
+    public int getPageSize() {
+        return pageSize;
+    }
+
+    public void setPageSize(int pageSize) {
+        this.pageSize = pageSize;
+    }
 
     public int getPage() {
         return page;
@@ -24,11 +37,11 @@ public abstract class DefaultPageQuery {
         this.page = page;
     }
 
-    public int getLimit() {
+    public String getLimit() {
         return limit;
     }
 
-    public void setLimit(int limit) {
+    public void setLimit(String limit) {
         this.limit = limit;
     }
 }
