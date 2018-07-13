@@ -5,9 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sql.pojo.cfg.HzCfg0ColorSet;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Author: Fancyears·Maylos·Mayways
@@ -22,15 +20,25 @@ public class HzCfg0ColorSetService {
     public HzCfg0ColorSetService(HzCfg0ColorSetDao hzCfg0ColorSetDao) {
         this.hzCfg0ColorSetDao = hzCfg0ColorSetDao;
     }
+
     /**
      * @return 颜色集合
      * Description: 搜索出所有的颜色信息
      * Date: 2018/5/21 17:08
      */
     public Map<String, Object> queryAll2() {
-
+        Date now = new Date();
         Map<String, Object> result = new HashMap<>();
         List<HzCfg0ColorSet> colorSet = hzCfg0ColorSetDao.queryAll2();
+        List<HzCfg0ColorSet> toUpdate = new ArrayList<>();
+        colorSet.stream().filter(set -> now.after(set.getpColorAbolishDate())).filter(set -> set != null).forEach(set -> {
+            set.setpColorStatus(0);
+            toUpdate.add(set);
+        });
+        //更新废止的颜色信息状态，设置为不可用状态
+        toUpdate.forEach(set -> {
+            hzCfg0ColorSetDao.updateStatusByPk(set);
+        });
         result.put("totalCount", colorSet.size());
         result.put("result", colorSet);
         return result;
@@ -78,5 +86,25 @@ public class HzCfg0ColorSetService {
      */
     public boolean doAddOne(HzCfg0ColorSet entity) {
         return hzCfg0ColorSetDao.insertOne(entity) > 0 ? true : false;
+    }
+
+    /**
+     * 根据代码获取1个颜色对象
+     *
+     * @param entity
+     * @return
+     */
+    public HzCfg0ColorSet doGetByColorCode(HzCfg0ColorSet entity) {
+        return hzCfg0ColorSetDao.selectByColorCode(entity);
+    }
+
+    /**
+     * 根据主键更新状态
+     *
+     * @param entity
+     * @return
+     */
+    public boolean doUpdateStatusByPk(HzCfg0ColorSet entity) {
+        return hzCfg0ColorSetDao.updateStatusByPk(entity) > 0 ? true : false;
     }
 }

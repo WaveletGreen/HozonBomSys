@@ -31,11 +31,11 @@
         <input class="form-control" id="pCfg0Desc" name="pCfg0Desc" type="text"
                placeholder="请输入特性值/配置(描述)"/>
     </div>
-    <div class="form-group">
-        <label for="length">字符长度</label>
-        <input class="form-control" id="length" name="length" type="text" value="10"
-               placeholder="请输入字符长度"/>
-    </div>
+    <!--<div class="form-group">-->
+    <!--<label for="length">字符长度</label>-->
+    <!--<input class="form-control" id="length" name="length" type="text" value="10"-->
+    <!--placeholder="请输入字符长度"/>-->
+    <!--</div>-->
 </form>
 <script th:inline="javascript">
     <![CDATA[
@@ -58,7 +58,11 @@
                         regexp: {
                             regexp: /^[a-zA-Z][a-zA-Z0-9]*$/, /* ^ 指的是匹配字符串开始的位置 + 匹配一个或者多个*/
                             message: '特性只能以英文开头，加英文和数字，不允许有英文和数字以外的字符'
-                        }
+                        },
+                        stringLength: {
+                            max: 10,
+                            message: '特性最长长度为10'
+                        },
                     }
                 },
                 pCfg0FamilyDesc: {
@@ -79,7 +83,11 @@
                         regexp: {
                             regexp: /[a-zA-Z0-9]+$/, /* ^ 指的是匹配字符串开始的位置 + 匹配一个或者多个*/
                             message: '特性值只能以数字/英文开头，加英文和数字，不允许有英文和数字以外的字符'
-                        }
+                        },
+                        stringLength: {
+                            max: 10,
+                            message: '特性值最长长度为10'
+                        },
                     }
                 },
                 pCfg0Desc: {

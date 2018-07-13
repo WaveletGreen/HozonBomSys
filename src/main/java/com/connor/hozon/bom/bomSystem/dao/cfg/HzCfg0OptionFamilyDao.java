@@ -32,4 +32,8 @@ public interface HzCfg0OptionFamilyDao {
      * @return 返回一组系统名称
      */
     List<HzCfg0OptionFamily> selectNameByMainId(@Param("mainId") String mainId);
+
+    HzCfg0OptionFamily selectByCodeAndDescWithMain(HzCfg0OptionFamily family);
+
+    int insert(HzCfg0OptionFamily family);
 }

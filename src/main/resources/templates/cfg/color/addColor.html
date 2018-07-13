@@ -1,113 +1,224 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
-    <body>
-        <form id="colorForm" role="form" method="post" action="./colorSet/add">
-            <div class="form-group">
-                <label for="pColorOfSet">色系</label>
-                <input class="form-control" id="pColorOfSet" name="pColorOfSet" type="text"
-                       placeholder="请输入色系名称"
-                />
-            </div>
-            <div class="form-group">
-                <label for="pColorName">颜色名称</label>
-                <input class="form-control" id="pColorName" name="pColorName" type="text"
-                       placeholder="请输入颜色名称"/>
-            </div>
-            <div class="form-group">
-                <label for="pColorCode">颜色代号</label>
-                <input class="form-control" id="pColorCode" name="pColorCode" type="text"
-                       placeholder="请输入颜色代号"/>
-            </div>
-            <div class="form-group">
-                <label for="pColorComment">备注</label>
-                <input class="form-control" id="pColorComment" name="pColorComment" type="text"
-                       placeholder="备注"/>
-            </div>
-            <div class="form-group">
-                <label>是否多色</label>
-                <select class="form-control input-small" data-style="btn-info"
-                        id="pColorIsMultiply">
-                    <option th:value="N" th:text="否">
-                    </option>
-                    <option th:value="Y" th:text="是">
-                    </option>
-                </select>
-            </div>
-        </form>
-        <script th:inline="javascript">
-            <![CDATA[
-            $(function () {
-                $('#colorForm').bootstrapValidator({
-                    message: 'This value is not valid',
-                    feedbackIcons: {
-                        valid: 'glyphicon glyphicon-ok',
-                        invalid: 'glyphicon glyphicon-remove',
-                        validating: 'glyphicon glyphicon-refresh'
+<body>
+<form id="colorForm" role="form" method="post" action="./colorSet/add">
+    <div class="form-group">
+        <label for="pColorOfSet">色系</label>
+        <input class="form-control" id="pColorOfSet" name="pColorOfSet" type="text"
+               placeholder="请输入色系名称"
+        />
+    </div>
+    <div class="form-group">
+        <label for="pColorName">颜色名称</label>
+        <input class="form-control" id="pColorName" name="pColorName" type="text"
+               placeholder="请输入颜色名称"/>
+    </div>
+    <div class="form-group">
+        <label for="pColorCode">颜色代号</label>
+        <input class="form-control" id="pColorCode" name="pColorCode" type="text"
+               placeholder="请输入颜色代号"/>
+    </div>
+    <div class="form-group">
+        <label for="pColorPlate">色板编号</label>
+        <input class="form-control" id="pColorPlate" name="pColorPlate" type="text"
+               placeholder="请输入颜色代号"/>
+    </div>
+    <div class="form-group">
+        <label>是否多色</label>
+        <select class="form-control input-small" data-style="btn-info"
+                id="pColorIsMultiply">
+            <option th:value="N" th:text="否">
+            </option>
+            <option th:value="Y" th:text="是">
+            </option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="pColorEffectedDate">生效日期</label>
+        <input class="form-control input-small" id="pColorEffectedDate" name="pColorEffectedDate"
+               placeholder="请选择生效日期"
+        />
+    </div>
+    <div class="form-group">
+        <label for="pColorAbolishDate">废止日期</label>
+        <input class="form-control input-small" id="pColorAbolishDate" name="pColorAbolishDate"
+               placeholder="请选择废止日期"
+        />
+    </div>
+    <div class="form-group">
+        <label for="pColorComment">备注</label>
+        <input class="form-control" id="pColorComment" name="pColorComment" type="text"
+               placeholder="备注"/>
+    </div>
+</form>
+<script th:src="@{/js/bootstrap/date/bootstrap-datetimepicker.js}"></script>
+<script th:inline="javascript">
+    <![CDATA[
+    $(function () {
+            $('#colorForm').bootstrapValidator({
+                message: 'This value is not valid',
+                feedbackIcons: {
+                    valid: 'glyphicon glyphicon-ok',
+                    invalid: 'glyphicon glyphicon-remove',
+                    validating: 'glyphicon glyphicon-refresh'
+                },
+                fields: {
+                    pColorOfSet: {
+                        message: '颜色系列名称验证失败',
+                        validators: {
+                            notEmpty: {
+                                message: '颜色系列名称不能为空'
+                            }
+                        }
                     },
-                    fields: {
-                        pColorOfSet: {
-                            message: '颜色系列名称验证失败',
-                            validators: {
-                                notEmpty: {
-                                    message: '颜色系列名称不能为空'
-                                }
+                    pColorName: {
+                        message: '颜色名称验证失败',
+                        validators: {
+                            notEmpty: {
+                                message: '颜色名称不能为空'
                             }
-                        },
-                        pColorName: {
-                            message: '颜色名称验证失败',
-                            validators: {
-                                notEmpty: {
-                                    message: '颜色名称不能为空'
-                                }
-                            }
-                        },
-                        pColorCode: {
-                            message: '颜色代号验证失败',
-                            validators: {
-                                notEmpty: {
-                                    message: '颜色代号不能为空'
+                        }
+                    },
+                    pColorEffectedDate: {
+                        message: '生效时间验证失败',
+                        validators: {
+                            callback: {
+                                message: '生效时间不能晚于废止时间',
+                                callback: function (value, validator, $field) {
+                                    if (
+                                        ($('#pColorEffectedDate').val() == null ||
+                                            $('#pColorEffectedDate').val() == undefined) &&
+                                        ($('#pColorAbolishDate').val() == null ||
+                                            $('#pColorAbolishDate').val() == undefined)) {
+                                        return true;
+                                    }
+                                    else if ($('#pColorEffectedDate').val() < $('#pColorAbolishDate').val()) {
+                                        return true;
+                                    }
+                                    else if ($('#pColorEffectedDate').val() >= $('#pColorAbolishDate').val()) {
+                                        if ($('#pColorAbolishDate').val() == null || $('#pColorAbolishDate').val() == undefined) {
+                                            return true;
+                                        }
+                                        return false;
+                                    }
                                 }
                             }
                         }
-                    }
-                });
-                // 绑定dialog的确定按钮的监听事件
-                $("#btnOk", window.top.document).click(function () {
-                    var bootstrapValidator = $("#colorForm", window.top.document).data('bootstrapValidator');
-                    bootstrapValidator.validate();
-                    if (bootstrapValidator.isValid()) {
-                        var url = $("#colorForm", window.top.document).attr('action');
-                        <!--其实不要puid，puid会在服务器上生成-->
-                        var myData = JSON.stringify({
-                            "pColorCode": $("#pColorCode").val(),
-                            "pColorComment": $("#pColorComment").val(),
-                            "pColorName": $("#pColorName").val(),
-                            "pColorOfSet": $("#pColorOfSet").val(),
-                            "pColorIsMultiply": $("#pColorIsMultiply").val()
-                        });
-                        $.ajax({
-                            contentType:
-                                "application/json",
-                            type:
-                                'POST',
-                            url: url,
-                            data: myData,
-                            success:
-                                function (result) {
-                                    $('.modal-dialog', window.top.document).parent('div').remove()
-                                    $('body', window.top.document).find('.modal-backdrop').remove();
-                                    // jquery 调用刷新当前操作的table页面的refresh方法
-                                    $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
-                                    window.Ewin.alert({message: result.msg});
-                                },
-                            error: function (status) {
-                                window.Ewin.alert({message: status.status + ':添加数据失败!'});
+                    },
+                    pColorAbolishDate: {
+                        message: '废止时间验证失败',
+                        validators: {
+                            callback: {
+                                message: '废止时间不能早于生效时间',
+                                callback: function (value, validator, $field) {
+                                    if (
+                                        ($('#pColorEffectedDate').val() == null ||
+                                            $('#pColorEffectedDate').val() == undefined) &&
+                                        ($('#pColorAbolishDate').val() == null ||
+                                            $('#pColorAbolishDate').val() == undefined)) {
+                                        return true;
+                                    }
+                                    else if ($('#pColorEffectedDate').val() < $('#pColorAbolishDate').val()) {
+                                        return true;
+                                    }
+                                    else if ($('#pColorEffectedDate').val() >= $('#pColorAbolishDate').val()) {
+                                        if ($('#pColorAbolishDate').val() == null || $('#pColorAbolishDate').val() == undefined) {
+                                            return true;
+                                        }
+                                        return false;
+                                    }
+                                }
                             }
-                        });
+                        }
+                    },
+                    pColorCode: {
+                        message: '颜色代号验证失败',
+                        validators: {
+                            notEmpty: {
+                                message: '颜色代号不能为空'
+                            },
+                            threshold: 1, //有1字符以上才发送ajax请求，（input中输入一个字符，插件会向服务器发送一次，设置限制，6字符以上才开始）
+                            remote: {//ajax验证。server result:{"valid",true or false} 向服务发送当前input name值，获得一个json数据。例表示正确：{"valid",true}
+                                url: 'colorSet/validateCodeWithPuid',//验证地址
+                                message: '颜色代号已存在',//提示消息
+                                delay: 500,//每输入一个字符，就发ajax请求，服务器压力还是太大，设置2秒发送一次ajax（默认输入一个字符，提交一次，服务器压力太大）
+                                // *自定义提交数据，默认值提交当前input value
+                                data: function (validator) {
+                                    return {
+                                        puid: $('#puid').val(),
+                                        pColorCode: $("#pColorCode").val()
+                                    };
+                                },
+                                type: 'POST'//请求方式
+                            }
+                        }
                     }
-                });
-            })
-            ]]>
-        </script>
-    </body>
+                }
+            });
+            // 绑定dialog的确定按钮的监听事件
+            $("#btnOk", window.top.document).click(function () {
+                var bootstrapValidator = $("#colorForm", window.top.document).data('bootstrapValidator');
+                bootstrapValidator.validate();
+                //重新验证字段
+                bootstrapValidator.revalidateField("pColorAbolishDate");
+                bootstrapValidator.revalidateField("pColorEffectedDate");
+                if (bootstrapValidator.isValid()) {
+                    var url = $("#colorForm", window.top.document).attr('action');
+                    <!--其实不要puid，puid会在服务器上生成-->
+                    var myData = JSON.stringify({
+                        "pColorCode": $("#pColorCode").val(),
+                        "pColorComment": $("#pColorComment").val(),
+                        "pColorName": $("#pColorName").val(),
+                        "pColorOfSet": $("#pColorOfSet").val(),
+                        "pColorIsMultiply": $("#pColorIsMultiply").val(),
+                        "pColorPlate": $("#pColorPlate").val(),
+                        "strColorEffectedDate": $("#pColorEffectedDate").val(),
+                        "strColorAbolishDate": $("#pColorAbolishDate").val()
+                    });
+                    $.ajax({
+                        contentType:
+                            "application/json",
+                        type:
+                            'POST',
+                        url: url,
+                        data: myData,
+                        success:
+                            function (result) {
+                                $('.modal-dialog', window.top.document).parent('div').remove()
+                                $('body', window.top.document).find('.modal-backdrop').remove();
+                                // jquery 调用刷新当前操作的table页面的refresh方法
+                                $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
+                                window.Ewin.alert({message: result.msg});
+                            },
+                        error: function (status) {
+                            window.Ewin.alert({message: status.status + ':添加数据失败!'});
+                        }
+                    });
+                }
+            });
+        },
+        $('#pColorEffectedDate').datetimepicker({
+            format: 'yyyy-mm-dd hh:ii',//日期的格式
+            weekStart: 1,//一周开始， 0（星期日）到6（星期六）
+            startDate: "1900-01-01 00:00",//选择器的开始日期
+            autoclose: true,//日期选择完成后是否关闭选择框
+            bootcssVer: 3,//显示向左向右的箭头
+            language: 'zh_CN',//语言
+            minView: 0,//表示日期选择的最小范围，默认是hour
+            todayBtn: true
+        }),
+        $('#pColorAbolishDate').datetimepicker({
+            format: 'yyyy-mm-dd hh:ii',//日期的格式
+            weekStart: 1,// 0（星期日）到6（星期六）
+            startDate: "1900-01-01 00:00",//选择器的开始日期
+            autoclose: true,//日期选择完成后是否关闭选择框
+            bootcssVer: 3,//显示向左向右的箭头
+            language: 'zh_CN',//语言
+            minView: 0,//表示日期选择的最小范围，默认是hour
+            todayBtn: true
+        })
+    )
+    ]]>
+</script>
+</body>
 </html>

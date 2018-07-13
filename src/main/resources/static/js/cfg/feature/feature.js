@@ -163,12 +163,12 @@ function loadData() {
                 align: 'center',
                 valign: 'middle',
             },
-            {
-                field: 'length',
-                title: '字符长度',
-                align: 'center',
-                valign: 'middle',
-            },
+            // {
+            //     field: 'length',
+            //     title: '字符长度',
+            //     align: 'center',
+            //     valign: 'middle',
+            // },
             {
                 field: 'pCfg0ObjectId',
                 title: '特性值/配置代码',

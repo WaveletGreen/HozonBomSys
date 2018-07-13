@@ -1,5 +1,6 @@
 package com.connor.hozon.bom.bomSystem.service.integrate;
 
+import com.connor.hozon.bom.bomSystem.helper.IntegrateMsgDTO;
 import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
 import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0Service;
 import com.connor.hozon.bom.bomSystem.service.iservice.integrate.ISynFeatureService;
@@ -80,15 +81,24 @@ public class SynFeatureService implements ISynFeatureService {
     private JSONObject execute(List<HzCfg0Record> records, ActionFlagOption option) throws Exception {
         transCfgService.setClearInputEachTime(true);
         List<HzCfg0Record> toSend = new ArrayList<>();
-        List<Features> featuresList = new ArrayList<>();
         Map<String, HzCfg0Record> _mapCoach = new HashMap<>();
         JSONObject result = new JSONObject();
-        StringBuilder sbs = new StringBuilder();
-        sbs.append("发送成功:<br/>");
-        StringBuilder sbf = new StringBuilder();
-        sbf.append("发送失败:<br/>");
-
-        boolean hasFail = false;
+        /**
+         * 成功项
+         */
+        List<IntegrateMsgDTO> success = new ArrayList<>();
+        /**
+         * 失败项
+         */
+        List<IntegrateMsgDTO> fail = new ArrayList<>();
+        /***
+         * 计数
+         */
+        int total = 0;
+        int totalOfSuccess = 0;
+        int totalOfFail = 0;
+        int totalOfOutOfParent = 0;
+        int totalOfUnknown = 0;
 
         if (records == null || records.size() <= 0) {
             result.put("status", false);
@@ -109,7 +119,7 @@ public class SynFeatureService implements ISynFeatureService {
             }
         });
 
-        int index = 0;
+        int index;
         for (HzCfg0Record record : toSend) {
             index = 1;
             Features features = new Features();
@@ -144,28 +154,43 @@ public class SynFeatureService implements ISynFeatureService {
             //特性值描述
             features.setPropertyValuesDescribe(record.getpCfg0Desc());
             //            featuresList.add(features);
+            coach.get(packNumOfFeature.get(fpuid)).put(features.getLineNum(), record);
             transCfgService.getInput().getItem().add(features.getZpptci002());
-            _mapCoach.put(packnum, record);
         }
 
         transCfgService.execute();
         List<ZPPTCO002> list = transCfgService.getOut().getItem();
         if (list != null && list.size() > 0) {
-            result.put("status", true);
             for (ZPPTCO002 _l : list) {
+                total++;
+                if (_l == null) {
+                    totalOfUnknown++;
+                    continue;
+                }
+                IntegrateMsgDTO dto = new IntegrateMsgDTO();
+                HzCfg0Record record = coach.get(_l.getPPACKNO()).get(_l.getPZITEM());
+                dto.setItemId(record.getpCfg0ObjectId());
+                dto.setMsg(_l.getPMESSAGE());
+                dto.setPuid(record.getPuid());
                 if ("S".equalsIgnoreCase(_l.getPTYPE())) {
-                    sbs.append("&emsp;&emsp;&emsp;&emsp;" + _mapCoach.get(_l.getPPACKNO()).getpCfg0ObjectId() + "<br/>");
+                    success.add(dto);
+                    totalOfSuccess++;
                 } else {
-                    sbf.append("&emsp;&emsp;&emsp;&emsp;" + _mapCoach.get(_l.getPPACKNO()).getpCfg0ObjectId() + "(" + _l.getPMESSAGE() + ")<br/>");
-                    hasFail = true;
+                    fail.add(dto);
+                    totalOfFail++;
                 }
             }
         }
-        if (hasFail) {
-            result.put("msg", sbs.append("<br/>" + sbf).toString());
-        } else {
-            result.put("msg", sbs.toString());
-        }
+
+        result.put("success", success);
+        result.put("fail", fail);
+
+        result.put("total", total);
+        result.put("totalOfSuccess", totalOfSuccess);
+        result.put("totalOfFail", totalOfFail);
+        result.put("totalOfOutOfParent", totalOfOutOfParent);
+        result.put("totalOfUnknown", totalOfUnknown);
+
         return result;
     }
 }

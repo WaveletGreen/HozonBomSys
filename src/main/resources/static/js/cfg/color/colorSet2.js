@@ -16,13 +16,17 @@ function loadData() {
     $("#refreshColorSet").removeAttr("disabled");
     $table.bootstrapTable({
         url: "colorSet/queryAll2",
-        height: $(window.parent.document).find("#wrapper").height() - document.body.offsetHeight - 45,
+        height: $(window.parent.document).find("#wrapper").height() - document.body.offsetHeight - 200,
         width: $(window).width(),
         showToggle: true,                   //是否显示详细视图和列表视图的切换按钮
         showRefresh: true,                  //是否显示刷新按钮
         pageSize: 10,
         pagination: true,                   //是否显示分页（*）
         clickToSelect: true,                // 单击某一行的时候选中某一条记录
+        sortable: true,
+        sortName: 'pColorCode',
+        sortOrder: 'asc',
+        sidePagination: "server",           //客户端分页
         formId: "hide",
         toolbars: [
             {
@@ -116,30 +120,72 @@ function loadData() {
             {
                 field: 'pColorOfSet',
                 title: '色系',
+                sortable: true,
+                sortOrder: 'asc',
             },
             {
                 field: 'pColorName',
                 title: '颜色名称',
                 align: 'center',
                 valign: 'middle',
+                sortable: true,
+                sortOrder: 'asc',
             },
             {
                 field: 'pColorCode',
                 title: '颜色代码',
                 align: 'center',
                 valign: 'middle',
+                sortable: true,
+                sortOrder: 'asc',
             },
             {
-                field: 'pColorComment',
-                title: '备注',
+                field: 'pColorPlate',
+                title: '色板编号',
                 align: 'center',
                 valign: 'middle',
+                sortable: true,
+                sortOrder: 'asc',
             },
             {
                 field: 'pColorIsMultiply',
                 title: '是否多色',
                 align: 'center',
                 valign: 'middle',
+                sortable: true,
+                sortOrder: 'asc',
+            },
+            {
+                field: 'pColorEffectedDate',
+                title: '生效时间',
+                align: 'center',
+                valign: 'middle',
+                sortable: true,
+                sortOrder: 'asc',
+                //——修改——获取日期列的值进行转换
+                formatter: function (value, row, index) {
+                    return changeDateFormat(value)
+                }
+            },
+            {
+                field: 'pColorAbolishDate',
+                title: '废止时间',
+                align: 'center',
+                valign: 'middle',
+                sortable: true,
+                sortOrder: 'asc',
+                //——修改——获取日期列的值进行转换
+                formatter: function (value, row, index) {
+                    return changeDateFormat(value)
+                }
+            },
+            {
+                field: 'pColorComment',
+                title: '备注',
+                align: 'center',
+                valign: 'middle',
+                sortable: true,
+                sortOrder: 'asc',
             },
             {
                 field: 'puid',
@@ -151,4 +197,17 @@ function loadData() {
         // sortOrder: "asc",                   //排序方式
     });
     $table.bootstrapTable('hideColumn', 'puid');
+
+    //修改——转换日期格式(时间戳转换为datetime格式)
+    function changeDateFormat(cellval) {
+        if (cellval != null) {
+            var date = new Date(parseInt(cellval));
+            var month = date.getMonth() + 1 < 10 ? "0" + (date.getMonth() + 1) : date.getMonth() + 1;
+            var currentDate = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
+            var hour = date.getHours() < 10 ? "0" + date.getHours() : date.getHours();
+            var mins = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
+            var sec = date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds();
+            return date.getFullYear() + "-" + month + "-" + currentDate + " " + hour + ":" + mins;
+        }
+    }
 }

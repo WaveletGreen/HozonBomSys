@@ -3,6 +3,8 @@ package com.connor.hozon.bom.bomSystem.controller.cfg;
 import com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0MainRecordDao;
 import com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0OptionFamilyDao;
 import com.connor.hozon.bom.bomSystem.dto.HzRelevanceBean;
+import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
+import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0OptionFamilyService;
 import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0Service;
 import com.connor.hozon.bom.bomSystem.service.iservice.integrate.ISynFeatureService;
 import integration.base.feature.ZPPTCO002;
@@ -20,6 +22,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import sql.pojo.cfg.HzCfg0MainRecord;
+import sql.pojo.cfg.HzCfg0OptionFamily;
 import sql.pojo.cfg.HzCfg0Record;
 
 import java.util.*;
@@ -39,6 +42,8 @@ public class HzCfg0Controller {
     private final HzCfg0OptionFamilyDao hzCfg0OptionFamilyDao;
     @Autowired
     ISynFeatureService iSynFeatureService;
+    @Autowired
+    HzCfg0OptionFamilyService cfg0OptionFamilyService;
     /**
      * 特性传输服务
      */
@@ -83,18 +88,37 @@ public class HzCfg0Controller {
     @ResponseBody
     public JSONObject add(@RequestBody HzCfg0Record record) {
         JSONObject result = new JSONObject();
-        /**因为没有关联组，所以要新生成组的puid*/
-        record.setpCfg0FamilyPuid(UUID.randomUUID().toString());
+
         /**生成自身的puid*/
         record.setPuid(UUID.randomUUID().toString());
         record.setpCfg0FamilyName(record.getpCfg0FamilyName().toUpperCase());
         record.setpCfg0ObjectId(record.getpCfg0ObjectId().toUpperCase());
+
+
         if (!hzCfg0Service.preCheck(record)) {
             result.put("status", false);
             result.put("msg", "已存在的特性值");
             return result;
         }
 
+        HzCfg0OptionFamily family = new HzCfg0OptionFamily();
+        family.setpOfCfg0Main(record.getpCfg0MainItemPuid());
+        family.setpOptionfamilyName(record.getpCfg0FamilyName());
+        family.setpOptionfamilyDesc(record.getpCfg0FamilyDesc());
+
+        HzCfg0OptionFamily _family = cfg0OptionFamilyService.doGetByCodeAndDescWithMain(family);
+        if (_family == null) {
+            family.setPuid(UUIDHelper.generateUpperUid());
+            if (!cfg0OptionFamilyService.doInsert(family)) {
+                result.put("status", false);
+                result.put("msg", "添加特性" + family.getpOptionfamilyName() + "失败，请联系系统管理员");
+                return result;
+            }
+        } else {
+            family = _family;
+        }
+
+        record.setpCfg0FamilyPuid(family.getPuid());
         if (!checkString(record.getpCfg0Relevance())) {
             record.setpCfg0Relevance("$ROOT." + record.getpCfg0FamilyName() + " = '" + record.getpCfg0ObjectId() + "'");
         }
