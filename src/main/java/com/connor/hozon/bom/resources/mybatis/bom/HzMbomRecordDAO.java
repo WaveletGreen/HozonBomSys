@@ -57,11 +57,11 @@ public interface HzMbomRecordDAO {
     Page<HzMbomLineRecord> findMbomForPage(HzMbomByPageQuery query);
 
     /**
-     * 查询一条Mbom信息
+     * 查询Mbom信息
      * @param map
      * @return
      */
-    HzMbomLineRecord findHzMbomByPuid(Map<String,Object> map);
+    List<HzMbomLineRecord> findHzMbomByPuid(Map<String,Object> map);
 
 
     /**

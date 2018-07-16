@@ -21,6 +21,20 @@ public class HzEbomRespDTO {
 
     private String puid;
 
+
+    /**
+     * 专业
+     */
+    private String pBomOfWhichDept;//1
+    /**
+     * 级别 以2Y层为相对 第1级
+     */
+    private String rank;//1
+
+    /**
+     * 分组号
+     */
+    private String groupNum;//1
     /**
      * 层级
      */
@@ -52,6 +66,7 @@ public class HzEbomRespDTO {
     private String upc;
     private String fna ;
     private String fnaDesc;
+    private String lineId;
     private String h9_Dimension;
     private String h9_Gross_Unit;
     private String h9_Drawingno;
@@ -83,12 +98,44 @@ public class HzEbomRespDTO {
     private String h9_Memo;
     private String fastener;
 
+    public String getLineId() {
+        return lineId;
+    }
+
+    public void setLineId(String lineId) {
+        this.lineId = lineId;
+    }
+
     public String getPuid() {
         return puid;
     }
 
     public void setPuid(String puid) {
         this.puid = puid;
+    }
+
+    public String getpBomOfWhichDept() {
+        return pBomOfWhichDept;
+    }
+
+    public void setpBomOfWhichDept(String pBomOfWhichDept) {
+        this.pBomOfWhichDept = pBomOfWhichDept;
+    }
+
+    public String getRank() {
+        return rank;
+    }
+
+    public void setRank(String rank) {
+        this.rank = rank;
+    }
+
+    public String getGroupNum() {
+        return groupNum;
+    }
+
+    public void setGroupNum(String groupNum) {
+        this.groupNum = groupNum;
     }
 
     public String getLevel() {
