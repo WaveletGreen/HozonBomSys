@@ -243,9 +243,9 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
         try {
             Page<HzWorkProcess> hzWorkProcessPage = hzWorkProcedureDAO.findHzWorkProcessByPage(query);
             if(hzWorkProcessPage == null || hzWorkProcessPage.getResult() == null){
-                return  new Page<>(query.getPage(),query.getLimit(),0);
+                return  new Page<>(hzWorkProcessPage.getPageNumber(),hzWorkProcessPage.getPageSize(),0);
             }
-            int num = (query.getPage()-1)*query.getLimit();
+            int num = (hzWorkProcessPage.getPageNumber()-1)*hzWorkProcessPage.getPageSize();
             List<HzWorkProcess> list = hzWorkProcessPage.getResult();
             List<HzWorkProcessRespDTO> respDTOS = new ArrayList<>();
             for(HzWorkProcess process:list){
@@ -275,7 +275,7 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
                 respDTO.setState(process.getState());
                 respDTOS.add(respDTO);
             }
-            return new Page<>(query.getPage(),query.getLimit(),hzWorkProcessPage.getTotalCount(),respDTOS);
+            return new Page<>(hzWorkProcessPage.getPageNumber(),hzWorkProcessPage.getPageSize(),hzWorkProcessPage.getTotalCount(),respDTOS);
         }catch (Exception e){
             return null;
         }

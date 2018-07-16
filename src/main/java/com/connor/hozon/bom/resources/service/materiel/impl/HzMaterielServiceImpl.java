@@ -622,9 +622,9 @@ public class HzMaterielServiceImpl implements HzMaterielService {
                 }
             }
             Page<HzMaterielRecord> page = hzMaterielDAO.findHzMaterielForPage(query);
-            int num = (query.getPage()-1)*query.getLimit();
+            int num = (page.getPageNumber()-1)*page.getPageSize();
             if(page == null || page.getResult() == null){
-                return new Page<>(query.getPage(),query.getLimit(),0);
+                return new Page<>(page.getPageNumber(),page.getPageSize(),0);
             }
 
             List<HzMaterielRecord> recordList = page.getResult();
@@ -638,7 +638,7 @@ public class HzMaterielServiceImpl implements HzMaterielService {
                 }
                 respDTOS.add(respDTO);
             }
-            return new Page<>(query.getPage(),query.getLimit(),page.getTotalCount(),respDTOS);
+            return new Page<>(page.getPageNumber(),page.getPageSize(),page.getTotalCount(),respDTOS);
         }catch (Exception e){
             return null;
         }

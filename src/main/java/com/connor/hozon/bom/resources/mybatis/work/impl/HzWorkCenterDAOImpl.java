@@ -35,7 +35,7 @@ public class HzWorkCenterDAOImpl extends BaseSQLUtil implements HzWorkCenterDAO 
         Map map = new HashMap();
         map.put("projectId",query.getProjectId());
         pageRequest.setPageNumber(query.getPage());
-        pageRequest.setPageSize(query.getLimit());
+        pageRequest.setPageSize(query.getPageSize());
         pageRequest.setFilters(map);
         return super.findPage("HzWorkCenterDAOImpl_findWorkCenterForPage","HzWorkCenterDAOImpl_findWorkCenterTotalCount",pageRequest);
     }

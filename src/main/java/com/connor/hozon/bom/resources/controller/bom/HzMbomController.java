@@ -172,6 +172,13 @@ public class HzMbomController extends BaseController {
     @RequestMapping(value = "record", method = RequestMethod.GET)
     @ResponseBody
     public Map<String, Object> getMbomLineRecord(HzMbomByPageQuery query) {
+        HzMbomByPageQuery ebomByPageQuery = query;
+        ebomByPageQuery.setPageSize(0);
+        try{
+            ebomByPageQuery.setPageSize(Integer.valueOf(query.getLimit()));
+        }catch (Exception e){
+
+        }
         Page<HzMbomRecordRespDTO> page = hzMbomService.fingHzMbomForPage(query);
         if (page == null) {
             return new HashMap<>();

@@ -39,7 +39,7 @@ public class HzWorkProcedureDAOImpl  extends BaseSQLUtil implements HzWorkProced
     @Override
     public Page<HzWorkProcess> findHzWorkProcessByPage(HzWorkProcessByPageQuery query) {
         PageRequest pageRequest = new PageRequest();
-        pageRequest.setPageSize(query.getLimit());
+        pageRequest.setPageSize(query.getPageSize());
         pageRequest.setPageNumber(query.getPage());
         Map<String,Object> map = new HashMap<>();
         map.put("projectId",query.getProjectId());

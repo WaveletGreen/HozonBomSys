@@ -11,6 +11,7 @@ import com.connor.hozon.bom.resources.dto.request.UpdateHzEbomReqDTO;
 import com.connor.hozon.bom.resources.dto.response.HzEbomRespDTO;
 import com.connor.hozon.bom.resources.dto.response.OperateResultMessageRespDTO;
 import com.connor.hozon.bom.resources.page.Page;
+import com.connor.hozon.bom.resources.query.DefaultPageQuery;
 import com.connor.hozon.bom.resources.query.HzEbomByPageQuery;
 import com.connor.hozon.bom.resources.service.bom.HzEbomService;
 import com.connor.hozon.bom.resources.util.ListUtil;
@@ -57,7 +58,14 @@ public class HzEbomController extends BaseController {
     @RequestMapping(value = "getEBom/list", method = RequestMethod.GET)
     @ResponseBody
     public Map<String, Object> getEbomList(HzEbomByPageQuery query) {
-        Page<HzEbomRespDTO> recordRespDTOPage = hzEbomService.getHzEbomPage(query);
+        HzEbomByPageQuery ebomByPageQuery = query;
+        ebomByPageQuery.setPageSize(0);
+        try{
+            ebomByPageQuery.setPageSize(Integer.valueOf(query.getLimit()));
+        }catch (Exception e){
+
+        }
+        Page<HzEbomRespDTO> recordRespDTOPage = hzEbomService.getHzEbomPage(ebomByPageQuery);
         Map<String, Object> ret = new HashMap<>();
         if(recordRespDTOPage == null){
             return ret;
@@ -175,73 +183,115 @@ public class HzEbomController extends BaseController {
         if(projectId == null || puid == null){
             return "";
         }
-        JSONArray array = hzEbomService.getEbomTitle(projectId);
         HzEbomRespDTO recordRespDTO = hzEbomService.fingEbomById(puid,projectId);
-        if(array == null ||recordRespDTO == null){
-            return "";
-        }
-        //过滤掉没必要的标题
-        JSONArray jsonArray = new JSONArray();
-        String[] strings1 = (String[]) array.get(0);
-        String[] strings2 = (String[]) array.get(1);
-
-        List<String> list1 = Arrays.asList(strings1);
-        List<String> list2 = Arrays.asList(strings2);
-        List<String> arrayList1=new ArrayList<String>(list1);
-        List<String> arrayList2=new ArrayList<String>(list2);
-
-        if(list1.contains("序号")){
-            arrayList1.remove("序号");
-        }
-        if(list1.contains("级别")){
-            arrayList1.remove("级别");
-        }
-        if(list1.contains("层级")){
-            arrayList1.remove("层级");
-        }
-        if(list1.contains("分组号")){
-            arrayList1.remove("分组号");
-        }
-        if(list1.contains("puid")){
-            arrayList1.remove("puid");
-        }
-        if(list2.contains("No")){
-            arrayList2.remove("No");
-        }
-        if(list2.contains("rank")){
-            arrayList2.remove("rank");
-        }
-        if(list2.contains("level")){
-            arrayList2.remove("level");
-        }
-        if(list2.contains("groupNum")){
-            arrayList2.remove("groupNum");
-        }
-        if(list2.contains("puid")){
-            arrayList2.remove("puid");
-        }
-        String[] strings3 =arrayList1.toArray(new String[0]);;
-        String[] strings4 = arrayList2.toArray(new String[0]);
-        jsonArray.add(strings3);
-        jsonArray.add(strings4);
-
-
         JSONArray array1 = recordRespDTO.getJsonArray();
         JSONObject object = array1.getJSONObject(0);
-        String[] strings5 = new String[strings4.length];
-        for(int i =0 ;i<strings2.length;i++){
-            if("puid".equals(strings2[i])){
-                model.addAttribute("puid",object.getString(strings2[i]));
-                break;
-            }
-        }
-
-        for(int i =0;i<strings4.length;i++){
-            strings5[i] = object.getString(strings4[i])==null?"":object.getString(strings4[i]);
-        }
-
-        jsonArray.add(strings5);
-        model.addAttribute("data",jsonArray);
+        recordRespDTO.setPuid(puid);
+        recordRespDTO.setFna(object.getString("fna"));
+        recordRespDTO.setLevel(object.getString("level"));
+        recordRespDTO.setP3cPartFlag(object.getString("p3cPartFlag"));
+        recordRespDTO.setpBomLinePartClass(object.getString("h9_IsCommon"));
+        recordRespDTO.setpBomLinePartEnName(object.getString("h9_Dimension"));
+        recordRespDTO.setpBomLinePartName(object.getString("object_name"));
+        recordRespDTO.setpBomLinePartResource(object.getString("H9_Mat_Status"));
+        recordRespDTO.setFastener(object.getString("fastener"));
+        recordRespDTO.setH9_Actual_Weight(object.getString("h9_Actual_Weight"));
+        recordRespDTO.setFnaDesc(object.getString("fnaDesc"));
+        recordRespDTO.setH9_Configure(object.getString("h9_Configure"));
+        recordRespDTO.setH9_Density(object.getString("h9_Density"));
+        recordRespDTO.setH9_DevelopType(object.getString("h9_DevelopType"));
+        recordRespDTO.setH9_Estimate_Weight(object.getString("h9_Estimate_Weight"));
+        recordRespDTO.setH9_Draw_size(object.getString("h9_Draw_size"));
+        recordRespDTO.setH9_Drawingno(object.getString("h9_Drawingno"));
+        recordRespDTO.setH9_Gross(object.getString("h9_Gross"));
+        recordRespDTO.setH9_Gross_Unit(object.getString("h9_Gross_Unit"));
+        recordRespDTO.setH9_I_Part(object.getString("h9_I_Part"));
+        recordRespDTO.setH9_Legal_Part(object.getString("h9_Legal_Part"));
+        recordRespDTO.setH9_Manufacture_method(object.getString("h9_Manufacture_method"));
+        recordRespDTO.setH9_MatType(object.getString("h9_MatType"));
+        recordRespDTO.setH9_Memo(object.getString("h9_Memo"));
+        recordRespDTO.setH9_Model_numberPaint_colour(object.getString("h9_Model_numberPaint_colour"));
+        recordRespDTO.setH9_PerformanceLevel(object.getString("h9_PerformanceLevel"));
+        recordRespDTO.setH9_Repalced(object.getString("h9_Repalced"));
+        recordRespDTO.setH9_S_Part(object.getString("h9_S_Part"));
+        recordRespDTO.setH9_Specification(object.getString("h9_Specification"));
+        recordRespDTO.setH9_SupplyInfor(object.getString("h9_SupplyInfor"));
+        recordRespDTO.setH9_SupplyType(object.getString("h9_SupplyType"));
+        recordRespDTO.setH9_Surface_treatment(object.getString("h9_Surface_treatment"));
+        recordRespDTO.setH9_Symmetrical_Part(object.getString("h9_Symmetrical_Part"));
+        recordRespDTO.setH9_Target_Weight(object.getString("h9_Target_Weight"));
+        recordRespDTO.setH9_Thickness(object.getString("h9_Thickness"));
+        recordRespDTO.setH9_Torque(object.getString("h9_Torque"));
+        recordRespDTO.setInOutSideFlag(object.getString("inOutSideFlag"));
+        recordRespDTO.setH9_DevelopType(object.getString("h9_DevelopType"));
+        recordRespDTO.setItem_revision_id(object.getString("item_revision_id"));
+        recordRespDTO.setOwning_user(object.getString("owning_user"));
+        recordRespDTO.setUpc(object.getString("upc"));
+//        JSONArray array = hzEbomService.getEbomTitle(projectId);
+//        if(array == null ||recordRespDTO == null){
+//            return "";
+//        }
+//        //过滤掉没必要的标题
+//        JSONArray jsonArray = new JSONArray();
+//        String[] strings1 = (String[]) array.get(0);
+//        String[] strings2 = (String[]) array.get(1);
+//
+//        List<String> list1 = Arrays.asList(strings1);
+//        List<String> list2 = Arrays.asList(strings2);
+//        List<String> arrayList1=new ArrayList<String>(list1);
+//        List<String> arrayList2=new ArrayList<String>(list2);
+//
+//        if(list1.contains("序号")){
+//            arrayList1.remove("序号");
+//        }
+//        if(list1.contains("级别")){
+//            arrayList1.remove("级别");
+//        }
+//        if(list1.contains("层级")){
+//            arrayList1.remove("层级");
+//        }
+//        if(list1.contains("分组号")){
+//            arrayList1.remove("分组号");
+//        }
+//        if(list1.contains("puid")){
+//            arrayList1.remove("puid");
+//        }
+//        if(list2.contains("No")){
+//            arrayList2.remove("No");
+//        }
+//        if(list2.contains("rank")){
+//            arrayList2.remove("rank");
+//        }
+//        if(list2.contains("level")){
+//            arrayList2.remove("level");
+//        }
+//        if(list2.contains("groupNum")){
+//            arrayList2.remove("groupNum");
+//        }
+//        if(list2.contains("puid")){
+//            arrayList2.remove("puid");
+//        }
+//        String[] strings3 =arrayList1.toArray(new String[0]);;
+//        String[] strings4 = arrayList2.toArray(new String[0]);
+//        jsonArray.add(strings3);
+//        jsonArray.add(strings4);
+//
+//
+//        JSONArray array1 = recordRespDTO.getJsonArray();
+//        JSONObject object = array1.getJSONObject(0);
+//        String[] strings5 = new String[strings4.length];
+//        for(int i =0 ;i<strings2.length;i++){
+//            if("puid".equals(strings2[i])){
+//                model.addAttribute("puid",object.getString(strings2[i]));
+//                break;
+//            }
+//        }
+//
+//        for(int i =0;i<strings4.length;i++){
+//            strings5[i] = object.getString(strings4[i])==null?"":object.getString(strings4[i]);
+//        }
+//        jsonArray.add(strings5);
+        model.addAttribute("data",recordRespDTO);
 
         return "bomManage/ebom/ebomManage/updateEbomManage";
     }

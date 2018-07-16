@@ -2,15 +2,23 @@ package com.connor.hozon.bom.resources.dto.request;
 
 /**
  * @Author: haozt
- * @Date: 2018/6/25
+ * @Date: 2018/7/16
  * @Description:
  */
-public class DeleteHzEbomReqDTO {
-    private String puids;
+public class RecoverHzBomReqDTO {
+    private Integer type;
+
+    private String puid;
 
     private String projectId;
 
-    private String puid;
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
+    }
 
     public String getPuid() {
         return puid;
@@ -18,14 +26,6 @@ public class DeleteHzEbomReqDTO {
 
     public void setPuid(String puid) {
         this.puid = puid;
-    }
-
-    public String getPuids() {
-        return puids;
-    }
-
-    public void setPuids(String puids) {
-        this.puids = puids;
     }
 
     public String getProjectId() {

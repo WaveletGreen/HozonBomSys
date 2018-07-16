@@ -44,7 +44,6 @@ public class HzEPLManageRecordServiceImpl implements HzEPLManageRecordService {
     @Override
     public Page<HzEPLRecordRespDTO> getHzEPLRecordForPage(HzEPLByPageQuery query) {
         try{
-            int num = (query.getPage()-1)*query.getLimit();
             HzEPLRecordRespDTO recordRespDTO = new HzEPLRecordRespDTO();
             JSONArray array = new JSONArray();
             List<HzEPLRecordRespDTO> recordRespDTOList = new ArrayList<>();
@@ -64,8 +63,9 @@ public class HzEPLManageRecordServiceImpl implements HzEPLManageRecordService {
                 }
             }
             Page<HzEPLManageRecord> recordPage = hzEplMangeRecordDAO.getEPLListForPage(query);
+            int num = (recordPage.getPageNumber()-1)*recordPage.getPageSize();
             if(recordPage == null || recordPage.getResult() == null || recordPage.getResult().size()==0){
-                return new Page<>(query.getPage(),query.getLimit(),0);
+                return new Page<>(recordPage.getPageNumber(),recordPage.getPageSize(),0);
             }
             List<HzEPLManageRecord> records = recordPage.getResult();
             for(HzEPLManageRecord record:records){
@@ -150,7 +150,7 @@ public class HzEPLManageRecordServiceImpl implements HzEPLManageRecordService {
             }
             recordRespDTO.setJsonArray(array);
             recordRespDTOList.add(recordRespDTO);
-            return new Page<>(query.getPage(),query.getLimit(),recordPage.getTotalCount(),recordRespDTOList);
+            return new Page<>(recordPage.getPageNumber(),recordPage.getPageSize(),recordPage.getTotalCount(),recordRespDTOList);
         }catch (Exception e){
             return null;
         }

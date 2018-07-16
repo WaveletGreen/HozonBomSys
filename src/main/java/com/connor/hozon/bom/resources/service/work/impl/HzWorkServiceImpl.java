@@ -42,9 +42,9 @@ public class HzWorkServiceImpl implements HzWorkService {
     public Page<HzWorkCenterRespDTO> findHzWorkPage(HzWorkByPageQuery query) {
         try {
             Page<HzWorkCenter> centerPage = hzWorkCenterDAO.findWorkCenterForPage(query);
-            int num = (query.getPage()-1)*query.getLimit();
+            int num = (centerPage.getPageNumber()-1)*centerPage.getPageSize();
             if(centerPage == null || centerPage.getResult() == null){
-                return  new Page<>(query.getPage(),query.getLimit(),0);
+                return  new Page<>(centerPage.getPageNumber(),centerPage.getPageSize(),0);
             }
             Map<String,Object> map = new HashMap<>();
             map.put("projectId",query.getProjectId());
@@ -91,7 +91,7 @@ public class HzWorkServiceImpl implements HzWorkService {
                 respDTO.setpExperssion6(center.getpExperssion6());
                 respDTOList.add(respDTO);
             }
-            return new Page<>(query.getPage(),query.getLimit(),centerPage.getTotalCount(),respDTOList);
+            return new Page<>(centerPage.getPageNumber(),centerPage.getPageSize(),centerPage.getTotalCount(),respDTOList);
         } catch (Exception e) {
             return null;
         }

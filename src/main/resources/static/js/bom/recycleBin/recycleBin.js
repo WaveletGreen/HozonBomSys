@@ -8,6 +8,7 @@ function doQuery() {
     var projectPuid = $("#project", window.top.document).val();
     var $table = $("#recycleBinTable");
     var type = $("#type").val();
+    var bomUrl = "recycle/record/?projectId=" + projectPuid+"&type="+type;
     if (type == 1) {
         // function initTable() {
         $table.bootstrapTable('destroy');
@@ -16,7 +17,6 @@ function doQuery() {
             type: "GET",
             success: function (result) {
                 var column = [];
-                var eBomUrl = "ebom/getEBom/list?projectId=" + projectPuid;
                 // column.push({field: 'eBomPuid', title: 'puid'});
                 column.push({field: 'ck', checkbox: true});
                 var data = result.data;
@@ -38,7 +38,7 @@ function doQuery() {
                     }
                 }
                 $table.bootstrapTable({
-                    url: eBomUrl,
+                    url: bomUrl,
                     method: 'GET',
                     dataType: 'json',
                     sidePagination: "server",           //分页方式：client客户端分页，server服务端分页（*）
@@ -59,14 +59,15 @@ function doQuery() {
                     toolbars: [
                         {
                             text: '还原',
-                            iconCls: 'glyphicon glyphicon-remove',
+                            iconCls: 'glyphicon glyphicon-share',
                             handler: function () {
                                 var rows = $table.bootstrapTable('getSelections');
                                 var myData = JSON.stringify({
                                     "projectId": $("#project", window.top.document).val(),
                                     "puid": rows[0].puid,
+                                    "type":type
                                 });
-                                if (rows.length == 0 && rows.length > 1) {
+                                if (rows.length !=1) {
                                     window.Ewin.alert({message: '请选择一条需要还原的数据!'});
                                     return false;
                                 }
@@ -79,7 +80,7 @@ function doQuery() {
                                         $.ajax({
                                             type: "POST",
                                             //ajax需要添加打包名
-                                            url: "ebom/delete/ebom",
+                                            url: "recycle/recover",
                                             data: myData,
                                             contentType: "application/json",
                                             success: function (result) {
@@ -107,7 +108,6 @@ function doQuery() {
     else if (type == 2) {
         $table.bootstrapTable('destroy');
         // function initTable() {
-        var pBomUrl = "pbom/getBomManage?projectId=" + projectPuid;
         $.ajax({
             url: "pbom/manage/title?project=" + projectPuid,
             type: "GET",
@@ -132,7 +132,7 @@ function doQuery() {
                     }
                 }
                 $table.bootstrapTable({
-                    url: pBomUrl,
+                    url: bomUrl,
                     method: 'GET',
                     dataType: 'json',
                     cache: false,
@@ -159,12 +159,13 @@ function doQuery() {
                     toolbars: [
                         {
                             text: '还原',
-                            iconCls: 'glyphicon glyphicon-remove',
+                            iconCls: 'glyphicon glyphicon-share',
                             handler: function () {
                                 var rows = $table.bootstrapTable('getSelections');
                                 var myData = JSON.stringify({
                                     "projectId": $("#project", window.top.document).val(),
-                                    "puids": rows[0].eBomPuid,
+                                    "puid": rows[0].eBomPuid,
+                                    "type":type
                                 });
                                 if (rows.length == 0) {
                                     window.Ewin.alert({message: '请至少选择一条需要还原的的数据!'});
@@ -179,7 +180,7 @@ function doQuery() {
                                         $.ajax({
                                             type: "POST",
                                             //ajax需要添加打包名
-                                            url: "pbom/delete",
+                                            url: "recycle/recover",
                                             data: myData,
                                             contentType: "application/json",
                                             success: function (result) {
@@ -215,7 +216,6 @@ function doQuery() {
                 var column = [];
                 column.push({field: 'eBomPuid', title: 'puid'});
                 column.push({field: 'ck', checkbox: true, Width: 50});
-                var mBomUrl = "mbom/record?projectId=" + projectPuid;
                 var data = result.data;
                 var keys = [];
                 var values;
@@ -234,7 +234,7 @@ function doQuery() {
                     }
                 }
                 $table.bootstrapTable({
-                    url: mBomUrl,
+                    url: bomUrl,
                     method: 'GET',
                     dataType: 'json',
                     cache: false,
@@ -266,13 +266,14 @@ function doQuery() {
                     toolbars: [
                         {
                             text: '还原',
-                            iconCls: 'glyphicon glyphicon-remove',
+                            iconCls: 'glyphicon glyphicon-share',
                             handler: function () {
                                 var rows = $table.bootstrapTable('getSelections');
 
                                 var myData = JSON.stringify({
                                     "projectId": $("#project", window.top.document).val(),
-                                    "puids": rows[0].eBomPuid,
+                                    "puid": rows[0].eBomPuid,
+                                    "type":type
                                 });
                                 if (rows.length == 0) {
                                     window.Ewin.alert({message: '请选择一条需要还原的数据!'});
@@ -287,7 +288,7 @@ function doQuery() {
                                         $.ajax({
                                             type: "POST",
                                             //ajax需要添加打包名
-                                            url: "mbom/delete",
+                                            url: "recycle/recover",
                                             data: myData,
                                             contentType: "application/json",
                                             success: function (result) {

@@ -19,7 +19,7 @@
                 <property name="username" value="HOZON"/>
                 <property name="password" value="HOZON"/>
                 <!--最大的活动连接数，活动连接，就是正在与数据库交互的连接，默认是10-->
-                <property name="poolMaximumIdleConnections" value="0"/>
+                <property name="poolMaximumIdleConnections" value="50"/>
                 <!--空闲连接数，就是没有处理请求的连接，默认是5-->
                 <property name="poolMaximumActiveConnections" value="2000"/>
                 <!--在被强制返回之前，连接池中被检查的时间，默认值为20000毫秒-->
