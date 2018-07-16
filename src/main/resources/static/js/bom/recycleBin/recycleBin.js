@@ -65,8 +65,9 @@ function doQuery() {
                                 var myData = JSON.stringify({
                                     "projectId": $("#project", window.top.document).val(),
                                     "puid": rows[0].puid,
+                                    "type":type
                                 });
-                                if (rows.length == 0 && rows.length > 1) {
+                                if (rows.length !=1) {
                                     window.Ewin.alert({message: '请选择一条需要还原的数据!'});
                                     return false;
                                 }
@@ -79,7 +80,7 @@ function doQuery() {
                                         $.ajax({
                                             type: "POST",
                                             //ajax需要添加打包名
-                                            url: "ebom/delete/ebom",
+                                            url: "recycle/recover",
                                             data: myData,
                                             contentType: "application/json",
                                             success: function (result) {
@@ -163,7 +164,8 @@ function doQuery() {
                                 var rows = $table.bootstrapTable('getSelections');
                                 var myData = JSON.stringify({
                                     "projectId": $("#project", window.top.document).val(),
-                                    "puids": rows[0].eBomPuid,
+                                    "puid": rows[0].eBomPuid,
+                                    "type":type
                                 });
                                 if (rows.length == 0) {
                                     window.Ewin.alert({message: '请至少选择一条需要还原的的数据!'});
@@ -178,7 +180,7 @@ function doQuery() {
                                         $.ajax({
                                             type: "POST",
                                             //ajax需要添加打包名
-                                            url: "pbom/delete",
+                                            url: "recycle/recover",
                                             data: myData,
                                             contentType: "application/json",
                                             success: function (result) {
@@ -270,7 +272,8 @@ function doQuery() {
 
                                 var myData = JSON.stringify({
                                     "projectId": $("#project", window.top.document).val(),
-                                    "puids": rows[0].eBomPuid,
+                                    "puid": rows[0].eBomPuid,
+                                    "type":type
                                 });
                                 if (rows.length == 0) {
                                     window.Ewin.alert({message: '请选择一条需要还原的数据!'});
@@ -285,7 +288,7 @@ function doQuery() {
                                         $.ajax({
                                             type: "POST",
                                             //ajax需要添加打包名
-                                            url: "mbom/delete",
+                                            url: "recycle/recover",
                                             data: myData,
                                             contentType: "application/json",
                                             success: function (result) {

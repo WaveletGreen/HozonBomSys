@@ -731,6 +731,66 @@ public class HzPbomServiceImpl implements HzPbomService {
         }
     }
 
+    @Override
+    public OperateResultMessageRespDTO RecoverDeletePbomRecord(String projectId, String puid) {
+        OperateResultMessageRespDTO respDTO = new OperateResultMessageRespDTO();
+        try{
+            if(projectId == null || projectId == "" || puid == null || puid == ""){
+                respDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
+                respDTO.setErrMsg("非法参数");
+                return  respDTO;
+            }
+            Map<String,Object> map = new HashMap<>();
+            map.put("projectId",projectId);
+            map.put("pPuid",puid);
+            List<HzPbomLineRecord> recordList = hzPbomRecordDAO.getPbomById(map);
+            if(ListUtil.isNotEmpty(recordList)){
+                respDTO.setErrMsg("当前要恢复对象已存在bom系统中！");
+                respDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
+                return  respDTO;
+            }
+            map.put("status",0);//已删除的bom
+            recordList =hzPbomRecordDAO.getPbomById(map);
+            if(ListUtil.isNotEmpty(recordList)){
+                HzPbomLineRecord record = recordList.get(0);
+                if(record.getLineIndex().split("\\.").length == 2){
+                    respDTO.setErrMsg("2Y层结构无法恢复！");
+                    respDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
+                    return  respDTO;
+                }
+                Map<String,Object> map1 = new HashMap<>();
+                map1.put("projectId",projectId);
+                map1.put("pPuid",record.getParentUid());
+                recordList = hzPbomRecordDAO.getPbomById(map1);
+                if(ListUtil.isEmpty(recordList)){
+                    respDTO.setErrMsg("当前要恢复对象的父结构不存在，无法恢复！");
+                    respDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
+                    return  respDTO;
+                }else{
+                    if(recordList.get(0).getIsHas().equals(0)){
+                        HzPbomLineRecord lineRecord = recordList.get(0);
+                        lineRecord.setIsHas(1);
+                        lineRecord.setIsPart(0);
+                        if(lineRecord.getLineIndex().split("\\.").length == 2 && lineRecord.getIs2Y().equals(0)){
+                            lineRecord.setIs2Y(1);
+                        }
+                        int i = hzPbomRecordDAO.update(lineRecord);
+                        if(i<=0){
+                            return OperateResultMessageRespDTO.getFailResult();
+                        }
+                    }
+                    int i = hzPbomRecordDAO.recoverBomById(record.geteBomPuid());
+                    if(i>0){
+                        return OperateResultMessageRespDTO.getSuccessResult();
+                    }
+                }
+            }
+            return OperateResultMessageRespDTO.getFailResult();
+        }catch (Exception e){
+            return OperateResultMessageRespDTO.getFailResult();
+        }
+    }
+
     private HzPbomLineRecord bomLineToPbomLine(HzBomLineRecord record){
         HzPbomLineRecord hzPbomLineRecord = new HzPbomLineRecord();
         hzPbomLineRecord.setPuid(UUID.randomUUID().toString());
@@ -855,4 +915,5 @@ public class HzPbomServiceImpl implements HzPbomService {
         }
         return null;
     }
+
 }

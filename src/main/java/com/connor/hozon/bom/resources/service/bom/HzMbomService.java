@@ -90,4 +90,10 @@ public interface HzMbomService {
     List<HzMbomLineRecord> getHzMbomTree(HzMbomTreeQuery query);
 
     Page<HzMbomRecordRespDTO> getHzMbomRecycleByPage(HzBomRecycleByPageQuery query);
+
+    /**
+     * 删除记录恢复
+     * @return
+     */
+    OperateResultMessageRespDTO RecoverDeleteMbomRecord(String projectId,String puid);
 }

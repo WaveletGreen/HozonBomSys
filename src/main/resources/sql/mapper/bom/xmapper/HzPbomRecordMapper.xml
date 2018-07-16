@@ -153,7 +153,12 @@
       <if test="pPuid != null and  pPuid!='' " >
         and t6.P_E_BOM_PUID = #{pPuid,jdbcType=VARCHAR}
       </if>
-      and t6.P_PBOM_STATUS=1
+      <if test="status != null  " >
+        and t6.P_PBOM_STATUS= #{status,jdbcType=INTEGER}
+      </if>
+      <if test="status == null " >
+        and t6.P_PBOM_STATUS= 1
+      </if>
     </where>
   </select>
 
@@ -390,10 +395,10 @@
   </update>
 
 
-<!--删除一条记录-->
-  <update id="HzPbomRecordDAOImpl_deleteByForeignId" parameterType="java.lang.String">
+<!--恢复一条记录-->
+  <update id="HzPbomRecordDAOImpl_recoverBomById" parameterType="java.lang.String">
     update HZ_PBOM_RECORD
-    set P_PBOM_STATUS = 0
+    set P_PBOM_STATUS = 1
     where P_E_BOM_PUID = #{eBomPuid,jdbcType=VARCHAR}
  </update>
 

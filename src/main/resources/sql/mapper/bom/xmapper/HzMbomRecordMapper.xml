@@ -149,9 +149,14 @@
             <if test="pPuid != null and  pPuid!='' ">
                 and t.P_BOM_PUID = #{pPuid,jdbcType=VARCHAR}
             </if>
-            and t.P_MBOM_STATUS=1
+            <if test="status != null ">
+                and t.P_MBOM_STATUS = #{status,jdbcType=INTEGER}
+            </if>
+            <if test="status == null  ">
+                and t.P_MBOM_STATUS = 1
+            </if>
         </where>
-    </select>
+</select>
 
 
     <!--批量插入 同步EBOM数据-->
@@ -376,17 +381,18 @@
                 P_BOM_LINE_PART_EN_NAME = #{pBomLinePartEnName,jdbcType=VARCHAR},
             </if>
             <if test="pBomLinePartResource != null">
-                P_BOM_LINE_PART_RESOURCE = #{pBomLinePartResource,jdbcType=VARCHAR}
+                P_BOM_LINE_PART_RESOURCE = #{pBomLinePartResource,jdbcType=VARCHAR}，
             </if>
+
         </set>
         where P_BOM_PUID = #{eBomPuid,jdbcType=VARCHAR}
        and P_MBOM_STATUS =1
     </update>
 
-    <!--删除数据-->
-    <update id="HzMbomRecordDAOImpl_deleteByForeignId" parameterType="java.lang.String">
+    <!--恢复数据-->
+    <update id="HzMbomRecordDAOImpl_recoverBomById" parameterType="java.lang.String">
     update HZ_MBOM_RECORD
-    set P_MBOM_STATUS = 0
+    set P_MBOM_STATUS = 1
     where P_BOM_PUID = #{eBomPuid,jdbcType=VARCHAR}
  </update>
 

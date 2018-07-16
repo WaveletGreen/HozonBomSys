@@ -49,8 +49,8 @@ public class HzPbomRecordDAOImpl extends BaseSQLUtil implements HzPbomRecordDAO 
     }
 
     @Override
-    public int deleteByForeignId(String ePuid) {
-        return super.update("HzPbomRecordDAOImpl_deleteByForeignId",ePuid);
+    public int recoverBomById(String ePuid) {
+        return super.update("HzPbomRecordDAOImpl_recoverBomById",ePuid);
     }
 
     @Override

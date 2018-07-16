@@ -3,20 +3,21 @@ package com.connor.hozon.bom.resources.controller.bom;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.connor.hozon.bom.resources.controller.BaseController;
+import com.connor.hozon.bom.resources.dto.request.RecoverHzBomReqDTO;
 import com.connor.hozon.bom.resources.dto.response.HzEbomRespDTO;
 import com.connor.hozon.bom.resources.dto.response.HzMbomRecordRespDTO;
 import com.connor.hozon.bom.resources.dto.response.HzPbomLineRespDTO;
+import com.connor.hozon.bom.resources.dto.response.OperateResultMessageRespDTO;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.query.HzBomRecycleByPageQuery;
 import com.connor.hozon.bom.resources.service.bom.HzEbomService;
 import com.connor.hozon.bom.resources.service.bom.HzMbomService;
 import com.connor.hozon.bom.resources.service.bom.HzPbomService;
 import com.connor.hozon.bom.resources.util.ListUtil;
+import com.connor.hozon.bom.resources.util.ResultMessageBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
@@ -150,6 +151,30 @@ public class HzBomRecycleController extends BaseController {
             return ret;
         }else {
             return new HashMap<>();
+        }
+    }
+
+    /**
+     * 删除 恢复
+     * @param recoverHzBomReqDTO
+     * @param response
+     */
+    @RequestMapping(value = "recover",method = RequestMethod.POST)
+    public void recoverHasDeletedBom(@RequestBody RecoverHzBomReqDTO recoverHzBomReqDTO, HttpServletResponse response){
+        if(recoverHzBomReqDTO.getType() ==1){
+            OperateResultMessageRespDTO respDTO =hzEbomService.RecoverDeleteEbomRecord(recoverHzBomReqDTO.getProjectId(),recoverHzBomReqDTO.getPuid());
+            writeAjaxJSONResponse(ResultMessageBuilder.build(OperateResultMessageRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
+            return;
+        }else if(recoverHzBomReqDTO.getType() ==2){
+            OperateResultMessageRespDTO respDTO = hzPbomService.RecoverDeletePbomRecord(recoverHzBomReqDTO.getProjectId(),recoverHzBomReqDTO.getPuid());
+            writeAjaxJSONResponse(ResultMessageBuilder.build(OperateResultMessageRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
+            return;
+        }else if(recoverHzBomReqDTO.getType() == 3){
+            OperateResultMessageRespDTO respDTO = hzMbomService.RecoverDeleteMbomRecord(recoverHzBomReqDTO.getProjectId(),recoverHzBomReqDTO.getPuid());
+            writeAjaxJSONResponse(ResultMessageBuilder.build(OperateResultMessageRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
+            return;
+        }else{
+            writeAjaxJSONResponse(ResultMessageBuilder.build(false,"非法参数！"),response);
         }
     }
 }

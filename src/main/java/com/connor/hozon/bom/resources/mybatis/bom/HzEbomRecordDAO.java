@@ -54,4 +54,6 @@ public interface HzEbomRecordDAO {
      * @return
      */
     Page<HzEPLManageRecord> getHzRecycleRecord(HzBomRecycleByPageQuery query);
+
+    HzEPLManageRecord getHasDeletedBom(String puid,String projectId);
 }

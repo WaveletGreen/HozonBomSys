@@ -40,7 +40,7 @@ public interface HzMbomRecordDAO {
      * @param eBomPuid
      * @return
      */
-    int deleteByForeignId(String eBomPuid);
+    int recoverBomById(String eBomPuid);
 
     /**
      * 批量删除
@@ -57,7 +57,7 @@ public interface HzMbomRecordDAO {
     Page<HzMbomLineRecord> findMbomForPage(HzMbomByPageQuery query);
 
     /**
-     * 查询一条Mbom信息 EBOM表和MBOM表
+     * 查询一条Mbom信息
      * @param map
      * @return
      */

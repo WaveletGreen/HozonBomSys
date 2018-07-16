@@ -31,6 +31,7 @@
                 property="pBomLinePartClass"/>
         <result column="P_BOM_LINE_PART_EN_NAME" jdbcType="VARCHAR" property="pBomLinePartEnName" />
         <result column="P_BOM_LINE_PART_RESOURCE" jdbcType="VARCHAR" property="pBomLinePartResource" />
+        <result column="P_EBOM_STATUS" jdbcType="INTEGER" property="status" />
     </resultMap>
     <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs"
                type="sql.pojo.bom.HzBomLineRecord">
@@ -179,7 +180,7 @@
             <if test="bomLineBlock != null">
                 P_BOM_LINE_BLOCK = #{bomLineBlock,jdbcType=VARCHAR},
             </if>
-
+            P_EBOM_STATUS =1
         </set>
         where PUID = #{puid,jdbcType=VARCHAR}
     </update>

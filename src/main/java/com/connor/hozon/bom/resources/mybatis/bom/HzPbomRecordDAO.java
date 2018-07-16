@@ -48,7 +48,7 @@ public interface HzPbomRecordDAO {
      * @param ePuid
      * @return
      */
-    int deleteByForeignId(String ePuid);
+    int recoverBomById(String ePuid);
 
     /**
      * 批量删除

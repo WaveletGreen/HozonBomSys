@@ -39,8 +39,8 @@ public class HzMbomRecordDAOImpl extends BaseSQLUtil implements HzMbomRecordDAO 
         return super.update("HzMbomRecordDAOImpl_update",record);
     }
     @Override
-    public int deleteByForeignId(String eBomPuid) {
-        return super.update("HzMbomRecordDAOImpl_deleteByForeignId",eBomPuid);
+    public int recoverBomById(String eBomPuid) {
+        return super.update("HzMbomRecordDAOImpl_recoverBomById",eBomPuid);
     }
 
     @Override

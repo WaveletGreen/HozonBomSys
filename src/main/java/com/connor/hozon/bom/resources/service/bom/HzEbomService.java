@@ -71,4 +71,9 @@ public interface HzEbomService {
 
     Page<HzEbomRespDTO> getHzEbomRecycleByPage(HzBomRecycleByPageQuery query);
 
+    /**
+     * 删除记录恢复
+     * @return
+     */
+    OperateResultMessageRespDTO RecoverDeleteEbomRecord(String projectId,String puid);
 }

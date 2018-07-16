@@ -82,5 +82,16 @@ public interface HzPbomService {
      */
     OperateResultMessageRespDTO andProcessCompose(AddHzPbomRecordReqDTO recordReqDTO);
 
+    /**
+     * 查询已删除记录
+     * @param query
+     * @return
+     */
     Page<HzPbomLineRespDTO> getHzPbomRecycleByPage(HzBomRecycleByPageQuery query);
+
+    /**
+     * 删除记录恢复
+     * @return
+     */
+    OperateResultMessageRespDTO RecoverDeletePbomRecord(String projectId,String puid);
 }

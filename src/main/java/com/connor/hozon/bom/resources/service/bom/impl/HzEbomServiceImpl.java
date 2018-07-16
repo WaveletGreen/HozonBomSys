@@ -26,6 +26,7 @@ import share.bean.RedisBomBean;
 import sql.pojo.HzPreferenceSetting;
 import sql.pojo.bom.HZBomMainRecord;
 import sql.pojo.bom.HzBomLineRecord;
+import sql.pojo.epl.HzEPLManage;
 import sql.pojo.epl.HzEPLManageRecord;
 import sql.redis.SerializeUtil;
 
@@ -185,7 +186,7 @@ public class HzEbomServiceImpl implements HzEbomService {
         try{
             HzEPLManageRecord record = hzEbomRecordDAO.findEbomById(puid,projectId);
             HzEbomRespDTO respDTO = new HzEbomRespDTO();
-            if(record!=null && !(Integer.valueOf(2).equals(record.getpState()))){
+            if(record!=null){
                 JSONArray jsonArray = new JSONArray();
                 JSONObject jsonObject = new JSONObject();
                 jsonObject.put("puid", record.getPuid());
@@ -273,17 +274,6 @@ public class HzEbomServiceImpl implements HzEbomService {
                         }
                         //更新数据
                         hzBomLineRecordDao.update(record);
-//                        //状态值也要更新
-//                        HzBomState bomState = new HzBomState();
-//                        bomState.setpBomId(record.getPuid());
-//                        bomState.setpBomState(1);
-//                        HzBomState hzBomState = hzBomStateDAO.findStateById(record.getPuid());
-//                        if (hzBomState == null) {
-//                            bomState.setPuid(UUID.randomUUID().toString());
-//                            hzBomStateDAO.insert(bomState);
-//                        } else {
-//                            hzBomStateDAO.update(bomState);
-//                        }
                     }
                 } else {
                     return OperateResultMessageRespDTO.getFailResult();
@@ -347,17 +337,6 @@ public class HzEbomServiceImpl implements HzEbomService {
                 hzBomLineRecord.setpBomLinePartClass("");
                 hzBomLineRecord.setpBomLinePartName("");
                 i = hzBomLineRecordDao.insert(hzBomLineRecord);
-                //状态表中添加数据
-//                HzBomState state = new HzBomState();
-//                // 0 新增 1 更新 2 删除
-//                state.setpBomState(0);
-//                state.setPuid(UUID.randomUUID().toString());
-//                state.setpBomId(puid);
-//                int j = hzBomStateDAO.insert(state);
-                //pbom表中添加数据否？ 暂时未定 后续测试出问题了再加进去
-//                if (i > 0 && j > 0) {
-//                    return OperateResultMessageRespDTO.getSuccessResult();
-//                }
                 if(i>0){
                     return OperateResultMessageRespDTO.getSuccessResult();
                 }
@@ -587,6 +566,61 @@ public class HzEbomServiceImpl implements HzEbomService {
             return new Page<>(recordPage.getPageNumber(),recordPage.getPageSize(),recordPage.getTotalCount(),recordRespDTOList);
         }catch (Exception e){
             return null;
+        }
+    }
+
+    @Override
+    public OperateResultMessageRespDTO RecoverDeleteEbomRecord(String projectId, String puid) {
+        OperateResultMessageRespDTO respDTO = new OperateResultMessageRespDTO();
+        try{
+            if(projectId == null || projectId == "" || puid == null || puid == ""){
+                respDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
+                respDTO.setErrMsg("非法参数");
+                return  respDTO;
+            }
+            HzEPLManageRecord record = hzEbomRecordDAO.findEbomById(puid,projectId);
+            if(record!=null){
+                respDTO.setErrMsg("当前要恢复对象已存在bom系统中！");
+                respDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
+                return  respDTO;
+            }
+
+            record =hzEbomRecordDAO.getHasDeletedBom(puid,projectId);
+            if(record !=null){
+                if(record.getLineIndex().split("\\.").length == 2){
+                    respDTO.setErrMsg("2Y层结构无法恢复！");
+                    respDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
+                    return  respDTO;
+                }
+                HzEPLManageRecord manageRecord = hzEbomRecordDAO.findEbomById(record.getParentUid(),projectId);
+                if(manageRecord == null){
+                    respDTO.setErrMsg("当前要恢复对象的父结构不存在，无法恢复！");
+                    respDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
+                    return  respDTO;
+                }else{
+                    HzBomLineRecord bomLineRecord = new HzBomLineRecord();
+                    if(manageRecord.getIsHas().equals(0)){
+                        bomLineRecord.setIsHas(1);
+                        bomLineRecord.setIsPart(0);
+                        if(manageRecord.getLineIndex().split("\\.").length == 2 && manageRecord.getIs2Y().equals(0)){
+                            bomLineRecord.setIs2Y(1);
+                        }
+                        int i = hzBomLineRecordDao.update(bomLineRecord);
+                        if(i<=0){
+                            return OperateResultMessageRespDTO.getFailResult();
+                        }
+                    }
+                    HzBomLineRecord hzBomLineRecord = new HzBomLineRecord();
+                    hzBomLineRecord.setPuid(record.getPuid());
+                    int i =hzBomLineRecordDao.update(hzBomLineRecord);
+                    if(i>0){
+                        return OperateResultMessageRespDTO.getSuccessResult();
+                    }
+                }
+            }
+            return OperateResultMessageRespDTO.getFailResult();
+        }catch (Exception e){
+            return OperateResultMessageRespDTO.getFailResult();
         }
     }
 

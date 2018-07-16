@@ -82,4 +82,12 @@ public class HzEbomRecordDAOImpl extends BaseSQLUtil implements HzEbomRecordDAO 
         return super.findPage("HzEbomRecordDAOImpl_getHzRecycleRecord","HzEbomRecordDAOImpl_findRecycleTotalCount",request);
     }
 
+    @Override
+    public HzEPLManageRecord getHasDeletedBom(String puid, String projectId) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("puid",puid);
+        map.put("projectId",projectId);
+        return (HzEPLManageRecord) super.findForObject("HzEbomRecordDAOImpl_findHasDeletedBom",map);
+    }
+
 }
