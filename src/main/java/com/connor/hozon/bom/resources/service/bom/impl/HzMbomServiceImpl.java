@@ -59,36 +59,36 @@ public class HzMbomServiceImpl implements HzMbomService {
                 }
             }
 
-            int count = hzMbomRecordDAO.getHzMbomTotalCount(query.getProjectId());
-            if(count<=0){
-                List<HzBomLineRecord> lineRecords = hzBomLineRecordDao.getAllBomLineRecordByProjectId(query.getProjectId());
-                if(ListUtil.isNotEmpty(lineRecords)){
-                    int size = lineRecords.size();
-                    //分批插入数据 一次1000条
-                    int i =0;
-                    int cout = 0;
-                    if(size>1000){
-                        for(i =0;i<size/1000;i++){
-                            List<HzMbomLineRecord> list = new ArrayList<>();
-                            for(int j = 0;j<1000;j++){
-                                HzMbomLineRecord hzPbomLineRecord =bomLineToMbomLine(lineRecords.get(cout));
-                                list.add(hzPbomLineRecord);
-                                cout++;
-                            }
-                            hzMbomRecordDAO.insertList(list);
-                        }
-                    }
-                    if(i*1000<size){
-                        List<HzMbomLineRecord> list = new ArrayList<>();
-                        for(int j = 0;j<size-i*1000;j++){
-                            HzMbomLineRecord hzPbomLineRecord =bomLineToMbomLine(lineRecords.get(cout));
-                            list.add(hzPbomLineRecord);
-                            cout++;
-                        }
-                        hzMbomRecordDAO.insertList(list);
-                    }
-                }
-            }
+//            int count = hzMbomRecordDAO.getHzMbomTotalCount(query.getProjectId());
+//            if(count<=0){
+//                List<HzBomLineRecord> lineRecords = hzBomLineRecordDao.getAllBomLineRecordByProjectId(query.getProjectId());
+//                if(ListUtil.isNotEmpty(lineRecords)){
+//                    int size = lineRecords.size();
+//                    //分批插入数据 一次1000条
+//                    int i =0;
+//                    int cout = 0;
+//                    if(size>1000){
+//                        for(i =0;i<size/1000;i++){
+//                            List<HzMbomLineRecord> list = new ArrayList<>();
+//                            for(int j = 0;j<1000;j++){
+//                                HzMbomLineRecord hzPbomLineRecord =bomLineToMbomLine(lineRecords.get(cout));
+//                                list.add(hzPbomLineRecord);
+//                                cout++;
+//                            }
+//                            hzMbomRecordDAO.insertList(list);
+//                        }
+//                    }
+//                    if(i*1000<size){
+//                        List<HzMbomLineRecord> list = new ArrayList<>();
+//                        for(int j = 0;j<size-i*1000;j++){
+//                            HzMbomLineRecord hzPbomLineRecord =bomLineToMbomLine(lineRecords.get(cout));
+//                            list.add(hzPbomLineRecord);
+//                            cout++;
+//                        }
+//                        hzMbomRecordDAO.insertList(list);
+//                    }
+//                }
+//            }
             Page<HzMbomLineRecord> recordPage =hzMbomRecordDAO.findMbomForPage(query);
             int num = (recordPage.getPageNumber()-1)*recordPage.getPageSize();
             if(recordPage == null || recordPage.getResult() == null){

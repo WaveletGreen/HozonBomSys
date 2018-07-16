@@ -701,8 +701,8 @@
         <where>
             t2.puid=#{projectId,jdbcType=VARCHAR}))
             and( t1.P_UPDATE_TIME BETWEEN
-            to_date(SYSDATE-7) and
-            to_date(sysdate) )and
+            (SYSDATE-7) and
+            (sysdate) )and
             t1.P_MBOM_STATUS = 0
 
         </where>

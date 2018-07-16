@@ -761,6 +761,7 @@ public class HzMaterielServiceImpl implements HzMaterielService {
         hzMaterielRecord.setpMaterielType("A002");
         hzMaterielRecord.setpPertainToProjectPuid(projectId);
         hzMaterielRecord.setpMaterielDataType(41);
+        hzMaterielRecord.setType(2);
         hzMaterielRecord.setPuid(UUID.randomUUID().toString());
         hzMaterielRecord.setMaterielResourceId(record.geteBomPuid());
         return hzMaterielRecord;
@@ -806,7 +807,7 @@ public class HzMaterielServiceImpl implements HzMaterielService {
         hzMaterielRecord.setpMaterielDataType(71);
         hzMaterielRecord.setPuid(UUID.randomUUID().toString());
         hzMaterielRecord.setMaterielResourceId(record.geteBomPuid());
-        hzMaterielRecord.setType(1);
+        hzMaterielRecord.setType(2);
         return hzMaterielRecord;
 
     }
