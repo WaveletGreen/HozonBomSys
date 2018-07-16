@@ -330,6 +330,7 @@ var setting = {
                         // eval("coach." + puid + "=" + data);
                         changeView(localProjectDetail);
                         $("#detailTable").css("visibility", "visible");
+                        $("#projectDetail").css("visibility", "visible");
                     },
                     error: function (err) {
                         alert(err.status);
@@ -366,8 +367,7 @@ $(document).ready(
         $("#currentProjectHead", window.top.document).text(localProjectDetail.project.pProjectName);
         alert("当前选择的工作项目是:" + localProjectDetail.project.pProjectName);
     })
-)
-;
+);
 
 function changeView(data) {
     //品牌
@@ -379,11 +379,23 @@ function changeView(data) {
     //车型
     $("#projVehicleCode").text(data.vehicle.pVehicleName);
     $("#projVehicleName").text(data.vehicle.pVehicleCode);
-    $("#projVehicleShapeCode").text(data.vehicle.pVehicleShapeCode);
-    $("#projVehicleTranName").text(data.vehicle.pVehicleTranName);
-    $("#projVehicleAnnualCode").text(data.vehicle.pVehicleAnnualCode);
-    $("#projVehicleAnnual").text(data.vehicle.pVehicleAnnual);
+
     //项目
+    $("#pInColorCode").text(data.project.pInColorCode);
+    $("#pInColorName").text(data.project.pInColorName);
+    $("#pColorCode").text(data.project.pColorCode);
+    $("#pColorName").text(data.project.pColorName);
+    $("#pBatteryModel").text(data.project.pBatteryModel);
+    $("#pMotorModel").text(data.project.pMotorModel);
+    $("#pModelYearCode").text(data.project.pModelYearCode);
+    $("#pModelYear").text(data.project.pModelYear);
+    $("#pVehicleShapeCode").text(data.project.pVehicleShapeCode);
+    $("#pVehicleTranName").text(data.project.pVehicleTranName);
+    //项目详情
     $("#pProjectCode").text(data.project.pProjectCode);
     $("#pProjectName").text(data.project.pProjectName);
+    $("#pProjectManager").text(data.project.pProjectManager);
+    $("#pProjectCreateDate").text(changeDateFormat(data.project.pProjectCreateDate));
+    $("#pProjectDiscontinuationDate").text(changeDateFormat(data.project.pProjectDiscontinuationDate));
+    $("#pProjectDetail").text(data.project.pProjectDetail);
 }

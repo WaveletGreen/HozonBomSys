@@ -31,13 +31,25 @@
                 property="pBomOfWhichDept"/>
         <result column="P_CFG0_MODEL_RECORD" jdbcType="VARCHAR"
                 property="modelPuid"/>
+        <result column="P_BOM_LINE_BLOCK" jdbcType="BLOB"
+                property="lineBlock"/>
     </resultMap>
     <sql id="Base_Column_List">
-		OBJECT_NAME, OBJECT_DESC, P_CFG0_OPTION_VALUE, P_PARSE_LOGIC_VALUE,
-		P_CFG0_OBJECT_ID,
-		P_CFG0_DESC, P_CFG0_FAMILY_NAME, P_H9FEATURENAME, P_H9FEATUREENNAME,
-		P_H9FEATUREDESC,
-		P_BOM_LINE_NAME, P_BOM_LINE_ID,P_BOM_OF_WHICH_DEPT,P_CFG0_MODEL_RECORD
+        OBJECT_NAME,
+        OBJECT_DESC,
+        P_CFG0_OPTION_VALUE,
+        P_PARSE_LOGIC_VALUE,
+        P_CFG0_OBJECT_ID,
+        P_CFG0_DESC,
+        P_CFG0_FAMILY_NAME,
+        P_H9FEATURENAME,
+        P_H9FEATUREENNAME,
+        P_H9FEATUREDESC,
+        P_BOM_LINE_NAME,
+        P_BOM_LINE_ID,
+        P_BOM_OF_WHICH_DEPT,
+        P_CFG0_MODEL_RECORD,
+        P_BOM_LINE_BLOCK
 	</sql>
     <select id="selectByModelMainId" parameterType="java.lang.String"
             resultMap="BaseResultMap">

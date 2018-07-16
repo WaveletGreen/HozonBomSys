@@ -8,10 +8,6 @@
         <result column="P_VEHICLE_CREATE_DATE" jdbcType="TIMESTAMP" property="pVehicleCreateDate"/>
         <result column="P_VEHICLE_LAST_MOD_DATE" jdbcType="TIMESTAMP" property="pVehicleLastModDate"/>
         <result column="P_VEHICLE_CODE" jdbcType="VARCHAR" property="pVehicleCode"/>
-        <result column="P_VEHICLE_SHAPE_CODE" jdbcType="VARCHAR" property="pVehicleShapeCode"/>
-        <result column="P_VEHICLE_TRAN_NAME" jdbcType="VARCHAR" property="pVehicleTranName"/>
-        <result column="P_VEHICLE_ANNUAL_CODE" jdbcType="VARCHAR" property="pVehicleAnnualCode"/>
-        <result column="P_VEHICLE_ANNUAL" jdbcType="VARCHAR" property="pVehicleAnnual"/>
         <result column="P_VEHICLE_LAST_MODIFIER" jdbcType="VARCHAR" property="pVehicleLastModifier"/>
     </resultMap>
     <sql id="Base_Column_List">
@@ -21,10 +17,6 @@
         P_VEHICLE_CREATE_DATE,
         P_VEHICLE_LAST_MOD_DATE,
         P_VEHICLE_CODE,
-        P_VEHICLE_SHAPE_CODE,
-        P_VEHICLE_TRAN_NAME,
-        P_VEHICLE_ANNUAL_CODE,
-        P_VEHICLE_ANNUAL,
         P_VEHICLE_LAST_MODIFIER
     </sql>
     <!--根据主键查找车型信息-->
@@ -59,10 +51,6 @@
         P_VEHICLE_CREATE_DATE,
         P_VEHICLE_LAST_MOD_DATE,
         P_VEHICLE_CODE,
-        P_VEHICLE_SHAPE_CODE,
-        P_VEHICLE_TRAN_NAME,
-        P_VEHICLE_ANNUAL_CODE,
-        P_VEHICLE_ANNUAL,
         P_VEHICLE_LAST_MODIFIER
         )
     values (
@@ -72,10 +60,6 @@
         #{pVehicleCreateDate,jdbcType=TIMESTAMP},
         #{pVehicleLastModDate,jdbcType=TIMESTAMP},
         #{pVehicleCode,jdbcType=VARCHAR},
-        #{pVehicleShapeCode,jdbcType=VARCHAR},
-        #{pVehicleTranName,jdbcType=VARCHAR},
-        #{pVehicleAnnualCode,jdbcType=VARCHAR},
-        #{pVehicleAnnual,jdbcType=VARCHAR},
         #{pVehicleLastModifier,jdbcType=VARCHAR}
           )
     </insert>
@@ -85,10 +69,6 @@
     set P_VEHICLE_NAME = #{pVehicleName,jdbcType=VARCHAR},
       P_VEHICLE_LAST_MOD_DATE = #{pVehicleLastModDate,jdbcType=TIMESTAMP},
       P_VEHICLE_CODE = #{pVehicleCode,jdbcType=VARCHAR},
-      P_VEHICLE_SHAPE_CODE = #{pVehicleShapeCode,jdbcType=VARCHAR},
-      P_VEHICLE_TRAN_NAME = #{pVehicleTranName,jdbcType=VARCHAR},
-      P_VEHICLE_ANNUAL_CODE = #{pVehicleAnnualCode,jdbcType=VARCHAR},
-      P_VEHICLE_ANNUAL = #{pVehicleAnnual,jdbcType=VARCHAR},
       P_VEHICLE_LAST_MODIFIER = #{pVehicleLastModifier,jdbcType=VARCHAR}
     where PUID = #{puid,jdbcType=VARCHAR}
   </update>

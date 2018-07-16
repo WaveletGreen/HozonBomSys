@@ -24,7 +24,6 @@ public class HzLoadBomDataController {
     @RequestMapping(value = "/loadCfg0BomLineOfModel", method = RequestMethod.GET)
     @ResponseBody
     public JSONObject loadCfg0BomLineOfModel(@RequestParam String bdf) {
-        SimpleDateFormat.getInstance().format(new Date());
         return hzCfg0BomLineOfModelService.parse(bdf);
     }
 

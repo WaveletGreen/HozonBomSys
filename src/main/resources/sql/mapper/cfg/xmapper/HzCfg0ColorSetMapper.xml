@@ -27,6 +27,8 @@
         <result column="P_COLOR_MODIFIER" jdbcType="VARCHAR" property="pColorModifier"/>
         <!--可用状态-->
         <result column="P_COLOR_STATUS" jdbcType="INTEGER" property="pColorStatus"/>
+        <!--可用状态-->
+        <result column="P_COLOR_IS_DELETED" jdbcType="INTEGER" property="pColorIsDeleted"/>
     </resultMap>
     <sql id="Base_Column_List">
       PUID,
@@ -41,7 +43,8 @@
       P_COLOR_ABOLISH_DATE,
       P_COLOR_MODIFY_DATE,
       P_COLOR_MODIFIER,
-      P_COLOR_STATUS
+      P_COLOR_STATUS,
+      P_COLOR_IS_DELETED
   </sql>
     <sql id="Base_Column_List_By_Batch">
         #{item.puid,jdbcType=VARCHAR}
@@ -60,7 +63,8 @@
       #{pColorAbolishDate,jdbcType=VARCHAR},
       #{pColorModifyDate,jdbcType=VARCHAR},
       #{pColorModifier,jdbcType=VARCHAR},
-      #{pColorStatus,jdbcType=VARCHAR}
+      #{pColorStatus,jdbcType=VARCHAR},
+      #{pColorIsDeleted,jdbcType=VARCHAR}
     </sql>
     <!--根据主键查询-->
     <select id="selectByPrimaryKey" parameterType="sql.pojo.cfg.HzCfg0ColorSet" resultMap="BaseResultMap">
@@ -123,6 +127,15 @@
     <!--批量删除-->
     <delete id="deleteByBatch" parameterType="java.util.List">
         delete from HZ_CFG0_COLORSET where PUID in (
+        <foreach collection="list" item="item" index="index"
+                 separator=",">
+            <include refid="Base_Column_List_By_Batch"/>
+        </foreach>
+        )
+    </delete>
+    <!--批量逻辑删除-->
+    <delete id="logicDeleteByBatch" parameterType="java.util.List">
+        update HZ_CFG0_COLORSET set P_COLOR_IS_DELETED =1 where PUID in (
         <foreach collection="list" item="item" index="index"
                  separator=",">
             <include refid="Base_Column_List_By_Batch"/>

@@ -31,10 +31,21 @@ public class HzCfg0ColorSetService {
         Map<String, Object> result = new HashMap<>();
         List<HzCfg0ColorSet> colorSet = hzCfg0ColorSetDao.queryAll2();
         List<HzCfg0ColorSet> toUpdate = new ArrayList<>();
-        colorSet.stream().filter(set -> now.after(set.getpColorAbolishDate())).filter(set -> set != null).forEach(set -> {
-            set.setpColorStatus(0);
-            toUpdate.add(set);
-        });
+//        colorSet.stream().filter(
+//                set -> now.after(set.getpColorAbolishDate())).filter(
+//                set -> set != null).forEach(
+//                set -> {
+//                    set.setpColorStatus(0);
+//                    toUpdate.add(set);
+//                });
+        for (HzCfg0ColorSet set : colorSet) {
+            if (set.getpColorAbolishDate() == null) {
+                continue;
+            }
+            if (now.after(set.getpColorAbolishDate())) {
+                toUpdate.add(set);
+            }
+        }
         //更新废止的颜色信息状态，设置为不可用状态
         toUpdate.forEach(set -> {
             hzCfg0ColorSetDao.updateStatusByPk(set);
@@ -106,5 +117,15 @@ public class HzCfg0ColorSetService {
      */
     public boolean doUpdateStatusByPk(HzCfg0ColorSet entity) {
         return hzCfg0ColorSetDao.updateStatusByPk(entity) > 0 ? true : false;
+    }
+
+    /**
+     * 批量逻辑删除
+     *
+     * @param entity
+     * @return
+     */
+    public boolean doLogicDeleteByBatch(List<HzCfg0ColorSet> entity) {
+        return hzCfg0ColorSetDao.logicDeleteByBatch(entity) > 0 ? true : false;
     }
 }

@@ -1,9 +1,11 @@
 package sql.pojo.project;
 
+import com.connor.hozon.bom.bomSystem.service.project.IProject;
+
 import java.util.Calendar;
 import java.util.Date;
 
-public class HzProjectLibs {
+public class HzProjectLibs implements IProject {
     private String puid;
     /***
      * 项目名
@@ -65,11 +67,11 @@ public class HzProjectLibs {
     /**
      * 电池型号
      */
-    private String pBaterryCode;
+    private String pBatteryModel;
     /**
      * 电机型号
      */
-    private String pMotorCode;
+    private String pMotorModel;
     /**
      * 车型年代码
      */
@@ -78,6 +80,14 @@ public class HzProjectLibs {
      * 车型年
      */
     private String pModelYear;
+    /**
+     * 车身形式代码
+     */
+    private String pVehicleShapeCode;
+    /**
+     * 车身变形名称
+     */
+    private String pVehicleTranName;
 
     public String getpProjectOwningUser() {
         return pProjectOwningUser;
@@ -118,6 +128,11 @@ public class HzProjectLibs {
 
     public String getPuid() {
         return puid;
+    }
+
+    @Override
+    public String getCode() {
+        return this.pProjectCode;
     }
 
     public void setPuid(String puid) {
@@ -204,20 +219,36 @@ public class HzProjectLibs {
         this.pColorName = pColorName;
     }
 
-    public String getpBaterryCode() {
-        return pBaterryCode;
+    public String getpBatteryModel() {
+        return pBatteryModel;
     }
 
-    public void setpBaterryCode(String pBaterryCode) {
-        this.pBaterryCode = pBaterryCode;
+    public void setpBatteryModel(String pBatteryModel) {
+        this.pBatteryModel = pBatteryModel;
     }
 
-    public String getpMotorCode() {
-        return pMotorCode;
+    public String getpMotorModel() {
+        return pMotorModel;
     }
 
-    public void setpMotorCode(String pMotorCode) {
-        this.pMotorCode = pMotorCode;
+    public void setpMotorModel(String pMotorModel) {
+        this.pMotorModel = pMotorModel;
+    }
+
+    public String getpVehicleShapeCode() {
+        return pVehicleShapeCode;
+    }
+
+    public void setpVehicleShapeCode(String pVehicleShapeCode) {
+        this.pVehicleShapeCode = pVehicleShapeCode;
+    }
+
+    public String getpVehicleTranName() {
+        return pVehicleTranName;
+    }
+
+    public void setpVehicleTranName(String pVehicleTranName) {
+        this.pVehicleTranName = pVehicleTranName;
     }
 
     public String getpModelYearCode() {

@@ -1,5 +1,7 @@
 package com.connor.hozon.bom.bomSystem.service.iservice.project;
 
+import com.connor.hozon.bom.bomSystem.service.project.IProject;
+import net.sf.json.JSONObject;
 import org.springframework.context.annotation.Configuration;
 import sql.pojo.project.HzVehicleRecord;
 
@@ -60,4 +62,12 @@ public interface IHzVehicleService {
      * @return
      */
     HzVehicleRecord doGetByVehicleCode(String s);
+
+    /**
+     * 车型代号查重
+     *
+     * @param vehicle 车型对象
+     * @return
+     */
+    JSONObject doValidateCodeWithPuid(IProject vehicle);
 }

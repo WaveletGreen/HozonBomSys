@@ -75,4 +75,13 @@ public interface HzCfg0ColorSetDao {
      * @Date: 2018/5/21 17:10
      */
     int deleteByList(List<HzCfg0ColorSet> entity);
+
+    /**
+     * @param entity 传入的颜色集合
+     * @return
+     * @Author: Fancyears·Maylos·Mayways
+     * @Description: 批量逻辑删除颜色信息，设置颜色删除状态为0
+     * @Date: 2018/5/21 17:10
+     */
+    int logicDeleteByBatch(List<HzCfg0ColorSet> entity);
 }

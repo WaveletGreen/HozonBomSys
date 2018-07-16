@@ -67,6 +67,18 @@ public class HzCfg0ColorSetDaoImpl implements HzCfg0ColorSetDao {
         return baseSQLUtil.executeDelete(entity, "com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0ColorSetDao.deleteByBatch");
     }
 
+    /**
+     * @param entity 传入的颜色集合
+     * @return
+     * @Author: Fancyears·Maylos·Mayways
+     * @Description: 批量逻辑删除颜色信息，设置颜色删除状态为0
+     * @Date: 2018/5/21 17:10
+     */
+    @Override
+    public int logicDeleteByBatch(List<HzCfg0ColorSet> entity) {
+        return baseSQLUtil.executeDelete(entity, "com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0ColorSetDao.logicDeleteByBatch");
+    }
+
     @Override
     public int insertOne(HzCfg0ColorSet entity) {
         return baseSQLUtil.executeInsert(entity, "com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0ColorSetDao.insertOne");

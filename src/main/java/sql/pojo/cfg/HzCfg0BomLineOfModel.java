@@ -57,6 +57,10 @@ public class HzCfg0BomLineOfModel {
      * 归属的的模型
      */
     private String modelPuid;
+    /**
+     * 大对象
+     */
+    private byte[] lineBlock;
 
     public String getObjectName() {
         return objectName;
@@ -64,7 +68,7 @@ public class HzCfg0BomLineOfModel {
 
     public static final String[] selfDesc =
             {
-                    "pBomOfWhichDept", "pBomLineId", "pBomLineName", "pH9featureenname", "pCfg0Desc", "pCfg0ObjectId", "comment"
+                    "pBomOfWhichDept", "pBomLineId", "pBomLineName", "pH9featureenname", "owningUser","pCfg0Desc", "pCfg0ObjectId", "comment"
             };
 
     public void setObjectName(String objectName) {
@@ -174,4 +178,13 @@ public class HzCfg0BomLineOfModel {
     public void setModelPuid(String modelPuid) {
         this.modelPuid = modelPuid;
     }
+
+    public byte[] getLineBlock() {
+        return lineBlock;
+    }
+
+    public void setLineBlock(byte[] lineBlock) {
+        this.lineBlock = lineBlock;
+    }
+
 }

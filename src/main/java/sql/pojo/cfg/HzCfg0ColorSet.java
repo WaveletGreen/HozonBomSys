@@ -63,9 +63,14 @@ public class HzCfg0ColorSet {
      */
     private Date pColorModifyDate;
     /**
-     * 可用状态
+     * 可用状态,1可用，0不可用
      */
     private Integer pColorStatus;
+
+    /**
+     * 是否删除,0删除，1现存
+     */
+    private Integer pColorIsDeleted;
 
     public String getPuid() {
         return puid;
@@ -186,5 +191,13 @@ public class HzCfg0ColorSet {
 
     public void setpColorStatus(Integer pColorStatus) {
         this.pColorStatus = pColorStatus;
+    }
+
+    public Integer getpColorIsDeleted() {
+        return pColorIsDeleted;
+    }
+
+    public void setpColorIsDeleted(Integer pColorIsDeleted) {
+        this.pColorIsDeleted = pColorIsDeleted;
     }
 }

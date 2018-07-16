@@ -24,6 +24,8 @@ import sql.pojo.project.HzVehicleRecord;
 
 import java.util.*;
 
+import static com.connor.hozon.bom.bomSystem.helper.StringHelper.checkString;
+
 /**
  * <strong>Author: Fancyears·Maylos·Mayways</strong>
  * <p>
@@ -311,7 +313,7 @@ public class HzProjectLibsController {
             project.setpProjectLastModifier(user.getUsername());
             //设置失效年份为9999年12月31日23时59分59秒
             Calendar calendar = Calendar.getInstance();
-            calendar.set(9998, 12, 31, 23, 59, 59);
+            calendar.set(9999, 11, 31, 23, 59, 59);
             project.setpProjectDiscontinuationDate(calendar.getTime());
             if (hzProjectLibsService.doInsertOne(project)) {
                 result.put("status", 1);
@@ -552,6 +554,55 @@ public class HzProjectLibsController {
                 return false;
         }
     }
+    //////////////////////////////////////////////////验证编号重复性/////////////////////////////////////////////////////////
+    /**
+     * 项目编号查重
+     *
+     * @param project 项目对象
+     * @return
+     */
+    @RequestMapping(value = "/validateProjectCodeWithPuid", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public JSONObject validateProjectCodeWithPuid(HzProjectLibs project) {
+        return hzProjectLibsService.doValidateCodeWithPuid(project);
+    }
+
+    /**
+     * 车型代号查重
+     *
+     * @param vehicle 车型对象
+     * @return
+     */
+    @RequestMapping(value = "/validateVehicleCodeWithPuid", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public JSONObject validateVehicleCodeWithPuid(HzVehicleRecord vehicle) {
+        return hzVehicleService.doValidateCodeWithPuid(vehicle);
+    }
+
+    /**
+     * 查重平台编号
+     *
+     * @param platform 平台对象
+     * @return
+     */
+    @RequestMapping(value = "/validatePlatformCodeWithPuid", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public JSONObject validatePlatformCodeWithPuid(HzPlatformRecord platform) {
+        return hzPlatformService.doValidateCodeWithPuid(platform);
+    }
+
+    /**
+     * 查重品牌编号
+     *
+     * @param brand 品牌对象
+     * @return
+     */
+    @RequestMapping(value = "/validateBrandCodeWithPuid", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public JSONObject validateBrandCodeWithPuid(HzBrandRecord brand) {
+        return hzBrandService.doValidateCodeWithPuid(brand);
+    }
+    //////////////////////////////////////////////////验证编号重复性/////////////////////////////////////////////////////////
 
 
 }
