@@ -168,8 +168,8 @@ public class HzAccessoriesController  extends BaseController {
      * @return
      */
     @RequestMapping(value = "addAccessories", method = RequestMethod.GET)
-    public String addMBomToPage(String puid ,Model model) {
-        return"bomManage/mbom/mbomMaintenance/addMbomMaintenance";
+    public String addMBomToPage() {
+        return"bomManage/pbom/processAids/addProcessAids";
     }
 
     /**
@@ -184,6 +184,6 @@ public class HzAccessoriesController  extends BaseController {
             return "";
         }
         model.addAttribute("data",libs.get(0));
-        return"bomManage/mbom/mbomMaintenance/addMbomMaintenance";
+        return"bomManage/pbom/processAids/updateProcessAids";
     }
 }
