@@ -4,11 +4,290 @@
 <body>
 <form id="ebomMainForm" role="form" method="post" action="ebom/update/ebom">
     <input id="puid" name="puid" type="hidden" th:value="${puid}"/>
-    <div class="form-group" th:each="_data,c:${data.get(0)}">
+    <div class="form-group">
+        <label for="level">层级</label>
+        <input class="form-control" id="level" name="level" type="text"
+               placeholder="请输入层级"/>
+    </div>
+    <div class="form-group">
+        <label for="pBomOfWhichDept">专业</label>
+        <input class="form-control" id="pBomOfWhichDept" name="pBomOfWhichDept" type="text"
+
+               placeholder="请输入专业"/>
+    </div>
+    <div class="form-group">
+        <label for="rank">级别</label>
+        <input class="form-control" id="rank" name="rank" type="text"
+
+               placeholder="请输入级别"/>
+    </div>
+    <div class="form-group">
+        <label for="groupNum">分组号</label>
+        <input class="form-control" id="groupNum" name="groupNum" type="text"
+
+               placeholder="请输入分组号"/>
+    </div>
+    <div class="form-group">
+        <label for="item_id">零件号</label>
+        <input class="form-control" id="item_id" name="item_id" type="text"
+
+               placeholder="请输入零件号"/>
+    </div>
+    <div class="form-group">
+        <label for="object_name">名称</label>
+        <input class="form-control" id="object_name" name="object_name" type="text"
+
+               placeholder="请输入名称"/>
+    </div>
+    <div class="form-group">
+        <label for="h9_Dimension">英文名称</label>
+        <input class="form-control" id="h9_Dimension" name="h9_Dimension" type="text"
+
+               placeholder="请输入英文名称"/>
+    </div>
+    <div class="form-group">
+        <label for="h9_Gross_Unit">单位</label>
+        <select class="form-control" name="h9_Gross_Unit" id="h9_Gross_Unit" placeholder="请选择单位">
+            <option>EA</option> <!--th:selected="${data.getResource()=='MAKE'?true:false}"-->
+            <option>Kg</option>
+            <option>L</option>
+            <option>mm</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="h9_Drawingno">图号</label>
+        <input class="form-control" id="h9_Drawingno" name="h9_Drawingno" type="text"
+
+               placeholder="请输入图号"/>
+    </div>
+    <div class="form-group">
+        <label for="h9_Draw_size">图幅</label>
+        <select class="form-control" name="h9_Draw_size" id="h9_Draw_size" placeholder="请选择图幅">
+            <option>A0+</option> <!--th:selected="${data.getResource()=='MAKE'?true:false}"-->
+            <option>A0</option>
+            <option>A1</option>
+            <option>A2</option>
+            <option>A3</option>
+            <option>A4</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="h9_Thickness">料厚</label>
+        <input class="form-control" id="h9_Thickness" name="h9_Thickness" type="text"
+
+               placeholder="请输入料厚"/>
+    </div>
+    <div class="form-group">
+        <label for="h9_Repalced">材料1</label>
+        <input class="form-control" id="h9_Repalced" name="h9_Repalced" type="text"
+
+               placeholder="请输入材料1"/>
+    </div>
+    <div class="form-group">
+        <label for="h9_Gross">材料2</label>
+        <input class="form-control" id="h9_Gross" name="h9_Gross" type="text"
+
+               placeholder="请输入材料2"/>
+    </div>
+    <div class="form-group">
+        <label for="h9_Configure">材料3</label>
+        <input class="form-control" id="h9_Configure" name="h9_Configure" type="text"
+
+               placeholder="请输入材料3"/>
+    </div>
+    <div class="form-group">
+        <label for="h9_Density">密度</label>
+        <input class="form-control" id="h9_Density" name="h9_Density" type="text"
+
+               placeholder="请输入密度"/>
+    </div>
+    <div class="form-group">
+        <label for="h9_MatType">材料标准/材料牌号</label>
+        <input class="form-control" id="h9_MatType" name="h9_MatType" type="text"
+
+               placeholder="请输入材料标准/材料牌号"/>
+    </div>
+    <div class="form-group">
+        <label for="h9_Surface_treatment">表面处理</label>
+        <input class="form-control" id="h9_Surface_treatment" name="h9_Surface_treatment" type="text"
+
+               placeholder="请输入表面处理"/>
+    </div>
+    <div class="form-group">
+        <label for="h9_Model_numberPaint_colour">纹理编号彩编号</label>
+        <input class="form-control" id="h9_Model_numberPaint_colour" name="h9_Model_numberPaint_colour" type="text"
+
+               placeholder="请输入纹理编号彩编号"/>
+    </div>
+    <div class="form-group">
+        <label for="h9_Manufacture_method">制造工艺</label>
+        <input class="form-control" id="h9_Manufacture_method" name="h9_Manufacture_method" type="text"
+
+               placeholder="请输入制造工艺"/>
+    </div>
+    <div class="form-group">
+        <label for="h9_Symmetrical_Part">对称</label>
+        <select class="form-control" name="h9_Symmetrical_Part" id="h9_Symmetrical_Part" placeholder="请选择对称">
+            <option>左件</option> <!--th:selected="${data.getResource()=='MAKE'?true:false}"-->
+            <option>右件</option>
+            <option>通用</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="h9_I_Part">重要度</label>
+        <select class="form-control" name="h9_I_Part" id="h9_I_Part" placeholder="请选择重要度">
+            <option>D</option> <!--th:selected="${data.getResource()=='MAKE'?true:false}"-->
+            <option>P</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="h9_S_Part">是否法规件</label>
+        <select class="form-control" name="h9_S_Part" id="h9_S_Part" placeholder="请选择是否法规件">
+            <option>Y</option> <!--th:selected="${data.getResource()=='MAKE'?true:false}"-->
+            <option>N</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="3cPartFlag">是否3C件</label>
+        <select class="form-control" name="3cPartFlag" id="3cPartFlag" placeholder="请选择是否3C件">
+            <option>Y</option> <!--th:selected="${data.getResource()=='MAKE'?true:false}"-->
+            <option>N</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="h9_Legal_Part">法规件型号</label>
+        <input class="form-control" id="h9_Legal_Part" name="h9_Legal_Part" type="text"
+
+               placeholder="请输入法规件型号"/>
+    </div>
+    <div class="form-group">
+        <label for="h9_SupplyType">黑白灰匣子件</label>
+        <select class="form-control" name="h9_SupplyType" id="h9_SupplyType" placeholder="请选择黑白灰匣子件">
+            <option>B</option> <!--th:selected="${data.getResource()=='MAKE'?true:false}"-->
+            <option>W</option>
+            <option>G</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="h9_DevelopType">开发类型</label>
+        <input class="form-control" id="h9_DevelopType" name="h9_DevelopType" type="text"
+
+               placeholder="请输入开发类型"/>
+    </div>
+    <div class="form-group">
+        <label for="item_revision_id">数据版本</label>
+        <input class="form-control" id="item_revision_id" name="item_revision_id" type="text"
+
+               placeholder="请输入数据版本"/>
+    </div>
+    <div class="form-group">
+        <label for="h9_Target_Weight">目标重量(kg)</label>
+        <input class="form-control" id="h9_Target_Weight" name="h9_Target_Weight" type="text"
+
+               placeholder="请输入目标重量(kg)"/>
+    </div>
+    <div class="form-group">
+        <label for="h9_Estimate_Weight">预估重量(kg)</label>
+        <input class="form-control" id="h9_Estimate_Weight" name="h9_Estimate_Weight" type="text"
+
+               placeholder="请输入预估重量(kg)"/>
+    </div>
+    <div class="form-group">
+        <label for="h9_Actual_Weight">实际重量(kg)</label>
+        <input class="form-control" id="h9_Actual_Weight" name="h9_Actual_Weight" type="text"
+
+               placeholder="请输入实际重量(kg)"/>
+    </div>
+    <div class="form-group">
+        <label for="fastener">紧固件</label>
+        <select class="form-control" name="fastener" id="fastener" placeholder="请选择紧固件">
+            <option>标准件</option> <!--th:selected="${data.getResource()=='MAKE'?true:false}"-->
+            <option>非标件</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="h9_Specification">紧固件规格</label>
+        <input class="form-control" id="h9_Specification" name="h9_Specification" type="text"
+
+               placeholder="请输入紧固件规格"/>
+    </div>
+    <div class="form-group">
+        <label for="h9_PerformanceLevel">紧固件性能等级</label>
+        <input class="form-control" id="h9_PerformanceLevel" name="h9_PerformanceLevel" type="text"
+
+               placeholder="请输入紧固件性能等级"/>
+    </div>
+    <div class="form-group">
+        <label for="h9_Torque">扭矩</label>
+        <input class="form-control" id="h9_Torque" name="h9_Torque" type="text"
+
+               placeholder="请输入扭矩"/>
+    </div>
+    <div class="form-group">
+        <label for="owning_user">责任工程师</label>
+        <input class="form-control" id="owning_user" name="owning_user" type="text"
+
+               placeholder="请输入责任工程师"/>
+    </div>
+    <div class="form-group">
+        <label for="h9_SupplyInfor">供应商</label>
+        <input class="form-control" id="h9_SupplyInfor" name="h9_SupplyInfor" type="text"
+
+               placeholder="请输入供应商"/>
+    </div>
+    <div class="form-group">
+        <label for="h9_Memo">备注</label>
+        <input class="form-control" id="h9_Memo" name="h9_Memo" type="text"
+
+               placeholder="请输入备注"/>
+    </div>
+    <div class="form-group">
+        <label for="h9_IsCommon">零件分类</label>
+        <select class="form-control" name="h9_IsCommon" id="h9_IsCommon" placeholder="请选择零件分类">
+            <option>自制</option> <!--th:selected="${data.getResource()=='MAKE'?true:false}"-->
+            <option>外协</option>
+            <option>虚拟总成</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="H9_Mat_Status">零部件来源</label>
+        <select class="form-control" name="H9_Mat_Status" id="H9_Mat_Status" placeholder="请选择零件来源">
+            <option>采购件</option>
+            <option>采购拆分单件</option>
+            <option>采购拆分总成件</option>
+            <option>采购拆分标准件</option>
+            <option>采购拆分非标件</option>
+            <option>自制总成</option>
+            <option>自制单件</option>
+            <option>自用标准件</option>
+            <option>自用非标件</option>
+            <option>虚拟总成</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="inOutSideFlag">内外饰标识</label>
+        <select class="form-control" name="inOutSideFlag" id="inOutSideFlag" placeholder="请选择内外饰标识">
+            <option>内饰件</option>
+            <option>外饰件</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="upc">UPC</label>
+        <input class="form-control" id="upc" name="upc" type="text" placeholder="请输入FNA"/>
+    </div>
+    <div class="form-group">
+        <label for="fna">FNA</label>
+        <input class="form-control" id="fna" name="fna" type="text" placeholder="请输入FNA"/>
+    </div>
+    <div class="form-group">
+        <label for="fnaDesc  ">FNA描述</label>
+        <input class="form-control" id="fnaDesc  " name="fnaDesc  " type="text" placeholder="请输入FNA描述"/>
+    </div>
+    <!--<div class="form-group" th:each="_data,c:${data.get(0)}">
         <label class="control-label" th:text="${_data}"></label>
         <input class="form-control" th:id="${data.get(1)[c.index]}" th:name="${data.get(1)[c.index]}" type="text"
-         th:value="${data.get(2)[c.index]}"      th:placeholder="${'请输入'+_data}"/><!--th:value="${entity.level}"-->
-    </div>
+         th:value="${data.get(2)[c.index]}"      th:placeholder="${'请输入'+_data}"/>&lt;!&ndash;th:value="${entity.level}"&ndash;&gt;
+    </div>-->
 </form>
 <script th:inline="javascript">
     <![CDATA[
@@ -22,10 +301,18 @@
             },
             fields: {
                 item_id: {
-                    message: '零组件验证失败',
+                    message: '零件号验证失败',
                     validators: {
                         notEmpty: {
-                            message: '零组件不能为空'
+                            message: '零件号不能为空'
+                        }
+                    }
+                },
+                object_name: {
+                    message: '名称验证失败',
+                    validators: {
+                        notEmpty: {
+                            message: '名称不能为空'
                         }
                     }
                 },
@@ -37,40 +324,65 @@
             bootstrapValidator.validate();
             if (bootstrapValidator.isValid()) {
                 var url = $("#ebomMainForm", window.top.document).attr('action');
-                var projectPuid = $("#project", window.top.document).val();
-                var puid = $("#puid").val();
-                // alert(puid);
-                /*var myData = JSON.stringify({
-                    "pBomPuid": $("#pBomPuid").val(),
+                var myData =JSON.stringify({
+                    "puid":$("#puid").val(),
                     "level": $("#level").val(),
                     "pBomOfWhichDept": $("#pBomOfWhichDept").val(),
-                    "lineId": $("#lineId").val(),
-                    "bomDigifaxId": $("#bomDigifaxId").val(),
-                    "sparePart": $("#sparePart").val(),
-                    "sparePartNum": $("#sparePartNum").val(),
-                    "processRoute": $("#processRoute").val(),
-                    "laborHour": $("#laborHour").val(),
-                    "rhythm": $("#rhythm").val(),
-                    "solderJoint": $("#solderJoint").val(),
-                    "machineMaterial": $("#machineMaterial").val(),
-                    "standardPart": $("#standardPart").val(),
-                    "tools": $("#tools").val(),
-                    "wasterProduct": $("#wasterProduct").val(),
-                    "change": $("#change").val(),
-                    "changeNum": $("#changeNum").val()
-                });*/
-                var data = {};
-                var _d = $("#ebomMainForm").serializeArray();
-                for (var p in _d) {
-                    data[_d[p].name] = _d[p].value;
-                }
+                    "rank": $("#rank").val(),
+                    "groupNum": $("#groupNum").val(),
+                    "item_id": $("#item_id").val(),
+                    "object_name": $("#object_name").val(),
+                    "h9_Dimension": $("#h9_Dimension").val(),
+                    "h9_Gross_Unit": $("#h9_Gross_Unit").val(),
+                    "h9_Drawingno": $("#h9_Drawingno").val(),
+                    "h9_Draw_size": $("#h9_Draw_size").val(),
+                    "h9_Thickness": $("#h9_Thickness").val(),
+                    "h9_Repalced": $("#h9_Repalced").val(),
+                    "h9_Gross": $("#h9_Gross").val(),
+                    "h9_Configure": $("#h9_Configure").val(),
+                    "h9_Density": $("#h9_Density").val(),
+                    "h9_MatType": $("#h9_MatType").val(),
+                    "h9_Surface_treatment": $("#h9_Surface_treatment").val(),
+                    "h9_Model_numberPaint_colour": $("#h9_Model_numberPaint_colour").val(),
+                    "h9_Manufacture_method": $("#h9_Manufacture_method").val(),
+                    "h9_Symmetrical_Part": $("#h9_Symmetrical_Part").val(),
+                    "h9_I_Part": $("#h9_I_Part").val(),
+                    "h9_S_Part": $("#h9_S_Part").val(),
+                    "3cPartFlag": $("#3cPartFlag").val(),
+                    "h9_Legal_Part": $("#h9_Legal_Part").val(),
+                    "h9_SupplyType": $("#h9_SupplyType").val(),
+                    "h9_DevelopType": $("#h9_DevelopType").val(),
+                    "item_revision_id": $("#item_revision_id").val(),
+                    "h9_Target_Weight": $("#h9_Target_Weight").val(),
+                    "h9_Estimate_Weight": $("#h9_Estimate_Weight").val(),
+                    "h9_Actual_Weight": $("#h9_Actual_Weight").val(),
+                    "fastener": $("#fastener").val(),
+                    "h9_Specification": $("#h9_Specification").val(),
+                    "h9_PerformanceLevel": $("#h9_PerformanceLevel").val(),
+                    "h9_Torque": $("#h9_Torque").val(),
+                    "owning_user": $("#owning_user").val(),
+                    "h9_SupplyInfor": $("#h9_SupplyInfor").val(),
+                    "h9_Memo": $("#h9_Memo").val(),
+                    "h9_IsCommon": $("#h9_IsCommon").val(),
+                    "H9_Mat_Status": $("#H9_Mat_Status").val(),
+                    "inOutSideFlag": $("#inOutSideFlag").val(),
+                    "upc": $("#upc").val(),
+                    "fna": $("#fna").val(),
+                    "fnaDesc": $("#fnaDesc").val(),
+                    "projectPuid":$("#project", window.top.document).val(),
+                });
+                // var data = {};
+                // var _d = $("#ebomMainForm").serializeArray();
+                // for (var p in _d) {
+                //     data[_d[p].name] = _d[p].value;
+                // }
                 $.ajax({
                     contentType:
                         "application/json",
                     type:
                         'POST',
-                    url: url+"?projectId="+projectPuid,
-                    data: JSON.stringify(data),
+                    url: url,
+                    data: myData,
                     success:
                         function (result) {
                             $('.modal-dialog', window.top.document).parent('div').remove()
