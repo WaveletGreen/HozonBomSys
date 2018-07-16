@@ -187,6 +187,9 @@ public class HzEbomController extends BaseController {
         JSONArray array1 = recordRespDTO.getJsonArray();
         JSONObject object = array1.getJSONObject(0);
         recordRespDTO.setPuid(puid);
+        recordRespDTO.setpBomOfWhichDept(object.getString("pBomOfWhichDept"));
+        recordRespDTO.setRank(object.getString("rank"));
+        recordRespDTO.setGroupNum(object.getString("groupNum"));
         recordRespDTO.setFna(object.getString("fna"));
         recordRespDTO.setLevel(object.getString("level"));
         recordRespDTO.setP3cPartFlag(object.getString("p3cPartFlag"));

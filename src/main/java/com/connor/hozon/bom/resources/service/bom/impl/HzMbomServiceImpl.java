@@ -143,8 +143,9 @@ public class HzMbomServiceImpl implements HzMbomService {
             Map<String,Object> map = new HashMap<>();
             map.put("projectId",projectId);
             map.put("pPuid",puid);
-            HzMbomLineRecord record = hzMbomRecordDAO.findHzMbomByPuid(map);
-            if(record != null){
+            List<HzMbomLineRecord> records = hzMbomRecordDAO.findHzMbomByPuid(map);
+            if( ListUtil.isNotEmpty(records)){
+                HzMbomLineRecord record = records.get(0);
                 HzMbomRecordRespDTO respDTO = new HzMbomRecordRespDTO();
                 respDTO.setPuid(record.getPuid());
                 respDTO.seteBomPuid(record.geteBomPuid());
@@ -220,8 +221,8 @@ public class HzMbomServiceImpl implements HzMbomService {
             Map<String,Object> map = new HashMap<>();
             map.put("pPuid",reqDTO.geteBomPuid());
             map.put("projectId",reqDTO.getProjectId());
-            HzMbomLineRecord lineRecord = hzMbomRecordDAO.findHzMbomByPuid(map);
-            if(lineRecord!=null){
+            List<HzMbomLineRecord> lineRecords = hzMbomRecordDAO.findHzMbomByPuid(map);
+            if(ListUtil.isNotEmpty(lineRecords)){
                 int i = hzMbomRecordDAO.update(hzMbomRecord);
                 if(i>0){
                     return  OperateResultMessageRespDTO.getSuccessResult();
@@ -514,41 +515,41 @@ public class HzMbomServiceImpl implements HzMbomService {
             Map<String,Object> map = new HashMap<>();
             map.put("projectId",projectId);
             map.put("pPuid",puid);
-            HzMbomLineRecord record = hzMbomRecordDAO.findHzMbomByPuid(map);
-            if(record!=null){
+            List<HzMbomLineRecord> records = hzMbomRecordDAO.findHzMbomByPuid(map);
+            if(ListUtil.isNotEmpty(records)){
                 respDTO.setErrMsg("当前要恢复对象已存在bom系统中！");
                 respDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
                 return  respDTO;
             }
             map.put("status",0);//已删除的bom
-            record =hzMbomRecordDAO.findHzMbomByPuid(map);
-            if(record !=null){
-                if(record.getLineIndex().split(",").length == 2){
+            records =hzMbomRecordDAO.findHzMbomByPuid(map);
+            if(ListUtil.isNotEmpty(records)){
+                if(records.get(0).getLineIndex().split("\\.").length == 2){
                     respDTO.setErrMsg("2Y层结构无法恢复！");
                     respDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
                     return  respDTO;
                 }
                 Map<String,Object> map1 = new HashMap<>();
                 map1.put("projectId",projectId);
-                map1.put("pPuid",record.getParentUid());
-                HzMbomLineRecord mbomLineRecord = hzMbomRecordDAO.findHzMbomByPuid(map1);
-                if(mbomLineRecord == null){
+                map1.put("pPuid",records.get(0).getParentUid());
+                List<HzMbomLineRecord> mbomLineRecords = hzMbomRecordDAO.findHzMbomByPuid(map1);
+                if(ListUtil.isEmpty(mbomLineRecords)){
                     respDTO.setErrMsg("当前要恢复对象的父结构不存在，无法恢复！");
                     respDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
                     return  respDTO;
                 }else{
-                    if(mbomLineRecord.getIsHas().equals(0)){
-                        mbomLineRecord.setIsHas(1);
-                        mbomLineRecord.setIsPart(0);
-                        if(mbomLineRecord.getLineIndex().split("\\.").length == 2 && mbomLineRecord.getIs2Y().equals(0)){
-                            mbomLineRecord.setIs2Y(1);
+                    if(mbomLineRecords.get(0).getIsHas().equals(0)){
+                        mbomLineRecords.get(0).setIsHas(1);
+                        mbomLineRecords.get(0).setIsPart(0);
+                        if(mbomLineRecords.get(0).getLineIndex().split("\\.").length == 2 && mbomLineRecords.get(0).getIs2Y().equals(0)){
+                            mbomLineRecords.get(0).setIs2Y(1);
                         }
-                        int i = hzMbomRecordDAO.update(mbomLineRecord);
+                        int i = hzMbomRecordDAO.update(mbomLineRecords.get(0));
                         if(i<=0){
                             return OperateResultMessageRespDTO.getFailResult();
                         }
                     }
-                    int i =hzMbomRecordDAO.recoverBomById(record.geteBomPuid());
+                    int i =hzMbomRecordDAO.recoverBomById(records.get(0).geteBomPuid());
                     if(i>0){
                         return OperateResultMessageRespDTO.getSuccessResult();
                     }
