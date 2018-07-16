@@ -234,14 +234,14 @@ public class SynBomService implements ISynBomService {
 
 
         for (String key : mapOfPackNo.keySet()) {
-            int index = 0;
+            int index = 1;
             coach.clear();
             for (String k : mapOfPackNo.get(key).keySet()) {
-                mapOfPackNo.get(key).get(k).getZpptci005().setPITEM(String.valueOf(index));
-                mapOfPackNo.get(key).get(k).getZpptci005().setPSORTF(String.valueOf(index));
+//                mapOfPackNo.get(key).get(k).getZpptci005().setPITEM(String.valueOf(index));
+//                mapOfPackNo.get(key).get(k).getZpptci005().setPSORTF(String.valueOf(index));
                 transBomService.getInput().getItem().add(mapOfPackNo.get(key).get(k).getZpptci005());
-                coach.put(String.valueOf(index), mapOfPackNo.get(key).get(k));
-                index++;
+                coach.put(String.valueOf(mapOfPackNo.get(key).get(k).getZpptci005().getPSORTF()), mapOfPackNo.get(key).get(k));
+//                index++;
             }
             transBomService.execute();
             /**

@@ -69,6 +69,10 @@ public class HzMBomToERPBean {
      * 真实顺序序号
      */
     private String lineIndex;
+    /**
+     * 是否已发送到SAP
+     */
+    private Integer isSended;
 
     public String getPuid() {
         return puid;
@@ -204,5 +208,13 @@ public class HzMBomToERPBean {
 
     public void setLineIndex(String lineIndex) {
         this.lineIndex = lineIndex;
+    }
+
+    public Integer getIsSended() {
+        return isSended;
+    }
+
+    public void setIsSended(Integer isSended) {
+        this.isSended = isSended;
     }
 }

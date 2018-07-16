@@ -190,7 +190,13 @@ public class SynMaterielService implements ISynMaterielService {
             //已经发送过了，设置为更新
             if (record.getSendSapFlag() != null && record.getSendSapFlag() == 1) {
                 //更新操作或删除操作
-                reflectMateriel.setActionFlagOption(option);
+                if (option == ActionFlagOption.DELETE || option == ActionFlagOption.UPDATE_EMPTY) {
+                    reflectMateriel.setActionFlagOption(option);
+                }
+                //默认执行更新操作
+                else {
+                    reflectMateriel.setActionFlagOption(ActionFlagOption.UPDATE_EMPTY);
+                }
             }
             //没有发送过，执行新增操作
             else {
