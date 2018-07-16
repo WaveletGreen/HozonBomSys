@@ -68,6 +68,13 @@ public class HzPbomController extends BaseController {
     @RequestMapping(value = "getBomManage", method = RequestMethod.GET)
     @ResponseBody
     public Map<String, Object> getPbomLineRecord(HzPbomByPageQuery query) {
+        HzPbomByPageQuery ebomByPageQuery = query;
+        ebomByPageQuery.setPageSize(0);
+        try{
+            ebomByPageQuery.setPageSize(Integer.valueOf(query.getLimit()));
+        }catch (Exception e){
+
+        }
         Page<HzPbomLineRespDTO> respDTOPage = hzPbomService.getHzPbomRecordPage(query);
         List<HzPbomLineRespDTO> respDTOS = respDTOPage.getResult();
         if(respDTOS == null){

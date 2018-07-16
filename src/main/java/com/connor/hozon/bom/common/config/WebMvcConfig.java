@@ -88,7 +88,8 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         registry.addViewController("/halfRouting").setViewName("/bomManage/mbom/halfRouting/halfRouting");
         //MBOM的工艺路线页面
         registry.addViewController("/routingData").setViewName("/bomManage/mbom/routingData/routingData");
-
+        //MBOM的工艺路线页面
+        registry.addViewController("/recycleBin").setViewName("/bomManage/recycleBin/recycleBin");
 
 
         //变更管理VWO表单

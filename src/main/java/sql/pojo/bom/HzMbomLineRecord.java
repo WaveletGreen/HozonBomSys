@@ -210,158 +210,6 @@ public class HzMbomLineRecord {
      */
     private String pFactoryId;
 
-    public Integer getpBomType() {
-        return pBomType;
-    }
-
-    public void setpBomType(Integer pBomType) {
-        this.pBomType = pBomType;
-    }
-
-    public String getpStockLocation() {
-        return pStockLocation;
-    }
-
-    public void setpStockLocation(String pStockLocation) {
-        this.pStockLocation = pStockLocation;
-    }
-
-    public String getpFactoryId() {
-        return pFactoryId;
-    }
-
-    public void setpFactoryId(String pFactoryId) {
-        this.pFactoryId = pFactoryId;
-    }
-
-    public String getpBomLinePartResource() {
-        return pBomLinePartResource;
-    }
-
-    public void setpBomLinePartResource(String pBomLinePartResource) {
-        this.pBomLinePartResource = pBomLinePartResource;
-    }
-
-    public String getResource() {
-        return resource;
-    }
-
-    public void setResource(String resource) {
-        this.resource = resource;
-    }
-
-    public String getpBomLinePartEnName() {
-        return pBomLinePartEnName;
-    }
-
-    public void setpBomLinePartEnName(String pBomLinePartEnName) {
-        this.pBomLinePartEnName = pBomLinePartEnName;
-    }
-
-    public String getCfg0ModelRecordId() {
-        return cfg0ModelRecordId;
-    }
-
-    public void setCfg0ModelRecordId(String cfg0ModelRecordId) {
-        this.cfg0ModelRecordId = cfg0ModelRecordId;
-    }
-
-    public String getCfg0Desc() {
-        return cfg0Desc;
-    }
-
-    public void setCfg0Desc(String cfg0Desc) {
-        this.cfg0Desc = cfg0Desc;
-    }
-
-    public String getCfg0FamilyName() {
-        return cfg0FamilyName;
-    }
-
-    public void setCfg0FamilyName(String cfg0FamilyName) {
-        this.cfg0FamilyName = cfg0FamilyName;
-    }
-
-    public String getCfg0FamilyDesc() {
-        return cfg0FamilyDesc;
-    }
-
-    public void setCfg0FamilyDesc(String cfg0FamilyDesc) {
-        this.cfg0FamilyDesc = cfg0FamilyDesc;
-    }
-
-    public String getObjectName() {
-        return objectName;
-    }
-
-    public void setObjectName(String objectName) {
-        this.objectName = objectName;
-    }
-
-    public String getObjectDesc() {
-        return objectDesc;
-    }
-
-    public void setObjectDesc(String objectDesc) {
-        this.objectDesc = objectDesc;
-    }
-
-    public String getCfg0ModelBasicDetail() {
-        return cfg0ModelBasicDetail;
-    }
-
-    public void setCfg0ModelBasicDetail(String cfg0ModelBasicDetail) {
-        this.cfg0ModelBasicDetail = cfg0ModelBasicDetail;
-    }
-
-    public String geteBomPuid() {
-        return eBomPuid;
-    }
-
-    public void seteBomPuid(String eBomPuid) {
-        this.eBomPuid = eBomPuid;
-    }
-
-    public Integer getStatus() {
-        return status;
-    }
-
-    public void setStatus(Integer status) {
-        this.status = status;
-    }
-
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
-    }
-
-    public String getCreateName() {
-        return createName;
-    }
-
-    public void setCreateName(String createName) {
-        this.createName = createName;
-    }
-
-    public String getUpdateName() {
-        return updateName;
-    }
-
-    public void setUpdateName(String updateName) {
-        this.updateName = updateName;
-    }
-
     public String getPuid() {
         return puid;
     }
@@ -376,6 +224,14 @@ public class HzMbomLineRecord {
 
     public void setParentUid(String parentUid) {
         this.parentUid = parentUid;
+    }
+
+    public Integer getIsDept() {
+        return isDept;
+    }
+
+    public void setIsDept(Integer isDept) {
+        this.isDept = isDept;
     }
 
     public String getBomDigifaxId() {
@@ -414,7 +270,7 @@ public class HzMbomLineRecord {
         return isHas;
     }
 
-    public void setIsHas(int isHas) {
+    public void setIsHas(Integer isHas) {
         this.isHas = isHas;
     }
 
@@ -430,19 +286,23 @@ public class HzMbomLineRecord {
         return is2Y;
     }
 
-    public int getIsPart() {
+    public void setIs2Y(Integer is2Y) {
+        this.is2Y = is2Y;
+    }
+
+    public Integer getIsPart() {
         return isPart;
     }
 
-    public void setIsPart(int isPart) {
+    public void setIsPart(Integer isPart) {
         this.isPart = isPart;
     }
 
-    public int getOrderNum() {
+    public Integer getOrderNum() {
         return orderNum;
     }
 
-    public void setOrderNum(int orderNum) {
+    public void setOrderNum(Integer orderNum) {
         this.orderNum = orderNum;
     }
 
@@ -454,12 +314,60 @@ public class HzMbomLineRecord {
         this.pBomOfWhichDept = pBomOfWhichDept;
     }
 
+    public String getProjectPuid() {
+        return projectPuid;
+    }
+
+    public void setProjectPuid(String projectPuid) {
+        this.projectPuid = projectPuid;
+    }
+
+    public String getpBomLinePartName() {
+        return pBomLinePartName;
+    }
+
+    public void setpBomLinePartName(String pBomLinePartName) {
+        this.pBomLinePartName = pBomLinePartName;
+    }
+
+    public String getpBomLinePartEnName() {
+        return pBomLinePartEnName;
+    }
+
+    public void setpBomLinePartEnName(String pBomLinePartEnName) {
+        this.pBomLinePartEnName = pBomLinePartEnName;
+    }
+
+    public String getpBomLinePartClass() {
+        return pBomLinePartClass;
+    }
+
+    public void setpBomLinePartClass(String pBomLinePartClass) {
+        this.pBomLinePartClass = pBomLinePartClass;
+    }
+
+    public String getpBomLinePartResource() {
+        return pBomLinePartResource;
+    }
+
+    public void setpBomLinePartResource(String pBomLinePartResource) {
+        this.pBomLinePartResource = pBomLinePartResource;
+    }
+
     public String getpPuid() {
         return pPuid;
     }
 
     public void setpPuid(String pPuid) {
         this.pPuid = pPuid;
+    }
+
+    public String geteBomPuid() {
+        return eBomPuid;
+    }
+
+    public void seteBomPuid(String eBomPuid) {
+        this.eBomPuid = eBomPuid;
     }
 
     public String getSparePart() {
@@ -558,51 +466,131 @@ public class HzMbomLineRecord {
         this.changeNum = changeNum;
     }
 
-    public Integer getIsDept() {
-        return isDept;
+    public Integer getStatus() {
+        return status;
     }
 
-    public void setIsDept(Integer isDept) {
-        this.isDept = isDept;
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 
-    public void setIsHas(Integer isHas) {
-        this.isHas = isHas;
+    public Date getCreateTime() {
+        return createTime;
     }
 
-    public void setIs2Y(Integer is2Y) {
-        this.is2Y = is2Y;
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 
-    public void setIsPart(Integer isPart) {
-        this.isPart = isPart;
+    public Date getUpdateTime() {
+        return updateTime;
     }
 
-    public void setOrderNum(Integer orderNum) {
-        this.orderNum = orderNum;
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
     }
 
-    public String getProjectPuid() {
-        return projectPuid;
+    public String getCreateName() {
+        return createName;
     }
 
-    public void setProjectPuid(String projectPuid) {
-        this.projectPuid = projectPuid;
+    public void setCreateName(String createName) {
+        this.createName = createName;
     }
 
-    public String getpBomLinePartName() {
-        return pBomLinePartName;
+    public String getUpdateName() {
+        return updateName;
     }
 
-    public void setpBomLinePartName(String pBomLinePartName) {
-        this.pBomLinePartName = pBomLinePartName;
+    public void setUpdateName(String updateName) {
+        this.updateName = updateName;
     }
 
-    public String getpBomLinePartClass() {
-        return pBomLinePartClass;
+    public String getCfg0Desc() {
+        return cfg0Desc;
     }
 
-    public void setpBomLinePartClass(String pBomLinePartClass) {
-        this.pBomLinePartClass = pBomLinePartClass;
+    public void setCfg0Desc(String cfg0Desc) {
+        this.cfg0Desc = cfg0Desc;
+    }
+
+    public String getCfg0FamilyName() {
+        return cfg0FamilyName;
+    }
+
+    public void setCfg0FamilyName(String cfg0FamilyName) {
+        this.cfg0FamilyName = cfg0FamilyName;
+    }
+
+    public String getCfg0FamilyDesc() {
+        return cfg0FamilyDesc;
+    }
+
+    public void setCfg0FamilyDesc(String cfg0FamilyDesc) {
+        this.cfg0FamilyDesc = cfg0FamilyDesc;
+    }
+
+    public String getObjectName() {
+        return objectName;
+    }
+
+    public void setObjectName(String objectName) {
+        this.objectName = objectName;
+    }
+
+    public String getObjectDesc() {
+        return objectDesc;
+    }
+
+    public void setObjectDesc(String objectDesc) {
+        this.objectDesc = objectDesc;
+    }
+
+    public String getCfg0ModelBasicDetail() {
+        return cfg0ModelBasicDetail;
+    }
+
+    public void setCfg0ModelBasicDetail(String cfg0ModelBasicDetail) {
+        this.cfg0ModelBasicDetail = cfg0ModelBasicDetail;
+    }
+
+    public String getCfg0ModelRecordId() {
+        return cfg0ModelRecordId;
+    }
+
+    public void setCfg0ModelRecordId(String cfg0ModelRecordId) {
+        this.cfg0ModelRecordId = cfg0ModelRecordId;
+    }
+
+    public String getResource() {
+        return resource;
+    }
+
+    public void setResource(String resource) {
+        this.resource = resource;
+    }
+
+    public Integer getpBomType() {
+        return pBomType;
+    }
+
+    public void setpBomType(Integer pBomType) {
+        this.pBomType = pBomType;
+    }
+
+    public String getpStockLocation() {
+        return pStockLocation;
+    }
+
+    public void setpStockLocation(String pStockLocation) {
+        this.pStockLocation = pStockLocation;
+    }
+
+    public String getpFactoryId() {
+        return pFactoryId;
+    }
+
+    public void setpFactoryId(String pFactoryId) {
+        this.pFactoryId = pFactoryId;
     }
 }

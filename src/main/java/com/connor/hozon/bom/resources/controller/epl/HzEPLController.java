@@ -30,10 +30,17 @@ public class HzEPLController extends BaseController {
 
     @RequestMapping(value = "record/page",method = RequestMethod.GET)
     public void getHzEplRecordByPage(HzEPLByPageQuery query, HttpServletResponse response){
+        HzEPLByPageQuery ebomByPageQuery = query;
+        ebomByPageQuery.setPageSize(0);
+        try{
+            ebomByPageQuery.setPageSize(Integer.valueOf(query.getLimit()));
+        }catch (Exception e){
+
+        }
         Page<HzEPLRecordRespDTO> recordRespDTOPage = hzEPLManageRecordService.getHzEPLRecordForPage(query);
         List<HzEPLRecordRespDTO> recordRespDTOS =  recordRespDTOPage.getResult();
         if (ListUtil.isEmpty(recordRespDTOS)) {
-            writeAjaxJSONResponse(ResultMessageBuilder.build(false,"暂无数据",new Page<>(query.getPage(),query.getLimit(),0)),response);
+            writeAjaxJSONResponse(ResultMessageBuilder.build(false,"暂无数据",new Page<>(recordRespDTOPage.getPageNumber(),recordRespDTOPage.getPageSize(),0)),response);
             return;
         }
         writeAjaxJSONResponse(ResultMessageBuilder.build(recordRespDTOPage),response);
@@ -43,6 +50,13 @@ public class HzEPLController extends BaseController {
     @RequestMapping(value = "record",method = RequestMethod.GET)
     @ResponseBody
     public Map<String, Object> getHzEplRecord(HzEPLByPageQuery query){
+        HzEPLByPageQuery ebomByPageQuery = query;
+        ebomByPageQuery.setPageSize(0);
+        try{
+            ebomByPageQuery.setPageSize(Integer.valueOf(query.getLimit()));
+        }catch (Exception e){
+
+        }
         Page<HzEPLRecordRespDTO> recordRespDTOPage = hzEPLManageRecordService.getHzEPLRecordForPage(query);
         Map<String, Object> ret = new HashMap<>();
         if(recordRespDTOPage == null){

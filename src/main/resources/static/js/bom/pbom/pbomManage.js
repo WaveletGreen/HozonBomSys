@@ -27,7 +27,7 @@ function initTable(pBomUrl) {
         type: "GET",
         success: function (result) {
             var column = [];
-            column.push({field: 'eBomPuid', title: 'puid'});
+            column.push({field: 'eBomPuid', title: '主键'});
             column.push({field: 'ck', checkbox: true, Width: 50});
             // column.push({
             //     field: '',
@@ -62,15 +62,15 @@ function initTable(pBomUrl) {
                 dataType: 'json',
                 cache: false,
                 striped: true,                              //是否显示行间隔色
-                // sidePagination: "server",           //分页方式：client客户端分页，server服务端分页（*）
+                sidePagination: "server",           //分页方式：client客户端分页，server服务端分页（*）
                 height: $(window.parent.document).find("#wrapper").height() - 180,
                 width: $(window).width(),
                 formId: "queryPbomManage",
                 undefinedText: "",//当数据为 undefined 时显示的字符
                 pagination: true,
-                // pageNumber:1,                       //初始化加载第一页，默认第一页
+                pageNumber:1,                       //初始化加载第一页，默认第一页
                 pageSize: 20,                       //每页的记录行数（*）
-                // pageList: [20, 50,100,200],        //可供选择的每页的行数（*）
+                pageList: [20, 50,100,200,500,1000,'ALL'],        //可供选择的每页的行数（*）
                 uniqueId: "puid",                     //每一行的唯一标识，一般为主键列
                 showExport: true,
                 //exportDataType: 'all',
@@ -172,6 +172,9 @@ function initTable(pBomUrl) {
                 ],
             });
             $table.bootstrapTable('hideColumn', 'eBomPuid');
+            $table.bootstrapTable('hideColumn','level');
+            $table.bootstrapTable('hideColumn','groupNum');
+            $table.bootstrapTable('hideColumn','pBomLinePartEnName');
         }
     });
 }

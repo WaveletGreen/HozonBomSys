@@ -89,6 +89,13 @@ public class HzMaterielController  extends BaseController {
     @RequestMapping(value = "getMateriel", method = RequestMethod.GET)
     @ResponseBody
     public Map<String, Object> getPbomLineRecord(HzMaterielByPageQuery query) {
+        HzMaterielByPageQuery ebomByPageQuery = query;
+        ebomByPageQuery.setPageSize(0);
+        try{
+            ebomByPageQuery.setPageSize(Integer.valueOf(query.getLimit()));
+        }catch (Exception e){
+
+        }
         Page<HzMaterielRespDTO> respDTOPage = hzMaterielService.findHzMaterielForPage(query);
         List<HzMaterielRespDTO> respDTOS = respDTOPage.getResult();
         if(respDTOS == null){

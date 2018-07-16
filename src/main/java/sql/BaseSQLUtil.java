@@ -316,10 +316,10 @@ public class BaseSQLUtil implements IBaseSQLUtil {
      * @return
      */
     public Object findForObject(final String sqlMapId, final Object param) {
-//        SqlSession session = null;
+        SqlSession session = null;
         try {
-//            SqlSessionFactory f = FactoryManager.getInstance();
-//            session = f.openSession();
+            SqlSessionFactory f = FactoryManager.getInstance();
+            session = f.openSession();
             if (param != null) {
                 return session.selectOne(sqlMapId, param);
             } else {
@@ -329,8 +329,8 @@ public class BaseSQLUtil implements IBaseSQLUtil {
             logger.error("SQL执行出错: " + sqlMapId, e);
             throw new DatabaseException("SQL执行出错" + sqlMapId, e);
         } finally {
-//            if (session != null)
-//                session.close();
+            if (session != null)
+                session.close();
         }
     }
 
@@ -393,7 +393,9 @@ public class BaseSQLUtil implements IBaseSQLUtil {
         if (totalCount != null && totalCount.intValue() <= (pageRequest.getPageNumber() - 1) * pageRequest.getPageSize()) {
             return new Page(pageRequest.getPageNumber(), pageRequest.getPageSize(), totalCount.intValue(), new ArrayList(0));
         }
-
+        if(pageRequest.getPageSize() == 0){
+            pageRequest.setPageSize((int)totalCount);
+        }
         Page page = new Page(pageRequest, totalCount.intValue());
         List list = findForList(sqlMapId, filters, page.getFirstResult(), page.getPageSize());
 
@@ -419,6 +421,9 @@ public class BaseSQLUtil implements IBaseSQLUtil {
         }
         if (totalCount != null && totalCount.intValue() <= (pageRequest.getPageNumber() - 1) * pageRequest.getPageSize()) {
             return new Page(pageRequest.getPageNumber(), pageRequest.getPageSize(), totalCount.intValue(), new ArrayList(0));
+        }
+        if(pageRequest.getPageSize() == 0){
+            pageRequest.setPageSize((int)totalCount);
         }
         Page page = new Page(pageRequest, totalCount.intValue());
         filters.put("offset", (pageRequest.getPageNumber() - 1) * pageRequest.getPageSize());

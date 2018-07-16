@@ -162,12 +162,9 @@
         P_FACTORY_PUID,P_TYPE,P_MATERIEL_RESOURCE_ID,P_VALID_FLAG)
         <foreach collection="list" item="item" index="index" separator="UNION ALL">
             select
-            #{item.puid,jdbcType=VARCHAR}, #{item.pMaterielCode,jdbcType=VARCHAR},
-            #{item.pMaterielType,jdbcType=VARCHAR},
-            #{item.pMaterielDesc,jdbcType=VARCHAR}, #{item.pPertainToProjectPuid,jdbcType=VARCHAR},
-            #{item.pMaterielDescEn,jdbcType=VARCHAR},
-            #{item.pMaterielDataType,jdbcType=VARCHAR},
-            #{item.pFactoryPuid,jdbcType=VARCHAR},#{item.type,jdbcType=INTEGER},
+            #{item.puid,jdbcType=VARCHAR}, #{item.pMaterielCode,jdbcType=VARCHAR}, #{item.pMaterielType,jdbcType=VARCHAR},
+            #{item.pMaterielDesc,jdbcType=VARCHAR}, #{item.pPertainToProjectPuid,jdbcType=VARCHAR}, #{item.pMaterielDescEn,jdbcType=VARCHAR},
+            #{item.pMaterielDataType,jdbcType=VARCHAR}, #{item.pFactoryPuid,jdbcType=VARCHAR},#{item.type,jdbcType=INTEGER},
             #{item.materielResourceId,jdbcType=INTEGER},1
             from DUAL
         </foreach>
@@ -277,8 +274,7 @@
 
 
     <!--查询整车衍生物料主数据全部-->
-    <select id="HzMaterialDAOImpl_findHzCfg0ModelRecordAll" parameterType="java.util.HashMap"
-            resultMap="HzCfg0ModelRecordMap">
+    <select id="HzMaterialDAOImpl_findHzCfg0ModelRecordAll" parameterType="java.util.HashMap" resultMap="HzCfg0ModelRecordMap">
         SELECT t1.* FROM HZ_CFG0_MODEL_RECORD t1 WHERE t1.P_CFG0_MODEL_OF_MAIN_RECORD =
         (SELECT PUID FROM HZ_CFG0_MAIN_RECORD t2
         WHERE t2.P_CFG0_OF_WHICH_PROJECT_PUID=#{projectId,jdbcType=VARCHAR})
@@ -286,11 +282,9 @@
 
 
     <!--查询一条物料数据-->
-    <select id="HzMaterialDAOImpl_getHzMaterielRecord" parameterType="java.util.HashMap"
-            resultMap="HzMaterielRecordMap">
-        select
-        <include refid="HzMaterielRecordList"/>
-        from HZ_MATERIEL_RECORD
+    <select id="HzMaterialDAOImpl_getHzMaterielRecord" parameterType="java.util.HashMap" resultMap="HzMaterielRecordMap">
+      select <include refid="HzMaterielRecordList"/>
+       from HZ_MATERIEL_RECORD
         <where>
             1=1
             <if test="puid != null and puid!=''">

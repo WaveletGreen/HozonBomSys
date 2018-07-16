@@ -11,6 +11,7 @@ import com.connor.hozon.bom.resources.dto.response.HzVehicleModelRespDTO;
 import com.connor.hozon.bom.resources.dto.response.OperateResultMessageRespDTO;
 import com.connor.hozon.bom.resources.mybatis.bom.HzMbomRecordDAO;
 import com.connor.hozon.bom.resources.page.Page;
+import com.connor.hozon.bom.resources.query.HzBomRecycleByPageQuery;
 import com.connor.hozon.bom.resources.query.HzMbomByPageQuery;
 import com.connor.hozon.bom.resources.query.HzMbomTreeQuery;
 import com.connor.hozon.bom.resources.service.bom.HzMbomService;
@@ -89,9 +90,9 @@ public class HzMbomServiceImpl implements HzMbomService {
                 }
             }
             Page<HzMbomLineRecord> recordPage =hzMbomRecordDAO.findMbomForPage(query);
-            int num = (query.getPage()-1)*query.getLimit();
+            int num = (recordPage.getPageNumber()-1)*recordPage.getPageSize();
             if(recordPage == null || recordPage.getResult() == null){
-                return  new Page<>(query.getPage(),query.getLimit(),0);
+                return  new Page<>(recordPage.getPageNumber(),recordPage.getPageSize(),0);
             }
             List<HzMbomLineRecord> lineRecords = recordPage.getResult();
             List<HzMbomRecordRespDTO> respDTOList = new ArrayList<>();
@@ -129,7 +130,7 @@ public class HzMbomServiceImpl implements HzMbomService {
                 respDTO.setpStockLocation(record.getpStockLocation());
                 respDTOList.add(respDTO);
             }
-            return new Page<>(query.getPage(),query.getLimit(),recordPage.getTotalCount(),respDTOList);
+            return new Page<>(recordPage.getPageNumber(),recordPage.getPageSize(),recordPage.getTotalCount(),respDTOList);
         }catch (Exception e){
             return null;
         }
@@ -142,8 +143,9 @@ public class HzMbomServiceImpl implements HzMbomService {
             Map<String,Object> map = new HashMap<>();
             map.put("projectId",projectId);
             map.put("pPuid",puid);
-            HzMbomLineRecord record = hzMbomRecordDAO.findHzMbomByPuid(map);
-            if(record != null){
+            List<HzMbomLineRecord> records = hzMbomRecordDAO.findHzMbomByPuid(map);
+            if( ListUtil.isNotEmpty(records)){
+                HzMbomLineRecord record = records.get(0);
                 HzMbomRecordRespDTO respDTO = new HzMbomRecordRespDTO();
                 respDTO.setPuid(record.getPuid());
                 respDTO.seteBomPuid(record.geteBomPuid());
@@ -219,8 +221,8 @@ public class HzMbomServiceImpl implements HzMbomService {
             Map<String,Object> map = new HashMap<>();
             map.put("pPuid",reqDTO.geteBomPuid());
             map.put("projectId",reqDTO.getProjectId());
-            HzMbomLineRecord lineRecord = hzMbomRecordDAO.findHzMbomByPuid(map);
-            if(lineRecord!=null){
+            List<HzMbomLineRecord> lineRecords = hzMbomRecordDAO.findHzMbomByPuid(map);
+            if(ListUtil.isNotEmpty(lineRecords)){
                 int i = hzMbomRecordDAO.update(hzMbomRecord);
                 if(i>0){
                     return  OperateResultMessageRespDTO.getSuccessResult();
@@ -319,7 +321,9 @@ public class HzMbomServiceImpl implements HzMbomService {
                     deleteHzPbomReqDTO.setPuid(s);
                     list.add(deleteHzPbomReqDTO);
                 }
-                hzMbomRecordDAO.deleteList(list);//mabatis 做批量更新时 返回值为-1 所以这里根据异常情况来判断成功与否
+                if(ListUtil.isNotEmpty(list)){
+                    hzMbomRecordDAO.deleteList(list);//mabatis 做批量更新时 返回值为-1 所以这里根据异常情况来判断成功与否
+                }
             }
             return OperateResultMessageRespDTO.getSuccessResult();
         } catch (Exception e) {
@@ -345,9 +349,9 @@ public class HzMbomServiceImpl implements HzMbomService {
                 }
             }
             Page<HzMbomLineRecord> recordPage =hzMbomRecordDAO.getHzSuberMbomByPage(query);
-            int num = (query.getPage()-1)*query.getLimit();
+            int num = (recordPage.getPageNumber()-1)*recordPage.getPageSize();
             if(recordPage == null || recordPage.getResult() == null){
-                return  new Page<>(query.getPage(),query.getLimit(),0);
+                return  new Page<>(recordPage.getPageNumber(),recordPage.getPageSize(),0);
             }
             Map<String,Object> map = new HashMap<>();
             map.put("projectId",query.getProjectId());
@@ -404,7 +408,7 @@ public class HzMbomServiceImpl implements HzMbomService {
                 }
                 respDTOS.add(respDTO);
             }
-            return new Page<>(query.getPage(),query.getLimit(),recordPage.getTotalCount(),respDTOS);
+            return new Page<>(recordPage.getPageNumber(),recordPage.getPageSize(),recordPage.getTotalCount(),respDTOS);
         }catch (Exception e){
             return null;
         }
@@ -448,6 +452,113 @@ public class HzMbomServiceImpl implements HzMbomService {
     @Override
     public List<HzMbomLineRecord> getHzMbomTree(HzMbomTreeQuery query) {
         return hzMbomRecordDAO.getHzMbomTree(query);
+    }
+
+    @Override
+    public Page<HzMbomRecordRespDTO> getHzMbomRecycleByPage(HzBomRecycleByPageQuery query) {
+        try {
+
+            Page<HzMbomLineRecord> recordPage =hzMbomRecordDAO.getHzMbomRecycleRecord(query);
+            int num = (recordPage.getPageNumber()-1)*recordPage.getPageSize();
+            if(recordPage == null || recordPage.getResult() == null){
+                return  new Page<>(recordPage.getPageNumber(),recordPage.getPageSize(),0);
+            }
+            List<HzMbomLineRecord> lineRecords = recordPage.getResult();
+            List<HzMbomRecordRespDTO> respDTOList = new ArrayList<>();
+            for(HzMbomLineRecord record:lineRecords){
+                HzMbomRecordRespDTO respDTO= new HzMbomRecordRespDTO();
+                respDTO.setNo(++num);
+                respDTO.setPuid(record.getPuid());
+                respDTO.seteBomPuid(record.geteBomPuid());
+                Integer is2Y = record.getIs2Y();
+                Integer hasChildren = record.getIsHas();
+                String lineIndex = record.getLineIndex();
+                String[] strings = getLevelAndRank(lineIndex, is2Y, hasChildren);
+                respDTO.setLevel(strings[0]);//层级
+                respDTO.setLineId(record.getLineId());
+                respDTO.setpBomOfWhichDept(record.getpBomOfWhichDept());
+                respDTO.setpBomLinePartClass(record.getpBomLinePartClass());
+                respDTO.setpBomLinePartEnName(record.getpBomLinePartEnName());
+                respDTO.setpBomLinePartName(record.getpBomLinePartName());
+                respDTO.setpBomLinePartResource(record.getpBomLinePartResource());
+                respDTO.setSparePart(record.getSparePart());
+                respDTO.setSparePartNum(record.getSparePartNum());
+                respDTO.setLaborHour(record.getLaborHour());
+                respDTO.setRhythm(record.getRhythm());
+                respDTO.setSolderJoint(record.getSolderJoint());
+                respDTO.setMachineMaterial(record.getMachineMaterial());
+                respDTO.setStandardPart(record.getStandardPart());
+                respDTO.setTools(record.getTools());
+                respDTO.setWasterProduct(record.getWasterProduct());
+                respDTO.setChange(record.getChange());
+                respDTO.setChangeNum(record.getChangeNum());
+                respDTO.setpBomType(record.getpBomType());
+                respDTO.setpFactoryCode("1001");
+                respDTO.setpStockLocation(record.getpStockLocation());
+                respDTOList.add(respDTO);
+            }
+            return new Page<>(recordPage.getPageNumber(),recordPage.getPageSize(),recordPage.getTotalCount(),respDTOList);
+        }catch (Exception e){
+            return null;
+        }
+    }
+
+    @Override
+    public OperateResultMessageRespDTO RecoverDeleteMbomRecord(String projectId, String puid) {
+        OperateResultMessageRespDTO respDTO = new OperateResultMessageRespDTO();
+        try{
+            if(projectId == null || projectId == "" || puid == null || puid == ""){
+                respDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
+                respDTO.setErrMsg("非法参数");
+                return  respDTO;
+            }
+            Map<String,Object> map = new HashMap<>();
+            map.put("projectId",projectId);
+            map.put("pPuid",puid);
+            List<HzMbomLineRecord> records = hzMbomRecordDAO.findHzMbomByPuid(map);
+            if(ListUtil.isNotEmpty(records)){
+                respDTO.setErrMsg("当前要恢复对象已存在bom系统中！");
+                respDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
+                return  respDTO;
+            }
+            map.put("status",0);//已删除的bom
+            records =hzMbomRecordDAO.findHzMbomByPuid(map);
+            if(ListUtil.isNotEmpty(records)){
+                if(records.get(0).getLineIndex().split("\\.").length == 2){
+                    respDTO.setErrMsg("2Y层结构无法恢复！");
+                    respDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
+                    return  respDTO;
+                }
+                Map<String,Object> map1 = new HashMap<>();
+                map1.put("projectId",projectId);
+                map1.put("pPuid",records.get(0).getParentUid());
+                List<HzMbomLineRecord> mbomLineRecords = hzMbomRecordDAO.findHzMbomByPuid(map1);
+                if(ListUtil.isEmpty(mbomLineRecords)){
+                    respDTO.setErrMsg("当前要恢复对象的父结构不存在，无法恢复！");
+                    respDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
+                    return  respDTO;
+                }else{
+                    if(mbomLineRecords.get(0).getIsHas().equals(0)){
+                        mbomLineRecords.get(0).setIsHas(1);
+                        mbomLineRecords.get(0).setIsPart(0);
+                        if(mbomLineRecords.get(0).getLineIndex().split("\\.").length == 2 && mbomLineRecords.get(0).getIs2Y().equals(0)){
+                            mbomLineRecords.get(0).setIs2Y(1);
+                        }
+                        int i = hzMbomRecordDAO.update(mbomLineRecords.get(0));
+                        if(i<=0){
+                            return OperateResultMessageRespDTO.getFailResult();
+                        }
+                    }
+                    int i =hzMbomRecordDAO.recoverBomById(records.get(0).geteBomPuid());
+                    if(i>0){
+                        return OperateResultMessageRespDTO.getSuccessResult();
+                    }
+                }
+            }
+            return OperateResultMessageRespDTO.getFailResult();
+        }catch (Exception e){
+            return OperateResultMessageRespDTO.getFailResult();
+        }
     }
 
     private HzMbomLineRecord bomLineToMbomLine(HzBomLineRecord record){
