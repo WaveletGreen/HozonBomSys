@@ -48,9 +48,9 @@ public class HzAccessoriesController  extends BaseController {
         tableTitle.put("pSurfaceTreat", "表面处理");
         tableTitle.put("pTextureColorNum", "纹理编号/色彩编号");
         tableTitle.put("pManuProcess", "制造工艺");
-        tableTitle.put("pTargetWeight", "目标重量");
-        tableTitle.put("pFutureWeight", "预估重量");
-        tableTitle.put("pActualWeight", "实际重量");
+        tableTitle.put("pTargetWeight", "目标重量(kg)");
+        tableTitle.put("pFutureWeight", "预估重量(kg)");
+        tableTitle.put("pActualWeight", "实际重量(kg)");
         tableTitle.put("pDutyEngineer", "责任工程师");
         tableTitle.put("pSupply", "供应商");
         tableTitle.put("pSupplyCode", "供应商代码");
