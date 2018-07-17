@@ -60,20 +60,16 @@ public class HzEbomController extends BaseController {
         LinkedHashMap<String, String> tableTitle = new LinkedHashMap<>();
         tableTitle.put("No","No");
         tableTitle.put("level","层级" );
-        tableTitle.put("rank","级别" );
         tableTitle.put("pBomOfWhichDept","专业" );
+        tableTitle.put("rank","级别" );
         tableTitle.put("groupNum","分组号");
         tableTitle.put("lineId","零件号" );
-        tableTitle.put("fna","FNA");
+
         tableTitle.put("pBomLinePartName","名称" );
-        tableTitle.put("pBomLinePartClass","零件分类" );
+
         tableTitle.put("pBomLinePartEnName","英文名称");
-        tableTitle.put("pBomLinePartResource","零件来源");
-        tableTitle.put("pFastener","紧固件");
-        tableTitle.put("p3cpartFlag","是否3C件" );
-        tableTitle.put("pInOutSideFlag","内外饰标识");
-        tableTitle.put("pUpc","UPC");
-        tableTitle.put("pFnaDesc","FNA描述" );
+        tableTitle.put("pLouaFlag","LOU/LOA");
+
         tableTitle.put("pUnit","单位");
         tableTitle.put("pPictureNo","图号");
         tableTitle.put("pPictureSheet","图幅" );
@@ -89,6 +85,8 @@ public class HzEbomController extends BaseController {
         tableTitle.put("pSymmetry","对称" );
         tableTitle.put("pImportance","重要度");
         tableTitle.put("pRegulationFlag","是否法规件");
+        tableTitle.put("p3cpartFlag","是否3C件" );
+
         tableTitle.put("pRegulationCode","法规件型号");
         tableTitle.put("pBwgBoxPart","黑白灰匣子件" );
         tableTitle.put("pDevelopType","开发类别");
@@ -96,13 +94,23 @@ public class HzEbomController extends BaseController {
         tableTitle.put("pTargetWeight","目标重量(kg)");
         tableTitle.put("pFeatureWeight","预估重量(kg)");
         tableTitle.put("pActualWeight","实际重量(kg)" );
+        tableTitle.put("pFastener","紧固件");
         tableTitle.put("pFastenerStandard","紧固件规格");
         tableTitle.put("pFastenerLevel","紧固件性能等级");
         tableTitle.put("pTorque","扭矩" );
         tableTitle.put("pDutyEngineer","责任工程师");
         tableTitle.put("pSupply","供应商");
         tableTitle.put("pSupplyCode","供应商代码" );
+
+        tableTitle.put("pBuyEngineer","采购工程师");
         tableTitle.put("pRemark","备注");
+        tableTitle.put("pBomLinePartClass","零件分类" );
+        tableTitle.put("pBomLinePartResource","零件来源");
+        tableTitle.put("pInOutSideFlag","内外饰标识");
+        tableTitle.put("pUpc","UPC");
+        tableTitle.put("fna","FNA");
+        tableTitle.put("pFnaDesc","FNA描述" );
+
         writeAjaxJSONResponse(ResultMessageBuilder.build(tableTitle), response);
     }
     
@@ -240,6 +248,7 @@ public class HzEbomController extends BaseController {
         JSONObject object = array1.getJSONObject(0);
         recordRespDTO.setPuid(puid);
         recordRespDTO.setpBomOfWhichDept(object.getString("pBomOfWhichDept"));
+        recordRespDTO.setpLouaFlag(object.getString("pLouaFlag"));
         recordRespDTO.setRank(object.getString("rank"));
         recordRespDTO.setGroupNum(object.getString("groupNum"));
         recordRespDTO.setLevel(object.getString("level"));
