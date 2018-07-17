@@ -30,6 +30,7 @@ function initTable(eBomUrl){
             var column = [];
             // column.push({field: 'eBomPuid', title: 'puid'});
             column.push({field: 'ck', checkbox: true});
+            column.push({field: 'puid', title: '主键'});
             var data = result.data;
             var nameZh = data[0];
             var nameEn = data[1];
