@@ -8,6 +8,7 @@ import com.alibaba.fastjson.JSONArray;
 public class HzEbomRespDTO {
 
     private JSONArray jsonArray;
+    
 
     public JSONArray getJsonArray() {
         return jsonArray;
