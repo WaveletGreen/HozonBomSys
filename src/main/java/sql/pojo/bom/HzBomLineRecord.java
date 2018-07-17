@@ -68,6 +68,7 @@ public class HzBomLineRecord {
      */
     private String pBomLinePartClass;
 
+    private Integer status;
     private String pBomLinePartEnName;
 
     private String pBomLinePartResource;
@@ -628,5 +629,13 @@ public class HzBomLineRecord {
 
     public void setpBomLinePartName(String pBomLinePartName) {
         this.pBomLinePartName = pBomLinePartName;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 }

@@ -71,9 +71,9 @@ function initTable(url) {
                     formId: "queryMaterialData",
                     undefinedText: "",//当数据为 undefined 时显示的字符
                     pagination: true,
-                    pageNumber:1,                       //初始化加载第一页，默认第一页
+                    pageNumber: 1,                       //初始化加载第一页，默认第一页
                     pageSize: 20,                       //每页的记录行数（*）
-                    pageList: [20, 50,100,200,500,1000,'ALL'],     //可供选择的每页的行数（*）
+                    pageList: [20, 50, 100, 200, 500, 1000, 'ALL'],     //可供选择的每页的行数（*）
                     uniqueId: "puid",                     //每一行的唯一标识，一般为主键列
                     showExport: true,
                     //exportDataType: 'all',
@@ -208,9 +208,15 @@ function initTable(url) {
                                     });
                                 }
                                 else {
+                                    var _table = '<p>是否要重新发送您所选择的记录？</p>' +
+                                        '<div style="max-height: 500px;overflow:scroll;"><table class="table table-striped tableNormalStyle" >';
+                                    for (var index in rows) {
+                                        _table += '<tr><td>' + rows[index].pMaterielCode + '</td></tr>';
+                                    }
+                                    _table += '</table></div>';
                                     window.Ewin.confirm({
                                         title: '提示',
-                                        message: '是否要重新发送您所选择的记录？',
+                                        message: _table,
                                         width: 600
                                     }).on(function (e) {
                                         if (e) {

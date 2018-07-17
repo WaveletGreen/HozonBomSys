@@ -212,7 +212,7 @@ public class HzEbomServiceImpl implements HzEbomService {
                 appendLocalName[4] = "级别";
                 appendLocalName[5] = "分组号";
                 appendLocalName[6] = "FNA";
-                appendLocalName[6] = "零部件来源";
+                appendLocalName[7] = "零部件来源";
 
                 appendTrueName[0] = "No";
                 appendTrueName[1] = "puid";
@@ -221,7 +221,7 @@ public class HzEbomServiceImpl implements HzEbomService {
                 appendTrueName[4] = "rank";
                 appendTrueName[5] = "groupNum";
                 appendTrueName[6] = "fna";
-                appendTrueName[6] = "pBomLinePartResource";
+                appendTrueName[7] = "pBomLinePartResource";
                 System.arraycopy(localName, 0, appendLocalName, appendCount, localName.length);
                 System.arraycopy(trueName, 0, appendTrueName, appendCount, trueName.length);
 
