@@ -50,10 +50,8 @@ public class AddHzEbomReqDTO {
     private String pBomLinePartEnName;
 
     private String fastener;
-    /**
-     * Bom行对应的零件名
-     */
-    private String pFnaInfo;
+
+    private String fna;
 
     private String pFastener;
 
@@ -208,12 +206,12 @@ public class AddHzEbomReqDTO {
         this.fastener = fastener;
     }
 
-    public String getpFnaInfo() {
-        return pFnaInfo;
+    public String getFna() {
+        return fna;
     }
 
-    public void setpFnaInfo(String pFnaInfo) {
-        this.pFnaInfo = pFnaInfo;
+    public void setFna(String fna) {
+        this.fna = fna;
     }
 
     public String getpFastener() {
