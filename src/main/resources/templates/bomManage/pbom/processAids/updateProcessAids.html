@@ -156,6 +156,7 @@
             if (bootstrapValidator.isValid()) {
                 var url = $("#processAidsForm", window.top.document).attr('action');
                 var myData = JSON.stringify({
+                    "puid": $("#puid").val(),
                     "pBomLinePartName": $("#pBomLinePartName").val(),
                     "pBomLinePartEnName": $("#pBomLinePartEnName").val(),
                     "pLineId": $("#pLineId").val(),

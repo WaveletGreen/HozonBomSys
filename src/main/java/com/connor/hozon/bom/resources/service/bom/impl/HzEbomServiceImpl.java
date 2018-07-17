@@ -15,7 +15,6 @@ import com.connor.hozon.bom.resources.query.HzBomRecycleByPageQuery;
 import com.connor.hozon.bom.resources.query.HzEbomByPageQuery;
 import com.connor.hozon.bom.resources.query.HzEbomTreeQuery;
 import com.connor.hozon.bom.resources.service.bom.HzEbomService;
-import com.connor.hozon.bom.resources.service.bom.HzPbomService;
 import com.connor.hozon.bom.resources.service.epl.HzEPLManageRecordService;
 import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.sys.entity.User;
@@ -26,7 +25,6 @@ import share.bean.RedisBomBean;
 import sql.pojo.HzPreferenceSetting;
 import sql.pojo.bom.HZBomMainRecord;
 import sql.pojo.bom.HzBomLineRecord;
-import sql.pojo.epl.HzEPLManage;
 import sql.pojo.epl.HzEPLManageRecord;
 import sql.redis.SerializeUtil;
 
@@ -96,13 +94,13 @@ public class HzEbomServiceImpl implements HzEbomService {
                 //获取分组号
                 String groupNum = record.getLineID();
                 //这里在做一个递归查询
-                if(groupNum.contains("-")){
-                    groupNum =groupNum.split("-")[1].substring(0,4);
-                }
-                else{
-                    String parentId = record.getParentUid();
-                    groupNum = hzEPLManageRecordService.getGroupNum(query.getProjectId(),parentId);
-                }
+//                if(groupNum.contains("-")){
+//                    groupNum =groupNum.split("-")[1].substring(0,4);
+//                }
+//                else{
+//                    String parentId = record.getParentUid();
+//                    groupNum = hzEPLManageRecordService.getGroupNum(query.getProjectId(),parentId);
+//                }
                 jsonObject.put("groupNum", groupNum);
                 jsonObject.put("lineId", record.getLineID());
                 jsonObject.put("fna",record.getFna());

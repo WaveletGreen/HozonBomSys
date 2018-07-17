@@ -3,6 +3,8 @@ package com.connor.hozon.bom.resources.controller.accessories;
 import com.connor.hozon.bom.resources.controller.BaseController;
 import com.connor.hozon.bom.resources.dto.request.DeleteHzAccessoriesDTO;
 import com.connor.hozon.bom.resources.mybatis.accessories.HzAccessoriesDAO;
+import com.connor.hozon.bom.resources.page.Page;
+import com.connor.hozon.bom.resources.query.HzAccessoriesPageQuery;
 import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.resources.util.ResultMessageBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import sql.pojo.accessories.HzAccessoriesLib;
 
 import javax.servlet.http.HttpServletResponse;
@@ -55,7 +58,7 @@ public class HzAccessoriesController  extends BaseController {
         tableTitle.put("pSupply", "供应商");
         tableTitle.put("pSupplyCode", "供应商代码");
         tableTitle.put("pRemark", "备注");
-        writeAjaxJSONResponse(tableTitle, response);
+        writeAjaxJSONResponse(ResultMessageBuilder.build(tableTitle), response);
     }
 
     /**
@@ -112,20 +115,33 @@ public class HzAccessoriesController  extends BaseController {
             deleteHzAccessoriesDTO.setPuid(puid);
             list.add(deleteHzAccessoriesDTO);
         }
-        int i = hzAccessoriesDAO.deleteList(list);
-        if(i>0){
-            writeAjaxJSONResponse(ResultMessageBuilder.build(true,"操作成功！"),response);
+        try{
+            hzAccessoriesDAO.deleteList(list);
+        }catch (Exception e){
+            writeAjaxJSONResponse(ResultMessageBuilder.build(false,"操作失败！"),response);
             return;
         }
-        writeAjaxJSONResponse(ResultMessageBuilder.build(false,"操作失败！"),response);
+        writeAjaxJSONResponse(ResultMessageBuilder.build(true,"操作成功！"),response);
 
     }
 
 
     @RequestMapping(value = "get/lib",method = RequestMethod.GET)
-    public Map<String,Object> getHzAccessories(){
-        List<HzAccessoriesLib> libs = hzAccessoriesDAO.getHzAccessoriesLibs(null);
+    @ResponseBody
+    public Map<String,Object> getHzAccessories(HzAccessoriesPageQuery query){
+        HzAccessoriesPageQuery hzAccessoriesPageQuery = query;
+        hzAccessoriesPageQuery.setPageSize(0);
+        try {
+            hzAccessoriesPageQuery.setPageSize(Integer.valueOf(query.getLimit()));
+        }catch (Exception e){
+
+        }
+        Page<HzAccessoriesLib> page = hzAccessoriesDAO.getHzAccessoriesByPage(query);
         int i = 0;
+        if(ListUtil.isEmpty(page.getResult())){
+            return new HashMap<>();
+        }
+        List<HzAccessoriesLib> libs = page.getResult();
         Map<String, Object> ret = new HashMap<>();
         List<Map<String, Object>> _list = new ArrayList<>();
         for(HzAccessoriesLib lib : libs){

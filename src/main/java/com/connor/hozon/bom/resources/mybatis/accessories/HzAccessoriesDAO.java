@@ -1,6 +1,8 @@
 package com.connor.hozon.bom.resources.mybatis.accessories;
 
 import com.connor.hozon.bom.resources.dto.request.DeleteHzAccessoriesDTO;
+import com.connor.hozon.bom.resources.page.Page;
+import com.connor.hozon.bom.resources.query.HzAccessoriesPageQuery;
 import sql.pojo.accessories.HzAccessoriesLib;
 
 import java.util.List;
@@ -19,4 +21,5 @@ public interface HzAccessoriesDAO {
 
     List<HzAccessoriesLib> getHzAccessoriesLibs(String puid);
 
+    Page<HzAccessoriesLib> getHzAccessoriesByPage(HzAccessoriesPageQuery query);
 }

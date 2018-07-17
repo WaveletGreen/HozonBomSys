@@ -112,6 +112,15 @@ public class HzAccessoriesLib {
      */
     private String pUpdateName;
 
+    private String pStatus;
+
+    public String getpStatus() {
+        return pStatus;
+    }
+
+    public void setpStatus(String pStatus) {
+        this.pStatus = pStatus;
+    }
 
     public String getPuid() {
         return puid;

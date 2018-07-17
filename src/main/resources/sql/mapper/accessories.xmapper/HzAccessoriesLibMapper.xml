@@ -28,6 +28,7 @@
     <result column="P_REMARK" jdbcType="VARCHAR" property="pRemark" />
     <result column="P_CREATE_NAME" jdbcType="VARCHAR" property="pCreateName" />
     <result column="P_UPDATE_NAME" jdbcType="VARCHAR" property="pUpdateName" />
+    <result column="P_STATUS" jdbcType="INTEGER" property="pStatus" />
   </resultMap>
 
   <insert id="HzAccessoriesDAOImpl_insert" parameterType="sql.pojo.accessories.HzAccessoriesLib">
@@ -253,18 +254,35 @@
         P_UPDATE_NAME = #{pUpdateName,jdbcType=VARCHAR},
       </if>
     </set>
+    <where>
+      PUID = #{puid,jdbcType=VARCHAR}
+    </where>
   </update>
 
   <select id="HzAccessoriesDAOImpl_getHzAccessoriesLibs" parameterType="java.util.HashMap" resultMap="BaseResultMap">
     select  * from HZ_ACCESSORIES_LIB
     <where>
-      1=1
-      <if test="puid != null and puid !=''">
-       and  PUID = #{puid,jdbcType=VARCHAR},
-      </if>
+      and  PUID = #{puid,jdbcType=VARCHAR}
+      and P_STATUS =1
     </where>
   </select>
 
+
+
+  <select id="HzAccessoriesDAOImpl_getHzAccessoriesByPage" parameterType="java.util.HashMap" resultMap="BaseResultMap">
+    select * FROM
+    (SELECT u.*,rownum as rn from
+    (SELECT * from HZ_ACCESSORIES_LIB
+    where P_STATUS=1
+    order by P_UPDATE_TIME DESC)u
+    WHERE ROWNUM &lt;=#{limit,jdbcType=INTEGER}) where rn &gt;#{offset,jdbcType=INTEGER}
+  </select>
+
+
+
+  <select id="HzAccessoriesDAOImpl_getHzAccessoriesTotalCount" parameterType="java.util.HashMap" resultType="java.lang.Integer">
+    select count(*) from HZ_ACCESSORIES_LIB where P_STATUS =1
+  </select>
 
 
   <!--批量删除-->

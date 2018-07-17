@@ -1,4 +1,11 @@
 $(document).ready((function () {
+    initTable();
+}))
+function  doQuery() {
+    $('#processAidsTable').bootstrapTable('refresh');
+}
+
+function initTable(){
     var $table = $("#processAidsTable");
     var column = [];
     $.ajax({
@@ -50,12 +57,6 @@ $(document).ready((function () {
                         text: '添加',
                         iconCls: 'glyphicon glyphicon-plus',
                         handler: function () {
-                            var rows = $table.bootstrapTable('getSelections');
-                            //只能选一条
-                            if (rows.length != 1) {
-                                window.Ewin.alert({message: '请选择一条需要添加的数据!'});
-                                return false;
-                            }
                             window.Ewin.dialog({
                                 title: "添加",
                                 url: "accessories/addAccessories",
@@ -133,4 +134,4 @@ $(document).ready((function () {
 
         }
     })
-}))
+}

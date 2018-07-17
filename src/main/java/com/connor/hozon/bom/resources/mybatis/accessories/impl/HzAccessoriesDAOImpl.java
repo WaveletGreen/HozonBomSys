@@ -2,6 +2,9 @@ package com.connor.hozon.bom.resources.mybatis.accessories.impl;
 
 import com.connor.hozon.bom.resources.dto.request.DeleteHzAccessoriesDTO;
 import com.connor.hozon.bom.resources.mybatis.accessories.HzAccessoriesDAO;
+import com.connor.hozon.bom.resources.page.Page;
+import com.connor.hozon.bom.resources.page.PageRequest;
+import com.connor.hozon.bom.resources.query.HzAccessoriesPageQuery;
 import org.springframework.stereotype.Service;
 import sql.BaseSQLUtil;
 import sql.pojo.accessories.HzAccessoriesLib;
@@ -37,6 +40,16 @@ public class HzAccessoriesDAOImpl  extends BaseSQLUtil implements HzAccessoriesD
         Map<String,Object> map = new HashMap<>();
         map.put("puid",puid);
         return super.findForList("HzAccessoriesDAOImpl_getHzAccessoriesLibs",map);
+    }
+
+    @Override
+    public Page<HzAccessoriesLib> getHzAccessoriesByPage(HzAccessoriesPageQuery query) {
+        PageRequest request = new PageRequest();
+        Map map = new HashMap();
+        request.setPageNumber(query.getPage());
+        request.setPageSize(query.getPageSize());
+        request.setFilters(map);
+        return super.findPage("HzAccessoriesDAOImpl_getHzAccessoriesByPage","HzAccessoriesDAOImpl_getHzAccessoriesTotalCount",request);
     }
 
 }
