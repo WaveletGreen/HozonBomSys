@@ -405,7 +405,7 @@
                     "pUpc": $("#pUpc").val(),
                     "fna": $("#fna").val(),
                     "pFnaDesc": $("#pFnaDesc").val(),
-                    "projectPuid":$("#project", window.top.document).val(),
+                    "projectId":$("#project", window.top.document).val(),
                 });
                 if (puid = "") {
                     $.ajax({
@@ -433,7 +433,8 @@
                             "application/json",
                         type:
                             'POST',
-                        url: url + "?projectId=" + projectPuid + "&puid=" + puid,
+                        // url: url + "?projectId=" + projectPuid + "&puid=" + puid,
+                        url: url,
                         data: myData,
                         success:
                             function (result) {
