@@ -124,7 +124,6 @@ public class HzMaterielRecord {
      * 发送到SAP 成功标志 （1 成功 0 失败）
      */
     private Integer sendSapFlag;
-
     public Integer getSendSapFlag() {
         return sendSapFlag;
     }

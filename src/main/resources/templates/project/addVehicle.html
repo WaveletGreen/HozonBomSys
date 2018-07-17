@@ -18,30 +18,30 @@
                placeholder="请输入车型名称"
         />
     </div>
-    <div class="form-group">
-        <label for="pVehicleShapeCode">车身形式代码</label>
-        <input class="form-control" id="pVehicleShapeCode" name="pVehicleShapeCode" type="text"
-               placeholder="请输入车身形式代码"
-        />
-    </div>
-    <div class="form-group">
-        <label for="pVehicleTranName">车身变形名称</label>
-        <input class="form-control" id="pVehicleTranName" name="pVehicleTranName" type="text"
-               placeholder="请输入车身变形名称"
-        />
-    </div>
-    <div class="form-group">
-        <label for="pVehicleAnnualCode">车型年代码</label>
-        <input class="form-control" id="pVehicleAnnualCode" name="pVehicleAnnualCode" type="text"
-               placeholder="请输入车型年代码"
-        />
-    </div>
-    <div class="form-group">
-        <label for="pVehicleAnnual">年型年</label>
-        <input class="form-control" id="pVehicleAnnual" name="pVehicleAnnual" type="text"
-               placeholder="请输入年型年"
-        />
-    </div>
+    <!--<div class="form-group">-->
+        <!--<label for="pVehicleShapeCode">车身形式代码</label>-->
+        <!--<input class="form-control" id="pVehicleShapeCode" name="pVehicleShapeCode" type="text"-->
+               <!--placeholder="请输入车身形式代码"-->
+        <!--/>-->
+    <!--</div>-->
+    <!--<div class="form-group">-->
+        <!--<label for="pVehicleTranName">车身变形名称</label>-->
+        <!--<input class="form-control" id="pVehicleTranName" name="pVehicleTranName" type="text"-->
+               <!--placeholder="请输入车身变形名称"-->
+        <!--/>-->
+    <!--</div>-->
+    <!--<div class="form-group">-->
+        <!--<label for="pVehicleAnnualCode">车型年代码</label>-->
+        <!--<input class="form-control" id="pVehicleAnnualCode" name="pVehicleAnnualCode" type="text"-->
+               <!--placeholder="请输入车型年代码"-->
+        <!--/>-->
+    <!--</div>-->
+    <!--<div class="form-group">-->
+        <!--<label for="pVehicleAnnual">年型年</label>-->
+        <!--<input class="form-control" id="pVehicleAnnual" name="pVehicleAnnual" type="text"-->
+               <!--placeholder="请输入年型年"-->
+        <!--/>-->
+    <!--</div>-->
     <!--不可编辑部分-->
     <div class="form-group">
         <label for="pPlatformCode">平台代码</label>
@@ -80,19 +80,33 @@
                 validating: 'glyphicon glyphicon-refresh'
             },
             fields: {
-                pProjectCode: {
-                    message: '项目编号验证失败',
+                pVehicleCode: {
+                    message: '车型代码验证失败',
                     validators: {
                         notEmpty: {
-                            message: '项目编号不能为空'
+                            message: '车型代码不能为空'
+                        },
+                        threshold: 1, //有1字符以上才发送ajax请求，（input中输入一个字符，插件会向服务器发送一次，设置限制，6字符以上才开始）
+                        remote: {//ajax验证。server result:{"valid",true or false} 向服务发送当前input name值，获得一个json数据。例表示正确：{"valid",true}
+                            url: 'project/validateVehicleCodeWithPuid',//验证地址
+                            message: '车型代码已存在',//提示消息
+                            delay: 500,//每输入一个字符，就发ajax请求，服务器压力还是太大，设置2秒发送一次ajax（默认输入一个字符，提交一次，服务器压力太大）
+                            // *自定义提交数据，默认值提交当前input value
+                            data: function (validator) {
+                                return {
+                                    puid: $('#puid').val(),
+                                    pVehicleCode: $("#pVehicleCode").val()
+                                };
+                            },
+                            type: 'POST'//请求方式
                         }
                     }
                 },
-                pProjectName: {
-                    message: '项目名称验证失败',
+                pVehicleName: {
+                    message: '车型名称验证失败',
                     validators: {
                         notEmpty: {
-                            message: '项目名称不能为空'
+                            message: '车型名称不能为空'
                         }
                     }
                 }
@@ -102,6 +116,8 @@
         $("#btnOk", window.top.document).click(function () {
             var bootstrapValidator = $("#form", window.top.document).data('bootstrapValidator');
             bootstrapValidator.validate();
+            // bootstrapValidator.revalidateField("pVehicleCode");
+
             if (bootstrapValidator.isValid()) {
                 var url = $("#form", window.top.document).attr('action');
                 <!--其实不要puid，puid会在服务器上生成-->
@@ -142,7 +158,6 @@
                             else {
                                 window.Ewin.alert({message: "添加失败，请联系管理员"});
                             }
-
                         },
                     error: function (status) {
                         window.Ewin.alert({message: status.status + ':添加数据失败!'});

@@ -1,10 +1,17 @@
 package com.connor.hozon.bom.bomSystem.controller.cfg;
 
 
+import com.connor.hozon.bom.bomSystem.helper.DateStringHelper;
+import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
 import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0ColorSetService;
+import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.sys.commen.Error;
+import com.connor.hozon.bom.sys.entity.User;
 import net.sf.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,9 +20,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import sql.pojo.cfg.HzCfg0ColorSet;
 
+import java.text.ParseException;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+
+import static com.connor.hozon.bom.bomSystem.helper.StringHelper.checkString;
 
 @Controller
 @RequestMapping("/colorSet")
@@ -24,6 +35,7 @@ public class HzCfg0ColorSetController {
     @Autowired
     HzCfg0ColorSetService colorSerService;
 
+    private final static Logger logger = LoggerFactory.getLogger(HzCfg0ColorSetController.class);
 //    @RequestMapping(value = "/queryAll", method = RequestMethod.GET)
 //    @ResponseBody
 //    public JSONArray queryAll() {
@@ -73,6 +85,8 @@ public class HzCfg0ColorSetController {
     @RequestMapping(value = "/update", method = RequestMethod.GET)
     public String update(HzCfg0ColorSet entity, Model model) {
         if ((entity = colorSerService.getById(entity)) != null) {
+            entity.setStrColorAbolishDate(DateStringHelper.dateToString2(entity.getpColorAbolishDate()));
+            entity.setStrColorEffectedDate(DateStringHelper.dateToString2(entity.getpColorEffectedDate()));
             model.addAttribute("entity", entity);
             return "cfg/color/colorUpdate";
         } else {
@@ -104,6 +118,22 @@ public class HzCfg0ColorSetController {
     @RequestMapping(value = "/updateWithEntity", method = RequestMethod.POST)
     @ResponseBody
     public Boolean update(@RequestBody HzCfg0ColorSet set) {
+        Date now = new Date();
+        User user = UserInfo.getUser();
+        try {
+            set.setpColorAbolishDate(DateStringHelper.stringToDate2(set.getStrColorAbolishDate()));
+            set.setpColorEffectedDate(DateStringHelper.stringToDate2(set.getStrColorEffectedDate()));
+        } catch (ParseException e) {
+            e.printStackTrace();
+            logger.error("从字符串解析时间失败", e);
+        }
+        if (now.before(set.getpColorAbolishDate())) {
+            set.setpColorStatus(1);
+        } else {
+            set.setpColorStatus(0);
+        }
+        set.setpColorModifier(user.getUserName());
+        set.setpColorModifyDate(now);
         return colorSerService.doUpdate(set);
     }
 
@@ -118,10 +148,32 @@ public class HzCfg0ColorSetController {
     @ResponseBody
     public JSONObject add(@RequestBody HzCfg0ColorSet set) {
         JSONObject result = new JSONObject();
-        boolean resultFromDB = false;
+        Date now = new Date();
+        User user = UserInfo.getUser();
+        boolean resultFromDB;
         if (set.getPuid() == null || "".equals(set.getPuid())) {
-            set.setPuid(UUID.randomUUID().toString());
+            set.setPuid(UUIDHelper.generateUpperUid());
         }
+        try {
+            set.setpColorAbolishDate(DateStringHelper.stringToDate2(set.getStrColorAbolishDate()));
+            set.setpColorEffectedDate(DateStringHelper.stringToDate2(set.getStrColorEffectedDate()));
+            if (set.getpColorAbolishDate() == null) {
+                set.setpColorAbolishDate(new Date());
+            }
+            if (set.getpColorEffectedDate().after(set.getpColorAbolishDate())) {
+                set.setpColorStatus(0);
+            } else {
+                set.setpColorStatus(1);
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+            logger.error("从字符串解析时间失败", e);
+        }
+        set.setpColorModifyDate(now);
+        set.setpColorCreateDate(now);
+        set.setpColorModifier(user.getUserName());
+        set.setpColorStatus(1);
+
         while (true) {
             if (colorSerService.getById(set) == null) {
                 resultFromDB = colorSerService.doAddOne(set);
@@ -161,6 +213,29 @@ public class HzCfg0ColorSetController {
         } else {
             result.put("status", false);
             result.put("msg", "删除颜色信息:" + sb + "失败");
+        }
+        return result;
+    }
+
+
+    @RequestMapping(value = "/validateCodeWithPuid", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public JSONObject validateCodeWithPuid(HzCfg0ColorSet set) {
+        JSONObject result = new JSONObject();
+        result.put("valid", true);
+        HzCfg0ColorSet _set = null;
+        //有puid，则时更新，没有则为新增
+        if (checkString(set.getPuid())) {
+            _set = colorSerService.getById(set);
+            //根据puid查出来的同名，代表自身，则验证通过
+            if (_set.getpColorCode().equals(set.getpColorCode())) {
+                result.put("valid", true);
+            } else if ((_set = colorSerService.doGetByColorCode(set)) != null) {
+                //不是自身，更换了代号，检查是否有同代号的，有同代号则不允许验证通过
+                result.put("valid", false);
+            }
+        } else if ((_set = colorSerService.doGetByColorCode(set)) != null) {
+            result.put("valid", false);
         }
         return result;
     }

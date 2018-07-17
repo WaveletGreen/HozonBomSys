@@ -21,15 +21,36 @@
         from HZ_CFG0_OPTIONFAMILY_RECORD
         where PUID = #{puid,jdbcType=VARCHAR}
     </select>
+    <select id="selectByCodeAndDescWithMain" parameterType="sql.pojo.cfg.HzCfg0OptionFamily" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from HZ_CFG0_OPTIONFAMILY_RECORD
+        where
+        P_OPTIONFAMILY_NAME = #{pOptionfamilyName,jdbcType=VARCHAR}
+        and P_OPTIONFAMILY_DESC=#{pOptionfamilyDesc,jdbcType=VARCHAR}
+        and P_OF_CFG0_MAIN=#{pOfCfg0Main,jdbcType=VARCHAR}
+    </select>
+    <select id="insert" parameterType="sql.pojo.cfg.HzCfg0OptionFamily" resultMap="BaseResultMap">
+        insert into
+        HZ_CFG0_OPTIONFAMILY_RECORD
+        (<include refid="Base_Column_List"/>)
+        VALUES
+        (
+        #{puid,jdbcType=VARCHAR},
+        #{pOfCfg0Main,jdbcType=VARCHAR},
+        #{pOptionfamilyName,jdbcType=VARCHAR},
+        #{pOptionfamilyDesc,jdbcType=VARCHAR}
+        )
+    </select>
 
     <select id="selectNameByMainId" parameterType="java.lang.String" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from HZ_CFG0_OPTIONFAMILY_RECORD
         where P_OF_CFG0_MAIN = (
-          select t2.puid
-            from hz_cfg0_main_record t2
-            where t2.p_cfg0_of_which_project_puid =#{mainId}
-        )  order by P_OF_CFG0_MAIN ASC
+        select t2.puid
+        from hz_cfg0_main_record t2
+        where t2.p_cfg0_of_which_project_puid =#{mainId}
+        ) order by P_OF_CFG0_MAIN ASC
     </select>
 </mapper>

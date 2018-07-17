@@ -105,10 +105,36 @@ public class HzCfg0Service {
             bean.setRelevanceCode(record.getpCfg0Relevance());
             _list.add(bean);
         }
+        updateByTableName(needToUpdate, _table);
         return index;
     }
 
     public List<HzCfg0Record> doLoadListByPuids(List<HzCfg0Record> records) {
         return hzCfg0RecordDao.selectCfg0ListByPuids(records);
+    }
+
+    public void updateByTableName(List<HzCfg0Record> list, String table) {
+        switch (table) {
+            case "HZ_CFG0_RECORD":
+                list.forEach(_l -> hzCfg0RecordDao.updateByPrimaryKey(_l));
+                break;
+            case "HZ_CFG0_ADD_CFG_RECORD":
+                list.forEach(_l -> hzCfg0RecordDao.updateAddedCfgByPrimaryKey(_l));
+                break;
+        }
+    }
+
+    public boolean preCheck(HzCfg0Record record) {
+        record.setWhichTable("HZ_CFG0_RECORD");
+        List<HzCfg0Record> list;
+        list = hzCfg0RecordDao.selectByCodeAndDesc(record);
+        if (list == null || list.isEmpty()) {
+            record.setWhichTable("HZ_CFG0_ADD_CFG_RECORD");
+            list = hzCfg0RecordDao.selectByCodeAndDesc(record);
+            if (list == null || list.isEmpty()) {
+                return true;
+            }
+        }
+        return false;
     }
 }

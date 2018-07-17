@@ -1,18 +1,20 @@
 package com.connor.hozon.bom.bomSystem.service.project;
 
 import com.connor.hozon.bom.bomSystem.dao.project.HzBrandRecordDao;
+import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sql.pojo.project.HzBrandRecord;
 
 import java.util.List;
 
+import static com.connor.hozon.bom.bomSystem.helper.StringHelper.checkString;
+
 /**
- *                                  Author: Fancyears·Maylos·Mayways
+ * Author: Fancyears·Maylos·Mayways
  * Date: 2018/6/1 11:30
- *
+ * <p>
  * Description:
- *
  */
 @Service("hzBrandService")
 public class HzBrandService {
@@ -106,5 +108,30 @@ public class HzBrandService {
      */
     public HzBrandRecord doGetByBrandCode(String brandCode) {
         return hzBrandRecordDao.selectByBrandCode(brandCode);
+    }
+    /**
+     * 查重品牌编号
+     *
+     * @param brand 品牌对象
+     * @return
+     */
+    public JSONObject doValidateCodeWithPuid(IProject brand) {
+        JSONObject result = new JSONObject();
+        result.put("valid", true);
+        HzBrandRecord _brand = null;
+        //有puid，则时更新，没有则为新增
+        if (checkString(brand.getPuid())) {
+            _brand = doGetByPuid(brand.getPuid());
+            //根据puid查出来的同名，代表自身，则验证通过
+            if (_brand.getCode().trim().equals(brand.getCode().trim())) {
+                result.put("valid", true);
+            } else if ((_brand = doGetByBrandCode(brand.getCode().trim())) != null) {
+                //不是自身，更换了代号，检查是否有同代号的，有同代号则不允许验证通过
+                result.put("valid", false);
+            }
+        } else if ((_brand = doGetByBrandCode(brand.getCode().trim())) != null) {
+            result.put("valid", false);
+        }
+        return result;
     }
 }

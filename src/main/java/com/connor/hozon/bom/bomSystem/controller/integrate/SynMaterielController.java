@@ -5,9 +5,12 @@ import com.connor.hozon.bom.resources.dto.request.EditHzMaterielReqDTO;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
+import static com.connor.hozon.bom.bomSystem.helper.StringHelper.checkString;
 
 /**
  * 同步物料主数据
@@ -37,10 +40,11 @@ public class SynMaterielController {
      * @param dtos
      * @return
      */
-    @RequestMapping(value = "/updateByPuids", method = RequestMethod.POST)
-    @ResponseBody
-    public JSONObject updateByPuids(@RequestBody List<EditHzMaterielReqDTO> dtos) {
-        return iSynMaterielService.updateByPuids(dtos);
+    @RequestMapping(value = "/updateOrAddByUids", method = RequestMethod.POST)
+    public String updateOrAddByUids(@RequestBody List<EditHzMaterielReqDTO> dtos, Model model) {
+        JSONObject entities = iSynMaterielService.updateOrAddByUids(dtos);
+        addToModel(entities, model);
+        return "stage/templateOfIntegrate";
     }
 
     /**
@@ -50,15 +54,32 @@ public class SynMaterielController {
      * @return
      */
     @RequestMapping(value = "/synAllByProjectPuid", method = RequestMethod.POST)
-    @ResponseBody
-    public JSONObject synAllByProjectPuid(@RequestParam("projectId") String projectId) {
+    public String synAllByProjectPuid(@RequestParam("projectId") String projectId, Model model) {
         JSONObject result = new JSONObject();
-        if (projectId == null || "".equalsIgnoreCase(projectId)) {
-            result.put("status", false);
-            result.put("result", "请选择项目再操作!");
-            return result;
+        if (!checkString(projectId)) {
+            result.put("msg", "请选择项目再操作!");
+            return "errorWithEntity";
         }
-        return iSynMaterielService.synAllByProjectPuid(projectId);
+        JSONObject entities = iSynMaterielService.synAllByProjectPuid(projectId);
+        addToModel(entities, model);
+        return "stage/templateOfIntegrate";
     }
 
+    /**
+     * 添加进model中
+     *
+     * @param entities
+     * @param model
+     */
+    private void addToModel(JSONObject entities, Model model) {
+        model.addAttribute("msgOfSuccess", "发送成功项");
+        model.addAttribute("msgOfFail", "发送失败项");
+        model.addAttribute("success", entities.get("success"));
+        model.addAttribute("fail", entities.get("fail"));
+        model.addAttribute("total", entities.get("total"));
+        model.addAttribute("totalOfSuccess", entities.get("totalOfSuccess"));
+        model.addAttribute("totalOfFail", entities.get("totalOfFail"));
+        model.addAttribute("totalOfOutOfParent", entities.get("totalOfOutOfParent"));
+        model.addAttribute("totalOfUnknown", entities.get("totalOfUnknown"));
+    }
 }

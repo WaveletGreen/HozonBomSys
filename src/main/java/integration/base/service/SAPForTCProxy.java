@@ -14,101 +14,102 @@ import javax.xml.ws.WebServiceClient;
  * Generated source version: 2.0
  * <p>
  * An example of how this class may be used:
- * 
+ * <p>
  * <pre>
-* SAPForTCProxy service = new SAPForTCProxy();
-* SAPForTCProxyPortType portType = service.getSAPForTCProxyHttpSoap11Endpoint();
-* portType.zppTCSAP001(...);
+ * SAPForTCProxy service = new SAPForTCProxy();
+ * SAPForTCProxyPortType portType = service.getSAPForTCProxyHttpSoap11Endpoint();
+ * portType.zppTCSAP001(...);
  * </pre>
  * </p>
- * 
  */
-@WebServiceClient(name = "SAPForTCProxy", targetNamespace = "urn:sap-com:document:sap:rfc:functions", wsdlLocation = "http://10.0.6.72:8280/services/SAPForTCProxy?wsdl")
+@WebServiceClient(name = "SAPForTCProxy", targetNamespace = "urn:sap-com:document:sap:rfc:functions", wsdlLocation = "http://10.0.6.71:8280/services/SAPForTCProxy?wsdl")
 public class SAPForTCProxy extends Service {
 
-	private final static URL SAPFORTCPROXY_WSDL_LOCATION;
-	private final static Logger logger = Logger.getLogger(SAPForTCProxy.class.getName());
+    private final static URL SAPFORTCPROXY_WSDL_LOCATION;
+    private final static Logger logger = Logger.getLogger(SAPForTCProxy.class.getName());
+    private static boolean debug = true;
 
-	static {
-		URL url = null;
-		try {
-			URL baseUrl;
-			baseUrl = SAPForTCProxy.class.getResource(".");
-			url = new URL(baseUrl, "http://10.0.6.72:8280/services/SAPForTCProxy?wsdl");
-		} catch (MalformedURLException e) {
-			logger.warning(
-					"Failed to create URL for the wsdl Location: 'http://10.0.6.72:8280/services/SAPForTCProxy?wsdl', retrying as a local file");
-			logger.warning(e.getMessage());
-		}
-		SAPFORTCPROXY_WSDL_LOCATION = url;
-	}
+    static {
+        URL url = null;
+        try {
+            if (debug) {
+                URL baseUrl;
+                baseUrl = integration.base.service.SAPForTCProxy.class.getResource("/");
+                url = new URL(baseUrl,
+                        "../classes/SAPInfo/SAPForTCProxy.wsdl");
+            } else {
+                URL baseUrl;
+                baseUrl = SAPForTCProxy.class.getResource(".");
+                url = new URL(baseUrl, "http://10.0.6.71:8280/services/SAPForTCProxy?wsdl");
+            }
+        } catch (MalformedURLException e) {
+            logger.warning(
+                    "Failed to create URL for the wsdl Location: 'http://10.0.6.71:8280/services/SAPForTCProxy?wsdl', retrying as a local file");
+            logger.warning(e.getMessage());
+        }
+        SAPFORTCPROXY_WSDL_LOCATION = url;
+    }
 
-	public SAPForTCProxy(URL wsdlLocation, QName serviceName) {
-		super(wsdlLocation, serviceName);
-	}
+    public SAPForTCProxy(URL wsdlLocation, QName serviceName) {
+        super(wsdlLocation, serviceName);
+    }
 
-	public SAPForTCProxy() {
-		super(SAPFORTCPROXY_WSDL_LOCATION, new QName("urn:sap-com:document:sap:rfc:functions", "SAPForTCProxy"));
-	}
+    public SAPForTCProxy() {
+        super(SAPFORTCPROXY_WSDL_LOCATION, new QName("urn:sap-com:document:sap:rfc:functions", "SAPForTCProxy"));
+    }
 
-	/**
-	 * 
-	 * @return returns SAPForTCProxyPortType
-	 */
-	@WebEndpoint(name = "SAPForTCProxyHttpSoap11Endpoint")
-	public SAPForTCProxyPortType getSAPForTCProxyHttpSoap11Endpoint() {
-		return super.getPort(new QName("urn:sap-com:document:sap:rfc:functions", "SAPForTCProxyHttpSoap11Endpoint"),
-				SAPForTCProxyPortType.class);
-	}
+    /**
+     * @return returns SAPForTCProxyPortType
+     */
+    @WebEndpoint(name = "SAPForTCProxyHttpSoap11Endpoint")
+    public SAPForTCProxyPortType getSAPForTCProxyHttpSoap11Endpoint() {
+        return super.getPort(new QName("urn:sap-com:document:sap:rfc:functions", "SAPForTCProxyHttpSoap11Endpoint"),
+                SAPForTCProxyPortType.class);
+    }
 
-	/**
-	 * 
-	 * @return returns SAPForTCProxyPortType
-	 */
-	@WebEndpoint(name = "SAPForTCProxyHttpsSoap11Endpoint")
-	public SAPForTCProxyPortType getSAPForTCProxyHttpsSoap11Endpoint() {
-		return super.getPort(new QName("urn:sap-com:document:sap:rfc:functions", "SAPForTCProxyHttpsSoap11Endpoint"),
-				SAPForTCProxyPortType.class);
-	}
+    /**
+     * @return returns SAPForTCProxyPortType
+     */
+    @WebEndpoint(name = "SAPForTCProxyHttpsSoap11Endpoint")
+    public SAPForTCProxyPortType getSAPForTCProxyHttpsSoap11Endpoint() {
+        return super.getPort(new QName("urn:sap-com:document:sap:rfc:functions", "SAPForTCProxyHttpsSoap11Endpoint"),
+                SAPForTCProxyPortType.class);
+    }
 
-	/**
-	 * 
-	 * @return returns SAPForTCProxyPortType
-	 */
-	@WebEndpoint(name = "SAPForTCProxyHttpsSoap12Endpoint")
-	public SAPForTCProxyPortType getSAPForTCProxyHttpsSoap12Endpoint() {
-		return super.getPort(new QName("urn:sap-com:document:sap:rfc:functions", "SAPForTCProxyHttpsSoap12Endpoint"),
-				SAPForTCProxyPortType.class);
-	}
+    /**
+     * @return returns SAPForTCProxyPortType
+     */
+    @WebEndpoint(name = "SAPForTCProxyHttpsSoap12Endpoint")
+    public SAPForTCProxyPortType getSAPForTCProxyHttpsSoap12Endpoint() {
+        return super.getPort(new QName("urn:sap-com:document:sap:rfc:functions", "SAPForTCProxyHttpsSoap12Endpoint"),
+                SAPForTCProxyPortType.class);
+    }
 
-	/**
-	 * 
-	 * @return returns SAPForTCProxyPortType
-	 */
-	@WebEndpoint(name = "SAPForTCProxyHttpSoap12Endpoint")
-	public SAPForTCProxyPortType getSAPForTCProxyHttpSoap12Endpoint() {
-		return super.getPort(new QName("urn:sap-com:document:sap:rfc:functions", "SAPForTCProxyHttpSoap12Endpoint"),
-				SAPForTCProxyPortType.class);
-	}
+    /**
+     * @return returns SAPForTCProxyPortType
+     */
+    @WebEndpoint(name = "SAPForTCProxyHttpSoap12Endpoint")
+    public SAPForTCProxyPortType getSAPForTCProxyHttpSoap12Endpoint() {
+        return super.getPort(new QName("urn:sap-com:document:sap:rfc:functions", "SAPForTCProxyHttpSoap12Endpoint"),
+                SAPForTCProxyPortType.class);
+    }
 
-	/**
-	 * 
-	 * @return returns SAPForTCProxyPortType
-	 */
-	@WebEndpoint(name = "SAPForTCProxyHttpEndpoint")
-	public SAPForTCProxyPortType getSAPForTCProxyHttpEndpoint() {
-		return super.getPort(new QName("urn:sap-com:document:sap:rfc:functions", "SAPForTCProxyHttpEndpoint"),
-				SAPForTCProxyPortType.class);
-	}
+    /**
+     * @return returns SAPForTCProxyPortType
+     */
+    @WebEndpoint(name = "SAPForTCProxyHttpEndpoint")
+    public SAPForTCProxyPortType getSAPForTCProxyHttpEndpoint() {
+        return super.getPort(new QName("urn:sap-com:document:sap:rfc:functions", "SAPForTCProxyHttpEndpoint"),
+                SAPForTCProxyPortType.class);
+    }
 
-	/**
-	 * 
-	 * @return returns SAPForTCProxyPortType
-	 */
-	@WebEndpoint(name = "SAPForTCProxyHttpsEndpoint")
-	public SAPForTCProxyPortType getSAPForTCProxyHttpsEndpoint() {
-		return super.getPort(new QName("urn:sap-com:document:sap:rfc:functions", "SAPForTCProxyHttpsEndpoint"),
-				SAPForTCProxyPortType.class);
-	}
+    /**
+     * @return returns SAPForTCProxyPortType
+     */
+    @WebEndpoint(name = "SAPForTCProxyHttpsEndpoint")
+    public SAPForTCProxyPortType getSAPForTCProxyHttpsEndpoint() {
+        return super.getPort(new QName("urn:sap-com:document:sap:rfc:functions", "SAPForTCProxyHttpsEndpoint"),
+                SAPForTCProxyPortType.class);
+    }
 
 }

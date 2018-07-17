@@ -2,15 +2,16 @@
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <body>
 <form id="featureForm" role="form" method="post" action="./cfg0/add">
-    <input class="form-control" id="pCfg0MainItemPuid" name="pCfg0MainItemPuid" type="hidden" th:value="${entity.puid}"/>
+    <input class="form-control" id="pCfg0MainItemPuid" name="pCfg0MainItemPuid" type="hidden"
+           th:value="${entity.puid}"/>
     <div class="form-group">
-        <label for="pCfg0FamilyName">特性名称</label>
+        <label for="pCfg0FamilyName">特性名称<span style="color: red">⭐</span></label>
         <input class="form-control" id="pCfg0FamilyName" name="pCfg0FamilyName" type="text"
                placeholder="请输入特性名称"
         />
     </div>
     <div class="form-group">
-        <label for="pCfg0FamilyDesc">特性描述</label>
+        <label for="pCfg0FamilyDesc">特性描述<span style="color: red">⭐</span></label>
         <input class="form-control" id="pCfg0FamilyDesc" name="pCfg0FamilyDesc" type="text"
                placeholder="请输入特性描述"/>
     </div>
@@ -21,20 +22,20 @@
     </div>
     </div>
     <div class="form-group">
-        <label for="pCfg0ObjectId">特性值/配置代码</label>
+        <label for="pCfg0ObjectId">特性值/配置代码<span style="color: red">⭐</span></label>
         <input class="form-control" id="pCfg0ObjectId" name="pCfg0ObjectId" type="text"
                placeholder="请输入特性值/配置代码"/>
     </div>
     <div class="form-group">
-        <label for="pCfg0Desc">特性值/配置(描述)</label>
+        <label for="pCfg0Desc">特性值/配置(描述)<span style="color: red">⭐</span></label>
         <input class="form-control" id="pCfg0Desc" name="pCfg0Desc" type="text"
                placeholder="请输入特性值/配置(描述)"/>
     </div>
-    <div class="form-group">
-        <label for="length">字符长度</label>
-        <input class="form-control" id="length" name="length" type="text" value="10"
-               placeholder="请输入字符长度"/>
-    </div>
+    <!--<div class="form-group">-->
+    <!--<label for="length">字符长度</label>-->
+    <!--<input class="form-control" id="length" name="length" type="text" value="10"-->
+    <!--placeholder="请输入字符长度"/>-->
+    <!--</div>-->
 </form>
 <script th:inline="javascript">
     <![CDATA[
@@ -52,7 +53,16 @@
                     validators: {
                         notEmpty: {
                             message: '特性名称不能为空'
-                        }
+                        },
+                        //正则校验
+                        regexp: {
+                            regexp: /^[a-zA-Z][a-zA-Z0-9]*$/, /* ^ 指的是匹配字符串开始的位置 + 匹配一个或者多个*/
+                            message: '特性只能以英文开头，加英文和数字，不允许有英文和数字以外的字符'
+                        },
+                        stringLength: {
+                            max: 10,
+                            message: '特性最长长度为10'
+                        },
                     }
                 },
                 pCfg0FamilyDesc: {
@@ -68,7 +78,16 @@
                     validators: {
                         notEmpty: {
                             message: '特性值/配置代码不能为空'
-                        }
+                        },
+                        //正则校验
+                        regexp: {
+                            regexp: /[a-zA-Z0-9]+$/, /* ^ 指的是匹配字符串开始的位置 + 匹配一个或者多个*/
+                            message: '特性值只能以数字/英文开头，加英文和数字，不允许有英文和数字以外的字符'
+                        },
+                        stringLength: {
+                            max: 10,
+                            message: '特性值最长长度为10'
+                        },
                     }
                 },
                 pCfg0Desc: {
@@ -118,11 +137,7 @@
                             $('body', window.top.document).find('.modal-backdrop').remove();
                             // jquery 调用刷新当前操作的table页面的refresh方法
                             $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
-                            if(result){
-                                window.Ewin.alert({message: "添加特性数据成功"});
-
-                            }
-
+                            window.Ewin.alert({message: result.msg});
                         },
                     error: function (status) {
                         window.Ewin.alert({message: status.status + ':添加数据失败!'});

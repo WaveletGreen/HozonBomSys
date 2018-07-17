@@ -1,8 +1,10 @@
 package sql.pojo.project;
 
+import com.connor.hozon.bom.bomSystem.service.project.IProject;
+
 import java.util.Date;
 
-public class HzPlatformRecord {
+public class HzPlatformRecord implements IProject{
     /**
      * puid
      */
@@ -38,6 +40,11 @@ public class HzPlatformRecord {
 
     public String getPuid() {
         return puid;
+    }
+
+    @Override
+    public String getCode() {
+        return this.pPlatformCode;
     }
 
     public void setPuid(String puid) {

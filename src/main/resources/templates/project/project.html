@@ -6,7 +6,7 @@
 <body>
 <div id="content" class="row-fluid">
     <!--bootstrap网格系统只能貌似只能使用同种网格系统-->
-    <div class="col-md-4" style="margin-top: 10px;">
+    <div class="col-md-3" style="margin-top: 10px;">
         <button class="btn btn-default" style="width: 250px" id="setCurrentProject" type="button">设置为当前工作项目</button>
         <h2>
             <lable id="labHidden" hidden="hidden">快速操作</lable>
@@ -15,7 +15,25 @@
         <h2><span class="label label-success" id="currentProject"></span></h2>
         <ul id="menu_tree" class="ztree" style="width:560px; overflow:auto;"></ul>
     </div>
-    <div class="col-md-4">
+    <div class="col-md-8" style="margin-top: 10px">
+        <table class="table table-striped tableNormalStyle" id="projectDetail" style="visibility: hidden">
+            <tr>
+                <th>项目编号</th>
+                <td id="pProjectCode"></td>
+                <th>项目名称</th>
+                <td id="pProjectName"></td>
+                <th>项目经理</th>
+                <td id="pProjectManager"></td>
+            </tr>
+            <tr>
+                <th>创建时间</th>
+                <td id="pProjectCreateDate"></td>
+                <th>停产时间</th>
+                <td id="pProjectDiscontinuationDate"></td>
+                <th>项目详细信息</th>
+                <td id="pProjectDetail"></td>
+            </tr>
+        </table>
         <table class="table table-striped tableNormalStyle" id="detailTable" style="visibility: hidden">
             <tr>
                 <th>品牌代码</th>
@@ -36,28 +54,39 @@
                 <td id="projVehicleName"></td>
             </tr>
             <tr>
+                <th>内饰颜色代码</th>
+                <td id="pInColorCode"></td>
+                <th>内饰颜色名称</th>
+                <td id="pInColorName"></td>
+            </tr>
+            <tr>
+                <th>颜色代码</th>
+                <td id="pColorCode"></td>
+                <th>颜色名称</th>
+                <td id="pColorName"></td>
+            </tr>
+            <tr>
+                <th>电池型号</th>
+                <td id="pBatteryModel"></td>
+                <th>电机型号</th>
+                <td id="pMotorModel"></td>
+            </tr>
+            <tr>
                 <th>车身形式代码</th>
-                <td id="projVehicleShapeCode"></td>
+                <td id="pVehicleShapeCode"></td>
                 <th>车身变形名称</th>
-                <td id="projVehicleTranName"></td>
+                <td id="pVehicleTranName"></td>
             </tr>
             <tr>
                 <th>车型年代码</th>
-                <td id="projVehicleAnnualCode"></td>
+                <td id="pModelYearCode"></td>
                 <th>年型年</th>
-                <td id="projVehicleAnnual"></td>
-            </tr>
-            <tr>
-                <th>项目编号</th>
-                <td id="pProjectCode"></td>
-                <th>项目名称</th>
-                <td id="pProjectName"></td>
+                <td id="pModelYear"></td>
             </tr>
         </table>
     </div>
 </div>
-<script th:src="@{/js/project/project.js}"></script>
-<script type="application/javascript">
-</script>
 </body>
+<script th:src="@{/js/helper/dateFormater.js}"></script>
+<script th:src="@{/js/project/project.js}"></script>
 </html>

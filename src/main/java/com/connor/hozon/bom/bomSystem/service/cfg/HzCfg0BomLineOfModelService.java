@@ -21,6 +21,7 @@ import sql.pojo.project.HzBrandRecord;
 import sql.pojo.project.HzPlatformRecord;
 import sql.pojo.project.HzProjectLibs;
 import sql.pojo.project.HzVehicleRecord;
+import sql.redis.SerializeUtil;
 
 import java.util.*;
 
@@ -140,19 +141,25 @@ public class HzCfg0BomLineOfModelService {
             });
             modelWithBomLineMap.forEach((keyOfMap, withBomLine) -> {
                 JSONObject data = new JSONObject();
+                String owningUser = "";
                 HzFcfgBomLvl1ListOperation operation = hzFcfgBomLvl1ListOperationService.doSelectByPrimaryKey(withBomLine.getpBomLineId());
                 if (null != operation) {
                     data.put("operation", operation.getpOprationTypeName());
                 } else {
                     data.put("operation", "");
                 }
+                Object obj = SerializeUtil.unserialize(withBomLine.getLineBlock());
+                if (obj instanceof LinkedHashMap) {
+                    owningUser = (String) ((LinkedHashMap) obj).get("bl_rev_owning_user");
+                }
                 data.put(HzCfg0BomLineOfModel.selfDesc[0], withBomLine.getpBomOfWhichDept());
                 data.put(HzCfg0BomLineOfModel.selfDesc[1], withBomLine.getpBomLineId());
                 data.put(HzCfg0BomLineOfModel.selfDesc[2], withBomLine.getpBomLineName());
                 data.put(HzCfg0BomLineOfModel.selfDesc[3], withBomLine.getpH9featureenname() == null ? "" : withBomLine.getpH9featureenname());
-                data.put(HzCfg0BomLineOfModel.selfDesc[4], withBomLine.getpCfg0Desc() != null ? withBomLine.getpCfg0Desc() : "");
-                data.put(HzCfg0BomLineOfModel.selfDesc[5], withBomLine.getpCfg0ObjectId());
-                data.put(HzCfg0BomLineOfModel.selfDesc[6], withBomLine.getpCfg0Desc() != null ? withBomLine.getpCfg0Desc() : "");
+                data.put(HzCfg0BomLineOfModel.selfDesc[4], owningUser);
+                data.put(HzCfg0BomLineOfModel.selfDesc[5], withBomLine.getpCfg0Desc() != null ? withBomLine.getpCfg0Desc() : "");
+                data.put(HzCfg0BomLineOfModel.selfDesc[6], withBomLine.getpCfg0ObjectId());
+                data.put(HzCfg0BomLineOfModel.selfDesc[7], withBomLine.getpCfg0Desc() != null ? withBomLine.getpCfg0Desc() : "");
                 mapModelHasCfg0.forEach((key, value) -> {
                     for (HzCfg0BomLineOfModel model : value) {
                         if (keyOfMap.equals(model.getpBomLineId())) {

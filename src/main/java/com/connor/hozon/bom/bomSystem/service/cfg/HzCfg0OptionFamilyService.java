@@ -85,4 +85,12 @@ public class HzCfg0OptionFamilyService {
     public HzCfg0OptionFamily doGetById(HzCfg0OptionFamily family) {
         return hzCfg0OptionFamilyDao.selectByPrimaryKey(family);
     }
+
+    public HzCfg0OptionFamily doGetByCodeAndDescWithMain(HzCfg0OptionFamily family) {
+        return hzCfg0OptionFamilyDao.selectByCodeAndDescWithMain(family);
+    }
+
+    public boolean doInsert(HzCfg0OptionFamily family) {
+        return hzCfg0OptionFamilyDao.insert(family) > 0 ? true : false;
+    }
 }

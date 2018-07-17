@@ -74,6 +74,11 @@ public class HzCfg0RecordDaoImpl implements HzCfg0RecordDao {
     }
 
     @Override
+    public List<HzCfg0Record> selectByCodeAndDesc(HzCfg0Record record) {
+        return baseSQLUtil.executeQuery(record, "com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0RecordDao.selectByCodeAndDesc");
+    }
+
+    @Override
     public List<HzCfg0Record> selectListByProjectPuid(String projectPuid) {
         HzCfg0Record record = new HzCfg0Record();
         record.setProjectPuid(projectPuid);

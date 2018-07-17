@@ -1,9 +1,10 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
-<head th:include="include/includebase">
-    <meta charset="UTF-8">
-    <title>全BOM配置一级清单</title>
-</head>
+<head th:include="include/includebase"></head>
+<link th:href="@{/css/stage/bom-stage.css}" rel="stylesheet"/>
+<meta charset="UTF-8">
+<title>全BOM配置一级清单</title>
+<style rel=""></style>
 <body class="content-body">
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog"
      aria-labelledby="myModalLabel" aria-hidden="true">
@@ -23,12 +24,10 @@
         </div>
     </div>
 </div>
-<div class="panel-body content col-lg-4">
-    <div class="input-group">
-        <button class="btn btn-default" id="myButton" type="button">刷新</button>
-    </div>
-</div>
-<div class="panel-body" >
+<div class="panel-body col-md-12">
+    <!--<div class="input-group">-->
+    <button class="btn btn-default" id="myButton" type="button">刷新</button>
+    <!--</div>-->
     <div class="panel panel-default" style="margin-top: 50px;">
         <div class="panel-body">
             <form class="form-inline" role="form" style="float: left; width: 100%;margin-left: 20px;" method="post"
@@ -50,18 +49,19 @@
                     <button type="button" id="searchBtn" onclick="" class="btn btn-primary">搜索</button>
                 </div>
             </form>
+            <div class="content col-lg-12" style="overflow: auto">
+                <table class="table table-striped" id="cfg0Table" style="min-width: 1920px;"></table>
+            </div>
         </div>
     </div>
+
 </div>
-<div style="float: right; margin-bottom:0;">
-    <table id="cfg1Table" class="table table-striped col-md-4" style="margin-top:0px; margin-bottom:0px;">
-    </table>
-    <div id="newtable"></div>
-</div>
-<div>
-    <table class="table table-striped col-md-12" id="cfg0Table"  style="margin-top: 0px;">
-    </table>
-</div>
+<!--<div style="float: right; margin-bottom:0;">-->
+<!--<table id="cfg1Table" class="table table-striped col-md-4" style="margin-top:0px; margin-bottom:0px;">-->
+<!--</table>-->
+<!--<div id="newtable"></div>-->
+<!--</div>-->
+
 </body>
 <script th:src="@{/js/stage/bom-all-cfg.js}"></script>
 <script th:inline="javascript">

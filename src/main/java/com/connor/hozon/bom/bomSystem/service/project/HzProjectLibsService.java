@@ -1,12 +1,14 @@
 package com.connor.hozon.bom.bomSystem.service.project;
 
 import com.connor.hozon.bom.bomSystem.dao.project.HzProjectLibsDao;
+import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sql.pojo.project.HzProjectLibs;
 
-import java.util.Date;
 import java.util.List;
+
+import static com.connor.hozon.bom.bomSystem.helper.StringHelper.checkString;
 
 /***
  *                                  Author: Fancyears·Maylos·Mayways
@@ -115,5 +117,31 @@ public class HzProjectLibsService {
     }
 
     public void toDTO(HzProjectLibs project) {
+    }
+
+    /**
+     * 项目编号查重
+     *
+     * @param project 项目对象
+     * @return
+     */
+    public JSONObject doValidateCodeWithPuid(IProject project) {
+        JSONObject result = new JSONObject();
+        result.put("valid", true);
+        HzProjectLibs _project = null;
+        //有puid，则时更新，没有则为新增
+        if (checkString(project.getPuid())) {
+            _project = doLoadProjectLibsById(project.getPuid());
+            //根据puid查出来的同名，代表自身，则验证通过
+            if (_project.getCode().trim().equals(project.getCode().trim())) {
+                result.put("valid", true);
+            } else if ((_project = doGetByProjectCode(project.getCode().trim())) != null) {
+                //不是自身，更换了代号，检查是否有同代号的，有同代号则不允许验证通过
+                result.put("valid", false);
+            }
+        } else if ((_project = doGetByProjectCode(project.getCode().trim())) != null) {
+            result.put("valid", false);
+        }
+        return result;
     }
 }

@@ -96,6 +96,17 @@
         )
         order by t4.puid
     </select>
+    <!--通过特性值和特性描述获取到1个特性值-->
+    <select id="selectByCodeAndDesc" parameterType="sql.pojo.cfg.HzCfg0Record" resultMap="MaterielFeatureMap">
+        select
+        <include refid="Base_Column_List"/>
+        from ${whichTable} t
+        where
+        t.P_CFG0_OBJECT_ID=#{pCfg0ObjectId}
+        and t.P_CFG0_DESC=#{pCfg0Desc}
+        and t.P_CFG0_FAMILY_NAME=#{pCfg0FamilyName}
+        and t.P_CFG0_FAMILY_DESC=#{pCfg0FamilyDesc}
+    </select>
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from ${0}

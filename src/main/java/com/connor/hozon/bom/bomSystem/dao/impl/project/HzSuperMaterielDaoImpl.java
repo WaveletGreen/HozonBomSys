@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 import sql.IBaseSQLUtil;
 import sql.pojo.project.HzMaterielRecord;
 
+import java.util.List;
+
 /**
  * Created by Fancyears·Maylos·Mayways
  * Description:

@@ -14,7 +14,7 @@ public interface ISynMaterielService {
      * @param dtos
      * @return
      */
-    JSONObject updateByPuids(List<EditHzMaterielReqDTO> dtos);
+    JSONObject updateOrAddByUids(List<EditHzMaterielReqDTO> dtos);
 
     /**
      * 删除时候传
