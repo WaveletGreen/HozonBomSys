@@ -134,8 +134,18 @@ public class ReflectBom {
 
         //基本数量，默认是1
         setBaseNumOfHead("1");
-        //BOM序号
-        setOrderOfBomLine(bomToERPBean.getLineIndex().substring(bomToERPBean.getLineIndex().lastIndexOf(".")+1));
+        //BOM序号,按10进制
+        Integer index = Integer.parseInt(bomToERPBean.getLineIndex().substring(bomToERPBean.getLineIndex().lastIndexOf(".") + 1)) * 10;
+        String str = "";
+        if (index < 10) {
+            str = "00" + String.valueOf(index);
+        }
+        if (index > 10) {
+            str = "0" + String.valueOf(index);
+        } else if (index > 100) {
+            str = String.valueOf(index);
+        }
+        setOrderOfBomLine(str);
         //子物料编码
         setChildOfBomLine(bomToERPBean.getBomLineId());
         //数量，也默认1条条传
@@ -155,11 +165,11 @@ public class ReflectBom {
         //采购件下级件标识,TC系统传输02或空，SAP系统会将02转化为L
         setPurchaseFlag("");
         //装配位置
-        setAssemblyPoint(bomToERPBean.getFNAInfo() == null ? "FNA" : bomToERPBean.getFNAInfo());
+        setAssemblyPoint(bomToERPBean.getFNAInfo() == null ? "null" : bomToERPBean.getFNAInfo());
         //使用车间
-        setUseWorkshop(bomToERPBean.getWorkShop() == null ? "1" : bomToERPBean.getWorkShop());
+        setUseWorkshop(bomToERPBean.getWorkShop() == null ? "null" : bomToERPBean.getWorkShop());
         //工位
-        setStation(bomToERPBean.getStation() == null ? "1" : bomToERPBean.getStation());
+        setStation(bomToERPBean.getStation() == null ? "null" : bomToERPBean.getStation());
 
     }
 
