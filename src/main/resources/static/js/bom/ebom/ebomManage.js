@@ -24,7 +24,7 @@ function initTable(eBomUrl){
     var $table = $("#ebomManageTable");
     var column = [];
     $.ajax({
-        url: "ebom/ebomTitle?projectId=" + projectPuid,
+        url: "ebom/title?projectId=" + projectPuid,
         type: "GET",
         success: function (result) {
             var column = [];
