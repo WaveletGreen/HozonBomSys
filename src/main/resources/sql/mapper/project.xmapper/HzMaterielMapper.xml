@@ -32,7 +32,7 @@
         <result column="P_RESOURCE" jdbcType="VARCHAR" property="resource" />
         <result column="P_TYPE" jdbcType="INTEGER" property="type" />
         <result column="P_MATERIEL_RESOURCE_ID" jdbcType="VARCHAR" property="materielResourceId" />
-        <!--<result column="P_SEND_SAP_FLAG" jdbcType="INTEGER" property="sendSapFlag" />-->
+        <result column="P_SEND_SAP_FLAG" jdbcType="INTEGER" property="sendSapFlag" />
 
     </resultMap>
 
