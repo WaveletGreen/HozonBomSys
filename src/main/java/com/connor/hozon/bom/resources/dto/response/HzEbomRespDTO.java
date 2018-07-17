@@ -64,7 +64,9 @@ public class HzEbomRespDTO {
      * Bom行对应的零件名
      */
     private String pFnaInfo;
-    
+
+    private String pLouaFlag;
+
     private String pFastener;
 
     private String p3cpartFlag;
@@ -136,6 +138,14 @@ public class HzEbomRespDTO {
     private String pRemark;
 
     private String pRegulationCode;
+
+    public String getpLouaFlag() {
+        return pLouaFlag;
+    }
+
+    public void setpLouaFlag(String pLouaFlag) {
+        this.pLouaFlag = pLouaFlag;
+    }
 
     public String getLineId() {
         return lineId;
