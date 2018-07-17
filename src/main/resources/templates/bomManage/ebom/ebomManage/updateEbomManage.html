@@ -3,309 +3,315 @@
 <!--User: xulf Date: 2018/6/4 Time: 15:10-->
 <body>
 <form id="ebomMainForm" role="form" method="post" action="ebom/update/ebom">
-    <input id="puid" name="puid" type="hidden"/><!--th:value="${entity.eBomPuid}"-->
+    <input id="puid" name="puid" type="hidden" th:value="${data.puid}"/><!--th:value="${entity.eBomPuid}"-->
     <div class="form-group">
         <label for="level">层级</label>
         <input class="form-control" id="level" name="level" type="text"
-
+        th:value="${data.level}"
                placeholder="请输入层级"/>
     </div>
     <div class="form-group">
         <label for="pBomOfWhichDept">专业</label>
         <input class="form-control" id="pBomOfWhichDept" name="pBomOfWhichDept" type="text"
-
+               th:value="${data.pBomOfWhichDept}"
                placeholder="请输入专业"/>
     </div>
     <div class="form-group">
         <label for="rank">级别</label>
         <input class="form-control" id="rank" name="rank" type="text"
-
+               th:value="${data.rank}"
                placeholder="请输入级别"/>
     </div>
     <div class="form-group">
         <label for="groupNum">分组号</label>
         <input class="form-control" id="groupNum" name="groupNum" type="text"
-
+               th:value="${data.groupNum}"
                placeholder="请输入分组号"/>
     </div>
     <div class="form-group">
         <label for="lineId">零件号</label>
         <input class="form-control" id="lineId" name="lineId" type="text"
-
+               th:value="${data.lineId}"
                placeholder="请输入零件号"/>
     </div>
     <div class="form-group">
         <label for="pBomLinePartName">名称</label>
         <input class="form-control" id="pBomLinePartName" name="pBomLinePartName" type="text"
-
+               th:value="${data.pBomLinePartName}"
                placeholder="请输入名称"/>
     </div>
     <div class="form-group">
         <label for="pBomLinePartEnName">英文名称</label>
         <input class="form-control" id="pBomLinePartEnName" name="pBomLinePartEnName" type="text"
-
+               th:value="${data.pBomLinePartEnName}"
                placeholder="请输入英文名称"/>
     </div>
     <div class="form-group">
         <label for="pUnit">单位</label>
         <select class="form-control" name="pUnit" id="pUnit" placeholder="请选择单位">
             <option></option>
-            <option>EA</option> <!--th:selected="${data.getResource()=='MAKE'?true:false}"-->
-            <option>Kg</option>
-            <option>L</option>
-            <option>mm</option>
+            <option th:selected="${data.getpUnit()=='EA'?true:false}">EA</option> <!--th:selected="${data.getResource()=='MAKE'?true:false}"-->
+            <option th:selected="${data.getpUnit()=='Kg'?true:false}">Kg</option>
+            <option th:selected="${data.getpUnit()=='L'?true:false}">L</option>
+            <option th:selected="${data.getpUnit()=='mm'?true:false}">mm</option>
         </select>
     </div>
     <div class="form-group">
         <label for="pPictureNo">图号</label>
         <input class="form-control" id="pPictureNo" name="pPictureNo" type="text"
-
+               th:value="${data.pPictureNo}"
                placeholder="请输入图号"/>
     </div>
     <div class="form-group">
         <label for="pPictureSheet">图幅</label>
         <select class="form-control" name="pPictureSheet" id="pPictureSheet" placeholder="请选择图幅">
             <option></option>
-            <option>A0+</option> <!--th:selected="${data.getResource()=='MAKE'?true:false}"-->
-            <option>A0</option>
-            <option>A1</option>
-            <option>A2</option>
-            <option>A3</option>
-            <option>A4</option>
+            <option th:selected="${data.getpPictureSheet()=='A0+'?true:false}">A0+</option> <!--th:selected="${data.getResource()=='MAKE'?true:false}"-->
+            <option th:selected="${data.getpPictureSheet()=='A0'?true:false}">A0</option>
+            <option th:selected="${data.getpPictureSheet()=='A1'?true:false}">A1</option>
+            <option th:selected="${data.getpPictureSheet()=='A2'?true:false}">A2</option>
+            <option th:selected="${data.getpPictureSheet()=='A3'?true:false}">A3</option>
+            <option th:selected="${data.getpPictureSheet()=='A4'?true:false}">A4</option>
         </select>
     </div>
     <div class="form-group">
         <label for="pMaterialHigh">料厚</label>
         <input class="form-control" id="pMaterialHigh" name="pMaterialHigh" type="text"
-
+               th:value="${data.pMaterialHigh}"
                placeholder="请输入料厚"/>
     </div>
     <div class="form-group">
         <label for="pMaterial1">材料1</label>
         <input class="form-control" id="pMaterial1" name="pMaterial1" type="text"
-
+               th:value="${data.pMaterial1}"
                placeholder="请输入材料1"/>
     </div>
     <div class="form-group">
         <label for="pMaterial2">材料2</label>
         <input class="form-control" id="pMaterial2" name="pMaterial2" type="text"
-
+               th:value="${data.pMaterial2}"
                placeholder="请输入材料2"/>
     </div>
     <div class="form-group">
         <label for="pMaterial3">材料3</label>
         <input class="form-control" id="pMaterial3" name="pMaterial3" type="text"
-
+               th:value="${data.pMaterial3}"
                placeholder="请输入材料3"/>
     </div>
     <div class="form-group">
         <label for="pDensity">密度</label>
         <input class="form-control" id="pDensity" name="pDensity" type="text"
-
+               th:value="${data.pDensity}"
                placeholder="请输入密度"/>
     </div>
     <div class="form-group">
         <label for="pMaterialStandard">材料标准</label>
         <input class="form-control" id="pMaterialStandard" name="pMaterialStandard" type="text"
-
+               th:value="${data.pMaterialStandard}"
                placeholder="请输入材料标准"/>
     </div>
     <div class="form-group">
         <label for="pSurfaceTreat">表面处理</label>
         <input class="form-control" id="pSurfaceTreat" name="pSurfaceTreat" type="text"
-
+               th:value="${data.pSurfaceTreat}"
                placeholder="请输入表面处理"/>
     </div>
     <div class="form-group">
         <label for="pTextureColorNum">纹理编号彩编号</label>
         <input class="form-control" id="pTextureColorNum" name="pTextureColorNum" type="text"
-
+               th:value="${data.pTextureColorNum}"
                placeholder="请输入纹理编号彩编号"/>
     </div>
     <div class="form-group">
         <label for="pManuProcess">制造工艺</label>
         <input class="form-control" id="pManuProcess" name="pManuProcess" type="text"
-
+               th:value="${data.pManuProcess}"
                placeholder="请输入制造工艺"/>
     </div>
     <div class="form-group">
         <label for="pSymmetry">对称</label>
         <select class="form-control" name="pSymmetry" id="pSymmetry" placeholder="请选择对称">
             <option></option>
-            <option>左件</option> <!--th:selected="${data.getResource()=='MAKE'?true:false}"-->
-            <option>右件</option>
-            <option>通用</option>
+            <option th:selected="${data.getpSymmetry()=='左件'?true:false}">左件</option> <!--th:selected="${data.getResource()=='MAKE'?true:false}"-->
+            <option th:selected="${data.getpSymmetry()=='右件'?true:false}">右件</option>
+            <option th:selected="${data.getpSymmetry()=='通用'?true:false}">通用</option>
         </select>
     </div>
     <div class="form-group">
         <label for="pImportance">重要度</label>
         <select class="form-control" name="pImportance" id="pImportance" placeholder="请选择重要度">
             <option></option>
-            <option>D</option> <!--th:selected="${data.getResource()=='MAKE'?true:false}"-->
-            <option>P</option>
+            <option th:selected="${data.getpImportance()=='D'?true:false}">D</option> <!--th:selected="${data.getResource()=='MAKE'?true:false}"-->
+            <option th:selected="${data.getpImportance()=='P'?true:false}">P</option>
         </select>
     </div>
     <div class="form-group">
         <label for="pRegulationFlag">是否法规件</label>
         <select class="form-control" name="pRegulationFlag" id="pRegulationFlag" placeholder="请选择是否法规件">
             <option></option>
-            <option>Y</option> <!--th:selected="${data.getResource()=='MAKE'?true:false}"-->
-            <option>N</option>
+            <option th:selected="${data.getpRegulationFlag()=='Y'?true:false}">Y</option> <!--th:selected="${data.getResource()=='MAKE'?true:false}"-->
+            <option th:selected="${data.getpRegulationFlag()=='N'?true:false}">N</option>
         </select>
     </div>
     <div class="form-group">
         <label for="p3cpartFlag">是否3C件</label>
         <select class="form-control" name="p3cpartFlag" id="p3cpartFlag" placeholder="请选择是否3C件">
             <option></option>
-            <option>Y</option> <!--th:selected="${data.getResource()=='MAKE'?true:false}"-->
-            <option>N</option>
+            <option th:selected="${data.getP3cpartFlag()=='Y'?true:false}">Y</option> <!--th:selected="${data.getResource()=='MAKE'?true:false}"-->
+            <option th:selected="${data.getP3cpartFlag()=='N'?true:false}">N</option>
         </select>
     </div>
     <div class="form-group">
         <label for="pRegulationCode">法规件型号</label>
         <input class="form-control" id="pRegulationCode" name="pRegulationCode" type="text"
-
+               th:value="${data.pRegulationCode}"
                placeholder="请输入法规件型号"/>
     </div>
     <div class="form-group">
         <label for="pBwgBoxPart">黑白灰匣子件</label>
         <select class="form-control" name="pBwgBoxPart" id="pBwgBoxPart" placeholder="请选择黑白灰匣子件">
             <option></option>
-            <option>B</option> <!--th:selected="${data.getResource()=='MAKE'?true:false}"-->
-            <option>W</option>
-            <option>G</option>
+            <option th:selected="${data.getpBwgBoxPart()=='B'?true:false}">B</option> <!--th:selected="${data.getResource()=='MAKE'?true:false}"-->
+            <option th:selected="${data.getpBwgBoxPart()=='W'?true:false}">W</option>
+            <option th:selected="${data.getpBwgBoxPart()=='G'?true:false}">G</option>
         </select>
     </div>
     <div class="form-group">
         <label for="pDevelopType">开发类型</label>
         <input class="form-control" id="pDevelopType" name="pDevelopType" type="text"
-
+               th:value="${data.pDevelopType}"
                placeholder="请输入开发类型"/>
     </div>
     <div class="form-group">
         <label for="pDataVersion">数据版本</label>
         <input class="form-control" id="pDataVersion" name="pDataVersion" type="text"
-
+               th:value="${data.pDataVersion}"
                placeholder="请输入数据版本"/>
     </div>
     <div class="form-group">
         <label for="pTargetWeight">目标重量(kg)</label>
         <input class="form-control" id="pTargetWeight" name="pTargetWeight" type="text"
-
+               th:value="${data.pTargetWeight}"
                placeholder="请输入目标重量(kg)"/>
     </div>
     <div class="form-group">
         <label for="pFeatureWeight">预估重量(kg)</label>
         <input class="form-control" id="pFeatureWeight" name="pFeatureWeight" type="text"
-
+               th:value="${data.pFeatureWeight}"
                placeholder="请输入预估重量(kg)"/>
     </div>
     <div class="form-group">
         <label for="pActualWeight">实际重量(kg)</label>
         <input class="form-control" id="pActualWeight" name="pActualWeight" type="text"
-
+               th:value="${data.pActualWeight}"
                placeholder="请输入实际重量(kg)"/>
     </div>
     <div class="form-group">
         <label for="pFastener">紧固件</label>
         <select class="form-control" name="pFastener" id="pFastener" placeholder="请选择紧固件">
             <option></option>
-            <option>标准件</option> <!--th:selected="${data.getResource()=='MAKE'?true:false}"-->
-            <option>非标件</option>
+            <option th:selected="${data.getpFastener()=='标准件'?true:false}">标准件</option> <!--th:selected="${data.getResource()=='MAKE'?true:false}"-->
+            <option th:selected="${data.getpFastener()=='非标件'?true:false}">非标件</option>
         </select>
     </div>
     <div class="form-group">
         <label for="pFastenerStandard">紧固件规格</label>
         <input class="form-control" id="pFastenerStandard" name="pFastenerStandard" type="text"
-
+               th:value="${data.pFastenerStandard}"
                placeholder="请输入紧固件规格"/>
     </div>
     <div class="form-group">
         <label for="pFastenerLevel">紧固件性能等级</label>
         <input class="form-control" id="pFastenerLevel" name="pFastenerLevel" type="text"
-
+               th:value="${data.pFastenerLevel}"
                placeholder="请输入紧固件性能等级"/>
     </div>
     <div class="form-group">
         <label for="pTorque">扭矩</label>
         <input class="form-control" id="pTorque" name="pTorque" type="text"
-
+               th:value="${data.pTorque}"
                placeholder="请输入扭矩"/>
     </div>
     <div class="form-group">
         <label for="pDutyEngineer">责任工程师</label>
         <input class="form-control" id="pDutyEngineer" name="pDutyEngineer" type="text"
-
+               th:value="${data.pDutyEngineer}"
                placeholder="请输入责任工程师"/>
     </div>
     <div class="form-group">
         <label for="pSupply">供应商</label>
         <input class="form-control" id="pSupply" name="pSupply" type="text"
-
+               th:value="${data.pSupply}"
                placeholder="请输入供应商"/>
     </div>
     <div class="form-group">
         <label for="pSupplyCode">供应商代码</label>
         <input class="form-control" id="pSupplyCode" name="pSupplyCode" type="text"
-
+               th:value="${data.pSupplyCode}"
                placeholder="请输入供应商代码"/>
     </div>
     <div class="form-group">
         <label for="pBuyEngineer">采购工程师</label>
         <input class="form-control" id="pBuyEngineer" name="pBuyEngineer" type="text"
-
+               th:value="${data.pBuyEngineer}"
                placeholder="请输入采购工程师"/>
     </div>
     <div class="form-group">
         <label for="pRemark">备注</label>
         <input class="form-control" id="pRemark" name="pRemark" type="text"
-
+               th:value="${data.pRemark}"
                placeholder="请输入备注"/>
     </div>
     <div class="form-group">
         <label for="pBomLinePartClass">零件分类</label>
         <select class="form-control" name="pBomLinePartClass" id="pBomLinePartClass" placeholder="请选择零件分类">
             <option></option>
-            <option>自制</option> <!--th:selected="${data.getResource()=='MAKE'?true:false}"-->
-            <option>外协</option>
-            <option>虚拟总成</option>
+            <option th:selected="${data.getpBomLinePartClass()=='自制'?true:false}">自制</option> <!--th:selected="${data.getResource()=='MAKE'?true:false}"-->
+            <option th:selected="${data.getpBomLinePartClass()=='外协'?true:false}">外协</option>
+            <option th:selected="${data.getpBomLinePartClass()=='虚拟总成'?true:false}">虚拟总成</option>
         </select>
     </div>
     <div class="form-group">
         <label for="pBomLinePartResource">零件来源</label>
         <select class="form-control" name="pBomLinePartResource" id="pBomLinePartResource" placeholder="请选择零件来源">
             <option></option>
-            <option>采购件</option>
-            <option>采购拆分单件</option>
-            <option>采购拆分总成件</option>
-            <option>采购拆分标准件</option>
-            <option>采购拆分非标件</option>
-            <option>自制总成</option>
-            <option>自制单件</option>
-            <option>自用标准件</option>
-            <option>自用非标件</option>
-            <option>虚拟总成</option>
+            <option th:selected="${data.getpBomLinePartResource()=='采购件'?true:false}">采购件</option>
+            <option th:selected="${data.getpBomLinePartResource()=='采购拆分单件'?true:false}">采购拆分单件</option>
+            <option th:selected="${data.getpBomLinePartResource()=='采购拆分总成件'?true:false}">采购拆分总成件</option>
+            <option th:selected="${data.getpBomLinePartResource()=='采购拆分标准件'?true:false}">采购拆分标准件</option>
+            <option th:selected="${data.getpBomLinePartResource()=='采购拆分非标件'?true:false}">采购拆分非标件</option>
+            <option th:selected="${data.getpBomLinePartResource()=='自制总成'?true:false}">自制总成</option>
+            <option th:selected="${data.getpBomLinePartResource()=='自制单件'?true:false}">自制单件</option>
+            <option th:selected="${data.getpBomLinePartResource()=='自用标准件'?true:false}">自用标准件</option>
+            <option th:selected="${data.getpBomLinePartResource()=='自用非标件'?true:false}">自用非标件</option>
+            <option th:selected="${data.getpBomLinePartResource()=='虚拟总成'?true:false}">虚拟总成</option>
         </select>
     </div>
     <div class="form-group">
         <label for="pInOutSideFlag">内外饰标识</label>
         <select class="form-control" name="pInOutSideFlag" id="pInOutSideFlag" placeholder="请选择内外饰标识">
             <option></option>
-            <option>内饰件</option>
-            <option>外饰件</option>
+            <option th:selected="${data.getpInOutSideFlag()=='内饰件'?true:false}">内饰件</option>
+            <option th:selected="${data.getpInOutSideFlag()=='外饰件'?true:false}">外饰件</option>
         </select>
     </div>
     <div class="form-group">
         <label for="pUpc">UPC</label>
-        <input class="form-control" id="pUpc" name="pUpc" type="text" placeholder="请输入UPC"/>
+        <input class="form-control" id="pUpc" name="pUpc" type="text"
+               th:value="${data.pUpc}"
+               placeholder="请输入UPC"/>
     </div>
     <div class="form-group">
         <label for="fna">FNA</label>
-        <input class="form-control" id="fna" name="fna" type="text" placeholder="请输入FNA"/>
+        <input class="form-control" id="fna" name="fna" type="text"
+               th:value="${data.fna}"
+               placeholder="请输入FNA"/>
     </div>
     <div class="form-group">
         <label for="pFnaDesc">FNA描述</label>
-        <input class="form-control" id="pFnaDesc" name="pFnaDesc" type="text" placeholder="请输入FNA描述"/>
+        <input class="form-control" id="pFnaDesc" name="pFnaDesc" type="text"
+               th:value="${data.pFnaDesc}"
+               placeholder="请输入FNA描述"/>
     </div>
     <!--<div class="form-group" th:each="_data,c:${data.get(0)}">
         <label class="control-label" th:text="${_data}"></label>
