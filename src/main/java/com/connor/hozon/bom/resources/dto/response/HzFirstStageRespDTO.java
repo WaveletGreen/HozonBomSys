@@ -1,17 +1,30 @@
-package sql.pojo.epl;
-
-import java.util.Date;
+package com.connor.hozon.bom.resources.dto.response;
 
 /**
- * Created by haozt on 2018/06/05
- * EPL管理全字段
+ * @Author: haozt
+ * @Date: 2018/7/17
+ * @Description:
  */
-public class HzEPLManageRecord {
+public class HzFirstStageRespDTO {
+    private String puid;
+
+    private int No;//1
 
     /**
-     * puid
+     * 级别 以2Y层为相对 第1级
      */
-    private String puid;
+    private String rank;//1
+
+    /**
+     * 层级
+     */
+    private String level;//1
+
+    /**
+     * 分组号
+     */
+    private String groupNum;//1
+
     /**
      * 父层puid
      */
@@ -20,46 +33,17 @@ public class HzEPLManageRecord {
      * 是否部门层
      */
     private Integer isDept;
-    /**
-     * 数模层PUID
-     */
-    private String bomDigifaxId;
-    /**
-     * Bom行的层级索引
-     */
-    private String lineIndex;
-    /**
-     * 记录TC的BOMLine的Puid，用于快速session.stringToTCObject
-     */
-    private String linePuid;
+
     /**
      * Bom行对应的零件号
      */
     private String lineID;
-    /**
-     * 是否有子层
-     */
-    private Integer isHas;
-    /**
-     * 属性集合，是一个LinkedHashMap，需要转换
-     */
-    private byte[] bomLineBlock;
-    /**
-     * 是否2Y层
-     */
-    private Integer is2Y;
-    /**
-     * 是否零件
-     */
-    private Integer isPart;
-    /**
-     * 在Bom结构中的顺序号
-     */
-    private Integer orderNum;
+
     /**
      * 2Y层归属哪个部门
      */
     private String pBomOfWhichDept;
+
     /**
      * Bom行对应的零件名
      */
@@ -69,118 +53,19 @@ public class HzEPLManageRecord {
      */
     private String pBomLinePartClass;
 
-    /**
-     * bom 状态
-     */
-    private Integer pState;
-
-    /**
-     *零件来源（自制总成/采购拆分等）
-     */
-    private String itemResource;
-    /**
-     * 来源（自制/采购）
-     */
-    private String resource;
-    /**
-     * 类型 是否为焊接/装配（0是  1不是 2不明确）
-     */
-    private Integer type;
-    /**
-     * 是否采购单元 （0是  1不是 2不明确）
-     */
-    private Integer buyUnit;
-    /**
-     *车间1
-     */
-    private String workShop1;
-    /**
-     *车间2
-     */
-    private String workShop2;
-    /**
-     *生产线
-     */
-    private String productLine;
-    /**
-     * 模具类型
-     */
-    private String mouldType;
-    /**
-     * 外委件
-     */
-    private String outerPart;
-    /**
-     * 颜色件
-     */
-    private Integer colorPart;
-
-    /**
-     * 备件
-     */
-    private String sparePart;
-    /**
-     *备件编号
-     */
-    private String sparePartNum;
-    /**
-     * 工艺路线
-     */
-    private String processRoute;
-    /**
-     * 人工工时
-     */
-    private String laborHour;
-    /**
-     *节拍
-     */
-    private String rhythm;
-    /**
-     * 焊点
-     */
-    private String solderJoint;
-    /**
-     * 机物料
-     */
-    private String machineMaterial;
-    /**
-     * 标准件
-     */
-    private String standardPart;
-    /**
-     * 工具
-     */
-    private String tools;
-    /**
-     * 废品
-     */
-    private String wasterProduct;
-    /**
-     * 变更
-     */
-    private String change;
-    /**
-     * 变更编号
-     */
-    private String changeNum;
-    /**
-     * FNA信息
-     */
-    private String fna;
-
     private String pBomLinePartEnName;
 
     private String pBomLinePartResource;
 
-    private Date pCreateTime;
-
-    private Date pUpdateTime;
+    private String pFnaInfo;
 
     private String pFastener;
 
-    private Integer p3cpartFlag;
+    private String pLouaFlag;
 
-    private Integer pInOutSideFlag;
+    private String p3cpartFlag;
+
+    private String pInOutSideFlag;
 
     private String pUpc;
 
@@ -218,7 +103,7 @@ public class HzEPLManageRecord {
 
     private String pImportance;
 
-    private Integer pRegulationFlag;
+    private String pRegulationFlag;
 
     private String pBwgBoxPart;
 
@@ -248,20 +133,44 @@ public class HzEPLManageRecord {
 
     private String pRegulationCode;
 
-    public String getFna() {
-        return fna;
-    }
-
-    public void setFna(String fna) {
-        this.fna = fna;
-    }
-
     public String getPuid() {
         return puid;
     }
 
     public void setPuid(String puid) {
         this.puid = puid;
+    }
+
+    public int getNo() {
+        return No;
+    }
+
+    public void setNo(int no) {
+        No = no;
+    }
+
+    public String getRank() {
+        return rank;
+    }
+
+    public void setRank(String rank) {
+        this.rank = rank;
+    }
+
+    public String getLevel() {
+        return level;
+    }
+
+    public void setLevel(String level) {
+        this.level = level;
+    }
+
+    public String getGroupNum() {
+        return groupNum;
+    }
+
+    public void setGroupNum(String groupNum) {
+        this.groupNum = groupNum;
     }
 
     public String getParentUid() {
@@ -280,76 +189,12 @@ public class HzEPLManageRecord {
         this.isDept = isDept;
     }
 
-    public String getBomDigifaxId() {
-        return bomDigifaxId;
-    }
-
-    public void setBomDigifaxId(String bomDigifaxId) {
-        this.bomDigifaxId = bomDigifaxId;
-    }
-
-    public String getLineIndex() {
-        return lineIndex;
-    }
-
-    public void setLineIndex(String lineIndex) {
-        this.lineIndex = lineIndex;
-    }
-
-    public String getLinePuid() {
-        return linePuid;
-    }
-
-    public void setLinePuid(String linePuid) {
-        this.linePuid = linePuid;
-    }
-
     public String getLineID() {
         return lineID;
     }
 
     public void setLineID(String lineID) {
         this.lineID = lineID;
-    }
-
-    public Integer getIsHas() {
-        return isHas;
-    }
-
-    public void setIsHas(Integer isHas) {
-        this.isHas = isHas;
-    }
-
-    public byte[] getBomLineBlock() {
-        return bomLineBlock;
-    }
-
-    public void setBomLineBlock(byte[] bomLineBlock) {
-        this.bomLineBlock = bomLineBlock;
-    }
-
-    public Integer getIs2Y() {
-        return is2Y;
-    }
-
-    public void setIs2Y(Integer is2Y) {
-        this.is2Y = is2Y;
-    }
-
-    public Integer getIsPart() {
-        return isPart;
-    }
-
-    public void setIsPart(Integer isPart) {
-        this.isPart = isPart;
-    }
-
-    public Integer getOrderNum() {
-        return orderNum;
-    }
-
-    public void setOrderNum(Integer orderNum) {
-        this.orderNum = orderNum;
     }
 
     public String getpBomOfWhichDept() {
@@ -376,190 +221,6 @@ public class HzEPLManageRecord {
         this.pBomLinePartClass = pBomLinePartClass;
     }
 
-    public String getItemResource() {
-        return itemResource;
-    }
-
-    public void setItemResource(String itemResource) {
-        this.itemResource = itemResource;
-    }
-
-    public String getResource() {
-        return resource;
-    }
-
-    public void setResource(String resource) {
-        this.resource = resource;
-    }
-
-    public Integer getType() {
-        return type;
-    }
-
-    public void setType(Integer type) {
-        this.type = type;
-    }
-
-    public Integer getBuyUnit() {
-        return buyUnit;
-    }
-
-    public void setBuyUnit(Integer buyUnit) {
-        this.buyUnit = buyUnit;
-    }
-
-    public String getWorkShop1() {
-        return workShop1;
-    }
-
-    public void setWorkShop1(String workShop1) {
-        this.workShop1 = workShop1;
-    }
-
-    public String getWorkShop2() {
-        return workShop2;
-    }
-
-    public void setWorkShop2(String workShop2) {
-        this.workShop2 = workShop2;
-    }
-
-    public String getProductLine() {
-        return productLine;
-    }
-
-    public void setProductLine(String productLine) {
-        this.productLine = productLine;
-    }
-
-    public String getMouldType() {
-        return mouldType;
-    }
-
-    public void setMouldType(String mouldType) {
-        this.mouldType = mouldType;
-    }
-
-    public String getOuterPart() {
-        return outerPart;
-    }
-
-    public void setOuterPart(String outerPart) {
-        this.outerPart = outerPart;
-    }
-
-    public Integer getColorPart() {
-        return colorPart;
-    }
-
-    public void setColorPart(Integer colorPart) {
-        this.colorPart = colorPart;
-    }
-
-    public String getSparePart() {
-        return sparePart;
-    }
-
-    public void setSparePart(String sparePart) {
-        this.sparePart = sparePart;
-    }
-
-    public String getSparePartNum() {
-        return sparePartNum;
-    }
-
-    public void setSparePartNum(String sparePartNum) {
-        this.sparePartNum = sparePartNum;
-    }
-
-    public String getProcessRoute() {
-        return processRoute;
-    }
-
-    public void setProcessRoute(String processRoute) {
-        this.processRoute = processRoute;
-    }
-
-    public String getLaborHour() {
-        return laborHour;
-    }
-
-    public void setLaborHour(String laborHour) {
-        this.laborHour = laborHour;
-    }
-
-    public String getRhythm() {
-        return rhythm;
-    }
-
-    public void setRhythm(String rhythm) {
-        this.rhythm = rhythm;
-    }
-
-    public String getSolderJoint() {
-        return solderJoint;
-    }
-
-    public void setSolderJoint(String solderJoint) {
-        this.solderJoint = solderJoint;
-    }
-
-    public String getMachineMaterial() {
-        return machineMaterial;
-    }
-
-    public void setMachineMaterial(String machineMaterial) {
-        this.machineMaterial = machineMaterial;
-    }
-
-    public String getStandardPart() {
-        return standardPart;
-    }
-
-    public void setStandardPart(String standardPart) {
-        this.standardPart = standardPart;
-    }
-
-    public String getTools() {
-        return tools;
-    }
-
-    public void setTools(String tools) {
-        this.tools = tools;
-    }
-
-    public String getWasterProduct() {
-        return wasterProduct;
-    }
-
-    public void setWasterProduct(String wasterProduct) {
-        this.wasterProduct = wasterProduct;
-    }
-
-    public String getChange() {
-        return change;
-    }
-
-    public void setChange(String change) {
-        this.change = change;
-    }
-
-    public String getChangeNum() {
-        return changeNum;
-    }
-
-    public void setChangeNum(String changeNum) {
-        this.changeNum = changeNum;
-    }
-
-    public Integer getpState() {
-        return pState;
-    }
-
-    public void setpState(Integer pState) {
-        this.pState = pState;
-    }
-
     public String getpBomLinePartEnName() {
         return pBomLinePartEnName;
     }
@@ -576,20 +237,12 @@ public class HzEPLManageRecord {
         this.pBomLinePartResource = pBomLinePartResource;
     }
 
-    public Date getpCreateTime() {
-        return pCreateTime;
+    public String getpFnaInfo() {
+        return pFnaInfo;
     }
 
-    public void setpCreateTime(Date pCreateTime) {
-        this.pCreateTime = pCreateTime;
-    }
-
-    public Date getpUpdateTime() {
-        return pUpdateTime;
-    }
-
-    public void setpUpdateTime(Date pUpdateTime) {
-        this.pUpdateTime = pUpdateTime;
+    public void setpFnaInfo(String pFnaInfo) {
+        this.pFnaInfo = pFnaInfo;
     }
 
     public String getpFastener() {
@@ -600,19 +253,27 @@ public class HzEPLManageRecord {
         this.pFastener = pFastener;
     }
 
-    public Integer getP3cpartFlag() {
+    public String getpLouaFlag() {
+        return pLouaFlag;
+    }
+
+    public void setpLouaFlag(String pLouaFlag) {
+        this.pLouaFlag = pLouaFlag;
+    }
+
+    public String getP3cpartFlag() {
         return p3cpartFlag;
     }
 
-    public void setP3cpartFlag(Integer p3cpartFlag) {
+    public void setP3cpartFlag(String p3cpartFlag) {
         this.p3cpartFlag = p3cpartFlag;
     }
 
-    public Integer getpInOutSideFlag() {
+    public String getpInOutSideFlag() {
         return pInOutSideFlag;
     }
 
-    public void setpInOutSideFlag(Integer pInOutSideFlag) {
+    public void setpInOutSideFlag(String pInOutSideFlag) {
         this.pInOutSideFlag = pInOutSideFlag;
     }
 
@@ -760,11 +421,11 @@ public class HzEPLManageRecord {
         this.pImportance = pImportance;
     }
 
-    public Integer getpRegulationFlag() {
+    public String getpRegulationFlag() {
         return pRegulationFlag;
     }
 
-    public void setpRegulationFlag(Integer pRegulationFlag) {
+    public void setpRegulationFlag(String pRegulationFlag) {
         this.pRegulationFlag = pRegulationFlag;
     }
 
