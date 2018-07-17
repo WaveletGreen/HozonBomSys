@@ -101,7 +101,13 @@ function initTable(){
                                 window.Ewin.alert({message: '请至少选择一条需要删除的数据!'});
                                 return false;
                             }
-                            window.Ewin.confirm({title: '提示', message: '是否要删除您所选择的记录？', width: 500}).on(function (e) {
+                            var _table = '<p>是否要删除您所选择的记录？</p>' +
+                                '<div style="max-height: 500px;overflow:scroll;"><table class="table table-striped tableNormalStyle" >';
+                            for (var index in rows) {
+                                _table += '<tr><td>' + rows[index].pLineId + '</td></tr>';
+                            }
+                            _table += '</table></div>';
+                            window.Ewin.confirm({title: '提示', message: _table, width: 500}).on(function (e) {
                                 if (e) {
                                     $.ajax({
                                         type: "POST",
@@ -116,8 +122,11 @@ function initTable(){
                                             }
                                             else {
                                                 window.Ewin.alert({message: ":" + result.errMsg});
-                                            }*/if (result) {
+                                            }*/if (result.success) {
                                                 layer.msg('删除成功', {icon: 1, time: 2000})
+                                            }
+                                            else if(!result.success){
+                                                window.Ewin.alert({message: result.errMsg})
                                             }
                                             //window.Ewin.alert({message: result.errMsg});
                                             $table.bootstrapTable("refresh");

@@ -129,11 +129,19 @@
                 validating: 'glyphicon glyphicon-refresh'
             },
             fields: {
-                level: {
-                    message: '层级验证失败',
+                pLineId: {
+                    message: '零件号验证失败',
                     validators: {
                         notEmpty: {
-                            message: '层级不能为空'
+                            message: '零件号不能为空'
+                        }
+                    }
+                },
+                pBomLinePartName: {
+                    message: '名称验证失败',
+                    validators: {
+                        notEmpty: {
+                            message: '名称不能为空'
                         }
                     }
                 },
