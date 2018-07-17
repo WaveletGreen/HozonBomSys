@@ -12,8 +12,8 @@
 }
 .infoToUser {
 	font-family: 黑体,微软雅黑,宋体;
-	font-size: 1.25em;
-
+	font-size: 16px;
+	color: #696969;
 }
 
 .numToCenter {
