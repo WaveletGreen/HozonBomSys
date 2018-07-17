@@ -859,12 +859,12 @@ public class HzPbomServiceImpl implements HzPbomService {
                 //获取分组号
                 String groupNum = record.getLineId();
                 //这里在做一个递归查询
-                if(groupNum.contains("-")){
-                    groupNum =groupNum.split("-")[1].substring(0,4);
-                }else{
-                    String parentId = record.getParentUid();
-                    groupNum = hzEPLManageRecordService.getGroupNum(projectId,parentId);
-                }
+//                if(groupNum.contains("-")){
+//                    groupNum =groupNum.split("-")[1].substring(0,4);
+//                }else{
+//                    String parentId = record.getParentUid();
+//                    groupNum = hzEPLManageRecordService.getGroupNum(projectId,parentId);
+//                }
                 respDTO.setGroupNum(groupNum);
 
                 respDTO.setpBomLinePartClass(record.getpBomLinePartClass());

@@ -232,7 +232,7 @@
             bootstrapValidator.validate();
             if (bootstrapValidator.isValid()) {
                 var url = $("#processCenterForm", window.top.document).attr('action');
-                var projectId =  $("#project", window.top.document).val();
+                var projectId = $("#project", window.top.document).val();
                 var myData = JSON.stringify({
                     "factoryCode": $("#factoryCode").val(),
                     "pWorkCode": $("#pWorkCode").val(),
@@ -267,7 +267,7 @@
                     "pExperssion4": $("#pExperssion4").val(),
                     "pExperssion5": $("#pExperssion5").val(),
                     "pExperssion6": $("#pExperssion6").val(),
-                    "projectId":$("#project", window.top.document).val()
+                    "projectId": $("#project", window.top.document).val()
                 });
                 $.ajax({
                     contentType:

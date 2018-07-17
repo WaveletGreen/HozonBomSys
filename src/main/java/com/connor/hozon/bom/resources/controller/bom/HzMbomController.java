@@ -158,7 +158,7 @@ public class HzMbomController extends BaseController {
         tableTitle.put("changeNum", "变更号");
         tableTitle.put("pFactoryCode", "工厂代码");
         tableTitle.put("pStockLocation", "发货料库存地点");
-        tableTitle.put("pBomType", "bom类型");
+        tableTitle.put("pBomType", "BOM类型");
         writeAjaxJSONResponse(ResultMessageBuilder.build(tableTitle), response);
     }
 

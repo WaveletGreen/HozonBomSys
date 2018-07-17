@@ -1,5 +1,7 @@
 package sql.pojo.epl;
 
+import java.util.Date;
+
 /**
  * Created by haozt on 2018/06/05
  * EPL管理全字段
@@ -59,7 +61,7 @@ public class HzEPLManageRecord {
      */
     private String pBomOfWhichDept;
     /**
-     * 项目的puid，只是方便根据项目查找数据，并不存在数据库中，做项目映射应该使用bomDigifaxId字段对应数模层，再对应项目
+     * 项目的puid
      */
     private String projectPuid;
     /**
@@ -169,6 +171,92 @@ public class HzEPLManageRecord {
      * FNA信息
      */
     private String fna;
+
+    private String pBomLinePartEnName;
+
+    private String pBomLinePartResource;
+
+    private String pFnaInfo;
+
+    private Integer pEbomStatus;
+
+    private Date pCreateTime;
+
+    private Date pUpdateTime;
+
+    private String pFastener;
+
+    private Integer pLouaFlag;
+
+    private Integer p3cpartFlag;
+
+    private Integer pInOutSideFlag;
+
+    private String pUpc;
+
+    private String pFnaDesc;
+
+    private String pCreateName;
+
+    private String pUpdateName;
+
+    private String pUnit;
+
+    private String pPictureNo;
+
+    private String pPictureSheet;
+
+    private String pMaterialHigh;
+
+    private String pMaterial1;
+
+    private String pMaterial2;
+
+    private String pMaterial3;
+
+    private String pDensity;
+
+    private String pMaterialStandard;
+
+    private String pSurfaceTreat;
+
+    private String pTextureColorNum;
+
+    private String pManuProcess;
+
+    private String pSymmetry;
+
+    private String pImportance;
+
+    private Integer pRegulationFlag;
+
+    private String pBwgBoxPart;
+
+    private String pDevelopType;
+
+    private String pDataVersion;
+
+    private String pTargetWeight;
+
+    private String pFeatureWeight;
+
+    private String pActualWeight;
+
+    private String pFastenerStandard;
+
+    private String pFastenerLevel;
+
+    private String pTorque;
+
+    private String pDutyEngineer;
+
+    private String pSupply;
+
+    private String pSupplyCode;
+
+    private String pRemark;
+
+    private String pRegulationCode;
 
     public String getFna() {
         return fna;

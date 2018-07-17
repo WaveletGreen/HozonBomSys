@@ -1,24 +1,20 @@
 $(document).ready((function () {
+    initTable();
+}))
+function  doQuery() {
+    $('#processAidsTable').bootstrapTable('refresh');
+}
+
+function initTable(){
     var $table = $("#processAidsTable");
     var column = [];
     $.ajax({
-        url: "epl/title",
+        url: "accessories/title",
         type: "GET",
         success: function (result) {
             var column = [];
             column.push({field: 'puid', title: 'Puid'});
-            // column.push({field: 'ck', checkbox: true, Width: 50});
-            column.push({
-                field: 'No',
-                title: '序号',
-                // formatter: function (value, row, index) {
-                //     return index + 1;
-                // },
-                align:
-                    'center',
-                valign:
-                    'middle'
-            });
+            column.push({field: 'ck', checkbox: true, Width: 50});
             var data = result.data;
             var keys = [];
             var values;
@@ -36,7 +32,7 @@ $(document).ready((function () {
                 }
             };
             $table.bootstrapTable({
-                url:"epl/record",
+                url:"accessories/get/lib",
                 method: 'get',
                 height: $(window.parent.document).find("#wrapper").height() - 90,
                 width: $(window).width(),
@@ -45,24 +41,97 @@ $(document).ready((function () {
                 pagination: true,                   //是否显示分页（*）
                 pageSize:20,
                 pageNumber:1,
-                pageList : [ 20, 50, 100,200,300,500, ], //可供选择的每页的行数（*）
-                sidePagination : "server", //分页方式：client客户端分页，server服务端分页（*）
+                pageList : [ 20, 50, 100,200,300,500,'ALL' ], //可供选择的每页的行数（*）
+                sidePagination : "server",          //分页方式：client客户端分页，server服务端分页（*）
                 clickToSelect: true,                // 单击某一行的时候选中某一条记录
                 showExport: true,
                 formId: "formId",
-                /**列信息，需要预先定义好*/
-                columns: column,
+                columns: column,                     //列信息，需要预先定义好
                 sortable: true,                     //是否启用排序
                 sortOrder: "asc",                   //排序方式
-                striped: true, //是否显示行间隔色
-                search: false, //是否显示表格搜索，此搜索是客户端搜索，不会进服务端
-                showColumns: true, //是否显示所有的列
-                /*fixedColumns: true,
-                fixedNumber: 1 ,//固定列数*/
-                //minimumCountColumns: 4,//设置最小列数
+                striped: true,                      //是否显示行间隔色
+                search: false,                      //是否显示表格搜索，此搜索是客户端搜索，不会进服务端
+                showColumns: true,                 //是否显示所有的列
+                toolbars: [
+                    {
+                        text: '添加',
+                        iconCls: 'glyphicon glyphicon-plus',
+                        handler: function () {
+                            window.Ewin.dialog({
+                                title: "添加",
+                                url: "accessories/addAccessories",
+                                gridId: "gridId",
+                                width: 500,
+                                height: 650
+                            })
+                        }
+                    },
+                    {
+                        text: '修改',
+                        iconCls: 'glyphicon glyphicon-pencil',
+                        handler: function () {
+                            var rows = $table.bootstrapTable('getSelections');
+                            //只能选一条
+                            if (rows.length != 1) {
+                                window.Ewin.alert({message: '请选择一条需要修改的数据!'});
+                                return false;
+                            }
+                            window.Ewin.dialog({
+                                title: "修改",
+                                url: "accessories/updateAccessories?puid=" + rows[0].puid,
+                                gridId: "gridId",
+                                width: 500,
+                                height: 650
+                            });
+                        }
+                    },
+                    {
+                        text: '删除',
+                        iconCls: 'glyphicon glyphicon-remove',
+                        handler: function () {
+                            var rows = $table.bootstrapTable('getSelections');
+                            var puids = "";
+                            for (var i = 0 ; i<rows.length;i++){
+                                puids += rows[i].puid+",";
+                            };
+                            var myData = JSON.stringify({
+                                "puids":puids,
+                            });
+                            if (rows.length == 0) {
+                                window.Ewin.alert({message: '请至少选择一条需要删除的数据!'});
+                                return false;
+                            }
+                            window.Ewin.confirm({title: '提示', message: '是否要删除您所选择的记录？', width: 500}).on(function (e) {
+                                if (e) {
+                                    $.ajax({
+                                        type: "POST",
+                                        //ajax需要添加打包名
+                                        url: "accessories/delete",
+                                        data: myData,
+                                        contentType: "application/json",
+                                        success: function (result) {
+                                            /*if (result.status) {
+                                                window.Ewin.alert({message: result.errMsg});
+                                                //刷新，会重新申请数据库数据
+                                            }
+                                            else {
+                                                window.Ewin.alert({message: ":" + result.errMsg});
+                                            }*/
+                                            window.Ewin.alert({message: result.errMsg});
+                                            $table.bootstrapTable("refresh");
+                                        },
+                                        error: function (info) {
+                                            window.Ewin.alert({message: "操作删除:" + info.status});
+                                        }
+                                    })
+                                }
+                            });
+                        }
+                    }
+                ],
             });
             $table.bootstrapTable('hideColumn', 'puid');
 
         }
     })
-}))
+}

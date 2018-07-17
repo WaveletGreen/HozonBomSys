@@ -240,15 +240,6 @@
 
 
 
-
-
-
-
-
-
-
-
-
     <!--分页查询 EBOM全信息 回收站-->
     <select id="HzEbomRecordDAOImpl_getHzRecycleRecord" resultMap="BaseResultMap" parameterType="java.util.HashMap">
         select * FROM

@@ -100,6 +100,24 @@
 
                placeholder="请输入变更号"/><!--th:value="${entity.changeNum}"-->
     </div>
+    <div class="form-group">
+        <label for="pFactoryCode">工厂代码</label>
+        <input class="form-control" id="pFactoryCode" name="pFactoryCode" type="text"
+
+               placeholder="请输入工厂代码"/><!--th:value="${entity.changeNum}"-->
+    </div>
+    <div class="form-group">
+        <label for="pStockLocation">发货料库存地点</label>
+        <input class="form-control" id="pStockLocation" name="pStockLocation" type="text"
+
+               placeholder="请输入发货料库存地点"/><!--th:value="${entity.changeNum}"-->
+    </div>
+    <div class="form-group">
+        <label for="pBomType">BOM类型</label>
+        <input class="form-control" id="pBomType" name="pBomType" type="text"
+
+               placeholder="请输入BOM类型"/><!--th:value="${entity.changeNum}"-->
+    </div>
 </form>
 
 <script th:inline="javascript">
@@ -147,7 +165,10 @@
                     "tools": $("#tools").val(),
                     "wasterProduct": $("#wasterProduct").val(),
                     "change": $("#change").val(),
-                    "changeNum": $("#changeNum").val()
+                    "changeNum": $("#changeNum").val(),
+                    "pFactoryCode": $("#pFactoryCode").val(),
+                    "pStockLocation": $("#pStockLocation").val(),
+                    "pBomType": $("#pBomType").val(),
                 });
                 $.ajax({
                     contentType:
