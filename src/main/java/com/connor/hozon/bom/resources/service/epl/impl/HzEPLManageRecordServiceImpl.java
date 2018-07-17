@@ -97,12 +97,12 @@ public class HzEPLManageRecordServiceImpl implements HzEPLManageRecordService {
                 String groupNum = record.getLineID();
 
                 //这里在做一个递归查询
-                if(groupNum.contains("-")){
-                    groupNum =groupNum.split("-")[1].substring(0,4);
-                }else{
-                    String parentId = record.getParentUid();
-                    groupNum = getGroupNum(query.getProjectId(),parentId);
-                }
+//                if(groupNum.contains("-")){
+//                    groupNum =groupNum.split("-")[1].substring(0,4);
+//                }else{
+//                    String parentId = record.getParentUid();
+//                    groupNum = getGroupNum(query.getProjectId(),parentId);
+//                }
                 jsonObject.put("groupNum", groupNum);
                 jsonObject.put("lineId", record.getLineID());
                 jsonObject.put("itemName", record.getpBomLinePartName());

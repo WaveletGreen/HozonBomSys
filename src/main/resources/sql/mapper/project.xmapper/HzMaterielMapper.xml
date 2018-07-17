@@ -194,10 +194,10 @@
                 or P_MATERIEL_DATA_TYPE =51
                 or P_MATERIEL_DATA_TYPE =61 )
             </if>
-            <if test="pMaterielCode != null">
+            <if test="pMaterielCode != null and pMaterielCode != '' ">
                 and P_MATERIEL_CODE like CONCAT(CONCAT('%',#{pMaterielCode,jdbcType=VARCHAR}),'%')
             </if>
-            <if test="pMaterielType != null">
+            <if test="pMaterielType != null and pMaterielType != ''">
                 and P_MATERIEL_TYPE like CONCAT(CONCAT('%',#{pMaterielType,jdbcType=VARCHAR}),'%')
             </if>
             and P_VALID_FLAG =1
@@ -226,10 +226,10 @@
                 or P_MATERIEL_DATA_TYPE =51
                 or P_MATERIEL_DATA_TYPE =61 )
             </if>
-            <if test="pMaterielCode != null">
+            <if test="pMaterielCode != null and pMaterielCode != '' ">
                 and P_MATERIEL_CODE like CONCAT(CONCAT('%',#{pMaterielCode,jdbcType=VARCHAR}),'%')
             </if>
-            <if test="pMaterielType != null">
+            <if test="pMaterielType != null and pMaterielType != ''">
                 and P_MATERIEL_TYPE like CONCAT(CONCAT('%',#{pMaterielType,jdbcType=VARCHAR}),'%')
             </if>
             and P_VALID_FLAG =1

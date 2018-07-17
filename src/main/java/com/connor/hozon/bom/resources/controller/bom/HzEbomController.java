@@ -192,6 +192,7 @@ public class HzEbomController extends BaseController {
         recordRespDTO.setGroupNum(object.getString("groupNum"));
         recordRespDTO.setFna(object.getString("fna"));
         recordRespDTO.setLevel(object.getString("level"));
+        recordRespDTO.setLineId(object.getString("lineId"));
         recordRespDTO.setP3cPartFlag(object.getString("p3cPartFlag"));
         recordRespDTO.setpBomLinePartClass(object.getString("h9_IsCommon"));
         recordRespDTO.setpBomLinePartEnName(object.getString("h9_Dimension"));
@@ -356,7 +357,7 @@ public class HzEbomController extends BaseController {
      */
     @RequestMapping(value = "update/ebom",method = RequestMethod.POST)
     public void updateEbomToDB(UpdateHzEbomReqDTO reqDTO, @RequestBody Map<String,Object> map, HttpServletResponse response){
-        if(reqDTO.getProjectId()==null){
+        if(map.get("projectPuid").equals("") || map.get("projectPuid")== null){
             writeAjaxJSONResponse(ResultMessageBuilder.build(false,"非法参数！"), response);
             return;
         }
