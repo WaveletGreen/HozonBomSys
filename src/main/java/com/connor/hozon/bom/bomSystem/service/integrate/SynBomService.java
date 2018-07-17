@@ -231,18 +231,41 @@ public class SynBomService implements ISynBomService {
             }
         }
         Map<String, ReflectBom> coach = new HashMap<>();
-
-
+        Map<String, ReflectBom> coach2 = new HashMap<>();
+        Map<String, ReflectBom> rel = new HashMap<>();
         for (String key : mapOfPackNo.keySet()) {
-            int index = 0;
             coach.clear();
-            for (String k : mapOfPackNo.get(key).keySet()) {
-                mapOfPackNo.get(key).get(k).getZpptci005().setPITEM(String.valueOf(index));
-                mapOfPackNo.get(key).get(k).getZpptci005().setPSORTF(String.valueOf(index));
+            /***********************part1******************/
+/*            for (String k : mapOfPackNo.get(key).keySet()) {
+                //一个物料下的相同组件存在多行，只能是工位不一致才允许多行
+                coach2.put(k, mapOfPackNo.get(key).get(k));
+                for (String _key : coach2.keySet()) {
+                    if (_key.equals(k)) {
+                        //添加，当前的数据
+                        rel.put(_key, coach.get(_key));
+                        continue;
+                    }
+                    //同名的组件
+                    if (coach2.get(_key).getChildOfBomLine().equals(mapOfPackNo.get(key).get(k).getChildOfBomLine())) {
+                        //查看组件的工位是否一样，工位相同，自增1
+                        if (coach2.get(_key).getStation().equals(mapOfPackNo.get(key).get(k).getStation())) {
+                            //自增1
+                            mapOfPackNo.get(key).get(k).setNumber(String.valueOf(Integer.parseInt(mapOfPackNo.get(key).get(k).getNumber()) + 1));
+                            //移除当前标志的缓存位
+                            mapOfPackNo.get(key).remove(_key);
+                        }
+                    }
+                }
                 transBomService.getInput().getItem().add(mapOfPackNo.get(key).get(k).getZpptci005());
-                coach.put(String.valueOf(index), mapOfPackNo.get(key).get(k));
-                index++;
+                coach.put(String.valueOf(mapOfPackNo.get(key).get(k).getZpptci005().getPSORTF()), mapOfPackNo.get(key).get(k));
+            }*/
+
+            /***********************part2******************/
+            for (String k : mapOfPackNo.get(key).keySet()) {
+                transBomService.getInput().getItem().add(mapOfPackNo.get(key).get(k).getZpptci005());
+                coach.put(String.valueOf(mapOfPackNo.get(key).get(k).getZpptci005().getPSORTF()), mapOfPackNo.get(key).get(k));
             }
+
             transBomService.execute();
             /**
              * 总数计数

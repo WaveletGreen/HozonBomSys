@@ -208,9 +208,15 @@ function initTable(url) {
                                     });
                                 }
                                 else {
+                                    var _table = '<p>是否要重新发送您所选择的记录？</p>' +
+                                        '<div style="max-height: 500px;overflow:scroll;"><table class="table table-striped tableNormalStyle" >';
+                                    for (var index in rows) {
+                                        _table += '<tr><td>' + rows[index].pMaterielCode + '</td></tr>';
+                                    }
+                                    _table += '</table></div>';
                                     window.Ewin.confirm({
                                         title: '提示',
-                                        message: '是否要重新发送您所选择的记录？',
+                                        message: _table,
                                         width: 600
                                     }).on(function (e) {
                                         if (e) {

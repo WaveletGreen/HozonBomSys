@@ -97,7 +97,7 @@ public class HzVehicleRecord implements IProject {
 
         if (pVehicleLastModDate == null) {
             Calendar calendar = Calendar.getInstance();
-            calendar.set(9998, 12, 31, 23, 59, 59);
+            calendar.set(9999, 11, 31, 23, 59, 59);
             this.pVehicleLastModDate = calendar.getTime();
         } else
             this.pVehicleLastModDate = pVehicleLastModDate;

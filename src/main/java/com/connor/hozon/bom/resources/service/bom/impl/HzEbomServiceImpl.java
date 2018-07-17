@@ -48,9 +48,6 @@ public class HzEbomServiceImpl implements HzEbomService {
     private HzBomDataDao hzBomDataDao;
 
     @Autowired
-    private HzEPLManageRecordService hzEPLManageRecordService;
-
-    @Autowired
     private HzBomLineRecordDaoImpl hzBomLineRecordDao;
 
     @Override
@@ -101,9 +98,6 @@ public class HzEbomServiceImpl implements HzEbomService {
 //                    String parentId = record.getParentUid();
 //                    groupNum = hzEPLManageRecordService.getGroupNum(query.getProjectId(),parentId);
 //                }
-                jsonObject.put("groupNum", groupNum);
-                jsonObject.put("lineId", record.getLineID());
-                jsonObject.put("fna",record.getFna());
                 byte[] bomLineBlock = record.getBomLineBlock();
                 Object obj = SerializeUtil.unserialize(bomLineBlock);
                 if (obj instanceof LinkedHashMap) {
@@ -121,6 +115,65 @@ public class HzEbomServiceImpl implements HzEbomService {
                             jsonObject.put(pSets.get(i), pValues.get(i));
                         }
                 }
+                jsonObject.put("groupNum", groupNum);
+                jsonObject.put("lineId", record.getLineID());
+                jsonObject.put("fna",record.getFna());
+
+
+                jsonObject.put("pBomLinePartName", record.getpBomLinePartName());
+                jsonObject.put("pBomLinePartClass", record.getpBomLinePartClass());
+                jsonObject.put("pBomLinePartEnName",record.getpBomLinePartEnName());
+                jsonObject.put("pBomLinePartResource", record.getpBomLinePartResource());
+                jsonObject.put("pFastener", record.getpFastener());
+                if(record.getIs2Y().equals(1)){
+                    jsonObject.put("pLouaFlag","LOU");
+                }else{
+                    jsonObject.put("pLouaFlag","LOA");
+                }
+//                if(record.getP3cpartFlag().equals(0)){
+//                    jsonObject.put("p3cpartFlag", "Y");
+//                }else {
+//                    jsonObject.put("p3cpartFlag", "N");
+//                }
+//                if(record.getpInOutSideFlag().equals(0)){
+//                    jsonObject.put("pInOutSideFlag", "内饰件");
+//                }else {
+//                    jsonObject.put("pInOutSideFlag", "外饰件");
+//                }
+//                jsonObject.put("pUpc",record.getpUpc());
+//                jsonObject.put("pFnaDesc", record.getpFnaDesc());
+//                jsonObject.put("pUnit", record.getpUnit());
+//                jsonObject.put("pPictureNo",record.getpPictureNo());
+//                jsonObject.put("pPictureSheet", record.getpPictureSheet());
+//                jsonObject.put("pMaterialHigh", record.getpMaterialHigh());
+//                jsonObject.put("pMaterial1",record.getpMaterial1());
+//                jsonObject.put("pMaterial2", record.getpMaterial2());
+//                jsonObject.put("pMaterial3", record.getpMaterial3());
+//                jsonObject.put("pDensity",record.getpDensity());
+//                jsonObject.put("pMaterialStandard", record.getpMaterialStandard());
+//                jsonObject.put("pSurfaceTreat", record.getpSurfaceTreat());
+//                jsonObject.put("pTextureColorNum",record.getpTextureColorNum());
+//                jsonObject.put("pManuProcess", groupNum);
+//                jsonObject.put("pSymmetry", record.getLineID());
+//                jsonObject.put("pImportance",record.getFna());
+//                jsonObject.put("pRegulationFlag", groupNum);
+//                jsonObject.put("pBwgBoxPart", record.getLineID());
+//                jsonObject.put("pDevelopType",record.getFna());
+//                jsonObject.put("pDataVersion", groupNum);
+//                jsonObject.put("pTargetWeight", record.getLineID());
+//                jsonObject.put("pFeatureWeight",record.getFna());
+//                jsonObject.put("pActualWeight", groupNum);
+//                jsonObject.put("pFastenerStandard", record.getLineID());
+//                jsonObject.put("pFastenerLevel",record.getFna());
+//
+//                jsonObject.put("pTorque", record.getLineID());
+//                jsonObject.put("pDutyEngineer",record.getFna());
+//                jsonObject.put("pSupply", groupNum);
+//                jsonObject.put("pSupplyCode", record.getLineID());
+//                jsonObject.put("pRemark",record.getFna());
+//                jsonObject.put("pRegulationCode", groupNum);
+
+
                 array.add(jsonObject);
             }
             recordRespDTO.setJsonArray(array);
@@ -135,7 +188,7 @@ public class HzEbomServiceImpl implements HzEbomService {
     public JSONArray getEbomTitle(String projectId) {
         try{
             JSONArray array = new JSONArray();
-            int appendCount = 7;
+            int appendCount = 8;
             HzPreferenceSetting setting = new HzPreferenceSetting();
             setting.setSettingName("Hz_ExportBomPreferenceRedis");
             HZBomMainRecord main = hzBomMainRecordDao.selectByProjectPuid(projectId);
@@ -159,6 +212,7 @@ public class HzEbomServiceImpl implements HzEbomService {
                 appendLocalName[4] = "级别";
                 appendLocalName[5] = "分组号";
                 appendLocalName[6] = "FNA";
+                appendLocalName[7] = "零部件来源";
 
                 appendTrueName[0] = "No";
                 appendTrueName[1] = "puid";
@@ -167,6 +221,7 @@ public class HzEbomServiceImpl implements HzEbomService {
                 appendTrueName[4] = "rank";
                 appendTrueName[5] = "groupNum";
                 appendTrueName[6] = "fna";
+                appendTrueName[7] = "pBomLinePartResource";
                 System.arraycopy(localName, 0, appendLocalName, appendCount, localName.length);
                 System.arraycopy(trueName, 0, appendTrueName, appendCount, trueName.length);
 
@@ -409,11 +464,8 @@ public class HzEbomServiceImpl implements HzEbomService {
                 ebomContent.remove("pBomOfWhichDept");
             }
 
-            if(ebomContent.containsKey("bl_item_item_id")){
-                itemId = (String)ebomContent.get("bl_item_item_id");
-            }
-            if(ebomContent.containsKey("item_id")){
-                itemId = (String)ebomContent.get("item_id");
+            if(ebomContent.containsKey("lineId")){
+                itemId = (String)ebomContent.get("lineId");
             }
 //            boolean isRepeat = hzEbomRecordDAO.checkItemIdIsRepeat(reqDTO.getProjectId(),itemId);
 //            if(isRepeat){
@@ -422,7 +474,7 @@ public class HzEbomServiceImpl implements HzEbomService {
 //                respDTO.setErrMsg("当前零件号已存在,请重新添加！");
 //                return respDTO;
 //            }
-            HZBomMainRecord hzBomMainRecord = hzBomMainRecordDao.selectByProjectPuid(reqDTO.getProjectId());
+            HZBomMainRecord hzBomMainRecord = hzBomMainRecordDao.selectByProjectPuid((String)ebomContent.get("projectPuid"));
             HzBomLineRecord hzBomLineRecord = new HzBomLineRecord();
             hzBomLineRecord.setBomDigifaxId(hzBomMainRecord.getPuid());
 
@@ -431,6 +483,7 @@ public class HzEbomServiceImpl implements HzEbomService {
             hzBomLineRecord.setpBomOfWhichDept(pBomOfWhichDept);
             hzBomLineRecord.setBomLineBlock(bytes);
             hzBomLineRecord.setPuid(puid);
+            hzBomLineRecord.setpBomLinePartResource((String)ebomContent.get("pBomLinePartResource"));
             int i =hzBomLineRecordDao.update(hzBomLineRecord);
             if(i>0){
                 return OperateResultMessageRespDTO.getSuccessResult();

@@ -11,38 +11,38 @@
     </resultMap>
 
     <!--物料数据信息-->
-    <resultMap extends="BaseResultMap" id="HzMaterielRecordMap" type="sql.pojo.project.HzMaterielRecord">
-        <result column="P_MATERIEL_DESC_EN" jdbcType="VARCHAR" property="pMaterielDescEn"/>
-        <result column="P_BASIC_UNIT_MEASURE" jdbcType="VARCHAR" property="pBasicUnitMeasure"/>
-        <result column="P_INVENTED_PART" jdbcType="INTEGER" property="pInventedPart"/>
-        <result column="P_SPARE_MATERIAL" jdbcType="VARCHAR" property="pSpareMaterial"/>
-        <result column="P_VIN_PER_NO" jdbcType="VARCHAR" property="pVinPerNo"/>
-        <result column="P_COLOR_PART" jdbcType="INTEGER" property="pColorPart"/>
-        <result column="P_HEIGHT" jdbcType="VARCHAR" property="pHeight"/>
-        <result column="P_IN_OUT_SIDE_FLAG" jdbcType="INTEGER" property="pInOutSideFlag"/>
-        <result column="P_3C_PART_FLAG" jdbcType="INTEGER" property="p3cPartFlag"/>
-        <result column="P_MRP_CONTROLLER" jdbcType="VARCHAR" property="pMrpController"/>
-        <result column="P_PART_IMPORTANT_DEGREE" jdbcType="VARCHAR" property="pPartImportantDegree"/>
-        <result column="P_LOOSE_PART_FLAG" jdbcType="INTEGER" property="pLoosePartFlag"/>
-        <result column="P_VALID_FLAG" jdbcType="INTEGER" property="pValidFlag"/>
-        <result column="P_MATERIEL_DATA_TYPE" jdbcType="INTEGER" property="pMaterielDataType"/>
-        <result column="P_CREATE_NAME" jdbcType="VARCHAR" property="pCreateName"/>
-        <result column="P_UPDATE_NAME" jdbcType="VARCHAR" property="pUpdateName"/>
-        <result column="P_FACTORY_PUID" jdbcType="VARCHAR" property="pFactoryPuid"/>
-        <result column="P_RESOURCE" jdbcType="VARCHAR" property="resource"/>
-        <result column="P_TYPE" jdbcType="INTEGER" property="type"/>
-        <result column="P_MATERIEL_RESOURCE_ID" jdbcType="VARCHAR" property="materielResourceId"/>
-        <result column="P_SEND_SAP_FLAG" jdbcType="INTEGER" property="sendSapFlag"/>
+    <resultMap  extends="BaseResultMap" id="HzMaterielRecordMap" type="sql.pojo.project.HzMaterielRecord">
+        <result column="P_MATERIEL_DESC_EN" jdbcType="VARCHAR" property="pMaterielDescEn" />
+        <result column="P_BASIC_UNIT_MEASURE" jdbcType="VARCHAR" property="pBasicUnitMeasure" />
+        <result column="P_INVENTED_PART" jdbcType="INTEGER" property="pInventedPart" />
+        <result column="P_SPARE_MATERIAL" jdbcType="VARCHAR" property="pSpareMaterial" />
+        <result column="P_VIN_PER_NO" jdbcType="VARCHAR" property="pVinPerNo" />
+        <result column="P_COLOR_PART" jdbcType="INTEGER" property="pColorPart" />
+        <result column="P_HEIGHT" jdbcType="VARCHAR" property="pHeight" />
+        <result column="P_IN_OUT_SIDE_FLAG" jdbcType="INTEGER" property="pInOutSideFlag" />
+        <result column="P_3C_PART_FLAG" jdbcType="INTEGER" property="p3cPartFlag" />
+        <result column="P_MRP_CONTROLLER" jdbcType="VARCHAR" property="pMrpController" />
+        <result column="P_PART_IMPORTANT_DEGREE" jdbcType="VARCHAR" property="pPartImportantDegree" />
+        <result column="P_LOOSE_PART_FLAG" jdbcType="INTEGER" property="pLoosePartFlag" />
+        <result column="P_VALID_FLAG" jdbcType="INTEGER" property="pValidFlag" />
+        <result column="P_MATERIEL_DATA_TYPE" jdbcType="INTEGER" property="pMaterielDataType" />
+        <result column="P_CREATE_NAME" jdbcType="VARCHAR" property="pCreateName" />
+        <result column="P_UPDATE_NAME" jdbcType="VARCHAR" property="pUpdateName" />
+        <result column="P_FACTORY_PUID" jdbcType="VARCHAR" property="pFactoryPuid" />
+        <result column="P_RESOURCE" jdbcType="VARCHAR" property="resource" />
+        <result column="P_TYPE" jdbcType="INTEGER" property="type" />
+        <result column="P_MATERIEL_RESOURCE_ID" jdbcType="VARCHAR" property="materielResourceId" />
+        <result column="P_SEND_SAP_FLAG" jdbcType="INTEGER" property="sendSapFlag" />
 
     </resultMap>
 
     <!--整车衍生物料主数据-->
     <resultMap id="HzCfg0ModelRecordMap" type="sql.pojo.cfg.HzCfg0ModelRecord">
-        <id column="PUID" jdbcType="VARCHAR" property="puid"/>
-        <result column="OBJECT_NAME" jdbcType="OTHER" property="objectName"/>
-        <result column="OBJECT_DESC" jdbcType="OTHER" property="objectDesc"/>
-        <result column="P_CFG0_MODEL_OF_MAIN_RECORD" jdbcType="VARCHAR" property="pCfg0ModelOfMainRecord"/>
-        <result column="P_CFG0_MODEL_BASIC_DETAIL" jdbcType="VARCHAR" property="pCfg0ModelBasicDetail"/>
+        <id column="PUID" jdbcType="VARCHAR" property="puid" />
+        <result column="OBJECT_NAME" jdbcType="OTHER" property="objectName" />
+        <result column="OBJECT_DESC" jdbcType="OTHER" property="objectDesc" />
+        <result column="P_CFG0_MODEL_OF_MAIN_RECORD" jdbcType="VARCHAR" property="pCfg0ModelOfMainRecord" />
+        <result column="P_CFG0_MODEL_BASIC_DETAIL" jdbcType="VARCHAR" property="pCfg0ModelBasicDetail" />
     </resultMap>
 
     <sql id="Base_Column_List">
@@ -61,7 +61,7 @@
     P_MATERIEL_DESC_EN, P_BASIC_UNIT_MEASURE, P_INVENTED_PART, P_SPARE_MATERIAL, P_VIN_PER_NO,
     P_COLOR_PART, P_HEIGHT, P_IN_OUT_SIDE_FLAG, P_3C_PART_FLAG, P_MRP_CONTROLLER, P_PART_IMPORTANT_DEGREE,
     P_LOOSE_PART_FLAG, P_VALID_FLAG, P_MATERIEL_DATA_TYPE, P_CREATE_TIME, P_UPDATE_TIME,
-    P_CREATE_NAME, P_UPDATE_NAME, P_FACTORY_PUID,P_MATERIEL_RESOURCE_ID,P_TYPE,P_SEND_SAP_FLAG
+    P_CREATE_NAME, P_UPDATE_NAME, P_FACTORY_PUID,P_MATERIEL_RESOURCE_ID,P_TYPE
   </sql>
 
     <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
@@ -128,7 +128,7 @@
             <if test="pLoosePartFlag != null">
                 P_LOOSE_PART_FLAG = #{pLoosePartFlag,jdbcType=INTEGER},
             </if>
-            P_UPDATE_TIME = sysdate,
+                P_UPDATE_TIME = sysdate,
             <if test="pUpdateName != null">
                 P_UPDATE_NAME = #{pUpdateName,jdbcType=VARCHAR},
             </if>
@@ -162,21 +162,18 @@
         P_FACTORY_PUID,P_TYPE,P_MATERIEL_RESOURCE_ID,P_VALID_FLAG)
         <foreach collection="list" item="item" index="index" separator="UNION ALL">
             select
-            #{item.puid,jdbcType=VARCHAR}, #{item.pMaterielCode,jdbcType=VARCHAR},
-            #{item.pMaterielType,jdbcType=VARCHAR},
-            #{item.pMaterielDesc,jdbcType=VARCHAR}, #{item.pPertainToProjectPuid,jdbcType=VARCHAR},
-            #{item.pMaterielDescEn,jdbcType=VARCHAR},
-            #{item.pMaterielDataType,jdbcType=VARCHAR},
-            #{item.pFactoryPuid,jdbcType=VARCHAR},#{item.type,jdbcType=INTEGER},
+            #{item.puid,jdbcType=VARCHAR}, #{item.pMaterielCode,jdbcType=VARCHAR}, #{item.pMaterielType,jdbcType=VARCHAR},
+            #{item.pMaterielDesc,jdbcType=VARCHAR}, #{item.pPertainToProjectPuid,jdbcType=VARCHAR}, #{item.pMaterielDescEn,jdbcType=VARCHAR},
+            #{item.pMaterielDataType,jdbcType=VARCHAR}, #{item.pFactoryPuid,jdbcType=VARCHAR},#{item.type,jdbcType=INTEGER},
             #{item.materielResourceId,jdbcType=INTEGER},1
             from DUAL
         </foreach>
     </insert>
 
 
+
     <!--分页获取物料主数据-->
-    <select id="HzMaterialDAOImpl_findHzMaterielForPage" parameterType="java.util.HashMap"
-            resultMap="HzMaterielRecordMap">
+    <select id="HzMaterialDAOImpl_findHzMaterielForPage" parameterType="java.util.HashMap" resultMap="HzMaterielRecordMap">
         select * from
         (select t.*,ROWNUM as rn from
         (select
@@ -197,10 +194,10 @@
                 or P_MATERIEL_DATA_TYPE =51
                 or P_MATERIEL_DATA_TYPE =61 )
             </if>
-            <if test="pMaterielCode != null">
+            <if test="pMaterielCode != null and pMaterielCode != '' ">
                 and P_MATERIEL_CODE like CONCAT(CONCAT('%',#{pMaterielCode,jdbcType=VARCHAR}),'%')
             </if>
-            <if test="pMaterielType != null">
+            <if test="pMaterielType != null and pMaterielType != ''">
                 and P_MATERIEL_TYPE like CONCAT(CONCAT('%',#{pMaterielType,jdbcType=VARCHAR}),'%')
             </if>
             and P_VALID_FLAG =1
@@ -210,8 +207,7 @@
     </select>
 
     <!--获取物料主数据总数-->
-    <select id="HzMaterialDAOImpl_findHzMaterielTotalCount" parameterType="java.util.HashMap"
-            resultType="java.lang.Integer">
+    <select id="HzMaterialDAOImpl_findHzMaterielTotalCount" parameterType="java.util.HashMap" resultType="java.lang.Integer">
         select
         count(*)
         from HZ_MATERIEL_RECORD
@@ -230,10 +226,10 @@
                 or P_MATERIEL_DATA_TYPE =51
                 or P_MATERIEL_DATA_TYPE =61 )
             </if>
-            <if test="pMaterielCode != null">
+            <if test="pMaterielCode != null and pMaterielCode != '' ">
                 and P_MATERIEL_CODE like CONCAT(CONCAT('%',#{pMaterielCode,jdbcType=VARCHAR}),'%')
             </if>
-            <if test="pMaterielType != null">
+            <if test="pMaterielType != null and pMaterielType != ''">
                 and P_MATERIEL_TYPE like CONCAT(CONCAT('%',#{pMaterielType,jdbcType=VARCHAR}),'%')
             </if>
             and P_VALID_FLAG =1
@@ -241,31 +237,33 @@
     </select>
 
 
+
     <!--获取物料主数据-->
-    <select id="HzMaterialDAOImpl_findHzMaterielForList" parameterType="java.util.HashMap"
-            resultMap="HzMaterielRecordMap">
+    <select id="HzMaterialDAOImpl_findHzMaterielForList" parameterType="java.util.HashMap" resultMap="HzMaterielRecordMap">
         select
-        <include refid="HzMaterielRecordList"/>
+        <include refid="HzMaterielRecordList" />
         from HZ_MATERIEL_RECORD
         <where>
             1=1
             <if test="projectId != null and projectId!=''">
-                and P_PERTAIN_TO_PROJECT_PUID = #{projectId,jdbcType=VARCHAR}
+               and P_PERTAIN_TO_PROJECT_PUID = #{projectId,jdbcType=VARCHAR}
             </if>
             <if test="puid != null and puid!=''">
-                and PUID = #{puid,jdbcType=VARCHAR}
+               and PUID = #{puid,jdbcType=VARCHAR}
             </if>
             <if test="pMaterielDataType != null">
-                and P_MATERIEL_DATA_TYPE = #{pMaterielDataType,jdbcType=INTEGER}
+               and P_MATERIEL_DATA_TYPE = #{pMaterielDataType,jdbcType=INTEGER}
             </if>
             and P_VALID_FLAG =1
         </where>
     </select>
 
 
+
+
+
     <!--分页查询整车衍生物料主数据-->
-    <select id="HzMaterialDAOImpl_findHzCfg0ModelRecord" parameterType="java.util.HashMap"
-            resultMap="HzCfg0ModelRecordMap">
+    <select id="HzMaterialDAOImpl_findHzCfg0ModelRecord" parameterType="java.util.HashMap" resultMap="HzCfg0ModelRecordMap">
          select * from
         (select t.*,ROWNUM as rn from
         (SELECT t1.* FROM HZ_CFG0_MODEL_RECORD t1 WHERE t1.P_CFG0_MODEL_OF_MAIN_RECORD =
@@ -277,8 +275,7 @@
 
 
     <!--查询整车衍生物料主数据全部-->
-    <select id="HzMaterialDAOImpl_findHzCfg0ModelRecordAll" parameterType="java.util.HashMap"
-            resultMap="HzCfg0ModelRecordMap">
+    <select id="HzMaterialDAOImpl_findHzCfg0ModelRecordAll" parameterType="java.util.HashMap" resultMap="HzCfg0ModelRecordMap">
         SELECT t1.* FROM HZ_CFG0_MODEL_RECORD t1 WHERE t1.P_CFG0_MODEL_OF_MAIN_RECORD =
         (SELECT PUID FROM HZ_CFG0_MAIN_RECORD t2
         WHERE t2.P_CFG0_OF_WHICH_PROJECT_PUID=#{projectId,jdbcType=VARCHAR})
@@ -286,11 +283,9 @@
 
 
     <!--查询一条物料数据-->
-    <select id="HzMaterialDAOImpl_getHzMaterielRecord" parameterType="java.util.HashMap"
-            resultMap="HzMaterielRecordMap">
-        select
-        <include refid="HzMaterielRecordList"/>
-        from HZ_MATERIEL_RECORD
+    <select id="HzMaterialDAOImpl_getHzMaterielRecord" parameterType="java.util.HashMap" resultMap="HzMaterielRecordMap">
+      select <include refid="HzMaterielRecordList"/>
+       from HZ_MATERIEL_RECORD
         <where>
             1=1
             <if test="puid != null and puid!=''">
