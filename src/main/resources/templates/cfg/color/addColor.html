@@ -188,7 +188,8 @@
                                 $('body', window.top.document).find('.modal-backdrop').remove();
                                 // jquery 调用刷新当前操作的table页面的refresh方法
                                 $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
-                                window.Ewin.alert({message: result.msg});
+                                layer.msg(result.msg, {icon: 1, time: 2000})
+                                // window.Ewin.alert({message: result.msg});
                             },
                         error: function (status) {
                             window.Ewin.alert({message: status.status + ':添加数据失败!'});
@@ -198,27 +199,28 @@
             });
         },
         $('#pColorEffectedDate').datetimepicker({
-            format: 'yyyy-mm-dd hh:ii',//日期的格式
+            format: 'yyyy-mm-dd',//日期的格式
             weekStart: 1,//一周开始， 0（星期日）到6（星期六）
-            startDate: "1900-01-01 00:00",//选择器的开始日期
+            startDate: "1900-01-01",//选择器的开始日期
             autoclose: true,//日期选择完成后是否关闭选择框
             bootcssVer: 3,//显示向左向右的箭头
             language: 'zh_CN',//语言
-            minView: 1,//表示日期选择的最小范围，默认是hour
+            minView: 2,//表示日期选择的最小范围，默认是hour
             todayBtn: true
         }),
         $('#pColorAbolishDate').datetimepicker({
-            format: 'yyyy-mm-dd hh:ii',//日期的格式
+            format: 'yyyy-mm-dd',//日期的格式
             weekStart: 1,// 0（星期日）到6（星期六）
-            startDate: "1900-01-01 00:00",//选择器的开始日期
+            startDate: "1900-01-01",//选择器的开始日期
             autoclose: true,//日期选择完成后是否关闭选择框
             bootcssVer: 3,//显示向左向右的箭头
             language: 'zh_CN',//语言
-            minView: 1,//表示日期选择的最小范围，默认是hour
+            minView: 2,//表示日期选择的最小范围，默认是hour
             todayBtn: true
         })
     )
     ]]>
 </script>
+<script th:src="@{/layer/layer.js}"></script>
 </body>
 </html>
