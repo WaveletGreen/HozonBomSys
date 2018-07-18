@@ -15,6 +15,7 @@ import sql.pojo.bom.HzMBomToERPBean;
 
 import java.util.*;
 
+
 @Configuration
 public class SynBomService implements ISynBomService {
     /***
@@ -81,6 +82,8 @@ public class SynBomService implements ISynBomService {
     public JSONObject synAllByProjectUid(String projectPuid) {
         //每次都清空缓存
         transBomService.setClearInputEachTime(true);
+        if (SynMaterielService.debug)
+            transBomService.getInput().getItem().clear();
         /**
          * 成功项
          */
@@ -266,7 +269,8 @@ public class SynBomService implements ISynBomService {
                 coach.put(String.valueOf(mapOfPackNo.get(key).get(k).getZpptci005().getPSORTF()), mapOfPackNo.get(key).get(k));
             }
 
-            transBomService.execute();
+            if (SynMaterielService.debug)
+                transBomService.execute();
             /**
              * 总数计数
              */
@@ -534,7 +538,6 @@ public class SynBomService implements ISynBomService {
         List<HzMBomToERPBean> beans = new ArrayList<>();
         List<HzMBomToERPBean> parents = new ArrayList<>();
         JSONObject result = validate(projectPuid, puids, beans, parents);
-
         parents.forEach(p -> {
             parentPuidMap.put(p.getBomUid(), p);
         });
