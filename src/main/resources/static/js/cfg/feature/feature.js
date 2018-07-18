@@ -89,7 +89,8 @@ function loadData() {
                                 contentType: "application/json",
                                 success: function (result) {
                                     if (result.status) {
-                                        window.Ewin.alert({message: result.msg});
+                                        layer.msg(result.msg, {icon: 1, time: 2000})
+                                        // window.Ewin.alert({message: result.msg});
                                         //刷新，会重新申请数据库数据
                                     }
                                     else {
@@ -124,7 +125,8 @@ function loadData() {
                                 contentType: "application/json",
                                 success: function (result) {
                                     if (result.status) {
-                                        window.Ewin.alert({message: result.msg});
+                                        layer.msg(result.msg, {icon: 1, time: 2000})
+                                        // window.Ewin.alert({message: result.msg});
                                         //刷新，会重新申请数据库数据
                                     }
                                     else {

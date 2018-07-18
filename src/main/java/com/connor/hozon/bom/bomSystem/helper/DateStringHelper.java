@@ -12,7 +12,7 @@ public class DateStringHelper {
      */
     public static final String pattern = "yyyy-MM-dd HH:mm:ss";
 
-    private static final String pattern2 = "yyyy-MM-dd HH:mm";
+    private static final String pattern2 = "yyyy-MM-dd";
     /**
      * 转换器
      */

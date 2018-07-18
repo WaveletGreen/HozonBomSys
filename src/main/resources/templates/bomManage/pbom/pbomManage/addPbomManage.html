@@ -179,7 +179,12 @@
                             //     window.Ewin.alert({message: '添加数据成功!'});
                             // else
                             //     window.Ewin.alert({message: '添加数据失败!'});
-                            window.Ewin.alert({message: result.errMsg})
+                            if (result.success) {
+                                layer.msg('添加成功', {icon: 1, time: 2000})
+                            }
+                            else if(!result.success){
+                                window.Ewin.alert({message: result.errMsg})
+                            }
                         },
                     error: function (status) {
                         window.Ewin.alert({message: status.status + ':添加数据失败!'});
@@ -190,5 +195,6 @@
     })
     ]]>
 </script>
+<script th:src="@{/layer/layer.js}"></script>
 </body>
 </html>

@@ -282,7 +282,12 @@
                             $('body', window.top.document).find('.modal-backdrop').remove();
                             // jquery 调用刷新当前操作的table页面的refresh方法
                             $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
-                            window.Ewin.alert({message: result.errMsg});
+                            if (result.success) {
+                                layer.msg('添加成功', {icon: 1, time: 2000})
+                            }
+                            else if(!result.success){
+                                window.Ewin.alert({message: result.errMsg})
+                            }
                         },
                     error: function (status) {
                         window.Ewin.alert({message: status.status + ':添加数据失败!'});
@@ -293,5 +298,6 @@
     })
     ]]>
 </script>
+<script th:src="@{/layer/layer.js}"></script>
 </body>
 </html>
