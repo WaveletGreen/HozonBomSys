@@ -156,7 +156,7 @@ public class HzEbomServiceImpl implements HzEbomService {
                 jsonObject.put("pManuProcess", record.getpManuProcess());
                 jsonObject.put("pSymmetry", record.getpSymmetry());
                 jsonObject.put("pImportance",record.getpImportance());
-                if(Integer.valueOf(0).equals(record.getpRegulationFlag())){
+                if(Integer.valueOf(1).equals(record.getpRegulationFlag())){
                     jsonObject.put("pRegulationFlag", "Y");
                 }else{
                     jsonObject.put("pRegulationFlag", "N");
@@ -310,7 +310,7 @@ public class HzEbomServiceImpl implements HzEbomService {
                 jsonObject.put("pManuProcess", record.getpManuProcess());
                 jsonObject.put("pSymmetry", record.getpSymmetry());
                 jsonObject.put("pImportance",record.getpImportance());
-                if(Integer.valueOf(0).equals(record.getpRegulationFlag())){
+                if(Integer.valueOf(1).equals(record.getpRegulationFlag())){
                     jsonObject.put("pRegulationFlag", "Y");
                 }else{
                     jsonObject.put("pRegulationFlag", "N");
@@ -484,9 +484,9 @@ public class HzEbomServiceImpl implements HzEbomService {
                 hzBomLineRecord.setBomLineBlock(SerializeUtil.serialize(0));
                 hzBomLineRecord.setNumber(reqDTO.getNumber());
                 if(reqDTO.getpRegulationFlag().equals("Y")){
-                    hzBomLineRecord.setpRegulationFlag(0);
-                }else {
                     hzBomLineRecord.setpRegulationFlag(1);
+                }else {
+                    hzBomLineRecord.setpRegulationFlag(0);
                 }
                 i = hzBomLineRecordDao.insert(hzBomLineRecord);
                 if(i>0){
@@ -586,9 +586,9 @@ public class HzEbomServiceImpl implements HzEbomService {
                 hzBomLineRecord.setBomLineBlock(SerializeUtil.serialize(0));
                 hzBomLineRecord.setNumber(reqDTO.getNumber());
                 if(reqDTO.getpRegulationFlag().equals("Y")){
-                    hzBomLineRecord.setpRegulationFlag(0);
-                }else {
                     hzBomLineRecord.setpRegulationFlag(1);
+                }else {
+                    hzBomLineRecord.setpRegulationFlag(0);
                 }
                 i = hzBomLineRecordDao.insert(hzBomLineRecord);
                if(i>0){
@@ -677,9 +677,9 @@ public class HzEbomServiceImpl implements HzEbomService {
             hzBomLineRecord.setpPictureSheet(reqDTO.getpPictureSheet());
             hzBomLineRecord.setpRegulationCode(reqDTO.getpRegulationCode());
             if(reqDTO.getpRegulationFlag().equals("Y")){
-                hzBomLineRecord.setpRegulationFlag(0);
-            }else {
                 hzBomLineRecord.setpRegulationFlag(1);
+            }else {
+                hzBomLineRecord.setpRegulationFlag(0);
             }
             hzBomLineRecord.setpUpc(reqDTO.getpUpc());
             hzBomLineRecord.setpRemark(reqDTO.getpRemark());
@@ -839,7 +839,7 @@ public class HzEbomServiceImpl implements HzEbomService {
                 jsonObject.put("pManuProcess", record.getpManuProcess());
                 jsonObject.put("pSymmetry", record.getpSymmetry());
                 jsonObject.put("pImportance",record.getpImportance());
-                if(Integer.valueOf(0).equals(record.getpRegulationFlag())){
+                if(Integer.valueOf(1).equals(record.getpRegulationFlag())){
                     jsonObject.put("pRegulationFlag", "Y");
                 }else{
                     jsonObject.put("pRegulationFlag", "N");
