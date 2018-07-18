@@ -216,16 +216,16 @@
                 invalid: 'glyphicon glyphicon-remove',
                 validating: 'glyphicon glyphicon-refresh'
             },
-           /* fields: {
-                level: {
-                    message: '层级验证失败',
+            fields: {
+                factoryCode: {
+                    message: '工厂代码验证失败',
                     validators: {
                         notEmpty: {
-                            message: '层级不能为空'
+                            message: '工厂代码不能为空'
                         }
                     }
                 },
-            }*/
+            }
         });
         // 绑定dialog的确定按钮的监听事件
         $("#btnOk", window.top.document).click(function () {

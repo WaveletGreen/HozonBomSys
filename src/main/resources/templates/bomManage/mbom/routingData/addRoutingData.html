@@ -119,16 +119,32 @@
                 invalid: 'glyphicon glyphicon-remove',
                 validating: 'glyphicon glyphicon-refresh'
             },
-            /*fields: {
-                level: {
-                    message: '层级验证失败',
+            fields: {
+                factoryCode: {
+                    message: '工厂验证失败',
                     validators: {
                         notEmpty: {
-                            message: '层级不能为空'
+                            message: '工厂不能为空'
                         }
                     }
                 },
-            }*/
+                pMaterielCode: {
+                    message: '物料验证失败',
+                    validators: {
+                        notEmpty: {
+                            message: '物料不能为空'
+                        }
+                    }
+                },
+                pMaterielDesc: {
+                    message: '物料名称验证失败',
+                    validators: {
+                        notEmpty: {
+                            message: '物料名称不能为空'
+                        }
+                    }
+                },
+            }
         });
         // 绑定dialog的确定按钮的监听事件
         $("#btnOk", window.top.document).click(function () {

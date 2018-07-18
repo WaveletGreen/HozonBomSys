@@ -9,6 +9,7 @@ public class HzEbomRespDTO {
 
     private JSONArray jsonArray;
 
+
     public JSONArray getJsonArray() {
         return jsonArray;
     }
@@ -19,9 +20,10 @@ public class HzEbomRespDTO {
     /**不要吐槽为什么要这么写 实在没办法 一会这样的 一会那样的 代码都让改乱了*/
     /**把参数提出来 单独写实体类*/
 
+    private String lineId;
     private String puid;
 
-
+    private String projectId;
     /**
      * 专业
      */
@@ -54,49 +56,106 @@ public class HzEbomRespDTO {
      * Bom行对应的零件名
      */
     private String pBomLinePartName;
-
     /**
      * 英文名称
      */
     private String pBomLinePartEnName;
-
-
-	private String p3cPartFlag;
-    private String inOutSideFlag;
-    private String upc;
-    private String fna ;
-    private String fnaDesc;
-    private String lineId;
-    private String h9_Dimension;
-    private String h9_Gross_Unit;
-    private String h9_Drawingno;
-    private String h9_Draw_size;
-    private String h9_Thickness;
-    private String h9_Repalced;
-    private String h9_Gross;
-    private String h9_Configure;
-    private String h9_Density;
-    private String h9_MatType;
-    private String h9_Surface_treatment;
-    private String h9_Model_numberPaint_colour;
-    private String h9_Manufacture_method;
-    private String h9_Symmetrical_Part;
-    private String h9_I_Part;
-    private String h9_S_Part;
-    private String h9_Legal_Part;
-    private String h9_SupplyType;
-    private String h9_DevelopType;
-    private String item_revision_id;
-    private String  h9_Target_Weight;
-    private String  h9_Estimate_Weight;
-    private String h9_Actual_Weight;
-    private String h9_Specification;
-    private String h9_PerformanceLevel;
-    private String h9_Torque;
-    private String owning_user;
-    private String h9_SupplyInfor;
-    private String h9_Memo;
     private String fastener;
+    /**
+     * Bom行对应的零件名
+     */
+    private String fna;
+
+    private String pBuyEngineer;
+    private String pLouaFlag;
+
+    private String pFastener;
+
+    private String p3cpartFlag;
+
+    private String pInOutSideFlag;
+
+    private String pUpc;
+
+    private String pFnaDesc;
+
+    private String pCreateName;
+
+    private String pUpdateName;
+
+    private String pUnit;
+
+    private String pPictureNo;
+
+    private String pPictureSheet;
+
+    private String pMaterialHigh;
+
+    private String pMaterial1;
+
+    private String pMaterial2;
+
+    private String pMaterial3;
+
+    private String pDensity;
+
+    private String pMaterialStandard;
+
+    private String pSurfaceTreat;
+
+    private String pTextureColorNum;
+
+    private String pManuProcess;
+
+    private String pSymmetry;
+
+    private String pImportance;
+
+    private String pRegulationFlag;
+
+    private String pBwgBoxPart;
+
+    private String pDevelopType;
+
+    private String pDataVersion;
+
+    private String pTargetWeight;
+
+    private String pFeatureWeight;
+
+    private String pActualWeight;
+
+    private String pFastenerStandard;
+
+    private String pFastenerLevel;
+
+    private String pTorque;
+
+    private String pDutyEngineer;
+
+    private String pSupply;
+
+    private String pSupplyCode;
+
+    private String pRemark;
+
+    private String pRegulationCode;
+
+    public String getProjectId() {
+        return projectId;
+    }
+
+    public void setProjectId(String projectId) {
+        this.projectId = projectId;
+    }
+
+    public String getpLouaFlag() {
+        return pLouaFlag;
+    }
+
+    public void setpLouaFlag(String pLouaFlag) {
+        this.pLouaFlag = pLouaFlag;
+    }
 
     public String getLineId() {
         return lineId;
@@ -178,28 +237,44 @@ public class HzEbomRespDTO {
         this.pBomLinePartEnName = pBomLinePartEnName;
     }
 
-    public String getP3cPartFlag() {
-        return p3cPartFlag;
+    public String getFastener() {
+        return fastener;
     }
 
-    public void setP3cPartFlag(String p3cPartFlag) {
-        this.p3cPartFlag = p3cPartFlag;
+    public void setFastener(String fastener) {
+        this.fastener = fastener;
     }
 
-    public String getInOutSideFlag() {
-        return inOutSideFlag;
+    public String getpFastener() {
+        return pFastener;
     }
 
-    public void setInOutSideFlag(String inOutSideFlag) {
-        this.inOutSideFlag = inOutSideFlag;
+    public void setpFastener(String pFastener) {
+        this.pFastener = pFastener;
     }
 
-    public String getUpc() {
-        return upc;
+    public String getP3cpartFlag() {
+        return p3cpartFlag;
     }
 
-    public void setUpc(String upc) {
-        this.upc = upc;
+    public void setP3cpartFlag(String p3cpartFlag) {
+        this.p3cpartFlag = p3cpartFlag;
+    }
+
+    public String getpInOutSideFlag() {
+        return pInOutSideFlag;
+    }
+
+    public void setpInOutSideFlag(String pInOutSideFlag) {
+        this.pInOutSideFlag = pInOutSideFlag;
+    }
+
+    public String getpUpc() {
+        return pUpc;
+    }
+
+    public void setpUpc(String pUpc) {
+        this.pUpc = pUpc;
     }
 
     public String getFna() {
@@ -210,251 +285,267 @@ public class HzEbomRespDTO {
         this.fna = fna;
     }
 
-    public String getFnaDesc() {
-        return fnaDesc;
+    public String getpFnaDesc() {
+        return pFnaDesc;
     }
 
-    public void setFnaDesc(String fnaDesc) {
-        this.fnaDesc = fnaDesc;
+    public void setpFnaDesc(String pFnaDesc) {
+        this.pFnaDesc = pFnaDesc;
     }
 
-    public String getH9_Dimension() {
-        return h9_Dimension;
+    public String getpCreateName() {
+        return pCreateName;
     }
 
-    public void setH9_Dimension(String h9_Dimension) {
-        this.h9_Dimension = h9_Dimension;
+    public void setpCreateName(String pCreateName) {
+        this.pCreateName = pCreateName;
     }
 
-    public String getH9_Gross_Unit() {
-        return h9_Gross_Unit;
+    public String getpUpdateName() {
+        return pUpdateName;
     }
 
-    public void setH9_Gross_Unit(String h9_Gross_Unit) {
-        this.h9_Gross_Unit = h9_Gross_Unit;
+    public void setpUpdateName(String pUpdateName) {
+        this.pUpdateName = pUpdateName;
     }
 
-    public String getH9_Drawingno() {
-        return h9_Drawingno;
+    public String getpUnit() {
+        return pUnit;
     }
 
-    public void setH9_Drawingno(String h9_Drawingno) {
-        this.h9_Drawingno = h9_Drawingno;
+    public void setpUnit(String pUnit) {
+        this.pUnit = pUnit;
     }
 
-    public String getH9_Draw_size() {
-        return h9_Draw_size;
+    public String getpPictureNo() {
+        return pPictureNo;
     }
 
-    public void setH9_Draw_size(String h9_Draw_size) {
-        this.h9_Draw_size = h9_Draw_size;
+    public void setpPictureNo(String pPictureNo) {
+        this.pPictureNo = pPictureNo;
     }
 
-    public String getH9_Thickness() {
-        return h9_Thickness;
+    public String getpPictureSheet() {
+        return pPictureSheet;
     }
 
-    public void setH9_Thickness(String h9_Thickness) {
-        this.h9_Thickness = h9_Thickness;
+    public void setpPictureSheet(String pPictureSheet) {
+        this.pPictureSheet = pPictureSheet;
     }
 
-    public String getH9_Repalced() {
-        return h9_Repalced;
+    public String getpMaterialHigh() {
+        return pMaterialHigh;
     }
 
-    public void setH9_Repalced(String h9_Repalced) {
-        this.h9_Repalced = h9_Repalced;
+    public void setpMaterialHigh(String pMaterialHigh) {
+        this.pMaterialHigh = pMaterialHigh;
     }
 
-    public String getH9_Gross() {
-        return h9_Gross;
+    public String getpMaterial1() {
+        return pMaterial1;
     }
 
-    public void setH9_Gross(String h9_Gross) {
-        this.h9_Gross = h9_Gross;
+    public void setpMaterial1(String pMaterial1) {
+        this.pMaterial1 = pMaterial1;
     }
 
-    public String getH9_Configure() {
-        return h9_Configure;
+    public String getpMaterial2() {
+        return pMaterial2;
     }
 
-    public void setH9_Configure(String h9_Configure) {
-        this.h9_Configure = h9_Configure;
+    public void setpMaterial2(String pMaterial2) {
+        this.pMaterial2 = pMaterial2;
     }
 
-    public String getH9_Density() {
-        return h9_Density;
+    public String getpMaterial3() {
+        return pMaterial3;
     }
 
-    public void setH9_Density(String h9_Density) {
-        this.h9_Density = h9_Density;
+    public void setpMaterial3(String pMaterial3) {
+        this.pMaterial3 = pMaterial3;
     }
 
-    public String getH9_MatType() {
-        return h9_MatType;
+    public String getpDensity() {
+        return pDensity;
     }
 
-    public void setH9_MatType(String h9_MatType) {
-        this.h9_MatType = h9_MatType;
+    public void setpDensity(String pDensity) {
+        this.pDensity = pDensity;
     }
 
-    public String getH9_Surface_treatment() {
-        return h9_Surface_treatment;
+    public String getpMaterialStandard() {
+        return pMaterialStandard;
     }
 
-    public void setH9_Surface_treatment(String h9_Surface_treatment) {
-        this.h9_Surface_treatment = h9_Surface_treatment;
+    public void setpMaterialStandard(String pMaterialStandard) {
+        this.pMaterialStandard = pMaterialStandard;
     }
 
-    public String getH9_Model_numberPaint_colour() {
-        return h9_Model_numberPaint_colour;
+    public String getpSurfaceTreat() {
+        return pSurfaceTreat;
     }
 
-    public void setH9_Model_numberPaint_colour(String h9_Model_numberPaint_colour) {
-        this.h9_Model_numberPaint_colour = h9_Model_numberPaint_colour;
+    public void setpSurfaceTreat(String pSurfaceTreat) {
+        this.pSurfaceTreat = pSurfaceTreat;
     }
 
-    public String getH9_Manufacture_method() {
-        return h9_Manufacture_method;
+    public String getpTextureColorNum() {
+        return pTextureColorNum;
     }
 
-    public void setH9_Manufacture_method(String h9_Manufacture_method) {
-        this.h9_Manufacture_method = h9_Manufacture_method;
+    public void setpTextureColorNum(String pTextureColorNum) {
+        this.pTextureColorNum = pTextureColorNum;
     }
 
-    public String getH9_Symmetrical_Part() {
-        return h9_Symmetrical_Part;
+    public String getpManuProcess() {
+        return pManuProcess;
     }
 
-    public void setH9_Symmetrical_Part(String h9_Symmetrical_Part) {
-        this.h9_Symmetrical_Part = h9_Symmetrical_Part;
+    public void setpManuProcess(String pManuProcess) {
+        this.pManuProcess = pManuProcess;
     }
 
-    public String getH9_I_Part() {
-        return h9_I_Part;
+    public String getpSymmetry() {
+        return pSymmetry;
     }
 
-    public void setH9_I_Part(String h9_I_Part) {
-        this.h9_I_Part = h9_I_Part;
+    public void setpSymmetry(String pSymmetry) {
+        this.pSymmetry = pSymmetry;
     }
 
-    public String getH9_S_Part() {
-        return h9_S_Part;
+    public String getpImportance() {
+        return pImportance;
     }
 
-    public void setH9_S_Part(String h9_S_Part) {
-        this.h9_S_Part = h9_S_Part;
+    public void setpImportance(String pImportance) {
+        this.pImportance = pImportance;
     }
 
-    public String getH9_Legal_Part() {
-        return h9_Legal_Part;
+    public String getpRegulationFlag() {
+        return pRegulationFlag;
     }
 
-    public void setH9_Legal_Part(String h9_Legal_Part) {
-        this.h9_Legal_Part = h9_Legal_Part;
+    public void setpRegulationFlag(String pRegulationFlag) {
+        this.pRegulationFlag = pRegulationFlag;
     }
 
-    public String getH9_SupplyType() {
-        return h9_SupplyType;
+    public String getpBwgBoxPart() {
+        return pBwgBoxPart;
     }
 
-    public void setH9_SupplyType(String h9_SupplyType) {
-        this.h9_SupplyType = h9_SupplyType;
+    public void setpBwgBoxPart(String pBwgBoxPart) {
+        this.pBwgBoxPart = pBwgBoxPart;
     }
 
-    public String getH9_DevelopType() {
-        return h9_DevelopType;
+    public String getpDevelopType() {
+        return pDevelopType;
     }
 
-    public void setH9_DevelopType(String h9_DevelopType) {
-        this.h9_DevelopType = h9_DevelopType;
+    public void setpDevelopType(String pDevelopType) {
+        this.pDevelopType = pDevelopType;
     }
 
-    public String getItem_revision_id() {
-        return item_revision_id;
+    public String getpDataVersion() {
+        return pDataVersion;
     }
 
-    public void setItem_revision_id(String item_revision_id) {
-        this.item_revision_id = item_revision_id;
+    public void setpDataVersion(String pDataVersion) {
+        this.pDataVersion = pDataVersion;
     }
 
-    public String getH9_Target_Weight() {
-        return h9_Target_Weight;
+    public String getpTargetWeight() {
+        return pTargetWeight;
     }
 
-    public void setH9_Target_Weight(String h9_Target_Weight) {
-        this.h9_Target_Weight = h9_Target_Weight;
+    public void setpTargetWeight(String pTargetWeight) {
+        this.pTargetWeight = pTargetWeight;
     }
 
-    public String getH9_Estimate_Weight() {
-        return h9_Estimate_Weight;
+    public String getpFeatureWeight() {
+        return pFeatureWeight;
     }
 
-    public void setH9_Estimate_Weight(String h9_Estimate_Weight) {
-        this.h9_Estimate_Weight = h9_Estimate_Weight;
+    public void setpFeatureWeight(String pFeatureWeight) {
+        this.pFeatureWeight = pFeatureWeight;
     }
 
-    public String getH9_Actual_Weight() {
-        return h9_Actual_Weight;
+    public String getpActualWeight() {
+        return pActualWeight;
     }
 
-    public void setH9_Actual_Weight(String h9_Actual_Weight) {
-        this.h9_Actual_Weight = h9_Actual_Weight;
+    public void setpActualWeight(String pActualWeight) {
+        this.pActualWeight = pActualWeight;
     }
 
-    public String getH9_Specification() {
-        return h9_Specification;
+    public String getpFastenerStandard() {
+        return pFastenerStandard;
     }
 
-    public void setH9_Specification(String h9_Specification) {
-        this.h9_Specification = h9_Specification;
+    public void setpFastenerStandard(String pFastenerStandard) {
+        this.pFastenerStandard = pFastenerStandard;
     }
 
-    public String getH9_PerformanceLevel() {
-        return h9_PerformanceLevel;
+    public String getpFastenerLevel() {
+        return pFastenerLevel;
     }
 
-    public void setH9_PerformanceLevel(String h9_PerformanceLevel) {
-        this.h9_PerformanceLevel = h9_PerformanceLevel;
+    public void setpFastenerLevel(String pFastenerLevel) {
+        this.pFastenerLevel = pFastenerLevel;
     }
 
-    public String getH9_Torque() {
-        return h9_Torque;
+    public String getpTorque() {
+        return pTorque;
     }
 
-    public void setH9_Torque(String h9_Torque) {
-        this.h9_Torque = h9_Torque;
+    public void setpTorque(String pTorque) {
+        this.pTorque = pTorque;
     }
 
-    public String getOwning_user() {
-        return owning_user;
+    public String getpDutyEngineer() {
+        return pDutyEngineer;
     }
 
-    public void setOwning_user(String owning_user) {
-        this.owning_user = owning_user;
+    public void setpDutyEngineer(String pDutyEngineer) {
+        this.pDutyEngineer = pDutyEngineer;
     }
 
-    public String getH9_SupplyInfor() {
-        return h9_SupplyInfor;
+    public String getpSupply() {
+        return pSupply;
     }
 
-    public void setH9_SupplyInfor(String h9_SupplyInfor) {
-        this.h9_SupplyInfor = h9_SupplyInfor;
+    public void setpSupply(String pSupply) {
+        this.pSupply = pSupply;
     }
 
-    public String getH9_Memo() {
-        return h9_Memo;
+    public String getpSupplyCode() {
+        return pSupplyCode;
     }
 
-    public void setH9_Memo(String h9_Memo) {
-        this.h9_Memo = h9_Memo;
+    public void setpSupplyCode(String pSupplyCode) {
+        this.pSupplyCode = pSupplyCode;
     }
 
-    public String getFastener() {
-        return fastener;
+    public String getpRemark() {
+        return pRemark;
     }
 
-    public void setFastener(String fastener) {
-        this.fastener = fastener;
+    public void setpRemark(String pRemark) {
+        this.pRemark = pRemark;
+    }
+
+    public String getpRegulationCode() {
+        return pRegulationCode;
+    }
+
+    public void setpRegulationCode(String pRegulationCode) {
+        this.pRegulationCode = pRegulationCode;
+    }
+
+    public String getpBuyEngineer() {
+        return pBuyEngineer;
+    }
+
+    public void setpBuyEngineer(String pBuyEngineer) {
+        this.pBuyEngineer = pBuyEngineer;
     }
 }

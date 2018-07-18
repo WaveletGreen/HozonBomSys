@@ -41,7 +41,7 @@ function initTable(){
                 pagination: true,                   //是否显示分页（*）
                 pageSize:20,
                 pageNumber:1,
-                pageList : [ 20, 50, 100,200,300,500,'ALL' ], //可供选择的每页的行数（*）
+                pageList: ['ALL',20,50,100,200,500,1000],        //可供选择的每页的行数（*）
                 sidePagination : "server",          //分页方式：client客户端分页，server服务端分页（*）
                 clickToSelect: true,                // 单击某一行的时候选中某一条记录
                 showExport: true,
@@ -101,7 +101,13 @@ function initTable(){
                                 window.Ewin.alert({message: '请至少选择一条需要删除的数据!'});
                                 return false;
                             }
-                            window.Ewin.confirm({title: '提示', message: '是否要删除您所选择的记录？', width: 500}).on(function (e) {
+                            var _table = '<p>是否要删除您所选择的记录？</p>' +
+                                '<div style="max-height: 500px;overflow:scroll;"><table class="table table-striped tableNormalStyle" >';
+                            for (var index in rows) {
+                                _table += '<tr><td>' + rows[index].pLineId + '</td></tr>';
+                            }
+                            _table += '</table></div>';
+                            window.Ewin.confirm({title: '提示', message: _table, width: 500}).on(function (e) {
                                 if (e) {
                                     $.ajax({
                                         type: "POST",
@@ -116,8 +122,13 @@ function initTable(){
                                             }
                                             else {
                                                 window.Ewin.alert({message: ":" + result.errMsg});
-                                            }*/
-                                            window.Ewin.alert({message: result.errMsg});
+                                            }*/if (result.success) {
+                                                layer.msg('删除成功', {icon: 1, time: 2000})
+                                            }
+                                            else if(!result.success){
+                                                window.Ewin.alert({message: result.errMsg})
+                                            }
+                                            //window.Ewin.alert({message: result.errMsg});
                                             $table.bootstrapTable("refresh");
                                         },
                                         error: function (info) {
