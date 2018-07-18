@@ -58,7 +58,7 @@ public class HzEbomController extends BaseController {
     @RequestMapping(value = "title",method = RequestMethod.GET)
     public void getEbomTitle(HttpServletResponse response) {
         LinkedHashMap<String, String> tableTitle = new LinkedHashMap<>();
-        tableTitle.put("No","No");
+        tableTitle.put("No","序号");
         tableTitle.put("level","层级" );
         tableTitle.put("pBomOfWhichDept","专业" );
         tableTitle.put("rank","级别" );

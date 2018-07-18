@@ -170,7 +170,7 @@ function initTable(pBomUrl) {
                                                 window.Ewin.alert({message: result.errMsg});
                                             }
                                             $table.bootstrapTable("refresh");
-                                        },
+                                },
                                         error: function (info) {
                                             window.Ewin.alert({message: "操作删除:" + info.status});
                                         }
