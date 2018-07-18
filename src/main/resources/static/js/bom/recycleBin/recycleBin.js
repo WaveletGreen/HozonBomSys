@@ -183,8 +183,8 @@ function doQuery() {
                                     "puid": rows[0].eBomPuid,
                                     "type":type
                                 });
-                                if (rows.length == 0) {
-                                    window.Ewin.alert({message: '请至少选择一条需要还原的的数据!'});
+                                if (rows.length !=1) {
+                                    window.Ewin.alert({message: '请选择一条需要还原的数据!'});
                                     return false;
                                 }
                                 window.Ewin.confirm({
@@ -291,7 +291,7 @@ function doQuery() {
                                     "puid": rows[0].eBomPuid,
                                     "type":type
                                 });
-                                if (rows.length == 0) {
+                                if (rows.length !=1) {
                                     window.Ewin.alert({message: '请选择一条需要还原的数据!'});
                                     return false;
                                 }
