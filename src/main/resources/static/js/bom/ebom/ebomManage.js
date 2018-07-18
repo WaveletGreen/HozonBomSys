@@ -31,7 +31,7 @@ function initTable(eBomUrl){
             // column.push({field: 'eBomPuid', title: 'puid'});
             column.push({field: 'ck', checkbox: true});
             column.push({field: 'puid', title: '主键'});
-            var data = result.data;
+           /* var data = result.data;
             var nameZh = data[0];
             var nameEn = data[1];
             var keys = [];
@@ -41,6 +41,22 @@ function initTable(eBomUrl){
                     var json = {
                         field: nameEn[key],
                         title: nameZh[key],
+                        align:
+                            'center',
+                        valign:
+                            'middle'
+                    };
+                    column.push(json);
+                }
+            }*/
+            var data = result.data;
+            var keys = [];
+            var values;
+            for (var key in data) {
+                if (data.hasOwnProperty(key)) {
+                    var json = {
+                        field: key,
+                        title: data[key],
                         align:
                             'center',
                         valign:

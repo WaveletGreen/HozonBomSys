@@ -8,7 +8,7 @@ import com.alibaba.fastjson.JSONArray;
 public class HzEbomRespDTO {
 
     private JSONArray jsonArray;
-    
+
 
     public JSONArray getJsonArray() {
         return jsonArray;
@@ -23,7 +23,7 @@ public class HzEbomRespDTO {
     private String lineId;
     private String puid;
 
-
+    private String projectId;
     /**
      * 专业
      */
@@ -64,8 +64,9 @@ public class HzEbomRespDTO {
     /**
      * Bom行对应的零件名
      */
-    private String pFnaInfo;
+    private String fna;
 
+    private String pBuyEngineer;
     private String pLouaFlag;
 
     private String pFastener;
@@ -139,6 +140,14 @@ public class HzEbomRespDTO {
     private String pRemark;
 
     private String pRegulationCode;
+
+    public String getProjectId() {
+        return projectId;
+    }
+
+    public void setProjectId(String projectId) {
+        this.projectId = projectId;
+    }
 
     public String getpLouaFlag() {
         return pLouaFlag;
@@ -236,14 +245,6 @@ public class HzEbomRespDTO {
         this.fastener = fastener;
     }
 
-    public String getpFnaInfo() {
-        return pFnaInfo;
-    }
-
-    public void setpFnaInfo(String pFnaInfo) {
-        this.pFnaInfo = pFnaInfo;
-    }
-
     public String getpFastener() {
         return pFastener;
     }
@@ -274,6 +275,14 @@ public class HzEbomRespDTO {
 
     public void setpUpc(String pUpc) {
         this.pUpc = pUpc;
+    }
+
+    public String getFna() {
+        return fna;
+    }
+
+    public void setFna(String fna) {
+        this.fna = fna;
     }
 
     public String getpFnaDesc() {
@@ -530,5 +539,13 @@ public class HzEbomRespDTO {
 
     public void setpRegulationCode(String pRegulationCode) {
         this.pRegulationCode = pRegulationCode;
+    }
+
+    public String getpBuyEngineer() {
+        return pBuyEngineer;
+    }
+
+    public void setpBuyEngineer(String pBuyEngineer) {
+        this.pBuyEngineer = pBuyEngineer;
     }
 }

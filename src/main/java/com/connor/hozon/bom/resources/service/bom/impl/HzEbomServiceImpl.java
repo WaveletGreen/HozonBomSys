@@ -479,6 +479,7 @@ public class HzEbomServiceImpl implements HzEbomService {
                 hzBomLineRecord.setpSupplyCode(reqDTO.getpSupplyCode());
                 hzBomLineRecord.setpSupply(reqDTO.getpSupply());
                 hzBomLineRecord.setpTorque(reqDTO.getpTorque());
+                hzBomLineRecord.setBomLineBlock(SerializeUtil.serialize(0));
                 if(reqDTO.getpRegulationFlag().equals("Y")){
                     hzBomLineRecord.setpRegulationFlag(0);
                 }else {
@@ -579,6 +580,7 @@ public class HzEbomServiceImpl implements HzEbomService {
                 hzBomLineRecord.setpUpc(reqDTO.getpUpc());
                 hzBomLineRecord.setpUnit(reqDTO.getpUnit());
                 hzBomLineRecord.setpRemark(reqDTO.getpRemark());
+                hzBomLineRecord.setBomLineBlock(SerializeUtil.serialize(0));
                 if(reqDTO.getpRegulationFlag().equals("Y")){
                     hzBomLineRecord.setpRegulationFlag(0);
                 }else {
@@ -686,6 +688,7 @@ public class HzEbomServiceImpl implements HzEbomService {
             hzBomLineRecord.setpTargetWeight(reqDTO.getpTargetWeight());
             hzBomLineRecord.setpSupplyCode(reqDTO.getpSupplyCode());
             hzBomLineRecord.setpSupply(reqDTO.getpSupply());
+            hzBomLineRecord.setBomLineBlock(SerializeUtil.serialize(0));
             int i =hzBomLineRecordDao.update(hzBomLineRecord);
             if(i>0){
                 return OperateResultMessageRespDTO.getSuccessResult();
