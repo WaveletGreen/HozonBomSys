@@ -162,7 +162,7 @@
                     minimumCountColumns: 4,
                     //responseHandler:responseHandler, //在渲染页面数据之前执行的方法，此配置很重要!!!!!!!
                     toolbars: [
-                        {
+                        /*{
                             text: '添加',
                             iconCls: 'glyphicon glyphicon-plus',
                             handler: function () {
@@ -180,7 +180,7 @@
                                     height: 650
                                 })
                             }
-                        },
+                        },*/
                         {
                             text: '修改',
                             iconCls: 'glyphicon glyphicon-pencil',
@@ -196,7 +196,7 @@
                                     url: "mbom/updateMBom?projectId=" + projectPuid + "&eBomPuid=" + rows[0].eBomPuid,
                                     gridId: "gridId",
                                     width: 500,
-                                    height: 650
+                                    height: 500
                                 });
                             }
                         },
@@ -218,7 +218,7 @@
                                     return false;
                                 }
                                 var _table = '<p>是否要删除您所选择的记录？</p>' +
-                                    '<div style="max-height: 500px;overflow:scroll;"><table class="table table-striped tableNormalStyle" >';
+                                    '<div style="max-height: 400px;overflow:scroll;"><table class="table table-striped tableNormalStyle" >';
                                 for (var index in rows) {
                                     _table += '<tr><td>' + rows[index].lineId + '</td></tr>';
                                 }

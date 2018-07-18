@@ -176,6 +176,7 @@ public class HzEbomServiceImpl implements HzEbomService {
                 jsonObject.put("pSupplyCode", record.getpSupplyCode());
                 jsonObject.put("pRemark",record.getpRemark());
                 jsonObject.put("pRegulationCode", record.getpRegulationCode());
+                jsonObject.put("number",record.getNumber());
                 array.add(jsonObject);
             }
             recordRespDTO.setJsonArray(array);
@@ -329,6 +330,7 @@ public class HzEbomServiceImpl implements HzEbomService {
                 jsonObject.put("pSupplyCode", record.getpSupplyCode());
                 jsonObject.put("pRemark",record.getpRemark());
                 jsonObject.put("pRegulationCode", record.getpRegulationCode());
+                jsonObject.put("number", record.getNumber());
                 jsonArray.add(jsonObject);
                 respDTO.setJsonArray(jsonArray);
             }
@@ -480,6 +482,7 @@ public class HzEbomServiceImpl implements HzEbomService {
                 hzBomLineRecord.setpSupply(reqDTO.getpSupply());
                 hzBomLineRecord.setpTorque(reqDTO.getpTorque());
                 hzBomLineRecord.setBomLineBlock(SerializeUtil.serialize(0));
+                hzBomLineRecord.setNumber(reqDTO.getNumber());
                 if(reqDTO.getpRegulationFlag().equals("Y")){
                     hzBomLineRecord.setpRegulationFlag(0);
                 }else {
@@ -581,6 +584,7 @@ public class HzEbomServiceImpl implements HzEbomService {
                 hzBomLineRecord.setpUnit(reqDTO.getpUnit());
                 hzBomLineRecord.setpRemark(reqDTO.getpRemark());
                 hzBomLineRecord.setBomLineBlock(SerializeUtil.serialize(0));
+                hzBomLineRecord.setNumber(reqDTO.getNumber());
                 if(reqDTO.getpRegulationFlag().equals("Y")){
                     hzBomLineRecord.setpRegulationFlag(0);
                 }else {
@@ -689,6 +693,7 @@ public class HzEbomServiceImpl implements HzEbomService {
             hzBomLineRecord.setpSupplyCode(reqDTO.getpSupplyCode());
             hzBomLineRecord.setpSupply(reqDTO.getpSupply());
             hzBomLineRecord.setBomLineBlock(SerializeUtil.serialize(0));
+            hzBomLineRecord.setNumber(reqDTO.getNumber());
             int i =hzBomLineRecordDao.update(hzBomLineRecord);
             if(i>0){
                 return OperateResultMessageRespDTO.getSuccessResult();

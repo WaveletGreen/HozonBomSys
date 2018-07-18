@@ -110,7 +110,7 @@ public class HzEbomController extends BaseController {
         tableTitle.put("pUpc","UPC");
         tableTitle.put("fna","FNA");
         tableTitle.put("pFnaDesc","FNA描述" );
-
+        tableTitle.put("number","数量" );
         writeAjaxJSONResponse(ResultMessageBuilder.build(tableTitle), response);
     }
     
@@ -295,6 +295,7 @@ public class HzEbomController extends BaseController {
         recordRespDTO.setpRegulationCode(object.getString("pRegulationCode"));
         recordRespDTO.setProjectId(projectId);
         recordRespDTO.setpBuyEngineer(object.getString("pBuyEngineer"));
+        recordRespDTO.setNumber(Integer.valueOf(object.getString("number")));
 //        JSONArray array = hzEbomService.getEbomTitle(projectId);
 //        if(array == null ||recordRespDTO == null){
 //            return "";

@@ -79,19 +79,7 @@ public class HzEPLManageRecordServiceImpl implements HzEPLManageRecordService {
                 jsonObject.put("No",++num);
                 jsonObject.put("level", strings[0]);
                 jsonObject.put("rank", strings[1]);
-                Integer state =record.getpState();
-                String pState="";
 
-                if(state==null){
-                    pState = "-";
-                }else if(state .equals(0)){
-                    pState ="A";
-                }else if(state.equals(1)){
-                    pState ="U";
-                }else{
-                    pState="D";
-                }
-                jsonObject.put("pState",pState);
                 jsonObject.put("pBomOfWhichDept", record.getpBomOfWhichDept());
                 //获取分组号
                 String groupNum = record.getLineID();
@@ -129,23 +117,23 @@ public class HzEPLManageRecordServiceImpl implements HzEPLManageRecordService {
                 jsonObject.put("wasterProduct", record.getWasterProduct());
                 jsonObject.put("change", record.getChange());
                 jsonObject.put("changeNum", record.getChangeNum());
-                byte[] bomLineBlock = record.getBomLineBlock();
-                Object obj = SerializeUtil.unserialize(bomLineBlock);
-                if (obj instanceof LinkedHashMap) {
-                    if (((LinkedHashMap) obj).size() > 0) {
-                        ((LinkedHashMap) obj).forEach((key, value) -> {
-
-                            jsonObject.put((String) key, value);
-                        });
-                    }
-                } else if (obj instanceof RedisBomBean) {
-                    List<String> pSets = ((RedisBomBean) obj).getpSets();
-                    List<String> pValues = ((RedisBomBean) obj).getpValues();
-                    if (null != pSets && pSets.size() > 0 && null != pValues && pValues.size() > 0)
-                        for (int i = 0; i < pSets.size(); i++) {
-                            jsonObject.put(pSets.get(i), pValues.get(i));
-                        }
-                }
+//                byte[] bomLineBlock = record.getBomLineBlock();
+//                Object obj = SerializeUtil.unserialize(bomLineBlock);
+//                if (obj instanceof LinkedHashMap) {
+//                    if (((LinkedHashMap) obj).size() > 0) {
+//                        ((LinkedHashMap) obj).forEach((key, value) -> {
+//
+//                            jsonObject.put((String) key, value);
+//                        });
+//                    }
+//                } else if (obj instanceof RedisBomBean) {
+//                    List<String> pSets = ((RedisBomBean) obj).getpSets();
+//                    List<String> pValues = ((RedisBomBean) obj).getpValues();
+//                    if (null != pSets && pSets.size() > 0 && null != pValues && pValues.size() > 0)
+//                        for (int i = 0; i < pSets.size(); i++) {
+//                            jsonObject.put(pSets.get(i), pValues.get(i));
+//                        }
+//                }
                 array.add(jsonObject);
             }
             recordRespDTO.setJsonArray(array);

@@ -87,7 +87,7 @@ function initTable(pBomUrl) {
                 showRefresh: true,                  //是否显示刷新按钮
                 //minimumCountColumns:4,
                 toolbars: [
-                    {
+                    /*{
                         text: '添加',
                         iconCls: 'glyphicon glyphicon-plus',
                         handler: function () {
@@ -105,7 +105,7 @@ function initTable(pBomUrl) {
                                 height: 500
                             })
                         }
-                    },
+                    },*/
                     {
                         text: '修改',
                         iconCls: 'glyphicon glyphicon-pencil',

@@ -72,7 +72,7 @@ public class HzEPLManageRecord {
     /**
      * bom 状态
      */
-    private Integer pState;
+    private Integer status;
 
     /**
      *零件来源（自制总成/采购拆分等）
@@ -247,6 +247,16 @@ public class HzEPLManageRecord {
     private String pRemark;
 
     private String pRegulationCode;
+
+    private Integer number;
+
+    public Integer getNumber() {
+        return number;
+    }
+
+    public void setNumber(Integer number) {
+        this.number = number;
+    }
 
     public String getFna() {
         return fna;
@@ -552,12 +562,12 @@ public class HzEPLManageRecord {
         this.changeNum = changeNum;
     }
 
-    public Integer getpState() {
-        return pState;
+    public Integer getStatus() {
+        return status;
     }
 
-    public void setpState(Integer pState) {
-        this.pState = pState;
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 
     public String getpBomLinePartEnName() {
