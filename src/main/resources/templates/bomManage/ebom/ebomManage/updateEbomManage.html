@@ -313,6 +313,12 @@
                th:value="${data.pFnaDesc}"
                placeholder="请输入FNA描述"/>
     </div>
+    <div class="form-group">
+        <label for="number">数量</label>
+        <input class="form-control" id="number" name="number" type="text"
+               th:value="${data.number}"
+               placeholder="请输入数量"/>
+    </div>
     <!--<div class="form-group" th:each="_data,c:${data.get(0)}">
         <label class="control-label" th:text="${_data}"></label>
         <input class="form-control" th:id="${data.get(1)[c.index]}" th:name="${data.get(1)[c.index]}" type="text"

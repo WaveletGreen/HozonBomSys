@@ -18,6 +18,13 @@ function doQuery(){
     eplUrl+="&pBomOfWhichDept="+pBomOfWhichDept;
     var lineId = $("#lineId").val();
     eplUrl += "&lineId="+lineId;
+    var pFastener = $("#pFastener").val();
+    if (type=="请选择是否紧固件") {
+        eplUrl += "&pFastener="+"";
+    }
+    else {
+        eplUrl += "&pFastener="+pFastener;
+    }
     initTable(eplUrl);
     $('#eplTable').bootstrapTable('destroy');
 }
