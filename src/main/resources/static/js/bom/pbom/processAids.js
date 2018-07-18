@@ -62,7 +62,7 @@ function initTable(){
                                 url: "accessories/addAccessories",
                                 gridId: "gridId",
                                 width: 500,
-                                height: 650
+                                height: 500
                             })
                         }
                     },
@@ -81,7 +81,7 @@ function initTable(){
                                 url: "accessories/updateAccessories?puid=" + rows[0].puid,
                                 gridId: "gridId",
                                 width: 500,
-                                height: 650
+                                height: 500
                             });
                         }
                     },
@@ -102,7 +102,7 @@ function initTable(){
                                 return false;
                             }
                             var _table = '<p>是否要删除您所选择的记录？</p>' +
-                                '<div style="max-height: 500px;overflow:scroll;"><table class="table table-striped tableNormalStyle" >';
+                                '<div style="max-height: 400px;overflow:scroll;"><table class="table table-striped tableNormalStyle" >';
                             for (var index in rows) {
                                 _table += '<tr><td>' + rows[index].pLineId + '</td></tr>';
                             }

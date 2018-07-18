@@ -198,7 +198,7 @@ $(document).ready(function () {
                 url: "pbom/updataProcessOfFitting?puids="+puids,
                 gridId: "gridId",
                 width: 500,
-                height: 650
+                height: 500
             })
         }
     })

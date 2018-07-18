@@ -111,7 +111,7 @@ function initTable(url) {
                                 url: "work/process/addWorkProcess?projectId="+projectId+"&materielId="+rows[0].materielId,
                                 gridId: "gridId",
                                 width: 500,
-                                height: 650
+                                height: 500
                             })
                         }
                     },
@@ -130,7 +130,7 @@ function initTable(url) {
                                 url: "work/process/updateWorkProcess?projectId="+projectId+"&materielId="+rows[0].materielId,
                                 gridId: "gridId",
                                 width: 500,
-                                height: 650
+                                height: 500
                             });
                         }
                     },
@@ -143,7 +143,13 @@ function initTable(url) {
                                 window.Ewin.alert({message: '请选择一条需要删除的数据!'});
                                 return false;
                             }
-                            window.Ewin.confirm({title: '提示', message: '是否要删除您所选择的记录？', width: 500}).on(function (e) {
+                            var _table = '<p>是否要删除您所选择的记录？</p>' +
+                                '<div style="max-height: 400px;overflow:scroll;"><table class="table table-striped tableNormalStyle" >';
+                            for (var index in rows) {
+                                _table += '<tr><td>' + rows[index].pMaterielDesc + '</td></tr>';
+                            }
+                            _table += '</table></div>';
+                            window.Ewin.confirm({title: '提示', message: _table, width: 500}).on(function (e) {
                                 if (e) {
                                     $.ajax({
                                         type: "POST",
@@ -159,7 +165,12 @@ function initTable(url) {
                                             else {
                                                 window.Ewin.alert({message: ":" + result.errMsg});
                                             }*/
-                                            window.Ewin.alert({message: result.errMsg});
+                                            if (result.success){
+                                                layer.msg('删除成功', {icon: 1, time: 2000})
+                                            }
+                                            else if (!result.success) {
+                                                window.Ewin.alert({message: result.errMsg});
+                                            }
                                             $table.bootstrapTable("refresh");
                                         },
                                         error: function (info) {

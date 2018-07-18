@@ -13,13 +13,13 @@ function doQuery() {
         // function initTable() {
         $table.bootstrapTable('destroy');
         $.ajax({
-            url: "ebom/ebomTitle?projectId=" + projectPuid,
+            url: "ebom/title?projectId=" + projectPuid,
             type: "GET",
             success: function (result) {
                 var column = [];
-                // column.push({field: 'eBomPuid', title: 'puid'});
+                column.push({field: 'puid', title: '主键'});
                 column.push({field: 'ck', checkbox: true});
-                var data = result.data;
+                /*var data = result.data;
                 var nameZh = data[0];
                 var nameEn = data[1];
                 var keys = [];
@@ -29,6 +29,22 @@ function doQuery() {
                         var json = {
                             field: nameEn[key],
                             title: nameZh[key],
+                            align:
+                                'center',
+                            valign:
+                                'middle'
+                        };
+                        column.push(json);
+                    }
+                }*/
+                var data = result.data;
+                var keys = [];
+                var values;
+                for (var key in data) {
+                    if (data.hasOwnProperty(key)) {
+                        var json = {
+                            field: key,
+                            title: data[key],
                             align:
                                 'center',
                             valign:
@@ -167,8 +183,8 @@ function doQuery() {
                                     "puid": rows[0].eBomPuid,
                                     "type":type
                                 });
-                                if (rows.length == 0) {
-                                    window.Ewin.alert({message: '请至少选择一条需要还原的的数据!'});
+                                if (rows.length !=1) {
+                                    window.Ewin.alert({message: '请选择一条需要还原的数据!'});
                                     return false;
                                 }
                                 window.Ewin.confirm({
@@ -275,7 +291,7 @@ function doQuery() {
                                     "puid": rows[0].eBomPuid,
                                     "type":type
                                 });
-                                if (rows.length == 0) {
+                                if (rows.length !=1) {
                                     window.Ewin.alert({message: '请选择一条需要还原的数据!'});
                                     return false;
                                 }

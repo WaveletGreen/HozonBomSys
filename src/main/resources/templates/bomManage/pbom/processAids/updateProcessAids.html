@@ -25,6 +25,7 @@
     <div class="form-group">
         <label for="pUnit">单位</label>
         <select class="form-control" name="pUnit" id="pUnit" placeholder="请选择单位">
+            <option></option>
             <option th:selected="${data.getpUnit()=='EA'?true:false}">EA</option> <!--th:selected="${data.getResource()=='MAKE'?true:false}"-->
             <option th:selected="${data.getpUnit()=='Kg'?true:false}">Kg</option>
             <option th:selected="${data.getpUnit()=='L'?true:false}">L</option>
