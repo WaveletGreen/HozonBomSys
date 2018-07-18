@@ -60,7 +60,6 @@ function loadData(){
                         return [
                             '<a href="javascript:void(0)" onclick="modeVehicle(' + row.puid + ')">' + value + '</a>'
                         ].join("");
-                        z
                     }
                     else {
                         return [
@@ -153,7 +152,8 @@ function loadData(){
                                         contentType: "application/json",
                                         success: function (result) {
                                             if (result) {
-                                                window.Ewin.alert({message: "删除时数据成功"});
+                                                layer.msg("删除时数据成功", {icon: 1, time: 2000})
+                                                // window.Ewin.alert({message: "删除时数据成功"});
                                                 //刷新，会重新申请数据库数据
                                             }
                                             else {

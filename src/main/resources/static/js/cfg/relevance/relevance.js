@@ -39,7 +39,7 @@ function loadData() {
             },
             {
                 text: '发送到ERP',
-                iconCls: 'glyphicon glyphicon-remove',
+                iconCls: 'glyphicon glyphicon-send',
                 handler: function () {
                     var rows = $table.bootstrapTable('getSelections');
                     if (rows.length == 0) {
@@ -56,7 +56,8 @@ function loadData() {
                                 contentType: "application/json",
                                 success: function (result) {
                                     if (result.status) {
-                                        window.Ewin.alert({message: result.msg});
+                                        layer.msg(result.msg, {icon: 1, time: 2000})
+                                        // window.Ewin.alert({message: result.msg});
                                         //刷新，会重新申请数据库数据
                                     }
                                     else {
