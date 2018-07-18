@@ -233,7 +233,9 @@ public class HzEbomController extends BaseController {
 //        String[] strings4 = arrayList2.toArray(new String[0]);
 //        jsonArray.add(strings3);
 //        jsonArray.add(strings4);
-        model.addAttribute("data",puid);
+        HzEbomRespDTO respDTO = new HzEbomRespDTO();
+        respDTO.setPuid(puid);
+        model.addAttribute("data",respDTO);
 
         return "bomManage/ebom/ebomManage/addebomManage";
     }
@@ -291,6 +293,8 @@ public class HzEbomController extends BaseController {
         recordRespDTO.setpRemark(object.getString("pRemark"));
         recordRespDTO.setpRegulationFlag(object.getString("pRegulationFlag"));
         recordRespDTO.setpRegulationCode(object.getString("pRegulationCode"));
+        recordRespDTO.setProjectId(projectId);
+        recordRespDTO.setpBuyEngineer(object.getString("pBuyEngineer"));
 //        JSONArray array = hzEbomService.getEbomTitle(projectId);
 //        if(array == null ||recordRespDTO == null){
 //            return "";

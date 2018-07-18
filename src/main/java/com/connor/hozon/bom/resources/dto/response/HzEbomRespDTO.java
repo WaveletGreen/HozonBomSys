@@ -23,7 +23,7 @@ public class HzEbomRespDTO {
     private String lineId;
     private String puid;
 
-
+    private String projectId;
     /**
      * 专业
      */
@@ -66,6 +66,7 @@ public class HzEbomRespDTO {
      */
     private String fna;
 
+    private String pBuyEngineer;
     private String pLouaFlag;
 
     private String pFastener;
@@ -139,6 +140,14 @@ public class HzEbomRespDTO {
     private String pRemark;
 
     private String pRegulationCode;
+
+    public String getProjectId() {
+        return projectId;
+    }
+
+    public void setProjectId(String projectId) {
+        this.projectId = projectId;
+    }
 
     public String getpLouaFlag() {
         return pLouaFlag;
@@ -530,5 +539,13 @@ public class HzEbomRespDTO {
 
     public void setpRegulationCode(String pRegulationCode) {
         this.pRegulationCode = pRegulationCode;
+    }
+
+    public String getpBuyEngineer() {
+        return pBuyEngineer;
+    }
+
+    public void setpBuyEngineer(String pBuyEngineer) {
+        this.pBuyEngineer = pBuyEngineer;
     }
 }
