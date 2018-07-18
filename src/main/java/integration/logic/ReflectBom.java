@@ -137,12 +137,12 @@ public class ReflectBom {
         //BOM序号,按10进制
         Integer index = Integer.parseInt(bomToERPBean.getLineIndex().substring(bomToERPBean.getLineIndex().lastIndexOf(".") + 1)) * 10;
         String str = "";
-        if (index < 10) {
+        if (index < 100) {
             str = "00" + String.valueOf(index);
         }
-        if (index > 10) {
+        if (index > 100) {
             str = "0" + String.valueOf(index);
-        } else if (index > 100) {
+        } else if (index > 1000 && index < 10000) {
             str = String.valueOf(index);
         }
         setOrderOfBomLine(str);

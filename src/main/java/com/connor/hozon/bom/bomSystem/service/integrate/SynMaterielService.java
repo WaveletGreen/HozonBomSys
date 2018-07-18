@@ -17,10 +17,7 @@ import org.springframework.stereotype.Service;
 import sql.pojo.factory.HzFactory;
 import sql.pojo.project.HzMaterielRecord;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static com.connor.hozon.bom.bomSystem.helper.StringHelper.checkStringIsEmpty;
 
@@ -29,6 +26,7 @@ import static com.connor.hozon.bom.bomSystem.helper.StringHelper.checkStringIsEm
  */
 @Service("synMaterielService")
 public class SynMaterielService implements ISynMaterielService {
+    public static boolean debug = true;
     /**
      * 发送服务
      */
@@ -147,7 +145,8 @@ public class SynMaterielService implements ISynMaterielService {
      */
     private JSONObject execute(List<HzMaterielRecord> sorted, ActionFlagOption option) {
         transMasterMaterialService.setClearInputEachTime(true);
-
+        if (debug)
+            transMasterMaterialService.getInput().getItem().clear();
         /**
          * 成功项
          */
@@ -173,8 +172,14 @@ public class SynMaterielService implements ISynMaterielService {
 
         List<HzMaterielRecord> toUpdate = new ArrayList<>();
         List<String> puids = new ArrayList<>();
-
+        Set<String> materialCode = new HashSet<>();
         for (HzMaterielRecord record : sorted) {
+            //过滤重复的零件号
+            if (materialCode.contains(record.getpMaterielCode())) {
+                continue;
+            } else {
+                materialCode.add(record.getpMaterielCode());
+            }
             if (!validate(record)) {
                 totalOfUnknown++;
                 continue;
@@ -223,31 +228,34 @@ public class SynMaterielService implements ISynMaterielService {
             _mapCoach.put(packNo, record);
         }
         //执行
-        transMasterMaterialService.execute();
-
-        List<ZPPTCO001> resultPool = transMasterMaterialService.getOut().getItem();
-
-        for (ZPPTCO001 zpptco001 : resultPool) {
-            total++;
-            if (zpptco001 == null || checkStringIsEmpty(zpptco001.getPGUID())) {
-                totalOfUnknown++;
-                continue;
-            }
-            HzMaterielRecord record = _mapCoach.get(zpptco001.getPGUID());
-            IntegrateMsgDTO msgDTO = new IntegrateMsgDTO();
-            msgDTO.setMsg(zpptco001.getPMESSAGE());
-            msgDTO.setItemId(record.getpMaterielCode());
-            msgDTO.setPuid(record.getPuid());
-
-            if ("S".equalsIgnoreCase(zpptco001.getPTYPE())) {
-                success.add(msgDTO);
-                totalOfSuccess++;
-                toUpdate.add(record);
-            } else {
-                fail.add(msgDTO);
-                totalOfFail++;
-            }
+        if (debug) {
+            return result;
+        } else {
+            transMasterMaterialService.execute();
         }
+        List<ZPPTCO001> resultPool = transMasterMaterialService.getOut().getItem();
+        if (resultPool != null)
+            for (ZPPTCO001 zpptco001 : resultPool) {
+                total++;
+                if (zpptco001 == null || checkStringIsEmpty(zpptco001.getPGUID())) {
+                    totalOfUnknown++;
+                    continue;
+                }
+                HzMaterielRecord record = _mapCoach.get(zpptco001.getPGUID());
+                IntegrateMsgDTO msgDTO = new IntegrateMsgDTO();
+                msgDTO.setMsg(zpptco001.getPMESSAGE());
+                msgDTO.setItemId(record.getpMaterielCode());
+                msgDTO.setPuid(record.getPuid());
+
+                if ("S".equalsIgnoreCase(zpptco001.getPTYPE())) {
+                    success.add(msgDTO);
+                    totalOfSuccess++;
+                    toUpdate.add(record);
+                } else {
+                    fail.add(msgDTO);
+                    totalOfFail++;
+                }
+            }
 
         /**
          * 更新信息
