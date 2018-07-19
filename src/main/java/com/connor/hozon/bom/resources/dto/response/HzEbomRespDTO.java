@@ -141,6 +141,16 @@ public class HzEbomRespDTO {
 
     private String pRegulationCode;
 
+    private Integer number;
+
+    public Integer getNumber() {
+        return number;
+    }
+
+    public void setNumber(Integer number) {
+        this.number = number;
+    }
+
     public String getProjectId() {
         return projectId;
     }

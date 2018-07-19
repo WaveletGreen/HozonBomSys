@@ -125,7 +125,7 @@ public class HzEbomServiceImpl implements HzEbomService {
                 jsonObject.put("pBomLinePartEnName",record.getpBomLinePartEnName());
                 jsonObject.put("pBomLinePartResource", record.getpBomLinePartResource());
                 jsonObject.put("pFastener", record.getpFastener());
-                if(Integer.valueOf(0).equals(record.getIs2Y())){
+                if(Integer.valueOf(1).equals(record.getIs2Y())){
                     jsonObject.put("pLouaFlag","LOU");
                 }else{
                     jsonObject.put("pLouaFlag","LOA");
@@ -156,7 +156,7 @@ public class HzEbomServiceImpl implements HzEbomService {
                 jsonObject.put("pManuProcess", record.getpManuProcess());
                 jsonObject.put("pSymmetry", record.getpSymmetry());
                 jsonObject.put("pImportance",record.getpImportance());
-                if(Integer.valueOf(0).equals(record.getpRegulationFlag())){
+                if(Integer.valueOf(1).equals(record.getpRegulationFlag())){
                     jsonObject.put("pRegulationFlag", "Y");
                 }else{
                     jsonObject.put("pRegulationFlag", "N");
@@ -176,6 +176,7 @@ public class HzEbomServiceImpl implements HzEbomService {
                 jsonObject.put("pSupplyCode", record.getpSupplyCode());
                 jsonObject.put("pRemark",record.getpRemark());
                 jsonObject.put("pRegulationCode", record.getpRegulationCode());
+                jsonObject.put("number",record.getNumber());
                 array.add(jsonObject);
             }
             recordRespDTO.setJsonArray(array);
@@ -309,7 +310,7 @@ public class HzEbomServiceImpl implements HzEbomService {
                 jsonObject.put("pManuProcess", record.getpManuProcess());
                 jsonObject.put("pSymmetry", record.getpSymmetry());
                 jsonObject.put("pImportance",record.getpImportance());
-                if(Integer.valueOf(0).equals(record.getpRegulationFlag())){
+                if(Integer.valueOf(1).equals(record.getpRegulationFlag())){
                     jsonObject.put("pRegulationFlag", "Y");
                 }else{
                     jsonObject.put("pRegulationFlag", "N");
@@ -329,6 +330,7 @@ public class HzEbomServiceImpl implements HzEbomService {
                 jsonObject.put("pSupplyCode", record.getpSupplyCode());
                 jsonObject.put("pRemark",record.getpRemark());
                 jsonObject.put("pRegulationCode", record.getpRegulationCode());
+                jsonObject.put("number", record.getNumber());
                 jsonArray.add(jsonObject);
                 respDTO.setJsonArray(jsonArray);
             }
@@ -480,10 +482,11 @@ public class HzEbomServiceImpl implements HzEbomService {
                 hzBomLineRecord.setpSupply(reqDTO.getpSupply());
                 hzBomLineRecord.setpTorque(reqDTO.getpTorque());
                 hzBomLineRecord.setBomLineBlock(SerializeUtil.serialize(0));
+                hzBomLineRecord.setNumber(reqDTO.getNumber());
                 if(reqDTO.getpRegulationFlag().equals("Y")){
-                    hzBomLineRecord.setpRegulationFlag(0);
-                }else {
                     hzBomLineRecord.setpRegulationFlag(1);
+                }else {
+                    hzBomLineRecord.setpRegulationFlag(0);
                 }
                 i = hzBomLineRecordDao.insert(hzBomLineRecord);
                 if(i>0){
@@ -581,10 +584,11 @@ public class HzEbomServiceImpl implements HzEbomService {
                 hzBomLineRecord.setpUnit(reqDTO.getpUnit());
                 hzBomLineRecord.setpRemark(reqDTO.getpRemark());
                 hzBomLineRecord.setBomLineBlock(SerializeUtil.serialize(0));
+                hzBomLineRecord.setNumber(reqDTO.getNumber());
                 if(reqDTO.getpRegulationFlag().equals("Y")){
-                    hzBomLineRecord.setpRegulationFlag(0);
-                }else {
                     hzBomLineRecord.setpRegulationFlag(1);
+                }else {
+                    hzBomLineRecord.setpRegulationFlag(0);
                 }
                 i = hzBomLineRecordDao.insert(hzBomLineRecord);
                if(i>0){
@@ -673,9 +677,9 @@ public class HzEbomServiceImpl implements HzEbomService {
             hzBomLineRecord.setpPictureSheet(reqDTO.getpPictureSheet());
             hzBomLineRecord.setpRegulationCode(reqDTO.getpRegulationCode());
             if(reqDTO.getpRegulationFlag().equals("Y")){
-                hzBomLineRecord.setpRegulationFlag(0);
-            }else {
                 hzBomLineRecord.setpRegulationFlag(1);
+            }else {
+                hzBomLineRecord.setpRegulationFlag(0);
             }
             hzBomLineRecord.setpUpc(reqDTO.getpUpc());
             hzBomLineRecord.setpRemark(reqDTO.getpRemark());
@@ -689,6 +693,7 @@ public class HzEbomServiceImpl implements HzEbomService {
             hzBomLineRecord.setpSupplyCode(reqDTO.getpSupplyCode());
             hzBomLineRecord.setpSupply(reqDTO.getpSupply());
             hzBomLineRecord.setBomLineBlock(SerializeUtil.serialize(0));
+            hzBomLineRecord.setNumber(reqDTO.getNumber());
             int i =hzBomLineRecordDao.update(hzBomLineRecord);
             if(i>0){
                 return OperateResultMessageRespDTO.getSuccessResult();
@@ -798,23 +803,79 @@ public class HzEbomServiceImpl implements HzEbomService {
 //                jsonObject.put("groupNum", groupNum);
                 jsonObject.put("lineId", record.getLineID());
                 jsonObject.put("fna",record.getFna());
-                byte[] bomLineBlock = record.getBomLineBlock();
-                Object obj = SerializeUtil.unserialize(bomLineBlock);
-                if (obj instanceof LinkedHashMap) {
-                    if (((LinkedHashMap) obj).size() > 0) {
-                        ((LinkedHashMap) obj).forEach((key, value) -> {
-
-                            jsonObject.put((String) key, value);
-                        });
-                    }
-                } else if (obj instanceof RedisBomBean) {
-                    List<String> pSets = ((RedisBomBean) obj).getpSets();
-                    List<String> pValues = ((RedisBomBean) obj).getpValues();
-                    if (null != pSets && pSets.size() > 0 && null != pValues && pValues.size() > 0)
-                        for (int i = 0; i < pSets.size(); i++) {
-                            jsonObject.put(pSets.get(i), pValues.get(i));
-                        }
+                jsonObject.put("pBomLinePartName", record.getpBomLinePartName());
+                jsonObject.put("pBomLinePartClass", record.getpBomLinePartClass());
+                jsonObject.put("pBomLinePartEnName",record.getpBomLinePartEnName());
+                jsonObject.put("pBomLinePartResource", record.getpBomLinePartResource());
+                jsonObject.put("pFastener", record.getpFastener());
+//                if(Integer.valueOf(1).equals(record.getIs2Y())){
+////                    jsonObject.put("pLouaFlag","LOU");
+////                }else{
+////                    jsonObject.put("pLouaFlag","LOA");
+////                }
+                if(Integer.valueOf(0).equals(record.getP3cpartFlag())){
+                    jsonObject.put("p3cpartFlag", "Y");
+                }else {
+                    jsonObject.put("p3cpartFlag", "N");
                 }
+                if(Integer.valueOf(0).equals(record.getpInOutSideFlag())){
+                    jsonObject.put("pInOutSideFlag", "内饰件");
+                }else {
+                    jsonObject.put("pInOutSideFlag", "外饰件");
+                }
+                jsonObject.put("pUpc",record.getpUpc());
+                jsonObject.put("pFnaDesc", record.getpFnaDesc());
+                jsonObject.put("pUnit", record.getpUnit());
+                jsonObject.put("pPictureNo",record.getpPictureNo());
+                jsonObject.put("pPictureSheet", record.getpPictureSheet());
+                jsonObject.put("pMaterialHigh", record.getpMaterialHigh());
+                jsonObject.put("pMaterial1",record.getpMaterial1());
+                jsonObject.put("pMaterial2", record.getpMaterial2());
+                jsonObject.put("pMaterial3", record.getpMaterial3());
+                jsonObject.put("pDensity",record.getpDensity());
+                jsonObject.put("pMaterialStandard", record.getpMaterialStandard());
+                jsonObject.put("pSurfaceTreat", record.getpSurfaceTreat());
+                jsonObject.put("pTextureColorNum",record.getpTextureColorNum());
+                jsonObject.put("pManuProcess", record.getpManuProcess());
+                jsonObject.put("pSymmetry", record.getpSymmetry());
+                jsonObject.put("pImportance",record.getpImportance());
+                if(Integer.valueOf(1).equals(record.getpRegulationFlag())){
+                    jsonObject.put("pRegulationFlag", "Y");
+                }else{
+                    jsonObject.put("pRegulationFlag", "N");
+                }
+                jsonObject.put("pBwgBoxPart", record.getpBwgBoxPart());
+                jsonObject.put("pDevelopType",record.getpDevelopType());
+                jsonObject.put("pDataVersion", record.getpDataVersion());
+                jsonObject.put("pTargetWeight", record.getpTargetWeight());
+                jsonObject.put("pFeatureWeight",record.getpFeatureWeight());
+                jsonObject.put("pActualWeight", record.getpActualWeight());
+                jsonObject.put("pFastenerStandard", record.getpFastenerStandard());
+                jsonObject.put("pFastenerLevel",record.getpFastenerLevel());
+
+                jsonObject.put("pTorque", record.getpTorque());
+                jsonObject.put("pDutyEngineer",record.getpDutyEngineer());
+                jsonObject.put("pSupply", record.getpSupply());
+                jsonObject.put("pSupplyCode", record.getpSupplyCode());
+                jsonObject.put("pRemark",record.getpRemark());
+                jsonObject.put("pRegulationCode", record.getpRegulationCode());
+//                byte[] bomLineBlock = record.getBomLineBlock();
+//                Object obj = SerializeUtil.unserialize(bomLineBlock);
+//                if (obj instanceof LinkedHashMap) {
+//                    if (((LinkedHashMap) obj).size() > 0) {
+//                        ((LinkedHashMap) obj).forEach((key, value) -> {
+//
+//                            jsonObject.put((String) key, value);
+//                        });
+//                    }
+//                } else if (obj instanceof RedisBomBean) {
+//                    List<String> pSets = ((RedisBomBean) obj).getpSets();
+//                    List<String> pValues = ((RedisBomBean) obj).getpValues();
+//                    if (null != pSets && pSets.size() > 0 && null != pValues && pValues.size() > 0)
+//                        for (int i = 0; i < pSets.size(); i++) {
+//                            jsonObject.put(pSets.get(i), pValues.get(i));
+//                        }
+//                }
                 array.add(jsonObject);
             }
             recordRespDTO.setJsonArray(array);

@@ -42,12 +42,11 @@ public class HzPbomController extends BaseController {
         tableTitle.put("rank", "级别");
         tableTitle.put("groupNum", "分组号");
         tableTitle.put("lineId", "零件号");
-
         tableTitle.put("pBomLinePartName", "名称");
         tableTitle.put("pBomLinePartEnName", "英文名称");
+        tableTitle.put("pLouaFlag","LOU/LOA");
         tableTitle.put("pBomLinePartClass", "零件分类");
         tableTitle.put("pBomLinePartResource", "零部件来源");
-
         tableTitle.put("resource", "自制/采购");
         tableTitle.put("type", "焊接/装配");
         tableTitle.put("buyUnit", "采购单元");
@@ -97,7 +96,7 @@ public class HzPbomController extends BaseController {
             _res.put("pBomLinePartEnName",dto.getpBomLinePartEnName());
             _res.put("pBomLinePartClass",dto.getpBomLinePartClass());
             _res.put("pBomLinePartResource",dto.getpBomLinePartResource());
-
+            _res.put("pLouaFlag",dto.getpLouaFlag());
             _res.put("resource", dto.getResource());
             _res.put("type", dto.getType());
             _res.put("buyUnit", dto.getBuyUnit());

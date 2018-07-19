@@ -1,5 +1,7 @@
 package com.connor.hozon.bom.resources.dto.request;
 
+import io.swagger.models.auth.In;
+
 import java.util.Map;
 
 /**
@@ -124,6 +126,16 @@ public class AddHzEbomReqDTO {
     private String pRemark;
 
     private String pRegulationCode;
+
+    private Integer number;
+
+    public Integer getNumber() {
+        return number;
+    }
+
+    public void setNumber(Integer number) {
+        this.number = number;
+    }
 
     public String getProjectId() {
         return projectId;

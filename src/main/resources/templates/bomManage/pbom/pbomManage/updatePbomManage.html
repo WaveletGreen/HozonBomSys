@@ -52,6 +52,7 @@
     <div class="form-group">
         <label for="resource">自制/采购</label>
         <select class="form-control" name="resource" id="resource" placeholder="请选择来源">
+            <option></option>
             <option th:selected="${data.getResource()=='MAKE'?true:false}">MAKE</option>
             <option th:selected="${data.getResource()=='BUY'?true:false}">BUY</option>
         </select>
@@ -59,6 +60,7 @@
     <div class="form-group">
         <label for="type">焊接/装配</label>
         <select class="form-control" name="type" id="type" placeholder="请选择是否为焊接类型">
+            <option></option>
             <option th:selected="${data.getType()=='Y'?true:false}">Y</option>
             <option th:selected="${data.getType()=='N'?true:false}">N</option>
         </select>
@@ -66,6 +68,7 @@
     <div class="form-group">
         <label for="buyUnit">采购单元</label>
         <select class="form-control" name="buyUnit" id="buyUnit" placeholder="请选择是否为采购单元">
+            <option></option>
             <option th:selected="${data.getBuyUnit()=='Y'?true:false}">Y</option>
             <option th:selected="${data.getBuyUnit()=='N'?true:false}">N</option>
         </select>
@@ -98,6 +101,7 @@
     <div class="form-group">
         <label for="colorPart">颜色件</label>
         <select class="form-control" name="colorPart" id="colorPart" placeholder="请选择是否为颜色件">
+            <option></option>
             <option th:selected="${data.getColorPart()=='Y'?true:false}">Y</option>
             <option th:selected="${data.getColorPart()=='N'?true:false}">N</option>
         </select>

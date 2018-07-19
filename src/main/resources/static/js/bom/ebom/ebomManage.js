@@ -111,7 +111,7 @@ function initTable(eBomUrl){
                                     url: "ebom/addEbom?projectId=" + projectPuid + "&puid=" + rows[0].puid,
                                     gridId: "gridId",
                                     width: 500,
-                                    height: 650
+                                    height: 500
                                 })
                             }
                             else if (rows.length == 0) {
@@ -120,7 +120,7 @@ function initTable(eBomUrl){
                                     url: "ebom/addEbom?projectId=" + projectPuid,
                                     gridId: "gridId",
                                     width: 500,
-                                    height: 650
+                                    height: 500
                                 })
                             }
                         }
@@ -140,7 +140,7 @@ function initTable(eBomUrl){
                                 url: "ebom/updateEbom?projectId=" + projectPuid + "&puid=" + rows[0].puid,
                                 gridId: "gridId",
                                 width: 500,
-                                height: 650
+                                height: 500
                             });
                         }
                     },
@@ -162,7 +162,7 @@ function initTable(eBomUrl){
                                 return false;
                             }
                             var _table = '<p>是否要删除您所选择的记录？</p>' +
-                                '<div style="max-height: 500px;overflow:scroll;"><table class="table table-striped tableNormalStyle" >';
+                                '<div style="max-height: 400px;overflow:scroll;"><table class="table table-striped tableNormalStyle" >';
                             for (var index in rows) {
                                 _table += '<tr><td>' + rows[index].lineId + '</td></tr>';
                             }

@@ -144,6 +144,7 @@ public class HzMbomController extends BaseController {
         tableTitle.put("pBomOfWhichDept", "专业");
         tableTitle.put("lineId", "零件号");
         tableTitle.put("pBomLinePartName", "名称");
+        tableTitle.put("pLouaFlag","LOU/LOA");
         tableTitle.put("sparePart", "备件");
         tableTitle.put("sparePartNum", "备件编号");
         tableTitle.put("processRoute", "工艺路线");
@@ -200,6 +201,7 @@ public class HzMbomController extends BaseController {
             _res.put("processRoute", dto.getProcessRoute());
             _res.put("laborHour", dto.getLaborHour());
             _res.put("rhythm", dto.getRhythm());
+            _res.put("pLouaFlag",dto.getpLouaFlag());
             _res.put("solderJoint", dto.getSolderJoint());
             _res.put("machineMaterial", dto.getMachineMaterial());
             _res.put("standardPart", dto.getStandardPart());

@@ -107,6 +107,7 @@ public class HzPbomLineRespDTO {
 
     private String puids;
 
+    private String pLouaFlag;
     public String getPuids() {
         return puids;
     }
@@ -297,5 +298,13 @@ public class HzPbomLineRespDTO {
 
     public void setNo(int no) {
         No = no;
+    }
+
+    public String getpLouaFlag() {
+        return pLouaFlag;
+    }
+
+    public void setpLouaFlag(String pLouaFlag) {
+        this.pLouaFlag = pLouaFlag;
     }
 }

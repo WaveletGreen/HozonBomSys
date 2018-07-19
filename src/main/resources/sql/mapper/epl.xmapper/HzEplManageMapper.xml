@@ -21,7 +21,7 @@
 
 
       <result column="P_BOM_LINE_BLOCK" jdbcType="BLOB" property="bomLineBlock"/>
-    <result column="P_FNA_INFO" jdbcType="VARCHAR" property="fna" />
+      <result column="P_FNA_INFO" jdbcType="VARCHAR" property="fna" />
       <result column="P_FASTENER" jdbcType="VARCHAR" property="pFastener" />
       <result column="P_LOUA_FLAG" jdbcType="INTEGER" property="pLouaFlag" />
       <result column="P_3CPART_FLAG" jdbcType="INTEGER" property="p3cpartFlag" />
@@ -59,6 +59,8 @@
       <result column="P_SUPPLY_CODE" jdbcType="VARCHAR" property="pSupplyCode" />
       <result column="P_REMARK" jdbcType="VARCHAR" property="pRemark" />
       <result column="P_REGULATION_CODE" jdbcType="VARCHAR" property="pRegulationCode" />
+      <result column="P_EBOM_STATUS" jdbcType="VARCHAR" property="status" />
+      <result column="P_NUMBER" jdbcType="INTEGER" property="number" />
 
     <!--PBOM-->
     <result column="P_ITEM_RESOURCE" jdbcType="VARCHAR" property="itemResource" />
@@ -156,7 +158,7 @@
   <select id="HzEbomRecordDAOImpl_getHzEbomList" resultMap="BaseResultMap" parameterType="java.util.HashMap">
       select * FROM
       (SELECT u.*,rownum as rn from
-      (SELECT <include refid="EBOM_COLUMN"/> from HZ_BOM_LINE_RECORD
+      (SELECT * from HZ_BOM_LINE_RECORD
       where p_bom_digifax_id=(
       select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(
       select t2.puid from Hz_project_libs t2

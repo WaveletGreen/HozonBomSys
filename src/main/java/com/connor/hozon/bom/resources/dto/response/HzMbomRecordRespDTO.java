@@ -111,6 +111,16 @@ public class HzMbomRecordRespDTO {
      */
     private String pFactoryCode;
 
+    private String pLouaFlag;
+
+    public String getpLouaFlag() {
+        return pLouaFlag;
+    }
+
+    public void setpLouaFlag(String pLouaFlag) {
+        this.pLouaFlag = pLouaFlag;
+    }
+
     public Integer getpBomType() {
         return pBomType;
     }

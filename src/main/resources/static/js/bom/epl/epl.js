@@ -34,14 +34,14 @@ function initTable(eplUrl){
     var $table = $("#eplTable");
     var column = [];
     //var eplUrl = "epl/record?projectId="+projectPuid;
-    var eplTitleUrl = "epl/title?projectId="+projectPuid;
+    var eplTitleUrl = "epl/epl/title";
     $.ajax({
         url:eplTitleUrl,
         type: "GET",
         success: function (result) {
             var column = [];
             column.push({field: 'puid', title: '主键'});
-            var data = result.data;
+            /*var data = result.data;
             var nameZh =data[0];
             var nameEn = data[1];
             var myData=JSON.stringify({
@@ -56,6 +56,22 @@ function initTable(eplUrl){
                     var json = {
                         field: nameEn[key],
                         title: nameZh[key],
+                        align:
+                            'center',
+                        valign:
+                            'middle'
+                    };
+                    column.push(json);
+                }
+            }*/
+            var data = result.data;
+            var keys = [];
+            var values;
+            for (var key in data) {
+                if (data.hasOwnProperty(key)) {
+                    var json = {
+                        field: key,
+                        title: data[key],
                         align:
                             'center',
                         valign:
@@ -100,6 +116,7 @@ function initTable(eplUrl){
             $table.bootstrapTable('hideColumn', 'puid');
             $table.bootstrapTable('hideColumn', 'rank');
             $table.bootstrapTable('hideColumn', 'groupNum');
+            $table.bootstrapTable('hideColumn', 'level');
         }
     })
 
