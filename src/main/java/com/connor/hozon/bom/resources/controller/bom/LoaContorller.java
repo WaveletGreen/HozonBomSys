@@ -45,9 +45,9 @@ public class LoaContorller extends BaseController {
     @Autowired
     private HzMbomService hzMbomService;
 
-    @RequestMapping(value = "ebom",method = RequestMethod.GET)
+    @RequestMapping(value = "ebom",method = RequestMethod.POST)
     @ResponseBody
-    public void getHzEbomLoa(HzLoaQuery query, HttpServletResponse response){
+    public void getHzEbomLoa(@RequestBody HzLoaQuery query, HttpServletResponse response){
         if(query.getProjectId() == null || query.getPuid() == null || query.getPuid() == "" || query.getProjectId() == ""){
             writeAjaxJSONResponse(ResultMessageBuilder.build(false,"非法参数！"),response);
             return;
@@ -96,8 +96,8 @@ public class LoaContorller extends BaseController {
     }
 
 
-    @RequestMapping(value = "pbom",method = RequestMethod.GET)
-    public void getHzPbomLoa( HzLoaQuery query, HttpServletResponse response){
+    @RequestMapping(value = "pbom",method = RequestMethod.POST)
+    public void getHzPbomLoa(@RequestBody  HzLoaQuery query, HttpServletResponse response){
         if(query.getProjectId() == null || query.getPuid() == null || query.getPuid() == "" || query.getProjectId() == ""){
             writeAjaxJSONResponse(ResultMessageBuilder.build(false,"非法参数！"),response);
             return;
@@ -141,8 +141,8 @@ public class LoaContorller extends BaseController {
         jsonObject.put("child",loaRespDTOS);
         writeAjaxJSONResponse(ResultMessageBuilder.build(jsonObject),response);
     }
-    @RequestMapping(value = "mbom",method = RequestMethod.GET)
-    public void getHzMbomLoa( HzLoaQuery query, HttpServletResponse response){
+    @RequestMapping(value = "mbom",method = RequestMethod.POST)
+    public void getHzMbomLoa(@RequestBody HzLoaQuery query, HttpServletResponse response){
         if(query.getProjectId() == null || query.getPuid() == null || query.getPuid() == "" || query.getProjectId() == ""){
             writeAjaxJSONResponse(ResultMessageBuilder.build(false,"非法参数！"),response);
             return;
