@@ -30,6 +30,7 @@ public class HzEplManageRecordDAOImpl extends BaseSQLUtil implements HzEplMangeR
         map.put("pBomOfWhichDept",query.getpBomOfWhichDept());
         map.put("lineIndex",query.getLineIndex());
         map.put("lineId",query.getLineId());
+        map.put("pFastener",query.getpFastener());
         request.setPageNumber(query.getPage());
         request.setPageSize(query.getPageSize());
         request.setFilters(map);

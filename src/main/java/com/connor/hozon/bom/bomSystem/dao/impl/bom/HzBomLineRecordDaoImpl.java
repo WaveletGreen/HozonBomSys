@@ -63,4 +63,9 @@ public class HzBomLineRecordDaoImpl extends BaseSQLUtil {
     public List<HzBomLineRecord> getAllBomLineRecordByProjectId(String projectId){
         return super.findForList("HzBomLineRecordDaoImpl_getAllBomLineRecordByProjectId",projectId);
     }
+
+    public List<HzBomLineRecord> getLoadingCarPartBom(String projectId){
+
+        return super.findForList("HzBomLineRecordDaoImpl_getLoadingCarPartBom",projectId);
+    }
 }

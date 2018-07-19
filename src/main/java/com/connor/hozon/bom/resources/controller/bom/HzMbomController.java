@@ -145,6 +145,8 @@ public class HzMbomController extends BaseController {
         tableTitle.put("lineId", "零件号");
         tableTitle.put("pBomLinePartName", "名称");
         tableTitle.put("pLouaFlag","LOU/LOA");
+        tableTitle.put("pBomLinePartClass", "零件分类");
+        tableTitle.put("pBomLinePartResource", "零部件来源");
         tableTitle.put("sparePart", "备件");
         tableTitle.put("sparePartNum", "备件编号");
         tableTitle.put("processRoute", "工艺路线");
@@ -196,6 +198,8 @@ public class HzMbomController extends BaseController {
             _res.put("pBomOfWhichDept", dto.getpBomOfWhichDept());
             _res.put("lineId", dto.getLineId());
             _res.put("pBomLinePartName", dto.getpBomLinePartName());
+            _res.put("pBomLinePartClass", dto.getpBomLinePartClass());
+            _res.put("pBomLinePartResource", dto.getpBomLinePartResource());
             _res.put("sparePart", dto.getSparePart());
             _res.put("sparePartNum", dto.getSparePartNum());
             _res.put("processRoute", dto.getProcessRoute());

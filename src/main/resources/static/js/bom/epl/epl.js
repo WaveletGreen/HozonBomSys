@@ -19,7 +19,7 @@ function doQuery(){
     var lineId = $("#lineId").val();
     eplUrl += "&lineId="+lineId;
     var pFastener = $("#pFastener").val();
-    if (type=="请选择是否紧固件") {
+    if (pFastener=="请选择是否紧固件") {
         eplUrl += "&pFastener="+"";
     }
     else {

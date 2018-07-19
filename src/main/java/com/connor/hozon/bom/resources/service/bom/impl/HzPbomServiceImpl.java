@@ -81,23 +81,23 @@ public class HzPbomServiceImpl implements HzPbomService {
             String colorPart = recordReqDTO.getColorPart();
             String type = recordReqDTO.getType();
             if("Y".equals(buyUnit)){
-                hzPbomRecord.setBuyUnit(0);
-            }else if("N".equals(buyUnit)){
                 hzPbomRecord.setBuyUnit(1);
+            }else if("N".equals(buyUnit)){
+                hzPbomRecord.setBuyUnit(0);
             }else{
                 hzPbomRecord.setBuyUnit(2);
             }
             if("Y".equals(colorPart)){
-                hzPbomRecord.setColorPart(0);
-            }else if("N".equals(colorPart)){
                 hzPbomRecord.setColorPart(1);
+            }else if("N".equals(colorPart)){
+                hzPbomRecord.setColorPart(0);
             }else{
                 hzPbomRecord.setColorPart(2);
             }
             if("Y".equals(type)){
-                hzPbomRecord.setType(0);
-            }else if("N".equals(type)){
                 hzPbomRecord.setType(1);
+            }else if("N".equals(type)){
+                hzPbomRecord.setType(0);
             }else{
                 hzPbomRecord.setType(2);
             }
@@ -160,23 +160,23 @@ public class HzPbomServiceImpl implements HzPbomService {
             String colorPart = recordReqDTO.getColorPart();
             String type = recordReqDTO.getType();
             if(buyUnit.equals("Y")){
-                hzPbomRecord.setBuyUnit(0);
-            }else if(buyUnit.equals("N")){
                 hzPbomRecord.setBuyUnit(1);
+            }else if(buyUnit.equals("N")){
+                hzPbomRecord.setBuyUnit(0);
             }else{
                 hzPbomRecord.setBuyUnit(2);
             }
             if(colorPart.equals("Y")){
-                hzPbomRecord.setColorPart(0);
-            }else if(colorPart.equals("N")){
                 hzPbomRecord.setColorPart(1);
+            }else if(colorPart.equals("N")){
+                hzPbomRecord.setColorPart(0);
             }else{
                 hzPbomRecord.setColorPart(2);
             }
             if(type.equals("Y")){
-                hzPbomRecord.setType(0);
-            }else if(type.equals("N")){
                 hzPbomRecord.setType(1);
+            }else if(type.equals("N")){
+                hzPbomRecord.setType(0);
             }else{
                 hzPbomRecord.setType(2);
             }
@@ -486,23 +486,23 @@ public class HzPbomServiceImpl implements HzPbomService {
                 String colorPart = recordReqDTO.getColorPart();
                 String type = recordReqDTO.getType();
                 if ("Y".equals(buyUnit)) {
-                    hzPbomLineRecord.setBuyUnit(0);
-                } else if ("N".equals(buyUnit)) {
                     hzPbomLineRecord.setBuyUnit(1);
+                } else if ("N".equals(buyUnit)) {
+                    hzPbomLineRecord.setBuyUnit(0);
                 } else {
                     hzPbomLineRecord.setBuyUnit(2);
                 }
                 if ("Y".equals(colorPart)) {
-                    hzPbomLineRecord.setColorPart(0);
-                } else if ("N".equals(colorPart)) {
                     hzPbomLineRecord.setColorPart(1);
+                } else if ("N".equals(colorPart)) {
+                    hzPbomLineRecord.setColorPart(0);
                 } else {
                     hzPbomLineRecord.setColorPart(2);
                 }
                 if ("Y".equals(type)) {
-                    hzPbomLineRecord.setType(0);
-                } else if ("N".equals(type)) {
                     hzPbomLineRecord.setType(1);
+                } else if ("N".equals(type)) {
+                    hzPbomLineRecord.setType(0);
                 } else {
                     hzPbomLineRecord.setType(2);
                 }
@@ -875,23 +875,23 @@ public class HzPbomServiceImpl implements HzPbomService {
                 Integer buyUnit = record.getBuyUnit();
                 Integer colorPart = record.getColorPart();
                 if (Integer.valueOf(0).equals(type)) {
-                    respDTO.setType("Y");
-                } else if (Integer.valueOf(1).equals(type)) {
                     respDTO.setType("N");
+                } else if (Integer.valueOf(1).equals(type)) {
+                    respDTO.setType("Y");
                 } else {
                     respDTO.setType("");
                 }
                 if (Integer.valueOf(0).equals(buyUnit)) {
-                    respDTO.setBuyUnit("Y");
-                } else if (Integer.valueOf(1).equals(buyUnit)) {
                     respDTO.setBuyUnit("N");
+                } else if (Integer.valueOf(1).equals(buyUnit)) {
+                    respDTO.setBuyUnit("Y");
                 } else {
                     respDTO.setBuyUnit("");
                 }
                 if (Integer.valueOf(0).equals(colorPart)) {
-                    respDTO.setColorPart("Y");
-                } else if (Integer.valueOf(1).equals(colorPart)) {
                     respDTO.setColorPart("N");
+                } else if (Integer.valueOf(1).equals(colorPart)) {
+                    respDTO.setColorPart("Y");
                 } else {
                     respDTO.setColorPart("");
                 }

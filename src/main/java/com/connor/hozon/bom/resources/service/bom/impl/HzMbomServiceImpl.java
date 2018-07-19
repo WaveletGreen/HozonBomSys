@@ -61,7 +61,7 @@ public class HzMbomServiceImpl implements HzMbomService {
 
             int count = hzMbomRecordDAO.getHzMbomTotalCount(query.getProjectId());
             if(count<=0){
-                List<HzBomLineRecord> lineRecords = hzBomLineRecordDao.getAllBomLineRecordByProjectId(query.getProjectId());
+                List<HzBomLineRecord> lineRecords = hzBomLineRecordDao.getLoadingCarPartBom(query.getProjectId());
                 if(ListUtil.isNotEmpty(lineRecords)){
                     int size = lineRecords.size();
                     //分批插入数据 一次1000条
@@ -529,7 +529,7 @@ public class HzMbomServiceImpl implements HzMbomService {
             records =hzMbomRecordDAO.findHzMbomByPuid(map);
             if(ListUtil.isNotEmpty(records)){
                 if(records.get(0).getLineIndex().split("\\.").length == 2){
-                    respDTO.setErrMsg("2Y层结构无法恢复！");
+                    respDTO.setErrMsg("2或者2Y层结构无法恢复！");
                     respDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
                     return  respDTO;
                 }
@@ -563,6 +563,18 @@ public class HzMbomServiceImpl implements HzMbomService {
         }catch (Exception e){
             return OperateResultMessageRespDTO.getFailResult();
         }
+    }
+
+    @Override
+    public List<String> loadingCarPartType() {
+        List<String> list = new ArrayList<>();
+        list.add("采购件");
+        list.add("自制总成");
+        list.add("自制单件");
+        list.add("自用标准件");
+        list.add("自用非标件");
+        list.add("虚拟总成");
+        return list;
     }
 
     private HzMbomLineRecord bomLineToMbomLine(HzBomLineRecord record){

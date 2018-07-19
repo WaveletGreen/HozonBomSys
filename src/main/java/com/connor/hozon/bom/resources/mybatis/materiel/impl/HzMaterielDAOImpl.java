@@ -66,6 +66,7 @@ public class HzMaterielDAOImpl extends BaseSQLUtil implements HzMaterielDAO {
         map.put("projectId",query.getProjectId());
         map.put("puid",query.getPuid());
         map.put("pMaterielDataType",query.getpMaterielDataType());
+        map.put("",query.getMaterielResourceId());
         return super.findForList("HzMaterialDAOImpl_findHzMaterielForList",query);
     }
 
@@ -119,5 +120,10 @@ public class HzMaterielDAOImpl extends BaseSQLUtil implements HzMaterielDAO {
         Map<String, Object> map = new HashMap<>();
         map.put("list", list);
         return super.executeUpdate(map, "com.connor.hozon.bom.bomSystem.dao.project.HzSuperMaterielDao.updateByBatch");
+    }
+
+    @Override
+    public int realDelete(String materielResourceId) {
+        return super.delete("HzMaterialDAOImpl_realDelete",materielResourceId);
     }
 }
