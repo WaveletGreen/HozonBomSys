@@ -10,13 +10,26 @@
     <script th:src="@{/js/bootstrap.min.js}"></script>
 
     <style type="text/css">
+        html{
+            height: 100%;
+        }
         body {
-            padding-top: 50px;
+            /*padding-top: 50px;*/
+            height: 100%;
         }
 
         .starter-template {
             padding: 40px 15px;
             text-align: center;
+        }
+        span{
+            font-family: 黑体,微软雅黑,宋体;
+            font-size: 45px;
+            position: absolute;
+            left: 40px;
+            top: 40px;
+            /*font-style:oblique;*/
+            color: #005A5A;
         }
     </style>
 </head>
@@ -72,6 +85,7 @@
     <!-- /.modal-dialog -->
 </div>
 <!-- /.modal -->
+<span>合众BOM管理系统</span>
 </body>
 <script type="text/javascript">
     function post() {

@@ -1,5 +1,10 @@
 @charset "UTF-8";
-
+body{
+	 background: url(s2.jpg) no-repeat center;
+	 background-size:contain;
+	 z-index: -10;
+	 /*background-color: skyblue;*/
+ }
 .logo {
 	background: url(logo.png) no-repeat center;
 	background-size: 300px 81px;
@@ -11,4 +16,9 @@
  }
  h3{
 	 margin: 0;
+ }
+ .container{
+	 background-color: white;
+	 border:5px solid #BFBFBF;
+	 margin-top: 80px;
  }
