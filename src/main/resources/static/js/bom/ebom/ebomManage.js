@@ -1,24 +1,25 @@
 $(document).ready((function () {
     var projectPuid = $("#project", window.top.document).val();
-    var eBomUrl ="ebom/getEBom/list?projectId=" + projectPuid;
+    var eBomUrl = "ebom/getEBom/list?projectId=" + projectPuid;
     initTable(eBomUrl);
 }))
 
 
-function doQuery(){
+function doQuery() {
     //$('#ebomManageTable').bootstrapTable('refresh');    //刷新表格
     var projectPuid = $("#project", window.top.document).val();
-    var eBomUrl ="ebom/getEBom/list?projectId=" + projectPuid;
+    var eBomUrl = "ebom/getEBom/list?projectId=" + projectPuid;
     var level = $("#level").val();
-    eBomUrl+="&level="+level;
+    eBomUrl += "&level=" + level;
     var pBomOfWhichDept = $("#pBomOfWhichDept").val();
-    eBomUrl+="&pBomOfWhichDept="+pBomOfWhichDept;
+    eBomUrl += "&pBomOfWhichDept=" + pBomOfWhichDept;
     var lineId = $("#lineId").val();
-    eBomUrl += "&lineId="+lineId;
+    eBomUrl += "&lineId=" + lineId;
     initTable(eBomUrl);
     $('#ebomManageTable').bootstrapTable('destroy');
 }
-function initTable(eBomUrl){
+
+function initTable(eBomUrl) {
     var projectPuid = $("#project", window.top.document).val();
     //var eBomUrl ="ebom/getEBom/list?projectId=" + projectPuid
     var $table = $("#ebomManageTable");
@@ -31,38 +32,73 @@ function initTable(eBomUrl){
             // column.push({field: 'eBomPuid', title: 'puid'});
             column.push({field: 'ck', checkbox: true});
             column.push({field: 'puid', title: '主键'});
-           /* var data = result.data;
-            var nameZh = data[0];
-            var nameEn = data[1];
-            var keys = [];
-            var values;
-            for (var key in nameEn) {
-                if (nameEn.hasOwnProperty(key)) {
-                    var json = {
-                        field: nameEn[key],
-                        title: nameZh[key],
-                        align:
-                            'center',
-                        valign:
-                            'middle'
-                    };
-                    column.push(json);
-                }
-            }*/
+            /* var data = result.data;
+             var nameZh = data[0];
+             var nameEn = data[1];
+             var keys = [];
+             var values;
+             for (var key in nameEn) {
+                 if (nameEn.hasOwnProperty(key)) {
+                     var json = {
+                         field: nameEn[key],
+                         title: nameZh[key],
+                         align:
+                             'center',
+                         valign:
+                             'middle'
+                     };
+                     column.push(json);
+                 }
+             }*/
             var data = result.data;
             var keys = [];
             var values;
             for (var key in data) {
                 if (data.hasOwnProperty(key)) {
-                    var json = {
-                        field: key,
-                        title: data[key],
-                        align:
-                            'center',
-                        valign:
-                            'middle'
-                    };
-                    column.push(json);
+                    if('pLouaFlag'===key){
+                        var json = {
+                            field: key,
+                            title: data[key],
+                            align: 'center',
+                            valign: 'middle',
+                            formatter: function (value, row, index) {
+                                if (value =="LOU"||"LOA"==value) {
+                                    return [
+                                        '<a href="javascript:void(0)" onclick="queryLou(\'' + row.puid + '\')">' + value + '</a>'
+                                    ].join("");
+                                }
+                                else {
+                                    return [
+                                        value
+                                    ].join("");
+                                }
+                            }
+                        };
+                        column.push(json);
+                    }
+                    else{
+                        var json = {
+                            field: key,
+                            title: data[key],
+                            align: 'center',
+                            valign: 'middle',
+                            formatter: function (value, row, index) {
+                                if (value =="LOU/LOA") {
+                                    return [
+                                        '<a href="javascript:void(0)" onclick="queryLou(' + row.puid + ')">' + value + '</a>'
+                                    ].join("");
+                                }
+                                else {
+                                    return [
+                                        value
+                                    ].join("");
+                                }
+                            }
+                        };
+                        column.push(json);
+                    }
+
+
                 }
             }
             $table.bootstrapTable({
@@ -77,9 +113,9 @@ function initTable(eBomUrl){
                 formId: "queryEbomManage",
                 undefinedText: "",//当数据为 undefined 时显示的字符
                 pagination: true,
-                pageNumber:1,                       //初始化加载第一页，默认第一页
+                pageNumber: 1,                       //初始化加载第一页，默认第一页
                 pageSize: 20,                       //每页的记录行数（*）
-                pageList: ['ALL',20, 50,100,200,500,1000],        //可供选择的每页的行数（*）
+                pageList: ['ALL', 20, 50, 100, 200, 500, 1000],        //可供选择的每页的行数（*）
                 //uniqueId: "puid",                     //每一行的唯一标识，一般为主键列
                 //showExport: true,
                 //exportDataType: 'all',
@@ -150,12 +186,13 @@ function initTable(eBomUrl){
                         handler: function () {
                             var rows = $table.bootstrapTable('getSelections');
                             var puids = "";
-                            for (var i = 0 ; i<rows.length;i++){
-                                puids += rows[i].puid+",";
-                            };
+                            for (var i = 0; i < rows.length; i++) {
+                                puids += rows[i].puid + ",";
+                            }
+                            ;
                             var myData = JSON.stringify({
                                 "projectId": $("#project", window.top.document).val(),
-                                "puids":puids,
+                                "puids": puids,
                             });
                             if (rows.length == 0) {
                                 window.Ewin.alert({message: '请选择一条需要删除的数据!'});
@@ -173,7 +210,7 @@ function initTable(eBomUrl){
                                         type: "POST",
                                         //ajax需要添加打包名
                                         url: "ebom/delete/ebom",
-                                        data:myData,
+                                        data: myData,
                                         contentType: "application/json",
                                         success: function (result) {
                                             // if (result.status) {
@@ -183,9 +220,9 @@ function initTable(eBomUrl){
                                             // else {
                                             //     window.Ewin.alert({messabge: + result.errMsg});
                                             // }
-                                            if (result.success){
+                                            if (result.success) {
                                                 layer.msg('删除成功', {icon: 1, time: 2000})
-                                            } else if (!result.success){
+                                            } else if (!result.success) {
                                                 window.Ewin.alert({message: result.errMsg});
                                             }
                                             $table.bootstrapTable("refresh");
@@ -202,8 +239,38 @@ function initTable(eBomUrl){
             });
             //$table.bootstrapTable('hideColumn','puid');
             $table.bootstrapTable('hideColumn', 'puid');
-            $table.bootstrapTable('hideColumn','groupNum');
+            $table.bootstrapTable('hideColumn', 'groupNum');
             $table.bootstrapTable('hideColumn', 'rank');
         }
     });
+}
+
+function  queryLou(row){
+    var myData= JSON.stringify({
+        "projectId": $("#project", window.top.document).val(),
+        "puid": row
+    });
+    $.ajax({
+        type: "POST",
+        //ajax需要添加打包名
+        url: "loa/ebom",
+        data: myData,
+        contentType: "application/json",
+        success: function (result) {
+            var child = result.data.child;
+            var parent =result.data.parent;
+            var _table = '<div style="max-height: 400px;overflow:scroll;"><table class="table table-striped tableNormalStyle" >';
+            _table+='<tr><td>父层级</td><td>父零件号</td><td>父名称</td></tr>'
+            // for (var i=0;i<parent.length; i++) {
+                _table += '<tr><td>' + parent.parentLevel + '</td><td>'+parent.parentLineId+'</td><td>'+parent.parentName+'</td></tr>';
+            // }
+             _table += '</table></div>' + '<div style="max-height: 400px;overflow:scroll;"><table class="table table-striped tableNormalStyle" >';
+             _table+='<tr><td>子层级</td><td>子零件号</td><td>子名称</td></tr>'
+            for (var i=0;i<child.length; i++) {
+                _table += '<tr><td>' + child[i].childLevel + '</td><td>'+child[i].childLineId+'</td><td>'+child[i].childName+'</td></tr>';
+            }
+            _table += '</table></div>';
+            window.Ewin.confirm({title: '提示', message: _table, width: 500});
+        }
+    })
 }

@@ -1,17 +1,18 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <!--User: xulf Date: 2018/7/2 Time: 11:42-->
+<link th:href="@{/css/labelColor.css}" rel="stylesheet">
 <body>
 <form id="materialDataForm" role="form" method="post" action="materiel/add">
     <input id="puid" name="puid" type="hidden"th:value="${data.puid}"/><!--th:value="${entity.pBomPuid}"-->
     <div class="form-group">
-        <label for="pMaterielCode">物料代码</label>
+        <label for="pMaterielCode">物料代码<span>*</span></label>
         <input class="form-control" id="pMaterielCode" name="pMaterielCode" type="text"disabled="disabled"
                 th:value="${data.pMaterielCode}"
                placeholder="请输入物料代码"/><!--th:value="${entity.level}"-->
     </div>
     <div class="form-group">
-        <label for="pMaterielType">物料类型</label>
+        <label for="pMaterielType">物料类型<span>*</span></label>
         <input class="form-control" id="pMaterielType" name="pMaterielType" type="text"disabled="disabled"
                th:value="${data.pMaterielType}"
                placeholder="请输入物料类型"/><!--th:value="${entity.level}"-->
@@ -81,7 +82,7 @@
                placeholder="请输入零件重要度"/><!--th:value="${entity.level}"-->
     </div>
     <div class="form-group">
-        <label for="factoryCode">工厂代码</label>
+        <label for="factoryCode">工厂代码<span>*</span></label>
         <input class="form-control" id="factoryCode" name="factoryCode" type="text"
 
                placeholder="请输入工厂代码"/><!--th:value="${entity.level}"-->

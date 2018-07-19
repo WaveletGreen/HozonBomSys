@@ -6,20 +6,22 @@
 <meta charset="UTF-8">
 <title>回收站</title>
 <body>
-<form class="form-inline" role="form" style="float: left; width: 100%;margin-left: 20px;" method="get"
-      id="queryBom">
-    <div class="form-group">
-        <label for="type">BOM:</label>
-        <select class="form-control" style="min-width: 180px" name="type" id="type" placeholder="请选择BOM">
-            <option value="1">EBOM</option>
-            <option value="2">PBOM</option>
-            <option value="3">MBOM</option>
-        </select>
-    </div>
-    <div class="form-group">
-        <button type="button" id="queryBtn" onclick="doQuery();" class="btn btn-primary">查询</button>
-    </div>
-</form>
+<div class="panel-body" style="padding-bottom:0px;">
+    <form class="form-inline" role="form" style="float: left; width: 100%;margin-left: 20px;" method="get"
+          id="queryBom">
+        <div class="form-group">
+            <label for="type">BOM:</label>
+            <select class="form-control" style="min-width: 180px" name="type" id="type" placeholder="请选择BOM">
+                <option value="1">EBOM</option>
+                <option value="2">PBOM</option>
+                <option value="3">MBOM</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <button type="button" id="queryBtn" onclick="doQuery();" class="btn btn-primary">查询</button>
+        </div>
+    </form>
+</div>
 <div class="content col-lg-12">
     <table class="table table-striped tableNormalStyle" id="recycleBinTable"></table>
 </div>

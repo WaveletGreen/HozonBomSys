@@ -1,11 +1,12 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <!--User: xulf Date: 2018/6/28 Time: 14:19-->
+<link th:href="@{/css/labelColor.css}" rel="stylesheet">
 <body>
 <form id="processCenterForm" role="form" method="post" action="work/add">
     <!--<input id="puid" name="puid" type="text"/>&lt;!&ndash;th:value="${entity.pBomPuid}"&ndash;&gt;-->
     <div class="form-group">
-        <label for="factoryCode">工厂代码</label>
+        <label for="factoryCode">工厂代码<span>*</span></label>
         <input class="form-control" id="factoryCode" name="factoryCode" type="text"
 
                placeholder="请输入工厂代码"/><!--th:value="${entity.level}"-->

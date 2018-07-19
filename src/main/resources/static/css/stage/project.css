@@ -1,3 +1,7 @@
+.bg{
+    background: url(Hozon5.jpg) no-repeat center;
+    background-size:contain;
+}
 .tableNormalStyle {
     border: 1px solid #CCC;
     min-width: 100%;

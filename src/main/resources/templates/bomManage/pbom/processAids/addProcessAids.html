@@ -1,10 +1,11 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <!--User: xulf Date: 2018/7/16 Time: 19:23-->
+<link th:href="@{/css/labelColor.css}" rel="stylesheet">
 <body>
 <form id="processAidsForm" role="form" method="post" action="accessories/insert">
     <div class="form-group">
-        <label for="pBomLinePartName">零件名称</label>
+        <label for="pBomLinePartName">零件名称<span>*</span></label>
         <input class="form-control" id="pBomLinePartName" name="pBomLinePartName" type="text"
 
                placeholder="请输入零件名称"/><!--th:value="${entity.level}"-->
@@ -16,7 +17,7 @@
                placeholder="请输入零件英文名称"/><!--th:value="${entity.level}"-->
     </div>
     <div class="form-group">
-        <label for="pLineId">零件号</label>
+        <label for="pLineId">零件号<span>*</span></label>
         <input class="form-control" id="pLineId" name="pLineId" type="text"
 
                placeholder="请输入零件号"/><!--th:value="${entity.level}"-->
