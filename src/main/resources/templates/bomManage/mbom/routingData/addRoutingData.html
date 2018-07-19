@@ -1,23 +1,24 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <!--User: xulf Date: 2018/7/2 Time: 10:58-->
+<link th:href="@{/css/labelColor.css}" rel="stylesheet">
 <body>
 <form id="routingDataForm" role="form" method="post" action="work/process/add">
     <input id="materielId" name="materielId" type="hidden" th:value="${data.materielId}"/><!--th:value="${entity.pBomPuid}"-->
     <div class="form-group">
-        <label for="pMaterielCode">物料</label>
+        <label for="pMaterielCode">物料<span>*</span></label>
         <input class="form-control" id="pMaterielCode" name="pMaterielCode" type="text"disabled="disabled"
                th:value="${data.pMaterielCode}"
                placeholder="请输入物料"/><!--th:value="${entity.level}"-->
     </div>
     <div class="form-group">
-        <label for="pMaterielDesc">物料名称</label>
+        <label for="pMaterielDesc">物料名称<span>*</span></label>
         <input class="form-control" id="pMaterielDesc" name="pMaterielDesc" type="text"disabled="disabled"
                th:value="${data.pMaterielDesc}"
                placeholder="请输入物料名称"/><!--th:value="${entity.level}"-->
     </div>
     <div class="form-group">
-        <label for="factoryCode">工厂</label>
+        <label for="factoryCode">工厂<span>*</span></label>
         <input class="form-control" id="factoryCode" name="factoryCode" type="text"
 
                placeholder="请输入工厂"/><!--th:value="${entity.level}"-->
