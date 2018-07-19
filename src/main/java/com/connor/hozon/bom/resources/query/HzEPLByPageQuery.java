@@ -34,6 +34,16 @@ public class HzEPLByPageQuery extends DefaultPageQuery{
      */
     private Integer isHas;
 
+    private Integer type;
+
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
+    }
+
     public Integer getIsHas() {
         return isHas;
     }

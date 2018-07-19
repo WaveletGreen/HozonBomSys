@@ -69,6 +69,7 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
                 HzFactory hzFactory = hzFactoryDAO.findFactory("",factoryCode);
                 String puid = UUID.randomUUID().toString();
                 if(hzFactory == null){
+                    hzFactory = new HzFactory();
                     hzFactory.setPuid(puid);
                     hzFactory.setpFactoryCode(factoryCode);
                     int i = hzFactoryDAO.insert(hzFactory);
@@ -143,9 +144,71 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
         }
         HzWorkProcedure workProcess = hzWorkProcedureDAO.getHzWorkProcessByMaterielId(reqDTO.getMaterielId());
         if(workProcess == null){
-            respDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
-            respDTO.setErrMsg("当前编辑的对象不存在，请添加后再执行此操作！");
-            return respDTO;
+            HzWorkProcedure hzWorkProcedure = new HzWorkProcedure();
+            String factoryCode = reqDTO.getFactoryCode();
+            if(factoryCode != null && !factoryCode.equals("")){
+                HzFactory hzFactory = hzFactoryDAO.findFactory("",factoryCode);
+                String puid = UUID.randomUUID().toString();
+                if(hzFactory == null){
+                    hzFactory = new HzFactory();
+                    hzFactory.setPuid(puid);
+                    hzFactory.setpFactoryCode(factoryCode);
+                    int i = hzFactoryDAO.insert(hzFactory);
+                    if(i<0){
+                        return OperateResultMessageRespDTO.getFailResult();
+                    }
+                }else{
+                    puid = hzFactory.getPuid();
+                }
+                HzMaterielQuery query = new HzMaterielQuery();
+                query.setProjectId(reqDTO.getProjectId());
+                query.setPuid(reqDTO.getMaterielId());
+                HzMaterielRecord hzMaterielRecord = hzMaterielDAO.getHzMaterielRecord(query);
+                if(hzMaterielRecord == null){
+                    return OperateResultMessageRespDTO.getFailResult();
+                }
+                hzMaterielRecord.setpFactoryPuid(puid);
+                int i = hzMaterielDAO.update(hzMaterielRecord);
+                if(i<0){
+                    return OperateResultMessageRespDTO.getFailResult();
+                }
+            }
+
+            hzWorkProcedure.setMaterielId(reqDTO.getMaterielId());
+            hzWorkProcedure.setControlCode( reqDTO.getControlCode());
+            hzWorkProcedure.setpBurn(reqDTO.getpBurn());
+            hzWorkProcedure.setpCount(reqDTO.getpCount());
+            hzWorkProcedure.setpCreateName(user.getUserName());
+            hzWorkProcedure.setpDirectLabor(reqDTO.getpDirectLabor());
+            hzWorkProcedure.setpIndirectLabor(reqDTO.getpIndirectLabor());
+            hzWorkProcedure.setpMachineLabor(reqDTO.getpMachineLabor());
+            hzWorkProcedure.setpMachineMaterialLabor(reqDTO.getpMachineMaterialLabor());
+            hzWorkProcedure.setpOtherCost(reqDTO.getpOtherCost());
+            hzWorkProcedure.setpProcedureDesc(reqDTO.getpProcedureDesc());
+            hzWorkProcedure.setpProcedureCode(reqDTO.getpProcedureCode());
+            hzWorkProcedure.setProjectId(reqDTO.getProjectId());
+            hzWorkProcedure.setpUpdateName(user.getUserName());
+            hzWorkProcedure.setPurpose(reqDTO.getPurpose());
+            hzWorkProcedure.setState(reqDTO.getState());
+            hzWorkProcedure.setPuid(UUID.randomUUID().toString());
+            List<HzWorkCenter> hzWorkCenterList = hzWorkCenterDAO.findWorkCenter(reqDTO.getProjectId(),reqDTO.getpWorkCode());
+            if(hzWorkCenterList != null && hzWorkCenterList.size()>0){
+                hzWorkProcedure.setpWorkPuid("");
+            }else {
+                String puid = UUID.randomUUID().toString();
+                HzWorkCenter hzWorkCenter = new HzWorkCenter();
+                hzWorkCenter.setPuid(puid);
+                hzWorkCenter.setpWorkCode(reqDTO.getpWorkCode());
+                hzWorkCenter.setpWorkDesc(reqDTO.getpWorkDesc());
+                hzWorkCenterDAO.insert(hzWorkCenter);
+                hzWorkProcedure.setpWorkPuid(puid);
+            }
+            int i =  hzWorkProcedureDAO.insert(hzWorkProcedure);
+            if(i>0){
+                return OperateResultMessageRespDTO.getSuccessResult();
+            }else {
+                return OperateResultMessageRespDTO.getFailResult();
+            }
         }
         String factoryCode = reqDTO.getFactoryCode();
         if(factoryCode != null && !factoryCode.equals("")){

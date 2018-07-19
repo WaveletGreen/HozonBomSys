@@ -60,7 +60,7 @@
         <result column="P_SUPPLY_CODE" jdbcType="VARCHAR" property="pSupplyCode" />
         <result column="P_REMARK" jdbcType="VARCHAR" property="pRemark" />
         <result column="P_REGULATION_CODE" jdbcType="VARCHAR" property="pRegulationCode" />
-        
+        <result column="P_NUMBER" jdbcType="INTEGER" property="number" />
         
         
     </resultMap>
@@ -79,7 +79,7 @@
     P_MATERIAL2, P_MATERIAL3, P_DENSITY, P_MATERIAL_STANDARD, P_SURFACE_TREAT, P_TEXTURE_COLOR_NUM, 
     P_MANU_PROCESS, P_SYMMETRY, P_IMPORTANCE, P_REGULATION_FLAG, P_BWG_BOX_PART, P_DEVELOP_TYPE, 
     P_DATA_VERSION, P_TARGET_WEIGHT, P_FEATURE_WEIGHT, P_ACTUAL_WEIGHT, P_FASTENER_STANDARD, 
-    P_FASTENER_LEVEL, P_TORQUE, P_DUTY_ENGINEER, P_SUPPLY, P_SUPPLY_CODE, P_REMARK, P_REGULATION_CODE
+    P_FASTENER_LEVEL, P_TORQUE, P_DUTY_ENGINEER, P_SUPPLY, P_SUPPLY_CODE, P_REMARK, P_REGULATION_CODE,P_NUMBER
   </sql>
 
     <sql id="Blob_Column_List">P_BOM_LINE_BLOCK</sql>
@@ -153,7 +153,7 @@
         P_DATA_VERSION, P_TARGET_WEIGHT, P_FEATURE_WEIGHT,
         P_ACTUAL_WEIGHT, P_FASTENER_STANDARD, P_FASTENER_LEVEL,
         P_TORQUE, P_DUTY_ENGINEER, P_SUPPLY,
-        P_SUPPLY_CODE, P_REMARK, P_REGULATION_CODE
+        P_SUPPLY_CODE, P_REMARK, P_REGULATION_CODE,P_NUMBER
         )
         values
         (#{puid,jdbcType=VARCHAR},#{parentUid,jdbcType=VARCHAR},#{bomDigifaxId,jdbcType=VARCHAR},
@@ -175,7 +175,8 @@
           #{pDataVersion,jdbcType=VARCHAR}, #{pTargetWeight,jdbcType=VARCHAR}, #{pFeatureWeight,jdbcType=VARCHAR}, 
           #{pActualWeight,jdbcType=VARCHAR}, #{pFastenerStandard,jdbcType=VARCHAR}, #{pFastenerLevel,jdbcType=VARCHAR}, 
           #{pTorque,jdbcType=VARCHAR}, #{pDutyEngineer,jdbcType=VARCHAR}, #{pSupply,jdbcType=VARCHAR}, 
-          #{pSupplyCode,jdbcType=VARCHAR}, #{pRemark,jdbcType=VARCHAR}, #{pRegulationCode,jdbcType=VARCHAR}
+          #{pSupplyCode,jdbcType=VARCHAR}, #{pRemark,jdbcType=VARCHAR}, #{pRegulationCode,jdbcType=VARCHAR},
+          #{number,jdbcType=INTEGER}
       )
     </insert>
 
@@ -365,6 +366,9 @@
             </if>
             <if test="pRegulationCode != null">
                 P_REGULATION_CODE = #{pRegulationCode,jdbcType=VARCHAR},
+            </if>
+            <if test="number != null">
+                P_NUMBER = #{number,jdbcType=VARCHAR},
             </if>
         </set>
         where PUID = #{puid,jdbcType=VARCHAR}

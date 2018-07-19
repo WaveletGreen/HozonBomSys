@@ -835,10 +835,10 @@ public class HzPbomServiceImpl implements HzPbomService {
                 line = String.valueOf(level);
                 rank = level - 1;
             } else {
-                line = "/";//错误数据
+                line = "";//错误数据
             }
         } else {
-            line = "/";
+            line = "";
         }
         return new String[]{line, String.valueOf(rank)};
     }
@@ -879,21 +879,21 @@ public class HzPbomServiceImpl implements HzPbomService {
                 } else if (Integer.valueOf(1).equals(type)) {
                     respDTO.setType("N");
                 } else {
-                    respDTO.setType("/");
+                    respDTO.setType("");
                 }
                 if (Integer.valueOf(0).equals(buyUnit)) {
                     respDTO.setBuyUnit("Y");
                 } else if (Integer.valueOf(1).equals(buyUnit)) {
                     respDTO.setBuyUnit("N");
                 } else {
-                    respDTO.setBuyUnit("/");
+                    respDTO.setBuyUnit("");
                 }
                 if (Integer.valueOf(0).equals(colorPart)) {
                     respDTO.setColorPart("Y");
                 } else if (Integer.valueOf(1).equals(colorPart)) {
                     respDTO.setColorPart("N");
                 } else {
-                    respDTO.setColorPart("/");
+                    respDTO.setColorPart("");
                 }
                 respDTO.seteBomPuid(record.geteBomPuid());
                 respDTO.setPuid(record.getPuid());
@@ -906,6 +906,11 @@ public class HzPbomServiceImpl implements HzPbomService {
                 respDTO.setOrderNum(record.getOrderNum());
                 respDTO.setpBomLinePartName(record.getpBomLinePartName());
                 respDTO.setpBomLinePartEnName(record.getpBomLinePartEnName());
+                if(Integer.valueOf(1).equals(record.getIs2Y())){
+                    respDTO.setpLouaFlag("LOU");
+                }else {
+                    respDTO.setpLouaFlag("LOA");
+                }
                 respDTOS.add(respDTO);
             }
             return respDTOS;
