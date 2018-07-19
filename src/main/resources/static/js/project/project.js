@@ -330,7 +330,7 @@ var setting = {
                         // eval("coach." + puid + "=" + data);
                         changeView(localProjectDetail);
                         $("#detailTable").css("visibility", "visible");
-                        $("#projectDetail").css("visibility", "visible");
+                        // $("#projectDetail").css("visibility", "visible");
                     },
                     error: function (err) {
                         alert(err.status);
@@ -395,7 +395,7 @@ function changeView(data) {
     $("#pProjectCode").text(data.project.pProjectCode);
     $("#pProjectName").text(data.project.pProjectName);
     $("#pProjectManager").text(data.project.pProjectManager);
-    $("#pProjectCreateDate").text(changeDateFormat(data.project.pProjectCreateDate));
-    $("#pProjectDiscontinuationDate").text(changeDateFormat(data.project.pProjectDiscontinuationDate));
+    // $("#pProjectCreateDate").text(changeDateFormat(data.project.pProjectCreateDate));
+    // $("#pProjectDiscontinuationDate").text(changeDateFormat(data.project.pProjectDiscontinuationDate));
     $("#pProjectDetail").text(data.project.pProjectDetail);
 }

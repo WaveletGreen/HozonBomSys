@@ -41,7 +41,7 @@
     <!--映射文件：描述某个实体和数据库表的对应关系 -->
     <mappers>
         <!--共有项-->
-        <mapper resource="sql/mapper/HzPreferenceSettingMapper.xml"/>
+        <mapper resource="sql/mapper/bom/xmapper/HzPreferenceSettingMapper.xml"/>
         <!--bom-->
         <mapper resource="sql/mapper/bom/xmapper/HzBomMainRecordMapper.xml"/>
         <mapper resource="sql/mapper/bom/xmapper/HzBomLineRecordMapper.xml"/>

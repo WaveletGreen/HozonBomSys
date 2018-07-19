@@ -149,7 +149,7 @@ public class ReflectBom {
         //子物料编码
         setChildOfBomLine(bomToERPBean.getBomLineId());
         //数量，也默认1条条传
-        setNumber("1");
+        setNumber(bomToERPBean.getNumber() == null ? "1" : bomToERPBean.getNumber().toString());
         //单位，如果没有则默认设为EA
         Object obj = SerializeUtil.unserialize(bomToERPBean.getBomLineBlock());
         if (obj instanceof LinkedHashMap) {
@@ -158,18 +158,18 @@ public class ReflectBom {
         } else {
             setUnit("EA");
         }
-        //发料库存地点
-        setStockLocation(bomToERPBean.getStockLocation() == null ? "ZP02" : bomToERPBean.getStockLocation());
+        //发料库存地点，默认传个空格
+        setStockLocation(bomToERPBean.getStockLocation() == null ? " " : bomToERPBean.getStockLocation());
         //相关性（选配条件）
         setRelevance(bomToERPBean.getCfg0Relevance());
         //采购件下级件标识,TC系统传输02或空，SAP系统会将02转化为L
         setPurchaseFlag("");
         //装配位置
-        setAssemblyPoint(bomToERPBean.getFNAInfo() == null ? "null" : bomToERPBean.getFNAInfo());
+        setAssemblyPoint(bomToERPBean.getFNAInfo() == null ? "" : bomToERPBean.getFNAInfo());
         //使用车间
-        setUseWorkshop(bomToERPBean.getWorkShop() == null ? "null" : bomToERPBean.getWorkShop());
+        setUseWorkshop(bomToERPBean.getWorkShop() == null ? "" : bomToERPBean.getWorkShop());
         //工位
-        setStation(bomToERPBean.getStation() == null ? "null" : bomToERPBean.getStation());
+        setStation(bomToERPBean.getStation() == null ? "" : bomToERPBean.getStation());
 
     }
 

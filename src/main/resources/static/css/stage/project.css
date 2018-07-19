@@ -19,3 +19,7 @@
     min-width: 140px;
     text-align: center;
 }
+
+#content {
+    background-color: white;
+}
