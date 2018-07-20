@@ -47,6 +47,12 @@
 
                placeholder="请输入英文名称"/>
     </div>
+    <div class="form-group" id="lineNuber">
+        <label for="lineNo">查找编号</label>
+        <input class="form-control" id="lineNo" name="lineNo" type="text"
+
+               placeholder="请输入查找编号"/>
+    </div>
     <div class="form-group">
         <label for="pUnit">单位</label>
         <select class="form-control" name="pUnit" id="pUnit" placeholder="请选择单位">
@@ -324,6 +330,17 @@
 <script th:inline="javascript">
     <![CDATA[
     $(function () {
+        /*var puid = $("#puid").val();
+        if (puid==""){
+            $("#lineNo").attr({"disabled": "disabled"});
+        } else {
+            $("#lineNo").removeAttr("disabled");
+        }*/
+        var oTxt = document.getElementById("puid");
+        var oDiv = document.getElementById("lineNuber");
+        // oTxt.onblur = function(){
+            oTxt.value == "" ? oDiv.style.display = "none" : oDiv.style.display = "block";
+        // };
         $('#ebomMainForm').bootstrapValidator({
             message: 'This value is not valid',
             feedbackIcons: {
@@ -372,6 +389,7 @@
                     "rank": $("#rank").val(),
                     "groupNum": $("#groupNum").val(),
                     "pBomLinePartEnName": $("#pBomLinePartEnName").val(),
+                    "lineNo": $("#lineNo").val(),
                     "pLouaFlag": $("#pLouaFlag").val(),
                     "pUnit": $("#pUnit").val(),
                     "pPictureNo": $("#pPictureNo").val(),

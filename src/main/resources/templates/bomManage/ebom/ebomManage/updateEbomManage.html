@@ -48,10 +48,24 @@
                placeholder="请输入英文名称"/>
     </div>
     <div class="form-group">
+        <label for="lineNo">查找编号</label>
+        <input class="form-control" id="lineNo" name="lineNo" type="text"
+               th:value="${data.lineNo}" onclick="doha()"
+               placeholder="请输入查找编号"/>
+    </div>
+    <input type="hidden" id="lineNuber" th:value="${data.lineNo}">
+    <div class="form-group" id="parentNO">
+        <label for="parentLineId">父零件号</label>
+        <input class="form-control" id="parentLineId" name="parentLineId" type="text"
+
+               placeholder="请输入父零件号"/>
+    </div>
+    <div class="form-group">
         <label for="pUnit">单位</label>
         <select class="form-control" name="pUnit" id="pUnit" placeholder="请选择单位">
             <option></option>
-            <option th:selected="${data.getpUnit()=='EA'?true:false}">EA</option> <!--th:selected="${data.getResource()=='MAKE'?true:false}"-->
+            <option th:selected="${data.getpUnit()=='EA'?true:false}">EA</option>
+            <!--th:selected="${data.getResource()=='MAKE'?true:false}"-->
             <option th:selected="${data.getpUnit()=='Kg'?true:false}">Kg</option>
             <option th:selected="${data.getpUnit()=='L'?true:false}">L</option>
             <option th:selected="${data.getpUnit()=='mm'?true:false}">mm</option>
@@ -67,7 +81,8 @@
         <label for="pPictureSheet">图幅</label>
         <select class="form-control" name="pPictureSheet" id="pPictureSheet" placeholder="请选择图幅">
             <option></option>
-            <option th:selected="${data.getpPictureSheet()=='A0+'?true:false}">A0+</option> <!--th:selected="${data.getResource()=='MAKE'?true:false}"-->
+            <option th:selected="${data.getpPictureSheet()=='A0+'?true:false}">A0+</option>
+            <!--th:selected="${data.getResource()=='MAKE'?true:false}"-->
             <option th:selected="${data.getpPictureSheet()=='A0'?true:false}">A0</option>
             <option th:selected="${data.getpPictureSheet()=='A1'?true:false}">A1</option>
             <option th:selected="${data.getpPictureSheet()=='A2'?true:false}">A2</option>
@@ -133,7 +148,8 @@
         <label for="pSymmetry">对称</label>
         <select class="form-control" name="pSymmetry" id="pSymmetry" placeholder="请选择对称">
             <option></option>
-            <option th:selected="${data.getpSymmetry()=='左件'?true:false}">左件</option> <!--th:selected="${data.getResource()=='MAKE'?true:false}"-->
+            <option th:selected="${data.getpSymmetry()=='左件'?true:false}">左件</option>
+            <!--th:selected="${data.getResource()=='MAKE'?true:false}"-->
             <option th:selected="${data.getpSymmetry()=='右件'?true:false}">右件</option>
             <option th:selected="${data.getpSymmetry()=='通用'?true:false}">通用</option>
         </select>
@@ -142,7 +158,8 @@
         <label for="pImportance">重要度</label>
         <select class="form-control" name="pImportance" id="pImportance" placeholder="请选择重要度">
             <option></option>
-            <option th:selected="${data.getpImportance()=='D'?true:false}">D</option> <!--th:selected="${data.getResource()=='MAKE'?true:false}"-->
+            <option th:selected="${data.getpImportance()=='D'?true:false}">D</option>
+            <!--th:selected="${data.getResource()=='MAKE'?true:false}"-->
             <option th:selected="${data.getpImportance()=='P'?true:false}">P</option>
         </select>
     </div>
@@ -150,7 +167,8 @@
         <label for="pRegulationFlag">是否法规件</label>
         <select class="form-control" name="pRegulationFlag" id="pRegulationFlag" placeholder="请选择是否法规件">
             <option></option>
-            <option th:selected="${data.getpRegulationFlag()=='Y'?true:false}">Y</option> <!--th:selected="${data.getResource()=='MAKE'?true:false}"-->
+            <option th:selected="${data.getpRegulationFlag()=='Y'?true:false}">Y</option>
+            <!--th:selected="${data.getResource()=='MAKE'?true:false}"-->
             <option th:selected="${data.getpRegulationFlag()=='N'?true:false}">N</option>
         </select>
     </div>
@@ -158,7 +176,8 @@
         <label for="p3cpartFlag">是否3C件</label>
         <select class="form-control" name="p3cpartFlag" id="p3cpartFlag" placeholder="请选择是否3C件">
             <option></option>
-            <option th:selected="${data.getP3cpartFlag()=='Y'?true:false}">Y</option> <!--th:selected="${data.getResource()=='MAKE'?true:false}"-->
+            <option th:selected="${data.getP3cpartFlag()=='Y'?true:false}">Y</option>
+            <!--th:selected="${data.getResource()=='MAKE'?true:false}"-->
             <option th:selected="${data.getP3cpartFlag()=='N'?true:false}">N</option>
         </select>
     </div>
@@ -172,7 +191,8 @@
         <label for="pBwgBoxPart">黑白灰匣子件</label>
         <select class="form-control" name="pBwgBoxPart" id="pBwgBoxPart" placeholder="请选择黑白灰匣子件">
             <option></option>
-            <option th:selected="${data.getpBwgBoxPart()=='B'?true:false}">B</option> <!--th:selected="${data.getResource()=='MAKE'?true:false}"-->
+            <option th:selected="${data.getpBwgBoxPart()=='B'?true:false}">B</option>
+            <!--th:selected="${data.getResource()=='MAKE'?true:false}"-->
             <option th:selected="${data.getpBwgBoxPart()=='W'?true:false}">W</option>
             <option th:selected="${data.getpBwgBoxPart()=='G'?true:false}">G</option>
         </select>
@@ -211,7 +231,8 @@
         <label for="pFastener">紧固件</label>
         <select class="form-control" name="pFastener" id="pFastener" placeholder="请选择紧固件">
             <option></option>
-            <option th:selected="${data.getpFastener()=='标准件'?true:false}">标准件</option> <!--th:selected="${data.getResource()=='MAKE'?true:false}"-->
+            <option th:selected="${data.getpFastener()=='标准件'?true:false}">标准件</option>
+            <!--th:selected="${data.getResource()=='MAKE'?true:false}"-->
             <option th:selected="${data.getpFastener()=='非标件'?true:false}">非标件</option>
         </select>
     </div>
@@ -267,7 +288,8 @@
         <label for="pBomLinePartClass">零件分类</label>
         <select class="form-control" name="pBomLinePartClass" id="pBomLinePartClass" placeholder="请选择零件分类">
             <option></option>
-            <option th:selected="${data.getpBomLinePartClass()=='自制'?true:false}">自制</option> <!--th:selected="${data.getResource()=='MAKE'?true:false}"-->
+            <option th:selected="${data.getpBomLinePartClass()=='自制'?true:false}">自制</option>
+            <!--th:selected="${data.getResource()=='MAKE'?true:false}"-->
             <option th:selected="${data.getpBomLinePartClass()=='外协'?true:false}">外协</option>
             <option th:selected="${data.getpBomLinePartClass()=='虚拟总成'?true:false}">虚拟总成</option>
         </select>
@@ -329,6 +351,13 @@
 <script th:inline="javascript">
     <![CDATA[
     $(function () {
+        var lineNo = $("#lineNo").val();
+        var lineNuber = $("#lineNuber").val();
+        if (lineNo == lineNuber) {
+            $("#parentLineId").attr({"disabled": "disabled"});
+        } else {
+            $("#parentLineId").removeAttr("disabled");
+        }
         $('#ebomMainForm').bootstrapValidator({
             message: 'This value is not valid',
             feedbackIcons: {
@@ -361,8 +390,8 @@
             bootstrapValidator.validate();
             if (bootstrapValidator.isValid()) {
                 var url = $("#ebomMainForm", window.top.document).attr('action');
-                var myData =JSON.stringify({
-                    "puid":$("#puid").val(),
+                var myData = JSON.stringify({
+                    "puid": $("#puid").val(),
                     "lineId": $("#lineId").val(),
                     "pBomLinePartName": $("#pBomLinePartName").val(),
                     "level": $("#level").val(),
@@ -370,6 +399,8 @@
                     "rank": $("#rank").val(),
                     "groupNum": $("#groupNum").val(),
                     "pBomLinePartEnName": $("#pBomLinePartEnName").val(),
+                    "lineNo": $("#lineNo").val(),
+                    "parentLineId": $("#parentLineId").val(),
                     "pLouaFlag": $("#pLouaFlag").val(),
                     "pUnit": $("#pUnit").val(),
                     "pPictureNo": $("#pPictureNo").val(),
@@ -410,7 +441,7 @@
                     "fna": $("#fna").val(),
                     "pFnaDesc": $("#pFnaDesc").val(),
                     "number": $("#number").val(),
-                    "projectId":$("#project", window.top.document).val(),
+                    "projectId": $("#project", window.top.document).val(),
                 });
                 // var data = {};
                 // var _d = $("#ebomMainForm").serializeArray();
@@ -438,7 +469,7 @@
                             if (result.success) {
                                 layer.msg('修改成功', {icon: 1, time: 2000})
                             }
-                            else if(!result.success){
+                            else if (!result.success) {
                                 window.Ewin.alert({message: result.errMsg})
                             }
                         },
