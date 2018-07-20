@@ -6,6 +6,8 @@ import org.springframework.context.annotation.Configuration;
 import sql.IBaseSQLUtil;
 import sql.pojo.HzPreferenceSetting;
 
+import java.util.List;
+
 @Configuration
 public class HzPreferenceSettingDaoImpl implements HzPreferenceSettingDao {
     @Autowired
@@ -64,5 +66,10 @@ public class HzPreferenceSettingDaoImpl implements HzPreferenceSettingDao {
     @Override
     public int updateByPrimaryKey(HzPreferenceSetting record) {
         return baseSQLUtil.executeUpdate(record, "com.connor.hozon.bom.bomSystem.dao.bom.HzPreferenceSettingDao.updateByPrimaryKey");
+    }
+
+    @Override
+    public List<HzPreferenceSetting> selectSettingByTemplateName(HzPreferenceSetting setting) {
+        return baseSQLUtil.executeQuery(setting, "com.connor.hozon.bom.bomSystem.dao.bom.HzPreferenceSettingDao.selectSettingByTemplateName");
     }
 }

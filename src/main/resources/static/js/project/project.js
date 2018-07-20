@@ -12,43 +12,6 @@ function selectEvent() {
     $("#currentProjectHead", window.top.document).text(selectedOption.text());
 }
 
-$(document).ready(
-    $("#tsada").click(
-        function (e) {
-            var tabContainer = $("#tabContainer", window.top.document);
-
-            var tabc = $(".nav-tabs li a[href='#82']").tab("show");
-            // tabc.tabs({
-            //     data: [{
-            //         id: '93',
-            //         text: 'MBOM管理',
-            //         url: "modelColorCfg",
-            //         closeable: true
-            //     }],
-            // })
-            // if (tabContainer != null || tabContainer != undefined)
-            //     var xxx = tabc.data("tabs");
-            // xxx.addTab({
-            //     // data: [{
-            //     //     id: '93',
-            //     //     text: 'MBOM管理',
-            //     //     url: "modelColorCfg",
-            //     //     closeable: true
-            //     // }]
-            //     id: 93,
-            //     text: "MBOM管理",
-            //     closeable: true,
-            //     url: 'modelColorCfg'
-            // })
-            // // tabContainer.data("tabs").addTab({
-            // //     id: 93,
-            // //     text: "MBOM管理",
-            // //     closeable: true,
-            // //     url: 'modelColorCfg'
-            // // })
-        }
-    )
-)
 
 // 异步加载项目数据
 $(document).ready(
@@ -56,10 +19,15 @@ $(document).ready(
             url: "./project/loadAll",
             type: "GET",
             success: function (data) {
+
                 var auth = data.auth;
                 var _data = data.data;
                 var ok = true;
-                if (_data) {
+                if (data.brand.length == 0) {
+                    $("#newBrand").css("display", "block");
+                    window.Ewin.alert("初始化系统成功，请点击新建品牌按钮新建品牌并刷新界面");
+                }
+                else {
                     for (var i in _data) {
                         if (i == 0 && ok) {
                             $("#project", window.top.document).val(_data[i].puid);
@@ -87,7 +55,13 @@ $(document).ready(
                 alert(err.status);
             }
         })
-    ))
+    ),
+    $("#newBrand").click(function () {
+        //添加品牌
+        window.Ewin.dialog({title: "添加", url: "project/addPage?id=&page=brand", width: 400, height: 650})
+        // location.reload();
+    })
+)
 
 /*鼠标移入操作*/
 function addHoverDom(treeId, treeNode) {
@@ -202,7 +176,7 @@ function addHoverDom(treeId, treeNode) {
                                     zTree.removeNode(treeNode);
                                     // zTree.destroy();
                                     // (initZTree());
-                                    window.Ewin.alert({message: "成功删除"});
+                                    layer.msg('成功删除', {icon: 1, time: 2000})
                                 } else {
                                     window.Ewin.alert({message: "删除失败" + typeName + ":" + name});
                                 }

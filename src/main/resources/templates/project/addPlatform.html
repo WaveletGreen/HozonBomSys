@@ -115,7 +115,9 @@
                                     pPuid: entity.pPertainToBrandPuid,
                                     name: entity.pPlatformName
                                 });
-                                window.Ewin.alert({message: "添加平台成功"});
+                                layer.msg('添加平台成功', {icon: 1, time: 2000})
+
+                                // window.Ewin.alert({message: "添加平台成功"});
                             }
                             else if (result.status == 0) {
                                 window.Ewin.alert({message: "已存在的平台代码，请修改或者更换平台代码"});
@@ -133,5 +135,6 @@
     })
     ]]>
 </script>
+<script th:src="@{/layer/layer.js}"></script>
 </body>
 </html>

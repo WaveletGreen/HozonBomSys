@@ -3,6 +3,8 @@ package com.connor.hozon.bom.bomSystem.dao.bom;
 import org.springframework.context.annotation.Configuration;
 import sql.pojo.HzPreferenceSetting;
 
+import java.util.List;
+
 @Configuration
 public interface HzPreferenceSettingDao {
     /**
@@ -45,4 +47,6 @@ public interface HzPreferenceSettingDao {
      * @return
      */
     int updateByPrimaryKey(HzPreferenceSetting record);
+
+    List<HzPreferenceSetting> selectSettingByTemplateName(HzPreferenceSetting setting);
 }

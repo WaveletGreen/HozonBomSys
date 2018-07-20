@@ -150,7 +150,9 @@
                                     pPuid: entity.pProjectPertainToPlatform,
                                     name: entity.pVehicleName
                                 });
-                                window.Ewin.alert({message: "添加车型成功"});
+                                layer.msg('添加车型成功', {icon: 1, time: 2000})
+
+                                // window.Ewin.alert({message: "添加车型成功"});
                             }
                             else if (result.status == 0) {
                                 window.Ewin.alert({message: "已存在的车型信息，请修改或者更换项目代码"});
@@ -168,5 +170,6 @@
     })
     ]]>
 </script>
+<script th:src="@{/layer/layer.js}"></script>
 </body>
 </html>

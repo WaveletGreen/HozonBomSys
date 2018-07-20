@@ -31,6 +31,17 @@
         <input class="form-control" id="pFeatureSingleVehicleCode" name="pFeatureSingleVehicleCode" type="text"
         />
     </div>
+    <div class="form-group col-lg-10" th:each="column,currentKey:${_map}">
+        <label th:text="${currentKey.current.key}">配置</label>
+        <select class="form-control input-small" data-style="btn-info"
+                th:id="modelShell" th:name="${currentKey.current.key}"
+        >
+            <option th:each="currentValue,index:${currentKey.current.value}" th:value="${currentValue.getPuid()}"
+                    th:text="${currentValue.getpCfg0ObjectId()}"
+            >
+            </option>
+        </select>
+    </div>
 </form>
 </body>
 <script th:inline="javascript">
@@ -51,12 +62,17 @@
             // if (bootstrapValidator.isValid()) {
             var url = $("#form", window.top.document).attr('action');
             var data = {};
-            data.objectName = $("#objectName").val();
-            data.objectDesc = $("#objectDesc").val();
-            data.pCfg0ModelOfMainRecord = $("#pCfg0ModelOfMainRecord").val();
-            data.pCfg0ModelBasicDetail = $("#pCfg0ModelBasicDetail").val();
-            data.pFeatureCnDesc = $("#pFeatureCnDesc").val();
-            data.pFeatureSingleVehicleCode = $("#pFeatureSingleVehicleCode").val();
+            // data.objectName = $("#objectName").val();
+            // data.objectDesc = $("#objectDesc").val();
+            // data.pCfg0ModelOfMainRecord = $("#pCfg0ModelOfMainRecord").val();
+            // data.pCfg0ModelBasicDetail = $("#pCfg0ModelBasicDetail").val();
+            // data.pFeatureCnDesc = $("#pFeatureCnDesc").val();
+            // data.pFeatureSingleVehicleCode = $("#pFeatureSingleVehicleCode").val();
+            // var data = {};
+            var _d = $("#form").serializeArray();
+            for (var p in _d) {
+                data[_d[p].name] = _d[p].value;
+            }
             $.ajax({
                 contentType:
                     "application/json",

@@ -35,6 +35,16 @@
         from HZ_PREFERENCESETTING where BOM_MAIN_RECORD_PUID =
         #{bomMainRecordPuid,jdbcType=VARCHAR}
     </select>
+    <select id="selectSettingByTemplateName"
+            parameterType="sql.pojo.HzPreferenceSetting"
+            resultMap="ResultMapWithBLOBs">
+        select
+        <include refid="Base_Column_List"/>
+        ,
+        <include refid="Blob_Column_List"/>
+        from HZ_PREFERENCESETTING
+        where SETTING_NAME ='Hz_ExportBomPreferenceRedis'
+    </select>
     <select id="selectSettingByNameWithMainRecord"
             parameterType="sql.pojo.HzPreferenceSetting"
             resultMap="ResultMapWithBLOBs">

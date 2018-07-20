@@ -69,6 +69,9 @@ public class HzCfg0Service {
     public boolean doDeleteAddedCfgByList(List<HzCfg0Record> records) {
         return hzCfg0RecordDao.deleteAddedCfgByList(records) > 0 ? true : false;
     }
+    public boolean doDeleteCfgByList(List<HzCfg0Record> records) {
+        return hzCfg0RecordDao.deleteCfgByList(records) > 0 ? true : false;
+    }
 
 
     public boolean doDeleteAddedCfgById(HzCfg0Record record) {
