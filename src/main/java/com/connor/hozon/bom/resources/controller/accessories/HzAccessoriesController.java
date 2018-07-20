@@ -1,5 +1,6 @@
 package com.connor.hozon.bom.resources.controller.accessories;
 
+import com.connor.hozon.bom.bomSystem.dao.impl.bom.HzBomLineRecordDaoImpl;
 import com.connor.hozon.bom.resources.controller.BaseController;
 import com.connor.hozon.bom.resources.dto.request.DeleteHzAccessoriesDTO;
 import com.connor.hozon.bom.resources.mybatis.accessories.HzAccessoriesDAO;
@@ -15,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import sql.pojo.accessories.HzAccessoriesLib;
+import sql.pojo.bom.HzBomLineRecord;
+import sql.pojo.bom.HzMbomLineRecord;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.*;
@@ -38,9 +41,9 @@ public class HzAccessoriesController  extends BaseController {
     public void getHzSuperMBomTitle(HttpServletResponse response) {
         LinkedHashMap<String, String> tableTitle = new LinkedHashMap<>();
         tableTitle.put("No", "序号");
+        tableTitle.put("pLineId", "零件号");
         tableTitle.put("pBomLinePartName", "零件名称");
         tableTitle.put("pBomLinePartEnName", "零件英文名称");
-        tableTitle.put("pLineId", "零件号");
         tableTitle.put("pUnit", "单位");
         tableTitle.put("pMaterialHigh", "料厚");
         tableTitle.put("pMaterial1", "材料1");

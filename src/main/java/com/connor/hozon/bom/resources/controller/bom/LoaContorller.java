@@ -58,28 +58,33 @@ public class LoaContorller extends BaseController {
          hzEbomTreeQuery.setProjectId(query.getProjectId());
          List<HzLoaRespDTO> loaRespDTOS = new ArrayList<>();
          List<HzEPLManageRecord> recordList = hzEbomService.findCurrentBomChildren(hzEbomTreeQuery);//子
-         HzEbomRespDTO respDTO = new HzEbomRespDTO();
+        List<HzEPLManageRecord> hzEPLManageRecords = new ArrayList<>();
+        HzEbomRespDTO respDTO = new HzEbomRespDTO();
          if(ListUtil.isNotEmpty(recordList)){
            HzEPLManageRecord record = recordList.get(0);
-           String parentId = record.getParentUid();
-           respDTO = hzEbomService.fingEbomById(parentId,query.getProjectId());//父
-           if(recordList.get(0).getPuid().equals(query.getPuid())){
-               recordList.remove(recordList.get(0));
+           int  length = record.getLineIndex().split("\\.").length+1;
+           for(HzEPLManageRecord eplManageRecord:recordList){
+               if(eplManageRecord.getLineIndex().split("\\.").length == length){
+                   hzEPLManageRecords.add(eplManageRecord);
+               }
            }
+           String parentId = record.getParentUid();
+           if(parentId != null)
+           respDTO = hzEbomService.fingEbomById(parentId,query.getProjectId());//父
          }
-         recordList.forEach(record -> {
+        hzEPLManageRecords.forEach(record -> {
              HzLoaRespDTO hzLoaRespDTO = new HzLoaRespDTO();
              Integer is2Y = record.getIs2Y();
              Integer hasChildren = record.getIsHas();
-             String lineIndex = record.getLineIndex();
-             String[] strings = getLevelAndRank(lineIndex, is2Y, hasChildren);
+             String index = record.getLineIndex();
+             String[] strings = getLevelAndRank(index, is2Y, hasChildren);
              hzLoaRespDTO.setChildLevel(strings[0]);
              hzLoaRespDTO.setChildLineId(record.getLineID());
              hzLoaRespDTO.setChildName(record.getpBomLinePartName());
              loaRespDTOS.add(hzLoaRespDTO);
          });
 
-        if(respDTO !=null){
+        if(respDTO .getJsonArray() !=null){
             HzLoaRespDTO hzLoaRespDTO = new HzLoaRespDTO();
             JSONObject object = (JSONObject) respDTO.getJsonArray().get(0);
             hzLoaRespDTO.setParentLevel(object.getString("level"));
@@ -88,7 +93,6 @@ public class LoaContorller extends BaseController {
 
             jsonObject.put("parent",hzLoaRespDTO);
         }else {
-            JSONObject object = new JSONObject();
             jsonObject.put("parent",new HzLoaRespDTO());
         }
         jsonObject.put("child",loaRespDTOS);
@@ -108,16 +112,21 @@ public class LoaContorller extends BaseController {
         hzPbomTreeQuery.setProjectId(query.getProjectId());
         List<HzLoaRespDTO> loaRespDTOS = new ArrayList<>();
         List<HzPbomLineRecord> recordList = hzPbomService.getHzPbomLineTree(hzPbomTreeQuery);//子
+        List<HzPbomLineRecord> hzPbomLineRecordList = new ArrayList<>();
         HzPbomLineRespDTO respDTO = new HzPbomLineRespDTO();
         if(ListUtil.isNotEmpty(recordList)){
             HzPbomLineRecord record = recordList.get(0);
-            String parentId = record.getParentUid();
-            respDTO = hzPbomService.getHzPbomByPuid(query.getProjectId(),parentId);//父
-            if(recordList.get(0).getPuid().equals(query.getPuid())){
-                recordList.remove(recordList.get(0));
+            int  length = record.getLineIndex().split("\\.").length+1;
+            for(HzPbomLineRecord hzPbomLineRecord:recordList){
+                if(hzPbomLineRecord.getLineIndex().split("\\.").length == length){
+                    hzPbomLineRecordList.add(hzPbomLineRecord);
+                }
             }
+            String parentId = record.getParentUid();
+            if(parentId != null)
+            respDTO = hzPbomService.getHzPbomByPuid(query.getProjectId(),parentId);//父
         }
-        recordList.forEach(record -> {
+        hzPbomLineRecordList.forEach(record -> {
             HzLoaRespDTO hzLoaRespDTO = new HzLoaRespDTO();
             Integer is2Y = record.getIs2Y();
             Integer hasChildren = record.getIsHas();
@@ -154,15 +163,21 @@ public class LoaContorller extends BaseController {
         List<HzLoaRespDTO> loaRespDTOS = new ArrayList<>();
         List<HzMbomLineRecord> recordList = hzMbomService.getHzMbomTree(hzMbomTreeQuery);//子
         HzMbomRecordRespDTO respDTO = new HzMbomRecordRespDTO();
+        List<HzMbomLineRecord> recordArrayList = new ArrayList<>();
         if(ListUtil.isNotEmpty(recordList)){
             HzMbomLineRecord record = recordList.get(0);
+            int  length = record.getLineIndex().split("\\.").length+1;
+            for(HzMbomLineRecord hzMbomLineRecord:recordList){
+                if(hzMbomLineRecord.getLineIndex().split("\\.").length == length){
+                    recordArrayList.add(hzMbomLineRecord);
+                }
+            }
             String parentId = record.getParentUid();
-            respDTO = hzMbomService.findHzMbomByPuid(query.getProjectId(),parentId);//父
-            if(recordList.get(0).getPuid().equals(query.getPuid())){
-                recordList.remove(recordList.get(0));
+            if(parentId != null){
+                respDTO = hzMbomService.findHzMbomByPuid(query.getProjectId(),parentId);//父
             }
         }
-        recordList.forEach(record -> {
+        recordArrayList.forEach(record -> {
             HzLoaRespDTO hzLoaRespDTO = new HzLoaRespDTO();
             Integer is2Y = record.getIs2Y();
             Integer hasChildren = record.getIsHas();

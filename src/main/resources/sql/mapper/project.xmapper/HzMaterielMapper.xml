@@ -254,6 +254,9 @@
             <if test="pMaterielDataType != null">
                and P_MATERIEL_DATA_TYPE = #{pMaterielDataType,jdbcType=INTEGER}
             </if>
+            <if test="materielResourceId != null and materielResourceId!=''">
+                and P_MATERIEL_RESOURCE_ID = #{materielResourceId,jdbcType=VARCHAR}
+            </if>
             and P_VALID_FLAG =1
         </where>
     </select>
@@ -332,4 +335,18 @@
             ('')
         </if>
     </update>
+
+
+
+
+    <!--删除-->
+    <delete id="HzMaterialDAOImpl_realDelete"  parameterType="java.lang.String">
+
+        delete from HZ_MATERIEL_RECORD
+
+
+
+        where P_MATERIEL_RESOURCE_ID = #{materielResourceId,jdbcType=VARCHAR}
+
+    </delete>
 </mapper>

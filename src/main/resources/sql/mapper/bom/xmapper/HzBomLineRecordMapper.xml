@@ -374,7 +374,7 @@
         where PUID = #{puid,jdbcType=VARCHAR}
     </update>
 
-    <!--查询一条bom信息    本sql没加入状态值 要作废 转EPL sql表查询对应的状态值-->
+    <!--查询一条bom信息-->
     <select id="HzBomLineRecordDaoImpl_findBomLineByPuid" parameterType="java.util.Map" resultMap="BaseResultMap">
         SELECT
         <include refid="Base_Column_List"/>
@@ -421,6 +421,31 @@
         </where>
         and t.P_EBOM_STATUS=1
     </select>
+
+
+    <!--查询所有的装车件信息-->
+    <select id="HzBomLineRecordDaoImpl_getLoadingCarPartBom" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        t.<include refid="Base_Column_List" />
+        from HZ_BOM_LINE_RECORD t
+        where t.p_bom_digifax_id=(
+        select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(
+        select t2.puid from Hz_project_libs t2
+        <where>
+            t2.puid = #{projectId,jdbcType=VARCHAR}))
+            and
+            (t.P_BOM_LINE_PART_RESOURCE ='采购件'or
+            t.P_BOM_LINE_PART_RESOURCE ='自制总成' or
+            t.P_BOM_LINE_PART_RESOURCE ='自制单件'or
+            t.P_BOM_LINE_PART_RESOURCE ='自用标准件'or
+            t.P_BOM_LINE_PART_RESOURCE ='自用非标件'or
+            t.P_BOM_LINE_PART_RESOURCE ='虚拟总成')
+        </where>
+        and t.P_EBOM_STATUS=1
+    </select>
+
+
+
 
     <!--批量删除EBOM-->
     <update id="HzEbomRecordDAOImpl_deleteList"  parameterType="java.util.List">

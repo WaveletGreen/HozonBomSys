@@ -90,4 +90,10 @@ public class HzEbomRecordDAOImpl extends BaseSQLUtil implements HzEbomRecordDAO 
         return (HzEPLManageRecord) super.findForObject("HzEbomRecordDAOImpl_findHasDeletedBom",map);
     }
 
+    @Override
+    public List<HzEPLManageRecord> findEbom(Map<String, Object> map) {
+
+        return super.findForList("HzEbomRecordDAOImpl_findEbom",map);
+    }
+
 }

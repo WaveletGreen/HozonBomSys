@@ -98,6 +98,12 @@ public class HzEPLManageRecordServiceImpl implements HzEPLManageRecordService {
                 if(record.getStatus().equals(0)){
                     jsonObject.put("status","D");
                 }
+                if(record.getStatus().equals(1)){
+                    jsonObject.put("status","A");
+                }
+                if(record.getStatus().equals(2)){
+                    jsonObject.put("status","U");
+                }
 
                 jsonObject.put("pBomLinePartName", record.getpBomLinePartName());
                 jsonObject.put("pBomLinePartClass", record.getpBomLinePartClass());
@@ -109,12 +115,12 @@ public class HzEPLManageRecordServiceImpl implements HzEPLManageRecordService {
                 }else{
                     jsonObject.put("pLouaFlag","LOA");
                 }
-                if(Integer.valueOf(0).equals(record.getP3cpartFlag())){
+                if(Integer.valueOf(1).equals(record.getP3cpartFlag())){
                     jsonObject.put("p3cpartFlag", "Y");
                 }else {
                     jsonObject.put("p3cpartFlag", "N");
                 }
-                if(Integer.valueOf(0).equals(record.getpInOutSideFlag())){
+                if(Integer.valueOf(1).equals(record.getpInOutSideFlag())){
                     jsonObject.put("pInOutSideFlag", "内饰件");
                 }else {
                     jsonObject.put("pInOutSideFlag", "外饰件");
@@ -135,7 +141,7 @@ public class HzEPLManageRecordServiceImpl implements HzEPLManageRecordService {
                 jsonObject.put("pManuProcess", record.getpManuProcess());
                 jsonObject.put("pSymmetry", record.getpSymmetry());
                 jsonObject.put("pImportance",record.getpImportance());
-                if(Integer.valueOf(0).equals(record.getpRegulationFlag())){
+                if(Integer.valueOf(1).equals(record.getpRegulationFlag())){
                     jsonObject.put("pRegulationFlag", "Y");
                 }else{
                     jsonObject.put("pRegulationFlag", "N");

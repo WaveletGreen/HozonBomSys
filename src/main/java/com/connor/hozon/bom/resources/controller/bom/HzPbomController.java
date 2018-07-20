@@ -37,12 +37,13 @@ public class HzPbomController extends BaseController {
     public void getPbomLineTitle(HttpServletResponse response) {
         LinkedHashMap<String, String> tableTitle = new LinkedHashMap<>();
         tableTitle.put("No", "序号");
+        tableTitle.put("lineId", "零件号");
+        tableTitle.put("pBomLinePartName", "名称");
         tableTitle.put("level", "层级");
         tableTitle.put("pBomOfWhichDept", "专业");
         tableTitle.put("rank", "级别");
         tableTitle.put("groupNum", "分组号");
-        tableTitle.put("lineId", "零件号");
-        tableTitle.put("pBomLinePartName", "名称");
+        tableTitle.put("lineNo","查找编号");
         tableTitle.put("pBomLinePartEnName", "英文名称");
         tableTitle.put("pLouaFlag","LOU/LOA");
         tableTitle.put("pBomLinePartClass", "零件分类");
@@ -91,7 +92,7 @@ public class HzPbomController extends BaseController {
             _res.put("rank", dto.getRank());
             _res.put("groupNum", dto.getGroupNum());
             _res.put("lineId", dto.getLineId());
-
+            _res.put("lineNo",dto.getLineNo());
             _res.put("pBomLinePartName",dto.getpBomLinePartName());
             _res.put("pBomLinePartEnName",dto.getpBomLinePartEnName());
             _res.put("pBomLinePartClass",dto.getpBomLinePartClass());

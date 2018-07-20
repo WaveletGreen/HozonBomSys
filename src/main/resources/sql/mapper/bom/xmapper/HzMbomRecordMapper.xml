@@ -99,7 +99,7 @@
             <if test="pBomOfWhichDept != null and  pBomOfWhichDept!='' ">
                 and t.P_BOM_OF_WHICH_DEPT like CONCAT(CONCAT('%',#{pBomOfWhichDept,jdbcType=VARCHAR}),'%')
             </if>
-            and t.P_MBOM_STATUS=1
+            and t.P_MBOM_STATUS=1 order by P_BOM_ORDER_NUM
         </where>
     </select>
 
@@ -381,7 +381,7 @@
                 P_BOM_LINE_PART_EN_NAME = #{pBomLinePartEnName,jdbcType=VARCHAR},
             </if>
             <if test="pBomLinePartResource != null">
-                P_BOM_LINE_PART_RESOURCE = #{pBomLinePartResource,jdbcType=VARCHAR}，
+                P_BOM_LINE_PART_RESOURCE = #{pBomLinePartResource,jdbcType=VARCHAR}
             </if>
 
         </set>
@@ -557,7 +557,7 @@
 
     <!--获取mbom最大排序值-->
     <select id="HzMbomRecordDAOImpl_getHzMbomMaxOrderNum" parameterType="java.lang.String" resultType="java.lang.Integer" >
-        select  max(P_BOM_ORDER_NUM) from HZ_MBOM_RECORD;
+        select  max(P_BOM_ORDER_NUM) from HZ_MBOM_RECORD
     </select>
 
 
@@ -614,7 +614,7 @@
         <if test="sparePart != null and  sparePart!='' " >
             and t1.P_SPARE_PART = #{sparePart,jdbcType=VARCHAR}
         </if>
-        and t1.P_MBOM_STATUS =1
+        and t1.P_MBOM_STATUS =1 order by P_BOM_ORDER_NUM
         )t
         WHERE ROWNUM &lt;=#{limit,jdbcType=INTEGER}) where rn &gt;#{offset,jdbcType=INTEGER}
     </select>
@@ -671,6 +671,16 @@
     </update>
 
 
+    <!--删除-->
+    <delete id="HzMbomRecordDAOImpl_delete"  parameterType="java.lang.String">
+
+        delete from HZ_MBOM_RECORD
+
+
+
+        where P_BOM_PUID = #{puid,jdbcType=VARCHAR}
+
+    </delete>
 
     <!--分页查询 回收站-->
     <select id="HzMbomRecordDAOImpl_getHzMbomRecycleRecord" resultMap="MbomResultMap" parameterType="java.util.HashMap">
@@ -705,6 +715,20 @@
             (sysdate) )and
             t1.P_MBOM_STATUS = 0
 
+        </where>
+    </select>
+
+
+
+    <!--获取PBOM 2Y层 对应的lineIndex的第一个字母最大值-->
+    <select id="HzMbomRecordDAOImpl_getMaxLineIndexFirstNum" parameterType="java.lang.String" resultType="java.lang.Integer">
+        select max(substr(P_LINE_INDEX,1,1)) from HZ_MBOM_RECORD t
+        where t.p_bom_digifax_id=(
+        select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(
+        select t2.puid from Hz_project_libs t2
+        <where>
+            t2.puid = #{projectId,jdbcType=VARCHAR}))
+            and LENGTH(TRANSLATE(P_LINE_INDEX,',0123456789','.'))=1
         </where>
     </select>
 </mapper>

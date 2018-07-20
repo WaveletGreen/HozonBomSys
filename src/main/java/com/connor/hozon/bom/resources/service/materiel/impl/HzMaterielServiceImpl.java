@@ -77,9 +77,9 @@ public class HzMaterielServiceImpl implements HzMaterielService {
             record.setpSpareMaterial(editHzMaterielReqDTO.getpSpareMaterial());
             String loosePartFlag = editHzMaterielReqDTO.getpLoosePartFlag();
             if("N".equals(loosePartFlag.toUpperCase())){
-                record.setpLoosePartFlag(1);
-            }else if("Y".equals(loosePartFlag.toUpperCase())){
                 record.setpLoosePartFlag(0);
+            }else if("Y".equals(loosePartFlag.toUpperCase())){
+                record.setpLoosePartFlag(1);
             }else{
                 record.setpLoosePartFlag(2);
             }
@@ -668,6 +668,18 @@ public class HzMaterielServiceImpl implements HzMaterielService {
         respDTO.setpMaterielDescEn(record.getpMaterielDescEn());
         respDTO.setpMaterielType(record.getpMaterielType());
         respDTO.setpMrpController(record.getpMrpController());
+
+
+        if(record.getpFactoryPuid() != null){
+            HzFactory hzFactory = hzFactoryDAO.findFactory(record.getpFactoryPuid(),"");
+            if(hzFactory !=null){
+                respDTO.setFactoryCode(hzFactory.getpFactoryCode());
+            }else{
+                respDTO.setFactoryCode("1001");
+            }
+        }else {
+            respDTO.setFactoryCode("1001");
+        }
         respDTO.setPuid(record.getPuid());
         Integer p3CPartFlag = record.getP3cPartFlag();
         Integer colorPart = record.getpColorPart();
@@ -675,40 +687,40 @@ public class HzMaterielServiceImpl implements HzMaterielService {
         Integer inventedFlag = record.getpInventedPart();
         Integer loosePartFlag = record.getpLoosePartFlag();
         if (Integer.valueOf(0).equals(p3CPartFlag)) {
-            respDTO.setP3cPartFlag("Y");
-        } else if (Integer.valueOf(1).equals(p3CPartFlag)) {
             respDTO.setP3cPartFlag("N");
+        } else if (Integer.valueOf(1).equals(p3CPartFlag)) {
+            respDTO.setP3cPartFlag("Y");
         } else {
             respDTO.setP3cPartFlag("-");
         }
 
         if (Integer.valueOf(0).equals(inventedFlag)) {
-            respDTO.setpInventedPart("Y");
-        } else if (Integer.valueOf(1).equals(inventedFlag)) {
             respDTO.setpInventedPart("N");
+        } else if (Integer.valueOf(1).equals(inventedFlag)) {
+            respDTO.setpInventedPart("Y");
         } else {
             respDTO.setpInventedPart("-");
         }
 
         if (Integer.valueOf(0).equals(colorPart)) {
-            respDTO.setpColorPart("Y");
-        } else if (Integer.valueOf(1).equals(colorPart)) {
             respDTO.setpColorPart("N");
+        } else if (Integer.valueOf(1).equals(colorPart)) {
+            respDTO.setpColorPart("Y");
         } else {
             respDTO.setpColorPart("-");
         }
 
-        if (Integer.valueOf(0).equals(inOutSideFlag)) {
+        if (Integer.valueOf(1).equals(inOutSideFlag)) {
             respDTO.setpInOutSideFlag("内饰件");
-        } else if (Integer.valueOf(1).equals(inOutSideFlag)) {
+        } else if (Integer.valueOf(0).equals(inOutSideFlag)) {
             respDTO.setpInOutSideFlag("外饰件");
         } else {
             respDTO.setpInOutSideFlag("-");
         }
 
-        if (Integer.valueOf(0).equals(loosePartFlag)) {
+        if (Integer.valueOf(1).equals(loosePartFlag)) {
             respDTO.setpLoosePartFlag("Y");
-        } else if (Integer.valueOf(1).equals(loosePartFlag)) {
+        } else if (Integer.valueOf(0).equals(loosePartFlag)) {
             respDTO.setpLoosePartFlag("N");
         } else {
             respDTO.setpLoosePartFlag("-");

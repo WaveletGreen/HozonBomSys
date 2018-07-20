@@ -113,4 +113,7 @@ public interface HzMaterielDAO {
      * @return
      */
     int updateByBatch(List<String> list);
+
+
+    int realDelete(String materielResourceId);
 }

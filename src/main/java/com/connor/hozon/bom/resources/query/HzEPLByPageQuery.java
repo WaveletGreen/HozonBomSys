@@ -34,14 +34,14 @@ public class HzEPLByPageQuery extends DefaultPageQuery{
      */
     private Integer isHas;
 
-    private Integer type;
+    private Integer pFastener;
 
-    public Integer getType() {
-        return type;
+    public Integer getpFastener() {
+        return pFastener;
     }
 
-    public void setType(Integer type) {
-        this.type = type;
+    public void setpFastener(Integer pFastener) {
+        this.pFastener = pFastener;
     }
 
     public Integer getIsHas() {
