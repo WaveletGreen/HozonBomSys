@@ -79,6 +79,11 @@ public class HzCfg0RecordDaoImpl implements HzCfg0RecordDao {
     }
 
     @Override
+    public int deleteCfgByList(List<HzCfg0Record> records) {
+        return baseSQLUtil.executeDelete(records, "com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0RecordDao.deleteCfgByList");
+    }
+
+    @Override
     public List<HzCfg0Record> selectListByProjectPuid(String projectPuid) {
         HzCfg0Record record = new HzCfg0Record();
         record.setProjectPuid(projectPuid);

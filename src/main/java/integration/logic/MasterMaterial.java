@@ -127,7 +127,10 @@ public class MasterMaterial {
      * 公告号，新加入的,注意：SAP没有发布新的字段
      */
     private String announcement;
-
+    /**
+     * 数量
+     */
+    private Integer number;
     public String getGUID() {
         return GUID;
     }

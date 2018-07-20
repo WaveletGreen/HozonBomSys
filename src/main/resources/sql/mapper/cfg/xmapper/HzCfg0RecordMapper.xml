@@ -57,7 +57,7 @@
         <include refid="Base_Column_List"/>
         from ${whichTable}
         where PUID = #{puid,jdbcType=VARCHAR}
-        order by P_CFG0_FAMILY_NAME
+        order by P_CFG0_OBJECT_ID
     </select>
 
     <select id="selectListByProjectPuid" parameterType="java.lang.String" resultMap="BaseResultMap">
@@ -69,7 +69,7 @@
         from Hz_Cfg0_Main_Record t2
         where t2.p_cfg0_of_which_project_puid=#{projectPuid,jdbcType=VARCHAR}
         )
-        order by P_CFG0_FAMILY_NAME
+        order by P_CFG0_OBJECT_ID
     </select>
     <select id="selectCfg0ListByPuids" parameterType="java.util.List" resultMap="BaseResultMap">
         select
@@ -80,7 +80,7 @@
         from Hz_Cfg0_Main_Record t2
         where t2.p_cfg0_of_which_project_puid=#{projectPuid,jdbcType=VARCHAR}
         )
-        order by P_CFG0_FAMILY_NAME
+        order by P_CFG0_OBJECT_ID ASC
     </select>
 
     <select id="selectMaterielFeatureByProjectPuid" parameterType="java.lang.String" resultMap="MaterielFeatureMap">
@@ -114,6 +114,16 @@
     </delete>
     <delete id="deleteAddedCfgByList" parameterType="java.util.List">
         delete from HZ_CFG0_ADD_CFG_RECORD
+        where PUID in(
+        <foreach collection="list" item="item" index="index"
+                 separator=",">
+            #{item.puid,jdbcType=VARCHAR}
+        </foreach>
+        )
+
+    </delete>
+    <delete id="deleteCfgByList" parameterType="java.util.List">
+        delete from HZ_CFG0_RECORD
         where PUID in(
         <foreach collection="list" item="item" index="index"
                  separator=",">

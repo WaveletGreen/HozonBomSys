@@ -14,17 +14,23 @@ import sql.pojo.cfg.HzCfg0MainRecord;
  * Description:
  *
  * ***********************************************************************************************************************/
-@Service ("hzCfg0MainRecordDao")
+@Service("hzCfg0MainRecordDao")
 public class HzCfg0MainRecordDaoImpl implements HzCfg0MainRecordDao {
     @Autowired
     IBaseSQLUtil baseSQLUtil;
+
     @Override
     public HzCfg0MainRecord selectByPrimaryKey(String puid) {
-        return baseSQLUtil.executeQueryByPass(new HzCfg0MainRecord(),puid,"com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0MainRecordDao.selectByPrimaryKey",true);
+        return baseSQLUtil.executeQueryByPass(new HzCfg0MainRecord(), puid, "com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0MainRecordDao.selectByPrimaryKey", true);
     }
 
     @Override
     public HzCfg0MainRecord selectByProjectPuid(String projectPuid) {
-        return baseSQLUtil.executeQueryByPass(new HzCfg0MainRecord(),projectPuid,"com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0MainRecordDao.selectByProjectPuid",true);
+        return baseSQLUtil.executeQueryByPass(new HzCfg0MainRecord(), projectPuid, "com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0MainRecordDao.selectByProjectPuid", true);
+    }
+
+    @Override
+    public int insert(HzCfg0MainRecord hzCfg0MainRecord) {
+        return baseSQLUtil.executeInsert(hzCfg0MainRecord, "com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0MainRecordDao.insert");
     }
 }

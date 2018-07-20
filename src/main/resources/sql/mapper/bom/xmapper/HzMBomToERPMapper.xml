@@ -49,6 +49,9 @@
         <!--工位-->
         <result column="P_STATION" jdbcType="VARCHAR"
                 property="station"/>
+        <!--数量-->
+        <result column="P_NUMBER" jdbcType="INTEGER"
+                property="number"/>
     </resultMap>
 
     <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs"
@@ -71,7 +74,8 @@
         P_CFG0_RELEVANCE,
         P_FNA_INFO,
         P_WORK_SHOP1,
-        P_STATION
+        P_STATION,
+        P_NUMBER
     </sql>
     <!--加装大对象类型-->
     <sql id="Blob_Column_List">
@@ -95,7 +99,8 @@
         T8.P_CFG0_RELEVANCE, /*相关性*/
         T3.P_FNA_INFO,/*FNA（装配位置）*/
         T2.P_WORK_SHOP1,/*使用车间，默认使用车间1*/
-        T2.P_STATION/*工位*/
+        T2.P_STATION,/*工位*/
+        T3.P_NUMBER/*数量*/
     </sql>
     <select id="selectByBatch"
             parameterType="java.util.Map"

@@ -10,4 +10,6 @@ public interface HzCfg0MainRecordDao {
     HzCfg0MainRecord selectByPrimaryKey(@Param("puid") String puid);
 
     HzCfg0MainRecord selectByProjectPuid(@Param("projectPuid") String projectPuid);
+
+    int insert(HzCfg0MainRecord hzCfg0MainRecord);
 }

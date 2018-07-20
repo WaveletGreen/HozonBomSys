@@ -26,7 +26,7 @@ import static com.connor.hozon.bom.bomSystem.helper.StringHelper.checkStringIsEm
  */
 @Service("synMaterielService")
 public class SynMaterielService implements ISynMaterielService {
-    public static boolean debug = true;
+    public static boolean debug = false;
     /**
      * 发送服务
      */
@@ -260,7 +260,7 @@ public class SynMaterielService implements ISynMaterielService {
         /**
          * 更新信息
          */
-        toUpdate.forEach(to -> puids.add(to.getPuid()));
+        toUpdate.forEach(to -> puids.add(to.getpMaterielCode()));
         splitListThenUpdate(puids);
 
         result.put("status", true);

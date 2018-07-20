@@ -1,6 +1,10 @@
 package com.connor.hozon.bom.bomSystem.controller.project;
 
+import com.connor.hozon.bom.bomSystem.dao.bom.HzBomMainRecordDao;
+import com.connor.hozon.bom.bomSystem.dao.bom.HzPreferenceSettingDao;
+import com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0MainRecordDao;
 import com.connor.hozon.bom.bomSystem.dto.HzProjectBean;
+import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
 import com.connor.hozon.bom.bomSystem.service.iservice.project.IHzVehicleService;
 import com.connor.hozon.bom.bomSystem.service.project.HzBrandService;
 import com.connor.hozon.bom.bomSystem.service.project.HzPlatformService;
@@ -17,14 +21,15 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import sql.pojo.HzPreferenceSetting;
+import sql.pojo.bom.HZBomMainRecord;
+import sql.pojo.cfg.HzCfg0MainRecord;
 import sql.pojo.project.HzBrandRecord;
 import sql.pojo.project.HzPlatformRecord;
 import sql.pojo.project.HzProjectLibs;
 import sql.pojo.project.HzVehicleRecord;
 
 import java.util.*;
-
-import static com.connor.hozon.bom.bomSystem.helper.StringHelper.checkString;
 
 /**
  * <strong>Author: Fancyears·Maylos·Mayways</strong>
@@ -49,11 +54,19 @@ public class HzProjectLibsController {
     private final Logger logger;
 
     @Autowired
-    public HzProjectLibsController(HzProjectLibsService hzProjectLibsService, HzBrandService hzBrandService, HzPlatformService hzPlatformService, IHzVehicleService hzVehicleService) {
+    private final HzPreferenceSettingDao hzPreferenceSettingDao;
+    @Autowired
+    HzCfg0MainRecordDao hzCfg0MainRecordDao;
+    @Autowired
+    HzBomMainRecordDao hzBomMainRecordDao;
+
+    @Autowired
+    public HzProjectLibsController(HzProjectLibsService hzProjectLibsService, HzBrandService hzBrandService, HzPlatformService hzPlatformService, IHzVehicleService hzVehicleService, HzPreferenceSettingDao hzPreferenceSettingDao) {
         this.hzProjectLibsService = hzProjectLibsService;
         this.hzBrandService = hzBrandService;
         this.hzPlatformService = hzPlatformService;
         this.hzVehicleService = hzVehicleService;
+        this.hzPreferenceSettingDao = hzPreferenceSettingDao;
         logger = LoggerFactory.getLogger(this.getClass());
     }
 
@@ -76,6 +89,7 @@ public class HzProjectLibsController {
             }
         }
         result.put("data", hzProjectLibsService.doLoadAllProjectLibs());
+        result.put("brand", hzBrandService.doGetAllBrand());
         return result;
     }
 
@@ -298,16 +312,17 @@ public class HzProjectLibsController {
     @RequestMapping(value = "/addProject", method = RequestMethod.POST)
     @ResponseBody
     public JSONObject addProject(@RequestBody HzProjectLibs project) {
+        Date now = new Date();
         JSONObject result = new JSONObject();
         User user = UserInfo.getUser();
         if (!hzProjectLibsService.validate(project) || user == null) {
             result.put("status", -1);
         }
         if (null == hzProjectLibsService.doGetByProjectCode(project.getpProjectCode())) {
-            Date date = new Date();
+
             project.setPuid(UUID.randomUUID().toString());
-            project.setpProjectCreateDate(date);
-            project.setpProjectLastModDate(date);
+            project.setpProjectCreateDate(now);
+            project.setpProjectLastModDate(now);
             //设置创建者
             project.setpProjectOwningUser(user.getUsername());
             project.setpProjectLastModifier(user.getUsername());
@@ -316,7 +331,88 @@ public class HzProjectLibsController {
             calendar.set(9999, 11, 31, 23, 59, 59);
             project.setpProjectDiscontinuationDate(calendar.getTime());
             if (hzProjectLibsService.doInsertOne(project)) {
+
+                int status1 = 0;
+                int status2 = 0;
+                int status3 = 0;
+                //自动添加数模层和主配置
+                {
+
+                    //数模层
+                    HZBomMainRecord hzBomMainRecord = new HZBomMainRecord();
+                    //主配置
+                    HzCfg0MainRecord hzCfg0MainRecord = new HzCfg0MainRecord();
+
+                    //数模层
+                    hzBomMainRecord.setPuid(UUIDHelper.generateUpperUid());
+                    hzBomMainRecord.setPostDate(now);
+                    hzBomMainRecord.setPoster(user.getUserName());
+                    hzBomMainRecord.setBomDigifax(project.getpProjectCode() + "的数模层");
+                    hzBomMainRecord.setBomOrgPuid(hzBomMainRecord.getPuid().substring(0, 15));
+                    hzBomMainRecord.setpCfg0LastModDate(now);
+                    hzBomMainRecord.setpCfg0OfWhichProjectPuid(project.getPuid());
+                    hzBomMainRecord.setpCfg0OfWhichProject(project.getpProjectName() == null ? project.getpProjectCode() : project.getpProjectName());
+                    hzBomMainRecord.setpCfg0OrgPoster(user.getUserName());
+
+                    //主配置
+                    hzCfg0MainRecord.setPuid(UUIDHelper.generateUpperUid());
+                    hzCfg0MainRecord.setpCfg0LastModDate(now);
+                    hzCfg0MainRecord.setpCfg0OfWhichProject(project.getpProjectName() == null ? project.getpProjectCode() : project.getpProjectName());
+                    hzCfg0MainRecord.setpCfg0OfWhichProjectPuid(project.getPuid());
+                    hzCfg0MainRecord.setpCfg0OrgPuid(hzCfg0MainRecord.getPuid().substring(0, 15));
+                    hzCfg0MainRecord.setpItemName(project.getpProjectCode() + "的主配置");
+                    hzCfg0MainRecord.setPostDate(now);
+                    hzCfg0MainRecord.setPoster(user.getUserName());
+                    hzCfg0MainRecord.setpCfg0OrgPoster(user.getUserName());
+
+                    //同步插入数模层和主配置
+                    if (hzCfg0MainRecordDao.insert(hzCfg0MainRecord) > 0) {
+                        result.put("dxgMainMsg", "自动创建关联数模层成功");
+                        status2 = 1;
+                    } else {
+                        result.put("dxgMainMsg", "自动创建关联数模层失败，请联系系统管理员");
+                        status2 = 0;
+                    }
+                    if (hzBomMainRecordDao.insert(hzBomMainRecord) > 0) {
+                        result.put("cfgMsg", "自动创建主配置数据成功");
+                        status3 = 1;
+                    } else {
+                        result.put("cfgMsg", "自动创建主配置数据失败，请联系系统管理员");
+                        status3 = 0;
+                    }
+                    //首选项
+                    HzPreferenceSetting setting = new HzPreferenceSetting();
+                    setting.setSettingName("Hz_ExportBomPreferenceRedis");
+
+                    HzPreferenceSetting thisSetting;
+                    List<HzPreferenceSetting> list = hzPreferenceSettingDao.selectSettingByTemplateName(setting);
+                    if (list == null || list.size() <= 0) {
+                        result.put("settingMsg", "自动创建首选项模板失败，请保证HZ_PREFERENCESETTING表包含Hz_ExportBomPreferenceRedis首选项模板");
+                        status1 = 0;
+                    } else {
+                        thisSetting = list.get(0);
+                        thisSetting.setBomMainRecordPuid(hzBomMainRecord.getPuid());
+                        thisSetting.setPuid(UUIDHelper.generateUpperUid());
+                        thisSetting.setSettingName("Hz_ExportBomPreferenceRedis_" + project.getpProjectCode());
+                        if (status2 == 1) {
+                            if (hzPreferenceSettingDao.insert(thisSetting) > 0) {
+                                result.put("settingMsg", "自动创建首选项模板成功");
+                                status1 = 1;
+                            } else {
+                                result.put("settingMsg", "自动创建首选项模板失败，请保证HZ_PREFERENCESETTING表包含Hz_ExportBomPreferenceRedis首选项模板");
+                                status1 = 0;
+                            }
+                        } else {
+                            result.put("settingMsg", "自动创建首选项模板失败，请保证HZ_PREFERENCESETTING表包含Hz_ExportBomPreferenceRedis首选项模板");
+                            status1 = 0;
+                        }
+
+                    }
+                }
                 result.put("status", 1);
+                result.put("status1", status1);
+                result.put("status2", status2);
+                result.put("status3", status3);
                 result.put("entity", project);
             } else {
                 result.put("status", -1);
@@ -555,6 +651,7 @@ public class HzProjectLibsController {
         }
     }
     //////////////////////////////////////////////////验证编号重复性/////////////////////////////////////////////////////////
+
     /**
      * 项目编号查重
      *

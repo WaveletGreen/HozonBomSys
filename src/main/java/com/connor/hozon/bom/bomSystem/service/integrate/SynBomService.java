@@ -238,6 +238,7 @@ public class SynBomService implements ISynBomService {
         Map<String, ReflectBom> rel = new HashMap<>();
         for (String key : mapOfPackNo.keySet()) {
             coach.clear();
+            transBomService.getInput().getItem().clear();
             /***********************part1******************/
 /*            for (String k : mapOfPackNo.get(key).keySet()) {
                 //一个物料下的相同组件存在多行，只能是工位不一致才允许多行
@@ -269,7 +270,7 @@ public class SynBomService implements ISynBomService {
                 coach.put(String.valueOf(mapOfPackNo.get(key).get(k).getZpptci005().getPSORTF()), mapOfPackNo.get(key).get(k));
             }
 
-            if (SynMaterielService.debug)
+            if (!SynMaterielService.debug)
                 transBomService.execute();
             /**
              * 总数计数
@@ -566,7 +567,8 @@ public class SynBomService implements ISynBomService {
             }
         }
         //执行操作
-        transBomService.execute();
+        if (SynMaterielService.debug)
+            transBomService.execute();
         //获取返回值
         List<ZPPTCO005> resultPool = transBomService.getOut().getItem();
         for (ZPPTCO005 zpptco005 : resultPool) {

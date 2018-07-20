@@ -14,7 +14,11 @@
                 property="pCfg0ModelBasicDetail"/>
     </resultMap>
     <sql id="Base_Column_List">
-		PUID, OBJECT_NAME, OBJECT_DESC, P_CFG0_MODEL_OF_MAIN_RECORD,P_CFG0_MODEL_BASIC_DETAIL
+		PUID,
+		OBJECT_NAME,
+		OBJECT_DESC,
+		P_CFG0_MODEL_OF_MAIN_RECORD,
+		P_CFG0_MODEL_BASIC_DETAIL
 	</sql>
     <!--根据主键删选-->
     <select id="selectByPrimaryKey" parameterType="sql.pojo.cfg.HzCfg0ModelRecord"
@@ -29,7 +33,8 @@
 		#{item.puid,jdbcType=VARCHAR},
 		#{item.objectName,jdbcType=VARCHAR},
 		#{item.objectDesc,jdbcType=VARCHAR},
-		#{item.pCfg0ModelOfMainRecord,jdbcType=VARCHAR}
+		#{item.pCfg0ModelOfMainRecord,jdbcType=VARCHAR},
+		#{item.pCfg0ModelBasicDetail,jdbcType=VARCHAR}
 	</sql>
     <!--批量插入-->
     <insert id="insertByBatch" parameterType="java.util.List">

@@ -125,7 +125,8 @@ $(document).ready(
     (loadData()),
     //手动刷新按钮
     $("#refresh").click(function () {
-        $('#dataTable').bootstrapTable('refresh');
+        loadData();
+        // $('#dataTable').bootstrapTable('refresh');
     }),
     //手动刷新按钮
     $("#query").click(function () {
