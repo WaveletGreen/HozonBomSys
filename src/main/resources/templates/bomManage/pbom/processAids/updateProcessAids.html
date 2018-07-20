@@ -6,6 +6,12 @@
 <form id="processAidsForm" role="form" method="post" action="accessories/update">
     <input id="puid" name="puid" type="hidden" th:value="${data.puid}">
     <div class="form-group">
+        <label for="pLineId">零件号<span>*</span></label>
+        <input class="form-control" id="pLineId" name="pLineId" type="text"
+               th:value="${data.pLineId}"
+               placeholder="请输入零件号"/><!--th:value="${entity.level}"-->
+    </div>
+    <div class="form-group">
         <label for="pBomLinePartName">零件名称<span>*</span></label>
         <input class="form-control" id="pBomLinePartName" name="pBomLinePartName" type="text"
                th:value="${data.pBomLinePartName}"
@@ -16,12 +22,6 @@
         <input class="form-control" id="pBomLinePartEnName" name="pBomLinePartEnName" type="text"
                th:value="${data.pBomLinePartEnName}"
                placeholder="请输入零件英文名称"/><!--th:value="${entity.level}"-->
-    </div>
-    <div class="form-group">
-        <label for="pLineId">零件号<span>*</span></label>
-        <input class="form-control" id="pLineId" name="pLineId" type="text"
-               th:value="${data.pLineId}"
-               placeholder="请输入零件号"/><!--th:value="${entity.level}"-->
     </div>
     <div class="form-group">
         <label for="pUnit">单位</label>
@@ -167,9 +167,9 @@
                 var url = $("#processAidsForm", window.top.document).attr('action');
                 var myData = JSON.stringify({
                     "puid": $("#puid").val(),
+                    "pLineId": $("#pLineId").val(),
                     "pBomLinePartName": $("#pBomLinePartName").val(),
                     "pBomLinePartEnName": $("#pBomLinePartEnName").val(),
-                    "pLineId": $("#pLineId").val(),
                     "pUnit": $("#pUnit").val(),
                     "pMaterialHigh": $("#pMaterialHigh").val(),
                     "pMaterial1": $("#pMaterial1").val(),
