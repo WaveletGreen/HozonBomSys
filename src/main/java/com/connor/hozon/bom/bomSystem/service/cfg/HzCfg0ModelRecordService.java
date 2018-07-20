@@ -5,6 +5,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sql.pojo.cfg.HzCfg0ModelRecord;
 
+import java.util.Collections;
+import java.util.List;
+
 /**
  * User: Fancyears·Maylos·Mayways
  * Date: 2018/5/22
@@ -27,4 +30,8 @@ public class HzCfg0ModelRecordService {
         return hzCfg0ModelRecordDao.updateModelName(modelRecord) > 0 ? true : false;
     }
 
+
+    public boolean doInsert(List<HzCfg0ModelRecord> modelRecord) {
+        return hzCfg0ModelRecordDao.insertByBatch(modelRecord) > 0 ? true : false;
+    }
 }

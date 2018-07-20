@@ -1,5 +1,6 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<link th:href="@{/css/labelColor.css}" rel="stylesheet">
 <body>
 <form id="featureForm" role="form" method="post" th:action="${action}">
     <input class="form-control" id="puid" name="puid" type="hidden" th:value="${entity.puid}"/>
@@ -8,14 +9,14 @@
     <input class="form-control" id="pCfg0FamilyPuid" name="pCfg0FamilyPuid" type="hidden"
            th:value="${entity.pCfg0FamilyPuid}"/>
     <div class="form-group">
-        <label for="pCfg0FamilyName">特性名称<span style="color: red;font-size: 30px">*</span></label>
+        <label for="pCfg0FamilyName">特性名称<span>*</span></label>
         <input class="form-control" id="pCfg0FamilyName" name="pCfg0FamilyName" type="text"
                th:value="${entity.pCfg0FamilyName}"
                placeholder="请输入特性名称"
         />
     </div>
     <div class="form-group">
-        <label for="pCfg0FamilyDesc">特性描述<span style="color: red;font-size: 30px">*</span></label>
+        <label for="pCfg0FamilyDesc">特性描述<span>*</span></label>
         <input class="form-control" id="pCfg0FamilyDesc" name="pCfg0FamilyDesc" type="text"
                th:value="${entity.pCfg0FamilyDesc}"
                placeholder="请输入特性描述"/>
@@ -28,13 +29,13 @@
     </div>
     </div>
     <div class="form-group">
-        <label for="pCfg0ObjectId">特性值/配置代码<span style="color: red;font: 30px">*</span></label>
+        <label for="pCfg0ObjectId">特性值/配置代码<span>*</span></label>
         <input class="form-control" id="pCfg0ObjectId" name="pCfg0ObjectId" type="text"
                th:value="${entity.pCfg0ObjectId}"
                placeholder="请输入特性值/配置代码"/>
     </div>
     <div class="form-group">
-        <label for="pCfg0Desc">特性值/配置(描述)<span style="color: red;font-size:30px">*</span></label>
+        <label for="pCfg0Desc">特性值/配置(描述)<span>*</span></label>
         <input class="form-control" id="pCfg0Desc" name="pCfg0Desc" type="text" th:value="${entity.pCfg0Desc}"
                placeholder="请输入特性值/配置(描述)"/>
     </div>

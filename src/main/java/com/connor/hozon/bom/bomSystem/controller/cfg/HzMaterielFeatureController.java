@@ -1,7 +1,10 @@
 package com.connor.hozon.bom.bomSystem.controller.cfg;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.connor.hozon.bom.bomSystem.dto.HzMaterielFeatureBean;
 import com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0ModelColorDao;
+import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
 import com.connor.hozon.bom.bomSystem.service.cfg.*;
 import com.connor.hozon.bom.bomSystem.service.iservice.cfg.IHzCfg0ModelFeatureService;
 import com.connor.hozon.bom.bomSystem.service.project.HzSuperMaterielService;
@@ -13,11 +16,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import sql.pojo.cfg.HzCfg0MainRecord;
+import sql.pojo.cfg.HzCfg0ModelDetail;
 import sql.pojo.cfg.HzCfg0ModelFeature;
 import sql.pojo.cfg.HzCfg0ModelRecord;
 import sql.pojo.project.HzMaterielRecord;
 
 import java.util.*;
+
+import static com.connor.hozon.bom.bomSystem.helper.StringHelper.checkString;
 
 /**
  * Created by Fancyears·Maylos·Mayways
@@ -148,7 +154,7 @@ public class HzMaterielFeatureController {
 
         Map<String, HzMaterielFeatureBean> sortedBean = new HashMap<>();
 
-        hzMaterielFeatureBeans.stream().filter(_b -> _b.getpCfg0ModelRecord() != null).forEach(_b -> sortedBean.put(_b.getpCfg0ModelRecord()+"="+_b.getpCfg0FamilyDesc() + "<br/>" + _b.getpCfg0FamilyName(), _b));
+        hzMaterielFeatureBeans.stream().filter(_b -> _b.getpCfg0ModelRecord() != null).forEach(_b -> sortedBean.put(_b.getpCfg0ModelRecord() + "=" + _b.getpCfg0FamilyDesc() + "<br/>" + _b.getpCfg0FamilyName(), _b));
 
         if (hzMaterielFeatureBeans == null || column == null || column.size() == 0) {
             result.put("status", false);
@@ -163,7 +169,7 @@ public class HzMaterielFeatureController {
                 Map<String, Object> _result = new HashMap<>();
                 int index = 0;
                 for (int j = 0; j < column.size(); j++) {
-                    _result.put("s" + j, sortedBean.get(value.getpCfg0ModelRecord()+"="+column.get(j)) == null ? "-" : sortedBean.get(value.getpCfg0ModelRecord()+"="+column.get(j)).getpCfg0ObjectId());
+                    _result.put("s" + j, sortedBean.get(value.getpCfg0ModelRecord() + "=" + column.get(j)) == null ? "-" : sortedBean.get(value.getpCfg0ModelRecord() + "=" + column.get(j)).getpCfg0ObjectId());
                     index = j;
                 }
 
@@ -338,4 +344,56 @@ public class HzMaterielFeatureController {
         }
         return false;
     }
+
+    @RequestMapping("/addVehicleModelPage")
+    public String addVehicleModelPage(@RequestParam String projectPuid, Model model) {
+        if (checkString(projectPuid)) {
+            HzCfg0MainRecord hzCfg0MainRecord = hzCfg0MainService.doGetbyProjectPuid(projectPuid);
+            model.addAttribute("cfgmain", hzCfg0MainRecord);
+            model.addAttribute("action", "./materiel/addVehicleModel");
+            return "cfg/materielFeature/addModel";
+        } else {
+            model.addAttribute("msg", "请选择项目再操作");
+            return "errorWithEntity";
+        }
+    }
+
+    @RequestMapping("/addVehicleModel")
+    @ResponseBody
+    public boolean addVehicleModel(@RequestBody  Map<String, String> params) {
+        if (params != null) {
+            if (!params.containsKey("pCfg0ModelOfMainRecord")) {
+                return false;
+            } else {
+                HzCfg0ModelRecord modelRecord = new HzCfg0ModelRecord();
+                //设置归属主配置
+                modelRecord.setpCfg0ModelOfMainRecord(params.get(""));
+                //设置车型名
+                modelRecord.setObjectName(params.get("objectName"));
+                //设置车型描述
+                modelRecord.setObjectDesc(params.get("objectDesc"));
+                //生成UID
+                modelRecord.setPuid(UUIDHelper.generateUpperUid());
+                //设置基本信息代码
+                modelRecord.setpCfg0ModelBasicDetail(params.get("pCfg0ModelBasicDetail"));
+
+                HzCfg0ModelFeature modelDetail = new HzCfg0ModelFeature();
+                //设置归属车型
+                modelDetail.setpPertainToModel(modelRecord.getPuid());
+                //生成UID
+                modelDetail.setPuid(UUIDHelper.generateUpperUid());
+                //中文描述
+                modelDetail.setpFeatureCnDesc(params.get("pFeatureCnDesc"));
+                //设置单车配置码
+                modelDetail.setpFeatureSingleVehicleCode(params.get("pFeatureSingleVehicleCode"));
+                //没有设置归属的颜色车型
+                hzCfg0ModelRecordService.doInsert(Collections.singletonList(modelRecord));
+                hzCfg0ModelFeatureService.doInsert(modelDetail);
+            }
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 }
