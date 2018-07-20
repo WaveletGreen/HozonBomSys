@@ -61,7 +61,7 @@
         <result column="P_REMARK" jdbcType="VARCHAR" property="pRemark" />
         <result column="P_REGULATION_CODE" jdbcType="VARCHAR" property="pRegulationCode" />
         <result column="P_NUMBER" jdbcType="INTEGER" property="number" />
-        
+        <result column="P_BUY_ENGINEER" jdbcType="INTEGER" property="pBuyEngineer" />
         
     </resultMap>
     <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs"
@@ -79,7 +79,7 @@
     P_MATERIAL2, P_MATERIAL3, P_DENSITY, P_MATERIAL_STANDARD, P_SURFACE_TREAT, P_TEXTURE_COLOR_NUM, 
     P_MANU_PROCESS, P_SYMMETRY, P_IMPORTANCE, P_REGULATION_FLAG, P_BWG_BOX_PART, P_DEVELOP_TYPE, 
     P_DATA_VERSION, P_TARGET_WEIGHT, P_FEATURE_WEIGHT, P_ACTUAL_WEIGHT, P_FASTENER_STANDARD, 
-    P_FASTENER_LEVEL, P_TORQUE, P_DUTY_ENGINEER, P_SUPPLY, P_SUPPLY_CODE, P_REMARK, P_REGULATION_CODE,P_NUMBER
+    P_FASTENER_LEVEL, P_TORQUE, P_DUTY_ENGINEER, P_SUPPLY, P_SUPPLY_CODE, P_REMARK, P_REGULATION_CODE,P_NUMBER,P_BUY_ENGINEER
   </sql>
 
     <sql id="Blob_Column_List">P_BOM_LINE_BLOCK</sql>
@@ -153,7 +153,7 @@
         P_DATA_VERSION, P_TARGET_WEIGHT, P_FEATURE_WEIGHT,
         P_ACTUAL_WEIGHT, P_FASTENER_STANDARD, P_FASTENER_LEVEL,
         P_TORQUE, P_DUTY_ENGINEER, P_SUPPLY,
-        P_SUPPLY_CODE, P_REMARK, P_REGULATION_CODE,P_NUMBER
+        P_SUPPLY_CODE, P_REMARK, P_REGULATION_CODE,P_NUMBER,P_BUY_ENGINEER
         )
         values
         (#{puid,jdbcType=VARCHAR},#{parentUid,jdbcType=VARCHAR},#{bomDigifaxId,jdbcType=VARCHAR},
@@ -176,7 +176,7 @@
           #{pActualWeight,jdbcType=VARCHAR}, #{pFastenerStandard,jdbcType=VARCHAR}, #{pFastenerLevel,jdbcType=VARCHAR}, 
           #{pTorque,jdbcType=VARCHAR}, #{pDutyEngineer,jdbcType=VARCHAR}, #{pSupply,jdbcType=VARCHAR}, 
           #{pSupplyCode,jdbcType=VARCHAR}, #{pRemark,jdbcType=VARCHAR}, #{pRegulationCode,jdbcType=VARCHAR},
-          #{number,jdbcType=INTEGER}
+          #{number,jdbcType=INTEGER},#{pBuyEngineer,jdbcType=INTEGER}
       )
     </insert>
 
@@ -370,6 +370,10 @@
             <if test="number != null">
                 P_NUMBER = #{number,jdbcType=VARCHAR},
             </if>
+
+            <if test="pBuyEngineer != null">
+                P_BUY_ENGINEER = #{pBuyEngineer,jdbcType=VARCHAR},
+            </if>
         </set>
         where PUID = #{puid,jdbcType=VARCHAR}
     </update>
@@ -392,6 +396,11 @@
     <!--查询orderNum的最大值信息-->
     <select id="HzBomLineRecordDaoImpl_findMaxBomOrderNum"  resultType="int">
         select max(P_BOM_ORDER_NUM) from HZ_BOM_LINE_RECORD
+         where P_BOM_DIGIFAX_ID =(
+        select t2.puid from Hz_Bom_Main_Record t2
+        where
+        t2.p_cfg0_of_which_project_puid=#{projectId,jdbcType=VARCHAR}
+        )
     </select>
 
     <!--查询全部的2y或者2层的 lineindex 信息-->
@@ -458,4 +467,17 @@
             where PUID = #{item.puid,jdbcType=VARCHAR}
         </foreach>
     </update>
+
+
+
+    <!--删除-->
+    <delete id="HzEbomRecordDAOImpl_delete"  parameterType="java.lang.String">
+
+        delete  HZ_BOM_LINE_RECORD
+
+
+
+        where PUID = #{puid,jdbcType=VARCHAR}
+
+    </delete>
 </mapper>

@@ -102,7 +102,7 @@ public class HzMbomRecordRespDTO {
     /**
      * bom类型
      */
-    private Integer pBomType;
+    private String pBomType;
     /**
      * 发货料库存地点
      */
@@ -131,11 +131,11 @@ public class HzMbomRecordRespDTO {
         this.pLouaFlag = pLouaFlag;
     }
 
-    public Integer getpBomType() {
+    public String getpBomType() {
         return pBomType;
     }
 
-    public void setpBomType(Integer pBomType) {
+    public void setpBomType(String pBomType) {
         this.pBomType = pBomType;
     }
 

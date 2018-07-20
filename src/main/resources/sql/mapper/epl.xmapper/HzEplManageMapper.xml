@@ -61,6 +61,7 @@
       <result column="P_REGULATION_CODE" jdbcType="VARCHAR" property="pRegulationCode" />
       <result column="P_EBOM_STATUS" jdbcType="VARCHAR" property="status" />
       <result column="P_NUMBER" jdbcType="INTEGER" property="number" />
+      <result column="P_BUY_ENGINEER" jdbcType="INTEGER" property="pBuyEngineer" />
 
     <!--PBOM-->
     <result column="P_ITEM_RESOURCE" jdbcType="VARCHAR" property="itemResource" />
@@ -331,5 +332,17 @@
             </if>
             and t1.P_EBOM_STATUS=1
         </where>
+    </select>
+
+    <!--找出大于当前排序号的最小排序号-->
+    <select id="HzEbomRecordDAOImpl_findMinOrderNumWhichGreaterThanThisOrderNum" parameterType="java.util.HashMap" resultType="java.lang.Integer">
+       SELECT min(P_BOM_ORDER_NUM) FROM HZ_BOM_LINE_RECORD
+        where p_bom_digifax_id=(
+        select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(
+        select t2.puid from Hz_project_libs t2
+        <where>
+        t2.puid=#{projectId,jdbcType=VARCHAR}))
+        </where>
+       and  P_BOM_ORDER_NUM &gt;#{orderNum,jdbcType=INTEGER}
     </select>
 </mapper>

@@ -295,7 +295,12 @@ public class HzEbomController extends BaseController {
         recordRespDTO.setpRegulationCode(object.getString("pRegulationCode"));
         recordRespDTO.setProjectId(projectId);
         recordRespDTO.setpBuyEngineer(object.getString("pBuyEngineer"));
-        recordRespDTO.setNumber(Integer.valueOf(object.getString("number")));
+        if(object.getString("pBuyEngineer") != null){
+            recordRespDTO.setNumber(Integer.valueOf(object.getString("number")));
+        }else {
+            recordRespDTO.setNumber(null);
+        }
+
 //        JSONArray array = hzEbomService.getEbomTitle(projectId);
 //        if(array == null ||recordRespDTO == null){
 //            return "";

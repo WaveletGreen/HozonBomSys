@@ -93,8 +93,8 @@ public class HzPbomRecordDAOImpl extends BaseSQLUtil implements HzPbomRecordDAO 
     }
 
     @Override
-    public int getHzPbomMaxOrderNum() {
-        return(int) super.findForObject("HzPbomRecordDAOImpl_findMaxOrderNum",null);
+    public Integer getHzPbomMaxOrderNum(String projectId) {
+        return(Integer) super.findForObject("HzPbomRecordDAOImpl_findMaxOrderNum",projectId);
     }
 
     @Override
@@ -106,8 +106,8 @@ public class HzPbomRecordDAOImpl extends BaseSQLUtil implements HzPbomRecordDAO 
     }
 
     @Override
-    public int getMaxLineIndexFirstNum(String projectId) {
-        return (int)super.findForObject("HzPbomRecordDAOImpl_getMaxLineIndexFirstNum",projectId);
+    public Integer getMaxLineIndexFirstNum(String projectId) {
+        return (Integer) super.findForObject("HzPbomRecordDAOImpl_getMaxLineIndexFirstNum",projectId);
     }
 
     @Override
@@ -127,5 +127,18 @@ public class HzPbomRecordDAOImpl extends BaseSQLUtil implements HzPbomRecordDAO 
         request.setPageSize(query.getPageSize());
         request.setFilters(map);
         return super.findPage("HzPbomRecordDAOImpl_getHzPbomRecycleRecord","HzPbomRecordDAOImpl_getRecycleTotalCount",request);
+    }
+
+    @Override
+    public Integer findMinOrderNumWhichGreaterThanThisOrderNum(String projectId,int orderNum) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("projectId",projectId);
+        map.put("orderNum",orderNum);
+        return (Integer) super.findForObject("HzPbomRecordDAOImpl_findMinOrderNumWhichGreaterThanThisOrderNum",map);
+    }
+
+    @Override
+    public int delete(String eBomPuid) {
+        return super.delete("HzPbomRecordDAOImpl_delete",eBomPuid);
     }
 }

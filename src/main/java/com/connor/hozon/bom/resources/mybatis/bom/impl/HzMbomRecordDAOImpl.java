@@ -176,12 +176,20 @@ public class HzMbomRecordDAOImpl extends BaseSQLUtil implements HzMbomRecordDAO 
     }
 
     @Override
-    public int getMaxLineIndexFirstNum(String projectId) {
-        return (int)super.findForObject("HzMbomRecordDAOImpl_getMaxLineIndexFirstNum",projectId);
+    public Integer getMaxLineIndexFirstNum(String projectId) {
+        return (Integer) super.findForObject("HzMbomRecordDAOImpl_getMaxLineIndexFirstNum",projectId);
     }
 
     @Override
-    public int delete(String puid) {
-        return super.delete("HzMbomRecordDAOImpl_delete",puid);
+    public int delete(String eBomPuid) {
+        return super.delete("HzMbomRecordDAOImpl_delete",eBomPuid);
+    }
+
+    @Override
+    public Integer findMinOrderNumWhichGreaterThanThisOrderNum(String projectId,int orderNum) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("projectId",projectId);
+        map.put("orderNum",orderNum);
+        return (Integer) super.findForObject("HzMbomRecordDAOImpl_findMinOrderNumWhichGreaterThanThisOrderNum",map);
     }
 }
