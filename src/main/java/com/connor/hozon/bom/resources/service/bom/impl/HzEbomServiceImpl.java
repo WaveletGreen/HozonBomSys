@@ -646,6 +646,7 @@ public class HzEbomServiceImpl implements HzEbomService {
                             hzBomLineRecord.setpSupplyCode(reqDTO.getpSupplyCode());
                             hzBomLineRecord.setpSupply(reqDTO.getpSupply());
                             hzBomLineRecord.setpTorque(reqDTO.getpTorque());
+                            hzBomLineRecord.setpBomLinePartResource(reqDTO.getpBomLinePartResource());
                             hzBomLineRecord.setBomLineBlock(SerializeUtil.serialize(0));
                             hzBomLineRecord.setNumber(reqDTO.getNumber());
                             hzBomLineRecord.setBomDigifaxId(hzBomMainRecord.getPuid());
@@ -1157,6 +1158,7 @@ public class HzEbomServiceImpl implements HzEbomService {
                 hzBomLineRecord.setpRemark(reqDTO.getpRemark());
                 hzBomLineRecord.setBomLineBlock(SerializeUtil.serialize(0));
                 hzBomLineRecord.setNumber(reqDTO.getNumber());
+                hzBomLineRecord.setpBomLinePartResource(reqDTO.getpBomLinePartResource());
                 if(reqDTO.getpRegulationFlag().equals("Y")){
                     hzBomLineRecord.setpRegulationFlag(1);
                 }else {
