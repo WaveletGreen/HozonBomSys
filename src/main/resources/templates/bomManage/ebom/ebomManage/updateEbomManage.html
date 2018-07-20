@@ -29,18 +29,18 @@
                th:value="${data.pBomOfWhichDept}"
                placeholder="请输入专业"/>
     </div>
-    <div class="form-group">
-        <label for="rank">级别</label>
-        <input class="form-control" id="rank" name="rank" type="text"
-               th:value="${data.rank}"
-               placeholder="请输入级别"/>
-    </div>
-    <div class="form-group">
-        <label for="groupNum">分组号</label>
-        <input class="form-control" id="groupNum" name="groupNum" type="text"
-               th:value="${data.groupNum}"
-               placeholder="请输入分组号"/>
-    </div>
+    <!--<div class="form-group">-->
+        <!--<label for="rank">级别</label>-->
+        <!--<input class="form-control" id="rank" name="rank" type="text"-->
+               <!--th:value="${data.rank}"-->
+               <!--placeholder="请输入级别"/>-->
+    <!--</div>-->
+    <!--<div class="form-group">-->
+        <!--<label for="groupNum">分组号</label>-->
+        <!--<input class="form-control" id="groupNum" name="groupNum" type="text"-->
+               <!--th:value="${data.groupNum}"-->
+               <!--placeholder="请输入分组号"/>-->
+    <!--</div>-->
     <div class="form-group">
         <label for="pBomLinePartEnName">英文名称</label>
         <input class="form-control" id="pBomLinePartEnName" name="pBomLinePartEnName" type="text"
@@ -432,8 +432,8 @@
                     "pBomLinePartName": $("#pBomLinePartName").val(),
                     "level": $("#level").val(),
                     "pBomOfWhichDept": $("#pBomOfWhichDept").val(),
-                    "rank": $("#rank").val(),
-                    "groupNum": $("#groupNum").val(),
+                    // "rank": $("#rank").val(),
+                    // "groupNum": $("#groupNum").val(),
                     "pBomLinePartEnName": $("#pBomLinePartEnName").val(),
                     "lineNo": $("#lineNo").val(),
                     "parentLineId": $("#parentLineId").val(),
