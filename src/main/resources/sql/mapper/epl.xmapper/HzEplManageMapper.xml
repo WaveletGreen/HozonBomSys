@@ -123,6 +123,12 @@
       <if test="pBomOfWhichDept != null and  pBomOfWhichDept!='' " >
           and t1.P_BOM_OF_WHICH_DEPT like CONCAT(CONCAT('%',#{pBomOfWhichDept,jdbcType=VARCHAR}),'%')
       </if>
+      <if test="pFastener ==1 " >
+          and t1.P_FASTENER is not null
+      </if>
+      <if test="pFastener ==2 " >
+          and t1.P_FASTENER is  null
+      </if>
       </where>
   </select>
 
@@ -150,6 +156,12 @@
       </if>
       <if test="pBomOfWhichDept != null and  pBomOfWhichDept!='' " >
           and t1.P_BOM_OF_WHICH_DEPT like CONCAT(CONCAT('%',#{pBomOfWhichDept,jdbcType=VARCHAR}),'%')
+      </if>
+      <if test="pFastener == 1" >
+          and t1.P_FASTENER is not null
+      </if>
+      <if test="pFastener ==2 " >
+          and t1.P_FASTENER is  null
       </if>
       </where>
   </select>
@@ -182,7 +194,7 @@
       <if test="pBomOfWhichDept != null and  pBomOfWhichDept!='' " >
           and P_BOM_OF_WHICH_DEPT like CONCAT(CONCAT('%',#{pBomOfWhichDept,jdbcType=VARCHAR}),'%')
       </if>
-          and P_EBOM_STATUS=1)u
+          and P_EBOM_STATUS=1 order by P_BOM_ORDER_NUM)u
       </where>
          WHERE ROWNUM &lt;=#{limit,jdbcType=INTEGER}) where rn &gt;#{offset,jdbcType=INTEGER}
   </select>
@@ -303,5 +315,21 @@
         </where>
     </select>
 
-
+    <!--根据零件号查询bom-->
+    <select id="HzEbomRecordDAOImpl_findEbom" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+        SELECT t1.*from HZ_BOM_LINE_RECORD t1
+        where t1.p_bom_digifax_id=(
+        select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(
+        select t2.puid from Hz_project_libs t2
+        <where>
+            t2.puid=#{projectId,jdbcType=VARCHAR}))
+            <if test="puid != null and puid!=''">
+                and t1.puid = #{puid,jdbcType=VARCHAR}
+            </if>
+            <if test="lineID != null and lineID!=''">
+                and t1.P_BOM_LINE_ID = #{lineID,jdbcType=VARCHAR}
+            </if>
+            and t1.P_EBOM_STATUS=1
+        </where>
+    </select>
 </mapper>

@@ -45,6 +45,8 @@ public class HzMbomRecordRespDTO {
      */
     private Integer No;
 
+    private String lineNo;
+
     /**
      * 外键id
      */
@@ -112,6 +114,14 @@ public class HzMbomRecordRespDTO {
     private String pFactoryCode;
 
     private String pLouaFlag;
+
+    public String getLineNo() {
+        return lineNo;
+    }
+
+    public void setLineNo(String lineNo) {
+        this.lineNo = lineNo;
+    }
 
     public String getpLouaFlag() {
         return pLouaFlag;

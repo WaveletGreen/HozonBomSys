@@ -33,6 +33,7 @@ public class HzEbomRespDTO {
      */
     private String rank;//1
 
+    private String lineNo;
     /**
      * 分组号
      */
@@ -142,6 +143,14 @@ public class HzEbomRespDTO {
     private String pRegulationCode;
 
     private Integer number;
+
+    public String getLineNo() {
+        return lineNo;
+    }
+
+    public void setLineNo(String lineNo) {
+        this.lineNo = lineNo;
+    }
 
     public Integer getNumber() {
         return number;

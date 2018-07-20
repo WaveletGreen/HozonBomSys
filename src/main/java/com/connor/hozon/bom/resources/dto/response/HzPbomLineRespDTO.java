@@ -42,6 +42,7 @@ public class HzPbomLineRespDTO {
      */
     private String puid;
 
+    private String lineNo;
 
     /**
      * 零件来源
@@ -108,6 +109,15 @@ public class HzPbomLineRespDTO {
     private String puids;
 
     private String pLouaFlag;
+
+    public String getLineNo() {
+        return lineNo;
+    }
+
+    public void setLineNo(String lineNo) {
+        this.lineNo = lineNo;
+    }
+
     public String getPuids() {
         return puids;
     }

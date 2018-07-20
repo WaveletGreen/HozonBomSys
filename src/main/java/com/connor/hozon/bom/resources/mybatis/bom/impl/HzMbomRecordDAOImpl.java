@@ -174,4 +174,14 @@ public class HzMbomRecordDAOImpl extends BaseSQLUtil implements HzMbomRecordDAO 
         return super.findPage("HzMbomRecordDAOImpl_getHzMbomRecycleRecord","HzMbomRecordDAOImpl_getRecycleTotalCount",request);
 
     }
+
+    @Override
+    public int getMaxLineIndexFirstNum(String projectId) {
+        return (int)super.findForObject("HzMbomRecordDAOImpl_getMaxLineIndexFirstNum",projectId);
+    }
+
+    @Override
+    public int delete(String puid) {
+        return super.delete("HzMbomRecordDAOImpl_delete",puid);
+    }
 }

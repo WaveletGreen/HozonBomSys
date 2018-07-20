@@ -96,4 +96,10 @@ public interface HzMbomService {
      * @return
      */
     OperateResultMessageRespDTO RecoverDeleteMbomRecord(String projectId,String puid);
+
+    /**
+     * 装车件类型
+     * @return
+     */
+    List<String> loadingCarPartType();
 }

@@ -19,7 +19,7 @@ public interface HzEbomRecordDAO {
     Page<HzEPLManageRecord> getHzEbomPage(HzEbomByPageQuery query);
 
     /**
-     * 找一条EBOM EBOM  EBOM是EPL子集 这里直接返回EPL 全信息了
+     * 找一条EBOM  EBOM是EPL子集 这里直接返回EPL 全信息了
      * @param puid
      * @param projectId
      * @return
@@ -56,4 +56,6 @@ public interface HzEbomRecordDAO {
     Page<HzEPLManageRecord> getHzRecycleRecord(HzBomRecycleByPageQuery query);
 
     HzEPLManageRecord getHasDeletedBom(String puid,String projectId);
+
+    List<HzEPLManageRecord> findEbom(Map<String,Object> map);
 }
