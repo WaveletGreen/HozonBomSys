@@ -1,6 +1,6 @@
 body{
-    background: url(Hozon5.jpg) no-repeat center;
-    background-size:contain;
+    background: url(Hozon5.jpg) no-repeat fixed;
+    background-size:cover;
 }
 .tableNormalStyle {
     border: 1px solid #CCC;
