@@ -121,8 +121,11 @@ public class HzPbomServiceImpl implements HzPbomService {
                 }
             }
             hzPbomRecord.setPuid(UUID.randomUUID().toString());
-            int maxOrderNum = hzPbomRecordDAO.getHzPbomMaxOrderNum();
-            hzPbomRecord.setOrderNum(++maxOrderNum);
+            Integer maxOrderNum = hzPbomRecordDAO.getHzPbomMaxOrderNum(recordReqDTO.getProjectId());
+            if(maxOrderNum == null){
+                maxOrderNum = 100;
+            }
+            hzPbomRecord.setOrderNum(maxOrderNum+100);
             List<HzPbomLineRecord> records = new ArrayList<>();
             records.add(hzPbomRecord);
             int i = hzPbomRecordDAO.insertList(records);
@@ -469,13 +472,19 @@ public class HzPbomServiceImpl implements HzPbomService {
                 hzPbomLineRecord.setpBomOfWhichDept(recordReqDTO.getpBomOfWhichDept());
                 hzPbomLineRecord.setpBomLinePartName(recordReqDTO.getpBomLinePartName());
                 hzPbomLineRecord.setpBomLinePartClass(recordReqDTO.getpBomLinePartClass());
-                int num = hzPbomRecordDAO.getHzPbomMaxOrderNum();
-                hzPbomLineRecord.setOrderNum(++num);
+                Integer num = hzPbomRecordDAO.getHzPbomMaxOrderNum(recordReqDTO.getProjectId());
+                if(num == null){
+                    num = 100;
+                }
+                hzPbomLineRecord.setOrderNum(num+100);
                 hzPbomLineRecord.seteBomPuid(puid);
-                int maxLineIndexFirstNum = hzPbomRecordDAO.getMaxLineIndexFirstNum(recordReqDTO.getProjectId());
+                Integer maxLineIndexFirstNum = hzPbomRecordDAO.getMaxLineIndexFirstNum(recordReqDTO.getProjectId());
+                if(maxLineIndexFirstNum == null){
+                    maxLineIndexFirstNum = 10;
+                }
                 StringBuffer buffer = new StringBuffer(String.valueOf(++maxLineIndexFirstNum));
 
-                hzPbomLineRecord.setLineIndex(buffer.append(".1").toString());
+                hzPbomLineRecord.setLineIndex(buffer.append(".10").toString());
                 String lineId = recordReqDTO.getLineId();
                 hzPbomLineRecord.setLineId(lineId);
                 hzPbomLineRecord.setIsDept(0);
@@ -573,7 +582,7 @@ public class HzPbomServiceImpl implements HzPbomService {
                                 max = Integer.valueOf(str);
                             }
                         }
-                        max = max + 1;
+                        max = max + 10;
                         record.setLineIndex(new StringBuffer(recordList.get(0).getLineIndex()).append("." + max).toString());
                         hzPbomRecordDAO.update(record);
                     } else {
@@ -632,7 +641,7 @@ public class HzPbomServiceImpl implements HzPbomService {
                                         max = Integer.valueOf(str);
                                     }
                                 }
-                                max = max + 1;
+                                max = max + 10;
                                 parentLineIndex = new StringBuffer(lineIndex).append("." + max).toString();
                                 if (childRecord.getIs2Y().equals(1) && childRecord.getLineIndex().split("\\.").length == 2) {
                                     childRecord.setIs2Y(0);
@@ -680,7 +689,7 @@ public class HzPbomServiceImpl implements HzPbomService {
                                             max = Integer.valueOf(str);
                                         }
                                     }
-                                    max = max + 1;
+                                    max = max + 10;
                                     parentLineIndex = new StringBuffer(lineIndex).append("." + max).toString();
                                     childRecord.setLineIndex(parentLineIndex);
                                     hzPbomRecordDAO.update(childRecord);
@@ -688,7 +697,7 @@ public class HzPbomServiceImpl implements HzPbomService {
                             }
                         }
                     }
-                    int count = 1;
+                    int count = 10;
                     for (String child : children) {
                         if(childrenParentPuid.equals(child)){
                             continue;
@@ -697,7 +706,7 @@ public class HzPbomServiceImpl implements HzPbomService {
                         if (childRecord.getLineIndex().split("\\.").length > 2) {//找合成 子层
                             StringBuffer buffer = new StringBuffer(parentLineIndex);
                             buffer.append("." + count);
-                            count++;
+                            count+=10;
                             childRecord.setLineIndex(buffer.toString());
                             hzPbomRecordDAO.update(childRecord);
                         }

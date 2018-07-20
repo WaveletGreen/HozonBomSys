@@ -250,6 +250,16 @@ public class HzEPLManageRecord {
 
     private Integer number;
 
+    private String pBuyEngineer;
+
+    public String getpBuyEngineer() {
+        return pBuyEngineer;
+    }
+
+    public void setpBuyEngineer(String pBuyEngineer) {
+        this.pBuyEngineer = pBuyEngineer;
+    }
+
     public Integer getNumber() {
         return number;
     }

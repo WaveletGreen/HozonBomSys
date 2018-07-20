@@ -23,8 +23,10 @@ public class UpdateHzEbomReqDTO {
     private String puid;
 
 
+    private String lineNo;
     private String lineId;
 
+    private String parentLineId;
     /**
      * 专业
      */
@@ -126,6 +128,22 @@ public class UpdateHzEbomReqDTO {
     private String pRegulationCode;
 
     private Integer number;
+
+    public String getParentLineId() {
+        return parentLineId;
+    }
+
+    public void setParentLineId(String parentLineId) {
+        this.parentLineId = parentLineId;
+    }
+
+    public String getLineNo() {
+        return lineNo;
+    }
+
+    public void setLineNo(String lineNo) {
+        this.lineNo = lineNo;
+    }
 
     public Integer getNumber() {
         return number;

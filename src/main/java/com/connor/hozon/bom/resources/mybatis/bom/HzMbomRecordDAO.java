@@ -144,7 +144,10 @@ public interface HzMbomRecordDAO {
 
     Page<HzMbomLineRecord> getHzMbomRecycleRecord(HzBomRecycleByPageQuery query);
 
-    int getMaxLineIndexFirstNum(String projectId);
+    Integer getMaxLineIndexFirstNum(String projectId);
 
-    int delete(String puid);
+    int delete(String eBomPuid);
+
+
+    Integer findMinOrderNumWhichGreaterThanThisOrderNum(String projectId,int orderNum);
 }

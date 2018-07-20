@@ -78,7 +78,7 @@ public interface HzPbomRecordDAO {
      */
     int getHzBomLineCount(String projectId);
 
-    int getHzPbomMaxOrderNum();
+    Integer getHzPbomMaxOrderNum(String projectId);
 
     /**
      * 获取PBOM结构树
@@ -87,10 +87,14 @@ public interface HzPbomRecordDAO {
      */
     List<HzPbomLineRecord> getHzPbomTree(HzPbomTreeQuery query);
 
-    int getMaxLineIndexFirstNum(String projectId);
+    Integer getMaxLineIndexFirstNum(String projectId);
 
     boolean checkItemIdIsRepeat(String projectId, String lineId);
 
 
     Page<HzPbomLineRecord> getHzPbomRecycleRecord(HzBomRecycleByPageQuery query);
+
+    Integer findMinOrderNumWhichGreaterThanThisOrderNum(String projectId,int orderNum);
+
+    int delete(String eBomPuid);
 }

@@ -404,7 +404,11 @@
 
   <!--查询最大排序号-->
   <select id="HzPbomRecordDAOImpl_findMaxOrderNum" resultType="java.lang.Integer">
-    select max(P_BOM_ORDER_NUM) from HZ_PBOM_RECORD
+    select max(P_BOM_ORDER_NUM) from HZ_PBOM_RECORD  where P_BOM_DIGIFAX_ID =(
+        select t2.puid from Hz_Bom_Main_Record t2
+        where
+        t2.p_cfg0_of_which_project_puid=#{projectId,jdbcType=VARCHAR}
+        )
  </select>
 
     <!--获取PBOM结构树-->
@@ -496,4 +500,29 @@
             t1.P_PBOM_STATUS = 0
         </where>
     </select>
+
+
+  <!--找出大于当前排序号的最小排序号-->
+  <select id="HzPbomRecordDAOImpl_findMinOrderNumWhichGreaterThanThisOrderNum" parameterType="java.util.HashMap" resultType="java.lang.Integer">
+    SELECT min(P_BOM_ORDER_NUM) FROM HZ_PBOM_RECORD
+    where p_bom_digifax_id=(
+    select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(
+    select t2.puid from Hz_project_libs t2
+    <where>
+      t2.puid=#{projectId,jdbcType=VARCHAR}))
+    </where>
+    and  P_BOM_ORDER_NUM &gt;#{orderNum,jdbcType=INTEGER}
+  </select>
+
+
+  <!--删除-->
+  <delete id="HzPbomRecordDAOImpl_delete"  parameterType="java.lang.String">
+
+        delete  HZ_PBOM_RECORD
+
+
+
+        where P_E_BOM_PUID = #{eBomPuid,jdbcType=VARCHAR}
+
+    </delete>
 </mapper>

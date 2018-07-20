@@ -359,7 +359,7 @@ public class BaseSQLUtil implements IBaseSQLUtil {
     }
 
     public int delete(final String sqlMapId, final Object param) {
-        SqlSession session = null;
+//        SqlSession session = null;
         try {
 //            SqlSessionFactory f = FactoryManager.getInstance();
 //            session = f.openSession();

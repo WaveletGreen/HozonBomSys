@@ -24,6 +24,7 @@ public class AddHzEbomReqDTO {
 
     private String puid;
 
+    private String lineNo;
 
     private String lineId;
 
@@ -128,6 +129,24 @@ public class AddHzEbomReqDTO {
     private String pRegulationCode;
 
     private Integer number;
+
+    private String pBuyEngineer;
+
+    public String getpBuyEngineer() {
+        return pBuyEngineer;
+    }
+
+    public void setpBuyEngineer(String pBuyEngineer) {
+        this.pBuyEngineer = pBuyEngineer;
+    }
+
+    public String getLineNo() {
+        return lineNo;
+    }
+
+    public void setLineNo(String lineNo) {
+        this.lineNo = lineNo;
+    }
 
     public Integer getNumber() {
         return number;

@@ -38,8 +38,8 @@ public class HzBomLineRecordDaoImpl extends BaseSQLUtil {
      * @author haozt
      * @return
      */
-    public int findMaxBomOrderNum(){
-        return (int)super.findForObject("HzBomLineRecordDaoImpl_findMaxBomOrderNum",null);
+    public Integer findMaxBomOrderNum(String projectId){
+        return (Integer) super.findForObject("HzBomLineRecordDaoImpl_findMaxBomOrderNum",projectId);
     }
 
     /**
@@ -67,5 +67,9 @@ public class HzBomLineRecordDaoImpl extends BaseSQLUtil {
     public List<HzBomLineRecord> getLoadingCarPartBom(String projectId){
 
         return super.findForList("HzBomLineRecordDaoImpl_getLoadingCarPartBom",projectId);
+    }
+
+    public int delete(String puid){
+        return super.delete("HzEbomRecordDAOImpl_delete",puid);
     }
 }
