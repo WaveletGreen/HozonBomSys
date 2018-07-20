@@ -18,10 +18,10 @@
                placeholder="请输入名称"/>
     </div>
     <!--<div class="form-group">-->
-        <!--<label for="level">层级</label>-->
-        <!--<input class="form-control" id="level" name="level" type="text"-->
+    <!--<label for="level">层级</label>-->
+    <!--<input class="form-control" id="level" name="level" type="text"-->
 
-               <!--placeholder="请输入层级"/>-->
+    <!--placeholder="请输入层级"/>-->
     <!--</div>-->
     <div class="form-group">
         <label for="pBomOfWhichDept">专业</label>
@@ -339,7 +339,7 @@
         var oTxt = document.getElementById("puid");
         var oDiv = document.getElementById("lineNuber");
         // oTxt.onblur = function(){
-            oTxt.value == "" ? oDiv.style.display = "none" : oDiv.style.display = "block";
+        oTxt.value == "" ? oDiv.style.display = "none" : oDiv.style.display = "block";
         // };
         $('#ebomMainForm').bootstrapValidator({
             message: 'This value is not valid',
@@ -365,6 +365,25 @@
                         }
                     }
                 },
+                lineNo: {
+                    message: '编号验证失败',
+                    validators: {
+                        stringLength: {/*长度提示*/
+                            min: 4,
+                            max: 4,
+                            message: '编号长度必须是4位数字'
+                        },
+                        //正则校验
+
+                        regexp: {
+
+                            regexp: /^[0-9]+$/, /* ^ 指的是匹配字符串开始的位置 + 匹配一个或者多个*/
+
+                            message: '编号只能为数字'
+
+                        },
+                    }
+                },
             }
         });
         // 绑定dialog的确定按钮的监听事件
@@ -380,8 +399,8 @@
                 // for (var p in _d) {
                 //     data[_d[p].name] = _d[p].value;
                 // }
-                var myData =JSON.stringify({
-                    "puid":$("#puid").val(),
+                var myData = JSON.stringify({
+                    "puid": $("#puid").val(),
                     "lineId": $("#lineId").val(),
                     "pBomLinePartName": $("#pBomLinePartName").val(),
                     // "level": $("#level").val(),
@@ -430,7 +449,7 @@
                     "fna": $("#fna").val(),
                     "pFnaDesc": $("#pFnaDesc").val(),
                     "number": $("#number").val(),
-                    "projectId":$("#project", window.top.document).val(),
+                    "projectId": $("#project", window.top.document).val(),
                 });
                 if (puid = "") {
                     $.ajax({
@@ -470,7 +489,7 @@
                                 if (result.success) {
                                     layer.msg('添加成功', {icon: 1, time: 2000})
                                 }
-                                else if(!result.success){
+                                else if (!result.success) {
                                     window.Ewin.alert({message: result.errMsg})
                                 }
                             },
