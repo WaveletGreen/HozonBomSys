@@ -19,6 +19,10 @@ public class HzCfg0ToModelRecordDaoImpl implements HzCfg0ToModelRecordDao {
     @Override
     public int insert(HzCfg0ToModelRecord record) {
         return baseSQLUtil.executeInsert(record, "com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0ToModelRecordDao.insert");
+
+        
+
+
     }
 
     @Override
