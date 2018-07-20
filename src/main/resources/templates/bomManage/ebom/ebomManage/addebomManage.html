@@ -5,6 +5,18 @@
 <body>
 <form id="ebomMainForm" role="form" method="post" action="ebom/add/ebom">
     <input id="puid" name="puid" type="hidden" th:value="${data.puid}"/><!--th:value="${entity.eBomPuid}"-->
+    <div class="form-group">
+        <label for="lineId">零件号<span>*</span></label>
+        <input class="form-control" id="lineId" name="lineId" type="text"
+
+               placeholder="请输入零件号"/>
+    </div>
+    <div class="form-group">
+        <label for="pBomLinePartName">名称<span>*</span></label>
+        <input class="form-control" id="pBomLinePartName" name="pBomLinePartName" type="text"
+
+               placeholder="请输入名称"/>
+    </div>
     <!--<div class="form-group">-->
         <!--<label for="level">层级</label>-->
         <!--<input class="form-control" id="level" name="level" type="text"-->
@@ -28,18 +40,6 @@
         <input class="form-control" id="groupNum" name="groupNum" type="text"
 
                placeholder="请输入分组号"/>
-    </div>
-    <div class="form-group">
-        <label for="lineId">零件号<span>*</span></label>
-        <input class="form-control" id="lineId" name="lineId" type="text"
-
-               placeholder="请输入零件号"/>
-    </div>
-    <div class="form-group">
-        <label for="pBomLinePartName">名称<span>*</span></label>
-        <input class="form-control" id="pBomLinePartName" name="pBomLinePartName" type="text"
-
-               placeholder="请输入名称"/>
     </div>
     <div class="form-group">
         <label for="pBomLinePartEnName">英文名称</label>
@@ -365,12 +365,12 @@
                 // }
                 var myData =JSON.stringify({
                     "puid":$("#puid").val(),
+                    "lineId": $("#lineId").val(),
+                    "pBomLinePartName": $("#pBomLinePartName").val(),
                     // "level": $("#level").val(),
                     "pBomOfWhichDept": $("#pBomOfWhichDept").val(),
                     "rank": $("#rank").val(),
                     "groupNum": $("#groupNum").val(),
-                    "lineId": $("#lineId").val(),
-                    "pBomLinePartName": $("#pBomLinePartName").val(),
                     "pBomLinePartEnName": $("#pBomLinePartEnName").val(),
                     "pLouaFlag": $("#pLouaFlag").val(),
                     "pUnit": $("#pUnit").val(),
