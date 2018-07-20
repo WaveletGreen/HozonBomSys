@@ -24,4 +24,5 @@ public class HzCfg0MainService {
     public HzCfg0MainRecord doGetByPrimaryKey(String puid) {
         return hzCfg0MainRecordDao.selectByPrimaryKey(puid);
     }
+
 }

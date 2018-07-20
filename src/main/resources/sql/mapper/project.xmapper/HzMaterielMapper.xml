@@ -325,7 +325,7 @@
     <!--批量更新发送到SAP的状态为1，表示发放成功，没有写在DAO层中-->
     <update id="updateByBatch" parameterType="java.util.HashMap">
         update HZ_MATERIEL_RECORD t set t.p_send_sap_flag=1
-        where t.puid in
+        where t.P_MATERIEL_CODE in
         <if test="list!=null">
             <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
                 #{item,jdbcType=VARCHAR}

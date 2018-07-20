@@ -7,4 +7,6 @@ import sql.pojo.bom.HZBomMainRecord;
 @Configuration
 public interface HzBomMainRecordDao {
     HZBomMainRecord selectByProjectPuid(@Param("projectPuid") String projectPuid);
+
+    int insert(HZBomMainRecord hzBomMainRecord);
 }

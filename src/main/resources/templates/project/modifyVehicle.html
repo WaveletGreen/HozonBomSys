@@ -146,7 +146,8 @@
                                 var entity = result.entity;
                                 selectNode.name = entity.pVehicleName;
                                 zTree.updateNode(selectNode);
-                                window.Ewin.alert({message: "项目修改信息成功"});
+                                layer.msg('项目修改信息成功', {icon: 1, time: 2000})
+                                // window.Ewin.alert({message: "项目修改信息成功"});
                             }
                             else if (result.status == 0) {
                                 window.Ewin.alert({message: "已存在的车型代码，请修改或者更换车型代码"});
@@ -165,5 +166,6 @@
     })
     ]]>
 </script>
+<script th:src="@{/layer/layer.js}"></script>
 </body>
 </html>

@@ -71,8 +71,8 @@ public class ReflectMateriel {
         mm.setMaterialEnglishName(hzMaterielRecord.getpMaterielDescEn() == null ? "" : hzMaterielRecord.getpMaterielDescEn());
         //基本计量单位
         mm.setUnit(hzMaterielRecord.getpBasicUnitMeasure() == null ? "EA" : hzMaterielRecord.getpBasicUnitMeasure());
-        //虚拟件标识
-        mm.setVertureFlag(hzMaterielRecord.getpInventedPart() == null ? "" : hzMaterielRecord.getpInventedPart().toString());
+        //虚拟件标识,是虚拟件则传X，不是则N
+        mm.setVertureFlag(hzMaterielRecord.getpInventedPart() == null||hzMaterielRecord.getpInventedPart()==0 ? "N" : "X");
         //VIN前置号
         mm.setPerVIN(hzMaterielRecord.getpVinPerNo() == null ? "" : hzMaterielRecord.getpVinPerNo());
         //颜色件标识
@@ -86,7 +86,7 @@ public class ReflectMateriel {
         //零件重要度
         mm.setPartImportance(hzMaterielRecord.getpPartImportantDegree() == null ? "" : hzMaterielRecord.getpPartImportantDegree());
         //散件标志
-        mm.setBulkFlag(hzMaterielRecord.getpLoosePartFlag() == null ? "" : hzMaterielRecord.getpLoosePartFlag().toString());
+        mm.setBulkFlag(hzMaterielRecord.getpLoosePartFlag() == null||hzMaterielRecord.getpLoosePartFlag()==0 ? "" : "X");
         //设置物料类型，默认是材料
         mm.setMaterialType(
                 (hzMaterielRecord.getpMaterielType() == null ||

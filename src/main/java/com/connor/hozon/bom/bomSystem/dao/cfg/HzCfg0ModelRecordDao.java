@@ -2,8 +2,9 @@ package com.connor.hozon.bom.bomSystem.dao.cfg;
 
 import org.apache.ibatis.annotations.Param;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.bind.annotation.RequestParam;
 import sql.pojo.cfg.HzCfg0ModelRecord;
+
+import java.util.List;
 
 @Configuration
 public interface HzCfg0ModelRecordDao {
@@ -30,4 +31,6 @@ public interface HzCfg0ModelRecordDao {
      * @return
      */
     int updateModelName(HzCfg0ModelRecord modelRecord);
+
+    int insertByBatch(List<HzCfg0ModelRecord> modelRecord);
 }

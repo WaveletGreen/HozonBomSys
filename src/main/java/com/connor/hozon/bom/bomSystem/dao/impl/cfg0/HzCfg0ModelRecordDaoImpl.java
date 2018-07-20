@@ -6,6 +6,9 @@ import org.springframework.stereotype.Service;
 import sql.IBaseSQLUtil;
 import sql.pojo.cfg.HzCfg0ModelRecord;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * User: Fancyears·Maylos·Mayways
  * Date: 2018/5/22
@@ -29,5 +32,10 @@ public class HzCfg0ModelRecordDaoImpl implements HzCfg0ModelRecordDao {
     @Override
     public int updateModelName(HzCfg0ModelRecord modelRecord) {
         return baseSQLUtil.executeUpdate(modelRecord, "com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0ModelRecordDao.updateModelName");
+    }
+
+    @Override
+    public int insertByBatch(List<HzCfg0ModelRecord> modelRecord) {
+        return baseSQLUtil.executeInsert(modelRecord, "com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0ModelRecordDao.insertByBatch");
     }
 }

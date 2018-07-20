@@ -122,7 +122,7 @@ public class HzCfg0Controller {
         if (!checkString(record.getpCfg0Relevance())) {
             record.setpCfg0Relevance("$ROOT." + record.getpCfg0FamilyName() + " = '" + record.getpCfg0ObjectId() + "'");
         }
-        if (hzCfg0Service.doInsertAddCfg(record)) {
+        if (hzCfg0Service.doInsertOne(record)) {
             result.put("status", true);
             result.put("msg", "添加特性值" + record.getpCfg0ObjectId() + "成功");
         } else {
@@ -204,23 +204,25 @@ public class HzCfg0Controller {
             }
             //原始配置先不给删除，只能删除新加的配置项
             else {
-                if (hzCfg0Service.doSelectOneAddedCfgByPuid(record.getPuid()) != null) {
+                /*if (hzCfg0Service.doSelectOneAddedCfgByPuid(record.getPuid()) != null) {
                     toDelete.add(record);
                 }
-//                else if(hzCfg0Service.doSelectOneByPuid(record.getPuid()) != null){
-//                    //如果需要删除原数据
+                else*/
+                if (hzCfg0Service.doSelectOneByPuid(record.getPuid()) != null) {
+                    //如果需要删除原数据
+                    toDelete.add(record);
 //                    result.put("status", false);
 //                    result.put("msg", "目前不允许删除原数据，请重试或联系系统管理员");
 //                    return result;
-//                }
-                else {
+                } else {
                     result.put("status", false);
-                    result.put("msg", "目前不允许删除原数据，请重试或联系系统管理员");
+                    result.put("msg", "找不到需要删除的数据，请重试或联系系统管理员");
+//                    result.put("msg", "目前不允许删除原数据，请重试或联系系统管理员");
                     return result;
                 }
             }
         }
-        result.put("status", hzCfg0Service.doDeleteAddedCfgByList(toDelete));
+        result.put("status", hzCfg0Service.doDeleteCfgByList(toDelete));
         result.put("msg", "删除成功");
         return result;
     }

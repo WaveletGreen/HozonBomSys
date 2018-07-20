@@ -27,6 +27,6 @@ public class HzBomDataDaoImpl implements HzBomDataDao {
     @Override
     public HzPreferenceSetting loadSetting(HzPreferenceSetting setting) {
         return baseSQLUtil.executeQueryById(setting,
-                "sql.mapper.HzPreferenceSettingMapper.selectSettingByNameWithMainRecord");
+                "com.connor.hozon.bom.bomSystem.dao.bom.HzPreferenceSettingDao.selectSettingByNameWithMainRecord");
     }
 }

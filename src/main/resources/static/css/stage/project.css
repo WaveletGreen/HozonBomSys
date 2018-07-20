@@ -23,3 +23,7 @@ body{
     min-width: 140px;
     text-align: center;
 }
+
+tr{
+    background-color: white;
+}

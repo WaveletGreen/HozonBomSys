@@ -121,7 +121,7 @@
          <!--<property name="useActualColumnNames" value="false" />-->
 
          <!--</table>-->
-         <table tableName="HZ_FCFGBOM_LVL1_LIST_OPER" domainObjectName="HzFcfgBomLvl1ListOperation">
+         <table tableName="HZ_CFG0_TO_MODEL_RECORD" domainObjectName="HzCfg0ToModelRecord">
          <property name="useActualColumnNames" value="false" />
 
          </table>
