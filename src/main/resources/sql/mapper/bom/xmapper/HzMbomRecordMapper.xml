@@ -99,7 +99,7 @@
             <if test="pBomOfWhichDept != null and  pBomOfWhichDept!='' ">
                 and t.P_BOM_OF_WHICH_DEPT like CONCAT(CONCAT('%',#{pBomOfWhichDept,jdbcType=VARCHAR}),'%')
             </if>
-            and t.P_MBOM_STATUS=1
+            and t.P_MBOM_STATUS=1 order by P_BOM_ORDER_NUM
         </where>
     </select>
 
@@ -614,7 +614,7 @@
         <if test="sparePart != null and  sparePart!='' " >
             and t1.P_SPARE_PART = #{sparePart,jdbcType=VARCHAR}
         </if>
-        and t1.P_MBOM_STATUS =1
+        and t1.P_MBOM_STATUS =1 order by P_BOM_ORDER_NUM
         )t
         WHERE ROWNUM &lt;=#{limit,jdbcType=INTEGER}) where rn &gt;#{offset,jdbcType=INTEGER}
     </select>

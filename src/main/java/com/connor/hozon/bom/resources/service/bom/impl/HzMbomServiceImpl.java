@@ -106,6 +106,7 @@ public class HzMbomServiceImpl implements HzMbomService {
                 String lineIndex = record.getLineIndex();
                 String[] strings = getLevelAndRank(lineIndex, is2Y, hasChildren);
                 respDTO.setLevel(strings[0]);//层级
+                respDTO.setLineNo(strings[2]);
                 respDTO.setLineId(record.getLineId());
                 respDTO.setpBomOfWhichDept(record.getpBomOfWhichDept());
                 respDTO.setpBomLinePartClass(record.getpBomLinePartClass());
@@ -159,6 +160,7 @@ public class HzMbomServiceImpl implements HzMbomService {
                 String[] strings = getLevelAndRank(lineIndex, is2Y, hasChildren);
                 respDTO.setLevel(strings[0]);//层级
                 respDTO.setLineId(record.getLineId());
+                respDTO.setLineNo(strings[2]);
                 respDTO.setpBomOfWhichDept(record.getpBomOfWhichDept());
 
 

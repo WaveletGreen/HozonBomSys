@@ -59,14 +59,13 @@ public class HzEbomController extends BaseController {
     public void getEbomTitle(HttpServletResponse response) {
         LinkedHashMap<String, String> tableTitle = new LinkedHashMap<>();
         tableTitle.put("No","序号");
+        tableTitle.put("lineId","零件号" );
+        tableTitle.put("pBomLinePartName","名称" );
         tableTitle.put("level","层级" );
         tableTitle.put("pBomOfWhichDept","专业" );
         tableTitle.put("rank","级别" );
         tableTitle.put("groupNum","分组号");
-        tableTitle.put("lineId","零件号" );
-
-        tableTitle.put("pBomLinePartName","名称" );
-
+        tableTitle.put("lineNo","查找编号");
         tableTitle.put("pBomLinePartEnName","英文名称");
         tableTitle.put("pLouaFlag","LOU/LOA");
 
@@ -252,6 +251,7 @@ public class HzEbomController extends BaseController {
         recordRespDTO.setpBomOfWhichDept(object.getString("pBomOfWhichDept"));
         recordRespDTO.setpLouaFlag(object.getString("pLouaFlag"));
         recordRespDTO.setRank(object.getString("rank"));
+        recordRespDTO.setLineNo(object.getString("lineNo"));
         recordRespDTO.setGroupNum(object.getString("groupNum"));
         recordRespDTO.setLevel(object.getString("level"));
         recordRespDTO.setLineId(object.getString("lineId"));

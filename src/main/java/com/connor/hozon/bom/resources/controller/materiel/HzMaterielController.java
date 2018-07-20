@@ -63,9 +63,9 @@ public class HzMaterielController  extends BaseController {
         tableTitle.put("No", "序号");
         tableTitle.put("puid", "puid");
         tableTitle.put("pMaterielCode", "物料编码");
+        tableTitle.put("pMaterielDesc", "物料描述（中文）");
         tableTitle.put("pMaterielType", "物料类型");
         tableTitle.put("factoryCode","工厂");
-        tableTitle.put("pMaterielDesc", "物料描述（中文）");
         tableTitle.put("pMaterielDescEn", "物料描述（英文）");
         tableTitle.put("pBasicUnitMeasure", "单位");
         tableTitle.put("pInventedPart", "虚拟件标识");

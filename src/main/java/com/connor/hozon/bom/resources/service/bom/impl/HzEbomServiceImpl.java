@@ -130,8 +130,7 @@ public class HzEbomServiceImpl implements HzEbomService {
                 jsonObject.put("groupNum", groupNum);
                 jsonObject.put("lineId", record.getLineID());
                 jsonObject.put("fna",record.getFna());
-
-
+                jsonObject.put("lineNo",strings[2]);
                 jsonObject.put("pBomLinePartName", record.getpBomLinePartName());
                 jsonObject.put("pBomLinePartClass", record.getpBomLinePartClass());
                 jsonObject.put("pBomLinePartEnName",record.getpBomLinePartEnName());
@@ -264,6 +263,7 @@ public class HzEbomServiceImpl implements HzEbomService {
                 String[] strings = getLevelAndRank(lineIndex, is2Y, hasChildren);
                 jsonObject.put("level", strings[0]);
                 jsonObject.put("rank", strings[1]);
+                jsonObject.put("lineNo",strings[2]);
                 jsonObject.put("pBomOfWhichDept", record.getpBomOfWhichDept());
                 jsonObject.put("lineId", record.getLineID());
 
@@ -672,7 +672,7 @@ public class HzEbomServiceImpl implements HzEbomService {
                 }
 
                 HzBomLineRecord hzBomLineRecord = new HzBomLineRecord();//EBOM
-                HzMaterielRecord hzMaterielRecord = new HzMaterielRecord();//物料
+//                HzMaterielRecord hzMaterielRecord = new HzMaterielRecord();//物料
                 HzPbomLineRecord hzPbomLineRecord = new HzPbomLineRecord();//PBOM
                 HzMbomLineRecord hzMbomLineRecord = new HzMbomLineRecord();//MBOM
 
@@ -787,7 +787,7 @@ public class HzEbomServiceImpl implements HzEbomService {
                 hzPbomLineRecord.setLineId(reqDTO.getLineId());
                 hzPbomLineRecord.seteBomPuid(puid);
                 hzPbomLineRecord.setPuid(UUID.randomUUID().toString());
-                hzPbomLineRecord.setOrderNum(num++);
+                hzPbomLineRecord.setOrderNum(++num);
                 hzPbomLineRecord.setIs2Y(0);
                 hzPbomLineRecord.setLinePuid(puid);
                 hzPbomLineRecord.setIsDept(0);
@@ -825,30 +825,30 @@ public class HzEbomServiceImpl implements HzEbomService {
                     hzMbomLineRecord.setIsPart(1);
                     stringBuffer = new StringBuffer(String.valueOf(++maxIndexFirstNum));
                     hzMbomLineRecord.setLineIndex(stringBuffer.append(".1").toString());
-                    hzMaterielRecord.setpMaterielCode(reqDTO.getLineId());
-                    hzMaterielRecord.setpMaterielDesc(reqDTO.getpBomLinePartName());
-                    hzMaterielRecord.setpMaterielDescEn(reqDTO.getpBomLinePartEnName());
-                    hzMaterielRecord.setpBasicUnitMeasure(reqDTO.getpUnit());
-                    hzMaterielRecord.setpHeight(reqDTO.getpActualWeight());
-                    if(reqDTO.getpInOutSideFlag().equals("Y")){
-                        hzMaterielRecord.setpInOutSideFlag(1);
-                    }else {
-                        hzMaterielRecord.setpInOutSideFlag(0);
-                    }
-                    if(reqDTO.getP3cpartFlag().equals("Y")){
-                        hzMaterielRecord.setP3cPartFlag(1);
-                    }else {
-                        hzMaterielRecord.setP3cPartFlag(0);
-                    }
-                    hzMaterielRecord.setpPartImportantDegree(reqDTO.getpImportance());
-                    hzMaterielRecord.setMaterielResourceId(puid);
-                    hzMaterielRecord.setPuid(UUID.randomUUID().toString());
+//                    hzMaterielRecord.setpMaterielCode(reqDTO.getLineId());
+//                    hzMaterielRecord.setpMaterielDesc(reqDTO.getpBomLinePartName());
+//                    hzMaterielRecord.setpMaterielDescEn(reqDTO.getpBomLinePartEnName());
+//                    hzMaterielRecord.setpBasicUnitMeasure(reqDTO.getpUnit());
+//                    hzMaterielRecord.setpHeight(reqDTO.getpActualWeight());
+//                    if(reqDTO.getpInOutSideFlag().equals("Y")){
+//                        hzMaterielRecord.setpInOutSideFlag(1);
+//                    }else {
+//                        hzMaterielRecord.setpInOutSideFlag(0);
+//                    }
+//                    if(reqDTO.getP3cpartFlag().equals("Y")){
+//                        hzMaterielRecord.setP3cPartFlag(1);
+//                    }else {
+//                        hzMaterielRecord.setP3cPartFlag(0);
+//                    }
+//                    hzMaterielRecord.setpPartImportantDegree(reqDTO.getpImportance());
+//                    hzMaterielRecord.setMaterielResourceId(puid);
+//                    hzMaterielRecord.setPuid(UUID.randomUUID().toString());
                     List<HzMbomLineRecord> mbomLineRecords = new ArrayList<>();
-                    List<HzMaterielRecord> hzMaterielRecords = new ArrayList<>();
+//                    List<HzMaterielRecord> hzMaterielRecords = new ArrayList<>();
                     mbomLineRecords.add(hzMbomLineRecord);
-                    hzMaterielRecords.add(hzMaterielRecord);
+//                    hzMaterielRecords.add(hzMaterielRecord);
                     hzMbomRecordDAO.insertList(mbomLineRecords);
-                    hzMaterielDAO.insertList(hzMaterielRecords);
+//                    hzMaterielDAO.insertList(hzMaterielRecords);
                 }
 
                 return OperateResultMessageRespDTO.getSuccessResult();

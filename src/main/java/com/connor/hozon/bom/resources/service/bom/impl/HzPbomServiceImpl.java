@@ -818,7 +818,7 @@ public class HzPbomServiceImpl implements HzPbomService {
      * @param lineIndex
      * @param is2Y
      * @param hasChildren
-     * @return String[0]层级  String[1]级别
+     * @return String[0]层级  String[1]级别  String[3]级查找编号
      */
     public static String[] getLevelAndRank(String lineIndex, Integer is2Y, Integer hasChildren) {
         int level = (lineIndex.split("\\.")).length;
@@ -840,7 +840,9 @@ public class HzPbomServiceImpl implements HzPbomService {
         } else {
             line = "";
         }
-        return new String[]{line, String.valueOf(rank)};
+        int length = lineIndex.split("\\.").length-1;
+        int s1 = Integer.valueOf(lineIndex.split("\\.")[length]);
+        return new String[]{line, String.valueOf(rank),String.format("%04d",s1)};
     }
 
     private List<HzPbomLineRespDTO> pbomLineRecordToRespDTOS(List<HzPbomLineRecord> records,String projectId,int num) {
@@ -852,10 +854,11 @@ public class HzPbomServiceImpl implements HzPbomService {
                 Integer hasChildren = record.getIsHas();
                 String lineIndex = record.getLineIndex();
                 String[] strings = getLevelAndRank(lineIndex, is2Y, hasChildren);
-                respDTO.setLevel(strings[0] == null ? "" : strings[0]);
-                respDTO.setRank(strings[1] == null ? "" : strings[1]);
-                respDTO.setLineId(record.getLineId() == null ? "" : record.getLineId());
-                respDTO.setpBomOfWhichDept(record.getpBomOfWhichDept() == null ? "" : record.getpBomOfWhichDept());
+                respDTO.setLevel(strings[0]);
+                respDTO.setRank(strings[1]);
+                respDTO.setLineNo(strings[2]);
+                respDTO.setLineId(record.getLineId());
+                respDTO.setpBomOfWhichDept(record.getpBomOfWhichDept());
                 //获取分组号
                 String groupNum = record.getLineId();
                 //这里在做一个递归查询
