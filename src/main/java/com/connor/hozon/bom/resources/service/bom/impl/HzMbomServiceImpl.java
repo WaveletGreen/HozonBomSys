@@ -10,6 +10,7 @@ import com.connor.hozon.bom.resources.dto.response.HzSuperMbomRecordRespDTO;
 import com.connor.hozon.bom.resources.dto.response.HzVehicleModelRespDTO;
 import com.connor.hozon.bom.resources.dto.response.OperateResultMessageRespDTO;
 import com.connor.hozon.bom.resources.mybatis.bom.HzMbomRecordDAO;
+import com.connor.hozon.bom.resources.mybatis.factory.HzFactoryDAO;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.query.HzBomRecycleByPageQuery;
 import com.connor.hozon.bom.resources.query.HzMbomByPageQuery;
@@ -22,6 +23,7 @@ import org.springframework.stereotype.Service;
 import sql.pojo.bom.HzBomLineRecord;
 import sql.pojo.bom.HzMbomLineRecord;
 import sql.pojo.bom.HzMbomRecord;
+import sql.pojo.factory.HzFactory;
 import sql.redis.SerializeUtil;
 
 import java.util.*;
@@ -41,6 +43,8 @@ public class HzMbomServiceImpl implements HzMbomService {
     @Autowired
     private HzBomLineRecordDaoImpl hzBomLineRecordDao;
 
+    @Autowired
+    private HzFactoryDAO hzFactoryDAO;
     @Override
     public Page<HzMbomRecordRespDTO> fingHzMbomForPage(HzMbomByPageQuery query) {
         try {
@@ -130,8 +134,20 @@ public class HzMbomServiceImpl implements HzMbomService {
                 }else {
                     respDTO.setpLouaFlag("LOA");
                 }
-                respDTO.setpBomType(record.getpBomType());
-                respDTO.setpFactoryCode("1001");
+                if(record.getpBomType().equals(1)){
+                    respDTO.setpBomType("生产");
+                }else if(record.getpBomType().equals(6)){
+                    respDTO.setpBomType("财务");
+                }else {
+                    respDTO.setpBomType("");
+                }
+
+                HzFactory hzFactory = hzFactoryDAO.findFactory(record.getpFactoryId(),"");
+                if(hzFactory !=null){
+                    respDTO.setpFactoryCode(hzFactory.getpFactoryCode());
+                }else {
+                    respDTO.setpFactoryCode("1001");
+                }
                 respDTO.setpStockLocation(record.getpStockLocation());
                 respDTOList.add(respDTO);
             }
@@ -267,6 +283,32 @@ public class HzMbomServiceImpl implements HzMbomService {
             record.setChange(reqDTO.getChange());
             record.setSparePart(reqDTO.getSparePart());
             record.seteBomPuid(reqDTO.geteBomPuid());
+            if(!reqDTO.getpFactoryCode().equals("") && null != reqDTO.getpFactoryCode()){
+                HzFactory hzFactory = hzFactoryDAO.findFactory("", reqDTO.getpFactoryCode());
+                if(hzFactory == null){
+                    String puid = UUID.randomUUID().toString();
+                    hzFactory =  new HzFactory();
+                    hzFactory.setPuid(puid);
+                    hzFactory.setpFactoryCode(reqDTO.getpFactoryCode());
+                    hzFactory.setpUpdateName(user.getUserName());
+                    hzFactory.setpCreateName(user.getUserName());
+                    int i = hzFactoryDAO.insert(hzFactory);
+                    if(i<0){
+                        return OperateResultMessageRespDTO.getFailResult();
+                    }
+                    record.setpFactoryId(puid);
+                }else{
+                    record.setpFactoryId(hzFactory.getPuid());
+                }
+            }
+            if(reqDTO.getpBomType().equals("生产")){
+                record.setpBomType(1);
+            }else if(reqDTO.getpBomType().equals("财务")){
+                record.setpBomType(6);
+            }else {
+                record.setpBomType(0);
+            }
+            record.setpStockLocation(reqDTO.getpStockLocation());
             int i = hzMbomRecordDAO.update(record);
             if(i>0){
                 return OperateResultMessageRespDTO.getSuccessResult();
@@ -498,7 +540,14 @@ public class HzMbomServiceImpl implements HzMbomService {
                 respDTO.setWasterProduct(record.getWasterProduct());
                 respDTO.setChange(record.getChange());
                 respDTO.setChangeNum(record.getChangeNum());
-                respDTO.setpBomType(record.getpBomType());
+
+                if(record.getpBomType().equals(1)){
+                    respDTO.setpBomType("生产");
+                }else if(record.getpBomType().equals(6)){
+                    respDTO.setpBomType("财务");
+                }else {
+                    respDTO.setpBomType("");
+                }
                 respDTO.setpFactoryCode("1001");
                 respDTO.setpStockLocation(record.getpStockLocation());
                 respDTOList.add(respDTO);

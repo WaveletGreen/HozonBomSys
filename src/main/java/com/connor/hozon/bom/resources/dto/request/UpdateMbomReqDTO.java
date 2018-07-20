@@ -57,6 +57,36 @@ public class UpdateMbomReqDTO {
      */
     private String changeNum;
 
+    private String pBomType;
+
+    private String pStockLocation;
+
+    private String pFactoryCode;
+
+    public String getpBomType() {
+        return pBomType;
+    }
+
+    public void setpBomType(String pBomType) {
+        this.pBomType = pBomType;
+    }
+
+    public String getpStockLocation() {
+        return pStockLocation;
+    }
+
+    public void setpStockLocation(String pStockLocation) {
+        this.pStockLocation = pStockLocation;
+    }
+
+    public String getpFactoryCode() {
+        return pFactoryCode;
+    }
+
+    public void setpFactoryCode(String pFactoryCode) {
+        this.pFactoryCode = pFactoryCode;
+    }
+
     public String geteBomPuid() {
         return eBomPuid;
     }

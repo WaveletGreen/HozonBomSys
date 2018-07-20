@@ -58,4 +58,11 @@ public interface HzEbomRecordDAO {
     HzEPLManageRecord getHasDeletedBom(String puid,String projectId);
 
     List<HzEPLManageRecord> findEbom(Map<String,Object> map);
+
+    /**
+     * 找出大于当前排序号的最小排序号
+     * @param projectId
+     * @return
+     */
+    Integer findMinOrderNumWhichGreaterThanThisOrderNum(String projectId,int orderNum);
 }
