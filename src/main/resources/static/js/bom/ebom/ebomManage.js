@@ -256,13 +256,17 @@ function  queryLou(row){
         url: "loa/ebom",
         data: myData,
         contentType: "application/json",
+        undefinedText: "",
         success: function (result) {
             var child = result.data.child;
             var parent =result.data.parent;
+            var parentLevel= (parent.parentLevel==undefined?"":parent.parentLevel);
+            var parentLineId= (parent.parentLineId==undefined?"":parent.parentLineId);
+            var parentName= (parent.parentName==undefined?"":parent.parentName);
             var _table = '<div style="max-height: 400px;overflow:scroll;"><table class="table table-striped tableNormalStyle" >';
             _table+='<tr><td>父层级</td><td>父零件号</td><td>父名称</td></tr>'
             // for (var i=0;i<parent.length; i++) {
-                _table += '<tr><td>' + parent.parentLevel + '</td><td>'+parent.parentLineId+'</td><td>'+parent.parentName+'</td></tr>';
+                _table += '<tr><td>' + parentLevel + '</td><td>'+parentLineId+'</td><td>'+parentName+'</td></tr>';
             // }
              _table += '</table></div>' + '<div style="max-height: 400px;overflow:scroll;"><table class="table table-striped tableNormalStyle" >';
              _table+='<tr><td>子层级</td><td>子零件号</td><td>子名称</td></tr>'
