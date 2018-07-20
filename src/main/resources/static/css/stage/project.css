@@ -1,4 +1,4 @@
-.bg{
+body{
     background: url(Hozon5.jpg) no-repeat center;
     background-size:contain;
 }
@@ -24,6 +24,6 @@
     text-align: center;
 }
 
-#content {
+tr{
     background-color: white;
 }
