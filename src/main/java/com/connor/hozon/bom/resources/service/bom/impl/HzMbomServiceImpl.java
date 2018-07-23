@@ -134,20 +134,25 @@ public class HzMbomServiceImpl implements HzMbomService {
                 }else {
                     respDTO.setpLouaFlag("LOA");
                 }
-                if(record.getpBomType().equals(1)){
+                if(Integer.valueOf(1).equals(record.getpBomType())){
                     respDTO.setpBomType("生产");
-                }else if(record.getpBomType().equals(6)){
+                }else if(Integer.valueOf(6).equals(record.getpBomType())){
                     respDTO.setpBomType("财务");
                 }else {
                     respDTO.setpBomType("");
                 }
 
-                HzFactory hzFactory = hzFactoryDAO.findFactory(record.getpFactoryId(),"");
-                if(hzFactory !=null){
-                    respDTO.setpFactoryCode(hzFactory.getpFactoryCode());
+                if(record.getpFactoryId() != null && record.getpFactoryId() != ""){
+                    HzFactory hzFactory = hzFactoryDAO.findFactory(record.getpFactoryId(),"");
+                    if(hzFactory !=null){
+                        respDTO.setpFactoryCode(hzFactory.getpFactoryCode());
+                    }else {
+                        respDTO.setpFactoryCode("1001");
+                    }
                 }else {
                     respDTO.setpFactoryCode("1001");
                 }
+
                 respDTO.setpStockLocation(record.getpStockLocation());
                 respDTOList.add(respDTO);
             }
