@@ -41,10 +41,10 @@ public class SynBomService implements ISynBomService {
      */
     @Override
     public JSONObject updateByUids(String projectPuid, String puidOfUpdate) {
-        JSONObject result = deleteByUids(projectPuid, Collections.singletonList(puidOfUpdate));
-        if (result.getBoolean("status")) {
-            result = execute(projectPuid, Collections.singletonList(puidOfUpdate), ActionFlagOption.ADD);
-        }
+        JSONObject result = null;//deleteByUids(projectPuid, Collections.singletonList(puidOfUpdate));
+//        if (result.getBoolean("status")) {
+        result = execute(projectPuid, Collections.singletonList(puidOfUpdate), ActionFlagOption.UPDATE);
+//        }
         return result;
     }
 
@@ -527,6 +527,7 @@ public class SynBomService implements ISynBomService {
     private JSONObject execute(String projectPuid, List<String> puids, ActionFlagOption option) {
         //每次都清空缓存
         transBomService.setClearInputEachTime(true);
+        transBomService.getInput().getItem().clear();
         /**
          * 成功项
          */
@@ -586,7 +587,7 @@ public class SynBomService implements ISynBomService {
             }
         }
         //执行操作
-        if (SynMaterielService.debug)
+        if (!SynMaterielService.debug)
             transBomService.execute();
         //获取返回值
         List<ZPPTCO005> resultPool = transBomService.getOut().getItem();

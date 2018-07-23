@@ -120,8 +120,8 @@ public class ReflectBom {
         setModifyCode(bomToERPBean.getChangeNum());
         //工程更改号描述
         setModifyDesc(bomToERPBean.getChange());
-        //TC系统更改号
-        setTCModifyCode(bomToERPBean.getChangeNum());
+//        //TC系统更改号，这个不用填
+//        setTCModifyCode(bomToERPBean.getChangeNum());
         //工厂
         setFactory(bomToERPBean.getFactoryCode());
         //BOM类型,默认设置为生产

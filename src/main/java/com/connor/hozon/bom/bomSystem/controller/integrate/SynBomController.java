@@ -94,6 +94,24 @@ public class SynBomController {
     }
 
     /**
+     * 根据UID更新BOM
+     *
+     * @param dtos
+     * @return
+     */
+    @RequestMapping("/addByUids")
+    public String addByUids(@RequestBody List<EditHzMaterielReqDTO> dtos, @RequestParam("projectUid") String projectUid, Model model) {
+        JSONObject result = validate(dtos, projectUid);
+        if (!result.getBoolean("status")) {
+            model.addAttribute("msg", result.get("msg"));
+            return "errorWithEntity";
+        }
+        JSONObject entities = bomService.updateByUids(projectUid, dtos.get(0).getPuid());
+        addToModel(entities, model);
+        return "stage/templateOfIntegrate";
+    }
+
+    /**
      * 添加进model中
      *
      * @param entities
