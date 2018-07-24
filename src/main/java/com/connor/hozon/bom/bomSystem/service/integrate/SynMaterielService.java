@@ -26,7 +26,7 @@ import static com.connor.hozon.bom.bomSystem.helper.StringHelper.checkStringIsEm
  */
 @Service("synMaterielService")
 public class SynMaterielService implements ISynMaterielService {
-    public static boolean debug = true;
+    public static boolean debug = false;
     /**
      * 发送服务
      */

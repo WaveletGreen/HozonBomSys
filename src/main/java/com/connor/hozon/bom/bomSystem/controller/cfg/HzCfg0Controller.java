@@ -1,11 +1,13 @@
 package com.connor.hozon.bom.bomSystem.controller.cfg;
 
+import com.connor.hozon.bom.bomSystem.controller.integrate.ExtraIntegrate;
 import com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0MainRecordDao;
 import com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0OptionFamilyDao;
 import com.connor.hozon.bom.bomSystem.dto.HzRelevanceBean;
 import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
 import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0OptionFamilyService;
 import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0Service;
+import com.connor.hozon.bom.bomSystem.service.integrate.SynMaterielService;
 import com.connor.hozon.bom.bomSystem.service.iservice.integrate.ISynFeatureService;
 import integration.base.feature.ZPPTCO002;
 import integration.base.relevance.ZPPTCO004;
@@ -36,7 +38,7 @@ import static com.connor.hozon.bom.bomSystem.helper.StringHelper.checkString;
  */
 @Controller
 @RequestMapping("/cfg0")
-public class HzCfg0Controller {
+public class HzCfg0Controller extends ExtraIntegrate {
     private final HzCfg0Service hzCfg0Service;
     private final HzCfg0MainRecordDao hzCfg0MainRecordDao;
     private final HzCfg0OptionFamilyDao hzCfg0OptionFamilyDao;
@@ -90,14 +92,14 @@ public class HzCfg0Controller {
         JSONObject result = new JSONObject();
 
         /**生成自身的puid*/
-        record.setPuid(UUID.randomUUID().toString());
+        record.setPuid(UUIDHelper.generateUpperUid());
         record.setpCfg0FamilyName(record.getpCfg0FamilyName().toUpperCase());
         record.setpCfg0ObjectId(record.getpCfg0ObjectId().toUpperCase());
 
 
         if (!hzCfg0Service.preCheck(record)) {
             result.put("status", false);
-            result.put("msg", "已存在的特性值");
+            result.put("msg", "<p style='color:red;'>特性值已存在</p>");
             return result;
         }
 
@@ -124,7 +126,7 @@ public class HzCfg0Controller {
         }
         if (hzCfg0Service.doInsertOne(record)) {
             result.put("status", true);
-            result.put("msg", "添加特性值" + record.getpCfg0ObjectId() + "成功");
+            result.put("msg", "添加特性值" + record.getpCfg0ObjectId() + "成功，如果需要传输相关性数据到ERP，请到相关性页面进行发送");
         } else {
             result.put("status", false);
             result.put("msg", "添加特性值" + record.getpCfg0ObjectId() + "失败，请联系系统管理员");
@@ -228,9 +230,10 @@ public class HzCfg0Controller {
     }
 
     @RequestMapping(value = "/sendToERP", method = RequestMethod.POST)
-    @ResponseBody
-    public JSONObject sendToERP(@RequestBody List<HzCfg0Record> records, Model model) throws Exception {
-        return iSynFeatureService.addFeature(records);
+    public String sendToERP(@RequestBody List<HzCfg0Record> records, Model model) throws Exception {
+        JSONObject result = iSynFeatureService.addFeature(records);
+        addToModel(result, model);
+        return "stage/templateOfIntegrate";
     }
 
 
@@ -354,7 +357,8 @@ public class HzCfg0Controller {
             _mapCoach.put(packnum, bean);
             transOptionsService.getInput().getItem().add(correlate.getZpptci004());
         });
-        transOptionsService.execute();
+        if (!SynMaterielService.debug)
+            transOptionsService.execute();
         List<ZPPTCO004> list = transOptionsService.getOut().getItem();
         if (list != null && list.size() > 0) {
             result.put("status", true);

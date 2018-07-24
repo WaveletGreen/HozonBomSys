@@ -124,14 +124,14 @@ function loadData() {
                                 data: JSON.stringify(rows),
                                 contentType: "application/json",
                                 success: function (result) {
-                                    if (result.status) {
-                                        layer.msg(result.msg, {icon: 1, time: 2000})
-                                        // window.Ewin.alert({message: result.msg});
-                                        //刷新，会重新申请数据库数据
-                                    }
-                                    else {
-                                        window.Ewin.alert({message: "操作发送失败:" + result.msg});
-                                    }
+                                    // if (result.status) {
+                                    // layer.msg(result.msg, {icon: 1, time: 2000});
+                                    window.Ewin.alert({message: result, width: 800});
+                                    //刷新，会重新申请数据库数据
+                                    // }
+                                    // else {
+                                    //     window.Ewin.alert({message: "操作发送失败:" + result.msg});
+                                    // }
                                     $table.bootstrapTable("refresh");
                                 },
                                 error: function (info) {

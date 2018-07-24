@@ -19,7 +19,7 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("/synBom")
-public class SynBomController {
+public class SynBomController extends ExtraIntegrate {
     /**
      * 服务层
      */
@@ -111,23 +111,6 @@ public class SynBomController {
         return "stage/templateOfIntegrate";
     }
 
-    /**
-     * 添加进model中
-     *
-     * @param entities
-     * @param model
-     */
-    private void addToModel(JSONObject entities, Model model) {
-        model.addAttribute("msgOfSuccess", "发送成功项");
-        model.addAttribute("msgOfFail", "发送失败项");
-        model.addAttribute("success", entities.get("success"));
-        model.addAttribute("fail", entities.get("fail"));
-        model.addAttribute("total", entities.get("total"));
-        model.addAttribute("totalOfSuccess", entities.get("totalOfSuccess"));
-        model.addAttribute("totalOfFail", entities.get("totalOfFail"));
-        model.addAttribute("totalOfOutOfParent", entities.get("totalOfOutOfParent"));
-        model.addAttribute("totalOfUnknown", entities.get("totalOfUnknown"));
-    }
 
     private JSONObject validate(List<EditHzMaterielReqDTO> dtos, String projectUid) {
         JSONObject result = new JSONObject();

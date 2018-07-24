@@ -84,6 +84,11 @@ public class HzCfg0RecordDaoImpl implements HzCfg0RecordDao {
     }
 
     @Override
+    public int setIsSended(List<HzCfg0Record> list) {
+        return baseSQLUtil.executeUpdate(list, "com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0RecordDao.setIsSended");
+    }
+
+    @Override
     public List<HzCfg0Record> selectListByProjectPuid(String projectPuid) {
         HzCfg0Record record = new HzCfg0Record();
         record.setProjectPuid(projectPuid);

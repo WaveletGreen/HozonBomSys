@@ -51,8 +51,18 @@ public class HzCfg0Record {
      * 归属项目，类中特有的
      */
     private String projectPuid;
-    /**相关性代码，目前手输入*/
+    /**
+     * 相关性代码，目前手输入
+     */
     private String pCfg0Relevance;
+    /**
+     * 特性是否已发送到ERP
+     */
+    private Integer isFeatureSended;
+    /**
+     * 相关性是否已发送到ERP
+     */
+    private Integer isRelevanceSended;
 
     public String getPuid() {
         return puid;
@@ -166,5 +176,21 @@ public class HzCfg0Record {
 
     public void setpCfg0Relevance(String pCfg0Relevance) {
         this.pCfg0Relevance = pCfg0Relevance;
+    }
+
+    public Integer getIsFeatureSended() {
+        return isFeatureSended;
+    }
+
+    public void setIsFeatureSended(Integer isFeatureSended) {
+        this.isFeatureSended = isFeatureSended;
+    }
+
+    public Integer getIsRelevanceSended() {
+        return isRelevanceSended;
+    }
+
+    public void setIsRelevanceSended(Integer isRelevanceSended) {
+        this.isRelevanceSended = isRelevanceSended;
     }
 }

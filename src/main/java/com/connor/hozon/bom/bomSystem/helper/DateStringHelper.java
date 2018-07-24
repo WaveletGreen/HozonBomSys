@@ -85,8 +85,6 @@ public class DateStringHelper {
     public static void main(String[] args) throws ParseException {
         Date date = stringToDate2("2018-07-04 05:00");
         String xxx=dateToString3(new Date());
-
         System.out.println(date);
-
     }
 }

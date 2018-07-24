@@ -58,6 +58,10 @@ public class HzCfg0Service {
         return hzCfg0RecordDao.updateByPrimaryKey(record) > 0 ? true : false;
     }
 
+    public boolean doUpdateByBatch(List<HzCfg0Record> record) {
+        return hzCfg0RecordDao.setIsSended(record) > 0 ? true : false;
+    }
+
     public boolean doUpdateAddedCfg(HzCfg0Record record) {
         return hzCfg0RecordDao.updateAddedCfgByPrimaryKey(record) > 0 ? true : false;
     }

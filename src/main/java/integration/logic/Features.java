@@ -13,10 +13,6 @@ public class Features {
      */
     private ZPPTCI002 zpptci002;
 
-    public Features() {
-        zpptci002 = new ZPPTCI002();
-    }
-
     /**
      * 数据包号
      */
@@ -65,6 +61,10 @@ public class Features {
      * 预留字段5
      */
     private String reservedField5;
+
+    public Features() {
+        zpptci002 = new ZPPTCI002();
+    }
 
     public ZPPTCI002 getZpptci002() {
         return zpptci002;

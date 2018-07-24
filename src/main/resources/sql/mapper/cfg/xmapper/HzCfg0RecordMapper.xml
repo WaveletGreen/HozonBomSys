@@ -13,6 +13,8 @@
         <result column="P_H9FEATUREDESC" jdbcType="VARCHAR" property="pH9featuredesc"/>
         <result column="P_CFG0_FAMILY_DESC" jdbcType="VARCHAR" property="pCfg0FamilyDesc"/>
         <result column="P_CFG0_RELEVANCE" jdbcType="VARCHAR" property="pCfg0Relevance"/>
+        <result column="P_IS_FEATURE_SENDED" jdbcType="INTEGER" property="isFeatureSended"/>
+        <result column="P_IS_RELEVANCE_SENDED" jdbcType="INTEGER" property="isRelevanceSended"/>
     </resultMap>
 
     <resultMap id="MaterielFeatureMap" type="com.connor.hozon.bom.bomSystem.dto.HzMaterielFeatureBean">
@@ -25,7 +27,6 @@
         <result column="P_CFG0_MODEL_RECORD" jdbcType="VARCHAR" property="pCfg0ModelRecord"/>
         <result column="P_OF_CFG0_MAIN_RECORD" jdbcType="VARCHAR" property="pOfCfg0MainRecord"/>
         <result column="P_CFG0_MODEL_BASIC_DETAIL" jdbcType="VARCHAR" property="pCfg0ModelBasicDetail"/>
-
     </resultMap>
 
     <sql id="Base_Column_List">
@@ -39,7 +40,9 @@
         P_H9FEATUREENNAME,
         P_H9FEATUREDESC,
         P_CFG0_FAMILY_DESC,
-        P_CFG0_RELEVANCE
+        P_CFG0_RELEVANCE,
+        P_IS_FEATURE_SENDED,
+        P_IS_RELEVANCE_SENDED
   </sql>
     <sql id="Materiel_Feature_Column_List">
         t.PUID,
@@ -176,5 +179,22 @@
           P_CFG0_RELEVANCE = #{pCfg0Relevance,jdbcType=VARCHAR}
     where
           PUID = #{puid,jdbcType=VARCHAR}
-  </update>
+    </update>
+    <!--设置发送到ERP的状态为是-->
+    <update id="setIsSended" parameterType="java.util.List">
+        update HZ_CFG0_RECORD
+        set P_IS_FEATURE_SENDED = 1
+        where PUID in
+        <if test="list==null">
+            ('')
+        </if>
+        <if test="list!=null">
+            (
+            <foreach collection="list" item="item" index="index"
+                     separator=",">
+                #{item.puid,jdbcType=VARCHAR}
+            </foreach>
+            )
+        </if>
+    </update>
 </mapper>
