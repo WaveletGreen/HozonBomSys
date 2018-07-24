@@ -93,6 +93,8 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
 
 
         //变更管理VWO表单
+        //registry.addViewController("/vwo").setViewName("/changeManage/vwo/vwo");
+        //变更管理VWO表单
         registry.addViewController("/vwoFromList").setViewName("/changeManage/vwo/vwoFromList");
     }
 
