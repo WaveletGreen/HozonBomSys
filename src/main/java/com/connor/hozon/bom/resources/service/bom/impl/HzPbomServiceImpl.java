@@ -21,6 +21,7 @@ import com.connor.hozon.bom.resources.query.HzPbomByPageQuery;
 import com.connor.hozon.bom.resources.query.HzPbomTreeQuery;
 import com.connor.hozon.bom.resources.service.bom.HzPbomService;
 import com.connor.hozon.bom.resources.service.epl.HzEPLManageRecordService;
+import com.connor.hozon.bom.resources.util.DateUtil;
 import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.sys.entity.User;
 import org.omg.CORBA.OBJ_ADAPTER;
@@ -48,14 +49,7 @@ public class HzPbomServiceImpl implements HzPbomService {
     private HzPbomRecordDAO hzPbomRecordDAO;
 
     @Autowired
-    private HzBomStateDAO hzBomStateDAO;
-
-    @Autowired
     private HzBomMainRecordDao hzBomMainRecordDao;
-
-    @Autowired
-    private HzEPLManageRecordService hzEPLManageRecordService;
-
 
     @Override
     public OperateResultMessageRespDTO insertHzPbomRecord(AddHzPbomRecordReqDTO recordReqDTO) {
@@ -955,4 +949,18 @@ public class HzPbomServiceImpl implements HzPbomService {
         return null;
     }
 
+//    public static void main(String[] a){
+//        long t1 = System.currentTimeMillis();
+//        for(long m  = Long.MIN_VALUE;m<Long.MAX_VALUE;m++){
+//
+//        }
+//        long t2 = System.currentTimeMillis();
+//        System.out.println(t2-t1 +"ms");
+//        long l = 999999999999999999L;//18个9 29个9    少11个9
+//
+//        long l1 = 100000000;//1亿条数据 1秒产生1亿条数据
+//         long l2 = 24 * 60 * 60*365l; //年
+//        long m  = l/l1/l2;
+//        System.out.println(m);
+//    }
 }
