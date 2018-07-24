@@ -3,6 +3,7 @@ package com.connor.hozon.bom.bomSystem.service.cfg;
 import com.connor.hozon.bom.bomSystem.dto.HzMaterielFeatureBean;
 import com.connor.hozon.bom.bomSystem.dto.HzRelevanceBean;
 import com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0RecordDao;
+import com.connor.hozon.bom.bomSystem.helper.StringHelper;
 import org.springframework.stereotype.Service;
 import sql.pojo.cfg.HzCfg0Record;
 
@@ -73,6 +74,7 @@ public class HzCfg0Service {
     public boolean doDeleteAddedCfgByList(List<HzCfg0Record> records) {
         return hzCfg0RecordDao.deleteAddedCfgByList(records) > 0 ? true : false;
     }
+
     public boolean doDeleteCfgByList(List<HzCfg0Record> records) {
         return hzCfg0RecordDao.deleteCfgByList(records) > 0 ? true : false;
     }
@@ -132,6 +134,10 @@ public class HzCfg0Service {
     }
 
     public boolean preCheck(HzCfg0Record record) {
+        //存在puid的可以同名更新
+        if (StringHelper.checkString(record.getPuid())) {
+            return true;
+        }
         record.setWhichTable("HZ_CFG0_RECORD");
         List<HzCfg0Record> list;
         list = hzCfg0RecordDao.selectByCodeAndDesc(record);

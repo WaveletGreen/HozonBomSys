@@ -4,6 +4,7 @@ import com.connor.hozon.bom.bomSystem.controller.integrate.ExtraIntegrate;
 import com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0MainRecordDao;
 import com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0OptionFamilyDao;
 import com.connor.hozon.bom.bomSystem.dto.HzRelevanceBean;
+import com.connor.hozon.bom.bomSystem.helper.IntegrateMsgDTO;
 import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
 import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0OptionFamilyService;
 import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0Service;
@@ -19,6 +20,8 @@ import integration.service.impl.cfg2.TransCfgService;
 import integration.service.impl.feature4.TransOptionsService;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -56,6 +59,10 @@ public class HzCfg0Controller extends ExtraIntegrate {
      */
     @Autowired
     TransOptionsService transOptionsService;
+    /**
+     * 日志记录
+     */
+    private final static Logger logger = LoggerFactory.getLogger(HzCfg0Controller.class);
 
     @Autowired
     public HzCfg0Controller(HzCfg0Service hzCfg0Service, HzCfg0MainRecordDao hzCfg0MainRecordDao, HzCfg0OptionFamilyDao hzCfg0OptionFamilyDao) {
@@ -88,11 +95,10 @@ public class HzCfg0Controller extends ExtraIntegrate {
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     @ResponseBody
-    public JSONObject add(@RequestBody HzCfg0Record record) {
+    public JSONObject add(@RequestBody HzCfg0Record record) throws Exception {
         JSONObject result = new JSONObject();
 
         /**生成自身的puid*/
-        record.setPuid(UUIDHelper.generateUpperUid());
         record.setpCfg0FamilyName(record.getpCfg0FamilyName().toUpperCase());
         record.setpCfg0ObjectId(record.getpCfg0ObjectId().toUpperCase());
 
@@ -102,6 +108,7 @@ public class HzCfg0Controller extends ExtraIntegrate {
             result.put("msg", "<p style='color:red;'>特性值已存在</p>");
             return result;
         }
+        record.setPuid(UUIDHelper.generateUpperUid());
 
         HzCfg0OptionFamily family = new HzCfg0OptionFamily();
         family.setpOfCfg0Main(record.getpCfg0MainItemPuid());
@@ -126,7 +133,11 @@ public class HzCfg0Controller extends ExtraIntegrate {
         }
         if (hzCfg0Service.doInsertOne(record)) {
             result.put("status", true);
-            result.put("msg", "添加特性值" + record.getpCfg0ObjectId() + "成功，如果需要传输相关性数据到ERP，请到相关性页面进行发送");
+            result.put("msg", "添加特性值" + record.getpCfg0ObjectId() + "成功");
+//            //发送到SAP,走流程
+//            if (!SynMaterielService.debug) {
+//                iSynFeatureService.addFeature(Collections.singletonList(record));
+//            }
         } else {
             result.put("status", false);
             result.put("msg", "添加特性值" + record.getpCfg0ObjectId() + "失败，请联系系统管理员");
@@ -190,8 +201,9 @@ public class HzCfg0Controller extends ExtraIntegrate {
 
     @RequestMapping(value = "/deleteByPuid", method = RequestMethod.POST)
     @ResponseBody
-    public JSONObject deleteByPuid(@RequestBody List<HzCfg0Record> records) {
+    public JSONObject deleteByPuid(@RequestBody List<HzCfg0Record> records) throws Exception {
         List<HzCfg0Record> toDelete = new ArrayList<>();
+        Map<String, HzCfg0Record> mapOfDelete = new HashMap<>();
         JSONObject result = new JSONObject();
         if (records == null || records.size() <= 0) {
             result.put("status", false);
@@ -213,6 +225,7 @@ public class HzCfg0Controller extends ExtraIntegrate {
                 if (hzCfg0Service.doSelectOneByPuid(record.getPuid()) != null) {
                     //如果需要删除原数据
                     toDelete.add(record);
+                    mapOfDelete.put(record.getpCfg0FamilyName() + "-" + record.getpCfg0FamilyDesc() + "-" + record.getpCfg0ObjectId() + "-" + record.getpCfg0FamilyDesc(), record);
 //                    result.put("status", false);
 //                    result.put("msg", "目前不允许删除原数据，请重试或联系系统管理员");
 //                    return result;
@@ -224,8 +237,27 @@ public class HzCfg0Controller extends ExtraIntegrate {
                 }
             }
         }
-        result.put("status", hzCfg0Service.doDeleteCfgByList(toDelete));
-        result.put("msg", "删除成功");
+        JSONObject resultFromSap = iSynFeatureService.deleteFeature(toDelete);
+
+        Object obj = resultFromSap.get("_forDelete");
+        List<HzCfg0Record> _toDelete = new ArrayList<>();
+
+        if (obj != null && obj instanceof List) {
+            if (((List) obj).size() > 0) {
+                for (int i = 0; i < ((List<String>) obj).size(); i++) {
+                    if (mapOfDelete.containsKey(((List<String>) obj).get(i))) {
+                        _toDelete.add(mapOfDelete.get(((List) obj).get(i)));
+                        logger.warn("---------------同步在SAP中删除特性:" + (mapOfDelete.get(((List) obj).get(i)).getpCfg0ObjectId()));
+                    }
+                }
+            }
+        } else {
+            _toDelete.addAll(records);
+        }
+        if (_toDelete.size() > 0 && hzCfg0Service.doDeleteCfgByList(_toDelete)) {
+            result.put("status", true);
+            result.put("msg", "删除成功");
+        }
         return result;
     }
 
@@ -337,7 +369,7 @@ public class HzCfg0Controller extends ExtraIntegrate {
 
         beans.forEach(bean -> {
             Correlate correlate = new Correlate();
-            String packnum = UUID.randomUUID().toString().replaceAll("-", "");
+            String packnum = UUIDHelper.generateUpperUid();
             correlate.setPackNo(packnum);
             correlate.setLineNum(bean.getPuid().substring(0, 5));
             //动作描述代码

@@ -392,8 +392,8 @@ public class HzMaterielFeatureController {
                 modelDetail.setPuid(UUIDHelper.generateUpperUid());
                 //设置归属车型
                 modelDetail.setpPertainToModel(modelRecord.getPuid());
-
-                params.forEach((key, value) -> {
+                for (String key : params.keySet()) {
+                    String value = params.get(key);
                     if ("pCfg0ModelOfMainRecord".equals(key)) {
                         //设置归属主配置
                         modelRecord.setpCfg0ModelOfMainRecord(params.get("pCfg0ModelOfMainRecord"));
@@ -420,6 +420,7 @@ public class HzMaterielFeatureController {
                                 throw new Exception("无法找到特性值，请检查数据");
                             } catch (Exception e) {
                                 e.printStackTrace();
+                                return false;
                             }
                         } else {
                             hzCfg0ToModelRecord.setpCfg0IdRecord(addedRecord.getPuid());
@@ -432,10 +433,8 @@ public class HzMaterielFeatureController {
                             toInsert.add(hzCfg0ToModelRecord);
 //                            hzCfg0ToModelRecordDao.insert(hzCfg0ToModelRecord);
                         }
-
                     }
-
-                });
+                }
 
                 //没有设置归属的颜色车型
                 hzCfg0ModelRecordService.doInsert(Collections.singletonList(modelRecord));
@@ -443,6 +442,7 @@ public class HzMaterielFeatureController {
                 for (int i = 0; i < toInsert.size(); i++) {
                     hzCfg0ToModelRecordDao.insert(toInsert.get(i));
                 }
+                //发送到SAP?
             }
             return true;
         } else {

@@ -20,10 +20,10 @@ public interface ISynFeatureService {
     /**
      * 添加特性值
      *
-     * @param projectPuid
+     * @param features
      * @return
      */
-    JSONObject addFeature(List<HzCfg0Record> projectPuid) throws Exception;
+    JSONObject addFeature(List<HzCfg0Record> features) throws Exception;
 
     /**
      * 更新特性值
@@ -36,10 +36,10 @@ public interface ISynFeatureService {
     /**
      * 删除特性值
      *
-     * @param projectPuid
+     * @param features
      * @return
      */
-    JSONObject deleteFeature(String projectPuid);
+    JSONObject deleteFeature(List<HzCfg0Record> features) throws Exception;
 
     /**
      * 先删除后添加ERP

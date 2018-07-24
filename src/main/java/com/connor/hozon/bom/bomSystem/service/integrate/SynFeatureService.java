@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import sql.pojo.cfg.HzCfg0Record;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service("synFeatureService")
 public class SynFeatureService implements ISynFeatureService {
@@ -64,12 +65,14 @@ public class SynFeatureService implements ISynFeatureService {
     /**
      * 删除特性值
      *
-     * @param projectPuid
+     * @param features
      * @return
      */
     @Override
-    public JSONObject deleteFeature(String projectPuid) {
-        return null;
+    public JSONObject deleteFeature(List<HzCfg0Record> features) throws Exception {
+        List<HzCfg0Record> records;
+        records = features.stream().filter(f -> f.getIsFeatureSended() == 1).collect(Collectors.toList());
+        return execute(records, ActionFlagOption.DELETE);
     }
 
     /**
@@ -99,6 +102,8 @@ public class SynFeatureService implements ISynFeatureService {
          * 失败项
          */
         List<IntegrateMsgDTO> fail = new ArrayList<>();
+
+        List<String> _forDelete = new ArrayList<>();
         /***
          * 计数
          */
@@ -206,6 +211,7 @@ public class SynFeatureService implements ISynFeatureService {
                     dto.setPuid(record.getPuid());
                     if ("S".equalsIgnoreCase(_l.getPTYPE())) {
                         success.add(dto);
+                        _forDelete.add(record.getpCfg0FamilyName() + "-" + record.getpCfg0FamilyDesc() + "-" + record.getpCfg0ObjectId() + "-" + record.getpCfg0FamilyDesc());
                         totalOfSuccess++;
                         needToUpdateStatus.add(record);
                     } else {
@@ -221,12 +227,12 @@ public class SynFeatureService implements ISynFeatureService {
 
         result.put("success", success);
         result.put("fail", fail);
-
         result.put("total", total);
         result.put("totalOfSuccess", totalOfSuccess);
         result.put("totalOfFail", totalOfFail);
         result.put("totalOfOutOfParent", totalOfOutOfParent);
         result.put("totalOfUnknown", totalOfUnknown);
+        result.put("_forDelete", _forDelete);
         return result;
     }
 }

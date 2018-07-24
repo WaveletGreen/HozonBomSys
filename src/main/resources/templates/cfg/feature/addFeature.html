@@ -111,10 +111,23 @@
         });
         // 绑定dialog的确定按钮的监听事件
         $("#btnOk", window.top.document).click(function () {
+            var url = $("#featureForm", window.top.document).attr('action');
             var bootstrapValidator = $("#featureForm", window.top.document).data('bootstrapValidator');
             bootstrapValidator.validate();
             if (bootstrapValidator.isValid()) {
-                var url = $("#featureForm", window.top.document).attr('action');
+                // window.Ewin.confirm({
+                //     title: '提示',
+                //     message: '需要将特性<span style="color: #ac4e44">' + $("#pCfg0ObjectId").val() + '</span>自动发送到ERP',
+                //     width: 500
+                // }).on(function (e) {
+                //     if (e) {
+                //         //自动发送到ERP
+                //         url += '?send=1';
+                //     }
+                //     else {
+                //         url += '?send=0';
+                //     }
+                // });
                 <!--其实不要puid，puid会在服务器上生成-->
                 var myData = JSON.stringify({
                     "pCfg0FamilyName": $("#pCfg0FamilyName").val(),

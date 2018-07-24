@@ -5,20 +5,23 @@
 <form id="featureForm" role="form" method="post" th:action="${action}">
     <input class="form-control" id="puid" name="puid" type="hidden" th:value="${entity.puid}"/>
     <input class="form-control" id="pCfg0MainItemPuid" name="pCfg0MainItemPuid" type="hidden"
-           th:value="${entity.pCfg0MainItemPuid}"/>
+           th:value="${entity.pCfg0MainItemPuid}"
+
+    />
     <input class="form-control" id="pCfg0FamilyPuid" name="pCfg0FamilyPuid" type="hidden"
-           th:value="${entity.pCfg0FamilyPuid}"/>
+           th:value="${entity.pCfg0FamilyPuid}"
+    />
     <div class="form-group">
         <label for="pCfg0FamilyName">特性名称<span>*</span></label>
         <input class="form-control" id="pCfg0FamilyName" name="pCfg0FamilyName" type="text"
-               th:value="${entity.pCfg0FamilyName}"
+               th:value="${entity.pCfg0FamilyName}" disabled="disabled"
                placeholder="请输入特性名称"
         />
     </div>
     <div class="form-group">
         <label for="pCfg0FamilyDesc">特性描述<span>*</span></label>
         <input class="form-control" id="pCfg0FamilyDesc" name="pCfg0FamilyDesc" type="text"
-               th:value="${entity.pCfg0FamilyDesc}"
+               th:value="${entity.pCfg0FamilyDesc}" disabled="disabled"
                placeholder="请输入特性描述"/>
     </div>
     <div class="form-group">
@@ -31,13 +34,15 @@
     <div class="form-group">
         <label for="pCfg0ObjectId">特性值/配置代码<span>*</span></label>
         <input class="form-control" id="pCfg0ObjectId" name="pCfg0ObjectId" type="text"
-               th:value="${entity.pCfg0ObjectId}"
-               placeholder="请输入特性值/配置代码"/>
+               th:value="${entity.pCfg0ObjectId}" disabled="disabled"
+               placeholder="请输入特性值/配置代码"
+        />
     </div>
     <div class="form-group">
         <label for="pCfg0Desc">特性值/配置(描述)<span>*</span></label>
         <input class="form-control" id="pCfg0Desc" name="pCfg0Desc" type="text" th:value="${entity.pCfg0Desc}"
-               placeholder="请输入特性值/配置(描述)"/>
+               placeholder="请输入特性值/配置(描述)" disabled="disabled"
+        />
     </div>
     <!--<div class="form-group">-->
     <!--<label for="length">字符长度</label>-->
