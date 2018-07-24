@@ -13,7 +13,6 @@ import com.connor.hozon.bom.resources.service.epl.HzEPLManageRecordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import share.bean.PreferenceSetting;
-import share.bean.RedisBomBean;
 import sql.pojo.HzPreferenceSetting;
 import sql.pojo.bom.HZBomMainRecord;
 import sql.pojo.bom.HzBomLineRecord;
