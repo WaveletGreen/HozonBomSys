@@ -295,7 +295,7 @@ public class HzEbomController extends BaseController {
         recordRespDTO.setpRegulationCode(object.getString("pRegulationCode"));
         recordRespDTO.setProjectId(projectId);
         recordRespDTO.setpBuyEngineer(object.getString("pBuyEngineer"));
-        if(object.getString("pBuyEngineer") != null){
+        if(object.getString("number") != null){
             recordRespDTO.setNumber(Integer.valueOf(object.getString("number")));
         }else {
             recordRespDTO.setNumber(null);
@@ -430,14 +430,4 @@ public class HzEbomController extends BaseController {
         writeAjaxJSONResponse(ResultMessageBuilder.build(OperateResultMessageRespDTO.isSuccess(respDTO), respDTO.getErrMsg()), response);
     }
 
-
-    /**
-     * 获取当前登录用户信息
-     */
-    @RequestMapping(value = "/getUser",method = RequestMethod.GET)
-    public void getUser(HttpServletResponse  response){
-        User user = UserInfo.getUser();
-        writeAjaxJSONResponse(ResultMessageBuilder.build(user),response);
-        System.out.println(JSON.toJSONString(user));
-    }
 }

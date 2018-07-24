@@ -281,4 +281,10 @@
 			order by ${sort} ${order}
 		</if>
 	</select>
+
+
+	<!-- 更新用户 登录密码  haozt on 7/23/2018-->
+	<update id="updatePassword" parameterType="com.connor.hozon.bom.sys.entity.User">
+		 update user set password = #{password} where id=#{id}
+	 </update>
 </mapper>
