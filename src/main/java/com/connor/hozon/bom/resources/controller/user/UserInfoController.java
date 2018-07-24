@@ -3,6 +3,7 @@ package com.connor.hozon.bom.resources.controller.user;
 import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.resources.controller.BaseController;
 import com.connor.hozon.bom.resources.dto.request.UpdateUserPasswordReqDTO;
+import com.connor.hozon.bom.resources.dto.response.OperateResultMessageRespDTO;
 import com.connor.hozon.bom.resources.util.ResultMessageBuilder;
 import com.connor.hozon.bom.sys.dao.UserDao;
 import com.connor.hozon.bom.sys.entity.User;
@@ -13,7 +14,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -28,6 +28,7 @@ public class UserInfoController extends BaseController {
 
     @Autowired
     private UserDao userDao;
+
     @RequestMapping(value = "update/password",method = RequestMethod.POST)
     public void updateUserPassWord(@RequestBody UpdateUserPasswordReqDTO reqDTO, HttpServletResponse response){
         User user = UserInfo.getUser();
