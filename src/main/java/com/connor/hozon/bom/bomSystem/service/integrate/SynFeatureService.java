@@ -71,7 +71,7 @@ public class SynFeatureService implements ISynFeatureService {
     @Override
     public JSONObject deleteFeature(List<HzCfg0Record> features) throws Exception {
         List<HzCfg0Record> records;
-        records = features.stream().filter(f -> f.getIsFeatureSended() == 1).collect(Collectors.toList());
+        records = features.stream().filter(f -> f.getIsFeatureSent() == 1).collect(Collectors.toList());
         return execute(records, ActionFlagOption.DELETE);
     }
 
@@ -166,7 +166,7 @@ public class SynFeatureService implements ISynFeatureService {
             //动作描述代码
             if (option == ActionFlagOption.ADD) {
                 //没有发送过，添加发送
-                if (null == record.getIsFeatureSended() || record.getIsFeatureSended() == 0) {
+                if (null == record.getIsFeatureSent() || record.getIsFeatureSent() == 0) {
                     features.setActionFlag(option);
                 }
                 //有发送过，执行更新
@@ -219,7 +219,13 @@ public class SynFeatureService implements ISynFeatureService {
                         totalOfFail++;
                     }
                 }
-                hzCfg0Service.doUpdateByBatch(needToUpdateStatus);
+                Map<String, Object> _map = new HashMap<>();
+                //设定需要更新特性值已发送,不用设定相关性值已发送
+                _map.put("isFeatureSent", 1);
+                _map.put("list", needToUpdateStatus);
+                if (needToUpdateStatus.size() > 0) {
+                    hzCfg0Service.doUpdateByBatch(_map);
+                }
             }
         } catch (Exception e) {
             logger.error("发送特性到ERP失败", e);

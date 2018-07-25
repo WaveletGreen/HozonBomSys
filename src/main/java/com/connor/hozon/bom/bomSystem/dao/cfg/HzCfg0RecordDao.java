@@ -5,6 +5,7 @@ import org.apache.ibatis.annotations.Param;
 import sql.pojo.cfg.HzCfg0Record;
 
 import java.util.List;
+import java.util.Map;
 
 
 public interface HzCfg0RecordDao {
@@ -79,11 +80,11 @@ public interface HzCfg0RecordDao {
 
     int deleteAddedCfgByList(List<HzCfg0Record> records);
 
-    List<HzCfg0Record> selectCfg0ListByPuids(List<HzCfg0Record> records);
+    List<HzCfg0Record> selectCfg0ListByPuids(Map<String,Object> _map);
 
     List<HzCfg0Record>  selectByCodeAndDesc(HzCfg0Record record);
 
     int deleteCfgByList(List<HzCfg0Record> records);
 
-    int setIsSended(List<HzCfg0Record> list);
+    int setIsSent(Map<String,Object> _map);
 }

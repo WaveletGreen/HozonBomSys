@@ -18,25 +18,25 @@ function loadData() {
         clickToSelect: true,                // 单击某一行的时候选中某一条记录
         formId: "puid",
         toolbars: [
-            {
-                text: '修改',
-                iconCls: 'glyphicon glyphicon-pencil',
-                handler: function () {
-                    var rows = $table.bootstrapTable('getSelections');
-                    //只能选一条
-                    if (rows.length != 1) {
-                        window.Ewin.alert({message: '请选择一条需要修改的数据!'});
-                        return false;
-                    }
-                    window.Ewin.dialog({
-                        title: "修改",
-                        url: "cfg0/relModifyPage?uid=" + rows[0].puid + "&page=" + "modifyPage",
-                        gridId: "gridId",
-                        width: 400,
-                        height: 500
-                    });
-                }
-            },
+            // {
+            //     text: '修改',
+            //     iconCls: 'glyphicon glyphicon-pencil',
+            //     handler: function () {
+            //         var rows = $table.bootstrapTable('getSelections');
+            //         //只能选一条
+            //         if (rows.length != 1) {
+            //             window.Ewin.alert({message: '请选择一条需要修改的数据!'});
+            //             return false;
+            //         }
+            //         window.Ewin.dialog({
+            //             title: "修改",
+            //             url: "cfg0/relModifyPage?uid=" + rows[0].puid + "&page=" + "modifyPage",
+            //             gridId: "gridId",
+            //             width: 400,
+            //             height: 500
+            //         });
+            //     }
+            // },
             {
                 text: '发送到ERP',
                 iconCls: 'glyphicon glyphicon-send',
@@ -55,14 +55,14 @@ function loadData() {
                                 data: JSON.stringify(rows),
                                 contentType: "application/json",
                                 success: function (result) {
-                                    if (result.status) {
-                                        layer.msg(result.msg, {icon: 1, time: 2000})
-                                        // window.Ewin.alert({message: result.msg});
-                                        //刷新，会重新申请数据库数据
-                                    }
-                                    else {
-                                        window.Ewin.alert({message: "操作发送失败:" + result.msg});
-                                    }
+                                    // if (result.status) {
+                                    //     layer.msg(result.msg, {icon: 1, time: 2000})
+                                    window.Ewin.alert({message: result, width: 800});
+                                    //     //刷新，会重新申请数据库数据
+                                    // }
+                                    // else {
+                                    //     window.Ewin.alert({message: "操作发送失败:" + result.msg});
+                                    // }
                                     $table.bootstrapTable("refresh");
                                 },
                                 error: function (info) {

@@ -39,6 +39,12 @@ public class HzRelevanceBean {
      * 修改时间
      */
     private Date modifyDate;
+
+    /**
+     * 相关性是否已发送过
+     */
+    private Integer isRelevanceSended;
+
     public Integer getIndex() {
         return index;
     }
@@ -101,5 +107,13 @@ public class HzRelevanceBean {
 
     public void setModifyDate(Date modifyDate) {
         this.modifyDate = modifyDate;
+    }
+
+    public Integer getIsRelevanceSended() {
+        return isRelevanceSended;
+    }
+
+    public void setIsRelevanceSended(Integer isRelevanceSended) {
+        this.isRelevanceSended = isRelevanceSended;
     }
 }

@@ -8,6 +8,7 @@ import sql.IBaseSQLUtil;
 import sql.pojo.cfg.HzCfg0Record;
 
 import java.util.List;
+import java.util.Map;
 
 
 @Service("hzCfg0RecordDao")
@@ -69,8 +70,8 @@ public class HzCfg0RecordDaoImpl implements HzCfg0RecordDao {
     }
 
     @Override
-    public List<HzCfg0Record> selectCfg0ListByPuids(List<HzCfg0Record> records) {
-        return baseSQLUtil.executeQueryByPass(new HzCfg0Record(), records, "com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0RecordDao.selectCfg0ListByPuids");
+    public List<HzCfg0Record> selectCfg0ListByPuids(Map<String, Object> _map) {
+        return baseSQLUtil.executeQueryByPass(new HzCfg0Record(), _map, "com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0RecordDao.selectCfg0ListByPuids");
     }
 
     @Override
@@ -84,8 +85,8 @@ public class HzCfg0RecordDaoImpl implements HzCfg0RecordDao {
     }
 
     @Override
-    public int setIsSended(List<HzCfg0Record> list) {
-        return baseSQLUtil.executeUpdate(list, "com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0RecordDao.setIsSended");
+    public int setIsSent(Map<String, Object> _map) {
+        return baseSQLUtil.executeUpdate(_map, "com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0RecordDao.setIsSent");
     }
 
     @Override

@@ -1,5 +1,6 @@
 package integration.logic;
 
+import com.connor.hozon.bom.bomSystem.dto.HzRelevanceBean;
 import integration.base.relevance.ZPPTCI004;
 import integration.option.ActionFlagOption;
 import integration.option.CorrelateTypeOption;
@@ -16,10 +17,6 @@ public class Correlate {
      */
     private ZPPTCI004 zpptci004;
     static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-
-    public Correlate() {
-        zpptci004 = new ZPPTCI004();
-    }
 
     /**
      * 数据包号
@@ -81,6 +78,25 @@ public class Correlate {
      * 预留字段5
      */
     private String reservedField5;
+
+
+    public Correlate(HzRelevanceBean bean) {
+        zpptci004 = new ZPPTCI004();
+        //一个包号+1个行号
+        setLineNum("1");
+        //相关性
+        setCorrelate(bean.getRelevance());
+        //相关性描述
+        setCorrelateDescript(bean.getRelevanceDesc());
+        //相关性状态
+        setCorrelateState("5");
+        //创建日期
+        setCreateDate(bean.getCreateDate());
+        //修改时间
+        setModifyDate(bean.getModifyDate());
+        //相关性代码
+        setCorrelateCode(bean.getRelevanceCode());
+    }
 
     public ZPPTCI004 getZpptci004() {
         return zpptci004;

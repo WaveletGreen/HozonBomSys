@@ -1,5 +1,7 @@
 package sql.pojo.cfg;
 
+import java.util.Date;
+
 public class HzCfg0Record {
     /**
      * PUId，主键
@@ -58,11 +60,24 @@ public class HzCfg0Record {
     /**
      * 特性是否已发送到ERP
      */
-    private Integer isFeatureSended;
+    private Integer isFeatureSent;
     /**
      * 相关性是否已发送到ERP
      */
-    private Integer isRelevanceSended;
+    private Integer isRelevanceSent;
+
+    /**
+     * 创建时间
+     */
+    private Date createDate;
+
+    /**
+     * 最后一次修改时间
+     */
+    private Date lastModifyDate;
+
+    private String creator;
+    private String lastModifier;
 
     public String getPuid() {
         return puid;
@@ -178,19 +193,52 @@ public class HzCfg0Record {
         this.pCfg0Relevance = pCfg0Relevance;
     }
 
-    public Integer getIsFeatureSended() {
-        return isFeatureSended;
+    public Integer getIsFeatureSent() {
+        return isFeatureSent;
     }
 
-    public void setIsFeatureSended(Integer isFeatureSended) {
-        this.isFeatureSended = isFeatureSended;
+    public void setIsFeatureSent(Integer isFeatureSent) {
+        this.isFeatureSent = isFeatureSent;
     }
 
-    public Integer getIsRelevanceSended() {
-        return isRelevanceSended;
+    public Integer getIsRelevanceSent() {
+        return isRelevanceSent;
     }
 
-    public void setIsRelevanceSended(Integer isRelevanceSended) {
-        this.isRelevanceSended = isRelevanceSended;
+    public void setIsRelevanceSent(Integer isRelevanceSent) {
+        this.isRelevanceSent = isRelevanceSent;
     }
+
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
+    public Date getLastModifyDate() {
+        return lastModifyDate;
+    }
+
+    public void setLastModifyDate(Date lastModifyDate) {
+        this.lastModifyDate = lastModifyDate;
+    }
+
+    public String getCreator() {
+        return creator;
+    }
+
+    public void setCreator(String creator) {
+        this.creator = creator;
+    }
+
+    public String getLastModifier() {
+        return lastModifier;
+    }
+
+    public void setLastModifier(String lastModifier) {
+        this.lastModifier = lastModifier;
+    }
+
 }

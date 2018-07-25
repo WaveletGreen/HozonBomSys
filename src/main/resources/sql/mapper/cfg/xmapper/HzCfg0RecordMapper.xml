@@ -13,8 +13,13 @@
         <result column="P_H9FEATUREDESC" jdbcType="VARCHAR" property="pH9featuredesc"/>
         <result column="P_CFG0_FAMILY_DESC" jdbcType="VARCHAR" property="pCfg0FamilyDesc"/>
         <result column="P_CFG0_RELEVANCE" jdbcType="VARCHAR" property="pCfg0Relevance"/>
-        <result column="P_IS_FEATURE_SENDED" jdbcType="INTEGER" property="isFeatureSended"/>
-        <result column="P_IS_RELEVANCE_SENDED" jdbcType="INTEGER" property="isRelevanceSended"/>
+        <result column="P_IS_FEATURE_SENT" jdbcType="INTEGER" property="isFeatureSent"/>
+        <result column="P_IS_RELEVANCE_SENT" jdbcType="INTEGER" property="isRelevanceSent"/>
+        <!--创建和修改信息-->
+        <result column="P_FEATURE_CREATOR" jdbcType="VARCHAR" property="creator"/>
+        <result column="P_FEATURE_CREATOR_DATE" jdbcType="TIMESTAMP" property="createDate"/>
+        <result column="P_FEATURE_LAST_MODIFIER" jdbcType="VARCHAR" property="lastModifier"/>
+        <result column="P_FEATURE_LAST_MODIFY_DATE" jdbcType="TIMESTAMP" property="lastModifyDate"/>
     </resultMap>
 
     <resultMap id="MaterielFeatureMap" type="com.connor.hozon.bom.bomSystem.dto.HzMaterielFeatureBean">
@@ -28,7 +33,7 @@
         <result column="P_OF_CFG0_MAIN_RECORD" jdbcType="VARCHAR" property="pOfCfg0MainRecord"/>
         <result column="P_CFG0_MODEL_BASIC_DETAIL" jdbcType="VARCHAR" property="pCfg0ModelBasicDetail"/>
     </resultMap>
-
+    <!--基础列信息-->
     <sql id="Base_Column_List">
         PUID,
         P_CFG0_OBJECT_ID,
@@ -41,9 +46,14 @@
         P_H9FEATUREDESC,
         P_CFG0_FAMILY_DESC,
         P_CFG0_RELEVANCE,
-        P_IS_FEATURE_SENDED,
-        P_IS_RELEVANCE_SENDED
+        P_IS_FEATURE_SENT,
+        P_IS_RELEVANCE_SENT,
+        P_FEATURE_CREATOR,
+        P_FEATURE_CREATOR_DATE,
+        P_FEATURE_LAST_MODIFIER,
+        P_FEATURE_LAST_MODIFY_DATE
   </sql>
+    <!--物料特性表列信息-->
     <sql id="Materiel_Feature_Column_List">
         t.PUID,
         t.P_CFG0_OBJECT_ID,
@@ -55,6 +65,7 @@
         t3.P_OF_CFG0_MAIN_RECORD,
         t4.p_cfg0_model_basic_detail
   </sql>
+    <!--根据主键搜索-->
     <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
@@ -62,7 +73,7 @@
         where PUID = #{puid,jdbcType=VARCHAR}
         order by P_CFG0_OBJECT_ID
     </select>
-
+    <!--根据项目搜索全部-->
     <select id="selectListByProjectPuid" parameterType="java.lang.String" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
@@ -74,18 +85,26 @@
         )
         order by P_CFG0_OBJECT_ID
     </select>
-    <select id="selectCfg0ListByPuids" parameterType="java.util.List" resultMap="BaseResultMap">
+    <!--根据主键列表进行搜索-->
+    <select id="selectCfg0ListByPuids" parameterType="java.util.Map" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from ${whichTable} t where
-        t.p_cfg0_main_item_puid=(
-        select t2.puid
-        from Hz_Cfg0_Main_Record t2
-        where t2.p_cfg0_of_which_project_puid=#{projectPuid,jdbcType=VARCHAR}
-        )
+        t.PUID in
+        <if test="list!=null">
+            (
+            <foreach collection="list" item="item" index="index"
+                     separator=",">
+                #{item,jdbcType=VARCHAR}
+            </foreach>
+            )
+        </if>
+        <if test="list==null">
+            ('')
+        </if>
         order by P_CFG0_OBJECT_ID ASC
     </select>
-
+    <!--根据项目搜索所有物料特性数据-->
     <select id="selectMaterielFeatureByProjectPuid" parameterType="java.lang.String" resultMap="MaterielFeatureMap">
         select
         <include refid="Materiel_Feature_Column_List"/>
@@ -110,11 +129,12 @@
         and t.P_CFG0_FAMILY_NAME=#{pCfg0FamilyName}
         and t.P_CFG0_FAMILY_DESC=#{pCfg0FamilyDesc}
     </select>
-
+    <!--根据主键删除-->
     <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from ${0}
     where PUID = #{puid,jdbcType=VARCHAR}
     </delete>
+    <!--根据主键列表删除,删除的是附加表-->
     <delete id="deleteAddedCfgByList" parameterType="java.util.List">
         delete from HZ_CFG0_ADD_CFG_RECORD
         where PUID in(
@@ -125,6 +145,7 @@
         )
 
     </delete>
+    <!--根据主键列表删除,删除的是主表-->
     <delete id="deleteCfgByList" parameterType="java.util.List">
         delete from HZ_CFG0_RECORD
         where PUID in(
@@ -135,6 +156,7 @@
         )
 
     </delete>
+    <!--插入1个特性值-->
     <insert id="insert" parameterType="sql.pojo.cfg.HzCfg0Record">
     insert into ${whichTable}
       (
@@ -148,7 +170,9 @@
         P_H9FEATUREENNAME,
         P_H9FEATUREDESC,
         P_CFG0_FAMILY_DESC,
-        P_CFG0_RELEVANCE
+        P_CFG0_RELEVANCE,
+        P_FEATURE_CREATOR,
+        P_FEATURE_LAST_MODIFIER
         )
     values (
         #{puid,jdbcType=VARCHAR},
@@ -161,9 +185,12 @@
         #{pH9featureenname,jdbcType=VARCHAR},
         #{pH9featuredesc,jdbcType=VARCHAR},
         #{pCfg0FamilyDesc,jdbcType=VARCHAR},
-        #{pCfg0Relevance,jdbcType=VARCHAR}
+        #{pCfg0Relevance,jdbcType=VARCHAR},
+        #{creator,jdbcType=VARCHAR},
+        #{lastModifier,jdbcType=VARCHAR}
         )
   </insert>
+    <!--根据主键更新数据-->
     <update id="updateByPrimaryKey" parameterType="sql.pojo.cfg.HzCfg0Record">
     update ${whichTable}
     set
@@ -176,14 +203,23 @@
           P_H9FEATUREENNAME = #{pH9featureenname,jdbcType=VARCHAR},
           P_H9FEATUREDESC = #{pH9featuredesc,jdbcType=VARCHAR},
           P_CFG0_FAMILY_DESC = #{pCfg0FamilyDesc,jdbcType=VARCHAR},
-          P_CFG0_RELEVANCE = #{pCfg0Relevance,jdbcType=VARCHAR}
+          P_CFG0_RELEVANCE = #{pCfg0Relevance,jdbcType=VARCHAR},
+          P_FEATURE_LAST_MODIFIER = #{lastModifier,jdbcType=VARCHAR},
+          P_FEATURE_LAST_MODIFY_DATE = sysdate
     where
           PUID = #{puid,jdbcType=VARCHAR}
     </update>
     <!--设置发送到ERP的状态为是-->
-    <update id="setIsSended" parameterType="java.util.List">
+    <update id="setIsSent" parameterType="java.util.Map">
         update HZ_CFG0_RECORD
-        set P_IS_FEATURE_SENDED = 1
+        set
+        <if test="isFeatureSent==1">
+            P_IS_FEATURE_SENT = 1,
+        </if>
+        <if test="isRelevanceSent==1">
+            P_IS_RELEVANCE_SENT=1,
+        </if>
+        P_FEATURE_LAST_MODIFY_DATE=sysdate
         where PUID in
         <if test="list==null">
             ('')

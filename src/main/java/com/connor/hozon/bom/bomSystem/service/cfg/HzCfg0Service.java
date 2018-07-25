@@ -8,7 +8,9 @@ import org.springframework.stereotype.Service;
 import sql.pojo.cfg.HzCfg0Record;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Fancyears·Maylos·Mayways
@@ -59,8 +61,8 @@ public class HzCfg0Service {
         return hzCfg0RecordDao.updateByPrimaryKey(record) > 0 ? true : false;
     }
 
-    public boolean doUpdateByBatch(List<HzCfg0Record> record) {
-        return hzCfg0RecordDao.setIsSended(record) > 0 ? true : false;
+    public boolean doUpdateByBatch(Map<String, Object> record) {
+        return hzCfg0RecordDao.setIsSent(record) > 0 ? true : false;
     }
 
     public boolean doUpdateAddedCfg(HzCfg0Record record) {
@@ -118,8 +120,11 @@ public class HzCfg0Service {
         return index;
     }
 
-    public List<HzCfg0Record> doLoadListByPuids(List<HzCfg0Record> records) {
-        return hzCfg0RecordDao.selectCfg0ListByPuids(records);
+    public List<HzCfg0Record> doLoadListByPuids(List<String> list) {
+        Map<String, Object> _map = new HashMap<>();
+        _map.put("whichTable", "HZ_CFG0_RECORD");
+        _map.put("list", list);
+        return hzCfg0RecordDao.selectCfg0ListByPuids(_map);
     }
 
     public void updateByTableName(List<HzCfg0Record> list, String table) {
