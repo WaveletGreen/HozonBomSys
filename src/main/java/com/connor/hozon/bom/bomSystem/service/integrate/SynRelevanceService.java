@@ -12,7 +12,6 @@ import integration.service.impl.feature4.TransOptionsService;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
-import sql.pojo.cfg.HzCfg0Record;
 
 import java.util.*;
 
@@ -65,7 +64,7 @@ public class SynRelevanceService implements ISynRelevanceService {
         return null;
     }
 
-    public JSONObject execute(List<HzRelevanceBean> features, ActionFlagOption option) throws Exception {
+    public JSONObject execute(List<HzRelevanceBean> features, ActionFlagOption option,CorrelateTypeOption correlateTypeOption) throws Exception {
         /**
          * 清除缓存
          */
@@ -98,10 +97,12 @@ public class SynRelevanceService implements ISynRelevanceService {
         features.forEach(bean -> {
             Correlate correlate = new Correlate();
             String packnum = UUIDHelper.generateUpperUid();
+            //包号
             correlate.setPackNo(packnum);
-            correlate.setLineNum(bean.getPuid().substring(0, 5));
+            //一个包号+1个行号
+            correlate.setLineNum("1");
             //动作描述代码
-            correlate.setActionFlag(ActionFlagOption.ADD);
+            correlate.setActionFlag(option);
             //相关性
             correlate.setCorrelate(bean.getRelevance());
             //相关性描述
@@ -111,7 +112,7 @@ public class SynRelevanceService implements ISynRelevanceService {
             //创建日期
             correlate.setCreateDate(new Date());
             //相关性类型
-            correlate.setCorrelateType(CorrelateTypeOption.CorrelateType_1);
+            correlate.setCorrelateType(correlateTypeOption);
             //相关性代码
             correlate.setCorrelateCode(bean.getRelevanceCode());
             _mapCoach.put(packnum, bean);

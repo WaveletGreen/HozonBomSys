@@ -1,5 +1,7 @@
 package com.connor.hozon.bom.bomSystem.dto;
 
+import java.util.Date;
+
 /**
  * Created by Fancyears·Maylos·Mayways
  * Description:
@@ -29,6 +31,14 @@ public class HzRelevanceBean {
      */
     private String _table;
 
+    /**
+     * 创建时间
+     */
+    private Date createDate;
+    /**
+     * 修改时间
+     */
+    private Date modifyDate;
     public Integer getIndex() {
         return index;
     }
@@ -75,5 +85,21 @@ public class HzRelevanceBean {
 
     public void set_table(String _table) {
         this._table = _table;
+    }
+
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
+    public Date getModifyDate() {
+        return modifyDate;
+    }
+
+    public void setModifyDate(Date modifyDate) {
+        this.modifyDate = modifyDate;
     }
 }

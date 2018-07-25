@@ -7,7 +7,7 @@ public enum CorrelateTypeOption {
      */
     CorrelateType_1("1"),
     /**
-     * 相关性类型：锁定不执行
+     * 相关性类型：锁定不执行，可标识为删除状态
      */
     CorrelateType_3("3");
     /***
