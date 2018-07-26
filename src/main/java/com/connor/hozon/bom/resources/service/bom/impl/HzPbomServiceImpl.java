@@ -21,6 +21,7 @@ import com.connor.hozon.bom.resources.query.HzPbomByPageQuery;
 import com.connor.hozon.bom.resources.query.HzPbomTreeQuery;
 import com.connor.hozon.bom.resources.service.bom.HzPbomService;
 import com.connor.hozon.bom.resources.service.epl.HzEPLManageRecordService;
+import com.connor.hozon.bom.resources.util.DateUtil;
 import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.sys.entity.User;
 import org.omg.CORBA.OBJ_ADAPTER;
@@ -48,14 +49,7 @@ public class HzPbomServiceImpl implements HzPbomService {
     private HzPbomRecordDAO hzPbomRecordDAO;
 
     @Autowired
-    private HzBomStateDAO hzBomStateDAO;
-
-    @Autowired
     private HzBomMainRecordDao hzBomMainRecordDao;
-
-    @Autowired
-    private HzEPLManageRecordService hzEPLManageRecordService;
-
 
     @Override
     public OperateResultMessageRespDTO insertHzPbomRecord(AddHzPbomRecordReqDTO recordReqDTO) {
@@ -312,25 +306,47 @@ public class HzPbomServiceImpl implements HzPbomService {
             String[] strings = getLevelAndRank(lineIndex, is2Y, hasChildren);
             jsonObject.put("level", strings[0]);
             jsonObject.put("rank", strings[1]);
-            jsonObject.put("pBomOfWhichDept", record.getpBomOfWhichDept());
+            jsonObject.put("pBomOfWhichDept", record.getpBomOfWhichDept()==null?"":record.getpBomOfWhichDept());
             jsonObject.put("groupNum", record.getLineId());
             jsonObject.put("eBomPuid", record.geteBomPuid());
-            jsonObject.put("lineId", record.getLineId());
+            jsonObject.put("lineId", record.getLineId() == null ?"":record.getLineId());
 
-            jsonObject.put("pBomLinePartName", record.getpBomLinePartName());
-            jsonObject.put("pBomLinePartClass", record.getpBomLinePartClass());
-            jsonObject.put("pBomLinePartResource", record.getpBomLinePartResource());
-            jsonObject.put("pBomLinePartEnName", record.getpBomLinePartEnName());
+            jsonObject.put("pBomLinePartName", record.getpBomLinePartName()==null?"":record.getpBomLinePartName());
+            jsonObject.put("pBomLinePartClass", record.getpBomLinePartClass()==null?"":record.getpBomLinePartClass());
+            jsonObject.put("pBomLinePartResource", record.getpBomLinePartResource()==null?"":record.getpBomLinePartResource());
+            jsonObject.put("pBomLinePartEnName", record.getpBomLinePartEnName()==null?"":record.getpBomLinePartEnName());
 
-            jsonObject.put("resource", record.getResource());
-            jsonObject.put("type", record.getType());
-            jsonObject.put("buyUnit", record.getBuyUnit());
-            jsonObject.put("workShop1", record.getWorkShop1());
-            jsonObject.put("workShop2", record.getWorkShop2());
-            jsonObject.put("productLine", record.getProductLine());
-            jsonObject.put("mouldType", record.getMouldType());
-            jsonObject.put("outerPart", record.getOuterPart());
-            jsonObject.put("colorPart", record.getColorPart());
+            jsonObject.put("resource", record.getResource()==null?"":record.getResource());
+            jsonObject.put("workShop1", record.getWorkShop1() ==null?"":record.getWorkShop1());
+            jsonObject.put("workShop2", record.getWorkShop2() == null ?"":record.getWorkShop2());
+            jsonObject.put("productLine", record.getProductLine() == null?"":record.getProductLine());
+            jsonObject.put("mouldType", record.getMouldType() == null?"":record.getMouldType());
+            jsonObject.put("outerPart", record.getOuterPart()==null?"":record.getOuterPart());
+            jsonObject.put("station",record.getStation() == null?"":record.getStation());
+            Integer type = record.getType();
+            Integer buyUnit = record.getBuyUnit();
+            Integer colorPart = record.getColorPart();
+            if (Integer.valueOf(0).equals(type)) {
+                jsonObject.put("type","N");
+            } else if (Integer.valueOf(1).equals(type)) {
+                jsonObject.put("type","Y");
+            } else {
+                jsonObject.put("type","N");
+            }
+            if (Integer.valueOf(0).equals(buyUnit)) {
+                jsonObject.put("buyUnit", "N");
+            } else if (Integer.valueOf(1).equals(buyUnit)) {
+                jsonObject.put("buyUnit", "Y");
+            } else {
+                jsonObject.put("buyUnit", "");
+            }
+            if (Integer.valueOf(0).equals(colorPart)) {
+                jsonObject.put("colorPart", "N");
+            } else if (Integer.valueOf(1).equals(colorPart)) {
+                jsonObject.put("colorPart", "Y");
+            } else {
+                jsonObject.put("colorPart", "");
+            }
             jsonArray.add(jsonObject);
             return jsonArray;
         } catch (Exception e) {
@@ -933,4 +949,18 @@ public class HzPbomServiceImpl implements HzPbomService {
         return null;
     }
 
+//    public static void main(String[] a){
+//        long t1 = System.currentTimeMillis();
+//        for(long m  = Long.MIN_VALUE;m<Long.MAX_VALUE;m++){
+//
+//        }
+//        long t2 = System.currentTimeMillis();
+//        System.out.println(t2-t1 +"ms");
+//        long l = 999999999999999999L;//18个9 29个9    少11个9
+//
+//        long l1 = 100000000;//1亿条数据 1秒产生1亿条数据
+//         long l2 = 24 * 60 * 60*365l; //年
+//        long m  = l/l1/l2;
+//        System.out.println(m);
+//    }
 }

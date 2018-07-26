@@ -3,14 +3,17 @@ package com.connor.hozon.bom.resources.controller.user;
 import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.resources.controller.BaseController;
 import com.connor.hozon.bom.resources.dto.request.UpdateUserPasswordReqDTO;
+import com.connor.hozon.bom.resources.dto.response.OperateResultMessageRespDTO;
 import com.connor.hozon.bom.resources.util.ResultMessageBuilder;
+import com.connor.hozon.bom.sys.dao.UserDao;
 import com.connor.hozon.bom.sys.entity.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.encoding.Md5PasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -22,6 +25,9 @@ import javax.servlet.http.HttpServletResponse;
 @Controller
 @RequestMapping("user")
 public class UserInfoController extends BaseController {
+
+    @Autowired
+    private UserDao userDao;
 
     @RequestMapping(value = "update/password",method = RequestMethod.POST)
     public void updateUserPassWord(@RequestBody UpdateUserPasswordReqDTO reqDTO, HttpServletResponse response){
@@ -40,13 +46,22 @@ public class UserInfoController extends BaseController {
 
         String newPassWord = reqDTO.getNewPassWord();
         newPassWord = encoder.encodePassword(newPassWord,"hyll");
-//        return encoder.encodePassword(password, "hyll");
+        User userInfo = new User();
+        userInfo.setId(user.getId());
+        userInfo.setPassword(newPassWord);
+        int i = userDao.updatePassword(userInfo);
+        if(i<=0){
+            writeAjaxJSONResponse(ResultMessageBuilder.build(false,"操作失败！"),response);
+            return;
+        }
+        writeAjaxJSONResponse(ResultMessageBuilder.build(true,"操作成功！"),response);
 
     }
 
-    public static void main(String[] a){
-        Md5PasswordEncoder encoder = new Md5PasswordEncoder();
-        String passWord = "dcproxy123";
-        System.out.println(encoder.encodePassword(passWord,"hyll"));
+    @RequestMapping(value = "/getUser",method = RequestMethod.GET)
+    public String get(Model model){
+        User user = UserInfo.getUser();
+        model.addAttribute("data",user);
+        return "updatePassword";
     }
 }
