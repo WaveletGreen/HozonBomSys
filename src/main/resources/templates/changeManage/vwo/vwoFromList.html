@@ -1,116 +1,196 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<!--User: xulf Date: 2018/6/21 Time: 13:09-->
+<!--User: xulf Date: 2018/7/23 Time: 18:48-->
 <head th:include="include/includebase"></head>
-<link th:href="@{/css/stage/bom-stage.css}" rel="stylesheet"/>
-<link th:href="@{/css/changeManage/vwo/vwoFromList.css}"/>
+<link th:href="@{/css/changeManage/vwo/vwoFromList.css}" rel="stylesheet"/>
 <meta charset="UTF-8">
-<title>VWO表单</title>
+<title>vwo表单</title>
 </head>
 <body>
-<h1>没日没夜开发中...</h1>
-<!--<h1>VWO表单</h1>
+<!--
+<nav class="navbar navbar-expand-sm bg-light">
+    <ul class="navbar-nav">
+        <li class="nav-item">
+            <a class="nav-link" href="vwo/vwoFromList">基本信息</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="vwo/changeDescription">变更描述</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#">相关部门</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#">评估意见</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#">备注</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#">分发与实施</a>
+        </li>
+    </ul>
+</nav>
+
+-->
 <div class="panel-body" style="padding-bottom:0px;">
-    <div class="panel panel-default">
-        <div class="panel-body" style="background-color:#E0FFFF">
+    <div class="panel panel-default" style="margin-top: 10px;">
+        <div class="panel-body">
             <form class="form-inline" role="form" style="float: left; width: 100%;margin-left: 20px;" method="get"
                   id="queryPbomManage">
-                <div class="form-group">
-                    <label for="VWOnum">VWO号:&nbsp;&nbsp;</label>
-                    <input type="text" class="form-control" name="level" id="VWOnum" placeholder=""/>
-                </div>
-                <div class="form-group  ">
-                    <label for="creatTime">创建时间:&emsp;&emsp;</label>
-                    <input type="text" class="form-control" name="pBomOfWhichDept" id="creatTime"
+                <div class="form-group after_the">
+                    <label for="VWOnum">VWO号:&ensp;</label>
+                    <input type="text" style="width: 150px;" class="form-control" name="level" id="VWOnum"
                            placeholder=""/>
                 </div>
-                <div class="form-group  ">
+                <div class="form-group  after_the">
+                    <label for="creatTime">创建时间:&emsp;&emsp;</label>
+                    <input type="text" style="width: 150px;" class="form-control" name="pBomOfWhichDept" id="creatTime"
+                           placeholder=""/>
+                </div>
+                <div class="form-group  after_the">
                     <label for="processState">流程状态:</label>
-                    <input type="text" class="form-control" name="rank" id="processState" placeholder=""/>
+                    <input type="text" style="width: 150px;" class="form-control" name="rank" id="processState"
+                           placeholder=""/>
                 </div>
-                <div class="form-group  ">
+                <div class="form-group after_the">
                     <label for="title">标题:&emsp;&emsp;&emsp;&emsp;</label>
-                    <input type="text" class="form-control" name="groupNum" id="title" placeholder=""/>
+                    <input type="text" style="width: 150px;" class="form-control" name="groupNum" id="title"
+                           placeholder=""/>
                 </div>
-                <div class="form-group  ">
+                <div class="form-group after_the">
                     <label for="dept">部门:&emsp;&emsp;</label>
-                    <input type="text" class="form-control" name="lineId" id="dept" placeholder=""/>
+                    <input type="text" style="width: 150px;" class="form-control" name="lineId" id="dept"
+                           placeholder=""/>
                 </div>
-                <div class="form-group">
+                <div class="form-group after_the">
                     <label for="initiator">发起人:&emsp;&emsp;&emsp;</label>
-                    <input type="text" class="form-control" name="itemType" id="initiator" placeholder=""/>
+                    <input type="text" style="width: 150px;" class="form-control" name="itemType" id="initiator"
+                           placeholder=""/>
                 </div>
-                <div class="form-group">
+                <div class="form-group after_the">
                     <label for="phone">联系电话:</label>
-                    <input type="text" class="form-control" name="itemType" id="phone" placeholder=""/>
+                    <input type="text" style="width: 150px;" class="form-control" name="itemType" id="phone"
+                           placeholder=""/>
                 </div>
-                <div class="form-group">
+                <div class="form-group after_the">
                     <label for="finishTime">要求完成时间:</label>
-                    <input type="text" class="form-control" name="itemType" id="finishTime" placeholder=""/>
+                    <input type="text" style="width: 150px;" class="form-control" name="itemType" id="finishTime"
+                           placeholder=""/>
                 </div>
-                <div class="form-group">
+                <div class="form-group after_the">
                     <label for="changeType">变更类型:</label>
-                    <input type="text" class="form-control" name="itemType" id="changeType" placeholder=""/>
+                    <input type="text" style="width: 150px;" class="form-control" name="itemType" id="changeType"
+                           placeholder=""/>
                 </div>
-                <div class="form-group">
+                <div class="form-group after_the">
                     <label for="expenseDept">费用承担部门:</label>
-                    <select class="form-control" name="" id="expenseDept" style="width: 13.65em">
-                        <option>车身技术部门</option>
-                        <option>电子电器技术部门</option>
-                        <option>底盘技术部门</option>
-                        <option>系统集成技术部门</option>
-                        <option>内外饰技术部门</option>
+                    <select class="form-control" style="min-width: 150px" name="" id="expenseDept">
+                        <!--<option>车身技术部门</option>-->
+                        <!--<option>电子电器技术部门</option>-->
+                        <!--<option>底盘技术部门</option>-->
+                        <!--<option>系统集成技术部门</option>-->
+                        <!--<option>内外饰技术部门</option>-->
+                        <option>车身部门</option>
+                        <option>车身部门</option>
+                        <option>车身部门</option>
+                        <option>车身部门</option>
+                        <option>车身部门</option>
                     </select>
                 </div>
-                <div class="form-group">
+                <div class="form-group after_the">
                     <label for="listedType">上市类型:</label>
-                    <input type="text" class="form-control" name="itemType" id="listedType" placeholder=""/>
+                    <input type="text" style="width: 150px;" class="form-control" name="itemType" id="listedType"
+                           placeholder=""/>
                 </div>
-                <div class="form-group">
-                    <label for="relevanceVWONum">关联VWO号:&nbsp;&nbsp;</label>
-                    <input type="text" class="form-control" name="itemType" id="relevanceVWONum" placeholder=""/>
-                </div>
-                <div class="form-group">
-                    <label for="ReasonPhrase">原因描述:</label>
-                    <input type="text" class="form-control" style="width: 74em" name="itemType" id="ReasonPhrase"
+                <div class="form-group after_the">
+                    <label for="relevanceVWONum">关联VWO号:&ensp;</label>
+                    <input type="text" style="width: 150px;" class="form-control" name="itemType" id="relevanceVWONum"
                            placeholder=""/>
                 </div>
                 <div class="form-group">
-                    <label for="platform" style="text-align: center">平台</label>
-                    <input type="text" class="form-control" style="width: 16em" name="itemType" id="platform"
-                           placeholder=""/>
+                    <button type="button" id="queryBtn" onclick="doQuery();" class="btn btn-primary">重置</button>
                 </div>
                 <div class="form-group">
-                    <label for="modelCode" style="text-align: center">车型代号</label>
-                    <input type="text" class="form-control" style="width: 16em" name="itemType" id="modelCode"
-                           placeholder=""/>
-                </div>
-                <div class="form-group">
-                    <label for="projectCode" style="text-align: center">项目代号</label>
-                    <input type="text" class="form-control" style="width: 16em" name="itemType" id="projectCode"
-                           placeholder=""/>
-                </div>
-                <div class="form-group">
-                    <label for="commonTime" style="text-align: center">启动生效时间</label>
-                    <input type="text" class="form-control" style="width: 16em" name="itemType" id="commonTime"
-                           placeholder=""/>
-                </div>
-                <div class="form-group">
-                    <label for="endTime" style="text-align: center">终止生效时间</label>
-                    <input type="text" class="form-control" style="width: 16em" name="itemType" id="endTime"
-                           placeholder=""/>
-                </div>
-                <div class="form-group">
-                    <label for="projectPhase" style="text-align: center">项目所属阶段</label>
-                    <input type="text" class="form-control" style="width: 16em" name="itemType" id="projectPhase "
-                           placeholder=""/>
+                    <button type="button" id="queryBtn" onclick="doQuery();" class="btn btn-primary">查询</button>
                 </div>
             </form>
-
         </div>
     </div>
-    <table id="vwo-table" style="margin-top: -50px;">
+</div>
+<div class="content col-lg-12"><!--style="margin-top: -50px;"-->
+    <table id="vwo_table" class="table table-striped tableNormalStyle">
+        <tr>
+            <th>vwo号</th>
+            <th>vwo名称</th>
+            <th>审批类型</th>
+            <th>vwo需求类型</th>
+            <th>vwo状态</th>
+            <th>预计实施时间</th>
+            <th>vwo提出者</th>
+            <th>提出时间</th>
+        </tr>
+        <tr>
+            <td><a href="vwo/vwoFromList">2018072400001</a></td>
+            <td><a href="vwo/vwoFromList">发布VPPS</a></td>
+            <td><a href="vwo/vwoFromList">VPPS</a></td>
+            <td><a href="vwo/vwoFromList">制造需求</a></td>
+            <td><a href="vwo/vwoFromList">开启</a></td>
+            <td><a href="vwo/vwoFromList">2018-07-28</a></td>
+            <td><a href="vwo/vwoFromList">BOM工程师</a></td>
+            <td><a href="vwo/vwoFromList">2018-07-24</a></td>
+        </tr>
+        <tr>
+            <td><a href="vwo/vwoFromList">2018072400001</a></td>
+            <td><a href="vwo/vwoFromList">发布VPPS</a></td>
+            <td><a href="vwo/vwoFromList">VPPS</a></td>
+            <td><a href="vwo/vwoFromList">制造需求</a></td>
+            <td><a href="vwo/vwoFromList">开启</a></td>
+            <td><a href="vwo/vwoFromList">2018-07-28</a></td>
+            <td><a href="vwo/vwoFromList">BOM工程师</a></td>
+            <td><a href="vwo/vwoFromList">2018-07-24</a></td>
+        </tr>
+        <tr>
+            <td><a href="vwo/vwoFromList">2018072400001</a></td>
+            <td><a href="vwo/vwoFromList">发布VPPS</a></td>
+            <td><a href="vwo/vwoFromList">VPPS</a></td>
+            <td><a href="vwo/vwoFromList">制造需求</a></td>
+            <td><a href="vwo/vwoFromList">开启</a></td>
+            <td><a href="vwo/vwoFromList">2018-07-28</a></td>
+            <td><a href="vwo/vwoFromList">BOM工程师</a></td>
+            <td><a href="vwo/vwoFromList">2018-07-24</a></td>
+        </tr>
+        <tr>
+            <td><a href="vwo/vwoFromList">2018072400001</a></td>
+            <td><a href="vwo/vwoFromList">发布VPPS</a></td>
+            <td><a href="vwo/vwoFromList">VPPS</a></td>
+            <td><a href="vwo/vwoFromList">制造需求</a></td>
+            <td><a href="vwo/vwoFromList">开启</a></td>
+            <td><a href="vwo/vwoFromList">2018-07-28</a></td>
+            <td><a href="vwo/vwoFromList">BOM工程师</a></td>
+            <td><a href="vwo/vwoFromList">2018-07-24</a></td>
+        </tr>
+        <tr>
+            <td><a href="vwo/vwoFromList">2018072400001</a></td>
+            <td><a href="vwo/vwoFromList">发布VPPS</a></td>
+            <td><a href="vwo/vwoFromList">VPPS</a></td>
+            <td><a href="vwo/vwoFromList">制造需求</a></td>
+            <td><a href="vwo/vwoFromList">开启</a></td>
+            <td><a href="vwo/vwoFromList">2018-07-28</a></td>
+            <td><a href="vwo/vwoFromList">BOM工程师</a></td>
+            <td><a href="vwo/vwoFromList">2018-07-24</a></td>
+        </tr>
+        <tr>
+            <td><a href="vwo/vwoFromList">2018072400001</a></td>
+            <td><a href="vwo/vwoFromList">发布VPPS</a></td>
+            <td><a href="vwo/vwoFromList">VPPS</a></td>
+            <td><a href="vwo/vwoFromList">制造需求</a></td>
+            <td><a href="vwo/vwoFromList">开启</a></td>
+            <td><a href="vwo/vwoFromList">2018-07-28</a></td>
+            <td><a href="vwo/vwoFromList">BOM工程师</a></td>
+            <td><a href="vwo/vwoFromList">2018-07-24</a></td>
+        </tr>
     </table>
-</div>-->
+</div>
+<script th:src="@{/js/changeManage/vwo/vwoFromList.js}"></script>
 </body>
 </html>
