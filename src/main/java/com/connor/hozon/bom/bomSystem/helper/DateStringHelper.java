@@ -2,6 +2,7 @@ package com.connor.hozon.bom.bomSystem.helper;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 import static com.connor.hozon.bom.bomSystem.helper.StringHelper.checkString;
@@ -20,6 +21,7 @@ public class DateStringHelper {
     private static SimpleDateFormat format = new SimpleDateFormat(pattern);
     private static SimpleDateFormat format2 = new SimpleDateFormat(pattern2);
     private static SimpleDateFormat format3 = new SimpleDateFormat(pattern3);
+
 
     /**
      * 日期转字符串
@@ -84,7 +86,18 @@ public class DateStringHelper {
 
     public static void main(String[] args) throws ParseException {
         Date date = stringToDate2("2018-07-04 05:00");
-        String xxx=dateToString3(new Date());
+        String xxx = dateToString3(new Date());
         System.out.println(date);
+    }
+
+    /**
+     * 永久时间点
+     *
+     * @return
+     */
+    public static Date forever() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(9999, 11, 31, 23, 59, 59);
+        return calendar.getTime();
     }
 }

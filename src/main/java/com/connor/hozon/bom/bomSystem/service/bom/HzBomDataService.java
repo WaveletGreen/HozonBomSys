@@ -114,4 +114,14 @@ public class HzBomDataService {
         }
         return array;
     }
+
+    /**
+     * 获取项目下的所有2Y层
+     *
+     * @param projectPuid
+     * @return
+     */
+    public List<HzBomLineRecord> doSelect2YByProjectPuid(String projectPuid) {
+        return hzBomDataDao.select2YByProjectPuid(projectPuid);
+    }
 }

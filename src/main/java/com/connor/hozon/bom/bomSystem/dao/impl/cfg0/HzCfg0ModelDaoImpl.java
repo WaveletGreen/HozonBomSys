@@ -30,4 +30,6 @@ public class HzCfg0ModelDaoImpl implements HzCfg0ModelDetailDao {
     public HzCfg0ModelDetail selectByModelId(HzCfg0ModelDetail detail) {
         return baseSQLUtil.executeQueryById(detail, "com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0ModelDetailDao.selectByModelId");
     }
+
+
 }

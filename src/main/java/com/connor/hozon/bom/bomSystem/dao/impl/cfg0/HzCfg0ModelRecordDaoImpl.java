@@ -38,4 +38,15 @@ public class HzCfg0ModelRecordDaoImpl implements HzCfg0ModelRecordDao {
     public int insertByBatch(List<HzCfg0ModelRecord> modelRecord) {
         return baseSQLUtil.executeInsert(modelRecord, "com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0ModelRecordDao.insertByBatch");
     }
+
+    /**
+     * 该项目下的所有车型
+     *
+     * @param projectPuid
+     * @return
+     */
+    @Override
+    public List<HzCfg0ModelRecord> selectByProjectPuid(String projectPuid) {
+        return baseSQLUtil.executeQueryByPass(new HzCfg0ModelRecord(), projectPuid, "com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0ModelRecordDao.selectByProjectPuid");
+    }
 }

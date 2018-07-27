@@ -33,17 +33,17 @@
             </option>
         </select>
     </div>
-    <div class="form-group">
-        <label for="pColorEffectedDate">生效日期</label>
-        <input class="form-control input-small" id="pColorEffectedDate" name="pColorEffectedDate"
-               placeholder="请选择生效日期"
-        />
-    </div>
-    <div class="form-group">
-        <label for="pColorAbolishDate">废止日期</label>
-        <input class="form-control input-small" id="pColorAbolishDate" name="pColorAbolishDate"
-               placeholder="请选择废止日期"
-        />
+    <!--<div class="form-group">-->
+    <!--<label for="pColorEffectedDate">生效日期</label>-->
+    <!--<input class="form-control input-small" id="pColorEffectedDate" name="pColorEffectedDate"-->
+    <!--placeholder="请选择生效日期"-->
+    <!--/>-->
+    <!--</div>-->
+    <!--<div class="form-group">-->
+    <!--<label for="pColorAbolishDate">废止日期</label>-->
+    <!--<input class="form-control input-small" id="pColorAbolishDate" name="pColorAbolishDate"-->
+    <!--placeholder="请选择废止日期"-->
+    <!--/>-->
     </div>
     <div class="form-group">
         <label for="pColorComment">备注</label>
@@ -79,7 +79,7 @@
                             }
                         }
                     },
-                    pColorEffectedDate: {
+                    /*pColorEffectedDate: {
                         message: '生效时间验证失败',
                         validators: {
                             callback: {
@@ -130,7 +130,7 @@
                                 }
                             }
                         }
-                    },
+                    },*/
                     pColorCode: {
                         message: '颜色代号验证失败',
                         validators: {
@@ -160,8 +160,8 @@
                 var bootstrapValidator = $("#colorForm", window.top.document).data('bootstrapValidator');
                 bootstrapValidator.validate();
                 //重新验证字段
-                bootstrapValidator.revalidateField("pColorAbolishDate");
-                bootstrapValidator.revalidateField("pColorEffectedDate");
+                // bootstrapValidator.revalidateField("pColorAbolishDate");
+                // bootstrapValidator.revalidateField("pColorEffectedDate");
                 if (bootstrapValidator.isValid()) {
                     var url = $("#colorForm", window.top.document).attr('action');
                     <!--其实不要puid，puid会在服务器上生成-->
@@ -171,9 +171,10 @@
                         "pColorName": $("#pColorName").val(),
                         "pColorOfSet": $("#pColorOfSet").val(),
                         "pColorIsMultiply": $("#pColorIsMultiply").val(),
-                        "pColorPlate": $("#pColorPlate").val(),
+                        "pColorPlate": $("#pColorPlate").val()
+                        /*,
                         "strColorEffectedDate": $("#pColorEffectedDate").val(),
-                        "strColorAbolishDate": $("#pColorAbolishDate").val()
+                        "strColorAbolishDate": $("#pColorAbolishDate").val()*/
                     });
                     $.ajax({
                         contentType:

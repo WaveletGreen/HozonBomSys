@@ -416,12 +416,13 @@ public class HzMaterielFeatureController {
                         HzCfg0Record addedRecord = hzCfg0Service.doSelectOneByPuid(value);
                         HzCfg0ToModelRecord hzCfg0ToModelRecord = new HzCfg0ToModelRecord();
                         if (addedRecord == null) {
-                            try {
-                                throw new Exception("无法找到特性值，请检查数据");
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                                return false;
-                            }
+//                            try {
+//                                throw new Exception("无法找到特性值，请检查数据");
+//                            } catch (Exception e) {
+//                                e.printStackTrace();
+//                                return false;
+//                            }
+                            continue;
                         } else {
                             hzCfg0ToModelRecord.setpCfg0IdRecord(addedRecord.getPuid());
                             hzCfg0ToModelRecord.setpCfg0ModelRecord(modelRecord.getPuid());

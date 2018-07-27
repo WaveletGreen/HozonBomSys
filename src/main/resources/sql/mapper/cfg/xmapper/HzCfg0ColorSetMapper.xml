@@ -85,10 +85,30 @@
         from HZ_CFG0_COLORSET where P_COLOR_CODE=#{pColorCode,jdbcType=VARCHAR}
     </select>
     <!--查询全部数据-->
-    <select id="selectAll" resultMap="BaseResultMap">
+    <select id="selectAll" parameterType="com.connor.hozon.bom.common.base.entity.QueryBase" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
-        from HZ_CFG0_COLORSET
+        from
+        ( select
+        <include refid="Base_Column_List"/>,
+        ROWNUM as rowno
+        from HZ_CFG0_COLORSET where 1=1
+        <if test="limit!=null and  page!=null">
+            and ROWNUM &lt;= ${page}*${limit}
+        </if>
+        ) temp
+        <if test="offset!=null">
+            where temp.rowno &gt;= ${offset}
+        </if>
+        <if test="sort!=null">
+            order by ${sort}
+        </if>
+        <if test="order!=null">
+            ${order}
+        </if>
+        <if test="order==null">
+            ASC
+        </if>
     </select>
     <!--插入1条数据-->
     <insert id="insertOne" parameterType="sql.pojo.cfg.HzCfg0ColorSet">
@@ -110,11 +130,8 @@
       P_COLOR_IS_MULTIPLY = #{pColorIsMultiply,jdbcType=VARCHAR},
       P_COLOR_COMMENT = #{pColorComment,jdbcType=VARCHAR},
 
-      P_COLOR_EFFECTED_DATE = #{pColorEffectedDate,jdbcType=VARCHAR},
-      P_COLOR_ABOLISH_DATE = #{pColorAbolishDate,jdbcType=VARCHAR},
       P_COLOR_MODIFY_DATE = #{pColorModifyDate,jdbcType=VARCHAR},
-      P_COLOR_MODIFIER = #{pColorModifier,jdbcType=VARCHAR},
-      P_COLOR_STATUS = #{pColorStatus,jdbcType=VARCHAR}
+      P_COLOR_MODIFIER = #{pColorModifier,jdbcType=VARCHAR}
 
     where PUID = #{puid,jdbcType=VARCHAR}
   </update>
@@ -142,5 +159,9 @@
         </foreach>
         )
     </delete>
+    <!--查询总数-->
+    <select id="tellMeHowManyOfIt" resultType="java.lang.Integer">
+    select count(puid) from HZ_CFG0_COLORSET
+    </select>
 
 </mapper>

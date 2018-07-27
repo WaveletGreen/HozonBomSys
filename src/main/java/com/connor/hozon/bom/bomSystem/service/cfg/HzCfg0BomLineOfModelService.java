@@ -13,10 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sql.pojo.cfg.HzCfg0BomLineOfModel;
-import sql.pojo.cfg.HzCfg0MainRecord;
-import sql.pojo.cfg.HzCfg0ModelDetail;
-import sql.pojo.cfg.HzFcfgBomLvl1ListOperation;
+import sql.pojo.cfg.*;
 import sql.pojo.project.HzBrandRecord;
 import sql.pojo.project.HzPlatformRecord;
 import sql.pojo.project.HzProjectLibs;
@@ -62,6 +59,10 @@ public class HzCfg0BomLineOfModelService {
     private final HzBrandService hzBrandService;
     private final Logger logger = LoggerFactory.getLogger(HzCfg0BomLineOfModelService.class);
     private final HzCfg0ModelDetailDao hzCfg0ModelDetailDao;
+
+
+    @Autowired
+    HzCfg0ModelService hzCfg0ModelService;
 
     @Autowired
     public HzCfg0BomLineOfModelService(
@@ -109,7 +110,7 @@ public class HzCfg0BomLineOfModelService {
             HzVehicleRecord vehicle = hzVehicleService.doGetByPuid(project.getpProjectPertainToVehicle());
             HzPlatformRecord platform = hzPlatformService.doGetByPuid(vehicle.getpVehiclePertainToPlatform());
             HzBrandRecord brand = hzBrandService.doGetByPuid(platform.getpPertainToBrandPuid());
-
+            List<HzCfg0ModelRecord> listOfModel = hzCfg0ModelService.doSelectByProjectPuid(bdf);
             if (hzCfg0BomlineOfModels == null || hzCfg0BomlineOfModels.size() <= 0)
                 return null;
             JSONObject respond = new JSONObject();

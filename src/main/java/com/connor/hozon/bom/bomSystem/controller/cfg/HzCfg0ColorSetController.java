@@ -4,6 +4,7 @@ package com.connor.hozon.bom.bomSystem.controller.cfg;
 import com.connor.hozon.bom.bomSystem.helper.DateStringHelper;
 import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
 import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0ColorSetService;
+import com.connor.hozon.bom.common.base.entity.QueryBase;
 import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.sys.commen.Error;
 import com.connor.hozon.bom.sys.entity.User;
@@ -70,8 +71,9 @@ public class HzCfg0ColorSetController {
      */
     @RequestMapping(value = "/queryAll2", method = RequestMethod.POST)
     @ResponseBody
-    public Map<String, Object> queryAll2() {
-        return colorSerService.queryAll2();
+    public Map<String, Object> queryAll2(QueryBase queryBase) {
+        System.out.println();
+        return colorSerService.queryAll2(queryBase);
     }
 
     /**
@@ -85,8 +87,8 @@ public class HzCfg0ColorSetController {
     @RequestMapping(value = "/update", method = RequestMethod.GET)
     public String update(HzCfg0ColorSet entity, Model model) {
         if ((entity = colorSerService.getById(entity)) != null) {
-            entity.setStrColorAbolishDate(DateStringHelper.dateToString2(entity.getpColorAbolishDate()));
-            entity.setStrColorEffectedDate(DateStringHelper.dateToString2(entity.getpColorEffectedDate()));
+           /* entity.setStrColorAbolishDate(DateStringHelper.dateToString2(entity.getpColorAbolishDate()));
+            entity.setStrColorEffectedDate(DateStringHelper.dateToString2(entity.getpColorEffectedDate()));*/
             model.addAttribute("entity", entity);
             return "cfg/color/colorUpdate";
         } else {
@@ -120,7 +122,8 @@ public class HzCfg0ColorSetController {
     public Boolean update(@RequestBody HzCfg0ColorSet set) {
         Date now = new Date();
         User user = UserInfo.getUser();
-        try {
+        /*try
+        {
             set.setpColorAbolishDate(DateStringHelper.stringToDate2(set.getStrColorAbolishDate()));
             set.setpColorEffectedDate(DateStringHelper.stringToDate2(set.getStrColorEffectedDate()));
         } catch (ParseException e) {
@@ -131,7 +134,7 @@ public class HzCfg0ColorSetController {
             set.setpColorStatus(1);
         } else {
             set.setpColorStatus(0);
-        }
+        }*/
         set.setpColorModifier(user.getUserName());
         set.setpColorModifyDate(now);
         return colorSerService.doUpdate(set);
@@ -154,8 +157,8 @@ public class HzCfg0ColorSetController {
         if (set.getPuid() == null || "".equals(set.getPuid())) {
             set.setPuid(UUIDHelper.generateUpperUid());
         }
-        try {
-            set.setpColorAbolishDate(DateStringHelper.stringToDate2(set.getStrColorAbolishDate()));
+        /*try {
+
             set.setpColorEffectedDate(DateStringHelper.stringToDate2(set.getStrColorEffectedDate()));
             if (set.getpColorAbolishDate() == null) {
                 set.setpColorAbolishDate(new Date());
@@ -168,18 +171,22 @@ public class HzCfg0ColorSetController {
         } catch (ParseException e) {
             e.printStackTrace();
             logger.error("从字符串解析时间失败", e);
-        }
+        }*/
+        //生效时间由审核完成只有更新
         set.setpColorModifyDate(now);
-        set.setpColorCreateDate(now);
+        //失效时间设置为9999
+        set.setpColorAbolishDate(DateStringHelper.forever());
+        //创建时间由数据库默认值定义
+        //  set.setpColorCreateDate(now);
         set.setpColorModifier(user.getUserName());
-        set.setpColorStatus(1);
+        set.setpColorStatus(0);
 
         while (true) {
             if (colorSerService.getById(set) == null) {
                 resultFromDB = colorSerService.doAddOne(set);
                 break;
             } else {
-                set.setPuid(UUID.randomUUID().toString());
+                set.setPuid(UUIDHelper.generateUpperUid());
             }
         }
         if (resultFromDB) {

@@ -33,8 +33,10 @@ function loadData() {
         showToggle: true,                   //是否显示详细视图和列表视图的切换按钮
         showColumns: true,                  //是否显示所有的列
         showRefresh: true,                  //是否显示刷新按钮
-        pageSize: 10,
-        pagination: true,                   //是否显示分页（*）
+        pagination:true,
+        pageNumber:1,                       //初始化加载第一页，默认第一页
+        pageSize: 20,                       //每页的记录行数（*）
+        pageList: ['ALL',20, 50,100,200,500,1000],        //可供选择的每页的行数（*）
         clickToSelect: true,                // 单击某一行的时候选中某一条记录
         formId: "puid",
         toolbars: [

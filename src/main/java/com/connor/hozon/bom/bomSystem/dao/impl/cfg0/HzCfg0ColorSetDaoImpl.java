@@ -1,6 +1,7 @@
 package com.connor.hozon.bom.bomSystem.dao.impl.cfg0;
 
 import com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0ColorSetDao;
+import com.connor.hozon.bom.common.base.entity.QueryBase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sql.BaseSQLUtil;
@@ -21,8 +22,22 @@ public class HzCfg0ColorSetDaoImpl implements HzCfg0ColorSetDao {
     IBaseSQLUtil baseSQLUtil;
 
     @Override
+    public List<HzCfg0ColorSet> queryAll2(QueryBase queryBase) {
+        HzCfg0ColorSet set = new HzCfg0ColorSet();
+        queryBase.setSort(set.reflectToDBField(queryBase.getSort()));
+        List<HzCfg0ColorSet> colorSet = baseSQLUtil.executeQueryByPass(set, queryBase, "com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0ColorSetDao.selectAll");
+        return colorSet;
+    }
+
+    /**
+     * @return
+     * @Author: Fancyears·Maylos·Mayways
+     * @Description: 检索所有的颜色集
+     * @Date: 2018/5/21 17:09
+     */
+    @Override
     public List<HzCfg0ColorSet> queryAll2() {
-        List<HzCfg0ColorSet> colorSet = baseSQLUtil.executeQuery(new HzCfg0ColorSet(), "com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0ColorSetDao.selectAll");
+        List<HzCfg0ColorSet> colorSet = baseSQLUtil.executeQueryByPass(new HzCfg0ColorSet(), new QueryBase(), "com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0ColorSetDao.selectAll");
         return colorSet;
     }
 
@@ -77,6 +92,16 @@ public class HzCfg0ColorSetDaoImpl implements HzCfg0ColorSetDao {
     @Override
     public int logicDeleteByBatch(List<HzCfg0ColorSet> entity) {
         return baseSQLUtil.executeDelete(entity, "com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0ColorSetDao.logicDeleteByBatch");
+    }
+
+    /**
+     * 查询全部的颜色数量
+     *
+     * @return
+     */
+    @Override
+    public int tellMeHowManyOfIt() {
+        return baseSQLUtil.executeQueryById(new Integer(0), "com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0ColorSetDao.tellMeHowManyOfIt");
     }
 
     @Override

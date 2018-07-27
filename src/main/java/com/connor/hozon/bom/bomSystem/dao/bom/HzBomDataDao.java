@@ -1,5 +1,6 @@
 package com.connor.hozon.bom.bomSystem.dao.bom;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.context.annotation.Configuration;
 import sql.pojo.HzPreferenceSetting;
 import sql.pojo.bom.HzBomLineRecord;
@@ -33,4 +34,17 @@ public interface HzBomDataDao {
      * @return
      */
     HzPreferenceSetting loadSetting(HzPreferenceSetting setting);
+
+    /**
+     * Author: Fancyears·Maylos·Mayways
+     * Description: 根据数模层puid获取到所有的BomLine
+     * Date: 2018/5/23 9:59
+     *
+     * @param projectPuid 项目puid
+     * @return
+     */
+    List<HzBomLineRecord> select2YByProjectPuid(@Param("projectPuid") String projectPuid);
+
+
+
 }
