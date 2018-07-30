@@ -154,7 +154,7 @@ function loadData() {
             },
             {
                 field: 'pColorIsMultiply',
-                title: '是否多色',
+                title: '是否拼色',
                 align: 'center',
                 valign: 'middle',
                 sortable: true,

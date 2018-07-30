@@ -63,7 +63,6 @@ public class TransBomService extends Author implements ITransmitService {
      */
     @Override
     public TABLEOFZPPTCO005 execute() {
-
         try {
             if (setClearInputEachTime) {
                 out.getItem().clear();
