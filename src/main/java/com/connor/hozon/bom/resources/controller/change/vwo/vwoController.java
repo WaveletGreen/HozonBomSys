@@ -21,8 +21,8 @@ public class vwoController {
         return "changeManage/vwo/vwoBasicInformation";
     }
 
-    @RequestMapping(value = "changeDescription" ,method = RequestMethod.GET)
-    public String getvwoChangeDescription(){
-        return "changeManage/vwo/vwoChangeDescription";
-    }
+//    @RequestMapping(value = "vwoChangeDescription" ,method = RequestMethod.GET)
+//    public String getvwoChangeDescription(){
+//        return "changeManage/vwo/vwoChangeDescription";
+//    }
 }
