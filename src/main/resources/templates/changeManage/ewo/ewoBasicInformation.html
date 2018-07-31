@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<!--User: xulf Date: 2018/7/30 Time: 15:51-->
+<head th:include="include/includebase"></head>
+<link th:href="@{/css/changeManage/vwo/vwoFromList.css}" rel="stylesheet"/>
+<meta charset="UTF-8">
+<title>变更管理ewo</title>
+</head>
+<body>
+<!--基本信息-->
+<h4><i class="fa fa-minus-square" aria-hidden="true">基本信息</i></h4>
+<div class="panel-body" style="padding-bottom:0px;">
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="col-lg-12 col-md-12">
+                <div class="col-lg-2 col-md-2">
+                    <div class="form-group after_the">
+                        <label for="VWOnum1">EWO号:</label>
+                        <input type="text" style="width: 150px;" class="form-control" name="level" id="VWOnum1"
+                               placeholder=""/>
+                    </div>
+                    <div class="form-group after_the">
+                        <label for="EWOnum2">创建时间:</label>
+                        <input type="text" style="width: 150px;" class="form-control" name="level" id="EWOnum2"
+                               placeholder=""/>
+                    </div>
+                    <div class="form-group after_the">
+                        <label for="VWOnum3">流程状态:</label>
+                        <input type="text" style="width: 150px;" class="form-control" name="level" id="VWOnum3"
+                               placeholder=""/>
+                    </div>
+                    <div class="form-group after_the">
+                        <label for="VWOnum4">标题:</label>
+                        <input type="text" style="width: 150px;" class="form-control" name="level" id="VWOnum4"
+                               placeholder=""/>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-2">
+                    <div class="form-group after_the">
+                        <label for="VWOnum5">部门:</label>
+                        <input type="text" style="width: 150px;" class="form-control" name="level" id="VWOnum5"
+                               placeholder=""/>
+                    </div>
+                    <div class="form-group after_the">
+                        <label for="VWOnum6">发起人:</label>
+                        <input type="text" style="width: 150px;" class="form-control" name="level" id="VWOnum6"
+                               placeholder=""/>
+                    </div>
+                    <div class="form-group after_the">
+                        <label for="VWOnum7">联系电话:</label>
+                        <input type="text" style="width: 150px;" class="form-control" name="level" id="VWOnum7"
+                               placeholder=""/>
+                    </div>
+                    <div class="form-group after_the">
+                        <label for="VWOnum8">要求完成时间:</label>
+                        <input type="text" style="width: 150px;" class="form-control" name="level" id="VWOnum8"
+                               placeholder=""/>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-2">
+                    <div class="form-group after_the">
+                        <label for="VWOnum9">变更类型:</label>
+                        <input type="text" style="width: 150px;" class="form-control" name="level" id="VWOnum9"
+                               placeholder=""/>
+                    </div>
+                    <div class="form-group after_the">
+                        <label for="expenseDept">费用承担部门:&ensp;</label>
+                        <select class="form-control" style="min-width: 150px;max-width: 150px" name="" id="expenseDept">
+                            <!--<option>车身技术部门</option>-->
+                            <!--<option>电子电器技术部门</option>-->
+                            <!--<option>底盘技术部门</option>-->
+                            <!--<option>系统集成技术部门</option>-->
+                            <!--<option>内外饰技术部门</option>-->
+                            <option>车身部门</option>
+                            <option>车身部门</option>
+                            <option>车身部门</option>
+                            <option>车身部门</option>
+                            <option>车身部门</option>
+                        </select>
+                    </div>
+                    <div class="form-group after_the">
+                        <label for="VWOnum10">上市类型:</label>
+                        <input type="text" style="width: 150px;" class="form-control" name="level" id="VWOnum10"
+                               placeholder=""/>
+                    </div>
+                    <div class="form-group after_the">
+                        <label for="VWOnum11">关联EWO号:</label>
+                        <input type="text" style="width: 150px;" class="form-control" name="level" id="VWOnum11"
+                               placeholder=""/>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-2">
+                    <div class="form-group after_the">
+                        <label for="expenseDept1">原因代码:&ensp;</label>
+                        <select class="form-control" style="min-width: 150px;max-width: 150px" name=""
+                                id="expenseDept1">
+                            <option>001配置优化</option>
+                            <option>002性能提升</option>
+                            <option>003造型更改</option>
+                            <option>004设计优化</option>
+                            <option>005市场需求</option>
+                            <option>006关联变更</option>
+                            <option>007BOM及图纸更改</option>
+                            <option>008质量提升</option>
+                            <option>009工艺改进</option>
+                            <option>010VAVE</option>
+                            <option>011其他</option>
+                        </select>
+                    </div>
+                    <div class="form-group after_the">
+                        <label for="VWOnum13">平台:</label>
+                        <input type="text" style="width: 150px;" class="form-control" name="level" id="VWOnum13"
+                               placeholder=""/>
+                    </div>
+                    <div class="form-group after_the">
+                        <label for="VWOnum14">车型代号:</label>
+                        <input type="text" style="width: 150px;" class="form-control" name="level" id="VWOnum14"
+                               placeholder=""/>
+                    </div>
+                    <div class="form-group after_the">
+                        <label for="VWOnum15">项目代号:</label>
+                        <input type="text" style="width: 150px;" class="form-control" name="level" id="VWOnum15"
+                               placeholder=""/>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-2">
+                    <div class="form-group after_the">
+                        <label for="VWOnum16">生效时间:</label>
+                        <input type="text" style="width: 150px;" class="form-control" name="level" id="VWOnum16"
+                               placeholder=""/>
+                    </div>
+                    <div class="form-group after_the">
+                        <label for="VWOnum17">项目所属阶段:&ensp;</label>
+                        <input type="text" style="width: 150px;" class="form-control" name="level" id="VWOnum17"
+                               placeholder=""/>
+                    </div>
+                    <div class="form-group after_the">
+                        <label for="VWOnum18">关联工程师姓名:&ensp;</label>
+                        <input type="text" style="width: 150px;" class="form-control" name="level" id="VWOnum18"
+                               placeholder=""/>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-2">
+                    <div class="form-group after_the">
+                        <label for="VWOnum19">所属部门:&ensp;</label>
+                        <input type="text" style="width: 150px;" class="form-control" name="level" id="VWOnum19"
+                               placeholder=""/>
+                    </div>
+                    <div class="form-group after_the">
+                        <label for="VWOnum20">关联零件号:</label>
+                        <input type="text" style="width: 150px;" class="form-control" name="level" id="VWOnum20"
+                               placeholder=""/>
+                    </div>
+                    <div class="form-group after_the">
+                        <label for="VWOnum21">关联零件名称:&ensp;</label>
+                        <input type="text" style="width: 150px;" class="form-control" name="level" id="VWOnum21"
+                               placeholder=""/>
+                    </div>
+                </div>
+                <div class="col-lg-12 col-md-12">
+                    <div class="form-group after_the">
+                        <label for="VWOnum12">原因描述:</label>
+                        <input type="text" class="form-control" name="level" id="VWOnum12"
+                               placeholder=""/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--变更描述-->
+<h4><i class="fa fa-minus-square" aria-hidden="true">变更描述</i></h4>
+<div class="panel-body" style="padding-bottom:0px;">
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="col-md-3 col-lg-3">
+                <div class="form-group after_the">
+                    <label for="VWOnum1">变更描述:</label>
+                    <textarea rows="1" cols="30" class="form-control"
+                              style="width: 100%;height: 102px;resize:none"></textarea>
+                </div>
+                <!--<div class="form-group after_the">-->
+                <!--<label for="VWOnum1">变更前图片:</label>-->
+                <!--<input type="file" class="form-control" name="level" id="EWOnum3"-->
+                <!--placeholder=""/>-->
+                <!--</div>-->
+                <!--<div class="form-group after_the">-->
+                <!--<label for="VWOnum1">变更后图片:</label>-->
+                <!--<input type="file" class="form-control" name="level" id="EWOnum4"-->
+                <!--placeholder=""/>-->
+                <!--</div>-->
+                <!--<div class="form-group after_the">-->
+                <!--<label for="VWOnum1">附件:</label>-->
+                <!--<input type="file" class="form-control" name="level" id="EWOnum5"-->
+                <!--placeholder=""/>-->
+                <!--</div>-->
+            </div>
+        </div>
+    </div>
+</div>
+<!--零件信息-->
+<h4><i class="fa fa-minus-square" aria-hidden="true">变更描述</i></h4>
+<div class="panel-body" style="padding-bottom:0px;">
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="content col-lg-12"><!--style="margin-top: -50px;"-->
+                <table id="vwo_table" class="table table-striped tableNormalStyle">
+                    <tr>
+                        <th>操作</th>
+                        <th>零件号</th>
+                        <th>版本号</th>
+                        <th>零件名称</th>
+                        <th>上级总成零件号</th>
+                        <th>车型族</th>
+                        <th>状态（U/P/B/D)</th>
+                        <th>配置车型</th>
+                        <th>公告车型号</th>
+                        <th>整车物料号</th>
+                        <th>销售市场</th>
+                    </tr>
+                    <tr>
+                        <td><a href="#"><i class="fa fa-plus" aria-hidden="true"></i></a>
+                            <a href="#"><i class="fa fa-times" aria-hidden="true"></i></a>
+                            <a href="#"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                        </td>
+                        <td>S00-1001</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td><a href="#"><i class="fa fa-plus" aria-hidden="true"></i></a>
+                            <a href="#"><i class="fa fa-times" aria-hidden="true"></i></a>
+                            <a href="#"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                        </td>
+                        <td>S00-1001</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td><a href="#"><i class="fa fa-plus" aria-hidden="true"></i></a>
+                            <a href="#"><i class="fa fa-times" aria-hidden="true"></i></a>
+                            <a href="#"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                        </td>
+                        <td>S00-1001</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td><a href="#"><i class="fa fa-plus" aria-hidden="true"></i></a>
+                            <a href="#"><i class="fa fa-times" aria-hidden="true"></i></a>
+                            <a href="#"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                        </td>
+                        <td>S00-1001</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td><a href="#"><i class="fa fa-plus" aria-hidden="true"></i></a>
+                            <a href="#"><i class="fa fa-times" aria-hidden="true"></i></a>
+                            <a href="#"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                        </td>
+                        <td>S00-1001</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td><a href="#"><i class="fa fa-plus" aria-hidden="true"></i></a>
+                            <a href="#"><i class="fa fa-times" aria-hidden="true"></i></a>
+                            <a href="#"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                        </td>
+                        <td>S00-1001</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<!--影响分析-->
+<h4><i class="fa fa-minus-square" aria-hidden="true">影响分析</i></h4>
+<div class="panel-body" style="padding-bottom:0px;">
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="col-lg-12 col-md-12"><!--style="margin-top: -50px;"-->
+                <div class="col-lg-6 col-md-6">
+                    <label>A 工程师自查清单</label>
+                    <table id="vwo_table1" class="table table-striped tableNormalStyle">
+                        <tr>
+                            <td style="width: 50px;"><input type="checkbox"></td>
+                            <td>此变更涉及到标签/文字?</td>
+                        </tr>
+                        <tr>
+                            <td style="width: 50px;"><input type="checkbox"></td>
+                            <td>此变更涉及到紧固件/力矩吗?</td>
+                        </tr>
+                        <tr>
+                            <td style="width: 50px;"><input type="checkbox"></td>
+                            <td>此变更涉及到原材料的变更吗?</td>
+                        </tr>
+                        <tr>
+                            <td style="width: 50px;"><input type="checkbox"></td>
+                            <td>此变更涉及到售后维修方式的变化吗?</td>
+                        </tr>
+                        <tr>
+                            <td style="width: 50px;"><input type="checkbox"></td>
+                            <td>此变更有没有和以往类似的变更不一样的地方?</td>
+                        </tr>
+                        <tr>
+                            <td style="width: 50px;"><input type="checkbox"></td>
+                            <td>此变更涉及到A面造型吗?</td>
+                        </tr>
+                        <tr>
+                            <td style="width: 50px;"><input type="checkbox"></td>
+                            <td>此变更涉及到零件重量的变化吗?</td>
+                        </tr>
+                        <tr>
+                            <td style="width: 50px;"><input type="checkbox"></td>
+                            <td>此变更的子件变更内容确认?</td>
+                        </tr>
+                        <tr>
+                            <td style="width: 50px;"><input type="checkbox"></td>
+                            <td>此变更是否是U发布?</td>
+                        </tr>
+                        <tr>
+                            <td style="width: 50px;"><input type="checkbox"></td>
+                            <td>此变更是否有产品开发工程师在做工程方面的支持?</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="col-lg-6 col-md-6">
+                    <label>B 如涉及软件/程序/数据 变更,增加以下自查内容</label>
+                    <table id="vwo_table2" class="table table-striped tableNormalStyle">
+                        <tr>
+                            <td style="width: 50px;"><input type="checkbox"></td>
+                            <td>是否是一个只涉及部门内部的变更?</td>
+                        </tr>
+                        <tr>
+                            <td style="width: 50px;"><input type="checkbox"></td>
+                            <td>是否是一个硬件/OS软件/程序标定 变更?</td>
+                        </tr>
+                        <tr>
+                            <td style="width: 50px;"><input type="checkbox"></td>
+                            <td>新的硬件/OS软件/程序标定 是否和变更前的兼容?</td>
+                        </tr>
+                        <tr>
+                            <td style="width: 50px;"><input type="checkbox"></td>
+                            <td>变更是否和其它零部件相关?</td>
+                        </tr>
+                        <tr>
+                            <td style="width: 50px;"><input type="checkbox"></td>
+                            <td>新零件会引起任何功能相关的变化吗?</td>
+                        </tr>
+                        <tr>
+                            <td style="width: 50px;"><input type="checkbox"></td>
+                            <td>新的OS软件装载之前校准(反之亦然)导致控制器中的错误?</td>
+                        </tr>
+                        <tr>
+                            <td style="width: 50px;"><input type="checkbox"></td>
+                            <td>新零件会用来在售后市场维修之前的车型吗?</td>
+                        </tr>
+                        <tr>
+                            <td style="width: 50px;"><input type="checkbox"></td>
+                            <td>为售后4S店的技师维修提供必要的说明</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--相关部门-->
+<h4><i class="fa fa-minus-square" aria-hidden="true">相关部门</i></h4>
+<div class="panel-body" style="padding-bottom:0px;">
+    <div class="panel panel-default">
+        <div class="panel-body">
+
+        </div>
+    </div>
+</div>
+</body>
+</html>
