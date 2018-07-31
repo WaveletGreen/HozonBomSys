@@ -96,6 +96,8 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         registry.addViewController("/vwoFromList").setViewName("/changeManage/vwo/vwoFromList");
         //变更管理EWO表单
         registry.addViewController("/ewoFromList").setViewName("/changeManage/ewo/ewoFromList");
+        //变更管理EWO表单
+        registry.addViewController("/mwoFromList").setViewName("/changeManage/mwo/mwoFromList");
     }
 
 

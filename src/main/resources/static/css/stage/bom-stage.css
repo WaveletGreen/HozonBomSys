@@ -17,7 +17,7 @@
     color: #696969;
 }
 .numToCenter {
-    text-align: center;
+    /*text-align: center;*/
     width: 100px;
 }
 
@@ -45,11 +45,12 @@
     /* 	调整单个单元格的大小 */
     min-width: 50px;
     white-space: nowrap;
+    text-align: left !important;
 }
 
 .tableNormalStyle tr th {
     border: 1px solid #CCC;
-    text-align: center;
+    /*text-align: center;*/
 }
 
 .tableNormalStyle thead tr .bs-checkbox {
@@ -75,7 +76,7 @@
 
 .tableNormalStyle2 tr th {
     border: 1px solid #cccccc;
-    text-align: center;
+    /*text-align: center;*/
 }
 
 .tableNormalStyle2 thead tr .bs-checkbox {
