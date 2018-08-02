@@ -5,6 +5,7 @@ import com.connor.hozon.bom.bomSystem.helper.IntegrateMsgDTO;
 import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
 import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0Service;
 import com.connor.hozon.bom.bomSystem.service.iservice.integrate.ISynRelevanceService;
+import com.connor.hozon.bom.common.base.entity.QueryBase;
 import integration.base.relevance.ZPPTCO004;
 import integration.logic.Correlate;
 import integration.option.ActionFlagOption;
@@ -33,7 +34,7 @@ public class SynRelevanceService implements ISynRelevanceService {
      */
     @Override
     public JSONObject synAllByProjectPuid(String projectPuid) throws Exception {
-        List<HzCfg0Record> list = hzCfg0Service.doLoadCfgListByProjectPuid(projectPuid);
+        List<HzCfg0Record> list = hzCfg0Service.doLoadCfgListByProjectPuid(projectPuid, new QueryBase());
         List<HzRelevanceBean> beans = new ArrayList<>();
         if (list != null && list.size() > 0) {
             sortData(list, beans);

@@ -8,7 +8,7 @@ public class StringHelper {
      * @return
      */
     public static boolean checkString(String str) {
-        if (str == null || "".equals(str)) {
+        if (str == null || str.length() <= 0) {
             return false;
         } else {
             return true;
@@ -36,7 +36,7 @@ public class StringHelper {
      * @return
      */
     public static boolean checkStringIsEmpty(String str) {
-        if ("".equals(str)) {
+        if (str.length() <= 0) {
             return true;
         } else {
             return false;

@@ -51,6 +51,6 @@
         select t2.puid
         from hz_cfg0_main_record t2
         where t2.p_cfg0_of_which_project_puid =#{mainId}
-        ) order by P_OF_CFG0_MAIN ASC
+        ) order by PUID
     </select>
 </mapper>

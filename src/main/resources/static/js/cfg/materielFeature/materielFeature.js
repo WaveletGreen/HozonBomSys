@@ -1,4 +1,3 @@
-var firstLoad = true;
 
 function modeVehicle(puid) {
     // $.ajax({

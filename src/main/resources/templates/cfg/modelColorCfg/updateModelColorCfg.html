@@ -2,9 +2,8 @@
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <body>
 <meta charset=utf-8/>
-<form class="form-horizontal" id="modColorModelForm" role="form" method="post" action="./modelColor/updateColorModel">
+<form class="form-horizontal" id="form" role="form" method="post" action="./modelColor/updateColorModel">
     <fieldset>
-        <input id="counter" name="count" type="hidden" th:value="${columnList.size()}"/>
         <input id="puid" name="puid" type="hidden" th:value="${entity.puid}"/>
         <div id="legend" class="">
             <legend class="">更新颜色车型</legend>
@@ -27,11 +26,11 @@
         </div>
         <!--循环放入数据-->
         <div class="form-group col-lg-10" th:each="column,c:${columnList}">
-            <label class="control-label" th:text="${column}"></label>
-            <select class="form-control input-small" th:name="${c.index}" data-style="btn-info"
-                    th:id="${'select'+c.index}"
+            <label class="control-label" th:text="${column.getpOptionfamilyName()+'-'+column.getpOptionfamilyDesc()}" th:for="${column.getPuid()}"></label>
+            <select class="form-control input-small" th:name="${column.getPuid()}" data-style="btn-info"
+                    th:id="${column.getPuid()}"
             >
-                <option th:each="color:${colorList}" th:value="${color.pColorCode}"
+                <option th:each="color:${colorList}" th:value="${color.getPuid()}"
                         th:text="${color.pColorCode}"
                         th:text="${color.pColorCode+'&emsp;&emsp;'+color.pColorName+'&emsp;&emsp;'+color.getpColorComment()+'&emsp;&emsp;'+color.getpColorOfSet()}"
                         th:selected="${orgValue.get((c.index))==color.pColorCode? true :false}"
@@ -44,7 +43,7 @@
 <script th:inline="javascript">
     <![CDATA[
     $(function () {
-        $('#modColorModelForm').bootstrapValidator({
+        $('#form').bootstrapValidator({
             message: 'This value is not valid',
             feedbackIcons: {
                 valid: 'glyphicon glyphicon-ok',
@@ -64,18 +63,16 @@
         });
         // 绑定dialog的确定按钮的监听事件
         $("#btnOk", window.top.document).click(function () {
-            var bootstrapValidator = $("#modColorModelForm", window.top.document).data('bootstrapValidator');
+            var bootstrapValidator = $("#form", window.top.document).data('bootstrapValidator');
             bootstrapValidator.validate();
             if (bootstrapValidator.isValid()) {
-                var url = $("#modColorModelForm", window.top.document).attr('action');
+                var url = $("#form", window.top.document).attr('action');
                 var data = {};
-                data.puid = $("#puid").val();
-                data.pCodeOfColorfulModel = $("#pCodeOfColorfulModel").val();
-                data.pDescOfColorfulModel = $("#pDescOfColorfulModel").val();
-                var count = parseInt($("#counter").val());
-                for (var i = 0; i < count; i++) {
-                    eval(('data.s' + i + '=$("#select' + i + '").val()'));
+                var _d = $("#form").serializeArray();
+                for (var p in _d) {
+                    data[_d[p].name] = _d[p].value;
                 }
+                data.pCodeOfColorfulModel=$("#pCodeOfColorfulModel").val();
                 $.ajax({
                     contentType:
                         "application/json",

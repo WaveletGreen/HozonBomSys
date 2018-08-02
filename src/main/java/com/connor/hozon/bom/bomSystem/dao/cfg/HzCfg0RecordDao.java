@@ -1,6 +1,7 @@
 package com.connor.hozon.bom.bomSystem.dao.cfg;
 
 import com.connor.hozon.bom.bomSystem.dto.HzMaterielFeatureBean;
+import com.connor.hozon.bom.common.base.entity.QueryBase;
 import org.apache.ibatis.annotations.Param;
 import sql.pojo.cfg.HzCfg0Record;
 
@@ -35,9 +36,10 @@ public interface HzCfg0RecordDao {
     /***
      * 根据项目的puid搜索所有的特性信息
      * @param projectPuid
+     * @param queryBase
      * @return
      */
-    List<HzCfg0Record> selectListByProjectPuid(@Param("projectPuid") String projectPuid);
+    List<HzCfg0Record> selectListByProjectPuid(@Param("projectPuid") String projectPuid, QueryBase queryBase);
 
     /***
      * 根据项目的puid搜索所有新添加的特性信息
@@ -87,4 +89,6 @@ public interface HzCfg0RecordDao {
     int deleteCfgByList(List<HzCfg0Record> records);
 
     int setIsSent(Map<String,Object> _map);
+
+    int tellMeHowManyOfThose(String projectPuid);
 }

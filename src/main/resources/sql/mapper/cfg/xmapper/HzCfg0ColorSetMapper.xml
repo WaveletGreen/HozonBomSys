@@ -92,7 +92,7 @@
         ( select
         <include refid="Base_Column_List"/>,
         ROWNUM as rowno
-        from HZ_CFG0_COLORSET where 1=1
+        from HZ_CFG0_COLORSET where 1=1 and P_Defualt is null
         <if test="limit!=null and  page!=null">
             and ROWNUM &lt;= ${page}*${limit}
         </if>
@@ -161,7 +161,7 @@
     </delete>
     <!--查询总数-->
     <select id="tellMeHowManyOfIt" resultType="java.lang.Integer">
-    select count(puid) from HZ_CFG0_COLORSET
+    select count(puid) from HZ_CFG0_COLORSET where p_defualt is null
     </select>
 
 </mapper>

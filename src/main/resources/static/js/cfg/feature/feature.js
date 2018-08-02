@@ -1,4 +1,3 @@
-var firstLoad = true;
 $(document).ready(
     // $("#query").click(function () {
     (function () {
@@ -14,7 +13,7 @@ $(document).ready(
             $("#refresh").removeAttr("disabled");
         }
     )
-)
+);
 
 /***
  * 加载数据，异步操作，方便调用
@@ -33,10 +32,11 @@ function loadData() {
         showToggle: true,                   //是否显示详细视图和列表视图的切换按钮
         showColumns: true,                  //是否显示所有的列
         showRefresh: true,                  //是否显示刷新按钮
-        pagination:true,
+        pagination: true,                   //是否显示分页（*）
         pageNumber:1,                       //初始化加载第一页，默认第一页
-        pageSize: 20,                       //每页的记录行数（*）
-        pageList: ['ALL',20, 50,100,200,500,1000],        //可供选择的每页的行数（*）
+        pageSize: 10,                       //每页的记录行数（*）
+        pageList: [10, 30,50,100,500,1000],//可供选择的每页的行数（*）
+        smartDisplay:false,
         clickToSelect: true,                // 单击某一行的时候选中某一条记录
         formId: "puid",
         toolbars: [
@@ -154,18 +154,22 @@ function loadData() {
             {
                 field: 'pCfg0FamilyName',
                 title: '特性名称',
+                sortable: true,                     //是否启用排序
+                sortOrder: "asc"
             },
             {
                 field: 'pCfg0FamilyDesc',
                 title: '特性描述',
                 align: 'center',
                 valign: 'middle',
+                sortable: true,                     //是否启用排序
+                sortOrder: "asc"
             },
             {
                 field: 'pH9featureenname',
                 title: '特性英文名称',
                 align: 'center',
-                valign: 'middle',
+                valign: 'middle'
             },
             // {
             //     field: 'length',
@@ -178,12 +182,16 @@ function loadData() {
                 title: '特性值/配置代码',
                 align: 'center',
                 valign: 'middle',
+                sortable: true,                     //是否启用排序
+                sortOrder: "asc"
             },
             {
                 field: 'pCfg0Desc',
                 title: '特性值/配置(描述)',
                 align: 'center',
                 valign: 'middle',
+                sortable: true,                     //是否启用排序
+                sortOrder: "asc"
             },
             {
                 field: 'puid',
@@ -193,6 +201,7 @@ function loadData() {
         ],
         sortable: true,                     //是否启用排序
         sortOrder: "asc",                   //排序方式
+        sortName: 'pCfg0ObjectId'
     });
     $table.bootstrapTable('hideColumn', 'puid');
 }

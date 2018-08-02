@@ -9,6 +9,7 @@ import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0OptionFamilyService;
 import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0Service;
 import com.connor.hozon.bom.bomSystem.service.iservice.integrate.ISynFeatureService;
 import com.connor.hozon.bom.bomSystem.service.iservice.integrate.ISynRelevanceService;
+import com.connor.hozon.bom.common.base.entity.QueryBase;
 import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.sys.entity.User;
 import integration.Author;
@@ -83,10 +84,12 @@ public class HzCfg0Controller extends ExtraIntegrate {
     /******************************************特性表***********************************************/
     @RequestMapping("/loadFeature")
     @ResponseBody
-    public Map<String, Object> loadCfg0(@RequestParam("projectPuid") String projectPuid) {
+    public Map<String, Object> loadCfg0(@RequestParam("projectPuid") String projectPuid, QueryBase queryBase) {
         Map<String, Object> result = new HashMap<>();
-        List<HzCfg0Record> records = hzCfg0Service.doLoadCfgListByProjectPuid(projectPuid);
-        records.addAll(hzCfg0Service.doLoadAddedCfgListByProjectPuid(projectPuid));
+        queryBase.setSort(HzCfg0Record.reflectToDBField(queryBase.getSort()));
+        List<HzCfg0Record> records = hzCfg0Service.doLoadCfgListByProjectPuid(projectPuid,queryBase);
+        int totalCount=hzCfg0Service.tellMeHowManyOfThose(projectPuid);
+//        records.addAll(hzCfg0Service.doLoadAddedCfgListByProjectPuid(projectPuid));
         result.put("totalCount", records.size());
         result.put("result", records);
         return result;
@@ -312,7 +315,7 @@ public class HzCfg0Controller extends ExtraIntegrate {
         List<HzRelevanceBean> _list = new ArrayList<>();
         int _index = 0;
         _index = hzCfg0Service.doLoadRelevance(projectPuid, _list, _index, "HZ_CFG0_RECORD");
-        hzCfg0Service.doLoadRelevance(projectPuid, _list, _index, "HZ_CFG0_ADD_CFG_RECORD");
+//        hzCfg0Service.doLoadRelevance(projectPuid, _list, _index, "HZ_CFG0_ADD_CFG_RECORD");
         result.put("totalCount", _list.size());
         result.put("result", _list);
         return result;

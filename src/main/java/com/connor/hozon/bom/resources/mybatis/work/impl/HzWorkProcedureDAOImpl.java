@@ -6,7 +6,6 @@ import com.connor.hozon.bom.resources.page.PageRequest;
 import com.connor.hozon.bom.resources.query.HzWorkProcessByPageQuery;
 import org.springframework.stereotype.Service;
 import sql.BaseSQLUtil;
-import sql.pojo.work.HzWorkCenter;
 import sql.pojo.work.HzWorkProcedure;
 import sql.pojo.work.HzWorkProcess;
 

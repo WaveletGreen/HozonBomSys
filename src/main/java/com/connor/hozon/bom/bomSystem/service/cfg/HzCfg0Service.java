@@ -4,6 +4,7 @@ import com.connor.hozon.bom.bomSystem.dto.HzMaterielFeatureBean;
 import com.connor.hozon.bom.bomSystem.dto.HzRelevanceBean;
 import com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0RecordDao;
 import com.connor.hozon.bom.bomSystem.helper.StringHelper;
+import com.connor.hozon.bom.common.base.entity.QueryBase;
 import org.springframework.stereotype.Service;
 import sql.pojo.cfg.HzCfg0Record;
 
@@ -29,8 +30,8 @@ public class HzCfg0Service {
         return hzCfg0RecordDao.selectByPrimaryKey(projectPuid);
     }
 
-    public List<HzCfg0Record> doLoadCfgListByProjectPuid(String projectPuid) {
-        return hzCfg0RecordDao.selectListByProjectPuid(projectPuid);
+    public List<HzCfg0Record> doLoadCfgListByProjectPuid(String projectPuid, QueryBase queryBase) {
+        return hzCfg0RecordDao.selectListByProjectPuid(projectPuid,queryBase);
     }
 
     public List<HzCfg0Record> doLoadAddedCfgListByProjectPuid(String projectPuid) {
@@ -98,7 +99,7 @@ public class HzCfg0Service {
         List<HzCfg0Record> records = null;
         List<HzCfg0Record> needToUpdate = new ArrayList<>();
         if ("HZ_CFG0_RECORD".equals(_table)) {
-            records = doLoadCfgListByProjectPuid(projectPuid);
+            records = doLoadCfgListByProjectPuid(projectPuid, new QueryBase());
         } else if ("HZ_CFG0_ADD_CFG_RECORD".equals(_table)) {
             records = doLoadAddedCfgListByProjectPuid(projectPuid);
         }
@@ -154,5 +155,9 @@ public class HzCfg0Service {
             }
         }
         return false;
+    }
+
+    public int tellMeHowManyOfThose(String projectPuid) {
+       return  hzCfg0RecordDao.tellMeHowManyOfThose(projectPuid);
     }
 }

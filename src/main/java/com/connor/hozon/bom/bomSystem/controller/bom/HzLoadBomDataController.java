@@ -1,22 +1,24 @@
 package com.connor.hozon.bom.bomSystem.controller.bom;
 
+import com.connor.hozon.bom.bomSystem.dao.bom.HzBomMainRecordDao;
+import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
 import com.connor.hozon.bom.bomSystem.service.bom.HzBomDataService;
 import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0BomLineOfModelService;
-import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0ModelService;
 import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0Service;
+import com.connor.hozon.bom.bomSystem.service.iservice.cfg.IHzCfg0OfBomLineService;
+import com.connor.hozon.bom.common.base.entity.QueryBase;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import sql.pojo.bom.HZBomMainRecord;
 import sql.pojo.bom.HzBomLineRecord;
+import sql.pojo.cfg.HzCfg0OfBomLineRecord;
 import sql.pojo.cfg.HzCfg0Record;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 @RequestMapping("/loadBom")
@@ -25,7 +27,14 @@ public class HzLoadBomDataController {
     private final HzBomDataService hzBomDataService;
 
     @Autowired
+    HzBomMainRecordDao hzBomMainRecordDao;
+    @Autowired
+    IHzCfg0OfBomLineService iHzCfg0OfBomLineService;
+
+    @Autowired
     HzCfg0Service hzCfg0Service;
+
+    private boolean debug = false;
 
     public HzLoadBomDataController(HzCfg0BomLineOfModelService hzCfg0BomLineOfModelService, HzBomDataService hzBomDataService) {
         this.hzCfg0BomLineOfModelService = hzCfg0BomLineOfModelService;
@@ -83,7 +92,7 @@ public class HzLoadBomDataController {
             model.addAttribute("msg", "请选择1个项目进行操作");
             return "errorWithEntity";
         }
-        List<HzCfg0Record> features = hzCfg0Service.doLoadCfgListByProjectPuid(projectPuid);
+        List<HzCfg0Record> features = hzCfg0Service.doLoadCfgListByProjectPuid(projectPuid, new QueryBase());
         List<HzBomLineRecord> lines = hzBomDataService.doSelect2YByProjectPuid(projectPuid);
         model.addAttribute("features", features);
         model.addAttribute("lines", lines);
@@ -94,8 +103,38 @@ public class HzLoadBomDataController {
     @RequestMapping(value = "reflect2Y", method = RequestMethod.POST)
     @ResponseBody
     public boolean reflect2Y(@RequestBody Map<String, String> params) {
+        List<HzCfg0OfBomLineRecord> records = new ArrayList<>();
+        HZBomMainRecord mainRecord = new HZBomMainRecord();
         if (params != null) {
-            return true;
+            int index = 0;
+            Iterator<Map.Entry<String, String>> iterator = params.entrySet().iterator();
+            while (iterator.hasNext()) {
+                if (index <= 0) {
+                    mainRecord = hzBomMainRecordDao.selectByProjectPuid(iterator.next().getValue());
+                    index++;
+                    continue;
+                }
+                HzCfg0OfBomLineRecord record = new HzCfg0OfBomLineRecord();
+
+                Map.Entry<String, String> p1 = iterator.next();
+                Map.Entry<String, String> p2 = iterator.next();
+                //需要强关联
+                record.setpCfg0name(p1.getKey());
+                record.setpToCfg0IdOfBl(p1.getValue());
+                record.setpBomLineName(p2.getKey());
+                record.setpBomlinepuid(p2.getValue());
+                HzCfg0Record record1 = hzCfg0Service.doSelectOneByPuid(p1.getValue());
+                record.setpCfg0familyname(record1.getpCfg0FamilyName());
+                record.setpBomDigifaxId(mainRecord.getPuid());
+                record.setPuid(UUIDHelper.generateUpperUid());
+                records.add(record);
+                index++;
+            }
+            if (!debug) {
+                return iHzCfg0OfBomLineService.doInsertByBatch(records);
+            } else {
+                return false;
+            }
         } else {
             return false;
         }

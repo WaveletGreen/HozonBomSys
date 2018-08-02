@@ -1,4 +1,3 @@
-var firstLoad = true;
 
 function loadData() {
     var $table = $("#dataTable");

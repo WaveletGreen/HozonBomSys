@@ -43,17 +43,21 @@
         // });
         // 绑定dialog的确定按钮的监听事件
         $("#btnOk", window.top.document).click(function () {
-            var bootstrapValidator = $("#form", window.top.document).data('bootstrapValidator');
+            // var bootstrapValidator = $("#form", window.top.document).data('bootstrapValidator');
             // bootstrapValidator.validate();
             // if (bootstrapValidator.isValid()) {
             var url = $("#form", window.top.document).attr('action');
+            var projectPuid = $("#project", window.top.document).val();
             <!--其实不要puid，puid会在服务器上生成-->
             var data = {};
+            data.projectPuid = projectPuid;
             var _d = $("#form").serializeArray();
             for (var p in _d) {
-                data[_d[p].name] = _d[p].value;
+                if(_d.hasOwnProperty(p)){
+                    data[_d[p].name] = _d[p].value;
+                }
             }
-            var sort = {};
+            // var sort = {};
 
             // for (var i in data) {
             //     console.log(data[i]);
@@ -85,7 +89,7 @@
                 data: JSON.stringify(data),
                 success:
                     function (result) {
-                        $('.modal-dialog', window.top.document).parent('div').remove()
+                        $('.modal-dialog', window.top.document).parent('div').remove();
                         $('body', window.top.document).find('.modal-backdrop').remove();
                         // jquery 调用刷新当前操作的table页面的refresh方法
                         // $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();

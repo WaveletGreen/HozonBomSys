@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sql.pojo.cfg.HzCfg0ModelColor;
 import sql.pojo.cfg.HzCfg0OptionFamily;
+import sql.pojo.cfg.HzColorModel;
 import sql.redis.SerializeUtil;
 
 import java.util.ArrayList;
@@ -24,6 +25,9 @@ public class HzCfg0ModelColorService {
     HzCfg0ModelColorDao hzCfg0ModelColorDao;
     @Autowired
     HzCfg0OptionFamilyDao hzCfg0OptionFamilyDao;
+
+    @Autowired
+    HzColorModelService hzColorModelService;
 
     public List<HzCfg0ModelColor> doLoadModelColorByMainId(HzCfg0ModelColor color) {
         return hzCfg0ModelColorDao.selectByMainId(color);
@@ -44,6 +48,8 @@ public class HzCfg0ModelColorService {
     public Map<String, Object> doLoadAll(String projectPuid) {
         Map<String, Object> result = new HashMap<>();
         List<HzCfg0ModelColor> colorSet = hzCfg0ModelColorDao.selectAll(projectPuid);
+        List<HzCfg0OptionFamily> families = hzCfg0OptionFamilyDao.selectNameByMainId(projectPuid);
+
         result.put("totalCount", colorSet.size());
         List<Map<String, String>> res = new ArrayList<>();
         colorSet.forEach(color -> {
@@ -53,13 +59,24 @@ public class HzCfg0ModelColorService {
             _result.put("descOfColorModel", color.getpDescOfColorfulModel());
             _result.put("modelShell", color.getpModelShellOfColorfulModel());
             _result.put("modeColorIsMultiply", color.getpColorIsMultiply());
-            Object o = SerializeUtil.unserialize(color.getpColorfulMapBlock());
-            if (o instanceof HashMap) {
-                HashMap<String, String> _map = (HashMap) o;
-                _map.forEach((key, value) ->
-                        _result.put(key==null?"":key, value==null?"-":value)
-                );
+            List<HzColorModel> cm = hzColorModelService.doSelectByModelUidWithColor(color.getPuid());
+            if (cm == null || cm.size() == 0) {
+                for (int i = 0; i < families.size(); i++) {
+                    _result.put("s" + i, "-");
+                }
             }
+            else{
+                for (int i = 0; i < cm.size(); i++) {
+                    _result.put("s"+i,cm.get(i).getpColorCode());
+                }
+            }
+//            Object o = SerializeUtil.unserialize(color.getpColorfulMapBlock());
+//            if (o instanceof HashMap) {
+//                HashMap<String, String> _map = (HashMap) o;
+//                _map.forEach((key, value) ->
+//                        _result.put(key == null ? "" : key, value == null ? "-" : value)
+//                );
+//            }
             res.add(_result);
         });
         result.put("result", res);

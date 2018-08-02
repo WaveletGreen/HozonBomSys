@@ -79,6 +79,42 @@ public class HzCfg0Record {
     private String creator;
     private String lastModifier;
 
+    public static String reflectToDBField(String property) {
+        switch (property) {
+            /**
+             * 主键
+             */
+            case "puid":
+                return "PUID";
+            /**
+             * 颜色集
+             */
+            case "pCfg0ObjectId":
+                return "P_CFG0_OBJECT_ID";
+            /**
+             * 颜色名称
+             */
+            case "pCfg0Desc":
+                return "P_CFG0_DESC";
+            /**
+             * 颜色代码
+             */
+            case "pCfg0FamilyName":
+                return "P_CFG0_FAMILY_NAME";
+            /**
+             * 备注
+             */
+            case "pCfg0FamilyDesc":
+                return "P_CFG0_FAMILY_DESC";
+            default:
+                return null;
+        }
+    }
+
+
+
+
+
     public String getPuid() {
         return puid;
     }
