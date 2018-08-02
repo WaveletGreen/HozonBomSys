@@ -45,15 +45,18 @@
     /* 	调整单个单元格的大小 */
     min-width: 50px;
     white-space: nowrap;
-    text-align: left !important;
+    /*text-align: left !important;*/
 }
 
-.tableNormalStyle tr th {
+.tableNormalStyle thead tr th{
     border: 1px solid #CCC;
-    /*text-align: center;*/
+    text-align: center;
 }
-
+.tableNormalStyle thead tr th .th-inner{
+padding: 2px !important;
+}
 .tableNormalStyle thead tr .bs-checkbox {
+    text-align: center ;
     min-width: 50px;
 }
 

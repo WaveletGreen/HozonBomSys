@@ -45,8 +45,8 @@ function doQuery() {
                         var json = {
                             field: key,
                             title: data[key],
-                            align:
-                                'center',
+                            // align:
+                            //     'center',
                             valign:
                                 'middle'
                         };
@@ -58,7 +58,7 @@ function doQuery() {
                     method: 'GET',
                     dataType: 'json',
                     sidePagination: "server",           //分页方式：client客户端分页，server服务端分页（*）
-                    height: $(window.parent.document).find("#wrapper").height() - 180,
+                    height: $(window.parent.document).find("#wrapper").height() - 150,
                     width: $(window).width(),
                     formId: "queryBom",
                     undefinedText: "",//当数据为 undefined 时显示的字符
