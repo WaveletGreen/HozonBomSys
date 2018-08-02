@@ -126,8 +126,8 @@ function initTable(eBomUrl) {
                 clickToSelect: true,// 单击某一行的时候选中某一条记录
                 //search: true, //是否显示表格搜索，此搜索是客户端搜索，不会进服务端
                 showColumns: true, //是否显示所有的列
-                fixedColumns: true,
-                fixedNumber:3,
+                // fixedColumns: true,
+                // fixedNumber:3,
                 showToggle: false,                   //是否显示详细视图和列表视图的切换按钮
                 showRefresh: true,                  //是否显示刷新按钮
                 //minimumCountColumns:4,

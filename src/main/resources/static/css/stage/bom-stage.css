@@ -39,7 +39,7 @@
 .tableNormalStyle tr {
 }
 .tableNormalStyle tr:nth-child(even){
-    background-color: #C9C5C5;
+    background-color: #ced4da;
 }
 .tableNormalStyle tr td {
     /* 	调整单个单元格的大小 */
