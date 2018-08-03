@@ -86,4 +86,14 @@
 .after_the{
     margin-top: 8px;
 }
+.panel-body{
+    padding-bottom: 2px!important;
+    padding-top: 2px!important;
+
+}
+.panel-default{
+    padding-bottom: 2px!important;
+    padding-top: 2px!important;
+
+}
 

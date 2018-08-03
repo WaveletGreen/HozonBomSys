@@ -11,4 +11,10 @@ label{
 /*input{*/
     /*width: 50%;*/
 /*}*/
+.panel-body{
+    padding: 0!important;
+}
+.panel-default{
+    padding: 0!important;
+}
 
