@@ -105,14 +105,13 @@
 
         <!--生成对应表及类名 schema="general" 数据库用的是Oracle,SqlServer需要去掉schema属性,MySQL则不需要去掉 -->
 
-        <!-- <table tableName="GRANTUSER" domainObjectName="GrantUser"> -->
-        <!-- <property name="useActualColumnNames" value="false" /> -->
+         <table tableName="HZ_COLOR_LVL2_MODEL" domainObjectName="HzColorLvl2Model">
+         <property name="useActualColumnNames" value="false" />
 
-        <!-- </table> -->
-        <!-- <table tableName="USERAUTHORIZATION" domainObjectName="UserAuthorization"> -->
-        <!-- <property name="useActualColumnNames" value="false" /> -->
-
-         <!--</table> -->
+         </table>
+         <!--<table tableName="HZ_CFG0_OF_BOMLINE_RECORD" domainObjectName="HzCfg0OfBomLineRecord">-->
+         <!--<property name="useActualColumnNames" value="false" />-->
+         <!--</table>-->
          <!--<table tableName="HZ_BRAND_RECORD" domainObjectName="HzBrandRecord">-->
          <!--<property name="useActualColumnNames" value="false" />-->
 
@@ -121,10 +120,10 @@
          <!--<property name="useActualColumnNames" value="false" />-->
 
          <!--</table>-->
-         <table tableName="HZ_CFG0_TO_MODEL_RECORD" domainObjectName="HzCfg0ToModelRecord">
-         <property name="useActualColumnNames" value="false" />
+         <!--<table tableName="HZ_CFG0_TO_MODEL_RECORD" domainObjectName="HzCfg0ToModelRecord">-->
+         <!--<property name="useActualColumnNames" value="false" />-->
 
-         </table>
+         <!--</table>-->
         <!-- <table tableName="HZ_RELEASE_FILE_RECORD" domainObjectName="HzReleaseFileRecord"> -->
         <!-- <property name="useActualColumnNames" value="false" /> -->
         <!-- </table> -->

@@ -48,8 +48,8 @@ function initTable(url) {
                     var json = {
                         field: key,
                         title: data[key],
-                        align:
-                            'center',
+                        // align:
+                        //     'center',
                         valign:
                             'middle'
                     };

@@ -1,511 +1,537 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<!--User: xulf Date: 2018/6/21 Time: 13:09-->
+<!--User: xulf Date: 2018/7/27 Time: 10:11-->
 <head th:include="include/includebase"></head>
-<link th:href="@{/css/stage/bom-stage.css}" rel="stylesheet"/>
-<!--<link th:href="@{/css/changeManage/vwo/vwoBasicInformation.css}" rel="stylesheet"/>-->
-<!--<link th:href="@{/css/cdn/bootstraps.min.css}" rel="stylesheet"/>-->
-<!--<script th:src="@{/js/cdn/jquerys.min.js}"></script>-->
-<!--<script th:src="@{/js/cdn/bootstraps.min.js}"></script>-->
-<!--<script th:src="@{/js/cdn/popper.min.js}"></script>-->
-<meta content="text/html;charset=UTF-8"/>
-<!--<meta name="viewport" content="width=device-width, initial-scale=1.0"/>-->
-<title>VWO基本信息</title>
+<link th:href="@{/css/changeManage/vwo/vwoFromList.css}" rel="stylesheet"/>
+<meta charset="UTF-8">
+<title>变更管理vwo</title>
 </head>
 <body>
-<!--<div class="form-group">
-    <label for="type">分发模块:</label>
-    <select class="form-control" style="min-width: 180px" name="type" id="type">
-        <option>基本信息</option>
-        <option>变更描述</option>
-        <option>相关部门</option>
-        <option>评估意见</option>
-        <option>备注</option>
-        <option>分发与实施</option>
-    </select>
-</div>-->
-
-<!--<nav class="navbar navbar-expand-sm bg-light">
-    <ul class="navbar-nav">
-        <li class="nav-item">
-            <a class="nav-link" href="vwo/vwoFromList">基本信息</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="vwo/changeDescription">变更描述</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="#">相关部门</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="#">评估意见</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="#">备注</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="#">分发与实施</a>
-        </li>
-    </ul>
-</nav>
-<table class="table table-striped tableNormalStyle" id="dataTable1">
-    <tr>
-        <td>VWO号</td>
-        <td contentEditable="true"></td>
-        <td>创建时间</td>
-        <td contentEditable="true"></td>
-        <td>流程状态</td>
-        <td contentEditable="true"></td>
-        <td>标题</td>
-        <td contentEditable="true"></td>
-    </tr>
-    <tr>
-        <td>部门</td>
-        <td contentEditable="true"></td>
-        <td>发起人</td>
-        <td contentEditable="true"></td>
-        <td>联系电话</td>
-        <td contentEditable="true"></td>
-        <td>要求完成时间</td>
-        <td contentEditable="true"></td>
-    </tr>
-    <tr>
-        <td>变更类型</td>
-        <td contentEditable="true"></td>
-        <td>费用承担部门</td>
-        <td><select class="form-control" name="" id="expenseDept" style="width: 75%">
-            <option>车身技术部门</option>
-            <option>电子电器技术部门</option>
-            <option>底盘技术部门</option>
-            <option>系统集成技术部门</option>
-            <option>内外饰技术部门</option>
-        </select></td>
-        <td>上市类型</td>
-        <td contentEditable="true"></td>
-        <td>关联VWO号</td>
-        <td contentEditable="true"></td>
-    </tr>
-    <tr>
-        <td>原因描述</td>
-        <td contentEditable="true"></td>
-    </tr>
-</table>
-<div class="content col-lg-12">
-    <table id="titleTable" class="table table-striped tableNormalStyle">
-        <tr>
-            <th>平台</th>
-            <th>车型代码</th>
-            <th>项目代码</th>
-            <th>启动生效时间</th>
-            <th>终止生效时间</th>
-            <th>项目所属阶段</th>
-        </tr>
-        <tr>
-            <td contentEditable="true"></td>
-            <td contentEditable="true"></td>
-            <td contentEditable="true"></td>
-            <td contentEditable="true"></td>
-            <td contentEditable="true"></td>
-            <td contentEditable="true"></td>
-        </tr>
-    </table>
+<!--基本信息-->
+<h4><i class="fa fa-minus-square" aria-hidden="true">基本信息</i></h4>
+<div class="panel-body" style="padding:0;">
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="col-lg-12 col-md-12">
+                <div class="col-lg-2 col-md-2">
+                    <div class="form-group after_the">
+                        <label for="VWOnum">VWO号:</label>
+                        <input type="text" style="width: 150px" class="form-control" name="level" id="VWOnum"
+                               placeholder=""/>
+                    </div>
+                    <div class="form-group  after_the">
+                        <label for="creatTime">创建时间:</label>
+                        <input type="text" style="width: 150px" class="form-control" name="pBomOfWhichDept"
+                               id="creatTime"
+                               placeholder=""/>
+                    </div>
+                    <div class="form-group  after_the">
+                        <label for="processState">流程状态:</label>
+                        <input type="text" style="width: 150px" class="form-control" name="rank" id="processState"
+                               placeholder=""/>
+                    </div>
+                    <div class="form-group after_the">
+                        <label for="title">标题:</label>
+                        <input type="text" style="width: 150px" class="form-control" name="groupNum" id="title"
+                               placeholder=""/>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-2">
+                    <div class="form-group after_the">
+                        <label for="dept">部门:</label>
+                        <input type="text" style="width: 150px" class="form-control" name="lineId" id="dept"
+                               placeholder=""/>
+                    </div>
+                    <div class="form-group after_the">
+                        <label for="initiator">发起人:</label>
+                        <input type="text" style="width: 150px" class="form-control" name="itemType" id="initiator"
+                               placeholder=""/>
+                    </div>
+                    <div class="form-group after_the">
+                        <label for="phone">联系电话:</label>
+                        <input type="text" style="width: 150px" class="form-control" name="itemType" id="phone"
+                               placeholder=""/>
+                    </div>
+                    <div class="form-group after_the">
+                        <label for="finishTime">要求完成时间:</label>
+                        <input type="text" style="width: 150px" class="form-control" name="itemType" id="finishTime"
+                               placeholder=""/>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-2">
+                    <div class="form-group after_the">
+                        <label for="changeType">变更类型:</label>
+                        <input type="text" style="width: 150px" class="form-control" name="itemType" id="changeType"
+                               placeholder=""/>
+                    </div>
+                    <div class="form-group after_the">
+                        <label for="expenseDept">费用承担部门:</label>
+                        <select class="form-control" style="width: 150px" name="" id="expenseDept">
+                            <option>车身部门</option>
+                            <option>车身部门</option>
+                            <option>车身部门</option>
+                            <option>车身部门</option>
+                            <option>车身部门</option>
+                        </select>
+                    </div>
+                    <div class="form-group after_the">
+                        <label for="listedType">上市类型:</label>
+                        <input type="text" style="width: 150px" class="form-control" name="itemType" id="listedType"
+                               placeholder=""/>
+                    </div>
+                    <div class="form-group after_the">
+                        <label for="relevanceVWONum1">关联VWO号:</label>
+                        <input type="text" style="width: 150px" class="form-control" name="itemType"
+                               id="relevanceVWONum1"
+                               placeholder=""/>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-2">
+                    <div class="form-group after_the">
+                        <label for="relevanceVWONum">平台:</label>
+                        <input type="text" style="width: 150px" class="form-control" name="itemType"
+                               id="relevanceVWONum3"
+                               placeholder=""/>
+                    </div>
+                    <div class="form-group after_the">
+                        <label for="relevanceVWONum">车型代码:</label>
+                        <input type="text" style="width: 150px" class="form-control" name="itemType"
+                               id="relevanceVWONum4"
+                               placeholder=""/>
+                    </div>
+                    <div class="form-group after_the">
+                        <label for="relevanceVWONum">项目代码:</label>
+                        <input type="text" style="width: 150px" class="form-control" name="itemType"
+                               id="relevanceVWONum5"
+                               placeholder=""/>
+                    </div>
+                    <div class="form-group after_the">
+                        <label for="relevanceVWONum">启动生效时间:</label>
+                        <input type="text" style="width: 150px" class="form-control" name="itemType"
+                               id="relevanceVWONum6"
+                               placeholder=""/>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-2">
+                    <div class="form-group after_the">
+                        <label for="relevanceVWONum1">终止生效时间:</label>
+                        <input type="text" style="width: 150px" class="form-control" name="itemType"
+                               id="relevanceVWONum7"
+                               placeholder=""/>
+                    </div>
+                    <div class="form-group after_the">
+                        <label for="relevanceVWONum5">项目所属阶段:</label>
+                        <input type="text" style="width: 150px" class="form-control" name="itemType"
+                               id="relevanceVWONum8"
+                               placeholder=""/>
+                    </div>
+                    <div class="form-group after_the">
+                        <label for="relevanceVWONum3">关联工程师姓名:</label>
+                        <input type="text" style="width: 150px" class="form-control" name="itemType"
+                               id="relevanceVWONum9"
+                               placeholder=""/>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-2">
+                    <div class="form-group after_the">
+                        <label for="relevanceVWONum4">所属部门:</label>
+                        <input type="text" style="width: 150px" class="form-control" name="itemType"
+                               id="relevanceVWONum10"
+                               placeholder=""/>
+                    </div>
+                    <div class="form-group after_the">
+                        <label for="relevanceVWONum">关联零件号:</label>
+                        <input type="text" style="width: 150px" class="form-control" name="itemType"
+                               id="relevanceVWONum11"
+                               placeholder=""/>
+                    </div>
+                    <div class="form-group after_the">
+                        <label for="relevanceVWONum">关联零件名称:</label>
+                        <input type="text" style="width: 150px" class="form-control" name="itemType"
+                               id="relevanceVWONum12"
+                               placeholder=""/>
+                    </div>
+                </div>
+                <div class="col-lg-12 col-md-12">
+                    <div class="form-group after_the">
+                        <label for="relevanceVWONum">原因描述:</label>
+                        <textarea rows="2" cols="30" class="form-control"
+                                  style="width: 100%;resize:none"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-<div class="content col-lg-12">
-    <table class="table table-striped tableNormalStyle">
-        <tr>
-            <td>关联工程师姓名</td>
-            <td>所属部门</td>
-            <td>关联零件号</td>
-            <td>关联零件名称</td>
-            <td>操作</td>
-        </tr>
-        <tr>
-            <td contentEditable="true"></td>
-            <td contentEditable="true"></td>
-            <td contentEditable="true"></td>
-            <td contentEditable="true"></td>
-            <td><a class="fa fa-plus-square-o"></a></td>
-        </tr>
-    </table>
-</div>-->
-
-<ul id="myTab" class="nav nav-tabs">
-    <li class="active">
-        <a href="#vwoBasicInformation" data-toggle="tab">基本信息</a>
-    </li>
-    <li>
-        <a href="#vwoChangeDescription" data-toggle="tab">变更描述</a>
-    </li>
-    <li>
-        <a href="#vwoRelevantDept" data-toggle="tab">相关部门</a>
-    </li>
-    <li>
-        <a href="#assessment" data-toggle="tab">评估意见</a>
-    </li>
-    <li>
-        <a href="#note" data-toggle="tab">备注</a>
-    </li>
-    <li>
-        <a href="#distribution" data-toggle="tab">分发与实施</a>
-    </li>
-</ul>
-<div id="myTabContent" class="tab-content">
-    <!--基本信息-->
-    <div class="tab-pane fade in active" id="vwoBasicInformation">
-        <table class="table table-striped tableNormalStyle" id="dataTable1">
-            <tr>
-                <td>VWO号</td>
-                <td contentEditable="true"></td>
-                <td>创建时间</td>
-                <td contentEditable="true"></td>
-                <td>流程状态</td>
-                <td contentEditable="true"></td>
-                <td>标题</td>
-                <td contentEditable="true"></td>
-            </tr>
-            <tr>
-                <td>部门</td>
-                <td contentEditable="true"></td>
-                <td>发起人</td>
-                <td contentEditable="true"></td>
-                <td>联系电话</td>
-                <td contentEditable="true"></td>
-                <td>要求完成时间</td>
-                <td contentEditable="true"></td>
-            </tr>
-            <tr>
-                <td>变更类型</td>
-                <td contentEditable="true"></td>
-                <td>费用承担部门</td>
-                <td><select class="form-control" name="" id="expenseDept" style="width: 75%">
-                    <option>车身技术部门</option>
-                    <option>电子电器技术部门</option>
-                    <option>底盘技术部门</option>
-                    <option>系统集成技术部门</option>
-                    <option>内外饰技术部门</option>
-                </select></td>
-                <td>上市类型</td>
-                <td contentEditable="true"></td>
-                <td>关联VWO号</td>
-                <td contentEditable="true"></td>
-            </tr>
-            <tr>
-                <td>原因描述</td>
-                <td contentEditable="true"></td>
-            </tr>
-        </table>
-        <div class="content col-lg-12">
-            <table id="titleTable" class="table table-striped tableNormalStyle">
-                <tr>
-                    <th>平台</th>
-                    <th>车型代码</th>
-                    <th>项目代码</th>
-                    <th>启动生效时间</th>
-                    <th>终止生效时间</th>
-                    <th>项目所属阶段</th>
-                </tr>
-                <tr>
-                    <td contentEditable="true"></td>
-                    <td contentEditable="true"></td>
-                    <td contentEditable="true"></td>
-                    <td contentEditable="true"></td>
-                    <td contentEditable="true"></td>
-                    <td contentEditable="true"></td>
-                </tr>
-            </table>
-        </div>
-        <div class="content col-lg-12">
-            <table class="table table-striped tableNormalStyle">
-                <tr>
-                    <td>关联工程师姓名</td>
-                    <td>所属部门</td>
-                    <td>关联零件号</td>
-                    <td>关联零件名称</td>
-                    <td>操作</td>
-                </tr>
-                <tr>
-                    <td contentEditable="true"></td>
-                    <td contentEditable="true"></td>
-                    <td contentEditable="true"></td>
-                    <td contentEditable="true"></td>
-                    <td><a class="fa fa-plus-square-o"></a></td>
-                </tr>
-            </table>
-        </div>
-    </div>
-    <!--变更描述-->
-    <div class="tab-pane fade" id="vwoChangeDescription">
-        <div class="content col-lg-12"><!--style="margin-top: -50px;"-->
-            <table id="vwo_table" class="table table-striped tableNormalStyle">
-                <tr>
-                    <th>变更描述</th>
-                    <th>配置编号</th>
-                    <th>配置语句</th>
-                    <th>适用车型</th>
-                </tr>
-                <tr>
-                    <th>变更前</th>
-                    <td contentEditable="true"></td>
-                    <td contentEditable="true"></td>
-                    <td contentEditable="true"></td>
-                </tr>
-                <tr>
-                    <th>变更后</th>
-                    <td contentEditable="true"></td>
-                    <td contentEditable="true"></td>
-                    <td contentEditable="true"></td>
-                </tr>
-                <tr>
-                    <th>附件</th>
-                    <td contentEditable="true"></td>
-                    <td contentEditable="true"></td>
-                    <td contentEditable="true"></td>
-                </tr>
-            </table>
-        </div>
-    </div>
-    <!--影响部门-->
-    <div class="tab-pane fade col-lg-6" id="vwoRelevantDept">
-        <div class="form-group col-lg-12">
-            <label for="type">影响部门:</label>
-            <div class="content" ><!--style="margin-top: -50px;"<!--style="width: 400px"-->
-                <table id="vwo_table1" class="table table-striped tableNormalStyle">
+<!--变更描述-->
+<h4><i class="fa fa-minus-square" aria-hidden="true">变更描述</i></h4>
+<div class="panel-body" style="padding:0;">
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="content col-lg-12" style="padding: 3px"><!--style="margin-top: -50px;"-->
+                <table id="vwo_table" class="table table-striped tableNormalStyle">
                     <tr>
-                        <td><input type="checkbox"></td>
-                        <td>智能驾驶研究院</td>
-                        <td><input type="checkbox"></td>
-                        <td>智能座舱事业部</td>
-                        <td><input type="checkbox"></td>
-                        <td>电动化底盘中心</td>
+                        <th>变更描述</th>
+                        <th>配置编号</th>
+                        <th>配置语句</th>
+                        <th>适用车型</th>
                     </tr>
                     <tr>
-                        <td><input type="checkbox"></td>
-                        <td>电子电器中心</td>
-                        <td><input type="checkbox"></td>
-                        <td>内外饰中心</td>
-                        <td><input type="checkbox"></td>
-                        <td>动总集成中心</td>
+                        <th>变更前</th>
+                        <td contentEditable="true"></td>
+                        <td contentEditable="true"></td>
+                        <td contentEditable="true"></td>
                     </tr>
                     <tr>
-                        <td><input type="checkbox"></td>
-                        <td>车身中心</td>
+                        <th>变更后</th>
+                        <td contentEditable="true"></td>
+                        <td contentEditable="true"></td>
+                        <td contentEditable="true"></td>
+                    </tr>
+                    <tr>
+                        <th>附件</th>
+                        <td contentEditable="true"></td>
+                        <td contentEditable="true"></td>
+                        <td contentEditable="true"></td>
                     </tr>
                 </table>
             </div>
         </div>
-        <div class="content col-lg-12" ><!--style="margin-top: -50px;"-->
-            <table id="vwo_table2" class="table table-striped tableNormalStyle">
-                <tr>
-                    <th>专业科长</th>
-                    <td contentEditable="true"></td>
-                </tr>
-                <tr>
-                    <th>变更协调员</th>
-                    <td contentEditable="true"></td>
-                </tr>
-                <tr>
-                    <th>车身</th>
-                    <td contentEditable="true"></td>
-                </tr>
-                <tr>
-                    <th>底盘</th>
-                    <td contentEditable="true"></td>
-                </tr>
-                <tr>
-                    <th>电器</th>
-                    <td contentEditable="true"></td>
-                </tr>
-                <tr>
-                    <th>内外饰</th>
-                    <td contentEditable="true"></td>
-                </tr>
-                <tr>
-                    <th>项目经理</th>
-                    <td contentEditable="true"></td>
-                </tr>
-            </table>
+    </div>
+</div>
+<!--相关部门-->
+<h4><i class="fa fa-minus-square" aria-hidden="true">相关部门</i></h4>
+<div class="panel-body" style="padding-bottom:0px;">
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="panel-body" style="padding-bottom:0px;">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <label>影响部门:</label>
+                        <div class="content col-lg-5"><!--style="margin-top: -50px;"-->
+                            <table id="vwo_table1" class="table table-striped tableNormalStyle">
+                                <tr>
+                                    <td style="width: 50px"><input type="checkbox"></td>
+                                    <td>智能驾驶研究院</td>
+                                    <td style="width: 50px"><input type="checkbox"></td>
+                                    <td>智能座舱事业部</td>
+                                    <td style="width: 50px"><input type="checkbox"></td>
+                                    <td>电动化底盘中心</td>
+                                </tr>
+                                <tr>
+                                    <td style="width: 50px"><input type="checkbox"></td>
+                                    <td>电子电器中心</td>
+                                    <td style="width: 50px"><input type="checkbox"></td>
+                                    <td>内外饰中心</td>
+                                    <td style="width: 50px"><input type="checkbox"></td>
+                                    <td>动总集成中心</td>
+                                </tr>
+                                <tr>
+                                    <td style="width: 50px"><input type="checkbox"></td>
+                                    <td>车身中心</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12 col-md-12">
+                <div class="col-lg-3 col-md-3">
+                    <div class="form-group after_the">
+                        <label for="expenseDept">专业科长:</label>
+                        <select class="form-control" name="" id="expenseDept1">
+                            <option>×××科长</option>
+                            <option>×××科长</option>
+                            <option>×××科长</option>
+                            <option>×××科长</option>
+                            <option>×××科长</option>
+                        </select>
+                    </div>
+                    <div class="form-group after_the">
+                        <label for="expenseDept">变更协调员:</label>
+                        <select class="form-control" name="" id="expenseDept7">
+                            <option>×××协调员</option>
+                            <option>×××协调员</option>
+                            <option>×××协调员</option>
+                            <option>×××协调员</option>
+                            <option>×××协调员</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-3">
+                    <div class="form-group after_the">
+                        <label for="expenseDept">车身:</label>
+                        <select class="form-control" name="" id="expenseDept2">
+                            <option>×××车身</option>
+                            <option>×××车身</option>
+                            <option>×××车身</option>
+                            <option>×××车身</option>
+                            <option>×××车身</option>
+                        </select>
+                    </div>
+                    <div class="form-group after_the">
+                        <label for="expenseDept">底盘:</label>
+                        <select class="form-control" name="" id="expenseDept6">
+                            <option>×××底盘</option>
+                            <option>×××底盘</option>
+                            <option>×××底盘</option>
+                            <option>×××底盘</option>
+                            <option>×××底盘</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-3">
+                    <div class="form-group after_the">
+                        <label for="expenseDept">电器:</label>
+                        <select class="form-control" name="" id="expenseDept3">
+                            <option>×××电器</option>
+                            <option>×××电器</option>
+                            <option>×××电器</option>
+                            <option>×××电器</option>
+                            <option>×××电器</option>
+                        </select>
+                    </div>
+                    <div class="form-group after_the">
+                        <label for="expenseDept">内外饰:</label>
+                        <select class="form-control" name="" id="expenseDept5">
+                            <option>×××内外饰</option>
+                            <option>×××内外饰</option>
+                            <option>×××内外饰</option>
+                            <option>×××内外饰</option>
+                            <option>×××内外饰</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-3">
+                    <div class="form-group after_the">
+                        <label for="expenseDept">项目经理:</label>
+                        <select class="form-control" name="" id="expenseDept4">
+                            <option>×××项目经理</option>
+                            <option>×××项目经理</option>
+                            <option>×××项目经理</option>
+                            <option>×××项目经理</option>
+                            <option>×××项目经理</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-    <!--评估意见-->
-    <div class="tab-pane fade" id="assessment">
-        <div class="col-lg-12 col-md-12">
-            <div class="col-lg-4 col-md-4">
-                <div class="panel-body" style="padding-bottom:0px;">
-                    <div class="panel panel-default" style="margin-top: 10px;">
-                        <div class="panel-body">
-                            <h4>BOM经理</h4>
-                            <div class="form-group">
-                                <label for="pMaterielDesc">意见</label>
-                                <textarea rows="1" cols="30" style="width: 265px;height: 102px;resize:none"></textarea>
+</div>
+<!--评估意见-->
+<h4><i class="fa fa-minus-square" aria-hidden="true">评估意见</i></h4>
+<div class="panel-body" style="padding-bottom:0px;">
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="col-lg-12 col-md-12">
+                <div class="col-lg-4 col-md-4">
+                    <div class="panel-body" style="padding-bottom:0px;">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <h4>BOM经理</h4>
+                                <div class="form-group">
+                                    <label for="pMaterielDesc">意见</label>
+                                    <textarea rows="2" cols="30" class="form-control"
+                                              style="width: 100%;resize:none"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="type">结论</label>
+                                    <select class="form-control" name="type" id="type"
+                                            placeholder="请选择是否同意">
+                                        <option>同意</option>
+                                        <option>不同意</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="pMaterielDesc">日期</label>
+                                    <input class="form-control" id="pMaterielDesc" name="pMaterielDesc" type="text"
+                                           value="2018-07-26"
+                                           placeholder="请输入物料名称"/>
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <label for="type">结论</label>
-                                <select class="form-control" style="min-width: 180px" name="type" id="type"
-                                        placeholder="请选择是否同意">
-                                    <option>同意</option>
-                                    <option>不同意</option>
-                                </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-4">
+                    <div class="panel-body" style="padding-bottom:0px;">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <h4>专业PMT经理</h4>
+                                <div class="form-group">
+                                    <label for="pMaterielDesc">意见</label>
+                                    <textarea rows="2" cols="30" class="form-control"
+                                              style="width: 100%;resize:none"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="type">结论</label>
+                                    <select class="form-control" name="type" id="type1"
+                                            placeholder="请选择是否同意">
+                                        <option>同意</option>
+                                        <option>不同意</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="pMaterielDesc">日期</label>
+                                    <input class="form-control" id="pMaterielDesc1" name="pMaterielDesc" type="text"
+                                           value="2018-07-26"
+                                           placeholder="请输入物料名称"/>
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <label for="pMaterielDesc">日期</label>
-                                <input class="form-control" id="pMaterielDesc" name="pMaterielDesc" type="text"
-                                       value="2018-07-26"
-                                       placeholder="请输入物料名称"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-4">
+                    <div class="panel-body" style="padding-bottom:0px;">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <h4>项目经理</h4>
+                                <div class="form-group">
+                                    <label for="pMaterielDesc">意见</label>
+                                    <textarea rows="2" cols="30" class="form-control"
+                                              style="width: 100%;resize:none"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="type">结论</label>
+                                    <select class="form-control" name="type" id="type2"
+                                            placeholder="请选择是否同意">
+                                        <option>同意</option>
+                                        <option>不同意</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="pMaterielDesc">日期</label>
+                                    <input class="form-control" id="pMaterielDesc2" name="pMaterielDesc" type="text"
+                                           value="2018-07-26" placeholder="请输入物料名称"/>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-lg-4 col-md-4">
-                <div class="panel-body" style="padding-bottom:0px;">
-                    <div class="panel panel-default" style="margin-top: 10px;">
-                        <div class="panel-body">
-                            <h4>专业PMT经理</h4>
-                            <div class="form-group">
-                                <label for="pMaterielDesc">意见</label>
-                                <textarea rows="1" cols="30" style="width: 265px;height: 102px;resize:none"></textarea>
-                            </div>
-                            <div class="form-group">
-                                <label for="type">结论</label>
-                                <select class="form-control" style="min-width: 180px" name="type" id="type1"
-                                        placeholder="请选择是否同意">
-                                    <option>同意</option>
-                                    <option>不同意</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="pMaterielDesc">日期</label>
-                                <input class="form-control" id="pMaterielDesc1" name="pMaterielDesc" type="text"
-                                       value="2018-07-26"
-                                       placeholder="请输入物料名称"/>
-                            </div>
-                        </div>
+        </div>
+    </div>
+</div>
+<!--备注-->
+<h4><i class="fa fa-minus-square" aria-hidden="true">备注</i></h4>
+<div class="panel-body" style="padding-bottom:0px;">
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="col-lg-12 col-md-12">
+                <div class="col-lg-3 col-md-3">
+                    <!--<div class="form-group after_the">-->
+                    <!--<label for="VWOnum">附件:</label>-->
+                    <!--<input type="file" class="form-control" name="level" id="VWOnum1"-->
+                    <!--placeholder=""/>-->
+                    <!--</div>-->
+                    <div class="form-group  after_the">
+                        <label for="creatTime">文件名称:</label>
+                        <input type="text" class="form-control" name="pBomOfWhichDept"
+                               id="creatTime2"
+                               placeholder=""/>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-3">
+                    <div class="form-group after_the">
+                        <label for="VWOnum">上传人:</label>
+                        <input type="text" class="form-control" name="level" id="VWOnum2"
+                               placeholder=""/>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-3">
+                    <div class="form-group  after_the">
+                        <label for="creatTime">上传日期:</label>
+                        <input type="text" class="form-control" name="pBomOfWhichDept"
+                               id="creatTime1"
+                               placeholder=""/>
                     </div>
                 </div>
             </div>
-            <div class="col-lg-4 col-md-4">
-                <div class="panel-body" style="padding-bottom:0px;">
-                    <div class="panel panel-default" style="margin-top: 10px;">
-                        <div class="panel-body">
-                            <h4>项目经理</h4>
-                            <div class="form-group">
-                                <label for="pMaterielDesc">意见</label>
-                                <textarea rows="1" cols="30" style="width: 265px;height: 102px;resize:none"></textarea>
-                            </div>
-                            <div class="form-group">
-                                <label for="type">结论</label>
-                                <select class="form-control" style="min-width: 180px" name="type" id="type2"
-                                        placeholder="请选择是否同意">
-                                    <option>同意</option>
-                                    <option>不同意</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="pMaterielDesc">日期</label>
-                                <input class="form-control" id="pMaterielDesc2" name="pMaterielDesc" type="text"
-                                       value="2018-07-26" placeholder="请输入物料名称"/>
-                            </div>
-                        </div>
+            <div class="col-lg-12 col-md-12">
+                <div class="col-lg-9 col-md-9">
+                    <div class="form-group">
+                        <label for="pMaterielDesc">说明:</label>
+                        <textarea rows="2" cols="30" class="form-control"
+                                  style="width: 100%;resize:none"></textarea>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <!--备注-->
-    <div class="tab-pane fade" id="note">
-        <div class="content col-lg-12">
-            <table class="table table-striped tableNormalStyle" id="routingDataTable">
-                <tr>
-                    <th>附件</th>
-                    <th>文件名称</th>
-                    <th>上传人</th>
-                    <th>上传日期</th>
-                    <th>说明</th>
-                </tr>
-                <tr>
-                    <td contentEditable="true"></td>
-                    <td contentEditable="true"></td>
-                    <td contentEditable="true">BOM工程师</td>
-                    <td contentEditable="true"></td>
-                    <td contentEditable="true"></td>
-                </tr>
-            </table>
+</div>
+<!--分发与实施-->
+<h4><i class="fa fa-minus-square" aria-hidden="true">分发与实施</i></h4>
+<div class="panel-body" style="padding-bottom:0px;">
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="content col-lg-12">
+                <table class="table table-striped tableNormalStyle" id="routingDataTable">
+                    <tr>
+                        <th>部门</th>
+                        <th>人员</th>
+                        <th>角色</th>
+                        <th>任务</th>
+                        <th>计划完成时间</th>
+                        <th>状态</th>
+                        <th>证明</th>
+                    </tr>
+                    <tr>
+                        <td contentEditable="true">制造部门</td>
+                        <td contentEditable="true"></td>
+                        <td contentEditable="true">EDIT</td>
+                        <td contentEditable="true"></td>
+                        <td contentEditable="true"></td>
+                        <td contentEditable="true"></td>
+                        <td contentEditable="true"></td>
+                    </tr>
+                    <tr>
+                        <td contentEditable="true">制造部门</td>
+                        <td contentEditable="true"></td>
+                        <td contentEditable="true">EDIT</td>
+                        <td contentEditable="true"></td>
+                        <td contentEditable="true"></td>
+                        <td contentEditable="true"></td>
+                        <td contentEditable="true"></td>
+                    </tr>
+                    <tr>
+                        <td contentEditable="true">制造部门</td>
+                        <td contentEditable="true"></td>
+                        <td contentEditable="true">EDIT</td>
+                        <td contentEditable="true"></td>
+                        <td contentEditable="true"></td>
+                        <td contentEditable="true"></td>
+                        <td contentEditable="true"></td>
+                    </tr>
+                    <tr>
+                        <td contentEditable="true">制造部门</td>
+                        <td contentEditable="true"></td>
+                        <td contentEditable="true">EDIT</td>
+                        <td contentEditable="true"></td>
+                        <td contentEditable="true"></td>
+                        <td contentEditable="true"></td>
+                        <td contentEditable="true"></td>
+                    </tr>
+                    <tr>
+                        <td contentEditable="true">制造部门</td>
+                        <td contentEditable="true"></td>
+                        <td contentEditable="true">EDIT</td>
+                        <td contentEditable="true"></td>
+                        <td contentEditable="true"></td>
+                        <td contentEditable="true"></td>
+                        <td contentEditable="true"></td>
+                    </tr>
+                    <tr>
+                        <td contentEditable="true">制造部门</td>
+                        <td contentEditable="true"></td>
+                        <td contentEditable="true">EDIT</td>
+                        <td contentEditable="true"></td>
+                        <td contentEditable="true"></td>
+                        <td contentEditable="true"></td>
+                        <td contentEditable="true"></td>
+                    </tr>
+                </table>
+            </div>
         </div>
     </div>
-    <!--分发与实施-->
-    <div class="tab-pane fade" id="distribution">
-        <div class="content col-lg-12">
-            <table class="table table-striped tableNormalStyle" id="routingDataTable1">
-                <tr>
-                    <th>部门</th>
-                    <th>人员</th>
-                    <th>角色</th>
-                    <th>任务</th>
-                    <th>计划完成时间</th>
-                    <th>状态</th>
-                    <th>证明</th>
-                </tr>
-                <tr>
-                    <td contentEditable="true">制造部门</td>
-                    <td contentEditable="true"></td>
-                    <td contentEditable="true">EDIT</td>
-                    <td contentEditable="true"></td>
-                    <td contentEditable="true"></td>
-                    <td contentEditable="true"></td>
-                    <td contentEditable="true"></td>
-                </tr>
-                <tr>
-                    <td contentEditable="true">制造部门</td>
-                    <td contentEditable="true"></td>
-                    <td contentEditable="true">EDIT</td>
-                    <td contentEditable="true"></td>
-                    <td contentEditable="true"></td>
-                    <td contentEditable="true"></td>
-                    <td contentEditable="true"></td>
-                </tr>
-                <tr>
-                    <td contentEditable="true">制造部门</td>
-                    <td contentEditable="true"></td>
-                    <td contentEditable="true">EDIT</td>
-                    <td contentEditable="true"></td>
-                    <td contentEditable="true"></td>
-                    <td contentEditable="true"></td>
-                    <td contentEditable="true"></td>
-                </tr>
-                <tr>
-                    <td contentEditable="true">制造部门</td>
-                    <td contentEditable="true"></td>
-                    <td contentEditable="true">EDIT</td>
-                    <td contentEditable="true"></td>
-                    <td contentEditable="true"></td>
-                    <td contentEditable="true"></td>
-                    <td contentEditable="true"></td>
-                </tr>
-                <tr>
-                    <td contentEditable="true">制造部门</td>
-                    <td contentEditable="true"></td>
-                    <td contentEditable="true">EDIT</td>
-                    <td contentEditable="true"></td>
-                    <td contentEditable="true"></td>
-                    <td contentEditable="true"></td>
-                    <td contentEditable="true"></td>
-                </tr>
-                <tr>
-                    <td contentEditable="true">制造部门</td>
-                    <td contentEditable="true"></td>
-                    <td contentEditable="true">EDIT</td>
-                    <td contentEditable="true"></td>
-                    <td contentEditable="true"></td>
-                    <td contentEditable="true"></td>
-                    <td contentEditable="true"></td>
-                </tr>
-            </table>
-        </div>
-    </div>
-    <script th:inline="javascript">
-        $(function () {
-            $('#myTab li:eq(0) a').tab('show');
-        });
-    </script>
 </div>
 </body>
 </html>
