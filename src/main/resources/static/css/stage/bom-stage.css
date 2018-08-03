@@ -36,6 +36,8 @@
 .tableNormalStyle tr:first-child {
     padding: 2px !important;
 }
+.table-striped>tbody>tr:nth-of-type(odd){background-color: #b9bbbe}
+.table-hover>tbody>tr:hover{background-color: #bce8f1}
 .tableNormalStyle tr {
 }
 .tableNormalStyle tr:nth-child(even){
