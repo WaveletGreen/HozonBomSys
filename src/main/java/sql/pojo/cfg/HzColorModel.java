@@ -1,5 +1,7 @@
 package sql.pojo.cfg;
 
+import java.util.Date;
+
 /**
  * 所有外键都进行了级联删除
  */
@@ -44,6 +46,22 @@ public class HzColorModel {
      * 是否多色
      */
     private String pColorIsMultiply;
+    /**
+     * 创建时间
+     */
+    private Date createDate;
+    /**
+     * 修改时间
+     */
+    private Date modifyDate;
+    /**
+     * 创建者
+     */
+    private String creator;
+    /**
+     * 修改者
+     */
+    private String modifier;
 
     public String getPuid() {
         return puid;
@@ -123,5 +141,37 @@ public class HzColorModel {
 
     public void setpColorIsMultiply(String pColorIsMultiply) {
         this.pColorIsMultiply = pColorIsMultiply;
+    }
+
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
+    public Date getModifyDate() {
+        return modifyDate;
+    }
+
+    public void setModifyDate(Date modifyDate) {
+        this.modifyDate = modifyDate;
+    }
+
+    public String getCreator() {
+        return creator;
+    }
+
+    public void setCreator(String creator) {
+        this.creator = creator;
+    }
+
+    public String getModifier() {
+        return modifier;
+    }
+
+    public void setModifier(String modifier) {
+        this.modifier = modifier;
     }
 }

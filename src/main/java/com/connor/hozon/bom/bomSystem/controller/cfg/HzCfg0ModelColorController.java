@@ -1,8 +1,11 @@
 package com.connor.hozon.bom.bomSystem.controller.cfg;
 
 import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
+import com.connor.hozon.bom.bomSystem.service.bom.HzBomLineRecordService;
 import com.connor.hozon.bom.bomSystem.service.cfg.*;
 import com.connor.hozon.bom.bomSystem.service.iservice.cfg.IHzColorModelService;
+import com.connor.hozon.bom.common.util.user.UserInfo;
+import com.connor.hozon.bom.sys.entity.User;
 import net.sf.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,6 +35,8 @@ public class HzCfg0ModelColorController {
     private final HzCfg0MainService hzCfg0MainService;
     @Autowired
     IHzColorModelService hzColorModelService;
+    @Autowired
+    HzBomLineRecordService hzBomLineRecordService;
     private Logger logger;
 
     @Autowired
@@ -131,7 +136,11 @@ public class HzCfg0ModelColorController {
     @RequestMapping(value = "/updateColorModel", method = RequestMethod.POST)
     @ResponseBody
     public boolean updateColorModel(@RequestBody LinkedHashMap<String, String> form) {
+        User user = UserInfo.getUser();
+        Date date = new Date();
         List<HzColorModel> colorModels = new ArrayList<>();
+        /*修改之后需要进入流程的*/
+        List<HzColorModel> toProcess = new ArrayList<>();
         if (form != null && form.size() > 0) {
             HzCfg0ModelColor color = new HzCfg0ModelColor();
             form.forEach((key, value) -> {
@@ -150,13 +159,27 @@ public class HzCfg0ModelColorController {
                         break;
                 }
             });
+            List<HzColorModel> history = hzColorModelService.doSelectByModelUidWithColor(color.getPuid());
+            Map<String, String> mHistory = new HashMap<>();
+            history.forEach(h -> mHistory.put(h.getCfgUid(), h.getColorUid()));
+            //没有更新过的值不需要进行更新
             for (Map.Entry<String, String> entry : color.getMapOfCfg0().entrySet()) {
+                if (mHistory.containsKey(entry.getKey())) {
+                    if (mHistory.get(entry.getKey()).equals(entry.getValue())) {
+                        continue;
+                    }
+                }
                 HzColorModel model = new HzColorModel();
-                model.setPuid(color.getPuid());
+                model.setModelUid(color.getPuid());
                 model.setColorUid(entry.getValue());
                 model.setCfgUid(entry.getKey());
+                model.setModifier(user.getUserName());
+                model.setModifyDate(date);
                 if (!hzColorModelService.doUpdateColorModelWithCfg(model)) {
                     logger.error("更新" + color.getpCodeOfColorfulModel() + "配置项的颜色值" + model.getColorUid() + "失败");
+                } else {
+                    logger.info("更新" + color.getpCodeOfColorfulModel() + "配置项的颜色值" + model.getColorUid() + "成功");
+                    toProcess.add(model);
                 }
             }
             return hzCfg0ModelColorService.doUpdateOne(color);
@@ -191,6 +214,8 @@ public class HzCfg0ModelColorController {
     @RequestMapping(value = "/saveColorModel", method = RequestMethod.POST)
     @ResponseBody
     public boolean saveColorModel(@RequestBody LinkedHashMap<String, String> form) {
+        User user = UserInfo.getUser();
+        Date date = new Date();
         if (form != null) {
             HzCfg0ModelColor modelColor = new HzCfg0ModelColor();
             form.forEach((key, value) -> {
@@ -209,7 +234,6 @@ public class HzCfg0ModelColorController {
             });
             modelColor.setPuid(UUIDHelper.generateUpperUid());
             List<HzColorModel> colorList = new ArrayList<>();
-//            modelColor.setpColorfulMapBlock(SerializeUtil.serialize(modelColor.getMapOfCfg0()));
             for (Map.Entry<String, String> entry : modelColor.getMapOfCfg0().entrySet()) {
                 HzColorModel hzColorModel = new HzColorModel();
                 hzColorModel.setPuid(UUIDHelper.generateUpperUid());
@@ -217,6 +241,10 @@ public class HzCfg0ModelColorController {
                 hzColorModel.setColorUid(entry.getValue());
                 hzColorModel.setCfgUid(entry.getKey());
                 hzColorModel.setCfgMainUid(modelColor.getpCfg0MainRecordOfMC());
+                hzColorModel.setCreateDate(date);
+                hzColorModel.setModifyDate(date);
+                hzColorModel.setCreator(user.getUserName());
+                hzColorModel.setModifier(user.getUserName());
                 colorList.add(hzColorModel);
             }
             hzCfg0ModelColorService.doInsertOne(modelColor);
@@ -225,9 +253,9 @@ public class HzCfg0ModelColorController {
         } else return false;
     }
 
-    @RequestMapping(value = "/setLvl2Color", method = RequestMethod.GET)
+    @RequestMapping(value = "/setLvl2ColorPage", method = RequestMethod.GET)
     @ResponseBody
-    public boolean setLvl2Color(@RequestParam("modelUid") String modelPuid) {
+    public boolean setLvl2ColorPage(@RequestParam("modelUid") String modelPuid) {
         if (checkString(modelPuid)) {
             return true;
         } else {

@@ -1,7 +1,7 @@
 function modeVehicle(puid) {
     window.Ewin.dialog({
         title: "添加",
-        url: "modelColor/setLvl2Color?modelUid=" + puid,
+        url: "modelColor/setLvl2ColorPage?modelUid=" + puid,
         gridId: "gridId",
         width: 500,
         height: 600
