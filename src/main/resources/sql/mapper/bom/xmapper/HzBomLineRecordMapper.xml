@@ -465,7 +465,6 @@
         from Hz_Bom_Main_Record t1
         where t1.p_cfg0_of_which_project_puid=#{projectPuid,jdbcType=VARCHAR}
         )
-
     </select>
 
 
@@ -488,10 +487,16 @@
         where PUID = #{puid,jdbcType=VARCHAR}
 
     </delete>
-
+    <!--获取车身下级2Y层的总成级，需要代码进行查重-->
     <select id="selectVehicleAssembly" parameterType="java.util.Map">
-    select * from Hz_Bom_Line_Record t2 where t2.p_parent_uid in(
-      select t.puid from Hz_Bom_Line_Record t where t.p_bom_line_is_2y=1 and t.p_bom_of_which_dept='车身' and t.p_bom_digifax_id='wtYdMSQVKb2AcA') order by t2.p_bom_order_num
-
+        select
+        <include refid="Base_Column_List"/>
+        from Hz_Bom_Line_Record t2 where t2.p_parent_uid in(
+        select t.puid from Hz_Bom_Line_Record t where t.p_bom_line_is_2y=1 and
+        t.p_bom_of_which_dept=#{dept,jdbcType=VARCHAR}
+        and t.p_bom_digifax_id=(
+        select puid from Hz_Bom_Main_Record tin where
+        tin.p_cfg0_of_which_project_puid=#{projectUid,jdbcType=VARCHAR}
+        )) order by t2.p_bom_order_num
     </select>
 </mapper>

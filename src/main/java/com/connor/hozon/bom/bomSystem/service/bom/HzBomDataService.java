@@ -13,6 +13,7 @@ import sql.pojo.bom.HZBomMainRecord;
 import sql.pojo.bom.HzBomLineRecord;
 import sql.redis.SerializeUtil;
 
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -123,5 +124,19 @@ public class HzBomDataService {
      */
     public List<HzBomLineRecord> doSelect2YByProjectPuid(String projectPuid) {
         return hzBomDataDao.select2YByProjectPuid(projectPuid);
+    }
+
+    /**
+     * 传入部门和项目UID，获取部门下2Y层的子总成
+     *
+     * @param dept        部门名
+     * @param projectPuid 项目UID
+     * @return 一组总成，需要进行查重操作
+     */
+    public List<HzBomLineRecord> doSelectVehicleAssembly(String dept, String projectPuid) {
+        HashMap params = new HashMap();
+        params.put("dept", dept);
+        params.put("projectPuid", projectPuid);
+        return hzBomDataDao.selectVehicleAssembly(params);
     }
 }

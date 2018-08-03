@@ -6,6 +6,7 @@ import sql.pojo.HzPreferenceSetting;
 import sql.pojo.bom.HzBomLineRecord;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by IntelliJ IDEA.
@@ -45,6 +46,15 @@ public interface HzBomDataDao {
      */
     List<HzBomLineRecord> select2YByProjectPuid(@Param("projectPuid") String projectPuid);
 
+    /**
+     * Author: Fancyears·Maylos·Mayways
+     * Description: 根据部门和2Y层获取到2Y层的下级总成
+     * Date: 2018/5/23 9:59
+     *
+     * @param params 包含部门名称和项目UID
+     * @return
+     */
+    List<HzBomLineRecord> selectVehicleAssembly(Map<String, Object> params);
 
 
 }
