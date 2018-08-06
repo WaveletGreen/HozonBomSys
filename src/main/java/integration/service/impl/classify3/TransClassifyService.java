@@ -63,27 +63,35 @@ public class TransClassifyService extends Author implements ITransmitService {
      * @return 请看接口@{@link ITransmitService}定义
      */
     @Override
-    public TABLEOFZPPTCO005 execute() throws Exception {
-        //一定要有一个输出参数，否则报错
-        if (setClearInputEachTime) {
-            out.getItem().clear();
+    public TABLEOFZPPTCO005 execute() {
+        try {
+            //一定要有一个输出参数，否则报错
+            if (setClearInputEachTime) {
+                out.getItem().clear();
+            }
+            if (t == null) {
+                out.getItem().add(t = new ZPPTCO005());
+            }
+            inputContainer.value = input;
+            outputContainer.value = out;
+            //执行服务
+            if (super.execute(serviceExecutor, inputContainer, outputContainer) != null)
+                out = outputContainer.value;
+            else {
+                out = null;
+            }
+            //如果需要在每次execute之后清空input，则需要设置clearEachTime=true
+            if (setClearInputEachTime) {
+                input.getItem().clear();
+            }
+            return out;
+        } catch (Exception e) {
+            e.printStackTrace();
+            if (setClearInputEachTime) {
+                input.getItem().clear();
+            }
+            return null;
         }
-        if (t == null) {
-            out.getItem().add(t = new ZPPTCO005());
-        }
-        inputContainer.value = input;
-        outputContainer.value = out;
-        //执行服务
-        if (super.execute(serviceExecutor, inputContainer, outputContainer) != null)
-            out = outputContainer.value;
-        else {
-            out = null;
-        }
-        //如果需要在每次execute之后清空input，则需要设置clearEachTime=true
-        if (setClearInputEachTime) {
-            input.getItem().clear();
-        }
-        return out;
     }
 
     /**

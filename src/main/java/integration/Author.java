@@ -13,6 +13,11 @@ public class Author {
      */
     protected boolean setClearInputEachTime = false;
 
+    /**
+     * 同步删除已发送到ERP的数据
+     */
+    public final static boolean SYN_DELETE = true;
+
     public Author() {
     }
 

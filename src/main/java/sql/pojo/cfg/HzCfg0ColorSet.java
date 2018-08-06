@@ -34,7 +34,7 @@ public class HzCfg0ColorSet {
      */
     private String pColorPlate;
     /**
-     * 色板
+     * 修改者
      */
     private String pColorModifier;
 
@@ -63,7 +63,7 @@ public class HzCfg0ColorSet {
      */
     private Date pColorModifyDate;
     /**
-     * 可用状态,1可用，0不可用
+     * 可用状态,1生效，0草稿状态，-1废止状态
      */
     private Integer pColorStatus;
 
@@ -71,6 +71,68 @@ public class HzCfg0ColorSet {
      * 是否删除,0删除，1现存
      */
     private Integer pColorIsDeleted;
+
+    public String reflectToDBField(String property) {
+        switch (property) {
+            /**
+             * 主键
+             */
+            case "puid":
+                return "PUID";
+            /**
+             * 颜色集
+             */
+            case "pColorOfSet":
+                return "p_Color_Of_Set";
+            /**
+             * 颜色名称
+             */
+            case "pColorName":
+                return "p_Color_Name";
+            /**
+             * 颜色代码
+             */
+            case "pColorCode":
+                return "p_Color_Code";
+            /**
+             * 备注
+             */
+            case "pColorComment":
+                return "p_Color_Comment";
+            /**
+             * 是否多色
+             */
+            case "pColorIsMultiply":
+                return "p_Color_Is_Multiply";
+            /**
+             * 色板
+             */
+            case "pColorPlate":
+                return "p_Color_Plate";
+            /**
+             * 修改者
+             */
+            case "pColorModifier":
+                return "p_Color_Modifier";
+            /**
+             * 创建时间
+             */
+            case "pColorCreateDate":
+                return "p_Color_Create_Date";
+            /**
+             * 废止时间
+             */
+            case "pColorAbolishDate":
+                return "p_Color_Abolish_Date";
+            /**
+             * 生效时间
+             */
+            case "pColorEffectedDate":
+                return "p_Color_Effected_Date";
+            default:
+                return null;
+        }
+    }
 
     public String getPuid() {
         return puid;
@@ -200,4 +262,6 @@ public class HzCfg0ColorSet {
     public void setpColorIsDeleted(Integer pColorIsDeleted) {
         this.pColorIsDeleted = pColorIsDeleted;
     }
+
+
 }

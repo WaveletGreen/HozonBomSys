@@ -173,6 +173,7 @@ public class SynMaterielService implements ISynMaterielService {
         List<HzMaterielRecord> toUpdate = new ArrayList<>();
         List<String> puids = new ArrayList<>();
         Set<String> materialCode = new HashSet<>();
+        //没有过滤部门层
         for (HzMaterielRecord record : sorted) {
             //过滤重复的零件号
             if (materialCode.contains(record.getpMaterielCode())) {
@@ -227,6 +228,9 @@ public class SynMaterielService implements ISynMaterielService {
             //加入缓存
             _mapCoach.put(packNo, record);
         }
+        _mapCoach.forEach((k, v) ->
+                System.out.println(v.getpMaterielCode())
+        );
         //执行
         if (debug) {
             return result;

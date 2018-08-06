@@ -19,7 +19,7 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("/synBom")
-public class SynBomController {
+public class SynBomController extends ExtraIntegrate {
     /**
      * 服务层
      */
@@ -94,22 +94,23 @@ public class SynBomController {
     }
 
     /**
-     * 添加进model中
+     * 根据UID更新BOM
      *
-     * @param entities
-     * @param model
+     * @param dtos
+     * @return
      */
-    private void addToModel(JSONObject entities, Model model) {
-        model.addAttribute("msgOfSuccess", "发送成功项");
-        model.addAttribute("msgOfFail", "发送失败项");
-        model.addAttribute("success", entities.get("success"));
-        model.addAttribute("fail", entities.get("fail"));
-        model.addAttribute("total", entities.get("total"));
-        model.addAttribute("totalOfSuccess", entities.get("totalOfSuccess"));
-        model.addAttribute("totalOfFail", entities.get("totalOfFail"));
-        model.addAttribute("totalOfOutOfParent", entities.get("totalOfOutOfParent"));
-        model.addAttribute("totalOfUnknown", entities.get("totalOfUnknown"));
+    @RequestMapping("/addByUids")
+    public String addByUids(@RequestBody List<EditHzMaterielReqDTO> dtos, @RequestParam("projectUid") String projectUid, Model model) {
+        JSONObject result = validate(dtos, projectUid);
+        if (!result.getBoolean("status")) {
+            model.addAttribute("msg", result.get("msg"));
+            return "errorWithEntity";
+        }
+        JSONObject entities = bomService.updateByUids(projectUid, dtos.get(0).getPuid());
+        addToModel(entities, model);
+        return "stage/templateOfIntegrate";
     }
+
 
     private JSONObject validate(List<EditHzMaterielReqDTO> dtos, String projectUid) {
         JSONObject result = new JSONObject();

@@ -120,8 +120,8 @@ public class ReflectBom {
         setModifyCode(bomToERPBean.getChangeNum());
         //工程更改号描述
         setModifyDesc(bomToERPBean.getChange());
-        //TC系统更改号
-        setTCModifyCode(bomToERPBean.getChangeNum());
+//        //TC系统更改号，这个不用填
+//        setTCModifyCode(bomToERPBean.getChangeNum());
         //工厂
         setFactory(bomToERPBean.getFactoryCode());
         //BOM类型,默认设置为生产
@@ -135,12 +135,15 @@ public class ReflectBom {
         //基本数量，默认是1
         setBaseNumOfHead("1");
         //BOM序号,按10进制
-        Integer index = Integer.parseInt(bomToERPBean.getLineIndex().substring(bomToERPBean.getLineIndex().lastIndexOf(".") + 1)) * 10;
+        if (null == bomToERPBean.getLineIndex() || "".equals(bomToERPBean.getLineIndex())) {
+            return;
+        }
+        Integer index = Integer.parseInt(bomToERPBean.getLineIndex().substring(bomToERPBean.getLineIndex().lastIndexOf(".") + 1));
         String str = "";
         if (index < 100) {
             str = "00" + String.valueOf(index);
         }
-        if (index > 100) {
+        if (index >= 100) {
             str = "0" + String.valueOf(index);
         } else if (index > 1000 && index < 10000) {
             str = String.valueOf(index);
@@ -159,7 +162,7 @@ public class ReflectBom {
             setUnit("EA");
         }
         //发料库存地点，默认传个空格
-        setStockLocation(bomToERPBean.getStockLocation() == null ? " " : bomToERPBean.getStockLocation());
+        setStockLocation(bomToERPBean.getStockLocation() == null ? "ZP03" : bomToERPBean.getStockLocation());
         //相关性（选配条件）
         setRelevance(bomToERPBean.getCfg0Relevance());
         //采购件下级件标识,TC系统传输02或空，SAP系统会将02转化为L

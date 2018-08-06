@@ -1,7 +1,5 @@
 package com.connor.hozon.bom.bomSystem.dao.cfg;
 
-import java.util.List;
-import org.apache.ibatis.annotations.Param;
 import sql.pojo.cfg.HzFcfgBomLvl1ListOperation;
 
 public interface HzFcfgBomLvl1ListOperationDao {

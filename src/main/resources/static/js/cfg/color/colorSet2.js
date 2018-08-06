@@ -16,18 +16,22 @@ function loadData() {
     $("#refreshColorSet").removeAttr("disabled");
     $table.bootstrapTable({
         url: "colorSet/queryAll2",
-        height: $(window.parent.document).find("#wrapper").height() - document.body.offsetHeight - 200,
+        height: $(window.parent.document).find("#wrapper").height() - document.body.offsetHeight-100,
         width: $(window).width(),
         showToggle: true,                   //是否显示详细视图和列表视图的切换按钮
         showRefresh: true,                  //是否显示刷新按钮
-        pageSize: 10,
         pagination: true,                   //是否显示分页（*）
+        pageNumber:1,                       //初始化加载第一页，默认第一页
+        pageSize: 10,                       //每页的记录行数（*）
+        pageList: [10, 30,50,100,500,1000],//可供选择的每页的行数（*）
         clickToSelect: true,                // 单击某一行的时候选中某一条记录
+        smartDisplay:false,
+        search:true,
         sortable: true,
         sortName: 'pColorCode',
         sortOrder: 'asc',
-        sidePagination: "server",           //客户端分页
-        formId: "hide",
+        // sidePagination: "server",           //客户端/客户端分页
+        formId: "queryColor",
         toolbars: [
             {
                 text: '添加',
@@ -37,7 +41,7 @@ function loadData() {
                         title: "添加",
                         url: "colorSet/addPage",
                         gridId: "gridId",
-                        width: 350,
+                        width: 400,
                         height: 500
                     })
                 }
@@ -56,8 +60,8 @@ function loadData() {
                         title: "修改",
                         url: "colorSet/update?puid=" + rows[0].puid,
                         gridId: "gridId",
-                        width: 350,
-                        height: 450
+                        width: 400,
+                        height: 500
                     });
                 }
             },
@@ -150,7 +154,7 @@ function loadData() {
             },
             {
                 field: 'pColorIsMultiply',
-                title: '是否多色',
+                title: '是否拼色',
                 align: 'center',
                 valign: 'middle',
                 sortable: true,
@@ -181,6 +185,26 @@ function loadData() {
                 }
             },
             {
+                field: 'pColorStatus',
+                title: '状态',
+                align: 'center',
+                valign: 'middle',
+                formatter: function (value, row, index) {
+                    if (value == 1 || "1" == value) {
+                        return "<span style='color: #00B83F'>已生效</span>";
+                    }
+                    if (value == 0 || "0" == value) {
+                        return "<span style='color: #a97f89'>草稿状态</span>";
+                    }
+                    if (-1 == value || "-1" == value) {
+                        return "<span style='color: #9492a9'>已废止</span>";
+                    }
+                    else {
+                        return "<span style='color: #a90009'>未知状态</span>";
+                    }
+                }
+            },
+            {
                 field: 'pColorComment',
                 title: '备注',
                 align: 'center',
@@ -194,20 +218,15 @@ function loadData() {
                 hide: false
             }
         ]
-        // sortable: true,                     //是否启用排序
-        // sortOrder: "asc",                   //排序方式
     });
     $table.bootstrapTable('hideColumn', 'puid');
-
+    // $('div').hasClass('pagination').css('display','block');
     //修改——转换日期格式(时间戳转换为datetime格式)
     function changeDateFormat(cellval) {
         if (cellval != null) {
             var date = new Date(parseInt(cellval));
             var month = date.getMonth() + 1 < 10 ? "0" + (date.getMonth() + 1) : date.getMonth() + 1;
             var currentDate = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
-            /*var hour = date.getHours() < 10 ? "0" + date.getHours() : date.getHours();
-            var mins = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
-            var sec = date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds();*/
             return date.getFullYear() + "-" + month + "-" + currentDate /*+ " " + hour + ":" + mins*/;
         }
     }

@@ -17,6 +17,7 @@ import java.util.List;
 public class HzCfg0OptionFamilyDaoImpl implements HzCfg0OptionFamilyDao {
     @Autowired
     IBaseSQLUtil baseSQLUtil;
+    private final static HzCfg0OptionFamily FAMILY = new HzCfg0OptionFamily();
 
     @Override
     public HzCfg0OptionFamily selectByPrimaryKey(HzCfg0OptionFamily family) {
@@ -25,7 +26,20 @@ public class HzCfg0OptionFamilyDaoImpl implements HzCfg0OptionFamilyDao {
 
     @Override
     public List<HzCfg0OptionFamily> selectNameByMainId(String mainId) {
-        return baseSQLUtil.executeQueryByPass(new HzCfg0OptionFamily(), mainId, "com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0OptionFamilyDao.selectNameByMainId");
+        return baseSQLUtil.executeQueryByPass(FAMILY, mainId, "com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0OptionFamilyDao.selectNameByMainId");
+    }
+
+    /**
+     * Author: Fancyears·Maylos·Mayways
+     * Description: 根据产品配置器的puid获取到所有的配置系统层
+     * Date: 2018/5/23 9:49
+     *
+     * @param mainId 产品配置器的puid
+     * @return 返回一组系统名称
+     */
+    @Override
+    public List<HzCfg0OptionFamily> selectNameByMainId2(String mainId) {
+        return baseSQLUtil.executeQueryByPass(FAMILY, mainId, "com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0OptionFamilyDao.selectNameByMainId2");
     }
 
     @Override
@@ -37,4 +51,5 @@ public class HzCfg0OptionFamilyDaoImpl implements HzCfg0OptionFamilyDao {
     public int insert(HzCfg0OptionFamily family) {
         return baseSQLUtil.executeInsert(family, "com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0OptionFamilyDao.insert");
     }
+
 }

@@ -1,7 +1,7 @@
 @charset "UTF-8";
 
 .content-body {
-    background-color: #ffffff;
+	background-color: #ffffff;
 }
 
 .content-body div .content {
@@ -10,20 +10,20 @@
     overflow-x: auto;
 
 }
-
 .infoToUser {
-    font-family: 黑体, 微软雅黑, 宋体;
-    font-size: 16px;
-    color: #696969;
+	font-family: 黑体,微软雅黑,宋体;
+	font-size: 16px;
+	color: #696969;
 }
+
 .numToCenter {
     /*text-align: center;*/
     width: 100px;
 }
 
 .tableNormalStyle {
-    border: 1px solid #CCC;
-    min-width: 100%;
+	border: 1px solid #CCC;
+	min-width: 100%;
 }
 
 .tableNormalStyle tr, tr td {
@@ -86,4 +86,13 @@ padding: 2px !important;
 
 .tableNormalStyle2 thead tr .bs-checkbox {
     min-width: 50px;
+}
+
+/* 另一种尝试通过，把边框变成透明的。 */
+.tableNormalStyle3 td {
+	border: 1px solid transparent !important;
+    white-space: nowrap;
+	overflow:hidden;
+	word-break:keep-all;
+	text-overflow:ellipsis
 }

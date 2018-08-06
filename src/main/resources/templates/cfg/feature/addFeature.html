@@ -111,10 +111,23 @@
         });
         // 绑定dialog的确定按钮的监听事件
         $("#btnOk", window.top.document).click(function () {
+            var url = $("#featureForm", window.top.document).attr('action');
             var bootstrapValidator = $("#featureForm", window.top.document).data('bootstrapValidator');
             bootstrapValidator.validate();
             if (bootstrapValidator.isValid()) {
-                var url = $("#featureForm", window.top.document).attr('action');
+                // window.Ewin.confirm({
+                //     title: '提示',
+                //     message: '需要将特性<span style="color: #ac4e44">' + $("#pCfg0ObjectId").val() + '</span>自动发送到ERP',
+                //     width: 500
+                // }).on(function (e) {
+                //     if (e) {
+                //         //自动发送到ERP
+                //         url += '?send=1';
+                //     }
+                //     else {
+                //         url += '?send=0';
+                //     }
+                // });
                 <!--其实不要puid，puid会在服务器上生成-->
                 var myData = JSON.stringify({
                     "pCfg0FamilyName": $("#pCfg0FamilyName").val(),
@@ -131,16 +144,20 @@
                     type:
                         'POST',
                     url: url,
-                    data: myData,
                     success:
                         function (result) {
                             $('.modal-dialog', window.top.document).parent('div').remove()
                             $('body', window.top.document).find('.modal-backdrop').remove();
                             // jquery 调用刷新当前操作的table页面的refresh方法
                             $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
-                            layer.msg(result.msg, {icon: 1, time: 2000})
-                            // window.Ewin.alert({message: result.msg});
+                            if (result.status) {
+                                layer.msg(result.msg, {icon: 1, time: 2000})
+                            }
+                            else {
+                                window.Ewin.alert({message: result.msg});
+                            }
                         },
+                    data: myData,
                     error: function (status) {
                         window.Ewin.alert({message: status.status + ':添加数据失败!'});
                     }

@@ -20,7 +20,7 @@
 		P_CFG0_MODEL_OF_MAIN_RECORD,
 		P_CFG0_MODEL_BASIC_DETAIL
 	</sql>
-    <!--根据主键删选-->
+    <!--根据主键筛选-->
     <select id="selectByPrimaryKey" parameterType="sql.pojo.cfg.HzCfg0ModelRecord"
             resultMap="BaseResultMap">
         select
@@ -28,6 +28,21 @@
         />
         from HZ_CFG0_MODEL_RECORD
         where PUID=#{puid,jdbcType=VARCHAR}
+    </select>
+    <!--根据项目puid获取所有车型-->
+    <select id="selectByProjectPuid" parameterType="java.lang.String"
+            resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"
+        />
+        from HZ_CFG0_MODEL_RECORD
+        where P_CFG0_MODEL_OF_MAIN_RECORD=
+        (
+          select t.puid
+            from HZ_CFG0_MAIN_RECORD t
+              where t.p_cfg0_of_which_project_puid=#{projectPuid,jdbcType=VARCHAR}
+        )
+
     </select>
     <sql id="values_by_batch">
 		#{item.puid,jdbcType=VARCHAR},

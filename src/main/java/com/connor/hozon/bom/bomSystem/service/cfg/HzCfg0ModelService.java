@@ -1,9 +1,13 @@
 package com.connor.hozon.bom.bomSystem.service.cfg;
 
 import com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0ModelDetailDao;
+import com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0ModelRecordDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sql.pojo.cfg.HzCfg0ModelDetail;
+import sql.pojo.cfg.HzCfg0ModelRecord;
+
+import java.util.List;
 
 /**
  * User: Fancyears·Maylos·Mayways
@@ -14,6 +18,8 @@ import sql.pojo.cfg.HzCfg0ModelDetail;
 public class HzCfg0ModelService {
     @Autowired
     HzCfg0ModelDetailDao hzCfg0ModelDetailDao;
+    @Autowired
+    HzCfg0ModelRecordDao hzCfg0ModelRecordDao;
 
     @Deprecated
     public boolean isExist(HzCfg0ModelDetail entity) {
@@ -51,5 +57,15 @@ public class HzCfg0ModelService {
      */
     public boolean doInsertOne(HzCfg0ModelDetail detail) {
         return hzCfg0ModelDetailDao.insertOne(detail) > 0 ? true : false;
+    }
+
+    /**
+     * 根据项目puid获取到车型集合数据
+     *
+     * @param projectPuid
+     * @return
+     */
+    public List<HzCfg0ModelRecord> doSelectByProjectPuid(String projectPuid) {
+        return hzCfg0ModelRecordDao.selectByProjectPuid(projectPuid);
     }
 }

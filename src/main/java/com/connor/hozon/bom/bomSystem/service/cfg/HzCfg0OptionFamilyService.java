@@ -19,8 +19,22 @@ public class HzCfg0OptionFamilyService {
     @Autowired
     HzCfg0OptionFamilyDao hzCfg0OptionFamilyDao;
 
+    /**
+     * 旧版方法，根据主配置的PUID排序
+     * @param mainId
+     * @return
+     */
     public List<HzCfg0OptionFamily> doGetCfg0OptionFamilyListByProjectPuid(String mainId) {
         return hzCfg0OptionFamilyDao.selectNameByMainId(mainId);
+    }
+
+    /**
+     * 新版方法,根据族的PUID排序
+     * @param mainId
+     * @return
+     */
+    public List<HzCfg0OptionFamily> doGetCfg0OptionFamilyListByProjectPuid2(String mainId) {
+        return hzCfg0OptionFamilyDao.selectNameByMainId2(mainId);
     }
 
     /**
@@ -65,7 +79,24 @@ public class HzCfg0OptionFamilyService {
         if (families == null || families.isEmpty())
             return null;
         List<String> result = new ArrayList<>();
+        return sortFamiliesCode(families,def);
+    }
+    /**
+     * 自定义的列信息，如果组的id(name)未定义(null)，则取留空;如果组描述(desc)未定义，则取组的id(name)的值
+     *
+     * @param mainId 主配置的puid
+     * @param def    自定义的分隔符
+     * @return 一组列信息，包含分隔符
+     */
+    public List<String> doGetColumnDef2(String mainId, String def) {
+        List<HzCfg0OptionFamily> families = doGetCfg0OptionFamilyListByProjectPuid2(mainId);
+        if (families == null || families.isEmpty())
+            return null;
+        return sortFamiliesCode(families,def);
+    }
 
+    private List<String> sortFamiliesCode(List<HzCfg0OptionFamily> families,String def){
+        List<String> result = new ArrayList<>();
         families.stream().filter(f -> f != null).collect(Collectors.toList()).forEach(f -> {
             StringBuilder sb = new StringBuilder();
             sb.append(f.getpOptionfamilyDesc() == null ? f.getpOptionfamilyName() : f.getpOptionfamilyDesc());
@@ -75,7 +106,6 @@ public class HzCfg0OptionFamilyService {
         });
         return result;
     }
-
     /**
      * 根据主键获取组对象信息
      *

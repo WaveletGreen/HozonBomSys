@@ -7,6 +7,7 @@ import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
 import com.connor.hozon.bom.bomSystem.service.cfg.*;
 import com.connor.hozon.bom.bomSystem.service.iservice.cfg.IHzCfg0ModelFeatureService;
 import com.connor.hozon.bom.bomSystem.service.project.HzSuperMaterielService;
+import com.connor.hozon.bom.common.base.entity.QueryBase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -349,7 +350,7 @@ public class HzMaterielFeatureController {
     public String addVehicleModelPage(@RequestParam String projectPuid, Model model) {
         if (checkString(projectPuid)) {
             HzCfg0MainRecord hzCfg0MainRecord = hzCfg0MainService.doGetbyProjectPuid(projectPuid);
-            List<HzCfg0Record> cfg0s = hzCfg0Service.doLoadCfgListByProjectPuid(projectPuid);
+            List<HzCfg0Record> cfg0s = hzCfg0Service.doLoadCfgListByProjectPuid(projectPuid, new QueryBase());
             Map<String, List<HzCfg0Record>> _map = new HashMap<>();
             cfg0s.forEach(cfg -> {
                 String id = cfg.getpCfg0FamilyDesc() + "\t" + cfg.getpCfg0FamilyName();
@@ -392,8 +393,8 @@ public class HzMaterielFeatureController {
                 modelDetail.setPuid(UUIDHelper.generateUpperUid());
                 //设置归属车型
                 modelDetail.setpPertainToModel(modelRecord.getPuid());
-
-                params.forEach((key, value) -> {
+                for (String key : params.keySet()) {
+                    String value = params.get(key);
                     if ("pCfg0ModelOfMainRecord".equals(key)) {
                         //设置归属主配置
                         modelRecord.setpCfg0ModelOfMainRecord(params.get("pCfg0ModelOfMainRecord"));
@@ -416,11 +417,13 @@ public class HzMaterielFeatureController {
                         HzCfg0Record addedRecord = hzCfg0Service.doSelectOneByPuid(value);
                         HzCfg0ToModelRecord hzCfg0ToModelRecord = new HzCfg0ToModelRecord();
                         if (addedRecord == null) {
-                            try {
-                                throw new Exception("无法找到特性值，请检查数据");
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
+//                            try {
+//                                throw new Exception("无法找到特性值，请检查数据");
+//                            } catch (Exception e) {
+//                                e.printStackTrace();
+//                                return false;
+//                            }
+                            continue;
                         } else {
                             hzCfg0ToModelRecord.setpCfg0IdRecord(addedRecord.getPuid());
                             hzCfg0ToModelRecord.setpCfg0ModelRecord(modelRecord.getPuid());
@@ -432,10 +435,8 @@ public class HzMaterielFeatureController {
                             toInsert.add(hzCfg0ToModelRecord);
 //                            hzCfg0ToModelRecordDao.insert(hzCfg0ToModelRecord);
                         }
-
                     }
-
-                });
+                }
 
                 //没有设置归属的颜色车型
                 hzCfg0ModelRecordService.doInsert(Collections.singletonList(modelRecord));
@@ -443,6 +444,7 @@ public class HzMaterielFeatureController {
                 for (int i = 0; i < toInsert.size(); i++) {
                     hzCfg0ToModelRecordDao.insert(toInsert.get(i));
                 }
+                //发送到SAP?
             }
             return true;
         } else {

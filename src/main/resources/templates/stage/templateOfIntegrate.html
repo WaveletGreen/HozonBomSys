@@ -6,7 +6,7 @@
 <meta charset="UTF-8">
 <body class="content-body">
 <div class="panel-body">
-    <div style="overflow:scroll;max-height: 300px;width: inherit">
+    <div id="divOfSuccess" style="overflow:scroll;max-height: 300px;width: inherit">
         <table class="table table-striped tableNormalStyle"
                id="dataOfSuccessTable">
             <tr>
@@ -20,7 +20,7 @@
             </tr>
         </table>
     </div>
-    <div style="overflow:scroll;max-height: 250px;width: inherit">
+    <div id="divOfFail" style="overflow:scroll;max-height: 300px;width: inherit">
         <table class="table table-striped tableNormalStyle" id="dataOfFailTable">
             <tr>
                 <th th:text="${msgOfFail}" style="text-align: left"></th>
@@ -33,7 +33,7 @@
             </tr>
         </table>
     </div>
-    <div style="overflow:scroll;max-height: 150px;width: inherit">
+    <div id="divOfSummary" style="overflow:scroll;max-height: 100px;width: inherit">
         <table class="table table-striped tableNormalStyle" id="totalTable">
             <tr>
                 <th style="text-align: left">总计执行行数</th>
@@ -59,6 +59,16 @@
         </table>
     </div>
 </div>
+<script th:inline="javascript">
+    <![CDATA[
+    $(function () {
+        var height = document.body.clientHeight;
+        $("#divOfSuccess").maxHeight(height / 7 * 2.5);
+        $("#divOfFail").maxHeight(height / 7 * 2.5);
+        $("#divOfSummary").maxHeight(height / 7 * 1);
+    })
+    ]]>
+</script>
 
 </body>
 </html>

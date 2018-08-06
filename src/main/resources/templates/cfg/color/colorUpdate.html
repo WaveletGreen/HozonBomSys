@@ -37,7 +37,7 @@
             </option>
         </select>
     </div>
-    <div class="form-group">
+    <!--<div class="form-group">
         <label for="strColorEffectedDate">生效日期</label>
         <input class="form-control" id="strColorEffectedDate" name="strColorEffectedDate"
                th:value="${entity.strColorEffectedDate}"
@@ -50,7 +50,7 @@
                th:value="${entity.strColorAbolishDate}"
                placeholder="请选择废止日期"
         />
-    </div>
+    </div>-->
     <div class="form-group">
         <label for="pColorComment">备注</label>
         <input class="form-control" id="pColorComment" name="pColorComment" type="text"
@@ -86,58 +86,58 @@
                             }
                         }
                     },
-                    strColorEffectedDate: {
-                        message: '生效时间验证失败',
-                        validators: {
-                            callback: {
-                                message: '生效时间不能晚于废止时间',
-                                callback: function (value, validator, $field) {
-                                    if (
-                                        ($('#strColorEffectedDate').val() == null ||
-                                            $('#strColorEffectedDate').val() == undefined) &&
-                                        ($('#strColorAbolishDate').val() == null ||
-                                            $('#strColorAbolishDate').val() == undefined)) {
-                                        return true;
-                                    }
-                                    else if ($('#strColorEffectedDate').val() < $('#strColorAbolishDate').val()) {
-                                        return true;
-                                    }
-                                    else if ($('#strColorEffectedDate').val() >= $('#strColorAbolishDate').val()) {
-                                        if ($('#strColorAbolishDate').val() == null || $('#strColorAbolishDate').val() == undefined) {
-                                            return true;
-                                        }
-                                        return false;
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    strColorAbolishDate: {
-                        message: '废止时间验证失败',
-                        validators: {
-                            callback: {
-                                message: '废止时间不能早于生效时间',
-                                callback: function (value, validator, $field) {
-                                    if (
-                                        ($('#strColorEffectedDate').val() == null ||
-                                            $('#strColorEffectedDate').val() == undefined) &&
-                                        ($('#strColorAbolishDate').val() == null ||
-                                            $('#strColorAbolishDate').val() == undefined)) {
-                                        return true;
-                                    }
-                                    else if ($('#strColorEffectedDate').val() < $('#strColorAbolishDate').val()) {
-                                        return true;
-                                    }
-                                    else if ($('#strColorEffectedDate').val() >= $('#strColorAbolishDate').val()) {
-                                        if ($('#strColorAbolishDate').val() == null || $('#strColorAbolishDate').val() == undefined) {
-                                            return true;
-                                        }
-                                        return false;
-                                    }
-                                }
-                            }
-                        }
-                    },
+                    /*strColorEffectedDate: {
+                         message: '生效时间验证失败',
+                         validators: {
+                             callback: {
+                                 message: '生效时间不能晚于废止时间',
+                                 callback: function (value, validator, $field) {
+                                     if (
+                                         ($('#strColorEffectedDate').val() == null ||
+                                             $('#strColorEffectedDate').val() == undefined) &&
+                                         ($('#strColorAbolishDate').val() == null ||
+                                             $('#strColorAbolishDate').val() == undefined)) {
+                                         return true;
+                                     }
+                                     else if ($('#strColorEffectedDate').val() < $('#strColorAbolishDate').val()) {
+                                         return true;
+                                     }
+                                     else if ($('#strColorEffectedDate').val() >= $('#strColorAbolishDate').val()) {
+                                         if ($('#strColorAbolishDate').val() == null || $('#strColorAbolishDate').val() == undefined) {
+                                             return true;
+                                         }
+                                         return false;
+                                     }
+                                 }
+                             }
+                         }
+                     },
+                     strColorAbolishDate: {
+                         message: '废止时间验证失败',
+                         validators: {
+                             callback: {
+                                 message: '废止时间不能早于生效时间',
+                                 callback: function (value, validator, $field) {
+                                     if (
+                                         ($('#strColorEffectedDate').val() == null ||
+                                             $('#strColorEffectedDate').val() == undefined) &&
+                                         ($('#strColorAbolishDate').val() == null ||
+                                             $('#strColorAbolishDate').val() == undefined)) {
+                                         return true;
+                                     }
+                                     else if ($('#strColorEffectedDate').val() < $('#strColorAbolishDate').val()) {
+                                         return true;
+                                     }
+                                     else if ($('#strColorEffectedDate').val() >= $('#strColorAbolishDate').val()) {
+                                         if ($('#strColorAbolishDate').val() == null || $('#strColorAbolishDate').val() == undefined) {
+                                             return true;
+                                         }
+                                         return false;
+                                     }
+                                 }
+                             }
+                         }
+                     },*/
                     pColorCode: {
                         message: '颜色代号验证失败',
                         validators: {
@@ -167,8 +167,8 @@
                 var bootstrapValidator = $("#colorForm", window.top.document).data('bootstrapValidator');
                 bootstrapValidator.validate();
                 //重新验证字段
-                bootstrapValidator.revalidateField("strColorEffectedDate");
-                bootstrapValidator.revalidateField("strColorAbolishDate");
+               /* bootstrapValidator.revalidateField("strColorEffectedDate");
+                bootstrapValidator.revalidateField("strColorAbolishDate");*/
                 if (bootstrapValidator.isValid()) {
                     var url = $("#colorForm", window.top.document).attr('action');
                     var myData = JSON.stringify({
@@ -178,9 +178,10 @@
                         "pColorOfSet": $("#pColorOfSet").val(),
                         "puid": $("#puid").val(),
                         "pColorIsMultiply": $("#pColorIsMultiply").val(),
-                        "pColorPlate": $("#pColorPlate").val(),
+                        "pColorPlate": $("#pColorPlate").val()
+                        /*,
                         "strColorEffectedDate": $("#strColorEffectedDate").val(),
-                        "strColorAbolishDate": $("#strColorAbolishDate").val()
+                        "strColorAbolishDate": $("#strColorAbolishDate").val()*/
 
                     });
                     $.ajax({

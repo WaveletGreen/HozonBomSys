@@ -2,18 +2,22 @@ package com.connor.hozon.bom.bomSystem.dao.impl.cfg0;
 
 import com.connor.hozon.bom.bomSystem.dto.HzMaterielFeatureBean;
 import com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0RecordDao;
+import com.connor.hozon.bom.common.base.entity.QueryBase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sql.IBaseSQLUtil;
 import sql.pojo.cfg.HzCfg0Record;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 @Service("hzCfg0RecordDao")
 public class HzCfg0RecordDaoImpl implements HzCfg0RecordDao {
 
     private final IBaseSQLUtil baseSQLUtil;
+    private final static HzCfg0Record RECORD = new HzCfg0Record();
 
     @Autowired
     public HzCfg0RecordDaoImpl(IBaseSQLUtil baseSQLUtil) {
@@ -69,8 +73,8 @@ public class HzCfg0RecordDaoImpl implements HzCfg0RecordDao {
     }
 
     @Override
-    public List<HzCfg0Record> selectCfg0ListByPuids(List<HzCfg0Record> records) {
-        return baseSQLUtil.executeQueryByPass(new HzCfg0Record(), records, "com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0RecordDao.selectCfg0ListByPuids");
+    public List<HzCfg0Record> selectCfg0ListByPuids(Map<String, Object> _map) {
+        return baseSQLUtil.executeQueryByPass(new HzCfg0Record(), _map, "com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0RecordDao.selectCfg0ListByPuids");
     }
 
     @Override
@@ -84,11 +88,22 @@ public class HzCfg0RecordDaoImpl implements HzCfg0RecordDao {
     }
 
     @Override
-    public List<HzCfg0Record> selectListByProjectPuid(String projectPuid) {
-        HzCfg0Record record = new HzCfg0Record();
-        record.setProjectPuid(projectPuid);
-        record.setWhichTable("HZ_CFG0_RECORD");
-        return baseSQLUtil.executeQuery(record, "com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0RecordDao.selectListByProjectPuid");
+    public int setIsSent(Map<String, Object> _map) {
+        return baseSQLUtil.executeUpdate(_map, "com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0RecordDao.setIsSent");
+    }
+
+    @Override
+    public int tellMeHowManyOfThose(String projectPuid) {
+        return baseSQLUtil.executeQueryByPass(new Integer(0), projectPuid, "com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0RecordDao.tellMeHowManyOfThose", true);
+    }
+
+    @Override
+    public List<HzCfg0Record> selectListByProjectPuid(String projectPuid, QueryBase queryBase) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("projectPuid", projectPuid);
+        params.put("whichTable", "HZ_CFG0_RECORD");
+        params.put("param", queryBase);
+        return baseSQLUtil.executeQueryByPass(RECORD, params, "com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0RecordDao.selectListByProjectPuid");
     }
 
     @Override

@@ -1,5 +1,7 @@
 package sql.pojo.cfg;
 
+import java.util.Date;
+
 public class HzCfg0Record {
     /**
      * PUId，主键
@@ -51,8 +53,67 @@ public class HzCfg0Record {
      * 归属项目，类中特有的
      */
     private String projectPuid;
-    /**相关性代码，目前手输入*/
+    /**
+     * 相关性代码，目前手输入
+     */
     private String pCfg0Relevance;
+    /**
+     * 特性是否已发送到ERP
+     */
+    private Integer isFeatureSent;
+    /**
+     * 相关性是否已发送到ERP
+     */
+    private Integer isRelevanceSent;
+
+    /**
+     * 创建时间
+     */
+    private Date createDate;
+
+    /**
+     * 最后一次修改时间
+     */
+    private Date lastModifyDate;
+
+    private String creator;
+    private String lastModifier;
+
+    public static String reflectToDBField(String property) {
+        switch (property) {
+            /**
+             * 主键
+             */
+            case "puid":
+                return "PUID";
+            /**
+             * 颜色集
+             */
+            case "pCfg0ObjectId":
+                return "P_CFG0_OBJECT_ID";
+            /**
+             * 颜色名称
+             */
+            case "pCfg0Desc":
+                return "P_CFG0_DESC";
+            /**
+             * 颜色代码
+             */
+            case "pCfg0FamilyName":
+                return "P_CFG0_FAMILY_NAME";
+            /**
+             * 备注
+             */
+            case "pCfg0FamilyDesc":
+                return "P_CFG0_FAMILY_DESC";
+            default:
+                return null;
+        }
+    }
+
+
+
+
 
     public String getPuid() {
         return puid;
@@ -167,4 +228,53 @@ public class HzCfg0Record {
     public void setpCfg0Relevance(String pCfg0Relevance) {
         this.pCfg0Relevance = pCfg0Relevance;
     }
+
+    public Integer getIsFeatureSent() {
+        return isFeatureSent;
+    }
+
+    public void setIsFeatureSent(Integer isFeatureSent) {
+        this.isFeatureSent = isFeatureSent;
+    }
+
+    public Integer getIsRelevanceSent() {
+        return isRelevanceSent;
+    }
+
+    public void setIsRelevanceSent(Integer isRelevanceSent) {
+        this.isRelevanceSent = isRelevanceSent;
+    }
+
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
+    public Date getLastModifyDate() {
+        return lastModifyDate;
+    }
+
+    public void setLastModifyDate(Date lastModifyDate) {
+        this.lastModifyDate = lastModifyDate;
+    }
+
+    public String getCreator() {
+        return creator;
+    }
+
+    public void setCreator(String creator) {
+        this.creator = creator;
+    }
+
+    public String getLastModifier() {
+        return lastModifier;
+    }
+
+    public void setLastModifier(String lastModifier) {
+        this.lastModifier = lastModifier;
+    }
+
 }

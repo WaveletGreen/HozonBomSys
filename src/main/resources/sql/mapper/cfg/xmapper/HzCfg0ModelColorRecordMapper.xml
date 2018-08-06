@@ -7,6 +7,7 @@
         <result column="P_CODE_OF_COLORFUL_MODEL" jdbcType="VARCHAR" property="pCodeOfColorfulModel"/>
         <result column="P_DESC_OF_COLORFUL_MODEL" jdbcType="VARCHAR" property="pDescOfColorfulModel"/>
         <result column="P_MODEL_SHELL" jdbcType="VARCHAR" property="pModelShellOfColorfulModel"/>
+        <result column="P_UPDATE_DEFAULT" jdbcType="INTEGER" property="updateDefault"/>
     </resultMap>
     <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs"
                type="sql.pojo.cfg.HzCfg0ModelColor">
@@ -19,7 +20,12 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-    PUID, P_CFG0_MAIN_RECORD_OF_MC, P_CODE_OF_COLORFUL_MODEL, P_DESC_OF_COLORFUL_MODEL,P_MODEL_SHELL
+    PUID,
+    P_CFG0_MAIN_RECORD_OF_MC,
+    P_CODE_OF_COLORFUL_MODEL,
+    P_DESC_OF_COLORFUL_MODEL,
+    P_MODEL_SHELL,
+    P_UPDATE_DEFAULT
     </sql>
     <sql id="Blob_Column_List">
     P_COLORFUL_MAP_BLOCK
@@ -33,11 +39,10 @@
         #{pCodeOfColorfulModel,jdbcType=VARCHAR},
         #{pDescOfColorfulModel,jdbcType=VARCHAR},
         #{pModelShellOfColorfulModel,jdbcType=VARCHAR},
-        #{pColorfulMapBlock,jdbcType=BLOB}
+        1
     </sql>
     <sql id="reflect">
-      P_DESC_OF_COLORFUL_MODEL = #{pDescOfColorfulModel,jdbcType=VARCHAR},
-      P_COLORFUL_MAP_BLOCK = #{pColorfulMapBlock,jdbcType=VARCHAR}
+      P_DESC_OF_COLORFUL_MODEL = #{pDescOfColorfulModel,jdbcType=VARCHAR}
     </sql>
 
     <select id="selectByMainId" parameterType="sql.pojo.cfg.HzCfg0ModelColor" resultMap="ResultMapWithBLOBs">
@@ -63,17 +68,16 @@
         from HZ_CFG0_MODEL_COLOR_RECORD t
         left join HZ_CFG0_COLORSET t2 on p_model_shell=t2.p_color_code
         where t.p_cfg0_main_record_of_mc=
-          (select puid
-              from hz_cfg0_main_record t3
-          where t3.p_cfg0_of_which_project_puid=#{projectPuid}
+        (select puid
+        from hz_cfg0_main_record t3
+        where t3.p_cfg0_of_which_project_puid=#{projectPuid}
         )
 
     </select>
     <insert id="insertOne" parameterType="sql.pojo.cfg.HzCfg0ModelColor">
         insert into HZ_CFG0_MODEL_COLOR_RECORD
         (
-        <include refid="Base_Column_List"/>,
-        <include refid="Blob_Column_List"/>
+        <include refid="Base_Column_List"/>
         )
         VALUES (
         <include refid="values"/>
@@ -83,6 +87,13 @@
         update HZ_CFG0_MODEL_COLOR_RECORD
         set
         <include refid="reflect"/>
+        where PUID = #{puid,jdbcType=VARCHAR}
+    </update>
+    <update id="updateOldData" parameterType="sql.pojo.cfg.HzCfg0ModelColor">
+        update HZ_CFG0_MODEL_COLOR_RECORD
+        set
+        P_COLORFUL_MAP_BLOCK=null,
+        P_UPDATE_DEFAULT=1
         where PUID = #{puid,jdbcType=VARCHAR}
     </update>
 

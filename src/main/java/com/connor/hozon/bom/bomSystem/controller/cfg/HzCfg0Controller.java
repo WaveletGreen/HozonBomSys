@@ -1,5 +1,6 @@
 package com.connor.hozon.bom.bomSystem.controller.cfg;
 
+import com.connor.hozon.bom.bomSystem.controller.integrate.ExtraIntegrate;
 import com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0MainRecordDao;
 import com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0OptionFamilyDao;
 import com.connor.hozon.bom.bomSystem.dto.HzRelevanceBean;
@@ -7,16 +8,16 @@ import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
 import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0OptionFamilyService;
 import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0Service;
 import com.connor.hozon.bom.bomSystem.service.iservice.integrate.ISynFeatureService;
-import integration.base.feature.ZPPTCO002;
-import integration.base.relevance.ZPPTCO004;
-import integration.logic.Correlate;
-import integration.logic.Features;
-import integration.option.ActionFlagOption;
-import integration.option.CorrelateTypeOption;
+import com.connor.hozon.bom.bomSystem.service.iservice.integrate.ISynRelevanceService;
+import com.connor.hozon.bom.common.base.entity.QueryBase;
+import com.connor.hozon.bom.common.util.user.UserInfo;
+import com.connor.hozon.bom.sys.entity.User;
+import integration.Author;
 import integration.service.impl.cfg2.TransCfgService;
 import integration.service.impl.feature4.TransOptionsService;
-import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,7 +26,10 @@ import sql.pojo.cfg.HzCfg0MainRecord;
 import sql.pojo.cfg.HzCfg0OptionFamily;
 import sql.pojo.cfg.HzCfg0Record;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static com.connor.hozon.bom.bomSystem.helper.StringHelper.checkString;
 
@@ -36,12 +40,23 @@ import static com.connor.hozon.bom.bomSystem.helper.StringHelper.checkString;
  */
 @Controller
 @RequestMapping("/cfg0")
-public class HzCfg0Controller {
+public class HzCfg0Controller extends ExtraIntegrate {
     private final HzCfg0Service hzCfg0Service;
     private final HzCfg0MainRecordDao hzCfg0MainRecordDao;
     private final HzCfg0OptionFamilyDao hzCfg0OptionFamilyDao;
+    /**
+     * 同步特性
+     */
     @Autowired
     ISynFeatureService iSynFeatureService;
+    /**
+     * 同步相关性
+     */
+    @Autowired
+    ISynRelevanceService iSynRelevanceService;
+    /***
+     * 族
+     */
     @Autowired
     HzCfg0OptionFamilyService cfg0OptionFamilyService;
     /**
@@ -54,6 +69,10 @@ public class HzCfg0Controller {
      */
     @Autowired
     TransOptionsService transOptionsService;
+    /**
+     * 日志记录
+     */
+    private final static Logger logger = LoggerFactory.getLogger(HzCfg0Controller.class);
 
     @Autowired
     public HzCfg0Controller(HzCfg0Service hzCfg0Service, HzCfg0MainRecordDao hzCfg0MainRecordDao, HzCfg0OptionFamilyDao hzCfg0OptionFamilyDao) {
@@ -65,11 +84,14 @@ public class HzCfg0Controller {
     /******************************************特性表***********************************************/
     @RequestMapping("/loadFeature")
     @ResponseBody
-    public Map<String, Object> loadCfg0(@RequestParam("projectPuid") String projectPuid) {
+    public Map<String, Object> loadCfg0(@RequestParam("projectPuid") String projectPuid, QueryBase queryBase) {
         Map<String, Object> result = new HashMap<>();
-        List<HzCfg0Record> records = hzCfg0Service.doLoadCfgListByProjectPuid(projectPuid);
-        records.addAll(hzCfg0Service.doLoadAddedCfgListByProjectPuid(projectPuid));
-        result.put("totalCount", records.size());
+        queryBase.setSort(HzCfg0Record.reflectToDBField(queryBase.getSort()));
+        List<HzCfg0Record> records = hzCfg0Service.doLoadCfgListByProjectPuid(projectPuid, queryBase);
+        int totalCount = hzCfg0Service.tellMeHowManyOfThose(projectPuid);
+//        records.addAll(hzCfg0Service.doLoadAddedCfgListByProjectPuid(projectPuid));
+//        int totalCount = hzCfg0Service.tellMeHowManyOfThose(projectPuid);
+        result.put("totalCount", totalCount);
         result.put("result", records);
         return result;
     }
@@ -86,20 +108,23 @@ public class HzCfg0Controller {
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     @ResponseBody
-    public JSONObject add(@RequestBody HzCfg0Record record) {
+    public JSONObject add(@RequestBody HzCfg0Record record) throws Exception {
         JSONObject result = new JSONObject();
+        User user = UserInfo.getUser();
 
-        /**生成自身的puid*/
-        record.setPuid(UUID.randomUUID().toString());
         record.setpCfg0FamilyName(record.getpCfg0FamilyName().toUpperCase());
         record.setpCfg0ObjectId(record.getpCfg0ObjectId().toUpperCase());
-
+        //创建人和修改人
+        record.setCreator(user.getUserName());
+        record.setLastModifier(user.getUserName());
 
         if (!hzCfg0Service.preCheck(record)) {
             result.put("status", false);
-            result.put("msg", "已存在的特性值");
+            result.put("msg", "<p style='color:red;'>特性值已存在</p>");
             return result;
         }
+        /**生成自身的puid*/
+        record.setPuid(UUIDHelper.generateUpperUid());
 
         HzCfg0OptionFamily family = new HzCfg0OptionFamily();
         family.setpOfCfg0Main(record.getpCfg0MainItemPuid());
@@ -125,6 +150,10 @@ public class HzCfg0Controller {
         if (hzCfg0Service.doInsertOne(record)) {
             result.put("status", true);
             result.put("msg", "添加特性值" + record.getpCfg0ObjectId() + "成功");
+//            //发送到SAP,走流程
+//            if (!SynMaterielService.debug) {
+//                iSynFeatureService.addFeature(Collections.singletonList(record));
+//            }
         } else {
             result.put("status", false);
             result.put("msg", "添加特性值" + record.getpCfg0ObjectId() + "失败，请联系系统管理员");
@@ -151,6 +180,7 @@ public class HzCfg0Controller {
     @ResponseBody
     public JSONObject modify(@RequestBody HzCfg0Record record) {
         JSONObject result = new JSONObject();
+        User user = UserInfo.getUser();
         result.put("status", true);
         if (record == null || "".equalsIgnoreCase(record.getPuid()) || null == record.getPuid()) {
             result.put("status", false);
@@ -159,6 +189,8 @@ public class HzCfg0Controller {
         }
         record.setpCfg0FamilyName(record.getpCfg0FamilyName().toUpperCase());
         record.setpCfg0ObjectId(record.getpCfg0ObjectId().toUpperCase());
+        record.setLastModifier(user.getUserName());
+
         if (!hzCfg0Service.preCheck(record)) {
             result.put("status", false);
             result.put("msg", "已存在的特性值");
@@ -188,8 +220,9 @@ public class HzCfg0Controller {
 
     @RequestMapping(value = "/deleteByPuid", method = RequestMethod.POST)
     @ResponseBody
-    public JSONObject deleteByPuid(@RequestBody List<HzCfg0Record> records) {
+    public JSONObject deleteByPuid(@RequestBody List<HzCfg0Record> records) throws Exception {
         List<HzCfg0Record> toDelete = new ArrayList<>();
+        Map<String, HzCfg0Record> mapOfDelete = new HashMap<>();
         JSONObject result = new JSONObject();
         if (records == null || records.size() <= 0) {
             result.put("status", false);
@@ -211,6 +244,7 @@ public class HzCfg0Controller {
                 if (hzCfg0Service.doSelectOneByPuid(record.getPuid()) != null) {
                     //如果需要删除原数据
                     toDelete.add(record);
+                    mapOfDelete.put(record.getpCfg0FamilyName() + "-" + record.getpCfg0FamilyDesc() + "-" + record.getpCfg0ObjectId() + "-" + record.getpCfg0FamilyDesc(), record);
 //                    result.put("status", false);
 //                    result.put("msg", "目前不允许删除原数据，请重试或联系系统管理员");
 //                    return result;
@@ -222,15 +256,55 @@ public class HzCfg0Controller {
                 }
             }
         }
-        result.put("status", hzCfg0Service.doDeleteCfgByList(toDelete));
-        result.put("msg", "删除成功");
+        List<HzCfg0Record> _toDelete = new ArrayList<>();
+
+        /**同步删除已发送到ERP的特性值和相关性值（标记为状态3：不可用）*/
+        if (Author.SYN_DELETE) {
+            JSONObject resultFromSap = iSynFeatureService.deleteFeature(toDelete);
+
+            JSONObject resultFromSapOfRelevance;
+            //整理数据
+            List<HzRelevanceBean> myBeans = new ArrayList<>();
+            iSynRelevanceService.sortData(records, myBeans);
+
+            for (HzRelevanceBean myBean : myBeans) {
+                logger.warn("---------------同步在SAP中标记像关系状态为3:" + (myBean.getRelevanceCode()));
+            }
+            resultFromSapOfRelevance = iSynRelevanceService.deleteRelevance(myBeans);
+
+            Object obj = resultFromSap.get("_forDelete");
+
+
+            if (obj != null && obj instanceof List) {
+                if (((List) obj).size() > 0) {
+                    for (int i = 0; i < ((List<String>) obj).size(); i++) {
+                        if (mapOfDelete.containsKey(((List<String>) obj).get(i))) {
+                            _toDelete.add(mapOfDelete.get(((List) obj).get(i)));
+                            logger.warn("---------------同步在SAP中删除特性:" + (mapOfDelete.get(((List) obj).get(i)).getpCfg0ObjectId()));
+                        }
+                    }
+                }
+            } else {
+                _toDelete.addAll(records);
+            }
+        }
+//        没有进行同步删除时执行该段代码
+        if (_toDelete.size() == 0) {
+            _toDelete.addAll(records);
+        }
+        if (_toDelete.size() > 0 && hzCfg0Service.doDeleteCfgByList(_toDelete)) {
+            result.put("status", true);
+            result.put("msg", "删除成功");
+        }
+
         return result;
     }
 
     @RequestMapping(value = "/sendToERP", method = RequestMethod.POST)
-    @ResponseBody
-    public JSONObject sendToERP(@RequestBody List<HzCfg0Record> records, Model model) throws Exception {
-        return iSynFeatureService.addFeature(records);
+    public String sendToERP(@RequestBody List<HzCfg0Record> records, Model model) throws Exception {
+        JSONObject result = iSynFeatureService.addFeature(records);
+        addToModel(result, model);
+        return "stage/templateOfIntegrate";
     }
 
 
@@ -242,7 +316,7 @@ public class HzCfg0Controller {
         List<HzRelevanceBean> _list = new ArrayList<>();
         int _index = 0;
         _index = hzCfg0Service.doLoadRelevance(projectPuid, _list, _index, "HZ_CFG0_RECORD");
-        hzCfg0Service.doLoadRelevance(projectPuid, _list, _index, "HZ_CFG0_ADD_CFG_RECORD");
+//        hzCfg0Service.doLoadRelevance(projectPuid, _list, _index, "HZ_CFG0_ADD_CFG_RECORD");
         result.put("totalCount", _list.size());
         result.put("result", _list);
         return result;
@@ -313,69 +387,21 @@ public class HzCfg0Controller {
     }
 
     @RequestMapping(value = "/sendRelToERP", method = RequestMethod.POST)
-    @ResponseBody
-    public JSONObject sendRelToERP(@RequestBody List<HzRelevanceBean> beans) throws Exception {
+    public String sendRelToERP(@RequestBody List<HzRelevanceBean> beans, Model model) throws Exception {
         //清空上次传输的内容
-        transOptionsService.setClearInputEachTime(true);
-        Map<String, HzRelevanceBean> _mapCoach = new HashMap<>();
-        JSONObject result = new JSONObject();
-        StringBuilder sbs = new StringBuilder();
-        sbs.append("发送成功:<br/>");
-        StringBuilder sbf = new StringBuilder();
-        sbf.append("发送失败:<br/>");
-
-        boolean hasFail = false;
-        if (beans == null || beans.size() <= 0) {
-            result.put("status", false);
-            result.put("msg", "选择的列为空，请至少选择1列发送");
-            return result;
-        }
-
-
-        beans.forEach(bean -> {
-            Correlate correlate = new Correlate();
-            String packnum = UUID.randomUUID().toString().replaceAll("-", "");
-            correlate.setPackNo(packnum);
-            correlate.setLineNum(bean.getPuid().substring(0, 5));
-            //动作描述代码
-            correlate.setActionFlag(ActionFlagOption.ADD);
-            //相关性
-            correlate.setCorrelate(bean.getRelevance());
-            //相关性描述
-            correlate.setCorrelateDescript(bean.getRelevanceDesc());
-            //相关性状态
-            correlate.setCorrelateState("5");
-            //创建日期
-            correlate.setCreateDate(new Date());
-            //相关性类型
-            correlate.setCorrelateType(CorrelateTypeOption.CorrelateType_1);
-            //相关性代码
-            correlate.setCorrelateCode(bean.getRelevanceCode());
-            _mapCoach.put(packnum, bean);
-            transOptionsService.getInput().getItem().add(correlate.getZpptci004());
-        });
-        transOptionsService.execute();
-        List<ZPPTCO004> list = transOptionsService.getOut().getItem();
-        if (list != null && list.size() > 0) {
-            result.put("status", true);
-            for (ZPPTCO004 _l : list) {
-                if ("S".equalsIgnoreCase(_l.getPTYPE())) {
-                    sbs.append("&emsp;&emsp;&emsp;&emsp;" + _mapCoach.get(_l.getPPACKNO()).getRelevance() + "<br/>");
-                } else {
-                    if (_mapCoach.get(_l.getPPACKNO()) == null) {
-                        continue;
-                    }
-                    sbf.append("&emsp;&emsp;&emsp;&emsp;" + _mapCoach.get(_l.getPPACKNO()).getRelevance() + "(" + _l.getPMESSAGE() + ")<br/>");
-                    hasFail = true;
-                }
-            }
-        }
-        if (hasFail) {
-            result.put("msg", sbs.append("<br/>" + sbf).toString());
-        } else {
-            result.put("msg", sbs.toString());
-        }
-        return result;
+        JSONObject result;
+        List<String> puids = new ArrayList<>();
+        List<HzCfg0Record> records;
+        //只要求获取puid
+        beans.forEach(bean -> puids.add(bean.getPuid()));
+        //从根本根本上查找数据
+        records = hzCfg0Service.doLoadListByPuids(puids);
+        //整理数据
+        List<HzRelevanceBean> myBeans = new ArrayList<>();
+        iSynRelevanceService.sortData(records, myBeans);
+        result = iSynRelevanceService.addRelevance(myBeans);
+        addToModel(result, model);
+        return "stage/templateOfIntegrate";
     }
 
 

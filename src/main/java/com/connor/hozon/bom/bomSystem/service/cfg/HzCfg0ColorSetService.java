@@ -1,6 +1,7 @@
 package com.connor.hozon.bom.bomSystem.service.cfg;
 
 import com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0ColorSetDao;
+import com.connor.hozon.bom.common.base.entity.QueryBase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sql.pojo.cfg.HzCfg0ColorSet;
@@ -22,14 +23,15 @@ public class HzCfg0ColorSetService {
     }
 
     /**
+     * @param queryBase
      * @return 颜色集合
      * Description: 搜索出所有的颜色信息
      * Date: 2018/5/21 17:08
      */
-    public Map<String, Object> queryAll2() {
+    public Map<String, Object> queryAll2(QueryBase queryBase) {
         Date now = new Date();
         Map<String, Object> result = new HashMap<>();
-        List<HzCfg0ColorSet> colorSet = hzCfg0ColorSetDao.queryAll2();
+        List<HzCfg0ColorSet> colorSet = hzCfg0ColorSetDao.queryAll2(queryBase);
         List<HzCfg0ColorSet> toUpdate = new ArrayList<>();
 //        colorSet.stream().filter(
 //                set -> now.after(set.getpColorAbolishDate())).filter(
@@ -50,11 +52,24 @@ public class HzCfg0ColorSetService {
         toUpdate.forEach(set -> {
             hzCfg0ColorSetDao.updateStatusByPk(set);
         });
-        result.put("totalCount", colorSet.size());
+        result.put("totalCount", hzCfg0ColorSetDao.tellMeHowManyOfIt());
         result.put("result", colorSet);
         return result;
     }
 
+    /**
+     * 根据分页条件获取颜色
+     * @param queryBase
+     * @return
+     */
+    public List<HzCfg0ColorSet> doGetAll(QueryBase queryBase) {
+        return hzCfg0ColorSetDao.queryAll2(queryBase);
+    }
+
+    /**
+     * 获取全部颜色
+     * @return
+     */
     public List<HzCfg0ColorSet> doGetAll() {
         return hzCfg0ColorSetDao.queryAll2();
     }

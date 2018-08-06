@@ -66,26 +66,34 @@ public class TransCfgService extends Author implements ITransmitService {
      */
     @Override
     public TABLEOFZPPTCO002 execute() throws Exception {
-        //一定要有一个输出参数，否则报错
-        if (setClearInputEachTime) {
-            out.getItem().clear();
+        try {
+            //一定要有一个输出参数，否则报错
+            if (setClearInputEachTime) {
+                out.getItem().clear();
+            }
+            if (t == null) {
+                out.getItem().add(t = new ZPPTCO002());
+            }
+            inputContainer.value = input;
+            outputContainer.value = out;
+            //执行服务
+            if (super.execute(serviceExecutor, inputContainer, outputContainer) != null)
+                out = outputContainer.value;
+            else {
+                out = null;
+            }
+            //如果需要在每次execute之后清空input，则需要设置clearEachTime=true
+            if (setClearInputEachTime) {
+                input.getItem().clear();
+            }
+            return out;
+        } catch (Exception e) {
+            e.printStackTrace();
+            if (setClearInputEachTime) {
+                input.getItem().clear();
+            }
+            return null;
         }
-        if (t == null) {
-            out.getItem().add(t = new ZPPTCO002());
-        }
-        inputContainer.value = input;
-        outputContainer.value = out;
-        //执行服务
-        if (super.execute(serviceExecutor, inputContainer, outputContainer) != null)
-            out = outputContainer.value;
-        else {
-            out = null;
-        }
-        //如果需要在每次execute之后清空input，则需要设置clearEachTime=true
-        if (setClearInputEachTime) {
-            input.getItem().clear();
-        }
-        return out;
     }
 
     /**
@@ -115,7 +123,7 @@ public class TransCfgService extends Author implements ITransmitService {
     }
 
     public static void main(String[] args) throws Exception {
-        TransCfgService transCfgService=new TransCfgService();
+        TransCfgService transCfgService = new TransCfgService();
         Features features = new Features();
         String packnum = UUID.randomUUID().toString().replaceAll("-", "");
         //数据包号

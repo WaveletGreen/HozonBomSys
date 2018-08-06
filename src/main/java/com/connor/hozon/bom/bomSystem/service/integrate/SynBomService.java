@@ -41,10 +41,10 @@ public class SynBomService implements ISynBomService {
      */
     @Override
     public JSONObject updateByUids(String projectPuid, String puidOfUpdate) {
-        JSONObject result = deleteByUids(projectPuid, Collections.singletonList(puidOfUpdate));
-        if (result.getBoolean("status")) {
-            result = execute(projectPuid, Collections.singletonList(puidOfUpdate), ActionFlagOption.ADD);
-        }
+        JSONObject result = null;//deleteByUids(projectPuid, Collections.singletonList(puidOfUpdate));
+//        if (result.getBoolean("status")) {
+        result = execute(projectPuid, Collections.singletonList(puidOfUpdate), ActionFlagOption.UPDATE);
+//        }
         return result;
     }
 
@@ -176,6 +176,9 @@ public class SynBomService implements ISynBomService {
         String packNum = UUIDHelper.generateUpperUid();
         for (HzMBomToERPBean bean : beanListOfChildren) {
             HzMBomToERPBean parent = null;
+            if (bean.getParentUID() == null) {
+                continue;
+            }
             //判断是否是2Y层，2Y层没有父层
             if (mapOf2YUid.containsKey(bean.getPuid())) {
                 totalOfUnknown++;
@@ -190,9 +193,25 @@ public class SynBomService implements ISynBomService {
                     parent = mapOfparents.get(bean.getParentUID());
                 }
             }
+//            //location cannt be empty
+//            if (bean.getStockLocation() == null || "".equals(bean.getStockLocation())) {
+//                totalOfUnknown++;
+//                continue;
+//            }
+
+            if (bean.getIs2Y() == 1) {
+                continue;
+            }
+//            if (mapOf2YUid.containsKey(bean.getPuid())) {
+//                continue;
+//            }
 
             /*******包号没有对应上，需要修改**********/
             if (parent != null) {
+                if (null == bean.getLineIndex() || "".equals(bean.getLineIndex())) {
+                    totalOfUnknown++;
+                    continue;
+                }
                 //初始化映射
                 ReflectBom reflectBom = new ReflectBom(bean);
                 //设置父层
@@ -508,6 +527,7 @@ public class SynBomService implements ISynBomService {
     private JSONObject execute(String projectPuid, List<String> puids, ActionFlagOption option) {
         //每次都清空缓存
         transBomService.setClearInputEachTime(true);
+        transBomService.getInput().getItem().clear();
         /**
          * 成功项
          */
@@ -567,7 +587,7 @@ public class SynBomService implements ISynBomService {
             }
         }
         //执行操作
-        if (SynMaterielService.debug)
+        if (!SynMaterielService.debug)
             transBomService.execute();
         //获取返回值
         List<ZPPTCO005> resultPool = transBomService.getOut().getItem();

@@ -8,6 +8,7 @@ import sql.pojo.HzPreferenceSetting;
 import sql.pojo.bom.HzBomLineRecord;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * User: Fancyears·Maylos·Mayways
@@ -16,6 +17,7 @@ import java.util.List;
  */
 @Service("hzBomDataDao")
 public class HzBomDataDaoImpl implements HzBomDataDao {
+    private static final HzBomLineRecord RECORD = new HzBomLineRecord();
     @Autowired
     BaseSQLUtil baseSQLUtil;
 
@@ -24,9 +26,36 @@ public class HzBomDataDaoImpl implements HzBomDataDao {
         return baseSQLUtil.executeQuery(bomLineRecord, "com.connor.hozon.bom.bomSystem.dao.bom.HzBomDataDao.selectByProjectPuid");
     }
 
+
     @Override
     public HzPreferenceSetting loadSetting(HzPreferenceSetting setting) {
         return baseSQLUtil.executeQueryById(setting,
                 "com.connor.hozon.bom.bomSystem.dao.bom.HzPreferenceSettingDao.selectSettingByNameWithMainRecord");
+    }
+
+    /**
+     * Author: Fancyears·Maylos·Mayways
+     * Description: 根据数模层puid获取到所有的BomLine
+     * Date: 2018/5/23 9:59
+     *
+     * @param projectPuid
+     * @return
+     */
+    @Override
+    public List<HzBomLineRecord> select2YByProjectPuid(String projectPuid) {
+        return baseSQLUtil.executeQueryByPass(new HzBomLineRecord(), projectPuid, "com.connor.hozon.bom.bomSystem.dao.bom.HzBomDataDao.select2YByProjectPuid");
+    }
+
+    /**
+     * Author: Fancyears·Maylos·Mayways
+     * Description: 根据部门和2Y层获取到2Y层的下级总成
+     * Date: 2018/5/23 9:59
+     *
+     * @param params 包含部门名称和项目UID
+     * @return
+     */
+    @Override
+    public List<HzBomLineRecord> selectVehicleAssembly(Map<String, Object> params) {
+        return baseSQLUtil.executeQueryByPass(RECORD, params, "com.connor.hozon.bom.bomSystem.dao.bom.HzBomDataDao.selectVehicleAssembly");
     }
 }

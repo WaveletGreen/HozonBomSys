@@ -33,4 +33,11 @@ public interface HzCfg0ModelRecordDao {
     int updateModelName(HzCfg0ModelRecord modelRecord);
 
     int insertByBatch(List<HzCfg0ModelRecord> modelRecord);
+
+    /**
+     * 该项目下的所有车型
+     * @param projectPuid
+     * @return
+     */
+    List<HzCfg0ModelRecord> selectByProjectPuid(String projectPuid);
 }

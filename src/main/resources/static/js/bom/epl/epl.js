@@ -75,7 +75,7 @@ function initTable(eplUrl){
                         // align:
                         //     'center',
                         valign:
-                            'middle'
+                            'middle',
                     };
                     column.push(json);
                 }

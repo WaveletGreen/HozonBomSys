@@ -1,5 +1,6 @@
 package com.connor.hozon.bom.bomSystem.dao.cfg;
 
+import com.connor.hozon.bom.common.base.entity.QueryBase;
 import org.springframework.context.annotation.Configuration;
 import sql.pojo.cfg.HzCfg0ColorSet;
 
@@ -12,6 +13,15 @@ import java.util.List;
  */
 @Configuration
 public interface HzCfg0ColorSetDao {
+    /**
+     * @return
+     * @Author: Fancyears·Maylos·Mayways
+     * @Description: 检索所有的颜色集
+     * @Date: 2018/5/21 17:09
+     * @param queryBase
+     */
+    List<HzCfg0ColorSet> queryAll2(QueryBase queryBase);
+
     /**
      * @return
      * @Author: Fancyears·Maylos·Mayways
@@ -84,4 +94,10 @@ public interface HzCfg0ColorSetDao {
      * @Date: 2018/5/21 17:10
      */
     int logicDeleteByBatch(List<HzCfg0ColorSet> entity);
+
+    /**
+     * 查询全部的颜色数量
+     * @return
+     */
+    int tellMeHowManyOfIt();
 }
