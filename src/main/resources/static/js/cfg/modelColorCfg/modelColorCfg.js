@@ -1,7 +1,8 @@
 function modeVehicle(puid) {
+    var projectPuid = $("#project", window.top.document).val();
     window.Ewin.dialog({
         title: "添加",
-        url: "modelColor/setLvl2ColorPage?modelUid=" + puid,
+        url: "modelColor/setLvl2ColorPage?modelUid=" + puid+"&projectPuid="+projectPuid,
         gridId: "gridId",
         width: 500,
         height: 600

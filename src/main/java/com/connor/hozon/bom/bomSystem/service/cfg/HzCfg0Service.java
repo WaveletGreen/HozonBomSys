@@ -157,6 +157,11 @@ public class HzCfg0Service {
         return false;
     }
 
+    /**
+     * 项目上的特性总数是多少，针对项目而非整个合众公司
+     * @param projectPuid
+     * @return
+     */
     public int tellMeHowManyOfThose(String projectPuid) {
        return  hzCfg0RecordDao.tellMeHowManyOfThose(projectPuid);
     }

@@ -1,8 +1,12 @@
 package com.connor.hozon.bom.bomSystem.controller.cfg;
 
 import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
+import com.connor.hozon.bom.bomSystem.service.bom.HzBomDataService;
 import com.connor.hozon.bom.bomSystem.service.bom.HzBomLineRecordService;
-import com.connor.hozon.bom.bomSystem.service.cfg.*;
+import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0ColorSetService;
+import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0MainService;
+import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0ModelColorService;
+import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0OptionFamilyService;
 import com.connor.hozon.bom.bomSystem.service.iservice.cfg.IHzColorModelService;
 import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.sys.entity.User;
@@ -14,7 +18,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import sql.pojo.cfg.*;
-import sql.redis.SerializeUtil;
 
 import java.util.*;
 
@@ -37,6 +40,8 @@ public class HzCfg0ModelColorController {
     IHzColorModelService hzColorModelService;
     @Autowired
     HzBomLineRecordService hzBomLineRecordService;
+    @Autowired
+    HzBomDataService hzBomDataService;
     private Logger logger;
 
     @Autowired
@@ -194,7 +199,7 @@ public class HzCfg0ModelColorController {
         if (projectPuid == null || "".equals(projectPuid)) {
             object.put("status", false);
         } else {
-            column = hzCfg0OptionFamilyService.doGetColumnDef(projectPuid, "<br/>");
+            column = hzCfg0OptionFamilyService.doGetColumnDef2(projectPuid, "<br/>");
             if (column == null || column.size() <= 0) {
                 object.put("status", false);
             } else {
@@ -255,13 +260,13 @@ public class HzCfg0ModelColorController {
 
     @RequestMapping(value = "/setLvl2ColorPage", method = RequestMethod.GET)
     @ResponseBody
-    public boolean setLvl2ColorPage(@RequestParam("modelUid") String modelPuid) {
+    public String setLvl2ColorPage(@RequestParam("modelUid") String modelPuid, @RequestParam("projectPuid") String projectPuid) {
+        //List<HzBomLineRecord> lineRecords = hzBomDataService.doSelectVehicleAssembly("车身", projectPuid);
         if (checkString(modelPuid)) {
-            return true;
+            return "二级配色方案";
         } else {
-            return false;
+            return "发生错误，请选择一个项目和颜色车型进行操作";
         }
     }
-
 
 }

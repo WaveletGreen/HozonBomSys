@@ -88,12 +88,12 @@
         where t2.p_cfg0_of_which_project_puid=#{projectPuid,jdbcType=VARCHAR}
         )
 
-        <if test="limit!=null and  page!=null">
-            and ROWNUM &lt;= ${page}*${param.limit}
+        <if test="param.limit!=null and  param.page!=null">
+            and ROWNUM &lt;= ${param.page}*${param.limit}
         </if>
         ) temp
         <if test="param.offset!=null">
-            where temp.rowno &gt;= ${param.offset}
+            where temp.rowno &gt;= ${param.offset}+1
         </if>
         <if test="param.sort!=null">
             order by ${param.sort}

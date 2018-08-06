@@ -130,13 +130,13 @@ public class HzBomDataService {
      * 传入部门和项目UID，获取部门下2Y层的子总成
      *
      * @param dept        部门名
-     * @param projectPuid 项目UID
+     * @param projectUid 项目UID
      * @return 一组总成，需要进行查重操作
      */
-    public List<HzBomLineRecord> doSelectVehicleAssembly(String dept, String projectPuid) {
+    public List<HzBomLineRecord> doSelectVehicleAssembly(String dept, String projectUid) {
         HashMap params = new HashMap();
         params.put("dept", dept);
-        params.put("projectPuid", projectPuid);
+        params.put("projectUid", projectUid);
         return hzBomDataDao.selectVehicleAssembly(params);
     }
 }

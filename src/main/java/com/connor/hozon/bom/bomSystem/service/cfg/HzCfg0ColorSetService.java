@@ -23,10 +23,10 @@ public class HzCfg0ColorSetService {
     }
 
     /**
+     * @param queryBase
      * @return 颜色集合
      * Description: 搜索出所有的颜色信息
      * Date: 2018/5/21 17:08
-     * @param queryBase
      */
     public Map<String, Object> queryAll2(QueryBase queryBase) {
         Date now = new Date();
@@ -57,9 +57,19 @@ public class HzCfg0ColorSetService {
         return result;
     }
 
+    /**
+     * 根据分页条件获取颜色
+     * @param queryBase
+     * @return
+     */
     public List<HzCfg0ColorSet> doGetAll(QueryBase queryBase) {
         return hzCfg0ColorSetDao.queryAll2(queryBase);
     }
+
+    /**
+     * 获取全部颜色
+     * @return
+     */
     public List<HzCfg0ColorSet> doGetAll() {
         return hzCfg0ColorSetDao.queryAll2();
     }

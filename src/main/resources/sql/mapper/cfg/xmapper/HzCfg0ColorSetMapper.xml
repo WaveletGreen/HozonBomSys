@@ -98,7 +98,7 @@
         </if>
         ) temp
         <if test="offset!=null">
-            where temp.rowno &gt;= ${offset}
+            where temp.rowno &gt;= ${offset}+1
         </if>
         <if test="sort!=null">
             order by ${sort}

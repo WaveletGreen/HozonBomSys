@@ -1,6 +1,5 @@
 package sql.pojo.cfg;
 
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 
 /**
@@ -21,6 +20,10 @@ public class HzCfg0ModelColor {
     private byte[] pColorfulMapBlock;
     private LinkedHashMap<String, String> mapOfCfg0;
     private String pColorIsMultiply;
+    /**
+     * 作为更新旧数据的标识，为0/null的都是旧数据，需要进行更新
+     */
+    private Integer updateDefault;
 
     public HzCfg0ModelColor() {
         mapOfCfg0 = new LinkedHashMap<>();
@@ -89,5 +92,13 @@ public class HzCfg0ModelColor {
 
     public void setpColorIsMultiply(String pColorIsMultiply) {
         this.pColorIsMultiply = pColorIsMultiply;
+    }
+
+    public Integer getUpdateDefault() {
+        return updateDefault;
+    }
+
+    public void setUpdateDefault(Integer updateDefault) {
+        this.updateDefault = updateDefault;
     }
 }

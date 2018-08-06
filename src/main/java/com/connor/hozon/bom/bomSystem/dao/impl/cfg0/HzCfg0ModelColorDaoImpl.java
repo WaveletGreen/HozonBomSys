@@ -43,6 +43,17 @@ public class HzCfg0ModelColorDaoImpl implements HzCfg0ModelColorDao {
         return baseSQLUtil.executeInsert(color, "com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0ModelColorDao.insertOne");
     }
 
+    /**
+     * 更新旧数据，将旧数据的大对象设置为null
+     *
+     * @param color 旧数据
+     * @return
+     */
+    @Override
+    public int updateOldData(HzCfg0ModelColor color) {
+        return baseSQLUtil.executeUpdate(color, "com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0ModelColorDao.updateOldData");
+    }
+
     @Override
     public int deleteByBatch(List<HzCfg0ModelColor> colors) {
         return baseSQLUtil.executeDelete(colors, "com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0ModelColorDao.deleteByBatch");

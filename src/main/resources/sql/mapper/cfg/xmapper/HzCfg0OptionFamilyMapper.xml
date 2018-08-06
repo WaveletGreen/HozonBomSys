@@ -13,7 +13,10 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-    PUID, P_OF_CFG0_MAIN, P_OPTIONFAMILY_NAME,P_OPTIONFAMILY_DESC
+    PUID,
+    P_OF_CFG0_MAIN,
+    P_OPTIONFAMILY_NAME,
+    P_OPTIONFAMILY_DESC
   </sql>
     <select id="selectByPrimaryKey" parameterType="sql.pojo.cfg.HzCfg0OptionFamily" resultMap="BaseResultMap">
         select
@@ -51,6 +54,16 @@
         select t2.puid
         from hz_cfg0_main_record t2
         where t2.p_cfg0_of_which_project_puid =#{mainId}
-        ) order by PUID
+        ) order by P_OF_CFG0_MAIN ASC/*by PUID*/
+    </select>
+    <select id="selectNameByMainId2" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from HZ_CFG0_OPTIONFAMILY_RECORD
+        where P_OF_CFG0_MAIN = (
+        select t2.puid
+        from hz_cfg0_main_record t2
+        where t2.p_cfg0_of_which_project_puid =#{mainId}
+        ) order by PUID ASC
     </select>
 </mapper>

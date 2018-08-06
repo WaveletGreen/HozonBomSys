@@ -63,6 +63,14 @@ public interface HzCfg0ModelColorDao {
     int insertOne(HzCfg0ModelColor color);
 
     /**
+     * 更新旧数据，将旧数据的大对象设置为null
+     *
+     * @param color 旧数据
+     * @return
+     */
+    int updateOldData(HzCfg0ModelColor color);
+
+    /**
      * Author: Fancyears·Maylos·Mayways
      * Description: 根据主键批量删除颜色车型
      * Date: 2018/5/23 9:55

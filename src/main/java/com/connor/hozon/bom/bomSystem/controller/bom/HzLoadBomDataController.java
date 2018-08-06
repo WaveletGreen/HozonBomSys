@@ -116,14 +116,23 @@ public class HzLoadBomDataController {
                 }
                 HzCfg0OfBomLineRecord record = new HzCfg0OfBomLineRecord();
 
-                Map.Entry<String, String> p1 = iterator.next();
                 Map.Entry<String, String> p2 = iterator.next();
+                if (!iterator.hasNext()) {
+                    break;
+                }
+                Map.Entry<String, String> p1 = iterator.next();
+                if (p2 == null || p1 == null) {
+                    continue;
+                }
                 //需要强关联
                 record.setpCfg0name(p1.getKey());
                 record.setpToCfg0IdOfBl(p1.getValue());
                 record.setpBomLineName(p2.getKey());
                 record.setpBomlinepuid(p2.getValue());
                 HzCfg0Record record1 = hzCfg0Service.doSelectOneByPuid(p1.getValue());
+                if (record1 == null) {
+                    continue;
+                }
                 record.setpCfg0familyname(record1.getpCfg0FamilyName());
                 record.setpBomDigifaxId(mainRecord.getPuid());
                 record.setPuid(UUIDHelper.generateUpperUid());

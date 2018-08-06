@@ -87,10 +87,11 @@ public class HzCfg0Controller extends ExtraIntegrate {
     public Map<String, Object> loadCfg0(@RequestParam("projectPuid") String projectPuid, QueryBase queryBase) {
         Map<String, Object> result = new HashMap<>();
         queryBase.setSort(HzCfg0Record.reflectToDBField(queryBase.getSort()));
-        List<HzCfg0Record> records = hzCfg0Service.doLoadCfgListByProjectPuid(projectPuid,queryBase);
-        int totalCount=hzCfg0Service.tellMeHowManyOfThose(projectPuid);
+        List<HzCfg0Record> records = hzCfg0Service.doLoadCfgListByProjectPuid(projectPuid, queryBase);
+        int totalCount = hzCfg0Service.tellMeHowManyOfThose(projectPuid);
 //        records.addAll(hzCfg0Service.doLoadAddedCfgListByProjectPuid(projectPuid));
-        result.put("totalCount", records.size());
+//        int totalCount = hzCfg0Service.tellMeHowManyOfThose(projectPuid);
+        result.put("totalCount", totalCount);
         result.put("result", records);
         return result;
     }
