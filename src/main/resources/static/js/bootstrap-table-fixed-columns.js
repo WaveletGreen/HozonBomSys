@@ -1,3 +1,7 @@
+/**
+ * @author zhixin wen <wenzhixin2010@gmail.com>
+ * @version: v1.0.1
+ */
 
 (function ($) {
     'use strict';
@@ -51,7 +55,7 @@
         $trs.each(function () {
             $(this).find('th:gt(' + that.options.fixedNumber + ')').remove();
         });
-        this.$fixedHeaderColumns.html('').append($trs);
+        this.$fixedHeaderColumns.html('').append($trs); 
     };
 
     BootstrapTable.prototype.initBody = function () {
@@ -79,9 +83,9 @@
                 $tr.append($tds.eq(i).clone());
             }
             that.$fixedBodyColumns.append($tr);
-
+            
             if ($tds.eq(0).attr('rowspan')){
-                rowspan = $tds.eq(0).attr('rowspan') - 1;
+            	rowspan = $tds.eq(0).attr('rowspan') - 1;
             }
         });
     };
