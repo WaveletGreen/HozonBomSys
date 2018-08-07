@@ -53,7 +53,7 @@ public class HzMbomServiceImpl implements HzMbomService {
     private HzFactoryDAO hzFactoryDAO;
 
     @Override
-    public Page<HzMbomRecordRespDTO> fingHzMbomForPage(HzMbomByPageQuery query) {
+    public Page<HzMbomRecordRespDTO> findHzMbomForPage(HzMbomByPageQuery query) {
         try {
             String level = query.getLevel();
             if (level != null && level != "") {
@@ -124,7 +124,6 @@ public class HzMbomServiceImpl implements HzMbomService {
                 respDTO.setpBomLinePartEnName(record.getpBomLinePartEnName());
                 respDTO.setpBomLinePartName(record.getpBomLinePartName());
                 respDTO.setpBomLinePartResource(record.getpBomLinePartResource());
-
                 respDTO.setSparePart(record.getSparePart());
                 respDTO.setSparePartNum(record.getSparePartNum());
                 respDTO.setLaborHour(record.getLaborHour());
@@ -159,7 +158,7 @@ public class HzMbomServiceImpl implements HzMbomService {
                 } else {
                     respDTO.setpFactoryCode("1001");
                 }
-
+                respDTO.setStatus(record.getStatus());
                 respDTO.setpStockLocation(record.getpStockLocation());
                 respDTOList.add(respDTO);
             }

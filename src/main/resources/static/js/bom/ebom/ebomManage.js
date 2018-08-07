@@ -32,24 +32,7 @@ function initTable(eBomUrl) {
             // column.push({field: 'eBomPuid', title: 'puid'});
             column.push({field: 'ck', checkbox: true});
             column.push({field: 'puid', title: '主键'});
-            column.push({ field: 'pColorStatus',
-                title: '状态',
-                align: 'center',
-                valign: 'middle',
-                formatter: function (value, row, index) {
-                    if (value == 1 || "1" == value) {
-                        return "<span style='color: #00B83F'>已生效</span>";
-                    }
-                    if (value == 2 || "2" == value) {
-                        return "<span style='color: #a97f89'>草稿状态</span>";
-                    }
-                    if (3 == value || "3" == value) {
-                        return "<span style='color: #9492a9'>废除状态</span>";
-                    }
-                    if (4 == value || "4" == value){
-                        return "<span style='color: #a90009'>删除状态</span>";
-                    }
-                }})
+
             /* var data = result.data;
              var nameZh = data[0];
              var nameEn = data[1];
@@ -119,6 +102,24 @@ function initTable(eBomUrl) {
 
                 }
             }
+            column.push({ field: 'status',
+                title: '状态',
+                align: 'center',
+                valign: 'middle',
+                formatter: function (value, row, index) {
+                    if (value == 1 || "1" == value) {
+                        return "<span style='color: #00B83F'>已生效</span>";
+                    }
+                    if (value == 2 || "2" == value) {
+                        return "<span style='color: #a97f89'>草稿状态</span>";
+                    }
+                    if (3 == value || "3" == value) {
+                        return "<span style='color: #9492a9'>废除状态</span>";
+                    }
+                    if (4 == value || "4" == value){
+                        return "<span style='color: #a90009'>删除状态</span>";
+                    }
+                }})
             $table.bootstrapTable({
                 url: eBomUrl,
                 method: 'GET',

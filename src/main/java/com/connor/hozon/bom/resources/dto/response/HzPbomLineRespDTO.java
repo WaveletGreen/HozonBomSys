@@ -109,6 +109,18 @@ public class HzPbomLineRespDTO {
     private String puids;
 
     private String pLouaFlag;
+    /**
+     * 1 已生效 0 删除  2草稿状态  3废除状态 4删除状态
+     */
+    private Integer status;
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
 
     public String getLineNo() {
         return lineNo;

@@ -183,7 +183,7 @@ public class HzMbomController extends BaseController {
         }catch (Exception e){
 
         }
-        Page<HzMbomRecordRespDTO> page = hzMbomService.fingHzMbomForPage(query);
+        Page<HzMbomRecordRespDTO> page = hzMbomService.findHzMbomForPage(query);
         if (page == null) {
             return new HashMap<>();
         }
@@ -218,6 +218,7 @@ public class HzMbomController extends BaseController {
             _res.put("pFactoryCode", dto.getpFactoryCode());
             _res.put("pStockLocation",dto.getpStockLocation());
             _res.put("pBomType", dto.getpBomType());
+            _res.put("status",dto.getStatus());
             _list.add(_res);
         });
         ret.put("totalCount", page.getTotalCount());

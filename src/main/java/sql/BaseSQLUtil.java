@@ -449,7 +449,7 @@ public class BaseSQLUtil implements IBaseSQLUtil {
 //            session = f.openSession();
             return session.selectList(sqlMapId, param, new RowBounds(offset, limit));
         } catch (Exception e) {
-            logger.error("SQL执行出错: " + sqlMapId, e);
+//            logger.error("SQL执行出错: " + sqlMapId, e);
             throw new DatabaseException("SQL执行出错: " + sqlMapId, e);
         }
 

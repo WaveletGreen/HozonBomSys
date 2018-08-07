@@ -1,5 +1,9 @@
 package com.connor.hozon.bom.resources.dto.request;
 
+import sql.pojo.cfg.HzCfg0ColorSet;
+
+import java.util.List;
+
 /**
  * Created by haozt on 2018/5/29
  */
@@ -47,7 +51,6 @@ public class UpdateHzPbomRecordReqDTO {
     private String eBomPuid;
 
     private String station;
-
 
     public String getStation() {
         return station;
@@ -136,5 +139,4 @@ public class UpdateHzPbomRecordReqDTO {
     public void seteBomPuid(String eBomPuid) {
         this.eBomPuid = eBomPuid;
     }
-
 }
