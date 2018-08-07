@@ -195,7 +195,7 @@
       <if test="pBomOfWhichDept != null and  pBomOfWhichDept!='' " >
           and P_BOM_OF_WHICH_DEPT like CONCAT(CONCAT('%',#{pBomOfWhichDept,jdbcType=VARCHAR}),'%')
       </if>
-          and P_EBOM_STATUS=1 order by P_BOM_ORDER_NUM)u
+          and P_EBOM_STATUS <![CDATA[ <> ]]>0  order by P_BOM_ORDER_NUM)u
       </where>
          WHERE ROWNUM &lt;=#{limit,jdbcType=INTEGER}) where rn &gt;#{offset,jdbcType=INTEGER}
   </select>

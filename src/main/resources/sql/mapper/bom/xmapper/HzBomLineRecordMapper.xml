@@ -61,7 +61,7 @@
         <result column="P_REMARK" jdbcType="VARCHAR" property="pRemark"/>
         <result column="P_REGULATION_CODE" jdbcType="VARCHAR" property="pRegulationCode"/>
         <result column="P_NUMBER" jdbcType="INTEGER" property="number"/>
-        <result column="P_BUY_ENGINEER" jdbcType="INTEGER" property="pBuyEngineer"/>
+        <result column="P_BUY_ENGINEER" jdbcType="VARCHAR" property="pBuyEngineer"/>
 
     </resultMap>
     <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs"
@@ -163,7 +163,7 @@
         #{orderNum,jdbcType=INTEGER},#{isDept,jdbcType=INTEGER},
         #{pBomOfWhichDept,jdbcType=VARCHAR},#{pBomLinePartName,jdbcType=VARCHAR},#{pBomLinePartClass,jdbcType=VARCHAR},
         #{pBomLinePartEnName,jdbcType=VARCHAR}, 
-          #{pBomLinePartResource,jdbcType=VARCHAR}, #{pFnaInfo,jdbcType=VARCHAR}, 1, 
+          #{pBomLinePartResource,jdbcType=VARCHAR}, #{pFnaInfo,jdbcType=VARCHAR}, 2,
           sysdate,sysdate, #{pFastener,jdbcType=VARCHAR}, #{p3cpartFlag,jdbcType=INTEGER}, #{pInOutSideFlag,jdbcType=INTEGER},
           #{pUpc,jdbcType=VARCHAR}, #{pFnaDesc,jdbcType=VARCHAR}, #{pCreateName,jdbcType=VARCHAR}, 
           #{pUpdateName,jdbcType=VARCHAR}, #{pUnit,jdbcType=VARCHAR}, #{pPictureNo,jdbcType=VARCHAR}, 

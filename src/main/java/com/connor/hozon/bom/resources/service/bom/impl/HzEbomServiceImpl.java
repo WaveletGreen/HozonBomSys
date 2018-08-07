@@ -189,6 +189,7 @@ public class HzEbomServiceImpl implements HzEbomService {
                 jsonObject.put("pRegulationCode", record.getpRegulationCode());
                 jsonObject.put("number",record.getNumber());
                 jsonObject.put("pBuyEngineer",record.getpBuyEngineer());
+                jsonObject.put("status",record.getStatus());
                 array.add(jsonObject);
             }
             recordRespDTO.setJsonArray(array);
@@ -345,6 +346,7 @@ public class HzEbomServiceImpl implements HzEbomService {
                 jsonObject.put("pRegulationCode", record.getpRegulationCode());
                 jsonObject.put("number", record.getNumber());
                 jsonObject.put("pBuyEngineer", record.getpBuyEngineer());
+                jsonObject.put("status",record.getStatus());
                 jsonArray.add(jsonObject);
                 respDTO.setJsonArray(jsonArray);
             }

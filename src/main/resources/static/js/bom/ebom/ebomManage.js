@@ -102,8 +102,7 @@ function initTable(eBomUrl) {
 
                 }
             }
-            column.push({
-                field: 'status',
+            column.push({ field: 'status',
                 title: '状态',
                 align: 'center',
                 valign: 'middle',
