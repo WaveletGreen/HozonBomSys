@@ -3,6 +3,7 @@
 <!--User: xulf Date: 2018/7/30 Time: 14:24-->
 <head th:include="include/includebase"></head>
 <link th:href="@{/css/changeManage/vwo/vwoFromList.css}" rel="stylesheet"/>
+<link th:href="@{/css/stage/bom-stage.css}" rel="stylesheet"/>
 <meta charset="UTF-8">
 <title>ewo表单</title>
 </head>
@@ -54,8 +55,10 @@
                 </div>
                 <div class="form-group after_the">
                     <label for="VWOnum9">变更类型:&ensp;</label>
-                    <input type="text" style="width: 150px;" class="form-control" name="level" id="VWOnum9"
-                           placeholder=""/>
+                    <select class="form-control" name="" id="VWOnum9">
+                        <option>正常设变</option>
+                        <option>简易设变</option>
+                    </select>
                 </div>
                 <div class="form-group after_the">
                     <label for="expenseDept">费用承担部门:&ensp;</label>
@@ -74,8 +77,10 @@
                 </div>
                 <div class="form-group after_the">
                     <label for="VWOnum10">上市类型:&ensp;&ensp;&ensp;&ensp;&ensp;</label>
-                    <input type="text" style="width: 150px;" class="form-control" name="level" id="VWOnum10"
-                           placeholder=""/>
+                    <select class="form-control" name="" id="VWOnum10">
+                        <option>上市前</option>
+                        <option>上市后</option>
+                    </select>
                 </div>
                 <div class="form-group after_the">
                     <label for="VWOnum11">关联EWO号:&ensp;&ensp;&ensp;&ensp;</label>
@@ -159,7 +164,7 @@
     </div>
 </div>
 <div class="content col-lg-12"><!--style="margin-top: -50px;"-->
-    <table id="vwo_table" class="table table-striped tableNormalStyle">
+    <table id="ewo_table" class="table table-striped tableNormalStyle">
         <tr>
             <th>ewo号</th>
             <th>ewo名称</th>
@@ -172,65 +177,66 @@
         </tr>
         <tr>
             <td><a href="ewo/ewoFromList">2018072400001</a></td>
-            <td><a href="ewo/ewoFromList">发布VPPS</a></td>
-            <td><a href="ewo/ewoFromList">VPPS</a></td>
-            <td><a href="ewo/ewoFromList">制造需求</a></td>
-            <td><a href="ewo/ewoFromList">开启</a></td>
-            <td><a href="ewo/ewoFromList">2018-07-28</a></td>
-            <td><a href="ewo/ewoFromList">BOM工程师</a></td>
-            <td><a href="ewo/ewoFromList">2018-07-24</a></td>
+            <td>发布VPPS</td>
+            <td>VPPS</td>
+            <td>制造需求</td>
+            <td>开启</td>
+            <td>2018-07-28</td>
+            <td>BOM工程师</td>
+            <td>2018-07-24</td>
         </tr>
         <tr>
             <td><a href="ewo/ewoFromList">2018072400001</a></td>
-            <td><a href="ewo/ewoFromList">发布VPPS</a></td>
-            <td><a href="ewo/ewoFromList">VPPS</a></td>
-            <td><a href="ewo/ewoFromList">制造需求</a></td>
-            <td><a href="ewo/ewoFromList">开启</a></td>
-            <td><a href="ewo/ewoFromList">2018-07-28</a></td>
-            <td><a href="ewo/ewoFromList">BOM工程师</a></td>
-            <td><a href="ewo/ewoFromList">2018-07-24</a></td>
+            <td>发布VPPS</td>
+            <td>VPPS</td>
+            <td>制造需求</td>
+            <td>开启</td>
+            <td>2018-07-28</td>
+            <td>BOM工程师</td>
+            <td>2018-07-24</td>
         </tr>
         <tr>
             <td><a href="ewo/ewoFromList">2018072400001</a></td>
-            <td><a href="ewo/ewoFromList">发布VPPS</a></td>
-            <td><a href="ewo/ewoFromList">VPPS</a></td>
-            <td><a href="ewo/ewoFromList">制造需求</a></td>
-            <td><a href="ewo/ewoFromList">开启</a></td>
-            <td><a href="ewo/ewoFromList">2018-07-28</a></td>
-            <td><a href="ewo/ewoFromList">BOM工程师</a></td>
-            <td><a href="ewo/ewoFromList">2018-07-24</a></td>
+            <td>发布VPPS</td>
+            <td>VPPS</td>
+            <td>制造需求</td>
+            <td>开启</td>
+            <td>2018-07-28</td>
+            <td>BOM工程师</td>
+            <td>2018-07-24</td>
         </tr>
         <tr>
             <td><a href="ewo/ewoFromList">2018072400001</a></td>
-            <td><a href="ewo/ewoFromList">发布VPPS</a></td>
-            <td><a href="ewo/ewoFromList">VPPS</a></td>
-            <td><a href="ewo/ewoFromList">制造需求</a></td>
-            <td><a href="ewo/ewoFromList">开启</a></td>
-            <td><a href="ewo/ewoFromList">2018-07-28</a></td>
-            <td><a href="ewo/ewoFromList">BOM工程师</a></td>
-            <td><a href="ewo/ewoFromList">2018-07-24</a></td>
+            <td>发布VPPS</td>
+            <td>VPPS</td>
+            <td>制造需求</td>
+            <td>开启</td>
+            <td>2018-07-28</td>
+            <td>BOM工程师</td>
+            <td>2018-07-24</td>
         </tr>
         <tr>
             <td><a href="ewo/ewoFromList">2018072400001</a></td>
-            <td><a href="ewo/ewoFromList">发布VPPS</a></td>
-            <td><a href="ewo/ewoFromList">VPPS</a></td>
-            <td><a href="ewo/ewoFromList">制造需求</a></td>
-            <td><a href="ewo/ewoFromList">开启</a></td>
-            <td><a href="ewo/ewoFromList">2018-07-28</a></td>
-            <td><a href="ewo/ewoFromList">BOM工程师</a></td>
-            <td><a href="ewo/ewoFromList">2018-07-24</a></td>
+            <td>发布VPPS</td>
+            <td>VPPS</td>
+            <td>制造需求</td>
+            <td>开启</td>
+            <td>2018-07-28</td>
+            <td>BOM工程师</td>
+            <td>2018-07-24</td>
         </tr>
         <tr>
             <td><a href="ewo/ewoFromList">2018072400001</a></td>
-            <td><a href="ewo/ewoFromList">发布VPPS</a></td>
-            <td><a href="ewo/ewoFromList">VPPS</a></td>
-            <td><a href="ewo/ewoFromList">制造需求</a></td>
-            <td><a href="ewo/ewoFromList">开启</a></td>
-            <td><a href="ewo/ewoFromList">2018-07-28</a></td>
-            <td><a href="ewo/ewoFromList">BOM工程师</a></td>
-            <td><a href="ewo/ewoFromList">2018-07-24</a></td>
+            <td>发布VPPS</td>
+            <td>VPPS</td>
+            <td>制造需求</td>
+            <td>开启</td>
+            <td>2018-07-28</td>
+            <td>BOM工程师</td>
+            <td>2018-07-24</td>
         </tr>
     </table>
 </div>
+<!--<script th:src="@{/js/changeManage/ewo/ewoFromList.js}"></script>-->
 </body>
 </html>

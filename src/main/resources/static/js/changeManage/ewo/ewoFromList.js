@@ -2,14 +2,15 @@ $(document).ready((function () {
     initTable();
 }))
 function  doQuery() {
-    $('#vwo_table').bootstrapTable('refresh');
+    $('#ewo_table').bootstrapTable('refresh');
 }
 
 function initTable(){
-    var $table = $("#vwo_table");
+    var projectPuid = $("#project", window.top.document).val();
+    var $table = $("#ewo_table");
     var column = [];
     $.ajax({
-        url: "",
+        url: "ebom/title?projectId=" + projectPuid,
         type: "GET",
         success: function (result) {
             var column = [];
@@ -32,7 +33,7 @@ function initTable(){
                 }
             };
             $table.bootstrapTable({
-                url:"",
+                url: "ebom/getEBom/list?projectId=" + projectPuid,
                 method: 'get',
                 height: $(window.parent.document).find("#wrapper").height() - 90,
                 width: $(window).width(),
