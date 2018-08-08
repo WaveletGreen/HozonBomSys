@@ -3,10 +3,7 @@ package com.connor.hozon.bom.bomSystem.controller.cfg;
 import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
 import com.connor.hozon.bom.bomSystem.service.bom.HzBomDataService;
 import com.connor.hozon.bom.bomSystem.service.bom.HzBomLineRecordService;
-import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0ColorSetService;
-import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0MainService;
-import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0ModelColorService;
-import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0OptionFamilyService;
+import com.connor.hozon.bom.bomSystem.service.cfg.*;
 import com.connor.hozon.bom.bomSystem.service.iservice.cfg.IHzColorModelService;
 import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.sys.entity.User;
@@ -43,6 +40,8 @@ public class HzCfg0ModelColorController {
     HzBomLineRecordService hzBomLineRecordService;
     @Autowired
     HzBomDataService hzBomDataService;
+    @Autowired
+    HzColorLvl2ModelService hzColorLvl2ModelService;
     private Logger logger;
 
     @Autowired
@@ -261,13 +260,23 @@ public class HzCfg0ModelColorController {
 
     @RequestMapping(value = "/setLvl2ColorPage", method = RequestMethod.GET)
     public String setLvl2ColorPage(@RequestParam("modelUid") String modelUid, @RequestParam("projectUid") String projectUid, Model model) {
-        List<HzBomLineRecord> lineRecords = hzBomDataService.doSelectVehicleAssembly("车身", projectUid);
+        List<HzBomLineRecord> lineRecords = hzBomDataService.doSelectVehicleAssembly("车身", projectUid, null);
+        List<HzBomLineRecord> lineRecords2 = hzBomDataService.doSelectVehicleAssembly("车身", projectUid, modelUid);
+        //这里我估计需要过滤一些紧固件胶带等东西
+        for (int i = 0; i < lineRecords.size(); i++) {
+            for (int i1 = 0; i1 < lineRecords2.size(); i1++) {
+                if (lineRecords.get(i).getPuid().equals(lineRecords2.get(i1).getPuid())) {
+                    lineRecords.get(i).setColorUid(lineRecords2.get(i1).getColorUid());
+                }
+            }
+        }
+
         List<HzCfg0ColorSet> colorList = hzCfg0ColorSetService.doGetAll();
         model.addAttribute("assembly", lineRecords);
         model.addAttribute("colorList", colorList);
         model.addAttribute("modelUid", modelUid);
         model.addAttribute("projectUid", projectUid);
-        model.addAttribute("action", "./modelColor/");
+        model.addAttribute("action", "./modelColor/saveColorLvl2");
         if (checkString(modelUid)) {
             return "cfg/modelColorCfg/colorLvl2";
         } else {
@@ -276,10 +285,56 @@ public class HzCfg0ModelColorController {
         }
     }
 
-    @RequestMapping(value = "/saveColorLvl2",method = RequestMethod.POST)
+    @RequestMapping(value = "/saveColorLvl2", method = RequestMethod.POST)
     @ResponseBody
     public boolean saveColorLvl2(@RequestBody Map<String, String> params) {
+        User user = UserInfo.getUser();
+        Date date = new Date();
         if (params != null && params.size() > 0) {
+            List<HzColorLvl2Model> toInsert = new ArrayList<>();
+            List<HzColorLvl2Model> toUpdate = new ArrayList<>();
+            HzColorLvl2Model model;
+            HzColorLvl2Model modelFromDb;
+            String modelUid = params.get("modelUid");
+            String projectUid = params.get("projectUid");
+            for (Map.Entry<String, String> entry : params.entrySet()) {
+                if ("modelUid".equals(entry.getKey())) {
+                    modelUid = entry.getValue();
+                } else if ("projectUid".equals(entry.getKey())) {
+                    projectUid = entry.getValue();
+                } else {
+                    model = new HzColorLvl2Model();
+
+                    model.setpModelUid(modelUid);
+                    model.setpLvlFunction(entry.getKey());
+                    model.setpColorUid(entry.getValue());
+                    if ((modelFromDb = hzColorLvl2ModelService.doSelectByModelAndFunctionLvl(model)) != null) {
+                        model.setPuid(modelFromDb.getPuid());
+                        model.setModifier(user.getUserName());
+                        model.setModifyDate(date);
+                        try {
+                            if (hzColorLvl2ModelService.doUpdateByPrimaryKey(model) <= 0) {
+                                logger.error("模型PUID为:" + model.getpModelUid() + "增加1条二级配色方案" + model.getpLvlFunction() + "失败");
+                            }
+                        } catch (Exception e) {
+                            logger.error("模型PUID为:" + model.getpModelUid() + "增加1条二级配色方案(功能总成)" + model.getpLvlFunction() + "发生异常", e);
+                        }
+                    } else {
+                        model.setCreateDate(date);
+                        model.setCreator(user.getUserName());
+                        model.setModifyDate(date);
+                        model.setModifier(user.getUserName());
+                        model.setPuid(UUIDHelper.generateUpperUid());
+                        try {
+                            if (hzColorLvl2ModelService.doInsert(model) <= 0) {
+                                logger.error("模型PUID为:" + model.getpModelUid() + "增加1条二级配色方案" + model.getpLvlFunction() + "失败");
+                            }
+                        } catch (Exception e) {
+                            logger.error("模型PUID为:" + model.getpModelUid() + "增加1条二级配色方案(功能总成)" + model.getpLvlFunction() + "发生异常", e);
+                        }
+                    }
+                }
+            }
             return true;
         } else {
             return false;

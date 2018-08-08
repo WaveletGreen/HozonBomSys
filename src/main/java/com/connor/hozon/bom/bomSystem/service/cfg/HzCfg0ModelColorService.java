@@ -150,6 +150,8 @@ public class HzCfg0ModelColorService {
             }
             //新数据
             else if (1 == color.getUpdateDefault()) {
+                String vehicleColor = "";
+                String localTemp = "";
                 if (cm == null || cm.size() == 0) {
                     for (int i = 0; i < familiesNew.size(); i++) {
                         //添加默认值
@@ -158,7 +160,14 @@ public class HzCfg0ModelColorService {
                 } else {
                     //添加颜色值用于显示
                     for (int i = 0; i < cm.size(); i++) {
-                        _result.put("s" + i, cm.get(i).getpColorCode());
+                        if ("车身颜色".equals(familiesNew.get(i).getpOptionfamilyDesc())) {
+                            vehicleColor = cm.get(i).getpColorCode();
+                            localTemp = _result.get("s0");
+                            _result.put("s0", vehicleColor);
+                            _result.put("s" + i, localTemp);
+                        } else {
+                            _result.put("s" + i, cm.get(i).getpColorCode());
+                        }
                     }
                 }
             } else {

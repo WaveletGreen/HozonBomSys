@@ -3,6 +3,7 @@ package com.connor.hozon.bom.bomSystem.service.cfg;
 import com.connor.hozon.bom.bomSystem.dao.cfg.HzColorLvl2ModelDao;
 import com.connor.hozon.bom.bomSystem.service.iservice.cfg.IHzColorLvl2ModelService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import sql.pojo.cfg.HzColorLvl2Model;
 
 /**
@@ -11,6 +12,7 @@ import sql.pojo.cfg.HzColorLvl2Model;
  * @Date: Created in 2018/8/3 11:04
  * @Modified By:
  */
+@Service("hzColorLvl2ModelService")
 public class HzColorLvl2ModelService implements IHzColorLvl2ModelService {
     @Autowired
     HzColorLvl2ModelDao hzColorLvl2ModelDao;
@@ -57,5 +59,9 @@ public class HzColorLvl2ModelService implements IHzColorLvl2ModelService {
     @Override
     public int doUpdateByPrimaryKey(HzColorLvl2Model record) {
         return hzColorLvl2ModelDao.updateByPrimaryKey(record);
+    }
+
+    public HzColorLvl2Model doSelectByModelAndFunctionLvl(HzColorLvl2Model model) {
+        return hzColorLvl2ModelDao.selectByModelAndFunctionLvl(model);
     }
 }

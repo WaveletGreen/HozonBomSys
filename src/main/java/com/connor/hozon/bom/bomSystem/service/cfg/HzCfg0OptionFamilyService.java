@@ -21,6 +21,7 @@ public class HzCfg0OptionFamilyService {
 
     /**
      * 旧版方法，根据主配置的PUID排序
+     *
      * @param mainId
      * @return
      */
@@ -30,6 +31,7 @@ public class HzCfg0OptionFamilyService {
 
     /**
      * 新版方法,根据族的PUID排序
+     *
      * @param mainId
      * @return
      */
@@ -79,8 +81,9 @@ public class HzCfg0OptionFamilyService {
         if (families == null || families.isEmpty())
             return null;
         List<String> result = new ArrayList<>();
-        return sortFamiliesCode(families,def);
+        return sortFamiliesCode(families, def);
     }
+
     /**
      * 自定义的列信息，如果组的id(name)未定义(null)，则取留空;如果组描述(desc)未定义，则取组的id(name)的值
      *
@@ -92,20 +95,31 @@ public class HzCfg0OptionFamilyService {
         List<HzCfg0OptionFamily> families = doGetCfg0OptionFamilyListByProjectPuid2(mainId);
         if (families == null || families.isEmpty())
             return null;
-        return sortFamiliesCode(families,def);
+        return sortFamiliesCode(families, def);
     }
 
-    private List<String> sortFamiliesCode(List<HzCfg0OptionFamily> families,String def){
+    private List<String> sortFamiliesCode(List<HzCfg0OptionFamily> families, String def) {
         List<String> result = new ArrayList<>();
         families.stream().filter(f -> f != null).collect(Collectors.toList()).forEach(f -> {
             StringBuilder sb = new StringBuilder();
-            sb.append(f.getpOptionfamilyDesc() == null ? f.getpOptionfamilyName() : f.getpOptionfamilyDesc());
-            sb.append(def);
-            sb.append(f.getpOptionfamilyName() == null ? "" : f.getpOptionfamilyName());
-            result.add(sb.toString());
+            if ("车身颜色".equals(f.getpOptionfamilyDesc())) {
+                String localTemp = result.get(0);
+                sb.append(f.getpOptionfamilyDesc() == null ? f.getpOptionfamilyName() : f.getpOptionfamilyDesc());
+                sb.append(def);
+                sb.append(f.getpOptionfamilyName() == null ? "" : f.getpOptionfamilyName());
+                //交换一下位置
+                result.set(0,sb.toString());
+                result.add(localTemp);
+            } else {
+                sb.append(f.getpOptionfamilyDesc() == null ? f.getpOptionfamilyName() : f.getpOptionfamilyDesc());
+                sb.append(def);
+                sb.append(f.getpOptionfamilyName() == null ? "" : f.getpOptionfamilyName());
+                result.add(sb.toString());
+            }
         });
         return result;
     }
+
     /**
      * 根据主键获取组对象信息
      *

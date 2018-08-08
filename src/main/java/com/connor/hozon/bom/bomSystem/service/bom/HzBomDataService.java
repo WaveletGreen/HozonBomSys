@@ -16,6 +16,7 @@ import sql.redis.SerializeUtil;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by IntelliJ IDEA.
@@ -129,14 +130,16 @@ public class HzBomDataService {
     /**
      * 传入部门和项目UID，获取部门下2Y层的子总成
      *
-     * @param dept        部门名
+     * @param dept       部门名
      * @param projectUid 项目UID
      * @return 一组总成，需要进行查重操作
      */
-    public List<HzBomLineRecord> doSelectVehicleAssembly(String dept, String projectUid) {
+    public List<HzBomLineRecord> doSelectVehicleAssembly(String dept, String projectUid, String modelUid) {
         HashMap params = new HashMap();
         params.put("dept", dept);
         params.put("projectUid", projectUid);
+        params.put("modelUid", modelUid);
         return hzBomDataDao.selectVehicleAssembly(params);
     }
+
 }

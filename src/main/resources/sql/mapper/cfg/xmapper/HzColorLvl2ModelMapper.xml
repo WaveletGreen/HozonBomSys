@@ -43,6 +43,13 @@
         from HZ_COLOR_LVL2_MODEL
         where P_MODEL_UID = #{pModelUid,jdbcType=VARCHAR}
     </select>
+    <!--根据模型主键进行筛选，主要用于新增或更新时的检查-->
+    <select id="selectByModelAndFunctionLvl" parameterType="sql.pojo.cfg.HzColorLvl2Model" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from HZ_COLOR_LVL2_MODEL
+        where P_MODEL_UID = #{pModelUid,jdbcType=VARCHAR} and P_LVL_FUNCTION=#{pLvlFunction,jdbcType=VARCHAR}
+    </select>
     <!--主键删除-->
     <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from HZ_COLOR_LVL2_MODEL
@@ -74,12 +81,8 @@
     <update id="updateByPrimaryKey" parameterType="sql.pojo.cfg.HzColorLvl2Model">
     update HZ_COLOR_LVL2_MODEL
     set
-      P_MODEL_UID = #{pModelUid,jdbcType=VARCHAR},
-      P_LVL_FUNCTION = #{pLvlFunction,jdbcType=VARCHAR},
       P_COLOR_UID = #{pColorUid,jdbcType=VARCHAR},
-      CREATE_DATE = #{createDate,jdbcType=TIMESTAMP},
       MODIFY_DATE = #{modifyDate,jdbcType=TIMESTAMP},
-      CREATOR = #{creator,jdbcType=VARCHAR},
       MODIFIER = #{modifier,jdbcType=VARCHAR}
     where PUID = #{puid,jdbcType=VARCHAR}
   </update>

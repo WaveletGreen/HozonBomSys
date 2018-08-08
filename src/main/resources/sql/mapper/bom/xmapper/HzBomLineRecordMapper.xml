@@ -62,6 +62,8 @@
         <result column="P_REGULATION_CODE" jdbcType="VARCHAR" property="pRegulationCode"/>
         <result column="P_NUMBER" jdbcType="INTEGER" property="number"/>
         <result column="P_BUY_ENGINEER" jdbcType="INTEGER" property="pBuyEngineer"/>
+        <!--针对配色方案的颜色库对应的UID-->
+        <result column="COLOR_UID" jdbcType="VARCHAR" property="colorUid"/>
 
     </resultMap>
     <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs"
@@ -131,7 +133,7 @@
   </sql>
 
     <sql id="Blob_Column_List">P_BOM_LINE_BLOCK</sql>
-
+    <sql id="Color_Column">P_COLOR_UID</sql>
     <sql id="values_by_batch">
 		#{item.puid,jdbcType=VARCHAR},
 		#{item.parentUid,jdbcType=VARCHAR},
@@ -538,13 +540,44 @@
     <!--获取车身下级2Y层的总成级，需要代码进行查重-->
     <select id="selectVehicleAssembly" parameterType="java.util.Map" resultMap="BaseResultMap">
         select
-        <include refid="Base_Column_List"/>
-        from Hz_Bom_Line_Record t2 where t2.p_parent_uid in(
+        t2.<include refid="Base_Column_List"/>
+        <if test="modelUid!=null">
+            ,t3.
+            <include refid="Color_Column"/>  as COLOR_UID
+        </if>
+        from Hz_Bom_Line_Record t2
+        <if test="modelUid!=null">
+            left join Hz_Color_Lvl2_Model t3 on t3.p_lvl_function=t2.puid
+        </if>
+        where t2.p_parent_uid in(
         select t.puid from Hz_Bom_Line_Record t where t.p_bom_line_is_2y=1 and
         t.p_bom_of_which_dept=#{dept,jdbcType=VARCHAR}
         and t.p_bom_digifax_id=(
         select puid from Hz_Bom_Main_Record tin where
         tin.p_cfg0_of_which_project_puid=#{projectUid,jdbcType=VARCHAR}
-        )) order by t2.p_bom_order_num
+        ))
+        <if test="modelUid!=null">
+            and t3.p_model_uid=#{modelUid,jdbcType=VARCHAR}
+        </if>
+        order by t2.p_bom_order_num
+    </select>
+    <!--获取车身下级2Y层的总成级，需要代码进行查重-->
+    <select id="selectVehicleAssembly2" parameterType="java.util.Map" resultMap="BaseResultMap">
+        select
+        t2.PUID
+        ,t3.
+        <include refid="Color_Column"/>
+        as COLOR_UID
+        from Hz_Bom_Line_Record t2
+        left join Hz_Color_Lvl2_Model t3 on t3.p_lvl_function=t2.puid
+        where t2.p_parent_uid in(
+        select t.puid from Hz_Bom_Line_Record t where t.p_bom_line_is_2y=1 and
+        t.p_bom_of_which_dept=#{dept,jdbcType=VARCHAR}
+        and t.p_bom_digifax_id=(
+        select puid from Hz_Bom_Main_Record tin where
+        tin.p_cfg0_of_which_project_puid=#{projectUid,jdbcType=VARCHAR}
+        ))
+        and t3.p_model_uid=#{modelUid,jdbcType=VARCHAR}
+        order by t2.p_bom_order_num
     </select>
 </mapper>

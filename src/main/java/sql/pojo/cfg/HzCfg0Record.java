@@ -75,9 +75,26 @@ public class HzCfg0Record {
      * 最后一次修改时间
      */
     private Date lastModifyDate;
-
+    /**
+     * 创建者
+     */
     private String creator;
+    /**
+     * 修改者
+     */
     private String lastModifier;
+    /**
+     * 生效时间
+     */
+    private Date cfgEffectedDate;
+    /**
+     * 废止时间
+     */
+    private Date cfgAbolishDate;
+    /**
+     * 状态
+     */
+    private Integer cfgStatus;
 
     public static String reflectToDBField(String property) {
         switch (property) {
@@ -106,13 +123,20 @@ public class HzCfg0Record {
              */
             case "pCfg0FamilyDesc":
                 return "P_CFG0_FAMILY_DESC";
+            /**
+             * 生效时间
+             */
+            case "cfgEffectedDate":
+                return "CFG_EFFECTED_DATE";
+            /**
+             * 废止时间
+             */
+            case "cfgAbolishDate":
+                return "CFG_ABOLISH_DATE";
             default:
                 return null;
         }
     }
-
-
-
 
 
     public String getPuid() {
@@ -277,4 +301,27 @@ public class HzCfg0Record {
         this.lastModifier = lastModifier;
     }
 
+    public Date getCfgEffectedDate() {
+        return cfgEffectedDate;
+    }
+
+    public void setCfgEffectedDate(Date cfgEffectedDate) {
+        this.cfgEffectedDate = cfgEffectedDate;
+    }
+
+    public Date getCfgAbolishDate() {
+        return cfgAbolishDate;
+    }
+
+    public void setCfgAbolishDate(Date cfgAbolishDate) {
+        this.cfgAbolishDate = cfgAbolishDate;
+    }
+
+    public Integer getCfgStatus() {
+        return cfgStatus;
+    }
+
+    public void setCfgStatus(Integer cfgStatus) {
+        this.cfgStatus = cfgStatus;
+    }
 }

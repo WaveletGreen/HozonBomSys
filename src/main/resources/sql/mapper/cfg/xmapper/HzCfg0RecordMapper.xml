@@ -20,6 +20,14 @@
         <result column="P_FEATURE_CREATOR_DATE" jdbcType="TIMESTAMP" property="createDate"/>
         <result column="P_FEATURE_LAST_MODIFIER" jdbcType="VARCHAR" property="lastModifier"/>
         <result column="P_FEATURE_LAST_MODIFY_DATE" jdbcType="TIMESTAMP" property="lastModifyDate"/>
+
+        <!--流程状态-->
+        <!--生效时间-->
+        <result column="CFG_EFFECTED_DATE" jdbcType="TIMESTAMP" property="cfgEffectedDate"/>
+        <!--废止时间-->
+        <result column="CFG_ABOLISH_DATE" jdbcType="TIMESTAMP" property="cfgAbolishDate"/>
+        <!--状态-->
+        <result column="CFG_STATUS" jdbcType="INTEGER" property="cfgStatus"/>
     </resultMap>
 
     <resultMap id="MaterielFeatureMap" type="com.connor.hozon.bom.bomSystem.dto.HzMaterielFeatureBean">
@@ -51,8 +59,14 @@
         P_FEATURE_CREATOR,
         P_FEATURE_CREATOR_DATE,
         P_FEATURE_LAST_MODIFIER,
-        P_FEATURE_LAST_MODIFY_DATE
-  </sql>
+        P_FEATURE_LAST_MODIFY_DATE,
+        <!--生效时间-->
+        CFG_EFFECTED_DATE,
+        <!--废止时间-->
+        CFG_ABOLISH_DATE,
+        <!--状态-->
+        CFG_STATUS
+    </sql>
     <!--物料特性表列信息-->
     <sql id="Materiel_Feature_Column_List">
         t.PUID,
@@ -242,7 +256,8 @@
           P_CFG0_FAMILY_DESC = #{pCfg0FamilyDesc,jdbcType=VARCHAR},
           P_CFG0_RELEVANCE = #{pCfg0Relevance,jdbcType=VARCHAR},
           P_FEATURE_LAST_MODIFIER = #{lastModifier,jdbcType=VARCHAR},
-          P_FEATURE_LAST_MODIFY_DATE = sysdate
+          P_FEATURE_LAST_MODIFY_DATE = sysdate,
+          CFG_STATUS = 0
     where
           PUID = #{puid,jdbcType=VARCHAR}
     </update>

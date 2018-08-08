@@ -36,7 +36,7 @@
         IS_SENT
   </sql>
     <!--根据项目查找所有的整车物料属性-->
-    <select id="selectByDiff" parameterType="sql.pojo.cfg.HzMaterielCfgBean" resultMap="sql.pojo.cfg.HzMaterielCfgBean">
+    <select id="selectByDiff" parameterType="sql.pojo.cfg.HzMaterielCfgBean" resultMap="BaseResultMap">
         select t.p_brand_code,
         t.p_brand_name,
         t2.p_platform_code,

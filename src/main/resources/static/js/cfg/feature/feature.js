@@ -194,6 +194,50 @@ function loadData() {
                 sortOrder: "asc"
             },
             {
+                field: 'cfgEffectedDate',
+                title: '生效时间',
+                align: 'center',
+                valign: 'middle',
+                sortable: true,
+                sortOrder: 'asc',
+                //——修改——获取日期列的值进行转换
+                formatter: function (value, row, index) {
+                    return changeDateFormat(value)
+                }
+            },
+            {
+                field: 'cfgAbolishDate',
+                title: '废止时间',
+                align: 'center',
+                valign: 'middle',
+                sortable: true,
+                sortOrder: 'asc',
+                //——修改——获取日期列的值进行转换
+                formatter: function (value, row, index) {
+                    return changeDateFormat(value)
+                }
+            },
+            {
+                field: 'cfgStatus',
+                title: '状态',
+                align: 'center',
+                valign: 'middle',
+                formatter: function (value, row, index) {
+                    if (value == 1 || "1" == value) {
+                        return "<span style='color: #00B83F'>已生效</span>";
+                    }
+                    if (value == 0 || "0" == value) {
+                        return "<span style='color: #a97f89'>草稿状态</span>";
+                    }
+                    if (-1 == value || "-1" == value) {
+                        return "<span style='color: #9492a9'>已废止</span>";
+                    }
+                    else {
+                        return "<span style='color: #a90009'>未知状态</span>";
+                    }
+                }
+            },
+            {
                 field: 'puid',
                 title: 'puid',
                 hide: false
