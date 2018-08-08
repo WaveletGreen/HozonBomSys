@@ -23,12 +23,12 @@
     </div>
     <div class="form-group col-lg-10">
         <label for="pFeatureCnDesc">中文描述</label>
-        <input class="form-control" id="pFeatureCnDesc" name="pFeatureCnDesc" type="text"
+        <input class="form-control" id="pFeatureCnDesc" name="pFeatureCnDesc" type="text" type="hidden" disabled="disabled"
         />
     </div>
     <div class="form-group col-lg-10">
         <label for="pFeatureSingleVehicleCode">单车配置码</label>
-        <input class="form-control" id="pFeatureSingleVehicleCode" name="pFeatureSingleVehicleCode" type="text"
+        <input class="form-control" id="pFeatureSingleVehicleCode" name="pFeatureSingleVehicleCode" type="hidden" disabled="disabled"
         />
     </div>
     <div class="form-group col-lg-10" th:each="column,currentKey:${_map}">

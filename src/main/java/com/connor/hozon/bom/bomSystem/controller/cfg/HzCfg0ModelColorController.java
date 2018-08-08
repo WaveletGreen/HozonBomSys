@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import sql.pojo.bom.HzBomLineRecord;
 import sql.pojo.cfg.*;
 
 import java.util.*;
@@ -259,13 +260,29 @@ public class HzCfg0ModelColorController {
     }
 
     @RequestMapping(value = "/setLvl2ColorPage", method = RequestMethod.GET)
-    @ResponseBody
-    public String setLvl2ColorPage(@RequestParam("modelUid") String modelPuid, @RequestParam("projectPuid") String projectPuid) {
-        //List<HzBomLineRecord> lineRecords = hzBomDataService.doSelectVehicleAssembly("车身", projectPuid);
-        if (checkString(modelPuid)) {
-            return "二级配色方案";
+    public String setLvl2ColorPage(@RequestParam("modelUid") String modelUid, @RequestParam("projectUid") String projectUid, Model model) {
+        List<HzBomLineRecord> lineRecords = hzBomDataService.doSelectVehicleAssembly("车身", projectUid);
+        List<HzCfg0ColorSet> colorList = hzCfg0ColorSetService.doGetAll();
+        model.addAttribute("assembly", lineRecords);
+        model.addAttribute("colorList", colorList);
+        model.addAttribute("modelUid", modelUid);
+        model.addAttribute("projectUid", projectUid);
+        model.addAttribute("action", "./modelColor/");
+        if (checkString(modelUid)) {
+            return "cfg/modelColorCfg/colorLvl2";
         } else {
-            return "发生错误，请选择一个项目和颜色车型进行操作";
+            model.addAttribute("msg", "操作错误，请选择一个项目进行操作!");
+            return "errorWithEntity";
+        }
+    }
+
+    @RequestMapping(value = "/saveColorLvl2",method = RequestMethod.POST)
+    @ResponseBody
+    public boolean saveColorLvl2(@RequestBody Map<String, String> params) {
+        if (params != null && params.size() > 0) {
+            return true;
+        } else {
+            return false;
         }
     }
 
