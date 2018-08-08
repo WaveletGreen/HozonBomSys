@@ -139,6 +139,7 @@ function initTable(eBomUrl) {
                 //showExport: true,
                 //exportDataType: 'all',
                 columns: column,
+                toolbar : "#toolbar",
                 //sortName: 'id',
                 // sortable: true,                     //是否启用排序
                 sortOrder: "asc",                   //排序方式

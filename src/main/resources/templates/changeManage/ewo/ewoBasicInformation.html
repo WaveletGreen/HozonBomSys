@@ -60,8 +60,10 @@
                 <div class="col-lg-2 col-md-2">
                     <div class="form-group after_the">
                         <label for="VWOnum9">变更类型:</label>
-                        <input type="text" class="form-control" name="level" id="VWOnum9"
-                               placeholder=""/>
+                        <select class="form-control" name="" id="VWOnum9">
+                            <option>正常设变</option>
+                            <option>简易设变</option>
+                        </select>
                     </div>
                     <div class="form-group after_the">
                         <label for="expenseDept">费用承担部门:&ensp;</label>
@@ -80,8 +82,10 @@
                     </div>
                     <div class="form-group after_the">
                         <label for="VWOnum10">上市类型:</label>
-                        <input type="text" class="form-control" name="level" id="VWOnum10"
-                               placeholder=""/>
+                        <select class="form-control" name="" id="VWOnum10">
+                            <option>上市前</option>
+                            <option>上市后</option>
+                        </select>
                     </div>
                     <div class="form-group after_the">
                         <label for="VWOnum11">关联EWO号:</label>
@@ -109,8 +113,11 @@
                     </div>
                     <div class="form-group after_the">
                         <label for="VWOnum13">平台:</label>
-                        <input type="text" class="form-control" name="level" id="VWOnum13"
-                               placeholder=""/>
+                        <select class="form-control" name="" id="VWOnum13">
+                            <option>A平台</option>
+                            <option>E平台</option>
+                            <option>G平台</option>
+                        </select>
                     </div>
                     <div class="form-group after_the">
                         <label for="VWOnum14">车型代号:</label>
@@ -159,7 +166,7 @@
                 </div>
                 <div class="col-lg-12 col-md-12" style="padding-top:-20px">
                     <div class="form-group after_the">
-                        <label for="VWOnum12">原因描述:</label>
+                        <label for="VWOnum22">原因描述:</label>
                         <textarea rows="2" cols="30" class="form-control"
                                   style="width: 100%;resize:none"></textarea>
                     </div>
@@ -1696,7 +1703,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-lg-4 col-md-4" >
+                            <div class="col-lg-4 col-md-4">
                                 <!--备件管理部门-->
                                 <div class="panel-body" style="padding-bottom:0px;">
                                     <div class="panel panel-default">
@@ -1876,7 +1883,7 @@
     </div>
 </div>
 <!--7.成本/进度/评估-->
-<h4><i class="fa fa-minus-square" aria-hidden="true">评估意见</i></h4>
+<h4><i class="fa fa-minus-square" aria-hidden="true">成本&进度&评估</i></h4>
 <div class="panel-body" style="padding:0px;">
     <div class="panel panel-default">
         <div class="panel-body">
@@ -1892,7 +1899,7 @@
                     </tr>
                     <tr>
                         <td>OTS认可完成时间</td>
-                        <td contentEditable="true"> contentEditable="true"</td>
+                        <td contentEditable="true"></td>
                         <td contentEditable="true"></td>
                         <td contentEditable="true"></td>
                         <td contentEditable="true"></td>
@@ -1948,43 +1955,41 @@
 <div class="panel-body" style="padding:0px;">
     <div class="panel panel-default">
         <div class="panel-body">
+            <!--<div class="col-lg-12 col-md-12" style="padding:0px;">-->
+            <!--<div class="col-lg-3 col-md-3">-->
+            <!--&lt;!&ndash;<div class="form-group after_the">&ndash;&gt;-->
+            <!--&lt;!&ndash;<label for="VWOnum">附件:</label>&ndash;&gt;-->
+            <!--&lt;!&ndash;<input type="file" class="form-control" name="level" id="VWOnum1"&ndash;&gt;-->
+            <!--&lt;!&ndash;placeholder=""/>&ndash;&gt;-->
+            <!--&lt;!&ndash;</div>&ndash;&gt;-->
+            <!--<div class="form-group  after_the">-->
+            <!--<label for="creatTime">文件名称:</label>-->
+            <!--<input type="text" class="form-control" name="pBomOfWhichDept"-->
+            <!--id="creatTime2"-->
+            <!--placeholder=""/>-->
+            <!--</div>-->
+            <!--</div>-->
+            <!--<div class="col-lg-3 col-md-3">-->
+            <!--<div class="form-group after_the">-->
+            <!--<label for="VWOnum">上传人:</label>-->
+            <!--<input type="text" class="form-control" name="level" id="VWOnum2"-->
+            <!--placeholder=""/>-->
+            <!--</div>-->
+            <!--</div>-->
+            <!--<div class="col-lg-3 col-md-3">-->
+            <!--<div class="form-group  after_the">-->
+            <!--<label for="creatTime">上传日期:</label>-->
+            <!--<input type="text" class="form-control" name="pBomOfWhichDept"-->
+            <!--id="creatTime1"-->
+            <!--placeholder=""/>-->
+            <!--</div>-->
+            <!--</div>-->
+            <!--</div>-->
             <div class="col-lg-12 col-md-12" style="padding:0px;">
-                <div class="col-lg-3 col-md-3">
-                    <!--<div class="form-group after_the">-->
-                    <!--<label for="VWOnum">附件:</label>-->
-                    <!--<input type="file" class="form-control" name="level" id="VWOnum1"-->
-                    <!--placeholder=""/>-->
-                    <!--</div>-->
-                    <div class="form-group  after_the">
-                        <label for="creatTime">文件名称:</label>
-                        <input type="text" class="form-control" name="pBomOfWhichDept"
-                               id="creatTime2"
-                               placeholder=""/>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-3">
-                    <div class="form-group after_the">
-                        <label for="VWOnum">上传人:</label>
-                        <input type="text" class="form-control" name="level" id="VWOnum2"
-                               placeholder=""/>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-3">
-                    <div class="form-group  after_the">
-                        <label for="creatTime">上传日期:</label>
-                        <input type="text" class="form-control" name="pBomOfWhichDept"
-                               id="creatTime1"
-                               placeholder=""/>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-12 col-md-12" style="padding:0px;">
-                <div class="col-lg-9 col-md-9">
-                    <div class="form-group">
-                        <label for="pMaterielDesc">说明:</label>
-                        <textarea rows="2" cols="30" class="form-control"
-                                  style="width: 100%;resize:none"></textarea>
-                    </div>
+                <div class="form-group">
+                    <label for="pMaterielDesc">说明:</label>
+                    <textarea rows="2" cols="30" class="form-control"
+                              style="width: 100%;resize:none"></textarea>
                 </div>
             </div>
         </div>
