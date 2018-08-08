@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
  */
 @Controller
 @RequestMapping(value = "/ewo")
-public class ewoController {
+public class HzEWOController {
     @RequestMapping(value = "ewoFromList" ,method = RequestMethod.GET)
     public String getEwoFromList(){
         return "changeManage/ewo/ewoBasicInformation";

@@ -150,6 +150,7 @@ public class LoaContorller extends BaseController {
         jsonObject.put("child",loaRespDTOS);
         writeAjaxJSONResponse(ResultMessageBuilder.build(jsonObject),response);
     }
+
     @RequestMapping(value = "mbom",method = RequestMethod.POST)
     public void getHzMbomLoa(@RequestBody HzLoaQuery query, HttpServletResponse response){
         if(query.getProjectId() == null || query.getPuid() == null || query.getPuid() == "" || query.getProjectId() == ""){

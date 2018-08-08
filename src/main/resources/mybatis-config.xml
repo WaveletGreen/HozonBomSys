@@ -82,5 +82,7 @@
         <mapper resource="sql/mapper/work.xmapper/HzWorkProcedureMapper.xml"/>
         <!--工艺辅料库-->
         <mapper resource="sql/mapper/accessories.xmapper/HzAccessoriesLibMapper.xml"/>
+        <!--变更管理-->
+        <mapper resource="sql/mapper/change.xmapper/HzEWOBasicInfoMapper.xml"/>
     </mappers>
 </configuration>
