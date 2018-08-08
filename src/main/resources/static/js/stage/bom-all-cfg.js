@@ -171,12 +171,12 @@ function loadData() {
 
 var projectPuid;
 $(document).ready(
-    projectPuid = $("#project", window.top.document).val(),
     (loadData()),
     $("#myButton").click(function () {
         loadData();
     }),
     $("#addVehicle").click(function () {
+        projectPuid = $("#project", window.top.document).val(),
         window.Ewin.dialog({
             // 这个puid就是车型模型的puid，直接修改了车型模型的基本信息（在bom系统维护的字段）
             title: "添加车型模型",
@@ -187,6 +187,7 @@ $(document).ready(
         });
     }),
     $("#reflect2Y").click(function () {
+        projectPuid = $("#project", window.top.document).val(),
         window.Ewin.dialog({
             // 这个puid就是车型模型的puid，直接修改了车型模型的基本信息（在bom系统维护的字段）
             title: "将配置映射到2Y层",

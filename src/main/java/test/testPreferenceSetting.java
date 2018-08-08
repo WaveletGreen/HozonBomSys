@@ -1,38 +1,29 @@
-//package test;
-//
-//import com.connor.hozon.bom.bomSystem.dao.bom.HzBomDataDao;
-//import com.connor.hozon.bom.bomSystem.dao.bom.HzBomMainRecordDao;
-//import org.junit.jupiter.api.Test;
-//import org.junit.runner.RunWith;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.boot.test.context.SpringBootTest;
-//import org.springframework.test.context.junit4.SpringRunner;
-//import share.bean.PreferenceSetting;
-//import com.connor.hozon.bom.bomSystem.dao.bom.HzPreferenceSettingDao;
-//import sql.pojo.HzPreferenceSetting;
-//import sql.pojo.bom.HZBomMainRecord;
-//import sql.redis.SerializeUtil;
-//
-//@SpringBootTest
-//@RunWith(SpringRunner.class)
-//public class testPreferenceSetting {
-//    @Autowired
-//    HzBomDataDao hzBomDataDao;
-//    @Autowired
-//    HzBomMainRecordDao hzBomMainRecordDao;
-//    @Autowired
-//
-//    @Test
-//    public void testPreferenceSetting() {
-//        HzPreferenceSetting setting = new HzPreferenceSetting();
-//        setting.setSettingName("Hz_ExportBomPreferenceRedis");
-//        HZBomMainRecord main = hzBomMainRecordDao.selectByProjectPuid("c1a7c2ea-d687-4f01-b1d3-ba63fec57281");
-//        setting.setBomMainRecordPuid(main.getPuid());
-//        setting = hzBomDataDao.loadSetting(setting);
-//        byte[] btOfSetting = setting.getPreferencesettingblock();
-//        Object objOfSetting = SerializeUtil.unserialize(btOfSetting);
-//        if (objOfSetting instanceof PreferenceSetting) {
-//
-//        }
-//    }
-//}
+package test;
+
+import com.connor.hozon.HzBomSysApplication;
+import com.connor.hozon.bom.bomSystem.service.cfg.HzMaterielCfgService;
+import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
+import sql.pojo.cfg.HzMaterielCfgBean;
+
+import java.util.List;
+
+@SpringBootTest(classes = HzBomSysApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@RunWith(SpringRunner.class)
+public class testPreferenceSetting {
+    @Autowired
+    HzMaterielCfgService hzMaterielCfgService;
+
+    @Test
+    public void testHzMaterielCfgService() {
+        hzMaterielCfgService=new HzMaterielCfgService();
+        HzMaterielCfgBean bean = new HzMaterielCfgBean();
+        bean.setPuid("F6CAFB8DA09A465DB0BA259D88563C84");
+//        bean.setProjectUid("e5969e81-0339-4e3a-98a9-a918f64e4289");
+        List<HzMaterielCfgBean> result = hzMaterielCfgService.doSelectByDiff(bean);
+        System.out.println();
+    }
+}

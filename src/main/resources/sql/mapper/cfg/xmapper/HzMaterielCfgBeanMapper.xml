@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.connor.hozon.bom.bomSystem.dao.cfg.HzMaterielCfgBeanDao">
+    <resultMap id="BaseResultMap" type="sql.pojo.cfg.HzMaterielCfgBean">
+        <result column="P_BRAND_CODE" jdbcType="VARCHAR" property="pBrandCode"/>
+        <result column="P_BRAND_NAME" jdbcType="VARCHAR" property="pBrandName"/>
+        <result column="P_PLATFORM_CODE" jdbcType="VARCHAR" property="pPlatformCode"/>
+        <result column="P_PLATFORM_NAME" jdbcType="VARCHAR" property="pPlatformName"/>
+        <result column="P_VEHICLE_CODE" jdbcType="VARCHAR" property="pVehicleCode"/>
+        <result column="P_VEHICLE_NAME" jdbcType="VARCHAR" property="pVehicleName"/>
+        <result column="P_IN_COLOR_CODE" jdbcType="VARCHAR" property="pInColorCode"/>
+        <result column="P_IN_COLOR_NAME" jdbcType="VARCHAR" property="pInColorName"/>
+        <result column="P_COLOR_CODE" jdbcType="VARCHAR" property="pColorCode"/>
+        <result column="P_COLOR_NAME" jdbcType="VARCHAR" property="pColorName"/>
+        <result column="P_BATTERY_MODEL" jdbcType="VARCHAR" property="pBatteryModel"/>
+        <result column="P_MOTOR_MODEL" jdbcType="VARCHAR" property="pMotorModel"/>
+        <result column="OBJECT_NAME" jdbcType="VARCHAR" property="objectName"/>
+        <result column="PUID" jdbcType="VARCHAR" property="puid"/>
+        <result column="IS_SENT" jdbcType="DECIMAL" property="isSent"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        P_BRAND_CODE,
+        P_BRAND_NAME,
+        P_PLATFORM_CODE,
+        P_PLATFORM_NAME,
+        P_VEHICLE_CODE,
+        P_VEHICLE_NAME,
+        P_IN_COLOR_CODE,
+        P_IN_COLOR_NAME,
+        P_COLOR_CODE,
+        P_COLOR_NAME,
+        P_BATTERY_MODEL,
+        P_MOTOR_MODEL,
+        OBJECT_NAME,
+        PUID,
+        IS_SENT
+  </sql>
+    <!--根据项目查找所有的整车物料属性-->
+    <select id="selectByDiff" parameterType="sql.pojo.cfg.HzMaterielCfgBean" resultMap="sql.pojo.cfg.HzMaterielCfgBean">
+        select t.p_brand_code,
+        t.p_brand_name,
+        t2.p_platform_code,
+        t2.p_platform_name,
+        t3.p_vehicle_code,
+        t3.p_vehicle_name,
+        t4.p_in_color_code,
+        t4.p_in_color_name,
+        t4.p_color_code,
+        t4.p_color_name,
+        t4.p_battery_model,
+        t4.p_motor_model,
+        t6.object_name,
+        t6.puid,
+        t6.is_sent
+        from Hz_Brand_Record t
+        left join Hz_Platform_Record t2 on t.puid=t2.p_pertain_to_brand_puid
+        left join Hz_Vehicle_Record t3 on t2.puid=t3.p_vehicle_pertain_to_platform
+        left join Hz_Project_Libs t4 on t3.puid=t4.p_project_pertain_to_vehicle
+        left join Hz_Cfg0_Main_Record t5 on t5.p_cfg0_of_which_project_puid=t4.puid
+        left join Hz_Cfg0_Model_Record t6 on t6.p_cfg0_model_of_main_record=t5.puid
+        <if test="projectUid!=null">
+            where t4.puid=#{projectUid,jdbcType="VARCHAR"} ;
+        </if>
+        <if test="puid!=null">
+            where t6.puid=#{uid,jdbcType="VARCHAR"} ;
+        </if>
+    </select>
+</mapper>
