@@ -3,6 +3,8 @@ package sql.pojo.bom;
 import java.util.Date;
 
 public class HzBomLineRecord {
+
+    private Long id;
     /**
      * puid
      */
@@ -161,6 +163,27 @@ public class HzBomLineRecord {
      * 数据库表名
      */
     private String tableName;
+
+    /**
+     * ewo编号
+     */
+    private String ewoNo;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getEwoNo() {
+        return ewoNo;
+    }
+
+    public void setEwoNo(String ewoNo) {
+        this.ewoNo = ewoNo;
+    }
 
     public String getTableName() {
         return tableName;
