@@ -1430,6 +1430,24 @@ public class HzEbomServiceImpl implements HzEbomService {
                 return addHzEbomRecord(addHzEbomReqDTO);
 
             }else {//不调层级关系
+                /**
+                 * 业务涉及到变更 需要走流程进行审核，走流程时需要查看变更前和变更后的数据，所以需要记录变更前的数据；
+                 * 这里每次走更新数据的时候先将原来未更新的数据保存一份，更新后的数据也保存一份，类似于查看变更历史记录的
+                 * 功能。
+                 */
+                Map<String,Object> bomLineMap = new HashMap<>();
+                bomLineMap.put("puid",reqDTO.getPuid());
+                bomLineMap.put("projectId",reqDTO.getProjectId());
+                HzBomLineRecord bomLineRecord = hzBomLineRecordDao.findBomLineByPuid(bomLineMap);//未修改前的数据
+
+
+
+
+
+
+
+
+
 
                 HZBomMainRecord hzBomMainRecord = hzBomMainRecordDao.selectByProjectPuid(reqDTO.getProjectId());
                 HzBomLineRecord hzBomLineRecord = new HzBomLineRecord();

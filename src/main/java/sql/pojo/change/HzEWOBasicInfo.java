@@ -1,6 +1,5 @@
 package sql.pojo.change;
 
-import java.math.BigDecimal;
 import java.util.Date;
 /**
  * @Author: haozt
