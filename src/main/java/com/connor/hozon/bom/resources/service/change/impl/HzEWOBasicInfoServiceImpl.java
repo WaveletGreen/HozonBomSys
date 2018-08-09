@@ -1,6 +1,8 @@
 package com.connor.hozon.bom.resources.service.change.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.connor.hozon.bom.bomSystem.dao.impl.bom.HzBomDataDaoImpl;
+import com.connor.hozon.bom.bomSystem.dao.impl.bom.HzBomLineRecordDaoImpl;
 import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.resources.dto.request.UpdateHzEWOBasicInfoReqDTO;
 import com.connor.hozon.bom.resources.dto.response.HzEWOBasicInfoRespDTO;
@@ -14,6 +16,7 @@ import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.sys.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import sql.pojo.bom.HzBomLineRecord;
 import sql.pojo.change.HzEWOBasicInfo;
 
 import java.util.ArrayList;
@@ -144,7 +147,7 @@ public class HzEWOBasicInfoServiceImpl implements HzEWOBasicInfoService {
 
 
     public static void main(String[] a){
-        HzEWOBasicInfoDAO hzEWOBasicInfoDAO = new HzEWOBasicInfoDAOImpl();
+//        HzEWOBasicInfoDAO hzEWOBasicInfoDAO = new HzEWOBasicInfoDAOImpl();
 //        HzEWOBasicInfo hzEWOBasicInfo = new HzEWOBasicInfo();
 //        hzEWOBasicInfo.setEwoNo("20180000312");
 ////        hzEWOBasicInfo.setOriginator("haozt");
@@ -163,6 +166,20 @@ public class HzEWOBasicInfoServiceImpl implements HzEWOBasicInfoService {
 //            HzEWOBasicInfo info = hzEWOBasicInfoDAO.findHzEWOBasicInfo(query);
 //            String date = DateUtil.formatTimestampDate(info.getFormCreateTime());
 //        System.out.println(JSON.toJSONString(info));
+
+//        HzBomLineRecordDaoImpl hzBomDataDao = new HzBomLineRecordDaoImpl();
+//        HzBomLineRecord record = new HzBomLineRecord();
+//        record.setTableName("HZ_EBOM_REOCRD_AFTER_CHANGE");
+//        record.setPuid("222");
+//        record.setBomDigifaxId("222");
+//        record.setLineIndex("1.1.1");
+//        record.setIsHas(1);
+//        record.setLinePuid("222");
+//        record.setLineID("2222");
+//        record.setIs2Y(1);
+//        record.setIsPart(1);
+//        int i =hzBomDataDao.insert(record);
+//        System.out.println(i);
     }
 
 }
