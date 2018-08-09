@@ -4,9 +4,11 @@ import com.connor.hozon.bom.bomSystem.controller.integrate.ExtraIntegrate;
 import com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0MainRecordDao;
 import com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0OptionFamilyDao;
 import com.connor.hozon.bom.bomSystem.dto.HzRelevanceBean;
+import com.connor.hozon.bom.bomSystem.helper.DateStringHelper;
 import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
 import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0OptionFamilyService;
 import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0Service;
+import com.connor.hozon.bom.bomSystem.service.iservice.cfg.vwo.IHzFeatureChangeService;
 import com.connor.hozon.bom.bomSystem.service.iservice.integrate.ISynFeatureService;
 import com.connor.hozon.bom.bomSystem.service.iservice.integrate.ISynRelevanceService;
 import com.connor.hozon.bom.common.base.entity.QueryBase;
@@ -26,10 +28,7 @@ import sql.pojo.cfg.HzCfg0MainRecord;
 import sql.pojo.cfg.HzCfg0OptionFamily;
 import sql.pojo.cfg.HzCfg0Record;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static com.connor.hozon.bom.bomSystem.helper.StringHelper.checkString;
 
@@ -44,6 +43,7 @@ public class HzCfg0Controller extends ExtraIntegrate {
     private final HzCfg0Service hzCfg0Service;
     private final HzCfg0MainRecordDao hzCfg0MainRecordDao;
     private final HzCfg0OptionFamilyDao hzCfg0OptionFamilyDao;
+
     /**
      * 同步特性
      */
@@ -70,9 +70,16 @@ public class HzCfg0Controller extends ExtraIntegrate {
     @Autowired
     TransOptionsService transOptionsService;
     /**
+     * 特性变更服务
+     */
+    @Autowired
+    IHzFeatureChangeService iHzFeatureChangeService;
+
+    /**
      * 日志记录
      */
     private final static Logger logger = LoggerFactory.getLogger(HzCfg0Controller.class);
+
 
     @Autowired
     public HzCfg0Controller(HzCfg0Service hzCfg0Service, HzCfg0MainRecordDao hzCfg0MainRecordDao, HzCfg0OptionFamilyDao hzCfg0OptionFamilyDao) {
@@ -97,7 +104,7 @@ public class HzCfg0Controller extends ExtraIntegrate {
     }
 
     @RequestMapping("/addPage")
-    public String add(@RequestParam("projectPuid") String projectPuid, Model model) {
+    public String addPage(@RequestParam("projectPuid") String projectPuid, Model model) {
         HzCfg0MainRecord mainRecord = hzCfg0MainRecordDao.selectByProjectPuid(projectPuid);
         if (mainRecord == null) {
             return "error";
@@ -117,7 +124,7 @@ public class HzCfg0Controller extends ExtraIntegrate {
         //创建人和修改人
         record.setCreator(user.getUserName());
         record.setLastModifier(user.getUserName());
-
+        record.setCfgAbolishDate(DateStringHelper.forever());
         if (!hzCfg0Service.preCheck(record)) {
             result.put("status", false);
             result.put("msg", "<p style='color:red;'>特性值已存在</p>");
@@ -154,6 +161,11 @@ public class HzCfg0Controller extends ExtraIntegrate {
 //            if (!SynMaterielService.debug) {
 //                iSynFeatureService.addFeature(Collections.singletonList(record));
 //            }
+            record=hzCfg0Service.doSelectOneByPuid(record.getPuid());
+            if (!iHzFeatureChangeService.insertByCfg(record, "HZ_CFG0_AFTER_CHANGE_RECORD")) {
+                logger.error("创建后自动同步变更记录值失败，请联系管理员");
+            }
+
         } else {
             result.put("status", false);
             result.put("msg", "添加特性值" + record.getpCfg0ObjectId() + "失败，请联系系统管理员");

@@ -28,19 +28,9 @@ public class HzCfg0Record {
      */
     private String pCfg0MainItemPuid;
     /**
-     * 需要被废弃
-     */
-    @Deprecated
-    private String pH9featurename;
-    /**
      * 特性英文名称
      */
     private String pH9featureenname;
-    /**
-     * 需要被废弃
-     */
-    @Deprecated
-    private String pH9featuredesc;
     /**
      * 组的描述
      */
@@ -95,7 +85,10 @@ public class HzCfg0Record {
      * 状态
      */
     private Integer cfgStatus;
-
+    /**
+     * 是否在流程中
+     */
+    private Integer cfgIsInProcess;
     public static String reflectToDBField(String property) {
         switch (property) {
             /**
@@ -189,14 +182,6 @@ public class HzCfg0Record {
         this.pCfg0MainItemPuid = pCfg0MainItemPuid == null ? null : pCfg0MainItemPuid.trim();
     }
 
-    public String getpH9featurename() {
-        return pH9featurename;
-    }
-
-    public void setpH9featurename(String pH9featurename) {
-        this.pH9featurename = pH9featurename == null ? null : pH9featurename.trim();
-    }
-
     public String getpH9featureenname() {
         return pH9featureenname;
     }
@@ -205,13 +190,6 @@ public class HzCfg0Record {
         this.pH9featureenname = pH9featureenname == null ? null : pH9featureenname.trim();
     }
 
-    public String getpH9featuredesc() {
-        return pH9featuredesc;
-    }
-
-    public void setpH9featuredesc(String pH9featuredesc) {
-        this.pH9featuredesc = pH9featuredesc == null ? null : pH9featuredesc.trim();
-    }
 
     public String getpCfg0FamilyDesc() {
         return pCfg0FamilyDesc;
@@ -323,5 +301,13 @@ public class HzCfg0Record {
 
     public void setCfgStatus(Integer cfgStatus) {
         this.cfgStatus = cfgStatus;
+    }
+
+    public Integer getCfgIsInProcess() {
+        return cfgIsInProcess;
+    }
+
+    public void setCfgIsInProcess(Integer cfgIsInProcess) {
+        this.cfgIsInProcess = cfgIsInProcess;
     }
 }

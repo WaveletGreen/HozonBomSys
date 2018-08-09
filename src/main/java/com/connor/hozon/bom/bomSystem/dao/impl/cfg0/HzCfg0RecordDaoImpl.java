@@ -92,6 +92,18 @@ public class HzCfg0RecordDaoImpl implements HzCfg0RecordDao {
         return baseSQLUtil.executeUpdate(_map, "com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0RecordDao.setIsSent");
     }
 
+    /**
+     * 设置进入流程状态
+     *
+     * @param _map
+     * @return
+     */
+    @Override
+    public int setToProcess(Map<String, Object> _map) {
+        return baseSQLUtil.executeUpdate(_map, "com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0RecordDao.setToProcess");
+    }
+
+
     @Override
     public int tellMeHowManyOfThose(String projectPuid) {
         return baseSQLUtil.executeQueryByPass(new Integer(0), projectPuid, "com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0RecordDao.tellMeHowManyOfThose", true);

@@ -31,7 +31,7 @@ public class HzCfg0Service {
     }
 
     public List<HzCfg0Record> doLoadCfgListByProjectPuid(String projectPuid, QueryBase queryBase) {
-        return hzCfg0RecordDao.selectListByProjectPuid(projectPuid,queryBase);
+        return hzCfg0RecordDao.selectListByProjectPuid(projectPuid, queryBase);
     }
 
     public List<HzCfg0Record> doLoadAddedCfgListByProjectPuid(String projectPuid) {
@@ -159,10 +159,24 @@ public class HzCfg0Service {
 
     /**
      * 项目上的特性总数是多少，针对项目而非整个合众公司
+     *
      * @param projectPuid
      * @return
      */
     public int tellMeHowManyOfThose(String projectPuid) {
-       return  hzCfg0RecordDao.tellMeHowManyOfThose(projectPuid);
+        return hzCfg0RecordDao.tellMeHowManyOfThose(projectPuid);
+    }
+
+    /**
+     * 设置已经在流程中
+     *
+     * @param cfgs 特性值集合
+     * @return
+     */
+    public int doSetToProcess(List<HzCfg0Record> cfgs) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("cfgIsInProcess", "1");
+        params.put("list", cfgs);
+        return hzCfg0RecordDao.setToProcess(params);
     }
 }

@@ -27,16 +27,16 @@ function loadData() {
     $table.bootstrapTable({
         url: "cfg0/loadFeature?projectPuid=" + projectPuid,
         method: "GET",
-        height: $(window.parent.document).find("#wrapper").height() - document.body.offsetHeight - 100,
+        height: $(window.parent.document).find("#wrapper").height() - 150,// $(window.parent.document).find("#wrapper").height() - document.body.offsetHeight - 100,
         width: $(window).width(),
         showToggle: true,                   //是否显示详细视图和列表视图的切换按钮
         showColumns: true,                  //是否显示所有的列
         showRefresh: true,                  //是否显示刷新按钮
         pagination: true,                   //是否显示分页（*）
-        pageNumber:1,                       //初始化加载第一页，默认第一页
+        pageNumber: 1,                       //初始化加载第一页，默认第一页
         pageSize: 10,                       //每页的记录行数（*）
-        pageList: [10, 30,50,100,500,1000],//可供选择的每页的行数（*）
-        smartDisplay:false,
+        pageList: [10, 30, 50, 100, 500, 1000],//可供选择的每页的行数（*）
+        smartDisplay: false,
         clickToSelect: true,                // 单击某一行的时候选中某一条记录
         formId: "puid",
         toolbars: [
@@ -134,6 +134,48 @@ function loadData() {
                                     // else {
                                     //     window.Ewin.alert({message: "操作发送失败:" + result.msg});
                                     // }
+                                    $table.bootstrapTable("refresh");
+                                },
+                                error: function (info) {
+                                    window.Ewin.alert({message: "操作发送失败:" + info.status});
+                                }
+                            })
+                        }
+                    });
+                }
+            },
+            {
+                text: '发起VWO流程',
+                iconCls: 'glyphicon glyphicon-send',
+                handler: function () {
+                    var rows = $table.bootstrapTable('getSelections');
+                    if (rows.length == 0) {
+                        window.Ewin.alert({message: '请至少选择一条需要发送的数据!'});
+                        return false;
+                    }
+                    let msg = "";
+                    for (let i in rows) {
+                        msg += "<p>" + rows[i].pCfg0ObjectId + "</p>";
+                    }
+                    window.Ewin.confirm({title: '请确认发起VWO流程的特性值', message: msg, width: 500}).on(function (e) {
+                        if (e) {
+                            $.ajax({
+                                type: "POST",
+                                //ajax需要添加打包名
+                                url: "./vwoProcess/featureGetIntoVWO",
+                                data: JSON.stringify(rows),
+                                contentType: "application/json",
+                                success: function (result) {
+                                    // if (result.status) {
+                                    if (result) {
+                                        layer.msg("发起VWO流程成功", {icon: 1, time: 2000});
+                                    }
+                                    // window.Ewin.alert({message: result, width: 800});
+                                    //刷新，会重新申请数据库数据
+                                    // }
+                                    else {
+                                        window.Ewin.alert({message: "操作失败，请稍后重试"});
+                                    }
                                     $table.bootstrapTable("refresh");
                                 },
                                 error: function (info) {

@@ -8,16 +8,14 @@
         <result column="P_CFG0_FAMILY_NAME" jdbcType="VARCHAR" property="pCfg0FamilyName"/>
         <result column="P_CFG0_FAMILY_PUID" jdbcType="VARCHAR" property="pCfg0FamilyPuid"/>
         <result column="P_CFG0_MAIN_ITEM_PUID" jdbcType="VARCHAR" property="pCfg0MainItemPuid"/>
-        <result column="P_H9FEATURENAME" jdbcType="VARCHAR" property="pH9featurename"/>
         <result column="P_H9FEATUREENNAME" jdbcType="VARCHAR" property="pH9featureenname"/>
-        <result column="P_H9FEATUREDESC" jdbcType="VARCHAR" property="pH9featuredesc"/>
         <result column="P_CFG0_FAMILY_DESC" jdbcType="VARCHAR" property="pCfg0FamilyDesc"/>
         <result column="P_CFG0_RELEVANCE" jdbcType="VARCHAR" property="pCfg0Relevance"/>
         <result column="P_IS_FEATURE_SENT" jdbcType="INTEGER" property="isFeatureSent"/>
         <result column="P_IS_RELEVANCE_SENT" jdbcType="INTEGER" property="isRelevanceSent"/>
         <!--创建和修改信息-->
         <result column="P_FEATURE_CREATOR" jdbcType="VARCHAR" property="creator"/>
-        <result column="P_FEATURE_CREATOR_DATE" jdbcType="TIMESTAMP" property="createDate"/>
+        <result column="FEATURE_CREATE_DATE" jdbcType="TIMESTAMP" property="createDate"/>
         <result column="P_FEATURE_LAST_MODIFIER" jdbcType="VARCHAR" property="lastModifier"/>
         <result column="P_FEATURE_LAST_MODIFY_DATE" jdbcType="TIMESTAMP" property="lastModifyDate"/>
 
@@ -28,6 +26,8 @@
         <result column="CFG_ABOLISH_DATE" jdbcType="TIMESTAMP" property="cfgAbolishDate"/>
         <!--状态-->
         <result column="CFG_STATUS" jdbcType="INTEGER" property="cfgStatus"/>
+        <!--是否在流程中状态-->
+        <result column="CFG_IS_IN_PROCESS" jdbcType="INTEGER" property="cfgIsInProcess"/>
     </resultMap>
 
     <resultMap id="MaterielFeatureMap" type="com.connor.hozon.bom.bomSystem.dto.HzMaterielFeatureBean">
@@ -49,15 +49,13 @@
         P_CFG0_FAMILY_NAME,
         P_CFG0_FAMILY_PUID,
         P_CFG0_MAIN_ITEM_PUID,
-        P_H9FEATURENAME,
         P_H9FEATUREENNAME,
-        P_H9FEATUREDESC,
         P_CFG0_FAMILY_DESC,
         P_CFG0_RELEVANCE,
         P_IS_FEATURE_SENT,
         P_IS_RELEVANCE_SENT,
         P_FEATURE_CREATOR,
-        P_FEATURE_CREATOR_DATE,
+        FEATURE_CREATE_DATE,
         P_FEATURE_LAST_MODIFIER,
         P_FEATURE_LAST_MODIFY_DATE,
         <!--生效时间-->
@@ -65,7 +63,8 @@
         <!--废止时间-->
         CFG_ABOLISH_DATE,
         <!--状态-->
-        CFG_STATUS
+        CFG_STATUS,
+        CFG_IS_IN_PROCESS
     </sql>
     <!--物料特性表列信息-->
     <sql id="Materiel_Feature_Column_List">
@@ -209,38 +208,44 @@
     </delete>
     <!--插入1个特性值-->
     <insert id="insert" parameterType="sql.pojo.cfg.HzCfg0Record">
-    insert into ${whichTable}
-      (
+        insert into ${whichTable}
+        (
         PUID,
         P_CFG0_OBJECT_ID,
         P_CFG0_DESC,
         P_CFG0_FAMILY_NAME,
         P_CFG0_FAMILY_PUID,
         P_CFG0_MAIN_ITEM_PUID,
-        P_H9FEATURENAME,
         P_H9FEATUREENNAME,
-        P_H9FEATUREDESC,
         P_CFG0_FAMILY_DESC,
         P_CFG0_RELEVANCE,
         P_FEATURE_CREATOR,
-        P_FEATURE_LAST_MODIFIER
+        P_FEATURE_LAST_MODIFIER,
+        FEATURE_CREATE_DATE,
+        P_FEATURE_LAST_MODIFY_DATE,
+        CFG_ABOLISH_DATE,
+        CFG_STATUS,
+        CFG_IS_IN_PROCESS
         )
-    values (
+        values (
         #{puid,jdbcType=VARCHAR},
         #{pCfg0ObjectId,jdbcType=VARCHAR},
         #{pCfg0Desc,jdbcType=VARCHAR},
         #{pCfg0FamilyName,jdbcType=VARCHAR},
         #{pCfg0FamilyPuid,jdbcType=VARCHAR},
         #{pCfg0MainItemPuid,jdbcType=VARCHAR},
-        #{pH9featurename,jdbcType=VARCHAR},
         #{pH9featureenname,jdbcType=VARCHAR},
-        #{pH9featuredesc,jdbcType=VARCHAR},
         #{pCfg0FamilyDesc,jdbcType=VARCHAR},
         #{pCfg0Relevance,jdbcType=VARCHAR},
         #{creator,jdbcType=VARCHAR},
-        #{lastModifier,jdbcType=VARCHAR}
+        #{lastModifier,jdbcType=VARCHAR},
+        sysdate,
+        sysdate,
+        #{cfgAbolishDate,jdbcType=TIMESTAMP},
+        0,
+        0
         )
-  </insert>
+    </insert>
     <!--根据主键更新数据-->
     <update id="updateByPrimaryKey" parameterType="sql.pojo.cfg.HzCfg0Record">
     update ${whichTable}
@@ -250,9 +255,7 @@
           P_CFG0_FAMILY_NAME = #{pCfg0FamilyName,jdbcType=VARCHAR},
           P_CFG0_FAMILY_PUID = #{pCfg0FamilyPuid,jdbcType=VARCHAR},
           P_CFG0_MAIN_ITEM_PUID = #{pCfg0MainItemPuid,jdbcType=VARCHAR},
-          P_H9FEATURENAME = #{pH9featurename,jdbcType=VARCHAR},
           P_H9FEATUREENNAME = #{pH9featureenname,jdbcType=VARCHAR},
-          P_H9FEATUREDESC = #{pH9featuredesc,jdbcType=VARCHAR},
           P_CFG0_FAMILY_DESC = #{pCfg0FamilyDesc,jdbcType=VARCHAR},
           P_CFG0_RELEVANCE = #{pCfg0Relevance,jdbcType=VARCHAR},
           P_FEATURE_LAST_MODIFIER = #{lastModifier,jdbcType=VARCHAR},
@@ -272,6 +275,27 @@
             P_IS_RELEVANCE_SENT=1,
         </if>
         P_FEATURE_LAST_MODIFY_DATE=sysdate
+        where PUID in
+        <if test="list==null">
+            ('')
+        </if>
+        <if test="list!=null">
+            (
+            <foreach collection="list" item="item" index="index"
+                     separator=",">
+                #{item.puid,jdbcType=VARCHAR}
+            </foreach>
+            )
+        </if>
+    </update>
+
+    <!--设置进入流程状态-->
+    <update id="setToProcess" parameterType="java.util.Map">
+        update HZ_CFG0_RECORD
+        set
+        <if test="cfgIsInProcess==1">
+            CFG_IS_IN_PROCESS = 1,
+        </if>
         where PUID in
         <if test="list==null">
             ('')
