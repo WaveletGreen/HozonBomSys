@@ -10,6 +10,7 @@ import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.resources.util.ResultMessageBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -43,20 +44,23 @@ public class HzEWOBaseInfoController extends BaseController {
     /**
      * 获取EWO表单基本信息
      * @param query
-     * @param response
+     * @param
      */
     @RequestMapping(value = "info",method = RequestMethod.GET)
-    public void getHzEWOBasicInfo(HzEWOBasicInfoQuery query,HttpServletResponse response){
-        if(query.getId() == null){
-            writeAjaxJSONResponse(ResultMessageBuilder.build(false,"非法参数！"),response);
-            return ;
-        }
+    public String getHzEWOBasicInfo(HzEWOBasicInfoQuery query, Model model){
+//        if(query.getId() == null){
+//            writeAjaxJSONResponse(ResultMessageBuilder.build(false,"非法参数！"),response);
+//            return ;
+//        }
         HzEWOBasicInfoRespDTO respDTO = hzEWOBasicInfoService.findHzEWOBasicInfo(query);
         if(respDTO == null){
-            writeAjaxJSONResponse(ResultMessageBuilder.build(false,"暂无数据！"),response);
-            return ;
+//            writeAjaxJSONResponse(ResultMessageBuilder.build(false,"暂无数据！"),response);
+            return "";
         }
-        writeAjaxJSONResponse(ResultMessageBuilder.build(respDTO),response);
+        model.addAttribute("data",respDTO);
+        return "changeManage/ewo/ewoBasicInformation";
+
+//        writeAjaxJSONResponse(ResultMessageBuilder.build(respDTO),response);
     }
 
 
