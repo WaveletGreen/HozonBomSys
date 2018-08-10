@@ -46,7 +46,7 @@ public class HzFeatureChangeBean {
     /**
      * 创建日期
      */
-    private Date featureCreatDate;
+    private Date featureCreateDate;
     /**
      * 最近一次修改者
      */
@@ -104,6 +104,14 @@ public class HzFeatureChangeBean {
      * 表名，bean中特有，用于识别变更前还是变更后的表
      */
     private String tableName;
+    /**
+     * 变更创建时间
+     */
+    private Date changeCreateDate;
+    /**
+     * vwo变更号ID
+     */
+    private Long vwoId;
 
     public Long getId() {
         return id;
@@ -185,12 +193,12 @@ public class HzFeatureChangeBean {
         this.featureCreator = featureCreator;
     }
 
-    public Date getFeatureCreatDate() {
-        return featureCreatDate;
+    public Date getFeatureCreateDate() {
+        return featureCreateDate;
     }
 
-    public void setFeatureCreatDate(Date featureCreatDate) {
-        this.featureCreatDate = featureCreatDate;
+    public void setFeatureCreateDate(Date featureCreateDate) {
+        this.featureCreateDate = featureCreateDate;
     }
 
     public String getFeatureLastModifier() {
@@ -304,4 +312,21 @@ public class HzFeatureChangeBean {
     public void setTableName(String tableName) {
         this.tableName = tableName;
     }
+
+    public Date getChangeCreateDate() {
+        return changeCreateDate;
+    }
+
+    public void setChangeCreateDate(Date changeCreateDate) {
+        this.changeCreateDate = changeCreateDate;
+    }
+
+    public Long getVwoId() {
+        return vwoId;
+    }
+
+    public void setVwoId(Long vwoId) {
+        this.vwoId = vwoId;
+    }
+
 }

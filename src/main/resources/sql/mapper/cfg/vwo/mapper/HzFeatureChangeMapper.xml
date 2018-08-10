@@ -27,6 +27,9 @@
         <result column="PROCESS_STARTER" jdbcType="VARCHAR" property="processStarter"/>
         <result column="PROCESS_FINISH_DATE" jdbcType="TIMESTAMP" property="processFinishDate"/>
         <result column="PROCESS_FINISHER" jdbcType="VARCHAR" property="processFinisher"/>
+        <!--变更创建时间-->
+        <result column="CHANGE_CREATE_DATE" jdbcType="TIMESTAMP" property="changeCreateDate"/>
+        <result column="VWO_ID" jdbcType="DECIMAL" property="vwoId"/>
     </resultMap>
     <sql id="Base_Column_List">
         ID,
@@ -52,7 +55,9 @@
         PROCESS_START_DATE,
         PROCESS_STARTER,
         PROCESS_FINISH_DATE,
-        PROCESS_FINISHER
+        PROCESS_FINISHER,
+        CHANGE_CREATE_DATE,
+        VWO_ID
   </sql>
     <sql id="Values_Of_Result">
         #{id,jdbcType=DECIMAL},
@@ -65,7 +70,7 @@
         #{featureDesc,jdbcType=VARCHAR},
         #{cfg0Relevance,jdbcType=VARCHAR},
         #{featureCreator,jdbcType=VARCHAR},
-        #{featureCreatDate,jdbcType=TIMESTAMP},
+        #{featureCreateDate,jdbcType=TIMESTAMP},
         #{featureLastModifier,jdbcType=VARCHAR},
         #{featureLastModifyDate,jdbcType=TIMESTAMP},
         #{isFeatureSent,jdbcType=DECIMAL},
@@ -78,7 +83,10 @@
         #{processStartDate,jdbcType=TIMESTAMP},
         #{processStarter,jdbcType=VARCHAR},
         #{processFinishDate,jdbcType=TIMESTAMP},
-        #{processFinisher,jdbcType=VARCHAR}
+        #{processFinisher,jdbcType=VARCHAR},
+        #{changeCreateDate,jdbcType=TIMESTAMP},
+        #{vwoId,jdbcType=DECIMAL}
+
     </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.Double" resultMap="BaseResultMap">
         select
@@ -86,6 +94,16 @@
         from HZ_CFG0_BEFORE_CHANGE_RECORD
         where ID = #{id,jdbcType=DECIMAL}
     </select>
+
+    <!--查询区域内最大的VWO号-->
+    <select id="findNewestChange" parameterType="sql.pojo.cfg.vwo.HzFeatureChangeBean" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from ${tableName} t
+        where t.cfg_puid=#{cfgPuid} and rownum &lt;=1
+        order by t.change_create_date desc
+    </select>
+
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Double">
     delete from HZ_CFG0_BEFORE_CHANGE_RECORD
     where ID = #{id,jdbcType=DECIMAL}
@@ -99,7 +117,7 @@
         )
     </insert>
     <update id="updateByPrimaryKey" parameterType="sql.pojo.cfg.vwo.HzFeatureChangeBean">
-    update HZ_CFG0_BEFORE_CHANGE_RECORD
+    update ${tableName}
     set FEATURE_VALUE_NAME = #{featureValueName,jdbcType=VARCHAR},
       FEATURE_VALUE_DESC = #{featureValueDesc,jdbcType=VARCHAR},
       FEATURE_NAME = #{featureName,jdbcType=VARCHAR},
@@ -109,7 +127,7 @@
       FEATURE_DESC = #{featureDesc,jdbcType=VARCHAR},
       CFG0_RELEVANCE = #{cfg0Relevance,jdbcType=VARCHAR},
       FEATURE_CREATOR = #{featureCreator,jdbcType=VARCHAR},
-      FEATURE_CREATE_DATE = #{featureCreatDate,jdbcType=TIMESTAMP},
+      FEATURE_CREATE_DATE = #{featureCreateDate,jdbcType=TIMESTAMP},
       FEATURE_LAST_MODIFIER = #{featureLastModifier,jdbcType=VARCHAR},
       FEATURE_LAST_MODIFY_DATE = #{featureLastModifyDate,jdbcType=TIMESTAMP},
       IS_FEATURE_SENT = #{isFeatureSent,jdbcType=DECIMAL},
@@ -117,6 +135,7 @@
       CFG_EFFECTED_DATE = #{cfgEffectedDate,jdbcType=TIMESTAMP},
       CFG_ABOLISH_DATE = #{cfgAbolishDate,jdbcType=TIMESTAMP},
       CFG_STATUS = #{cfgStatus,jdbcType=DECIMAL},
+      VWO_ID=#{vwoId,jdbcType=DECIMAL}
     where ID = #{id,jdbcType=DECIMAL}
   </update>
 </mapper>

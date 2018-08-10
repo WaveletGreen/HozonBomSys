@@ -31,6 +31,15 @@ public interface HzFeatureChangeDao {
     HzFeatureChangeBean selectByPrimaryKey(Long id);
 
     /**
+     * 查找特性下最新的更改
+     *
+     * @param bean
+     * @return
+     */
+
+    HzFeatureChangeBean findNewestChange(HzFeatureChangeBean bean);
+
+    /**
      * 主键更新
      *
      * @param record

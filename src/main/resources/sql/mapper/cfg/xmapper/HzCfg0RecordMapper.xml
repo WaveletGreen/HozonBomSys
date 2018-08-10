@@ -28,6 +28,8 @@
         <result column="CFG_STATUS" jdbcType="INTEGER" property="cfgStatus"/>
         <!--是否在流程中状态-->
         <result column="CFG_IS_IN_PROCESS" jdbcType="INTEGER" property="cfgIsInProcess"/>
+        <!--vwo号ID-->
+        <result column="VWO_ID" jdbcType="INTEGER" property="vwoId"/>
     </resultMap>
 
     <resultMap id="MaterielFeatureMap" type="com.connor.hozon.bom.bomSystem.dto.HzMaterielFeatureBean">
@@ -64,7 +66,8 @@
         CFG_ABOLISH_DATE,
         <!--状态-->
         CFG_STATUS,
-        CFG_IS_IN_PROCESS
+        CFG_IS_IN_PROCESS,
+        VWO_ID
     </sql>
     <!--物料特性表列信息-->
     <sql id="Materiel_Feature_Column_List">
@@ -248,22 +251,50 @@
     </insert>
     <!--根据主键更新数据-->
     <update id="updateByPrimaryKey" parameterType="sql.pojo.cfg.HzCfg0Record">
-    update ${whichTable}
-    set
-          P_CFG0_OBJECT_ID = #{pCfg0ObjectId,jdbcType=VARCHAR},
-          P_CFG0_DESC = #{pCfg0Desc,jdbcType=VARCHAR},
-          P_CFG0_FAMILY_NAME = #{pCfg0FamilyName,jdbcType=VARCHAR},
-          P_CFG0_FAMILY_PUID = #{pCfg0FamilyPuid,jdbcType=VARCHAR},
-          P_CFG0_MAIN_ITEM_PUID = #{pCfg0MainItemPuid,jdbcType=VARCHAR},
-          P_H9FEATUREENNAME = #{pH9featureenname,jdbcType=VARCHAR},
-          P_CFG0_FAMILY_DESC = #{pCfg0FamilyDesc,jdbcType=VARCHAR},
-          P_CFG0_RELEVANCE = #{pCfg0Relevance,jdbcType=VARCHAR},
-          P_FEATURE_LAST_MODIFIER = #{lastModifier,jdbcType=VARCHAR},
-          P_FEATURE_LAST_MODIFY_DATE = sysdate,
-          CFG_STATUS = 0
-    where
-          PUID = #{puid,jdbcType=VARCHAR}
+        update ${whichTable}
+        set
+        P_FEATURE_LAST_MODIFY_DATE = sysdate
+        <if test="pCfg0ObjectId!=null">
+            ,P_CFG0_OBJECT_ID = #{pCfg0ObjectId,jdbcType=VARCHAR}
+        </if>
+        <if test="pCfg0Desc!=null">
+            ,P_CFG0_DESC = #{pCfg0Desc,jdbcType=VARCHAR}
+        </if>
+        <if test="pCfg0FamilyName!=null">
+            ,P_CFG0_FAMILY_NAME = #{pCfg0FamilyName,jdbcType=VARCHAR}
+        </if>
+        <if test="pCfg0FamilyPuid!=null">
+            ,P_CFG0_FAMILY_PUID = #{pCfg0FamilyPuid,jdbcType=VARCHAR}
+        </if>
+        <if test="pCfg0MainItemPuid!=null">
+            ,P_CFG0_MAIN_ITEM_PUID = #{pCfg0MainItemPuid,jdbcType=VARCHAR}
+        </if>
+        <if test="pH9featureenname!=null">
+            ,P_H9FEATUREENNAME = #{pH9featureenname,jdbcType=VARCHAR}
+        </if>
+        <if test="pCfg0FamilyDesc!=null">
+            ,P_CFG0_FAMILY_DESC = #{pCfg0FamilyDesc,jdbcType=VARCHAR}
+        </if>
+        <if test="pCfg0Relevance!=null">
+            ,P_CFG0_RELEVANCE = #{pCfg0Relevance,jdbcType=VARCHAR}
+        </if>
+        <if test="lastModifier!=null">
+            ,P_FEATURE_LAST_MODIFIER = #{lastModifier,jdbcType=VARCHAR}
+        </if>
+        <if test="cfgStatus!=null">
+            ,CFG_STATUS =#{cfgStatus,jdbcType=INTEGER}
+        </if>
+        <if test="cfgIsInProcess!=null">
+            ,CFG_IS_IN_PROCESS =#{cfgIsInProcess,jdbcType=INTEGER}
+        </if>
+        <if test="vwoId!=null">
+            ,VWO_ID=#{vwoId,jdbcType=INTEGER}
+        </if>
+        where
+        PUID = #{puid,jdbcType=VARCHAR}
     </update>
+
+
     <!--设置发送到ERP的状态为是-->
     <update id="setIsSent" parameterType="java.util.Map">
         update HZ_CFG0_RECORD

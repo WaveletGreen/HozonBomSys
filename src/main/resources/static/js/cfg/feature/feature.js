@@ -269,7 +269,12 @@ function loadData() {
                         return "<span style='color: #00B83F'>已生效</span>";
                     }
                     if (value == 0 || "0" == value) {
-                        return "<span style='color: #a97f89'>草稿状态</span>";
+                        if (1 == row.cfgIsInProcess || "1" == row.cfgIsInProcess) {
+                            return "<span style='color: #a97f89'>草稿状态(已在VWO变更中)</span>";
+                        }
+                        else {
+                            return "<span style='color: #a97f89'>草稿状态</span>";
+                        }
                     }
                     if (-1 == value || "-1" == value) {
                         return "<span style='color: #9492a9'>已废止</span>";

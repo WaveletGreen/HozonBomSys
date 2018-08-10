@@ -89,6 +89,10 @@ public class HzCfg0Record {
      * 是否在流程中
      */
     private Integer cfgIsInProcess;
+    /**
+     * vwo号的ID
+     */
+    private Long vwoId;
     public static String reflectToDBField(String property) {
         switch (property) {
             /**
@@ -309,5 +313,13 @@ public class HzCfg0Record {
 
     public void setCfgIsInProcess(Integer cfgIsInProcess) {
         this.cfgIsInProcess = cfgIsInProcess;
+    }
+
+    public Long getVwoId() {
+        return vwoId;
+    }
+
+    public void setVwoId(Long vwoId) {
+        this.vwoId = vwoId;
     }
 }

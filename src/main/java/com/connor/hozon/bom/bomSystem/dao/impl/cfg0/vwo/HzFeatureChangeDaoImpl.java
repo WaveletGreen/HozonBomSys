@@ -56,6 +56,18 @@ public class HzFeatureChangeDaoImpl implements HzFeatureChangeDao {
     }
 
     /**
+     * 查找特性下最新的更改
+     *
+     * @param bean
+     * @return
+     */
+    @Override
+    public HzFeatureChangeBean findNewestChange(HzFeatureChangeBean bean) {
+        return baseSQLUtil.executeQueryById(bean, "com.connor.hozon.bom.bomSystem.dao.cfg.vwo.HzFeatureChangeDao.findNewestChange");
+    }
+
+
+    /**
      * 主键更新
      *
      * @param record

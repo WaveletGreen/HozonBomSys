@@ -25,8 +25,8 @@ public class HzFeatureChangeService implements IHzFeatureChangeService {
      * @return
      */
     @Override
-    public int doDeleteByPrimaryKey(Long id) {
-        return hzFeatureChangeDao.deleteByPrimaryKey(id);
+    public boolean doDeleteByPrimaryKey(Long id) {
+        return hzFeatureChangeDao.deleteByPrimaryKey(id) > 0 ? true : false;
     }
 
     /**
@@ -36,8 +36,8 @@ public class HzFeatureChangeService implements IHzFeatureChangeService {
      * @return
      */
     @Override
-    public int doInsert(HzFeatureChangeBean record) {
-        return hzFeatureChangeDao.insert(record);
+    public boolean doInsert(HzFeatureChangeBean record) {
+        return hzFeatureChangeDao.insert(record) > 0 ? true : false;
     }
 
     /**
@@ -52,14 +52,26 @@ public class HzFeatureChangeService implements IHzFeatureChangeService {
     }
 
     /**
+     * 查找特性下最新的更改
+     *
+     * @param bean
+     * @return
+     */
+    @Override
+    public HzFeatureChangeBean doFindNewestChange(HzFeatureChangeBean bean) {
+        return hzFeatureChangeDao.findNewestChange(bean);
+    }
+
+
+    /**
      * 主键更新
      *
      * @param record
      * @return
      */
     @Override
-    public int doUpdateByPrimaryKey(HzFeatureChangeBean record) {
-        return hzFeatureChangeDao.updateByPrimaryKey(record);
+    public boolean doUpdateByPrimaryKey(HzFeatureChangeBean record) {
+        return hzFeatureChangeDao.updateByPrimaryKey(record) > 0 ? true : false;
     }
 
     /**
@@ -88,7 +100,7 @@ public class HzFeatureChangeService implements IHzFeatureChangeService {
         /*创建人*/
         bean.setFeatureCreator(record.getCreator());
         /*创建日期*/
-        bean.setFeatureCreatDate(record.getCreateDate());
+        bean.setFeatureCreateDate(record.getCreateDate());
         /*族描述*/
         bean.setFeatureDesc(record.getpCfg0FamilyDesc());
         /*最近一次修改者*/
@@ -111,7 +123,7 @@ public class HzFeatureChangeService implements IHzFeatureChangeService {
         bean.setIsRelevanceSent(record.getIsRelevanceSent());
         /*所属表*/
         bean.setTableName(tableName);
-        return doInsert(bean) > 0 ? true : false;
+        return doInsert(bean);
     }
 
 }

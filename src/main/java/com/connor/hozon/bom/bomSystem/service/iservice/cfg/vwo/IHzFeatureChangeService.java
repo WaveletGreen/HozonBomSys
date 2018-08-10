@@ -16,7 +16,7 @@ public interface IHzFeatureChangeService {
      * @param id
      * @return
      */
-    int doDeleteByPrimaryKey(Long id);
+    boolean doDeleteByPrimaryKey(Long id);
 
     /**
      * 插入1条数据
@@ -24,7 +24,7 @@ public interface IHzFeatureChangeService {
      * @param record
      * @return
      */
-    int doInsert(HzFeatureChangeBean record);
+    boolean doInsert(HzFeatureChangeBean record);
 
     /**
      * 主键查找
@@ -34,14 +34,21 @@ public interface IHzFeatureChangeService {
      */
 
     HzFeatureChangeBean doSelectByPrimaryKey(Long id);
+    /**
+     * 查找特性下最新的更改
+     *
+     * @param bean
+     * @return
+     */
 
+    HzFeatureChangeBean doFindNewestChange(HzFeatureChangeBean bean);
     /**
      * 主键更新
      *
      * @param record
      * @return
      */
-    int doUpdateByPrimaryKey(HzFeatureChangeBean record);
+    boolean doUpdateByPrimaryKey(HzFeatureChangeBean record);
 
     /**
      * 根据配置进行插入

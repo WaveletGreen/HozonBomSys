@@ -161,10 +161,16 @@ public class HzCfg0Controller extends ExtraIntegrate {
 //            if (!SynMaterielService.debug) {
 //                iSynFeatureService.addFeature(Collections.singletonList(record));
 //            }
-            record=hzCfg0Service.doSelectOneByPuid(record.getPuid());
+            record = hzCfg0Service.doSelectOneByPuid(record.getPuid());
             if (!iHzFeatureChangeService.insertByCfg(record, "HZ_CFG0_AFTER_CHANGE_RECORD")) {
-                logger.error("创建后自动同步变更记录值失败，请联系管理员");
+                logger.error("创建后自动同步变更后记录值失败，请联系管理员");
             }
+            HzCfg0Record record1 = new HzCfg0Record();
+            record1.setPuid(record.getPuid());
+            if (!iHzFeatureChangeService.insertByCfg(record1, "HZ_CFG0_BEFORE_CHANGE_RECORD")) {
+                logger.error("创建后自动同步变更前记录值失败，请联系管理员");
+            }
+
 
         } else {
             result.put("status", false);
