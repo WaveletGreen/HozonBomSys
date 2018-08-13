@@ -166,4 +166,15 @@
   </update>
 
 
+
+  <select id="HzEWOBasicInfoDAOImpl_getMaxEWONoLastFourIndexInThisMonth" resultType="java.lang.String" parameterType="java.util.HashMap">
+      SELECT max(substr(EWO_NO, -4)) FROM HZ_EWO_BASIC_INFO WHERE EWO_NO like
+
+      CONCAT(CONCAT('%',#{ym,jdbcType=VARCHAR}),'%')
+
+      and PROJECT_ID=#{projectId,jdbcType=VARCHAR}
+
+  </select>
+
+
 </mapper>
