@@ -64,6 +64,13 @@
         <mapper resource="sql/mapper/cfg/xmapper/HzCfg0ToModelRecordMapper.xml"/>
         <mapper resource="sql/mapper/cfg/xmapper/HzCfg0OfBomLineRecordMapper.xml"/>
         <mapper resource="sql/mapper/cfg/xmapper/HzColorModelMapper.xml"/>
+        <mapper resource="sql/mapper/cfg/xmapper/HzMaterielCfgBeanMapper.xml"/>
+        <mapper resource="sql/mapper/cfg/xmapper/HzColorLvl2ModelMapper.xml"/>
+        <!--流程-->
+        <!--VWO-->
+        <mapper resource="sql/mapper/cfg/vwo/mapper/HzFeatureChangeMapper.xml"/>
+        <mapper resource="sql/mapper/cfg/vwo/mapper/HzVwoInfoMapper.xml"/>
+
         <!--项目-->
         <mapper resource="sql/mapper/project.xmapper/HzMaterielMapper.xml"/>
         <mapper resource="sql/mapper/project.xmapper/HzProjectLibsMapper.xml"/>
@@ -82,5 +89,7 @@
         <mapper resource="sql/mapper/work.xmapper/HzWorkProcedureMapper.xml"/>
         <!--工艺辅料库-->
         <mapper resource="sql/mapper/accessories.xmapper/HzAccessoriesLibMapper.xml"/>
+        <!--变更管理-->
+        <mapper resource="sql/mapper/change.xmapper/HzEWOBasicInfoMapper.xml"/>
     </mappers>
 </configuration>

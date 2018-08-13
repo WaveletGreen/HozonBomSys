@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.connor.hozon.bom.bomSystem.dao.cfg.vwo.HzVwoInfoDao">
+    <resultMap id="BaseResultMap" type="sql.pojo.cfg.vwo.HzVwoInfo">
+        <id column="ID" jdbcType="DOUBLE" property="id"/>
+        <result column="VWO_NUM" jdbcType="VARCHAR" property="vwoNum"/>
+        <result column="VWO_CREATOR" jdbcType="VARCHAR" property="vwoCreator"/>
+        <result column="VWO_CREATE_DATE" jdbcType="TIMESTAMP" property="vwoCreateDate"/>
+        <result column="VWO_FINISHER" jdbcType="VARCHAR" property="vwoFinisher"/>
+        <result column="VWO_FINISH_DATE" jdbcType="TIMESTAMP" property="vwoFinishDate"/>
+    </resultMap>
+    <!--字段声明-->
+    <sql id="Base_Column_List">
+    ID,
+    VWO_NUM,
+    VWO_CREATOR,
+    VWO_CREATE_DATE,
+    VWO_FINISHER,
+    VWO_FINISH_DATE
+  </sql>
+    <!--结果集-->
+    <sql id="Values_Of_Result">
+        #{id,jdbcType=DECIMAL},
+        #{vwoNum,jdbcType=VARCHAR},
+        #{vwoCreator,jdbcType=VARCHAR},
+        #{vwoCreateDate,jdbcType=TIMESTAMP},
+        #{vwoFinisher,jdbcType=VARCHAR},
+        #{vwoFinishDate,jdbcType=TIMESTAMP}
+    </sql>
+    <!--主键搜索-->
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from HZ_VWO_INFO
+        where ID = #{id,jdbcType=DECIMAL}
+    </select>
+    <!--查询区域内最大的VWO号-->
+    <select id="findMaxAreaVwoNum" resultMap="BaseResultMap">
+        select max(t.vwo_num) as VWO_NUM
+        from HZ_VWO_INFO t
+        where t.vwo_num like
+        (select to_char(sysdate,'yyyymm')||'%' from dual)
+    </select>
+    <!--主键删除-->
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from HZ_VWO_INFO
+    where ID = #{id,jdbcType=DECIMAL}
+  </delete>
+    <!--插入1个记录，返回主键-->
+    <insert id="insert" parameterType="sql.pojo.cfg.vwo.HzVwoInfo">
+
+        <!--
+        对于 Oracle 而言, 需要使用 selectKey 来生成主键值，
+        order="BEFORE": 先于 INSERT 执行
+        selectKey 的标签体: 指定生成主键的查询语句. SELECT 序列名.nextval FROM dual
+        keyColumn: 使用哪一列的值来进行赋值 ,在oracle中可以省略不写
+        keyProperty: 把标签体的查询结果赋给 bean 的哪一个属性.
+        resultType: 执行标签体查询的结果类型.
+        注意: 下面编写 SQL 时, 主键不能再次使用序列生成. 而要使用 #{keyProperty}
+        -->
+        <selectKey order="BEFORE"
+                   keyColumn="id" keyProperty="id" resultType="java.lang.Long">
+            select Seq_Hz_Vwo_Id.Nextval from dual
+        </selectKey>
+
+        insert into HZ_VWO_INFO (
+        <include refid="Base_Column_List"/>
+        )
+        values (
+        <include refid="Values_Of_Result"/>
+        )
+    </insert>
+    <!--主键更新-->
+    <update id="updateByPrimaryKey" parameterType="sql.pojo.cfg.vwo.HzVwoInfo">
+    update HZ_VWO_INFO
+    set VWO_NUM = #{vwoNum,jdbcType=VARCHAR},
+      VWO_FINISHER = #{vwoFinisher,jdbcType=VARCHAR},
+      VWO_FINISH_DATE = #{vwoFinishDate,jdbcType=TIMESTAMP}
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+</mapper>

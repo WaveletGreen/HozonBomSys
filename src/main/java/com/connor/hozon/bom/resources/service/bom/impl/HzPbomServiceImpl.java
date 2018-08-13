@@ -939,6 +939,7 @@ public class HzPbomServiceImpl implements HzPbomService {
                 }else {
                     respDTO.setpLouaFlag("LOA");
                 }
+                respDTO.setStatus(record.getStatus());
                 respDTOS.add(respDTO);
             }
             return respDTOS;
@@ -949,7 +950,7 @@ public class HzPbomServiceImpl implements HzPbomService {
         return null;
     }
 
-//    public static void main(String[] a){
+    public static void main(String[] a){
 //        long t1 = System.currentTimeMillis();
 //        for(long m  = Long.MIN_VALUE;m<Long.MAX_VALUE;m++){
 //
@@ -962,5 +963,9 @@ public class HzPbomServiceImpl implements HzPbomService {
 //         long l2 = 24 * 60 * 60*365l; //年
 //        long m  = l/l1/l2;
 //        System.out.println(m);
-//    }
+
+        String s1 = "S00-1002";
+        s1+="AB";
+        System.out.println(s1);
+    }
 }

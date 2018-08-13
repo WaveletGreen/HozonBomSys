@@ -96,11 +96,9 @@ public class HzEPLManageRecordServiceImpl implements HzEPLManageRecordService {
                 jsonObject.put("fna",record.getFna());
                 if(record.getStatus().equals(0)){
                     jsonObject.put("status","D");
-                }
-                if(record.getStatus().equals(1)){
+                }else if(record.getStatus().equals(1)){
                     jsonObject.put("status","A");
-                }
-                if(record.getStatus().equals(2)){
+                }else{
                     jsonObject.put("status","U");
                 }
 

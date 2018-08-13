@@ -5,18 +5,20 @@
 <title>二级配色方案</title>
 <form class="form-horizontal" id="form" role="form" method="post" th:action="${action}">
     <fieldset>
-        <input th:value="${modelUid}" type="hidden" id="counter"/>
-        <input th:value="${projectUid}" type="hidden" id="pCfg0MainRecordOfMC"/>
+        <input th:value="${modelUid}" type="hidden" id="modelUid"/>
+        <input th:value="${projectUid}" type="hidden" id="projectUid"/>
 
         <div id="legend" class="">
             <legend class="">二级配色方案</legend>
         </div>
         <!--循环放入数据-->
         <div class="form-group col-lg-10" th:each="line,index:${assembly}">
-            <label class="control-label" th:text="${line.getLineID()+'-'+line.getpBomLinePartName()}" th:for="${line.getPuid()}"></label>
+            <label class="control-label" th:text="${line.getLineID()+'-'+line.getpBomLinePartName()}"
+                   th:for="${line.getPuid()}"></label>
             <select class="form-control input-small" th:name="${line.getPuid()}" data-style="btn-info"
                     th:id="${line.getPuid()}">
                 <option th:each="color:${colorList}" th:value="${color.puid}"
+                        th:selected="${color.getPuid()==line.getColorUid()? true :false}"
                         th:text="${color.pColorCode+' -- '+color.pColorName+' -- '+color.getpColorComment()+' -- '+color.getpColorOfSet()}"
                 >
                 </option>
@@ -63,7 +65,8 @@
             $("#btnOk", window.top.document).click(function () {
                 // var count = parseInt($("#counter").val());
                 // var data = {};
-                // <!--其实不要puid，puid会在服务器上生成-->
+                //
+                <!--其实不要puid，puid会在服务器上生成-->
                 // data.pCodeOfColorfulModel = $("#pCodeOfColorfulModel").val();
                 // data.pDescOfColorfulModel = $("#pDescOfColorfulModel").val();
                 // data.pCfg0MainRecordOfMC = $("#pCfg0MainRecordOfMC").val();
@@ -74,8 +77,8 @@
 
                 var data = {};
 
-                data.modelUid=$("#modelUid").val();
-                data.projectUid=$("#projectUid").val();
+                data.modelUid = $("#modelUid").val();
+                data.projectUid = $("#projectUid").val();
 
                 var _d = $("#form").serializeArray();
                 for (var p in _d) {
@@ -99,13 +102,13 @@
                                 $('body', window.top.document).find('.modal-backdrop').remove();
                                 // jquery 调用刷新当前操作的table页面的refresh方法
                                 $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
-                                if (result){
-                                    layer.msg('添加二级配色方案数据成功!', {icon: 1, time: 2000})
+                                if (result) {
+                                    layer.msg('修改二级配色方案数据成功!', {icon: 1, time: 2000})
                                 }
-                                    // window.Ewin.alert({message: "添加数据成功"});
+                                // window.Ewin.alert({message: "添加数据成功"});
                             },
                         error: function (status) {
-                            window.Ewin.alert({message: status.status + ':添加二级配色方案数据失败!'});
+                            window.Ewin.alert({message: status.status + ':修改二级配色方案数据失败!'});
                         }
                     });
                 }

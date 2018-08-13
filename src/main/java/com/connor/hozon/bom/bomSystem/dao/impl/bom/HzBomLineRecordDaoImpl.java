@@ -20,6 +20,9 @@ public class HzBomLineRecordDaoImpl extends BaseSQLUtil {
      * @return
      */
     public int insert(HzBomLineRecord record){
+        if(null == record.getTableName() || "".equals(record.getTableName())){
+            record.setTableName("HZ_BOM_LINE_RECORD");
+        }
         return super.insert("HzBomLineRecordDaoImpl_insert",record);
     }
 
@@ -49,7 +52,20 @@ public class HzBomLineRecordDaoImpl extends BaseSQLUtil {
      * @return
      */
     public HzBomLineRecord findBomLineByPuid(Map map){
+        if(null == map.get("tableName") || map.get("tableName").equals("")){
+            map.put("tableName","HZ_BOM_LINE_RECORD");
+        }
         return (HzBomLineRecord)super.findForObject("HzBomLineRecordDaoImpl_findBomLineByPuid",map);
+    }
+
+    /**
+     * 查询设变时BOM 历史记录
+     * @author haozt
+     * @param map 过滤器
+     * @return
+     */
+    public List<HzBomLineRecord> findBomListForChange(Map map){
+        return super.findForList("HzBomLineRecordDaoImpl_findBomListForChange",map);
     }
 
     /**

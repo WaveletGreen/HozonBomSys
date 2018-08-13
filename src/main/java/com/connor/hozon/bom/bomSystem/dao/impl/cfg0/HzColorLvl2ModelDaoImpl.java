@@ -77,5 +77,16 @@ public class HzColorLvl2ModelDaoImpl implements HzColorLvl2ModelDao {
         return baseSQLUtil.executeUpdate(record, "com.connor.hozon.bom.bomSystem.dao.cfg.HzColorLvl2ModelDao.updateByPrimaryKey");
     }
 
+    /**
+     * 根据模型和功能层查找是否已存在二级配色方案
+     *
+     * @param model
+     * @return
+     */
+    @Override
+    public HzColorLvl2Model selectByModelAndFunctionLvl(HzColorLvl2Model model) {
+        return baseSQLUtil.executeQueryById(model,"com.connor.hozon.bom.bomSystem.dao.cfg.HzColorLvl2ModelDao.selectByModelAndFunctionLvl");
+    }
+
 
 }

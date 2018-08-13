@@ -195,7 +195,7 @@
       <if test="pBomOfWhichDept != null and  pBomOfWhichDept!='' " >
           and P_BOM_OF_WHICH_DEPT like CONCAT(CONCAT('%',#{pBomOfWhichDept,jdbcType=VARCHAR}),'%')
       </if>
-          and P_EBOM_STATUS=1 order by P_BOM_ORDER_NUM)u
+          and P_EBOM_STATUS <![CDATA[ <> ]]>0  order by P_BOM_ORDER_NUM)u
       </where>
          WHERE ROWNUM &lt;=#{limit,jdbcType=INTEGER}) where rn &gt;#{offset,jdbcType=INTEGER}
   </select>
@@ -251,7 +251,7 @@
         <where>
           t2.puid=#{projectId,jdbcType=VARCHAR}))
           and t1.puid = #{puid,jdbcType=VARCHAR}
-          and t1.P_EBOM_STATUS=1
+          and t1.P_EBOM_STATUS <![CDATA[ <> ]]>0
         </where>
     </select>
 
@@ -278,7 +278,7 @@
             t2.puid=#{projectId,jdbcType=VARCHAR}))
             and
             t1.P_BOM_LINE_ID = #{lineID,jdbcType=VARCHAR}
-            and t1.P_EBOM_STATUS=1
+            and t1.P_EBOM_STATUS <![CDATA[ <> ]]>0
         </where>
     </select>
 
@@ -330,7 +330,7 @@
             <if test="lineID != null and lineID!=''">
                 and t1.P_BOM_LINE_ID = #{lineID,jdbcType=VARCHAR}
             </if>
-            and t1.P_EBOM_STATUS=1
+            and t1.P_EBOM_STATUS <![CDATA[ <> ]]>0
         </where>
     </select>
 

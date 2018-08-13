@@ -29,10 +29,7 @@ public class HzPbomController extends BaseController {
 
     @Autowired
     private HzPbomService hzPbomService;
-    @Autowired
-    HzBomDataDao hzBomDataDao;
-    @Autowired
-    HzCfg0ColorSetDao hzCfg0ColorSetDao;
+
     @RequestMapping(value = "manage/title", method = RequestMethod.GET)
     public void getPbomLineTitle(HttpServletResponse response) {
         LinkedHashMap<String, String> tableTitle = new LinkedHashMap<>();
@@ -108,6 +105,7 @@ public class HzPbomController extends BaseController {
             _res.put("outerPart", dto.getOuterPart());
             _res.put("colorPart", dto.getColorPart());
             _res.put("station",dto.getStation());
+            _res.put("status",dto.getStatus());
             _list.add(_res);
         });
         ret.put("totalCount", respDTOPage.getTotalCount());
@@ -147,12 +145,10 @@ public class HzPbomController extends BaseController {
     @RequestMapping(value = "updatePbomManage", method = RequestMethod.GET)
     public String updatePbomManageRecordToPage(String projectId,String eBomPuid,Model model) {
         HzPbomLineRespDTO respDTO = hzPbomService.getHzPbomByPuid(projectId,eBomPuid);
-        List<HzCfg0ColorSet> colorSet = hzCfg0ColorSetDao.queryAll2();
         if(respDTO == null){
             return "";
         }
         model.addAttribute("data",respDTO);
-        model.addAttribute("color",colorSet);
         return "bomManage/pbom/pbomManage/updatePbomManage";
     }
 

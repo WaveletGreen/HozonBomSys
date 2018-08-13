@@ -3,6 +3,8 @@ package sql.pojo.bom;
 import java.util.Date;
 
 public class HzBomLineRecord {
+
+    private Long id;
     /**
      * puid
      */
@@ -67,8 +69,11 @@ public class HzBomLineRecord {
      * Bom行对应的零件类别
      */
     private String pBomLinePartClass;
-
+    /**
+     * 状态
+     */
     private Integer status;
+
     private String pBomLinePartEnName;
 
     private String pBomLinePartResource;
@@ -101,62 +106,153 @@ public class HzBomLineRecord {
     private String pPictureSheet;
 
     private String pMaterialHigh;
-
+    /**
+     * 材料1
+     */
     private String pMaterial1;
-
+    /**
+     * 材料2
+     */
     private String pMaterial2;
-
+    /**
+     * 材料3
+     */
     private String pMaterial3;
-
+    /**
+     * 密度
+     */
     private String pDensity;
-
+    /**
+     * 材料标准
+     */
     private String pMaterialStandard;
-
+    /**
+     * 表面处理
+     */
     private String pSurfaceTreat;
-
+    /**
+     * 纹理编号
+     */
     private String pTextureColorNum;
 
     private String pManuProcess;
-
+    /**
+     *
+     */
     private String pSymmetry;
-
+    /**
+     * 重要度
+     */
     private String pImportance;
-
+    /**
+     * 法规件标识
+     */
     private Integer pRegulationFlag;
-
+    /**
+     * 黑白匣子类型
+     */
     private String pBwgBoxPart;
-
+    /**
+     * 开发类型
+     */
     private String pDevelopType;
-
+    /**
+     * 数据版本
+     */
     private String pDataVersion;
-
+    /**
+     * 实际重量
+     */
     private String pTargetWeight;
-
+    /**
+     * 预估重量
+     */
     private String pFeatureWeight;
-
+    /**
+     * 实际重量
+     */
     private String pActualWeight;
-
+    /**
+     * 紧固件标准
+     */
     private String pFastenerStandard;
-
+    /**
+     * 紧固件等级
+     */
     private String pFastenerLevel;
-
+    /**
+     * 转矩
+     */
     private String pTorque;
-
+    /**
+     * 责任工程师
+     */
     private String pDutyEngineer;
-
+    /**
+     * 供应商
+     */
     private String pSupply;
-
+    /**
+     * 供应商代码
+     */
     private String pSupplyCode;
-
+    /**
+     * 备注
+     */
     private String pRemark;
-
+    /**
+     * 法规件代码
+     */
     private String pRegulationCode;
-
+    /**
+     * 项目UID
+     */
     private String pProjectPuid;
-
+    /**
+     * 数量
+     */
     private Integer number;
-
+    /**
+     * 采购工程师
+     */
     private String pBuyEngineer;
+    /**
+     * 针对二级配色方案对应的颜色值的UID
+     */
+    private String colorUid;
+    /**
+     * 数据库表名
+     */
+    private String tableName;
+
+    /**
+     * ewo编号
+     */
+    private String ewoNo;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getEwoNo() {
+        return ewoNo;
+    }
+
+    public void setEwoNo(String ewoNo) {
+        this.ewoNo = ewoNo;
+    }
+
+    public String getTableName() {
+        return tableName;
+    }
+
+    public void setTableName(String tableName) {
+        this.tableName = tableName;
+    }
 
     public String getpBuyEngineer() {
         return pBuyEngineer;
@@ -656,5 +752,13 @@ public class HzBomLineRecord {
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public String getColorUid() {
+        return colorUid;
+    }
+
+    public void setColorUid(String colorUid) {
+        this.colorUid = colorUid;
     }
 }

@@ -48,13 +48,21 @@ public interface HzBomDataDao {
 
     /**
      * Author: Fancyears·Maylos·Mayways
-     * Description: 根据部门和2Y层获取到2Y层的下级总成
+     * Description: 根据部门和2Y层获取到2Y层的下级总成，不包含modelUid
      * Date: 2018/5/23 9:59
      *
      * @param params 包含部门名称和项目UID
      * @return
      */
     List<HzBomLineRecord> selectVehicleAssembly(Map<String, Object> params);
+
+    /**
+     * 查找已经存储好的2级配色方案
+     *
+     * @param params 包含modelUid
+     * @return
+     */
+    List<HzBomLineRecord> selectVehicleAssembly2(Map<String, Object> params);
 
 
 }

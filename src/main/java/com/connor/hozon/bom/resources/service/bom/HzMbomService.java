@@ -26,7 +26,7 @@ public interface HzMbomService {
      * @param query
      * @return
      */
-    Page<HzMbomRecordRespDTO> fingHzMbomForPage(HzMbomByPageQuery query);
+    Page<HzMbomRecordRespDTO> findHzMbomForPage(HzMbomByPageQuery query);
 
     /**
      * 获取一条MBOM
