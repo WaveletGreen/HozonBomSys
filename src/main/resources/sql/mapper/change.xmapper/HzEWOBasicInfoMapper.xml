@@ -52,7 +52,7 @@
        and EWO_NO = #{ewoNo,jdbcType=VARCHAR}
       </if>
       <if test="projectId != null and projectId !='' ">
-        and PROJECT_ID = #{ewoNo,jdbcType=VARCHAR}
+        and PROJECT_ID = #{projectId,jdbcType=VARCHAR}
       </if>
     </where>
   </select>
