@@ -63,8 +63,8 @@ function loadData() {
                         window.Ewin.alert({message: '请选择一条需要修改的数据!'});
                         return false;
                     }
-                    if (1 == rows.cfgIsInProcess || "1" == rows.cfgIsInProcess) {
-                        window.Ewin.alert({message: rows.pCfg0ObjectId + '已在VWO流程中，不允许修改'});
+                    if (1 == rows[0].cfgIsInProcess || "1" == rows[0].cfgIsInProcess) {
+                        window.Ewin.alert({message: rows[0].pCfg0ObjectId + '已在VWO流程中，不允许修改'});
                         return false;
                     }
                     window.Ewin.dialog({
@@ -159,6 +159,10 @@ function loadData() {
                     }
                     let msg = "<div style='max-height: 350px;overflow: -moz-scrollbars-vertical'>";
                     for (let i in rows) {
+                        if (1 == rows[i].cfgIsInProcess || "1" == rows[i].cfgIsInProcess) {
+                            window.Ewin.alert({message: rows[i].pCfg0ObjectId + "已在VWO流程中，不允许重复发起VWO流程"});
+                            return false;
+                        }
                         msg += "<p>" + rows[i].pCfg0ObjectId + "-" + rows[i].pCfg0Desc + "</p>";
                     }
                     msg += "</div>";
@@ -275,7 +279,7 @@ function loadData() {
                     }
                     if (value == 0 || "0" == value) {
                         if (1 == row.cfgIsInProcess || "1" == row.cfgIsInProcess) {
-                            return "<span style='color: #a97f89'>草稿状态(已在VWO变更流程中)</span>";
+                            return "<span style='color: #e69800'>VWO审核中</span>";
                         }
                         else {
                             return "<span style='color: #a97f89'>草稿状态</span>";
