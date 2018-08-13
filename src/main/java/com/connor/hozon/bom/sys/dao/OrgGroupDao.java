@@ -4,10 +4,12 @@ package com.connor.hozon.bom.sys.dao;
 import com.connor.hozon.bom.common.base.dao.GenericDao;
 import com.connor.hozon.bom.sys.entity.OrgGroup;
 import com.connor.hozon.bom.sys.entity.QueryOrgGroup;
+import org.springframework.stereotype.Service;
 
 /**
  * @author linzf
  **/
+@Service("OrgGroupDao")
 public interface OrgGroupDao extends GenericDao<OrgGroup, QueryOrgGroup> {
 
 	/**
@@ -25,4 +27,7 @@ public interface OrgGroupDao extends GenericDao<OrgGroup, QueryOrgGroup> {
 	 * @return
 	 */
 	OrgGroup findByNode(String node);
+
+	OrgGroup queryOrgGroupById(Long groupId);
+
 }

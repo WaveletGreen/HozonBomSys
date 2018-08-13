@@ -214,7 +214,7 @@
 
 
     <update id="HzBomLineRecordDaoImpl_update" parameterType="sql.pojo.bom.HzBomLineRecord">
-        update HZ_BOM_LINE_RECORD
+        update ${tableName}
         <set>
             <if test="parentUid != null">
                 P_PARENT_UID = #{parentUid,jdbcType=VARCHAR},
@@ -266,7 +266,12 @@
             <if test="bomLineBlock != null">
                 P_BOM_LINE_BLOCK = #{bomLineBlock,jdbcType=VARCHAR},
             </if>
-            P_EBOM_STATUS =2,
+            <if test="status != null">
+                P_EBOM_STATUS = #{status,jdbcType=VARCHAR},
+            </if>
+            <if test="status == null">
+                P_EBOM_STATUS = 2,
+            </if>
             <if test="pFnaInfo != null">
                 P_FNA_INFO = #{pFnaInfo,jdbcType=VARCHAR},
             </if>
@@ -394,8 +399,8 @@
         </set>
         <where>
             PUID = #{puid,jdbcType=VARCHAR}
-            <if test="id != null">
-                and ID = #{id,jdbcType=DOUBLE}
+            <if test='ewoNo == "1" '>
+                and (P_EWO_NO is null or P_EWO_NO ='1')
             </if>
         </where>
     </update>
