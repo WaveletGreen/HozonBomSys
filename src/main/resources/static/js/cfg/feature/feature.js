@@ -19,7 +19,7 @@ $(document).ready(
  * 加载数据，异步操作，方便调用
  */
 function loadData() {
-    var projectPuid = $("#project", window.top.document).val();
+    let projectPuid = getProjectUid();
     var $table = $("#dataTable");
     if ($table == null)
         return;
@@ -61,6 +61,10 @@ function loadData() {
                     //只能选一条
                     if (rows.length != 1) {
                         window.Ewin.alert({message: '请选择一条需要修改的数据!'});
+                        return false;
+                    }
+                    if (1 == rows.cfgIsInProcess || "1" == rows.cfgIsInProcess) {
+                        window.Ewin.alert({message: rows.pCfg0ObjectId + '已在VWO流程中，不允许修改'});
                         return false;
                     }
                     window.Ewin.dialog({
@@ -153,10 +157,11 @@ function loadData() {
                         window.Ewin.alert({message: '请至少选择一条需要发送的数据!'});
                         return false;
                     }
-                    let msg = "";
+                    let msg = "<div style='max-height: 350px;overflow: -moz-scrollbars-vertical'>";
                     for (let i in rows) {
-                        msg += "<p>" + rows[i].pCfg0ObjectId + "</p>";
+                        msg += "<p>" + rows[i].pCfg0ObjectId + "-" + rows[i].pCfg0Desc + "</p>";
                     }
+                    msg += "</div>";
                     window.Ewin.confirm({title: '请确认发起VWO流程的特性值', message: msg, width: 500}).on(function (e) {
                         if (e) {
                             $.ajax({
@@ -167,14 +172,14 @@ function loadData() {
                                 contentType: "application/json",
                                 success: function (result) {
                                     // if (result.status) {
-                                    if (result) {
-                                        layer.msg("发起VWO流程成功", {icon: 1, time: 2000});
+                                    if (result.status) {
+                                        layer.msg(result.msg, {icon: 1, time: 2000});
                                     }
                                     // window.Ewin.alert({message: result, width: 800});
                                     //刷新，会重新申请数据库数据
                                     // }
                                     else {
-                                        window.Ewin.alert({message: "操作失败，请稍后重试"});
+                                        window.Ewin.alert({message: result.msg});
                                     }
                                     $table.bootstrapTable("refresh");
                                 },
@@ -270,7 +275,7 @@ function loadData() {
                     }
                     if (value == 0 || "0" == value) {
                         if (1 == row.cfgIsInProcess || "1" == row.cfgIsInProcess) {
-                            return "<span style='color: #a97f89'>草稿状态(已在VWO变更中)</span>";
+                            return "<span style='color: #a97f89'>草稿状态(已在VWO变更流程中)</span>";
                         }
                         else {
                             return "<span style='color: #a97f89'>草稿状态</span>";

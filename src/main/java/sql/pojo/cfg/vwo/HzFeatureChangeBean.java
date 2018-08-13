@@ -101,9 +101,16 @@ public class HzFeatureChangeBean {
      */
     private String processFinisher;
     /**
+     * 流程状态
+     */
+    private Integer processStatus;
+
+    /**
      * 表名，bean中特有，用于识别变更前还是变更后的表
      */
     private String tableName;
+
+
     /**
      * 变更创建时间
      */
@@ -111,6 +118,8 @@ public class HzFeatureChangeBean {
     /**
      * vwo变更号ID
      */
+
+
     private Long vwoId;
     /**
      * 序列名称
@@ -339,5 +348,13 @@ public class HzFeatureChangeBean {
 
     public void setSeqName(String seqName) {
         this.seqName = seqName;
+    }
+
+    public Integer getProcessStatus() {
+        return processStatus;
+    }
+
+    public void setProcessStatus(Integer processStatus) {
+        this.processStatus = processStatus;
     }
 }

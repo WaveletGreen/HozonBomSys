@@ -62,7 +62,6 @@ public class HzFeatureChangeDaoImpl implements HzFeatureChangeDao {
         return baseSQLUtil.executeQueryById(bean, "com.connor.hozon.bom.bomSystem.dao.cfg.vwo.HzFeatureChangeDao.findNewestChange");
     }
 
-
     /**
      * 主键更新
      *

@@ -23,7 +23,7 @@ public interface IHzVwoInfoService {
      * @param record
      * @return
      */
-    int doInsert(HzVwoInfo record);
+    Long doInsert(HzVwoInfo record);
 
     /**
      * 主键搜索

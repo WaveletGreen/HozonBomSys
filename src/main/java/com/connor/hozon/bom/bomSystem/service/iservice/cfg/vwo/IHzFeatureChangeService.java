@@ -24,7 +24,7 @@ public interface IHzFeatureChangeService {
      * @param record
      * @return
      */
-    int doInsert(HzFeatureChangeBean record);
+    Long doInsert(HzFeatureChangeBean record);
 
     /**
      * 主键查找
@@ -36,6 +36,24 @@ public interface IHzFeatureChangeService {
     HzFeatureChangeBean doSelectByPrimaryKey(HzFeatureChangeBean bean);
 
     /**
+     * 主键查找
+     *
+     * @param bean
+     * @return
+     */
+
+    HzFeatureChangeBean doSelectAfterByPk(HzFeatureChangeBean bean);
+
+    /**
+     * 主键查找
+     *
+     * @param bean
+     * @return
+     */
+
+    HzFeatureChangeBean doSelectBeforeByPk(HzFeatureChangeBean bean);
+
+    /**
      * 查找特性下最新的更改
      *
      * @param bean
@@ -43,6 +61,24 @@ public interface IHzFeatureChangeService {
      */
 
     HzFeatureChangeBean doFindNewestChange(HzFeatureChangeBean bean);
+
+    /**
+     * 查找特性下最新的更改
+     *
+     * @param bean
+     * @return
+     */
+
+    HzFeatureChangeBean doFindNewestChangeFromAfter(HzFeatureChangeBean bean);
+
+    /**
+     * 查找特性下最新的更改
+     *
+     * @param bean
+     * @return
+     */
+
+    HzFeatureChangeBean doFindNewestChangeFromBefore(HzFeatureChangeBean bean);
 
     /**
      * 主键更新
@@ -74,5 +110,22 @@ public interface IHzFeatureChangeService {
      * @param record
      * @return
      */
-    int insertByCfg(HzCfg0Record record, String tableName, String seqName);
+    Long insertByCfgAfter(HzCfg0Record record);
+
+    /**
+     * 根据配置进行插入
+     *
+     * @param record
+     * @return
+     */
+    Long insertByCfgBefore(HzCfg0Record record);
+
+    /**
+     * 配置对应的变更，做字段按对应
+     *
+     * @param record
+     * @param bean
+     * @return
+     */
+    HzFeatureChangeBean reflect(HzCfg0Record record, HzFeatureChangeBean bean);
 }

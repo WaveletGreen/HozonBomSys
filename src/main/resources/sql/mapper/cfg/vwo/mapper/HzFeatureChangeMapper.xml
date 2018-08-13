@@ -27,6 +27,7 @@
         <result column="PROCESS_STARTER" jdbcType="VARCHAR" property="processStarter"/>
         <result column="PROCESS_FINISH_DATE" jdbcType="TIMESTAMP" property="processFinishDate"/>
         <result column="PROCESS_FINISHER" jdbcType="VARCHAR" property="processFinisher"/>
+        <result column="PROCESS_STATUS" jdbcType="INTEGER" property="processStatus"/>
         <!--变更创建时间-->
         <result column="CHANGE_CREATE_DATE" jdbcType="TIMESTAMP" property="changeCreateDate"/>
         <result column="VWO_ID" jdbcType="DECIMAL" property="vwoId"/>
@@ -56,6 +57,7 @@
         PROCESS_STARTER,
         PROCESS_FINISH_DATE,
         PROCESS_FINISHER,
+        PROCESS_STATUS,
         CHANGE_CREATE_DATE,
         VWO_ID
   </sql>
@@ -84,6 +86,7 @@
         #{processStarter,jdbcType=VARCHAR},
         #{processFinishDate,jdbcType=TIMESTAMP},
         #{processFinisher,jdbcType=VARCHAR},
+        #{processStatus,jdbcType=INTEGER},
         #{changeCreateDate,jdbcType=TIMESTAMP},
         #{vwoId,jdbcType=DECIMAL}
 
@@ -122,26 +125,83 @@
         )
     </insert>
     <update id="updateByPrimaryKey" parameterType="sql.pojo.cfg.vwo.HzFeatureChangeBean">
-    update ${tableName}
-    set FEATURE_VALUE_NAME = #{featureValueName,jdbcType=VARCHAR},
-      FEATURE_VALUE_DESC = #{featureValueDesc,jdbcType=VARCHAR},
-      FEATURE_NAME = #{featureName,jdbcType=VARCHAR},
-      FEATURE_PUID = #{featurePuid,jdbcType=VARCHAR},
-      CFG0_MAIN_ITEM_PUID = #{cfg0MainItemPuid,jdbcType=VARCHAR},
-      H9FEATUREENNAME = #{h9featureenname,jdbcType=VARCHAR},
-      FEATURE_DESC = #{featureDesc,jdbcType=VARCHAR},
-      CFG0_RELEVANCE = #{cfg0Relevance,jdbcType=VARCHAR},
-      FEATURE_CREATOR = #{featureCreator,jdbcType=VARCHAR},
-      FEATURE_CREATE_DATE = #{featureCreateDate,jdbcType=TIMESTAMP},
-      FEATURE_LAST_MODIFIER = #{featureLastModifier,jdbcType=VARCHAR},
-      FEATURE_LAST_MODIFY_DATE = #{featureLastModifyDate,jdbcType=TIMESTAMP},
-      IS_FEATURE_SENT = #{isFeatureSent,jdbcType=DECIMAL},
-      IS_RELEVANCE_SENT = #{isRelevanceSent,jdbcType=DECIMAL},
-      CFG_EFFECTED_DATE = #{cfgEffectedDate,jdbcType=TIMESTAMP},
-      CFG_ABOLISH_DATE = #{cfgAbolishDate,jdbcType=TIMESTAMP},
-      CFG_STATUS = #{cfgStatus,jdbcType=DECIMAL},
-      CFG_IS_IN_PROCESS = #{cfgIsInProcess,jdbcType=DECIMAL},
-      VWO_ID=#{vwoId,jdbcType=DECIMAL}
-    where ID = #{id,jdbcType=DECIMAL}
-  </update>
+        update ${tableName}
+        <set>
+            <if test="featureValueName!=null">
+                FEATURE_VALUE_NAME = #{featureValueName,jdbcType=VARCHAR},
+            </if>
+            <if test="featureValueDesc!=null">
+                FEATURE_VALUE_DESC = #{featureValueDesc,jdbcType=VARCHAR},
+            </if>
+            <if test="featureName!=null">
+                FEATURE_NAME = #{featureName,jdbcType=VARCHAR},
+            </if>
+            <if test="featurePuid!=null">
+                FEATURE_PUID = #{featurePuid,jdbcType=VARCHAR},
+            </if>
+            <if test="cfg0MainItemPuid!=null">
+                CFG0_MAIN_ITEM_PUID = #{cfg0MainItemPuid,jdbcType=VARCHAR},
+            </if>
+            <if test="h9featureenname!=null">
+                H9FEATUREENNAME = #{h9featureenname,jdbcType=VARCHAR},
+            </if>
+            <if test="featureDesc!=null">
+                FEATURE_DESC = #{featureDesc,jdbcType=VARCHAR},
+            </if>
+            <if test="cfg0Relevance!=null">
+                CFG0_RELEVANCE = #{cfg0Relevance,jdbcType=VARCHAR},
+            </if>
+            <if test="featureCreator!=null">
+                FEATURE_CREATOR = #{featureCreator,jdbcType=VARCHAR},
+            </if>
+            <if test="featureCreateDate!=null">
+                FEATURE_CREATE_DATE = #{featureCreateDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="featureLastModifier!=null">
+                FEATURE_LAST_MODIFIER = #{featureLastModifier,jdbcType=VARCHAR},
+            </if>
+            <if test="featureLastModifyDate!=null">
+                FEATURE_LAST_MODIFY_DATE = #{featureLastModifyDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="isFeatureSent!=null">
+                IS_FEATURE_SENT = #{isFeatureSent,jdbcType=DECIMAL},
+            </if>
+            <if test="isRelevanceSent!=null">
+                IS_RELEVANCE_SENT = #{isRelevanceSent,jdbcType=DECIMAL},
+            </if>
+            <if test="cfgEffectedDate!=null">
+                CFG_EFFECTED_DATE = #{cfgEffectedDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="cfgAbolishDate!=null">
+                CFG_ABOLISH_DATE = #{cfgAbolishDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="cfgStatus!=null">
+                CFG_STATUS = #{cfgStatus,jdbcType=DECIMAL},
+            </if>
+            <if test="cfgIsInProcess!=null">
+                CFG_IS_IN_PROCESS = #{cfgIsInProcess,jdbcType=DECIMAL},
+            </if>
+            <if test="processStartDate!=null">
+                PROCESS_START_DATE = #{processStartDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="processStarter!=null">
+                PROCESS_STARTER = #{processStarter,jdbcType=VARCHAR},
+            </if>
+            <if test="processFinishDate!=null">
+                PROCESS_FINISH_DATE = #{processFinishDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="processFinisher!=null">
+                PROCESS_FINISHER = #{processFinisher,jdbcType=VARCHAR},
+            </if>
+            <if test="processStatus!=null">
+                PROCESS_STATUS = #{processStatus,jdbcType=INTEGER},
+            </if>
+            <if test="vwoId!=null">
+                VWO_ID=#{vwoId,jdbcType=DECIMAL}
+            </if>
+        </set>
+        <where>
+            ID = #{id,jdbcType=DECIMAL}
+        </where>
+    </update>
 </mapper>

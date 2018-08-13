@@ -35,9 +35,9 @@ public class HzVwoInfoService implements IHzVwoInfoService {
      * @return
      */
     @Override
-    public int doInsert(HzVwoInfo record) {
+    public Long doInsert(HzVwoInfo record) {
         hzVwoInfoDao.insert(record);
-        return Math.toIntExact(record.getId());
+        return record.getId();
     }
 
     /**

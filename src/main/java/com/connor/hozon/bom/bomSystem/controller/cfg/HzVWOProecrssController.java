@@ -6,6 +6,8 @@ import com.connor.hozon.bom.bomSystem.service.iservice.cfg.vwo.IHzFeatureChangeS
 import com.connor.hozon.bom.bomSystem.service.iservice.cfg.vwo.IHzVwoInfoService;
 import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.sys.entity.User;
+import net.sf.json.JSON;
+import net.sf.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,19 +46,21 @@ public class HzVWOProecrssController {
 
     @RequestMapping("/featureGetIntoVWO")
     @ResponseBody
-    public boolean featureGetIntoVWO(@RequestBody List<HzCfg0Record> beans) {
+    public JSONObject featureGetIntoVWO(@RequestBody List<HzCfg0Record> beans) {
         User user = UserInfo.getUser();
         Date now = new Date();
-
+        JSONObject result = new JSONObject();
         if (beans != null && beans.size() > 0) {
             List<String> puids = new ArrayList<>();
             beans.forEach(bean -> puids.add(bean.getPuid()));
             List<HzCfg0Record> lists = hzCfg0Service.doLoadListByPuids(puids);
             List<HzCfg0Record> localParams = lists.stream().filter(l -> l != null).collect(Collectors.toList());
-            int id = -1;
+            Long id = -1L;
             if (beans.size() != localParams.size()) {
                 logger.error("搜索出的特性值总数与发起VWO流程的特性值的总数不一致，请检查数据核对数据是否被删除");
-                return false;
+                result.put("status", false);
+                result.put("msg", "搜索出的特性值总数与发起VWO流程的特性值的总数不一致，请检查数据核对数据是否被删除");
+                return result;
             } else {
                 //hzCfg0Service.doSetToProcess(localParams);
                 System.out.println("总数一致");
@@ -68,63 +72,79 @@ public class HzVWOProecrssController {
                     hzVwoInfo.setVwoNum(DateStringHelper.dateToString4(now) + "0001");
                 } else {
                     hzVwoInfo.setVwoNum(String.valueOf(Long.parseLong(hzVwoInfo.getVwoNum()) + 1));
-                    hzVwoInfo.setVwoCreator(user.getUserName());
-                    hzVwoInfo.setVwoCreateDate(now);
                 }
+                hzVwoInfo.setVwoCreator(user.getUserName());
+                hzVwoInfo.setVwoCreateDate(now);
                 if ((id = iHzVwoInfoService.doInsert(hzVwoInfo)) <= 0) {
                     logger.error("创建新的VWO号失败，请联系系统管理员");
-                    return false;
+                    result.put("status", false);
+                    result.put("msg", "创建新的VWO号失败，请联系系统管理员");
                 }
 
-                hzVwoInfo.setId(Long.valueOf(id));
+                hzVwoInfo.setId(id);
                 HzFeatureChangeBean after = new HzFeatureChangeBean();
                 HzFeatureChangeBean before = new HzFeatureChangeBean();
                 HzCfg0Record record = new HzCfg0Record();
-                int afterId = -1, beforeId = -1;
+                Long afterId = -1L, beforeId = -1L;
                 for (int i = 0; i < localParams.size(); i++) {
+
+                    if (1 == localParams.get(i).getCfgIsInProcess()) {
+                        result.put("status", false);
+                        result.put("msg", localParams.get(i).getpCfg0ObjectId() + "已在VWO变更流程中，不允许重复发起流程");
+                        return result;
+                    }
 
                     after.setCfgPuid(localParams.get(i).getPuid());
                     before.setCfgPuid(localParams.get(i).getPuid());
-                    after.setTableName("HZ_CFG0_AFTER_CHANGE_RECORD");
-                    before.setTableName("HZ_CFG0_BEFORE_CHANGE_RECORD");
+//                    after.setTableName("HZ_CFG0_AFTER_CHANGE_RECORD");
+//                    before.setTableName("HZ_CFG0_BEFORE_CHANGE_RECORD");
 
-
-                    after = iHzFeatureChangeService.doFindNewestChange(after);
-                    before = iHzFeatureChangeService.doFindNewestChange(before);
+                    after = iHzFeatureChangeService.doFindNewestChangeFromAfter(after);
+                    before = iHzFeatureChangeService.doFindNewestChangeFromBefore(before);
 
 
                     if (after == null) {
                         after = new HzFeatureChangeBean();
-                        if ((afterId = iHzFeatureChangeService.insertByCfg(localParams.get(i), "HZ_CFG0_AFTER_CHANGE_RECORD", "SEQ_HZ_FEATURE_AFTER_CHANGE")) <= 0) {
+
+                        if ((afterId = iHzFeatureChangeService.insertByCfgAfter(localParams.get(i))) <= 0) {
                             logger.error("创建后自动同步变更后记录值失败，请联系管理员");
-                            return false;
+                            result.put("status", false);
+                            result.put("msg", localParams.get(i).getpCfg0ObjectId() + "创建后自动同步变更后记录值失败，请联系管理员");
+                            return result;
                         }
-                        after.setTableName("HZ_CFG0_AFTER_CHANGE_RECORD");
-                        after.setId(Long.valueOf(afterId));
-                        after = iHzFeatureChangeService.doSelectByPrimaryKey(after);
+//                        after.setTableName("HZ_CFG0_AFTER_CHANGE_RECORD");
+                        /*这一段估计有bug*/
+                        after.setId(afterId);
+                        after = iHzFeatureChangeService.doSelectAfterByPk(after);
                     }
 
                     if (before == null) {
                         before = new HzFeatureChangeBean();
                         HzCfg0Record localRecord = new HzCfg0Record();
                         localRecord.setPuid(localParams.get(i).getPuid());
-                        if ((beforeId = iHzFeatureChangeService.insertByCfg(localRecord, "HZ_CFG0_BEFORE_CHANGE_RECORD", "SEQ_HZ_FEATURE_BEFORE_CHANGE")) <= 0) {
+                        if ((beforeId = iHzFeatureChangeService.insertByCfgBefore(localRecord)) <= 0) {
                             logger.error("创建后自动同步变更前记录值失败，请联系管理员");
-                            return false;
+                            result.put("status", false);
+                            result.put("msg", localParams.get(i).getpCfg0ObjectId() + "创建后自动同步变更前记录值失败，请联系管理员");
+                            return result;
                         }
-                        before.setTableName("HZ_CFG0_BEFORE_CHANGE_RECORD");
-                        before.setId(Long.valueOf(beforeId));
-                        before = iHzFeatureChangeService.doSelectByPrimaryKey(before);
+                        //before.setTableName("HZ_CFG0_BEFORE_CHANGE_RECORD");
+                        /*这一段估计有bug*/
+                        before.setId(beforeId);
+                        before = iHzFeatureChangeService.doSelectBeforeByPk(before);
                     }
 
 //                    after.setTableName("HZ_CFG0_AFTER_CHANGE_RECORD");
 //                    before.setTableName("HZ_CFG0_BEFORE_CHANGE_RECORD");
 
-                    after.setVwoId(hzVwoInfo.getId());
-                    after.setCfgIsInProcess(1);
 
-                    before.setVwoId(hzVwoInfo.getId());
-                    before.setCfgIsInProcess(1);
+                    setVwo(after, hzVwoInfo.getId(), now, user);
+                    setVwo(before, hzVwoInfo.getId(), now, user);
+
+//                    before.setVwoId(hzVwoInfo.getId());
+//                    before.setCfgIsInProcess(1);
+//                    before.setProcessStartDate(now);
+//                    before.setProcessStarter(user.getUserName());
 
                     if (!iHzFeatureChangeService.doUpdateAfterByPk(after)) {
                         logger.error("更新" + localParams.get(i).getpCfg0ObjectId() + "的更新后VWO号失败，请联系系统管理员");
@@ -136,15 +156,27 @@ public class HzVWOProecrssController {
                     record.setPuid(localParams.get(i).getPuid());
                     record.setCfgIsInProcess(1);
                     record.setVwoId(hzVwoInfo.getId());
-
+                    record.setCfgStatus(0);
                     if (!hzCfg0Service.doUpdate(record)) {
                         logger.error("更新" + record.getpCfg0ObjectId() + "VWO号失败，请联系系统管理员");
                     }
                 }
             }
-            return true;
+            result.put("status", true);
+            result.put("msg", "发起VWO流程成功");
+            return result;
         } else {
-            return false;
+            result.put("status", false);
+            result.put("msg", "请至少选择1个特性值发起流程");
+            return result;
         }
+    }
+
+    private void setVwo(HzFeatureChangeBean bean, Long id, Date now, User user) {
+        bean.setVwoId(id);
+        bean.setCfgIsInProcess(1);
+        bean.setProcessStartDate(now);
+        bean.setProcessStarter(user.getUserName());
+        bean.setProcessStatus(1);
     }
 }

@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.*;
 import sql.pojo.cfg.HzCfg0MainRecord;
 import sql.pojo.cfg.HzCfg0OptionFamily;
 import sql.pojo.cfg.HzCfg0Record;
+import sql.pojo.cfg.vwo.HzFeatureChangeBean;
 
 import java.util.*;
 
@@ -162,12 +163,12 @@ public class HzCfg0Controller extends ExtraIntegrate {
 //                iSynFeatureService.addFeature(Collections.singletonList(record));
 //            }
             record = hzCfg0Service.doSelectOneByPuid(record.getPuid());
-            if (iHzFeatureChangeService.insertByCfg(record, "HZ_CFG0_AFTER_CHANGE_RECORD","SEQ_HZ_FEATURE_AFTER_CHANGE")<=0) {
+            if (iHzFeatureChangeService.insertByCfgAfter(record) <= 0) {
                 logger.error("创建后自动同步变更后记录值失败，请联系管理员");
             }
             HzCfg0Record record1 = new HzCfg0Record();
             record1.setPuid(record.getPuid());
-            if (iHzFeatureChangeService.insertByCfg(record1, "HZ_CFG0_BEFORE_CHANGE_RECORD","SEQ_HZ_FEATURE_BEFORE_CHANGE")<=0) {
+            if (iHzFeatureChangeService.insertByCfgBefore(record1) <= 0) {
                 logger.error("创建后自动同步变更前记录值失败，请联系管理员");
             }
 
@@ -220,14 +221,44 @@ public class HzCfg0Controller extends ExtraIntegrate {
         }
         if (hzCfg0Service.doSelectOneByPuid(record.getPuid()) != null) {
             if (hzCfg0Service.doUpdate(record)) {
+                //重新取回一遍数据
+                record = hzCfg0Service.doSelectOneByPuid(record.getPuid());
                 result.put("msg", "更新特性值" + record.getpCfg0ObjectId() + "成功");
+                HzFeatureChangeBean after = new HzFeatureChangeBean();
+                after.setCfgPuid(record.getPuid());
+                after = iHzFeatureChangeService.doSelectAfterByPk(after);
+                if (after == null) {
+                    if (iHzFeatureChangeService.insertByCfgAfter(record) <= 0) {
+                        logger.error("更新" + record.getpCfg0ObjectId() + "变更后记录数据失败，请联系系统管理员");
+                    }
+                    HzFeatureChangeBean before = new HzFeatureChangeBean();
+                    before.setCfgPuid(record.getPuid());
+                    before = iHzFeatureChangeService.doSelectBeforeByPk(before);
+                    if (before == null) {
+                        HzCfg0Record localRecord = new HzCfg0Record();
+                        localRecord.setPuid(record.getPuid());
+                        if (iHzFeatureChangeService.insertByCfgBefore(localRecord) <= 0) {
+                            logger.error("更新" + record.getpCfg0ObjectId() + "变更前记录数据失败，请联系系统管理员");
+                        }
+                    }
+                } else {
+                    //先取回所有需要存储的数据
+                    iHzFeatureChangeService.reflect(record, after);
+                    //再进行更新
+                    if (!iHzFeatureChangeService.doUpdateAfterByPk(after)) {
+                        logger.error("更新" + record.getpCfg0ObjectId() + "变更后记录数据失败，请联系系统管理员");
+                    }
+                }
             } else {
                 result.put("msg", "更新特性值" + record.getpCfg0ObjectId() + "失败");
+                logger.error("更新特性值" + record.getpCfg0ObjectId() + "失败");
+
             }
         } else if (hzCfg0Service.doSelectOneAddedCfgByPuid(record.getPuid()) != null) {
             if (hzCfg0Service.doUpdateAddedCfg(record)) {
                 result.put("msg", "更新特性值" + record.getpCfg0ObjectId() + "成功");
             } else {
+                logger.error("更新特性值" + record.getpCfg0ObjectId() + "失败");
                 result.put("msg", "更新特性值" + record.getpCfg0ObjectId() + "失败");
             }
         } else {

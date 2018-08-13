@@ -91,8 +91,10 @@
     </select>
     <!--根据项目搜索全部-->
     <select id="selectListByProjectPuid" parameterType="java.util.Map" resultMap="BaseResultMap">
+
+        select * from (
         select
-        <include refid="Base_Column_List"/>
+        <include refid="Base_Column_List"/>,ROWNUM as rown
         from
         ( select
         <include refid="Base_Column_List"/>,
@@ -103,14 +105,6 @@
         from Hz_Cfg0_Main_Record t2
         where t2.p_cfg0_of_which_project_puid=#{projectPuid,jdbcType=VARCHAR}
         )
-
-        <if test="param.limit!=null and  param.page!=null">
-            and ROWNUM &lt;= ${param.page}*${param.limit}
-        </if>
-        ) temp
-        <if test="param.offset!=null">
-            where temp.rowno &gt;= ${param.offset}+1
-        </if>
         <if test="param.sort!=null">
             order by ${param.sort}
         </if>
@@ -120,15 +114,15 @@
         <if test="param.order==null">
             ASC
         </if>
-        <!--select
-        <include refid="Base_Column_List"/>
-        from ${whichTable} t where
-        t.p_cfg0_main_item_puid=(
-        select t2.puid
-        from Hz_Cfg0_Main_Record t2
-        where t2.p_cfg0_of_which_project_puid=#{projectPuid,jdbcType=VARCHAR}
-        )
-        order by P_CFG0_OBJECT_ID-->
+        ) temp
+        ) temp2
+        where 1=1
+        <if test="param.offset!=null">
+            and temp2.rown &gt;= ${param.offset}+1
+        </if>
+        <if test="param.limit!=null and  param.page!=null">
+            and temp2.rown &lt;= ${param.page}*${param.limit}
+        </if>
     </select>
     <!--根据主键列表进行搜索-->
     <select id="selectCfg0ListByPuids" parameterType="java.util.Map" resultMap="BaseResultMap">

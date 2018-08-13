@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 import sql.pojo.cfg.HzCfg0Record;
 import sql.pojo.cfg.vwo.HzFeatureChangeBean;
 
+import java.util.Date;
+
 /**
  * @Author: Fancyears·Maylos·Maywas
  * @Description:
@@ -36,9 +38,9 @@ public class HzFeatureChangeService implements IHzFeatureChangeService {
      * @return
      */
     @Override
-    public int doInsert(HzFeatureChangeBean record) {
+    public Long doInsert(HzFeatureChangeBean record) {
         hzFeatureChangeDao.insert(record);
-        return Math.toIntExact(record.getId());
+        return record.getId();
     }
 
     /**
@@ -53,6 +55,31 @@ public class HzFeatureChangeService implements IHzFeatureChangeService {
     }
 
     /**
+     * 主键查找
+     *
+     * @param bean
+     * @return
+     */
+    @Override
+    public HzFeatureChangeBean doSelectAfterByPk(HzFeatureChangeBean bean) {
+        setAfterTable(bean);
+        return doSelectByPrimaryKey(bean);
+    }
+
+    /**
+     * 主键查找
+     *
+     * @param bean
+     * @return
+     */
+    @Override
+    public HzFeatureChangeBean doSelectBeforeByPk(HzFeatureChangeBean bean) {
+        setBeforeTable(bean);
+        return doSelectByPrimaryKey(bean);
+    }
+
+
+    /**
      * 查找特性下最新的更改
      *
      * @param bean
@@ -61,6 +88,30 @@ public class HzFeatureChangeService implements IHzFeatureChangeService {
     @Override
     public HzFeatureChangeBean doFindNewestChange(HzFeatureChangeBean bean) {
         return hzFeatureChangeDao.findNewestChange(bean);
+    }
+
+    /**
+     * 查找特性下最新的更改
+     *
+     * @param bean
+     * @return
+     */
+    @Override
+    public HzFeatureChangeBean doFindNewestChangeFromAfter(HzFeatureChangeBean bean) {
+        setAfterTable(bean);
+        return doFindNewestChange(bean);
+    }
+
+    /**
+     * 查找特性下最新的更改
+     *
+     * @param bean
+     * @return
+     */
+    @Override
+    public HzFeatureChangeBean doFindNewestChangeFromBefore(HzFeatureChangeBean bean) {
+        setBeforeTable(bean);
+        return doFindNewestChange(bean);
     }
 
 
@@ -78,25 +129,77 @@ public class HzFeatureChangeService implements IHzFeatureChangeService {
     /**
      * 更新变更后
      *
-     * @param record
+     * @param bean
      * @return
      */
     @Override
-    public boolean doUpdateAfterByPk(HzFeatureChangeBean record) {
-        record.setTableName("HZ_CFG0_AFTER_CHANGE_RECORD");
-        return doUpdateByPrimaryKey(record);
+    public boolean doUpdateAfterByPk(HzFeatureChangeBean bean) {
+        setAfterTable(bean);
+        return doUpdateByPrimaryKey(bean);
     }
 
     /**
      * 更新变更前
      *
+     * @param bean
+     * @return
+     */
+    @Override
+    public boolean doUpdateBeforeByPk(HzFeatureChangeBean bean) {
+        setBeforeTable(bean);
+        return doUpdateByPrimaryKey(bean);
+    }
+
+    /**
+     * 根据配置进行插入
+     *
      * @param record
      * @return
      */
     @Override
-    public boolean doUpdateBeforeByPk(HzFeatureChangeBean record) {
-        record.setTableName("HZ_CFG0_BEFORE_CHANGE_RECORD");
-        return doUpdateByPrimaryKey(record);
+    public Long insertByCfgAfter(HzCfg0Record record) {
+        HzFeatureChangeBean bean = new HzFeatureChangeBean();
+        setAfterTable(bean);
+        bean.setChangeCreateDate(new Date());
+        return insertByCfg(record, bean);
+    }
+
+    /**
+     * 根据配置进行插入
+     *
+     * @param record
+     * @return
+     */
+    @Override
+    public Long insertByCfgBefore(HzCfg0Record record) {
+        HzFeatureChangeBean bean = new HzFeatureChangeBean();
+        setBeforeTable(bean);
+        bean.setChangeCreateDate(new Date());
+        return insertByCfg(record, bean);
+    }
+
+    /**
+     * 设置记录的表名
+     *
+     * @param bean
+     * @return
+     */
+    private HzFeatureChangeBean setAfterTable(HzFeatureChangeBean bean) {
+        bean.setTableName("HZ_CFG0_AFTER_CHANGE_RECORD");
+        bean.setSeqName("SEQ_HZ_FEATURE_AFTER_CHANGE");
+        return bean;
+    }
+
+    /**
+     * 设置记录的表名
+     *
+     * @param bean
+     * @return
+     */
+    private HzFeatureChangeBean setBeforeTable(HzFeatureChangeBean bean) {
+        bean.setTableName("HZ_CFG0_BEFORE_CHANGE_RECORD");
+        bean.setSeqName("SEQ_HZ_FEATURE_BEFORE_CHANGE");
+        return bean;
     }
 
 
@@ -106,9 +209,24 @@ public class HzFeatureChangeService implements IHzFeatureChangeService {
      * @param record
      * @return
      */
+    public Long insertByCfg(HzCfg0Record record, HzFeatureChangeBean bean) {
+        reflect(record, bean);
+//        /*所属表*/
+//        bean.setTableName(tableName);
+//        /*序列名称*/
+//        bean.setSeqName(seqName);
+        return doInsert(bean);
+    }
+
+    /**
+     * 配置对应的变更，做字段按对应
+     *
+     * @param record
+     * @param bean
+     * @return
+     */
     @Override
-    public int insertByCfg(HzCfg0Record record, String tableName, String seqName) {
-        HzFeatureChangeBean bean = new HzFeatureChangeBean();
+    public HzFeatureChangeBean reflect(HzCfg0Record record, HzFeatureChangeBean bean) {
         /*主配置的puid，用这个可以找到主配置的对象*/
         bean.setCfg0MainItemPuid(record.getpCfg0MainItemPuid());
         /*废止时间*/
@@ -147,11 +265,9 @@ public class HzFeatureChangeService implements IHzFeatureChangeService {
         bean.setIsFeatureSent(record.getIsFeatureSent());
         /*相关性是否已成功发送到SAP*/
         bean.setIsRelevanceSent(record.getIsRelevanceSent());
-        /*所属表*/
-        bean.setTableName(tableName);
-        /*序列名称*/
-        bean.setSeqName(seqName);
-        return doInsert(bean);
+        /*VWO_ID*/
+        bean.setVwoId(record.getVwoId());
+        return bean;
     }
 
 }
