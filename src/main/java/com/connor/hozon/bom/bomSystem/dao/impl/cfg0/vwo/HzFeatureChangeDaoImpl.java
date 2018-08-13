@@ -21,13 +21,11 @@ public class HzFeatureChangeDaoImpl implements HzFeatureChangeDao {
     /**
      * 主键删除
      *
-     * @param id
+     * @param bean
      * @return
      */
     @Override
-    public int deleteByPrimaryKey(Long id) {
-        HzFeatureChangeBean bean = new HzFeatureChangeBean();
-        bean.setId(id);
+    public int deleteByPrimaryKey(HzFeatureChangeBean bean) {
         return baseSQLUtil.executeDelete(bean, "com.connor.hozon.bom.bomSystem.dao.cfg.vwo.HzFeatureChangeDao.deleteByPrimaryKey");
     }
 
@@ -45,13 +43,11 @@ public class HzFeatureChangeDaoImpl implements HzFeatureChangeDao {
     /**
      * 主键查找
      *
-     * @param id
+     * @param bean
      * @return
      */
     @Override
-    public HzFeatureChangeBean selectByPrimaryKey(Long id) {
-        HzFeatureChangeBean bean = new HzFeatureChangeBean();
-        bean.setId(id);
+    public HzFeatureChangeBean selectByPrimaryKey(HzFeatureChangeBean bean) {
         return baseSQLUtil.executeQueryById(bean, "com.connor.hozon.bom.bomSystem.dao.cfg.vwo.HzFeatureChangeDao.selectByPrimaryKey");
     }
 

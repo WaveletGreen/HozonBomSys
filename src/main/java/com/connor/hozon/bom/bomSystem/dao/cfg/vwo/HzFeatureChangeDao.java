@@ -8,10 +8,10 @@ public interface HzFeatureChangeDao {
     /**
      * 主键删除
      *
-     * @param id
+     * @param bean
      * @return
      */
-    int deleteByPrimaryKey(Long id);
+    int deleteByPrimaryKey(HzFeatureChangeBean bean);
 
     /**
      * 插入1条数据
@@ -24,11 +24,11 @@ public interface HzFeatureChangeDao {
     /**
      * 主键查找
      *
-     * @param id
+     * @param bean
      * @return
      */
 
-    HzFeatureChangeBean selectByPrimaryKey(Long id);
+    HzFeatureChangeBean selectByPrimaryKey(HzFeatureChangeBean bean);
 
     /**
      * 查找特性下最新的更改

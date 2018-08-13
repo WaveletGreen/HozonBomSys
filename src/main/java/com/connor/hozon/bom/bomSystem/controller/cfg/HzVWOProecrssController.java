@@ -80,6 +80,7 @@ public class HzVWOProecrssController {
                 HzFeatureChangeBean after = new HzFeatureChangeBean();
                 HzFeatureChangeBean before = new HzFeatureChangeBean();
                 HzCfg0Record record = new HzCfg0Record();
+                int afterId = -1, beforeId = -1;
                 for (int i = 0; i < localParams.size(); i++) {
 
                     after.setCfgPuid(localParams.get(i).getPuid());
@@ -91,18 +92,47 @@ public class HzVWOProecrssController {
                     after = iHzFeatureChangeService.doFindNewestChange(after);
                     before = iHzFeatureChangeService.doFindNewestChange(before);
 
-                    after.setTableName("HZ_CFG0_AFTER_CHANGE_RECORD");
-                    before.setTableName("HZ_CFG0_BEFORE_CHANGE_RECORD");
+
+                    if (after == null) {
+                        after = new HzFeatureChangeBean();
+                        if ((afterId = iHzFeatureChangeService.insertByCfg(localParams.get(i), "HZ_CFG0_AFTER_CHANGE_RECORD", "SEQ_HZ_FEATURE_AFTER_CHANGE")) <= 0) {
+                            logger.error("创建后自动同步变更后记录值失败，请联系管理员");
+                            return false;
+                        }
+                        after.setTableName("HZ_CFG0_AFTER_CHANGE_RECORD");
+                        after.setId(Long.valueOf(afterId));
+                        after = iHzFeatureChangeService.doSelectByPrimaryKey(after);
+                    }
+
+                    if (before == null) {
+                        before = new HzFeatureChangeBean();
+                        HzCfg0Record localRecord = new HzCfg0Record();
+                        localRecord.setPuid(localParams.get(i).getPuid());
+                        if ((beforeId = iHzFeatureChangeService.insertByCfg(localRecord, "HZ_CFG0_BEFORE_CHANGE_RECORD", "SEQ_HZ_FEATURE_BEFORE_CHANGE")) <= 0) {
+                            logger.error("创建后自动同步变更前记录值失败，请联系管理员");
+                            return false;
+                        }
+                        before.setTableName("HZ_CFG0_BEFORE_CHANGE_RECORD");
+                        before.setId(Long.valueOf(beforeId));
+                        before = iHzFeatureChangeService.doSelectByPrimaryKey(before);
+                    }
+
+//                    after.setTableName("HZ_CFG0_AFTER_CHANGE_RECORD");
+//                    before.setTableName("HZ_CFG0_BEFORE_CHANGE_RECORD");
 
                     after.setVwoId(hzVwoInfo.getId());
-                    before.setVwoId(hzVwoInfo.getId());
+                    after.setCfgIsInProcess(1);
 
-                    if (!iHzFeatureChangeService.doUpdateByPrimaryKey(after)) {
+                    before.setVwoId(hzVwoInfo.getId());
+                    before.setCfgIsInProcess(1);
+
+                    if (!iHzFeatureChangeService.doUpdateAfterByPk(after)) {
                         logger.error("更新" + localParams.get(i).getpCfg0ObjectId() + "的更新后VWO号失败，请联系系统管理员");
                     }
-                    if (!iHzFeatureChangeService.doUpdateByPrimaryKey(before)) {
+                    if (!iHzFeatureChangeService.doUpdateBeforeByPk(before)) {
                         logger.error("更新" + localParams.get(i).getpCfg0ObjectId() + "的更新前VWO号失败，请联系系统管理员");
                     }
+
                     record.setPuid(localParams.get(i).getPuid());
                     record.setCfgIsInProcess(1);
                     record.setVwoId(hzVwoInfo.getId());

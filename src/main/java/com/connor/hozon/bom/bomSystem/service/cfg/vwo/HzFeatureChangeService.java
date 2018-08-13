@@ -21,12 +21,12 @@ public class HzFeatureChangeService implements IHzFeatureChangeService {
     /**
      * 主键删除
      *
-     * @param id
+     * @param bean
      * @return
      */
     @Override
-    public boolean doDeleteByPrimaryKey(Long id) {
-        return hzFeatureChangeDao.deleteByPrimaryKey(id) > 0 ? true : false;
+    public boolean doDeleteByPrimaryKey(HzFeatureChangeBean bean) {
+        return hzFeatureChangeDao.deleteByPrimaryKey(bean) > 0 ? true : false;
     }
 
     /**
@@ -36,19 +36,20 @@ public class HzFeatureChangeService implements IHzFeatureChangeService {
      * @return
      */
     @Override
-    public boolean doInsert(HzFeatureChangeBean record) {
-        return hzFeatureChangeDao.insert(record) > 0 ? true : false;
+    public int doInsert(HzFeatureChangeBean record) {
+        hzFeatureChangeDao.insert(record);
+        return Math.toIntExact(record.getId());
     }
 
     /**
      * 主键查找
      *
-     * @param id
+     * @param bean
      * @return
      */
     @Override
-    public HzFeatureChangeBean doSelectByPrimaryKey(Long id) {
-        return hzFeatureChangeDao.selectByPrimaryKey(id);
+    public HzFeatureChangeBean doSelectByPrimaryKey(HzFeatureChangeBean bean) {
+        return hzFeatureChangeDao.selectByPrimaryKey(bean);
     }
 
     /**
@@ -75,13 +76,38 @@ public class HzFeatureChangeService implements IHzFeatureChangeService {
     }
 
     /**
+     * 更新变更后
+     *
+     * @param record
+     * @return
+     */
+    @Override
+    public boolean doUpdateAfterByPk(HzFeatureChangeBean record) {
+        record.setTableName("HZ_CFG0_AFTER_CHANGE_RECORD");
+        return doUpdateByPrimaryKey(record);
+    }
+
+    /**
+     * 更新变更前
+     *
+     * @param record
+     * @return
+     */
+    @Override
+    public boolean doUpdateBeforeByPk(HzFeatureChangeBean record) {
+        record.setTableName("HZ_CFG0_BEFORE_CHANGE_RECORD");
+        return doUpdateByPrimaryKey(record);
+    }
+
+
+    /**
      * 根据配置进行插入
      *
      * @param record
      * @return
      */
     @Override
-    public boolean insertByCfg(HzCfg0Record record, String tableName) {
+    public int insertByCfg(HzCfg0Record record, String tableName, String seqName) {
         HzFeatureChangeBean bean = new HzFeatureChangeBean();
         /*主配置的puid，用这个可以找到主配置的对象*/
         bean.setCfg0MainItemPuid(record.getpCfg0MainItemPuid());
@@ -123,6 +149,8 @@ public class HzFeatureChangeService implements IHzFeatureChangeService {
         bean.setIsRelevanceSent(record.getIsRelevanceSent());
         /*所属表*/
         bean.setTableName(tableName);
+        /*序列名称*/
+        bean.setSeqName(seqName);
         return doInsert(bean);
     }
 

@@ -112,6 +112,10 @@ public class HzFeatureChangeBean {
      * vwo变更号ID
      */
     private Long vwoId;
+    /**
+     * 序列名称
+     */
+    private String seqName;
 
     public Long getId() {
         return id;
@@ -329,4 +333,11 @@ public class HzFeatureChangeBean {
         this.vwoId = vwoId;
     }
 
+    public String getSeqName() {
+        return seqName;
+    }
+
+    public void setSeqName(String seqName) {
+        this.seqName = seqName;
+    }
 }

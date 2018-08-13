@@ -88,10 +88,10 @@
         #{vwoId,jdbcType=DECIMAL}
 
     </sql>
-    <select id="selectByPrimaryKey" parameterType="java.lang.Double" resultMap="BaseResultMap">
+    <select id="selectByPrimaryKey" parameterType="sql.pojo.cfg.vwo.HzFeatureChangeBean" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
-        from HZ_CFG0_BEFORE_CHANGE_RECORD
+        from ${tableName}
         where ID = #{id,jdbcType=DECIMAL}
     </select>
 
@@ -104,11 +104,16 @@
         order by t.change_create_date desc
     </select>
 
-    <delete id="deleteByPrimaryKey" parameterType="java.lang.Double">
+    <delete id="deleteByPrimaryKey" parameterType="sql.pojo.cfg.vwo.HzFeatureChangeBean">
     delete from HZ_CFG0_BEFORE_CHANGE_RECORD
     where ID = #{id,jdbcType=DECIMAL}
   </delete>
     <insert id="insert" parameterType="sql.pojo.cfg.vwo.HzFeatureChangeBean">
+        <selectKey order="BEFORE"
+                   keyColumn="id" keyProperty="id" resultType="java.lang.Long">
+            select ${seqName}.Nextval from dual
+        </selectKey>
+
         insert into ${tableName} (
         <include refid="Base_Column_List"/>
         )
@@ -135,6 +140,7 @@
       CFG_EFFECTED_DATE = #{cfgEffectedDate,jdbcType=TIMESTAMP},
       CFG_ABOLISH_DATE = #{cfgAbolishDate,jdbcType=TIMESTAMP},
       CFG_STATUS = #{cfgStatus,jdbcType=DECIMAL},
+      CFG_IS_IN_PROCESS = #{cfgIsInProcess,jdbcType=DECIMAL},
       VWO_ID=#{vwoId,jdbcType=DECIMAL}
     where ID = #{id,jdbcType=DECIMAL}
   </update>

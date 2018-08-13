@@ -13,10 +13,10 @@ public interface IHzFeatureChangeService {
     /**
      * 主键删除
      *
-     * @param id
+     * @param bean
      * @return
      */
-    boolean doDeleteByPrimaryKey(Long id);
+    boolean doDeleteByPrimaryKey(HzFeatureChangeBean bean);
 
     /**
      * 插入1条数据
@@ -24,16 +24,17 @@ public interface IHzFeatureChangeService {
      * @param record
      * @return
      */
-    boolean doInsert(HzFeatureChangeBean record);
+    int doInsert(HzFeatureChangeBean record);
 
     /**
      * 主键查找
      *
-     * @param id
+     * @param bean
      * @return
      */
 
-    HzFeatureChangeBean doSelectByPrimaryKey(Long id);
+    HzFeatureChangeBean doSelectByPrimaryKey(HzFeatureChangeBean bean);
+
     /**
      * 查找特性下最新的更改
      *
@@ -42,6 +43,7 @@ public interface IHzFeatureChangeService {
      */
 
     HzFeatureChangeBean doFindNewestChange(HzFeatureChangeBean bean);
+
     /**
      * 主键更新
      *
@@ -51,9 +53,26 @@ public interface IHzFeatureChangeService {
     boolean doUpdateByPrimaryKey(HzFeatureChangeBean record);
 
     /**
-     * 根据配置进行插入
+     * 更新变更后
+     *
      * @param record
      * @return
      */
-    boolean insertByCfg(HzCfg0Record record,String tableName);
+    boolean doUpdateAfterByPk(HzFeatureChangeBean record);
+
+    /**
+     * 更新变更前
+     *
+     * @param record
+     * @return
+     */
+    boolean doUpdateBeforeByPk(HzFeatureChangeBean record);
+
+    /**
+     * 根据配置进行插入
+     *
+     * @param record
+     * @return
+     */
+    int insertByCfg(HzCfg0Record record, String tableName, String seqName);
 }
