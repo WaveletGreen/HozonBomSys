@@ -218,6 +218,18 @@ public class HzBomLineRecord {
      * 针对二级配色方案对应的颜色值的UID
      */
     private String colorUid;
+    /**
+     * 数据库表名
+     */
+    private String tableName;
+
+    public String getTableName() {
+        return tableName;
+    }
+
+    public void setTableName(String tableName) {
+        this.tableName = tableName;
+    }
 
     public String getpBuyEngineer() {
         return pBuyEngineer;

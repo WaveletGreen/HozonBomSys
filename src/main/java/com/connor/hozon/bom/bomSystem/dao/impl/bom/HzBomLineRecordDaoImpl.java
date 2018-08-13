@@ -20,6 +20,9 @@ public class HzBomLineRecordDaoImpl extends BaseSQLUtil {
      * @return
      */
     public int insert(HzBomLineRecord record){
+        if(null == record.getTableName() || "".equals(record.getTableName())){
+            record.setTableName("HZ_BOM_LINE_RECORD");
+        }
         return super.insert("HzBomLineRecordDaoImpl_insert",record);
     }
 

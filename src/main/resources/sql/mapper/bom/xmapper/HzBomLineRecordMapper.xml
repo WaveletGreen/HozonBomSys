@@ -183,7 +183,7 @@
 	</delete>
 
     <insert id="HzBomLineRecordDaoImpl_insert" parameterType="sql.pojo.bom.HzBomLineRecord">
-        insert into HZ_BOM_LINE_RECORD
+        insert into ${tableName}
         (
         PUID,P_PARENT_UID,P_BOM_DIGIFAX_ID,P_LINE_INDEX,P_BOM_LINE_IS_HAS,P_BOM_LINE_PUID,P_BOM_LINE_ID,
         P_BOM_LINE_BLOCK,
@@ -213,7 +213,7 @@
         #{orderNum,jdbcType=INTEGER},#{isDept,jdbcType=INTEGER},
         #{pBomOfWhichDept,jdbcType=VARCHAR},#{pBomLinePartName,jdbcType=VARCHAR},#{pBomLinePartClass,jdbcType=VARCHAR},
         #{pBomLinePartEnName,jdbcType=VARCHAR}, 
-          #{pBomLinePartResource,jdbcType=VARCHAR}, #{pFnaInfo,jdbcType=VARCHAR}, 1, 
+          #{pBomLinePartResource,jdbcType=VARCHAR}, #{pFnaInfo,jdbcType=VARCHAR}, 2,
           sysdate,sysdate, #{pFastener,jdbcType=VARCHAR}, #{p3cpartFlag,jdbcType=INTEGER}, #{pInOutSideFlag,jdbcType=INTEGER},
           #{pUpc,jdbcType=VARCHAR}, #{pFnaDesc,jdbcType=VARCHAR}, #{pCreateName,jdbcType=VARCHAR}, 
           #{pUpdateName,jdbcType=VARCHAR}, #{pUnit,jdbcType=VARCHAR}, #{pPictureNo,jdbcType=VARCHAR}, 
@@ -300,7 +300,7 @@
             <if test="bomLineBlock != null">
                 P_BOM_LINE_BLOCK = #{bomLineBlock,jdbcType=VARCHAR},
             </if>
-            P_EBOM_STATUS =1,
+            P_EBOM_STATUS =2,
             <if test="pFnaInfo != null">
                 P_FNA_INFO = #{pFnaInfo,jdbcType=VARCHAR},
             </if>
@@ -438,7 +438,7 @@
         where
         t2.p_cfg0_of_which_project_puid=#{projectId,jdbcType=VARCHAR}
         ) and PUID=#{puid,jdbcType=VARCHAR}
-        and P_EBOM_STATUS <![CDATA[ <> ]]>0
+        and P_EBOM_STATUS<![CDATA[ <> ]]>0
     </select>
 
     <!--查询orderNum的最大值信息-->
@@ -462,7 +462,7 @@
         where
         t2.p_cfg0_of_which_project_puid=#{projectId,jdbcType=VARCHAR}
         ) and LENGTH(TRANSLATE(P_LINE_INDEX,',0123456789','.'))=1
-        and P_EBOM_STATUS=1
+        and P_EBOM_STATUS<![CDATA[ <> ]]>0
     </select>
 
 

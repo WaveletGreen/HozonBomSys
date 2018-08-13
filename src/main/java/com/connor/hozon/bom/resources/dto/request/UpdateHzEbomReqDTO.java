@@ -1,5 +1,7 @@
 package com.connor.hozon.bom.resources.dto.request;
 
+import io.swagger.models.auth.In;
+
 import java.util.Map;
 
 /**
@@ -128,6 +130,19 @@ public class UpdateHzEbomReqDTO {
     private String pRegulationCode;
 
     private Integer number;
+
+    /**
+     * 1 已生效 0 已删除  2草稿状态  3废除状态 4删除状态
+     */
+    private Integer status;
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
 
     public String getParentLineId() {
         return parentLineId;
