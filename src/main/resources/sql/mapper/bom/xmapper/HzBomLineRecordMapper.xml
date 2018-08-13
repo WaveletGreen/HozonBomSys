@@ -3,6 +3,7 @@
 <mapper namespace="com.connor.hozon.bom.bomSystem.dao.bom.HzBomDataDao">
     <resultMap id="BaseResultMap" type="sql.pojo.bom.HzBomLineRecord">
         <id column="PUID" jdbcType="VARCHAR" property="puid"/>
+        <result column="ID" jdbcType="DOUBLE" property="id"/>
         <result column="P_PARENT_UID" jdbcType="VARCHAR" property="parentUid"/>
         <result column="P_BOM_DIGIFAX_ID" jdbcType="VARCHAR" property="bomDigifaxId"/>
         <result column="P_LINE_INDEX" jdbcType="VARCHAR" property="lineIndex"/>
@@ -62,6 +63,7 @@
         <result column="P_REGULATION_CODE" jdbcType="VARCHAR" property="pRegulationCode"/>
         <result column="P_NUMBER" jdbcType="INTEGER" property="number"/>
         <result column="P_BUY_ENGINEER" jdbcType="VARCHAR" property="pBuyEngineer"/>
+        <result column="P_EWO_NO" jdbcType="VARCHAR" property="ewoNo"/>
 
     </resultMap>
     <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs"
@@ -79,9 +81,23 @@
     P_MATERIAL2, P_MATERIAL3, P_DENSITY, P_MATERIAL_STANDARD, P_SURFACE_TREAT, P_TEXTURE_COLOR_NUM, 
     P_MANU_PROCESS, P_SYMMETRY, P_IMPORTANCE, P_REGULATION_FLAG, P_BWG_BOX_PART, P_DEVELOP_TYPE, 
     P_DATA_VERSION, P_TARGET_WEIGHT, P_FEATURE_WEIGHT, P_ACTUAL_WEIGHT, P_FASTENER_STANDARD, 
-    P_FASTENER_LEVEL, P_TORQUE, P_DUTY_ENGINEER, P_SUPPLY, P_SUPPLY_CODE, P_REMARK, P_REGULATION_CODE,P_NUMBER,P_BUY_ENGINEER
+    P_FASTENER_LEVEL, P_TORQUE, P_DUTY_ENGINEER, P_SUPPLY, P_SUPPLY_CODE, P_REMARK, P_REGULATION_CODE,P_NUMBER,
+    P_BUY_ENGINEER,P_EWO_NO
   </sql>
 
+    <sql id="Bom_Column_For_Change">
+    ID,PUID, P_PARENT_UID, P_BOM_DIGIFAX_ID, P_LINE_INDEX, P_BOM_LINE_IS_HAS, P_BOM_LINE_PUID,
+    P_BOM_LINE_ID, P_BOM_LINE_IS_2Y, P_BOM_LINE_IS_PART, P_BOM_ORDER_NUM, P_BOM_LINE_IS_DEPT,
+    P_BOM_OF_WHICH_DEPT, P_BOM_LINE_PART_NAME, P_BOM_LINE_PART_CLASS, P_BOM_LINE_PART_EN_NAME,
+    P_BOM_LINE_PART_RESOURCE,P_FNA_INFO, P_EBOM_STATUS, P_CREATE_TIME, P_UPDATE_TIME,
+    P_FASTENER, P_3CPART_FLAG, P_IN_OUT_SIDE_FLAG, P_UPC, P_FNA_DESC, P_CREATE_NAME,
+    P_UPDATE_NAME, P_UNIT, P_PICTURE_NO, P_PICTURE_SHEET, P_MATERIAL_HIGH, P_MATERIAL1,
+    P_MATERIAL2, P_MATERIAL3, P_DENSITY, P_MATERIAL_STANDARD, P_SURFACE_TREAT, P_TEXTURE_COLOR_NUM,
+    P_MANU_PROCESS, P_SYMMETRY, P_IMPORTANCE, P_REGULATION_FLAG, P_BWG_BOX_PART, P_DEVELOP_TYPE,
+    P_DATA_VERSION, P_TARGET_WEIGHT, P_FEATURE_WEIGHT, P_ACTUAL_WEIGHT, P_FASTENER_STANDARD,
+    P_FASTENER_LEVEL, P_TORQUE, P_DUTY_ENGINEER, P_SUPPLY, P_SUPPLY_CODE, P_REMARK, P_REGULATION_CODE,P_NUMBER,
+    P_BUY_ENGINEER,P_EWO_NO
+  </sql>
     <sql id="Blob_Column_List">P_BOM_LINE_BLOCK</sql>
 
     <sql id="values_by_batch">
@@ -372,8 +388,16 @@
             <if test="pBuyEngineer != null">
                 P_BUY_ENGINEER = #{pBuyEngineer,jdbcType=VARCHAR},
             </if>
+            <if test="ewoNo != null">
+                P_EWO_NO = #{ewoNo,jdbcType=VARCHAR}
+            </if>
         </set>
-        where PUID = #{puid,jdbcType=VARCHAR}
+        <where>
+            PUID = #{puid,jdbcType=VARCHAR}
+            <if test="id != null">
+                and ID = #{id,jdbcType=DOUBLE}
+            </if>
+        </where>
     </update>
 
     <!--查询一条bom信息-->
@@ -382,7 +406,7 @@
         <include refid="Base_Column_List"/>
         ,
         <include refid="Blob_Column_List"/>
-        from HZ_BOM_LINE_RECORD
+        from ${tableName}
         where P_BOM_DIGIFAX_ID =(
         select t2.puid from Hz_Bom_Main_Record t2
         where
@@ -390,6 +414,24 @@
         ) and PUID=#{puid,jdbcType=VARCHAR}
         and P_EBOM_STATUS<![CDATA[ <> ]]>0
     </select>
+
+
+    <select id="HzBomLineRecordDaoImpl_findBomListForChange" parameterType="java.util.Map" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Bom_Column_For_Change"/>
+        ,
+        <include refid="Blob_Column_List"/>
+        from ${tableName}
+        where P_BOM_DIGIFAX_ID =(
+        select t2.puid from Hz_Bom_Main_Record t2
+        where
+        t2.p_cfg0_of_which_project_puid=#{projectId,jdbcType=VARCHAR}
+        ) and PUID=#{puid,jdbcType=VARCHAR}
+        and P_EBOM_STATUS<![CDATA[ <> ]]>0
+    </select>
+
+
+
 
     <!--查询orderNum的最大值信息-->
     <select id="HzBomLineRecordDaoImpl_findMaxBomOrderNum" resultType="int">
