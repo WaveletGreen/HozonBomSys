@@ -270,4 +270,24 @@
             )
         </if>
     </update>
+
+    <update id="updateIsSent" parameterType="java.util.Map">
+        update HZ_CFG0_MODEL_RECORD
+        set
+        <if test="isSent==1">
+            IS_SENT = 1,
+        </if>
+        where PUID in
+        <if test="list==null">
+            ('')
+        </if>
+        <if test="list!=null">
+            (
+            <foreach collection="list" item="item" index="index"
+                     separator=",">
+                #{item.puid,jdbcType=VARCHAR}
+            </foreach>
+            )
+        </if>
+    </update>
 </mapper>

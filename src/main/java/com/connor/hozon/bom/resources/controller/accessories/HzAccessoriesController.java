@@ -29,12 +29,13 @@ import java.util.*;
  */
 @Controller
 @RequestMapping(value = "accessories")
-public class HzAccessoriesController  extends BaseController {
+public class HzAccessoriesController extends BaseController {
     @Autowired
     private HzAccessoriesDAO hzAccessoriesDAO;
 
     /**
      * 获工艺辅料标题
+     *
      * @param response
      */
     @RequestMapping(value = "title", method = RequestMethod.GET)
@@ -66,88 +67,91 @@ public class HzAccessoriesController  extends BaseController {
 
     /**
      * 插入一条记录
+     *
      * @param hzAccessoriesLib
      * @param response
      */
-    @RequestMapping(value = "insert",method = RequestMethod.POST)
-    public void insert(@RequestBody HzAccessoriesLib hzAccessoriesLib, HttpServletResponse response){
+    @RequestMapping(value = "insert", method = RequestMethod.POST)
+    public void insert(@RequestBody HzAccessoriesLib hzAccessoriesLib, HttpServletResponse response) {
         String puid = UUID.randomUUID().toString();
         hzAccessoriesLib.setPuid(puid);
         int i = hzAccessoriesDAO.insert(hzAccessoriesLib);
-        if(i>0){
-           writeAjaxJSONResponse(ResultMessageBuilder.build(true,"操作成功！"),response);
-           return;
+        if (i > 0) {
+            writeAjaxJSONResponse(ResultMessageBuilder.build(true, "操作成功！"), response);
+            return;
         }
-        writeAjaxJSONResponse(ResultMessageBuilder.build(false,"操作失败！"),response);
+        writeAjaxJSONResponse(ResultMessageBuilder.build(false, "操作失败！"), response);
 
     }
 
 
     /**
      * 编辑一条记录
+     *
      * @param hzAccessoriesLib
      * @param response
      */
-    @RequestMapping(value = "update",method = RequestMethod.POST)
-    public void update(@RequestBody HzAccessoriesLib hzAccessoriesLib, HttpServletResponse response){
+    @RequestMapping(value = "update", method = RequestMethod.POST)
+    public void update(@RequestBody HzAccessoriesLib hzAccessoriesLib, HttpServletResponse response) {
         int i = hzAccessoriesDAO.update(hzAccessoriesLib);
-        if(i>0){
-            writeAjaxJSONResponse(ResultMessageBuilder.build(true,"操作成功！"),response);
+        if (i > 0) {
+            writeAjaxJSONResponse(ResultMessageBuilder.build(true, "操作成功！"), response);
             return;
         }
-        writeAjaxJSONResponse(ResultMessageBuilder.build(false,"操作失败！"),response);
+        writeAjaxJSONResponse(ResultMessageBuilder.build(false, "操作失败！"), response);
 
     }
 
 
     /**
      * 批量删除
+     *
      * @param reqDTO
      * @param response
      */
-    @RequestMapping(value = "delete",method = RequestMethod.POST)
-    public void delete(@RequestBody DeleteHzAccessoriesDTO reqDTO, HttpServletResponse response){
-        if(reqDTO.getPuids() == null || reqDTO.getPuids() == ""){
-            writeAjaxJSONResponse(ResultMessageBuilder.build(false,"非法参数！"),response);
+    @RequestMapping(value = "delete", method = RequestMethod.POST)
+    public void delete(@RequestBody DeleteHzAccessoriesDTO reqDTO, HttpServletResponse response) {
+        if (reqDTO.getPuids() == null || reqDTO.getPuids() == "") {
+            writeAjaxJSONResponse(ResultMessageBuilder.build(false, "非法参数！"), response);
             return;
         }
         List<DeleteHzAccessoriesDTO> list = new ArrayList<>();
         String[] puids = reqDTO.getPuids().split(",");
-        for(String puid:puids){
+        for (String puid : puids) {
             DeleteHzAccessoriesDTO deleteHzAccessoriesDTO = new DeleteHzAccessoriesDTO();
             deleteHzAccessoriesDTO.setPuid(puid);
             list.add(deleteHzAccessoriesDTO);
         }
-        try{
+        try {
             hzAccessoriesDAO.deleteList(list);
-        }catch (Exception e){
-            writeAjaxJSONResponse(ResultMessageBuilder.build(false,"操作失败！"),response);
+        } catch (Exception e) {
+            writeAjaxJSONResponse(ResultMessageBuilder.build(false, "操作失败！"), response);
             return;
         }
-        writeAjaxJSONResponse(ResultMessageBuilder.build(true,"操作成功！"),response);
+        writeAjaxJSONResponse(ResultMessageBuilder.build(true, "操作成功！"), response);
 
     }
 
 
-    @RequestMapping(value = "get/lib",method = RequestMethod.GET)
+    @RequestMapping(value = "get/lib", method = RequestMethod.GET)
     @ResponseBody
-    public Map<String,Object> getHzAccessories(HzAccessoriesPageQuery query){
+    public Map<String, Object> getHzAccessories(HzAccessoriesPageQuery query) {
         HzAccessoriesPageQuery hzAccessoriesPageQuery = query;
         hzAccessoriesPageQuery.setPageSize(0);
         try {
             hzAccessoriesPageQuery.setPageSize(Integer.valueOf(query.getLimit()));
-        }catch (Exception e){
+        } catch (Exception e) {
 
         }
         Page<HzAccessoriesLib> page = hzAccessoriesDAO.getHzAccessoriesByPage(query);
         int i = 0;
-        if(ListUtil.isEmpty(page.getResult())){
+        if (ListUtil.isEmpty(page.getResult())) {
             return new HashMap<>();
         }
         List<HzAccessoriesLib> libs = page.getResult();
         Map<String, Object> ret = new HashMap<>();
         List<Map<String, Object>> _list = new ArrayList<>();
-        for(HzAccessoriesLib lib : libs){
+        for (HzAccessoriesLib lib : libs) {
             Map<String, Object> _res = new HashMap<>();
             _res.put("No", ++i);
             _res.put("puid", lib.getPuid());
@@ -168,7 +172,7 @@ public class HzAccessoriesController  extends BaseController {
             _res.put("pFutureWeight", lib.getpFutureWeight());
             _res.put("pActualWeight", lib.getpActualWeight());
             _res.put("pDutyEngineer", lib.getpDutyEngineer());
-            _res.put("pSupply",lib.getpSupply());
+            _res.put("pSupply", lib.getpSupply());
             _res.put("pSupplyCode", lib.getpSupplyCode());
             _res.put("pRemark", lib.getpRemark());
 
@@ -180,29 +184,29 @@ public class HzAccessoriesController  extends BaseController {
     }
 
 
-
-
     /**
      * 跳转到工艺辅料管理的添加页面
+     *
      * @return
      */
     @RequestMapping(value = "addAccessories", method = RequestMethod.GET)
     public String addMBomToPage() {
-        return"bomManage/pbom/processAids/addProcessAids";
+        return "bomManage/pbom/processAids/addProcessAids";
     }
 
     /**
      * 跳转到工艺辅料的修改页面
+     *
      * @param model
      * @return
      */
     @RequestMapping(value = "updateAccessories", method = RequestMethod.GET)
-    public String updateMbomToPage(String puid,Model model) {
+    public String updateMbomToPage(String puid, Model model) {
         List<HzAccessoriesLib> libs = hzAccessoriesDAO.getHzAccessoriesLibs(puid);
-        if(ListUtil.isEmpty(libs)){
+        if (ListUtil.isEmpty(libs)) {
             return "";
         }
-        model.addAttribute("data",libs.get(0));
-        return"bomManage/pbom/processAids/updateProcessAids";
+        model.addAttribute("data", libs.get(0));
+        return "bomManage/pbom/processAids/updateProcessAids";
     }
 }

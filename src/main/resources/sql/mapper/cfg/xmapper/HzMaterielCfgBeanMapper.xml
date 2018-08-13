@@ -36,7 +36,7 @@
         IS_SENT
   </sql>
     <!--根据项目查找所有的整车物料属性-->
-    <select id="selectByDiff" parameterType="sql.pojo.cfg.HzMaterielCfgBean" resultMap="sql.pojo.cfg.HzMaterielCfgBean">
+    <select id="selectByDiff" parameterType="sql.pojo.cfg.HzMaterielCfgBean" resultMap="BaseResultMap">
         select t.p_brand_code,
         t.p_brand_name,
         t2.p_platform_code,
@@ -59,10 +59,10 @@
         left join Hz_Cfg0_Main_Record t5 on t5.p_cfg0_of_which_project_puid=t4.puid
         left join Hz_Cfg0_Model_Record t6 on t6.p_cfg0_model_of_main_record=t5.puid
         <if test="projectUid!=null">
-            where t4.puid=#{projectUid,jdbcType="VARCHAR"} ;
+            where t4.puid=#{projectUid} ;
         </if>
         <if test="puid!=null">
-            where t6.puid=#{uid,jdbcType="VARCHAR"} ;
+            where t6.puid=#{puid}
         </if>
     </select>
 </mapper>

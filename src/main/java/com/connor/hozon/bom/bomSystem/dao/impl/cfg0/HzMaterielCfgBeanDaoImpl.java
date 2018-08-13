@@ -22,4 +22,10 @@ public class HzMaterielCfgBeanDaoImpl implements HzMaterielCfgBeanDao {
     public List<HzMaterielCfgBean> selectByDiff(HzMaterielCfgBean bean) {
         return baseSQLUtil.executeQuery(bean,"com.connor.hozon.bom.bomSystem.dao.cfg.HzMaterielCfgBeanDao.selectByDiff");
     }
+
+    @Override
+    public boolean updateIsSent() {
+        return false;
+    }
+
 }
