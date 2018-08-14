@@ -8,238 +8,245 @@
 </head>
 <body>
 <!--1.基本信息-->
-<h4><i class="fa fa-minus-square" aria-hidden="true">基本信息</i></h4>
-<div class="panel-body" style="padding:0px;">
-    <div class="panel panel-default" style="padding:0px;">
-        <div class="panel-body" style="padding:0px;">
-            <div class="col-lg-12 col-md-12" style="padding:0px;">
-                <div class="col-lg-2 col-md-2">
-                    <input type="hidden" id="id"th:value="${data.id}">
-                    <div class="form-group after_the">
-                        <label for="ewoNo">EWO号:</label>
-                        <input type="text" class="form-control" name="ewoNo" id="ewoNo"
-                               th:value="${data.ewoNo}" disabled="disabled"
-                               placeholder="请输入EWO号"/>
+<form id="basicForm" role="form" method="post" action="">
+    <h4><i class="fa fa-minus-square" aria-hidden="true">基本信息</i></h4>
+    <div class="panel-body" style="padding:0px;">
+        <div class="panel panel-default" style="padding:0px;">
+            <div class="panel-body" style="padding:0px;">
+
+                <div class="col-lg-12 col-md-12" style="padding:0px;">
+                    <div class="col-lg-2 col-md-2">
+                        <input type="hidden" id="id" th:value="${data.id}">
+                        <div class="form-group after_the">
+                            <label for="ewoNo">EWO号:</label>
+                            <input type="text" class="form-control" name="ewoNo" id="ewoNo"
+                                   th:value="${data.ewoNo}" disabled="disabled"
+                                   placeholder="请输入EWO号"/>
+                        </div>
+                        <div class="form-group after_the">
+                            <label for="formCreateTime">创建时间:</label>
+                            <input type="text" class="form-control" name="formCreateTime" id="formCreateTime"
+                                   th:value="${data.formCreateTime}" disabled="disabled"
+                                   placeholder="请输入创建时间"/>
+                        </div>
+                        <div class="form-group after_the">
+                            <label for="flowStatus">流程状态:</label>
+                            <input type="text" class="form-control" name="flowStatus" id="flowStatus"
+                                   th:value="${data.flowStatus}"
+                                   placeholder="请输入流程状态"/>
+                        </div>
+                        <div class="form-group after_the">
+                            <label for="title">标题:</label>
+                            <input type="text" class="form-control" name="title" id="title"
+                                   th:value="${data.title}"
+                                   placeholder="请输入标题"/>
+                        </div>
                     </div>
-                    <div class="form-group after_the">
-                        <label for="formCreateTime">创建时间:</label>
-                        <input type="text" class="form-control" name="formCreateTime" id="formCreateTime"
-                               th:value="${data.formCreateTime}" disabled="disabled"
-                               placeholder="请输入创建时间"/>
+                    <div class="col-lg-2 col-md-2">
+                        <div class="form-group after_the">
+                            <label for="dept">部门:</label>
+                            <input type="text" class="form-control" name="dept" id="dept"
+                                   th:value="${data.dept}" disabled="disabled"
+                                   placeholder="请输入部门"/>
+                        </div>
+                        <div class="form-group after_the">
+                            <label for="originator">发起人:</label>
+                            <input type="text" class="form-control" name="originator" id="originator"
+                                   th:value="${data.originator}" disabled="disabled"
+                                   placeholder="请输入发起人"/>
+                        </div>
+                        <div class="form-group after_the">
+                            <label for="tel">联系电话:</label>
+                            <input type="text" class="form-control" name="tel" id="tel"
+                                   th:value="${data.tel}"
+                                   placeholder="请输入联系电话"/>
+                        </div>
+                        <div class="form-group after_the">
+                            <label for="finishTime">要求完成时间:</label>
+                            <input class="form-control input-small" name="finishTime" id="finishTime"
+                                   th:value="${data.finishTime}"
+                                   placeholder="请输入要求完成时间"/>
+                        </div>
                     </div>
-                    <div class="form-group after_the">
-                        <label for="flowStatus">流程状态:</label>
-                        <input type="text" class="form-control" name="flowStatus" id="flowStatus"
-                               th:value="${data.flowStatus}"
-                               placeholder="请输入流程状态"/>
+                    <div class="col-lg-2 col-md-2">
+                        <div class="form-group after_the">
+                            <label for="changeType">变更类型:</label>
+                            <select class="form-control" name="changeType" id="changeType" placeholder="请选择变更类型">
+                                <option th:selected="${data.getChangeType()=='正常设变'?true:false}">正常设变</option>
+                                <option th:selected="${data.getChangeType()=='简易设变'?true:false}">简易设变</option>
+                            </select>
+                        </div>
+                        <div class="form-group after_the">
+                            <label for="costAssumeDept">费用承担部门:&ensp;</label>
+                            <select class="form-control" name="costAssumeDept" id="costAssumeDept"
+                                    placeholder="请选择费用承担部门">
+                                <option th:selected="${data.getCostAssumeDept()=='智能驾驶研究院'?true:false}">智能驾驶研究院</option>
+                                <option th:selected="${data.getCostAssumeDept()=='智能座舱事业部'?true:false}">智能座舱事业部</option>
+                                <option th:selected="${data.getCostAssumeDept()=='电动化底盘中心'?true:false}">电动化底盘中心</option>
+                                <option th:selected="${data.getCostAssumeDept()=='电子电器中心'?true:false}">电子电器中心</option>
+                                <option th:selected="${data.getCostAssumeDept()=='内外饰中心'?true:false}">内外饰中心</option>
+                                <option th:selected="${data.getCostAssumeDept()=='动总集成中心'?true:false}">动总集成中心</option>
+                                <option th:selected="${data.getCostAssumeDept()=='车身中心'?true:false}">车身中心</option>
+                            </select>
+                        </div>
+                        <div class="form-group after_the">
+                            <label for="publicType">上市类型:</label>
+                            <select class="form-control" name="publicType" id="publicType" placeholder="请选择上市类型">
+                                <option th:selected="${data.getPublicType()=='上市前'?true:false}">上市前</option>
+                                <option th:selected="${data.getPublicType()=='上市后'?true:false}">上市后</option>
+                            </select>
+                        </div>
+                        <div class="form-group after_the">
+                            <label for="relationEwoNo">关联EWO号:</label>
+                            <input type="text" class="form-control" name="relationEwoNo" id="relationEwoNo"
+                                   th:value="${data.relationEwoNo}"
+                                   placeholder="请输入关联EWO号"/>
+                        </div>
                     </div>
-                    <div class="form-group after_the">
-                        <label for="title">标题:</label>
-                        <input type="text" class="form-control" name="title" id="title"
-                               th:value="${data.title}"
-                               placeholder="请输入标题"/>
+                    <div class="col-lg-2 col-md-2">
+                        <div class="form-group after_the">
+                            <label for="reasonCode">原因代码:&ensp;</label>
+                            <select class="form-control" name="reasonCode"
+                                    id="reasonCode" placeholder="请选择原因代码">
+                                <option th:selected="${data.getReasonCode()=='001配置优化'?true:false}">001配置优化</option>
+                                <option th:selected="${data.getReasonCode()=='002性能提升'?true:false}">002性能提升</option>
+                                <option th:selected="${data.getReasonCode()=='003造型更改'?true:false}">003造型更改</option>
+                                <option th:selected="${data.getReasonCode()=='004设计优化'?true:false}">004设计优化</option>
+                                <option th:selected="${data.getReasonCode()=='005市场需求'?true:false}">005市场需求</option>
+                                <option th:selected="${data.getReasonCode()=='006关联变更'?true:false}">006关联变更</option>
+                                <option th:selected="${data.getReasonCode()=='007BOM及图纸更改'?true:false}">007BOM及图纸更改
+                                </option>
+                                <option th:selected="${data.getReasonCode()=='008质量提升'?true:false}">008质量提升</option>
+                                <option th:selected="${data.getReasonCode()=='009工艺改进'?true:false}">009工艺改进</option>
+                                <option th:selected="${data.getReasonCode()=='010VAVE'?true:false}">010VAVE</option>
+                                <option th:selected="${data.getReasonCode()=='011其他'?true:false}">011其他</option>
+                            </select>
+                        </div>
+                        <div class="form-group after_the">
+                            <label for="platform">平台:</label>
+                            <select class="form-control" name="platform" id="platform" placeholder="请选择平台">
+                                <option th:selected="${data.getPlatform()=='A平台'?true:false}">A平台</option>
+                                <option th:selected="${data.getPlatform()=='E平台'?true:false}">E平台</option>
+                                <option th:selected="${data.getPlatform()=='G平台'?true:false}">G平台</option>
+                            </select>
+                        </div>
+                        <div class="form-group after_the">
+                            <label for="vehicleCode">车型代号:</label>
+                            <input type="text" class="form-control" name="vehicleCode" id="vehicleCode"
+                                   th:value="${data.vehicleCode}"
+                                   placeholder="请输入车型代号"/>
+                        </div>
+                        <div class="form-group after_the">
+                            <label for="projectCode">项目代号:</label>
+                            <input type="text" class="form-control" name="projectCode" id="projectCode"
+                                   th:value="${data.projectCode}"
+                                   placeholder="请输入项目代号"/>
+                        </div>
                     </div>
-                </div>
-                <div class="col-lg-2 col-md-2">
-                    <div class="form-group after_the">
-                        <label for="dept">部门:</label>
-                        <input type="text" class="form-control" name="dept" id="dept"
-                               th:value="${data.dept}" disabled="disabled"
-                               placeholder="请输入部门"/>
+                    <div class="col-lg-2 col-md-2">
+                        <div class="form-group after_the">
+                            <label for="effectTime">生效时间:</label>
+                            <input class="form-control input-small" name="effectTime" id="effectTime"
+                                   th:value="${data.effectTime}"
+                                   placeholder="请输入生效时间"/>
+                        </div>
+                        <div class="form-group after_the">
+                            <label for="projectStage">项目所属阶段:&ensp;</label>
+                            <input type="text" class="form-control" name="projectStage" id="projectStage"
+                                   th:value="${data.projectStage}"
+                                   placeholder="请输入项目所属阶段"/>
+                        </div>
+                        <div class="form-group after_the">
+                            <label for="relationEngineer">关联工程师姓名:&ensp;</label>
+                            <input type="text" class="form-control" name="relationEngineer" id="relationEngineer"
+                                   th:value="${data.relationEngineer}"
+                                   placeholder="请输入关联工程师姓名"/>
+                        </div>
                     </div>
-                    <div class="form-group after_the">
-                        <label for="originator">发起人:</label>
-                        <input type="text" class="form-control" name="originator" id="originator"
-                               th:value="${data.originator}" disabled="disabled"
-                               placeholder="请输入发起人"/>
+                    <div class="col-lg-2 col-md-2">
+                        <div class="form-group after_the">
+                            <label for="relationEngineerDept">所属部门:&ensp;</label>
+                            <input type="text" class="form-control" name="relationEngineerDept"
+                                   id="relationEngineerDept"
+                                   th:value="${data.relationEngineerDept}"
+                                   placeholder="请输入所属部门"/>
+                        </div>
+                        <div class="form-group after_the">
+                            <label for="relationItemId">关联零件号:</label>
+                            <input type="text" class="form-control" name="relationItemId" id="relationItemId"
+                                   th:value="${data.relationItemId}"
+                                   placeholder="请输入关联零件号"/>
+                        </div>
+                        <div class="form-group after_the">
+                            <label for="relationItemName">关联零件名称:&ensp;</label>
+                            <input type="text" class="form-control" name="relationItemName" id="relationItemName"
+                                   th:value="${data.relationItemName}"
+                                   placeholder="请输入关联零件名称"/>
+                        </div>
                     </div>
-                    <div class="form-group after_the">
-                        <label for="tel">联系电话:</label>
-                        <input type="text" class="form-control" name="tel" id="tel"
-                               th:value="${data.tel}"
-                               placeholder="请输入联系电话"/>
-                    </div>
-                    <div class="form-group after_the">
-                        <label for="finishTime">要求完成时间:</label>
-                        <input class="form-control input-small"  name="finishTime" id="finishTime"
-                               th:value="${data.finishTime}"
-                               placeholder="请输入要求完成时间"/>
-                    </div>
-                </div>
-                <div class="col-lg-2 col-md-2">
-                    <div class="form-group after_the">
-                        <label for="changeType">变更类型:</label>
-                        <select class="form-control" name="changeType" id="changeType"placeholder="请选择变更类型">
-                            <option th:selected="${data.getChangeType()=='正常设变'?true:false}">正常设变</option>
-                            <option th:selected="${data.getChangeType()=='简易设变'?true:false}">简易设变</option>
-                        </select>
-                    </div>
-                    <div class="form-group after_the">
-                        <label for="costAssumeDept">费用承担部门:&ensp;</label>
-                        <select class="form-control" name="costAssumeDept" id="costAssumeDept"placeholder="请选择费用承担部门">
-                            <option th:selected="${data.getCostAssumeDept()=='智能驾驶研究院'?true:false}">智能驾驶研究院</option>
-                            <option th:selected="${data.getCostAssumeDept()=='智能座舱事业部'?true:false}">智能座舱事业部</option>
-                            <option th:selected="${data.getCostAssumeDept()=='电动化底盘中心'?true:false}">电动化底盘中心</option>
-                            <option th:selected="${data.getCostAssumeDept()=='电子电器中心'?true:false}">电子电器中心</option>
-                            <option th:selected="${data.getCostAssumeDept()=='内外饰中心'?true:false}">内外饰中心</option>
-                            <option th:selected="${data.getCostAssumeDept()=='动总集成中心'?true:false}">动总集成中心</option>
-                            <option th:selected="${data.getCostAssumeDept()=='车身中心'?true:false}">车身中心</option>
-                        </select>
-                    </div>
-                    <div class="form-group after_the">
-                        <label for="publicType">上市类型:</label>
-                        <select class="form-control" name="publicType" id="publicType"placeholder="请选择上市类型">
-                            <option th:selected="${data.getPublicType()=='上市前'?true:false}">上市前</option>
-                            <option th:selected="${data.getPublicType()=='上市后'?true:false}">上市后</option>
-                        </select>
-                    </div>
-                    <div class="form-group after_the">
-                        <label for="relationEwoNo">关联EWO号:</label>
-                        <input type="text" class="form-control" name="relationEwoNo" id="relationEwoNo"
-                               th:value="${data.relationEwoNo}"
-                               placeholder="请输入关联EWO号"/>
-                    </div>
-                </div>
-                <div class="col-lg-2 col-md-2">
-                    <div class="form-group after_the">
-                        <label for="reasonCode">原因代码:&ensp;</label>
-                        <select class="form-control" name="reasonCode"
-                                id="reasonCode"placeholder="请选择原因代码">
-                            <option th:selected="${data.getReasonCode()=='001配置优化'?true:false}">001配置优化</option>
-                            <option th:selected="${data.getReasonCode()=='002性能提升'?true:false}">002性能提升</option>
-                            <option th:selected="${data.getReasonCode()=='003造型更改'?true:false}">003造型更改</option>
-                            <option th:selected="${data.getReasonCode()=='004设计优化'?true:false}">004设计优化</option>
-                            <option th:selected="${data.getReasonCode()=='005市场需求'?true:false}">005市场需求</option>
-                            <option th:selected="${data.getReasonCode()=='006关联变更'?true:false}">006关联变更</option>
-                            <option th:selected="${data.getReasonCode()=='007BOM及图纸更改'?true:false}">007BOM及图纸更改</option>
-                            <option th:selected="${data.getReasonCode()=='008质量提升'?true:false}">008质量提升</option>
-                            <option th:selected="${data.getReasonCode()=='009工艺改进'?true:false}">009工艺改进</option>
-                            <option th:selected="${data.getReasonCode()=='010VAVE'?true:false}">010VAVE</option>
-                            <option th:selected="${data.getReasonCode()=='011其他'?true:false}">011其他</option>
-                        </select>
-                    </div>
-                    <div class="form-group after_the">
-                        <label for="platform">平台:</label>
-                        <select class="form-control" name="platform" id="platform"placeholder="请选择平台">
-                            <option th:selected="${data.getPlatform()=='A平台'?true:false}">A平台</option>
-                            <option th:selected="${data.getPlatform()=='E平台'?true:false}">E平台</option>
-                            <option th:selected="${data.getPlatform()=='G平台'?true:false}">G平台</option>
-                        </select>
-                    </div>
-                    <div class="form-group after_the">
-                        <label for="vehicleCode">车型代号:</label>
-                        <input type="text" class="form-control" name="vehicleCode" id="vehicleCode"
-                               th:value="${data.vehicleCode}"
-                               placeholder="请输入车型代号"/>
-                    </div>
-                    <div class="form-group after_the">
-                        <label for="projectCode">项目代号:</label>
-                        <input type="text" class="form-control" name="projectCode" id="projectCode"
-                               th:value="${data.projectCode}"
-                               placeholder="请输入项目代号"/>
-                    </div>
-                </div>
-                <div class="col-lg-2 col-md-2">
-                    <div class="form-group after_the">
-                        <label for="effectTime">生效时间:</label>
-                        <input class="form-control input-small"  name="effectTime" id="effectTime"
-                               th:value="${data.effectTime}"
-                               placeholder="请输入生效时间"/>
-                    </div>
-                    <div class="form-group after_the">
-                        <label for="projectStage">项目所属阶段:&ensp;</label>
-                        <input type="text" class="form-control" name="projectStage" id="projectStage"
-                               th:value="${data.projectStage}"
-                               placeholder="请输入项目所属阶段"/>
-                    </div>
-                    <div class="form-group after_the">
-                        <label for="relationEngineer">关联工程师姓名:&ensp;</label>
-                        <input type="text" class="form-control" name="relationEngineer" id="relationEngineer"
-                               th:value="${data.relationEngineer}"
-                               placeholder="请输入关联工程师姓名"/>
-                    </div>
-                </div>
-                <div class="col-lg-2 col-md-2">
-                    <div class="form-group after_the">
-                        <label for="relationEngineerDept">所属部门:&ensp;</label>
-                        <input type="text" class="form-control" name="relationEngineerDept" id="relationEngineerDept"
-                               th:value="${data.relationEngineerDept}"
-                               placeholder="请输入所属部门"/>
-                    </div>
-                    <div class="form-group after_the">
-                        <label for="relationItemId">关联零件号:</label>
-                        <input type="text" class="form-control" name="relationItemId" id="relationItemId"
-                               th:value="${data.relationItemId}"
-                               placeholder="请输入关联零件号"/>
-                    </div>
-                    <div class="form-group after_the">
-                        <label for="relationItemName">关联零件名称:&ensp;</label>
-                        <input type="text" class="form-control" name="relationItemName" id="relationItemName"
-                               th:value="${data.relationItemName}"
-                               placeholder="请输入关联零件名称"/>
-                    </div>
-                </div>
-                <div class="col-lg-12 col-md-12" style="padding-top:-20px">
-                    <div class="form-group after_the">
-                        <label for="reasonDesc">原因描述:</label>
-                        <textarea rows="2" cols="30"id="reasonDesc"name="reasonDesc" class="form-control"
-                                  style="width: 100%;resize:none"placeholder="请输入原因描述"th:text="${data.reasonDesc}"></textarea>
-                        <!--<input  type="text" class="form-control" name="reasonDesc" id="reasonDesc"-->
-                                <!--placeholder="请输入原因描述"th:value="${data.reasonDesc}"-->
-                        <!--style="width: 100%;height: 50px ">-->
+                    <div class="col-lg-12 col-md-12" style="padding-top:-20px">
+                        <div class="form-group after_the">
+                            <label for="reasonDesc">原因描述:</label>
+                            <textarea rows="2" cols="30" id="reasonDesc" name="reasonDesc" class="form-control"
+                                      style="width: 100%;resize:none" placeholder="请输入原因描述"
+                                      th:text="${data.reasonDesc}"></textarea>
+                            <!--<input  type="text" class="form-control" name="reasonDesc" id="reasonDesc"-->
+                            <!--placeholder="请输入原因描述"th:value="${data.reasonDesc}"-->
+                            <!--style="width: 100%;height: 50px ">-->
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 <!--2.变更描述-->
-<h4><i class="fa fa-minus-square" aria-hidden="true">变更描述</i></h4>
-<div class="panel-body" style="padding:0px;">
-    <div class="panel panel-default">
-        <div class="panel-body">
-            <div class="col-md-12 col-lg-12" style="padding:0px;">
-                <div class="form-group after_the">
-                    <label for="changeDesc">变更描述:</label>
-                    <textarea rows="2" cols="30"id="changeDesc"name="changeDesc" class="form-control"
-                              style="width: 100%;resize:none"placeholder="请输入变更描述"th:text="${data.changeDesc}"></textarea>
+    <div class="panel-body" style="padding:0px;">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="col-md-12 col-lg-12" style="padding:0px;">
+                    <div class="form-group after_the">
+                        <label for="changeDesc">变更描述:</label>
+                        <textarea rows="2" cols="30" id="changeDesc" name="changeDesc" class="form-control"
+                                  style="width: 100%;resize:none" placeholder="请输入变更描述"
+                                  th:text="${data.changeDesc}"></textarea>
+                    </div>
+                    <!--<div class="form-group after_the">-->
+                    <!--<label for="VWOnum1">变更前图片:</label>-->
+                    <!--<input type="file" class="form-control" name="level" id="EWOnum3"-->
+                    <!--placeholder=""/>-->
+                    <!--</div>-->
+                    <!--<div class="form-group after_the">-->
+                    <!--<label for="VWOnum1">变更后图片:</label>-->
+                    <!--<input type="file" class="form-control" name="level" id="EWOnum4"-->
+                    <!--placeholder=""/>-->
+                    <!--</div>-->
+                    <!--<div class="form-group after_the">-->
+                    <!--<label for="VWOnum1">附件:</label>-->
+                    <!--<input type="file" class="form-control" name="level" id="EWOnum5"-->
+                    <!--placeholder=""/>-->
+                    <!--</div>-->
                 </div>
-                <!--<div class="form-group after_the">-->
-                <!--<label for="VWOnum1">变更前图片:</label>-->
-                <!--<input type="file" class="form-control" name="level" id="EWOnum3"-->
-                <!--placeholder=""/>-->
-                <!--</div>-->
-                <!--<div class="form-group after_the">-->
-                <!--<label for="VWOnum1">变更后图片:</label>-->
-                <!--<input type="file" class="form-control" name="level" id="EWOnum4"-->
-                <!--placeholder=""/>-->
-                <!--</div>-->
-                <!--<div class="form-group after_the">-->
-                <!--<label for="VWOnum1">附件:</label>-->
-                <!--<input type="file" class="form-control" name="level" id="EWOnum5"-->
-                <!--placeholder=""/>-->
-                <!--</div>-->
             </div>
         </div>
     </div>
-</div>
-<div class="form-group">
-    <button type="button" id="queryBtn" onclick="doSave();" class="btn btn-primary">保存</button>
-</div>
+    <div class="form-group">
+        <button type="button" id="queryBtn" onclick="doSave();" class="btn btn-primary">保存</button>
+    </div>
+</form>
 <!--3.零件信息-->
 <h4><i class="fa fa-minus-square" aria-hidden="true">零件信息</i></h4>
 <div class="panel-body" style="padding:0px;">
     <div class="panel panel-default">
         <div class="panel-body">
             <div class="content col-lg-12" style="padding:0px;"><!--style="margin-top: -50px;"-->
-                <div class="form-group">
+                <!--<div class="form-group">
                     <button type="button" id="queryBtn1" onclick="doQuery();" class="btn btn-primary">
                         <i class="fa fa-plus" aria-hidden="true">新增</i>
                     </button>
-                </div>
+                </div>-->
                 <table id="vwo_table" class="table table-striped tableNormalStyle">
                     <tr>
-                        <th>操作</th>
+                        <!--<th>操作</th>-->
                         <th>零件号</th>
                         <th>版本号</th>
                         <th>零件名称</th>
@@ -252,10 +259,10 @@
                         <th>销售市场</th>
                     </tr>
                     <tr>
-                        <td>
+                        <!--<td>
                             <a href="#"><i class="fa fa-times" aria-hidden="true"></i>删除</a>
                             <a href="#"><i class="fa fa-pencil" aria-hidden="true"></i>修改</a>
-                        </td>
+                        </td>-->
                         <td>S00-1001</td>
                         <td></td>
                         <td></td>
@@ -268,10 +275,10 @@
                         <td></td>
                     </tr>
                     <tr>
-                        <td>
+                        <!--<td>
                             <a href="#"><i class="fa fa-times" aria-hidden="true"></i>删除</a>
                             <a href="#"><i class="fa fa-pencil" aria-hidden="true"></i>修改</a>
-                        </td>
+                        </td>-->
                         <td>S00-1001</td>
                         <td></td>
                         <td></td>
@@ -284,10 +291,10 @@
                         <td></td>
                     </tr>
                     <tr>
-                        <td>
+                        <!--<td>
                             <a href="#"><i class="fa fa-times" aria-hidden="true"></i>删除</a>
                             <a href="#"><i class="fa fa-pencil" aria-hidden="true"></i>修改</a>
-                        </td>
+                        </td>-->
                         <td>S00-1001</td>
                         <td></td>
                         <td></td>
@@ -300,10 +307,10 @@
                         <td></td>
                     </tr>
                     <tr>
-                        <td>
+                        <!--<td>
                             <a href="#"><i class="fa fa-times" aria-hidden="true"></i>删除</a>
                             <a href="#"><i class="fa fa-pencil" aria-hidden="true"></i>修改</a>
-                        </td>
+                        </td>-->
                         <td>S00-1001</td>
                         <td></td>
                         <td></td>
@@ -316,10 +323,10 @@
                         <td></td>
                     </tr>
                     <tr>
-                        <td>
+                        <!--<td>
                             <a href="#"><i class="fa fa-times" aria-hidden="true"></i>删除</a>
                             <a href="#"><i class="fa fa-pencil" aria-hidden="true"></i>修改</a>
-                        </td>
+                        </td>-->
                         <td>S00-1001</td>
                         <td></td>
                         <td></td>
@@ -332,10 +339,10 @@
                         <td></td>
                     </tr>
                     <tr>
-                        <td>
+                        <!--<td>
                             <a href="#"><i class="fa fa-times" aria-hidden="true"></i>删除</a>
                             <a href="#"><i class="fa fa-pencil" aria-hidden="true"></i>修改</a>
-                        </td>
+                        </td>-->
                         <td>S00-1001</td>
                         <td></td>
                         <td></td>

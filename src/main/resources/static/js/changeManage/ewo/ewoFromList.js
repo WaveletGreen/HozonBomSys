@@ -25,7 +25,7 @@ function initTable() {
         formatter: function (value, row, index) {
             var id = row.id
             return [
-                '<a href="ewo/base/info?id="'+id +'>' + value + '</a>'
+                '<a href="ewo/base/info?id='+id +'">' + value + '</a>'
             ].join("");
         }
     });

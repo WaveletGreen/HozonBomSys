@@ -31,7 +31,7 @@ function initTable(eBomUrl) {
             var column = [];
             // column.push({field: 'eBomPuid', title: 'puid'});
             column.push({field: 'ck', checkbox: true});
-            column.push({field: 'puid', title: '主键'});
+            // column.push({field: 'puid', title: '主键'});
 
             /* var data = result.data;
              var nameZh = data[0];
@@ -119,6 +119,12 @@ function initTable(eBomUrl) {
                     }
                     if (4 == value || "4" == value) {
                         return "<span style='color: #a90009'>删除状态</span>";
+                    }
+                    if (value == 5 || value == "5"){
+                        return "<span style='color: #e2ab2f'>审核中</span>"
+                    }
+                    if (value == 6 || value == "6"){
+                        return "<span style='color: #e2ab2f'>审核中</span>"
                     }
                 }
             })
@@ -263,24 +269,32 @@ function initTable(eBomUrl) {
                         iconCls: 'glyphicon glyphicon-log-out',
                         handler: function () {
                             var rows = $table.bootstrapTable('getSelections');
-                            // var puids = "";
-                            // for (var i = 0; i < rows.length; i++) {
-                            //     puids += rows[i].puid + ",";
-                            // }
-                            // ;
+                            var puids = "";
+                            for (var i = 0; i < rows.length; i++) {
+                                puids += rows[i].puid + ",";
+                            }
+                            ;
                             var myData = JSON.stringify({
                                 "projectId": $("#project", window.top.document).val(),
-                                // "puids": puids,
+                                "puids": puids,
                             });
                             if (rows.length == 0) {
                                 window.Ewin.alert({message: '请选择一条需要变更的数据!'});
                                 return false;
-                            } else if (rows[0].status !== 2) {
-
-                                window.Ewin.alert({message: '请选择状态为草稿状态的数据!'});
-                                return false;
-
+                            }else {
+                                for (var i = 0; i<rows.length;i++){
+                                    if (rows[i].status !=4 &&rows[i].status !=2){
+                                        window.Ewin.alert({message: '请选择状态为草稿状态或删除状态的数据!'});
+                                        return false;
+                                    }
+                                }
                             }
+                            // else if (rows[0].status !== 2||4) {
+                            //
+                            //     window.Ewin.alert({message: '请选择状态为草稿状态或删除状态的数据!'});
+                            //     return false;
+                            //
+                            // }
                             // var _table = '<p>是否要删除您所选择的记录？</p>' +
                             //     '<div style="max-height: 400px;overflow:scroll;"><table class="table table-striped tableNormalStyle" >';
                             // for (var index in rows) {
@@ -290,10 +304,10 @@ function initTable(eBomUrl) {
                             // window.Ewin.confirm({title: '提示', message: _table, width: 500}).on(function (e) {
                             //     if (e) {
                             $.ajax({
-                                // type: "POST",
-                                //ajax需要添加打包名
-                                url: "",
-                                // data: myData,
+                                type: "POST",
+                                // ajax需要添加打包名
+                                url: "ewo/initiating/process",
+                                data: myData,
                                 contentType: "application/json",
                                 success: function (result) {
                                     // if (result.status) {

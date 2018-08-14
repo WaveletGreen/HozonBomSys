@@ -46,15 +46,17 @@ public class HzEWOBaseInfoController extends BaseController {
 
     /**
      * 获取EWO表单基本信息
-     * @param query
+     * @param
      * @param
      */
     @RequestMapping(value = "info",method = RequestMethod.GET)
-    public String getHzEWOBasicInfo(HzEWOBasicInfoQuery query, Model model){
+    public String getHzEWOBasicInfo(HzEWOBasicInfoQuery query,Model model){
 //        if(query.getId() == null){
 //            writeAjaxJSONResponse(ResultMessageBuilder.build(false,"非法参数！"),response);
 //            return ;
 //        }
+//        HzEWOBasicInfoQuery query = new HzEWOBasicInfoQuery();
+//        query.setId(id);
         HzEWOBasicInfoRespDTO respDTO = hzEWOBasicInfoService.findHzEWOBasicInfo(query);
         if(respDTO == null){
 //            writeAjaxJSONResponse(ResultMessageBuilder.build(false,"暂无数据！"),response);

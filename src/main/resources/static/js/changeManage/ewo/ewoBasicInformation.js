@@ -1,6 +1,4 @@
 $(document).ready((function () {
-
-
     var myData = JSON.stringify({
         "id": $("#id").val(),
         "ewoNo": $("#ewoNo").val(),

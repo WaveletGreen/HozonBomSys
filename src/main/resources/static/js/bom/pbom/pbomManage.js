@@ -27,7 +27,7 @@ function initTable(pBomUrl) {
         type: "GET",
         success: function (result) {
             var column = [];
-            column.push({field: 'eBomPuid', title: '主键'});
+            // column.push({field: 'eBomPuid', title: '主键'});
             column.push({field: 'ck', checkbox: true, Width: 50});
             // column.push({
             //     field: '',
