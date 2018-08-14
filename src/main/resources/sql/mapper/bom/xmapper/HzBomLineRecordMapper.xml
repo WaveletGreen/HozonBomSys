@@ -264,7 +264,7 @@
 
 
     <update id="HzBomLineRecordDaoImpl_update" parameterType="sql.pojo.bom.HzBomLineRecord">
-        update HZ_BOM_LINE_RECORD
+        update ${tableName}
         <set>
             <if test="parentUid != null">
                 P_PARENT_UID = #{parentUid,jdbcType=VARCHAR},
@@ -316,7 +316,12 @@
             <if test="bomLineBlock != null">
                 P_BOM_LINE_BLOCK = #{bomLineBlock,jdbcType=VARCHAR},
             </if>
-            P_EBOM_STATUS =2,
+            <if test="status != null">
+                P_EBOM_STATUS = #{status,jdbcType=VARCHAR},
+            </if>
+            <if test="status == null">
+                P_EBOM_STATUS = 2,
+            </if>
             <if test="pFnaInfo != null">
                 P_FNA_INFO = #{pFnaInfo,jdbcType=VARCHAR},
             </if>
@@ -444,39 +449,43 @@
         </set>
         <where>
             PUID = #{puid,jdbcType=VARCHAR}
-            <if test="id != null">
-                and ID = #{id,jdbcType=DOUBLE}
+            <if test='ewoNo == "1" '>
+                and (P_EWO_NO is null or P_EWO_NO ='1')
             </if>
         </where>
     </update>
 
     <!--查询一条bom信息-->
     <select id="HzBomLineRecordDaoImpl_findBomLineByPuid" parameterType="java.util.Map" resultMap="BaseResultMap">
-        SELECT
-        <include refid="Base_Column_List"/>
-        ,
-        <include refid="Blob_Column_List"/>
+        SELECT *
         from ${tableName}
         where P_BOM_DIGIFAX_ID =(
         select t2.puid from Hz_Bom_Main_Record t2
         where
         t2.p_cfg0_of_which_project_puid=#{projectId,jdbcType=VARCHAR}
-        ) and PUID=#{puid,jdbcType=VARCHAR}
+        )
+        and PUID=#{puid,jdbcType=VARCHAR}
+        <if test="ewoNo != null">
+            and P_EWO_NO = #{ewoNo,jdbcType=VARCHAR}
+        </if>
         and P_EBOM_STATUS<![CDATA[ <> ]]>0
     </select>
 
 
     <select id="HzBomLineRecordDaoImpl_findBomListForChange" parameterType="java.util.Map" resultMap="BaseResultMap">
-        SELECT
-        <include refid="Bom_Column_For_Change"/>
-        ,
-        <include refid="Blob_Column_List"/>
+        SELECT *
         from ${tableName}
         where P_BOM_DIGIFAX_ID =(
         select t2.puid from Hz_Bom_Main_Record t2
         where
         t2.p_cfg0_of_which_project_puid=#{projectId,jdbcType=VARCHAR}
-        ) and PUID=#{puid,jdbcType=VARCHAR}
+        )
+        <if test="ewoNo != null">
+          and P_EWO_NO = #{ewoNo,jdbcType=VARCHAR}
+        </if>
+        <if test="puid != null">
+            and PUID=#{puid,jdbcType=VARCHAR}
+        </if>
         and P_EBOM_STATUS<![CDATA[ <> ]]>0
     </select>
 
@@ -566,11 +575,16 @@
         <foreach collection="list" item="item" index="index" open="begin" close=";end;" separator=";">
             update HZ_BOM_LINE_RECORD
             <set>
-                P_EBOM_STATUS=0,
+                <if test="item.status != null">
+                    P_EBOM_STATUS = #{item.status,jdbcType=INTEGER},
+                </if>
+                <if test="item.status == null">
+                    P_EBOM_STATUS =0,
+                </if>
                 P_UPDATE_TIME =sysdate
             </set>
             where PUID = #{item.puid,jdbcType=VARCHAR}
-        </foreach>
+           </foreach>
     </update>
 
     <!--删除-->
@@ -625,4 +639,21 @@
         <!--and t2.P_EBOM_STATUS <![CDATA[ <> ]]> 0-->
         <!--order by t2.p_bom_order_num-->
     <!--</select>-->
+
+
+
+    <!--批量更新EBOM  EWO变更 主要是对状态值和ewo编号的更新-->
+    <update id="HzEbomRecordDAOImpl_updateBatch" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" open="begin" close=";end;" separator=";">
+            update ${item.tableName}
+            <set>
+                <if test="item.status != null">
+                    P_EBOM_STATUS = #{item.status,jdbcType=INTEGER},
+                </if>
+                P_UPDATE_TIME =sysdate,
+                P_EWO_NO = #{item.ewoNo,jdbcType=VARCHAR}
+            </set>
+            where PUID = #{item.puid,jdbcType=VARCHAR}
+        </foreach>
+    </update>
 </mapper>

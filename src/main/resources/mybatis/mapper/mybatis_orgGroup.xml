@@ -122,4 +122,14 @@
 		order by ${sort} ${order}
 		</if>
 	</select>
+
+
+
+	<!--获取组织架构信息信息-->
+	<select id="queryOrgGroupById" parameterType="Long" resultMap="OrgGroupMap">
+		SELECT group_id,existing_num,group_code,name,node,num,parent_node FROM org_group
+
+	 	where group_id=#{groupId}
+
+	</select>
 </mapper>

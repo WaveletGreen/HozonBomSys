@@ -366,6 +366,10 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
                 respDTO.setPuid(hzWorkProcess.getPuid());
                 respDTO.setpMaterielCode(hzWorkProcess.getpMaterielCode());
                 respDTO.setpMaterielDesc(hzWorkProcess.getpMaterielDesc());
+                respDTO.setControlCode(hzWorkProcess.getControlCode());
+                respDTO.setPurpose(hzWorkProcess.getPurpose());
+                respDTO.setState(hzWorkProcess.getState());
+                respDTO.setpWorkPuid(hzWorkProcess.getpWorkPuid());
                 return respDTO;
             }
         }catch (Exception e){

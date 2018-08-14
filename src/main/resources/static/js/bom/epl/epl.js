@@ -40,7 +40,7 @@ function initTable(eplUrl){
         type: "GET",
         success: function (result) {
             var column = [];
-            column.push({field: 'puid', title: '主键'});
+            // column.push({field: 'puid', title: '主键'});
             /*var data = result.data;
             var nameZh =data[0];
             var nameEn = data[1];

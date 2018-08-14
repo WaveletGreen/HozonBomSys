@@ -9,6 +9,8 @@ public class OperateResultMessageRespDTO {
 
     public static final String SUCCESS_MSG ="操作成功！";
     public static final String FAILED_MSG ="操作失败,请稍后重试！";
+    public static final String NOT_PRIVILEGE = "对不起，您当前没有操作权限！";
+
     public static final Long SUCCESS_CODE = 1000L;
     public static final Long FAILED_CODE = 1001L;
     /**
@@ -58,5 +60,12 @@ public class OperateResultMessageRespDTO {
         respDTO.setErrMsg(FAILED_MSG);
         respDTO.setErrCode(FAILED_CODE);
         return respDTO;
+    }
+
+    public static OperateResultMessageRespDTO getFailPrivilege(){
+        OperateResultMessageRespDTO operateResultMessageRespDTO = new OperateResultMessageRespDTO();
+        operateResultMessageRespDTO.setErrMsg(NOT_PRIVILEGE);
+        operateResultMessageRespDTO.setErrCode(FAILED_CODE);
+        return operateResultMessageRespDTO;
     }
 }

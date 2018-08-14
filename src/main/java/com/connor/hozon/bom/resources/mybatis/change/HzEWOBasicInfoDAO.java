@@ -16,4 +16,12 @@ public interface HzEWOBasicInfoDAO {
     int update(HzEWOBasicInfo hzEWOBasicInfo);
 
     List<HzEWOBasicInfo> findHzEWOBasicInfoList(HzEWOBasicInfoQuery query);
+
+    /**
+     * 获取当前年月的EWO编号的最大后四位
+     * @param projectId 项目id
+     * @param ym 当前年月字符串
+     * @return
+     */
+    String getMaxEWONoLastFourIndexInThisMonth(String projectId,String ym);
 }

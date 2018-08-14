@@ -65,4 +65,8 @@ public interface HzEbomRecordDAO {
      * @return
      */
     Integer findMinOrderNumWhichGreaterThanThisOrderNum(String projectId,int orderNum);
+
+
+    int insert(HzEPLManageRecord record);
+
 }
