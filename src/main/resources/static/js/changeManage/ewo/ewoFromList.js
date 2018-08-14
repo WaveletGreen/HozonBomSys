@@ -25,7 +25,8 @@ function initTable() {
         formatter: function (value, row, index) {
             var id = row.id
             return [
-                '<a href="ewo/base/info?id='+id +'">' + value + '</a>'
+                // '<a href="ewo/base/info?id='+id +'">' + value + '</a>'
+                '<a href="javascript:void(0)" onclick="queryLou(' + id + ')">' + value + '</a>'
             ].join("");
         }
     });
@@ -74,7 +75,7 @@ function initTable() {
         height: $(window.parent.document).find("#wrapper").height() - 90,
         width: $(window).width(),
         showToggle: false,                   //是否显示详细视图和列表视图的切换按钮
-        showRefresh: false,                  //是否显示刷新按钮
+        showRefresh: true,                  //是否显示刷新按钮
         pagination: true,                   //是否显示分页（*）
         pageSize: 20,
         pageNumber: 1,
@@ -183,17 +184,9 @@ function initTable() {
     //     }
     // })
 }
-// function queryEWO(row) {
-//     var longInt = parseInt(row);
-//     $.ajax({
-//         type: "get",
-//         //ajax需要添加打包名
-//         url: "/ewo/base/info?id="+longInt,
-//         //data: myData,
-//         contentType: "application/json",
-//         undefinedText: "",
-//     })
-// }
+function queryLou(id) {
+    window.location.href="ewo/base/info?id="+id;
+}
 // function basic() {
 //     window.Ewin.dialog({
 //         title: '信息',

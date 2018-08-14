@@ -20,12 +20,12 @@ function doQuery() {
 }
 
 function initTable(eBomUrl) {
-    var projectPuid = $("#project", window.top.document).val();
-    //var eBomUrl ="ebom/getEBom/list?projectId=" + projectPuid
+    var projectId = $("#project", window.top.document).val();
+    //var eBomUrl ="ebom/getEBom/list?projectId=" + projectId
     var $table = $("#ebomManageTable");
     var column = [];
     $.ajax({
-        url: "ebom/title?projectId=" + projectPuid,
+        url: "ebom/title?projectId=" + projectId,
         type: "GET",
         success: function (result) {
             var column = [];
