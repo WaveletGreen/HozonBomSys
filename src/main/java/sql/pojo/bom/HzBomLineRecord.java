@@ -1,6 +1,7 @@
 package sql.pojo.bom;
 
 import java.util.Date;
+import java.util.Objects;
 
 public class HzBomLineRecord {
 
@@ -168,6 +169,25 @@ public class HzBomLineRecord {
      * ewo编号
      */
     private String ewoNo;
+
+    /**
+     * 根据puid来进行判断重复 重新equals方法
+     * @param o
+     * @return
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        HzBomLineRecord record = (HzBomLineRecord) o;
+        return Objects.equals(puid, record.puid);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(puid);
+    }
 
     public Long getId() {
         return id;

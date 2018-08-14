@@ -19,6 +19,7 @@ import com.connor.hozon.bom.resources.service.bom.HzEbomService;
 import com.connor.hozon.bom.resources.service.bom.HzMbomService;
 import com.connor.hozon.bom.resources.service.epl.HzEPLManageRecordService;
 import com.connor.hozon.bom.resources.util.ListUtil;
+import com.connor.hozon.bom.resources.util.PrivilegeUtil;
 import com.connor.hozon.bom.sys.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -1703,11 +1704,9 @@ public class HzEbomServiceImpl implements HzEbomService {
     public OperateResultMessageRespDTO deleteHzEbomRecordById(DeleteHzEbomReqDTO reqDTO) {
         OperateResultMessageRespDTO respDTO = new OperateResultMessageRespDTO();
         try {
-            User user = UserInfo.getUser();
-            if (user.getGroupId() != 9) {
-                respDTO.setErrMsg("你当前没有权限执行此操作");
-                respDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
-                return respDTO;
+            boolean b = PrivilegeUtil.writePrivilege();
+            if(!b){
+                return OperateResultMessageRespDTO.getFailPrivilege();
             }
             if(reqDTO.getPuids() == null || reqDTO.getPuids().equals("") || reqDTO.getProjectId() ==null || reqDTO.getProjectId().equals("")){
                 respDTO.setErrMsg("非法参数！");
@@ -1771,6 +1770,7 @@ public class HzEbomServiceImpl implements HzEbomService {
                 for(String s:set){
                     DeleteHzEbomReqDTO deleteHzEbomReqDTO = new DeleteHzEbomReqDTO();
                     deleteHzEbomReqDTO.setPuid(s);
+                    deleteHzEbomReqDTO.setStatus(4);
                     list.add(deleteHzEbomReqDTO);
                 }
                 if(ListUtil.isNotEmpty(list)){

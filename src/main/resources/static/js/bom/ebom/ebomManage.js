@@ -112,7 +112,7 @@ function initTable(eBomUrl) {
                         return "<span style='color: #00B83F'>已生效</span>";
                     }
                     if (value == 2 || "2" == value) {
-                        return "<span style='color: #a97f89'>草稿状态</span>";
+                        return "<span style='color: #ff7cf4'>草稿状态</span>";
                     }
                     if (3 == value || "3" == value) {
                         return "<span style='color: #9492a9'>废除状态</span>";

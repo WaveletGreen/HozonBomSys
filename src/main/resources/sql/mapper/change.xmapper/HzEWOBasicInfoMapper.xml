@@ -65,7 +65,7 @@
 
 
   <insert id="HzEWOBasicInfoDAOImpl_insert" parameterType="sql.pojo.change.HzEWOBasicInfo">
-    insert into HZ_EWO_BASIC_INFO (EWO_NO, DEPT,
+    insert into HZ_EWO_BASIC_INFO (ID,EWO_NO, DEPT,
       CHANGE_TYPE, REASON_CODE, FORM_CREATE_TIME, 
       FLOW_STATUS, TITLE, ORIGINATOR, 
       TEL, FINISH_TIME, COST_ASSUME_DEPT, 
@@ -74,7 +74,7 @@
       EFFECT_TIME, PROJECT_STAGE, RELATION_ENGINEER, 
       RELATION_ENGINEER_DEPT, RELATION_ITEM_ID, RELATION_ITEM_NAME, 
       CHANGE_DESC,ORIGINATOR_ID,PROJECT_ID)
-    values (#{ewoNo,jdbcType=VARCHAR}, #{dept,jdbcType=VARCHAR},
+    values (SEQ_HZ_EWO_BASIC_INFO.nextval,#{ewoNo,jdbcType=VARCHAR}, #{dept,jdbcType=VARCHAR},
       #{changeType,jdbcType=VARCHAR}, #{reasonCode,jdbcType=VARCHAR}, #{formCreateTime,jdbcType=TIMESTAMP}, 
       #{flowStatus,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, #{originator,jdbcType=VARCHAR}, 
       #{tel,jdbcType=VARCHAR}, #{finishTime,jdbcType=TIMESTAMP}, #{costAssumeDept,jdbcType=VARCHAR}, 

@@ -68,6 +68,9 @@ public class HzBomLineRecordDaoImpl extends BaseSQLUtil {
      * @return
      */
     public List<HzBomLineRecord> findBomListForChange(Map map){
+        if(null == map.get("tableName") || map.get("tableName").equals("")){
+            map.put("tableName","HZ_BOM_LINE_RECORD");
+        }
         return super.findForList("HzBomLineRecordDaoImpl_findBomListForChange",map);
     }
 
@@ -90,5 +93,14 @@ public class HzBomLineRecordDaoImpl extends BaseSQLUtil {
 
     public int delete(String puid){
         return super.delete("HzEbomRecordDAOImpl_delete",puid);
+    }
+
+    /**
+     * 批量更新
+     * @param records
+     * @return
+     */
+    public int updateBatch(List<HzBomLineRecord> records){
+        return super.update("HzEbomRecordDAOImpl_updateBatch",records);
     }
 }
