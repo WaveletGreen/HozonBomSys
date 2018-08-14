@@ -54,7 +54,7 @@ public class HzEWOServiceImpl implements HzEWOService {
             }
             String puids = reqDTO.getPuids();
             User user = UserInfo.getUser();
-            String createYM = DateUtil.getTodayTextYMD();
+            String createYM = DateUtil.getTodayTextYM();
             Date createTime = new Date();
             String lastFourIndex = hzEWOBasicInfoDAO.getMaxEWONoLastFourIndexInThisMonth(reqDTO.getProjectId(),createYM);
             if(lastFourIndex == null){
@@ -212,7 +212,7 @@ public class HzEWOServiceImpl implements HzEWOService {
         int length = (i+"").length();
         if(length<4){
             StringBuffer stringBuffer = new StringBuffer();
-            for(int j = 0;j<length-4;j++){
+            for(int j = 0;j<4-length;j++){
                 stringBuffer.append("0");
             }
             stringBuffer.append(String.valueOf(i));
@@ -222,6 +222,7 @@ public class HzEWOServiceImpl implements HzEWOService {
         }
         return lastFourIndex;
     }
+
 
 
 }
