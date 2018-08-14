@@ -91,10 +91,6 @@
                         <!--<option>系统集成技术部门</option>-->
                         <!--<option>内外饰技术部门</option>-->
                         <option>车身部门</option>
-                        <option>车身部门</option>
-                        <option>车身部门</option>
-                        <option>车身部门</option>
-                        <option>车身部门</option>
                     </select>
                 </div>
                 <div class="form-group after_the">
@@ -108,7 +104,7 @@
                            placeholder=""/>
                 </div>
                 <div class="form-group">
-                    <button type="button" id="queryBtn1" onclick="doQuery();" class="btn btn-primary">重置</button>
+                    <button type="reset" id="queryBtn1" class="btn btn-primary">重置</button>
                 </div>
                 <div class="form-group">
                     <button type="button" id="queryBtn" onclick="doQuery();" class="btn btn-primary">查询</button>
@@ -118,79 +114,81 @@
     </div>
 </div>
 <div class="content col-lg-12"><!--style="margin-top: -50px;"-->
-    <table id="vwo_table" class="table table-striped tableNormalStyle">
-        <tr>
-            <th>vwo号</th>
-            <th>vwo名称</th>
-            <th>审批类型</th>
-            <th>vwo需求类型</th>
-            <th>vwo状态</th>
-            <th>预计实施时间</th>
-            <th>vwo提出者</th>
-            <th>提出时间</th>
-        </tr>
-        <tr>
-            <td><a href="vwo/vwoFromList">2018072400001</a></td>
-            <td><a href="vwo/vwoFromList">发布VPPS</a></td>
-            <td><a href="vwo/vwoFromList">VPPS</a></td>
-            <td><a href="vwo/vwoFromList">制造需求</a></td>
-            <td><a href="vwo/vwoFromList">开启</a></td>
-            <td><a href="vwo/vwoFromList">2018-07-28</a></td>
-            <td><a href="vwo/vwoFromList">BOM工程师</a></td>
-            <td><a href="vwo/vwoFromList">2018-07-24</a></td>
-        </tr>
-        <tr>
-            <td><a href="vwo/vwoFromList">2018072400001</a></td>
-            <td><a href="vwo/vwoFromList">发布VPPS</a></td>
-            <td><a href="vwo/vwoFromList">VPPS</a></td>
-            <td><a href="vwo/vwoFromList">制造需求</a></td>
-            <td><a href="vwo/vwoFromList">开启</a></td>
-            <td><a href="vwo/vwoFromList">2018-07-28</a></td>
-            <td><a href="vwo/vwoFromList">BOM工程师</a></td>
-            <td><a href="vwo/vwoFromList">2018-07-24</a></td>
-        </tr>
-        <tr>
-            <td><a href="vwo/vwoFromList">2018072400001</a></td>
-            <td><a href="vwo/vwoFromList">发布VPPS</a></td>
-            <td><a href="vwo/vwoFromList">VPPS</a></td>
-            <td><a href="vwo/vwoFromList">制造需求</a></td>
-            <td><a href="vwo/vwoFromList">开启</a></td>
-            <td><a href="vwo/vwoFromList">2018-07-28</a></td>
-            <td><a href="vwo/vwoFromList">BOM工程师</a></td>
-            <td><a href="vwo/vwoFromList">2018-07-24</a></td>
-        </tr>
-        <tr>
-            <td><a href="vwo/vwoFromList">2018072400001</a></td>
-            <td><a href="vwo/vwoFromList">发布VPPS</a></td>
-            <td><a href="vwo/vwoFromList">VPPS</a></td>
-            <td><a href="vwo/vwoFromList">制造需求</a></td>
-            <td><a href="vwo/vwoFromList">开启</a></td>
-            <td><a href="vwo/vwoFromList">2018-07-28</a></td>
-            <td><a href="vwo/vwoFromList">BOM工程师</a></td>
-            <td><a href="vwo/vwoFromList">2018-07-24</a></td>
-        </tr>
-        <tr>
-            <td><a href="vwo/vwoFromList">2018072400001</a></td>
-            <td><a href="vwo/vwoFromList">发布VPPS</a></td>
-            <td><a href="vwo/vwoFromList">VPPS</a></td>
-            <td><a href="vwo/vwoFromList">制造需求</a></td>
-            <td><a href="vwo/vwoFromList">开启</a></td>
-            <td><a href="vwo/vwoFromList">2018-07-28</a></td>
-            <td><a href="vwo/vwoFromList">BOM工程师</a></td>
-            <td><a href="vwo/vwoFromList">2018-07-24</a></td>
-        </tr>
-        <tr>
-            <td><a href="vwo/vwoFromList">2018072400001</a></td>
-            <td><a href="vwo/vwoFromList">发布VPPS</a></td>
-            <td><a href="vwo/vwoFromList">VPPS</a></td>
-            <td><a href="vwo/vwoFromList">制造需求</a></td>
-            <td><a href="vwo/vwoFromList">开启</a></td>
-            <td><a href="vwo/vwoFromList">2018-07-28</a></td>
-            <td><a href="vwo/vwoFromList">BOM工程师</a></td>
-            <td><a href="vwo/vwoFromList">2018-07-24</a></td>
-        </tr>
+    <table id="vwo_table" class="table table-striped">
+        <!--<tr>-->
+        <!--<th>vwo号</th>-->
+        <!--<th>vwo名称</th>-->
+        <!--<th>审批类型</th>-->
+        <!--<th>vwo需求类型</th>-->
+        <!--<th>vwo状态</th>-->
+        <!--<th>预计实施时间</th>-->
+        <!--<th>vwo提出者</th>-->
+        <!--<th>提出时间</th>-->
+        <!--</tr>-->
+        <!--<tr>-->
+        <!--<td><a th:href="${href==null?'vwo/vwoFromList':href}">2018072400001</a></td>-->
+        <!--<td><a th:href="${href}">发布VPPS</a></td>-->
+        <!--<td><a href="vwo/vwoFromList">VPPS</a></td>-->
+        <!--<td><a href="vwo/vwoFromList">制造需求</a></td>-->
+        <!--<td><a href="vwo/vwoFromList">开启</a></td>-->
+        <!--<td><a href="vwo/vwoFromList">2018-07-28</a></td>-->
+        <!--<td><a href="vwo/vwoFromList">BOM工程师</a></td>-->
+        <!--<td><a href="vwo/vwoFromList">2018-07-24</a></td>-->
+        <!--</tr>-->
+        <!--<tr>-->
+        <!--<td><a href="vwo/vwoFromList">2018072400001</a></td>-->
+        <!--<td><a href="vwo/vwoFromList">发布VPPS</a></td>-->
+        <!--<td><a href="vwo/vwoFromList">VPPS</a></td>-->
+        <!--<td><a href="vwo/vwoFromList">制造需求</a></td>-->
+        <!--<td><a href="vwo/vwoFromList">开启</a></td>-->
+        <!--<td><a href="vwo/vwoFromList">2018-07-28</a></td>-->
+        <!--<td><a href="vwo/vwoFromList">BOM工程师</a></td>-->
+        <!--<td><a href="vwo/vwoFromList">2018-07-24</a></td>-->
+        <!--</tr>-->
+        <!--<tr>-->
+        <!--<td><a href="vwo/vwoFromList">2018072400001</a></td>-->
+        <!--<td><a href="vwo/vwoFromList">发布VPPS</a></td>-->
+        <!--<td><a href="vwo/vwoFromList">VPPS</a></td>-->
+        <!--<td><a href="vwo/vwoFromList">制造需求</a></td>-->
+        <!--<td><a href="vwo/vwoFromList">开启</a></td>-->
+        <!--<td><a href="vwo/vwoFromList">2018-07-28</a></td>-->
+        <!--<td><a href="vwo/vwoFromList">BOM工程师</a></td>-->
+        <!--<td><a href="vwo/vwoFromList">2018-07-24</a></td>-->
+        <!--</tr>-->
+        <!--<tr>-->
+        <!--<td><a href="vwo/vwoFromList">2018072400001</a></td>-->
+        <!--<td><a href="vwo/vwoFromList">发布VPPS</a></td>-->
+        <!--<td><a href="vwo/vwoFromList">VPPS</a></td>-->
+        <!--<td><a href="vwo/vwoFromList">制造需求</a></td>-->
+        <!--<td><a href="vwo/vwoFromList">开启</a></td>-->
+        <!--<td><a href="vwo/vwoFromList">2018-07-28</a></td>-->
+        <!--<td><a href="vwo/vwoFromList">BOM工程师</a></td>-->
+        <!--<td><a href="vwo/vwoFromList">2018-07-24</a></td>-->
+        <!--</tr>-->
+        <!--<tr>-->
+        <!--<td><a href="vwo/vwoFromList">2018072400001</a></td>-->
+        <!--<td><a href="vwo/vwoFromList">发布VPPS</a></td>-->
+        <!--<td><a href="vwo/vwoFromList">VPPS</a></td>-->
+        <!--<td><a href="vwo/vwoFromList">制造需求</a></td>-->
+        <!--<td><a href="vwo/vwoFromList">开启</a></td>-->
+        <!--<td><a href="vwo/vwoFromList">2018-07-28</a></td>-->
+        <!--<td><a href="vwo/vwoFromList">BOM工程师</a></td>-->
+        <!--<td><a href="vwo/vwoFromList">2018-07-24</a></td>-->
+        <!--</tr>-->
+        <!--<tr>-->
+        <!--<td><a href="vwo/vwoFromList">2018072400001</a></td>-->
+        <!--<td><a href="vwo/vwoFromList">发布VPPS</a></td>-->
+        <!--<td><a href="vwo/vwoFromList">VPPS</a></td>-->
+        <!--<td><a href="vwo/vwoFromList">制造需求</a></td>-->
+        <!--<td><a href="vwo/vwoFromList">开启</a></td>-->
+        <!--<td><a href="vwo/vwoFromList">2018-07-28</a></td>-->
+        <!--<td><a href="vwo/vwoFromList">BOM工程师</a></td>-->
+        <!--<td><a href="vwo/vwoFromList">2018-07-24</a></td>-->
+        <!--</tr>-->
     </table>
 </div>
-<!--<script th:src="@{/js/changeManage/vwo/vwoFromList.js}"></script>-->
+<script th:src="@{/js/helper/projectHelper.js}"></script>
+<script th:src="@{/js/helper/dateFormater.js}"></script>
+<script th:src="@{/js/changeManage/vwo/vwoFormList.js}"></script>
 </body>
 </html>

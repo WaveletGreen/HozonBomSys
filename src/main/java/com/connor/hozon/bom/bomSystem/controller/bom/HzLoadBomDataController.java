@@ -108,16 +108,17 @@ public class HzLoadBomDataController {
     public boolean reflect2Y(@RequestBody Map<String, String> params) {
         List<HzCfg0OfBomLineRecord> records = new ArrayList<>();
         HZBomMainRecord mainRecord = new HZBomMainRecord();
-        Map<String,String> myParam=new HashMap<>();
+        Map<String, String> myParam = new HashMap<>();
+        Map<String, String> coach = new HashMap<>();
         String projectUid;
         if (params != null) {
             int index = 0;
             Iterator<Map.Entry<String, String>> iterator = params.entrySet().iterator();
             while (iterator.hasNext()) {
                 if (index <= 0) {
-                    projectUid=iterator.next().getValue();
+                    projectUid = iterator.next().getValue();
                     mainRecord = hzBomMainRecordDao.selectByProjectPuid(projectUid);
-                    myParam.put("projectId",projectUid);
+                    myParam.put("projectId", projectUid);
                     index++;
                     continue;
                 }
@@ -132,8 +133,15 @@ public class HzLoadBomDataController {
                 if (p2 == null || p1 == null) {
                     continue;
                 }
-                myParam.put("puid",p2.getValue());
-                HzBomLineRecord bomLineRecord=hzBomLineRecordDao.findBomLineByPuid(myParam);
+                myParam.put("puid", p2.getValue());
+                if (coach.containsKey(p2.getValue())) {
+                    continue;
+                }
+
+                HzBomLineRecord bomLineRecord = hzBomLineRecordDao.findBomLineByPuid(myParam);
+                if (bomLineRecord == null) {
+                    continue;
+                }
                 //需要强关联
                 record.setpCfg0name(p1.getKey());
                 //对应的bom行的UID
@@ -149,6 +157,7 @@ public class HzLoadBomDataController {
                 record.setpBomDigifaxId(mainRecord.getPuid());
                 record.setPuid(UUIDHelper.generateUpperUid());
                 records.add(record);
+                coach.put(p2.getValue(), p2.getValue());
                 index++;
             }
             if (!debug) {

@@ -3,6 +3,8 @@ package com.connor.hozon.bom.bomSystem.dao.cfg.vwo;
 import org.springframework.context.annotation.Configuration;
 import sql.pojo.cfg.vwo.HzFeatureChangeBean;
 
+import java.util.List;
+
 @Configuration
 public interface HzFeatureChangeDao {
     /**
@@ -47,4 +49,5 @@ public interface HzFeatureChangeDao {
      */
     int updateByPrimaryKey(HzFeatureChangeBean record);
 
+    List<HzFeatureChangeBean> selectByVwoId(HzFeatureChangeBean bean);
 }

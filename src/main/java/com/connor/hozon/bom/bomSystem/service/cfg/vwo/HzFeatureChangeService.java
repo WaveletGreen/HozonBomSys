@@ -8,6 +8,7 @@ import sql.pojo.cfg.HzCfg0Record;
 import sql.pojo.cfg.vwo.HzFeatureChangeBean;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @Author: Fancyears·Maylos·Maywas
@@ -218,6 +219,7 @@ public class HzFeatureChangeService implements IHzFeatureChangeService {
         return doInsert(bean);
     }
 
+
     /**
      * 配置对应的变更，做字段按对应
      *
@@ -268,6 +270,31 @@ public class HzFeatureChangeService implements IHzFeatureChangeService {
         /*VWO_ID*/
         bean.setVwoId(record.getVwoId());
         return bean;
+    }
+
+    /**
+     * 根据VWO号查找变更后的数据
+     * @param vwo
+     * @return
+     */
+    @Override
+    public List<HzFeatureChangeBean> doSelectAfterByVwoId(Long vwo) {
+        HzFeatureChangeBean bean = new HzFeatureChangeBean();
+        bean.setVwoId(vwo);
+        setAfterTable(bean);
+        return hzFeatureChangeDao.selectByVwoId(bean);
+    }
+    /**
+     * 根据VWO号查找变更前的数据
+     * @param vwo
+     * @return
+     */
+    @Override
+    public List<HzFeatureChangeBean> doSelectBeforeByVwoId(Long vwo) {
+        HzFeatureChangeBean bean = new HzFeatureChangeBean();
+        bean.setVwoId(vwo);
+        setAfterTable(bean);
+        return hzFeatureChangeDao.selectByVwoId(bean);
     }
 
 }

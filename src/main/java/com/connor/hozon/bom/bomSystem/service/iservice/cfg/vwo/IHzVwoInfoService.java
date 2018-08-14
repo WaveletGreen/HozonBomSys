@@ -1,6 +1,10 @@
 package com.connor.hozon.bom.bomSystem.service.iservice.cfg.vwo;
 
+import com.connor.hozon.bom.common.base.entity.QueryBase;
 import sql.pojo.cfg.vwo.HzVwoInfo;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * @Author: Fancyears·Maylos·Maywas
@@ -47,4 +51,17 @@ public interface IHzVwoInfoService {
      * @return
      */
     HzVwoInfo doFindMaxAreaVwoNum();
+
+    /**
+     * 根据分页进行查询
+     */
+    List<HzVwoInfo> doSelectListByProjectUid(QueryBase queryBase, String projectUid);
+
+    /**
+     * 当前项目下的总数
+     *
+     * @param projectUid
+     * @return
+     */
+    int tellMeHowManyOfIt(String projectUid);
 }

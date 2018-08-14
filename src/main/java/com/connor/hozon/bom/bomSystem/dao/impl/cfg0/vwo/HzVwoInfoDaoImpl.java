@@ -1,10 +1,14 @@
 package com.connor.hozon.bom.bomSystem.dao.impl.cfg0.vwo;
 
 import com.connor.hozon.bom.bomSystem.dao.cfg.vwo.HzVwoInfoDao;
+import com.connor.hozon.bom.common.base.entity.QueryBase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import sql.IBaseSQLUtil;
 import sql.pojo.cfg.vwo.HzVwoInfo;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * @Author: Fancyears·Maylos·Maywas
@@ -16,6 +20,8 @@ import sql.pojo.cfg.vwo.HzVwoInfo;
 public class HzVwoInfoDaoImpl implements HzVwoInfoDao {
     @Autowired
     IBaseSQLUtil baseSQLUtil;
+
+    private static final HzVwoInfo INFO = new HzVwoInfo();
 
     /**
      * 主键删除
@@ -70,6 +76,32 @@ public class HzVwoInfoDaoImpl implements HzVwoInfoDao {
      */
     @Override
     public HzVwoInfo findMaxAreaVwoNum() {
-        return baseSQLUtil.executeQueryById(new HzVwoInfo(), "com.connor.hozon.bom.bomSystem.dao.cfg.vwo.HzVwoInfoDao.findMaxAreaVwoNum");
+        return baseSQLUtil.executeQueryById(INFO, "com.connor.hozon.bom.bomSystem.dao.cfg.vwo.HzVwoInfoDao.findMaxAreaVwoNum");
     }
+
+    /**
+     * 分页查询
+     *
+     * @param params
+     * @return
+     *
+     * QueryBase queryBase,String projectUid
+     */
+    @Override
+    public List<HzVwoInfo> selectListByProjectUid(Map<String,Object> params) {
+        return baseSQLUtil.executeQueryByPass(INFO, params, "com.connor.hozon.bom.bomSystem.dao.cfg.vwo.HzVwoInfoDao.selectListByProjectUid");
+    }
+
+    /**
+     * 获取当前项目下的变更总数
+     *
+     * @param projectUid
+     * @return
+     */
+    @Override
+    public int tellMeHowManyOfIt(String projectUid) {
+        return baseSQLUtil.executeQueryByPass(new Integer(-1), projectUid, "com.connor.hozon.bom.bomSystem.dao.cfg.vwo.HzVwoInfoDao.tellMeHowManyOfIt", true);
+    }
+
+
 }

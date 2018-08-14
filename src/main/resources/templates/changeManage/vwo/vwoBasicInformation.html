@@ -9,26 +9,38 @@
 <body>
 <!--基本信息-->
 <h4><i class="fa fa-minus-square" aria-hidden="true">基本信息</i></h4>
+<a th:href="${href}">返回</a>
 <div class="panel-body" style="padding:0;">
     <div class="panel panel-default">
         <div class="panel-body">
             <div class="col-lg-12 col-md-12">
                 <div class="col-lg-2 col-md-2">
                     <div class="form-group after_the">
-                        <label for="VWOnum">VWO号:</label>
-                        <input type="text" style="width: 150px" class="form-control" name="level" id="VWOnum"
-                               placeholder=""/>
+                        <label for="vwoNum">VWO号:</label>
+                        <input class="form-control" style="width: 150px"
+                               id="vwoNum" name="vwoNum"
+                               type="text"
+                               disabled="disabled"
+                               th:value="${vwoInfo.getVwoNum()}"
+                        />
                     </div>
                     <div class="form-group  after_the">
-                        <label for="creatTime">创建时间:</label>
-                        <input type="text" style="width: 150px" class="form-control" name="pBomOfWhichDept"
-                               id="creatTime"
-                               placeholder=""/>
+                        <label for="vwoCreateDate">创建时间:</label>
+                        <input class="form-control" style="width: 150px"
+                               id="vwoCreateDate" name="vwoCreateDate"
+                               type="text"
+                               disabled="disabled"
+                               th:value="${vwoInfo.getVwoCreateDate()}"
+                        />
                     </div>
                     <div class="form-group  after_the">
-                        <label for="processState">流程状态:</label>
-                        <input type="text" style="width: 150px" class="form-control" name="rank" id="processState"
-                               placeholder=""/>
+                        <label for="vwoStatus">流程状态:</label>
+                        <input class="form-control" style="width: 150px"
+                               id="vwoStatus" name="vwoStatus"
+                               type="text"
+                               disabled="disabled"
+                               th:value="${vwoInfo.getVwoStatusName()}"
+                        />
                     </div>
                     <div class="form-group after_the">
                         <label for="title">标题:</label>
@@ -43,9 +55,13 @@
                                placeholder=""/>
                     </div>
                     <div class="form-group after_the">
-                        <label for="initiator">发起人:</label>
-                        <input type="text" style="width: 150px" class="form-control" name="itemType" id="initiator"
-                               placeholder=""/>
+                        <label for="getVwoCreator">发起人:</label>
+                        <input class="form-control" style="width: 150px"
+                               id="getVwoCreator" name="getVwoCreator"
+                               type="text"
+                               disabled="disabled"
+                               th:value="${vwoInfo.getVwoCreator()}"
+                        />
                     </div>
                     <div class="form-group after_the">
                         <label for="phone">联系电话:</label>
@@ -69,10 +85,6 @@
                     <div class="form-group after_the">
                         <label for="expenseDept">费用承担部门:</label>
                         <select class="form-control" style="width: 150px" name="" id="expenseDept">
-                            <option>车身部门</option>
-                            <option>车身部门</option>
-                            <option>车身部门</option>
-                            <option>车身部门</option>
                             <option>车身部门</option>
                         </select>
                     </div>
@@ -192,12 +204,6 @@
                         <td contentEditable="true"></td>
                         <td contentEditable="true"></td>
                     </tr>
-                    <!--<tr>
-                        <th>附件</th>
-                        <td contentEditable="true"></td>
-                        <td contentEditable="true"></td>
-                        <td contentEditable="true"></td>
-                    </tr>-->
                 </table>
             </div>
         </div>
@@ -420,36 +426,6 @@
 <div class="panel-body" style="padding-bottom:0px;">
     <div class="panel panel-default">
         <div class="panel-body">
-            <!--<div class="col-lg-12 col-md-12">-->
-                <!--<div class="col-lg-3 col-md-3">-->
-                    <!--&lt;!&ndash;<div class="form-group after_the">&ndash;&gt;-->
-                    <!--&lt;!&ndash;<label for="VWOnum">附件:</label>&ndash;&gt;-->
-                    <!--&lt;!&ndash;<input type="file" class="form-control" name="level" id="VWOnum1"&ndash;&gt;-->
-                    <!--&lt;!&ndash;placeholder=""/>&ndash;&gt;-->
-                    <!--&lt;!&ndash;</div>&ndash;&gt;-->
-                    <!--<div class="form-group  after_the">-->
-                        <!--<label for="creatTime">文件名称:</label>-->
-                        <!--<input type="text" class="form-control" name="pBomOfWhichDept"-->
-                               <!--id="creatTime2"-->
-                               <!--placeholder=""/>-->
-                    <!--</div>-->
-                <!--</div>-->
-                <!--<div class="col-lg-3 col-md-3">-->
-                    <!--<div class="form-group after_the">-->
-                        <!--<label for="VWOnum">上传人:</label>-->
-                        <!--<input type="text" class="form-control" name="level" id="VWOnum2"-->
-                               <!--placeholder=""/>-->
-                    <!--</div>-->
-                <!--</div>-->
-                <!--<div class="col-lg-3 col-md-3">-->
-                    <!--<div class="form-group  after_the">-->
-                        <!--<label for="creatTime">上传日期:</label>-->
-                        <!--<input type="text" class="form-control" name="pBomOfWhichDept"-->
-                               <!--id="creatTime1"-->
-                               <!--placeholder=""/>-->
-                    <!--</div>-->
-                <!--</div>-->
-            <!--</div>-->
             <div class="col-lg-12 col-md-12">
                 <div class="col-lg-12 col-md-12">
                     <div class="form-group">

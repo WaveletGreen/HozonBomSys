@@ -557,6 +557,7 @@
         from Hz_Bom_Main_Record t1
         where t1.p_cfg0_of_which_project_puid=#{projectPuid,jdbcType=VARCHAR}
         )
+        and t.P_EBOM_STATUS<![CDATA[ <> ]]>0
     </select>
 
 
@@ -601,25 +602,27 @@
         <if test="modelUid!=null">
             and t3.p_model_uid=#{modelUid,jdbcType=VARCHAR}
         </if>
+        and t2.P_EBOM_STATUS <![CDATA[ <> ]]> 0
         order by t2.p_bom_order_num
     </select>
-    <!--获取车身下级2Y层的总成级，需要代码进行查重-->
-    <select id="selectVehicleAssembly2" parameterType="java.util.Map" resultMap="BaseResultMap">
-        select
-        t2.PUID
-        ,t3.
-        <include refid="Color_Column"/>
-        as COLOR_UID
-        from Hz_Bom_Line_Record t2
-        left join Hz_Color_Lvl2_Model t3 on t3.p_lvl_function=t2.puid
-        where t2.p_parent_uid in(
-        select t.puid from Hz_Bom_Line_Record t where t.p_bom_line_is_2y=1 and
-        t.p_bom_of_which_dept=#{dept,jdbcType=VARCHAR}
-        and t.p_bom_digifax_id=(
-        select puid from Hz_Bom_Main_Record tin where
-        tin.p_cfg0_of_which_project_puid=#{projectUid,jdbcType=VARCHAR}
-        ))
-        and t3.p_model_uid=#{modelUid,jdbcType=VARCHAR}
-        order by t2.p_bom_order_num
-    </select>
+    <!--&lt;!&ndash;获取车身下级2Y层的总成级，需要代码进行查重&ndash;&gt;-->
+    <!--<select id="selectVehicleAssembly2" parameterType="java.util.Map" resultMap="BaseResultMap">-->
+        <!--select-->
+        <!--t2.PUID-->
+        <!--,t3.-->
+        <!--<include refid="Color_Column"/>-->
+        <!--as COLOR_UID-->
+        <!--from Hz_Bom_Line_Record t2-->
+        <!--left join Hz_Color_Lvl2_Model t3 on t3.p_lvl_function=t2.puid-->
+        <!--where t2.p_parent_uid in(-->
+        <!--select t.puid from Hz_Bom_Line_Record t where t.p_bom_line_is_2y=1 and-->
+        <!--t.p_bom_of_which_dept=#{dept,jdbcType=VARCHAR}-->
+        <!--and t.p_bom_digifax_id=(-->
+        <!--select puid from Hz_Bom_Main_Record tin where-->
+        <!--tin.p_cfg0_of_which_project_puid=#{projectUid,jdbcType=VARCHAR}-->
+        <!--))-->
+        <!--and t3.p_model_uid=#{modelUid,jdbcType=VARCHAR}-->
+        <!--and t2.P_EBOM_STATUS <![CDATA[ <> ]]> 0-->
+        <!--order by t2.p_bom_order_num-->
+    <!--</select>-->
 </mapper>

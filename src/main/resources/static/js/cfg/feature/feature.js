@@ -171,7 +171,7 @@ function loadData() {
                             $.ajax({
                                 type: "POST",
                                 //ajax需要添加打包名
-                                url: "./vwoProcess/featureGetIntoVWO",
+                                url: "./vwoProcess/featureGetIntoVWO?projectUid=" + projectPuid,
                                 data: JSON.stringify(rows),
                                 contentType: "application/json",
                                 success: function (result) {
@@ -292,16 +292,17 @@ function loadData() {
                         return "<span style='color: #a90009'>未知状态</span>";
                     }
                 }
-            },
-            {
-                field: 'puid',
-                title: 'puid',
-                hide: false
             }
+            // ,
+            // {
+            //     field: 'puid',
+            //     title: 'puid',
+            //     hide: false
+            // }
         ],
         sortable: true,                     //是否启用排序
         sortOrder: "asc",                   //排序方式
         sortName: 'pCfg0ObjectId'
     });
-    $table.bootstrapTable('hideColumn', 'puid');
+    // $table.bootstrapTable('hideColumn', 'puid');
 }

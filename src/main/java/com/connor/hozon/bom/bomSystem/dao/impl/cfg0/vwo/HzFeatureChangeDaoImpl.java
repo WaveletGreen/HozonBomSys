@@ -6,6 +6,8 @@ import org.springframework.context.annotation.Configuration;
 import sql.IBaseSQLUtil;
 import sql.pojo.cfg.vwo.HzFeatureChangeBean;
 
+import java.util.List;
+
 /**
  * @Author: Fancyears·Maylos·Maywas
  * @Description:
@@ -72,4 +74,11 @@ public class HzFeatureChangeDaoImpl implements HzFeatureChangeDao {
     public int updateByPrimaryKey(HzFeatureChangeBean record) {
         return baseSQLUtil.executeUpdate(record, "com.connor.hozon.bom.bomSystem.dao.cfg.vwo.HzFeatureChangeDao.updateByPrimaryKey");
     }
+
+    @Override
+    public List<HzFeatureChangeBean> selectByVwoId(HzFeatureChangeBean bean) {
+        return baseSQLUtil.executeQuery(bean, "com.connor.hozon.bom.bomSystem.dao.cfg.vwo.HzFeatureChangeDao.selectByVwoId");
+    }
+
+
 }

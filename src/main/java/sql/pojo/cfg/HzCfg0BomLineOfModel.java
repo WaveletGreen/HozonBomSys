@@ -28,19 +28,9 @@ public class HzCfg0BomLineOfModel {
      */
     private String pCfg0FamilyName;
     /**
-     * 特性值，已废除，用pCfg0ObjectId代替
-     */
-    @Deprecated
-    private String pH9featurename;
-    /**
      * 特性英文名稱
      */
     private String pH9featureenname;
-    /**
-     * 特性描述，已废除，用pCfg0Desc代替
-     */
-    @Deprecated
-    private String pH9featuredesc;
     /**
      * 对应的bom行名
      */
@@ -61,6 +51,10 @@ public class HzCfg0BomLineOfModel {
      * 大对象
      */
     private byte[] lineBlock;
+    /**
+     * 责任工程师
+     */
+    private String creator;
 
     public String getObjectName() {
         return objectName;
@@ -123,28 +117,12 @@ public class HzCfg0BomLineOfModel {
         this.pCfg0FamilyName = pCfg0FamilyName == null ? null : pCfg0FamilyName.trim();
     }
 
-    public String getpH9featurename() {
-        return pH9featurename;
-    }
-
-    public void setpH9featurename(String pH9featurename) {
-        this.pH9featurename = pH9featurename == null ? null : pH9featurename.trim();
-    }
-
     public String getpH9featureenname() {
         return pH9featureenname;
     }
 
     public void setpH9featureenname(String pH9featureenname) {
         this.pH9featureenname = pH9featureenname == null ? null : pH9featureenname.trim();
-    }
-
-    public String getpH9featuredesc() {
-        return pH9featuredesc;
-    }
-
-    public void setpH9featuredesc(String pH9featuredesc) {
-        this.pH9featuredesc = pH9featuredesc == null ? null : pH9featuredesc.trim();
     }
 
     public String getpBomLineName() {
@@ -185,6 +163,14 @@ public class HzCfg0BomLineOfModel {
 
     public void setLineBlock(byte[] lineBlock) {
         this.lineBlock = lineBlock;
+    }
+
+    public String getCreator() {
+        return creator;
+    }
+
+    public void setCreator(String creator) {
+        this.creator = creator;
     }
 
 }
