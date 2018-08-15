@@ -2,6 +2,10 @@ package integration.logic;
 
 import com.connor.hozon.bom.resources.dto.response.HzWorkProcessRespDTO;
 import com.connor.hozon.bom.resources.service.work.HzWorkProcessService;
+import integration.base.processRoute.ZPPTCI006;
+import integration.option.ActionFlagOption;
+
+import java.math.BigDecimal;
 
 /**
  * 工艺路线接口映射been
@@ -18,7 +22,7 @@ public class ProcessRoute {
     /**
      * 动作描述代码,ZACTIONID
      */
-    private String actionFlag;
+    private ActionFlagOption actionFlag;
     /**
      * 工厂,ZWERKS
      */
@@ -62,117 +66,140 @@ public class ProcessRoute {
     /**
      * 作业数量1,P_DATA1
      */
-    private String workNumber1;
+    private BigDecimal workNumber1;
     /**
      * 作业数量1,P_DATA2
      */
-    private String workNumber2;
+    private BigDecimal workNumber2;
     /**
      * 作业数量1,P_DATA3
      */
-    private String workNumber3;
+    private BigDecimal workNumber3;
     /**
      * 作业数量1,P_DATA4
      */
-    private String workNumber4;
+    private BigDecimal workNumber4;
     /**
      * 作业数量1,P_DATA5
      */
-    private String workNumber5;
+    private BigDecimal workNumber5;
     /**
      * 作业数量1,P_DATA6
      */
-    private String workNumber6;
+    private BigDecimal workNumber6;
 
+    private ZPPTCI006 zpptci006;
 
-    public static ProcessRoute getProcessRoute(String materielId,HzWorkProcessService hzWorkProcessService){
-        HzWorkProcessRespDTO respDTO = hzWorkProcessService.findHzWorkProcess(materielId, "e5969e81-0339-4e3a-98a9-a918f64e4289");
-        ProcessRoute processRoute = new ProcessRoute();
-        processRoute.setFactory(respDTO.getFactoryCode());
-        processRoute.setMaterialCode(respDTO.getMaterielId());
-        if(respDTO.getpCount()==null){
-            processRoute.setBasedAmount("1");
-        }else {
-            processRoute.setBasedAmount(String.valueOf(respDTO.getpCount()));
-        }
-        processRoute.setEffectiveDate(respDTO.get);
+    /**
+     * 无参构造函数
+     */
+    public ProcessRoute(){
+        this.zpptci006 = new ZPPTCI006();
+        zpptci006.setPDATA1(new BigDecimal(1));
+        zpptci006.setPDATA2(new BigDecimal(2));
+        zpptci006.setPDATA3(new BigDecimal(3));
+        zpptci006.setPDATA4(new BigDecimal(4));
+        zpptci006.setPDATA5(new BigDecimal(5));
+        zpptci006.setPDATA6(new BigDecimal(6));
+        zpptci006.setPDATE("2018-08-14");
     }
+
+
 
     /////////////////////////////setter/////////////////////////////
 
     public void setPackNo(String packNo) {
+        zpptci006.setPPACKNO(packNo);
         this.packNo = packNo;
     }
 
     public void setLineNum(String lineNum) {
+        zpptci006.setPITEM(lineNum);
         this.lineNum = lineNum;
     }
 
-    public void setActionFlag(String actionFlag) {
+    public void setActionFlag(ActionFlagOption actionFlag) {
+        zpptci006.setPACTIONID(actionFlag.GetDesc());
         this.actionFlag = actionFlag;
     }
 
     public void setFactory(String factory) {
+        zpptci006.setPWERKS(factory);
         this.factory = factory;
     }
 
     public void setMaterialCode(String materialCode) {
+        zpptci006.setPMATNR(materialCode);
         this.materialCode = materialCode;
     }
 
     public void setBasedAmount(String basedAmount) {
+        zpptci006.setPBASED(basedAmount);
         this.basedAmount = basedAmount;
     }
 
     public void setEffectiveDate(String effectiveDate) {
+        zpptci006.setPDATE(effectiveDate);
         this.effectiveDate = effectiveDate;
     }
 
     public void setUse(String use) {
+        zpptci006.setPUSE(use);
         this.use = use;
     }
 
     public void setStatus(String status) {
+        zpptci006.setPSTA(status);
         this.status = status;
     }
 
     public void setProcessNumber(String processNumber) {
+        zpptci006.setPNUMBER(processNumber);
         this.processNumber = processNumber;
     }
 
     public void setWorkCenter(String workCenter) {
+        zpptci006.setPWORK(workCenter);
         this.workCenter = workCenter;
     }
 
     public void setControlCode(String controlCode) {
+        zpptci006.setPCON(controlCode);
         this.controlCode = controlCode;
     }
 
     public void setProcessDescription(String processDescription) {
+        zpptci006.setPROUT(processDescription);
         this.processDescription = processDescription;
     }
 
-    public void setWorkNumber1(String workNumber1) {
+    public void setWorkNumber1(BigDecimal workNumber1) {
+        zpptci006.setPDATA1(workNumber1);
         this.workNumber1 = workNumber1;
     }
 
-    public void setWorkNumber2(String workNumber2) {
+    public void setWorkNumber2(BigDecimal workNumber2) {
+        zpptci006.setPDATA2(workNumber2);
         this.workNumber2 = workNumber2;
     }
 
-    public void setWorkNumber3(String workNumber3) {
+    public void setWorkNumber3(BigDecimal workNumber3) {
+        zpptci006.setPDATA3(workNumber3);
         this.workNumber3 = workNumber3;
     }
 
-    public void setWorkNumber4(String workNumber4) {
+    public void setWorkNumber4(BigDecimal workNumber4) {
+        zpptci006.setPDATA4(workNumber4);
         this.workNumber4 = workNumber4;
     }
 
-    public void setWorkNumber5(String workNumber5) {
+    public void setWorkNumber5(BigDecimal workNumber5) {
+        zpptci006.setPDATA5(workNumber5);
         this.workNumber5 = workNumber5;
     }
 
-    public void setWorkNumber6(String workNumber6) {
+    public void setWorkNumber6(BigDecimal workNumber6) {
+        zpptci006.setPDATA6(workNumber6);
         this.workNumber6 = workNumber6;
     }
 
@@ -184,7 +211,7 @@ public class ProcessRoute {
 
     public String getLineNum() { return lineNum; }
 
-    public String getActionFlag() { return actionFlag; }
+    public ActionFlagOption getActionFlag() { return actionFlag; }
 
     public String getFactory() { return factory; }
 
@@ -206,15 +233,17 @@ public class ProcessRoute {
 
     public String getProcessDescription() { return processDescription; }
 
-    public String getWorkNumber1() { return workNumber1; }
+    public BigDecimal getWorkNumber1() { return workNumber1; }
 
-    public String getWorkNumber2() { return workNumber2; }
+    public BigDecimal getWorkNumber2() { return workNumber2; }
 
-    public String getWorkNumber3() { return workNumber3; }
+    public BigDecimal getWorkNumber3() { return workNumber3; }
 
-    public String getWorkNumber4() { return workNumber4; }
+    public BigDecimal getWorkNumber4() { return workNumber4; }
 
-    public String getWorkNumber5() { return workNumber5; }
+    public BigDecimal getWorkNumber5() { return workNumber5; }
 
-    public String getWorkNumber6() { return workNumber6; }
+    public BigDecimal getWorkNumber6() { return workNumber6; }
+
+    public ZPPTCI006 getZpptci006() { return zpptci006;  }
 }

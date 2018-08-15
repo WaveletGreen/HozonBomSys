@@ -85,7 +85,6 @@ public class SynMaterielCfgService{
             //收录包号对应的特性
             index = 1;
             List<VehicleBom> vehicleBomList = VehicleBom.getVehicleBom(fpuid,hzMaterielCfgService);
-            String packNum=UUIDHelper.generateUpperUid();
 
             for(VehicleBom vehicleBom : vehicleBomList){
                 //有没有包号，没有则添加包号

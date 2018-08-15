@@ -92,6 +92,10 @@ public class HzWorkProcessRespDTO {
      * 控制码
      */
     private String controlCode;
+    /**
+     * 是否已发送过SAP
+     */
+    private Integer isSent;
 
     public Integer getNo() {
         return No;
@@ -259,5 +263,11 @@ public class HzWorkProcessRespDTO {
 
     public void setpWorkDesc(String pWorkDesc) {
         this.pWorkDesc = pWorkDesc;
+    }
+
+    public Integer getIsSent() { return isSent; }
+
+    public void setIsSent(Integer isSent) {
+        this.isSent = isSent;
     }
 }

@@ -156,6 +156,25 @@ function loadData() {
                                 height: 450
                             });
                         }
+                    },
+                    {
+                        text: '添加',
+                        iconCls: 'glyphicon glyphicon-pencil',
+                        handler: function () {
+                            var rows = $table.bootstrapTable('getSelections');
+                            //只能选一条
+                            if (rows.length != 1) {
+                                window.Ewin.alert({message: '请选择一条需要添加的数据!'});
+                                return false;
+                            }
+                            window.Ewin.dialog({
+                                title: "添加",
+                                //直接修改了超级物料表的数据，要根据配置器的puid找，否则就不能根据所见即所改
+                                url: "cfgMateriel/synMateriel?puid=" + rows[0].puid,
+                                width: 350,
+                                height: 450
+                            });
+                        }
                     }
                 ]
             });

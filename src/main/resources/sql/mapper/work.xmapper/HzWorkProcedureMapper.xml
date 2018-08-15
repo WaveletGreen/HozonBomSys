@@ -354,4 +354,17 @@
     </where>
   </select>
 
+   <update id="HzWorkProcedureDAOImpl_updateSendFlag" parameterType="java.util.HashMap">
+    update HZ_WORK_PROCEDURE t  set t.P_SEND_FLAG=1
+    where P_MATERIEL_PUID in
+    <if test="list!=null">
+      <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+        #{item.materielId,jdbcType=VARCHAR}
+      </foreach>
+    </if>
+    <if test="list==null">
+      ('')
+    </if>
+   </update>
+
 </mapper>
