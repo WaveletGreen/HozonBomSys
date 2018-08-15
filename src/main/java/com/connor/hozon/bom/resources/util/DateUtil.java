@@ -42,7 +42,11 @@ public class DateUtil {
     public static String getTodayTextYM() {
         DateFormat df = new SimpleDateFormat("yyyyMM");
         return df.format(new Date());
+    }
 
+    public static String getTodayTextY() {
+        DateFormat df = new SimpleDateFormat("yyyy");
+        return df.format(new Date());
     }
     public static String getYesterdayTextYMD() {
         Calendar c = Calendar.getInstance();

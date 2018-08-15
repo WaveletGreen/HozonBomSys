@@ -1440,6 +1440,13 @@ public class HzEbomServiceImpl implements HzEbomService {
                  * 这里每次走更新数据的时候先将原来未更新的数据保存一份，更新后的数据也保存一份，类似于查看变更历史记录的
                  * 功能。
                  */
+                boolean isRepeat = hzEbomRecordDAO.checkItemIdIsRepeat(reqDTO.getProjectId(),reqDTO.getLineId());
+                if(isRepeat){
+                    OperateResultMessageRespDTO respDTO = new OperateResultMessageRespDTO();
+                    respDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
+                    respDTO.setErrMsg("非法操作,要修改的零件号已存在！");
+                    return respDTO;
+                }
                 Map<String,Object> bomLineMap = new HashMap<>();
                 bomLineMap.put("puid",reqDTO.getPuid());
                 bomLineMap.put("projectId",reqDTO.getProjectId());
@@ -1536,7 +1543,7 @@ public class HzEbomServiceImpl implements HzEbomService {
                 //需要记录数据 变更后的数据
                 bomLineMap.put("tableName","HZ_EBOM_REOCRD_AFTER_CHANGE");
                 List<HzBomLineRecord> rs = hzBomLineRecordDao.findBomListForChange(bomLineMap);
-                HzBomLineRecord h = hzBomLineRecord;;
+                HzBomLineRecord h = hzBomLineRecord;
                 if(ListUtil.isEmpty(rs)){
                     h.setTableName("HZ_EBOM_REOCRD_AFTER_CHANGE");
                     h.setPuid(reqDTO.getPuid());
@@ -1575,6 +1582,8 @@ public class HzEbomServiceImpl implements HzEbomService {
 
                 }
 
+                hzBomLineRecord.setTableName(null);
+                hzBomLineRecordDao.update(hzBomLineRecord);
                 Map<String,Object> map = new HashMap<>();
                 map.put("projectId",reqDTO.getProjectId());
                 map.put("lineID",reqDTO.getLineId());
@@ -1721,13 +1730,32 @@ public class HzEbomServiceImpl implements HzEbomService {
                 treeQuery.setPuid(puid);
                 List<HzEPLManageRecord> lineRecords = hzEbomRecordDAO.getHzBomLineChildren(treeQuery);//自己
                 Set<String> set = new HashSet<>();//去除重复
-                if(ListUtil.isNotEmpty(lineRecords)){//将删除数据在历史记录表里做备份
+                if(ListUtil.isNotEmpty(lineRecords)){//将删除数据在历史记录表里做备份,删除前的数据状态也要做记录
                     for(int i = 0;i<lineRecords.size();i++){
-                        Map<String,Object> m = new HashMap<>();
-                        m.put("tableName","HZ_EBOM_REOCRD_AFTER_CHANGE");
-                        m.put("puid",lineRecords.get(i).getPuid());
-                        m.put("projectId",reqDTO.getProjectId());
-                        HzBomLineRecord record  = hzBomLineRecordDao.findBomLineByPuid(m);
+                        Map<String,Object> after = new HashMap<>();
+                        after.put("tableName","HZ_EBOM_REOCRD_AFTER_CHANGE");
+                        after.put("puid",lineRecords.get(i).getPuid());
+                        after.put("projectId",reqDTO.getProjectId());
+
+                        Map<String,Object> before = new HashMap<>();
+                        before.put("tableName","HZ_EBOM_REOCRD_BEFORE_CHANGE");
+                        before.put("puid",lineRecords.get(i).getPuid());
+                        before.put("projectId",reqDTO.getProjectId());
+
+                        HzBomLineRecord record  = hzBomLineRecordDao.findBomLineByPuid(after);
+                        HzBomLineRecord beforeRecord  = hzBomLineRecordDao.findBomLineByPuid(before);
+                        if(beforeRecord == null){//不存在 记录添加进去
+                            HzEPLManageRecord be = lineRecords.get(i);
+                            be.setTableName("HZ_EBOM_REOCRD_BEFORE_CHANGE");
+                            hzEbomRecordDAO.insert(be);
+                        }else {//存在记录 查看是否都有产生流程历史记录
+                            if(beforeRecord.getEwoNo() != null && !beforeRecord.getEwoNo().equals("")){
+                                HzEPLManageRecord be = lineRecords.get(i);
+                                be.setTableName("HZ_EBOM_REOCRD_BEFORE_CHANGE");
+                                hzEbomRecordDAO.insert(be);
+                            }
+                        }
+
                         if(record!=null &&record.getEwoNo()!=null&&record.getEwoNo().equals("1")){
                             if(!record.getStatus().equals(4)){
                                 record.setTableName("HZ_EBOM_REOCRD_AFTER_CHANGE");
@@ -1746,6 +1774,8 @@ public class HzEbomServiceImpl implements HzEbomService {
                             r.setStatus(4);
                             hzEbomRecordDAO.insert(r);
                         }
+
+
                         HzEbomTreeQuery hzEbomTreeQuery = new HzEbomTreeQuery();
                         hzEbomTreeQuery.setPuid(lineRecords.get(0).getParentUid());
                         hzEbomTreeQuery.setProjectId(reqDTO.getProjectId());
