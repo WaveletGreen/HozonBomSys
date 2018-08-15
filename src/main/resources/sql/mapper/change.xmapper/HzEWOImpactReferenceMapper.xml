@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="sql.mapper.imapper.HzEWOImpactReferenceMapper">
-  <resultMap id="BaseResultMap" type="sql.pojo.HzEWOImpactReference">
+<mapper namespace="HzEWOImpactReferenceMapper">
+  <resultMap id="BaseResultMap" type="sql.pojo.change.HzEWOImpactReference">
     <id column="ID" jdbcType="DOUBLE" property="id" />
     <result column="IMPACT_ANALYSIS_ID" jdbcType="DOUBLE" property="impactAnalysisId" />
     <result column="EWO_NO" jdbcType="VARCHAR" property="ewoNo" />
@@ -32,7 +32,7 @@
   </delete>
   
   
-  <insert id="insert" parameterType="sql.pojo.HzEWOImpactReference">
+  <insert id="insert" parameterType="sql.pojo.change.HzEWOImpactReference">
     insert into HZ_EWO_IMPACT_REFERENCE (ID, IMPACT_ANALYSIS_ID, EWO_NO, 
       PROJECT_ID, CHECKED)
     values (#{id,jdbcType=DOUBLE}, #{impactAnalysisId,jdbcType=DOUBLE}, #{ewoNo,jdbcType=VARCHAR}, 
@@ -40,7 +40,7 @@
   </insert>
   
   
-  <insert id="insertSelective" parameterType="sql.pojo.HzEWOImpactReference">
+  <insert id="insertSelective" parameterType="sql.pojo.change.HzEWOImpactReference">
     insert into HZ_EWO_IMPACT_REFERENCE
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -79,7 +79,7 @@
   </insert>
   
   
-  <update id="updateByPrimaryKeySelective" parameterType="sql.pojo.HzEWOImpactReference">
+  <update id="updateByPrimaryKeySelective" parameterType="sql.pojo.change.HzEWOImpactReference">
     update HZ_EWO_IMPACT_REFERENCE
     <set>
       <if test="impactAnalysisId != null">
@@ -99,7 +99,7 @@
   </update>
   
   
-  <update id="updateByPrimaryKey" parameterType="sql.pojo.HzEWOImpactReference">
+  <update id="updateByPrimaryKey" parameterType="sql.pojo.change.HzEWOImpactReference">
     update HZ_EWO_IMPACT_REFERENCE
     set IMPACT_ANALYSIS_ID = #{impactAnalysisId,jdbcType=DOUBLE},
       EWO_NO = #{ewoNo,jdbcType=VARCHAR},
