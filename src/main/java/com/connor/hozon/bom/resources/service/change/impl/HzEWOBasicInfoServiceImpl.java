@@ -145,41 +145,4 @@ public class HzEWOBasicInfoServiceImpl implements HzEWOBasicInfoService {
         return null;
     }
 
-
-    public static void main(String[] a){
-//        HzEWOBasicInfoDAO hzEWOBasicInfoDAO = new HzEWOBasicInfoDAOImpl();
-//        HzEWOBasicInfo hzEWOBasicInfo = new HzEWOBasicInfo();
-//        hzEWOBasicInfo.setEwoNo("20180000312");
-////        hzEWOBasicInfo.setOriginator("haozt");
-////        hzEWOBasicInfo.setOriginatorId(24L);
-////        hzEWOBasicInfo.setFormCreateTime(new Date());
-//        hzEWOBasicInfo.setDept("测试部");
-//        hzEWOBasicInfo.setChangeDesc("《传奇》是一首很特别的歌，没有明显的起伏却情感饱满，好似一个人在低低地诉说自己的心事。《传奇》一开始的“无意中多看了你一眼”是铺陈，中间用了四个排比句表达思念，也让思念更加立体，具有空间感，最后引出相爱的两个人终生相守的信念。"
-//                );
-//        hzEWOBasicInfo.setId(1L);
-//        hzEWOBasicInfo.setTel("12345566");
-//        hzEWOBasicInfo.setVehicleCode("EP10");
-//        hzEWOBasicInfo.setRelationItemName("林飞");
-//        int i  = hzEWOBasicInfoDAO.update(hzEWOBasicInfo);
-//            HzEWOBasicInfoQuery query = new HzEWOBasicInfoQuery();
-//            query.setId(1L);
-//            HzEWOBasicInfo info = hzEWOBasicInfoDAO.findHzEWOBasicInfo(query);
-//            String date = DateUtil.formatTimestampDate(info.getFormCreateTime());
-//        System.out.println(JSON.toJSONString(info));
-
-//        HzBomLineRecordDaoImpl hzBomDataDao = new HzBomLineRecordDaoImpl();
-//        HzBomLineRecord record = new HzBomLineRecord();
-//        record.setTableName("HZ_EBOM_REOCRD_AFTER_CHANGE");
-//        record.setPuid("222");
-//        record.setBomDigifaxId("222");
-//        record.setLineIndex("1.1.1");
-//        record.setIsHas(1);
-//        record.setLinePuid("222");
-//        record.setLineID("2222");
-//        record.setIs2Y(1);
-//        record.setIsPart(1);
-//        int i =hzBomDataDao.insert(record);
-//        System.out.println(i);
-    }
-
 }

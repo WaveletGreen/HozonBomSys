@@ -84,5 +84,6 @@
         <mapper resource="sql/mapper/accessories.xmapper/HzAccessoriesLibMapper.xml"/>
         <!--变更管理-->
         <mapper resource="sql/mapper/change.xmapper/HzEWOBasicInfoMapper.xml"/>
+        <mapper resource="sql/mapper/change.xmapper/HzEWOImpactReferenceMapper.xml"/>
     </mappers>
 </configuration>
