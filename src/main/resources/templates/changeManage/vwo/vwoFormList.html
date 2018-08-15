@@ -7,6 +7,7 @@
 <title>vwo表单</title>
 </head>
 <body>
+<input id="url" type="hidden" value="vwo/queryByBase"/>
 <!--
 <nav class="navbar navbar-expand-sm bg-light">
     <ul class="navbar-nav">
@@ -113,79 +114,8 @@
         </div>
     </div>
 </div>
-<div class="content col-lg-12"><!--style="margin-top: -50px;"-->
-    <table id="vwo_table" class="table table-striped">
-        <!--<tr>-->
-        <!--<th>vwo号</th>-->
-        <!--<th>vwo名称</th>-->
-        <!--<th>审批类型</th>-->
-        <!--<th>vwo需求类型</th>-->
-        <!--<th>vwo状态</th>-->
-        <!--<th>预计实施时间</th>-->
-        <!--<th>vwo提出者</th>-->
-        <!--<th>提出时间</th>-->
-        <!--</tr>-->
-        <!--<tr>-->
-        <!--<td><a th:href="${href==null?'vwo/vwoFromList':href}">2018072400001</a></td>-->
-        <!--<td><a th:href="${href}">发布VPPS</a></td>-->
-        <!--<td><a href="vwo/vwoFromList">VPPS</a></td>-->
-        <!--<td><a href="vwo/vwoFromList">制造需求</a></td>-->
-        <!--<td><a href="vwo/vwoFromList">开启</a></td>-->
-        <!--<td><a href="vwo/vwoFromList">2018-07-28</a></td>-->
-        <!--<td><a href="vwo/vwoFromList">BOM工程师</a></td>-->
-        <!--<td><a href="vwo/vwoFromList">2018-07-24</a></td>-->
-        <!--</tr>-->
-        <!--<tr>-->
-        <!--<td><a href="vwo/vwoFromList">2018072400001</a></td>-->
-        <!--<td><a href="vwo/vwoFromList">发布VPPS</a></td>-->
-        <!--<td><a href="vwo/vwoFromList">VPPS</a></td>-->
-        <!--<td><a href="vwo/vwoFromList">制造需求</a></td>-->
-        <!--<td><a href="vwo/vwoFromList">开启</a></td>-->
-        <!--<td><a href="vwo/vwoFromList">2018-07-28</a></td>-->
-        <!--<td><a href="vwo/vwoFromList">BOM工程师</a></td>-->
-        <!--<td><a href="vwo/vwoFromList">2018-07-24</a></td>-->
-        <!--</tr>-->
-        <!--<tr>-->
-        <!--<td><a href="vwo/vwoFromList">2018072400001</a></td>-->
-        <!--<td><a href="vwo/vwoFromList">发布VPPS</a></td>-->
-        <!--<td><a href="vwo/vwoFromList">VPPS</a></td>-->
-        <!--<td><a href="vwo/vwoFromList">制造需求</a></td>-->
-        <!--<td><a href="vwo/vwoFromList">开启</a></td>-->
-        <!--<td><a href="vwo/vwoFromList">2018-07-28</a></td>-->
-        <!--<td><a href="vwo/vwoFromList">BOM工程师</a></td>-->
-        <!--<td><a href="vwo/vwoFromList">2018-07-24</a></td>-->
-        <!--</tr>-->
-        <!--<tr>-->
-        <!--<td><a href="vwo/vwoFromList">2018072400001</a></td>-->
-        <!--<td><a href="vwo/vwoFromList">发布VPPS</a></td>-->
-        <!--<td><a href="vwo/vwoFromList">VPPS</a></td>-->
-        <!--<td><a href="vwo/vwoFromList">制造需求</a></td>-->
-        <!--<td><a href="vwo/vwoFromList">开启</a></td>-->
-        <!--<td><a href="vwo/vwoFromList">2018-07-28</a></td>-->
-        <!--<td><a href="vwo/vwoFromList">BOM工程师</a></td>-->
-        <!--<td><a href="vwo/vwoFromList">2018-07-24</a></td>-->
-        <!--</tr>-->
-        <!--<tr>-->
-        <!--<td><a href="vwo/vwoFromList">2018072400001</a></td>-->
-        <!--<td><a href="vwo/vwoFromList">发布VPPS</a></td>-->
-        <!--<td><a href="vwo/vwoFromList">VPPS</a></td>-->
-        <!--<td><a href="vwo/vwoFromList">制造需求</a></td>-->
-        <!--<td><a href="vwo/vwoFromList">开启</a></td>-->
-        <!--<td><a href="vwo/vwoFromList">2018-07-28</a></td>-->
-        <!--<td><a href="vwo/vwoFromList">BOM工程师</a></td>-->
-        <!--<td><a href="vwo/vwoFromList">2018-07-24</a></td>-->
-        <!--</tr>-->
-        <!--<tr>-->
-        <!--<td><a href="vwo/vwoFromList">2018072400001</a></td>-->
-        <!--<td><a href="vwo/vwoFromList">发布VPPS</a></td>-->
-        <!--<td><a href="vwo/vwoFromList">VPPS</a></td>-->
-        <!--<td><a href="vwo/vwoFromList">制造需求</a></td>-->
-        <!--<td><a href="vwo/vwoFromList">开启</a></td>-->
-        <!--<td><a href="vwo/vwoFromList">2018-07-28</a></td>-->
-        <!--<td><a href="vwo/vwoFromList">BOM工程师</a></td>-->
-        <!--<td><a href="vwo/vwoFromList">2018-07-24</a></td>-->
-        <!--</tr>-->
-    </table>
+<div class="content col-lg-12">
+    <table id="vwo_table" class="table table-striped"></table>
 </div>
 <script th:src="@{/js/helper/projectHelper.js}"></script>
 <script th:src="@{/js/helper/dateFormater.js}"></script>
