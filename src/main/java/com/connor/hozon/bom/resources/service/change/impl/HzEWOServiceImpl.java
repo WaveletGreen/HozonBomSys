@@ -54,7 +54,7 @@ public class HzEWOServiceImpl implements HzEWOService {
             }
             String puids = reqDTO.getPuids();
             User user = UserInfo.getUser();
-            String createYM = DateUtil.getTodayTextYM();
+            String createYM = DateUtil.getTodayTextY();
             Date createTime = new Date();
             String lastFourIndex = hzEWOBasicInfoDAO.getMaxEWONoLastFourIndexInThisMonth(reqDTO.getProjectId(),createYM);
             if(lastFourIndex == null){
@@ -62,7 +62,7 @@ public class HzEWOServiceImpl implements HzEWOService {
             }else {
                 lastFourIndex =getEwoNoLastFourIndex(lastFourIndex);
             }
-            String ewoNo = createYM+lastFourIndex;
+            String ewoNo = "EC"+createYM+lastFourIndex;
             HzEWOBasicInfo hzEWOBasicInfo = new HzEWOBasicInfo();
             hzEWOBasicInfo.setFormCreateTime(createTime);
             OrgGroup orgGroup  = orgGroupDao.queryOrgGroupById(user.getGroupId());
@@ -76,6 +76,8 @@ public class HzEWOServiceImpl implements HzEWOService {
             hzEWOBasicInfo.setOriginator(user.getUsername());
             hzEWOBasicInfo.setProjectId(reqDTO.getProjectId());
             hzEWOBasicInfoDAO.insert(hzEWOBasicInfo);
+
+
             String [] ids = puids.split(",");
             //循环遍历 进行查找 如果为删除状态 需要找出所有子 将他们的状态值进行修改
             Set<HzBomLineRecord> srcRecords = new HashSet<>();//原始数据
@@ -200,6 +202,9 @@ public class HzEWOServiceImpl implements HzEWOService {
         }
 
     }
+
+
+
 
     /**
      * 生成EWO编号的后四位

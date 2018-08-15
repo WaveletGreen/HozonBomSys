@@ -5,6 +5,8 @@ import com.connor.hozon.bom.resources.dto.request.InitiatingProcessReqDTO;
 import com.connor.hozon.bom.resources.dto.response.HzEWOChangeFormRespDTO;
 import com.connor.hozon.bom.resources.dto.response.OperateResultMessageRespDTO;
 import com.connor.hozon.bom.resources.query.HzEWOChangeRecordQuery;
+import com.connor.hozon.bom.resources.query.HzEWOImpactReferenceQuery;
+import com.connor.hozon.bom.resources.service.change.HzEWOImpactReferenceService;
 import com.connor.hozon.bom.resources.service.change.HzEWOService;
 import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.resources.util.ResultMessageBuilder;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import sql.pojo.change.HzEWOImpactReference;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
@@ -30,6 +33,9 @@ public class HzEWOController extends BaseController {
 
     @Autowired
     private HzEWOService hzEWOService;
+
+    @Autowired
+    private HzEWOImpactReferenceService hzEWOImpactReferenceService;
     /**
      * EWO表单发起流程
      * @param reqDTO
@@ -65,4 +71,18 @@ public class HzEWOController extends BaseController {
         writeAjaxJSONResponse(ResultMessageBuilder.build(respDTOList),response);
     }
 
+    @RequestMapping(value = "impact/reference",method = RequestMethod.GET)
+    public void impactReferenceRecord(HzEWOImpactReferenceQuery query, HttpServletResponse response){
+        if(query.getEwoNo() == null || query.getProjectId() == null
+                || query.getProjectId() == "" || query.getEwoNo() == ""){
+            writeAjaxJSONResponse(ResultMessageBuilder.build(false,"非法参数！"),response);
+            return ;
+        }
+        List<HzEWOImpactReference> respDTOList = hzEWOImpactReferenceService.getHzEWOImpactReferences(query);
+        if(ListUtil.isEmpty(respDTOList)){
+            writeAjaxJSONResponse(ResultMessageBuilder.build(false,"暂无数据！"),response);
+            return ;
+        }
+        writeAjaxJSONResponse(ResultMessageBuilder.build(respDTOList),response);
+    }
 }
