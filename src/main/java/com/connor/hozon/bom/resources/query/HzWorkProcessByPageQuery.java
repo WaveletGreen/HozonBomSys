@@ -9,7 +9,7 @@ public class HzWorkProcessByPageQuery extends DefaultPageQuery {
     private String projectId;
 
     /**
-     *类型（1整车工艺路线 2半成品工艺路线 3总成分总成工艺路线  ）
+     *类型（1整车工艺路线 2半成品工艺路线）
      */
     private Integer type;
 

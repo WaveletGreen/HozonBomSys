@@ -35,4 +35,14 @@ public class HzEWOBasicInfoDAOImpl extends BaseSQLUtil implements HzEWOBasicInfo
         map.put("projectId",query.getProjectId());
         return  super.findForList("HzEWOBasicInfoDAOImpl_findHzEWOBasicInfoList",query);
     }
+
+    @Override
+    public String getMaxEWONoLastFourIndexInThisMonth(String projectId, String ym) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("projectId",projectId);
+        map.put("ym",ym);
+        return (String)super.findForObject("HzEWOBasicInfoDAOImpl_getMaxEWONoLastFourIndexInThisMonth",map);
+    }
+
+
 }

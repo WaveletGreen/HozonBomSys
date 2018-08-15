@@ -97,6 +97,13 @@
         from ${tableName}
         where ID = #{id,jdbcType=DECIMAL}
     </select>
+    <select id="selectByVwoId" parameterType="sql.pojo.cfg.vwo.HzFeatureChangeBean" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from ${tableName}
+        where VWO_ID = #{vwoId,jdbcType=DECIMAL}
+    </select>
+
 
     <!--查询区域内最大的VWO号-->
     <select id="findNewestChange" parameterType="sql.pojo.cfg.vwo.HzFeatureChangeBean" resultMap="BaseResultMap">

@@ -1,10 +1,17 @@
 package com.connor.hozon.bom.bomSystem.service.cfg.vwo;
 
 import com.connor.hozon.bom.bomSystem.dao.cfg.vwo.HzVwoInfoDao;
+import com.connor.hozon.bom.bomSystem.helper.DateStringHelper;
 import com.connor.hozon.bom.bomSystem.service.iservice.cfg.vwo.IHzVwoInfoService;
+import com.connor.hozon.bom.common.base.entity.QueryBase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sql.pojo.cfg.vwo.HzVwoInfo;
+
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @Author: Fancyears·Maylos·Maywas
@@ -71,4 +78,47 @@ public class HzVwoInfoService implements IHzVwoInfoService {
     public HzVwoInfo doFindMaxAreaVwoNum() {
         return hzVwoInfoDao.findMaxAreaVwoNum();
     }
+
+    /**
+     * 根据分页进行查询
+     *
+     * @param queryBase
+     */
+    @Override
+    public List<HzVwoInfo> doSelectListByProjectUid(QueryBase queryBase, String projectUid) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("param", queryBase);
+        params.put("projectUid", projectUid);
+        return hzVwoInfoDao.selectListByProjectUid(params);
+    }
+
+    /**
+     * 获取总数
+     *
+     * @param projectUid
+     * @return
+     */
+    @Override
+    public int tellMeHowManyOfIt(String projectUid) {
+        return hzVwoInfoDao.tellMeHowManyOfIt(projectUid);
+    }
+
+    /**
+     * 生成VWO号码
+     */
+    @Override
+    public HzVwoInfo generateVWONum() {
+        Date now = new Date();
+        HzVwoInfo hzVwoInfo = doFindMaxAreaVwoNum();
+        if (hzVwoInfo == null || hzVwoInfo.getVwoNum() == null) {
+            hzVwoInfo = new HzVwoInfo();
+            //当月第一位vwo号
+            hzVwoInfo.setVwoNum("VC" + DateStringHelper.dateToString4(now) + "0001");
+        } else {
+            hzVwoInfo.setVwoNum("VC" + String.valueOf(Long.parseLong(hzVwoInfo.getVwoNum().substring(2)) + 1));
+        }
+        return hzVwoInfo;
+    }
+
+
 }

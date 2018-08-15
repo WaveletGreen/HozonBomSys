@@ -30,7 +30,7 @@ function loadData() {
         sortable: true,
         sortName: 'pColorCode',
         sortOrder: 'asc',
-        // sidePagination: "server",           //客户端/客户端分页
+        // sidePagination: "client",           //客户端/客户端分页
         formId: "queryColor",
         toolbars: [
             {
@@ -211,12 +211,13 @@ function loadData() {
                 valign: 'middle',
                 sortable: true,
                 sortOrder: 'asc',
-            },
-            {
-                field: 'puid',
-                title: 'puid',
-                hide: false
             }
+            // ,
+            // {
+            //     field: 'puid',
+            //     title: 'puid',
+            //     hide: false
+            // }
         ]
     });
     $table.bootstrapTable('hideColumn', 'puid');

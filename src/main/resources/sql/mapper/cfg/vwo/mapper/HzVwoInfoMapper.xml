@@ -2,12 +2,32 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.connor.hozon.bom.bomSystem.dao.cfg.vwo.HzVwoInfoDao">
     <resultMap id="BaseResultMap" type="sql.pojo.cfg.vwo.HzVwoInfo">
+        <!--主键-->
         <id column="ID" jdbcType="DOUBLE" property="id"/>
+        <!--VWO号-->
         <result column="VWO_NUM" jdbcType="VARCHAR" property="vwoNum"/>
+        <!--创建者-->
         <result column="VWO_CREATOR" jdbcType="VARCHAR" property="vwoCreator"/>
+        <!--VWO创建时间-->
         <result column="VWO_CREATE_DATE" jdbcType="TIMESTAMP" property="vwoCreateDate"/>
+        <!--结束人-->
         <result column="VWO_FINISHER" jdbcType="VARCHAR" property="vwoFinisher"/>
+        <!--结束时间-->
         <result column="VWO_FINISH_DATE" jdbcType="TIMESTAMP" property="vwoFinishDate"/>
+        <!--项目UID-->
+        <result column="PROJECT_UID" jdbcType="VARCHAR" property="projectUid"/>
+        <!--审批类型-->
+        <result column="VWO_APPROVAL_TYPE" jdbcType="VARCHAR" property="approvalType"/>
+        <!--需求类型-->
+        <result column="VWO_DEMAND_TYPE" jdbcType="VARCHAR" property="demandType"/>
+        <!--vwo名-->
+        <result column="VWO_NAME" jdbcType="VARCHAR" property="vwoName"/>
+        <!--vwo状态-->
+        <result column="VWO_STATUS" jdbcType="INTEGER" property="vwoStatus"/>
+        <!--预计实施时间-->
+        <result column="VWO_EXPECT_EXECUTE_TIME" jdbcType="TIMESTAMP" property="vwoExpectExecuteTime"/>
+        <!--1.特性，2相关性，3配色方案-->
+        <result column="VWO_TYPE" jdbcType="INTEGER" property="vwoType"/>
     </resultMap>
     <!--字段声明-->
     <sql id="Base_Column_List">
@@ -16,8 +36,17 @@
     VWO_CREATOR,
     VWO_CREATE_DATE,
     VWO_FINISHER,
-    VWO_FINISH_DATE
+    VWO_FINISH_DATE,
+    PROJECT_UID,
+    VWO_TYPE
   </sql>
+    <sql id="VWO_Extend_Column">
+        VWO_APPROVAL_TYPE,
+        VWO_DEMAND_TYPE,
+        VWO_NAME,
+        VWO_STATUS,
+        VWO_EXPECT_EXECUTE_TIME
+    </sql>
     <!--结果集-->
     <sql id="Values_Of_Result">
         #{id,jdbcType=DECIMAL},
@@ -25,21 +54,64 @@
         #{vwoCreator,jdbcType=VARCHAR},
         #{vwoCreateDate,jdbcType=TIMESTAMP},
         #{vwoFinisher,jdbcType=VARCHAR},
-        #{vwoFinishDate,jdbcType=TIMESTAMP}
+        #{vwoFinishDate,jdbcType=TIMESTAMP},
+        #{projectUid,jdbcType=VARCHAR},
+        #{vwoType,jdbcType=VARCHAR}
+    </sql>
+    <sql id="Values_Of_Extend_Column">
+        #{approvalType,jdbcType=VARCHAR},
+        #{demandType,jdbcType=VARCHAR},
+        #{vwoName,jdbcType=VARCHAR},
+        #{vwoStatus,jdbcType=INTEGER},
+        #{vwoExpectExecuteTime,jdbcType=TIMESTAMP}
     </sql>
     <!--主键搜索-->
     <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
         select
-        <include refid="Base_Column_List"/>
+        <include refid="Base_Column_List"/>,
+        <include refid="VWO_Extend_Column"/>
         from HZ_VWO_INFO
         where ID = #{id,jdbcType=DECIMAL}
     </select>
+    <select id="selectListByProjectUid" parameterType="java.util.Map"
+            resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>,
+        <include refid="VWO_Extend_Column"/>
+        from
+        ( select
+        <include refid="Base_Column_List"/>,
+        <include refid="VWO_Extend_Column"/>,
+        ROWNUM as rowno
+        from HZ_VWO_INFO t where 1=1
+        and t.PROJECT_UID=#{projectUid,jdbcType=VARCHAR}
+        <if test="param.limit!=null and  param.page!=null">
+            and ROWNUM &lt;= ${param.page}*${param.limit}
+        </if>
+        ) temp
+        <if test="param.offset!=null">
+            where temp.rowno &gt;= ${param.offset}+1
+        </if>
+        <if test="param.sort!=null">
+            order by ${param.sort}
+        </if>
+        <if test="param.order!=null">
+            ${param.order}
+        </if>
+        <if test="param.order==null">
+            ASC
+        </if>
+    </select>
+    <select id="tellMeHowManyOfIt" parameterType="java.lang.String" resultType="java.lang.Integer">
+    select COUNT (*) from HZ_VWO_INFO where PROJECT_UID=#{projectUid}
+    </select>
+
     <!--查询区域内最大的VWO号-->
     <select id="findMaxAreaVwoNum" resultMap="BaseResultMap">
         select max(t.vwo_num) as VWO_NUM
         from HZ_VWO_INFO t
         where t.vwo_num like
-        (select to_char(sysdate,'yyyymm')||'%' from dual)
+        (select 'VC'||to_char(sysdate,'yyyy')||'%' from dual)
     </select>
     <!--主键删除-->
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
@@ -64,18 +136,42 @@
         </selectKey>
 
         insert into HZ_VWO_INFO (
-        <include refid="Base_Column_List"/>
+        <include refid="Base_Column_List"/>,
+        <include refid="VWO_Extend_Column"/>
         )
         values (
-        <include refid="Values_Of_Result"/>
+        <include refid="Values_Of_Result"/>,
+        <include refid="Values_Of_Extend_Column"/>
         )
     </insert>
     <!--主键更新-->
     <update id="updateByPrimaryKey" parameterType="sql.pojo.cfg.vwo.HzVwoInfo">
-    update HZ_VWO_INFO
-    set VWO_NUM = #{vwoNum,jdbcType=VARCHAR},
-      VWO_FINISHER = #{vwoFinisher,jdbcType=VARCHAR},
-      VWO_FINISH_DATE = #{vwoFinishDate,jdbcType=TIMESTAMP}
-    where ID = #{id,jdbcType=DECIMAL}
-  </update>
+        update HZ_VWO_INFO
+        <set>
+            <if test="approvalType!=null">
+                VWO_APPROVAL_TYPE=#{approvalType,jdbcType=VARCHAR},
+            </if>
+            <if test="demandType!=null">
+                VWO_DEMAND_TYPE=#{demandType,jdbcType=VARCHAR},
+            </if>
+            <if test="vwoName!=null">
+                VWO_NAME=#{vwoName,jdbcType=VARCHAR},
+            </if>
+            <if test="vwoStatus!=null">
+                VWO_STATUS=#{vwoStatus,jdbcType=INTEGER},
+            </if>
+            <if test="vwoExpectExecuteTime!=null">
+                VWO_EXPECT_EXECUTE_TIME=#{vwoExpectExecuteTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="vwoFinisher!=null">
+                VWO_FINISHER = #{vwoFinisher,jdbcType=VARCHAR},
+            </if>
+            <if test="vwoFinishDate!=null">
+                VWO_FINISH_DATE = #{vwoFinishDate,jdbcType=TIMESTAMP}
+            </if>
+        </set>
+        <where>
+            ID = #{id,jdbcType=DECIMAL}
+        </where>
+    </update>
 </mapper>

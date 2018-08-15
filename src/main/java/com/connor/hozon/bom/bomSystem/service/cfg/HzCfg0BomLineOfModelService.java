@@ -22,6 +22,8 @@ import sql.redis.SerializeUtil;
 
 import java.util.*;
 
+import static com.connor.hozon.bom.bomSystem.helper.StringHelper.checkString;
+
 /**
  * User: Fancyears·Maylos·Mayways
  * Date: 2018/5/21
@@ -149,15 +151,17 @@ public class HzCfg0BomLineOfModelService {
                 } else {
                     data.put("operation", "");
                 }
-                Object obj = SerializeUtil.unserialize(withBomLine.getLineBlock());
-                if (obj instanceof LinkedHashMap) {
-                    owningUser = (String) ((LinkedHashMap) obj).get("bl_rev_owning_user");
-                }
+//                Object obj = SerializeUtil.unserialize(withBomLine.getLineBlock());
+//                if (obj instanceof LinkedHashMap) {
+//                    owningUser = (String) ((LinkedHashMap) obj).get("bl_rev_owning_user");
+//                }
+                owningUser = withBomLine.getCreator();
+
                 data.put(HzCfg0BomLineOfModel.selfDesc[0], withBomLine.getpBomOfWhichDept());
                 data.put(HzCfg0BomLineOfModel.selfDesc[1], withBomLine.getpBomLineId());
                 data.put(HzCfg0BomLineOfModel.selfDesc[2], withBomLine.getpBomLineName());
                 data.put(HzCfg0BomLineOfModel.selfDesc[3], withBomLine.getpH9featureenname() == null ? "" : withBomLine.getpH9featureenname());
-                data.put(HzCfg0BomLineOfModel.selfDesc[4], owningUser==null?"":owningUser);
+                data.put(HzCfg0BomLineOfModel.selfDesc[4], owningUser == null ? "" : owningUser);
                 data.put(HzCfg0BomLineOfModel.selfDesc[5], withBomLine.getpCfg0Desc() != null ? withBomLine.getpCfg0Desc() : "");
                 data.put(HzCfg0BomLineOfModel.selfDesc[6], withBomLine.getpCfg0ObjectId());
                 data.put(HzCfg0BomLineOfModel.selfDesc[7], withBomLine.getpCfg0Desc() != null ? withBomLine.getpCfg0Desc() : "");

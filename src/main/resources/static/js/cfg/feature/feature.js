@@ -63,8 +63,8 @@ function loadData() {
                         window.Ewin.alert({message: '请选择一条需要修改的数据!'});
                         return false;
                     }
-                    if (1 == rows.cfgIsInProcess || "1" == rows.cfgIsInProcess) {
-                        window.Ewin.alert({message: rows.pCfg0ObjectId + '已在VWO流程中，不允许修改'});
+                    if (1 == rows[0].cfgIsInProcess || "1" == rows[0].cfgIsInProcess) {
+                        window.Ewin.alert({message: rows[0].pCfg0ObjectId + '已在VWO流程中，不允许修改'});
                         return false;
                     }
                     window.Ewin.dialog({
@@ -159,6 +159,10 @@ function loadData() {
                     }
                     let msg = "<div style='max-height: 350px;overflow: -moz-scrollbars-vertical'>";
                     for (let i in rows) {
+                        if (1 == rows[i].cfgIsInProcess || "1" == rows[i].cfgIsInProcess) {
+                            window.Ewin.alert({message: rows[i].pCfg0ObjectId + "已在VWO流程中，不允许重复发起VWO流程"});
+                            return false;
+                        }
                         msg += "<p>" + rows[i].pCfg0ObjectId + "-" + rows[i].pCfg0Desc + "</p>";
                     }
                     msg += "</div>";
@@ -167,7 +171,7 @@ function loadData() {
                             $.ajax({
                                 type: "POST",
                                 //ajax需要添加打包名
-                                url: "./vwoProcess/featureGetIntoVWO",
+                                url: "./vwoProcess/featureGetIntoVWO?projectUid=" + projectPuid,
                                 data: JSON.stringify(rows),
                                 contentType: "application/json",
                                 success: function (result) {
@@ -275,7 +279,7 @@ function loadData() {
                     }
                     if (value == 0 || "0" == value) {
                         if (1 == row.cfgIsInProcess || "1" == row.cfgIsInProcess) {
-                            return "<span style='color: #a97f89'>草稿状态(已在VWO变更流程中)</span>";
+                            return "<span style='color: #e69800'>VWO审核中</span>";
                         }
                         else {
                             return "<span style='color: #a97f89'>草稿状态</span>";
@@ -288,16 +292,17 @@ function loadData() {
                         return "<span style='color: #a90009'>未知状态</span>";
                     }
                 }
-            },
-            {
-                field: 'puid',
-                title: 'puid',
-                hide: false
             }
+            // ,
+            // {
+            //     field: 'puid',
+            //     title: 'puid',
+            //     hide: false
+            // }
         ],
         sortable: true,                     //是否启用排序
         sortOrder: "asc",                   //排序方式
         sortName: 'pCfg0ObjectId'
     });
-    $table.bootstrapTable('hideColumn', 'puid');
+    // $table.bootstrapTable('hideColumn', 'puid');
 }

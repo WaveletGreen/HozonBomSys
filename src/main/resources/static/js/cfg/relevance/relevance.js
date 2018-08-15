@@ -101,22 +101,22 @@ function loadData() {
                 align: 'center',
                 valign: 'middle',
             },
-            {
-                field: 'puid',
-                title: 'puid',
-                hide: false
-            },
-            {
-                field: '_table',
-                title: '_table',
-                hide: false
-            }
+            // {
+            //     field: 'puid',
+            //     title: 'puid',
+            //     hide: false
+            // },
+            // {
+            //     field: '_table',
+            //     title: '_table',
+            //     hide: false
+            // }
         ],
         // sortable: true,                     //是否启用排序
         // sortOrder: "asc",                   //排序方式
     });
-    $table.bootstrapTable('hideColumn', 'puid');
-    $table.bootstrapTable('hideColumn', '_table');
+    // $table.bootstrapTable('hideColumn', 'puid');
+    // $table.bootstrapTable('hideColumn', '_table');
 }
 
 $(document).ready(

@@ -46,8 +46,8 @@ function loadData(){
             }
             var data = result.data;
             var column = [];
-            column.push({field: 'puid', title: 'puid'});
-            column.push({field: 'modeColorIsMultiply', title: 'modeColorIsMultiply'});
+            // column.push({field: 'puid', title: 'puid'});
+            // column.push({field: 'modeColorIsMultiply', title: 'modeColorIsMultiply'});
             column.push({field: 'ck', checkbox: true, Width: 50});
             column.push({field: 'codeOfColorModel', title: '车型颜色代码', align: 'center', valign: 'middle'});
             column.push({field: 'descOfColorModel', title: '描述', align: 'center', valign: 'middle'});
@@ -173,8 +173,8 @@ function loadData(){
                     }
                 ]
             });
-            $table.bootstrapTable('hideColumn', 'puid');
-            $table.bootstrapTable('hideColumn', 'modeColorIsMultiply');
+            // $table.bootstrapTable('hideColumn', 'puid');
+            // $table.bootstrapTable('hideColumn', 'modeColorIsMultiply');
         }
     });
 }

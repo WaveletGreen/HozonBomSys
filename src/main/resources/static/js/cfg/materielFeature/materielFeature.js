@@ -43,9 +43,9 @@ function loadData() {
             var column = [];
             column.push({field: 'ck', checkbox: true, Width: 50});
             //该puid是车型模型的
-            column.push({field: 'puid', title: 'puid'});
-            column.push({field: 'puidOfModelFeature', title: 'puidOfModelFeature'});
-            column.push({field: 'cfg0MainPuid', title: 'cfg0MainPuid'});
+            // column.push({field: 'puid', title: 'puid'});
+            // column.push({field: 'puidOfModelFeature', title: 'puidOfModelFeature'});
+            // column.push({field: 'cfg0MainPuid', title: 'cfg0MainPuid'});
             column.push({field: 'modeBasiceDetail', title: '基本信息代码'});
             column.push({field: 'modeBasiceDetailDesc', title: '基本信息'});
             column.push({field: 'superMateriel', title: '超级物料'});
@@ -138,6 +138,26 @@ function loadData() {
                         }
                     }
                     ,
+                    // {
+                    //     text: '添加车型模型',
+                    //     iconCls: 'glyphicon glyphicon-pencil',
+                    //     handler: function () {
+                    //         // var rows = $table.bootstrapTable('getSelections');
+                    //         // //只能选一条
+                    //         // if (rows.length != 1) {
+                    //         //     window.Ewin.alert({message: '请选择一条需要修改的数据!'});
+                    //         //     return false;
+                    //         // }
+                    //         window.Ewin.dialog({
+                    //             // 这个puid就是车型模型的puid，直接修改了车型模型的基本信息（在bom系统维护的字段）
+                    //             title: "添加车型模型",
+                    //             url: "materiel/addVehicleModelPage?projectPuid=" + projectPuid,
+                    //             gridId: "gridId",
+                    //             width: 350,
+                    //             height: 450
+                    //         });
+                    //     }
+                    // },
                     {
                         text: '同步车型',
                         iconCls: 'glyphicon glyphicon-pencil',
@@ -178,9 +198,9 @@ function loadData() {
                     }
                 ]
             });
-            $table.bootstrapTable('hideColumn', 'puid');
-            $table.bootstrapTable('hideColumn', 'cfg0MainPuid');
-            $table.bootstrapTable('hideColumn', 'puidOfModelFeature');
+            // $table.bootstrapTable('hideColumn', 'puid');
+            // $table.bootstrapTable('hideColumn', 'cfg0MainPuid');
+            // $table.bootstrapTable('hideColumn', 'puidOfModelFeature');
         }
     });
 

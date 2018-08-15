@@ -29,7 +29,7 @@ function initTable(url) {
         type:"GET",
         success:function(result){
             var column = [];
-            column.push({field: 'puid', title: 'puid'});
+            // column.push({field: 'puid', title: 'puid'});
             column.push({field: 'ck', checkbox: true, Width: 50});
             /*column.push({field: '',
                 title: '序号',

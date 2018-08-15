@@ -42,6 +42,7 @@ public class HzEbomRecordDAOImpl extends BaseSQLUtil implements HzEbomRecordDAO 
         Map<String,Object> map = new HashMap<>();
         map.put("puid",puid);
         map.put("projectId",projectId);
+
         return (HzEPLManageRecord) super.findForObject("HzEbomRecordDAOImpl_findEbomById",map);
     }
 
@@ -102,6 +103,11 @@ public class HzEbomRecordDAOImpl extends BaseSQLUtil implements HzEbomRecordDAO 
         map.put("projectId",projectId);
         map.put("orderNum",orderNum);
         return (Integer) super.findForObject("HzEbomRecordDAOImpl_findMinOrderNumWhichGreaterThanThisOrderNum",map);
+    }
+
+    @Override
+    public int insert(HzEPLManageRecord record) {
+        return super.insert("HzEbomRecordDAOImpl_insert",record);
     }
 
 }

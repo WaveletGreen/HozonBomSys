@@ -3,6 +3,8 @@ package com.connor.hozon.bom.bomSystem.service.iservice.cfg.vwo;
 import sql.pojo.cfg.HzCfg0Record;
 import sql.pojo.cfg.vwo.HzFeatureChangeBean;
 
+import java.util.List;
+
 /**
  * @Author: Fancyears·Maylos·Maywas
  * @Description:
@@ -128,4 +130,8 @@ public interface IHzFeatureChangeService {
      * @return
      */
     HzFeatureChangeBean reflect(HzCfg0Record record, HzFeatureChangeBean bean);
+
+    List<HzFeatureChangeBean> doSelectAfterByVwoId(Long vwo);
+
+    List<HzFeatureChangeBean> doSelectBeforeByVwoId(Long vwo);
 }

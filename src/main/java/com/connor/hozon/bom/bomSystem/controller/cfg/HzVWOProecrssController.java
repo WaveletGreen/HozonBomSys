@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import sql.pojo.cfg.HzCfg0Record;
 import sql.pojo.cfg.vwo.HzFeatureChangeBean;
@@ -46,7 +47,7 @@ public class HzVWOProecrssController {
 
     @RequestMapping("/featureGetIntoVWO")
     @ResponseBody
-    public JSONObject featureGetIntoVWO(@RequestBody List<HzCfg0Record> beans) {
+    public JSONObject featureGetIntoVWO(@RequestParam String projectUid, @RequestBody List<HzCfg0Record> beans) {
         User user = UserInfo.getUser();
         Date now = new Date();
         JSONObject result = new JSONObject();
@@ -64,24 +65,32 @@ public class HzVWOProecrssController {
             } else {
                 //hzCfg0Service.doSetToProcess(localParams);
                 System.out.println("总数一致");
-                HzVwoInfo hzVwoInfo = iHzVwoInfoService.doFindMaxAreaVwoNum();
+                HzVwoInfo hzVwoInfo;
+                synchronized (iHzVwoInfoService) {
+                    hzVwoInfo = iHzVwoInfoService.generateVWONum();
+                    /**
+                     * 生成VWO号码
+                     */
 
-                if (hzVwoInfo == null || hzVwoInfo.getVwoNum() == null) {
-                    hzVwoInfo = new HzVwoInfo();
-                    //当月第一位vwo号
-                    hzVwoInfo.setVwoNum(DateStringHelper.dateToString4(now) + "0001");
-                } else {
-                    hzVwoInfo.setVwoNum(String.valueOf(Long.parseLong(hzVwoInfo.getVwoNum()) + 1));
-                }
-                hzVwoInfo.setVwoCreator(user.getUserName());
-                hzVwoInfo.setVwoCreateDate(now);
-                if ((id = iHzVwoInfoService.doInsert(hzVwoInfo)) <= 0) {
-                    logger.error("创建新的VWO号失败，请联系系统管理员");
-                    result.put("status", false);
-                    result.put("msg", "创建新的VWO号失败，请联系系统管理员");
-                }
+                    hzVwoInfo.setVwoCreator(user.getUserName());
+                    hzVwoInfo.setVwoCreateDate(now);
+                    hzVwoInfo.setProjectUid(projectUid);
+                    hzVwoInfo.setVwoType(1);
+                    hzVwoInfo.setVwoStatus(1);
+                    try {
 
-                hzVwoInfo.setId(id);
+
+                    if ((id = iHzVwoInfoService.doInsert(hzVwoInfo)) <= 0) {
+                        logger.error("创建新的VWO号失败，请联系系统管理员");
+                        result.put("status", false);
+                        result.put("msg", "创建新的VWO号失败，请联系系统管理员");
+                    }
+                    hzVwoInfo.setId(id);
+                    }
+                    catch (Exception e){
+
+                    }
+                }
                 HzFeatureChangeBean after = new HzFeatureChangeBean();
                 HzFeatureChangeBean before = new HzFeatureChangeBean();
                 HzCfg0Record record = new HzCfg0Record();
@@ -105,7 +114,6 @@ public class HzVWOProecrssController {
 
                     if (after == null) {
                         after = new HzFeatureChangeBean();
-
                         if ((afterId = iHzFeatureChangeService.insertByCfgAfter(localParams.get(i))) <= 0) {
                             logger.error("创建后自动同步变更后记录值失败，请联系管理员");
                             result.put("status", false);
@@ -179,4 +187,6 @@ public class HzVWOProecrssController {
         bean.setProcessStarter(user.getUserName());
         bean.setProcessStatus(1);
     }
+
+
 }

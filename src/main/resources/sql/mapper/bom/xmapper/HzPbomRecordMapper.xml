@@ -420,8 +420,8 @@
     <where>
       t2.puid = #{projectId,jdbcType=VARCHAR}))
     </where>
-    start with t.P_E_BOM_PUID = #{puid,jdbcType=VARCHAR} and t.P_PBOM_STATUS = 1
-    connect by prior t.P_E_BOM_PUID = t.p_parent_uid and t.P_PBOM_STATUS = 1
+    start with t.P_E_BOM_PUID = #{puid,jdbcType=VARCHAR} and t.P_PBOM_STATUS <![CDATA[ <> ]]>0
+    connect by prior t.P_E_BOM_PUID = t.p_parent_uid and t.P_PBOM_STATUS<![CDATA[ <> ]]>0
 </select>
 
   <!--获取PBOM 2Y层 对应的lineIndex的第一个字母最大值-->

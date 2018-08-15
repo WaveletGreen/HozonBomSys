@@ -22,7 +22,6 @@ import java.util.*;
 import static com.connor.hozon.bom.bomSystem.helper.StringHelper.checkString;
 
 /**
- * Created by IntelliJ IDEA.
  * User: Fancyears·Maylos·Mayways
  * Date: 2018/5/22
  * Time: 10:52
@@ -82,6 +81,8 @@ public class HzCfg0ModelColorController {
         HzCfg0ModelColor currentModel = new HzCfg0ModelColor();
         currentModel.setPuid(puid);
         currentModel = hzCfg0ModelColorService.doGetById(currentModel);
+        Date now = new Date();
+        User user = UserInfo.getUser();
         if (currentModel == null) {
             return "cfg/modelColorCfg/addModelColorCfg";
         }
@@ -115,6 +116,10 @@ public class HzCfg0ModelColorController {
                 model1.setColorUid("-");
                 model1.setPuid(UUIDHelper.generateUpperUid());
                 model1.setModelUid(currentModel.getPuid());
+                model1.setCreateDate(now);
+                model1.setCreator(user.getUserName());
+                model1.setModifyDate(now);
+                model1.setModifier(user.getUserName());
                 //插入多余项
                 toInsert.add(model1);
             }

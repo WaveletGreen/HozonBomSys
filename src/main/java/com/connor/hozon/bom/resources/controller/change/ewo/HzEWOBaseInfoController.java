@@ -51,10 +51,9 @@ public class HzEWOBaseInfoController extends BaseController {
      */
     @RequestMapping(value = "info",method = RequestMethod.GET)
     public String getHzEWOBasicInfo(HzEWOBasicInfoQuery query, Model model){
-//        if(query.getId() == null){
-//            writeAjaxJSONResponse(ResultMessageBuilder.build(false,"非法参数！"),response);
-//            return ;
-//        }
+        if(query.getId() == null){
+            return"" ;
+        }
         HzEWOBasicInfoRespDTO respDTO = hzEWOBasicInfoService.findHzEWOBasicInfo(query);
         if(respDTO == null){
 //            writeAjaxJSONResponse(ResultMessageBuilder.build(false,"暂无数据！"),response);
