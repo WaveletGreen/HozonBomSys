@@ -141,7 +141,7 @@ function initTable(){
                     }
                 ],
             });
-            $table.bootstrapTable('hideColumn', 'puid');
+            // $table.bootstrapTable('hideColumn', 'puid');
 
         }
     })

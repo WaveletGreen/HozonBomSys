@@ -20,12 +20,12 @@ function doQuery() {
 }
 
 function initTable(eBomUrl) {
-    var projectId = $("#project", window.top.document).val();
-    //var eBomUrl ="ebom/getEBom/list?projectId=" + projectId
+    var projectPuid = $("#project", window.top.document).val();
+    //var eBomUrl ="ebom/getEBom/list?projectId=" + projectPuid
     var $table = $("#ebomManageTable");
     var column = [];
     $.ajax({
-        url: "ebom/title?projectId=" + projectId,
+        url: "ebom/title?projectId=" + projectPuid,
         type: "GET",
         success: function (result) {
             var column = [];
@@ -200,6 +200,10 @@ function initTable(eBomUrl) {
                                 window.Ewin.alert({message: '请选择一条需要修改的数据!'});
                                 return false;
                             }
+                            else if (rows[0].status == 5 || rows[0].status == 6){
+                                window.Ewin.alert({message: '对不起,审核中的数据不能修改!'});
+                                return false;
+                            }
                             window.Ewin.dialog({
                                 title: "修改",
                                 url: "ebom/updateEbom?projectId=" + projectPuid + "&puid=" + rows[0].puid,
@@ -225,6 +229,10 @@ function initTable(eBomUrl) {
                             });
                             if (rows.length == 0) {
                                 window.Ewin.alert({message: '请选择一条需要删除的数据!'});
+                                return false;
+                            }
+                            else if (rows[0].status == 5 || rows[0].status == 6){
+                                window.Ewin.alert({message: '对不起,审核中的数据不能修改!'});
                                 return false;
                             }
                             var _table = '<p>是否要删除您所选择的记录？</p>' +
@@ -335,7 +343,7 @@ function initTable(eBomUrl) {
                 ],
             });
             //$table.bootstrapTable('hideColumn','puid');
-            $table.bootstrapTable('hideColumn', 'puid');
+            // $table.bootstrapTable('hideColumn', 'puid');
             $table.bootstrapTable('hideColumn', 'groupNum');
             $table.bootstrapTable('hideColumn', 'rank');
         }

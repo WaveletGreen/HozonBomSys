@@ -260,7 +260,7 @@ function initTable(url) {
                     ]
                 }
             );
-            $table.bootstrapTable('hideColumn', 'puid');
+            // $table.bootstrapTable('hideColumn', 'puid');
         }
     })
 }

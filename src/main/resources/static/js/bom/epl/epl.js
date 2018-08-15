@@ -113,7 +113,7 @@ function initTable(eplUrl){
                 showRefresh: true,                  //是否显示刷新按钮
                 //minimumCountColumns:4
             });
-            $table.bootstrapTable('hideColumn', 'puid');
+            // $table.bootstrapTable('hideColumn', 'puid');
             $table.bootstrapTable('hideColumn', 'rank');
             $table.bootstrapTable('hideColumn', 'groupNum');
             $table.bootstrapTable('hideColumn', 'level');

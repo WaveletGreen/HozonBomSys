@@ -210,7 +210,7 @@ function initTable(url) {
                     // },
                 ],
             });
-            $table.bootstrapTable('hideColumn', 'materielId');
+            // $table.bootstrapTable('hideColumn', 'materielId');
         }
     })
 }

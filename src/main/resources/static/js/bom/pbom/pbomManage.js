@@ -233,7 +233,7 @@ function initTable(pBomUrl) {
                     }
                 ],
             });
-            $table.bootstrapTable('hideColumn', 'eBomPuid');
+            // $table.bootstrapTable('hideColumn', 'eBomPuid');
             $table.bootstrapTable('hideColumn','level');
             $table.bootstrapTable('hideColumn','groupNum');
             $table.bootstrapTable('hideColumn','pBomLinePartEnName');

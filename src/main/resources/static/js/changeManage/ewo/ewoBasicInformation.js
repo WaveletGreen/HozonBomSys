@@ -1,57 +1,39 @@
 $(document).ready((function () {
     var projectId = $("#project", window.top.document).val();
     var ewoNo = $("#ewoNo").val();
-    var partDescUrl = "change/record?projectId=" + projectId+"&ewoNo="+ewoNo;
+    var partDescUrl = "change/record?projectId=" + projectId + "&ewoNo=" + ewoNo;
     initTable(partDescUrl);
 
-    // var myData = JSON.stringify({
-    //     "id": $("#id").val(),
-    //     "ewoNo": $("#ewoNo").val(),
-    //     "dept": $("#dept").val(),
-    //     "changeType": $("#changeType").val(),
-    //     "reasonCode": $("#reasonCode").val(),
-    //     "formCreateTime": $("#formCreateTime").val(),
-    //     "flowStatus": $("#flowStatus").val(),
-    //     "title": $("#title").val(),
-    //     "originator": $("#originator").val(),
-    //     "tel": $("#tel").val(),
-    //     "finishTime": $("#finishTime").val(),
-    //     "costAssumeDept": $("#costAssumeDept").val(),
-    //     "publicType": $("#publicType").val(),
-    //     "relationEwoNo": $("#relationEwoNo").val(),
-    //     "reasonDesc": $("#reasonDesc").val(),
-    //     "platform": $("#platform").val(),
-    //     "vehicleCode": $("#vehicleCode").val(),
-    //     "projectCode": $("#projectCode").val(),
-    //     "effectTime": $("#effectTime").val(),
-    //     "projectStage": $("#projectStage").val(),
-    //     "relationEngineer": $("#relationEngineer").val(),
-    //     "relationEngineerDept": $("#relationEngineerDept").val(),
-    //     "relationItemId": $("#relationItemId").val(),
-    //     "relationItemName": $("#relationItemName").val(),
-    //     "changeDesc": $("#changeDesc").val(),
-    // })
+    var myData = JSON.stringify({
+        "id": $("#id").val(),
+        "ewoNo": $("#ewoNo").val(),
+        "dept": $("#dept").val(),
+        "changeType": $("#changeType").val(),
+        "reasonCode": $("#reasonCode").val(),
+        "formCreateTime": $("#formCreateTime").val(),
+        "flowStatus": $("#flowStatus").val(),
+        "title": $("#title").val(),
+        "originator": $("#originator").val(),
+        "tel": $("#tel").val(),
+        "finishTime": $("#finishTime").val(),
+        "costAssumeDept": $("#costAssumeDept").val(),
+        "publicType": $("#publicType").val(),
+        "relationEwoNo": $("#relationEwoNo").val(),
+        "reasonDesc": $("#reasonDesc").val(),
+        "platform": $("#platform").val(),
+        "vehicleCode": $("#vehicleCode").val(),
+        "projectCode": $("#projectCode").val(),
+        "effectTime": $("#effectTime").val(),
+        "projectStage": $("#projectStage").val(),
+        "relationEngineer": $("#relationEngineer").val(),
+        "relationEngineerDept": $("#relationEngineerDept").val(),
+        "relationItemId": $("#relationItemId").val(),
+        "relationItemName": $("#relationItemName").val(),
+        "changeDesc": $("#changeDesc").val(),
+    })
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    /*$('#finishTime').datetimepicker({
+    $('#finishTime').datetimepicker({
         format: 'yyyy-mm-dd  hh:ii:ss',//日期的格式
         weekStart: 1,//一周开始， 0（星期日）到6（星期六）
         startDate: "1900-01-01",//选择器的开始日期
@@ -70,7 +52,7 @@ $(document).ready((function () {
         language: 'zh_CN',//语言
         minView: 2,//表示日期选择的最小范围，默认是hour
         todayBtn: true
-    })*/
+    })
 }))
 
 
@@ -84,9 +66,49 @@ function initTable(partDescUrl) {
         success: function (result) {
             var column = [];
             // column.push({field: 'eBomPuid', title: 'puid'});
-            // column.push({field: 'ck', checkbox: true});
+            column.push({field: 'ck', checkbox: true});
             // column.push({field: 'puid', title: '主键'});
-
+            column.push({field: 'lineId', title: '零件号'});
+            column.push({
+                field: 'changeFlag',
+                title: '变更前/变更后',
+                align: 'center',
+                valign: 'middle',
+                formatter: function (value, row, index) {
+                    if (value == 0 || "0" == value) {
+                        return "<span>变更前</span>";
+                    }
+                    if (value == 1 || "1" == value) {
+                        return "<span>变更后</span>";
+                    }
+                }
+            });
+            column.push({
+                field: 'status',
+                title: '状态',
+                align: 'center',
+                valign: 'middle',
+                formatter: function (value, row, index) {
+                    if (value == 1 || "1" == value) {
+                        return "<span style='color: #00B83F'>已生效</span>";
+                    }
+                    if (value == 2 || "2" == value) {
+                        return "<span style='color: #ff7cf4'>草稿状态</span>";
+                    }
+                    if (3 == value || "3" == value) {
+                        return "<span style='color: #9492a9'>废除状态</span>";
+                    }
+                    if (4 == value || "4" == value) {
+                        return "<span style='color: #a90009'>删除状态</span>";
+                    }
+                    if (value == 5 || value == "5"){
+                        return "<span style='color: #e2ab2f'>审核中</span>"
+                    }
+                    if (value == 6 || value == "6"){
+                        return "<span style='color: #e2ab2f'>审核中</span>"
+                    }
+                }
+            })
             var data = result.data;
             var keys = [];
             var values;
@@ -177,191 +199,204 @@ function initTable(partDescUrl) {
                 //sortName: 'id',
                 // sortable: true,                     //是否启用排序
                 sortOrder: "asc",                   //排序方式
-                clickToSelect: false,// 单击某一行的时候选中某一条记录
+                clickToSelect: true,// 单击某一行的时候选中某一条记录
                 //search: true, //是否显示表格搜索，此搜索是客户端搜索，不会进服务端
                 showColumns: false, //是否显示所有的列
                 // resizable:true,
                 // fixedColumns: true,
                 // fixedNumber:3,
                 showToggle: false,                   //是否显示详细视图和列表视图的切换按钮
-                showRefresh: false,                  //是否显示刷新按钮
+                showRefresh: true,                  //是否显示刷新按钮
                 //minimumCountColumns:4,
-                // toolbars: [
-                //     {
-                //         text: '添加',
-                //         iconCls: 'glyphicon glyphicon-plus',
-                //         handler: function () {
-                //             var rows = $table.bootstrapTable('getSelections');
-                //             if (rows.length > 1) {
-                //                 window.Ewin.alert({message: '只能选择一个父级!'});
-                //                 return false;
-                //             }
-                //             else if (rows.length == 1) {
-                //                 window.Ewin.dialog({
-                //                     title: "添加",
-                //                     url: "ebom/addEbom?projectId=" + projectPuid + "&puid=" + rows[0].puid,
-                //                     gridId: "gridId",
-                //                     width: 500,
-                //                     height: 500
-                //                 })
-                //             }
-                //             else if (rows.length == 0) {
-                //                 window.Ewin.dialog({
-                //                     title: "添加",
-                //                     url: "ebom/addEbom?projectId=" + projectPuid,
-                //                     gridId: "gridId",
-                //                     width: 500,
-                //                     height: 500
-                //                 })
-                //             }
-                //         }
-                //     },
-                //     {
-                //         text: '修改',
-                //         iconCls: 'glyphicon glyphicon-pencil',
-                //         handler: function () {
-                //             var rows = $table.bootstrapTable('getSelections');
-                //             //只能选一条
-                //             if (rows.length != 1) {
-                //                 window.Ewin.alert({message: '请选择一条需要修改的数据!'});
-                //                 return false;
-                //             }
-                //             window.Ewin.dialog({
-                //                 title: "修改",
-                //                 url: "ebom/updateEbom?projectId=" + projectPuid + "&puid=" + rows[0].puid,
-                //                 gridId: "gridId",
-                //                 width: 500,
-                //                 height: 500
-                //             });
-                //         }
-                //     },
-                //     {
-                //         text: '删除',
-                //         iconCls: 'glyphicon glyphicon-remove',
-                //         handler: function () {
-                //             var rows = $table.bootstrapTable('getSelections');
-                //             var puids = "";
-                //             for (var i = 0; i < rows.length; i++) {
-                //                 puids += rows[i].puid + ",";
-                //             }
-                //             ;
-                //             var myData = JSON.stringify({
-                //                 "projectId": $("#project", window.top.document).val(),
-                //                 "puids": puids,
-                //             });
-                //             if (rows.length == 0) {
-                //                 window.Ewin.alert({message: '请选择一条需要删除的数据!'});
-                //                 return false;
-                //             }
-                //             var _table = '<p>是否要删除您所选择的记录？</p>' +
-                //                 '<div style="max-height: 400px;overflow:scroll;"><table class="table table-striped tableNormalStyle" >';
-                //             for (var index in rows) {
-                //                 _table += '<tr><td>' + rows[index].lineId + '</td></tr>';
-                //             }
-                //             _table += '</table></div>';
-                //             window.Ewin.confirm({title: '提示', message: _table, width: 500}).on(function (e) {
-                //                 if (e) {
-                //                     $.ajax({
-                //                         type: "POST",
-                //                         //ajax需要添加打包名
-                //                         url: "ebom/delete/ebom",
-                //                         data: myData,
-                //                         contentType: "application/json",
-                //                         success: function (result) {
-                //                             // if (result.status) {
-                //                             //     window.Ewin.alert({message: result.errMsg});
-                //                             //     //刷新，会重新申请数据库数据
-                //                             // }
-                //                             // else {
-                //                             //     window.Ewin.alert({messabge: + result.errMsg});
-                //                             // }
-                //                             if (result.success) {
-                //                                 layer.msg('删除成功', {icon: 1, time: 2000})
-                //                             } else if (!result.success) {
-                //                                 window.Ewin.alert({message: result.errMsg});
-                //                             }
-                //                             $table.bootstrapTable("refresh");
-                //                         },
-                //                         error: function (info) {
-                //                             window.Ewin.alert({message: ":" + info.status});
-                //                         }
-                //                     })
-                //                 }
-                //             });
-                //         }
-                //     },
-                //     {
-                //         text: '发起流程',
-                //         iconCls: 'glyphicon glyphicon-log-out',
-                //         handler: function () {
-                //             var rows = $table.bootstrapTable('getSelections');
-                //             var puids = "";
-                //             for (var i = 0; i < rows.length; i++) {
-                //                 puids += rows[i].puid + ",";
-                //             }
-                //             ;
-                //             var myData = JSON.stringify({
-                //                 "projectId": $("#project", window.top.document).val(),
-                //                 "puids": puids,
-                //             });
-                //             if (rows.length == 0) {
-                //                 window.Ewin.alert({message: '请选择一条需要变更的数据!'});
-                //                 return false;
-                //             }else {
-                //                 for (var i = 0; i<rows.length;i++){
-                //                     if (rows[i].status !=4 &&rows[i].status !=2){
-                //                         window.Ewin.alert({message: '请选择状态为草稿状态或删除状态的数据!'});
-                //                         return false;
-                //                     }
-                //                 }
-                //             }
-                //             // else if (rows[0].status !== 2||4) {
-                //             //
-                //             //     window.Ewin.alert({message: '请选择状态为草稿状态或删除状态的数据!'});
-                //             //     return false;
-                //             //
-                //             // }
-                //             // var _table = '<p>是否要删除您所选择的记录？</p>' +
-                //             //     '<div style="max-height: 400px;overflow:scroll;"><table class="table table-striped tableNormalStyle" >';
-                //             // for (var index in rows) {
-                //             //     _table += '<tr><td>' + rows[index].lineId + '</td></tr>';
-                //             // }
-                //             // _table += '</table></div>';
-                //             // window.Ewin.confirm({title: '提示', message: _table, width: 500}).on(function (e) {
-                //             //     if (e) {
-                //             $.ajax({
-                //                 type: "POST",
-                //                 // ajax需要添加打包名
-                //                 url: "ewo/initiating/process",
-                //                 data: myData,
-                //                 contentType: "application/json",
-                //                 success: function (result) {
-                //                     // if (result.status) {
-                //                     //     window.Ewin.alert({message: result.errMsg});
-                //                     //     //刷新，会重新申请数据库数据
-                //                     // }
-                //                     // else {
-                //                     //     window.Ewin.alert({messabge: + result.errMsg});
-                //                     // }
-                //                     if (result.success) {
-                //                         layer.msg('发起流程成功', {icon: 1, time: 2000})
-                //                     } else if (!result.success) {
-                //                         window.Ewin.alert({message: result.errMsg});
-                //                     }
-                //                     $table.bootstrapTable("refresh");
-                //                 },
-                //                 error: function (info) {
-                //                     window.Ewin.alert({message: ":" + info.status});
-                //                 }
-                //             })
-                //             //     }
-                //             // });
-                //         }
-                //     }
-                // ],
+                toolbars: [
+                    {
+                        text: '添加',
+                        iconCls: 'glyphicon glyphicon-plus',
+                        handler: function () {
+                            var rows = $table.bootstrapTable('getSelections');
+                            if (rows.length > 1) {
+                                window.Ewin.alert({message: '只能选择一个父级!'});
+                                return false;
+                            }
+                            window.Ewin.dialog({
+                                title: "添加",
+                                url: "ebom/addEbom?projectId=" + projectPuid + "&puid=" + rows[0].puid,
+                                gridId: "gridId",
+                                width: 500,
+                                height: 500
+                            })
+                        }
+                    },
+                    // {
+                    //     text: '修改',
+                    //     iconCls: 'glyphicon glyphicon-pencil',
+                    //     handler: function () {
+                    //         var rows = $table.bootstrapTable('getSelections');
+                    //         //只能选一条
+                    //         if (rows.length != 1) {
+                    //             window.Ewin.alert({message: '请选择一条需要修改的数据!'});
+                    //             return false;
+                    //         }
+                    //         window.Ewin.dialog({
+                    //             title: "修改",
+                    //             url: "ebom/updateEbom?projectId=" + projectPuid + "&puid=" + rows[0].puid,
+                    //             gridId: "gridId",
+                    //             width: 500,
+                    //             height: 500
+                    //         });
+                    //     }
+                    // },
+                    {
+                        text: '删除',
+                        iconCls: 'glyphicon glyphicon-remove',
+                        handler: function () {
+                            var rows = $table.bootstrapTable('getSelections');
+                            var puids = "";
+                            for (var i = 0; i < rows.length; i++) {
+                                puids += rows[i].puid + ",";
+                            }
+                            ;
+                            var myData = JSON.stringify({
+                                "projectId": $("#project", window.top.document).val(),
+                                "puids": puids,
+                            });
+                            if (rows.length == 0) {
+                                window.Ewin.alert({message: '请选择一条需要删除的数据!'});
+                                return false;
+                            }
+                            var _table = '<p>是否要删除您所选择的记录？</p>' +
+                                '<div style="max-height: 400px;overflow:scroll;"><table class="table table-striped tableNormalStyle" >';
+                            for (var index in rows) {
+                                _table += '<tr><td>' + rows[index].lineId + '</td></tr>';
+                            }
+                            _table += '</table></div>';
+                            window.Ewin.confirm({title: '提示', message: _table, width: 500}).on(function (e) {
+                                if (e) {
+                                    $.ajax({
+                                        type: "POST",
+                                        //ajax需要添加打包名
+                                        url: "ebom/delete/ebom",
+                                        data: myData,
+                                        contentType: "application/json",
+                                        success: function (result) {
+                                            // if (result.status) {
+                                            //     window.Ewin.alert({message: result.errMsg});
+                                            //     //刷新，会重新申请数据库数据
+                                            // }
+                                            // else {
+                                            //     window.Ewin.alert({messabge: + result.errMsg});
+                                            // }
+                                            if (result.success) {
+                                                layer.msg('删除成功', {icon: 1, time: 2000})
+                                            } else if (!result.success) {
+                                                window.Ewin.alert({message: result.errMsg});
+                                            }
+                                            $table.bootstrapTable("refresh");
+                                        },
+                                        error: function (info) {
+                                            window.Ewin.alert({message: ":" + info.status});
+                                        }
+                                    })
+                                }
+                            });
+                        }
+                    },
+                    // {
+                    //     text: '发起流程',
+                    //     iconCls: 'glyphicon glyphicon-log-out',
+                    //     handler: function () {
+                    //         var rows = $table.bootstrapTable('getSelections');
+                    //         var puids = "";
+                    //         for (var i = 0; i < rows.length; i++) {
+                    //             puids += rows[i].puid + ",";
+                    //         }
+                    //         ;
+                    //         var myData = JSON.stringify({
+                    //             "projectId": $("#project", window.top.document).val(),
+                    //             "puids": puids,
+                    //         });
+                    //         if (rows.length == 0) {
+                    //             window.Ewin.alert({message: '请选择一条需要变更的数据!'});
+                    //             return false;
+                    //         }else {
+                    //             for (var i = 0; i<rows.length;i++){
+                    //                 if (rows[i].status !=4 &&rows[i].status !=2){
+                    //                     window.Ewin.alert({message: '请选择状态为草稿状态或删除状态的数据!'});
+                    //                     return false;
+                    //                 }
+                    //             }
+                    //         }
+                    //         // else if (rows[0].status !== 2||4) {
+                    //         //
+                    //         //     window.Ewin.alert({message: '请选择状态为草稿状态或删除状态的数据!'});
+                    //         //     return false;
+                    //         //
+                    //         // }
+                    //         // var _table = '<p>是否要删除您所选择的记录？</p>' +
+                    //         //     '<div style="max-height: 400px;overflow:scroll;"><table class="table table-striped tableNormalStyle" >';
+                    //         // for (var index in rows) {
+                    //         //     _table += '<tr><td>' + rows[index].lineId + '</td></tr>';
+                    //         // }
+                    //         // _table += '</table></div>';
+                    //         // window.Ewin.confirm({title: '提示', message: _table, width: 500}).on(function (e) {
+                    //         //     if (e) {
+                    //         $.ajax({
+                    //             type: "POST",
+                    //             // ajax需要添加打包名
+                    //             url: "ewo/initiating/process",
+                    //             data: myData,
+                    //             contentType: "application/json",
+                    //             success: function (result) {
+                    //                 // if (result.status) {
+                    //                 //     window.Ewin.alert({message: result.errMsg});
+                    //                 //     //刷新，会重新申请数据库数据
+                    //                 // }
+                    //                 // else {
+                    //                 //     window.Ewin.alert({messabge: + result.errMsg});
+                    //                 // }
+                    //                 if (result.success) {
+                    //                     layer.msg('发起流程成功', {icon: 1, time: 2000})
+                    //                 } else if (!result.success) {
+                    //                     window.Ewin.alert({message: result.errMsg});
+                    //                 }
+                    //                 $table.bootstrapTable("refresh");
+                    //             },
+                    //             error: function (info) {
+                    //                 window.Ewin.alert({message: ":" + info.status});
+                    //             }
+                    //         })
+                    //         //     }
+                    //         // });
+                    //     }
+                    // }
+                ],
             });
         }
     });
 
 }
+
+
+$(document).ready((function () {
+    var projectId = $("#project", window.top.document).val();
+    var ewoNo = $("#ewoNo").val();
+    $.ajax({
+        url:"impact/reference?projectId="+projectId+"&ewoNo="+ewoNo,
+        type:"GET",
+        success: function (result) {
+            if (result==null){
+                window.Ewin.alert("查无数据,请联系管理员")
+            }
+            var impactAnalysisTable1 = $("#impactAnalysisTable1");
+            var impactAnalysisTable2 = $("#impactAnalysisTable2");
+            var data = JSON.stringify(result);
+            var _data = JSON.parse(data);
+            var temp = "";
+            for (var i=0;i<_data.length;i++){
+                temp +="<tr><td><input type='checkbox' id='ck'></td><td>"+_data[i].content+"</td></tr>"
+            }
+            impactAnalysisTable1.html(temp);
+        }
+    })
+}))
 
