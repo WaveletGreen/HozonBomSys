@@ -1,8 +1,10 @@
 package com.connor.hozon.bom.bomSystem.service.iservice.cfg.vwo;
 
+import com.connor.hozon.bom.bomSystem.helper.DateStringHelper;
 import com.connor.hozon.bom.common.base.entity.QueryBase;
 import sql.pojo.cfg.vwo.HzVwoInfo;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -64,4 +66,9 @@ public interface IHzVwoInfoService {
      * @return
      */
     int tellMeHowManyOfIt(String projectUid);
+
+    /**
+     * 生成VWO号码
+     */
+    HzVwoInfo generateVWONum() ;
 }

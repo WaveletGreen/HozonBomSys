@@ -65,27 +65,32 @@ public class HzVWOProecrssController {
             } else {
                 //hzCfg0Service.doSetToProcess(localParams);
                 System.out.println("总数一致");
-                HzVwoInfo hzVwoInfo = iHzVwoInfoService.doFindMaxAreaVwoNum();
+                HzVwoInfo hzVwoInfo;
+                synchronized (iHzVwoInfoService) {
+                    hzVwoInfo = iHzVwoInfoService.generateVWONum();
+                    /**
+                     * 生成VWO号码
+                     */
 
-                if (hzVwoInfo == null || hzVwoInfo.getVwoNum() == null) {
-                    hzVwoInfo = new HzVwoInfo();
-                    //当月第一位vwo号
-                    hzVwoInfo.setVwoNum(DateStringHelper.dateToString4(now) + "0001");
-                } else {
-                    hzVwoInfo.setVwoNum(String.valueOf(Long.parseLong(hzVwoInfo.getVwoNum()) + 1));
-                }
-                hzVwoInfo.setVwoCreator(user.getUserName());
-                hzVwoInfo.setVwoCreateDate(now);
-                hzVwoInfo.setProjectUid(projectUid);
-                hzVwoInfo.setVwoType(1);
-                hzVwoInfo.setVwoStatus(1);
-                if ((id = iHzVwoInfoService.doInsert(hzVwoInfo)) <= 0) {
-                    logger.error("创建新的VWO号失败，请联系系统管理员");
-                    result.put("status", false);
-                    result.put("msg", "创建新的VWO号失败，请联系系统管理员");
-                }
+                    hzVwoInfo.setVwoCreator(user.getUserName());
+                    hzVwoInfo.setVwoCreateDate(now);
+                    hzVwoInfo.setProjectUid(projectUid);
+                    hzVwoInfo.setVwoType(1);
+                    hzVwoInfo.setVwoStatus(1);
+                    try {
 
-                hzVwoInfo.setId(id);
+
+                    if ((id = iHzVwoInfoService.doInsert(hzVwoInfo)) <= 0) {
+                        logger.error("创建新的VWO号失败，请联系系统管理员");
+                        result.put("status", false);
+                        result.put("msg", "创建新的VWO号失败，请联系系统管理员");
+                    }
+                    hzVwoInfo.setId(id);
+                    }
+                    catch (Exception e){
+
+                    }
+                }
                 HzFeatureChangeBean after = new HzFeatureChangeBean();
                 HzFeatureChangeBean before = new HzFeatureChangeBean();
                 HzCfg0Record record = new HzCfg0Record();
@@ -182,4 +187,6 @@ public class HzVWOProecrssController {
         bean.setProcessStarter(user.getUserName());
         bean.setProcessStatus(1);
     }
+
+
 }

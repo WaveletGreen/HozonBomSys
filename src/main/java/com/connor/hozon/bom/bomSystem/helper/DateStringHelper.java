@@ -15,7 +15,10 @@ public class DateStringHelper {
 
     private static final String pattern2 = "yyyy-MM-dd";
     private static final String pattern3 = "yyyy年MM月dd日";
-    private static final String pattern4 = "yyyyMM";
+    /**
+     * VWO号用
+     */
+    private static final String pattern4 = "yyyy";
     /**
      * 转换器
      */

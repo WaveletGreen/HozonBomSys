@@ -30,7 +30,7 @@ function loadData() {
         sortable: true,
         sortName: 'pColorCode',
         sortOrder: 'asc',
-        // sidePagination: "server",           //客户端/客户端分页
+        // sidePagination: "client",           //客户端/客户端分页
         formId: "queryColor",
         toolbars: [
             {

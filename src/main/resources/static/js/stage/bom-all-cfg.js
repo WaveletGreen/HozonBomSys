@@ -1,7 +1,7 @@
 function loadData() {
     var project = $("#project", window.top.document);
     var data = project.val();
-    if (0==data.length) {
+    if (0 == data.length) {
         $("#myModal").modal('show');
         return;
     }
@@ -43,30 +43,30 @@ function loadData() {
 
             $table.append(temp);
 
-            $("#tr0").append("<th width='100px' id='th0'>品牌</th>");
-            $("#tr1").append("<th width='100px' id='th1'>平台</th>");
-            $("#tr2").append("<th width='100px' id='th2'>车型</th>");
-            $("#tr3").append("<th width='100px' id='th3'>版型</th>");
-            $("#tr4").append("<th width='100px' id='th4'>车身形式</th>");
-            $("#tr5").append("<th width='100px' id='th5'>公告</th>");
-            $("#tr6").append("<th width='100px' id='th6'>配置描述</th>");
-            $("#tr7").append("<th width='100px' id='th7'>配置管理</th>");
+            $("#tr0").append("<th id='th0'><div style='width: 200px'  >品牌</div></th>");
+            $("#tr1").append("<th id='th1'><div style='width: 200px'  >平台</div></th>");
+            $("#tr2").append("<th id='th2'><div style='width: 200px'  >车型</div></th>");
+            $("#tr3").append("<th id='th3'><div style='width: 200px'  >版型</div></th>");
+            $("#tr4").append("<th id='th4'><div style='width: 200px'  >车身形式</div></th>");
+            $("#tr5").append("<th id='th5'><div style='width: 200px'  >公告</div></th>");
+            $("#tr6").append("<th id='th6'><div style='width: 200px'  >配置描述</div></th>");
+            $("#tr7").append("<th id='th7'><div style='width: 200px'  >配置管理</div></th>");
 
             for (var i = 0; i < model.length; i++) {
                 var modeli = model[i];
                 var v0 = modeli.key;
                 var v1 = modeli.hide;
                 //品牌
-                $("#tr0").append("<td width='100px'>" + modeli.brand + "</td>");
+                $("#tr0").append("<td ><div style='width: 200px'  >" + modeli.brand + "</div></td>");
                 //平台
-                $("#tr1").append("<td width='100px'>" + modeli.platform + "</td>");
+                $("#tr1").append("<td ><div style='width: 200px'  >" + modeli.platform + "</div></td>");
                 //车型
-                $("#tr2").append("<td width='100px'>" + modeli.vehicle + "</td>");
-                $("#tr3").append("<td width='120px'><a href='javascript:void(0);' onclick='Botton(\"" + v1 + "\")'>" + v0 + "</a></td>");
-                $("#tr4").append("<td width='100px'>" + modeli.pModelShape + "</td>");
-                $("#tr5").append("<td width='100px'>" + modeli.pModelAnnouncement + "</td>");
-                $("#tr6").append("<td width='100px'>" + modeli.pModelCfgDesc + "</td>");
-                $("#tr7").append("<td width='100px'>" + modeli.pModelCfgMng + "</td>");
+                $("#tr2").append("<td ><div style='width: 200px'  >" + modeli.vehicle + "</div></td>");
+                $("#tr3").append("<td ><div style='width: 200px'  ><a href='javascript:void(0);' onclick='Botton(\"" + v1 + "\")'>" + v0 + "</a></div></td>");
+                $("#tr4").append("<td ><div style='width: 200px'  >" + modeli.pModelShape + "</div></td>");
+                $("#tr5").append("<td ><div style='width: 200px'  >" + modeli.pModelAnnouncement + "</div></td>");
+                $("#tr6").append("<td ><div style='width: 200px'  >" + modeli.pModelCfgDesc + "</div></td>");
+                $("#tr7").append("<td ><div style='width: 200px'  >" + modeli.pModelCfgMng + "</div></td>");
             }
 
             // var c = "<tr>" +
@@ -133,18 +133,18 @@ function loadData() {
             //动态添加
             var t =
                 "<tr>" +
-                "<th width='50px' align='center'>选择</th>" +
-                "<th width='50px'>序号</th>" +
-                "<th width='100px'>操作类型</th>" +
-                "<th width='100px'>系统</th>" +
-                "<th width='200px'>总成零件号</th>" +
-                "<th width='180px'>总成零件名称</th>" +
-                "<th width='180px'>总成英文名称</th>" +
-                "<th width='180px'>责任工程师</th>" +
+                "<th align='center'><div style='width: 50px' >选择</div></th>" +
+                "<th ><div style='width: 50px' >序号</div></th>" +
+                "<th ><div style='width: 150px' >操作类型</div></th>" +
+                "<th ><div style='width: 150px' >系统</div></th>" +
+                "<th ><div style='width: 150px' >总成零件号</div></th>" +
+                "<th ><div style='width: 150px' >总成零件名称</div></th>" +
+                "<th ><div style='width: 150px' >总成英文名称</div></th>" +
+                "<th ><div style='width: 150px' >责任工程师</div></th>" +
                 //描述的宽度应该大一点，保持可用
-                "<th width='200px'>配置描述</th>" +
-                "<th width='100px'>配置代码</th>" +
-                "<th width='100px'>备注</th>" +
+                "<th ><div style='width: 150px' >配置描述</div></th>" +
+                "<th ><div style='width: 150px' >配置代码</div></th>" +
+                "<th ><div style='width: 150px' >备注</div></th>" +
                 "</tr>"
             ;
             $table.append(t);
@@ -152,11 +152,11 @@ function loadData() {
             for (var i = 0; i < data.length; i++) {
                 var dataOfModel = data[i];
                 var delta = "<tr>" +
-                    "<td style='text-align: center'><input type='checkbox'></td>"
+                    "<td style='text-align: center'><div style='width: 50px' ><input type='checkbox'></div></td>"
                     +
-                    "<td>" + (i + 1) + "</td>";
+                    "<td><div style='width: 50px' >" + (i + 1) + "</div></td>";
                 for (var index in dataOfModel) {
-                    delta = delta + "<td>" + dataOfModel[index] + "</td>";
+                    delta = delta + "<td><div style='width: 150px'>" + dataOfModel[index] + "</div></td>";
                 }
                 delta = delta + "</tr>";
                 $table.append(delta);
@@ -177,25 +177,25 @@ $(document).ready(
     }),
     $("#addVehicle").click(function () {
         projectPuid = $("#project", window.top.document).val(),
-        window.Ewin.dialog({
-            // 这个puid就是车型模型的puid，直接修改了车型模型的基本信息（在bom系统维护的字段）
-            title: "添加车型模型",
-            url: "materiel/addVehicleModelPage?projectPuid=" + projectPuid,
-            gridId: "gridId",
-            width: 350,
-            height: 450
-        });
+            window.Ewin.dialog({
+                // 这个puid就是车型模型的puid，直接修改了车型模型的基本信息（在bom系统维护的字段）
+                title: "添加车型模型",
+                url: "materiel/addVehicleModelPage?projectPuid=" + projectPuid,
+                gridId: "gridId",
+                width: 350,
+                height: 450
+            });
     }),
     $("#reflect2Y").click(function () {
         projectPuid = $("#project", window.top.document).val(),
-        window.Ewin.dialog({
-            // 这个puid就是车型模型的puid，直接修改了车型模型的基本信息（在bom系统维护的字段）
-            title: "将配置映射到2Y层",
-            url: "loadBom/reflectTo2YPage?projectPuid=" + projectPuid,
-            gridId: "gridId",
-            width: 400,
-            height: 450
-        });
+            window.Ewin.dialog({
+                // 这个puid就是车型模型的puid，直接修改了车型模型的基本信息（在bom系统维护的字段）
+                title: "将配置映射到2Y层",
+                url: "loadBom/reflectTo2YPage?projectPuid=" + projectPuid,
+                gridId: "gridId",
+                width: 400,
+                height: 450
+            });
     })
 )
 

@@ -111,7 +111,7 @@
         select max(t.vwo_num) as VWO_NUM
         from HZ_VWO_INFO t
         where t.vwo_num like
-        (select to_char(sysdate,'yyyymm')||'%' from dual)
+        (select 'VC'||to_char(sysdate,'yyyy')||'%' from dual)
     </select>
     <!--主键删除-->
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
