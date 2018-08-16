@@ -2004,7 +2004,10 @@ public class HzEbomServiceImpl implements HzEbomService {
        if(ListUtil.isNotEmpty(records)){
            if(records.get(0).getIs2Y().equals(1)){
                return records.get(0);
-           }else {
+           }else if(records.get(0).getParentUid() == null){
+               return records.get(0);
+           }
+           else {
                return  findParentFor2Y(projectId,records.get(0).getParentUid());
            }
        }else {

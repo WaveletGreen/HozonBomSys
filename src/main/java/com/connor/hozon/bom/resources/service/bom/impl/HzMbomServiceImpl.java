@@ -684,10 +684,12 @@ public class HzMbomServiceImpl implements HzMbomService {
     public HzMbomLineRecord findParentBomUtil2Y(String projectId, String puid) {
         Map<String,Object> map = new HashMap<>();
         map.put("projectId",projectId);
-        map.put("puid",puid);
+        map.put("pPuid",puid);
         List<HzMbomLineRecord> records = hzMbomRecordDAO.findHzMbomByPuid(map);
         if(ListUtil.isNotEmpty(records)){
             if(records.get(0).getIs2Y().equals(1)){
+                return records.get(0);
+            }else if(records.get(0).getParentUid() == null){
                 return records.get(0);
             }else {
                 return  findParentBomUtil2Y(projectId,records.get(0).getParentUid());
@@ -704,7 +706,7 @@ public class HzMbomServiceImpl implements HzMbomService {
             HzLouRespDTO respDTO = new HzLouRespDTO();
             HzMbomLineRecord hzBomLineRecord = findParentBomUtil2Y(query.getProjectId(),query.getPuid());
             if(hzBomLineRecord != null){
-                HzCfg0OfBomLineRecord record = hzCfg0OfBomLineService.doSelectByBLUidAndPrjUid(query.getProjectId(),hzBomLineRecord.getPuid());
+                HzCfg0OfBomLineRecord record = hzCfg0OfBomLineService.doSelectByBLUidAndPrjUid(query.getProjectId(),hzBomLineRecord.geteBomPuid());
                 if(record != null){
                     respDTO.setCfg0Desc(record.getCfg0Desc());
                     respDTO.setCfg0FamilyDesc(record.getCfg0FamilyDesc());
