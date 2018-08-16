@@ -56,6 +56,14 @@ public class ConfigurableMaterialAllocation {
         zpptci003 = new ZPPTCI003();
     }
 
+    /**\
+     *新建组映射对象，其中对特性编码，特性编码值和超级物料编码赋值
+     * @param puid
+     * @param pCfg0ObjectMap
+     * @param hzCfg0MainService
+     * @param hzSuperMaterielService
+     * @return
+     */
     public static List<ConfigurableMaterialAllocation> getConfigurableMaterialAllocationList(String puid, Map<String, String> pCfg0ObjectMap, HzCfg0MainService hzCfg0MainService, HzSuperMaterielService hzSuperMaterielService) {
         List<ConfigurableMaterialAllocation> configurableMaterialAllocations = new ArrayList<ConfigurableMaterialAllocation>();
         HzCfg0MainRecord mainRecord = hzCfg0MainService.doGetByPrimaryKey(puid);

@@ -9,6 +9,8 @@ import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0OptionFamilyService;
 import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0Service;
 import com.connor.hozon.bom.bomSystem.service.iservice.cfg.IHzCfg0ModelFeatureService;
 import com.connor.hozon.bom.bomSystem.service.project.HzSuperMaterielService;
+import integration.base.classify.ZPPTCO003;
+import integration.base.feature.ZPPTCO002;
 import integration.logic.ConfigurableMaterialAllocation;
 import integration.option.ActionFlagOption;
 import integration.service.impl.cfg2.TransCfgService;
@@ -140,12 +142,16 @@ public class SynConfigurableMaterialService {
                     else {
                         configurableMaterialAllocation.setActionFlag("D");
                     }
-//                    transClassifyService.getInput().getItem().add(configurableMaterialAllocation.getZpptci003());
+                    transClassifyService.getInput().getItem().add(configurableMaterialAllocation.getZpptci003());
                 }
             }
         }
 
+        if (!SynMaterielService.debug) {
+            transClassifyService.execute();
+        }
 
+        List<ZPPTCO003> list = transClassifyService.getOut().getItem();
 
         return result;
     }
