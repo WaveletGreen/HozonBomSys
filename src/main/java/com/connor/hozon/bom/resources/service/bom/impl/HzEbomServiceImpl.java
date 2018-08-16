@@ -5,9 +5,11 @@ import com.alibaba.fastjson.JSONObject;
 import com.connor.hozon.bom.bomSystem.dao.bom.HzBomDataDao;
 import com.connor.hozon.bom.bomSystem.dao.bom.HzBomMainRecordDao;
 import com.connor.hozon.bom.bomSystem.dao.impl.bom.HzBomLineRecordDaoImpl;
+import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0OfBomLineService;
 import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.resources.dto.request.*;
 import com.connor.hozon.bom.resources.dto.response.HzEbomRespDTO;
+import com.connor.hozon.bom.resources.dto.response.HzLouRespDTO;
 import com.connor.hozon.bom.resources.dto.response.OperateResultMessageRespDTO;
 import com.connor.hozon.bom.resources.mybatis.bom.HzEbomRecordDAO;
 import com.connor.hozon.bom.resources.mybatis.bom.HzMbomRecordDAO;
@@ -30,6 +32,7 @@ import sql.pojo.bom.HZBomMainRecord;
 import sql.pojo.bom.HzBomLineRecord;
 import sql.pojo.bom.HzMbomLineRecord;
 import sql.pojo.bom.HzPbomLineRecord;
+import sql.pojo.cfg.HzCfg0OfBomLineRecord;
 import sql.pojo.epl.HzEPLManageRecord;
 import sql.pojo.project.HzMaterielRecord;
 import sql.redis.SerializeUtil;
@@ -64,6 +67,9 @@ public class HzEbomServiceImpl implements HzEbomService {
     private HzMaterielDAO hzMaterielDAO;
     @Autowired
     private HzMbomService hzMbomService;
+
+    @Autowired
+    private HzCfg0OfBomLineService hzCfg0OfBomLineService;
     @Override
     public Page<HzEbomRespDTO> getHzEbomPage(HzEbomByPageQuery query) {
         try{
@@ -2005,5 +2011,94 @@ public class HzEbomServiceImpl implements HzEbomService {
            return null;
        }
 
+    }
+
+    @Override
+    public OperateResultMessageRespDTO setCurrentBomAsLou(SetLouReqDTO reqDTO) {
+        try {
+            if(reqDTO.getLineIds()==null || reqDTO.getProjectId() == null){
+                return OperateResultMessageRespDTO.illgalArgument();
+            }
+            boolean b = PrivilegeUtil.writePrivilege();
+            if(!b){
+                return OperateResultMessageRespDTO.getFailPrivilege();
+            }
+            String[] lineIds = reqDTO.getLineIds().split(",");
+            for(String lineId:lineIds){
+                Map<String,Object> map = new HashMap<>();
+                map.put("lineID",lineId);
+                map.put("lineId",lineId);
+                map.put("projectId",reqDTO.getProjectId());
+                List<HzEPLManageRecord> ebomList =  hzEbomRecordDAO.findEbom(map);
+                List<HzPbomLineRecord> pbomList =  hzPbomRecordDAO.getPbomById(map);
+                List<HzMbomLineRecord> mbomList  =  hzMbomRecordDAO.findHzMbomByPuid(map);
+                if(ListUtil.isNotEmpty(ebomList)){
+                    List<HzBomLineRecord> list1 = new ArrayList<>();
+                    List<HzBomLineRecord> list2 = new ArrayList<>();
+                    ebomList.forEach(record -> {
+                        HzEbomTreeQuery treeQuery = new HzEbomTreeQuery();
+                        treeQuery.setProjectId(reqDTO.getProjectId());
+                        treeQuery.setPuid(record.getPuid());
+                        List<HzEPLManageRecord> records = hzEbomRecordDAO.getHzBomLineChildren(treeQuery);
+                        if(ListUtil.isNotEmpty(records) && records.size() > 1){//父层设置为LOU，子层全部为LOA
+                            for(int i = 1;i<records.size();i++){
+                                HzBomLineRecord hzBomLineRecord = new HzBomLineRecord();
+                                hzBomLineRecord.setpLouaFlag(0);
+                                hzBomLineRecord.setPuid(records.get(i).getPuid());
+                                hzBomLineRecord.setTableName("HZ_BOM_LINE_RECORD");
+                                list2.add(hzBomLineRecord);
+                            }
+                        }
+                        HzBomLineRecord record1 = new HzBomLineRecord();
+                        record1.setPuid(record.getPuid());
+                        record1.setpLouaFlag(1);
+                        record1.setTableName("HZ_BOM_LINE_RECORD");
+                        list1.add(record1);
+                    });
+
+                    hzBomLineRecordDao.updateBatch(list1);
+                    hzBomLineRecordDao.updateBatch(list2);
+                }
+
+
+                if(ListUtil.isNotEmpty(pbomList)){
+                    pbomList.forEach(hzPbomLineRecord -> {
+                        hzPbomLineRecord.setpLouaFlag(1);
+                        hzPbomRecordDAO.update(hzPbomLineRecord);
+                    });
+                }
+                if(ListUtil.isNotEmpty(mbomList)){
+                    mbomList.forEach(hzMbomLineRecord -> {
+                        hzMbomLineRecord.setpLouaFlag(1);
+                        hzMbomRecordDAO.update(hzMbomLineRecord);
+                    });
+                }
+
+            }
+            return OperateResultMessageRespDTO.getSuccessResult();
+        }catch (Exception e){
+            return OperateResultMessageRespDTO.getFailResult();
+        }
+    }
+
+    @Override
+    public HzLouRespDTO getHzLouInfoById(HzLouaQuery query) {
+        try {
+            HzLouRespDTO respDTO = new HzLouRespDTO();
+            HzBomLineRecord hzBomLineRecord = findParentFor2Y(query.getProjectId(),query.getPuid());
+            if(hzBomLineRecord != null){
+                HzCfg0OfBomLineRecord record = hzCfg0OfBomLineService.doSelectByBLUidAndPrjUid(query.getProjectId(),hzBomLineRecord.getPuid());
+                if(record != null){
+                    respDTO.setCfg0Desc(record.getCfg0Desc());
+                    respDTO.setCfg0FamilyDesc(record.getCfg0FamilyDesc());
+                    respDTO.setpCfg0name(record.getpCfg0name());
+                    respDTO.setpCfg0familyname(record.getpCfg0familyname());
+                    return  respDTO;
+                }
+            }
+           return respDTO;
+        }catch (Exception e){
+            return null;
+        }
     }
 }

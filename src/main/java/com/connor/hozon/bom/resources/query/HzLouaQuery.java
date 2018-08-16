@@ -5,7 +5,7 @@ package com.connor.hozon.bom.resources.query;
  * @Date: 2018/7/18
  * @Description:
  */
-public class HzLoaQuery {
+public class HzLouaQuery {
     private String projectId;
 
     private String puid;

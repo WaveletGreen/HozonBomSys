@@ -46,7 +46,7 @@
         <result column="P_BOM_TYPE" jdbcType="INTEGER" property="pBomType" />
         <result column="P_STOCK_LOCATION" jdbcType="VARCHAR" property="pStockLocation" />
         <result column="P_FACTORY_ID" jdbcType="VARCHAR" property="pFactoryId" />
-
+        <result column="P_LOU_LOA_FLAG" jdbcType="INTEGER" property="pLouaFlag"/>
         <!--插入配置信息 车型信息-->
         <result column="P_CFG0_MODEL_RECORD" jdbcType="VARCHAR" property="cfg0ModelRecordId"/>
         <result column="P_CFG0_DESC" jdbcType="VARCHAR" property="cfg0Desc"/>
@@ -395,7 +395,9 @@
             <if test="pFactoryId != null">
                 P_FACTORY_ID = #{pFactoryId,jdbcType=VARCHAR},
             </if>
-
+            <if test="pLouaFlag != null">
+                P_LOU_LOA_FLAG = #{pLouaFlag,jdbcType=VARCHAR}
+            </if>
         </set>
         where P_BOM_PUID = #{eBomPuid,jdbcType=VARCHAR}
        and P_MBOM_STATUS <![CDATA[ <> ]]>0

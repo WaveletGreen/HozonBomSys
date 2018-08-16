@@ -117,6 +117,16 @@ public class HzPbomLineRecord {
      */
     private String updateName;
 
+    private Integer pLouaFlag;
+
+    public Integer getpLouaFlag() {
+        return pLouaFlag;
+    }
+
+    public void setpLouaFlag(Integer pLouaFlag) {
+        this.pLouaFlag = pLouaFlag;
+    }
+
     public String getpBomLinePartEnName() {
         return pBomLinePartEnName;
     }
