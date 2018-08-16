@@ -148,6 +148,19 @@ public class HzEbomRespDTO {
      */
     private Integer status;
 
+    /**
+     * 变更标志 1变更后 0变更前
+     */
+    private Integer changeFlag;
+
+    public Integer getChangeFlag() {
+        return changeFlag;
+    }
+
+    public void setChangeFlag(Integer changeFlag) {
+        this.changeFlag = changeFlag;
+    }
+
     public Integer getStatus() {
         return status;
     }

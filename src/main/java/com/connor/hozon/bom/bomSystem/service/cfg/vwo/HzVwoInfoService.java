@@ -120,5 +120,4 @@ public class HzVwoInfoService implements IHzVwoInfoService {
         return hzVwoInfo;
     }
 
-
 }

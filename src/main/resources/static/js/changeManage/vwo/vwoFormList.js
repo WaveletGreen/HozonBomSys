@@ -8,17 +8,18 @@ function doQuery() {
 }
 
 function initTable() {
+    let url = $("#url").val();
     let projectUid = getProjectUid();
     var $table = $("#vwo_table");
     $table.bootstrapTable('destroy');
     $table.bootstrapTable({
-        url: "vwo/queryByBase?projectUid=" + projectUid,
+        url: url + "?projectUid=" + projectUid,
         method: 'post',
         height: $(window.parent.document).find("#wrapper").height() - 90,
         width: $(window).width(),
         showToggle: false,                   //是否显示详细视图和列表视图的切换按钮
-        showRefresh: false,                  //是否显示刷新按钮
-        pagination: true,                   //是否显示分页（*）
+        showRefresh: true,                  //是否显示刷新按钮
+        pagination: false,                   //是否显示分页（*）
         pageSize: 20,
         pageNumber: 1,
         pageList: [20, 50, 100, 200, 500, 1000],        //可供选择的每页的行数（*）
@@ -68,6 +69,9 @@ function initTable() {
                 title: 'vwo状态',
                 sortable: true,
                 sortOrder: 'asc',
+                formatter: function (value, row, index) {
+                    return row.vwoStatusName;
+                }
             },
             {
                 field: 'vwoExpectExecuteTime',

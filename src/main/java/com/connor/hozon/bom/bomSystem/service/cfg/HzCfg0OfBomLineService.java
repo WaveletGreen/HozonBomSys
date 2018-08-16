@@ -4,11 +4,12 @@ import com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0OfBomLineRecordDao;
 import com.connor.hozon.bom.bomSystem.service.iservice.cfg.IHzCfg0OfBomLineService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Service;
 import sql.pojo.cfg.HzCfg0OfBomLineRecord;
 
 import java.util.List;
 
-@Configuration
+@Service("hzCfg0OfBomLineService")
 public class HzCfg0OfBomLineService implements IHzCfg0OfBomLineService {
     @Autowired
     HzCfg0OfBomLineRecordDao hzCfg0OfBomLineRecordDao;

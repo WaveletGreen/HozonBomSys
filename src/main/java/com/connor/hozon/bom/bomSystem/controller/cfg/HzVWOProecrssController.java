@@ -1,12 +1,15 @@
 package com.connor.hozon.bom.bomSystem.controller.cfg;
 
-import com.connor.hozon.bom.bomSystem.helper.DateStringHelper;
 import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0Service;
 import com.connor.hozon.bom.bomSystem.service.iservice.cfg.vwo.IHzFeatureChangeService;
 import com.connor.hozon.bom.bomSystem.service.iservice.cfg.vwo.IHzVwoInfoService;
+import com.connor.hozon.bom.bomSystem.service.project.HzPlatformService;
+import com.connor.hozon.bom.bomSystem.service.project.HzProjectLibsService;
+import com.connor.hozon.bom.bomSystem.service.project.HzVehicleService;
 import com.connor.hozon.bom.common.util.user.UserInfo;
+import com.connor.hozon.bom.sys.dao.OrgGroupDao;
+import com.connor.hozon.bom.sys.entity.OrgGroup;
 import com.connor.hozon.bom.sys.entity.User;
-import net.sf.json.JSON;
 import net.sf.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,6 +22,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import sql.pojo.cfg.HzCfg0Record;
 import sql.pojo.cfg.vwo.HzFeatureChangeBean;
 import sql.pojo.cfg.vwo.HzVwoInfo;
+import sql.pojo.project.HzPlatformRecord;
+import sql.pojo.project.HzProjectLibs;
+import sql.pojo.project.HzVehicleRecord;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -43,7 +49,16 @@ public class HzVWOProecrssController {
     @Autowired
     IHzFeatureChangeService iHzFeatureChangeService;
 
+    @Autowired
+    OrgGroupDao orgGroupDao;
     private Logger logger = LoggerFactory.getLogger(HzVWOProecrssController.class);
+
+    @Autowired
+    HzProjectLibsService hzProjectLibsService;
+    @Autowired
+    HzVehicleService hzVehicleService;
+    @Autowired
+    HzPlatformService hzPlatformService;
 
     @RequestMapping("/featureGetIntoVWO")
     @ResponseBody
@@ -51,12 +66,12 @@ public class HzVWOProecrssController {
         User user = UserInfo.getUser();
         Date now = new Date();
         JSONObject result = new JSONObject();
+
         if (beans != null && beans.size() > 0) {
             List<String> puids = new ArrayList<>();
             beans.forEach(bean -> puids.add(bean.getPuid()));
             List<HzCfg0Record> lists = hzCfg0Service.doLoadListByPuids(puids);
             List<HzCfg0Record> localParams = lists.stream().filter(l -> l != null).collect(Collectors.toList());
-            Long id = -1L;
             if (beans.size() != localParams.size()) {
                 logger.error("搜索出的特性值总数与发起VWO流程的特性值的总数不一致，请检查数据核对数据是否被删除");
                 result.put("status", false);
@@ -65,31 +80,9 @@ public class HzVWOProecrssController {
             } else {
                 //hzCfg0Service.doSetToProcess(localParams);
                 System.out.println("总数一致");
-                HzVwoInfo hzVwoInfo;
-                synchronized (iHzVwoInfoService) {
-                    hzVwoInfo = iHzVwoInfoService.generateVWONum();
-                    /**
-                     * 生成VWO号码
-                     */
-
-                    hzVwoInfo.setVwoCreator(user.getUserName());
-                    hzVwoInfo.setVwoCreateDate(now);
-                    hzVwoInfo.setProjectUid(projectUid);
-                    hzVwoInfo.setVwoType(1);
-                    hzVwoInfo.setVwoStatus(1);
-                    try {
-
-
-                    if ((id = iHzVwoInfoService.doInsert(hzVwoInfo)) <= 0) {
-                        logger.error("创建新的VWO号失败，请联系系统管理员");
-                        result.put("status", false);
-                        result.put("msg", "创建新的VWO号失败，请联系系统管理员");
-                    }
-                    hzVwoInfo.setId(id);
-                    }
-                    catch (Exception e){
-
-                    }
+                HzVwoInfo hzVwoInfo = generateVwoEntity(user, projectUid, result);
+                if (hzVwoInfo == null) {
+                    return result;
                 }
                 HzFeatureChangeBean after = new HzFeatureChangeBean();
                 HzFeatureChangeBean before = new HzFeatureChangeBean();
@@ -188,5 +181,44 @@ public class HzVWOProecrssController {
         bean.setProcessStatus(1);
     }
 
+    public HzVwoInfo generateVwoEntity(User user, String projectUid, JSONObject result) {
+        Long id = -1L;
+        HzVwoInfo hzVwoInfo;
+        Date now = new Date();
+        synchronized (iHzVwoInfoService) {
+            /**
+             * 生成VWO号码
+             */
+            hzVwoInfo = iHzVwoInfoService.generateVWONum();
+            OrgGroup group = orgGroupDao.queryOrgGroupById(user.getGroupId());
+            HzProjectLibs project = hzProjectLibsService.doLoadProjectLibsById(projectUid);
+            HzVehicleRecord vehicle = hzVehicleService.doGetByPuid(project.getpProjectPertainToVehicle());
+            HzPlatformRecord platform = hzPlatformService.doGetByPuid(vehicle.getpVehiclePertainToPlatform());
 
+            hzVwoInfo.setVwoCreator(user.getUserName());
+            hzVwoInfo.setVwoCreateDate(now);
+            hzVwoInfo.setProjectUid(projectUid);
+            hzVwoInfo.setVwoType(1);
+            hzVwoInfo.setVwoStatus(1);
+            hzVwoInfo.setProjectCode(project.getpProjectCode());
+            hzVwoInfo.setVehicleCode(vehicle.getpVehicleCode());
+            hzVwoInfo.setPlatformCode(platform.getpPlatformCode());
+
+            if (null != group) {
+                hzVwoInfo.setUserDeptName(group.getName());
+            }
+            try {
+                if ((id = iHzVwoInfoService.doInsert(hzVwoInfo)) <= 0) {
+                    logger.error("创建新的VWO号失败，请联系系统管理员");
+                    result.put("status", false);
+                    result.put("msg", "创建新的VWO号失败，请联系系统管理员");
+                }
+                hzVwoInfo.setId(id);
+                return hzVwoInfo;
+            } catch (Exception e) {
+                logger.error("新增VWO号出错", e);
+            }
+        }
+        return null;
+    }
 }

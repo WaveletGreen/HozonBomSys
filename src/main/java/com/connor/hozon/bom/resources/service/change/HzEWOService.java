@@ -2,6 +2,7 @@ package com.connor.hozon.bom.resources.service.change;
 
 import com.connor.hozon.bom.resources.dto.request.InitiatingProcessReqDTO;
 import com.connor.hozon.bom.resources.dto.response.HzEWOChangeFormRespDTO;
+import com.connor.hozon.bom.resources.dto.response.HzEbomRespDTO;
 import com.connor.hozon.bom.resources.dto.response.OperateResultMessageRespDTO;
 import com.connor.hozon.bom.resources.query.HzEWOBasicInfoQuery;
 import com.connor.hozon.bom.resources.query.HzEWOChangeRecordQuery;
@@ -28,7 +29,21 @@ public interface HzEWOService {
      * @param query
      * @return
      */
-    List<HzEWOChangeFormRespDTO> getEWOChangeFormRecord(HzEWOChangeRecordQuery query);
+    List<HzEbomRespDTO> getEWOChangeFormRecord(HzEWOChangeRecordQuery query);
+
+    /**
+     * 添加新零件到变更表单
+     * @param reqDTO
+     * @return
+     */
+    OperateResultMessageRespDTO addNewItemToChangeForm(InitiatingProcessReqDTO reqDTO);
+
+    /**
+     * 从变更表单删除零件
+     * @param reqDTO
+     * @return
+     */
+    OperateResultMessageRespDTO deleteItemFromChangeFrom(InitiatingProcessReqDTO reqDTO);
 
 
 }

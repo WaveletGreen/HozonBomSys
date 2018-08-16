@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="HzEWOImpactReferenceMapper">
+  <resultMap id="BaseResultMap" type="sql.pojo.change.HzEWOImpactReference">
+    <id column="ID" jdbcType="DOUBLE" property="id" />
+    <result column="IMPACT_ANALYSIS_ID" jdbcType="DOUBLE" property="impactAnalysisId" />
+    <result column="EWO_NO" jdbcType="VARCHAR" property="ewoNo" />
+    <result column="PROJECT_ID" jdbcType="VARCHAR" property="projectId" />
+    <result column="CHECKED" jdbcType="INTEGER" property="checked" />
+    <result column="CONTENT" jdbcType="VARCHAR" property="content" />
+    <result column="TYPE" jdbcType="VARCHAR" property="type" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ID, IMPACT_ANALYSIS_ID, EWO_NO, PROJECT_ID, CHECKED,CONTENT，TYPE
+  </sql>
+  
+  
+  <select id="HzEWOImpactReferenceDAOImpl_findImpactReferences" parameterType="java.util.HashMap" resultMap="BaseResultMap">
+    select t1.ID,t1.EWO_NO,t1.PROJECT_ID,t1.CHECKED,t2.ID as IMPACT_ANALYSIS_ID,t2.CONTENT,t2.TYPE
+    from HZ_EWO_IMPACT_ANALYSIS t2 left outer join HZ_EWO_IMPACT_REFERENCE t1
+      on
+       t2.ID= t1.IMPACT_ANALYSIS_ID
+      and t1.EWO_NO = #{ewoNo,jdbcType=VARCHAR}
+      and t1.PROJECT_ID = #{projectId,jdbcType=VARCHAR}
+  </select>
+
+
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from HZ_EWO_IMPACT_REFERENCE
+    where ID = #{id,jdbcType=DOUBLE}
+  </delete>
+  
+  
+  <insert id="insert" parameterType="sql.pojo.change.HzEWOImpactReference">
+    insert into HZ_EWO_IMPACT_REFERENCE (ID, IMPACT_ANALYSIS_ID, EWO_NO, 
+      PROJECT_ID, CHECKED)
+    values (#{id,jdbcType=DOUBLE}, #{impactAnalysisId,jdbcType=DOUBLE}, #{ewoNo,jdbcType=VARCHAR}, 
+      #{projectId,jdbcType=VARCHAR}, #{checked,jdbcType=INTEGER})
+  </insert>
+  
+  
+  <insert id="insertSelective" parameterType="sql.pojo.change.HzEWOImpactReference">
+    insert into HZ_EWO_IMPACT_REFERENCE
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="impactAnalysisId != null">
+        IMPACT_ANALYSIS_ID,
+      </if>
+      <if test="ewoNo != null">
+        EWO_NO,
+      </if>
+      <if test="projectId != null">
+        PROJECT_ID,
+      </if>
+      <if test="checked != null">
+        CHECKED,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=DOUBLE},
+      </if>
+      <if test="impactAnalysisId != null">
+        #{impactAnalysisId,jdbcType=DOUBLE},
+      </if>
+      <if test="ewoNo != null">
+        #{ewoNo,jdbcType=VARCHAR},
+      </if>
+      <if test="projectId != null">
+        #{projectId,jdbcType=VARCHAR},
+      </if>
+      <if test="checked != null">
+        #{checked,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  
+  
+  <update id="updateByPrimaryKeySelective" parameterType="sql.pojo.change.HzEWOImpactReference">
+    update HZ_EWO_IMPACT_REFERENCE
+    <set>
+      <if test="impactAnalysisId != null">
+        IMPACT_ANALYSIS_ID = #{impactAnalysisId,jdbcType=DOUBLE},
+      </if>
+      <if test="ewoNo != null">
+        EWO_NO = #{ewoNo,jdbcType=VARCHAR},
+      </if>
+      <if test="projectId != null">
+        PROJECT_ID = #{projectId,jdbcType=VARCHAR},
+      </if>
+      <if test="checked != null">
+        CHECKED = #{checked,jdbcType=INTEGER},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=DOUBLE}
+  </update>
+  
+  
+  <update id="updateByPrimaryKey" parameterType="sql.pojo.change.HzEWOImpactReference">
+    update HZ_EWO_IMPACT_REFERENCE
+    set IMPACT_ANALYSIS_ID = #{impactAnalysisId,jdbcType=DOUBLE},
+      EWO_NO = #{ewoNo,jdbcType=VARCHAR},
+      PROJECT_ID = #{projectId,jdbcType=VARCHAR},
+      CHECKED = #{checked,jdbcType=INTEGER}
+    where ID = #{id,jdbcType=DOUBLE}
+  </update>
+</mapper>
