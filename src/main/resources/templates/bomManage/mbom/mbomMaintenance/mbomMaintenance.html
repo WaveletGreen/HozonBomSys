@@ -545,7 +545,7 @@
             }
         });
     }
-    function  queryLou(row){
+    function  queryLoa(row){
         var myData= JSON.stringify({
             "projectId": $("#project", window.top.document).val(),
             "puid": row
@@ -572,6 +572,33 @@
                 for (var i=0;i<child.length; i++) {
                     _table += '<tr><td>' + child[i].childLevel + '</td><td>'+child[i].childLineId+'</td><td>'+child[i].childName+'</td></tr>';
                 }
+                _table += '</table></div>';
+                window.Ewin.confirm({title: '提示', message: _table, width: 500});
+            }
+        })
+    }
+    function queryLou(row) {
+        // var myData = JSON.stringify({
+        //     "projectId": $("#project", window.top.document).val(),
+        //     "puid": row
+        // });
+        var projectId = $("#project", window.top.document).val();
+        $.ajax({
+            type: "GET",
+            //ajax需要添加打包名
+            url: "loa/getLou?projectId="+projectId+"&puid="+row,
+            // data: myData,
+            // contentType: "application/json",
+            undefinedText: "",
+            success: function (result) {
+                var data = result.data
+                var pCfg0name = (data.pCfg0name == undefined ? "" : data.pCfg0name);
+                var cfg0Desc = (data.cfg0Desc == undefined ? "" : data.cfg0Desc);
+                var pCfg0familyname = (data.pCfg0familyname == undefined ? "" : data.pCfg0familyname);
+                var cfg0FamilyDesc = (data.cfg0FamilyDesc == undefined ? "" : data.cfg0FamilyDesc);
+                var _table = '<div style="max-height: 400px;overflow:scroll;"><table class="table table-striped tableNormalStyle" >';
+                _table += '<tr><td>配置名</td><td>特性值描述</td><td>族名</td><td>特性描述</td></tr>'
+                _table += '<tr><td>' + pCfg0name + '</td><td>' + cfg0Desc + '</td><td>' + pCfg0familyname + '</td><td>'+cfg0FamilyDesc+'</td></tr>';
                 _table += '</table></div>';
                 window.Ewin.confirm({title: '提示', message: _table, width: 500});
             }
