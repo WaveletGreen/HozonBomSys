@@ -114,13 +114,16 @@
         var pBomLinePartClass = $("#pBomLinePartClass").val();
         if (pBomLinePartClass =="请选择零件分类") {
             mBomUrl += "&pBomLinePartClass="+ "";
+        }else {
+            mBomUrl += "&pBomLinePartClass=" + pBomLinePartClass;
         }
-        mBomUrl += "&pBomLinePartClass=" + pBomLinePartClass;
         var pBomLinePartResource = $("#pBomLinePartResource").val();
         if (pBomLinePartResource == "请选择零件来源") {
             mBomUrl += "&pBomLinePartResource="+ "";
         }
-        mBomUrl += "&pBomLinePartResource=" + pBomLinePartResource;
+        else {
+            mBomUrl += "&pBomLinePartResource=" + pBomLinePartResource;
+        }
         initTable(mBomUrl);
         $('#mbomMaintenanceTable').bootstrapTable('destroy');
     }
