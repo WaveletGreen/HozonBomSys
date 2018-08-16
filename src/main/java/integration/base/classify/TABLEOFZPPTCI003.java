@@ -1,6 +1,8 @@
 
 package integration.base.classify;
 
+import integration.service.i.ICommon;
+
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -31,7 +33,7 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "TABLE_OF_ZPP_TCI003", propOrder = { "item" })
-public class TABLEOFZPPTCI003 {
+public class TABLEOFZPPTCI003  implements ICommon {
 
 	protected List<ZPPTCI003> item;
 
