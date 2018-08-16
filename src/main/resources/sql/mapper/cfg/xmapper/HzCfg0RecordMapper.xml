@@ -79,7 +79,8 @@
         t4.OBJECT_NAME,
         t3.P_CFG0_MODEL_RECORD,
         t3.P_OF_CFG0_MAIN_RECORD,
-        t4.p_cfg0_model_basic_detail
+        t4.p_cfg0_model_basic_detail,
+        t3.IS_SENT
   </sql>
     <!--根据主键搜索-->
     <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">

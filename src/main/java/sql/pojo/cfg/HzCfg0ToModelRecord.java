@@ -13,6 +13,7 @@ public class HzCfg0ToModelRecord {
 
     private Integer pParseLogicValue;
 
+    private Integer isSent;
     public String getPuid() {
         return puid;
     }
@@ -59,5 +60,13 @@ public class HzCfg0ToModelRecord {
 
     public void setpParseLogicValue(Integer pParseLogicValue) {
         this.pParseLogicValue = pParseLogicValue;
+    }
+
+    public Integer getIsSent() {
+        return isSent;
+    }
+
+    public void setIsSent(Integer isSent) {
+        this.isSent = isSent;
     }
 }

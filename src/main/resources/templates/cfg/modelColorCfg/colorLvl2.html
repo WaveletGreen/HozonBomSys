@@ -4,7 +4,8 @@
 <meta charset=utf-8/>
 <title>二级配色方案</title>
 <form class="form-horizontal" id="form" role="form" method="post" th:action="${action}">
-    <fieldset>
+    <button id="btnAdd">添加</button>
+    <fieldset id="fieldSet">
         <input th:value="${modelUid}" type="hidden" id="modelUid"/>
         <input th:value="${projectUid}" type="hidden" id="projectUid"/>
 
@@ -12,18 +13,19 @@
             <legend class="">二级配色方案</legend>
         </div>
         <!--循环放入数据-->
-        <div class="form-group col-lg-10" th:each="line,index:${assembly}">
-            <label class="control-label" th:text="${line.getLineID()+'-'+line.getpBomLinePartName()}"
-                   th:for="${line.getPuid()}"></label>
-            <select class="form-control input-small" th:name="${line.getPuid()}" data-style="btn-info"
-                    th:id="${line.getPuid()}">
-                <option th:each="color:${colorList}" th:value="${color.puid}"
-                        th:selected="${color.getPuid()==line.getColorUid()? true :false}"
-                        th:text="${color.pColorCode+' -- '+color.pColorName+' -- '+color.getpColorComment()+' -- '+color.getpColorOfSet()}"
-                >
-                </option>
-            </select>
-        </div>
+        <!--<div class="form-group col-lg-10" th:each="line,index:${assembly}">-->
+        <!--<label class="control-label" th:text="${line.getLineID()+'-'+line.getpBomLinePartName()}"-->
+        <!--th:for="${line.getPuid()}"></label>-->
+        <!--<select class="form-control input-small" th:name="${line.getPuid()}" data-style="btn-info"-->
+        <!--th:id="${line.getPuid()}">-->
+        <!--<option th:each="color:${colorList}" th:value="${color.puid}"-->
+        <!--th:selected="${color.getPuid()==line.getColorUid()? true :false}"-->
+        <!--th:text="${color.pColorCode+' &#45;&#45; '+color.pColorName+' &#45;&#45; '+color.getpColorComment()+' &#45;&#45; '+color.getpColorOfSet()}"-->
+        <!--&gt;-->
+        <!--</option>-->
+        <!--</select>-->
+        <!--</div>-->
+
     </fieldset>
 </form>
 
@@ -117,7 +119,18 @@
         $("#modelShell").change(function () {
             $("#pDescOfColorfulModel").val($("#pCodeOfColorfulModel").val() + $('#modelShell option:selected').text().split(' -- ')[1]);
             console.log("已选择油漆车身颜色");
-        })
+        }),
+        $("#btnAdd").click(function () {
+            var child = '< div >' +
+                '<input class = "form-control" id = "s0" name = "s0" type = "text" / >' +
+                '< select class= "form-control input-small" name = "s_01" data - style = "btn-info" id = "s_01" >' +
+                // '< option th:each = "color:${colorList}" th:value = "${color.puid}" th:text = "${color.pColorCode+'+' --'+'+color.pColorName+'+ '--'+ '+color.getpColorComment()+' -- '+color.getpColorOfSet()}"
+                // >
+                '<option>blue< /option>' +
+                '< /select>' +
+                '< /div>';
+            $("#fieldSet").append(child);
+        }),
     )
     ]]>
 </script>
