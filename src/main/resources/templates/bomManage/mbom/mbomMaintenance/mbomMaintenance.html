@@ -360,7 +360,7 @@
                                 $.ajax({
                                     type: "POST",
                                     //ajax需要添加打包名
-                                    url: "loa/setLou",
+                                    url: "loa/setLou/mBom",
                                     data: myData,
                                     contentType: "application/json",
                                     success: function (result) {
@@ -586,7 +586,7 @@
         $.ajax({
             type: "GET",
             //ajax需要添加打包名
-            url: "loa/getLou?projectId="+projectId+"&puid="+row,
+            url: "loa/getLou/mBom?projectId="+projectId+"&puid="+row,
             // data: myData,
             // contentType: "application/json",
             undefinedText: "",

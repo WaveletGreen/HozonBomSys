@@ -281,7 +281,7 @@ function initTable(pBomUrl) {
                             $.ajax({
                                 type: "POST",
                                 //ajax需要添加打包名
-                                url: "loa/setLou",
+                                url: "loa/setLou/pBom",
                                 data: myData,
                                 contentType: "application/json",
                                 success: function (result) {
@@ -357,7 +357,7 @@ function queryLou(row) {
     $.ajax({
         type: "GET",
         //ajax需要添加打包名
-        url: "loa/getLou?projectId="+projectId+"&puid="+row,
+        url: "loa/getLou/pBom?projectId="+projectId+"&puid="+row,
         // data: myData,
         // contentType: "application/json",
         undefinedText: "",
