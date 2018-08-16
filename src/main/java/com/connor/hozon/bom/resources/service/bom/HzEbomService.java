@@ -10,9 +10,11 @@ import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.query.HzBomRecycleByPageQuery;
 import com.connor.hozon.bom.resources.query.HzEbomByPageQuery;
 import com.connor.hozon.bom.resources.query.HzEbomTreeQuery;
+import sql.pojo.bom.HzBomLineRecord;
 import sql.pojo.epl.HzEPLManageRecord;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by haozt on 2018/06/06
@@ -77,6 +79,14 @@ public interface HzEbomService {
      */
     OperateResultMessageRespDTO RecoverDeleteEbomRecord(String projectId,String puid);
 
+
+    /**
+     * 向上查询找到2y层BOM
+     * @param projectId
+     * @param puid
+     * @return
+     */
+    HzBomLineRecord findParentFor2Y(String projectId,String puid);
 
 
 }

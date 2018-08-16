@@ -138,9 +138,9 @@ public class HzEbomServiceImpl implements HzEbomService {
                 jsonObject.put("pBomLinePartEnName",record.getpBomLinePartEnName());
                 jsonObject.put("pBomLinePartResource", record.getpBomLinePartResource());
                 jsonObject.put("pFastener", record.getpFastener());
-                if(Integer.valueOf(1).equals(record.getIs2Y())){
+                if(Integer.valueOf(1).equals(record.getpLouaFlag())){
                     jsonObject.put("pLouaFlag","LOU");
-                }else{
+                }else if(Integer.valueOf(0).equals(record.getpLouaFlag())){
                     jsonObject.put("pLouaFlag","LOA");
                 }
                 if(Integer.valueOf(1).equals(record.getP3cpartFlag())){
@@ -295,9 +295,9 @@ public class HzEbomServiceImpl implements HzEbomService {
                 jsonObject.put("pBomLinePartEnName",record.getpBomLinePartEnName());
                 jsonObject.put("pBomLinePartResource", record.getpBomLinePartResource());
                 jsonObject.put("pFastener", record.getpFastener());
-                if(Integer.valueOf(0).equals(record.getIs2Y())){
+                if(Integer.valueOf(1).equals(record.getpLouaFlag())){
                     jsonObject.put("pLouaFlag","LOU");
-                }else{
+                }else if(Integer.valueOf(0).equals(record.getpLouaFlag())){
                     jsonObject.put("pLouaFlag","LOA");
                 }
                 if(Integer.valueOf(1).equals(record.getP3cpartFlag())){
@@ -381,7 +381,7 @@ public class HzEbomServiceImpl implements HzEbomService {
                 map.put("puid", parentId);
                 map.put("projectId", reqDTO.getProjectId());
                 map.put("pPuid",parentId);
-                HzBomLineRecord record = hzBomLineRecordDao.findBomLineByPuid(map);
+                HzBomLineRecord record = hzBomLineRecordDao.findBomLine(map);
 
                 //找到他们的父，并找到他们父的零件号，继而找出所有使用父零件号的部位，保持结构的完整性
                 String bomLineId = "";
@@ -1989,4 +1989,21 @@ public class HzEbomServiceImpl implements HzEbomService {
         }
     }
 
+    @Override
+    public HzBomLineRecord findParentFor2Y(String projectId, String puid) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("projectId",projectId);
+        map.put("puid",puid);
+       List<HzBomLineRecord> records = hzBomLineRecordDao.findBomListForChange(map);
+       if(ListUtil.isNotEmpty(records)){
+           if(records.get(0).getIs2Y().equals(1)){
+               return records.get(0);
+           }else {
+               return  findParentFor2Y(projectId,records.get(0).getParentUid());
+           }
+       }else {
+           return null;
+       }
+
+    }
 }

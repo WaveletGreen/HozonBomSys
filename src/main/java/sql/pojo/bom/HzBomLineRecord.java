@@ -231,8 +231,9 @@ public class HzBomLineRecord {
      */
     private String ewoNo;
 
+    private Integer pLouaFlag;
     /**
-     * 根据puid来进行判断重复 重新equals方法
+     * 根据puid来进行判断重复 重写equals方法
      * @param o
      * @return
      */
@@ -248,6 +249,15 @@ public class HzBomLineRecord {
     public int hashCode() {
 
         return Objects.hash(puid);
+    }
+
+
+    public Integer getpLouaFlag() {
+        return pLouaFlag;
+    }
+
+    public void setpLouaFlag(Integer pLouaFlag) {
+        this.pLouaFlag = pLouaFlag;
     }
 
     public Long getId() {

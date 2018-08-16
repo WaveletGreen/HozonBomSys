@@ -66,7 +66,7 @@
         <!--针对配色方案的颜色库对应的UID-->
         <result column="COLOR_UID" jdbcType="VARCHAR" property="colorUid"/>
         <result column="P_EWO_NO" jdbcType="VARCHAR" property="ewoNo"/>
-
+        <result column="P_LOU_LOA_FLAG" jdbcType="INTEGER" property="pLouaFlag"/>
     </resultMap>
     <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs"
                type="sql.pojo.bom.HzBomLineRecord">
@@ -132,7 +132,8 @@
     P_REGULATION_CODE,
     P_NUMBER,
     P_BUY_ENGINEER,
-    P_EWO_NO
+    P_EWO_NO,
+    P_LOU_LOA_FLAG
   </sql>
 
     <sql id="Bom_Column_For_Change">
@@ -473,6 +474,22 @@
         </if>
         and P_EBOM_STATUS<![CDATA[ <> ]]>0
     </select>
+
+
+
+
+    <select id="HzBomLineRecordDaoImpl_findBomLine" parameterType="java.util.Map" resultMap="BaseResultMap">
+        SELECT *
+        from HZ_BOM_LINE_RECORD
+        where P_BOM_DIGIFAX_ID =(
+        select t2.puid from Hz_Bom_Main_Record t2
+        where
+        t2.p_cfg0_of_which_project_puid=#{projectId,jdbcType=VARCHAR}
+        )
+        and PUID=#{puid,jdbcType=VARCHAR}
+        and P_EBOM_STATUS<![CDATA[ <> ]]>0
+    </select>
+
 
 
     <select id="HzBomLineRecordDaoImpl_findBomListForChange" parameterType="java.util.Map" resultMap="BaseResultMap">
