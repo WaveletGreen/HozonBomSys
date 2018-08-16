@@ -32,6 +32,7 @@
         <result column="P_CFG0_MODEL_RECORD" jdbcType="VARCHAR" property="pCfg0ModelRecord"/>
         <result column="P_OF_CFG0_MAIN_RECORD" jdbcType="VARCHAR" property="pOfCfg0MainRecord"/>
         <result column="P_CFG0_MODEL_BASIC_DETAIL" jdbcType="VARCHAR" property="pCfg0ModelBasicDetail"/>
+        <result column="IS_SENT" jdbcType="INTEGER" property="isSent"/>
     </resultMap>
     <!--基础列信息-->
     <sql id="Base_Column_List">
