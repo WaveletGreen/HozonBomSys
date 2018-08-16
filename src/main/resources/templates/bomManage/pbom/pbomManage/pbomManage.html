@@ -13,25 +13,42 @@
                   id="queryPbomManage">
                 <div class="form-group">
                     <label for="level">层级:</label>
-                    <input type="text" class="form-control" name="level" id="level" placeholder="请输入层级"/>
+                    <input type="text"style="width: 140px;" class="form-control" name="level" id="level" placeholder="请输入层级"/>
                 </div>
                 <div class="form-group">
                     <label for="pBomOfWhichDept">专业:</label>
-                    <input type="text" class="form-control" name="pBomOfWhichDept" id="pBomOfWhichDept"
+                    <input type="text"style="width: 140px;" class="form-control" name="pBomOfWhichDept" id="pBomOfWhichDept"
                            placeholder="请输入专业"/>
                 </div>
                 <div class="form-group">
                     <label for="lineId">零件号:</label>
-                    <input type="text" class="form-control" name="lineId" id="lineId" placeholder="请输入零件号"/>
-                </div>
-                <!--<div class="form-group">
-                    <label for="lineId">零件号:</label>
-                    <input type="text" class="form-control" name="lineId" id="lineId" placeholder="请输入零件号"/>
+                    <input type="text"style="width: 140px;" class="form-control" name="lineId" id="lineId" placeholder="请输入零件号"/>
                 </div>
                 <div class="form-group">
-                    <label for="itemType">零件分类:</label>
-                    <input type="text" class="form-control" name="itemType" id="itemType" placeholder="请输入零件号"/>
-                </div>-->
+                    <label for="pBomLinePartClass">零件分类:</label>
+                    <select class="form-control"style="width: 140px;" name="pBomLinePartClass" id="pBomLinePartClass">
+                        <option>请选择零件分类</option>
+                        <option>自制</option>
+                        <option>外协</option>
+                        <option>虚拟总成</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="pBomLinePartResource">零件来源:</label>
+                    <select class="form-control" style="width: 140px;"name="pBomLinePartResource" id="pBomLinePartResource">
+                        <option>请选择零件来源</option>
+                        <option>采购件</option>
+                        <option>采购拆分单件</option>
+                        <option>采购拆分总成件</option>
+                        <option>采购拆分标准件</option>
+                        <option>采购拆分非标件</option>
+                        <option>自制总成</option>
+                        <option>自制单件</option>
+                        <option>自用标准件</option>
+                        <option>自用非标件</option>
+                        <option>虚拟总成</option>
+                    </select>
+                </div>
                 <div class="form-group">
                     <button type="button" id="queryBtn" onclick="doQuery();" class="btn btn-primary">查询</button>
                 </div>
