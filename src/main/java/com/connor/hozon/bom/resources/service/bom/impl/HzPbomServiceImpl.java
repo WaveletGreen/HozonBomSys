@@ -6,8 +6,10 @@ import com.alibaba.fastjson.JSONObject;
 import com.connor.hozon.bom.bomSystem.dao.bom.HzBomDataDao;
 import com.connor.hozon.bom.bomSystem.dao.bom.HzBomMainRecordDao;
 import com.connor.hozon.bom.bomSystem.dao.impl.bom.HzBomLineRecordDaoImpl;
+import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0OfBomLineService;
 import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.resources.dto.request.*;
+import com.connor.hozon.bom.resources.dto.response.HzLouRespDTO;
 import com.connor.hozon.bom.resources.dto.response.HzMbomRecordRespDTO;
 import com.connor.hozon.bom.resources.dto.response.HzPbomLineRespDTO;
 import com.connor.hozon.bom.resources.dto.response.OperateResultMessageRespDTO;
@@ -17,12 +19,14 @@ import com.connor.hozon.bom.resources.mybatis.bom.HzPbomRecordDAO;
 import com.connor.hozon.bom.resources.mybatis.bom.impl.HzPbomRecordDAOImpl;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.query.HzBomRecycleByPageQuery;
+import com.connor.hozon.bom.resources.query.HzLouaQuery;
 import com.connor.hozon.bom.resources.query.HzPbomByPageQuery;
 import com.connor.hozon.bom.resources.query.HzPbomTreeQuery;
 import com.connor.hozon.bom.resources.service.bom.HzPbomService;
 import com.connor.hozon.bom.resources.service.epl.HzEPLManageRecordService;
 import com.connor.hozon.bom.resources.util.DateUtil;
 import com.connor.hozon.bom.resources.util.ListUtil;
+import com.connor.hozon.bom.resources.util.PrivilegeUtil;
 import com.connor.hozon.bom.sys.entity.User;
 import org.omg.CORBA.OBJ_ADAPTER;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +37,7 @@ import share.bean.PreferenceSetting;
 import share.bean.RedisBomBean;
 import sql.pojo.HzPreferenceSetting;
 import sql.pojo.bom.*;
+import sql.pojo.cfg.HzCfg0OfBomLineRecord;
 import sql.redis.SerializeUtil;
 
 import java.util.*;
@@ -51,6 +56,11 @@ public class HzPbomServiceImpl implements HzPbomService {
     @Autowired
     private HzBomMainRecordDao hzBomMainRecordDao;
 
+    @Autowired
+    private HzMbomRecordDAO hzMbomRecordDAO;
+
+    @Autowired
+    private HzCfg0OfBomLineService hzCfg0OfBomLineService;
     @Override
     public OperateResultMessageRespDTO insertHzPbomRecord(AddHzPbomRecordReqDTO recordReqDTO) {
         OperateResultMessageRespDTO respDTO = new OperateResultMessageRespDTO();
@@ -816,6 +826,88 @@ public class HzPbomServiceImpl implements HzPbomService {
         }
     }
 
+    @Override
+    public OperateResultMessageRespDTO setCurrentBomAsLou(SetLouReqDTO reqDTO) {
+        try {
+            if(reqDTO.getLineIds()==null || reqDTO.getProjectId() == null){
+                return OperateResultMessageRespDTO.illgalArgument();
+            }
+            boolean b = PrivilegeUtil.writePrivilege();
+            if(!b){
+                return OperateResultMessageRespDTO.getFailPrivilege();
+            }
+            String[] lineIds = reqDTO.getLineIds().split(",");
+            for(String lineId:lineIds){
+                Map<String,Object> map = new HashMap<>();
+                map.put("lineId",lineId);
+                map.put("projectId",reqDTO.getProjectId());
+                List<HzPbomLineRecord> pbomList =  hzPbomRecordDAO.getPbomById(map);
+                List<HzMbomLineRecord> mbomList  =  hzMbomRecordDAO.findHzMbomByPuid(map);
+                if(ListUtil.isNotEmpty(pbomList)){
+                    pbomList.forEach(hzPbomLineRecord -> {
+                        if(Integer.valueOf(1).equals(hzPbomLineRecord.getpLouaFlag())){
+                            hzPbomLineRecord.setpLouaFlag(2);
+                        }else {
+                            hzPbomLineRecord.setpLouaFlag(1);
+                        }
+                        hzPbomRecordDAO.update(hzPbomLineRecord);
+                    });
+                }
+                if(ListUtil.isNotEmpty(mbomList)){
+                    mbomList.forEach(hzMbomLineRecord -> {
+                        hzMbomLineRecord.setpLouaFlag(Integer.valueOf(1).equals(hzMbomLineRecord.getpLouaFlag())?2:1);
+                        hzMbomRecordDAO.update(hzMbomLineRecord);
+                    });
+                }
+
+            }
+            return OperateResultMessageRespDTO.getSuccessResult();
+        }catch (Exception e){
+            return OperateResultMessageRespDTO.getFailResult();
+        }
+    }
+
+    @Override
+    public HzPbomLineRecord findParentUtil2Y(String projectId, String puid) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("projectId",projectId);
+        map.put("puid",puid);
+        List<HzPbomLineRecord> records = hzPbomRecordDAO.getPbomById(map);
+        if(ListUtil.isNotEmpty(records)){
+            if(records.get(0).getIs2Y().equals(1)){
+                return records.get(0);
+            }else {
+                return  findParentUtil2Y(projectId,records.get(0).getParentUid());
+            }
+        }else {
+            return null;
+        }
+    }
+
+
+    @Override
+    public HzLouRespDTO getHzLouInfoById(HzLouaQuery query) {
+        try {
+            HzLouRespDTO respDTO = new HzLouRespDTO();
+            HzPbomLineRecord hzBomLineRecord = findParentUtil2Y(query.getProjectId(),query.getPuid());
+            if(hzBomLineRecord != null){
+                HzCfg0OfBomLineRecord record = hzCfg0OfBomLineService.doSelectByBLUidAndPrjUid(query.getProjectId(),hzBomLineRecord.getPuid());
+                if(record != null){
+                    respDTO.setCfg0Desc(record.getCfg0Desc());
+                    respDTO.setCfg0FamilyDesc(record.getCfg0FamilyDesc());
+                    respDTO.setpCfg0name(record.getpCfg0name());
+                    respDTO.setpCfg0familyname(record.getpCfg0familyname());
+                    return  respDTO;
+                }
+            }
+            return respDTO;
+        }catch (Exception e){
+            return null;
+        }
+    }
+
+
+
     private HzPbomLineRecord bomLineToPbomLine(HzBomLineRecord record){
         HzPbomLineRecord hzPbomLineRecord = new HzPbomLineRecord();
         hzPbomLineRecord.setPuid(UUID.randomUUID().toString());
@@ -934,10 +1026,8 @@ public class HzPbomServiceImpl implements HzPbomService {
                 respDTO.setOrderNum(record.getOrderNum());
                 respDTO.setpBomLinePartName(record.getpBomLinePartName());
                 respDTO.setpBomLinePartEnName(record.getpBomLinePartEnName());
-                if(Integer.valueOf(1).equals(record.getIs2Y())){
+                if(Integer.valueOf(1).equals(record.getpLouaFlag())){
                     respDTO.setpLouaFlag("LOU");
-                }else {
-                    respDTO.setpLouaFlag("LOA");
                 }
                 respDTO.setStatus(record.getStatus());
                 respDTOS.add(respDTO);

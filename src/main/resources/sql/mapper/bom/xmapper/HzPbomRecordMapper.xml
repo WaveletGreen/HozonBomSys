@@ -388,14 +388,14 @@
         P_BOM_LINE_PART_EN_NAME = #{pBomLinePartEnName,jdbcType=VARCHAR},
       </if>
       <if test="pBomLinePartResource != null">
-        P_BOM_LINE_PART_RESOURCE = #{pBomLinePartResource,jdbcType=VARCHAR}
+        P_BOM_LINE_PART_RESOURCE = #{pBomLinePartResource,jdbcType=VARCHAR},
       </if>
       <if test="pLouaFlag != null">
         P_LOU_LOA_FLAG = #{pLouaFlag,jdbcType=VARCHAR}
       </if>
     </set>
     where P_E_BOM_PUID = #{eBomPuid,jdbcType=VARCHAR}
-    and P_PBOM_STATUS =2
+    and P_PBOM_STATUS <![CDATA[ <> ]]>0
   </update>
 
 

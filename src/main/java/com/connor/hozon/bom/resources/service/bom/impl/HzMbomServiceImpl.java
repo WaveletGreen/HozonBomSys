@@ -1,29 +1,32 @@
 package com.connor.hozon.bom.resources.service.bom.impl;
 
 import com.connor.hozon.bom.bomSystem.dao.impl.bom.HzBomLineRecordDaoImpl;
+import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0OfBomLineService;
 import com.connor.hozon.bom.bomSystem.service.integrate.SynBomService;
 import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.resources.dto.request.AddMbomReqDTO;
 import com.connor.hozon.bom.resources.dto.request.DeleteHzMbomReqDTO;
+import com.connor.hozon.bom.resources.dto.request.SetLouReqDTO;
 import com.connor.hozon.bom.resources.dto.request.UpdateMbomReqDTO;
-import com.connor.hozon.bom.resources.dto.response.HzMbomRecordRespDTO;
-import com.connor.hozon.bom.resources.dto.response.HzSuperMbomRecordRespDTO;
-import com.connor.hozon.bom.resources.dto.response.HzVehicleModelRespDTO;
-import com.connor.hozon.bom.resources.dto.response.OperateResultMessageRespDTO;
+import com.connor.hozon.bom.resources.dto.response.*;
 import com.connor.hozon.bom.resources.mybatis.bom.HzMbomRecordDAO;
 import com.connor.hozon.bom.resources.mybatis.factory.HzFactoryDAO;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.query.HzBomRecycleByPageQuery;
+import com.connor.hozon.bom.resources.query.HzLouaQuery;
 import com.connor.hozon.bom.resources.query.HzMbomByPageQuery;
 import com.connor.hozon.bom.resources.query.HzMbomTreeQuery;
 import com.connor.hozon.bom.resources.service.bom.HzMbomService;
 import com.connor.hozon.bom.resources.util.ListUtil;
+import com.connor.hozon.bom.resources.util.PrivilegeUtil;
 import com.connor.hozon.bom.sys.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sql.pojo.bom.HzBomLineRecord;
 import sql.pojo.bom.HzMbomLineRecord;
 import sql.pojo.bom.HzMbomRecord;
+import sql.pojo.bom.HzPbomLineRecord;
+import sql.pojo.cfg.HzCfg0OfBomLineRecord;
 import sql.pojo.factory.HzFactory;
 import sql.redis.SerializeUtil;
 
@@ -51,7 +54,8 @@ public class HzMbomServiceImpl implements HzMbomService {
 
     @Autowired
     private HzFactoryDAO hzFactoryDAO;
-
+    @Autowired
+    private HzCfg0OfBomLineService hzCfg0OfBomLineService;
     @Override
     public Page<HzMbomRecordRespDTO> findHzMbomForPage(HzMbomByPageQuery query) {
         try {
@@ -135,10 +139,8 @@ public class HzMbomServiceImpl implements HzMbomService {
                 respDTO.setWasterProduct(record.getWasterProduct());
                 respDTO.setChange(record.getChange());
                 respDTO.setChangeNum(record.getChangeNum());
-                if (Integer.valueOf(1).equals(record.getIs2Y())) {
+                if (Integer.valueOf(1).equals(record.getpLouaFlag())) {
                     respDTO.setpLouaFlag("LOU");
-                } else {
-                    respDTO.setpLouaFlag("LOA");
                 }
                 if (Integer.valueOf(1).equals(record.getpBomType())) {
                     respDTO.setpBomType("生产");
@@ -647,6 +649,78 @@ public class HzMbomServiceImpl implements HzMbomService {
         list.add("虚拟总成");
         return list;
     }
+
+    @Override
+    public OperateResultMessageRespDTO setCurrentBomToLou(SetLouReqDTO reqDTO) {
+        try {
+            if(reqDTO.getLineIds()==null || reqDTO.getProjectId() == null){
+                return OperateResultMessageRespDTO.illgalArgument();
+            }
+            boolean b = PrivilegeUtil.writePrivilege();
+            if(!b){
+                return OperateResultMessageRespDTO.getFailPrivilege();
+            }
+            String[] lineIds = reqDTO.getLineIds().split(",");
+            for(String lineId:lineIds){
+                Map<String,Object> map = new HashMap<>();
+                map.put("lineId",lineId);
+                map.put("projectId",reqDTO.getProjectId());
+                List<HzMbomLineRecord> mbomList  =  hzMbomRecordDAO.findHzMbomByPuid(map);
+                if(ListUtil.isNotEmpty(mbomList)){
+                    mbomList.forEach(hzMbomLineRecord -> {
+                        hzMbomLineRecord.setpLouaFlag(Integer.valueOf(1).equals(hzMbomLineRecord.getpLouaFlag())?2:1);
+                        hzMbomRecordDAO.update(hzMbomLineRecord);
+                    });
+                }
+
+            }
+            return OperateResultMessageRespDTO.getSuccessResult();
+        }catch (Exception e){
+            return OperateResultMessageRespDTO.getFailResult();
+        }
+    }
+
+    @Override
+    public HzMbomLineRecord findParentBomUtil2Y(String projectId, String puid) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("projectId",projectId);
+        map.put("puid",puid);
+        List<HzMbomLineRecord> records = hzMbomRecordDAO.findHzMbomByPuid(map);
+        if(ListUtil.isNotEmpty(records)){
+            if(records.get(0).getIs2Y().equals(1)){
+                return records.get(0);
+            }else {
+                return  findParentBomUtil2Y(projectId,records.get(0).getParentUid());
+            }
+        }else {
+            return null;
+        }
+    }
+
+
+    @Override
+    public HzLouRespDTO getHzLouInfoById(HzLouaQuery query) {
+        try {
+            HzLouRespDTO respDTO = new HzLouRespDTO();
+            HzMbomLineRecord hzBomLineRecord = findParentBomUtil2Y(query.getProjectId(),query.getPuid());
+            if(hzBomLineRecord != null){
+                HzCfg0OfBomLineRecord record = hzCfg0OfBomLineService.doSelectByBLUidAndPrjUid(query.getProjectId(),hzBomLineRecord.getPuid());
+                if(record != null){
+                    respDTO.setCfg0Desc(record.getCfg0Desc());
+                    respDTO.setCfg0FamilyDesc(record.getCfg0FamilyDesc());
+                    respDTO.setpCfg0name(record.getpCfg0name());
+                    respDTO.setpCfg0familyname(record.getpCfg0familyname());
+                    return  respDTO;
+                }
+            }
+            return respDTO;
+        }catch (Exception e){
+            return null;
+        }
+    }
+
+
+
 
     private HzMbomLineRecord bomLineToMbomLine(HzBomLineRecord record) {
         HzMbomLineRecord hzMbomLineRecord = new HzMbomLineRecord();

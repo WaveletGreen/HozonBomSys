@@ -216,4 +216,38 @@ public class LouaContorller extends BaseController {
         HzLouRespDTO respDTO = hzEbomService.getHzLouInfoById(query);
         writeAjaxJSONResponse(ResultMessageBuilder.build(respDTO),response);
     }
+
+    @RequestMapping(value = "setLou/pBom",method = RequestMethod.POST)
+    public void setPbomAsLou(@RequestBody SetLouReqDTO reqDTO,HttpServletResponse response){
+        OperateResultMessageRespDTO respDTO = hzPbomService.setCurrentBomAsLou(reqDTO);
+        writeAjaxJSONResponse(ResultMessageBuilder.build(OperateResultMessageRespDTO.isSuccess(respDTO),respDTO),response);
+    }
+
+    @RequestMapping(value = "getLou/pBom",method = RequestMethod.GET)
+    public void getPbomLou(HzLouaQuery query,HttpServletResponse response){
+        if(query.getProjectId() == null || query.getPuid() == null || query.getPuid() == "" || query.getProjectId() == ""){
+            writeAjaxJSONResponse(ResultMessageBuilder.build(false,"非法参数！"),response);
+            return;
+        }
+        HzLouRespDTO respDTO = hzPbomService.getHzLouInfoById(query);
+        writeAjaxJSONResponse(ResultMessageBuilder.build(respDTO),response);
+    }
+
+    @RequestMapping(value = "setLou/mBom",method = RequestMethod.POST)
+    public void setMBomAsLou(@RequestBody SetLouReqDTO reqDTO,HttpServletResponse response){
+        OperateResultMessageRespDTO respDTO = hzMbomService.setCurrentBomToLou(reqDTO);
+        writeAjaxJSONResponse(ResultMessageBuilder.build(OperateResultMessageRespDTO.isSuccess(respDTO),respDTO),response);
+    }
+
+    @RequestMapping(value = "getLou/mBom",method = RequestMethod.GET)
+    public void getMbomLou(HzLouaQuery query,HttpServletResponse response){
+        if(query.getProjectId() == null || query.getPuid() == null || query.getPuid() == "" || query.getProjectId() == ""){
+            writeAjaxJSONResponse(ResultMessageBuilder.build(false,"非法参数！"),response);
+            return;
+        }
+        HzLouRespDTO respDTO = hzMbomService.getHzLouInfoById(query);
+        writeAjaxJSONResponse(ResultMessageBuilder.build(respDTO),response);
+    }
+
+
 }
