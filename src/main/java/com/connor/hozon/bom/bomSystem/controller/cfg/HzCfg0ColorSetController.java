@@ -52,6 +52,12 @@ public class HzCfg0ColorSetController {
         return colorSerService.queryAll2(queryBase);
     }
 
+    @RequestMapping(value = "/getAllColorSet", method = RequestMethod.GET)
+    @ResponseBody
+    public List<HzCfg0ColorSet> getAllColorSet() {
+        return colorSerService.doGetAll();
+    }
+
     /**
      * @param entity 颜色对象
      * @param model  spring的model

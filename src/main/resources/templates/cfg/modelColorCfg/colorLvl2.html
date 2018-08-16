@@ -8,6 +8,7 @@
     <fieldset id="fieldSet">
         <input th:value="${modelUid}" type="hidden" id="modelUid"/>
         <input th:value="${projectUid}" type="hidden" id="projectUid"/>
+        <input th:value="${total}" type="hidden" id="total"/>
 
         <div id="legend" class="">
             <legend class="">二级配色方案</legend>
@@ -31,6 +32,7 @@
 
 <script th:inline="javascript">
     <![CDATA[
+    var total = $("#total").val();
     $(function () {
             $('#form').bootstrapValidator({
                 message: 'This value is not valid',
@@ -121,15 +123,39 @@
             console.log("已选择油漆车身颜色");
         }),
         $("#btnAdd").click(function () {
-            var child = '< div >' +
-                '<input class = "form-control" id = "s0" name = "s0" type = "text" / >' +
-                '< select class= "form-control input-small" name = "s_01" data - style = "btn-info" id = "s_01" >' +
-                // '< option th:each = "color:${colorList}" th:value = "${color.puid}" th:text = "${color.pColorCode+'+' --'+'+color.pColorName+'+ '--'+ '+color.getpColorComment()+' -- '+color.getpColorOfSet()}"
-                // >
-                '<option>blue< /option>' +
-                '< /select>' +
-                '< /div>';
-            $("#fieldSet").append(child);
+            if (total == undefined || null == total) {
+                total = 0;
+            }
+            else {
+                total++;
+            }
+            var child =
+                '<label for="s' + total + '">请输入零件号</label>' +
+                '<div>' +
+                '<div class="col-lg-6">' +
+                '   <input class = "form-control" id = "s' + total + '" name = "s' + total + '" type = "text"/>' +
+                '</div>' +
+                '<div class="col-lg-6">' +
+                '   <select class= "form-control input-small" id = "s_' + total + '"  name = "s_' + total + '" data-style = "btn-info" >';
+            $.ajax({
+                url: "./colorSet/getAllColorSet",
+                type: "GET",
+                success: function (result) {
+                    let option = "";
+                    for (let index in result) {
+                        if (result.hasOwnProperty(index)) {
+                            option = "<option value='" + result[index].puid + "'>" + result[index].pColorName + "-" + result[index].pColorCode + "</option>";
+                            child += option;
+                        }
+                    }
+                    child += '</select></div>' +
+                        '</div>';
+                    $("#fieldSet").append(child);
+                },
+                error: function (e) {
+                    window.Ewin.alert({message: "发生错误，请稍后重试:" + e.status})
+                }
+            });
         }),
     )
     ]]>

@@ -17,9 +17,17 @@ public class HzCfg0OfBomLineRecord {
      */
     private String pCfg0name;
     /**
+     * 特性值描述
+     */
+    private String cfg0Desc;
+    /**
      * 族名
      */
     private String pCfg0familyname;
+    /**
+     * 特性描述
+     */
+    private String cfg0FamilyDesc;
     /**
      * 数模层的PUID
      */
@@ -99,5 +107,21 @@ public class HzCfg0OfBomLineRecord {
 
     public void setProjectUid(String projectUid) {
         this.projectUid = projectUid;
+    }
+
+    public String getCfg0Desc() {
+        return cfg0Desc;
+    }
+
+    public void setCfg0Desc(String cfg0Desc) {
+        this.cfg0Desc = cfg0Desc;
+    }
+
+    public String getCfg0FamilyDesc() {
+        return cfg0FamilyDesc;
+    }
+
+    public void setCfg0FamilyDesc(String cfg0FamilyDesc) {
+        this.cfg0FamilyDesc = cfg0FamilyDesc;
     }
 }
