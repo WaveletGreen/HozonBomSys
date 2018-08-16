@@ -63,7 +63,11 @@ function initTable(eBomUrl) {
                             // align: 'center',
                             valign: 'middle',
                             formatter: function (value, row, index) {
-                                if (value == "LOU" || "LOA" == value) {
+                                if (value == "LOA") {
+                                    return [
+                                        '<a href="javascript:void(0)" onclick="queryLoa(\'' + row.puid + '\')">' + value + '</a>'
+                                    ].join("");
+                                }else if (value == "LOU"){
                                     return [
                                         '<a href="javascript:void(0)" onclick="queryLou(\'' + row.puid + '\')">' + value + '</a>'
                                     ].join("");
@@ -350,7 +354,7 @@ function initTable(eBomUrl) {
     });
 }
 
-function queryLou(row) {
+function queryLoa(row) {
     var myData = JSON.stringify({
         "projectId": $("#project", window.top.document).val(),
         "puid": row
