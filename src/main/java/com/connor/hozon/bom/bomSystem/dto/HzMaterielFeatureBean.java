@@ -42,7 +42,10 @@ public class HzMaterielFeatureBean {
      * 主配置puid
      */
     private String pOfCfg0MainRecord;
-
+    /**
+     * 是否已发送过SAP
+     */
+    private Integer isSent;
     public String getPuid() {
         return puid;
     }
@@ -113,5 +116,13 @@ public class HzMaterielFeatureBean {
 
     public void setpCfg0ModelBasicDetail(String pCfg0ModelBasicDetail) {
         this.pCfg0ModelBasicDetail = pCfg0ModelBasicDetail;
+    }
+
+    public Integer getIsSent() {
+        return isSent;
+    }
+
+    public void setIsSent(Integer isSent) {
+        this.isSent = isSent;
     }
 }
