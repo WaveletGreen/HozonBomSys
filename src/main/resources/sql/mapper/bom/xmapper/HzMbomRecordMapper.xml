@@ -99,6 +99,12 @@
             <if test="pBomOfWhichDept != null and  pBomOfWhichDept!='' ">
                 and t.P_BOM_OF_WHICH_DEPT like CONCAT(CONCAT('%',#{pBomOfWhichDept,jdbcType=VARCHAR}),'%')
             </if>
+            <if test="pBomLinePartClass != null and pBomLinePartClass!=''">
+                and P_BOM_LINE_PART_CLASS = #{pBomLinePartClass,jdbcType=VARCHAR}
+            </if>
+            <if test="pBomLinePartResource != null and pBomLinePartResource!=''">
+                and P_BOM_LINE_PART_RESOURCE = #{pBomLinePartResource,jdbcType=VARCHAR}
+            </if>
             and t.P_MBOM_STATUS<![CDATA[ <> ]]>0 order by P_BOM_ORDER_NUM
         </where>
     </select>
@@ -126,6 +132,12 @@
             </if>
             <if test="pBomOfWhichDept != null and  pBomOfWhichDept!='' ">
                 and t.P_BOM_OF_WHICH_DEPT like CONCAT(CONCAT('%',#{pBomOfWhichDept,jdbcType=VARCHAR}),'%')
+            </if>
+            <if test="pBomLinePartClass != null and pBomLinePartClass!=''">
+                and P_BOM_LINE_PART_CLASS = #{pBomLinePartClass,jdbcType=VARCHAR}
+            </if>
+            <if test="pBomLinePartResource != null and pBomLinePartResource!=''">
+                and P_BOM_LINE_PART_RESOURCE = #{pBomLinePartResource,jdbcType=VARCHAR}
             </if>
             and t.P_MBOM_STATUS<![CDATA[ <> ]]>0
         </where>
