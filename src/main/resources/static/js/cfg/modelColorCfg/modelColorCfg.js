@@ -4,7 +4,7 @@ function modeVehicle(puid) {
         title: "添加",
         url: "modelColor/setLvl2ColorPage?modelUid=" + puid+"&projectUid="+projectUid,
         gridId: "gridId",
-        width: 500,
+        width: 880,
         height: 600
     })
 }
