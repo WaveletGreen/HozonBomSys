@@ -29,6 +29,32 @@ public class HzEbomByPageQuery extends DefaultPageQuery{
 
     private String lineIndex;
 
+    /**
+     * 零件分类
+     */
+    private String pBomLinePartClass;
+
+    /**
+     * 零件来源
+     */
+    private String pBomLinePartResource;
+
+    public String getpBomLinePartClass() {
+        return pBomLinePartClass;
+    }
+
+    public void setpBomLinePartClass(String pBomLinePartClass) {
+        this.pBomLinePartClass = pBomLinePartClass;
+    }
+
+    public String getpBomLinePartResource() {
+        return pBomLinePartResource;
+    }
+
+    public void setpBomLinePartResource(String pBomLinePartResource) {
+        this.pBomLinePartResource = pBomLinePartResource;
+    }
+
     public String getLineIndex() {
         return lineIndex;
     }
