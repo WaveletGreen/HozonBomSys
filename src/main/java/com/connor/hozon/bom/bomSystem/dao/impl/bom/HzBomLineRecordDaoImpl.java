@@ -49,7 +49,7 @@ public class HzBomLineRecordDaoImpl extends BaseSQLUtil {
     }
 
     /**
-     * 找出一条BOMLine 对象
+     * 找出一条BOMLine 对象 走变更查询单一条记录
      * @author haozt
      * @param map 过滤器
      * @return
@@ -60,6 +60,18 @@ public class HzBomLineRecordDaoImpl extends BaseSQLUtil {
         }
         return (HzBomLineRecord)super.findForObject("HzBomLineRecordDaoImpl_findBomLineByPuid",map);
     }
+
+
+    /**
+     * 找出一条BOMLine 对象 与变更无关
+     * @author haozt
+     * @param map 过滤器
+     * @return
+     */
+    public HzBomLineRecord findBomLine(Map map){
+        return (HzBomLineRecord)super.findForObject("HzBomLineRecordDaoImpl_findBomLine",map);
+    }
+
 
     /**
      * 查询设变时BOM 历史记录

@@ -8,7 +8,7 @@ import sql.pojo.cfg.HzColorModel;
 
 import java.util.List;
 
-@Service
+@Service("hzColorModelService")
 public class HzColorModelService implements IHzColorModelService {
     @Autowired
     HzColorModelDao hzColorModelDao;

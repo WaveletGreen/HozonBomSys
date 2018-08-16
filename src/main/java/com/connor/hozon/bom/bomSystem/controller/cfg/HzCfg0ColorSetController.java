@@ -37,30 +37,6 @@ public class HzCfg0ColorSetController {
     HzCfg0ColorSetService colorSerService;
 
     private final static Logger logger = LoggerFactory.getLogger(HzCfg0ColorSetController.class);
-//    @RequestMapping(value = "/queryAll", method = RequestMethod.GET)
-//    @ResponseBody
-//    public JSONArray queryAll() {
-//        if (baseSQLUtil == null) {
-//            baseSQLUtil = new BaseSQLUtil();
-//        }
-//        JSONArray result = new JSONArray();
-//        String[] orgName = new String[]{"colorOfSet", "colorName", "colorCode", "comment", "hide"};
-//        String[] localName = new String[]{"colorOfSet", "colorName", "colorCode", "comment", "hide"};
-//        result.add(0, orgName);
-//        result.add(1, localName);
-//
-//        List<HzCfg0ColorSet> colorSet = baseSQLUtil.executeQuery(new HzCfg0ColorSet(), "sql.mapper.cfg.i.HzCfg0ColorSetMapper.selectAll");
-//        colorSet.forEach((set) -> {
-//            JSONObject object = new JSONObject();
-//            object.put(orgName[0], set.getpColorOfSet());
-//            object.put(orgName[1], set.getpColorName());
-//            object.put(orgName[2], set.getpColorCode());
-//            object.put(orgName[3], set.getpColorComment());
-//            object.put("hide", set.getPuid());
-//            result.add(object);
-//        });
-//        return result;
-//    }
 
     /**
      * @param
@@ -74,6 +50,12 @@ public class HzCfg0ColorSetController {
     public Map<String, Object> queryAll2(QueryBase queryBase) {
         System.out.println();
         return colorSerService.queryAll2(queryBase);
+    }
+
+    @RequestMapping(value = "/getAllColorSet", method = RequestMethod.GET)
+    @ResponseBody
+    public List<HzCfg0ColorSet> getAllColorSet() {
+        return colorSerService.doGetAll();
     }
 
     /**

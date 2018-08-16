@@ -59,22 +59,6 @@ public class HzEWOController extends BaseController {
     /**
      * 流程变更表单记录
      */
-//    @RequestMapping(value = "change/record",method = RequestMethod.GET)
-//    public void changeProcessHistory(HzEWOChangeRecordQuery query,HttpServletResponse response){
-//        if(query.getEwoNo() == null || query.getProjectId() == null
-//                || query.getProjectId() == "" || query.getEwoNo() == ""){
-//            writeAjaxJSONResponse(ResultMessageBuilder.build(false,"非法参数！"),response);
-//            return ;
-//        }
-//        List<HzEbomRespDTO> respDTOList = hzEWOService.getEWOChangeFormRecord(query);
-//        if(ListUtil.isEmpty(respDTOList)){
-//            writeAjaxJSONResponse(ResultMessageBuilder.build(false,"暂无数据！"),response);
-//            return ;
-//        }
-//        writeAjaxJSONResponse(ResultMessageBuilder.build(respDTOList),response);
-//    }
-
-
     @RequestMapping(value = "change/record",method = RequestMethod.GET)
     @ResponseBody
     public JSONObject changeProcessHistory(HzEWOChangeRecordQuery query){
@@ -178,4 +162,8 @@ public class HzEWOController extends BaseController {
         }
         writeAjaxJSONResponse(ResultMessageBuilder.build(respDTOList),response);
     }
+
+
+
+
 }

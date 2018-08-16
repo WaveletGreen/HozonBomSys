@@ -16,12 +16,16 @@ public class DateStringHelper {
     private static final String pattern2 = "yyyy-MM-dd";
     private static final String pattern3 = "yyyy年MM月dd日";
     /**
+     * VWO号用
+     */
+    private static final String pattern4 = "yyyy";
+    /**
      * 转换器
      */
     private static SimpleDateFormat format = new SimpleDateFormat(pattern);
     private static SimpleDateFormat format2 = new SimpleDateFormat(pattern2);
     private static SimpleDateFormat format3 = new SimpleDateFormat(pattern3);
-
+    private static SimpleDateFormat format4 = new SimpleDateFormat(pattern4);
 
     /**
      * 日期转字符串
@@ -51,6 +55,12 @@ public class DateStringHelper {
         if (date == null) {
             return null;
         } else return format3.format(date);
+    }
+
+    public static String dateToString4(Date date) {
+        if (date == null) {
+            return null;
+        } else return format4.format(date);
     }
 
     /**

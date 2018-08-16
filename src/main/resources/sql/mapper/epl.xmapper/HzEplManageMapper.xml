@@ -62,6 +62,8 @@
       <result column="P_EBOM_STATUS" jdbcType="VARCHAR" property="status" />
       <result column="P_NUMBER" jdbcType="INTEGER" property="number" />
       <result column="P_BUY_ENGINEER" jdbcType="INTEGER" property="pBuyEngineer" />
+      <result column="P_EWO_NO" jdbcType="VARCHAR" property="ewoNo"/>
+      <result column="P_LOU_LOA_FLAG" jdbcType="INTEGER" property="pLouaFlag"/>
 
     <!--PBOM-->
     <result column="P_ITEM_RESOURCE" jdbcType="VARCHAR" property="itemResource" />

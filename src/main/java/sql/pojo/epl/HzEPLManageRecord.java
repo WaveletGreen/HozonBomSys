@@ -254,6 +254,26 @@ public class HzEPLManageRecord {
 
     private String tableName;
 
+    private String ewoNo;
+
+    private Integer pLouaFlag;
+
+    public String getEwoNo() {
+        return ewoNo;
+    }
+
+    public void setEwoNo(String ewoNo) {
+        this.ewoNo = ewoNo;
+    }
+
+    public Integer getpLouaFlag() {
+        return pLouaFlag;
+    }
+
+    public void setpLouaFlag(Integer pLouaFlag) {
+        this.pLouaFlag = pLouaFlag;
+    }
+
     public String getTableName() {
         return tableName;
     }

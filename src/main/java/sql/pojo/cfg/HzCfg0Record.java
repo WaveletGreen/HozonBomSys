@@ -28,19 +28,9 @@ public class HzCfg0Record {
      */
     private String pCfg0MainItemPuid;
     /**
-     * 需要被废弃
-     */
-    @Deprecated
-    private String pH9featurename;
-    /**
      * 特性英文名称
      */
     private String pH9featureenname;
-    /**
-     * 需要被废弃
-     */
-    @Deprecated
-    private String pH9featuredesc;
     /**
      * 组的描述
      */
@@ -75,10 +65,34 @@ public class HzCfg0Record {
      * 最后一次修改时间
      */
     private Date lastModifyDate;
-
+    /**
+     * 创建者
+     */
     private String creator;
+    /**
+     * 修改者
+     */
     private String lastModifier;
-
+    /**
+     * 生效时间
+     */
+    private Date cfgEffectedDate;
+    /**
+     * 废止时间
+     */
+    private Date cfgAbolishDate;
+    /**
+     * 状态
+     */
+    private Integer cfgStatus;
+    /**
+     * 是否在流程中
+     */
+    private Integer cfgIsInProcess;
+    /**
+     * vwo号的ID
+     */
+    private Long vwoId;
     public static String reflectToDBField(String property) {
         switch (property) {
             /**
@@ -106,13 +120,20 @@ public class HzCfg0Record {
              */
             case "pCfg0FamilyDesc":
                 return "P_CFG0_FAMILY_DESC";
+            /**
+             * 生效时间
+             */
+            case "cfgEffectedDate":
+                return "CFG_EFFECTED_DATE";
+            /**
+             * 废止时间
+             */
+            case "cfgAbolishDate":
+                return "CFG_ABOLISH_DATE";
             default:
                 return null;
         }
     }
-
-
-
 
 
     public String getPuid() {
@@ -165,14 +186,6 @@ public class HzCfg0Record {
         this.pCfg0MainItemPuid = pCfg0MainItemPuid == null ? null : pCfg0MainItemPuid.trim();
     }
 
-    public String getpH9featurename() {
-        return pH9featurename;
-    }
-
-    public void setpH9featurename(String pH9featurename) {
-        this.pH9featurename = pH9featurename == null ? null : pH9featurename.trim();
-    }
-
     public String getpH9featureenname() {
         return pH9featureenname;
     }
@@ -181,13 +194,6 @@ public class HzCfg0Record {
         this.pH9featureenname = pH9featureenname == null ? null : pH9featureenname.trim();
     }
 
-    public String getpH9featuredesc() {
-        return pH9featuredesc;
-    }
-
-    public void setpH9featuredesc(String pH9featuredesc) {
-        this.pH9featuredesc = pH9featuredesc == null ? null : pH9featuredesc.trim();
-    }
 
     public String getpCfg0FamilyDesc() {
         return pCfg0FamilyDesc;
@@ -277,4 +283,43 @@ public class HzCfg0Record {
         this.lastModifier = lastModifier;
     }
 
+    public Date getCfgEffectedDate() {
+        return cfgEffectedDate;
+    }
+
+    public void setCfgEffectedDate(Date cfgEffectedDate) {
+        this.cfgEffectedDate = cfgEffectedDate;
+    }
+
+    public Date getCfgAbolishDate() {
+        return cfgAbolishDate;
+    }
+
+    public void setCfgAbolishDate(Date cfgAbolishDate) {
+        this.cfgAbolishDate = cfgAbolishDate;
+    }
+
+    public Integer getCfgStatus() {
+        return cfgStatus;
+    }
+
+    public void setCfgStatus(Integer cfgStatus) {
+        this.cfgStatus = cfgStatus;
+    }
+
+    public Integer getCfgIsInProcess() {
+        return cfgIsInProcess;
+    }
+
+    public void setCfgIsInProcess(Integer cfgIsInProcess) {
+        this.cfgIsInProcess = cfgIsInProcess;
+    }
+
+    public Long getVwoId() {
+        return vwoId;
+    }
+
+    public void setVwoId(Long vwoId) {
+        this.vwoId = vwoId;
+    }
 }

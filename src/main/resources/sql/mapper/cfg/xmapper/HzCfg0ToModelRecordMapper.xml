@@ -8,10 +8,16 @@
         <result column="P_OF_CFG0_MAIN_RECORD" jdbcType="VARCHAR" property="pOfCfg0MainRecord"/>
         <result column="P_CFG0_MODEL_RECORD" jdbcType="VARCHAR" property="pCfg0ModelRecord"/>
         <result column="P_PARSE_LOGIC_VALUE" jdbcType="INTEGER" property="pParseLogicValue"/>
+        <result column="IS_SENT" jdbcType="INTEGER" property="isSent"/>
     </resultMap>
     <sql id="Base_Column_List">
-    PUID, P_CFG0_ID_RECORD, P_CFG0_OPTION_VALUE, P_OF_CFG0_MAIN_RECORD, P_CFG0_MODEL_RECORD, 
-    P_PARSE_LOGIC_VALUE
+        PUID,
+        P_CFG0_ID_RECORD,
+        P_CFG0_OPTION_VALUE,
+        P_OF_CFG0_MAIN_RECORD,
+        P_CFG0_MODEL_RECORD,
+        P_PARSE_LOGIC_VALUE,
+        IS_SENT
   </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
         select
@@ -40,4 +46,23 @@
       P_PARSE_LOGIC_VALUE = #{pParseLogicValue,jdbcType=INTEGER}
     where PUID = #{puid,jdbcType=VARCHAR}
   </update>
+
+    <!--设置进入流程状态-->
+    <update id="setIsSent" parameterType="java.util.List">
+        update HZ_CFG0_TO_MODEL_RECORD
+        set
+        IS_SENT = 1
+        where PUID in
+        <if test="list==null">
+            ('')
+        </if>
+        <if test="list!=null">
+            (
+            <foreach collection="list" item="item" index="index"
+                     separator=",">
+                #{item.puid,jdbcType=VARCHAR}
+            </foreach>
+            )
+        </if>
+    </update>
 </mapper>

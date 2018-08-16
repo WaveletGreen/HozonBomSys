@@ -31,5 +31,19 @@ public interface HzEWOService {
      */
     List<HzEbomRespDTO> getEWOChangeFormRecord(HzEWOChangeRecordQuery query);
 
+    /**
+     * 添加新零件到变更表单
+     * @param reqDTO
+     * @return
+     */
+    OperateResultMessageRespDTO addNewItemToChangeForm(InitiatingProcessReqDTO reqDTO);
+
+    /**
+     * 从变更表单删除零件
+     * @param reqDTO
+     * @return
+     */
+    OperateResultMessageRespDTO deleteItemFromChangeFrom(InitiatingProcessReqDTO reqDTO);
+
 
 }

@@ -7,7 +7,7 @@ function loadData() {
     $table.bootstrapTable({
         url: "cfg0/loadRelevance?projectPuid=" + projectPuid,
         method: "GET",
-        height: $(window.parent.document).find("#wrapper").height() - document.body.offsetHeight - 45,
+        height: $(window.parent.document).find("#wrapper").height() - 150,//$(window.parent.document).find("#wrapper").height() - document.body.offsetHeight - 45,
         width: $(window).width(),
         showToggle: true,                   //是否显示详细视图和列表视图的切换按钮
         // showColumns: true,                  //是否显示所有的列
@@ -101,22 +101,22 @@ function loadData() {
                 align: 'center',
                 valign: 'middle',
             },
-            {
-                field: 'puid',
-                title: 'puid',
-                hide: false
-            },
-            {
-                field: '_table',
-                title: '_table',
-                hide: false
-            }
+            // {
+            //     field: 'puid',
+            //     title: 'puid',
+            //     hide: false
+            // },
+            // {
+            //     field: '_table',
+            //     title: '_table',
+            //     hide: false
+            // }
         ],
         // sortable: true,                     //是否启用排序
         // sortOrder: "asc",                   //排序方式
     });
-    $table.bootstrapTable('hideColumn', 'puid');
-    $table.bootstrapTable('hideColumn', '_table');
+    // $table.bootstrapTable('hideColumn', 'puid');
+    // $table.bootstrapTable('hideColumn', '_table');
 }
 
 $(document).ready(

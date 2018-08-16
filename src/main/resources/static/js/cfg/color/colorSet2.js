@@ -16,7 +16,7 @@ function loadData() {
     $("#refreshColorSet").removeAttr("disabled");
     $table.bootstrapTable({
         url: "colorSet/queryAll2",
-        height: $(window.parent.document).find("#wrapper").height() - document.body.offsetHeight-100,
+        height: $(window.parent.document).find("#wrapper").height() - 150,//$(window.parent.document).find("#wrapper").height() - document.body.offsetHeight-100,
         width: $(window).width(),
         showToggle: true,                   //是否显示详细视图和列表视图的切换按钮
         showRefresh: true,                  //是否显示刷新按钮
@@ -30,7 +30,7 @@ function loadData() {
         sortable: true,
         sortName: 'pColorCode',
         sortOrder: 'asc',
-        // sidePagination: "server",           //客户端/客户端分页
+        // sidePagination: "client",           //客户端/客户端分页
         formId: "queryColor",
         toolbars: [
             {
@@ -211,12 +211,13 @@ function loadData() {
                 valign: 'middle',
                 sortable: true,
                 sortOrder: 'asc',
-            },
-            {
-                field: 'puid',
-                title: 'puid',
-                hide: false
             }
+            // ,
+            // {
+            //     field: 'puid',
+            //     title: 'puid',
+            //     hide: false
+            // }
         ]
     });
     $table.bootstrapTable('hideColumn', 'puid');

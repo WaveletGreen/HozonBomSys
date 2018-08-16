@@ -1,8 +1,8 @@
 function modeVehicle(puid) {
-    var projectPuid = $("#project", window.top.document).val();
+    var projectUid = $("#project", window.top.document).val();
     window.Ewin.dialog({
         title: "添加",
-        url: "modelColor/setLvl2ColorPage?modelUid=" + puid+"&projectPuid="+projectPuid,
+        url: "modelColor/setLvl2ColorPage?modelUid=" + puid+"&projectUid="+projectUid,
         gridId: "gridId",
         width: 500,
         height: 600
@@ -46,8 +46,8 @@ function loadData(){
             }
             var data = result.data;
             var column = [];
-            column.push({field: 'puid', title: 'puid'});
-            column.push({field: 'modeColorIsMultiply', title: 'modeColorIsMultiply'});
+            // column.push({field: 'puid', title: 'puid'});
+            // column.push({field: 'modeColorIsMultiply', title: 'modeColorIsMultiply'});
             column.push({field: 'ck', checkbox: true, Width: 50});
             column.push({field: 'codeOfColorModel', title: '车型颜色代码', align: 'center', valign: 'middle'});
             column.push({field: 'descOfColorModel', title: '描述', align: 'center', valign: 'middle'});
@@ -85,7 +85,7 @@ function loadData(){
             $table.bootstrapTable({
                 url: "modelColor/loadAll?projectPuid=" + projectPuid,
                 method: 'get',
-                height: $(window.parent.document).find("#wrapper").height() - document.body.offsetHeight - 45,
+                height: $(window.parent.document).find("#wrapper").height() - 150,//$(window.parent.document).find("#wrapper").height() - document.body.offsetHeight - 45,
                 width: $(window).width(),
                 showToggle: true,                   //是否显示详细视图和列表视图的切换按钮
                 showRefresh: true,                  //是否显示刷新按钮
@@ -173,8 +173,8 @@ function loadData(){
                     }
                 ]
             });
-            $table.bootstrapTable('hideColumn', 'puid');
-            $table.bootstrapTable('hideColumn', 'modeColorIsMultiply');
+            // $table.bootstrapTable('hideColumn', 'puid');
+            // $table.bootstrapTable('hideColumn', 'modeColorIsMultiply');
         }
     });
 }

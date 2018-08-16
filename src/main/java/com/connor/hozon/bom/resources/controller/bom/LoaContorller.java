@@ -2,6 +2,7 @@ package com.connor.hozon.bom.resources.controller.bom;
 
 import com.alibaba.fastjson.JSONObject;
 import com.connor.hozon.bom.resources.controller.BaseController;
+import com.connor.hozon.bom.resources.dto.request.SetLouReqDTO;
 import com.connor.hozon.bom.resources.dto.response.HzEbomRespDTO;
 import com.connor.hozon.bom.resources.dto.response.HzLoaRespDTO;
 import com.connor.hozon.bom.resources.dto.response.HzMbomRecordRespDTO;
@@ -202,4 +203,13 @@ public class LoaContorller extends BaseController {
         jsonObject.put("child",loaRespDTOS);
         writeAjaxJSONResponse(ResultMessageBuilder.build(jsonObject),response);
     }
+
+    @RequestMapping(value = "setLou",method = RequestMethod.POST)
+    public void setBomAsLou(@RequestBody SetLouReqDTO reqDTO,HttpServletResponse response){
+        writeAjaxJSONResponse(ResultMessageBuilder.build("111"),response);
+    }
+
+
+
+    
 }

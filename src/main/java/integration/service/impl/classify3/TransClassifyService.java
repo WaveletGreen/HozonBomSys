@@ -4,6 +4,9 @@ import integration.Author;
 import integration.base.bom.TABLEOFZPPTCI005;
 import integration.base.bom.TABLEOFZPPTCO005;
 import integration.base.bom.ZPPTCO005;
+import integration.base.classify.TABLEOFZPPTCI003;
+import integration.base.classify.TABLEOFZPPTCO003;
+import integration.base.classify.ZPPTCO003;
 import integration.service.i.ITransmitService;
 import integration.service.impl.bom5.ZPPTCSAP005Service;
 import org.springframework.stereotype.Service;
@@ -20,40 +23,40 @@ public class TransClassifyService extends Author implements ITransmitService {
     /**
      * 调用服务方
      */
-    private ZPPTCSAP005Service serviceExecutor;
+    private ZPPTCSAP003Service serviceExecutor;
     /**
      * 输入参数容器
      */
-    private Holder<TABLEOFZPPTCI005> inputContainer;
+    private Holder<TABLEOFZPPTCI003> inputContainer;
     /**
      * 输入参数
      */
-    private TABLEOFZPPTCI005 input;
+    private TABLEOFZPPTCI003 input;
 
 
     /**
      * 输出参数:临时的输出参数容器，需要一个临时输出参数容器，否则传不到SAP，该参数不应该有setter和getter
      */
-    private TABLEOFZPPTCO005 out;
+    private TABLEOFZPPTCO003 out;
     /**
      * 输出参数:临时变量
      */
-    private ZPPTCO005 t;
+    private ZPPTCO003 t;
     /**
      * 输出参数:输出参数容器，要有setter和getter给调用方
      */
-    private Holder<TABLEOFZPPTCO005> outputContainer;
+    private Holder<TABLEOFZPPTCO003> outputContainer;
 
     public TransClassifyService() {
-        serviceExecutor = new ZPPTCSAP005Service();
+        serviceExecutor = new ZPPTCSAP003Service();
         //输入参数
         inputContainer = new Holder<>();
-        input = new TABLEOFZPPTCI005();
+        input = new TABLEOFZPPTCI003();
 
         //输出参数
         outputContainer = new Holder<>();
-        out = new TABLEOFZPPTCO005();
-        t = new ZPPTCO005();
+        out = new TABLEOFZPPTCO003();
+        t = new ZPPTCO003();
         out.getItem().add(t);
     }
 
@@ -63,14 +66,14 @@ public class TransClassifyService extends Author implements ITransmitService {
      * @return 请看接口@{@link ITransmitService}定义
      */
     @Override
-    public TABLEOFZPPTCO005 execute() {
+    public TABLEOFZPPTCO003 execute() {
         try {
             //一定要有一个输出参数，否则报错
             if (setClearInputEachTime) {
                 out.getItem().clear();
             }
             if (t == null) {
-                out.getItem().add(t = new ZPPTCO005());
+                out.getItem().add(t = new ZPPTCO003());
             }
             inputContainer.value = input;
             outputContainer.value = out;
@@ -99,7 +102,7 @@ public class TransClassifyService extends Author implements ITransmitService {
      *
      * @return
      */
-    public TABLEOFZPPTCI005 getInput() {
+    public TABLEOFZPPTCI003 getInput() {
         return input;
     }
 
@@ -107,7 +110,7 @@ public class TransClassifyService extends Author implements ITransmitService {
      * 设置输入参数，在执行@execute之前设置输入参数，否则无法发送数据
      * @param input
      */
-    public void setInput(TABLEOFZPPTCI005 input) {
+    public void setInput(TABLEOFZPPTCI003 input) {
         this.input = input;
     }
 
@@ -116,7 +119,7 @@ public class TransClassifyService extends Author implements ITransmitService {
      *
      * @return @out，执行@execute之后获取的输出参数
      */
-    public TABLEOFZPPTCO005 getOut() {
+    public TABLEOFZPPTCO003 getOut() {
         return out;
     }
 

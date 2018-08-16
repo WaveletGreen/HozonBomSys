@@ -16,6 +16,16 @@ public class InitiatingProcessReqDTO {
      */
     private String puids;
 
+    private String lineId;
+
+    public String getLineId() {
+        return lineId;
+    }
+
+    public void setLineId(String lineId) {
+        this.lineId = lineId;
+    }
+
     public String getProjectId() {
         return projectId;
     }

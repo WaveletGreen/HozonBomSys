@@ -1,6 +1,7 @@
 package com.connor.hozon.bom.bomSystem.controller.bom;
 
 import com.connor.hozon.bom.bomSystem.dao.bom.HzBomMainRecordDao;
+import com.connor.hozon.bom.bomSystem.dao.impl.bom.HzBomLineRecordDaoImpl;
 import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
 import com.connor.hozon.bom.bomSystem.service.bom.HzBomDataService;
 import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0BomLineOfModelService;
@@ -26,6 +27,8 @@ public class HzLoadBomDataController {
     private final HzCfg0BomLineOfModelService hzCfg0BomLineOfModelService;
     private final HzBomDataService hzBomDataService;
 
+    @Autowired
+    HzBomLineRecordDaoImpl hzBomLineRecordDao;
     @Autowired
     HzBomMainRecordDao hzBomMainRecordDao;
     @Autowired
@@ -105,30 +108,47 @@ public class HzLoadBomDataController {
     public boolean reflect2Y(@RequestBody Map<String, String> params) {
         List<HzCfg0OfBomLineRecord> records = new ArrayList<>();
         HZBomMainRecord mainRecord = new HZBomMainRecord();
+        Map<String, String> myParam = new HashMap<>();
+        Map<String, String> coach = new HashMap<>();
+        String projectUid;
         if (params != null) {
             int index = 0;
             Iterator<Map.Entry<String, String>> iterator = params.entrySet().iterator();
             while (iterator.hasNext()) {
                 if (index <= 0) {
-                    mainRecord = hzBomMainRecordDao.selectByProjectPuid(iterator.next().getValue());
+                    projectUid = iterator.next().getValue();
+                    mainRecord = hzBomMainRecordDao.selectByProjectPuid(projectUid);
+                    myParam.put("projectId", projectUid);
                     index++;
                     continue;
                 }
                 HzCfg0OfBomLineRecord record = new HzCfg0OfBomLineRecord();
 
-                Map.Entry<String, String> p2 = iterator.next();
+                Map.Entry<String, String> p1 = iterator.next();
                 if (!iterator.hasNext()) {
                     break;
                 }
-                Map.Entry<String, String> p1 = iterator.next();
+                Map.Entry<String, String> p2 = iterator.next();
+
                 if (p2 == null || p1 == null) {
+                    continue;
+                }
+                myParam.put("puid", p2.getValue());
+                if (coach.containsKey(p2.getValue())) {
+                    continue;
+                }
+
+                HzBomLineRecord bomLineRecord = hzBomLineRecordDao.findBomLineByPuid(myParam);
+                if (bomLineRecord == null) {
                     continue;
                 }
                 //需要强关联
                 record.setpCfg0name(p1.getKey());
+                //对应的bom行的UID
                 record.setpToCfg0IdOfBl(p1.getValue());
-                record.setpBomLineName(p2.getKey());
-                record.setpBomlinepuid(p2.getValue());
+                //对应的BOM行item_id
+                record.setpBomLineName(bomLineRecord.getLineID());
+                record.setpBomlinepuid(bomLineRecord.getPuid());
                 HzCfg0Record record1 = hzCfg0Service.doSelectOneByPuid(p1.getValue());
                 if (record1 == null) {
                     continue;
@@ -137,6 +157,7 @@ public class HzLoadBomDataController {
                 record.setpBomDigifaxId(mainRecord.getPuid());
                 record.setPuid(UUIDHelper.generateUpperUid());
                 records.add(record);
+                coach.put(p2.getValue(), p2.getValue());
                 index++;
             }
             if (!debug) {

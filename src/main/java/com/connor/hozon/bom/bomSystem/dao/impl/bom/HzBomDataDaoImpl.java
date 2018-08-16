@@ -58,4 +58,16 @@ public class HzBomDataDaoImpl implements HzBomDataDao {
     public List<HzBomLineRecord> selectVehicleAssembly(Map<String, Object> params) {
         return baseSQLUtil.executeQueryByPass(RECORD, params, "com.connor.hozon.bom.bomSystem.dao.bom.HzBomDataDao.selectVehicleAssembly");
     }
+
+    /**
+     * 查找已经存储好的2级配色方案
+     *
+     * @param params 包含modelUid
+     * @return
+     */
+    @Override
+    public List<HzBomLineRecord> selectVehicleAssembly2(Map<String, Object> params) {
+        return baseSQLUtil.executeQueryByPass(RECORD, params, "com.connor.hozon.bom.bomSystem.dao.bom.HzBomDataDao.selectVehicleAssembly2");
+    }
+
 }

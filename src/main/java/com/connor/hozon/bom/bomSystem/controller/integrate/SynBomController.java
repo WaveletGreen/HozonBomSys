@@ -1,5 +1,6 @@
 package com.connor.hozon.bom.bomSystem.controller.integrate;
 
+import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0OfBomLineService;
 import com.connor.hozon.bom.bomSystem.service.iservice.integrate.ISynBomService;
 import com.connor.hozon.bom.resources.dto.request.EditHzMaterielReqDTO;
 import net.sf.json.JSONObject;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import sql.pojo.cfg.HzCfg0OfBomLineRecord;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +27,9 @@ public class SynBomController extends ExtraIntegrate {
      */
     @Autowired
     ISynBomService bomService;
+
+    @Autowired
+    HzCfg0OfBomLineService hzCfg0OfBomLineService;
 
     /*   */
 
@@ -83,6 +88,7 @@ public class SynBomController extends ExtraIntegrate {
      */
     @RequestMapping("/updateByUids")
     public String updateByUids(@RequestBody List<EditHzMaterielReqDTO> dtos, @RequestParam("projectUid") String projectUid, Model model) {
+        Object obj = hzCfg0OfBomLineService.doSelectByBLUidAndPrjUid(projectUid, dtos.get(0).getPuid());
         JSONObject result = validate(dtos, projectUid);
         if (!result.getBoolean("status")) {
             model.addAttribute("msg", result.get("msg"));

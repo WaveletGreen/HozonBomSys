@@ -101,7 +101,7 @@ public class HzMaterielFeatureController {
         if ((_result = hzCfg0OptionFamilyService.doGetColumnDef(projectPuid, "<br/>")) != null) {
             column.addAll(_result);
             //附加列信息
-            appendColumn(column);
+//            appendColumn(column);
             result.put("status", true);
             result.put("data", column);
         } else {
@@ -182,10 +182,10 @@ public class HzMaterielFeatureController {
                     _result.put("puidOfModelFeature", "");
 
                 } else {
-                    //获取中文描述
-                    _result.put("s" + ++index, hzCfg0ModelFeature.getpFeatureCnDesc());
-                    //获取单车配置码
-                    _result.put("s" + ++index, hzCfg0ModelFeature.getpFeatureSingleVehicleCode());
+//                    //获取中文描述
+//                    _result.put("s" + ++index, hzCfg0ModelFeature.getpFeatureCnDesc());
+//                    //获取单车配置码
+//                    _result.put("s" + ++index, hzCfg0ModelFeature.getpFeatureSingleVehicleCode());
                     _result.put("puidOfModelFeature", hzCfg0ModelFeature.getPuid());
                 }
 

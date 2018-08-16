@@ -210,6 +210,24 @@ public class HzEWOServiceImpl implements HzEWOService {
     }
 
 
+    @Override
+    public OperateResultMessageRespDTO addNewItemToChangeForm(InitiatingProcessReqDTO reqDTO) {
+        try{
+            //新增一个零件到已存在的变更表单
+
+        }catch (Exception e){
+
+        }
+        return null;
+    }
+
+
+    @Override
+    public OperateResultMessageRespDTO deleteItemFromChangeFrom(InitiatingProcessReqDTO reqDTO) {
+        return null;
+    }
+
+
 
 
     /**
@@ -233,6 +251,8 @@ public class HzEWOServiceImpl implements HzEWOService {
         }
         return lastFourIndex;
     }
+
+
 
 
     private HzEbomRespDTO recordToRespDTO(HzBomLineRecord record){

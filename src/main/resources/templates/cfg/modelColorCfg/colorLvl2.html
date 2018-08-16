@@ -1,0 +1,165 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<body>
+<meta charset=utf-8/>
+<title>二级配色方案</title>
+<form class="form-horizontal" id="form" role="form" method="post" th:action="${action}">
+    <button id="btnAdd">添加</button>
+    <fieldset id="fieldSet">
+        <input th:value="${modelUid}" type="hidden" id="modelUid"/>
+        <input th:value="${projectUid}" type="hidden" id="projectUid"/>
+        <input th:value="${total}" type="hidden" id="total"/>
+
+        <div id="legend" class="">
+            <legend class="">二级配色方案</legend>
+        </div>
+        <!--循环放入数据-->
+        <!--<div class="form-group col-lg-10" th:each="line,index:${assembly}">-->
+        <!--<label class="control-label" th:text="${line.getLineID()+'-'+line.getpBomLinePartName()}"-->
+        <!--th:for="${line.getPuid()}"></label>-->
+        <!--<select class="form-control input-small" th:name="${line.getPuid()}" data-style="btn-info"-->
+        <!--th:id="${line.getPuid()}">-->
+        <!--<option th:each="color:${colorList}" th:value="${color.puid}"-->
+        <!--th:selected="${color.getPuid()==line.getColorUid()? true :false}"-->
+        <!--th:text="${color.pColorCode+' &#45;&#45; '+color.pColorName+' &#45;&#45; '+color.getpColorComment()+' &#45;&#45; '+color.getpColorOfSet()}"-->
+        <!--&gt;-->
+        <!--</option>-->
+        <!--</select>-->
+        <!--</div>-->
+
+    </fieldset>
+</form>
+
+<script th:inline="javascript">
+    <![CDATA[
+    var total = $("#total").val();
+    $(function () {
+            $('#form').bootstrapValidator({
+                message: 'This value is not valid',
+                feedbackIcons: {
+                    valid: 'glyphicon glyphicon-ok',
+                    invalid: 'glyphicon glyphicon-remove',
+                    validating: 'glyphicon glyphicon-refresh'
+                },
+                fields: {
+                    pCodeOfColorfulModel: {
+                        message: '车型颜色代码验证失败',
+                        validators: {
+                            notEmpty: {
+                                message: '车型颜色代码不能为空'
+                            }
+                        }
+                    },
+                    modelShell: {
+                        validators: {
+                            callback: {
+                                message: '油漆车身总成验证失败,不能选无色',
+                                callback: function () {
+                                    if ($('#modelShell').val() == '-')
+                                        return false;
+                                    return true;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            // 绑定dialog的确定按钮的监听事件
+            <!--th:selected="${c.index}==${color.pColorName}"-->
+            $("#btnOk", window.top.document).click(function () {
+                // var count = parseInt($("#counter").val());
+                // var data = {};
+                //
+                <!--其实不要puid，puid会在服务器上生成-->
+                // data.pCodeOfColorfulModel = $("#pCodeOfColorfulModel").val();
+                // data.pDescOfColorfulModel = $("#pDescOfColorfulModel").val();
+                // data.pCfg0MainRecordOfMC = $("#pCfg0MainRecordOfMC").val();
+                // data.modelShell = $("#modelShell").val();
+                // for (var i = 0; i < count; i++) {
+                //     eval(('data.s' + i + '=$("#select' + i + '").val()'));
+                // }
+
+                var data = {};
+
+                data.modelUid = $("#modelUid").val();
+                data.projectUid = $("#projectUid").val();
+
+                var _d = $("#form").serializeArray();
+                for (var p in _d) {
+                    data[_d[p].name] = _d[p].value;
+                }
+
+                var bootstrapValidator = $("#form", window.top.document).data('bootstrapValidator');
+                bootstrapValidator.validate();
+                if (bootstrapValidator.isValid()) {
+                    var url = $("#form", window.top.document).attr('action');
+                    $.ajax({
+                        contentType:
+                            "application/json",
+                        type:
+                            'POST',
+                        url: url,
+                        data: JSON.stringify(data),
+                        success:
+                            function (result) {
+                                $('.modal-dialog', window.top.document).parent('div').remove()
+                                $('body', window.top.document).find('.modal-backdrop').remove();
+                                // jquery 调用刷新当前操作的table页面的refresh方法
+                                $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
+                                if (result) {
+                                    layer.msg('修改二级配色方案数据成功!', {icon: 1, time: 2000})
+                                }
+                                // window.Ewin.alert({message: "添加数据成功"});
+                            },
+                        error: function (status) {
+                            window.Ewin.alert({message: status.status + ':修改二级配色方案数据失败!'});
+                        }
+                    });
+                }
+            });
+        },
+        $("#modelShell").change(function () {
+            $("#pDescOfColorfulModel").val($("#pCodeOfColorfulModel").val() + $('#modelShell option:selected').text().split(' -- ')[1]);
+            console.log("已选择油漆车身颜色");
+        }),
+        $("#btnAdd").click(function () {
+            if (total == undefined || null == total) {
+                total = 0;
+            }
+            else {
+                total++;
+            }
+            var child =
+                '<label for="s' + total + '">请输入零件号</label>' +
+                '<div>' +
+                '<div class="col-lg-6">' +
+                '   <input class = "form-control" id = "s' + total + '" name = "s' + total + '" type = "text"/>' +
+                '</div>' +
+                '<div class="col-lg-6">' +
+                '   <select class= "form-control input-small" id = "s_' + total + '"  name = "s_' + total + '" data-style = "btn-info" >';
+            $.ajax({
+                url: "./colorSet/getAllColorSet",
+                type: "GET",
+                success: function (result) {
+                    let option = "";
+                    for (let index in result) {
+                        if (result.hasOwnProperty(index)) {
+                            option = "<option value='" + result[index].puid + "'>" + result[index].pColorName + "-" + result[index].pColorCode + "</option>";
+                            child += option;
+                        }
+                    }
+                    child += '</select></div>' +
+                        '</div>';
+                    $("#fieldSet").append(child);
+                },
+                error: function (e) {
+                    window.Ewin.alert({message: "发生错误，请稍后重试:" + e.status})
+                }
+            });
+        }),
+    )
+    ]]>
+</script>
+<script th:src="@{/layer/layer.js}"></script>
+</body>
+</html>
