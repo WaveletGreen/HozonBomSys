@@ -32,6 +32,10 @@ public class HzCfg0OfBomLineRecord {
      * 指向选项值的puid，做为外键
      */
     private String pToCfg0IdOfBl;
+    /**
+     * 项目UID
+     */
+    private String projectUid;
 
     public String getPuid() {
         return puid;
@@ -87,5 +91,13 @@ public class HzCfg0OfBomLineRecord {
 
     public void setpToCfg0IdOfBl(String pToCfg0IdOfBl) {
         this.pToCfg0IdOfBl = pToCfg0IdOfBl == null ? null : pToCfg0IdOfBl.trim();
+    }
+
+    public String getProjectUid() {
+        return projectUid;
+    }
+
+    public void setProjectUid(String projectUid) {
+        this.projectUid = projectUid;
     }
 }
