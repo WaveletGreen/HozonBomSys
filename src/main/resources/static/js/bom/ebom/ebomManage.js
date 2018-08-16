@@ -88,7 +88,11 @@ function initTable(eBomUrl) {
                             // align: 'center',
                             valign: 'middle',
                             formatter: function (value, row, index) {
-                                if (value == "LOU/LOA") {
+                                if (value == "LOA") {
+                                    return [
+                                        '<a href="javascript:void(0)" onclick="queryLoa(' + row.puid + ')">' + value + '</a>'
+                                    ].join("");
+                                }else if (value == "LOU"){
                                     return [
                                         '<a href="javascript:void(0)" onclick="queryLou(' + row.puid + ')">' + value + '</a>'
                                     ].join("");
@@ -277,7 +281,7 @@ function initTable(eBomUrl) {
                         }
                     },
                     {
-                        text: '设置为LOU',
+                        text: '设置为LOU/取消',
                         iconCls: 'glyphicon glyphicon-cog',
                         handler: function () {
                             var rows = $table.bootstrapTable('getSelections');

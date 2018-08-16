@@ -125,7 +125,12 @@
                                 // align: 'center',
                                 valign: 'middle',
                                 formatter: function (value, row, index) {
-                                    if (value =="LOU"||"LOA"==value) {
+                                    if (value =="LOA") {
+                                        return [
+                                            '<a href="javascript:void(0)" onclick="queryLoa(\'' + row.eBomPuid + '\')">' + value + '</a>'
+                                        ].join("");
+                                    }
+                                    else if (value == "LOU"){
                                         return [
                                             '<a href="javascript:void(0)" onclick="queryLou(\'' + row.eBomPuid + '\')">' + value + '</a>'
                                         ].join("");
@@ -147,9 +152,14 @@
                                 valign: 'middle',
                                 formatter: function (value, row, index) {
                                     console.log(row)
-                                    if (value =="LOU/LOA") {
+                                    if (value =="LOA") {
                                         return [
-                                            '<a href="javascript:void(0)" onclick="queryLou(' + row.eBomPuid + ')">' + value + '</a>'
+                                            '<a href="javascript:void(0)" onclick="queryLoa(' + row.eBomPuid + ')">' + value + '</a>'
+                                        ].join("");
+                                    }
+                                    else if (value == "LOU"){
+                                        return [
+                                            '<a href="javascript:void(0)" onclick="queryLou(\'' + row.eBomPuid + '\')">' + value + '</a>'
                                         ].join("");
                                     }
                                     else {
@@ -173,15 +183,22 @@
                             return "<span style='color: #00B83F'>已生效</span>";
                         }
                         if (value == 2 || "2" == value) {
-                            return "<span style='color: #a97f89'>草稿状态</span>";
+                            return "<span style='color: #ff7cf4'>草稿状态</span>";
                         }
                         if (3 == value || "3" == value) {
                             return "<span style='color: #9492a9'>废除状态</span>";
                         }
-                        if (4 == value || "4" == value){
+                        if (4 == value || "4" == value) {
                             return "<span style='color: #a90009'>删除状态</span>";
                         }
-                    }})
+                        if (value == 5 || value == "5"){
+                            return "<span style='color: #e2ab2f'>审核中</span>"
+                        }
+                        if (value == 6 || value == "6"){
+                            return "<span style='color: #e2ab2f'>审核中</span>"
+                        }
+                    }
+                })
                 $table.bootstrapTable({
                     url: mBomUrl,
                     method: 'GET',
