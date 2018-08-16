@@ -378,7 +378,7 @@ public class LouaContorller extends BaseController {
         }
         jsonObject.put("child",loaRespDTOS);
         jsonObject.put("config",resp);
-        writeAjaxJSONResponse(ResultMessageBuilder.build(resp),response);
+        writeAjaxJSONResponse(ResultMessageBuilder.build(jsonObject),response);
     }
 
 
