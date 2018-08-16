@@ -629,14 +629,29 @@
             // contentType: "application/json",
             undefinedText: "",
             success: function (result) {
-                var data = result.data
-                var pCfg0name = (data.pCfg0name == undefined ? "" : data.pCfg0name);
-                var cfg0Desc = (data.cfg0Desc == undefined ? "" : data.cfg0Desc);
-                var pCfg0familyname = (data.pCfg0familyname == undefined ? "" : data.pCfg0familyname);
-                var cfg0FamilyDesc = (data.cfg0FamilyDesc == undefined ? "" : data.cfg0FamilyDesc);
+                var data = result.data;
+                var parent = data.parent;
+                var config = data.config;
+                var child = data.child;
+                var parentLevel = (parent.parentLevel == undefined ? "" : parent.parentLevel);
+                var parentLineId = (parent.parentLineId == undefined ? "" : parent.parentLineId);
+                var parentName = (parent.parentName == undefined ? "" : parent.parentName);
+                var pCfg0name = (config.pCfg0name == undefined ? "" : config.pCfg0name);
+                var cfg0Desc = (config.cfg0Desc == undefined ? "" : config.cfg0Desc);
+                var pCfg0familyname = (config.pCfg0familyname == undefined ? "" : config.pCfg0familyname);
+                var cfg0FamilyDesc = (config.cfg0FamilyDesc == undefined ? "" : config.cfg0FamilyDesc);
                 var _table = '<div style="max-height: 400px;overflow:scroll;"><table class="table table-striped tableNormalStyle" >';
+                _table += '<tr><td>父层级</td><td>父零件号</td><td>父名称</td></tr>'
+                // for (var i=0;i<parent.length; i++) {
+                _table += '<tr><td>' + parentLevel + '</td><td>' + parentLineId + '</td><td>' + parentName + '</td></tr>';
+                _table += '</table></div>' + '<div style="max-height: 400px;overflow:scroll;"><table class="table table-striped tableNormalStyle" >';
                 _table += '<tr><td>配置名</td><td>特性值描述</td><td>族名</td><td>特性描述</td></tr>'
                 _table += '<tr><td>' + pCfg0name + '</td><td>' + cfg0Desc + '</td><td>' + pCfg0familyname + '</td><td>'+cfg0FamilyDesc+'</td></tr>';
+                _table += '</table></div>' + '<div style="max-height: 400px;overflow:scroll;"><table class="table table-striped tableNormalStyle" >';
+                _table += '<tr><td>子层级</td><td>子零件号</td><td>子名称</td></tr>'
+                for (var i = 0; i < child.length; i++) {
+                    _table += '<tr><td>' + child[i].childLevel + '</td><td>' + child[i].childLineId + '</td><td>' + child[i].childName + '</td></tr>';
+                }
                 _table += '</table></div>';
                 window.Ewin.confirm({title: '提示', message: _table, width: 500});
             }
