@@ -6,6 +6,8 @@ import org.springframework.context.annotation.Configuration;
 import sql.IBaseSQLUtil;
 import sql.pojo.cfg.HzCfg0ToModelRecord;
 
+import java.util.List;
+
 @Configuration
 public class HzCfg0ToModelRecordDaoImpl implements HzCfg0ToModelRecordDao {
     @Autowired
@@ -20,8 +22,6 @@ public class HzCfg0ToModelRecordDaoImpl implements HzCfg0ToModelRecordDao {
     public int insert(HzCfg0ToModelRecord record) {
         return baseSQLUtil.executeInsert(record, "com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0ToModelRecordDao.insert");
 
-        
-
 
     }
 
@@ -34,4 +34,17 @@ public class HzCfg0ToModelRecordDaoImpl implements HzCfg0ToModelRecordDao {
     public int updateByPrimaryKey(HzCfg0ToModelRecord record) {
         return baseSQLUtil.executeUpdate(record, "com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0ToModelRecordDao.updateByPrimaryKey");
     }
+
+    /**
+     * 批量更新发送到SAP的状态
+     *
+     * @param list
+     * @return
+     */
+    @Override
+    public int setIsSent(List<HzCfg0ToModelRecord> list) {
+        return baseSQLUtil.executeUpdate(list, "com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0ToModelRecordDao.setIsSent");
+    }
+
+
 }

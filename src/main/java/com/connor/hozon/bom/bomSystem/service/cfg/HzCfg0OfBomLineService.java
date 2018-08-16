@@ -61,11 +61,26 @@ public class HzCfg0OfBomLineService implements IHzCfg0OfBomLineService {
     /**
      * 批量插入
      *
-     * @param records  @{@link HzCfg0OfBomLineRecord}的集合，进行批量插入
+     * @param records @{@link HzCfg0OfBomLineRecord}的集合，进行批量插入
      * @return
      */
     @Override
     public boolean doInsertByBatch(List<HzCfg0OfBomLineRecord> records) {
         return hzCfg0OfBomLineRecordDao.insertByBatch(records) > 0 ? true : false;
+    }
+
+    /**
+     * 根据项目ID和Bomline UID查找一条配置+BOMLine关联数据
+     *
+     * @param projectUid 项目UID
+     * @param bomLineUid BOM行UID
+     * @return
+     */
+    @Override
+    public HzCfg0OfBomLineRecord doSelectByBLUidAndPrjUid(String projectUid, String bomLineUid) {
+        HzCfg0OfBomLineRecord record = new HzCfg0OfBomLineRecord();
+        record.setProjectUid(projectUid);
+        record.setpBomlinepuid(bomLineUid);
+        return hzCfg0OfBomLineRecordDao.selectByBLUidAndPrjUid(record);
     }
 }

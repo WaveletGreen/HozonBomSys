@@ -50,6 +50,18 @@ public class HzCfg0OfBomLineRecordDaoImpl implements HzCfg0OfBomLineRecordDao {
     }
 
     /**
+     * 根据项目ID和Bomline UID查找一条配置+BOMLine关联数据
+     *
+     * @param record
+     * @return
+     */
+    @Override
+    public HzCfg0OfBomLineRecord selectByBLUidAndPrjUid(HzCfg0OfBomLineRecord record) {
+        return baseSQLUtil.executeQueryById(record, "com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0OfBomLineRecordDao.selectByBLUidAndPrjUid");
+    }
+
+
+    /**
      * 根据主键更新
      *
      * @param record

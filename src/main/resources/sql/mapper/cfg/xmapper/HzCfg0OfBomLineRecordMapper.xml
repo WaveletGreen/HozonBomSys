@@ -35,6 +35,17 @@
         from HZ_CFG0_OF_BOMLINE_RECORD
         where PUID = #{puid,jdbcType=VARCHAR}
     </select>
+    <!--根据项目UID和BOMLine UID查询1条记录-->
+    <select id="selectByBLUidAndPrjUid" parameterType="sql.pojo.cfg.HzCfg0OfBomLineRecord" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from HZ_CFG0_OF_BOMLINE_RECORD t
+        where t.p_bomlinepuid=#{pBomlinepuid,jdbcType=VARCHAR}
+        and t.p_bom_digifax_id=(
+        select puid from Hz_Bom_Main_Record t2
+        where t2.p_cfg0_of_which_project_puid=#{projectUid,jdbcType=VARCHAR}
+        )
+    </select>
     <!--根据主键删除-->
     <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
 delete from HZ_CFG0_OF_BOMLINE_RECORD
