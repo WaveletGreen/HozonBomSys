@@ -72,4 +72,14 @@ public class HzCfg0ModelGroupDaoImpl implements HzCfg0ModelGroupDao {
     public int updateByPrimaryKey(HzCfg0ModelGroup record) {
         return baseSQLUtil.executeUpdate(record, "com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0ModelGroupDao.updateByPrimaryKey");
     }
+
+    /**
+     * 根据主配置寻找族名
+     * @param mainUid
+     * @return
+     */
+    public String selectGroupNameByMainUid(String mainUid){
+        String groupName = new String();
+        return baseSQLUtil.executeQueryByPass(groupName,mainUid,"com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0ModelGroupDao.selectGroupNameByMainUid",true );
+    }
 }

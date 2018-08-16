@@ -37,4 +37,11 @@ public interface HzCfg0ModelGroupDao {
      * @return
      */
     int updateByPrimaryKey(HzCfg0ModelGroup record);
+
+    /**
+     * 根据主配置寻找族名
+     * @param mainUid
+     * @return
+     */
+    String selectGroupNameByMainUid(String mainUid);
 }

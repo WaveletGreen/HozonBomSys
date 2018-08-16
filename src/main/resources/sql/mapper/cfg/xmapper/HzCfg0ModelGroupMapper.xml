@@ -42,4 +42,11 @@
       MAIN_UID = #{mainUid,jdbcType=VARCHAR}
     where ID = #{id,jdbcType=VARCHAR}
   </update>
+    <select id="selectGroupNameByMainUid" parameterType="java.lang.String" resultType="java.lang.String">
+        select
+        GROUP_NAME
+        from HZ_CFG0_MODEL_GROUP
+        where MAIN_UID = #{mainUid,jdbcType=VARCHAR}
+    </select>
+
 </mapper>

@@ -1,7 +1,16 @@
 package integration.logic;
 
+import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0MainService;
+import com.connor.hozon.bom.bomSystem.service.project.HzSuperMaterielService;
 import integration.base.classify.ZPPTCI003;
 import integration.option.ActionFlagOption;
+import sql.pojo.cfg.HzCfg0MainRecord;
+import sql.pojo.project.HzMaterielRecord;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * 可配置物料分配特性接口映射类
@@ -45,6 +54,28 @@ public class ConfigurableMaterialAllocation {
      */
     public ConfigurableMaterialAllocation(){
         zpptci003 = new ZPPTCI003();
+    }
+
+    public static List<ConfigurableMaterialAllocation> getConfigurableMaterialAllocationList(String puid, Map<String, String> pCfg0ObjectMap, HzCfg0MainService hzCfg0MainService, HzSuperMaterielService hzSuperMaterielService) {
+        List<ConfigurableMaterialAllocation> configurableMaterialAllocations = new ArrayList<ConfigurableMaterialAllocation>();
+        HzCfg0MainRecord mainRecord = hzCfg0MainService.doGetByPrimaryKey(puid);
+        HzMaterielRecord superMateriel = null;
+        if (mainRecord != null) {
+            superMateriel = hzSuperMaterielService.doSelectByProjectPuid(mainRecord.getpCfg0OfWhichProjectPuid());
+            if(superMateriel==null){
+                return null;
+            }
+        }
+        Set<String> keySet = pCfg0ObjectMap.keySet();
+        for(String key : keySet){
+            ConfigurableMaterialAllocation configurableMaterialAllocation = new ConfigurableMaterialAllocation();
+            configurableMaterialAllocation.setPitem(superMateriel.getpMaterielCode());
+            configurableMaterialAllocation.setPeculiarityEncoding(key);
+            configurableMaterialAllocation.setPeculiarityValueEncoding(pCfg0ObjectMap.get(key));
+
+            configurableMaterialAllocations.add(configurableMaterialAllocation);
+        }
+        return  configurableMaterialAllocations;
     }
     /////////////////////////setter//////////////////////////
 
