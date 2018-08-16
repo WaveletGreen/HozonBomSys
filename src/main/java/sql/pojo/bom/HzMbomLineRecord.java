@@ -210,6 +210,16 @@ public class HzMbomLineRecord {
      */
     private String pFactoryId;
 
+    private Integer pLouaFlag;
+
+    public Integer getpLouaFlag() {
+        return pLouaFlag;
+    }
+
+    public void setpLouaFlag(Integer pLouaFlag) {
+        this.pLouaFlag = pLouaFlag;
+    }
+
     public String getPuid() {
         return puid;
     }

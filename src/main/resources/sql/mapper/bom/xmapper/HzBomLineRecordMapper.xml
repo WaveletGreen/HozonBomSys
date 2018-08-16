@@ -662,7 +662,7 @@
 
 
 
-    <!--批量更新EBOM  EWO变更 主要是对状态值和ewo编号的更新-->
+    <!--批量更新EBOM  只更新了部分字段-->
     <update id="HzEbomRecordDAOImpl_updateBatch" parameterType="java.util.List">
         <foreach collection="list" item="item" index="index" open="begin" close=";end;" separator=";">
             update ${item.tableName}
@@ -671,7 +671,12 @@
                     P_EBOM_STATUS = #{item.status,jdbcType=INTEGER},
                 </if>
                 P_UPDATE_TIME =sysdate,
-                P_EWO_NO = #{item.ewoNo,jdbcType=VARCHAR}
+                <if test="item.ewoNo != null">
+                    P_EWO_NO = #{item.ewoNo,jdbcType=VARCHAR},
+                </if>
+                <if test="item.pLouaFlag != null">
+                    P_LOU_LOA_FLAG = #{item.pLouaFlag,jdbcType=VARCHAR}
+                </if>
             </set>
             where PUID = #{item.puid,jdbcType=VARCHAR}
         </foreach>

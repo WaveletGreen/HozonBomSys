@@ -333,6 +333,7 @@
                 and t1.P_BOM_LINE_ID = #{lineID,jdbcType=VARCHAR}
             </if>
             and t1.P_EBOM_STATUS <![CDATA[ <> ]]>0
+            order by P_BOM_ORDER_NUM
         </where>
     </select>
 
