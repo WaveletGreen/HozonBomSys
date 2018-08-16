@@ -14,6 +14,16 @@ function doQuery() {
     pBomUrl+="&pBomOfWhichDept="+pBomOfWhichDept;
     var lineId = $("#lineId").val();
     pBomUrl += "&lineId="+lineId;
+    var pBomLinePartClass = $("#pBomLinePartClass").val();
+    if (pBomLinePartClass =="请选择零件分类") {
+        pBomUrl += "&pBomLinePartClass="+ "";
+    }
+    pBomUrl += "&pBomLinePartClass=" + pBomLinePartClass;
+    var pBomLinePartResource = $("#pBomLinePartResource").val();
+    if (pBomLinePartResource == "请选择零件来源") {
+        pBomUrl += "&pBomLinePartResource="+ "";
+    }
+    pBomUrl += "&pBomLinePartResource=" + pBomLinePartResource;
     initTable(pBomUrl);
     $('#pbomManageTable').bootstrapTable('destroy');
 }
