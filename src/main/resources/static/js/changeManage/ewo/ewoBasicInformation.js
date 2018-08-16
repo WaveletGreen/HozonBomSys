@@ -389,13 +389,28 @@ $(document).ready((function () {
             }
             var impactAnalysisTable1 = $("#impactAnalysisTable1");
             var impactAnalysisTable2 = $("#impactAnalysisTable2");
-            var data = JSON.stringify(result);
+            var data = JSON.stringify(result.data);
             var _data = JSON.parse(data);
-            var temp = "";
+            var temp = "<table>";
+            var tempB = "<table>"
             for (var i=0;i<_data.length;i++){
-                temp +="<tr><td><input type='checkbox' id='ck'></td><td>"+_data[i].content+"</td></tr>"
+                if(_data[i].type == "A"){
+
+                    temp +="<tr><td><input "+(_data[i].checked==1?"checked=true":"")+" type='checkbox' id='ck'></td>" +
+                        "<td>"+_data[i].content+"</td></tr>"
+                    temp += "</table>"
+                    impactAnalysisTable1.html(temp);
+                }else {
+                    tempB +="<tr><td><input "+(_data[i].checked==1?"checked=true":"")+" type='checkbox' id='ck'></td>" +
+                        "<td>"+_data[i].content+"</td></tr>"
+                    tempB += "</table>"
+                    impactAnalysisTable2.html(tempB);
+                }
+
+
             }
-            impactAnalysisTable1.html(temp);
+
+
         }
     })
 }))
