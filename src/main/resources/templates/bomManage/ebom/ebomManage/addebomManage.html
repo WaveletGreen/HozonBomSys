@@ -501,6 +501,13 @@
             }
         });
     })
+    $(document).keydown(function(event) {
+        if (event.keyCode == 13) {
+            $('form').each(function() {
+                event.preventDefault();
+            });
+        }
+    });
     ]]>
 </script>
 <script th:src="@{/layer/layer.js}"></script>

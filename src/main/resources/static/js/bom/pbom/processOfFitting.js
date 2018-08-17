@@ -398,3 +398,10 @@ function refreshNode() {
     /*强行异步加载父节点的子节点。[setting.async.enable = true 时有效]*/
     zTree.reAsyncChildNodes(nodes[0], type, silent);
 }
+$(document).keydown(function(event) {
+    if (event.keyCode == 13) {
+        $('form').each(function() {
+            event.preventDefault();
+        });
+    }
+});
