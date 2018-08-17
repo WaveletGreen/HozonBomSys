@@ -55,7 +55,7 @@ $(document).ready((function () {
     })
 }))
 
-
+// 零件信息
 function initTable(partDescUrl) {
     var projectId = $("#project", window.top.document).val();
     var partDescTable = $("#partDescTable");
@@ -376,7 +376,7 @@ function initTable(partDescUrl) {
 
 }
 
-
+// 影响分析
 $(document).ready((function () {
     var projectId = $("#project", window.top.document).val();
     var ewoNo = $("#ewoNo").val();
@@ -414,4 +414,36 @@ $(document).ready((function () {
         }
     })
 }))
+// 相关部门
+$(document).ready((function () {
+    $.ajax({
+        url:"all",
+        type:"GET",
+        success: function (result) {
+            var affectDept = $("#affectDept");
+            var data = JSON.stringify(result.data);
+            var _data = JSON.parse(data);
+            var temp = "<table>";
+            for (var i=0;i<_data.length;i++){
+                // if(_data[i].type == "A"){
+
+                    temp +="<tr><td><input id='"+data[i].groupCode+"'value='"+data[i].groupId+"' type='checkbox' id='ck'></td>" +
+                        "<td>"+_data[i].name+"</td></tr>"
+                    temp += "</table>"
+                affectDept.html(temp);
+                // }else {
+                //     tempB +="<tr><td><input "+(_data[i].checked==1?"checked=true":"")+" type='checkbox' id='ck'></td>" +
+                //         "<td>"+_data[i].content+"</td></tr>"
+                    // tempB += "</table>"
+                    // impactAnalysisTable2.html(tempB);
+                // }
+
+
+            }
+
+
+        }
+    })
+}))
+
 

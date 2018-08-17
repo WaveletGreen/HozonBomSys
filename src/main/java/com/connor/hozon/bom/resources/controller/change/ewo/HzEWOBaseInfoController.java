@@ -15,6 +15,10 @@ import com.connor.hozon.bom.resources.service.change.HzEWOImpactReferenceService
 import com.connor.hozon.bom.resources.service.change.HzEWOService;
 import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.resources.util.ResultMessageBuilder;
+import com.connor.hozon.bom.sys.dao.OrgGroupDao;
+import com.connor.hozon.bom.sys.dao.UserDao;
+import com.connor.hozon.bom.sys.entity.OrgGroup;
+import com.connor.hozon.bom.sys.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -43,6 +47,10 @@ public class HzEWOBaseInfoController extends BaseController {
     private HzEWOService hzEWOService;
     @Autowired
     private HzEWOImpactReferenceService hzEWOImpactReferenceService;
+    @Autowired
+    private OrgGroupDao orgGroupDao;
+    @Autowired
+    private UserDao userDao;
 
     /**
      * 编辑EWO表单基本信息
@@ -276,19 +284,24 @@ public class HzEWOBaseInfoController extends BaseController {
         }
         writeAjaxJSONResponse(ResultMessageBuilder.build(respDTOList),response);
     }
+    /**
+     * 获取全部的部门
+     * @param response
+     */
+    @RequestMapping(value = "all",method = RequestMethod.GET)
+    public void getAllDept(HttpServletResponse response){
+        List<OrgGroup> list = orgGroupDao.queryAllOrgGroup();
+        writeAjaxJSONResponse(ResultMessageBuilder.build(list),response);
+    }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    /**
+     * 查询部门下面的人员信息
+     * @param groupId
+     * @param response
+     */
+    @RequestMapping(value = "user",method = RequestMethod.GET)
+    public void getUserByGroupId(String groupId,HttpServletResponse response){
+        List<User> list = userDao.findUserByGroupId(groupId);
+        writeAjaxJSONResponse(ResultMessageBuilder.build(list),response);
+    }
 }
