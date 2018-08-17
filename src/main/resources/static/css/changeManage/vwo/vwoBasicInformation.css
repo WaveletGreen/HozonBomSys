@@ -18,3 +18,10 @@ label{
     padding: 0!important;
 }
 
+button[name=paginationSwitch]{
+    display:none!important;
+}
+
+.hideIt{
+    display:none!important;
+}

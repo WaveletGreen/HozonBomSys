@@ -1,6 +1,6 @@
 $(document).ready((function () {
     initTable();
-}))
+}));
 
 function doQuery() {
     initTable();

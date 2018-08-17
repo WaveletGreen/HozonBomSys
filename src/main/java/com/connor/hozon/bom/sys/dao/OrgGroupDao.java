@@ -6,6 +6,8 @@ import com.connor.hozon.bom.sys.entity.OrgGroup;
 import com.connor.hozon.bom.sys.entity.QueryOrgGroup;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * @author linzf
  **/

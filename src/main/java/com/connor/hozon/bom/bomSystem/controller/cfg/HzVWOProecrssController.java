@@ -104,62 +104,65 @@ public class HzVWOProecrssController {
                     after = iHzFeatureChangeService.doFindNewestChangeFromAfter(after);
                     before = iHzFeatureChangeService.doFindNewestChangeFromBefore(before);
 
-
-                    if (after == null) {
-                        after = new HzFeatureChangeBean();
-                        if ((afterId = iHzFeatureChangeService.insertByCfgAfter(localParams.get(i))) <= 0) {
-                            logger.error("创建后自动同步变更后记录值失败，请联系管理员");
-                            result.put("status", false);
-                            result.put("msg", localParams.get(i).getpCfg0ObjectId() + "创建后自动同步变更后记录值失败，请联系管理员");
-                            return result;
-                        }
+                    try {
+                        if (after == null) {
+                            after = new HzFeatureChangeBean();
+                            if ((afterId = iHzFeatureChangeService.insertByCfgAfter(localParams.get(i))) <= 0) {
+                                logger.error("创建后自动同步变更后记录值失败，请联系管理员");
+                                result.put("status", false);
+                                result.put("msg", localParams.get(i).getpCfg0ObjectId() + "创建后自动同步变更后记录值失败，请联系管理员");
+                                return result;
+                            }
 //                        after.setTableName("HZ_CFG0_AFTER_CHANGE_RECORD");
-                        /*这一段估计有bug*/
-                        after.setId(afterId);
-                        after = iHzFeatureChangeService.doSelectAfterByPk(after);
-                    }
-
-                    if (before == null) {
-                        before = new HzFeatureChangeBean();
-                        HzCfg0Record localRecord = new HzCfg0Record();
-                        localRecord.setPuid(localParams.get(i).getPuid());
-                        if ((beforeId = iHzFeatureChangeService.insertByCfgBefore(localRecord)) <= 0) {
-                            logger.error("创建后自动同步变更前记录值失败，请联系管理员");
-                            result.put("status", false);
-                            result.put("msg", localParams.get(i).getpCfg0ObjectId() + "创建后自动同步变更前记录值失败，请联系管理员");
-                            return result;
+                            /*这一段估计有bug*/
+                            after.setId(afterId);
+                            after = iHzFeatureChangeService.doSelectAfterByPk(after);
                         }
-                        //before.setTableName("HZ_CFG0_BEFORE_CHANGE_RECORD");
-                        /*这一段估计有bug*/
-                        before.setId(beforeId);
-                        before = iHzFeatureChangeService.doSelectBeforeByPk(before);
-                    }
+
+                        if (before == null) {
+                            before = new HzFeatureChangeBean();
+                            HzCfg0Record localRecord = new HzCfg0Record();
+                            localRecord.setPuid(localParams.get(i).getPuid());
+                            if ((beforeId = iHzFeatureChangeService.insertByCfgBefore(localRecord)) <= 0) {
+                                logger.error("创建后自动同步变更前记录值失败，请联系管理员");
+                                result.put("status", false);
+                                result.put("msg", localParams.get(i).getpCfg0ObjectId() + "创建后自动同步变更前记录值失败，请联系管理员");
+                                return result;
+                            }
+                            //before.setTableName("HZ_CFG0_BEFORE_CHANGE_RECORD");
+                            /*这一段估计有bug*/
+                            before.setId(beforeId);
+                            before = iHzFeatureChangeService.doSelectBeforeByPk(before);
+                        }
 
 //                    after.setTableName("HZ_CFG0_AFTER_CHANGE_RECORD");
 //                    before.setTableName("HZ_CFG0_BEFORE_CHANGE_RECORD");
 
 
-                    setVwo(after, hzVwoInfo.getId(), now, user);
-                    setVwo(before, hzVwoInfo.getId(), now, user);
+                        setVwo(after, hzVwoInfo.getId(), now, user);
+                        setVwo(before, hzVwoInfo.getId(), now, user);
 
 //                    before.setVwoId(hzVwoInfo.getId());
 //                    before.setCfgIsInProcess(1);
 //                    before.setProcessStartDate(now);
 //                    before.setProcessStarter(user.getUserName());
 
-                    if (!iHzFeatureChangeService.doUpdateAfterByPk(after)) {
-                        logger.error("更新" + localParams.get(i).getpCfg0ObjectId() + "的更新后VWO号失败，请联系系统管理员");
-                    }
-                    if (!iHzFeatureChangeService.doUpdateBeforeByPk(before)) {
-                        logger.error("更新" + localParams.get(i).getpCfg0ObjectId() + "的更新前VWO号失败，请联系系统管理员");
-                    }
+                        if (!iHzFeatureChangeService.doUpdateAfterByPk(after)) {
+                            logger.error("更新" + localParams.get(i).getpCfg0ObjectId() + "的更新后VWO号失败，请联系系统管理员");
+                        }
+                        if (!iHzFeatureChangeService.doUpdateBeforeByPk(before)) {
+                            logger.error("更新" + localParams.get(i).getpCfg0ObjectId() + "的更新前VWO号失败，请联系系统管理员");
+                        }
 
-                    record.setPuid(localParams.get(i).getPuid());
-                    record.setCfgIsInProcess(1);
-                    record.setVwoId(hzVwoInfo.getId());
-                    record.setCfgStatus(0);
-                    if (!hzCfg0Service.doUpdate(record)) {
-                        logger.error("更新" + record.getpCfg0ObjectId() + "VWO号失败，请联系系统管理员");
+                        record.setPuid(localParams.get(i).getPuid());
+                        record.setCfgIsInProcess(1);
+                        record.setVwoId(hzVwoInfo.getId());
+                        record.setCfgStatus(0);
+                        if (!hzCfg0Service.doUpdate(record)) {
+                            logger.error("更新" + record.getpCfg0ObjectId() + "VWO号失败，请联系系统管理员");
+                        }
+                    } catch (Exception e) {
+                        logger.error("更新数据时发生异常:", e);
                     }
                 }
             }

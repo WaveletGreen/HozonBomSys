@@ -410,8 +410,8 @@ public class HzCfg0ModelColorController {
     @RequestMapping("checkItemId")
     @ResponseBody
     public JSONObject checkItemId(@RequestParam String lineId, @RequestParam String projectUid) {
-        Map<String, Object> queryParam = new HashMap<>();
         JSONObject result = new JSONObject();
+        Map<String, Object> queryParam = new HashMap<>();
         queryParam.put("projectId", projectUid);
         queryParam.put("lineID", lineId.trim());
         List<HzEPLManageRecord> itemList = hzEbomRecordDAO.findEbom(queryParam);

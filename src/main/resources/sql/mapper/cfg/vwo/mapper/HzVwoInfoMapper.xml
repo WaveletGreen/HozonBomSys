@@ -135,6 +135,7 @@
         #{vwoProjectStage,jdbcType=VARCHAR},
         #{vwoConnectedUser,jdbcType=VARCHAR},
         #{vwoConnectedUserDept,jdbcType=VARCHAR},
+        #{vwoConnectedPart,jdbcType=VARCHAR},
         #{vwoConnectedPartName,jdbcType=VARCHAR},
         #{vwoChangeReason,jdbcType=VARCHAR}
     </sql>

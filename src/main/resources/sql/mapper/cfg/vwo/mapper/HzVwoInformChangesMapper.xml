@@ -54,6 +54,10 @@
     where ID = #{id,jdbcType=DECIMAL}
   </delete>
     <insert id="insert" parameterType="sql.pojo.cfg.vwo.HzVwoInformChanges">
+        <selectKey order="BEFORE"
+                   keyColumn="id" keyProperty="id" resultType="java.lang.Long">
+            select SEQ_HZ_VWO_INFO_CHANGE_ID.Nextval from dual
+        </selectKey>
         insert into
         HZ_VWO_INFORM_CHANGES (
         <include refid="Base_Column_List"/>
