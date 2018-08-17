@@ -64,4 +64,5 @@ public class UserInfoController extends BaseController {
         model.addAttribute("data",user);
         return "updatePassword";
     }
+
 }

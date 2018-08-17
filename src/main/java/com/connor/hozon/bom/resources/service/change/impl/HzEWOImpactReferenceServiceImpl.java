@@ -10,7 +10,9 @@ import org.springframework.stereotype.Service;
 import sql.pojo.change.HzEWOImpactReference;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @Author: haozt
@@ -50,20 +52,56 @@ public class HzEWOImpactReferenceServiceImpl implements HzEWOImpactReferenceServ
             HzEWOImpactReferenceQuery query = new HzEWOImpactReferenceQuery();
             query.setEwoNo(reference.getEwoNo());
             query.setProjectId(reference.getProjectId());
+            List<HzEWOImpactReference> list = hzEWOImpactReferenceDAO.findImpactReferences(query);
+
+            Set<HzEWOImpactReference> set = new HashSet<>();
+            if(ListUtil.isNotEmpty(list)){
+                list.forEach(reference1 -> {
+                    if(reference1.getId()!=null){
+                        set.add(reference1);
+                    }
+                });
+            }
+
             for(String id :impactAnalysisIds){
+                if(set.size()>0){
+                    for(HzEWOImpactReference s:set){
+                        if(s.getImpactAnalysisId().equals(Long.valueOf(id))){
+                            set.remove(s);
+                            break;
+                        }
+                    }
+                }
                 query.setImpactAnalysisId(Long.valueOf(id));
                 HzEWOImpactReference impactReference = hzEWOImpactReferenceDAO.findHzImpactReference(query);
-                HzEWOImpactReference hzEWOImpactReference = reference;
+                HzEWOImpactReference hzEWOImpactReference = new HzEWOImpactReference();
                 hzEWOImpactReference.setImpactAnalysisId(Long.valueOf(id));
                 hzEWOImpactReference.setChecked(1);
+                hzEWOImpactReference.setEwoNo(reference.getEwoNo());
+                hzEWOImpactReference.setProjectId(reference.getProjectId());
                 if(impactReference == null){
                     insertList.add(hzEWOImpactReference);
                 }else {
-                    updateList.add(hzEWOImpactReference);
+                    if(Integer.valueOf(0).equals(impactReference.getChecked())){
+                        hzEWOImpactReference.setId(impactReference.getId());
+                        updateList.add(hzEWOImpactReference);
+                    }
                 }
             }
-            hzEWOImpactReferenceDAO.insertList(insertList);
-            hzEWOImpactReferenceDAO.updateList(updateList);
+            if(set.size()>0){
+                for(HzEWOImpactReference s :set){
+                    s.setChecked(0);
+                    updateList.add(s);
+
+                }
+            }
+            if(ListUtil.isNotEmpty(insertList)){
+                hzEWOImpactReferenceDAO.insertList(insertList);
+            }
+            if(ListUtil.isNotEmpty(updateList)){
+                hzEWOImpactReferenceDAO.updateList(updateList);
+            }
+
         }catch (Exception e){
             return OperateResultMessageRespDTO.getFailResult();
         }

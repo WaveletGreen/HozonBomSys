@@ -287,4 +287,8 @@
 	<update id="updatePassword" parameterType="com.connor.hozon.bom.sys.entity.User">
 		 update user set password = #{password} where id=#{id}
 	 </update>
+
+	<select id="findUserByGroupId" parameterType="java.lang.String" resultMap="UserMap">
+		select  * FROM user  where group_id = #{groupId}
+	</select>
 </mapper>
