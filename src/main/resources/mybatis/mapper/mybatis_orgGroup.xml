@@ -132,4 +132,9 @@
 	 	where group_id=#{groupId}
 
 	</select>
+
+	<!--获取全部的部门信息-->
+	<select id="queryAllOrgGroup"  resultMap="OrgGroupMap">
+		SELECT group_id,existing_num,group_code,name,node,num,parent_node FROM org_group
+	</select>
 </mapper>

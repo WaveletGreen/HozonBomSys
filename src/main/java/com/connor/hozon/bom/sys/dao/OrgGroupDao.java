@@ -6,6 +6,8 @@ import com.connor.hozon.bom.sys.entity.OrgGroup;
 import com.connor.hozon.bom.sys.entity.QueryOrgGroup;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * @author linzf
  **/
@@ -28,6 +30,12 @@ public interface OrgGroupDao extends GenericDao<OrgGroup, QueryOrgGroup> {
 	 */
 	OrgGroup findByNode(String node);
 
+	/**
+	 * 获取部门信息
+	 * @param groupId
+	 * @return
+	 */
 	OrgGroup queryOrgGroupById(Long groupId);
 
+	List<OrgGroup> queryAllOrgGroup();
 }
