@@ -1,5 +1,6 @@
 package com.connor.hozon.bom.activiti;
 
+import com.connor.hozon.bom.activiti.Act;
 import org.activiti.engine.*;
 import org.activiti.engine.delegate.DelegateTask;
 import org.activiti.engine.delegate.TaskListener;
@@ -53,12 +54,9 @@ public class ActImpl implements Act, TaskListener, ActivitiEventListener {
     public ModelAndView createProcess(@RequestAttribute(value = "actKey") String key, @RequestAttribute("actReviewers") Map<String, List<String>> reviewers, @RequestAttribute("actAssignees") Map<String, String> assignees) {
         logger.info("流程实例数量：" + runtimeService.createProcessInstanceQuery().count());
         logger.info("开始进行创建");
-        Map<String, Object> variables = new HashMap<>();
-        variables.putAll(reviewers);
-        variables.putAll(assignees);
         ProcessInstance pi;
         try {
-            pi = runtimeService.startProcessInstanceByKey(key,variables);
+            pi=ActUtil.createProcess(runtimeService,key,reviewers,assignees);
         } catch (Exception e) {
             logger.error(e);
             String err="流程创建失败："+e.getMessage();
@@ -73,21 +71,9 @@ public class ActImpl implements Act, TaskListener, ActivitiEventListener {
 
     @Override
     public ModelAndView runDoTask(@RequestAttribute(value = "actDoTask") String taskId) {
-        //检查任务
-        Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
-        if(task==null){
-            String err="没有找到任务，id = "+taskId;
-            return error(err);
-        }
-        logger.info("开始执行任务："+task.toString());
-        String taskName = task.getTaskDefinitionKey();
-        if(!taskName.startsWith("do_")){
-            String err="不是DO任务，请检查任务类型："+task.toString();
-            return error(err);
-        }
-        //完成任务
+        logger.info("开始执行任务："+taskId);
         try {
-            taskService.complete(taskId);
+            ActUtil.runDoTask(taskService,taskId);
         } catch (Exception e) {
             logger.error(e);
             String err="任务执行失败："+e.getMessage();
@@ -100,54 +86,9 @@ public class ActImpl implements Act, TaskListener, ActivitiEventListener {
 
     @Override
     public ModelAndView runReviewTask(@RequestAttribute(value = "actReviewTask") String taskId, @RequestAttribute("actDecision") int decision) {
-        //检查任务
-        Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
-        if(task==null){
-            String err="没有找到任务，id = "+taskId;
-            return error(err);
-        }
-        logger.info("开始执行任务："+task.toString());
-        String taskName = task.getTaskDefinitionKey();
-        if(!taskName.startsWith("review_")){
-            String err="不是审核任务，请检查任务类型："+task.toString();
-            return error(err);
-        }
-        //完成任务
-        Object passCountObj = taskService.getVariable(taskId, taskName + "_passCount");
-        Object totalCountObj = taskService.getVariable(taskId,taskName+"_totalCount");
-        if(passCountObj==null||totalCountObj==null){
-            String err="审核任务未添加监听";
-            return error(err);
-        }
-        int passCount=(int)passCountObj;
-        int totalCount=(int)totalCountObj;
-        if(decision==Act.PASS){
-            passCount++;
-            totalCount++;
-        }else if(decision==Act.NOT_PASS){
-            totalCount++;
-        }else if(decision==Act.CANCEL){
-            totalCount=-9999;
-        }else{
-            String err="无法识别的审核结果：decision = "+decision;
-            return error(err);
-        }
-        taskService.setVariable(taskId,taskName + "_passCount",passCount);
-        taskService.setVariable(taskId,taskName + "_totalCount",totalCount);
-        String varName=taskName+"_decision";
-        Map<String,Object> variables=new HashMap<>();
-        //获取结果
-        int actDecision=Act.NOT_PASS;
-        if(totalCount<0){
-            actDecision=Act.CANCEL;
-        }else{
-            if(passCount==totalCount){
-                actDecision=Act.PASS;
-            }
-        }
-        variables.put(varName,actDecision);
+        logger.info("开始执行任务："+taskId);
         try {
-            taskService.complete(taskId,variables);
+            ActUtil.runReviewTask(taskService,taskId,decision);
         } catch (Exception e) {
             logger.error(e);
             return error("任务执行失败："+e.getMessage());
@@ -159,16 +100,6 @@ public class ActImpl implements Act, TaskListener, ActivitiEventListener {
 
 
     @Override
-    public ModelAndView getProcessDiagram(String folder, String processInstanceId) {
-        return null;
-    }
-
-    @Override
-    public ModelAndView getProcessDiagram(String folder, Task task) {
-        return null;
-    }
-
-    @Override
     public ModelAndView queryTasks(String user) {
         List<Task> tasks = queryTaskByUserId(taskService,user);
         ModelAndView mv=new ModelAndView("success");
@@ -178,28 +109,25 @@ public class ActImpl implements Act, TaskListener, ActivitiEventListener {
 
     @Override
     public List<Task> queryTaskByUserId(TaskService taskService, String user){
-        return taskService.createTaskQuery().taskAssignee(user).list();
+        return ActUtil.queryTaskByUserId(taskService,user);
     }
 
     @Override
     public List<Task> queryTasksByProcessId(TaskService taskService, String processInstanceId){
-        List<Task> tasks = taskService.createTaskQuery().processInstanceId(processInstanceId).list();
-        return tasks;
+        return ActUtil.queryTasksByProcessId(taskService,processInstanceId);
     }
 
     public Map<Task,String> queryUsersByProcessId(TaskService taskService, String processInstanceId){
-        List<Task> tasks = taskService.createTaskQuery().processInstanceId(processInstanceId).list();
-        Map<Task,String> userMap=new LinkedHashMap<>();
-        for (Task task: tasks) {
-            userMap.put(task,task.getAssignee());
-        }
-        return userMap;
+        return ActUtil.queryUsersByProcessId(taskService,processInstanceId);
     }
 
 
+    /**
+     * 创建审核任务监听
+     * @param delegateTask
+     */
     @Override
     public void notify(DelegateTask delegateTask) {
-
         System.out.println("创建任务：" + delegateTask.getName());
         System.out.println("负责人：" + delegateTask.getAssignee());
         System.out.println("<通知负责人>");
@@ -207,14 +135,6 @@ public class ActImpl implements Act, TaskListener, ActivitiEventListener {
         //创建任务时添加变量记录审核信息
         delegateTask.setVariable(taskName+"_passCount", 0);
         delegateTask.setVariable(taskName+"_totalCount", 0);
-    }
-
-    private void checkProcessVariables(String key,Map<String,Object> variables) throws Exception{
-
-    }
-
-    private void checkTaskVariables(Task task,Map<String,Object> variables) throws Exception{
-
     }
 
     /**
@@ -229,10 +149,14 @@ public class ActImpl implements Act, TaskListener, ActivitiEventListener {
         return mv;
     }
 
-
+    /**
+     * 流程完成监听
+     * @param activitiEvent
+     */
     @Override
     public void onEvent(ActivitiEvent activitiEvent) {
         if(PROCESS_COMPLETED.equals(activitiEvent.getType())){
+            //TODO 
             logger.info("<流程完成> "+activitiEvent.getProcessInstanceId());
         }
     }

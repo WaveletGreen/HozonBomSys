@@ -75,11 +75,11 @@ public interface Act{
      */
     Map<Task,String> queryUsersByProcessId(TaskService taskService, String processInstanceId);
 
-    @RequestMapping(value = "/getProcessDiagramByProcess",method = RequestMethod.GET)
+  /*  @RequestMapping(value = "/getProcessDiagramByProcess",method = RequestMethod.GET)
     ModelAndView getProcessDiagram(String folder, String processInstanceId);
 
     @RequestMapping(value = "/getProcessDiagramByTask",method = RequestMethod.GET)
-    ModelAndView getProcessDiagram(String folder, Task task);
+    ModelAndView getProcessDiagram(String folder, Task task);*/
 
     @RequestMapping(value = "/queryTasksByUser",method = RequestMethod.GET)
     ModelAndView queryTasks(String user);

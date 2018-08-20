@@ -25,7 +25,7 @@ public class ActivitiConfig implements ProcessEngineConfigurationConfigurer {
 
     @Override
     public void configure(SpringProcessEngineConfiguration springProcessEngineConfiguration) {
-        System.out.println("开始配置");
+        System.out.println("开始配置ActivitiEngine");
         List<ActivitiEventListener> activitiEventListener=new ArrayList<>();
         activitiEventListener.add(actImpl);
         Map<String, List<ActivitiEventListener>> typedListener=new HashMap<>();
