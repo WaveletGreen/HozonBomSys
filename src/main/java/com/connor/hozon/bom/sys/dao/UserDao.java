@@ -66,4 +66,11 @@ public interface UserDao extends GenericDao<User, QueryUser> {
 	 *  todo by haozt on 8/17/2018
 	 */
 	List<User> findUserByGroupId(String groupId);
+
+	/**
+	 * 获取当前全部用户
+	 * @return
+	 *  todo by haozt on 8/20/2018
+	 */
+	List<User> findAllUser();
 }

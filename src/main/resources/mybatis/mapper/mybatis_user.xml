@@ -291,4 +291,9 @@
 	<select id="findUserByGroupId" parameterType="java.lang.String" resultMap="UserMap">
 		select  * FROM user  where group_id = #{groupId}
 	</select>
+
+	<select id="findAllUser" resultMap="UserMap">
+		select  * FROM user  where state = 1
+	</select>
+
 </mapper>
