@@ -42,12 +42,11 @@ public class DeptController extends BaseController {
 
     /**
      * 查询部门下面的人员信息
-     * @param groupId
      * @param response
      */
     @RequestMapping(value = "user",method = RequestMethod.GET)
-    public void getUserByGroupId(String groupId,HttpServletResponse response){
-        List<User> list = userDao.findUserByGroupId(groupId);
+    public void getUserByGroupId(HttpServletResponse response){
+        List<User> list = userDao.findAllUser();
         writeAjaxJSONResponse(ResultMessageBuilder.build(list),response);
     }
 
