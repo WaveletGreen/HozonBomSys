@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="HOZON">
+  <process id="hozon_vwo" name="VWO流程" isExecutable="true">
+    <startEvent id="vwo_start" name="开始"/>
+    <userTask id="do_start" name="发起" activiti:assignee="${do_start_assign}"/>
+    <userTask id="review_bom_manager" name="BOM经理评审" activiti:assignee="${assignee}">
+      <extensionElements>
+        <activiti:taskListener event="create" class="com.kk.testspb.demo_k.activiti.ActImpl"/>
+        <modeler:initiator-can-complete xmlns:modeler="http://activiti.com/modeler"><![CDATA[false]]></modeler:initiator-can-complete>
+      </extensionElements>
+      <multiInstanceLoopCharacteristics isSequential="false" activiti:collection="${review_bom_manager_assign}" activiti:elementVariable="assignee"/>
+    </userTask>
+    <exclusiveGateway id="gateway_bom_manager"/>
+    <userTask id="review_project_group" name="项目工程评审小组评审" activiti:assignee="${assignee}">
+      <extensionElements>
+        <activiti:taskListener event="create" class="com.kk.testspb.demo_k.activiti.ActImpl"/>
+        <modeler:initiator-can-complete xmlns:modeler="http://activiti.com/modeler"><![CDATA[false]]></modeler:initiator-can-complete>
+      </extensionElements>
+      <multiInstanceLoopCharacteristics isSequential="false" activiti:collection="${review_project_group_assign}" activiti:elementVariable="assignee"/>
+    </userTask>
+    <exclusiveGateway id="gateway_project_group"/>
+    <serviceTask id="publish" name="发布" activiti:class="com.connor.hozon.bom.activiti.serviceTask.PublishTask"/>
+    <endEvent id="vwo_end" name="结束"/>
+    <sequenceFlow id="f1" sourceRef="vwo_start" targetRef="do_start"/>
+    <sequenceFlow id="f2" sourceRef="do_start" targetRef="review_bom_manager"/>
+    <sequenceFlow id="f3" name="通过" sourceRef="gateway_bom_manager" targetRef="review_project_group">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${review_bom_manager_decision == 1}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="f7" sourceRef="review_project_group" targetRef="gateway_project_group"/>
+    <sequenceFlow id="f6" name="不通过" sourceRef="gateway_project_group" targetRef="do_start">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${review_project_group_decision == 0}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="f8" sourceRef="publish" targetRef="vwo_end"/>
+    <sequenceFlow id="f4" name="不通过" sourceRef="gateway_bom_manager" targetRef="do_start">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${review_bom_manager_decision == 0}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="f5" name="通过" sourceRef="gateway_project_group" targetRef="publish">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${review_project_group_decision == 1}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="f9" sourceRef="review_bom_manager" targetRef="gateway_bom_manager"/>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_hozon_vwo">
+    <bpmndi:BPMNPlane bpmnElement="hozon_vwo" id="BPMNPlane_hozon_vwo">
+      <bpmndi:BPMNShape bpmnElement="vwo_start" id="BPMNShape_vwo_start">
+        <omgdc:Bounds height="30.0" width="30.0" x="20.0" y="100.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="do_start" id="BPMNShape_do_start">
+        <omgdc:Bounds height="55.0" width="85.0" x="112.0" y="88.5"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="review_bom_manager" id="BPMNShape_review_bom_manager">
+        <omgdc:Bounds height="56.0" width="101.0" x="255.0" y="87.5"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="gateway_bom_manager" id="BPMNShape_gateway_bom_manager">
+        <omgdc:Bounds height="40.0" width="40.0" x="405.0" y="96.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="review_project_group" id="BPMNShape_review_project_group">
+        <omgdc:Bounds height="55.0" width="185.0" x="494.0" y="88.5"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="gateway_project_group" id="BPMNShape_gateway_project_group">
+        <omgdc:Bounds height="40.0" width="40.0" x="735.0" y="96.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="publish" id="BPMNShape_publish">
+        <omgdc:Bounds height="55.0" width="85.0" x="827.0" y="88.5"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="vwo_end" id="BPMNShape_vwo_end">
+        <omgdc:Bounds height="28.0" width="28.0" x="972.0" y="100.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="f6" id="BPMNEdge_f6">
+        <omgdi:waypoint x="755.0" y="136.0"></omgdi:waypoint>
+        <omgdi:waypoint x="755.0" y="255.0"></omgdi:waypoint>
+        <omgdi:waypoint x="154.0" y="255.0"></omgdi:waypoint>
+        <omgdi:waypoint x="154.40107913669064" y="143.5"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="f7" id="BPMNEdge_f7">
+        <omgdi:waypoint x="679.0" y="116.0"></omgdi:waypoint>
+        <omgdi:waypoint x="735.0" y="116.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="f8" id="BPMNEdge_f8">
+        <omgdi:waypoint x="912.0" y="115.27038626609442"></omgdi:waypoint>
+        <omgdi:waypoint x="972.0020625771276" y="114.24030793859008"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="f9" id="BPMNEdge_f9">
+        <omgdi:waypoint x="356.0" y="115.7112970711297"></omgdi:waypoint>
+        <omgdi:waypoint x="405.0833333333333" y="115.91666666666667"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="f1" id="BPMNEdge_f1">
+        <omgdi:waypoint x="49.99947482669265" y="115.1255186177966"></omgdi:waypoint>
+        <omgdi:waypoint x="112.0" y="115.64435146443515"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="f2" id="BPMNEdge_f2">
+        <omgdi:waypoint x="197.0" y="115.8592715231788"></omgdi:waypoint>
+        <omgdi:waypoint x="255.0" y="115.66721854304636"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="f3" id="BPMNEdge_f3">
+        <omgdi:waypoint x="445.0" y="116.0"></omgdi:waypoint>
+        <omgdi:waypoint x="494.0" y="116.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="f4" id="BPMNEdge_f4">
+        <omgdi:waypoint x="425.0" y="136.0"></omgdi:waypoint>
+        <omgdi:waypoint x="425.0" y="235.0"></omgdi:waypoint>
+        <omgdi:waypoint x="154.0" y="235.0"></omgdi:waypoint>
+        <omgdi:waypoint x="154.3844537815126" y="143.5"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="f5" id="BPMNEdge_f5">
+        <omgdi:waypoint x="775.0" y="116.0"></omgdi:waypoint>
+        <omgdi:waypoint x="827.0" y="116.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>
