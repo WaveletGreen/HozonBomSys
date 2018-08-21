@@ -23,5 +23,5 @@ public interface IHzMaterielCfgService {
      */
     List<HzMaterielCfgBean> doSelectByDiff(HzMaterielCfgBean bean);
 
-    boolean doUpdateIsSent(Map<String,Object> map);
+    int doUpdateIsSent(Map<String,Object> map);
 }

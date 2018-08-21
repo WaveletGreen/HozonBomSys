@@ -61,6 +61,11 @@ public class VehicleBom {
      */
     private String puid;
 
+    /**
+     * 是否已发送过SAP
+     */
+    private Integer isSent;
+
     public VehicleBom() {
         zpptci007=new ZPPTCI007();
     }
@@ -105,6 +110,7 @@ public class VehicleBom {
         this.puid = puid;
     }
 
+    public void setIsSent(Integer isSent) { this.isSent = isSent; }
 
     /////////getter////////////
 
@@ -148,29 +154,8 @@ public class VehicleBom {
         this.zpptci007 = zpptci007;
     }
 
-//    public static void main(String[] args) {
-//        VehicleBom vb = new VehicleBom();
-//        HzMaterielCfgBean hzmcb = new HzMaterielCfgBean();
-//        HzMaterielCfgService hzmcs = new HzMaterielCfgService();
-//        hzmcb.setPuid("F6CAFB8DA09A465DB0BA259D88563C84");
-//        List<HzMaterielCfgBean> result = hzmcs.doSelectByDiff(hzmcb);
-//
-//        vb.propertyEncoding = "SD_01";
-//        vb.propertyValue = result.get(0).getpBrandCode();
-//        vb.setPackNo(UUIDHelper.generateUpperUid());
-//        vb.setLineNum("1");
-//
-//
-//        VehicleBom vb2 = new VehicleBom();
-//        vb2.propertyEncoding = "SD_02";
-//        vb2.propertyValue = result.get(0).getpBrandName();
-//        vb2.setLineNum("2");
-//
-//        VehicleBom vb3 = new VehicleBom();
-//        vb3.propertyEncoding = "SD_03";
-//        vb3.propertyValue =reflectCode(result.get(0),vb3.getPropertyEncoding());
-//        vb3.setLineNum("3");
-//    }
+    public Integer getIsSent() { return isSent; }
+
     /**
      * DMS提交的车辆属性代码
      */
@@ -197,6 +182,7 @@ public class VehicleBom {
             vb.setVehicleEncoding(result.get(0).getObjectName());
             vb.setPropertyEncoding(code[i]);
             vb.setPropertyValue(reflectCode(result.get(0),vb.getPropertyEncoding()));
+            vb.setIsSent(result.get(0).getIsSent());
             vehicleBomList.add(vb);
         }
         return vehicleBomList;

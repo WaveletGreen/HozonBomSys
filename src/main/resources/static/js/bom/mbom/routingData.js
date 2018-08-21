@@ -199,20 +199,15 @@ function initTable(url) {
                             _table += '</table></div>';
                             window.Ewin.confirm({title: '提示', message: _table, width: 500}).on(function (e) {
                                 if (e) {
+                                    var materielIds = new Array();
+                                    for(var i=0;i<rows.length;i++){
+                                        materielIds[i] = rows[i].materielId;
+                                    }
                                     $.ajax({
                                         type: "POST",
                                         //ajax需要添加打包名
-                                        url: "work/process/submit?projectId="+projectId,
-                                        data: JSON.stringify(rows),
-                                        contentType: "application/json",
+                                        url: "work/process/submit?projectId="+projectId+"&materielIds="+materielIds,
                                         success: function (result) {
-                                            /*if (result.status) {
-                                                window.Ewin.alert({message: result.errMsg});
-                                                //刷新，会重新申请数据库数据
-                                            }
-                                            else {
-                                                window.Ewin.alert({message: ":" + result.errMsg});
-                                            }*/
                                             if (result.success){
                                                 layer.msg('提交成功', {icon: 1, time: 2000})
                                             }

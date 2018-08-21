@@ -1,4 +1,4 @@
-package com.connor.hozon.bom.bomSystem.controller.cfg;
+package com.connor.hozon.bom.bomSystem.controller.integrate;
 
 import com.connor.hozon.bom.bomSystem.service.integrate.SynMaterielCfgService;
 import net.sf.json.JSONObject;
@@ -14,17 +14,16 @@ import java.util.*;
 
 @Controller
 @RequestMapping("/cfgMateriel")
-public class HzCfgMaterielController {
+public class SynCfgMaterielController extends ExtraIntegrate {
     @Autowired
     SynMaterielCfgService synMaterielCfgService;
 
     @RequestMapping("/synMateriel")
-    @ResponseBody
-    public String modPage(@RequestParam String puid) throws Exception {
+    public String modPage(@RequestParam String puid,Model model) {
         HzMaterielCfgBean bean = new HzMaterielCfgBean();
         bean.setPuid(puid);
-        JSONObject result = synMaterielCfgService.addFeature(Collections.singletonList(bean));
-
-        return result.toString();
+        JSONObject result = synMaterielCfgService.addMaterielCfg(Collections.singletonList(bean));
+        addToModel(result, model);
+        return "stage/templateOfIntegrate";
     }
 }

@@ -47,12 +47,12 @@
     where PUID = #{puid,jdbcType=VARCHAR}
   </update>
 
-    <!--设置进入流程状态-->
+    <!--设置已发送至SAP-->
     <update id="setIsSent" parameterType="java.util.List">
         update HZ_CFG0_TO_MODEL_RECORD
         set
         IS_SENT = 1
-        where PUID in
+        where p_cfg0_model_record in
         <if test="list==null">
             ('')
         </if>

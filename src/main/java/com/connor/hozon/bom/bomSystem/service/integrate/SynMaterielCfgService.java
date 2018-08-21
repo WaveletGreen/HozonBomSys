@@ -29,21 +29,53 @@ import java.util.Map;
 @Service("snMaterielCfgService")
 public class SynMaterielCfgService{
     @Autowired
-    TransCfgService transCfgService;
-    @Autowired
     IHzMaterielCfgService hzMaterielCfgService;
     @Autowired
     TransProductAttrService transProductAttrService;
+    /**
+     * 日志记录
+     */
     private final static Logger logger = LoggerFactory.getLogger(SynMaterielCfgService.class);
 
-    public JSONObject addFeature(List<HzMaterielCfgBean> records) throws Exception {
+    /**
+     * 新增
+     * @param records       仅需对其puid属性赋值，puid为表 Hz_Cfg0_Model_Record 的主键 PUID
+     * @return
+     */
+    public JSONObject addMaterielCfg(List<HzMaterielCfgBean> records){
         return execute(records, ActionFlagOption.ADD);
     }
 
-    private JSONObject execute(List<HzMaterielCfgBean> records, ActionFlagOption option) throws Exception{
+    /**
+     * 删除
+     * @param records       仅需对其puid属性赋值，puid为表 Hz_Cfg0_Model_Record 的主键 PUID
+     * @return
+     */
+    public JSONObject deleteMaterielCfg(List<HzMaterielCfgBean> records){
+        return  execute(records, ActionFlagOption.DELETE);
+    }
+
+    /**
+     * 修改
+     * @param records       仅需对其puid属性赋值，puid为表 Hz_Cfg0_Model_Record 的主键 PUID
+     * @return
+     */
+    public JSONObject updataMaterielCfg(List<HzMaterielCfgBean> records){
+        deleteMaterielCfg(records);
+        return addMaterielCfg(records);
+    }
+
+    /**
+     * 核心方法
+     * @param records       仅需对其puid属性赋值，puid为表 Hz_Cfg0_Model_Record 的主键 PUID
+     * @param option        动作标志
+     * @return
+     */
+    private JSONObject execute(List<HzMaterielCfgBean> records, ActionFlagOption option){
+        transProductAttrService.setClearInputEachTime(true);
+        transProductAttrService.getInput().getItem().clear();
         //需要更新的数据，更新特性属性
         List<HzMaterielCfgBean> needToUpdateStatus = new ArrayList<>();
-        Map<String, List<HzMaterielCfgBean>> _mapCoach = new HashMap<>();
         JSONObject result = new JSONObject();
         /**
          * 成功项
@@ -69,18 +101,21 @@ public class SynMaterielCfgService{
             result.put("msg", "选择的列为空，请至少选择1列发送");
             return result;
         }
+        //上传数据Map
         Map<String, Map<String, HzMaterielCfgBean>> coach = new HashMap<>();
+        //包号为Key，puid为Value
         Map<String, String> packNumOfFeature = new HashMap<>();
+        //包号
         String packnum = UUIDHelper.generateUpperUid();
-
+        //层级
         int index;
         for (HzMaterielCfgBean record : records) {
                 String fpuid = record.getPuid();
                 //没有父层的puid
                 if (!packNumOfFeature.containsKey(fpuid)) {
                     //添加父层puid和包号的对应关系
-                    packNumOfFeature.put(fpuid, packnum);
                     packnum = UUIDHelper.generateUpperUid();
+                    packNumOfFeature.put(fpuid, packnum);
                 }
             //收录包号对应的特性
             index = 1;
@@ -93,7 +128,8 @@ public class SynMaterielCfgService{
                     _m.put(String.valueOf(index), record);
                     coach.put(packNumOfFeature.get(fpuid), _m);
                 } else {
-                    index += coach.get(packNumOfFeature.get(fpuid)).size();
+                    index ++;
+                    coach.get(packNumOfFeature.get(fpuid)).put(String.valueOf(index), record);
                 }
                 //数据包号
                 vehicleBom.setPackNo(packNumOfFeature.get(fpuid));
@@ -103,7 +139,7 @@ public class SynMaterielCfgService{
                 //动作描述代码
                 if (option == ActionFlagOption.ADD) {
                     //没有发送过，添加发送
-                    if (null == record.getIsSent() || record.getIsSent() == 0) {
+                    if (null == vehicleBom.getIsSent() || vehicleBom.getIsSent() == 0) {
                         vehicleBom.setActionFlag(option);
                     }
                     //有发送过，执行更新
@@ -115,51 +151,50 @@ public class SynMaterielCfgService{
                 else {
                     vehicleBom.setActionFlag(option);
                 }
-                transProductAttrService.getInput().getItem().add(vehicleBom.getZpptci007());
 
-                //            featuresList.add(features);
-                coach.get(packNumOfFeature.get(fpuid)).put(vehicleBom.getItem(), record);
+                transProductAttrService.getInput().getItem().add(vehicleBom.getZpptci007());
+//                coach.get(packNumOfFeature.get(fpuid)).put(vehicleBom.getItem(), record);
 
             }
 
         }
-
-        transProductAttrService.execute();
-//        List<ZPPTCO002> list = transCfgService.getOut().getItem();
+        if (!SynMaterielService.debug) {
+            transProductAttrService.execute();
+        }
         List<ZPPTCO007> list=transProductAttrService.getOut().getItem();
-//        try {
-//            if (list != null && li6st.size() > 0) {
-//                for (ZPPTCO007 _l : list) {
-//                    total++;
-//                    if (_l == null) {
-//                        totalOfUnknown++;
-//                        continue;
-//                    }
-//                    IntegrateMsgDTO dto = new IntegrateMsgDTO();
-//                    HzMaterielCfgBean record = coach.get(_l.getPPACKNO()).get(_l.getPZITEM());
-//                    dto.setItemId(record.getObjectName());
-//                    dto.setMsg(_l.getPMESSAGE());
-//                    dto.setPuid(record.getPuid());
-//                    if ("S".equalsIgnoreCase(_l.getPTYPE())) {
-//                        success.add(dto);
-//                        totalOfSuccess++;
-//                        needToUpdateStatus.add(record);
-//                    } else {
-//                        fail.add(dto);
-//                        totalOfFail++;
-//                    }
-//                }
-//                Map<String, Object> _map = new HashMap<>();
-//                //设定需要更新特性值已发送,不用设定相关性值已发送
-//                _map.put("isSent", 1);
-//                _map.put("list", needToUpdateStatus);
-//                if (needToUpdateStatus.size() > 0) {
-//                    hzMaterielCfgService.doUpdateIsSent(_map);
-//                }
-//            }
-//        } catch (Exception e) {
-//            logger.error("发送特性到ERP失败", e);
-//        }
+        try {
+            if (list != null && list.size() > 0) {
+                for (ZPPTCO007 _l : list) {
+                    total++;
+                    if (_l == null) {
+                        totalOfUnknown++;
+                        continue;
+                    }
+                    IntegrateMsgDTO dto = new IntegrateMsgDTO();
+                    HzMaterielCfgBean record = coach.get(_l.getPPACKNO()).get(_l.getPZITEM());
+                    dto.setItemId(_l.getPZITEM());
+                    dto.setMsg(_l.getPMESSAGE());
+                    dto.setPuid(record.getPuid());
+                    if ("S".equalsIgnoreCase(_l.getPTYPE())) {
+                        success.add(dto);
+                        totalOfSuccess++;
+                        needToUpdateStatus.add(record);
+                    } else {
+                        fail.add(dto);
+                        totalOfFail++;
+                    }
+                }
+                Map<String, Object> _map = new HashMap<>();
+                //设定需要更新特性值已发送,不用设定相关性值已发送
+                _map.put("isSent", 1);
+                _map.put("list", needToUpdateStatus);
+                if (needToUpdateStatus.size() > 0) {
+                    hzMaterielCfgService.doUpdateIsSent(_map);
+                }
+            }
+        } catch (Exception e) {
+            logger.error("发送特性到ERP失败", e);
+        }
 
         result.put("success", success);
         result.put("fail", fail);

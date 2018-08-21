@@ -53,38 +53,11 @@ public class ConfigurableMaterialAllocation {
      * 无参构造函数
      */
     public ConfigurableMaterialAllocation(){
+
         zpptci003 = new ZPPTCI003();
     }
 
-    /**\
-     *新建组映射对象，其中对特性编码，特性编码值和超级物料编码赋值
-     * @param puid
-     * @param pCfg0ObjectMap
-     * @param hzCfg0MainService
-     * @param hzSuperMaterielService
-     * @return
-     */
-    public static List<ConfigurableMaterialAllocation> getConfigurableMaterialAllocationList(String puid, Map<String, String> pCfg0ObjectMap, HzCfg0MainService hzCfg0MainService, HzSuperMaterielService hzSuperMaterielService) {
-        List<ConfigurableMaterialAllocation> configurableMaterialAllocations = new ArrayList<ConfigurableMaterialAllocation>();
-        HzCfg0MainRecord mainRecord = hzCfg0MainService.doGetByPrimaryKey(puid);
-        HzMaterielRecord superMateriel = null;
-        if (mainRecord != null) {
-            superMateriel = hzSuperMaterielService.doSelectByProjectPuid(mainRecord.getpCfg0OfWhichProjectPuid());
-            if(superMateriel==null){
-                return null;
-            }
-        }
-        Set<String> keySet = pCfg0ObjectMap.keySet();
-        for(String key : keySet){
-            ConfigurableMaterialAllocation configurableMaterialAllocation = new ConfigurableMaterialAllocation();
-            configurableMaterialAllocation.setPitem(superMateriel.getpMaterielCode());
-            configurableMaterialAllocation.setPeculiarityEncoding(key);
-            configurableMaterialAllocation.setPeculiarityValueEncoding(pCfg0ObjectMap.get(key));
 
-            configurableMaterialAllocations.add(configurableMaterialAllocation);
-        }
-        return  configurableMaterialAllocations;
-    }
     /////////////////////////setter//////////////////////////
 
     public void setPackNo(String packNo) {

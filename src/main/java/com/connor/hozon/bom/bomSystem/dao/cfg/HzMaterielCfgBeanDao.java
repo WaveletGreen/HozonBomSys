@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Configuration;
 import sql.pojo.cfg.HzMaterielCfgBean;
 
 import java.util.List;
+import java.util.Map;
 
 @Configuration
 
@@ -17,5 +18,5 @@ public interface HzMaterielCfgBeanDao {
      */
     List<HzMaterielCfgBean> selectByDiff(HzMaterielCfgBean bean);
 
-    boolean updateIsSent();
+    int updateIsSent(Map<String, Object> map);
 }

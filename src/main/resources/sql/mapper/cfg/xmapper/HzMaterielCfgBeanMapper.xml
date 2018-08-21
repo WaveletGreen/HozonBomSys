@@ -65,4 +65,24 @@
             where t6.puid=#{puid}
         </if>
     </select>
+
+    <update id="updateIsSent" parameterType="java.util.HashMap">
+        update Hz_Cfg0_Model_Record
+        set
+        <if test="isSent==1">
+            IS_SENT = 1
+        </if>
+        where PUID in
+        <if test="list==null">
+            ('')
+        </if>
+        <if test="list!=null">
+            (
+            <foreach collection="list" item="item" index="index"
+                     separator=",">
+                #{item.puid,jdbcType=VARCHAR}
+            </foreach>
+            )
+        </if>
+    </update>
 </mapper>

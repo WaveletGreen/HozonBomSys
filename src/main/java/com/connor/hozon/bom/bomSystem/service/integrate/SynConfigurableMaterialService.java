@@ -1,6 +1,7 @@
 package com.connor.hozon.bom.bomSystem.service.integrate;
 
 import com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0ModelGroupDao;
+import com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0ToModelRecordDao;
 import com.connor.hozon.bom.bomSystem.dto.HzMaterielFeatureBean;
 import com.connor.hozon.bom.bomSystem.helper.IntegrateMsgDTO;
 import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
@@ -20,10 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sql.pojo.cfg.HzCfg0MainRecord;
-import sql.pojo.cfg.HzCfg0ModelFeature;
-import sql.pojo.cfg.HzCfg0Record;
-import sql.pojo.cfg.HzMaterielCfgBean;
+import sql.pojo.cfg.*;
 import sql.pojo.project.HzMaterielRecord;
 
 import java.util.*;
@@ -41,6 +39,8 @@ public class SynConfigurableMaterialService {
     private HzCfg0Service hzCfg0Service;
     @Autowired
     TransClassifyService transClassifyService;
+    @Autowired
+    HzCfg0ToModelRecordDao hzCfg0ToModelRecordDao;
     /**
      * 模型族dao层
      */
@@ -49,18 +49,47 @@ public class SynConfigurableMaterialService {
     /**
      * 日志记录
      */
-    private final static Logger logger = LoggerFactory.getLogger(SynFeatureService.class);
+    private final static Logger logger = LoggerFactory.getLogger(SynConfigurableMaterialService.class);
 
-
+    /**
+     * 新增
+     * @param puid                      表 Hz_Cfg0_Model_Record 的主键 PUID
+     * @param cfg0MainPuids            表 HZ_CFG0_MAIN_RECORD   的主键 PUID
+     * @param modeBasiceDetails       配置物料编码    表  Hz_Cfg0_Model_Record  的  OBJECT_NAME
+     * @param projectPuid              项目ID         表   hz_cfg0_main_record 的 p_cfg0_of_which_project_puid
+     * @return
+     */
     public JSONObject addConfigurableMaterial(String[] puid, String[] cfg0MainPuids, String[] modeBasiceDetails, String projectPuid) {
         return execute(puid, cfg0MainPuids, modeBasiceDetails, projectPuid, ActionFlagOption.ADD);
     }
 
+    /**
+     * 删除
+     * @param puid                        表 Hz_Cfg0_Model_Record 的主键 PUID
+     * @param cfg0MainPuids             表 HZ_CFG0_MAIN_RECORD   的主键 PUID
+     * @param modeBasiceDetails         配置物料编码    表  Hz_Cfg0_Model_Record  的  OBJECT_NAME
+     * @param projectPuid               项目ID         表   hz_cfg0_main_record 的 p_cfg0_of_which_project_puid
+     * @return
+     */
     public JSONObject deleteConfigurableMaterial(String[] puid, String[] cfg0MainPuids, String[] modeBasiceDetails, String projectPuid) {
         return execute(puid, cfg0MainPuids, modeBasiceDetails, projectPuid, ActionFlagOption.DELETE);
     }
 
+    /**
+     * 核心方法
+     * @param puids                       表 Hz_Cfg0_Model_Record 的主键 PUID
+     * @param cfg0MainPuids             表 HZ_CFG0_MAIN_RECORD   的主键 PUID
+     * @param modeBasiceDetails         配置物料编码    表  Hz_Cfg0_Model_Record  的  OBJECT_NAME
+     * @param projectPuid               项目ID         表   hz_cfg0_main_record 的 p_cfg0_of_which_project_puid
+     * @param option                    动作标志
+     * @return
+     */
     private JSONObject execute(String[] puids, String[] cfg0MainPuids, String[] modeBasiceDetails, String projectPuid, ActionFlagOption option) {
+        transClassifyService.setClearInputEachTime(true);
+        transClassifyService.getInput().getItem().clear();
+
+        //需要更新的数据，更新特性属性
+        List<HzCfg0ToModelRecord> needToUpdateStatus = new ArrayList<>();
         JSONObject result = new JSONObject();
         /**
          * 成功项
@@ -91,24 +120,27 @@ public class SynConfigurableMaterialService {
             result.put("msg", "前端数据传输错误");
             return result;
         }
-        Map<String, String> packNumOfFeature = new HashMap<>();
+        Map<String, HzCfg0ToModelRecord> coach = new HashMap<String, HzCfg0ToModelRecord>();
+        Map<String, String> packNumOfFeature = new HashMap<String, String>();
+
         String packnum = UUIDHelper.generateUpperUid();
-        /**
-         * 获取到所有puid对应的所有的“特性编码”和其对应的"特性编码值"
-         */
+
         for(int i=0;i<puids.length;i++){
             //没有父层的puid
             if (!packNumOfFeature.containsKey(puids[i])) {
                 //添加父层puid和包号的对应关系
-                packNumOfFeature.put(puids[i], packnum);
                 packnum = UUIDHelper.generateUpperUid();
+                packNumOfFeature.put(puids[i], packnum);
             }
-            //存取编码特性与编码特性值
-            Map<String, String> pCfg0ObjectMap = new HashMap<String, String>();
+            if (!coach.containsKey(packNumOfFeature.get(puids[i]))) {
+                HzCfg0ToModelRecord hzCfg0ToModelRecord = new HzCfg0ToModelRecord();
+                hzCfg0ToModelRecord.setPuid(puids[i]);
+                hzCfg0ToModelRecord.setpOfCfg0MainRecord(modeBasiceDetails[i]);
+                coach.put(packNumOfFeature.get(puids[i]), hzCfg0ToModelRecord);
+            }
             List<String> column = hzCfg0OptionFamilyService.doGetColumnDef(projectPuid, "<br/>");
             List<HzMaterielFeatureBean> hzMaterielFeatureBeans = hzCfg0Service.doSelectMaterielFeatureByProjectPuid(projectPuid);
 
-            HzMaterielRecord superMateriel = hzSuperMaterielService.doSelectByProjectPuid(projectPuid);
 
             Map<String, HzMaterielFeatureBean> sortedBean = new HashMap<>();
 
@@ -117,32 +149,44 @@ public class SynConfigurableMaterialService {
             if (hzMaterielFeatureBeans == null || column == null || column.size() == 0) {
                 continue;
             } else {
-                //往map中添加当前puid的特性编码和对应值
-                for(HzMaterielFeatureBean hzMaterielFeatureBean :hzMaterielFeatureBeans){
-                    if(hzMaterielFeatureBean.getpCfg0ModelRecord()!=null && hzMaterielFeatureBean.getpCfg0ModelRecord().equals(puids[i])){
-                        pCfg0ObjectMap.put(hzMaterielFeatureBean.getpCfg0FamilyName(),hzMaterielFeatureBean.getpCfg0ObjectId());
-                    }
-                }
-                //新建组映射对象，其中对特性编码，特性编码值和超级物料编码赋值
-                List<ConfigurableMaterialAllocation> configurableMaterialAllocations = ConfigurableMaterialAllocation.getConfigurableMaterialAllocationList(cfg0MainPuids[i], pCfg0ObjectMap, hzCfg0MainService, hzSuperMaterielService);
                 //获取族
                 String groupName = hzCfg0ModelGroupDao.selectGroupNameByMainUid(cfg0MainPuids[i]);
-                //循环list对其中映射对象的包号、动作描述赋值
-                for(ConfigurableMaterialAllocation configurableMaterialAllocation : configurableMaterialAllocations){
-                    //数据包号
-                    configurableMaterialAllocation.setPackNo(packnum);
-                    //配置物料编码
-                    configurableMaterialAllocation.setConfigurableMaterialEncoding(modeBasiceDetails[i]);
-                    //添加族
-                    configurableMaterialAllocation.setModelClass(groupName);
-                    if (option == ActionFlagOption.ADD) {
-                            configurableMaterialAllocation.setActionFlag("A");
+                //超级物料编码
+                HzCfg0MainRecord mainRecord = hzCfg0MainService.doGetByPrimaryKey(cfg0MainPuids[i]);
+                HzMaterielRecord superMateriel = null;
+                if (mainRecord != null) {
+                    superMateriel = hzSuperMaterielService.doSelectByProjectPuid(mainRecord.getpCfg0OfWhichProjectPuid());
+                }
+                for(HzMaterielFeatureBean hzMaterielFeatureBean :hzMaterielFeatureBeans){
+                    if(hzMaterielFeatureBean.getpCfg0ModelRecord()!=null && hzMaterielFeatureBean.getpCfg0ModelRecord().equals(puids[i])){
+
+                        ConfigurableMaterialAllocation configurableMaterialAllocation = new ConfigurableMaterialAllocation();
+                        //特性编码
+                        configurableMaterialAllocation.setPeculiarityEncoding(hzMaterielFeatureBean.getpCfg0FamilyName());
+                        //特性编码值
+                        configurableMaterialAllocation.setPeculiarityValueEncoding(hzMaterielFeatureBean.getpCfg0ObjectId());
+                        //超级物料编码
+                        configurableMaterialAllocation.setPitem(superMateriel.getpMaterielCode());
+                        //数据包号
+                        configurableMaterialAllocation.setPackNo(packnum);
+                        //配置物料编码
+                        configurableMaterialAllocation.setConfigurableMaterialEncoding(modeBasiceDetails[i]);
+                        //添加族
+                        configurableMaterialAllocation.setModelClass(groupName);
+                        //动作描述
+                        if (option == ActionFlagOption.ADD) {
+                            if(hzMaterielFeatureBean.getIsSent()==null||hzMaterielFeatureBean.getIsSent()==0){
+                                configurableMaterialAllocation.setActionFlag("A");
+                            }else  if(hzMaterielFeatureBean.getIsSent()==1){
+                                configurableMaterialAllocation.setActionFlag("U");
+                            }
+                        }
+                        //执行删除
+                        else {
+                            configurableMaterialAllocation.setActionFlag("D");
+                        }
+                        transClassifyService.getInput().getItem().add(configurableMaterialAllocation.getZpptci003());
                     }
-                    //执行更新或删除
-                    else {
-                        configurableMaterialAllocation.setActionFlag("D");
-                    }
-                    transClassifyService.getInput().getItem().add(configurableMaterialAllocation.getZpptci003());
                 }
             }
         }
@@ -153,6 +197,54 @@ public class SynConfigurableMaterialService {
 
         List<ZPPTCO003> list = transClassifyService.getOut().getItem();
 
+        try {
+            if (list != null && list.size() > 0) {
+                for (ZPPTCO003 _l : list) {
+                    total++;
+                    if (_l == null) {
+                        totalOfUnknown++;
+                        continue;
+                    }
+                    IntegrateMsgDTO dto = new IntegrateMsgDTO();
+                    HzCfg0ToModelRecord record = coach.get(_l.getPPACKNO());
+                    dto.setPuid(record.getPuid());
+                    dto.setItemId(record.getpOfCfg0MainRecord());
+                    dto.setMsg(_l.getPMESSAGE());
+                    if ("S".equalsIgnoreCase(_l.getPTYPE())) {
+                        success.add(dto);
+                        totalOfSuccess++;
+                        needToUpdateStatus.add(record);
+                    } else {
+                        fail.add(dto);
+                        totalOfFail++;
+                    }
+                }
+                Map<String, Object> _map = new HashMap<>();
+                //设定需要更新特性值已发送,不用设定相关性值已发送
+                _map.put("isFeatureSent", 1);
+                _map.put("list", needToUpdateStatus);
+                if (needToUpdateStatus.size() > 0) {
+                    List<HzCfg0ToModelRecord> hzCfg0ToModelRecordList = new ArrayList<HzCfg0ToModelRecord>();
+                    Set<String> keySet = coach.keySet();
+                    for(String key : keySet){
+                        hzCfg0ToModelRecordList.add(coach.get(key));
+                    }
+                    hzCfg0ToModelRecordDao.setIsSent(hzCfg0ToModelRecordList);
+                }
+            }
+        } catch (Exception e) {
+            logger.error("发送特性到ERP失败", e);
+        }
+
+
+        result.put("success", success);
+        result.put("fail", fail);
+        result.put("total", total);
+        result.put("totalOfSuccess", totalOfSuccess);
+        result.put("totalOfFail", totalOfFail);
+        result.put("totalOfOutOfParent", totalOfOutOfParent);
+        result.put("totalOfUnknown", totalOfUnknown);
+        result.put("_forDelete", _forDelete);
         return result;
     }
 }

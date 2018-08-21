@@ -33,7 +33,7 @@ public class HzMaterielCfgService implements IHzMaterielCfgService {
     }
 
     @Override
-    public boolean doUpdateIsSent(Map<String, Object> map) {
-        return hzMaterielCfgBeanDao.updateIsSent();
+    public int doUpdateIsSent(Map<String, Object> map) {
+        return hzMaterielCfgBeanDao.updateIsSent(map);
     }
 }

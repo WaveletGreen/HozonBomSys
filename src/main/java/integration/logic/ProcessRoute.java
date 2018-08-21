@@ -6,6 +6,8 @@ import integration.base.processRoute.ZPPTCI006;
 import integration.option.ActionFlagOption;
 
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * 工艺路线接口映射been
@@ -95,13 +97,10 @@ public class ProcessRoute {
      */
     public ProcessRoute(){
         this.zpptci006 = new ZPPTCI006();
-        zpptci006.setPDATA1(new BigDecimal(1));
-        zpptci006.setPDATA2(new BigDecimal(2));
-        zpptci006.setPDATA3(new BigDecimal(3));
-        zpptci006.setPDATA4(new BigDecimal(4));
-        zpptci006.setPDATA5(new BigDecimal(5));
-        zpptci006.setPDATA6(new BigDecimal(6));
-        zpptci006.setPDATE("2018-08-14");
+        this.setWorkNumber1(new BigDecimal(1));
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        String date = df.format(new Date());
+        this.setEffectiveDate(date);
     }
 
 
