@@ -10,12 +10,11 @@
 <body>
 <!--基本信息-->
 <h4><i class="fa fa-minus-square" aria-hidden="true">基本信息</i></h4>
-<input th:value="${url}" type="hidden" id="url"/>
 <button class="btn btn-success" style="position: fixed;margin-left:95%;margin-top: 100px;z-index:99999;"
         id="vwoSaveBtn">保存
 </button>
 <div class="panel-body" style="padding:0;">
-    <form class="form-horizontal" id="basicInfo" role="form" method="post" action="./modelColor/saveColorModel">
+    <form class="form-horizontal" id="basicInfo" role="form" onsubmit="return false;">
         <fieldset>
             <div class="panel panel-default">
                 <div class="panel-body">
@@ -213,118 +212,105 @@
     </div>
 </div>
 <!--相关部门-->
-<h4><i class="fa fa-minus-square" aria-hidden="true">相关部门</i></h4>
+<h4><i class="fa fa-minus-square" aria-hidden="true">影响部门</i></h4>
 <div class="panel-body" style="padding-bottom:0px;">
     <div class="panel panel-default">
         <div class="panel-body">
             <div class="panel-body" style="padding-bottom:0px;">
-                <div class="panel panel-default">
-                    <div class="panel-body">
-                        <label>影响部门:</label>
-                        <div class="content col-lg-5"><!--style="margin-top: -50px;"-->
-                            <table id="vwo_table1" class="table table-striped tableNormalStyle">
-                                <tr>
-                                    <td style="width: 50px"><input type="checkbox"></td>
-                                    <td>智能驾驶研究院</td>
-                                    <td style="width: 50px"><input type="checkbox"></td>
-                                    <td>智能座舱事业部</td>
-                                    <td style="width: 50px"><input type="checkbox"></td>
-                                    <td>电动化底盘中心</td>
-                                </tr>
-                                <tr>
-                                    <td style="width: 50px"><input type="checkbox"></td>
-                                    <td>电子电器中心</td>
-                                    <td style="width: 50px"><input type="checkbox"></td>
-                                    <td>内外饰中心</td>
-                                    <td style="width: 50px"><input type="checkbox"></td>
-                                    <td>动总集成中心</td>
-                                </tr>
-                                <tr>
-                                    <td style="width: 50px"><input type="checkbox"></td>
-                                    <td>车身中心</td>
-                                </tr>
-                            </table>
+                <form class="form-horizontal" id="influenceDept" role="form" onsubmit="return false;">
+                    <fieldset>
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <div class="content col-lg-4" style="text-align: center;">
+                                    <label>研究涉及部门</label>
+                                </div>
+                                <div class="content col-lg-8"><!--style="margin-top: -50px;"-->
+                                    <input id="influenceVwoId" name="vwoId" type="hidden"
+                                           th:value="${influenceDept.getVwoId()}"/>
+                                    <table id="vwo_table1" class="table table-striped tableNormalStyle">
+                                        <tr>
+                                            <td style="width: 50px"><input type="checkbox" id="vwoIdri" name="vwoIdri"
+                                                                           value="1"
+                                                                           th:checked="${influenceDept.getVwoIdri()==1?true:false}"/>
+                                            </td>
+                                            <td><label for="vwoIdri">智能驾驶研究院</label></td>
+                                            <td style="width: 50px"><input type="checkbox" id="vwoIcbu" name="vwoIcbu"
+                                                                           value="1"
+                                                                           th:checked="${influenceDept.getVwoIcbu()==1?true:false}"/>
+                                            </td>
+                                            <td><label for="vwoIcbu">智能座舱事业部</label></td>
+                                            <td style="width: 50px"><input type="checkbox" id="vwoMcc" name="vwoMcc"
+                                                                           value="1"
+                                                                           th:checked="${influenceDept.getVwoMcc()==1?true:false}"/>
+                                            </td>
+                                            <td><label for="vwoMcc">电动化底盘中心</label></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="width: 50px"><input type="checkbox" id="vwoEec" name="vwoEec"
+                                                                           value="1"
+                                                                           th:checked="${influenceDept.getVwoEec()==1?true:false}"/>
+                                            </td>
+                                            <td><label for="vwoEec">电子电器中心</label></td>
+                                            <td style="width: 50px"><input type="checkbox" id="vwoIdc" name="vwoIdc"
+                                                                           value="1"
+                                                                           th:checked="${influenceDept.getVwoIdc()==1?true:false}"/>
+                                            </td>
+                                            <td><label for="vwoIdc">内外饰中心</label></td>
+                                            <td style="width: 50px"><input type="checkbox" id="vwoDic" name="vwoDic"
+                                                                           value="1"
+                                                                           th:checked="${influenceDept.getVwoDic()==1?true:false}"/>
+                                            </td>
+                                            <td><label for="vwoDic">动总集成中心</label></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="width: 50px"><input type="checkbox" id="vwoVbc" name="vwoVbc"
+                                                                           value="1"
+                                                                           th:checked="${influenceDept.getVwoVbc()==1?true:false}"/>
+                                            </td>
+                                            <td><label for="vwoVbc"> 车身中心</label></td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
+                    </fieldset>
+                </form>
             </div>
             <div class="col-lg-12 col-md-12">
                 <div class="col-lg-3 col-md-3">
                     <div class="form-group after_the">
-                        <label for="expenseDept">专业科长:</label>
-                        <select class="form-control" name="" id="expenseDept1">
-                            <option>×××科长</option>
-                            <option>×××科长</option>
-                            <option>×××科长</option>
-                            <option>×××科长</option>
-                            <option>×××科长</option>
-                        </select>
+                        <a href="javascript:void(0)" onclick="doSelectPerson('1')">专业科长:</a>
+                        <span id="sp_1" th:text="${influenceUser.getVwoProSectionChiefName()}"></span>
                     </div>
                     <div class="form-group after_the">
-                        <label for="expenseDept">变更协调员:</label>
-                        <select class="form-control" name="" id="expenseDept7">
-                            <option>×××协调员</option>
-                            <option>×××协调员</option>
-                            <option>×××协调员</option>
-                            <option>×××协调员</option>
-                            <option>×××协调员</option>
-                        </select>
+                        <a href="javascript:void(0)" onclick="doSelectPerson('2')">变更协调员:</a>
+                        <span id="sp_2" th:text="${influenceUser.getVwoChangeCoordinatorName()}"></span>
                     </div>
                 </div>
                 <div class="col-lg-3 col-md-3">
                     <div class="form-group after_the">
-                        <label for="expenseDept">车身:</label>
-                        <select class="form-control" name="" id="expenseDept2">
-                            <option>×××车身</option>
-                            <option>×××车身</option>
-                            <option>×××车身</option>
-                            <option>×××车身</option>
-                            <option>×××车身</option>
-                        </select>
+                        <a href="javascript:void(0)" onclick="doSelectPerson('3')">车身:</a>
+                        <span id="sp_3" th:text="${influenceUser.getVwoVehicleBodyUserName()}"></span>
                     </div>
                     <div class="form-group after_the">
-                        <label for="expenseDept">底盘:</label>
-                        <select class="form-control" name="" id="expenseDept6">
-                            <option>×××底盘</option>
-                            <option>×××底盘</option>
-                            <option>×××底盘</option>
-                            <option>×××底盘</option>
-                            <option>×××底盘</option>
-                        </select>
+                        <a href="javascript:void(0)" onclick="doSelectPerson('4')">底盘:</a>
+                        <span id="sp_4" th:text="${influenceUser.getVwoChassisName()}"></span>
                     </div>
                 </div>
                 <div class="col-lg-3 col-md-3">
                     <div class="form-group after_the">
-                        <label for="expenseDept">电器:</label>
-                        <select class="form-control" name="" id="expenseDept3">
-                            <option>×××电器</option>
-                            <option>×××电器</option>
-                            <option>×××电器</option>
-                            <option>×××电器</option>
-                            <option>×××电器</option>
-                        </select>
+                        <a href="javascript:void(0)" onclick="doSelectPerson('5')">电器:</a>
+                        <span id="sp_5" th:text="${influenceUser.getVwoElectricApplianceName()}"></span>
                     </div>
                     <div class="form-group after_the">
-                        <label for="expenseDept">内外饰:</label>
-                        <select class="form-control" name="" id="expenseDept5">
-                            <option>×××内外饰</option>
-                            <option>×××内外饰</option>
-                            <option>×××内外饰</option>
-                            <option>×××内外饰</option>
-                            <option>×××内外饰</option>
-                        </select>
+                        <a href="javascript:void(0)" onclick="doSelectPerson('6')">内外饰:</a>
+                        <span id="sp_6" th:text="${influenceUser.getVwoIeoName()}"></span>
                     </div>
                 </div>
                 <div class="col-lg-3 col-md-3">
                     <div class="form-group after_the">
-                        <label for="expenseDept">项目经理:</label>
-                        <select class="form-control" name="" id="expenseDept4">
-                            <option>×××项目经理</option>
-                            <option>×××项目经理</option>
-                            <option>×××项目经理</option>
-                            <option>×××项目经理</option>
-                            <option>×××项目经理</option>
-                        </select>
+                        <a href="javascript:void(0)" onclick="doSelectPerson('7')">项目经理:</a>
+                        <span id="sp_7" th:text="${influenceUser.getVwoProjectManagerName()}"></span>
                     </div>
                 </div>
             </div>
@@ -334,88 +320,84 @@
 <!--评估意见-->
 <h4><i class="fa fa-minus-square" aria-hidden="true">评估意见</i></h4>
 <div class="panel-body" style="padding-bottom:0px;">
-    <div class="panel panel-default">
-        <div class="panel-body">
-            <div class="col-lg-12 col-md-12">
-                <div class="col-lg-4 col-md-4">
-                    <div class="panel-body" style="padding-bottom:0px;">
-                        <div class="panel panel-default">
-                            <div class="panel-body">
-                                <h4>BOM经理</h4>
-                                <div class="form-group">
-                                    <label for="pMaterielDesc">意见</label>
-                                    <textarea rows="2" cols="30" class="form-control"
-                                              style="width: 100%;resize:none"></textarea>
-                                </div>
-                                <div class="form-group">
-                                    <label for="type">结论</label>
-                                    <select class="form-control" name="type" id="type"
-                                            placeholder="请选择是否同意">
-                                        <option>同意</option>
-                                        <option>不同意</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="pMaterielDesc">日期</label>
-                                    <input class="form-control" id="pMaterielDesc" name="pMaterielDesc" type="text"
-                                           value="2018-07-26"
-                                           placeholder="请输入物料名称"/>
-                                </div>
+    <div class="panel panel-default panel-body">
+        <div class="col-lg-12 col-md-12">
+            <div class="col-lg-4 col-md-4">
+                <div class="panel panel-default panel-body" style="padding-bottom:0px;">
+                    <div class="panel-body">
+                        <h4>BOM经理</h4>
+                        <div class="form-group">
+                            <label for="pMaterielDesc">意见</label>
+                            <textarea rows="2" cols="30" class="form-control"
+                                      style="width: 100%;resize:none"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="type">结论</label>
+                            <select class="form-control" name="type" id="type"
+                                    placeholder="请选择是否同意">
+                                <option>同意</option>
+                                <option>不同意</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="pMaterielDesc">日期</label>
+                            <input class="form-control" id="pMaterielDesc" name="pMaterielDesc" type="text"
+                                   value="2018-07-26"
+                                   placeholder="请输入物料名称"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-4">
+                <div class="panel-body" style="padding-bottom:0px;">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <h4>专业PMT经理</h4>
+                            <div class="form-group">
+                                <label for="pMaterielDesc">意见</label>
+                                <textarea rows="2" cols="30" class="form-control"
+                                          style="width: 100%;resize:none"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="type">结论</label>
+                                <select class="form-control" name="type" id="type1"
+                                        placeholder="请选择是否同意">
+                                    <option>同意</option>
+                                    <option>不同意</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="pMaterielDesc">日期</label>
+                                <input class="form-control" id="pMaterielDesc1" name="pMaterielDesc" type="text"
+                                       value="2018-07-26"
+                                       placeholder="请输入物料名称"/>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-4 col-md-4">
-                    <div class="panel-body" style="padding-bottom:0px;">
-                        <div class="panel panel-default">
-                            <div class="panel-body">
-                                <h4>专业PMT经理</h4>
-                                <div class="form-group">
-                                    <label for="pMaterielDesc">意见</label>
-                                    <textarea rows="2" cols="30" class="form-control"
-                                              style="width: 100%;resize:none"></textarea>
-                                </div>
-                                <div class="form-group">
-                                    <label for="type">结论</label>
-                                    <select class="form-control" name="type" id="type1"
-                                            placeholder="请选择是否同意">
-                                        <option>同意</option>
-                                        <option>不同意</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="pMaterielDesc">日期</label>
-                                    <input class="form-control" id="pMaterielDesc1" name="pMaterielDesc" type="text"
-                                           value="2018-07-26"
-                                           placeholder="请输入物料名称"/>
-                                </div>
+            </div>
+            <div class="col-lg-4 col-md-4">
+                <div class="panel-body" style="padding-bottom:0px;">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <h4>项目经理</h4>
+                            <div class="form-group">
+                                <label for="pMaterielDesc">意见</label>
+                                <textarea rows="2" cols="30" class="form-control"
+                                          style="width: 100%;resize:none"></textarea>
                             </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-4">
-                    <div class="panel-body" style="padding-bottom:0px;">
-                        <div class="panel panel-default">
-                            <div class="panel-body">
-                                <h4>项目经理</h4>
-                                <div class="form-group">
-                                    <label for="pMaterielDesc">意见</label>
-                                    <textarea rows="2" cols="30" class="form-control"
-                                              style="width: 100%;resize:none"></textarea>
-                                </div>
-                                <div class="form-group">
-                                    <label for="type">结论</label>
-                                    <select class="form-control" name="type" id="type2"
-                                            placeholder="请选择是否同意">
-                                        <option>同意</option>
-                                        <option>不同意</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="pMaterielDesc">日期</label>
-                                    <input class="form-control" id="pMaterielDesc2" name="pMaterielDesc" type="text"
-                                           value="2018-07-26" placeholder="请输入物料名称"/>
-                                </div>
+                            <div class="form-group">
+                                <label for="type">结论</label>
+                                <select class="form-control" name="type" id="type2"
+                                        placeholder="请选择是否同意">
+                                    <option>同意</option>
+                                    <option>不同意</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="pMaterielDesc">日期</label>
+                                <input class="form-control" id="pMaterielDesc2" name="pMaterielDesc" type="text"
+                                       value="2018-07-26" placeholder="请输入物料名称"/>
                             </div>
                         </div>
                     </div>
@@ -521,6 +503,10 @@
 <script th:inline="javascript">
     function doQuery() {
         $('#connectedTable').bootstrapTable('refresh');    //刷新表格
+    };
+
+    function reloadSheet() {
+        window.location.reload();//刷新当前页面.
     }
 </script>
 </body>

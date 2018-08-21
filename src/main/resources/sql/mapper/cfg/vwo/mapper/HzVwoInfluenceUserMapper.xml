@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.connor.hozon.bom.bomSystem.dao.cfg.vwo.HzVwoInfluenceUserDao">
+    <resultMap id="BaseResultMap" type="sql.pojo.cfg.vwo.HzVwoInfluenceUser">
+        <!--主键-->
+        <id column="ID" jdbcType="DECIMAL" property="id"/>
+        <!--vwo id，外键-->
+        <result column="VWO_ID" jdbcType="DECIMAL" property="vwoId"/>
+        <!--
+专业科长名,Professional section chief-->
+        <result column="VWO_PRO_SECTION_CHIEF_NAME" jdbcType="VARCHAR" property="vwoProSectionChiefName"/>
+
+        <!--专业科长ID,Professional section chief-->
+        <result column="VWO_PRO_SECTION_CHIEF_ID" jdbcType="DECIMAL" property="vwoProSectionChiefId"/>
+        <!--车身人员ID-->
+        <result column="VWO_VEHICLE_BODY_USER_ID" jdbcType="DECIMAL" property="vwoVehicleBodyUserId"/>
+        <!--车身人员名-->
+        <result column="VWO_VEHICLE_BODY_USER_NAME" jdbcType="VARCHAR" property="vwoVehicleBodyUserName"/>
+        <!--电器人员ID-->
+        <result column="VWO_ELECTRIC_APPLIANCE_ID" jdbcType="DECIMAL" property="vwoElectricApplianceId"/>
+        <!--电器人员名-->
+        <result column="VWO_ELECTRIC_APPLIANCE_NAME" jdbcType="VARCHAR" property="vwoElectricApplianceName"/>
+        <!--项目经理ID-->
+        <result column="VWO_PROJECT_MANAGER_ID" jdbcType="DECIMAL" property="vwoProjectManagerId"/>
+        <!--项目经理名-->
+        <result column="VWO_PROJECT_MANAGER_NAME" jdbcType="VARCHAR" property="vwoProjectManagerName"/>
+        <!--变更协调员ID-->
+        <result column="VWO_CHANGE_COORDINATOR_ID" jdbcType="DECIMAL" property="vwoChangeCoordinatorId"/>
+        <!--变更协调员名-->
+        <result column="VWO_CHANGE_COORDINATOR_NAME" jdbcType="VARCHAR" property="vwoChangeCoordinatorName"/>
+        <!--底盘人员ID-->
+        <result column="VWO_CHASSIS_ID" jdbcType="DECIMAL" property="vwoChassisId"/>
+        <!--底盘人员名-->
+        <result column="VWO_CHASSIS_NAME" jdbcType="VARCHAR" property="vwoChassisName"/>
+        <!--内外饰人员ID、Interior and exterior ornaments-->
+        <result column="VWO_IEO_ID" jdbcType="DECIMAL" property="vwoIeoId"/>
+        <!--内外饰人员名-->
+        <result column="VWO_IEO_NAME" jdbcType="VARCHAR" property="vwoIeoName"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        ID,
+        VWO_ID,
+        VWO_PRO_SECTION_CHIEF_NAME,
+        VWO_PRO_SECTION_CHIEF_ID,
+        VWO_VEHICLE_BODY_USER_ID,
+        VWO_VEHICLE_BODY_USER_NAME,
+        VWO_ELECTRIC_APPLIANCE_ID,
+        VWO_ELECTRIC_APPLIANCE_NAME,
+        VWO_PROJECT_MANAGER_ID,
+        VWO_PROJECT_MANAGER_NAME,
+        VWO_CHANGE_COORDINATOR_ID,
+        VWO_CHANGE_COORDINATOR_NAME,
+        VWO_CHASSIS_ID,
+        VWO_CHASSIS_NAME,
+        VWO_IEO_ID,
+        VWO_IEO_NAME
+  </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from HZ_VWO_INFLUENCE_USER
+        where ID = #{id,jdbcType=DECIMAL}
+    </select>
+    <select id="selectByVwoId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from HZ_VWO_INFLUENCE_USER
+        where VWO_ID = #{vwoId,jdbcType=DECIMAL}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from HZ_VWO_INFLUENCE_USER
+    where ID = #{id,jdbcType=DECIMAL}
+  </delete>
+    <insert id="insert" parameterType="sql.pojo.cfg.vwo.HzVwoInfluenceUser">
+        <selectKey order="BEFORE"
+                   keyColumn="id" keyProperty="id" resultType="java.lang.Long">
+            select SEQ_VWO_INFLUENCE_USER_ID.Nextval from dual
+        </selectKey>
+        insert into HZ_VWO_INFLUENCE_USER (ID, VWO_ID, VWO_PRO_SECTION_CHIEF_NAME,
+        VWO_PRO_SECTION_CHIEF_ID, VWO_VEHICLE_BODY_USER_ID,
+        VWO_VEHICLE_BODY_USER_NAME, VWO_ELECTRIC_APPLIANCE_ID,
+        VWO_ELECTRIC_APPLIANCE_NAME, VWO_PROJECT_MANAGER_ID,
+        VWO_PROJECT_MANAGER_NAME, VWO_CHANGE_COORDINATOR_ID,
+        VWO_CHANGE_COORDINATOR_NAME, VWO_CHASSIS_ID, VWO_CHASSIS_NAME,
+        VWO_IEO_ID, VWO_IEO_NAME)
+        values (#{id,jdbcType=DECIMAL}, #{vwoId,jdbcType=DECIMAL}, #{vwoProSectionChiefName,jdbcType=VARCHAR},
+        #{vwoProSectionChiefId,jdbcType=DECIMAL}, #{vwoVehicleBodyUserId,jdbcType=DECIMAL},
+        #{vwoVehicleBodyUserName,jdbcType=VARCHAR}, #{vwoElectricApplianceId,jdbcType=DECIMAL},
+        #{vwoElectricApplianceName,jdbcType=VARCHAR}, #{vwoProjectManagerId,jdbcType=DECIMAL},
+        #{vwoProjectManagerName,jdbcType=VARCHAR}, #{vwoChangeCoordinatorId,jdbcType=DECIMAL},
+        #{vwoChangeCoordinatorName,jdbcType=VARCHAR}, #{vwoChassisId,jdbcType=DECIMAL},
+        #{vwoChassisName,jdbcType=VARCHAR},
+        #{vwoIeoId,jdbcType=DECIMAL}, #{vwoIeoName,jdbcType=VARCHAR})
+    </insert>
+    <insert id="insertSelective" parameterType="sql.pojo.cfg.vwo.HzVwoInfluenceUser">
+        <selectKey order="BEFORE"
+                   keyColumn="id" keyProperty="id" resultType="java.lang.Long">
+            select SEQ_VWO_INFLUENCE_USER_ID.Nextval from dual
+        </selectKey>
+        insert into HZ_VWO_INFLUENCE_USER
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                ID,
+            </if>
+            <if test="vwoId != null">
+                VWO_ID,
+            </if>
+            <if test="vwoProSectionChiefName != null">
+                VWO_PRO_SECTION_CHIEF_NAME,
+            </if>
+            <if test="vwoProSectionChiefId != null">
+                VWO_PRO_SECTION_CHIEF_ID,
+            </if>
+            <if test="vwoVehicleBodyUserId != null">
+                VWO_VEHICLE_BODY_USER_ID,
+            </if>
+            <if test="vwoVehicleBodyUserName != null">
+                VWO_VEHICLE_BODY_USER_NAME,
+            </if>
+            <if test="vwoElectricApplianceId != null">
+                VWO_ELECTRIC_APPLIANCE_ID,
+            </if>
+            <if test="vwoElectricApplianceName != null">
+                VWO_ELECTRIC_APPLIANCE_NAME,
+            </if>
+            <if test="vwoProjectManagerId != null">
+                VWO_PROJECT_MANAGER_ID,
+            </if>
+            <if test="vwoProjectManagerName != null">
+                VWO_PROJECT_MANAGER_NAME,
+            </if>
+            <if test="vwoChangeCoordinatorId != null">
+                VWO_CHANGE_COORDINATOR_ID,
+            </if>
+            <if test="vwoChangeCoordinatorName != null">
+                VWO_CHANGE_COORDINATOR_NAME,
+            </if>
+            <if test="vwoChassisId != null">
+                VWO_CHASSIS_ID,
+            </if>
+            <if test="vwoChassisName != null">
+                VWO_CHASSIS_NAME,
+            </if>
+            <if test="vwoIeoId != null">
+                VWO_IEO_ID,
+            </if>
+            <if test="vwoIeoName != null">
+                VWO_IEO_NAME,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=DECIMAL},
+            </if>
+            <if test="vwoId != null">
+                #{vwoId,jdbcType=DECIMAL},
+            </if>
+            <if test="vwoProSectionChiefName != null">
+                #{vwoProSectionChiefName,jdbcType=VARCHAR},
+            </if>
+            <if test="vwoProSectionChiefId != null">
+                #{vwoProSectionChiefId,jdbcType=DECIMAL},
+            </if>
+            <if test="vwoVehicleBodyUserId != null">
+                #{vwoVehicleBodyUserId,jdbcType=DECIMAL},
+            </if>
+            <if test="vwoVehicleBodyUserName != null">
+                #{vwoVehicleBodyUserName,jdbcType=VARCHAR},
+            </if>
+            <if test="vwoElectricApplianceId != null">
+                #{vwoElectricApplianceId,jdbcType=DECIMAL},
+            </if>
+            <if test="vwoElectricApplianceName != null">
+                #{vwoElectricApplianceName,jdbcType=VARCHAR},
+            </if>
+            <if test="vwoProjectManagerId != null">
+                #{vwoProjectManagerId,jdbcType=DECIMAL},
+            </if>
+            <if test="vwoProjectManagerName != null">
+                #{vwoProjectManagerName,jdbcType=VARCHAR},
+            </if>
+            <if test="vwoChangeCoordinatorId != null">
+                #{vwoChangeCoordinatorId,jdbcType=DECIMAL},
+            </if>
+            <if test="vwoChangeCoordinatorName != null">
+                #{vwoChangeCoordinatorName,jdbcType=VARCHAR},
+            </if>
+            <if test="vwoChassisId != null">
+                #{vwoChassisId,jdbcType=DECIMAL},
+            </if>
+            <if test="vwoChassisName != null">
+                #{vwoChassisName,jdbcType=VARCHAR},
+            </if>
+            <if test="vwoIeoId != null">
+                #{vwoIeoId,jdbcType=DECIMAL},
+            </if>
+            <if test="vwoIeoName != null">
+                #{vwoIeoName,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="sql.pojo.cfg.vwo.HzVwoInfluenceUser">
+        update HZ_VWO_INFLUENCE_USER
+        <set>
+            <if test="vwoId != null">
+                VWO_ID = #{vwoId,jdbcType=DECIMAL},
+            </if>
+            <if test="vwoProSectionChiefName != null">
+                VWO_PRO_SECTION_CHIEF_NAME = #{vwoProSectionChiefName,jdbcType=VARCHAR},
+            </if>
+            <if test="vwoProSectionChiefId != null">
+                VWO_PRO_SECTION_CHIEF_ID = #{vwoProSectionChiefId,jdbcType=DECIMAL},
+            </if>
+            <if test="vwoVehicleBodyUserId != null">
+                VWO_VEHICLE_BODY_USER_ID = #{vwoVehicleBodyUserId,jdbcType=DECIMAL},
+            </if>
+            <if test="vwoVehicleBodyUserName != null">
+                VWO_VEHICLE_BODY_USER_NAME = #{vwoVehicleBodyUserName,jdbcType=VARCHAR},
+            </if>
+            <if test="vwoElectricApplianceId != null">
+                VWO_ELECTRIC_APPLIANCE_ID = #{vwoElectricApplianceId,jdbcType=DECIMAL},
+            </if>
+            <if test="vwoElectricApplianceName != null">
+                VWO_ELECTRIC_APPLIANCE_NAME = #{vwoElectricApplianceName,jdbcType=VARCHAR},
+            </if>
+            <if test="vwoProjectManagerId != null">
+                VWO_PROJECT_MANAGER_ID = #{vwoProjectManagerId,jdbcType=DECIMAL},
+            </if>
+            <if test="vwoProjectManagerName != null">
+                VWO_PROJECT_MANAGER_NAME = #{vwoProjectManagerName,jdbcType=VARCHAR},
+            </if>
+            <if test="vwoChangeCoordinatorId != null">
+                VWO_CHANGE_COORDINATOR_ID = #{vwoChangeCoordinatorId,jdbcType=DECIMAL},
+            </if>
+            <if test="vwoChangeCoordinatorName != null">
+                VWO_CHANGE_COORDINATOR_NAME = #{vwoChangeCoordinatorName,jdbcType=VARCHAR},
+            </if>
+            <if test="vwoChassisId != null">
+                VWO_CHASSIS_ID = #{vwoChassisId,jdbcType=DECIMAL},
+            </if>
+            <if test="vwoChassisName != null">
+                VWO_CHASSIS_NAME = #{vwoChassisName,jdbcType=VARCHAR},
+            </if>
+            <if test="vwoIeoId != null">
+                VWO_IEO_ID = #{vwoIeoId,jdbcType=DECIMAL},
+            </if>
+            <if test="vwoIeoName != null">
+                VWO_IEO_NAME = #{vwoIeoName,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where ID = #{id,jdbcType=DECIMAL}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="sql.pojo.cfg.vwo.HzVwoInfluenceUser">
+    update HZ_VWO_INFLUENCE_USER
+    set VWO_ID = #{vwoId,jdbcType=DECIMAL},
+      VWO_PRO_SECTION_CHIEF_NAME = #{vwoProSectionChiefName,jdbcType=VARCHAR},
+      VWO_PRO_SECTION_CHIEF_ID = #{vwoProSectionChiefId,jdbcType=DECIMAL},
+      VWO_VEHICLE_BODY_USER_ID = #{vwoVehicleBodyUserId,jdbcType=DECIMAL},
+      VWO_VEHICLE_BODY_USER_NAME = #{vwoVehicleBodyUserName,jdbcType=VARCHAR},
+      VWO_ELECTRIC_APPLIANCE_ID = #{vwoElectricApplianceId,jdbcType=DECIMAL},
+      VWO_ELECTRIC_APPLIANCE_NAME = #{vwoElectricApplianceName,jdbcType=VARCHAR},
+      VWO_PROJECT_MANAGER_ID = #{vwoProjectManagerId,jdbcType=DECIMAL},
+      VWO_PROJECT_MANAGER_NAME = #{vwoProjectManagerName,jdbcType=VARCHAR},
+      VWO_CHANGE_COORDINATOR_ID = #{vwoChangeCoordinatorId,jdbcType=DECIMAL},
+      VWO_CHANGE_COORDINATOR_NAME = #{vwoChangeCoordinatorName,jdbcType=VARCHAR},
+      VWO_CHASSIS_ID = #{vwoChassisId,jdbcType=DECIMAL},
+      VWO_CHASSIS_NAME = #{vwoChassisName,jdbcType=VARCHAR},
+      VWO_IEO_ID = #{vwoIeoId,jdbcType=DECIMAL},
+      VWO_IEO_NAME = #{vwoIeoName,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+</mapper>

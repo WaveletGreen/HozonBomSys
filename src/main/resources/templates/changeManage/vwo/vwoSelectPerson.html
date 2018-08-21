@@ -10,7 +10,9 @@
         <fieldset>
             <div class="panel panel-default" style="margin-top: 10px;">
                 <input th:value="${vwoId}" type="hidden" id="vwoId" name="vwoId"/>
-                <input type="hidden" id="personId" name="personId"/>
+                <input th:value="${selectId}" type="hidden" id="selectId" name="selectId"/>
+                <input th:value="${typeName}" type="hidden" id="selectOption"/>
+                <input type="hidden" id="selectedUserId" name="selectedUserId"/>
                 <div class="panel-body">
                     <div class="col-lg-6">
                         <label>请展开部门选择人员</label>
@@ -18,25 +20,16 @@
                     </div>
                     <div class="col-lg-6">
                         <div class="form-group col-lg-12">
-                            <label for="personName">关联工程师名:</label>
-                            <input type="text" class="form-control" name="personName" id="personName"
-                                   placeholder="请选择工程师"/>
-                        </div>
-                        <div class="form-group col-lg-12">
-                            <label for="personDeptName">所属部门:</label>
-                            <input type="text" class="form-control" name="personDeptName" id="personDeptName"
-                                   disabled="disabled"
+                            <label th:for="${typeName}">关联工程师名:</label>
+                            <input type="text" class="form-control" th:id="${typeName}" th:name="${typeName}"
+                                   placeholder="请选择工程师"
                             />
                         </div>
                         <div class="form-group col-lg-12">
-                            <label for="partId">关联零件号:</label>
-                            <input type="text" class="form-control" name="partId" id="partId"
-                                   placeholder="请输入关联零件号"/>
-                        </div>
-                        <div class="form-group col-lg-12">
-                            <label for="partName">关联零件名称:</label>
-                            <input type="text" class="form-control" name="partName" id="partName"
-                                   placeholder="请输入关联零件名称"/>
+                            <label>所属部门:</label>
+                            <input type="text" class="form-control" id="dept"
+                                   disabled="disabled"
+                            />
                         </div>
                     </div>
                 </div>
@@ -46,15 +39,12 @@
 </div>
 <script th:src="@{/js/helper/projectHelper.js}"></script>
 <script th:src="@{/js/helper/dateFormater.js}"></script>
-<!--<script th:src="@{/js/helper/disableEnterKey.js}"></script>-->
 <script th:inline="javascript">
     var setting = {
         check: {
             enable: false
         },
         view: {
-            // addHoverDom: addHoverDom,
-            // removeHoverDom: removeHoverDom,
             dblClickExpand: false,
             showLine: true,
             selectedMulti: false
@@ -79,7 +69,7 @@
             },
             onClick: function (event, treeId, treeNode) {
                 console.log(treeId);
-                $("#personName").val(treeNode.name);
+                console.log($("#selectOption").val());
                 let userId = treeNode.uid;
                 $.ajax({
                     type: "GET",
@@ -87,8 +77,10 @@
                     url: "./vwo/getUserDetail?uid=" + userId,
                     success: function (result) {
                         if (result.status) {
-                            $("#personDeptName").val(result.groupName);
-                            $("#personId").val(result.personId);
+                            $("#dept").val(result.groupName);
+                            $("#selectedUserId").val(result.personId);
+                            $("#" + $("#selectOption").val()).val(result.personName);
+
                         }
                     },
                     error: function (e) {
@@ -113,7 +105,7 @@
             for (var p in _d) {
                 data[_d[p].name] = _d[p].value;
             }
-            console.log(data);
+            // console.log(data);
             JSON.stringify(data);
             $.ajax({
                 contentType:
@@ -121,12 +113,12 @@
                 type:
                     'POST',
                 data: JSON.stringify(data),
-                url: "./vwo/saveInformChanger",
+                url: "./vwo/saveInfluenceUser",
                 success: function (result) {
                     $('.modal-dialog', window.top.document).parent('div').remove()
                     $('body', window.top.document).find('.modal-backdrop').remove();
-                    // $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
                     if (result.status) {
+                        $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.reloadSheet();//.find('#' + result.type).text(result.name);
                         layer.msg(result.msg, {icon: 1, time: 2000});
                     }
                     else {

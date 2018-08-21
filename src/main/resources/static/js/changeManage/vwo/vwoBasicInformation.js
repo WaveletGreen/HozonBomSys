@@ -1,10 +1,13 @@
+var vwoId = -1;
 $(document).ready((function () {
     // initTable(),
     formatDate();
-    let url = $("#url").val();
-    url += "?vwo=" + $("#vwo").val();
+    vwoId = $("#vwo").val();
+    let url = "getInformChangers";
+    url += "?vwo=" + vwoId;
     loadConnectedData(url);
-    registerBtn();
+
+    // registerBtn();
 }));
 
 /**
@@ -77,7 +80,6 @@ function loadConnectedData(url) {
                 text: '添加',
                 iconCls: 'glyphicon glyphicon-plus',
                 handler: function () {
-                    let vwoId = $("#id").val();
                     window.Ewin.dialog({
                         title: "添加",
                         url: "getUserAndGroupPage?vwoId=" + vwoId,
@@ -167,31 +169,71 @@ function loadConnectedData(url) {
     });
 }
 
-function registerBtn() {
-    $("#vwoSaveBtn").click(
-        function () {
-            let data = {};
-            var _d = $("#basicInfo").serializeArray();
-            for (var p in _d) {
-                data[_d[p].name] = _d[p].value;
-            }
-            console.log(data);
-            JSON.stringify(data);
-            $.ajax({
-                contentType:
-                    "application/json",
-                type:
-                    'POST',
-                data: JSON.stringify(data),
-                url: "saveBasic",
-                success: function (result) {
-                    console.log(result);
-                    window.location.reload();//刷新当前页面.
-                },
-                error: function (e) {
-                    console.log("连接服务器失败:" + e.status);
+// function registerBtn() {
+
+$(document).ready(
+    function () {
+        $("#vwoSaveBtn").click(
+            function () {
+                let data = {};
+                let _d = $("#basicInfo").serializeArray();
+                for (let p in _d) {
+                    data[_d[p].name] = _d[p].value;
                 }
-            })
-        });
+                console.log(data);
+                JSON.stringify(data);
+                $.ajax({
+                    contentType:
+                        "application/json",
+                    type:
+                        'POST',
+                    data: JSON.stringify(data),
+                    url: "saveBasic",
+                    success: function (result) {
+                        console.log(result);
+                        // window.location.reload();//刷新当前页面.
+                    },
+                    error: function (e) {
+                        console.log("连接服务器失败:" + e.status);
+                    }
+                });
+
+                let data2 = {};
+                let _d2 = $("#influenceDept").serializeArray();
+                for (let p in _d2) {
+                    data2[_d2[p].name] = _d2[p].value;
+                }
+
+                console.log("----data2----");
+                console.log(data2);
+                JSON.stringify(data2);
+                console.log("----data2----");
+                $.ajax({
+                    contentType:
+                        "application/json",
+                    type:
+                        'POST',
+                    data: JSON.stringify(data2),
+                    url: "saveInfluenceDept",
+                    success: function (result) {
+                        console.log(result);
+                        // window.location.reload();//刷新当前页面.
+                    },
+                    error: function (e) {
+                        console.log("连接服务器失败:" + e.status);
+                    }
+                });
+            });
+    }
+);
+
+function doSelectPerson(id) {
+    window.Ewin.dialog({
+        title: "添加",
+        url: "doSelectPersonPage?vwo=" + vwoId + "&selectType=" + id,
+        gridId: "gridId",
+        width: 600,
+        height: 500
+    })
 }
 

@@ -256,7 +256,7 @@
             </if>
             <!--联系电话-->
             <if test="contactPhoneNum!=null">
-                CONTACT_PHONE_NUM = #{property="contactPhoneNum"/>,jdbcType=VARCHAR},
+                CONTACT_PHONE_NUM = #{contactPhoneNum,jdbcType=VARCHAR},
             </if>
             <!--要求完成时间-->
             <if test="vwoDemandFinishTime!=null">

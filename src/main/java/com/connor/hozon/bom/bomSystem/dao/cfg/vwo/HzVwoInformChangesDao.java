@@ -1,4 +1,4 @@
-package com.connor.hozon.bom.bomSystem.dao.cfg;
+package com.connor.hozon.bom.bomSystem.dao.cfg.vwo;
 
 import org.apache.ibatis.annotations.Param;
 import sql.pojo.cfg.vwo.HzVwoInformChanges;

@@ -3,11 +3,11 @@
     max-width: 200px;
     white-space: nowrap;
 }
-label{
-    font-family: 黑体,微软雅黑,宋体;
-    font-size: 1.25em;
-    /*width: 6em;*/
-}
+/*label{*/
+    /*font-family: 黑体,微软雅黑,宋体;*/
+    /*font-size: 1.25em;*/
+    /*!*width: 6em;*!*/
+/*}*/
 /*input{*/
     /*width: 50%;*/
 /*}*/
