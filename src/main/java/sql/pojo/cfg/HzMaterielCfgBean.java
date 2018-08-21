@@ -50,7 +50,7 @@ public class HzMaterielCfgBean {
      */
     private String pMotorModel;
     /**
-     * 车型名称号码
+     * 车型名称号码  整车编码
      */
     private String objectName;
     /**

@@ -7,6 +7,7 @@ import sql.IBaseSQLUtil;
 import sql.pojo.cfg.HzMaterielCfgBean;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author: Fancyears·Maylos·Maywas
@@ -22,4 +23,10 @@ public class HzMaterielCfgBeanDaoImpl implements HzMaterielCfgBeanDao {
     public List<HzMaterielCfgBean> selectByDiff(HzMaterielCfgBean bean) {
         return baseSQLUtil.executeQuery(bean,"com.connor.hozon.bom.bomSystem.dao.cfg.HzMaterielCfgBeanDao.selectByDiff");
     }
+
+    @Override
+    public int updateIsSent(Map<String, Object> map) {
+        return baseSQLUtil.executeUpdate(map , "com.connor.hozon.bom.bomSystem.dao.cfg.HzMaterielCfgBeanDao.updateIsSent");
+    }
+
 }

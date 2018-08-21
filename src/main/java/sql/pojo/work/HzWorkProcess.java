@@ -115,6 +115,11 @@ public class HzWorkProcess {
 
     private Date pUpdateTime;
 
+    /**
+     * 是否已发送过SAP
+     */
+    private Integer isSent;
+
     public String getpCreateName() {
         return pCreateName;
     }
@@ -314,4 +319,8 @@ public class HzWorkProcess {
     public void setWorkCenterDesc(String workCenterDesc) {
         this.workCenterDesc = workCenterDesc;
     }
+
+    public Integer getIsSent() { return isSent; }
+
+    public void setIsSent(Integer isSent) { this.isSent = isSent; }
 }

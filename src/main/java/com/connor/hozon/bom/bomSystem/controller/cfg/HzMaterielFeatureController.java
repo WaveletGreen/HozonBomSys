@@ -191,6 +191,7 @@ public class HzMaterielFeatureController {
 
                 //
                 _result.put("puid", value.getpCfg0ModelRecord());
+                //族
                 _result.put("cfg0MainPuid", value.getpOfCfg0MainRecord());
                 _result.put("modeBasiceDetail", value.getpCfg0ModelBasicDetail());
                 //目前只有无色件

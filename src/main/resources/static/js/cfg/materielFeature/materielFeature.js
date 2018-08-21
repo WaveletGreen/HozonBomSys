@@ -77,26 +77,6 @@ function loadData() {
                 // sortable: true,                     //是否启用排序
                 // sortOrder: "asc",                   //排序方式
                 toolbars: [
-                    // {
-                    //     text: '添加车型模型',
-                    //     iconCls: 'glyphicon glyphicon-pencil',
-                    //     handler: function () {
-                    //         // var rows = $table.bootstrapTable('getSelections');
-                    //         // //只能选一条
-                    //         // if (rows.length != 1) {
-                    //         //     window.Ewin.alert({message: '请选择一条需要修改的数据!'});
-                    //         //     return false;
-                    //         // }
-                    //         window.Ewin.dialog({
-                    //             // 这个puid就是车型模型的puid，直接修改了车型模型的基本信息（在bom系统维护的字段）
-                    //             title: "添加车型模型",
-                    //             url: "materiel/addVehicleModelPage?projectPuid=" + projectPuid,
-                    //             gridId: "gridId",
-                    //             width: 350,
-                    //             height: 450
-                    //         });
-                    //     }
-                    // },
                     {
                         text: '修改基本信息',
                         iconCls: 'glyphicon glyphicon-pencil',
@@ -132,6 +112,102 @@ function loadData() {
                                 //直接修改了超级物料表的数据，要根据配置器的puid找，否则就不能根据所见即所改
                                 url: "materiel/modifyPage?puid=" + rows[0].cfg0MainPuid + "&puidOfModelFeature=" + rows[0].puidOfModelFeature + "&page=superMateriel",
                                 gridId: "gridId",
+                                width: 350,
+                                height: 450
+                            });
+                        }
+                    }
+                    ,
+                    // {
+                    //     text: '添加车型模型',
+                    //     iconCls: 'glyphicon glyphicon-pencil',
+                    //     handler: function () {
+                    //         // var rows = $table.bootstrapTable('getSelections');
+                    //         // //只能选一条
+                    //         // if (rows.length != 1) {
+                    //         //     window.Ewin.alert({message: '请选择一条需要修改的数据!'});
+                    //         //     return false;
+                    //         // }
+                    //         window.Ewin.dialog({
+                    //             // 这个puid就是车型模型的puid，直接修改了车型模型的基本信息（在bom系统维护的字段）
+                    //             title: "添加车型模型",
+                    //             url: "materiel/addVehicleModelPage?projectPuid=" + projectPuid,
+                    //             gridId: "gridId",
+                    //             width: 350,
+                    //             height: 450
+                    //         });
+                    //     }
+                    // },
+                    {
+                        text: '同步车型',
+                        iconCls: 'glyphicon glyphicon-pencil',
+                        handler: function () {
+                            var rows = $table.bootstrapTable('getSelections');
+                            //只能选一条
+                            if (rows.length != 1) {
+                                window.Ewin.alert({message: '请选择一条需要修改的数据!'});
+                                return false;
+                            }
+                            window.Ewin.dialog({
+                                title: "同步车型",
+                                //直接修改了超级物料表的数据，要根据配置器的puid找，否则就不能根据所见即所改
+                                url: "cfgMateriel/synMateriel?puid=" + rows[0].puid,
+                                width: 350,
+                                height: 450
+                            });
+                        }
+                    },
+                    {
+                        text: '添加',
+                        iconCls: 'glyphicon glyphicon-pencil',
+                        handler: function () {
+                            var rows = $table.bootstrapTable('getSelections');
+                            //只能选一条
+                            // if (rows.length != 1) {
+                            //     window.Ewin.alert({message: '请选择一条需要添加的数据!'});
+                            //     return false;
+                            // }
+                            var puids = new Array();
+                            var cfg0MainPuids = new Array();
+                            var modeBasiceDetails = new Array();
+                            for(var i = 0;i<rows.length;i++){
+                                puids[i] = rows[i].puid;
+                                cfg0MainPuids[i] = rows[i].cfg0MainPuid;
+                                modeBasiceDetails[i] = rows[i].modeBasiceDetail;
+                            }
+                            var projectPuid = $("#project", window.top.document).val();
+                            window.Ewin.dialog({
+                                title: "添加",
+                                //直接修改了超级物料表的数据，要根据配置器的puid找，否则就不能根据所见即所改
+                                url: "cfgMateriel/addConfigurableMaterial?puids=" + puids+"&cfg0MainPuids="+cfg0MainPuids+"&modeBasiceDetails="+modeBasiceDetails+"&projectPuid="+projectPuid,
+                                width: 350,
+                                height: 450
+                            });
+                        }
+                    },
+                    {
+                        text: '删除',
+                        iconCls: 'glyphicon glyphicon-pencil',
+                        handler: function () {
+                            var rows = $table.bootstrapTable('getSelections');
+                            //只能选一条
+                            // if (rows.length != 1) {
+                            //     window.Ewin.alert({message: '请选择一条需要添加的数据!'});
+                            //     return false;
+                            // }
+                            var puids = new Array();
+                            var cfg0MainPuids = new Array();
+                            var modeBasiceDetails = new Array();
+                            for(var i = 0;i<rows.length;i++){
+                                puids[i] = rows[i].puid;
+                                cfg0MainPuids[i] = rows[i].cfg0MainPuid;
+                                modeBasiceDetails[i] = rows[i].modeBasiceDetail;
+                            }
+                            var projectPuid = $("#project", window.top.document).val();
+                            window.Ewin.dialog({
+                                title: "添加",
+                                //直接修改了超级物料表的数据，要根据配置器的puid找，否则就不能根据所见即所改
+                                url: "cfgMateriel/deleteConfigurableMaterial?puids=" + puids+"&cfg0MainPuids="+cfg0MainPuids+"&modeBasiceDetails="+modeBasiceDetails+"&projectPuid="+projectPuid,
                                 width: 350,
                                 height: 450
                             });
