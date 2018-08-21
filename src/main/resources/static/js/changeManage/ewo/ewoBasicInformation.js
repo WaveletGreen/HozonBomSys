@@ -444,6 +444,64 @@ $(document).ready((function () {
 
         }
     })
+    $.ajax({
+        url:"user",
+        type:"GET",
+        success:function (result) {
+            var _table = $("#deptName")
+            // var data = JSON.stringify(result.data);
+            // var _data = JSON.parse(data);
+            // var arr = [];
+            // for(var i =0 ;i < _data.length;i++){
+            //     arr[i] = _data[i].username+_data[i].id;
+            //     console.log(arr[i].id)
+            // }
+            // console.log(arr);
+            // var temp = "<table>"
+            // for (var i = 0; i < _data.length;i++){
+            //     temp += "<tr><td>"+_data[i].username+"</td></tr>"
+            // }
+            // temp += "</table>"
+            // _table.html(temp)
+            $.ajax({
+                url:"allDept",
+                type:"GET",
+                success:function (data) {
+                    // var _table = $("#deptName");
+                    var _data = JSON.stringify(data.data);
+                    var allDept = JSON.parse(_data);
+                    // var temp = "<table>";
+                    // for (var i=0;i<allDept.length;i++) {
+                        // if(_data[i].type == "A"){
+
+                        // temp += "<tr><td id='" + allDept[i].id + "'>" + allDept[i].deptName + "</td>" +
+                        //     "<td><div id='queryName'><div class='wrapper'>" +
+                        //     "<div class='search-form'></div>" +
+                        //     "<div class='message'></div>" +
+                        //     "</div></div></td></tr>"
+                        // temp += "</table>"
+                    for(var item in allDept){
+                        $('#demo').append($('<div class="wrapper">\
+                          <laber>'+ allDept[item].deptName +'</laber>\
+                          <div class="search-form"></div>\
+                          <div class="message"></div>\
+                        </div>'))
+                    }
+                    $('.search-form').autocomplete({
+                        hints: result,
+                        width: 300,
+                        height: 30,
+                        // onSubmit: function(text){
+                        //     $('#message').html('结果: <b>' + text + '</b>');
+                        // }
+                    });
+                    // _table.html(temp);
+                }
+            })
+
+        }
+    })
 }))
+
 
 

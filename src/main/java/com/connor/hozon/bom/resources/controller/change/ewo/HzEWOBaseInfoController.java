@@ -1,5 +1,6 @@
 package com.connor.hozon.bom.resources.controller.change.ewo;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.connor.hozon.bom.resources.controller.BaseController;
 import com.connor.hozon.bom.resources.dto.request.UpdateHzEWOBasicInfoReqDTO;
@@ -7,6 +8,7 @@ import com.connor.hozon.bom.resources.dto.response.HzEWOBasicInfoRespDTO;
 import com.connor.hozon.bom.resources.dto.response.HzEWOChangeFormRespDTO;
 import com.connor.hozon.bom.resources.dto.response.HzEbomRespDTO;
 import com.connor.hozon.bom.resources.dto.response.OperateResultMessageRespDTO;
+import com.connor.hozon.bom.resources.mybatis.change.HzEWOImpactDeptDAO;
 import com.connor.hozon.bom.resources.query.HzEWOBasicInfoQuery;
 import com.connor.hozon.bom.resources.query.HzEWOChangeRecordQuery;
 import com.connor.hozon.bom.resources.query.HzEWOImpactReferenceQuery;
@@ -26,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import sql.pojo.change.HzEWOAllImpactDept;
 import sql.pojo.change.HzEWOImpactReference;
 
 import javax.servlet.http.HttpServletResponse;
@@ -51,6 +54,8 @@ public class HzEWOBaseInfoController extends BaseController {
     private OrgGroupDao orgGroupDao;
     @Autowired
     private UserDao userDao;
+    @Autowired
+    private HzEWOImpactDeptDAO hzEWOImpactDeptDAO;
     /**
      * 编辑EWO表单基本信息
      * @param reqDTO
@@ -294,13 +299,26 @@ public class HzEWOBaseInfoController extends BaseController {
     }
 
     /**
-     * 查询部门下面的人员信息
-     * @param groupId
+     * 查询全部的人员信息
      * @param response
      */
     @RequestMapping(value = "user",method = RequestMethod.GET)
-    public void getUserByGroupId(String groupId,HttpServletResponse response){
-        List<User> list = userDao.findUserByGroupId(groupId);
+    @ResponseBody
+    public JSONArray getUserByGroupId(HttpServletResponse response){
+        List<User> list = userDao.findAllUser();
+        JSONArray array = new JSONArray();
+        list.forEach(user -> {
+            array.add(user);
+        });
+        return array;
+    }
+    /**
+     * 全部的影响部门信息 目前部门是固定的
+     * @param response
+     */
+    @RequestMapping("allDept")
+    public void findAllImpactDept(HttpServletResponse response){
+        List<HzEWOAllImpactDept> list = hzEWOImpactDeptDAO.findEWOAllImpactDept();
         writeAjaxJSONResponse(ResultMessageBuilder.build(list),response);
     }
 }
