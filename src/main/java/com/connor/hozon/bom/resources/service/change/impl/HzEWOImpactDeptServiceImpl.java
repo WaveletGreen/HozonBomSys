@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.connor.hozon.bom.resources.dto.request.EditEWOImpactDeptReqDTO;
 import com.connor.hozon.bom.resources.dto.request.EditImpactDeptEmpReqDTO;
+import com.connor.hozon.bom.resources.dto.response.HzEWOImpactDeptEmpRespDTO;
 import com.connor.hozon.bom.resources.dto.response.HzEWOImpactDeptRespDTO;
 import com.connor.hozon.bom.resources.dto.response.OperateResultMessageRespDTO;
 import com.connor.hozon.bom.resources.mybatis.change.HzEWOImpactDeptDAO;
@@ -12,9 +13,12 @@ import com.connor.hozon.bom.resources.query.HzEWOImpactDeptQuery;
 import com.connor.hozon.bom.resources.service.change.HzEWOImpactDeptService;
 import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.sys.dao.OrgGroupDao;
+import com.connor.hozon.bom.sys.dao.UserDao;
 import com.connor.hozon.bom.sys.entity.OrgGroup;
+import com.connor.hozon.bom.sys.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import sql.pojo.change.HzEWOAllImpactDept;
 import sql.pojo.change.HzEWOImpactDept;
 import sql.pojo.change.HzEWOImpactDeptEmp;
 
@@ -36,6 +40,10 @@ public class HzEWOImpactDeptServiceImpl implements HzEWOImpactDeptService {
 
     @Autowired
     private OrgGroupDao orgGroupDao;
+
+    @Autowired
+    private UserDao userDao;
+
     @Override
     public OperateResultMessageRespDTO saveImpactDept(EditEWOImpactDeptReqDTO reqDTO) {
         try{
@@ -176,6 +184,39 @@ public class HzEWOImpactDeptServiceImpl implements HzEWOImpactDeptService {
            return respDTOS;
         }catch (Exception e){
             return null;
+        }
+    }
+
+    @Override
+    public List<HzEWOImpactDeptEmpRespDTO> getAllImpactDeptEmp(HzEWOImpactDeptQuery query) {
+        try {
+            List<HzEWOImpactDeptEmpRespDTO>  respDTOS = new ArrayList<>();
+            List<HzEWOImpactDeptEmp> list = hzEWOImpactDeptEmpDAO.findImpactDeptList(query);
+            List<HzEWOAllImpactDept> allDept = hzEWOImpactDeptDAO.findEWOAllImpactDept();
+            allDept.forEach(hzEWOAllImpactDept -> {
+                HzEWOImpactDeptEmpRespDTO respDTO = new HzEWOImpactDeptEmpRespDTO();
+                respDTO.setDeptId(hzEWOAllImpactDept.getId());
+                respDTO.setDeptName(hzEWOAllImpactDept.getDeptName());
+                respDTO.setChecked(0);
+                if(ListUtil.isNotEmpty(list)){
+                    for(HzEWOImpactDeptEmp emp:list){
+                        if(emp.getImpactDeptId().equals(hzEWOAllImpactDept.getId())){
+                            respDTO.setUserId(emp.getUserId());
+                            respDTO.setChecked(1);
+                            User user = userDao.findUserById(emp.getUserId());
+                            if(user!=null){
+                                respDTO.setUserName(user.getUserName());
+                                respDTO.setLogin(user.getUsername());
+                            }
+                            break;
+                        }
+                    }
+                }
+                respDTOS.add(respDTO);
+            });
+            return respDTOS;
+        }catch (Exception e){
+            return  null;
         }
     }
 }

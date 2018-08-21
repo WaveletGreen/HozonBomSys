@@ -3,6 +3,7 @@ package com.connor.hozon.bom.resources.controller.change.ewo;
 import com.connor.hozon.bom.resources.controller.BaseController;
 import com.connor.hozon.bom.resources.dto.request.EditEWOImpactDeptReqDTO;
 import com.connor.hozon.bom.resources.dto.request.EditImpactDeptEmpReqDTO;
+import com.connor.hozon.bom.resources.dto.response.HzEWOImpactDeptEmpRespDTO;
 import com.connor.hozon.bom.resources.dto.response.HzEWOImpactDeptRespDTO;
 import com.connor.hozon.bom.resources.dto.response.OperateResultMessageRespDTO;
 import com.connor.hozon.bom.resources.mybatis.change.HzEWOImpactDeptDAO;
@@ -54,6 +55,11 @@ public class HzEWOImpactDeptController extends BaseController {
         writeAjaxJSONResponse(ResultMessageBuilder.build(list),response);
     }
 
+    /**
+     * 保存影响部门信息 带人员信息
+     * @param reqDTO
+     * @param response
+     */
     @RequestMapping(value = "save/deptEmp",method = RequestMethod.POST)
     public void saveImpactDeptEmp(@RequestBody EditImpactDeptEmpReqDTO reqDTO, HttpServletResponse response){
         OperateResultMessageRespDTO respDTO = hzEWOImpactDeptService.saveImpactDeptEmp(reqDTO);
@@ -61,6 +67,11 @@ public class HzEWOImpactDeptController extends BaseController {
     }
 
 
+    /**
+     * 获取影响部门详细
+     * @param query
+     * @param response
+     */
     @RequestMapping(value = "get/detail",method = RequestMethod.GET)
     public void getImpactDeptDetail(HzEWOImpactDeptQuery query, HttpServletResponse response){
         if(query.getProjectId() == null || query.getEwoNo() == null){
@@ -71,4 +82,19 @@ public class HzEWOImpactDeptController extends BaseController {
         writeAjaxJSONResponse(ResultMessageBuilder.build(depts),response);
     }
 
+
+    /**
+     * 获取影响部门评估人员
+     * @param query
+     * @param response
+     */
+    @RequestMapping(value = "get/detail/emp",method = RequestMethod.GET)
+    public void getImpactDeptEmp(HzEWOImpactDeptQuery query, HttpServletResponse response){
+        if(query.getProjectId() == null || query.getEwoNo() == null){
+            writeAjaxJSONResponse(ResultMessageBuilder.build(false,"非法参数！"),response);
+            return;
+        }
+        List<HzEWOImpactDeptEmpRespDTO> depts = hzEWOImpactDeptService.getAllImpactDeptEmp(query);
+        writeAjaxJSONResponse(ResultMessageBuilder.build(depts),response);
+    }
 }

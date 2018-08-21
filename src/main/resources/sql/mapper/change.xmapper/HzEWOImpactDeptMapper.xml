@@ -27,6 +27,9 @@
       <if test="ewoNo != null">
         and EWO_NO = #{ewoNo,jdbcType=VARCHAR}
       </if>
+      <if test="deptId != null">
+        and DEPT_ID = #{deptId,jdbcType=VARCHAR}
+      </if>
       <if test="projectId != null">
         and PROJECT_ID = #{projectId,jdbcType=VARCHAR}
       </if>

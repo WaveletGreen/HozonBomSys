@@ -2,6 +2,7 @@ package com.connor.hozon.bom.resources.service.change;
 
 import com.connor.hozon.bom.resources.dto.request.EditEWOImpactDeptReqDTO;
 import com.connor.hozon.bom.resources.dto.request.EditImpactDeptEmpReqDTO;
+import com.connor.hozon.bom.resources.dto.response.HzEWOImpactDeptEmpRespDTO;
 import com.connor.hozon.bom.resources.dto.response.HzEWOImpactDeptRespDTO;
 import com.connor.hozon.bom.resources.dto.response.OperateResultMessageRespDTO;
 import com.connor.hozon.bom.resources.query.HzEWOImpactDeptQuery;
@@ -24,4 +25,6 @@ public interface HzEWOImpactDeptService {
     OperateResultMessageRespDTO saveImpactDeptEmp(EditImpactDeptEmpReqDTO reqDTO);
 
     List<HzEWOImpactDeptRespDTO> getAllImpactDept(HzEWOImpactDeptQuery query);
+
+    List<HzEWOImpactDeptEmpRespDTO> getAllImpactDeptEmp(HzEWOImpactDeptQuery query);
 }
