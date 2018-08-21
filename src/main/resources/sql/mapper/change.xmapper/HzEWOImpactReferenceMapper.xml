@@ -54,7 +54,7 @@
       #{item.impactAnalysisId,jdbcType=DOUBLE},
       #{item.ewoNo,jdbcType=VARCHAR},
       #{item.projectId,jdbcType=VARCHAR},
-      #{item.checked,jdbcType=VARCHAR}
+      #{item.checked,jdbcType=INTEGER}
       from DUAL
     </foreach>
     )t
