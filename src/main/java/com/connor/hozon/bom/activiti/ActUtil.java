@@ -20,8 +20,12 @@ public class ActUtil {
 
     public static ProcessInstance createProcess(RuntimeService runtimeService, String key, Map<String, List<String>> reviewers, Map<String, String> assignees) throws Exception {
         Map<String, Object> variables = new HashMap<>();
-        variables.putAll(reviewers);
-        variables.putAll(assignees);
+        if(reviewers!=null){
+            variables.putAll(reviewers);
+        }
+        if(assignees!=null){
+            variables.putAll(assignees);
+        }
         ProcessInstance pi;
         pi = runtimeService.startProcessInstanceByKey(key, variables);
         return pi;
