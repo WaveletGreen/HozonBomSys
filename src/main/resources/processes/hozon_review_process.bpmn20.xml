@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="HOZON">
+  <process id="hozon_review_process" name="工艺路线评审流程" isExecutable="true">
+    <startEvent id="review_process_start" name="开始" ></startEvent>
+    <userTask id="do_start" name="发起" activiti:assignee="${do_start_assign}"></userTask>
+    <userTask id="review_check" name="校对" activiti:assignee="${assignee}">
+      <extensionElements>
+        <activiti:taskListener event="create" class="com.kk.testspb.demo_k.activiti.ActImpl"/>
+      </extensionElements>
+      <multiInstanceLoopCharacteristics isSequential="false" activiti:collection="${review_check_assign}" activiti:elementVariable="assignee"/>
+    </userTask>
+    <exclusiveGateway id="eGateway_check" name="校对结果"></exclusiveGateway>
+    <userTask id="review_review" name="审核" activiti:assignee="${assignee}">
+      <extensionElements>
+        <activiti:taskListener event="create" class="com.kk.testspb.demo_k.activiti.ActImpl"/>
+      </extensionElements>
+      <multiInstanceLoopCharacteristics isSequential="false" activiti:collection="${review_review_assign}" activiti:elementVariable="assignee"/>
+    </userTask>
+    <exclusiveGateway id="eGateway_review" name="审核结果"></exclusiveGateway>
+    <serviceTask id="publish" name="发布" activiti:class="com.kk.testspb.demo_k.activiti.javaServiceTask.PublishTask"></serviceTask>
+    <endEvent id="review_process_end" name="结束"></endEvent>
+    <sequenceFlow id="sequenceFlow-94b5e602-abbb-4001-b5d8-2b714a3dbcb4" sourceRef="review_process_start" targetRef="do_start"></sequenceFlow>
+    <sequenceFlow id="sequenceFlow-17b5d845-24f7-4134-9948-1ec8ff244469" sourceRef="do_start" targetRef="review_check"></sequenceFlow>
+    <sequenceFlow id="sequenceFlow-5f642408-07f5-4068-be93-bc3e9e325ca4" sourceRef="review_check" targetRef="eGateway_check"></sequenceFlow>
+    <sequenceFlow id="sequenceFlow-414761b7-8a33-4a62-8cff-d2a69d6554bf" sourceRef="review_review" targetRef="eGateway_review"></sequenceFlow>
+    <sequenceFlow id="sequenceFlow-76e18ed1-8ea6-4bad-9fba-ed94386e71e6" sourceRef="publish" targetRef="review_process_end"></sequenceFlow>
+    <sequenceFlow id="sequenceFlow-9b4498af-6cd6-4570-b5d3-c79ee8f7228e" name="通过" sourceRef="eGateway_check" targetRef="review_review">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${review_check_decision == 1}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="sequenceFlow-498701f6-d1d3-4bb4-a544-cd893f1b14f4" name="不通过" sourceRef="eGateway_check" targetRef="do_start">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${review_check_decision == 0}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="sequenceFlow-47848418-e996-48c5-8fda-5e6020b3410b" name="通过" sourceRef="eGateway_review" targetRef="publish">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${review_review_decision == 1}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="sequenceFlow-7c6a48f7-4566-4efa-8909-6c32f4cfe7bb" name="不通过" sourceRef="eGateway_review" targetRef="do_start">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${review_review_decision == 0}]]></conditionExpression>
+    </sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_hozon_review_process">
+    <bpmndi:BPMNPlane bpmnElement="hozon_review_process" id="BPMNPlane_hozon_review_process">
+      <bpmndi:BPMNShape bpmnElement="review_process_start" id="BPMNShape_review_process_start">
+        <omgdc:Bounds height="30.0" width="30.0" x="100.0" y="143.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="do_start" id="BPMNShape_do_start">
+        <omgdc:Bounds height="60.0" width="100.0" x="180.0" y="128.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="review_check" id="BPMNShape_review_check">
+        <omgdc:Bounds height="60.0" width="100.0" x="330.0" y="128.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="eGateway_check" id="BPMNShape_eGateway_check">
+        <omgdc:Bounds height="40.0" width="40.0" x="480.0" y="138.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="review_review" id="BPMNShape_review_review">
+        <omgdc:Bounds height="60.0" width="100.0" x="570.0" y="128.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="eGateway_review" id="BPMNShape_eGateway_review">
+        <omgdc:Bounds height="40.0" width="40.0" x="720.0" y="138.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="publish" id="BPMNShape_publish">
+        <omgdc:Bounds height="60.0" width="100.0" x="810.0" y="128.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="review_process_end" id="BPMNShape_review_process_end">
+        <omgdc:Bounds height="28.0" width="28.0" x="960.0" y="144.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="sequenceFlow-17b5d845-24f7-4134-9948-1ec8ff244469" id="BPMNEdge_sequenceFlow-17b5d845-24f7-4134-9948-1ec8ff244469">
+        <omgdi:waypoint x="280.0" y="158.0"></omgdi:waypoint>
+        <omgdi:waypoint x="330.0" y="158.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sequenceFlow-7c6a48f7-4566-4efa-8909-6c32f4cfe7bb" id="BPMNEdge_sequenceFlow-7c6a48f7-4566-4efa-8909-6c32f4cfe7bb">
+        <omgdi:waypoint x="740.0" y="178.0"></omgdi:waypoint>
+        <omgdi:waypoint x="740.0" y="330.0"></omgdi:waypoint>
+        <omgdi:waypoint x="230.0" y="330.0"></omgdi:waypoint>
+        <omgdi:waypoint x="230.0" y="188.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sequenceFlow-94b5e602-abbb-4001-b5d8-2b714a3dbcb4" id="BPMNEdge_sequenceFlow-94b5e602-abbb-4001-b5d8-2b714a3dbcb4">
+        <omgdi:waypoint x="130.0" y="158.0"></omgdi:waypoint>
+        <omgdi:waypoint x="180.0" y="158.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sequenceFlow-9b4498af-6cd6-4570-b5d3-c79ee8f7228e" id="BPMNEdge_sequenceFlow-9b4498af-6cd6-4570-b5d3-c79ee8f7228e">
+        <omgdi:waypoint x="520.0" y="158.0"></omgdi:waypoint>
+        <omgdi:waypoint x="570.0" y="158.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sequenceFlow-5f642408-07f5-4068-be93-bc3e9e325ca4" id="BPMNEdge_sequenceFlow-5f642408-07f5-4068-be93-bc3e9e325ca4">
+        <omgdi:waypoint x="430.0" y="158.0"></omgdi:waypoint>
+        <omgdi:waypoint x="480.0" y="158.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sequenceFlow-76e18ed1-8ea6-4bad-9fba-ed94386e71e6" id="BPMNEdge_sequenceFlow-76e18ed1-8ea6-4bad-9fba-ed94386e71e6">
+        <omgdi:waypoint x="910.0" y="158.0"></omgdi:waypoint>
+        <omgdi:waypoint x="960.0" y="158.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sequenceFlow-414761b7-8a33-4a62-8cff-d2a69d6554bf" id="BPMNEdge_sequenceFlow-414761b7-8a33-4a62-8cff-d2a69d6554bf">
+        <omgdi:waypoint x="670.0" y="158.0"></omgdi:waypoint>
+        <omgdi:waypoint x="720.0" y="158.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sequenceFlow-47848418-e996-48c5-8fda-5e6020b3410b" id="BPMNEdge_sequenceFlow-47848418-e996-48c5-8fda-5e6020b3410b">
+        <omgdi:waypoint x="760.0" y="158.0"></omgdi:waypoint>
+        <omgdi:waypoint x="810.0" y="158.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sequenceFlow-498701f6-d1d3-4bb4-a544-cd893f1b14f4" id="BPMNEdge_sequenceFlow-498701f6-d1d3-4bb4-a544-cd893f1b14f4">
+        <omgdi:waypoint x="500.0" y="178.0"></omgdi:waypoint>
+        <omgdi:waypoint x="500.0" y="291.0"></omgdi:waypoint>
+        <omgdi:waypoint x="230.0" y="291.0"></omgdi:waypoint>
+        <omgdi:waypoint x="230.0" y="188.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

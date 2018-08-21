@@ -12,24 +12,34 @@ import java.util.Map;
 public class ProcessBean {
 
     private String processKey;
-    private Map<String,String> assignees=new HashMap<>();
-    private Map<String, List<String>> reviewers=new HashMap<>();
+    private Map<String,String> singleUserAssign =new HashMap<>();
+    private Map<String, List<String>> multiUserAssign =new HashMap<>();
 
     public ProcessBean(String processKey) {
         this.processKey = processKey;
     }
 
-    public void addAssignee(String taskName,String assignee){
-        assignees.put(taskName+"_assign",assignee);
+    /**
+     * 添加唯一用户，根据流程节点是否配置了多实例
+     * @param taskName
+     * @param assignee
+     */
+    public void addSingleUser(String taskName, String assignee){
+        singleUserAssign.put(taskName+"_assign",assignee);
     }
 
-    public void addReviewer(String taskName,String... reviewer){
+    /**
+     * 添加多用户，根据流程节点是否配置了多实例
+     * @param taskName
+     * @param reviewer
+     */
+    public void addMultiUser(String taskName, String... reviewer){
         List<String> userIds;
-        if(reviewers.containsKey(taskName+"_assign")){
-            userIds=reviewers.get(taskName+"_assign");
+        if(multiUserAssign.containsKey(taskName+"_assign")){
+            userIds= multiUserAssign.get(taskName+"_assign");
         }else{
             userIds=new ArrayList<>();
-            reviewers.put(taskName+"_assign",userIds);
+            multiUserAssign.put(taskName+"_assign",userIds);
         }
         for (String userId:reviewer) {
             if(!userIds.contains(userId)){
@@ -41,8 +51,8 @@ public class ProcessBean {
     public void initRequest(ServletRequest request){
         if(processKey!=null&&!"".equals(processKey)){
             request.setAttribute("actKey",processKey);
-            request.setAttribute("actReviewers",reviewers);
-            request.setAttribute("actAssignees",assignees);
+            request.setAttribute("actReviewers", multiUserAssign);
+            request.setAttribute("actAssignees", singleUserAssign);
         }
     }
 }

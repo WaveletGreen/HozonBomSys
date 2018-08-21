@@ -24,9 +24,9 @@ public class ActFilter implements Filter {
         System.out.println("进入过滤器");
         //添加审核人
         ProcessBean processBean = new ProcessBean("hozon_vwo");
-        processBean.addAssignee("do_start", "black");
-        processBean.addReviewer("review_bom_manager", "admin", "white");
-        processBean.addReviewer("review_project_group", "admin");
+        processBean.addSingleUser("do_start", "black");
+        processBean.addMultiUser("review_bom_manager", "admin", "white");
+        processBean.addMultiUser("review_project_group", "admin");
         processBean.initRequest(servletRequest);
         // do 任务
         DoTaskBean doTaskBean = new DoTaskBean("22531");

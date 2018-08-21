@@ -51,12 +51,12 @@ public class ActImpl implements Act, TaskListener, ActivitiEventListener {
     private FormService formService;
 
     @Override
-    public ModelAndView createProcess(@RequestAttribute(value = "actKey") String key, @RequestAttribute("actReviewers") Map<String, List<String>> reviewers, @RequestAttribute("actAssignees") Map<String, String> assignees) {
+    public ModelAndView createProcess(@RequestAttribute(value = "actKey") String key, @RequestAttribute("actReviewers") Map<String, List<String>> multiUserAssign, @RequestAttribute("actAssignees") Map<String, String> singleUserAssign) {
         logger.info("流程实例数量：" + runtimeService.createProcessInstanceQuery().count());
         logger.info("开始进行创建");
         ProcessInstance pi;
         try {
-            pi=ActUtil.createProcess(runtimeService,key,reviewers,assignees);
+            pi=ActUtil.createProcess(runtimeService,key, multiUserAssign, singleUserAssign);
         } catch (Exception e) {
             logger.error(e);
             String err="流程创建失败："+e.getMessage();

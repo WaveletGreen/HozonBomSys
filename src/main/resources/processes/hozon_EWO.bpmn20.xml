@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="HOZON">
+  <process id="hozon_ewo" name="EWO流程" isExecutable="true">
+    <startEvent id="ewo_start" name="开始" />
+    <userTask id="do_start" name="发起" activiti:assignee="${do_start_assign}"/>
+    <userTask id="review_1" name="审核" activiti:assignee="${assignee}">
+      <extensionElements>
+        <activiti:taskListener event="create" class="com.kk.testspb.demo_k.activiti.ActImpl"/>
+      </extensionElements>
+      <multiInstanceLoopCharacteristics isSequential="false" activiti:collection="${review_1_assign}" activiti:elementVariable="assignee"></multiInstanceLoopCharacteristics>
+    </userTask>
+    <exclusiveGateway id="gateway_1" name="审核是否通过"></exclusiveGateway>
+    <userTask id="review_std_change" name="变更规范性审核" activiti:assignee="${assignee}">
+      <extensionElements>
+        <activiti:taskListener event="create" class="com.kk.testspb.demo_k.activiti.ActImpl"/>
+      </extensionElements>
+      <multiInstanceLoopCharacteristics isSequential="false" activiti:collection="${review_std_change_assign}" activiti:elementVariable="assignee"></multiInstanceLoopCharacteristics>
+    </userTask>
+    <exclusiveGateway id="gateway_std_change" name="变更规范性审核是否通过"></exclusiveGateway>
+    <userTask id="do_evaluate_change" name="变更影响性评估"  activiti:assignee="${assignee}">
+      <!--<extensionElements>-->
+      <!--<activiti:taskListener event="create" class="com.kk.testspb.demo_k.activiti.ActImpl"/>-->
+      <!--</extensionElements>-->
+      <multiInstanceLoopCharacteristics isSequential="false" activiti:collection="${do_evaluate_change_assign}" activiti:elementVariable="assignee"></multiInstanceLoopCharacteristics>
+    </userTask>
+    <userTask id="review_change" name="变更决策" activiti:assignee="${review_change_assign}">
+      <extensionElements>
+        <activiti:taskListener event="create" class="com.kk.testspb.demo_k.activiti.ActImpl"/>
+      </extensionElements>
+      <!--<multiInstanceLoopCharacteristics isSequential="false" activiti:collection="${review_change_assign}" activiti:elementVariable="assignee"></multiInstanceLoopCharacteristics>-->
+    </userTask>
+    <exclusiveGateway id="gateway_change" name="是否变更决策"></exclusiveGateway>
+    <parallelGateway id="gateway_do_change" name="开始更新"></parallelGateway>
+    <userTask id="do_update_design" name="更新设计数据" activiti:assignee="${do_update_design_assign}"></userTask>
+    <userTask id="do_update_ebom" name="更新EBOM数据" activiti:assignee="${do_update_ebom_assign}"></userTask>
+    <parallelGateway id="gateway_done_change" name="更新结束"></parallelGateway>
+    <serviceTask id="publish" name="发布" activiti:class="com.kk.testspb.demo_k.activiti.javaServiceTask.PublishTask"></serviceTask>
+    <endEvent id="ewo_end" name="结束"></endEvent>
+    <endEvent id="ewo_end2" name="结束"></endEvent>
+    <sequenceFlow id="f1" sourceRef="ewo_start" targetRef="do_start"></sequenceFlow>
+    <sequenceFlow id="f2" sourceRef="do_start" targetRef="review_1"></sequenceFlow>
+    <sequenceFlow id="f3" sourceRef="review_1" targetRef="gateway_1"></sequenceFlow>
+    <sequenceFlow id="f6" sourceRef="review_std_change" targetRef="gateway_std_change"></sequenceFlow>
+    <sequenceFlow id="f9" sourceRef="do_evaluate_change" targetRef="review_change"></sequenceFlow>
+    <sequenceFlow id="f18" sourceRef="gateway_done_change" targetRef="publish"></sequenceFlow>
+    <sequenceFlow id="f19" sourceRef="publish" targetRef="ewo_end"></sequenceFlow>
+    <sequenceFlow id="f10" sourceRef="review_change" targetRef="gateway_change"></sequenceFlow>
+    <sequenceFlow id="f15" sourceRef="gateway_do_change" targetRef="do_update_ebom"></sequenceFlow>
+    <sequenceFlow id="f17" sourceRef="do_update_design" targetRef="gateway_done_change"></sequenceFlow>
+    <sequenceFlow id="f16" sourceRef="do_update_ebom" targetRef="gateway_done_change"></sequenceFlow>
+    <sequenceFlow id="f14" sourceRef="gateway_do_change" targetRef="do_update_design"></sequenceFlow>
+    <sequenceFlow id="f5" name="通过" sourceRef="gateway_1" targetRef="review_std_change">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${review_1_decision == 1}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="f4" name="不通过" sourceRef="gateway_1" targetRef="do_start">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${review_1_decision == 0}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="f8" name="通过" sourceRef="gateway_std_change" targetRef="do_evaluate_change">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${review_std_change_decision == 1}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="f7" name="不通过" sourceRef="gateway_std_change" targetRef="do_start">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${review_std_change_decision == 0}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="f11" name="取消变更" sourceRef="gateway_change" targetRef="ewo_end2">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${review_change_decision == -1}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="f12" name="重新评估" sourceRef="gateway_change" targetRef="do_evaluate_change">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${review_change_decision == 0}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="f13" name="通过" sourceRef="gateway_change" targetRef="gateway_do_change">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${review_change_decision == 1}]]></conditionExpression>
+    </sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_hozon_ewo">
+    <bpmndi:BPMNPlane bpmnElement="hozon_ewo" id="BPMNPlane_hozon_ewo">
+      <bpmndi:BPMNShape bpmnElement="ewo_start" id="BPMNShape_ewo_start">
+        <omgdc:Bounds height="30.0" width="30.0" x="20.0" y="100.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="do_start" id="BPMNShape_do_start">
+        <omgdc:Bounds height="55.0" width="85.0" x="112.0" y="88.5"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="review_1" id="BPMNShape_review_1">
+        <omgdc:Bounds height="55.0" width="85.0" x="257.0" y="88.5"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="gateway_1" id="BPMNShape_gateway_1">
+        <omgdc:Bounds height="40.0" width="40.0" x="405.0" y="95.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="review_std_change" id="BPMNShape_review_std_change">
+        <omgdc:Bounds height="55.0" width="125.0" x="495.0" y="87.5"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="gateway_std_change" id="BPMNShape_gateway_std_change">
+        <omgdc:Bounds height="40.0" width="40.0" x="700.0" y="95.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="do_evaluate_change" id="BPMNShape_do_evaluate_change">
+        <omgdc:Bounds height="55.0" width="110.0" x="790.0" y="87.5"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="review_change" id="BPMNShape_review_change">
+        <omgdc:Bounds height="55.0" width="85.0" x="975.0" y="87.5"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="gateway_change" id="BPMNShape_gateway_change">
+        <omgdc:Bounds height="40.0" width="40.0" x="1120.0" y="240.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="gateway_do_change" id="BPMNShape_gateway_do_change">
+        <omgdc:Bounds height="40.0" width="40.0" x="1025.0" y="360.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="do_update_design" id="BPMNShape_do_update_design">
+        <omgdc:Bounds height="55.0" width="110.0" x="765.0" y="285.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="do_update_ebom" id="BPMNShape_do_update_ebom">
+        <omgdc:Bounds height="55.0" width="110.0" x="765.0" y="420.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="gateway_done_change" id="BPMNShape_gateway_done_change">
+        <omgdc:Bounds height="40.0" width="40.0" x="590.0" y="360.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="publish" id="BPMNShape_publish">
+        <omgdc:Bounds height="55.0" width="85.0" x="435.0" y="352.5"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="ewo_end" id="BPMNShape_ewo_end">
+        <omgdc:Bounds height="28.0" width="28.0" x="330.0" y="366.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="ewo_end2" id="BPMNShape_ewo_end2">
+        <omgdc:Bounds height="28.0" width="28.0" x="1245.0" y="246.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="f10" id="BPMNEdge_f10">
+        <omgdi:waypoint x="1060.0" y="115.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1140.0" y="115.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1140.0" y="240.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="f12" id="BPMNEdge_f12">
+        <omgdi:waypoint x="1120.0" y="260.0"></omgdi:waypoint>
+        <omgdi:waypoint x="845.0" y="260.0"></omgdi:waypoint>
+        <omgdi:waypoint x="845.0" y="142.5"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="f11" id="BPMNEdge_f11">
+        <omgdi:waypoint x="1160.0" y="260.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1245.0" y="260.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="f14" id="BPMNEdge_f14">
+        <omgdi:waypoint x="1045.0" y="360.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1045.0" y="312.5"></omgdi:waypoint>
+        <omgdi:waypoint x="875.0" y="312.5"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="f13" id="BPMNEdge_f13">
+        <omgdi:waypoint x="1140.0" y="280.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1140.0" y="380.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1065.0" y="380.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="f16" id="BPMNEdge_f16">
+        <omgdi:waypoint x="765.0" y="447.5"></omgdi:waypoint>
+        <omgdi:waypoint x="610.0" y="447.5"></omgdi:waypoint>
+        <omgdi:waypoint x="610.0" y="400.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="f1" id="BPMNEdge_f1">
+        <omgdi:waypoint x="49.99947482669265" y="115.1255186177966"></omgdi:waypoint>
+        <omgdi:waypoint x="112.0" y="115.64435146443515"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="f15" id="BPMNEdge_f15">
+        <omgdi:waypoint x="1045.0" y="400.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1045.0" y="447.5"></omgdi:waypoint>
+        <omgdi:waypoint x="875.0" y="447.5"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="f2" id="BPMNEdge_f2">
+        <omgdi:waypoint x="197.0" y="116.0"></omgdi:waypoint>
+        <omgdi:waypoint x="257.0" y="116.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="f18" id="BPMNEdge_f18">
+        <omgdi:waypoint x="590.0" y="380.0"></omgdi:waypoint>
+        <omgdi:waypoint x="520.0" y="380.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="f3" id="BPMNEdge_f3">
+        <omgdi:waypoint x="342.0" y="115.66135458167331"></omgdi:waypoint>
+        <omgdi:waypoint x="405.15810276679844" y="115.15810276679842"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="f17" id="BPMNEdge_f17">
+        <omgdi:waypoint x="765.0" y="312.5"></omgdi:waypoint>
+        <omgdi:waypoint x="610.0" y="312.5"></omgdi:waypoint>
+        <omgdi:waypoint x="610.0" y="360.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="f4" id="BPMNEdge_f4">
+        <omgdi:waypoint x="425.0" y="135.0"></omgdi:waypoint>
+        <omgdi:waypoint x="425.0" y="224.0"></omgdi:waypoint>
+        <omgdi:waypoint x="154.5" y="224.0"></omgdi:waypoint>
+        <omgdi:waypoint x="154.5" y="143.5"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="f19" id="BPMNEdge_f19">
+        <omgdi:waypoint x="435.0" y="380.0"></omgdi:waypoint>
+        <omgdi:waypoint x="358.0" y="380.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="f5" id="BPMNEdge_f5">
+        <omgdi:waypoint x="445.0" y="115.0"></omgdi:waypoint>
+        <omgdi:waypoint x="495.0" y="115.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="f6" id="BPMNEdge_f6">
+        <omgdi:waypoint x="620.0" y="115.0"></omgdi:waypoint>
+        <omgdi:waypoint x="700.0" y="115.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="f7" id="BPMNEdge_f7">
+        <omgdi:waypoint x="720.0" y="135.0"></omgdi:waypoint>
+        <omgdi:waypoint x="720.0" y="258.0"></omgdi:waypoint>
+        <omgdi:waypoint x="154.5" y="258.0"></omgdi:waypoint>
+        <omgdi:waypoint x="154.5" y="143.5"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="f8" id="BPMNEdge_f8">
+        <omgdi:waypoint x="740.0" y="115.0"></omgdi:waypoint>
+        <omgdi:waypoint x="790.0" y="115.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="f9" id="BPMNEdge_f9">
+        <omgdi:waypoint x="900.0" y="115.0"></omgdi:waypoint>
+        <omgdi:waypoint x="975.0" y="115.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="HOZON">
+  <process id="hozon_mwo" name="MWO流程" isExecutable="true">
+    <startEvent id="mwo_start" name="开始"></startEvent>
+    <userTask id="do_start" name="发起" activiti:assignee="${do_start_assign}"></userTask>
+    <parallelGateway id="pGateway_do_review" name="开始审核"></parallelGateway>
+    <userTask id="review_bom" name="BOM审核" activiti:assignee="${assignee}">
+      <extensionElements>
+        <activiti:taskListener event="create" class="com.kk.testspb.demo_k.activiti.ActImpl"/>
+      </extensionElements>
+      <multiInstanceLoopCharacteristics isSequential="false" activiti:collection="${review_bom_assign}" activiti:elementVariable="assignee"/>
+    </userTask>
+    <userTask id="review_purchase" name="采购审核" activiti:assignee="${assignee}">
+      <extensionElements>
+        <activiti:taskListener event="create" class="com.kk.testspb.demo_k.activiti.ActImpl"/>
+      </extensionElements>
+      <multiInstanceLoopCharacteristics isSequential="false" activiti:collection="${review_purchase_assign}" activiti:elementVariable="assignee"/>
+    </userTask>
+    <userTask id="review_quality" name="质量审核" activiti:assignee="${assignee}">
+      <extensionElements>
+        <activiti:taskListener event="create" class="com.kk.testspb.demo_k.activiti.ActImpl"/>
+      </extensionElements>
+      <multiInstanceLoopCharacteristics isSequential="false" activiti:collection="${review_quality_assign}" activiti:elementVariable="assignee"/>
+    </userTask>
+    <userTask id="review_design" name="设计审核" activiti:assignee="${assignee}">
+      <extensionElements>
+        <activiti:taskListener event="create" class="com.kk.testspb.demo_k.activiti.ActImpl"/>
+      </extensionElements>
+      <multiInstanceLoopCharacteristics isSequential="false" activiti:collection="${review_design_assign}" activiti:elementVariable="assignee"/>
+    </userTask>
+    <userTask id="review_logistics" name="物流审核" activiti:assignee="${assignee}">
+      <extensionElements>
+        <activiti:taskListener event="create" class="com.kk.testspb.demo_k.activiti.ActImpl"/>
+      </extensionElements>
+      <multiInstanceLoopCharacteristics isSequential="false" activiti:collection="${review_logistics_assign}" activiti:elementVariable="assignee"/>
+    </userTask>
+    <userTask id="review_manufacture" name="制造审核" activiti:assignee="${assignee}">
+      <extensionElements>
+        <activiti:taskListener event="create" class="com.kk.testspb.demo_k.activiti.ActImpl"/>
+      </extensionElements>
+      <multiInstanceLoopCharacteristics isSequential="false" activiti:collection="${review_manufacture_assign}" activiti:elementVariable="assignee"/>
+    </userTask>
+    <userTask id="review_finance" name="财务审核" activiti:assignee="${assignee}">
+      <extensionElements>
+        <activiti:taskListener event="create" class="com.kk.testspb.demo_k.activiti.ActImpl"/>
+      </extensionElements>
+      <multiInstanceLoopCharacteristics isSequential="false" activiti:collection="${review_finance_assign}" activiti:elementVariable="assignee"/>
+    </userTask>
+    <parallelGateway id="pGateway_done_review" name="审核结束"></parallelGateway>
+    <exclusiveGateway id="eGateway_check_result" name="检查审核结果"></exclusiveGateway>
+    <serviceTask id="publish" name="发布" activiti:class="com.kk.testspb.demo_k.activiti.javaServiceTask.PublishTask"></serviceTask>
+    <endEvent id="mwo_end" name="结束"></endEvent>
+    <sequenceFlow id="sequenceFlow-20e0be6e-9850-4297-9835-9696734ebb8c" sourceRef="review_manufacture" targetRef="pGateway_done_review"></sequenceFlow>
+    <sequenceFlow id="sequenceFlow-21e22f9c-2569-45ba-9b2d-da175682607f" sourceRef="pGateway_done_review" targetRef="eGateway_check_result"></sequenceFlow>
+    <sequenceFlow id="sequenceFlow-fef14e7b-0d3e-4a21-9e10-a95a144e4ac5" sourceRef="publish" targetRef="mwo_end"></sequenceFlow>
+    <sequenceFlow id="sequenceFlow-08fc92a5-cff4-4d67-a544-3fc135de7dd0" sourceRef="do_start" targetRef="pGateway_do_review"></sequenceFlow>
+    <sequenceFlow id="sequenceFlow-85c7e56f-cb78-4554-8bfc-7ae14cc92d46" sourceRef="mwo_start" targetRef="do_start"></sequenceFlow>
+    <sequenceFlow id="sequenceFlow-c3f571d4-2909-4aa5-8867-bdb3773aba7e" sourceRef="pGateway_do_review" targetRef="review_manufacture"></sequenceFlow>
+    <sequenceFlow id="sequenceFlow-2b338b6b-4105-4e1b-a0e7-90db171c9652" sourceRef="pGateway_do_review" targetRef="review_logistics"></sequenceFlow>
+    <sequenceFlow id="sequenceFlow-51644959-065d-4ccf-9d4d-d1904d88d3f5" sourceRef="pGateway_do_review" targetRef="review_purchase"></sequenceFlow>
+    <sequenceFlow id="sequenceFlow-4245c392-6163-43ad-aeb2-09d8696c1714" sourceRef="pGateway_do_review" targetRef="review_quality"></sequenceFlow>
+    <sequenceFlow id="sequenceFlow-665eaf17-3a30-41dc-981c-08def6540cd8" sourceRef="pGateway_do_review" targetRef="review_design"></sequenceFlow>
+    <sequenceFlow id="sequenceFlow-5776fc58-9925-4e2e-b38b-ae9b1a2ebe35" sourceRef="pGateway_do_review" targetRef="review_bom"></sequenceFlow>
+    <sequenceFlow id="sequenceFlow-239361ce-fd83-402a-890c-7c119142c54f" sourceRef="pGateway_do_review" targetRef="review_finance"></sequenceFlow>
+    <sequenceFlow id="sequenceFlow-557a2570-a611-4baa-8356-72671cfeb6da" sourceRef="review_quality" targetRef="pGateway_done_review"></sequenceFlow>
+    <sequenceFlow id="sequenceFlow-0f96c225-e1f4-402c-85f6-04797ebcc98e" sourceRef="review_purchase" targetRef="pGateway_done_review"></sequenceFlow>
+    <sequenceFlow id="sequenceFlow-27582e02-36cf-4748-9bd2-fb0388c775bf" sourceRef="review_logistics" targetRef="pGateway_done_review"></sequenceFlow>
+    <sequenceFlow id="sequenceFlow-25349aec-0158-45c2-a8b0-5ae2346fecd4" sourceRef="review_design" targetRef="pGateway_done_review"></sequenceFlow>
+    <sequenceFlow id="sequenceFlow-10eeefc1-926d-441a-95c8-7a8288ac398f" sourceRef="review_bom" targetRef="pGateway_done_review"></sequenceFlow>
+    <sequenceFlow id="sequenceFlow-36efee32-5bcc-47a6-97ff-e630f4cfc60d" sourceRef="review_finance" targetRef="pGateway_done_review"></sequenceFlow>
+    <sequenceFlow id="sequenceFlow-9550f17a-2d26-4a72-b030-ea1bea04948e" name="通过" sourceRef="eGateway_check_result" targetRef="publish">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${
+                review_bom_decision == 1 &&
+                review_purchase_decision == 1 &&
+                review_quality_decision == 1 &&
+                review_design_decision == 1 &&
+                review_logistics_decision == 1 &&
+                review_manufacture_decision == 1 &&
+                review_finance_decision == 1
+                }]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="sequenceFlow-5301b6c9-b407-44af-8a1a-ef0527079e05" name="不通过" sourceRef="eGateway_check_result" targetRef="mwo_end">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${
+                review_bom_decision == 0 ||
+                review_purchase_decision == 0 ||
+                review_quality_decision == 0 ||
+                review_design_decision == 0 ||
+                review_logistics_decision == 0 ||
+                review_manufacture_decision == 0 ||
+                review_finance_decision == 0
+                }]]></conditionExpression>
+    </sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_hozon_mwo">
+    <bpmndi:BPMNPlane bpmnElement="hozon_mwo" id="BPMNPlane_hozon_mwo">
+      <bpmndi:BPMNShape bpmnElement="mwo_start" id="BPMNShape_mwo_start">
+        <omgdc:Bounds height="30.0" width="30.0" x="75.0" y="395.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="do_start" id="BPMNShape_do_start">
+        <omgdc:Bounds height="60.0" width="100.0" x="155.0" y="380.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="pGateway_do_review" id="BPMNShape_pGateway_do_review">
+        <omgdc:Bounds height="40.0" width="40.0" x="305.0" y="390.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="review_bom" id="BPMNShape_review_bom">
+        <omgdc:Bounds height="60.0" width="100.0" x="520.0" y="590.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="review_purchase" id="BPMNShape_review_purchase">
+        <omgdc:Bounds height="60.0" width="100.0" x="520.0" y="170.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="review_quality" id="BPMNShape_review_quality">
+        <omgdc:Bounds height="60.0" width="100.0" x="520.0" y="60.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="review_design" id="BPMNShape_review_design">
+        <omgdc:Bounds height="60.0" width="100.0" x="520.0" y="485.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="review_logistics" id="BPMNShape_review_logistics">
+        <omgdc:Bounds height="60.0" width="100.0" x="520.0" y="280.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="review_manufacture" id="BPMNShape_review_manufacture">
+        <omgdc:Bounds height="60.0" width="100.0" x="520.0" y="380.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="review_finance" id="BPMNShape_review_finance">
+        <omgdc:Bounds height="60.0" width="100.0" x="520.0" y="695.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="pGateway_done_review" id="BPMNShape_pGateway_done_review">
+        <omgdc:Bounds height="40.0" width="40.0" x="780.0" y="390.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="eGateway_check_result" id="BPMNShape_eGateway_check_result">
+        <omgdc:Bounds height="40.0" width="40.0" x="882.0" y="390.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="publish" id="BPMNShape_publish">
+        <omgdc:Bounds height="60.0" width="100.0" x="1002.0" y="380.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="mwo_end" id="BPMNShape_mwo_end">
+        <omgdc:Bounds height="28.0" width="28.0" x="1155.0" y="396.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="sequenceFlow-557a2570-a611-4baa-8356-72671cfeb6da" id="BPMNEdge_sequenceFlow-557a2570-a611-4baa-8356-72671cfeb6da">
+        <omgdi:waypoint x="587.15625" y="120.0"></omgdi:waypoint>
+        <omgdi:waypoint x="753.0" y="410.0"></omgdi:waypoint>
+        <omgdi:waypoint x="780.0" y="410.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sequenceFlow-4245c392-6163-43ad-aeb2-09d8696c1714" id="BPMNEdge_sequenceFlow-4245c392-6163-43ad-aeb2-09d8696c1714">
+        <omgdi:waypoint x="345.0" y="410.0"></omgdi:waypoint>
+        <omgdi:waypoint x="382.0" y="410.0"></omgdi:waypoint>
+        <omgdi:waypoint x="552.375" y="120.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sequenceFlow-0f96c225-e1f4-402c-85f6-04797ebcc98e" id="BPMNEdge_sequenceFlow-0f96c225-e1f4-402c-85f6-04797ebcc98e">
+        <omgdi:waypoint x="596.1428571428571" y="230.0"></omgdi:waypoint>
+        <omgdi:waypoint x="753.0" y="410.0"></omgdi:waypoint>
+        <omgdi:waypoint x="780.0" y="410.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sequenceFlow-85c7e56f-cb78-4554-8bfc-7ae14cc92d46" id="BPMNEdge_sequenceFlow-85c7e56f-cb78-4554-8bfc-7ae14cc92d46">
+        <omgdi:waypoint x="105.0" y="410.0"></omgdi:waypoint>
+        <omgdi:waypoint x="155.0" y="410.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sequenceFlow-25349aec-0158-45c2-a8b0-5ae2346fecd4" id="BPMNEdge_sequenceFlow-25349aec-0158-45c2-a8b0-5ae2346fecd4">
+        <omgdi:waypoint x="620.0" y="486.15384615384613"></omgdi:waypoint>
+        <omgdi:waypoint x="752.0" y="410.0"></omgdi:waypoint>
+        <omgdi:waypoint x="780.0" y="410.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sequenceFlow-51644959-065d-4ccf-9d4d-d1904d88d3f5" id="BPMNEdge_sequenceFlow-51644959-065d-4ccf-9d4d-d1904d88d3f5">
+        <omgdi:waypoint x="345.0" y="410.0"></omgdi:waypoint>
+        <omgdi:waypoint x="384.0" y="410.0"></omgdi:waypoint>
+        <omgdi:waypoint x="543.4285714285714" y="230.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sequenceFlow-c3f571d4-2909-4aa5-8867-bdb3773aba7e" id="BPMNEdge_sequenceFlow-c3f571d4-2909-4aa5-8867-bdb3773aba7e">
+        <omgdi:waypoint x="345.0" y="410.0"></omgdi:waypoint>
+        <omgdi:waypoint x="520.0" y="410.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sequenceFlow-2b338b6b-4105-4e1b-a0e7-90db171c9652" id="BPMNEdge_sequenceFlow-2b338b6b-4105-4e1b-a0e7-90db171c9652">
+        <omgdi:waypoint x="345.0" y="410.0"></omgdi:waypoint>
+        <omgdi:waypoint x="386.0" y="410.0"></omgdi:waypoint>
+        <omgdi:waypoint x="520.0" y="337.17391304347825"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sequenceFlow-10eeefc1-926d-441a-95c8-7a8288ac398f" id="BPMNEdge_sequenceFlow-10eeefc1-926d-441a-95c8-7a8288ac398f">
+        <omgdi:waypoint x="595.8571428571429" y="590.0"></omgdi:waypoint>
+        <omgdi:waypoint x="751.0" y="410.0"></omgdi:waypoint>
+        <omgdi:waypoint x="780.0" y="410.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sequenceFlow-20e0be6e-9850-4297-9835-9696734ebb8c" id="BPMNEdge_sequenceFlow-20e0be6e-9850-4297-9835-9696734ebb8c">
+        <omgdi:waypoint x="620.0" y="410.0"></omgdi:waypoint>
+        <omgdi:waypoint x="780.0" y="410.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sequenceFlow-5301b6c9-b407-44af-8a1a-ef0527079e05" id="BPMNEdge_sequenceFlow-5301b6c9-b407-44af-8a1a-ef0527079e05">
+        <omgdi:waypoint x="902.0" y="390.0"></omgdi:waypoint>
+        <omgdi:waypoint x="902.0" y="300.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1169.0" y="300.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1169.0" y="396.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sequenceFlow-665eaf17-3a30-41dc-981c-08def6540cd8" id="BPMNEdge_sequenceFlow-665eaf17-3a30-41dc-981c-08def6540cd8">
+        <omgdi:waypoint x="345.0" y="410.0"></omgdi:waypoint>
+        <omgdi:waypoint x="386.0" y="410.0"></omgdi:waypoint>
+        <omgdi:waypoint x="520.0" y="486.4673913043478"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sequenceFlow-5776fc58-9925-4e2e-b38b-ae9b1a2ebe35" id="BPMNEdge_sequenceFlow-5776fc58-9925-4e2e-b38b-ae9b1a2ebe35">
+        <omgdi:waypoint x="345.0" y="410.0"></omgdi:waypoint>
+        <omgdi:waypoint x="384.0" y="410.0"></omgdi:waypoint>
+        <omgdi:waypoint x="543.4285714285714" y="590.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sequenceFlow-36efee32-5bcc-47a6-97ff-e630f4cfc60d" id="BPMNEdge_sequenceFlow-36efee32-5bcc-47a6-97ff-e630f4cfc60d">
+        <omgdi:waypoint x="587.3333333333334" y="695.0"></omgdi:waypoint>
+        <omgdi:waypoint x="752.0" y="410.0"></omgdi:waypoint>
+        <omgdi:waypoint x="780.0" y="410.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sequenceFlow-239361ce-fd83-402a-890c-7c119142c54f" id="BPMNEdge_sequenceFlow-239361ce-fd83-402a-890c-7c119142c54f">
+        <omgdi:waypoint x="345.0" y="410.0"></omgdi:waypoint>
+        <omgdi:waypoint x="382.0" y="410.0"></omgdi:waypoint>
+        <omgdi:waypoint x="552.0952380952381" y="695.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sequenceFlow-27582e02-36cf-4748-9bd2-fb0388c775bf" id="BPMNEdge_sequenceFlow-27582e02-36cf-4748-9bd2-fb0388c775bf">
+        <omgdi:waypoint x="620.0" y="337.6243093922652"></omgdi:waypoint>
+        <omgdi:waypoint x="751.0" y="410.0"></omgdi:waypoint>
+        <omgdi:waypoint x="780.0" y="410.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sequenceFlow-21e22f9c-2569-45ba-9b2d-da175682607f" id="BPMNEdge_sequenceFlow-21e22f9c-2569-45ba-9b2d-da175682607f">
+        <omgdi:waypoint x="820.0" y="410.0"></omgdi:waypoint>
+        <omgdi:waypoint x="882.0" y="410.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sequenceFlow-fef14e7b-0d3e-4a21-9e10-a95a144e4ac5" id="BPMNEdge_sequenceFlow-fef14e7b-0d3e-4a21-9e10-a95a144e4ac5">
+        <omgdi:waypoint x="1102.0" y="410.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1155.0" y="410.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sequenceFlow-9550f17a-2d26-4a72-b030-ea1bea04948e" id="BPMNEdge_sequenceFlow-9550f17a-2d26-4a72-b030-ea1bea04948e">
+        <omgdi:waypoint x="922.0" y="410.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1002.0" y="410.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sequenceFlow-08fc92a5-cff4-4d67-a544-3fc135de7dd0" id="BPMNEdge_sequenceFlow-08fc92a5-cff4-4d67-a544-3fc135de7dd0">
+        <omgdi:waypoint x="255.0" y="410.0"></omgdi:waypoint>
+        <omgdi:waypoint x="305.0" y="410.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

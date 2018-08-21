@@ -18,13 +18,13 @@ public class ActUtil {
 
     private static Logger logger = Logger.getLogger(ActUtil.class);
 
-    public static ProcessInstance createProcess(RuntimeService runtimeService, String key, Map<String, List<String>> reviewers, Map<String, String> assignees) throws Exception {
+    public static ProcessInstance createProcess(RuntimeService runtimeService, String key, Map<String, List<String>> multiUserAssign, Map<String, String> singleUserAssign) throws Exception {
         Map<String, Object> variables = new HashMap<>();
-        if(reviewers!=null){
-            variables.putAll(reviewers);
+        if(multiUserAssign!=null){
+            variables.putAll(multiUserAssign);
         }
-        if(assignees!=null){
-            variables.putAll(assignees);
+        if(singleUserAssign!=null){
+            variables.putAll(singleUserAssign);
         }
         ProcessInstance pi;
         pi = runtimeService.startProcessInstanceByKey(key, variables);

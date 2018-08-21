@@ -27,12 +27,12 @@ public interface Act{
     /**
      * 创建流程实例
      * @param key 流程id
-     * @param reviewers 审核人
-     * @param assignees 任务负责人
+     * @param multiUserAssign 多实例任务节点指派
+     * @param singleUserAssign 单实例任务节点指派
      * @return 页面跳转
      */
     @RequestMapping(value = "/createProcess", method = RequestMethod.GET)
-    ModelAndView createProcess(String key, Map<String, List<String>> reviewers, Map<String, String> assignees);
+    ModelAndView createProcess(String key, Map<String, List<String>> multiUserAssign, Map<String, String> singleUserAssign);
 
     /**
      * 运行DO任务
