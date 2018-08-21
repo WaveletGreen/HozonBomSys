@@ -603,7 +603,7 @@
         where
         t2.p_cfg0_of_which_project_puid=#{projectId,jdbcType=VARCHAR}
         ) and LENGTH(TRANSLATE(P_LINE_INDEX,',0123456789','.'))=1
-        and t1.P_BOM_LINE_IS_HAS=1 and t1.P_MBOM_STATUS=1)t
+        and t1.P_BOM_LINE_IS_HAS=1 and t1.P_MBOM_STATUS<![CDATA[ <> ]]>0)t
         WHERE ROWNUM &lt;=#{limit,jdbcType=INTEGER}) where rn &gt;#{offset,jdbcType=INTEGER}
     </select>
 
@@ -619,7 +619,7 @@
         where
         t2.p_cfg0_of_which_project_puid=#{projectId,jdbcType=VARCHAR}
         ) and LENGTH(TRANSLATE(P_LINE_INDEX,',0123456789','.'))=1
-        and t1.P_BOM_LINE_IS_HAS=1 and t1.P_MBOM_STATUS =1
+        and t1.P_BOM_LINE_IS_HAS=1 and t1.P_MBOM_STATUS<![CDATA[ <> ]]>0
 
     </select>
 
@@ -644,7 +644,7 @@
         <if test="sparePart != null and  sparePart!='' " >
             and t1.P_SPARE_PART = #{sparePart,jdbcType=VARCHAR}
         </if>
-        and t1.P_MBOM_STATUS =1 order by P_BOM_ORDER_NUM
+        and t1.P_MBOM_STATUS<![CDATA[ <> ]]>0 order by P_BOM_ORDER_NUM
         )t
         WHERE ROWNUM &lt;=#{limit,jdbcType=INTEGER}) where rn &gt;#{offset,jdbcType=INTEGER}
     </select>
@@ -667,7 +667,7 @@
         <if test="sparePart != null and  sparePart!='' " >
             and t1.P_SPARE_PART = #{sparePart,jdbcType=VARCHAR}
         </if>
-        and t1.P_MBOM_STATUS =1
+        and t1.P_MBOM_STATUS<![CDATA[ <> ]]>0
 
     </select>
 

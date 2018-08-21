@@ -654,7 +654,7 @@ public class HzMbomServiceImpl implements HzMbomService {
     public OperateResultMessageRespDTO setCurrentBomToLou(SetLouReqDTO reqDTO) {
         try {
             if(reqDTO.getLineIds()==null || reqDTO.getProjectId() == null){
-                return OperateResultMessageRespDTO.illgalArgument();
+                return OperateResultMessageRespDTO.IllgalArgument();
             }
             boolean b = PrivilegeUtil.writePrivilege();
             if(!b){

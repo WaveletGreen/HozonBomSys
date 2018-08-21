@@ -2,8 +2,11 @@ package com.connor.hozon.bom.resources.controller.change.ewo;
 
 import com.connor.hozon.bom.resources.controller.BaseController;
 import com.connor.hozon.bom.resources.dto.request.EditEWOImpactDeptReqDTO;
+import com.connor.hozon.bom.resources.dto.request.EditImpactDeptEmpReqDTO;
+import com.connor.hozon.bom.resources.dto.response.HzEWOImpactDeptRespDTO;
 import com.connor.hozon.bom.resources.dto.response.OperateResultMessageRespDTO;
 import com.connor.hozon.bom.resources.mybatis.change.HzEWOImpactDeptDAO;
+import com.connor.hozon.bom.resources.query.HzEWOImpactDeptQuery;
 import com.connor.hozon.bom.resources.service.change.HzEWOImpactDeptService;
 import com.connor.hozon.bom.resources.util.ResultMessageBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +14,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import sql.pojo.change.HzEWOAllImpactDept;
+import sql.pojo.change.HzEWOImpactDept;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
@@ -43,9 +48,27 @@ public class HzEWOImpactDeptController extends BaseController {
      * 全部的影响部门信息 目前部门是固定的
      * @param response
      */
-    @RequestMapping("all")
+    @RequestMapping(value = "all",method = RequestMethod.GET)
     public void findAllImpactDept(HttpServletResponse response){
         List<HzEWOAllImpactDept> list = hzEWOImpactDeptDAO.findEWOAllImpactDept();
         writeAjaxJSONResponse(ResultMessageBuilder.build(list),response);
     }
+
+    @RequestMapping(value = "save/deptEmp",method = RequestMethod.POST)
+    public void saveImpactDeptEmp(@RequestBody EditImpactDeptEmpReqDTO reqDTO, HttpServletResponse response){
+        OperateResultMessageRespDTO respDTO = hzEWOImpactDeptService.saveImpactDeptEmp(reqDTO);
+        writeAjaxJSONResponse(ResultMessageBuilder.build(OperateResultMessageRespDTO.isSuccess(respDTO),respDTO),response);
+    }
+
+
+    @RequestMapping(value = "get/detail",method = RequestMethod.GET)
+    public void getImpactDeptDetail(HzEWOImpactDeptQuery query, HttpServletResponse response){
+        if(query.getProjectId() == null || query.getEwoNo() == null){
+            writeAjaxJSONResponse(ResultMessageBuilder.build(false,"非法参数！"),response);
+            return;
+        }
+        List<HzEWOImpactDeptRespDTO> depts = hzEWOImpactDeptService.getAllImpactDept(query);
+        writeAjaxJSONResponse(ResultMessageBuilder.build(depts),response);
+    }
+
 }

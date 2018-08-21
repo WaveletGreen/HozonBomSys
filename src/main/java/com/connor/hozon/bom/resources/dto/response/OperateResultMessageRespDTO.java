@@ -70,7 +70,7 @@ public class OperateResultMessageRespDTO {
         operateResultMessageRespDTO.setErrCode(FAILED_CODE);
         return operateResultMessageRespDTO;
     }
-    public static OperateResultMessageRespDTO illgalArgument(){
+    public static OperateResultMessageRespDTO IllgalArgument(){
         OperateResultMessageRespDTO operateResultMessageRespDTO = new OperateResultMessageRespDTO();
         operateResultMessageRespDTO.setErrMsg(ILLGAL_ARGUMENT);
         operateResultMessageRespDTO.setErrCode(FAILED_CODE);

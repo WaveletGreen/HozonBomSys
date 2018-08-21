@@ -830,7 +830,7 @@ public class HzPbomServiceImpl implements HzPbomService {
     public OperateResultMessageRespDTO setCurrentBomAsLou(SetLouReqDTO reqDTO) {
         try {
             if(reqDTO.getLineIds()==null || reqDTO.getProjectId() == null){
-                return OperateResultMessageRespDTO.illgalArgument();
+                return OperateResultMessageRespDTO.IllgalArgument();
             }
             boolean b = PrivilegeUtil.writePrivilege();
             if(!b){
@@ -1040,24 +1040,5 @@ public class HzPbomServiceImpl implements HzPbomService {
 //            throw new RuntimeException(e.getMessage(),e);
         }
         return null;
-    }
-
-    public static void main(String[] a){
-//        long t1 = System.currentTimeMillis();
-//        for(long m  = Long.MIN_VALUE;m<Long.MAX_VALUE;m++){
-//
-//        }
-//        long t2 = System.currentTimeMillis();
-//        System.out.println(t2-t1 +"ms");
-//        long l = 999999999999999999L;//18个9 29个9    少11个9
-//
-//        long l1 = 100000000;//1亿条数据 1秒产生1亿条数据
-//         long l2 = 24 * 60 * 60*365l; //年
-//        long m  = l/l1/l2;
-//        System.out.println(m);
-
-        String s1 = "S00-1002";
-        s1+="AB";
-        System.out.println(s1);
     }
 }

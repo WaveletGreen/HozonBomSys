@@ -40,7 +40,6 @@ import sql.redis.SerializeUtil;
 import java.util.*;
 
 import static com.connor.hozon.bom.resources.service.bom.impl.HzPbomServiceImpl.getLevelAndRank;
-import static com.connor.hozon.bom.resources.service.bom.impl.HzPbomServiceImpl.main;
 
 /**
  * Created by haozt on 2018/06/06
@@ -2023,7 +2022,7 @@ public class HzEbomServiceImpl implements HzEbomService {
              * 设置为LOU 或者取消设置为LOU
              */
             if(reqDTO.getLineIds()==null || reqDTO.getProjectId() == null){
-                return OperateResultMessageRespDTO.illgalArgument();
+                return OperateResultMessageRespDTO.IllgalArgument();
             }
             boolean b = PrivilegeUtil.writePrivilege();
             if(!b){

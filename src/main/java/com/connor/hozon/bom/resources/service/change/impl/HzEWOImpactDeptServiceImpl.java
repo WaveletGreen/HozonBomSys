@@ -1,15 +1,22 @@
 package com.connor.hozon.bom.resources.service.change.impl;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.connor.hozon.bom.resources.dto.request.EditEWOImpactDeptReqDTO;
 import com.connor.hozon.bom.resources.dto.request.EditImpactDeptEmpReqDTO;
+import com.connor.hozon.bom.resources.dto.response.HzEWOImpactDeptRespDTO;
 import com.connor.hozon.bom.resources.dto.response.OperateResultMessageRespDTO;
 import com.connor.hozon.bom.resources.mybatis.change.HzEWOImpactDeptDAO;
+import com.connor.hozon.bom.resources.mybatis.change.HzEWOImpactDeptEmpDAO;
 import com.connor.hozon.bom.resources.query.HzEWOImpactDeptQuery;
 import com.connor.hozon.bom.resources.service.change.HzEWOImpactDeptService;
 import com.connor.hozon.bom.resources.util.ListUtil;
+import com.connor.hozon.bom.sys.dao.OrgGroupDao;
+import com.connor.hozon.bom.sys.entity.OrgGroup;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sql.pojo.change.HzEWOImpactDept;
+import sql.pojo.change.HzEWOImpactDeptEmp;
 
 import java.util.*;
 
@@ -24,6 +31,11 @@ public class HzEWOImpactDeptServiceImpl implements HzEWOImpactDeptService {
     @Autowired
     private HzEWOImpactDeptDAO hzEWOImpactDeptDAO;
 
+    @Autowired
+    private HzEWOImpactDeptEmpDAO hzEWOImpactDeptEmpDAO;
+
+    @Autowired
+    private OrgGroupDao orgGroupDao;
     @Override
     public OperateResultMessageRespDTO saveImpactDept(EditEWOImpactDeptReqDTO reqDTO) {
         try{
@@ -86,6 +98,84 @@ public class HzEWOImpactDeptServiceImpl implements HzEWOImpactDeptService {
 
     @Override
     public OperateResultMessageRespDTO saveImpactDeptEmp(EditImpactDeptEmpReqDTO reqDTO) {
+        try{
+            List<String> deptIds = Arrays.asList(reqDTO.getDeptIds().split(","));
+            List<String> userIds = Arrays.asList(reqDTO.getUserIds().split(","));
+            if(ListUtil.isEmpty(userIds) || ListUtil.isEmpty(deptIds) || deptIds.size() != userIds.size()){
+                return OperateResultMessageRespDTO.IllgalArgument();
+            }
+            HzEWOImpactDeptQuery query = new HzEWOImpactDeptQuery();
+            query.setProjectId(reqDTO.getProjectId());
+            query.setEwoNo(reqDTO.getEwoNo());
+            List<HzEWOImpactDeptEmp> insertList = new ArrayList<>();
+            List<HzEWOImpactDeptEmp> updateList = new ArrayList<>();
+            List<HzEWOImpactDeptEmp> list = hzEWOImpactDeptEmpDAO.findImpactDeptList(query);
+            for(int i= 0 ;i<userIds.size();i++){
+                if(ListUtil.isNotEmpty(list)){
+                    for(HzEWOImpactDeptEmp ewoImpactDeptEmp :list){
+                        if(ewoImpactDeptEmp.getImpactDeptId().equals(deptIds.get(i))){
+                            list.remove(ewoImpactDeptEmp);
+                        }
+                    }
+                }
+                query.setDeptId(Long.valueOf(deptIds.get(i)));
+                HzEWOImpactDeptEmp emp = new HzEWOImpactDeptEmp();
+                emp.setEwoNo(reqDTO.getEwoNo());
+                emp.setImpactDeptId(Long.valueOf(deptIds.get(i)));
+                emp.setProjectId(reqDTO.getProjectId());
+                emp.setValidFlag(1);
+                emp.setUserId(Long.valueOf(userIds.get(i)));
+                List<HzEWOImpactDeptEmp> impactDeptList = hzEWOImpactDeptEmpDAO.findImpactDeptList(query);
+                if(ListUtil.isEmpty(impactDeptList)){
+                    insertList.add(emp);
+                }else {
+                    if(impactDeptList.get(0).getValidFlag().equals(0)){
+                        impactDeptList.get(0).setValidFlag(1);
+                        updateList.add(impactDeptList.get(0));
+                    }
+                }
+            }
+
+            if(ListUtil.isNotEmpty(insertList)){
+                hzEWOImpactDeptEmpDAO.insertList(insertList);
+            }
+            if(ListUtil.isNotEmpty(updateList)){
+                hzEWOImpactDeptEmpDAO.updateList(updateList);
+            }
+        }catch (Exception e){
+
+        }
         return null;
+    }
+
+    @Override
+    public List<HzEWOImpactDeptRespDTO> getAllImpactDept(HzEWOImpactDeptQuery query) {
+        try{
+            List<HzEWOImpactDept> depts = hzEWOImpactDeptDAO.findEWOImpactDeptList(query);
+            List<OrgGroup> list = orgGroupDao.queryAllOrgGroup();
+            List<HzEWOImpactDeptRespDTO> respDTOS = new ArrayList<>();
+            list.forEach(l->{
+            HzEWOImpactDeptRespDTO respDTO = new HzEWOImpactDeptRespDTO();
+            respDTO.setDeptId(l.getGroupId());
+            respDTO.setDeptName(l.getName());
+            respDTO.setChecked(0);
+            if(ListUtil.isNotEmpty(depts)){
+              for(HzEWOImpactDept dept:depts){
+                  if(dept.getDeptId().equals(l.getGroupId())){
+                      if(dept.getCheckFlag().equals(1)){
+                          respDTO.setChecked(1);
+                          respDTO.setId(dept.getId());
+                      }
+                      break;
+                  }
+              }
+            }
+            respDTOS.add(respDTO);
+            });
+
+           return respDTOS;
+        }catch (Exception e){
+            return null;
+        }
     }
 }

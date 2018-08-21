@@ -43,6 +43,7 @@ public class HzEWOBaseInfoController extends BaseController {
     private HzEWOService hzEWOService;
     @Autowired
     private HzEWOImpactReferenceService hzEWOImpactReferenceService;
+
     /**
      * 编辑EWO表单基本信息
      * @param reqDTO
@@ -275,5 +276,19 @@ public class HzEWOBaseInfoController extends BaseController {
         }
         writeAjaxJSONResponse(ResultMessageBuilder.build(respDTOList),response);
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 }
