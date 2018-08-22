@@ -1,6 +1,6 @@
 $(document).ready((function () {
     initTable();
-}))
+}));
 
 function doQuery() {
     initTable();
@@ -42,7 +42,7 @@ function initTable() {
                 sortOrder: 'asc',
                 formatter: function (value, row, index) {
                     return [
-                        '<a href="vwo/vwoFormList?vwo=' + row.id + '&vwoType=' + row.vwoType + '">' + value + '</a>'
+                        '<a href="vwo/vwoFormList?id=' + row.id + '&vwoType=' + row.vwoType + '">' + value + '</a>'
                     ].join("");
                 }
             },

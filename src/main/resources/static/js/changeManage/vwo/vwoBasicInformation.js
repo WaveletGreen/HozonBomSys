@@ -1,9 +1,13 @@
+var vwoId = -1;
 $(document).ready((function () {
     // initTable(),
     formatDate();
-    let url = $("#url").val();
-    url += "?vwo=" + $("#vwo").val();
+    vwoId = $("#vwo").val();
+    let url = "getInformChangers";
+    url += "?vwo=" + vwoId;
     loadConnectedData(url);
+
+    // registerBtn();
 }));
 
 /**
@@ -54,6 +58,7 @@ function formatDate() {
 
 /**
  * 加载关联数据
+
  */
 function loadConnectedData(url) {
     var $table = $("#connectedTable");
@@ -64,7 +69,7 @@ function loadConnectedData(url) {
         height: 300,//$(window.parent.document).find("#wrapper").height() - document.body.offsetHeight-100,
         width: $(window).width(),
         showToggle: false,                   //是否显示详细视图和列表视图的切换按钮
-        showRefresh: true,                  //是否显示刷新按钮
+        showRefresh: false,                  //是否显示刷新按钮
         pagination: false,                  //是否显示分页（*）
         clickToSelect: true,                // 单击某一行的时候选中某一条记录
         sortName: 'pColorCode',
@@ -77,9 +82,9 @@ function loadConnectedData(url) {
                 handler: function () {
                     window.Ewin.dialog({
                         title: "添加",
-                        url: "colorSet/addPage",
+                        url: "getUserAndGroupPage?vwoId=" + vwoId,
                         gridId: "gridId",
-                        width: 400,
+                        width: 600,
                         height: 500
                     })
                 }
@@ -98,7 +103,7 @@ function loadConnectedData(url) {
                             $.ajax({
                                 type: "POST",
                                 //ajax需要添加打包名
-                                url: "./colorSet/delete",
+                                url: "deleteVwoInfoChange",
                                 data: JSON.stringify(rows),
                                 contentType: "application/json",
                                 success: function (result) {
@@ -163,3 +168,72 @@ function loadConnectedData(url) {
         ]
     });
 }
+
+// function registerBtn() {
+
+$(document).ready(
+    function () {
+        $("#vwoSaveBtn").click(
+            function () {
+                let data = {};
+                let _d = $("#basicInfo").serializeArray();
+                for (let p in _d) {
+                    data[_d[p].name] = _d[p].value;
+                }
+                console.log(data);
+                JSON.stringify(data);
+                $.ajax({
+                    contentType:
+                        "application/json",
+                    type:
+                        'POST',
+                    data: JSON.stringify(data),
+                    url: "saveBasic",
+                    success: function (result) {
+                        console.log(result);
+                        // window.location.reload();//刷新当前页面.
+                    },
+                    error: function (e) {
+                        console.log("连接服务器失败:" + e.status);
+                    }
+                });
+
+                let data2 = {};
+                let _d2 = $("#influenceDept").serializeArray();
+                for (let p in _d2) {
+                    data2[_d2[p].name] = _d2[p].value;
+                }
+
+                console.log("----data2----");
+                console.log(data2);
+                JSON.stringify(data2);
+                console.log("----data2----");
+                $.ajax({
+                    contentType:
+                        "application/json",
+                    type:
+                        'POST',
+                    data: JSON.stringify(data2),
+                    url: "saveInfluenceDept",
+                    success: function (result) {
+                        console.log(result);
+                        // window.location.reload();//刷新当前页面.
+                    },
+                    error: function (e) {
+                        console.log("连接服务器失败:" + e.status);
+                    }
+                });
+            });
+    }
+);
+
+function doSelectPerson(id) {
+    window.Ewin.dialog({
+        title: "添加",
+        url: "doSelectPersonPage?vwo=" + vwoId + "&selectType=" + id,
+        gridId: "gridId",
+        width: 600,
+        height: 500
+    })
+}
+

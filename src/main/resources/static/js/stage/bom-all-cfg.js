@@ -152,7 +152,7 @@ function loadData() {
             for (var i = 0; i < data.length; i++) {
                 var dataOfModel = data[i];
                 var delta = "<tr>" +
-                    "<td style='text-align: center'><div style='width: 50px' ><input type='checkbox'></div></td>"
+                    "<td style='text-align: center'><div style='width: 50px' ><input type='button' value='编辑'></div></td>"
                     +
                     "<td><div style='width: 50px' >" + (i + 1) + "</div></td>";
                 for (var index in dataOfModel) {
@@ -196,8 +196,21 @@ $(document).ready(
                 width: 400,
                 height: 450
             });
+    }),
+);
+$(document).ready(
+    ($("input:button").click(function () {
+        str = $(this).val() == "编辑" ? "确定" : "编辑";
+        $(this).val(str);   // 按钮被点击后，在“编辑”和“确定”之间切换
+        $(this).parent().parent().siblings("td").each(function () {  // 获取当前行的其他单元格
+            obj_text = $(this).find("div input:text");    // 判断单元格下是否有文本框
+            if (!obj_text.length)   // 如果没有文本框，则添加文本框使之可以编辑
+                $(this).html("<div style='width: 150px'><input type='text' value='" + $(this).text() + "'></div>");
+            else   // 如果已经存在文本框，则将其显示为文本框修改的值
+                $(this).html("<div style='width: 150px'>" + obj_text.val() + "</div>");
+        });
     })
-)
+);
 
 function Botton(id) {
     window.Ewin.dialog({
@@ -207,4 +220,24 @@ function Botton(id) {
         height: 400,
         gridId: "addPageOfModel"
     })
-}
+};
+//
+// $(function () {
+//     $("div input:button").click(function () {
+//         str = $(this).val() == "编辑" ? "确定" : "编辑";
+//         $(this).val(str);   // 按钮被点击后，在“编辑”和“确定”之间切换
+//         $(this).parent().parent().siblings("td").each(function () {  // 获取当前行的其他单元格
+//             obj_text = $(this).find("div input:text");    // 判断单元格下是否有文本框
+//             if (!obj_text.length)   // 如果没有文本框，则添加文本框使之可以编辑
+//                 $(this).html("<div style='width: 150px'><input type='text' value='" + $(this).text() + "'></div>");
+//             else   // 如果已经存在文本框，则将其显示为文本框修改的值
+//                 $(this).html("<div style='width: 150px'>" + obj_text.val() + "</div>");
+//         });
+//     });
+// });
+var i = 0;
+$(function () {
+    $("#addTo").click(function () {
+        $("#tr_1").append("<td>追加值" + (++i) + "</td>");
+    });
+})

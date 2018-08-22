@@ -1,3 +1,8 @@
+/**
+ * 格式化日期，根据毫秒数进行格式化
+ * @param cellval
+ * @returns {string}
+ */
 function changeDateFormat(cellval) {
     if (cellval != null) {
         var date = new Date(parseInt(cellval));
@@ -6,10 +11,21 @@ function changeDateFormat(cellval) {
         // var hour = date.getHours() < 10 ? "0" + date.getHours() : date.getHours();
         // var mins = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
         // var sec = date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds();
-        return date.getFullYear() + "-" + month + "-" + currentDate /*+ " " + hour + ":" + mins + ":" + sec*/;
+        let result = date.getFullYear() + "-" + month + "-" + currentDate /*+ " " + hour + ":" + mins + ":" + sec*/;
+        if ("NaN-NaN-NaN" === result) {
+            return "";
+        }
+        else {
+            return result;
+        }
     }
 };
 
+/**
+ * 格式化日期，根据字符串进行格式化
+ * @param strDate
+ * @returns {string}
+ */
 function changeDateFormat2(strDate) {
     if (strDate != null) {
         var date = new Date(Date.parse(strDate));
@@ -21,6 +37,12 @@ function changeDateFormat2(strDate) {
         // var hour = date.getHours() < 10 ? "0" + date.getHours() : date.getHours();
         // var mins = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
         // var sec = date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds();
-        return date.getFullYear() + "-" + month + "-" + currentDate /*+ " " + hour + ":" + mins + ":" + sec*/;
+        let result = date.getFullYear() + "-" + month + "-" + currentDate /*+ " " + hour + ":" + mins + ":" + sec*/;
+        if ("NaN-NaN-NaN" === result) {
+            return "";
+        }
+        else {
+            return result;
+        }
     }
 }

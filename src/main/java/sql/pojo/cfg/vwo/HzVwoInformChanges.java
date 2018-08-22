@@ -45,6 +45,7 @@ public class HzVwoInformChanges {
      */
     private String partPuid;
 
+
     public Long getId() {
         return id;
     }
@@ -124,4 +125,5 @@ public class HzVwoInformChanges {
     public void setPartPuid(String partPuid) {
         this.partPuid = partPuid == null ? null : partPuid.trim();
     }
+
 }

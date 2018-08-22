@@ -1,6 +1,6 @@
 package com.connor.hozon.bom.bomSystem.service.cfg.vwo;
 
-import com.connor.hozon.bom.bomSystem.dao.cfg.HzVwoInformChangesDao;
+import com.connor.hozon.bom.bomSystem.dao.cfg.vwo.HzVwoInformChangesDao;
 import com.connor.hozon.bom.bomSystem.service.iservice.cfg.vwo.IHzVwoInformChangesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

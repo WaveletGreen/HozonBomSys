@@ -54,6 +54,13 @@
 <script th:src="@{/js/bootstrap/date/bootstrap-datetimepicker.js}"></script>
 <script th:inline="javascript">
     <![CDATA[
+    $(document).keydown(function (event) {
+        if (event.keyCode == 13) {
+            $('form').each(function () {
+                event.preventDefault();
+            });
+        }
+    });
     $(function () {
             $('#colorForm').bootstrapValidator({
                 message: 'This value is not valid',

@@ -103,7 +103,6 @@ public class HzProjectLibsController {
     public Map<String, Object> loadUserTree() {
         Map<String, Object> result = new HashMap<>();
         List<HzProjectBean> beans = new ArrayList<>();
-        Set<String> vehicleSet = new HashSet<>();
 
         List<HzBrandRecord> brands = hzBrandService.doGetAllBrand();
         List<HzPlatformRecord> platforms = hzPlatformService.doGetAllPlatform();
