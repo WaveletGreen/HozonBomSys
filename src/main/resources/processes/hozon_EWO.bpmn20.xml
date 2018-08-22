@@ -5,27 +5,27 @@
     <userTask id="do_start" name="发起" activiti:assignee="${do_start_assign}"/>
     <userTask id="review_1" name="审核" activiti:assignee="${assignee}">
       <extensionElements>
-        <activiti:taskListener event="create" class="com.kk.testspb.demo_k.activiti.ActImpl"/>
+        <activiti:taskListener event="create" class="com.connor.hozon.bom.activiti.ActImpl"/>
       </extensionElements>
       <multiInstanceLoopCharacteristics isSequential="false" activiti:collection="${review_1_assign}" activiti:elementVariable="assignee"></multiInstanceLoopCharacteristics>
     </userTask>
     <exclusiveGateway id="gateway_1" name="审核是否通过"></exclusiveGateway>
     <userTask id="review_std_change" name="变更规范性审核" activiti:assignee="${assignee}">
       <extensionElements>
-        <activiti:taskListener event="create" class="com.kk.testspb.demo_k.activiti.ActImpl"/>
+        <activiti:taskListener event="create" class="com.connor.hozon.bom.activiti.ActImpl"/>
       </extensionElements>
       <multiInstanceLoopCharacteristics isSequential="false" activiti:collection="${review_std_change_assign}" activiti:elementVariable="assignee"></multiInstanceLoopCharacteristics>
     </userTask>
     <exclusiveGateway id="gateway_std_change" name="变更规范性审核是否通过"></exclusiveGateway>
     <userTask id="do_evaluate_change" name="变更影响性评估"  activiti:assignee="${assignee}">
       <!--<extensionElements>-->
-      <!--<activiti:taskListener event="create" class="com.kk.testspb.demo_k.activiti.ActImpl"/>-->
+      <!--<activiti:taskListener event="create" class="com.connor.hozon.bom.activiti.ActImpl"/>-->
       <!--</extensionElements>-->
       <multiInstanceLoopCharacteristics isSequential="false" activiti:collection="${do_evaluate_change_assign}" activiti:elementVariable="assignee"></multiInstanceLoopCharacteristics>
     </userTask>
     <userTask id="review_change" name="变更决策" activiti:assignee="${review_change_assign}">
       <extensionElements>
-        <activiti:taskListener event="create" class="com.kk.testspb.demo_k.activiti.ActImpl"/>
+        <activiti:taskListener event="create" class="com.connor.hozon.bom.activiti.ActImpl"/>
       </extensionElements>
       <!--<multiInstanceLoopCharacteristics isSequential="false" activiti:collection="${review_change_assign}" activiti:elementVariable="assignee"></multiInstanceLoopCharacteristics>-->
     </userTask>
@@ -34,7 +34,7 @@
     <userTask id="do_update_design" name="更新设计数据" activiti:assignee="${do_update_design_assign}"></userTask>
     <userTask id="do_update_ebom" name="更新EBOM数据" activiti:assignee="${do_update_ebom_assign}"></userTask>
     <parallelGateway id="gateway_done_change" name="更新结束"></parallelGateway>
-    <serviceTask id="publish" name="发布" activiti:class="com.kk.testspb.demo_k.activiti.javaServiceTask.PublishTask"></serviceTask>
+    <serviceTask id="publish" name="发布" activiti:class="com.connor.hozon.bom.activiti.serviceTask.PublishTask"></serviceTask>
     <endEvent id="ewo_end" name="结束"></endEvent>
     <endEvent id="ewo_end2" name="结束"></endEvent>
     <sequenceFlow id="f1" sourceRef="ewo_start" targetRef="do_start"></sequenceFlow>

@@ -5,19 +5,19 @@
     <userTask id="do_start" name="发起" activiti:assignee="${do_start_assign}"></userTask>
     <userTask id="review_check" name="校对" activiti:assignee="${assignee}">
       <extensionElements>
-        <activiti:taskListener event="create" class="com.kk.testspb.demo_k.activiti.ActImpl"/>
+        <activiti:taskListener event="create" class="com.connor.hozon.bom.activiti.ActImpl"/>
       </extensionElements>
       <multiInstanceLoopCharacteristics isSequential="false" activiti:collection="${review_check_assign}" activiti:elementVariable="assignee"/>
     </userTask>
     <exclusiveGateway id="eGateway_check" name="校对结果"></exclusiveGateway>
     <userTask id="review_review" name="审核" activiti:assignee="${assignee}">
       <extensionElements>
-        <activiti:taskListener event="create" class="com.kk.testspb.demo_k.activiti.ActImpl"/>
+        <activiti:taskListener event="create" class="com.connor.hozon.bom.activiti.ActImpl"/>
       </extensionElements>
       <multiInstanceLoopCharacteristics isSequential="false" activiti:collection="${review_review_assign}" activiti:elementVariable="assignee"/>
     </userTask>
     <exclusiveGateway id="eGateway_review" name="审核结果"></exclusiveGateway>
-    <serviceTask id="publish" name="发布" activiti:class="com.kk.testspb.demo_k.activiti.javaServiceTask.PublishTask"></serviceTask>
+    <serviceTask id="publish" name="发布" activiti:class="com.connor.hozon.bom.activiti.serviceTask.PublishTask"></serviceTask>
     <endEvent id="review_workcenter_end" name="结束"></endEvent>
     <sequenceFlow id="sequenceFlow-17e14d7c-939f-4ebb-973c-4ca0ce2c73dc" sourceRef="review_workcenter_start" targetRef="do_start"></sequenceFlow>
     <sequenceFlow id="sequenceFlow-4298bf26-6f3c-4f0c-8692-c100135475d6" sourceRef="do_start" targetRef="review_check"></sequenceFlow>

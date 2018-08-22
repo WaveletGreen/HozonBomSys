@@ -6,49 +6,49 @@
     <parallelGateway id="pGateway_do_review" name="开始审核"></parallelGateway>
     <userTask id="review_bom" name="BOM审核" activiti:assignee="${assignee}">
       <extensionElements>
-        <activiti:taskListener event="create" class="com.kk.testspb.demo_k.activiti.ActImpl"/>
+        <activiti:taskListener event="create" class="com.connor.hozon.bom.activiti.ActImpl"/>
       </extensionElements>
       <multiInstanceLoopCharacteristics isSequential="false" activiti:collection="${review_bom_assign}" activiti:elementVariable="assignee"/>
     </userTask>
     <userTask id="review_purchase" name="采购审核" activiti:assignee="${assignee}">
       <extensionElements>
-        <activiti:taskListener event="create" class="com.kk.testspb.demo_k.activiti.ActImpl"/>
+        <activiti:taskListener event="create" class="com.connor.hozon.bom.activiti.ActImpl"/>
       </extensionElements>
       <multiInstanceLoopCharacteristics isSequential="false" activiti:collection="${review_purchase_assign}" activiti:elementVariable="assignee"/>
     </userTask>
     <userTask id="review_quality" name="质量审核" activiti:assignee="${assignee}">
       <extensionElements>
-        <activiti:taskListener event="create" class="com.kk.testspb.demo_k.activiti.ActImpl"/>
+        <activiti:taskListener event="create" class="com.connor.hozon.bom.activiti.ActImpl"/>
       </extensionElements>
       <multiInstanceLoopCharacteristics isSequential="false" activiti:collection="${review_quality_assign}" activiti:elementVariable="assignee"/>
     </userTask>
     <userTask id="review_design" name="设计审核" activiti:assignee="${assignee}">
       <extensionElements>
-        <activiti:taskListener event="create" class="com.kk.testspb.demo_k.activiti.ActImpl"/>
+        <activiti:taskListener event="create" class="com.connor.hozon.bom.activiti.ActImpl"/>
       </extensionElements>
       <multiInstanceLoopCharacteristics isSequential="false" activiti:collection="${review_design_assign}" activiti:elementVariable="assignee"/>
     </userTask>
     <userTask id="review_logistics" name="物流审核" activiti:assignee="${assignee}">
       <extensionElements>
-        <activiti:taskListener event="create" class="com.kk.testspb.demo_k.activiti.ActImpl"/>
+        <activiti:taskListener event="create" class="com.connor.hozon.bom.activiti.ActImpl"/>
       </extensionElements>
       <multiInstanceLoopCharacteristics isSequential="false" activiti:collection="${review_logistics_assign}" activiti:elementVariable="assignee"/>
     </userTask>
     <userTask id="review_manufacture" name="制造审核" activiti:assignee="${assignee}">
       <extensionElements>
-        <activiti:taskListener event="create" class="com.kk.testspb.demo_k.activiti.ActImpl"/>
+        <activiti:taskListener event="create" class="com.connor.hozon.bom.activiti.ActImpl"/>
       </extensionElements>
       <multiInstanceLoopCharacteristics isSequential="false" activiti:collection="${review_manufacture_assign}" activiti:elementVariable="assignee"/>
     </userTask>
     <userTask id="review_finance" name="财务审核" activiti:assignee="${assignee}">
       <extensionElements>
-        <activiti:taskListener event="create" class="com.kk.testspb.demo_k.activiti.ActImpl"/>
+        <activiti:taskListener event="create" class="com.connor.hozon.bom.activiti.ActImpl"/>
       </extensionElements>
       <multiInstanceLoopCharacteristics isSequential="false" activiti:collection="${review_finance_assign}" activiti:elementVariable="assignee"/>
     </userTask>
     <parallelGateway id="pGateway_done_review" name="审核结束"></parallelGateway>
     <exclusiveGateway id="eGateway_check_result" name="检查审核结果"></exclusiveGateway>
-    <serviceTask id="publish" name="发布" activiti:class="com.kk.testspb.demo_k.activiti.javaServiceTask.PublishTask"></serviceTask>
+    <serviceTask id="publish" name="发布" activiti:class="com.connor.hozon.bom.activiti.serviceTask.PublishTask"></serviceTask>
     <endEvent id="mwo_end" name="结束"></endEvent>
     <sequenceFlow id="sequenceFlow-20e0be6e-9850-4297-9835-9696734ebb8c" sourceRef="review_manufacture" targetRef="pGateway_done_review"></sequenceFlow>
     <sequenceFlow id="sequenceFlow-21e22f9c-2569-45ba-9b2d-da175682607f" sourceRef="pGateway_done_review" targetRef="eGateway_check_result"></sequenceFlow>

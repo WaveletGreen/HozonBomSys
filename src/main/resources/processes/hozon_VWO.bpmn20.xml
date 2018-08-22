@@ -5,16 +5,14 @@
     <userTask id="do_start" name="发起" activiti:assignee="${do_start_assign}"/>
     <userTask id="review_bom_manager" name="BOM经理评审" activiti:assignee="${assignee}">
       <extensionElements>
-        <activiti:taskListener event="create" class="com.kk.testspb.demo_k.activiti.ActImpl"/>
-        <modeler:initiator-can-complete xmlns:modeler="http://activiti.com/modeler"><![CDATA[false]]></modeler:initiator-can-complete>
+        <activiti:taskListener event="create" class="com.connor.hozon.bom.activiti.ActImpl"/>
       </extensionElements>
       <multiInstanceLoopCharacteristics isSequential="false" activiti:collection="${review_bom_manager_assign}" activiti:elementVariable="assignee"/>
     </userTask>
     <exclusiveGateway id="gateway_bom_manager"/>
     <userTask id="review_project_group" name="项目工程评审小组评审" activiti:assignee="${assignee}">
       <extensionElements>
-        <activiti:taskListener event="create" class="com.kk.testspb.demo_k.activiti.ActImpl"/>
-        <modeler:initiator-can-complete xmlns:modeler="http://activiti.com/modeler"><![CDATA[false]]></modeler:initiator-can-complete>
+        <activiti:taskListener event="create" class="com.connor.hozon.bom.activiti.ActImpl"/>
       </extensionElements>
       <multiInstanceLoopCharacteristics isSequential="false" activiti:collection="${review_project_group_assign}" activiti:elementVariable="assignee"/>
     </userTask>
