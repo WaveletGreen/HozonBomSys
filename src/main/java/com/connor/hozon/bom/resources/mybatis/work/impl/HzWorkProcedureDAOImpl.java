@@ -63,4 +63,9 @@ public class HzWorkProcedureDAOImpl  extends BaseSQLUtil implements HzWorkProced
         map.put("materielId",materielId);
         return (HzWorkProcedure) super.findForObject("HzWorkProcedureDAOImpl_getHzWorkProcessByMaterielId",map);
     }
+
+    @Override
+    public int updateSendFlag(Map<String, Object> map) {
+        return super.update("HzWorkProcedureDAOImpl_updateSendFlag",map);
+    }
 }

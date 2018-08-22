@@ -198,6 +198,7 @@ $(document).ready(
             });
     }),
 );
+
 $(document).ready(
     ($("input:button").click(function () {
         str = $(this).val() == "编辑" ? "确定" : "编辑";
@@ -210,7 +211,7 @@ $(document).ready(
                 $(this).html("<div style='width: 150px'>" + obj_text.val() + "</div>");
         });
     })
-);
+))
 
 function Botton(id) {
     window.Ewin.dialog({
@@ -238,6 +239,6 @@ function Botton(id) {
 var i = 0;
 $(function () {
     $("#addTo").click(function () {
-        $("#tr_1").append("<td>追加值" + (++i) + "</td>");
+        $("#tr_1").append("<div><td>追加值" + (++i) + "</td></div>");
     });
 })

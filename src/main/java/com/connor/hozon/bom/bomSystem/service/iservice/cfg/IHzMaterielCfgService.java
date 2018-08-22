@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Configuration;
 import sql.pojo.cfg.HzMaterielCfgBean;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author: Fancyears·Maylos·Maywas
@@ -21,4 +22,6 @@ public interface IHzMaterielCfgService {
      * @return 一组整车物料属性bean或单个值，根据projectUid和puid决定，所有的返回数据都存放在List中
      */
     List<HzMaterielCfgBean> doSelectByDiff(HzMaterielCfgBean bean);
+
+    int doUpdateIsSent(Map<String,Object> map);
 }

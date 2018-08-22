@@ -8,6 +8,8 @@ import com.connor.hozon.bom.resources.dto.response.OperateResultMessageRespDTO;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.query.HzWorkProcessByPageQuery;
 
+import java.util.Map;
+
 /**
  * @Author: haozt
  * @Date: 2018/7/5
@@ -45,4 +47,6 @@ public interface HzWorkProcessService {
     HzWorkProcessRespDTO findHzWorkProcess(String materielId,String projectId);
 
     OperateResultMessageRespDTO applyMbomDataToHzMaterielOneKey(ApplyMbomDataTOHzMaterielReqDTO reqDTO);
+
+    int doUpdateByBatch(Map<String,Object> map);
 }

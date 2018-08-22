@@ -59,10 +59,30 @@
         left join Hz_Cfg0_Main_Record t5 on t5.p_cfg0_of_which_project_puid=t4.puid
         left join Hz_Cfg0_Model_Record t6 on t6.p_cfg0_model_of_main_record=t5.puid
         <if test="projectUid!=null">
-            where t4.puid=#{projectUid,jdbcType="VARCHAR"} ;
+            where t4.puid=#{projectUid} ;
         </if>
         <if test="puid!=null">
-            where t6.puid=#{uid,jdbcType="VARCHAR"} ;
+            where t6.puid=#{puid}
         </if>
     </select>
+
+    <update id="updateIsSent" parameterType="java.util.HashMap">
+        update Hz_Cfg0_Model_Record
+        set
+        <if test="isSent==1">
+            IS_SENT = 1
+        </if>
+        where PUID in
+        <if test="list==null">
+            ('')
+        </if>
+        <if test="list!=null">
+            (
+            <foreach collection="list" item="item" index="index"
+                     separator=",">
+                #{item.puid,jdbcType=VARCHAR}
+            </foreach>
+            )
+        </if>
+    </update>
 </mapper>

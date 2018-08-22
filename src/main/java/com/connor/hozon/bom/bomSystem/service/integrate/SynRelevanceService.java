@@ -1,5 +1,6 @@
 package com.connor.hozon.bom.bomSystem.service.integrate;
 
+import com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0ModelGroupDao;
 import com.connor.hozon.bom.bomSystem.dto.HzRelevanceBean;
 import com.connor.hozon.bom.bomSystem.helper.IntegrateMsgDTO;
 import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
@@ -25,6 +26,12 @@ public class SynRelevanceService implements ISynRelevanceService {
 
     @Autowired
     HzCfg0Service hzCfg0Service;
+    /**
+     * 模型族dao层
+     */
+    @Autowired
+    HzCfg0ModelGroupDao hzCfg0ModelGroupDao;//            hzCfg0ModelGroupDao.selectByMainUid(cfg0MainPuid);
+
 
     /**
      * 一开始同步所有数据到ERP，不实现
