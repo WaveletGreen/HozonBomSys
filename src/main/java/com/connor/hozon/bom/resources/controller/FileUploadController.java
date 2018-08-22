@@ -2,16 +2,14 @@ package com.connor.hozon.bom.resources.controller;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import org.apache.tomcat.util.http.fileupload.FileItem;
-import org.apache.tomcat.util.http.fileupload.RequestContext;
-import org.apache.tomcat.util.http.fileupload.disk.DiskFileItemFactory;
-import org.apache.tomcat.util.http.fileupload.servlet.ServletFileUpload;
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -58,7 +56,7 @@ public class FileUploadController extends BaseController{
                 System.out.println("没有文件上传");
             }
             //4、使用ServletFileUpload解析器解析上传数据，解析结果返回的是一个List<FileItem>集合，每一个FileItem对应一个Form表单的输入项
-            List<FileItem> list = upload.parseRequest((RequestContext) request);
+            List<FileItem> list = upload.parseRequest(request);
             for(FileItem item : list){
                 //如果fileitem中封装的是普通输入项的数据
                 if(item.isFormField()){
@@ -111,6 +109,22 @@ public class FileUploadController extends BaseController{
     public void filesUpload(HttpServletRequest request, HttpServletResponse response,
                             @RequestParam("file") MultipartFile file) {
 
+
+
+//        InputStream inputStream = file.getInputStream();
+//        POIFSFileSystem poifsFileSystem = new POIFSFileSystem(inputStream);
+//        HSSFWorkbook wb = new HSSFWorkbook(poifsFileSystem);
+//        // 2.读取页脚sheet
+//        HSSFSheet sheetAt = wb.getSheetAt(0);
+//        // 3.循环读取某一行
+//        for (Row row : sheetAt) {
+//            // 4.读取每一行的单元格
+//            String stringCellValue = row.getCell(0).getStringCellValue(); // 第一列数据
+//            String stringCellValue2 = row.getCell(1).getStringCellValue();// 第二列
+//            // 写多少个具体看大家上传的文件有多少列.....
+//            // 测试是否读取到数据,及数据的正确性
+//            System.out.println(stringCellValue);
+//        }
 
 
         //设置返回信息的编码格式及类型

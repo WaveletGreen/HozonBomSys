@@ -474,7 +474,7 @@ public class HzMaterielServiceImpl implements HzMaterielService {
                         }
                         break;
                     case 21:
-                        List<HzCfg0ModelRecord> cfg0ModelRecords = hzMaterielDAO.findHzCfg0ModelRecord(query);
+                        List<HzCfg0ModelRecord> cfg0ModelRecords = hzMaterielDAO.findHzCfg0ModelRecordAll(query);
                         if(ListUtil.isNotEmpty(cfg0ModelRecords)){
                             for(HzCfg0ModelRecord record :cfg0ModelRecords){
                                 Map<String,Object> map = new HashMap<>();
@@ -504,7 +504,7 @@ public class HzMaterielServiceImpl implements HzMaterielService {
                     case 31:
                         HzMbomByPageQuery mbomByPageQuery = new HzMbomByPageQuery();
                         mbomByPageQuery.setProjectId(query.getProjectId());
-                        List<HzMbomLineRecord> hzMbomLineRecords = hzMbomRecordDAO.findHz2YMbomRecord(mbomByPageQuery);
+                        List<HzMbomLineRecord> hzMbomLineRecords = hzMbomRecordDAO.findHz2YMbomRecordAll(mbomByPageQuery);
                         if(ListUtil.isNotEmpty(hzMbomLineRecords)){
                             for(HzMbomLineRecord record :hzMbomLineRecords){
                                 Map<String,Object> map = new HashMap<>();
@@ -534,7 +534,7 @@ public class HzMaterielServiceImpl implements HzMaterielService {
                         HzMbomByPageQuery mbom = new HzMbomByPageQuery();
                         mbom.setProjectId(query.getProjectId());
                         mbom.setpBomLinePartResource("自制单件");
-                        List<HzMbomLineRecord> lineRecords = hzMbomRecordDAO.findHzMbomByResource(mbom);
+                        List<HzMbomLineRecord> lineRecords = hzMbomRecordDAO.findHzMbomByResourceAll(mbom);
                         if(ListUtil.isNotEmpty(lineRecords)){
                             for(HzMbomLineRecord record:lineRecords){
                                 Map<String,Object> map = new HashMap<>();
@@ -564,7 +564,7 @@ public class HzMaterielServiceImpl implements HzMaterielService {
                         HzMbomByPageQuery byPageQuery = new HzMbomByPageQuery();
                         byPageQuery.setProjectId(query.getProjectId());
                         byPageQuery.setpBomLinePartResource("采购件");
-                        List<HzMbomLineRecord> lineRecordList = hzMbomRecordDAO.findHzMbomByResource(byPageQuery);
+                        List<HzMbomLineRecord> lineRecordList = hzMbomRecordDAO.findHzMbomByResourceAll(byPageQuery);
                         if(ListUtil.isNotEmpty(lineRecordList)){
                             for(HzMbomLineRecord record:lineRecordList){
                                 Map<String,Object> map = new HashMap<>();
@@ -593,7 +593,7 @@ public class HzMaterielServiceImpl implements HzMaterielService {
                         hzMbomByPageQuery = new HzMbomByPageQuery();
                         hzMbomByPageQuery.setProjectId(query.getProjectId());
                         hzMbomByPageQuery.setSparePart("自制");
-                        List<HzMbomLineRecord> mbomLineRecords = hzMbomRecordDAO.findHzMbomByResource(hzMbomByPageQuery);
+                        List<HzMbomLineRecord> mbomLineRecords = hzMbomRecordDAO.findHzMbomByResourceAll(hzMbomByPageQuery);
                         if(ListUtil.isNotEmpty(mbomLineRecords)){
                             for(HzMbomLineRecord record:mbomLineRecords){
                                 Map<String,Object> map = new HashMap<>();

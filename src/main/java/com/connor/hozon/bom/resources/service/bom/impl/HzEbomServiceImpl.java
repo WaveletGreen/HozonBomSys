@@ -1445,21 +1445,24 @@ public class HzEbomServiceImpl implements HzEbomService {
                  * 这里每次走更新数据的时候先将原来未更新的数据保存一份，更新后的数据也保存一份，类似于查看变更历史记录的
                  * 功能。
                  */
-                boolean isRepeat = hzEbomRecordDAO.checkItemIdIsRepeat(reqDTO.getProjectId(),reqDTO.getLineId());
-                if(isRepeat){
-                    OperateResultMessageRespDTO respDTO = new OperateResultMessageRespDTO();
-                    respDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
-                    respDTO.setErrMsg("非法操作,要修改的零件号已存在！");
-                    return respDTO;
-                }
+//                boolean isRepeat = hzEbomRecordDAO.checkItemIdIsRepeat(reqDTO.getProjectId(),reqDTO.getLineId());
+//                if(isRepeat){
+//                    OperateResultMessageRespDTO respDTO = new OperateResultMessageRespDTO();
+//                    respDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
+//                    respDTO.setErrMsg("非法操作,要修改的零件号已存在！");
+//                    return respDTO;
+//                }
                 Map<String,Object> bomLineMap = new HashMap<>();
                 bomLineMap.put("puid",reqDTO.getPuid());
                 bomLineMap.put("projectId",reqDTO.getProjectId());
-                HzBomLineRecord bomLineRecord = hzBomLineRecordDao.findBomLineByPuid(bomLineMap);//未修改前的数据
+                HzBomLineRecord bomLineRecord = hzBomLineRecordDao.findBomLine(bomLineMap);//未修改前的数据
                 if(bomLineRecord != null){
                     bomLineMap.put("tableName","HZ_EBOM_REOCRD_BEFORE_CHANGE");
                     List<HzBomLineRecord> records = hzBomLineRecordDao.findBomListForChange(bomLineMap);
                     bomLineRecord.setTableName("HZ_EBOM_REOCRD_BEFORE_CHANGE");
+                    if(bomLineRecord.getEwoNo()!=null && !bomLineRecord.getEwoNo().equals("1")){
+                        bomLineRecord.setEwoNo(null);
+                    }
                     if(ListUtil.isEmpty(records)){//不存在时 添加进去
                         hzBomLineRecordDao.insert(bomLineRecord);
                     }else{//存在记录 查看是否都有产生流程历史记录
