@@ -2,7 +2,7 @@ function modeVehicle(puid) {
     var projectUid = $("#project", window.top.document).val();
     window.Ewin.dialog({
         title: "添加",
-        url: "modelColor/setLvl2ColorPage?modelUid=" + puid+"&projectUid="+projectUid,
+        url: "modelColor/setLvl2ColorPage?modelUid=" + puid + "&projectUid=" + projectUid,
         gridId: "gridId",
         width: 880,
         height: 600
@@ -27,7 +27,8 @@ $(document).ready(
         }
     )
 );
-function loadData(){
+
+function loadData() {
     var projectPuid = $("#project", window.top.document).val();
     if (projectPuid.length <= 0) {
         $("#myModal").modal('show');
@@ -50,7 +51,17 @@ function loadData(){
             // column.push({field: 'modeColorIsMultiply', title: 'modeColorIsMultiply'});
             column.push({field: 'ck', checkbox: true, Width: 50});
             column.push({field: 'codeOfColorModel', title: '车型颜色代码', align: 'center', valign: 'middle'});
-            column.push({field: 'descOfColorModel', title: '描述', align: 'center', valign: 'middle'});
+            column.push({
+                field: 'descOfColorModel',
+                title: '&emsp;&emsp;&emsp;&emsp;描述&emsp;&emsp;&emsp;&emsp;',
+                align: 'center',
+                valign: 'middle',
+                formatter: function (value, row, index) {
+                    return [
+                        '<div style="width: 200px">' + value + '</div>'
+                    ].join("");
+                }
+            });
             column.push({
                 field: 'modelShell',
                 title: '油漆车身总成',

@@ -8,16 +8,14 @@
         <result column="P_CFG0_FAMILY_NAME" jdbcType="VARCHAR" property="pCfg0FamilyName"/>
         <result column="P_CFG0_FAMILY_PUID" jdbcType="VARCHAR" property="pCfg0FamilyPuid"/>
         <result column="P_CFG0_MAIN_ITEM_PUID" jdbcType="VARCHAR" property="pCfg0MainItemPuid"/>
-        <result column="P_H9FEATURENAME" jdbcType="VARCHAR" property="pH9featurename"/>
         <result column="P_H9FEATUREENNAME" jdbcType="VARCHAR" property="pH9featureenname"/>
-        <result column="P_H9FEATUREDESC" jdbcType="VARCHAR" property="pH9featuredesc"/>
         <result column="P_CFG0_FAMILY_DESC" jdbcType="VARCHAR" property="pCfg0FamilyDesc"/>
         <result column="P_CFG0_RELEVANCE" jdbcType="VARCHAR" property="pCfg0Relevance"/>
         <result column="P_IS_FEATURE_SENT" jdbcType="INTEGER" property="isFeatureSent"/>
         <result column="P_IS_RELEVANCE_SENT" jdbcType="INTEGER" property="isRelevanceSent"/>
         <!--创建和修改信息-->
         <result column="P_FEATURE_CREATOR" jdbcType="VARCHAR" property="creator"/>
-        <result column="P_FEATURE_CREATOR_DATE" jdbcType="TIMESTAMP" property="createDate"/>
+        <result column="FEATURE_CREATE_DATE" jdbcType="TIMESTAMP" property="createDate"/>
         <result column="P_FEATURE_LAST_MODIFIER" jdbcType="VARCHAR" property="lastModifier"/>
         <result column="P_FEATURE_LAST_MODIFY_DATE" jdbcType="TIMESTAMP" property="lastModifyDate"/>
     </resultMap>
@@ -42,15 +40,13 @@
         P_CFG0_FAMILY_NAME,
         P_CFG0_FAMILY_PUID,
         P_CFG0_MAIN_ITEM_PUID,
-        P_H9FEATURENAME,
         P_H9FEATUREENNAME,
-        P_H9FEATUREDESC,
         P_CFG0_FAMILY_DESC,
         P_CFG0_RELEVANCE,
         P_IS_FEATURE_SENT,
         P_IS_RELEVANCE_SENT,
         P_FEATURE_CREATOR,
-        P_FEATURE_CREATOR_DATE,
+        FEATURE_CREATE_DATE,
         P_FEATURE_LAST_MODIFIER,
         P_FEATURE_LAST_MODIFY_DATE
   </sql>
@@ -205,9 +201,7 @@
         P_CFG0_FAMILY_NAME,
         P_CFG0_FAMILY_PUID,
         P_CFG0_MAIN_ITEM_PUID,
-        P_H9FEATURENAME,
         P_H9FEATUREENNAME,
-        P_H9FEATUREDESC,
         P_CFG0_FAMILY_DESC,
         P_CFG0_RELEVANCE,
         P_FEATURE_CREATOR,
@@ -220,9 +214,7 @@
         #{pCfg0FamilyName,jdbcType=VARCHAR},
         #{pCfg0FamilyPuid,jdbcType=VARCHAR},
         #{pCfg0MainItemPuid,jdbcType=VARCHAR},
-        #{pH9featurename,jdbcType=VARCHAR},
         #{pH9featureenname,jdbcType=VARCHAR},
-        #{pH9featuredesc,jdbcType=VARCHAR},
         #{pCfg0FamilyDesc,jdbcType=VARCHAR},
         #{pCfg0Relevance,jdbcType=VARCHAR},
         #{creator,jdbcType=VARCHAR},
@@ -238,9 +230,7 @@
           P_CFG0_FAMILY_NAME = #{pCfg0FamilyName,jdbcType=VARCHAR},
           P_CFG0_FAMILY_PUID = #{pCfg0FamilyPuid,jdbcType=VARCHAR},
           P_CFG0_MAIN_ITEM_PUID = #{pCfg0MainItemPuid,jdbcType=VARCHAR},
-          P_H9FEATURENAME = #{pH9featurename,jdbcType=VARCHAR},
           P_H9FEATUREENNAME = #{pH9featureenname,jdbcType=VARCHAR},
-          P_H9FEATUREDESC = #{pH9featuredesc,jdbcType=VARCHAR},
           P_CFG0_FAMILY_DESC = #{pCfg0FamilyDesc,jdbcType=VARCHAR},
           P_CFG0_RELEVANCE = #{pCfg0Relevance,jdbcType=VARCHAR},
           P_FEATURE_LAST_MODIFIER = #{lastModifier,jdbcType=VARCHAR},

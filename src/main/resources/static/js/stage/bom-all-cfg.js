@@ -210,7 +210,7 @@ $(document).ready(
                 $(this).html("<div style='width: 150px'>" + obj_text.val() + "</div>");
         });
     })
-);
+))
 
 function Botton(id) {
     window.Ewin.dialog({
