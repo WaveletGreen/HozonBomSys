@@ -163,6 +163,55 @@ function initTable(url) {
                                 }
                             });
                         }
+                    },
+                    {
+                        text: '发送到SAP',
+                        iconCls: 'glyphicon glyphicon-remove',
+                        handler: function () {
+                            var rows = $table.bootstrapTable('getSelections');
+                            if (rows.length == 0) {
+                                window.Ewin.alert({message: '请选择一条需要发送的数据!'});
+                                return false;
+                            }
+                            var _table = '<p>是否要发送您所选择的记录？</p>' +
+                                '<div style="max-height: 400px;overflow:scroll;"><table class="table table-striped tableNormalStyle" >';
+                            for (var index in rows) {
+                                _table += '<tr><td>' + rows[index].pWorkCode + '</td></tr>';
+                            }
+                            _table += '</table></div>';
+                            window.Ewin.confirm({title: '提示', message:_table, width: 500}).on(function (e) {
+                                if (e) {
+                                    var materielIds = new Array();
+                                    for(var i=0;i<rows.length;i++){
+                                        materielIds[i] = rows[i].materielId;
+                                    }
+                                    $.ajax({
+                                        type: "POST",
+                                        //ajax需要添加打包名
+                                        url: "work/process/submit?projectId="+projectId+"&materielIds="+materielIds,
+                                        //data: JSON.stringify(rows),
+                                        contentType: "application/json",
+                                        success: function (result) {
+                                            /*if (result.status) {
+                                                window.Ewin.alert({message: result.errMsg});
+                                                //刷新，会重新申请数据库数据
+                                            }
+                                            else {
+                                                window.Ewin.alert({message: ":" + result.errMsg});
+                                            }*/if (result.success){
+                                                layer.msg('发送成功', {icon: 1, time: 2000})
+                                            } else if (!result.success){
+                                                window.Ewin.alert({message: result.errMsg});
+                                            }
+                                            $table.bootstrapTable("refresh");
+                                        },
+                                        error: function (info) {
+                                            window.Ewin.alert({message: "操作发送:" + info.status});
+                                        }
+                                    })
+                                }
+                            });
+                        }
                     }
                 ],
             });

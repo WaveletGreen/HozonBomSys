@@ -528,6 +528,7 @@ public class SynBomService implements ISynBomService {
         //每次都清空缓存
         transBomService.setClearInputEachTime(true);
         transBomService.getInput().getItem().clear();
+        transBomService.getOut().getItem().clear();
         /**
          * 成功项
          */

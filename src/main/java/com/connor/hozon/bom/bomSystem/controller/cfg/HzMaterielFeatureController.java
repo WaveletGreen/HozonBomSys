@@ -309,7 +309,7 @@ public class HzMaterielFeatureController {
     public boolean updateModelBasic(@RequestBody HzCfg0ModelRecord modelRecord,
                                     @RequestParam String pFeatureCnDesc,
                                     @RequestParam String pFeatureSingleVehicleCode,
-                                    @RequestParam String modelFeaturePuid) {
+                                    @RequestParam String modelFeaturePuid, @RequestParam Map<String, String> reques) {
         boolean result = hzCfg0ModelRecordService.doUpdateBasic(modelRecord);
         if (result == false)
             return false;
