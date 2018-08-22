@@ -1,7 +1,5 @@
 package com.connor.hozon.bom.bomSystem.dao.cfg;
 
-import java.util.List;
-
 import org.apache.ibatis.annotations.Param;
 import org.springframework.context.annotation.Configuration;
 import sql.pojo.cfg.HzCfg0ModelFeature;
