@@ -229,7 +229,7 @@ public class ReflectMateriel {
         //设置VIN前置号
         materiel.setpVinPerNo("11111111111");
         //设置颜色标识
-        materiel.setpColorPart(0);
+//        materiel.setpColorPart(0);
         //设置毛重
         materiel.setpHeight("12.5");
         //设置内外饰标识

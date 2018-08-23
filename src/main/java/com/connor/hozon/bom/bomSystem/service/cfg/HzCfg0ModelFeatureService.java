@@ -33,6 +33,18 @@ public class HzCfg0ModelFeatureService implements IHzCfg0ModelFeatureService {
         return hzCfg0ModelFeatureDao.selectByPrimaryKey(puid);
     }
 
+    /**
+     * 连同工厂编号一起查出来
+     *
+     * @param puid
+     * @return
+     */
+    @Override
+    public HzCfg0ModelFeature doSelectByPrimaryKeyWithFactoryCode(String puid) {
+        return hzCfg0ModelFeatureDao.selectByPrimaryKeyWithFactoryCode(puid);
+    }
+
+
     @Override
     public HzCfg0ModelFeature doSelectByModelPuid(String pPertainToModel) {
         return hzCfg0ModelFeatureDao.selectByModelPuid(pPertainToModel);
@@ -59,6 +71,6 @@ public class HzCfg0ModelFeatureService implements IHzCfg0ModelFeatureService {
         hzCfg0ModelFeature.setpPertainToModel(puid);
         hzCfg0ModelFeature.setpFeatureCnDesc(pFeatureCnDesc);
         hzCfg0ModelFeature.setpFeatureSingleVehicleCode(pFeatureSingleVehicleCode);
-        return hzCfg0ModelFeatureDao.updateByModelPuidWithBasic(hzCfg0ModelFeature)>0?true:false;
+        return hzCfg0ModelFeatureDao.updateByModelPuidWithBasic(hzCfg0ModelFeature) > 0 ? true : false;
     }
 }

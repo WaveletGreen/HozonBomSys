@@ -235,14 +235,15 @@ function loadData() {
                                         // data: JSON.stringify(puidOfModelFeatures),
                                         contentType: "application/json",
                                         success: function (result) {
-                                            if (result.status) {
-                                                layer.msg(result.msg, {icon: 1, time: 2000})
-                                                // window.Ewin.alert({message: result, width: 800});
-                                                //刷新，会重新申请数据库数据
-                                            }
-                                            else {
-                                                window.Ewin.alert({message: "操作添加失败:" + result.msg});
-                                            }
+                                            window.Ewin.alert({message: result, width: 800});
+                                            // if (result.status) {
+                                            //     // layer.msg(result.msg, {icon: 1, time: 2000})
+                                            //     // window.Ewin.alert({message: result, width: 800});
+                                            //     //刷新，会重新申请数据库数据
+                                            // }
+                                            // else {
+                                            //     window.Ewin.alert({message: "操作添加失败:" + result.msg});
+                                            // }
                                             $table.bootstrapTable("refresh");
                                         },
                                         error: function (info) {
@@ -275,14 +276,15 @@ function loadData() {
                                         // data: JSON.stringify(puidOfModelFeatures),
                                         contentType: "application/json",
                                         success: function (result) {
-                                            if (result.status) {
-                                                layer.msg(result.msg, {icon: 1, time: 2000})
-                                                // window.Ewin.alert({message: result, width: 800});
-                                                //刷新，会重新申请数据库数据
-                                            }
-                                            else {
-                                                window.Ewin.alert({message: "操作删除失败:" + result.msg});
-                                            }
+                                            // if (result.status) {
+                                            //     layer.msg(result.msg, {icon: 1, time: 2000})
+                                            //     // window.Ewin.alert({message: result, width: 800});
+                                            //     //刷新，会重新申请数据库数据
+                                            // }
+                                            // else {
+                                            //     window.Ewin.alert({message: "操作删除失败:" + result.msg});
+                                            // }
+                                            window.Ewin.alert({message: result, width: 800});
                                             $table.bootstrapTable("refresh");
                                         },
                                         error: function (info) {

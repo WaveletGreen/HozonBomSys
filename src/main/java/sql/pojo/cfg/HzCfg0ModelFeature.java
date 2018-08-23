@@ -73,7 +73,7 @@ public class HzCfg0ModelFeature {
     /**
      * 颜色件标识
      */
-    private String color;
+    private Integer color;
     /**
      * 毛重
      */
@@ -99,7 +99,10 @@ public class HzCfg0ModelFeature {
      * 主键
      */
     private String puidOfModelFeature;
-
+    /**
+     * 是否已发送过SAP
+     */
+    private Integer isSent;
     public String getPuid() {
         return puid;
     }
@@ -236,12 +239,12 @@ public class HzCfg0ModelFeature {
         this.vinCode = vinCode == null ? null : vinCode.trim();
     }
 
-    public String getColor() {
+    public Integer getColor() {
         return color;
     }
 
-    public void setColor(String color) {
-        this.color = color == null ? null : color.trim();
+    public void setColor(Integer color) {
+        this.color = color == null ? null : color;
     }
 
     public String getGrossWeight() {
@@ -298,5 +301,13 @@ public class HzCfg0ModelFeature {
 
     public void setPuidOfModelFeature(String puidOfModelFeature) {
         this.puidOfModelFeature = puidOfModelFeature;
+    }
+
+    public Integer getIsSent() {
+        return isSent;
+    }
+
+    public void setIsSent(Integer isSent) {
+        this.isSent = isSent;
     }
 }

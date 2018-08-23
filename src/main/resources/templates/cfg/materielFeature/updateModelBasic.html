@@ -34,7 +34,6 @@
         <!--disabled="disabled"-->
         <!--th:value="${modelFeature.getpFeatureCnDesc()}"-->
         <!--/>-->
-        <!--</div>-->
         <div class="form-group col-lg-10">
             <label for="factoryCode">工厂</label>
             <input class="form-control" id="factoryCode" name="factoryCode" type="text"
@@ -51,6 +50,18 @@
             <label for="oldMaterielCode">旧物料编码</label>
             <input class="form-control" id="oldMaterielCode" name="oldMaterielCode" type="text"
                    th:value="${modelFeature.getOldMaterielCode()}"
+            />
+        </div>
+        <div class="form-group col-lg-10">
+            <label for="materielDesc">物料中文描述</label>
+            <input class="form-control" id="materielDesc" name="materielDesc" type="text"
+                   th:value="${modelFeature.getMaterielDesc()}"
+            />
+        </div>
+        <div class="form-group col-lg-10">
+            <label for="materielEnDesc">物料英文描述</label>
+            <input class="form-control" id="materielEnDesc" name="materielEnDesc" type="text"
+                   th:value="${modelFeature.getMaterielEnDesc()}"
             />
         </div>
         <div class="form-group col-lg-10">
@@ -97,9 +108,14 @@
         </div>
         <div class="form-group col-lg-10">
             <label for="color">颜色件标识</label>
-            <input class="form-control" id="color" name="color" type="text"
-                   th:value="${modelFeature.getColor()}"
-            />
+            <select class="form-control input-small" data-style="btn-info"
+                    id="color" name="color">
+                <option th:value="0" th:text="N"
+                        th:selected="${modelFeature.getColor()==0 or modelFeature.getColor()==null?true:false}">
+                </option>
+                <option th:value="1" th:text="Y" th:selected="${modelFeature.getLabelFlag()==1?true:false}">
+                </option>
+            </select>
         </div>
         <div class="form-group col-lg-10">
             <label for="grossWeight">毛重</label>
@@ -111,10 +127,10 @@
             <label for="labelFlag">内外饰标识</label>
             <select class="form-control input-small" data-style="btn-info"
                     id="labelFlag" name="labelFlag">
-                <option th:value="0" th:text="否"
+                <option th:value="0" th:text="N"
                         th:selected="${modelFeature.getLabelFlag()==0 or modelFeature.getLabelFlag()==null?true:false}">
                 </option>
-                <option th:value="1" th:text="是" th:selected="${modelFeature.getLabelFlag()==1?true:false}">
+                <option th:value="1" th:text="Y" th:selected="${modelFeature.getLabelFlag()==1?true:false}">
                 </option>
             </select>
         </div>
@@ -122,10 +138,10 @@
             <label for="rulesFlag">3C件标识</label>
             <select class="form-control input-small" data-style="btn-info"
                     id="rulesFlag" name="rulesFlag">
-                <option th:value="0" th:text="否"
+                <option th:value="0" th:text="N"
                         th:selected="${modelFeature.getRulesFlag()==0 or modelFeature.getRulesFlag()==null?true:false}">
                 </option>
-                <option th:value="1" th:text="是" th:selected="${modelFeature.getRulesFlag()==1?true:false}">
+                <option th:value="1" th:text="Y" th:selected="${modelFeature.getRulesFlag()==1?true:false}">
                 </option>
             </select>
         </div>
@@ -133,10 +149,10 @@
             <label for="importance">零件重要度</label>
             <select class="form-control input-small" data-style="btn-info"
                     id="importance" name="importance">
-                <option th:value="0" th:text="否"
+                <option th:value="0" th:text="N"
                         th:selected="${modelFeature.getImportance()==0 or modelFeature.getImportance()==null?true:false}">
                 </option>
-                <option th:value="1" th:text="是" th:selected="${modelFeature.getImportance()==1?true:false}">
+                <option th:value="1" th:text="Y" th:selected="${modelFeature.getImportance()==1?true:false}">
                 </option>
             </select>
         </div>
@@ -144,10 +160,10 @@
             <label for="deleteFlag">删除标示</label>
             <select class="form-control input-small" data-style="btn-info"
                     id="deleteFlag" name="deleteFlag">
-                <option th:value="0" th:text="否"
+                <option th:value="0" th:text="N"
                         th:selected="${modelFeature.getDeleteFlag()==0 or modelFeature.getDeleteFlag()==null?true:false}">
                 </option>
-                <option th:value="1" th:text="是"
+                <option th:value="1" th:text="Y"
                         th:selected="${modelFeature.getDeleteFlag()==1?true:false}">
                 </option>
             </select>
