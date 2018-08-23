@@ -188,11 +188,13 @@
                 and P_MATERIEL_DATA_TYPE = #{pMaterielDataType,jdbcType=INTEGER}
             </if>
             <if test="pMaterielDataType == null">
-                and (P_MATERIEL_DATA_TYPE = 11 or P_MATERIEL_DATA_TYPE =21
+                and (P_MATERIEL_DATA_TYPE = 11
+                or P_MATERIEL_DATA_TYPE =21
                 or P_MATERIEL_DATA_TYPE =31
                 or P_MATERIEL_DATA_TYPE =41
                 or P_MATERIEL_DATA_TYPE =51
-                or P_MATERIEL_DATA_TYPE =61 )
+                or P_MATERIEL_DATA_TYPE =61
+                or P_MATERIEL_DATA_TYPE =71)
             </if>
             <if test="pMaterielCode != null and pMaterielCode != '' ">
                 and P_MATERIEL_CODE like CONCAT(CONCAT('%',#{pMaterielCode,jdbcType=VARCHAR}),'%')
@@ -224,7 +226,8 @@
                 or P_MATERIEL_DATA_TYPE =31
                 or P_MATERIEL_DATA_TYPE =41
                 or P_MATERIEL_DATA_TYPE =51
-                or P_MATERIEL_DATA_TYPE =61 )
+                or P_MATERIEL_DATA_TYPE =61
+                or P_MATERIEL_DATA_TYPE =71)
             </if>
             <if test="pMaterielCode != null and pMaterielCode != '' ">
                 and P_MATERIEL_CODE like CONCAT(CONCAT('%',#{pMaterielCode,jdbcType=VARCHAR}),'%')

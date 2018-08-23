@@ -11,7 +11,8 @@ public class OperateResultMessageRespDTO {
     public static final String FAILED_MSG ="操作失败,请稍后重试！";
     public static final String NOT_PRIVILEGE = "对不起，您当前没有操作权限！";
     public static final String ILLGAL_ARGUMENT = "非法参数！";
-
+    public static final String FILE_SIZE_OVER_FLOW ="文件过大！";
+    public static final String FILE_IS_NOT_EXCEL ="传入的文件格式不是excel！";
 
     public static final Long SUCCESS_CODE = 1000L;
     public static final Long FAILED_CODE = 1001L;
@@ -77,4 +78,17 @@ public class OperateResultMessageRespDTO {
         return operateResultMessageRespDTO;
     }
 
+    public static OperateResultMessageRespDTO fileSizeOverFlow(){
+        OperateResultMessageRespDTO operateResultMessageRespDTO = new OperateResultMessageRespDTO();
+        operateResultMessageRespDTO.setErrMsg(FILE_SIZE_OVER_FLOW);
+        operateResultMessageRespDTO.setErrCode(FAILED_CODE);
+        return operateResultMessageRespDTO;
+    }
+
+    public static OperateResultMessageRespDTO fileIsNotExcel(){
+        OperateResultMessageRespDTO operateResultMessageRespDTO = new OperateResultMessageRespDTO();
+        operateResultMessageRespDTO.setErrMsg(FILE_IS_NOT_EXCEL);
+        operateResultMessageRespDTO.setErrCode(FAILED_CODE);
+        return operateResultMessageRespDTO;
+    }
 }

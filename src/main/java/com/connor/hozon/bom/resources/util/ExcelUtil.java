@@ -1,15 +1,16 @@
 package com.connor.hozon.bom.resources.util;
 
 import org.apache.poi.hssf.usermodel.*;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.formula.FormulaParseException;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.util.CellAddress;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apache.xmlbeans.impl.piccolo.io.FileFormatException;
 
 import java.io.*;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -21,12 +22,104 @@ public class ExcelUtil {
     private static final String EXTENSION_XLS = "xls";
     private static final String EXTENSION_XLSX = "xlsx";
 
+
+    private static final String SEVER_LOCATION = "D:\\file\\upload";//服务器上传文件地址
+    private static final long FILE_MAX_SIZE = 10485760L;//文件大小限制 最大为10MB 这里采用字节
+
+
+
+
+
+
+    public static boolean checkFileSize(long size){
+        if(size == 0L){
+            return false;
+        }
+        if(size>FILE_MAX_SIZE){
+            return false;
+        }
+        return true;
+    }
+
+
+    /**
+     * 写文件到指定的位置
+     * @param file
+     * @param fileName
+     * @throws Exception
+     */
+    public static String uploadFileToLocation(byte[] file,  String fileName) throws Exception {
+        File targetFile = new File(SEVER_LOCATION);
+        if (!targetFile.exists()) {
+            targetFile.mkdirs();
+        }
+        FileOutputStream out = null;
+        try {
+            out = new FileOutputStream(SEVER_LOCATION+"\\" + fileName);
+            out.write(file);
+        }finally {
+            if(out!=null){
+                out.flush();
+                out.close();
+            }
+        }
+        return SEVER_LOCATION+"\\" + fileName;
+    }
+
+
+    /**
+     * 删除文件
+     *
+     * @param pathname
+     * 			文件名（包括路径）
+     */
+    public static void deleteFile(String pathname) throws FileNotFoundException{
+
+        File file = new File(pathname);
+        if(file.isFile() && file.exists()){
+            file.delete();
+        }
+        else{
+            throw new FileNotFoundException("File["+ pathname +"] not exists!");
+        }
+
+    }
+
+
+    /**
+     * 删除服务器指定位置的全部文件
+     * @param
+     */
+    public static void deleteFile() throws FileNotFoundException{
+        File file = new File(SEVER_LOCATION);
+        deleteAllFile(file);
+    }
+
+    /**
+     * 递归删除目录下的所有文件及子目录下所有文件
+     * @param dir 将要删除的文件目录
+     */
+    private static boolean deleteAllFile(File dir) {
+        if (dir.isDirectory()) {
+            String[] children = dir.list();
+            //递归删除目录中的子目录下
+            for (int i=0; i<children.length; i++) {
+                boolean success = deleteAllFile(new File(dir, children[i]));
+                if (!success) {
+                    return false;
+                }
+            }
+        }
+        return dir.delete();
+    }
+
     /***
      * 取得Workbook对象(xls和xlsx对象不同,不过都是Workbook的实现类)
      */
     public static Workbook getWorkbook(String filePath) throws IOException {
         Workbook workbook = null;
-        InputStream is = new FileInputStream(filePath);
+        File file = new File(filePath);
+        InputStream is = new FileInputStream(file);
         if (filePath.endsWith(EXTENSION_XLS)) {
             workbook = new HSSFWorkbook(is);
         } else if (filePath.endsWith(EXTENSION_XLSX)) {
@@ -42,18 +135,33 @@ public class ExcelUtil {
      * @throws FileNotFoundException
      * @throws FileFormatException
      */
-    public static void preReadCheck(String filePath)
-            throws FileNotFoundException, FileFormatException {
-        // 常规检查
-        File file = new File(filePath);
-        if (!file.exists()) {
-            throw new FileNotFoundException("传入的文件不存在：" + filePath);
-        }
+//    public static void preReadCheck(String filePath)
+//            throws FileNotFoundException, FileFormatException {
+//        // 常规检查
+//        File file = new File(filePath);
+//        if (!file.exists()) {
+//            throw new FileNotFoundException("传入的文件不存在：" + filePath);
+//        }
+//
+//        if (!(filePath.endsWith(EXTENSION_XLS) || filePath
+//                .endsWith(EXTENSION_XLSX))) {
+//            throw new FileFormatException("传入的文件不是excel");
+//        }
+//    }
 
-        if (!(filePath.endsWith(EXTENSION_XLS) || filePath
+    /**
+     * 文件检查
+     *
+     * @param fileName
+     * @throws FileNotFoundException
+     * @throws FileFormatException
+     */
+    public static boolean preReadCheck(String fileName) {
+        if (!(fileName.endsWith(EXTENSION_XLS) || fileName
                 .endsWith(EXTENSION_XLSX))) {
-            throw new FileFormatException("传入的文件不是excel");
+            return false;
         }
+        return true;
     }
 
     /**
@@ -82,12 +190,9 @@ public class ExcelUtil {
                 if (sheet == null) {
                     continue;
                 }
-//				System.out.println("======================="
-//						+ sheet.getSheetName() + "=========================");
 
                 int firstRowIndex = sheet.getFirstRowNum();
                 int lastRowIndex = sheet.getLastRowNum();
-                // HSSFSheet s = wb.createSheet(sheet.getSheetName());
                 // 读取首行 即,表头
                 Row firstRow = sheet.getRow(firstRowIndex);
                 HSSFRow row = s.createRow(firstRowIndex);
@@ -118,17 +223,14 @@ public class ExcelUtil {
 
                             cellValue.getFontAtIndex(1);
 
-//							System.out.print(cellValue + "\t");
                             HSSFCell cell1 = currentRow1
                                     .createCell(columnIndex);
                             cell1.setCellValue(cellValue);
                             HSSFRichTextString cellValue111 = (HSSFRichTextString) cell1
                                     .getRichStringCellValue();
-//							System.out.print(cellValue + "\t");
                         } else {
                             String cellValue = String.valueOf(currentCell
                                     .getNumericCellValue());
-//							System.out.print(cellValue + "\t");
                             HSSFCell cell1 = currentRow1
                                     .createCell(columnIndex);
                             cell1.setCellValue(cellValue);
@@ -138,12 +240,6 @@ public class ExcelUtil {
 
                 }
 
-                /*
-                 * FileOutputStream fos = new
-                 * FileOutputStream("D:\\Documents\\test2.xls");
-                 *
-                 * // update(s,sheet); wb.write(fos); wb.close(); fos.close();
-                 */
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -167,7 +263,7 @@ public class ExcelUtil {
      *            为true时，当做文本来取值 (取到的是文本，不会把“1”取成“1.0”)
      * @return
      */
-    private static String getCellValue(Cell cell, boolean treatAsStr) {
+    public static String getCellValue(Cell cell, boolean treatAsStr) {
         if (cell == null) {
             return "";
         }
@@ -195,7 +291,7 @@ public class ExcelUtil {
      *            为true时，当做文本来取值 (取到的是文本，不会把“1”取成“1.0”)
      * @return
      */
-    private static void setCellValue(Cell cell, boolean treatAsStr,
+    public static void setCellValue(Cell cell, boolean treatAsStr,
                                      Object object) {
         if (cell == null) {
             return;
@@ -244,25 +340,231 @@ public class ExcelUtil {
         }
     }
 
-    /**
-     * 写文件到指定的电脑位置
-     * @param filePath
-     */
-    public static void writeFileToLocation(String filePath,File dest) throws IOException {
-        InputStream inputStream = null;
-        OutputStream outputStream = null;
-        try{
-            inputStream = new FileInputStream(filePath);
-            outputStream = new FileOutputStream(dest);
-            byte[] buf = new byte[1024];
-            int bytesRead;
-            while ((bytesRead = inputStream.read(buf)) != -1) {
-                outputStream.write(buf, 0, bytesRead);
-            }
-        }finally {
-            inputStream.close();
-            outputStream.close();
-        }
-    }
 
+
+    /**
+     * 获取单元格
+     *
+     * @param row
+     * @param cellIndex
+     * @return
+     */
+    public static Cell getCell(Row row, int cellIndex) {
+        //row.getCell(cellIndex).setCellType(Cell.CELL_TYPE_STRING);
+        Cell cell =row.getCell(cellIndex);
+        if(null==cell){
+            return new Cell() {
+                @Override
+                public String getStringCellValue() {
+                    // TODO Auto-generated method stub
+                    return "";
+                }
+
+                @Override
+                public int getColumnIndex() {
+                    // TODO Auto-generated method stub
+                    return 0;
+                }
+
+                @Override
+                public int getRowIndex() {
+                    // TODO Auto-generated method stub
+                    return 0;
+                }
+
+                @Override
+                public Sheet getSheet() {
+                    // TODO Auto-generated method stub
+                    return null;
+                }
+
+                @Override
+                public Row getRow() {
+                    // TODO Auto-generated method stub
+                    return null;
+                }
+
+                @Override
+                public void setCellType(int cellType) {
+                    // TODO Auto-generated method stub
+
+                }
+
+                @Override
+                public int getCellType() {
+                    // TODO Auto-generated method stub
+                    return 1;
+                }
+
+                @Override
+                public int getCachedFormulaResultType() {
+                    // TODO Auto-generated method stub
+                    return 0;
+                }
+
+                @Override
+                public void setCellValue(double value) {
+                    // TODO Auto-generated method stub
+
+                }
+
+                @Override
+                public void setCellValue(Date value) {
+                    // TODO Auto-generated method stub
+
+                }
+
+                @Override
+                public void setCellValue(Calendar value) {
+                    // TODO Auto-generated method stub
+
+                }
+
+                @Override
+                public void setCellValue(RichTextString value) {
+                    // TODO Auto-generated method stub
+
+                }
+
+                @Override
+                public void setCellValue(String value) {
+                    // TODO Auto-generated method stub
+
+                }
+
+                @Override
+                public void setCellFormula(String formula)
+                        throws FormulaParseException {
+                    // TODO Auto-generated method stub
+
+                }
+
+                @Override
+                public String getCellFormula() {
+                    // TODO Auto-generated method stub
+                    return null;
+                }
+
+                @Override
+                public double getNumericCellValue() {
+                    // TODO Auto-generated method stub
+                    return 0;
+                }
+
+                @Override
+                public Date getDateCellValue() {
+                    // TODO Auto-generated method stub
+                    return null;
+                }
+
+                @Override
+                public RichTextString getRichStringCellValue() {
+                    // TODO Auto-generated method stub
+                    return null;
+                }
+
+                @Override
+                public void setCellValue(boolean value) {
+                    // TODO Auto-generated method stub
+
+                }
+
+                @Override
+                public void setCellErrorValue(byte value) {
+                    // TODO Auto-generated method stub
+
+                }
+
+                @Override
+                public boolean getBooleanCellValue() {
+                    // TODO Auto-generated method stub
+                    return false;
+                }
+
+                @Override
+                public byte getErrorCellValue() {
+                    // TODO Auto-generated method stub
+                    return 0;
+                }
+
+                @Override
+                public void setCellStyle(CellStyle style) {
+                    // TODO Auto-generated method stub
+
+                }
+
+                @Override
+                public CellStyle getCellStyle() {
+                    // TODO Auto-generated method stub
+                    return null;
+                }
+
+                @Override
+                public void setAsActiveCell() {
+                    // TODO Auto-generated method stub
+
+                }
+
+                @Override
+                public CellAddress getAddress() {
+                    return null;
+                }
+
+                @Override
+                public void setCellComment(Comment comment) {
+                    // TODO Auto-generated method stub
+
+                }
+
+                @Override
+                public Comment getCellComment() {
+                    // TODO Auto-generated method stub
+                    return null;
+                }
+
+                @Override
+                public void removeCellComment() {
+                    // TODO Auto-generated method stub
+
+                }
+
+                @Override
+                public Hyperlink getHyperlink() {
+                    // TODO Auto-generated method stub
+                    return null;
+                }
+
+                @Override
+                public void setHyperlink(Hyperlink link) {
+                    // TODO Auto-generated method stub
+
+                }
+
+                @Override
+                public void removeHyperlink() {
+
+                }
+
+                @Override
+                public CellRangeAddress getArrayFormulaRange() {
+                    // TODO Auto-generated method stub
+                    return null;
+                }
+
+                @Override
+                public boolean isPartOfArrayFormulaGroup() {
+                    // TODO Auto-generated method stub
+                    return false;
+                }
+
+
+            };
+        }else{
+            if(cell.getCellType() == Cell.CELL_TYPE_NUMERIC){
+                cell.setCellType(Cell.CELL_TYPE_STRING);
+            }
+            return cell;
+        }
+
+    }
 }
