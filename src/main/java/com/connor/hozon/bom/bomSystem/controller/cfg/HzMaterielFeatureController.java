@@ -306,25 +306,24 @@ public class HzMaterielFeatureController {
 
     @RequestMapping("/updateModelBasic")
     @ResponseBody
-    public boolean updateModelBasic(@RequestBody HzCfg0ModelRecord modelRecord,
-                                    @RequestParam String pFeatureCnDesc,
-                                    @RequestParam String pFeatureSingleVehicleCode,
-                                    @RequestParam String modelFeaturePuid, @RequestParam Map<String, String> reques) {
+    public boolean updateModelBasic(
+            @RequestParam String pCfg0ModelBasicDetail,
+            @RequestParam String puid,
+            @RequestBody HzCfg0ModelFeature modelFeature
+    ) {
+        HzCfg0ModelRecord modelRecord = new HzCfg0ModelRecord();
+        modelRecord.setPuid(puid);
+        modelRecord.setpCfg0ModelBasicDetail(pCfg0ModelBasicDetail);
+
         boolean result = hzCfg0ModelRecordService.doUpdateBasic(modelRecord);
         if (result == false)
             return false;
-        HzCfg0ModelFeature hzCfg0ModelFeature = new HzCfg0ModelFeature();
-        if (modelFeaturePuid == null || "".equals(modelFeaturePuid)) {
-            hzCfg0ModelFeature.setPuid(UUID.randomUUID().toString());
-            hzCfg0ModelFeature.setpFeatureCnDesc(pFeatureCnDesc);
-            hzCfg0ModelFeature.setpFeatureSingleVehicleCode(pFeatureSingleVehicleCode);
-            hzCfg0ModelFeature.setpPertainToModel(modelRecord.getPuid());
-            result = hzCfg0ModelFeatureService.doInsert(hzCfg0ModelFeature);
-        } else if (null != (hzCfg0ModelFeature = hzCfg0ModelFeatureService.doSelectByPrimaryKey(modelFeaturePuid))) {
-            hzCfg0ModelFeature.setpFeatureCnDesc(pFeatureCnDesc);
-            hzCfg0ModelFeature.setpFeatureSingleVehicleCode(pFeatureSingleVehicleCode);
-            hzCfg0ModelFeature.setpPertainToModel(modelRecord.getPuid());
-            result = hzCfg0ModelFeatureService.doUpdateByPrimaryKey(hzCfg0ModelFeature);
+        if (modelFeature.getPuid() == null || "".equals(modelFeature.getPuid())) {
+            modelFeature.setPuid(UUID.randomUUID().toString());
+            result = hzCfg0ModelFeatureService.doInsert(modelFeature);
+        } else if (null != (hzCfg0ModelFeatureService.doSelectByPrimaryKey(modelFeature.getModelFeaturePuid()))) {
+            modelFeature.setPuid(modelFeature.getModelFeaturePuid());
+            result = hzCfg0ModelFeatureService.doUpdateByPrimaryKey(modelFeature);
         } else return false;
         return result;
     }

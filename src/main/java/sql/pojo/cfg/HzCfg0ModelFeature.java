@@ -90,7 +90,11 @@ public class HzCfg0ModelFeature {
      * 3C件标识
      */
     private Integer deleteFlag;
-
+    /**
+     * 在materielFeature中是主键
+     */
+    private String modelFeaturePuid;
+    private Integer importance;
     public String getPuid() {
         return puid;
     }
@@ -265,5 +269,21 @@ public class HzCfg0ModelFeature {
 
     public void setDeleteFlag(Integer deleteFlag) {
         this.deleteFlag = deleteFlag;
+    }
+
+    public Integer getImportance() {
+        return importance;
+    }
+
+    public void setImportance(Integer importance) {
+        this.importance = importance;
+    }
+
+    public String getModelFeaturePuid() {
+        return modelFeaturePuid;
+    }
+
+    public void setModelFeaturePuid(String modelFeaturePuid) {
+        this.modelFeaturePuid = modelFeaturePuid;
     }
 }

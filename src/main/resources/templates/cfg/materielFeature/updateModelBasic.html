@@ -28,141 +28,150 @@
                    th:value="${entity.pCfg0ModelBasicDetail}"
             />
         </div>
+        <!--<div class="form-group col-lg-10">-->
+        <!--<label for="pFeatureCnDesc">中文描述</label>-->
+        <!--<input class="form-control" id="pFeatureCnDesc" name="pFeatureCnDesc" type="text" type="hidden"-->
+        <!--disabled="disabled"-->
+        <!--th:value="${modelFeature.getpFeatureCnDesc()}"-->
+        <!--/>-->
+        <!--</div>-->
         <div class="form-group col-lg-10">
-            <label for="pFeatureCnDesc">中文描述</label>
-            <input class="form-control" id="pFeatureCnDesc" name="pFeatureCnDesc" type="text" type="hidden" disabled="disabled"
-                   th:value="${modelFeature.getpFeatureCnDesc()}"
+            <label for="factoryCode">工厂</label>
+            <input class="form-control" id="factoryCode" name="factoryCode" type="text"
+                   th:value="${modelFeature.getFactoryCode()}"
             />
         </div>
         <div class="form-group col-lg-10">
-            <label for="pFeatureCnDesc">工厂</label>
-            <input class="form-control" id="pProperty1" name="pFeatureCnDesc" type="text"
-                   th:value="${modelFeature.getpFeatureCnDesc()}"
+            <label for="materialCode">物料编码</label>
+            <input class="form-control" id="materialCode" name="materialCode" type="text"
+                   th:value="${modelFeature.getMaterialCode()}"
             />
         </div>
         <div class="form-group col-lg-10">
-            <label for="pFeatureCnDesc">物料编码</label>
-            <input class="form-control" id="pProperty2" name="pFeatureCnDesc" type="text"
-                   th:value="${modelFeature.getpFeatureCnDesc()}"
+            <label for="oldMaterielCode">旧物料编码</label>
+            <input class="form-control" id="oldMaterielCode" name="oldMaterielCode" type="text"
+                   th:value="${modelFeature.getOldMaterielCode()}"
             />
         </div>
         <div class="form-group col-lg-10">
-            <label for="pFeatureCnDesc">旧物料编码</label>
-            <input class="form-control" id="pProperty3" name="pFeatureCnDesc" type="text"
-                   th:value="${modelFeature.getpFeatureCnDesc()}"
+            <label for="basicCountUnit">基本计量单位*</label>
+            <input class="form-control" id="basicCountUnit" name="basicCountUnit" type="text"
+                   th:value="${modelFeature.getBasicCountUnit()}"
             />
         </div>
         <div class="form-group col-lg-10">
-            <label for="pFeatureCnDesc">基本计量单位*</label>
-            <input class="form-control" id="pProperty4" name="pFeatureCnDesc" type="text"
-                   th:value="${modelFeature.getpFeatureCnDesc()}"
+            <label for="materielType">物料类型*</label>
+            <input class="form-control" id="materielType" name="materielType" type="text" disabled="disabled"
+                   th:value="${modelFeature.getMaterielType()}"
             />
         </div>
         <div class="form-group col-lg-10">
-            <label for="pFeatureCnDesc">物料类型*</label>
-            <input class="form-control" id="pProperty5" name="pFeatureCnDesc" type="text" disabled="disabled"
-                   th:value="${modelFeature.getpFeatureCnDesc()}"
-            />
-        </div>
-        <div class="form-group col-lg-10">
-            <label for="pFeatureCnDesc">虚拟件标示*</label>
+            <label for="virtualFlag">虚拟件标示*</label>
             <select class="form-control input-small" data-style="btn-info"
-                    id="pProperty6">
-                <option th:value="N" th:text="否">
+                    id="virtualFlag" name="virtualFlag">
+                <option th:value="0" th:text="否"
+                        th:selected="${modelFeature.getVirtualFlag()==0 or modelFeature.getVirtualFlag()==null?true:false}">
                 </option>
-                <option th:value="Y" th:text="是">
+                <option th:value="1" th:text="是" th:selected="${modelFeature.getVirtualFlag()==1?true:false}">
                 </option>
             </select>
         </div>
         <div class="form-group col-lg-10">
-            <label for="pFeatureCnDesc">采购类型*</label>
+            <label for="purchaseType">采购类型*</label>
             <select class="form-control input-small" data-style="btn-info"
-                    id="pProperty7">
-                <option th:value="E" th:text="E">
+                    id="purchaseType" name="purchaseType">
+                <option th:value="E" th:text="E" th:selected="${modelFeature.getPurchaseType()=='E'?true:false}">
                 </option>
-                <option th:value="F" th:text="F">
+                <option th:value="F" th:text="F" th:selected="${modelFeature.getPurchaseType()=='F'?true:false}">
                 </option>
-                <option th:value="X" th:text="X">
+                <option th:value="X" th:text="X" th:selected="${modelFeature.getPurchaseType()=='X'?true:false}">
                 </option>
+                <option value="-" text="-"></option>
             </select>
         </div>
         <div class="form-group col-lg-10">
-            <label for="pFeatureCnDesc">VIN前置号</label>
-            <input class="form-control" id="pProperty8" name="pFeatureCnDesc" type="text"
-                   th:value="${modelFeature.getpFeatureCnDesc()}"
+            <label for="vinCode">VIN前置号</label>
+            <input class="form-control" id="vinCode" name="vinCode" type="text"
+                   th:value="${modelFeature.getVinCode()}"
             />
         </div>
         <div class="form-group col-lg-10">
-            <label for="pFeatureCnDesc">颜色件标识</label>
-            <input class="form-control" id="pProperty9" name="pFeatureCnDesc" type="text"
-                   th:value="${modelFeature.getpFeatureCnDesc()}"
+            <label for="color">颜色件标识</label>
+            <input class="form-control" id="color" name="color" type="text"
+                   th:value="${modelFeature.getColor()}"
             />
         </div>
         <div class="form-group col-lg-10">
-            <label for="pFeatureCnDesc">毛重</label>
-            <input class="form-control" id="pProperty10" name="pFeatureCnDesc" type="text"
-                   th:value="${modelFeature.getpFeatureCnDesc()}"
+            <label for="grossWeight">毛重</label>
+            <input class="form-control" id="grossWeight" name="grossWeight" type="text"
+                   th:value="${modelFeature.getGrossWeight()}"
             />
         </div>
         <div class="form-group col-lg-10">
-            <label for="pFeatureCnDesc">内外饰标识</label>
+            <label for="labelFlag">内外饰标识</label>
             <select class="form-control input-small" data-style="btn-info"
-                    id="pProperty11">
-                <option th:value="N" th:text="否">
+                    id="labelFlag" name="labelFlag">
+                <option th:value="0" th:text="否"
+                        th:selected="${modelFeature.getLabelFlag()==0 or modelFeature.getLabelFlag()==null?true:false}">
                 </option>
-                <option th:value="Y" th:text="是">
+                <option th:value="1" th:text="是" th:selected="${modelFeature.getLabelFlag()==1?true:false}">
                 </option>
             </select>
         </div>
         <div class="form-group col-lg-10">
-            <label for="pFeatureCnDesc">3C件标识</label>
+            <label for="rulesFlag">3C件标识</label>
             <select class="form-control input-small" data-style="btn-info"
-                    id="pProperty12">
-                <option th:value="N" th:text="否">
+                    id="rulesFlag" name="rulesFlag">
+                <option th:value="0" th:text="否"
+                        th:selected="${modelFeature.getRulesFlag()==0 or modelFeature.getRulesFlag()==null?true:false}">
                 </option>
-                <option th:value="Y" th:text="是">
+                <option th:value="1" th:text="是" th:selected="${modelFeature.getRulesFlag()==1?true:false}">
                 </option>
             </select>
         </div>
         <div class="form-group col-lg-10">
-            <label for="pFeatureCnDesc">零件重要度</label>
+            <label for="importance">零件重要度</label>
             <select class="form-control input-small" data-style="btn-info"
-                    id="pProperty13">
-                <option th:value="N" th:text="否">
+                    id="importance" name="importance">
+                <option th:value="0" th:text="否"
+                        th:selected="${modelFeature.getImportance()==0 or modelFeature.getImportance()==null?true:false}">
                 </option>
-                <option th:value="Y" th:text="是">
+                <option th:value="1" th:text="是" th:selected="${modelFeature.getImportance()==1?true:false}">
                 </option>
             </select>
         </div>
         <div class="form-group col-lg-10">
-            <label for="pFeatureCnDesc">删除标示</label>
+            <label for="deleteFlag">删除标示</label>
             <select class="form-control input-small" data-style="btn-info"
-                    id="pProperty14">
-                <option th:value="N" th:text="否">
+                    id="deleteFlag" name="deleteFlag">
+                <option th:value="0" th:text="否"
+                        th:selected="${modelFeature.getDeleteFlag()==0 or modelFeature.getDeleteFlag()==null?true:false}">
                 </option>
-                <option th:value="Y" th:text="是">
+                <option th:value="1" th:text="是"
+                        th:selected="${modelFeature.getDeleteFlag()==1?true:false}">
                 </option>
             </select>
         </div>
         <div class="form-group col-lg-10">
-            <label for="pFeatureCnDesc">MRP控制者*</label>
-            <input class="form-control" id="pProperty15" name="pFeatureCnDesc" type="text"
-                   th:value="${modelFeature.getpFeatureCnDesc()}"
+            <label for="mrpController">MRP控制者*</label>
+            <input class="form-control" id="mrpController" name="mrpController" type="text"
+                   th:value="${modelFeature.getMrpController()}"
             />
         </div>
 
         <div class="form-group col-lg-10">
-            <label for="pFeatureCnDesc">公告号(BOM没加)*</label>
-            <input class="form-control" id="pProperty18" name="pFeatureCnDesc" type="text"
-                   th:value="${modelFeature.getpFeatureCnDesc()}"
+            <label for="bulletinNum">公告号(BOM没加)*</label>
+            <input class="form-control" id="bulletinNum" name="bulletinNum" type="text"
+                   th:value="${modelFeature.getBulletinNum()}"
             />
         </div>
-        <div class="form-group col-lg-10">
-            <label for="pFeatureSingleVehicleCode">单车配置码</label>
-            <input class="form-control" id="pFeatureSingleVehicleCode" name="pFeatureSingleVehicleCode" type="text" type="hidden" disabled="disabled"
-                   th:value="${modelFeature.getpFeatureSingleVehicleCode()}"
-            />
-        </div>
+        <!--<div class="form-group col-lg-10">-->
+        <!--<label for="pFeatureSingleVehicleCode">单车配置码</label>-->
+        <!--<input class="form-control" id="pFeatureSingleVehicleCode" name="pFeatureSingleVehicleCode" type="text"-->
+        <!--type="hidden" disabled="disabled"-->
+        <!--th:value="${modelFeature.get()}"-->
+        <!--/>-->
+        <!--</div>-->
     </fieldset>
 </form>
 <script th:inline="javascript">
@@ -182,22 +191,16 @@
             // bootstrapValidator.validate();
             // if (bootstrapValidator.isValid()) {
             var url = $("#form", window.top.document).attr('action');
-            url += "?";
             var data = {};
+            url += "?";
+            url += "puid=" + $("#puid").val() + "&pCfg0ModelBasicDetail=" + $("#pCfg0ModelBasicDetail").val()
+            ;
+            var _d = $("#form").serializeArray();
+            for (var p in _d) {
+                data[_d[p].name] = _d[p].value;
+            }
             data.puid = $("#puid").val();
             data.pCfg0ModelBasicDetail = $("#pCfg0ModelBasicDetail").val();
-            url += "pFeatureCnDesc=" + $("#pFeatureCnDesc").val()
-                + "&pFeatureSingleVehicleCode=" + $("#pFeatureSingleVehicleCode").val()
-                + "&modelFeaturePuid=" + $("#modelFeaturePuid").val()
-                +"&pProperty1="+$("#pProperty1").val()+"&pProperty2="+$("#pProperty2").val()
-                +"&pProperty3="+$("#pProperty3").val()+"&pProperty4="+$("#pProperty4").val()
-                +"&pProperty5="+$("#pProperty5").val()+"&pProperty6="+$("#pProperty6").val()
-                +"&pProperty7="+$("#pProperty7").val()+"&pProperty8="+$("#pProperty8").val()
-                +"&pProperty9="+$("#pProperty9").val()+"&pProperty10="+$("#pProperty10").val()
-                +"&pProperty11="+$("#pProperty11").val()+"&pProperty12="+$("#pProperty12").val()
-                +"&pProperty13="+$("#pProperty13").val()+"&pProperty14="+$("#pProperty14").val()
-                +"&pProperty15="+$("#pProperty15").val()+"&pProperty16="+$("#pProperty16").val()
-                +"&pProperty17="+$("#pProperty17").val()+"&pProperty18="+$("#pProperty18").val();
             $.ajax({
                 contentType:
                     "application/json",
