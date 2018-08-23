@@ -58,4 +58,26 @@ public interface UserDao extends GenericDao<User, QueryUser> {
 	//TODO by haozt on 7/23/2018
 	//更改用户密码
 	int updatePassword(User user);
+
+	/**
+	 * 根据部门id 获取当前部门下的用户
+	 * @param groupId
+	 * @return
+	 *  todo by haozt on 8/17/2018
+	 */
+	List<User> findUserByGroupId(String groupId);
+
+	/**
+	 * 获取当前全部用户
+	 * @return
+	 *  todo by haozt on 8/20/2018
+	 */
+	List<User> findAllUser();
+
+	/**
+	 * 获取当前全部用户
+	 * @return
+	 *  todo by haozt on 8/21/2018
+	 */
+	User findUserById(Long userId);
 }

@@ -2,13 +2,12 @@ package com.connor.hozon.bom.resources.service.bom;
 
 import com.connor.hozon.bom.resources.dto.request.AddMbomReqDTO;
 import com.connor.hozon.bom.resources.dto.request.DeleteHzMbomReqDTO;
+import com.connor.hozon.bom.resources.dto.request.SetLouReqDTO;
 import com.connor.hozon.bom.resources.dto.request.UpdateMbomReqDTO;
-import com.connor.hozon.bom.resources.dto.response.HzMbomRecordRespDTO;
-import com.connor.hozon.bom.resources.dto.response.HzSuperMbomRecordRespDTO;
-import com.connor.hozon.bom.resources.dto.response.HzVehicleModelRespDTO;
-import com.connor.hozon.bom.resources.dto.response.OperateResultMessageRespDTO;
+import com.connor.hozon.bom.resources.dto.response.*;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.query.HzBomRecycleByPageQuery;
+import com.connor.hozon.bom.resources.query.HzLouaQuery;
 import com.connor.hozon.bom.resources.query.HzMbomByPageQuery;
 import com.connor.hozon.bom.resources.query.HzMbomTreeQuery;
 import sql.pojo.bom.HzMbomLineRecord;
@@ -102,4 +101,11 @@ public interface HzMbomService {
      * @return
      */
     List<String> loadingCarPartType();
+
+    OperateResultMessageRespDTO setCurrentBomToLou(SetLouReqDTO reqDTO);
+
+    HzMbomLineRecord findParentBomUtil2Y(String projectId,String puid);
+
+
+    HzLouRespDTO getHzLouInfoById(HzLouaQuery query);
 }

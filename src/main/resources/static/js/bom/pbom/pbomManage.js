@@ -14,6 +14,19 @@ function doQuery() {
     pBomUrl+="&pBomOfWhichDept="+pBomOfWhichDept;
     var lineId = $("#lineId").val();
     pBomUrl += "&lineId="+lineId;
+    var pBomLinePartClass = $("#pBomLinePartClass").val();
+    if (pBomLinePartClass =="请选择零件分类") {
+        pBomUrl += "&pBomLinePartClass="+ "";
+    }else {
+        pBomUrl += "&pBomLinePartClass=" + pBomLinePartClass;
+    }
+    var pBomLinePartResource = $("#pBomLinePartResource").val();
+    if (pBomLinePartResource == "请选择零件来源") {
+        pBomUrl += "&pBomLinePartResource="+ "";
+    }
+    else {
+        pBomUrl += "&pBomLinePartResource=" + pBomLinePartResource;
+    }
     initTable(pBomUrl);
     $('#pbomManageTable').bootstrapTable('destroy');
 }
@@ -52,7 +65,12 @@ function initTable(pBomUrl) {
                             align: 'center',
                             valign: 'middle',
                             formatter: function (value, row, index) {
-                                if (value =="LOU"||"LOA"==value) {
+                                if (value =="LOA") {
+                                    return [
+                                        '<a href="javascript:void(0)" onclick="queryLoa(\'' + row.eBomPuid + '\')">' + value + '</a>'
+                                    ].join("");
+                                }
+                                else if (value == "LOU"){
                                     return [
                                         '<a href="javascript:void(0)" onclick="queryLou(\'' + row.eBomPuid + '\')">' + value + '</a>'
                                     ].join("");
@@ -73,9 +91,14 @@ function initTable(pBomUrl) {
                             // align: 'center',
                             valign: 'middle',
                             formatter: function (value, row, index) {
-                                if (value =="LOU/LOA") {
+                                if (value =="LOA") {
                                     return [
-                                        '<a href="javascript:void(0)" onclick="queryLou(' + row.eBomPuid + ')">' + value + '</a>'
+                                        '<a href="javascript:void(0)" onclick="queryLoa(' + row.eBomPuid + ')">' + value + '</a>'
+                                    ].join("");
+                                }
+                                else if (value == "LOU"){
+                                    return [
+                                        '<a href="javascript:void(0)" onclick="queryLou(\'' + row.eBomPuid + '\')">' + value + '</a>'
                                     ].join("");
                                 }
                                 else {
@@ -99,15 +122,22 @@ function initTable(pBomUrl) {
                         return "<span style='color: #00B83F'>已生效</span>";
                     }
                     if (value == 2 || "2" == value) {
-                        return "<span style='color: #a97f89'>草稿状态</span>";
+                        return "<span style='color: #ff7cf4'>草稿状态</span>";
                     }
                     if (3 == value || "3" == value) {
                         return "<span style='color: #9492a9'>废除状态</span>";
                     }
-                    if (4 == value || "4" == value){
+                    if (4 == value || "4" == value) {
                         return "<span style='color: #a90009'>删除状态</span>";
                     }
-                }})
+                    if (value == 5 || value == "5"){
+                        return "<span style='color: #e2ab2f'>审核中</span>"
+                    }
+                    if (value == 6 || value == "6"){
+                        return "<span style='color: #e2ab2f'>审核中</span>"
+                    }
+                }
+            })
             $table.bootstrapTable({
                 url:pBomUrl,
                 method: 'GET',
@@ -230,7 +260,66 @@ function initTable(pBomUrl) {
                                 }
                             });
                         }
-                    }
+                    },
+                    {
+                        text: '设置为LOU/取消',
+                        iconCls: 'glyphicon glyphicon-cog',
+                        handler: function () {
+                            var rows = $table.bootstrapTable('getSelections');
+                            var lineIds = "";
+                            for (var i = 0; i < rows.length; i++) {
+                                lineIds += rows[i].lineId + ",";
+                            }
+                            ;
+                            var myData = JSON.stringify({
+                                "projectId": $("#project", window.top.document).val(),
+                                "lineIds": lineIds,
+                            });
+                            if (rows.length == 0) {
+                                window.Ewin.alert({message: '请选择至少一条需要设置为LOU的数据!'});
+                                return false;
+                            }
+                            else if (rows[0].status == 5 || rows[0].status == 6){
+                                window.Ewin.alert({message: '对不起,审核中的数据不能设置为LOU!'});
+                                return false;
+                            }
+                            // var _table = '<p>是否要删除您所选择的记录？</p>' +
+                            //     '<div style="max-height: 400px;overflow:scroll;"><table class="table table-striped tableNormalStyle" >';
+                            // for (var index in rows) {
+                            //     _table += '<tr><td>' + rows[index].lineId + '</td></tr>';
+                            // }
+                            // _table += '</table></div>';
+                            // window.Ewin.confirm({title: '提示', message: _table, width: 500}).on(function (e) {
+                            //     if (e) {
+                            $.ajax({
+                                type: "POST",
+                                //ajax需要添加打包名
+                                url: "loa/setLou/pBom",
+                                data: myData,
+                                contentType: "application/json",
+                                success: function (result) {
+                                    // if (result.status) {
+                                    //     window.Ewin.alert({message: result.errMsg});
+                                    //     //刷新，会重新申请数据库数据
+                                    // }
+                                    // else {
+                                    //     window.Ewin.alert({messabge: + result.errMsg});
+                                    // }
+                                    if (result.success) {
+                                        layer.msg('设置成功', {icon: 1, time: 2000})
+                                    } else if (!result.success) {
+                                        window.Ewin.alert({message: result.errMsg});
+                                    }
+                                    $table.bootstrapTable("refresh");
+                                },
+                                error: function (info) {
+                                    window.Ewin.alert({message: ":" + info.status});
+                                }
+                            })
+                            //     }
+                            // });
+                        }
+                    },
                 ],
             });
             // $table.bootstrapTable('hideColumn', 'eBomPuid');
@@ -240,7 +329,7 @@ function initTable(pBomUrl) {
         }
     });
 }
-function  queryLou(row){
+function  queryLoa(row){
     var myData= JSON.stringify({
         "projectId": $("#project", window.top.document).val(),
         "puid": row
@@ -272,3 +361,52 @@ function  queryLou(row){
         }
     })
 }
+function queryLou(row) {
+    // var myData = JSON.stringify({
+    //     "projectId": $("#project", window.top.document).val(),
+    //     "puid": row
+    // });
+    var projectId = $("#project", window.top.document).val();
+    $.ajax({
+        type: "GET",
+        //ajax需要添加打包名
+        url: "loa/getLou/pBom?projectId="+projectId+"&puid="+row,
+        // data: myData,
+        // contentType: "application/json",
+        undefinedText: "",
+        success: function (result) {
+            var data = result.data;
+            var parent = data.parent;
+            var config = data.config;
+            var child = data.child;
+            var parentLevel = (parent.parentLevel == undefined ? "" : parent.parentLevel);
+            var parentLineId = (parent.parentLineId == undefined ? "" : parent.parentLineId);
+            var parentName = (parent.parentName == undefined ? "" : parent.parentName);
+            var pCfg0name = (config.pCfg0name == undefined ? "" : config.pCfg0name);
+            var cfg0Desc = (config.cfg0Desc == undefined ? "" : config.cfg0Desc);
+            var pCfg0familyname = (config.pCfg0familyname == undefined ? "" : config.pCfg0familyname);
+            var cfg0FamilyDesc = (config.cfg0FamilyDesc == undefined ? "" : config.cfg0FamilyDesc);
+            var _table = '<div style="max-height: 400px;overflow:scroll;"><table class="table table-striped tableNormalStyle" >';
+            _table += '<tr><td>父层级</td><td>父零件号</td><td>父名称</td></tr>'
+            // for (var i=0;i<parent.length; i++) {
+            _table += '<tr><td>' + parentLevel + '</td><td>' + parentLineId + '</td><td>' + parentName + '</td></tr>';
+            _table += '</table></div>' + '<div style="max-height: 400px;overflow:scroll;"><table class="table table-striped tableNormalStyle" >';
+            _table += '<tr><td>配置名</td><td>特性值描述</td><td>族名</td><td>特性描述</td></tr>'
+            _table += '<tr><td>' + pCfg0name + '</td><td>' + cfg0Desc + '</td><td>' + pCfg0familyname + '</td><td>'+cfg0FamilyDesc+'</td></tr>';
+            _table += '</table></div>' + '<div style="max-height: 400px;overflow:scroll;"><table class="table table-striped tableNormalStyle" >';
+            _table += '<tr><td>子层级</td><td>子零件号</td><td>子名称</td></tr>'
+            for (var i = 0; i < child.length; i++) {
+                _table += '<tr><td>' + child[i].childLevel + '</td><td>' + child[i].childLineId + '</td><td>' + child[i].childName + '</td></tr>';
+            }
+            _table += '</table></div>';
+            window.Ewin.confirm({title: '提示', message: _table, width: 500});
+        }
+    })
+}
+$(document).keydown(function(event) {
+    if (event.keyCode == 13) {
+        $('form').each(function() {
+            event.preventDefault();
+        });
+    }
+});

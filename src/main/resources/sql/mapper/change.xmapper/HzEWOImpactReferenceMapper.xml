@@ -26,20 +26,55 @@
 
 
 
+  <select id="HzEWOImpactReferenceDAOImpl_findHzImpactReference" parameterType="java.util.HashMap" resultMap="BaseResultMap">
+    select t1.ID,t1.EWO_NO,t1.PROJECT_ID,t1.CHECKED
+    from  HZ_EWO_IMPACT_REFERENCE t1
+      where
+       t1.EWO_NO = #{ewoNo,jdbcType=VARCHAR}
+      and t1.PROJECT_ID = #{projectId,jdbcType=VARCHAR}
+      and t1.IMPACT_ANALYSIS_ID = #{impactAnalysisId,jdbcType=DOUBLE}
+  </select>
+
+
+
+
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from HZ_EWO_IMPACT_REFERENCE
     where ID = #{id,jdbcType=DOUBLE}
   </delete>
   
   
-  <insert id="insert" parameterType="sql.pojo.change.HzEWOImpactReference">
+  <insert id="HzEWOImpactReferenceDAOImpl_insertList"  parameterType="java.util.List">
     insert into HZ_EWO_IMPACT_REFERENCE (ID, IMPACT_ANALYSIS_ID, EWO_NO, 
       PROJECT_ID, CHECKED)
-    values (#{id,jdbcType=DOUBLE}, #{impactAnalysisId,jdbcType=DOUBLE}, #{ewoNo,jdbcType=VARCHAR}, 
-      #{projectId,jdbcType=VARCHAR}, #{checked,jdbcType=INTEGER})
+      select SEQ_HZ_EWO_IMPACT_REFERENCE.nextval,t.* from
+    (
+    <foreach collection="list" item="item" index="index" separator="UNION ALL">
+      select
+      #{item.impactAnalysisId,jdbcType=DOUBLE},
+      #{item.ewoNo,jdbcType=VARCHAR},
+      #{item.projectId,jdbcType=VARCHAR},
+      #{item.checked,jdbcType=INTEGER}
+      from DUAL
+    </foreach>
+    )t
   </insert>
-  
-  
+
+  <update id="HzEWOImpactReferenceDAOImpl_updateList" parameterType="java.util.List">
+    <foreach collection="list" item="item" index="index" open="begin" close=";end;" separator=";">
+    update HZ_EWO_IMPACT_REFERENCE
+      <set>
+        IMPACT_ANALYSIS_ID = #{item.impactAnalysisId,jdbcType=DOUBLE},
+        EWO_NO = #{item.ewoNo,jdbcType=VARCHAR},
+        CHECKED = #{item.checked,jdbcType=INTEGER}
+      </set>
+    where ID = #{item.id,jdbcType=DOUBLE}
+    </foreach>
+  </update>
+
+
+
+
   <insert id="insertSelective" parameterType="sql.pojo.change.HzEWOImpactReference">
     insert into HZ_EWO_IMPACT_REFERENCE
     <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -97,14 +132,5 @@
     </set>
     where ID = #{id,jdbcType=DOUBLE}
   </update>
-  
-  
-  <update id="updateByPrimaryKey" parameterType="sql.pojo.change.HzEWOImpactReference">
-    update HZ_EWO_IMPACT_REFERENCE
-    set IMPACT_ANALYSIS_ID = #{impactAnalysisId,jdbcType=DOUBLE},
-      EWO_NO = #{ewoNo,jdbcType=VARCHAR},
-      PROJECT_ID = #{projectId,jdbcType=VARCHAR},
-      CHECKED = #{checked,jdbcType=INTEGER}
-    where ID = #{id,jdbcType=DOUBLE}
-  </update>
+
 </mapper>

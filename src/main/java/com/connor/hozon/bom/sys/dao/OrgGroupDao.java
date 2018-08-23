@@ -30,6 +30,12 @@ public interface OrgGroupDao extends GenericDao<OrgGroup, QueryOrgGroup> {
 	 */
 	OrgGroup findByNode(String node);
 
+	/**
+	 * 获取部门信息
+	 * @param groupId
+	 * @return
+	 */
 	OrgGroup queryOrgGroupById(Long groupId);
 
+	List<OrgGroup> queryAllOrgGroup();
 }

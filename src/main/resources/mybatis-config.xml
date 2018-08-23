@@ -96,5 +96,7 @@
         <!--变更管理-->
         <mapper resource="sql/mapper/change.xmapper/HzEWOBasicInfoMapper.xml"/>
         <mapper resource="sql/mapper/change.xmapper/HzEWOImpactReferenceMapper.xml"/>
+        <mapper resource="sql/mapper/change.xmapper/HzEWOImpactDeptEmpMapper.xml"/>
+        <mapper resource="sql/mapper/change.xmapper/HzEWOImpactDeptMapper.xml"/>
     </mappers>
 </configuration>

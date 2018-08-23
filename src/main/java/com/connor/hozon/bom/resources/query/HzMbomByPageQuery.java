@@ -40,6 +40,20 @@ public class HzMbomByPageQuery extends DefaultPageQuery {
      */
     private String pBomLinePartResource;
 
+    /**
+     * 零件分类
+     */
+    private String pBomLinePartClass;
+
+
+    public String getpBomLinePartClass() {
+        return pBomLinePartClass;
+    }
+
+    public void setpBomLinePartClass(String pBomLinePartClass) {
+        this.pBomLinePartClass = pBomLinePartClass;
+    }
+
     public String getSparePart() {
         return sparePart;
     }

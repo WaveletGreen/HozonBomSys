@@ -19,12 +19,12 @@ import java.util.Map;
 public class HzEWOImpactReferenceDAOImpl extends BaseSQLUtil implements HzEWOImpactReferenceDAO {
     @Override
     public int insertList(List<HzEWOImpactReference> referenceList) {
-        return 0;
+        return super.insert("HzEWOImpactReferenceDAOImpl_insertList",referenceList);
     }
 
     @Override
     public int updateList(List<HzEWOImpactReference> referenceList) {
-        return 0;
+        return super.update("HzEWOImpactReferenceDAOImpl_updateList",referenceList);
     }
 
     @Override

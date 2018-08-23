@@ -15,6 +15,19 @@ function doQuery() {
     eBomUrl += "&pBomOfWhichDept=" + pBomOfWhichDept;
     var lineId = $("#lineId").val();
     eBomUrl += "&lineId=" + lineId;
+    var pBomLinePartClass = $("#pBomLinePartClass").val();
+    if (pBomLinePartClass =="请选择零件分类") {
+        eBomUrl += "&pBomLinePartClass="+ "";
+    }else {
+        eBomUrl += "&pBomLinePartClass=" + pBomLinePartClass;
+    }
+    var pBomLinePartResource = $("#pBomLinePartResource").val();
+    if (pBomLinePartResource == "请选择零件来源") {
+        eBomUrl += "&pBomLinePartResource="+ "";
+    }
+    else {
+        eBomUrl += "&pBomLinePartResource=" + pBomLinePartResource;
+    }
     initTable(eBomUrl);
     $('#ebomManageTable').bootstrapTable('destroy');
 }
@@ -88,7 +101,11 @@ function initTable(eBomUrl) {
                             // align: 'center',
                             valign: 'middle',
                             formatter: function (value, row, index) {
-                                if (value == "LOU/LOA") {
+                                if (value == "LOA") {
+                                    return [
+                                        '<a href="javascript:void(0)" onclick="queryLoa(' + row.puid + ')">' + value + '</a>'
+                                    ].join("");
+                                }else if (value == "LOU"){
                                     return [
                                         '<a href="javascript:void(0)" onclick="queryLou(' + row.puid + ')">' + value + '</a>'
                                     ].join("");
@@ -277,7 +294,7 @@ function initTable(eBomUrl) {
                         }
                     },
                     {
-                        text: '设置为LOU',
+                        text: '设置为LOU/取消',
                         iconCls: 'glyphicon glyphicon-cog',
                         handler: function () {
                             var rows = $table.bootstrapTable('getSelections');
@@ -446,3 +463,52 @@ function queryLoa(row) {
         }
     })
 }
+function queryLou(row) {
+    // var myData = JSON.stringify({
+    //     "projectId": $("#project", window.top.document).val(),
+    //     "puid": row
+    // });
+    var projectId = $("#project", window.top.document).val();
+    $.ajax({
+        type: "GET",
+        //ajax需要添加打包名
+        url: "loa/getLou?projectId="+projectId+"&puid="+row,
+        // data: myData,
+        // contentType: "application/json",
+        undefinedText: "",
+        success: function (result) {
+            var data = result.data;
+            var parent = data.parent;
+            var config = data.config;
+            var child = data.child;
+            var parentLevel = (parent.parentLevel == undefined ? "" : parent.parentLevel);
+            var parentLineId = (parent.parentLineId == undefined ? "" : parent.parentLineId);
+            var parentName = (parent.parentName == undefined ? "" : parent.parentName);
+            var pCfg0name = (config.pCfg0name == undefined ? "" : config.pCfg0name);
+            var cfg0Desc = (config.cfg0Desc == undefined ? "" : config.cfg0Desc);
+            var pCfg0familyname = (config.pCfg0familyname == undefined ? "" : config.pCfg0familyname);
+            var cfg0FamilyDesc = (config.cfg0FamilyDesc == undefined ? "" : config.cfg0FamilyDesc);
+            var _table = '<div style="max-height: 400px;overflow:scroll;"><table class="table table-striped tableNormalStyle" >';
+            _table += '<tr><td>父层级</td><td>父零件号</td><td>父名称</td></tr>'
+            // for (var i=0;i<parent.length; i++) {
+            _table += '<tr><td>' + parentLevel + '</td><td>' + parentLineId + '</td><td>' + parentName + '</td></tr>';
+            _table += '</table></div>' + '<div style="max-height: 400px;overflow:scroll;"><table class="table table-striped tableNormalStyle" >';
+            _table += '<tr><td>配置名</td><td>特性值描述</td><td>族名</td><td>特性描述</td></tr>'
+            _table += '<tr><td>' + pCfg0name + '</td><td>' + cfg0Desc + '</td><td>' + pCfg0familyname + '</td><td>'+cfg0FamilyDesc+'</td></tr>';
+            _table += '</table></div>' + '<div style="max-height: 400px;overflow:scroll;"><table class="table table-striped tableNormalStyle" >';
+            _table += '<tr><td>子层级</td><td>子零件号</td><td>子名称</td></tr>'
+            for (var i = 0; i < child.length; i++) {
+                _table += '<tr><td>' + child[i].childLevel + '</td><td>' + child[i].childLineId + '</td><td>' + child[i].childName + '</td></tr>';
+            }
+            _table += '</table></div>';
+            window.Ewin.confirm({title: '提示', message: _table, width: 500});
+        }
+    })
+}
+$(document).keydown(function(event) {
+    if (event.keyCode == 13) {
+        $('form').each(function() {
+            event.preventDefault();
+        });
+    }
+});

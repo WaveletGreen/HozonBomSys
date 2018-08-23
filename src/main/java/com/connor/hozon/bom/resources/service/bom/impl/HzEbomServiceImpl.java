@@ -40,7 +40,6 @@ import sql.redis.SerializeUtil;
 import java.util.*;
 
 import static com.connor.hozon.bom.resources.service.bom.impl.HzPbomServiceImpl.getLevelAndRank;
-import static com.connor.hozon.bom.resources.service.bom.impl.HzPbomServiceImpl.main;
 
 /**
  * Created by haozt on 2018/06/06
@@ -1446,21 +1445,24 @@ public class HzEbomServiceImpl implements HzEbomService {
                  * 这里每次走更新数据的时候先将原来未更新的数据保存一份，更新后的数据也保存一份，类似于查看变更历史记录的
                  * 功能。
                  */
-                boolean isRepeat = hzEbomRecordDAO.checkItemIdIsRepeat(reqDTO.getProjectId(),reqDTO.getLineId());
-                if(isRepeat){
-                    OperateResultMessageRespDTO respDTO = new OperateResultMessageRespDTO();
-                    respDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
-                    respDTO.setErrMsg("非法操作,要修改的零件号已存在！");
-                    return respDTO;
-                }
+//                boolean isRepeat = hzEbomRecordDAO.checkItemIdIsRepeat(reqDTO.getProjectId(),reqDTO.getLineId());
+//                if(isRepeat){
+//                    OperateResultMessageRespDTO respDTO = new OperateResultMessageRespDTO();
+//                    respDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
+//                    respDTO.setErrMsg("非法操作,要修改的零件号已存在！");
+//                    return respDTO;
+//                }
                 Map<String,Object> bomLineMap = new HashMap<>();
                 bomLineMap.put("puid",reqDTO.getPuid());
                 bomLineMap.put("projectId",reqDTO.getProjectId());
-                HzBomLineRecord bomLineRecord = hzBomLineRecordDao.findBomLineByPuid(bomLineMap);//未修改前的数据
+                HzBomLineRecord bomLineRecord = hzBomLineRecordDao.findBomLine(bomLineMap);//未修改前的数据
                 if(bomLineRecord != null){
                     bomLineMap.put("tableName","HZ_EBOM_REOCRD_BEFORE_CHANGE");
                     List<HzBomLineRecord> records = hzBomLineRecordDao.findBomListForChange(bomLineMap);
                     bomLineRecord.setTableName("HZ_EBOM_REOCRD_BEFORE_CHANGE");
+                    if(bomLineRecord.getEwoNo()!=null && !bomLineRecord.getEwoNo().equals("1")){
+                        bomLineRecord.setEwoNo(null);
+                    }
                     if(ListUtil.isEmpty(records)){//不存在时 添加进去
                         hzBomLineRecordDao.insert(bomLineRecord);
                     }else{//存在记录 查看是否都有产生流程历史记录
@@ -2004,7 +2006,10 @@ public class HzEbomServiceImpl implements HzEbomService {
        if(ListUtil.isNotEmpty(records)){
            if(records.get(0).getIs2Y().equals(1)){
                return records.get(0);
-           }else {
+           }else if(records.get(0).getParentUid() == null){
+               return records.get(0);
+           }
+           else {
                return  findParentFor2Y(projectId,records.get(0).getParentUid());
            }
        }else {
@@ -2016,8 +2021,11 @@ public class HzEbomServiceImpl implements HzEbomService {
     @Override
     public OperateResultMessageRespDTO setCurrentBomAsLou(SetLouReqDTO reqDTO) {
         try {
+            /**
+             * 设置为LOU 或者取消设置为LOU
+             */
             if(reqDTO.getLineIds()==null || reqDTO.getProjectId() == null){
-                return OperateResultMessageRespDTO.illgalArgument();
+                return OperateResultMessageRespDTO.IllgalArgument();
             }
             boolean b = PrivilegeUtil.writePrivilege();
             if(!b){
@@ -2034,42 +2042,56 @@ public class HzEbomServiceImpl implements HzEbomService {
                 List<HzMbomLineRecord> mbomList  =  hzMbomRecordDAO.findHzMbomByPuid(map);
                 if(ListUtil.isNotEmpty(ebomList)){
                     List<HzBomLineRecord> list1 = new ArrayList<>();
-                    List<HzBomLineRecord> list2 = new ArrayList<>();
+                    Set<HzBomLineRecord> set = new HashSet<>();
                     ebomList.forEach(record -> {
                         HzEbomTreeQuery treeQuery = new HzEbomTreeQuery();
                         treeQuery.setProjectId(reqDTO.getProjectId());
                         treeQuery.setPuid(record.getPuid());
                         List<HzEPLManageRecord> records = hzEbomRecordDAO.getHzBomLineChildren(treeQuery);
                         if(ListUtil.isNotEmpty(records) && records.size() > 1){//父层设置为LOU，子层全部为LOA
+                            HzEPLManageRecord r = records.get(0);
                             for(int i = 1;i<records.size();i++){
                                 HzBomLineRecord hzBomLineRecord = new HzBomLineRecord();
-                                hzBomLineRecord.setpLouaFlag(0);
+                                if(Integer.valueOf(1).equals(r.getpLouaFlag())){
+                                    hzBomLineRecord.setpLouaFlag(2);
+                                }else {
+                                    hzBomLineRecord.setpLouaFlag(0);
+                                }
                                 hzBomLineRecord.setPuid(records.get(i).getPuid());
                                 hzBomLineRecord.setTableName("HZ_BOM_LINE_RECORD");
-                                list2.add(hzBomLineRecord);
+                                set.add(hzBomLineRecord);
                             }
+
                         }
                         HzBomLineRecord record1 = new HzBomLineRecord();
                         record1.setPuid(record.getPuid());
-                        record1.setpLouaFlag(1);
+                        if(Integer.valueOf(1).equals(record.getpLouaFlag())){//是lou，则取消设置，否则，就设置为LOU
+                            record1.setpLouaFlag(2);
+                        }else {
+                            record1.setpLouaFlag(1);
+                        }
                         record1.setTableName("HZ_BOM_LINE_RECORD");
                         list1.add(record1);
                     });
 
                     hzBomLineRecordDao.updateBatch(list1);
+                    List<HzBomLineRecord> list2 = new ArrayList<>(set);
                     hzBomLineRecordDao.updateBatch(list2);
                 }
 
-
                 if(ListUtil.isNotEmpty(pbomList)){
                     pbomList.forEach(hzPbomLineRecord -> {
-                        hzPbomLineRecord.setpLouaFlag(1);
+                        if(Integer.valueOf(1).equals(hzPbomLineRecord.getpLouaFlag())){
+                            hzPbomLineRecord.setpLouaFlag(2);
+                        }else {
+                            hzPbomLineRecord.setpLouaFlag(1);
+                        }
                         hzPbomRecordDAO.update(hzPbomLineRecord);
                     });
                 }
                 if(ListUtil.isNotEmpty(mbomList)){
                     mbomList.forEach(hzMbomLineRecord -> {
-                        hzMbomLineRecord.setpLouaFlag(1);
+                        hzMbomLineRecord.setpLouaFlag(Integer.valueOf(1).equals(hzMbomLineRecord.getpLouaFlag())?2:1);
                         hzMbomRecordDAO.update(hzMbomLineRecord);
                     });
                 }

@@ -164,6 +164,23 @@ public class HzEWOController extends BaseController {
     }
 
 
+    /**
+     * 影响分析保存
+     * @param reference
+     * @param response
+     */
+    @RequestMapping(value = "impact/save",method = RequestMethod.POST)
+    public void impactReferenceRecord(HzEWOImpactReference reference, HttpServletResponse response){
+        if(reference.getEwoNo() == null || reference.getProjectId() == null
+                || reference.getProjectId() == "" || reference.getEwoNo() == ""){
+            writeAjaxJSONResponse(ResultMessageBuilder.build(false,"非法参数！"),response);
+            return ;
+        }
+        OperateResultMessageRespDTO respDTO = hzEWOImpactReferenceService.editHzEWOImpactReference(reference);
+        writeAjaxJSONResponse(ResultMessageBuilder.build(respDTO),response);
+    }
+
+
 
 
 }
