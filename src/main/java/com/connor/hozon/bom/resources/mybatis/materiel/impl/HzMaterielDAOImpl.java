@@ -25,22 +25,22 @@ public class HzMaterielDAOImpl extends BaseSQLUtil implements HzMaterielDAO {
 
     @Override
     public int insert(HzMaterielRecord hzMaterielRecord) {
-        return super.insert("HzMaterialDAOImpl_insert",hzMaterielRecord);
+        return super.insert("HzMaterialDAOImpl_insert", hzMaterielRecord);
     }
 
     @Override
     public int update(HzMaterielRecord hzMaterielRecord) {
-        return super.update("HzMaterialDAOImpl_update",hzMaterielRecord);
+        return super.update("HzMaterialDAOImpl_update", hzMaterielRecord);
     }
 
     @Override
     public int delete(String puid) {
-        return super.update("HzMaterialDAOImpl_delete",puid);
+        return super.update("HzMaterialDAOImpl_delete", puid);
     }
 
     @Override
     public int insertList(List<HzMaterielRecord> hzMaterielRecords) {
-        return super.insert("HzMaterialDAOImpl_insertList",hzMaterielRecords);
+        return super.insert("HzMaterialDAOImpl_insertList", hzMaterielRecords);
     }
 
     @Override
@@ -49,64 +49,62 @@ public class HzMaterielDAOImpl extends BaseSQLUtil implements HzMaterielDAO {
         pageRequest.setPageNumber(query.getPage());
         pageRequest.setPageSize(query.getPageSize());
         Map map = new HashMap<>();
-        map.put("projectId",query.getProjectId());
-        map.put("pMaterielDataType",query.getpMaterielDataType());
-        map.put("pMaterielCode",query.getpMaterielCode());
-        map.put("pMaterielType",query.getpMaterielType());
+        map.put("projectId", query.getProjectId());
+        map.put("pMaterielDataType", query.getpMaterielDataType());
+        map.put("pMaterielCode", query.getpMaterielCode());
+        map.put("pMaterielType", query.getpMaterielType());
         pageRequest.setFilters(map);
-        return super.findPage("HzMaterialDAOImpl_findHzMaterielForPage","HzMaterialDAOImpl_findHzMaterielTotalCount",pageRequest);
+        return super.findPage("HzMaterialDAOImpl_findHzMaterielForPage", "HzMaterialDAOImpl_findHzMaterielTotalCount", pageRequest);
     }
-
-
 
 
     @Override
     public List<HzMaterielRecord> findHzMaterielForList(HzMaterielQuery query) {
-        Map<String,Object> map = new HashMap<>();
-        map.put("projectId",query.getProjectId());
-        map.put("puid",query.getPuid());
-        map.put("pMaterielDataType",query.getpMaterielDataType());
-        map.put("",query.getMaterielResourceId());
-        return super.findForList("HzMaterialDAOImpl_findHzMaterielForList",query);
+        Map<String, Object> map = new HashMap<>();
+        map.put("projectId", query.getProjectId());
+        map.put("puid", query.getPuid());
+        map.put("pMaterielDataType", query.getpMaterielDataType());
+        map.put("", query.getMaterielResourceId());
+        return super.findForList("HzMaterialDAOImpl_findHzMaterielForList", query);
     }
 
     @Override
     public List<HzCfg0ModelRecord> findHzCfg0ModelRecord(HzMaterielByPageQuery query) {
-        Map<String,Object> map = new HashMap<>();
-        map.put("offset",(query.getPage() - 1) * query.getPageSize());
-        map.put("limit",query.getPage()*query.getPageSize());
-        map.put("projectId",query.getProjectId());
-        return super.findForList("HzMaterialDAOImpl_findHzCfg0ModelRecord",map);
+        Map<String, Object> map = new HashMap<>();
+        map.put("offset", (query.getPage() - 1) * query.getPageSize());
+        map.put("limit", query.getPage() * query.getPageSize());
+        map.put("projectId", query.getProjectId());
+        return super.findForList("HzMaterialDAOImpl_findHzCfg0ModelRecord", map);
     }
 
     @Override
     public boolean HzMaterielIsExist(Map<String, Object> map) {
-        return (int)super.findForObject("HzMaterialDAOImpl_HzMaterielIsExist",map)>0;
+        return (int) super.findForObject("HzMaterialDAOImpl_HzMaterielIsExist", map) > 0;
     }
 
     @Override
     public HzMaterielRecord getHzMaterielRecord(HzMaterielQuery query) {
-        Map<String,Object> map = new HashMap<>();
-        map.put("puid",query.getPuid());
-        map.put("projectId",query.getProjectId());
-        map.put("pMaterielDataType",query.getpMaterielDataType());
-        return (HzMaterielRecord)super.findForObject("HzMaterialDAOImpl_getHzMaterielRecord",map);
+        Map<String, Object> map = new HashMap<>();
+        map.put("puid", query.getPuid());
+        map.put("projectId", query.getProjectId());
+        map.put("pMaterielDataType", query.getpMaterielDataType());
+        return (HzMaterielRecord) super.findForObject("HzMaterialDAOImpl_getHzMaterielRecord", map);
     }
 
     @Override
     public Integer getHzMaterielCount(String projectId, Integer pMaterielDataType) {
-        Map<String,Object> map = new HashMap<>();
-        map.put("projectId",projectId);
-        map.put("pMaterielDataType",pMaterielDataType);
-        return(Integer) super.findForObject("HzMaterialDAOImpl_findHzMaterielTotalCount",map);
+        Map<String, Object> map = new HashMap<>();
+        map.put("projectId", projectId);
+        map.put("pMaterielDataType", pMaterielDataType);
+        return (Integer) super.findForObject("HzMaterialDAOImpl_findHzMaterielTotalCount", map);
     }
 
 
     @Override
     public List<HzCfg0ModelRecord> findHzCfg0ModelRecordAll(HzMaterielByPageQuery query) {
-        Map<String,Object> map = new HashMap<>();
-        map.put("projectId",query.getProjectId());
-        return super.findForList("HzMaterialDAOImpl_findHzCfg0ModelRecordAll",map);
+        Map<String, Object> map = new HashMap<>();
+        map.put("projectId", query.getProjectId());
+        return super.findForList("HzMaterialDAOImpl_findHzCfg0ModelRecordAll", map);
     }
 
     /**
@@ -116,14 +114,16 @@ public class HzMaterielDAOImpl extends BaseSQLUtil implements HzMaterielDAO {
      * @return
      */
     @Override
-    public int updateByBatch(List<String> list) {
+    public int updateByBatch(List<String> list, String tableName, String field) {
         Map<String, Object> map = new HashMap<>();
         map.put("list", list);
+        map.put("tableName", tableName);
+        map.put("field", field);
         return super.executeUpdate(map, "com.connor.hozon.bom.bomSystem.dao.project.HzSuperMaterielDao.updateByBatch");
     }
 
     @Override
     public int realDelete(String materielResourceId) {
-        return super.delete("HzMaterialDAOImpl_realDelete",materielResourceId);
+        return super.delete("HzMaterialDAOImpl_realDelete", materielResourceId);
     }
 }

@@ -12,6 +12,7 @@ import java.util.List;
 public class HzCfg0ModelFeatureDaoImpl implements HzCfg0ModelFeatureDao {
 
     private final IBaseSQLUtil baseSQLUtil;
+    private static final HzCfg0ModelFeature MODEL_FEATURE = new HzCfg0ModelFeature();
 
     @Autowired
     public HzCfg0ModelFeatureDaoImpl(IBaseSQLUtil baseSQLUtil) {
@@ -30,8 +31,20 @@ public class HzCfg0ModelFeatureDaoImpl implements HzCfg0ModelFeatureDao {
 
     @Override
     public HzCfg0ModelFeature selectByPrimaryKey(String puid) {
-        return baseSQLUtil.executeQueryByPass(new HzCfg0ModelFeature(), puid, "com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0ModelFeatureDao.selectByPrimaryKey", true);
+        return baseSQLUtil.executeQueryByPass(MODEL_FEATURE, puid, "com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0ModelFeatureDao.selectByPrimaryKey", true);
     }
+
+    /**
+     * 连同工厂编号一起查出来
+     *
+     * @param puid
+     * @return
+     */
+    @Override
+    public HzCfg0ModelFeature selectByPrimaryKeyWithFactoryCode(String puid) {
+        return baseSQLUtil.executeQueryByPass(MODEL_FEATURE, puid, "com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0ModelFeatureDao.selectByPrimaryKeyWithFactoryCode", true);
+    }
+
 
     @Override
     public HzCfg0ModelFeature selectByModelPuid(String pPertainToModel) {

@@ -31,6 +31,13 @@ public interface HzCfg0ModelFeatureDao {
     HzCfg0ModelFeature selectByPrimaryKey(@Param("puid") String puid);
 
     /**
+     * 连同工厂编号一起查出来
+     * @param puid
+     * @return
+     */
+    HzCfg0ModelFeature selectByPrimaryKeyWithFactoryCode(@Param("puid") String puid);
+
+    /**
      * 根据车型模型puid查找1个模型特性数据
      *
      * @param pPertainToModel 车型模型主键，puid

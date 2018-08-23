@@ -14,7 +14,7 @@ public interface ISynMaterielService {
      * @param dtos
      * @return
      */
-    JSONObject updateOrAddByUids(List<EditHzMaterielReqDTO> dtos);
+    JSONObject updateOrAddByUids(List<EditHzMaterielReqDTO> dtos,String tableName,String field);
 
     /**
      * 删除时候传
@@ -22,7 +22,7 @@ public interface ISynMaterielService {
      * @param dtos
      * @return
      */
-    JSONObject deleteByPuids(List<EditHzMaterielReqDTO> dtos);
+    JSONObject deleteByPuids(List<EditHzMaterielReqDTO> dtos,String tableName,String field);
 
     /**
      * 一开始同步所有数据到ERP
@@ -30,5 +30,5 @@ public interface ISynMaterielService {
      * @param projectPuid
      * @return
      */
-    JSONObject synAllByProjectPuid(String projectPuid);
+    JSONObject synAllByProjectPuid(String projectPuid,String tableName,String field);
 }
