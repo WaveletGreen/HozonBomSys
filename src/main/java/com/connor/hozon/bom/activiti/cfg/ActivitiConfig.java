@@ -16,6 +16,7 @@ import java.util.Map;
 
 /**
  * Created by K on 2018/8/20.
+ * 项目启动时添加流程引擎配置
  */
 @Component
 public class ActivitiConfig implements ProcessEngineConfigurationConfigurer {

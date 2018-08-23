@@ -10,6 +10,7 @@ import java.io.IOException;
 
 /**
  * Created by K on 2018/8/17.
+ * 测试用，过滤器中添加请求参数
  */
 //@Order(1)
 //@WebFilter(filterName = "actFilter", urlPatterns = "/act/*")
