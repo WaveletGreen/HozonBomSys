@@ -8,15 +8,18 @@ import com.connor.hozon.bom.resources.mybatis.factory.HzFactoryDAO;
 import com.connor.hozon.bom.resources.mybatis.materiel.HzMaterielDAO;
 import com.connor.hozon.bom.resources.query.HzMaterielQuery;
 import integration.base.masterMaterial.ZPPTCO001;
+import integration.logic.ReflectAddMasterMaterial;
 import integration.logic.ReflectMateriel;
 import integration.option.ActionFlagOption;
 import integration.service.impl.masterMaterial1.TransMasterMaterialService;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import sql.pojo.cfg.HzCfg0ModelFeature;
 import sql.pojo.factory.HzFactory;
 import sql.pojo.project.HzMaterielRecord;
 
+import javax.lang.model.type.ArrayType;
 import java.util.*;
 
 import static com.connor.hozon.bom.bomSystem.helper.StringHelper.checkStringIsEmpty;
@@ -71,6 +74,14 @@ public class SynMaterielService implements ISynMaterielService {
         return updateOrDelete(dtos, ActionFlagOption.DELETE);
     }
 
+    public JSONObject tranMateriel2(List<HzCfg0ModelFeature> feature,ActionFlagOption option){
+        List<HzMaterielRecord> sorted=new ArrayList();
+        for (int i = 0; i < feature.size(); i++) {
+            ReflectAddMasterMaterial sad= new ReflectAddMasterMaterial(feature.get(i));
+            sorted.add(sad.getRecord());
+        }
+        return execute(sorted,option);
+    }
     /**
      * 发送全部
      *
@@ -319,6 +330,8 @@ public class SynMaterielService implements ISynMaterielService {
     private int executeByType(List<String> list) {
         return hzMaterielDAO.updateByBatch(list);
     }
+
+
 
     private boolean validate(HzMaterielRecord record) {
         if (null == record.getpMaterielDesc() || "".equalsIgnoreCase(record.getpMaterielDesc()) || null == record.getpFactoryPuid() || "".equals(record.getpFactoryPuid())) {

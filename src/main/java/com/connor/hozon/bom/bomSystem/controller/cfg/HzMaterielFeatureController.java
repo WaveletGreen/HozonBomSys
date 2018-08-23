@@ -5,9 +5,12 @@ import com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0ToModelRecordDao;
 import com.connor.hozon.bom.bomSystem.dto.HzMaterielFeatureBean;
 import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
 import com.connor.hozon.bom.bomSystem.service.cfg.*;
+import com.connor.hozon.bom.bomSystem.service.integrate.SynMaterielService;
 import com.connor.hozon.bom.bomSystem.service.iservice.cfg.IHzCfg0ModelFeatureService;
 import com.connor.hozon.bom.bomSystem.service.project.HzSuperMaterielService;
 import com.connor.hozon.bom.common.base.entity.QueryBase;
+import integration.option.ActionFlagOption;
+import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -66,6 +69,9 @@ public class HzMaterielFeatureController {
 
     @Autowired
     HzCfg0ToModelRecordDao hzCfg0ToModelRecordDao;
+
+    @Autowired
+    private SynMaterielService synMaterielService;
 
     @Autowired
     public HzMaterielFeatureController(HzCfg0OptionFamilyService hzCfg0OptionFamilyService,
@@ -452,4 +458,25 @@ public class HzMaterielFeatureController {
         }
     }
 
+
+    @RequestMapping("/addToSAP")
+    @ResponseBody
+    public JSONObject addToSAP(String[] puidOfModelFeatures){
+        List<HzCfg0ModelFeature> HCMfeatures = new ArrayList<HzCfg0ModelFeature>();
+        for(String puidOfModelFeature : puidOfModelFeatures){
+            HzCfg0ModelFeature feature = hzCfg0ModelFeatureService.doSelectByPrimaryKey(puidOfModelFeature);
+            HCMfeatures.add(feature);
+        }
+        return synMaterielService.tranMateriel2(HCMfeatures,ActionFlagOption.ADD);
+    }
+    @RequestMapping("/deleteToSAP")
+    @ResponseBody
+    public JSONObject deleteToSAP(String[] puidOfModelFeatures){
+        List<HzCfg0ModelFeature> HCMfeatures = new ArrayList<HzCfg0ModelFeature>();
+        for(String puidOfModelFeature : puidOfModelFeatures){
+            HzCfg0ModelFeature feature = hzCfg0ModelFeatureService.doSelectByPrimaryKey(puidOfModelFeature);
+            HCMfeatures.add(feature);
+        }
+        return synMaterielService.tranMateriel2(HCMfeatures,ActionFlagOption.DELETE);
+    }
 }

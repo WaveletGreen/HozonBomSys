@@ -95,6 +95,11 @@ public class HzCfg0ModelFeature {
      */
     private String modelFeaturePuid;
     private Integer importance;
+    /**
+     * 主键
+     */
+    private String puidOfModelFeature;
+
     public String getPuid() {
         return puid;
     }
@@ -285,5 +290,13 @@ public class HzCfg0ModelFeature {
 
     public void setModelFeaturePuid(String modelFeaturePuid) {
         this.modelFeaturePuid = modelFeaturePuid;
+    }
+
+    public String getPuidOfModelFeature() {
+        return puidOfModelFeature;
+    }
+
+    public void setPuidOfModelFeature(String puidOfModelFeature) {
+        this.puidOfModelFeature = puidOfModelFeature;
     }
 }
