@@ -561,6 +561,7 @@ public class SynBomService implements ISynBomService {
         List<HzMBomToERPBean> parents = new ArrayList<>();
         JSONObject result = validate(projectPuid, puids, beans, parents);
         parents.forEach(p -> {
+//            parentPuidMap.put(p.getBomUid(), p);
             parentPuidMap.put(p.getBomUid(), p);
         });
 

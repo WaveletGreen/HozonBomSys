@@ -57,7 +57,7 @@ public class SynMaterielService implements ISynMaterielService {
      */
     @Override
     public JSONObject updateOrAddByUids(List<EditHzMaterielReqDTO> dtos) {
-        return updateOrDelete(dtos, ActionFlagOption.UPDATE_EMPTY);
+        return updateOrDelete(dtos, ActionFlagOption.UPDATE);
     }
 
     /**
@@ -196,18 +196,18 @@ public class SynMaterielService implements ISynMaterielService {
             //已经发送过了，设置为更新
             if (record.getSendSapFlag() != null && record.getSendSapFlag() == 1) {
                 //更新操作或删除操作
-                if (option == ActionFlagOption.DELETE || option == ActionFlagOption.UPDATE_EMPTY) {
+                if (option == ActionFlagOption.DELETE || option == ActionFlagOption.UPDATE) {
                     reflectMateriel.setActionFlagOption(option);
                 }
                 //默认执行更新操作
                 else {
-                    reflectMateriel.setActionFlagOption(ActionFlagOption.UPDATE_EMPTY);
+                    reflectMateriel.setActionFlagOption(ActionFlagOption.UPDATE);
                 }
             }
             //没有发送过，执行新增操作
             else {
                 //更新操作或新增操作
-                if (option == ActionFlagOption.UPDATE_EMPTY || option == ActionFlagOption.ADD) {
+                if (option == ActionFlagOption.UPDATE || option == ActionFlagOption.ADD) {
                     reflectMateriel.setActionFlagOption(ActionFlagOption.ADD);
                 }
                 //没有，不允许删除

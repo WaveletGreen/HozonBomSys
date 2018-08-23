@@ -112,7 +112,7 @@ public class SynBomController extends ExtraIntegrate {
             model.addAttribute("msg", result.get("msg"));
             return "errorWithEntity";
         }
-        JSONObject entities = bomService.updateByUids(projectUid, dtos.get(0).getPuid());
+        JSONObject entities = bomService.addOne(projectUid, dtos.get(0).getPuid());
         addToModel(entities, model);
         return "stage/templateOfIntegrate";
     }
