@@ -90,7 +90,7 @@ public class HzVWOProecrssController {
                 Long afterId = -1L, beforeId = -1L;
                 for (int i = 0; i < localParams.size(); i++) {
 
-                    if (1 == localParams.get(i).getCfgIsInProcess()) {
+                    if (localParams.get(i).getCfgIsInProcess() != null && 1 == localParams.get(i).getCfgIsInProcess()) {
                         result.put("status", false);
                         result.put("msg", localParams.get(i).getpCfg0ObjectId() + "已在VWO变更流程中，不允许重复发起流程");
                         return result;
