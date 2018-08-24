@@ -419,7 +419,14 @@ function initTable(eBomUrl) {
                             //     }
                             // });
                         }
-                    }
+                    },
+                    {
+                        text: '导入Excel',
+                        iconCls: 'glyphicon glyphicon-share',
+                        handler: function () {
+                            window.Ewin.dialog({title:"导入",url:"role/addPage",width:600,height:310})
+                        }
+                    },
                 ],
             });
             //$table.bootstrapTable('hideColumn','puid');
