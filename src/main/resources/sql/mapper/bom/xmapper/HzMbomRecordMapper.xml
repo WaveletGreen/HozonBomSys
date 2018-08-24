@@ -750,7 +750,7 @@
 
 
 
-    <!--获取PBOM 2Y层 对应的lineIndex的第一个字母最大值-->
+    <!--获取MBOM 2Y层 对应的lineIndex的第一个字母最大值-->
     <select id="HzMbomRecordDAOImpl_getMaxLineIndexFirstNum" parameterType="java.lang.String" resultType="java.lang.Integer">
         select max(substr(P_LINE_INDEX,1,1)) from HZ_MBOM_RECORD t
         where t.p_bom_digifax_id=(
