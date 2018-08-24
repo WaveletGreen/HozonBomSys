@@ -149,14 +149,17 @@ function loadData() {
             ;
             $table.append(t);
             //动态拼接后台数据
+            var aaa = 1
             for (var i = 0; i < data.length; i++) {
                 var dataOfModel = data[i];
-                var delta = "<tr>"
-                    "<td style='text-align: center'><div style='width: 50px' ><input type='button' value='编辑'></div></td>"
+                var delta = "<tr>" +
+                    // "<input type='text' value='"+(int++)+"'>"+
+                    // <input type='text' value='"+aaa+++"'>
+                    "<td style='text-align: center'><div style='width: 50px'class='btn' >编辑</div></td>"
                     +
                     "<td><div style='width: 50px' >" + (i + 1) + "</div></td>";
                 for (var index in dataOfModel) {
-                    delta = delta + "<td><div style='width: 150px'>" + dataOfModel[index] + "</div></td>";
+                    delta = delta + "<td class='edit'><input type='text' value='"+dataOfModel[index]+"'><div style='width: 150px'>" + dataOfModel[index] + "</div></td>";
                 }
                 delta = delta + "</tr>";
                 $table.append(delta);
@@ -168,6 +171,40 @@ function loadData() {
         }
     });
 }
+// $("input:button").click(function() {
+//     // if($(this).val()=="确定"){
+//     //     var goods={};
+//     //     goods["goodsId"]=$(this).parents("tr").children("#goodsId").children('input').val();
+//     //     goods["goodsType"]=$(this).parents("tr").children("#goodsType").children('input').val();
+//     //     goods["goodsName"]=$(this).parents("tr").children("#goodsName").children('input').val();
+//     //     goods["goodsContent"]=$(this).parents("tr").children("#goodsContent").children('input').val();
+//     //     goods["goodsPrice"]=$(this).parents("tr").children("#goodsPrice").children('input').val();
+//     //     goods["goodsSell"]=$(this).parents("tr").children("#goodsSell").children('input').val();
+//     //
+//     //     $.ajax({
+//     //         type : "post",
+//     //         url :"<%=ppath%>/goodsManager/edit",
+//     //         data :goods,
+//     //         dataType : "json",
+//     //         success : function(res) {
+//     //             if(res=="success")
+//     //                 alert("修改成功");
+//     //         }
+//     //     });
+//     // }
+//
+//
+//     str = $(this).val()=="编辑"?"确定":"编辑";
+//     $(this).val(str);   // 按钮被点击后，在“编辑”和“确定”之间切换
+//     $(this).parent().siblings("td").each(function() {  // 获取当前行的其他单元格
+//         var obj_text = $(this).find("input:text");    // 判断单元格下是否有文本框
+//         if(!obj_text.length)   // 如果没有文本框，则添加文本框使之可以编辑
+//             $(this).html("<input type='text' value='"+$(this).text()+"'>");
+//         else
+//             $(this).html(obj_text.val());
+//     });
+//
+// });
 
 var projectPuid;
 $(document).ready(
@@ -196,24 +233,102 @@ $(document).ready(
                 width: 400,
                 height: 450
             });
-    }),
-);
-
-// $(document).ready(
-($("input:button").click(function () {
-        str = $(this).val() == "编辑" ? "确定" : "编辑";
-        $(this).val(str);   // 按钮被点击后，在“编辑”和“确定”之间切换
-        $(this).parent().parent().siblings("td").each(function () {  // 获取当前行的其他单元格
-            obj_text = $(this).find("div input:text");    // 判断单元格下是否有文本框
-            if (!obj_text.length)   // 如果没有文本框，则添加文本框使之可以编辑
-                $(this).html("<div style='width: 150px'><input type='text' value='" + $(this).text() + "'></div>");
-            else   // 如果已经存在文本框，则将其显示为文本框修改的值
-                $(this).html("<div style='width: 150px'>" + obj_text.val() + "</div>");
-        });
     })
-)
+);
+// function editTd(id) {
+//     //选中编辑按钮的时候,把这行指定的几个td变成文本框
+//     var b = $("input[type='button'][id='" + id + "']").parent(); //td
+//     var a = b.siblings(); //td的兄弟节点
+//     if (a[1].children.length === 0) {
+//         a[1].innerHTML = "<input type='text' value='" + a[1].innerText + "'/>";
+//     }
+//     if (a[2].children.length === 0) {
+//         a[2].innerHTML = "<input type='text' value='" + a[2].innerText + "'/>";
+//     }
+//     if (a[3].children.length === 0) {
+//         a[3].innerHTML = "<input type='text' value='" + a[3].innerText + "'/>";
+//     }
+//     if (a[4].children.length === 0) {
+//         a[4].innerHTML = "<input type='text' value='" + a[4].innerText + "'/>";
+//     }
+//     if (a[5].children.length === 0) {
+//         a[5].innerHTML = "<input type='text' value='" + a[5].innerText + "'/>";
+//     }
+//     if (a[6].children.length === 0) {
+//         a[6].innerHTML = "<input type='text' value='" + a[6].innerText + "'/>";
+//     }
+//     //将编辑改成 保存和取消两个按钮
+//     b[0].innerHTML = "<input id='" + id + "' type='button' onclick='saveEditTd(this.id);' value='保存'/><input type='button' onclick='resertEditTd();' value='取消'/>";
+// }
 
-// )
+$('.edit').on('click', function(){
+    if(!($(this).find('div').hasClass('btn'))){
+        $(this).find('div').is(':visible') && ($(this).find('input').show().prev().hide(), $(this).parent().find('.btn').html('保存'));
+    }
+})
+$('.btn').on('click', function(){
+    // $(this).html() == '编辑' ? $(this).html('保存') : $(this).html('编辑');
+    if($(this).html() == '编辑'){
+        $(this).html('保存');
+        $(this).parent().siblings().each(function(index, item){
+            $(item).find('div').hide().next().show();
+        })
+    }else{
+        $(this).html('编辑');
+        $(this).parent().siblings().each(function(index, item){
+            $(item).find('div').html($(item).find('input').val()).show().next().hide();
+        })
+    }
+})
+
+/*$(function(){
+    $("input:button").click(function() {
+        str = $(this).val()=="编辑"?"确定":"编辑";
+        $(this).val(str);   // 按钮被点击后，在“编辑”和“确定”之间切换
+        $(this).parent().siblings("td").each(function() {  // 获取当前行的其他单元格
+            var obj_text = $(this).find("input:text");    // 判断单元格下是否有文本框
+            console.log($(this).find("input:text"));
+            if(!obj_text.length)   // 如果没有文本框，则添加文本框使之可以编辑
+                $(this).html("<input type='text' value='"+$(this).text()+"'>");
+            else // 如果已经存在文本框，则将其显示为文本框修改的值
+                $(this).html(obj_text.val());
+            });
+    });
+});*/
+// $(document).ready(function () {
+//     $(".edit").on("click", function () {
+//         var t_this = $(this);
+//         var list = $(t_this).parent().parent().find("td:lt(2)");
+//         var html = encodeURIComponent($(t_this).parent().parent().html());
+//         $.each(list, function (i, obj) {
+//             $(obj).html("<input type='text' value='" + $(obj).text() + "'/>");
+//         });
+//         $(t_this).parent().html("<input type='button' value='保存' class='save'/>");
+//     });
+//     $(".save").on("click", function () {
+//         var t_this = $(this);
+//         var list = $(t_this).parent().parent().find("td :input[type='text']");
+//         $.each(list, function (i, obj) {
+//             $(obj).parent().html($(obj).val());
+//         });
+//         $(t_this).parent().html("<input type='button' value='编辑' class='edit'/>");
+//     });
+// });
+// $(document).ready(function() {
+// //     $("#edit").bind("click", function() {
+//     ($("input:button").click(function () {
+//         str = $(this).val() == "编辑" ? "确定" : "编辑";
+//         $(this).val(str);   // 按钮被点击后，在“编辑”和“确定”之间切换
+//         $(this).parent().parent().siblings("td").each(function () {  // 获取当前行的其他单元格
+//             obj_text = $(this).find("div input:text");    // 判断单元格下是否有文本框
+//             if (!obj_text.length)   // 如果没有文本框，则添加文本框使之可以编辑
+//                 $(this).html("<div style='width: 150px'><input type='text' value='" + $(this).text() + "'></div>");
+//             else   // 如果已经存在文本框，则将其显示为文本框修改的值
+//                 $(this).html("<div style='width: 150px'>" + obj_text.val() + "</div>");
+//         });
+//     }))
+//     // });
+// });
 
 function Botton(id) {
     window.Ewin.dialog({
@@ -224,20 +339,20 @@ function Botton(id) {
         gridId: "addPageOfModel"
     })
 };
-//
-// $(function () {
-//     $("div input:button").click(function () {
-//         str = $(this).val() == "编辑" ? "确定" : "编辑";
-//         $(this).val(str);   // 按钮被点击后，在“编辑”和“确定”之间切换
-//         $(this).parent().parent().siblings("td").each(function () {  // 获取当前行的其他单元格
-//             obj_text = $(this).find("div input:text");    // 判断单元格下是否有文本框
-//             if (!obj_text.length)   // 如果没有文本框，则添加文本框使之可以编辑
-//                 $(this).html("<div style='width: 150px'><input type='text' value='" + $(this).text() + "'></div>");
-//             else   // 如果已经存在文本框，则将其显示为文本框修改的值
-//                 $(this).html("<div style='width: 150px'>" + obj_text.val() + "</div>");
-//         });
-//     });
-// });
+
+/*$(function () {
+    $("div input:button").click(function () {
+        str = $(this).val() == "编辑" ? "确定" : "编辑";
+        $(this).val(str);   // 按钮被点击后，在“编辑”和“确定”之间切换
+        $(this).parent().parent().siblings("td").each(function () {  // 获取当前行的其他单元格
+            obj_text = $(this).find("div input:text");    // 判断单元格下是否有文本框
+            if (!obj_text.length)   // 如果没有文本框，则添加文本框使之可以编辑
+                $(this).html("<div style='width: 150px'><input type='text' value='" + $(this).text() + "'></div>");
+            else   // 如果已经存在文本框，则将其显示为文本框修改的值
+                $(this).html("<div style='width: 150px'>" + obj_text.val() + "</div>");
+        });
+    });
+});*/
 var i = 0;
 $(function () {
     $("#addTo").click(function () {

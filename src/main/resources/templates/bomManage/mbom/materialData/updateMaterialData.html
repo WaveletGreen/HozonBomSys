@@ -106,9 +106,11 @@
     </div>
     <div class="form-group">
         <label for="pLoosePartFlag">散件标志</label>
-        <input class="form-control" id="pLoosePartFlag" name="pLoosePartFlag" type="text"
-               th:value="${data.pLoosePartFlag}"
-               placeholder="请输入散件标志"/><!--th:value="${entity.level}"-->
+        <select class="form-control" name="pLoosePartFlag" id="pLoosePartFlag" placeholder="请选择是否散件标志">
+            <option th:selected="${data.getpLoosePartFlag()==''?true:false}"></option> <!--th:selected="${data.getResource()=='MAKE'?true:false}"-->
+            <option th:selected="${data.getpLoosePartFlag()=='Y'?true:false}">Y</option>
+            <option th:selected="${data.getpLoosePartFlag()=='N'?true:false}">N</option>
+        </select>
     </div>
 </form>
 

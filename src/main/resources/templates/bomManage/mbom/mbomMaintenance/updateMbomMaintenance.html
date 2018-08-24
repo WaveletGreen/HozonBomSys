@@ -114,9 +114,10 @@
     </div>
     <div class="form-group">
         <label for="pBomType">BOM类型</label>
-        <input class="form-control" id="pBomType" name="pBomType" type="text"
-               th:value="${data.pBomType}"
-               placeholder="请输入BOM类型"/><!--th:value="${entity.changeNum}"-->
+        <select class="form-control" name="pBomType" id="pBomType" placeholder="请选择BOM类型">
+            <option th:selected="${data.getpBomType()=='生产'?true:false}">生产</option>
+            <option th:selected="${data.getpBomType()=='财务'?true:false}">财务</option>
+        </select>
     </div>
 </form>
 
