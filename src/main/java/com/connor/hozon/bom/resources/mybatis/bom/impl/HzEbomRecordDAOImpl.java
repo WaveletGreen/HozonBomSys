@@ -9,6 +9,7 @@ import com.connor.hozon.bom.resources.query.HzEbomByPageQuery;
 import com.connor.hozon.bom.resources.query.HzEbomTreeQuery;
 import org.springframework.stereotype.Service;
 import sql.BaseSQLUtil;
+import sql.pojo.bom.HzImportEbomRecord;
 import sql.pojo.epl.HzEPLManageRecord;
 
 import java.util.HashMap;
@@ -110,6 +111,12 @@ public class HzEbomRecordDAOImpl extends BaseSQLUtil implements HzEbomRecordDAO 
     @Override
     public int insert(HzEPLManageRecord record) {
         return super.insert("HzEbomRecordDAOImpl_insert",record);
+    }
+
+    @Override
+    public int importList(List<HzImportEbomRecord> records) {
+
+        return super.insert("HzEbomRecordDAOImpl_importList",records);
     }
 
 }

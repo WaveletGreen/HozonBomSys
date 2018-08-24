@@ -1,5 +1,7 @@
 package sql.pojo.bom;
 
+import java.util.Objects;
+
 /**
  * @Author: haozt
  * @Date: 2018/8/23
@@ -17,6 +19,7 @@ public class HzImportEbomRecord {
 
     private String lineIndex;
 
+    private String linePuid;
     /**
      * 树的高度（深度）
      */
@@ -192,12 +195,34 @@ public class HzImportEbomRecord {
      */
     private String pBuyEngineer;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        HzImportEbomRecord record = (HzImportEbomRecord) o;
+        return Objects.equals(puid, record.puid) ;
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash( puid);
+    }
+
     public Integer getNo() {
         return No;
     }
 
     public void setNo(Integer no) {
         No = no;
+    }
+
+    public String getLinePuid() {
+        return linePuid;
+    }
+
+    public void setLinePuid(String linePuid) {
+        this.linePuid = linePuid;
     }
 
     public String getPuid() {
