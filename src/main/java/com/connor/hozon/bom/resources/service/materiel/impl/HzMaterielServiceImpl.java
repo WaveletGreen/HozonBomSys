@@ -81,7 +81,7 @@ public class HzMaterielServiceImpl implements HzMaterielService {
             }else if("Y".equals(loosePartFlag.toUpperCase())){
                 record.setpLoosePartFlag(1);
             }else{
-                record.setpLoosePartFlag(2);
+                record.setpLoosePartFlag(null);
             }
             record.setpMrpController(editHzMaterielReqDTO.getpMrpController());
             record.setpUpdateName(user.getUserName());

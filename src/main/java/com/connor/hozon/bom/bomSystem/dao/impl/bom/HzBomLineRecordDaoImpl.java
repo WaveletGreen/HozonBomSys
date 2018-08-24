@@ -125,10 +125,6 @@ public class HzBomLineRecordDaoImpl extends BaseSQLUtil {
     }
 
 
-    public int insertList(List<HzBomLineRecord> records){
-        return super.insert("HzBomLineRecordDaoImpl_insertList",records);
-    }
-
     public Integer getMaxLineIndexFirstNum(String projectId){
         return (Integer) super.findForObject("HzBomLineRecordDaoImpl_getMaxLineIndexFirstNum",projectId);
     }

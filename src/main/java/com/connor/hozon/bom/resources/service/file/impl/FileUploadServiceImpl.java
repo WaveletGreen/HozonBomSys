@@ -1,12 +1,16 @@
 package com.connor.hozon.bom.resources.service.file.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.connor.hozon.bom.bomSystem.dao.bom.HzBomMainRecordDao;
 import com.connor.hozon.bom.bomSystem.dao.impl.bom.HzBomLineRecordDaoImpl;
 import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.resources.dto.response.OperateResultMessageRespDTO;
+import com.connor.hozon.bom.resources.mybatis.bom.HzEbomRecordDAO;
 import com.connor.hozon.bom.resources.service.file.FileUploadService;
 import com.connor.hozon.bom.resources.util.ExcelUtil;
+import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.resources.util.PrivilegeUtil;
+import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -32,12 +36,13 @@ public class FileUploadServiceImpl implements FileUploadService {
     @Autowired
     private HzBomMainRecordDao hzBomMainRecordDao;
 
-    private static final  String projectId = "e5969e81-0339-4e3a-98a9-a918f64e4289";
+    @Autowired
+    private HzEbomRecordDAO hzEbomRecordDAO;
+
+    private int errorCount = 0;
     @Override
     public OperateResultMessageRespDTO UploadEbomToDB(MultipartFile file,String projectId) {
-        projectId = "e5969e81-0339-4e3a-98a9-a918f64e4289";
         long t1 = System.currentTimeMillis();
-        final StringBuffer stringBuffer = new StringBuffer();//错误信息记录
         try {
             //判断权限
             boolean b = PrivilegeUtil.writePrivilege();
@@ -57,9 +62,17 @@ public class FileUploadServiceImpl implements FileUploadService {
             ExcelUtil.preReadCheck(file.getOriginalFilename());
             //上传文件到服务器
             String fileUrl = ExcelUtil.uploadFileToLocation(file.getBytes(),file.getOriginalFilename());
-            String textUtl = "D:\\file\\upload\\..EP10分时租赁全配置BOM清单2018.01.25.xlsx";
+            String textUtl = "D:\\file\\upload\\测试测试.xlsx";
             //读取excel文件
             Workbook workbook = ExcelUtil.getWorkbook(textUtl);
+            this.errorCount = 0;
+            String errorMsg = errorLogInfo(workbook);
+            if(this.errorCount!=0){
+                OperateResultMessageRespDTO respDTO = new OperateResultMessageRespDTO();
+                respDTO.setErrMsg(errorMsg);
+                respDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
+                return  respDTO;
+            }
 
             List<List<HzImportEbomRecord>> list1 = new ArrayList<>();
 
@@ -114,20 +127,55 @@ public class FileUploadServiceImpl implements FileUploadService {
 
             }
 
-            List<HzImportEbomRecord> records = analysisFinalExcelContent(list1);
+            List<HzImportEbomRecord> records = analysisFinalExcelContent(list1,projectId);
             int j = 0;
             String s ="";
-            for(HzImportEbomRecord record:records){
-                if(record.getLevel().endsWith("Y")){
-                    int level = Integer.valueOf(record.getLevel().replace("Y",""))+1;
+            Set<HzImportEbomRecord> ss = new HashSet<>();
+            List<HzImportEbomRecord> ll = new ArrayList<>();
+
+            for(int i=0;i<records.size();i++){//设置子层的父id为当前的id
+                j = i;
+                if(records.get(i).getLevel().endsWith("Y")){
+                    ss.add(records.get(i));
+                    ll.add(records.get(i));
+                    int level = Integer.valueOf(records.get(i).getLevel().replace("Y",""))+1;
                     s = String.valueOf(level);
-                    for(int i =j;i<records.size();i++){
-                        if(records.get(i).getLevel().replace("Y","").equals(s)){
-                            record.setPuid(records.get(i).getParentId());
-                            j = i;
+                    for(int k =j;k<records.size();k++){
+                        if(s.equals(records.get(k).getLevel()) || (s+"Y").equals(records.get(k).getLevel())){
+                            records.get(i).setPuid(records.get(k).getParentId());
                             break;
                         }
                     }
+                }
+            }
+
+            System.out.println(JSON.toJSONString(ll));
+
+            Set<HzImportEbomRecord> set = new HashSet<>(records);
+            if(ListUtil.isNotEmpty(records)){
+                int size = records.size();
+                //分批插入数据 一次1000条
+                int i =0;
+                int cou = 0;
+                if(size>1000){
+                    for(i =0;i<size/1000;i++){
+                        List<HzImportEbomRecord> list = new ArrayList<>();
+                        for(int k = 0;k<1000;k++){
+                            HzImportEbomRecord hzImportEbomRecord =records.get(cou);
+                            list.add(hzImportEbomRecord);
+                            cou++;
+                        }
+                        hzEbomRecordDAO.importList(list);
+                    }
+                }
+                if(i*1000<size){
+                    List<HzImportEbomRecord> list = new ArrayList<>();
+                    for(int k = 0;k<size-i*1000;k++){
+                        HzImportEbomRecord hzImportEbomRecord =records.get(cou);
+                        list.add(hzImportEbomRecord);
+                        cou++;
+                    }
+                    hzEbomRecordDAO.importList(list);
                 }
             }
 
@@ -137,10 +185,10 @@ public class FileUploadServiceImpl implements FileUploadService {
             System.out.println("时间="+(t2-t1)+"ms");
 
         }catch (Exception e){
-            e.printStackTrace();
+            return OperateResultMessageRespDTO.getFailResult();
 
         }
-        return null;
+        return OperateResultMessageRespDTO.getSuccessResult();
     }
 
 
@@ -151,65 +199,88 @@ public class FileUploadServiceImpl implements FileUploadService {
      * @return
      */
     private HzImportEbomRecord excelObjectToRecord(Sheet sheet,int rowNum){
-        String no = ExcelUtil.getCell(sheet.getRow(rowNum),0).getStringCellValue();
-        String lineId=ExcelUtil.getCell(sheet.getRow(rowNum),1).getStringCellValue();
-        String pBomLinePartName=ExcelUtil.getCell(sheet.getRow(rowNum),2).getStringCellValue();
-        String pBomOfWhichDept=ExcelUtil.getCell(sheet.getRow(rowNum),4).getStringCellValue();
+        Row row = sheet.getRow(rowNum);
+        String no = ExcelUtil.getCell(row,0).getStringCellValue();
+        String lineId=ExcelUtil.getCell(row,1).getStringCellValue();
+        String pBomLinePartName=ExcelUtil.getCell(row,2).getStringCellValue();
+        String pBomOfWhichDept=ExcelUtil.getCell(row,4).getStringCellValue();
 
 
-        String pBomLinePartEnName=ExcelUtil.getCell(sheet.getRow(rowNum),5).getStringCellValue();
-        String pUnit=ExcelUtil.getCell(sheet.getRow(rowNum),6).getStringCellValue();
-        String pPictureNo=ExcelUtil.getCell(sheet.getRow(rowNum),7).getStringCellValue();
-        String pPictureSheet=ExcelUtil.getCell(sheet.getRow(rowNum),8).getStringCellValue();
-        String pMaterialHigh=ExcelUtil.getCell(sheet.getRow(rowNum),9).getStringCellValue();
+        String pBomLinePartEnName=ExcelUtil.getCell(row,5).getStringCellValue();
+        String pUnit=ExcelUtil.getCell(row,6).getStringCellValue();
+        String pPictureNo=ExcelUtil.getCell(row,7).getStringCellValue();
+        String pPictureSheet=ExcelUtil.getCell(row,8).getStringCellValue();
+        String pMaterialHigh=ExcelUtil.getCell(row,9).getStringCellValue();
 
-        String pMaterial1=ExcelUtil.getCell(sheet.getRow(rowNum),10).getStringCellValue();
-        String pMaterial2=ExcelUtil.getCell(sheet.getRow(rowNum),11).getStringCellValue();
-        String pMaterial3=ExcelUtil.getCell(sheet.getRow(rowNum),12).getStringCellValue();
-        String pDensity=ExcelUtil.getCell(sheet.getRow(rowNum),13).getStringCellValue();
-        String pMaterialStandard=ExcelUtil.getCell(sheet.getRow(rowNum),14).getStringCellValue();
+        String pMaterial1=ExcelUtil.getCell(row,10).getStringCellValue();
+        String pMaterial2=ExcelUtil.getCell(row,11).getStringCellValue();
+        String pMaterial3=ExcelUtil.getCell(row,12).getStringCellValue();
+        String pDensity=ExcelUtil.getCell(row,13).getStringCellValue();
+        String pMaterialStandard=ExcelUtil.getCell(row,14).getStringCellValue();
 
-        String pSurfaceTreat=ExcelUtil.getCell(sheet.getRow(rowNum),15).getStringCellValue();
-        String pTextureColorNum=ExcelUtil.getCell(sheet.getRow(rowNum),16).getStringCellValue();
-        String pManuProcess=ExcelUtil.getCell(sheet.getRow(rowNum),17).getStringCellValue();
-        String pSymmetry=ExcelUtil.getCell(sheet.getRow(rowNum),18).getStringCellValue();
-        String pImportance=ExcelUtil.getCell(sheet.getRow(rowNum),19).getStringCellValue();
+        String pSurfaceTreat=ExcelUtil.getCell(row,15).getStringCellValue();
+        String pTextureColorNum=ExcelUtil.getCell(row,16).getStringCellValue();
+        String pManuProcess=ExcelUtil.getCell(row,17).getStringCellValue();
+        String pSymmetry=ExcelUtil.getCell(row,18).getStringCellValue();
+        String pImportance=ExcelUtil.getCell(row,19).getStringCellValue();
 
-        String pRegulationFlag=ExcelUtil.getCell(sheet.getRow(rowNum),20).getStringCellValue();
-        String p3cpartFlag=ExcelUtil.getCell(sheet.getRow(rowNum),21).getStringCellValue();
-        String pRegulationCode=ExcelUtil.getCell(sheet.getRow(rowNum),22).getStringCellValue();
-        String pBwgBoxPart=ExcelUtil.getCell(sheet.getRow(rowNum),23).getStringCellValue();
-        String pDevelopType=ExcelUtil.getCell(sheet.getRow(rowNum),24).getStringCellValue();
+        String pRegulationFlag=ExcelUtil.getCell(row,20).getStringCellValue();
+        String p3cpartFlag=ExcelUtil.getCell(row,21).getStringCellValue();
+        String pRegulationCode=ExcelUtil.getCell(row,22).getStringCellValue();
+        String pBwgBoxPart=ExcelUtil.getCell(row,23).getStringCellValue();
+        String pDevelopType=ExcelUtil.getCell(row,24).getStringCellValue();
 
-        String pDataVersion=ExcelUtil.getCell(sheet.getRow(rowNum),25).getStringCellValue();
-        String pTargetWeight=ExcelUtil.getCell(sheet.getRow(rowNum),26).getStringCellValue();
-        String pFeatureWeight=ExcelUtil.getCell(sheet.getRow(rowNum),27).getStringCellValue();
-        String pActualWeight=ExcelUtil.getCell(sheet.getRow(rowNum),28).getStringCellValue();
-        String pFastener=ExcelUtil.getCell(sheet.getRow(rowNum),29).getStringCellValue();
+        String pDataVersion=ExcelUtil.getCell(row,25).getStringCellValue();
 
-        String pFastenerStandard=ExcelUtil.getCell(sheet.getRow(rowNum),30).getStringCellValue();
-        String pFastenerLevel=ExcelUtil.getCell(sheet.getRow(rowNum),31).getStringCellValue();
-        String pTorque=ExcelUtil.getCell(sheet.getRow(rowNum),32).getStringCellValue();
-        String pDutyEngineer=ExcelUtil.getCell(sheet.getRow(rowNum),33).getStringCellValue();
-        String pSupply=ExcelUtil.getCell(sheet.getRow(rowNum),34).getStringCellValue();
+        String pTargetWeight ="";
+        String pFeatureWeight ="";
+        String pActualWeight="";
 
-        String pSupplyCode=ExcelUtil.getCell(sheet.getRow(rowNum),35).getStringCellValue();
-        String pBuyEngineer=ExcelUtil.getCell(sheet.getRow(rowNum),36).getStringCellValue();
-        String pRemark=ExcelUtil.getCell(sheet.getRow(rowNum),37).getStringCellValue();
-        String pBomLinePartClass=ExcelUtil.getCell(sheet.getRow(rowNum),38).getStringCellValue();
-        String pBomLinePartResource=ExcelUtil.getCell(sheet.getRow(rowNum),39).getStringCellValue();
+        try {
+            pTargetWeight =ExcelUtil.getCell(row,26).getStringCellValue();
+        }catch (Exception e){
+            pTargetWeight =String.valueOf(ExcelUtil.getCell(row,26).getNumericCellValue());
+        }
 
-        String pInOutSideFlag=ExcelUtil.getCell(sheet.getRow(rowNum),40).getStringCellValue();
-        String pUpc=ExcelUtil.getCell(sheet.getRow(rowNum),41).getStringCellValue();
-        String fna=ExcelUtil.getCell(sheet.getRow(rowNum),42).getStringCellValue();
-        String pFnaDesc=ExcelUtil.getCell(sheet.getRow(rowNum),43).getStringCellValue();
-        double number=ExcelUtil.getCell(sheet.getRow(rowNum),44).getNumericCellValue();
+        try {
+            pFeatureWeight =ExcelUtil.getCell(row,27).getStringCellValue();
+        }catch (Exception e){
+            pFeatureWeight =String.valueOf(ExcelUtil.getCell(row,27).getNumericCellValue());
+        }
+
+        try {
+            pActualWeight =ExcelUtil.getCell(row,28).getStringCellValue();
+        }catch (Exception e){
+            pActualWeight=String.valueOf(ExcelUtil.getCell(row,28).getNumericCellValue());
+        }
+
+        String pFastener=ExcelUtil.getCell(row,29).getStringCellValue();
+
+        String pFastenerStandard=ExcelUtil.getCell(row,30).getStringCellValue();
+        String pFastenerLevel=ExcelUtil.getCell(row,31).getStringCellValue();
+        String pTorque=ExcelUtil.getCell(row,32).getStringCellValue();
+        String pDutyEngineer=ExcelUtil.getCell(row,33).getStringCellValue();
+        String pSupply=ExcelUtil.getCell(row,34).getStringCellValue();
+
+        String pSupplyCode=ExcelUtil.getCell(row,35).getStringCellValue();
+        String pBuyEngineer=ExcelUtil.getCell(row,36).getStringCellValue();
+        String pRemark=ExcelUtil.getCell(row,37).getStringCellValue();
+        String pBomLinePartClass=ExcelUtil.getCell(row,38).getStringCellValue();
+        String pBomLinePartResource=ExcelUtil.getCell(row,39).getStringCellValue();
+
+        String pInOutSideFlag=ExcelUtil.getCell(row,40).getStringCellValue();
+        String pUpc=ExcelUtil.getCell(row,41).getStringCellValue();
+        String fna=ExcelUtil.getCell(row,42).getStringCellValue();
+        String pFnaDesc=ExcelUtil.getCell(row,43).getStringCellValue();
+        String number=ExcelUtil.getCell(row,44).getStringCellValue();
 
 
         HzImportEbomRecord record = new HzImportEbomRecord();
         record.setNo(Integer.valueOf(no));
         record.setLineId(lineId);
-        record.setNumber((int)number);
+        if(number !=null && number !=""){
+            record.setNumber(Integer.valueOf(number));
+        }
         if("Y".endsWith(p3cpartFlag)){
             record.setP3cpartFlag(1);
         }else {
@@ -257,6 +328,7 @@ public class FileUploadServiceImpl implements FileUploadService {
         record.setpUnit(pUnit);
         record.setpUpc(pUpc);
         record.setpUpdateName(UserInfo.getUser().getUserName());
+        record.setLinePuid(UUID.randomUUID().toString());
         return record;
     }
 
@@ -282,7 +354,7 @@ public class FileUploadServiceImpl implements FileUploadService {
      * @param records
      * @return
      */
-    private Map<String,String> analysisLineIndex(List<HzImportEbomRecord> records) {
+    private Map<String,String> analysisLineIndex(List<HzImportEbomRecord> records,String projectId) {
         Map<String,String> lineIndexMap = new HashMap<>();
         for(int i = 1;i<records.size();i++){//产生lineIndex
             HzImportEbomRecord preDTO = records.get(i-1);
@@ -352,9 +424,9 @@ public class FileUploadServiceImpl implements FileUploadService {
      * @param records
      * @return
      */
-    private List<HzImportEbomRecord> analysisResultBom(List<HzImportEbomRecord> records) {
+    private List<HzImportEbomRecord> analysisResultBom(List<HzImportEbomRecord> records,String projectId) {
         Map<String,String> mapList = generateParentPuid(records);
-        Map<String,String> lineIndexMap = analysisLineIndex(records);
+        Map<String,String> lineIndexMap = analysisLineIndex(records,projectId);
         List<HzImportEbomRecord> recordList = new ArrayList<>();
         for(int i = 0;i<records.size();i++){//找父 找lineIndex 最为关键
             HzImportEbomRecord record = records.get(i);
@@ -400,12 +472,52 @@ public class FileUploadServiceImpl implements FileUploadService {
     }
 
 
-    List<HzImportEbomRecord> analysisFinalExcelContent(List<List<HzImportEbomRecord>> lists){
+    /**
+     * 将 传入的excel文件解析为符合数据库存储的结构
+     * @param lists
+     * @param projectId
+     * @return
+     */
+    List<HzImportEbomRecord> analysisFinalExcelContent(List<List<HzImportEbomRecord>> lists,String projectId){
         List<HzImportEbomRecord> list = new ArrayList<>();
         for(List<HzImportEbomRecord> records:lists){
-            list.addAll(analysisResultBom(records));
+            list.addAll(analysisResultBom(records,projectId));
         }
         return list;
     }
 
+
+    private String errorLogInfo(Workbook workbook){
+        StringBuffer stringBuffer = new StringBuffer("文件解析失败!</br>");
+        for(int numSheet = 0; numSheet < workbook.getNumberOfSheets(); numSheet++ ){
+            Sheet sheet = workbook.getSheetAt(numSheet);
+            for(int rowNum = 1; rowNum <= sheet.getLastRowNum(); rowNum++){
+                String level = ExcelUtil.getCell(sheet.getRow(rowNum),3).getStringCellValue();
+                String number=ExcelUtil.getCell(sheet.getRow(rowNum),44).getStringCellValue();
+
+                if(level.endsWith("Y") && rowNum !=sheet.getLastRowNum()){
+                    int lev = Integer.valueOf(level.replace("Y",""))+1;
+                    String nextLevel = ExcelUtil.getCell(sheet.getRow(rowNum+1),3).getStringCellValue();
+                    if(!nextLevel.equals(lev+"Y") && !nextLevel.equals(String.valueOf(lev))){
+                        stringBuffer.append("第"+(rowNum+1)+"行的层级填写不正确，" +
+                                ""+level+"下的层级应该为:<strong>"+lev+"Y</strong>"+"或者<strong>"+lev+"</strong>" +
+                                ";而实际为:"+nextLevel+"</br>");
+                        this.errorCount++;
+                        continue;
+                    }
+                }
+
+                try {
+                    if(number!=null && number!="")
+                    Integer.valueOf(number);
+                }catch (Exception e){
+                    stringBuffer.append("第"+(rowNum+1)+"行的数量填写应该为整数，而实际为:"+number+"</br>");
+                    this.errorCount++;
+                    continue;
+                }
+            }
+
+        }
+        return stringBuffer.toString();
+    }
 }
