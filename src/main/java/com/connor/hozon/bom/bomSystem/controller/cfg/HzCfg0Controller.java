@@ -53,7 +53,7 @@ public class HzCfg0Controller extends ExtraIntegrate {
     /**
      * 同步相关性
      */
-//    @Autowired
+    @Autowired
     ISynRelevanceService iSynRelevanceService;
     /***
      * 族
