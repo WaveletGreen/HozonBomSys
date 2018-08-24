@@ -14,6 +14,26 @@ public class HzEWOImpactDeptEmp {
 
     private Integer validFlag;
 
+    private String ewoNo;
+
+    private String projectId;
+
+    public String getEwoNo() {
+        return ewoNo;
+    }
+
+    public void setEwoNo(String ewoNo) {
+        this.ewoNo = ewoNo;
+    }
+
+    public String getProjectId() {
+        return projectId;
+    }
+
+    public void setProjectId(String projectId) {
+        this.projectId = projectId;
+    }
+
     public Integer getValidFlag() {
         return validFlag;
     }

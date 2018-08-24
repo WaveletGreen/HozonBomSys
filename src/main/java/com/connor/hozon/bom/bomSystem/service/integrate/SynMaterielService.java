@@ -8,15 +8,18 @@ import com.connor.hozon.bom.resources.mybatis.factory.HzFactoryDAO;
 import com.connor.hozon.bom.resources.mybatis.materiel.HzMaterielDAO;
 import com.connor.hozon.bom.resources.query.HzMaterielQuery;
 import integration.base.masterMaterial.ZPPTCO001;
+import integration.logic.ReflectAddMasterMaterial;
 import integration.logic.ReflectMateriel;
 import integration.option.ActionFlagOption;
 import integration.service.impl.masterMaterial1.TransMasterMaterialService;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import sql.pojo.cfg.HzCfg0ModelFeature;
 import sql.pojo.factory.HzFactory;
 import sql.pojo.project.HzMaterielRecord;
 
+import javax.lang.model.type.ArrayType;
 import java.util.*;
 
 import static com.connor.hozon.bom.bomSystem.helper.StringHelper.checkStringIsEmpty;
@@ -56,8 +59,8 @@ public class SynMaterielService implements ISynMaterielService {
      * @return
      */
     @Override
-    public JSONObject updateOrAddByUids(List<EditHzMaterielReqDTO> dtos) {
-        return updateOrDelete(dtos, ActionFlagOption.UPDATE_EMPTY);
+    public JSONObject updateOrAddByUids(List<EditHzMaterielReqDTO> dtos, String tableName, String field) {
+        return updateOrDelete(dtos, ActionFlagOption.UPDATE, tableName, field);
     }
 
     /**
@@ -67,8 +70,17 @@ public class SynMaterielService implements ISynMaterielService {
      * @return
      */
     @Override
-    public JSONObject deleteByPuids(List<EditHzMaterielReqDTO> dtos) {
-        return updateOrDelete(dtos, ActionFlagOption.DELETE);
+    public JSONObject deleteByPuids(List<EditHzMaterielReqDTO> dtos, String tableName, String field) {
+        return updateOrDelete(dtos, ActionFlagOption.DELETE, tableName, field);
+    }
+
+    public JSONObject tranMateriel2(List<HzCfg0ModelFeature> feature, ActionFlagOption option, String tableName, String field) {
+        List<HzMaterielRecord> sorted = new ArrayList();
+        for (int i = 0; i < feature.size(); i++) {
+            ReflectAddMasterMaterial sad = new ReflectAddMasterMaterial(feature.get(i));
+            sorted.add(sad.getRecord());
+        }
+        return execute(sorted, option, tableName, field);
     }
 
     /**
@@ -78,7 +90,7 @@ public class SynMaterielService implements ISynMaterielService {
      * @return
      */
     @Override
-    public JSONObject synAllByProjectPuid(String projectPuid) {
+    public JSONObject synAllByProjectPuid(String projectPuid, String tableName, String field) {
         JSONObject result;
         if (projectPuid == null || "".equalsIgnoreCase(projectPuid)) {
             result = new JSONObject();
@@ -92,7 +104,7 @@ public class SynMaterielService implements ISynMaterielService {
         List<HzMaterielRecord> src = hzMaterielDAO.findHzMaterielForList(query);
         List<HzMaterielRecord> sorted = new ArrayList<>();
         src.stream().filter(_s -> _s.getpMaterielType() != null).forEach(_s -> sorted.add(_s));
-        result = execute(sorted, ActionFlagOption.ADD);
+        result = execute(sorted, ActionFlagOption.ADD, tableName, field);//"HZ_MATERIEL_RECORD","P_MATERIEL_CODE"
         return result;
     }
 
@@ -101,7 +113,7 @@ public class SynMaterielService implements ISynMaterielService {
      * @param option 操作标识符，更新可传
      * @return
      */
-    private JSONObject updateOrDelete(List<EditHzMaterielReqDTO> dtos, ActionFlagOption option) {
+    private JSONObject updateOrDelete(List<EditHzMaterielReqDTO> dtos, ActionFlagOption option, String tableName, String field) {
 
         JSONObject result;
         if (dtos == null || dtos.isEmpty()) {
@@ -131,7 +143,7 @@ public class SynMaterielService implements ISynMaterielService {
                 continue;
             sorted.add(record);
         }
-        result = execute(sorted, option);
+        result = execute(sorted, option, tableName, field);
         return result;
     }
 
@@ -143,7 +155,7 @@ public class SynMaterielService implements ISynMaterielService {
      * @param option
      * @return
      */
-    private JSONObject execute(List<HzMaterielRecord> sorted, ActionFlagOption option) {
+    private JSONObject execute(List<HzMaterielRecord> sorted, ActionFlagOption option, String tableName, String field) {
         transMasterMaterialService.setClearInputEachTime(true);
         if (debug)
             transMasterMaterialService.getInput().getItem().clear();
@@ -196,18 +208,18 @@ public class SynMaterielService implements ISynMaterielService {
             //已经发送过了，设置为更新
             if (record.getSendSapFlag() != null && record.getSendSapFlag() == 1) {
                 //更新操作或删除操作
-                if (option == ActionFlagOption.DELETE || option == ActionFlagOption.UPDATE_EMPTY) {
+                if (option == ActionFlagOption.DELETE || option == ActionFlagOption.UPDATE) {
                     reflectMateriel.setActionFlagOption(option);
                 }
                 //默认执行更新操作
                 else {
-                    reflectMateriel.setActionFlagOption(ActionFlagOption.UPDATE_EMPTY);
+                    reflectMateriel.setActionFlagOption(ActionFlagOption.UPDATE);
                 }
             }
             //没有发送过，执行新增操作
             else {
                 //更新操作或新增操作
-                if (option == ActionFlagOption.UPDATE_EMPTY || option == ActionFlagOption.ADD) {
+                if (option == ActionFlagOption.UPDATE || option == ActionFlagOption.ADD) {
                     reflectMateriel.setActionFlagOption(ActionFlagOption.ADD);
                 }
                 //没有，不允许删除
@@ -234,7 +246,7 @@ public class SynMaterielService implements ISynMaterielService {
         //执行
         if (debug) {
             return result;
-        } else {
+        } else if (_mapCoach.size() > 0) {
             transMasterMaterialService.execute();
         }
         List<ZPPTCO001> resultPool = transMasterMaterialService.getOut().getItem();
@@ -265,7 +277,7 @@ public class SynMaterielService implements ISynMaterielService {
          * 更新信息
          */
         toUpdate.forEach(to -> puids.add(to.getpMaterielCode()));
-        splitListThenUpdate(puids);
+        splitListThenUpdate(puids, tableName, field);
 
         result.put("status", true);
         result.put("success", success);
@@ -285,26 +297,26 @@ public class SynMaterielService implements ISynMaterielService {
      * @param list uid集合
      * @return
      */
-    public int splitListThenUpdate(List<String> list) {
+    public int splitListThenUpdate(List<String> list, String tableName, String field) {
         int intCount = list.size() / capacity;
         int index = 0;
         int endIndex;
         int result = 0;
 
         if (intCount == 0) {
-            return executeByType(list);
+            return executeByType(list, tableName, field);
         } else if (intCount > 0) {
             endIndex = index + capacity;
             while (true) {
                 //第一次查0-1000，以后都从1000-2000...查
-                result = executeByType(list.subList(index, endIndex));
+                result = executeByType(list.subList(index, endIndex), tableName, field);
                 //向后截列表
                 index += capacity;
                 //加1000
                 endIndex = index + capacity;
                 if (endIndex >= list.size()) {
                     endIndex = list.size();
-                    result = executeByType(list.subList(index, endIndex));
+                    result = executeByType(list.subList(index, endIndex), tableName, field);
                     break;
                 }
                 if (result < capacity) {
@@ -316,9 +328,10 @@ public class SynMaterielService implements ISynMaterielService {
         return result;
     }
 
-    private int executeByType(List<String> list) {
-        return hzMaterielDAO.updateByBatch(list);
+    private int executeByType(List<String> list, String tableName, String field) {
+        return hzMaterielDAO.updateByBatch(list, tableName, field);
     }
+
 
     private boolean validate(HzMaterielRecord record) {
         if (null == record.getpMaterielDesc() || "".equalsIgnoreCase(record.getpMaterielDesc()) || null == record.getpFactoryPuid() || "".equals(record.getpFactoryPuid())) {

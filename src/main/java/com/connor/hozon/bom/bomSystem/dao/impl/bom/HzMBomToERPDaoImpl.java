@@ -43,7 +43,7 @@ public class HzMBomToERPDaoImpl implements HzMBomToERPDao {
     public List<HzMBomToERPBean> selectbyParentUidOfBatch(String projectUid, List<String> list) {
         Map<String, Object> _param = new HashMap<>();
         _param.put("projectUid", projectUid);
-        _param.put("flag", "T.P_PARENT_UID");
+        _param.put("flag", "T.p_bom_PUID");
         _param.put("list", list);
         return baseSQLUtil.executeQueryByPass(new HzMBomToERPBean(), _param, "com.connor.hozon.bom.bomSystem.dao.bom.HzMBomToERPDao.selectByBatch");
 

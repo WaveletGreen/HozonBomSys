@@ -19,7 +19,18 @@
     select 
     <include refid="Base_Column_List" />
     from HZ_EWO_IMPACT_DEPT_EMP
-    where IMPACT_DEPT_ID = #{impactDeptId,jdbcType=DOUBLE}
+    <where>
+      1=1
+      <if test="impactDeptId != null">
+        and IMPACT_DEPT_ID = #{impactDeptId,jdbcType=VARCHAR}
+      </if>
+      <if test="ewoNo != null">
+        and EWO_NO = #{ewoNo,jdbcType=VARCHAR}
+      </if>
+      <if test="projectId != null">
+        and PROJECT_ID = #{projectId,jdbcType=VARCHAR}
+      </if>
+    </where>
   </select>
 
 

@@ -151,7 +151,7 @@ function loadData() {
             //动态拼接后台数据
             for (var i = 0; i < data.length; i++) {
                 var dataOfModel = data[i];
-                var delta = "<tr>" +
+                var delta = "<tr>"
                     "<td style='text-align: center'><div style='width: 50px' ><input type='button' value='编辑'></div></td>"
                     +
                     "<td><div style='width: 50px' >" + (i + 1) + "</div></td>";
@@ -199,8 +199,8 @@ $(document).ready(
     }),
 );
 
-$(document).ready(
-    ($("input:button").click(function () {
+// $(document).ready(
+($("input:button").click(function () {
         str = $(this).val() == "编辑" ? "确定" : "编辑";
         $(this).val(str);   // 按钮被点击后，在“编辑”和“确定”之间切换
         $(this).parent().parent().siblings("td").each(function () {  // 获取当前行的其他单元格
@@ -211,7 +211,9 @@ $(document).ready(
                 $(this).html("<div style='width: 150px'>" + obj_text.val() + "</div>");
         });
     })
-))
+)
+
+// )
 
 function Botton(id) {
     window.Ewin.dialog({

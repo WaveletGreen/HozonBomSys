@@ -1,7 +1,5 @@
 package com.connor.hozon.bom.bomSystem.dao.cfg;
 
-import java.util.List;
-
 import org.apache.ibatis.annotations.Param;
 import org.springframework.context.annotation.Configuration;
 import sql.pojo.cfg.HzCfg0ModelFeature;
@@ -31,6 +29,13 @@ public interface HzCfg0ModelFeatureDao {
      * @return
      */
     HzCfg0ModelFeature selectByPrimaryKey(@Param("puid") String puid);
+
+    /**
+     * 连同工厂编号一起查出来
+     * @param puid
+     * @return
+     */
+    HzCfg0ModelFeature selectByPrimaryKeyWithFactoryCode(@Param("puid") String puid);
 
     /**
      * 根据车型模型puid查找1个模型特性数据

@@ -4,7 +4,7 @@
     <resultMap id="BaseResultMap" type="sql.pojo.cfg.HzCfg0ModelFeature">
         <!--主键-->
         <id column="PUID" jdbcType="VARCHAR" property="puid"/>
-        <!--归属车型模型-->
+        <!--归属车型-->
         <result column="P_PERTAIN_TO_MODEL" jdbcType="VARCHAR" property="pPertainToModel"/>
         <!--归属颜色车身-->
         <result column="P_PERTAIN_TO_COLOR_MODEL" jdbcType="VARCHAR" property="pPertainToColorModel"/>
@@ -12,13 +12,70 @@
         <result column="P_FEATURE_CN_DESC" jdbcType="VARCHAR" property="pFeatureCnDesc"/>
         <!--单车配置码-->
         <result column="P_FEATURE_SINGLE_VEHICLE_CODE" jdbcType="VARCHAR" property="pFeatureSingleVehicleCode"/>
+        <!--工厂，默认是1001,作为物料数据传到SAP,一下的字段都是需要传到SAP的字段-->
+        <result column="FACTORY_CODE" jdbcType="VARCHAR" property="factoryCode"/>
+        <!--物料编码-->
+        <result column="MATERIAL_CODE" jdbcType="VARCHAR" property="materialCode"/>
+        <!--旧物料编码-->
+        <result column="OLD_MATERIEL_CODE" jdbcType="VARCHAR" property="oldMaterielCode"/>
+        <!--物料中文描述-->
+        <result column="MATERIEL_DESC" jdbcType="VARCHAR" property="materielDesc"/>
+        <!--物料英文描述-->
+        <result column="MATERIEL_EN_DESC" jdbcType="VARCHAR" property="materielEnDesc"/>
+        <!--基本计量单位-->
+        <result column="BASIC_COUNT_UNIT" jdbcType="VARCHAR" property="basicCountUnit"/>
+        <!--物料类型-->
+        <result column="MATERIEL_TYPE" jdbcType="VARCHAR" property="materielType"/>
+        <!--虚拟件标识-->
+        <result column="VIRTUAL_FLAG" jdbcType="DECIMAL" property="virtualFlag"/>
+        <!--采购类型-->
+        <result column="PURCHASE_TYPE" jdbcType="VARCHAR" property="purchaseType"/>
+        <!--MRP控制者，衍生物料都是整车-->
+        <result column="MRP_CONTROLLER" jdbcType="VARCHAR" property="mrpController"/>
+        <!--公告号，（只有MRP=整车才有，否则传空置）-->
+        <result column="BULLETIN_NUM" jdbcType="VARCHAR" property="bulletinNum"/>
+        <!--vin前置码-->
+        <result column="VIN_CODE" jdbcType="VARCHAR" property="vinCode"/>
+        <!--颜色件标识-->
+        <result column="COLOR" jdbcType="DECIMAL" property="color"/>
+        <!--毛重-->
+        <result column="GROSS_WEIGHT" jdbcType="VARCHAR" property="grossWeight"/>
+        <!--内外饰标识-->
+        <result column="LABEL_FLAG" jdbcType="DECIMAL" property="labelFlag"/>
+        <!--3C件标识-->
+        <result column="RULES_FLAG" jdbcType="DECIMAL" property="rulesFlag"/>
+        <!--删除标示-->
+        <result column="DELETE_FLAG" jdbcType="DECIMAL" property="deleteFlag"/>
+        <!--零件重要度-->
+        <result column="IMPORTANCE" jdbcType="DECIMAL" property="importance"/>
+        <!--是否已发送过SAP-->
+        <result column="IS_SENT" jdbcType="DECIMAL" property="isSent"/>
     </resultMap>
     <sql id="Base_Column_List">
         PUID,
         P_PERTAIN_TO_MODEL,
         P_PERTAIN_TO_COLOR_MODEL,
         P_FEATURE_CN_DESC,
-        P_FEATURE_SINGLE_VEHICLE_CODE
+        P_FEATURE_SINGLE_VEHICLE_CODE,
+        FACTORY_CODE,
+        MATERIAL_CODE,
+        OLD_MATERIEL_CODE,
+        MATERIEL_DESC,
+        MATERIEL_EN_DESC,
+        BASIC_COUNT_UNIT,
+        MATERIEL_TYPE,
+        VIRTUAL_FLAG,
+        PURCHASE_TYPE,
+        MRP_CONTROLLER,
+        BULLETIN_NUM,
+        VIN_CODE,
+        COLOR,
+        GROSS_WEIGHT,
+        LABEL_FLAG,
+        RULES_FLAG,
+        DELETE_FLAG,
+        IMPORTANCE,
+        IS_SENT
   </sql>
     <!--根据主键查找-->
     <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
@@ -26,6 +83,36 @@
         <include refid="Base_Column_List"/>
         from HZ_CFG0_MODEL_FEATURE
         where PUID = #{puid,jdbcType=VARCHAR}
+    </select>
+    <!--根据主键查找-->
+    <select id="selectByPrimaryKeyWithFactoryCode" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        t.PUID,
+        P_PERTAIN_TO_MODEL,
+        P_PERTAIN_TO_COLOR_MODEL,
+        P_FEATURE_CN_DESC,
+        P_FEATURE_SINGLE_VEHICLE_CODE,
+        MATERIAL_CODE,
+        OLD_MATERIEL_CODE,
+        MATERIEL_DESC,
+        MATERIEL_EN_DESC,
+        BASIC_COUNT_UNIT,
+        MATERIEL_TYPE,
+        VIRTUAL_FLAG,
+        PURCHASE_TYPE,
+        MRP_CONTROLLER,
+        BULLETIN_NUM,
+        VIN_CODE,
+        COLOR,
+        GROSS_WEIGHT,
+        LABEL_FLAG,
+        RULES_FLAG,
+        DELETE_FLAG,
+        IMPORTANCE,
+        T2.P_FACTORY_CODE as FACTORY_CODE
+        from HZ_CFG0_MODEL_FEATURE t
+        LEFT JOIN HZ_FACTORY t2 on t.FACTORY_CODE=T2.PUID
+        where t.PUID = #{puid,jdbcType=VARCHAR}
     </select>
     <!--根据车型模型puid找-->
     <select id="selectByModelPuid" parameterType="java.lang.String" resultMap="BaseResultMap">
@@ -66,25 +153,159 @@
         #{pPertainToModel,jdbcType=VARCHAR},
         #{pPertainToColorModel,jdbcType=VARCHAR},
         #{pFeatureCnDesc,jdbcType=VARCHAR},
-        #{pFeatureSingleVehicleCode,jdbcType=VARCHAR}
+        #{pFeatureSingleVehicleCode,jdbcType=VARCHAR},
+        #{factoryCode,jdbcType=VARCHAR},
+        #{materialCode,jdbcType=VARCHAR},
+        #{oldMaterielCode,jdbcType=VARCHAR},
+        #{materielDesc,jdbcType=VARCHAR},
+        #{materielEnDesc,jdbcType=VARCHAR},
+        #{basicCountUnit,jdbcType=VARCHAR},
+        #{materielType,jdbcType=VARCHAR},
+        #{virtualFlag,jdbcType=DECIMAL},
+        #{purchaseType,jdbcType=VARCHAR},
+        #{mrpController,jdbcType=VARCHAR},
+        #{bulletinNum,jdbcType=VARCHAR},
+        #{vinCode,jdbcType=VARCHAR},
+        #{color,jdbcType=DECIMAL},
+        #{grossWeight,jdbcType=VARCHAR},
+        #{labelFlag,jdbcType=DECIMAL},
+        #{rulesFlag,jdbcType=DECIMAL},
+        #{deleteFlag,jdbcType=DECIMAL},
+        #{importance,jdbcType=DECIMAL}
         )
     </insert>
     <!--根据主键更新1条车型特性数据-->
     <update id="updateByPrimaryKey" parameterType="sql.pojo.cfg.HzCfg0ModelFeature">
-    update HZ_CFG0_MODEL_FEATURE
-        set
-          P_PERTAIN_TO_MODEL = #{pPertainToModel,jdbcType=VARCHAR},
-          P_FEATURE_CN_DESC = #{pFeatureCnDesc,jdbcType=VARCHAR},
-          P_FEATURE_SINGLE_VEHICLE_CODE = #{pFeatureSingleVehicleCode,jdbcType=VARCHAR}
+        update HZ_CFG0_MODEL_FEATURE
+        <set>
+            <if test="pFeatureCnDesc != null">
+                P_FEATURE_CN_DESC = #{pFeatureCnDesc,jdbcType=VARCHAR},
+            </if>
+            <if test="pFeatureSingleVehicleCode != null">
+                P_FEATURE_SINGLE_VEHICLE_CODE = #{pFeatureSingleVehicleCode,jdbcType=VARCHAR},
+            </if>
+            <if test="factoryCode != null">
+                FACTORY_CODE = #{factoryCode,jdbcType=VARCHAR},
+            </if>
+            <if test="materialCode != null">
+                MATERIAL_CODE = #{materialCode,jdbcType=VARCHAR},
+            </if>
+            <if test="oldMaterielCode != null">
+                OLD_MATERIEL_CODE = #{oldMaterielCode,jdbcType=VARCHAR},
+            </if>
+            <if test="materielDesc != null">
+                MATERIEL_DESC = #{materielDesc,jdbcType=VARCHAR},
+            </if>
+            <if test="materielEnDesc != null">
+                MATERIEL_EN_DESC = #{materielEnDesc,jdbcType=VARCHAR},
+            </if>
+            <if test="basicCountUnit != null">
+                BASIC_COUNT_UNIT = #{basicCountUnit,jdbcType=VARCHAR},
+            </if>
+            <if test="materielType != null">
+                MATERIEL_TYPE = #{materielType,jdbcType=VARCHAR},
+            </if>
+            <if test="virtualFlag != null">
+                VIRTUAL_FLAG = #{virtualFlag,jdbcType=DECIMAL},
+            </if>
+            <if test="purchaseType != null">
+                PURCHASE_TYPE = #{purchaseType,jdbcType=VARCHAR},
+            </if>
+            <if test="mrpController != null">
+                MRP_CONTROLLER = #{mrpController,jdbcType=VARCHAR},
+            </if>
+            <if test="bulletinNum != null">
+                BULLETIN_NUM = #{bulletinNum,jdbcType=VARCHAR},
+            </if>
+            <if test="vinCode != null">
+                VIN_CODE = #{vinCode,jdbcType=VARCHAR},
+            </if>
+            <if test="color != null">
+                COLOR = #{color,jdbcType=DECIMAL},
+            </if>
+            <if test="grossWeight != null">
+                GROSS_WEIGHT = #{grossWeight,jdbcType=VARCHAR},
+            </if>
+            <if test="labelFlag != null">
+                LABEL_FLAG = #{labelFlag,jdbcType=DECIMAL},
+            </if>
+            <if test="rulesFlag != null">
+                RULES_FLAG = #{rulesFlag,jdbcType=DECIMAL},
+            </if>
+            <if test="deleteFlag != null">
+                DELETE_FLAG = #{deleteFlag,jdbcType=DECIMAL},
+            </if>
+            <if test="importance != null">
+                IMPORTANCE = #{importance,jdbcType=DECIMAL},
+            </if>
+        </set>
         where PUID = #{puid,jdbcType=VARCHAR}
-  </update>
+    </update>
     <update id="updateByModelPuidWithBasic" parameterType="sql.pojo.cfg.HzCfg0ModelFeature">
-    update HZ_CFG0_MODEL_FEATURE
+        update HZ_CFG0_MODEL_FEATURE
         set
-          P_PERTAIN_TO_MODEL = #{pPertainToModel,jdbcType=VARCHAR},
-          P_PERTAIN_TO_COLOR_MODEL = #{pPertainToColorModel,jdbcType=VARCHAR},
-          P_FEATURE_CN_DESC = #{pFeatureCnDesc,jdbcType=VARCHAR},
-          P_FEATURE_SINGLE_VEHICLE_CODE = #{pFeatureSingleVehicleCode,jdbcType=VARCHAR}
-        where PUID = #{puid,jdbcType=VARCHAR}
-  </update>
+        <set>
+            <if test="pFeatureCnDesc != null">
+                P_FEATURE_CN_DESC = #{pFeatureCnDesc,jdbcType=VARCHAR},
+            </if>
+            <if test="pFeatureSingleVehicleCode != null">
+                P_FEATURE_SINGLE_VEHICLE_CODE = #{pFeatureSingleVehicleCode,jdbcType=VARCHAR},
+            </if>
+            <if test="factoryCode != null">
+                FACTORY_CODE = #{factoryCode,jdbcType=VARCHAR},
+            </if>
+            <if test="materialCode != null">
+                MATERIAL_CODE = #{materialCode,jdbcType=VARCHAR},
+            </if>
+            <if test="oldMaterielCode != null">
+                OLD_MATERIEL_CODE = #{oldMaterielCode,jdbcType=VARCHAR},
+            </if>
+            <if test="materielDesc != null">
+                MATERIEL_DESC = #{materielDesc,jdbcType=VARCHAR},
+            </if>
+            <if test="materielEnDesc != null">
+                MATERIEL_EN_DESC = #{materielEnDesc,jdbcType=VARCHAR},
+            </if>
+            <if test="basicCountUnit != null">
+                BASIC_COUNT_UNIT = #{basicCountUnit,jdbcType=VARCHAR},
+            </if>
+            <if test="materielType != null">
+                MATERIEL_TYPE = #{materielType,jdbcType=VARCHAR},
+            </if>
+            <if test="virtualFlag != null">
+                VIRTUAL_FLAG = #{virtualFlag,jdbcType=DECIMAL},
+            </if>
+            <if test="purchaseType != null">
+                PURCHASE_TYPE = #{purchaseType,jdbcType=VARCHAR},
+            </if>
+            <if test="mrpController != null">
+                MRP_CONTROLLER = #{mrpController,jdbcType=VARCHAR},
+            </if>
+            <if test="bulletinNum != null">
+                BULLETIN_NUM = #{bulletinNum,jdbcType=VARCHAR},
+            </if>
+            <if test="vinCode != null">
+                VIN_CODE = #{vinCode,jdbcType=VARCHAR},
+            </if>
+            <if test="color != null">
+                COLOR = #{color,jdbcType=DECIMAL},
+            </if>
+            <if test="grossWeight != null">
+                GROSS_WEIGHT = #{grossWeight,jdbcType=VARCHAR},
+            </if>
+            <if test="labelFlag != null">
+                LABEL_FLAG = #{labelFlag,jdbcType=DECIMAL},
+            </if>
+            <if test="rulesFlag != null">
+                RULES_FLAG = #{rulesFlag,jdbcType=DECIMAL},
+            </if>
+            <if test="deleteFlag != null">
+                DELETE_FLAG = #{deleteFlag,jdbcType=DECIMAL},
+            </if>
+            <if test="deleteFlag != null">
+                IMPORTANCE = #{importance,jdbcType=DECIMAL},
+            </if>
+        </set>
+        where P_PERTAIN_TO_MODEL = #{pPertainToModel,jdbcType=VARCHAR}
+    </update>
 </mapper>

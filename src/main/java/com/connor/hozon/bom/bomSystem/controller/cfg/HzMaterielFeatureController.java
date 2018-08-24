@@ -1,13 +1,18 @@
 package com.connor.hozon.bom.bomSystem.controller.cfg;
 
+import com.connor.hozon.bom.bomSystem.controller.integrate.ExtraIntegrate;
 import com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0ModelColorDao;
 import com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0ToModelRecordDao;
 import com.connor.hozon.bom.bomSystem.dto.HzMaterielFeatureBean;
 import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
 import com.connor.hozon.bom.bomSystem.service.cfg.*;
+import com.connor.hozon.bom.bomSystem.service.integrate.SynMaterielService;
 import com.connor.hozon.bom.bomSystem.service.iservice.cfg.IHzCfg0ModelFeatureService;
 import com.connor.hozon.bom.bomSystem.service.project.HzSuperMaterielService;
 import com.connor.hozon.bom.common.base.entity.QueryBase;
+import com.connor.hozon.bom.resources.mybatis.factory.HzFactoryDAO;
+import integration.option.ActionFlagOption;
+import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import sql.pojo.cfg.*;
+import sql.pojo.factory.HzFactory;
 import sql.pojo.project.HzMaterielRecord;
 
 import java.util.*;
@@ -29,7 +35,7 @@ import static com.connor.hozon.bom.bomSystem.helper.StringHelper.checkString;
  */
 @Controller
 @RequestMapping("/materiel")
-public class HzMaterielFeatureController {
+public class HzMaterielFeatureController extends ExtraIntegrate {
     /**
      * 族层服务
      */
@@ -63,9 +69,14 @@ public class HzMaterielFeatureController {
      */
     private final IHzCfg0ModelFeatureService hzCfg0ModelFeatureService;
 
+    @Autowired
+    HzFactoryDAO hzFactoryDAO;
 
     @Autowired
     HzCfg0ToModelRecordDao hzCfg0ToModelRecordDao;
+
+    @Autowired
+    private SynMaterielService synMaterielService;
 
     @Autowired
     public HzMaterielFeatureController(HzCfg0OptionFamilyService hzCfg0OptionFamilyService,
@@ -273,7 +284,7 @@ public class HzMaterielFeatureController {
             if (puidOfModelFeature == null || "".equals(puidOfModelFeature))
                 hzCfg0ModelFeature = new HzCfg0ModelFeature();
             else
-                hzCfg0ModelFeature = hzCfg0ModelFeatureService.doSelectByPrimaryKey(puidOfModelFeature);
+                hzCfg0ModelFeature = hzCfg0ModelFeatureService.doSelectByPrimaryKeyWithFactoryCode(puidOfModelFeature);
             //没有找到
             if (hzCfg0ModelFeature == null)
                 hzCfg0ModelFeature = new HzCfg0ModelFeature();
@@ -306,27 +317,55 @@ public class HzMaterielFeatureController {
 
     @RequestMapping("/updateModelBasic")
     @ResponseBody
-    public boolean updateModelBasic(@RequestBody HzCfg0ModelRecord modelRecord,
-                                    @RequestParam String pFeatureCnDesc,
-                                    @RequestParam String pFeatureSingleVehicleCode,
-                                    @RequestParam String modelFeaturePuid) {
+    public JSONObject updateModelBasic(
+            @RequestParam String pCfg0ModelBasicDetail,
+            @RequestParam String puid,
+            @RequestBody HzCfg0ModelFeature modelFeature
+    ) {
+        JSONObject _result = new JSONObject();
+        HzCfg0ModelRecord modelRecord = new HzCfg0ModelRecord();
+        modelRecord.setPuid(puid);
+        modelRecord.setpCfg0ModelBasicDetail(pCfg0ModelBasicDetail);
+
         boolean result = hzCfg0ModelRecordService.doUpdateBasic(modelRecord);
-        if (result == false)
-            return false;
-        HzCfg0ModelFeature hzCfg0ModelFeature = new HzCfg0ModelFeature();
-        if (modelFeaturePuid == null || "".equals(modelFeaturePuid)) {
-            hzCfg0ModelFeature.setPuid(UUID.randomUUID().toString());
-            hzCfg0ModelFeature.setpFeatureCnDesc(pFeatureCnDesc);
-            hzCfg0ModelFeature.setpFeatureSingleVehicleCode(pFeatureSingleVehicleCode);
-            hzCfg0ModelFeature.setpPertainToModel(modelRecord.getPuid());
-            result = hzCfg0ModelFeatureService.doInsert(hzCfg0ModelFeature);
-        } else if (null != (hzCfg0ModelFeature = hzCfg0ModelFeatureService.doSelectByPrimaryKey(modelFeaturePuid))) {
-            hzCfg0ModelFeature.setpFeatureCnDesc(pFeatureCnDesc);
-            hzCfg0ModelFeature.setpFeatureSingleVehicleCode(pFeatureSingleVehicleCode);
-            hzCfg0ModelFeature.setpPertainToModel(modelRecord.getPuid());
-            result = hzCfg0ModelFeatureService.doUpdateByPrimaryKey(hzCfg0ModelFeature);
-        } else return false;
-        return result;
+        if (result == false) {
+            _result.put("status", false);
+            _result.put("msg", "更新模型信息失败");
+            return _result;
+        }
+        if (modelFeature.getPuid() == null || "".equals(modelFeature.getPuid())) {
+            modelFeature.setPuid(UUID.randomUUID().toString());
+            if (hzCfg0ModelFeatureService.doInsert(modelFeature)) {
+                _result.put("status", true);
+                _result.put("msg", "新增衍生物料基本数据成功");
+            } else {
+                _result.put("status", false);
+                _result.put("msg", "新增衍生物料基本数据失败");
+            }
+        } else if (null != (hzCfg0ModelFeatureService.doSelectByPrimaryKey(modelFeature.getModelFeaturePuid()))) {
+            modelFeature.setPuid(modelFeature.getModelFeaturePuid());
+            modelFeature.setMaterielType("A001");
+            HzFactory factory = hzFactoryDAO.findFactory("", modelFeature.getFactoryCode());
+            if (factory == null) {
+                _result.put("status", false);
+                _result.put("msg", "没有找到工厂" + modelFeature.getFactoryCode());
+                return _result;
+            }
+            modelFeature.setFactoryCode(factory.getPuid());
+            if (hzCfg0ModelFeatureService.doUpdateByPrimaryKey(modelFeature)) {
+                _result.put("status", true);
+                _result.put("msg", "更新衍生物料基本数据成功");
+            } else {
+                _result.put("status", false);
+                _result.put("msg", "更新衍生物料基本数据失败");
+            }
+            return _result;
+        } else {
+            _result.put("status", false);
+            _result.put("msg", "没有找到衍生物料" + modelFeature.getMaterialCode());
+
+        }
+        return _result;
     }
 
     @RequestMapping("/updateSuperMateriel")
@@ -453,4 +492,28 @@ public class HzMaterielFeatureController {
         }
     }
 
+
+    @RequestMapping("/addToSAP")
+    public String addToSAP(String[] puidOfModelFeatures, Model model) {
+        List<HzCfg0ModelFeature> features = new ArrayList<HzCfg0ModelFeature>();
+        for (String puidOfModelFeature : puidOfModelFeatures) {
+            HzCfg0ModelFeature feature = hzCfg0ModelFeatureService.doSelectByPrimaryKey(puidOfModelFeature);
+            features.add(feature);
+        }
+        JSONObject object = synMaterielService.tranMateriel2(features, ActionFlagOption.ADD, "HZ_CFG0_MODEL_FEATURE", "MATERIAL_CODE");
+        addToModel(object, model);
+        return "stage/templateOfIntegrate";
+    }
+
+    @RequestMapping("/deleteToSAP")
+    public String deleteToSAP(String[] puidOfModelFeatures, Model model) {
+        List<HzCfg0ModelFeature> HCMfeatures = new ArrayList<HzCfg0ModelFeature>();
+        for (String puidOfModelFeature : puidOfModelFeatures) {
+            HzCfg0ModelFeature feature = hzCfg0ModelFeatureService.doSelectByPrimaryKey(puidOfModelFeature);
+            HCMfeatures.add(feature);
+        }
+        JSONObject object = synMaterielService.tranMateriel2(HCMfeatures, ActionFlagOption.DELETE, "HZ_CFG0_MODEL_FEATURE", "MATERIAL_CODE");
+        addToModel(object, model);
+        return "stage/templateOfIntegrate";
+    }
 }

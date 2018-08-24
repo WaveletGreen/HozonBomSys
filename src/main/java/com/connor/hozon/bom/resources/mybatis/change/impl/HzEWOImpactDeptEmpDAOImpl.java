@@ -32,6 +32,8 @@ public class HzEWOImpactDeptEmpDAOImpl extends BaseSQLUtil implements HzEWOImpac
     public List<HzEWOImpactDeptEmp> findImpactDeptList(HzEWOImpactDeptQuery query) {
         Map<String,Object> map = new HashMap<>();
         map.put("impactDeptId",query.getDeptId());
+        map.put("projectId",query.getProjectId());
+        map.put("ewoNo",query.getEwoNo());
         return super.findForList("HzEWOImpactDeptEmpDAOImpl_findImpactDeptList",map);
     }
 }

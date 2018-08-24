@@ -112,7 +112,7 @@ public interface HzMaterielDAO {
      * @param list
      * @return
      */
-    int updateByBatch(List<String> list);
+    int updateByBatch(List<String> list,String tableName,String field);
 
 
     int realDelete(String materielResourceId);
