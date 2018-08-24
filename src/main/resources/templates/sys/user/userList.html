@@ -77,7 +77,7 @@
                     text: '添加',
                     iconCls: 'glyphicon glyphicon-plus',
                     handler: function () {
-                        window.Ewin.dialog({title:"添加",url:"user/addPage",gridId:"gridId",width:600,height:745})
+                        window.Ewin.dialog({title:"添加",url:"user/addPage",gridId:"gridId",width:550,height:550})
                     }
                 },
                 {
@@ -89,7 +89,7 @@
                             window.Ewin.alert({message:'请选择一条需要修改的数据!'});
                             return false;
                         }
-                        window.Ewin.dialog({title:"修改",url:"user/updatePage?id="+rows[0].id,width:600,height:595});
+                        window.Ewin.dialog({title:"修改",url:"user/updatePage?id="+rows[0].id,width:550,height:550});
                     }
                 },
                 {
@@ -154,13 +154,13 @@
                     valign : 'middle',
                     sortable : true
                 },
-                {
+                /*{
                     field : 'address',
                     title : '用户地址',
                     align : 'center',
                     valign : 'middle',
                     sortable : true
-                },
+                },*/
                 {
                     field : 'orgGroup.name',
                     title : '组织架构',
