@@ -159,12 +159,13 @@ public class HzCfg0BomLineOfModelService {
 
                 data.put(HzCfg0BomLineOfModel.selfDesc[0], withBomLine.getpBomOfWhichDept());
                 data.put(HzCfg0BomLineOfModel.selfDesc[1], withBomLine.getpBomLineId());
-                data.put(HzCfg0BomLineOfModel.selfDesc[2], withBomLine.getpBomLineName());
-                data.put(HzCfg0BomLineOfModel.selfDesc[3], withBomLine.getpH9featureenname() == null ? "" : withBomLine.getpH9featureenname());
-                data.put(HzCfg0BomLineOfModel.selfDesc[4], owningUser == null ? "" : owningUser);
-                data.put(HzCfg0BomLineOfModel.selfDesc[5], withBomLine.getpCfg0Desc() != null ? withBomLine.getpCfg0Desc() : "");
-                data.put(HzCfg0BomLineOfModel.selfDesc[6], withBomLine.getpCfg0ObjectId());
-                data.put(HzCfg0BomLineOfModel.selfDesc[7], withBomLine.getpCfg0Desc() != null ? withBomLine.getpCfg0Desc() : "");
+                data.put(HzCfg0BomLineOfModel.selfDesc[2], withBomLine.getpBomLineId());
+                data.put(HzCfg0BomLineOfModel.selfDesc[3], withBomLine.getpBomLineName());
+                data.put(HzCfg0BomLineOfModel.selfDesc[4], withBomLine.getpH9featureenname() == null ? "" : withBomLine.getpH9featureenname());
+                data.put(HzCfg0BomLineOfModel.selfDesc[5], owningUser == null ? "" : owningUser);
+                data.put(HzCfg0BomLineOfModel.selfDesc[6], withBomLine.getpCfg0Desc() != null ? withBomLine.getpCfg0Desc() : "");
+                data.put(HzCfg0BomLineOfModel.selfDesc[7], withBomLine.getpCfg0ObjectId());
+                data.put(HzCfg0BomLineOfModel.selfDesc[8], withBomLine.getpCfg0Desc() != null ? withBomLine.getpCfg0Desc() : "");
                 mapModelHasCfg0.forEach((key, value) -> {
                     for (HzCfg0BomLineOfModel model : value) {
                         if (keyOfMap.equals(model.getpBomLineId())) {

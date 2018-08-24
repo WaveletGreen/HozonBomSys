@@ -15,105 +15,113 @@ public class HzBomLineRecordDaoImpl extends BaseSQLUtil {
 
     /**
      * 插入一条数据
-     * @author haozt
+     *
      * @param record
      * @return
+     * @author haozt
      */
-    public int insert(HzBomLineRecord record){
-        if(null == record.getTableName() || "".equals(record.getTableName())){
+    public int insert(HzBomLineRecord record) {
+        if (null == record.getTableName() || "".equals(record.getTableName())) {
             record.setTableName("HZ_BOM_LINE_RECORD");
         }
-        return super.insert("HzBomLineRecordDaoImpl_insert",record);
+        return super.insert("HzBomLineRecordDaoImpl_insert", record);
     }
 
     /**
      * 更新一条数据
-     * @author haozt
+     *
      * @param record
      * @return
+     * @author haozt
      */
-    public int update(HzBomLineRecord record){
-        if(null == record.getTableName() || "".equals(record.getTableName())){
+    public int update(HzBomLineRecord record) {
+        if (null == record.getTableName() || "".equals(record.getTableName())) {
             record.setTableName("HZ_BOM_LINE_RECORD");
         }
-        return super.update("HzBomLineRecordDaoImpl_update",record);
+        return super.update("HzBomLineRecordDaoImpl_update", record);
     }
 
     /**
      * 找出最大排序号
-     * @author haozt
+     *
      * @return
+     * @author haozt
      */
-    public Integer findMaxBomOrderNum(String projectId){
-        return (Integer) super.findForObject("HzBomLineRecordDaoImpl_findMaxBomOrderNum",projectId);
+    public Integer findMaxBomOrderNum(String projectId) {
+        return (Integer) super.findForObject("HzBomLineRecordDaoImpl_findMaxBomOrderNum", projectId);
     }
 
     /**
      * 找出一条BOMLine 对象 走变更查询单一条记录
-     * @author haozt
+     *
      * @param map 过滤器
      * @return
+     * @author haozt
      */
-    public HzBomLineRecord findBomLineByPuid(Map map){
-        if(null == map.get("tableName") || map.get("tableName").equals("")){
-            map.put("tableName","HZ_BOM_LINE_RECORD");
+    public HzBomLineRecord findBomLineByPuid(Map map) {
+        if (null == map.get("tableName") || map.get("tableName").equals("")) {
+            map.put("tableName", "HZ_BOM_LINE_RECORD");
         }
-        return (HzBomLineRecord)super.findForObject("HzBomLineRecordDaoImpl_findBomLineByPuid",map);
+        return (HzBomLineRecord) super.findForObject("HzBomLineRecordDaoImpl_findBomLineByPuid", map);
     }
 
 
     /**
      * 找出一条BOMLine 对象 与变更无关
-     * @author haozt
-     * @param map 过滤器
+     *
+     * @param map 需要传入的参数是<strong>projectId----项目ID</strong> <span style='color:red;'>puid---BOMLine主键</span>
      * @return
+     * @author haozt
      */
-    public HzBomLineRecord findBomLine(Map map){
-        return (HzBomLineRecord)super.findForObject("HzBomLineRecordDaoImpl_findBomLine",map);
+    public HzBomLineRecord findBomLine(Map map) {
+        return (HzBomLineRecord) super.findForObject("HzBomLineRecordDaoImpl_findBomLine", map);
     }
 
 
     /**
      * 查询设变时BOM 历史记录
-     * @author haozt
+     *
      * @param map 过滤器
      * @return
+     * @author haozt
      */
-    public List<HzBomLineRecord> findBomListForChange(Map map){
-        if(null == map.get("tableName") || map.get("tableName").equals("")){
-            map.put("tableName","HZ_BOM_LINE_RECORD");
+    public List<HzBomLineRecord> findBomListForChange(Map map) {
+        if (null == map.get("tableName") || map.get("tableName").equals("")) {
+            map.put("tableName", "HZ_BOM_LINE_RECORD");
         }
-        return super.findForList("HzBomLineRecordDaoImpl_findBomListForChange",map);
+        return super.findForList("HzBomLineRecordDaoImpl_findBomListForChange", map);
     }
 
     /**
      * 找出全部的2或者2Y层级结构
+     *
      * @return
      */
-    public List<String> findBomLineIndex(Map map){
-        return super.findForList("HzBomLineRecordDaoImpl_findBomLineIndex",map);
+    public List<String> findBomLineIndex(Map map) {
+        return super.findForList("HzBomLineRecordDaoImpl_findBomLineIndex", map);
     }
 
-    public List<HzBomLineRecord> getAllBomLineRecordByProjectId(String projectId){
-        return super.findForList("HzBomLineRecordDaoImpl_getAllBomLineRecordByProjectId",projectId);
+    public List<HzBomLineRecord> getAllBomLineRecordByProjectId(String projectId) {
+        return super.findForList("HzBomLineRecordDaoImpl_getAllBomLineRecordByProjectId", projectId);
     }
 
-    public List<HzBomLineRecord> getLoadingCarPartBom(String projectId){
+    public List<HzBomLineRecord> getLoadingCarPartBom(String projectId) {
 
-        return super.findForList("HzBomLineRecordDaoImpl_getLoadingCarPartBom",projectId);
+        return super.findForList("HzBomLineRecordDaoImpl_getLoadingCarPartBom", projectId);
     }
 
-    public int delete(String puid){
-        return super.delete("HzEbomRecordDAOImpl_delete",puid);
+    public int delete(String puid) {
+        return super.delete("HzEbomRecordDAOImpl_delete", puid);
     }
 
     /**
      * 批量更新
+     *
      * @param records
      * @return
      */
-    public int updateBatch(List<HzBomLineRecord> records){
-        return super.update("HzEbomRecordDAOImpl_updateBatch",records);
+    public int updateBatch(List<HzBomLineRecord> records) {
+        return super.update("HzEbomRecordDAOImpl_updateBatch", records);
     }
 
 

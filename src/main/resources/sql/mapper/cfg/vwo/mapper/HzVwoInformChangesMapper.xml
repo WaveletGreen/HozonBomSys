@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.connor.hozon.bom.bomSystem.dao.cfg.HzVwoInformChangesDao">
+<mapper namespace="com.connor.hozon.bom.bomSystem.dao.cfg.vwo.HzVwoInformChangesDao">
     <resultMap id="BaseResultMap" type="sql.pojo.cfg.vwo.HzVwoInformChanges">
         <id column="ID" jdbcType="DECIMAL" property="id"/>
         <result column="VWO_ID" jdbcType="DECIMAL" property="vwoId"/>
@@ -54,6 +54,10 @@
     where ID = #{id,jdbcType=DECIMAL}
   </delete>
     <insert id="insert" parameterType="sql.pojo.cfg.vwo.HzVwoInformChanges">
+        <selectKey order="BEFORE"
+                   keyColumn="id" keyProperty="id" resultType="java.lang.Long">
+            select SEQ_HZ_VWO_INFO_CHANGE_ID.Nextval from dual
+        </selectKey>
         insert into
         HZ_VWO_INFORM_CHANGES (
         <include refid="Base_Column_List"/>

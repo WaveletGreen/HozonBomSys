@@ -123,6 +123,7 @@ public class OrgGroupController extends GenericController<OrgGroup,QueryOrgGroup
     @ResponseBody
     public Map<String,Object> userList(QueryUser user){
         Map<String,Object> result = new HashMap<String, Object>();
+        user.setSort(User.reflectToDBField(user.getSort()));
         Page page = userService.findByGroupUserPage(user);
         result.put("totalCount",page.getTotal());
         result.put("result",page.getRows());

@@ -77,26 +77,6 @@ function loadData() {
                 // sortable: true,                     //是否启用排序
                 // sortOrder: "asc",                   //排序方式
                 toolbars: [
-                    // {
-                    //     text: '添加车型模型',
-                    //     iconCls: 'glyphicon glyphicon-pencil',
-                    //     handler: function () {
-                    //         // var rows = $table.bootstrapTable('getSelections');
-                    //         // //只能选一条
-                    //         // if (rows.length != 1) {
-                    //         //     window.Ewin.alert({message: '请选择一条需要修改的数据!'});
-                    //         //     return false;
-                    //         // }
-                    //         window.Ewin.dialog({
-                    //             // 这个puid就是车型模型的puid，直接修改了车型模型的基本信息（在bom系统维护的字段）
-                    //             title: "添加车型模型",
-                    //             url: "materiel/addVehicleModelPage?projectPuid=" + projectPuid,
-                    //             gridId: "gridId",
-                    //             width: 350,
-                    //             height: 450
-                    //         });
-                    //     }
-                    // },
                     {
                         text: '修改基本信息',
                         iconCls: 'glyphicon glyphicon-pencil',
@@ -134,6 +114,184 @@ function loadData() {
                                 gridId: "gridId",
                                 width: 350,
                                 height: 450
+                            });
+                        }
+                    }
+                    ,
+                    // {
+                    //     text: '添加车型模型',
+                    //     iconCls: 'glyphicon glyphicon-pencil',
+                    //     handler: function () {
+                    //         // var rows = $table.bootstrapTable('getSelections');
+                    //         // //只能选一条
+                    //         // if (rows.length != 1) {
+                    //         //     window.Ewin.alert({message: '请选择一条需要修改的数据!'});
+                    //         //     return false;
+                    //         // }
+                    //         window.Ewin.dialog({
+                    //             // 这个puid就是车型模型的puid，直接修改了车型模型的基本信息（在bom系统维护的字段）
+                    //             title: "添加车型模型",
+                    //             url: "materiel/addVehicleModelPage?projectPuid=" + projectPuid,
+                    //             gridId: "gridId",
+                    //             width: 350,
+                    //             height: 450
+                    //         });
+                    //     }
+                    // },
+                    {
+                        text: '同步车型',
+                        iconCls: 'glyphicon glyphicon-pencil',
+                        handler: function () {
+                            var rows = $table.bootstrapTable('getSelections');
+                            //只能选一条
+                            if (rows.length != 1) {
+                                window.Ewin.alert({message: '请选择一条需要修改的数据!'});
+                                return false;
+                            }
+                            window.Ewin.dialog({
+                                title: "同步车型",
+                                //直接修改了超级物料表的数据，要根据配置器的puid找，否则就不能根据所见即所改
+                                url: "cfgMateriel/synMateriel?puid=" + rows[0].puid,
+                                width: 350,
+                                height: 450
+                            });
+                        }
+                    },
+                    {
+                        text: '添加',
+                        iconCls: 'glyphicon glyphicon-pencil',
+                        handler: function () {
+                            var rows = $table.bootstrapTable('getSelections');
+                            //只能选一条
+                            // if (rows.length != 1) {
+                            //     window.Ewin.alert({message: '请选择一条需要添加的数据!'});
+                            //     return false;
+                            // }
+                            var puids = new Array();
+                            var cfg0MainPuids = new Array();
+                            var modeBasiceDetails = new Array();
+                            for(var i = 0;i<rows.length;i++){
+                                puids[i] = rows[i].puid;
+                                cfg0MainPuids[i] = rows[i].cfg0MainPuid;
+                                modeBasiceDetails[i] = rows[i].modeBasiceDetail;
+                            }
+                            var projectPuid = $("#project", window.top.document).val();
+                            window.Ewin.dialog({
+                                title: "添加",
+                                //直接修改了超级物料表的数据，要根据配置器的puid找，否则就不能根据所见即所改
+                                url: "cfgMateriel/addConfigurableMaterial?puids=" + puids+"&cfg0MainPuids="+cfg0MainPuids+"&modeBasiceDetails="+modeBasiceDetails+"&projectPuid="+projectPuid,
+                                width: 350,
+                                height: 450
+                            });
+                        }
+                    },
+                    {
+                        text: '删除',
+                        iconCls: 'glyphicon glyphicon-pencil',
+                        handler: function () {
+                            var rows = $table.bootstrapTable('getSelections');
+                            //只能选一条
+                            // if (rows.length != 1) {
+                            //     window.Ewin.alert({message: '请选择一条需要添加的数据!'});
+                            //     return false;
+                            // }
+                            var puids = new Array();
+                            var cfg0MainPuids = new Array();
+                            var modeBasiceDetails = new Array();
+                            for(var i = 0;i<rows.length;i++){
+                                puids[i] = rows[i].puid;
+                                cfg0MainPuids[i] = rows[i].cfg0MainPuid;
+                                modeBasiceDetails[i] = rows[i].modeBasiceDetail;
+                            }
+                            var projectPuid = $("#project", window.top.document).val();
+                            window.Ewin.dialog({
+                                title: "添加",
+                                //直接修改了超级物料表的数据，要根据配置器的puid找，否则就不能根据所见即所改
+                                url: "cfgMateriel/deleteConfigurableMaterial?puids=" + puids+"&cfg0MainPuids="+cfg0MainPuids+"&modeBasiceDetails="+modeBasiceDetails+"&projectPuid="+projectPuid,
+                                width: 350,
+                                height: 450
+                            });
+                        }
+                    },
+                    {
+                        text: '添加到SAP',
+                        iconCls: 'glyphicon glyphicon-pencil',
+                        handler: function () {
+                            var rows = $table.bootstrapTable('getSelections');
+                            if (rows.length == 0) {
+                                window.Ewin.alert({message: '请选择一条需要添加的数据!'});
+                                return false;
+                            }
+                            window.Ewin.confirm({title: '提示', message: '是否要添加您所选择的记录？', width: 500}).on(function (e) {
+                                if (e) {
+                                    var puidOfModelFeatures = new Array();
+                                    for(var i = 0;i<rows.length;i++){
+                                        puidOfModelFeatures[i] = rows[i].puidOfModelFeature;
+                                    }
+                                    $.ajax({
+                                        type: "POST",
+                                        //ajax需要添加打包名
+                                        url: "materiel/addToSAP?puidOfModelFeatures="+puidOfModelFeatures,
+                                        // data: JSON.stringify(puidOfModelFeatures),
+                                        contentType: "application/json",
+                                        success: function (result) {
+                                            window.Ewin.alert({message: result, width: 800});
+                                            // if (result.status) {
+                                            //     // layer.msg(result.msg, {icon: 1, time: 2000})
+                                            //     // window.Ewin.alert({message: result, width: 800});
+                                            //     //刷新，会重新申请数据库数据
+                                            // }
+                                            // else {
+                                            //     window.Ewin.alert({message: "操作添加失败:" + result.msg});
+                                            // }
+                                            $table.bootstrapTable("refresh");
+                                        },
+                                        error: function (info) {
+                                            window.Ewin.alert({message: "操作添加:" + info.status});
+                                        }
+                                    })
+                                }
+                            });
+                        }
+                    },
+                    {
+                        text: '从SAP删除',
+                        iconCls: 'glyphicon glyphicon-pencil',
+                        handler: function () {
+                            var rows = $table.bootstrapTable('getSelections');
+                            if (rows.length == 0) {
+                                window.Ewin.alert({message: '请选择一条需要删除的数据!'});
+                                return false;
+                            }
+                            window.Ewin.confirm({title: '提示', message: '是否要删除您所选择的记录？', width: 500}).on(function (e) {
+                                if (e) {
+                                    var puidOfModelFeatures = new Array();
+                                    for(var i = 0;i<rows.length;i++){
+                                        puidOfModelFeatures[i] = rows[i].puidOfModelFeature;
+                                    }
+                                    $.ajax({
+                                        type: "POST",
+                                        //ajax需要添加打包名
+                                        url: "materiel/deleteToSAP?puidOfModelFeatures="+puidOfModelFeatures,
+                                        // data: JSON.stringify(puidOfModelFeatures),
+                                        contentType: "application/json",
+                                        success: function (result) {
+                                            // if (result.status) {
+                                            //     layer.msg(result.msg, {icon: 1, time: 2000})
+                                            //     // window.Ewin.alert({message: result, width: 800});
+                                            //     //刷新，会重新申请数据库数据
+                                            // }
+                                            // else {
+                                            //     window.Ewin.alert({message: "操作删除失败:" + result.msg});
+                                            // }
+                                            window.Ewin.alert({message: result, width: 800});
+                                            $table.bootstrapTable("refresh");
+                                        },
+                                        error: function (info) {
+                                            window.Ewin.alert({message: "操作删除:" + info.status});
+                                        }
+                                    })
+                                }
                             });
                         }
                     }

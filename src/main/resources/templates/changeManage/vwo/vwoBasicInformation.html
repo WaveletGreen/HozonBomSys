@@ -3,223 +3,202 @@
 <!--User: xulf Date: 2018/7/27 Time: 10:11-->
 <head th:include="include/includebase"></head>
 <link th:href="@{/css/changeManage/vwo/vwoFromList.css}" rel="stylesheet"/>
+<link th:href="@{/css/changeManage/vwo/vwoBasicInformation.css}" rel="stylesheet"/>
 <meta charset="UTF-8">
 <title>变更管理vwo</title>
 </head>
 <body>
 <!--基本信息-->
 <h4><i class="fa fa-minus-square" aria-hidden="true">基本信息</i></h4>
-<input th:value="${url}" type="hidden" id="url"/>
-<input th:value="${vwo}" type="hidden" id="vwo"/>
-<button class="btn btn-success" style="position: fixed;margin-left:95%;margin-top: 100px;z-index:99999;">保存</button>
+<button class="btn btn-success" style="position: fixed;margin-left:95%;margin-top: 100px;z-index:99999;"
+        id="vwoSaveBtn">保存
+</button>
 <div class="panel-body" style="padding:0;">
-    <div class="panel panel-default">
-        <div class="panel-body">
-            <div class="col-lg-12 col-md-12">
-                <div class="col-lg-2 col-md-2">
-                    <div class="form-group after_the">
-                        <label for="vwoNum">VWO号:</label>
-                        <input class="form-control" style="width: 150px"
-                               id="vwoNum" name="vwoNum"
-                               type="text"
-                               disabled="disabled"
-                               th:value="${vwoInfo.getVwoNum()}"
-                        />
-                    </div>
-                    <div class="form-group  after_the">
-                        <label for="vwoCreateDate">创建时间:</label>
-                        <input class="form-control" style="width: 150px"
-                               id="vwoCreateDate" name="vwoCreateDate"
-                               type="text"
-                               disabled="disabled"
-                               th:value="${vwoInfo.getVwoCreateDate()}"
-                        />
-                    </div>
-                    <div class="form-group  after_the">
-                        <label for="vwoStatus">流程状态:</label>
-                        <input class="form-control" style="width: 150px"
-                               id="vwoStatus" name="vwoStatus"
-                               type="text"
-                               disabled="disabled"
-                               th:value="${vwoInfo.getVwoStatusName()}"
-                        />
-                    </div>
-                    <div class="form-group after_the">
-                        <label for="vwoName">标题:</label>
-                        <input class="form-control" style="width: 150px"
-                               id="vwoName" name="vwoName"
-                               type="text"
-                               th:value="${vwoInfo.getVwoName()}"
-                        />
-                    </div>
-                </div>
-                <div class="col-lg-2 col-md-2">
-                    <div class="form-group after_the">
-                        <label for="userDeptName">部门:</label>
-                        <input class="form-control" style="width: 150px"
-                               id="userDeptName" name="userDeptName"
-                               type="text"
-                               disabled="disabled"
-                               th:value="${vwoInfo.getUserDeptName()}"
-                        />
-                    </div>
-                    <div class="form-group after_the">
-                        <label for="getVwoCreator">发起人:</label>
-                        <input class="form-control" style="width: 150px"
-                               id="getVwoCreator" name="getVwoCreator"
-                               type="text"
-                               disabled="disabled"
-                               th:value="${vwoInfo.getVwoCreator()}"
-                        />
-                    </div>
-                    <div class="form-group after_the">
-                        <label for="contactPhoneNum">联系电话:</label>
-                        <input class="form-control" style="width: 150px"
-                               id="contactPhoneNum" name="contactPhoneNum"
-                               type="text"
-                               th:value="${vwoInfo.getContactPhoneNum()}"
-                        />
-                    </div>
-                    <div class="form-group after_the">
-                        <label for="vwoDemandFinishTime">要求完成时间:</label>
-                        <input class="form-control" style="width: 150px"
-                               id="vwoDemandFinishTime" name="vwoDemandFinishTime"
-                               type="text"
-                               th:value="${vwoInfo.getVwoDemandFinishTime()}"
-                        />
-                    </div>
-                </div>
-                <div class="col-lg-2 col-md-2">
-                    <div class="form-group after_the">
-                        <label for="changeType">变更类型:</label>
-                        <select class="form-control" style="width: 150px" name="" id="changeType">
-                            <option th:selected="${vwoInfo.getVwoChangeType()==1?true:false}">正常设变</option>
-                            <option th:selected="${vwoInfo.getVwoChangeType()==2?true:false}">简易设变</option>
-                        </select>
-                    </div>
-                    <div class="form-group after_the">
-                        <label for="expenseDept">费用承担部门:</label>
-                        <select class="form-control" style="width: 150px" name="" id="expenseDept">
-                            <option>车身部门</option>
-                        </select>
-                    </div>
-                    <div class="form-group after_the">
-                        <label for="listedType">上市类型:</label>
-                        <select class="form-control" style="width: 150px" name="" id="listedType">
-                            <option th:selected="${vwoInfo.getVwoListedType()==1?true:false}">上市前</option>
-                            <option th:selected="${vwoInfo.getVwoListedType()==2?true:false}">上市后</option>
-                        </select>
-                    </div>
-                    <div class="form-group after_the">
-                        <label for="vwoConnectedVwo">关联VWO号:</label>
-                        <input style="width: 150px" class="form-control"
-                               id="vwoConnectedVwo" name="vwoConnectedVwo"
-                               type="text"
-                               th:value="${vwoInfo.getVwoConnectedVwo()}"
-                        />
-                    </div>
-                </div>
-                <div class="col-lg-2 col-md-2">
-                    <div class="form-group after_the">
-                        <label for="platformCode">平台:</label>
-                        <input style="width: 150px" class="form-control"
-                               id="platformCode" name="platformCode"
-                               type="text"
-                               disabled="disabled"
-                               th:value="${vwoInfo.getPlatformCode()}"
-                        />
-                    </div>
-                    <div class="form-group after_the">
-                        <label for="vehicleCode">车型代码:</label>
-                        <input style="width: 150px" class="form-control"
-                               id="vehicleCode" name="vehicleCode"
-                               type="text"
-                               disabled="disabled"
-                               th:value="${vwoInfo.getVehicleCode()}"
-                        />
-                    </div>
-                    <div class="form-group after_the">
-                        <label for="projectCode">项目代码:</label>
-                        <input style="width: 150px" class="form-control"
-                               id="projectCode" name="projectCode"
-                               type="text"
-                               disabled="disabled"
-                               th:value="${vwoInfo.getProjectCode()}"
-                        />
-                    </div>
-                    <div class="form-group after_the">
-                        <label for="vwoStartEffectiveTime">启动生效时间:</label>
-                        <input style="width: 150px" class="form-control"
-                               id="vwoStartEffectiveTime" name="vwoStartEffectiveTime"
-                               type="text"
-                               th:value="${vwoInfo.getVwoStartEffectiveTime()}"
-                        />
-                    </div>
-                </div>
-                <div class="col-lg-2 col-md-2">
-                    <div class="form-group after_the">
-                        <label for="vwoEndEffectiveTime">终止生效时间:</label>
-                        <input type="text" style="width: 150px" class="form-control"
-                               id="vwoEndEffectiveTime" name="vwoEndEffectiveTime"
-                               th:value="${vwoInfo.getVwoEndEffectiveTime()}"
-                        />
-                    </div>
-                    <div class="form-group after_the">
-                        <label for="vwoProjectStage">项目所属阶段:</label>
-                        <input style="width: 150px" class="form-control"
-                               id="vwoProjectStage" name="vwoProjectStage"
-                               type="text"
-                               th:value="${vwoInfo.getVwoProjectStage()}"
-                        />
-                    </div>
-                </div>
+    <form class="form-horizontal" id="basicInfo" role="form" onsubmit="return false;">
+        <fieldset>
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="col-lg-12 col-md-12">
+                        <input th:value="${vwo}" type="hidden" id="vwo" name="id"/>
+                        <div class="col-lg-2 col-md-2">
+                            <div class="form-group after_the">
+                                <label for="vwoNum">VWO号:</label>
+                                <input class="form-control" style="width: 150px"
+                                       id="vwoNum" name="vwoNum"
+                                       type="text"
+                                       disabled="disabled"
+                                       th:value="${vwoInfo.getVwoNum()}"
+                                />
+                            </div>
+                            <div class="form-group  after_the">
+                                <label for="vwoCreateDate">创建时间:</label>
+                                <input class="form-control" style="width: 150px"
+                                       id="vwoCreateDate" name="vwoCreateDate"
+                                       type="text"
+                                       disabled="disabled"
+                                       th:value="${vwoInfo.getVwoCreateDate()}"
+                                />
+                            </div>
+                            <div class="form-group  after_the">
+                                <label for="vwoStatus">流程状态:</label>
+                                <input class="form-control" style="width: 150px"
+                                       id="vwoStatus" name="vwoStatus"
+                                       type="text"
+                                       disabled="disabled"
+                                       th:value="${vwoInfo.getVwoStatusName()}"
+                                />
+                            </div>
+                            <div class="form-group after_the">
+                                <label for="vwoName">标题:</label>
+                                <input class="form-control" style="width: 150px"
+                                       id="vwoName" name="vwoName"
+                                       type="text"
+                                       th:value="${vwoInfo.getVwoName()}"
+                                />
+                            </div>
+                        </div>
+                        <div class="col-lg-2 col-md-2">
+                            <div class="form-group after_the">
+                                <label for="userDeptName">部门:</label>
+                                <input class="form-control" style="width: 150px"
+                                       id="userDeptName" name="userDeptName"
+                                       type="text"
+                                       disabled="disabled"
+                                       th:value="${vwoInfo.getUserDeptName()}"
+                                />
+                            </div>
+                            <div class="form-group after_the">
+                                <label for="getVwoCreator">发起人:</label>
+                                <input class="form-control" style="width: 150px"
+                                       id="getVwoCreator" name="getVwoCreator"
+                                       type="text"
+                                       disabled="disabled"
+                                       th:value="${vwoInfo.getVwoCreator()}"
+                                />
+                            </div>
+                            <div class="form-group after_the">
+                                <label for="contactPhoneNum">联系电话:</label>
+                                <input class="form-control" style="width: 150px"
+                                       id="contactPhoneNum" name="contactPhoneNum"
+                                       type="text"
+                                       th:value="${vwoInfo.getContactPhoneNum()}"
+                                />
+                            </div>
+                            <div class="form-group after_the">
+                                <label for="vwoDemandFinishTime">要求完成时间:</label>
+                                <input class="form-control" style="width: 150px"
+                                       id="vwoDemandFinishTime" name="vwoDemandFinishTime"
+                                       type="text"
+                                       th:value="${vwoInfo.getVwoDemandFinishTime()}"
+                                />
+                            </div>
+                        </div>
+                        <div class="col-lg-2 col-md-2">
+                            <div class="form-group after_the">
+                                <label for="changeType">变更类型:</label>
+                                <select class="form-control" style="width: 150px" name="" id="changeType">
+                                    <option th:selected="${vwoInfo.getVwoChangeType()==1?true:false}">正常设变</option>
+                                    <option th:selected="${vwoInfo.getVwoChangeType()==2?true:false}">简易设变</option>
+                                </select>
+                            </div>
+                            <div class="form-group after_the">
+                                <label for="expenseDept">费用承担部门:</label>
+                                <select class="form-control" style="width: 150px" name="" id="expenseDept">
+                                    <option>车身部门</option>
+                                </select>
+                            </div>
+                            <div class="form-group after_the">
+                                <label for="listedType">上市类型:</label>
+                                <select class="form-control" style="width: 150px" name="" id="listedType">
+                                    <option th:selected="${vwoInfo.getVwoListedType()==1?true:false}">上市前</option>
+                                    <option th:selected="${vwoInfo.getVwoListedType()==2?true:false}">上市后</option>
+                                </select>
+                            </div>
+                            <div class="form-group after_the">
+                                <label for="vwoConnectedVwo">关联VWO号:</label>
+                                <input style="width: 150px" class="form-control"
+                                       id="vwoConnectedVwo" name="vwoConnectedVwo"
+                                       type="text"
+                                       th:value="${vwoInfo.getVwoConnectedVwo()}"
+                                />
+                            </div>
+                        </div>
+                        <div class="col-lg-2 col-md-2">
+                            <div class="form-group after_the">
+                                <label for="platformCode">平台:</label>
+                                <input style="width: 150px" class="form-control"
+                                       id="platformCode" name="platformCode"
+                                       type="text"
+                                       disabled="disabled"
+                                       th:value="${vwoInfo.getPlatformCode()}"
+                                />
+                            </div>
+                            <div class="form-group after_the">
+                                <label for="vehicleCode">车型代码:</label>
+                                <input style="width: 150px" class="form-control"
+                                       id="vehicleCode" name="vehicleCode"
+                                       type="text"
+                                       disabled="disabled"
+                                       th:value="${vwoInfo.getVehicleCode()}"
+                                />
+                            </div>
+                            <div class="form-group after_the">
+                                <label for="projectCode">项目代码:</label>
+                                <input style="width: 150px" class="form-control"
+                                       id="projectCode" name="projectCode"
+                                       type="text"
+                                       disabled="disabled"
+                                       th:value="${vwoInfo.getProjectCode()}"
+                                />
+                            </div>
+                            <div class="form-group after_the">
+                                <label for="vwoStartEffectiveTime">启动生效时间:</label>
+                                <input style="width: 150px" class="form-control"
+                                       id="vwoStartEffectiveTime" name="vwoStartEffectiveTime"
+                                       type="text"
+                                       th:value="${vwoInfo.getVwoStartEffectiveTime()}"
+                                />
+                            </div>
+                        </div>
+                        <div class="col-lg-2 col-md-2">
+                            <div class="form-group after_the">
+                                <label for="vwoEndEffectiveTime">终止生效时间:</label>
+                                <input type="text" style="width: 150px" class="form-control"
+                                       id="vwoEndEffectiveTime" name="vwoEndEffectiveTime"
+                                       th:value="${vwoInfo.getVwoEndEffectiveTime()}"
+                                />
+                            </div>
+                            <div class="form-group after_the">
+                                <label for="vwoProjectStage">项目所属阶段:</label>
+                                <input style="width: 150px" class="form-control"
+                                       id="vwoProjectStage" name="vwoProjectStage"
+                                       type="text"
+                                       th:value="${vwoInfo.getVwoProjectStage()}"
+                                />
+                            </div>
+                        </div>
 
-                <div class="col-lg-12 col-md-12">
-                    <div class="form-group after_the">
-                        <table id="connectedTable" name="connectedTable"></table>
-                    </div>
-                </div>
-                <!--<div class="form-group after_the">-->
-                <!--<label for="relevanceVWONum3">关联工程师姓名:</label>-->
-                <!--<input type="text" style="width: 150px" class="form-control" name="itemType"-->
-                <!--id="relevanceVWONum9"-->
-                <!--placeholder=""/>-->
-                <!--</div>-->
-                <!--</div>-->
-                <!--<div class="col-lg-2 col-md-2">-->
-                <!--<div class="form-group after_the">-->
-                <!--<label for="relevanceVWONum4">所属部门:</label>-->
-                <!--<input type="text" style="width: 150px" class="form-control" name="itemType"-->
-                <!--id="relevanceVWONum10"-->
-                <!--placeholder=""/>-->
-                <!--</div>-->
-                <!--<div class="form-group after_the">-->
-                <!--<label for="relevanceVWONum">关联零件号:</label>-->
-                <!--<input type="text" style="width: 150px" class="form-control" name="itemType"-->
-                <!--id="relevanceVWONum11"-->
-                <!--placeholder=""/>-->
-                <!--</div>-->
-                <!--<div class="form-group after_the">-->
-                <!--<label for="relevanceVWONum">关联零件名称:</label>-->
-                <!--<input type="text" style="width: 150px" class="form-control" name="itemType"-->
-                <!--id="relevanceVWONum12"-->
-                <!--placeholder=""/>-->
-                <!--</div>-->
-
-                <div class="col-lg-12 col-md-12">
-                    <div class="form-group after_the">
-                        <label for="vwoChangeReason">原因描述:</label>
-                        <textarea rows="2" cols="30" style="width: 100%;resize:none"
-                                  class="form-control"
-                                  id="vwoChangeReason" name="vwoChangeReason"
-                                  th:text="${vwoInfo.getVwoChangeReason()}"
-                        >
+                        <div class="col-lg-12 col-md-12">
+                            <div class="form-group after_the">
+                                <table id="connectedTable" name="connectedTable"></table>
+                            </div>
+                        </div>
+                        <div class="col-lg-12 col-md-12">
+                            <div class="form-group after_the">
+                                <label for="vwoChangeReason">原因描述:</label>
+                                <textarea rows="2" cols="30" style="width: 100%;resize:none"
+                                          class="form-control"
+                                          id="vwoChangeReason" name="vwoChangeReason"
+                                          th:text="${vwoInfo.getVwoChangeReason()}"
+                                >
                         </textarea>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
+        </fieldset>
+    </form>
 </div>
 <!--变更描述-->
 <h4><i class="fa fa-minus-square" aria-hidden="true">变更描述</i></h4>
@@ -233,118 +212,105 @@
     </div>
 </div>
 <!--相关部门-->
-<h4><i class="fa fa-minus-square" aria-hidden="true">相关部门</i></h4>
+<h4><i class="fa fa-minus-square" aria-hidden="true">影响部门</i></h4>
 <div class="panel-body" style="padding-bottom:0px;">
     <div class="panel panel-default">
         <div class="panel-body">
             <div class="panel-body" style="padding-bottom:0px;">
-                <div class="panel panel-default">
-                    <div class="panel-body">
-                        <label>影响部门:</label>
-                        <div class="content col-lg-5"><!--style="margin-top: -50px;"-->
-                            <table id="vwo_table1" class="table table-striped tableNormalStyle">
-                                <tr>
-                                    <td style="width: 50px"><input type="checkbox"></td>
-                                    <td>智能驾驶研究院</td>
-                                    <td style="width: 50px"><input type="checkbox"></td>
-                                    <td>智能座舱事业部</td>
-                                    <td style="width: 50px"><input type="checkbox"></td>
-                                    <td>电动化底盘中心</td>
-                                </tr>
-                                <tr>
-                                    <td style="width: 50px"><input type="checkbox"></td>
-                                    <td>电子电器中心</td>
-                                    <td style="width: 50px"><input type="checkbox"></td>
-                                    <td>内外饰中心</td>
-                                    <td style="width: 50px"><input type="checkbox"></td>
-                                    <td>动总集成中心</td>
-                                </tr>
-                                <tr>
-                                    <td style="width: 50px"><input type="checkbox"></td>
-                                    <td>车身中心</td>
-                                </tr>
-                            </table>
+                <form class="form-horizontal" id="influenceDept" role="form" onsubmit="return false;">
+                    <fieldset>
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <div class="content col-lg-4" style="text-align: center;">
+                                    <label>研究涉及部门</label>
+                                </div>
+                                <div class="content col-lg-8"><!--style="margin-top: -50px;"-->
+                                    <input id="influenceVwoId" name="vwoId" type="hidden"
+                                           th:value="${influenceDept.getVwoId()}"/>
+                                    <table id="vwo_table1" class="table table-striped tableNormalStyle">
+                                        <tr>
+                                            <td style="width: 50px"><input type="checkbox" id="vwoIdri" name="vwoIdri"
+                                                                           value="1"
+                                                                           th:checked="${influenceDept.getVwoIdri()==1?true:false}"/>
+                                            </td>
+                                            <td><label for="vwoIdri">智能驾驶研究院</label></td>
+                                            <td style="width: 50px"><input type="checkbox" id="vwoIcbu" name="vwoIcbu"
+                                                                           value="1"
+                                                                           th:checked="${influenceDept.getVwoIcbu()==1?true:false}"/>
+                                            </td>
+                                            <td><label for="vwoIcbu">智能座舱事业部</label></td>
+                                            <td style="width: 50px"><input type="checkbox" id="vwoMcc" name="vwoMcc"
+                                                                           value="1"
+                                                                           th:checked="${influenceDept.getVwoMcc()==1?true:false}"/>
+                                            </td>
+                                            <td><label for="vwoMcc">电动化底盘中心</label></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="width: 50px"><input type="checkbox" id="vwoEec" name="vwoEec"
+                                                                           value="1"
+                                                                           th:checked="${influenceDept.getVwoEec()==1?true:false}"/>
+                                            </td>
+                                            <td><label for="vwoEec">电子电器中心</label></td>
+                                            <td style="width: 50px"><input type="checkbox" id="vwoIdc" name="vwoIdc"
+                                                                           value="1"
+                                                                           th:checked="${influenceDept.getVwoIdc()==1?true:false}"/>
+                                            </td>
+                                            <td><label for="vwoIdc">内外饰中心</label></td>
+                                            <td style="width: 50px"><input type="checkbox" id="vwoDic" name="vwoDic"
+                                                                           value="1"
+                                                                           th:checked="${influenceDept.getVwoDic()==1?true:false}"/>
+                                            </td>
+                                            <td><label for="vwoDic">动总集成中心</label></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="width: 50px"><input type="checkbox" id="vwoVbc" name="vwoVbc"
+                                                                           value="1"
+                                                                           th:checked="${influenceDept.getVwoVbc()==1?true:false}"/>
+                                            </td>
+                                            <td><label for="vwoVbc"> 车身中心</label></td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
+                    </fieldset>
+                </form>
             </div>
             <div class="col-lg-12 col-md-12">
                 <div class="col-lg-3 col-md-3">
                     <div class="form-group after_the">
-                        <label for="expenseDept">专业科长:</label>
-                        <select class="form-control" name="" id="expenseDept1">
-                            <option>×××科长</option>
-                            <option>×××科长</option>
-                            <option>×××科长</option>
-                            <option>×××科长</option>
-                            <option>×××科长</option>
-                        </select>
+                        <a href="javascript:void(0)" onclick="doSelectPerson('1')">专业科长:</a>
+                        <span id="sp_1" th:text="${influenceUser.getVwoProSectionChiefName()}"></span>
                     </div>
                     <div class="form-group after_the">
-                        <label for="expenseDept">变更协调员:</label>
-                        <select class="form-control" name="" id="expenseDept7">
-                            <option>×××协调员</option>
-                            <option>×××协调员</option>
-                            <option>×××协调员</option>
-                            <option>×××协调员</option>
-                            <option>×××协调员</option>
-                        </select>
+                        <a href="javascript:void(0)" onclick="doSelectPerson('2')">变更协调员:</a>
+                        <span id="sp_2" th:text="${influenceUser.getVwoChangeCoordinatorName()}"></span>
                     </div>
                 </div>
                 <div class="col-lg-3 col-md-3">
                     <div class="form-group after_the">
-                        <label for="expenseDept">车身:</label>
-                        <select class="form-control" name="" id="expenseDept2">
-                            <option>×××车身</option>
-                            <option>×××车身</option>
-                            <option>×××车身</option>
-                            <option>×××车身</option>
-                            <option>×××车身</option>
-                        </select>
+                        <a href="javascript:void(0)" onclick="doSelectPerson('3')">车身:</a>
+                        <span id="sp_3" th:text="${influenceUser.getVwoVehicleBodyUserName()}"></span>
                     </div>
                     <div class="form-group after_the">
-                        <label for="expenseDept">底盘:</label>
-                        <select class="form-control" name="" id="expenseDept6">
-                            <option>×××底盘</option>
-                            <option>×××底盘</option>
-                            <option>×××底盘</option>
-                            <option>×××底盘</option>
-                            <option>×××底盘</option>
-                        </select>
+                        <a href="javascript:void(0)" onclick="doSelectPerson('4')">底盘:</a>
+                        <span id="sp_4" th:text="${influenceUser.getVwoChassisName()}"></span>
                     </div>
                 </div>
                 <div class="col-lg-3 col-md-3">
                     <div class="form-group after_the">
-                        <label for="expenseDept">电器:</label>
-                        <select class="form-control" name="" id="expenseDept3">
-                            <option>×××电器</option>
-                            <option>×××电器</option>
-                            <option>×××电器</option>
-                            <option>×××电器</option>
-                            <option>×××电器</option>
-                        </select>
+                        <a href="javascript:void(0)" onclick="doSelectPerson('5')">电器:</a>
+                        <span id="sp_5" th:text="${influenceUser.getVwoElectricApplianceName()}"></span>
                     </div>
                     <div class="form-group after_the">
-                        <label for="expenseDept">内外饰:</label>
-                        <select class="form-control" name="" id="expenseDept5">
-                            <option>×××内外饰</option>
-                            <option>×××内外饰</option>
-                            <option>×××内外饰</option>
-                            <option>×××内外饰</option>
-                            <option>×××内外饰</option>
-                        </select>
+                        <a href="javascript:void(0)" onclick="doSelectPerson('6')">内外饰:</a>
+                        <span id="sp_6" th:text="${influenceUser.getVwoIeoName()}"></span>
                     </div>
                 </div>
                 <div class="col-lg-3 col-md-3">
                     <div class="form-group after_the">
-                        <label for="expenseDept">项目经理:</label>
-                        <select class="form-control" name="" id="expenseDept4">
-                            <option>×××项目经理</option>
-                            <option>×××项目经理</option>
-                            <option>×××项目经理</option>
-                            <option>×××项目经理</option>
-                            <option>×××项目经理</option>
-                        </select>
+                        <a href="javascript:void(0)" onclick="doSelectPerson('7')">项目经理:</a>
+                        <span id="sp_7" th:text="${influenceUser.getVwoProjectManagerName()}"></span>
                     </div>
                 </div>
             </div>
@@ -354,88 +320,84 @@
 <!--评估意见-->
 <h4><i class="fa fa-minus-square" aria-hidden="true">评估意见</i></h4>
 <div class="panel-body" style="padding-bottom:0px;">
-    <div class="panel panel-default">
-        <div class="panel-body">
-            <div class="col-lg-12 col-md-12">
-                <div class="col-lg-4 col-md-4">
-                    <div class="panel-body" style="padding-bottom:0px;">
-                        <div class="panel panel-default">
-                            <div class="panel-body">
-                                <h4>BOM经理</h4>
-                                <div class="form-group">
-                                    <label for="pMaterielDesc">意见</label>
-                                    <textarea rows="2" cols="30" class="form-control"
-                                              style="width: 100%;resize:none"></textarea>
-                                </div>
-                                <div class="form-group">
-                                    <label for="type">结论</label>
-                                    <select class="form-control" name="type" id="type"
-                                            placeholder="请选择是否同意">
-                                        <option>同意</option>
-                                        <option>不同意</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="pMaterielDesc">日期</label>
-                                    <input class="form-control" id="pMaterielDesc" name="pMaterielDesc" type="text"
-                                           value="2018-07-26"
-                                           placeholder="请输入物料名称"/>
-                                </div>
+    <div class="panel panel-default panel-body">
+        <div class="col-lg-12 col-md-12">
+            <div class="col-lg-4 col-md-4">
+                <div class="panel panel-default panel-body" style="padding-bottom:0px;">
+                    <div class="panel-body">
+                        <h4>BOM经理</h4>
+                        <div class="form-group">
+                            <label for="pMaterielDesc">意见</label>
+                            <textarea rows="2" cols="30" class="form-control"
+                                      style="width: 100%;resize:none"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="type">结论</label>
+                            <select class="form-control" name="type" id="type"
+                                    placeholder="请选择是否同意">
+                                <option>同意</option>
+                                <option>不同意</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="pMaterielDesc">日期</label>
+                            <input class="form-control" id="pMaterielDesc" name="pMaterielDesc" type="text"
+                                   value="2018-07-26"
+                                   placeholder="请输入物料名称"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-4">
+                <div class="panel-body" style="padding-bottom:0px;">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <h4>专业PMT经理</h4>
+                            <div class="form-group">
+                                <label for="pMaterielDesc">意见</label>
+                                <textarea rows="2" cols="30" class="form-control"
+                                          style="width: 100%;resize:none"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="type">结论</label>
+                                <select class="form-control" name="type" id="type1"
+                                        placeholder="请选择是否同意">
+                                    <option>同意</option>
+                                    <option>不同意</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="pMaterielDesc">日期</label>
+                                <input class="form-control" id="pMaterielDesc1" name="pMaterielDesc" type="text"
+                                       value="2018-07-26"
+                                       placeholder="请输入物料名称"/>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-4 col-md-4">
-                    <div class="panel-body" style="padding-bottom:0px;">
-                        <div class="panel panel-default">
-                            <div class="panel-body">
-                                <h4>专业PMT经理</h4>
-                                <div class="form-group">
-                                    <label for="pMaterielDesc">意见</label>
-                                    <textarea rows="2" cols="30" class="form-control"
-                                              style="width: 100%;resize:none"></textarea>
-                                </div>
-                                <div class="form-group">
-                                    <label for="type">结论</label>
-                                    <select class="form-control" name="type" id="type1"
-                                            placeholder="请选择是否同意">
-                                        <option>同意</option>
-                                        <option>不同意</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="pMaterielDesc">日期</label>
-                                    <input class="form-control" id="pMaterielDesc1" name="pMaterielDesc" type="text"
-                                           value="2018-07-26"
-                                           placeholder="请输入物料名称"/>
-                                </div>
+            </div>
+            <div class="col-lg-4 col-md-4">
+                <div class="panel-body" style="padding-bottom:0px;">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <h4>项目经理</h4>
+                            <div class="form-group">
+                                <label for="pMaterielDesc">意见</label>
+                                <textarea rows="2" cols="30" class="form-control"
+                                          style="width: 100%;resize:none"></textarea>
                             </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-4">
-                    <div class="panel-body" style="padding-bottom:0px;">
-                        <div class="panel panel-default">
-                            <div class="panel-body">
-                                <h4>项目经理</h4>
-                                <div class="form-group">
-                                    <label for="pMaterielDesc">意见</label>
-                                    <textarea rows="2" cols="30" class="form-control"
-                                              style="width: 100%;resize:none"></textarea>
-                                </div>
-                                <div class="form-group">
-                                    <label for="type">结论</label>
-                                    <select class="form-control" name="type" id="type2"
-                                            placeholder="请选择是否同意">
-                                        <option>同意</option>
-                                        <option>不同意</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="pMaterielDesc">日期</label>
-                                    <input class="form-control" id="pMaterielDesc2" name="pMaterielDesc" type="text"
-                                           value="2018-07-26" placeholder="请输入物料名称"/>
-                                </div>
+                            <div class="form-group">
+                                <label for="type">结论</label>
+                                <select class="form-control" name="type" id="type2"
+                                        placeholder="请选择是否同意">
+                                    <option>同意</option>
+                                    <option>不同意</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="pMaterielDesc">日期</label>
+                                <input class="form-control" id="pMaterielDesc2" name="pMaterielDesc" type="text"
+                                       value="2018-07-26" placeholder="请输入物料名称"/>
                             </div>
                         </div>
                     </div>
@@ -538,5 +500,14 @@
 </div>
 <script th:src="@{/js/helper/dateFormater.js}"></script>
 <script th:src="@{/js/changeManage/vwo/vwoBasicInformation.js}"></script>
+<script th:inline="javascript">
+    function doQuery() {
+        $('#connectedTable').bootstrapTable('refresh');    //刷新表格
+    };
+
+    function reloadSheet() {
+        window.location.reload();//刷新当前页面.
+    }
+</script>
 </body>
 </html>

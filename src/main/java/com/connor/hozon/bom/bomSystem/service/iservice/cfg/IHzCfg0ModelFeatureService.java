@@ -31,6 +31,13 @@ public interface IHzCfg0ModelFeatureService {
     HzCfg0ModelFeature doSelectByPrimaryKey(@Param("puid") String puid);
 
     /**
+     * 连同工厂编号一起查出来
+     * @param puid
+     * @return
+     */
+    HzCfg0ModelFeature doSelectByPrimaryKeyWithFactoryCode(@Param("puid") String puid);
+
+    /**
      * 根据车型模型puid查找1个模型特性数据
      *
      * @param pPertainToModel 车型模型主键，puid

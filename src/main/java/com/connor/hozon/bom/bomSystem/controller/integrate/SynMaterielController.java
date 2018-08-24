@@ -31,7 +31,7 @@ public class SynMaterielController extends ExtraIntegrate {
     @RequestMapping("/deleteByPuids")
     @ResponseBody
     public JSONObject deleteByPuids(List<EditHzMaterielReqDTO> dtos) {
-        return iSynMaterielService.deleteByPuids(dtos);
+        return iSynMaterielService.deleteByPuids(dtos,"HZ_MATERIEL_RECORD","P_MATERIEL_CODE");
     }
 
     /**
@@ -42,7 +42,7 @@ public class SynMaterielController extends ExtraIntegrate {
      */
     @RequestMapping(value = "/updateOrAddByUids", method = RequestMethod.POST)
     public String updateOrAddByUids(@RequestBody List<EditHzMaterielReqDTO> dtos, Model model) {
-        JSONObject entities = iSynMaterielService.updateOrAddByUids(dtos);
+        JSONObject entities = iSynMaterielService.updateOrAddByUids(dtos,"HZ_MATERIEL_RECORD","P_MATERIEL_CODE");
         addToModel(entities, model);
         return "stage/templateOfIntegrate";
     }
@@ -60,7 +60,7 @@ public class SynMaterielController extends ExtraIntegrate {
             result.put("msg", "请选择项目再操作!");
             return "errorWithEntity";
         }
-        JSONObject entities = iSynMaterielService.synAllByProjectPuid(projectId);
+        JSONObject entities = iSynMaterielService.synAllByProjectPuid(projectId,"HZ_MATERIEL_RECORD","P_MATERIEL_CODE");
         addToModel(entities, model);
         return "stage/templateOfIntegrate";
     }

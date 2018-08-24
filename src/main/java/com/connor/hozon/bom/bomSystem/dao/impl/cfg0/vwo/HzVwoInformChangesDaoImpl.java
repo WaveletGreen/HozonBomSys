@@ -1,6 +1,6 @@
 package com.connor.hozon.bom.bomSystem.dao.impl.cfg0.vwo;
 
-import com.connor.hozon.bom.bomSystem.dao.cfg.HzVwoInformChangesDao;
+import com.connor.hozon.bom.bomSystem.dao.cfg.vwo.HzVwoInformChangesDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import sql.IBaseSQLUtil;
@@ -30,7 +30,7 @@ public class HzVwoInformChangesDaoImpl implements HzVwoInformChangesDao {
     @Override
     public int deleteByPrimaryKey(Long id) {
         CHANGES.setId(id);
-        return baseSQLUtil.executeDelete(CHANGES, "com.connor.hozon.bom.bomSystem.dao.cfg.HzVwoInformChangesDao.deleteByPrimaryKey");
+        return baseSQLUtil.executeDelete(CHANGES, "com.connor.hozon.bom.bomSystem.dao.cfg.vwo.HzVwoInformChangesDao.deleteByPrimaryKey");
     }
 
     /**
@@ -41,7 +41,7 @@ public class HzVwoInformChangesDaoImpl implements HzVwoInformChangesDao {
      */
     @Override
     public int insert(HzVwoInformChanges record) {
-        return baseSQLUtil.executeInsert(record, "com.connor.hozon.bom.bomSystem.dao.cfg.HzVwoInformChangesDao.insert");
+        return baseSQLUtil.executeInsert(record, "com.connor.hozon.bom.bomSystem.dao.cfg.vwo.HzVwoInformChangesDao.insert");
     }
 
     /**
@@ -52,7 +52,7 @@ public class HzVwoInformChangesDaoImpl implements HzVwoInformChangesDao {
      */
     @Override
     public int insertSelective(HzVwoInformChanges record) {
-        return baseSQLUtil.executeInsert(record, "com.connor.hozon.bom.bomSystem.dao.cfg.HzVwoInformChangesDao.insertSelective");
+        return baseSQLUtil.executeInsert(record, "com.connor.hozon.bom.bomSystem.dao.cfg.vwo.HzVwoInformChangesDao.insertSelective");
     }
 
     /**
@@ -64,7 +64,7 @@ public class HzVwoInformChangesDaoImpl implements HzVwoInformChangesDao {
     @Override
     public HzVwoInformChanges selectByPrimaryKey(Long id) {
         CHANGES.setId(id);
-        return baseSQLUtil.executeQueryById(CHANGES, "com.connor.hozon.bom.bomSystem.dao.cfg.HzVwoInformChangesDao.selectByPrimaryKey");
+        return baseSQLUtil.executeQueryById(CHANGES, "com.connor.hozon.bom.bomSystem.dao.cfg.vwo.HzVwoInformChangesDao.selectByPrimaryKey");
     }
 
     /**
@@ -76,7 +76,7 @@ public class HzVwoInformChangesDaoImpl implements HzVwoInformChangesDao {
     @Override
     public List<HzVwoInformChanges> selectByVwoId(Long vwoId) {
         CHANGES.setVwoId(vwoId);
-        return baseSQLUtil.executeQuery(CHANGES, "com.connor.hozon.bom.bomSystem.dao.cfg.HzVwoInformChangesDao.selectByVwoId");
+        return baseSQLUtil.executeQuery(CHANGES, "com.connor.hozon.bom.bomSystem.dao.cfg.vwo.HzVwoInformChangesDao.selectByVwoId");
     }
 
     /**
@@ -87,7 +87,7 @@ public class HzVwoInformChangesDaoImpl implements HzVwoInformChangesDao {
      */
     @Override
     public int updateByPrimaryKeySelective(HzVwoInformChanges record) {
-        return baseSQLUtil.executeUpdate(record, "com.connor.hozon.bom.bomSystem.dao.cfg.HzVwoInformChangesDao.updateByPrimaryKeySelective");
+        return baseSQLUtil.executeUpdate(record, "com.connor.hozon.bom.bomSystem.dao.cfg.vwo.HzVwoInformChangesDao.updateByPrimaryKeySelective");
     }
 
     /**
@@ -98,7 +98,7 @@ public class HzVwoInformChangesDaoImpl implements HzVwoInformChangesDao {
      */
     @Override
     public int updateByPrimaryKey(HzVwoInformChanges record) {
-        return baseSQLUtil.executeUpdate(record, "com.connor.hozon.bom.bomSystem.dao.cfg.HzVwoInformChangesDao.updateByPrimaryKey");
+        return baseSQLUtil.executeUpdate(record, "com.connor.hozon.bom.bomSystem.dao.cfg.vwo.HzVwoInformChangesDao.updateByPrimaryKey");
     }
 
     /**
@@ -109,6 +109,7 @@ public class HzVwoInformChangesDaoImpl implements HzVwoInformChangesDao {
      */
     @Override
     public Long tellMeHowManyOfIt(Long vwoId) {
-        return baseSQLUtil.executeQueryById(vwoId, "com.connor.hozon.bom.bomSystem.dao.cfg.HzVwoInformChangesDao.tellMeHowManyOfIt");
+        return baseSQLUtil.executeQueryById(vwoId, "com.connor.hozon.bom.bomSystem.dao.cfg.vwo.HzVwoInformChangesDao.tellMeHowManyOfIt");
     }
+
 }

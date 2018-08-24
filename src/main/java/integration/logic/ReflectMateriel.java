@@ -6,6 +6,7 @@ import integration.option.MRPControlOption;
 import integration.option.MaterialOption;
 import integration.option.PurchaseOption;
 import integration.service.impl.masterMaterial1.TransMasterMaterialService;
+import sql.pojo.cfg.HzCfg0ModelFeature;
 import sql.pojo.project.HzMaterielRecord;
 
 import static com.connor.hozon.bom.bomSystem.helper.StringHelper.checkString;
@@ -101,6 +102,10 @@ public class ReflectMateriel {
         mm.setLineNum("1");
     }
 
+    public ReflectMateriel(HzCfg0ModelFeature feature){
+        mm = new MasterMaterial();
+        mm.setMaterialCode(feature.getMaterialCode());
+    }
     /**
      * 设置动作标识，新建传ADD;更新传"";删除传DELETE,删除会同步传""和删除标识D
      *
@@ -224,7 +229,7 @@ public class ReflectMateriel {
         //设置VIN前置号
         materiel.setpVinPerNo("11111111111");
         //设置颜色标识
-        materiel.setpColorPart(0);
+//        materiel.setpColorPart(0);
         //设置毛重
         materiel.setpHeight("12.5");
         //设置内外饰标识

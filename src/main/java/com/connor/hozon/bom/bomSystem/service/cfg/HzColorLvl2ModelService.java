@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sql.pojo.cfg.HzColorLvl2Model;
 
+import java.util.List;
+
 /**
  * @Author: Fancyears·Maylos·Maywas
  * @Description:
@@ -63,5 +65,15 @@ public class HzColorLvl2ModelService implements IHzColorLvl2ModelService {
 
     public HzColorLvl2Model doSelectByModelAndFunctionLvl(HzColorLvl2Model model) {
         return hzColorLvl2ModelDao.selectByModelAndFunctionLvl(model);
+    }
+
+    /**
+     * 根据模型寻找所有2级配色方案
+     *
+     * @param modelUid
+     * @return
+     */
+    public List<HzColorLvl2Model> doSelectByModelUid(String modelUid) {
+        return hzColorLvl2ModelDao.selectByModelUid(modelUid);
     }
 }

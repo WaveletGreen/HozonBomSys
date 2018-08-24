@@ -62,7 +62,7 @@ public class HzCfg0BomLineOfModel {
 
     public static final String[] selfDesc =
             {
-                    "pBomOfWhichDept", "pBomLineId", "pBomLineName", "pH9featureenname", "owningUser","pCfg0Desc", "pCfg0ObjectId", "comment"
+                    "pBomOfWhichDept", "operationType","pBomLineId", "pBomLineName", "pH9featureenname", "owningUser","pCfg0Desc", "pCfg0ObjectId", "comment"
             };
 
     public void setObjectName(String objectName) {

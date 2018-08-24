@@ -3,6 +3,8 @@ package com.connor.hozon.bom.bomSystem.service.iservice.cfg;
 import org.springframework.stereotype.Service;
 import sql.pojo.cfg.HzColorLvl2Model;
 
+import java.util.List;
+
 /**
  * @Author: Fancyears·Maylos·Maywas
  * @Description:
@@ -42,4 +44,12 @@ public interface IHzColorLvl2ModelService {
      * @return
      */
     int doUpdateByPrimaryKey(HzColorLvl2Model record);
+
+    /**
+     * 根据模型寻找所有2级配色方案
+     * @param modelUid
+     * @return
+     */
+    List<HzColorLvl2Model> doSelectByModelUid(String modelUid);
+
 }

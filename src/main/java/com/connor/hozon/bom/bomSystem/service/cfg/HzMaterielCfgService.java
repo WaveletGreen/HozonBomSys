@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import sql.pojo.cfg.HzMaterielCfgBean;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author: Fancyears·Maylos·Maywas
@@ -29,5 +30,10 @@ public class HzMaterielCfgService implements IHzMaterielCfgService {
      */
     public List<HzMaterielCfgBean> doSelectByDiff(HzMaterielCfgBean bean) {
         return hzMaterielCfgBeanDao.selectByDiff(bean);
+    }
+
+    @Override
+    public int doUpdateIsSent(Map<String, Object> map) {
+        return hzMaterielCfgBeanDao.updateIsSent(map);
     }
 }

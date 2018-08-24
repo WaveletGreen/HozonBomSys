@@ -72,6 +72,8 @@
         <mapper resource="sql/mapper/cfg/vwo/mapper/HzFeatureChangeMapper.xml"/>
         <mapper resource="sql/mapper/cfg/vwo/mapper/HzVwoInfoMapper.xml"/>
         <mapper resource="sql/mapper/cfg/vwo/mapper/HzVwoInformChangesMapper.xml"/>
+        <mapper resource="sql/mapper/cfg/vwo/mapper/HzVwoInfluenceDeptMapper.xml"/>
+        <mapper resource="sql/mapper/cfg/vwo/mapper/HzVwoInfluenceUserMapper.xml"/>
 
         <!--项目-->
         <mapper resource="sql/mapper/project.xmapper/HzMaterielMapper.xml"/>

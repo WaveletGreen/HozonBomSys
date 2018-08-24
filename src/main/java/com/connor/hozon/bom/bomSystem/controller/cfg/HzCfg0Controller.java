@@ -53,7 +53,7 @@ public class HzCfg0Controller extends ExtraIntegrate {
     /**
      * 同步相关性
      */
-    @Autowired
+//    @Autowired
     ISynRelevanceService iSynRelevanceService;
     /***
      * 族
@@ -314,12 +314,12 @@ public class HzCfg0Controller extends ExtraIntegrate {
             JSONObject resultFromSapOfRelevance;
             //整理数据
             List<HzRelevanceBean> myBeans = new ArrayList<>();
-            iSynRelevanceService.sortData(records, myBeans);
+//            iSynRelevanceService.sortData(records, myBeans);
 
             for (HzRelevanceBean myBean : myBeans) {
                 logger.warn("---------------同步在SAP中标记像关系状态为3:" + (myBean.getRelevanceCode()));
             }
-            resultFromSapOfRelevance = iSynRelevanceService.deleteRelevance(myBeans);
+//            resultFromSapOfRelevance = iSynRelevanceService.deleteRelevance(myBeans);
 
             Object obj = resultFromSap.get("_forDelete");
 

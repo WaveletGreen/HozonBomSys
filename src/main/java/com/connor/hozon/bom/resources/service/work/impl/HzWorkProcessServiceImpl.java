@@ -370,6 +370,7 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
                 respDTO.setPurpose(hzWorkProcess.getPurpose());
                 respDTO.setState(hzWorkProcess.getState());
                 respDTO.setpWorkPuid(hzWorkProcess.getpWorkPuid());
+                respDTO.setIsSent(hzWorkProcess.getIsSent());
                 return respDTO;
             }
         }catch (Exception e){
@@ -422,5 +423,10 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
             return OperateResultMessageRespDTO.getFailResult();
         }
         return OperateResultMessageRespDTO.getFailResult();
+    }
+
+    @Override
+    public int doUpdateByBatch(Map<String, Object> map) {
+        return hzWorkProcedureDAO.updateSendFlag(map);
     }
 }
