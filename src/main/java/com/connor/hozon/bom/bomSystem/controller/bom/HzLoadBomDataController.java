@@ -19,6 +19,7 @@ import sql.pojo.bom.HzBomLineRecord;
 import sql.pojo.cfg.HzCfg0OfBomLineRecord;
 import sql.pojo.cfg.HzCfg0Record;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 @Controller

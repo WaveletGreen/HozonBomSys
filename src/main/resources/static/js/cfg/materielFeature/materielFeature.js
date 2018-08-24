@@ -152,8 +152,8 @@ function loadData() {
                                 title: "同步车型",
                                 //直接修改了超级物料表的数据，要根据配置器的puid找，否则就不能根据所见即所改
                                 url: "cfgMateriel/synMateriel?puid=" + rows[0].puid,
-                                width: 350,
-                                height: 450
+                                width: 500,
+                                height: 400
                             });
                         }
                     },
@@ -180,8 +180,8 @@ function loadData() {
                                 title: "添加",
                                 //直接修改了超级物料表的数据，要根据配置器的puid找，否则就不能根据所见即所改
                                 url: "cfgMateriel/addConfigurableMaterial?puids=" + puids+"&cfg0MainPuids="+cfg0MainPuids+"&modeBasiceDetails="+modeBasiceDetails+"&projectPuid="+projectPuid,
-                                width: 350,
-                                height: 450
+                                width: 500,
+                                height: 400
                             });
                         }
                     },
@@ -208,8 +208,8 @@ function loadData() {
                                 title: "添加",
                                 //直接修改了超级物料表的数据，要根据配置器的puid找，否则就不能根据所见即所改
                                 url: "cfgMateriel/deleteConfigurableMaterial?puids=" + puids+"&cfg0MainPuids="+cfg0MainPuids+"&modeBasiceDetails="+modeBasiceDetails+"&projectPuid="+projectPuid,
-                                width: 350,
-                                height: 450
+                                width: 500,
+                                height: 400
                             });
                         }
                     },

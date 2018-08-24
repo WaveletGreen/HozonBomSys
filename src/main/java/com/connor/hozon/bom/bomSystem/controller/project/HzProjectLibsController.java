@@ -29,6 +29,7 @@ import sql.pojo.project.HzPlatformRecord;
 import sql.pojo.project.HzProjectLibs;
 import sql.pojo.project.HzVehicleRecord;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 /**
@@ -77,7 +78,7 @@ public class HzProjectLibsController {
      */
     @RequestMapping(value = "/loadAll", method = RequestMethod.GET)
     @ResponseBody
-    public Map<String, Object> loadAll() {
+    public Map<String, Object> loadAll(HttpServletRequest request) {
         Map<String, Object> result = new HashMap<>();
         User user = UserInfo.getUser();
         Collection<? extends GrantedAuthority> authorities = user.getAuthorities();
@@ -90,6 +91,7 @@ public class HzProjectLibsController {
         }
         result.put("data", hzProjectLibsService.doLoadAllProjectLibs());
         result.put("brand", hzBrandService.doGetAllBrand());
+        request.getSession().setMaxInactiveInterval(30 * 60);
         return result;
     }
 
