@@ -139,19 +139,19 @@
                 P_BASIC_UNIT_MEASURE = #{pBasicUnitMeasure,jdbcType=VARCHAR},
             </if>
             <if test="pInventedPart != null">
-                P_INVENTED_PART = #{pInventedPart,jdbcType=VARCHAR},
+                P_INVENTED_PART = #{pInventedPart,jdbcType=INTEGER},
             </if>
             <if test="pColorPart != null">
-                P_COLOR_PART = #{pColorPart,jdbcType=VARCHAR},
+                P_COLOR_PART = #{pColorPart,jdbcType=INTEGER},
             </if>
             <if test="pHeight != null">
                 P_HEIGHT = #{pHeight,jdbcType=INTEGER},
             </if>
             <if test="pInOutSideFlag != null">
-                P_IN_OUT_SIDE_FLAG = #{pInOutSideFlag,jdbcType=VARCHAR},
+                P_IN_OUT_SIDE_FLAG = #{pInOutSideFlag,jdbcType=INTEGER},
             </if>
             <if test="p3cPartFlag != null">
-                P_3C_PART_FLAG = #{p3cPartFlag,jdbcType=VARCHAR},
+                P_3C_PART_FLAG = #{p3cPartFlag,jdbcType=INTEGER},
             </if>
             <if test="pPartImportantDegree != null">
                 P_PART_IMPORTANT_DEGREE = #{pPartImportantDegree,jdbcType=VARCHAR},
