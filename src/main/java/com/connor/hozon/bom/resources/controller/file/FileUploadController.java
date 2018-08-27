@@ -28,7 +28,7 @@ public class FileUploadController extends BaseController{
     @RequestMapping(value = "/upload", method = RequestMethod.POST)
     public void filesUpload (@RequestParam("file") MultipartFile file,
 
-                             @RequestParam("projectId") String projectId,HttpServletResponse response) throws Exception{
+                             @RequestParam("projectId") String projectId,HttpServletResponse response){
         OperateResultMessageRespDTO respDTO = fileUploadService.UploadEbomToDB(file,projectId);
         writeAjaxJSONResponse(ResultMessageBuilder.build(OperateResultMessageRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
     }

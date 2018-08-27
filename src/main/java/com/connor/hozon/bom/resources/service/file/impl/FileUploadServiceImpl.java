@@ -40,9 +40,9 @@ public class FileUploadServiceImpl implements FileUploadService {
     private HzEbomRecordDAO hzEbomRecordDAO;
 
     private int errorCount = 0;
+
     @Override
     public OperateResultMessageRespDTO UploadEbomToDB(MultipartFile file,String projectId) {
-        long t1 = System.currentTimeMillis();
         try {
             //判断权限
             boolean b = PrivilegeUtil.writePrivilege();
@@ -62,9 +62,9 @@ public class FileUploadServiceImpl implements FileUploadService {
             ExcelUtil.preReadCheck(file.getOriginalFilename());
             //上传文件到服务器
             String fileUrl = ExcelUtil.uploadFileToLocation(file.getBytes(),file.getOriginalFilename());
-            String textUtl = "D:\\file\\upload\\测试测试.xlsx";
+            //String textUtl = "D:\\file\\upload\\测试测试.xlsx";
             //读取excel文件
-            Workbook workbook = ExcelUtil.getWorkbook(textUtl);
+            Workbook workbook = ExcelUtil.getWorkbook(fileUrl);
             this.errorCount = 0;
             String errorMsg = errorLogInfo(workbook);
             if(this.errorCount!=0){
@@ -149,9 +149,7 @@ public class FileUploadServiceImpl implements FileUploadService {
                 }
             }
 
-            System.out.println(JSON.toJSONString(ll));
 
-            Set<HzImportEbomRecord> set = new HashSet<>(records);
             if(ListUtil.isNotEmpty(records)){
                 int size = records.size();
                 //分批插入数据 一次1000条
@@ -178,11 +176,6 @@ public class FileUploadServiceImpl implements FileUploadService {
                     hzEbomRecordDAO.importList(list);
                 }
             }
-
-            long t2 = System.currentTimeMillis();
-            System.out.println("时间="+(t2-t1)+"ms");
-            System.out.println("老资好几把累");
-            System.out.println("时间="+(t2-t1)+"ms");
 
         }catch (Exception e){
             return OperateResultMessageRespDTO.getFailResult();
@@ -338,7 +331,7 @@ public class FileUploadServiceImpl implements FileUploadService {
      * @return
      */
     private Map<String,String> generateParentPuid(List<HzImportEbomRecord> records) {
-        Map<String,String> mapList = new HashMap<>();
+        Map<String,String> mapList = new LinkedHashMap<>();
         for(int i = 0;i<records.size();i++){//产生父键
             HzImportEbomRecord record = records.get(i);
             String level = record.getLevel();
@@ -442,6 +435,8 @@ public class FileUploadServiceImpl implements FileUploadService {
                 for(Map.Entry<String,String> entry:mapList.entrySet()){
                     if(entry.getKey().indexOf(parentKey)>-1){
                         parentId = entry.getValue();
+                    }
+                    if(entry.getKey().equals(currentKey)){
                         break;
                     }
                 }
@@ -507,6 +502,14 @@ public class FileUploadServiceImpl implements FileUploadService {
                     }
                 }
 
+
+                if(rowNum == sheet.getLastRowNum()){
+                    if(level.endsWith("Y")){
+                        stringBuffer.append("最后一行的层级不能带Y,因为找不到他的子层!");
+                        this.errorCount++;
+                        continue;
+                    }
+                }
                 try {
                     if(number!=null && number!="")
                     Integer.valueOf(number);
