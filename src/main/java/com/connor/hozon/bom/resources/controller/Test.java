@@ -27,15 +27,13 @@ public class Test {
         //2Y 3 3 3 3Y 4 4 4 4 4Y 5 5 5Y 6Y 7 7 7  5 5 5  4 4 4Y 5 5 3 3 2/2Y m]
 
         List<EbomTestDTO> list = generateEbomTree();
-        Map<String,String> mapList = new HashMap<>();
+        Map<String,String> mapList = new LinkedHashMap<>();
         for(int i = 0;i<list.size();i++){//产生父键
             EbomTestDTO testDTO = list.get(i);
             String level = testDTO.getLevel();
             int high = testDTO.getHigh();
             mapList.put(level+"-"+high,UUID.randomUUID().toString());
         }
-        System.out.println(JSON.toJSONString(mapList));
-
 
        Map<String,String> lineIndexMap = new HashMap<>();
         for(int i = 1;i<list.size();i++){//产生lineIndex
