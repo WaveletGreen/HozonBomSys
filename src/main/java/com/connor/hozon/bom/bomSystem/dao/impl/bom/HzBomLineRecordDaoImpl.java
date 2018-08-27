@@ -123,4 +123,9 @@ public class HzBomLineRecordDaoImpl extends BaseSQLUtil {
     public int updateBatch(List<HzBomLineRecord> records) {
         return super.update("HzEbomRecordDAOImpl_updateBatch", records);
     }
+
+
+    public Integer getMaxLineIndexFirstNum(String projectId){
+        return (Integer) super.findForObject("HzBomLineRecordDaoImpl_getMaxLineIndexFirstNum",projectId);
+    }
 }

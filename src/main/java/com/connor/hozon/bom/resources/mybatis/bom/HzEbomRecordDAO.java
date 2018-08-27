@@ -5,6 +5,7 @@ import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.query.HzBomRecycleByPageQuery;
 import com.connor.hozon.bom.resources.query.HzEbomByPageQuery;
 import com.connor.hozon.bom.resources.query.HzEbomTreeQuery;
+import sql.pojo.bom.HzImportEbomRecord;
 import sql.pojo.epl.HzEPLManageRecord;
 
 import java.util.List;
@@ -69,4 +70,5 @@ public interface HzEbomRecordDAO {
 
     int insert(HzEPLManageRecord record);
 
+    int importList(List<HzImportEbomRecord> records);
 }
