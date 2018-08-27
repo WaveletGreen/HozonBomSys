@@ -20,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 import sql.pojo.bom.HZBomMainRecord;
 import sql.pojo.bom.HzImportEbomRecord;
 
+import java.math.BigDecimal;
 import java.util.*;
 
 /**
@@ -41,6 +42,7 @@ public class FileUploadServiceImpl implements FileUploadService {
 
     private int errorCount = 0;
 
+    private int lineIndexFirst =10;
     @Override
     public OperateResultMessageRespDTO UploadEbomToDB(MultipartFile file,String projectId) {
         try {
@@ -230,27 +232,36 @@ public class FileUploadServiceImpl implements FileUploadService {
         String pActualWeight="";
 
         try {
-            pTargetWeight =ExcelUtil.getCell(row,26).getStringCellValue();
+            BigDecimal bigDecimal = new BigDecimal(ExcelUtil.getCell(row,26).getStringCellValue());
+            pTargetWeight =String.valueOf( bigDecimal.setScale(3, BigDecimal.ROUND_HALF_UP));
         }catch (Exception e){
-            pTargetWeight =String.valueOf(ExcelUtil.getCell(row,26).getNumericCellValue());
+            BigDecimal dec = new BigDecimal(ExcelUtil.getCell(row,26).getNumericCellValue());
+            pTargetWeight =String.valueOf(dec.setScale(3, BigDecimal.ROUND_HALF_UP).doubleValue());
         }
 
         try {
-            pFeatureWeight =ExcelUtil.getCell(row,27).getStringCellValue();
+            BigDecimal bigDecimal = new BigDecimal(ExcelUtil.getCell(row,27).getStringCellValue());
+            pFeatureWeight =String.valueOf( bigDecimal.setScale(3, BigDecimal.ROUND_HALF_UP));
         }catch (Exception e){
-            pFeatureWeight =String.valueOf(ExcelUtil.getCell(row,27).getNumericCellValue());
+            BigDecimal dec = new BigDecimal(ExcelUtil.getCell(row,27).getNumericCellValue());
+            pFeatureWeight =String.valueOf(dec.setScale(3, BigDecimal.ROUND_HALF_UP).doubleValue());
         }
 
         try {
-            pActualWeight =ExcelUtil.getCell(row,28).getStringCellValue();
+            BigDecimal bigDecimal = new BigDecimal(ExcelUtil.getCell(row,28).getStringCellValue());
+            pActualWeight =String.valueOf( bigDecimal.setScale(3, BigDecimal.ROUND_HALF_UP));
         }catch (Exception e){
-            pActualWeight=String.valueOf(ExcelUtil.getCell(row,28).getNumericCellValue());
+            BigDecimal dec = new BigDecimal(ExcelUtil.getCell(row,28).getNumericCellValue());
+            pActualWeight =String.valueOf(dec.setScale(3, BigDecimal.ROUND_HALF_UP).doubleValue());
         }
 
         String pFastener=ExcelUtil.getCell(row,29).getStringCellValue();
 
         String pFastenerStandard=ExcelUtil.getCell(row,30).getStringCellValue();
         String pFastenerLevel=ExcelUtil.getCell(row,31).getStringCellValue();
+        if(pFastenerLevel.contains(".") && pFastenerLevel.length()>4){
+            pFastenerLevel = pFastenerLevel.substring(0,3);
+        }
         String pTorque=ExcelUtil.getCell(row,32).getStringCellValue();
         String pDutyEngineer=ExcelUtil.getCell(row,33).getStringCellValue();
         String pSupply=ExcelUtil.getCell(row,34).getStringCellValue();
@@ -355,9 +366,12 @@ public class FileUploadServiceImpl implements FileUploadService {
             if(preDTO.getHigh() == 0){
                 Integer lineIndexFirstNum = hzBomLineRecordDao.getMaxLineIndexFirstNum(projectId);
                 if(lineIndexFirstNum == null){
-                    lineIndexMap.put(preDTO.getLevel()+"-"+0,"10.10");
+                    lineIndexMap.put(preDTO.getLevel()+"-"+0,lineIndexFirst+".10");
+                    lineIndexFirst +=10;
                 }else {
+                    lineIndexFirstNum = lineIndexFirstNum+lineIndexFirst;
                     lineIndexMap.put(preDTO.getLevel()+"-"+0,lineIndexFirstNum+".10");
+                    lineIndexFirst+=10;
                 }
             }
             String level = currentDTO.getLevel();
@@ -440,21 +454,22 @@ public class FileUploadServiceImpl implements FileUploadService {
                         break;
                     }
                 }
-                //找lineIndex
-                for(String key :lineIndexMap.keySet()){
-                    if(key.equals(currentKey)){
-                        currentLineIndex = lineIndexMap.get(currentKey);
-                        break;
-                    }
-                }
-            }else {
-                Integer lineIndexFirstNum = hzBomLineRecordDao.getMaxLineIndexFirstNum(projectId);
-                if(lineIndexFirstNum == null){
-                    currentLineIndex = "10.10";
-                }else {
-                    currentLineIndex =lineIndexFirstNum+".10";
+            }
+            //找lineIndex
+            for(String key :lineIndexMap.keySet()){
+                if(key.equals(currentKey)){
+                    currentLineIndex = lineIndexMap.get(currentKey);
+                    break;
                 }
             }
+//            else {
+//                Integer lineIndexFirstNum = hzBomLineRecordDao.getMaxLineIndexFirstNum(projectId);
+//                if(lineIndexFirstNum == null){
+//                    currentLineIndex = lineIndexFirst+".10";
+//                }else {
+//                    currentLineIndex =lineIndexFirstNum+".10";
+//                }
+//            }
             record.setLineIndex(currentLineIndex);
             record.setParentId(parentId);
             if(!level.endsWith("Y")){
