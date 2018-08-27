@@ -13,6 +13,7 @@ import com.connor.hozon.bom.resources.query.HzMaterielQuery;
 import com.connor.hozon.bom.resources.query.HzMbomByPageQuery;
 import com.connor.hozon.bom.resources.service.materiel.HzMaterielService;
 import com.connor.hozon.bom.resources.util.ListUtil;
+import com.connor.hozon.bom.resources.util.PrivilegeUtil;
 import com.connor.hozon.bom.sys.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -47,13 +48,12 @@ public class HzMaterielServiceImpl implements HzMaterielService {
             return respDTO;
         }
         try{
-            User user = UserInfo.getUser();
-            if(user.getGroupId()!=9l){
-                respDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
-                respDTO.setErrMsg("您当前没有权限进行此操作！");
-                return respDTO;
+            boolean b = PrivilegeUtil.writePrivilege();
+            if(!b){
+                return OperateResultMessageRespDTO.getFailPrivilege();
             }
             HzMaterielRecord record = new HzMaterielRecord();
+            User user = UserInfo.getUser();
             if(!editHzMaterielReqDTO.getFactoryCode().equals("") && null != editHzMaterielReqDTO.getFactoryCode()){
                 HzFactory hzFactory = hzFactoryDAO.findFactory("", editHzMaterielReqDTO.getFactoryCode());
                 if(hzFactory == null){
@@ -86,6 +86,40 @@ public class HzMaterielServiceImpl implements HzMaterielService {
             record.setpMrpController(editHzMaterielReqDTO.getpMrpController());
             record.setpUpdateName(user.getUserName());
             record.setPuid(editHzMaterielReqDTO.getPuid());
+            record.setpBasicUnitMeasure(editHzMaterielReqDTO.getpBasicUnitMeasure());
+            if("Y".equals(editHzMaterielReqDTO.getpInventedPart().toUpperCase())){
+                record.setpInventedPart(1);
+            }else if("N".equals(editHzMaterielReqDTO.getpInventedPart().toUpperCase())){
+                record.setpInventedPart(0);
+            }else {
+                record.setpInventedPart(null);
+            }
+            record.setResource(editHzMaterielReqDTO.getResource());
+            if("Y".equals(editHzMaterielReqDTO.getpColorPart().toUpperCase())){
+                record.setpColorPart(1);
+            }else if("N".equals(editHzMaterielReqDTO.getpColorPart().toUpperCase())){
+                record.setpColorPart(0);
+            }else {
+                record.setpColorPart(null);
+            }
+            record.setpHeight(editHzMaterielReqDTO.getpHeight());
+
+            if("内饰件".equals(editHzMaterielReqDTO.getpInOutSideFlag())){
+                record.setpInOutSideFlag(1);
+            }else if("外饰件".equals(editHzMaterielReqDTO.getpInOutSideFlag())){
+                record.setpInOutSideFlag(0);
+            }else {
+                record.setpInOutSideFlag(null);
+            }
+
+            if("Y".equals(editHzMaterielReqDTO.getP3cPartFlag().toUpperCase())){
+                record.setP3cPartFlag(1);
+            }else if("N".equals(editHzMaterielReqDTO.getP3cPartFlag().toUpperCase())){
+                record.setP3cPartFlag(0);
+            }else {
+                record.setP3cPartFlag(null);
+            }
+            record.setpPartImportantDegree(editHzMaterielReqDTO.getpPartImportantDegree());
             int i = hzMaterielDAO.update(record);
             if(i>0){
                 return OperateResultMessageRespDTO.getSuccessResult();

@@ -45,6 +45,42 @@ public class EditHzMaterielReqDTO {
      */
     private String factoryCode;
 
+    // 以下字段本不应该在物料中进行维护；，暂时先放开
+    /**
+     * 基本计量单位
+     */
+    private String pBasicUnitMeasure;
+    /**
+     * 虚拟件标识(1 ,0 )
+     */
+    private String pInventedPart;
+
+    /**
+     * 颜色件标识
+     */
+    private String pColorPart;
+    /**
+     * 毛重
+     */
+    private String pHeight;
+    /**
+     * 内外饰标识
+     */
+    private String pInOutSideFlag;
+    /**
+     * 3C件标识
+     */
+    private String p3cPartFlag;
+
+    /**
+     * 零件重要度
+     */
+    private String pPartImportantDegree;
+
+    /**
+     * 采购类型
+     */
+    private String resource;
 
     public String getPuid() {
         return puid;
@@ -78,7 +114,6 @@ public class EditHzMaterielReqDTO {
         this.pVinPerNo = pVinPerNo;
     }
 
-
     public String getpMrpController() {
         return pMrpController;
     }
@@ -86,7 +121,6 @@ public class EditHzMaterielReqDTO {
     public void setpMrpController(String pMrpController) {
         this.pMrpController = pMrpController;
     }
-
 
     public String getpLoosePartFlag() {
         return pLoosePartFlag;
@@ -112,4 +146,67 @@ public class EditHzMaterielReqDTO {
         this.factoryCode = factoryCode;
     }
 
+    public String getpBasicUnitMeasure() {
+        return pBasicUnitMeasure;
+    }
+
+    public void setpBasicUnitMeasure(String pBasicUnitMeasure) {
+        this.pBasicUnitMeasure = pBasicUnitMeasure;
+    }
+
+    public String getpInventedPart() {
+        return pInventedPart;
+    }
+
+    public void setpInventedPart(String pInventedPart) {
+        this.pInventedPart = pInventedPart;
+    }
+
+    public String getpColorPart() {
+        return pColorPart;
+    }
+
+    public void setpColorPart(String pColorPart) {
+        this.pColorPart = pColorPart;
+    }
+
+    public String getpHeight() {
+        return pHeight;
+    }
+
+    public void setpHeight(String pHeight) {
+        this.pHeight = pHeight;
+    }
+
+    public String getpInOutSideFlag() {
+        return pInOutSideFlag;
+    }
+
+    public void setpInOutSideFlag(String pInOutSideFlag) {
+        this.pInOutSideFlag = pInOutSideFlag;
+    }
+
+    public String getP3cPartFlag() {
+        return p3cPartFlag;
+    }
+
+    public void setP3cPartFlag(String p3cPartFlag) {
+        this.p3cPartFlag = p3cPartFlag;
+    }
+
+    public String getpPartImportantDegree() {
+        return pPartImportantDegree;
+    }
+
+    public void setpPartImportantDegree(String pPartImportantDegree) {
+        this.pPartImportantDegree = pPartImportantDegree;
+    }
+
+    public String getResource() {
+        return resource;
+    }
+
+    public void setResource(String resource) {
+        this.resource = resource;
+    }
 }
