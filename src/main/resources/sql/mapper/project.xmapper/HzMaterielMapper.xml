@@ -135,6 +135,30 @@
             <if test="pFactoryPuid != null">
                 P_FACTORY_PUID = #{pFactoryPuid,jdbcType=VARCHAR},
             </if>
+            <if test="pBasicUnitMeasure != null">
+                P_BASIC_UNIT_MEASURE = #{pBasicUnitMeasure,jdbcType=VARCHAR},
+            </if>
+            <if test="pInventedPart != null">
+                P_INVENTED_PART = #{pInventedPart,jdbcType=VARCHAR},
+            </if>
+            <if test="pColorPart != null">
+                P_COLOR_PART = #{pColorPart,jdbcType=VARCHAR},
+            </if>
+            <if test="pHeight != null">
+                P_HEIGHT = #{pHeight,jdbcType=INTEGER},
+            </if>
+            <if test="pInOutSideFlag != null">
+                P_IN_OUT_SIDE_FLAG = #{pInOutSideFlag,jdbcType=VARCHAR},
+            </if>
+            <if test="p3cPartFlag != null">
+                P_3C_PART_FLAG = #{p3cPartFlag,jdbcType=VARCHAR},
+            </if>
+            <if test="pPartImportantDegree != null">
+                P_PART_IMPORTANT_DEGREE = #{pPartImportantDegree,jdbcType=VARCHAR},
+            </if>
+            <if test="resource != null">
+                P_RESOURCE = #{resource,jdbcType=VARCHAR}
+            </if>
         </set>
         where PUID = #{puid,jdbcType=VARCHAR}
     </update>
