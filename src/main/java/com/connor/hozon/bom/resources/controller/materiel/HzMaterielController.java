@@ -61,7 +61,7 @@ public class HzMaterielController  extends BaseController {
     public void getPbomLineTitle(HttpServletResponse response) {
         LinkedHashMap<String, String> tableTitle = new LinkedHashMap<>();
         tableTitle.put("No", "序号");
-        tableTitle.put("puid", "puid");
+//        tableTitle.put("puid", "puid");
         tableTitle.put("pMaterielCode", "物料编码");
         tableTitle.put("pMaterielDesc", "物料描述（中文）");
         tableTitle.put("pMaterielType", "物料类型");

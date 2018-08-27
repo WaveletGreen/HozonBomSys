@@ -7,7 +7,7 @@
         <ul id="tree" class="ztree" style="width:560px; overflow:auto;"></ul>
     </div>
     <div class="col-md-9">
-        <div class="panel panel-default" style="margin-top: 10px;">
+        <!--<div class="panel panel-default" style="margin-top: 10px;">
             <div class="panel-heading" id="groupQueryTitle">查询条件</div>
             <div class="panel-body">
                 <form class="form-inline" role="form" style="float: left; width: 100%;margin-left: 20px;" method="post"
@@ -23,7 +23,7 @@
                     </div>
                 </form>
             </div>
-        </div>
+        </div>-->
         <table id="group-user-table" style="margin-top: -50px;">
         </table>
     </div>
@@ -162,16 +162,17 @@
     function initTable() {
         $('#group-user-table').bootstrapTable({
             url: "group/userList",
-            height: $(window.parent.document).find("#wrapper").height() - 252,
+            height: $(window.parent.document).find("#wrapper").height() - 100,
             width: $(window).width(),
             showColumns: true,
             formId: "queryGroupUser",
             pagination: true,
             sortName: 'id',
             sortOrder: 'desc',
-            pageSize: 13,
+            pageSize: 10,
             clickToSelect: true,// 单击某一行的时候选中某一条记录
-            toolbars: [
+            showToggle: false,  //是否显示详细视图和列表视图的切换按钮
+            /*toolbars: [
                 {
                     text: '添加',
                     iconCls: 'glyphicon glyphicon-plus',
@@ -180,8 +181,8 @@
                             title: "添加",
                             url: "group/addUserPage",
                             gridId: "gridId",
-                            width: 600,
-                            height: 745
+                            width: 550,
+                            height: 550
                         })
                     }
                 },
@@ -198,8 +199,8 @@
                             title: "修改",
                             url: "group/updateUserPage?id=" + rows[0].id,
                             gridId: "gridId",
-                            width: 600,
-                            height: 590
+                            width: 550,
+                            height: 550
                         });
                     }
                 },
@@ -224,7 +225,7 @@
                         });
                     }
                 }
-            ],
+            ],*/
             columns: [
                 {
                     checkbox: true
@@ -236,14 +237,14 @@
                         return index + 1;
                     }
                 },
-                {
+                /*{
                     field: 'id',
                     title: '用户流水',
                     align: 'center',
                     valign: 'middle',
                     hide: false,
                     sortable: true
-                },
+                },*/
                 {
                     field: 'userName',
                     title: '用户姓名',
@@ -258,13 +259,13 @@
                     valign: 'middle',
                     sortable: true
                 },
-                {
+                /*{
                     field: 'address',
                     title: '用户地址',
                     align: 'center',
                     valign: 'middle',
                     sortable: true
-                },
+                },*/
                 {
                     field: 'orgGroup.name',
                     title: '组织架构',

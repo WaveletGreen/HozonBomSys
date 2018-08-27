@@ -430,4 +430,13 @@ public class HzEbomController extends BaseController {
         writeAjaxJSONResponse(ResultMessageBuilder.build(OperateResultMessageRespDTO.isSuccess(respDTO), respDTO.getErrMsg()), response);
     }
 
+    /**
+     * 跳转到Excel导入页面
+     * @return
+     */
+    @RequestMapping(value = "importExcel",method = RequestMethod.GET)
+    public String getExcelImport(){
+        return "bomManage/ebom/ebomManage/excelImport";
+    }
+
 }

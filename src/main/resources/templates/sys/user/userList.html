@@ -71,13 +71,14 @@
             sortName : 'id',
             sortOrder : 'desc',
             clickToSelect: true,// 单击某一行的时候选中某一条记录
-            pageSize : 13,
+            showToggle: false,  //是否显示详细视图和列表视图的切换按钮
+            pageSize : 10,
             toolbars:[
                 {
                     text: '添加',
                     iconCls: 'glyphicon glyphicon-plus',
                     handler: function () {
-                        window.Ewin.dialog({title:"添加",url:"user/addPage",gridId:"gridId",width:600,height:745})
+                        window.Ewin.dialog({title:"添加",url:"user/addPage",gridId:"gridId",width:550,height:550})
                     }
                 },
                 {
@@ -89,7 +90,7 @@
                             window.Ewin.alert({message:'请选择一条需要修改的数据!'});
                             return false;
                         }
-                        window.Ewin.dialog({title:"修改",url:"user/updatePage?id="+rows[0].id,width:600,height:595});
+                        window.Ewin.dialog({title:"修改",url:"user/updatePage?id="+rows[0].id,width:550,height:550});
                     }
                 },
                 {
@@ -125,14 +126,14 @@
                         return index+1;
                     }
                 },
-                {
-                    field : 'id',
-                    title : '用户流水',
-                    align : 'center',
-                    valign : 'middle',
-                    hide : false,
-                    sortable : true
-                },
+                // {
+                //     field : 'id',
+                //     title : '用户流水',
+                //     align : 'center',
+                //     valign : 'middle',
+                //     hide : false,
+                //     sortable : true
+                // },
                 {
                     field : 'userName',
                     title : '用户姓名',
@@ -154,13 +155,13 @@
                     valign : 'middle',
                     sortable : true
                 },
-                {
+                /*{
                     field : 'address',
                     title : '用户地址',
                     align : 'center',
                     valign : 'middle',
                     sortable : true
-                },
+                },*/
                 {
                     field : 'orgGroup.name',
                     title : '组织架构',

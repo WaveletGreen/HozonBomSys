@@ -1,5 +1,6 @@
 package com.connor.hozon.bom.resources.controller.change.ewo;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.connor.hozon.bom.resources.controller.BaseController;
 import com.connor.hozon.bom.resources.dto.request.UpdateHzEWOBasicInfoReqDTO;
@@ -7,6 +8,7 @@ import com.connor.hozon.bom.resources.dto.response.HzEWOBasicInfoRespDTO;
 import com.connor.hozon.bom.resources.dto.response.HzEWOChangeFormRespDTO;
 import com.connor.hozon.bom.resources.dto.response.HzEbomRespDTO;
 import com.connor.hozon.bom.resources.dto.response.OperateResultMessageRespDTO;
+import com.connor.hozon.bom.resources.mybatis.change.HzEWOImpactDeptDAO;
 import com.connor.hozon.bom.resources.query.HzEWOBasicInfoQuery;
 import com.connor.hozon.bom.resources.query.HzEWOChangeRecordQuery;
 import com.connor.hozon.bom.resources.query.HzEWOImpactReferenceQuery;
@@ -15,6 +17,10 @@ import com.connor.hozon.bom.resources.service.change.HzEWOImpactReferenceService
 import com.connor.hozon.bom.resources.service.change.HzEWOService;
 import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.resources.util.ResultMessageBuilder;
+import com.connor.hozon.bom.sys.dao.OrgGroupDao;
+import com.connor.hozon.bom.sys.dao.UserDao;
+import com.connor.hozon.bom.sys.entity.OrgGroup;
+import com.connor.hozon.bom.sys.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import sql.pojo.change.HzEWOAllImpactDept;
 import sql.pojo.change.HzEWOImpactReference;
 
 import javax.servlet.http.HttpServletResponse;
@@ -43,7 +50,12 @@ public class HzEWOBaseInfoController extends BaseController {
     private HzEWOService hzEWOService;
     @Autowired
     private HzEWOImpactReferenceService hzEWOImpactReferenceService;
-
+    @Autowired
+    private OrgGroupDao orgGroupDao;
+    @Autowired
+    private UserDao userDao;
+    @Autowired
+    private HzEWOImpactDeptDAO hzEWOImpactDeptDAO;
     /**
      * 编辑EWO表单基本信息
      * @param reqDTO
@@ -276,19 +288,37 @@ public class HzEWOBaseInfoController extends BaseController {
         }
         writeAjaxJSONResponse(ResultMessageBuilder.build(respDTOList),response);
     }
+    /**
+     * 获取全部的部门
+     * @param response
+     */
+    @RequestMapping(value = "all",method = RequestMethod.GET)
+    public void getAllDept(HttpServletResponse response){
+        List<OrgGroup> list = orgGroupDao.queryAllOrgGroup();
+        writeAjaxJSONResponse(ResultMessageBuilder.build(list),response);
+    }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    /**
+     * 查询全部的人员信息
+     * @param response
+     */
+    @RequestMapping(value = "user",method = RequestMethod.GET)
+    @ResponseBody
+    public JSONArray getUserByGroupId(HttpServletResponse response){
+        List<User> list = userDao.findAllUser();
+        JSONArray array = new JSONArray();
+        list.forEach(user -> {
+            array.add(user);
+        });
+        return array;
+    }
+    /**
+     * 全部的影响部门信息 目前部门是固定的
+     * @param response
+     */
+    @RequestMapping("allDept")
+    public void findAllImpactDept(HttpServletResponse response){
+        List<HzEWOAllImpactDept> list = hzEWOImpactDeptDAO.findEWOAllImpactDept();
+        writeAjaxJSONResponse(ResultMessageBuilder.build(list),response);
+    }
 }

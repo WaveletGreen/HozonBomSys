@@ -9,7 +9,7 @@
         <label for="pMaterielCode">物料代码</label>
         <input class="form-control" id="pMaterielCode" name="pMaterielCode" type="text"disabled="disabled"
                th:value="${data.pMaterielCode}"
-               placeholder="请输入物料代码"/><!--th:value="${entity.level}"-->
+               placeholder="请输入物料代码"/><!--th:value="${entity.level}"disabled="disabled"-->
     </div>
     <div class="form-group">
         <label for="pMaterielDesc">物料中文描述</label>
@@ -37,19 +37,19 @@
     </div>
     <div class="form-group">
         <label for="pBasicUnitMeasure">基本计量单位</label>
-        <input class="form-control" id="pBasicUnitMeasure" name="pBasicUnitMeasure" type="text" disabled="disabled"
+        <input class="form-control" id="pBasicUnitMeasure" name="pBasicUnitMeasure" type="text"
                th:value="${data.pBasicUnitMeasure}"
                placeholder="请输入基本计量单位"/><!--th:value="${entity.level}"-->
     </div>
     <div class="form-group">
         <label for="pInventedPart">虚拟件标识</label>
-        <input class="form-control" id="pInventedPart" name="pInventedPart" type="text"disabled="disabled"
+        <input class="form-control" id="pInventedPart" name="pInventedPart" type="text"
                th:value="${data.pInventedPart}"
                placeholder="请输入虚拟件标识"/><!--th:value="${entity.level}"-->
     </div>
     <div class="form-group">
         <label for="resource">采购类型</label>
-        <input class="form-control" id="resource" name="resource" type="text"disabled="disabled"
+        <input class="form-control" id="resource" name="resource" type="text"
                th:value="${data.resource}"
                placeholder="请输入采购类型"/><!--th:value="${entity.level}"-->
     </div>
@@ -68,33 +68,33 @@
     </div>
     <div class="form-group">
         <label for="pColorPart">颜色件标识</label>
-        <input class="form-control" id="pColorPart" name="pColorPart" type="text"disabled="disabled"
+        <input class="form-control" id="pColorPart" name="pColorPart" type="text"
                th:value="${data.pColorPart}"
                placeholder="请输入颜色件标识"/><!--th:value="${entity.level}"-->
     </div>
     <div class="form-group">
         <label for="pHeight">实际重量</label>
-        <input class="form-control" id="pHeight" name="pHeight" type="text"disabled="disabled"
+        <input class="form-control" id="pHeight" name="pHeight" type="text"
                th:value="${data.pHeight}"
                placeholder="请输入实际重量"/><!--th:value="${entity.level}"-->
     </div>
 
     <div class="form-group">
         <label for="pInOutSideFlag">内外饰标识</label>
-        <input class="form-control" id="pInOutSideFlag" name="pInOutSideFlag" type="text"disabled="disabled"
+        <input class="form-control" id="pInOutSideFlag" name="pInOutSideFlag" type="text"
                th:value="${data.pInOutSideFlag}"
                placeholder="请输入内外饰标识"/><!--th:value="${entity.level}"-->
     </div>
 
     <div class="form-group">
         <label for="p3cPartFlag">3C件标识</label>
-        <input class="form-control" id="p3cPartFlag" name="p3cPartFlag" type="text"disabled="disabled"
+        <input class="form-control" id="p3cPartFlag" name="p3cPartFlag" type="text"
                th:value="${data.p3cPartFlag}"
                placeholder="请输入3C件标识"/><!--th:value="${entity.level}"-->
     </div>
     <div class="form-group">
         <label for="pPartImportantDegree">零件重要度</label>
-        <input class="form-control" id="pPartImportantDegree" name="pPartImportantDegree" type="text"disabled="disabled"
+        <input class="form-control" id="pPartImportantDegree" name="pPartImportantDegree" type="text"
                th:value="${data.pPertainToProjectPuid}"
                placeholder="请输入零件重要度"/><!--th:value="${entity.level}"-->
     </div>
@@ -106,9 +106,11 @@
     </div>
     <div class="form-group">
         <label for="pLoosePartFlag">散件标志</label>
-        <input class="form-control" id="pLoosePartFlag" name="pLoosePartFlag" type="text"
-               th:value="${data.pLoosePartFlag}"
-               placeholder="请输入散件标志"/><!--th:value="${entity.level}"-->
+        <select class="form-control" name="pLoosePartFlag" id="pLoosePartFlag" placeholder="请选择是否散件标志">
+            <option th:selected="${data.getpLoosePartFlag()==''?true:false}"></option> <!--th:selected="${data.getResource()=='MAKE'?true:false}"-->
+            <option th:selected="${data.getpLoosePartFlag()=='Y'?true:false}">Y</option>
+            <option th:selected="${data.getpLoosePartFlag()=='N'?true:false}">N</option>
+        </select>
     </div>
 </form>
 
