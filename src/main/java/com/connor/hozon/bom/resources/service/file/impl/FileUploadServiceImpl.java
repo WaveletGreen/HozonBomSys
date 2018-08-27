@@ -132,14 +132,10 @@ public class FileUploadServiceImpl implements FileUploadService {
             List<HzImportEbomRecord> records = analysisFinalExcelContent(list1,projectId);
             int j = 0;
             String s ="";
-            Set<HzImportEbomRecord> ss = new HashSet<>();
-            List<HzImportEbomRecord> ll = new ArrayList<>();
 
             for(int i=0;i<records.size();i++){//设置子层的父id为当前的id
                 j = i;
                 if(records.get(i).getLevel().endsWith("Y")){
-                    ss.add(records.get(i));
-                    ll.add(records.get(i));
                     int level = Integer.valueOf(records.get(i).getLevel().replace("Y",""))+1;
                     s = String.valueOf(level);
                     for(int k =j;k<records.size();k++){
@@ -232,29 +228,43 @@ public class FileUploadServiceImpl implements FileUploadService {
         String pActualWeight="";
 
         try {
-            BigDecimal bigDecimal = new BigDecimal(ExcelUtil.getCell(row,26).getStringCellValue());
+            pTargetWeight = ExcelUtil.getCell(row,26).getStringCellValue();
+            BigDecimal bigDecimal = new BigDecimal(pTargetWeight);
             pTargetWeight =String.valueOf( bigDecimal.setScale(3, BigDecimal.ROUND_HALF_UP));
         }catch (Exception e){
-            BigDecimal dec = new BigDecimal(ExcelUtil.getCell(row,26).getNumericCellValue());
-            pTargetWeight =String.valueOf(dec.setScale(3, BigDecimal.ROUND_HALF_UP).doubleValue());
+            try {
+                BigDecimal dec = new BigDecimal(ExcelUtil.getCell(row,26).getNumericCellValue());
+                pTargetWeight =String.valueOf(dec.setScale(3, BigDecimal.ROUND_HALF_UP).doubleValue());
+            }catch (Exception e1){
+                pTargetWeight ="";
+            }
+
         }
 
         try {
             BigDecimal bigDecimal = new BigDecimal(ExcelUtil.getCell(row,27).getStringCellValue());
             pFeatureWeight =String.valueOf( bigDecimal.setScale(3, BigDecimal.ROUND_HALF_UP));
         }catch (Exception e){
-            BigDecimal dec = new BigDecimal(ExcelUtil.getCell(row,27).getNumericCellValue());
-            pFeatureWeight =String.valueOf(dec.setScale(3, BigDecimal.ROUND_HALF_UP).doubleValue());
+            try {
+                BigDecimal dec = new BigDecimal(ExcelUtil.getCell(row,27).getNumericCellValue());
+                pFeatureWeight =String.valueOf(dec.setScale(3, BigDecimal.ROUND_HALF_UP).doubleValue());
+            }catch (Exception e1){
+                pFeatureWeight="";
+            }
+
         }
 
         try {
             BigDecimal bigDecimal = new BigDecimal(ExcelUtil.getCell(row,28).getStringCellValue());
             pActualWeight =String.valueOf( bigDecimal.setScale(3, BigDecimal.ROUND_HALF_UP));
         }catch (Exception e){
-            BigDecimal dec = new BigDecimal(ExcelUtil.getCell(row,28).getNumericCellValue());
-            pActualWeight =String.valueOf(dec.setScale(3, BigDecimal.ROUND_HALF_UP).doubleValue());
+            try {
+                BigDecimal dec = new BigDecimal(ExcelUtil.getCell(row,28).getNumericCellValue());
+                pActualWeight =String.valueOf(dec.setScale(3, BigDecimal.ROUND_HALF_UP).doubleValue());
+            }catch (Exception e1){
+                pActualWeight="";
+            }
         }
-
         String pFastener=ExcelUtil.getCell(row,29).getStringCellValue();
 
         String pFastenerStandard=ExcelUtil.getCell(row,30).getStringCellValue();
