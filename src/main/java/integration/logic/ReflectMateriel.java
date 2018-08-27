@@ -96,7 +96,7 @@ public class ReflectMateriel {
         //备件+原材料双属性标识，只要有双属性标识，物料类型就是X
         if (hzMaterielRecord.getpSpareMaterial() != null) {
             mm.setDoubleAttribute("X");
-            mm.setMaterialType("X");
+//            mm.setMaterialType("X");
         }
         //设置行号，默认都是1，一个包号对应一个行号
         mm.setLineNum("1");
