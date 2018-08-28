@@ -67,6 +67,9 @@
         <mapper resource="sql/mapper/cfg/xmapper/HzMaterielCfgBeanMapper.xml"/>
         <mapper resource="sql/mapper/cfg/xmapper/HzColorLvl2ModelMapper.xml"/>
         <mapper resource="sql/mapper/cfg/xmapper/HzCfg0ModelGroupMapper.xml"/>
+        <mapper resource="sql/mapper/cfg/xmapper/HzFullCfgMainMapper.xml"/>
+        <mapper resource="sql/mapper/cfg/xmapper/HzFullCfgModelMapper.xml"/>
+        <mapper resource="sql/mapper/cfg/xmapper/HzFullCfgWithCfgMapper.xml"/>
         <!--流程-->
         <!--VWO-->
         <mapper resource="sql/mapper/cfg/vwo/mapper/HzFeatureChangeMapper.xml"/>
