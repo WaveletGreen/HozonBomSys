@@ -276,8 +276,10 @@ public class SynMaterielService implements ISynMaterielService {
         /**
          * 更新信息
          */
-        toUpdate.forEach(to -> puids.add(to.getpMaterielCode()));
-        splitListThenUpdate(puids, tableName, field);
+        if (puids != null && puids.size() > 0) {
+            toUpdate.forEach(to -> puids.add(to.getpMaterielCode()));
+            splitListThenUpdate(puids, tableName, field);
+        }
 
         result.put("status", true);
         result.put("success", success);

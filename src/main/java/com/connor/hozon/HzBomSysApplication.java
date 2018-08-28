@@ -24,6 +24,10 @@ public class HzBomSysApplication extends SpringBootServletInitializer {
     }
 
 
+    public static void main(String[] args) {
+        SpringApplication.run(HzBomSysApplication.class, args);
+    }
+
     @Bean
     public EmbeddedServletContainerCustomizer containerCustomizer() {
         return new EmbeddedServletContainerCustomizer() {
@@ -33,8 +37,4 @@ public class HzBomSysApplication extends SpringBootServletInitializer {
             }
         };
     }
-    public static void main(String[] args) {
-        SpringApplication.run(HzBomSysApplication.class, args);
-    }
-
 }

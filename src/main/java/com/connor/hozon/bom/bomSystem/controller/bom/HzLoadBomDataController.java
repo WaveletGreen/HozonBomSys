@@ -35,9 +35,16 @@ public class HzLoadBomDataController {
     HzBomMainRecordDao hzBomMainRecordDao;
     @Autowired
     IHzCfg0OfBomLineService iHzCfg0OfBomLineService;
-
+    /**
+     * 特性
+     */
     @Autowired
     HzCfg0Service hzCfg0Service;
+    /**
+     * 车型模型
+     */
+    @Autowired
+    HzCfg0ModelService hzCfg0ModelService;
 
     @Autowired
     HzCfg0ModelService hzCfg0ModelService;
