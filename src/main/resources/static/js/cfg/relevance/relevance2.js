@@ -1,4 +1,3 @@
-
 function loadData() {
     var $table = $("#dataTable");
     $table.bootstrapTable('destroy');

@@ -12,13 +12,22 @@
                 property="pCfg0ModelOfMainRecord"/>
         <result column="P_CFG0_MODEL_BASIC_DETAIL" jdbcType="VARCHAR"
                 property="pCfg0ModelBasicDetail"/>
+        <result column="IS_SENT" jdbcType="INTEGER"
+                property="isSent"/>
+        <result column="MODEL_CREATE_DATE" jdbcType="TIMESTAMP"
+                property="modelCreateDate"/>
+        <result column="MODEL_UPDATE_DATE" jdbcType="TIMESTAMP"
+                property="modelUpdateDate"/>
     </resultMap>
     <sql id="Base_Column_List">
 		PUID,
 		OBJECT_NAME,
 		OBJECT_DESC,
 		P_CFG0_MODEL_OF_MAIN_RECORD,
-		P_CFG0_MODEL_BASIC_DETAIL
+		P_CFG0_MODEL_BASIC_DETAIL,
+		IS_SENT,
+		MODEL_CREATE_DATE,
+		MODEL_UPDATE_DATE
 	</sql>
     <!--根据主键筛选-->
     <select id="selectByPrimaryKey" parameterType="sql.pojo.cfg.HzCfg0ModelRecord"
@@ -38,9 +47,9 @@
         from HZ_CFG0_MODEL_RECORD
         where P_CFG0_MODEL_OF_MAIN_RECORD=
         (
-          select t.puid
-            from HZ_CFG0_MAIN_RECORD t
-              where t.p_cfg0_of_which_project_puid=#{projectPuid,jdbcType=VARCHAR}
+        select t.puid
+        from HZ_CFG0_MAIN_RECORD t
+        where t.p_cfg0_of_which_project_puid=#{projectPuid,jdbcType=VARCHAR}
         )
 
     </select>
@@ -67,13 +76,15 @@
     <!--更新基本信息-->
     <update id="updateBasicByPuid">
         update HZ_CFG0_MODEL_RECORD t
-          set t.P_CFG0_MODEL_BASIC_DETAIL=#{pCfg0ModelBasicDetail,jdbcType=VARCHAR}
+          set t.P_CFG0_MODEL_BASIC_DETAIL=#{pCfg0ModelBasicDetail,jdbcType=VARCHAR},
+              t.MODEL_UPDATE_DATE=sysdate
         where t.PUID=#{puid,jdbcType=VARCHAR}
     </update>
     <!--根据主键修改车型模型名称-->
     <update id="updateModelName">
         update HZ_CFG0_MODEL_RECORD t
-          set t.OBJECT_NAME=#{objectName,jdbcType=VARCHAR}
+          set t.OBJECT_NAME=#{objectName,jdbcType=VARCHAR},
+              t.MODEL_UPDATE_DATE=sysdate
         where t.PUID=#{puid,jdbcType=VARCHAR}
     </update>
 </mapper>

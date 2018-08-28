@@ -5,6 +5,7 @@ import com.connor.hozon.bom.bomSystem.dao.impl.bom.HzBomLineRecordDaoImpl;
 import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
 import com.connor.hozon.bom.bomSystem.service.bom.HzBomDataService;
 import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0BomLineOfModelService;
+import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0ModelService;
 import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0Service;
 import com.connor.hozon.bom.bomSystem.service.iservice.cfg.IHzCfg0OfBomLineService;
 import com.connor.hozon.bom.common.base.entity.QueryBase;
@@ -37,6 +38,9 @@ public class HzLoadBomDataController {
 
     @Autowired
     HzCfg0Service hzCfg0Service;
+
+    @Autowired
+    HzCfg0ModelService hzCfg0ModelService;
 
     private boolean debug = false;
 
@@ -87,6 +91,14 @@ public class HzLoadBomDataController {
         JSONArray array = new JSONArray();
         array.addAll(loadColumns(projectPuid));
         array.addAll(hzBomDataService.load(projectPuid));
+//        /**搜索全部特性，并经过P_CFG0_OBJECT_ID 升序排序*/
+//        QueryBase queryBase = new QueryBase();
+//        queryBase.setSort("P_CFG0_OBJECT_ID");
+//        hzCfg0Service.doLoadCfgListByProjectPuid(projectPuid, queryBase);
+        /**
+         * 获取该项目下的所有车型模型
+         */
+        hzCfg0ModelService.doSelectByProjectPuid(projectPuid);
         return array;
     }
 
