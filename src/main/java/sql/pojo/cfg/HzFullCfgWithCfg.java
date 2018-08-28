@@ -1,10 +1,9 @@
 package sql.pojo.cfg;
 
-import java.math.BigDecimal;
 import java.util.Date;
 
 public class HzFullCfgWithCfg {
-    private BigDecimal id;
+    private Long id;
 
     private String cfgCfg0Uid;
 
@@ -14,19 +13,19 @@ public class HzFullCfgWithCfg {
 
     private Date flCfgUpdateDate;
 
-    private Object flCfgCreator;
+    private String flCfgCreator;
 
-    private Object flCfgUpdator;
+    private String flCfgUpdator;
 
-    private Object flCfgBomlineName;
+    private String flCfgBomlineName;
 
-    private BigDecimal flCfgVersion;
+    private Long flCfgVersion;
 
-    public BigDecimal getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(BigDecimal id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -62,35 +61,35 @@ public class HzFullCfgWithCfg {
         this.flCfgUpdateDate = flCfgUpdateDate;
     }
 
-    public Object getFlCfgCreator() {
+    public String getFlCfgCreator() {
         return flCfgCreator;
     }
 
-    public void setFlCfgCreator(Object flCfgCreator) {
+    public void setFlCfgCreator(String flCfgCreator) {
         this.flCfgCreator = flCfgCreator;
     }
 
-    public Object getFlCfgUpdator() {
+    public String getFlCfgUpdator() {
         return flCfgUpdator;
     }
 
-    public void setFlCfgUpdator(Object flCfgUpdator) {
+    public void setFlCfgUpdator(String flCfgUpdator) {
         this.flCfgUpdator = flCfgUpdator;
     }
 
-    public Object getFlCfgBomlineName() {
+    public String getFlCfgBomlineName() {
         return flCfgBomlineName;
     }
 
-    public void setFlCfgBomlineName(Object flCfgBomlineName) {
+    public void setFlCfgBomlineName(String flCfgBomlineName) {
         this.flCfgBomlineName = flCfgBomlineName;
     }
 
-    public BigDecimal getFlCfgVersion() {
+    public Long getFlCfgVersion() {
         return flCfgVersion;
     }
 
-    public void setFlCfgVersion(BigDecimal flCfgVersion) {
+    public void setFlCfgVersion(Long flCfgVersion) {
         this.flCfgVersion = flCfgVersion;
     }
 }
