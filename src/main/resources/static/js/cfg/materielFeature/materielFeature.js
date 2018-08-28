@@ -139,7 +139,7 @@ function loadData() {
                     //     }
                     // },
                     {
-                        text: '同步车型',
+                        text: '同步整车物料属性到ERP',
                         iconCls: 'glyphicon glyphicon-pencil',
                         handler: function () {
                             var rows = $table.bootstrapTable('getSelections');
@@ -158,7 +158,7 @@ function loadData() {
                         }
                     },
                     {
-                        text: '添加',
+                        text: '添加可配置物料分配特性到ERP',
                         iconCls: 'glyphicon glyphicon-pencil',
                         handler: function () {
                             var rows = $table.bootstrapTable('getSelections');
@@ -186,7 +186,7 @@ function loadData() {
                         }
                     },
                     {
-                        text: '删除',
+                        text: '更新可配置物料分配特性到ERP',
                         iconCls: 'glyphicon glyphicon-pencil',
                         handler: function () {
                             var rows = $table.bootstrapTable('getSelections');
@@ -214,7 +214,7 @@ function loadData() {
                         }
                     },
                     {
-                        text: '添加到SAP',
+                        text: '添加衍生物料到SAP',
                         iconCls: 'glyphicon glyphicon-pencil',
                         handler: function () {
                             var rows = $table.bootstrapTable('getSelections');
@@ -255,7 +255,7 @@ function loadData() {
                         }
                     },
                     {
-                        text: '从SAP删除',
+                        text: '删除SAP中衍生物料',
                         iconCls: 'glyphicon glyphicon-pencil',
                         handler: function () {
                             var rows = $table.bootstrapTable('getSelections');

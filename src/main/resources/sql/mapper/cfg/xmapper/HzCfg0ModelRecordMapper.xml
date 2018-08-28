@@ -58,7 +58,10 @@
 		#{item.objectName,jdbcType=VARCHAR},
 		#{item.objectDesc,jdbcType=VARCHAR},
 		#{item.pCfg0ModelOfMainRecord,jdbcType=VARCHAR},
-		#{item.pCfg0ModelBasicDetail,jdbcType=VARCHAR}
+		#{item.pCfg0ModelBasicDetail,jdbcType=VARCHAR},
+		0,
+		sysdate,
+		sysdate
 	</sql>
     <!--批量插入-->
     <insert id="insertByBatch" parameterType="java.util.List">
