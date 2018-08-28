@@ -139,7 +139,7 @@ function loadData() {
                     //     }
                     // },
                     {
-                        text: '同步车型',
+                        text: '整车物料属性新增',
                         iconCls: 'glyphicon glyphicon-pencil',
                         handler: function () {
                             var rows = $table.bootstrapTable('getSelections');
@@ -151,7 +151,45 @@ function loadData() {
                             window.Ewin.dialog({
                                 title: "同步车型",
                                 //直接修改了超级物料表的数据，要根据配置器的puid找，否则就不能根据所见即所改
-                                url: "cfgMateriel/synMateriel?puid=" + rows[0].puid,
+                                url: "cfgMateriel/synMaterielAdd?puid=" + rows[0].puid,
+                                width: 500,
+                                height: 400
+                            });
+                        }
+                    },
+                    {
+                        text: '整车物料属性删除',
+                        iconCls: 'glyphicon glyphicon-pencil',
+                        handler: function () {
+                            var rows = $table.bootstrapTable('getSelections');
+                            //只能选一条
+                            if (rows.length != 1) {
+                                window.Ewin.alert({message: '请选择一条需要修改的数据!'});
+                                return false;
+                            }
+                            window.Ewin.dialog({
+                                title: "同步车型",
+                                //直接修改了超级物料表的数据，要根据配置器的puid找，否则就不能根据所见即所改
+                                url: "cfgMateriel/synMaterielDelete?puid=" + rows[0].puid,
+                                width: 500,
+                                height: 400
+                            });
+                        }
+                    },
+                    {
+                        text: '整车物料属性修改',
+                        iconCls: 'glyphicon glyphicon-pencil',
+                        handler: function () {
+                            var rows = $table.bootstrapTable('getSelections');
+                            //只能选一条
+                            if (rows.length != 1) {
+                                window.Ewin.alert({message: '请选择一条需要修改的数据!'});
+                                return false;
+                            }
+                            window.Ewin.dialog({
+                                title: "同步车型",
+                                //直接修改了超级物料表的数据，要根据配置器的puid找，否则就不能根据所见即所改
+                                url: "cfgMateriel/synMaterielUpdata?puid=" + rows[0].puid,
                                 width: 500,
                                 height: 400
                             });

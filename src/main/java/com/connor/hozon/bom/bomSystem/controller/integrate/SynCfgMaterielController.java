@@ -18,11 +18,27 @@ public class SynCfgMaterielController extends ExtraIntegrate {
     @Autowired
     SynMaterielCfgService synMaterielCfgService;
 
-    @RequestMapping("/synMateriel")
-    public String modPage(@RequestParam String puid,Model model) {
+    @RequestMapping("/synMaterielAdd")
+    public String add(@RequestParam String puid,Model model) {
         HzMaterielCfgBean bean = new HzMaterielCfgBean();
         bean.setPuid(puid);
         JSONObject result = synMaterielCfgService.addMaterielCfg(Collections.singletonList(bean));
+        addToModel(result, model);
+        return "stage/templateOfIntegrate";
+    }
+    @RequestMapping("/synMaterielDelete")
+    public String delete(@RequestParam String puid,Model model) {
+        HzMaterielCfgBean bean = new HzMaterielCfgBean();
+        bean.setPuid(puid);
+        JSONObject result = synMaterielCfgService.deleteMaterielCfg(Collections.singletonList(bean));
+        addToModel(result, model);
+        return "stage/templateOfIntegrate";
+    }
+    @RequestMapping("/synMaterielUpdata")
+    public String updata(@RequestParam String puid,Model model) {
+        HzMaterielCfgBean bean = new HzMaterielCfgBean();
+        bean.setPuid(puid);
+        JSONObject result = synMaterielCfgService.updataMaterielCfg(Collections.singletonList(bean));
         addToModel(result, model);
         return "stage/templateOfIntegrate";
     }
