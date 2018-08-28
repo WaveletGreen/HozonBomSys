@@ -1,6 +1,5 @@
 package com.connor.hozon.bom.resources.service.file.impl;
 
-import com.alibaba.fastjson.JSON;
 import com.connor.hozon.bom.bomSystem.dao.bom.HzBomMainRecordDao;
 import com.connor.hozon.bom.bomSystem.dao.impl.bom.HzBomLineRecordDaoImpl;
 import com.connor.hozon.bom.common.util.user.UserInfo;
@@ -10,7 +9,6 @@ import com.connor.hozon.bom.resources.service.file.FileUploadService;
 import com.connor.hozon.bom.resources.util.ExcelUtil;
 import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.resources.util.PrivilegeUtil;
-import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -43,6 +41,8 @@ public class FileUploadServiceImpl implements FileUploadService {
     private int errorCount = 0;
 
     private int lineIndexFirst =10;
+
+    private Integer maxOrderNum = null;
     @Override
     public OperateResultMessageRespDTO UploadEbomToDB(MultipartFile file,String projectId) {
         try {
@@ -79,7 +79,7 @@ public class FileUploadServiceImpl implements FileUploadService {
             List<List<HzImportEbomRecord>> list1 = new ArrayList<>();
 
             HZBomMainRecord hzBomMainRecord = hzBomMainRecordDao.selectByProjectPuid(projectId);
-
+            maxOrderNum = hzBomLineRecordDao.findMaxBomOrderNum(projectId);
             for(int numSheet = 0; numSheet < workbook.getNumberOfSheets(); numSheet++ ){
                 Sheet sheet = workbook.getSheetAt(numSheet);
                 String sheetName = workbook.getSheetName(numSheet);//EBOM 表名 就一张表的话 没什么卵用
@@ -174,7 +174,7 @@ public class FileUploadServiceImpl implements FileUploadService {
                     hzEbomRecordDAO.importList(list);
                 }
             }
-
+            ExcelUtil.deleteFile();
         }catch (Exception e){
             return OperateResultMessageRespDTO.getFailResult();
 
@@ -396,9 +396,8 @@ public class FileUploadServiceImpl implements FileUploadService {
      */
     private Map<String,String> analysisLineIndex(List<HzImportEbomRecord> records,String projectId) {
         Map<String,String> lineIndexMap = new HashMap<>();
-        for(int i = 1;i<records.size();i++){//产生lineIndex
-            HzImportEbomRecord preDTO = records.get(i-1);
-            HzImportEbomRecord currentDTO = records.get(i);
+        if(records.size() == 1){
+            HzImportEbomRecord preDTO = records.get(0);
             if(preDTO.getHigh() == 0){
                 Integer lineIndexFirstNum = hzBomLineRecordDao.getMaxLineIndexFirstNum(projectId);
                 if(lineIndexFirstNum == null){
@@ -410,54 +409,71 @@ public class FileUploadServiceImpl implements FileUploadService {
                     lineIndexFirst+=10;
                 }
             }
-            String level = currentDTO.getLevel();
-            int high = currentDTO.getHigh();
-            String currentKey = level+"-"+high;
-            String preKey = preDTO.getLevel()+"-"+preDTO.getHigh();
-            String currentIndex = "";
-            int preLevelNum = Integer.valueOf(preDTO.getLevel().replace("Y",""));
-            int currentLevelNum = Integer.valueOf(level.replace("Y",""));
+        }else{
+            for(int i = 1;i<records.size();i++){//产生lineIndex
+                HzImportEbomRecord preDTO = records.get(i-1);
+                HzImportEbomRecord currentDTO = records.get(i);
+                if(preDTO.getHigh() == 0){
+                    Integer lineIndexFirstNum = hzBomLineRecordDao.getMaxLineIndexFirstNum(projectId);
+                    if(lineIndexFirstNum == null){
+                        lineIndexMap.put(preDTO.getLevel()+"-"+0,lineIndexFirst+".10");
+                        lineIndexFirst +=10;
+                    }else {
+                        lineIndexFirstNum = lineIndexFirstNum+lineIndexFirst;
+                        lineIndexMap.put(preDTO.getLevel()+"-"+0,lineIndexFirstNum+".10");
+                        lineIndexFirst+=10;
+                    }
+                }
+                String level = currentDTO.getLevel();
+                int high = currentDTO.getHigh();
+                String currentKey = level+"-"+high;
+                String preKey = preDTO.getLevel()+"-"+preDTO.getHigh();
+                String currentIndex = "";
+                int preLevelNum = Integer.valueOf(preDTO.getLevel().replace("Y",""));
+                int currentLevelNum = Integer.valueOf(level.replace("Y",""));
 
-            if(currentLevelNum>preLevelNum){
-                for(String key:lineIndexMap.keySet()){
-                    if(key.equals(preKey)){
-                        StringBuffer s = new StringBuffer(lineIndexMap.get(preKey));
-                        currentIndex = s.append(".10").toString();
-                        lineIndexMap.put(currentKey,currentIndex);
-                        break;
+                if(currentLevelNum>preLevelNum){
+                    for(String key:lineIndexMap.keySet()){
+                        if(key.equals(preKey)){
+                            StringBuffer s = new StringBuffer(lineIndexMap.get(preKey));
+                            currentIndex = s.append(".10").toString();
+                            lineIndexMap.put(currentKey,currentIndex);
+                            break;
+                        }
                     }
-                }
-            }else if(currentLevelNum == preLevelNum){
-                for(String key:lineIndexMap.keySet()){
-                    if(key.equals(preKey)){
-                        String value = lineIndexMap.get(preKey);
-                        int lastNum = Integer.valueOf(value.split("\\.")[value.split("\\.").length-1]);
-                        int charAtNum = value.lastIndexOf(".");
-                        String preIndexDoNotContainLastNum = value.substring(0,charAtNum);
-                        lastNum+=10;
-                        currentIndex = preIndexDoNotContainLastNum+"."+lastNum;
-                        lineIndexMap.put(currentKey,currentIndex);
-                        break;
-                    }
+                }else if(currentLevelNum == preLevelNum){
+                    for(String key:lineIndexMap.keySet()){
+                        if(key.equals(preKey)){
+                            String value = lineIndexMap.get(preKey);
+                            int lastNum = Integer.valueOf(value.split("\\.")[value.split("\\.").length-1]);
+                            int charAtNum = value.lastIndexOf(".");
+                            String preIndexDoNotContainLastNum = value.substring(0,charAtNum);
+                            lastNum+=10;
+                            currentIndex = preIndexDoNotContainLastNum+"."+lastNum;
+                            lineIndexMap.put(currentKey,currentIndex);
+                            break;
+                        }
 
-                }
-            }else {
-                for(Map.Entry<String,String> entry:lineIndexMap.entrySet()){
-                    String parentKey = currentLevelNum+"Y-";
-                    if(entry.getKey().indexOf(parentKey)>-1){
-                        String value = entry.getValue();
-                        int lastNum = Integer.valueOf(value.split("\\.")[value.split("\\.").length-1]);
-                        int charAtNum = value.lastIndexOf(".");
-                        String preIndexDoNotContainLastNum = value.substring(0,charAtNum);
-                        lastNum+=10;
-                        currentIndex = preIndexDoNotContainLastNum+"."+lastNum;
-                        lineIndexMap.put(currentKey,currentIndex);
-                        break;
+                    }
+                }else {
+                    for(Map.Entry<String,String> entry:lineIndexMap.entrySet()){
+                        String parentKey = currentLevelNum+"Y-";
+                        if(entry.getKey().indexOf(parentKey)>-1){
+                            String value = entry.getValue();
+                            int lastNum = Integer.valueOf(value.split("\\.")[value.split("\\.").length-1]);
+                            int charAtNum = value.lastIndexOf(".");
+                            String preIndexDoNotContainLastNum = value.substring(0,charAtNum);
+                            lastNum+=10;
+                            currentIndex = preIndexDoNotContainLastNum+"."+lastNum;
+                            lineIndexMap.put(currentKey,currentIndex);
+                            break;
+                        }
                     }
                 }
+
             }
-
         }
+
         return lineIndexMap;
 
     }
@@ -511,7 +527,13 @@ public class FileUploadServiceImpl implements FileUploadService {
             if(!level.endsWith("Y")){
                 record.setPuid(UUID.randomUUID().toString());
             }
-            record.setOrderNum(record.getNo()*100);
+
+            if(maxOrderNum !=null){
+                record.setOrderNum(maxOrderNum+record.getNo()*100);
+            }else {
+                record.setOrderNum(record.getNo()*100);
+            }
+
             recordList.add(record);
         }
         return recordList;
