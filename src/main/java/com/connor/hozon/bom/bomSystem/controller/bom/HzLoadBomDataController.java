@@ -46,9 +46,6 @@ public class HzLoadBomDataController {
     @Autowired
     HzCfg0ModelService hzCfg0ModelService;
 
-    @Autowired
-    HzCfg0ModelService hzCfg0ModelService;
-
     private boolean debug = false;
 
     public HzLoadBomDataController(HzCfg0BomLineOfModelService hzCfg0BomLineOfModelService, HzBomDataService hzBomDataService) {
