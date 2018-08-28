@@ -8,7 +8,7 @@ function loadData() {
         return;
     }
     $.ajax({
-        url: 'loadBom/loadCfg0BomLineOfModel',
+        url: 'bomAllCfg/loadCfg0BomLineOfModel',
         type: 'GET',
         data: {
             'bdf': data

@@ -139,4 +139,11 @@
       FL_MOD_VERSION = #{flModVersion,jdbcType=DECIMAL}
     where ID = #{id,jdbcType=DECIMAL}
   </update>
+
+  <select id="selectCfg" parameterType="java.lang.String" resultType="java.lang.String">
+    select
+      MOD_POINT_TYPE
+    from HZ_FULL_CFG_MODEL_RECORD
+    where MOD_MODEL_UID = #{puid}
+  </select>
 </mapper>

@@ -3,6 +3,7 @@ package com.connor.hozon.bom.bomSystem.dao.cfg;
 import sql.pojo.cfg.HzFullCfgModel;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 public interface HzFullCfgModelDao {
 
@@ -17,4 +18,6 @@ public interface HzFullCfgModelDao {
     int updateByPrimaryKeySelective(HzFullCfgModel record);
 
     int updateByPrimaryKey(HzFullCfgModel record);
+
+    List<String> selectCfg(String puid);
 }

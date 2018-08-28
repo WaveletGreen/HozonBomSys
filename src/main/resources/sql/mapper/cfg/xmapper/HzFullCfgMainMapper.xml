@@ -150,4 +150,12 @@
       UPDATER = #{updater,jdbcType=OTHER}
     where ID = #{id,jdbcType=DECIMAL}
   </update>
+
+  <select id="selectByProjectId" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from HZ_FULL_CFG_MAIN_RECORD
+    where PROJECT_UID = #{projectUid}
+  </select>
+
 </mapper>

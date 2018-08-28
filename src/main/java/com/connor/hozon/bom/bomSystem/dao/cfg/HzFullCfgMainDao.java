@@ -17,4 +17,6 @@ public interface HzFullCfgMainDao {
     int updateByPrimaryKeySelective(HzFullCfgMain record);
 
     int updateByPrimaryKey(HzFullCfgMain record);
+
+    HzFullCfgMain selectByProjectId(String id);
 }
