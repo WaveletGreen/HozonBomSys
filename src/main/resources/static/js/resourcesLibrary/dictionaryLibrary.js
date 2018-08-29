@@ -24,7 +24,7 @@ function initTable(url) {
         cache: false,
         striped: true,                                //是否显示行间隔色
         sidePagination: "server",                    //分页方式：client客户端分页，server服务端分页（*）
-        height: $(window.parent.document).find("#wrapper").height() - 150,
+        height: $(window.parent.document).find("#wrapper").height() - 100,
         width: $(window).width(),
         formId :"queryDictionaryLibrary",
         undefinedText: "",                           //当数据为 undefined 时显示的字符
@@ -144,7 +144,7 @@ function initTable(url) {
             },
             {
                 field : 'name',
-                title : 'Professsion',
+                title : 'Profession',
                 align : 'center',
                 valign : 'middle',
                 sortable : true
