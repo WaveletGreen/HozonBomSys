@@ -50,12 +50,12 @@ public class HzWorkController extends BaseController {
         tableTitle.put("pPurpose","用途");
         tableTitle.put("pStandardCode","标准值码");
         tableTitle.put("pControlCode","控制码");
-        tableTitle.put("pDirectLabor","直接人工工时");
-        tableTitle.put("pIndirectLabor","间接人工工时");
-        tableTitle.put("pMachineLabor","机器工时");
-        tableTitle.put("pBurn","燃动");
-        tableTitle.put("pMachineMaterial","机物料");
-        tableTitle.put("pOtherCost","其他费用");
+        tableTitle.put("pDirectLabor","直接人工/机物料消耗");
+        tableTitle.put("pIndirectLabor","间接人工/标准件消耗");
+        tableTitle.put("pMachineLabor","折旧/工具消耗");
+        tableTitle.put("pBurn","燃动费/废品损失");
+        tableTitle.put("pMachineMaterial","辅助人工/设备维修");
+        tableTitle.put("pOtherCost","辅助折旧/辅助其他费用");
         tableTitle.put("pProcessExression","加工公式");
         tableTitle.put("pAbilityType","能力类别");
         tableTitle.put("pStartTime","开始时间");
