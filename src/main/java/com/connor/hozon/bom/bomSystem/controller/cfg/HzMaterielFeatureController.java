@@ -68,13 +68,19 @@ public class HzMaterielFeatureController extends ExtraIntegrate {
      * 模型特性数据服务
      */
     private final IHzCfg0ModelFeatureService hzCfg0ModelFeatureService;
-
+    /**
+     * 工厂
+     */
     @Autowired
     HzFactoryDAO hzFactoryDAO;
-
+    /**
+     * 配置-模型关系
+     */
     @Autowired
     HzCfg0ToModelRecordDao hzCfg0ToModelRecordDao;
-
+    /**
+     * 同步物料接口服务
+     */
     @Autowired
     private SynMaterielService synMaterielService;
 
