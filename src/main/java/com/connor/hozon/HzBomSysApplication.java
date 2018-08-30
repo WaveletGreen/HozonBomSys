@@ -24,17 +24,17 @@ public class HzBomSysApplication extends SpringBootServletInitializer {
     }
 
 
+    public static void main(String[] args) {
+        SpringApplication.run(HzBomSysApplication.class, args);
+    }
+
     @Bean
     public EmbeddedServletContainerCustomizer containerCustomizer() {
         return new EmbeddedServletContainerCustomizer() {
             @Override
             public void customize(ConfigurableEmbeddedServletContainer container) {
-                container.setSessionTimeout(1800);// 单位为S
+                container.setSessionTimeout(3600);// 单位为S
             }
         };
     }
-    public static void main(String[] args) {
-        SpringApplication.run(HzBomSysApplication.class, args);
-    }
-
 }

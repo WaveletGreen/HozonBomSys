@@ -25,6 +25,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.connor.hozon.bom.bomSystem.helper.StringHelper.checkString;
+
 
 /**
  * User: Fancyears·Maylos·Mayways
@@ -201,6 +203,11 @@ public class HzVwoController {
     public JSONObject saveInformChanger(@RequestBody HzVwoInformChanges change) {
         JSONObject result = new JSONObject();
         result.put("status", false);
+        if (!checkString(change.getPartId())) {
+            logger.error("没有选择正确的人员，可能选择了部门");
+            result.put("msg", "没有选择正确的人员，可能选择了部门");
+            return result;
+        }
         if (change != null) {
             User user = new User();
             try {

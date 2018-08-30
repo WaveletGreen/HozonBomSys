@@ -53,7 +53,7 @@ public class HzCfg0Controller extends ExtraIntegrate {
     /**
      * 同步相关性
      */
-//    @Autowired
+    @Autowired
     ISynRelevanceService iSynRelevanceService;
     /***
      * 族
@@ -361,6 +361,19 @@ public class HzCfg0Controller extends ExtraIntegrate {
     @RequestMapping("/loadRelevance")
     @ResponseBody
     public Map<String, Object> loadRelevance(@RequestParam("projectPuid") String projectPuid) {
+        Map<String, Object> result = new HashMap<>();
+        List<HzRelevanceBean> _list = new ArrayList<>();
+        int _index = 0;
+        _index = hzCfg0Service.doLoadRelevance(projectPuid, _list, _index, "HZ_CFG0_RECORD");
+//        hzCfg0Service.doLoadRelevance(projectPuid, _list, _index, "HZ_CFG0_ADD_CFG_RECORD");
+        result.put("totalCount", _list.size());
+        result.put("result", _list);
+        return result;
+    }
+
+    @RequestMapping("/loadRelevance2")
+    @ResponseBody
+    public Map<String, Object> loadRelevance2(@RequestParam("projectPuid") String projectPuid) {
         Map<String, Object> result = new HashMap<>();
         List<HzRelevanceBean> _list = new ArrayList<>();
         int _index = 0;

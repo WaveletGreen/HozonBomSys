@@ -5,9 +5,12 @@ import com.connor.hozon.bom.bomSystem.dao.impl.bom.HzBomLineRecordDaoImpl;
 import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
 import com.connor.hozon.bom.bomSystem.service.bom.HzBomDataService;
 import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0BomLineOfModelService;
+import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0ModelService;
 import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0Service;
 import com.connor.hozon.bom.bomSystem.service.iservice.cfg.IHzCfg0OfBomLineService;
 import com.connor.hozon.bom.common.base.entity.QueryBase;
+import com.connor.hozon.bom.common.util.user.UserInfo;
+import com.connor.hozon.bom.sys.entity.User;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +22,7 @@ import sql.pojo.bom.HzBomLineRecord;
 import sql.pojo.cfg.HzCfg0OfBomLineRecord;
 import sql.pojo.cfg.HzCfg0Record;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 @Controller
@@ -33,9 +37,16 @@ public class HzLoadBomDataController {
     HzBomMainRecordDao hzBomMainRecordDao;
     @Autowired
     IHzCfg0OfBomLineService iHzCfg0OfBomLineService;
-
+    /**
+     * 特性
+     */
     @Autowired
     HzCfg0Service hzCfg0Service;
+    /**
+     * 车型模型
+     */
+    @Autowired
+    HzCfg0ModelService hzCfg0ModelService;
 
     private boolean debug = false;
 
@@ -59,6 +70,7 @@ public class HzLoadBomDataController {
     @RequestMapping(value = "/loadColumns", method = RequestMethod.POST)
     @ResponseBody
     public JSONArray loadColumns(@RequestParam String projectPuid) {
+
         return hzBomDataService.doLoadColumns(projectPuid);
     }
 
@@ -86,6 +98,14 @@ public class HzLoadBomDataController {
         JSONArray array = new JSONArray();
         array.addAll(loadColumns(projectPuid));
         array.addAll(hzBomDataService.load(projectPuid));
+//        /**搜索全部特性，并经过P_CFG0_OBJECT_ID 升序排序*/
+//        QueryBase queryBase = new QueryBase();
+//        queryBase.setSort("P_CFG0_OBJECT_ID");
+//        hzCfg0Service.doLoadCfgListByProjectPuid(projectPuid, queryBase);
+        /**
+         * 获取该项目下的所有车型模型
+         */
+        hzCfg0ModelService.doSelectByProjectPuid(projectPuid);
         return array;
     }
 
@@ -95,7 +115,9 @@ public class HzLoadBomDataController {
             model.addAttribute("msg", "请选择1个项目进行操作");
             return "errorWithEntity";
         }
-        List<HzCfg0Record> features = hzCfg0Service.doLoadCfgListByProjectPuid(projectPuid, new QueryBase());
+        QueryBase queryBase = new QueryBase();
+        queryBase.setSort("P_CFG0_OBJECT_ID");
+        List<HzCfg0Record> features = hzCfg0Service.doLoadCfgListByProjectPuid(projectPuid, queryBase);
         List<HzBomLineRecord> lines = hzBomDataService.doSelect2YByProjectPuid(projectPuid);
         model.addAttribute("features", features);
         model.addAttribute("lines", lines);

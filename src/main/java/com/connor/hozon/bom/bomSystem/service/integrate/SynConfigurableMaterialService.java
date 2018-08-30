@@ -32,7 +32,7 @@ public class SynConfigurableMaterialService {
     @Autowired
     private HzCfg0MainService hzCfg0MainService;
     @Autowired
-    private  HzSuperMaterielService hzSuperMaterielService;
+    private HzSuperMaterielService hzSuperMaterielService;
     @Autowired
     private HzCfg0OptionFamilyService hzCfg0OptionFamilyService;
     @Autowired
@@ -53,10 +53,11 @@ public class SynConfigurableMaterialService {
 
     /**
      * 新增
-     * @param puid                      表 Hz_Cfg0_Model_Record 的主键 PUID
-     * @param cfg0MainPuids            表 HZ_CFG0_MAIN_RECORD   的主键 PUID
-     * @param modeBasiceDetails       配置物料编码    表  Hz_Cfg0_Model_Record  的  OBJECT_NAME
-     * @param projectPuid              项目ID         表   hz_cfg0_main_record 的 p_cfg0_of_which_project_puid
+     *
+     * @param puid              表 Hz_Cfg0_Model_Record 的主键 PUID
+     * @param cfg0MainPuids     表 HZ_CFG0_MAIN_RECORD   的主键 PUID
+     * @param modeBasiceDetails 配置物料编码    表  Hz_Cfg0_Model_Record  的  OBJECT_NAME
+     * @param projectPuid       项目ID         表   hz_cfg0_main_record 的 p_cfg0_of_which_project_puid
      * @return
      */
     public JSONObject addConfigurableMaterial(String[] puid, String[] cfg0MainPuids, String[] modeBasiceDetails, String projectPuid) {
@@ -64,24 +65,26 @@ public class SynConfigurableMaterialService {
     }
 
     /**
-     * 删除
-     * @param puid                        表 Hz_Cfg0_Model_Record 的主键 PUID
-     * @param cfg0MainPuids             表 HZ_CFG0_MAIN_RECORD   的主键 PUID
-     * @param modeBasiceDetails         配置物料编码    表  Hz_Cfg0_Model_Record  的  OBJECT_NAME
-     * @param projectPuid               项目ID         表   hz_cfg0_main_record 的 p_cfg0_of_which_project_puid
+     * 更新，一般不删除
+     *
+     * @param puid              表 Hz_Cfg0_Model_Record 的主键 PUID
+     * @param cfg0MainPuids     表 HZ_CFG0_MAIN_RECORD   的主键 PUID
+     * @param modeBasiceDetails 配置物料编码    表  Hz_Cfg0_Model_Record  的  OBJECT_NAME
+     * @param projectPuid       项目ID         表   hz_cfg0_main_record 的 p_cfg0_of_which_project_puid
      * @return
      */
     public JSONObject deleteConfigurableMaterial(String[] puid, String[] cfg0MainPuids, String[] modeBasiceDetails, String projectPuid) {
-        return execute(puid, cfg0MainPuids, modeBasiceDetails, projectPuid, ActionFlagOption.DELETE);
+        return execute(puid, cfg0MainPuids, modeBasiceDetails, projectPuid, ActionFlagOption.UPDATE);
     }
 
     /**
      * 核心方法
-     * @param puids                       表 Hz_Cfg0_Model_Record 的主键 PUID
-     * @param cfg0MainPuids             表 HZ_CFG0_MAIN_RECORD   的主键 PUID
-     * @param modeBasiceDetails         配置物料编码    表  Hz_Cfg0_Model_Record  的  OBJECT_NAME
-     * @param projectPuid               项目ID         表   hz_cfg0_main_record 的 p_cfg0_of_which_project_puid
-     * @param option                    动作标志
+     *
+     * @param puids             表 Hz_Cfg0_Model_Record 的主键 PUID
+     * @param cfg0MainPuids     表 HZ_CFG0_MAIN_RECORD   的主键 PUID
+     * @param modeBasiceDetails 配置物料编码    表  Hz_Cfg0_Model_Record  的  OBJECT_NAME
+     * @param projectPuid       项目ID         表   hz_cfg0_main_record 的 p_cfg0_of_which_project_puid
+     * @param option            动作标志
      * @return
      */
     private JSONObject execute(String[] puids, String[] cfg0MainPuids, String[] modeBasiceDetails, String projectPuid, ActionFlagOption option) {
@@ -110,12 +113,12 @@ public class SynConfigurableMaterialService {
         int totalOfOutOfParent = 0;
         int totalOfUnknown = 0;
 
-        if (puids == null || puids.length <= 0 || cfg0MainPuids == null || cfg0MainPuids.length<=0) {
+        if (puids == null || puids.length <= 0 || cfg0MainPuids == null || cfg0MainPuids.length <= 0) {
             result.put("status", false);
             result.put("msg", "选择的列为空，请至少选择1列发送");
             return result;
         }
-        if(puids.length != cfg0MainPuids.length){
+        if (puids.length != cfg0MainPuids.length) {
             result.put("status", false);
             result.put("msg", "前端数据传输错误");
             return result;
@@ -125,7 +128,7 @@ public class SynConfigurableMaterialService {
 
         String packnum = UUIDHelper.generateUpperUid();
 
-        for(int i=0;i<puids.length;i++){
+        for (int i = 0; i < puids.length; i++) {
             //没有父层的puid
             if (!packNumOfFeature.containsKey(puids[i])) {
                 //添加父层puid和包号的对应关系
@@ -157,8 +160,8 @@ public class SynConfigurableMaterialService {
                 if (mainRecord != null) {
                     superMateriel = hzSuperMaterielService.doSelectByProjectPuid(mainRecord.getpCfg0OfWhichProjectPuid());
                 }
-                for(HzMaterielFeatureBean hzMaterielFeatureBean :hzMaterielFeatureBeans){
-                    if(hzMaterielFeatureBean.getpCfg0ModelRecord()!=null && hzMaterielFeatureBean.getpCfg0ModelRecord().equals(puids[i])){
+                for (HzMaterielFeatureBean hzMaterielFeatureBean : hzMaterielFeatureBeans) {
+                    if (hzMaterielFeatureBean.getpCfg0ModelRecord() != null && hzMaterielFeatureBean.getpCfg0ModelRecord().equals(puids[i])) {
 
                         ConfigurableMaterialAllocation configurableMaterialAllocation = new ConfigurableMaterialAllocation();
                         //特性编码
@@ -175,15 +178,15 @@ public class SynConfigurableMaterialService {
                         configurableMaterialAllocation.setModelClass(groupName);
                         //动作描述
                         if (option == ActionFlagOption.ADD) {
-                            if(hzMaterielFeatureBean.getIsSent()==null||hzMaterielFeatureBean.getIsSent()==0){
-                                configurableMaterialAllocation.setActionFlag("A");
-                            }else  if(hzMaterielFeatureBean.getIsSent()==1){
-                                configurableMaterialAllocation.setActionFlag("U");
+                            if (hzMaterielFeatureBean.getIsSent() == null || hzMaterielFeatureBean.getIsSent() == 0) {
+                                configurableMaterialAllocation.setActionFlag(ActionFlagOption.ADD.GetDesc());
+                            } else if (hzMaterielFeatureBean.getIsSent() == 1) {
+                                configurableMaterialAllocation.setActionFlag(ActionFlagOption.UPDATE.GetDesc());
                             }
                         }
                         //执行删除
                         else {
-                            configurableMaterialAllocation.setActionFlag("D");
+                            configurableMaterialAllocation.setActionFlag(option.GetDesc());
                         }
                         transClassifyService.getInput().getItem().add(configurableMaterialAllocation.getZpptci003());
                     }
@@ -226,7 +229,7 @@ public class SynConfigurableMaterialService {
                 if (needToUpdateStatus.size() > 0) {
                     List<HzCfg0ToModelRecord> hzCfg0ToModelRecordList = new ArrayList<HzCfg0ToModelRecord>();
                     Set<String> keySet = coach.keySet();
-                    for(String key : keySet){
+                    for (String key : keySet) {
                         hzCfg0ToModelRecordList.add(coach.get(key));
                     }
                     hzCfg0ToModelRecordDao.setIsSent(hzCfg0ToModelRecordList);

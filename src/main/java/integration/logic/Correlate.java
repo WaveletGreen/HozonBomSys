@@ -170,6 +170,9 @@ public class Correlate {
     }
 
     public void setCreateDate(Date date) {
+        if (date == null) {
+            date = new Date();
+        }
         createDate = sdf.format(date);
         zpptci004.setPKNEDT(createDate);
         this.createDate = createDate;
@@ -180,6 +183,9 @@ public class Correlate {
     }
 
     public void setModifyDate(Date date) {
+        if (date == null) {
+            date = new Date();
+        }
         modifyDate = sdf.format(date);
         zpptci004.setPKNADT(modifyDate);
         this.modifyDate = modifyDate;

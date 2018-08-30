@@ -133,7 +133,7 @@ function loadData() {
             //动态添加
             var t =
                 "<tr>" +
-                "<th align='center'><div style='width: 50px' >操作</div></th>" +
+                "<th align='center'><div style='width: 50px' >选择</div></th>" +
                 "<th ><div style='width: 50px' >序号</div></th>" +
                 "<th ><div style='width: 150px' >操作类型</div></th>" +
                 "<th ><div style='width: 150px' >系统</div></th>" +
@@ -262,25 +262,25 @@ $(document).ready(
 //     b[0].innerHTML = "<input id='" + id + "' type='button' onclick='saveEditTd(this.id);' value='保存'/><input type='button' onclick='resertEditTd();' value='取消'/>";
 // }
 
-// $('.edit').on('click', function () {
-//     if (!($(this).find('div').hasClass('btn'))) {
-//         $(this).find('div').is(':visible') && ($(this).find('input').show().prev().hide(), $(this).parent().find('.btn').html('保存'));
-//     }
-// })
-// $('.btn').on('click', function () {
-//     // $(this).html() == '编辑' ? $(this).html('保存') : $(this).html('编辑');
-//     if ($(this).html() == '编辑') {
-//         $(this).html('保存');
-//         $(this).parent().siblings().each(function (index, item) {
-//             $(item).find('div').hide().next().show();
-//         })
-//     } else {
-//         $(this).html('编辑');
-//         $(this).parent().siblings().each(function (index, item) {
-//             $(item).find('div').html($(item).find('input').val()).show().next().hide();
-//         })
-//     }
-// })
+$('.edit').on('click', function () {
+    if (!($(this).find('div').hasClass('btn'))) {
+        $(this).find('div').is(':visible') && ($(this).find('input').show().prev().hide(), $(this).parent().find('.btn').html('保存'));
+    }
+})
+$('.btn').on('click', function () {
+    // $(this).html() == '编辑' ? $(this).html('保存') : $(this).html('编辑');
+    if ($(this).html() == '编辑') {
+        $(this).html('保存');
+        $(this).parent().siblings().each(function (index, item) {
+            $(item).find('div').hide().next().show();
+        })
+    } else {
+        $(this).html('编辑');
+        $(this).parent().siblings().each(function (index, item) {
+            $(item).find('div').html($(item).find('input').val()).show().next().hide();
+        })
+    }
+})
 
 /*$(function(){
     $("input:button").click(function() {
@@ -340,23 +340,23 @@ function Botton(id) {
         gridId: "addPageOfModel"
     })
 };
-//
-// $(function () {
-//     $("div input:button").click(function () {
-//         str = $(this).val() == "编辑" ? "确定" : "编辑";
-//         $(this).val(str);   // 按钮被点击后，在“编辑”和“确定”之间切换
-//         $(this).parent().parent().siblings("td").each(function () {  // 获取当前行的其他单元格
-//             obj_text = $(this).find("div input:text");    // 判断单元格下是否有文本框
-//             if (!obj_text.length)   // 如果没有文本框，则添加文本框使之可以编辑
-//                 $(this).html("<div style='width: 150px'><input type='text' value='" + $(this).text() + "'></div>");
-//             else   // 如果已经存在文本框，则将其显示为文本框修改的值
-//                 $(this).html("<div style='width: 150px'>" + obj_text.val() + "</div>");
-//         });
-//     });
-// });
-// var i = 0;
-// $(function () {
-//     $("#addTo").click(function () {
-//         $("#tr_1").append("<div><td>追加值" + (++i) + "</td></div>");
-//     });
-// })
+
+$(function () {
+    $("div input:button").click(function () {
+        str = $(this).val() == "编辑" ? "确定" : "编辑";
+        $(this).val(str);   // 按钮被点击后，在“编辑”和“确定”之间切换
+        $(this).parent().parent().siblings("td").each(function () {  // 获取当前行的其他单元格
+            obj_text = $(this).find("div input:text");    // 判断单元格下是否有文本框
+            if (!obj_text.length)   // 如果没有文本框，则添加文本框使之可以编辑
+                $(this).html("<div style='width: 150px'><input type='text' value='" + $(this).text() + "'></div>");
+            else   // 如果已经存在文本框，则将其显示为文本框修改的值
+                $(this).html("<div style='width: 150px'>" + obj_text.val() + "</div>");
+        });
+    });
+});
+var i = 0;
+$(function () {
+    $("#addTo").click(function () {
+        $("#tr_1").append("<div><td>追加值" + (++i) + "</td></div>");
+    });
+})

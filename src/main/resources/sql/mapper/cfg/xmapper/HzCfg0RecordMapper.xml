@@ -18,6 +18,11 @@
         <result column="FEATURE_CREATE_DATE" jdbcType="TIMESTAMP" property="createDate"/>
         <result column="P_FEATURE_LAST_MODIFIER" jdbcType="VARCHAR" property="lastModifier"/>
         <result column="P_FEATURE_LAST_MODIFY_DATE" jdbcType="TIMESTAMP" property="lastModifyDate"/>
+        <result column="CFG_EFFECTED_DATE" jdbcType="TIMESTAMP" property="cfgEffectedDate"/>
+        <result column="CFG_ABOLISH_DATE" jdbcType="TIMESTAMP" property="cfgAbolishDate"/>
+        <result column="CFG_STATUS" jdbcType="INTEGER" property="cfgStatus"/>
+        <result column="CFG_IS_IN_PROCESS" jdbcType="INTEGER" property="cfgIsInProcess"/>
+        <result column="VWO_ID" jdbcType="DECIMAL" property="vwoId"/>
     </resultMap>
 
     <resultMap id="MaterielFeatureMap" type="com.connor.hozon.bom.bomSystem.dto.HzMaterielFeatureBean">
@@ -48,7 +53,12 @@
         P_FEATURE_CREATOR,
         FEATURE_CREATE_DATE,
         P_FEATURE_LAST_MODIFIER,
-        P_FEATURE_LAST_MODIFY_DATE
+        P_FEATURE_LAST_MODIFY_DATE,
+        CFG_EFFECTED_DATE,
+        CFG_ABOLISH_DATE,
+        CFG_STATUS,
+        CFG_IS_IN_PROCESS,
+        VWO_ID
   </sql>
     <!--物料特性表列信息-->
     <sql id="Materiel_Feature_Column_List">
@@ -205,7 +215,12 @@
         P_CFG0_FAMILY_DESC,
         P_CFG0_RELEVANCE,
         P_FEATURE_CREATOR,
-        P_FEATURE_LAST_MODIFIER
+        P_FEATURE_LAST_MODIFIER,
+        CFG_EFFECTED_DATE,
+        CFG_ABOLISH_DATE,
+        CFG_STATUS,
+        CFG_IS_IN_PROCESS,
+        VWO_ID
         )
     values (
         #{puid,jdbcType=VARCHAR},
@@ -218,25 +233,65 @@
         #{pCfg0FamilyDesc,jdbcType=VARCHAR},
         #{pCfg0Relevance,jdbcType=VARCHAR},
         #{creator,jdbcType=VARCHAR},
-        #{lastModifier,jdbcType=VARCHAR}
+        #{lastModifier,jdbcType=VARCHAR},
+        #{cfgEffectedDate,jdbcType=TIMESTAMP},
+        #{cfgAbolishDate,jdbcType=TIMESTAMP},
+        0,
+        0,
+        #{vwoId,jdbcType=VARCHAR}
         )
   </insert>
     <!--根据主键更新数据-->
     <update id="updateByPrimaryKey" parameterType="sql.pojo.cfg.HzCfg0Record">
-    update ${whichTable}
-    set
-          P_CFG0_OBJECT_ID = #{pCfg0ObjectId,jdbcType=VARCHAR},
-          P_CFG0_DESC = #{pCfg0Desc,jdbcType=VARCHAR},
-          P_CFG0_FAMILY_NAME = #{pCfg0FamilyName,jdbcType=VARCHAR},
-          P_CFG0_FAMILY_PUID = #{pCfg0FamilyPuid,jdbcType=VARCHAR},
-          P_CFG0_MAIN_ITEM_PUID = #{pCfg0MainItemPuid,jdbcType=VARCHAR},
-          P_H9FEATUREENNAME = #{pH9featureenname,jdbcType=VARCHAR},
-          P_CFG0_FAMILY_DESC = #{pCfg0FamilyDesc,jdbcType=VARCHAR},
-          P_CFG0_RELEVANCE = #{pCfg0Relevance,jdbcType=VARCHAR},
-          P_FEATURE_LAST_MODIFIER = #{lastModifier,jdbcType=VARCHAR},
-          P_FEATURE_LAST_MODIFY_DATE = sysdate
-    where
-          PUID = #{puid,jdbcType=VARCHAR}
+        update ${whichTable}
+        <set>
+            <if test="pCfg0ObjectId!=null">
+                P_CFG0_OBJECT_ID = #{pCfg0ObjectId,jdbcType=VARCHAR},
+            </if>
+            <if test="pCfg0Desc!=null">
+                P_CFG0_DESC = #{pCfg0Desc,jdbcType=VARCHAR},
+            </if>
+            <if test="pCfg0FamilyName!=null">
+                P_CFG0_FAMILY_NAME = #{pCfg0FamilyName,jdbcType=VARCHAR},
+            </if>
+            <if test="pCfg0FamilyPuid!=null">
+                P_CFG0_FAMILY_PUID = #{pCfg0FamilyPuid,jdbcType=VARCHAR},
+            </if>
+            <if test="pCfg0MainItemPuid!=null">
+                P_CFG0_MAIN_ITEM_PUID = #{pCfg0MainItemPuid,jdbcType=VARCHAR},
+            </if>
+            <if test="pH9featureenname!=null">
+                P_H9FEATUREENNAME = #{pH9featureenname,jdbcType=VARCHAR},
+            </if>
+            <if test="pCfg0FamilyDesc!=null">
+                P_CFG0_FAMILY_DESC = #{pCfg0FamilyDesc,jdbcType=VARCHAR},
+            </if>
+            <if test="pCfg0Relevance!=null">
+                P_CFG0_RELEVANCE = #{pCfg0Relevance,jdbcType=VARCHAR},
+            </if>
+            <if test="lastModifier!=null">
+                P_FEATURE_LAST_MODIFIER = #{lastModifier,jdbcType=VARCHAR},
+            </if>
+            <if test="cfgEffectedDate!=null">
+                CFG_EFFECTED_DATE = #{cfgEffectedDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="cfgAbolishDate!=null">
+                CFG_ABOLISH_DATE = #{cfgAbolishDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="cfgStatus!=null">
+                CFG_STATUS = #{cfgStatus,jdbcType=INTEGER},
+            </if>
+            <if test="cfgIsInProcess!=null">
+                CFG_IS_IN_PROCESS = #{cfgIsInProcess,jdbcType=INTEGER},
+            </if>
+            <if test="vwoId!=null">
+                VWO_ID = #{vwoId,jdbcType=DECIMAL},
+            </if>
+            P_FEATURE_LAST_MODIFY_DATE = sysdate
+        </set>
+        <where>
+            PUID = #{puid,jdbcType=VARCHAR}
+        </where>
     </update>
     <!--设置发送到ERP的状态为是-->
     <update id="setIsSent" parameterType="java.util.Map">

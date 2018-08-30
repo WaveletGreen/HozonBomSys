@@ -125,7 +125,7 @@
                 success: function (result) {
                     $('.modal-dialog', window.top.document).parent('div').remove()
                     $('body', window.top.document).find('.modal-backdrop').remove();
-                    // $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
+                    $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
                     if (result.status) {
                         layer.msg(result.msg, {icon: 1, time: 2000});
                     }
