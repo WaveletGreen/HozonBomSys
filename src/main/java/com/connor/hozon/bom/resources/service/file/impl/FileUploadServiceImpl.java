@@ -132,14 +132,10 @@ public class FileUploadServiceImpl implements FileUploadService {
             List<HzImportEbomRecord> records = analysisFinalExcelContent(list1,projectId);
             int j = 0;
             String s ="";
-            Set<HzImportEbomRecord> ss = new HashSet<>();
-            List<HzImportEbomRecord> ll = new ArrayList<>();
 
             for(int i=0;i<records.size();i++){//设置子层的父id为当前的id
                 j = i;
                 if(records.get(i).getLevel().endsWith("Y")){
-                    ss.add(records.get(i));
-                    ll.add(records.get(i));
                     int level = Integer.valueOf(records.get(i).getLevel().replace("Y",""))+1;
                     s = String.valueOf(level);
                     for(int k =j;k<records.size();k++){
@@ -232,29 +228,57 @@ public class FileUploadServiceImpl implements FileUploadService {
         String pActualWeight="";
 
         try {
-            BigDecimal bigDecimal = new BigDecimal(ExcelUtil.getCell(row,26).getStringCellValue());
-            pTargetWeight =String.valueOf( bigDecimal.setScale(3, BigDecimal.ROUND_HALF_UP));
+            pTargetWeight = ExcelUtil.getCell(row,26).getStringCellValue();
+            if(pTargetWeight == null || pTargetWeight ==""){
+                pTargetWeight = "";
+            }else {
+                BigDecimal bigDecimal = new BigDecimal(pTargetWeight);
+                pTargetWeight =String.valueOf( bigDecimal.setScale(3, BigDecimal.ROUND_HALF_UP));
+            }
         }catch (Exception e){
-            BigDecimal dec = new BigDecimal(ExcelUtil.getCell(row,26).getNumericCellValue());
-            pTargetWeight =String.valueOf(dec.setScale(3, BigDecimal.ROUND_HALF_UP).doubleValue());
+            try {
+                BigDecimal dec = new BigDecimal(ExcelUtil.getCell(row,26).getNumericCellValue());
+                pTargetWeight =String.valueOf(dec.setScale(3, BigDecimal.ROUND_HALF_UP).doubleValue());
+            }catch (Exception e1){
+                pTargetWeight ="";
+            }
+
         }
 
         try {
-            BigDecimal bigDecimal = new BigDecimal(ExcelUtil.getCell(row,27).getStringCellValue());
-            pFeatureWeight =String.valueOf( bigDecimal.setScale(3, BigDecimal.ROUND_HALF_UP));
+            pFeatureWeight = ExcelUtil.getCell(row,27).getStringCellValue();
+            if(pFeatureWeight == null || pFeatureWeight == ""){
+                pFeatureWeight ="";
+            }else {
+                BigDecimal bigDecimal = new BigDecimal(pFeatureWeight);
+                pFeatureWeight =String.valueOf( bigDecimal.setScale(3, BigDecimal.ROUND_HALF_UP));
+            }
         }catch (Exception e){
-            BigDecimal dec = new BigDecimal(ExcelUtil.getCell(row,27).getNumericCellValue());
-            pFeatureWeight =String.valueOf(dec.setScale(3, BigDecimal.ROUND_HALF_UP).doubleValue());
+            try {
+                BigDecimal dec = new BigDecimal(ExcelUtil.getCell(row,27).getNumericCellValue());
+                pFeatureWeight =String.valueOf(dec.setScale(3, BigDecimal.ROUND_HALF_UP).doubleValue());
+            }catch (Exception e1){
+                pFeatureWeight="";
+            }
+
         }
 
         try {
-            BigDecimal bigDecimal = new BigDecimal(ExcelUtil.getCell(row,28).getStringCellValue());
-            pActualWeight =String.valueOf( bigDecimal.setScale(3, BigDecimal.ROUND_HALF_UP));
+            pActualWeight = ExcelUtil.getCell(row,28).getStringCellValue();
+            if(pActualWeight == null || pActualWeight == ""){
+                pActualWeight = "";
+            }else {
+                BigDecimal bigDecimal = new BigDecimal(pActualWeight);
+                pActualWeight =String.valueOf( bigDecimal.setScale(3, BigDecimal.ROUND_HALF_UP));
+            }
         }catch (Exception e){
-            BigDecimal dec = new BigDecimal(ExcelUtil.getCell(row,28).getNumericCellValue());
-            pActualWeight =String.valueOf(dec.setScale(3, BigDecimal.ROUND_HALF_UP).doubleValue());
+            try {
+                BigDecimal dec = new BigDecimal(ExcelUtil.getCell(row,28).getNumericCellValue());
+                pActualWeight =String.valueOf(dec.setScale(3, BigDecimal.ROUND_HALF_UP).doubleValue());
+            }catch (Exception e1){
+                pActualWeight="";
+            }
         }
-
         String pFastener=ExcelUtil.getCell(row,29).getStringCellValue();
 
         String pFastenerStandard=ExcelUtil.getCell(row,30).getStringCellValue();
@@ -285,10 +309,12 @@ public class FileUploadServiceImpl implements FileUploadService {
         if(number !=null && number !=""){
             record.setNumber(Integer.valueOf(number));
         }
-        if("Y".endsWith(p3cpartFlag)){
+        if("Y".equals(p3cpartFlag)){
             record.setP3cpartFlag(1);
-        }else {
+        }else if("N".equals(p3cpartFlag)) {
             record.setP3cpartFlag(0);
+        }else {
+            record.setP3cpartFlag(null);
         }
         record.setpActualWeight(pActualWeight);
         record.setpBomLinePartClass(pBomLinePartClass);
@@ -310,7 +336,13 @@ public class FileUploadServiceImpl implements FileUploadService {
         record.setpFnaDesc(pFnaDesc);
         record.setpFnaInfo(fna);
         record.setpImportance(pImportance);
-        record.setpInOutSideFlag(pInOutSideFlag == "外饰件"?0:1);
+        if("内饰件".equals(pInOutSideFlag)){
+            record.setpInOutSideFlag(1);
+        }else if("外饰件".equals(pInOutSideFlag)){
+            record.setpInOutSideFlag(0);
+        }else {
+            record.setpInOutSideFlag(null);
+        }
         record.setpManuProcess(pManuProcess);
         record.setpMaterial1(pMaterial1);
         record.setpMaterial2(pMaterial2);
@@ -320,7 +352,11 @@ public class FileUploadServiceImpl implements FileUploadService {
         record.setpPictureNo(pPictureNo);
         record.setpPictureSheet(pPictureSheet);
         record.setpRegulationCode(pRegulationCode);
-        record.setpRegulationFlag(pRegulationFlag == "Y"?1:0);
+        if(pRegulationFlag!=null && pRegulationFlag!=""){
+            record.setpRegulationFlag(pRegulationFlag == "Y"?1:0);
+        }else {
+            record.setpRegulationFlag(null);
+        }
         record.setpRemark(pRemark);
         record.setpSupply(pSupply);
         record.setpSupplyCode(pSupplyCode);
