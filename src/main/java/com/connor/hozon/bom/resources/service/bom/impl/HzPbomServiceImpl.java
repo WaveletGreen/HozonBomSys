@@ -951,8 +951,8 @@ public class HzPbomServiceImpl implements HzPbomService {
                 line = level + "Y";
                 rank = level - 1;
             } else if (hasChildren != null && hasChildren.equals(0)) {
-                line = String.valueOf(level);
-                rank = level - 1;
+                line = String.valueOf((level-1));
+                rank = level - 1 ;
             } else {
                 line = "";//错误数据
             }
