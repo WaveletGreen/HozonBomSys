@@ -47,22 +47,19 @@
 
     <select id="selectByMainId" parameterType="sql.pojo.cfg.HzCfg0ModelColor" resultMap="ResultMapWithBLOBs">
         select
-        <include refid="Base_Column_List"/>,
-        <include refid="Blob_Column_List"/>
+        <include refid="Base_Column_List"/>
         from HZ_CFG0_MODEL_COLOR_RECORD where P_CFG0_MAIN_RECORD_OF_MC=#{pCfg0MainRecordOfMC,jdbcType=VARCHAR}
     </select>
 
     <select id="selectByPrimaryKey" parameterType="sql.pojo.cfg.HzCfg0ModelColor" resultMap="ResultMapWithBLOBs">
         select
-        <include refid="Base_Column_List"/>,
-        <include refid="Blob_Column_List"/>
+        <include refid="Base_Column_List"/>
         from HZ_CFG0_MODEL_COLOR_RECORD where PUID=#{puid,jdbcType=VARCHAR}
     </select>
     <select id="selectAll" resultMap="ResultMapWithColorJudge">
         select
         t.
         <include refid="Base_Column_List"/>,
-        <include refid="Blob_Column_List"/>,
         t2.
         <include refid="Color_Is_Multiply"/>
         from HZ_CFG0_MODEL_COLOR_RECORD t

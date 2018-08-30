@@ -39,35 +39,43 @@ public class HzMaterielFeatureController extends ExtraIntegrate {
     /**
      * 族层服务
      */
-    private final HzCfg0OptionFamilyService hzCfg0OptionFamilyService;
+    @Autowired
+    HzCfg0OptionFamilyService hzCfg0OptionFamilyService;
     /**
      * 车身颜色服务
      */
-    private final HzCfg0ModelColorService hzCfg0ModelColorService;
+    @Autowired
+    HzCfg0ModelColorService hzCfg0ModelColorService;
     /**
      * 颜色车型dao层
      */
-    private final HzCfg0ModelColorDao hzCfg0ModelColorDao;
+    @Autowired
+    HzCfg0ModelColorDao hzCfg0ModelColorDao;
     /**
      * 配置值服务层
      */
-    private final HzCfg0Service hzCfg0Service;
+    @Autowired
+    HzCfg0Service hzCfg0Service;
     /**
      * 超级物料服务层
      */
-    private final HzSuperMaterielService hzSuperMaterielService;
+    @Autowired
+    HzSuperMaterielService hzSuperMaterielService;
     /**
      * 车型模型服务层
      */
-    private final HzCfg0ModelRecordService hzCfg0ModelRecordService;
+    @Autowired
+    HzCfg0ModelRecordService hzCfg0ModelRecordService;
     /**
      * 配置主模型服务层
      */
-    private final HzCfg0MainService hzCfg0MainService;
+    @Autowired
+    HzCfg0MainService hzCfg0MainService;
     /**
      * 模型特性数据服务
      */
-    private final IHzCfg0ModelFeatureService hzCfg0ModelFeatureService;
+    @Autowired
+    IHzCfg0ModelFeatureService hzCfg0ModelFeatureService;
     /**
      * 工厂
      */
@@ -85,22 +93,7 @@ public class HzMaterielFeatureController extends ExtraIntegrate {
     private SynMaterielService synMaterielService;
 
     @Autowired
-    public HzMaterielFeatureController(HzCfg0OptionFamilyService hzCfg0OptionFamilyService,
-                                       HzCfg0ModelColorService hzCfg0ModelColorService,
-                                       HzCfg0ModelColorDao hzCfg0ModelColorDao,
-                                       HzCfg0Service hzCfg0Service,
-                                       HzSuperMaterielService hzSuperMaterielService,
-                                       HzCfg0ModelRecordService hzCfg0ModelRecordService,
-                                       HzCfg0MainService hzCfg0MainService,
-                                       IHzCfg0ModelFeatureService hzCfg0ModelFeatureService) {
-        this.hzCfg0OptionFamilyService = hzCfg0OptionFamilyService;
-        this.hzCfg0ModelColorService = hzCfg0ModelColorService;
-        this.hzCfg0ModelColorDao = hzCfg0ModelColorDao;
-        this.hzCfg0Service = hzCfg0Service;
-        this.hzSuperMaterielService = hzSuperMaterielService;
-        this.hzCfg0ModelRecordService = hzCfg0ModelRecordService;
-        this.hzCfg0MainService = hzCfg0MainService;
-        this.hzCfg0ModelFeatureService = hzCfg0ModelFeatureService;
+    public HzMaterielFeatureController() {
     }
 
     /**

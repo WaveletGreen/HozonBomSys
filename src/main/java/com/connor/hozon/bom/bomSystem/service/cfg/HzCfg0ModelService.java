@@ -38,6 +38,16 @@ public class HzCfg0ModelService {
     }
 
     /**
+     * 根据主键查找1个车型模型
+     *
+     * @param puid
+     * @return
+     */
+    public HzCfg0ModelRecord getModelByPuid(String puid) {
+        return hzCfg0ModelRecordDao.selectByPrimaryKey(puid);
+    }
+
+    /**
      * @param detail
      * @return boolean
      * @Author: Fancyears·Maylos·Mayways
