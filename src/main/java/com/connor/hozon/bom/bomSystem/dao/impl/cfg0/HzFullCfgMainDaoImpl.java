@@ -19,8 +19,9 @@ public class HzFullCfgMainDaoImpl implements HzFullCfgMainDao {
     }
 
     @Override
-    public int insert(HzFullCfgMain record) {
-        return baseSQLUtil.executeInsert(record, "com.connor.hozon.bom.bomSystem.dao.cfg.HzFullCfgMainDao.insert");
+    public BigDecimal insert(HzFullCfgMain record) {
+        baseSQLUtil.executeInsert(record, "com.connor.hozon.bom.bomSystem.dao.cfg.HzFullCfgMainDao.insert");
+        return record.getId();
     }
 
     @Override

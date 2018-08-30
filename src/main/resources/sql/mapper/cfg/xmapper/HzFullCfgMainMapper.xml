@@ -28,17 +28,18 @@
     where ID = #{id,jdbcType=DECIMAL}
   </delete>
   <insert id="insert" parameterType="sql.pojo.cfg.HzFullCfgMain">
+    <selectKey order="BEFORE" keyColumn="id" keyProperty="id" resultType="java.math.BigDecimal">
+      select SEQ_HZ_FL_CFG_MAIN_ID.Nextval from dual
+    </selectKey>
     insert into HZ_FULL_CFG_MAIN_RECORD (ID, PROJECT_UID, STATUS, 
-      STAGE, VERSION, EFFECTIVE_DATE, 
-      CREATE_DATE, UPDATE_DATE, CREATOR, 
-      UPDATER)
+       VERSION, CREATOR,UPDATER)
     values (#{id,jdbcType=DECIMAL}, #{projectUid,jdbcType=VARCHAR}, #{status,jdbcType=OTHER}, 
-      #{stage,jdbcType=OTHER}, #{version,jdbcType=OTHER}, #{effectiveDate,jdbcType=TIMESTAMP}, 
-      #{createDate,jdbcType=TIMESTAMP}, #{updateDate,jdbcType=TIMESTAMP}, #{creator,jdbcType=OTHER}, 
-      #{updater,jdbcType=OTHER})
+      #{version,jdbcType=OTHER},#{creator,jdbcType=OTHER},  #{updater,jdbcType=OTHER})
   </insert>
   <insert id="insertSelective" parameterType="sql.pojo.cfg.HzFullCfgMain">
+
     insert into HZ_FULL_CFG_MAIN_RECORD
+
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         ID,

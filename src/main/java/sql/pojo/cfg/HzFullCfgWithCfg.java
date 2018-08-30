@@ -1,5 +1,6 @@
 package sql.pojo.cfg;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 public class HzFullCfgWithCfg {
@@ -19,7 +20,7 @@ public class HzFullCfgWithCfg {
 
     private String flCfgBomlineName;
 
-    private Long flCfgVersion;
+    private BigDecimal flCfgVersion;
 
     public Long getId() {
         return id;
@@ -85,11 +86,11 @@ public class HzFullCfgWithCfg {
         this.flCfgBomlineName = flCfgBomlineName;
     }
 
-    public Long getFlCfgVersion() {
+    public BigDecimal getFlCfgVersion() {
         return flCfgVersion;
     }
 
-    public void setFlCfgVersion(Long flCfgVersion) {
+    public void setFlCfgVersion(BigDecimal flCfgVersion) {
         this.flCfgVersion = flCfgVersion;
     }
 }

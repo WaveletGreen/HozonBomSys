@@ -21,9 +21,9 @@ function loadData() {
             var _data = JSON.stringify(myData);
             var _ddd = JSON.parse(_data);
             var data = _ddd.data;
-            var model = _ddd.model;
-            modelSize = _ddd.modelSize;
-            peculiarity = _ddd.peculiarity;
+            // var model = _ddd.model;
+            // modelSize = _ddd.modelSize;
+            // peculiarity = _ddd.peculiarity;
             var $table = $("#cfg0Table");
             //清空
             $table.html("");
@@ -56,22 +56,22 @@ function loadData() {
             $("#tr6").append("<th id='th6'><div style='width: 200px'  >配置描述</div></th>");
             $("#tr7").append("<th id='th7'><div style='width: 200px'  >配置管理</div></th>");
 
-            for (var i = 0; i < model.length; i++) {
-                var modeli = model[i];
-                var v0 = modeli.key;
-                var v1 = modeli.hide;
-                //品牌
-                $("#tr0").append("<td ><div style='width: 200px'  >" + modeli.brand + "</div></td>");
-                //平台
-                $("#tr1").append("<td ><div style='width: 200px'  >" + modeli.platform + "</div></td>");
-                //车型
-                $("#tr2").append("<td ><div style='width: 200px'  >" + modeli.vehicle + "</div></td>");
-                $("#tr3").append("<td ><div style='width: 200px'  ><a href='javascript:void(0);' onclick='Botton(\"" + v1 + "\")'>" + v0 + "</a></div></td>");
-                $("#tr4").append("<td ><div style='width: 200px'  >" + modeli.pModelShape + "</div></td>");
-                $("#tr5").append("<td ><div style='width: 200px'  >" + modeli.pModelAnnouncement + "</div></td>");
-                $("#tr6").append("<td ><div style='width: 200px'  >" + modeli.pModelCfgDesc + "</div></td>");
-                $("#tr7").append("<td ><div style='width: 200px'  >" + modeli.pModelCfgMng + "</div></td>");
-            }
+            // for (var i = 0; i < model.length; i++) {
+            //     var modeli = model[i];
+            //     var v0 = modeli.key;
+            //     var v1 = modeli.hide;
+            //     //品牌
+            //     $("#tr0").append("<td ><div style='width: 200px'  >" + modeli.brand + "</div></td>");
+            //     //平台
+            //     $("#tr1").append("<td ><div style='width: 200px'  >" + modeli.platform + "</div></td>");
+            //     //车型
+            //     $("#tr2").append("<td ><div style='width: 200px'  >" + modeli.vehicle + "</div></td>");
+            //     $("#tr3").append("<td ><div style='width: 200px'  ><a href='javascript:void(0);' onclick='Botton(\"" + v1 + "\")'>" + v0 + "</a></div></td>");
+            //     $("#tr4").append("<td ><div style='width: 200px'  >" + modeli.pModelShape + "</div></td>");
+            //     $("#tr5").append("<td ><div style='width: 200px'  >" + modeli.pModelAnnouncement + "</div></td>");
+            //     $("#tr6").append("<td ><div style='width: 200px'  >" + modeli.pModelCfgDesc + "</div></td>");
+            //     $("#tr7").append("<td ><div style='width: 200px'  >" + modeli.pModelCfgMng + "</div></td>");
+            // }
 
             // var c = "<tr>" +
             //     // "<td width='100px'  align='center'><input type='checkbox'></td>"+

@@ -20,4 +20,8 @@ public interface HzFullCfgModelDao {
     int updateByPrimaryKey(HzFullCfgModel record);
 
     List<String> selectCfg(String puid);
+
+    void insertCfgs(List<HzFullCfgModel> cfgs);
+
+    List<HzFullCfgModel> selectByMainPuid(BigDecimal mainPuid);
 }

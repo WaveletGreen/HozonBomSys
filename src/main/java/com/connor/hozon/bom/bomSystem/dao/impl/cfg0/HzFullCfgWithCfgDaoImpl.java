@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import sql.IBaseSQLUtil;
 import sql.pojo.cfg.HzFullCfgWithCfg;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -27,8 +28,8 @@ public class HzFullCfgWithCfgDaoImpl implements HzFullCfgWithCfgDao {
     }
 
     @Override
-    public int insert(HzFullCfgWithCfg record) {
-        return baseSQLUtil.executeInsert(record, "com.connor.hozon.bom.bomSystem.dao.cfg.HzFullCfgWithCfgDao.insert");
+    public int insert(List<HzFullCfgWithCfg> hzFullCfgWithCfgs) {
+        return baseSQLUtil.executeInsert(hzFullCfgWithCfgs, "com.connor.hozon.bom.bomSystem.dao.cfg.HzFullCfgWithCfgDao.insert");
     }
 
     @Override
@@ -43,7 +44,7 @@ public class HzFullCfgWithCfgDaoImpl implements HzFullCfgWithCfgDao {
     }
 
     @Override
-    public List<HzFullCfgWithCfg> selectByMainID(Long flCfgVersion) {
+    public List<HzFullCfgWithCfg> selectByMainID(BigDecimal flCfgVersion) {
         WITH_CFG.setFlCfgVersion(flCfgVersion);
         return baseSQLUtil.executeQuery(WITH_CFG, "com.connor.hozon.bom.bomSystem.dao.cfg.HzFullCfgWithCfgDao.selectByMainID");
     }

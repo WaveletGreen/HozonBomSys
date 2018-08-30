@@ -50,6 +50,17 @@ public class HzFullCfgModelDaoImpl implements HzFullCfgModelDao {
 
     @Override
     public List<String> selectCfg(String puid) {
-        return baseSQLUtil.executeQuery(puid,".connor.hozon.bom.bomSystem.dao.cfg.HzFullCfgModelDao.selectCfg");
+        return baseSQLUtil.executeQuery(puid,"com.connor.hozon.bom.bomSystem.dao.cfg.HzFullCfgModelDao.selectCfg");
+    }
+
+    @Override
+    public void insertCfgs(List<HzFullCfgModel> cfgs) {
+        baseSQLUtil.executeInsert(cfgs, "com.connor.hozon.bom.bomSystem.dao.cfg.HzFullCfgModelDao.insertCfgs");
+    }
+
+    @Override
+    public List<HzFullCfgModel> selectByMainPuid(BigDecimal mainPuid) {
+        HZ_FULL_CFG_MODEL.setFlModVersion(mainPuid);
+        return baseSQLUtil.executeQuery(HZ_FULL_CFG_MODEL, "com.connor.hozon.bom.bomSystem.dao.cfg.HzFullCfgModelDao.selectByMainPuid");
     }
 }
