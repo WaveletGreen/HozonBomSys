@@ -18,10 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import sql.pojo.resourcesLibrary.dictionaryLibrary.HzDictionaryLibrary;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created with IntelliJ IDEA.
@@ -139,5 +136,30 @@ public class DictionaryLibraryController extends BaseController {
     public void deleteDiDictionaryLibrary(String puid ,HttpServletResponse response){
         OperateResultMessageRespDTO respDTO = service.deleteHzDictionaryLibrary(puid);
         writeAjaxJSONResponse(ResultMessageBuilder.build(OperateResultMessageRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
+    }
+
+    @RequestMapping(value = "title",method = RequestMethod.GET)
+    public void getWorkTitel(HttpServletResponse response){
+        LinkedHashMap<String, String> tableTitle = new LinkedHashMap<>();
+        tableTitle.put("No","序号");
+        tableTitle.put("professionCh","专业部");
+        tableTitle.put("professionEn","Profession");
+        tableTitle.put("classificationCh","分类");
+        tableTitle.put("classificationEn","classification");
+        tableTitle.put("groupCode","特征组代码");
+        tableTitle.put("groupCh","特征组");
+        tableTitle.put("groupEn","group");
+        tableTitle.put("famillyCode","特征族代码");
+        tableTitle.put("famillyCh","特征族");
+        tableTitle.put("famillyEn","familly");
+        tableTitle.put("eigenValue","特征值");
+        tableTitle.put("valueDescCh","特征值描述");
+        tableTitle.put("valueDescEn","value description");
+        tableTitle.put("type","类型");
+        tableTitle.put("valueSource","特征值来源");
+        tableTitle.put("effectTime","生效时间");
+        tableTitle.put("failureTime","失效时间");
+        tableTitle.put("note","备注");
+        writeAjaxJSONResponse(ResultMessageBuilder.build(tableTitle), response);
     }
 }
