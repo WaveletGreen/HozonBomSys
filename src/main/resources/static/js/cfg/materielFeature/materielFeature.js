@@ -1,4 +1,3 @@
-
 function modeVehicle(puid) {
     // $.ajax({
     //
@@ -77,6 +76,20 @@ function loadData() {
                 // sortable: true,                     //是否启用排序
                 // sortOrder: "asc",                   //排序方式
                 toolbars: [
+                    // {
+                    //     text: '添加衍生物料',
+                    //     iconCls: 'glyphicon glyphicon-plus',
+                    //     handler: function () {
+                    //         window.Ewin.dialog({
+                    //             // 这个puid就是车型模型的puid，直接修改了车型模型的基本信息（在bom系统维护的字段）
+                    //             title: "修改基本信息",
+                    //             url: "materielV2/composePage?projectUid=" + projectPuid,
+                    //             gridId: "gridId",
+                    //             width: 400,
+                    //             height: 450
+                    //         });
+                    //     }
+                    // },
                     {
                         text: '修改基本信息',
                         iconCls: 'glyphicon glyphicon-pencil',
@@ -170,7 +183,7 @@ function loadData() {
                             var puids = new Array();
                             var cfg0MainPuids = new Array();
                             var modeBasiceDetails = new Array();
-                            for(var i = 0;i<rows.length;i++){
+                            for (var i = 0; i < rows.length; i++) {
                                 puids[i] = rows[i].puid;
                                 cfg0MainPuids[i] = rows[i].cfg0MainPuid;
                                 modeBasiceDetails[i] = rows[i].modeBasiceDetail;
@@ -179,7 +192,7 @@ function loadData() {
                             window.Ewin.dialog({
                                 title: "添加",
                                 //直接修改了超级物料表的数据，要根据配置器的puid找，否则就不能根据所见即所改
-                                url: "cfgMateriel/addConfigurableMaterial?puids=" + puids+"&cfg0MainPuids="+cfg0MainPuids+"&modeBasiceDetails="+modeBasiceDetails+"&projectPuid="+projectPuid,
+                                url: "cfgMateriel/addConfigurableMaterial?puids=" + puids + "&cfg0MainPuids=" + cfg0MainPuids + "&modeBasiceDetails=" + modeBasiceDetails + "&projectPuid=" + projectPuid,
                                 width: 500,
                                 height: 400
                             });
@@ -198,7 +211,7 @@ function loadData() {
                             var puids = new Array();
                             var cfg0MainPuids = new Array();
                             var modeBasiceDetails = new Array();
-                            for(var i = 0;i<rows.length;i++){
+                            for (var i = 0; i < rows.length; i++) {
                                 puids[i] = rows[i].puid;
                                 cfg0MainPuids[i] = rows[i].cfg0MainPuid;
                                 modeBasiceDetails[i] = rows[i].modeBasiceDetail;
@@ -207,7 +220,7 @@ function loadData() {
                             window.Ewin.dialog({
                                 title: "添加",
                                 //直接修改了超级物料表的数据，要根据配置器的puid找，否则就不能根据所见即所改
-                                url: "cfgMateriel/deleteConfigurableMaterial?puids=" + puids+"&cfg0MainPuids="+cfg0MainPuids+"&modeBasiceDetails="+modeBasiceDetails+"&projectPuid="+projectPuid,
+                                url: "cfgMateriel/deleteConfigurableMaterial?puids=" + puids + "&cfg0MainPuids=" + cfg0MainPuids + "&modeBasiceDetails=" + modeBasiceDetails + "&projectPuid=" + projectPuid,
                                 width: 500,
                                 height: 400
                             });
@@ -225,13 +238,13 @@ function loadData() {
                             window.Ewin.confirm({title: '提示', message: '是否要添加您所选择的记录？', width: 500}).on(function (e) {
                                 if (e) {
                                     var puidOfModelFeatures = new Array();
-                                    for(var i = 0;i<rows.length;i++){
+                                    for (var i = 0; i < rows.length; i++) {
                                         puidOfModelFeatures[i] = rows[i].puidOfModelFeature;
                                     }
                                     $.ajax({
                                         type: "POST",
                                         //ajax需要添加打包名
-                                        url: "materiel/addToSAP?puidOfModelFeatures="+puidOfModelFeatures,
+                                        url: "materiel/addToSAP?puidOfModelFeatures=" + puidOfModelFeatures,
                                         // data: JSON.stringify(puidOfModelFeatures),
                                         contentType: "application/json",
                                         success: function (result) {
@@ -266,13 +279,13 @@ function loadData() {
                             window.Ewin.confirm({title: '提示', message: '是否要删除您所选择的记录？', width: 500}).on(function (e) {
                                 if (e) {
                                     var puidOfModelFeatures = new Array();
-                                    for(var i = 0;i<rows.length;i++){
+                                    for (var i = 0; i < rows.length; i++) {
                                         puidOfModelFeatures[i] = rows[i].puidOfModelFeature;
                                     }
                                     $.ajax({
                                         type: "POST",
                                         //ajax需要添加打包名
-                                        url: "materiel/deleteToSAP?puidOfModelFeatures="+puidOfModelFeatures,
+                                        url: "materiel/deleteToSAP?puidOfModelFeatures=" + puidOfModelFeatures,
                                         // data: JSON.stringify(puidOfModelFeatures),
                                         contentType: "application/json",
                                         success: function (result) {

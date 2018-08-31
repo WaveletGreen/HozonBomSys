@@ -83,7 +83,7 @@ public class SynRelevanceService implements ISynRelevanceService {
      */
     @Override
     public JSONObject deleteRelevance(List<HzRelevanceBean> relevance) throws Exception {
-        return execute(relevance, ActionFlagOption.UPDATE, CorrelateTypeOption.CorrelateType_3);
+        return execute(relevance, ActionFlagOption.DELETE, CorrelateTypeOption.CorrelateType_3);
     }
 
     /**

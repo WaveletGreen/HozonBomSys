@@ -18,10 +18,11 @@ import java.util.List;
 public class HzCfg0ModelRecordDaoImpl implements HzCfg0ModelRecordDao {
     @Autowired
     IBaseSQLUtil baseSQLUtil;
+    private final static HzCfg0ModelRecord RECORD = new HzCfg0ModelRecord();
 
     @Override
     public HzCfg0ModelRecord selectByPrimaryKey(String puid) {
-        return baseSQLUtil.executeQueryByPass(new HzCfg0ModelRecord(), puid, "com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0ModelRecordDao.selectByPrimaryKey", true);
+        return baseSQLUtil.executeQueryByPass(RECORD, puid, "com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0ModelRecordDao.selectByPrimaryKey", true);
     }
 
     @Override
@@ -47,6 +48,6 @@ public class HzCfg0ModelRecordDaoImpl implements HzCfg0ModelRecordDao {
      */
     @Override
     public List<HzCfg0ModelRecord> selectByProjectPuid(String projectPuid) {
-        return baseSQLUtil.executeQueryByPass(new HzCfg0ModelRecord(), projectPuid, "com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0ModelRecordDao.selectByProjectPuid");
+        return baseSQLUtil.executeQueryByPass(RECORD, projectPuid, "com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0ModelRecordDao.selectByProjectPuid");
     }
 }

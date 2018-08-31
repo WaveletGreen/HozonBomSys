@@ -50,6 +50,8 @@
         <result column="IMPORTANCE" jdbcType="DECIMAL" property="importance"/>
         <!--是否已发送过SAP-->
         <result column="IS_SENT" jdbcType="DECIMAL" property="isSent"/>
+        <!--是否已发送过SAP-->
+        <result column="P_MF_CREATE_DATE" jdbcType="DECIMAL" property="pMfCreateDate"/>
     </resultMap>
     <sql id="Base_Column_List">
         PUID,
@@ -75,7 +77,9 @@
         RULES_FLAG,
         DELETE_FLAG,
         IMPORTANCE,
-        IS_SENT
+        IS_SENT,
+        P_MF_CREATE_DATE,
+        P_MF_UPDATE_DATE
   </sql>
     <!--根据主键查找-->
     <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
@@ -171,7 +175,10 @@
         #{labelFlag,jdbcType=DECIMAL},
         #{rulesFlag,jdbcType=DECIMAL},
         #{deleteFlag,jdbcType=DECIMAL},
-        #{importance,jdbcType=DECIMAL}
+        #{importance,jdbcType=DECIMAL},
+        #{isSent,jdbcType=DECIMAL},
+        sysdate,
+        sysdate
         )
     </insert>
     <!--根据主键更新1条车型特性数据-->
@@ -238,6 +245,7 @@
             <if test="importance != null">
                 IMPORTANCE = #{importance,jdbcType=DECIMAL},
             </if>
+            P_MF_UPDATE_DATE=sysdate
         </set>
         where PUID = #{puid,jdbcType=VARCHAR}
     </update>
@@ -305,6 +313,7 @@
             <if test="deleteFlag != null">
                 IMPORTANCE = #{importance,jdbcType=DECIMAL},
             </if>
+            P_MF_UPDATE_DATE=sysdate
         </set>
         where P_PERTAIN_TO_MODEL = #{pPertainToModel,jdbcType=VARCHAR}
     </update>

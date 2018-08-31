@@ -466,5 +466,22 @@ public class HzCfg0Controller extends ExtraIntegrate {
         return "stage/templateOfIntegrate";
     }
 
+    @RequestMapping(value = "/sendRelToERPDelete", method = RequestMethod.POST)
+    public String sendRelToERPDelete(@RequestBody List<HzRelevanceBean> beans, Model model) throws Exception {
+        //清空上次传输的内容
+        JSONObject result;
+        List<String> puids = new ArrayList<>();
+        List<HzCfg0Record> records;
+        //只要求获取puid
+        beans.forEach(bean -> puids.add(bean.getPuid()));
+        //从根本根本上查找数据
+        records = hzCfg0Service.doLoadListByPuids(puids);
+        //整理数据
+        List<HzRelevanceBean> myBeans = new ArrayList<>();
+        iSynRelevanceService.sortData(records, myBeans);
+        result = iSynRelevanceService.deleteRelevance(myBeans);
+        addToModel(result, model);
+        return "stage/templateOfIntegrate";
+    }
 
 }

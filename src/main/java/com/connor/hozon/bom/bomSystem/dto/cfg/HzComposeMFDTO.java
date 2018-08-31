@@ -1,29 +1,24 @@
-package sql.pojo.cfg;
+package com.connor.hozon.bom.bomSystem.dto.cfg;
 
-import java.util.Date;
-
-public class HzCfg0ModelFeature {
+/**
+ * @Author: Fancyears·Maylos·Maywas
+ * @Description: 配置物料特性传输对象，用于接收前端回传的配置物料
+ * @Date: Created in 2018/8/30 14:15
+ * @Modified By:
+ */
+public class HzComposeMFDTO {
     /**
-     * 主键
+     * 项目ID
      */
-
-    private String puid;
+    private String projectUid;
     /**
-     * 归属车型
+     * 车型模型ID
      */
-    private String pPertainToModel;
+    private String modelUid;
     /**
-     * 归属颜色车身
+     * 颜色车型ID
      */
-    private String pPertainToColorModel;
-    /**
-     * 中文描述
-     */
-    private String pFeatureCnDesc;
-    /**
-     * 单车配置码
-     */
-    private String pFeatureSingleVehicleCode;
+    private String colorModel;
     /**
      * 工厂，默认是1001,作为物料数据传到SAP,一下的字段都是需要传到SAP的字段
      */
@@ -96,61 +91,29 @@ public class HzCfg0ModelFeature {
      * 重要度
      */
     private Integer importance;
-    /**
-     * 在materielFeature中是主键
-     */
-    private String modelFeaturePuid;
-    /**
-     * 主键
-     */
-    private String puidOfModelFeature;
-    /**
-     * 是否已发送过SAP
-     */
-    private Integer isSent;
 
-    /**
-     * 创建时间
-     */
-    private Date pMfCreateDate;
-    public String getPuid() {
-        return puid;
+    public String getProjectUid() {
+        return projectUid;
     }
 
-    public void setPuid(String puid) {
-        this.puid = puid == null ? null : puid.trim();
+    public void setProjectUid(String projectUid) {
+        this.projectUid = projectUid;
     }
 
-    public String getpPertainToModel() {
-        return pPertainToModel;
+    public String getModelUid() {
+        return modelUid;
     }
 
-    public void setpPertainToModel(String pPertainToModel) {
-        this.pPertainToModel = pPertainToModel == null ? null : pPertainToModel.trim();
+    public void setModelUid(String modelUid) {
+        this.modelUid = modelUid;
     }
 
-    public String getpPertainToColorModel() {
-        return pPertainToColorModel;
+    public String getColorModel() {
+        return colorModel;
     }
 
-    public void setpPertainToColorModel(String pPertainToColorModel) {
-        this.pPertainToColorModel = pPertainToColorModel == null ? null : pPertainToColorModel.trim();
-    }
-
-    public String getpFeatureCnDesc() {
-        return pFeatureCnDesc;
-    }
-
-    public void setpFeatureCnDesc(String pFeatureCnDesc) {
-        this.pFeatureCnDesc = pFeatureCnDesc;
-    }
-
-    public String getpFeatureSingleVehicleCode() {
-        return pFeatureSingleVehicleCode;
-    }
-
-    public void setpFeatureSingleVehicleCode(String pFeatureSingleVehicleCode) {
-        this.pFeatureSingleVehicleCode = pFeatureSingleVehicleCode;
+    public void setColorModel(String colorModel) {
+        this.colorModel = colorModel;
     }
 
     public String getFactoryCode() {
@@ -158,7 +121,7 @@ public class HzCfg0ModelFeature {
     }
 
     public void setFactoryCode(String factoryCode) {
-        this.factoryCode = factoryCode == null ? null : factoryCode.trim();
+        this.factoryCode = factoryCode;
     }
 
     public String getMaterialCode() {
@@ -222,7 +185,7 @@ public class HzCfg0ModelFeature {
     }
 
     public void setPurchaseType(String purchaseType) {
-        this.purchaseType = purchaseType == null ? null : purchaseType.trim();
+        this.purchaseType = purchaseType;
     }
 
     public String getMrpController() {
@@ -230,7 +193,7 @@ public class HzCfg0ModelFeature {
     }
 
     public void setMrpController(String mrpController) {
-        this.mrpController = mrpController == null ? null : mrpController.trim();
+        this.mrpController = mrpController;
     }
 
     public String getBulletinNum() {
@@ -246,7 +209,7 @@ public class HzCfg0ModelFeature {
     }
 
     public void setVinCode(String vinCode) {
-        this.vinCode = vinCode == null ? null : vinCode.trim();
+        this.vinCode = vinCode;
     }
 
     public Integer getColor() {
@@ -254,7 +217,7 @@ public class HzCfg0ModelFeature {
     }
 
     public void setColor(Integer color) {
-        this.color = color == null ? null : color;
+        this.color = color;
     }
 
     public String getGrossWeight() {
@@ -295,37 +258,5 @@ public class HzCfg0ModelFeature {
 
     public void setImportance(Integer importance) {
         this.importance = importance;
-    }
-
-    public String getModelFeaturePuid() {
-        return modelFeaturePuid;
-    }
-
-    public void setModelFeaturePuid(String modelFeaturePuid) {
-        this.modelFeaturePuid = modelFeaturePuid;
-    }
-
-    public String getPuidOfModelFeature() {
-        return puidOfModelFeature;
-    }
-
-    public void setPuidOfModelFeature(String puidOfModelFeature) {
-        this.puidOfModelFeature = puidOfModelFeature;
-    }
-
-    public Integer getIsSent() {
-        return isSent;
-    }
-
-    public void setIsSent(Integer isSent) {
-        this.isSent = isSent;
-    }
-
-    public Date getpMfCreateDate() {
-        return pMfCreateDate;
-    }
-
-    public void setpMfCreateDate(Date pMfCreateDate) {
-        this.pMfCreateDate = pMfCreateDate;
     }
 }
