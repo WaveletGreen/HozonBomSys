@@ -21,9 +21,9 @@ function loadData() {
             var _data = JSON.stringify(myData);
             var _ddd = JSON.parse(_data);
             var data = _ddd.data;
-            // var model = _ddd.model;
-            // modelSize = _ddd.modelSize;
-            // peculiarity = _ddd.peculiarity;
+            var model = _ddd.model;
+            modelSize = _ddd.modelSize;
+            cfgSize = _ddd.cfgSize;
             var $table = $("#cfg0Table");
             //清空
             $table.html("");
@@ -47,7 +47,7 @@ function loadData() {
 
             $table.append(temp);
 
-            $("#tr0").append("<th id='th0'><div style='width: 200px'  >品牌</div></th>");
+            $("#tr0").append("<th id='th0'><div style='width: 200px'  >品牌</div><div id='modelSize' style='display: none'>"+modelSize+"</div><div id='cfgSize' style='display: none'>"+cfgSize+"</div></th>");
             $("#tr1").append("<th id='th1'><div style='width: 200px'  >平台</div></th>");
             $("#tr2").append("<th id='th2'><div style='width: 200px'  >车型</div></th>");
             $("#tr3").append("<th id='th3'><div style='width: 200px'  >版型</div></th>");
@@ -56,24 +56,9 @@ function loadData() {
             $("#tr6").append("<th id='th6'><div style='width: 200px'  >配置描述</div></th>");
             $("#tr7").append("<th id='th7'><div style='width: 200px'  >配置管理</div></th>");
 
-            // for (var i = 0; i < model.length; i++) {
-            //     var modeli = model[i];
-            //     var v0 = modeli.key;
-            //     var v1 = modeli.hide;
-            //     //品牌
-            //     $("#tr0").append("<td ><div style='width: 200px'  >" + modeli.brand + "</div></td>");
-            //     //平台
-            //     $("#tr1").append("<td ><div style='width: 200px'  >" + modeli.platform + "</div></td>");
-            //     //车型
-            //     $("#tr2").append("<td ><div style='width: 200px'  >" + modeli.vehicle + "</div></td>");
-            //     $("#tr3").append("<td ><div style='width: 200px'  ><a href='javascript:void(0);' onclick='Botton(\"" + v1 + "\")'>" + v0 + "</a></div></td>");
-            //     $("#tr4").append("<td ><div style='width: 200px'  >" + modeli.pModelShape + "</div></td>");
-            //     $("#tr5").append("<td ><div style='width: 200px'  >" + modeli.pModelAnnouncement + "</div></td>");
-            //     $("#tr6").append("<td ><div style='width: 200px'  >" + modeli.pModelCfgDesc + "</div></td>");
-            //     $("#tr7").append("<td ><div style='width: 200px'  >" + modeli.pModelCfgMng + "</div></td>");
-            // }
 
-            // var c = "<tr>" +
+
+                // var c = "<tr>" +
             //     // "<td width='100px'  align='center'><input type='checkbox'></td>"+
             //     "<th width='100px'>品牌</th>" +
             //     "<th width='100px'>平台</th>" +
@@ -155,23 +140,52 @@ function loadData() {
             //动态拼接后台数据
             for (var i = 0; i < data.length; i++) {
                 var dataOfModel = data[i];
-                var delta = "<tr>" +
-                    "<td style='text-align: center'><input type='button' value='编辑' style='width: 50px' onclick='editorOrSave(this)'><input class='pCfg0ObjectId' type='text' value='"+dataOfModel.pCfg0ObjectId+"' hidden='hidden' disabled='disabled'></td>"
+                var j = i+9;
+                var cfgId = "in_in_"+i;
+                var delta = "<tr id='tr"+j+"'>" +
+                    "<td style='text-align: center'><input class='btn btn-default' type='button' value='编辑' style='width: 50px' onclick='editorOrSave(this)'><input class='pCfg0ObjectId' type='text' value='"+dataOfModel.pCfg0ObjectId+"' hidden='hidden' disabled='disabled'></td>"
                     +
-                    "<td><div style='width: 50px' >" + (i + 1) + "</div></td>";
+                    "<td><div style='width: 50px' >" + (i + 1) + "</div><div id='"+cfgId+"' style='display: none'>"+dataOfModel.cfgPuid+"</div></td>";
                 var aaa = 0;
                 for (var index in dataOfModel) {
+                    if(index=="cfgPuid"){
+                        continue;
+                    }
                     if(aaa<7){
                         delta = delta + "<td class='edit'><input type='text' value='"+dataOfModel[index]+"' style='display: none'><div style='width: 150px'>" + dataOfModel[index] + "</div></td>";
-                    }else if(aaa>9){
-                        delta = delta + "<td class='edit'><select style='display: none'><option>-</option><option>●</option><option>○</option></select><div style='width: 150px'>" + dataOfModel[index] + "</div></td>";
-                    }else{
+                    }
+                    // else if(aaa>9){
+                        // delta = delta + "<td class='edit'><select style='display: none'><option>-</option><option>●</option><option>○</option></select><div style='width: 150px'>" + dataOfModel[index] + "</div></td>";
+                    else{
                         delta = delta + "<td class='edit'><div style='width: 150px'>" + dataOfModel[index] + "</div></td>";
                     }
                     aaa++;
                 }
                 delta = delta + "</tr>";
                 $table.append(delta);
+            }
+            for (var i = 0; i < model.length; i++) {
+                var modeli = model[i];
+                var v0 = modeli.key;
+                var v1 = modeli.hide;
+                //品牌
+                $("#tr0").append("<td ><div style='display: none' id='in_"+i+"'>"+modeli.modelPuid+"</div><div style='width: 200px'  >" + modeli.brand + "</div></td>");
+                //平台
+                $("#tr1").append("<td ><div style='width: 200px'  >" + modeli.platform + "</div></td>");
+                //车型
+                $("#tr2").append("<td ><div style='width: 200px'  >" + modeli.vehicle + "</div></td>");
+                $("#tr3").append("<td ><div style='width: 200px'  ><a href='javascript:void(0);' onclick='Botton(\"" + v1 + "\")'>" + v0 + "</a></div></td>");
+                $("#tr4").append("<td ><div style='width: 200px'  >" + modeli.pModelShape + "</div></td>");
+                $("#tr5").append("<td ><div style='width: 200px'  >" + modeli.pModelAnnouncement + "</div></td>");
+                $("#tr6").append("<td ><div style='width: 200px'  >" + modeli.pModelCfgDesc + "</div></td>");
+                $("#tr7").append("<td ><div style='width: 200px'  >" + modeli.pModelCfgMng + "</div></td>");
+                $("#tr8").append("<td ><div style='width: 200px'  >" + "" + "</div></td>");
+                var point = modeli.point;
+                for(var j=9;j<(point.length+9);j++){
+                    var trNumber = "tr"+j;
+                    var pointId = "in_"+i+"in_in_"+(j-9);
+                    $("#"+trNumber).append("<td class='edit'><select style='display: none'><option>-</option><option>●</option><option>○</option></select><div id='"+pointId+"' style='width: 150px'>" + point[j-9].point + "</div></td>");
+                }
             }
             $table.addClass("table").addClass("table-striped");
         },
@@ -218,20 +232,20 @@ $('.edit').on('click', function () {
         $(this).find('div').is(':visible') && ($(this).find('input').show().prev().hide(), $(this).parent().find('.btn').html('保存'));
     }
 })
-$('.btn').on('click', function () {
-    // $(this).html() == '编辑' ? $(this).html('保存') : $(this).html('编辑');
-    if ($(this).html() == '编辑') {
-        $(this).html('保存');
-        $(this).parent().siblings().each(function (index, item) {
-            $(item).find('div').hide().next().show();
-        })
-    } else {
-        $(this).html('编辑');
-        $(this).parent().siblings().each(function (index, item) {
-            $(item).find('div').html($(item).find('input').val()).show().next().hide();
-        })
-    }
-})
+// $('.btn').on('click', function () {
+//     // $(this).html() == '编辑' ? $(this).html('保存') : $(this).html('编辑');
+//     if ($(this).html() == '编辑') {
+//         $(this).html('保存');
+//         $(this).parent().siblings().each(function (index, item) {
+//             $(item).find('div').hide().next().show();
+//         })
+//     } else {
+//         $(this).html('编辑');
+//         $(this).parent().siblings().each(function (index, item) {
+//             $(item).find('div').html($(item).find('input').val()).show().next().hide();
+//         })
+//     }
+// })
 
 function editorOrSave(but) {
     if($(but).val() == '编辑'){
@@ -299,25 +313,86 @@ $(function () {
 
 
 function save() {
-    var jsonStr = '{';
-    var trList = $("#cfg0Table").children("tr");
+    // var jsonStr = '{';
+    // var trList = $("#cfg0Table").children("tr");
+    //
+    // for(var i=9;i<trList.length;i++){
+    //     var tdArr = trList.eq(i).find("td");
+    //     var pCfg0ObjectId = tdArr.eq(0).find('.pCfg0ObjectId').val();
+    //     var pBomlineId = tdArr.eq(4).find('input').val();
+    //     jsonStr = jsonStr+'\"'+pCfg0ObjectId+'\":\"'+pBomlineId+'\"';
+    //     if(trList.length-i!=1){
+    //         jsonStr+=',';
+    //     }
+    // }
+    // jsonStr+='}';
+    // var data = JSON.parse(jsonStr);
+    // $.ajax({
+    //     type: "POST",
+    //     //ajax需要添加打包名
+    //     url: "bomAllCfg/saveBom",
+    //     data:data,
+    //     // data: JSON.stringify(puidOfModelFeatures),
+    //     success: function (result) {
+    //         window.Ewin.alert({message: result, width: 800});
+    //         $table.bootstrapTable("refresh");
+    //     },
+    //     error: function (info) {
+    //         window.Ewin.alert({message: "操作删除:" + info.status});
+    //     }
+    // })
+    // var potinJsonStr = "{"
+    // for(var i=0;i<modelSize;i++){
+    //     var modelDivId = "in_"+i;
+    //     var modelId = $("#"+modelDivId).text();
+    //     var modelJsonStr = '\"'+modelId+'\":[';
+    //
+    //     for(var j=0;j<cfgSize;j++){
+    //         var cfgDivId = "in_in_"+j;
+    //         var cfgId = $("#"+cfgDivId).text();
+    //         var ponitId = modelDivId+cfgDivId;
+    //         var ponitVal = $("#"+ponitId).text();
+    //         var cfgPonitJson = '{\"'+cfgId+'\":\"'+ponitVal+'\"}';
+    //         modelJsonStr+=cfgPonitJson;
+    //         if(cfgSize-j>1){
+    //             modelJsonStr+=",";
+    //         }
+    //     }
+    //     modelJsonStr+="]";
+    //     if(modelSize-i>1){
+    //         modelJsonStr+=",";
+    //     }
+    //     potinJsonStr+=modelJsonStr;
+    // }
+    // potinJsonStr+="}";
+    // var data = JSON.parse(potinJsonStr);
 
-    for(var i=9;i<trList.length;i++){
-        var tdArr = trList.eq(i).find("td");
-        var pCfg0ObjectId = tdArr.eq(0).find('.pCfg0ObjectId').val();
-        var pBomlineId = tdArr.eq(4).find('input').val();
-        jsonStr = jsonStr+'\"'+pCfg0ObjectId+'\":\"'+pBomlineId+'\"';
-        if(trList.length-i!=1){
-            jsonStr+=',';
+
+    var object = {};
+    for(var i=0;i<modelSize;i++) {
+        var params = {};
+        var modelDivId = "in_" + i;
+        for (var j = 0; j < cfgSize; j++) {
+            var cfgDivId = "in_in_" + j;
+            var cfgId = $("#" + cfgDivId).text();
+            var ponitId = modelDivId + cfgDivId;
+            var ponitVal = $("#" + ponitId).text();
+
+            // var obj = {};
+            // obj[cfgId] = ponitVal;
+            params[cfgId] = ponitVal;
         }
+
+        var modelId = $("#" + modelDivId).text();
+        object[modelId] = params;
     }
-    jsonStr+='}';
-    var data = JSON.parse(jsonStr);
+    var data = JSON.stringify(object);
     $.ajax({
         type: "POST",
         //ajax需要添加打包名
-        url: "bomAllCfg/saveBom",
+        url: "bomAllCfg/savePoint",
         data:data,
+        contentType: 'application/json',
         // data: JSON.stringify(puidOfModelFeatures),
         success: function (result) {
             window.Ewin.alert({message: result, width: 800});

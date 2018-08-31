@@ -1,5 +1,6 @@
 package com.connor.hozon.bom.bomSystem.service.cfg;
 
+import com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0ModelDetailDao;
 import com.connor.hozon.bom.bomSystem.dao.cfg.HzFullCfgMainDao;
 import com.connor.hozon.bom.bomSystem.dao.cfg.HzFullCfgModelDao;
 import com.connor.hozon.bom.bomSystem.dao.cfg.HzFullCfgWithCfgDao;
@@ -48,6 +49,9 @@ public class HzBomAllCfgService {
     @Autowired
     private HzBrandService hzBrandService;
 
+    @Autowired
+    private HzCfg0ModelDetailDao hzCfg0ModelDetailDao;
+
     private static final String[] selfDesc =
             {
                     "pBomOfWhichDept", "operationType","pBomLineId", "pBomLineName", "pH9featureenname", "owningUser","pCfg0Desc", "pCfg0ObjectId", "comment"
@@ -70,7 +74,7 @@ public class HzBomAllCfgService {
         JSONArray _model = new JSONArray();
 
         Set<String> optionName = new HashSet<>();
-        Map<String, HzFullCfgModel> mapToModel = new HashMap<>();
+        Map<String, Map<String, HzFullCfgModel>> mapToModel = new HashMap<String, Map<String, HzFullCfgModel>>();
         Map<String, HzFullCfgWithCfg> modelWithBomLineMap = new HashMap();
         Map<String, List<HzFullCfgModel>> mapModelHasCfg0 = new HashMap<>();
 
@@ -87,19 +91,29 @@ public class HzBomAllCfgService {
         //获取该项目下的所有车型模型
         List<HzCfg0ModelRecord> hzCfg0ModelRecords = hzCfg0ModelService.doSelectByProjectPuid(projectPuid);
 
-
-        for(HzCfg0Record hzCfg0Record : hzCfg0Records){
-            List<HzFullCfgModel> hzFullCfgModels1 = new ArrayList<HzFullCfgModel>();
-            for(HzFullCfgModel hzFullCfgModel : hzFullCfgModels){
-                if(hzCfg0Record.getPuid().equals(hzFullCfgModel.getModModelUid())){
-                    hzFullCfgModels1.add(hzFullCfgModel);
-                }
-            }
-            mapModelHasCfg0.put(hzCfg0Record.getPuid(),hzFullCfgModels1);
+        List<HzCfg0ModelDetail> hzCfg0ModelDetailList = new ArrayList<HzCfg0ModelDetail>();
+        for(HzCfg0ModelRecord hzCfg0ModelRecord : hzCfg0ModelRecords){
+            HzCfg0ModelDetail hzCfg0ModelDetail = new HzCfg0ModelDetail();
+            hzCfg0ModelDetail.setpModelPuid(hzCfg0ModelRecord.getPuid());
+            hzCfg0ModelDetailList.add(hzCfg0ModelDetail);
+        }
+        //为detail赋值
+        List<HzCfg0ModelDetail> hzCfg0ModelDetails = null;
+        if(hzCfg0ModelDetailList.size()!=0){
+            hzCfg0ModelDetails = hzCfg0ModelDetailDao.selectByModelIds(hzCfg0ModelDetailList);
         }
 
+        //为特性Map赋值
         for(HzFullCfgWithCfg hzFullCfgWithCfg :hzFullCfgWithCfgs){
             modelWithBomLineMap.put(hzFullCfgWithCfg.getCfgCfg0Uid(), hzFullCfgWithCfg);
+        }
+        //为车辆模型Map赋值
+        for(HzFullCfgModel hzFullCfgModel : hzFullCfgModels){
+            if(mapToModel.get(hzFullCfgModel.getModModelUid())==null){
+                Map<String, HzFullCfgModel> mapToModel_ = new HashMap<String, HzFullCfgModel>();
+                mapToModel.put(hzFullCfgModel.getModModelUid(),mapToModel_);
+            }
+            mapToModel.get(hzFullCfgModel.getModModelUid()).put(hzFullCfgModel.getModCfg0Uid(),hzFullCfgModel);
         }
 
         for(HzCfg0Record hzCfg0Record : hzCfg0Records){
@@ -114,11 +128,64 @@ public class HzBomAllCfgService {
             data.put(selfDesc[6], hzCfg0Record.getpCfg0ObjectId()==null?"":hzCfg0Record.getpCfg0ObjectId());
             data.put(selfDesc[7], hzCfg0Record.getpCfg0ObjectId()==null?"":hzCfg0Record.getpCfg0ObjectId());
             data.put(selfDesc[8], hzCfg0Record.getpCfg0Desc()==null?"":hzCfg0Record.getpCfg0Desc());
+            data.put("cfgPuid",hzCfg0Record.getPuid());
             _data.add(data);
         }
 
-        respond.put("data", _data);
+        for(HzCfg0ModelRecord hzCfg0ModelRecord : hzCfg0ModelRecords){
+            JSONObject object = new JSONObject();
+            object.put("modelPuid", hzCfg0ModelRecord.getPuid());
+            object.put("brand", brand.getpBrandName());
+            object.put("platform", platform.getpPlatformName());
+            object.put("vehicle", vehicle.getpVehicleName());
+            object.put("key", hzCfg0ModelRecord.getObjectName());
+            object.put("hide", hzCfg0ModelRecord.getPuid());
+            if(hzCfg0ModelDetails==null||hzCfg0ModelDetails.size()==0){
+                object.put("pModelShape", "");
+                object.put("pModelAnnouncement", "");
+                object.put("pModelCfgDesc", "");
+                object.put("pModelCfgMng", "");
+            }else {
+                for(HzCfg0ModelDetail hzCfg0ModelDetail : hzCfg0ModelDetails){
+                    if(hzCfg0ModelDetail.getpModelPuid().equals(hzCfg0ModelRecord.getPuid())){
+                        object.put("pModelShape", hzCfg0ModelDetail.getpModelShape() == null ? "" : hzCfg0ModelDetail.getpModelShape());
+                        object.put("pModelAnnouncement", hzCfg0ModelDetail.getpModelAnnouncement() == null ? "" : hzCfg0ModelDetail.getpModelAnnouncement());
+                        object.put("pModelCfgDesc", hzCfg0ModelDetail.getpModelCfgDesc() == null ? "" : hzCfg0ModelDetail.getpModelCfgDesc());
+                        object.put("pModelCfgMng", hzCfg0ModelDetail.getpModelCfgMng() == null ? "" : hzCfg0ModelDetail.getpModelCfgMng());
+                    }else {
+                        object.put("pModelShape", "");
+                        object.put("pModelAnnouncement", "");
+                        object.put("pModelCfgDesc", "");
+                        object.put("pModelCfgMng", "");
+                    }
+                }
 
+            }
+            JSONArray object_ = new JSONArray();
+            for(HzCfg0Record hzCfg0Record : hzCfg0Records){
+                HzFullCfgModel hzFullCfgModel = mapToModel.get(hzCfg0ModelRecord.getPuid()).get(hzCfg0Record.getPuid());
+                Short sPoint = hzFullCfgModel.getModPointType();
+                String point;
+                if(sPoint==0){
+                    point = "-";
+                }else if(sPoint==1){
+                    point = "●";
+                }else{
+                    point = "○";
+                }
+                JSONObject pointJson = new JSONObject();
+                pointJson.put("point",point);
+                object_.add(pointJson);
+            }
+            object.put("point",object_);
+            _model.add(object);
+        }
+
+
+        respond.put("data", _data);
+        respond.put("model", _model);
+        respond.put("modelSize",_model.size());
+        respond.put("cfgSize",_data.size());
         return respond;
     }
 
