@@ -15,7 +15,7 @@
         </commentGenerator>
         <!--数据库连接的信息：驱动类、连接地址、用户名、密码 -->
         <jdbcConnection
-                connectionURL="jdbc:oracle:thin:@192.168.1.121:1521:TC10"
+                connectionURL="jdbc:oracle:thin:@192.168.1.111:1521:TC10"
                 driverClass="oracle.jdbc.driver.OracleDriver" password="HOZON"
                 userId="HOZON"/>
         <!-- 默认false，把JDBC DECIMAL 和 NUMERIC 类型解析为 Integer，为 true时把JDBC DECIMAL
@@ -105,7 +105,11 @@
 
         <!--生成对应表及类名 schema="general" 数据库用的是Oracle,SqlServer需要去掉schema属性,MySQL则不需要去掉 -->
 
-         <table tableName="HZ_COLOR_LVL2_MODEL" domainObjectName="HzColorLvl2Model">
+         <table tableName="HZ_DERIVATIVE_MATERIEL_BASIC" domainObjectName="HzDerivativeMaterielBasic">
+         <property name="useActualColumnNames" value="false" />
+
+         </table>
+         <table tableName="HZ_DERIVATIVE_MATERIEL_DETAIL" domainObjectName="HzDerivativeMaterielDetail">
          <property name="useActualColumnNames" value="false" />
 
          </table>
