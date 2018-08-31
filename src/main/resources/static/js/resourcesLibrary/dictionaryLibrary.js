@@ -7,14 +7,27 @@
 
 $(document).ready((function (){
     var projectId = $("#project", window.top.document).val();
-    var url = "";
+    var url = "dict/list";
     initTable(url);
 }))
 
 function doQuery() {
-    $('#dictionaryLibraryTable').bootstrapTable('refresh');    //刷新表格
-    /*initTable(url);
-    $('#dictionaryLibraryTable').bootstrapTable('destroy');*/
+    // $('#dictionaryLibraryTable').bootstrapTable('refresh');    //刷新表格
+    var url = "dict/list";
+    var groupCode = $("#groupCode").val();
+    url += "?groupCode=" + groupCode;
+    var groupCh = $("#groupCh").val();
+    url += "&groupCh=" + groupCh;
+    var famillyCode = $("#famillyCode").val();
+    url += "&famillyCode=" + famillyCode;
+    var famillyCh = $("#famillyCh").val();
+    url += "&famillyCh=" + famillyCh;
+    var valueDescCh = $("#valueDescCh").val();
+    url += "&valueDescCh=" + valueDescCh;
+    var eigenValue = $("#eigenValue").val();
+    url += "&eigenValue=" + eigenValue;
+    initTable(url);
+    $('#dictionaryLibraryTable').bootstrapTable('destroy');
 }
 function initTable(url) {
     $('#dictionaryLibraryTable').bootstrapTable({
@@ -50,7 +63,7 @@ function initTable(url) {
                     //只能选一条
                     window.Ewin.dialog({
                         title: "添加",
-                        url: "dictionary/getAddDictionaryToPage",
+                        url: "dict/getAdd",
                         gridId: "gridId",
                         width: 500,
                         height: 500
@@ -69,7 +82,7 @@ function initTable(url) {
                     }
                     window.Ewin.dialog({
                         title: "修改",
-                        url: "dictionary/getUpdateDictionaryToPage",
+                        url: "dict/getUpdate?puid="+rows[0].puid,
                         gridId: "gridId",
                         width: 500,
                         height: 500
@@ -96,7 +109,7 @@ function initTable(url) {
                             $.ajax({
                                 type: "POST",
                                 //ajax需要添加打包名
-                                url: "",
+                                url: "dict/delete?puid="+rows[0].puid,
                                 // data: JSON.stringify(rows),
                                 contentType: "application/json",
                                 success: function (result) {
@@ -126,136 +139,137 @@ function initTable(url) {
         ],
         columns: [
             {
-                checkbox: true
+                checkbox: true,
+                align:'center',
             },
             {
-                field: '',
+                field: 'No',
                 title: '序号',
-                formatter: function (value, row, index) {
-                    return index+1;
-                }
+                align : 'center',
+                valign : 'middle',
+                sortable : true
             },
             {
-                field : 'name',
+                field : 'professionCh',
                 title : '专业部',
                 align : 'center',
                 valign : 'middle',
                 sortable : true
             },
             {
-                field : 'name',
+                field : 'professionEn',
                 title : 'Profession',
                 align : 'center',
                 valign : 'middle',
                 sortable : true
             },
             {
-                field : 'name',
+                field : 'classificationCh',
                 title : '分类',
                 align : 'center',
                 valign : 'middle',
                 sortable : true
             },
             {
-                field : 'name',
+                field : 'classificationEn',
                 title : 'classification',
                 align : 'center',
                 valign : 'middle',
                 sortable : true
             },
             {
-                field : 'name',
+                field : 'groupCode',
                 title : '特征组代码',
                 align : 'center',
                 valign : 'middle',
                 sortable : true
             },
             {
-                field : 'name',
+                field : 'groupCh',
                 title : '特征组',
                 align : 'center',
                 valign : 'middle',
                 sortable : true
             },
             {
-                field : 'name',
+                field : 'groupEn',
                 title : 'group',
                 align : 'center',
                 valign : 'middle',
                 sortable : true
             },
             {
-                field : 'name',
+                field : 'famillyCode',
                 title : '特征族代码',
                 align : 'center',
                 valign : 'middle',
                 sortable : true
             },
             {
-                field : 'name',
+                field : 'famillyCh',
                 title : '特征族',
                 align : 'center',
                 valign : 'middle',
                 sortable : true
             },
             {
-                field : 'name',
+                field : 'famillyEn',
                 title : 'familly',
                 align : 'center',
                 valign : 'middle',
                 sortable : true
             },
             {
-                field : 'name',
+                field : 'eigenValue',
                 title : '特征值',
                 align : 'center',
                 valign : 'middle',
                 sortable : true
             },
             {
-                field : 'name',
+                field : 'valueDescCh',
                 title : '特征值描述',
                 align : 'center',
                 valign : 'middle',
                 sortable : true
             },
             {
-                field : 'name',
+                field : 'valueDescEn',
                 title : 'value description',
                 align : 'center',
                 valign : 'middle',
                 sortable : true
             },
             {
-                field : 'name',
+                field : 'type',
                 title : '类型',
                 align : 'center',
                 valign : 'middle',
                 sortable : true
             },
             {
-                field : 'name',
+                field : 'valueSource',
                 title : '特征值来源',
                 align : 'center',
                 valign : 'middle',
                 sortable : true
             },
             {
-                field : 'name',
+                field : 'effectTime',
                 title : '生效时间',
                 align : 'center',
                 valign : 'middle',
                 sortable : true
             },
             {
-                field : 'name',
+                field : 'failureTime',
                 title : '失效时间',
                 align : 'center',
                 valign : 'middle',
                 sortable : true
             },
             {
-                field : 'name',
+                field : 'note',
                 title : '备注',
                 align : 'center',
                 valign : 'middle',

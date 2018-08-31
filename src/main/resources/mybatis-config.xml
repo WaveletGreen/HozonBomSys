@@ -98,5 +98,7 @@
         <mapper resource="sql/mapper/change.xmapper/HzEWOImpactReferenceMapper.xml"/>
         <mapper resource="sql/mapper/change.xmapper/HzEWOImpactDeptEmpMapper.xml"/>
         <mapper resource="sql/mapper/change.xmapper/HzEWOImpactDeptMapper.xml"/>
+        <!--字典库-->
+        <mapper resource="sql/mapper/resourcesLibrary/dictionaryLibrary.xmapper/HzDictionaryLibraryMapper.xml"/>
     </mappers>
 </configuration>

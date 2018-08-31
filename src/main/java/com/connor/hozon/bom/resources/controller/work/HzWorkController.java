@@ -87,10 +87,10 @@ public class HzWorkController extends BaseController {
     @RequestMapping(value = "record",method = RequestMethod.GET)
     @ResponseBody
     public Map<String, Object> getWorkPageRecord(HzWorkByPageQuery query){
-        HzWorkByPageQuery ebomByPageQuery = query;
-        ebomByPageQuery.setPageSize(0);
+        HzWorkByPageQuery workByPageQuery = query;
+        workByPageQuery.setPageSize(0);
         try{
-            ebomByPageQuery.setPageSize(Integer.valueOf(query.getLimit()));
+            workByPageQuery.setPageSize(Integer.valueOf(query.getLimit()));
         }catch (Exception e){
 
         }
