@@ -82,7 +82,7 @@ public class FileUploadServiceImpl implements FileUploadService {
             maxOrderNum = hzBomLineRecordDao.findMaxBomOrderNum(projectId);
             for(int numSheet = 0; numSheet < workbook.getNumberOfSheets(); numSheet++ ){
                 Sheet sheet = workbook.getSheetAt(numSheet);
-                String sheetName = workbook.getSheetName(numSheet);//EBOM 表名 就一张表的话 没什么卵用
+                String sheetName = workbook.getSheetName(numSheet);//sheet 表名 就一个sheet的话 没什么卵用
                 int i = 1;
                 while (i<=sheet.getLastRowNum()){
                     List<HzImportEbomRecord> list = new ArrayList<>();
@@ -148,8 +148,6 @@ public class FileUploadServiceImpl implements FileUploadService {
                     }
                 }
             }
-
-            Set<HzImportEbomRecord> set1 = new HashSet<>(records);
 
             if(ListUtil.isNotEmpty(records)){
                 int size = records.size();

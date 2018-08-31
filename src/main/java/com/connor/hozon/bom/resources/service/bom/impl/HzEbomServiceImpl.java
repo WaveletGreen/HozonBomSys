@@ -1839,7 +1839,7 @@ public class HzEbomServiceImpl implements HzEbomService {
                 for(String s:set){
                     DeleteHzEbomReqDTO deleteHzEbomReqDTO = new DeleteHzEbomReqDTO();
                     deleteHzEbomReqDTO.setPuid(s);
-                    deleteHzEbomReqDTO.setStatus(4);
+//                    deleteHzEbomReqDTO.setStatus(4);
                     list.add(deleteHzEbomReqDTO);
                 }
                 if(ListUtil.isNotEmpty(list)){
