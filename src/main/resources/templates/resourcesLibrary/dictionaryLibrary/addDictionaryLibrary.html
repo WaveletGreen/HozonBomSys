@@ -2,96 +2,95 @@
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <!--User: xulf Date: 2018/8/28 Time: 20:39-->
 <body>
-<form id="dictionaryLibraryForm" role="form" method="post" action="">
-    <input id="id" name="id" type="hidden">
+<form id="dictionaryLibraryForm" role="form" method="post" action="dict/add">
     <div class="form-group">
-        <label for="">专业部</label>
-        <input class="form-control" id="" name="" type="text"
+        <label for="professionCh">专业部</label>
+        <input class="form-control" id="professionCh" name="professionCh" type="text"
                placeholder="请输入专业部"/>
     </div>
     <div class="form-group">
-        <label for="">Profession</label>
-        <input class="form-control" id="" name="" type="text"
+        <label for="professionEn">Profession</label>
+        <input class="form-control" id="professionEn" name="professionEn" type="text"
                placeholder="请输入Professsion"/>
     </div>
     <div class="form-group">
-        <label for="">分类</label>
-        <input class="form-control" id="" name="" type="text"
+        <label for="classificationCh">分类</label>
+        <input class="form-control" id="classificationCh" name="classificationCh" type="text"
                placeholder="请输入分类"/>
     </div>
     <div class="form-group">
-        <label for="">classification</label>
-        <input class="form-control" id="" name="" type="text"
+        <label for="classificationEn">classification</label>
+        <input class="form-control" id="classificationEn" name="classificationEn" type="text"
                placeholder="请输入classification"/>
     </div>
     <div class="form-group">
-        <label for="">特征组代码</label>
-        <input class="form-control" id="" name="" type="text"
+        <label for="groupCode">特征组代码</label>
+        <input class="form-control" id="groupCode" name="groupCode" type="text"
                placeholder="请输入特征组代码"/>
     </div>
     <div class="form-group">
-        <label for="">特征组</label>
-        <input class="form-control" id="" name="" type="text"
+        <label for="groupCh">特征组</label>
+        <input class="form-control" id="groupCh" name="groupCh" type="text"
                placeholder="请输入特征组"/>
     </div>
     <div class="form-group">
-        <label for="">group</label>
-        <input class="form-control" id="" name="" type="text"
+        <label for="groupEn">group</label>
+        <input class="form-control" id="groupEn" name="groupEn" type="text"
                placeholder="请输入group"/>
     </div>
     <div class="form-group">
-        <label for="">特征族代码</label>
-        <input class="form-control" id="" name="" type="text"
+        <label for="famillyCode">特征族代码</label>
+        <input class="form-control" id="famillyCode" name="famillyCode" type="text"
                placeholder="请输入特征族代码"/>
     </div>
     <div class="form-group">
-        <label for="">特征族</label>
-        <input class="form-control" id="" name="" type="text"
+        <label for="famillyCh">特征族</label>
+        <input class="form-control" id="famillyCh" name="famillyCh" type="text"
                placeholder="请输入特征族"/>
     </div>
     <div class="form-group">
-        <label for="">familly</label>
-        <input class="form-control" id="" name="" type="text"
+        <label for="famillyEn">familly</label>
+        <input class="form-control" id="famillyEn" name="famillyEn" type="text"
                placeholder="请输入familly"/>
     </div>
     <div class="form-group">
-        <label for="">特征值</label>
-        <input class="form-control" id="" name="" type="text"
+        <label for="eigenValue">特征值</label>
+        <input class="form-control" id="eigenValue" name="eigenValue" type="text"
                placeholder="请输入特征值"/>
     </div>
     <div class="form-group">
-        <label for="">特征值描述</label>
-        <input class="form-control" id="" name="" type="text"
+        <label for="valueDescCh">特征值描述</label>
+        <input class="form-control" id="valueDescCh" name="valueDescCh" type="text"
                placeholder="请输入特征值描述"/>
     </div>
     <div class="form-group">
-        <label for="">value description</label>
-        <input class="form-control" id="" name="" type="text"
+        <label for="valueDescEn">value description</label>
+        <input class="form-control" id="valueDescEn" name="valueDescEn" type="text"
                placeholder="请输入value description"/>
     </div>
     <div class="form-group">
-        <label for="">类型</label>
-        <input class="form-control" id="" name="" type="text"
+        <label for="type">类型</label>
+        <input class="form-control" id="type" name="type" type="text"
                placeholder="请输入类型"/>
     </div>
     <div class="form-group">
-        <label for="">特征值来源</label>
-        <input class="form-control" id="" name="" type="text"
+        <label for="valueSource">特征值来源</label>
+        <input class="form-control" id="valueSource" name="valueSource" type="text"
                placeholder="请输入特征值来源"/>
     </div>
     <div class="form-group">
-        <label for="">生效时间</label>
-        <input class="form-control" id="effectTime" name="" type="text"
+        <label for="effectTime">生效时间</label>
+        <input class="form-control" id="effectTime" name="effectTime" type="text"
                placeholder="请输入生效时间"/>
     </div>
     <div class="form-group">
-        <label for="">失效时间</label>
-        <input class="form-control" id="failureTime" name="" type="text"
+        <label for="failureTime">失效时间</label>
+        <input class="form-control" id="failureTime" name="failureTime" type="text"
                placeholder="请输入失效时间"/>
     </div>
     <div class="form-group">
-        <label for="">备注</label>
-        <input class="form-control" id="" name="" type="text"
+        <label for="note">备注</label>
+        <input class="form-control" id="note" name="note" type="text"
                placeholder="请输入备注"/>
     </div>
 </form>
@@ -123,7 +122,24 @@
             if (bootstrapValidator.isValid()) {
                 var url = $("#dictionaryLibraryForm", window.top.document).attr('action');
                 var myData = JSON.stringify({
-                    "id": $("#id").val(),
+                    "professionCh": $("#professionCh").val(),
+                    "professionEn": $("#professionEn").val(),
+                    "classificationCh": $("#classificationCh").val(),
+                    "classificationEn": $("#classificationEn").val(),
+                    "groupCode": $("#groupCode").val(),
+                    "groupCh": $("#groupCh").val(),
+                    "groupEn": $("#groupEn").val(),
+                    "famillyCode": $("#famillyCode").val(),
+                    "famillyCh": $("#famillyCh").val(),
+                    "famillyEn": $("#famillyEn").val(),
+                    "eigenValue": $("#eigenValue").val(),
+                    "valueDescCh": $("#valueDescCh").val(),
+                    "valueDescEn": $("#valueDescEn").val(),
+                    "type": $("#type").val(),
+                    "valueSource": $("#valueSource").val(),
+                    "effectTime": $("#effectTime").val(),
+                    "failureTime": $("#failureTime").val(),
+                    "note": $("#note").val(),
                 });
                 $.ajax({
                     contentType:
@@ -180,6 +196,13 @@
             });
         }
     })
+    $(document).keydown(function(event) {
+        if (event.keyCode == 13) {
+            $('form').each(function() {
+                event.preventDefault();
+            });
+        }
+    });
     ]]>
 </script>
 <script th:src="@{/layer/layer.js}"></script>
