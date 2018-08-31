@@ -1,20 +1,19 @@
 package sql.pojo.cfg;
 
-import java.math.BigDecimal;
 import java.util.Date;
 
 public class HzDerivativeMaterielBasic {
-    private BigDecimal id;
+    private Long id;
 
     private String dmbModelUid;
 
     private String dmbColorModelUid;
 
-    private Object dmbCreator;
+    private String dmbCreator;
 
     private Date dmbCreateDate;
 
-    private Object dmbUpdater;
+    private String dmbUpdater;
 
     private Date dmbUpdateDate;
 
@@ -28,11 +27,11 @@ public class HzDerivativeMaterielBasic {
 
     private String dmbReserved5;
 
-    public BigDecimal getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(BigDecimal id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -52,11 +51,11 @@ public class HzDerivativeMaterielBasic {
         this.dmbColorModelUid = dmbColorModelUid == null ? null : dmbColorModelUid.trim();
     }
 
-    public Object getDmbCreator() {
+    public String getDmbCreator() {
         return dmbCreator;
     }
 
-    public void setDmbCreator(Object dmbCreator) {
+    public void setDmbCreator(String dmbCreator) {
         this.dmbCreator = dmbCreator;
     }
 
@@ -68,11 +67,11 @@ public class HzDerivativeMaterielBasic {
         this.dmbCreateDate = dmbCreateDate;
     }
 
-    public Object getDmbUpdater() {
+    public String getDmbUpdater() {
         return dmbUpdater;
     }
 
-    public void setDmbUpdater(Object dmbUpdater) {
+    public void setDmbUpdater(String dmbUpdater) {
         this.dmbUpdater = dmbUpdater;
     }
 

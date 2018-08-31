@@ -1,50 +1,82 @@
 package sql.pojo.cfg;
 
-import java.math.BigDecimal;
 import java.util.Date;
 
 public class HzDerivativeMaterielDetail {
-    private BigDecimal id;
-
-    private BigDecimal dmdDmbId;
-
+    /**
+     * 主键
+     */
+    private Long id;
+    /**
+     * 基本信息外键
+     */
+    private Long dmdDmbId;
+    /**
+     * 特性值外键
+     */
     private String dmdCfg0Uid;
-
+    /**
+     * 特性外键
+     */
     private String dmdCfg0FamilyUid;
-
-    private Object dmdCreator;
-
+    /**
+     * 创建者
+     */
+    private String dmdCreator;
+    /**
+     * 创建时间
+     */
     private Date dmdCreateDate;
-
-    private Object dmdUpdater;
-
+    /**
+     * 更新人
+     */
+    private String dmdUpdater;
+    /**
+     * 更新时间
+     */
     private Date dmdUpdateDate;
-
+    /**
+     * 保留字段1
+     */
     private String dmdReserved1;
-
+    /**
+     * 保留字段2
+     */
     private String dmdReserved2;
-
+    /**
+     * 保留字段3
+     */
     private String dmdReserved3;
-
+    /**
+     * 保留字段4
+     */
     private String dmdReserved4;
-
+    /**
+     * 保留字段5
+     */
     private String dmdReserved5;
-
+    /**
+     * 特性值,放在最后直接显示在前端
+     */
     private String dmdFeatureValue;
+    /**
+     * 特性对象
+     */
+    private HzCfg0Record cfg0Record;
 
-    public BigDecimal getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(BigDecimal id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public BigDecimal getDmdDmbId() {
+    public Long getDmdDmbId() {
         return dmdDmbId;
     }
 
-    public void setDmdDmbId(BigDecimal dmdDmbId) {
+    public void setDmdDmbId(Long dmdDmbId) {
         this.dmdDmbId = dmdDmbId;
     }
 
@@ -64,11 +96,11 @@ public class HzDerivativeMaterielDetail {
         this.dmdCfg0FamilyUid = dmdCfg0FamilyUid == null ? null : dmdCfg0FamilyUid.trim();
     }
 
-    public Object getDmdCreator() {
+    public String getDmdCreator() {
         return dmdCreator;
     }
 
-    public void setDmdCreator(Object dmdCreator) {
+    public void setDmdCreator(String dmdCreator) {
         this.dmdCreator = dmdCreator;
     }
 
@@ -80,11 +112,11 @@ public class HzDerivativeMaterielDetail {
         this.dmdCreateDate = dmdCreateDate;
     }
 
-    public Object getDmdUpdater() {
+    public String getDmdUpdater() {
         return dmdUpdater;
     }
 
-    public void setDmdUpdater(Object dmdUpdater) {
+    public void setDmdUpdater(String dmdUpdater) {
         this.dmdUpdater = dmdUpdater;
     }
 
@@ -142,5 +174,13 @@ public class HzDerivativeMaterielDetail {
 
     public void setDmdFeatureValue(String dmdFeatureValue) {
         this.dmdFeatureValue = dmdFeatureValue == null ? null : dmdFeatureValue.trim();
+    }
+
+    public HzCfg0Record getCfg0Record() {
+        return cfg0Record;
+    }
+
+    public void setCfg0Record(HzCfg0Record cfg0Record) {
+        this.cfg0Record = cfg0Record;
     }
 }

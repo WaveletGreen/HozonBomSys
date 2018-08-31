@@ -4,21 +4,22 @@ import com.alibaba.fastjson.JSONObject;
 import com.connor.hozon.bom.bomSystem.controller.integrate.ExtraIntegrate;
 import com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0ModelColorDao;
 import com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0ToModelRecordDao;
+import com.connor.hozon.bom.bomSystem.dao.cfg.HzDerivativeMaterielBasicDao;
 import com.connor.hozon.bom.bomSystem.dto.cfg.HzComposeMFDTO;
 import com.connor.hozon.bom.bomSystem.service.business.cfg.HzComposeMFService;
 import com.connor.hozon.bom.bomSystem.service.cfg.*;
 import com.connor.hozon.bom.bomSystem.service.integrate.SynMaterielService;
 import com.connor.hozon.bom.bomSystem.service.iservice.cfg.IHzCfg0ModelFeatureService;
 import com.connor.hozon.bom.bomSystem.service.project.HzSuperMaterielService;
+import com.connor.hozon.bom.common.base.entity.QueryBase;
 import com.connor.hozon.bom.resources.mybatis.factory.HzFactoryDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import sql.pojo.cfg.HzCfg0ModelColor;
-import sql.pojo.cfg.HzCfg0ModelFeature;
-import sql.pojo.cfg.HzCfg0ModelRecord;
+import sql.pojo.cfg.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -86,6 +87,7 @@ public class HzMaterielFeatureV2Controller extends ExtraIntegrate {
     @Autowired
     HzComposeMFService hzComposeMFService;
 
+
     @Autowired
     public HzMaterielFeatureV2Controller() {
     }
@@ -125,5 +127,12 @@ public class HzMaterielFeatureV2Controller extends ExtraIntegrate {
         }
         hzComposeMFService.saveCompose(hzComposeMFDTO, result);
         return result;
+    }
+
+
+    @RequestMapping(value = "/loadComposes", method = RequestMethod.POST)
+    @ResponseBody
+    public Map<String, Object> loadComposes(@RequestParam String projectUid, @RequestBody QueryBase queryBase) {
+        return hzComposeMFService.loadComposes(projectUid, queryBase);
     }
 }

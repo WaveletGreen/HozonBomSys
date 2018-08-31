@@ -1,5 +1,7 @@
 package sql.pojo.cfg;
 
+import java.util.Date;
+
 public class HzCfg0ModelFeature {
     /**
      * 主键
@@ -106,6 +108,11 @@ public class HzCfg0ModelFeature {
      * 是否已发送过SAP
      */
     private Integer isSent;
+
+    /**
+     * 创建时间
+     */
+    private Date pMfCreateDate;
     public String getPuid() {
         return puid;
     }
@@ -312,5 +319,13 @@ public class HzCfg0ModelFeature {
 
     public void setIsSent(Integer isSent) {
         this.isSent = isSent;
+    }
+
+    public Date getpMfCreateDate() {
+        return pMfCreateDate;
+    }
+
+    public void setpMfCreateDate(Date pMfCreateDate) {
+        this.pMfCreateDate = pMfCreateDate;
     }
 }

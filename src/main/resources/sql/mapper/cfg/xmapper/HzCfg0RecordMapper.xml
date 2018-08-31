@@ -31,6 +31,7 @@
         <result column="P_CFG0_DESC" jdbcType="VARCHAR" property="pCfg0Desc"/>
         <result column="P_CFG0_FAMILY_NAME" jdbcType="VARCHAR" property="pCfg0FamilyName"/>
         <result column="P_CFG0_FAMILY_DESC" jdbcType="VARCHAR" property="pCfg0FamilyDesc"/>
+        <result column="P_CFG0_FAMILY_PUID" jdbcType="VARCHAR" property="pCfg0FamilyPuid"/>
         <result column="OBJECT_NAME" jdbcType="VARCHAR" property="objectName"/>
         <result column="P_CFG0_MODEL_RECORD" jdbcType="VARCHAR" property="pCfg0ModelRecord"/>
         <result column="P_OF_CFG0_MAIN_RECORD" jdbcType="VARCHAR" property="pOfCfg0MainRecord"/>
@@ -67,6 +68,7 @@
         t.P_CFG0_DESC,
         t.P_CFG0_FAMILY_NAME,
         t.P_CFG0_FAMILY_DESC,
+        t.P_CFG0_FAMILY_PUID,
         t4.OBJECT_NAME,
         t3.P_CFG0_MODEL_RECORD,
         t3.P_OF_CFG0_MAIN_RECORD,
