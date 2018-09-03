@@ -24,7 +24,7 @@
             <property name="forceBigDecimals" value="false"/>
         </javaTypeResolver>
         <!-- targetProject:生成PO类的位置 -->
-        <javaModelGenerator targetPackage="sql.pojo.cfg"
+        <javaModelGenerator targetPackage="sql.pojo.integration"
                             targetProject="J:\IntelliJIdeaWorkSpace\hozon\bs\HozonBomSys\src\main\java">
             <!-- enableSubPackages:是否让schema作为包的后缀 -->
             <property name="enableSubPackages" value="false"/>
@@ -33,14 +33,14 @@
         </javaModelGenerator>
         <!-- targetProject:mapper映射文件生成的位置 -->
         <sqlMapGenerator
-                targetPackage="com.connor.hozon.bom.bomSystem.dao.cfg"
+                targetPackage="com.connor.hozon.bom.resources.mybatis.change.breakpoint"
                 targetProject="J:\IntelliJIdeaWorkSpace\hozon\bs\HozonBomSys\src\main\java">
             <!-- enableSubPackages:是否让schema作为包的后缀 -->
             <property name="enableSubPackages" value="false"/>
         </sqlMapGenerator>
         <!-- targetPackage：mapper接口生成的位置 -->
         <javaClientGenerator type="XMLMAPPER"
-                             targetPackage="com.connor.hozon.bom.bomSystem.dao.cfg"
+                             targetPackage="com.connor.hozon.bom.resources.mybatis.change.breakpoint"
                              targetProject="J:\IntelliJIdeaWorkSpace\hozon\bs\HozonBomSys\src\main\java">
             <property name="enableSubPackages" value="false"/>
         </javaClientGenerator>
@@ -105,29 +105,25 @@
 
         <!--生成对应表及类名 schema="general" 数据库用的是Oracle,SqlServer需要去掉schema属性,MySQL则不需要去掉 -->
 
-         <table tableName="HZ_DERIVATIVE_MATERIEL_BASIC" domainObjectName="HzDerivativeMaterielBasic">
-         <property name="useActualColumnNames" value="false" />
+        <!--<table tableName="HZ_BREAKPOINT" domainObjectName="HzBreakPoint">-->
+        <!--<property name="useActualColumnNames" value="false" />-->
 
-         </table>
-         <table tableName="HZ_DERIVATIVE_MATERIEL_DETAIL" domainObjectName="HzDerivativeMaterielDetail">
-         <property name="useActualColumnNames" value="false" />
+        <!--</table>-->
+        <!--<table tableName="HZ_CFG0_OF_BOMLINE_RECORD" domainObjectName="HzCfg0OfBomLineRecord">-->
+        <!--<property name="useActualColumnNames" value="false" />-->
+        <!--</table>-->
+        <!--<table tableName="HZ_BRAND_RECORD" domainObjectName="HzBrandRecord">-->
+        <!--<property name="useActualColumnNames" value="false" />-->
 
-         </table>
-         <!--<table tableName="HZ_CFG0_OF_BOMLINE_RECORD" domainObjectName="HzCfg0OfBomLineRecord">-->
-         <!--<property name="useActualColumnNames" value="false" />-->
-         <!--</table>-->
-         <!--<table tableName="HZ_BRAND_RECORD" domainObjectName="HzBrandRecord">-->
-         <!--<property name="useActualColumnNames" value="false" />-->
+        <!--</table>-->
+        <!--<table tableName="HZ_PLATFORM_RECORD" domainObjectName="HzPlatformRecord">-->
+        <!--<property name="useActualColumnNames" value="false" />-->
 
-         <!--</table>-->
-         <!--<table tableName="HZ_PLATFORM_RECORD" domainObjectName="HzPlatformRecord">-->
-         <!--<property name="useActualColumnNames" value="false" />-->
+        <!--</table>-->
+        <!--<table tableName="HZ_CFG0_TO_MODEL_RECORD" domainObjectName="HzCfg0ToModelRecord">-->
+        <!--<property name="useActualColumnNames" value="false" />-->
 
-         <!--</table>-->
-         <!--<table tableName="HZ_CFG0_TO_MODEL_RECORD" domainObjectName="HzCfg0ToModelRecord">-->
-         <!--<property name="useActualColumnNames" value="false" />-->
-
-         <!--</table>-->
+        <!--</table>-->
         <!-- <table tableName="HZ_RELEASE_FILE_RECORD" domainObjectName="HzReleaseFileRecord"> -->
         <!-- <property name="useActualColumnNames" value="false" /> -->
         <!-- </table> -->

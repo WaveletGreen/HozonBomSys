@@ -311,24 +311,9 @@
     <!--end-->
     <!--</insert>-->
     <insert id="insertByBatch" parameterType="java.util.List">
-        insert into HZ_DERIVATIVE_MATERIEL_DETAIL(
-        ID,
-        DMD_DMB_ID,
-        DMD_CFG0_UID,
-        DMD_CFG0_FAMILY_UID,
-        DMD_CREATOR,
-        DMD_CREATE_DATE,
-        DMD_UPDATER,
-        DMD_UPDATE_DATE,
-        DMD_RESERVED_1,
-        DMD_RESERVED_2,
-        DMD_RESERVED_3,
-        DMD_RESERVED_4,
-        DMD_RESERVED_5,
-        DMD_FEATURE_VALUE
-        )
+        insert into HZ_DERIVATIVE_MATERIEL_DETAIL
         select seq_hz_dmd_id.NEXTVAL,A.* from(
-        <foreach collection="list" item="item" index="index" open="(" close=")" separator="UNION ALL">
+        <foreach collection="list" item="item" index="index" open="(" close=")" separator="UNION">
             select
             #{item.dmdDmbId,jdbcType=DECIMAL},
             #{item.dmdCfg0Uid,jdbcType=VARCHAR},

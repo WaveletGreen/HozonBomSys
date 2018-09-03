@@ -17,6 +17,7 @@ public class BasicDaoImpl<T> implements BasicDao<T> {
      */
     protected Class clz;
 
+
     @Autowired
     protected IBaseSQLUtil baseSQLUtil;
 
