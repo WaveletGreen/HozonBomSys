@@ -228,125 +228,125 @@
     </insert>
     <!--批量插入-->
     <!--<insert id="insertSelectiveByBatch" parameterType="java.util.List">-->
-        <!--begin-->
-        <!--<foreach collection="list" item="item" index="index">-->
-            <!--insert into HZ_DERIVATIVE_MATERIEL_DETAIL-->
-            <!--<trim prefix="(" suffix=")" suffixOverrides=",">-->
-                <!--ID,-->
-                <!--<if test="item.dmdDmbId != null">-->
-                    <!--DMD_DMB_ID,-->
-                <!--</if>-->
-                <!--<if test="item.dmdCfg0Uid != null">-->
-                    <!--DMD_CFG0_UID,-->
-                <!--</if>-->
-                <!--<if test="item.dmdCfg0FamilyUid != null">-->
-                    <!--DMD_CFG0_FAMILY_UID,-->
-                <!--</if>-->
-                <!--<if test="item.dmdCreator != null">-->
-                    <!--DMD_CREATOR,-->
-                <!--</if>-->
-                <!--DMD_CREATE_DATE,-->
-                <!--<if test="item.dmdUpdater != null">-->
-                    <!--DMD_UPDATER,-->
-                <!--</if>-->
-                <!--DMD_UPDATE_DATE,-->
-                <!--<if test="item.dmdReserved1 != null">-->
-                    <!--DMD_RESERVED_1,-->
-                <!--</if>-->
-                <!--<if test="item.dmdReserved2 != null">-->
-                    <!--DMD_RESERVED_2,-->
-                <!--</if>-->
-                <!--<if test="item.dmdReserved3 != null">-->
-                    <!--DMD_RESERVED_3,-->
-                <!--</if>-->
-                <!--<if test="item.dmdReserved4 != null">-->
-                    <!--DMD_RESERVED_4,-->
-                <!--</if>-->
-                <!--<if test="item.dmdReserved5 != null">-->
-                    <!--DMD_RESERVED_5,-->
-                <!--</if>-->
-                <!--<if test="item.dmdFeatureValue != null">-->
-                    <!--DMD_FEATURE_VALUE,-->
-                <!--</if>-->
-            <!--</trim>-->
-            <!--<trim prefix="values (" suffix=")" suffixOverrides=",">-->
-                <!--seq_hz_dmd_id.nextval,-->
-                <!--<if test="item.dmdDmbId != null">-->
-                    <!--#{item.dmdDmbId,jdbcType=DECIMAL},-->
-                <!--</if>-->
-                <!--<if test="item.dmdCfg0Uid != null">-->
-                    <!--#{item.dmdCfg0Uid,jdbcType=VARCHAR},-->
-                <!--</if>-->
-                <!--<if test="item.dmdCfg0FamilyUid != null">-->
-                    <!--#{item.dmdCfg0FamilyUid,jdbcType=VARCHAR},-->
-                <!--</if>-->
-                <!--<if test="item.dmdCreator != null">-->
-                    <!--#{item.dmdCreator,jdbcType=VARCHAR},-->
-                <!--</if>-->
-                <!--sysdate,-->
-                <!--<if test="item.dmdUpdater != null">-->
-                    <!--#{item.dmdUpdater,jdbcType=VARCHAR},-->
-                <!--</if>-->
-                <!--sysdate,-->
-                <!--<if test="item.dmdReserved1 != null">-->
-                    <!--#{item.dmdReserved1,jdbcType=VARCHAR},-->
-                <!--</if>-->
-                <!--<if test="item.dmdReserved2 != null">-->
-                    <!--#{item.dmdReserved2,jdbcType=VARCHAR},-->
-                <!--</if>-->
-                <!--<if test="item.dmdReserved3 != null">-->
-                    <!--#{item.dmdReserved3,jdbcType=VARCHAR},-->
-                <!--</if>-->
-                <!--<if test="item.dmdReserved4 != null">-->
-                    <!--#{item.dmdReserved4,jdbcType=VARCHAR},-->
-                <!--</if>-->
-                <!--<if test="item.dmdReserved5 != null">-->
-                    <!--#{item.dmdReserved5,jdbcType=VARCHAR},-->
-                <!--</if>-->
-                <!--<if test="item.dmdFeatureValue != null">-->
-                    <!--#{item.dmdFeatureValue,jdbcType=VARCHAR},-->
-                <!--</if>-->
-            <!--</trim>-->
-        <!--</foreach>-->
-        <!--end-->
+    <!--begin-->
+    <!--<foreach collection="list" item="item" index="index">-->
+    <!--insert into HZ_DERIVATIVE_MATERIEL_DETAIL-->
+    <!--<trim prefix="(" suffix=")" suffixOverrides=",">-->
+    <!--ID,-->
+    <!--<if test="item.dmdDmbId != null">-->
+    <!--DMD_DMB_ID,-->
+    <!--</if>-->
+    <!--<if test="item.dmdCfg0Uid != null">-->
+    <!--DMD_CFG0_UID,-->
+    <!--</if>-->
+    <!--<if test="item.dmdCfg0FamilyUid != null">-->
+    <!--DMD_CFG0_FAMILY_UID,-->
+    <!--</if>-->
+    <!--<if test="item.dmdCreator != null">-->
+    <!--DMD_CREATOR,-->
+    <!--</if>-->
+    <!--DMD_CREATE_DATE,-->
+    <!--<if test="item.dmdUpdater != null">-->
+    <!--DMD_UPDATER,-->
+    <!--</if>-->
+    <!--DMD_UPDATE_DATE,-->
+    <!--<if test="item.dmdReserved1 != null">-->
+    <!--DMD_RESERVED_1,-->
+    <!--</if>-->
+    <!--<if test="item.dmdReserved2 != null">-->
+    <!--DMD_RESERVED_2,-->
+    <!--</if>-->
+    <!--<if test="item.dmdReserved3 != null">-->
+    <!--DMD_RESERVED_3,-->
+    <!--</if>-->
+    <!--<if test="item.dmdReserved4 != null">-->
+    <!--DMD_RESERVED_4,-->
+    <!--</if>-->
+    <!--<if test="item.dmdReserved5 != null">-->
+    <!--DMD_RESERVED_5,-->
+    <!--</if>-->
+    <!--<if test="item.dmdFeatureValue != null">-->
+    <!--DMD_FEATURE_VALUE,-->
+    <!--</if>-->
+    <!--</trim>-->
+    <!--<trim prefix="values (" suffix=")" suffixOverrides=",">-->
+    <!--seq_hz_dmd_id.nextval,-->
+    <!--<if test="item.dmdDmbId != null">-->
+    <!--#{item.dmdDmbId,jdbcType=DECIMAL},-->
+    <!--</if>-->
+    <!--<if test="item.dmdCfg0Uid != null">-->
+    <!--#{item.dmdCfg0Uid,jdbcType=VARCHAR},-->
+    <!--</if>-->
+    <!--<if test="item.dmdCfg0FamilyUid != null">-->
+    <!--#{item.dmdCfg0FamilyUid,jdbcType=VARCHAR},-->
+    <!--</if>-->
+    <!--<if test="item.dmdCreator != null">-->
+    <!--#{item.dmdCreator,jdbcType=VARCHAR},-->
+    <!--</if>-->
+    <!--sysdate,-->
+    <!--<if test="item.dmdUpdater != null">-->
+    <!--#{item.dmdUpdater,jdbcType=VARCHAR},-->
+    <!--</if>-->
+    <!--sysdate,-->
+    <!--<if test="item.dmdReserved1 != null">-->
+    <!--#{item.dmdReserved1,jdbcType=VARCHAR},-->
+    <!--</if>-->
+    <!--<if test="item.dmdReserved2 != null">-->
+    <!--#{item.dmdReserved2,jdbcType=VARCHAR},-->
+    <!--</if>-->
+    <!--<if test="item.dmdReserved3 != null">-->
+    <!--#{item.dmdReserved3,jdbcType=VARCHAR},-->
+    <!--</if>-->
+    <!--<if test="item.dmdReserved4 != null">-->
+    <!--#{item.dmdReserved4,jdbcType=VARCHAR},-->
+    <!--</if>-->
+    <!--<if test="item.dmdReserved5 != null">-->
+    <!--#{item.dmdReserved5,jdbcType=VARCHAR},-->
+    <!--</if>-->
+    <!--<if test="item.dmdFeatureValue != null">-->
+    <!--#{item.dmdFeatureValue,jdbcType=VARCHAR},-->
+    <!--</if>-->
+    <!--</trim>-->
+    <!--</foreach>-->
+    <!--end-->
     <!--</insert>-->
-    <!--<insert id="insertSelectiveByBatch2" parameterType="java.util.List">-->
-        <!--insert into HZ_DERIVATIVE_MATERIEL_DETAIL(-->
-        <!--ID,-->
-        <!--DMD_DMB_ID,-->
-        <!--DMD_CFG0_UID,-->
-        <!--DMD_CFG0_FAMILY_UID,-->
-        <!--DMD_CREATOR,-->
-        <!--DMD_CREATE_DATE,-->
-        <!--DMD_UPDATER,-->
-        <!--DMD_UPDATE_DATE,-->
-        <!--DMD_RESERVED_1,-->
-        <!--DMD_RESERVED_2,-->
-        <!--DMD_RESERVED_3,-->
-        <!--DMD_RESERVED_4,-->
-        <!--DMD_RESERVED_5,-->
-        <!--DMD_FEATURE_VALUE-->
-        <!--)-->
-        <!--select seq_hz_dmd_id.NEXTVAL,A.* from(-->
-        <!--<foreach collection="list" item="item" index="index" separator="UNION ALL">-->
-            <!--select-->
-            <!--#{item.dmdDmbId,jdbcType=DECIMAL},-->
-            <!--#{item.dmdCfg0Uid,jdbcType=VARCHAR},-->
-            <!--#{item.dmdCfg0FamilyUid,jdbcType=VARCHAR},-->
-            <!--#{item.dmdCreator,jdbcType=VARCHAR},-->
-            <!--sysdate,-->
-            <!--#{item.dmdUpdater,jdbcType=VARCHAR},-->
-            <!--sysdate,-->
-            <!--#{item.dmdReserved1,jdbcType=VARCHAR},-->
-            <!--#{item.dmdReserved2,jdbcType=VARCHAR},-->
-            <!--#{item.dmdReserved3,jdbcType=VARCHAR},-->
-            <!--#{item.dmdReserved4,jdbcType=VARCHAR},-->
-            <!--#{item.dmdReserved5,jdbcType=VARCHAR},-->
-            <!--#{item.dmdFeatureValue,jdbcType=VARCHAR}-->
-            <!--from dual-->
-        <!--</foreach>-->
-        <!--) A-->
-    <!--</insert>-->
+    <insert id="insertByBatch" parameterType="java.util.List">
+        insert into HZ_DERIVATIVE_MATERIEL_DETAIL(
+        ID,
+        DMD_DMB_ID,
+        DMD_CFG0_UID,
+        DMD_CFG0_FAMILY_UID,
+        DMD_CREATOR,
+        DMD_CREATE_DATE,
+        DMD_UPDATER,
+        DMD_UPDATE_DATE,
+        DMD_RESERVED_1,
+        DMD_RESERVED_2,
+        DMD_RESERVED_3,
+        DMD_RESERVED_4,
+        DMD_RESERVED_5,
+        DMD_FEATURE_VALUE
+        )
+        select seq_hz_dmd_id.NEXTVAL,A.* from(
+        <foreach collection="list" item="item" index="index" open="(" close=")" separator="UNION ALL">
+            select
+            #{item.dmdDmbId,jdbcType=DECIMAL},
+            #{item.dmdCfg0Uid,jdbcType=VARCHAR},
+            #{item.dmdCfg0FamilyUid,jdbcType=VARCHAR},
+            #{item.dmdCreator,jdbcType=VARCHAR},
+            sysdate,
+            #{item.dmdUpdater,jdbcType=VARCHAR},
+            sysdate,
+            #{item.dmdReserved1,jdbcType=VARCHAR},
+            #{item.dmdReserved2,jdbcType=VARCHAR},
+            #{item.dmdReserved3,jdbcType=VARCHAR},
+            #{item.dmdReserved4,jdbcType=VARCHAR},
+            #{item.dmdReserved5,jdbcType=VARCHAR},
+            #{item.dmdFeatureValue,jdbcType=VARCHAR}
+            from dual
+        </foreach>
+        ) A
+    </insert>
     <!--<insert id="insertServiceMappings" parameterType="java.util.List" useGeneratedKeys="true">-->
     <!--<selectKey keyProperty="id" resultType="java.lang.Long" order="BEFORE">-->
     <!--SELECT-->

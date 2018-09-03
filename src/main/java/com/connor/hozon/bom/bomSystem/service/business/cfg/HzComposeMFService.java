@@ -153,12 +153,16 @@ public class HzComposeMFService {
                 result.put("msg", "新增衍生物料失败");
             }
             boolean hasFail = false;
-            for (int i = 0; i < details.size(); i++) {
-                if (hzDerivativeMaterielDetailDao.insert(details.get(i)) <= 0) {
-                    hasFail = true;
-                    logger.error("存储配置物料详情数据" + details.get(i).getDmdFeatureValue() + "失败");
-                }
+            if (hzDerivativeMaterielDetailDao.insertByBatch(details) <= 0) {
+                hasFail = true;
+                logger.error("存储配置物料详情数据失败");
             }
+//            for (int i = 0; i < details.size(); i++) {
+//                if (hzDerivativeMaterielDetailDao.insert(details.get(i)) <= 0) {
+//                    hasFail = true;
+//                    logger.error("存储配置物料详情数据" + details.get(i).getDmdFeatureValue() + "失败");
+//                }
+//            }
             if (hasFail) {
                 results.put("status", false);
                 results.put("msg", "存储配置物料详情数据失败，请联系管理员查看日志");

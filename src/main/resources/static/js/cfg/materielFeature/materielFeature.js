@@ -76,20 +76,20 @@ function loadData() {
                 // sortable: true,                     //是否启用排序
                 // sortOrder: "asc",                   //排序方式
                 toolbars: [
-                    // {
-                    //     text: '添加衍生物料',
-                    //     iconCls: 'glyphicon glyphicon-plus',
-                    //     handler: function () {
-                    //         window.Ewin.dialog({
-                    //             // 这个puid就是车型模型的puid，直接修改了车型模型的基本信息（在bom系统维护的字段）
-                    //             title: "修改基本信息",
-                    //             url: "materielV2/composePage?projectUid=" + projectPuid,
-                    //             gridId: "gridId",
-                    //             width: 400,
-                    //             height: 450
-                    //         });
-                    //     }
-                    // },
+                    {
+                        text: '添加衍生物料',
+                        iconCls: 'glyphicon glyphicon-plus',
+                        handler: function () {
+                            window.Ewin.dialog({
+                                // 这个puid就是车型模型的puid，直接修改了车型模型的基本信息（在bom系统维护的字段）
+                                title: "修改基本信息",
+                                url: "materielV2/composePage?projectUid=" + projectPuid,
+                                gridId: "gridId",
+                                width: 400,
+                                height: 450
+                            });
+                        }
+                    },
                     {
                         text: '修改基本信息',
                         iconCls: 'glyphicon glyphicon-pencil',

@@ -91,7 +91,6 @@
         <include refid="Base_Column_List"/>
         from HZ_COLOR_MODEL
         where MODEL_UID = #{modelUid,jdbcType=VARCHAR}
-
     </select>
     <!--连接查询颜色-->
     <select id="selectByModelUidWithColor" parameterType="java.lang.String" resultMap="ResultMapWithColor">

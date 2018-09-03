@@ -33,6 +33,17 @@ public class HzDerivativeMaterielDetailDaoImpl
         return baseSQLUtil.executeQuery(detail, clz.getCanonicalName() + ".selectByBasicWithCfg");
     }
 
+    /**
+     * 批量插入
+     *
+     * @param details
+     * @return
+     */
+    @Override
+    public int insertByBatch(List<HzDerivativeMaterielDetail> details) {
+        return baseSQLUtil.executeInsert(details, clz.getCanonicalName() + ".insertByBatch");
+    }
+
 //    /**
 //     * 主键删除
 //     *

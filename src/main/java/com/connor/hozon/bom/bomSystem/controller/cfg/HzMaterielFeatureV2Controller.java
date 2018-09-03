@@ -119,7 +119,7 @@ public class HzMaterielFeatureV2Controller extends ExtraIntegrate {
     @ResponseBody
     public JSONObject saveCompose(@RequestBody HzComposeMFDTO hzComposeMFDTO) {
         JSONObject result = new JSONObject();
-        result.put("status", false);
+        result.put("status", true);
         result.put("msg", "新增衍生物料成功");
         if (hzComposeMFDTO == null) {
             result.put("status", false);

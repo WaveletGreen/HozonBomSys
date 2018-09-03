@@ -231,7 +231,7 @@
                         $('body', window.top.document).find('.modal-backdrop').remove();
                         // jquery 调用刷新当前操作的table页面的refresh方法
                         $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
-                        if (result) {
+                        if (result.status) {
                             layer.msg('修改数据成功!', {icon: 1, time: 2000})
                             // window.Ewin.alert({message: '修改数据成功!'});
                         }

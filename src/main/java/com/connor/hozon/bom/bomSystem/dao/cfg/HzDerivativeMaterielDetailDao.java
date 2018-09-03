@@ -16,4 +16,11 @@ public interface HzDerivativeMaterielDetailDao extends BasicDao<HzDerivativeMate
      */
     List<HzDerivativeMaterielDetail> selectByBasicWithCfg(HzDerivativeMaterielDetail detail);
 
+    /**
+     * 批量插入
+     *
+     * @param details
+     * @return
+     */
+    int insertByBatch(List<HzDerivativeMaterielDetail> details);
 }
