@@ -14,64 +14,38 @@
         <label for="articleImageFile">选择文件</label>
         <input class="form-control" id="articleImageFile" name="excelFile" type="file"
                placeholder="请选择需要导入文件"/>
+        <div id="layout" style="display: none;margin-top: 50px;text-align: center;z-index: 100;" class="layoutLoading">
+            <img th:src="@{/img/process.gif}"/></div>
     </div>
-    <div id="layout"style="display: none;margin-top: 100px;text-align: center;" class="layoutLoading"><img th:src="@{/img/process.gif}"/></div>
 </form>
-
 <div>
-    <p><strong>温馨提醒:</strong></p>
-    <p><strong>1.这里限制上传文件大小的最大值为10MB</strong></p>
-    <p><strong>2.Excel文件格式必须正确，需严格按照模板格式导入</strong></p>
-    <p><strong>3.导入Excel文件不能有空行</strong></p>
-    <p><strong>4.Excel文件只能有一个Sheet，45列内容</strong></p>
-    <p><strong>5.如有导入疑问，请联系相关责任人进行规范调整</strong></p>
+    <div style="float: left">
+        <p><strong>温馨提醒:</strong></p>
+        <p><strong>1.这里限制上传文件大小的最大值为10MB</strong></p>
+        <p><strong>2.Excel文件格式必须正确，需严格按照模板格式导入</strong></p>
+        <p><strong>3.导入Excel文件不能有空行</strong></p>
+        <p><strong>4.Excel文件只能有一个Sheet，45列内容</strong></p>
+        <p><strong>5.如有导入疑问，请联系相关责任人进行规范调整</strong></p>
+    </div>
+    <div class="form-group" style="float: right;">
+        <button type="button"onclick="getTemplate()"><img th:src="@{/img/excelModel.png}">模版下载
+        </button>
+    </div>
 </div>
-<!--<div id="over" class="overLoading"></div>-->
+<script>
+    function getTemplate() {
 
-<!--<script type="text/javascript">-->
-<!--//导入excel文件-->
-<!--$("#saveZipButton").on('click', function(){-->
-<!--var formData = new FormData();-->
-<!--var name = $("#articleImageFile").val();-->
-<!--var projectId = $("#project", window.top.document).val();-->
-<!--formData.append("file",$("#articleImageFile")[0].files[0]);-->
-<!--formData.append("name",name);-->
-<!--formData.append("projectId",projectId);-->
-<!--if(name==null || name == ''){-->
-<!--window.Ewin.alert({message: '请选择要上传的文件~'});-->
-<!--return;-->
-<!--}-->
-<!--$.ajax({-->
-<!--url :"/hozon/file/upload",-->
-<!--type : 'POST',-->
-<!--async : false,-->
-<!--data : formData,-->
-<!--// 告诉jQuery不要去处理发送的数据-->
-<!--processData : false,-->
-<!--// 告诉jQuery不要去设置Content-Type请求头-->
-<!--contentType : false,-->
-<!--// beforeSend:function(){-->
-<!--//     window.Ewin.alert({message: '系统正在处理，请耐心等待...'});-->
-<!--// },-->
-<!--success : function(result) {-->
-<!--if (result.success) {-->
-<!--layer.msg(result.errMsg, {icon: 1, time: 2000})-->
-<!--}-->
-<!--else if (!result.success && result.errMsg.length>15) {-->
-<!--var msg = "<div style='height: 50%;overflow: auto'>"+ result.errMsg+"</div>"-->
-<!--window.Ewin.confirm({title:'提示',message: msg})-->
-<!--}else {-->
-<!--window.Ewin.alert({message: result.errMsg})-->
-<!--}-->
-<!--}-->
-<!--});-->
-<!--});-->
-
-<!--</script>-->
+        window.location.href = "http://192.168.1.115:8080/hozon/img/EBOM导入模板.xlsx";
+    }
+</script>
 
 <script th:inline="javascript">
     <![CDATA[
     $(function () {
+        // function getTemplate(){
+        //     window.location.href="http://192.168.1.115:8080/hozon/img/EBOM导入模板.xlsx";
+        // }
+
         // $("#btnOk").click(function () {
         //     var div =document.getElementById("layout");
         //     if(div.style.display=="none"){
@@ -113,7 +87,7 @@
                 formData.append("file", $("#articleImageFile")[0].files[0]);
                 formData.append("name", name);
                 formData.append("projectId", projectId);
-                if(name==null || name == ''){
+                if (name == null || name == '') {
                     window.Ewin.alert({message: '请选择要上传的文件~'});
                     return;
                 }
