@@ -7,6 +7,7 @@ import com.connor.hozon.bom.bomSystem.dto.HzMaterielFeatureBean;
 import com.connor.hozon.bom.bomSystem.dto.cfg.HzComposeMFDTO;
 import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
 import com.connor.hozon.bom.bomSystem.service.cfg.*;
+import com.connor.hozon.bom.bomSystem.service.project.HzSuperMaterielService;
 import com.connor.hozon.bom.common.base.entity.QueryBase;
 import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.resources.mybatis.factory.HzFactoryDAO;
@@ -17,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sql.pojo.cfg.*;
 import sql.pojo.factory.HzFactory;
+import sql.pojo.project.HzMaterielRecord;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -36,6 +38,11 @@ public class HzComposeMFService {
      */
     @Autowired
     HzFactoryDAO hzFactoryDAO;
+    /**
+     * 超级物料服务层
+     */
+    @Autowired
+    HzSuperMaterielService hzSuperMaterielService;
     /**
      * 衍生物料基本信息
      */
@@ -105,7 +112,7 @@ public class HzComposeMFService {
         basic.setDmbModelUid(cmodel.getPuid());
         basic.setDmbCreator(user.getUsername());
         basic.setDmbUpdater(user.getUsername());
-
+        basic.setDmbProjectUid(hzComposeMFDTO.getProjectUid());
         if (hzDerivativeMaterielBasicDao.insert(basic) <= 0) {
             logger.error("存储配置物料主数据失败");
             results.put("status", false);
@@ -153,16 +160,16 @@ public class HzComposeMFService {
                 result.put("msg", "新增衍生物料失败");
             }
             boolean hasFail = false;
-            if (hzDerivativeMaterielDetailDao.insertByBatch(details) <= 0) {
-                hasFail = true;
-                logger.error("存储配置物料详情数据失败");
-            }
-//            for (int i = 0; i < details.size(); i++) {
-//                if (hzDerivativeMaterielDetailDao.insert(details.get(i)) <= 0) {
-//                    hasFail = true;
-//                    logger.error("存储配置物料详情数据" + details.get(i).getDmdFeatureValue() + "失败");
-//                }
+//            if (hzDerivativeMaterielDetailDao.insertByBatch(details) <= 0) {
+//                hasFail = true;
+//                logger.error("存储配置物料详情数据失败");
 //            }
+            for (int i = 0; i < details.size(); i++) {
+                if (hzDerivativeMaterielDetailDao.insert(details.get(i)) <= 0) {
+                    hasFail = true;
+                    logger.error("存储配置物料详情数据" + details.get(i).getDmdFeatureValue() + "失败");
+                }
+            }
             if (hasFail) {
                 results.put("status", false);
                 results.put("msg", "存储配置物料详情数据失败，请联系管理员查看日志");
@@ -212,9 +219,45 @@ public class HzComposeMFService {
      */
     public Map<String, Object> loadComposes(String projectUid, QueryBase queryBase) {
         Map<String, Object> result = new HashMap<>();
+
         HzDerivativeMaterielBasic basic = new HzDerivativeMaterielBasic();
+        basic.setDmbProjectUid(projectUid);
         List<HzCfg0OptionFamily> columns = hzCfg0OptionFamilyService.doGetCfg0OptionFamilyListByProjectPuid(projectUid);
-//        List<HzDerivativeMaterielBasic> basics = hzDerivativeMaterielBasicDao.selectByProjectUid(projectUid);
+        Map<String, Object> params = new HashMap<>();
+        params.put("basic", basic);
+        List<HzDerivativeMaterielBasic> basics = hzDerivativeMaterielBasicDao.selectByProjectUid(params);
+        HzDerivativeMaterielDetail detail = new HzDerivativeMaterielDetail();
+        List<Map<String, Object>> list = new ArrayList<>();
+        HzMaterielRecord superMateriel = hzSuperMaterielService.doSelectByProjectPuid(projectUid);
+
+        for (int i = 0; i < basics.size(); i++) {
+            detail.setDmdDmbId(basics.get(i).getId());
+            //详情
+            List<HzDerivativeMaterielDetail> details = hzDerivativeMaterielDetailDao.selectByBasicWithCfg(detail);
+            Map<String, HzDerivativeMaterielDetail> mapOfDetails = new HashMap<>();
+            details.forEach(d -> mapOfDetails.put(d.getDmdCfg0FamilyUid(), d));
+            HzCfg0ModelFeature feature = hzCfg0ModelFeatureService.doSelectByModelAndColorPuids(basics.get(i).getDmbModelUid(), basics.get(i).getDmbColorModelUid());
+            Map<String, Object> _result = new HashMap<>();
+            for (int i1 = 0; i1 < columns.size(); i1++) {
+                if (mapOfDetails.get(columns.get(i1).getPuid()) != null) {
+                    _result.put("s" + i1, mapOfDetails.get(columns.get(i1).getPuid()).getDmdFeatureValue());
+                } else {
+                    _result.put("s" + i1, "-");
+                }
+            }
+            if (superMateriel != null) {
+                _result.put("superMateriel", superMateriel.getpMaterielCode());
+            } else {
+                _result.put("superMateriel", "");
+            }
+            _result.put("puid", basics.get(i).getId());
+            _result.put("factory", feature.getFactoryCode());
+            _result.put("modeBasiceDetail", feature.getMaterialCode());
+            _result.put("modeBasiceDetailDesc", feature.getMaterielDesc());
+            list.add(_result);
+        }
+        result.put("result", list);
+        result.put("totalCount", list.size());
         return result;
     }
 }

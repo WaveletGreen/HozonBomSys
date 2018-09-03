@@ -144,6 +144,7 @@ public class HzMaterielFeatureController extends ExtraIntegrate {
         Map<String, Object> result = new HashMap<>();
         Map<String, Object> data = parse2(projectPuid);
         List<Map<String, Object>> list = new ArrayList<>();
+
         data.forEach((key, value) -> list.add((Map<String, Object>) value));
         result.put("result", list);
         result.put("totalCount", list.size());

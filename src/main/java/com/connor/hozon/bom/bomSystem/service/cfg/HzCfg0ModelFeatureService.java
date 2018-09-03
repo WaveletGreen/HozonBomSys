@@ -57,7 +57,10 @@ public class HzCfg0ModelFeatureService implements IHzCfg0ModelFeatureService {
 
     @Override
     public HzCfg0ModelFeature doSelectByModelAndColorPuids(String pPertainToModel, String pPertainToColorModel) {
-        return hzCfg0ModelFeatureDao.selectByModelAndColorPuids(pPertainToModel, pPertainToColorModel);
+        HzCfg0ModelFeature feature = new HzCfg0ModelFeature();
+        feature.setpPertainToModel(pPertainToModel);
+        feature.setpPertainToColorModel(pPertainToColorModel);
+        return hzCfg0ModelFeatureDao.selectByModelAndColorPuids(feature);
     }
 
     @Override

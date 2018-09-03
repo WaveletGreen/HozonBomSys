@@ -61,7 +61,7 @@ function loadData() {
                 column.push(josn);
             }
             $table.bootstrapTable({
-                url: "materiel/loadAllByProjectPuid?projectPuid=" + projectPuid,
+                url: "materielV2/loadComposes?projectPuid=" + projectPuid,
                 method: 'get',
                 height: $(window.parent.document).find("#wrapper").height() - 150,//$(window.parent.document).find("#wrapper").height() - document.body.offsetHeight - 45,
                 width: $(window).width(),

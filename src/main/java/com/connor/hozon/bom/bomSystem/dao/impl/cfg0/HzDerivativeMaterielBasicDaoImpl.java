@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import sql.pojo.cfg.HzDerivativeMaterielBasic;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author: Fancyears·Maylos·Maywas
@@ -16,6 +17,8 @@ import java.util.List;
 @Configuration
 public class HzDerivativeMaterielBasicDaoImpl extends BasicDaoImpl<HzDerivativeMaterielBasic> implements HzDerivativeMaterielBasicDao {
 
+    private final static HzDerivativeMaterielBasic BASIC = new HzDerivativeMaterielBasic();
+
     public HzDerivativeMaterielBasicDaoImpl() {
         clz = HzDerivativeMaterielBasicDao.class;
     }
@@ -23,11 +26,11 @@ public class HzDerivativeMaterielBasicDaoImpl extends BasicDaoImpl<HzDerivativeM
     /**
      * 根据项目查找项目下的所有配置物料特性数据
      *
-     * @param basic
+     * @param params
      * @return
      */
-    public List<HzDerivativeMaterielBasic> selectByProjectUid(HzDerivativeMaterielBasic basic) {
-        return baseSQLUtil.executeQuery(basic, clz.getCanonicalName() + ".selectByProjectUid");
+    public List<HzDerivativeMaterielBasic> selectByProjectUid(Map<String, Object> params) {
+        return baseSQLUtil.executeQueryByPass(BASIC, params, clz.getCanonicalName() + ".selectByProjectUid");
     }
 
 //    /**
