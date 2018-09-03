@@ -3,6 +3,7 @@ package com.connor.hozon.bom.resources.controller.bom;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.connor.hozon.bom.bomSystem.dao.impl.bom.HzBomLineRecordDaoImpl;
 import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.resources.controller.BaseController;
 import com.connor.hozon.bom.resources.dto.request.AddHzEbomReqDTO;
@@ -15,6 +16,7 @@ import com.connor.hozon.bom.resources.query.DefaultPageQuery;
 import com.connor.hozon.bom.resources.query.HzEbomByPageQuery;
 import com.connor.hozon.bom.resources.service.bom.HzEbomService;
 import com.connor.hozon.bom.resources.util.ListUtil;
+import com.connor.hozon.bom.resources.util.PrivilegeUtil;
 import com.connor.hozon.bom.resources.util.ResultMessageBuilder;
 import com.connor.hozon.bom.sys.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import sql.pojo.bom.HzBomLineRecord;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.*;
@@ -41,6 +44,8 @@ public class HzEbomController extends BaseController {
     @Autowired
     private HzEbomService hzEbomService;
 
+    @Autowired
+    private HzBomLineRecordDaoImpl hzBomLineRecordDao;
     @RequestMapping(value = "/ebomTitle",method = RequestMethod.GET)
     public void getEbomTitle(String projectId, HttpServletResponse response) {
         if(projectId==null){
@@ -381,8 +386,8 @@ public class HzEbomController extends BaseController {
             writeAjaxJSONResponse(ResultMessageBuilder.build(false,"非法参数！"), response);
             return;
         }
-        User user = UserInfo.getUser();
-        if(user.getGroupId()!=9){//管理员权限
+        boolean b = PrivilegeUtil.writePrivilege();
+        if(!b){//管理员权限
             writeAjaxJSONResponse(ResultMessageBuilder.build(false,"您没有权限进行当前操作！"), response);
             return;
         }
@@ -399,8 +404,8 @@ public class HzEbomController extends BaseController {
      */
     @RequestMapping(value = "update/ebom",method = RequestMethod.POST)
     public void updateEbomToDB(@RequestBody UpdateHzEbomReqDTO reqDTO, HttpServletResponse response){
-        User user = UserInfo.getUser();
-        if(user.getGroupId()!=9){//管理员权限
+        boolean b = PrivilegeUtil.writePrivilege();
+        if(!b){//管理员权限
             writeAjaxJSONResponse(ResultMessageBuilder.build(false,"您没有权限进行当前操作！"), response);
             return;
         }
@@ -421,8 +426,8 @@ public class HzEbomController extends BaseController {
             writeAjaxJSONResponse(ResultMessageBuilder.build(false,"非法参数！"), response);
             return;
         }
-        User user = UserInfo.getUser();
-        if(user.getGroupId()!=9){//管理员权限
+        boolean b = PrivilegeUtil.writePrivilege();
+        if(!b){//管理员权限
             writeAjaxJSONResponse(ResultMessageBuilder.build(false,"您没有权限进行当前操作！"), response);
             return;
         }
@@ -439,4 +444,41 @@ public class HzEbomController extends BaseController {
         return "bomManage/ebom/ebomManage/excelImport";
     }
 
+
+
+    /**
+     * 直接生效EBOM 临时用
+     * @param
+     * @param
+     * @param response
+     */
+    @RequestMapping(value = "vaild/direct",method = RequestMethod.POST)
+    public void validDirect(String puids, HttpServletResponse response){
+        if(puids==null){
+            writeAjaxJSONResponse(ResultMessageBuilder.build(false,"非法参数！"), response);
+            return;
+        }
+        boolean b = PrivilegeUtil.writePrivilege();
+        if(!b){//管理员权限
+            writeAjaxJSONResponse(ResultMessageBuilder.build(false,"您没有权限进行当前操作！"), response);
+            return;
+        }
+
+        String[] ps = puids.split(",");
+        List<HzBomLineRecord> list = new ArrayList<>();
+        for(String s:ps){
+            HzBomLineRecord record = new HzBomLineRecord();
+            record.setTableName("HZ_BOM_LINE_RECORD");
+            record.setPuid(s);
+            record.setStatus(1);
+            list.add(record);
+        }
+        int i = hzBomLineRecordDao.updateBatch(list);
+        if(i>0){
+            writeAjaxJSONResponse(ResultMessageBuilder.build(true,"操作成功！"), response);
+        }else {
+            writeAjaxJSONResponse(ResultMessageBuilder.build(false,"操作失败！"), response);
+
+        }
+    }
 }

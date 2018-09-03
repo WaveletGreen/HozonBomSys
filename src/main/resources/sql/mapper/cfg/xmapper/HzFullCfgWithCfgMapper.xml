@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.connor.hozon.bom.bomSystem.dao.cfg.HzFullCfgWithCfgDao">
+    <resultMap id="BaseResultMap" type="sql.pojo.cfg.HzFullCfgWithCfg">
+        <id column="ID" jdbcType="DECIMAL" property="id"/>
+        <result column="CFG_CFG0_UID" jdbcType="VARCHAR" property="cfgCfg0Uid"/>
+        <result column="CFG_BOMLINE_UID" jdbcType="VARCHAR" property="cfgBomlineUid"/>
+        <result column="FL_CFG_CREATE_DATE" jdbcType="TIMESTAMP" property="flCfgCreateDate"/>
+        <result column="FL_CFG_UPDATE_DATE" jdbcType="TIMESTAMP" property="flCfgUpdateDate"/>
+        <result column="FL_CFG_CREATOR" jdbcType="OTHER" property="flCfgCreator"/>
+        <result column="FL_CFG_UPDATOR" jdbcType="OTHER" property="flCfgUpdator"/>
+        <result column="FL_CFG_BOMLINE_NAME" jdbcType="OTHER" property="flCfgBomlineName"/>
+        <result column="FL_CFG_VERSION" jdbcType="DECIMAL" property="flCfgVersion"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    ID, CFG_CFG0_UID, CFG_BOMLINE_UID, FL_CFG_CREATE_DATE, FL_CFG_UPDATE_DATE, FL_CFG_CREATOR, 
+    FL_CFG_UPDATOR, FL_CFG_BOMLINE_NAME, FL_CFG_VERSION
+  </sql>
+    <select id="selectByPrimaryKey" parameterType="sql.pojo.cfg.HzFullCfgWithCfg" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from HZ_FULL_CFG_WITHCFG_RECORD
+        where ID = #{id,jdbcType=DECIMAL}
+    </select>
+    <!--根据主表查询所有的特性-BOMLine对应关系-->
+    <select id="selectByMainID" parameterType="sql.pojo.cfg.HzFullCfgWithCfg" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from HZ_FULL_CFG_WITHCFG_RECORD
+        where FL_CFG_VERSION = #{flCfgVersion,jdbcType=DECIMAL}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.math.BigDecimal">
+    delete from HZ_FULL_CFG_WITHCFG_RECORD
+    where ID = #{id,jdbcType=DECIMAL}
+  </delete>
+    <insert id="insert" parameterType="sql.pojo.cfg.HzFullCfgWithCfg">
+    insert into HZ_FULL_CFG_WITHCFG_RECORD (ID, CFG_CFG0_UID, CFG_BOMLINE_UID, 
+      FL_CFG_CREATE_DATE, FL_CFG_UPDATE_DATE, FL_CFG_CREATOR, 
+      FL_CFG_UPDATOR, FL_CFG_BOMLINE_NAME, FL_CFG_VERSION
+      )
+    values (#{id,jdbcType=DECIMAL}, #{cfgCfg0Uid,jdbcType=VARCHAR}, #{cfgBomlineUid,jdbcType=VARCHAR}, 
+      #{flCfgCreateDate,jdbcType=TIMESTAMP}, #{flCfgUpdateDate,jdbcType=TIMESTAMP}, #{flCfgCreator,jdbcType=OTHER}, 
+      #{flCfgUpdator,jdbcType=OTHER}, #{flCfgBomlineName,jdbcType=OTHER}, #{flCfgVersion,jdbcType=DECIMAL}
+      )
+  </insert>
+    <insert id="insertSelective" parameterType="sql.pojo.cfg.HzFullCfgWithCfg">
+        insert into HZ_FULL_CFG_WITHCFG_RECORD
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                ID,
+            </if>
+            <if test="cfgCfg0Uid != null">
+                CFG_CFG0_UID,
+            </if>
+            <if test="cfgBomlineUid != null">
+                CFG_BOMLINE_UID,
+            </if>
+            <if test="flCfgCreateDate != null">
+                FL_CFG_CREATE_DATE,
+            </if>
+            <if test="flCfgUpdateDate != null">
+                FL_CFG_UPDATE_DATE,
+            </if>
+            <if test="flCfgCreator != null">
+                FL_CFG_CREATOR,
+            </if>
+            <if test="flCfgUpdator != null">
+                FL_CFG_UPDATOR,
+            </if>
+            <if test="flCfgBomlineName != null">
+                FL_CFG_BOMLINE_NAME,
+            </if>
+            <if test="flCfgVersion != null">
+                FL_CFG_VERSION,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=DECIMAL},
+            </if>
+            <if test="cfgCfg0Uid != null">
+                #{cfgCfg0Uid,jdbcType=VARCHAR},
+            </if>
+            <if test="cfgBomlineUid != null">
+                #{cfgBomlineUid,jdbcType=VARCHAR},
+            </if>
+            <if test="flCfgCreateDate != null">
+                #{flCfgCreateDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="flCfgUpdateDate != null">
+                #{flCfgUpdateDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="flCfgCreator != null">
+                #{flCfgCreator,jdbcType=OTHER},
+            </if>
+            <if test="flCfgUpdator != null">
+                #{flCfgUpdator,jdbcType=OTHER},
+            </if>
+            <if test="flCfgBomlineName != null">
+                #{flCfgBomlineName,jdbcType=OTHER},
+            </if>
+            <if test="flCfgVersion != null">
+                #{flCfgVersion,jdbcType=DECIMAL},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="sql.pojo.cfg.HzFullCfgWithCfg">
+        update HZ_FULL_CFG_WITHCFG_RECORD
+        <set>
+            <if test="cfgCfg0Uid != null">
+                CFG_CFG0_UID = #{cfgCfg0Uid,jdbcType=VARCHAR},
+            </if>
+            <if test="cfgBomlineUid != null">
+                CFG_BOMLINE_UID = #{cfgBomlineUid,jdbcType=VARCHAR},
+            </if>
+            <if test="flCfgCreateDate != null">
+                FL_CFG_CREATE_DATE = #{flCfgCreateDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="flCfgUpdateDate != null">
+                FL_CFG_UPDATE_DATE = #{flCfgUpdateDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="flCfgCreator != null">
+                FL_CFG_CREATOR = #{flCfgCreator,jdbcType=OTHER},
+            </if>
+            <if test="flCfgUpdator != null">
+                FL_CFG_UPDATOR = #{flCfgUpdator,jdbcType=OTHER},
+            </if>
+            <if test="flCfgBomlineName != null">
+                FL_CFG_BOMLINE_NAME = #{flCfgBomlineName,jdbcType=OTHER},
+            </if>
+            <if test="flCfgVersion != null">
+                FL_CFG_VERSION = #{flCfgVersion,jdbcType=DECIMAL},
+            </if>
+        </set>
+        where ID = #{id,jdbcType=DECIMAL}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="sql.pojo.cfg.HzFullCfgWithCfg">
+    update HZ_FULL_CFG_WITHCFG_RECORD
+    set CFG_CFG0_UID = #{cfgCfg0Uid,jdbcType=VARCHAR},
+      CFG_BOMLINE_UID = #{cfgBomlineUid,jdbcType=VARCHAR},
+      FL_CFG_CREATE_DATE = #{flCfgCreateDate,jdbcType=TIMESTAMP},
+      FL_CFG_UPDATE_DATE = #{flCfgUpdateDate,jdbcType=TIMESTAMP},
+      FL_CFG_CREATOR = #{flCfgCreator,jdbcType=OTHER},
+      FL_CFG_UPDATOR = #{flCfgUpdator,jdbcType=OTHER},
+      FL_CFG_BOMLINE_NAME = #{flCfgBomlineName,jdbcType=OTHER},
+      FL_CFG_VERSION = #{flCfgVersion,jdbcType=DECIMAL}
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+</mapper>
