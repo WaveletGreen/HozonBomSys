@@ -233,7 +233,29 @@
     <!--查询字典库的条数-->
     <select id="HzDictionaryLibraryDaoImpl_count" parameterType="java.lang.Integer" resultType="java.lang.Integer">
         SELECT  count(*) FROM HZ_DICTIONARY_LIBRARY
-        where STATUS =1
+--         where STATUS =1
+        <where>
+            1=1
+            <if test="groupCode != null and groupCode != ''">
+                and GROUPCODE like CONCAT(CONCAT('%',#{GROUPCODE,jdbcType=VARCHAR}),'%')
+            </if>
+            <if test="groupCh != null and groupCh != ''">
+                and GROUPCH like CONCAT(CONCAT('%',#{GROUPCH,jdbcType=VARCHAR}),'%')
+            </if>
+            <if test="famillyCode != null and famillyCode !=''">
+                and FAMILLYCODE like CONCAT(CONCAT('%',#{FAMILLYCODE,jdbcType=VARCHAR}),'%')
+            </if>
+            <if test="famillyCh != null and famillyCh !=''">
+                and FAMILLYCH like CONCAT(CONCAT('%',#{FAMILLYCH,jdbcType=VARCHAR}),'%')
+            </if>
+            <if test="eigenValue !=null and eigenValue !=''">
+                and EIGENVALUE like CONCAT(CONCAT('%',#{EIGENVALUE,jdbcType=VARCHAR}),'%')
+            </if>
+            <if test="valueDescCh !=null and valueDescCh !=''">
+                and VALUEDESCCH like CONCAT(CONCAT('%',#{VALUEDESCCH,jdbcType=VARCHAR}),'%')
+            </if>
+            and STATUS =1
+        </where>
     </select>
     <!--分页获取数据-->
     <select id="HzDictionaryLibraryDaoImpl_select" parameterType="java.util.HashMap" resultMap="BaseResultMap">
@@ -241,7 +263,29 @@
         (select  t.*,ROWNUM as rn FROM
         (select
         <include refid="Base_Column_List"/> FROM HZ_DICTIONARY_LIBRARY
-        where STATUS =1
+--         where STATUS =1
+        <where>
+            1=1
+            <if test="groupCode != null and groupCode != ''">
+               and GROUPCODE like CONCAT(CONCAT('%',#{GROUPCODE,jdbcType=VARCHAR}),'%')
+            </if>
+            <if test="groupCh != null and groupCh != ''">
+                and GROUPCH like CONCAT(CONCAT('%',#{GROUPCH,jdbcType=VARCHAR}),'%')
+            </if>
+            <if test="famillyCode != null and famillyCode !=''">
+                and FAMILLYCODE like CONCAT(CONCAT('%',#{FAMILLYCODE,jdbcType=VARCHAR}),'%')
+            </if>
+            <if test="famillyCh != null and famillyCh !=''">
+                and FAMILLYCH like CONCAT(CONCAT('%',#{FAMILLYCH,jdbcType=VARCHAR}),'%')
+            </if>
+            <if test="eigenValue !=null and eigenValue !=''">
+                and EIGENVALUE like CONCAT(CONCAT('%',#{EIGENVALUE,jdbcType=VARCHAR}),'%')
+            </if>
+            <if test="valueDescCh !=null and valueDescCh !=''">
+                and VALUEDESCCH like CONCAT(CONCAT('%',#{VALUEDESCCH,jdbcType=VARCHAR}),'%')
+            </if>
+            and STATUS =1
+        </where>
         order by INSERTTIME desc
         ) t
         where ROWNUM &lt;=#{limit,jdbcType=INTEGER})

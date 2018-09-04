@@ -138,6 +138,10 @@ public class DictionaryLibraryController extends BaseController {
         writeAjaxJSONResponse(ResultMessageBuilder.build(OperateResultMessageRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
     }
 
+    /**
+     * 获取配置字典的标题
+     * @param response
+     */
     @RequestMapping(value = "title",method = RequestMethod.GET)
     public void getWorkTitel(HttpServletResponse response){
         LinkedHashMap<String, String> tableTitle = new LinkedHashMap<>();

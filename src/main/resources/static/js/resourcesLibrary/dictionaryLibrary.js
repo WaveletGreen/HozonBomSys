@@ -39,8 +39,8 @@ function initTable(url) {
             var column = [];
             column.push({field: 'ck', checkbox: true, Width: 50});
             var data = result.data;
-            // var keys = [];
-            // var values;
+            var keys = [];
+            var values;
             for (var key in data) {
                 if (data.hasOwnProperty(key)) {
                     var json = {
@@ -79,6 +79,7 @@ function initTable(url) {
                 showColumns: true,                         //是否显示所有的列
                 showToggle: false,                        //是否显示详细视图和列表视图的切换按钮
                 showRefresh: true,                        //是否显示刷新按钮
+                columns:column,
                 toolbars: [
                     {
                         text: '添加',
