@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="sql.mapper.imapper.HzVPPSLibraryMapper">
+  <resultMap id="BaseResultMap" type="sql.pojo.HzVPPSLibrary">
+    <id column="PUID" jdbcType="VARCHAR" property="puid" />
+    <result column="VPPS_LEVEL" jdbcType="DECIMAL" property="vppsLevel" />
+    <result column="VSG_CODE" jdbcType="VARCHAR" property="vsgCode" />
+    <result column="VPPS_CODE" jdbcType="VARCHAR" property="vppsCode" />
+    <result column="VPPS_EN_DESC" jdbcType="VARCHAR" property="vppsEnDesc" />
+    <result column="VPPS_CH_DESC" jdbcType="VARCHAR" property="vppsChDesc" />
+    <result column="UPC" jdbcType="VARCHAR" property="upc" />
+    <result column="FNA" jdbcType="VARCHAR" property="fna" />
+    <result column="FNA_CH_DESC" jdbcType="VARCHAR" property="fnaChDesc" />
+    <result column="STANDARD_PART_CODE" jdbcType="VARCHAR" property="standardPartCode" />
+    <result column="INSERT_TIME" jdbcType="DATE" property="insertTime" />
+    <result column="UPDATE_TIME" jdbcType="DATE" property="updateTime" />
+    <result column="STATUS" jdbcType="DECIMAL" property="status" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    PUID, VPPS_LEVEL, VSG_CODE, VPPS_CODE, VPPS_EN_DESC, VPPS_CH_DESC, UPC, FNA, FNA_CH_DESC, 
+    STANDARD_PART_CODE, INSERT_TIME, UPDATE_TIME, STATUS
+  </sql>
+
+
+
+
+
+
+
+
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from HZ_VPPS_LIBRARY
+    where PUID = #{puid,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from HZ_VPPS_LIBRARY
+    where PUID = #{puid,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="sql.pojo.HzVPPSLibrary">
+    insert into HZ_VPPS_LIBRARY (PUID, VPPS_LEVEL, VSG_CODE, 
+      VPPS_CODE, VPPS_EN_DESC, VPPS_CH_DESC, 
+      UPC, FNA, FNA_CH_DESC, 
+      STANDARD_PART_CODE, INSERT_TIME, UPDATE_TIME, 
+      STATUS)
+    values (#{puid,jdbcType=VARCHAR}, #{vppsLevel,jdbcType=DECIMAL}, #{vsgCode,jdbcType=VARCHAR}, 
+      #{vppsCode,jdbcType=VARCHAR}, #{vppsEnDesc,jdbcType=VARCHAR}, #{vppsChDesc,jdbcType=VARCHAR}, 
+      #{upc,jdbcType=VARCHAR}, #{fna,jdbcType=VARCHAR}, #{fnaChDesc,jdbcType=VARCHAR}, 
+      #{standardPartCode,jdbcType=VARCHAR}, #{insertTime,jdbcType=DATE}, #{updateTime,jdbcType=DATE}, 
+      #{status,jdbcType=DECIMAL})
+  </insert>
+  <insert id="insertSelective" parameterType="sql.pojo.HzVPPSLibrary">
+    insert into HZ_VPPS_LIBRARY
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="puid != null">
+        PUID,
+      </if>
+      <if test="vppsLevel != null">
+        VPPS_LEVEL,
+      </if>
+      <if test="vsgCode != null">
+        VSG_CODE,
+      </if>
+      <if test="vppsCode != null">
+        VPPS_CODE,
+      </if>
+      <if test="vppsEnDesc != null">
+        VPPS_EN_DESC,
+      </if>
+      <if test="vppsChDesc != null">
+        VPPS_CH_DESC,
+      </if>
+      <if test="upc != null">
+        UPC,
+      </if>
+      <if test="fna != null">
+        FNA,
+      </if>
+      <if test="fnaChDesc != null">
+        FNA_CH_DESC,
+      </if>
+      <if test="standardPartCode != null">
+        STANDARD_PART_CODE,
+      </if>
+      <if test="insertTime != null">
+        INSERT_TIME,
+      </if>
+      <if test="updateTime != null">
+        UPDATE_TIME,
+      </if>
+      <if test="status != null">
+        STATUS,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="puid != null">
+        #{puid,jdbcType=VARCHAR},
+      </if>
+      <if test="vppsLevel != null">
+        #{vppsLevel,jdbcType=DECIMAL},
+      </if>
+      <if test="vsgCode != null">
+        #{vsgCode,jdbcType=VARCHAR},
+      </if>
+      <if test="vppsCode != null">
+        #{vppsCode,jdbcType=VARCHAR},
+      </if>
+      <if test="vppsEnDesc != null">
+        #{vppsEnDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="vppsChDesc != null">
+        #{vppsChDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="upc != null">
+        #{upc,jdbcType=VARCHAR},
+      </if>
+      <if test="fna != null">
+        #{fna,jdbcType=VARCHAR},
+      </if>
+      <if test="fnaChDesc != null">
+        #{fnaChDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="standardPartCode != null">
+        #{standardPartCode,jdbcType=VARCHAR},
+      </if>
+      <if test="insertTime != null">
+        #{insertTime,jdbcType=DATE},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=DATE},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="sql.pojo.HzVPPSLibrary">
+    update HZ_VPPS_LIBRARY
+    <set>
+      <if test="vppsLevel != null">
+        VPPS_LEVEL = #{vppsLevel,jdbcType=DECIMAL},
+      </if>
+      <if test="vsgCode != null">
+        VSG_CODE = #{vsgCode,jdbcType=VARCHAR},
+      </if>
+      <if test="vppsCode != null">
+        VPPS_CODE = #{vppsCode,jdbcType=VARCHAR},
+      </if>
+      <if test="vppsEnDesc != null">
+        VPPS_EN_DESC = #{vppsEnDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="vppsChDesc != null">
+        VPPS_CH_DESC = #{vppsChDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="upc != null">
+        UPC = #{upc,jdbcType=VARCHAR},
+      </if>
+      <if test="fna != null">
+        FNA = #{fna,jdbcType=VARCHAR},
+      </if>
+      <if test="fnaChDesc != null">
+        FNA_CH_DESC = #{fnaChDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="standardPartCode != null">
+        STANDARD_PART_CODE = #{standardPartCode,jdbcType=VARCHAR},
+      </if>
+      <if test="insertTime != null">
+        INSERT_TIME = #{insertTime,jdbcType=DATE},
+      </if>
+      <if test="updateTime != null">
+        UPDATE_TIME = #{updateTime,jdbcType=DATE},
+      </if>
+      <if test="status != null">
+        STATUS = #{status,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where PUID = #{puid,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="sql.pojo.HzVPPSLibrary">
+    update HZ_VPPS_LIBRARY
+    set VPPS_LEVEL = #{vppsLevel,jdbcType=DECIMAL},
+      VSG_CODE = #{vsgCode,jdbcType=VARCHAR},
+      VPPS_CODE = #{vppsCode,jdbcType=VARCHAR},
+      VPPS_EN_DESC = #{vppsEnDesc,jdbcType=VARCHAR},
+      VPPS_CH_DESC = #{vppsChDesc,jdbcType=VARCHAR},
+      UPC = #{upc,jdbcType=VARCHAR},
+      FNA = #{fna,jdbcType=VARCHAR},
+      FNA_CH_DESC = #{fnaChDesc,jdbcType=VARCHAR},
+      STANDARD_PART_CODE = #{standardPartCode,jdbcType=VARCHAR},
+      INSERT_TIME = #{insertTime,jdbcType=DATE},
+      UPDATE_TIME = #{updateTime,jdbcType=DATE},
+      STATUS = #{status,jdbcType=DECIMAL}
+    where PUID = #{puid,jdbcType=VARCHAR}
+  </update>
+</mapper>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<!--User: xulf Date: 2018/9/4 Time: 15:44-->
+<head th:include="include/headBom"></head>
+<link th:href="@{/css/stage/bom-stage.css}" rel="stylesheet"/>
+<meta charset="UTF-8">
+<title>VPPS库</title>
+</head>
+<body>
+<div class="panel-body" style="padding-bottom: 0;">
+    <form class="form-inline" role="form" style="float: left; width: 100%;margin-left: 20px;" method="get"
+          id="queryVPPSLibrary">
+        <div class="form-group">
+            <label for="vppsLevel">VPPS层级</label>
+            <input class="form-control" id="vppsLevel" name="vppsLevel" type="text"
+                   placeholder="请输入VPPS层级"/>
+        </div>
+        <div class="form-group">
+            <label for="vsgCode">VSG代码</label>
+            <input class="form-control" id="vsgCode" name="vsgCode" type="text"
+                   placeholder="请输入VSG代码"/>
+        </div>
+        <div class="form-group">
+            <label for="vppsCode">VPPS代码</label>
+            <input class="form-control" id="vppsCode" name="vppsCode" type="text"
+                   placeholder="请输入特征族代码"/>
+        </div>
+        <div class="form-group">
+            <label for="upc">UPC</label>
+            <input class="form-control" id="upc" name="upc" type="text"
+                   placeholder="请输入UPC"/>
+        </div>
+        <div class="form-group">
+            <label for="fna">FNA</label>
+            <input class="form-control" id="fna" name="fna" type="text"
+                   placeholder="请输入FNA"/>
+        </div>
+        <div class="form-group">
+            <label for="standardPartCode">标准零件代码</label>
+            <input class="form-control" id="standardPartCode" name="standardPartCode" type="text"
+                   placeholder="请输入标准零件代码"/>
+        </div>
+        <div class="form-group">
+            <button type="button" id="queryBtn" onclick="doQuery();" class="btn btn-primary">查询</button>
+        </div>
+    </form>
+</div>
+<table class="table table-striped tableNormalStyle" id="VPPSLibraryTable"></table>
+<script th:src="@{/js/resourcesLibrary/VPPSLibrary.js}"></script>
+</body>
+</html>

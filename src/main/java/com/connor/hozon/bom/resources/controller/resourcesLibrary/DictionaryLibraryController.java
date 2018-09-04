@@ -31,7 +31,7 @@ import java.util.*;
 @RequestMapping(value = "dict")
 public class DictionaryLibraryController extends BaseController {
     @Autowired
-    private HzDictionaryLibraryService service;
+    private HzDictionaryLibraryService hzDictionaryLibraryService;
     /**
      * 跳转到字典库的添加页面
      * @return
@@ -46,7 +46,7 @@ public class DictionaryLibraryController extends BaseController {
      */
     @RequestMapping(value = "getUpdate",method = RequestMethod.GET)
     public String getUpdateDictionaryLibrary(String puid, Model model){
-        HzDictionaryLibraryRespDTO library = service.findHzDictionaryLibraryByPuid(puid);
+        HzDictionaryLibraryRespDTO library = hzDictionaryLibraryService.findHzDictionaryLibraryByPuid(puid);
         if (library==null){
             return "";
         }
@@ -61,7 +61,7 @@ public class DictionaryLibraryController extends BaseController {
      */
     @RequestMapping(value = "add",method = RequestMethod.POST)
     public void addDictionaryLibrary(@RequestBody AddHzDictionaryLibraryReqDTO dto, HttpServletResponse response){
-        OperateResultMessageRespDTO respDTO = service.insertHzDictionaryLibrary(dto);
+        OperateResultMessageRespDTO respDTO = hzDictionaryLibraryService.insertHzDictionaryLibrary(dto);
         writeAjaxJSONResponse(ResultMessageBuilder.build(OperateResultMessageRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
     }
 
@@ -80,7 +80,7 @@ public class DictionaryLibraryController extends BaseController {
         } catch (NumberFormatException e) {
             e.printStackTrace();
         }
-        Page<HzDictionaryLibraryRespDTO> page = service.findHzDictionaryLibraryToPage(query);
+        Page<HzDictionaryLibraryRespDTO> page = hzDictionaryLibraryService.findHzDictionaryLibraryToPage(query);
         if (page ==null){
             return new HashMap<>();
         }
@@ -123,7 +123,7 @@ public class DictionaryLibraryController extends BaseController {
      */
     @RequestMapping(value = "updateById",method = RequestMethod.POST)
     public void updateDiDictionaryLibrary(@RequestBody AddHzDictionaryLibraryReqDTO dto,HttpServletResponse response){
-        OperateResultMessageRespDTO respDTO = service.updateHzDictionaryLibrary(dto);
+        OperateResultMessageRespDTO respDTO = hzDictionaryLibraryService.updateHzDictionaryLibrary(dto);
         writeAjaxJSONResponse(ResultMessageBuilder.build(OperateResultMessageRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
     }
 
@@ -134,7 +134,7 @@ public class DictionaryLibraryController extends BaseController {
      */
     @RequestMapping(value = "delete",method = RequestMethod.POST)
     public void deleteDiDictionaryLibrary(String puid ,HttpServletResponse response){
-        OperateResultMessageRespDTO respDTO = service.deleteHzDictionaryLibrary(puid);
+        OperateResultMessageRespDTO respDTO = hzDictionaryLibraryService.deleteHzDictionaryLibrary(puid);
         writeAjaxJSONResponse(ResultMessageBuilder.build(OperateResultMessageRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
     }
 
