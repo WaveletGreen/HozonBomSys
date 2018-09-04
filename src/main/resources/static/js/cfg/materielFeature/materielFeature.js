@@ -129,28 +129,44 @@ function loadData() {
                                 height: 450
                             });
                         }
-                    }
-                    ,
-                    // {
-                    //     text: '添加车型模型',
-                    //     iconCls: 'glyphicon glyphicon-pencil',
-                    //     handler: function () {
-                    //         // var rows = $table.bootstrapTable('getSelections');
-                    //         // //只能选一条
-                    //         // if (rows.length != 1) {
-                    //         //     window.Ewin.alert({message: '请选择一条需要修改的数据!'});
-                    //         //     return false;
-                    //         // }
-                    //         window.Ewin.dialog({
-                    //             // 这个puid就是车型模型的puid，直接修改了车型模型的基本信息（在bom系统维护的字段）
-                    //             title: "添加车型模型",
-                    //             url: "materiel/addVehicleModelPage?projectPuid=" + projectPuid,
-                    //             gridId: "gridId",
-                    //             width: 350,
-                    //             height: 450
-                    //         });
-                    //     }
-                    // },
+                    },
+                    {
+                        text: '删除衍生物料',
+                        iconCls: 'glyphicon glyphicon-pencil',
+                        handler: function () {
+                            var rows = $table.bootstrapTable('getSelections');
+                            //只能选一条
+                            if (rows.length <= 0) {
+                                window.Ewin.alert({message: '请至少选择一条需要删除的数据!'});
+                                return false;
+                            }
+                            window.Ewin.confirm({title: '提示', message: '是否要删除您所选择的记录？', width: 500}).on(function (e) {
+                                if (e) {
+                                    $.ajax({
+                                        type: "POST",
+                                        //ajax需要添加打包名
+                                        url: "./materielV2/deleteCompose",
+                                        data: JSON.stringify(rows),
+                                        contentType: "application/json",
+                                        success: function (result) {
+                                            if (result.status) {
+                                                layer.msg(result.msg, {icon: 1, time: 2000})
+                                                // window.Ewin.alert({message: });
+                                                //刷新，会重新申请数据库数据
+                                            }
+                                            else {
+                                                window.Ewin.alert({message: "操作删除失败:" + result.msg});
+                                            }
+                                            $table.bootstrapTable("refresh");
+                                        },
+                                        error: function (info) {
+                                            window.Ewin.alert({message: "操作删除:" + info.status});
+                                        }
+                                    })
+                                }
+                            })
+                        }
+                    },
                     {
                         text: '同步整车物料属性到ERP',
                         iconCls: 'glyphicon glyphicon-pencil',
