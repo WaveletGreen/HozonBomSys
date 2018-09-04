@@ -99,12 +99,12 @@ public class HzEWOBaseInfoController extends BaseController {
     @ResponseBody
     public JSONObject getHzEWOBasicInfoList(HzEWOBasicInfoQuery query, HttpServletResponse response){
         if(query.getProjectId() == null || query.getProjectId() == ""){
-            writeAjaxJSONResponse(ResultMessageBuilder.build(false,"非法参数！"),response);
+//            writeAjaxJSONResponse(ResultMessageBuilder.build(false,"非法参数！"),response);
             return new JSONObject();
         }
         List<HzEWOBasicInfoRespDTO> respDTOs = hzEWOBasicInfoService.findHzEWOList(query);
         if(ListUtil.isEmpty(respDTOs)){
-            writeAjaxJSONResponse(ResultMessageBuilder.build(false,"暂无数据！"),response);
+//            writeAjaxJSONResponse(ResultMessageBuilder.build(false,"暂无数据！"),response);
             return new JSONObject();
         }
         JSONObject jsonObject = new JSONObject();

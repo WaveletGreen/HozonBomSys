@@ -154,13 +154,9 @@ public class HzPbomServiceImpl implements HzPbomService {
 
     @Override
     public OperateResultMessageRespDTO updateHzPbomRecord(UpdateHzPbomRecordReqDTO recordReqDTO) {
-        OperateResultMessageRespDTO respDTO = new OperateResultMessageRespDTO();
         try {
-            User user = UserInfo.getUser();
-            if(user.getGroupId()!=9){
-                respDTO.setErrMsg("你当前没有权限执行此操作!");
-                respDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
-                return respDTO;
+            if(!PrivilegeUtil.writePrivilege()){
+                return OperateResultMessageRespDTO.getFailPrivilege();
             }
             HzPbomLineRecord hzPbomRecord = new HzPbomLineRecord();
             hzPbomRecord.setUpdateName(UserInfo.getUser().getUserName());
@@ -174,21 +170,21 @@ public class HzPbomServiceImpl implements HzPbomService {
             }else if(buyUnit.equals("N")){
                 hzPbomRecord.setBuyUnit(0);
             }else{
-                hzPbomRecord.setBuyUnit(2);
+                hzPbomRecord.setBuyUnit(null);
             }
             if(colorPart.equals("Y")){
                 hzPbomRecord.setColorPart(1);
             }else if(colorPart.equals("N")){
                 hzPbomRecord.setColorPart(0);
             }else{
-                hzPbomRecord.setColorPart(2);
+                hzPbomRecord.setColorPart(null);
             }
             if(type.equals("Y")){
                 hzPbomRecord.setType(1);
             }else if(type.equals("N")){
                 hzPbomRecord.setType(0);
             }else{
-                hzPbomRecord.setType(2);
+                hzPbomRecord.setType(null);
             }
             hzPbomRecord.setMouldType(recordReqDTO.getMouldType());
             hzPbomRecord.setOuterPart(recordReqDTO.getOuterPart());
@@ -196,6 +192,7 @@ public class HzPbomServiceImpl implements HzPbomService {
             hzPbomRecord.setStation(recordReqDTO.getStation());
             hzPbomRecord.setWorkShop1(recordReqDTO.getWorkShop1());
             hzPbomRecord.setWorkShop2(recordReqDTO.getWorkShop2());
+            hzPbomRecord.setResource(recordReqDTO.getResource());
             int i = hzPbomRecordDAO.update(hzPbomRecord);
             if(i>0){
                 return OperateResultMessageRespDTO.getSuccessResult();
@@ -211,11 +208,8 @@ public class HzPbomServiceImpl implements HzPbomService {
     public OperateResultMessageRespDTO deleteHzPbomRecordByForeignId(DeleteHzPbomReqDTO reqDTO) {
         OperateResultMessageRespDTO respDTO = new OperateResultMessageRespDTO();
         try {
-            User user = UserInfo.getUser();
-            if(user.getGroupId()!=9){
-                respDTO.setErrMsg("你当前没有权限执行此操作!");
-                respDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
-                return respDTO;
+            if(!PrivilegeUtil.writePrivilege()){
+                return OperateResultMessageRespDTO.getFailPrivilege();
             }
             if(reqDTO.getPuids() == null || reqDTO.getPuids().equals("") || reqDTO.getProjectId() ==null || reqDTO.getProjectId().equals("")){
                 respDTO.setErrMsg("非法参数！");
@@ -356,7 +350,7 @@ public class HzPbomServiceImpl implements HzPbomService {
             } else if (Integer.valueOf(1).equals(type)) {
                 jsonObject.put("type","Y");
             } else {
-                jsonObject.put("type","N");
+                jsonObject.put("type","");
             }
             if (Integer.valueOf(0).equals(buyUnit)) {
                 jsonObject.put("buyUnit", "N");
@@ -554,7 +548,7 @@ public class HzPbomServiceImpl implements HzPbomService {
                 } else if ("N".equals(type)) {
                     hzPbomLineRecord.setType(0);
                 } else {
-                    hzPbomLineRecord.setType(2);
+                    hzPbomLineRecord.setType(null);
                 }
                 hzPbomLineRecord.setMouldType(recordReqDTO.getMouldType());
                 hzPbomLineRecord.setOuterPart(recordReqDTO.getOuterPart());
