@@ -204,9 +204,9 @@ public class HzMaterielFeatureController extends ExtraIntegrate {
                 _result.put("puid", value.getpCfg0ModelRecord());
                 //族
                 _result.put("cfg0MainPuid", value.getpOfCfg0MainRecord());
-                _result.put("modeBasiceDetail", value.getpCfg0ModelBasicDetail());
+                _result.put("modeBasicDetail", value.getpCfg0ModelBasicDetail());
                 //目前只有无色件
-                _result.put("modeBasiceDetailDesc", value.getObjectName());
+                _result.put("modeBasicDetailDesc", value.getObjectName());
                 if (superMateriel != null) {
                     _result.put("superMateriel", superMateriel.getpMaterielCode());
                 } else {

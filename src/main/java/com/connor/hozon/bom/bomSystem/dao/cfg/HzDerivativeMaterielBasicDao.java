@@ -20,4 +20,12 @@ public interface HzDerivativeMaterielBasicDao extends BasicDao<HzDerivativeMater
      * @return
      */
     List<HzDerivativeMaterielBasic> selectByProjectUid(Map<String, Object> params);
+
+    /**
+     * 车型模型+配色模型组成唯一的配置物料特性数据
+     * @param modelUid 车型模型UID
+     * @param colorModel 配色模型UID
+     * @return
+     */
+    HzDerivativeMaterielBasic selectByModelAndColorUid(String modelUid, String colorModel);
 }

@@ -45,8 +45,8 @@ function loadData() {
             // column.push({field: 'puid', title: 'puid'});
             // column.push({field: 'puidOfModelFeature', title: 'puidOfModelFeature'});
             // column.push({field: 'cfg0MainPuid', title: 'cfg0MainPuid'});
-            column.push({field: 'modeBasiceDetail', title: '基本信息代码'});
-            column.push({field: 'modeBasiceDetailDesc', title: '基本信息'});
+            column.push({field: 'modeBasicDetail', title: '基本信息代码'});
+            column.push({field: 'modeBasicDetailDesc', title: '基本信息'});
             column.push({field: 'superMateriel', title: '超级物料'});
             for (var i = 0; i < data.length; i++) {
                 var josn = {

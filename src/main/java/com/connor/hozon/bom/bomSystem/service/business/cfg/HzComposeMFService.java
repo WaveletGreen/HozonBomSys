@@ -84,6 +84,13 @@ public class HzComposeMFService {
     private static Logger logger = LoggerFactory.getLogger(HzComposeMFService.class);
 
     public void saveCompose(HzComposeMFDTO hzComposeMFDTO, JSONObject results) {
+        HzDerivativeMaterielBasic basic1 = hzDerivativeMaterielBasicDao.selectByModelAndColorUid(hzComposeMFDTO.getModelUid(), hzComposeMFDTO.getColorModel());
+        if (basic1 != null) {
+            results.put("msg", "已存在相同配置的衍生物料，请进行修改操作或先删除衍生物料");
+            results.put("status", false);
+            return;
+        }
+
         HzCfg0ModelFeature feature = new HzCfg0ModelFeature();
         User user = UserInfo.getUser();
         HzFactory factory = hzFactoryDAO.findFactory(null, hzComposeMFDTO.getFactoryCode());
@@ -237,6 +244,7 @@ public class HzComposeMFService {
             Map<String, HzDerivativeMaterielDetail> mapOfDetails = new HashMap<>();
             details.forEach(d -> mapOfDetails.put(d.getDmdCfg0FamilyUid(), d));
             HzCfg0ModelFeature feature = hzCfg0ModelFeatureService.doSelectByModelAndColorPuids(basics.get(i).getDmbModelUid(), basics.get(i).getDmbColorModelUid());
+            HzCfg0ModelRecord modelRecord = hzCfg0ModelService.getModelByPuid(feature.getpPertainToModel());
             Map<String, Object> _result = new HashMap<>();
             for (int i1 = 0; i1 < columns.size(); i1++) {
                 if (mapOfDetails.get(columns.get(i1).getPuid()) != null) {
@@ -250,10 +258,12 @@ public class HzComposeMFService {
             } else {
                 _result.put("superMateriel", "");
             }
-            _result.put("puid", basics.get(i).getId());
+            _result.put("puid", feature.getpPertainToModel());
+            _result.put("puidOfModelFeature", feature.getPuid());
             _result.put("factory", feature.getFactoryCode());
-            _result.put("modeBasiceDetail", feature.getMaterialCode());
-            _result.put("modeBasiceDetailDesc", feature.getMaterielDesc());
+            _result.put("modeBasicDetail", modelRecord.getObjectName());
+            _result.put("modeBasicDetailDesc", modelRecord.getpCfg0ModelBasicDetail());
+            _result.put("cfg0MainPuid", modelRecord.getpCfg0ModelOfMainRecord());
             list.add(_result);
         }
         result.put("result", list);

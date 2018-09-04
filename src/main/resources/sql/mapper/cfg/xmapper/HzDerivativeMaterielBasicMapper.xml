@@ -57,6 +57,14 @@
         where DMB_PROJECT_UID = #{basic.dmbProjectUid,jdbcType=VARCHAR}
         order by t.id
     </select>
+    <select id="selectByModelAndColorUid" parameterType="sql.pojo.cfg.HzDerivativeMaterielBasic"
+            resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from HZ_DERIVATIVE_MATERIEL_BASIC t
+        where DMB_MODEL_UID = #{dmbModelUid,jdbcType=VARCHAR}
+        and DMB_COLOR_MODEL_UID=#{dmbColorModelUid,jdbcType=VARCHAR}
+    </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from HZ_DERIVATIVE_MATERIEL_BASIC
     where ID = #{id,jdbcType=DECIMAL}
