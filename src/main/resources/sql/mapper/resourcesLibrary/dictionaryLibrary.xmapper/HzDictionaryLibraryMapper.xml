@@ -1,0 +1,352 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="HzDictionaryLibraryMapper">
+  <resultMap id="BaseResultMap" type="sql.pojo.resourcesLibrary.dictionaryLibrary.HzDictionaryLibrary">
+    <id column="PUID" jdbcType="VARCHAR" property="puid" />
+    <result column="PROFESSION_CH" jdbcType="VARCHAR" property="professionCh" />
+    <result column="PROFESSION_EN" jdbcType="VARCHAR" property="professionEn" />
+    <result column="CLASSIFICATION_CH" jdbcType="VARCHAR" property="classificationCh" />
+    <result column="CLASSIFICATION_EN" jdbcType="VARCHAR" property="classificationEn" />
+    <result column="GROUP_CODE" jdbcType="VARCHAR" property="groupCode" />
+    <result column="GROUP_CH" jdbcType="VARCHAR" property="groupCh" />
+    <result column="GROUP_EN" jdbcType="VARCHAR" property="groupEn" />
+    <result column="FAMILLY_CODE" jdbcType="VARCHAR" property="famillyCode" />
+    <result column="FAMILLY_CH" jdbcType="VARCHAR" property="famillyCh" />
+    <result column="FAMILLY_EN" jdbcType="VARCHAR" property="famillyEn" />
+    <result column="EIGEN_VALUE" jdbcType="VARCHAR" property="eigenValue" />
+    <result column="VALUE_DESC_CH" jdbcType="VARCHAR" property="valueDescCh" />
+    <result column="VALUE_DESC_EN" jdbcType="VARCHAR" property="valueDescEn" />
+    <result column="TYPE" jdbcType="VARCHAR" property="type" />
+    <result column="VALUE_SOURCE" jdbcType="VARCHAR" property="valueSource" />
+    <result column="EFFECT_TIME" jdbcType="DATE" property="effectTime" />
+    <result column="FAILURE_TIME" jdbcType="DATE" property="failureTime" />
+    <result column="NOTE" jdbcType="VARCHAR" property="note" />
+    <result column="STATUS" jdbcType="INTEGER" property="status" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    PUID, PROFESSION_CH, PROFESSION_EN, CLASSIFICATION_CH, CLASSIFICATION_EN, GROUP_CODE, 
+    GROUP_CH, GROUP_EN, FAMILLY_CODE, FAMILLY_CH, FAMILLY_EN, EIGEN_VALUE, VALUE_DESC_CH, 
+    VALUE_DESC_EN, TYPE, VALUE_SOURCE, EFFECT_TIME, FAILURE_TIME, NOTE
+  </sql>
+    <!--根据ID查询一条数据-->
+    <select id="HzDictionaryLibraryDaoImpl_findById" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from HZ_DICTIONARY_LIBRARY
+    where PUID = #{puid,jdbcType=VARCHAR}
+  </select>
+    <!--插入一条数据-->
+    <insert id="HzDictionaryLibraryDaoImpl_insert" parameterType="sql.pojo.resourcesLibrary.dictionaryLibrary.HzDictionaryLibrary">
+        insert into HZ_DICTIONARY_LIBRARY
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="puid != null">
+                PUID,
+            </if>
+            <if test="professionCh != null">
+                PROFESSION_CH,
+            </if>
+            <if test="professionEn != null">
+                PROFESSION_EN,
+            </if>
+            <if test="classificationCh != null">
+                CLASSIFICATION_CH,
+            </if>
+            <if test="classificationEn != null">
+                CLASSIFICATION_EN,
+            </if>
+            <if test="groupCode != null">
+                GROUP_CODE,
+            </if>
+            <if test="groupCh != null">
+                GROUP_CH,
+            </if>
+            <if test="groupEn != null">
+                GROUP_EN,
+            </if>
+            <if test="famillyCode != null">
+                FAMILLY_CODE,
+            </if>
+            <if test="famillyCh != null">
+                FAMILLY_CH,
+            </if>
+            <if test="famillyEn != null">
+                FAMILLY_EN,
+            </if>
+            <if test="eigenValue != null">
+                EIGEN_VALUE,
+            </if>
+            <if test="valueDescCh != null">
+                VALUE_DESC_CH,
+            </if>
+            <if test="valueDescEn != null">
+                VALUE_DESC_EN,
+            </if>
+            <if test="type != null">
+                TYPE,
+            </if>
+            <if test="valueSource != null">
+                VALUE_SOURCE,
+            </if>
+            <if test="effectTime != null">
+                EFFECT_TIME,
+            </if>
+            <if test="failureTime != null">
+                FAILURE_TIME,
+            </if>
+            <if test="note != null">
+                NOTE,
+            </if>
+            STATUS,
+            INSERTTIME,
+            UPDATETIME,
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="puid != null">
+                #{puid,jdbcType=VARCHAR},
+            </if>
+            <if test="professionCh != null">
+                #{professionCh,jdbcType=VARCHAR},
+            </if>
+            <if test="professionEn != null">
+                #{professionEn,jdbcType=VARCHAR},
+            </if>
+            <if test="classificationCh != null">
+                #{classificationCh,jdbcType=VARCHAR},
+            </if>
+            <if test="classificationEn != null">
+                #{classificationEn,jdbcType=VARCHAR},
+            </if>
+            <if test="groupCode != null">
+                #{groupCode,jdbcType=VARCHAR},
+            </if>
+            <if test="groupCh != null">
+                #{groupCh,jdbcType=VARCHAR},
+            </if>
+            <if test="groupEn != null">
+                #{groupEn,jdbcType=VARCHAR},
+            </if>
+            <if test="famillyCode != null">
+                #{famillyCode,jdbcType=VARCHAR},
+            </if>
+            <if test="famillyCh != null">
+                #{famillyCh,jdbcType=VARCHAR},
+            </if>
+            <if test="famillyEn != null">
+                #{famillyEn,jdbcType=VARCHAR},
+            </if>
+            <if test="eigenValue != null">
+                #{eigenValue,jdbcType=VARCHAR},
+            </if>
+            <if test="valueDescCh != null">
+                #{valueDescCh,jdbcType=VARCHAR},
+            </if>
+            <if test="valueDescEn != null">
+                #{valueDescEn,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null">
+                #{type,jdbcType=VARCHAR},
+            </if>
+            <if test="valueSource != null">
+                #{valueSource,jdbcType=VARCHAR},
+            </if>
+            <if test="effectTime != null">
+                #{effectTime,jdbcType=DATE},
+            </if>
+            <if test="failureTime != null">
+                #{failureTime,jdbcType=DATE},
+            </if>
+            <if test="note != null">
+                #{note,jdbcType=VARCHAR},
+            </if>
+            1,
+            sysdate,
+            sysdate,
+        </trim>
+    </insert>
+    <!--编辑一条数据-->
+    <update id="HzDictionaryLibraryDaoImpl_update" parameterType="sql.pojo.resourcesLibrary.dictionaryLibrary.HzDictionaryLibrary">
+        update HZ_DICTIONARY_LIBRARY
+        <set>
+            <if test="professionCh != null">
+                PROFESSION_CH = #{professionCh,jdbcType=VARCHAR},
+            </if>
+            <if test="professionEn != null">
+                PROFESSION_EN = #{professionEn,jdbcType=VARCHAR},
+            </if>
+            <if test="classificationCh != null">
+                CLASSIFICATION_CH = #{classificationCh,jdbcType=VARCHAR},
+            </if>
+            <if test="classificationEn != null">
+                CLASSIFICATION_EN = #{classificationEn,jdbcType=VARCHAR},
+            </if>
+            <if test="groupCode != null">
+                GROUP_CODE = #{groupCode,jdbcType=VARCHAR},
+            </if>
+            <if test="groupCh != null">
+                GROUP_CH = #{groupCh,jdbcType=VARCHAR},
+            </if>
+            <if test="groupEn != null">
+                GROUP_EN = #{groupEn,jdbcType=VARCHAR},
+            </if>
+            <if test="famillyCode != null">
+                FAMILLY_CODE = #{famillyCode,jdbcType=VARCHAR},
+            </if>
+            <if test="famillyCh != null">
+                FAMILLY_CH = #{famillyCh,jdbcType=VARCHAR},
+            </if>
+            <if test="famillyEn != null">
+                FAMILLY_EN = #{famillyEn,jdbcType=VARCHAR},
+            </if>
+            <if test="eigenValue != null">
+                EIGEN_VALUE = #{eigenValue,jdbcType=VARCHAR},
+            </if>
+            <if test="valueDescCh != null">
+                VALUE_DESC_CH = #{valueDescCh,jdbcType=VARCHAR},
+            </if>
+            <if test="valueDescEn != null">
+                VALUE_DESC_EN = #{valueDescEn,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null">
+                TYPE = #{type,jdbcType=VARCHAR},
+            </if>
+            <if test="valueSource != null">
+                VALUE_SOURCE = #{valueSource,jdbcType=VARCHAR},
+            </if>
+            <if test="effectTime != null">
+                EFFECT_TIME = #{effectTime,jdbcType=DATE},
+            </if>
+            <if test="failureTime != null">
+                FAILURE_TIME = #{failureTime,jdbcType=DATE},
+            </if>
+            <if test="note != null">
+                NOTE = #{note,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where PUID = #{puid,jdbcType=VARCHAR}
+    </update>
+    <!--删除一条数据   逻辑删-->
+    <update id="HzDictionaryLibraryDaoImpl_delete">
+    update HZ_DICTIONARY_LIBRARY
+    set STATUS = 0
+    where PUID = #{puid,jdbcType=VARCHAR}
+  </update>
+    <!--查询字典库的条数-->
+    <select id="HzDictionaryLibraryDaoImpl_count" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT  count(*) FROM HZ_DICTIONARY_LIBRARY
+--         where STATUS =1
+        <where>
+            1=1
+            <if test="groupCode != null and groupCode != ''">
+                and GROUPCODE like CONCAT(CONCAT('%',#{GROUPCODE,jdbcType=VARCHAR}),'%')
+            </if>
+            <if test="groupCh != null and groupCh != ''">
+                and GROUPCH like CONCAT(CONCAT('%',#{GROUPCH,jdbcType=VARCHAR}),'%')
+            </if>
+            <if test="famillyCode != null and famillyCode !=''">
+                and FAMILLYCODE like CONCAT(CONCAT('%',#{FAMILLYCODE,jdbcType=VARCHAR}),'%')
+            </if>
+            <if test="famillyCh != null and famillyCh !=''">
+                and FAMILLYCH like CONCAT(CONCAT('%',#{FAMILLYCH,jdbcType=VARCHAR}),'%')
+            </if>
+            <if test="eigenValue !=null and eigenValue !=''">
+                and EIGENVALUE like CONCAT(CONCAT('%',#{EIGENVALUE,jdbcType=VARCHAR}),'%')
+            </if>
+            <if test="valueDescCh !=null and valueDescCh !=''">
+                and VALUEDESCCH like CONCAT(CONCAT('%',#{VALUEDESCCH,jdbcType=VARCHAR}),'%')
+            </if>
+            and STATUS =1
+        </where>
+    </select>
+    <!--分页获取数据-->
+    <select id="HzDictionaryLibraryDaoImpl_select" parameterType="java.util.HashMap" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List" /> FROM
+        (select  t.*,ROWNUM as rn FROM
+        (select
+        <include refid="Base_Column_List"/> FROM HZ_DICTIONARY_LIBRARY
+--         where STATUS =1
+        <where>
+            1=1
+            <if test="groupCode != null and groupCode != ''">
+               and GROUPCODE like CONCAT(CONCAT('%',#{GROUPCODE,jdbcType=VARCHAR}),'%')
+            </if>
+            <if test="groupCh != null and groupCh != ''">
+                and GROUPCH like CONCAT(CONCAT('%',#{GROUPCH,jdbcType=VARCHAR}),'%')
+            </if>
+            <if test="famillyCode != null and famillyCode !=''">
+                and FAMILLYCODE like CONCAT(CONCAT('%',#{FAMILLYCODE,jdbcType=VARCHAR}),'%')
+            </if>
+            <if test="famillyCh != null and famillyCh !=''">
+                and FAMILLYCH like CONCAT(CONCAT('%',#{FAMILLYCH,jdbcType=VARCHAR}),'%')
+            </if>
+            <if test="eigenValue !=null and eigenValue !=''">
+                and EIGENVALUE like CONCAT(CONCAT('%',#{EIGENVALUE,jdbcType=VARCHAR}),'%')
+            </if>
+            <if test="valueDescCh !=null and valueDescCh !=''">
+                and VALUEDESCCH like CONCAT(CONCAT('%',#{VALUEDESCCH,jdbcType=VARCHAR}),'%')
+            </if>
+            and STATUS =1
+        </where>
+        order by INSERTTIME desc
+        ) t
+        where ROWNUM &lt;=#{limit,jdbcType=INTEGER})
+        where rn &gt;#{offset,jdbcType=INTEGER}
+    </select>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from HZ_DICTIONARY_LIBRARY
+    where PUID = #{puid,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="sql.pojo.resourcesLibrary.dictionaryLibrary.HzDictionaryLibrary">
+    insert into HZ_DICTIONARY_LIBRARY (PUID, PROFESSION_CH, PROFESSION_EN, 
+      CLASSIFICATION_CH, CLASSIFICATION_EN, GROUP_CODE, 
+      GROUP_CH, GROUP_EN, FAMILLY_CODE, 
+      FAMILLY_CH, FAMILLY_EN, EIGEN_VALUE, 
+      VALUE_DESC_CH, VALUE_DESC_EN, TYPE, 
+      VALUE_SOURCE, EFFECT_TIME, FAILURE_TIME, 
+      NOTE, STATUS)
+    values (#{puid,jdbcType=VARCHAR}, #{professionCh,jdbcType=VARCHAR}, #{professionEn,jdbcType=VARCHAR}, 
+      #{classificationCh,jdbcType=VARCHAR}, #{classificationEn,jdbcType=VARCHAR}, #{groupCode,jdbcType=VARCHAR}, 
+      #{groupCh,jdbcType=VARCHAR}, #{groupEn,jdbcType=VARCHAR}, #{famillyCode,jdbcType=VARCHAR}, 
+      #{famillyCh,jdbcType=VARCHAR}, #{famillyEn,jdbcType=VARCHAR}, #{eigenValue,jdbcType=VARCHAR}, 
+      #{valueDescCh,jdbcType=VARCHAR}, #{valueDescEn,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, 
+      #{valueSource,jdbcType=VARCHAR}, #{effectTime,jdbcType=DATE}, #{failureTime,jdbcType=DATE}, 
+      #{note,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="sql.pojo.resourcesLibrary.dictionaryLibrary.HzDictionaryLibrary">
+    update HZ_DICTIONARY_LIBRARY
+    set PROFESSION_CH = #{professionCh,jdbcType=VARCHAR},
+      PROFESSION_EN = #{professionEn,jdbcType=VARCHAR},
+      CLASSIFICATION_CH = #{classificationCh,jdbcType=VARCHAR},
+      CLASSIFICATION_EN = #{classificationEn,jdbcType=VARCHAR},
+      GROUP_CODE = #{groupCode,jdbcType=VARCHAR},
+      GROUP_CH = #{groupCh,jdbcType=VARCHAR},
+      GROUP_EN = #{groupEn,jdbcType=VARCHAR},
+      FAMILLY_CODE = #{famillyCode,jdbcType=VARCHAR},
+      FAMILLY_CH = #{famillyCh,jdbcType=VARCHAR},
+      FAMILLY_EN = #{famillyEn,jdbcType=VARCHAR},
+      EIGEN_VALUE = #{eigenValue,jdbcType=VARCHAR},
+      VALUE_DESC_CH = #{valueDescCh,jdbcType=VARCHAR},
+      VALUE_DESC_EN = #{valueDescEn,jdbcType=VARCHAR},
+      TYPE = #{type,jdbcType=VARCHAR},
+      VALUE_SOURCE = #{valueSource,jdbcType=VARCHAR},
+      EFFECT_TIME = #{effectTime,jdbcType=DATE},
+      FAILURE_TIME = #{failureTime,jdbcType=DATE},
+      NOTE = #{note,jdbcType=VARCHAR},
+      STATUS = #{status,jdbcType=INTEGER}
+    where PUID = #{puid,jdbcType=VARCHAR}
+  </update>
+</mapper>

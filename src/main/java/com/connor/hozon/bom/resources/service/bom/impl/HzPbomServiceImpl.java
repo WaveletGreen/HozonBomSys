@@ -61,6 +61,9 @@ public class HzPbomServiceImpl implements HzPbomService {
 
     @Autowired
     private HzCfg0OfBomLineService hzCfg0OfBomLineService;
+
+    @Autowired
+    private HzEPLManageRecordService hzEPLManageRecordService;
     @Override
     public OperateResultMessageRespDTO insertHzPbomRecord(AddHzPbomRecordReqDTO recordReqDTO) {
         OperateResultMessageRespDTO respDTO = new OperateResultMessageRespDTO();
@@ -317,7 +320,19 @@ public class HzPbomServiceImpl implements HzPbomService {
             jsonObject.put("level", strings[0]);
             jsonObject.put("rank", strings[1]);
             jsonObject.put("pBomOfWhichDept", record.getpBomOfWhichDept()==null?"":record.getpBomOfWhichDept());
-            jsonObject.put("groupNum", record.getLineId());
+            String groupNum = "";
+            //这里在做一个递归查询
+            if(groupNum.contains("-")){
+                try {
+                    groupNum =groupNum.split("-")[1].substring(0,4);
+                }catch (Exception e){
+                    groupNum ="-后面的长度不足！";
+                }
+            }else{
+                String parentId = record.getParentUid();
+                groupNum = hzEPLManageRecordService.getGroupNum(reqDTO.getProjectId(),parentId);
+            }
+            jsonObject.put("groupNum", groupNum);
             jsonObject.put("eBomPuid", record.geteBomPuid());
             jsonObject.put("lineId", record.getLineId() == null ?"":record.getLineId());
 
@@ -951,8 +966,8 @@ public class HzPbomServiceImpl implements HzPbomService {
                 line = level + "Y";
                 rank = level - 1;
             } else if (hasChildren != null && hasChildren.equals(0)) {
-                line = String.valueOf(level);
-                rank = level - 1;
+                line = String.valueOf((level-1));
+                rank = level - 1 ;
             } else {
                 line = "";//错误数据
             }
@@ -979,14 +994,18 @@ public class HzPbomServiceImpl implements HzPbomService {
                 respDTO.setLineId(record.getLineId());
                 respDTO.setpBomOfWhichDept(record.getpBomOfWhichDept());
                 //获取分组号
-                String groupNum = record.getLineId();
+                String groupNum = "";
                 //这里在做一个递归查询
-//                if(groupNum.contains("-")){
-//                    groupNum =groupNum.split("-")[1].substring(0,4);
-//                }else{
-//                    String parentId = record.getParentUid();
-//                    groupNum = hzEPLManageRecordService.getGroupNum(projectId,parentId);
-//                }
+                if(groupNum.contains("-")){
+                    try {
+                        groupNum =groupNum.split("-")[1].substring(0,4);
+                    }catch (Exception e){
+                        groupNum ="-后面的长度不足！";
+                    }
+                }else{
+                    String parentId = record.getParentUid();
+                    groupNum = hzEPLManageRecordService.getGroupNum(projectId,parentId);
+                }
                 respDTO.setGroupNum(groupNum);
 
                 respDTO.setpBomLinePartClass(record.getpBomLinePartClass());
