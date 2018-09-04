@@ -28,14 +28,13 @@
         <p><strong>5.如有导入疑问，请联系相关责任人进行规范调整</strong></p>
     </div>
     <div class="form-group" style="float: right;">
-        <button type="button"onclick="getTemplate()"><img th:src="@{/img/excelModel.png}">模版下载
+        <button type="button" onclick="getTemplate()"><img th:src="@{/img/excelModel.png}">模版下载
         </button>
     </div>
 </div>
 <script>
     function getTemplate() {
-
-        window.location.href = "http://192.168.1.115:8080/hozon/img/EBOM导入模板.xlsx";
+        window.location.href =  "./files/EBOM导入模板.xlsx";
     }
 </script>
 
