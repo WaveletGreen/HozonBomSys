@@ -49,6 +49,23 @@
         <!--&lt;!&ndash;可用状态&ndash;&gt;-->
         <!--<result column="P_COLOR_IS_DELETED" jdbcType="INTEGER" property="pColorIsDeleted"/>-->
     </resultMap>
+
+    <resultMap id="BaseResultMap2" type="sql.pojo.cfg.HzColorModel2">
+        <id column="PUID" jdbcType="VARCHAR" property="puid"/>
+        <result column="MODEL_UID" jdbcType="VARCHAR" property="modelUid"/>
+        <result column="P_CFG_UID" jdbcType="VARCHAR" property="pCfgUid"/>
+        <result column="P_COLOR_UID" jdbcType="VARCHAR" property="pColorUid"/>
+        <result column="P_CFG_MAIN_UID" jdbcType="VARCHAR" property="pCfgMainUid"/>
+        <result column="CREATE_DATE" jdbcType="TIMESTAMP" property="createDate"/>
+        <result column="MODIFY_DATE" jdbcType="TIMESTAMP" property="modifyDate"/>
+        <result column="CREATOR" jdbcType="VARCHAR" property="creator"/>
+        <result column="MODIFIER" jdbcType="VARCHAR" property="modifier"/>
+        <result column="P_OPTIONFAMILY_NAME" jdbcType="VARCHAR" property="pOptionfamilyName"/>
+        <result column="P_OPTIONFAMILY_DESC" jdbcType="VARCHAR" property="pOptionfamilyDesc"/>
+        <result column="P_MODEL_SHELL" jdbcType="VARCHAR" property="pModelShell"/>
+        <result column="P_COLOR_NAME" jdbcType="VARCHAR" property="colorName"/>
+        <result column="P_COLOR_CODE" jdbcType="VARCHAR" property="colorCode"/>
+    </resultMap>
     <sql id="Base_Column_List">
         PUID,
         MODEL_UID,
@@ -59,6 +76,22 @@
         MODIFY_DATE,
         CREATOR,
         MODIFIER
+    </sql>
+    <sql id="Base_Column_List2">
+        t3.PUID,
+        t3.MODEL_UID,
+        t3.P_CFG_UID,
+        t3.P_COLOR_UID,
+        t3.P_CFG_MAIN_UID,
+        t3.CREATE_DATE,
+        t3.MODIFY_DATE,
+        t3.CREATOR,
+        t3.MODIFIER,
+        t4.P_OPTIONFAMILY_NAME,
+        t4.P_OPTIONFAMILY_DESC,
+        t2.P_MODEL_SHELL,
+        t5.P_COLOR_NAME,
+        t5.P_COLOR_CODE
     </sql>
     <sql id="Base_Column_List_With_Color">
         P_COLOR_OF_SET,
@@ -161,4 +194,16 @@
       MODIFIER=#{modifier,jdbcType=VARCHAR}
     where MODEL_UID = #{modelUid,jdbcType=VARCHAR} and P_CFG_UID = #{cfgUid,jdbcType=VARCHAR}
   </update>
+
+  <select id="selectByProjectPuid" parameterType="java.lang.String" resultMap="BaseResultMap2">
+      select
+        <include refid="Base_Column_List2"/>
+      from
+        HZ_CFG0_MAIN_RECORD t join Hz_Cfg0_Model_Color_Record t2  on t.PUID = t2.P_CFG0_MAIN_RECORD_OF_MC
+        join  Hz_Color_Model t3 on  t2.puid = t3.model_uid
+        join Hz_Cfg0_Optionfamily_Record t4 on t3.p_cfg_uid = t4.puid
+        join Hz_Cfg0_Colorset t5 on t5.puid = t3.p_color_uid
+      where t.P_CFG0_OF_WHICH_PROJECT_PUID = #{projectPuid}
+
+  </select>
 </mapper>

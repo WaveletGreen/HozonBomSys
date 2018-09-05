@@ -26,4 +26,12 @@ public class SynCfgMaterielController extends ExtraIntegrate {
         addToModel(result, model);
         return "stage/templateOfIntegrate";
     }
+    @RequestMapping("/synMaterielDelete")
+    public String delete(@RequestParam String puid,Model model) {
+        HzMaterielCfgBean bean = new HzMaterielCfgBean();
+        bean.setPuid(puid);
+        JSONObject result = synMaterielCfgService.deleteMaterielCfg(Collections.singletonList(bean));
+        addToModel(result, model);
+        return "stage/templateOfIntegrate";
+    }
 }

@@ -56,6 +56,7 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         registry.addViewController("/feature").setViewName("/cfg/feature/feature");
         //相关性表
         registry.addViewController("/relevance").setViewName("/cfg/relevance/relevance");
+        registry.addViewController("/relevance2").setViewName("/cfg/relevance/relevance2");
         /**物料配置表*/
         registry.addViewController("/materielFeature").setViewName("/cfg/materielFeature/materielFeature");
         //特性表页面

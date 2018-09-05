@@ -27,5 +27,17 @@ public class SynProcessRouteController extends ExtraIntegrate {
         addToModel(result, model);
         return "stage/templateOfIntegrate";
     }
+    @RequestMapping("/process/updata")
+    public String updata( String[] materielIds, String projectId, Model model){
+        JSONObject result =  synProcessRouteService.updateRouting(materielIds, projectId);
+        addToModel(result, model);
+        return "stage/templateOfIntegrate";
+    }
+    @RequestMapping("/process/delete1")
+    public String delete( String[] materielIds, String projectId, Model model){
+        JSONObject result =  synProcessRouteService.deleteRouting(materielIds, projectId);
+        addToModel(result, model);
+        return "stage/templateOfIntegrate";
+    }
 
 }
