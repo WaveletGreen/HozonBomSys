@@ -34,7 +34,7 @@ public class ActivitiConfig implements ProcessEngineConfigurationConfigurer {
         springProcessEngineConfiguration.setTypedEventListeners(typedListener);
         DataSource dataSource=new DataSource();
         dataSource.setDriverClassName("oracle.jdbc.driver.OracleDriver");
-        dataSource.setUrl("jdbc:oracle:thin:@(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST = 192.168.9.234)(PORT = 1521))(CONNECT_DATA=(SERVER = DEDICATED)(SERVICE_NAME=tc)))");
+        dataSource.setUrl("jdbc:oracle:thin:@(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST = 10.1.14.119)(PORT = 1521))(CONNECT_DATA=(SERVER = DEDICATED)(SERVICE_NAME=TC10)))");
         dataSource.setUsername("activiti");
         dataSource.setPassword("infodba");
         springProcessEngineConfiguration.setDataSource(dataSource);

@@ -25,7 +25,7 @@ public class ActService {
         ProcessEngine engine= ProcessEngineConfiguration.createStandaloneProcessEngineConfiguration()
                 .setDatabaseSchemaUpdate(ProcessEngineConfiguration.DB_SCHEMA_UPDATE_FALSE)
                 .setJdbcDriver("oracle.jdbc.driver.OracleDriver")
-                .setJdbcUrl("jdbc:oracle:thin:@(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST = 192.168.9.234)(PORT = 1521))(CONNECT_DATA=(SERVER = DEDICATED)(SERVICE_NAME=tc)))")
+                .setJdbcUrl("jdbc:oracle:thin:@(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST = 10.1.14.119)(PORT = 1521))(CONNECT_DATA=(SERVER = DEDICATED)(SERVICE_NAME=TC10)))")
                 .setJdbcUsername("activiti")
                 .setJdbcPassword("infodba")
                 .setAsyncExecutorActivate(false)
