@@ -19,7 +19,7 @@
         <!--相关性-->
         <result column="RB_RELEVANCE" jdbcType="VARCHAR" property="rbRelevance"/>
         <!--相关性描述-->
-        <result column="RB_RELEVANCE_DESC" jdbcType="OTHER" property="rbRelevanceDesc"/>
+        <result column="RB_RELEVANCE_DESC" jdbcType="VARCHAR" property="rbRelevanceDesc"/>
         <!--相关性代码-->
         <result column="RB_RELEVANCE_CODE" jdbcType="VARCHAR" property="rbRelevanceCode"/>
         <!--状态，分别为发布状态99，草稿状态0，删除状态10，其他状态null/其他数值-->
@@ -27,11 +27,11 @@
         <!--创建时间-->
         <result column="RELEVANCE_CREATE_DATE" jdbcType="TIMESTAMP" property="relevanceCreateDate"/>
         <!--创建者-->
-        <result column="RELEVANCE_CREATOR" jdbcType="OTHER" property="relevanceCreator"/>
+        <result column="RELEVANCE_CREATOR" jdbcType="VARCHAR" property="relevanceCreator"/>
         <!--更新时间-->
         <result column="RELEVANCE_UPDATE_DATE" jdbcType="TIMESTAMP" property="relevanceUpdateDate"/>
         <!--更新人-->
-        <result column="RELEVANCE_UPDATER" jdbcType="OTHER" property="relevanceUpdater"/>
+        <result column="RELEVANCE_UPDATER" jdbcType="VARCHAR" property="relevanceUpdater"/>
         <!--预留字段1-->
         <result column="RB_RESERVED_1" jdbcType="VARCHAR" property="rbReserved1"/>
         <!--预留字段1-->
@@ -163,13 +163,13 @@
         #{rbFeatureValueCode,jdbcType=VARCHAR},
         #{rbFeatureValueUid,jdbcType=VARCHAR},
         #{rbRelevance,jdbcType=VARCHAR},
-        #{rbRelevanceDesc,jdbcType=OTHER},
+        #{rbRelevanceDesc,jdbcType=VARCHAR},
         #{rbRelevanceCode,jdbcType=VARCHAR},
         #{relevanceStatus,jdbcType=DECIMAL},
-        #{relevanceCreateDate,jdbcType=TIMESTAMP},
-        #{relevanceCreator,jdbcType=OTHER},
-        #{relevanceUpdateDate,jdbcType=TIMESTAMP},
-        #{relevanceUpdater,jdbcType=OTHER},
+         sysdate,
+        #{relevanceCreator,jdbcType=VARCHAR},
+         sysdate,
+        #{relevanceUpdater,jdbcType=VARCHAR},
         #{rbReserved1,jdbcType=VARCHAR},
         #{rbReserved2,jdbcType=VARCHAR},
         #{rbReserved3,jdbcType=VARCHAR},
@@ -203,13 +203,13 @@
             #{item.rbFeatureValueCode,jdbcType=VARCHAR},
             #{item.rbFeatureValueUid,jdbcType=VARCHAR},
             #{item.rbRelevance,jdbcType=VARCHAR},
-            #{item.rbRelevanceDesc,jdbcType=OTHER},
+            #{item.rbRelevanceDesc,jdbcType=VARCHAR},
             #{item.rbRelevanceCode,jdbcType=VARCHAR},
             #{item.relevanceStatus,jdbcType=DECIMAL},
-            #{item.relevanceCreateDate,jdbcType=TIMESTAMP},
-            #{item.relevanceCreator,jdbcType=OTHER},
-            #{item.relevanceUpdateDate,jdbcType=TIMESTAMP},
-            #{item.relevanceUpdater,jdbcType=OTHER},
+            sysdate,
+            #{item.relevanceCreator,jdbcType=VARCHAR},
+            sysdate,
+            #{item.relevanceUpdater,jdbcType=VARCHAR},
             #{item.rbReserved1,jdbcType=VARCHAR},
             #{item.rbReserved2,jdbcType=VARCHAR},
             #{item.rbReserved3,jdbcType=VARCHAR},
@@ -267,15 +267,11 @@
             <if test="relevanceStatus != null">
                 RELEVANCE_STATUS,
             </if>
-            <if test="relevanceCreateDate != null">
-                RELEVANCE_CREATE_DATE,
-            </if>
+            RELEVANCE_CREATE_DATE,
             <if test="relevanceCreator != null">
                 RELEVANCE_CREATOR,
             </if>
-            <if test="relevanceUpdateDate != null">
-                RELEVANCE_UPDATE_DATE,
-            </if>
+            RELEVANCE_UPDATE_DATE,
             <if test="relevanceUpdater != null">
                 RELEVANCE_UPDATER,
             </if>
@@ -360,7 +356,7 @@
                 #{rbRelevance,jdbcType=VARCHAR},
             </if>
             <if test="rbRelevanceDesc != null">
-                #{rbRelevanceDesc,jdbcType=OTHER},
+                #{rbRelevanceDesc,jdbcType=VARCHAR},
             </if>
             <if test="rbRelevanceCode != null">
                 #{rbRelevanceCode,jdbcType=VARCHAR},
@@ -368,17 +364,13 @@
             <if test="relevanceStatus != null">
                 #{relevanceStatus,jdbcType=DECIMAL},
             </if>
-            <if test="relevanceCreateDate != null">
-                #{relevanceCreateDate,jdbcType=TIMESTAMP},
-            </if>
+            sysdate,
             <if test="relevanceCreator != null">
-                #{relevanceCreator,jdbcType=OTHER},
+                #{relevanceCreator,jdbcType=VARCHAR},
             </if>
-            <if test="relevanceUpdateDate != null">
-                #{relevanceUpdateDate,jdbcType=TIMESTAMP},
-            </if>
+            sysdate,
             <if test="relevanceUpdater != null">
-                #{relevanceUpdater,jdbcType=OTHER},
+                #{relevanceUpdater,jdbcType=VARCHAR},
             </if>
             <if test="rbReserved1 != null">
                 #{rbReserved1,jdbcType=VARCHAR},
@@ -461,7 +453,7 @@
                 RB_RELEVANCE = #{rbRelevance,jdbcType=VARCHAR},
             </if>
             <if test="rbRelevanceDesc != null">
-                RB_RELEVANCE_DESC = #{rbRelevanceDesc,jdbcType=OTHER},
+                RB_RELEVANCE_DESC = #{rbRelevanceDesc,jdbcType=VARCHAR},
             </if>
             <if test="rbRelevanceCode != null">
                 RB_RELEVANCE_CODE = #{rbRelevanceCode,jdbcType=VARCHAR},
@@ -473,13 +465,11 @@
                 RELEVANCE_CREATE_DATE = #{relevanceCreateDate,jdbcType=TIMESTAMP},
             </if>
             <if test="relevanceCreator != null">
-                RELEVANCE_CREATOR = #{relevanceCreator,jdbcType=OTHER},
+                RELEVANCE_CREATOR = #{relevanceCreator,jdbcType=VARCHAR},
             </if>
-            <if test="relevanceUpdateDate != null">
-                RELEVANCE_UPDATE_DATE = #{relevanceUpdateDate,jdbcType=TIMESTAMP},
-            </if>
+            RELEVANCE_UPDATE_DATE = sysdate,
             <if test="relevanceUpdater != null">
-                RELEVANCE_UPDATER = #{relevanceUpdater,jdbcType=OTHER},
+                RELEVANCE_UPDATER = #{relevanceUpdater,jdbcType=VARCHAR},
             </if>
             <if test="rbReserved1 != null">
                 RB_RESERVED_1 = #{rbReserved1,jdbcType=VARCHAR},
@@ -549,13 +539,13 @@
       RB_FEATURE_VALUE_CODE = #{rbFeatureValueCode,jdbcType=VARCHAR},
       RB_FEATURE_VALUE_UID = #{rbFeatureValueUid,jdbcType=VARCHAR},
       RB_RELEVANCE = #{rbRelevance,jdbcType=VARCHAR},
-      RB_RELEVANCE_DESC = #{rbRelevanceDesc,jdbcType=OTHER},
+      RB_RELEVANCE_DESC = #{rbRelevanceDesc,jdbcType=VARCHAR},
       RB_RELEVANCE_CODE = #{rbRelevanceCode,jdbcType=VARCHAR},
       RELEVANCE_STATUS = #{relevanceStatus,jdbcType=DECIMAL},
       RELEVANCE_CREATE_DATE = #{relevanceCreateDate,jdbcType=TIMESTAMP},
-      RELEVANCE_CREATOR = #{relevanceCreator,jdbcType=OTHER},
-      RELEVANCE_UPDATE_DATE = #{relevanceUpdateDate,jdbcType=TIMESTAMP},
-      RELEVANCE_UPDATER = #{relevanceUpdater,jdbcType=OTHER},
+      RELEVANCE_CREATOR = #{relevanceCreator,jdbcType=VARCHAR},
+      RELEVANCE_UPDATE_DATE = sysdate,
+      RELEVANCE_UPDATER = #{relevanceUpdater,jdbcType=VARCHAR},
       RB_RESERVED_1 = #{rbReserved1,jdbcType=VARCHAR},
       RB_RESERVED_2 = #{rbReserved2,jdbcType=VARCHAR},
       RB_RESERVED_3 = #{rbReserved3,jdbcType=VARCHAR},

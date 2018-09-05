@@ -46,7 +46,7 @@ public class HzRelevanceBasic {
     /**
      * 状态，分别为发布状态99，草稿状态0，删除状态10，其他状态null/其他数值
      */
-    private Short relevanceStatus;
+    private Integer relevanceStatus;
     /**
      * 创建时间
      */
@@ -216,11 +216,11 @@ public class HzRelevanceBasic {
         this.rbRelevanceCode = rbRelevanceCode == null ? null : rbRelevanceCode.trim();
     }
 
-    public Short getRelevanceStatus() {
+    public Integer getRelevanceStatus() {
         return relevanceStatus;
     }
 
-    public void setRelevanceStatus(Short relevanceStatus) {
+    public void setRelevanceStatus(Integer relevanceStatus) {
         this.relevanceStatus = relevanceStatus;
     }
 
