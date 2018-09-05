@@ -576,4 +576,40 @@
       IS_SENT = #{isSent,jdbcType=DECIMAL}
     where ID = #{id,jdbcType=DECIMAL}
   </update>
+
+  <insert id="insertBasic" parameterType="sql.pojo.cfg.relevance.HzRelevanceBasic">
+      <selectKey order="BEFORE" keyColumn="id" keyProperty="id" resultType="java.lang.Long">
+          select SEQ_HZ_RB.Nextval from dual
+      </selectKey>
+      insert into HZ_RELEVANCE_BASIC
+      (
+      ID,
+      RB_COLOR_CODE,
+      RB_COLOR_UID,
+      RB_FEATURE_CODE,
+      RB_FEATURE_UID,
+      RB_FEATURE_VALUE_CODE,
+      RB_FEATURE_VALUE_UID,
+      RB_RELEVANCE,
+      RB_RELEVANCE_DESC,
+      RB_RELEVANCE_CODE,
+      RELEVANCE_STATUS,
+      RB_PROJECT_UID,
+      )
+      values
+      (
+      #{id,jdbcType=DECIMAL},
+      #{rbColorCode,jdbcType=VARCHAR},
+      #{rbColorUid,jdbcType=VARCHAR},
+      #{rbFeatureCode,jdbcType=VARCHAR},
+      #{rbFeatureUid,jdbcType=VARCHAR},
+      #{rbFeatureValueCode,jdbcType=VARCHAR},
+      #{rbFeatureValueUid,jdbcType=VARCHAR},
+      #{rbRelevance,jdbcType=VARCHAR},
+      #{rbRelevanceDesc,jdbcType=OTHER},
+      #{rbRelevanceCode,jdbcType=VARCHAR},
+      #{relevanceStatus,jdbcType=DECIMAL},
+      #{rbProjectUid,jdbcType=VARCHAR}
+      )
+  </insert>
 </mapper>
