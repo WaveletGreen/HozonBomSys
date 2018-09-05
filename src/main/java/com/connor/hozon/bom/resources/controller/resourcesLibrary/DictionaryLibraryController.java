@@ -143,7 +143,7 @@ public class DictionaryLibraryController extends BaseController {
      * @param response
      */
     @RequestMapping(value = "title",method = RequestMethod.GET)
-    public void getWorkTitel(HttpServletResponse response){
+    public void getDiDictionaryLibraryTitel(HttpServletResponse response){
         LinkedHashMap<String, String> tableTitle = new LinkedHashMap<>();
         tableTitle.put("No","序号");
         tableTitle.put("professionCh","专业部");

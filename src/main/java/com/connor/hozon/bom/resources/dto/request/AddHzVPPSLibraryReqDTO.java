@@ -1,8 +1,14 @@
-package sql.pojo.resourcesLibrary.VPPSLibrary;
+package com.connor.hozon.bom.resources.dto.request;
 
 import java.util.Date;
 
-public class HzVPPSLibrary {
+/**
+ * Created with IntelliJ IDEA.
+ * User: xlf
+ * Date: 2018/9/5
+ * Time: 9:03
+ */
+public class AddHzVPPSLibraryReqDTO {
     /**
      * 主键
      */

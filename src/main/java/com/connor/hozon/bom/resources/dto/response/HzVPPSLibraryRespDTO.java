@@ -1,8 +1,19 @@
-package sql.pojo.resourcesLibrary.VPPSLibrary;
+package com.connor.hozon.bom.resources.dto.response;
 
 import java.util.Date;
 
-public class HzVPPSLibrary {
+/**
+ * Created with IntelliJ IDEA.
+ * User: xlf
+ * Date: 2018/9/5
+ * Time: 9:06
+ */
+public class HzVPPSLibraryRespDTO {
+
+    /**
+     * 序号
+     */
+    private Integer No;
     /**
      * 主键
      */
@@ -55,6 +66,14 @@ public class HzVPPSLibrary {
      * 删除标志（0删除1未删除）
      */
     private Short status;
+
+    public Integer getNo() {
+        return No;
+    }
+
+    public void setNo(Integer no) {
+        No = no;
+    }
 
     public String getPuid() {
         return puid;

@@ -5,20 +5,20 @@
  * Time: 16:02
  */
 $(document).ready((function () {
-    var url = "";
+    var url = "vpps/list";
     initTable(url);
 }))
 
 function doQuery() {
     // $('#dictionaryLibraryTable').bootstrapTable('refresh');    //刷新表格
-    var url = "";
+    var url = "vpps/list";
     var vppsLevel = $("#vppsLevel").val();
     url += "?vppsLevel=" + vppsLevel;
     var vsgCode = $("#vsgCode").val();
     url += "&vsgCode=" + vsgCode;
     var vppsCode = $("#vppsCode").val();
     url += "&vppsCode=" + vppsCode;
-    var famillyCh = $("#famillyCh").val();
+    var upc = $("#upc").val();
     url += "&upc=" + upc;
     var fna = $("#fna").val();
     url += "&fna=" + fna;
@@ -31,7 +31,7 @@ function doQuery() {
 function initTable(url) {
     var column = [];
     $.ajax({
-        url: "/title",
+        url: "vpps/title",
         type: "GET",
         success: function (result) {
             var column = [];
@@ -87,7 +87,7 @@ function initTable(url) {
                             //只能选一条
                             window.Ewin.dialog({
                                 title: "添加",
-                                url: "/getAdd",
+                                url: "vpps/getAdd",
                                 gridId: "gridId",
                                 width: 500,
                                 height: 500
@@ -106,7 +106,7 @@ function initTable(url) {
                             }
                             window.Ewin.dialog({
                                 title: "修改",
-                                url: "/getUpdate?puid=" + rows[0].puid,
+                                url: "vpps/getUpdate?puid=" + rows[0].puid,
                                 gridId: "gridId",
                                 width: 500,
                                 height: 500
@@ -134,7 +134,7 @@ function initTable(url) {
                                     $.ajax({
                                         type: "POST",
                                         //ajax需要添加打包名
-                                        url: "/delete?puid=" + rows[0].puid,
+                                        url: "vpps/delete?puid=" + rows[0].puid,
                                         // data: JSON.stringify(rows),
                                         contentType: "application/json",
                                         success: function (result) {

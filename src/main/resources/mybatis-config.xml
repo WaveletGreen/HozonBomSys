@@ -106,5 +106,7 @@
         <mapper resource="sql/mapper/change.xmapper/HzEWOImpactDeptMapper.xml"/>
         <!--字典库-->
         <mapper resource="sql/mapper/resourcesLibrary/dictionaryLibrary.xmapper/HzDictionaryLibraryMapper.xml"/>
+        <!--VPPS库-->
+        <mapper resource="sql/mapper/resourcesLibrary/VPPSLibrary.xmapper/HzVPPSLibraryMapper.xml"/>
     </mappers>
 </configuration>
