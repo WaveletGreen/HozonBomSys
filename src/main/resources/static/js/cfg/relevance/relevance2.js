@@ -4,18 +4,18 @@ function loadData() {
     $("#refresh").removeAttr("disabled");
     var projectPuid = $("#project", window.top.document).val();
     $table.bootstrapTable({
-        url: "cfg0/loadRelevance2?projectPuid=" + projectPuid,
-        method: "GET",
-        height: $(window.parent.document).find("#wrapper").height() - 150,//$(window.parent.document).find("#wrapper").height() - document.body.offsetHeight - 45,
-        width: $(window).width(),
-        showToggle: true,                   //是否显示详细视图和列表视图的切换按钮
-        // showColumns: true,                  //是否显示所有的列
-        showRefresh: true,                  //是否显示刷新按钮
-        pageSize: 10,
-        pagination: true,                   //是否显示分页（*）
-        clickToSelect: true,                // 单击某一行的时候选中某一条记录
-        formId: "relevanceForm",
-        toolbars: [
+            url: "cfg0/loadRelevance2?projectPuid=" + projectPuid,
+            method: "GET",
+            height: $(window.parent.document).find("#wrapper").height() - 150,//$(window.parent.document).find("#wrapper").height() - document.body.offsetHeight - 45,
+            width: $(window).width(),
+            showToggle: true,                   //是否显示详细视图和列表视图的切换按钮
+            // showColumns: true,                  //是否显示所有的列
+            showRefresh: true,                  //是否显示刷新按钮
+            pageSize: 10,
+            pagination: true,                   //是否显示分页（*）
+            clickToSelect: true,                // 单击某一行的时候选中某一条记录
+            formId: "relevanceForm",
+            toolbars: [
             // {
             //     text: '修改',
             //     iconCls: 'glyphicon glyphicon-pencil',

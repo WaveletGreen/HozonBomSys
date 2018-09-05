@@ -43,4 +43,13 @@ public class HzRelevanceRelationDaoImpl extends BasicDaoImpl<HzRelevanceRelation
         RELATION.setRrRelevanceId(rrRelevanceId);
         return baseSQLUtil.executeDelete(rrRelevanceId, clz.getCanonicalName() + ".deleteByBasicId");
     }
+
+    /**
+     * 单条插入
+     * @return
+     */
+    @Override
+    public int insertOne(HzRelevanceRelation hzRelevanceRelation) {
+        return baseSQLUtil.executeDelete(hzRelevanceRelation, clz.getCanonicalName() + ".insertOne");
+    }
 }

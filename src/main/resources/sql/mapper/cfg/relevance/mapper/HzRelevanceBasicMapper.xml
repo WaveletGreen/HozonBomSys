@@ -584,7 +584,7 @@
       RB_RELEVANCE_DESC,
       RB_RELEVANCE_CODE,
       RELEVANCE_STATUS,
-      RB_PROJECT_UID,
+      RB_PROJECT_UID
       )
       values
       (

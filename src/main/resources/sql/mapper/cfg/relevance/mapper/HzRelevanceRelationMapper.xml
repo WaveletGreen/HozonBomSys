@@ -445,4 +445,28 @@
       RR_REVISION = #{rrRevision,jdbcType=DECIMAL}
     where ID = #{id,jdbcType=DECIMAL}
   </update>
+
+   <insert id="insertOne" parameterType="sql.pojo.cfg.relevance.HzRelevanceRelation">
+      <selectKey order="BEFORE" keyColumn="id" keyProperty="id" resultType="java.lang.Long">
+          select SEQ_HZ_RR.Nextval from dual
+      </selectKey>
+      insert into HZ_RELEVANCE_RELATION
+       (
+       ID,
+       RR_CFG0_UID,
+       RR_COLOR_MODEL_UID,
+       RR_COLOR_UID,
+       RR_RELEVANCE_ID,
+       RR_CFG_FAMILY_UID
+       )
+       values
+       (
+        #{id, jdbctype=DECIMAL},
+        #{rrCfg0Uid, jdbctype=VARCHAR},
+        #{rrColorModelUid, jdbctype=VARCHAR},
+        #{rrColorUid, jdbctype=VARCHAR},
+        #{rrRelevanceId, jdbctype=VARCHAR},
+        #{rrCfgFamilyUid, jdbctype=VARCHAR}
+       )
+   </insert>
 </mapper>
