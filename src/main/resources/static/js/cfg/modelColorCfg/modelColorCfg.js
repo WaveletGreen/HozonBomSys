@@ -13,16 +13,15 @@ function modeVehicle(puid) {
 
 $(document).ready(
 // $("#queryModelColorCfg").click(function () {
-    projectPuid = $("#project", window.top.document).val(),
 //必须输入一个配置的puid
-    loadData(projectPuid),
+    loadData(getProjectUid()),
     $("#refresh").removeAttr("disabled"),
 //手动刷新按钮
     $("#refresh").click(function () {
-        loadData(projectPuid);
+        loadData(getProjectUid());
     }),
     $("#query").click(function () {
-            loadData(projectPuid);
+            loadData(getProjectUid());
             $("#refresh").removeAttr("disabled");
         }
     )

@@ -5,23 +5,21 @@ function modeVehicle(puid) {
 }
 
 $(document).ready(
-    //优先加载数据
-    (loadData()),
+//优先加载数据
+    loadData(getProjectUid()),
     //查询按钮
     $("#query").click(function () {
-        loadData();
+        loadData(getProjectUid());
     }),
     //手动刷新按钮
     $("#refresh").click(function () {
-        loadData();
-        //$('#materielFeature').bootstrapTable('refresh');
+        loadData(getProjectUid());
     })
-)
+);
 
-
-function loadData() {
+function loadData(projectPuid) {
     //必须输入一个配置的puid
-    var projectPuid = $("#project", window.top.document).val();
+
     if (projectPuid.length <= 0) {
         $("#myModal").modal('show');
         return;
