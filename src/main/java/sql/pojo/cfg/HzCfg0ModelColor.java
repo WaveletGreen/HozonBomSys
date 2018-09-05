@@ -24,6 +24,10 @@ public class HzCfg0ModelColor {
      * 作为更新旧数据的标识，为0/null的都是旧数据，需要进行更新
      */
     private Integer updateDefault;
+    /**
+     * 颜色UID
+     */
+    private String pColorUid;
 
     public HzCfg0ModelColor() {
         mapOfCfg0 = new LinkedHashMap<>();
@@ -100,5 +104,13 @@ public class HzCfg0ModelColor {
 
     public void setUpdateDefault(Integer updateDefault) {
         this.updateDefault = updateDefault;
+    }
+
+    public String getpColorUid() {
+        return pColorUid;
+    }
+
+    public void setpColorUid(String pColorUid) {
+        this.pColorUid = pColorUid;
     }
 }

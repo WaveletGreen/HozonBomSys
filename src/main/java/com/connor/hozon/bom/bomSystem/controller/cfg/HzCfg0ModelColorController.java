@@ -246,7 +246,11 @@ public class HzCfg0ModelColorController {
                     HzCfg0MainRecord mainRecord = hzCfg0MainService.doGetbyProjectPuid(value);
                     modelColor.setpCfg0MainRecordOfMC(mainRecord.getPuid());
                 } else if ("modelShell".equals(key)) {
-                    modelColor.setpModelShellOfColorfulModel(value);
+                    HzCfg0ColorSet set = new HzCfg0ColorSet();
+                    set.setPuid(value);
+                    set = hzCfg0ColorSetService.getById(set);
+                    modelColor.setpModelShellOfColorfulModel(set.getpColorCode());
+                    modelColor.setpColorUid(set.getPuid());
                 } else {
                     modelColor.getMapOfCfg0().put(key, value);
                 }

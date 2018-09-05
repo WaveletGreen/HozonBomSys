@@ -1,8 +1,10 @@
+var projectPuid = '';
+
 function modeVehicle(puid) {
-    var projectUid = $("#project", window.top.document).val();
+    projectPuid = $("#project", window.top.document).val();
     window.Ewin.dialog({
         title: "添加",
-        url: "modelColor/setLvl2ColorPage?modelUid=" + puid + "&projectUid=" + projectUid,
+        url: "modelColor/setLvl2ColorPage?modelUid=" + puid + "&projectUid=" + projectPuid,
         gridId: "gridId",
         width: 880,
         height: 600
@@ -10,26 +12,22 @@ function modeVehicle(puid) {
 }
 
 $(document).ready(
-    // $("#queryModelColorCfg").click(function () {
-    (function () {
-        //必须输入一个配置的puid
-        loadData();
-        $("#refresh").removeAttr("disabled");
-
-    }),
-    //手动刷新按钮
+// $("#queryModelColorCfg").click(function () {
+//必须输入一个配置的puid
+    loadData(getProjectUid()),
+    $("#refresh").removeAttr("disabled"),
+//手动刷新按钮
     $("#refresh").click(function () {
-        loadData();
+        loadData(getProjectUid());
     }),
     $("#query").click(function () {
-            loadData();
+            loadData(getProjectUid());
             $("#refresh").removeAttr("disabled");
         }
     )
 );
 
-function loadData() {
-    var projectPuid = $("#project", window.top.document).val();
+function loadData(projectPuid) {
     if (projectPuid.length <= 0) {
         $("#myModal").modal('show');
         return;

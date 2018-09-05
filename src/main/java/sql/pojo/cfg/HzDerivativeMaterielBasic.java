@@ -38,7 +38,7 @@ public class HzDerivativeMaterielBasic {
     /**
      * 预留字段1
      */
-    private String dmbReserved1;
+    private String dmbModelFeatureUid;
     /**
      * 预留字段2
      */
@@ -112,12 +112,12 @@ public class HzDerivativeMaterielBasic {
         this.dmbUpdateDate = dmbUpdateDate;
     }
 
-    public String getDmbReserved1() {
-        return dmbReserved1;
+    public String getDmbModelFeatureUid() {
+        return dmbModelFeatureUid;
     }
 
-    public void setDmbReserved1(String dmbReserved1) {
-        this.dmbReserved1 = dmbReserved1 == null ? null : dmbReserved1.trim();
+    public void setDmbModelFeatureUid(String dmbModelFeatureUid) {
+        this.dmbModelFeatureUid = dmbModelFeatureUid == null ? null : dmbModelFeatureUid.trim();
     }
 
     public String getDmbReserved2() {

@@ -19,7 +19,7 @@
         <!--项目UID-->
         <result column="DMB_PROJECT_UID" jdbcType="VARCHAR" property="dmbProjectUid"/>
         <!--保留字段1-->
-        <result column="DMB_RESERVED_1" jdbcType="VARCHAR" property="dmbReserved1"/>
+        <result column="DMB_MODEL_FEATURE_UID" jdbcType="VARCHAR" property="dmbModelFeatureUid"/>
         <!--保留字段2-->
         <result column="DMB_RESERVED_2" jdbcType="VARCHAR" property="dmbReserved2"/>
         <!--保留字段3-->
@@ -38,7 +38,7 @@
         DMB_UPDATER,
         DMB_UPDATE_DATE,
         DMB_PROJECT_UID,
-        DMB_RESERVED_1,
+        DMB_MODEL_FEATURE_UID,
         DMB_RESERVED_2,
         DMB_RESERVED_3,
         DMB_RESERVED_4,
@@ -83,7 +83,7 @@
         DMB_UPDATER,
         DMB_UPDATE_DATE,
         DMB_PROJECT_UID,
-        DMB_RESERVED_1,
+        DMB_MODEL_FEATURE_UID,
         DMB_RESERVED_2,
         DMB_RESERVED_3,
         DMB_RESERVED_4,
@@ -98,7 +98,7 @@
         #{dmbUpdater,jdbcType=OTHER},
         sysdate,
         #{dmbProjectUid,jdbcType=VARCHAR},
-        #{dmbReserved1,jdbcType=VARCHAR},
+        #{dmbModelFeatureUid,jdbcType=VARCHAR},
         #{dmbReserved2,jdbcType=VARCHAR},
         #{dmbReserved3,jdbcType=VARCHAR},
         #{dmbReserved4,jdbcType=VARCHAR},
@@ -132,8 +132,8 @@
             <if test="dmbProjectUid != null">
                 DMB_PROJECT_UID,
             </if>
-            <if test="dmbReserved1 != null">
-                DMB_RESERVED_1,
+            <if test="dmbModelFeatureUid != null">
+                DMB_MODEL_FEATURE_UID,
             </if>
             <if test="dmbReserved2 != null">
                 DMB_RESERVED_2,
@@ -169,8 +169,8 @@
             <if test="dmbProjectUid != null">
                 #{dmbProjectUid,jdbcType=VARCHAR},
             </if>
-            <if test="dmbReserved1 != null">
-                #{dmbReserved1,jdbcType=VARCHAR},
+            <if test="dmbModelFeatureUid != null">
+                #{dmbModelFeatureUid,jdbcType=VARCHAR},
             </if>
             <if test="dmbReserved2 != null">
                 #{dmbReserved2,jdbcType=VARCHAR},
@@ -205,8 +205,8 @@
                 DMB_UPDATER = #{dmbUpdater,jdbcType=OTHER},
             </if>
             DMB_UPDATE_DATE = sysdate,
-            <if test="dmbReserved1 != null">
-                DMB_RESERVED_1 = #{dmbReserved1,jdbcType=VARCHAR},
+            <if test="dmbModelFeatureUid != null">
+                DMB_MODEL_FEATURE_UID = #{dmbModelFeatureUid,jdbcType=VARCHAR},
             </if>
             <if test="dmbReserved2 != null">
                 DMB_RESERVED_2 = #{dmbReserved2,jdbcType=VARCHAR},
@@ -231,7 +231,7 @@
       DMB_CREATE_DATE = #{dmbCreateDate,jdbcType=TIMESTAMP},
       DMB_UPDATER = #{dmbUpdater,jdbcType=OTHER},
       DMB_UPDATE_DATE = sysdate,
-      DMB_RESERVED_1 = #{dmbReserved1,jdbcType=VARCHAR},
+      DMB_MODEL_FEATURE_UID = #{dmbModelFeatureUid,jdbcType=VARCHAR},
       DMB_RESERVED_2 = #{dmbReserved2,jdbcType=VARCHAR},
       DMB_RESERVED_3 = #{dmbReserved3,jdbcType=VARCHAR},
       DMB_RESERVED_4 = #{dmbReserved4,jdbcType=VARCHAR},

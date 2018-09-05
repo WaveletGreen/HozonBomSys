@@ -45,11 +45,16 @@
     </div>
 </div>
 
+<script th:src="@{/js/helper/projectHelper.js}"></script>
 <script th:src="@{/js/cfg/relevance/relevance.js}"></script>
 </body>
 <script th:inline="javascript">
     function doQuery() {
         $('#dataTable').bootstrapTable('refresh');    //刷新表格
+    }
+
+    function doRefresh(projectUid) {
+        loadData(projectUid);
     }
 </script>
 </html>

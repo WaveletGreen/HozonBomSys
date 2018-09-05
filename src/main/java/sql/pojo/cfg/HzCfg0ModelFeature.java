@@ -17,11 +17,12 @@ public class HzCfg0ModelFeature {
      */
     private String pPertainToColorModel;
     /**
-     * 中文描述
+     * 基本信息描述
      */
     private String pFeatureCnDesc;
     /**
-     * 单车配置码
+     * 基本信息代码
+     * //     * 单车配置码
      */
     private String pFeatureSingleVehicleCode;
     /**
@@ -113,6 +114,7 @@ public class HzCfg0ModelFeature {
      * 创建时间
      */
     private Date pMfCreateDate;
+
     public String getPuid() {
         return puid;
     }

@@ -23,7 +23,7 @@
                     <font id="currentProjectHead"></font>
 
                 </a>
-                <ul class="dropdown-menu" id="projectList"></ul>
+                <ul class="dropdown-menu" id="projectList" style="max-height: 300px;overflow-y:scroll;"></ul>
             </li>
             <!--<li class="dropdown">-->
             <!--<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-envelope"></i> <b-->
@@ -232,6 +232,11 @@
     function doChangeProject(projectUid, projectName) {
         $("#project").val(projectUid);
         $("#currentProjectHead").text(projectName);
+        myRefresh(projectUid);
+    }
+
+    function myRefresh(projectUid) {
+        $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doRefresh(projectUid);
     }
 
 </script>

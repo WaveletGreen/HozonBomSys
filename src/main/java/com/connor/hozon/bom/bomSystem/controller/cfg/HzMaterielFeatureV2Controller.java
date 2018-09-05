@@ -4,7 +4,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.connor.hozon.bom.bomSystem.controller.integrate.ExtraIntegrate;
 import com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0ModelColorDao;
 import com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0ToModelRecordDao;
-import com.connor.hozon.bom.bomSystem.dto.cfg.HzComposeMFDTO;
+import com.connor.hozon.bom.bomSystem.dto.cfg.compose.HzComposeDelDto;
+import com.connor.hozon.bom.bomSystem.dto.cfg.compose.HzComposeMFDTO;
 import com.connor.hozon.bom.bomSystem.service.business.cfg.HzComposeMFService;
 import com.connor.hozon.bom.bomSystem.service.cfg.*;
 import com.connor.hozon.bom.bomSystem.service.iservice.cfg.IHzCfg0ModelFeatureService;
@@ -124,6 +125,20 @@ public class HzMaterielFeatureV2Controller extends ExtraIntegrate {
             return result;
         }
         hzComposeMFService.saveCompose(hzComposeMFDTO, result);
+        return result;
+    }
+
+    @RequestMapping(value = "/deleteCompose", method = RequestMethod.POST)
+    @ResponseBody
+    public JSONObject deleteCompose(@RequestBody List<HzComposeDelDto> delDtos) {
+        JSONObject result = new JSONObject();
+        result.put("status", true);
+        result.put("msg", "请至少选择一个衍生物料进行操作");
+        if (delDtos == null || delDtos.size() <= 0) {
+            result.put("status", false);
+            return result;
+        }
+        hzComposeMFService.deleteCompose(delDtos, result);
         return result;
     }
 
