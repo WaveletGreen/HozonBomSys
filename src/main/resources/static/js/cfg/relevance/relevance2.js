@@ -1,8 +1,7 @@
-function loadData() {
+function loadData(projectPuid) {
     var $table = $("#dataTable");
     $table.bootstrapTable('destroy');
     $("#refresh").removeAttr("disabled");
-    var projectPuid = $("#project", window.top.document).val();
     $table.bootstrapTable({
             url: "cfg0/loadRelevance2?projectPuid=" + projectPuid,
             method: "GET",
@@ -120,15 +119,15 @@ function loadData() {
 
 $(document).ready(
     // $("#query").click(function () {
-    (loadData()),
+    loadData(getProjectUid()),
     //手动刷新按钮
     $("#refresh").click(function () {
-        loadData();
+        loadData(getProjectUid());
         // $('#dataTable').bootstrapTable('refresh');
     }),
     //手动刷新按钮
     $("#query").click(function () {
-        loadData();
+        loadData(getProjectUid());
     })
 );
 
