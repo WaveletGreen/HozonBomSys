@@ -23,7 +23,7 @@ public class ExcelUtil {
     private static final String EXTENSION_XLSX = "xlsx";
 
 
-    private static final String SEVER_LOCATION = "D:\\file\\upload";//服务器上传文件地址
+    private static final String SEVER_LOCATION = "C:\\file\\upload";//服务器上传文件地址
     private static final long FILE_MAX_SIZE = 10485760L;//文件大小限制 最大为10MB 这里采用字节
 
 

@@ -9,6 +9,8 @@ import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0ModelService;
 import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0Service;
 import com.connor.hozon.bom.bomSystem.service.iservice.cfg.IHzCfg0OfBomLineService;
 import com.connor.hozon.bom.common.base.entity.QueryBase;
+import com.connor.hozon.bom.common.util.user.UserInfo;
+import com.connor.hozon.bom.sys.entity.User;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,6 +70,7 @@ public class HzLoadBomDataController {
     @RequestMapping(value = "/loadColumns", method = RequestMethod.POST)
     @ResponseBody
     public JSONArray loadColumns(@RequestParam String projectPuid) {
+
         return hzBomDataService.doLoadColumns(projectPuid);
     }
 
@@ -112,7 +115,9 @@ public class HzLoadBomDataController {
             model.addAttribute("msg", "请选择1个项目进行操作");
             return "errorWithEntity";
         }
-        List<HzCfg0Record> features = hzCfg0Service.doLoadCfgListByProjectPuid(projectPuid, new QueryBase());
+        QueryBase queryBase = new QueryBase();
+        queryBase.setSort("P_CFG0_OBJECT_ID");
+        List<HzCfg0Record> features = hzCfg0Service.doLoadCfgListByProjectPuid(projectPuid, queryBase);
         List<HzBomLineRecord> lines = hzBomDataService.doSelect2YByProjectPuid(projectPuid);
         model.addAttribute("features", features);
         model.addAttribute("lines", lines);

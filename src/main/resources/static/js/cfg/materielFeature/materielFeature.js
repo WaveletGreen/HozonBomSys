@@ -1,4 +1,3 @@
-
 function modeVehicle(puid) {
     // $.ajax({
     //
@@ -46,8 +45,8 @@ function loadData() {
             // column.push({field: 'puid', title: 'puid'});
             // column.push({field: 'puidOfModelFeature', title: 'puidOfModelFeature'});
             // column.push({field: 'cfg0MainPuid', title: 'cfg0MainPuid'});
-            column.push({field: 'modeBasiceDetail', title: '基本信息代码'});
-            column.push({field: 'modeBasiceDetailDesc', title: '基本信息'});
+            column.push({field: 'modeBasicDetail', title: '基本信息代码'});
+            column.push({field: 'modeBasicDetailDesc', title: '基本信息'});
             column.push({field: 'superMateriel', title: '超级物料'});
             for (var i = 0; i < data.length; i++) {
                 var josn = {
@@ -62,7 +61,7 @@ function loadData() {
                 column.push(josn);
             }
             $table.bootstrapTable({
-                url: "materiel/loadAllByProjectPuid?projectPuid=" + projectPuid,
+                url: "materielV2/loadComposes?projectPuid=" + projectPuid,
                 method: 'get',
                 height: $(window.parent.document).find("#wrapper").height() - 150,//$(window.parent.document).find("#wrapper").height() - document.body.offsetHeight - 45,
                 width: $(window).width(),
@@ -77,6 +76,20 @@ function loadData() {
                 // sortable: true,                     //是否启用排序
                 // sortOrder: "asc",                   //排序方式
                 toolbars: [
+                    {
+                        text: '添加衍生物料',
+                        iconCls: 'glyphicon glyphicon-plus',
+                        handler: function () {
+                            window.Ewin.dialog({
+                                // 这个puid就是车型模型的puid，直接修改了车型模型的基本信息（在bom系统维护的字段）
+                                title: "修改基本信息",
+                                url: "materielV2/composePage?projectUid=" + projectPuid,
+                                gridId: "gridId",
+                                width: 400,
+                                height: 450
+                            });
+                        }
+                    },
                     {
                         text: '修改基本信息',
                         iconCls: 'glyphicon glyphicon-pencil',
@@ -116,30 +129,46 @@ function loadData() {
                                 height: 450
                             });
                         }
-                    }
-                    ,
-                    // {
-                    //     text: '添加车型模型',
-                    //     iconCls: 'glyphicon glyphicon-pencil',
-                    //     handler: function () {
-                    //         // var rows = $table.bootstrapTable('getSelections');
-                    //         // //只能选一条
-                    //         // if (rows.length != 1) {
-                    //         //     window.Ewin.alert({message: '请选择一条需要修改的数据!'});
-                    //         //     return false;
-                    //         // }
-                    //         window.Ewin.dialog({
-                    //             // 这个puid就是车型模型的puid，直接修改了车型模型的基本信息（在bom系统维护的字段）
-                    //             title: "添加车型模型",
-                    //             url: "materiel/addVehicleModelPage?projectPuid=" + projectPuid,
-                    //             gridId: "gridId",
-                    //             width: 350,
-                    //             height: 450
-                    //         });
-                    //     }
-                    // },
+                    },
                     {
-                        text: '同步车型',
+                        text: '删除衍生物料',
+                        iconCls: 'glyphicon glyphicon-pencil',
+                        handler: function () {
+                            var rows = $table.bootstrapTable('getSelections');
+                            //只能选一条
+                            if (rows.length <= 0) {
+                                window.Ewin.alert({message: '请至少选择一条需要删除的数据!'});
+                                return false;
+                            }
+                            window.Ewin.confirm({title: '提示', message: '是否要删除您所选择的记录？', width: 500}).on(function (e) {
+                                if (e) {
+                                    $.ajax({
+                                        type: "POST",
+                                        //ajax需要添加打包名
+                                        url: "./materielV2/deleteCompose",
+                                        data: JSON.stringify(rows),
+                                        contentType: "application/json",
+                                        success: function (result) {
+                                            if (result.status) {
+                                                layer.msg(result.msg, {icon: 1, time: 2000})
+                                                // window.Ewin.alert({message: });
+                                                //刷新，会重新申请数据库数据
+                                            }
+                                            else {
+                                                window.Ewin.alert({message: "操作删除失败:" + result.msg});
+                                            }
+                                            $table.bootstrapTable("refresh");
+                                        },
+                                        error: function (info) {
+                                            window.Ewin.alert({message: "操作删除:" + info.status});
+                                        }
+                                    })
+                                }
+                            })
+                        }
+                    },
+                    {
+                        text: '同步整车物料属性到ERP',
                         iconCls: 'glyphicon glyphicon-pencil',
                         handler: function () {
                             var rows = $table.bootstrapTable('getSelections');
@@ -176,7 +205,7 @@ function loadData() {
                         }
                     },
                     {
-                        text: '添加',
+                        text: '添加可配置物料分配特性到ERP',
                         iconCls: 'glyphicon glyphicon-pencil',
                         handler: function () {
                             var rows = $table.bootstrapTable('getSelections');
@@ -188,7 +217,7 @@ function loadData() {
                             var puids = new Array();
                             var cfg0MainPuids = new Array();
                             var modeBasiceDetails = new Array();
-                            for(var i = 0;i<rows.length;i++){
+                            for (var i = 0; i < rows.length; i++) {
                                 puids[i] = rows[i].puid;
                                 cfg0MainPuids[i] = rows[i].cfg0MainPuid;
                                 modeBasiceDetails[i] = rows[i].modeBasiceDetail;
@@ -197,14 +226,14 @@ function loadData() {
                             window.Ewin.dialog({
                                 title: "添加",
                                 //直接修改了超级物料表的数据，要根据配置器的puid找，否则就不能根据所见即所改
-                                url: "cfgMateriel/addConfigurableMaterial?puids=" + puids+"&cfg0MainPuids="+cfg0MainPuids+"&modeBasiceDetails="+modeBasiceDetails+"&projectPuid="+projectPuid,
+                                url: "cfgMateriel/addConfigurableMaterial?puids=" + puids + "&cfg0MainPuids=" + cfg0MainPuids + "&modeBasiceDetails=" + modeBasiceDetails + "&projectPuid=" + projectPuid,
                                 width: 500,
                                 height: 400
                             });
                         }
                     },
                     {
-                        text: '删除',
+                        text: '更新可配置物料分配特性到ERP',
                         iconCls: 'glyphicon glyphicon-pencil',
                         handler: function () {
                             var rows = $table.bootstrapTable('getSelections');
@@ -216,7 +245,7 @@ function loadData() {
                             var puids = new Array();
                             var cfg0MainPuids = new Array();
                             var modeBasiceDetails = new Array();
-                            for(var i = 0;i<rows.length;i++){
+                            for (var i = 0; i < rows.length; i++) {
                                 puids[i] = rows[i].puid;
                                 cfg0MainPuids[i] = rows[i].cfg0MainPuid;
                                 modeBasiceDetails[i] = rows[i].modeBasiceDetail;
@@ -225,14 +254,14 @@ function loadData() {
                             window.Ewin.dialog({
                                 title: "添加",
                                 //直接修改了超级物料表的数据，要根据配置器的puid找，否则就不能根据所见即所改
-                                url: "cfgMateriel/deleteConfigurableMaterial?puids=" + puids+"&cfg0MainPuids="+cfg0MainPuids+"&modeBasiceDetails="+modeBasiceDetails+"&projectPuid="+projectPuid,
+                                url: "cfgMateriel/deleteConfigurableMaterial?puids=" + puids + "&cfg0MainPuids=" + cfg0MainPuids + "&modeBasiceDetails=" + modeBasiceDetails + "&projectPuid=" + projectPuid,
                                 width: 500,
                                 height: 400
                             });
                         }
                     },
                     {
-                        text: '添加到SAP',
+                        text: '添加衍生物料到SAP',
                         iconCls: 'glyphicon glyphicon-pencil',
                         handler: function () {
                             var rows = $table.bootstrapTable('getSelections');
@@ -243,13 +272,13 @@ function loadData() {
                             window.Ewin.confirm({title: '提示', message: '是否要添加您所选择的记录？', width: 500}).on(function (e) {
                                 if (e) {
                                     var puidOfModelFeatures = new Array();
-                                    for(var i = 0;i<rows.length;i++){
+                                    for (var i = 0; i < rows.length; i++) {
                                         puidOfModelFeatures[i] = rows[i].puidOfModelFeature;
                                     }
                                     $.ajax({
                                         type: "POST",
                                         //ajax需要添加打包名
-                                        url: "materiel/addToSAP?puidOfModelFeatures="+puidOfModelFeatures,
+                                        url: "materiel/addToSAP?puidOfModelFeatures=" + puidOfModelFeatures,
                                         // data: JSON.stringify(puidOfModelFeatures),
                                         contentType: "application/json",
                                         success: function (result) {
@@ -273,7 +302,7 @@ function loadData() {
                         }
                     },
                     {
-                        text: '从SAP删除',
+                        text: '删除SAP中衍生物料',
                         iconCls: 'glyphicon glyphicon-pencil',
                         handler: function () {
                             var rows = $table.bootstrapTable('getSelections');
@@ -284,13 +313,13 @@ function loadData() {
                             window.Ewin.confirm({title: '提示', message: '是否要删除您所选择的记录？', width: 500}).on(function (e) {
                                 if (e) {
                                     var puidOfModelFeatures = new Array();
-                                    for(var i = 0;i<rows.length;i++){
+                                    for (var i = 0; i < rows.length; i++) {
                                         puidOfModelFeatures[i] = rows[i].puidOfModelFeature;
                                     }
                                     $.ajax({
                                         type: "POST",
                                         //ajax需要添加打包名
-                                        url: "materiel/deleteToSAP?puidOfModelFeatures="+puidOfModelFeatures,
+                                        url: "materiel/deleteToSAP?puidOfModelFeatures=" + puidOfModelFeatures,
                                         // data: JSON.stringify(puidOfModelFeatures),
                                         contentType: "application/json",
                                         success: function (result) {

@@ -1,0 +1,579 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.connor.hozon.bom.bomSystem.dao.cfg.relevance.HzRelevanceBasicDao">
+    <resultMap id="BaseResultMap" type="sql.pojo.cfg.relevance.HzRelevanceBasic">
+        <!--主键-->
+        <id column="ID" jdbcType="DECIMAL" property="id"/>
+        <!--颜色代码-->
+        <result column="RB_COLOR_CODE" jdbcType="VARCHAR" property="rbColorCode"/>
+        <!--颜色UID，外键-->
+        <result column="RB_COLOR_UID" jdbcType="VARCHAR" property="rbColorUid"/>
+        <!--特性代码-->
+        <result column="RB_FEATURE_CODE" jdbcType="VARCHAR" property="rbFeatureCode"/>
+        <!--特性UID，外键-->
+        <result column="RB_FEATURE_UID" jdbcType="VARCHAR" property="rbFeatureUid"/>
+        <!--特性值代码-->
+        <result column="RB_FEATURE_VALUE_CODE" jdbcType="VARCHAR" property="rbFeatureValueCode"/>
+        <!--特性值UID-->
+        <result column="RB_FEATURE_VALUE_UID" jdbcType="VARCHAR" property="rbFeatureValueUid"/>
+        <!--相关性-->
+        <result column="RB_RELEVANCE" jdbcType="VARCHAR" property="rbRelevance"/>
+        <!--相关性描述-->
+        <result column="RB_RELEVANCE_DESC" jdbcType="OTHER" property="rbRelevanceDesc"/>
+        <!--相关性代码-->
+        <result column="RB_RELEVANCE_CODE" jdbcType="VARCHAR" property="rbRelevanceCode"/>
+        <!--状态，分别为发布状态99，草稿状态0，删除状态10，其他状态null/其他数值-->
+        <result column="RELEVANCE_STATUS" jdbcType="DECIMAL" property="relevanceStatus"/>
+        <!--创建时间-->
+        <result column="RELEVANCE_CREATE_DATE" jdbcType="TIMESTAMP" property="relevanceCreateDate"/>
+        <!--创建者-->
+        <result column="RELEVANCE_CREATOR" jdbcType="OTHER" property="relevanceCreator"/>
+        <!--更新时间-->
+        <result column="RELEVANCE_UPDATE_DATE" jdbcType="TIMESTAMP" property="relevanceUpdateDate"/>
+        <!--更新人-->
+        <result column="RELEVANCE_UPDATER" jdbcType="OTHER" property="relevanceUpdater"/>
+        <!--预留字段1-->
+        <result column="RB_RESERVED_1" jdbcType="VARCHAR" property="rbReserved1"/>
+        <!--预留字段1-->
+        <result column="RB_RESERVED_2" jdbcType="VARCHAR" property="rbReserved2"/>
+        <!--预留字段1-->
+        <result column="RB_RESERVED_3" jdbcType="VARCHAR" property="rbReserved3"/>
+        <!--预留字段1-->
+        <result column="RB_RESERVED_4" jdbcType="VARCHAR" property="rbReserved4"/>
+        <!--预留字段1-->
+        <result column="RB_RESERVED_5" jdbcType="VARCHAR" property="rbReserved5"/>
+        <!--预留字段1-->
+        <result column="RB_RESERVED_6" jdbcType="VARCHAR" property="rbReserved6"/>
+        <!--预留字段1-->
+        <result column="RB_RESERVED_7" jdbcType="VARCHAR" property="rbReserved7"/>
+        <!--预留字段1-->
+        <result column="RB_RESERVED_8" jdbcType="VARCHAR" property="rbReserved8"/>
+        <!--预留字段1-->
+        <result column="RB_RESERVED_9" jdbcType="VARCHAR" property="rbReserved9"/>
+        <!--预留字段1-->
+        <result column="RB_RESERVED_10" jdbcType="VARCHAR" property="rbReserved10"/>
+        <!--预留字段1-->
+        <result column="RB_RESERVED_11" jdbcType="VARCHAR" property="rbReserved11"/>
+        <!--预留字段1-->
+        <result column="RB_RESERVED_12" jdbcType="VARCHAR" property="rbReserved12"/>
+        <!--预留字段1-->
+        <result column="RB_RESERVED_13" jdbcType="VARCHAR" property="rbReserved13"/>
+        <!--预留字段1-->
+        <result column="RB_RESERVED_14" jdbcType="VARCHAR" property="rbReserved14"/>
+        <!--预留字段1-->
+        <result column="RB_RESERVED_15" jdbcType="VARCHAR" property="rbReserved15"/>
+        <!--VWO变更ID-->
+        <result column="RB_VWO_ID" jdbcType="DECIMAL" property="rbVwoId"/>
+        <!--项目UID-->
+        <result column="RB_PROJECT_UID" jdbcType="VARCHAR" property="rbProjectUid"/>
+        <!--是否已发送到SAP-->
+        <result column="IS_SENT" jdbcType="DECIMAL" property="isSent"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    ID,
+    RB_COLOR_CODE,
+    RB_COLOR_UID,
+    RB_FEATURE_CODE,
+    RB_FEATURE_UID,
+    RB_FEATURE_VALUE_CODE,
+    RB_FEATURE_VALUE_UID,
+    RB_RELEVANCE,
+    RB_RELEVANCE_DESC,
+    RB_RELEVANCE_CODE,
+    RELEVANCE_STATUS,
+    RELEVANCE_CREATE_DATE,
+    RELEVANCE_CREATOR,
+    RELEVANCE_UPDATE_DATE,
+     RELEVANCE_UPDATER,
+    RB_RESERVED_1,
+    RB_RESERVED_2,
+    RB_RESERVED_3,
+    RB_RESERVED_4,
+    RB_RESERVED_5,
+    RB_RESERVED_6,
+    RB_RESERVED_7,
+    RB_RESERVED_8,
+    RB_RESERVED_9,
+    RB_RESERVED_10,
+    RB_RESERVED_11,
+    RB_RESERVED_12,
+    RB_RESERVED_13,
+    RB_RESERVED_14,
+    RB_RESERVED_15,
+    RB_VWO_ID,
+    RB_PROJECT_UID,
+    IS_SENT
+  </sql>
+    <select id="selectByPrimaryKey" parameterType="sql.pojo.cfg.relevance.HzRelevanceBasic" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from HZ_RELEVANCE_BASIC
+        where ID = #{id,jdbcType=DECIMAL}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="sql.pojo.cfg.relevance.HzRelevanceBasic">
+    delete from HZ_RELEVANCE_BASIC
+    where ID = #{id,jdbcType=DECIMAL}
+  </delete>
+    <delete id="deleteByProjectUid" parameterType="java.lang.String">
+    delete from HZ_RELEVANCE_BASIC
+    where RB_PROJECT_UID = #{rbProjectUid,jdbcType=VARCHAR}
+  </delete>
+    <insert id="insert" parameterType="sql.pojo.cfg.relevance.HzRelevanceBasic">
+    insert into HZ_RELEVANCE_BASIC (
+        ID,
+        RB_COLOR_CODE,
+        RB_COLOR_UID,
+        RB_FEATURE_CODE,
+        RB_FEATURE_UID,
+        RB_FEATURE_VALUE_CODE,
+        RB_FEATURE_VALUE_UID,
+        RB_RELEVANCE,
+        RB_RELEVANCE_DESC,
+        RB_RELEVANCE_CODE,
+        RELEVANCE_STATUS,
+        RELEVANCE_CREATE_DATE,
+        RELEVANCE_CREATOR,
+        RELEVANCE_UPDATE_DATE,
+        RELEVANCE_UPDATER,
+        RB_RESERVED_1,
+        RB_RESERVED_2,
+        RB_RESERVED_3,
+        RB_RESERVED_4,
+        RB_RESERVED_5,
+        RB_RESERVED_6,
+        RB_RESERVED_7,
+        RB_RESERVED_8,
+        RB_RESERVED_9,
+        RB_RESERVED_10,
+        RB_RESERVED_11,
+        RB_RESERVED_12,
+        RB_RESERVED_13,
+        RB_RESERVED_14,
+        RB_RESERVED_15,
+        RB_VWO_ID,
+        RB_PROJECT_UID,
+        IS_SENT
+       )
+    values (
+        #{id,jdbcType=DECIMAL},
+        #{rbColorCode,jdbcType=VARCHAR},
+        #{rbColorUid,jdbcType=VARCHAR},
+        #{rbFeatureCode,jdbcType=VARCHAR},
+        #{rbFeatureUid,jdbcType=VARCHAR},
+        #{rbFeatureValueCode,jdbcType=VARCHAR},
+        #{rbFeatureValueUid,jdbcType=VARCHAR},
+        #{rbRelevance,jdbcType=VARCHAR},
+        #{rbRelevanceDesc,jdbcType=OTHER},
+        #{rbRelevanceCode,jdbcType=VARCHAR},
+        #{relevanceStatus,jdbcType=DECIMAL},
+        #{relevanceCreateDate,jdbcType=TIMESTAMP},
+        #{relevanceCreator,jdbcType=OTHER},
+        #{relevanceUpdateDate,jdbcType=TIMESTAMP},
+        #{relevanceUpdater,jdbcType=OTHER},
+        #{rbReserved1,jdbcType=VARCHAR},
+        #{rbReserved2,jdbcType=VARCHAR},
+        #{rbReserved3,jdbcType=VARCHAR},
+        #{rbReserved4,jdbcType=VARCHAR},
+        #{rbReserved5,jdbcType=VARCHAR},
+        #{rbReserved6,jdbcType=VARCHAR},
+        #{rbReserved7,jdbcType=VARCHAR},
+        #{rbReserved8,jdbcType=VARCHAR},
+        #{rbReserved9,jdbcType=VARCHAR},
+        #{rbReserved10,jdbcType=VARCHAR},
+        #{rbReserved11,jdbcType=VARCHAR},
+        #{rbReserved12,jdbcType=VARCHAR},
+        #{rbReserved13,jdbcType=VARCHAR},
+        #{rbReserved14,jdbcType=VARCHAR},
+        #{rbReserved15,jdbcType=VARCHAR},
+        #{rbVwoId,jdbcType=DECIMAL},
+        #{rbProjectUid,jdbcType=VARCHAR},
+        #{isSent,jdbcType=DECIMAL}
+      )
+  </insert>
+    <insert id="insertByBatch" parameterType="List">
+        insert into HZ_RELEVANCE_BASIC (
+        <include refid="Base_Column_List"/>
+        )
+        select CHECK_DETAIL_SEQ.NEXTVAL,cd.* from(
+        <foreach collection="list" item="item" index="index" separator="union all">
+            #{item.rbColorCode,jdbcType=VARCHAR},
+            #{item.rbColorUid,jdbcType=VARCHAR},
+            #{item.rbFeatureCode,jdbcType=VARCHAR},
+            #{item.rbFeatureUid,jdbcType=VARCHAR},
+            #{item.rbFeatureValueCode,jdbcType=VARCHAR},
+            #{item.rbFeatureValueUid,jdbcType=VARCHAR},
+            #{item.rbRelevance,jdbcType=VARCHAR},
+            #{item.rbRelevanceDesc,jdbcType=OTHER},
+            #{item.rbRelevanceCode,jdbcType=VARCHAR},
+            #{item.relevanceStatus,jdbcType=DECIMAL},
+            #{item.relevanceCreateDate,jdbcType=TIMESTAMP},
+            #{item.relevanceCreator,jdbcType=OTHER},
+            #{item.relevanceUpdateDate,jdbcType=TIMESTAMP},
+            #{item.relevanceUpdater,jdbcType=OTHER},
+            #{item.rbReserved1,jdbcType=VARCHAR},
+            #{item.rbReserved2,jdbcType=VARCHAR},
+            #{item.rbReserved3,jdbcType=VARCHAR},
+            #{item.rbReserved4,jdbcType=VARCHAR},
+            #{item.rbReserved5,jdbcType=VARCHAR},
+            #{item.rbReserved6,jdbcType=VARCHAR},
+            #{item.rbReserved7,jdbcType=VARCHAR},
+            #{item.rbReserved8,jdbcType=VARCHAR},
+            #{item.rbReserved9,jdbcType=VARCHAR},
+            #{item.rbReserved10,jdbcType=VARCHAR},
+            #{item.rbReserved11,jdbcType=VARCHAR},
+            #{item.rbReserved12,jdbcType=VARCHAR},
+            #{item.rbReserved13,jdbcType=VARCHAR},
+            #{item.rbReserved14,jdbcType=VARCHAR},
+            #{item.rbReserved15,jdbcType=VARCHAR},
+            #{item.rbVwoId,jdbcType=DECIMAL},
+            #{item.rbProjectUid,jdbcType=VARCHAR},
+            #{item.isSent,jdbcType=DECIMAL}
+        </foreach>
+        ) cd
+    </insert>
+    <insert id="insertSelective" parameterType="sql.pojo.cfg.relevance.HzRelevanceBasic">
+        insert into HZ_RELEVANCE_BASIC
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                ID,
+            </if>
+            <if test="rbColorCode != null">
+                RB_COLOR_CODE,
+            </if>
+            <if test="rbColorUid != null">
+                RB_COLOR_UID,
+            </if>
+            <if test="rbFeatureCode != null">
+                RB_FEATURE_CODE,
+            </if>
+            <if test="rbFeatureUid != null">
+                RB_FEATURE_UID,
+            </if>
+            <if test="rbFeatureValueCode != null">
+                RB_FEATURE_VALUE_CODE,
+            </if>
+            <if test="rbFeatureValueUid != null">
+                RB_FEATURE_VALUE_UID,
+            </if>
+            <if test="rbRelevance != null">
+                RB_RELEVANCE,
+            </if>
+            <if test="rbRelevanceDesc != null">
+                RB_RELEVANCE_DESC,
+            </if>
+            <if test="rbRelevanceCode != null">
+                RB_RELEVANCE_CODE,
+            </if>
+            <if test="relevanceStatus != null">
+                RELEVANCE_STATUS,
+            </if>
+            <if test="relevanceCreateDate != null">
+                RELEVANCE_CREATE_DATE,
+            </if>
+            <if test="relevanceCreator != null">
+                RELEVANCE_CREATOR,
+            </if>
+            <if test="relevanceUpdateDate != null">
+                RELEVANCE_UPDATE_DATE,
+            </if>
+            <if test="relevanceUpdater != null">
+                RELEVANCE_UPDATER,
+            </if>
+            <if test="rbReserved1 != null">
+                RB_RESERVED_1,
+            </if>
+            <if test="rbReserved2 != null">
+                RB_RESERVED_2,
+            </if>
+            <if test="rbReserved3 != null">
+                RB_RESERVED_3,
+            </if>
+            <if test="rbReserved4 != null">
+                RB_RESERVED_4,
+            </if>
+            <if test="rbReserved5 != null">
+                RB_RESERVED_5,
+            </if>
+            <if test="rbReserved6 != null">
+                RB_RESERVED_6,
+            </if>
+            <if test="rbReserved7 != null">
+                RB_RESERVED_7,
+            </if>
+            <if test="rbReserved8 != null">
+                RB_RESERVED_8,
+            </if>
+            <if test="rbReserved9 != null">
+                RB_RESERVED_9,
+            </if>
+            <if test="rbReserved10 != null">
+                RB_RESERVED_10,
+            </if>
+            <if test="rbReserved11 != null">
+                RB_RESERVED_11,
+            </if>
+            <if test="rbReserved12 != null">
+                RB_RESERVED_12,
+            </if>
+            <if test="rbReserved13 != null">
+                RB_RESERVED_13,
+            </if>
+            <if test="rbReserved14 != null">
+                RB_RESERVED_14,
+            </if>
+            <if test="rbReserved15 != null">
+                RB_RESERVED_15,
+            </if>
+            <if test="rbVwoId != null">
+                RB_VWO_ID,
+            </if>
+            <if test="rbProjectUid != null">
+                RB_PROJECT_UID,
+            </if>
+            <if test="isSent != null">
+                IS_SENT,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=DECIMAL},
+            </if>
+            <if test="rbColorCode != null">
+                #{rbColorCode,jdbcType=VARCHAR},
+            </if>
+            <if test="rbColorUid != null">
+                #{rbColorUid,jdbcType=VARCHAR},
+            </if>
+            <if test="rbFeatureCode != null">
+                #{rbFeatureCode,jdbcType=VARCHAR},
+            </if>
+            <if test="rbFeatureUid != null">
+                #{rbFeatureUid,jdbcType=VARCHAR},
+            </if>
+            <if test="rbFeatureValueCode != null">
+                #{rbFeatureValueCode,jdbcType=VARCHAR},
+            </if>
+            <if test="rbFeatureValueUid != null">
+                #{rbFeatureValueUid,jdbcType=VARCHAR},
+            </if>
+            <if test="rbRelevance != null">
+                #{rbRelevance,jdbcType=VARCHAR},
+            </if>
+            <if test="rbRelevanceDesc != null">
+                #{rbRelevanceDesc,jdbcType=OTHER},
+            </if>
+            <if test="rbRelevanceCode != null">
+                #{rbRelevanceCode,jdbcType=VARCHAR},
+            </if>
+            <if test="relevanceStatus != null">
+                #{relevanceStatus,jdbcType=DECIMAL},
+            </if>
+            <if test="relevanceCreateDate != null">
+                #{relevanceCreateDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="relevanceCreator != null">
+                #{relevanceCreator,jdbcType=OTHER},
+            </if>
+            <if test="relevanceUpdateDate != null">
+                #{relevanceUpdateDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="relevanceUpdater != null">
+                #{relevanceUpdater,jdbcType=OTHER},
+            </if>
+            <if test="rbReserved1 != null">
+                #{rbReserved1,jdbcType=VARCHAR},
+            </if>
+            <if test="rbReserved2 != null">
+                #{rbReserved2,jdbcType=VARCHAR},
+            </if>
+            <if test="rbReserved3 != null">
+                #{rbReserved3,jdbcType=VARCHAR},
+            </if>
+            <if test="rbReserved4 != null">
+                #{rbReserved4,jdbcType=VARCHAR},
+            </if>
+            <if test="rbReserved5 != null">
+                #{rbReserved5,jdbcType=VARCHAR},
+            </if>
+            <if test="rbReserved6 != null">
+                #{rbReserved6,jdbcType=VARCHAR},
+            </if>
+            <if test="rbReserved7 != null">
+                #{rbReserved7,jdbcType=VARCHAR},
+            </if>
+            <if test="rbReserved8 != null">
+                #{rbReserved8,jdbcType=VARCHAR},
+            </if>
+            <if test="rbReserved9 != null">
+                #{rbReserved9,jdbcType=VARCHAR},
+            </if>
+            <if test="rbReserved10 != null">
+                #{rbReserved10,jdbcType=VARCHAR},
+            </if>
+            <if test="rbReserved11 != null">
+                #{rbReserved11,jdbcType=VARCHAR},
+            </if>
+            <if test="rbReserved12 != null">
+                #{rbReserved12,jdbcType=VARCHAR},
+            </if>
+            <if test="rbReserved13 != null">
+                #{rbReserved13,jdbcType=VARCHAR},
+            </if>
+            <if test="rbReserved14 != null">
+                #{rbReserved14,jdbcType=VARCHAR},
+            </if>
+            <if test="rbReserved15 != null">
+                #{rbReserved15,jdbcType=VARCHAR},
+            </if>
+            <if test="rbVwoId != null">
+                #{rbVwoId,jdbcType=DECIMAL},
+            </if>
+            <if test="rbProjectUid != null">
+                #{rbProjectUid,jdbcType=VARCHAR},
+            </if>
+            <if test="isSent != null">
+                #{isSent,jdbcType=DECIMAL},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="sql.pojo.cfg.relevance.HzRelevanceBasic">
+        update HZ_RELEVANCE_BASIC
+        <set>
+            <if test="rbColorCode != null">
+                RB_COLOR_CODE = #{rbColorCode,jdbcType=VARCHAR},
+            </if>
+            <if test="rbColorUid != null">
+                RB_COLOR_UID = #{rbColorUid,jdbcType=VARCHAR},
+            </if>
+            <if test="rbFeatureCode != null">
+                RB_FEATURE_CODE = #{rbFeatureCode,jdbcType=VARCHAR},
+            </if>
+            <if test="rbFeatureUid != null">
+                RB_FEATURE_UID = #{rbFeatureUid,jdbcType=VARCHAR},
+            </if>
+            <if test="rbFeatureValueCode != null">
+                RB_FEATURE_VALUE_CODE = #{rbFeatureValueCode,jdbcType=VARCHAR},
+            </if>
+            <if test="rbFeatureValueUid != null">
+                RB_FEATURE_VALUE_UID = #{rbFeatureValueUid,jdbcType=VARCHAR},
+            </if>
+            <if test="rbRelevance != null">
+                RB_RELEVANCE = #{rbRelevance,jdbcType=VARCHAR},
+            </if>
+            <if test="rbRelevanceDesc != null">
+                RB_RELEVANCE_DESC = #{rbRelevanceDesc,jdbcType=OTHER},
+            </if>
+            <if test="rbRelevanceCode != null">
+                RB_RELEVANCE_CODE = #{rbRelevanceCode,jdbcType=VARCHAR},
+            </if>
+            <if test="relevanceStatus != null">
+                RELEVANCE_STATUS = #{relevanceStatus,jdbcType=DECIMAL},
+            </if>
+            <if test="relevanceCreateDate != null">
+                RELEVANCE_CREATE_DATE = #{relevanceCreateDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="relevanceCreator != null">
+                RELEVANCE_CREATOR = #{relevanceCreator,jdbcType=OTHER},
+            </if>
+            <if test="relevanceUpdateDate != null">
+                RELEVANCE_UPDATE_DATE = #{relevanceUpdateDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="relevanceUpdater != null">
+                RELEVANCE_UPDATER = #{relevanceUpdater,jdbcType=OTHER},
+            </if>
+            <if test="rbReserved1 != null">
+                RB_RESERVED_1 = #{rbReserved1,jdbcType=VARCHAR},
+            </if>
+            <if test="rbReserved2 != null">
+                RB_RESERVED_2 = #{rbReserved2,jdbcType=VARCHAR},
+            </if>
+            <if test="rbReserved3 != null">
+                RB_RESERVED_3 = #{rbReserved3,jdbcType=VARCHAR},
+            </if>
+            <if test="rbReserved4 != null">
+                RB_RESERVED_4 = #{rbReserved4,jdbcType=VARCHAR},
+            </if>
+            <if test="rbReserved5 != null">
+                RB_RESERVED_5 = #{rbReserved5,jdbcType=VARCHAR},
+            </if>
+            <if test="rbReserved6 != null">
+                RB_RESERVED_6 = #{rbReserved6,jdbcType=VARCHAR},
+            </if>
+            <if test="rbReserved7 != null">
+                RB_RESERVED_7 = #{rbReserved7,jdbcType=VARCHAR},
+            </if>
+            <if test="rbReserved8 != null">
+                RB_RESERVED_8 = #{rbReserved8,jdbcType=VARCHAR},
+            </if>
+            <if test="rbReserved9 != null">
+                RB_RESERVED_9 = #{rbReserved9,jdbcType=VARCHAR},
+            </if>
+            <if test="rbReserved10 != null">
+                RB_RESERVED_10 = #{rbReserved10,jdbcType=VARCHAR},
+            </if>
+            <if test="rbReserved11 != null">
+                RB_RESERVED_11 = #{rbReserved11,jdbcType=VARCHAR},
+            </if>
+            <if test="rbReserved12 != null">
+                RB_RESERVED_12 = #{rbReserved12,jdbcType=VARCHAR},
+            </if>
+            <if test="rbReserved13 != null">
+                RB_RESERVED_13 = #{rbReserved13,jdbcType=VARCHAR},
+            </if>
+            <if test="rbReserved14 != null">
+                RB_RESERVED_14 = #{rbReserved14,jdbcType=VARCHAR},
+            </if>
+            <if test="rbReserved15 != null">
+                RB_RESERVED_15 = #{rbReserved15,jdbcType=VARCHAR},
+            </if>
+            <if test="rbVwoId != null">
+                RB_VWO_ID = #{rbVwoId,jdbcType=DECIMAL},
+            </if>
+            <if test="rbProjectUid != null">
+                RB_PROJECT_UID = #{rbProjectUid,jdbcType=VARCHAR},
+            </if>
+            <if test="isSent != null">
+                IS_SENT = #{isSent,jdbcType=DECIMAL},
+            </if>
+
+        </set>
+        where ID = #{id,jdbcType=DECIMAL}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="sql.pojo.cfg.relevance.HzRelevanceBasic">
+    update HZ_RELEVANCE_BASIC
+    set
+      RB_COLOR_CODE = #{rbColorCode,jdbcType=VARCHAR},
+      RB_COLOR_UID = #{rbColorUid,jdbcType=VARCHAR},
+      RB_FEATURE_CODE = #{rbFeatureCode,jdbcType=VARCHAR},
+      RB_FEATURE_UID = #{rbFeatureUid,jdbcType=VARCHAR},
+      RB_FEATURE_VALUE_CODE = #{rbFeatureValueCode,jdbcType=VARCHAR},
+      RB_FEATURE_VALUE_UID = #{rbFeatureValueUid,jdbcType=VARCHAR},
+      RB_RELEVANCE = #{rbRelevance,jdbcType=VARCHAR},
+      RB_RELEVANCE_DESC = #{rbRelevanceDesc,jdbcType=OTHER},
+      RB_RELEVANCE_CODE = #{rbRelevanceCode,jdbcType=VARCHAR},
+      RELEVANCE_STATUS = #{relevanceStatus,jdbcType=DECIMAL},
+      RELEVANCE_CREATE_DATE = #{relevanceCreateDate,jdbcType=TIMESTAMP},
+      RELEVANCE_CREATOR = #{relevanceCreator,jdbcType=OTHER},
+      RELEVANCE_UPDATE_DATE = #{relevanceUpdateDate,jdbcType=TIMESTAMP},
+      RELEVANCE_UPDATER = #{relevanceUpdater,jdbcType=OTHER},
+      RB_RESERVED_1 = #{rbReserved1,jdbcType=VARCHAR},
+      RB_RESERVED_2 = #{rbReserved2,jdbcType=VARCHAR},
+      RB_RESERVED_3 = #{rbReserved3,jdbcType=VARCHAR},
+      RB_RESERVED_4 = #{rbReserved4,jdbcType=VARCHAR},
+      RB_RESERVED_5 = #{rbReserved5,jdbcType=VARCHAR},
+      RB_RESERVED_6 = #{rbReserved6,jdbcType=VARCHAR},
+      RB_RESERVED_7 = #{rbReserved7,jdbcType=VARCHAR},
+      RB_RESERVED_8 = #{rbReserved8,jdbcType=VARCHAR},
+      RB_RESERVED_9 = #{rbReserved9,jdbcType=VARCHAR},
+      RB_RESERVED_10 = #{rbReserved10,jdbcType=VARCHAR},
+      RB_RESERVED_11 = #{rbReserved11,jdbcType=VARCHAR},
+      RB_RESERVED_12 = #{rbReserved12,jdbcType=VARCHAR},
+      RB_RESERVED_13 = #{rbReserved13,jdbcType=VARCHAR},
+      RB_RESERVED_14 = #{rbReserved14,jdbcType=VARCHAR},
+      RB_RESERVED_15 = #{rbReserved15,jdbcType=VARCHAR},
+      RB_VWO_ID = #{rbVwoId,jdbcType=DECIMAL},
+      RB_PROJECT_UID = #{rbProjectUid,jdbcType=VARCHAR},
+      IS_SENT = #{isSent,jdbcType=DECIMAL}
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+</mapper>

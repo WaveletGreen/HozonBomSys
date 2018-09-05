@@ -1,6 +1,5 @@
 package com.connor.hozon.bom.resources.service.file.impl;
 
-import com.alibaba.fastjson.JSON;
 import com.connor.hozon.bom.bomSystem.dao.bom.HzBomMainRecordDao;
 import com.connor.hozon.bom.bomSystem.dao.impl.bom.HzBomLineRecordDaoImpl;
 import com.connor.hozon.bom.common.util.user.UserInfo;
@@ -10,7 +9,6 @@ import com.connor.hozon.bom.resources.service.file.FileUploadService;
 import com.connor.hozon.bom.resources.util.ExcelUtil;
 import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.resources.util.PrivilegeUtil;
-import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -43,6 +41,8 @@ public class FileUploadServiceImpl implements FileUploadService {
     private int errorCount = 0;
 
     private int lineIndexFirst =10;
+
+    private Integer maxOrderNum = null;
     @Override
     public OperateResultMessageRespDTO UploadEbomToDB(MultipartFile file,String projectId) {
         try {
@@ -79,10 +79,10 @@ public class FileUploadServiceImpl implements FileUploadService {
             List<List<HzImportEbomRecord>> list1 = new ArrayList<>();
 
             HZBomMainRecord hzBomMainRecord = hzBomMainRecordDao.selectByProjectPuid(projectId);
-
+            maxOrderNum = hzBomLineRecordDao.findMaxBomOrderNum(projectId);
             for(int numSheet = 0; numSheet < workbook.getNumberOfSheets(); numSheet++ ){
                 Sheet sheet = workbook.getSheetAt(numSheet);
-                String sheetName = workbook.getSheetName(numSheet);//EBOM 表名 就一张表的话 没什么卵用
+                String sheetName = workbook.getSheetName(numSheet);//sheet 表名 就一个sheet的话 没什么卵用
                 int i = 1;
                 while (i<=sheet.getLastRowNum()){
                     List<HzImportEbomRecord> list = new ArrayList<>();
@@ -108,7 +108,7 @@ public class FileUploadServiceImpl implements FileUploadService {
                                 record.setIsHas(0);
                                 record.setIsPart(1);
                             }
-                            if(level.equals("2") || level.equals("2Y")){
+                            if(level.equals("2Y")){
                                 if(add2Y){
                                     list.add(record);
                                     high++;
@@ -132,25 +132,22 @@ public class FileUploadServiceImpl implements FileUploadService {
             List<HzImportEbomRecord> records = analysisFinalExcelContent(list1,projectId);
             int j = 0;
             String s ="";
-            Set<HzImportEbomRecord> ss = new HashSet<>();
-            List<HzImportEbomRecord> ll = new ArrayList<>();
-
+            String ss = "";
             for(int i=0;i<records.size();i++){//设置子层的父id为当前的id
                 j = i;
-                if(records.get(i).getLevel().endsWith("Y")){
-                    ss.add(records.get(i));
-                    ll.add(records.get(i));
-                    int level = Integer.valueOf(records.get(i).getLevel().replace("Y",""))+1;
+                if(records.get(i).getLevel().endsWith("Y")){//2Y - 2/3Y
+                    int level = Integer.valueOf(records.get(i).getLevel().replace("Y",""));
+                    int lev = level+1;
                     s = String.valueOf(level);
+                    ss = String.valueOf(lev);
                     for(int k =j;k<records.size();k++){
-                        if(s.equals(records.get(k).getLevel()) || (s+"Y").equals(records.get(k).getLevel())){
+                        if(s.equals(records.get(k).getLevel()) || (ss+"Y").equals(records.get(k).getLevel())){
                             records.get(i).setPuid(records.get(k).getParentId());
                             break;
                         }
                     }
                 }
             }
-
 
             if(ListUtil.isNotEmpty(records)){
                 int size = records.size();
@@ -178,7 +175,7 @@ public class FileUploadServiceImpl implements FileUploadService {
                     hzEbomRecordDAO.importList(list);
                 }
             }
-
+            ExcelUtil.deleteFile();
         }catch (Exception e){
             return OperateResultMessageRespDTO.getFailResult();
 
@@ -232,29 +229,57 @@ public class FileUploadServiceImpl implements FileUploadService {
         String pActualWeight="";
 
         try {
-            BigDecimal bigDecimal = new BigDecimal(ExcelUtil.getCell(row,26).getStringCellValue());
-            pTargetWeight =String.valueOf( bigDecimal.setScale(3, BigDecimal.ROUND_HALF_UP));
+            pTargetWeight = ExcelUtil.getCell(row,26).getStringCellValue();
+            if(pTargetWeight == null || pTargetWeight ==""){
+                pTargetWeight = "";
+            }else {
+                BigDecimal bigDecimal = new BigDecimal(pTargetWeight);
+                pTargetWeight =String.valueOf( bigDecimal.setScale(3, BigDecimal.ROUND_HALF_UP));
+            }
         }catch (Exception e){
-            BigDecimal dec = new BigDecimal(ExcelUtil.getCell(row,26).getNumericCellValue());
-            pTargetWeight =String.valueOf(dec.setScale(3, BigDecimal.ROUND_HALF_UP).doubleValue());
+            try {
+                BigDecimal dec = new BigDecimal(ExcelUtil.getCell(row,26).getNumericCellValue());
+                pTargetWeight =String.valueOf(dec.setScale(3, BigDecimal.ROUND_HALF_UP).doubleValue());
+            }catch (Exception e1){
+                pTargetWeight ="";
+            }
+
         }
 
         try {
-            BigDecimal bigDecimal = new BigDecimal(ExcelUtil.getCell(row,27).getStringCellValue());
-            pFeatureWeight =String.valueOf( bigDecimal.setScale(3, BigDecimal.ROUND_HALF_UP));
+            pFeatureWeight = ExcelUtil.getCell(row,27).getStringCellValue();
+            if(pFeatureWeight == null || pFeatureWeight == ""){
+                pFeatureWeight ="";
+            }else {
+                BigDecimal bigDecimal = new BigDecimal(pFeatureWeight);
+                pFeatureWeight =String.valueOf( bigDecimal.setScale(3, BigDecimal.ROUND_HALF_UP));
+            }
         }catch (Exception e){
-            BigDecimal dec = new BigDecimal(ExcelUtil.getCell(row,27).getNumericCellValue());
-            pFeatureWeight =String.valueOf(dec.setScale(3, BigDecimal.ROUND_HALF_UP).doubleValue());
+            try {
+                BigDecimal dec = new BigDecimal(ExcelUtil.getCell(row,27).getNumericCellValue());
+                pFeatureWeight =String.valueOf(dec.setScale(3, BigDecimal.ROUND_HALF_UP).doubleValue());
+            }catch (Exception e1){
+                pFeatureWeight="";
+            }
+
         }
 
         try {
-            BigDecimal bigDecimal = new BigDecimal(ExcelUtil.getCell(row,28).getStringCellValue());
-            pActualWeight =String.valueOf( bigDecimal.setScale(3, BigDecimal.ROUND_HALF_UP));
+            pActualWeight = ExcelUtil.getCell(row,28).getStringCellValue();
+            if(pActualWeight == null || pActualWeight == ""){
+                pActualWeight = "";
+            }else {
+                BigDecimal bigDecimal = new BigDecimal(pActualWeight);
+                pActualWeight =String.valueOf( bigDecimal.setScale(3, BigDecimal.ROUND_HALF_UP));
+            }
         }catch (Exception e){
-            BigDecimal dec = new BigDecimal(ExcelUtil.getCell(row,28).getNumericCellValue());
-            pActualWeight =String.valueOf(dec.setScale(3, BigDecimal.ROUND_HALF_UP).doubleValue());
+            try {
+                BigDecimal dec = new BigDecimal(ExcelUtil.getCell(row,28).getNumericCellValue());
+                pActualWeight =String.valueOf(dec.setScale(3, BigDecimal.ROUND_HALF_UP).doubleValue());
+            }catch (Exception e1){
+                pActualWeight="";
+            }
         }
-
         String pFastener=ExcelUtil.getCell(row,29).getStringCellValue();
 
         String pFastenerStandard=ExcelUtil.getCell(row,30).getStringCellValue();
@@ -285,10 +310,12 @@ public class FileUploadServiceImpl implements FileUploadService {
         if(number !=null && number !=""){
             record.setNumber(Integer.valueOf(number));
         }
-        if("Y".endsWith(p3cpartFlag)){
+        if("Y".equals(p3cpartFlag)){
             record.setP3cpartFlag(1);
-        }else {
+        }else if("N".equals(p3cpartFlag)) {
             record.setP3cpartFlag(0);
+        }else {
+            record.setP3cpartFlag(null);
         }
         record.setpActualWeight(pActualWeight);
         record.setpBomLinePartClass(pBomLinePartClass);
@@ -310,7 +337,13 @@ public class FileUploadServiceImpl implements FileUploadService {
         record.setpFnaDesc(pFnaDesc);
         record.setpFnaInfo(fna);
         record.setpImportance(pImportance);
-        record.setpInOutSideFlag(pInOutSideFlag == "外饰件"?0:1);
+        if("内饰件".equals(pInOutSideFlag)){
+            record.setpInOutSideFlag(1);
+        }else if("外饰件".equals(pInOutSideFlag)){
+            record.setpInOutSideFlag(0);
+        }else {
+            record.setpInOutSideFlag(null);
+        }
         record.setpManuProcess(pManuProcess);
         record.setpMaterial1(pMaterial1);
         record.setpMaterial2(pMaterial2);
@@ -320,7 +353,11 @@ public class FileUploadServiceImpl implements FileUploadService {
         record.setpPictureNo(pPictureNo);
         record.setpPictureSheet(pPictureSheet);
         record.setpRegulationCode(pRegulationCode);
-        record.setpRegulationFlag(pRegulationFlag == "Y"?1:0);
+        if(pRegulationFlag!=null && pRegulationFlag!=""){
+            record.setpRegulationFlag(pRegulationFlag == "Y"?1:0);
+        }else {
+            record.setpRegulationFlag(null);
+        }
         record.setpRemark(pRemark);
         record.setpSupply(pSupply);
         record.setpSupplyCode(pSupplyCode);
@@ -347,7 +384,9 @@ public class FileUploadServiceImpl implements FileUploadService {
             HzImportEbomRecord record = records.get(i);
             String level = record.getLevel();
             int high = record.getHigh();
+           //这里并没有产生多余的数据，层级不带Y也产生puid是因为下面解析要用到
             mapList.put(level+"-"+high,UUID.randomUUID().toString());
+
         }
         return mapList;
     }
@@ -359,7 +398,7 @@ public class FileUploadServiceImpl implements FileUploadService {
      * @return
      */
     private Map<String,String> analysisLineIndex(List<HzImportEbomRecord> records,String projectId) {
-        Map<String,String> lineIndexMap = new HashMap<>();
+        Map<String,String> lineIndexMap = new LinkedHashMap<>();
         for(int i = 1;i<records.size();i++){//产生lineIndex
             HzImportEbomRecord preDTO = records.get(i-1);
             HzImportEbomRecord currentDTO = records.get(i);
@@ -374,51 +413,109 @@ public class FileUploadServiceImpl implements FileUploadService {
                     lineIndexFirst+=10;
                 }
             }
+            String preLevel = preDTO.getLevel();
             String level = currentDTO.getLevel();
             int high = currentDTO.getHigh();
             String currentKey = level+"-"+high;
             String preKey = preDTO.getLevel()+"-"+preDTO.getHigh();
             String currentIndex = "";
-            int preLevelNum = Integer.valueOf(preDTO.getLevel().replace("Y",""));
+            int preLevelNum = Integer.valueOf(preLevel.replace("Y",""));
             int currentLevelNum = Integer.valueOf(level.replace("Y",""));
 
-            if(currentLevelNum>preLevelNum){
-                for(String key:lineIndexMap.keySet()){
-                    if(key.equals(preKey)){
-                        StringBuffer s = new StringBuffer(lineIndexMap.get(preKey));
-                        currentIndex = s.append(".10").toString();
-                        lineIndexMap.put(currentKey,currentIndex);
-                        break;
-                    }
-                }
-            }else if(currentLevelNum == preLevelNum){
+            if(currentLevelNum>=preLevelNum){
                 for(String key:lineIndexMap.keySet()){
                     if(key.equals(preKey)){
                         String value = lineIndexMap.get(preKey);
-                        int lastNum = Integer.valueOf(value.split("\\.")[value.split("\\.").length-1]);
-                        int charAtNum = value.lastIndexOf(".");
-                        String preIndexDoNotContainLastNum = value.substring(0,charAtNum);
-                        lastNum+=10;
-                        currentIndex = preIndexDoNotContainLastNum+"."+lastNum;
-                        lineIndexMap.put(currentKey,currentIndex);
+                        if(preLevel.endsWith("Y")){
+                            StringBuffer s = new StringBuffer(lineIndexMap.get(preKey));
+                            currentIndex = s.append(".10").toString();
+                            lineIndexMap.put(currentKey,currentIndex);
+                        }else if(preLevelNum == currentLevelNum && level.endsWith("Y")){
+                            String[] values = value.split("\\.");
+                            StringBuffer stringBuffer = new StringBuffer();
+                            for(int j = 0;j<currentLevelNum;j++){
+                                if(j!=currentLevelNum-1)
+                                    stringBuffer.append(values[j]+".");
+                                else
+                                    stringBuffer.append(values[j]);
+                            }
+                            value = stringBuffer.toString();
+                            int lastNum = Integer.valueOf(value.split("\\.")[value.split("\\.").length-1]);
+                            int charAtNum = value.lastIndexOf(".");
+                            String preIndexDoNotContainLastNum = value.substring(0,charAtNum);
+                            lastNum+=10;
+                            currentIndex = preIndexDoNotContainLastNum+"."+lastNum;
+                            lineIndexMap.put(currentKey,currentIndex);
+                        } else {
+                            int lastNum = Integer.valueOf(value.split("\\.")[value.split("\\.").length-1]);
+                            int charAtNum = value.lastIndexOf(".");
+                            String preIndexDoNotContainLastNum = value.substring(0,charAtNum);
+                            lastNum+=10;
+                            currentIndex = preIndexDoNotContainLastNum+"."+lastNum;
+                            lineIndexMap.put(currentKey,currentIndex);
+                        }
                         break;
                     }
+                }
+            }
+//                else if(currentLevelNum == preLevelNum){
+//                    for(String key:lineIndexMap.keySet()){
+//                        if(key.equals(preKey)){
+//                            String value = lineIndexMap.get(preKey);
+//                            if(preKey.endsWith("Y")){
+//                                StringBuffer s = new StringBuffer(value);
+//                                currentIndex = s.append(".10").toString();
+//                                lineIndexMap.put(currentKey,currentIndex);
+//                                break;
+//                            }else {
+//                                int lastNum = Integer.valueOf(value.split("\\.")[value.split("\\.").length-1]);
+//                                int charAtNum = value.lastIndexOf(".");
+//                                String preIndexDoNotContainLastNum = value.substring(0,charAtNum);
+//                                lastNum+=10;
+//                                currentIndex = preIndexDoNotContainLastNum+"."+lastNum;
+//                                lineIndexMap.put(currentKey,currentIndex);
+//                                break;
+//                            }
+//
+//                        }
+//
+//                    }
+//                }
+            else {
+                String value = lineIndexMap.get(preKey);
+                String[] values = value.split("\\.");
+                int count = currentLevelNum;
+                if(!level.endsWith("Y")){
+                    count = currentLevelNum+1;
+                }
+                StringBuffer stringBuffer = new StringBuffer();
+                for(int j = 0;j<count;j++){
+                    if(j!=count-1)
+                        stringBuffer.append(values[j]+".");
+                    else
+                        stringBuffer.append(values[j]);
+                }
 
-                }
-            }else {
-                for(Map.Entry<String,String> entry:lineIndexMap.entrySet()){
-                    String parentKey = currentLevelNum+"Y-";
-                    if(entry.getKey().indexOf(parentKey)>-1){
-                        String value = entry.getValue();
-                        int lastNum = Integer.valueOf(value.split("\\.")[value.split("\\.").length-1]);
-                        int charAtNum = value.lastIndexOf(".");
-                        String preIndexDoNotContainLastNum = value.substring(0,charAtNum);
-                        lastNum+=10;
-                        currentIndex = preIndexDoNotContainLastNum+"."+lastNum;
-                        lineIndexMap.put(currentKey,currentIndex);
-                        break;
-                    }
-                }
+                value = stringBuffer.toString();
+                int lastNum = Integer.valueOf(value.split("\\.")[value.split("\\.").length-1]);
+                int charAtNum = value.lastIndexOf(".");
+                String preIndexDoNotContainLastNum = value.substring(0,charAtNum);
+                lastNum+=10;
+                currentIndex = preIndexDoNotContainLastNum+"."+lastNum;
+                lineIndexMap.put(currentKey,currentIndex);
+//                    for(Map.Entry<String,String> entry:lineIndexMap.entrySet()){
+//                        String parentKey = currentLevelNum+"Y-";
+//                        if(entry.getKey().indexOf(parentKey)>-1){
+//                            String value = entry.getValue();
+//                            int lastNum = Integer.valueOf(value.split("\\.")[value.split("\\.").length-1]);
+//                            int charAtNum = value.lastIndexOf(".");
+//                            String preIndexDoNotContainLastNum = value.substring(0,charAtNum);
+//                            lastNum+=10;
+//                            currentIndex = preIndexDoNotContainLastNum+"."+lastNum;
+//                            lineIndexMap.put(currentKey,currentIndex);
+//                            break;
+//                        }
+//                    }
             }
 
         }
@@ -441,11 +538,14 @@ public class FileUploadServiceImpl implements FileUploadService {
             int high = record.getHigh();
             String parentId = "";
             String currentKey = record.getLevel()+"-"+high;
-            String currentLineIndex = "";
+            int currentLevelNum = Integer.valueOf(level.replace("Y",""));
+            String currentLineIndex = lineIndexMap.get(currentKey);
             //找父id
             if(high!=0){
-                int m = Integer.valueOf(level.replace("Y",""))-1;
-                String parentKey = m+"Y-";
+                if(level.endsWith("Y")){
+                    currentLevelNum = currentLevelNum-1;
+                }
+                String parentKey = currentLevelNum+"Y-";
                 for(Map.Entry<String,String> entry:mapList.entrySet()){
                     if(entry.getKey().indexOf(parentKey)>-1){
                         parentId = entry.getValue();
@@ -456,12 +556,12 @@ public class FileUploadServiceImpl implements FileUploadService {
                 }
             }
             //找lineIndex
-            for(String key :lineIndexMap.keySet()){
-                if(key.equals(currentKey)){
-                    currentLineIndex = lineIndexMap.get(currentKey);
-                    break;
-                }
-            }
+//            for(String key :lineIndexMap.keySet()){
+//                if(key.equals(currentKey)){
+//                    currentLineIndex = lineIndexMap.get(currentKey);
+//                    break;
+//                }
+//            }
 //            else {
 //                Integer lineIndexFirstNum = hzBomLineRecordDao.getMaxLineIndexFirstNum(projectId);
 //                if(lineIndexFirstNum == null){
@@ -470,12 +570,19 @@ public class FileUploadServiceImpl implements FileUploadService {
 //                    currentLineIndex =lineIndexFirstNum+".10";
 //                }
 //            }
-            record.setLineIndex(currentLineIndex);
+
+            record.setLineIndex(lineIndexMap.get(currentKey));
             record.setParentId(parentId);
             if(!level.endsWith("Y")){
                 record.setPuid(UUID.randomUUID().toString());
             }
-            record.setOrderNum(record.getNo()*100);
+
+            if(maxOrderNum !=null){
+                record.setOrderNum(maxOrderNum+record.getNo()*100);
+            }else {
+                record.setOrderNum(record.getNo()*100);
+            }
+
             recordList.add(record);
         }
         return recordList;
@@ -508,9 +615,9 @@ public class FileUploadServiceImpl implements FileUploadService {
                 if(level.endsWith("Y") && rowNum !=sheet.getLastRowNum()){
                     int lev = Integer.valueOf(level.replace("Y",""))+1;
                     String nextLevel = ExcelUtil.getCell(sheet.getRow(rowNum+1),3).getStringCellValue();
-                    if(!nextLevel.equals(lev+"Y") && !nextLevel.equals(String.valueOf(lev))){
+                    if(!nextLevel.equals(lev+"Y") && !nextLevel.equals(String.valueOf(lev-1))){
                         stringBuffer.append("第"+(rowNum+1)+"行的层级填写不正确，" +
-                                ""+level+"下的层级应该为:<strong>"+lev+"Y</strong>"+"或者<strong>"+lev+"</strong>" +
+                                ""+level+"下的层级应该为:<strong>"+lev+"Y</strong>"+"或者<strong>"+(lev-1)+"</strong>" +
                                 ";而实际为:"+nextLevel+"</br>");
                         this.errorCount++;
                         continue;

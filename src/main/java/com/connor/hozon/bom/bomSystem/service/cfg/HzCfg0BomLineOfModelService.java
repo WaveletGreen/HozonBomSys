@@ -147,24 +147,23 @@ public class HzCfg0BomLineOfModelService {
                 String owningUser = "";
                 HzFcfgBomLvl1ListOperation operation = hzFcfgBomLvl1ListOperationService.doSelectByPrimaryKey(withBomLine.getpBomLineId());
                 if (null != operation) {
-                    data.put("operation", operation.getpOprationTypeName());
+                    data.put(HzCfg0BomLineOfModel.selfDesc[0], operation.getpOprationTypeName());
                 } else {
-                    data.put("operation", "");
+                    data.put(HzCfg0BomLineOfModel.selfDesc[0], "新增");
                 }
 //                Object obj = SerializeUtil.unserialize(withBomLine.getLineBlock());
 //                if (obj instanceof LinkedHashMap) {
 //                    owningUser = (String) ((LinkedHashMap) obj).get("bl_rev_owning_user");
 //                }
                 owningUser = withBomLine.getCreator();
-
-                data.put(HzCfg0BomLineOfModel.selfDesc[0], withBomLine.getpBomOfWhichDept());
-                data.put(HzCfg0BomLineOfModel.selfDesc[1], withBomLine.getpBomLineId());
+                data.put(HzCfg0BomLineOfModel.selfDesc[1], withBomLine.getpBomOfWhichDept());
                 data.put(HzCfg0BomLineOfModel.selfDesc[2], withBomLine.getpBomLineId());
+//                data.put(HzCfg0BomLineOfModel.selfDesc[2], withBomLine.getpBomLineId());
                 data.put(HzCfg0BomLineOfModel.selfDesc[3], withBomLine.getpBomLineName());
                 data.put(HzCfg0BomLineOfModel.selfDesc[4], withBomLine.getpH9featureenname() == null ? "" : withBomLine.getpH9featureenname());
                 data.put(HzCfg0BomLineOfModel.selfDesc[5], owningUser == null ? "" : owningUser);
-                data.put(HzCfg0BomLineOfModel.selfDesc[6], withBomLine.getpCfg0Desc() != null ? withBomLine.getpCfg0Desc() : "");
-                data.put(HzCfg0BomLineOfModel.selfDesc[7], withBomLine.getpCfg0ObjectId());
+                data.put(HzCfg0BomLineOfModel.selfDesc[6], withBomLine.getpCfg0ObjectId());
+                data.put(HzCfg0BomLineOfModel.selfDesc[7], withBomLine.getpCfg0Desc() != null ? withBomLine.getpCfg0Desc() : "");
                 data.put(HzCfg0BomLineOfModel.selfDesc[8], withBomLine.getpCfg0Desc() != null ? withBomLine.getpCfg0Desc() : "");
                 mapModelHasCfg0.forEach((key, value) -> {
                     for (HzCfg0BomLineOfModel model : value) {

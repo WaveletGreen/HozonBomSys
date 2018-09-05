@@ -31,6 +31,7 @@
         <result column="P_CFG0_DESC" jdbcType="VARCHAR" property="pCfg0Desc"/>
         <result column="P_CFG0_FAMILY_NAME" jdbcType="VARCHAR" property="pCfg0FamilyName"/>
         <result column="P_CFG0_FAMILY_DESC" jdbcType="VARCHAR" property="pCfg0FamilyDesc"/>
+        <result column="P_CFG0_FAMILY_PUID" jdbcType="VARCHAR" property="pCfg0FamilyPuid"/>
         <result column="OBJECT_NAME" jdbcType="VARCHAR" property="objectName"/>
         <result column="P_CFG0_MODEL_RECORD" jdbcType="VARCHAR" property="pCfg0ModelRecord"/>
         <result column="P_OF_CFG0_MAIN_RECORD" jdbcType="VARCHAR" property="pOfCfg0MainRecord"/>
@@ -67,6 +68,7 @@
         t.P_CFG0_DESC,
         t.P_CFG0_FAMILY_NAME,
         t.P_CFG0_FAMILY_DESC,
+        t.P_CFG0_FAMILY_PUID,
         t4.OBJECT_NAME,
         t3.P_CFG0_MODEL_RECORD,
         t3.P_OF_CFG0_MAIN_RECORD,
@@ -83,8 +85,9 @@
     </select>
     <!--根据项目搜索全部-->
     <select id="selectListByProjectPuid" parameterType="java.util.Map" resultMap="BaseResultMap">
+        select * from (
         select
-        <include refid="Base_Column_List"/>
+        <include refid="Base_Column_List"/>,ROWNUM as rown
         from
         ( select
         <include refid="Base_Column_List"/>,
@@ -95,14 +98,6 @@
         from Hz_Cfg0_Main_Record t2
         where t2.p_cfg0_of_which_project_puid=#{projectPuid,jdbcType=VARCHAR}
         )
-
-        <if test="param.limit!=null and  param.page!=null">
-            and ROWNUM &lt;= ${param.page}*${param.limit}
-        </if>
-        ) temp
-        <if test="param.offset!=null">
-            where temp.rowno &gt;= ${param.offset}+1
-        </if>
         <if test="param.sort!=null">
             order by ${param.sort}
         </if>
@@ -112,6 +107,16 @@
         <if test="param.order==null">
             ASC
         </if>
+        ) temp
+        ) temp2
+        where 1=1
+        <if test="param.offset!=null">
+            and temp2.rown &gt;= ${param.offset}+1
+        </if>
+        <if test="param.limit!=null and  param.page!=null">
+            and temp2.rown &lt;= ${param.page}*${param.limit}
+        </if>
+
         <!--select
         <include refid="Base_Column_List"/>
         from ${whichTable} t where

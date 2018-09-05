@@ -11,6 +11,10 @@ public class HzMaterielFeatureBean {
      */
     private String puid;
     /**
+     * 特性的puid
+     */
+    private String pCfg0FamilyPuid;
+    /**
      * 配置值
      */
     private String pCfg0ObjectId;
@@ -42,10 +46,12 @@ public class HzMaterielFeatureBean {
      * 主配置puid
      */
     private String pOfCfg0MainRecord;
+
     /**
      * 是否已发送过SAP
      */
     private Integer isSent;
+
     public String getPuid() {
         return puid;
     }
@@ -124,5 +130,13 @@ public class HzMaterielFeatureBean {
 
     public void setIsSent(Integer isSent) {
         this.isSent = isSent;
+    }
+
+    public String getpCfg0FamilyPuid() {
+        return pCfg0FamilyPuid;
+    }
+
+    public void setpCfg0FamilyPuid(String pCfg0FamilyPuid) {
+        this.pCfg0FamilyPuid = pCfg0FamilyPuid;
     }
 }

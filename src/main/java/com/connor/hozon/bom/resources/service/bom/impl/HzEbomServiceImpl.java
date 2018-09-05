@@ -150,13 +150,17 @@ public class HzEbomServiceImpl implements HzEbomService {
                 }
                 if(Integer.valueOf(1).equals(record.getP3cpartFlag())){
                     jsonObject.put("p3cpartFlag", "Y");
-                }else {
+                }else if(Integer.valueOf(0).equals(record.getP3cpartFlag())){
                     jsonObject.put("p3cpartFlag", "N");
+                }else {
+                    jsonObject.put("p3cpartFlag", "");
                 }
                 if(Integer.valueOf(1).equals(record.getpInOutSideFlag())){
                     jsonObject.put("pInOutSideFlag", "内饰件");
-                }else {
+                }else if(Integer.valueOf(0).equals(record.getpInOutSideFlag())){
                     jsonObject.put("pInOutSideFlag", "外饰件");
+                }else {
+                    jsonObject.put("pInOutSideFlag", "");
                 }
                 jsonObject.put("pUpc",record.getpUpc());
                 jsonObject.put("pFnaDesc", record.getpFnaDesc());
@@ -176,8 +180,10 @@ public class HzEbomServiceImpl implements HzEbomService {
                 jsonObject.put("pImportance",record.getpImportance());
                 if(Integer.valueOf(1).equals(record.getpRegulationFlag())){
                     jsonObject.put("pRegulationFlag", "Y");
-                }else{
+                }else if(Integer.valueOf(0).equals(record.getpRegulationFlag())){
                     jsonObject.put("pRegulationFlag", "N");
+                }else {
+                    jsonObject.put("pRegulationFlag", "");
                 }
                 jsonObject.put("pBwgBoxPart", record.getpBwgBoxPart());
                 jsonObject.put("pDevelopType",record.getpDevelopType());
@@ -307,14 +313,19 @@ public class HzEbomServiceImpl implements HzEbomService {
                 }
                 if(Integer.valueOf(1).equals(record.getP3cpartFlag())){
                     jsonObject.put("p3cpartFlag", "Y");
-                }else {
+                }else if(Integer.valueOf(0).equals(record.getP3cpartFlag())){
                     jsonObject.put("p3cpartFlag", "N");
+                }else {
+                    jsonObject.put("p3cpartFlag", "");
                 }
                 if(Integer.valueOf(1).equals(record.getpInOutSideFlag())){
                     jsonObject.put("pInOutSideFlag", "内饰件");
-                }else {
+                }else if(Integer.valueOf(0).equals(record.getpInOutSideFlag())){
                     jsonObject.put("pInOutSideFlag", "外饰件");
+                }else {
+                    jsonObject.put("pInOutSideFlag", "");
                 }
+
                 jsonObject.put("pUpc",record.getpUpc());
                 jsonObject.put("pFnaDesc", record.getpFnaDesc());
                 jsonObject.put("pUnit", record.getpUnit());
@@ -333,8 +344,10 @@ public class HzEbomServiceImpl implements HzEbomService {
                 jsonObject.put("pImportance",record.getpImportance());
                 if(Integer.valueOf(1).equals(record.getpRegulationFlag())){
                     jsonObject.put("pRegulationFlag", "Y");
-                }else{
+                }else if(Integer.valueOf(0).equals(record.getpRegulationFlag())){
                     jsonObject.put("pRegulationFlag", "N");
+                }else {
+                    jsonObject.put("pRegulationFlag", "");
                 }
                 jsonObject.put("pBwgBoxPart", record.getpBwgBoxPart());
                 jsonObject.put("pDevelopType",record.getpDevelopType());
@@ -610,8 +623,10 @@ public class HzEbomServiceImpl implements HzEbomService {
                             hzBomLineRecord.setpBomLinePartName(reqDTO.getpBomLinePartName());
                             if(reqDTO.getP3cpartFlag().equals("Y")){
                                 hzBomLineRecord.setP3cpartFlag(1);
-                            }else {
+                            }else if(reqDTO.getP3cpartFlag().equals("N")){
                                 hzBomLineRecord.setP3cpartFlag(0);
+                            }else {
+                                hzBomLineRecord.setP3cpartFlag(null);
                             }
                             hzBomLineRecord.setpBuyEngineer(reqDTO.getpBuyEngineer());
                             hzBomLineRecord.setpActualWeight(reqDTO.getpActualWeight());
@@ -631,8 +646,10 @@ public class HzEbomServiceImpl implements HzEbomService {
                             hzBomLineRecord.setpFnaInfo(reqDTO.getFna());
                             if(reqDTO.getpInOutSideFlag().equals("内饰件")){
                                 hzBomLineRecord.setpInOutSideFlag(1);
-                            }else {
+                            }else if(reqDTO.getpInOutSideFlag().equals("外饰件")){
                                 hzBomLineRecord.setpInOutSideFlag(0);
+                            }else {
+                                hzBomLineRecord.setpInOutSideFlag(null);
                             }
 
                             hzBomLineRecord.setpImportance(reqDTO.getpImportance());
@@ -661,8 +678,10 @@ public class HzEbomServiceImpl implements HzEbomService {
                             hzBomLineRecord.setBomDigifaxId(hzBomMainRecord.getPuid());
                             if(reqDTO.getpRegulationFlag().equals("Y")){
                                 hzBomLineRecord.setpRegulationFlag(1);
-                            }else {
+                            }else if(reqDTO.getpRegulationFlag().equals("N")){
                                 hzBomLineRecord.setpRegulationFlag(0);
+                            }else {
+                                hzBomLineRecord.setpRegulationFlag(null);
                             }
 
                             hzBomLineRecordDao.insert(hzBomLineRecord);
@@ -1121,8 +1140,10 @@ public class HzEbomServiceImpl implements HzEbomService {
                 hzBomLineRecord.setpBomLinePartName(reqDTO.getpBomLinePartName());
                 if(reqDTO.getP3cpartFlag().equals("Y")){
                     hzBomLineRecord.setP3cpartFlag(1);
-                }else {
+                }else if(reqDTO.getP3cpartFlag().equals("N")){
                     hzBomLineRecord.setP3cpartFlag(0);
+                }else {
+                    hzBomLineRecord.setP3cpartFlag(null);
                 }
                 hzBomLineRecord.setpActualWeight(reqDTO.getpActualWeight());
                 hzBomLineRecord.setpBomLinePartEnName(reqDTO.getpBomLinePartEnName());
@@ -1148,8 +1169,10 @@ public class HzEbomServiceImpl implements HzEbomService {
                 hzBomLineRecord.setpSupply(reqDTO.getpSupply());
                 if(reqDTO.getpInOutSideFlag().equals("内饰件")){
                     hzBomLineRecord.setpInOutSideFlag(1);
-                }else {
+                }else if(reqDTO.getpInOutSideFlag().equals("外饰件")){
                     hzBomLineRecord.setpInOutSideFlag(0);
+                }else {
+                    hzBomLineRecord.setpInOutSideFlag(null);
                 }
 
                 hzBomLineRecord.setpBuyEngineer(reqDTO.getpBuyEngineer());
@@ -1171,8 +1194,10 @@ public class HzEbomServiceImpl implements HzEbomService {
                 hzBomLineRecord.setpBomLinePartResource(reqDTO.getpBomLinePartResource());
                 if(reqDTO.getpRegulationFlag().equals("Y")){
                     hzBomLineRecord.setpRegulationFlag(1);
-                }else {
+                }else if(reqDTO.getpRegulationFlag().equals("N")){
                     hzBomLineRecord.setpRegulationFlag(0);
+                }else {
+                    hzBomLineRecord.setpRegulationFlag(null);
                 }
 
                  hzBomLineRecordDao.insert(hzBomLineRecord);
@@ -1495,8 +1520,10 @@ public class HzEbomServiceImpl implements HzEbomService {
                 hzBomLineRecord.setpBomLinePartName(reqDTO.getpBomLinePartName());
                 if(reqDTO.getP3cpartFlag().equals("Y")){
                     hzBomLineRecord.setP3cpartFlag(1);
-                }else {
+                }else if(reqDTO.getP3cpartFlag().equals("N")){
                     hzBomLineRecord.setP3cpartFlag(0);
+                }else {
+                    hzBomLineRecord.setP3cpartFlag(null);
                 }
                 hzBomLineRecord.setpActualWeight(reqDTO.getpActualWeight());
                 hzBomLineRecord.setpBomLinePartEnName(reqDTO.getpBomLinePartEnName());
@@ -1514,8 +1541,10 @@ public class HzEbomServiceImpl implements HzEbomService {
                 hzBomLineRecord.setpFnaInfo(reqDTO.getFna());
                 if(reqDTO.getpInOutSideFlag().equals("内饰件")){
                     hzBomLineRecord.setpInOutSideFlag(1);
-                }else {
+                }else if(reqDTO.getpInOutSideFlag().equals("外饰件")){
                     hzBomLineRecord.setpInOutSideFlag(0);
+                }else {
+                    hzBomLineRecord.setpInOutSideFlag(null);
                 }
 
                 hzBomLineRecord.setpImportance(reqDTO.getpImportance());
@@ -1530,8 +1559,10 @@ public class HzEbomServiceImpl implements HzEbomService {
                 hzBomLineRecord.setpRegulationCode(reqDTO.getpRegulationCode());
                 if(reqDTO.getpRegulationFlag().equals("Y")){
                     hzBomLineRecord.setpRegulationFlag(1);
-                }else {
+                }else if(reqDTO.getpRegulationFlag().equals("N")){
                     hzBomLineRecord.setpRegulationFlag(0);
+                }else {
+                    hzBomLineRecord.setpRegulationFlag(null);
                 }
                 hzBomLineRecord.setpUpc(reqDTO.getpUpc());
                 hzBomLineRecord.setpRemark(reqDTO.getpRemark());
@@ -1808,7 +1839,7 @@ public class HzEbomServiceImpl implements HzEbomService {
                 for(String s:set){
                     DeleteHzEbomReqDTO deleteHzEbomReqDTO = new DeleteHzEbomReqDTO();
                     deleteHzEbomReqDTO.setPuid(s);
-                    deleteHzEbomReqDTO.setStatus(4);
+//                    deleteHzEbomReqDTO.setStatus(4);
                     list.add(deleteHzEbomReqDTO);
                 }
                 if(ListUtil.isNotEmpty(list)){
@@ -1871,13 +1902,17 @@ public class HzEbomServiceImpl implements HzEbomService {
 ////                }
                 if(Integer.valueOf(1).equals(record.getP3cpartFlag())){
                     jsonObject.put("p3cpartFlag", "Y");
-                }else {
+                }else if(Integer.valueOf(0).equals(record.getP3cpartFlag())){
                     jsonObject.put("p3cpartFlag", "N");
+                }else {
+                    jsonObject.put("p3cpartFlag", "");
                 }
                 if(Integer.valueOf(1).equals(record.getpInOutSideFlag())){
                     jsonObject.put("pInOutSideFlag", "内饰件");
-                }else {
+                }else if(Integer.valueOf(0).equals(record.getpInOutSideFlag())){
                     jsonObject.put("pInOutSideFlag", "外饰件");
+                }else {
+                    jsonObject.put("pInOutSideFlag", "");
                 }
                 jsonObject.put("pUpc",record.getpUpc());
                 jsonObject.put("pFnaDesc", record.getpFnaDesc());
@@ -1897,8 +1932,10 @@ public class HzEbomServiceImpl implements HzEbomService {
                 jsonObject.put("pImportance",record.getpImportance());
                 if(Integer.valueOf(1).equals(record.getpRegulationFlag())){
                     jsonObject.put("pRegulationFlag", "Y");
-                }else{
+                }else if(Integer.valueOf(0).equals(record.getpRegulationFlag())){
                     jsonObject.put("pRegulationFlag", "N");
+                }else {
+                    jsonObject.put("pRegulationFlag", "");
                 }
                 jsonObject.put("pBwgBoxPart", record.getpBwgBoxPart());
                 jsonObject.put("pDevelopType",record.getpDevelopType());

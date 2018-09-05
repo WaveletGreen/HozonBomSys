@@ -34,4 +34,14 @@ public class HzCfg0ModelRecordService {
     public boolean doInsert(List<HzCfg0ModelRecord> modelRecord) {
         return hzCfg0ModelRecordDao.insertByBatch(modelRecord) > 0 ? true : false;
     }
+
+    /**
+     * 根据项目的ID，查找所有的车型
+     *
+     * @param projectUid 项目ID
+     * @return 一组车型模型
+     */
+    public List<HzCfg0ModelRecord> doSelectByProjectUid(String projectUid) {
+        return hzCfg0ModelRecordDao.selectByProjectPuid(projectUid);
+    }
 }

@@ -6,16 +6,22 @@
     <settings>
         <!-- 打印查询语句 -->
         <setting name="logImpl" value="STDOUT_LOGGING"/> <!--最好是放在最上面即紧跟configuration节点,注意顺序-->
+        <setting name="cacheEnabled" value="false"></setting>
     </settings>
     <!--该文件请放到resource下，便于单独读到，不需要配置-->
     <typeAliases>
+        <typeAlias type="java.lang.String" alias="String"/>
+        <typeAlias type="java.lang.Integer" alias="Integer"/>
+        <typeAlias type="java.lang.Long" alias="Long"/>
+        <typeAlias type="java.util.List" alias="List"/>
+        <typeAlias type="java.util.Map" alias="Map"/>
     </typeAliases>
     <environments default="development">
         <environment id="development">
             <transactionManager type="JDBC"/>
             <dataSource type="POOLED">
                 <property name="driver" value="oracle.jdbc.OracleDriver"/>
-                <property name="url" value="jdbc:oracle:thin:@192.168.1.111:1521:TC10"/>
+                <property name="url" value="jdbc:oracle:thin:@10.1.14.119:1521:TC10"/>
                 <property name="username" value="HOZON"/>
                 <property name="password" value="HOZON"/>
                 <!--最大的活动连接数，活动连接，就是正在与数据库交互的连接，默认是10-->
@@ -70,6 +76,8 @@
         <mapper resource="sql/mapper/cfg/xmapper/HzFullCfgMainMapper.xml"/>
         <mapper resource="sql/mapper/cfg/xmapper/HzFullCfgModelMapper.xml"/>
         <mapper resource="sql/mapper/cfg/xmapper/HzFullCfgWithCfgMapper.xml"/>
+        <mapper resource="sql/mapper/cfg/xmapper/HzDerivativeMaterielBasicMapper.xml"/>
+        <mapper resource="sql/mapper/cfg/xmapper/HzDerivativeMaterielDetailMapper.xml"/>
         <!--流程-->
         <!--VWO-->
         <mapper resource="sql/mapper/cfg/vwo/mapper/HzFeatureChangeMapper.xml"/>
@@ -101,5 +109,7 @@
         <mapper resource="sql/mapper/change.xmapper/HzEWOImpactReferenceMapper.xml"/>
         <mapper resource="sql/mapper/change.xmapper/HzEWOImpactDeptEmpMapper.xml"/>
         <mapper resource="sql/mapper/change.xmapper/HzEWOImpactDeptMapper.xml"/>
+        <!--字典库-->
+        <mapper resource="sql/mapper/resourcesLibrary/dictionaryLibrary.xmapper/HzDictionaryLibraryMapper.xml"/>
     </mappers>
 </configuration>

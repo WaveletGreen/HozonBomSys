@@ -39,5 +39,5 @@ public interface HzCfg0ModelRecordDao {
      * @param projectPuid
      * @return
      */
-    List<HzCfg0ModelRecord> selectByProjectPuid(String projectPuid);
+    List<HzCfg0ModelRecord> selectByProjectPuid(@Param("projectPuid") String projectPuid);
 }

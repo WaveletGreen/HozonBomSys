@@ -57,12 +57,12 @@ public class HzCfg0ModelFeatureDaoImpl implements HzCfg0ModelFeatureDao {
     }
 
     @Override
-    public HzCfg0ModelFeature selectByModelAndColorPuids(String pPertainToModel, String pPertainToColorModel) {
+    public HzCfg0ModelFeature selectByModelAndColorPuids(HzCfg0ModelFeature feature) {
 //        List<HzCfg0ModelFeature> list = baseSQLUtil.executeQueryByPass(new HzCfg0ModelFeature(), new String[]{pPertainToModel, pPertainToColorModel}, "com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0ModelFeatureDao.selectByModelAndColorPuids");
 //        if (list == null || list.size() == 0)
 //            return null;
 //        else return list.get(0);
-        return baseSQLUtil.executeQueryByPass(new HzCfg0ModelFeature(), "com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0ModelFeatureDao.selectByModelAndColorPuids", pPertainToModel, pPertainToColorModel);
+        return baseSQLUtil.executeQueryById(feature, "com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0ModelFeatureDao.selectByModelAndColorPuids");
     }
 
     @Override

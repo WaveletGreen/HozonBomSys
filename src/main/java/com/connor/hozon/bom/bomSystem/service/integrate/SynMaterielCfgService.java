@@ -27,7 +27,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service("snMaterielCfgService")
-public class SynMaterielCfgService{
+public class SynMaterielCfgService {
     @Autowired
     IHzMaterielCfgService hzMaterielCfgService;
     @Autowired
@@ -39,39 +39,43 @@ public class SynMaterielCfgService{
 
     /**
      * 新增
-     * @param records       仅需对其puid属性赋值，puid为表 Hz_Cfg0_Model_Record 的主键 PUID
+     *
+     * @param records 仅需对其puid属性赋值，puid为表 Hz_Cfg0_Model_Record 的主键 PUID
      * @return
      */
-    public JSONObject addMaterielCfg(List<HzMaterielCfgBean> records){
+    public JSONObject addMaterielCfg(List<HzMaterielCfgBean> records) {
         return execute(records, ActionFlagOption.ADD);
     }
 
     /**
      * 删除
-     * @param records       仅需对其puid属性赋值，puid为表 Hz_Cfg0_Model_Record 的主键 PUID
+     *
+     * @param records 仅需对其puid属性赋值，puid为表 Hz_Cfg0_Model_Record 的主键 PUID
      * @return
      */
-    public JSONObject deleteMaterielCfg(List<HzMaterielCfgBean> records){
-        return  execute(records, ActionFlagOption.DELETE);
+    public JSONObject deleteMaterielCfg(List<HzMaterielCfgBean> records) {
+        return execute(records, ActionFlagOption.DELETE);
     }
 
     /**
      * 修改
-     * @param records       仅需对其puid属性赋值，puid为表 Hz_Cfg0_Model_Record 的主键 PUID
+     *
+     * @param records 仅需对其puid属性赋值，puid为表 Hz_Cfg0_Model_Record 的主键 PUID
      * @return
      */
-    public JSONObject updataMaterielCfg(List<HzMaterielCfgBean> records){
+    public JSONObject updataMaterielCfg(List<HzMaterielCfgBean> records) {
         deleteMaterielCfg(records);
         return addMaterielCfg(records);
     }
 
     /**
      * 核心方法
-     * @param records       仅需对其puid属性赋值，puid为表 Hz_Cfg0_Model_Record 的主键 PUID
-     * @param option        动作标志
+     *
+     * @param records 仅需对其puid属性赋值，puid为表 Hz_Cfg0_Model_Record 的主键 PUID
+     * @param option  动作标志
      * @return
      */
-    private JSONObject execute(List<HzMaterielCfgBean> records, ActionFlagOption option){
+    private JSONObject execute(List<HzMaterielCfgBean> records, ActionFlagOption option) {
         transProductAttrService.setClearInputEachTime(true);
         transProductAttrService.getInput().getItem().clear();
         //需要更新的数据，更新特性属性
@@ -110,25 +114,25 @@ public class SynMaterielCfgService{
         //层级
         int index;
         for (HzMaterielCfgBean record : records) {
-                String fpuid = record.getPuid();
-                //没有父层的puid
-                if (!packNumOfFeature.containsKey(fpuid)) {
-                    //添加父层puid和包号的对应关系
-                    packnum = UUIDHelper.generateUpperUid();
-                    packNumOfFeature.put(fpuid, packnum);
-                }
+            String fpuid = record.getPuid();
+            //没有父层的puid
+            if (!packNumOfFeature.containsKey(fpuid)) {
+                //添加父层puid和包号的对应关系
+                packnum = UUIDHelper.generateUpperUid();
+                packNumOfFeature.put(fpuid, packnum);
+            }
             //收录包号对应的特性
             index = 1;
-            List<VehicleBom> vehicleBomList = VehicleBom.getVehicleBom(fpuid,hzMaterielCfgService);
+            List<VehicleBom> vehicleBomList = VehicleBom.getVehicleBom(fpuid, hzMaterielCfgService);
 
-            for(VehicleBom vehicleBom : vehicleBomList){
+            for (VehicleBom vehicleBom : vehicleBomList) {
                 //有没有包号，没有则添加包号
                 if (!coach.containsKey(packNumOfFeature.get(fpuid))) {
                     Map<String, HzMaterielCfgBean> _m = new HashMap<>();
                     _m.put(String.valueOf(index), record);
                     coach.put(packNumOfFeature.get(fpuid), _m);
                 } else {
-                    index ++;
+                    index++;
                     coach.get(packNumOfFeature.get(fpuid)).put(String.valueOf(index), record);
                 }
                 //数据包号
@@ -153,20 +157,22 @@ public class SynMaterielCfgService{
                 }
 
                 transProductAttrService.getInput().getItem().add(vehicleBom.getZpptci007());
-//                coach.get(packNumOfFeature.get(fpuid)).put(vehicleBom.getItem(), record);
+                coach.get(packNumOfFeature.get(fpuid)).put(vehicleBom.getItem(), record);
 
             }
 
         }
         if (!SynMaterielService.debug) {
-            transProductAttrService.execute();
+            if (transProductAttrService.getInput().getItem().size() > 0) {
+                transProductAttrService.execute();
+            }
         }
-        List<ZPPTCO007> list=transProductAttrService.getOut().getItem();
+        List<ZPPTCO007> list = transProductAttrService.getOut().getItem();
         try {
             if (list != null && list.size() > 0) {
                 for (ZPPTCO007 _l : list) {
                     total++;
-                    if (_l == null) {
+                    if (_l == null || _l.getPPACKNO() == null) {
                         totalOfUnknown++;
                         continue;
                     }
@@ -209,6 +215,6 @@ public class SynMaterielCfgService{
         result.put("totalOfUnknown", totalOfUnknown);
         result.put("_forDelete", _forDelete);
 
-        return  result;
+        return result;
     }
 }

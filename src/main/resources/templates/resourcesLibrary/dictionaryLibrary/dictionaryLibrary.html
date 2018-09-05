@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<!--User: xulf Date: 2018/8/28 Time: 16:49-->
+<head th:include="include/headBom"></head>
+<link th:href="@{/css/stage/bom-stage.css}" rel="stylesheet"/>
+<meta charset="UTF-8">
+<title>合众字典库</title>
+</head>
+<body>
+<div class="panel-body" style="padding-bottom: 0;">
+    <form class="form-inline" role="form" style="float: left; width: 100%;margin-left: 20px;" method="get"
+          id="queryDictionaryLibrary">
+        <div class="form-group">
+            <label for="groupCode">特征组代码</label>
+            <input class="form-control" id="groupCode" name="groupCode" type="text"
+                   placeholder="请输入特征组代码"/>
+        </div>
+        <div class="form-group">
+            <label for="groupCh">特征组</label>
+            <input class="form-control" id="groupCh" name="groupCh" type="text"
+                   placeholder="请输入特征组"/>
+        </div>
+        <div class="form-group">
+            <label for="famillyCode">特征族代码</label>
+            <input class="form-control" id="famillyCode" name="famillyCode" type="text"
+                   placeholder="请输入特征族代码"/>
+        </div>
+        <div class="form-group">
+            <label for="famillyCh">特征族</label>
+            <input class="form-control" id="famillyCh" name="famillyCh" type="text"
+                   placeholder="请输入特征族"/>
+        </div>
+        <div class="form-group">
+            <label for="valueDescCh">特征值描述</label>
+            <input class="form-control" id="valueDescCh" name="valueDescCh" type="text"
+                   placeholder="请输入特征值描述"/>
+        </div>
+        <div class="form-group">
+            <label for="eigenValue">特征值</label>
+            <input class="form-control" id="eigenValue" name="eigenValue" type="text"
+                   placeholder="请输入特征值"/>
+        </div>
+        <div class="form-group">
+            <button type="button" id="queryBtn" onclick="doQuery();" class="btn btn-primary">查询</button>
+        </div>
+    </form>
+</div>
+<table class="table table-striped tableNormalStyle" id="dictionaryLibraryTable"></table>
+<script th:src="@{/js/resourcesLibrary/dictionaryLibrary.js}"></script>
+</body>
+</html>

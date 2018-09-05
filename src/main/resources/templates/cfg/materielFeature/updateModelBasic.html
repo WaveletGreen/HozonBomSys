@@ -23,9 +23,16 @@
             />
         </div>
         <div class="form-group col-lg-10">
-            <label for="pCfg0ModelBasicDetail">车型模型基本信息</label>
-            <input class="form-control" id="pCfg0ModelBasicDetail" name="pCfg0ModelBasicDetail" type="text"
-                   th:value="${entity.pCfg0ModelBasicDetail}"
+            <label for="pFeatureSingleVehicleCode">基本信息代码</label>
+            <input class="form-control" id="pFeatureSingleVehicleCode" name="pFeatureSingleVehicleCode" type="text"
+                   disabled="disabled"
+                   th:value="${modelFeature.getpFeatureSingleVehicleCode()}"
+            />
+        </div>
+        <div class="form-group col-lg-10">
+            <label for="pFeatureCnDesc">基本信息描述</label>
+            <input class="form-control" id="pFeatureCnDesc" name="pFeatureCnDesc" type="text"
+                   th:value="${modelFeature.getpFeatureCnDesc()}"
             />
         </div>
         <!--<div class="form-group col-lg-10">-->
