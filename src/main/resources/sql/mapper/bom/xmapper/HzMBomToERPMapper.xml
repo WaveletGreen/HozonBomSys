@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.connor.hozon.bom.bomSystem.dao.bom.HzMBomToERPDao">
+    <resultMap id="BaseResultMap" type="sql.pojo.bom.HzMBomToERPBean">
+        <!--主键-->
+        <id column="PUID" jdbcType="VARCHAR" property="puid"/>
+        <!--父项PUID-->
+        <result column="P_PARENT_UID" jdbcType="VARCHAR"
+                property="parentUID"/>
+        <!--原始的BOMLine PUID-->
+        <result column="P_BOM_PUID" jdbcType="VARCHAR"
+                property="bomUid"/>
+        <!--变更号-->
+        <result column="P_CHANGE_NUM" jdbcType="VARCHAR"
+                property="changeNum"/>
+        <!--变更描述-->
+        <result column="P_CHANGE" jdbcType="VARCHAR"
+                property="change"/>
+        <!--工厂代号-->
+        <result column="P_FACTORY_CODE" jdbcType="VARCHAR"
+                property="factoryCode"/>
+        <!--BOM类型-->
+        <result column="P_BOM_TYPE" jdbcType="VARCHAR"
+                property="bomType"/>
+        <!--item_ID，当物料编号-->
+        <result column="P_BOM_LINE_ID" jdbcType="VARCHAR"
+                property="bomLineId"/>
+        <!--BOM顺序号-->
+        <result column="P_BOM_ORDER_NUM" jdbcType="VARCHAR"
+                property="bomOrderNum"/>
+        <!--BOM顺序号-->
+        <result column="P_LINE_INDEX" jdbcType="VARCHAR"
+                property="lineIndex"/>
+        <!--是否2Y-->
+        <result column="P_BOM_LINE_IS_2Y" jdbcType="INTEGER"
+                property="is2Y"/>
+        <!--库存地点-->
+        <result column="P_STOCK_LOCATION" jdbcType="VARCHAR"
+                property="stockLocation"/>
+        <!--相关性-->
+        <result column="P_CFG0_RELEVANCE" jdbcType="VARCHAR"
+                property="cfg0Relevance"/>
+        <!--FNA，装配位置-->
+        <result column="P_FNA_INFO" jdbcType="VARCHAR"
+                property="FNAInfo"/>
+        <!--车间1，作为使用车间-->
+        <result column="P_WORK_SHOP1" jdbcType="VARCHAR"
+                property="workShop"/>
+        <!--工位-->
+        <result column="P_STATION" jdbcType="VARCHAR"
+                property="station"/>
+        <!--数量-->
+        <result column="P_NUMBER" jdbcType="INTEGER"
+                property="number"/>
+    </resultMap>
+
+    <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs"
+               type="sql.pojo.bom.HzMBomToERPBean">
+        <result column="P_BOM_LINE_BLOCK" jdbcType="BLOB"
+                property="bomLineBlock"/>
+    </resultMap>
+    <!--没有大对象类型-->
+    <sql id="Base_Column_List">
+        PUID,
+        P_PARENT_UID,
+        P_BOM_PUID,
+        P_CHANGE_NUM,
+        P_CHANGE,
+        P_FACTORY_CODE,
+        P_BOM_TYPE,
+        P_BOM_LINE_ID,
+        P_BOM_ORDER_NUM,
+        P_STOCK_LOCATION,
+        P_CFG0_RELEVANCE,
+        P_FNA_INFO,
+        P_WORK_SHOP1,
+        P_STATION,
+        P_NUMBER
+    </sql>
+    <!--加装大对象类型-->
+    <sql id="Blob_Column_List">
+        P_BOM_LINE_BLOCK
+    </sql>
+
+    <sql id="Column_List_Of_ERP">
+        T.PUID,/*当前PUID*/
+        T.P_PARENT_UID,/*父层PUID*/
+        T.P_BOM_PUID,/*关联的BOMLINEPUID*/
+        T.P_CHANGE_NUM,/*变更号*/
+        T.P_CHANGE,/*变更描述*/
+        T6.P_FACTORY_CODE, /* 工厂*/
+        T.P_BOM_TYPE, /*BOM类型*/
+        T3.P_BOM_LINE_ID,/*物料编码*/
+        T.P_BOM_ORDER_NUM,/*BOM顺序号*/
+        T.P_BOM_LINE_IS_2Y,/**是否2Yceng*/
+        T3.P_BOM_LINE_BLOCK, /* 从这里找单位*/
+        T3.P_LINE_INDEX,/**真实顺序号*/
+        T.P_STOCK_LOCATION,/*发料库存地点*/
+        T8.P_CFG0_RELEVANCE, /*相关性*/
+        T3.P_FNA_INFO,/*FNA（装配位置）*/
+        T2.P_WORK_SHOP1,/*使用车间，默认使用车间1*/
+        T2.P_STATION,/*工位*/
+        T3.P_NUMBER/*数量*/
+    </sql>
+    <select id="selectByBatch"
+            parameterType="java.util.Map"
+            resultMap="ResultMapWithBLOBs">
+
+        select
+
+        <include refid="Column_List_Of_ERP"/>
+
+        FROM HZ_MBOM_RECORD T
+        LEFT JOIN HZ_PBOM_RECORD T2 ON T.P_BOM_PUID=T2.P_E_BOM_PUID
+        LEFT JOIN HZ_BOM_LINE_RECORD T3 ON T3.PUID=T.P_BOM_PUID
+        LEFT JOIN HZ_FACTORY T6 ON T6.PUID=T.P_FACTORY_ID
+        /*关联相关性*/
+        LEFT JOIN Hz_Cfg0_Of_Bomline_Record T7 on t7.p_bomlinepuid=t.p_bom_line_id
+        LEFT JOIN Hz_Cfg0_Record T8 on T8.PUID=T7.P_TO_CFG0_ID_OF_BL
+
+        WHERE T.P_BOM_DIGIFAX_ID=(
+        SELECT T4.PUID FROM HZ_BOM_MAIN_RECORD T4 WHERE T4.P_CFG0_OF_WHICH_PROJECT_PUID=(
+        SELECT T5.PUID FROM HZ_PROJECT_LIBS T5
+        WHERE T5.PUID =#{projectUid,jdbcType=VARCHAR}
+        AND ${flag} IN
+        <if test="list!=null">
+            <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+                #{item,jdbcType=VARCHAR}
+            </foreach>
+        </if>
+        <if test="list==null">
+            ('')
+        </if>
+        )
+        )
+        order by T.p_bom_order_num
+    </select>
+    <select id="selectByProjectUidWithCondition"
+            parameterType="java.util.Map"
+            resultMap="ResultMapWithBLOBs">
+        select
+        t.PUID,t.P_PARENT_UID,t.P_BOM_PUID
+        from Hz_Mbom_Record t where t.p_bom_digifax_id=(
+        select puid from Hz_Bom_Main_Record t2 where t2.p_cfg0_of_which_project_puid=#{projectUid,jdbcType=VARCHAR}
+        )
+        <if test="is2Y==0">
+            and t.p_bom_line_is_2y=0
+        </if>
+        <if test="is2Y==1">
+            and t.p_bom_line_is_2y=1
+        </if>
+    </select>
+
+</mapper>

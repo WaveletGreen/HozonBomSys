@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.connor.hozon.bom.bomSystem.dao.cfg.HzFcfgBomLvl1ListOperationDao">
+    <resultMap id="BaseResultMap" type="sql.pojo.cfg.HzFcfgBomLvl1ListOperation">
+        <id column="PUID" jdbcType="VARCHAR" property="puid"/>
+        <result column="P_OPRATION_TYPE_NAME" jdbcType="VARCHAR" property="pOprationTypeName"/>
+        <result column="P_OPRATOR" jdbcType="VARCHAR" property="pOprator"/>
+        <result column="P_OPRATION_DATE" jdbcType="TIMESTAMP" property="pOprationDate"/>
+        <result column="P_OPRATION_STATUS" jdbcType="DECIMAL" property="pOprationStatus"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    PUID, P_OPRATION_TYPE_NAME, P_OPRATOR, P_OPRATION_DATE, P_OPRATION_STATUS
+    </sql>
+    <!--根据主键筛选-->
+    <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from HZ_FCFGBOM_LVL1_LIST_OPER
+        where PUID = #{puid,jdbcType=VARCHAR}
+    </select>
+    <!--真的删除-->
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from HZ_FCFGBOM_LVL1_LIST_OPER
+    where PUID = #{puid,jdbcType=VARCHAR}
+    </delete>
+    <!--逻辑删除，设置状态值-->
+    <delete id="logicDeleteByPrimaryKey" parameterType="sql.pojo.cfg.HzFcfgBomLvl1ListOperation">
+    update HZ_FCFGBOM_LVL1_LIST_OPER
+    set
+      P_OPRATION_STATUS = 0
+    where PUID = #{puid,jdbcType=VARCHAR}
+    </delete>
+    <!--新增1条操作信息，插入应设置P_OPRATION_TYPE_NAME为新增，状态1,，操作人和操作日期-->
+    <insert id="insert" parameterType="sql.pojo.cfg.HzFcfgBomLvl1ListOperation">
+    insert into HZ_FCFGBOM_LVL1_LIST_OPER (PUID, P_OPRATION_TYPE_NAME, P_OPRATOR, 
+      P_OPRATION_DATE, P_OPRATION_STATUS)
+    values (#{puid,jdbcType=VARCHAR}, #{pOprationTypeName,jdbcType=VARCHAR}, #{pOprator,jdbcType=VARCHAR}, 
+      #{pOprationDate,jdbcType=TIMESTAMP}, #{pOprationStatus,jdbcType=DECIMAL})
+    </insert>
+    <!--根据主键更新，只更新操作类型，操作人和操作日期-->
+    <update id="updateByPrimaryKey" parameterType="sql.pojo.cfg.HzFcfgBomLvl1ListOperation">
+    update HZ_FCFGBOM_LVL1_LIST_OPER
+    set P_OPRATION_TYPE_NAME = #{pOprationTypeName,jdbcType=VARCHAR},
+      P_OPRATOR = #{pOprator,jdbcType=VARCHAR},
+      P_OPRATION_DATE = #{pOprationDate,jdbcType=TIMESTAMP}
+    where PUID = #{puid,jdbcType=VARCHAR}
+  </update>
+</mapper>

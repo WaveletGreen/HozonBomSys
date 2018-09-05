@@ -1,95 +1,698 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="sql.mapper.bom.i.HzBomLineRecordMapper">
-	<resultMap id="BaseResultMap" type="sql.pojo.bom.HzBomLineRecord">
-		<id column="P_PUID" jdbcType="VARCHAR" property="puid" />
-		<result column="P_PARENT_UID" jdbcType="VARCHAR"
-			property="parentUid" />
-		<result column="P_BOM_DIGIFAX_ID" jdbcType="VARCHAR"
-			property="bomDigifaxId" />
-		<result column="P_LINE_INDEX" jdbcType="VARCHAR"
-			property="lineIndex" />
-		<result column="P_BOM_LINE_IS_HAS" jdbcType="INTEGER"
-			property="isHas" />
-		<result column="P_BOM_LINE_PUID" jdbcType="VARCHAR"
-			property="linePuid" />
-		<result column="P_BOM_LINE_ID" jdbcType="VARCHAR"
-			property="lineID" />
-		<result column="P_BOM_LINE_IS_2Y" jdbcType="INTEGER"
-			property="is2Y" />
-		<result column="P_BOM_LINE_IS_PART" jdbcType="INTEGER"
-			property="isPart" />
-		<result column="P_BOM_ORDER_NUM" jdbcType="INTEGER"
-			property="orderNum" />
-	</resultMap>
-	<resultMap extends="BaseResultMap" id="ResultMapWithBLOBs"
-		type="sql.pojo.bom.HzBomLineRecord">
-		<result column="P_BOM_LINE_BLOCK" jdbcType="BLOB"
-			property="bomLineBlock" />
-	</resultMap>
-	<sql id="Base_Column_List">
-		P_PUID, P_PARENT_UID, P_BOM_DIGIFAX_ID, P_LINE_INDEX,
-		P_BOM_LINE_IS_HAS, P_BOM_LINE_PUID,
-		P_BOM_LINE_ID,
-		P_BOM_LINE_IS_2Y,P_BOM_LINE_IS_PART,P_BOM_ORDER_NUM
-	</sql>
-	<sql id="Blob_Column_List">P_BOM_LINE_BLOCK</sql>
-	<sql id="values_by_batch">
-		#{item.puid,jdbcType=VARCHAR},#{item.parentUid,jdbcType=VARCHAR},#{item.bomDigifaxId,jdbcType=VARCHAR},
-		#{item.lineIndex,jdbcType=VARCHAR},#{item.isHas,jdbcType=INTEGER},#{item.linePuid,jdbcType=VARCHAR},
-		#{item.lineID,jdbcType=VARCHAR},#{item.is2Y,jdbcType=INTEGER},#{item.isPart,jdbcType=INTEGER},
-		#{item.orderNum,jdbcType=INTEGER},#{item.bomLineBlock,jdbcType=BLOB}
-	</sql>
-	<select id="selectByPrimaryKey"
-		parameterType="sql.pojo.bom.HzBomLineRecord"
-		resultMap="ResultMapWithBLOBs">
-		select
-		<include refid="Base_Column_List" />
-		,
-		<include refid="Blob_Column_List" />
-		from HZ_BOM_LINE_RECORD
-		where PUID = #{puid,jdbcType=VARCHAR}
-	</select>
-	<select id="selectByBomDigifaxId"
-		parameterType="sql.pojo.bom.HzBomLineRecord"
-		resultMap="ResultMapWithBLOBs">
-		select
-		<include refid="Base_Column_List" />
-		,
-		<include refid="Blob_Column_List" />
-		from HZ_BOM_LINE_RECORD
-		where P_BOM_DIGIFAX_ID =
-		#{bomDigifaxId,jdbcType=VARCHAR} order by P_BOM_ORDER_NUM
-	</select>
-	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">delete from
+<mapper namespace="com.connor.hozon.bom.bomSystem.dao.bom.HzBomDataDao">
+    <resultMap id="BaseResultMap" type="sql.pojo.bom.HzBomLineRecord">
+        <id column="PUID" jdbcType="VARCHAR" property="puid"/>
+        <result column="ID" jdbcType="DOUBLE" property="id"/>
+        <result column="P_PARENT_UID" jdbcType="VARCHAR" property="parentUid"/>
+        <result column="P_BOM_DIGIFAX_ID" jdbcType="VARCHAR" property="bomDigifaxId"/>
+        <result column="P_LINE_INDEX" jdbcType="VARCHAR" property="lineIndex"/>
+        <result column="P_BOM_LINE_IS_HAS" jdbcType="INTEGER" property="isHas"/>
+        <result column="P_BOM_LINE_PUID" jdbcType="VARCHAR" property="linePuid"/>
+        <result column="P_BOM_LINE_ID" jdbcType="VARCHAR" property="lineID"/>
+        <result column="P_BOM_LINE_IS_2Y" jdbcType="INTEGER" property="is2Y"/>
+        <result column="P_BOM_LINE_IS_PART" jdbcType="INTEGER" property="isPart"/>
+        <result column="P_BOM_ORDER_NUM" jdbcType="INTEGER" property="orderNum"/>
+        <result column="P_BOM_LINE_IS_DEPT" jdbcType="INTEGER" property="isDept"/>
+        <result column="P_BOM_OF_WHICH_DEPT" jdbcType="INTEGER" property="pBomOfWhichDept"/>
+        <result column="P_BOM_LINE_PART_NAME" jdbcType="VARCHAR" property="pBomLinePartName"/>
+        <result column="P_BOM_LINE_PART_CLASS" jdbcType="VARCHAR" property="pBomLinePartClass"/>
+        <result column="P_BOM_LINE_PART_EN_NAME" jdbcType="VARCHAR" property="pBomLinePartEnName"/>
+        <result column="P_BOM_LINE_PART_RESOURCE" jdbcType="VARCHAR" property="pBomLinePartResource"/>
+        <result column="P_EBOM_STATUS" jdbcType="INTEGER" property="status"/>
+
+
+        <result column="P_FNA_INFO" jdbcType="VARCHAR" property="pFnaInfo"/>
+        <result column="P_CREATE_TIME" jdbcType="DATE" property="pCreateTime"/>
+        <result column="P_UPDATE_TIME" jdbcType="DATE" property="pUpdateTime"/>
+        <result column="P_FASTENER" jdbcType="VARCHAR" property="pFastener"/>
+        <result column="P_3CPART_FLAG" jdbcType="INTEGER" property="p3cpartFlag"/>
+        <result column="P_IN_OUT_SIDE_FLAG" jdbcType="INTEGER" property="pInOutSideFlag"/>
+        <result column="P_UPC" jdbcType="VARCHAR" property="pUpc"/>
+        <result column="P_FNA_DESC" jdbcType="VARCHAR" property="pFnaDesc"/>
+        <result column="P_CREATE_NAME" jdbcType="VARCHAR" property="pCreateName"/>
+        <result column="P_UPDATE_NAME" jdbcType="VARCHAR" property="pUpdateName"/>
+        <result column="P_UNIT" jdbcType="VARCHAR" property="pUnit"/>
+        <result column="P_PICTURE_NO" jdbcType="VARCHAR" property="pPictureNo"/>
+        <result column="P_PICTURE_SHEET" jdbcType="VARCHAR" property="pPictureSheet"/>
+        <result column="P_MATERIAL_HIGH" jdbcType="VARCHAR" property="pMaterialHigh"/>
+        <result column="P_MATERIAL1" jdbcType="VARCHAR" property="pMaterial1"/>
+        <result column="P_MATERIAL2" jdbcType="VARCHAR" property="pMaterial2"/>
+        <result column="P_MATERIAL3" jdbcType="VARCHAR" property="pMaterial3"/>
+        <result column="P_DENSITY" jdbcType="VARCHAR" property="pDensity"/>
+        <result column="P_MATERIAL_STANDARD" jdbcType="VARCHAR" property="pMaterialStandard"/>
+        <result column="P_SURFACE_TREAT" jdbcType="VARCHAR" property="pSurfaceTreat"/>
+        <result column="P_TEXTURE_COLOR_NUM" jdbcType="VARCHAR" property="pTextureColorNum"/>
+        <result column="P_MANU_PROCESS" jdbcType="VARCHAR" property="pManuProcess"/>
+        <result column="P_SYMMETRY" jdbcType="VARCHAR" property="pSymmetry"/>
+        <result column="P_IMPORTANCE" jdbcType="VARCHAR" property="pImportance"/>
+        <result column="P_REGULATION_FLAG" jdbcType="INTEGER" property="pRegulationFlag"/>
+        <result column="P_BWG_BOX_PART" jdbcType="VARCHAR" property="pBwgBoxPart"/>
+        <result column="P_DEVELOP_TYPE" jdbcType="VARCHAR" property="pDevelopType"/>
+        <result column="P_DATA_VERSION" jdbcType="VARCHAR" property="pDataVersion"/>
+        <result column="P_TARGET_WEIGHT" jdbcType="VARCHAR" property="pTargetWeight"/>
+        <result column="P_FEATURE_WEIGHT" jdbcType="VARCHAR" property="pFeatureWeight"/>
+        <result column="P_ACTUAL_WEIGHT" jdbcType="VARCHAR" property="pActualWeight"/>
+        <result column="P_FASTENER_STANDARD" jdbcType="VARCHAR" property="pFastenerStandard"/>
+        <result column="P_FASTENER_LEVEL" jdbcType="VARCHAR" property="pFastenerLevel"/>
+        <result column="P_TORQUE" jdbcType="VARCHAR" property="pTorque"/>
+        <result column="P_DUTY_ENGINEER" jdbcType="VARCHAR" property="pDutyEngineer"/>
+        <result column="P_SUPPLY" jdbcType="VARCHAR" property="pSupply"/>
+        <result column="P_SUPPLY_CODE" jdbcType="VARCHAR" property="pSupplyCode"/>
+        <result column="P_REMARK" jdbcType="VARCHAR" property="pRemark"/>
+        <result column="P_REGULATION_CODE" jdbcType="VARCHAR" property="pRegulationCode"/>
+        <result column="P_NUMBER" jdbcType="INTEGER" property="number"/>
+        <result column="P_BUY_ENGINEER" jdbcType="INTEGER" property="pBuyEngineer"/>
+        <!--针对配色方案的颜色库对应的UID-->
+        <result column="COLOR_UID" jdbcType="VARCHAR" property="colorUid"/>
+        <result column="P_EWO_NO" jdbcType="VARCHAR" property="ewoNo"/>
+        <result column="P_LOU_LOA_FLAG" jdbcType="INTEGER" property="pLouaFlag"/>
+    </resultMap>
+    <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs"
+               type="sql.pojo.bom.HzBomLineRecord">
+        <result column="P_BOM_LINE_BLOCK" jdbcType="BLOB"
+                property="bomLineBlock"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    PUID,
+    P_PARENT_UID,
+    P_BOM_DIGIFAX_ID,
+    P_LINE_INDEX,
+    P_BOM_LINE_IS_HAS,
+    P_BOM_LINE_PUID,
+    P_BOM_LINE_ID,
+    P_BOM_LINE_IS_2Y,
+    P_BOM_LINE_IS_PART,
+    P_BOM_ORDER_NUM,
+    P_BOM_LINE_IS_DEPT,
+    P_BOM_OF_WHICH_DEPT,
+    P_BOM_LINE_PART_NAME,
+    P_BOM_LINE_PART_CLASS,
+    P_BOM_LINE_PART_EN_NAME,
+    P_BOM_LINE_PART_RESOURCE,
+    P_FNA_INFO,
+    P_EBOM_STATUS,
+    P_CREATE_TIME,
+    P_UPDATE_TIME,
+    P_FASTENER,
+    P_3CPART_FLAG,
+    P_IN_OUT_SIDE_FLAG,
+    P_UPC,
+    P_FNA_DESC,
+    P_CREATE_NAME,
+    P_UPDATE_NAME,
+    P_UNIT,
+    P_PICTURE_NO,
+    P_PICTURE_SHEET,
+    P_MATERIAL_HIGH,
+    P_MATERIAL1,
+    P_MATERIAL2,
+    P_MATERIAL3,
+    P_DENSITY,
+    P_MATERIAL_STANDARD,
+    P_SURFACE_TREAT,
+    P_TEXTURE_COLOR_NUM,
+    P_MANU_PROCESS,
+    P_SYMMETRY,
+    P_IMPORTANCE,
+    P_REGULATION_FLAG,
+    P_BWG_BOX_PART,
+    P_DEVELOP_TYPE,
+    P_DATA_VERSION,
+    P_TARGET_WEIGHT,
+    P_FEATURE_WEIGHT,
+    P_ACTUAL_WEIGHT,
+    P_FASTENER_STANDARD,
+    P_FASTENER_LEVEL,
+    P_TORQUE,
+    P_DUTY_ENGINEER,
+    P_SUPPLY,
+    P_SUPPLY_CODE,
+    P_REMARK,
+    P_REGULATION_CODE,
+    P_NUMBER,
+    P_BUY_ENGINEER,
+    P_EWO_NO,
+    P_LOU_LOA_FLAG
+  </sql>
+
+    <sql id="Bom_Column_For_Change">
+    ID,PUID, P_PARENT_UID, P_BOM_DIGIFAX_ID, P_LINE_INDEX, P_BOM_LINE_IS_HAS, P_BOM_LINE_PUID,
+    P_BOM_LINE_ID, P_BOM_LINE_IS_2Y, P_BOM_LINE_IS_PART, P_BOM_ORDER_NUM, P_BOM_LINE_IS_DEPT,
+    P_BOM_OF_WHICH_DEPT, P_BOM_LINE_PART_NAME, P_BOM_LINE_PART_CLASS, P_BOM_LINE_PART_EN_NAME,
+    P_BOM_LINE_PART_RESOURCE,P_FNA_INFO, P_EBOM_STATUS, P_CREATE_TIME, P_UPDATE_TIME,
+    P_FASTENER, P_3CPART_FLAG, P_IN_OUT_SIDE_FLAG, P_UPC, P_FNA_DESC, P_CREATE_NAME,
+    P_UPDATE_NAME, P_UNIT, P_PICTURE_NO, P_PICTURE_SHEET, P_MATERIAL_HIGH, P_MATERIAL1,
+    P_MATERIAL2, P_MATERIAL3, P_DENSITY, P_MATERIAL_STANDARD, P_SURFACE_TREAT, P_TEXTURE_COLOR_NUM,
+    P_MANU_PROCESS, P_SYMMETRY, P_IMPORTANCE, P_REGULATION_FLAG, P_BWG_BOX_PART, P_DEVELOP_TYPE,
+    P_DATA_VERSION, P_TARGET_WEIGHT, P_FEATURE_WEIGHT, P_ACTUAL_WEIGHT, P_FASTENER_STANDARD,
+    P_FASTENER_LEVEL, P_TORQUE, P_DUTY_ENGINEER, P_SUPPLY, P_SUPPLY_CODE, P_REMARK, P_REGULATION_CODE,P_NUMBER,
+    P_BUY_ENGINEER,P_EWO_NO
+  </sql>
+    <sql id="Blob_Column_List">P_BOM_LINE_BLOCK</sql>
+    <sql id="Color_Column">P_COLOR_UID</sql>
+    <sql id="values_by_batch">
+		#{item.puid,jdbcType=VARCHAR},
+		#{item.parentUid,jdbcType=VARCHAR},
+		#{item.bomDigifaxId,jdbcType=VARCHAR},
+		#{item.lineIndex,jdbcType=VARCHAR},
+		#{item.isHas,jdbcType=INTEGER},
+		#{item.linePuid,jdbcType=VARCHAR},
+		#{item.lineID,jdbcType=VARCHAR},
+		#{item.is2Y,jdbcType=INTEGER},
+		#{item.isPart,jdbcType=INTEGER},
+		#{item.orderNum,jdbcType=INTEGER},
+		#{item.isDept,jdbcType=INTEGER},
+		#{item.pBomOfWhichDept,jdbcType=VARCHAR},
+		#{item.pBomLinePartName,jdbcType=VARCHAR},
+		#{item.pBomLinePartClass,jdbcType=VARCHAR},
+		#{item.bomLineBlock,jdbcType=BLOB}
+    </sql>
+    <select id="selectByPrimaryKey"
+            parameterType="sql.pojo.bom.HzBomLineRecord"
+            resultMap="ResultMapWithBLOBs">
+        select
+        <include refid="Base_Column_List"/>
+        ,
+        <include refid="Blob_Column_List"/>
+        from HZ_BOM_LINE_RECORD
+        where PUID = #{puid,jdbcType=VARCHAR}
+    </select>
+    <select id="selectByProjectPuid"
+            parameterType="sql.pojo.bom.HzBomLineRecord"
+            resultMap="ResultMapWithBLOBs">
+        select
+        <include refid="Base_Column_List"/>
+        ,
+        <include refid="Blob_Column_List"/>
+        from HZ_BOM_LINE_RECORD
+        where P_BOM_DIGIFAX_ID =(
+        select t2.puid from Hz_Bom_Main_Record t2
+        where
+        t2.p_cfg0_of_which_project_puid=#{projectPuid,jdbcType=VARCHAR}
+        )
+        order by P_BOM_ORDER_NUM
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">delete from
 		HZ_BOM_LINE_RECORD
 		where PUID = #{puid,jdbcType=VARCHAR}
 	</delete>
-	<insert id="insert" parameterType="sql.pojo.bom.HzBomLineRecord">
-		insert into HZ_BOM_LINE_RECORD
-		(
-		<include refid="Base_Column_List" />
-		,
-		<include refid="Blob_Column_List" />
-		)
-		<!-- (PUID, LINE_INDEX,PARENT_UID, BOM_DIGIFAX_ID, BOM_LINE_IS_HAS,BOM_LINE_BLOCK) -->
-		values
-		(#{puid,jdbcType=VARCHAR},#{parentUid,jdbcType=VARCHAR},#{bomDigifaxId,jdbcType=VARCHAR},
-		#{lineIndex,jdbcType=VARCHAR},#{isHas,jdbcType=VARCHAR},#{linePuid,jdbcType=VARCHAR},
-		#{lineID,jdbcType=VARCHAR},#{bomLineBlock,jdbcType=BLOB})
-	</insert>
-	<insert id="insertByBatch" parameterType="java.util.List">
-		insert all
-		<foreach collection="list" item="item" index="index"
-			separator=" ">
-			into HZ_BOM_LINE_RECORD (
-			<include refid="Base_Column_List" />
-			,
-			<include refid="Blob_Column_List" />
-			) values (
-			<include refid="values_by_batch" />
-			)
-		</foreach>
-		select 1 from dual
-	</insert>
+
+    <insert id="HzBomLineRecordDaoImpl_insert" parameterType="sql.pojo.bom.HzBomLineRecord">
+        insert into ${tableName}
+        (
+        PUID,P_PARENT_UID,P_BOM_DIGIFAX_ID,P_LINE_INDEX,P_BOM_LINE_IS_HAS,P_BOM_LINE_PUID,P_BOM_LINE_ID,
+        P_BOM_LINE_BLOCK,
+        P_BOM_LINE_IS_2Y,P_BOM_LINE_IS_PART,P_BOM_ORDER_NUM,P_BOM_LINE_IS_DEPT,P_BOM_OF_WHICH_DEPT,
+        P_BOM_LINE_PART_NAME,P_BOM_LINE_PART_CLASS,
+        P_BOM_LINE_PART_EN_NAME,
+        P_BOM_LINE_PART_RESOURCE, P_FNA_INFO, P_EBOM_STATUS,
+        P_CREATE_TIME, P_UPDATE_TIME, P_FASTENER,
+        P_3CPART_FLAG, P_IN_OUT_SIDE_FLAG,
+        P_UPC, P_FNA_DESC, P_CREATE_NAME,
+        P_UPDATE_NAME, P_UNIT, P_PICTURE_NO,
+        P_PICTURE_SHEET, P_MATERIAL_HIGH, P_MATERIAL1,
+        P_MATERIAL2, P_MATERIAL3, P_DENSITY,
+        P_MATERIAL_STANDARD, P_SURFACE_TREAT, P_TEXTURE_COLOR_NUM,
+        P_MANU_PROCESS, P_SYMMETRY, P_IMPORTANCE,
+        P_REGULATION_FLAG, P_BWG_BOX_PART, P_DEVELOP_TYPE,
+        P_DATA_VERSION, P_TARGET_WEIGHT, P_FEATURE_WEIGHT,
+        P_ACTUAL_WEIGHT, P_FASTENER_STANDARD, P_FASTENER_LEVEL,
+        P_TORQUE, P_DUTY_ENGINEER, P_SUPPLY,
+        P_SUPPLY_CODE, P_REMARK, P_REGULATION_CODE,P_NUMBER,P_BUY_ENGINEER
+        )
+        values
+        (#{puid,jdbcType=VARCHAR},#{parentUid,jdbcType=VARCHAR},#{bomDigifaxId,jdbcType=VARCHAR},
+        #{lineIndex,jdbcType=VARCHAR},#{isHas,jdbcType=INTEGER},#{linePuid,jdbcType=VARCHAR},
+        #{lineID,jdbcType=VARCHAR},#{bomLineBlock,jdbcType=BLOB},
+        #{is2Y,jdbcType=INTEGER},#{isPart,jdbcType=INTEGER},
+        #{orderNum,jdbcType=INTEGER},#{isDept,jdbcType=INTEGER},
+        #{pBomOfWhichDept,jdbcType=VARCHAR},#{pBomLinePartName,jdbcType=VARCHAR},#{pBomLinePartClass,jdbcType=VARCHAR},
+        #{pBomLinePartEnName,jdbcType=VARCHAR}, 
+          #{pBomLinePartResource,jdbcType=VARCHAR}, #{pFnaInfo,jdbcType=VARCHAR}, 2,
+          sysdate,sysdate, #{pFastener,jdbcType=VARCHAR}, #{p3cpartFlag,jdbcType=INTEGER}, #{pInOutSideFlag,jdbcType=INTEGER},
+          #{pUpc,jdbcType=VARCHAR}, #{pFnaDesc,jdbcType=VARCHAR}, #{pCreateName,jdbcType=VARCHAR}, 
+          #{pUpdateName,jdbcType=VARCHAR}, #{pUnit,jdbcType=VARCHAR}, #{pPictureNo,jdbcType=VARCHAR}, 
+          #{pPictureSheet,jdbcType=VARCHAR}, #{pMaterialHigh,jdbcType=VARCHAR}, #{pMaterial1,jdbcType=VARCHAR}, 
+          #{pMaterial2,jdbcType=VARCHAR}, #{pMaterial3,jdbcType=VARCHAR}, #{pDensity,jdbcType=VARCHAR}, 
+          #{pMaterialStandard,jdbcType=VARCHAR}, #{pSurfaceTreat,jdbcType=VARCHAR}, #{pTextureColorNum,jdbcType=VARCHAR}, 
+          #{pManuProcess,jdbcType=VARCHAR}, #{pSymmetry,jdbcType=VARCHAR}, #{pImportance,jdbcType=VARCHAR}, 
+          #{pRegulationFlag,jdbcType=INTEGER}, #{pBwgBoxPart,jdbcType=VARCHAR}, #{pDevelopType,jdbcType=VARCHAR}, 
+          #{pDataVersion,jdbcType=VARCHAR}, #{pTargetWeight,jdbcType=VARCHAR}, #{pFeatureWeight,jdbcType=VARCHAR}, 
+          #{pActualWeight,jdbcType=VARCHAR}, #{pFastenerStandard,jdbcType=VARCHAR}, #{pFastenerLevel,jdbcType=VARCHAR}, 
+          #{pTorque,jdbcType=VARCHAR}, #{pDutyEngineer,jdbcType=VARCHAR}, #{pSupply,jdbcType=VARCHAR}, 
+          #{pSupplyCode,jdbcType=VARCHAR}, #{pRemark,jdbcType=VARCHAR}, #{pRegulationCode,jdbcType=VARCHAR},
+          #{number,jdbcType=INTEGER},#{pBuyEngineer,jdbcType=INTEGER}
+      )
+    </insert>
+
+
+    <insert id="insertByBatch" parameterType="java.util.List">
+        insert all
+        <foreach collection="list" item="item" index="index"
+                 separator=" ">
+            into HZ_BOM_LINE_RECORD (
+            <include refid="Base_Column_List"/>
+            ,
+            <include refid="Blob_Column_List"/>
+            ) values (
+            <include refid="values_by_batch"/>
+            )
+        </foreach>
+        select 1 from dual
+    </insert>
+
+
+    <update id="HzBomLineRecordDaoImpl_update" parameterType="sql.pojo.bom.HzBomLineRecord">
+        update ${tableName}
+        <set>
+            <if test="parentUid != null">
+                P_PARENT_UID = #{parentUid,jdbcType=VARCHAR},
+            </if>
+            <if test="bomDigifaxId != null">
+                P_BOM_DIGIFAX_ID = #{bomDigifaxId,jdbcType=VARCHAR},
+            </if>
+            <if test="lineIndex != null">
+                P_LINE_INDEX = #{lineIndex,jdbcType=INTEGER},
+            </if>
+            <if test="isHas != null">
+                P_BOM_LINE_IS_HAS = #{isHas,jdbcType=INTEGER},
+            </if>
+            <if test="linePuid != null">
+                P_BOM_LINE_PUID = #{linePuid,jdbcType=VARCHAR},
+            </if>
+            <if test="is2Y != null">
+                P_BOM_LINE_IS_2Y = #{is2Y,jdbcType=VARCHAR},
+            </if>
+            <if test="isPart != null">
+                P_BOM_LINE_IS_PART = #{isPart,jdbcType=VARCHAR},
+            </if>
+            <if test="orderNum != null">
+                P_BOM_ORDER_NUM = #{orderNum,jdbcType=VARCHAR},
+            </if>
+            <if test="isDept != null">
+                P_BOM_LINE_IS_DEPT = #{isDept,jdbcType=VARCHAR},
+            </if>
+            <if test="pBomLinePartName != null">
+                P_BOM_LINE_PART_NAME = #{pBomLinePartName,jdbcType=INTEGER},
+            </if>
+            <if test="pBomLinePartClass != null">
+                P_BOM_LINE_PART_CLASS = #{pBomLinePartClass,jdbcType=VARCHAR},
+            </if>
+            <if test="pBomLinePartEnName != null">
+                P_BOM_LINE_PART_EN_NAME = #{pBomLinePartEnName,jdbcType=VARCHAR},
+            </if>
+            <if test="pBomLinePartResource != null">
+                P_BOM_LINE_PART_RESOURCE = #{pBomLinePartResource,jdbcType=VARCHAR},
+            </if>
+
+            <if test="lineID != null">
+                P_BOM_LINE_ID = #{lineID,jdbcType=VARCHAR},
+            </if>
+
+            <if test="pBomOfWhichDept != null">
+                P_BOM_OF_WHICH_DEPT = #{pBomOfWhichDept,jdbcType=VARCHAR},
+            </if>
+            <if test="bomLineBlock != null">
+                P_BOM_LINE_BLOCK = #{bomLineBlock,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                P_EBOM_STATUS = #{status,jdbcType=VARCHAR},
+            </if>
+            <if test="status == null">
+                P_EBOM_STATUS = 2,
+            </if>
+            <if test="pFnaInfo != null">
+                P_FNA_INFO = #{pFnaInfo,jdbcType=VARCHAR},
+            </if>
+
+            P_UPDATE_TIME =sysdate,
+
+            <if test="pFastener != null">
+                P_FASTENER = #{pFastener,jdbcType=VARCHAR},
+            </if>
+            <if test="p3cpartFlag != null">
+                P_3CPART_FLAG = #{p3cpartFlag,jdbcType=INTEGER},
+            </if>
+            <if test="pInOutSideFlag != null">
+                P_IN_OUT_SIDE_FLAG = #{pInOutSideFlag,jdbcType=INTEGER},
+            </if>
+            <if test="pUpc != null">
+                P_UPC = #{pUpc,jdbcType=VARCHAR},
+            </if>
+            <if test="pFnaDesc != null">
+                P_FNA_DESC = #{pFnaDesc,jdbcType=VARCHAR},
+            </if>
+            <if test="pCreateName != null">
+                P_CREATE_NAME = #{pCreateName,jdbcType=VARCHAR},
+            </if>
+            <if test="pUpdateName != null">
+                P_UPDATE_NAME = #{pUpdateName,jdbcType=VARCHAR},
+            </if>
+            <if test="pUnit != null">
+                P_UNIT = #{pUnit,jdbcType=VARCHAR},
+            </if>
+            <if test="pPictureNo != null">
+                P_PICTURE_NO = #{pPictureNo,jdbcType=VARCHAR},
+            </if>
+            <if test="pPictureSheet != null">
+                P_PICTURE_SHEET = #{pPictureSheet,jdbcType=VARCHAR},
+            </if>
+            <if test="pMaterialHigh != null">
+                P_MATERIAL_HIGH = #{pMaterialHigh,jdbcType=VARCHAR},
+            </if>
+            <if test="pMaterial1 != null">
+                P_MATERIAL1 = #{pMaterial1,jdbcType=VARCHAR},
+            </if>
+            <if test="pMaterial2 != null">
+                P_MATERIAL2 = #{pMaterial2,jdbcType=VARCHAR},
+            </if>
+            <if test="pMaterial3 != null">
+                P_MATERIAL3 = #{pMaterial3,jdbcType=VARCHAR},
+            </if>
+            <if test="pDensity != null">
+                P_DENSITY = #{pDensity,jdbcType=VARCHAR},
+            </if>
+            <if test="pMaterialStandard != null">
+                P_MATERIAL_STANDARD = #{pMaterialStandard,jdbcType=VARCHAR},
+            </if>
+            <if test="pSurfaceTreat != null">
+                P_SURFACE_TREAT = #{pSurfaceTreat,jdbcType=VARCHAR},
+            </if>
+            <if test="pTextureColorNum != null">
+                P_TEXTURE_COLOR_NUM = #{pTextureColorNum,jdbcType=VARCHAR},
+            </if>
+            <if test="pManuProcess != null">
+                P_MANU_PROCESS = #{pManuProcess,jdbcType=VARCHAR},
+            </if>
+            <if test="pSymmetry != null">
+                P_SYMMETRY = #{pSymmetry,jdbcType=VARCHAR},
+            </if>
+            <if test="pImportance != null">
+                P_IMPORTANCE = #{pImportance,jdbcType=VARCHAR},
+            </if>
+            <if test="pRegulationFlag != null">
+                P_REGULATION_FLAG = #{pRegulationFlag,jdbcType=INTEGER},
+            </if>
+            <if test="pBwgBoxPart != null">
+                P_BWG_BOX_PART = #{pBwgBoxPart,jdbcType=VARCHAR},
+            </if>
+            <if test="pDevelopType != null">
+                P_DEVELOP_TYPE = #{pDevelopType,jdbcType=VARCHAR},
+            </if>
+            <if test="pDataVersion != null">
+                P_DATA_VERSION = #{pDataVersion,jdbcType=VARCHAR},
+            </if>
+            <if test="pTargetWeight != null">
+                P_TARGET_WEIGHT = #{pTargetWeight,jdbcType=VARCHAR},
+            </if>
+            <if test="pFeatureWeight != null">
+                P_FEATURE_WEIGHT = #{pFeatureWeight,jdbcType=VARCHAR},
+            </if>
+            <if test="pActualWeight != null">
+                P_ACTUAL_WEIGHT = #{pActualWeight,jdbcType=VARCHAR},
+            </if>
+            <if test="pFastenerStandard != null">
+                P_FASTENER_STANDARD = #{pFastenerStandard,jdbcType=VARCHAR},
+            </if>
+            <if test="pFastenerLevel != null">
+                P_FASTENER_LEVEL = #{pFastenerLevel,jdbcType=VARCHAR},
+            </if>
+            <if test="pTorque != null">
+                P_TORQUE = #{pTorque,jdbcType=VARCHAR},
+            </if>
+            <if test="pDutyEngineer != null">
+                P_DUTY_ENGINEER = #{pDutyEngineer,jdbcType=VARCHAR},
+            </if>
+            <if test="pSupply != null">
+                P_SUPPLY = #{pSupply,jdbcType=VARCHAR},
+            </if>
+            <if test="pSupplyCode != null">
+                P_SUPPLY_CODE = #{pSupplyCode,jdbcType=VARCHAR},
+            </if>
+            <if test="pRemark != null">
+                P_REMARK = #{pRemark,jdbcType=VARCHAR},
+            </if>
+            <if test="pRegulationCode != null">
+                P_REGULATION_CODE = #{pRegulationCode,jdbcType=VARCHAR},
+            </if>
+            <if test="number != null">
+                P_NUMBER = #{number,jdbcType=VARCHAR},
+            </if>
+
+            <if test="pBuyEngineer != null">
+                P_BUY_ENGINEER = #{pBuyEngineer,jdbcType=VARCHAR},
+            </if>
+            <if test="ewoNo != null">
+                P_EWO_NO = #{ewoNo,jdbcType=VARCHAR}
+            </if>
+        </set>
+        <where>
+            PUID = #{puid,jdbcType=VARCHAR}
+            <if test='ewoNo == "1" '>
+                and (P_EWO_NO is null or P_EWO_NO ='1')
+            </if>
+        </where>
+    </update>
+
+    <!--查询一条bom信息-->
+    <select id="HzBomLineRecordDaoImpl_findBomLineByPuid" parameterType="java.util.Map" resultMap="BaseResultMap">
+        SELECT *
+        from ${tableName}
+        where P_BOM_DIGIFAX_ID =(
+        select t2.puid from Hz_Bom_Main_Record t2
+        where
+        t2.p_cfg0_of_which_project_puid=#{projectId,jdbcType=VARCHAR}
+        )
+        and PUID=#{puid,jdbcType=VARCHAR}
+        <if test="ewoNo != null">
+            and P_EWO_NO = #{ewoNo,jdbcType=VARCHAR}
+        </if>
+        <if test="ewoNo == null">
+            and (P_EWO_NO is null  or P_EWO_NO='1')
+        </if>
+        and P_EBOM_STATUS<![CDATA[ <> ]]>0
+    </select>
+
+
+
+
+    <select id="HzBomLineRecordDaoImpl_findBomLine" parameterType="java.util.Map" resultMap="BaseResultMap">
+        SELECT *
+        from HZ_BOM_LINE_RECORD
+        where P_BOM_DIGIFAX_ID =(
+        select t2.puid from Hz_Bom_Main_Record t2
+        where
+        t2.p_cfg0_of_which_project_puid=#{projectId,jdbcType=VARCHAR}
+        )
+        and PUID=#{puid,jdbcType=VARCHAR}
+        and P_EBOM_STATUS<![CDATA[ <> ]]>0
+    </select>
+
+
+
+    <select id="HzBomLineRecordDaoImpl_findBomListForChange" parameterType="java.util.Map" resultMap="BaseResultMap">
+        SELECT *
+        from ${tableName}
+        where P_BOM_DIGIFAX_ID =(
+        select t2.puid from Hz_Bom_Main_Record t2
+        where
+        t2.p_cfg0_of_which_project_puid=#{projectId,jdbcType=VARCHAR}
+        )
+        <if test="ewoNo != null">
+          and P_EWO_NO = #{ewoNo,jdbcType=VARCHAR}
+        </if>
+        <if test="puid != null">
+            and PUID=#{puid,jdbcType=VARCHAR}
+        </if>
+        and P_EBOM_STATUS<![CDATA[ <> ]]>0
+    </select>
+
+
+
+
+    <!--查询orderNum的最大值信息-->
+    <select id="HzBomLineRecordDaoImpl_findMaxBomOrderNum" resultType="int">
+        select max(P_BOM_ORDER_NUM) from HZ_BOM_LINE_RECORD
+         where P_BOM_DIGIFAX_ID =(
+        select t2.puid from Hz_Bom_Main_Record t2
+        where
+        t2.p_cfg0_of_which_project_puid=#{projectId,jdbcType=VARCHAR}
+        )
+    </select>
+
+    <!--查询全部的2y或者2层的 lineindex 信息-->
+    <select id="HzBomLineRecordDaoImpl_findBomLineIndex" resultType="java.lang.String"
+            parameterType="java.util.HashMap">
+        select
+        P_LINE_INDEX
+        from HZ_BOM_LINE_RECORD
+        where P_BOM_DIGIFAX_ID =(
+        select t2.puid from Hz_Bom_Main_Record t2
+        where
+        t2.p_cfg0_of_which_project_puid=#{projectId,jdbcType=VARCHAR}
+        ) and LENGTH(TRANSLATE(P_LINE_INDEX,',0123456789','.'))=1
+        and P_EBOM_STATUS<![CDATA[ <> ]]>0
+    </select>
+
+
+    <!--查询所有的bomLine信息-->
+    <select id="HzBomLineRecordDaoImpl_getAllBomLineRecordByProjectId" resultMap="BaseResultMap"
+            parameterType="java.lang.String">
+        select
+        t.
+        <include refid="Base_Column_List"/>
+        from HZ_BOM_LINE_RECORD t
+        where t.p_bom_digifax_id=(
+        select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(
+        select t2.puid from Hz_project_libs t2
+        <where>
+            t2.puid = #{projectId,jdbcType=VARCHAR}))
+        </where>
+        and t.P_EBOM_STATUS=1
+    </select>
+
+
+    <!--查询所有的装车件信息-->
+    <select id="HzBomLineRecordDaoImpl_getLoadingCarPartBom" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        t.
+        <include refid="Base_Column_List"/>
+        from HZ_BOM_LINE_RECORD t
+        where t.p_bom_digifax_id=(
+        select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(
+        select t2.puid from Hz_project_libs t2
+        <where>
+            t2.puid = #{projectId,jdbcType=VARCHAR}))
+            and
+            (t.P_BOM_LINE_PART_RESOURCE ='采购件'or
+            t.P_BOM_LINE_PART_RESOURCE ='自制总成' or
+            t.P_BOM_LINE_PART_RESOURCE ='自制单件'or
+            t.P_BOM_LINE_PART_RESOURCE ='自用标准件'or
+            t.P_BOM_LINE_PART_RESOURCE ='自用非标件'or
+            t.P_BOM_LINE_PART_RESOURCE ='虚拟总成')
+        </where>
+        and t.P_EBOM_STATUS=1
+    </select>
+
+
+    <select id="select2YByProjectPuid" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from HZ_BOM_LINE_RECORD t where t.P_BOM_LINE_IS_2Y=1 and t.P_BOM_DIGIFAX_ID=
+        (
+        select t1.puid
+        from Hz_Bom_Main_Record t1
+        where t1.p_cfg0_of_which_project_puid=#{projectPuid,jdbcType=VARCHAR}
+        )
+        and t.P_EBOM_STATUS<![CDATA[ <> ]]>0
+    </select>
+
+
+    <!--批量删除EBOM-->
+    <update id="HzEbomRecordDAOImpl_deleteList" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" open="begin" close=";end;" separator=";">
+            update HZ_BOM_LINE_RECORD
+            <set>
+                <if test="item.status != null">
+                    P_EBOM_STATUS = #{item.status,jdbcType=INTEGER},
+                </if>
+                <if test="item.status == null">
+                    P_EBOM_STATUS =0,
+                </if>
+                P_UPDATE_TIME =sysdate
+            </set>
+            where PUID = #{item.puid,jdbcType=VARCHAR}
+           </foreach>
+    </update>
+
+    <!--删除-->
+    <delete id="HzEbomRecordDAOImpl_delete" parameterType="java.lang.String">
+
+        delete  HZ_BOM_LINE_RECORD
+        where PUID = #{puid,jdbcType=VARCHAR}
+
+    </delete>
+    <!--获取车身下级2Y层的总成级，需要代码进行查重-->
+    <select id="selectVehicleAssembly" parameterType="java.util.Map" resultMap="BaseResultMap">
+        select
+        t2.<include refid="Base_Column_List"/>
+        <if test="modelUid!=null">
+            ,t3.
+            <include refid="Color_Column"/>  as COLOR_UID
+        </if>
+        from Hz_Bom_Line_Record t2
+        <if test="modelUid!=null">
+            left join Hz_Color_Lvl2_Model t3 on t3.p_lvl_function=t2.puid
+        </if>
+        where t2.p_parent_uid in(
+        select t.puid from Hz_Bom_Line_Record t where t.p_bom_line_is_2y=1 and
+        t.p_bom_of_which_dept=#{dept,jdbcType=VARCHAR}
+        and t.p_bom_digifax_id=(
+        select puid from Hz_Bom_Main_Record tin where
+        tin.p_cfg0_of_which_project_puid=#{projectUid,jdbcType=VARCHAR}
+        ))
+        <if test="modelUid!=null">
+            and t3.p_model_uid=#{modelUid,jdbcType=VARCHAR}
+        </if>
+        and t2.P_EBOM_STATUS <![CDATA[ <> ]]> 0
+        order by t2.p_bom_order_num
+    </select>
+    <!--&lt;!&ndash;获取车身下级2Y层的总成级，需要代码进行查重&ndash;&gt;-->
+    <!--<select id="selectVehicleAssembly2" parameterType="java.util.Map" resultMap="BaseResultMap">-->
+        <!--select-->
+        <!--t2.PUID-->
+        <!--,t3.-->
+        <!--<include refid="Color_Column"/>-->
+        <!--as COLOR_UID-->
+        <!--from Hz_Bom_Line_Record t2-->
+        <!--left join Hz_Color_Lvl2_Model t3 on t3.p_lvl_function=t2.puid-->
+        <!--where t2.p_parent_uid in(-->
+        <!--select t.puid from Hz_Bom_Line_Record t where t.p_bom_line_is_2y=1 and-->
+        <!--t.p_bom_of_which_dept=#{dept,jdbcType=VARCHAR}-->
+        <!--and t.p_bom_digifax_id=(-->
+        <!--select puid from Hz_Bom_Main_Record tin where-->
+        <!--tin.p_cfg0_of_which_project_puid=#{projectUid,jdbcType=VARCHAR}-->
+        <!--))-->
+        <!--and t3.p_model_uid=#{modelUid,jdbcType=VARCHAR}-->
+        <!--and t2.P_EBOM_STATUS <![CDATA[ <> ]]> 0-->
+        <!--order by t2.p_bom_order_num-->
+    <!--</select>-->
+
+
+
+    <!--批量更新EBOM  只更新了部分字段-->
+    <update id="HzEbomRecordDAOImpl_updateBatch" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" open="begin" close=";end;" separator=";">
+            update ${item.tableName}
+            <set>
+                <if test="item.status != null">
+                    P_EBOM_STATUS = #{item.status,jdbcType=INTEGER},
+                </if>
+                P_UPDATE_TIME =sysdate,
+                <if test="item.ewoNo != null">
+                    P_EWO_NO = #{item.ewoNo,jdbcType=VARCHAR},
+                </if>
+                <if test="item.pLouaFlag != null">
+                    P_LOU_LOA_FLAG = #{item.pLouaFlag,jdbcType=VARCHAR}
+                </if>
+            </set>
+            where PUID = #{item.puid,jdbcType=VARCHAR}
+        </foreach>
+    </update>
+
+
+
+    <!--获取EBOM 2Y层 对应的lineIndex的第一个字母最大值-->
+    <select id="HzBomLineRecordDaoImpl_getMaxLineIndexFirstNum" parameterType="java.lang.String" resultType="java.lang.Integer">
+        select max(substr(P_LINE_INDEX,1,1)) from HZ_BOM_LINE_RECORD t
+        where t.p_bom_digifax_id=(
+        select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(
+        select t2.puid from Hz_project_libs t2
+        <where>
+            t2.puid = #{projectId,jdbcType=VARCHAR}))
+            and LENGTH(TRANSLATE(P_LINE_INDEX,',0123456789','.'))=1
+        </where>
+    </select>
 </mapper>

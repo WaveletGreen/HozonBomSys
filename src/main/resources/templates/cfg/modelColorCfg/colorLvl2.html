@@ -1,0 +1,246 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<body>
+<button id="btnAdd" class="btn btn-success" style="position: fixed;margin-left: 130%;margin-bottom: -10px;z-index:99999;">添加</button>
+<meta charset=utf-8/>
+<title>二级配色方案</title>
+<form class="form-horizontal" id="form" role="form" method="post" th:action="${action}">
+    <fieldset id="fieldSet">
+        <input th:value="${modelUid}" type="hidden" id="modelUid"/>
+        <input th:value="${projectUid}" type="hidden" id="projectUid"/>
+        <input th:value="${total}" type="hidden" id="total"/>
+
+        <div id="legend" class="">
+            <legend class="">二级配色方案</legend>
+        </div>
+        <div class="form-group col-lg-12" th:each="line,index:${assembly}" th:id="${'div_'+line.getPuid()}">
+            <label th:id="${'lab_'+line.getPuid()}" th:for="${line.getPuid()}">请输入零件号</label>
+            <div>
+                <div class="col-lg-1">
+                    <a href="javascript:void(0)" th:onclick="'javascript:deleteFromServer(\''+${line.getPuid()}+'\')'">删除</a>
+                </div>
+                <div class="col-lg-4">
+                    <input class="form-control" th:id="${'s'+line.getPuid()}" th:name="${line.getPuid()}"
+                           disabled="disabled"
+                           th:value="${line.getLineID()}" type="text"
+                           th:onblur="'javascript:doQueryById(\''+${line.getPuid()}+'\')'"
+                           th:oninput="'javascript:reversLabel(\''+${line.getPuid()}+'\')'"
+                    />
+                </div>
+                <div class="col-lg-4">
+                    <input class="form-control" th:id="${'in_'+line.getPuid()}"
+                           th:value="${line.getpBomLinePartName()}" type="text" disabled="disabled"
+                    />
+                </div>
+                <div class=" col-lg-3">
+                    <select class="form-control input-small" th:name="${'_V_'+line.getPuid()}" data-style="btn-info"
+                            th:id="${'_V_'+line.getPuid()}" disabled="disabled"
+                    >
+                        <option th:each="color:${colorList}" th:value="${color.puid}"
+                                th:selected="${color.getPuid()==line.getColorUid()? true :false}"
+                                th:text="${color.pColorCode+' -- '+color.pColorName+' -- '+color.getpColorComment()+' -- '+color.getpColorOfSet()}"
+                        >
+                        </option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+    </fieldset>
+</form>
+<script th:inline="javascript">
+    <![CDATA[
+    var total = $("#total").val();
+    $(function () {
+            $('#form').bootstrapValidator({
+                message: 'This value is not valid',
+                feedbackIcons: {
+                    valid: 'glyphicon glyphicon-ok',
+                    invalid: 'glyphicon glyphicon-remove',
+                    validating: 'glyphicon glyphicon-refresh'
+                },
+                fields: {
+                    pCodeOfColorfulModel: {
+                        message: '车型颜色代码验证失败',
+                        validators: {
+                            notEmpty: {
+                                message: '车型颜色代码不能为空'
+                            }
+                        }
+                    },
+                    modelShell: {
+                        validators: {
+                            callback: {
+                                message: '油漆车身总成验证失败,不能选无色',
+                                callback: function () {
+                                    if ($('#modelShell').val() == '-')
+                                        return false;
+                                    return true;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            // 绑定dialog的确定按钮的监听事件
+            <!--th:selected="${c.index}==${color.pColorName}"-->
+            $("#btnOk", window.top.document).click(function () {
+                var data = {};
+                data.modelUid = $("#modelUid").val();
+                data.projectUid = $("#projectUid").val();
+                var _d = $("#form").serializeArray();
+                for (var p in _d) {
+                    data[_d[p].name] = _d[p].value;
+                }
+                var bootstrapValidator = $("#form", window.top.document).data('bootstrapValidator');
+                bootstrapValidator.validate();
+                if (bootstrapValidator.isValid()) {
+                    var url = $("#form", window.top.document).attr('action');
+                    $.ajax({
+                        contentType:
+                            "application/json",
+                        type:
+                            'POST',
+                        url: url,
+                        data: JSON.stringify(data),
+                        success:
+                            function (result) {
+                                $('.modal-dialog', window.top.document).parent('div').remove()
+                                $('body', window.top.document).find('.modal-backdrop').remove();
+                                // jquery 调用刷新当前操作的table页面的refresh方法
+                                $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
+                                if (result.status) {
+                                    layer.msg('修改二级配色方案数据成功!', {icon: 1, time: 2000})
+                                }
+                                else {
+                                    let msg = "<div style='max-height: 400px;overflow: -moz-scrollbars-vertical'>";
+                                    console.log(result.result);
+                                    for (let i in result.result) {
+                                        msg += "<p>" + result.result[i] + "</p>";
+                                    }
+                                    msg += "</div>";
+                                    window.Ewin.alert({message: msg});
+
+                                }
+                                // window.Ewin.alert({message: "添加数据成功"});
+                            },
+                        error: function (status) {
+                            window.Ewin.alert({message: status.status + ':修改二级配色方案数据失败!'});
+                        }
+                    });
+                }
+            });
+        },
+        $("#modelShell").change(function () {
+            $("#pDescOfColorfulModel").val($("#pCodeOfColorfulModel").val() + $('#modelShell option:selected').text().split(' -- ')[1]);
+            console.log("已选择油漆车身颜色");
+        }),
+        $("#btnAdd").click(function () {
+            if (total == undefined || null == total) {
+                total = 0;
+            }
+            else {
+                total++;
+            }
+            var child =
+                '<div class="form-group col-lg-12" id="div_' + total + '"><label for="s' + total + '" id="lab_' + total + '">请输入零件号</label>' +
+                '<div>' +
+                '<div class="col-lg-1">' +
+                '   <a href="javascript:void(0)" onclick="deleteFromServer(\'' + total + '\')">删除</a>' +
+                '</div>' +
+                '<div class="col-lg-4">' +
+                '   <input class = "form-control" id = "s' + total + '" name = "s' + total + '" type = "text" onblur="doQueryById(\'' + total + '\')" oninput="reversLabel(\'' + total + '\')"/>' +
+                '</div>' +
+                '<div class="col-lg-4">' +
+                '   <input class = "form-control" id = "in_' + total + '" disabled="disabled" type = "text"/>' +
+                '</div>' +
+                '<div class="col-lg-3">' +
+                '   <select class= "form-control input-small" id = "s_' + total + '"  name = "s_' + total + '" data-style = "btn-info" >';
+            $.ajax({
+                url: "./colorSet/getAllColorSet",
+                type: "GET",
+                success: function (result) {
+                    let option = "";
+                    for (let index in result) {
+                        if (result.hasOwnProperty(index)) {
+                            option = "<option value='" + result[index].puid + "'>" +
+                                result[index].pColorCode + " -- " +
+                                result[index].pColorName + " -- " +
+                                result[index].pColorComment + " -- " +
+                                result[index].pColorOfSet +
+                                "</option>";
+                            child += option;
+                        }
+                    }
+                    child +=
+                        '</select>' +
+                        '</div>' +
+                        '</div>' +
+                        '</div>';
+                    $("#fieldSet").append(child);
+                },
+                error: function (e) {
+                    window.Ewin.alert({message: "发生错误，请稍后重试:" + e.status})
+                }
+            });
+        }),
+    );
+
+    function doQueryById(id) {
+        let projectUid = $("#project", window.top.document).val();
+        let lineId = $("#s" + id).val();
+        $.ajax({
+            url: "./modelColor/checkItemId?projectUid=" + projectUid + "&lineId=" + lineId,
+            type: "GET",
+            success: function (result) {
+                if (result.status) {
+                    console.log(result.item.lineID);
+                    $("#in_" + id).val(result.item.pBomLinePartName);
+                }
+                else {
+                    $("#lab_" + id).text(result.msg);
+                    console.log(result.msg);
+                    $("#lab_" + id).css("color", "red");
+                    $("#in_" + id).val("");
+                }
+            },
+            error: function (e) {
+                console.error("未能连接服务器:" + e.status);
+            }
+        });
+    };
+
+    function reversLabel(labId) {
+        $("#lab_" + labId).text("请输入正确的零件号");
+        $("#lab_" + labId).css("color", "black");
+
+    };
+
+    function deleteFromServer(puid) {
+        let modelUid = $("#modelUid").val();
+        $.ajax({
+            url: "./modelColor/deleteFromServer?modelUid=" + modelUid + "&puid=" + puid,
+            type: "GET",
+            success: function (result) {
+                if (1 == result.status) {
+                    console.log(puid);
+                    console.log("可以随便删");
+                    $("#div_" + puid).remove();
+
+                }
+                else if (2 == result.status) {
+                    console.log("已存在的二级配色方案");
+                    $("#div_" + puid).remove();
+                }
+            },
+            error: function (e) {
+                console.error("未能连接服务器:" + e.status);
+            }
+        });
+    }
+
+    ]]>
+</script>
+<script th:src="@{/layer/layer.js}"></script>
+</body>
+</html>

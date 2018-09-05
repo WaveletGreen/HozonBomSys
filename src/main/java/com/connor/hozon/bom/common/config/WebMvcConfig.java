@@ -18,10 +18,14 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
      */
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
+        //登陆界面
         registry.addViewController("/login").setViewName("login");
+        //首页
+        registry.addViewController("/index").setViewName("index");
+        //主界面
         registry.addViewController("/main").setViewName("main");
+        //统一出错界面
         registry.addViewController("/Error").setViewName("error");
-        registry.addViewController("/home").setViewName("home");
         // 跳转到菜单管理页面
         registry.addViewController("/treeList").setViewName("/sys/tree/treeList");
         // 跳转到角色管理页面
@@ -34,12 +38,75 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         registry.addViewController("/dictList").setViewName("/sys/dict/dictList");
         // 注册bom视图
         registry.addViewController("/bom").setViewName("/stage/bom");
+        //bom的树型结构
         registry.addViewController("/bom-treegrid").setViewName("/stage/bom-treegrid");
+        //一级配置表
         registry.addViewController("/bom-all-cfg").setViewName("/bom/bom-all-cfg");
+        //一级配置表2
+        registry.addViewController("/bom-all-cfg2").setViewName("/bom/bom-all-cfg2");
         //颜色库
         registry.addViewController("/colorSet").setViewName("/cfg/color/colorSet");
-        registry.addViewController("/colorUpdate").setViewName("/cfg/color/colorUpdate");
+//        registry.addViewController("/colorUpdate").setViewName("/cfg/color/colorUpdate");
+        //配色方案
+        registry.addViewController("/modelColorCfg").setViewName("/cfg/modelColorCfg/modelColorCfg");
+        //项目，应该作为首页
+        registry.addViewController("/project").setViewName("project/project");
+        registry.addViewController("/project2").setViewName("project/project2");
+        //特性表
+        registry.addViewController("/feature").setViewName("/cfg/feature/feature");
+        //相关性表
+        registry.addViewController("/relevance").setViewName("/cfg/relevance/relevance");
+        /**物料配置表*/
+        registry.addViewController("/materielFeature").setViewName("/cfg/materielFeature/materielFeature");
+        //特性表页面
+        registry.addViewController("/featuresList").setViewName("/cfg/features/featuresList");
+        //配色方案
+        registry.addViewController("/modelColorCfg").setViewName("/cfg/modelColorCfg/modelColorCfg");
+        //EPL页面
+        registry.addViewController("/eplManage").setViewName("/bomManage/epl/eplManage");
+        //EBOM页面
+        registry.addViewController("/ebomManage").setViewName("/bomManage/ebom/ebomManage/ebomManage");
+        //PBOM管理页面
+        registry.addViewController("/pbomManage").setViewName("/bomManage/pbom/pbomManage/pbomManage");
+        //PBOM工艺合件页面
+        registry.addViewController("/craftFitting").setViewName("/bomManage/pbom/processOfFitting/craftFitting");
+        //PBOM工艺辅料页面
+        registry.addViewController("/processAids").setViewName("/bomManage/pbom/processAids/processAids");
+        //MBOM维护页面
+        registry.addViewController("/mbomMaintenance").setViewName("/bomManage/mbom/mbomMaintenance/mbomMaintenance");
+        //Mbom的超级MBOM页面
+        registry.addViewController("/superMBom").setViewName("/bomManage/mbom/superMBom/superMBom");
+        //MBOM物料数据类别页面
+        registry.addViewController("/materialData").setViewName("/bomManage/mbom/materialData/materialData");
+        //MBOM的工艺中心主数据页面
+        registry.addViewController("/processCenter").setViewName("/bomManage/mbom/processCenter/processCenter");
+        //MBOM的整车工艺路线页面
+        registry.addViewController("/carRouting").setViewName("/bomManage/mbom/carRouting/carRouting");
+        //MBOM的整车工艺路线页面
+        registry.addViewController("/assemblyRouting").setViewName("/bomManage/mbom/assemblyRouting/assemblyRouting");
+        //MBOM的半成品工艺路线页面
+        registry.addViewController("/halfRouting").setViewName("/bomManage/mbom/halfRouting/halfRouting");
+        //MBOM的工艺路线页面
+        registry.addViewController("/routingData").setViewName("/bomManage/mbom/routingData/routingData");
+        //MBOM的工艺路线页面
+        registry.addViewController("/recycleBin").setViewName("/bomManage/recycleBin/recycleBin");
+        //合众字典库
+        registry.addViewController("/dictionaryLibrary").setViewName("/resourcesLibrary/dictionaryLibrary/dictionaryLibrary");
 
+        //变更管理VWO表单
+        registry.addViewController("/vwoFormList").setViewName("/changeManage/vwo/vwoFormList");
+        //变更管理EWO表单
+        registry.addViewController("/ewoFromList").setViewName("/changeManage/ewo/ewoFromList");
+        //变更管理MWO表单
+        registry.addViewController("/mwoFromList").setViewName("/changeManage/mwo/mwoFromList");
+        //变更管理物料数据表单
+        registry.addViewController("/materialForm").setViewName("/changeManage/materialForm");
+        //变更管理工艺路线表单
+        registry.addViewController("/processForm").setViewName("/changeManage/processForm");
+        //变更管理工作中心表单
+        registry.addViewController("/workFrom").setViewName("/changeManage/workFrom");
+        //变更管理CODPWO表单
+        registry.addViewController("/codpwoFromList").setViewName("/changeManage/codpwo/codpwoFromList");
     }
 
 

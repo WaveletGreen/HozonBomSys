@@ -201,7 +201,7 @@ jQuery.extend = jQuery.fn.extend = function() {
 	for ( ; i < length; i++ ) {
 		// Only deal with non-null/undefined values
 		if ( (options = arguments[ i ]) != null ) {
-			// Extend the base object
+			// Extend the integrate.base object
 			for ( name in options ) {
 				src = target[ name ];
 				copy = options[ name ];
@@ -6809,7 +6809,7 @@ jQuery.cssHooks.marginRight = addGetHookIf( support.reliableMarginRight,
 	function( elem, computed ) {
 		if ( computed ) {
 			// WebKit Bug 13343 - getComputedStyle returns wrong value for margin-right
-			// Work around by temporarily setting element display to inline-block
+			// work around by temporarily setting element display to inline-block
 			return jQuery.swap( elem, { "display": "inline-block" },
 				curCSS, [ elem, "marginRight" ] );
 		}
@@ -8730,7 +8730,7 @@ function ajaxHandleResponses( s, jqXHR, responses ) {
 function ajaxConvert( s, response, jqXHR, isSuccess ) {
 	var conv2, current, conv, tmp, prev,
 		converters = {},
-		// Work with a copy of dataTypes in case we need to modify it for conversion
+		// work with a copy of dataTypes in case we need to modify it for conversion
 		dataTypes = s.dataTypes.slice();
 
 	// Create converters map with lowercased keys
@@ -9799,7 +9799,7 @@ jQuery.ajaxTransport( "script", function(s) {
 					}
 				};
 
-				// Circumvent IE6 bugs with base elements (#2709 and #4378) by prepending
+				// Circumvent IE6 bugs with integrate.base elements (#2709 and #4378) by prepending
 				// Use native DOM manipulation to avoid our domManip AJAX trickery
 				head.insertBefore( script, head.firstChild );
 			},

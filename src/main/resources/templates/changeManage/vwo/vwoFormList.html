@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<!--User: xulf Date: 2018/7/23 Time: 18:48-->
+<head th:include="include/includebase"></head>
+<link th:href="@{/css/changeManage/vwo/vwoFromList.css}" rel="stylesheet"/>
+<meta charset="UTF-8">
+<title>vwo表单</title>
+</head>
+<body>
+<input id="url" type="hidden" value="vwo/queryByBase"/>
+<div class="panel-body" style="padding-bottom:0px;">
+    <div class="panel panel-default" style="margin-top: 10px;">
+        <div class="panel-body">
+            <form class="form-inline" role="form" style="float: left; width: 100%;margin-left: 20px;" method="get"
+                  id="queryPbomManage">
+                <div class="form-group after_the">
+                    <label for="VWOnum">VWO号:&ensp;</label>
+                    <input type="text" style="width: 150px;" class="form-control" name="level" id="VWOnum"
+                           placeholder=""/>
+                </div>
+                <div class="form-group  after_the">
+                    <label for="creatTime">创建时间:&emsp;&emsp;</label>
+                    <input type="text" style="width: 150px;" class="form-control" name="pBomOfWhichDept" id="creatTime"
+                           placeholder=""/>
+                </div>
+                <div class="form-group  after_the">
+                    <label for="processState">流程状态:</label>
+                    <input type="text" style="width: 150px;" class="form-control" name="rank" id="processState"
+                           placeholder=""/>
+                </div>
+                <div class="form-group after_the">
+                    <label for="title">标题:&emsp;&emsp;&emsp;&emsp;</label>
+                    <input type="text" style="width: 150px;" class="form-control" name="groupNum" id="title"
+                           placeholder=""/>
+                </div>
+                <div class="form-group after_the">
+                    <label for="dept">部门:&emsp;&emsp;</label>
+                    <input type="text" style="width: 150px;" class="form-control" name="lineId" id="dept"
+                           placeholder=""/>
+                </div>
+                <div class="form-group after_the">
+                    <label for="initiator">发起人:&emsp;&emsp;&emsp;</label>
+                    <input type="text" style="width: 150px;" class="form-control" name="itemType" id="initiator"
+                           placeholder=""/>
+                </div>
+                <div class="form-group after_the">
+                    <label for="phone">联系电话:</label>
+                    <input type="text" style="width: 150px;" class="form-control" name="itemType" id="phone"
+                           placeholder=""/>
+                </div>
+                <div class="form-group after_the">
+                    <label for="finishTime">要求完成时间:</label>
+                    <input type="text" style="width: 150px;" class="form-control" name="itemType" id="finishTime"
+                           placeholder=""/>
+                </div>
+                <div class="form-group after_the">
+                    <label for="changeType">变更类型:</label>
+                    <input type="text" style="width: 150px;" class="form-control" name="itemType" id="changeType"
+                           placeholder=""/>
+                </div>
+                <div class="form-group after_the">
+                    <label for="expenseDept">费用承担部门:</label>
+                    <select class="form-control" style="min-width: 150px" name="" id="expenseDept">
+                        <!--<option>车身技术部门</option>-->
+                        <!--<option>电子电器技术部门</option>-->
+                        <!--<option>底盘技术部门</option>-->
+                        <!--<option>系统集成技术部门</option>-->
+                        <!--<option>内外饰技术部门</option>-->
+                        <option>车身部门</option>
+                    </select>
+                </div>
+                <div class="form-group after_the">
+                    <label for="listedType">上市类型:</label>
+                    <input type="text" style="width: 150px;" class="form-control" name="itemType" id="listedType"
+                           placeholder=""/>
+                </div>
+                <div class="form-group after_the">
+                    <label for="relevanceVWONum">关联VWO号:&ensp;</label>
+                    <input type="text" style="width: 150px;" class="form-control" name="itemType" id="relevanceVWONum"
+                           placeholder=""/>
+                </div>
+                <div class="form-group">
+                    <button type="reset" id="queryBtn1" class="btn btn-primary">重置</button>
+                </div>
+                <div class="form-group">
+                    <button type="button" id="queryBtn" onclick="doQuery();" class="btn btn-primary">查询</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="content col-lg-12">
+    <table id="vwo_table" class="table table-striped"></table>
+</div>
+<script th:src="@{/js/helper/projectHelper.js}"></script>
+<script th:src="@{/js/helper/dateFormater.js}"></script>
+<script th:src="@{/js/changeManage/vwo/vwoFormList.js}"></script>
+</body>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<!--User: xulf Date: 2018/6/28 Time: 10:21-->
+<head th:include="include/headBom"></head>
+<link th:href="@{/css/stage/bom-stage.css}" rel="stylesheet"/>
+<meta charset="UTF-8">
+<title>物料数据表</title>
+<body>
+<!--<div class="panel-body" style="padding-bottom:0px;">-->
+    <!--<div class="panel panel-default" style="margin-top: 10px;">-->
+        <div class="panel-body" style="padding-bottom: 0;">
+            <form class="form-inline" role="form" style="float: left; width: 100%;margin-left: 20px;" method="get"
+                  id="queryMaterialData">
+                <div class="form-group">
+                    <label for="pMaterielCode">物料代码</label>
+                    <input class="form-control" id="pMaterielCode" name="pMaterielCode" type="text"
+                           placeholder="请输入物料代码"/>
+                </div>
+                <div class="form-group">
+                    <label for="pMaterielType">物料类型</label>
+                    <input class="form-control" id="pMaterielType" name="pMaterielType" type="text"
+                           placeholder="请输入物料类型"/>
+                </div>
+                <div class="form-group">
+                    <label for="pMaterielDataType">物料类别:</label>
+                    <select class="form-control" name="pMaterielDataType" id="pMaterielDataType">
+                        <option>车型项目物料总表</option>
+                        <option value="11">整车超级物料主数据</option>
+                        <option value="21">整车衍生物料主数据</option>
+                        <option value="31">虚拟物料主数据</option>
+                        <option value="41">半成品物料主数据</option>
+                        <option value="51">生产性外购物料主数据</option>
+                        <option value="61">自制备件物料主数据</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <button type="button" id="queryBtn" onclick="doQuery();" class="btn btn-primary">查询</button>
+                </div>
+            </form>
+        </div>
+    <!--</div>-->
+<!--</div>-->
+<div class="content col-lg-12">
+    <table class="table table-striped tableNormalStyle" id="materialDataTable"></table>
+</div>
+<script th:src="@{/js/bom/mbom/materialData.js}"></script>
+</body>
+</html>

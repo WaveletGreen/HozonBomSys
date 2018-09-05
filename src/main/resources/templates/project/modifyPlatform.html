@@ -1,0 +1,145 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<body>
+<form id="form" role="form" method="post" th:action="${action}">
+    <input class="form-control" id="puid" name="puid" type="hidden"
+           th:value="${platform.getPuid()}"
+    />
+    <div class="form-group">
+        <label for="pPlatformCode">平台代码</label>
+        <input class="form-control" id="pPlatformCode" name="pPlatformCode" type="text"
+               placeholder="请输入平台代码" th:value="${platform.getpPlatformCode()}"
+        />
+    </div>
+    </div>
+    <div class="form-group">
+        <label for="pPlatformName">平台名称</label>
+        <input class="form-control" id="pPlatformName" name="pPlatformName" type="text"
+               placeholder="请输入平台名称" th:value="${platform.getpPlatformName()}"
+        />
+    </div>
+    <div class="form-group">
+        <label for="pPlatformComment">备注</label>
+        <input class="form-control" id="pPlatformComment" name="pPlatformComment" type="text"
+               placeholder="请输入备注" th:value="${platform.getpPlatformComment()}"
+        />
+    </div>
+    <!--品牌-->
+    <div class="form-group">
+        <label for="pBrandCode">品牌代码</label>
+        <input class="form-control" id="pBrandCode" name="pBrandCode" type="text"
+               placeholder="需要品牌代码" th:value="${brand.getpBrandCode()}" disabled="disabled"
+        />
+    </div>
+    <div class="form-group">
+        <label for="pBrandName">中文品牌</label>
+        <input class="form-control" id="pBrandName" name="pBrandName" type="text"
+               placeholder="需要中文品牌" th:value="${brand.getpBrandName()}" disabled="disabled"
+        />
+    </div>
+</form>
+<script th:inline="javascript">
+    <![CDATA[
+    $(function () {
+        $('#form').bootstrapValidator({
+            message: 'This value is not valid',
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            fields: {
+                pPlatformName: {
+                    message: '平台名称验证失败',
+                    validators: {
+                        notEmpty: {
+                            message: '平台名称不能为空'
+                        }
+                    }
+                },
+                pPlatformCode: {
+                    message: '平台代码验证失败',
+                    validators: {
+                        notEmpty: {
+                            message: '平台代码不能为空'
+                        },
+                        threshold: 1, //有1字符以上才发送ajax请求，（input中输入一个字符，插件会向服务器发送一次，设置限制，6字符以上才开始）
+                        remote: {//ajax验证。server result:{"valid",true or false} 向服务发送当前input name值，获得一个json数据。例表示正确：{"valid",true}
+                            url: 'project/validatePlatformCodeWithPuid',//验证地址
+                            message: '平台编号已存在',//提示消息
+                            delay: 500,//每输入一个字符，就发ajax请求，服务器压力还是太大，设置2秒发送一次ajax（默认输入一个字符，提交一次，服务器压力太大）
+                            // *自定义提交数据，默认值提交当前input value
+                            data: function (validator) {
+                                return {
+                                    puid: $('#puid').val(),
+                                    pPlatformCode: $("#pPlatformCode").val()
+                                };
+                            },
+                            type: 'POST'//请求方式
+                        }
+                    }
+                }
+            }
+        });
+        // 绑定dialog的确定按钮的监听事件
+        $("#btnOk", window.top.document).click(function () {
+            var bootstrapValidator = $("#form", window.top.document).data('bootstrapValidator');
+            bootstrapValidator.validate();
+            // bootstrapValidator.revalidateField("pPlatformCode");
+
+            if (bootstrapValidator.isValid()) {
+                var url = $("#form", window.top.document).attr('action');
+                <!--其实不要puid，puid会在服务器上生成-->
+                var data = {};
+                var _d = $("#form").serializeArray();
+                for (var p in _d) {
+                    data[_d[p].name] = _d[p].value;
+                }
+                $.ajax({
+                    contentType:
+                        "application/json",
+                    type:
+                        'POST',
+                    url: url,
+                    data: JSON.stringify(data),
+                    success:
+                        function (result) {
+                            $('.modal-dialog', window.top.document).parent('div').remove()
+                            $('body', window.top.document).find('.modal-backdrop').remove();
+                            // jquery 调用刷新当前操作的table页面的refresh方法
+                            var zTree = $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.zTree;
+                            var selectNode = $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.selectNode;
+                            if (result.status == 1) {
+                                var entity = result.entity;
+                                selectNode.name = entity.pPlatformName;
+                                zTree.updateNode(selectNode);
+
+                                // zTree.addNodes(selectNode, {
+                                //     puid: entity.puid,
+                                //     pPuid: entity.pPertainToBrandPuid,
+                                //     name: entity.pPlatformName
+                                // });
+
+                                layer.msg('修改平台信息成功', {icon: 1, time: 2000})
+
+                                // window.Ewin.alert({message: "修改平台信息成功"});
+                            }
+                            else if (result.status == 0) {
+                                window.Ewin.alert({message: "已存在的平台代码，请修改或者更换平台代码"});
+                            }
+                            else {
+                                window.Ewin.alert({message: "修改失败，请联系管理员"});
+                            }
+                        },
+                    error: function (status) {
+                        window.Ewin.alert({message: status.status + ':修改数据失败!'});
+                    }
+                });
+            }
+        });
+    })
+    ]]>
+</script>
+<script th:src="@{/layer/layer.js}"></script>
+</body>
+</html>

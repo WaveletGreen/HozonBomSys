@@ -1,0 +1,261 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<body>
+<meta charset=utf-8/>
+<form class="form-horizontal" id="form" role="form" method="post" th:action="${action}">
+    <fieldset>
+        <input id="projectUid" name="projectUid" type="hidden" th:value="${projectUid}"/>
+        <div id="legend" class="">
+            <legend class="">添加带颜色的衍生物料</legend>
+        </div>
+
+        <div class="form-group col-lg-12">
+            <label for="modelUid">车型模型</label>
+            <select class="form-control input-small" name="modelUid" id="modelUid">
+                <option th:each="model:${models}"
+                        th:value="${model.getPuid()}"
+                        th:text="${model.getObjectName()+'--'+model.getObjectDesc()}"
+                >
+                </option>
+            </select>
+        </div>
+        <div class="form-group col-lg-12">
+            <label for="colorModel">配色方案</label>
+            <select class="form-control input-small" name="colorModel" id="colorModel">
+                <option th:each="colorModel:${colorModels}"
+                        th:value="${colorModel.getPuid()}"
+                        th:text="${colorModel.getpDescOfColorfulModel()+'--'+colorModel.getpCodeOfColorfulModel()}"
+                >
+                </option>
+            </select>
+        </div>
+        <div class="form-group col-lg-12">
+            <label for="pCfg0ModelBasicDetail">衍生物料基本信息</label>
+            <input class="form-control" id="pCfg0ModelBasicDetail" name="pCfg0ModelBasicDetail" type="text"
+                   placeholder="请数据衍生物料基本信息"
+            />
+        </div>
+        <div class="form-group col-lg-10">
+            <label for="factoryCode">工厂</label>
+            <input class="form-control" id="factoryCode" name="factoryCode" type="text"
+            />
+        </div>
+        <div class="form-group col-lg-10">
+            <label for="materialCode">物料编码</label>
+            <input class="form-control" id="materialCode" name="materialCode" type="text"
+            />
+        </div>
+        <div class="form-group col-lg-10">
+            <label for="oldMaterielCode">旧物料编码</label>
+            <input class="form-control" id="oldMaterielCode" name="oldMaterielCode" type="text"
+            />
+        </div>
+        <div class="form-group col-lg-10">
+            <label for="materielDesc">物料中文描述</label>
+            <input class="form-control" id="materielDesc" name="materielDesc" type="text"
+            />
+        </div>
+        <div class="form-group col-lg-10">
+            <label for="materielEnDesc">物料英文描述</label>
+            <input class="form-control" id="materielEnDesc" name="materielEnDesc" type="text"
+            />
+        </div>
+        <div class="form-group col-lg-10">
+            <label for="basicCountUnit">基本计量单位*</label>
+            <input class="form-control" id="basicCountUnit" name="basicCountUnit" type="text"
+            />
+        </div>
+        <div class="form-group col-lg-10">
+            <label for="materielType">物料类型*</label>
+            <input class="form-control" id="materielType" name="materielType" type="text" disabled="disabled"
+            />
+        </div>
+        <div class="form-group col-lg-10">
+            <label for="virtualFlag">虚拟件标示*</label>
+            <select class="form-control input-small" data-style="btn-info"
+                    id="virtualFlag" name="virtualFlag">
+                <option th:value="0" th:text="否"
+                >
+                </option>
+                <option th:value="1" th:text="是"
+                >
+                </option>
+            </select>
+        </div>
+        <div class="form-group col-lg-10">
+            <label for="purchaseType">采购类型*</label>
+            <select class="form-control input-small" data-style="btn-info"
+                    id="purchaseType" name="purchaseType">
+                <option
+                        th:value="E" th:text="E"
+                >
+                </option>
+                <option
+                        th:value="F" th:text="F"
+                >
+                </option>
+                <option
+                        th:value="X" th:text="X"
+                >
+                </option>
+                <option value="-" text="-"></option>
+            </select>
+        </div>
+        <div class="form-group col-lg-10">
+            <label for="vinCode">VIN前置号</label>
+            <input class="form-control" id="vinCode" name="vinCode" type="text"
+            />
+        </div>
+        <div class="form-group col-lg-10">
+            <label for="color">颜色件标识</label>
+            <select class="form-control input-small" data-style="btn-info"
+                    id="color" name="color">
+                <option th:value="0" th:text="N"
+                >
+                </option>
+                <option th:value="1" th:text="Y"
+                >
+                </option>
+            </select>
+        </div>
+        <div class="form-group col-lg-10">
+            <label for="grossWeight">毛重</label>
+            <input class="form-control" id="grossWeight" name="grossWeight" type="text"
+            />
+        </div>
+        <div class="form-group col-lg-10">
+            <label for="labelFlag">内外饰标识</label>
+            <select class="form-control input-small" data-style="btn-info"
+                    id="labelFlag" name="labelFlag">
+                <option th:value="0" th:text="N"
+                >
+                </option>
+                <option th:value="1" th:text="Y"
+                >
+                </option>
+            </select>
+        </div>
+        <div class="form-group col-lg-10">
+            <label for="rulesFlag">3C件标识</label>
+            <select class="form-control input-small" data-style="btn-info"
+                    id="rulesFlag" name="rulesFlag">
+                <option th:value="0" th:text="N"
+                >
+                </option>
+                <option th:value="1" th:text="Y"
+                >
+                </option>
+            </select>
+        </div>
+        <div class="form-group col-lg-10">
+            <label for="importance">零件重要度</label>
+            <select class="form-control input-small" data-style="btn-info"
+                    id="importance" name="importance">
+                <option th:value="0" th:text="N"
+                >
+                </option>
+                <option th:value="1" th:text="Y"
+                >
+                </option>
+            </select>
+        </div>
+        <div class="form-group col-lg-10">
+            <label for="deleteFlag">删除标示</label>
+            <select class="form-control input-small" data-style="btn-info"
+                    id="deleteFlag" name="deleteFlag">
+                <option th:value="0" th:text="N"
+                >
+                </option>
+                <option th:value="1" th:text="Y"
+                >
+                </option>
+            </select>
+        </div>
+        <div class="form-group col-lg-10">
+            <label for="mrpController">MRP控制者*</label>
+            <input class="form-control" id="mrpController" name="mrpController" type="text"
+            />
+        </div>
+
+        <div class="form-group col-lg-10">
+            <label for="bulletinNum">公告号(BOM没加)*</label>
+            <input class="form-control" id="bulletinNum" name="bulletinNum" type="text"
+            />
+        </div>
+        <!--<div class="form-group col-lg-10">-->
+        <!--<label for="pFeatureSingleVehicleCode">单车配置码</label>-->
+        <!--<input class="form-control" id="pFeatureSingleVehicleCode" name="pFeatureSingleVehicleCode" type="text"-->
+        <!--type="hidden" disabled="disabled"-->
+        <!--th:value="${modelFeature.get()}"-->
+        <!--/>-->
+        <!--</div>-->
+    </fieldset>
+</form>
+<script th:inline="javascript">
+    <![CDATA[
+    $(document).keydown(function (event) {
+        if (event.keyCode == 13 ) {
+            $('form').each(function () {
+                event.preventDefault();
+            });
+        }
+    });
+    $(function () {
+        $('#form').bootstrapValidator({
+            message: 'This value is not valid',
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            }
+        });
+        // 绑定dialog的确定按钮的监听事件
+        $("#btnOk", window.top.document).click(function () {
+            // var bootstrapValidator = $("#form", window.top.document).data('bootstrapValidator');
+            // bootstrapValidator.validate();
+            // if (bootstrapValidator.isValid()) {
+            var url = $("#form", window.top.document).attr('action');
+            var data = {};
+            // url += "?";
+            // url += "puid=" + $("#puid").val() + "&pCfg0ModelBasicDetail=" + $("#pCfg0ModelBasicDetail").val()
+            // ;
+            var _d = $("#form").serializeArray();
+            for (var p in _d) {
+                data[_d[p].name] = _d[p].value;
+            }
+            data.puid = $("#puid").val();
+            data.pCfg0ModelBasicDetail = $("#pCfg0ModelBasicDetail").val();
+            $.ajax({
+                contentType:
+                    "application/json",
+                type:
+                    'POST',
+                url: url,
+                data: JSON.stringify(data),
+                success:
+                    function (result) {
+                        $('.modal-dialog', window.top.document).parent('div').remove()
+                        $('body', window.top.document).find('.modal-backdrop').remove();
+                        // jquery 调用刷新当前操作的table页面的refresh方法
+                        $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
+                        if (result.status) {
+                            layer.msg(result.msg, {icon: 1, time: 2000})
+                            // window.Ewin.alert({message: '修改数据成功!'});
+                        }
+                        else {
+                            window.Ewin.alert({message: result.msg});
+                        }
+
+                    },
+                error: function (status) {
+                    window.Ewin.alert({message: status.status + ':修改数据失败!'});
+                }
+            });
+            // }
+        });
+    })
+    ]]>
+</script>
+<script th:src="@{/layer/layer.js}"></script>
+</body>
+</html>

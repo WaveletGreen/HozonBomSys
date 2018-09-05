@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.connor.hozon.bom.bomSystem.dao.cfg.HzFullCfgModelDao">
+  <resultMap id="BaseResultMap" type="sql.pojo.cfg.HzFullCfgModel">
+    <id column="ID" jdbcType="DECIMAL" property="id" />
+    <result column="MOD_MODEL_UID" jdbcType="VARCHAR" property="modModelUid" />
+    <result column="MOD_CFG0_UID" jdbcType="VARCHAR" property="modCfg0Uid" />
+    <result column="MOD_POINT_TYPE" jdbcType="DECIMAL" property="modPointType" />
+    <result column="FL_MOD_CREATE_DATE" jdbcType="TIMESTAMP" property="flModCreateDate" />
+    <result column="FL_MOD_UPDATE_DATE" jdbcType="TIMESTAMP" property="flModUpdateDate" />
+    <result column="FL_MOD_CREATOR" jdbcType="OTHER" property="flModCreator" />
+    <result column="FL_MOD_LAST_UPDATER" jdbcType="OTHER" property="flModLastUpdater" />
+    <result column="FL_MOD_VERSION" jdbcType="DECIMAL" property="flModVersion" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ID, MOD_MODEL_UID, MOD_CFG0_UID, MOD_POINT_TYPE, FL_MOD_CREATE_DATE, FL_MOD_UPDATE_DATE, 
+    FL_MOD_CREATOR, FL_MOD_LAST_UPDATER, FL_MOD_VERSION
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.math.BigDecimal" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from HZ_FULL_CFG_MODEL_RECORD
+    where ID = #{id,jdbcType=DECIMAL}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.math.BigDecimal">
+    delete from HZ_FULL_CFG_MODEL_RECORD
+    where ID = #{id,jdbcType=DECIMAL}
+  </delete>
+  <insert id="insert" parameterType="sql.pojo.cfg.HzFullCfgModel">
+    insert into HZ_FULL_CFG_MODEL_RECORD (ID, MOD_MODEL_UID, MOD_CFG0_UID, 
+      MOD_POINT_TYPE, FL_MOD_CREATE_DATE, FL_MOD_UPDATE_DATE, 
+      FL_MOD_CREATOR, FL_MOD_LAST_UPDATER, FL_MOD_VERSION
+      )
+    values (#{id,jdbcType=DECIMAL}, #{modModelUid,jdbcType=VARCHAR}, #{modCfg0Uid,jdbcType=VARCHAR}, 
+      #{modPointType,jdbcType=DECIMAL}, #{flModCreateDate,jdbcType=TIMESTAMP}, #{flModUpdateDate,jdbcType=TIMESTAMP}, 
+      #{flModCreator,jdbcType=OTHER}, #{flModLastUpdater,jdbcType=OTHER}, #{flModVersion,jdbcType=DECIMAL}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="sql.pojo.cfg.HzFullCfgModel">
+    insert into HZ_FULL_CFG_MODEL_RECORD
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="modModelUid != null">
+        MOD_MODEL_UID,
+      </if>
+      <if test="modCfg0Uid != null">
+        MOD_CFG0_UID,
+      </if>
+      <if test="modPointType != null">
+        MOD_POINT_TYPE,
+      </if>
+      <if test="flModCreateDate != null">
+        FL_MOD_CREATE_DATE,
+      </if>
+      <if test="flModUpdateDate != null">
+        FL_MOD_UPDATE_DATE,
+      </if>
+      <if test="flModCreator != null">
+        FL_MOD_CREATOR,
+      </if>
+      <if test="flModLastUpdater != null">
+        FL_MOD_LAST_UPDATER,
+      </if>
+      <if test="flModVersion != null">
+        FL_MOD_VERSION,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=DECIMAL},
+      </if>
+      <if test="modModelUid != null">
+        #{modModelUid,jdbcType=VARCHAR},
+      </if>
+      <if test="modCfg0Uid != null">
+        #{modCfg0Uid,jdbcType=VARCHAR},
+      </if>
+      <if test="modPointType != null">
+        #{modPointType,jdbcType=DECIMAL},
+      </if>
+      <if test="flModCreateDate != null">
+        #{flModCreateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="flModUpdateDate != null">
+        #{flModUpdateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="flModCreator != null">
+        #{flModCreator,jdbcType=OTHER},
+      </if>
+      <if test="flModLastUpdater != null">
+        #{flModLastUpdater,jdbcType=OTHER},
+      </if>
+      <if test="flModVersion != null">
+        #{flModVersion,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="sql.pojo.cfg.HzFullCfgModel">
+    update HZ_FULL_CFG_MODEL_RECORD
+    <set>
+      <if test="modModelUid != null">
+        MOD_MODEL_UID = #{modModelUid,jdbcType=VARCHAR},
+      </if>
+      <if test="modCfg0Uid != null">
+        MOD_CFG0_UID = #{modCfg0Uid,jdbcType=VARCHAR},
+      </if>
+      <if test="modPointType != null">
+        MOD_POINT_TYPE = #{modPointType,jdbcType=DECIMAL},
+      </if>
+      <if test="flModCreateDate != null">
+        FL_MOD_CREATE_DATE = #{flModCreateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="flModUpdateDate != null">
+        FL_MOD_UPDATE_DATE = #{flModUpdateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="flModCreator != null">
+        FL_MOD_CREATOR = #{flModCreator,jdbcType=OTHER},
+      </if>
+      <if test="flModLastUpdater != null">
+        FL_MOD_LAST_UPDATER = #{flModLastUpdater,jdbcType=OTHER},
+      </if>
+      <if test="flModVersion != null">
+        FL_MOD_VERSION = #{flModVersion,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="sql.pojo.cfg.HzFullCfgModel">
+    update HZ_FULL_CFG_MODEL_RECORD
+    set MOD_MODEL_UID = #{modModelUid,jdbcType=VARCHAR},
+      MOD_CFG0_UID = #{modCfg0Uid,jdbcType=VARCHAR},
+      MOD_POINT_TYPE = #{modPointType,jdbcType=DECIMAL},
+      FL_MOD_CREATE_DATE = #{flModCreateDate,jdbcType=TIMESTAMP},
+      FL_MOD_UPDATE_DATE = #{flModUpdateDate,jdbcType=TIMESTAMP},
+      FL_MOD_CREATOR = #{flModCreator,jdbcType=OTHER},
+      FL_MOD_LAST_UPDATER = #{flModLastUpdater,jdbcType=OTHER},
+      FL_MOD_VERSION = #{flModVersion,jdbcType=DECIMAL}
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+</mapper>

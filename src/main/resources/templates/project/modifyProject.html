@@ -1,0 +1,237 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<body>
+<form id="form" role="form" method="post" th:action="${action}">
+    <input class="form-control" id="puid" name="puid" type="hidden"
+           th:value="${project.getPuid()}"
+    />
+
+    <div class="form-group">
+        <label for="pProjectCode">项目编号</label>
+        <input class="form-control" id="pProjectCode" name="pProjectCode" type="text"
+               placeholder="请输入项目编号" th:value="${project.getpProjectCode()}"
+        />
+    </div>
+    <div class="form-group">
+        <label for="pProjectName">项目名称</label>
+        <input class="form-control" id="pProjectName" name="pProjectName" type="text"
+               placeholder="请输入项目名称" th:value="${project.getpProjectName()}"
+        />
+    </div>
+    <div class="form-group">
+        <label for="pProjectManager">项目经理</label>
+        <input class="form-control" id="pProjectManager" name="pProjectManager" type="text"
+               placeholder="请输入项目名称" th:value="${project.getpProjectManager()}"
+        />
+    </div>
+    <div class="form-group">
+        <label for="pProjectDetail">项目描述</label>
+        <input class="form-control" id="pProjectDetail" name="pProjectDetail" type="text"
+               placeholder="请输入项目名称" th:value="${project.getpProjectDetail()}"
+        />
+    </div>
+
+    <div class="form-group">
+        <label for="pInColorCode">内饰颜色代码</label>
+        <input class="form-control" id="pInColorCode" name="pInColorCode" type="text"
+               th:value="${project.getpInColorCode()}"
+        />
+    </div>
+    <div class="form-group">
+        <label for="pInColorName">内饰颜色名称</label>
+        <input class="form-control" id="pInColorName" name="pInColorName" type="text"
+               th:value="${project.getpInColorName()}"
+        />
+    </div>
+    <div class="form-group">
+        <label for="pColorCode">颜色代码</label>
+        <input class="form-control" id="pColorCode" name="pColorCode" type="text"
+               th:value="${project.getpColorCode()}"
+        />
+    </div>
+    <div class="form-group">
+        <label for="pColorName">颜色名称</label>
+        <input class="form-control" id="pColorName" name="pColorName" type="text"
+               th:value="${project.getpColorName()}"
+        />
+    </div>
+    <div class="form-group">
+        <label for="pBatteryModel">电池型号</label>
+        <input class="form-control" id="pBatteryModel" name="pBatteryModel" type="text"
+               th:value="${project.getpBatteryModel()}"
+        />
+    </div>
+    <div class="form-group">
+        <label for="pMotorModel">电机型号</label>
+        <input class="form-control" id="pMotorModel" name="pMotorModel" type="text"
+               th:value="${project.getpMotorModel()}"
+        />
+    </div>
+    <div class="form-group">
+        <label for="pVehicleShapeCode">车身形式代码</label>
+        <input class="form-control" id="pVehicleShapeCode" name="pVehicleShapeCode" type="text"
+               th:value="${project.getpVehicleShapeCode()}"
+        />
+    </div>
+    <div class="form-group">
+        <label for="pVehicleTranName">车身变形名称</label>
+        <input class="form-control" id="pVehicleTranName" name="pVehicleTranName" type="text"
+               th:value="${project.getpVehicleTranName()}"
+        />
+    </div>
+    <div class="form-group">
+        <label for="pModelYearCode">车型年代码</label>
+        <input class="form-control" id="pModelYearCode" name="pModelYearCode" type="text"
+               th:value="${project.getpModelYearCode()}"
+        />
+    </div>
+    <div class="form-group">
+        <label for="pModelYear">车型年</label>
+        <input class="form-control" id="pModelYear" name="pModelYear" type="text"
+               th:value="${project.getpModelYear()}"
+        />
+    </div>
+
+    <!--车型-->
+    <div class="form-group">
+        <label for="pVehicleCode">车型代码</label>
+        <input class="form-control" id="pVehicleCode" name="pVehicleCode" type="text"
+               th:value="${vehicle.getpVehicleCode()}" disabled="disabled"
+        />
+    </div>
+    <div class="form-group">
+        <label for="pVehicleName">车型名称</label>
+        <input class="form-control" id="pVehicleName" name="pVehicleName" type="text"
+               th:value="${vehicle.getpVehicleName()}" disabled="disabled"
+        />
+    </div>
+
+    <!--平台-->
+    <div class="form-group">
+        <label for="pProjectPertainToPlatform">平台代码</label>
+        <input class="form-control" id="pProjectPertainToPlatform" name="pProjectPertainToPlatform" type="text"
+               th:value="${platform.getpPlatformCode()}" disabled="disabled"
+        />
+    </div>
+    </div>
+    <div class="form-group">
+        <label for="pPlatformName">平台名称</label>
+        <input class="form-control" id="pPlatformName" name="pPlatformName" type="text"
+               th:value="${platform.getpPlatformName()}" disabled="disabled"
+        />
+    </div>
+    <!--品牌-->
+    <div class="form-group">
+        <label for="pBrandCode">品牌代码</label>
+        <input class="form-control" id="pBrandCode" name="pBrandCode" type="text"
+               th:value="${brand.getpBrandCode()}" disabled="disabled"
+        />
+    </div>
+    <div class="form-group">
+        <label for="pBrandName">中文品牌</label>
+        <input class="form-control" id="pBrandName" name="pBrandName" type="text"
+               th:value="${brand.getpBrandName()}" disabled="disabled"
+        />
+    </div>
+</form>
+<script th:inline="javascript">
+    <![CDATA[
+    $(function () {
+        $('#form').bootstrapValidator({
+            message: 'This value is not valid',
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            fields: {
+                pProjectCode: {
+                    message: '项目编号验证失败',
+                    validators: {
+                        notEmpty: {
+                            message: '项目编号不能为空'
+                        },
+                        threshold: 1, //有1字符以上才发送ajax请求，（input中输入一个字符，插件会向服务器发送一次，设置限制，6字符以上才开始）
+                        remote: {//ajax验证。server result:{"valid",true or false} 向服务发送当前input name值，获得一个json数据。例表示正确：{"valid",true}
+                            url: 'project/validateProjectCodeWithPuid',//验证地址
+                            message: '项目编号已存在',//提示消息
+                            delay: 500,//每输入一个字符，就发ajax请求，服务器压力还是太大，设置2秒发送一次ajax（默认输入一个字符，提交一次，服务器压力太大）
+                            // *自定义提交数据，默认值提交当前input value
+                            data: function (validator) {
+                                return {
+                                    puid: $('#puid').val(),
+                                    pProjectCode: $("#pProjectCode").val()
+                                };
+                            },
+                            type: 'POST'//请求方式
+                        }
+                    }
+                },
+                pProjectName: {
+                    message: '项目名称验证失败',
+                    validators: {
+                        notEmpty: {
+                            message: '项目名称不能为空'
+                        }
+                    }
+                }
+            }
+        });
+        // 绑定dialog的确定按钮的监听事件
+        $("#btnOk", window.top.document).click(function () {
+            var bootstrapValidator = $("#form", window.top.document).data('bootstrapValidator');
+            bootstrapValidator.validate();
+            // bootstrapValidator.revalidateField("pProjectCode");
+            if (bootstrapValidator.isValid()) {
+                var url = $("#form", window.top.document).attr('action');
+                <!--其实不要puid，puid会在服务器上生成-->
+                var data = {};
+                var _d = $("#form").serializeArray();
+                for (var p in _d) {
+                    data[_d[p].name] = _d[p].value;
+                }
+                // data.pProjectPertainToPlatform=$("#pProjectPertainToPlatform").val();
+                console.log(data);
+                console.log(JSON.stringify(data));
+                $.ajax({
+                    type:
+                        'POST',
+                    contentType:
+                        "application/json",
+                    url: url,
+                    data: JSON.stringify(data),
+                    success:
+                        function (result) {
+                            $('.modal-dialog', window.top.document).parent('div').remove()
+                            $('body', window.top.document).find('.modal-backdrop').remove();
+                            // jquery 调用刷新当前操作的table页面的refresh方法
+                            var zTree = $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.zTree;
+                            var selectNode = $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.selectNode;
+                            if (result.status == 1) {
+                                var entity = result.entity;
+                                selectNode.name = entity.pProjectName;
+                                zTree.updateNode(selectNode);
+                                layer.msg('项目修改信息成功', {icon: 1, time: 2000})
+
+                                // window.Ewin.alert({message: "项目修改信息成功"});
+                            }
+                            else if (result.status == 0) {
+                                window.Ewin.alert({message: "已存在的项目代码，请修改或者更换项目代码"});
+                            }
+                            else {
+                                window.Ewin.alert({message: "修改失败，请联系管理员"});
+                            }
+
+                        },
+                    error: function (status) {
+                        window.Ewin.alert({message: status.status + ':修改数据失败!'});
+                    }
+                });
+            }
+        });
+    })
+    ]]>
+</script>
+<script th:src="@{/layer/layer.js}"></script>
+</body>
+</html>

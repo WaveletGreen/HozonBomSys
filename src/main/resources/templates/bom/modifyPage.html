@@ -1,0 +1,124 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<body>
+<form id="form" role="form" method="post" action="./model/saveModelData">
+    <div class="row">
+        <div class="col-md-6">
+            <input class="form-control" id="pModelPuid" name="pModelPuid" type="hidden"
+                   th:value="${entity.getpModelPuid()}"
+            />
+            <input class="form-control" id="puid" name="puid" type="hidden"
+                   th:value="${entity.getPuid()}"
+            />
+            <div class="form-group">
+                <label for="pModelBrand">品牌</label>
+                <input class="form-control" id="pModelBrand" name="pModelBrand" type="text"
+                       placeholder="请输入品牌" th:value="${entity.getpModelBrand()}" disabled="disabled"
+                />
+            </div>
+            <div class="form-group">
+                <label for="pModelPlatform">平台</label>
+                <input class="form-control" id="pModelPlatform" name="pModelPlatform" type="text"
+                       placeholder="请输入平台" th:value="${entity.getpModelPlatform()}" disabled="disabled"
+                />
+            </div>
+            <div class="form-group">
+                <label for="pModelMod">车型</label>
+                <input class="form-control" id="pModelMod" name="pModelMod" type="text"
+                       placeholder="请输入车型" th:value="${entity.getpModelMod()}" disabled="disabled"
+                />
+            </div>
+            <div class="form-group">
+                <label for="pModelVersion">版型</label>
+                <input class="form-control" id="pModelVersion" name="pModelVersion" type="text"
+                       placeholder="请输入版型" th:value="${entity.getpModelVersion()}"
+                />
+            </div>
+            <div class="form-group">
+                <label for="pModelShape">车身形式</label>
+                <input class="form-control" id="pModelShape" name="pModelShape" type="text"
+                       placeholder="请输入车身形式" th:value="${entity.pModelShape}"
+                />
+            </div>
+            <div class="form-group">
+                <label for="pModelAnnouncement">公告</label>
+                <input class="form-control" id="pModelAnnouncement" name="pModelAnnouncement" type="text"
+                       placeholder="请输入公告" th:value="${entity.pModelAnnouncement}"/>
+            </div>
+            <div class="form-group">
+                <label for="pModelCfgDesc">配置描述</label>
+                <input class="form-control" id="pModelCfgDesc" name="pModelCfgDesc" type="text"
+                       placeholder="请输入配置描述" th:value="${entity.pModelCfgDesc}"/>
+            </div>
+            <div class="form-group">
+                <label for="pModelCfgMng">配置管理</label>
+                <input class="form-control" id="pModelCfgMng" name="pModelCfgMng" type="text"
+                       placeholder="请输入配置描述" th:value="${entity.pModelCfgMng}"/>
+            </div>
+        </div>
+    </div>
+</form>
+
+<script th:inline="javascript">
+    <![CDATA[
+    $(function () {
+        $('#form').bootstrapValidator({
+            message: 'This value is not valid',
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            fields: {
+                pModelName: {
+                    message: '模型名称验证失败',
+                    validators: {
+                        notEmpty: {
+                            message: '模型名称不能为空'
+                        }
+                    }
+                }
+            }
+
+        });
+        // 绑定dialog的确定按钮的监听事件
+        $("#btnOk", window.top.document).click(function () {
+            var bootstrapValidator = $("#form", window.top.document).data('bootstrapValidator');
+            bootstrapValidator.validate();
+            if (bootstrapValidator.isValid()) {
+                var url = $("#form", window.top.document).attr('action');
+                <!--其实不要puid，puid会在服务器上生成-->
+                var data = {};
+                var _d = $("#form").serializeArray();
+                for (var p in _d) {
+                    data[_d[p].name] = _d[p].value;
+                }
+                data.pModelBrand=$("#pModelBrand").val();
+                data.pModelPlatform=$("#pModelPlatform").val();
+                data.pModelMod=$("#pModelMod").val();
+                $.ajax({
+                    contentType:
+                        "application/json",
+                    type:
+                        'POST',
+                    url: url,
+                    data: JSON.stringify(data),
+                    success:
+                        function (result) {
+                            $('.modal-dialog', window.top.document).parent('div').remove()
+                            $('body', window.top.document).find('.modal-backdrop').remove();
+                            // jquery 调用刷新当前操作的table页面的refresh方法
+                            $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
+                            window.Ewin.alert({message: result.msg});
+                        },
+                    error: function (status) {
+                        window.Ewin.alert({message: status.status + ':添加数据失败!'});
+                    }
+                });
+            }
+        });
+    })
+    ]]>
+</script>
+</body>
+</html>

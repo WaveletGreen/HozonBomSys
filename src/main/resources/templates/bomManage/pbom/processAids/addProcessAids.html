@@ -1,0 +1,222 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<!--User: xulf Date: 2018/7/16 Time: 19:23-->
+<link th:href="@{/css/labelColor.css}" rel="stylesheet">
+<body>
+<form id="processAidsForm" role="form" method="post" action="accessories/insert">
+    <div class="form-group">
+        <label for="pLineId">零件号<span>*</span></label>
+        <input class="form-control" id="pLineId" name="pLineId" type="text"
+
+               placeholder="请输入零件号"/><!--th:value="${entity.level}"-->
+    </div>
+    <div class="form-group">
+        <label for="pBomLinePartName">零件名称<span>*</span></label>
+        <input class="form-control" id="pBomLinePartName" name="pBomLinePartName" type="text"
+
+               placeholder="请输入零件名称"/><!--th:value="${entity.level}"-->
+    </div>
+    <div class="form-group">
+        <label for="pBomLinePartEnName">零件英文名称</label>
+        <input class="form-control" id="pBomLinePartEnName" name="pBomLinePartEnName" type="text"
+
+               placeholder="请输入零件英文名称"/><!--th:value="${entity.level}"-->
+    </div>
+    <div class="form-group">
+        <label for="pUnit">单位</label>
+        <select class="form-control" name="pUnit" id="pUnit" placeholder="请选择单位">
+            <option></option>
+            <option>EA</option> <!--th:selected="${data.getResource()=='MAKE'?true:false}"-->
+            <option>Kg</option>
+            <option>L</option>
+            <option>mm</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="pMaterialHigh">料厚</label>
+        <input class="form-control" id="pMaterialHigh" name="pMaterialHigh" type="text"
+
+               placeholder="请输入料厚"/><!--th:value="${entity.level}"-->
+    </div>
+    <div class="form-group">
+        <label for="pMaterial1">材料1</label>
+        <input class="form-control" id="pMaterial1" name="pMaterial1" type="text"
+
+               placeholder="请输入材料1"/><!--th:value="${entity.level}"-->
+    </div>
+    <div class="form-group">
+        <label for="pMaterial2">材料2</label>
+        <input class="form-control" id="pMaterial2" name="pMaterial2" type="text"
+
+               placeholder="请输入材料2"/><!--th:value="${entity.level}"-->
+    </div>
+    <div class="form-group">
+        <label for="pMaterial3">材料3</label>
+        <input class="form-control" id="pMaterial3" name="pMaterial3" type="text"
+
+               placeholder="请输入材料3"/><!--th:value="${entity.level}"-->
+    </div>
+    <div class="form-group">
+        <label for="pDensity">密度</label>
+        <input class="form-control" id="pDensity" name="pDensity" type="text"
+
+               placeholder="请输入密度"/><!--th:value="${entity.level}"-->
+    </div>
+    <div class="form-group">
+        <label for="pMaterialStandard">材料标准</label>
+        <input class="form-control" id="pMaterialStandard" name="pMaterialStandard" type="text"
+
+               placeholder="请输入材料标准"/><!--th:value="${entity.level}"-->
+    </div>
+    <div class="form-group">
+        <label for="pSurfaceTreat">表面处理</label>
+        <input class="form-control" id="pSurfaceTreat" name="pSurfaceTreat" type="text"
+
+               placeholder="请输入表面处理"/><!--th:value="${entity.level}"-->
+    </div>
+    <div class="form-group">
+        <label for="pTextureColorNum">纹理编号/色彩编号</label>
+        <input class="form-control" id="pTextureColorNum" name="pTextureColorNum" type="text"
+               placeholder="请输入纹理编号/色彩编号"/><!--th:value="${entity.level}"-->
+    </div>
+    <div class="form-group">
+        <label for="pManuProcess">制造工艺</label>
+        <input class="form-control" id="pManuProcess" name="pManuProcess" type="text"
+               placeholder="请输入制造工艺"/><!--th:value="${entity.level}"-->
+    </div>
+    <div class="form-group">
+        <label for="pTargetWeight">目标重量(kg)</label>
+        <input class="form-control" id="pTargetWeight" name="pTargetWeight" type="text"
+               placeholder="请输入目标重量(kg)"/><!--th:value="${entity.level}"-->
+    </div>
+    <div class="form-group">
+        <label for="pFutureWeight">预估重量(kg)</label>
+        <input class="form-control" id="pFutureWeight" name="pFutureWeight" type="text"
+               placeholder="请输入预估重量(kg)"/><!--th:value="${entity.level}"-->
+    </div>
+    <div class="form-group">
+        <label for="pActualWeight">实际重量(kg)</label>
+        <input class="form-control" id="pActualWeight" name="pActualWeight" type="text"
+               placeholder="请输入实际重量(kg)"/><!--th:value="${entity.level}"-->
+    </div>
+    <div class="form-group">
+        <label for="pDutyEngineer">责任工程师</label>
+        <input class="form-control" id="pDutyEngineer" name="pDutyEngineer" type="text"
+               placeholder="请输入责任工程师"/><!--th:value="${entity.level}"-->
+    </div>
+    <div class="form-group">
+        <label for="pSupply">供应商</label>
+        <input class="form-control" id="pSupply" name="pSupply" type="text"
+               placeholder="请输入供应商"/><!--th:value="${entity.level}"-->
+    </div>
+    <div class="form-group">
+        <label for="pSupplyCode">供应商代码</label>
+        <input class="form-control" id="pSupplyCode" name="pSupplyCode" type="text"
+               placeholder="请输入供应商代码"/><!--th:value="${entity.level}"-->
+    </div> <div class="form-group">
+    <label for="pRemark">备注</label>
+    <input class="form-control" id="pRemark" name="pRemark" type="text"
+           placeholder="请输入备注"/><!--th:value="${entity.level}"-->
+</div>
+</form>
+
+<script th:inline="javascript">
+    <![CDATA[
+    $(function () {
+        $('#processAidsForm').bootstrapValidator({
+            message: 'This value is not valid',
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            fields: {
+                pLineId: {
+                    message: '零件号验证失败',
+                    validators: {
+                        notEmpty: {
+                            message: '零件号不能为空'
+                        }
+                    }
+                },
+                pBomLinePartName: {
+                    message: '名称验证失败',
+                    validators: {
+                        notEmpty: {
+                            message: '名称不能为空'
+                        }
+                    }
+                },
+            }
+        });
+        // 绑定dialog的确定按钮的监听事件
+        $("#btnOk", window.top.document).click(function () {
+            var bootstrapValidator = $("#processAidsForm", window.top.document).data('bootstrapValidator');
+            bootstrapValidator.validate();
+            if (bootstrapValidator.isValid()) {
+                var url = $("#processAidsForm", window.top.document).attr('action');
+                var myData = JSON.stringify({
+                    "pLineId": $("#pLineId").val(),
+                    "pBomLinePartName": $("#pBomLinePartName").val(),
+                    "pBomLinePartEnName": $("#pBomLinePartEnName").val(),
+                    "pUnit": $("#pUnit").val(),
+                    "pMaterialHigh": $("#pMaterialHigh").val(),
+                    "pMaterial1": $("#pMaterial1").val(),
+                    "pMaterial2": $("#pMaterial2").val(),
+                    "pMaterial3": $("#pMaterial3").val(),
+                    "pDensity": $("#pDensity").val(),
+                    "pMaterialStandard": $("#pMaterialStandard").val(),
+                    "pSurfaceTreat": $("#pSurfaceTreat").val(),
+                    "pTextureColorNum": $("#pTextureColorNum").val(),
+                    "pManuProcess": $("#pManuProcess").val(),
+                    "pTargetWeight": $("#pTargetWeight").val(),
+                    "pFutureWeight": $("#pFutureWeight").val(),
+                    "pActualWeight": $("#pActualWeight").val(),
+                    "pDutyEngineer": $("#pDutyEngineer").val(),
+                    "pSupply": $("#pSupply").val(),
+                    "pSupplyCode": $("#pSupplyCode").val(),
+                    "pRemark": $("#pRemark").val(),
+                });
+                $.ajax({
+                    contentType:
+                        "application/json",
+                    type:
+                        'POST',
+                    url: url,
+                    data: myData,
+                    success:
+                        function (result) {
+                            $('.modal-dialog', window.top.document).parent('div').remove()
+                            $('body', window.top.document).find('.modal-backdrop').remove();
+                            // jquery 调用刷新当前操作的table页面的refresh方法
+                            $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
+                            // if (result)
+                            //     window.Ewin.alert({message: '添加数据成功!'});
+                            // else
+                            //     window.Ewin.alert({message: '添加数据失败!'});
+                            if (result.success) {
+                                layer.msg('添加成功', {icon: 1, time: 2000})
+                            }
+                            else if(!result.success){
+                                window.Ewin.alert({message: result.errMsg})
+                            }
+                        },
+                    error: function (status) {
+                        window.Ewin.alert({message: status.status + ':添加数据失败!'});
+                    }
+                });
+            }
+        });
+    })
+    $(document).keydown(function(event) {
+        if (event.keyCode == 13) {
+            $('form').each(function() {
+                event.preventDefault();
+            });
+        }
+    });
+    ]]>
+</script>
+<script th:src="@{/layer/layer.js}"></script>
+</body>
+</html>

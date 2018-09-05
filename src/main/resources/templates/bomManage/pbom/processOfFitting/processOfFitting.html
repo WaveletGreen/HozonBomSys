@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<!--User: xulf Date: 2018/6/7 Time: 16:51-->
+<head th:include="include/headBom"></head>
+<head th:include="include/ofBom">
+    <!--<link th:href="@{/css/stage/bom-stage.css}" rel="stylesheet"/>-->
+    <link th:href="@{/css/bom/pbom/processOfFitting.css}" rel="stylesheet"/>
+    <meta charset="UTF-8">
+    <title>工艺合件</title>
+</head>
+<body>
+<div id="content" class="row-fluid">
+    <div class="content row-fluid col-md-3 col-lg-3">
+        <h4>请选择您要合成的零件</h4>
+        <form class="form-inline">
+            <div class="form-group">
+                <label for="lineId1">零件号:</label>
+                <input type="text" class="form-control" name="lineId" id="lineId1" placeholder="请输入查询的零件号"/>
+            </div>
+            <div class="form-group">
+                <button type="button" id="queryBtn1" class="btn btn-primary">查询</button>
+            </div>
+        </form>
+        <ul id="Ztree1" class="ztree  col-md-3"
+            style="width:300px;overflow-y: scroll;height: 500px; overflow:auto;"></ul>
+    </div>
+    <div class="content col-lg-5">
+        <form class="form-inline">
+            <div class="form-group">
+                <label for="compoundLineId">请输入合成零件号:</label>
+                <input type="text" class="form-control" name="lineId" id="compoundLineId" placeholder="请输入查询的零件号"/>
+            </div>
+            <div class="form-group">
+                <button type="button" id="synthetic" onclick="doSubmit()" class="btn btn-primary">生成</button>
+            </div>
+        </form>
+        <div style="width:450px;height: 550px;overflow-y:scroll; overflow:auto;">
+            <table align="center" valign="center" class="table table-striped tableNormalStyle" id="detailTable">
+            </table>
+        </div>
+        <!--<div id="newtable"></div>-->
+    </div>
+    <div class="content row-fluid col-md-3 col-lg-3">
+        <h4>请指定您要合成的位置</h4>
+        <form class="form-inline">
+            <div class="form-group">
+                <label for="lineId3">零件号:</label>
+                <input type="text" class="form-control" name="lineId" id="lineId3" placeholder="请输入查询的零件号"/>
+            </div>
+            <div class="form-group">
+                <button type="button" id="queryBtn3" class="btn btn-primary">查询</button>
+            </div>
+        </form>
+        <ul id="Ztree3" class="ztree  col-md-4"
+            style="width:300px;overflow-y: scroll;height: 500px; overflow:auto;"></ul>
+    </div>
+</div>
+<script th:src="@{/js//bom/pbom/processOfFitting.js}"></script>
+</body>
+</html>

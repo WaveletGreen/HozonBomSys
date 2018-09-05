@@ -139,7 +139,7 @@ public class GenCodeUtil {
         sb.append("import org.springframework.stereotype.Service;\n\n");
         sb.append("import org.springframework.transaction.annotation.Transactional;\n\n");
         sb.append("import "+extendsBasePackage+".service.GenericService;\n");
-        sb.append("import "+basePackage+".common.base.dao.GenericDao;\n\n");
+        sb.append("import "+basePackage+".common.integrate.base.dao.GenericDao;\n\n");
         sb.append("import "+businessPackage+".entity."+beanName+";\n");
         sb.append("import "+businessPackage+".entity."+queryModelName+";\n");
         sb.append("import "+businessPackage+".dao."+beanName+"Dao;\n\n");
@@ -171,7 +171,7 @@ public class GenCodeUtil {
         sb.append("import org.springframework.web.bind.annotation.RequestMapping;\n");
         sb.append("import org.springframework.stereotype.Controller;\n");
         sb.append("import "+extendsBasePackage+".controller.GenericController;\n");
-        sb.append("import "+basePackage+".common.base.service.GenericService;\n\n");
+        sb.append("import "+basePackage+".common.integrate.base.service.GenericService;\n\n");
         sb.append("import "+businessPackage+".entity."+beanName+";\n");
         sb.append("import "+businessPackage+".entity."+queryModelName+";\n");
         sb.append("import "+businessPackage+".service."+beanName+"Service;\n\n");
@@ -352,7 +352,7 @@ public class GenCodeUtil {
 //     * @throws IOException
 //     */
 //    public static void main(String[] args) throws IOException {
-//        genFiles("linzf", "dict", "com.csdn.bom.common.base","com.csdn.bom.sys", "/resources/mybatis/mapper","Dict", "QueryDict", "application-dev.properties");
+//        genFiles("linzf", "dict", "com.csdn.bom.common.integrate.base","com.csdn.bom.sys", "/resources/mybatis/mapper","Dict", "QueryDict", "application-dev.properties");
 //    }
 
 }

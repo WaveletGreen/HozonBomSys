@@ -10,7 +10,22 @@ body {
     margin-top: 100px;
     background-color: #222;
 }
-
+.navbar-header img{
+    /*position:absolute;*/
+    margin-left: 0px;
+    margin-top: 0px;
+    height:35px ;
+    width: 160px;
+}
+.navbar-brand>img {
+    display:inline-block;
+}
+/*.navbar-header{*/
+    /*background-color:#fff ;*/
+/*}*/
+/*.nav_custom{*/
+    /*background-color:#005A5A;*/
+/*}*/
 @media(min-width:768px) {
     body {
         margin-top: 50px;

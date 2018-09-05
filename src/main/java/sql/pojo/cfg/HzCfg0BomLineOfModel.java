@@ -1,38 +1,68 @@
 package sql.pojo.cfg;
 
 public class HzCfg0BomLineOfModel {
+
     private String objectName;
-
+    /**
+     * 车型模型描述
+     */
     private String objectDesc;
-
+    /**
+     * 选项值
+     */
     private String pCfg0OptionValue;
-
+    /**
+     * 本地解析变量，用于打点图，与=1，或=0，非=-1，用于解析是否是
+     */
     private Short pParseLogicValue;
-
+    /**
+     * 配置项的值
+     */
     private String pCfg0ObjectId;
-
+    /**
+     * 配置项描述
+     */
     private String pCfg0Desc;
-
+    /**
+     * 族值
+     */
     private String pCfg0FamilyName;
-
-    private String pH9featurename;
-
+    /**
+     * 特性英文名稱
+     */
     private String pH9featureenname;
-
-    private String pH9featuredesc;
-
+    /**
+     * 对应的bom行名
+     */
     private String pBomLineName;
-
+    /**
+     * 对应的bom行id
+     */
     private String pBomLineId;
+    /**
+     * bom行归属的部门
+     */
     private String pBomOfWhichDept;
+    /**
+     * 归属的的模型
+     */
     private String modelPuid;
+    /**
+     * 大对象
+     */
+    private byte[] lineBlock;
+    /**
+     * 责任工程师
+     */
+    private String creator;
+
     public String getObjectName() {
         return objectName;
     }
 
     public static final String[] selfDesc =
             {
-                    "系统", "总成零件号", "总成零件名称", "总成英文名称", "配置(描述)", "配置代码", "备注"
+                    "operationType", "pBomOfWhichDept", "pBomLineId", "pBomLineName", "pH9featureenname", "owningUser", "pCfg0Desc", "pCfg0ObjectId", "comment"
             };
 
     public void setObjectName(String objectName) {
@@ -87,28 +117,12 @@ public class HzCfg0BomLineOfModel {
         this.pCfg0FamilyName = pCfg0FamilyName == null ? null : pCfg0FamilyName.trim();
     }
 
-    public String getpH9featurename() {
-        return pH9featurename;
-    }
-
-    public void setpH9featurename(String pH9featurename) {
-        this.pH9featurename = pH9featurename == null ? null : pH9featurename.trim();
-    }
-
     public String getpH9featureenname() {
         return pH9featureenname;
     }
 
     public void setpH9featureenname(String pH9featureenname) {
         this.pH9featureenname = pH9featureenname == null ? null : pH9featureenname.trim();
-    }
-
-    public String getpH9featuredesc() {
-        return pH9featuredesc;
-    }
-
-    public void setpH9featuredesc(String pH9featuredesc) {
-        this.pH9featuredesc = pH9featuredesc == null ? null : pH9featuredesc.trim();
     }
 
     public String getpBomLineName() {
@@ -142,4 +156,21 @@ public class HzCfg0BomLineOfModel {
     public void setModelPuid(String modelPuid) {
         this.modelPuid = modelPuid;
     }
+
+    public byte[] getLineBlock() {
+        return lineBlock;
+    }
+
+    public void setLineBlock(byte[] lineBlock) {
+        this.lineBlock = lineBlock;
+    }
+
+    public String getCreator() {
+        return creator;
+    }
+
+    public void setCreator(String creator) {
+        this.creator = creator;
+    }
+
 }

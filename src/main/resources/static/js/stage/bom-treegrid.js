@@ -2,18 +2,20 @@ var firstLoad = true;
 var isExpand = false;
 $(document).ready(
     $("#doSubmit2").click(
+    // (
         function () {
             var $table = $("#dataTable");
-            var bdf = $("#text1").val();
-            if (bdf.length <= 0) {
+            var project = $("#project", window.top.document);
+            var projectPuid = project.val();
+            if (projectPuid.length <= 0) {
                 $("#myModal").modal('show');
                 return;
             }
             $.ajax({
-                type: "GET",
-                url: "/hozon/loadBom/loadByID",
+                type: "POST",
+                url: "./loadBom/loadColumns",
                 data: {
-                    "bdf": bdf
+                    "projectPuid": projectPuid
                 },
                 success: function (result) {
                     var toJson = JSON.stringify(result);
@@ -33,8 +35,9 @@ $(document).ready(
                         };
                         myColumns.push(temp);
                     }
-                    var data = thisResult.slice(2, thisResult.length);
-                    addToTable($table, data, myColumns);
+                    $table.bootstrapTable('destroy');
+                    // var data = thisResult.slice(2, thisResult.length);
+                    addToTable($table, projectPuid, myColumns);
                 },
                 error: function (result) {
                     var xx = JSON.stringify(result);
@@ -74,31 +77,28 @@ $(document).ready(
 //     )
 )
 
-function addToTable($table, result, myColumns) {
-    if (firstLoad) {
-        $table.bootstrapTable({
-            striped: true,
-            data: result,
-            columns: myColumns,
-            idField: 'id',
-            parentIdField: 'pid',
-            treeShowField: 'object_string',
-            striped: true,
-            showToggle: true,                    //是否显示详细视图和列表视图的切换按钮
-            showColumns: true,                  //是否显示所有的列
-            showRefresh: true,                  //是否显示刷新按钮
-            search: true,                       //是否显示表格搜索，此搜索是客户端搜索，不会进服务端，所以，个人感觉意义不大
-            // pagination: isPagination,                   //是否显示分页（*）
-            sortable: true,                     //是否启用排序
-            sortOrder: "asc",                   //排序方式
-            clickToSelect: true  //点击表格项即可选择
-        });
-    }
-    else {
-        //重新载入数据，清空之前的，用load，用refresh不成功
-        $table.bootstrapTable("load", result);
-    }
-    toTree($table, "collapsed");
+function addToTable($table, projectPuid, myColumns) {
+    $table.bootstrapTable({
+        striped: true,
+        url: "loadBom/loadByID?projectPuid=" + projectPuid,
+        method: "POST",
+        columns: myColumns,
+        idField: 'id',
+        parentIdField: 'pid',
+        treeShowField: 'object_string',
+        height: $(window.parent.document).find("#wrapper").height() - document.body.offsetHeight - 45,
+        width: $(window).width(),
+        striped: true,
+        showToggle: true,                    //是否显示详细视图和列表视图的切换按钮
+        showColumns: true,                  //是否显示所有的列
+        showRefresh: true,                  //是否显示刷新按钮
+        search: true,                       //是否显示表格搜索，此搜索是客户端搜索，不会进服务端，所以，个人感觉意义不大
+        // pagination: isPagination,                   //是否显示分页（*）
+        // sortable: true,                     //是否启用排序
+        // sortOrder: "asc",                   //排序方式
+        clickToSelect: true  //点击表格项即可选择
+    });
+    toTree($table, "expanded");
     firstLoad = false;
 
 }
@@ -106,9 +106,9 @@ function addToTable($table, result, myColumns) {
 function toTree($table, isExpand) {
     $table.treegrid({
         initialState: isExpand,//收缩collapsed展开expanded
-        treeColumn: 0,//指明第几列数据改为树形is-expander-expandedis-expander-collapsed
-        expanderExpandedClass: 'glyphicon glyphicon-triangle-bottom ',//有关于折叠图标的问题，由于字体集文件无法跨域调用，因此需要将fonts文件夹中的文件放到与bootstrap.xxx.css统计目录下，并修改@font-face的字体集路径
-        expanderCollapsedClass: 'glyphicon glyphicon-triangle-right ',
+        treeColumn: 0,//指明第几列数据改为树形is-expander-expandedis-expander-collapsedglyphicon-triangle-bottom glyphicon glyphicon-triangle-right
+        expanderExpandedClass: 'glyphicon glyphicon-minus',//有关于折叠图标的问题，由于字体集文件无法跨域调用，因此需要将fonts文件夹中的文件放到与bootstrap.xxx.css统计目录下，并修改@font-face的字体集路径
+        expanderCollapsedClass: 'glyphicon glyphicon-plus',
         onChange: function () {
             $table.bootstrapTable('resetWidth');
         }

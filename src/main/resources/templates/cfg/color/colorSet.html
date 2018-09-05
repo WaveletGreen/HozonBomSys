@@ -1,23 +1,22 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-    <head th:include="include/includebase">
-    </head>
-    <meta charset="UTF-8">
-    <title>合众颜色库</title>
-    </head>
-    <body>
-        <div class="panel-body">
-            <div class="content col-lg-5">
-                <button class="btn btn-default" id="queryColorSet" type="button">查询颜色库</button>
-                <button class="btn btn-default" id="refreshColorSet" type="button" disabled="disabled">刷新</button>
-                <table class="table table-striped tableNormalStyle" id="dataTable"></table>
-            </div>
-        </div>
-        <script th:src="@{/js/cfg/color/colorSet2.js}"></script>
-    </body>
-    <script th:inline="javascript">
-        function doQuery() {
-            $('#dataTable').bootstrapTable('refresh');    //刷新表格
-        }
-    </script>
+<head th:include="include/includebase">
+</head>
+<meta charset="UTF-8">
+<title>合众颜色库</title>
+<body class="content-body">
+<div class="panel-body">
+    <div class="content col-lg-12">
+        <!--<button class="btn btn-default" id="queryColorSet" type="button">查询颜色库</button>-->
+        <button class="btn btn-default" id="refreshColorSet" type="button" disabled="disabled">刷新</button>
+        <table class="table table-striped tableNormalStyle" id="dataTable"></table>
+    </div>
+</div>
+<script th:src="@{/js/cfg/color/colorSet2.js}"></script>
+</body>
+<script th:inline="javascript">
+    function doQuery() {
+        $('#dataTable').bootstrapTable('refresh');    //刷新表格
+    }
+</script>
 </html>

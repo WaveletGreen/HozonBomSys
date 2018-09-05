@@ -12,11 +12,11 @@ public class QueryBase {
     /** 排序方式: desc \ asc */
     protected String order = "";
     /** 获取一页行数 */
-    protected int limit;
+    protected Integer limit;
     /** 获取的页码 */
-    protected int page;
+    protected Integer page;
     /** 起始记录 */
-    protected int offset;
+    protected Integer offset;
 
     public String getSort() {
         return sort;
@@ -34,27 +34,27 @@ public class QueryBase {
         this.order = order;
     }
 
-    public int getLimit() {
+    public Integer getLimit() {
         return limit;
     }
 
-    public void setLimit(int limit) {
+    public void setLimit(Integer limit) {
         this.limit = limit;
     }
 
-    public int getPage() {
+    public Integer getPage() {
         return page;
     }
 
-    public void setPage(int page) {
+    public void setPage(Integer page) {
         this.page = page;
     }
 
-    public int getOffset() {
-        return (this.page-1)*limit;
+    public Integer getOffset() {
+        return (page==null||limit==null)?null:(this.page-1)*limit;
     }
 
-    public void setOffset(int offset) {
+    public void setOffset(Integer offset) {
         this.offset = offset;
     }
 }

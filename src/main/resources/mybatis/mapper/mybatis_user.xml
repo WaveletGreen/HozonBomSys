@@ -61,6 +61,10 @@
 	<select id="findByLogin" parameterType="java.lang.String" resultMap="UserLoginMap">
 		select u.*,ur.id as user_role_id,ur.name,ur.role_name from user u inner join user_associate_role uar on u.id = uar.user_id inner join user_role ur on uar.role_id = ur.id where u.login = #{login}
 	</select>
+	<!-- 根据账号来获取用户信息 -->
+	<select id="loadAll" resultMap="UserLoginMap">
+		select u.*,ur.id as user_role_id,ur.name,ur.role_name from user u inner join user_associate_role uar on u.id = uar.user_id inner join user_role ur on uar.role_id = ur.id
+	</select>
 
 	<!-- 更新用户的最迟登陆时间 -->
      <update id="updateLogin" parameterType="com.connor.hozon.bom.sys.entity.User">
@@ -280,5 +284,23 @@
 		<if test="sort!= null and sort!='' ">
 			order by ${sort} ${order}
 		</if>
+	</select>
+
+
+	<!-- 更新用户 登录密码  haozt on 7/23/2018-->
+	<update id="updatePassword" parameterType="com.connor.hozon.bom.sys.entity.User">
+		 update user set password = #{password} where id=#{id}
+	 </update>
+
+	<select id="findUserByGroupId" parameterType="java.lang.String" resultMap="UserMap">
+		select  * FROM user  where group_id = #{groupId}
+	</select>
+
+	<select id="findAllUser" resultMap="UserMap">
+		select  * FROM user  where state = 1
+	</select>
+
+    <select id="findUserById" resultMap="UserMap">
+		select  * FROM user  where state = 1 and  id=#{id}
 	</select>
 </mapper>

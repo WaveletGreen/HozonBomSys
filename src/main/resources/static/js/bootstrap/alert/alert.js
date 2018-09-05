@@ -4,7 +4,7 @@
  */
 (function ($) {
     window.Ewin = function () {
-        var html = '<div id="[Id]" class="modal fade" role="dialog" aria-labelledby="modalLabel" style="margin-top: 10px;">' +
+        var html = '<div id="[Id]" class="modal fade" data-backdrop="static"role="dialog" aria-labelledby="modalLabel" style="margin-top: 10px;">' +
             '<div class="modal-dialog ">' +
             '<div class="modal-content">' +
             '<div class="modal-header">' +
@@ -21,9 +21,7 @@
             '</div>' +
             '</div>' +
             '</div>';
-
-
-        var dialogdHtml = '<div id="[Id]" class="modal fade" role="dialog" aria-labelledby="modalLabel" style="margin-top: 10px;">' +
+        var dialogdHtml = '<div id="[Id]" class="modal fade" data-backdrop="static" role="dialog" aria-labelledby="modalLabel" style="margin-top: 10px;">' +
             '<div class="modal-dialog" >' +
             '<div class="modal-content" style="'+'width:[Width]px;height:[Height]px'+';">' +
             '<div class="modal-header">' +

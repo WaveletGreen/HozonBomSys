@@ -20,6 +20,4 @@ public class ServletInitializer
         return
                 application.sources(HzBomSysApplication.class);
     }
-
-
 }

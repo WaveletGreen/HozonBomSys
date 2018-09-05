@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="HzFactoryMapper">
+  <resultMap id="BaseResultMap" type="sql.pojo.factory.HzFactory">
+    <id column="PUID" jdbcType="VARCHAR" property="puid" />
+    <result column="P_FACTORY_CODE" jdbcType="VARCHAR" property="pFactoryCode" />
+    <result column="P_FACTORY_DESC" jdbcType="VARCHAR" property="pFactoryDesc" />
+    <result column="P_FACTORY_STATUS" jdbcType="INTEGER" property="pFactoryStatus" />
+    <result column="P_CREATE_TIME" jdbcType="DATE" property="pCreateTime" />
+    <result column="P_UPDATE_TIME" jdbcType="DATE" property="pUpdateTime" />
+    <result column="P_CREATE_NAME" jdbcType="VARCHAR" property="pCreateName" />
+    <result column="P_UPDATE_NAME" jdbcType="VARCHAR" property="pUpdateName" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    PUID, P_FACTORY_CODE, P_FACTORY_DESC, P_CREATE_TIME, P_UPDATE_TIME,
+    P_CREATE_NAME, P_UPDATE_NAME
+  </sql>
+
+  <select id="HzFactoryDAOImpl_selectFactoryById" parameterType="java.util.HashMap" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from HZ_FACTORY
+    <where>
+      P_FACTORY_STATUS=1
+      <if test="puid != null and puid!=''">
+       and PUID = #{puid,jdbcType=VARCHAR}
+      </if>
+      <if test="factoryCode != null and factoryCode !=''">
+        and P_FACTORY_CODE = #{factoryCode,jdbcType=VARCHAR}
+      </if>
+    </where>
+  </select>
+
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from HZ_FACTORY
+    where PUID = #{puid,jdbcType=VARCHAR}
+  </delete>
+
+
+
+  <insert id="HzFactoryDAOImpl_insert" parameterType="sql.pojo.factory.HzFactory">
+    insert into HZ_FACTORY
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="puid != null">
+        PUID,
+      </if>
+      <if test="pFactoryCode != null">
+        P_FACTORY_CODE,
+      </if>
+      <if test="pFactoryDesc != null">
+        P_FACTORY_DESC,
+      </if>
+
+        P_FACTORY_STATUS,
+
+
+        P_CREATE_TIME,
+
+        P_UPDATE_TIME,
+
+      <if test="pCreateName != null">
+        P_CREATE_NAME,
+      </if>
+      <if test="pUpdateName != null">
+        P_UPDATE_NAME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="puid != null">
+        #{puid,jdbcType=VARCHAR},
+      </if>
+      <if test="pFactoryCode != null">
+        #{pFactoryCode,jdbcType=VARCHAR},
+      </if>
+      <if test="pFactoryDesc != null">
+        #{pFactoryDesc,jdbcType=VARCHAR},
+      </if>
+       1,
+       sysdate,
+       sysdate,
+      <if test="pCreateName != null">
+        #{pCreateName,jdbcType=VARCHAR},
+      </if>
+      <if test="pUpdateName != null">
+        #{pUpdateName,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+
+  <update id="updateByPrimaryKeySelective" parameterType="sql.pojo.factory.HzFactory">
+    update HZ_FACTORY
+    <set>
+      <if test="pFactoryCode != null">
+        P_FACTORY_CODE = #{pFactoryCode,jdbcType=VARCHAR},
+      </if>
+      <if test="pFactoryDesc != null">
+        P_FACTORY_DESC = #{pFactoryDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="pFactoryStatus != null">
+        P_FACTORY_STATUS = #{pFactoryStatus,jdbcType=INTEGER},
+      </if>
+      <if test="pCreateTime != null">
+        P_CREATE_TIME = #{pCreateTime,jdbcType=DATE},
+      </if>
+      <if test="pUpdateTime != null">
+        P_UPDATE_TIME = #{pUpdateTime,jdbcType=DATE},
+      </if>
+      <if test="pCreateName != null">
+        P_CREATE_NAME = #{pCreateName,jdbcType=VARCHAR},
+      </if>
+      <if test="pUpdateName != null">
+        P_UPDATE_NAME = #{pUpdateName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where PUID = #{puid,jdbcType=VARCHAR}
+  </update>
+
+
+
+</mapper>

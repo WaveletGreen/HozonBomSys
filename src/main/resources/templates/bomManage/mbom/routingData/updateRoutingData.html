@@ -1,0 +1,228 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<!--User: xulf Date: 2018/7/2 Time: 10:58-->
+<link th:href="@{/css/labelColor.css}" rel="stylesheet">
+<body>
+<form id="routingDataForm" role="form" method="post" action="work/process/update">
+    <input id="materielId" name="materielId" type="hidden" th:value="${data.materielId}"/><!--th:value="${entity.pBomPuid}"-->
+    <div class="form-group">
+        <label for="pMaterielCode">物料<span>*</span></label>
+        <input class="form-control" id="pMaterielCode" name="pMaterielCode" type="text"disabled="disabled"
+               th:value="${data.pMaterielCode}"
+               placeholder="请输入物料"/><!--th:value="${entity.level}"-->
+    </div>
+    <div class="form-group">
+        <label for="pMaterielDesc">物料名称<span>*</span></label>
+        <input class="form-control" id="pMaterielDesc" name="pMaterielDesc" type="text"disabled="disabled"
+               th:value="${data.pMaterielDesc}"
+               placeholder="请输入物料名称"/><!--th:value="${entity.level}"-->
+    </div>
+    <div class="form-group">
+        <label for="factoryCode">工厂<span>*</span></label>
+        <input class="form-control" id="factoryCode" name="factoryCode" type="text"
+               th:value="${data.factoryCode}"
+               placeholder="请输入工厂"/><!--th:value="${entity.level}"-->
+    </div>
+    <div class="form-group">
+        <label for="purpose">用途</label>
+        <input class="form-control" id="purpose" name="purpose" type="text"
+               th:value="${data.purpose}"
+               placeholder="请输入用途"/><!--th:value="${entity.level}"-->
+    </div>
+    <div class="form-group">
+        <label for="state">状态</label>
+        <input class="form-control" id="state" name="state" type="text"
+               th:value="${data.state}"
+               placeholder="请输入状态"/><!--th:value="${entity.level}"-->
+    </div>
+    <div class="form-group">
+        <label for="pProcedureCode">工序号</label>
+        <input class="form-control" id="pProcedureCode" name="pProcedureCode" type="text"
+               th:value="${data.pProcedureCode}"
+               placeholder="请输入工序号"/><!--th:value="${entity.level}"-->
+    </div>
+    <div class="form-group">
+        <label for="pWorkCode">工作中心</label>
+        <input class="form-control" id="pWorkCode" name="pWorkCode" type="text"
+               th:value="${data.pWorkCode}"
+               placeholder="请输入工作中心"/><!--th:value="${entity.level}"-->
+    </div>
+    <div class="form-group">
+        <label for="pWorkDesc">工作中心描述</label>
+        <input class="form-control" id="pWorkDesc" name="pWorkDesc" type="text"
+               th:value="${data.pWorkDesc}"
+               placeholder="请输入工作中心描述"/><!--th:value="${entity.level}"-->
+    </div>
+    <div class="form-group">
+        <label for="controlCode">控制码</label>
+        <input class="form-control" id="controlCode" name="controlCode" type="text"
+               th:value="${data.controlCode}"
+               placeholder="请输入控制码"/><!--th:value="${entity.level}"-->
+    </div>
+    <div class="form-group">
+        <label for="pProcedureDesc">工序描述</label>
+        <input class="form-control" id="pProcedureDesc" name="pProcedureDesc" type="text"
+               th:value="${data.pProcedureDesc}"
+               placeholder="请输入工序描述"/><!--th:value="${entity.level}"-->
+    </div>
+    <div class="form-group">
+        <label for="pCount">基本数量</label>
+        <input class="form-control" id="pCount" name="pCount" type="text"
+               th:value="${data.pCount}"
+               placeholder="请输入基本数量"/><!--th:value="${entity.level}"-->
+    </div>
+
+    <div class="form-group">
+        <label for="pDirectLabor">直接人工时间</label>
+        <input class="form-control" id="pDirectLabor" name="pDirectLabor" type="text"
+               th:value="${data.pDirectLabor}"
+               placeholder="请输入直接人工时间"/><!--th:value="${entity.level}"-->
+    </div>
+
+    <div class="form-group">
+        <label for="pIndirectLabor">间接人工时间</label>
+        <input class="form-control" id="pIndirectLabor" name="pIndirectLabor" type="text"
+               th:value="${data.pIndirectLabor}"
+               placeholder="请输入间接人工时间"/><!--th:value="${entity.level}"-->
+    </div>
+    <div class="form-group">
+        <label for="pMachineLabor">机器时间</label>
+        <input class="form-control" id="pMachineLabor" name="pMachineLabor" type="text"
+               th:value="${data.pMachineLabor}"
+               placeholder="请输入机器时间"/><!--th:value="${entity.level}"-->
+    </div>
+    <div class="form-group">
+        <label for="pBurn">燃动能</label>
+        <input class="form-control" id="pBurn" name="pBurn" type="text"
+               th:value="${data.pBurn}"
+               placeholder="请输入燃动能"/><!--th:value="${entity.level}"-->
+    </div>
+    <div class="form-group">
+        <label for="pMachineMaterialLabor">机物料消耗</label>
+        <input class="form-control" id="pMachineMaterialLabor" name="pMachineMaterialLabor" type="text"
+               th:value="${data.pMachineMaterialLabor}"
+               placeholder="请输入机物料消耗"/><!--th:value="${entity.level}"-->
+    </div>
+    <div class="form-group">
+        <label for="pOtherCost">其他费用</label>
+        <input class="form-control" id="pOtherCost" name="pOtherCost" type="text"
+               th:value="${data.pOtherCost}"
+               placeholder="请输入其他费用"/><!--th:value="${entity.level}"-->
+    </div>
+</form>
+
+<script th:inline="javascript">
+    <![CDATA[
+    $(function () {
+        $('#routingDataForm').bootstrapValidator({
+            message: 'This value is not valid',
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            fields: {
+                factoryCode: {
+                    message: '工厂验证失败',
+                    validators: {
+                        notEmpty: {
+                            message: '工厂不能为空'
+                        }
+                    }
+                },
+                pMaterielCode: {
+                    message: '物料验证失败',
+                    validators: {
+                        notEmpty: {
+                            message: '物料不能为空'
+                        }
+                    }
+                },
+                pMaterielDesc: {
+                    message: '物料名称验证失败',
+                    validators: {
+                        notEmpty: {
+                            message: '物料名称不能为空'
+                        }
+                    }
+                },
+                pCount: {
+                    message: '基本数量验证失败',
+                    validators: {
+                        numeric: {
+                            message: '基本数量只能输入数字'
+                        },
+                    }
+                }
+            }
+        });
+        // 绑定dialog的确定按钮的监听事件
+        $("#btnOk", window.top.document).click(function () {
+            var bootstrapValidator = $("#routingDataForm", window.top.document).data('bootstrapValidator');
+            bootstrapValidator.validate();
+            if (bootstrapValidator.isValid()) {
+                var url = $("#routingDataForm ", window.top.document).attr('action');
+                var myData = JSON.stringify({
+                    "materielId": $("#materielId").val(),
+                    "pMaterielCode": $("#pMaterielCode").val(),
+                    "pMaterielDesc": $("#pMaterielDesc").val(),
+                    "factoryCode": $("#factoryCode").val(),
+                    "purpose": $("#purpose").val(),
+                    "state": $("#state").val(),
+                    "pProcedureCode": $("#pProcedureCode").val(),
+                    "pWorkCode": $("#pWorkCode").val(),
+                    "pWorkDesc": $("#pWorkDesc").val(),
+                    "controlCode": $("#controlCode").val(),
+                    "pProcedureDesc": $("#pProcedureDesc").val(),
+                    "pCount": $("#pCount").val(),
+                    "pDirectLabor": $("#pDirectLabor").val(),
+                    "pIndirectLabor": $("#pIndirectLabor").val(),
+                    "pMachineLabor": $("#pMachineLabor").val(),
+                    "pBurn": $("#pBurn").val(),
+                    "pMachineMaterialLabor": $("#pMachineMaterialLabor").val(),
+                    "pOtherCost": $("#pOtherCost").val(),
+                    "projectId":$("#project", window.top.document).val()
+                });
+                $.ajax({
+                    contentType:
+                        "application/json",
+                    type:
+                        'POST',
+                    url: url,
+                    data: myData,
+                    success:
+                        function (result) {
+                            $('.modal-dialog', window.top.document).parent('div').remove()
+                            $('body', window.top.document).find('.modal-backdrop').remove();
+                            // jquery 调用刷新当前操作的table页面的refresh方法
+                            $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
+                            /*if (result)
+                                window.Ewin.alert({message: '修改数据成功!'});
+                            else
+                                window.Ewin.alert({message: '修改数据失败!'});*/
+                            if (result.success) {
+                                layer.msg('修改成功', {icon: 1, time: 2000})
+                            }
+                            else if(!result.success){
+                                window.Ewin.alert({message: result.errMsg})
+                            }
+                        },
+                    error: function (status) {
+                        window.Ewin.alert({message: status.status + ':修改数据失败!'});
+                    }
+                });
+            }
+        });
+    })
+    $(document).keydown(function(event) {
+        if (event.keyCode == 13) {
+            $('form').each(function() {
+                event.preventDefault();
+            });
+        }
+    });
+    ]]>
+</script>
+<script th:src="@{/layer/layer.js}"></script>
+</body>
+</html>

@@ -1,0 +1,319 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.connor.hozon.bom.bomSystem.dao.cfg.vwo.HzVwoInfoDao">
+    <resultMap id="BaseResultMap" type="sql.pojo.cfg.vwo.HzVwoInfo">
+        <!--主键-->
+        <id column="ID" jdbcType="DOUBLE" property="id"/>
+        <!--VWO号-->
+        <result column="VWO_NUM" jdbcType="VARCHAR" property="vwoNum"/>
+        <!--创建者-->
+        <result column="VWO_CREATOR" jdbcType="VARCHAR" property="vwoCreator"/>
+        <!--VWO创建时间-->
+        <result column="VWO_CREATE_DATE" jdbcType="TIMESTAMP" property="vwoCreateDate"/>
+        <!--结束人-->
+        <result column="VWO_FINISHER" jdbcType="VARCHAR" property="vwoFinisher"/>
+        <!--结束时间-->
+        <result column="VWO_FINISH_DATE" jdbcType="TIMESTAMP" property="vwoFinishDate"/>
+        <!--项目UID-->
+        <result column="PROJECT_UID" jdbcType="VARCHAR" property="projectUid"/>
+        <!--审批类型-->
+        <result column="VWO_APPROVAL_TYPE" jdbcType="VARCHAR" property="approvalType"/>
+        <!--需求类型-->
+        <result column="VWO_DEMAND_TYPE" jdbcType="VARCHAR" property="demandType"/>
+        <!--vwo名-->
+        <result column="VWO_NAME" jdbcType="VARCHAR" property="vwoName"/>
+        <!--vwo状态-->
+        <result column="VWO_STATUS" jdbcType="INTEGER" property="vwoStatus"/>
+        <!--预计实施时间-->
+        <result column="VWO_EXPECT_EXECUTE_TIME" jdbcType="TIMESTAMP" property="vwoExpectExecuteTime"/>
+        <!--1.特性，2相关性，3配色方案-->
+        <result column="VWO_TYPE" jdbcType="INTEGER" property="vwoType"/>
+        <!--用户部门名-->
+        <result column="USER_DEPT_NAME" jdbcType="VARCHAR" property="userDeptName"/>
+        <!--平台代码-->
+        <result column="PLATFORM_CODE" jdbcType="VARCHAR" property="platformCode"/>
+        <!--车型代码-->
+        <result column="VEHICLE_CODE" jdbcType="VARCHAR" property="vehicleCode"/>
+        <!--项目代码-->
+        <result column="PROJECT_CODE" jdbcType="VARCHAR" property="projectCode"/>
+        <!--附加-->
+        <!--联系电话-->
+        <result column="CONTACT_PHONE_NUM" jdbcType="VARCHAR" property="contactPhoneNum"/>
+        <!--要求完成时间-->
+        <result column="VWO_DEMAND_FINISH_TIME" jdbcType="TIMESTAMP" property="vwoDemandFinishTime"/>
+        <!--变更类型-->
+        <result column="VWO_CHANGE_TYPE" jdbcType="INTEGER" property="vwoChangeType"/>
+        <!--费用承担部门-->
+        <result column="VWO_COST_BEARING_DEPT" jdbcType="VARCHAR" property="vwoCostBearingDept"/>
+        <!--上市类型-->
+        <result column="VWO_LISTED_TYPE" jdbcType="INTEGER" property="vwoListedType"/>
+        <!--关联的VWO号-->
+        <result column="VWO_CONNECTED_VWO" jdbcType="VARCHAR" property="vwoConnectedVwo"/>
+        <!--启动生效时间-->
+        <result column="VWO_START_EFFECTIVE_TIME" jdbcType="TIMESTAMP" property="vwoStartEffectiveTime"/>
+        <!--终止生效时间-->
+        <result column="VWO_END_EFFECTIVE_TIME" jdbcType="TIMESTAMP" property="vwoEndEffectiveTime"/>
+        <!--项目所属阶段-->
+        <result column="VWO_PROJECT_STAGE" jdbcType="VARCHAR" property="vwoProjectStage"/>
+        <!--关联工程师姓名-->
+        <result column="VWO_CONNECTED_USER" jdbcType="VARCHAR" property="vwoConnectedUser"/>
+        <!--所属部门-->
+        <result column="VWO_CONNECTED_USER_DEPT" jdbcType="VARCHAR" property="vwoConnectedUserDept"/>
+        <!--关联零件号-->
+        <result column="VWO_CONNECTED_PART" jdbcType="VARCHAR" property="vwoConnectedPart"/>
+        <!--关联零件名称-->
+        <result column="VWO_CONNECTED_PART_NAME" jdbcType="VARCHAR" property="vwoConnectedPartName"/>
+        <!--原因描述-->
+        <result column="VWO_CHANGE_REASON" jdbcType="VARCHAR" property="vwoChangeReason"/>
+
+    </resultMap>
+    <!--字段声明-->
+    <sql id="Base_Column_List">
+        ID,
+        VWO_NUM,
+        VWO_CREATOR,
+        VWO_CREATE_DATE,
+        VWO_FINISHER,
+        VWO_FINISH_DATE,
+        PROJECT_UID,
+        VWO_TYPE,
+        PLATFORM_CODE,
+        VEHICLE_CODE,
+        PROJECT_CODE
+    </sql>
+    <sql id="VWO_Extend_Column">
+        VWO_APPROVAL_TYPE,
+        VWO_DEMAND_TYPE,
+        VWO_NAME,
+        VWO_STATUS,
+        VWO_EXPECT_EXECUTE_TIME,
+        USER_Dept_NAME,
+        CONTACT_PHONE_NUM,
+        VWO_DEMAND_FINISH_TIME,
+        VWO_CHANGE_TYPE,
+        VWO_COST_BEARING_DEPT,
+        VWO_LISTED_TYPE,
+        VWO_CONNECTED_VWO,
+        VWO_START_EFFECTIVE_TIME,
+        VWO_END_EFFECTIVE_TIME,
+        VWO_PROJECT_STAGE,
+        VWO_CONNECTED_USER,
+        VWO_CONNECTED_USER_DEPT,
+        VWO_CONNECTED_PART,
+        VWO_CONNECTED_PART_NAME,
+        VWO_CHANGE_REASON
+    </sql>
+    <!--结果集-->
+    <sql id="Values_Of_Result">
+        #{id,jdbcType=DECIMAL},
+        #{vwoNum,jdbcType=VARCHAR},
+        #{vwoCreator,jdbcType=VARCHAR},
+        #{vwoCreateDate,jdbcType=TIMESTAMP},
+        #{vwoFinisher,jdbcType=VARCHAR},
+        #{vwoFinishDate,jdbcType=TIMESTAMP},
+        #{projectUid,jdbcType=VARCHAR},
+        #{vwoType,jdbcType=VARCHAR},
+        #{platformCode,jdbcType=VARCHAR},
+        #{vehicleCode,jdbcType=VARCHAR},
+        #{projectCode,jdbcType=VARCHAR}
+    </sql>
+    <sql id="Values_Of_Extend_Column">
+        #{approvalType,jdbcType=VARCHAR},
+        #{demandType,jdbcType=VARCHAR},
+        #{vwoName,jdbcType=VARCHAR},
+        #{vwoStatus,jdbcType=INTEGER},
+        #{vwoExpectExecuteTime,jdbcType=TIMESTAMP},
+        #{userDeptName,jdbcType=VARCHAR},
+        #{contactPhoneNum,jdbcType=VARCHAR},
+        #{vwoDemandFinishTime,jdbcType=TIMESTAMP},
+        #{vwoChangeType,jdbcType=INTEGER},
+        #{vwoCostBearingDept,jdbcType=VARCHAR},
+        #{vwoListedType,jdbcType=INTEGER},
+        #{vwoConnectedVwo,jdbcType=VARCHAR},
+        #{vwoStartEffectiveTime,jdbcType=TIMESTAMP},
+        #{vwoEndEffectiveTime,jdbcType=TIMESTAMP},
+        #{vwoProjectStage,jdbcType=VARCHAR},
+        #{vwoConnectedUser,jdbcType=VARCHAR},
+        #{vwoConnectedUserDept,jdbcType=VARCHAR},
+        #{vwoConnectedPart,jdbcType=VARCHAR},
+        #{vwoConnectedPartName,jdbcType=VARCHAR},
+        #{vwoChangeReason,jdbcType=VARCHAR}
+    </sql>
+    <!--主键搜索-->
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>,
+        <include refid="VWO_Extend_Column"/>
+        from HZ_VWO_INFO
+        where ID = #{id,jdbcType=DECIMAL}
+    </select>
+    <select id="selectListByProjectUid" parameterType="java.util.Map"
+            resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>,
+        <include refid="VWO_Extend_Column"/>
+        from
+        ( select
+        <include refid="Base_Column_List"/>,
+        <include refid="VWO_Extend_Column"/>,
+        ROWNUM as rowno
+        from HZ_VWO_INFO t where 1=1
+        and t.PROJECT_UID=#{projectUid,jdbcType=VARCHAR}
+        <if test="param.limit!=null and  param.page!=null">
+            and ROWNUM &lt;= ${param.page}*${param.limit}
+        </if>
+        ) temp
+        <if test="param.offset!=null">
+            where temp.rowno &gt;= ${param.offset}+1
+        </if>
+        <if test="param.sort!=null">
+            order by ${param.sort}
+        </if>
+        <if test="param.order!=null">
+            ${param.order}
+        </if>
+        <if test="param.order==null">
+            ASC
+        </if>
+    </select>
+    <select id="tellMeHowManyOfIt" parameterType="java.lang.String" resultType="java.lang.Integer">
+    select COUNT (*) from HZ_VWO_INFO where PROJECT_UID=#{projectUid}
+    </select>
+
+    <!--查询区域内最大的VWO号-->
+    <select id="findMaxAreaVwoNum" resultMap="BaseResultMap">
+        select max(t.vwo_num) as VWO_NUM
+        from HZ_VWO_INFO t
+        where t.vwo_num like
+        (select 'VC'||to_char(sysdate,'yyyy')||'%' from dual)
+    </select>
+    <!--主键删除-->
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from HZ_VWO_INFO
+    where ID = #{id,jdbcType=DECIMAL}
+  </delete>
+    <!--插入1个记录，返回主键-->
+    <insert id="insert" parameterType="sql.pojo.cfg.vwo.HzVwoInfo">
+
+        <!--
+        对于 Oracle 而言, 需要使用 selectKey 来生成主键值，
+        order="BEFORE": 先于 INSERT 执行
+        selectKey 的标签体: 指定生成主键的查询语句. SELECT 序列名.nextval FROM dual
+        keyColumn: 使用哪一列的值来进行赋值 ,在oracle中可以省略不写
+        keyProperty: 把标签体的查询结果赋给 bean 的哪一个属性.
+        resultType: 执行标签体查询的结果类型.
+        注意: 下面编写 SQL 时, 主键不能再次使用序列生成. 而要使用 #{keyProperty}
+        -->
+        <selectKey order="BEFORE"
+                   keyColumn="id" keyProperty="id" resultType="java.lang.Long">
+            select Seq_Hz_Vwo_Id.Nextval from dual
+        </selectKey>
+
+        insert into HZ_VWO_INFO (
+        <include refid="Base_Column_List"/>,
+        <include refid="VWO_Extend_Column"/>
+        )
+        values (
+        <include refid="Values_Of_Result"/>,
+        <include refid="Values_Of_Extend_Column"/>
+        )
+    </insert>
+    <!--主键更新-->
+    <update id="updateByPrimaryKey" parameterType="sql.pojo.cfg.vwo.HzVwoInfo">
+        update HZ_VWO_INFO
+        <set>
+            <!--审批类型-->
+            <if test="approvalType!=null">
+                VWO_APPROVAL_TYPE=#{approvalType,jdbcType=VARCHAR},
+            </if>
+            <!--需求类型-->
+            <if test="demandType!=null">
+                VWO_DEMAND_TYPE=#{demandType,jdbcType=VARCHAR},
+            </if>
+            <!--vwo名-->
+            <if test="vwoName!=null">
+                VWO_NAME=#{vwoName,jdbcType=VARCHAR},
+            </if>
+            <!--vwo状态-->
+            <if test="vwoStatus!=null">
+                VWO_STATUS=#{vwoStatus,jdbcType=INTEGER},
+            </if>
+            <!--预计实施时间-->
+            <if test="vwoExpectExecuteTime!=null">
+                VWO_EXPECT_EXECUTE_TIME=#{vwoExpectExecuteTime,jdbcType=TIMESTAMP},
+            </if>
+            <!--结束人-->
+            <if test="vwoFinisher!=null">
+                VWO_FINISHER = #{vwoFinisher,jdbcType=VARCHAR},
+            </if>
+            <!--结束时间-->
+            <if test="vwoFinishDate!=null">
+                VWO_FINISH_DATE = #{vwoFinishDate,jdbcType=TIMESTAMP},
+            </if>
+            <!--部门名称-->
+            <if test="userDeptName!=null">
+                USER_Dept_NAME = #{userDeptName,jdbcType=VARCHAR},
+            </if>
+            <!--联系电话-->
+            <if test="contactPhoneNum!=null">
+                CONTACT_PHONE_NUM = #{contactPhoneNum,jdbcType=VARCHAR},
+            </if>
+            <!--要求完成时间-->
+            <if test="vwoDemandFinishTime!=null">
+                VWO_DEMAND_FINISH_TIME = #{vwoDemandFinishTime,jdbcType=VARCHAR},
+            </if>
+            <!--变更类型-->
+            <if test="vwoChangeType!=null">
+                VWO_CHANGE_TYPE = #{vwoChangeType,jdbcType=VARCHAR},
+            </if>
+            <!--费用承担部门-->
+            <if test="vwoCostBearingDept!=null">
+                VWO_COST_BEARING_DEPT = #{vwoCostBearingDept,jdbcType=VARCHAR},
+            </if>
+            <!--上市类型-->
+            <if test="vwoListedType!=null">
+                VWO_LISTED_TYPE = #{vwoListedType,jdbcType=VARCHAR},
+            </if>
+            <!--关联的VWO号-->
+            <if test="vwoConnectedVwo!=null">
+                VWO_CONNECTED_VWO = #{vwoConnectedVwo,jdbcType=VARCHAR},
+            </if>
+            <!--启动生效时间-->
+            <if test="vwoStartEffectiveTime!=null">
+                VWO_START_EFFECTIVE_TIME = #{vwoStartEffectiveTime,jdbcType=VARCHAR},
+            </if>
+            <!--终止生效时间-->
+            <if test="vwoEndEffectiveTime!=null">
+                VWO_END_EFFECTIVE_TIME = #{vwoEndEffectiveTime,jdbcType=VARCHAR},
+            </if>
+            <!--项目所属阶段-->
+            <if test="vwoProjectStage!=null">
+                VWO_PROJECT_STAGE = #{vwoProjectStage,jdbcType=VARCHAR},
+            </if>
+            <!--关联工程师姓名-->
+            <if test="vwoConnectedUser!=null">
+                VWO_CONNECTED_USER = #{vwoConnectedUser,jdbcType=VARCHAR},
+            </if>
+            <!--所属部门-->
+            <if test="vwoConnectedUserDept!=null">
+                VWO_CONNECTED_USER_DEPT = #{vwoConnectedUserDept,jdbcType=VARCHAR},
+            </if>
+            <!--关联零件号-->
+            <if test="vwoConnectedPart!=null">
+                VWO_CONNECTED_PART = #{vwoConnectedPart,jdbcType=VARCHAR},
+            </if>
+            <!--关联零件名称-->
+            <if test="vwoConnectedPartName!=null">
+                VWO_CONNECTED_PART_NAME = #{vwoConnectedPartName,jdbcType=VARCHAR},
+            </if>
+            <!--原因描述-->
+            <if test="vwoChangeReason!=null">
+                VWO_CHANGE_REASON = #{vwoChangeReason,jdbcType=VARCHAR},
+            </if>
+
+        </set>
+        <where>
+            ID = #{id,jdbcType=DECIMAL}
+        </where>
+    </update>
+</mapper>

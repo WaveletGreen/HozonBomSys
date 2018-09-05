@@ -1,43 +1,90 @@
 <html xmlns:th="http://www.thymeleaf.org"
-	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <head th:include="include/ofBom">
+</head>
 <meta charset="UTF-8">
 <title>BOM视图</title>
-</head>
 
 <body class="content-body">
-	<div class="panel-body">
-		<div class="col-lg-4">
-			<span class="infoToUser">请输入需要查询的bom数模行ID</span>
-			<div class="input-group">
-				<input id="text1" class="form-control" type="text" name="doSubmit1"
-					placeholder="请输入需要查找的bom"
-					value="d050cb5e-2f54-4782-92dc-6cf750e0b066"> <span
-					class="input-group-btn">
-					<button class="btn btn-default" id="doSubmit1" type="button">查询</button>
-				</span>
-			</div>
-		</div>
-		<div class="content col-lg-12" id="content"></div>
-	</div>
-	<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
-		aria-labelledby="myModalLabel" aria-hidden="true">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal"
-						aria-hidden="true">×</button>
-					<h4 class="modal-title" id="myModalLabel">操作错误</h4>
-				</div>
-				<div class="modal-body">请输入正确的数模层ID</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-default" data-dismiss="modal">关闭
-					</button>
-				</div>
-			</div>
-		</div>
-	</div>
-	<script th:src="@{/js/stage/bom-stage.js}"></script>
-</body>
+<div class="panel-body">
+    <div class="col-lg-4">
+        <div class="input-group">
+            <button class="btn btn-default" id="doSubmit1" type="button">查询BOM数据</button>
+        </div>
+    </div>
+    <div class="content col-lg-12" id="content"></div>
+</div>
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-hidden="true">×
+                </button>
+                <h4 class="modal-title" id="myModalLabel">操作错误</h4>
+            </div>
+            <div class="modal-body">发生错误，请在主页选择项目后重试</div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<table>
+    <tr>
+        <td>1</td>
+        <td>2</td>
+        <td><input type="button" value="编辑"></td>
+    </tr>
+    <tr>
+        <td>2</td>
+        <td>5</td>
+        <td><input type="button" value="编辑"></td>
+    </tr>
+    <tr>
+        <td>3</td>
+        <td>8</td>
+        <td><input type="button" value="编辑"></td>
+    </tr>
+    <tr>
+        <td>4</td>
+        <td>2</td>
+        <td><input type="button" value="编辑"></td>
+    </tr>
+</table>
 
+<button id="addTo"> add</button>
+<table>
+    <tr id="tr_1">
+        <td><input type="button" value="编辑"></td>
+        <td>1</td>
+        <td>2</td>
+    </tr>
+</table>
+
+<script th:src="@{/js/stage/bom-stage.js}"></script>
+<script>
+    $(function () {
+        $("input:button").click(function () {
+            str = $(this).val() == "编辑" ? "确定" : "编辑";
+            $(this).val(str);   // 按钮被点击后，在“编辑”和“确定”之间切换
+            $(this).parent().siblings("td").each(function () {  // 获取当前行的其他单元格
+                obj_text = $(this).find("input:text");    // 判断单元格下是否有文本框
+                if (!obj_text.length)   // 如果没有文本框，则添加文本框使之可以编辑
+                    $(this).html("<input type='text' value='" + $(this).text() + "'>");
+                else   // 如果已经存在文本框，则将其显示为文本框修改的值
+                    $(this).html(obj_text.val());
+            });
+        });
+    });
+    var i = 0;
+    $(function () {
+        $("#addTo").click(function () {
+            $("#tr_1").append("<td>追加值" + (++i) + "</td>");
+        });
+    })
+</script>
+</body>
 </html>
