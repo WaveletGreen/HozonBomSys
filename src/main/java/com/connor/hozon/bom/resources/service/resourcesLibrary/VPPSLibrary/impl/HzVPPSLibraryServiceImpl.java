@@ -107,6 +107,25 @@ public class HzVPPSLibraryServiceImpl implements HzVPPSLibraryService {
      */
     @Override
     public HzVPPSLibraryRespDTO findHzVPPSLibraryById(String puid) {
+        HzVPPSLibrary library = hzVPPSLibraryDao.findVPPSLibrary(puid);
+        try {
+            if (library != null) {
+                HzVPPSLibraryRespDTO respDTO = new HzVPPSLibraryRespDTO();
+                respDTO.setPuid(library.getPuid());
+                respDTO.setVppsLevel(library.getVppsLevel());
+                respDTO.setVsgCode(library.getVsgCode());
+                respDTO.setVppsCode(library.getVppsCode());
+                respDTO.setVppsEnDesc(library.getVppsEnDesc());
+                respDTO.setVppsChDesc(library.getVppsChDesc());
+                respDTO.setUpc(library.getUpc());
+                respDTO.setFna(library.getFna());
+                respDTO.setFnaChDesc(library.getFnaChDesc());
+                respDTO.setStandardPartCode(library.getStandardPartCode());
+                return respDTO;
+            }
+        } catch (Exception e) {
+            return null;
+        }
         return null;
     }
 
@@ -118,7 +137,30 @@ public class HzVPPSLibraryServiceImpl implements HzVPPSLibraryService {
      */
     @Override
     public OperateResultMessageRespDTO updateHzVPPSLibrary(AddHzVPPSLibraryReqDTO reqDTO) {
-        return null;
+        try {
+            boolean b = PrivilegeUtil.writePrivilege();
+            if (!b) {
+                return OperateResultMessageRespDTO.getFailPrivilege();
+            }
+            HzVPPSLibrary library = new HzVPPSLibrary();
+            library.setPuid(reqDTO.getPuid());
+            library.setVppsLevel(reqDTO.getVppsLevel());
+            library.setVsgCode(reqDTO.getVsgCode());
+            library.setVppsCode(reqDTO.getVppsCode());
+            library.setVppsEnDesc(reqDTO.getVppsEnDesc());
+            library.setVppsChDesc(reqDTO.getVppsChDesc());
+            library.setUpc(reqDTO.getUpc());
+            library.setFna(reqDTO.getFna());
+            library.setFnaChDesc(reqDTO.getFnaChDesc());
+            library.setStandardPartCode(reqDTO.getStandardPartCode());
+            int i = hzVPPSLibraryDao.update(library);
+            if (i>0){
+                return OperateResultMessageRespDTO.getSuccessResult();
+            }
+        } catch (Exception e) {
+            return OperateResultMessageRespDTO.getFailResult();
+        }
+        return OperateResultMessageRespDTO.getFailResult();
     }
 
     /**
@@ -129,6 +171,19 @@ public class HzVPPSLibraryServiceImpl implements HzVPPSLibraryService {
      */
     @Override
     public OperateResultMessageRespDTO deleteHzVPPSLibrary(String puid) {
-        return null;
+        try {
+            boolean b  = PrivilegeUtil.writePrivilege();
+            if(!b){
+                return OperateResultMessageRespDTO.getFailPrivilege();
+            }
+
+            int i = hzVPPSLibraryDao.delete(puid);
+            if (i>0){
+                return OperateResultMessageRespDTO.getSuccessResult();
+            }
+        } catch (Exception e) {
+            return OperateResultMessageRespDTO.getFailResult();
+        }
+        return OperateResultMessageRespDTO.getFailResult();
     }
 }

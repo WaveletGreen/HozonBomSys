@@ -202,7 +202,7 @@
         UPDATE_TIME = #{updateTime,jdbcType=DATE},
       </if>
       <if test="status != null">
-        STATUS = #{status,jdbcType=DECIMAL},
+        STATUS = #{status,jdbcType=DECIMAL}
       </if>
     </set>
     where PUID = #{puid,jdbcType=VARCHAR}

@@ -10,6 +10,7 @@ import com.connor.hozon.bom.resources.service.resourcesLibrary.VPPSLibrary.HzVPP
 import com.connor.hozon.bom.resources.util.ResultMessageBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -99,6 +100,38 @@ public class VPPSLibraryController extends BaseController {
     @RequestMapping(value = "add",method = RequestMethod.POST)
     public void addVPPSLibrary(@RequestBody AddHzVPPSLibraryReqDTO dto, HttpServletResponse response){
         OperateResultMessageRespDTO respDTO = hzVPPSLibraryService.insertHzVPPSLibrary(dto);
+        writeAjaxJSONResponse(ResultMessageBuilder.build(OperateResultMessageRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
+    }
+
+    /**
+     * 跳转到修改页面
+     * @param puid
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "getUpdate",method = RequestMethod.GET)
+    public String getUpdateVPPSLibraryToPage(String puid, Model model){
+        HzVPPSLibraryRespDTO respDTO = hzVPPSLibraryService.findHzVPPSLibraryById(puid);
+        if (respDTO == null){
+            return null;
+        }
+        model.addAttribute("data",respDTO);
+        return "resourcesLibrary/VPPSLibrary/updateVPPSLibrary";
+    }
+
+    /**
+     * 编辑一条数据
+     * @param dto
+     * @param response
+     */
+    @RequestMapping(value = "update",method = RequestMethod.POST)
+    public void updateVPPSLibrary(@RequestBody AddHzVPPSLibraryReqDTO dto,HttpServletResponse response){
+        OperateResultMessageRespDTO respDTO =hzVPPSLibraryService.updateHzVPPSLibrary(dto);
+        writeAjaxJSONResponse(ResultMessageBuilder.build(OperateResultMessageRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
+    }
+    @RequestMapping(value = "delete",method = RequestMethod.POST)
+    public void deleteVPPSLibrary(String puid,HttpServletResponse response){
+        OperateResultMessageRespDTO respDTO =hzVPPSLibraryService.deleteHzVPPSLibrary(puid);
         writeAjaxJSONResponse(ResultMessageBuilder.build(OperateResultMessageRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
     }
 }

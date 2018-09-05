@@ -151,7 +151,7 @@ function initTable(url) {
                                             else if (!result.success) {
                                                 window.Ewin.alert({message: result.errMsg});
                                             }
-                                            $('#dictionaryLibraryTable').bootstrapTable("refresh");
+                                            $('#VPPSLibraryTable').bootstrapTable("refresh");
                                         },
                                         error: function (info) {
                                             window.Ewin.alert({message: "操作删除:" + info.status});
