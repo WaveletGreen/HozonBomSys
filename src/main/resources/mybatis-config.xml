@@ -78,6 +78,8 @@
         <mapper resource="sql/mapper/cfg/xmapper/HzFullCfgWithCfgMapper.xml"/>
         <mapper resource="sql/mapper/cfg/xmapper/HzDerivativeMaterielBasicMapper.xml"/>
         <mapper resource="sql/mapper/cfg/xmapper/HzDerivativeMaterielDetailMapper.xml"/>
+        <mapper resource="sql/mapper/cfg/relevance/mapper/HzRelevanceBasicMapper.xml"/>
+        <mapper resource="sql/mapper/cfg/relevance/mapper/HzRelevanceRelationMapper.xml"/>
         <!--流程-->
         <!--VWO-->
         <mapper resource="sql/mapper/cfg/vwo/mapper/HzFeatureChangeMapper.xml"/>
@@ -85,6 +87,8 @@
         <mapper resource="sql/mapper/cfg/vwo/mapper/HzVwoInformChangesMapper.xml"/>
         <mapper resource="sql/mapper/cfg/vwo/mapper/HzVwoInfluenceDeptMapper.xml"/>
         <mapper resource="sql/mapper/cfg/vwo/mapper/HzVwoInfluenceUserMapper.xml"/>
+        <!--CODPWO表单-->
+        <mapper resource="sql/mapper/change.xmapper/HzBreakPointMapper.xml"/>
 
         <!--项目-->
         <mapper resource="sql/mapper/project.xmapper/HzMaterielMapper.xml"/>
