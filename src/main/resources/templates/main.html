@@ -232,6 +232,11 @@
     function doChangeProject(projectUid, projectName) {
         $("#project").val(projectUid);
         $("#currentProjectHead").text(projectName);
+        myRefresh(projectUid);
+    }
+
+    function myRefresh(projectUid) {
+        $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doRefresh();
     }
 
 </script>

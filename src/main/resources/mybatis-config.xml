@@ -10,6 +10,11 @@
     </settings>
     <!--该文件请放到resource下，便于单独读到，不需要配置-->
     <typeAliases>
+        <typeAlias type="java.lang.String" alias="String"/>
+        <typeAlias type="java.lang.Integer" alias="Integer"/>
+        <typeAlias type="java.lang.Long" alias="Long"/>
+        <typeAlias type="java.util.List" alias="List"/>
+        <typeAlias type="java.util.Map" alias="Map"/>
     </typeAliases>
     <environments default="development">
         <environment id="development">

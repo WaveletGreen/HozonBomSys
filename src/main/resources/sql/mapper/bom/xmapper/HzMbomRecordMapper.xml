@@ -189,7 +189,7 @@
             #{item.linePuid,jdbcType=VARCHAR}, #{item.lineId,jdbcType=VARCHAR}, #{item.is2Y,jdbcType=INTEGER},
             #{item.isPart,jdbcType=INTEGER}, #{item.isDept,jdbcType=INTEGER}, #{item.pBomOfWhichDept,jdbcType=VARCHAR},
             #{item.pBomLinePartName,jdbcType=VARCHAR}, #{item.pBomLinePartClass,jdbcType=VARCHAR}, #{item.pBomLinePartEnName,jdbcType=VARCHAR},
-            #{item.pBomLinePartResource,jdbcType=VARCHAR}，#{item.orderNum,jdbcType=INTEGER},2,
+            #{item.pBomLinePartResource,jdbcType=VARCHAR},#{item.orderNum,jdbcType=INTEGER},2,
             sysdate, sysdate, #{item.createName,jdbcType=VARCHAR},#{item.updateName,jdbcType=VARCHAR}
             from DUAL
         </foreach>
