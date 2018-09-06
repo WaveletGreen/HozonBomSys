@@ -16,6 +16,8 @@
         <result column="DMB_UPDATER" jdbcType="OTHER" property="dmbUpdater"/>
         <!--更新时间-->
         <result column="DMB_UPDATE_DATE" jdbcType="TIMESTAMP" property="dmbUpdateDate"/>
+        <!--项目UID-->
+        <result column="DMB_PROJECT_UID" jdbcType="VARCHAR" property="dmbProjectUid"/>
         <!--保留字段1-->
         <result column="DMB_RESERVED_1" jdbcType="VARCHAR" property="dmbReserved1"/>
         <!--保留字段2-->
@@ -35,19 +37,35 @@
         DMB_CREATE_DATE,
         DMB_UPDATER,
         DMB_UPDATE_DATE,
+        DMB_PROJECT_UID,
         DMB_RESERVED_1,
         DMB_RESERVED_2,
         DMB_RESERVED_3,
         DMB_RESERVED_4,
         DMB_RESERVED_5
   </sql>
-    <select id="selectByPrimaryKey" parameterType="java.math.BigDecimal" resultMap="BaseResultMap">
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from HZ_DERIVATIVE_MATERIEL_BASIC
         where ID = #{id,jdbcType=DECIMAL}
     </select>
-    <delete id="deleteByPrimaryKey" parameterType="java.math.BigDecimal">
+    <select id="selectByProjectUid" parameterType="java.util.Map" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from HZ_DERIVATIVE_MATERIEL_BASIC t
+        where DMB_PROJECT_UID = #{basic.dmbProjectUid,jdbcType=VARCHAR}
+        order by t.id
+    </select>
+    <select id="selectByModelAndColorUid" parameterType="sql.pojo.cfg.HzDerivativeMaterielBasic"
+            resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from HZ_DERIVATIVE_MATERIEL_BASIC t
+        where DMB_MODEL_UID = #{dmbModelUid,jdbcType=VARCHAR}
+        and DMB_COLOR_MODEL_UID=#{dmbColorModelUid,jdbcType=VARCHAR}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from HZ_DERIVATIVE_MATERIEL_BASIC
     where ID = #{id,jdbcType=DECIMAL}
   </delete>
@@ -56,15 +74,35 @@
                    keyColumn="id" keyProperty="id" resultType="java.lang.Long">
             select seq_hz_dmb_id.Nextval from dual
         </selectKey>
-        insert into HZ_DERIVATIVE_MATERIEL_BASIC (ID, DMB_MODEL_UID, DMB_COLOR_MODEL_UID,
-        DMB_CREATOR, DMB_CREATE_DATE, DMB_UPDATER,
-        DMB_UPDATE_DATE, DMB_RESERVED_1, DMB_RESERVED_2,
-        DMB_RESERVED_3, DMB_RESERVED_4, DMB_RESERVED_5
+        insert into HZ_DERIVATIVE_MATERIEL_BASIC (
+        ID,
+        DMB_MODEL_UID,
+        DMB_COLOR_MODEL_UID,
+        DMB_CREATOR,
+        DMB_CREATE_DATE,
+        DMB_UPDATER,
+        DMB_UPDATE_DATE,
+        DMB_PROJECT_UID,
+        DMB_RESERVED_1,
+        DMB_RESERVED_2,
+        DMB_RESERVED_3,
+        DMB_RESERVED_4,
+        DMB_RESERVED_5
         )
-        values (#{id,jdbcType=DECIMAL}, #{dmbModelUid,jdbcType=VARCHAR}, #{dmbColorModelUid,jdbcType=VARCHAR},
-        #{dmbCreator,jdbcType=OTHER}, sysdate, #{dmbUpdater,jdbcType=OTHER},
-        sysdate, #{dmbReserved1,jdbcType=VARCHAR}, #{dmbReserved2,jdbcType=VARCHAR},
-        #{dmbReserved3,jdbcType=VARCHAR}, #{dmbReserved4,jdbcType=VARCHAR}, #{dmbReserved5,jdbcType=VARCHAR}
+        values (
+        #{id,jdbcType=DECIMAL},
+        #{dmbModelUid,jdbcType=VARCHAR},
+        #{dmbColorModelUid,jdbcType=VARCHAR},
+        #{dmbCreator,jdbcType=OTHER},
+        sysdate,
+        #{dmbUpdater,jdbcType=OTHER},
+        sysdate,
+        #{dmbProjectUid,jdbcType=VARCHAR},
+        #{dmbReserved1,jdbcType=VARCHAR},
+        #{dmbReserved2,jdbcType=VARCHAR},
+        #{dmbReserved3,jdbcType=VARCHAR},
+        #{dmbReserved4,jdbcType=VARCHAR},
+        #{dmbReserved5,jdbcType=VARCHAR}
         )
     </insert>
     <insert id="insertSelective" parameterType="sql.pojo.cfg.HzDerivativeMaterielBasic">
@@ -91,6 +129,9 @@
                 DMB_UPDATER,
             </if>
             DMB_UPDATE_DATE,
+            <if test="dmbProjectUid != null">
+                DMB_PROJECT_UID,
+            </if>
             <if test="dmbReserved1 != null">
                 DMB_RESERVED_1,
             </if>
@@ -125,6 +166,9 @@
                 #{dmbUpdater,jdbcType=OTHER},
             </if>
             sysdate,
+            <if test="dmbProjectUid != null">
+                #{dmbProjectUid,jdbcType=VARCHAR},
+            </if>
             <if test="dmbReserved1 != null">
                 #{dmbReserved1,jdbcType=VARCHAR},
             </if>

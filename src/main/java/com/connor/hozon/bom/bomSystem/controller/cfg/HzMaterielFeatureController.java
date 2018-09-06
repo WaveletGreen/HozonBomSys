@@ -144,6 +144,7 @@ public class HzMaterielFeatureController extends ExtraIntegrate {
         Map<String, Object> result = new HashMap<>();
         Map<String, Object> data = parse2(projectPuid);
         List<Map<String, Object>> list = new ArrayList<>();
+
         data.forEach((key, value) -> list.add((Map<String, Object>) value));
         result.put("result", list);
         result.put("totalCount", list.size());
@@ -203,9 +204,9 @@ public class HzMaterielFeatureController extends ExtraIntegrate {
                 _result.put("puid", value.getpCfg0ModelRecord());
                 //族
                 _result.put("cfg0MainPuid", value.getpOfCfg0MainRecord());
-                _result.put("modeBasiceDetail", value.getpCfg0ModelBasicDetail());
+                _result.put("modeBasicDetail", value.getpCfg0ModelBasicDetail());
                 //目前只有无色件
-                _result.put("modeBasiceDetailDesc", value.getObjectName());
+                _result.put("modeBasicDetailDesc", value.getObjectName());
                 if (superMateriel != null) {
                     _result.put("superMateriel", superMateriel.getpMaterielCode());
                 } else {

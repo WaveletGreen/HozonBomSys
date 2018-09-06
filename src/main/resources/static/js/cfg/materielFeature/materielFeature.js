@@ -45,8 +45,8 @@ function loadData() {
             // column.push({field: 'puid', title: 'puid'});
             // column.push({field: 'puidOfModelFeature', title: 'puidOfModelFeature'});
             // column.push({field: 'cfg0MainPuid', title: 'cfg0MainPuid'});
-            column.push({field: 'modeBasiceDetail', title: '基本信息代码'});
-            column.push({field: 'modeBasiceDetailDesc', title: '基本信息'});
+            column.push({field: 'modeBasicDetail', title: '基本信息代码'});
+            column.push({field: 'modeBasicDetailDesc', title: '基本信息'});
             column.push({field: 'superMateriel', title: '超级物料'});
             for (var i = 0; i < data.length; i++) {
                 var josn = {
@@ -61,7 +61,7 @@ function loadData() {
                 column.push(josn);
             }
             $table.bootstrapTable({
-                url: "materiel/loadAllByProjectPuid?projectPuid=" + projectPuid,
+                url: "materielV2/loadComposes?projectPuid=" + projectPuid,
                 method: 'get',
                 height: $(window.parent.document).find("#wrapper").height() - 150,//$(window.parent.document).find("#wrapper").height() - document.body.offsetHeight - 45,
                 width: $(window).width(),
@@ -76,20 +76,20 @@ function loadData() {
                 // sortable: true,                     //是否启用排序
                 // sortOrder: "asc",                   //排序方式
                 toolbars: [
-                    // {
-                    //     text: '添加衍生物料',
-                    //     iconCls: 'glyphicon glyphicon-plus',
-                    //     handler: function () {
-                    //         window.Ewin.dialog({
-                    //             // 这个puid就是车型模型的puid，直接修改了车型模型的基本信息（在bom系统维护的字段）
-                    //             title: "修改基本信息",
-                    //             url: "materielV2/composePage?projectUid=" + projectPuid,
-                    //             gridId: "gridId",
-                    //             width: 400,
-                    //             height: 450
-                    //         });
-                    //     }
-                    // },
+                    {
+                        text: '添加衍生物料',
+                        iconCls: 'glyphicon glyphicon-plus',
+                        handler: function () {
+                            window.Ewin.dialog({
+                                // 这个puid就是车型模型的puid，直接修改了车型模型的基本信息（在bom系统维护的字段）
+                                title: "修改基本信息",
+                                url: "materielV2/composePage?projectUid=" + projectPuid,
+                                gridId: "gridId",
+                                width: 400,
+                                height: 450
+                            });
+                        }
+                    },
                     {
                         text: '修改基本信息',
                         iconCls: 'glyphicon glyphicon-pencil',

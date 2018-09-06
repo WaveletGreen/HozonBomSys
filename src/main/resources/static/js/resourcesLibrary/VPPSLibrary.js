@@ -1,39 +1,37 @@
 /**
  * Created with IntelliJ IDEA.
  * User: xlf
- * Date: 2018/8/28
- * Time: 16:58
+ * Date: 2018/9/4
+ * Time: 16:02
  */
-
 $(document).ready((function () {
-    var projectId = $("#project", window.top.document).val();
-    var url = "dict/list";
+    var url = "vpps/list";
     initTable(url);
 }))
 
 function doQuery() {
     // $('#dictionaryLibraryTable').bootstrapTable('refresh');    //刷新表格
-    var url = "dict/list";
-    var groupCode = $("#groupCode").val();
-    url += "?groupCode=" + groupCode;
-    var groupCh = $("#groupCh").val();
-    url += "&groupCh=" + groupCh;
-    var famillyCode = $("#famillyCode").val();
-    url += "&famillyCode=" + famillyCode;
-    var famillyCh = $("#famillyCh").val();
-    url += "&famillyCh=" + famillyCh;
-    var valueDescCh = $("#valueDescCh").val();
-    url += "&valueDescCh=" + valueDescCh;
-    var eigenValue = $("#eigenValue").val();
-    url += "&eigenValue=" + eigenValue;
+    var url = "vpps/list";
+    var vppsLevel = $("#vppsLevel").val();
+    url += "?vppsLevel=" + vppsLevel;
+    var vsgCode = $("#vsgCode").val();
+    url += "&vsgCode=" + vsgCode;
+    var vppsCode = $("#vppsCode").val();
+    url += "&vppsCode=" + vppsCode;
+    var upc = $("#upc").val();
+    url += "&upc=" + upc;
+    var fna = $("#fna").val();
+    url += "&fna=" + fna;
+    var standardPartCode = $("#standardPartCode").val();
+    url += "&standardPartCode=" + standardPartCode;
     initTable(url);
-    $('#dictionaryLibraryTable').bootstrapTable('destroy');
+    $('#VPPSLibraryTable').bootstrapTable('destroy');
 }
 
 function initTable(url) {
     var column = [];
     $.ajax({
-        url: "dict/title",
+        url: "vpps/title",
         type: "GET",
         success: function (result) {
             var column = [];
@@ -55,7 +53,7 @@ function initTable(url) {
                 }
             }
             ;
-            $('#dictionaryLibraryTable').bootstrapTable({
+            $('#VPPSLibraryTable').bootstrapTable({
                 url: url,
                 method: 'GET',
                 dataType: 'json',
@@ -64,7 +62,7 @@ function initTable(url) {
                 sidePagination: "server",                    //分页方式：client客户端分页，server服务端分页（*）
                 height: $(window.parent.document).find("#wrapper").height() - 100,
                 width: $(window).width(),
-                formId: "queryDictionaryLibrary",
+                formId: "queryVPPSLibrary",
                 undefinedText: "",                           //当数据为 undefined 时显示的字符
                 pagination: true,
                 pageNumber: 1,                                //初始化加载第一页，默认第一页
@@ -85,11 +83,11 @@ function initTable(url) {
                         text: '添加',
                         iconCls: 'glyphicon glyphicon-plus',
                         handler: function () {
-                            var rows = $('#dictionaryLibraryTable').bootstrapTable('getSelections');
+                            var rows = $('#VPPSLibraryTable').bootstrapTable('getSelections');
                             //只能选一条
                             window.Ewin.dialog({
                                 title: "添加",
-                                url: "dict/getAdd",
+                                url: "vpps/getAdd",
                                 gridId: "gridId",
                                 width: 500,
                                 height: 500
@@ -100,7 +98,7 @@ function initTable(url) {
                         text: '修改',
                         iconCls: 'glyphicon glyphicon-pencil',
                         handler: function () {
-                            var rows = $('#dictionaryLibraryTable').bootstrapTable('getSelections');
+                            var rows = $('#VPPSLibraryTable').bootstrapTable('getSelections');
                             //只能选一条
                             if (rows.length != 1) {
                                 window.Ewin.alert({message: '请选择一条需要修改的数据!'});
@@ -108,7 +106,7 @@ function initTable(url) {
                             }
                             window.Ewin.dialog({
                                 title: "修改",
-                                url: "dict/getUpdate?puid=" + rows[0].puid,
+                                url: "vpps/getUpdate?puid=" + rows[0].puid,
                                 gridId: "gridId",
                                 width: 500,
                                 height: 500
@@ -119,7 +117,7 @@ function initTable(url) {
                         text: '删除',
                         iconCls: 'glyphicon glyphicon-remove',
                         handler: function () {
-                            var rows = $('#dictionaryLibraryTable').bootstrapTable('getSelections');
+                            var rows = $('#VPPSLibraryTable').bootstrapTable('getSelections');
                             if (rows.length == 0) {
                                 window.Ewin.alert({message: '请选择一条需要删除的数据!'});
                                 return false;
@@ -136,7 +134,7 @@ function initTable(url) {
                                     $.ajax({
                                         type: "POST",
                                         //ajax需要添加打包名
-                                        url: "dict/delete?puid=" + rows[0].puid,
+                                        url: "vpps/delete?puid=" + rows[0].puid,
                                         // data: JSON.stringify(rows),
                                         contentType: "application/json",
                                         success: function (result) {
@@ -153,7 +151,7 @@ function initTable(url) {
                                             else if (!result.success) {
                                                 window.Ewin.alert({message: result.errMsg});
                                             }
-                                            $('#dictionaryLibraryTable').bootstrapTable("refresh");
+                                            $('#VPPSLibraryTable').bootstrapTable("refresh");
                                         },
                                         error: function (info) {
                                             window.Ewin.alert({message: "操作删除:" + info.status});
@@ -164,145 +162,6 @@ function initTable(url) {
                         }
                     },
                 ],
-                /*columns: [
-                    {
-                        checkbox: true,
-                        align:'center',
-                    },
-                    {
-                        field: 'No',
-                        title: '序号',
-                        align : 'center',
-                        valign : 'middle',
-                        sortable : true
-                    },
-                    {
-                        field : 'professionCh',
-                        title : '专业部',
-                        align : 'center',
-                        valign : 'middle',
-                        sortable : true
-                    },
-                    {
-                        field : 'professionEn',
-                        title : 'Profession',
-                        align : 'center',
-                        valign : 'middle',
-                        sortable : true
-                    },
-                    {
-                        field : 'classificationCh',
-                        title : '分类',
-                        align : 'center',
-                        valign : 'middle',
-                        sortable : true
-                    },
-                    {
-                        field : 'classificationEn',
-                        title : 'classification',
-                        align : 'center',
-                        valign : 'middle',
-                        sortable : true
-                    },
-                    {
-                        field : 'groupCode',
-                        title : '特征组代码',
-                        align : 'center',
-                        valign : 'middle',
-                        sortable : true
-                    },
-                    {
-                        field : 'groupCh',
-                        title : '特征组',
-                        align : 'center',
-                        valign : 'middle',
-                        sortable : true
-                    },
-                    {
-                        field : 'groupEn',
-                        title : 'group',
-                        align : 'center',
-                        valign : 'middle',
-                        sortable : true
-                    },
-                    {
-                        field : 'famillyCode',
-                        title : '特征族代码',
-                        align : 'center',
-                        valign : 'middle',
-                        sortable : true
-                    },
-                    {
-                        field : 'famillyCh',
-                        title : '特征族',
-                        align : 'center',
-                        valign : 'middle',
-                        sortable : true
-                    },
-                    {
-                        field : 'famillyEn',
-                        title : 'familly',
-                        align : 'center',
-                        valign : 'middle',
-                        sortable : true
-                    },
-                    {
-                        field : 'eigenValue',
-                        title : '特征值',
-                        align : 'center',
-                        valign : 'middle',
-                        sortable : true
-                    },
-                    {
-                        field : 'valueDescCh',
-                        title : '特征值描述',
-                        align : 'center',
-                        valign : 'middle',
-                        sortable : true
-                    },
-                    {
-                        field : 'valueDescEn',
-                        title : 'value description',
-                        align : 'center',
-                        valign : 'middle',
-                        sortable : true
-                    },
-                    {
-                        field : 'type',
-                        title : '类型',
-                        align : 'center',
-                        valign : 'middle',
-                        sortable : true
-                    },
-                    {
-                        field : 'valueSource',
-                        title : '特征值来源',
-                        align : 'center',
-                        valign : 'middle',
-                        sortable : true
-                    },
-                    {
-                        field : 'effectTime',
-                        title : '生效时间',
-                        align : 'center',
-                        valign : 'middle',
-                        sortable : true
-                    },
-                    {
-                        field : 'failureTime',
-                        title : '失效时间',
-                        align : 'center',
-                        valign : 'middle',
-                        sortable : true
-                    },
-                    {
-                        field : 'note',
-                        title : '备注',
-                        align : 'center',
-                        valign : 'middle',
-                        sortable : true
-                    },
-                ]*/
             })
         }
     })

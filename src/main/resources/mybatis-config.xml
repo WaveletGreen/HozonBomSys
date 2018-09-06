@@ -16,7 +16,7 @@
             <transactionManager type="JDBC"/>
             <dataSource type="POOLED">
                 <property name="driver" value="oracle.jdbc.OracleDriver"/>
-                <property name="url" value="jdbc:oracle:thin:@192.168.1.111:1521:TC10"/>
+                <property name="url" value="jdbc:oracle:thin:@10.1.14.119:1521:TC10"/>
                 <property name="username" value="HOZON"/>
                 <property name="password" value="HOZON"/>
                 <!--最大的活动连接数，活动连接，就是正在与数据库交互的连接，默认是10-->
@@ -71,6 +71,8 @@
         <mapper resource="sql/mapper/cfg/xmapper/HzFullCfgMainMapper.xml"/>
         <mapper resource="sql/mapper/cfg/xmapper/HzFullCfgModelMapper.xml"/>
         <mapper resource="sql/mapper/cfg/xmapper/HzFullCfgWithCfgMapper.xml"/>
+        <mapper resource="sql/mapper/cfg/xmapper/HzDerivativeMaterielBasicMapper.xml"/>
+        <mapper resource="sql/mapper/cfg/xmapper/HzDerivativeMaterielDetailMapper.xml"/>
         <!--流程-->
         <!--VWO-->
         <mapper resource="sql/mapper/cfg/vwo/mapper/HzFeatureChangeMapper.xml"/>
@@ -104,5 +106,7 @@
         <mapper resource="sql/mapper/change.xmapper/HzEWOImpactDeptMapper.xml"/>
         <!--字典库-->
         <mapper resource="sql/mapper/resourcesLibrary/dictionaryLibrary.xmapper/HzDictionaryLibraryMapper.xml"/>
+        <!--VPPS库-->
+        <mapper resource="sql/mapper/resourcesLibrary/VPPSLibrary.xmapper/HzVPPSLibraryMapper.xml"/>
     </mappers>
 </configuration>

@@ -1,6 +1,7 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <!--User: xulf Date: 2018/8/28 Time: 20:39-->
+<!--<link th:href="@{/css/autocomplete.css}" rel="stylesheet"/>-->
 <body>
 <form id="dictionaryLibraryForm" role="form" method="post" action="dict/add">
     <div class="form-group">
@@ -80,12 +81,12 @@
     </div>
     <div class="form-group">
         <label for="effectTime">生效时间</label>
-        <input class="form-control" id="effectTime" name="effectTime" type="text"
+        <input class="form-control input-small" id="effectTime" name="effectTime" type="text"
                placeholder="请输入生效时间"/>
     </div>
     <div class="form-group">
         <label for="failureTime">失效时间</label>
-        <input class="form-control" id="failureTime" name="failureTime" type="text"
+        <input class="form-control input-small" id="failureTime" name="failureTime" type="text"
                placeholder="请输入失效时间"/>
     </div>
     <div class="form-group">
@@ -167,35 +168,54 @@
                 });
             }
         });
-
-        function formatDate() {
-            var effectTime = changeDateFormat2($('#effectTime').val());
-            var failureTime = changeDateFormat2($('#failureTime').val());
-
-            $('#effectTime').val(vwoStartEffectiveTime);
-            $('#failureTime').val(vwoEndEffectiveTime);
-            $('#effectTime').datetimepicker({
-                format: 'yyyy-mm-dd',//日期的格式
-                weekStart: 1,// 0（星期日）到6（星期六）
-                startDate: "2008-01-01",//选择器的开始日期
-                autoclose: true,//日期选择完成后是否关闭选择框
-                bootcssVer: 3,//显示向左向右的箭头
-                language: 'zh_CN',//语言
-                minView: 2,//表示日期选择的最小范围，默认是hour
-                todayBtn: true
-            });
-            $('#failureTime').datetimepicker({
-                format: 'yyyy-mm-dd',//日期的格式
-                weekStart: 1,// 0（星期日）到6（星期六）
-                startDate: "2008-01-01",//选择器的开始日期
-                autoclose: true,//日期选择完成后是否关闭选择框
-                bootcssVer: 3,//显示向左向右的箭头
-                language: 'zh_CN',//语言
-                minView: 2,//表示日期选择的最小范围，默认是hour
-                todayBtn: true
-            });
-        }
+        $('#effectTime').datetimepicker({
+            format: 'yyyy-mm-dd',//日期的格式
+            weekStart: 1,// 0（星期日）到6（星期六）
+            startDate: "2008-01-01",//选择器的开始日期
+            autoclose: true,//日期选择完成后是否关闭选择框
+            bootcssVer: 3,//显示向左向右的箭头
+            language: 'zh_CN',//语言
+            minView: 2,//表示日期选择的最小范围，默认是hour
+            todayBtn: true
+        });
+        $('#failureTime').datetimepicker({
+            format: 'yyyy-mm-dd',//日期的格式
+            weekStart: 1,// 0（星期日）到6（星期六）
+            startDate: "2008-01-01",//选择器的开始日期
+            autoclose: true,//日期选择完成后是否关闭选择框
+            bootcssVer: 3,//显示向左向右的箭头
+            language: 'zh_CN',//语言
+            minView: 2,//表示日期选择的最小范围，默认是hour
+            todayBtn: true
+        });
     })
+    // function formatDate() {
+    //     var effectTime = changeDateFormat2($('#effectTime').val());
+    //     var failureTime = changeDateFormat2($('#failureTime').val());
+    //
+    //     $('#effectTime').val(vwoStartEffectiveTime);
+    //     $('#failureTime').val(vwoEndEffectiveTime);
+    //     $('#effectTime').datetimepicker({
+    //         format: 'yyyy-mm-dd',//日期的格式
+    //         weekStart: 1,// 0（星期日）到6（星期六）
+    //         startDate: "2008-01-01",//选择器的开始日期
+    //         autoclose: true,//日期选择完成后是否关闭选择框
+    //         bootcssVer: 3,//显示向左向右的箭头
+    //         language: 'zh_CN',//语言
+    //         minView: 2,//表示日期选择的最小范围，默认是hour
+    //         todayBtn: true
+    //     });
+    //     $('#failureTime').datetimepicker({
+    //         format: 'yyyy-mm-dd',//日期的格式
+    //         weekStart: 1,// 0（星期日）到6（星期六）
+    //         startDate: "2008-01-01",//选择器的开始日期
+    //         autoclose: true,//日期选择完成后是否关闭选择框
+    //         bootcssVer: 3,//显示向左向右的箭头
+    //         language: 'zh_CN',//语言
+    //         minView: 2,//表示日期选择的最小范围，默认是hour
+    //         todayBtn: true
+    //     });
+    // }
     $(document).keydown(function(event) {
         if (event.keyCode == 13) {
             $('form').each(function() {
@@ -206,5 +226,6 @@
     ]]>
 </script>
 <script th:src="@{/layer/layer.js}"></script>
+<!--<script th:src="@{/js/autocomplete.js}"></script>-->
 </body>
 </html>

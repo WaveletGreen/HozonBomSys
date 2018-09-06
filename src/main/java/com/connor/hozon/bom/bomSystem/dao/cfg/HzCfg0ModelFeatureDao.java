@@ -32,6 +32,7 @@ public interface HzCfg0ModelFeatureDao {
 
     /**
      * 连同工厂编号一起查出来
+     *
      * @param puid
      * @return
      */
@@ -56,11 +57,10 @@ public interface HzCfg0ModelFeatureDao {
     /**
      * 根据颜色车身和车型模型的puid查找1个模型特性数据
      *
-     * @param pPertainToModel      车型模型puid
-     * @param pPertainToColorModel 颜色车身的puid
+     * @param feature 传入所属车型模型个配色模型
      * @return
      */
-    HzCfg0ModelFeature selectByModelAndColorPuids(@Param("pPertainToModel") String pPertainToModel, @Param("pPertainToColorModel") String pPertainToColorModel);
+    HzCfg0ModelFeature selectByModelAndColorPuids(HzCfg0ModelFeature feature);
 
     /**
      * 根据主键更新1个模型特性
@@ -72,6 +72,7 @@ public interface HzCfg0ModelFeatureDao {
 
     /**
      * 仅仅更新基本信息。不更新
+     *
      * @param record
      * @return
      */

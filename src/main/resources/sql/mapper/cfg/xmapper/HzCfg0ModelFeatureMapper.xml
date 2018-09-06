@@ -133,7 +133,7 @@
         where P_PERTAIN_TO_COLOR_MODEL = #{pPertainToColorModel,jdbcType=VARCHAR}
     </select>
     <!--根据车型模型和颜色车身查找-->
-    <select id="selectByModelAndColorPuids" parameterType="java.lang.String" resultMap="BaseResultMap">
+    <select id="selectByModelAndColorPuids" parameterType="sql.pojo.cfg.HzCfg0ModelFeature" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from HZ_CFG0_MODEL_FEATURE

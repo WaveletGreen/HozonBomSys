@@ -4,11 +4,9 @@ import com.alibaba.fastjson.JSONObject;
 import com.connor.hozon.bom.bomSystem.controller.integrate.ExtraIntegrate;
 import com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0ModelColorDao;
 import com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0ToModelRecordDao;
-import com.connor.hozon.bom.bomSystem.dao.cfg.HzDerivativeMaterielBasicDao;
 import com.connor.hozon.bom.bomSystem.dto.cfg.HzComposeMFDTO;
 import com.connor.hozon.bom.bomSystem.service.business.cfg.HzComposeMFService;
 import com.connor.hozon.bom.bomSystem.service.cfg.*;
-import com.connor.hozon.bom.bomSystem.service.integrate.SynMaterielService;
 import com.connor.hozon.bom.bomSystem.service.iservice.cfg.IHzCfg0ModelFeatureService;
 import com.connor.hozon.bom.bomSystem.service.project.HzSuperMaterielService;
 import com.connor.hozon.bom.common.base.entity.QueryBase;
@@ -17,9 +15,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import sql.pojo.cfg.*;
+import sql.pojo.cfg.HzCfg0ModelColor;
+import sql.pojo.cfg.HzCfg0ModelRecord;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -119,7 +117,7 @@ public class HzMaterielFeatureV2Controller extends ExtraIntegrate {
     @ResponseBody
     public JSONObject saveCompose(@RequestBody HzComposeMFDTO hzComposeMFDTO) {
         JSONObject result = new JSONObject();
-        result.put("status", false);
+        result.put("status", true);
         result.put("msg", "新增衍生物料成功");
         if (hzComposeMFDTO == null) {
             result.put("status", false);
@@ -130,9 +128,9 @@ public class HzMaterielFeatureV2Controller extends ExtraIntegrate {
     }
 
 
-    @RequestMapping(value = "/loadComposes", method = RequestMethod.POST)
+    @RequestMapping(value = "/loadComposes", method = RequestMethod.GET)
     @ResponseBody
-    public Map<String, Object> loadComposes(@RequestParam String projectUid, @RequestBody QueryBase queryBase) {
-        return hzComposeMFService.loadComposes(projectUid, queryBase);
+    public Map<String, Object> loadComposes(@RequestParam String projectPuid) {
+        return hzComposeMFService.loadComposes(projectPuid, new QueryBase());
     }
 }
