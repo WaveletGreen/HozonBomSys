@@ -115,7 +115,7 @@ function loadData(projectPuid) {
                                 title: "添加",
                                 url: "modelColor/addPage?projectPuid=" + projectPuid,
                                 gridId: "gridId",
-                                width: 500,
+                                width: 700,
                                 height: 600
                             })
                         }
@@ -134,7 +134,7 @@ function loadData(projectPuid) {
                                 title: "修改",
                                 url: "modelColor/modifyPage?puid=" + rows[0].puid,
                                 gridId: "gridId",
-                                width: 350,
+                                width: 700,
                                 height: 450
                             });
                         }

@@ -133,7 +133,12 @@ public interface HzCfg0RecordDao {
      * @param projectPuid
      * @return
      */
-    int tellMeHowManyOfThose(String projectPuid);
+    int tellMeHowManyOfThose(HzFeatureQueryDTO projectPuid);
 
+    /**
+     *
+     * @param queryBase
+     * @return
+     */
     List<HzCfg0Record> selectByCondition(HzFeatureQueryDTO queryBase);
 }

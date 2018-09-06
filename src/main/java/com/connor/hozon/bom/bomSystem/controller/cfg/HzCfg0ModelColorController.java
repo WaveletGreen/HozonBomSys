@@ -59,6 +59,7 @@ public class HzCfg0ModelColorController {
         this.hzCfg0ModelColorService = hzCfg0ModelColorService;
         this.hzCfg0OptionFamilyService = hzCfg0OptionFamilyService;
         this.hzCfg0ColorSetService = hzCfg0ColorSetService;
+
     }
 
     @RequestMapping(value = "/loadAll", method = RequestMethod.GET)
