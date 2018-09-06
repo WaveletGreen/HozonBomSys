@@ -50,6 +50,6 @@ public class HzRelevanceRelationDaoImpl extends BasicDaoImpl<HzRelevanceRelation
      */
     @Override
     public int insertOne(HzRelevanceRelation hzRelevanceRelation) {
-        return baseSQLUtil.executeDelete(hzRelevanceRelation, clz.getCanonicalName() + ".insertOne");
+        return baseSQLUtil.executeInsert(hzRelevanceRelation, clz.getCanonicalName() + ".insertOne");
     }
 }

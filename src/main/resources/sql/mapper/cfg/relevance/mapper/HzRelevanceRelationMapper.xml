@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.connor.hozon.bom.bomSystem.dao.cfg.relevance.HzRelevanceRelationDao">
     <resultMap id="BaseResultMap" type="sql.pojo.cfg.relevance.HzRelevanceRelation">
-        <id column="ID" jdbcType="DECIMAL" property="id"/>
+        <id column="ID" jdbcType="BIGINT" property="id"/>
         <result column="RR_CFG0_UID" jdbcType="VARCHAR" property="rrCfg0Uid"/>
         <result column="RR_COLOR_MODEL_UID" jdbcType="VARCHAR" property="rrColorModelUid"/>
         <result column="RR_COLOR_UID" jdbcType="VARCHAR" property="rrColorUid"/>
@@ -27,8 +27,8 @@
         <result column="RR_RESERVE13" jdbcType="VARCHAR" property="rrReserve13"/>
         <result column="RR_RESERVE14" jdbcType="VARCHAR" property="rrReserve14"/>
         <result column="RR_RESERVE15" jdbcType="VARCHAR" property="rrReserve15"/>
-        <result column="RR_VWO_ID" jdbcType="DECIMAL" property="rrVwoId"/>
-        <result column="RR_REVISION" jdbcType="DECIMAL" property="rrRevision"/>
+        <result column="RR_VWO_ID" jdbcType="BIGINT" property="rrVwoId"/>
+        <result column="RR_REVISION" jdbcType="BIGINT" property="rrRevision"/>
     </resultMap>
     <sql id="Base_Column_List">
     ID,
@@ -461,12 +461,12 @@
        )
        values
        (
-        #{id, jdbctype=DECIMAL},
-        #{rrCfg0Uid, jdbctype=VARCHAR},
-        #{rrColorModelUid, jdbctype=VARCHAR},
-        #{rrColorUid, jdbctype=VARCHAR},
-        #{rrRelevanceId, jdbctype=VARCHAR},
-        #{rrCfgFamilyUid, jdbctype=VARCHAR}
+        #{id,jdbcType=BIGINT},
+        #{rrCfg0Uid,jdbcType=VARCHAR},
+        #{rrColorModelUid,jdbcType=VARCHAR},
+        #{rrColorUid,jdbcType=VARCHAR},
+        #{rrRelevanceId,jdbcType=BIGINT},
+        #{rrCfgFamilyUid,jdbcType=VARCHAR}
        )
    </insert>
 </mapper>
