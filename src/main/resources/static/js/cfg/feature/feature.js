@@ -1,15 +1,13 @@
 $(document).ready(
     // $("#query").click(function () {
-    (function () {
-        loadData();
-        $("#refresh").removeAttr("disabled");
-    }),
-    //手动刷新按钮
+    loadData(getProjectUid()),
+    $("#refresh").removeAttr("disabled"),
+//手动刷新按钮
     $("#refresh").click(function () {
-        loadData();
+        loadData(getProjectUid());
     }),
     $("#query").click(function () {
-            loadData();
+            loadData(getProjectUid());
             $("#refresh").removeAttr("disabled");
         }
     )
@@ -18,8 +16,7 @@ $(document).ready(
 /***
  * 加载数据，异步操作，方便调用
  */
-function loadData() {
-    let projectPuid = getProjectUid();
+function loadData(projectPuid) {
     var $table = $("#dataTable");
     if ($table == null)
         return;

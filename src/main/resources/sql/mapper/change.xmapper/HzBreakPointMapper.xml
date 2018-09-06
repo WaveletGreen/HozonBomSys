@@ -31,11 +31,43 @@
         from HZ_BREAKPOINT
         where PID = #{pid,jdbcType=DECIMAL}
     </select>
-    <select id="selectAll" resultMap="BaseResultMap">
+
+    <!--分页：当前页数据-->
+    <select id="selectAll" parameterType="com.connor.hozon.bom.common.base.entity.QueryBase" resultMap="BaseResultMap">
+        <!--select
+        <include refid="Base_Column_List"/>
+        from HZ_BREAKPOINT ORDER BY PID-->
+
         select
         <include refid="Base_Column_List"/>
-        from HZ_BREAKPOINT
+        from
+        ( select
+        <include refid="Base_Column_List"/>,
+        ROWNUM as rowno
+        from HZ_BREAKPOINT where 1=1
+        <if test="param.limit!=null and  param.page!=null">
+            and ROWNUM &lt;= ${param.page}*${param.limit}
+        </if>
+        ) temp
+        <if test="param.offset!=null">
+            where temp.rowno &gt;= ${param.offset}+1
+        </if>
+        <if test="param.sort!=null">
+            order by ${param.sort}
+        </if>
+        <if test="param.order!=null">
+            ${param.order}
+        </if>
+        <if test="param.order==null">
+            ASC
+        </if>
     </select>
+
+    <!--返回断点信息总数-->
+    <select id="tellMeHowManyOfIt" resultType="java.lang.Long">
+        select count(*) from HZ_BREAKPOINT
+    </select>
+
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from HZ_BREAKPOINT
     where PID = #{pid,jdbcType=DECIMAL}

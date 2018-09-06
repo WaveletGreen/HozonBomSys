@@ -3,7 +3,11 @@ $(document).ready((function () {
     var eBomUrl = "ebom/getEBom/list?projectId=" + projectPuid;
     initTable(eBomUrl);
 }))
-
+function doRefresh(projectPuid){
+    $('#ebomManageTable').bootstrapTable('destroy');
+    var eBomUrl = "ebom/getEBom/list?projectId=" + projectPuid;
+    initTable(eBomUrl);
+}
 
 function doQuery() {
     //$('#ebomManageTable').bootstrapTable('refresh');    //刷新表格

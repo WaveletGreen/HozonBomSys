@@ -8,6 +8,7 @@
         <result column="P_DESC_OF_COLORFUL_MODEL" jdbcType="VARCHAR" property="pDescOfColorfulModel"/>
         <result column="P_MODEL_SHELL" jdbcType="VARCHAR" property="pModelShellOfColorfulModel"/>
         <result column="P_UPDATE_DEFAULT" jdbcType="INTEGER" property="updateDefault"/>
+        <result column="P_COLOR_UID" jdbcType="VARCHAR" property="pColorUid"/>
     </resultMap>
     <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs"
                type="sql.pojo.cfg.HzCfg0ModelColor">
@@ -25,7 +26,8 @@
     P_CODE_OF_COLORFUL_MODEL,
     P_DESC_OF_COLORFUL_MODEL,
     P_MODEL_SHELL,
-    P_UPDATE_DEFAULT
+    P_UPDATE_DEFAULT,
+    P_COLOR_UID
     </sql>
     <sql id="Blob_Column_List">
     P_COLORFUL_MAP_BLOCK
@@ -39,7 +41,8 @@
         #{pCodeOfColorfulModel,jdbcType=VARCHAR},
         #{pDescOfColorfulModel,jdbcType=VARCHAR},
         #{pModelShellOfColorfulModel,jdbcType=VARCHAR},
-        1
+        1,
+        #{pColorUid,jdbcType=VARCHAR}
     </sql>
     <sql id="reflect">
       P_DESC_OF_COLORFUL_MODEL = #{pDescOfColorfulModel,jdbcType=VARCHAR}
@@ -94,13 +97,13 @@
         where PUID = #{puid,jdbcType=VARCHAR}
     </update>
 
-    <insert id="deleteByBatch" parameterType="java.util.List">
+    <delete id="deleteByBatch" parameterType="java.util.List">
         delete from HZ_CFG0_MODEL_COLOR_RECORD where PUID in (
         <foreach collection="list" item="item" index="index"
                  separator=",">
             #{item.puid,jdbcType=VARCHAR}
         </foreach>
         )
-    </insert>
+    </delete>
 
 </mapper>

@@ -3,41 +3,106 @@ package sql.pojo.integration;
 import java.util.Date;
 
 public class HzBreakPoint {
+    /**
+     * 主键
+     */
     private Long pid;
-
+    /**
+     * 数据包号
+     */
     private String pPackno;
-
+    /**
+     * 行号
+     */
     private String pItem;
-
+    /**
+     *TC-ECN
+     */
     private String pTcecn;
-
+    /**
+     *SAP-ECN
+     */
     private String pEcn;
-
+    /**
+     *断点日期
+     */
     private String pDate;
-
+    /**
+     *断点前ECN
+     */
     private String pOecn;
-
+    /**
+     *前ECN结束日期
+     */
     private String pOdate;
-
+    /**
+     *断点起始vin
+     */
     private String pVin;
-
+    /**
+     *断点执行工号
+     */
     private String pUser;
-
+    /**
+     *断点处理日期
+     */
     private String pCdate;
-
+    /**
+     *断点处理时间
+     */
     private String pCtime;
-
+    /**
+     *预留字段1
+     */
     private String pReserve1;
-
+    /**
+     *预留字段2
+     */
     private String pReserve2;
-
+    /**
+     *预留字段3
+     */
     private String pReserve3;
-
+    /**
+     *预留字段4
+     */
     private String pReserve4;
-
+    /**
+     *预留字段5
+     */
     private String pReserve5;
-
+    /**
+     *断点回传到BOM系统时间
+     */
     private Date feedbackTime;
+
+    public static String reflectToDBField(String property) {
+        switch (property) {
+            /**
+             * 主键
+             */
+            case "pid"://代码字段
+                return "PID";//对应数据库字段信息
+            /**
+             * 数据包号
+             */
+            case "pPackno":
+                return "P_Packno";
+
+            /**
+             * 生效时间
+             */
+//            case "cfgEffectedDate":
+//                return "CFG_EFFECTED_DATE";
+//            /**
+//             * 废止时间
+//             */
+//            case "cfgAbolishDate":
+//                return "CFG_ABOLISH_DATE";
+            default:
+                return null;
+        }
+    }
 
     public Long getPid() {
         return pid;

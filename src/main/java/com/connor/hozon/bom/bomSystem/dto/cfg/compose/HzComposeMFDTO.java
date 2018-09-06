@@ -1,4 +1,4 @@
-package com.connor.hozon.bom.bomSystem.dto.cfg;
+package com.connor.hozon.bom.bomSystem.dto.cfg.compose;
 
 /**
  * @Author: Fancyears·Maylos·Maywas
@@ -91,6 +91,8 @@ public class HzComposeMFDTO {
      * 重要度
      */
     private Integer importance;
+
+    private String pCfg0ModelBasicDetail;
 
     public String getProjectUid() {
         return projectUid;
@@ -258,5 +260,13 @@ public class HzComposeMFDTO {
 
     public void setImportance(Integer importance) {
         this.importance = importance;
+    }
+
+    public String getpCfg0ModelBasicDetail() {
+        return pCfg0ModelBasicDetail;
+    }
+
+    public void setpCfg0ModelBasicDetail(String pCfg0ModelBasicDetail) {
+        this.pCfg0ModelBasicDetail = pCfg0ModelBasicDetail;
     }
 }
