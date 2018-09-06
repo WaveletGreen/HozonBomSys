@@ -80,6 +80,7 @@ public class HzCfg0ModelColorController {
         set.setPuid("-");
         colorList.add(0, set);
         model.addAttribute("colorList", colorList);
+        model.addAttribute("colorList2", colorList);
         model.addAttribute("columnList", columnList);
         model.addAttribute("pCfg0MainRecordOfMC", projectPuid);
         return "cfg/modelColorCfg/addModelColorCfg";

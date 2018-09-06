@@ -24,6 +24,7 @@ function loadData(projectPuid) {
     $table.bootstrapTable({
         url: "cfg0/loadFeature?projectPuid=" + projectPuid,
         method: "GET",
+        queryParams: queryParams,
         height: $(window.parent.document).find("#wrapper").height() - 150,// $(window.parent.document).find("#wrapper").height() - document.body.offsetHeight - 100,
         width: $(window).width(),
         showToggle: true,                   //是否显示详细视图和列表视图的切换按钮
@@ -301,5 +302,38 @@ function loadData(projectPuid) {
         sortOrder: "asc",                   //排序方式
         sortName: 'pCfg0ObjectId'
     });
+
+    function queryParam(pageReqeust) {
+        var pageReqeust = {
+            page: this.pageNumber,// 起始页面
+            limit: this.pageSize // 页面大小
+        }
+        // if(formId!=undefined||formId!=''){
+        //     $.each($("#"+formId).find("input"),function(index,info){
+        //         param[info.name] = info.value;
+        //     })
+        // }
+        if (sortName != undefined) {
+            pageReqeust.sort = sortName;
+        }
+        if (sortOrder != null) {
+            pageReqeust.order = sortOrder;
+        }
+        if ($("#feature").val() != null) {
+            pageReqeust.feature = $("#feature").val();
+        }
+        if ($("#featureValue").val() != null) {
+            pageReqeust.featureValue = $("#featureValue").val();
+        }
+
+        if (getProjectUid() != null) {
+            pageReqeust.projectUid = getProjectUid();
+        }
+        console.log("-------------------------");
+        console.log(pageReqeust);
+        console.log("--------------------------");
+        return pageReqeust;
+
+    };
     // $table.bootstrapTable('hideColumn', 'puid');
 }

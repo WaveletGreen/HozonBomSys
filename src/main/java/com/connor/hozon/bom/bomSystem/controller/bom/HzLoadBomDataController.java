@@ -9,8 +9,6 @@ import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0ModelService;
 import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0Service;
 import com.connor.hozon.bom.bomSystem.service.iservice.cfg.IHzCfg0OfBomLineService;
 import com.connor.hozon.bom.common.base.entity.QueryBase;
-import com.connor.hozon.bom.common.util.user.UserInfo;
-import com.connor.hozon.bom.sys.entity.User;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,14 +20,14 @@ import sql.pojo.bom.HzBomLineRecord;
 import sql.pojo.cfg.HzCfg0OfBomLineRecord;
 import sql.pojo.cfg.HzCfg0Record;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 @Controller
 @RequestMapping("/loadBom")
 public class HzLoadBomDataController {
     private final HzCfg0BomLineOfModelService hzCfg0BomLineOfModelService;
-    private final HzBomDataService hzBomDataService;
+    @Autowired
+    HzBomDataService hzBomDataService;
 
     @Autowired
     HzBomLineRecordDaoImpl hzBomLineRecordDao;
@@ -50,9 +48,8 @@ public class HzLoadBomDataController {
 
     private boolean debug = false;
 
-    public HzLoadBomDataController(HzCfg0BomLineOfModelService hzCfg0BomLineOfModelService, HzBomDataService hzBomDataService) {
+    public HzLoadBomDataController(HzCfg0BomLineOfModelService hzCfg0BomLineOfModelService) {
         this.hzCfg0BomLineOfModelService = hzCfg0BomLineOfModelService;
-        this.hzBomDataService = hzBomDataService;
     }
 
     @RequestMapping(value = "/loadCfg0BomLineOfModel", method = RequestMethod.GET)

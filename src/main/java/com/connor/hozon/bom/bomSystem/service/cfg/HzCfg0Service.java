@@ -1,5 +1,6 @@
 package com.connor.hozon.bom.bomSystem.service.cfg;
 
+import com.connor.hozon.bom.bomSystem.dto.HzFeatureQueryDTO;
 import com.connor.hozon.bom.bomSystem.dto.HzMaterielFeatureBean;
 import com.connor.hozon.bom.bomSystem.dto.HzRelevanceBean;
 import com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0RecordDao;
@@ -178,5 +179,9 @@ public class HzCfg0Service {
         params.put("cfgIsInProcess", "1");
         params.put("list", cfgs);
         return hzCfg0RecordDao.setToProcess(params);
+    }
+
+    public List<HzCfg0Record> doLoadByCondition(HzFeatureQueryDTO queryBase) {
+        return hzCfg0RecordDao.selectByCondition(queryBase);
     }
 }
