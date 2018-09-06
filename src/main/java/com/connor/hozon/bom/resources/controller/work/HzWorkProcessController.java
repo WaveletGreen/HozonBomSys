@@ -1,14 +1,15 @@
 package com.connor.hozon.bom.resources.controller.work;
 
 import com.connor.hozon.bom.resources.controller.BaseController;
-import com.connor.hozon.bom.resources.dto.request.AddHzProcessReqDTO;
-import com.connor.hozon.bom.resources.dto.request.ApplyMbomDataTOHzMaterielReqDTO;
-import com.connor.hozon.bom.resources.dto.request.UpdateHzProcessReqDTO;
-import com.connor.hozon.bom.resources.dto.response.HzMbomRecordRespDTO;
-import com.connor.hozon.bom.resources.dto.response.HzWorkProcessRespDTO;
-import com.connor.hozon.bom.resources.dto.response.OperateResultMessageRespDTO;
+
+import com.connor.hozon.bom.resources.domain.dto.request.AddHzProcessReqDTO;
+import com.connor.hozon.bom.resources.domain.dto.request.ApplyMbomDataTOHzMaterielReqDTO;
+import com.connor.hozon.bom.resources.domain.dto.request.UpdateHzProcessReqDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.HzMbomRecordRespDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.HzWorkProcessRespDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.OperateResultMessageRespDTO;
+import com.connor.hozon.bom.resources.domain.query.HzWorkProcessByPageQuery;
 import com.connor.hozon.bom.resources.page.Page;
-import com.connor.hozon.bom.resources.query.HzWorkProcessByPageQuery;
 import com.connor.hozon.bom.resources.service.work.HzWorkProcessService;
 import com.connor.hozon.bom.resources.util.ResultMessageBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -185,7 +186,7 @@ public class HzWorkProcessController extends BaseController {
      * 一键同步MBom数据到物料主数据
      */
     @RequestMapping(value = "apply/oneKey",method = RequestMethod.POST)
-    public void applyMbomDataToHzMaterielOneKey(@RequestBody List<HzMbomRecordRespDTO> mbomRecordRespDTOS,String projectId,Integer type, HttpServletResponse response){
+    public void applyMbomDataToHzMaterielOneKey(@RequestBody List<HzMbomRecordRespDTO> mbomRecordRespDTOS, String projectId, Integer type, HttpServletResponse response){
         ApplyMbomDataTOHzMaterielReqDTO reqDTO = new ApplyMbomDataTOHzMaterielReqDTO();
         reqDTO.setMbomRecordRespDTOS(mbomRecordRespDTOS);
         reqDTO.setProjectId(projectId);

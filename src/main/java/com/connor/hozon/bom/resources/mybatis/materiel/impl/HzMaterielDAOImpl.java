@@ -1,10 +1,10 @@
 package com.connor.hozon.bom.resources.mybatis.materiel.impl;
 
+import com.connor.hozon.bom.resources.domain.query.HzMaterielByPageQuery;
+import com.connor.hozon.bom.resources.domain.query.HzMaterielQuery;
 import com.connor.hozon.bom.resources.mybatis.materiel.HzMaterielDAO;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.page.PageRequest;
-import com.connor.hozon.bom.resources.query.HzMaterielByPageQuery;
-import com.connor.hozon.bom.resources.query.HzMaterielQuery;
 import org.springframework.stereotype.Service;
 import sql.BaseSQLUtil;
 import sql.pojo.bom.HzMbomLineRecord;

@@ -2,9 +2,8 @@ package com.connor.hozon.bom.bomSystem.service.integrate;
 
 import com.connor.hozon.bom.bomSystem.helper.IntegrateMsgDTO;
 import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
-import com.connor.hozon.bom.resources.dto.response.HzWorkProcessRespDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.HzWorkProcessRespDTO;
 import com.connor.hozon.bom.resources.service.work.HzWorkProcessService;
-import com.connor.hozon.bom.resources.service.work.impl.HzWorkProcessServiceImpl;
 import integration.base.processRoute.ZPPTCO006;
 import integration.logic.ProcessRoute;
 import integration.logic.VehicleBom;
@@ -16,8 +15,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sql.pojo.cfg.HzCfg0Record;
-import sql.pojo.cfg.HzMaterielCfgBean;
 
 import java.util.ArrayList;
 import java.util.HashMap;

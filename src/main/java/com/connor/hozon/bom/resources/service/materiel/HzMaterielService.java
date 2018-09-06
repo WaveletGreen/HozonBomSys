@@ -1,11 +1,11 @@
 package com.connor.hozon.bom.resources.service.materiel;
 
-import com.connor.hozon.bom.resources.dto.request.EditHzMaterielReqDTO;
-import com.connor.hozon.bom.resources.dto.response.HzMaterielRespDTO;
-import com.connor.hozon.bom.resources.dto.response.OperateResultMessageRespDTO;
+import com.connor.hozon.bom.resources.domain.dto.request.EditHzMaterielReqDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.HzMaterielRespDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.OperateResultMessageRespDTO;
+import com.connor.hozon.bom.resources.domain.query.HzMaterielByPageQuery;
+import com.connor.hozon.bom.resources.domain.query.HzMaterielQuery;
 import com.connor.hozon.bom.resources.page.Page;
-import com.connor.hozon.bom.resources.query.HzMaterielByPageQuery;
-import com.connor.hozon.bom.resources.query.HzMaterielQuery;
 
 /**
  * @Author: haozt

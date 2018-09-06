@@ -61,7 +61,7 @@
         <result column="P_SUPPLY_CODE" jdbcType="VARCHAR" property="pSupplyCode"/>
         <result column="P_REMARK" jdbcType="VARCHAR" property="pRemark"/>
         <result column="P_REGULATION_CODE" jdbcType="VARCHAR" property="pRegulationCode"/>
-        <result column="P_NUMBER" jdbcType="INTEGER" property="number"/>
+        <result column="P_NUMBER" jdbcType="VARCHAR" property="number"/>
         <result column="P_BUY_ENGINEER" jdbcType="INTEGER" property="pBuyEngineer"/>
         <!--针对配色方案的颜色库对应的UID-->
         <result column="COLOR_UID" jdbcType="VARCHAR" property="colorUid"/>
@@ -243,7 +243,7 @@
           #{pActualWeight,jdbcType=VARCHAR}, #{pFastenerStandard,jdbcType=VARCHAR}, #{pFastenerLevel,jdbcType=VARCHAR}, 
           #{pTorque,jdbcType=VARCHAR}, #{pDutyEngineer,jdbcType=VARCHAR}, #{pSupply,jdbcType=VARCHAR}, 
           #{pSupplyCode,jdbcType=VARCHAR}, #{pRemark,jdbcType=VARCHAR}, #{pRegulationCode,jdbcType=VARCHAR},
-          #{number,jdbcType=INTEGER},#{pBuyEngineer,jdbcType=INTEGER}
+          #{number,jdbcType=VARCHAR},#{pBuyEngineer,jdbcType=INTEGER}
       )
     </insert>
 

@@ -1,15 +1,14 @@
 package com.connor.hozon.bom.resources.service.change.impl;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
-import com.connor.hozon.bom.resources.dto.request.EditEWOImpactDeptReqDTO;
-import com.connor.hozon.bom.resources.dto.request.EditImpactDeptEmpReqDTO;
-import com.connor.hozon.bom.resources.dto.response.HzEWOImpactDeptEmpRespDTO;
-import com.connor.hozon.bom.resources.dto.response.HzEWOImpactDeptRespDTO;
-import com.connor.hozon.bom.resources.dto.response.OperateResultMessageRespDTO;
+
+import com.connor.hozon.bom.resources.domain.dto.request.EditEWOImpactDeptReqDTO;
+import com.connor.hozon.bom.resources.domain.dto.request.EditImpactDeptEmpReqDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.HzEWOImpactDeptEmpRespDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.HzEWOImpactDeptRespDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.OperateResultMessageRespDTO;
+import com.connor.hozon.bom.resources.domain.query.HzEWOImpactDeptQuery;
 import com.connor.hozon.bom.resources.mybatis.change.HzEWOImpactDeptDAO;
 import com.connor.hozon.bom.resources.mybatis.change.HzEWOImpactDeptEmpDAO;
-import com.connor.hozon.bom.resources.query.HzEWOImpactDeptQuery;
 import com.connor.hozon.bom.resources.service.change.HzEWOImpactDeptService;
 import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.sys.dao.OrgGroupDao;

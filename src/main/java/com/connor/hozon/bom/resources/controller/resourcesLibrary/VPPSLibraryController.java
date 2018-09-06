@@ -1,11 +1,11 @@
 package com.connor.hozon.bom.resources.controller.resourcesLibrary;
 
 import com.connor.hozon.bom.resources.controller.BaseController;
-import com.connor.hozon.bom.resources.dto.request.AddHzVPPSLibraryReqDTO;
-import com.connor.hozon.bom.resources.dto.response.HzVPPSLibraryRespDTO;
-import com.connor.hozon.bom.resources.dto.response.OperateResultMessageRespDTO;
+import com.connor.hozon.bom.resources.domain.dto.request.AddHzVPPSLibraryReqDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.HzVPPSLibraryRespDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.OperateResultMessageRespDTO;
+import com.connor.hozon.bom.resources.domain.query.HzVPPSLibraryQuery;
 import com.connor.hozon.bom.resources.page.Page;
-import com.connor.hozon.bom.resources.query.HzVPPSLibraryQuery;
 import com.connor.hozon.bom.resources.service.resourcesLibrary.VPPSLibrary.HzVPPSLibraryService;
 import com.connor.hozon.bom.resources.util.ResultMessageBuilder;
 import org.springframework.beans.factory.annotation.Autowired;

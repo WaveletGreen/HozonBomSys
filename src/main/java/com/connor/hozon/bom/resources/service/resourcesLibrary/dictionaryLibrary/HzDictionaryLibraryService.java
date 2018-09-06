@@ -1,11 +1,10 @@
 package com.connor.hozon.bom.resources.service.resourcesLibrary.dictionaryLibrary;
 
-import com.connor.hozon.bom.resources.dto.request.AddHzDictionaryLibraryReqDTO;
-import com.connor.hozon.bom.resources.dto.response.HzDictionaryLibraryRespDTO;
-import com.connor.hozon.bom.resources.dto.response.OperateResultMessageRespDTO;
+import com.connor.hozon.bom.resources.domain.dto.request.AddHzDictionaryLibraryReqDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.HzDictionaryLibraryRespDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.OperateResultMessageRespDTO;
+import com.connor.hozon.bom.resources.domain.query.HzDictionaryLibraryQuery;
 import com.connor.hozon.bom.resources.page.Page;
-import com.connor.hozon.bom.resources.query.HzDictionaryLibraryQuery;
-import sql.pojo.resourcesLibrary.dictionaryLibrary.HzDictionaryLibrary;
 
 /**
  * Created with IntelliJ IDEA.

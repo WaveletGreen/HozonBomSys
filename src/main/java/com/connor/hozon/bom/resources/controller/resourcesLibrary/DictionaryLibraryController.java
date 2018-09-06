@@ -1,11 +1,11 @@
 package com.connor.hozon.bom.resources.controller.resourcesLibrary;
 
 import com.connor.hozon.bom.resources.controller.BaseController;
-import com.connor.hozon.bom.resources.dto.request.AddHzDictionaryLibraryReqDTO;
-import com.connor.hozon.bom.resources.dto.response.HzDictionaryLibraryRespDTO;
-import com.connor.hozon.bom.resources.dto.response.OperateResultMessageRespDTO;
+import com.connor.hozon.bom.resources.domain.dto.request.AddHzDictionaryLibraryReqDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.HzDictionaryLibraryRespDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.OperateResultMessageRespDTO;
+import com.connor.hozon.bom.resources.domain.query.HzDictionaryLibraryQuery;
 import com.connor.hozon.bom.resources.page.Page;
-import com.connor.hozon.bom.resources.query.HzDictionaryLibraryQuery;
 import com.connor.hozon.bom.resources.service.resourcesLibrary.dictionaryLibrary.HzDictionaryLibraryService;
 import com.connor.hozon.bom.resources.util.ResultMessageBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import sql.pojo.resourcesLibrary.dictionaryLibrary.HzDictionaryLibrary;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.*;

@@ -1,8 +1,8 @@
 package com.connor.hozon.bom.resources.service.change.impl;
 
-import com.connor.hozon.bom.resources.dto.response.OperateResultMessageRespDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.OperateResultMessageRespDTO;
+import com.connor.hozon.bom.resources.domain.query.HzEWOImpactReferenceQuery;
 import com.connor.hozon.bom.resources.mybatis.change.HzEWOImpactReferenceDAO;
-import com.connor.hozon.bom.resources.query.HzEWOImpactReferenceQuery;
 import com.connor.hozon.bom.resources.service.change.HzEWOImpactReferenceService;
 import com.connor.hozon.bom.resources.util.ListUtil;
 import org.springframework.beans.factory.annotation.Autowired;

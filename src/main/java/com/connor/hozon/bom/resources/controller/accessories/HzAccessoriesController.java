@@ -1,10 +1,10 @@
 package com.connor.hozon.bom.resources.controller.accessories;
 
 import com.connor.hozon.bom.resources.controller.BaseController;
-import com.connor.hozon.bom.resources.dto.request.DeleteHzAccessoriesDTO;
+import com.connor.hozon.bom.resources.domain.dto.request.DeleteHzAccessoriesDTO;
+import com.connor.hozon.bom.resources.domain.query.HzAccessoriesPageQuery;
 import com.connor.hozon.bom.resources.mybatis.accessories.HzAccessoriesDAO;
 import com.connor.hozon.bom.resources.page.Page;
-import com.connor.hozon.bom.resources.query.HzAccessoriesPageQuery;
 import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.resources.util.ResultMessageBuilder;
 import org.springframework.beans.factory.annotation.Autowired;

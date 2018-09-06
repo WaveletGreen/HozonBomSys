@@ -3,7 +3,7 @@ package com.connor.hozon.bom.resources.service.file.impl;
 import com.connor.hozon.bom.bomSystem.dao.bom.HzBomMainRecordDao;
 import com.connor.hozon.bom.bomSystem.dao.impl.bom.HzBomLineRecordDaoImpl;
 import com.connor.hozon.bom.common.util.user.UserInfo;
-import com.connor.hozon.bom.resources.dto.response.OperateResultMessageRespDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.OperateResultMessageRespDTO;
 import com.connor.hozon.bom.resources.mybatis.bom.HzEbomRecordDAO;
 import com.connor.hozon.bom.resources.service.file.FileUploadService;
 import com.connor.hozon.bom.resources.util.ExcelUtil;
@@ -44,8 +44,9 @@ public class FileUploadServiceImpl implements FileUploadService {
 
     private Integer maxOrderNum = null;
     @Override
-    public OperateResultMessageRespDTO UploadEbomToDB(MultipartFile file,String projectId) {
+    public OperateResultMessageRespDTO UploadEbomToDB(MultipartFile file, String projectId) {
         try {
+            long a = System.currentTimeMillis();
             //判断权限
             boolean b = PrivilegeUtil.writePrivilege();
             if(!b){
@@ -176,6 +177,8 @@ public class FileUploadServiceImpl implements FileUploadService {
                 }
             }
             ExcelUtil.deleteFile();
+            long m = System.currentTimeMillis();
+            System.out.println((m-a)+"ms");
         }catch (Exception e){
             return OperateResultMessageRespDTO.getFailResult();
 
@@ -301,14 +304,31 @@ public class FileUploadServiceImpl implements FileUploadService {
         String pUpc=ExcelUtil.getCell(row,41).getStringCellValue();
         String fna=ExcelUtil.getCell(row,42).getStringCellValue();
         String pFnaDesc=ExcelUtil.getCell(row,43).getStringCellValue();
-        String number=ExcelUtil.getCell(row,44).getStringCellValue();
+
+        String number="";
+
+        try {
+            number = ExcelUtil.getCell(row,44).getStringCellValue();;
+            if(number == null || number == ""){
+                number = "";
+            }
+        }catch (Exception e){
+            try {
+                BigDecimal dec = new BigDecimal(ExcelUtil.getCell(row,28).getNumericCellValue());
+                pActualWeight =String.valueOf(dec.setScale(3, BigDecimal.ROUND_HALF_UP).doubleValue());
+            }catch (Exception e1){
+                number="";
+            }
+        }
+
+
 
 
         HzImportEbomRecord record = new HzImportEbomRecord();
         record.setNo(Integer.valueOf(no));
         record.setLineId(lineId);
         if(number !=null && number !=""){
-            record.setNumber(Integer.valueOf(number));
+            record.setNumber(number);
         }
         if("Y".equals(p3cpartFlag)){
             record.setP3cpartFlag(1);
@@ -458,29 +478,6 @@ public class FileUploadServiceImpl implements FileUploadService {
                     }
                 }
             }
-//                else if(currentLevelNum == preLevelNum){
-//                    for(String key:lineIndexMap.keySet()){
-//                        if(key.equals(preKey)){
-//                            String value = lineIndexMap.get(preKey);
-//                            if(preKey.endsWith("Y")){
-//                                StringBuffer s = new StringBuffer(value);
-//                                currentIndex = s.append(".10").toString();
-//                                lineIndexMap.put(currentKey,currentIndex);
-//                                break;
-//                            }else {
-//                                int lastNum = Integer.valueOf(value.split("\\.")[value.split("\\.").length-1]);
-//                                int charAtNum = value.lastIndexOf(".");
-//                                String preIndexDoNotContainLastNum = value.substring(0,charAtNum);
-//                                lastNum+=10;
-//                                currentIndex = preIndexDoNotContainLastNum+"."+lastNum;
-//                                lineIndexMap.put(currentKey,currentIndex);
-//                                break;
-//                            }
-//
-//                        }
-//
-//                    }
-//                }
             else {
                 String value = lineIndexMap.get(preKey);
                 String[] values = value.split("\\.");
@@ -503,19 +500,6 @@ public class FileUploadServiceImpl implements FileUploadService {
                 lastNum+=10;
                 currentIndex = preIndexDoNotContainLastNum+"."+lastNum;
                 lineIndexMap.put(currentKey,currentIndex);
-//                    for(Map.Entry<String,String> entry:lineIndexMap.entrySet()){
-//                        String parentKey = currentLevelNum+"Y-";
-//                        if(entry.getKey().indexOf(parentKey)>-1){
-//                            String value = entry.getValue();
-//                            int lastNum = Integer.valueOf(value.split("\\.")[value.split("\\.").length-1]);
-//                            int charAtNum = value.lastIndexOf(".");
-//                            String preIndexDoNotContainLastNum = value.substring(0,charAtNum);
-//                            lastNum+=10;
-//                            currentIndex = preIndexDoNotContainLastNum+"."+lastNum;
-//                            lineIndexMap.put(currentKey,currentIndex);
-//                            break;
-//                        }
-//                    }
             }
 
         }
@@ -555,22 +539,6 @@ public class FileUploadServiceImpl implements FileUploadService {
                     }
                 }
             }
-            //找lineIndex
-//            for(String key :lineIndexMap.keySet()){
-//                if(key.equals(currentKey)){
-//                    currentLineIndex = lineIndexMap.get(currentKey);
-//                    break;
-//                }
-//            }
-//            else {
-//                Integer lineIndexFirstNum = hzBomLineRecordDao.getMaxLineIndexFirstNum(projectId);
-//                if(lineIndexFirstNum == null){
-//                    currentLineIndex = lineIndexFirst+".10";
-//                }else {
-//                    currentLineIndex =lineIndexFirstNum+".10";
-//                }
-//            }
-
             record.setLineIndex(lineIndexMap.get(currentKey));
             record.setParentId(parentId);
             if(!level.endsWith("Y")){
@@ -610,8 +578,6 @@ public class FileUploadServiceImpl implements FileUploadService {
             Sheet sheet = workbook.getSheetAt(numSheet);
             for(int rowNum = 1; rowNum <= sheet.getLastRowNum(); rowNum++){
                 String level = ExcelUtil.getCell(sheet.getRow(rowNum),3).getStringCellValue();
-                String number=ExcelUtil.getCell(sheet.getRow(rowNum),44).getStringCellValue();
-
                 if(level.endsWith("Y") && rowNum !=sheet.getLastRowNum()){
                     int lev = Integer.valueOf(level.replace("Y",""))+1;
                     String nextLevel = ExcelUtil.getCell(sheet.getRow(rowNum+1),3).getStringCellValue();
@@ -631,14 +597,6 @@ public class FileUploadServiceImpl implements FileUploadService {
                         this.errorCount++;
                         continue;
                     }
-                }
-                try {
-                    if(number!=null && number!="")
-                    Integer.valueOf(number);
-                }catch (Exception e){
-                    stringBuffer.append("第"+(rowNum+1)+"行的数量填写应该为整数，而实际为:"+number+"</br>");
-                    this.errorCount++;
-                    continue;
                 }
             }
 
