@@ -172,46 +172,46 @@ function doQuery() {
                     showColumns: true, //是否显示所有的列
                     showToggle: false,                   //是否显示详细视图和列表视图的切换按钮
                     showRefresh: true,                  //是否显示刷新按钮
-                    toolbars: [
-                        {
-                            text: '还原',
-                            iconCls: 'glyphicon glyphicon-share',
-                            handler: function () {
-                                var rows = $table.bootstrapTable('getSelections');
-                                var myData = JSON.stringify({
-                                    "projectId": $("#project", window.top.document).val(),
-                                    "puid": rows[0].eBomPuid,
-                                    "type":type
-                                });
-                                if (rows.length !=1) {
-                                    window.Ewin.alert({message: '请选择一条需要还原的数据!'});
-                                    return false;
-                                }
-                                window.Ewin.confirm({
-                                    title: '提示',
-                                    message: '是否要还原您所选择的记录？',
-                                    width: 500
-                                }).on(function (e) {
-                                    if (e) {
-                                        $.ajax({
-                                            type: "POST",
-                                            //ajax需要添加打包名
-                                            url: "recycle/recover",
-                                            data: myData,
-                                            contentType: "application/json",
-                                            success: function (result) {
-                                                window.Ewin.alert({message: result.errMsg});
-                                                $table.bootstrapTable("refresh");
-                                            },
-                                            error: function (info) {
-                                                window.Ewin.alert({message: "操作失败:" + info.status});
-                                            }
-                                        })
-                                    }
-                                });
-                            }
-                        }
-                    ],
+                    // toolbars: [
+                    //     {
+                    //         text: '还原',
+                    //         iconCls: 'glyphicon glyphicon-share',
+                    //         handler: function () {
+                    //             var rows = $table.bootstrapTable('getSelections');
+                    //             var myData = JSON.stringify({
+                    //                 "projectId": $("#project", window.top.document).val(),
+                    //                 "puid": rows[0].eBomPuid,
+                    //                 "type":type
+                    //             });
+                    //             if (rows.length !=1) {
+                    //                 window.Ewin.alert({message: '请选择一条需要还原的数据!'});
+                    //                 return false;
+                    //             }
+                    //             window.Ewin.confirm({
+                    //                 title: '提示',
+                    //                 message: '是否要还原您所选择的记录？',
+                    //                 width: 500
+                    //             }).on(function (e) {
+                    //                 if (e) {
+                    //                     $.ajax({
+                    //                         type: "POST",
+                    //                         //ajax需要添加打包名
+                    //                         url: "recycle/recover",
+                    //                         data: myData,
+                    //                         contentType: "application/json",
+                    //                         success: function (result) {
+                    //                             window.Ewin.alert({message: result.errMsg});
+                    //                             $table.bootstrapTable("refresh");
+                    //                         },
+                    //                         error: function (info) {
+                    //                             window.Ewin.alert({message: "操作失败:" + info.status});
+                    //                         }
+                    //                     })
+                    //                 }
+                    //             });
+                    //         }
+                    //     }
+                    // ],
                 });
                 $table.bootstrapTable('hideColumn', 'eBomPuid');
                 $table.bootstrapTable('hideColumn', 'level');
@@ -279,54 +279,54 @@ function doQuery() {
                     showToggle: false,                   //是否显示详细视图和列表视图的切换按钮
                     showRefresh: true,                  //是否显示刷新按钮
                     minimumCountColumns: 4,
-                    toolbars: [
-                        {
-                            text: '还原',
-                            iconCls: 'glyphicon glyphicon-share',
-                            handler: function () {
-                                var rows = $table.bootstrapTable('getSelections');
-
-                                var myData = JSON.stringify({
-                                    "projectId": $("#project", window.top.document).val(),
-                                    "puid": rows[0].eBomPuid,
-                                    "type":type
-                                });
-                                if (rows.length !=1) {
-                                    window.Ewin.alert({message: '请选择一条需要还原的数据!'});
-                                    return false;
-                                }
-                                window.Ewin.confirm({
-                                    title: '提示',
-                                    message: '是否要还原您所选择的记录？',
-                                    width: 500
-                                }).on(function (e) {
-                                    if (e) {
-                                        $.ajax({
-                                            type: "POST",
-                                            //ajax需要添加打包名
-                                            url: "recycle/recover",
-                                            data: myData,
-                                            contentType: "application/json",
-                                            success: function (result) {
-                                                /*if (result.status) {
-                                                    window.Ewin.alert({message: result.errMsg});
-                                                    //刷新，会重新申请数据库数据
-                                                }
-                                                else {
-                                                    window.Ewin.alert({message: ":" + result.errMsg});
-                                                }*/
-                                                window.Ewin.alert({message: result.errMsg});
-                                                $table.bootstrapTable("refresh");
-                                            },
-                                            error: function (info) {
-                                                window.Ewin.alert({message: "操作失败:" + info.status});
-                                            }
-                                        })
-                                    }
-                                });
-                            }
-                        }
-                    ],
+                    // toolbars: [
+                    //     {
+                    //         text: '还原',
+                    //         iconCls: 'glyphicon glyphicon-share',
+                    //         handler: function () {
+                    //             var rows = $table.bootstrapTable('getSelections');
+                    //
+                    //             var myData = JSON.stringify({
+                    //                 "projectId": $("#project", window.top.document).val(),
+                    //                 "puid": rows[0].eBomPuid,
+                    //                 "type":type
+                    //             });
+                    //             if (rows.length !=1) {
+                    //                 window.Ewin.alert({message: '请选择一条需要还原的数据!'});
+                    //                 return false;
+                    //             }
+                    //             window.Ewin.confirm({
+                    //                 title: '提示',
+                    //                 message: '是否要还原您所选择的记录？',
+                    //                 width: 500
+                    //             }).on(function (e) {
+                    //                 if (e) {
+                    //                     $.ajax({
+                    //                         type: "POST",
+                    //                         //ajax需要添加打包名
+                    //                         url: "recycle/recover",
+                    //                         data: myData,
+                    //                         contentType: "application/json",
+                    //                         success: function (result) {
+                    //                             /*if (result.status) {
+                    //                                 window.Ewin.alert({message: result.errMsg});
+                    //                                 //刷新，会重新申请数据库数据
+                    //                             }
+                    //                             else {
+                    //                                 window.Ewin.alert({message: ":" + result.errMsg});
+                    //                             }*/
+                    //                             window.Ewin.alert({message: result.errMsg});
+                    //                             $table.bootstrapTable("refresh");
+                    //                         },
+                    //                         error: function (info) {
+                    //                             window.Ewin.alert({message: "操作失败:" + info.status});
+                    //                         }
+                    //                     })
+                    //                 }
+                    //             });
+                    //         }
+                    //     }
+                    // ],
                 });
                 $table.bootstrapTable('hideColumn', 'eBomPuid');
             }
