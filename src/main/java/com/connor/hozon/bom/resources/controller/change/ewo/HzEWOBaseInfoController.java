@@ -3,15 +3,14 @@ package com.connor.hozon.bom.resources.controller.change.ewo;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.connor.hozon.bom.resources.controller.BaseController;
-import com.connor.hozon.bom.resources.dto.request.UpdateHzEWOBasicInfoReqDTO;
-import com.connor.hozon.bom.resources.dto.response.HzEWOBasicInfoRespDTO;
-import com.connor.hozon.bom.resources.dto.response.HzEWOChangeFormRespDTO;
-import com.connor.hozon.bom.resources.dto.response.HzEbomRespDTO;
-import com.connor.hozon.bom.resources.dto.response.OperateResultMessageRespDTO;
+import com.connor.hozon.bom.resources.domain.dto.request.UpdateHzEWOBasicInfoReqDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.HzEWOBasicInfoRespDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.HzEbomRespDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.OperateResultMessageRespDTO;
+import com.connor.hozon.bom.resources.domain.query.HzEWOBasicInfoQuery;
+import com.connor.hozon.bom.resources.domain.query.HzEWOChangeRecordQuery;
+import com.connor.hozon.bom.resources.domain.query.HzEWOImpactReferenceQuery;
 import com.connor.hozon.bom.resources.mybatis.change.HzEWOImpactDeptDAO;
-import com.connor.hozon.bom.resources.query.HzEWOBasicInfoQuery;
-import com.connor.hozon.bom.resources.query.HzEWOChangeRecordQuery;
-import com.connor.hozon.bom.resources.query.HzEWOImpactReferenceQuery;
 import com.connor.hozon.bom.resources.service.change.HzEWOBasicInfoService;
 import com.connor.hozon.bom.resources.service.change.HzEWOImpactReferenceService;
 import com.connor.hozon.bom.resources.service.change.HzEWOService;
@@ -99,12 +98,12 @@ public class HzEWOBaseInfoController extends BaseController {
     @ResponseBody
     public JSONObject getHzEWOBasicInfoList(HzEWOBasicInfoQuery query, HttpServletResponse response){
         if(query.getProjectId() == null || query.getProjectId() == ""){
-            writeAjaxJSONResponse(ResultMessageBuilder.build(false,"非法参数！"),response);
+//            writeAjaxJSONResponse(ResultMessageBuilder.build(false,"非法参数！"),response);
             return new JSONObject();
         }
         List<HzEWOBasicInfoRespDTO> respDTOs = hzEWOBasicInfoService.findHzEWOList(query);
         if(ListUtil.isEmpty(respDTOs)){
-            writeAjaxJSONResponse(ResultMessageBuilder.build(false,"暂无数据！"),response);
+//            writeAjaxJSONResponse(ResultMessageBuilder.build(false,"暂无数据！"),response);
             return new JSONObject();
         }
         JSONObject jsonObject = new JSONObject();

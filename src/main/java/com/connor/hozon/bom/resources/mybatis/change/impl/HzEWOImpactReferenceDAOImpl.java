@@ -1,7 +1,7 @@
 package com.connor.hozon.bom.resources.mybatis.change.impl;
 
+import com.connor.hozon.bom.resources.domain.query.HzEWOImpactReferenceQuery;
 import com.connor.hozon.bom.resources.mybatis.change.HzEWOImpactReferenceDAO;
-import com.connor.hozon.bom.resources.query.HzEWOImpactReferenceQuery;
 import org.springframework.stereotype.Service;
 import sql.BaseSQLUtil;
 import sql.pojo.change.HzEWOImpactReference;

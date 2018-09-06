@@ -1,6 +1,7 @@
 package sql.pojo.work;
 
 import java.util.Date;
+import java.util.Objects;
 
 /**
  * @Author: haozt
@@ -171,6 +172,22 @@ public class HzWorkCenter {
      * 项目id
      */
     private String projectId;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        HzWorkCenter that = (HzWorkCenter) o;
+        return Objects.equals(puid, that.puid) &&
+                Objects.equals(pWorkCode, that.pWorkCode) &&
+                Objects.equals(pWorkDesc, that.pWorkDesc);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(puid, pWorkCode, pWorkDesc);
+    }
 
     public String getProjectId() {
         return projectId;

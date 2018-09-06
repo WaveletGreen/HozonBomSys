@@ -1,10 +1,9 @@
 package com.connor.hozon.bom.resources.mybatis.resourcesLibrary.dictionaryLibrary.impl;
 
+import com.connor.hozon.bom.resources.domain.query.HzDictionaryLibraryQuery;
 import com.connor.hozon.bom.resources.mybatis.resourcesLibrary.dictionaryLibrary.HzDictionaryLibraryDao;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.page.PageRequest;
-import com.connor.hozon.bom.resources.query.DefaultPageQuery;
-import com.connor.hozon.bom.resources.query.HzDictionaryLibraryQuery;
 import org.springframework.stereotype.Service;
 import sql.BaseSQLUtil;
 import sql.pojo.resourcesLibrary.dictionaryLibrary.HzDictionaryLibrary;

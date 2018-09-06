@@ -1,11 +1,10 @@
 package com.connor.hozon.bom.resources.service.change;
 
-import com.connor.hozon.bom.resources.dto.request.InitiatingProcessReqDTO;
-import com.connor.hozon.bom.resources.dto.response.HzEWOChangeFormRespDTO;
-import com.connor.hozon.bom.resources.dto.response.HzEbomRespDTO;
-import com.connor.hozon.bom.resources.dto.response.OperateResultMessageRespDTO;
-import com.connor.hozon.bom.resources.query.HzEWOBasicInfoQuery;
-import com.connor.hozon.bom.resources.query.HzEWOChangeRecordQuery;
+
+import com.connor.hozon.bom.resources.domain.dto.request.InitiatingProcessReqDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.HzEbomRespDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.OperateResultMessageRespDTO;
+import com.connor.hozon.bom.resources.domain.query.HzEWOChangeRecordQuery;
 
 import java.util.List;
 

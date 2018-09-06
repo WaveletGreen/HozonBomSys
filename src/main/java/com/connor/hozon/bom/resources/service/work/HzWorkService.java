@@ -1,12 +1,12 @@
 package com.connor.hozon.bom.resources.service.work;
 
-import com.connor.hozon.bom.resources.dto.request.AddWorkCenterReqDTO;
-import com.connor.hozon.bom.resources.dto.request.UpdateHzEbomReqDTO;
-import com.connor.hozon.bom.resources.dto.request.UpdateWorkCenterReqDTO;
-import com.connor.hozon.bom.resources.dto.response.HzWorkCenterRespDTO;
-import com.connor.hozon.bom.resources.dto.response.OperateResultMessageRespDTO;
+
+import com.connor.hozon.bom.resources.domain.dto.request.AddWorkCenterReqDTO;
+import com.connor.hozon.bom.resources.domain.dto.request.UpdateWorkCenterReqDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.HzWorkCenterRespDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.OperateResultMessageRespDTO;
+import com.connor.hozon.bom.resources.domain.query.HzWorkByPageQuery;
 import com.connor.hozon.bom.resources.page.Page;
-import com.connor.hozon.bom.resources.query.HzWorkByPageQuery;
 
 /**
  * \* User: xulf

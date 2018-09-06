@@ -189,7 +189,7 @@ public class HzImportEbomRecord {
     /**
      * 数量
      */
-    private Integer number;
+    private String number;
     /**
      * 采购工程师
      */
@@ -650,11 +650,11 @@ public class HzImportEbomRecord {
         this.pRegulationCode = pRegulationCode;
     }
 
-    public Integer getNumber() {
+    public String getNumber() {
         return number;
     }
 
-    public void setNumber(Integer number) {
+    public void setNumber(String number) {
         this.number = number;
     }
 

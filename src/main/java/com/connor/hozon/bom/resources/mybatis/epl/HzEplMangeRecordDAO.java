@@ -1,7 +1,7 @@
 package com.connor.hozon.bom.resources.mybatis.epl;
 
+import com.connor.hozon.bom.resources.domain.query.HzEPLByPageQuery;
 import com.connor.hozon.bom.resources.page.Page;
-import com.connor.hozon.bom.resources.query.HzEPLByPageQuery;
 import sql.pojo.epl.HzEPLManageRecord;
 
 import java.util.List;

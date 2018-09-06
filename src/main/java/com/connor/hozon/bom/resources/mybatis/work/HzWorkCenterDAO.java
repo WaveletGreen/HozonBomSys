@@ -1,7 +1,7 @@
 package com.connor.hozon.bom.resources.mybatis.work;
 
+import com.connor.hozon.bom.resources.domain.query.HzWorkByPageQuery;
 import com.connor.hozon.bom.resources.page.Page;
-import com.connor.hozon.bom.resources.query.HzWorkByPageQuery;
 import sql.pojo.work.HzWorkCenter;
 
 import java.util.List;

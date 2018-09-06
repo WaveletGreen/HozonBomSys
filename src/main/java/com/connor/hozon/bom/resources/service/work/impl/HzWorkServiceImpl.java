@@ -1,14 +1,14 @@
 package com.connor.hozon.bom.resources.service.work.impl;
 
 import com.connor.hozon.bom.common.util.user.UserInfo;
-import com.connor.hozon.bom.resources.dto.request.AddWorkCenterReqDTO;
-import com.connor.hozon.bom.resources.dto.request.UpdateWorkCenterReqDTO;
-import com.connor.hozon.bom.resources.dto.response.HzWorkCenterRespDTO;
-import com.connor.hozon.bom.resources.dto.response.OperateResultMessageRespDTO;
+import com.connor.hozon.bom.resources.domain.dto.request.AddWorkCenterReqDTO;
+import com.connor.hozon.bom.resources.domain.dto.request.UpdateWorkCenterReqDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.HzWorkCenterRespDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.OperateResultMessageRespDTO;
+import com.connor.hozon.bom.resources.domain.query.HzWorkByPageQuery;
 import com.connor.hozon.bom.resources.mybatis.factory.HzFactoryDAO;
 import com.connor.hozon.bom.resources.mybatis.work.HzWorkCenterDAO;
 import com.connor.hozon.bom.resources.page.Page;
-import com.connor.hozon.bom.resources.query.HzWorkByPageQuery;
 import com.connor.hozon.bom.resources.service.work.HzWorkService;
 import com.connor.hozon.bom.sys.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;

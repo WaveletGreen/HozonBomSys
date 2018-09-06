@@ -1,8 +1,7 @@
 package com.connor.hozon.bom.resources.mybatis.resourcesLibrary.dictionaryLibrary;
 
+import com.connor.hozon.bom.resources.domain.query.HzDictionaryLibraryQuery;
 import com.connor.hozon.bom.resources.page.Page;
-import com.connor.hozon.bom.resources.query.DefaultPageQuery;
-import com.connor.hozon.bom.resources.query.HzDictionaryLibraryQuery;
 import sql.pojo.resourcesLibrary.dictionaryLibrary.HzDictionaryLibrary;
 
 /**

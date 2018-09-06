@@ -1,11 +1,12 @@
 package com.connor.hozon.bom.resources.service.change;
 
-import com.connor.hozon.bom.resources.dto.request.EditEWOImpactDeptReqDTO;
-import com.connor.hozon.bom.resources.dto.request.EditImpactDeptEmpReqDTO;
-import com.connor.hozon.bom.resources.dto.response.HzEWOImpactDeptEmpRespDTO;
-import com.connor.hozon.bom.resources.dto.response.HzEWOImpactDeptRespDTO;
-import com.connor.hozon.bom.resources.dto.response.OperateResultMessageRespDTO;
-import com.connor.hozon.bom.resources.query.HzEWOImpactDeptQuery;
+
+import com.connor.hozon.bom.resources.domain.dto.request.EditEWOImpactDeptReqDTO;
+import com.connor.hozon.bom.resources.domain.dto.request.EditImpactDeptEmpReqDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.HzEWOImpactDeptEmpRespDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.HzEWOImpactDeptRespDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.OperateResultMessageRespDTO;
+import com.connor.hozon.bom.resources.domain.query.HzEWOImpactDeptQuery;
 
 import java.util.List;
 

@@ -1,7 +1,7 @@
 package com.connor.hozon.bom.resources.mybatis.resourcesLibrary.VPPSLibrary;
 
+import com.connor.hozon.bom.resources.domain.query.HzVPPSLibraryQuery;
 import com.connor.hozon.bom.resources.page.Page;
-import com.connor.hozon.bom.resources.query.HzVPPSLibraryQuery;
 import sql.pojo.resourcesLibrary.VPPSLibrary.HzVPPSLibrary;
 /**
  * Created with IntelliJ IDEA.

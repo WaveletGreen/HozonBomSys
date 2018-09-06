@@ -1,6 +1,6 @@
 package com.connor.hozon.bom.resources.mybatis.change;
 
-import com.connor.hozon.bom.resources.query.HzEWOImpactDeptQuery;
+import com.connor.hozon.bom.resources.domain.query.HzEWOImpactDeptQuery;
 import sql.pojo.change.HzEWOAllImpactDept;
 import sql.pojo.change.HzEWOImpactDept;
 

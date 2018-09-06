@@ -1,9 +1,9 @@
 package com.connor.hozon.bom.resources.mybatis.resourcesLibrary.VPPSLibrary.impl;
 
+import com.connor.hozon.bom.resources.domain.query.HzVPPSLibraryQuery;
 import com.connor.hozon.bom.resources.mybatis.resourcesLibrary.VPPSLibrary.HzVPPSLibraryDao;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.page.PageRequest;
-import com.connor.hozon.bom.resources.query.HzVPPSLibraryQuery;
 import org.springframework.stereotype.Service;
 import sql.BaseSQLUtil;
 import sql.pojo.resourcesLibrary.VPPSLibrary.HzVPPSLibrary;
