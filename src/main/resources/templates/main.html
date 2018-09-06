@@ -236,7 +236,9 @@
     }
 
     function myRefresh(projectUid) {
-        $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doRefresh(projectUid);
+        if ($.isFunction($(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doRefresh)) {
+            $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doRefresh(projectUid);
+        }
     }
 
 </script>
