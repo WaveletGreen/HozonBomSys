@@ -130,4 +130,16 @@
       P_MODEL_CFG_MNG=#{pModelCfgMng,jdbcType=VARCHAR}
       where  PUID=#{puid,jdbcType=VARCHAR}
   </update>
+
+    <select id="selectByModelIds" parameterType="sql.pojo.cfg.HzCfg0ModelDetail" resultMap="BaseResultMap">
+        select
+          <include refid="Base_Column_List"/>
+        from
+          HZ_CFG0_MODEL_DETAIL
+        where
+          P_MODEL_PUID in
+        <foreach collection="list" item="hzCfg0ModelRecord" open="(" close=")" separator=",">
+            #{hzCfg0ModelRecord.pModelPuid}
+        </foreach>
+    </select>
 </mapper>

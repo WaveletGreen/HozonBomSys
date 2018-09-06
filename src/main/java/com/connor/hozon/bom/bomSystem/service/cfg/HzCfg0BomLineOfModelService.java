@@ -209,6 +209,8 @@ public class HzCfg0BomLineOfModelService {
             });
             respond.put("data", _data);
             respond.put("model", _model);
+            respond.put("modelSize",mapToModel.size());
+            respond.put("peculiarity",modelWithBomLineMap.size());
             return respond;
         } catch (Exception e) {
             logger.error("发生错误", e);

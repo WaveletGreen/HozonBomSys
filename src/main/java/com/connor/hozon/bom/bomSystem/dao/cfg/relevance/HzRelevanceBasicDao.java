@@ -21,4 +21,6 @@ public interface HzRelevanceBasicDao extends BasicDao<HzRelevanceBasic> {
      * @return
      */
     int insertByBatch(List<HzRelevanceBasic> list);
+
+    Long insertBasic(HzRelevanceBasic hzRelevanceBasic);
 }

@@ -6,6 +6,9 @@ import org.springframework.stereotype.Service;
 import sql.IBaseSQLUtil;
 import sql.pojo.cfg.HzCfg0ModelDetail;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * User: Fancyears·Maylos·Mayways
  * Date: 2018/5/21
@@ -29,6 +32,11 @@ public class HzCfg0ModelDaoImpl implements HzCfg0ModelDetailDao {
     @Override
     public HzCfg0ModelDetail selectByModelId(HzCfg0ModelDetail detail) {
         return baseSQLUtil.executeQueryById(detail, "com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0ModelDetailDao.selectByModelId");
+    }
+
+    @Override
+    public List<HzCfg0ModelDetail> selectByModelIds(List<HzCfg0ModelDetail> hzCfg0ModelDetails) {
+        return baseSQLUtil.executeQueryByPass(new HzCfg0ModelDetail(), hzCfg0ModelDetails, "com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0ModelDetailDao.selectByModelIds");
     }
 
 

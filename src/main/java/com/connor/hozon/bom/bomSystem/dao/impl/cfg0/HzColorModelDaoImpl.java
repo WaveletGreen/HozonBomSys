@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import sql.IBaseSQLUtil;
 import sql.pojo.cfg.HzColorModel;
+import sql.pojo.cfg.HzColorModel2;
 
 import java.util.List;
 
@@ -105,6 +106,11 @@ public class HzColorModelDaoImpl implements HzColorModelDao {
     @Override
     public int updateColorModelWithCfg(HzColorModel colorModels) {
         return baseSQLUtil.executeUpdate(colorModels, "com.connor.hozon.bom.bomSystem.dao.cfg.HzColorModelDao.updateColorModelWithCfg");
+    }
+
+    @Override
+    public List<HzColorModel2> selectByProjectPuid(String projectPuid) {
+        return  baseSQLUtil.executeQueryByPass(new HzColorModel2(), projectPuid, "com.connor.hozon.bom.bomSystem.dao.cfg.HzColorModelDao.selectByProjectPuid");
     }
 
 

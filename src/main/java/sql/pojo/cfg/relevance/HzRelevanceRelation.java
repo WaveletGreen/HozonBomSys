@@ -4,15 +4,15 @@ import java.util.Date;
 
 public class HzRelevanceRelation {
     private Long id;
-
+    //特性值id
     private String rrCfg0Uid;
-
+    //配色方案id
     private String rrColorModelUid;
-
+    //颜色id
     private String rrColorUid;
-
+    //相关性id
     private Long rrRelevanceId;
-
+    //特性id
     private String rrCfgFamilyUid;
 
     private String rrCreator;
