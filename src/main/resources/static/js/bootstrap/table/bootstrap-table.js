@@ -211,9 +211,9 @@
     var objectKeys = function () {
         // From https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/keys
         if (!Object.keys) {
-            Object.keys = (function() {
+            Object.keys = (function () {
                 var hasOwnProperty = Object.prototype.hasOwnProperty,
-                    hasDontEnumBug = !({ toString: null }).propertyIsEnumerable('toString'),
+                    hasDontEnumBug = !({toString: null}).propertyIsEnumerable('toString'),
                     dontEnums = [
                         'toString',
                         'toLocaleString',
@@ -225,7 +225,7 @@
                     ],
                     dontEnumsLength = dontEnums.length;
 
-                return function(obj) {
+                return function (obj) {
                     if (typeof obj !== 'object' && (typeof obj !== 'function' || obj === null)) {
                         throw new TypeError('Object.keys called on non-object');
                     }
@@ -286,7 +286,7 @@
         contentType: 'application/x-www-form-urlencoded',// 窗体数据被编码为名称/值对。这是标准的编码格式
         dataType: 'json',
         ajaxOptions: {},
-        formId:"",
+        formId: "",
         queryParams: function (params) {
             return params;
         },
@@ -294,13 +294,13 @@
         responseHandler: function (res) { // 用于server 分页，表格数据量太大的话 不想一次查询所有数据，可以使用server分页查询，数据量小的话可以直接把sidePagination: "server"  改为 sidePagination: "client" ，同时去掉responseHandler: responseHandler就可以了，
             if (res) {
                 return {
-                    "rows" : res.result,
-                    "total" : res.totalCount
+                    "rows": res.result,
+                    "total": res.totalCount
                 };
             } else {
                 return {
-                    "rows" : [],
-                    "total" : 0
+                    "rows": [],
+                    "total": 0
                 };
             }
         },
@@ -565,7 +565,7 @@
         searchable: true,
         searchFormatter: true,
         cardVisible: true,
-        escape : false
+        escape: false
     };
 
     BootstrapTable.EVENTS = {
@@ -741,7 +741,7 @@
                     rspan = +$this.attr('rowspan') || 1,
                     tx, ty;
 
-                for (; m[y] && m[y][x]; x++); //skip already occupied cells in current row
+                for (; m[y] && m[y][x]; x++) ; //skip already occupied cells in current row
 
                 for (tx = x; tx < x + cspan; tx++) { //mark matrix elements occupied by current cell with true
                     for (ty = y; ty < y + rspan; ty++) {
@@ -1043,7 +1043,7 @@
                 timeoutId = setTimeout(function () {
                     that.$el.removeClass(that.options.sortClass);
                     var index = that.$header.find(sprintf('[data-field="%s"]',
-                            that.options.sortName).index() + 1);
+                        that.options.sortName).index() + 1);
                     that.$el.find(sprintf('tr td:nth-child(%s)', index))
                         .addClass(that.options.sortClass);
                 }, 250);
@@ -1064,7 +1064,7 @@
             if (this.options.rememberOrder) {
                 this.options.sortOrder = $this.data('order') === 'asc' ? 'desc' : 'asc';
             } else {
-                this.options.sortOrder = this.options.columns[0].filter(function(option) {
+                this.options.sortOrder = this.options.columns[0].filter(function (option) {
                     return option.field === $this.data('field');
                 })[0].order;
             }
@@ -1098,15 +1098,15 @@
         }
         this.$toolbar.html('');
 
-        if(this.options.toolbars!=undefined){
+        if (this.options.toolbars != undefined) {
             var toolbars = "";
             var toolbargroup = document.createElement("div");
-            toolbargroup.setAttribute("class","columns columns-left btn-group pull-left");
-            for(var i=0;i<this.options.toolbars.length;i++){
+            toolbargroup.setAttribute("class", "columns columns-left btn-group pull-left");
+            for (var i = 0; i < this.options.toolbars.length; i++) {
                 var toolbar = document.createElement("button");
                 toolbar.setAttribute("class", "btn btn-default");
                 toolbar.onclick = this.options.toolbars[i].handler;
-                toolbar.innerHTML = "<span class='"+this.options.toolbars[i].iconCls+"' aria-hidden='true'></span>"+this.options.toolbars[i].text;
+                toolbar.innerHTML = "<span class='" + this.options.toolbars[i].iconCls + "' aria-hidden='true'></span>" + this.options.toolbars[i].text;
                 toolbargroup.appendChild(toolbar);
             }
             $('.fixed-table-toolbar').append(toolbargroup);
@@ -1128,9 +1128,9 @@
 
         if (this.options.showPaginationSwitch) {
             html.push(sprintf('<button class="btn' +
-                    sprintf(' btn-%s', this.options.buttonsClass) +
-                    sprintf(' btn-%s', this.options.iconSize) +
-                    '" type="button" name="paginationSwitch" aria-label="pagination Switch" title="%s" style="width: 52px;height: 34px;">',
+                sprintf(' btn-%s', this.options.buttonsClass) +
+                sprintf(' btn-%s', this.options.iconSize) +
+                '" type="button" name="paginationSwitch" aria-label="pagination Switch" title="%s" style="width: 52px;height: 34px;">',
                 this.options.formatPaginationSwitch()),
                 sprintf('<i class="%s %s"></i>', this.options.iconsPrefix, this.options.icons.paginationSwitchDown),
                 '</button>');
@@ -1138,9 +1138,9 @@
 
         if (this.options.showRefresh) {
             html.push(sprintf('<button class="btn' +
-                    sprintf(' btn-%s', this.options.buttonsClass) +
-                    sprintf(' btn-%s', this.options.iconSize) +
-                    '" type="button" name="refresh" aria-label="refresh" title="%s" style="width: 52px;height: 34px;">',
+                sprintf(' btn-%s', this.options.buttonsClass) +
+                sprintf(' btn-%s', this.options.iconSize) +
+                '" type="button" name="refresh" aria-label="refresh" title="%s" style="width: 52px;height: 34px;">',
                 this.options.formatRefresh()),
                 sprintf('<i class="%s %s"></i>', this.options.iconsPrefix, this.options.icons.refresh),
                 '</button>');
@@ -1148,9 +1148,9 @@
 
         if (this.options.showToggle) {
             html.push(sprintf('<button class="btn' +
-                    sprintf(' btn-%s', this.options.buttonsClass) +
-                    sprintf(' btn-%s', this.options.iconSize) +
-                    '" type="button" name="toggle" aria-label="toggle" title="%s" style="width: 52px;height: 34px;">',
+                sprintf(' btn-%s', this.options.buttonsClass) +
+                sprintf(' btn-%s', this.options.iconSize) +
+                '" type="button" name="toggle" aria-label="toggle" title="%s" style="width: 52px;height: 34px;">',
                 this.options.formatToggle()),
                 sprintf('<i class="%s %s"></i>', this.options.iconsPrefix, this.options.icons.toggle),
                 '</button>');
@@ -1300,7 +1300,7 @@
             }
 
             var s = this.searchText && (this.options.escape ?
-                    escapeHTML(this.searchText) : this.searchText).toLowerCase();
+                escapeHTML(this.searchText) : this.searchText).toLowerCase();
             var f = $.isEmptyObject(this.filterColumns) ? null : this.filterColumns;
 
             // Check filter
@@ -1393,7 +1393,7 @@
                 var pageLst = typeof this.options.pageList === 'string' ?
                     this.options.pageList.replace('[', '').replace(']', '')
                         .replace(/ /g, '').toLowerCase().split(',') : this.options.pageList;
-                if ($.inArray(this.options.formatAllRows().toLowerCase(), pageLst)  > -1) {
+                if ($.inArray(this.options.formatAllRows().toLowerCase(), pageLst) > -1) {
                     $allSelected = true;
                 }
             }
@@ -1668,8 +1668,8 @@
         return false;
     };
 
-    BootstrapTable.prototype.initRow = function(item, i, data, parentDom) {
-        var that=this,
+    BootstrapTable.prototype.initRow = function (item, i, data, parentDom) {
+        var that = this,
             key,
             html = [],
             style = {},
@@ -1700,7 +1700,7 @@
         }
 
         if (item._data && !$.isEmptyObject(item._data)) {
-            $.each(item._data, function(k, v) {
+            $.each(item._data, function (k, v) {
                 // ignore data-index
                 if (k === 'index') {
                     return;
@@ -1735,7 +1735,7 @@
             html.push('</td>');
         }
 
-        $.each(this.header.fields, function(j, field) {
+        $.each(this.header.fields, function (j, field) {
             var text = '',
                 value_ = getItemField(item, field, that.options.escape),
                 value = '',
@@ -1750,7 +1750,7 @@
                 column = that.columns[j];
 
             if (that.fromHtml && typeof value_ === 'undefined') {
-                if((!column.checkbox) && (!column.radio)) {
+                if ((!column.checkbox) && (!column.radio)) {
                     return;
                 }
             }
@@ -1802,7 +1802,7 @@
                 that.header.formatters[j], [value_, item, i, field], value_);
 
             if (item['_' + field + '_data'] && !$.isEmptyObject(item['_' + field + '_data'])) {
-                $.each(item['_' + field + '_data'], function(k, v) {
+                $.each(item['_' + field + '_data'], function (k, v) {
                     // ignore data-index
                     if (k === 'index') {
                         return;
@@ -1891,7 +1891,7 @@
             var item = data[i];
             var tr = this.initRow(item, i, data, trFragments);
             hasTr = hasTr || !!tr;
-            if (tr&&tr!==true) {
+            if (tr && tr !== true) {
                 trFragments.append(tr);
             }
         }
@@ -1954,7 +1954,7 @@
                 $tr.after(sprintf('<tr class="detail-view"><td colspan="%s"></td></tr>', $tr.find('td').length));
                 var $element = $tr.next().find('td');
                 var content = calculateObjectValue(that.options, that.options.detailFormatter, [index, row, $element], '');
-                if($element.length === 1) {
+                if ($element.length === 1) {
                     $element.append(content);
                 }
                 that.trigger('expand-row', index, row, $element);
@@ -2075,25 +2075,27 @@
         var sortName = this.options.sortName;
         var sortOrder = this.options.sortOrder;
         // 重写查询的js方法
-        this.options.queryParams = function(params){
+        this.options.queryParams = function (params) {
             var param = {
-                page : this.pageNumber,// 起始页面
-                limit : this.pageSize // 页面大小
+                page: this.pageNumber,// 起始页面
+                limit: this.pageSize // 页面大小
             }
             // if(formId!=undefined||formId!=''){
             //     $.each($("#"+formId).find("input"),function(index,info){
             //         param[info.name] = info.value;
             //     })
             // }
-            if(formId!=undefined||formId!=''){
-                $.each($(formId).find("input"),function(index,info){
+            if (formId != undefined || formId != '') {
+                console.log(formId);
+                $.each($("#"+formId).find("input"), function (index, info) {
                     param[info.name] = info.value;
+                    console.log(param[info.name]);
                 })
             }
-            if(sortName!=undefined){
+            if (sortName != undefined) {
                 param.sort = sortName;
             }
-            if(sortOrder!=null){
+            if (sortOrder != null) {
                 param.order = sortOrder;
             }
             return param;
@@ -2113,7 +2115,7 @@
         }
         request = $.extend({}, calculateObjectValue(null, this.options.ajaxOptions), {
             type: this.options.method,
-            url:  url || this.options.url,
+            url: url || this.options.url,
             data: this.options.contentType === 'application/json' && this.options.method === 'post' ?
                 JSON.stringify(data) : data,
             cache: this.options.cache,
@@ -2582,7 +2584,7 @@
 
             if (row.hasOwnProperty(uniqueId)) { // uniqueId is a column
                 rowUniqueId = row[uniqueId];
-            } else if(row._data.hasOwnProperty(uniqueId)) { // uniqueId is a row data property
+            } else if (row._data.hasOwnProperty(uniqueId)) { // uniqueId is a row data property
                 rowUniqueId = row._data[uniqueId];
             } else {
                 continue;
@@ -2626,9 +2628,9 @@
 
     BootstrapTable.prototype.updateByUniqueId = function (params) {
         var that = this;
-        var allParams = $.isArray(params) ? params : [ params ];
+        var allParams = $.isArray(params) ? params : [params];
 
-        $.each(allParams, function(i, params) {
+        $.each(allParams, function (i, params) {
             var rowId;
 
             if (!params.hasOwnProperty('id') || !params.hasOwnProperty('row')) {
@@ -2682,9 +2684,9 @@
 
     BootstrapTable.prototype.updateRow = function (params) {
         var that = this;
-        var allParams = $.isArray(params) ? params : [ params ];
+        var allParams = $.isArray(params) ? params : [params];
 
-        $.each(allParams, function(i, params) {
+        $.each(allParams, function (i, params) {
             if (!params.hasOwnProperty('index') || !params.hasOwnProperty('row')) {
                 return;
             }
@@ -2823,7 +2825,7 @@
         var that = this;
         var rows = that.$selectItem.filter(':enabled');
         var checked = rows.filter(':checked');
-        rows.each(function() {
+        rows.each(function () {
             $(this).prop('checked', !$(this).prop('checked'));
         });
         that.updateRows();

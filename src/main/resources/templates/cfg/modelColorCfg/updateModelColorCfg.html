@@ -2,43 +2,58 @@
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <body>
 <meta charset=utf-8/>
-<form class="form-horizontal" id="form" role="form" method="post" action="./modelColor/updateColorModel">
-    <fieldset>
-        <input id="puid" name="puid" type="hidden" th:value="${entity.puid}"/>
-        <div id="legend" class="">
-            <legend class="">更新颜色车型</legend>
-        </div>
+<div class="form-group col-lg-6">
+    <form class="form-horizontal" id="form" role="form" method="post" action="./modelColor/updateColorModel">
+        <fieldset>
+            <input id="puid" name="puid" type="hidden" th:value="${entity.puid}"/>
+            <div id="legend" class="">
+                <legend class="">更新颜色车型</legend>
+            </div>
 
-        <div class="form-group col-lg-10">
-            <label for="pCodeOfColorfulModel">车型颜色代码</label>
-            <input class="form-control" id="pCodeOfColorfulModel" name="pCodeOfColorfulModel" type="text"
-                   disabled="disabled" th:value="${entity.pCodeOfColorfulModel}"/>
-        </div>
-        <div class="form-group col-lg-10">
-            <label for="pDescOfColorfulModel">描述</label>
-            <input class="form-control" id="pDescOfColorfulModel" name="pDescOfColorfulModel" type="text"
-                   placeholder="请输入描述" th:value="${entity.pDescOfColorfulModel}"/>
-        </div>
-        <div class="form-group col-lg-10">
-            <label for="modelShell">油漆车身总成</label>
-            <input class="form-control" id="modelShell" name="modelShell" type="text"
-                   disabled="disabled" th:value="${entity.pModelShellOfColorfulModel}"/>
-        </div>
-        <!--循环放入数据-->
-        <div class="form-group col-lg-10" th:each="column,c:${columnList}">
-            <label class="control-label" th:text="${column.getpOptionfamilyName()+'-'+column.getpOptionfamilyDesc()}" th:for="${column.getPuid()}"></label>
-            <select class="form-control input-small" th:name="${column.getPuid()}" data-style="btn-info"
-                    th:id="${column.getPuid()}"
-            >
-                <option th:each="color:${colorList}" th:value="${color.getPuid()}"
-                        th:text="${color.pColorCode+'&emsp;&emsp;'+color.pColorName+'&emsp;&emsp;'+color.getpColorComment()+'&emsp;&emsp;'+color.getpColorOfSet()}"
-                        th:selected="${orgValue.get((c.index))==color.pColorCode? true :false}"
+            <div class="form-group col-lg-12">
+                <label for="pCodeOfColorfulModel">车型颜色代码</label>
+                <input class="form-control" id="pCodeOfColorfulModel" name="pCodeOfColorfulModel" type="text"
+                       disabled="disabled" th:value="${entity.pCodeOfColorfulModel}"/>
+            </div>
+            <div class="form-group ccol-lg-12">
+                <label for="pDescOfColorfulModel">描述</label>
+                <input class="form-control" id="pDescOfColorfulModel" name="pDescOfColorfulModel" type="text"
+                       placeholder="请输入描述" th:value="${entity.pDescOfColorfulModel}"/>
+            </div>
+            <div class="form-group ccol-lg-12">
+                <label for="modelShell">油漆车身总成</label>
+                <input class="form-control" id="modelShell" name="modelShell" type="text"
+                       disabled="disabled" th:value="${entity.pModelShellOfColorfulModel}"/>
+            </div>
+            <!--循环放入数据-->
+            <div class="form-group ccol-lg-12" th:each="column,c:${columnList}">
+                <label class="control-label"
+                       th:text="${column.getpOptionfamilyName()+'-'+column.getpOptionfamilyDesc()}"
+                       th:for="${column.getPuid()}"></label>
+                <select class="form-control input-small" th:name="${column.getPuid()}" data-style="btn-info"
+                        th:id="${column.getPuid()}"
                 >
-                </option>
-            </select>
-        </div>
-    </fieldset>
-</form>
+                    <option th:each="color:${colorList}" th:value="${color.getPuid()}"
+                            th:text="${color.pColorCode+'&emsp;&emsp;'+color.pColorName+'&emsp;&emsp;'+color.getpColorComment()+'&emsp;&emsp;'+color.getpColorOfSet()}"
+                            th:selected="${orgValue.get((c.index))==color.pColorCode? true :false}"
+                    >
+                    </option>
+                </select>
+            </div>
+        </fieldset>
+    </form>
+</div>
+<div class="form-group col-lg-6">
+    <div class="col-lg-12">
+        <label for="feature">特性代码:</label>
+        <input class="form-control" style="width: 200px;" id="feature" name="feature" type="text"
+               placeholder="请输入查找的特性"
+        />
+    </div>
+    <a id="search" href="#">
+
+    </a>
+</div>
 <script th:inline="javascript">
     <![CDATA[
     $(function () {
@@ -71,7 +86,7 @@
                 for (var p in _d) {
                     data[_d[p].name] = _d[p].value;
                 }
-                data.pCodeOfColorfulModel=$("#pCodeOfColorfulModel").val();
+                data.pCodeOfColorfulModel = $("#pCodeOfColorfulModel").val();
                 $.ajax({
                     contentType:
                         "application/json",

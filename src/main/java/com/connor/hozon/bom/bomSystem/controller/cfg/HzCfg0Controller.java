@@ -3,6 +3,7 @@ package com.connor.hozon.bom.bomSystem.controller.cfg;
 import com.connor.hozon.bom.bomSystem.controller.integrate.ExtraIntegrate;
 import com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0MainRecordDao;
 import com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0OptionFamilyDao;
+import com.connor.hozon.bom.bomSystem.dto.HzFeatureQueryDTO;
 import com.connor.hozon.bom.bomSystem.dto.HzRelevanceBean;
 import com.connor.hozon.bom.bomSystem.helper.DateStringHelper;
 import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
@@ -92,11 +93,12 @@ public class HzCfg0Controller extends ExtraIntegrate {
     /******************************************特性表***********************************************/
     @RequestMapping("/loadFeature")
     @ResponseBody
-    public Map<String, Object> loadCfg0(@RequestParam("projectPuid") String projectPuid, QueryBase queryBase) {
+    public Map<String, Object> loadCfg0(@RequestParam("projectPuid") String projectPuid, HzFeatureQueryDTO queryBase) {
         Map<String, Object> result = new HashMap<>();
         queryBase.setSort(HzCfg0Record.reflectToDBField(queryBase.getSort()));
         List<HzCfg0Record> records = hzCfg0Service.doLoadCfgListByProjectPuid(projectPuid, queryBase);
-        int totalCount = hzCfg0Service.tellMeHowManyOfThose(projectPuid);
+//        List<HzCfg0Record> list=hzCfg0Service.doLoadByCondition(queryBase);
+        int totalCount = hzCfg0Service.tellMeHowManyOfThose(queryBase);
 //        records.addAll(hzCfg0Service.doLoadAddedCfgListByProjectPuid(projectPuid));
 //        int totalCount = hzCfg0Service.tellMeHowManyOfThose(projectPuid);
         result.put("totalCount", totalCount);

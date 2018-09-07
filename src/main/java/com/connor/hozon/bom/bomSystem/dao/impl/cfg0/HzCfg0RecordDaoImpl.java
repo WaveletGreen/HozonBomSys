@@ -1,5 +1,6 @@
 package com.connor.hozon.bom.bomSystem.dao.impl.cfg0;
 
+import com.connor.hozon.bom.bomSystem.dto.HzFeatureQueryDTO;
 import com.connor.hozon.bom.bomSystem.dto.HzMaterielFeatureBean;
 import com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0RecordDao;
 import com.connor.hozon.bom.common.base.entity.QueryBase;
@@ -105,8 +106,18 @@ public class HzCfg0RecordDaoImpl implements HzCfg0RecordDao {
 
 
     @Override
-    public int tellMeHowManyOfThose(String projectPuid) {
-        return baseSQLUtil.executeQueryByPass(new Integer(0), projectPuid, "com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0RecordDao.tellMeHowManyOfThose", true);
+    public int tellMeHowManyOfThose(HzFeatureQueryDTO dto) {
+        List<Integer> result = baseSQLUtil.executeQueryByPass(new Integer(0), dto, "com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0RecordDao.tellMeHowManyOfThose");
+        if (result == null) {
+            return 0;
+        } else {
+            return result.get(0);
+        }
+    }
+
+    @Override
+    public List<HzCfg0Record> selectByCondition(HzFeatureQueryDTO queryBase) {
+        return baseSQLUtil.executeQueryByPass(RECORD, queryBase, "com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0RecordDao.selectByCondition");
     }
 
     @Override
@@ -146,5 +157,6 @@ public class HzCfg0RecordDaoImpl implements HzCfg0RecordDao {
         record.setWhichTable("HZ_CFG0_ADD_CFG_RECORD");
         return baseSQLUtil.executeQueryById(record, "com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0RecordDao.selectByPrimaryKey");
     }
+
 
 }

@@ -3,6 +3,8 @@ package com.connor.hozon.bom.bomSystem.dao.cfg;
 import org.springframework.context.annotation.Configuration;
 import sql.pojo.cfg.HzCfg0ModelDetail;
 
+import java.util.List;
+
 @Configuration
 public interface HzCfg0ModelDetailDao {
     /**
@@ -32,4 +34,5 @@ public interface HzCfg0ModelDetailDao {
      */
     HzCfg0ModelDetail selectByModelId(HzCfg0ModelDetail detail);
 
+    List<HzCfg0ModelDetail> selectByModelIds(List<HzCfg0ModelDetail> hzCfg0ModelRecords);
 }

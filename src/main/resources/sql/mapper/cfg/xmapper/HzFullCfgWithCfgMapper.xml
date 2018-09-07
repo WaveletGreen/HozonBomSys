@@ -33,15 +33,20 @@
     delete from HZ_FULL_CFG_WITHCFG_RECORD
     where ID = #{id,jdbcType=DECIMAL}
   </delete>
-    <insert id="insert" parameterType="sql.pojo.cfg.HzFullCfgWithCfg">
-    insert into HZ_FULL_CFG_WITHCFG_RECORD (ID, CFG_CFG0_UID, CFG_BOMLINE_UID, 
-      FL_CFG_CREATE_DATE, FL_CFG_UPDATE_DATE, FL_CFG_CREATOR, 
-      FL_CFG_UPDATOR, FL_CFG_BOMLINE_NAME, FL_CFG_VERSION
-      )
-    values (#{id,jdbcType=DECIMAL}, #{cfgCfg0Uid,jdbcType=VARCHAR}, #{cfgBomlineUid,jdbcType=VARCHAR}, 
-      #{flCfgCreateDate,jdbcType=TIMESTAMP}, #{flCfgUpdateDate,jdbcType=TIMESTAMP}, #{flCfgCreator,jdbcType=OTHER}, 
-      #{flCfgUpdator,jdbcType=OTHER}, #{flCfgBomlineName,jdbcType=OTHER}, #{flCfgVersion,jdbcType=DECIMAL}
-      )
+    <insert id="insert" parameterType="java.util.List">
+    insert into HZ_FULL_CFG_WITHCFG_RECORD
+        (ID, CFG_CFG0_UID, FL_CFG_CREATOR,
+          FL_CFG_UPDATOR, FL_CFG_VERSION
+        )
+      select SEQ_HZ_FL_CFG_CFG0_ID.NEXTVAL ,A.* from(
+      <foreach collection="list" index="index" item="hzFullCfgWithCfg" separator="union">
+          select
+          #{hzFullCfgWithCfg.cfgCfg0Uid,jdbcType=VARCHAR},  #{hzFullCfgWithCfg.flCfgCreator,jdbcType=OTHER},
+          #{hzFullCfgWithCfg.flCfgUpdator,jdbcType=OTHER}, #{hzFullCfgWithCfg.flCfgVersion,jdbcType=DECIMAL}
+          from
+            dual
+      </foreach>
+        )A
   </insert>
     <insert id="insertSelective" parameterType="sql.pojo.cfg.HzFullCfgWithCfg">
         insert into HZ_FULL_CFG_WITHCFG_RECORD

@@ -1,5 +1,6 @@
 package com.connor.hozon.bom.bomSystem.service.cfg;
 
+import com.connor.hozon.bom.bomSystem.dto.HzFeatureQueryDTO;
 import com.connor.hozon.bom.bomSystem.dto.HzMaterielFeatureBean;
 import com.connor.hozon.bom.bomSystem.dto.HzRelevanceBean;
 import com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0RecordDao;
@@ -160,11 +161,11 @@ public class HzCfg0Service {
     /**
      * 项目上的特性总数是多少，针对项目而非整个合众公司
      *
-     * @param projectPuid
+     * @param dto
      * @return
      */
-    public int tellMeHowManyOfThose(String projectPuid) {
-        return hzCfg0RecordDao.tellMeHowManyOfThose(projectPuid);
+    public int tellMeHowManyOfThose(HzFeatureQueryDTO dto) {
+        return hzCfg0RecordDao.tellMeHowManyOfThose(dto);
     }
 
     /**
@@ -178,5 +179,9 @@ public class HzCfg0Service {
         params.put("cfgIsInProcess", "1");
         params.put("list", cfgs);
         return hzCfg0RecordDao.setToProcess(params);
+    }
+
+    public List<HzCfg0Record> doLoadByCondition(HzFeatureQueryDTO queryBase) {
+        return hzCfg0RecordDao.selectByCondition(queryBase);
     }
 }

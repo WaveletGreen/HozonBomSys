@@ -3,18 +3,18 @@ function loadData(projectPuid) {
     $table.bootstrapTable('destroy');
     $("#refresh").removeAttr("disabled");
     $table.bootstrapTable({
-        url: "cfg0/loadRelevance2?projectPuid=" + projectPuid,
-        method: "GET",
-        height: $(window.parent.document).find("#wrapper").height() - 150,//$(window.parent.document).find("#wrapper").height() - document.body.offsetHeight - 45,
-        width: $(window).width(),
-        showToggle: true,                   //是否显示详细视图和列表视图的切换按钮
-        // showColumns: true,                  //是否显示所有的列
-        showRefresh: true,                  //是否显示刷新按钮
-        pageSize: 10,
-        pagination: true,                   //是否显示分页（*）
-        clickToSelect: true,                // 单击某一行的时候选中某一条记录
-        formId: "relevanceForm",
-        toolbars: [
+            url: "cfg0/loadRelevance2?projectPuid=" + projectPuid,
+            method: "GET",
+            height: $(window.parent.document).find("#wrapper").height() - 150,//$(window.parent.document).find("#wrapper").height() - document.body.offsetHeight - 45,
+            width: $(window).width(),
+            showToggle: true,                   //是否显示详细视图和列表视图的切换按钮
+            // showColumns: true,                  //是否显示所有的列
+            showRefresh: true,                  //是否显示刷新按钮
+            pageSize: 10,
+            pagination: true,                   //是否显示分页（*）
+            clickToSelect: true,                // 单击某一行的时候选中某一条记录
+            formId: "relevanceForm",
+            toolbars: [
             // {
             //     text: '修改',
             //     iconCls: 'glyphicon glyphicon-pencil',
@@ -130,3 +130,127 @@ $(document).ready(
         loadData(getProjectUid());
     })
 );
+
+
+function generateRelevance() {
+    var msg = "您确定生成相关性吗！";
+    var projectPuid = $("#project", window.top.document).val();
+    if (confirm(msg)==true){
+        // $.ajax({
+        //     type: "GET",
+        //     //ajax需要添加打包名
+        //     url: "relevance/addRelevance?projectPuid="+projectPuid,
+        //     success: function (result) {
+        //         $("#dataTable  tr:not(:first)").html("");
+        //         var datas = result.data;
+        //         $.each(datas, function(i,item) {
+        //             $("#dataTable").append("<tr><td>"+i+"</td>><td>"+item.pOptionfamilyName+"-"+item.pCfg0ObjectId+item.colorCode+"</td><td>"+item.pCfg0Desc+"-"+item.colorDesc+"</td><td>"+item.cfg0Relevance+"</td></tr>");
+        //         });
+        //     },
+        //     error: function (info) {
+        //         window.Ewin.alert({message: "操作发送失败:" + info.status});
+        //     }
+        // });
+
+
+
+        var $table = $("#dataTable");
+        $table.bootstrapTable('destroy');
+
+        $table.bootstrapTable({
+            url: "relevance/addRelevance?projectPuid="+projectPuid,
+            method: "GET",
+            height: $(window.parent.document).find("#wrapper").height() - 150,//$(window.parent.document).find("#wrapper").height() - document.body.offsetHeight - 45,
+            width: $(window).width(),
+            showToggle: true,                   //是否显示详细视图和列表视图的切换按钮
+            // showColumns: true,                  //是否显示所有的列
+            showRefresh: true,                  //是否显示刷新按钮
+            pageSize: 10,
+            pagination: true,                   //是否显示分页（*）
+            clickToSelect: true,                // 单击某一行的时候选中某一条记录
+            formId: "relevanceForm",
+            toolbars: [
+                {
+                    text: '发送到ERP',
+                    iconCls: 'glyphicon glyphicon-send',
+                    handler: function () {
+                        var rows = $table.bootstrapTable('getSelections');
+                        if (rows.length == 0) {
+                            window.Ewin.alert({message: '请至少选择一条需要发送的数据!'});
+                            return false;
+                        }
+                        window.Ewin.confirm({title: '提示', message: '是否要发送您所选择的记录？', width: 500}).on(function (e) {
+                            if (e) {
+                                $.ajax({
+                                    type: "POST",
+                                    //ajax需要添加打包名
+                                    url: "./cfg0/sendRelToERP",
+                                    data: JSON.stringify(rows),
+                                    contentType: "application/json",
+                                    success: function (result) {
+                                        // if (result.status) {
+                                        //     layer.msg(result.msg, {icon: 1, time: 2000})
+                                        window.Ewin.alert({message: result, width: 800});
+                                        //     //刷新，会重新申请数据库数据
+                                        // }
+                                        // else {
+                                        //     window.Ewin.alert({message: "操作发送失败:" + result.msg});
+                                        // }
+                                        $table.bootstrapTable("refresh");
+                                    },
+                                    error: function (info) {
+                                        window.Ewin.alert({message: "操作发送失败:" + info.status});
+                                    }
+                                })
+                            }
+                        });
+                    }
+                }
+            ],
+            /**列信息，需要预先定义好*/
+            columns: [
+                {
+                    // field: 'ck',
+                    checkbox: true
+                },
+                {
+                    field: 'index',
+                    title: '序号',
+                },
+                {
+                    field: 'pOptionfamilyName',
+                    title: '相关性',
+                    align: 'center',
+                    valign: 'middle',
+                //     formatter:function( value,row,index ){
+                //         //如何使用拿到的多个数据 直接返回拼接好的html;
+                //         var html = "<span>"+row["pOptionfamilyName"]+"-"+row["pCfg0ObjectId"]+"-"+row["colorCode"]+"</span>"
+                //         return html;
+                //     }
+                },
+                {
+                    field: 'pCfg0Desc',
+                    title: '相关性描述',
+                    align: 'center',
+                    valign: 'middle',
+                //     formatter:function( value,row,index ){
+                //         //如何使用拿到的多个数据 直接返回拼接好的html;
+                //         var html = "<span>"+row["pCfg0Desc"]+"-"+row["colorDesc"]+"</span>"
+                //         return html;
+                //     }
+                },
+                {
+                    field: 'cfg0Relevance',
+                    title: '相关性代码',
+                    align: 'center',
+                    valign: 'middle',
+                //     formatter:function( value,row,index ){
+                //     //如何使用拿到的多个数据 直接返回拼接好的html;
+                //     var html = "<span>"+row["cfg0Relevance"]+"</span>"
+                //     return html;
+                // }
+                },
+            ],
+        });
+    }
+}

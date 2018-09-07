@@ -43,4 +43,11 @@ public class HzRelevanceBasicDaoImpl extends BasicDaoImpl<HzRelevanceBasic> impl
         return baseSQLUtil.executeInsert(list, clz.getCanonicalName() + ".insertByBatch");
     }
 
+    @Override
+    public Long insertBasic(HzRelevanceBasic hzRelevanceBasic) {
+        baseSQLUtil.executeInsert(hzRelevanceBasic,clz.getCanonicalName() + ".insertBasic");
+        return hzRelevanceBasic.getId();
+
+    }
+
 }

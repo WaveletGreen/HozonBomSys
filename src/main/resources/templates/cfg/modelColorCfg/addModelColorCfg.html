@@ -14,7 +14,8 @@
         <div class="form-group col-lg-10">
             <label for="pCodeOfColorfulModel">车型颜色代码</label>
             <input class="form-control" id="pCodeOfColorfulModel" name="pCodeOfColorfulModel" type="text"
-                   placeholder="请输入车型颜色代码"/>
+                   placeholder="请输入车型颜色代码" disabled="disabled"
+            />
         </div>
         <div class="form-group col-lg-10">
             <label for="pDescOfColorfulModel">描述</label>
@@ -25,7 +26,7 @@
             <label>油漆车身总成</label>
             <select class="form-control input-small" data-style="btn-info"
                     th:id="modelShell" th:name="modelShell">
-                <option th:each="color:${colorList}" th:value="${color.getPuid()}"
+                <option th:each="color:${colorList2}" th:value="${color.getPuid()}"
                         th:text="${color.pColorCode+' -- '+color.pColorName+' -- '+color.getpColorComment()+' -- '+color.getpColorOfSet()}"
                 >
                 </option>
@@ -33,13 +34,15 @@
         </div>
         <!--循环放入数据-->
         <div class="form-group col-lg-10" th:each="column,c:${columnList}">
-            <label class="control-label" th:text="${column.getpOptionfamilyName()+'-'+column.getpOptionfamilyDesc()}" th:for="${column.getPuid()}"></label>
+            <label class="control-label" th:text="${column.getpOptionfamilyName()+'-'+column.getpOptionfamilyDesc()}"
+                   th:for="${column.getPuid()}"></label>
             <select class="form-control input-small" th:name="${column.getPuid()}" data-style="btn-info"
                     th:id="${column.getPuid()}">
                 <option th:each="color:${colorList}" th:value="${color.puid}"
                         th:text="${color.pColorCode+' -- '+color.pColorName+' -- '+color.getpColorComment()+' -- '+color.getpColorOfSet()}"
                 >
                 </option>
+
             </select>
         </div>
     </fieldset>
@@ -83,7 +86,8 @@
             $("#btnOk", window.top.document).click(function () {
                 // var count = parseInt($("#counter").val());
                 // var data = {};
-                // <!--其实不要puid，puid会在服务器上生成-->
+                //
+                <!--其实不要puid，puid会在服务器上生成-->
                 // data.pCodeOfColorfulModel = $("#pCodeOfColorfulModel").val();
                 // data.pDescOfColorfulModel = $("#pDescOfColorfulModel").val();
                 // data.pCfg0MainRecordOfMC = $("#pCfg0MainRecordOfMC").val();
@@ -97,7 +101,8 @@
                 for (var p in _d) {
                     data[_d[p].name] = _d[p].value;
                 }
-                data.pCfg0MainRecordOfMC=$("#pCfg0MainRecordOfMC").val();
+                data.pCfg0MainRecordOfMC = $("#pCfg0MainRecordOfMC").val();
+                data.pCodeOfColorfulModel = $("#pCodeOfColorfulModel").val();
 
                 var bootstrapValidator = $("#form", window.top.document).data('bootstrapValidator');
                 bootstrapValidator.validate();
@@ -116,10 +121,10 @@
                                 $('body', window.top.document).find('.modal-backdrop').remove();
                                 // jquery 调用刷新当前操作的table页面的refresh方法
                                 $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
-                                if (result){
+                                if (result) {
                                     layer.msg('添加数据成功!', {icon: 1, time: 2000})
                                 }
-                                    // window.Ewin.alert({message: "添加数据成功"});
+                                // window.Ewin.alert({message: "添加数据成功"});
                             },
                         error: function (status) {
                             window.Ewin.alert({message: status.status + ':添加数据失败!'});
@@ -129,6 +134,7 @@
             });
         },
         $("#modelShell").change(function () {
+            $("#pCodeOfColorfulModel").val($('#modelShell option:selected').text().split(' -- ')[0]);
             $("#pDescOfColorfulModel").val($("#pCodeOfColorfulModel").val() + $('#modelShell option:selected').text().split(' -- ')[1]);
             console.log("已选择油漆车身颜色");
         })
