@@ -17,7 +17,11 @@ import java.util.UUID;
 public class HzDictionaryLibraryFactory {
     public static HzDictionaryLibrary addDictionaryDTOHzDictionaryLibrary(AddHzDictionaryLibraryReqDTO reqDTO){
         HzDictionaryLibrary library = new HzDictionaryLibrary();
-        library.setPuid(UUID.randomUUID().toString());
+        if(reqDTO.getPuid()==null){
+            library.setPuid(UUID.randomUUID().toString());
+        }else {
+            library.setPuid(reqDTO.getPuid());
+        }
         library.setProfessionCh(reqDTO.getProfessionCh());
         library.setProfessionEn(reqDTO.getProfessionEn());
         library.setClassificationCh(reqDTO.getClassificationCh());

@@ -46,4 +46,18 @@ public interface HzDictionaryLibraryDao {
      * @return
      */
     int delete(String puid);
+
+    /**
+     * 根据特性值查条数
+     * @param eigenValue
+     * @return
+     */
+    int findDictionaryLibraryOrCodeToCount(String eigenValue);
+
+    /**
+     * 根据特性值查询 一条数据
+     * @param eigenValue
+     * @return
+     */
+    HzDictionaryLibrary findDictionaryLibraryOrCode(String eigenValue);
 }

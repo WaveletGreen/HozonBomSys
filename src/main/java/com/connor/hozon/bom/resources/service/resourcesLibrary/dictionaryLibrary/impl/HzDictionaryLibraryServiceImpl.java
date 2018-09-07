@@ -38,6 +38,13 @@ public class HzDictionaryLibraryServiceImpl implements HzDictionaryLibraryServic
             if(!b){
                 return OperateResultMessageRespDTO.getFailPrivilege();
             }
+            int j = hzDictionaryLibraryDao.findDictionaryLibraryOrCodeToCount(reqDTO.getEigenValue());
+            OperateResultMessageRespDTO resultMessageRespDTO = new OperateResultMessageRespDTO();
+            if (j>0){
+                resultMessageRespDTO.setErrMsg("对不起！您插入的特性值已存在");
+                resultMessageRespDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
+                return resultMessageRespDTO;
+            }
             HzDictionaryLibrary library = HzDictionaryLibraryFactory.addDictionaryDTOHzDictionaryLibrary(reqDTO);
             int i = hzDictionaryLibraryDao.insert(library);
             if (i>0){
@@ -60,6 +67,18 @@ public class HzDictionaryLibraryServiceImpl implements HzDictionaryLibraryServic
             boolean b  = PrivilegeUtil.writePrivilege();
             if(!b){
                 return OperateResultMessageRespDTO.getFailPrivilege();
+            }
+            int j =hzDictionaryLibraryDao.findDictionaryLibraryOrCodeToCount(reqDTO.getEigenValue());
+            HzDictionaryLibrary hzDictionaryLibrary = hzDictionaryLibraryDao.findDictionaryLibraryOrCode(reqDTO.getEigenValue());
+            OperateResultMessageRespDTO resultMessageRespDTO = new OperateResultMessageRespDTO();
+            if (j >1){
+                resultMessageRespDTO.setErrMsg("对不起！您修改的特性值已存在");
+                resultMessageRespDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
+                return  resultMessageRespDTO;
+            }
+            if (j==1&&hzDictionaryLibrary.getPuid()!=reqDTO.getPuid()){
+                resultMessageRespDTO.setErrMsg("对不起！您修改的特性值已存在");
+                return resultMessageRespDTO;
             }
             HzDictionaryLibrary library = HzDictionaryLibraryFactory.addDictionaryDTOHzDictionaryLibrary(reqDTO);
             int i = hzDictionaryLibraryDao.update(library);
