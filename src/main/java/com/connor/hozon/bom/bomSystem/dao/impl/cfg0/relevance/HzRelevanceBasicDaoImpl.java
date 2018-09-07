@@ -2,6 +2,8 @@ package com.connor.hozon.bom.bomSystem.dao.impl.cfg0.relevance;
 
 import com.connor.hozon.bom.bomSystem.dao.BasicDaoImpl;
 import com.connor.hozon.bom.bomSystem.dao.cfg.relevance.HzRelevanceBasicDao;
+import com.connor.hozon.bom.bomSystem.dto.relevance.HzRelevanceQueryDTO;
+import com.connor.hozon.bom.bomSystem.dto.relevance.HzRelevanceQueryResultBean;
 import org.springframework.stereotype.Service;
 import sql.pojo.cfg.relevance.HzRelevanceBasic;
 
@@ -16,6 +18,7 @@ import java.util.List;
 @Service
 public class HzRelevanceBasicDaoImpl extends BasicDaoImpl<HzRelevanceBasic> implements HzRelevanceBasicDao {
     private final static HzRelevanceBasic BASIC = new HzRelevanceBasic();
+    private final static HzRelevanceQueryResultBean BEAN = new HzRelevanceQueryResultBean();
 
     public HzRelevanceBasicDaoImpl() {
         clz = HzRelevanceBasicDao.class;
@@ -45,9 +48,36 @@ public class HzRelevanceBasicDaoImpl extends BasicDaoImpl<HzRelevanceBasic> impl
 
     @Override
     public Long insertBasic(HzRelevanceBasic hzRelevanceBasic) {
-        baseSQLUtil.executeInsert(hzRelevanceBasic,clz.getCanonicalName() + ".insertBasic");
+        baseSQLUtil.executeInsert(hzRelevanceBasic, clz.getCanonicalName() + ".insertBasic");
         return hzRelevanceBasic.getId();
 
+    }
+
+    /**
+     * 分页查询
+     *
+     * @param dto
+     * @return
+     */
+    @Override
+    public List<HzRelevanceQueryResultBean> selectByPage(HzRelevanceQueryDTO dto) {
+        return baseSQLUtil.executeQueryByPass(BEAN, dto, clz.getCanonicalName() + ".selectByPage");
+    }
+
+    /**
+     * 获取当前项目下的相关性总数
+     *
+     * @param dto
+     * @return
+     */
+    @Override
+    public Integer tellMeHowManyOfIt(HzRelevanceQueryDTO dto) {
+        List<Integer> result = baseSQLUtil.executeQueryByPass(new Integer(0), dto, clz.getCanonicalName() + ".tellMeHowManyOfIt");
+        if (result != null && result.size() > 0) {
+            return result.get(0);
+        } else {
+            return 0;
+        }
     }
 
 }

@@ -69,6 +69,13 @@
         <!--是否已发送到SAP-->
         <result column="IS_SENT" jdbcType="DECIMAL" property="isSent"/>
     </resultMap>
+    <resultMap id="ResultMapOfQuery" type="com.connor.hozon.bom.bomSystem.dto.relevance.HzRelevanceQueryResultBean">
+        <result column="ID" jdbcType="DECIMAL" property="id"/>
+        <result column="ROWN" jdbcType="DECIMAL" property="index"/>
+        <result column="RB_RELEVANCE" jdbcType="VARCHAR" property="relevance"/>
+        <result column="RB_RELEVANCE_DESC" jdbcType="VARCHAR" property="relevanceDesc"/>
+        <result column="RB_RELEVANCE_CODE" jdbcType="VARCHAR" property="relevanceCode"/>
+    </resultMap>
     <sql id="Base_Column_List">
     ID,
     RB_COLOR_CODE,
@@ -109,6 +116,92 @@
         <include refid="Base_Column_List"/>
         from HZ_RELEVANCE_BASIC
         where ID = #{id,jdbcType=DECIMAL}
+    </select>
+    <select id="selectByPage" parameterType="com.connor.hozon.bom.bomSystem.dto.relevance.HzRelevanceQueryDTO"
+            resultMap="ResultMapOfQuery">
+        select
+        * FROM (
+        select ID,
+        RB_RELEVANCE,
+        RB_RELEVANCE_DESC,
+        RB_RELEVANCE_CODE,
+        rownum ROWN
+        from (select
+        ID,
+        RB_COLOR_CODE,
+        RB_COLOR_UID,
+        RB_FEATURE_CODE,
+        RB_FEATURE_UID,
+        RB_FEATURE_VALUE_CODE,
+        RB_FEATURE_VALUE_UID,
+        RB_RELEVANCE,
+        RB_RELEVANCE_DESC,
+        RB_RELEVANCE_CODE,
+        RELEVANCE_STATUS,
+        RELEVANCE_CREATE_DATE,
+        RELEVANCE_CREATOR,
+        RELEVANCE_UPDATE_DATE,
+        RELEVANCE_UPDATER,
+        RB_RESERVED_1,
+        RB_RESERVED_2,
+        RB_RESERVED_3,
+        RB_RESERVED_4,
+        RB_RESERVED_5,
+        RB_RESERVED_6,
+        RB_RESERVED_7,
+        RB_RESERVED_8,
+        RB_RESERVED_9,
+        RB_RESERVED_10,
+        RB_RESERVED_11,
+        RB_RESERVED_12,
+        RB_RESERVED_13,
+        RB_RESERVED_14,
+        RB_RESERVED_15,
+        RB_VWO_ID,
+        RB_PROJECT_UID,
+        IS_SENT,
+        rownum
+        from Hz_Relevance_Basic t
+        where t.rb_project_uid =#{projectUid,jdbcType=VARCHAR}
+        <if test="featureCode!=null">
+            and t.rb_feature_code like '%'||upper(#{featureCode,jdbcType=VARCHAR})||'%'
+        </if>
+        <if test="featureValueCode!=null">
+            and t.rb_feature_value_code like '%'||upper(#{featureValueCode,jdbcType=VARCHAR})||'%'
+        </if>
+
+        <if test="sort==null">
+            order by t.RB_FEATURE_VALUE_CODE
+        </if>
+        <if test="sort!=null">
+            order by t.${sort}
+        </if>
+        <if test="order!=null">
+            ${order}
+        </if>
+        <if test="order==null">
+            ASC
+        </if>
+        )tt
+        )temp2
+        where 1=1
+        <if test="offset!=null">
+            and temp2.rown &gt;= ${offset}+1
+        </if>
+        <if test="limit!=null and  page!=null">
+            and temp2.rown &lt;= ${page}*${limit}
+        </if>
+    </select>
+    <select id="tellMeHowManyOfIt" parameterType="com.connor.hozon.bom.bomSystem.dto.relevance.HzRelevanceQueryDTO"
+            resultType="java.lang.Integer">
+        select count(*) from Hz_Relevance_Basic t
+        where t.RB_PROJECT_UID=#{projectUid,jdbcType=VARCHAR}
+        <if test="featureCode!=null">
+            and t.rb_feature_code like '%'||upper(#{featureCode,jdbcType=VARCHAR})||'%'
+        </if>
+        <if test="featureValueCode!=null">
+            and t.rb_feature_value_code like '%'||upper(#{featureValueCode,jdbcType=VARCHAR})||'%'
+        </if>
     </select>
     <delete id="deleteByPrimaryKey" parameterType="sql.pojo.cfg.relevance.HzRelevanceBasic">
     delete from HZ_RELEVANCE_BASIC
@@ -567,39 +660,39 @@
     where ID = #{id,jdbcType=DECIMAL}
   </update>
 
-  <insert id="insertBasic" parameterType="sql.pojo.cfg.relevance.HzRelevanceBasic">
-      <selectKey order="BEFORE" keyColumn="id" keyProperty="id" resultType="java.lang.Long">
-          select SEQ_HZ_RB.Nextval from dual
-      </selectKey>
-      insert into HZ_RELEVANCE_BASIC
-      (
-      ID,
-      RB_COLOR_CODE,
-      RB_COLOR_UID,
-      RB_FEATURE_CODE,
-      RB_FEATURE_UID,
-      RB_FEATURE_VALUE_CODE,
-      RB_FEATURE_VALUE_UID,
-      RB_RELEVANCE,
-      RB_RELEVANCE_DESC,
-      RB_RELEVANCE_CODE,
-      RELEVANCE_STATUS,
-      RB_PROJECT_UID
-      )
-      values
-      (
-      #{id,jdbcType=DECIMAL},
-      #{rbColorCode,jdbcType=VARCHAR},
-      #{rbColorUid,jdbcType=VARCHAR},
-      #{rbFeatureCode,jdbcType=VARCHAR},
-      #{rbFeatureUid,jdbcType=VARCHAR},
-      #{rbFeatureValueCode,jdbcType=VARCHAR},
-      #{rbFeatureValueUid,jdbcType=VARCHAR},
-      #{rbRelevance,jdbcType=VARCHAR},
-      #{rbRelevanceDesc,jdbcType=OTHER},
-      #{rbRelevanceCode,jdbcType=VARCHAR},
-      #{relevanceStatus,jdbcType=DECIMAL},
-      #{rbProjectUid,jdbcType=VARCHAR}
-      )
-  </insert>
+    <insert id="insertBasic" parameterType="sql.pojo.cfg.relevance.HzRelevanceBasic">
+        <selectKey order="BEFORE" keyColumn="id" keyProperty="id" resultType="java.lang.Long">
+            select SEQ_HZ_RB.Nextval from dual
+        </selectKey>
+        insert into HZ_RELEVANCE_BASIC
+        (
+        ID,
+        RB_COLOR_CODE,
+        RB_COLOR_UID,
+        RB_FEATURE_CODE,
+        RB_FEATURE_UID,
+        RB_FEATURE_VALUE_CODE,
+        RB_FEATURE_VALUE_UID,
+        RB_RELEVANCE,
+        RB_RELEVANCE_DESC,
+        RB_RELEVANCE_CODE,
+        RELEVANCE_STATUS,
+        RB_PROJECT_UID
+        )
+        values
+        (
+        #{id,jdbcType=DECIMAL},
+        #{rbColorCode,jdbcType=VARCHAR},
+        #{rbColorUid,jdbcType=VARCHAR},
+        #{rbFeatureCode,jdbcType=VARCHAR},
+        #{rbFeatureUid,jdbcType=VARCHAR},
+        #{rbFeatureValueCode,jdbcType=VARCHAR},
+        #{rbFeatureValueUid,jdbcType=VARCHAR},
+        #{rbRelevance,jdbcType=VARCHAR},
+        #{rbRelevanceDesc,jdbcType=OTHER},
+        #{rbRelevanceCode,jdbcType=VARCHAR},
+        #{relevanceStatus,jdbcType=DECIMAL},
+        #{rbProjectUid,jdbcType=VARCHAR}
+        )
+    </insert>
 </mapper>

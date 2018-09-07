@@ -1,20 +1,24 @@
 function loadData(projectPuid) {
     var $table = $("#dataTable");
+    $("#projectUid").val(projectPuid);
     $table.bootstrapTable('destroy');
     $("#refresh").removeAttr("disabled");
     $table.bootstrapTable({
-            url: "cfg0/loadRelevance2?projectPuid=" + projectPuid,
-            method: "GET",
-            height: $(window.parent.document).find("#wrapper").height() - 150,//$(window.parent.document).find("#wrapper").height() - document.body.offsetHeight - 45,
-            width: $(window).width(),
-            showToggle: true,                   //是否显示详细视图和列表视图的切换按钮
-            // showColumns: true,                  //是否显示所有的列
-            showRefresh: true,                  //是否显示刷新按钮
-            pageSize: 10,
-            pagination: true,                   //是否显示分页（*）
-            clickToSelect: true,                // 单击某一行的时候选中某一条记录
-            formId: "relevanceForm",
-            toolbars: [
+        url: "relevance/queryRelevance",
+        method: "GET",
+        height: $(window.parent.document).find("#wrapper").height() - 150,//$(window.parent.document).find("#wrapper").height() - document.body.offsetHeight - 45,
+        width: $(window).width(),
+        showToggle: true,                   //是否显示详细视图和列表视图的切换按钮
+        // showColumns: true,                  //是否显示所有的列
+        showRefresh: true,                  //是否显示刷新按钮
+        pagination: true,                   //是否显示分页（*）
+        pageNumber: 1,                       //初始化加载第一页，默认第一页
+        pageSize: 10,                       //每页的记录行数（*）
+        pageList: [10, 30, 50, 100, 500, 1000],//可供选择的每页的行数（*）
+        smartDisplay: false,
+        clickToSelect: true,                // 单击某一行的时候选中某一条记录
+        formId: "queryRelevance",
+        toolbars: [
             // {
             //     text: '修改',
             //     iconCls: 'glyphicon glyphicon-pencil',
@@ -86,18 +90,24 @@ function loadData(projectPuid) {
                 title: '相关性',
                 align: 'center',
                 valign: 'middle',
+                sortable: true,
+                sortOrder: 'asc',
             },
             {
                 field: 'relevanceDesc',
                 title: '相关性描述',
                 align: 'center',
                 valign: 'middle',
+                sortable: true,
+                sortOrder: 'asc',
             },
             {
                 field: 'relevanceCode',
                 title: '相关性代码',
                 align: 'center',
                 valign: 'middle',
+                sortable: true,
+                sortOrder: 'asc',
             },
             // {
             //     field: 'puid',
@@ -110,11 +120,10 @@ function loadData(projectPuid) {
             //     hide: false
             // }
         ],
-        // sortable: true,                     //是否启用排序
-        // sortOrder: "asc",                   //排序方式
+        sortable: true,                     //是否启用排序
+        sortOrder: "asc",                   //排序方式
+        sortName: 'relevance'
     });
-    // $table.bootstrapTable('hideColumn', 'puid');
-    // $table.bootstrapTable('hideColumn', '_table');
 }
 
 $(document).ready(
@@ -128,6 +137,9 @@ $(document).ready(
     //手动刷新按钮
     $("#query").click(function () {
         loadData(getProjectUid());
+    }),
+    $("#generateRelevance").click(function () {
+        generateRelevance();
     })
 );
 
@@ -135,7 +147,7 @@ $(document).ready(
 function generateRelevance() {
     var msg = "您确定生成相关性吗！";
     var projectPuid = $("#project", window.top.document).val();
-    if (confirm(msg)==true){
+    if (confirm(msg) == true) {
         // $.ajax({
         //     type: "GET",
         //     //ajax需要添加打包名
@@ -153,12 +165,11 @@ function generateRelevance() {
         // });
 
 
-
         var $table = $("#dataTable");
         $table.bootstrapTable('destroy');
 
         $table.bootstrapTable({
-            url: "relevance/addRelevance?projectPuid="+projectPuid,
+            url: "relevance/addRelevance?projectPuid=" + projectPuid,
             method: "GET",
             height: $(window.parent.document).find("#wrapper").height() - 150,//$(window.parent.document).find("#wrapper").height() - document.body.offsetHeight - 45,
             width: $(window).width(),
@@ -218,39 +229,48 @@ function generateRelevance() {
                     title: '序号',
                 },
                 {
-                    field: 'pOptionfamilyName',
+                    field: 'relevance',
                     title: '相关性',
                     align: 'center',
                     valign: 'middle',
-                //     formatter:function( value,row,index ){
-                //         //如何使用拿到的多个数据 直接返回拼接好的html;
-                //         var html = "<span>"+row["pOptionfamilyName"]+"-"+row["pCfg0ObjectId"]+"-"+row["colorCode"]+"</span>"
-                //         return html;
-                //     }
+                    sortable: true,
+                    sortOrder: 'asc',
+                    //     formatter:function( value,row,index ){
+                    //         //如何使用拿到的多个数据 直接返回拼接好的html;
+                    //         var html = "<span>"+row["pOptionfamilyName"]+"-"+row["pCfg0ObjectId"]+"-"+row["colorCode"]+"</span>"
+                    //         return html;
+                    //     }
                 },
                 {
-                    field: 'pCfg0Desc',
+                    field: 'relevanceDesc',
                     title: '相关性描述',
                     align: 'center',
                     valign: 'middle',
-                //     formatter:function( value,row,index ){
-                //         //如何使用拿到的多个数据 直接返回拼接好的html;
-                //         var html = "<span>"+row["pCfg0Desc"]+"-"+row["colorDesc"]+"</span>"
-                //         return html;
-                //     }
+                    sortable: true,
+                    sortOrder: 'asc',
+                    //     formatter:function( value,row,index ){
+                    //         //如何使用拿到的多个数据 直接返回拼接好的html;
+                    //         var html = "<span>"+row["pCfg0Desc"]+"-"+row["colorDesc"]+"</span>"
+                    //         return html;
+                    //     }
                 },
                 {
-                    field: 'cfg0Relevance',
+                    field: 'relevanceCode',
                     title: '相关性代码',
                     align: 'center',
                     valign: 'middle',
-                //     formatter:function( value,row,index ){
-                //     //如何使用拿到的多个数据 直接返回拼接好的html;
-                //     var html = "<span>"+row["cfg0Relevance"]+"</span>"
-                //     return html;
-                // }
+                    sortable: true,
+                    sortOrder: 'asc',
+                    //     formatter:function( value,row,index ){
+                    //     //如何使用拿到的多个数据 直接返回拼接好的html;
+                    //     var html = "<span>"+row["cfg0Relevance"]+"</span>"
+                    //     return html;
+                    // }
                 },
             ],
+            sortable: true,                     //是否启用排序
+            sortOrder: "asc",                   //排序方式
+            sortName: 'relevance'
         });
     }
 }

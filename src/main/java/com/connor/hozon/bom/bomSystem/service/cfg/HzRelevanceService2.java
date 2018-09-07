@@ -1,8 +1,11 @@
-package com.connor.hozon.bom.bomSystem.service.integrate;
+package com.connor.hozon.bom.bomSystem.service.cfg;
 
 import com.connor.hozon.bom.bomSystem.dao.cfg.HzColorModelDao;
 import com.connor.hozon.bom.bomSystem.dao.cfg.relevance.HzRelevanceBasicDao;
 import com.connor.hozon.bom.bomSystem.dao.cfg.relevance.HzRelevanceRelationDao;
+import com.connor.hozon.bom.bomSystem.dto.HzFeatureQueryDTO;
+import com.connor.hozon.bom.bomSystem.dto.relevance.HzRelevanceQueryDTO;
+import com.connor.hozon.bom.bomSystem.dto.relevance.HzRelevanceQueryResultBean;
 import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0ModelService;
 import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0Service;
 import com.connor.hozon.bom.common.base.entity.QueryBase;
@@ -21,8 +24,8 @@ import java.util.*;
 
 import static javax.swing.UIManager.get;
 
-@Service("synRelevanceService2")
-public class SynRelevanceService2 {
+@Service("hzRelevanceService2")
+public class HzRelevanceService2 {
 
     //特性服务
     @Autowired
@@ -37,7 +40,7 @@ public class SynRelevanceService2 {
     @Autowired
     private HzRelevanceRelationDao hzRelevanceRelationDao;
 
-    public JSONObject addRelevance(String projectPuid){
+    public JSONObject addRelevance(String projectPuid) {
         JSONObject response = new JSONObject();
         JSONArray datas = new JSONArray();
         Long index = 1L;
@@ -51,29 +54,29 @@ public class SynRelevanceService2 {
         //搜索全部特性值，并经过P_CFG0_OBJECT_ID 升序排序
         QueryBase queryBase = new QueryBase();
         queryBase.setSort("P_CFG0_OBJECT_ID");
-        List<HzCfg0Record> hzCfg0Records = hzCfg0Service.doLoadCfgListByProjectPuid(projectPuid, queryBase);
+        List<HzCfg0Record> hzCfg0Records = hzCfg0Service.doLoadCfgListByProjectPuid(projectPuid, new HzFeatureQueryDTO());
 
         //查询该项目下所有配色方案
         List<HzColorModel2> hzColorModel2s = hzColorModelDao.selectByProjectPuid(projectPuid);
 
         //遍历特性值
-        for(HzCfg0Record hzCfg0Record : hzCfg0Records){
+        for (HzCfg0Record hzCfg0Record : hzCfg0Records) {
             //将同一特性的配色方案分组
             List<HzColorModel2> hzColorModel2List = new ArrayList<HzColorModel2>();
-            for(HzColorModel2 hzColorModel2 : hzColorModel2s){
-                if(hzCfg0Record.getpCfg0FamilyName().equals(hzColorModel2.getpOptionfamilyName())){
+            for (HzColorModel2 hzColorModel2 : hzColorModel2s) {
+                if (hzCfg0Record.getpCfg0FamilyName().equals(hzColorModel2.getpOptionfamilyName())) {
                     hzColorModel2List.add(hzColorModel2);
                 }
             }
             //将同特性下不同颜色的配色方案放入Map
             Map<String, List<HzColorModel2>> colorMap = new HashMap<String, List<HzColorModel2>>();
-            for(HzColorModel2 hzColorModel2 :hzColorModel2List){
-                if("-".equals(hzColorModel2.getColorCode())){
+            for (HzColorModel2 hzColorModel2 : hzColorModel2List) {
+                if ("-".equals(hzColorModel2.getColorCode())) {
                     continue;
                 }
                 String colorcode = hzColorModel2.getColorCode();
-                if(colorMap.get(colorcode)==null){
-                    colorMap.put(colorcode,new ArrayList<HzColorModel2>());
+                if (colorMap.get(colorcode) == null) {
+                    colorMap.put(colorcode, new ArrayList<HzColorModel2>());
                 }
                 List<HzColorModel2> hzColorModel2List1 = colorMap.get(colorcode);
                 hzColorModel2List1.add(hzColorModel2);
@@ -81,27 +84,27 @@ public class SynRelevanceService2 {
 
             Set<String> keys = colorMap.keySet();
             //生成相关性
-            for(String key : keys){
+            for (String key : keys) {
                 //拼接相关性
-                String relevance = hzCfg0Record.getpCfg0FamilyName()+"-"+hzCfg0Record.getpCfg0ObjectId()+"-"+key;
+                String relevance = hzCfg0Record.getpCfg0FamilyName() + "-" + hzCfg0Record.getpCfg0ObjectId() + "-" + key;
                 //拼接相关性描述
-                String relevanceDesc = hzCfg0Record.getpCfg0FamilyDesc()+"-"+colorMap.get(key).get(0).getColorName();
+                String relevanceDesc = hzCfg0Record.getpCfg0FamilyDesc() + "-" + colorMap.get(key).get(0).getColorName();
                 //拼接相关性代码
-                String relevanceCode = "$ROOT."+hzCfg0Record.getpCfg0FamilyName()+" = '"+hzCfg0Record.getpCfg0ObjectId()+"' AND ";
+                String relevanceCode = "$ROOT." + hzCfg0Record.getpCfg0FamilyName() + " = '" + hzCfg0Record.getpCfg0ObjectId() + "' AND ";
                 List<HzColorModel2> hzColorModel2s1 = colorMap.get(key);
                 int size = hzColorModel2s1.size();
-                if(size==1){
-                    relevanceCode+="$ROOT.HZCSYS = '"+key+"'";
-                }else if(size>1){
-                    relevanceCode+="( ";
-                    for(int i=0;i<size;i++){
+                if (size == 1) {
+                    relevanceCode += "$ROOT.HZCSYS = '" + key + "'";
+                } else if (size > 1) {
+                    relevanceCode += "( ";
+                    for (int i = 0; i < size; i++) {
                         HzColorModel2 hzColorModel2 = hzColorModel2s1.get(i);
-                        relevanceCode = relevanceCode+"$ROOT.HZCSYS = '"+hzColorModel2.getColorCode()+"' ";
-                        if(size-i>1){
-                            relevanceCode+="OR ";
+                        relevanceCode = relevanceCode + "$ROOT.HZCSYS = '" + hzColorModel2.getColorCode() + "' ";
+                        if (size - i > 1) {
+                            relevanceCode += "OR ";
                         }
                     }
-                    relevanceCode+=" )";
+                    relevanceCode += " )";
                 }
 
                 /**
@@ -140,7 +143,7 @@ public class SynRelevanceService2 {
 
                 //添加相关性关联表
                 List<HzColorModel2> hzColorModel2List1 = colorMap.get(key);
-                for(HzColorModel2 hzColorModel2 : hzColorModel2List1){
+                for (HzColorModel2 hzColorModel2 : hzColorModel2List1) {
                     HzRelevanceRelation hzRelevanceRelation = new HzRelevanceRelation();
                     //特性id
                     hzRelevanceRelation.setRrCfgFamilyUid(hzCfg0Record.getpCfg0FamilyPuid());
@@ -156,20 +159,35 @@ public class SynRelevanceService2 {
                 }
 
 
-
                 //前端显示
                 JSONObject data = new JSONObject();
-                data.put("index",index);
+                data.put("index", index);
                 index++;
-                data.put("pOptionfamilyName",hzCfg0Record.getpCfg0FamilyName()+"-"+hzCfg0Record.getpCfg0ObjectId()+"-"+key);
-                data.put("pCfg0Desc",hzCfg0Record.getpCfg0FamilyDesc()+"-"+colorMap.get(key).get(0).getColorName());
-                data.put("cfg0Relevance",relevanceCode);
+                data.put("relevance", hzCfg0Record.getpCfg0FamilyName() + "-" + hzCfg0Record.getpCfg0ObjectId() + "-" + key);
+                data.put("relevanceDesc", hzCfg0Record.getpCfg0FamilyDesc() + "-" + colorMap.get(key).get(0).getColorName());
+                data.put("relevanceCode", relevanceCode);
                 datas.add(data);
             }
 
         }
-        response.put("totalCount",index-1);
-        response.put("result",datas);
+        response.put("totalCount", index - 1);
+        response.put("result", datas);
         return response;
+    }
+
+    /**
+     * 查询相关性
+     *
+     * @param dto
+     * @return
+     */
+    public JSONObject queryRelevance(HzRelevanceQueryDTO dto) {
+        JSONObject result = new JSONObject();
+        dto.setSort(HzRelevanceQueryDTO.relectSortToDB(dto.getSort()));
+        List<HzRelevanceQueryResultBean> beans = hzRelevanceBasicDao.selectByPage(dto);
+        Integer totalCount = hzRelevanceBasicDao.tellMeHowManyOfIt(dto);
+        result.put("result", beans);
+        result.put("totalCount", totalCount);
+        return result;
     }
 }
