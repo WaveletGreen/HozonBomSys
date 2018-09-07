@@ -106,13 +106,18 @@ public class HzCfg0RecordDaoImpl implements HzCfg0RecordDao {
 
 
     @Override
-    public int tellMeHowManyOfThose(String projectPuid) {
-        return baseSQLUtil.executeQueryByPass(new Integer(0), projectPuid, "com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0RecordDao.tellMeHowManyOfThose", true);
+    public int tellMeHowManyOfThose(HzFeatureQueryDTO dto) {
+        List<Integer> result = baseSQLUtil.executeQueryByPass(new Integer(0), dto, "com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0RecordDao.tellMeHowManyOfThose");
+        if (result == null) {
+            return 0;
+        } else {
+            return result.get(0);
+        }
     }
 
     @Override
     public List<HzCfg0Record> selectByCondition(HzFeatureQueryDTO queryBase) {
-        return baseSQLUtil.executeQueryByPass(RECORD,queryBase,"com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0RecordDao.selectByCondition");
+        return baseSQLUtil.executeQueryByPass(RECORD, queryBase, "com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0RecordDao.selectByCondition");
     }
 
     @Override

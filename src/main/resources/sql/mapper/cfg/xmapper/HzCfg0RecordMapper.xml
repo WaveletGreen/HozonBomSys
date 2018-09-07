@@ -107,8 +107,14 @@
         ( select
         <include refid="Base_Column_List"/>,
         ROWNUM as rowno
-        from ${whichTable} t where 1=1 and
-        t.p_cfg0_main_item_puid=(
+        from ${whichTable} t where 1=1
+        <if test="param.featureValue !=null">
+            and t.p_cfg0_object_id like upper(#{param.featureValue})||'%'
+        </if>
+        <if test="param.feature !=null">
+            and t.p_cfg0_family_name like upper(#{param.feature})||'%'
+        </if>
+        and t.p_cfg0_main_item_puid=(
         select t2.puid
         from Hz_Cfg0_Main_Record t2
         where t2.p_cfg0_of_which_project_puid=#{projectPuid,jdbcType=VARCHAR}
@@ -187,12 +193,19 @@
         and t.P_CFG0_FAMILY_DESC=#{pCfg0FamilyDesc}
     </select>
 
-    <select id="tellMeHowManyOfThose" parameterType="java.lang.String" resultType="java.lang.Integer">
-        select count(*) from  HZ_CFG0_RECORD t
+    <select id="tellMeHowManyOfThose" parameterType="com.connor.hozon.bom.bomSystem.dto.HzFeatureQueryDTO"
+            resultType="java.lang.Integer">
+        select count(*) from HZ_CFG0_RECORD t
         where t.P_CFG0_MAIN_ITEM_PUID=(
         select puid from Hz_Cfg0_Main_Record t2
-        where t2.p_cfg0_of_which_project_puid=#{projectPuid,jdbcType=VARCHAR}
+        where t2.p_cfg0_of_which_project_puid=#{projectUid,jdbcType=VARCHAR}
         )
+        <if test="featureValue!=null">
+            and t.p_cfg0_object_id like upper(#{featureValue})||'%'
+        </if>
+        <if test="feature!=null">
+            and t.p_cfg0_family_name like upper(#{feature})||'%'
+        </if>
     </select>
     <!--根据主键删除-->
     <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
