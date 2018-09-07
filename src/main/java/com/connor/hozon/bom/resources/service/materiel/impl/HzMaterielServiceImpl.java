@@ -1,16 +1,16 @@
 package com.connor.hozon.bom.resources.service.materiel.impl;
 
 import com.connor.hozon.bom.common.util.user.UserInfo;
-import com.connor.hozon.bom.resources.dto.request.EditHzMaterielReqDTO;
-import com.connor.hozon.bom.resources.dto.response.HzMaterielRespDTO;
-import com.connor.hozon.bom.resources.dto.response.OperateResultMessageRespDTO;
+import com.connor.hozon.bom.resources.domain.dto.request.EditHzMaterielReqDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.HzMaterielRespDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.OperateResultMessageRespDTO;
+import com.connor.hozon.bom.resources.domain.query.HzMaterielByPageQuery;
+import com.connor.hozon.bom.resources.domain.query.HzMaterielQuery;
+import com.connor.hozon.bom.resources.domain.query.HzMbomByPageQuery;
 import com.connor.hozon.bom.resources.mybatis.bom.HzMbomRecordDAO;
 import com.connor.hozon.bom.resources.mybatis.factory.HzFactoryDAO;
 import com.connor.hozon.bom.resources.mybatis.materiel.HzMaterielDAO;
 import com.connor.hozon.bom.resources.page.Page;
-import com.connor.hozon.bom.resources.query.HzMaterielByPageQuery;
-import com.connor.hozon.bom.resources.query.HzMaterielQuery;
-import com.connor.hozon.bom.resources.query.HzMbomByPageQuery;
 import com.connor.hozon.bom.resources.service.materiel.HzMaterielService;
 import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.resources.util.PrivilegeUtil;

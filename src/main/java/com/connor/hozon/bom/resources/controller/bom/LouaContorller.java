@@ -2,9 +2,12 @@ package com.connor.hozon.bom.resources.controller.bom;
 
 import com.alibaba.fastjson.JSONObject;
 import com.connor.hozon.bom.resources.controller.BaseController;
-import com.connor.hozon.bom.resources.dto.request.SetLouReqDTO;
-import com.connor.hozon.bom.resources.dto.response.*;
-import com.connor.hozon.bom.resources.query.*;
+import com.connor.hozon.bom.resources.domain.dto.request.SetLouReqDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.*;
+import com.connor.hozon.bom.resources.domain.query.HzEbomTreeQuery;
+import com.connor.hozon.bom.resources.domain.query.HzLouaQuery;
+import com.connor.hozon.bom.resources.domain.query.HzMbomTreeQuery;
+import com.connor.hozon.bom.resources.domain.query.HzPbomTreeQuery;
 import com.connor.hozon.bom.resources.service.bom.HzEbomService;
 import com.connor.hozon.bom.resources.service.bom.HzMbomService;
 import com.connor.hozon.bom.resources.service.bom.HzPbomService;
@@ -156,7 +159,8 @@ public class LouaContorller extends BaseController {
             return;
         }
         JSONObject jsonObject = new JSONObject();
-        HzMbomTreeQuery hzMbomTreeQuery = new HzMbomTreeQuery();
+        HzMbomTreeQuery hzMbomTreeQuery;
+        hzMbomTreeQuery = new HzMbomTreeQuery();
         hzMbomTreeQuery.setPuid(query.getPuid());
         hzMbomTreeQuery.setProjectId(query.getProjectId());
         List<HzLoaRespDTO> loaRespDTOS = new ArrayList<>();
@@ -202,7 +206,7 @@ public class LouaContorller extends BaseController {
     }
 
     @RequestMapping(value = "setLou",method = RequestMethod.POST)
-    public void setBomAsLou(@RequestBody SetLouReqDTO reqDTO,HttpServletResponse response){
+    public void setBomAsLou(@RequestBody SetLouReqDTO reqDTO, HttpServletResponse response){
         OperateResultMessageRespDTO respDTO = hzEbomService.setCurrentBomAsLou(reqDTO);
         writeAjaxJSONResponse(ResultMessageBuilder.build(OperateResultMessageRespDTO.isSuccess(respDTO),respDTO),response);
     }

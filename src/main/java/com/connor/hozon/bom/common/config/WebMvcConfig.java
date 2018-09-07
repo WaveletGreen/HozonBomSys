@@ -93,7 +93,8 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         registry.addViewController("/recycleBin").setViewName("/bomManage/recycleBin/recycleBin");
         //合众字典库
         registry.addViewController("/dictionaryLibrary").setViewName("/resourcesLibrary/dictionaryLibrary/dictionaryLibrary");
-
+        //合众VPPS库
+        registry.addViewController("/VPPSLibrary").setViewName("/resourcesLibrary/VPPSLibrary/VPPSLibrary");
         //变更管理VWO表单
         registry.addViewController("/vwoFormList").setViewName("/changeManage/vwo/vwoFormList");
         //变更管理EWO表单

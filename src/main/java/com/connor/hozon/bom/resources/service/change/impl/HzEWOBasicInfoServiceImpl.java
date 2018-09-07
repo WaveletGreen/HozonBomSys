@@ -1,22 +1,17 @@
 package com.connor.hozon.bom.resources.service.change.impl;
 
-import com.alibaba.fastjson.JSON;
-import com.connor.hozon.bom.bomSystem.dao.impl.bom.HzBomDataDaoImpl;
-import com.connor.hozon.bom.bomSystem.dao.impl.bom.HzBomLineRecordDaoImpl;
 import com.connor.hozon.bom.common.util.user.UserInfo;
-import com.connor.hozon.bom.resources.dto.request.UpdateHzEWOBasicInfoReqDTO;
-import com.connor.hozon.bom.resources.dto.response.HzEWOBasicInfoRespDTO;
-import com.connor.hozon.bom.resources.dto.response.OperateResultMessageRespDTO;
+import com.connor.hozon.bom.resources.domain.dto.request.UpdateHzEWOBasicInfoReqDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.HzEWOBasicInfoRespDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.OperateResultMessageRespDTO;
+import com.connor.hozon.bom.resources.domain.query.HzEWOBasicInfoQuery;
 import com.connor.hozon.bom.resources.mybatis.change.HzEWOBasicInfoDAO;
-import com.connor.hozon.bom.resources.mybatis.change.impl.HzEWOBasicInfoDAOImpl;
-import com.connor.hozon.bom.resources.query.HzEWOBasicInfoQuery;
 import com.connor.hozon.bom.resources.service.change.HzEWOBasicInfoService;
 import com.connor.hozon.bom.resources.util.DateUtil;
 import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.sys.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sql.pojo.bom.HzBomLineRecord;
 import sql.pojo.change.HzEWOBasicInfo;
 
 import java.util.ArrayList;

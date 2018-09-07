@@ -1,14 +1,16 @@
 package com.connor.hozon.bom.resources.controller.bom;
 
 import com.alibaba.fastjson.JSONArray;
-import com.connor.hozon.bom.bomSystem.dao.bom.HzBomDataDao;
-import com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0ColorSetDao;
 import com.connor.hozon.bom.resources.controller.BaseController;
-import com.connor.hozon.bom.resources.dto.request.*;
-import com.connor.hozon.bom.resources.dto.response.HzPbomLineRespDTO;
-import com.connor.hozon.bom.resources.dto.response.OperateResultMessageRespDTO;
+
+import com.connor.hozon.bom.resources.domain.dto.request.AddHzPbomRecordReqDTO;
+import com.connor.hozon.bom.resources.domain.dto.request.DeleteHzPbomReqDTO;
+import com.connor.hozon.bom.resources.domain.dto.request.HzPbomProcessComposeReqDTO;
+import com.connor.hozon.bom.resources.domain.dto.request.UpdateHzPbomRecordReqDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.HzPbomLineRespDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.OperateResultMessageRespDTO;
+import com.connor.hozon.bom.resources.domain.query.HzPbomByPageQuery;
 import com.connor.hozon.bom.resources.page.Page;
-import com.connor.hozon.bom.resources.query.HzPbomByPageQuery;
 import com.connor.hozon.bom.resources.service.bom.HzPbomService;
 import com.connor.hozon.bom.resources.util.ResultMessageBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -180,7 +182,7 @@ public class HzPbomController extends BaseController {
      * @param response
      */
     @RequestMapping(value = "processComposeTree",method = RequestMethod.GET)
-    public void findProcessComposeTree(HzPbomProcessComposeReqDTO reqDTO,HttpServletResponse response){
+    public void findProcessComposeTree(HzPbomProcessComposeReqDTO reqDTO, HttpServletResponse response){
          if(reqDTO==null){
             writeAjaxJSONResponse(ResultMessageBuilder.build(false,"非法参数！"),response);
              return;

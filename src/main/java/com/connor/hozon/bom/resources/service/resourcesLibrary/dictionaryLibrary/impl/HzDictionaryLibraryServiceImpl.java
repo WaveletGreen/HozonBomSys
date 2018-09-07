@@ -1,11 +1,11 @@
 package com.connor.hozon.bom.resources.service.resourcesLibrary.dictionaryLibrary.impl;
 
-import com.connor.hozon.bom.resources.dto.request.AddHzDictionaryLibraryReqDTO;
-import com.connor.hozon.bom.resources.dto.response.HzDictionaryLibraryRespDTO;
-import com.connor.hozon.bom.resources.dto.response.OperateResultMessageRespDTO;
+import com.connor.hozon.bom.resources.domain.dto.request.AddHzDictionaryLibraryReqDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.HzDictionaryLibraryRespDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.OperateResultMessageRespDTO;
+import com.connor.hozon.bom.resources.domain.query.HzDictionaryLibraryQuery;
 import com.connor.hozon.bom.resources.mybatis.resourcesLibrary.dictionaryLibrary.HzDictionaryLibraryDao;
 import com.connor.hozon.bom.resources.page.Page;
-import com.connor.hozon.bom.resources.query.HzDictionaryLibraryQuery;
 import com.connor.hozon.bom.resources.service.resourcesLibrary.dictionaryLibrary.HzDictionaryLibraryService;
 import com.connor.hozon.bom.resources.util.DateUtil;
 import com.connor.hozon.bom.resources.util.PrivilegeUtil;

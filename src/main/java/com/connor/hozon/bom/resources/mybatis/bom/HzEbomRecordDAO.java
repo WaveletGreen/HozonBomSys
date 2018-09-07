@@ -1,10 +1,10 @@
 package com.connor.hozon.bom.resources.mybatis.bom;
 
-import com.connor.hozon.bom.resources.dto.request.DeleteHzEbomReqDTO;
+import com.connor.hozon.bom.resources.domain.dto.request.DeleteHzEbomReqDTO;
+import com.connor.hozon.bom.resources.domain.query.HzBomRecycleByPageQuery;
+import com.connor.hozon.bom.resources.domain.query.HzEbomByPageQuery;
+import com.connor.hozon.bom.resources.domain.query.HzEbomTreeQuery;
 import com.connor.hozon.bom.resources.page.Page;
-import com.connor.hozon.bom.resources.query.HzBomRecycleByPageQuery;
-import com.connor.hozon.bom.resources.query.HzEbomByPageQuery;
-import com.connor.hozon.bom.resources.query.HzEbomTreeQuery;
 import sql.pojo.bom.HzImportEbomRecord;
 import sql.pojo.epl.HzEPLManageRecord;
 

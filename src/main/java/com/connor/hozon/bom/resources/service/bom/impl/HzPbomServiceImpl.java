@@ -3,25 +3,22 @@ package com.connor.hozon.bom.resources.service.bom.impl;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.connor.hozon.bom.bomSystem.dao.bom.HzBomDataDao;
 import com.connor.hozon.bom.bomSystem.dao.bom.HzBomMainRecordDao;
 import com.connor.hozon.bom.bomSystem.dao.impl.bom.HzBomLineRecordDaoImpl;
 import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0OfBomLineService;
 import com.connor.hozon.bom.common.util.user.UserInfo;
-import com.connor.hozon.bom.resources.dto.request.*;
-import com.connor.hozon.bom.resources.dto.response.HzLouRespDTO;
-import com.connor.hozon.bom.resources.dto.response.HzMbomRecordRespDTO;
-import com.connor.hozon.bom.resources.dto.response.HzPbomLineRespDTO;
-import com.connor.hozon.bom.resources.dto.response.OperateResultMessageRespDTO;
-import com.connor.hozon.bom.resources.mybatis.bom.HzBomStateDAO;
+import com.connor.hozon.bom.resources.domain.dto.request.*;
+import com.connor.hozon.bom.resources.domain.dto.response.HzLouRespDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.HzPbomLineRespDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.OperateResultMessageRespDTO;
+import com.connor.hozon.bom.resources.domain.query.HzBomRecycleByPageQuery;
+import com.connor.hozon.bom.resources.domain.query.HzLouaQuery;
+import com.connor.hozon.bom.resources.domain.query.HzPbomByPageQuery;
+import com.connor.hozon.bom.resources.domain.query.HzPbomTreeQuery;
 import com.connor.hozon.bom.resources.mybatis.bom.HzMbomRecordDAO;
 import com.connor.hozon.bom.resources.mybatis.bom.HzPbomRecordDAO;
 import com.connor.hozon.bom.resources.mybatis.bom.impl.HzPbomRecordDAOImpl;
 import com.connor.hozon.bom.resources.page.Page;
-import com.connor.hozon.bom.resources.query.HzBomRecycleByPageQuery;
-import com.connor.hozon.bom.resources.query.HzLouaQuery;
-import com.connor.hozon.bom.resources.query.HzPbomByPageQuery;
-import com.connor.hozon.bom.resources.query.HzPbomTreeQuery;
 import com.connor.hozon.bom.resources.service.bom.HzPbomService;
 import com.connor.hozon.bom.resources.service.epl.HzEPLManageRecordService;
 import com.connor.hozon.bom.resources.util.DateUtil;
@@ -154,13 +151,9 @@ public class HzPbomServiceImpl implements HzPbomService {
 
     @Override
     public OperateResultMessageRespDTO updateHzPbomRecord(UpdateHzPbomRecordReqDTO recordReqDTO) {
-        OperateResultMessageRespDTO respDTO = new OperateResultMessageRespDTO();
         try {
-            User user = UserInfo.getUser();
-            if(user.getGroupId()!=9){
-                respDTO.setErrMsg("你当前没有权限执行此操作!");
-                respDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
-                return respDTO;
+            if(!PrivilegeUtil.writePrivilege()){
+                return OperateResultMessageRespDTO.getFailPrivilege();
             }
             HzPbomLineRecord hzPbomRecord = new HzPbomLineRecord();
             hzPbomRecord.setUpdateName(UserInfo.getUser().getUserName());
@@ -174,21 +167,21 @@ public class HzPbomServiceImpl implements HzPbomService {
             }else if(buyUnit.equals("N")){
                 hzPbomRecord.setBuyUnit(0);
             }else{
-                hzPbomRecord.setBuyUnit(2);
+                hzPbomRecord.setBuyUnit(null);
             }
             if(colorPart.equals("Y")){
                 hzPbomRecord.setColorPart(1);
             }else if(colorPart.equals("N")){
                 hzPbomRecord.setColorPart(0);
             }else{
-                hzPbomRecord.setColorPart(2);
+                hzPbomRecord.setColorPart(null);
             }
             if(type.equals("Y")){
                 hzPbomRecord.setType(1);
             }else if(type.equals("N")){
                 hzPbomRecord.setType(0);
             }else{
-                hzPbomRecord.setType(2);
+                hzPbomRecord.setType(null);
             }
             hzPbomRecord.setMouldType(recordReqDTO.getMouldType());
             hzPbomRecord.setOuterPart(recordReqDTO.getOuterPart());
@@ -196,6 +189,7 @@ public class HzPbomServiceImpl implements HzPbomService {
             hzPbomRecord.setStation(recordReqDTO.getStation());
             hzPbomRecord.setWorkShop1(recordReqDTO.getWorkShop1());
             hzPbomRecord.setWorkShop2(recordReqDTO.getWorkShop2());
+            hzPbomRecord.setResource(recordReqDTO.getResource());
             int i = hzPbomRecordDAO.update(hzPbomRecord);
             if(i>0){
                 return OperateResultMessageRespDTO.getSuccessResult();
@@ -211,11 +205,8 @@ public class HzPbomServiceImpl implements HzPbomService {
     public OperateResultMessageRespDTO deleteHzPbomRecordByForeignId(DeleteHzPbomReqDTO reqDTO) {
         OperateResultMessageRespDTO respDTO = new OperateResultMessageRespDTO();
         try {
-            User user = UserInfo.getUser();
-            if(user.getGroupId()!=9){
-                respDTO.setErrMsg("你当前没有权限执行此操作!");
-                respDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
-                return respDTO;
+            if(!PrivilegeUtil.writePrivilege()){
+                return OperateResultMessageRespDTO.getFailPrivilege();
             }
             if(reqDTO.getPuids() == null || reqDTO.getPuids().equals("") || reqDTO.getProjectId() ==null || reqDTO.getProjectId().equals("")){
                 respDTO.setErrMsg("非法参数！");
@@ -356,7 +347,7 @@ public class HzPbomServiceImpl implements HzPbomService {
             } else if (Integer.valueOf(1).equals(type)) {
                 jsonObject.put("type","Y");
             } else {
-                jsonObject.put("type","N");
+                jsonObject.put("type","");
             }
             if (Integer.valueOf(0).equals(buyUnit)) {
                 jsonObject.put("buyUnit", "N");
@@ -554,7 +545,7 @@ public class HzPbomServiceImpl implements HzPbomService {
                 } else if ("N".equals(type)) {
                     hzPbomLineRecord.setType(0);
                 } else {
-                    hzPbomLineRecord.setType(2);
+                    hzPbomLineRecord.setType(null);
                 }
                 hzPbomLineRecord.setMouldType(recordReqDTO.getMouldType());
                 hzPbomLineRecord.setOuterPart(recordReqDTO.getOuterPart());

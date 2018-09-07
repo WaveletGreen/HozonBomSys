@@ -1,18 +1,18 @@
 package com.connor.hozon.bom.resources.service.bom;
 
 import com.alibaba.fastjson.JSONArray;
-import com.connor.hozon.bom.resources.dto.request.AddHzEbomReqDTO;
-import com.connor.hozon.bom.resources.dto.request.DeleteHzEbomReqDTO;
-import com.connor.hozon.bom.resources.dto.request.SetLouReqDTO;
-import com.connor.hozon.bom.resources.dto.request.UpdateHzEbomReqDTO;
-import com.connor.hozon.bom.resources.dto.response.HzEbomRespDTO;
-import com.connor.hozon.bom.resources.dto.response.HzLouRespDTO;
-import com.connor.hozon.bom.resources.dto.response.OperateResultMessageRespDTO;
+import com.connor.hozon.bom.resources.domain.dto.request.AddHzEbomReqDTO;
+import com.connor.hozon.bom.resources.domain.dto.request.DeleteHzEbomReqDTO;
+import com.connor.hozon.bom.resources.domain.dto.request.SetLouReqDTO;
+import com.connor.hozon.bom.resources.domain.dto.request.UpdateHzEbomReqDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.HzEbomRespDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.HzLouRespDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.OperateResultMessageRespDTO;
+import com.connor.hozon.bom.resources.domain.query.HzBomRecycleByPageQuery;
+import com.connor.hozon.bom.resources.domain.query.HzEbomByPageQuery;
+import com.connor.hozon.bom.resources.domain.query.HzEbomTreeQuery;
+import com.connor.hozon.bom.resources.domain.query.HzLouaQuery;
 import com.connor.hozon.bom.resources.page.Page;
-import com.connor.hozon.bom.resources.query.HzBomRecycleByPageQuery;
-import com.connor.hozon.bom.resources.query.HzEbomByPageQuery;
-import com.connor.hozon.bom.resources.query.HzEbomTreeQuery;
-import com.connor.hozon.bom.resources.query.HzLouaQuery;
 import sql.pojo.bom.HzBomLineRecord;
 import sql.pojo.epl.HzEPLManageRecord;
 

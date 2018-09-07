@@ -1,11 +1,11 @@
 package com.connor.hozon.bom.resources.controller.resourcesLibrary;
 
 import com.connor.hozon.bom.resources.controller.BaseController;
-import com.connor.hozon.bom.resources.dto.request.AddHzDictionaryLibraryReqDTO;
-import com.connor.hozon.bom.resources.dto.response.HzDictionaryLibraryRespDTO;
-import com.connor.hozon.bom.resources.dto.response.OperateResultMessageRespDTO;
+import com.connor.hozon.bom.resources.domain.dto.request.AddHzDictionaryLibraryReqDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.HzDictionaryLibraryRespDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.OperateResultMessageRespDTO;
+import com.connor.hozon.bom.resources.domain.query.HzDictionaryLibraryQuery;
 import com.connor.hozon.bom.resources.page.Page;
-import com.connor.hozon.bom.resources.query.HzDictionaryLibraryQuery;
 import com.connor.hozon.bom.resources.service.resourcesLibrary.dictionaryLibrary.HzDictionaryLibraryService;
 import com.connor.hozon.bom.resources.util.ResultMessageBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import sql.pojo.resourcesLibrary.dictionaryLibrary.HzDictionaryLibrary;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.*;
@@ -31,7 +30,7 @@ import java.util.*;
 @RequestMapping(value = "dict")
 public class DictionaryLibraryController extends BaseController {
     @Autowired
-    private HzDictionaryLibraryService service;
+    private HzDictionaryLibraryService hzDictionaryLibraryService;
     /**
      * 跳转到字典库的添加页面
      * @return
@@ -46,7 +45,7 @@ public class DictionaryLibraryController extends BaseController {
      */
     @RequestMapping(value = "getUpdate",method = RequestMethod.GET)
     public String getUpdateDictionaryLibrary(String puid, Model model){
-        HzDictionaryLibraryRespDTO library = service.findHzDictionaryLibraryByPuid(puid);
+        HzDictionaryLibraryRespDTO library = hzDictionaryLibraryService.findHzDictionaryLibraryByPuid(puid);
         if (library==null){
             return "";
         }
@@ -61,7 +60,7 @@ public class DictionaryLibraryController extends BaseController {
      */
     @RequestMapping(value = "add",method = RequestMethod.POST)
     public void addDictionaryLibrary(@RequestBody AddHzDictionaryLibraryReqDTO dto, HttpServletResponse response){
-        OperateResultMessageRespDTO respDTO = service.insertHzDictionaryLibrary(dto);
+        OperateResultMessageRespDTO respDTO = hzDictionaryLibraryService.insertHzDictionaryLibrary(dto);
         writeAjaxJSONResponse(ResultMessageBuilder.build(OperateResultMessageRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
     }
 
@@ -80,7 +79,7 @@ public class DictionaryLibraryController extends BaseController {
         } catch (NumberFormatException e) {
             e.printStackTrace();
         }
-        Page<HzDictionaryLibraryRespDTO> page = service.findHzDictionaryLibraryToPage(query);
+        Page<HzDictionaryLibraryRespDTO> page = hzDictionaryLibraryService.findHzDictionaryLibraryToPage(query);
         if (page ==null){
             return new HashMap<>();
         }
@@ -123,7 +122,7 @@ public class DictionaryLibraryController extends BaseController {
      */
     @RequestMapping(value = "updateById",method = RequestMethod.POST)
     public void updateDiDictionaryLibrary(@RequestBody AddHzDictionaryLibraryReqDTO dto,HttpServletResponse response){
-        OperateResultMessageRespDTO respDTO = service.updateHzDictionaryLibrary(dto);
+        OperateResultMessageRespDTO respDTO = hzDictionaryLibraryService.updateHzDictionaryLibrary(dto);
         writeAjaxJSONResponse(ResultMessageBuilder.build(OperateResultMessageRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
     }
 
@@ -134,7 +133,7 @@ public class DictionaryLibraryController extends BaseController {
      */
     @RequestMapping(value = "delete",method = RequestMethod.POST)
     public void deleteDiDictionaryLibrary(String puid ,HttpServletResponse response){
-        OperateResultMessageRespDTO respDTO = service.deleteHzDictionaryLibrary(puid);
+        OperateResultMessageRespDTO respDTO = hzDictionaryLibraryService.deleteHzDictionaryLibrary(puid);
         writeAjaxJSONResponse(ResultMessageBuilder.build(OperateResultMessageRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
     }
 
@@ -143,7 +142,7 @@ public class DictionaryLibraryController extends BaseController {
      * @param response
      */
     @RequestMapping(value = "title",method = RequestMethod.GET)
-    public void getWorkTitel(HttpServletResponse response){
+    public void getDiDictionaryLibraryTitel(HttpServletResponse response){
         LinkedHashMap<String, String> tableTitle = new LinkedHashMap<>();
         tableTitle.put("No","序号");
         tableTitle.put("professionCh","专业部");

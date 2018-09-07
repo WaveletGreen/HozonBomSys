@@ -99,7 +99,11 @@
 
 
     }))
-
+    function doRefresh(projectId){
+        $('#mbomMaintenanceTable').bootstrapTable('destroy');
+        var mBomUrl = "mbom/record?projectId=" + projectId;
+        initTable(mBomUrl);
+    }
 
     function doQuery() {
         //$('#eplTable').bootstrapTable('refresh');    //刷新表格

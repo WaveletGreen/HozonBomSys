@@ -2,8 +2,7 @@ package com.connor.hozon.bom.resources.controller.user;
 
 import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.resources.controller.BaseController;
-import com.connor.hozon.bom.resources.dto.request.UpdateUserPasswordReqDTO;
-import com.connor.hozon.bom.resources.dto.response.OperateResultMessageRespDTO;
+import com.connor.hozon.bom.resources.domain.dto.request.UpdateUserPasswordReqDTO;
 import com.connor.hozon.bom.resources.util.ResultMessageBuilder;
 import com.connor.hozon.bom.sys.dao.UserDao;
 import com.connor.hozon.bom.sys.entity.User;

@@ -3,12 +3,11 @@ $(document).ready((function (){
     var url = "work/process/record/page?projectId="+projectId;
     initTable(url);
 }))
-/*function doJump() {
-    window.location.href="work/process/getMBom"
-    $.get({
-        url:"work/process/getMBom",
-    })
-}*/
+function doRefresh(projectId){
+    $('#routingDataTable').bootstrapTable('destroy');
+    var url = "work/process/record/page?projectId="+projectId;
+    initTable(url);
+}
 function doQuery() {
     //$('#routingDataTable').bootstrapTable('refresh');    //刷新表格
     var projectId = $("#project", window.top.document).val();

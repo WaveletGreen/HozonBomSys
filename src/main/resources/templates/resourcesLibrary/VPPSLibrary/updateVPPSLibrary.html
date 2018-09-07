@@ -1,0 +1,130 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<!--User: xulf Date: 2018/9/4 Time: 16:37-->
+<body>
+<form id="VPPSLibraryForm" role="form" method="post" action="vpps/update">
+    <input type="hidden" id="puid" th:value="${data.puid}">
+    <div class="form-group">
+        <label for="vppsLevel">VPPS层级</label>
+        <input class="form-control" id="vppsLevel" name="vppsLevel" type="text"
+         th:value="${data.vppsLevel}"      placeholder="请输入VPPS层级"/>
+    </div>
+    <div class="form-group">
+        <label for="vsgCode">VSG代码</label>
+        <input class="form-control" id="vsgCode" name="vsgCode" type="text"
+               th:value="${data.vsgCode}"        placeholder="请输入VSG代码"/>
+    </div>
+    <div class="form-group">
+        <label for="vppsCode">VPPS代码</label>
+        <input class="form-control" id="vppsCode" name="vppsCode" type="text"
+               th:value="${data.vppsCode}"        placeholder="请输入VPPS代码"/>
+    </div>
+    <div class="form-group">
+        <label for="vppsEnDesc">VPPS英文描述</label>
+        <input class="form-control" id="vppsEnDesc" name="vppsEnDesc" type="text"
+               th:value="${data.vppsEnDesc}"       placeholder="请输入VPPS英文描述"/>
+    </div>
+    <div class="form-group">
+        <label for="vppsChDesc">VPPS中文描述</label>
+        <input class="form-control" id="vppsChDesc" name="vppsChDesc" type="text"
+               th:value="${data.vppsChDesc}"        placeholder="请输入VPPS中文描述"/>
+    </div>
+    <div class="form-group">
+        <label for="upc">UPC</label>
+        <input class="form-control" id="upc" name="upc" type="text"
+               th:value="${data.upc}"        placeholder="请输入UPC"/>
+    </div>
+    <div class="form-group">
+        <label for="fna">FNA</label>
+        <input class="form-control" id="fna" name="fna" type="text"
+               th:value="${data.fna}"        placeholder="请输入FNA"/>
+    </div>
+    <div class="form-group">
+        <label for="fnaChDesc">FNA中文描述</label>
+        <input class="form-control" id="fnaChDesc" name="fnaChDesc" type="text"
+               th:value="${data.fnaChDesc}"        placeholder="请输入FNA中文描述"/>
+    </div>
+    <div class="form-group">
+        <label for="standardPartCode">标准零件代码</label>
+        <input class="form-control" id="standardPartCode" name="standardPartCode" type="text"
+               th:value="${data.standardPartCode}"       placeholder="请输入标准零件代码"/>
+    </div>
+</form>
+<script th:inline="javascript">
+    <![CDATA[
+    $(function () {
+        $('#VPPSLibraryForm').bootstrapValidator({
+            message: 'This value is not valid',
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            id: {
+                factoryCode: {
+                    message: 'id验证失败',
+                    validators: {
+                        notEmpty: {
+                            message: 'id不能为空'
+                        }
+                    }
+                },
+            }
+        });
+        // 绑定dialog的确定按钮的监听事件
+        $("#btnOk", window.top.document).click(function () {
+            var bootstrapValidator = $("#VPPSLibraryForm", window.top.document).data('bootstrapValidator');
+            bootstrapValidator.validate();
+            if (bootstrapValidator.isValid()) {
+                var url = $("#VPPSLibraryForm", window.top.document).attr('action');
+                var myData = JSON.stringify({
+                    "puid": $("#puid").val(),
+                    "vppsLevel": $("#vppsLevel").val(),
+                    "vsgCode": $("#vsgCode").val(),
+                    "vppsCode": $("#vppsCode").val(),
+                    "vppsEnDesc": $("#vppsEnDesc").val(),
+                    "vppsChDesc": $("#vppsChDesc").val(),
+                    "upc": $("#upc").val(),
+                    "fna": $("#fna").val(),
+                    "fnaChDesc": $("#fnaChDesc").val(),
+                    "standardPartCode": $("#standardPartCode").val(),
+                });
+                $.ajax({
+                    contentType:
+                        "application/json",
+                    type:
+                        'POST',
+                    url: url,
+                    data: myData,
+                    success:
+                        function (result) {
+                            $('.modal-dialog', window.top.document).parent('div').remove()
+                            $('body', window.top.document).find('.modal-backdrop').remove();
+                            // jquery 调用刷新当前操作的table页面的refresh方法
+                            $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
+                            if (result.success) {
+                                layer.msg('修改成功', {icon: 1, time: 2000})
+                            }
+                            else if(!result.success){
+                                window.Ewin.alert({message: result.errMsg})
+                            }
+                        },
+                    error: function (status) {
+                        window.Ewin.alert({message: status.status + ':修改数据失败!'});
+                    }
+                });
+            }
+        });
+    })
+    $(document).keydown(function(event) {
+        if (event.keyCode == 13) {
+            $('form').each(function() {
+                event.preventDefault();
+            });
+        }
+    });
+    ]]>
+</script>
+<script th:src="@{/layer/layer.js}"></script>
+</body>
+</html>

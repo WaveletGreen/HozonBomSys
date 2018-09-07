@@ -1,6 +1,6 @@
 package com.connor.hozon.bom.bomSystem.service.iservice.integrate;
 
-import com.connor.hozon.bom.resources.dto.request.EditHzMaterielReqDTO;
+import com.connor.hozon.bom.resources.domain.dto.request.EditHzMaterielReqDTO;
 import net.sf.json.JSONObject;
 import org.springframework.context.annotation.Configuration;
 
@@ -14,7 +14,7 @@ public interface ISynMaterielService {
      * @param dtos
      * @return
      */
-    JSONObject updateOrAddByUids(List<EditHzMaterielReqDTO> dtos,String tableName,String field);
+    JSONObject updateOrAddByUids(List<EditHzMaterielReqDTO> dtos, String tableName, String field);
 
     /**
      * 删除时候传

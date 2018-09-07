@@ -1,7 +1,7 @@
 package com.connor.hozon.bom.resources.controller.file;
 
 import com.connor.hozon.bom.resources.controller.BaseController;
-import com.connor.hozon.bom.resources.dto.response.OperateResultMessageRespDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.OperateResultMessageRespDTO;
 import com.connor.hozon.bom.resources.service.file.FileUploadService;
 import com.connor.hozon.bom.resources.util.ExcelUtil;
 import com.connor.hozon.bom.resources.util.ResultMessageBuilder;

@@ -1,10 +1,9 @@
 package com.connor.hozon.bom.resources.service.change;
 
-import com.connor.hozon.bom.resources.dto.request.UpdateHzEWOBasicInfoReqDTO;
-import com.connor.hozon.bom.resources.dto.response.HzEWOBasicInfoRespDTO;
-import com.connor.hozon.bom.resources.dto.response.OperateResultMessageRespDTO;
-import com.connor.hozon.bom.resources.query.HzEWOBasicInfoQuery;
-import sql.pojo.change.HzEWOBasicInfo;
+import com.connor.hozon.bom.resources.domain.dto.request.UpdateHzEWOBasicInfoReqDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.HzEWOBasicInfoRespDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.OperateResultMessageRespDTO;
+import com.connor.hozon.bom.resources.domain.query.HzEWOBasicInfoQuery;
 
 import java.util.List;
 

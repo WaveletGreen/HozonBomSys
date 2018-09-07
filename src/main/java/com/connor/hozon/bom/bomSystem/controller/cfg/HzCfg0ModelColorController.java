@@ -303,8 +303,8 @@ public class HzCfg0ModelColorController {
 
     @RequestMapping(value = "/setLvl2ColorPage", method = RequestMethod.GET)
     public String setLvl2ColorPage(@RequestParam("modelUid") String modelUid, @RequestParam("projectUid") String projectUid, Model model) {
-//        List<HzBomLineRecord> lineRecords = hzBomDataService.doSelectVehicleAssembly("车身", projectUid, null);
-//        List<HzBomLineRecord> lineRecords2 = hzBomDataService.doSelectVehicleAssembly("车身", projectUid, modelUid);
+//        List<HzBomLineRecordDO> lineRecords = hzBomDataService.doSelectVehicleAssembly("车身", projectUid, null);
+//        List<HzBomLineRecordDO> lineRecords2 = hzBomDataService.doSelectVehicleAssembly("车身", projectUid, modelUid);
         List<HzColorLvl2Model> lvl2Models = hzColorLvl2ModelService.doSelectByModelUid(modelUid);
         Map<String, Object> params = new HashMap<>();
         List<HzBomLineRecord> lineRecords = new ArrayList<>();

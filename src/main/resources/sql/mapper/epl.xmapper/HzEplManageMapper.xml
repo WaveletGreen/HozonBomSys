@@ -60,7 +60,7 @@
       <result column="P_REMARK" jdbcType="VARCHAR" property="pRemark" />
       <result column="P_REGULATION_CODE" jdbcType="VARCHAR" property="pRegulationCode" />
       <result column="P_EBOM_STATUS" jdbcType="VARCHAR" property="status" />
-      <result column="P_NUMBER" jdbcType="INTEGER" property="number" />
+      <result column="P_NUMBER" jdbcType="VARCHAR" property="number" />
       <result column="P_BUY_ENGINEER" jdbcType="INTEGER" property="pBuyEngineer" />
       <result column="P_EWO_NO" jdbcType="VARCHAR" property="ewoNo"/>
       <result column="P_LOU_LOA_FLAG" jdbcType="INTEGER" property="pLouaFlag"/>
@@ -406,12 +406,12 @@
           #{pActualWeight,jdbcType=VARCHAR}, #{pFastenerStandard,jdbcType=VARCHAR}, #{pFastenerLevel,jdbcType=VARCHAR},
           #{pTorque,jdbcType=VARCHAR}, #{pDutyEngineer,jdbcType=VARCHAR}, #{pSupply,jdbcType=VARCHAR},
           #{pSupplyCode,jdbcType=VARCHAR}, #{pRemark,jdbcType=VARCHAR}, #{pRegulationCode,jdbcType=VARCHAR},
-          #{number,jdbcType=INTEGER},#{pBuyEngineer,jdbcType=INTEGER}
+          #{number,jdbcType=VARCHAR},#{pBuyEngineer,jdbcType=INTEGER}
       )
 
     </insert>
 
-
+    <!--导入excel文件到EBOM写的批量插入-->
     <insert id="HzEbomRecordDAOImpl_importList" parameterType="java.util.List">
         insert into HZ_BOM_LINE_RECORD
         (
@@ -454,7 +454,7 @@
             #{item.pActualWeight,jdbcType=VARCHAR}, #{item.pFastenerStandard,jdbcType=VARCHAR}, #{item.pFastenerLevel,jdbcType=VARCHAR},
             #{item.pTorque,jdbcType=VARCHAR}, #{item.pDutyEngineer,jdbcType=VARCHAR}, #{item.pSupply,jdbcType=VARCHAR},
             #{item.pSupplyCode,jdbcType=VARCHAR}, #{item.pRemark,jdbcType=VARCHAR}, #{item.pRegulationCode,jdbcType=VARCHAR},
-            #{item.number,jdbcType=INTEGER},#{item.pBuyEngineer,jdbcType=INTEGER}
+            #{item.number,jdbcType=VARCHAR},#{item.pBuyEngineer,jdbcType=INTEGER}
             from DUAL
         </foreach>
     </insert>

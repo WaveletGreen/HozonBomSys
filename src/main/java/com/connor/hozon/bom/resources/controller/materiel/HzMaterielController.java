@@ -1,12 +1,12 @@
 package com.connor.hozon.bom.resources.controller.materiel;
 
 import com.connor.hozon.bom.resources.controller.BaseController;
-import com.connor.hozon.bom.resources.dto.request.EditHzMaterielReqDTO;
-import com.connor.hozon.bom.resources.dto.response.HzMaterielRespDTO;
-import com.connor.hozon.bom.resources.dto.response.OperateResultMessageRespDTO;
+import com.connor.hozon.bom.resources.domain.dto.request.EditHzMaterielReqDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.HzMaterielRespDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.OperateResultMessageRespDTO;
+import com.connor.hozon.bom.resources.domain.query.HzMaterielByPageQuery;
+import com.connor.hozon.bom.resources.domain.query.HzMaterielQuery;
 import com.connor.hozon.bom.resources.page.Page;
-import com.connor.hozon.bom.resources.query.HzMaterielByPageQuery;
-import com.connor.hozon.bom.resources.query.HzMaterielQuery;
 import com.connor.hozon.bom.resources.service.materiel.HzMaterielService;
 import com.connor.hozon.bom.resources.util.ResultMessageBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -154,7 +154,7 @@ public class HzMaterielController  extends BaseController {
      * @return
      */
     @RequestMapping(value = "updateMBom", method = RequestMethod.GET)
-    public String updateMaterielToPage(HzMaterielQuery query,Model model) {
+    public String updateMaterielToPage(HzMaterielQuery query, Model model) {
         HzMaterielRespDTO respDTO = hzMaterielService.getHzMateriel(query);
         if(respDTO== null){
             return "";
