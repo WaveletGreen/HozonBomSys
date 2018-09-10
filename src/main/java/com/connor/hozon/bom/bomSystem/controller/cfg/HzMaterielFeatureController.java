@@ -3,6 +3,7 @@ package com.connor.hozon.bom.bomSystem.controller.cfg;
 import com.connor.hozon.bom.bomSystem.controller.integrate.ExtraIntegrate;
 import com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0ModelColorDao;
 import com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0ToModelRecordDao;
+import com.connor.hozon.bom.bomSystem.dto.HzFeatureQueryDTO;
 import com.connor.hozon.bom.bomSystem.dto.HzMaterielFeatureBean;
 import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
 import com.connor.hozon.bom.bomSystem.service.cfg.*;
@@ -390,7 +391,7 @@ public class HzMaterielFeatureController extends ExtraIntegrate {
     public String addVehicleModelPage(@RequestParam String projectPuid, Model model) {
         if (checkString(projectPuid)) {
             HzCfg0MainRecord hzCfg0MainRecord = hzCfg0MainService.doGetbyProjectPuid(projectPuid);
-            List<HzCfg0Record> cfg0s = hzCfg0Service.doLoadCfgListByProjectPuid(projectPuid, new QueryBase());
+            List<HzCfg0Record> cfg0s = hzCfg0Service.doLoadCfgListByProjectPuid(projectPuid, new HzFeatureQueryDTO());
             Map<String, List<HzCfg0Record>> _map = new HashMap<>();
             cfg0s.forEach(cfg -> {
                 String id = cfg.getpCfg0FamilyDesc() + "\t" + cfg.getpCfg0FamilyName();

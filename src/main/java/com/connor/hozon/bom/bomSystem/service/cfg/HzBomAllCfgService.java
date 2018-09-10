@@ -495,6 +495,10 @@ public class HzBomAllCfgService {
 
     public JSONObject saveOneRow(String bomLinePuid, String cfgPuid) {
         JSONObject respone = new JSONObject();
+        if (cfgPuid.equals("null")) {
+            respone.put("flag", false);
+            return respone;
+        }
         HzFullCfgWithCfg hzFullCfgWithCfg = new HzFullCfgWithCfg();
 
         //bomLine PUID

@@ -4,14 +4,14 @@
   <resultMap id="BaseResultMap" type="sql.pojo.cfg.HzFullCfgMain">
     <id column="ID" jdbcType="DECIMAL" property="id" />
     <result column="PROJECT_UID" jdbcType="VARCHAR" property="projectUid" />
-    <result column="STATUS" jdbcType="OTHER" property="status" />
-    <result column="STAGE" jdbcType="OTHER" property="stage" />
-    <result column="VERSION" jdbcType="OTHER" property="version" />
+    <result column="STATUS" jdbcType="VARCHAR" property="status" />
+    <result column="STAGE" jdbcType="VARCHAR" property="stage" />
+    <result column="VERSION" jdbcType="VARCHAR" property="version" />
     <result column="EFFECTIVE_DATE" jdbcType="TIMESTAMP" property="effectiveDate" />
     <result column="CREATE_DATE" jdbcType="TIMESTAMP" property="createDate" />
     <result column="UPDATE_DATE" jdbcType="TIMESTAMP" property="updateDate" />
-    <result column="CREATOR" jdbcType="OTHER" property="creator" />
-    <result column="UPDATER" jdbcType="OTHER" property="updater" />
+    <result column="CREATOR" jdbcType="VARCHAR" property="creator" />
+    <result column="UPDATER" jdbcType="VARCHAR" property="updater" />
   </resultMap>
   <sql id="Base_Column_List">
     ID, PROJECT_UID, STATUS, STAGE, VERSION, EFFECTIVE_DATE, CREATE_DATE, UPDATE_DATE, 
@@ -33,8 +33,8 @@
     </selectKey>
     insert into HZ_FULL_CFG_MAIN_RECORD (ID, PROJECT_UID, STATUS, 
        VERSION, CREATOR,UPDATER)
-    values (#{id,jdbcType=DECIMAL}, #{projectUid,jdbcType=VARCHAR}, #{status,jdbcType=OTHER}, 
-      #{version,jdbcType=OTHER},#{creator,jdbcType=OTHER},  #{updater,jdbcType=OTHER})
+    values (#{id,jdbcType=DECIMAL}, #{projectUid,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, 
+      #{version,jdbcType=VARCHAR},#{creator,jdbcType=VARCHAR},  #{updater,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="sql.pojo.cfg.HzFullCfgMain">
 
@@ -80,13 +80,13 @@
         #{projectUid,jdbcType=VARCHAR},
       </if>
       <if test="status != null">
-        #{status,jdbcType=OTHER},
+        #{status,jdbcType=VARCHAR},
       </if>
       <if test="stage != null">
-        #{stage,jdbcType=OTHER},
+        #{stage,jdbcType=VARCHAR},
       </if>
       <if test="version != null">
-        #{version,jdbcType=OTHER},
+        #{version,jdbcType=VARCHAR},
       </if>
       <if test="effectiveDate != null">
         #{effectiveDate,jdbcType=TIMESTAMP},
@@ -98,10 +98,10 @@
         #{updateDate,jdbcType=TIMESTAMP},
       </if>
       <if test="creator != null">
-        #{creator,jdbcType=OTHER},
+        #{creator,jdbcType=VARCHAR},
       </if>
       <if test="updater != null">
-        #{updater,jdbcType=OTHER},
+        #{updater,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -112,13 +112,13 @@
         PROJECT_UID = #{projectUid,jdbcType=VARCHAR},
       </if>
       <if test="status != null">
-        STATUS = #{status,jdbcType=OTHER},
+        STATUS = #{status,jdbcType=VARCHAR},
       </if>
       <if test="stage != null">
-        STAGE = #{stage,jdbcType=OTHER},
+        STAGE = #{stage,jdbcType=VARCHAR},
       </if>
       <if test="version != null">
-        VERSION = #{version,jdbcType=OTHER},
+        VERSION = #{version,jdbcType=VARCHAR},
       </if>
       <if test="effectiveDate != null">
         EFFECTIVE_DATE = #{effectiveDate,jdbcType=TIMESTAMP},
@@ -130,10 +130,10 @@
         UPDATE_DATE = #{updateDate,jdbcType=TIMESTAMP},
       </if>
       <if test="creator != null">
-        CREATOR = #{creator,jdbcType=OTHER},
+        CREATOR = #{creator,jdbcType=VARCHAR},
       </if>
       <if test="updater != null">
-        UPDATER = #{updater,jdbcType=OTHER},
+        UPDATER = #{updater,jdbcType=VARCHAR},
       </if>
     </set>
     where ID = #{id,jdbcType=DECIMAL}
@@ -141,14 +141,14 @@
   <update id="updateByPrimaryKey" parameterType="sql.pojo.cfg.HzFullCfgMain">
     update HZ_FULL_CFG_MAIN_RECORD
     set PROJECT_UID = #{projectUid,jdbcType=VARCHAR},
-      STATUS = #{status,jdbcType=OTHER},
-      STAGE = #{stage,jdbcType=OTHER},
-      VERSION = #{version,jdbcType=OTHER},
+      STATUS = #{status,jdbcType=VARCHAR},
+      STAGE = #{stage,jdbcType=VARCHAR},
+      VERSION = #{version,jdbcType=VARCHAR},
       EFFECTIVE_DATE = #{effectiveDate,jdbcType=TIMESTAMP},
       CREATE_DATE = #{createDate,jdbcType=TIMESTAMP},
       UPDATE_DATE = #{updateDate,jdbcType=TIMESTAMP},
-      CREATOR = #{creator,jdbcType=OTHER},
-      UPDATER = #{updater,jdbcType=OTHER}
+      CREATOR = #{creator,jdbcType=VARCHAR},
+      UPDATER = #{updater,jdbcType=VARCHAR}
     where ID = #{id,jdbcType=DECIMAL}
   </update>
 

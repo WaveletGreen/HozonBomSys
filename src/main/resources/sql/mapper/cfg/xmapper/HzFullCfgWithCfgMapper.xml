@@ -7,9 +7,9 @@
         <result column="CFG_BOMLINE_UID" jdbcType="VARCHAR" property="cfgBomlineUid"/>
         <result column="FL_CFG_CREATE_DATE" jdbcType="TIMESTAMP" property="flCfgCreateDate"/>
         <result column="FL_CFG_UPDATE_DATE" jdbcType="TIMESTAMP" property="flCfgUpdateDate"/>
-        <result column="FL_CFG_CREATOR" jdbcType="OTHER" property="flCfgCreator"/>
-        <result column="FL_CFG_UPDATOR" jdbcType="OTHER" property="flCfgUpdator"/>
-        <result column="FL_CFG_BOMLINE_NAME" jdbcType="OTHER" property="flCfgBomlineName"/>
+        <result column="FL_CFG_CREATOR" jdbcType="VARCHAR" property="flCfgCreator"/>
+        <result column="FL_CFG_UPDATOR" jdbcType="VARCHAR" property="flCfgUpdator"/>
+        <result column="FL_CFG_BOMLINE_NAME" jdbcType="VARCHAR" property="flCfgBomlineName"/>
         <result column="FL_CFG_VERSION" jdbcType="DECIMAL" property="flCfgVersion"/>
     </resultMap>
     <sql id="Base_Column_List">
@@ -41,8 +41,8 @@
       select SEQ_HZ_FL_CFG_CFG0_ID.NEXTVAL ,A.* from(
       <foreach collection="list" index="index" item="hzFullCfgWithCfg" separator="union">
           select
-          #{hzFullCfgWithCfg.cfgCfg0Uid,jdbcType=VARCHAR},  #{hzFullCfgWithCfg.flCfgCreator,jdbcType=OTHER},
-          #{hzFullCfgWithCfg.flCfgUpdator,jdbcType=OTHER}, #{hzFullCfgWithCfg.flCfgVersion,jdbcType=DECIMAL}
+          #{hzFullCfgWithCfg.cfgCfg0Uid,jdbcType=VARCHAR},  #{hzFullCfgWithCfg.flCfgCreator,jdbcType=VARCHAR},
+          #{hzFullCfgWithCfg.flCfgUpdator,jdbcType=VARCHAR}, #{hzFullCfgWithCfg.flCfgVersion,jdbcType=DECIMAL}
           from
             dual
       </foreach>
@@ -96,13 +96,13 @@
                 #{flCfgUpdateDate,jdbcType=TIMESTAMP},
             </if>
             <if test="flCfgCreator != null">
-                #{flCfgCreator,jdbcType=OTHER},
+                #{flCfgCreator,jdbcType=VARCHAR},
             </if>
             <if test="flCfgUpdator != null">
-                #{flCfgUpdator,jdbcType=OTHER},
+                #{flCfgUpdator,jdbcType=VARCHAR},
             </if>
             <if test="flCfgBomlineName != null">
-                #{flCfgBomlineName,jdbcType=OTHER},
+                #{flCfgBomlineName,jdbcType=VARCHAR},
             </if>
             <if test="flCfgVersion != null">
                 #{flCfgVersion,jdbcType=DECIMAL},
@@ -125,13 +125,13 @@
                 FL_CFG_UPDATE_DATE = #{flCfgUpdateDate,jdbcType=TIMESTAMP},
             </if>
             <if test="flCfgCreator != null">
-                FL_CFG_CREATOR = #{flCfgCreator,jdbcType=OTHER},
+                FL_CFG_CREATOR = #{flCfgCreator,jdbcType=VARCHAR},
             </if>
             <if test="flCfgUpdator != null">
-                FL_CFG_UPDATOR = #{flCfgUpdator,jdbcType=OTHER},
+                FL_CFG_UPDATOR = #{flCfgUpdator,jdbcType=VARCHAR},
             </if>
             <if test="flCfgBomlineName != null">
-                FL_CFG_BOMLINE_NAME = #{flCfgBomlineName,jdbcType=OTHER},
+                FL_CFG_BOMLINE_NAME = #{flCfgBomlineName,jdbcType=VARCHAR},
             </if>
             <if test="flCfgVersion != null">
                 FL_CFG_VERSION = #{flCfgVersion,jdbcType=DECIMAL},
@@ -145,9 +145,9 @@
       CFG_BOMLINE_UID = #{cfgBomlineUid,jdbcType=VARCHAR},
       FL_CFG_CREATE_DATE = #{flCfgCreateDate,jdbcType=TIMESTAMP},
       FL_CFG_UPDATE_DATE = #{flCfgUpdateDate,jdbcType=TIMESTAMP},
-      FL_CFG_CREATOR = #{flCfgCreator,jdbcType=OTHER},
-      FL_CFG_UPDATOR = #{flCfgUpdator,jdbcType=OTHER},
-      FL_CFG_BOMLINE_NAME = #{flCfgBomlineName,jdbcType=OTHER},
+      FL_CFG_CREATOR = #{flCfgCreator,jdbcType=VARCHAR},
+      FL_CFG_UPDATOR = #{flCfgUpdator,jdbcType=VARCHAR},
+      FL_CFG_BOMLINE_NAME = #{flCfgBomlineName,jdbcType=VARCHAR},
       FL_CFG_VERSION = #{flCfgVersion,jdbcType=DECIMAL}
     where ID = #{id,jdbcType=DECIMAL}
   </update>
@@ -160,8 +160,8 @@
         select SEQ_HZ_FL_CFG_CFG0_ID.NEXTVAL ,A.* from(
         <foreach collection="list" index="index" item="hzFullCfgWithCfg" separator="union">
             select
-            #{hzFullCfgWithCfg.cfgBomlineUid,jdbcType=VARCHAR}, #{hzFullCfgWithCfg.flCfgBomlineName,jdbcType=VARCHAR}, #{hzFullCfgWithCfg.flCfgCreator,jdbcType=OTHER},
-            #{hzFullCfgWithCfg.flCfgUpdator,jdbcType=OTHER}, #{hzFullCfgWithCfg.flCfgVersion,jdbcType=DECIMAL}
+            #{hzFullCfgWithCfg.cfgBomlineUid,jdbcType=VARCHAR}, #{hzFullCfgWithCfg.flCfgBomlineName,jdbcType=VARCHAR}, #{hzFullCfgWithCfg.flCfgCreator,jdbcType=VARCHAR},
+            #{hzFullCfgWithCfg.flCfgUpdator,jdbcType=VARCHAR}, #{hzFullCfgWithCfg.flCfgVersion,jdbcType=DECIMAL}
             from
             dual
         </foreach>
