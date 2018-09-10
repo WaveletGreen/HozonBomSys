@@ -31,30 +31,30 @@ function doQuery() {
 }
 
 function initTable(url) {
-    var column = [];
-    $.ajax({
-        url: "dict/title",
-        type: "GET",
-        success: function (result) {
-            var column = [];
-            column.push({field: 'ck', checkbox: true, Width: 50});
-            var data = result.data;
-            var keys = [];
-            var values;
-            for (var key in data) {
-                if (data.hasOwnProperty(key)) {
-                    var json = {
-                        field: key,
-                        title: data[key],
-                        // align:
-                        //     'center',
-                        valign:
-                            'middle'
-                    };
-                    column.push(json);
-                }
-            }
-            ;
+    // var column = [];
+    // $.ajax({
+    //     url: "dict/title",
+    //     type: "GET",
+    //     success: function (result) {
+    //         var column = [];
+    //         column.push({field: 'ck', checkbox: true, Width: 50});
+    //         var data = result.data;
+    //         var keys = [];
+    //         var values;
+    //         for (var key in data) {
+    //             if (data.hasOwnProperty(key)) {
+    //                 var json = {
+    //                     field: key,
+    //                     title: data[key],
+    //                     // align:
+    //                     //     'center',
+    //                     valign:
+    //                         'middle',
+    //                 };
+    //                 column.push(json);
+    //             }
+    //         }
+    //         ;
             $('#dictionaryLibraryTable').bootstrapTable({
                 url: url,
                 method: 'GET',
@@ -79,7 +79,7 @@ function initTable(url) {
                 showColumns: true,                         //是否显示所有的列
                 showToggle: false,                        //是否显示详细视图和列表视图的切换按钮
                 showRefresh: true,                        //是否显示刷新按钮
-                columns:column,
+                // columns:column,
                 toolbars: [
                     {
                         text: '添加',
@@ -164,7 +164,7 @@ function initTable(url) {
                         }
                     },
                 ],
-                /*columns: [
+                columns: [
                     {
                         checkbox: true,
                         align:'center',
@@ -172,138 +172,104 @@ function initTable(url) {
                     {
                         field: 'No',
                         title: '序号',
-                        align : 'center',
                         valign : 'middle',
-                        sortable : true
                     },
                     {
                         field : 'professionCh',
                         title : '专业部',
-                        align : 'center',
                         valign : 'middle',
-                        sortable : true
                     },
                     {
                         field : 'professionEn',
                         title : 'Profession',
-                        align : 'center',
                         valign : 'middle',
-                        sortable : true
                     },
                     {
                         field : 'classificationCh',
                         title : '分类',
-                        align : 'center',
                         valign : 'middle',
-                        sortable : true
+                        sortable : true,          //是否启用排序
+                        sortOrder: "asc"
                     },
                     {
                         field : 'classificationEn',
                         title : 'classification',
-                        align : 'center',
                         valign : 'middle',
-                        sortable : true
                     },
                     {
                         field : 'groupCode',
-                        title : '特征组代码',
-                        align : 'center',
+                        title : '特性组代码',
                         valign : 'middle',
-                        sortable : true
                     },
                     {
                         field : 'groupCh',
-                        title : '特征组',
-                        align : 'center',
+                        title : '特性组',
                         valign : 'middle',
-                        sortable : true
                     },
                     {
                         field : 'groupEn',
                         title : 'group',
-                        align : 'center',
                         valign : 'middle',
-                        sortable : true
                     },
                     {
                         field : 'famillyCode',
-                        title : '特征族代码',
-                        align : 'center',
+                        title : '特性族代码',
                         valign : 'middle',
-                        sortable : true
                     },
                     {
                         field : 'famillyCh',
-                        title : '特征族',
-                        align : 'center',
+                        title : '特性族',
                         valign : 'middle',
-                        sortable : true
                     },
                     {
                         field : 'famillyEn',
                         title : 'familly',
-                        align : 'center',
                         valign : 'middle',
-                        sortable : true
                     },
                     {
                         field : 'eigenValue',
-                        title : '特征值',
-                        align : 'center',
+                        title : '特性值',
                         valign : 'middle',
-                        sortable : true
+                        sortable : true,//是否启用排序
+                        sortOrder: "asc"
                     },
                     {
                         field : 'valueDescCh',
-                        title : '特征值描述',
-                        align : 'center',
+                        title : '特性值描述',
                         valign : 'middle',
-                        sortable : true
                     },
                     {
                         field : 'valueDescEn',
                         title : 'value description',
-                        align : 'center',
                         valign : 'middle',
-                        sortable : true
                     },
                     {
                         field : 'type',
                         title : '类型',
-                        align : 'center',
                         valign : 'middle',
-                        sortable : true
                     },
                     {
                         field : 'valueSource',
-                        title : '特征值来源',
-                        align : 'center',
+                        title : '特性值来源',
                         valign : 'middle',
-                        sortable : true
                     },
                     {
                         field : 'effectTime',
                         title : '生效时间',
-                        align : 'center',
                         valign : 'middle',
-                        sortable : true
                     },
                     {
                         field : 'failureTime',
                         title : '失效时间',
-                        align : 'center',
                         valign : 'middle',
-                        sortable : true
                     },
                     {
                         field : 'note',
                         title : '备注',
-                        align : 'center',
                         valign : 'middle',
-                        sortable : true
                     },
-                ]*/
+                ]
             })
-        }
-    })
+    //     }
+    // })
 }
