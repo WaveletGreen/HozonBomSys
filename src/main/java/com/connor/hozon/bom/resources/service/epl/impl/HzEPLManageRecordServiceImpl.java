@@ -21,7 +21,7 @@ import sql.redis.SerializeUtil;
 
 import java.util.*;
 
-import static com.connor.hozon.bom.resources.service.bom.impl.HzPbomServiceImpl.getLevelAndRank;
+import static com.connor.hozon.bom.resources.domain.model.HzBomSysFactory.getLevelAndRank;
 
 /**
  * Created by haozt on 2018/06/05
