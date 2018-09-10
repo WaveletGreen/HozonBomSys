@@ -285,7 +285,7 @@
             and STATUS =1
         </where>
 --         order by INSERTTIME desc
-        order by CLASSIFICATION_CH desc ,EIGEN_VALUE desc
+        order by CLASSIFICATION_CH  ,EIGEN_VALUE asc
         ) t
         where ROWNUM &lt;=#{limit,jdbcType=INTEGER})
         where rn &gt;#{offset,jdbcType=INTEGER}

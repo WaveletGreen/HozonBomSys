@@ -1,10 +1,11 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <!--User: xulf Date: 2018/9/4 Time: 16:36-->
+<link th:href="@{/css/labelColor.css}" rel="stylesheet">
 <body>
 <form id="VPPSLibraryForm" role="form" method="post" action="vpps/add">
     <div class="form-group">
-        <label for="vppsLevel">VPPS层级</label>
+        <label for="vppsLevel">VPPS层级<span>*</span></label>
         <input class="form-control" id="vppsLevel" name="vppsLevel" type="text"
                placeholder="请输入VPPS层级"/>
     </div>
@@ -14,7 +15,7 @@
                placeholder="请输入VSG代码"/>
     </div>
     <div class="form-group">
-        <label for="vppsCode">VPPS代码</label>
+        <label for="vppsCode">VPPS代码<span>*</span></label>
         <input class="form-control" id="vppsCode" name="vppsCode" type="text"
                placeholder="请输入VPPS代码"/>
     </div>
@@ -44,7 +45,7 @@
                placeholder="请输入FNA中文描述"/>
     </div>
     <div class="form-group">
-        <label for="standardPartCode">标准零件代码</label>
+        <label for="standardPartCode">标准零件代码<span>*</span></label>
         <input class="form-control" id="standardPartCode" name="standardPartCode" type="text"
                placeholder="请输入标准零件代码"/>
     </div>
@@ -59,12 +60,28 @@
                 invalid: 'glyphicon glyphicon-remove',
                 validating: 'glyphicon glyphicon-refresh'
             },
-            id: {
-                factoryCode: {
-                    message: 'id验证失败',
+            fields: {
+                vppsLevel: {
+                    message: 'VPPS层级验证失败',
                     validators: {
                         notEmpty: {
-                            message: 'id不能为空'
+                            message: 'VPPS层级不能为空'
+                        }
+                    }
+                },
+                vppsCode: {
+                    message: 'VPPS代码验证失败',
+                    validators: {
+                        notEmpty: {
+                            message: 'VPPS代码不能为空'
+                        }
+                    }
+                },
+                standardPartCode: {
+                    message: '标准零件代码验证失败',
+                    validators: {
+                        notEmpty: {
+                            message: '标准零件代码不能为空'
                         }
                     }
                 },
