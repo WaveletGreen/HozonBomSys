@@ -152,13 +152,13 @@ public class HzVPPSLibraryServiceImpl implements HzVPPSLibraryService {
             int j = hzVPPSLibraryDao.findVPPSLibraryOrCodeToCount(reqDTO.getVppsCode());
             HzVPPSLibrary hzVPPSLibrary = hzVPPSLibraryDao.findVPPSLibraryOrCode(reqDTO.getVppsCode());
             OperateResultMessageRespDTO resultMessageRespDTO = new OperateResultMessageRespDTO();
-            System.out.println("查出的数据："+hzVPPSLibrary.getPuid());
-            System.out.println("修改的数据："+reqDTO.getPuid());
             if (j > 1){
                 resultMessageRespDTO.setErrMsg("对不起!您修改的VPPS代码已存在");
                 resultMessageRespDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
                 return resultMessageRespDTO;
-            }else if (j!=1 &&hzVPPSLibrary.getPuid().equals(reqDTO.getPuid()) ){
+            }
+
+            else if (j==1&&hzVPPSLibrary.getPuid().equals(reqDTO.getPuid())==false ){
                 resultMessageRespDTO.setErrMsg("对不起!您修改的VPPS代码已存在");
                 return resultMessageRespDTO;
             }

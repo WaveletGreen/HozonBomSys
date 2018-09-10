@@ -13,10 +13,10 @@ function doQuery() {
     //$('#materialDataTable').bootstrapTable('refresh');    //刷新表格
     var projectId = $("#project", window.top.document).val();
     var url = "materiel/getMateriel?projectId=" + projectId;
-    var pMaterielCode = $("#pMaterielCode").val();
-    url += "&pMaterielCode=" + pMaterielCode;
-    var pMaterielType = $("#pMaterielType").val();
-    url += "&pMaterielType=" + pMaterielType;
+    // var pMaterielCode = $("#pMaterielCode").val();
+    // url += "&pMaterielCode=" + pMaterielCode;
+    // var pMaterielType = $("#pMaterielType").val();
+    // url += "&pMaterielType=" + pMaterielType;
     var pMaterielDataType = $("#pMaterielDataType").val();
     if (pMaterielDataType == "车型项目物料总表") {
         url += "&pMaterielDataType=" + "";

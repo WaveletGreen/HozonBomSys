@@ -13,12 +13,12 @@ function doQuery() {
     //$('#ebomManageTable').bootstrapTable('refresh');    //刷新表格
     var projectPuid = $("#project", window.top.document).val();
     var eBomUrl = "ebom/getEBom/list?projectId=" + projectPuid;
-    var level = $("#level").val();
-    eBomUrl += "&level=" + level;
-    var pBomOfWhichDept = $("#pBomOfWhichDept").val();
-    eBomUrl += "&pBomOfWhichDept=" + pBomOfWhichDept;
-    var lineId = $("#lineId").val();
-    eBomUrl += "&lineId=" + lineId;
+    // var level = $("#level").val();
+    // eBomUrl += "&level=" + level;
+    // var pBomOfWhichDept = $("#pBomOfWhichDept").val();
+    // eBomUrl += "&pBomOfWhichDept=" + pBomOfWhichDept;
+    // var lineId = $("#lineId").val();
+    // eBomUrl += "&lineId=" + lineId;
     var pBomLinePartClass = $("#pBomLinePartClass").val();
     if (pBomLinePartClass =="请选择零件分类") {
         eBomUrl += "&pBomLinePartClass="+ "";
