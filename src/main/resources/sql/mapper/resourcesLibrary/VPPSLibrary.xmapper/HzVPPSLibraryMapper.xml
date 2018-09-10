@@ -48,7 +48,7 @@
     </if>
     and STATUS = 1
   </where>
-  order by INSERT_TIME desc
+  order by VPPS_CODE asc
   ) t
   where ROWNUM &lt;=#{limit,jdbcType=INTEGER})
   where rn &gt;#{offset,jdbcType=INTEGER}

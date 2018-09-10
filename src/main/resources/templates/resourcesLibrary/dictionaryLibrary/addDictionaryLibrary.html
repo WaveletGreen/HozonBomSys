@@ -2,10 +2,11 @@
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <!--User: xulf Date: 2018/8/28 Time: 20:39-->
 <!--<link th:href="@{/css/autocomplete.css}" rel="stylesheet"/>-->
+<link th:href="@{/css/labelColor.css}" rel="stylesheet">
 <body>
 <form id="dictionaryLibraryForm" role="form" method="post" action="dict/add">
     <div class="form-group">
-        <label for="professionCh">专业部</label>
+        <label for="professionCh">专业部<span>*</span></label>
         <input class="form-control" id="professionCh" name="professionCh" type="text"
                placeholder="请输入专业部"/>
     </div>
@@ -15,7 +16,7 @@
                placeholder="请输入Professsion"/>
     </div>
     <div class="form-group">
-        <label for="classificationCh">分类</label>
+        <label for="classificationCh">分类<span>*</span></label>
         <input class="form-control" id="classificationCh" name="classificationCh" type="text"
                placeholder="请输入分类"/>
     </div>
@@ -55,12 +56,12 @@
                placeholder="请输入familly"/>
     </div>
     <div class="form-group">
-        <label for="eigenValue">特性值</label>
+        <label for="eigenValue">特性值<span>*</span></label>
         <input class="form-control" id="eigenValue" name="eigenValue" type="text"
                placeholder="请输入特性值"/>
     </div>
     <div class="form-group">
-        <label for="valueDescCh">特性值描述</label>
+        <label for="valueDescCh">特性值描述<span>*</span></label>
         <input class="form-control" id="valueDescCh" name="valueDescCh" type="text"
                placeholder="请输入特性值描述"/>
     </div>
@@ -105,12 +106,36 @@
                 invalid: 'glyphicon glyphicon-remove',
                 validating: 'glyphicon glyphicon-refresh'
             },
-            id: {
-                factoryCode: {
-                    message: 'id验证失败',
+            fields: {
+                professionCh: {
+                    message: '专业部验证失败',
                     validators: {
                         notEmpty: {
-                            message: 'id不能为空'
+                            message: '专业部不能为空'
+                        }
+                    }
+                },
+                classificationCh: {
+                    message: '分类验证失败',
+                    validators: {
+                        notEmpty: {
+                            message: '分类不能为空'
+                        }
+                    }
+                },
+                eigenValue: {
+                    message: '特性值验证失败',
+                    validators: {
+                        notEmpty: {
+                            message: '特性值不能为空'
+                        }
+                    }
+                },
+                valueDescCh: {
+                    message: '特性值描述验证失败',
+                    validators: {
+                        notEmpty: {
+                            message: '特性值描述不能为空'
                         }
                     }
                 },

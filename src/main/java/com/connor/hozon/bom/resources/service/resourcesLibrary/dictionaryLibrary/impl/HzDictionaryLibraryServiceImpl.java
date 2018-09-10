@@ -76,7 +76,7 @@ public class HzDictionaryLibraryServiceImpl implements HzDictionaryLibraryServic
                 resultMessageRespDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
                 return  resultMessageRespDTO;
             }
-            if (j==1&&hzDictionaryLibrary.getPuid()!=reqDTO.getPuid()){
+            if (j==1&&hzDictionaryLibrary.getPuid().equals(reqDTO.getPuid())==false){
                 resultMessageRespDTO.setErrMsg("对不起！您修改的特性值已存在");
                 return resultMessageRespDTO;
             }

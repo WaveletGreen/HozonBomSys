@@ -32,13 +32,6 @@ public interface HzEbomService {
     Page<HzEbomRespDTO> getHzEbomPage(HzEbomByPageQuery query);
 
     /**
-     * 获取EBOM标题信息
-     * @param projectId
-     * @return
-     */
-    JSONArray getEbomTitle(String projectId);
-
-    /**
      * 查询一条bom信息
      * @param puid
      * @param projectId

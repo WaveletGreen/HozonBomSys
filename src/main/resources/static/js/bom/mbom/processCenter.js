@@ -12,12 +12,12 @@ function doQuery() {
     //$('#processCenterTable').bootstrapTable('refresh');    //刷新表格
     var projectId =  $("#project", window.top.document).val();
     var url = "work/record?projectId="+projectId;
-    var factoryCode = $("#factoryCode").val();
-    url+="&factoryCode="+factoryCode;
-    var pWorkCode = $("#pWorkCode").val();
-    url+="&pWorkCode="+pWorkCode;
-    var pPurpose = $("#pPurpose").val();
-    url += "&pPurpose="+pPurpose;
+    // var factoryCode = $("#factoryCode").val();
+    // url+="&factoryCode="+factoryCode;
+    // var pWorkCode = $("#pWorkCode").val();
+    // url+="&pWorkCode="+pWorkCode;
+    // var pPurpose = $("#pPurpose").val();
+    // url += "&pPurpose="+pPurpose;
     initTable(url);
     $('#processCenterTable').bootstrapTable('destroy');
 }
