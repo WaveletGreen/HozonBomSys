@@ -1,6 +1,5 @@
 package com.connor.hozon.bom.resources.service.bom.impl;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.connor.hozon.bom.bomSystem.dao.bom.HzBomMainRecordDao;
@@ -17,27 +16,22 @@ import com.connor.hozon.bom.resources.domain.query.HzPbomByPageQuery;
 import com.connor.hozon.bom.resources.domain.query.HzPbomTreeQuery;
 import com.connor.hozon.bom.resources.mybatis.bom.HzMbomRecordDAO;
 import com.connor.hozon.bom.resources.mybatis.bom.HzPbomRecordDAO;
-import com.connor.hozon.bom.resources.mybatis.bom.impl.HzPbomRecordDAOImpl;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.service.bom.HzPbomService;
 import com.connor.hozon.bom.resources.service.epl.HzEPLManageRecordService;
-import com.connor.hozon.bom.resources.util.DateUtil;
 import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.resources.util.PrivilegeUtil;
 import com.connor.hozon.bom.sys.entity.User;
-import org.omg.CORBA.OBJ_ADAPTER;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
-import share.bean.PreferenceSetting;
-import share.bean.RedisBomBean;
-import sql.pojo.HzPreferenceSetting;
 import sql.pojo.bom.*;
 import sql.pojo.cfg.HzCfg0OfBomLineRecord;
-import sql.redis.SerializeUtil;
 
 import java.util.*;
+
+import static com.connor.hozon.bom.resources.domain.model.HzBomSysFactory.getLevelAndRank;
 
 /**
  * Created by haozt on 2018/5/24
@@ -376,19 +370,16 @@ public class HzPbomServiceImpl implements HzPbomService {
 
         String level = query.getLevel();
         if (level != null && level!="") {
-            if(level.length()==1 && level.toUpperCase().endsWith("Y")){
-                query.setIsHas(Integer.valueOf(1));
+            if(level.trim().toUpperCase().endsWith("Y")){
+                int length = Integer.valueOf(level.replace("Y",""));
+                query.setIsHas(1);
+                query.setLineIndex(String.valueOf(length-1));
             }else {
-                int length = level.charAt(0) - 48;
-                if (level.toUpperCase().endsWith("Y")) {
-                    query.setIsHas(Integer.valueOf(1));
-                } else {
-                    query.setIsHas(Integer.valueOf(0));
-                }
-                query.setLineIndex(String.valueOf(length - 1));
+                query.setIsHas(0);
+                int length = Integer.valueOf(level.trim());
+                query.setLineIndex(String.valueOf(length));
             }
         }
-
         int count = hzPbomRecordDAO.getHzBomLineCount(query.getProjectId());
         if(count<=0){
             List<HzBomLineRecord> lineRecords = hzBomLineRecordDao.getAllBomLineRecordByProjectId(query.getProjectId());
@@ -935,39 +926,6 @@ public class HzPbomServiceImpl implements HzPbomService {
         hzPbomLineRecord.setpBomLinePartResource(record.getpBomLinePartResource());
         hzPbomLineRecord.setOrderNum(record.getOrderNum());
         return hzPbomLineRecord;
-    }
-
-    /**
-     * 获取bom系统的层级和级别
-     *
-     * @param lineIndex
-     * @param is2Y
-     * @param hasChildren
-     * @return String[0]层级  String[1]级别  String[3]级查找编号
-     */
-    public static String[] getLevelAndRank(String lineIndex, Integer is2Y, Integer hasChildren) {
-        int level = (lineIndex.split("\\.")).length;
-        String line = "";
-        int rank = 0;
-        if (null != is2Y && is2Y.equals(1)) {
-            line = "2Y";
-            rank = 1;
-        } else if (null != is2Y && is2Y.equals(0)) {
-            if (hasChildren != null && hasChildren.equals(1)) {
-                line = level + "Y";
-                rank = level - 1;
-            } else if (hasChildren != null && hasChildren.equals(0)) {
-                line = String.valueOf((level-1));
-                rank = level - 1 ;
-            } else {
-                line = "";//错误数据
-            }
-        } else {
-            line = "";
-        }
-        int length = lineIndex.split("\\.").length-1;
-        int s1 = Integer.valueOf(lineIndex.split("\\.")[length]);
-        return new String[]{line, String.valueOf(rank),String.format("%04d",s1)};
     }
 
     private List<HzPbomLineRespDTO> pbomLineRecordToRespDTOS(List<HzPbomLineRecord> records,String projectId,int num) {

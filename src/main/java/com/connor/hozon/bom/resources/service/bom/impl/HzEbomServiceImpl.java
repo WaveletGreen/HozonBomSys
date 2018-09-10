@@ -14,6 +14,9 @@ import com.connor.hozon.bom.resources.domain.dto.request.UpdateHzEbomReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzEbomRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzLouRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.OperateResultMessageRespDTO;
+import com.connor.hozon.bom.resources.domain.model.HzEbomRecordFactory;
+import com.connor.hozon.bom.resources.domain.model.HzMbomRecordFactory;
+import com.connor.hozon.bom.resources.domain.model.HzPbomRecordFactory;
 import com.connor.hozon.bom.resources.domain.query.*;
 import com.connor.hozon.bom.resources.mybatis.bom.HzEbomRecordDAO;
 import com.connor.hozon.bom.resources.mybatis.bom.HzMbomRecordDAO;
@@ -26,6 +29,7 @@ import com.connor.hozon.bom.resources.service.epl.HzEPLManageRecordService;
 import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.resources.util.PrivilegeUtil;
 import com.connor.hozon.bom.sys.entity.User;
+import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import share.bean.PreferenceSetting;
@@ -42,7 +46,7 @@ import sql.redis.SerializeUtil;
 
 import java.util.*;
 
-import static com.connor.hozon.bom.resources.service.bom.impl.HzPbomServiceImpl.getLevelAndRank;
+import static com.connor.hozon.bom.resources.domain.model.HzBomSysFactory.getLevelAndRank;
 
 /**
  * Created by haozt on 2018/06/06
@@ -57,9 +61,6 @@ public class HzEbomServiceImpl implements HzEbomService {
     private HzBomMainRecordDao hzBomMainRecordDao;
 
     @Autowired
-    private HzBomDataDao hzBomDataDao;
-
-    @Autowired
     private HzBomLineRecordDaoImpl hzBomLineRecordDao;
     @Autowired
     private HzPbomRecordDAO hzPbomRecordDAO;
@@ -72,6 +73,9 @@ public class HzEbomServiceImpl implements HzEbomService {
 
     @Autowired
     private HzCfg0OfBomLineService hzCfg0OfBomLineService;
+
+    @Autowired
+    private HzEPLManageRecordService hzEPLManageRecordService;
     @Override
     public Page<HzEbomRespDTO> getHzEbomPage(HzEbomByPageQuery query) {
         try{
@@ -81,16 +85,14 @@ public class HzEbomServiceImpl implements HzEbomService {
             List<HzEbomRespDTO> recordRespDTOList = new ArrayList<>();
             String level = query.getLevel();
             if (level != null && level!="") {
-                if(level.length()==1 && level.toUpperCase().endsWith("Y")){
-                    query.setIsHas(Integer.valueOf(1));
+                if(level.trim().toUpperCase().endsWith("Y")){
+                    int length = Integer.valueOf(level.replace("Y",""));
+                    query.setIsHas(1);
+                    query.setLineIndex(String.valueOf(length-1));
                 }else {
-                    int length = level.charAt(0) - 48;
-                    if (level.toUpperCase().endsWith("Y")) {
-                        query.setIsHas(Integer.valueOf(1));
-                    } else {
-                        query.setIsHas(Integer.valueOf(0));
-                    }
-                    query.setLineIndex(String.valueOf(length - 1));
+                    query.setIsHas(0);
+                    int length = Integer.valueOf(level.trim());
+                    query.setLineIndex(String.valueOf(length));
                 }
             }
 
@@ -100,167 +102,32 @@ public class HzEbomServiceImpl implements HzEbomService {
             }
             List<HzEPLManageRecord> records = recordPage.getResult();
             for(HzEPLManageRecord record:records){
-                JSONObject jsonObject = new JSONObject();
-                jsonObject.put("puid", record.getPuid());
-                Integer is2Y = record.getIs2Y();
-                Integer hasChildren = record.getIsHas();
-                String lineIndex = record.getLineIndex();
-                String[] strings = getLevelAndRank(lineIndex, is2Y, hasChildren);
-                jsonObject.put("No",++num);
-                jsonObject.put("level", strings[0]);
-                jsonObject.put("rank", strings[1]);
-                jsonObject.put("pBomOfWhichDept", record.getpBomOfWhichDept());
+               JSONObject jsonObject = HzEbomRecordFactory.bomLineRecordTORespDTO(record);
                 //获取分组号
+                String fastener = record.getpFastener();
                 String groupNum = record.getLineID();
-                //这里在做一个递归查询
-//                if(groupNum.contains("-")){
-//                    groupNum =groupNum.split("-")[1].substring(0,4);
-//                }
-//                else{
-//                    String parentId = record.getParentUid();
-//                    groupNum = hzEPLManageRecordService.getGroupNum(query.getProjectId(),parentId);
-//                }
-//                byte[] bomLineBlock = record.getBomLineBlock();
-//                Object obj = SerializeUtil.unserialize(bomLineBlock);
-//                if (obj instanceof LinkedHashMap) {
-//                    if (((LinkedHashMap) obj).size() > 0) {
-//                        ((LinkedHashMap) obj).forEach((key, value) -> {
-//
-//                            jsonObject.put((String) key, value);
-//                        });
-//                    }
-//                } else if (obj instanceof RedisBomBean) {
-//                    List<String> pSets = ((RedisBomBean) obj).getpSets();
-//                    List<String> pValues = ((RedisBomBean) obj).getpValues();
-//                    if (null != pSets && pSets.size() > 0 && null != pValues && pValues.size() > 0)
-//                        for (int i = 0; i < pSets.size(); i++) {
-//                            jsonObject.put(pSets.get(i), pValues.get(i));
-//                        }
-//                }
-                jsonObject.put("groupNum", groupNum);
-                jsonObject.put("lineId", record.getLineID());
-                jsonObject.put("fna",record.getFna());
-                jsonObject.put("lineNo",strings[2]);
-                jsonObject.put("pBomLinePartName", record.getpBomLinePartName());
-                jsonObject.put("pBomLinePartClass", record.getpBomLinePartClass());
-                jsonObject.put("pBomLinePartEnName",record.getpBomLinePartEnName());
-                jsonObject.put("pBomLinePartResource", record.getpBomLinePartResource());
-                jsonObject.put("pFastener", record.getpFastener());
-                if(Integer.valueOf(1).equals(record.getpLouaFlag())){
-                    jsonObject.put("pLouaFlag","LOU");
-                }else if(Integer.valueOf(0).equals(record.getpLouaFlag())){
-                    jsonObject.put("pLouaFlag","LOA");
-                }
-                if(Integer.valueOf(1).equals(record.getP3cpartFlag())){
-                    jsonObject.put("p3cpartFlag", "Y");
-                }else if(Integer.valueOf(0).equals(record.getP3cpartFlag())){
-                    jsonObject.put("p3cpartFlag", "N");
-                }else {
-                    jsonObject.put("p3cpartFlag", "");
-                }
-                if(Integer.valueOf(1).equals(record.getpInOutSideFlag())){
-                    jsonObject.put("pInOutSideFlag", "内饰件");
-                }else if(Integer.valueOf(0).equals(record.getpInOutSideFlag())){
-                    jsonObject.put("pInOutSideFlag", "外饰件");
-                }else {
-                    jsonObject.put("pInOutSideFlag", "");
-                }
-                jsonObject.put("pUpc",record.getpUpc());
-                jsonObject.put("pFnaDesc", record.getpFnaDesc());
-                jsonObject.put("pUnit", record.getpUnit());
-                jsonObject.put("pPictureNo",record.getpPictureNo());
-                jsonObject.put("pPictureSheet", record.getpPictureSheet());
-                jsonObject.put("pMaterialHigh", record.getpMaterialHigh());
-                jsonObject.put("pMaterial1",record.getpMaterial1());
-                jsonObject.put("pMaterial2", record.getpMaterial2());
-                jsonObject.put("pMaterial3", record.getpMaterial3());
-                jsonObject.put("pDensity",record.getpDensity());
-                jsonObject.put("pMaterialStandard", record.getpMaterialStandard());
-                jsonObject.put("pSurfaceTreat", record.getpSurfaceTreat());
-                jsonObject.put("pTextureColorNum",record.getpTextureColorNum());
-                jsonObject.put("pManuProcess", record.getpManuProcess());
-                jsonObject.put("pSymmetry", record.getpSymmetry());
-                jsonObject.put("pImportance",record.getpImportance());
-                if(Integer.valueOf(1).equals(record.getpRegulationFlag())){
-                    jsonObject.put("pRegulationFlag", "Y");
-                }else if(Integer.valueOf(0).equals(record.getpRegulationFlag())){
-                    jsonObject.put("pRegulationFlag", "N");
-                }else {
-                    jsonObject.put("pRegulationFlag", "");
-                }
-                jsonObject.put("pBwgBoxPart", record.getpBwgBoxPart());
-                jsonObject.put("pDevelopType",record.getpDevelopType());
-                jsonObject.put("pDataVersion", record.getpDataVersion());
-                jsonObject.put("pTargetWeight", record.getpTargetWeight());
-                jsonObject.put("pFeatureWeight",record.getpFeatureWeight());
-                jsonObject.put("pActualWeight", record.getpActualWeight());
-                jsonObject.put("pFastenerStandard", record.getpFastenerStandard());
-                jsonObject.put("pFastenerLevel",record.getpFastenerLevel());
+                try {
+                    if(fastener.equals("/") || fastener.equals("")){
+                        if(groupNum.contains("-")){
+                            groupNum =groupNum.split("-")[1].substring(0,4);
+                        }else {
+                            groupNum = "";
+                        }
 
-                jsonObject.put("pTorque", record.getpTorque());
-                jsonObject.put("pDutyEngineer",record.getpDutyEngineer());
-                jsonObject.put("pSupply", record.getpSupply());
-                jsonObject.put("pSupplyCode", record.getpSupplyCode());
-                jsonObject.put("pRemark",record.getpRemark());
-                jsonObject.put("pRegulationCode", record.getpRegulationCode());
-                jsonObject.put("number",record.getNumber());
-                jsonObject.put("pBuyEngineer",record.getpBuyEngineer());
-                jsonObject.put("status",record.getStatus());
+                    }else {
+                        String parentId = record.getParentUid();
+                        groupNum = hzEPLManageRecordService.getGroupNum(query.getProjectId(),parentId);
+                    }
+                }catch (Exception e){
+                    groupNum = "";
+                }
+                jsonObject.put("No",num++);
+                jsonObject.put("groupNum",groupNum);
                 array.add(jsonObject);
             }
             recordRespDTO.setJsonArray(array);
             recordRespDTOList.add(recordRespDTO);
             return new Page<>(recordPage.getPageNumber(),recordPage.getPageSize(),recordPage.getTotalCount(),recordRespDTOList);
-        }catch (Exception e){
-            return null;
-        }
-    }
-
-    @Override
-    public JSONArray getEbomTitle(String projectId) {
-        try{
-            JSONArray array = new JSONArray();
-            int appendCount = 8;
-            HzPreferenceSetting setting = new HzPreferenceSetting();
-            setting.setSettingName("Hz_ExportBomPreferenceRedis");
-            HZBomMainRecord main = hzBomMainRecordDao.selectByProjectPuid(projectId);
-            if(main == null){
-                return null;
-            }
-            setting.setBomMainRecordPuid(main.getPuid());
-            setting = hzBomDataDao.loadSetting(setting);
-            byte[] btOfSetting = setting.getPreferencesettingblock();
-            Object objOfSetting = SerializeUtil.unserialize(btOfSetting);
-            if (objOfSetting instanceof PreferenceSetting) {
-                String[] localName = ((PreferenceSetting) objOfSetting).getPreferenceLocal();
-                String[] trueName = ((PreferenceSetting) objOfSetting).getPreferences();
-                String[] appendLocalName = new String[localName.length + appendCount];
-                String[] appendTrueName = new String[trueName.length + appendCount];
-
-                appendLocalName[0] = "序号";
-                appendLocalName[1] = "puid";
-                appendLocalName[2] = "层级";
-                appendLocalName[3] = "专业";
-                appendLocalName[4] = "级别";
-                appendLocalName[5] = "分组号";
-                appendLocalName[6] = "FNA";
-                appendLocalName[7] = "零部件来源";
-
-                appendTrueName[0] = "No";
-                appendTrueName[1] = "puid";
-                appendTrueName[2] = "level";
-                appendTrueName[3] = "pBomOfWhichDept";
-                appendTrueName[4] = "rank";
-                appendTrueName[5] = "groupNum";
-                appendTrueName[6] = "fna";
-                appendTrueName[7] = "pBomLinePartResource";
-                System.arraycopy(localName, 0, appendLocalName, appendCount, localName.length);
-                System.arraycopy(trueName, 0, appendTrueName, appendCount, trueName.length);
-
-                array.add(0, appendLocalName);
-                array.add(1, appendTrueName);
-            }
-            return array;
         }catch (Exception e){
             return null;
         }
@@ -273,103 +140,7 @@ public class HzEbomServiceImpl implements HzEbomService {
             HzEbomRespDTO respDTO = new HzEbomRespDTO();
             if(record!=null){
                 JSONArray jsonArray = new JSONArray();
-                JSONObject jsonObject = new JSONObject();
-                jsonObject.put("puid", record.getPuid());
-                Integer is2Y = record.getIs2Y();
-                Integer hasChildren = record.getIsHas();
-                String lineIndex = record.getLineIndex();
-                String[] strings = getLevelAndRank(lineIndex, is2Y, hasChildren);
-                jsonObject.put("level", strings[0]);
-                jsonObject.put("rank", strings[1]);
-                jsonObject.put("lineNo",strings[2]);
-                jsonObject.put("pBomOfWhichDept", record.getpBomOfWhichDept());
-                jsonObject.put("lineId", record.getLineID());
-
-//                byte[] bomLineBlock = record.getBomLineBlock();
-//                Object obj = SerializeUtil.unserialize(bomLineBlock);
-//                if (obj instanceof LinkedHashMap) {
-//                    if (((LinkedHashMap) obj).size() > 0) {
-//                        ((LinkedHashMap) obj).forEach((key, value) -> {
-//
-//                            jsonObject.put((String) key, value);
-//                        });
-//                    }
-//                } else if (obj instanceof RedisBomBean) {
-//                    List<String> pSets = ((RedisBomBean) obj).getpSets();
-//                    List<String> pValues = ((RedisBomBean) obj).getpValues();
-//                    if (null != pSets && pSets.size() > 0 && null != pValues && pValues.size() > 0)
-//                        for (int i = 0; i < pSets.size(); i++) {
-//                            jsonObject.put(pSets.get(i), pValues.get(i));
-//                        }
-//                }
-                jsonObject.put("fna",record.getFna());
-
-                jsonObject.put("pBomLinePartName", record.getpBomLinePartName());
-                jsonObject.put("pBomLinePartClass", record.getpBomLinePartClass());
-                jsonObject.put("pBomLinePartEnName",record.getpBomLinePartEnName());
-                jsonObject.put("pBomLinePartResource", record.getpBomLinePartResource());
-                jsonObject.put("pFastener", record.getpFastener());
-                if(Integer.valueOf(1).equals(record.getpLouaFlag())){
-                    jsonObject.put("pLouaFlag","LOU");
-                }else if(Integer.valueOf(0).equals(record.getpLouaFlag())){
-                    jsonObject.put("pLouaFlag","LOA");
-                }
-                if(Integer.valueOf(1).equals(record.getP3cpartFlag())){
-                    jsonObject.put("p3cpartFlag", "Y");
-                }else if(Integer.valueOf(0).equals(record.getP3cpartFlag())){
-                    jsonObject.put("p3cpartFlag", "N");
-                }else {
-                    jsonObject.put("p3cpartFlag", "");
-                }
-                if(Integer.valueOf(1).equals(record.getpInOutSideFlag())){
-                    jsonObject.put("pInOutSideFlag", "内饰件");
-                }else if(Integer.valueOf(0).equals(record.getpInOutSideFlag())){
-                    jsonObject.put("pInOutSideFlag", "外饰件");
-                }else {
-                    jsonObject.put("pInOutSideFlag", "");
-                }
-
-                jsonObject.put("pUpc",record.getpUpc());
-                jsonObject.put("pFnaDesc", record.getpFnaDesc());
-                jsonObject.put("pUnit", record.getpUnit());
-                jsonObject.put("pPictureNo",record.getpPictureNo());
-                jsonObject.put("pPictureSheet", record.getpPictureSheet());
-                jsonObject.put("pMaterialHigh", record.getpMaterialHigh());
-                jsonObject.put("pMaterial1",record.getpMaterial1());
-                jsonObject.put("pMaterial2", record.getpMaterial2());
-                jsonObject.put("pMaterial3", record.getpMaterial3());
-                jsonObject.put("pDensity",record.getpDensity());
-                jsonObject.put("pMaterialStandard", record.getpMaterialStandard());
-                jsonObject.put("pSurfaceTreat", record.getpSurfaceTreat());
-                jsonObject.put("pTextureColorNum",record.getpTextureColorNum());
-                jsonObject.put("pManuProcess", record.getpManuProcess());
-                jsonObject.put("pSymmetry", record.getpSymmetry());
-                jsonObject.put("pImportance",record.getpImportance());
-                if(Integer.valueOf(1).equals(record.getpRegulationFlag())){
-                    jsonObject.put("pRegulationFlag", "Y");
-                }else if(Integer.valueOf(0).equals(record.getpRegulationFlag())){
-                    jsonObject.put("pRegulationFlag", "N");
-                }else {
-                    jsonObject.put("pRegulationFlag", "");
-                }
-                jsonObject.put("pBwgBoxPart", record.getpBwgBoxPart());
-                jsonObject.put("pDevelopType",record.getpDevelopType());
-                jsonObject.put("pDataVersion", record.getpDataVersion());
-                jsonObject.put("pTargetWeight", record.getpTargetWeight());
-                jsonObject.put("pFeatureWeight",record.getpFeatureWeight());
-                jsonObject.put("pActualWeight", record.getpActualWeight());
-                jsonObject.put("pFastenerStandard", record.getpFastenerStandard());
-                jsonObject.put("pFastenerLevel",record.getpFastenerLevel());
-
-                jsonObject.put("pTorque", record.getpTorque());
-                jsonObject.put("pDutyEngineer",record.getpDutyEngineer());
-                jsonObject.put("pSupply", record.getpSupply());
-                jsonObject.put("pSupplyCode", record.getpSupplyCode());
-                jsonObject.put("pRemark",record.getpRemark());
-                jsonObject.put("pRegulationCode", record.getpRegulationCode());
-                jsonObject.put("number", record.getNumber());
-                jsonObject.put("pBuyEngineer", record.getpBuyEngineer());
-                jsonObject.put("status",record.getStatus());
+                JSONObject jsonObject = HzEbomRecordFactory.bomLineRecordTORespDTO(record);
                 jsonArray.add(jsonObject);
                 respDTO.setJsonArray(jsonArray);
             }
@@ -1078,7 +849,7 @@ public class HzEbomServiceImpl implements HzEbomService {
             return OperateResultMessageRespDTO.getSuccessResult();
 
             }else{
-                //自己搭建父结构 默认为2层 有子层时更新为2Y层
+                //自己搭建父结构 默认为2Y层
                 boolean isRepeat = hzEbomRecordDAO.checkItemIdIsRepeat(reqDTO.getProjectId(),reqDTO.getLineId());
                 if(isRepeat){
                     OperateResultMessageRespDTO respDTO = new OperateResultMessageRespDTO();
@@ -1086,202 +857,95 @@ public class HzEbomServiceImpl implements HzEbomService {
                     respDTO.setErrMsg("当前零件号已存在,请重新添加！");
                     return respDTO;
                 }
-
-                HzBomLineRecord hzBomLineRecord = new HzBomLineRecord();//EBOM
-//                HzMaterielRecord hzMaterielRecord = new HzMaterielRecord();//物料
-                HzPbomLineRecord hzPbomLineRecord = new HzPbomLineRecord();//PBOM
-                HzMbomLineRecord hzMbomLineRecord = new HzMbomLineRecord();//MBOM
-
-
+                HzMaterielRecord hzMaterielRecord = new HzMaterielRecord();//物料
                 HZBomMainRecord hzBomMainRecord = hzBomMainRecordDao.selectByProjectPuid(reqDTO.getProjectId());
                 if(hzBomMainRecord == null){
                     return OperateResultMessageRespDTO.getFailResult();
                 }
-                hzBomLineRecord.setBomDigifaxId(hzBomMainRecord.getPuid());
-//
-//                byte[] bytes = SerializeUtil.serialize(ebomContent);
-//                hzBomLineRecord.setBomLineBlock(bytes);
-                hzBomLineRecord.setIsPart(1);
-                hzBomLineRecord.setIsHas(0);
-                Map<String,Object> map = new HashMap();
-                map.put("projectId",reqDTO.getProjectId());
-                //找出全部的2y或者2层信息，新增的EBOM的层级 按2y或者2层的最大值开始增
-                List<String> list = hzBomLineRecordDao.findBomLineIndex(map);
-                List<Integer> lists = new ArrayList<>();
-                for(String str:list){
-                    lists.add(Integer.valueOf(str.split("\\.")[0]));
+                HzBomLineRecord hzBomLineRecord = HzEbomRecordFactory.addEbomDTOBomLineRecord(reqDTO);//EBOM
+                hzBomLineRecord.setIsPart(0);
+                hzBomLineRecord.setIsHas(1);
+                //找出全部的2y信息，新增的EBOM的层级 按2y层的最大值开始增
+                Integer maxFirstLineIndex = hzBomLineRecordDao.getMaxLineIndexFirstNum(reqDTO.getProjectId());
+                if(maxFirstLineIndex == null){
+                    hzBomLineRecord.setLineIndex("10.10");
+                }else {
+                    hzBomLineRecord.setLineIndex(maxFirstLineIndex+".10");
                 }
-                Integer max = 0;
-                for(Integer in:lists){
-                    if(max<in){
-                        max = in;
-                    }
-                }
-                max = max+10;
-                StringBuffer buffer = new StringBuffer(String.valueOf(max));
-                hzBomLineRecord.setLineIndex(buffer.append(".10").toString());
                 Integer maxGroupNum =hzBomLineRecordDao.findMaxBomOrderNum(reqDTO.getProjectId());
+                //2Y层到下一个2Y层之间树的深度留为1000  如果一个bom的子孙超过1000条 排序就会产生错误
                 if(maxGroupNum == null){
-                    maxGroupNum = 100;
+                    maxGroupNum = 1000;
                     hzBomLineRecord.setOrderNum(maxGroupNum);
                 }else {
-                    hzBomLineRecord.setOrderNum(maxGroupNum+100);
+                    hzBomLineRecord.setOrderNum(maxGroupNum+1000);
                 }
-
                 String puid = UUID.randomUUID().toString();
                 hzBomLineRecord.setPuid(puid);
-                hzBomLineRecord.setpBomOfWhichDept(reqDTO.getpBomOfWhichDept());
-                hzBomLineRecord.setLinePuid(puid);
-                hzBomLineRecord.setLineID(reqDTO.getLineId());
-                hzBomLineRecord.setIsDept(0);
-                hzBomLineRecord.setIs2Y(0);
-                hzBomLineRecord.setLinePuid(puid);
-                hzBomLineRecord.setPuid(puid);
-                hzBomLineRecord.setIsDept(0);
-                hzBomLineRecord.setLineID(reqDTO.getLineId());
-                hzBomLineRecord.setpBomLinePartClass(reqDTO.getpBomLinePartClass());
-                hzBomLineRecord.setpBomLinePartName(reqDTO.getpBomLinePartName());
-                if(reqDTO.getP3cpartFlag().equals("Y")){
-                    hzBomLineRecord.setP3cpartFlag(1);
-                }else if(reqDTO.getP3cpartFlag().equals("N")){
-                    hzBomLineRecord.setP3cpartFlag(0);
-                }else {
-                    hzBomLineRecord.setP3cpartFlag(null);
-                }
-                hzBomLineRecord.setpActualWeight(reqDTO.getpActualWeight());
-                hzBomLineRecord.setpBomLinePartEnName(reqDTO.getpBomLinePartEnName());
-                hzBomLineRecord.setpBwgBoxPart(reqDTO.getpBwgBoxPart());
-                hzBomLineRecord.setpDataVersion(reqDTO.getpDataVersion());
-                hzBomLineRecord.setpDensity(reqDTO.getpDensity());
-                hzBomLineRecord.setpCreateName(UserInfo.getUser().getUserName());
-                hzBomLineRecord.setpUpdateName(UserInfo.getUser().getUserName());
-                hzBomLineRecord.setpDevelopType(reqDTO.getpDevelopType());
-                hzBomLineRecord.setpDutyEngineer(reqDTO.getpDutyEngineer());
-                hzBomLineRecord.setpFastener(reqDTO.getpFastener());
-                hzBomLineRecord.setpFastenerLevel(reqDTO.getpFastenerLevel());
-                hzBomLineRecord.setpFastenerStandard(reqDTO.getpFastenerStandard());
-                hzBomLineRecord.setpFeatureWeight(reqDTO.getpFeatureWeight());
-                hzBomLineRecord.setpFnaDesc(reqDTO.getpFnaDesc());
-                hzBomLineRecord.setpFnaInfo(reqDTO.getFna());
-                hzBomLineRecord.setpTorque(reqDTO.getpTorque());
-                hzBomLineRecord.setpSymmetry(reqDTO.getpSymmetry());
-                hzBomLineRecord.setpTextureColorNum(reqDTO.getpTextureColorNum());
-                hzBomLineRecord.setpSurfaceTreat(reqDTO.getpSurfaceTreat());
-                hzBomLineRecord.setpTargetWeight(reqDTO.getpTargetWeight());
-                hzBomLineRecord.setpSupplyCode(reqDTO.getpSupplyCode());
-                hzBomLineRecord.setpSupply(reqDTO.getpSupply());
-                if(reqDTO.getpInOutSideFlag().equals("内饰件")){
-                    hzBomLineRecord.setpInOutSideFlag(1);
-                }else if(reqDTO.getpInOutSideFlag().equals("外饰件")){
-                    hzBomLineRecord.setpInOutSideFlag(0);
-                }else {
-                    hzBomLineRecord.setpInOutSideFlag(null);
-                }
-
-                hzBomLineRecord.setpBuyEngineer(reqDTO.getpBuyEngineer());
-                hzBomLineRecord.setpImportance(reqDTO.getpImportance());
-                hzBomLineRecord.setpManuProcess(reqDTO.getpManuProcess());
-                hzBomLineRecord.setpMaterial1(reqDTO.getpMaterial1());
-                hzBomLineRecord.setpMaterial2(reqDTO.getpMaterial2());
-                hzBomLineRecord.setpMaterial3(reqDTO.getpMaterial3());
-                hzBomLineRecord.setpMaterialHigh(reqDTO.getpMaterialHigh());
-                hzBomLineRecord.setpMaterialStandard(reqDTO.getpMaterialStandard());
-                hzBomLineRecord.setpPictureNo(reqDTO.getpPictureNo());
-                hzBomLineRecord.setpPictureSheet(reqDTO.getpPictureSheet());
-                hzBomLineRecord.setpRegulationCode(reqDTO.getpRegulationCode());
-                hzBomLineRecord.setpUpc(reqDTO.getpUpc());
-                hzBomLineRecord.setpUnit(reqDTO.getpUnit());
-                hzBomLineRecord.setpRemark(reqDTO.getpRemark());
-                hzBomLineRecord.setBomLineBlock(SerializeUtil.serialize(0));
-                hzBomLineRecord.setNumber(reqDTO.getNumber());
-                hzBomLineRecord.setpBomLinePartResource(reqDTO.getpBomLinePartResource());
-                if(reqDTO.getpRegulationFlag().equals("Y")){
-                    hzBomLineRecord.setpRegulationFlag(1);
-                }else if(reqDTO.getpRegulationFlag().equals("N")){
-                    hzBomLineRecord.setpRegulationFlag(0);
-                }else {
-                    hzBomLineRecord.setpRegulationFlag(null);
-                }
-
-                 hzBomLineRecordDao.insert(hzBomLineRecord);
+                hzBomLineRecord.setIsDept(1);
+                hzBomLineRecord.setIs2Y(1);
+                hzBomLineRecord.setBomDigifaxId(hzBomMainRecord.getPuid());
+                hzBomLineRecordDao.insert(hzBomLineRecord);
 
                 hzBomLineRecord.setTableName("HZ_EBOM_REOCRD_AFTER_CHANGE");
                 hzBomLineRecordDao.insert(hzBomLineRecord);
+
+
+
+                HzPbomLineRecord hzPbomLineRecord = HzPbomRecordFactory.AddHzEbomReqDTOPbomRecord(reqDTO);//PBOM
                 Integer num = hzPbomRecordDAO.getHzPbomMaxOrderNum(reqDTO.getProjectId());
                 if(num == null){
-                    num = 100;
+                    num = 1000;
                     hzPbomLineRecord.setOrderNum(num);
                 }else {
-                    hzPbomLineRecord.setOrderNum(num+100);
+                    hzPbomLineRecord.setOrderNum(num+1000);
                 }
-                hzPbomLineRecord.setUpdateName(UserInfo.getUser().getUserName());
-                hzPbomLineRecord.setCreateName(UserInfo.getUser().getUserName());
-                hzPbomLineRecord.setpBomLinePartEnName(reqDTO.getpBomLinePartEnName());
-                hzPbomLineRecord.setpBomOfWhichDept(reqDTO.getpBomOfWhichDept());
-                hzPbomLineRecord.setpBomLinePartResource(reqDTO.getpBomLinePartResource());
-                hzPbomLineRecord.setpBomLinePartName(reqDTO.getpBomLinePartName());
-                hzPbomLineRecord.setpBomLinePartClass(reqDTO.getpBomLinePartClass());
-                hzPbomLineRecord.setBomDigifaxId(hzBomMainRecord.getPuid());
-                hzPbomLineRecord.setLineId(reqDTO.getLineId());
                 hzPbomLineRecord.seteBomPuid(puid);
                 hzPbomLineRecord.setPuid(UUID.randomUUID().toString());
-
-                hzPbomLineRecord.setIs2Y(0);
-                hzPbomLineRecord.setLinePuid(puid);
-                hzPbomLineRecord.setIsDept(0);
-                hzPbomLineRecord.setIsHas(0);
-                hzPbomLineRecord.setIsPart(1);
-
+                hzPbomLineRecord.setIs2Y(1);
+                hzPbomLineRecord.setIsDept(1);
+                hzPbomLineRecord.setIsHas(1);
+                hzPbomLineRecord.setIsPart(0);
                 Integer maxLineIndexFirstNum = hzPbomRecordDAO.getMaxLineIndexFirstNum(reqDTO.getProjectId());
-                StringBuffer stringBuffer = new StringBuffer();
                 if(maxLineIndexFirstNum == null){
-                    maxLineIndexFirstNum  =10;
-                     stringBuffer = new StringBuffer(String.valueOf(maxLineIndexFirstNum));
+                    hzPbomLineRecord.setLineIndex("10.10");
                 }else {
-                     stringBuffer = new StringBuffer(String.valueOf(maxLineIndexFirstNum+10));
+                    hzPbomLineRecord.setLineIndex(maxLineIndexFirstNum+".10");
                 }
-
-                hzPbomLineRecord.setLineIndex(stringBuffer.append(".10").toString());
+                hzPbomLineRecord.setBomDigifaxId(hzBomMainRecord.getPuid());
                 List<HzPbomLineRecord> pbomLineRecords = new ArrayList<>();
                 pbomLineRecords.add(hzPbomLineRecord);
                 hzPbomRecordDAO.insertList(pbomLineRecords);
 
 
+
                 List<String> stringList = hzMbomService.loadingCarPartType();
                 if(stringList.contains(reqDTO.getpBomLinePartResource()) ){
+                    HzMbomLineRecord hzMbomLineRecord  = HzMbomRecordFactory.AddHzEbomReqDTOMbomRecord(reqDTO);//MBOM
                     Integer mbomMaxOrderNum = hzMbomRecordDAO.getHzMbomMaxOrderNum(reqDTO.getProjectId());
                     if(mbomMaxOrderNum == null){
-                        mbomMaxOrderNum  =100;
+                        mbomMaxOrderNum  =1000;
                         hzMbomLineRecord.setOrderNum(mbomMaxOrderNum);
                     }else {
-                        hzMbomLineRecord.setOrderNum(mbomMaxOrderNum+100);
+                        hzMbomLineRecord.setOrderNum(mbomMaxOrderNum+1000);
                     }
                     Integer maxIndexFirstNum = hzMbomRecordDAO.getMaxLineIndexFirstNum(reqDTO.getProjectId());
                     if(maxIndexFirstNum == null){
-                        maxIndexFirstNum  =10;
-                        stringBuffer = new StringBuffer(String.valueOf(maxIndexFirstNum));
+                        hzMbomLineRecord.setLineIndex("10.10");
                     }else {
-                        stringBuffer = new StringBuffer(String.valueOf(maxIndexFirstNum+10));
+                        hzMbomLineRecord.setLineIndex(maxIndexFirstNum+".10");
                     }
-                    hzMbomLineRecord.setUpdateName(UserInfo.getUser().getUserName());
-                    hzMbomLineRecord.setCreateName(UserInfo.getUser().getUserName());
-                    hzMbomLineRecord.setpBomLinePartEnName(reqDTO.getpBomLinePartEnName());
-                    hzMbomLineRecord.setpBomOfWhichDept(reqDTO.getpBomOfWhichDept());
-                    hzMbomLineRecord.setpBomLinePartResource(reqDTO.getpBomLinePartResource());
-                    hzMbomLineRecord.setpBomLinePartName(reqDTO.getpBomLinePartName());
-                    hzMbomLineRecord.setpBomLinePartClass(reqDTO.getpBomLinePartClass());
-                    hzMbomLineRecord.setBomDigifaxId(hzBomMainRecord.getPuid());
-                    hzMbomLineRecord.setLineId(reqDTO.getLineId());
                     hzMbomLineRecord.seteBomPuid(puid);
-                    hzMbomLineRecord.setPuid(UUID.randomUUID().toString());
+                    hzMbomLineRecord.setIs2Y(1);
+                    hzMbomLineRecord.setIsDept(1);
+                    hzMbomLineRecord.setIsHas(1);
+                    hzMbomLineRecord.setIsPart(0);
+                    List<HzMbomLineRecord> mbomLineRecords = new ArrayList<>();
+                    mbomLineRecords.add(hzMbomLineRecord);
+                    hzMbomRecordDAO.insertList(mbomLineRecords);
 
-                    hzMbomLineRecord.setIs2Y(0);
-                    hzMbomLineRecord.setLinePuid(puid);
-                    hzMbomLineRecord.setIsDept(0);
-                    hzMbomLineRecord.setIsHas(0);
-                    hzMbomLineRecord.setIsPart(1);
 
-                    hzMbomLineRecord.setLineIndex(stringBuffer.append(".10").toString());
+
 //                    hzMaterielRecord.setpMaterielCode(reqDTO.getLineId());
 //                    hzMaterielRecord.setpMaterielDesc(reqDTO.getpBomLinePartName());
 //                    hzMaterielRecord.setpMaterielDescEn(reqDTO.getpBomLinePartEnName());
@@ -1300,22 +964,19 @@ public class HzEbomServiceImpl implements HzEbomService {
 //                    hzMaterielRecord.setpPartImportantDegree(reqDTO.getpImportance());
 //                    hzMaterielRecord.setMaterielResourceId(puid);
 //                    hzMaterielRecord.setPuid(UUID.randomUUID().toString());
-                    List<HzMbomLineRecord> mbomLineRecords = new ArrayList<>();
+
 //                    List<HzMaterielRecord> hzMaterielRecords = new ArrayList<>();
-                    mbomLineRecords.add(hzMbomLineRecord);
+
 //                    hzMaterielRecords.add(hzMaterielRecord);
-                    hzMbomRecordDAO.insertList(mbomLineRecords);
+
 //                    hzMaterielDAO.insertList(hzMaterielRecords);
                 }
-
                 return OperateResultMessageRespDTO.getSuccessResult();
-
             }
         }catch (Exception e){
             return  OperateResultMessageRespDTO.getFailResult();
         }
     }
-
 
 
     @Override
@@ -1874,104 +1535,7 @@ public class HzEbomServiceImpl implements HzEbomService {
             List<HzEbomRespDTO> recordRespDTOList = new ArrayList<>();
             List<HzEPLManageRecord> records = recordPage.getResult();
             for(HzEPLManageRecord record:records){
-                JSONObject jsonObject = new JSONObject();
-                jsonObject.put("puid", record.getPuid());
-                Integer is2Y = record.getIs2Y();
-                Integer hasChildren = record.getIsHas();
-                String lineIndex = record.getLineIndex();
-                String[] strings = getLevelAndRank(lineIndex, is2Y, hasChildren);
-                jsonObject.put("No",++num);
-                jsonObject.put("level", strings[0]);
-                jsonObject.put("rank", strings[1]);
-                jsonObject.put("pBomOfWhichDept", record.getpBomOfWhichDept());
-                //获取分组号
-//                String groupNum = record.getLineID();
-                //这里在做一个递归查询
-//                if(groupNum.contains("-")){
-//                    groupNum =groupNum.split("-")[1].substring(0,4);
-//                }
-//                jsonObject.put("groupNum", groupNum);
-                jsonObject.put("lineId", record.getLineID());
-                jsonObject.put("fna",record.getFna());
-                jsonObject.put("pBomLinePartName", record.getpBomLinePartName());
-                jsonObject.put("pBomLinePartClass", record.getpBomLinePartClass());
-                jsonObject.put("pBomLinePartEnName",record.getpBomLinePartEnName());
-                jsonObject.put("pBomLinePartResource", record.getpBomLinePartResource());
-                jsonObject.put("pFastener", record.getpFastener());
-//                if(Integer.valueOf(1).equals(record.getIs2Y())){
-////                    jsonObject.put("pLouaFlag","LOU");
-////                }else{
-////                    jsonObject.put("pLouaFlag","LOA");
-////                }
-                if(Integer.valueOf(1).equals(record.getP3cpartFlag())){
-                    jsonObject.put("p3cpartFlag", "Y");
-                }else if(Integer.valueOf(0).equals(record.getP3cpartFlag())){
-                    jsonObject.put("p3cpartFlag", "N");
-                }else {
-                    jsonObject.put("p3cpartFlag", "");
-                }
-                if(Integer.valueOf(1).equals(record.getpInOutSideFlag())){
-                    jsonObject.put("pInOutSideFlag", "内饰件");
-                }else if(Integer.valueOf(0).equals(record.getpInOutSideFlag())){
-                    jsonObject.put("pInOutSideFlag", "外饰件");
-                }else {
-                    jsonObject.put("pInOutSideFlag", "");
-                }
-                jsonObject.put("pUpc",record.getpUpc());
-                jsonObject.put("pFnaDesc", record.getpFnaDesc());
-                jsonObject.put("pUnit", record.getpUnit());
-                jsonObject.put("pPictureNo",record.getpPictureNo());
-                jsonObject.put("pPictureSheet", record.getpPictureSheet());
-                jsonObject.put("pMaterialHigh", record.getpMaterialHigh());
-                jsonObject.put("pMaterial1",record.getpMaterial1());
-                jsonObject.put("pMaterial2", record.getpMaterial2());
-                jsonObject.put("pMaterial3", record.getpMaterial3());
-                jsonObject.put("pDensity",record.getpDensity());
-                jsonObject.put("pMaterialStandard", record.getpMaterialStandard());
-                jsonObject.put("pSurfaceTreat", record.getpSurfaceTreat());
-                jsonObject.put("pTextureColorNum",record.getpTextureColorNum());
-                jsonObject.put("pManuProcess", record.getpManuProcess());
-                jsonObject.put("pSymmetry", record.getpSymmetry());
-                jsonObject.put("pImportance",record.getpImportance());
-                if(Integer.valueOf(1).equals(record.getpRegulationFlag())){
-                    jsonObject.put("pRegulationFlag", "Y");
-                }else if(Integer.valueOf(0).equals(record.getpRegulationFlag())){
-                    jsonObject.put("pRegulationFlag", "N");
-                }else {
-                    jsonObject.put("pRegulationFlag", "");
-                }
-                jsonObject.put("pBwgBoxPart", record.getpBwgBoxPart());
-                jsonObject.put("pDevelopType",record.getpDevelopType());
-                jsonObject.put("pDataVersion", record.getpDataVersion());
-                jsonObject.put("pTargetWeight", record.getpTargetWeight());
-                jsonObject.put("pFeatureWeight",record.getpFeatureWeight());
-                jsonObject.put("pActualWeight", record.getpActualWeight());
-                jsonObject.put("pFastenerStandard", record.getpFastenerStandard());
-                jsonObject.put("pFastenerLevel",record.getpFastenerLevel());
-
-                jsonObject.put("pTorque", record.getpTorque());
-                jsonObject.put("pDutyEngineer",record.getpDutyEngineer());
-                jsonObject.put("pSupply", record.getpSupply());
-                jsonObject.put("pSupplyCode", record.getpSupplyCode());
-                jsonObject.put("pRemark",record.getpRemark());
-                jsonObject.put("pRegulationCode", record.getpRegulationCode());
-//                byte[] bomLineBlock = record.getBomLineBlock();
-//                Object obj = SerializeUtil.unserialize(bomLineBlock);
-//                if (obj instanceof LinkedHashMap) {
-//                    if (((LinkedHashMap) obj).size() > 0) {
-//                        ((LinkedHashMap) obj).forEach((key, value) -> {
-//
-//                            jsonObject.put((String) key, value);
-//                        });
-//                    }
-//                } else if (obj instanceof RedisBomBean) {
-//                    List<String> pSets = ((RedisBomBean) obj).getpSets();
-//                    List<String> pValues = ((RedisBomBean) obj).getpValues();
-//                    if (null != pSets && pSets.size() > 0 && null != pValues && pValues.size() > 0)
-//                        for (int i = 0; i < pSets.size(); i++) {
-//                            jsonObject.put(pSets.get(i), pValues.get(i));
-//                        }
-//                }
+                JSONObject jsonObject = HzEbomRecordFactory.bomLineRecordTORespDTO(record);
                 array.add(jsonObject);
             }
             recordRespDTO.setJsonArray(array);
