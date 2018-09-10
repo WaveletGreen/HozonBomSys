@@ -262,21 +262,29 @@ public class HzCfg0ModelColorController {
         Date date = new Date();
         if (form != null) {
             HzCfg0ModelColor modelColor = new HzCfg0ModelColor();
+            //String code="";
             form.forEach((key, value) -> {
-                if ("pCodeOfColorfulModel".equals(key)) {
+                System.out.println("*****="+key);
+                if ("pCodeOfColorfulModel".equals(key)) {//车型颜色代码
                     modelColor.setpCodeOfColorfulModel(value);
-                } else if ("pDescOfColorfulModel".equals(key)) {
+                    System.out.println("0=========="+value);
+                } else if ("pDescOfColorfulModel".equals(key)) {//描述
                     modelColor.setpDescOfColorfulModel(value);
-                } else if ("pCfg0MainRecordOfMC".equals(key)) {
+                    System.out.println("1=========="+value);
+                } else if ("pCfg0MainRecordOfMC".equals(key)) {//
                     HzCfg0MainRecord mainRecord = hzCfg0MainService.doGetbyProjectPuid(value);
                     modelColor.setpCfg0MainRecordOfMC(mainRecord.getPuid());
-                } else if ("modelShell".equals(key)) {
+                    System.out.println("2=========="+value);
+                } else if ("modelShell".equals(key)) {//油漆车身总成
                     HzCfg0ColorSet set = new HzCfg0ColorSet();
                     set.setPuid(value);
                     set = hzCfg0ColorSetService.getById(set);
                     modelColor.setpModelShellOfColorfulModel(set.getpColorCode());
                     modelColor.setpColorUid(set.getPuid());
-                } else {
+                    System.out.println("3=========="+set.getpColorCode());
+                }
+                //车身颜色设置成与车型颜色代码一致
+                else {
                     modelColor.getMapOfCfg0().put(key, value);
                 }
             });
