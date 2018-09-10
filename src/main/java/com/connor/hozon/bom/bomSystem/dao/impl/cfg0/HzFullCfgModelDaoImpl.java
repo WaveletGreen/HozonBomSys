@@ -63,4 +63,9 @@ public class HzFullCfgModelDaoImpl implements HzFullCfgModelDao {
         HZ_FULL_CFG_MODEL.setFlModVersion(mainPuid);
         return baseSQLUtil.executeQuery(HZ_FULL_CFG_MODEL, "com.connor.hozon.bom.bomSystem.dao.cfg.HzFullCfgModelDao.selectByMainPuid");
     }
+
+    @Override
+    public int updateByHzFullCfgModelList(List<HzFullCfgModel> hzFullCfgModels) {
+        return baseSQLUtil.executeUpdate(hzFullCfgModels,"com.connor.hozon.bom.bomSystem.dao.cfg.HzFullCfgModelDao.updateByHzFullCfgModelList");
+    }
 }

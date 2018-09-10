@@ -21,4 +21,8 @@ public interface HzFullCfgWithCfgDao {
     int updateByPrimaryKeySelective(HzFullCfgWithCfg record);
 
     int updateByPrimaryKey(HzFullCfgWithCfg record);
+
+    int insertBomLine(List<HzFullCfgWithCfg> hzFullCfgWithCfgs);
+
+    int updateByBomLinePuid(HzFullCfgWithCfg hzFullCfgWithCfg);
 }

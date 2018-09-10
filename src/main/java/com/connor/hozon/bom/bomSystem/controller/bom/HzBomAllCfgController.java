@@ -24,14 +24,26 @@ public class HzBomAllCfgController {
         return new JSONObject();
     }
 
-    @RequestMapping("/savePoint")
-    public JSONObject savePoint(@RequestBody Map<String, Map<String,String>> data){
-        return new JSONObject();
-    }
+//    @RequestMapping("/savePoint")
+//    public JSONObject savePoint(@RequestBody Map<String, Map<String,String>> data){
+//        return new JSONObject();
+//    }
 
     @RequestMapping("/loadCfg0BomLineOfModel")
     @ResponseBody
     public JSONObject loadCfg0BomLineOfModel(@RequestParam String bdf){
         return hzBomAllCfgService.parse(bdf);
+    }
+
+    @RequestMapping("/saveOneRow")
+    @ResponseBody
+    public JSONObject saveOneRow(String bomLinePuid, String cfgPuid){
+        return hzBomAllCfgService.saveOneRow(bomLinePuid,cfgPuid);
+    }
+
+    @RequestMapping("/savePoint")
+    @ResponseBody
+    public JSONObject savePoint(@RequestBody Map<String, Map<String,String>> data){
+        return hzBomAllCfgService.savePoint(data);
     }
 }

@@ -202,12 +202,32 @@
         )A
     </insert>
 
-    <select id="selectByMainPuid" parameterType="sql.pojo.cfg.HzFullCfgModel" resultMap="BaseResultMap">
-        select
-        <include refid="Base_Column_List"/>
-        from
-        HZ_FULL_CFG_MODEL_RECORD
-        where
-        FL_MOD_VERSION = #{flModVersion}
-    </select>
+  <select id="selectByMainPuid" parameterType="sql.pojo.cfg.HzFullCfgModel" resultMap="BaseResultMap">
+      select
+       <include refid="Base_Column_List"/>
+      from
+          HZ_FULL_CFG_MODEL_RECORD
+      where
+          FL_MOD_VERSION = #{flModVersion}
+  </select>
+
+  <update id="updateByHzFullCfgModelList" parameterType="java.util.List">
+    update HZ_FULL_CFG_MODEL_RECORD
+    set MOD_POINT_TYPE =
+    <foreach collection="list" item="hzFullCfgModel" open="case" close="end">
+      when MOD_MODEL_UID = #{hzFullCfgModel.modModelUid,jdbcType=VARCHAR}  and
+      MOD_CFG0_UID = #{hzFullCfgModel.modCfg0Uid,jdbcType=VARCHAR}
+      then
+        #{hzFullCfgModel.modPointType,jdbcType=VARCHAR}
+    </foreach>
+    where MOD_MODEL_UID in
+    <foreach collection="list" item="hzFullCfgModel" open="(" separator="," close=")">
+      #{hzFullCfgModel.modModelUid,jdbcType=VARCHAR}
+    </foreach>
+    and
+    MOD_CFG0_UID in
+    <foreach collection="list" item="hzFullCfgModel" open="(" separator="," close=")">
+      #{hzFullCfgModel.modCfg0Uid,jdbcType=VARCHAR}
+    </foreach>
+  </update>
 </mapper>
