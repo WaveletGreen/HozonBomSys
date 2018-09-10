@@ -248,7 +248,7 @@ public class HzEPLManageRecord {
 
     private String pRegulationCode;
 
-    private Integer number;
+    private String number;
 
     private String pBuyEngineer;
 
@@ -290,11 +290,11 @@ public class HzEPLManageRecord {
         this.pBuyEngineer = pBuyEngineer;
     }
 
-    public Integer getNumber() {
+    public String getNumber() {
         return number;
     }
 
-    public void setNumber(Integer number) {
+    public void setNumber(String number) {
         this.number = number;
     }
 

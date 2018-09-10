@@ -1,7 +1,7 @@
 package com.connor.hozon.bom.resources.mybatis.change.impl;
 
+import com.connor.hozon.bom.resources.domain.query.HzEWOBasicInfoQuery;
 import com.connor.hozon.bom.resources.mybatis.change.HzEWOBasicInfoDAO;
-import com.connor.hozon.bom.resources.query.HzEWOBasicInfoQuery;
 import org.springframework.stereotype.Service;
 import sql.BaseSQLUtil;
 import sql.pojo.change.HzEWOBasicInfo;

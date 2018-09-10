@@ -1,7 +1,7 @@
 package com.connor.hozon.bom.resources.mybatis.change.impl;
 
+import com.connor.hozon.bom.resources.domain.query.HzEWOImpactDeptQuery;
 import com.connor.hozon.bom.resources.mybatis.change.HzEWOImpactDeptEmpDAO;
-import com.connor.hozon.bom.resources.query.HzEWOImpactDeptQuery;
 import org.springframework.stereotype.Service;
 import sql.BaseSQLUtil;
 import sql.pojo.change.HzEWOImpactDeptEmp;

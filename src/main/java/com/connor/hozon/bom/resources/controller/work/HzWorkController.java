@@ -1,14 +1,12 @@
 package com.connor.hozon.bom.resources.controller.work;
 
-import com.alibaba.fastjson.JSON;
 import com.connor.hozon.bom.resources.controller.BaseController;
-import com.connor.hozon.bom.resources.dto.request.AddWorkCenterReqDTO;
-import com.connor.hozon.bom.resources.dto.request.UpdateHzEbomReqDTO;
-import com.connor.hozon.bom.resources.dto.request.UpdateWorkCenterReqDTO;
-import com.connor.hozon.bom.resources.dto.response.HzWorkCenterRespDTO;
-import com.connor.hozon.bom.resources.dto.response.OperateResultMessageRespDTO;
+import com.connor.hozon.bom.resources.domain.dto.request.AddWorkCenterReqDTO;
+import com.connor.hozon.bom.resources.domain.dto.request.UpdateWorkCenterReqDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.HzWorkCenterRespDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.OperateResultMessageRespDTO;
+import com.connor.hozon.bom.resources.domain.query.HzWorkByPageQuery;
 import com.connor.hozon.bom.resources.page.Page;
-import com.connor.hozon.bom.resources.query.HzWorkByPageQuery;
 import com.connor.hozon.bom.resources.service.work.HzWorkService;
 import com.connor.hozon.bom.resources.util.ResultMessageBuilder;
 import org.springframework.beans.factory.annotation.Autowired;

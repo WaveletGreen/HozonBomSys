@@ -2,12 +2,11 @@ package com.connor.hozon.bom.resources.controller.change.ewo;
 
 import com.alibaba.fastjson.JSONObject;
 import com.connor.hozon.bom.resources.controller.BaseController;
-import com.connor.hozon.bom.resources.dto.request.InitiatingProcessReqDTO;
-import com.connor.hozon.bom.resources.dto.response.HzEWOChangeFormRespDTO;
-import com.connor.hozon.bom.resources.dto.response.HzEbomRespDTO;
-import com.connor.hozon.bom.resources.dto.response.OperateResultMessageRespDTO;
-import com.connor.hozon.bom.resources.query.HzEWOChangeRecordQuery;
-import com.connor.hozon.bom.resources.query.HzEWOImpactReferenceQuery;
+import com.connor.hozon.bom.resources.domain.dto.request.InitiatingProcessReqDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.HzEbomRespDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.OperateResultMessageRespDTO;
+import com.connor.hozon.bom.resources.domain.query.HzEWOChangeRecordQuery;
+import com.connor.hozon.bom.resources.domain.query.HzEWOImpactReferenceQuery;
 import com.connor.hozon.bom.resources.service.change.HzEWOImpactReferenceService;
 import com.connor.hozon.bom.resources.service.change.HzEWOService;
 import com.connor.hozon.bom.resources.util.ListUtil;
@@ -18,10 +17,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import sql.pojo.change.HzEWOAllImpactDept;
 import sql.pojo.change.HzEWOImpactReference;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 /**

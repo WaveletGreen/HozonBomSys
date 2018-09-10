@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="HzVPPSLibraryMapper">
+  <resultMap id="BaseResultMap" type="sql.pojo.resourcesLibrary.VPPSLibrary.HzVPPSLibrary">
+    <id column="PUID" jdbcType="VARCHAR" property="puid" />
+    <result column="VPPS_LEVEL" jdbcType="VARCHAR" property="vppsLevel" />
+    <result column="VSG_CODE" jdbcType="VARCHAR" property="vsgCode" />
+    <result column="VPPS_CODE" jdbcType="VARCHAR" property="vppsCode" />
+    <result column="VPPS_EN_DESC" jdbcType="VARCHAR" property="vppsEnDesc" />
+    <result column="VPPS_CH_DESC" jdbcType="VARCHAR" property="vppsChDesc" />
+    <result column="UPC" jdbcType="VARCHAR" property="upc" />
+    <result column="FNA" jdbcType="VARCHAR" property="fna" />
+    <result column="FNA_CH_DESC" jdbcType="VARCHAR" property="fnaChDesc" />
+    <result column="STANDARD_PART_CODE" jdbcType="VARCHAR" property="standardPartCode" />
+    <result column="INSERT_TIME" jdbcType="DATE" property="insertTime" />
+    <result column="UPDATE_TIME" jdbcType="DATE" property="updateTime" />
+    <result column="STATUS" jdbcType="DECIMAL" property="status" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    PUID, VPPS_LEVEL, VSG_CODE, VPPS_CODE, VPPS_EN_DESC, VPPS_CH_DESC, UPC, FNA, FNA_CH_DESC, 
+    STANDARD_PART_CODE, INSERT_TIME, UPDATE_TIME, STATUS
+  </sql>
+  <!--分页获取VPPS库的数据-->
+  <select id="HzVPPSLibraryDaoImpl_select" parameterType="java.util.HashMap" resultMap="BaseResultMap">
+  select <include refid="Base_Column_List" /> FROM
+  (select  t.*,ROWNUM as rn FROM
+  (select
+  <include refid="Base_Column_List"/> FROM HZ_VPPS_LIBRARY
+  <where>
+    1=1
+    <if test="vppsLevel != null and vppsLevel != ''">
+      and VPPS_LEVEL like CONCAT(CONCAT('%',#{vppsLevel,jdbcType=VARCHAR}),'%')
+    </if>
+    <if test="vsgCode != null and vsgCode != ''">
+      and VSG_CODE like CONCAT(CONCAT('%',#{vsgCode,jdbcType=VARCHAR}),'%')
+    </if>
+    <if test="vppsCode != null and vppsCode != ''">
+      and VPPS_CODE like CONCAT(CONCAT('%',#{vppsCode,jdbcType=VARCHAR}),'%')
+    </if>
+    <if test="upc != null and upc != ''">
+      and UPC like CONCAT(CONCAT('%',#{upc,jdbcType=VARCHAR}),'%')
+    </if>
+    <if test="fna != null and fna != ''">
+      and FNA like CONCAT(CONCAT('%',#{fna,jdbcType=VARCHAR}),'%')
+    </if>
+    <if test="standardPartCode != null and standardPartCode != ''">
+      and STANDARD_PART_CODE like CONCAT(CONCAT('%',#{standardPartCode,jdbcType=VARCHAR}),'%')
+    </if>
+    and STATUS = 1
+  </where>
+  order by INSERT_TIME desc
+  ) t
+  where ROWNUM &lt;=#{limit,jdbcType=INTEGER})
+  where rn &gt;#{offset,jdbcType=INTEGER}
+</select>
+
+  <!--获取VPPS库的总条数-->
+  <select id="HzVPPSLibraryDaoImpl_count" parameterType="java.util.HashMap" resultType="java.lang.Integer">
+    SELECT  count(*) FROM HZ_VPPS_LIBRARY
+    <where>
+      1=1
+      <if test="vppsLevel != null and vppsLevel != ''">
+        and VPPS_LEVEL like CONCAT(CONCAT('%',#{vppsLevel,jdbcType=VARCHAR}),'%')
+      </if>
+      <if test="vsgCode != null and vsgCode != ''">
+        and VSG_CODE like CONCAT(CONCAT('%',#{vsgCode,jdbcType=VARCHAR}),'%')
+      </if>
+      <if test="vppsCode != null and vppsCode != ''">
+        and VPPS_CODE like CONCAT(CONCAT('%',#{vppsCode,jdbcType=VARCHAR}),'%')
+      </if>
+      <if test="upc != null and upc != ''">
+        and UPC like CONCAT(CONCAT('%',#{upc,jdbcType=VARCHAR}),'%')
+      </if>
+      <if test="fna != null and fna != ''">
+        and FNA like CONCAT(CONCAT('%',#{fna,jdbcType=VARCHAR}),'%')
+      </if>
+      <if test="standardPartCode != null and standardPartCode != ''">
+        and STANDARD_PART_CODE like CONCAT(CONCAT('%',#{standardPartCode,jdbcType=VARCHAR}),'%')
+      </if>
+      and STATUS =1
+    </where>
+  </select>
+
+  <!--添加一条数据-->
+  <insert id="HzVPPSLibraryDaoImpl_insert" parameterType="sql.pojo.resourcesLibrary.VPPSLibrary.HzVPPSLibrary">
+    insert into HZ_VPPS_LIBRARY
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="puid != null">
+        PUID,
+      </if>
+      <if test="vppsLevel != null">
+        VPPS_LEVEL,
+      </if>
+      <if test="vsgCode != null">
+        VSG_CODE,
+      </if>
+      <if test="vppsCode != null">
+        VPPS_CODE,
+      </if>
+      <if test="vppsEnDesc != null">
+        VPPS_EN_DESC,
+      </if>
+      <if test="vppsChDesc != null">
+        VPPS_CH_DESC,
+      </if>
+      <if test="upc != null">
+        UPC,
+      </if>
+      <if test="fna != null">
+        FNA,
+      </if>
+      <if test="fnaChDesc != null">
+        FNA_CH_DESC,
+      </if>
+      <if test="standardPartCode != null">
+        STANDARD_PART_CODE,
+      </if>
+        INSERT_TIME,
+        UPDATE_TIME,
+        STATUS,
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="puid != null">
+        #{puid,jdbcType=VARCHAR},
+      </if>
+      <if test="vppsLevel != null">
+        #{vppsLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="vsgCode != null">
+        #{vsgCode,jdbcType=VARCHAR},
+      </if>
+      <if test="vppsCode != null">
+        #{vppsCode,jdbcType=VARCHAR},
+      </if>
+      <if test="vppsEnDesc != null">
+        #{vppsEnDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="vppsChDesc != null">
+        #{vppsChDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="upc != null">
+        #{upc,jdbcType=VARCHAR},
+      </if>
+      <if test="fna != null">
+        #{fna,jdbcType=VARCHAR},
+      </if>
+      <if test="fnaChDesc != null">
+        #{fnaChDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="standardPartCode != null">
+        #{standardPartCode,jdbcType=VARCHAR},
+      </if>
+      sysdate,
+      sysdate,
+      1,
+    </trim>
+  </insert>
+
+  <!--根据ID查询一条数据-->
+  <select id="HzVPPSLibraryDaoImpl_findById" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from HZ_VPPS_LIBRARY
+    where PUID = #{puid,jdbcType=VARCHAR}
+  </select>
+
+  <!--编辑一条数据-->
+  <update id="HzVPPSLibraryDaoImpl_update" parameterType="sql.pojo.resourcesLibrary.VPPSLibrary.HzVPPSLibrary">
+    update HZ_VPPS_LIBRARY
+    <set>
+      <if test="vppsLevel != null">
+        VPPS_LEVEL = #{vppsLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="vsgCode != null">
+        VSG_CODE = #{vsgCode,jdbcType=VARCHAR},
+      </if>
+      <if test="vppsCode != null">
+        VPPS_CODE = #{vppsCode,jdbcType=VARCHAR},
+      </if>
+      <if test="vppsEnDesc != null">
+        VPPS_EN_DESC = #{vppsEnDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="vppsChDesc != null">
+        VPPS_CH_DESC = #{vppsChDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="upc != null">
+        UPC = #{upc,jdbcType=VARCHAR},
+      </if>
+      <if test="fna != null">
+        FNA = #{fna,jdbcType=VARCHAR},
+      </if>
+      <if test="fnaChDesc != null">
+        FNA_CH_DESC = #{fnaChDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="standardPartCode != null">
+        STANDARD_PART_CODE = #{standardPartCode,jdbcType=VARCHAR},
+      </if>
+      <if test="insertTime != null">
+        INSERT_TIME = #{insertTime,jdbcType=DATE},
+      </if>
+      <if test="updateTime != null">
+        UPDATE_TIME = #{updateTime,jdbcType=DATE},
+      </if>
+      <if test="status != null">
+        STATUS = #{status,jdbcType=DECIMAL}
+      </if>
+    </set>
+    where PUID = #{puid,jdbcType=VARCHAR}
+  </update>
+
+<!--删除一条数据-->
+  <update id="HzVPPSLibraryDaoImpl_delete">
+    update HZ_VPPS_LIBRARY
+    set STATUS = 0
+    where PUID = #{puid,jdbcType=VARCHAR}
+  </update>
+
+  <!--根据VPPS代码查询条数-->
+  <select id="HzVPPSLibraryDaoImpl_findByCodeOrCount" parameterType="java.lang.String" resultType="java.lang.Integer">
+    select count(*) from HZ_VPPS_LIBRARY
+    where VPPS_CODE = #{vppsCode,jdbcType=VARCHAR} and STATUS=1
+  </select>
+
+  <!--根据VPPS代码查询一条数据-->
+  <select id="HzVPPSLibraryDaoImpl_findByCode" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from HZ_VPPS_LIBRARY
+    where VPPS_CODE = #{vppsCode,jdbcType=VARCHAR} and STATUS=1
+  </select>
+</mapper>

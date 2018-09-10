@@ -1,13 +1,13 @@
 package com.connor.hozon.bom.resources.controller.change.ewo;
 
 import com.connor.hozon.bom.resources.controller.BaseController;
-import com.connor.hozon.bom.resources.dto.request.EditEWOImpactDeptReqDTO;
-import com.connor.hozon.bom.resources.dto.request.EditImpactDeptEmpReqDTO;
-import com.connor.hozon.bom.resources.dto.response.HzEWOImpactDeptEmpRespDTO;
-import com.connor.hozon.bom.resources.dto.response.HzEWOImpactDeptRespDTO;
-import com.connor.hozon.bom.resources.dto.response.OperateResultMessageRespDTO;
+import com.connor.hozon.bom.resources.domain.dto.request.EditEWOImpactDeptReqDTO;
+import com.connor.hozon.bom.resources.domain.dto.request.EditImpactDeptEmpReqDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.HzEWOImpactDeptEmpRespDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.HzEWOImpactDeptRespDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.OperateResultMessageRespDTO;
+import com.connor.hozon.bom.resources.domain.query.HzEWOImpactDeptQuery;
 import com.connor.hozon.bom.resources.mybatis.change.HzEWOImpactDeptDAO;
-import com.connor.hozon.bom.resources.query.HzEWOImpactDeptQuery;
 import com.connor.hozon.bom.resources.service.change.HzEWOImpactDeptService;
 import com.connor.hozon.bom.resources.util.ResultMessageBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,9 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 import sql.pojo.change.HzEWOAllImpactDept;
-import sql.pojo.change.HzEWOImpactDept;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;

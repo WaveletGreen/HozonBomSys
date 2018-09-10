@@ -3,7 +3,11 @@ $(document).ready((function (){
     var url = "work/record?projectId="+projectId;
     initTable(url);
     }))
-
+function doRefresh(projectId){
+    $('#processCenterTable').bootstrapTable('destroy');
+    var url = "work/record?projectId="+projectId;
+    initTable(url);
+}
 function doQuery() {
     //$('#processCenterTable').bootstrapTable('refresh');    //刷新表格
     var projectId =  $("#project", window.top.document).val();

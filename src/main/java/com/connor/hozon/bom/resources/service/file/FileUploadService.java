@@ -1,6 +1,6 @@
 package com.connor.hozon.bom.resources.service.file;
 
-import com.connor.hozon.bom.resources.dto.response.OperateResultMessageRespDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.OperateResultMessageRespDTO;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
@@ -14,5 +14,5 @@ public interface FileUploadService {
      * @param file
      * @return
      */
-    OperateResultMessageRespDTO UploadEbomToDB(MultipartFile file,String projectId);
+    OperateResultMessageRespDTO UploadEbomToDB(MultipartFile file, String projectId);
 }

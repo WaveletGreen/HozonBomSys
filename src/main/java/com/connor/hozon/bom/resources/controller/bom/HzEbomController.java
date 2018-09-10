@@ -1,24 +1,20 @@
 package com.connor.hozon.bom.resources.controller.bom;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.connor.hozon.bom.bomSystem.dao.impl.bom.HzBomLineRecordDaoImpl;
-import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.resources.controller.BaseController;
-import com.connor.hozon.bom.resources.dto.request.AddHzEbomReqDTO;
-import com.connor.hozon.bom.resources.dto.request.DeleteHzEbomReqDTO;
-import com.connor.hozon.bom.resources.dto.request.UpdateHzEbomReqDTO;
-import com.connor.hozon.bom.resources.dto.response.HzEbomRespDTO;
-import com.connor.hozon.bom.resources.dto.response.OperateResultMessageRespDTO;
+import com.connor.hozon.bom.resources.domain.dto.request.AddHzEbomReqDTO;
+import com.connor.hozon.bom.resources.domain.dto.request.DeleteHzEbomReqDTO;
+import com.connor.hozon.bom.resources.domain.dto.request.UpdateHzEbomReqDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.HzEbomRespDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.OperateResultMessageRespDTO;
+import com.connor.hozon.bom.resources.domain.query.HzEbomByPageQuery;
 import com.connor.hozon.bom.resources.page.Page;
-import com.connor.hozon.bom.resources.query.DefaultPageQuery;
-import com.connor.hozon.bom.resources.query.HzEbomByPageQuery;
 import com.connor.hozon.bom.resources.service.bom.HzEbomService;
 import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.resources.util.PrivilegeUtil;
 import com.connor.hozon.bom.resources.util.ResultMessageBuilder;
-import com.connor.hozon.bom.sys.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -301,7 +297,7 @@ public class HzEbomController extends BaseController {
         recordRespDTO.setProjectId(projectId);
         recordRespDTO.setpBuyEngineer(object.getString("pBuyEngineer"));
         if(object.getString("number") != null){
-            recordRespDTO.setNumber(Integer.valueOf(object.getString("number")));
+            recordRespDTO.setNumber(object.getString("number"));
         }else {
             recordRespDTO.setNumber(null);
         }
@@ -381,7 +377,7 @@ public class HzEbomController extends BaseController {
      * @param response
      */
     @RequestMapping(value = "add/ebom",method = RequestMethod.POST)
-    public void addEbomToDB(@RequestBody AddHzEbomReqDTO reqDTO,HttpServletResponse response){
+    public void addEbomToDB(@RequestBody AddHzEbomReqDTO reqDTO, HttpServletResponse response){
         if(reqDTO.getProjectId()==null){
             writeAjaxJSONResponse(ResultMessageBuilder.build(false,"非法参数！"), response);
             return;

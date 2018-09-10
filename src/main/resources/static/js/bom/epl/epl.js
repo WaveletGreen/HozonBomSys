@@ -7,7 +7,11 @@ $(document).ready((function () {
     $("#eplTable").bootstrapTable('hideColumn', 'groupNum');*/
 }))
 
-
+function doRefresh(projectId){
+    $('#eplTable').bootstrapTable('destroy');
+    var eplUrl = "epl/record?projectId="+projectId;
+    initTable(eplUrl);
+}
 function doQuery(){
     //$('#eplTable').bootstrapTable('refresh');    //刷新表格
     var projectPuid = $("#project", window.top.document).val();

@@ -3,6 +3,11 @@ $(document).ready((function () {
     var url = "materiel/getMateriel?projectId=" + projectId;
     initTable(url);
 }))
+function doRefresh(projectId){
+    $('#materialDataTable').bootstrapTable('destroy');
+    var url = "materiel/getMateriel?projectId=" + projectId;
+    initTable(url);
+}
 
 function doQuery() {
     //$('#materialDataTable').bootstrapTable('refresh');    //刷新表格

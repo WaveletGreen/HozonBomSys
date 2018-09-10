@@ -1,12 +1,12 @@
 package com.connor.hozon.bom.resources.mybatis.bom.impl;
 
-import com.connor.hozon.bom.resources.dto.request.DeleteHzMbomReqDTO;
+import com.connor.hozon.bom.resources.domain.dto.request.DeleteHzMbomReqDTO;
+import com.connor.hozon.bom.resources.domain.query.HzBomRecycleByPageQuery;
+import com.connor.hozon.bom.resources.domain.query.HzMbomByPageQuery;
+import com.connor.hozon.bom.resources.domain.query.HzMbomTreeQuery;
 import com.connor.hozon.bom.resources.mybatis.bom.HzMbomRecordDAO;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.page.PageRequest;
-import com.connor.hozon.bom.resources.query.HzBomRecycleByPageQuery;
-import com.connor.hozon.bom.resources.query.HzMbomByPageQuery;
-import com.connor.hozon.bom.resources.query.HzMbomTreeQuery;
 import org.springframework.stereotype.Service;
 import sql.BaseSQLUtil;
 import sql.pojo.bom.HzBomLineRecord;

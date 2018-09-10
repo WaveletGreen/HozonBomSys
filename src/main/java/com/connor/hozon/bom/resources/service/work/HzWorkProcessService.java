@@ -1,12 +1,12 @@
 package com.connor.hozon.bom.resources.service.work;
 
-import com.connor.hozon.bom.resources.dto.request.AddHzProcessReqDTO;
-import com.connor.hozon.bom.resources.dto.request.ApplyMbomDataTOHzMaterielReqDTO;
-import com.connor.hozon.bom.resources.dto.request.UpdateHzProcessReqDTO;
-import com.connor.hozon.bom.resources.dto.response.HzWorkProcessRespDTO;
-import com.connor.hozon.bom.resources.dto.response.OperateResultMessageRespDTO;
+import com.connor.hozon.bom.resources.domain.dto.request.AddHzProcessReqDTO;
+import com.connor.hozon.bom.resources.domain.dto.request.ApplyMbomDataTOHzMaterielReqDTO;
+import com.connor.hozon.bom.resources.domain.dto.request.UpdateHzProcessReqDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.HzWorkProcessRespDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.OperateResultMessageRespDTO;
+import com.connor.hozon.bom.resources.domain.query.HzWorkProcessByPageQuery;
 import com.connor.hozon.bom.resources.page.Page;
-import com.connor.hozon.bom.resources.query.HzWorkProcessByPageQuery;
 
 import java.util.Map;
 

@@ -1,9 +1,9 @@
 package com.connor.hozon.bom.resources.service.epl;
 
 import com.alibaba.fastjson.JSONArray;
-import com.connor.hozon.bom.resources.dto.response.HzEPLRecordRespDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.HzEPLRecordRespDTO;
+import com.connor.hozon.bom.resources.domain.query.HzEPLByPageQuery;
 import com.connor.hozon.bom.resources.page.Page;
-import com.connor.hozon.bom.resources.query.HzEPLByPageQuery;
 
 /**
  * Created by haozt on 2018/06/05

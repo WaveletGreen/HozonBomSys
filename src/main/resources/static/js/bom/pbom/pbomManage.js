@@ -3,7 +3,11 @@ $(document).ready((function () {
     var pBomUrl ="pbom/getBomManage?projectId=" + projectPuid;
     initTable(pBomUrl);
 }))
-
+function doRefresh(projectId){
+    $('#pbomManageTable').bootstrapTable('destroy');
+    var pBomUrl ="pbom/getBomManage?projectId=" + projectId;
+    initTable(pBomUrl);
+}
 function doQuery() {
     //$('#pbomManageTable').bootstrapTable('refresh');    //刷新表格
     var projectPuid = $("#project", window.top.document).val();

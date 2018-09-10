@@ -71,7 +71,28 @@ public class HzCfg0ModelColorController {
     @RequestMapping(value = "/addPage", method = RequestMethod.GET)
     public String addPage(@RequestParam String projectPuid, Model model) {
         List<HzCfg0OptionFamily> columnList = hzCfg0OptionFamilyService.doGetCfg0OptionFamilyListByProjectPuid(projectPuid);
-        List<HzCfg0ColorSet> colorList = hzCfg0ColorSetService.doGetAll();
+        List<HzCfg0ColorSet> colorList = hzCfg0ColorSetService.doGetAll();//颜色库所有数据
+        List<HzCfg0ColorSet> _colorList=new ArrayList<>(colorList);//将colorList复制到_colorList
+
+        HzCfg0ModelColor mc = new HzCfg0ModelColor();
+        HzCfg0MainRecord mainRecord = hzCfg0MainService.doGetbyProjectPuid(projectPuid);
+        mc.setpCfg0MainRecordOfMC(mainRecord.getPuid());
+        //配色方案中已有数据
+        List<HzCfg0ModelColor> colorList2 = hzCfg0ModelColorService.doLoadModelColorByMainId(mc);
+
+        Iterator<HzCfg0ColorSet> iterator = _colorList.iterator();
+        while (iterator.hasNext()) {
+            HzCfg0ColorSet hmc= iterator.next();
+            for (int i = 0; i < colorList2.size(); i++) {
+                if (colorList2.get(i).getpModelShellOfColorfulModel().equals(hmc.getpColorCode())) {
+                    iterator.remove();//去除（过滤）配色库已有数据
+                    break;
+                }
+            }
+        }
+
+        System.out.println("colorList.size===" + colorList.size());//8
+        System.out.println("colorList2.size===" + colorList2.size());//7
         //添加一个无色
         HzCfg0ColorSet set = new HzCfg0ColorSet();
         set.setpColorName("-");
@@ -80,10 +101,12 @@ public class HzCfg0ModelColorController {
         set.setpColorOfSet("-");
         set.setPuid("-");
         colorList.add(0, set);
+        _colorList.add(0, set);
         model.addAttribute("colorList", colorList);
-        model.addAttribute("colorList2", colorList);
+        model.addAttribute("colorList2", _colorList);
         model.addAttribute("columnList", columnList);
         model.addAttribute("pCfg0MainRecordOfMC", projectPuid);
+
         return "cfg/modelColorCfg/addModelColorCfg";
     }
 
@@ -293,8 +316,8 @@ public class HzCfg0ModelColorController {
 
     @RequestMapping(value = "/setLvl2ColorPage", method = RequestMethod.GET)
     public String setLvl2ColorPage(@RequestParam("modelUid") String modelUid, @RequestParam("projectUid") String projectUid, Model model) {
-//        List<HzBomLineRecord> lineRecords = hzBomDataService.doSelectVehicleAssembly("车身", projectUid, null);
-//        List<HzBomLineRecord> lineRecords2 = hzBomDataService.doSelectVehicleAssembly("车身", projectUid, modelUid);
+//        List<HzBomLineRecordDO> lineRecords = hzBomDataService.doSelectVehicleAssembly("车身", projectUid, null);
+//        List<HzBomLineRecordDO> lineRecords2 = hzBomDataService.doSelectVehicleAssembly("车身", projectUid, modelUid);
         List<HzColorLvl2Model> lvl2Models = hzColorLvl2ModelService.doSelectByModelUid(modelUid);
         Map<String, Object> params = new HashMap<>();
         List<HzBomLineRecord> lineRecords = new ArrayList<>();
