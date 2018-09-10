@@ -31,6 +31,10 @@ public class VPPSLibraryController extends BaseController {
     @Autowired
     private HzVPPSLibraryService hzVPPSLibraryService;
 
+    /**
+     * 获取VPPS库的标题
+     * @param response
+     */
     @RequestMapping(value = "title",method = RequestMethod.GET)
     public void getVPPSLibraryTitel(HttpServletResponse response){
         LinkedHashMap<String, String> tableTitle = new LinkedHashMap<>();
@@ -46,6 +50,12 @@ public class VPPSLibraryController extends BaseController {
         tableTitle.put("standardPartCode","零件标准代码");
         writeAjaxJSONResponse(ResultMessageBuilder.build(tableTitle), response);
     }
+
+    /**
+     * 分页获取VPPS库的数据
+     * @param query
+     * @return
+     */
     @RequestMapping(value = "list",method = RequestMethod.GET)
     @ResponseBody
     public Map<String,Object> findVPPSLibraryPage(HzVPPSLibraryQuery query){
@@ -129,6 +139,12 @@ public class VPPSLibraryController extends BaseController {
         OperateResultMessageRespDTO respDTO =hzVPPSLibraryService.updateHzVPPSLibrary(dto);
         writeAjaxJSONResponse(ResultMessageBuilder.build(OperateResultMessageRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
     }
+
+    /**
+     * 删除一条数据
+     * @param puid
+     * @param response
+     */
     @RequestMapping(value = "delete",method = RequestMethod.POST)
     public void deleteVPPSLibrary(String puid,HttpServletResponse response){
         OperateResultMessageRespDTO respDTO =hzVPPSLibraryService.deleteHzVPPSLibrary(puid);

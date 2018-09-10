@@ -214,4 +214,18 @@
     set STATUS = 0
     where PUID = #{puid,jdbcType=VARCHAR}
   </update>
+
+  <!--根据VPPS代码查询条数-->
+  <select id="HzVPPSLibraryDaoImpl_findByCodeOrCount" parameterType="java.lang.String" resultType="java.lang.Integer">
+    select count(*) from HZ_VPPS_LIBRARY
+    where VPPS_CODE = #{vppsCode,jdbcType=VARCHAR} and STATUS=1
+  </select>
+
+  <!--根据VPPS代码查询一条数据-->
+  <select id="HzVPPSLibraryDaoImpl_findByCode" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from HZ_VPPS_LIBRARY
+    where VPPS_CODE = #{vppsCode,jdbcType=VARCHAR} and STATUS=1
+  </select>
 </mapper>

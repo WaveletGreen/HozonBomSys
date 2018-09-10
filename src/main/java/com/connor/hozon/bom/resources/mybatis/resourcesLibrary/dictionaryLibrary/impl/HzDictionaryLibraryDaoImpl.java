@@ -59,7 +59,7 @@ public class HzDictionaryLibraryDaoImpl extends BaseSQLUtil implements HzDiction
 
     @Override
     public int findDictionaryLibraryOrCodeToCount(String eigenValue) {
-        return (int)super.findForObject("HzDictionaryLibraryDaoImpl_findByCodeOrCount", eigenValue);
+        return (Integer) super.findForObject("HzDictionaryLibraryDaoImpl_findByCodeOrCount", eigenValue);
     }
 
     @Override
