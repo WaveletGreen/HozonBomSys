@@ -21,11 +21,14 @@ public class HzFullCfgModel {
     private Object flModLastUpdater;
 
     private BigDecimal flModVersion;
+    /**
+     * 2Y层主键
+     */
+    private String flModelBomlineUid;
 
     public BigDecimal getId() {
         return id;
     }
-
     public void setId(BigDecimal id) {
         this.id = id;
     }
@@ -92,5 +95,13 @@ public class HzFullCfgModel {
 
     public void setFlModVersion(BigDecimal flModVersion) {
         this.flModVersion = flModVersion;
+    }
+
+    public String getFlModelBomlineUid() {
+        return flModelBomlineUid;
+    }
+
+    public void setFlModelBomlineUid(String flModelBomlineUid) {
+        this.flModelBomlineUid = flModelBomlineUid;
     }
 }
