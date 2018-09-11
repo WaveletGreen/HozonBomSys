@@ -95,6 +95,14 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         registry.addViewController("/dictionaryLibrary").setViewName("/resourcesLibrary/dictionaryLibrary/dictionaryLibrary");
         //合众VPPS库
         registry.addViewController("/VPPSLibrary").setViewName("/resourcesLibrary/VPPSLibrary/VPPSLibrary");
+
+
+
+
+
+
+
+
         //变更管理VWO表单
         registry.addViewController("/vwoFormList").setViewName("/changeManage/vwo/vwoFormList");
         //变更管理EWO表单
@@ -109,6 +117,19 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         registry.addViewController("/workFrom").setViewName("/changeManage/workFrom");
         //变更管理CODPWO表单
         registry.addViewController("/codpwoFromList").setViewName("/changeManage/codpwo/codpwoFromList");
+
+
+
+
+
+
+
+
+
+
+
+        //更新日志
+        registry.addViewController("/updateLog").setViewName("/updateLog/updateLog");
     }
 
 
