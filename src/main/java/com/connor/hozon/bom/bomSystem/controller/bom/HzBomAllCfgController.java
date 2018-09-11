@@ -1,5 +1,6 @@
 package com.connor.hozon.bom.bomSystem.controller.bom;
 
+import com.connor.hozon.bom.bomSystem.helper.DateStringHelper;
 import com.connor.hozon.bom.bomSystem.service.cfg.HzBomAllCfgService;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,7 +67,9 @@ public class HzBomAllCfgController {
             model.addAttribute("msg", "该项目下没有全配置BOM一级清单表，请先添加2Y层和特性值再进行操作");
             return "errorWithEntity";
         }
+        String releaseDate = fullCfgMain.getEffectiveDate() == null ? "" : DateStringHelper.dateToString(fullCfgMain.getEffectiveDate());
         model.addAttribute("entity", fullCfgMain);
+        model.addAttribute("releaseDate", releaseDate);
         model.addAttribute("action", "./bomAllCfg/setStage");
         return "bom/setStagePage";
     }
