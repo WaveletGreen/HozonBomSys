@@ -190,18 +190,21 @@ public class HzBomAllCfgService {
                 object.put("pModelCfgDesc", "");
                 object.put("pModelCfgMng", "");
             } else {
+                boolean flag = false;
                 for (HzCfg0ModelDetail hzCfg0ModelDetail : hzCfg0ModelDetails) {
                     if (hzCfg0ModelDetail.getpModelPuid().equals(hzCfg0ModelRecord.getPuid())) {
                         object.put("pModelShape", hzCfg0ModelDetail.getpModelShape() == null ? "" : hzCfg0ModelDetail.getpModelShape());
                         object.put("pModelAnnouncement", hzCfg0ModelDetail.getpModelAnnouncement() == null ? "" : hzCfg0ModelDetail.getpModelAnnouncement());
                         object.put("pModelCfgDesc", hzCfg0ModelDetail.getpModelCfgDesc() == null ? "" : hzCfg0ModelDetail.getpModelCfgDesc());
                         object.put("pModelCfgMng", hzCfg0ModelDetail.getpModelCfgMng() == null ? "" : hzCfg0ModelDetail.getpModelCfgMng());
-                    } else {
-                        object.put("pModelShape", "");
-                        object.put("pModelAnnouncement", "");
-                        object.put("pModelCfgDesc", "");
-                        object.put("pModelCfgMng", "");
+                        flag = true;
                     }
+                }
+                if(!flag){
+                    object.put("pModelShape", "");
+                    object.put("pModelAnnouncement", "");
+                    object.put("pModelCfgDesc", "");
+                    object.put("pModelCfgMng", "");
                 }
 
             }
@@ -227,7 +230,7 @@ public class HzBomAllCfgService {
             for (HzBomLineRecord hzBomLineRecord : lines) {
 //                boolean flag = false;
                 for (HzFullCfgModel hzFullCfgModel : hzFullCfgModels) {
-                    if (hzBomLineRecord.getPuid().equals(hzFullCfgModel.getFlModelBomlineUid())) {
+                    if (hzBomLineRecord.getPuid().equals(hzFullCfgModel.getFlModelBomlineUid())&&hzFullCfgModel.getModModelUid().equals(hzCfg0ModelRecord.getPuid())) {
                         Short sPoint = hzFullCfgModel.getModPointType();
                         String point;
                         if (sPoint == 0) {
@@ -434,7 +437,9 @@ public class HzBomAllCfgService {
                 hzFullCfgModels.add(hzFullCfgModel);
             }
         }
-        hzFullCfgModelDao.insertCfgs(hzFullCfgModels);
+        if(hzFullCfgModels!=null&&hzFullCfgModels.size()!=0){
+            hzFullCfgModelDao.insertCfgs(hzFullCfgModels);
+        }
     }
 
     /**
@@ -483,7 +488,9 @@ public class HzBomAllCfgService {
             hzFullCfgWithCfg.setFlCfgVersion(mainPuid);
             hzFullCfgWithCfgs.add(hzFullCfgWithCfg);
         }
-        hzFullCfgWithCfgDao.insertBomLine(hzFullCfgWithCfgs);
+        if(hzFullCfgWithCfgs!=null&&hzFullCfgWithCfgs.size()!=0){
+            hzFullCfgWithCfgDao.insertBomLine(hzFullCfgWithCfgs);
+        }
     }
 
     /**
@@ -495,15 +502,19 @@ public class HzBomAllCfgService {
     public JSONObject saveOneRow(String bomLinePuid, String cfgPuid) {
         JSONObject respone = new JSONObject();
         HzFullCfgWithCfg hzFullCfgWithCfg = new HzFullCfgWithCfg();
-
         //bomLine PUID
         hzFullCfgWithCfg.setCfgBomlineUid(bomLinePuid);
+
         //特性ID
-        hzFullCfgWithCfg.setCfgCfg0Uid(cfgPuid);
+        if("".equals(cfgPuid)||cfgPuid==null){
+            hzFullCfgWithCfg.setCfgCfg0Uid(null);
+        }else {
+            hzFullCfgWithCfg.setCfgCfg0Uid(cfgPuid);
+        }
 
         int updateRow = hzFullCfgWithCfgDao.updateByBomLinePuid(hzFullCfgWithCfg);
-        int updatePoint = hzFullCfgModelDao.updateByBomLinePuid(bomLinePuid);
-        if (updateRow == 1&&updatePoint==1) {
+        if (updateRow == 1) {
+            hzFullCfgModelDao.updateByBomLinePuid(hzFullCfgWithCfg);
             respone.put("flag", true);
         } else {
             respone.put("flag", false);

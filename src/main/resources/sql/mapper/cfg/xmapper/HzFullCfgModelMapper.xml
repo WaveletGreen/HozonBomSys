@@ -230,10 +230,10 @@
     </foreach>
   </update>
 
-  <update id="updateByBomLinePuid" parameterType="java.lang.String">
+  <update id="updateByBomLinePuid" parameterType="sql.pojo.cfg.HzFullCfgWithCfg">
       update HZ_FULL_CFG_MODEL_RECORD
-      set MOD_POINT_TYPE = '0'
+      set MOD_CFG0_UID = #{cfgCfg0Uid,jdbcType=VARCHAR}
       where
-      FL_MODEL_BOMLINE_UID = #{bomLinePuid}
+      FL_MODEL_BOMLINE_UID = #{cfgBomlineUid,jdbcType=VARCHAR}
   </update>
 </mapper>
