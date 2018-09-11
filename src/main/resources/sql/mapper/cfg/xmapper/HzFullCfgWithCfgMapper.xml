@@ -151,4 +151,29 @@
       FL_CFG_VERSION = #{flCfgVersion,jdbcType=DECIMAL}
     where ID = #{id,jdbcType=DECIMAL}
   </update>
+
+    <insert id="insertBomLine" parameterType="java.util.List">
+        insert into HZ_FULL_CFG_WITHCFG_RECORD
+        (ID, CFG_BOMLINE_UID, FL_CFG_BOMLINE_NAME, FL_CFG_CREATOR,
+        FL_CFG_UPDATOR, FL_CFG_VERSION
+        )
+        select SEQ_HZ_FL_CFG_CFG0_ID.NEXTVAL ,A.* from(
+        <foreach collection="list" index="index" item="hzFullCfgWithCfg" separator="union">
+            select
+            #{hzFullCfgWithCfg.cfgBomlineUid,jdbcType=VARCHAR}, #{hzFullCfgWithCfg.flCfgBomlineName,jdbcType=VARCHAR}, #{hzFullCfgWithCfg.flCfgCreator,jdbcType=OTHER},
+            #{hzFullCfgWithCfg.flCfgUpdator,jdbcType=OTHER}, #{hzFullCfgWithCfg.flCfgVersion,jdbcType=DECIMAL}
+            from
+            dual
+        </foreach>
+        )A
+    </insert>
+
+    <update id="updateByBomLinePuid" parameterType="sql.pojo.cfg.HzFullCfgWithCfg">
+        update HZ_FULL_CFG_WITHCFG_RECORD
+        set CFG_CFG0_UID = #{cfgCfg0Uid,jdbcType=VARCHAR}
+        where
+          CFG_BOMLINE_UID = #{cfgBomlineUid,jdbcType=VARCHAR} and
+          (select ID from HZ_FULL_CFG_WITHCFG_RECORD where CFG_CFG0_UID = #{cfgCfg0Uid,jdbcType=VARCHAR}) is NULL
+
+    </update>
 </mapper>

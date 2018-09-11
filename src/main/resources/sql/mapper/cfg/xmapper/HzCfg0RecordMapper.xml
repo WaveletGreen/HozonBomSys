@@ -109,10 +109,10 @@
         ROWNUM as rowno
         from ${whichTable} t where 1=1
         <if test="param.featureValue !=null">
-            and t.p_cfg0_object_id like upper(#{param.featureValue})||'%'
+            and t.p_cfg0_object_id like '%'||upper(#{param.featureValue})||'%'
         </if>
         <if test="param.feature !=null">
-            and t.p_cfg0_family_name like upper(#{param.feature})||'%'
+            and t.p_cfg0_family_name like '%'||upper(#{param.feature})||'%'
         </if>
         and t.p_cfg0_main_item_puid=(
         select t2.puid

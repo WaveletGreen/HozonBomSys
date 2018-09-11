@@ -44,4 +44,18 @@ public interface HzVPPSLibraryDao {
      * @return
      */
     int delete(String puid);
+
+    /**
+     * 根据VPPS代码查询条数
+     * @param vppsCode
+     * @return
+     */
+    int findVPPSLibraryOrCodeToCount(String vppsCode);
+
+    /**
+     * 更具VPPS代码查询一条数据
+     * @param vppsCode
+     * @return
+     */
+    HzVPPSLibrary findVPPSLibraryOrCode(String vppsCode);
 }

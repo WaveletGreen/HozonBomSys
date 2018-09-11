@@ -50,6 +50,12 @@ public interface HzCfg0OptionFamilyDao {
     HzCfg0OptionFamily selectByCodeAndDescWithMain(HzCfg0OptionFamily family);
 
     /**
+     * @param family 包含主配置UID，描述和配置代码
+     * @return
+     */
+    List<HzCfg0OptionFamily> selectByCodeAndDescWithMain2(HzCfg0OptionFamily family);
+
+    /**
      * 插入1个配置族
      *
      * @param family

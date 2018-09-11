@@ -79,4 +79,14 @@ public class HzVPPSLibraryDaoImpl extends BaseSQLUtil implements HzVPPSLibraryDa
     public int delete(String puid) {
         return super.delete("HzVPPSLibraryDaoImpl_delete",puid);
     }
+
+    @Override
+    public int findVPPSLibraryOrCodeToCount(String vppsCode) {
+        return (Integer) super.findForObject("HzVPPSLibraryDaoImpl_findByCodeOrCount",vppsCode);
+    }
+
+    @Override
+    public HzVPPSLibrary findVPPSLibraryOrCode(String vppsCode) {
+        return (HzVPPSLibrary) super.findForObject("HzVPPSLibraryDaoImpl_findByCode",vppsCode);
+    }
 }

@@ -13,25 +13,25 @@ function doQuery() {
     //$('#ebomManageTable').bootstrapTable('refresh');    //刷新表格
     var projectPuid = $("#project", window.top.document).val();
     var eBomUrl = "ebom/getEBom/list?projectId=" + projectPuid;
-    var level = $("#level").val();
-    eBomUrl += "&level=" + level;
-    var pBomOfWhichDept = $("#pBomOfWhichDept").val();
-    eBomUrl += "&pBomOfWhichDept=" + pBomOfWhichDept;
-    var lineId = $("#lineId").val();
-    eBomUrl += "&lineId=" + lineId;
-    var pBomLinePartClass = $("#pBomLinePartClass").val();
-    if (pBomLinePartClass =="请选择零件分类") {
-        eBomUrl += "&pBomLinePartClass="+ "";
-    }else {
-        eBomUrl += "&pBomLinePartClass=" + pBomLinePartClass;
-    }
-    var pBomLinePartResource = $("#pBomLinePartResource").val();
-    if (pBomLinePartResource == "请选择零件来源") {
-        eBomUrl += "&pBomLinePartResource="+ "";
-    }
-    else {
-        eBomUrl += "&pBomLinePartResource=" + pBomLinePartResource;
-    }
+    // var level = $("#level").val();
+    // eBomUrl += "&level=" + level;
+    // var pBomOfWhichDept = $("#pBomOfWhichDept").val();
+    // eBomUrl += "&pBomOfWhichDept=" + pBomOfWhichDept;
+    // var lineId = $("#lineId").val();
+    // eBomUrl += "&lineId=" + lineId;
+    // var pBomLinePartClass = $("#pBomLinePartClass").val();
+    // if (pBomLinePartClass =="请选择零件分类") {
+    //     eBomUrl += "&pBomLinePartClass="+ "";
+    // }else {
+    //     eBomUrl += "&pBomLinePartClass=" + pBomLinePartClass;
+    // }
+    // var pBomLinePartResource = $("#pBomLinePartResource").val();
+    // if (pBomLinePartResource == "请选择零件来源") {
+    //     eBomUrl += "&pBomLinePartResource="+ "";
+    // }
+    // else {
+    //     eBomUrl += "&pBomLinePartResource=" + pBomLinePartResource;
+    // }
     initTable(eBomUrl);
     $('#ebomManageTable').bootstrapTable('destroy');
 }
@@ -157,6 +157,7 @@ function initTable(eBomUrl) {
                 url: eBomUrl,
                 method: 'GET',
                 dataType: 'json',
+                queryParams:queryParams,
                 //cache: false,
                 //striped: true,                              //是否显示行间隔色
                 sidePagination: "server",           //分页方式：client客户端分页，server服务端分页（*）

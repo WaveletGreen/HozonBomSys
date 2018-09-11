@@ -100,7 +100,7 @@ public class HzCfg0Service {
         List<HzCfg0Record> records = null;
         List<HzCfg0Record> needToUpdate = new ArrayList<>();
         if ("HZ_CFG0_RECORD".equals(_table)) {
-            records = doLoadCfgListByProjectPuid(projectPuid, new QueryBase());
+            records = doLoadCfgListByProjectPuid(projectPuid, new HzFeatureQueryDTO());
         } else if ("HZ_CFG0_ADD_CFG_RECORD".equals(_table)) {
             records = doLoadAddedCfgListByProjectPuid(projectPuid);
         }

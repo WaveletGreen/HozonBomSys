@@ -78,6 +78,13 @@ public class HzVPPSLibraryServiceImpl implements HzVPPSLibraryService {
             if (!b) {
                 return OperateResultMessageRespDTO.getFailPrivilege();
             }
+            int j = hzVPPSLibraryDao.findVPPSLibraryOrCodeToCount(reqDTO.getVppsCode());
+            if (j > 0){
+                OperateResultMessageRespDTO resultMessageRespDTO = new OperateResultMessageRespDTO();
+                resultMessageRespDTO.setErrMsg("对不起!您插入的VPPS代码已存在");
+                resultMessageRespDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
+                return resultMessageRespDTO;
+            }
             HzVPPSLibrary library = new HzVPPSLibrary();
             library.setPuid(UUID.randomUUID().toString());
             library.setVppsLevel(reqDTO.getVppsLevel());
@@ -141,6 +148,19 @@ public class HzVPPSLibraryServiceImpl implements HzVPPSLibraryService {
             boolean b = PrivilegeUtil.writePrivilege();
             if (!b) {
                 return OperateResultMessageRespDTO.getFailPrivilege();
+            }
+            int j = hzVPPSLibraryDao.findVPPSLibraryOrCodeToCount(reqDTO.getVppsCode());
+            HzVPPSLibrary hzVPPSLibrary = hzVPPSLibraryDao.findVPPSLibraryOrCode(reqDTO.getVppsCode());
+            OperateResultMessageRespDTO resultMessageRespDTO = new OperateResultMessageRespDTO();
+            System.out.println("查出的数据："+hzVPPSLibrary.getPuid());
+            System.out.println("修改的数据："+reqDTO.getPuid());
+            if (j > 1){
+                resultMessageRespDTO.setErrMsg("对不起!您修改的VPPS代码已存在");
+                resultMessageRespDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
+                return resultMessageRespDTO;
+            }else if (j!=1 &&hzVPPSLibrary.getPuid().equals(reqDTO.getPuid()) ){
+                resultMessageRespDTO.setErrMsg("对不起!您修改的VPPS代码已存在");
+                return resultMessageRespDTO;
             }
             HzVPPSLibrary library = new HzVPPSLibrary();
             library.setPuid(reqDTO.getPuid());

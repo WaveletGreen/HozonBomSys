@@ -1,10 +1,6 @@
 package com.connor.hozon.bom.resources.mybatis.factory.impl;
 
 import com.connor.hozon.bom.resources.mybatis.factory.HzFactoryDAO;
-import com.connor.hozon.bom.resources.page.Page;
-import com.connor.hozon.bom.resources.page.PageRequest;
-import com.connor.hozon.bom.resources.query.HzWorkByPageQuery;
-import org.mapstruct.ap.shaded.freemarker.ext.beans.HashAdapter;
 import org.springframework.stereotype.Service;
 import sql.BaseSQLUtil;
 import sql.pojo.factory.HzFactory;

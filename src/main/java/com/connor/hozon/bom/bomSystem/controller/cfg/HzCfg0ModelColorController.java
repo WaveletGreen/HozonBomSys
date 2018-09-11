@@ -260,34 +260,34 @@ public class HzCfg0ModelColorController {
     public boolean saveColorModel(@RequestBody LinkedHashMap<String, String> form) {
         User user = UserInfo.getUser();
         Date date = new Date();
+        List<HzCfg0OptionFamily> families;
+        Map<String, HzCfg0OptionFamily> mapOfFamilies = new HashMap<>();
         if (form != null) {
             HzCfg0ModelColor modelColor = new HzCfg0ModelColor();
-            //String code="";
-            form.forEach((key, value) -> {
-                System.out.println("*****="+key);
-                if ("pCodeOfColorfulModel".equals(key)) {//车型颜色代码
+            for (String key :
+                    form.keySet()) {
+                String value = form.get(key);
+                if ("pCodeOfColorfulModel".equals(key)) {
                     modelColor.setpCodeOfColorfulModel(value);
-                    System.out.println("0=========="+value);
-                } else if ("pDescOfColorfulModel".equals(key)) {//描述
+                } else if ("pDescOfColorfulModel".equals(key)) {
                     modelColor.setpDescOfColorfulModel(value);
-                    System.out.println("1=========="+value);
-                } else if ("pCfg0MainRecordOfMC".equals(key)) {//
+                } else if ("pCfg0MainRecordOfMC".equals(key)) {
                     HzCfg0MainRecord mainRecord = hzCfg0MainService.doGetbyProjectPuid(value);
                     modelColor.setpCfg0MainRecordOfMC(mainRecord.getPuid());
-                    System.out.println("2=========="+value);
-                } else if ("modelShell".equals(key)) {//油漆车身总成
+                    families = hzCfg0OptionFamilyService.doSelectByDesc(mainRecord.getPuid(), "车身颜色");
+                    for (HzCfg0OptionFamily family : families) {
+                        mapOfFamilies.put(family.getPuid(), family);
+                    }
+                } else if ("modelShell".equals(key)) {
                     HzCfg0ColorSet set = new HzCfg0ColorSet();
                     set.setPuid(value);
                     set = hzCfg0ColorSetService.getById(set);
                     modelColor.setpModelShellOfColorfulModel(set.getpColorCode());
                     modelColor.setpColorUid(set.getPuid());
-                    System.out.println("3=========="+set.getpColorCode());
-                }
-                //车身颜色设置成与车型颜色代码一致
-                else {
+                } else {
                     modelColor.getMapOfCfg0().put(key, value);
                 }
-            });
+            }
             modelColor.setPuid(UUIDHelper.generateUpperUid());
             List<HzColorModel> colorList = new ArrayList<>();
             for (Map.Entry<String, String> entry : modelColor.getMapOfCfg0().entrySet()) {
@@ -301,6 +301,11 @@ public class HzCfg0ModelColorController {
                 hzColorModel.setModifyDate(date);
                 hzColorModel.setCreator(user.getUserName());
                 hzColorModel.setModifier(user.getUserName());
+
+                if (mapOfFamilies.containsKey(entry.getKey())) {
+                    hzColorModel.setColorUid(modelColor.getpColorUid());
+                }
+
                 colorList.add(hzColorModel);
             }
             hzCfg0ModelColorService.doInsertOne(modelColor);
