@@ -109,12 +109,12 @@
         //$('#eplTable').bootstrapTable('refresh');    //刷新表格
         var projectPuid = $("#project", window.top.document).val();
         var mBomUrl = "mbom/record?projectId=" + projectPuid;
-        var level = $("#level").val();
-        mBomUrl += "&level=" + level;
-        var pBomOfWhichDept = $("#pBomOfWhichDept").val();
-        mBomUrl += "&pBomOfWhichDept=" + pBomOfWhichDept;
-        var lineId = $("#lineId").val();
-        mBomUrl += "&lineId=" + lineId;
+        // var level = $("#level").val();
+        // mBomUrl += "&level=" + level;
+        // var pBomOfWhichDept = $("#pBomOfWhichDept").val();
+        // mBomUrl += "&pBomOfWhichDept=" + pBomOfWhichDept;
+        // var lineId = $("#lineId").val();
+        // mBomUrl += "&lineId=" + lineId;
         var pBomLinePartClass = $("#pBomLinePartClass").val();
         if (pBomLinePartClass =="请选择零件分类") {
             mBomUrl += "&pBomLinePartClass="+ "";

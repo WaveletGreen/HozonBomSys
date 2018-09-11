@@ -12,12 +12,12 @@ function doQuery() {
     //$('#pbomManageTable').bootstrapTable('refresh');    //刷新表格
     var projectPuid = $("#project", window.top.document).val();
     var pBomUrl ="pbom/getBomManage?projectId=" + projectPuid;
-    var level = $("#level").val();
-    pBomUrl+="&level="+level;
-    var pBomOfWhichDept = $("#pBomOfWhichDept").val();
-    pBomUrl+="&pBomOfWhichDept="+pBomOfWhichDept;
-    var lineId = $("#lineId").val();
-    pBomUrl += "&lineId="+lineId;
+    // var level = $("#level").val();
+    // pBomUrl+="&level="+level;
+    // var pBomOfWhichDept = $("#pBomOfWhichDept").val();
+    // pBomUrl+="&pBomOfWhichDept="+pBomOfWhichDept;
+    // var lineId = $("#lineId").val();
+    // pBomUrl += "&lineId="+lineId;
     var pBomLinePartClass = $("#pBomLinePartClass").val();
     if (pBomLinePartClass =="请选择零件分类") {
         pBomUrl += "&pBomLinePartClass="+ "";

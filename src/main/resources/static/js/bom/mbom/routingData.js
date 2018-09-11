@@ -12,10 +12,10 @@ function doQuery() {
     //$('#routingDataTable').bootstrapTable('refresh');    //刷新表格
     var projectId = $("#project", window.top.document).val();
     var url = "work/process/record/page?projectId="+projectId;
-    var pMaterielCode = $("#pMaterielCode").val();
-    url+="&pMaterielCode="+pMaterielCode;
-    var pMaterielDesc = $("#pMaterielDesc").val();
-    url+="&pMaterielDesc="+pMaterielDesc;
+    // var pMaterielCode = $("#pMaterielCode").val();
+    // url+="&pMaterielCode="+pMaterielCode;
+    // var pMaterielDesc = $("#pMaterielDesc").val();
+    // url+="&pMaterielDesc="+pMaterielDesc;
     var type = $("#type").val();
     if (type=="请选择工艺路线") {
         url += "&type="+"";

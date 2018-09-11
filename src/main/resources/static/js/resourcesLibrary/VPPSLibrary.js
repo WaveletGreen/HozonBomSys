@@ -12,18 +12,18 @@ $(document).ready((function () {
 function doQuery() {
     // $('#dictionaryLibraryTable').bootstrapTable('refresh');    //刷新表格
     var url = "vpps/list";
-    var vppsLevel = $("#vppsLevel").val();
-    url += "?vppsLevel=" + vppsLevel;
-    var vsgCode = $("#vsgCode").val();
-    url += "&vsgCode=" + vsgCode;
-    var vppsCode = $("#vppsCode").val();
-    url += "&vppsCode=" + vppsCode;
-    var upc = $("#upc").val();
-    url += "&upc=" + upc;
-    var fna = $("#fna").val();
-    url += "&fna=" + fna;
-    var standardPartCode = $("#standardPartCode").val();
-    url += "&standardPartCode=" + standardPartCode;
+    // var vppsLevel = $("#vppsLevel").val();
+    // url += "?vppsLevel=" + vppsLevel;
+    // var vsgCode = $("#vsgCode").val();
+    // url += "&vsgCode=" + vsgCode;
+    // var vppsCode = $("#vppsCode").val();
+    // url += "&vppsCode=" + vppsCode;
+    // var upc = $("#upc").val();
+    // url += "&upc=" + upc;
+    // var fna = $("#fna").val();
+    // url += "&fna=" + fna;
+    // var standardPartCode = $("#standardPartCode").val();
+    // url += "&standardPartCode=" + standardPartCode;
     initTable(url);
     $('#VPPSLibraryTable').bootstrapTable('destroy');
 }
