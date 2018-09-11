@@ -1,0 +1,92 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<body>
+<form id="form" role="form" method="post" th:action="${action}">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-group">
+                <label for="stage">阶段</label>
+                <select class="form-control" id="stage" name="stage">
+                    <option th:selected="${entity.getStage()=='' or entity.getStage() ==null?true:false}"
+                            value="">无
+                    </option>
+                    <option th:selected="${entity.getStage()=='P1'?true:false}" value="P1">P1</option>
+                    <option th:selected="${entity.getStage()=='P2'?true:false}" value="P2">P2</option>
+                    <option th:selected="${entity.getStage()=='P3'?true:false}" value="P3">P3</option>
+                    <option th:selected="${entity.getStage()=='P4'?true:false}" value="P4">P4</option>
+                    <option th:selected="${entity.getStage()=='P5'?true:false}" value="P5">P5</option>
+                    <option th:selected="${entity.getStage()=='P6'?true:false}" value="P6">P6</option>
+                    <option th:selected="${entity.getStage()=='P7'?true:false}" value="P7">P7</option>
+                    <option th:selected="${entity.getStage()=='P8'?true:false}" value="P8">P8</option>
+                </select>
+                <div class="form-group">
+                    <label>更新版本</label>
+                    <table>
+                        <tr>
+                            <td><input class="form-control col-md-7"
+                                       th:value="${entity.getVersion().substring(0,entity.getVersion().indexOf('.'))}"
+                                       id="version1" name="version1"
+                            />
+                            </td>
+                            <td style="font-size: 32px">.</td>
+                            <td><input class="form-control col-md-6"
+                                       th:value="${entity.getVersion().substring(entity.getVersion().indexOf('.')+1)}"
+                                       id="version2"  name="version2"
+                                       disabled="disabled"
+                            /></td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="form-group">
+                    <label>生效日期</label>
+                    <input class="form-control" th:value="${entity.getEffectiveDate()}"
+                           disabled="disabled"
+                    />
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<script th:inline="javascript">
+    <![CDATA[
+    $(function () {
+        // 绑定dialog的确定按钮的监听事件
+        $("#btnOk", window.top.document).click(function () {
+            var url = $("#form", window.top.document).attr('action');
+            var projectPuid = $("#project", window.top.document).val();
+            <!--其实不要puid，puid会在服务器上生成-->
+            var data = {};
+            data.projectPuid = projectPuid;
+            var _d = $("#form").serializeArray();
+            for (var p in _d) {
+                if (_d.hasOwnProperty(p)) {
+                    data[_d[p].name] = _d[p].value;
+                }
+            }
+            $.ajax({
+                contentType:
+                    "application/json",
+                type:
+                    'POST',
+                url: url,
+                data: JSON.stringify(data),
+                success:
+                    function (result) {
+                        $('.modal-dialog', window.top.document).parent('div').remove();
+                        $('body', window.top.document).find('.modal-backdrop').remove();
+                        // jquery 调用刷新当前操作的table页面的refresh方法
+                        // $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
+                        window.Ewin.alert({message: result.msg});
+                    },
+                error: function (status) {
+                    window.Ewin.alert({message: status.status + ':添加数据失败!'});
+                }
+            });
+            // }
+        });
+    })
+    ]]>
+</script>
+</body>
+</html>

@@ -28,6 +28,8 @@
     <div class="input-group">
         <button class="btn btn-default" id="myButton" type="button">刷新</button>
         <button class="btn btn-default" id="addVehicle" type="button">添加列信息</button>
+        <button class="btn btn-default" id="setStage" type="button">设置阶段与版本</button>
+        <button class="btn btn-default" id="release" type="button">发布</button>
         <!--<button class="btn btn-default" id="reflect2Y" type="button">特性关联2Y层</button>-->
         <button class="btn btn-default" id="save" type="button" onclick="save()">保存</button>
     </div>
@@ -66,6 +68,7 @@
 <!--</div>-->
 
 </body>
+<script th:src="@{/js/helper/projectHelper.js}"></script>
 <script th:src="@{/js/stage/bom-all-cfg2.js}"></script>
 <script th:inline="javascript">
     function doQuery() {

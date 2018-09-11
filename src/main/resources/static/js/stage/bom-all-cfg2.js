@@ -258,7 +258,17 @@ $(document).ready(
                 width: 400,
                 height: 450
             });
-    })
+    }),
+    $("#setStage").click(function () {
+        window.Ewin.dialog({
+            // 这个puid就是车型模型的puid，直接修改了车型模型的基本信息（在bom系统维护的字段）
+            title: "手动设置阶段与版本",
+            url: "bomAllCfg/setStagePage?projectUid=" + getProjectUid(),
+            gridId: "gridId",
+            width: 400,
+            height: 450
+        });
+    }),
 );
 
 
@@ -323,7 +333,7 @@ function editorOrSave(but) {
                             // $(item).find('select').hide();
                         }else if(index==8){
                             var selectText = $(item).find('select').find("option:selected").text();
-                            $(item).find('div').text(selectText);
+                             $(item).find('div').text(selectText);
                             $(item).find('div').show();
                             $(item).find('select').hide();
                         }

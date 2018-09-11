@@ -16,6 +16,8 @@ import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.sys.entity.User;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sql.pojo.bom.HzBomLineRecord;
@@ -27,6 +29,8 @@ import sql.pojo.project.HzVehicleRecord;
 
 import java.math.BigDecimal;
 import java.util.*;
+
+import static com.connor.hozon.bom.bomSystem.helper.StringHelper.checkString;
 
 @Service("hzBomAllCfgService")
 public class HzBomAllCfgService {
@@ -62,6 +66,8 @@ public class HzBomAllCfgService {
             {
                     "pBomOfWhichDept", "operationType", "pBomLineId", "pBomLineName", "pH9featureenname", "owningUser", "pCfg0Desc", "pCfg0ObjectId", "comment"
             };
+
+    private static Logger logger = LoggerFactory.getLogger(HzBomAllCfgService.class);
 
     /**
      * @param projectPuid 项目puid
@@ -200,7 +206,7 @@ public class HzBomAllCfgService {
                         flag = true;
                     }
                 }
-                if(!flag){
+                if (!flag) {
                     object.put("pModelShape", "");
                     object.put("pModelAnnouncement", "");
                     object.put("pModelCfgDesc", "");
@@ -230,7 +236,7 @@ public class HzBomAllCfgService {
             for (HzBomLineRecord hzBomLineRecord : lines) {
 //                boolean flag = false;
                 for (HzFullCfgModel hzFullCfgModel : hzFullCfgModels) {
-                    if (hzBomLineRecord.getPuid().equals(hzFullCfgModel.getFlModelBomlineUid())&&hzFullCfgModel.getModModelUid().equals(hzCfg0ModelRecord.getPuid())) {
+                    if (hzBomLineRecord.getPuid().equals(hzFullCfgModel.getFlModelBomlineUid()) && hzFullCfgModel.getModModelUid().equals(hzCfg0ModelRecord.getPuid())) {
                         Short sPoint = hzFullCfgModel.getModPointType();
                         String point;
                         if (sPoint == 0) {
@@ -271,9 +277,9 @@ public class HzBomAllCfgService {
     /**
      * 表单初始化
      *
-     * @param projectPuid                   项目id
-     * @param hzCfg0ModelRecords           打点图关系表数据
-     * @param hzBomLineRecords              2Y层数据
+     * @param projectPuid        项目id
+     * @param hzCfg0ModelRecords 打点图关系表数据
+     * @param hzBomLineRecords   2Y层数据
      */
     private void initLoad(String projectPuid, List<HzCfg0ModelRecord> hzCfg0ModelRecords, List<HzBomLineRecord> hzBomLineRecords) {
         User user = UserInfo.getUser();
@@ -437,7 +443,7 @@ public class HzBomAllCfgService {
                 hzFullCfgModels.add(hzFullCfgModel);
             }
         }
-        if(hzFullCfgModels!=null&&hzFullCfgModels.size()!=0){
+        if (hzFullCfgModels != null && hzFullCfgModels.size() != 0) {
             hzFullCfgModelDao.insertCfgs(hzFullCfgModels);
         }
     }
@@ -488,13 +494,14 @@ public class HzBomAllCfgService {
             hzFullCfgWithCfg.setFlCfgVersion(mainPuid);
             hzFullCfgWithCfgs.add(hzFullCfgWithCfg);
         }
-        if(hzFullCfgWithCfgs!=null&&hzFullCfgWithCfgs.size()!=0){
+        if (hzFullCfgWithCfgs != null && hzFullCfgWithCfgs.size() != 0) {
             hzFullCfgWithCfgDao.insertBomLine(hzFullCfgWithCfgs);
         }
     }
 
     /**
      * 保存单行
+     *
      * @param bomLinePuid
      * @param cfgPuid
      * @return
@@ -510,9 +517,9 @@ public class HzBomAllCfgService {
         hzFullCfgWithCfg.setCfgBomlineUid(bomLinePuid);
 
         //特性ID
-        if("".equals(cfgPuid)||cfgPuid==null){
+        if ("".equals(cfgPuid) || cfgPuid == null) {
             hzFullCfgWithCfg.setCfgCfg0Uid(null);
-        }else {
+        } else {
             hzFullCfgWithCfg.setCfgCfg0Uid(cfgPuid);
         }
 
@@ -567,5 +574,49 @@ public class HzBomAllCfgService {
             respone.put("updateFlag", false);
         }
         return respone;
+    }
+
+    /**
+     * 获取全配置BOM一级清单主数据
+     *
+     * @param projectUid
+     * @return
+     */
+    public HzFullCfgMain getFullCfgMain(String projectUid) {
+        return hzFullCfgMainDao.selectByProjectId(projectUid);
+    }
+
+    /**
+     * 存储阶段信息
+     *
+     * @param params
+     * @return
+     */
+    public JSONObject setStage(Map<String, String> params) {
+        JSONObject result = new JSONObject();
+        result.put("status", false);
+        result.put("msg", "更新全配置BOM一级清单主数据失败");
+        User user = UserInfo.getUser();
+        HzFullCfgMain fullCfgMain = hzFullCfgMainDao.selectByProjectId(params.get("projectPuid"));
+        if (fullCfgMain != null) {
+            if (checkString(fullCfgMain.getVersion()) && fullCfgMain.getVersion().contains(".")) {
+                String stage = fullCfgMain.getVersion().substring(0, fullCfgMain.getVersion().indexOf("."));
+                if (Integer.parseInt(params.get("version1")) > Integer.parseInt(stage)) {
+                    fullCfgMain.setVersion(params.get("version1") + ".0");
+                }
+            }
+            fullCfgMain.setStatus("更新");
+            fullCfgMain.setStage(params.get("stage"));
+            fullCfgMain.setUpdater(user.getUsername());
+            fullCfgMain.setUpdateDate(new Date());
+            fullCfgMain.setCreator(null);
+            fullCfgMain.setCreateDate(null);
+            if (hzFullCfgMainDao.updateByPrimaryKeySelective(fullCfgMain) > 0) {
+                logger.info("更新全配置BOM一级清单主数据成功");
+                result.put("status", true);
+                result.put("msg", "更新全配置BOM一级清单主数据成功");
+            }
+        }
+        return result;
     }
 }
