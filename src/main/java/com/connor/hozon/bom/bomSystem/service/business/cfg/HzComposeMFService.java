@@ -111,6 +111,7 @@ public class HzComposeMFService {
         if (modelDetail == null) {
             results.put("status", false);
             results.put("msg", "选择的基本模型没有详细信息，请修改详细信息");
+            return ;
         }
         if (!checkString(modelDetail.getpModelCfgMng())) {
             results.put("status", false);
