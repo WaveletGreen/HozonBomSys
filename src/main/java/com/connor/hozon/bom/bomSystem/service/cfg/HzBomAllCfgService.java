@@ -268,10 +268,10 @@ public class HzBomAllCfgService {
 
 
         JSONObject mainJson = new JSONObject();
-        mainJson.put("stage", hzFullCfgMain.getStage()==null?"":hzFullCfgMain.getStage());
-        mainJson.put("version", hzFullCfgMain.getVersion()==null?"":hzFullCfgMain.getVersion());
-        SimpleDateFormat sdf  = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        mainJson.put("effectiveDate",hzFullCfgMain.getEffectiveDate()==null?"":sdf.format(hzFullCfgMain.getEffectiveDate() ));
+        mainJson.put("stage", hzFullCfgMain.getStage() == null ? "" : hzFullCfgMain.getStage());
+        mainJson.put("version", hzFullCfgMain.getVersion() == null ? "" : hzFullCfgMain.getVersion());
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        mainJson.put("effectiveDate", hzFullCfgMain.getEffectiveDate() == null ? "" : sdf.format(hzFullCfgMain.getEffectiveDate()));
 
 
         respond.put("data", _data);
@@ -279,7 +279,7 @@ public class HzBomAllCfgService {
         respond.put("array", array);
         respond.put("modelSize", _model.size());
         respond.put("cfgSize", _data.size());
-        respond.put("main",mainJson);
+        respond.put("main", mainJson);
         return respond;
     }
 
@@ -580,10 +580,10 @@ public class HzBomAllCfgService {
     public JSONObject deleteModel(String modelId) {
         JSONObject respons = new JSONObject();
         int deleteRow = hzCfg0ModelService.deleteModelById(modelId);
-        if(deleteRow==1){
-            respons.put("flag",true);
-        }else {
-            respons.put("flag",false);
+        if (deleteRow == 1) {
+            respons.put("flag", true);
+        } else {
+            respons.put("flag", false);
         }
         return respons;
     }
@@ -628,6 +628,32 @@ public class HzBomAllCfgService {
                 result.put("status", true);
                 result.put("msg", "更新全配置BOM一级清单主数据成功");
             }
+        }
+        return result;
+    }
+
+    public JSONObject promote(String projectUid) {
+        JSONObject result = new JSONObject();
+        result.put("status", false);
+        result.put("msg", "更新全配置BOM一级清单主数据失败");
+        User user = UserInfo.getUser();
+        HzFullCfgMain fullCfgMain = hzFullCfgMainDao.selectByProjectId(projectUid);
+        if (fullCfgMain != null) {
+            if (checkString(fullCfgMain.getVersion()) && fullCfgMain.getVersion().contains(".")) {
+                String stage = fullCfgMain.getVersion().substring(0, fullCfgMain.getVersion().indexOf(".")) + "." + String.valueOf(Integer.parseInt(fullCfgMain.getVersion().substring(fullCfgMain.getVersion().indexOf(".") + 1)) + 1);
+                HzFullCfgMain hzFullCfgMain = new HzFullCfgMain();
+                hzFullCfgMain.setId(fullCfgMain.getId());
+                hzFullCfgMain.setVersion(stage);
+                hzFullCfgMain.setUpdater(user.getUsername());
+                hzFullCfgMain.setUpdateDate(new Date());
+                if (hzFullCfgMainDao.updateByPrimaryKeySelective(hzFullCfgMain) > 0) {
+                    logger.info("更新全配置BOM一级清单主数据成功");
+                    result.put("status", true);
+                    result.put("msg", "更新全配置BOM一级清单主数据成功");
+                }
+            }
+        } else {
+            result.put("msg", "没有找到全配置BOM一级清单主数据");
         }
         return result;
     }

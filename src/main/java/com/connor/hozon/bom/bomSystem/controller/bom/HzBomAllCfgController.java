@@ -6,10 +6,7 @@ import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import sql.pojo.cfg.HzFullCfgMain;
 
 import java.util.Map;
@@ -25,7 +22,7 @@ public class HzBomAllCfgController {
     private HzBomAllCfgService hzBomAllCfgService;
 
     @RequestMapping("/saveBom")
-    public JSONObject saveBom(@RequestParam Map<String, String> data){
+    public JSONObject saveBom(@RequestParam Map<String, String> data) {
         return new JSONObject();
     }
 
@@ -36,29 +33,31 @@ public class HzBomAllCfgController {
 
     @RequestMapping("/loadCfg0BomLineOfModel")
     @ResponseBody
-    public JSONObject loadCfg0BomLineOfModel(@RequestParam String bdf){
+    public JSONObject loadCfg0BomLineOfModel(@RequestParam String bdf) {
         return hzBomAllCfgService.parse(bdf);
     }
 
     @RequestMapping("/saveOneRow")
     @ResponseBody
-    public JSONObject saveOneRow(String bomLinePuid, String cfgPuid){
-        return hzBomAllCfgService.saveOneRow(bomLinePuid,cfgPuid);
+    public JSONObject saveOneRow(String bomLinePuid, String cfgPuid) {
+        return hzBomAllCfgService.saveOneRow(bomLinePuid, cfgPuid);
     }
 
     @RequestMapping("/savePoint")
     @ResponseBody
-    public JSONObject savePoint(@RequestBody Map<String, Map<String,String>> data){
+    public JSONObject savePoint(@RequestBody Map<String, Map<String, String>> data) {
         return hzBomAllCfgService.savePoint(data);
     }
 
     @RequestMapping("/deleteModel")
     @ResponseBody
-    public JSONObject deleteModel(@RequestParam String modelId){
+    public JSONObject deleteModel(@RequestParam String modelId) {
         return hzBomAllCfgService.deleteModel(modelId);
     }
 
     /**
+     * 获取阶段弹窗页面
+     *
      * @return
      * @Autor Fancyears
      */
@@ -80,9 +79,27 @@ public class HzBomAllCfgController {
         return "bom/setStagePage";
     }
 
+    /**
+     * 保存阶段数据
+     *
+     * @param params
+     * @return
+     */
     @RequestMapping("setStage")
     @ResponseBody
     public JSONObject setStage(@RequestBody Map<String, String> params) {
         return hzBomAllCfgService.setStage(params);
+    }
+
+    /**
+     * 升小版本
+     *
+     * @param projectUid
+     * @return
+     */
+    @RequestMapping(value = "promote", method = RequestMethod.POST)
+    @ResponseBody
+    public JSONObject promote(@RequestParam String projectUid) {
+        return hzBomAllCfgService.promote(projectUid);
     }
 }
