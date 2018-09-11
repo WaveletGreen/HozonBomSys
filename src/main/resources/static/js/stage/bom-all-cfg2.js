@@ -26,6 +26,7 @@ function loadData() {
             modelSize = _ddd.modelSize;
             cfgSize = _ddd.cfgSize;
             array = _ddd.array;
+            var main = _ddd.main;
             var $table = $("#cfg0Table");
             //清空
             $table.html("");
@@ -34,13 +35,13 @@ function loadData() {
             var temp = "";
             for (var i = 0; i < 9; i++) {
                 if (i == 0) {
-                    temp += "<tr id='tr" + i + "'><td id='row" + i + "' colspan='10' style='border: #fff'>阶段</td></tr>";
+                    temp += "<tr id='tr" + i + "'><td id='row" + i + "' colspan='10' style='border: #fff'>阶段："+main.stage+"</td></tr>";
                 }
                 else if (i == 1) {
-                    temp += "<tr id='tr" + i + "'><td id='row" + i + "' colspan='10' style='border: #fff'>版本</td></tr>";
+                    temp += "<tr id='tr" + i + "'><td id='row" + i + "' colspan='10' style='border: #fff'>版本："+main.version+"</td></tr>";
                 }
                 else if (i == 2) {
-                    temp += "<tr id='tr" + i + "'><td id='row" + i + "' colspan='10' style='border: #fff'>生效日期</td></tr>";
+                    temp += "<tr id='tr" + i + "'><td id='row" + i + "' colspan='10' style='border: #fff'>生效日期："+main.effectiveDate+"</td></tr>";
                 }
                 else {
                     temp += "<tr id='tr" + i + "'><td id='row" + i + "' colspan='10' style='border: #fff'></td></tr>";

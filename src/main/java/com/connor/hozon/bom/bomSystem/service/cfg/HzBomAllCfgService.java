@@ -28,6 +28,7 @@ import sql.pojo.project.HzProjectLibs;
 import sql.pojo.project.HzVehicleRecord;
 
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 import static com.connor.hozon.bom.bomSystem.helper.StringHelper.checkString;
@@ -265,11 +266,20 @@ public class HzBomAllCfgService {
 
         com.alibaba.fastjson.JSONArray array = com.alibaba.fastjson.JSONArray.parseArray(JSON.toJSONString(hzCfg0Records));
 
+
+        JSONObject mainJson = new JSONObject();
+        mainJson.put("stage", hzFullCfgMain.getStatus()==null?"":hzFullCfgMain.getStatus());
+        mainJson.put("version", hzFullCfgMain.getVersion()==null?"":hzFullCfgMain.getVersion());
+        SimpleDateFormat sdf  = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        mainJson.put("effectiveDate",hzFullCfgMain.getEffectiveDate()==null?"":sdf.format(hzFullCfgMain.getEffectiveDate() ));
+
+
         respond.put("data", _data);
         respond.put("model", _model);
         respond.put("array", array);
         respond.put("modelSize", _model.size());
         respond.put("cfgSize", _data.size());
+        respond.put("main",mainJson);
         return respond;
     }
 
@@ -284,15 +294,6 @@ public class HzBomAllCfgService {
     private void initLoad(String projectPuid, List<HzCfg0ModelRecord> hzCfg0ModelRecords, List<HzBomLineRecord> hzBomLineRecords) {
         User user = UserInfo.getUser();
 
-        //搜索全部特性，并经过P_CFG0_OBJECT_ID 升序排序
-        QueryBase queryBase = new QueryBase();
-        queryBase.setSort("P_CFG0_OBJECT_ID");
-//        List<HzCfg0Record> hzCfg0Records = hzCfg0Service.doLoadCfgListByProjectPuid(projectPuid, queryBase);
-//
-//        //获取该项目下的所有车型模型
-//        List<HzCfg0ModelRecord> hzCfg0ModelRecords = hzCfg0ModelService.doSelectByProjectPuid(projectPuid);
-//        //搜素所属有2Y层
-//        List<HzBomLineRecord> lines = hzBomDataService.doSelect2YByProjectPuid(projectPuid);
         //model表的数据集
         List<HzFullCfgModel> hzFullCfgModels = null;
         //withCfg表的数据集
