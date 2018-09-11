@@ -188,7 +188,7 @@ function loadData() {
                 var v0 = modeli.key;
                 var v1 = modeli.hide;
 
-                $("#tr0").append("<td ><input class='btn btn-default' type='button' value='编辑' onclick='editPoint(this)'/><div style='display: none' id='in_"+i+"'>"+modeli.modelPuid+"</div></td>");
+                $("#tr0").append("<td ><input class='btn btn-default' type='button' value='编辑' onclick='editPoint(this)'/><input class='btn btn-default' type='button' value='删除' style='background-color: red' onclick='deleteModel(this)'/><div style='display: none' id='in_"+i+"'>"+modeli.modelPuid+"</div></td>");
                 //品牌
                 $("#tr1").append("<td ><div style='width: 200px'  >" + modeli.brand + "</div></td>");
                 //平台
@@ -269,85 +269,7 @@ $('.edit').on('click', function () {
     }
 })
 
-function editorOrSave(but) {
-    if($(but).val() == '编辑'){
-        $(but).val('保存');
-        $(but).parent().siblings().each(function (index, item) {
-            if(index==8){
-                // var divText = $(item).find('div').text();
-                // $("select option:contains('"+divText+"')").attr("selected","selected");
-                // $(item).find('select').val(divText);
-                var select = $(item).find('select');
-                var selectText = $(select).find("option:selected").text();
-                if(selectText==null){
-                    $('#'+selectText+ 'option:first').prop("selected", 'selected');
-                }
-                $(item).find('select').show();
-                $(item).find('div').hide();
-            }
-        })
-    }else {
-        $(but).val('编辑');
-        var bomLinePuid;
-        var cfgPuid;
-        var cfgIndex;
-        var select;
-        $(but).parent().siblings().each(function (index, item) {
-            if(index==0){
-                select = $(item).find('select');
-                var divVal = $(item).find('div').text();
-                var num = parseInt(divVal);
-                var bomLinePuidDivId = "in_in_"+(num-1);
-                bomLinePuid = $("#"+bomLinePuidDivId).text();
-            }else if(index==8){
-                // cfgCode = $(item).find('select').text();
-                cfgPuid = $(item).find('select').val();
-                cfgIndex = $(item).find('select').get(0).selectedIndex;
-                return false;
-            }
-        });
-        $.ajax({
-            type: "POST",
-            url: "bomAllCfg/saveOneRow?bomLinePuid="+bomLinePuid+"&cfgPuid="+cfgPuid,
-            contentType: 'application/json',
-            success: function (result) {
-                if(result.flag){
-                    $(but).parent().siblings().each(function (index, item) {
-                        if(index==7){
-                            if(cfgPuid==""||cfgPuid==null){
-                                $(item).find('div').text('');
-                                $(item).find('div').show();
-                            }else{
-                                $(item).find('div').text(array[cfgIndex].pCfg0Desc);
-                                $(item).find('div').show();
-                            }
-                            // $(item).find('select').hide();
-                        }else if(index==8){
-                            var selectText = $(item).find('select').find("option:selected").text();
-                            $(item).find('div').text(selectText);
-                            $(item).find('div').show();
-                            $(item).find('select').hide();
-                        }
-                    })
-                }else{
-                    $(but).parent().siblings().each(function (index, item) {
-                        if(index==7){
-                            // $(item).find('div').text("");
-                            $(item).find('div').show();
-                        }else if(index==8){
-                            // $(item).find('div').text("");
-                            $(item).find('div').show();
-                            $(item).find('select').hide();
-                        }
-                    })
-                }
-            },
-            error: function (info) {
-                window.Ewin.alert({message: "操作删除:" + info.status});
-            }
-        });
-    }
-}
+
 
 function Botton(id) {
     window.Ewin.dialog({
@@ -471,8 +393,88 @@ function save() {
         }
     })
 }
-
-
+//编辑保存单行
+function editorOrSave(but) {
+    if($(but).val() == '编辑'){
+        $(but).val('保存');
+        $(but).parent().siblings().each(function (index, item) {
+            if(index==8){
+                // var divText = $(item).find('div').text();
+                // $("select option:contains('"+divText+"')").attr("selected","selected");
+                // $(item).find('select').val(divText);
+                var select = $(item).find('select');
+                var selectText = $(select).find("option:selected").text();
+                if(selectText==null){
+                    $('#'+selectText+ 'option:first').prop("selected", 'selected');
+                }
+                $(item).find('select').show();
+                $(item).find('div').hide();
+            }
+        })
+    }else {
+        $(but).val('编辑');
+        var bomLinePuid;
+        var cfgPuid;
+        var cfgIndex;
+        var select;
+        $(but).parent().siblings().each(function (index, item) {
+            if(index==0){
+                select = $(item).find('select');
+                var divVal = $(item).find('div').text();
+                var num = parseInt(divVal);
+                var bomLinePuidDivId = "in_in_"+(num-1);
+                bomLinePuid = $("#"+bomLinePuidDivId).text();
+            }else if(index==8){
+                // cfgCode = $(item).find('select').text();
+                cfgPuid = $(item).find('select').val();
+                cfgIndex = $(item).find('select').get(0).selectedIndex;
+                return false;
+            }
+        });
+        $.ajax({
+            type: "POST",
+            url: "bomAllCfg/saveOneRow?bomLinePuid="+bomLinePuid+"&cfgPuid="+cfgPuid,
+            contentType: 'application/json',
+            success: function (result) {
+                if(result.flag){
+                    $(but).parent().siblings().each(function (index, item) {
+                        if(index==7){
+                            if(cfgPuid==""||cfgPuid==null){
+                                $(item).find('div').text('');
+                                $(item).find('div').show();
+                            }else{
+                                $(item).find('div').text(array[cfgIndex].pCfg0Desc);
+                                $(item).find('div').show();
+                            }
+                            // $(item).find('select').hide();
+                        }else if(index==8){
+                            var selectText = $(item).find('select').find("option:selected").text();
+                            $(item).find('div').text(selectText);
+                            $(item).find('div').show();
+                            $(item).find('select').hide();
+                        }
+                    })
+                }else{
+                    alert("该特性以被其他2Y层关联");
+                    $(but).parent().siblings().each(function (index, item) {
+                        if(index==7){
+                            // $(item).find('div').text("");
+                            $(item).find('div').show();
+                        }else if(index==8){
+                            // $(item).find('div').text("");
+                            $(item).find('div').show();
+                            $(item).find('select').hide();
+                        }
+                    })
+                }
+            },
+            error: function (info) {
+                window.Ewin.alert({message: "操作删除:" + info.status});
+            }
+        });
+    }
+}
+//编辑保存打点图
 function editPoint(but) {
     // var modelPuid = $(but).parent().find("div").text();
     var modelDivId = $(but).parent().find("div").attr("id");
@@ -538,4 +540,23 @@ function editPoint(but) {
             }
         });
     }
+}
+
+//删除车辆模型
+function deleteModel(obj) {
+    var modelId = $(obj).parent().find("div").text();
+    $.ajax({
+        type:GET,
+        url:"bomAllCfg/deleteModel?modelId="+modelId,
+        success:function(result){
+            if(result.flag){
+                loadData();
+            }else {
+                alert("删除失败");
+            }
+        },
+        error:function (info) {
+            window.Ewin.alert({message: "删除失败:" + info.status});
+        }
+    });
 }

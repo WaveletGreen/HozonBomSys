@@ -46,4 +46,10 @@ public class HzBomAllCfgController {
     public JSONObject savePoint(@RequestBody Map<String, Map<String,String>> data){
         return hzBomAllCfgService.savePoint(data);
     }
+
+    @RequestMapping("/deleteModel")
+    @ResponseBody
+    public JSONObject deleteModel(@RequestParam String modelId){
+        return hzBomAllCfgService.deleteModel(modelId);
+    }
 }
