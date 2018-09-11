@@ -159,6 +159,7 @@ function loadData() {
                         delta = delta + "<td class='edit'><input type='text' value='"+dataOfModel[index]+"' style='display: none'><div style='width: 150px'>" + dataOfModel[index] + "</div></td>";
                     }else if(aaa==7){
                         var cfgSelect = "<select style='display: none'>";
+                        cfgSelect+="<option></option>";
                         for(var j=0;j<array.length;j++){
                             var cfg = array[j];
                             if(cfg.pCfg0ObjectId==dataOfModel[index]){
@@ -272,9 +273,14 @@ function editorOrSave(but) {
         $(but).val('保存');
         $(but).parent().siblings().each(function (index, item) {
             if(index==8){
-                var divText = $(item).find('div').text();
-                $("select option:contains('"+divText+"')").attr("selected","selected");
+                // var divText = $(item).find('div').text();
+                // $("select option:contains('"+divText+"')").attr("selected","selected");
                 // $(item).find('select').val(divText);
+                var select = $(item).find('select');
+                var selectText = $(select).find("option:selected").text();
+                if(selectText==null){
+                    $('#'+selectText+ 'option:first').prop("selected", 'selected');
+                }
                 $(item).find('select').show();
                 $(item).find('div').hide();
             }
@@ -284,14 +290,16 @@ function editorOrSave(but) {
         var bomLinePuid;
         var cfgPuid;
         var cfgIndex;
+        var select;
         $(but).parent().siblings().each(function (index, item) {
             if(index==0){
+                select = $(item).find('select');
                 var divVal = $(item).find('div').text();
                 var num = parseInt(divVal);
                 var bomLinePuidDivId = "in_in_"+(num-1);
                 bomLinePuid = $("#"+bomLinePuidDivId).text();
             }else if(index==8){
-                cfgCode = $(item).find('select').text();
+                // cfgCode = $(item).find('select').text();
                 cfgPuid = $(item).find('select').val();
                 cfgIndex = $(item).find('select').get(0).selectedIndex;
                 return false;
@@ -305,12 +313,17 @@ function editorOrSave(but) {
                 if(result.flag){
                     $(but).parent().siblings().each(function (index, item) {
                         if(index==7){
-                            $(item).find('div').text(array[cfgIndex].pCfg0Desc);
-                            $(item).find('div').show();
+                            if(cfgPuid==""||cfgPuid==null){
+                                $(item).find('div').text('');
+                                $(item).find('div').show();
+                            }else{
+                                $(item).find('div').text(array[cfgIndex].pCfg0Desc);
+                                $(item).find('div').show();
+                            }
                             // $(item).find('select').hide();
                         }else if(index==8){
                             var selectText = $(item).find('select').find("option:selected").text();
-                             $(item).find('div').text(selectText);
+                            $(item).find('div').text(selectText);
                             $(item).find('div').show();
                             $(item).find('select').hide();
                         }

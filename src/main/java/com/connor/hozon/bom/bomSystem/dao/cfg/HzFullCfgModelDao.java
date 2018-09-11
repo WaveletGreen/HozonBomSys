@@ -1,6 +1,7 @@
 package com.connor.hozon.bom.bomSystem.dao.cfg;
 
 import sql.pojo.cfg.HzFullCfgModel;
+import sql.pojo.cfg.HzFullCfgWithCfg;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -27,5 +28,5 @@ public interface HzFullCfgModelDao {
 
     int updateByHzFullCfgModelList(List<HzFullCfgModel> hzFullCfgModels);
 
-    int updateByBomLinePuid(String bomLinePuid);
+    int updateByBomLinePuid(HzFullCfgWithCfg hzFullCfgWithCfg);
 }
