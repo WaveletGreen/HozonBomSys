@@ -28,4 +28,6 @@ public interface HzFullCfgModelDao {
     List<HzFullCfgModel> selectByMainPuid(BigDecimal mainPuid);
 
     int updateByHzFullCfgModelList(List<HzFullCfgModel> hzFullCfgModels);
+
+    int updateByBomLinePuid(String bomLinePuid);
 }

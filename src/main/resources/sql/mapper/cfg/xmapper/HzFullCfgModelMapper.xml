@@ -185,12 +185,11 @@
     <insert id="insertCfgs" parameterType="java.util.List">
         insert into
         HZ_FULL_CFG_MODEL_RECORD
-        (ID,MOD_MODEL_UID, MOD_CFG0_UID, MOD_POINT_TYPE, FL_MOD_CREATOR, FL_MOD_LAST_UPDATER, FL_MOD_VERSION,FL_MODEL_BOMLINE_UID)
+        (ID,MOD_MODEL_UID, MOD_POINT_TYPE, FL_MOD_CREATOR, FL_MOD_LAST_UPDATER, FL_MOD_VERSION,FL_MODEL_BOMLINE_UID)
         select SEQ_HZ_FL_CFG_MODEL_ID.NEXTVAL , A.* from(
         <foreach collection="list" index="index" item="hzFullCfgModel" separator="union">
             select
             #{hzFullCfgModel.modModelUid},
-            #{hzFullCfgModel.modCfg0Uid},
             #{hzFullCfgModel.modPointType},
             #{hzFullCfgModel.flModCreator},
             #{hzFullCfgModel.flModLastUpdater},
@@ -216,7 +215,7 @@
     set MOD_POINT_TYPE =
     <foreach collection="list" item="hzFullCfgModel" open="case" close="end">
       when MOD_MODEL_UID = #{hzFullCfgModel.modModelUid,jdbcType=VARCHAR}  and
-      MOD_CFG0_UID = #{hzFullCfgModel.modCfg0Uid,jdbcType=VARCHAR}
+        FL_MODEL_BOMLINE_UID = #{hzFullCfgModel.flModelBomlineUid,jdbcType=VARCHAR}
       then
         #{hzFullCfgModel.modPointType,jdbcType=VARCHAR}
     </foreach>
@@ -225,9 +224,16 @@
       #{hzFullCfgModel.modModelUid,jdbcType=VARCHAR}
     </foreach>
     and
-    MOD_CFG0_UID in
+      FL_MODEL_BOMLINE_UID in
     <foreach collection="list" item="hzFullCfgModel" open="(" separator="," close=")">
-      #{hzFullCfgModel.modCfg0Uid,jdbcType=VARCHAR}
+      #{hzFullCfgModel.flModelBomlineUid,jdbcType=VARCHAR}
     </foreach>
+  </update>
+
+  <update id="updateByBomLinePuid" parameterType="java.lang.String">
+      update HZ_FULL_CFG_MODEL_RECORD
+      set MOD_POINT_TYPE = '0'
+      where
+      FL_MODEL_BOMLINE_UID = #{bomLinePuid}
   </update>
 </mapper>
