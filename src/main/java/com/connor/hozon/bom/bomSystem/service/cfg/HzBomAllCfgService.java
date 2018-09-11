@@ -268,7 +268,7 @@ public class HzBomAllCfgService {
 
 
         JSONObject mainJson = new JSONObject();
-        mainJson.put("stage", hzFullCfgMain.getStatus()==null?"":hzFullCfgMain.getStatus());
+        mainJson.put("stage", hzFullCfgMain.getStage()==null?"":hzFullCfgMain.getStage());
         mainJson.put("version", hzFullCfgMain.getVersion()==null?"":hzFullCfgMain.getVersion());
         SimpleDateFormat sdf  = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         mainJson.put("effectiveDate",hzFullCfgMain.getEffectiveDate()==null?"":sdf.format(hzFullCfgMain.getEffectiveDate() ));
@@ -542,7 +542,7 @@ public class HzBomAllCfgService {
      * @return
      */
     public JSONObject savePoint(Map<String, Map<String, String>> data) {
-        JSONObject respone = new JSONObject();
+        JSONObject respons = new JSONObject();
 
         //创建存储model数据集
         List<HzFullCfgModel> hzFullCfgModels = new ArrayList<HzFullCfgModel>();
@@ -570,11 +570,22 @@ public class HzBomAllCfgService {
 
         int updataNumber = hzFullCfgModelDao.updateByHzFullCfgModelList(hzFullCfgModels);
         if (hzFullCfgModels.size() == updataNumber) {
-            respone.put("updateFlag", true);
+            respons.put("updateFlag", true);
         } else {
-            respone.put("updateFlag", false);
+            respons.put("updateFlag", false);
         }
-        return respone;
+        return respons;
+    }
+
+    public JSONObject deleteModel(String modelId) {
+        JSONObject respons = new JSONObject();
+        int deleteRow = hzCfg0ModelService.deleteModelById(modelId);
+        if(deleteRow==1){
+            respons.put("flag",true);
+        }else {
+            respons.put("flag",false);
+        }
+        return respons;
     }
 
     /**
