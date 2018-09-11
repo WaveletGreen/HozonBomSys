@@ -442,7 +442,8 @@
 
   <!--获取PBOM 2Y层 对应的lineIndex的第一个字母最大值-->
   <select id="HzPbomRecordDAOImpl_getMaxLineIndexFirstNum" parameterType="java.lang.String" resultType="java.lang.Integer">
-    select max(substr(P_LINE_INDEX,1,1)) from HZ_PBOM_RECORD t
+    select max(TO_NUMBER((substr(P_LINE_INDEX,instr(P_LINE_INDEX,'.',0),instr(P_LINE_INDEX,'.',1)-1)))) m
+    from HZ_PBOM_RECORD t
     where t.p_bom_digifax_id=(
     select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(
     select t2.puid from Hz_project_libs t2
