@@ -489,10 +489,11 @@ function editPoint(but) {
         var params = {};
         for (var j = 0; j < cfgSize; j++) {
             var cfgDivId = "in_in_" + j;
-            var cfgId = $("#" + cfgDivId).parent().parent().find("select:first").val();
+            // var cfgId = $("#" + cfgDivId).parent().parent().find("select:first").val();
+            var bomLineId = $("#" + cfgDivId).text();
             var ponitId = modelDivId + cfgDivId;
             var ponitVal = $("#" + ponitId).parent().find("select").val();
-            params[cfgId] = ponitVal;
+            params[bomLineId] = ponitVal;
         }
 
         var modelId = $(but).parent().find("div").text();

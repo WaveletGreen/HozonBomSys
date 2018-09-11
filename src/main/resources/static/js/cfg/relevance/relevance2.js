@@ -176,7 +176,7 @@ function generateRelevance() {
             showToggle: true,                   //是否显示详细视图和列表视图的切换按钮
             // showColumns: true,                  //是否显示所有的列
             showRefresh: true,                  //是否显示刷新按钮
-            pageSize: 10,
+            pageSize: 10,                       //分页每页显示条数
             pagination: true,                   //是否显示分页（*）
             clickToSelect: true,                // 单击某一行的时候选中某一条记录
             formId: "relevanceForm",
@@ -221,7 +221,6 @@ function generateRelevance() {
             /**列信息，需要预先定义好*/
             columns: [
                 {
-                    // field: 'ck',
                     checkbox: true
                 },
                 {
@@ -235,11 +234,6 @@ function generateRelevance() {
                     valign: 'middle',
                     sortable: true,
                     sortOrder: 'asc',
-                    //     formatter:function( value,row,index ){
-                    //         //如何使用拿到的多个数据 直接返回拼接好的html;
-                    //         var html = "<span>"+row["pOptionfamilyName"]+"-"+row["pCfg0ObjectId"]+"-"+row["colorCode"]+"</span>"
-                    //         return html;
-                    //     }
                 },
                 {
                     field: 'relevanceDesc',
@@ -248,11 +242,6 @@ function generateRelevance() {
                     valign: 'middle',
                     sortable: true,
                     sortOrder: 'asc',
-                    //     formatter:function( value,row,index ){
-                    //         //如何使用拿到的多个数据 直接返回拼接好的html;
-                    //         var html = "<span>"+row["pCfg0Desc"]+"-"+row["colorDesc"]+"</span>"
-                    //         return html;
-                    //     }
                 },
                 {
                     field: 'relevanceCode',
@@ -261,11 +250,6 @@ function generateRelevance() {
                     valign: 'middle',
                     sortable: true,
                     sortOrder: 'asc',
-                    //     formatter:function( value,row,index ){
-                    //     //如何使用拿到的多个数据 直接返回拼接好的html;
-                    //     var html = "<span>"+row["cfg0Relevance"]+"</span>"
-                    //     return html;
-                    // }
                 },
             ],
             sortable: true,                     //是否启用排序
