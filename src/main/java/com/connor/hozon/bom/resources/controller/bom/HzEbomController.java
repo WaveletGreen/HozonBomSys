@@ -42,19 +42,6 @@ public class HzEbomController extends BaseController {
 
     @Autowired
     private HzBomLineRecordDaoImpl hzBomLineRecordDao;
-    @RequestMapping(value = "/ebomTitle",method = RequestMethod.GET)
-    public void getEbomTitle(String projectId, HttpServletResponse response) {
-        if(projectId==null){
-            writeAjaxJSONResponse(ResultMessageBuilder.build(false,"非法参数！"), response);
-            return;
-        }
-        JSONArray array = hzEbomService.getEbomTitle(projectId);
-        if(array==null){
-        writeAjaxJSONResponse(ResultMessageBuilder.build(false,"网络错误！"), response);
-    }else{
-            writeAjaxJSONResponse(ResultMessageBuilder.build(array), response);
-        }
-    }
 
     @RequestMapping(value = "title",method = RequestMethod.GET)
     public void getEbomTitle(HttpServletResponse response) {
@@ -167,76 +154,9 @@ public class HzEbomController extends BaseController {
 
     @RequestMapping(value = "addEbom",method = RequestMethod.GET)
     public String addEbom(String projectId,String puid,Model model) {
-//        if(projectId == null){
-//            return "";
-//        }
-//        JSONArray array = hzEbomService.getEbomTitle(projectId);
-//        if(array == null){
-//            return "";
-//        }
-//
-//        //过滤掉没必要的标题
-//        JSONArray jsonArray = new JSONArray();
-//        String[] strings1 = (String[]) array.get(0);
-//        String[] strings2 = (String[]) array.get(1);
-//
-//        List<String> list1 = Arrays.asList(strings1);
-//        List<String> list2 = Arrays.asList(strings2);
-//        List<String> arrayList1=new ArrayList<String>(list1);
-//        List<String> arrayList2=new ArrayList<String>(list2);
-//        if(list1.contains("puid")){
-//            arrayList1.remove("puid");
-//        }
-//        if(list1.contains("序号")){
-//            arrayList1.remove("序号");
-//        }
-//        if(list1.contains("级别")){
-//            arrayList1.remove("级别");
-//        }
-//        if(list1.contains("分组号")){
-//            arrayList1.remove("分组号");
-//        }
-//        if(list1.contains("层级")){
-//            arrayList1.remove("层级");
-//        }
-//
-//        if(list2.contains("puid")){
-//            arrayList2.remove("puid");
-//        }
-//        if(list2.contains("No")){
-//            arrayList2.remove("No");
-//        }
-//        if(list2.contains("rank")){
-//            arrayList2.remove("rank");
-//        }
-//        if(list2.contains("groupNum")){
-//            arrayList2.remove("groupNum");
-//        }
-//        if(list2.contains("level")){
-//            arrayList2.remove("level");
-//        }
-//        if(puid!=null){
-//            HzEbomRespDTO recordRespDTO = hzEbomService.fingEbomById(puid,projectId);
-//            if(array == null ||recordRespDTO == null){
-//                return "";
-//            }
-//            JSONArray array1 = recordRespDTO.getJsonArray();
-//            JSONObject object = array1.getJSONObject(0);
-//            for(int i =0 ;i<strings2.length;i++){
-//                if("puid".equals(strings2[i])){
-//                    model.addAttribute("puid",object.getString(strings2[i]));
-//                    break;
-//                }
-//            }
-//        }
-//        String[] strings3 = arrayList1.toArray(new String[0]);
-//        String[] strings4 = arrayList2.toArray(new String[0]);
-//        jsonArray.add(strings3);
-//        jsonArray.add(strings4);
         HzEbomRespDTO respDTO = new HzEbomRespDTO();
         respDTO.setPuid(puid);
         model.addAttribute("data",respDTO);
-
         return "bomManage/ebom/ebomManage/addebomManage";
     }
 
@@ -301,71 +221,6 @@ public class HzEbomController extends BaseController {
         }else {
             recordRespDTO.setNumber(null);
         }
-
-//        JSONArray array = hzEbomService.getEbomTitle(projectId);
-//        if(array == null ||recordRespDTO == null){
-//            return "";
-//        }
-//        //过滤掉没必要的标题
-//        JSONArray jsonArray = new JSONArray();
-//        String[] strings1 = (String[]) array.get(0);
-//        String[] strings2 = (String[]) array.get(1);
-//
-//        List<String> list1 = Arrays.asList(strings1);
-//        List<String> list2 = Arrays.asList(strings2);
-//        List<String> arrayList1=new ArrayList<String>(list1);
-//        List<String> arrayList2=new ArrayList<String>(list2);
-//
-//        if(list1.contains("序号")){
-//            arrayList1.remove("序号");
-//        }
-//        if(list1.contains("级别")){
-//            arrayList1.remove("级别");
-//        }
-//        if(list1.contains("层级")){
-//            arrayList1.remove("层级");
-//        }
-//        if(list1.contains("分组号")){
-//            arrayList1.remove("分组号");
-//        }
-//        if(list1.contains("puid")){
-//            arrayList1.remove("puid");
-//        }
-//        if(list2.contains("No")){
-//            arrayList2.remove("No");
-//        }
-//        if(list2.contains("rank")){
-//            arrayList2.remove("rank");
-//        }
-//        if(list2.contains("level")){
-//            arrayList2.remove("level");
-//        }
-//        if(list2.contains("groupNum")){
-//            arrayList2.remove("groupNum");
-//        }
-//        if(list2.contains("puid")){
-//            arrayList2.remove("puid");
-//        }
-//        String[] strings3 =arrayList1.toArray(new String[0]);;
-//        String[] strings4 = arrayList2.toArray(new String[0]);
-//        jsonArray.add(strings3);
-//        jsonArray.add(strings4);
-//
-//
-//        JSONArray array1 = recordRespDTO.getJsonArray();
-//        JSONObject object = array1.getJSONObject(0);
-//        String[] strings5 = new String[strings4.length];
-//        for(int i =0 ;i<strings2.length;i++){
-//            if("puid".equals(strings2[i])){
-//                model.addAttribute("puid",object.getString(strings2[i]));
-//                break;
-//            }
-//        }
-//
-//        for(int i =0;i<strings4.length;i++){
-//            strings5[i] = object.getString(strings4[i])==null?"":object.getString(strings4[i]);
-//        }
-//        jsonArray.add(strings5);
         model.addAttribute("data",recordRespDTO);
 
         return "bomManage/ebom/ebomManage/updateEbomManage";

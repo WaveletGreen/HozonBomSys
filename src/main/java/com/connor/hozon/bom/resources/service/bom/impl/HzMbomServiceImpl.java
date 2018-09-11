@@ -24,16 +24,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sql.pojo.bom.HzBomLineRecord;
 import sql.pojo.bom.HzMbomLineRecord;
-import sql.pojo.bom.HzMbomRecord;
-import sql.pojo.bom.HzPbomLineRecord;
 import sql.pojo.cfg.HzCfg0OfBomLineRecord;
 import sql.pojo.factory.HzFactory;
 import sql.redis.SerializeUtil;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
-import static com.connor.hozon.bom.resources.service.bom.impl.HzPbomServiceImpl.getLevelAndRank;
+import static com.connor.hozon.bom.resources.domain.model.HzBomSysFactory.getLevelAndRank;
+
 
 /**
  * @Author: haozt
@@ -60,20 +58,17 @@ public class HzMbomServiceImpl implements HzMbomService {
     public Page<HzMbomRecordRespDTO> findHzMbomForPage(HzMbomByPageQuery query) {
         try {
             String level = query.getLevel();
-            if (level != null && level != "") {
-                if (level.length() == 1 && level.toUpperCase().endsWith("Y")) {
-                    query.setIsHas(Integer.valueOf(1));
-                } else {
-                    int length = level.charAt(0) - 48;
-                    if (level.toUpperCase().endsWith("Y")) {
-                        query.setIsHas(Integer.valueOf(1));
-                    } else {
-                        query.setIsHas(Integer.valueOf(0));
-                    }
-                    query.setLineIndex(String.valueOf(length - 1));
+            if (level != null && level!="") {
+                if(level.trim().toUpperCase().endsWith("Y")){
+                    int length = Integer.valueOf(level.replace("Y",""));
+                    query.setIsHas(1);
+                    query.setLineIndex(String.valueOf(length-1));
+                }else {
+                    query.setIsHas(0);
+                    int length = Integer.valueOf(level.trim());
+                    query.setLineIndex(String.valueOf(length));
                 }
             }
-
             int count = hzMbomRecordDAO.getHzMbomTotalCount(query.getProjectId());
             if (count <= 0) {
                 List<HzBomLineRecord> lineRecords = hzBomLineRecordDao.getLoadingCarPartBom(query.getProjectId());
