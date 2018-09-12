@@ -2,6 +2,7 @@ package com.connor.hozon.bom.resources.controller.resourcesLibrary;
 
 import com.connor.hozon.bom.resources.controller.BaseController;
 import com.connor.hozon.bom.resources.domain.dto.request.AddHzDictionaryLibraryReqDTO;
+import com.connor.hozon.bom.resources.domain.dto.request.UpdateHzDictionaryLibraryReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzDictionaryLibraryRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.OperateResultMessageRespDTO;
 import com.connor.hozon.bom.resources.domain.query.HzDictionaryLibraryQuery;
@@ -121,7 +122,7 @@ public class DictionaryLibraryController extends BaseController {
      * @param response
      */
     @RequestMapping(value = "updateById",method = RequestMethod.POST)
-    public void updateDiDictionaryLibrary(@RequestBody AddHzDictionaryLibraryReqDTO dto,HttpServletResponse response){
+    public void updateDiDictionaryLibrary(@RequestBody UpdateHzDictionaryLibraryReqDTO dto, HttpServletResponse response){
         OperateResultMessageRespDTO respDTO = hzDictionaryLibraryService.updateHzDictionaryLibrary(dto);
         writeAjaxJSONResponse(ResultMessageBuilder.build(OperateResultMessageRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
     }
