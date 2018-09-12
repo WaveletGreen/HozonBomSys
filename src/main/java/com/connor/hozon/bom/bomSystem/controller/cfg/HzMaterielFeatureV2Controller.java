@@ -124,7 +124,7 @@ public class HzMaterielFeatureV2Controller extends ExtraIntegrate {
             result.put("status", false);
             return result;
         }
-        hzComposeMFService.saveCompose(hzComposeMFDTO, result);
+        hzComposeMFService.saveCompose2(hzComposeMFDTO, result);
         return result;
     }
 
