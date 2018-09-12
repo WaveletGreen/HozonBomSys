@@ -143,24 +143,24 @@
                     trigger:'change',
                     message : "生效时间验证失败",
                     validators : {
-                        notEmpty : {
-                            message : "生效时间不能为空"
-                        },
+                        // notEmpty : {
+                        //     message : "生效时间不能为空"
+                        // },
                         date : {
                             format : "yyyy-MM-dd",
-                            message : "生效时间日期格式不正确，应为yyyy-MM-dd"
+                            message : "生效时间日期格式不正确,例如:2018-10-18"
                         }
                     }
                 },
                 failureTime: {
                     message : "失效时间验证失败",
                     validators : {
-                        notEmpty : {
-                            message : "失效时间不能为空"
-                        },
+                        // notEmpty : {
+                        //     message : "失效时间不能为空"
+                        // },
                         date : {
                             format : "yyyy-MM-dd",
-                            message : "失效时间日期格式不正确，应为yyyy-MM-dd"
+                            message : "失效时间日期格式不正确,例如:2018-10-18"
                         }
                     }
                 },
