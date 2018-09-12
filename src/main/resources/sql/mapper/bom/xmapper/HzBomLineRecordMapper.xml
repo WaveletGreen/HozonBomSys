@@ -586,8 +586,8 @@
         from Hz_Bom_Main_Record t1
         where t1.p_cfg0_of_which_project_puid=#{projectPuid,jdbcType=VARCHAR}
         )
-        order by t.P_BOM_ORDER_NUM
         and t.P_EBOM_STATUS<![CDATA[ <> ]]>0
+        order by t.P_BOM_ORDER_NUM
     </select>
 
 

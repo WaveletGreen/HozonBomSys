@@ -1,7 +1,6 @@
 var modelSize;
 var peculiarity;
 var array
-
 function loadData() {
     var project = $("#project", window.top.document);
     var data = project.val();
@@ -128,7 +127,7 @@ function loadData() {
             //动态添加
             var t =
                 "<tr>" +
-                "<th align='center'><div style='width: 50px' >选择</div></th>" +
+                "<th style='text-align: center'><div style='width: 110px' >选择</div></th>" +
                 "<th ><div style='width: 50px' >序号</div></th>" +
                 "<th ><div style='width: 150px' >操作类型</div></th>" +
                 "<th ><div style='width: 150px' >系统</div></th>" +
@@ -149,7 +148,8 @@ function loadData() {
                 var j = i+10;
                 var cfgId = "in_in_"+i;
                 var delta = "<tr id='tr"+j+"'>" +
-                    "<td style='text-align: center'><input class='btn btn-default' type='button' value='编辑' style='width: 50px' onclick='editorOrSave(this)'><input class='pCfg0ObjectId' type='text' value='"+dataOfModel.pCfg0ObjectId+"' hidden='hidden' disabled='disabled'><div id='"+cfgId+"' style='display: none'>"+dataOfModel.bomLinePuid+"</div></td>"
+                    "<td style='text-align: center'><input class='btn btn-default' type='button' value='编辑' style='width: 50px' onclick='editorOrSave(this)'><input class='btn btn-default' type='button' value='取消' style='width: 50px; display: none' onclick='cancelEditor(this)'><div id='"+cfgId+"' style='display: none'>"+dataOfModel.bomLinePuid+"</div></td>"
+                    // "<td style='text-align: center'><input class='btn btn-default' type='button' value='编辑' style='width: 50px' onclick='editorOrSave(this)'><input class='pCfg0ObjectId' type='text' value='"+dataOfModel.pCfg0ObjectId+"' hidden='hidden' disabled='disabled'><div id='"+cfgId+"' style='display: none'>"+dataOfModel.bomLinePuid+"</div></td>"
                     +
                     "<td><div style='width: 50px' >" + (i + 1) + "</div></td>";
                 var aaa = 0;
@@ -260,17 +260,7 @@ $(document).ready(
                 width: 400,
                 height: 450
             });
-    }),
-    $("#setStage").click(function () {
-        window.Ewin.dialog({
-            // 这个puid就是车型模型的puid，直接修改了车型模型的基本信息（在bom系统维护的字段）
-            title: "手动设置阶段与版本",
-            url: "bomAllCfg/setStagePage?projectUid=" + getProjectUid(),
-            gridId: "gridId",
-            width: 400,
-            height: 450
-        });
-    }),
+    })
 );
 
 
@@ -279,6 +269,7 @@ $('.edit').on('click', function () {
         $(this).find('div').is(':visible') && ($(this).find('input').show().prev().hide(), $(this).parent().find('.btn').html('保存'));
     }
 })
+
 
 
 function Botton(id) {
@@ -403,10 +394,12 @@ function save() {
         }
     })
 }
+
 //编辑保存单行
 function editorOrSave(but) {
     if($(but).val() == '编辑'){
         $(but).val('保存');
+        $(but).parent().find('input:eq(1)').show();
         $(but).parent().siblings().each(function (index, item) {
             if(index==8){
                 // var divText = $(item).find('div').text();
@@ -423,6 +416,7 @@ function editorOrSave(but) {
         })
     }else {
         $(but).val('编辑');
+        $(but).parent().find('input:eq(1)').hide();
         var bomLinePuid;
         var cfgPuid;
         var cfgIndex;
@@ -453,7 +447,7 @@ function editorOrSave(but) {
                                 $(item).find('div').text('');
                                 $(item).find('div').show();
                             }else{
-                                $(item).find('div').text(array[cfgIndex].pCfg0Desc);
+                                $(item).find('div').text(array[cfgIndex-1].pCfg0Desc);
                                 $(item).find('div').show();
                             }
                             // $(item).find('select').hide();
@@ -484,6 +478,24 @@ function editorOrSave(but) {
         });
     }
 }
+
+//取消编辑
+function cancelEditor(but) {
+    $(but).hide();
+    $(but).parent().find("input:eq(0)").val('编辑');
+    $(but).parent().siblings().each(function (index, item) {
+        if(index==7){
+            // $(item).find('div').text("");
+            $(item).find('div').show();
+        }else if(index==8){
+            // $(item).find('div').text("");
+            $(item).find('div').show();
+            $(item).find('select').hide();
+        }
+    })
+}
+
+
 //编辑保存打点图
 function editPoint(but) {
     // var modelPuid = $(but).parent().find("div").text();
@@ -554,19 +566,23 @@ function editPoint(but) {
 
 //删除车辆模型
 function deleteModel(obj) {
-    var modelId = $(obj).parent().find("div").text();
-    $.ajax({
-        type:GET,
-        url:"bomAllCfg/deleteModel?modelId="+modelId,
-        success:function(result){
-            if(result.flag){
-                loadData();
-            }else {
-                alert("删除失败");
+    var isDelete = confirm("是否确认删除");
+    if(isDelete){
+        var modelId = $(obj).parent().find("div").text();
+        $.ajax({
+            type:"GET",
+            url:"bomAllCfg/deleteModel?modelId="+modelId,
+            success:function(result){
+                if(result.flag){
+                    alert("删除成功");
+                    loadData();
+                }else {
+                    alert("删除失败");
+                }
+            },
+            error:function (info) {
+                window.Ewin.alert({message: "删除失败:" + info.status});
             }
-        },
-        error:function (info) {
-            window.Ewin.alert({message: "删除失败:" + info.status});
-        }
-    });
+        });
+    }
 }
