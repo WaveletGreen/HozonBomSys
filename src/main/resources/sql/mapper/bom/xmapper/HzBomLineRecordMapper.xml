@@ -20,7 +20,7 @@
         <result column="P_BOM_LINE_PART_EN_NAME" jdbcType="VARCHAR" property="pBomLinePartEnName"/>
         <result column="P_BOM_LINE_PART_RESOURCE" jdbcType="VARCHAR" property="pBomLinePartResource"/>
         <result column="P_EBOM_STATUS" jdbcType="INTEGER" property="status"/>
-
+        <result column="P_SORT_NUM" jdbcType="VARCHAR" property="sortNum" />
 
         <result column="P_FNA_INFO" jdbcType="VARCHAR" property="pFnaInfo"/>
         <result column="P_CREATE_TIME" jdbcType="DATE" property="pCreateTime"/>
@@ -134,6 +134,7 @@
     P_BUY_ENGINEER,
     P_EWO_NO,
     P_LOU_LOA_FLAG
+    P_SORT_NUM
   </sql>
 
     <sql id="Bom_Column_For_Change">
@@ -147,7 +148,7 @@
     P_MANU_PROCESS, P_SYMMETRY, P_IMPORTANCE, P_REGULATION_FLAG, P_BWG_BOX_PART, P_DEVELOP_TYPE,
     P_DATA_VERSION, P_TARGET_WEIGHT, P_FEATURE_WEIGHT, P_ACTUAL_WEIGHT, P_FASTENER_STANDARD,
     P_FASTENER_LEVEL, P_TORQUE, P_DUTY_ENGINEER, P_SUPPLY, P_SUPPLY_CODE, P_REMARK, P_REGULATION_CODE,P_NUMBER,
-    P_BUY_ENGINEER,P_EWO_NO
+    P_BUY_ENGINEER,P_EWO_NO,P_SORT_NUM
   </sql>
     <sql id="Blob_Column_List">P_BOM_LINE_BLOCK</sql>
     <sql id="Color_Column">P_COLOR_UID</sql>
@@ -191,7 +192,7 @@
         where
         t2.p_cfg0_of_which_project_puid=#{projectPuid,jdbcType=VARCHAR}
         )
-        order by P_BOM_ORDER_NUM
+        order by CAST(P_SORT_NUM as FLOAT)
     </select>
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.String">delete from
@@ -204,7 +205,7 @@
         (
         PUID,P_PARENT_UID,P_BOM_DIGIFAX_ID,P_LINE_INDEX,P_BOM_LINE_IS_HAS,P_BOM_LINE_PUID,P_BOM_LINE_ID,
         P_BOM_LINE_BLOCK,
-        P_BOM_LINE_IS_2Y,P_BOM_LINE_IS_PART,P_BOM_ORDER_NUM,P_BOM_LINE_IS_DEPT,P_BOM_OF_WHICH_DEPT,
+        P_BOM_LINE_IS_2Y,P_BOM_LINE_IS_PART,P_SORT_NUM,P_BOM_LINE_IS_DEPT,P_BOM_OF_WHICH_DEPT,
         P_BOM_LINE_PART_NAME,P_BOM_LINE_PART_CLASS,
         P_BOM_LINE_PART_EN_NAME,
         P_BOM_LINE_PART_RESOURCE, P_FNA_INFO, P_EBOM_STATUS,
@@ -227,7 +228,7 @@
         #{lineIndex,jdbcType=VARCHAR},#{isHas,jdbcType=INTEGER},#{linePuid,jdbcType=VARCHAR},
         #{lineID,jdbcType=VARCHAR},#{bomLineBlock,jdbcType=BLOB},
         #{is2Y,jdbcType=INTEGER},#{isPart,jdbcType=INTEGER},
-        #{orderNum,jdbcType=INTEGER},#{isDept,jdbcType=INTEGER},
+        #{sortNum,jdbcType=VARCHAR},#{isDept,jdbcType=INTEGER},
         #{pBomOfWhichDept,jdbcType=VARCHAR},#{pBomLinePartName,jdbcType=VARCHAR},#{pBomLinePartClass,jdbcType=VARCHAR},
         #{pBomLinePartEnName,jdbcType=VARCHAR}, 
           #{pBomLinePartResource,jdbcType=VARCHAR}, #{pFnaInfo,jdbcType=VARCHAR}, 2,
@@ -288,8 +289,8 @@
             <if test="isPart != null">
                 P_BOM_LINE_IS_PART = #{isPart,jdbcType=VARCHAR},
             </if>
-            <if test="orderNum != null">
-                P_BOM_ORDER_NUM = #{orderNum,jdbcType=VARCHAR},
+            <if test="sortNum != null">
+                P_SORT_NUM = #{sortNum,jdbcType=VARCHAR},
             </if>
             <if test="isDept != null">
                 P_BOM_LINE_IS_DEPT = #{isDept,jdbcType=VARCHAR},
@@ -522,7 +523,7 @@
         )
     </select>
 
-    <!--查询全部的2y或者2层的 lineindex 信息-->
+    <!--查询全部的2y层 lineindex 信息-->
     <select id="HzBomLineRecordDaoImpl_findBomLineIndex" resultType="java.lang.String"
             parameterType="java.util.HashMap">
         select
@@ -532,7 +533,7 @@
         select t2.puid from Hz_Bom_Main_Record t2
         where
         t2.p_cfg0_of_which_project_puid=#{projectId,jdbcType=VARCHAR}
-        ) and LENGTH(TRANSLATE(P_LINE_INDEX,',0123456789','.'))=1
+        ) and P_BOM_LINE_IS_2Y=1
         and P_EBOM_STATUS<![CDATA[ <> ]]>0
     </select>
 
@@ -637,7 +638,7 @@
             and t3.p_model_uid=#{modelUid,jdbcType=VARCHAR}
         </if>
         and t2.P_EBOM_STATUS <![CDATA[ <> ]]> 0
-        order by t2.p_bom_order_num
+        order by CAST(t2.P_SORT_NUM as FLOAT)
     </select>
     <!--&lt;!&ndash;获取车身下级2Y层的总成级，需要代码进行查重&ndash;&gt;-->
     <!--<select id="selectVehicleAssembly2" parameterType="java.util.Map" resultMap="BaseResultMap">-->
@@ -682,11 +683,10 @@
         </foreach>
     </update>
 
-
-
     <!--获取EBOM 2Y层 对应的lineIndex的第一个字母最大值-->
     <select id="HzBomLineRecordDaoImpl_getMaxLineIndexFirstNum" parameterType="java.lang.String" resultType="java.lang.Integer">
-        select max(substr(P_LINE_INDEX,1,1)) from HZ_BOM_LINE_RECORD t
+        select max(TO_NUMBER((substr(P_LINE_INDEX,instr(P_LINE_INDEX,'.',0),instr(P_LINE_INDEX,'.',1)-1)))) m
+        from HZ_BOM_LINE_RECORD t
         where t.p_bom_digifax_id=(
         select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(
         select t2.puid from Hz_project_libs t2

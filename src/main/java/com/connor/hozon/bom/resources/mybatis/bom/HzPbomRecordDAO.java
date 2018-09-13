@@ -90,7 +90,7 @@ public interface HzPbomRecordDAO {
 
     Page<HzPbomLineRecord> getHzPbomRecycleRecord(HzBomRecycleByPageQuery query);
 
-    Integer findMinOrderNumWhichGreaterThanThisOrderNum(String projectId,int orderNum);
+    String findMinOrderNumWhichGreaterThanThisOrderNum(String projectId,String orderNum);
 
     int delete(String eBomPuid);
 }

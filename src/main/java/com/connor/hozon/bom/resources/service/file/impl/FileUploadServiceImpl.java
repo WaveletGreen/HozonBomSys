@@ -523,7 +523,6 @@ public class FileUploadServiceImpl implements FileUploadService {
             String parentId = "";
             String currentKey = record.getLevel()+"-"+high;
             int currentLevelNum = Integer.valueOf(level.replace("Y",""));
-            String currentLineIndex = lineIndexMap.get(currentKey);
             //找父id
             if(high!=0){
                 if(level.endsWith("Y")){

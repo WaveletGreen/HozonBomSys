@@ -55,6 +55,7 @@ public class HzEPLManageRecord {
     /**
      * 在Bom结构中的顺序号
      */
+    @Deprecated
     private Integer orderNum;
     /**
      * 2Y层归属哪个部门
@@ -257,6 +258,16 @@ public class HzEPLManageRecord {
     private String ewoNo;
 
     private Integer pLouaFlag;
+
+    private String sortNum;
+
+    public String getSortNum() {
+        return sortNum;
+    }
+
+    public void setSortNum(String sortNum) {
+        this.sortNum = sortNum;
+    }
 
     public String getEwoNo() {
         return ewoNo;

@@ -64,7 +64,8 @@ public class HzMaterielDAOImpl extends BaseSQLUtil implements HzMaterielDAO {
         map.put("projectId", query.getProjectId());
         map.put("puid", query.getPuid());
         map.put("pMaterielDataType", query.getpMaterielDataType());
-        map.put("", query.getMaterielResourceId());
+        map.put("materielResourceId", query.getMaterielResourceId());
+        map.put("pMaterielCode",query.getpMaterielCode());
         return super.findForList("HzMaterialDAOImpl_findHzMaterielForList", query);
     }
 
@@ -125,5 +126,13 @@ public class HzMaterielDAOImpl extends BaseSQLUtil implements HzMaterielDAO {
     @Override
     public int realDelete(String materielResourceId) {
         return super.delete("HzMaterialDAOImpl_realDelete", materielResourceId);
+    }
+
+    @Override
+    public boolean isRepeat(HzMaterielQuery query) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("pMaterielCode",query.getpMaterielCode());
+        map.put("projectId",query.getProjectId());
+        return (int)super.findForObject("HzMaterialDAOImpl_isRepeat",map)>0;
     }
 }
