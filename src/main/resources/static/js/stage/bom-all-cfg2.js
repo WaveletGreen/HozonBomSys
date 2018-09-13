@@ -244,7 +244,7 @@ $(document).ready(
             window.Ewin.dialog({
                 // 这个puid就是车型模型的puid，直接修改了车型模型的基本信息（在bom系统维护的字段）
                 title: "添加车型模型",
-                url: "materiel/addVehicleModelPage?projectPuid=" + projectPuid,
+                url: "materiel/addVehicleModelPage2?projectPuid=" + projectPuid,
                 gridId: "gridId",
                 width: 350,
                 height: 450

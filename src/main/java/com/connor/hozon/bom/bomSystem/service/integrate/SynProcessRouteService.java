@@ -139,8 +139,8 @@ public class SynProcessRouteService {
                     processRoute.setActionFlag(option);
                 }
                 //有发送过，执行更新
-                else {
-                    continue;
+                else if(respDTO.getIsSent()==1){
+                    processRoute.setActionFlag(ActionFlagOption.UPDATE);
                 }
             }
             //执行更新或删除
@@ -202,8 +202,14 @@ public class SynProcessRouteService {
                 }
                 Map<String, Object> _map = new HashMap<String, Object>();
                 //设定需要更新特性值已发送,不用设定相关性值已发送
-                _map.put("isFeatureSent", 1);
-                _map.put("list", needToUpdateStatus);
+                if(ActionFlagOption.ADD.equals(option)){
+                    _map.put("isFeatureSent", 1);
+                    _map.put("list", needToUpdateStatus);
+                }else {
+                    _map.put("isFeatureSent", 0);
+                    _map.put("list", needToUpdateStatus);
+
+                }
                 if (needToUpdateStatus.size() > 0) {
                     hzWorkProcessService.doUpdateByBatch(_map);
                 }
