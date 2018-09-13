@@ -14,16 +14,16 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @RequestMapping("updateLog")
 public class UpdateLogController {
 
-    @RequestMapping(value = "V1.1.0",method = RequestMethod.GET)
-    public String getUpdateLogPageVersion1() {
-        return "updateLog/V1.1.0";
-    }
     @RequestMapping(value = "V1.1.1",method = RequestMethod.GET)
-    public String getUpdateLogPageVersion2(){
+    public String getUpdateLogPageVersion1() {
         return "updateLog/V1.1.1";
     }
-    @RequestMapping(value = "V1.2.0",method = RequestMethod.GET)
+    @RequestMapping(value = "V1.1.2",method = RequestMethod.GET)
+    public String getUpdateLogPageVersion2(){
+        return "updateLog/V1.1.2";
+    }
+    @RequestMapping(value = "V1.1.3",method = RequestMethod.GET)
     public String getUpdateLogPageVersion3(){
-        return "updateLog/V1.2.0";
+        return "updateLog/V1.1.3";
     }
 }
