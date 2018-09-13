@@ -4,6 +4,7 @@ import com.connor.hozon.bom.bomSystem.dao.cfg.HzFullCfgWithCfgDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import sql.IBaseSQLUtil;
+import sql.pojo.cfg.HzFullCfgModel;
 import sql.pojo.cfg.HzFullCfgWithCfg;
 
 import java.math.BigDecimal;
@@ -67,5 +68,10 @@ public class HzFullCfgWithCfgDaoImpl implements HzFullCfgWithCfgDao {
     @Override
     public int updateByBomLinePuid(HzFullCfgWithCfg hzFullCfgWithCfg) {
         return baseSQLUtil.executeUpdate(hzFullCfgWithCfg, "com.connor.hozon.bom.bomSystem.dao.cfg.HzFullCfgWithCfgDao.updateByBomLinePuid");
+    }
+
+    @Override
+    public List<HzFullCfgWithCfg> query2YCfgByProjectId(String projectId) {
+        return baseSQLUtil.executeQueryByPass(new HzFullCfgWithCfg(), projectId,"com.connor.hozon.bom.bomSystem.dao.cfg.HzFullCfgWithCfgDao.query2YCfgByProjectId");
     }
 }

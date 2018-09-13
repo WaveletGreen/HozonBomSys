@@ -32,4 +32,5 @@ public interface HzFullCfgModelDao {
 
     List<HzFullCfgModel> selectByModelUid(String modelUid);
     List<HzFullCfgModel> selectByModelUidWithMarks(HzFullCfgModel withCfg);
+
 }

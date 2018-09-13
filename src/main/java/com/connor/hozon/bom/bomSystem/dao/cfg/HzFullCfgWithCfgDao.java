@@ -1,6 +1,7 @@
 package com.connor.hozon.bom.bomSystem.dao.cfg;
 
 import org.apache.ibatis.annotations.Param;
+import sql.pojo.cfg.HzFullCfgModel;
 import sql.pojo.cfg.HzFullCfgWithCfg;
 
 import java.math.BigDecimal;
@@ -25,4 +26,6 @@ public interface HzFullCfgWithCfgDao {
     int insertBomLine(List<HzFullCfgWithCfg> hzFullCfgWithCfgs);
 
     int updateByBomLinePuid(HzFullCfgWithCfg hzFullCfgWithCfg);
+
+    List<HzFullCfgWithCfg> query2YCfgByProjectId(String projectId);
 }

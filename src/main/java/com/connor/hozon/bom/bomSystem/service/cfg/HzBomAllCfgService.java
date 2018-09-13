@@ -350,7 +350,7 @@ public class HzBomAllCfgService {
                             //标志，如model中存在该特性则为true
                             boolean flag = false;
                             for (HzFullCfgModel hzFullCfgModel : hzFullCfgModelsCheck) {
-                                if (hzFullCfgModel.getModCfg0Uid().equals(hzBomLineRecord.getPuid())) {
+                                if (hzFullCfgModel.getFlModelBomlineUid().equals(hzBomLineRecord.getPuid())) {
                                     flag = true;
                                 }
                             }
@@ -754,5 +754,13 @@ public class HzBomAllCfgService {
         }
         return result;
 
+    }
+
+    public JSONObject query2YCfg(String projectId) {
+        JSONObject respons = new JSONObject();
+
+        List<HzFullCfgWithCfg> hzFullCfgWithCfgs= hzFullCfgWithCfgDao.query2YCfgByProjectId(projectId);
+        respons.put("cfgs",hzFullCfgWithCfgs);
+        return respons;
     }
 }
