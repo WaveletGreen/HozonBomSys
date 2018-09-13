@@ -29,4 +29,5 @@ public interface HzFullCfgModelDao {
     int updateByHzFullCfgModelList(List<HzFullCfgModel> hzFullCfgModels);
 
     int updateByBomLinePuid(HzFullCfgWithCfg hzFullCfgWithCfg);
+
 }

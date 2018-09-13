@@ -85,4 +85,10 @@ public class HzBomAllCfgController {
     public JSONObject setStage(@RequestBody Map<String, String> params) {
         return hzBomAllCfgService.setStage(params);
     }
+
+    @RequestMapping("query2YCfg")
+    @ResponseBody
+    public JSONObject query2YCfg(@RequestParam String projectPuid) {
+        return hzBomAllCfgService.query2YCfg(projectPuid);
+    }
 }

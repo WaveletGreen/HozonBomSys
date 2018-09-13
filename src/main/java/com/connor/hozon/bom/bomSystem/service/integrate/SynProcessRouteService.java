@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -170,8 +171,18 @@ public class SynProcessRouteService {
             processRoute.setControlCode(respDTO.getControlCode());
             processRoute.setProcessDescription(respDTO.getpProcedureDesc());
 
+
+            processRoute.setWorkNumber1(BigDecimal.valueOf(Long.valueOf(respDTO.getpDirectLabor())));
+            processRoute.setWorkNumber2(BigDecimal.valueOf(Long.valueOf(respDTO.getpIndirectLabor())));
+            processRoute.setWorkNumber3(BigDecimal.valueOf(Long.valueOf(respDTO.getpMachineLabor())));
+            processRoute.setWorkNumber4(BigDecimal.valueOf(Long.valueOf(respDTO.getpBurn())));
+            processRoute.setWorkNumber5(BigDecimal.valueOf(Long.valueOf(respDTO.getpMachineMaterialLabor())));
+            processRoute.setWorkNumber6(BigDecimal.valueOf(Long.valueOf(respDTO.getpOtherCost())));
+
+
             coach.get(packNumOfFeature.get(fpuid)).put(processRoute.getLineNum(), respDTO);
             transProcessRouteService.getInput().getItem().add(processRoute.getZpptci006());
+            supProcess(processRoute);
         }
         if(!SynMaterielService.debug){
             transProcessRouteService.execute();//回传2条output数据了！！！！
@@ -231,5 +242,32 @@ public class SynProcessRouteService {
         return result;
     }
 
+
+
+    private void supProcess(ProcessRoute processRoute){
+        for(int i=0;i<1;i++){
+            ProcessRoute processRoute1 = new ProcessRoute();
+            processRoute1.setPackNo(processRoute.getPackNo());
+            processRoute1.setLineNum(String.valueOf(i+2));
+            processRoute1.setActionFlag(processRoute.getActionFlag());
+            processRoute1.setFactory(processRoute.getFactory());
+            processRoute1.setMaterialCode(processRoute.getMaterialCode());
+            processRoute1.setBasedAmount(processRoute.getBasedAmount());
+            processRoute1.setEffectiveDate(processRoute.getEffectiveDate());
+            processRoute1.setUse(processRoute.getUse());
+            processRoute1.setStatus(processRoute.getStatus());
+            processRoute1.setProcessNumber("00"+(i+2)+"0");
+            processRoute1.setWorkCenter("T1BP-Q");
+            processRoute1.setControlCode("ZHZ3");
+            processRoute1.setProcessDescription("焊装-数量维度");
+            processRoute1.setWorkNumber1(processRoute.getWorkNumber1());
+            processRoute1.setWorkNumber2(processRoute.getWorkNumber2());
+            processRoute1.setWorkNumber3(processRoute.getWorkNumber3());
+            processRoute1.setWorkNumber4(processRoute.getWorkNumber4());
+            processRoute1.setWorkNumber5(processRoute.getWorkNumber5());
+            processRoute1.setWorkNumber6(processRoute.getWorkNumber6());
+            transProcessRouteService.getInput().getItem().add(processRoute1.getZpptci006());
+        }
+    }
 
 }
