@@ -127,11 +127,11 @@ public class HzPbomRecordDAOImpl extends BaseSQLUtil implements HzPbomRecordDAO 
     }
 
     @Override
-    public Integer findMinOrderNumWhichGreaterThanThisOrderNum(String projectId,int orderNum) {
+    public String findMinOrderNumWhichGreaterThanThisOrderNum(String projectId,String orderNum) {
         Map<String,Object> map = new HashMap<>();
         map.put("projectId",projectId);
-        map.put("orderNum",orderNum);
-        return (Integer) super.findForObject("HzPbomRecordDAOImpl_findMinOrderNumWhichGreaterThanThisOrderNum",map);
+        map.put("sortNum",orderNum);
+        return (String) super.findForObject("HzPbomRecordDAOImpl_findMinOrderNumWhichGreaterThanThisOrderNum",map);
     }
 
     @Override

@@ -148,5 +148,5 @@ public interface HzMbomRecordDAO {
     int delete(String eBomPuid);
 
 
-    Integer findMinOrderNumWhichGreaterThanThisOrderNum(String projectId,int orderNum);
+    String findMinOrderNumWhichGreaterThanThisOrderNum(String projectId,String orderNum);
 }

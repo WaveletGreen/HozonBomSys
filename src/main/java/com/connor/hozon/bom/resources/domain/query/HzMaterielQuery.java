@@ -34,6 +34,16 @@ public class HzMaterielQuery {
      */
     private String materielResourceId;
 
+    private String pMaterielCode;
+
+    public String getpMaterielCode() {
+        return pMaterielCode;
+    }
+
+    public void setpMaterielCode(String pMaterielCode) {
+        this.pMaterielCode = pMaterielCode;
+    }
+
     public String getMaterielResourceId() {
         return materielResourceId;
     }

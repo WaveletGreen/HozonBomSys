@@ -53,6 +53,7 @@ public class HzBomLineRecord {
     /**
      * 在Bom结构中的顺序号
      */
+    @Deprecated
     private Integer orderNum;
     /**
      * 2Y层归属哪个部门
@@ -231,6 +232,8 @@ public class HzBomLineRecord {
      */
     private String ewoNo;
 
+    private String sortNum;
+
     private Integer pLouaFlag;
     /**
      * 根据puid来进行判断重复 重写equals方法
@@ -251,6 +254,14 @@ public class HzBomLineRecord {
         return Objects.hash(puid);
     }
 
+
+    public String getSortNum() {
+        return sortNum;
+    }
+
+    public void setSortNum(String sortNum) {
+        this.sortNum = sortNum;
+    }
 
     public Integer getpLouaFlag() {
         return pLouaFlag;
