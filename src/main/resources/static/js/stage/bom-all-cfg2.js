@@ -278,7 +278,7 @@ $(document).ready(
             title: "手动设置阶段与版本",
             url: "bomAllCfg/setStagePage?projectUid=" + getProjectUid(),
             gridId: "gridId",
-            width: 400,
+            width: 450,
             height: 450
         });
     }),
