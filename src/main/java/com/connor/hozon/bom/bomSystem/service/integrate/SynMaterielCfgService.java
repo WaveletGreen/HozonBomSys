@@ -148,7 +148,7 @@ public class SynMaterielCfgService {
                     }
                     //有发送过，执行更新
                     else {
-                        continue;
+                        vehicleBom.setActionFlag(ActionFlagOption.UPDATE);
                     }
                 }
                 //执行更新或删除

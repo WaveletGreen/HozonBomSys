@@ -359,8 +359,8 @@
    <update id="HzWorkProcedureDAOImpl_updateSendFlag" parameterType="java.util.HashMap">
     update HZ_WORK_PROCEDURE
      set
-     <if test="isFeatureSent==1">
-       P_SEND_FLAG=1
+     <if test="isFeatureSent!=null">
+       P_SEND_FLAG=#{isFeatureSent}
      </if>
     where P_MATERIEL_PUID in
     <if test="list!=null">

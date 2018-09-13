@@ -1,0 +1,160 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<body>
+<meta charset=utf-8/>
+<form class="form-horizontal" id="form" role="form" method="post" th:action="${action}">
+    <div class="form-group col-lg-10">
+        <label for="objectDesc">品牌</label>
+        <input class="form-control" id="pModelBrand" name="pModelBrand" type="text"
+               placeholder="请输入品牌" th:value="${hzCfg0ModelDetail.getpModelBrand()}" disabled="disabled"
+        />
+    </div>
+    <div class="form-group col-lg-10">
+        <label for="objectDesc">平台</label>
+        <input class="form-control" id="pModelPlatform" name="pModelPlatform" type="text"
+               placeholder="请输入平台" th:value="${hzCfg0ModelDetail.getpModelPlatform()}" disabled="disabled"
+        />
+    </div>
+    <div class="form-group col-lg-10">
+        <label for="objectDesc">车型</label>
+        <input class="form-control" id="pModelMod" name="pModelMod" type="text"
+               placeholder="请输入车型" th:value="${hzCfg0ModelDetail.getpModelVehicle()}" disabled="disabled"
+        />
+    </div>
+    <div class="form-group">
+        <label for="pModelVersion">版型</label>
+        <input class="form-control" id="pModelVersion" name="pModelVersion" type="text"
+               placeholder="请输入版型"
+        />
+    </div>
+    <div class="form-group">
+        <label for="pModelShape">车身形式</label>
+        <input class="form-control" id="pModelShape" name="pModelShape" type="text"
+               placeholder="请输入车身形式"
+        />
+    </div>
+    <div class="form-group">
+        <label for="pModelAnnouncement">公告</label>
+        <input class="form-control" id="pModelAnnouncement" name="pModelAnnouncement" type="text"
+               placeholder="请输入公告"/>
+    </div>
+    <div class="form-group">
+        <label for="pModelCfgDesc">配置描述</label>
+        <input class="form-control" id="pModelCfgDesc" name="pModelCfgDesc" type="text"
+               placeholder="请输入配置描述"/>
+    </div>
+    <div class="form-group">
+        <label for="pModelCfgMng">配置管理</label>
+        <input class="form-control" id="pModelCfgMng" name="pModelCfgMng" type="text"
+               placeholder="请输入配置描述"/>
+    </div>
+    <div class="form-group col-lg-10">
+        <input class="form-control" id="pCfg0ModelOfMainRecord" name="pCfg0ModelOfMainRecord" type="hidden"
+               th:value="${cfgmain.getPuid()}"
+        />
+        <label for="objectName">车型模型名</label>
+        <input class="form-control" id="objectName" name="objectName" type="text"
+        />
+    </div>
+    <div class="form-group col-lg-10">
+        <label for="objectDesc">车型模型描述</label>
+        <input class="form-control" id="objectDesc" name="objectDesc" type="text"
+        />
+    </div>
+    <div class="form-group col-lg-10">
+        <label for="pCfg0ModelBasicDetail">车型模型基本信息</label>
+        <input class="form-control" id="pCfg0ModelBasicDetail" name="pCfg0ModelBasicDetail" type="text"
+        />
+    </div>
+    <!--<div class="form-group col-lg-10">-->
+        <!--<label for="pFeatureCnDesc">中文描述</label>-->
+        <!--<input class="form-control" id="pFeatureCnDesc" name="pFeatureCnDesc" type="text" type="hidden" disabled="disabled"-->
+        <!--/>-->
+    <!--</div>-->
+    <!--<div class="form-group col-lg-10">-->
+        <!--<label for="pFeatureSingleVehicleCode">单车配置码</label>-->
+        <!--<input class="form-control" id="pFeatureSingleVehicleCode" name="pFeatureSingleVehicleCode" type="hidden" disabled="disabled"-->
+        <!--/>-->
+    <!--</div>-->
+    <!--<div class="form-group col-lg-10" th:each="column,currentKey:${_map}">-->
+        <!--<label th:text="${currentKey.current.key}">配置</label>-->
+        <!--<select class="form-control input-small" data-style="btn-info"-->
+                <!--th:id="modelShell" th:name="${currentKey.current.key}"-->
+        <!--&gt;-->
+            <!--<option th:each="currentValue,index:${currentKey.current.value}" th:value="${currentValue.getPuid()}"-->
+                    <!--th:text="${currentValue.getpCfg0ObjectId()}"-->
+            <!--&gt;-->
+            <!--</option>-->
+        <!--</select>-->
+    <!--</div>-->
+</form>
+</body>
+<script th:inline="javascript">
+    <![CDATA[
+    $(document).keydown(function (event) {
+        if (event.keyCode == 13) {
+            $('form').each(function () {
+                event.preventDefault();
+            });
+        }
+    });
+    $(function () {
+        $('#form').bootstrapValidator({
+            message: 'This value is not valid',
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            }
+        });
+        // 绑定dialog的确定按钮的监听事件
+        $("#btnOk", window.top.document).click(function () {
+            // var bootstrapValidator = $("#form", window.top.document).data('bootstrapValidator');
+            // bootstrapValidator.validate();
+            // if (bootstrapValidator.isValid()) {
+            var url = $("#form", window.top.document).attr('action');
+            var data = {};
+            // data.objectName = $("#objectName").val();
+            // data.objectDesc = $("#objectDesc").val();
+            // data.pCfg0ModelOfMainRecord = $("#pCfg0ModelOfMainRecord").val();
+            // data.pCfg0ModelBasicDetail = $("#pCfg0ModelBasicDetail").val();
+            // data.pFeatureCnDesc = $("#pFeatureCnDesc").val();
+            // data.pFeatureSingleVehicleCode = $("#pFeatureSingleVehicleCode").val();
+            // var data = {};
+            var _d = $("#form").serializeArray();
+            for (var p in _d) {
+                data[_d[p].name] = _d[p].value;
+            }
+            $.ajax({
+                contentType:
+                    "application/json",
+                type:
+                    'POST',
+                url: url,
+                data: JSON.stringify(data),
+                success:
+                    function (result) {
+                        $('.modal-dialog', window.top.document).parent('div').remove()
+                        $('body', window.top.document).find('.modal-backdrop').remove();
+                        // jquery 调用刷新当前操作的table页面的refresh方法
+                        $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
+                        if (result) {
+                            layer.msg('添加车型模型成功!', {icon: 1, time: 2000})
+                            // window.Ewin.alert({message: '修改数据成功!'});
+                        }
+                        else {
+                            window.Ewin.alert({message: '添加车型模型失败!'});
+                        }
+
+                    },
+                error: function (status) {
+                    window.Ewin.alert({message: status.status + ':添加车型模型失败!'});
+                }
+            });
+            // }
+        });
+    })
+    ]]>
+</script>
+<script th:src="@{/layer/layer.js}"></script>
+</html>
