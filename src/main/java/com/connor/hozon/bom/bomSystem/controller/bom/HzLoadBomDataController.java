@@ -2,6 +2,7 @@ package com.connor.hozon.bom.bomSystem.controller.bom;
 
 import com.connor.hozon.bom.bomSystem.dao.bom.HzBomMainRecordDao;
 import com.connor.hozon.bom.bomSystem.dao.impl.bom.HzBomLineRecordDaoImpl;
+import com.connor.hozon.bom.bomSystem.dto.HzFeatureQueryDTO;
 import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
 import com.connor.hozon.bom.bomSystem.service.bom.HzBomDataService;
 import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0BomLineOfModelService;
@@ -112,7 +113,7 @@ public class HzLoadBomDataController {
             model.addAttribute("msg", "请选择1个项目进行操作");
             return "errorWithEntity";
         }
-        QueryBase queryBase = new QueryBase();
+        HzFeatureQueryDTO queryBase = new HzFeatureQueryDTO();
         queryBase.setSort("P_CFG0_OBJECT_ID");
         List<HzCfg0Record> features = hzCfg0Service.doLoadCfgListByProjectPuid(projectPuid, queryBase);
         List<HzBomLineRecord> lines = hzBomDataService.doSelect2YByProjectPuid(projectPuid);

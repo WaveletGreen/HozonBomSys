@@ -40,4 +40,6 @@ public interface HzCfg0ModelRecordDao {
      * @return
      */
     List<HzCfg0ModelRecord> selectByProjectPuid(@Param("projectPuid") String projectPuid);
+
+    int deleteModelById(String puid);
 }

@@ -90,4 +90,11 @@
               t.MODEL_UPDATE_DATE=sysdate
         where t.PUID=#{puid,jdbcType=VARCHAR}
     </update>
+
+    <delete id="deleteModelById" parameterType="java.lang.String">
+        delete from
+          HZ_CFG0_MODEL_RECORD
+        where
+          PUID = #{puid,jdbcType=VARCHAR}
+    </delete>
 </mapper>

@@ -47,6 +47,15 @@ public class HzCfg0OptionFamilyDaoImpl implements HzCfg0OptionFamilyDao {
         return baseSQLUtil.executeQueryById(family, "com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0OptionFamilyDao.selectByCodeAndDescWithMain");
     }
 
+    /**
+     * @param family 包含主配置UID，描述和配置代码
+     * @return
+     */
+    @Override
+    public List<HzCfg0OptionFamily> selectByCodeAndDescWithMain2(HzCfg0OptionFamily family) {
+        return baseSQLUtil.executeQuery(family, "com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0OptionFamilyDao.selectByCodeAndDescWithMain");
+    }
+
     @Override
     public int insert(HzCfg0OptionFamily family) {
         return baseSQLUtil.executeInsert(family, "com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0OptionFamilyDao.insert");

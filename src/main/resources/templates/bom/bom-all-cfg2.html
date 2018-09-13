@@ -6,30 +6,14 @@
 <title>全BOM配置一级清单</title>
 <style rel=""></style>
 <body class="content-body">
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
-     aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal"
-                        aria-hidden="true">×
-                </button>
-                <h4 class="modal-title" id="myModalLabel">操作错误</h4>
-            </div>
-            <div class="modal-body">请选择一个项目</div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">关闭
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
 <div class="panel-body col-md-12">
     <div class="input-group">
         <button class="btn btn-default" id="myButton" type="button">刷新</button>
-        <button class="btn btn-default" id="addVehicle" type="button">添加衍生物料</button>
-        <button class="btn btn-default" id="reflect2Y" type="button">映射2Y层</button>
-        <button class="btn btn-default" id="save" type="button" onclick="save()">保存</button>
+        <button class="btn btn-default" id="addVehicle" type="button">添加列信息</button>
+        <button class="btn btn-default" id="setStage" type="button">设置阶段与版本</button>
+        <button class="btn btn-default" id="release" type="button">发布</button>
+        <!--<button class="btn btn-default" id="reflect2Y" type="button">特性关联2Y层</button>-->
+        <!--<button class="btn btn-default" id="save" type="button" onclick="save()">保存</button>-->
     </div>
     <div class="panel panel-default" style="margin-top: 50px;">
         <div class="panel-body col-md-12">
@@ -52,20 +36,16 @@
                     <button type="button" id="searchBtn" onclick="" class="btn btn-primary">搜索</button>
                 </div>
             </form>
-            <div class="content col-lg-12" style="overflow: auto;max-height: 400px">
+            <div class="content col-lg-12" style="overflow: auto;max-height: 550px">
                 <table class="table table-striped" id="cfg0Table" style="min-width: 1920px;"></table>
             </div>
         </div>
     </div>
 
 </div>
-<!--<div style="float: right; margin-bottom:0;">-->
-<!--<table id="cfg1Table" class="table table-striped col-md-4" style="margin-top:0px; margin-bottom:0px;">-->
-<!--</table>-->
-<!--<div id="newtable"></div>-->
-<!--</div>-->
 
 </body>
+<script th:src="@{/js/helper/projectHelper.js}"></script>
 <script th:src="@{/js/stage/bom-all-cfg2.js}"></script>
 <script th:inline="javascript">
     function doQuery() {

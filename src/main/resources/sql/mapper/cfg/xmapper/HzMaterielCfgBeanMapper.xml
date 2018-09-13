@@ -69,8 +69,8 @@
     <update id="updateIsSent" parameterType="java.util.HashMap">
         update Hz_Cfg0_Model_Record
         set
-        <if test="isSent==1">
-            IS_SENT = 1
+        <if test="isSent!=null">
+            IS_SENT = #{isSent}
         </if>
         where PUID in
         <if test="list==null">

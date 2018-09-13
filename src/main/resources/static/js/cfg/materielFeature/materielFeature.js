@@ -19,11 +19,13 @@ $(document).ready(
 
 function loadData(projectPuid) {
     //必须输入一个配置的puid
-
-    if (projectPuid.length <= 0) {
-        $("#myModal").modal('show');
+    if (!checkIsSelectProject(projectPuid)) {
         return;
     }
+    // if (projectPuid.length <= 0) {
+    //     $("#myModal").modal('show');
+    //     return;
+    // }
     var $table = $("#materielFeature");
     $table.bootstrapTable('destroy');
     var column = [];
@@ -33,7 +35,18 @@ function loadData(projectPuid) {
         type: "GET",
         success: function (result) {
             if (!result.status) {
-                alert("查无数据，请联系管理员");
+                swal({
+                    width: 500,
+                    height: 400,
+                    html: $('<span>')
+                        .addClass('some-class')
+                        .css("font-size", "24px")
+                        .css("color", "#ff4f6a")
+                        .text('没有找到数据，请尝试创建特性值'),
+                    animation: false,
+                    customClass: 'animated tada'
+                });
+                return;
                 return;
             }
             var data = result.data;
@@ -183,7 +196,7 @@ function loadData(projectPuid) {
                                 height: 400
                             });
                         }
-                    },{
+                    }, {
                         text: '删除同步车型',
                         iconCls: 'glyphicon glyphicon-pencil',
                         handler: function () {

@@ -76,9 +76,9 @@ function initTable(url) {
                     formId: "queryMaterialData",
                     undefinedText: "",//当数据为 undefined 时显示的字符
                     pagination: true,
-                    pageNumber:1,                       //初始化加载第一页，默认第一页
+                    pageNumber: 1,                       //初始化加载第一页，默认第一页
                     pageSize: 20,                       //每页的记录行数（*）
-                    pageList: ['ALL',20,50,100,200,500,1000],        //可供选择的每页的行数（*）
+                    pageList: ['ALL', 20, 50, 100, 200, 500, 1000],        //可供选择的每页的行数（*）
                     uniqueId: "puid",                     //每一行的唯一标识，一般为主键列
                     showExport: true,
                     //exportDataType: 'all',
@@ -163,9 +163,10 @@ function initTable(url) {
                                                 }
                                                 else {
                                                     window.Ewin.alert({message: ":" + result.errMsg});
-                                                }*/if (result.success){
+                                                }*/
+                                                if (result.success) {
                                                     layer.msg('删除成功', {icon: 1, time: 2000})
-                                                } else if (!result.success){
+                                                } else if (!result.success) {
                                                     window.Ewin.alert({message: result.errMsg});
                                                 }
                                                 $table.bootstrapTable("refresh");
@@ -269,9 +270,10 @@ function initTable(url) {
         }
     })
 }
-$(document).keydown(function(event) {
+
+$(document).keydown(function (event) {
     if (event.keyCode == 13) {
-        $('form').each(function() {
+        $('form').each(function () {
             event.preventDefault();
         });
     }

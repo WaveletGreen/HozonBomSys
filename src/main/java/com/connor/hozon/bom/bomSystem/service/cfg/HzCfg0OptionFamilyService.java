@@ -108,7 +108,7 @@ public class HzCfg0OptionFamilyService {
                 sb.append(def);
                 sb.append(f.getpOptionfamilyName() == null ? "" : f.getpOptionfamilyName());
                 //交换一下位置
-                result.set(0,sb.toString());
+                result.set(0, sb.toString());
                 result.add(localTemp);
             } else {
                 sb.append(f.getpOptionfamilyDesc() == null ? f.getpOptionfamilyName() : f.getpOptionfamilyDesc());
@@ -136,5 +136,12 @@ public class HzCfg0OptionFamilyService {
 
     public boolean doInsert(HzCfg0OptionFamily family) {
         return hzCfg0OptionFamilyDao.insert(family) > 0 ? true : false;
+    }
+
+    public List<HzCfg0OptionFamily> doSelectByDesc(String mainUid, String desc) {
+        HzCfg0OptionFamily family = new HzCfg0OptionFamily();
+        family.setpOfCfg0Main(mainUid);
+        family.setpOptionfamilyDesc(desc);
+        return hzCfg0OptionFamilyDao.selectByCodeAndDescWithMain2(family);
     }
 }

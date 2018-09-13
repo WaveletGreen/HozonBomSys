@@ -1,9 +1,15 @@
 package com.connor.hozon.bom.bomSystem.service.cfg;
 
+import com.alibaba.fastjson.JSON;
 import com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0ModelDetailDao;
 import com.connor.hozon.bom.bomSystem.dao.cfg.HzFullCfgMainDao;
 import com.connor.hozon.bom.bomSystem.dao.cfg.HzFullCfgModelDao;
 import com.connor.hozon.bom.bomSystem.dao.cfg.HzFullCfgWithCfgDao;
+import com.connor.hozon.bom.bomSystem.dto.HzFeatureQueryDTO;
+import com.connor.hozon.bom.bomSystem.helper.DateStringHelper;
+import com.connor.hozon.bom.bomSystem.helper.ProjectHelper;
+import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
+import com.connor.hozon.bom.bomSystem.service.bom.HzBomDataService;
 import com.connor.hozon.bom.bomSystem.service.project.HzBrandService;
 import com.connor.hozon.bom.bomSystem.service.project.HzPlatformService;
 import com.connor.hozon.bom.bomSystem.service.project.HzProjectLibsService;
@@ -13,8 +19,11 @@ import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.sys.entity.User;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import sql.pojo.bom.HzBomLineRecord;
 import sql.pojo.cfg.*;
 import sql.pojo.project.HzBrandRecord;
 import sql.pojo.project.HzPlatformRecord;
@@ -22,7 +31,10 @@ import sql.pojo.project.HzProjectLibs;
 import sql.pojo.project.HzVehicleRecord;
 
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.*;
+
+import static com.connor.hozon.bom.bomSystem.helper.StringHelper.checkString;
 
 @Service("hzBomAllCfgService")
 public class HzBomAllCfgService {
@@ -39,7 +51,6 @@ public class HzBomAllCfgService {
     private HzFullCfgWithCfgDao hzFullCfgWithCfgDao;
 
 
-
     @Autowired
     private HzProjectLibsService hzProjectLibsService;
     @Autowired
@@ -52,17 +63,46 @@ public class HzBomAllCfgService {
     @Autowired
     private HzCfg0ModelDetailDao hzCfg0ModelDetailDao;
 
+    /**
+     * 车型模型服务层
+     */
+    @Autowired
+    HzCfg0ModelRecordService hzCfg0ModelRecordService;
+    //2Y层
+    @Autowired
+    HzBomDataService hzBomDataService;
+    /**
+     * 主配置
+     */
+    @Autowired
+    HzCfg0MainService hzCfg0MainService;
+    @Autowired
+    ProjectHelper projectHelper;
     private static final String[] selfDesc =
             {
-                    "pBomOfWhichDept", "operationType","pBomLineId", "pBomLineName", "pH9featureenname", "owningUser","pCfg0Desc", "pCfg0ObjectId", "comment"
+                    "pBomOfWhichDept", "operationType", "pBomLineId", "pBomLineName", "pH9featureenname", "owningUser", "pCfg0Desc", "pCfg0ObjectId", "comment"
             };
+
+    private static Logger logger = LoggerFactory.getLogger(HzBomAllCfgService.class);
+
     /**
      * @param projectPuid 项目puid
      * @return net.sf.json.JSONObject
      * Description: 根据数模层获取到bom的配置信息和车型模型信息
      */
     public JSONObject parse(String projectPuid) {
-        initLoad(projectPuid);
+        //搜索全部特性，并经过P_CFG0_OBJECT_ID 升序排序
+        HzFeatureQueryDTO queryBase = new HzFeatureQueryDTO();
+        queryBase.setSort("P_CFG0_OBJECT_ID");
+//        QueryBase queryBase = new QueryBase();
+//        queryBase.setSort("P_CFG0_OBJECT_ID");
+        List<HzCfg0Record> hzCfg0Records = hzCfg0Service.doLoadCfgListByProjectPuid(projectPuid, queryBase);
+        //获取该项目下的所有车型模型
+        List<HzCfg0ModelRecord> hzCfg0ModelRecords = hzCfg0ModelService.doSelectByProjectPuid(projectPuid);
+        //搜素所属有2Y层
+        List<HzBomLineRecord> lines = hzBomDataService.doSelect2YByProjectPuid(projectPuid);
+
+        initLoad(projectPuid, hzCfg0ModelRecords, lines);
 
         HzProjectLibs project = hzProjectLibsService.doLoadProjectLibsById(projectPuid);
         HzVehicleRecord vehicle = hzVehicleService.doGetByPuid(project.getpProjectPertainToVehicle());
@@ -84,55 +124,81 @@ public class HzBomAllCfgService {
         //withcfg数据
         List<HzFullCfgWithCfg> hzFullCfgWithCfgs = hzFullCfgWithCfgDao.selectByMainID(hzFullCfgMain.getId());
 
-        //搜索全部特性，并经过P_CFG0_OBJECT_ID 升序排序
-        QueryBase queryBase = new QueryBase();
-        queryBase.setSort("P_CFG0_OBJECT_ID");
-        List<HzCfg0Record> hzCfg0Records = hzCfg0Service.doLoadCfgListByProjectPuid(projectPuid, queryBase);
-        //获取该项目下的所有车型模型
-        List<HzCfg0ModelRecord> hzCfg0ModelRecords = hzCfg0ModelService.doSelectByProjectPuid(projectPuid);
 
         List<HzCfg0ModelDetail> hzCfg0ModelDetailList = new ArrayList<HzCfg0ModelDetail>();
-        for(HzCfg0ModelRecord hzCfg0ModelRecord : hzCfg0ModelRecords){
+        for (HzCfg0ModelRecord hzCfg0ModelRecord : hzCfg0ModelRecords) {
             HzCfg0ModelDetail hzCfg0ModelDetail = new HzCfg0ModelDetail();
             hzCfg0ModelDetail.setpModelPuid(hzCfg0ModelRecord.getPuid());
             hzCfg0ModelDetailList.add(hzCfg0ModelDetail);
         }
         //为detail赋值
         List<HzCfg0ModelDetail> hzCfg0ModelDetails = null;
-        if(hzCfg0ModelDetailList.size()!=0){
+        if (hzCfg0ModelDetailList.size() != 0) {
             hzCfg0ModelDetails = hzCfg0ModelDetailDao.selectByModelIds(hzCfg0ModelDetailList);
         }
 
         //为特性Map赋值
-        for(HzFullCfgWithCfg hzFullCfgWithCfg :hzFullCfgWithCfgs){
+        for (HzFullCfgWithCfg hzFullCfgWithCfg : hzFullCfgWithCfgs) {
             modelWithBomLineMap.put(hzFullCfgWithCfg.getCfgCfg0Uid(), hzFullCfgWithCfg);
         }
         //为车辆模型Map赋值
-        for(HzFullCfgModel hzFullCfgModel : hzFullCfgModels){
-            if(mapToModel.get(hzFullCfgModel.getModModelUid())==null){
+        for (HzFullCfgModel hzFullCfgModel : hzFullCfgModels) {
+            if (mapToModel.get(hzFullCfgModel.getModModelUid()) == null) {
                 Map<String, HzFullCfgModel> mapToModel_ = new HashMap<String, HzFullCfgModel>();
-                mapToModel.put(hzFullCfgModel.getModModelUid(),mapToModel_);
+                mapToModel.put(hzFullCfgModel.getModModelUid(), mapToModel_);
             }
-            mapToModel.get(hzFullCfgModel.getModModelUid()).put(hzFullCfgModel.getModCfg0Uid(),hzFullCfgModel);
+            mapToModel.get(hzFullCfgModel.getModModelUid()).put(hzFullCfgModel.getModCfg0Uid(), hzFullCfgModel);
         }
 
-        for(HzCfg0Record hzCfg0Record : hzCfg0Records){
+//        for(HzCfg0Record hzCfg0Record : hzCfg0Records){
+//            JSONObject data = new JSONObject();
+//
+//            data.put(selfDesc[0], modelWithBomLineMap.get(hzCfg0Record.getPuid()).getFlCfgBomlineName()==null?"":modelWithBomLineMap.get(hzCfg0Record.getPuid()).getFlCfgBomlineName());
+//            data.put(selfDesc[1], modelWithBomLineMap.get(hzCfg0Record.getPuid()).getFlCfgBomlineName()==null?"":modelWithBomLineMap.get(hzCfg0Record.getPuid()).getFlCfgBomlineName());
+//            data.put(selfDesc[2], modelWithBomLineMap.get(hzCfg0Record.getPuid()).getCfgBomlineUid()==null?"":modelWithBomLineMap.get(hzCfg0Record.getPuid()).getCfgBomlineUid());
+//            data.put(selfDesc[3], hzCfg0Record.getpCfg0FamilyName()==null?"":hzCfg0Record.getpCfg0FamilyName());
+//            data.put(selfDesc[4], hzCfg0Record.getpH9featureenname()==null?"":hzCfg0Record.getpH9featureenname());
+//            data.put(selfDesc[5], modelWithBomLineMap.get(hzCfg0Record.getPuid()).getFlCfgCreator()==null?"":modelWithBomLineMap.get(hzCfg0Record.getPuid()).getFlCfgCreator());
+//            data.put(selfDesc[6], hzCfg0Record.getpCfg0ObjectId()==null?"":hzCfg0Record.getpCfg0ObjectId());
+//            data.put(selfDesc[7], hzCfg0Record.getpCfg0ObjectId()==null?"":hzCfg0Record.getpCfg0ObjectId());
+//            data.put(selfDesc[8], hzCfg0Record.getpCfg0Desc()==null?"":hzCfg0Record.getpCfg0Desc());
+//            data.put("cfgPuid",hzCfg0Record.getPuid());
+//            _data.add(data);
+//        }
+        for (HzBomLineRecord hzBomLineRecord : lines) {
             JSONObject data = new JSONObject();
-
-            data.put(selfDesc[0], modelWithBomLineMap.get(hzCfg0Record.getPuid()).getFlCfgBomlineName()==null?"":modelWithBomLineMap.get(hzCfg0Record.getPuid()).getFlCfgBomlineName());
-            data.put(selfDesc[1], modelWithBomLineMap.get(hzCfg0Record.getPuid()).getFlCfgBomlineName()==null?"":modelWithBomLineMap.get(hzCfg0Record.getPuid()).getFlCfgBomlineName());
-            data.put(selfDesc[2], modelWithBomLineMap.get(hzCfg0Record.getPuid()).getCfgBomlineUid()==null?"":modelWithBomLineMap.get(hzCfg0Record.getPuid()).getCfgBomlineUid());
-            data.put(selfDesc[3], hzCfg0Record.getpCfg0FamilyName()==null?"":hzCfg0Record.getpCfg0FamilyName());
-            data.put(selfDesc[4], hzCfg0Record.getpH9featureenname()==null?"":hzCfg0Record.getpH9featureenname());
-            data.put(selfDesc[5], modelWithBomLineMap.get(hzCfg0Record.getPuid()).getFlCfgCreator()==null?"":modelWithBomLineMap.get(hzCfg0Record.getPuid()).getFlCfgCreator());
-            data.put(selfDesc[6], hzCfg0Record.getpCfg0ObjectId()==null?"":hzCfg0Record.getpCfg0ObjectId());
-            data.put(selfDesc[7], hzCfg0Record.getpCfg0ObjectId()==null?"":hzCfg0Record.getpCfg0ObjectId());
-            data.put(selfDesc[8], hzCfg0Record.getpCfg0Desc()==null?"":hzCfg0Record.getpCfg0Desc());
-            data.put("cfgPuid",hzCfg0Record.getPuid());
+            data.put(selfDesc[0], "");
+            data.put(selfDesc[1], "");
+            data.put(selfDesc[2], hzBomLineRecord.getLineID() == null ? "" : hzBomLineRecord.getLineID());
+            data.put(selfDesc[3], hzBomLineRecord.getpBomLinePartName() == null ? "" : hzBomLineRecord.getpBomLinePartName());
+            data.put(selfDesc[4], hzBomLineRecord.getpBomLinePartEnName() == null ? "" : hzBomLineRecord.getpBomLinePartEnName());
+            data.put(selfDesc[5], "");
+            data.put(selfDesc[6], "");
+            data.put(selfDesc[7], "");
+//            boolean flag = false;
+            for (HzFullCfgWithCfg hzFullCfgWithCfg : hzFullCfgWithCfgs) {
+                if (hzFullCfgWithCfg.getCfgBomlineUid().equals(hzBomLineRecord.getPuid())) {
+//                    flag = true;
+                    data.put(selfDesc[5], hzFullCfgWithCfg.getFlCfgCreator() == null ? "" : hzFullCfgWithCfg.getFlCfgCreator());
+                    for (HzCfg0Record hzCfg0Record : hzCfg0Records) {
+                        if (hzCfg0Record.getPuid().equals(hzFullCfgWithCfg.getCfgCfg0Uid())) {
+                            data.put(selfDesc[6], hzCfg0Record.getpCfg0Desc() == null ? "" : hzCfg0Record.getpCfg0Desc());
+                            data.put(selfDesc[7], hzCfg0Record.getpCfg0ObjectId() == null ? "" : hzCfg0Record.getpCfg0ObjectId());
+                        }
+                    }
+                }
+            }
+//            if(flag){
+//                data.put(selfDesc[5], "");
+//                data.put(selfDesc[6], "");
+//                data.put(selfDesc[7], "");
+//            }
+            data.put(selfDesc[8], "");
+            data.put("bomLinePuid", hzBomLineRecord.getPuid());
             _data.add(data);
         }
 
-        for(HzCfg0ModelRecord hzCfg0ModelRecord : hzCfg0ModelRecords){
+        for (HzCfg0ModelRecord hzCfg0ModelRecord : hzCfg0ModelRecords) {
             JSONObject object = new JSONObject();
             object.put("modelPuid", hzCfg0ModelRecord.getPuid());
             object.put("brand", brand.getpBrandName());
@@ -140,70 +206,108 @@ public class HzBomAllCfgService {
             object.put("vehicle", vehicle.getpVehicleName());
             object.put("key", hzCfg0ModelRecord.getObjectName());
             object.put("hide", hzCfg0ModelRecord.getPuid());
-            if(hzCfg0ModelDetails==null||hzCfg0ModelDetails.size()==0){
+            if (hzCfg0ModelDetails == null || hzCfg0ModelDetails.size() == 0) {
                 object.put("pModelShape", "");
                 object.put("pModelAnnouncement", "");
                 object.put("pModelCfgDesc", "");
                 object.put("pModelCfgMng", "");
-            }else {
-                for(HzCfg0ModelDetail hzCfg0ModelDetail : hzCfg0ModelDetails){
-                    if(hzCfg0ModelDetail.getpModelPuid().equals(hzCfg0ModelRecord.getPuid())){
+            } else {
+                boolean flag = false;
+                for (HzCfg0ModelDetail hzCfg0ModelDetail : hzCfg0ModelDetails) {
+                    if (hzCfg0ModelDetail.getpModelPuid().equals(hzCfg0ModelRecord.getPuid())) {
                         object.put("pModelShape", hzCfg0ModelDetail.getpModelShape() == null ? "" : hzCfg0ModelDetail.getpModelShape());
                         object.put("pModelAnnouncement", hzCfg0ModelDetail.getpModelAnnouncement() == null ? "" : hzCfg0ModelDetail.getpModelAnnouncement());
                         object.put("pModelCfgDesc", hzCfg0ModelDetail.getpModelCfgDesc() == null ? "" : hzCfg0ModelDetail.getpModelCfgDesc());
                         object.put("pModelCfgMng", hzCfg0ModelDetail.getpModelCfgMng() == null ? "" : hzCfg0ModelDetail.getpModelCfgMng());
-                    }else {
-                        object.put("pModelShape", "");
-                        object.put("pModelAnnouncement", "");
-                        object.put("pModelCfgDesc", "");
-                        object.put("pModelCfgMng", "");
+                        flag = true;
                     }
+                }
+                if (!flag) {
+                    object.put("pModelShape", "");
+                    object.put("pModelAnnouncement", "");
+                    object.put("pModelCfgDesc", "");
+                    object.put("pModelCfgMng", "");
                 }
 
             }
+//            JSONArray object_ = new JSONArray();
+//            for(HzCfg0Record hzCfg0Record : hzCfg0Records){
+//                HzFullCfgModel hzFullCfgModel = mapToModel.get(hzCfg0ModelRecord.getPuid()).get(hzCfg0Record.getPuid());
+//                Short sPoint = hzFullCfgModel.getModPointType();
+//                String point;
+//                if(sPoint==0){
+//                    point = "-";
+//                }else if(sPoint==1){
+//                    point = "○";
+//                }else{
+//                    point = "●";
+//                }
+//                JSONObject pointJson = new JSONObject();
+//                pointJson.put(hzCfg0Record.getpCfg0ObjectId(),point);
+//                object_.add(pointJson);
+//            }
+//            object.put("point",object_);
+//            _model.add(object);
             JSONArray object_ = new JSONArray();
-            for(HzCfg0Record hzCfg0Record : hzCfg0Records){
-                HzFullCfgModel hzFullCfgModel = mapToModel.get(hzCfg0ModelRecord.getPuid()).get(hzCfg0Record.getPuid());
-                Short sPoint = hzFullCfgModel.getModPointType();
-                String point;
-                if(sPoint==0){
-                    point = "-";
-                }else if(sPoint==1){
-                    point = "●";
-                }else{
-                    point = "○";
+            for (HzBomLineRecord hzBomLineRecord : lines) {
+//                boolean flag = false;
+                for (HzFullCfgModel hzFullCfgModel : hzFullCfgModels) {
+                    if (hzBomLineRecord.getPuid().equals(hzFullCfgModel.getFlModelBomlineUid()) && hzFullCfgModel.getModModelUid().equals(hzCfg0ModelRecord.getPuid())) {
+                        Short sPoint = hzFullCfgModel.getModPointType();
+                        String point;
+                        if (sPoint == 0) {
+                            point = "-";
+                        } else if (sPoint == 1) {
+                            point = "○";
+                        } else {
+                            point = "●";
+                        }
+                        JSONObject pointJson = new JSONObject();
+                        pointJson.put("point", point);
+                        object_.add(pointJson);
+                        break;
+                    }
                 }
-                JSONObject pointJson = new JSONObject();
-                pointJson.put("point",point);
-                object_.add(pointJson);
+//                if (!flag) {
+//                    String point = "-";
+//                    JSONObject pointJson = new JSONObject();
+//                    pointJson.put("point", point);
+//                    object_.add(pointJson);
+//                }
             }
-            object.put("point",object_);
+            object.put("point", object_);
             _model.add(object);
         }
+
+        com.alibaba.fastjson.JSONArray array = com.alibaba.fastjson.JSONArray.parseArray(JSON.toJSONString(hzCfg0Records));
+
+
+        JSONObject mainJson = new JSONObject();
+        mainJson.put("stage", hzFullCfgMain.getStage() == null ? "" : hzFullCfgMain.getStage());
+        mainJson.put("version", hzFullCfgMain.getVersion() == null ? "" : hzFullCfgMain.getVersion());
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        mainJson.put("effectiveDate", hzFullCfgMain.getEffectiveDate() == null ? "" : sdf.format(hzFullCfgMain.getEffectiveDate()));
 
 
         respond.put("data", _data);
         respond.put("model", _model);
-        respond.put("modelSize",_model.size());
-        respond.put("cfgSize",_data.size());
+        respond.put("array", array);
+        respond.put("modelSize", _model.size());
+        respond.put("cfgSize", _data.size());
+        respond.put("main", mainJson);
         return respond;
     }
 
 
     /**
      * 表单初始化
-     * @param projectPuid
+     *
+     * @param projectPuid        项目id
+     * @param hzCfg0ModelRecords 打点图关系表数据
+     * @param hzBomLineRecords   2Y层数据
      */
-    private void initLoad(String projectPuid){
+    private void initLoad(String projectPuid, List<HzCfg0ModelRecord> hzCfg0ModelRecords, List<HzBomLineRecord> hzBomLineRecords) {
         User user = UserInfo.getUser();
-
-        //搜索全部特性，并经过P_CFG0_OBJECT_ID 升序排序
-        QueryBase queryBase = new QueryBase();
-        queryBase.setSort("P_CFG0_OBJECT_ID");
-        List<HzCfg0Record> hzCfg0Records = hzCfg0Service.doLoadCfgListByProjectPuid(projectPuid, queryBase);
-
-        //获取该项目下的所有车型模型
-        List<HzCfg0ModelRecord> hzCfg0ModelRecords = hzCfg0ModelService.doSelectByProjectPuid(projectPuid);
 
         //model表的数据集
         List<HzFullCfgModel> hzFullCfgModels = null;
@@ -212,52 +316,53 @@ public class HzBomAllCfgService {
         //main表数据集
         HzFullCfgMain hzFullCfgMain = hzFullCfgMainDao.selectByProjectId(projectPuid);
         //检查main、model、withcfg三张表的数据是否为空
-        if(hzFullCfgMain==null){
+        if (hzFullCfgMain == null) {
             //为main新增一条信息
-            BigDecimal mainPuid = addHzFullCfgMain(projectPuid,user);
+            BigDecimal mainPuid = addHzFullCfgMain(projectPuid, user);
             //为model新增信息
-            addHzFullCfgModel(hzCfg0ModelRecords, hzCfg0Records, user, mainPuid);
+            addHzFullCfgModel(hzCfg0ModelRecords, hzBomLineRecords, user, mainPuid);
             //为withcfg新增数据
-            addHzFullCfgWithCfg(hzCfg0Records, user, mainPuid);
-        }else{
+//            addHzFullCfgWithCfg(hzCfg0Records, user, mainPuid);
+            addHzFullCfgWithCfgForBomLine(hzBomLineRecords, user, mainPuid);
+        } else {
             //判断model表是否为空，为空则添加数据
             hzFullCfgModels = hzFullCfgModelDao.selectByMainPuid(hzFullCfgMain.getId());
-            if(hzFullCfgModels==null||hzFullCfgModels.size()==0){
-                addHzFullCfgModel(hzCfg0ModelRecords, hzCfg0Records, user, hzFullCfgMain.getId());
+            if (hzFullCfgModels == null || hzFullCfgModels.size() == 0) {
+                addHzFullCfgModel(hzCfg0ModelRecords, hzBomLineRecords, user, hzFullCfgMain.getId());
                 //判断model表数据完整性
-            }else if(hzFullCfgModels.size()<(hzCfg0Records.size()*hzCfg0ModelRecords.size())){
+            } else if (hzFullCfgModels.size() < (hzBomLineRecords.size() * hzCfg0ModelRecords.size())) {
                 //遍历所有的车辆模型
-                for(HzCfg0ModelRecord hzCfg0ModelRecord :hzCfg0ModelRecords){
+                for (HzCfg0ModelRecord hzCfg0ModelRecord : hzCfg0ModelRecords) {
                     //存放同一车辆模型数据据集合
-                    List<HzFullCfgModel> hzFullCfgModelsCheck = new ArrayList<HzFullCfgModel >();
+                    List<HzFullCfgModel> hzFullCfgModelsCheck = new ArrayList<HzFullCfgModel>();
                     //遍历model表中数据，将同一车辆模型对象分开存放
-                    for(HzFullCfgModel hzFullCfgModel : hzFullCfgModels){
-                        if(hzFullCfgModel.getModModelUid().equals(hzCfg0ModelRecord.getPuid())){
+                    for (HzFullCfgModel hzFullCfgModel : hzFullCfgModels) {
+                        if (hzFullCfgModel.getModModelUid().equals(hzCfg0ModelRecord.getPuid())) {
                             hzFullCfgModelsCheck.add(hzFullCfgModel);
                         }
                     }
-                    //判断同一车辆模型是否每个特性都有值
-                    if(hzFullCfgModelsCheck.size()!=hzCfg0Records.size()){
+                    //判断同一车辆模型是否每个2Y都有值
+                    if (hzFullCfgModelsCheck.size() != hzBomLineRecords.size()) {
                         //遍历特性数据，与model数据对比，如发现model中不存在某种特性则添加
                         //存放model中不存在的特性
-                        List<HzCfg0Record> hzCfg0RecordsChecck = new ArrayList<HzCfg0Record>();
-                        for(HzCfg0Record hzCfg0Record : hzCfg0Records){
+                        List<HzBomLineRecord> hzBomLineRecordsChecck = new ArrayList<HzBomLineRecord>();
+                        for (HzBomLineRecord hzBomLineRecord : hzBomLineRecords) {
                             //标志，如model中存在该特性则为true
                             boolean flag = false;
-                            for(HzFullCfgModel hzFullCfgModel : hzFullCfgModelsCheck){
-                                if(hzFullCfgModel.getModCfg0Uid().equals(hzCfg0Record.getPuid())){
+                            for (HzFullCfgModel hzFullCfgModel : hzFullCfgModelsCheck) {
+                                if (hzFullCfgModel.getModCfg0Uid().equals(hzBomLineRecord.getPuid())) {
                                     flag = true;
                                 }
                             }
-                            if(!flag){
-                                hzCfg0RecordsChecck.add(hzCfg0Record);
+                            if (!flag) {
+                                hzBomLineRecordsChecck.add(hzBomLineRecord);
                             }
                         }
                         //如果model中缺失特性，则新增该特性数据
-                        if(hzCfg0RecordsChecck.size()>0){
+                        if (hzBomLineRecordsChecck.size() > 0) {
                             List<HzCfg0ModelRecord> hzCfg0ModelRecordsInsert = new ArrayList<HzCfg0ModelRecord>();
                             hzCfg0ModelRecordsInsert.add(hzCfg0ModelRecord);
-                            addHzFullCfgModel(hzCfg0ModelRecordsInsert, hzCfg0RecordsChecck, user, hzFullCfgMain.getId());
+                            addHzFullCfgModel(hzCfg0ModelRecordsInsert, hzBomLineRecordsChecck, user, hzFullCfgMain.getId());
                         }
                     }
                 }
@@ -265,36 +370,57 @@ public class HzBomAllCfgService {
             }
             //判断withcfg表是否为空，为空则添加数据
             hzFullCfgWithCfgs = hzFullCfgWithCfgDao.selectByMainID(hzFullCfgMain.getId());
-            if(hzFullCfgModels==null||hzFullCfgWithCfgs.size()==0){
-                addHzFullCfgWithCfg(hzCfg0Records, user, hzFullCfgMain.getId());
+//            if(hzFullCfgModels==null||hzFullCfgWithCfgs.size()==0){
+//                addHzFullCfgWithCfg(hzCfg0Records, user, hzFullCfgMain.getId());
+//                //判断withcfg表数据完整性
+//            }else if(hzFullCfgWithCfgs.size()<hzCfg0Records.size()){
+//                List<HzCfg0Record> hzCfg0RecordsInsert = new ArrayList<HzCfg0Record>();
+//                for(HzCfg0Record hzCfg0Record : hzCfg0Records){
+//                    boolean flag = false;
+//                    for(HzFullCfgWithCfg hzFullCfgWithCfg : hzFullCfgWithCfgs){
+//                        if(hzFullCfgWithCfg.getCfgCfg0Uid().equals(hzCfg0Record.getPuid())){
+//                            flag = true;
+//                        }
+//                    }
+//                    if(!flag){
+//                        hzCfg0RecordsInsert.add(hzCfg0Record);
+//                    }
+//                }
+//                addHzFullCfgWithCfg(hzCfg0RecordsInsert, user, hzFullCfgMain.getId());
+//            }
+
+            if (hzFullCfgWithCfgs == null || hzFullCfgWithCfgs.size() == 0) {
+                addHzFullCfgWithCfgForBomLine(hzBomLineRecords, user, hzFullCfgMain.getId());
                 //判断withcfg表数据完整性
-            }else if(hzFullCfgWithCfgs.size()<hzCfg0Records.size()){
-                List<HzCfg0Record> hzCfg0RecordsInsert = new ArrayList<HzCfg0Record>();
-                for(HzCfg0Record hzCfg0Record : hzCfg0Records){
+            } else if (hzFullCfgWithCfgs.size() < hzBomLineRecords.size()) {
+                List<HzBomLineRecord> hzBomLineRecordsInsert = new ArrayList<HzBomLineRecord>();
+                for (HzBomLineRecord hzBomLineRecord : hzBomLineRecords) {
                     boolean flag = false;
-                    for(HzFullCfgWithCfg hzFullCfgWithCfg : hzFullCfgWithCfgs){
-                        if(hzFullCfgWithCfg.getCfgCfg0Uid().equals(hzCfg0Record.getPuid())){
+                    for (HzFullCfgWithCfg hzFullCfgWithCfg : hzFullCfgWithCfgs) {
+                        if (hzFullCfgWithCfg.getCfgBomlineUid().equals(hzBomLineRecord.getPuid())) {
                             flag = true;
+                            break;
                         }
                     }
-                    if(!flag){
-                        hzCfg0RecordsInsert.add(hzCfg0Record);
+                    if (!flag) {
+                        hzBomLineRecordsInsert.add(hzBomLineRecord);
                     }
                 }
-                addHzFullCfgWithCfg(hzCfg0RecordsInsert, user, hzFullCfgMain.getId());
+                addHzFullCfgWithCfgForBomLine(hzBomLineRecordsInsert, user, hzFullCfgMain.getId());
             }
+
         }
     }
 
 
-
     /**
      * 为main新增一条信息
-     * @param projectPuid   项目ID
-     * @param user          当前用户
+     *
+     * @param projectPuid 项目ID
+     * @param user        当前用户
      * @return
      */
-    private BigDecimal addHzFullCfgMain(String projectPuid, User user){
+    private BigDecimal addHzFullCfgMain(String projectPuid, User user) {
         HzFullCfgMain hzFullCfgMain1 = new HzFullCfgMain();
         hzFullCfgMain1.setProjectUid(projectPuid);
         hzFullCfgMain1.setStatus("编辑");
@@ -307,20 +433,21 @@ public class HzBomAllCfgService {
 
     /**
      * 为model新增一条信息
-     * @param hzCfg0ModelRecords    所有的车辆模型集合
-     * @param hzCfg0Records         所有的特性集合
-     * @param user                  当前用户
-     * @param mainPuid              项目对应主表的ID
+     *
+     * @param hzCfg0ModelRecords 所有的车辆模型集合
+     * @param hzBomLineRecords   所有的2Y层集合
+     * @param user               当前用户
+     * @param mainPuid           项目对应主表的ID
      */
-    private void addHzFullCfgModel(List<HzCfg0ModelRecord> hzCfg0ModelRecords, List<HzCfg0Record> hzCfg0Records, User user, BigDecimal mainPuid){
+    private void addHzFullCfgModel(List<HzCfg0ModelRecord> hzCfg0ModelRecords, List<HzBomLineRecord> hzBomLineRecords, User user, BigDecimal mainPuid) {
         List<HzFullCfgModel> hzFullCfgModels = new ArrayList<HzFullCfgModel>();
-        for(HzCfg0ModelRecord hzCfg0ModelRecord : hzCfg0ModelRecords){
-            for(HzCfg0Record hzCfg0Record : hzCfg0Records){
+        for (HzCfg0ModelRecord hzCfg0ModelRecord : hzCfg0ModelRecords) {
+            for (HzBomLineRecord hzBomLineRecord : hzBomLineRecords) {
                 HzFullCfgModel hzFullCfgModel = new HzFullCfgModel();
                 //模型id
                 hzFullCfgModel.setModModelUid(hzCfg0ModelRecord.getPuid());
-                //特性值id
-                hzFullCfgModel.setModCfg0Uid(hzCfg0Record.getPuid());
+                //2Y层id
+                hzFullCfgModel.setFlModelBomlineUid(hzBomLineRecord.getPuid());
                 //打点状态
                 hzFullCfgModel.setModPointType((short) 0);
                 //创建人
@@ -332,7 +459,9 @@ public class HzBomAllCfgService {
                 hzFullCfgModels.add(hzFullCfgModel);
             }
         }
+        if (hzFullCfgModels != null && hzFullCfgModels.size() != 0) {
             hzFullCfgModelDao.insertCfgs(hzFullCfgModels);
+        }
     }
 
     /**
@@ -341,12 +470,38 @@ public class HzBomAllCfgService {
      * @param user               当前用户
      * @param mainPuid          项目对应主表的ID
      */
-    private void addHzFullCfgWithCfg(List<HzCfg0Record> hzCfg0Records, User user, BigDecimal mainPuid){
+//    private void addHzFullCfgWithCfg(List<HzCfg0Record> hzCfg0Records, User user, BigDecimal mainPuid){
+//        List<HzFullCfgWithCfg> hzFullCfgWithCfgs = new ArrayList<HzFullCfgWithCfg>();
+//        for(HzCfg0Record hzCfg0Record :hzCfg0Records){
+//            HzFullCfgWithCfg hzFullCfgWithCfg = new HzFullCfgWithCfg();
+//            //特性值id
+//            hzFullCfgWithCfg.setCfgCfg0Uid(hzCfg0Record.getPuid());
+//            //创建者
+//            hzFullCfgWithCfg.setFlCfgCreator(user.getUserName());
+//            //跟新人
+//            hzFullCfgWithCfg.setFlCfgUpdator(user.getUserName());
+//            //版本
+//            hzFullCfgWithCfg.setFlCfgVersion(mainPuid);
+//            hzFullCfgWithCfgs.add(hzFullCfgWithCfg);
+//        }
+//        hzFullCfgWithCfgDao.insert(hzFullCfgWithCfgs);
+//    }
+
+    /**
+     * 为withcfg新增数据  BomLine
+     *
+     * @param hzBomLineRecords 2Y层的集合
+     * @param user             当前用户
+     * @param mainPuid         主表id
+     */
+    private void addHzFullCfgWithCfgForBomLine(List<HzBomLineRecord> hzBomLineRecords, User user, BigDecimal mainPuid) {
         List<HzFullCfgWithCfg> hzFullCfgWithCfgs = new ArrayList<HzFullCfgWithCfg>();
-        for(HzCfg0Record hzCfg0Record :hzCfg0Records){
+        for (HzBomLineRecord hzBomLineRecord : hzBomLineRecords) {
             HzFullCfgWithCfg hzFullCfgWithCfg = new HzFullCfgWithCfg();
-            //特性值id
-            hzFullCfgWithCfg.setCfgCfg0Uid(hzCfg0Record.getPuid());
+            //2Y级PUID
+            hzFullCfgWithCfg.setCfgBomlineUid(hzBomLineRecord.getPuid());
+            //2Y级NAME
+            hzFullCfgWithCfg.setFlCfgBomlineName(hzBomLineRecord.getpBomLinePartName());
             //创建者
             hzFullCfgWithCfg.setFlCfgCreator(user.getUserName());
             //跟新人
@@ -355,6 +510,249 @@ public class HzBomAllCfgService {
             hzFullCfgWithCfg.setFlCfgVersion(mainPuid);
             hzFullCfgWithCfgs.add(hzFullCfgWithCfg);
         }
-        hzFullCfgWithCfgDao.insert(hzFullCfgWithCfgs);
+        if (hzFullCfgWithCfgs != null && hzFullCfgWithCfgs.size() != 0) {
+            hzFullCfgWithCfgDao.insertBomLine(hzFullCfgWithCfgs);
+        }
+    }
+
+    /**
+     * 保存单行
+     *
+     * @param bomLinePuid
+     * @param cfgPuid
+     * @return
+     */
+    public JSONObject saveOneRow(String bomLinePuid, String cfgPuid) {
+        JSONObject respone = new JSONObject();
+        if (cfgPuid.equals("null")) {
+            respone.put("flag", false);
+            return respone;
+        }
+        HzFullCfgWithCfg hzFullCfgWithCfg = new HzFullCfgWithCfg();
+        //bomLine PUID
+        hzFullCfgWithCfg.setCfgBomlineUid(bomLinePuid);
+
+        //特性ID
+        if ("".equals(cfgPuid) || cfgPuid == null) {
+            hzFullCfgWithCfg.setCfgCfg0Uid(null);
+        } else {
+            hzFullCfgWithCfg.setCfgCfg0Uid(cfgPuid);
+        }
+
+        int updateRow = hzFullCfgWithCfgDao.updateByBomLinePuid(hzFullCfgWithCfg);
+        if (updateRow == 1) {
+            hzFullCfgModelDao.updateByBomLinePuid(hzFullCfgWithCfg);
+            respone.put("flag", true);
+        } else {
+            respone.put("flag", false);
+
+        }
+        return respone;
+    }
+
+    /**
+     * 保存打点图
+     *
+     * @param data model集合 格式为<车辆模型ID<特性ID,打点图状态>>
+     * @return
+     */
+    public JSONObject savePoint(Map<String, Map<String, String>> data) {
+        JSONObject respons = new JSONObject();
+
+        //创建存储model数据集
+        List<HzFullCfgModel> hzFullCfgModels = new ArrayList<HzFullCfgModel>();
+        Set<String> modelKeys = data.keySet();
+        for (String modelKey : modelKeys) {
+            Map<String, String> cfgPointMap = data.get(modelKey);
+            Set<String> cfgKeys = cfgPointMap.keySet();
+            for (String cfgKey : cfgKeys) {
+                String pointStr = cfgPointMap.get(cfgKey);
+                short point;
+                if ("-".equals(pointStr) || "".equals(pointStr)) {
+                    point = 0;
+                } else if ("○".equals(pointStr)) {
+                    point = 1;
+                } else {
+                    point = 2;
+                }
+                HzFullCfgModel hzFullCfgModel = new HzFullCfgModel();
+                hzFullCfgModel.setModModelUid(modelKey);
+                hzFullCfgModel.setFlModelBomlineUid(cfgKey);
+                hzFullCfgModel.setModPointType(point);
+                hzFullCfgModels.add(hzFullCfgModel);
+            }
+        }
+        int updataNumber = 0;
+        if (hzFullCfgModels.size() > 0) {
+            updataNumber = hzFullCfgModelDao.updateByHzFullCfgModelList(hzFullCfgModels);
+        }
+        if (hzFullCfgModels.size() == updataNumber) {
+            respons.put("updateFlag", true);
+        } else {
+            respons.put("updateFlag", false);
+        }
+        return respons;
+    }
+
+    public JSONObject deleteModel(String modelId) {
+        JSONObject respons = new JSONObject();
+        int deleteRow = hzCfg0ModelService.deleteModelById(modelId);
+        if (deleteRow == 1) {
+            respons.put("flag", true);
+        } else {
+            respons.put("flag", false);
+        }
+        return respons;
+    }
+
+    /**
+     * 获取全配置BOM一级清单主数据
+     *
+     * @param projectUid
+     * @return
+     */
+    public HzFullCfgMain getFullCfgMain(String projectUid) {
+        return hzFullCfgMainDao.selectByProjectId(projectUid);
+    }
+
+    /**
+     * 存储阶段信息
+     *
+     * @param params
+     * @return
+     */
+    public JSONObject setStage(Map<String, String> params) {
+        JSONObject result = new JSONObject();
+        result.put("status", false);
+        result.put("msg", "更新全配置BOM一级清单主数据失败");
+        User user = UserInfo.getUser();
+        HzFullCfgMain fullCfgMain = hzFullCfgMainDao.selectByProjectId(params.get("projectPuid"));
+        if (fullCfgMain != null) {
+            if (checkString(fullCfgMain.getVersion()) && fullCfgMain.getVersion().contains(".")) {
+                String stage = fullCfgMain.getVersion().substring(0, fullCfgMain.getVersion().indexOf("."));
+                if (Integer.parseInt(params.get("version1")) > Integer.parseInt(stage)) {
+                    fullCfgMain.setVersion(params.get("version1") + ".0");
+                } else if (Integer.parseInt(params.get("version1")) < Integer.parseInt(stage)) {
+                    logger.info("不能进行降版本操作");
+                    result.put("status", false);
+                    result.put("msg", "不能进行降版本操作");
+                    return result;
+                }
+            }
+            fullCfgMain.setStatus("更新");
+            fullCfgMain.setStage(params.get("stage"));
+            fullCfgMain.setUpdater(user.getUsername());
+            fullCfgMain.setUpdateDate(new Date());
+            fullCfgMain.setCreator(null);
+            fullCfgMain.setCreateDate(null);
+            if (hzFullCfgMainDao.updateByPrimaryKeySelective(fullCfgMain) > 0) {
+                logger.info("更新全配置BOM一级清单主数据成功");
+                result.put("status", true);
+                result.put("msg", "更新全配置BOM一级清单主数据成功");
+                result.put("version", fullCfgMain.getVersion());
+                result.put("stage", fullCfgMain.getStage());
+            }
+        }
+        return result;
+    }
+
+    public JSONObject promote(String projectUid) {
+        JSONObject result = new JSONObject();
+        result.put("status", false);
+        result.put("msg", "更新全配置BOM一级清单主数据失败");
+        User user = UserInfo.getUser();
+        HzFullCfgMain fullCfgMain = hzFullCfgMainDao.selectByProjectId(projectUid);
+        if (fullCfgMain != null) {
+            if (checkString(fullCfgMain.getVersion()) && fullCfgMain.getVersion().contains(".")) {
+                String stage = fullCfgMain.getVersion().substring(0, fullCfgMain.getVersion().indexOf(".")) + "." + String.valueOf(Integer.parseInt(fullCfgMain.getVersion().substring(fullCfgMain.getVersion().indexOf(".") + 1)) + 1);
+                HzFullCfgMain hzFullCfgMain = new HzFullCfgMain();
+                hzFullCfgMain.setId(fullCfgMain.getId());
+                hzFullCfgMain.setVersion(stage);
+                hzFullCfgMain.setUpdater(user.getUsername());
+                hzFullCfgMain.setUpdateDate(new Date());
+                hzFullCfgMain.setEffectiveDate(new Date());
+                if (hzFullCfgMainDao.updateByPrimaryKeySelective(hzFullCfgMain) > 0) {
+                    logger.info("升小版本成功");
+                    result.put("status", true);
+                    result.put("msg", "升小版本成功");
+                    result.put("version", hzFullCfgMain.getVersion());
+                    result.put("releaseDate", DateStringHelper.dateToString(hzFullCfgMain.getEffectiveDate()));
+                }
+            }
+        } else {
+            result.put("msg", "没有找到全配置BOM一级清单主数据");
+        }
+        return result;
+    }
+
+    /**
+     * 添加基本车型模型
+     *
+     * @param params
+     * @return
+     */
+    public JSONObject addVehicleModel(Map<String, String> params) {
+        JSONObject result = new JSONObject();
+        result.put("msg", "请选择一个项目进行操作");
+        result.put("status", false);
+        if (null != params && params.containsKey("pCfg0ModelOfMainRecord") && checkString(params.get("pCfg0ModelOfMainRecord"))) {
+            HzCfg0MainRecord mainRecord = null;
+            if ((mainRecord = hzCfg0MainService.doGetByPrimaryKey(params.get("pCfg0ModelOfMainRecord"))) == null) {
+                return result;
+            }
+            projectHelper.doGetProjectTreeByProjectId(mainRecord.getpCfg0OfWhichProjectPuid());
+            HzCfg0ModelRecord modelRecord = new HzCfg0ModelRecord();
+            HzCfg0ModelDetail modelDetail = new HzCfg0ModelDetail();
+            //生成UID
+            modelRecord.setPuid(UUIDHelper.generateUpperUid());
+            //生成UID
+            modelDetail.setPuid(UUIDHelper.generateUpperUid());
+            //设置归属车型
+            modelDetail.setpModelPuid(modelRecord.getPuid());
+            //设置版型
+            modelDetail.setpModelVersion(params.get("pModelVersion"));
+            //设置车身形式
+            modelDetail.setpModelShape(params.get("pModelShape"));
+            //设置公告
+            modelDetail.setpModelAnnouncement(params.get("pModelAnnouncement"));
+            //设置配置描述
+            modelDetail.setpModelCfgDesc(params.get("pModelCfgDesc"));
+            //设置配置管理
+            modelDetail.setpModelCfgMng(params.get("pModelCfgMng"));
+            //车型
+            modelDetail.setpModelVehicle(projectHelper.getVehicle().getpVehicleCode());
+            //平台
+            modelDetail.setpModelPlatform(projectHelper.getPlatform().getpPlatformCode());
+            //品牌
+            modelDetail.setpModelBrand(projectHelper.getBrand().getpBrandCode());
+            //从TC继承过来的模型
+            //模型名
+            modelRecord.setObjectName(params.get("objectName"));
+            //模型描述
+            modelRecord.setObjectDesc(params.get("objectDesc"));
+            //模型基本信息
+            modelRecord.setpCfg0ModelBasicDetail(params.get("pCfg0ModelBasicDetail"));
+            //归属主配置
+            modelRecord.setpCfg0ModelOfMainRecord(mainRecord.getPuid());
+            //没有设置归属的颜色车型
+            if (hzCfg0ModelRecordService.doInsert(Collections.singletonList(modelRecord))) {
+                if (hzCfg0ModelDetailDao.insertOne(modelDetail) > 0) {
+                    logger.error("添加列成功");
+                    result.put("status", true);
+                    result.put("msg", "添加列成功");
+                } else {
+                    logger.error("添加模型详细信息失败");
+                    result.put("status", false);
+                    result.put("msg", "添加列模型详细信息失败，请联系系统管理员查看日志");
+                    hzCfg0ModelRecordService.doDeleteByUid(modelRecord.getPuid());
+                }
+            } else {
+                logger.error("添加模型信息失败");
+                result.put("status", false);
+                result.put("msg", "添加列信息失败，请联系系统管理员查看日志");
+            }
+        }
+        return result;
+
     }
 }

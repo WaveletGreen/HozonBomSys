@@ -50,4 +50,9 @@ public class HzCfg0ModelRecordDaoImpl implements HzCfg0ModelRecordDao {
     public List<HzCfg0ModelRecord> selectByProjectPuid(String projectPuid) {
         return baseSQLUtil.executeQueryByPass(RECORD, projectPuid, "com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0ModelRecordDao.selectByProjectPuid");
     }
+
+    @Override
+    public int deleteModelById(String modelId) {
+        return baseSQLUtil.executeDelete(modelId,"com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0ModelRecordDao.deleteModelById");
+    }
 }

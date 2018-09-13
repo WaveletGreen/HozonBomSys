@@ -1,17 +1,20 @@
 var modelSize;
 var peculiarity;
-function loadData() {
-    var project = $("#project", window.top.document);
-    var data = project.val();
-    if (0 == data.length) {
-        $("#myModal").modal('show');
+var array;
+
+function doRefresh(projectUid) {
+    loadData(projectUid);
+}
+
+function loadData(projectUid) {
+    if (!checkIsSelectProject(projectUid)) {
         return;
     }
     $.ajax({
         url: 'bomAllCfg/loadCfg0BomLineOfModel',
         type: 'GET',
         data: {
-            'bdf': data
+            'bdf': projectUid
         },
         success: function (myData) {
             if (myData == null) {
@@ -24,21 +27,23 @@ function loadData() {
             var model = _ddd.model;
             modelSize = _ddd.modelSize;
             cfgSize = _ddd.cfgSize;
+            array = _ddd.array;
+            var main = _ddd.main;
             var $table = $("#cfg0Table");
             //清空
             $table.html("");
             $table.removeClass("table").removeClass("table-striped");
             // $table.val("");
             var temp = "";
-            for (var i = 0; i < 8; i++) {
+            for (var i = 0; i < 9; i++) {
                 if (i == 0) {
-                    temp += "<tr id='tr" + i + "'><td id='row" + i + "' colspan='10' style='border: #fff'>阶段</td></tr>";
+                    temp += "<tr id='tr" + i + "'><td id='row" + i + "' colspan='10' style='border: #fff'>阶段：" + main.stage + "</td></tr>";
                 }
                 else if (i == 1) {
-                    temp += "<tr id='tr" + i + "'><td id='row" + i + "' colspan='10' style='border: #fff'>版本</td></tr>";
+                    temp += "<tr id='tr" + i + "'><td id='row" + i + "' colspan='10' style='border: #fff'>版本：" + main.version + "</td></tr>";
                 }
                 else if (i == 2) {
-                    temp += "<tr id='tr" + i + "'><td id='row" + i + "' colspan='10' style='border: #fff'>生效日期</td></tr>";
+                    temp += "<tr id='tr" + i + "'><td id='row" + i + "' colspan='10' style='border: #fff'>生效日期：" + main.effectiveDate + "</td></tr>";
                 }
                 else {
                     temp += "<tr id='tr" + i + "'><td id='row" + i + "' colspan='10' style='border: #fff'></td></tr>";
@@ -47,18 +52,19 @@ function loadData() {
 
             $table.append(temp);
 
-            $("#tr0").append("<th id='th0'><div style='width: 200px'  >品牌</div><div id='modelSize' style='display: none'>"+modelSize+"</div><div id='cfgSize' style='display: none'>"+cfgSize+"</div></th>");
-            $("#tr1").append("<th id='th1'><div style='width: 200px'  >平台</div></th>");
-            $("#tr2").append("<th id='th2'><div style='width: 200px'  >车型</div></th>");
-            $("#tr3").append("<th id='th3'><div style='width: 200px'  >版型</div></th>");
-            $("#tr4").append("<th id='th4'><div style='width: 200px'  >车身形式</div></th>");
-            $("#tr5").append("<th id='th5'><div style='width: 200px'  >公告</div></th>");
-            $("#tr6").append("<th id='th6'><div style='width: 200px'  >配置描述</div></th>");
-            $("#tr7").append("<th id='th7'><div style='width: 200px'  >配置管理</div></th>");
+
+            $("#tr0").append("<th id='th1'></th>");
+            $("#tr1").append("<th id='th0'><div style='width: 200px'  >品牌</div><div id='modelSize' style='display: none'>" + modelSize + "</div><div id='cfgSize' style='display: none'>" + cfgSize + "</div></th>");
+            $("#tr2").append("<th id='th1'><div style='width: 200px'  >平台</div></th>");
+            $("#tr3").append("<th id='th2'><div style='width: 200px'  >车型</div></th>");
+            $("#tr4").append("<th id='th3'><div style='width: 200px'  >版型</div></th>");
+            $("#tr5").append("<th id='th4'><div style='width: 200px'  >车身形式</div></th>");
+            $("#tr6").append("<th id='th5'><div style='width: 200px'  >公告</div></th>");
+            $("#tr7").append("<th id='th6'><div style='width: 200px'  >配置描述</div></th>");
+            $("#tr8").append("<th id='th7'><div style='width: 200px'  >配置管理</div></th>");
 
 
-
-                // var c = "<tr>" +
+            // var c = "<tr>" +
             //     // "<td width='100px'  align='center'><input type='checkbox'></td>"+
             //     "<th width='100px'>品牌</th>" +
             //     "<th width='100px'>平台</th>" +
@@ -122,7 +128,7 @@ function loadData() {
             //动态添加
             var t =
                 "<tr>" +
-                "<th align='center'><div style='width: 50px' >选择</div></th>" +
+                "<th style='text-align: center'><div style='width: 110px' >选择</div></th>" +
                 "<th ><div style='width: 50px' >序号</div></th>" +
                 "<th ><div style='width: 150px' >操作类型</div></th>" +
                 "<th ><div style='width: 150px' >系统</div></th>" +
@@ -140,23 +146,38 @@ function loadData() {
             //动态拼接后台数据
             for (var i = 0; i < data.length; i++) {
                 var dataOfModel = data[i];
-                var j = i+9;
-                var cfgId = "in_in_"+i;
-                var delta = "<tr id='tr"+j+"'>" +
-                    "<td style='text-align: center'><input class='btn btn-default' type='button' value='编辑' style='width: 50px' onclick='editorOrSave(this)'><input class='pCfg0ObjectId' type='text' value='"+dataOfModel.pCfg0ObjectId+"' hidden='hidden' disabled='disabled'></td>"
+                var j = i + 10;
+                var cfgId = "in_in_" + i;
+                var delta = "<tr id='tr" + j + "'>" +
+                    "<td style='text-align: center'><input class='btn btn-default' type='button' value='编辑' style='width: 50px' onclick='editorOrSave(this)'><input class='btn btn-default' type='button' value='取消' style='width: 50px; display: none' onclick='cancelEditor(this)'><div id='" + cfgId + "' style='display: none'>" + dataOfModel.bomLinePuid + "</div></td>"
+                    // "<td style='text-align: center'><input class='btn btn-default' type='button' value='编辑' style='width: 50px' onclick='editorOrSave(this)'><input class='pCfg0ObjectId' type='text' value='"+dataOfModel.pCfg0ObjectId+"' hidden='hidden' disabled='disabled'><div id='"+cfgId+"' style='display: none'>"+dataOfModel.bomLinePuid+"</div></td>"
                     +
-                    "<td><div style='width: 50px' >" + (i + 1) + "</div><div id='"+cfgId+"' style='display: none'>"+dataOfModel.cfgPuid+"</div></td>";
+                    "<td><div style='width: 50px' >" + (i + 1) + "</div></td>";
                 var aaa = 0;
                 for (var index in dataOfModel) {
-                    if(index=="cfgPuid"){
+                    if (index == "bomLinePuid") {
                         continue;
                     }
-                    if(aaa<7){
-                        delta = delta + "<td class='edit'><input type='text' value='"+dataOfModel[index]+"' style='display: none'><div style='width: 150px'>" + dataOfModel[index] + "</div></td>";
+                    if (aaa == 6) {
+                        delta = delta + "<td class='edit'><input type='text' value='" + dataOfModel[index] + "' style='display: none'><div style='width: 150px'>" + dataOfModel[index] + "</div></td>";
+                    } else if (aaa == 7) {
+                        var cfgSelect = "<select style='display: none'>";
+                        cfgSelect += "<option></option>";
+                        for (var j = 0; j < array.length; j++) {
+                            var cfg = array[j];
+                            if (cfg.pCfg0ObjectId == dataOfModel[index]) {
+                                cfgSelect += "<option value='" + cfg.puid + "' selected='selected'>" + cfg.pCfg0ObjectId + "</option>";
+                            } else {
+                                cfgSelect += "<option value='" + cfg.puid + "'>" + cfg.pCfg0ObjectId + "</option>";
+                            }
+                        }
+                        cfgSelect += "</select>";
+                        // delta = delta + "<td class='edit'><input type='text' value='"+dataOfModel[index]+"' style='display: none'><div style='width: 150px'>" + dataOfModel[index] + "</div></td>";
+                        delta = delta + "<td class='edit'>" + cfgSelect + "<div style='width: 150px'>" + dataOfModel[index] + "</div></td>";
                     }
                     // else if(aaa>9){
-                        // delta = delta + "<td class='edit'><select style='display: none'><option>-</option><option>●</option><option>○</option></select><div style='width: 150px'>" + dataOfModel[index] + "</div></td>";
-                    else{
+                    // delta = delta + "<td class='edit'><select style='display: none'><option>-</option><option>●</option><option>○</option></select><div style='width: 150px'>" + dataOfModel[index] + "</div></td>";
+                    else {
                         delta = delta + "<td class='edit'><div style='width: 150px'>" + dataOfModel[index] + "</div></td>";
                     }
                     aaa++;
@@ -168,24 +189,41 @@ function loadData() {
                 var modeli = model[i];
                 var v0 = modeli.key;
                 var v1 = modeli.hide;
+
+                $("#tr0").append("<td ><input class='btn btn-default' type='button' value='编辑' onclick='editPoint(this)'/><input class='btn btn-default' type='button' value='删除' style='background-color: red' onclick='deleteModel(this)'/><div style='display: none' id='in_" + i + "'>" + modeli.modelPuid + "</div></td>");
                 //品牌
-                $("#tr0").append("<td ><div style='display: none' id='in_"+i+"'>"+modeli.modelPuid+"</div><div style='width: 200px'  >" + modeli.brand + "</div></td>");
+                $("#tr1").append("<td ><div style='width: 200px'  >" + modeli.brand + "</div></td>");
                 //平台
-                $("#tr1").append("<td ><div style='width: 200px'  >" + modeli.platform + "</div></td>");
+                $("#tr2").append("<td ><div style='width: 200px'  >" + modeli.platform + "</div></td>");
                 //车型
-                $("#tr2").append("<td ><div style='width: 200px'  >" + modeli.vehicle + "</div></td>");
-                $("#tr3").append("<td ><div style='width: 200px'  ><a href='javascript:void(0);' onclick='Botton(\"" + v1 + "\")'>" + v0 + "</a></div></td>");
-                $("#tr4").append("<td ><div style='width: 200px'  >" + modeli.pModelShape + "</div></td>");
-                $("#tr5").append("<td ><div style='width: 200px'  >" + modeli.pModelAnnouncement + "</div></td>");
-                $("#tr6").append("<td ><div style='width: 200px'  >" + modeli.pModelCfgDesc + "</div></td>");
-                $("#tr7").append("<td ><div style='width: 200px'  >" + modeli.pModelCfgMng + "</div></td>");
-                $("#tr8").append("<td ><div style='width: 200px'  >" + "" + "</div></td>");
+                $("#tr3").append("<td ><div style='width: 200px'  >" + modeli.vehicle + "</div></td>");
+                $("#tr4").append("<td ><div style='width: 200px'  ><a href='javascript:void(0);' onclick='Botton(\"" + v1 + "\")'>" + v0 + "</a></div></td>");
+                $("#tr5").append("<td ><div style='width: 200px'  >" + modeli.pModelShape + "</div></td>");
+                $("#tr6").append("<td ><div style='width: 200px'  >" + modeli.pModelAnnouncement + "</div></td>");
+                $("#tr7").append("<td ><div style='width: 200px'  >" + modeli.pModelCfgDesc + "</div></td>");
+                $("#tr8").append("<td ><div style='width: 200px'  >" + modeli.pModelCfgMng + "</div></td>");
+                $("#tr9").append("<td ><div style='width: 200px'  >" + "" + "</div></td>");
                 var point = modeli.point;
-                for(var j=9;j<(point.length+9);j++){
-                    var trNumber = "tr"+j;
-                    var pointId = "in_"+i+"in_in_"+(j-9);
-                    $("#"+trNumber).append("<td class='edit'><select style='display: none'><option>-</option><option>●</option><option>○</option></select><div id='"+pointId+"' style='width: 150px'>" + point[j-9].point + "</div></td>");
+                for (var j = 10; j < (point.length + 10); j++) {
+                    var trNumber = "tr" + j;
+                    var pointId = "in_" + i + "in_in_" + (j - 10);
+                    var cfgObjectIdVar = $("#" + trNumber).find("select").find("option:selected").text();
+                    var cfgObjectId = point[j - 10].point;
+                    if (cfgObjectId == "" || cfgObjectId == "-") {
+                        // $("#"+trNumber).append("<td class='edit'><select style='display: none'><option selected='selected'>-</option><option>●</option><option>○</option></select><div id='"+pointId+"' style='width: 150px'>" + point[j-10].point + "</div></td>");
+                        $("#" + trNumber).append("<td class='edit'><select style='display: none'><option selected='selected'>-</option><option>●</option><option>○</option></select><div id='" + pointId + "' style='width: 150px'>" + cfgObjectId + "</div></td>");
+                    } else if (cfgObjectId == "●") {
+                        $("#" + trNumber).append("<td class='edit'><select style='display: none'><option>-</option><option selected='selected'>●</option><option>○</option></select><div id='" + pointId + "' style='width: 150px'>" + cfgObjectId + "</div></td>");
+                    } else if (cfgObjectId == "○") {
+                        $("#" + trNumber).append("<td class='edit'><select style='display: none'><option>-</option><option>●</option><option selected='selected'>○</option></select><div id='" + pointId + "' style='width: 150px'>" + cfgObjectId + "</div></td>");
+                    }
+
                 }
+                // for(var j=9;j<(data.length+9);j++){
+                //     var trNumber = "tr"+j;
+                //     var pointId = "in_"+i+"in_in_"+(j-9);
+                //     $("#"+trNumber).append("<td class='edit'><select style='display: none'><option>-</option><option>●</option><option>○</option></select><div id='"+pointId+"' style='width: 150px'>-</div></td>");
+                // }
             }
             $table.addClass("table").addClass("table-striped");
         },
@@ -198,32 +236,78 @@ function loadData() {
 
 var projectPuid;
 $(document).ready(
-    (loadData()),
+    loadData(getProjectUid()),
     $("#myButton").click(function () {
-        loadData();
+        loadData(getProjectUid());
     }),
     $("#addVehicle").click(function () {
         projectPuid = $("#project", window.top.document).val(),
             window.Ewin.dialog({
                 // 这个puid就是车型模型的puid，直接修改了车型模型的基本信息（在bom系统维护的字段）
                 title: "添加车型模型",
-                url: "materiel/addVehicleModelPage?projectPuid=" + projectPuid,
+                url: "materiel/addVehicleModelPage2?projectPuid=" + projectPuid,
                 gridId: "gridId",
                 width: 350,
                 height: 450
             });
     }),
-    $("#reflect2Y").click(function () {
-        projectPuid = $("#project", window.top.document).val(),
-            window.Ewin.dialog({
-                // 这个puid就是车型模型的puid，直接修改了车型模型的基本信息（在bom系统维护的字段）
-                title: "将配置映射到2Y层",
-                url: "loadBom/reflectTo2YPage?projectPuid=" + projectPuid,
-                gridId: "gridId",
-                width: 400,
-                height: 450
-            });
-    })
+    // $("#reflect2Y").click(function () {
+    //     projectPuid = $("#project", window.top.document).val(),
+    //         window.Ewin.alert({
+    //             // 这个puid就是车型模型的puid，直接修改了车型模型的基本信息（在bom系统维护的字段）
+    //             title: "将配置映射到2Y层",
+    //             url: "loadBom/reflectTo2YPage?projectPuid=" + projectPuid,
+    //             gridId: "gridId",
+    //             width: 400,
+    //             height: 450
+    //         });
+    // }),
+    $("#setStage").click(function () {
+        // $.ajax({
+        //     url: "bomAllCfg/setStagePage?projectUid=" + getProjectUid(),
+        //     type: "GET",
+        //     success: function (result) {
+        //         window.Ewin.alert({message: result});
+        //     },
+        //     error: function (info) {
+        //         window.Ewin.alert({message: "操作失败:" + info.status});
+        //     }
+        // })
+        window.Ewin.dialog({
+            // 这个puid就是车型模型的puid，直接修改了车型模型的基本信息（在bom系统维护的字段）
+            title: "手动设置阶段与版本",
+            url: "bomAllCfg/setStagePage?projectUid=" + getProjectUid(),
+            gridId: "gridId",
+            width: 400,
+            height: 450
+        });
+    }),
+    $("#release").click(function () {
+        window.Ewin.confirm({title: '提示', message: '您确定需要升小版本吗？', width: 500}).on(function (e) {
+            if (e) {
+                $.ajax({
+                    type: "POST",
+                    //ajax需要添加打包名
+                    url: "./bomAllCfg/promote?projectUid=" + getProjectUid(),
+                    contentType: "application/json",
+                    success: function (result) {
+                        if (result.status) {
+                            $("#row1").text("版本：" + result.version);
+                            $("#row2").text("生效日期：" + result.releaseDate);
+                            layer.msg(result.msg, {icon: 1, time: 2000})
+                        }
+                        else {
+                            window.Ewin.alert({message: "操作升级小版本失败:" + result.msg});
+                        }
+                        // loadData();
+                    },
+                    error: function (info) {
+                        window.Ewin.alert({message: "操作失败:" + info.status});
+                    }
+                })
+            }
+        });
+    }),
 );
 
 
@@ -232,57 +316,10 @@ $('.edit').on('click', function () {
         $(this).find('div').is(':visible') && ($(this).find('input').show().prev().hide(), $(this).parent().find('.btn').html('保存'));
     }
 })
-// $('.btn').on('click', function () {
-//     // $(this).html() == '编辑' ? $(this).html('保存') : $(this).html('编辑');
-//     if ($(this).html() == '编辑') {
-//         $(this).html('保存');
-//         $(this).parent().siblings().each(function (index, item) {
-//             $(item).find('div').hide().next().show();
-//         })
-//     } else {
-//         $(this).html('编辑');
-//         $(this).parent().siblings().each(function (index, item) {
-//             $(item).find('div').html($(item).find('input').val()).show().next().hide();
-//         })
-//     }
-// })
 
-function editorOrSave(but) {
-    if($(but).val() == '编辑'){
-        $(but).val('保存');
-        $(but).parent().siblings().each(function (index, item) {
-            if(index>1&&index<7){
-                var divText = $(item).find('div').text();
-                $(item).find('input').val(divText);
-                $(item).find('input').show();
-                $(item).find('div').hide();
-            }else if(index>9){
-                var divText = $(item).find('div').text();
-                $(item).find('select').val(divText);
-                $(item).find('select').show();
-                $(item).find('div').hide();
-            }
-        })
-    }else {
-        $(but).val('编辑');
-        $(but).parent().siblings().each(function (index, item) {
-            if(index>1&&index<7){
-                var inputVal = $(item).find('input').val();
-                $(item).find('div').text(inputVal);
-                $(item).find('div').show();
-                $(item).find('input').hide();
-            }else if(index>9){
-                var selectVal = $(item).find('select').val();
-                $(item).find('div').text(selectVal);
-                $(item).find('div').show();
-                $(item).find('select').hide();
-            }
-        })
-    }
-}
 
 function Botton(id) {
-    window.Ewin.dialog({
+    window.Ewin.alert({
         url: "model/modModel?pModelPuid=" + id,
         title: "修改",
         width: 500,
@@ -369,7 +406,7 @@ function save() {
 
 
     var object = {};
-    for(var i=0;i<modelSize;i++) {
+    for (var i = 0; i < modelSize; i++) {
         var params = {};
         var modelDivId = "in_" + i;
         for (var j = 0; j < cfgSize; j++) {
@@ -391,7 +428,7 @@ function save() {
         type: "POST",
         //ajax需要添加打包名
         url: "bomAllCfg/savePoint",
-        data:data,
+        data: data,
         contentType: 'application/json',
         // data: JSON.stringify(puidOfModelFeatures),
         success: function (result) {
@@ -402,4 +439,205 @@ function save() {
             window.Ewin.alert({message: "操作删除:" + info.status});
         }
     })
+}
+
+//编辑保存单行
+function editorOrSave(but) {
+    if ($(but).val() == '编辑') {
+        $(but).val('保存');
+        $(but).parent().find('input:eq(1)').show();
+        $(but).parent().siblings().each(function (index, item) {
+            if (index == 8) {
+                // var divText = $(item).find('div').text();
+                // $("select option:contains('"+divText+"')").attr("selected","selected");
+                // $(item).find('select').val(divText);
+                var select = $(item).find('select');
+                var selectText = $(select).find("option:selected").text();
+                if (selectText == null) {
+                    $('#' + selectText + 'option:first').prop("selected", 'selected');
+                }
+                $(item).find('select').show();
+                $(item).find('div').hide();
+            }
+        })
+    } else {
+        $(but).val('编辑');
+        $(but).parent().find('input:eq(1)').hide();
+        var bomLinePuid;
+        var cfgPuid;
+        var cfgIndex;
+        var select;
+        $(but).parent().siblings().each(function (index, item) {
+            if (index == 0) {
+                select = $(item).find('select');
+                var divVal = $(item).find('div').text();
+                var num = parseInt(divVal);
+                var bomLinePuidDivId = "in_in_" + (num - 1);
+                bomLinePuid = $("#" + bomLinePuidDivId).text();
+            } else if (index == 8) {
+                // cfgCode = $(item).find('select').text();
+                cfgPuid = $(item).find('select').val();
+                cfgIndex = $(item).find('select').get(0).selectedIndex;
+                return false;
+            }
+        });
+        $.ajax({
+            type: "POST",
+            url: "bomAllCfg/saveOneRow?bomLinePuid=" + bomLinePuid + "&cfgPuid=" + cfgPuid,
+            contentType: 'application/json',
+            success: function (result) {
+                if (result.flag) {
+                    $(but).parent().siblings().each(function (index, item) {
+                        if (index == 7) {
+                            if (cfgPuid == "" || cfgPuid == null) {
+                                $(item).find('div').text('');
+                                $(item).find('div').show();
+                            } else {
+                                $(item).find('div').text(array[cfgIndex - 1].pCfg0Desc);
+                                $(item).find('div').show();
+                            }
+                            // $(item).find('select').hide();
+                        } else if (index == 8) {
+                            var selectText = $(item).find('select').find("option:selected").text();
+                            $(item).find('div').text(selectText);
+                            $(item).find('div').show();
+                            $(item).find('select').hide();
+                        }
+                    })
+                } else {
+                    alert("该特性以被其他2Y层关联");
+                    $(but).parent().siblings().each(function (index, item) {
+                        if (index == 7) {
+                            // $(item).find('div').text("");
+                            $(item).find('div').show();
+                        } else if (index == 8) {
+                            // $(item).find('div').text("");
+                            $(item).find('div').show();
+                            $(item).find('select').hide();
+                        }
+                    })
+                }
+            },
+            error: function (info) {
+                window.Ewin.alert({message: "操作删除:" + info.status});
+            }
+        });
+    }
+}
+
+//取消编辑
+function cancelEditor(but) {
+    $(but).hide();
+    $(but).parent().find("input:eq(0)").val('编辑');
+    $(but).parent().siblings().each(function (index, item) {
+        if (index == 7) {
+            // $(item).find('div').text("");
+            $(item).find('div').show();
+        } else if (index == 8) {
+            // $(item).find('div').text("");
+            $(item).find('div').show();
+            $(item).find('select').hide();
+        }
+    })
+}
+
+
+//编辑保存打点图
+function editPoint(but) {
+    // var modelPuid = $(but).parent().find("div").text();
+    var modelDivId = $(but).parent().find("div").attr("id");
+    if ($(but).val() == '编辑') {
+        $(but).val('保存');
+        for (var i = 0; i < cfgSize; i++) {
+            var pointId = modelDivId + "in_in_" + i;
+            $("#" + pointId).parent().find("select").show();
+            $("#" + pointId).parent().find("div").hide();
+        }
+    } else {
+        $(but).val('编辑');
+        // var object = {};
+        // object['modelPuid'] = modelPuid;
+        // var params = [];
+        // for(var i=0;i<cfgSize;i++){
+        //     var cfgDivId = "in_in_"+i;
+        //     var cfgId = $("#"+cfgDivId).text();
+        //     var pointId = lineId + cfgDivId;
+        //     var point = $("#" + pointId).parent().find("select").val();
+        //     var obj = {};
+        //     obj[cfgId] = point;
+        //     params.push(obj);
+        // }
+        // object['data'] = params;
+
+        var object = {};
+        var params = {};
+        for (var j = 0; j < cfgSize; j++) {
+            var cfgDivId = "in_in_" + j;
+            // var cfgId = $("#" + cfgDivId).parent().parent().find("select:first").val();
+            var bomLineId = $("#" + cfgDivId).text();
+            var ponitId = modelDivId + cfgDivId;
+            var ponitVal = $("#" + ponitId).parent().find("select").val();
+            params[bomLineId] = ponitVal;
+        }
+
+        var modelId = $(but).parent().find("div").text();
+        object[modelId] = params;
+
+        var json = JSON.stringify(object);
+        $.ajax({
+            type: "POST",
+            url: "bomAllCfg/savePoint",
+            data: json,
+            dataType: 'json',
+            contentType: 'application/json',
+            success: function (result) {
+                if (result.updateFlag) {
+                    for (var i = 0; i < cfgSize; i++) {
+                        var pointId = modelDivId + "in_in_" + i;
+                        var selectVal = $("#" + pointId).parent().find("select").find("option:selected").val();
+                        $("#" + pointId).parent().find("div").text(selectVal);
+                        $("#" + pointId).parent().find("div").show();
+                        $("#" + pointId).parent().find("select").hide();
+                    }
+                } else {
+                    window.Ewin.alert({message: "修改失败:" + info.status});
+                }
+            },
+            error: function (info) {
+                window.Ewin.alert({message: "操作删除:" + info.status});
+            }
+        });
+    }
+}
+
+//删除车辆模型
+function deleteModel(obj) {
+    var isDelete = confirm("是否确认删除");
+    if (isDelete) {
+        var modelId = $(obj).parent().find("div").text();
+        $.ajax({
+            type: "GET",
+            url: "bomAllCfg/deleteModel?modelId=" + modelId,
+            success: function (result) {
+                if (result.flag) {
+                    alert("删除成功");
+                    loadData(getProjectUid());
+                } else {
+                    alert("删除失败");
+                }
+            },
+            error: function (info) {
+                window.Ewin.alert({message: "删除失败:" + info.status});
+            }
+        });
+    }
+}
+
+/**
+ * 设置阶段和版本
+ * @param result
+ */
+function setStage(result) {
+    $("#row0").text("阶段：" + result.stage);
+    $("#row1").text("版本：" + result.version);
 }

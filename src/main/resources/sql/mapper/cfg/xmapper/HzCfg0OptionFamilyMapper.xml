@@ -28,10 +28,13 @@
         select
         <include refid="Base_Column_List"/>
         from HZ_CFG0_OPTIONFAMILY_RECORD
-        where
-        P_OPTIONFAMILY_NAME = #{pOptionfamilyName,jdbcType=VARCHAR}
-        and P_OPTIONFAMILY_DESC=#{pOptionfamilyDesc,jdbcType=VARCHAR}
-        and P_OF_CFG0_MAIN=#{pOfCfg0Main,jdbcType=VARCHAR}
+        where P_OF_CFG0_MAIN=#{pOfCfg0Main,jdbcType=VARCHAR}
+        <if test="pOptionfamilyName!=null">
+            and P_OPTIONFAMILY_NAME = #{pOptionfamilyName,jdbcType=VARCHAR}
+        </if>
+        <if test="pOptionfamilyDesc!=null">
+            and P_OPTIONFAMILY_DESC=#{pOptionfamilyDesc,jdbcType=VARCHAR}
+        </if>
     </select>
     <select id="insert" parameterType="sql.pojo.cfg.HzCfg0OptionFamily" resultMap="BaseResultMap">
         insert into

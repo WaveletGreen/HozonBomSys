@@ -58,4 +58,14 @@ public class HzFullCfgWithCfgDaoImpl implements HzFullCfgWithCfgDao {
     public int updateByPrimaryKey(HzFullCfgWithCfg record) {
         return baseSQLUtil.executeUpdate(record, "com.connor.hozon.bom.bomSystem.dao.cfg.HzFullCfgWithCfgDao.updateByPrimaryKey");
     }
+
+    @Override
+    public int insertBomLine(List<HzFullCfgWithCfg> hzFullCfgWithCfgs) {
+        return baseSQLUtil.executeInsert(hzFullCfgWithCfgs, "com.connor.hozon.bom.bomSystem.dao.cfg.HzFullCfgWithCfgDao.insertBomLine");
+    }
+
+    @Override
+    public int updateByBomLinePuid(HzFullCfgWithCfg hzFullCfgWithCfg) {
+        return baseSQLUtil.executeUpdate(hzFullCfgWithCfg, "com.connor.hozon.bom.bomSystem.dao.cfg.HzFullCfgWithCfgDao.updateByBomLinePuid");
+    }
 }
