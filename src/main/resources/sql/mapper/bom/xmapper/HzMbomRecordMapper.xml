@@ -22,6 +22,7 @@
         <result column="P_UPDATE_TIME" jdbcType="DATE" property="updateTime"/>
         <result column="P_CREATE_NAME" jdbcType="VARCHAR" property="createName"/>
         <result column="P_UPDATE_NAME" jdbcType="VARCHAR" property="updateName"/>
+
     </resultMap>
 
 
@@ -42,6 +43,7 @@
         <result column="P_BOM_LINE_PART_EN_NAME" jdbcType="VARCHAR" property="pBomLinePartEnName" />
         <result column="P_BOM_LINE_PART_RESOURCE" jdbcType="VARCHAR" property="pBomLinePartResource" />
         <result column="P_BOM_ORDER_NUM" jdbcType="INTEGER" property="orderNum" />
+        <result column="P_SORT_NUM" jdbcType="VARCHAR" property="sortNum" />
 
         <result column="P_BOM_TYPE" jdbcType="INTEGER" property="pBomType" />
         <result column="P_STOCK_LOCATION" jdbcType="VARCHAR" property="pStockLocation" />
@@ -72,7 +74,7 @@
         P_CREATE_NAME, P_UPDATE_NAME, P_PARENT_UID, P_BOM_DIGIFAX_ID, P_LINE_INDEX, P_BOM_LINE_IS_HAS,
         P_BOM_LINE_PUID, P_BOM_LINE_ID, P_BOM_LINE_IS_2Y, P_BOM_LINE_IS_PART, P_BOM_LINE_IS_DEPT,
         P_BOM_OF_WHICH_DEPT, P_BOM_LINE_PART_NAME, P_BOM_LINE_PART_CLASS, P_BOM_LINE_PART_EN_NAME,
-        P_BOM_LINE_PART_RESOURCE, P_BOM_ORDER_NUM,P_BOM_TYPE, P_STOCK_LOCATION,P_FACTORY_ID
+        P_BOM_LINE_PART_RESOURCE, P_BOM_ORDER_NUM,P_BOM_TYPE, P_STOCK_LOCATION,P_FACTORY_ID,P_SORT_NUM
   </sql>
 
 
@@ -134,10 +136,10 @@
                 and t.P_BOM_OF_WHICH_DEPT like CONCAT(CONCAT('%',#{pBomOfWhichDept,jdbcType=VARCHAR}),'%')
             </if>
             <if test="pBomLinePartClass != null and pBomLinePartClass!=''">
-                and P_BOM_LINE_PART_CLASS = #{pBomLinePartClass,jdbcType=VARCHAR}
+                and t.P_BOM_LINE_PART_CLASS = #{pBomLinePartClass,jdbcType=VARCHAR}
             </if>
             <if test="pBomLinePartResource != null and pBomLinePartResource!=''">
-                and P_BOM_LINE_PART_RESOURCE = #{pBomLinePartResource,jdbcType=VARCHAR}
+                and t.P_BOM_LINE_PART_RESOURCE = #{pBomLinePartResource,jdbcType=VARCHAR}
             </if>
             and t.P_MBOM_STATUS<![CDATA[ <> ]]>0
         </where>
@@ -176,7 +178,7 @@
         insert into HZ_MBOM_RECORD (PUID,P_PARENT_UID,P_BOM_DIGIFAX_ID,P_BOM_PUID,
         P_LINE_INDEX,P_BOM_LINE_IS_HAS,P_BOM_LINE_PUID,P_BOM_LINE_ID,P_BOM_LINE_IS_2Y,
         P_BOM_LINE_IS_PART,P_BOM_LINE_IS_DEPT,P_BOM_OF_WHICH_DEPT,P_BOM_LINE_PART_NAME,
-        P_BOM_LINE_PART_CLASS,P_BOM_LINE_PART_EN_NAME,P_BOM_LINE_PART_RESOURCE,P_BOM_ORDER_NUM,P_MBOM_STATUS,
+        P_BOM_LINE_PART_CLASS,P_BOM_LINE_PART_EN_NAME,P_BOM_LINE_PART_RESOURCE,P_SORT_NUM,P_MBOM_STATUS,
         P_CREATE_TIME, P_UPDATE_TIME, P_CREATE_NAME,
         P_UPDATE_NAME)
         <foreach collection="list" item="item" index="index" separator="UNION ALL">
@@ -189,7 +191,7 @@
             #{item.linePuid,jdbcType=VARCHAR}, #{item.lineId,jdbcType=VARCHAR}, #{item.is2Y,jdbcType=INTEGER},
             #{item.isPart,jdbcType=INTEGER}, #{item.isDept,jdbcType=INTEGER}, #{item.pBomOfWhichDept,jdbcType=VARCHAR},
             #{item.pBomLinePartName,jdbcType=VARCHAR}, #{item.pBomLinePartClass,jdbcType=VARCHAR}, #{item.pBomLinePartEnName,jdbcType=VARCHAR},
-            #{item.pBomLinePartResource,jdbcType=VARCHAR},#{item.orderNum,jdbcType=INTEGER},2,
+            #{item.pBomLinePartResource,jdbcType=VARCHAR},#{item.sortNum,jdbcType=VARCHAR},2,
             sysdate, sysdate, #{item.createName,jdbcType=VARCHAR},#{item.updateName,jdbcType=VARCHAR}
             from DUAL
         </foreach>
@@ -250,8 +252,8 @@
             <if test="updateName != null">
                 P_UPDATE_NAME,
             </if>
-            <if test="orderNum != null">
-                P_BOM_ORDER_NUM,
+            <if test="sortNum != null">
+                P_SORT_NUM,
             </if>
 
         </trim>
@@ -307,8 +309,8 @@
             <if test="updateName != null">
                 #{updateName,jdbcType=VARCHAR},
             </if>
-            <if test="orderNum != null">
-                #{orderNum,jdbcType=VARCHAR}
+            <if test="sortNum != null">
+                #{sortNum,jdbcType=VARCHAR}
             </if>
         </trim>
     </insert>
@@ -639,12 +641,12 @@
         t2.p_cfg0_of_which_project_puid=#{projectId,jdbcType=VARCHAR}
         )
         <if test="pBomLinePartResource != null and  pBomLinePartResource!='' " >
-            and T1.P_BOM_LINE_PART_RESOURCE=#{pBomLinePartResource,jdbcType=VARCHAR}
+            and t1.P_BOM_LINE_PART_RESOURCE=#{pBomLinePartResource,jdbcType=VARCHAR}
         </if>
         <if test="sparePart != null and  sparePart!='' " >
             and t1.P_SPARE_PART = #{sparePart,jdbcType=VARCHAR}
         </if>
-        and t1.P_MBOM_STATUS<![CDATA[ <> ]]>0 order by P_BOM_ORDER_NUM
+        and t1.P_MBOM_STATUS<![CDATA[ <> ]]>0 order by CAST(t1.P_SORT_NUM as FLOAT)
         )t
         WHERE ROWNUM &lt;=#{limit,jdbcType=INTEGER}) where rn &gt;#{offset,jdbcType=INTEGER}
     </select>
@@ -765,14 +767,16 @@
 
 
     <!--找出大于当前排序号的最小排序号-->
-    <select id="HzMbomRecordDAOImpl_findMinOrderNumWhichGreaterThanThisOrderNum" parameterType="java.util.HashMap" resultType="java.lang.Integer">
-        SELECT min(P_BOM_ORDER_NUM) FROM HZ_MBOM_RECORD
+    <select id="HzMbomRecordDAOImpl_findMinOrderNumWhichGreaterThanThisOrderNum" parameterType="java.util.HashMap" resultType="java.lang.String">
+        SELECT * FROM (
+        SELECT P_SORT_NUM  FROM HZ_MBOM_RECORD
         where p_bom_digifax_id=(
         select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(
         select t2.puid from Hz_project_libs t2
         <where>
             t2.puid=#{projectId,jdbcType=VARCHAR}))
         </where>
-        and  P_BOM_ORDER_NUM &gt;#{orderNum,jdbcType=INTEGER}
+        and  P_SORT_NUM &gt;#{sortNum,jdbcType=VARCHAR}
+        ORDER BY  CAST(P_SORT_NUM as FLOAT))WHERE rownum =1
     </select>
 </mapper>

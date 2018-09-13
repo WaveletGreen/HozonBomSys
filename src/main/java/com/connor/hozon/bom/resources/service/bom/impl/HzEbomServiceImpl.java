@@ -205,11 +205,8 @@ public class HzEbomServiceImpl implements HzEbomService {
                             HzBomLineRecord hzBomLineRecord = new HzBomLineRecord();//EBOM
                             if (hzEPLManageRecord.getIsHas().equals(0) || hzEPLManageRecord.getIsPart().equals(1)) {
                                 HzBomLineRecord hzBomLineRecord1 = new HzBomLineRecord();
-                                hzBomLineRecord1.setIsHas(new Integer(1));
-                                hzBomLineRecord1.setIsPart(new Integer(0));
-                                if (hzEPLManageRecord.getLineIndex().split("\\.").length == 2) {
-                                    hzBomLineRecord1.setIs2Y(1);
-                                }
+                                hzBomLineRecord1.setIsHas(1);
+                                hzBomLineRecord1.setIsPart(0);
                                 hzBomLineRecord1.setPuid(hzEPLManageRecord.getPuid());
                                 //更新数据
                                 hzBomLineRecordDao.update(hzBomLineRecord1);
@@ -231,29 +228,70 @@ public class HzEbomServiceImpl implements HzEbomService {
                                 return operateResultMessageRespDTO;
                             }
                             if (records.size() ==1) {
-                                //1.1-1.1.1  1.2.2.2 -1.2.2.2.1
                                 StringBuffer stringBuffer = new StringBuffer(lineIndex);
                                 stringBuffer = stringBuffer.append(".10");
                                 hzBomLineRecord.setLineIndex(stringBuffer.toString());
-                                List<String> list = hzBomLineRecordDao.findBomLineIndex(map);
-                                List<Integer> lists = new ArrayList<>();
-                                for(String str:list){
-                                    lists.add(Integer.valueOf(str.split("\\.")[0]));
-                                }
-                                Integer max = 0;
-                                for(Integer in:lists){
-                                    if(max<in){
-                                        max = in;
-                                    }
-                                }
-                                if(Integer.valueOf(lineIndex.split("\\.")[0]).equals(max)){
+//                                List<String> list = hzBomLineRecordDao.findBomLineIndex(map);
+//                                List<Integer> lists = new ArrayList<>();
+//                                for(String str:list){
+//                                    lists.add(Integer.valueOf(str.split("\\.")[0]));
+//                                }
+//                                Integer max = 0;
+//                                for(Integer in:lists){
+//                                    if(max<in){
+//                                        max = in;
+//                                    }
+//                                }
+//                                if(Integer.valueOf(lineIndex.split("\\.")[0]).equals(max)){
                                     hzBomLineRecord.setOrderNum(hzEPLManageRecord.getOrderNum()+100);
-                                }else {
-                                    hzBomLineRecord.setOrderNum(hzEPLManageRecord.getOrderNum()+50);
-                                }
-
-
+//                                }else {
+//                                    hzBomLineRecord.setOrderNum(hzEPLManageRecord.getOrderNum()+50);
+//                                }
                             } else {
+                                if(lineNo.equals("")){//用户没有输入查找编号，默认添加到末尾位置
+                                    int length = lineIndex.split("\\.").length + 1;
+                                    List<HzEPLManageRecord> l = new ArrayList<>();
+                                    for (int k =0;k<records.size();k++) {
+                                        int len = records.get(k).getLineIndex().split("\\.").length;
+                                        if (length == len) {
+                                            l.add(records.get(k));
+                                        }
+                                    }
+                                    Integer max = 0;
+                                    HzEPLManageRecord lastRecord = new HzEPLManageRecord();
+                                    for(HzEPLManageRecord manageRecord:l){
+                                        if(max<manageRecord.getOrderNum()){
+                                            max = manageRecord.getOrderNum();
+                                            lastRecord = manageRecord;
+                                        }
+                                    }
+                                    String index = lastRecord.getLineIndex();
+                                    String lineIndexExceptLastNum = index.substring(0,index.lastIndexOf("."));
+                                    int lastNum = Integer.valueOf(index.split("\\.")[index.split("\\.").length - 1]);
+                                    hzBomLineRecord.setLineIndex(lineIndexExceptLastNum+(lastNum+10));
+                                    Integer o = hzEbomRecordDAO.findMinOrderNumWhichGreaterThanThisOrderNum(reqDTO.getProjectId(),max);
+                                    if(o == null){
+                                        hzBomLineRecord.setOrderNum(max+100);
+                                    }else {
+                                        int order = (o+max)/2;
+                                        boolean b = false;
+//                                        boolean b = hzEbomRecordDAO.sortNumRepeat(reqDTO.getProjectId(),order);
+                                        if(b){
+                                            order = order+1;
+//                                            b = hzEbomRecordDAO.sortNumRepeat(reqDTO.getProjectId(),order);
+                                            if(b){
+                                                operateResultMessageRespDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
+                                                operateResultMessageRespDTO.setErrMsg("当前插入对象的父结构不存在！");
+                                                return operateResultMessageRespDTO;
+                                            }else {
+                                                hzBomLineRecord.setOrderNum(order);
+                                            }
+                                        }
+                                    }
+
+                                }else {
+
+                                }
 
                                 int length = lineIndex.split("\\.").length + 1;
                                 List<String> list = new ArrayList<>();
@@ -570,8 +608,8 @@ public class HzEbomServiceImpl implements HzEbomService {
                                for (int j = 0; j < l.size(); j++) {
                                    //设置排序号
                                    if(l.size() == 1){
-
-                                       Integer order = hzPbomRecordDAO.findMinOrderNumWhichGreaterThanThisOrderNum(reqDTO.getProjectId(),l.get(0).getOrderNum());
+                                       Integer order = 0;
+//                                       String order = hzPbomRecordDAO.findMinOrderNumWhichGreaterThanThisOrderNum(reqDTO.getProjectId(),l.get(0).getOrderNum());
                                        if(lineNo.equals("")){
                                            if(order == null){
                                                order = l.get(0).getOrderNum()+100;
@@ -607,7 +645,8 @@ public class HzEbomServiceImpl implements HzEbomService {
                                        int sLast = Integer.valueOf(l.get(l.size()-1).getLineIndex().split("\\.")[iLast]);
 
                                        if(lineNo.equals("")){
-                                           Integer order = hzPbomRecordDAO.findMinOrderNumWhichGreaterThanThisOrderNum(reqDTO.getProjectId(),l.get(l.size()-1).getOrderNum());
+                                           Integer order = 0;
+//                                           Integer order = hzPbomRecordDAO.findMinOrderNumWhichGreaterThanThisOrderNum(reqDTO.getProjectId(),l.get(l.size()-1).getOrderNum());
                                            if(order == null){
                                                order = l.get(l.size()-1).getOrderNum()+100;
                                            }
@@ -616,13 +655,15 @@ public class HzEbomServiceImpl implements HzEbomService {
                                            break;
                                        }else {
                                            if(Integer.valueOf(lineNo)< s0){//小于第一个子排序号
-                                               Integer order = hzPbomRecordDAO.findMinOrderNumWhichGreaterThanThisOrderNum(reqDTO.getProjectId(),records1.get(0).getOrderNum());
+//                                               Integer order = hzPbomRecordDAO.findMinOrderNumWhichGreaterThanThisOrderNum(reqDTO.getProjectId(),records1.get(0).getOrderNum());
+                                               Integer order = 0;
                                                order = records1.get(0).getOrderNum()+100;
                                                int k = (l.get(0).getOrderNum() +order)/2;
                                                hzPbomLineRecord.setOrderNum(l.get(0).getOrderNum()+k);
                                                break;
                                            }else if(Integer.valueOf(lineNo) >sLast){//大于最后一个子排序号
-                                               Integer order = hzPbomRecordDAO.findMinOrderNumWhichGreaterThanThisOrderNum(reqDTO.getProjectId(),l.get(l.size()-1).getOrderNum());
+//                                               Integer order = hzPbomRecordDAO.findMinOrderNumWhichGreaterThanThisOrderNum(reqDTO.getProjectId(),l.get(l.size()-1).getOrderNum());
+                                                Integer order = 0;
                                                if(order == null){
                                                    order = l.get(l.size()-1).getOrderNum()+100;
                                                }
@@ -636,7 +677,8 @@ public class HzEbomServiceImpl implements HzEbomService {
                                                    int s1 = Integer.valueOf(l.get(j).getLineIndex().split("\\.")[i1]);
                                                    int s2 = Integer.valueOf(l.get(j+1).getLineIndex().split("\\.")[i2]);
                                                    if(Integer.valueOf(lineNo)> s1 &&Integer.valueOf(lineNo)<s2){
-                                                       Integer order = hzPbomRecordDAO.findMinOrderNumWhichGreaterThanThisOrderNum(reqDTO.getProjectId(),l.get(j).getOrderNum());
+//                                                       Integer order = hzPbomRecordDAO.findMinOrderNumWhichGreaterThanThisOrderNum(reqDTO.getProjectId(),l.get(j).getOrderNum());
+                                                       Integer order = 0;
                                                        if(order == null){
                                                            order = l.get(j).getOrderNum()+100;
                                                        }
@@ -758,7 +800,8 @@ public class HzEbomServiceImpl implements HzEbomService {
                                     for (int j = 0; j < l.size(); j++) {
                                         //设置排序号
                                         if (l.size() == 1) {
-                                            Integer order = hzMbomRecordDAO.findMinOrderNumWhichGreaterThanThisOrderNum(reqDTO.getProjectId(), l.get(0).getOrderNum());
+//                                            Integer order = hzMbomRecordDAO.findMinOrderNumWhichGreaterThanThisOrderNum(reqDTO.getProjectId(), l.get(0).getOrderNum());
+                                            Integer order = 0;
                                             if(lineNo.equals("")){
                                                 if(order == null){
                                                     order = l.get(0).getOrderNum()+100;
@@ -790,7 +833,8 @@ public class HzEbomServiceImpl implements HzEbomService {
                                             int sLast = Integer.valueOf(l.get(l.size() - 1).getLineIndex().split("\\.")[iLast]);
 
                                             if(lineNo.equals("")){
-                                                Integer order = hzMbomRecordDAO.findMinOrderNumWhichGreaterThanThisOrderNum(reqDTO.getProjectId(), l.get(l.size() - 1).getOrderNum());
+                                                Integer order = 0;
+//                                                Integer order = hzMbomRecordDAO.findMinOrderNumWhichGreaterThanThisOrderNum(reqDTO.getProjectId(), l.get(l.size() - 1).getOrderNum());
                                                 if(order == null){
                                                     order = l.get(l.size() - 1).getOrderNum()+100;
                                                 }
@@ -799,7 +843,8 @@ public class HzEbomServiceImpl implements HzEbomService {
                                                 break;
                                             }else {
                                                 if (Integer.valueOf(lineNo) < s0) {//小于第一个子排序号
-                                                    Integer order = hzMbomRecordDAO.findMinOrderNumWhichGreaterThanThisOrderNum(reqDTO.getProjectId(), records2.get(0).getOrderNum());
+                                                    Integer order = 0;
+//                                                    Integer order = hzMbomRecordDAO.findMinOrderNumWhichGreaterThanThisOrderNum(reqDTO.getProjectId(), records2.get(0).getOrderNum());
                                                     if(order == null){
                                                         order = records2.get(0).getOrderNum()+100;
                                                     }
@@ -807,7 +852,8 @@ public class HzEbomServiceImpl implements HzEbomService {
                                                     hzMbomLineRecord.setOrderNum(l.get(0).getOrderNum() + k);
                                                     break;
                                                 } else if (Integer.valueOf(lineNo) > sLast) {//大于最后一个子排序号
-                                                    Integer order = hzMbomRecordDAO.findMinOrderNumWhichGreaterThanThisOrderNum(reqDTO.getProjectId(), l.get(l.size() - 1).getOrderNum());
+                                                    Integer order = 0;
+//                                                    Integer order = hzMbomRecordDAO.findMinOrderNumWhichGreaterThanThisOrderNum(reqDTO.getProjectId(), l.get(l.size() - 1).getOrderNum());
                                                     if(order == null){
                                                         order = l.get(l.size() - 1).getOrderNum()+100;
                                                     }
@@ -821,7 +867,8 @@ public class HzEbomServiceImpl implements HzEbomService {
                                                         int s1 = Integer.valueOf(l.get(j).getLineIndex().split("\\.")[i1]);
                                                         int s2 = Integer.valueOf(l.get(j + 1).getLineIndex().split("\\.")[i2]);
                                                         if (Integer.valueOf(lineNo) > s1 && Integer.valueOf(lineNo) < s2) {
-                                                            Integer order = hzMbomRecordDAO.findMinOrderNumWhichGreaterThanThisOrderNum(reqDTO.getProjectId(), l.get(j).getOrderNum());
+//                                                            Integer order = hzMbomRecordDAO.findMinOrderNumWhichGreaterThanThisOrderNum(reqDTO.getProjectId(), l.get(j).getOrderNum());
+                                                            Integer order = 0;
                                                             if(order == null){
                                                                 order = l.get(j).getOrderNum()+100;
                                                             }
@@ -1493,4 +1540,5 @@ public class HzEbomServiceImpl implements HzEbomService {
             return null;
         }
     }
+
 }
