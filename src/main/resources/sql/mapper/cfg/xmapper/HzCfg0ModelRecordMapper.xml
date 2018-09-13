@@ -95,6 +95,6 @@
         delete from
           HZ_CFG0_MODEL_RECORD
         where
-          PUID = #{modelId,jdbcType=VARCHAR}
+          PUID = #{puid,jdbcType=VARCHAR}
     </delete>
 </mapper>

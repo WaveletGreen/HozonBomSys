@@ -7,6 +7,8 @@ import com.connor.hozon.bom.bomSystem.dao.cfg.HzFullCfgModelDao;
 import com.connor.hozon.bom.bomSystem.dao.cfg.HzFullCfgWithCfgDao;
 import com.connor.hozon.bom.bomSystem.dto.HzFeatureQueryDTO;
 import com.connor.hozon.bom.bomSystem.helper.DateStringHelper;
+import com.connor.hozon.bom.bomSystem.helper.ProjectHelper;
+import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
 import com.connor.hozon.bom.bomSystem.service.bom.HzBomDataService;
 import com.connor.hozon.bom.bomSystem.service.project.HzBrandService;
 import com.connor.hozon.bom.bomSystem.service.project.HzPlatformService;
@@ -61,9 +63,21 @@ public class HzBomAllCfgService {
     @Autowired
     private HzCfg0ModelDetailDao hzCfg0ModelDetailDao;
 
+    /**
+     * 车型模型服务层
+     */
+    @Autowired
+    HzCfg0ModelRecordService hzCfg0ModelRecordService;
     //2Y层
     @Autowired
     HzBomDataService hzBomDataService;
+    /**
+     * 主配置
+     */
+    @Autowired
+    HzCfg0MainService hzCfg0MainService;
+    @Autowired
+    ProjectHelper projectHelper;
     private static final String[] selfDesc =
             {
                     "pBomOfWhichDept", "operationType", "pBomLineId", "pBomLineName", "pH9featureenname", "owningUser", "pCfg0Desc", "pCfg0ObjectId", "comment"
@@ -568,8 +582,10 @@ public class HzBomAllCfgService {
                 hzFullCfgModels.add(hzFullCfgModel);
             }
         }
-
-        int updataNumber = hzFullCfgModelDao.updateByHzFullCfgModelList(hzFullCfgModels);
+        int updataNumber = 0;
+        if (hzFullCfgModels.size() > 0) {
+            updataNumber = hzFullCfgModelDao.updateByHzFullCfgModelList(hzFullCfgModels);
+        }
         if (hzFullCfgModels.size() == updataNumber) {
             respons.put("updateFlag", true);
         } else {
@@ -667,5 +683,76 @@ public class HzBomAllCfgService {
             result.put("msg", "没有找到全配置BOM一级清单主数据");
         }
         return result;
+    }
+
+    /**
+     * 添加基本车型模型
+     *
+     * @param params
+     * @return
+     */
+    public JSONObject addVehicleModel(Map<String, String> params) {
+        JSONObject result = new JSONObject();
+        result.put("msg", "请选择一个项目进行操作");
+        result.put("status", false);
+        if (null != params && params.containsKey("pCfg0ModelOfMainRecord") && checkString(params.get("pCfg0ModelOfMainRecord"))) {
+            HzCfg0MainRecord mainRecord = null;
+            if ((mainRecord = hzCfg0MainService.doGetByPrimaryKey(params.get("pCfg0ModelOfMainRecord"))) == null) {
+                return result;
+            }
+            projectHelper.doGetProjectTreeByProjectId(mainRecord.getpCfg0OfWhichProjectPuid());
+            HzCfg0ModelRecord modelRecord = new HzCfg0ModelRecord();
+            HzCfg0ModelDetail modelDetail = new HzCfg0ModelDetail();
+            //生成UID
+            modelRecord.setPuid(UUIDHelper.generateUpperUid());
+            //生成UID
+            modelDetail.setPuid(UUIDHelper.generateUpperUid());
+            //设置归属车型
+            modelDetail.setpModelPuid(modelRecord.getPuid());
+            //设置版型
+            modelDetail.setpModelVersion(params.get("pModelVersion"));
+            //设置车身形式
+            modelDetail.setpModelShape(params.get("pModelShape"));
+            //设置公告
+            modelDetail.setpModelAnnouncement(params.get("pModelAnnouncement"));
+            //设置配置描述
+            modelDetail.setpModelCfgDesc(params.get("pModelCfgDesc"));
+            //设置配置管理
+            modelDetail.setpModelCfgMng(params.get("pModelCfgMng"));
+            //车型
+            modelDetail.setpModelVehicle(projectHelper.getVehicle().getpVehicleCode());
+            //平台
+            modelDetail.setpModelPlatform(projectHelper.getPlatform().getpPlatformCode());
+            //品牌
+            modelDetail.setpModelBrand(projectHelper.getBrand().getpBrandCode());
+            //从TC继承过来的模型
+            //模型名
+            modelRecord.setObjectName(params.get("objectName"));
+            //模型描述
+            modelRecord.setObjectDesc(params.get("objectDesc"));
+            //模型基本信息
+            modelRecord.setpCfg0ModelBasicDetail(params.get("pCfg0ModelBasicDetail"));
+            //归属主配置
+            modelRecord.setpCfg0ModelOfMainRecord(mainRecord.getPuid());
+            //没有设置归属的颜色车型
+            if (hzCfg0ModelRecordService.doInsert(Collections.singletonList(modelRecord))) {
+                if (hzCfg0ModelDetailDao.insertOne(modelDetail) > 0) {
+                    logger.error("添加列成功");
+                    result.put("status", true);
+                    result.put("msg", "添加列成功");
+                } else {
+                    logger.error("添加模型详细信息失败");
+                    result.put("status", false);
+                    result.put("msg", "添加列模型详细信息失败，请联系系统管理员查看日志");
+                    hzCfg0ModelRecordService.doDeleteByUid(modelRecord.getPuid());
+                }
+            } else {
+                logger.error("添加模型信息失败");
+                result.put("status", false);
+                result.put("msg", "添加列信息失败，请联系系统管理员查看日志");
+            }
+        }
+        return result;
+
     }
 }

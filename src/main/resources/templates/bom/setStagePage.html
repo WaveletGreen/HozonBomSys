@@ -1,56 +1,67 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <body>
-<form id="form" role="form" method="post" th:action="${action}">
-    <div class="row">
-        <div class="col-md-12">
-            <div class="form-group">
-                <label for="stage">阶段</label>
-                <select class="form-control" id="stage" name="stage">
-                    <option th:selected="${entity.getStage()=='' or entity.getStage() ==null?true:false}"
-                            value="">无
-                    </option>
-                    <!--<option th:selected="${entity.getStage()=='P-x-P0阶段'?true:false}" value="P-x-P0阶段">P-x-P0阶段</option>-->
-                    <option th:selected="${entity.getStage()=='P0-P1阶段'?true:false}" value="P0-P1阶段">P0-P1阶段</option>
-                    <option th:selected="${entity.getStage()=='P1-P2阶段'?true:false}" value="P1-P2阶段">P1-P2阶段</option>
-                    <option th:selected="${entity.getStage()=='P2-P3阶段'?true:false}" value="P2-P3阶段">P2-P3阶段</option>
-                    <option th:selected="${entity.getStage()=='P3-P4阶段'?true:false}" value="P3-P4阶段">P3-P4阶段</option>
-                    <option th:selected="${entity.getStage()=='P4-P5阶段'?true:false}" value="P4-P5阶段">P4-P5阶段</option>
-                    <option th:selected="${entity.getStage()=='P5-P6阶段'?true:false}" value="P5-P6阶段">P5-P6阶段</option>
-                    <option th:selected="${entity.getStage()=='P6-P7阶段'?true:false}" value="P6-P7阶段">P6-P7阶段</option>
-                    <option th:selected="${entity.getStage()=='P7-P8阶段'?true:false}" value="P7-P8阶段">P7-P8阶段</option>
-                    <option th:selected="${entity.getStage()=='P8-P9阶段'?true:false}" value="P8-P9阶段">P8-P9阶段</option>
-                    <option th:selected="${entity.getStage()=='P9-P10阶段'?true:false}" value="P9-P10阶段">P9-P10阶段</option>
-                </select>
+<div style="max-width: 450px;max-height: 450px;overflow: auto">
+    <form id="form" role="form" method="post" th:action="${action}">
+        <div class="row">
+            <div class="col-md-12">
                 <div class="form-group">
-                    <label>更新版本</label>
-                    <table>
-                        <tr>
-                            <td><input class="form-control col-md-7"
-                                       th:value="${entity.getVersion().substring(0,entity.getVersion().indexOf('.'))}"
-                                       id="version1" name="version1"
-                            />
-                            </td>
-                            <td style="font-size: 32px">.</td>
-                            <td><input class="form-control col-md-6"
-                                       th:value="${entity.getVersion().substring(entity.getVersion().indexOf('.')+1)}"
-                                       id="version2" name="version2"
-                                       disabled="disabled"
-                            /></td>
-                        </tr>
-                    </table>
-                </div>
-                <div class="form-group">
-                    <label>生效日期</label>
-                    <input class="form-control" th:value="${releaseDate}"
-                           disabled="disabled"
-                    />
+                    <label for="stage">阶段</label>
+                    <select class="form-control" id="stage" name="stage">
+                        <option th:selected="${entity.getStage()=='' or entity.getStage() ==null?true:false}"
+                                value="">无
+                        </option>
+                        <!--<option th:selected="${entity.getStage()=='P-x-P0阶段'?true:false}" value="P-x-P0阶段">P-x-P0阶段</option>-->
+                        <option th:selected="${entity.getStage()=='P0-P1阶段'?true:false}" value="P0-P1阶段">P0-P1阶段
+                        </option>
+                        <option th:selected="${entity.getStage()=='P1-P2阶段'?true:false}" value="P1-P2阶段">P1-P2阶段
+                        </option>
+                        <option th:selected="${entity.getStage()=='P2-P3阶段'?true:false}" value="P2-P3阶段">P2-P3阶段
+                        </option>
+                        <option th:selected="${entity.getStage()=='P3-P4阶段'?true:false}" value="P3-P4阶段">P3-P4阶段
+                        </option>
+                        <option th:selected="${entity.getStage()=='P4-P5阶段'?true:false}" value="P4-P5阶段">P4-P5阶段
+                        </option>
+                        <option th:selected="${entity.getStage()=='P5-P6阶段'?true:false}" value="P5-P6阶段">P5-P6阶段
+                        </option>
+                        <option th:selected="${entity.getStage()=='P6-P7阶段'?true:false}" value="P6-P7阶段">P6-P7阶段
+                        </option>
+                        <option th:selected="${entity.getStage()=='P7-P8阶段'?true:false}" value="P7-P8阶段">P7-P8阶段
+                        </option>
+                        <option th:selected="${entity.getStage()=='P8-P9阶段'?true:false}" value="P8-P9阶段">P8-P9阶段
+                        </option>
+                        <option th:selected="${entity.getStage()=='P9-P10阶段'?true:false}" value="P9-P10阶段">P9-P10阶段
+                        </option>
+                    </select>
+                    <div class="form-group">
+                        <label>更新版本</label>
+                        <table>
+                            <tr>
+                                <td><input class="form-control col-md-7"
+                                           th:value="${entity.getVersion().substring(0,entity.getVersion().indexOf('.'))}"
+                                           id="version1" name="version1"
+                                />
+                                </td>
+                                <td style="font-size: 32px">.</td>
+                                <td><input class="form-control col-md-6"
+                                           th:value="${entity.getVersion().substring(entity.getVersion().indexOf('.')+1)}"
+                                           id="version2" name="version2"
+                                           disabled="disabled"
+                                /></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="form-group">
+                        <label>生效日期</label>
+                        <input class="form-control" th:value="${releaseDate}"
+                               disabled="disabled"
+                        />
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-</form>
-
+    </form>
+</div>
 <script th:inline="javascript">
     <![CDATA[
     $(function () {

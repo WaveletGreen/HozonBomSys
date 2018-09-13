@@ -102,4 +102,7 @@ public class HzBomAllCfgController {
     public JSONObject promote(@RequestParam String projectUid) {
         return hzBomAllCfgService.promote(projectUid);
     }
+
+
+
 }

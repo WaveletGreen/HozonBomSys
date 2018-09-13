@@ -87,10 +87,6 @@ public class HzMaterielFeatureV2Controller extends ExtraIntegrate {
     HzComposeMFService hzComposeMFService;
 
 
-    @Autowired
-    public HzMaterielFeatureV2Controller() {
-    }
-
     @RequestMapping(value = "/composePage", method = RequestMethod.GET)
     public String composePage(@RequestParam String projectUid, Model model) {
         if (!checkString(projectUid)) {
