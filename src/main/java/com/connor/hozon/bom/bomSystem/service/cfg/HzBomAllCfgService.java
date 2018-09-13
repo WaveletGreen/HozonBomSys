@@ -6,6 +6,7 @@ import com.connor.hozon.bom.bomSystem.dao.cfg.HzFullCfgMainDao;
 import com.connor.hozon.bom.bomSystem.dao.cfg.HzFullCfgModelDao;
 import com.connor.hozon.bom.bomSystem.dao.cfg.HzFullCfgWithCfgDao;
 import com.connor.hozon.bom.bomSystem.dto.HzFeatureQueryDTO;
+import com.connor.hozon.bom.bomSystem.helper.DateStringHelper;
 import com.connor.hozon.bom.bomSystem.service.bom.HzBomDataService;
 import com.connor.hozon.bom.bomSystem.service.project.HzBrandService;
 import com.connor.hozon.bom.bomSystem.service.project.HzPlatformService;
@@ -615,6 +616,11 @@ public class HzBomAllCfgService {
                 String stage = fullCfgMain.getVersion().substring(0, fullCfgMain.getVersion().indexOf("."));
                 if (Integer.parseInt(params.get("version1")) > Integer.parseInt(stage)) {
                     fullCfgMain.setVersion(params.get("version1") + ".0");
+                } else if (Integer.parseInt(params.get("version1")) < Integer.parseInt(stage)) {
+                    logger.info("不能进行降版本操作");
+                    result.put("status", false);
+                    result.put("msg", "不能进行降版本操作");
+                    return result;
                 }
             }
             fullCfgMain.setStatus("更新");
@@ -627,6 +633,8 @@ public class HzBomAllCfgService {
                 logger.info("更新全配置BOM一级清单主数据成功");
                 result.put("status", true);
                 result.put("msg", "更新全配置BOM一级清单主数据成功");
+                result.put("version", fullCfgMain.getVersion());
+                result.put("stage", fullCfgMain.getStage());
             }
         }
         return result;
@@ -646,10 +654,13 @@ public class HzBomAllCfgService {
                 hzFullCfgMain.setVersion(stage);
                 hzFullCfgMain.setUpdater(user.getUsername());
                 hzFullCfgMain.setUpdateDate(new Date());
+                hzFullCfgMain.setEffectiveDate(new Date());
                 if (hzFullCfgMainDao.updateByPrimaryKeySelective(hzFullCfgMain) > 0) {
-                    logger.info("更新全配置BOM一级清单主数据成功");
+                    logger.info("升小版本成功");
                     result.put("status", true);
-                    result.put("msg", "更新全配置BOM一级清单主数据成功");
+                    result.put("msg", "升小版本成功");
+                    result.put("version", hzFullCfgMain.getVersion());
+                    result.put("releaseDate", DateStringHelper.dateToString(hzFullCfgMain.getEffectiveDate()));
                 }
             }
         } else {

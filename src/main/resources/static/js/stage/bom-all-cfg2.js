@@ -1,10 +1,13 @@
 var modelSize;
 var peculiarity;
-var array
+var array;
 
-function loadData() {
-    var project = $("#project", window.top.document);
-    var data = project.val();
+function doRefresh(projectUid) {
+    loadData(projectUid);
+}
+
+function loadData(projectUid) {
+    var data = projectUid;
     if (0 == data.length) {
         $("#myModal").modal('show');
         return;
@@ -234,9 +237,9 @@ function loadData() {
 
 var projectPuid;
 $(document).ready(
-    (loadData()),
+    loadData(getProjectUid()),
     $("#myButton").click(function () {
-        loadData();
+        loadData(getProjectUid());
     }),
     $("#addVehicle").click(function () {
         projectPuid = $("#project", window.top.document).val(),
@@ -280,14 +283,14 @@ $(document).ready(
                     contentType: "application/json",
                     success: function (result) {
                         if (result.status) {
+                            $("#row1").text("版本：" + result.version);
+                            $("#row2").text("生效日期：" + result.releaseDate);
                             layer.msg(result.msg, {icon: 1, time: 2000})
-                            // window.Ewin.alert({message: });
-                            //刷新，会重新申请数据库数据
                         }
                         else {
                             window.Ewin.alert({message: "操作升级小版本失败:" + result.msg});
                         }
-                        loadData();
+                        // loadData();
                     },
                     error: function (info) {
                         window.Ewin.alert({message: "操作失败:" + info.status});
@@ -587,7 +590,7 @@ function deleteModel(obj) {
         url: "bomAllCfg/deleteModel?modelId=" + modelId,
         success: function (result) {
             if (result.flag) {
-                loadData();
+                loadData(getProjectUid());
             } else {
                 alert("删除失败");
             }
@@ -596,4 +599,9 @@ function deleteModel(obj) {
             window.Ewin.alert({message: "删除失败:" + info.status});
         }
     });
+}
+
+function setStage(result) {
+    $("#row0").text("阶段：" + result.stage);
+    $("#row1").text("版本：" + result.version);
 }

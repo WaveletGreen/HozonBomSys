@@ -78,12 +78,17 @@
                     function (result) {
                         $('.modal-dialog', window.top.document).parent('div').remove();
                         $('body', window.top.document).find('.modal-backdrop').remove();
+                        // $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.loadData();
                         // jquery 调用刷新当前操作的table页面的refresh方法
-                        $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.loadData();
-                        window.Ewin.alert({message: result.msg});
+                        if (result.status) {
+                            $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.setStage(result);
+                            layer.msg(result.msg, {icon: 1, time: 2000});
+                        } else {
+                            window.Ewin.alert({message: result.msg});
+                        }
                     },
                 error: function (status) {
-                    window.Ewin.alert({message: status.status + ':添加数据失败!'});
+                    window.Ewin.alert({message: status.status + ':设置阶段数据失败!'});
                 }
             });
             // }
