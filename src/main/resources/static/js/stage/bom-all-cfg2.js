@@ -208,15 +208,17 @@ function loadData() {
                     var pointId = "in_"+i+"in_in_"+(j-10);
                     var cfgObjectIdVar = $("#"+trNumber).find("select").find("option:selected").text();
                     var cfgObjectId = point[j-10].point;
+                    //总成零件号和总成零件名称
+                    var bomLineId =  $("#"+trNumber).find("td:eq(4)").find("div").text();
+                    var bomLineName = $("#"+trNumber).find("td:eq(5)").find("div").text();
                     if(cfgObjectId==""||cfgObjectId=="-"){
                         // $("#"+trNumber).append("<td class='edit'><select style='display: none'><option selected='selected'>-</option><option>●</option><option>○</option></select><div id='"+pointId+"' style='width: 150px'>" + point[j-10].point + "</div></td>");
-                        $("#"+trNumber).append("<td class='edit'><select style='display: none'><option selected='selected'>-</option><option>●</option><option>○</option></select><div id='"+pointId+"' style='width: 150px'>" + cfgObjectId + "</div></td>");
+                        $("#"+trNumber).append("<td class='edit'><select style='display: none' title='总成零件号:    "+bomLineId+"&#10总成零件名称:    "+bomLineName+"'><option selected='selected' title='总成零件号:    "+bomLineId+"&#10总成零件名称:    "+bomLineName+"'>-</option><option title='总成零件号:    "+bomLineId+"&#10总成零件名称:    "+bomLineName+"'>●</option><option title='总成零件号:    "+bomLineId+"&#10总成零件名称:    "+bomLineName+"'>○</option></select><div id='"+pointId+"' style='width: 150px'>" + cfgObjectId + "</div></td>");
                     }else if(cfgObjectId=="●"){
-                        $("#"+trNumber).append("<td class='edit'><select style='display: none'><option>-</option><option selected='selected'>●</option><option>○</option></select><div id='"+pointId+"' style='width: 150px'>" + cfgObjectId + "</div></td>");
+                        $("#"+trNumber).append("<td class='edit'><select style='display: none' title='总成零件号:    "+bomLineId+"&#10总成零件名称:    "+bomLineName+"'><option title='总成零件号:    "+bomLineId+"&#10总成零件名称:    "+bomLineName+"'>-</option><option selected='selected' title='总成零件号:    "+bomLineId+"&#10总成零件名称:    "+bomLineName+"'>●</option><option title='总成零件号:    "+bomLineId+"&#10总成零件名称:    "+bomLineName+"'>○</option></select><div id='"+pointId+"' style='width: 150px'>" + cfgObjectId + "</div></td>");
                     }else if(cfgObjectId=="○"){
-                        $("#"+trNumber).append("<td class='edit'><select style='display: none'><option>-</option><option>●</option><option selected='selected'>○</option></select><div id='"+pointId+"' style='width: 150px'>" + cfgObjectId + "</div></td>");
+                        $("#"+trNumber).append("<td class='edit'><select style='display: none' title='总成零件号:    "+bomLineId+"&#10总成零件名称:    "+bomLineName+"'><option title='总成零件号:    "+bomLineId+"&#10总成零件名称:    "+bomLineName+"'>-</option><option title='总成零件号:    "+bomLineId+"&#10总成零件名称:    "+bomLineName+"'>●</option><option selected='selected' title='总成零件号:    "+bomLineId+"&#10总成零件名称:    "+bomLineName+"'>○</option></select><div id='"+pointId+"' style='width: 150px'>" + cfgObjectId + "</div></td>");
                     }
-
                 }
                 // for(var j=9;j<(data.length+9);j++){
                 //     var trNumber = "tr"+j;
