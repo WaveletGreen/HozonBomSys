@@ -3,7 +3,8 @@ $(document).ready((function () {
     var eBomUrl = "ebom/getEBom/list?projectId=" + projectPuid;
     initTable(eBomUrl);
 }))
-function doRefresh(projectPuid){
+
+function doRefresh(projectPuid) {
     $('#ebomManageTable').bootstrapTable('destroy');
     var eBomUrl = "ebom/getEBom/list?projectId=" + projectPuid;
     initTable(eBomUrl);
@@ -20,14 +21,14 @@ function doQuery() {
     // var lineId = $("#lineId").val();
     // eBomUrl += "&lineId=" + lineId;
     var pBomLinePartClass = $("#pBomLinePartClass").val();
-    if (pBomLinePartClass =="请选择零件分类") {
-        eBomUrl += "&pBomLinePartClass="+ "";
-    }else {
+    if (pBomLinePartClass == "请选择零件分类") {
+        eBomUrl += "&pBomLinePartClass=" + "";
+    } else {
         eBomUrl += "&pBomLinePartClass=" + pBomLinePartClass;
     }
     var pBomLinePartResource = $("#pBomLinePartResource").val();
     if (pBomLinePartResource == "请选择零件来源") {
-        eBomUrl += "&pBomLinePartResource="+ "";
+        eBomUrl += "&pBomLinePartResource=" + "";
     }
     else {
         eBomUrl += "&pBomLinePartResource=" + pBomLinePartResource;
@@ -38,6 +39,9 @@ function doQuery() {
 
 function initTable(eBomUrl) {
     var projectPuid = $("#project", window.top.document).val();
+    if (!checkIsSelectProject(projectPuid)) {
+        return;
+    }
     //var eBomUrl ="ebom/getEBom/list?projectId=" + projectPuid
     var $table = $("#ebomManageTable");
     var column = [];
@@ -84,7 +88,7 @@ function initTable(eBomUrl) {
                                     return [
                                         '<a href="javascript:void(0)" onclick="queryLoa(\'' + row.puid + '\')">' + value + '</a>'
                                     ].join("");
-                                }else if (value == "LOU"){
+                                } else if (value == "LOU") {
                                     return [
                                         '<a href="javascript:void(0)" onclick="queryLou(\'' + row.puid + '\')">' + value + '</a>'
                                     ].join("");
@@ -109,7 +113,7 @@ function initTable(eBomUrl) {
                                     return [
                                         '<a href="javascript:void(0)" onclick="queryLoa(' + row.puid + ')">' + value + '</a>'
                                     ].join("");
-                                }else if (value == "LOU"){
+                                } else if (value == "LOU") {
                                     return [
                                         '<a href="javascript:void(0)" onclick="queryLou(' + row.puid + ')">' + value + '</a>'
                                     ].join("");
@@ -145,10 +149,10 @@ function initTable(eBomUrl) {
                     if (4 == value || "4" == value) {
                         return "<span style='color: #a90009'>删除状态</span>";
                     }
-                    if (value == 5 || value == "5"){
+                    if (value == 5 || value == "5") {
                         return "<span style='color: #e2ab2f'>审核中</span>"
                     }
-                    if (value == 6 || value == "6"){
+                    if (value == 6 || value == "6") {
                         return "<span style='color: #e2ab2f'>审核中</span>"
                     }
                 }
@@ -225,7 +229,7 @@ function initTable(eBomUrl) {
                                 window.Ewin.alert({message: '请选择一条需要修改的数据!'});
                                 return false;
                             }
-                            else if (rows[0].status == 5 || rows[0].status == 6){
+                            else if (rows[0].status == 5 || rows[0].status == 6) {
                                 window.Ewin.alert({message: '对不起,审核中的数据不能修改!'});
                                 return false;
                             }
@@ -256,7 +260,7 @@ function initTable(eBomUrl) {
                                 window.Ewin.alert({message: '请选择一条需要删除的数据!'});
                                 return false;
                             }
-                            else if (rows[0].status == 5 || rows[0].status == 6){
+                            else if (rows[0].status == 5 || rows[0].status == 6) {
                                 window.Ewin.alert({message: '对不起,审核中的数据不能修改!'});
                                 return false;
                             }
@@ -315,7 +319,7 @@ function initTable(eBomUrl) {
                                 window.Ewin.alert({message: '请选择至少一条需要设置为LOU的数据!'});
                                 return false;
                             }
-                            else if (rows[0].status == 5 || rows[0].status == 6){
+                            else if (rows[0].status == 5 || rows[0].status == 6) {
                                 window.Ewin.alert({message: '对不起,审核中的数据不能设置为LOU!'});
                                 return false;
                             }
@@ -327,31 +331,31 @@ function initTable(eBomUrl) {
                             // _table += '</table></div>';
                             // window.Ewin.confirm({title: '提示', message: _table, width: 500}).on(function (e) {
                             //     if (e) {
-                                    $.ajax({
-                                        type: "POST",
-                                        //ajax需要添加打包名
-                                        url: "loa/setLou",
-                                        data: myData,
-                                        contentType: "application/json",
-                                        success: function (result) {
-                                            // if (result.status) {
-                                            //     window.Ewin.alert({message: result.errMsg});
-                                            //     //刷新，会重新申请数据库数据
-                                            // }
-                                            // else {
-                                            //     window.Ewin.alert({messabge: + result.errMsg});
-                                            // }
-                                            if (result.success) {
-                                                layer.msg('设置成功', {icon: 1, time: 2000})
-                                            } else if (!result.success) {
-                                                window.Ewin.alert({message: result.errMsg});
-                                            }
-                                            $table.bootstrapTable("refresh");
-                                        },
-                                        error: function (info) {
-                                            window.Ewin.alert({message: ":" + info.status});
-                                        }
-                                    })
+                            $.ajax({
+                                type: "POST",
+                                //ajax需要添加打包名
+                                url: "loa/setLou",
+                                data: myData,
+                                contentType: "application/json",
+                                success: function (result) {
+                                    // if (result.status) {
+                                    //     window.Ewin.alert({message: result.errMsg});
+                                    //     //刷新，会重新申请数据库数据
+                                    // }
+                                    // else {
+                                    //     window.Ewin.alert({messabge: + result.errMsg});
+                                    // }
+                                    if (result.success) {
+                                        layer.msg('设置成功', {icon: 1, time: 2000})
+                                    } else if (!result.success) {
+                                        window.Ewin.alert({message: result.errMsg});
+                                    }
+                                    $table.bootstrapTable("refresh");
+                                },
+                                error: function (info) {
+                                    window.Ewin.alert({message: ":" + info.status});
+                                }
+                            })
                             //     }
                             // });
                         }
@@ -373,9 +377,9 @@ function initTable(eBomUrl) {
                             if (rows.length == 0) {
                                 window.Ewin.alert({message: '请选择一条需要变更的数据!'});
                                 return false;
-                            }else {
-                                for (var i = 0; i<rows.length;i++){
-                                    if (rows[i].status !=4 &&rows[i].status !=2){
+                            } else {
+                                for (var i = 0; i < rows.length; i++) {
+                                    if (rows[i].status != 4 && rows[i].status != 2) {
                                         window.Ewin.alert({message: '请选择状态为草稿状态或删除状态的数据!'});
                                         return false;
                                     }
@@ -428,7 +432,7 @@ function initTable(eBomUrl) {
                         text: '导入Excel',
                         iconCls: 'glyphicon glyphicon-share',
                         handler: function () {
-                            window.Ewin.dialog({title:"导入",url:"ebom/importExcel",width:600,height:500})
+                            window.Ewin.dialog({title: "导入", url: "ebom/importExcel", width: 600, height: 500})
                         }
                     },
                 ],
@@ -474,6 +478,7 @@ function queryLoa(row) {
         }
     })
 }
+
 function queryLou(row) {
     // var myData = JSON.stringify({
     //     "projectId": $("#project", window.top.document).val(),
@@ -483,7 +488,7 @@ function queryLou(row) {
     $.ajax({
         type: "GET",
         //ajax需要添加打包名
-        url: "loa/getLou?projectId="+projectId+"&puid="+row,
+        url: "loa/getLou?projectId=" + projectId + "&puid=" + row,
         // data: myData,
         // contentType: "application/json",
         undefinedText: "",
@@ -505,7 +510,7 @@ function queryLou(row) {
             _table += '<tr><td>' + parentLevel + '</td><td>' + parentLineId + '</td><td>' + parentName + '</td></tr>';
             _table += '</table></div>' + '<div style="max-height: 400px;overflow:scroll;"><table class="table table-striped tableNormalStyle" >';
             _table += '<tr><td>配置名</td><td>特性值描述</td><td>族名</td><td>特性描述</td></tr>'
-            _table += '<tr><td>' + pCfg0name + '</td><td>' + cfg0Desc + '</td><td>' + pCfg0familyname + '</td><td>'+cfg0FamilyDesc+'</td></tr>';
+            _table += '<tr><td>' + pCfg0name + '</td><td>' + cfg0Desc + '</td><td>' + pCfg0familyname + '</td><td>' + cfg0FamilyDesc + '</td></tr>';
             _table += '</table></div>' + '<div style="max-height: 400px;overflow:scroll;"><table class="table table-striped tableNormalStyle" >';
             _table += '<tr><td>子层级</td><td>子零件号</td><td>子名称</td></tr>'
             for (var i = 0; i < child.length; i++) {
@@ -516,9 +521,10 @@ function queryLou(row) {
         }
     })
 }
-$(document).keydown(function(event) {
+
+$(document).keydown(function (event) {
     if (event.keyCode == 13) {
-        $('form').each(function() {
+        $('form').each(function () {
             event.preventDefault();
         });
     }
