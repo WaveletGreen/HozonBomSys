@@ -9,10 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sql.pojo.cfg.HzCfg0ColorSet;
-import sql.pojo.cfg.HzCfg0ModelColor;
-import sql.pojo.cfg.HzCfg0OptionFamily;
-import sql.pojo.cfg.HzColorModel;
+import sql.pojo.cfg.*;
 import sql.redis.SerializeUtil;
 
 import java.util.*;
@@ -47,6 +44,8 @@ public class HzCfg0ModelColorService {
      */
     @Autowired
     HzCfg0ColorSetService hzCfg0ColorSetService;
+    @Autowired
+    HzCfg0MainService hzCfg0MainService;
     /**
      * 日志
      */
@@ -195,7 +194,7 @@ public class HzCfg0ModelColorService {
         List<HzCfg0ModelColor> colorSet = hzCfg0ModelColorDao.selectAll(projectPuid);
         List<HzCfg0OptionFamily> familiesNew = hzCfg0OptionFamilyService.getFamilies(projectPuid);//hzCfg0OptionFamilyDao.selectNameByMainId2(projectPuid);
         List<String> column = hzCfg0OptionFamilyService.getColumnNewWithFamilies(familiesNew, "<br/>");
-
+        HzCfg0MainRecord mainRecord = hzCfg0MainService.doGetbyProjectPuid(projectPuid);
         /**
          * 用于筛选颜色集
          */
@@ -303,17 +302,17 @@ public class HzCfg0ModelColorService {
                             hcm.setModifier(user.getUsername());
                             hcm.setModifyDate(date);
                             hcm.setModelUid(color.getPuid());
-                            hcm.setCfgMainUid(projectPuid);
+                            hcm.setCfgMainUid(mainRecord.getPuid());
                             hcm.setCfgUid(familiesNew.get(i).getPuid());
                             list.add(hcm);
                             logger.error(familiesNew.get(i).getpOptionfamilyName());
                             logger.error(familiesNew.get(i).getpOptionfamilyDesc());
                             logger.error(familiesNew.get(i).getPuid());
                         }
-                        if (list.size() > 0) {
-                            hzColorModelService.doInsertByBatch(list);
-                        }
 //                        }
+                    }
+                    if (list.size() > 0) {
+                        hzColorModelService.doInsertByBatch(list);
                     }
                 }
             } else {
