@@ -730,7 +730,7 @@ public class HzMbomServiceImpl implements HzMbomService {
         hzMbomLineRecord.setpBomOfWhichDept(record.getpBomOfWhichDept());
         hzMbomLineRecord.setpBomLinePartEnName(record.getpBomLinePartEnName());
         hzMbomLineRecord.setpBomLinePartResource(record.getpBomLinePartResource());
-        hzMbomLineRecord.setOrderNum(record.getOrderNum());
+        hzMbomLineRecord.setSortNum(record.getSortNum());
         return hzMbomLineRecord;
     }
 
