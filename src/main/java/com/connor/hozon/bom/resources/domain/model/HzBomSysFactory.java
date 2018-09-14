@@ -2,6 +2,7 @@ package com.connor.hozon.bom.resources.domain.model;
 
 
 import com.connor.hozon.bom.resources.mybatis.bom.HzEbomRecordDAO;
+import com.connor.hozon.bom.resources.mybatis.bom.impl.HzEbomRecordDAOImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Random;
@@ -12,10 +13,6 @@ import java.util.Random;
  * @Description:
  */
 public class HzBomSysFactory {
-
-    @Autowired
-    private static HzEbomRecordDAO hzEbomRecordDAO;
-
     /**
      * 获取bom系统的层级和级别 和查找编号
      * @param lineIndex
@@ -67,6 +64,7 @@ public class HzBomSysFactory {
             double d = random.nextDouble()+d1;
             if(d<d2){
                 s = String.valueOf(d);
+                HzEbomRecordDAO hzEbomRecordDAO = new HzEbomRecordDAOImpl();
                 boolean b = hzEbomRecordDAO.sortNumRepeat(projectId,s);
                 if(!b){
                     break;

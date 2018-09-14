@@ -140,11 +140,9 @@ public class HzMaterielServiceImpl implements HzMaterielService {
                 respDTO.setErrMsg("请选择一条需要删除的数据！");
                 return respDTO;
             }
-            User user = UserInfo.getUser();
-            if (user.getGroupId() != 9l) {
-                respDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
-                respDTO.setErrMsg("您当前没有权限进行此操作！");
-                return respDTO;
+            boolean b = PrivilegeUtil.writePrivilege();
+            if(!b){
+                return OperateResultMessageRespDTO.getFailPrivilege();
             }
             int i = hzMaterielDAO.delete(puid);
             if(i>0){

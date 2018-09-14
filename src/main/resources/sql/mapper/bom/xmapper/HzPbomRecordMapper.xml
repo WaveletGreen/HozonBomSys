@@ -419,12 +419,14 @@
  </update>
 
   <!--查询最大排序号-->
-  <select id="HzPbomRecordDAOImpl_findMaxOrderNum" resultType="java.lang.Integer">
-    select max(P_BOM_ORDER_NUM) from HZ_PBOM_RECORD  where P_BOM_DIGIFAX_ID =(
+  <select id="HzPbomRecordDAOImpl_findMaxOrderNum" resultType="java.lang.String">
+    SELECT * FROM (
+        SELECT t1.P_SORT_NUM from HZ_PBOM_RECORD t1
+         where t1.P_BOM_DIGIFAX_ID =(
         select t2.puid from Hz_Bom_Main_Record t2
         where
         t2.p_cfg0_of_which_project_puid=#{projectId,jdbcType=VARCHAR}
-        )
+        )order by CAST(t1.P_SORT_NUM as FLOAT) DESC)WHERE rownum = 1
  </select>
 
     <!--获取PBOM结构树-->
@@ -438,6 +440,7 @@
     </where>
     start with t.P_E_BOM_PUID = #{puid,jdbcType=VARCHAR} and t.P_PBOM_STATUS <![CDATA[ <> ]]>0
     connect by prior t.P_E_BOM_PUID = t.p_parent_uid and t.P_PBOM_STATUS<![CDATA[ <> ]]>0
+    order by CAST(t.P_SORT_NUM as FLOAT)
 </select>
 
   <!--获取PBOM 2Y层 对应的lineIndex的第一个字母最大值-->
@@ -522,13 +525,14 @@
   <!--找出大于当前排序号的最小排序号-->
   <select id="HzPbomRecordDAOImpl_findMinOrderNumWhichGreaterThanThisOrderNum" parameterType="java.util.HashMap" resultType="java.lang.String">
     SELECT * FROM (
-    SELECT P_SORT_NUM  FROM HZ_MBOM_RECORD
+    SELECT P_SORT_NUM  FROM HZ_PBOM_RECORD
     where p_bom_digifax_id=(
     select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(
     select t2.puid from Hz_project_libs t2
     <where>
       t2.puid=#{projectId,jdbcType=VARCHAR}))
     </where>
+    and   P_PBOM_STATUS <![CDATA[ <> ]]>0
     and  P_SORT_NUM &gt;#{sortNum,jdbcType=VARCHAR}
     ORDER BY  CAST(P_SORT_NUM as FLOAT))WHERE rownum =1
   </select>
