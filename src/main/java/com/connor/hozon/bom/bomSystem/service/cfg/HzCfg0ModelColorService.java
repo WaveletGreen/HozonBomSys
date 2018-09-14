@@ -204,7 +204,7 @@ public class HzCfg0ModelColorService {
         colorSets.forEach(set -> mapOfColorSet.put(set.getpColorCode(), set));
 
         List<Map<String, String>> res = new ArrayList<>();
-        Map<String, HzColorModel> coach = new HashMap<>();
+        Map<String, HzColorModel> coach = new LinkedHashMap<>();
         colorSet.forEach(color -> {
             Map<String, String> _result = new LinkedHashMap<>();
             _result.put("puid", color.getPuid());
@@ -283,14 +283,36 @@ public class HzCfg0ModelColorService {
                     }
                 } else {
                     //添加颜色值用于显示
+                    List<HzColorModel> list = new ArrayList<>();
                     for (int i = 0; i < familiesNew.size(); i++) {
 //                        if ("车身颜色".equals(familiesNew.get(i).getpOptionfamilyDesc())) {
 //                            vehicleColor = cm.get(i).getpColorCode();
 //                            localTemp = _result.get("s0");
 //                            _result.put("s0", vehicleColor);
-//                            _result.put("s" + i, localTemp);
+//                            _result.put("s" + i, localTemp);F56B98AB58C04CA4AC5007C216A967BC
 //                        } else {
-                        _result.put("s" + i, coach.get(familiesNew.get(i).getPuid()).getpColorCode());
+                        if (coach.containsKey(familiesNew.get(i).getPuid())) {
+                            _result.put("s" + i, coach.get(familiesNew.get(i).getPuid()).getpColorCode());
+                        } else {
+                            _result.put("s" + i, "-");
+                            HzColorModel hcm = new HzColorModel();
+                            hcm.setColorUid("-");
+                            hcm.setPuid(UUIDHelper.generateUpperUid());
+                            hcm.setCreator(user.getUsername());
+                            hcm.setCreateDate(date);
+                            hcm.setModifier(user.getUsername());
+                            hcm.setModifyDate(date);
+                            hcm.setModelUid(color.getPuid());
+                            hcm.setCfgMainUid(projectPuid);
+                            hcm.setCfgUid(familiesNew.get(i).getPuid());
+                            list.add(hcm);
+                            logger.error(familiesNew.get(i).getpOptionfamilyName());
+                            logger.error(familiesNew.get(i).getpOptionfamilyDesc());
+                            logger.error(familiesNew.get(i).getPuid());
+                        }
+                        if (list.size() > 0) {
+                            hzColorModelService.doInsertByBatch(list);
+                        }
 //                        }
                     }
                 }
