@@ -30,6 +30,9 @@ function doQuery() {
 
 function initTable(url) {
     var projectId = $("#project", window.top.document).val();
+    if (!checkIsSelectProject(projectId)) {
+        return;
+    }
     var  $table =  $("#routingDataTable");
     var  column = [];
     $.ajax({
