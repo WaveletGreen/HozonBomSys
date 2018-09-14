@@ -28,7 +28,7 @@ public class HzImportEbomRecord {
     /**
      * 排序号
      */
-    private int orderNum;
+    private String sortNum;
 
     private String bomDigifaxId;
 
@@ -265,14 +265,13 @@ public class HzImportEbomRecord {
         this.high = high;
     }
 
-    public int getOrderNum() {
-        return orderNum;
+    public String getSortNum() {
+        return sortNum;
     }
 
-    public void setOrderNum(int orderNum) {
-        this.orderNum = orderNum;
+    public void setSortNum(String sortNum) {
+        this.sortNum = sortNum;
     }
-
     public String getBomDigifaxId() {
         return bomDigifaxId;
     }

@@ -10,6 +10,7 @@ import com.connor.hozon.bom.resources.mybatis.factory.HzFactoryDAO;
 import com.connor.hozon.bom.resources.mybatis.work.HzWorkCenterDAO;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.service.work.HzWorkService;
+import com.connor.hozon.bom.resources.util.PrivilegeUtil;
 import com.connor.hozon.bom.sys.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -104,13 +105,10 @@ public class HzWorkServiceImpl implements HzWorkService {
      */
     @Override
     public OperateResultMessageRespDTO insertHzWorkRecord(AddWorkCenterReqDTO reqDTO) {
-        OperateResultMessageRespDTO operateResultMessageRespDTO = new OperateResultMessageRespDTO();
         try {
-            User user = UserInfo.getUser();
-            if(user.getGroupId()!=9){
-                operateResultMessageRespDTO.setErrMsg("你当前没有权限执行此操作!");
-                operateResultMessageRespDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
-                return operateResultMessageRespDTO;
+            boolean b = PrivilegeUtil.writePrivilege();
+            if(!b){
+                return OperateResultMessageRespDTO.getFailPrivilege();
             }
             HzWorkCenter hzWorkCenter = new HzWorkCenter();
             HzFactory hzFactory = hzFactoryDAO.findFactory("",reqDTO.getFactoryCode());
@@ -239,11 +237,9 @@ public class HzWorkServiceImpl implements HzWorkService {
     public OperateResultMessageRespDTO updateHzWorkRecord(UpdateWorkCenterReqDTO reqDTO) {
         OperateResultMessageRespDTO operateResultMessageRespDTO = new OperateResultMessageRespDTO();
         try {
-            User user = UserInfo.getUser();
-            if(user.getGroupId()!=9){
-                operateResultMessageRespDTO.setErrMsg("你当前没有权限执行此操作!");
-                operateResultMessageRespDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
-                return operateResultMessageRespDTO;
+            boolean b = PrivilegeUtil.writePrivilege();
+            if(!b){
+                return OperateResultMessageRespDTO.getFailPrivilege();
             }
             HzWorkCenter center = new HzWorkCenter();
             HzFactory hzFactory = hzFactoryDAO.findFactory("",reqDTO.getFactoryCode());

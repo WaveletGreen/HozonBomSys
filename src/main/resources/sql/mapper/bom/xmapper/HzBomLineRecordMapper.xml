@@ -514,13 +514,14 @@
 
 
     <!--查询orderNum的最大值信息-->
-    <select id="HzBomLineRecordDaoImpl_findMaxBomOrderNum" resultType="int">
-        select max(P_BOM_ORDER_NUM) from HZ_BOM_LINE_RECORD
-         where P_BOM_DIGIFAX_ID =(
+    <select id="HzBomLineRecordDaoImpl_findMaxBomOrderNum" resultType="java.lang.String">
+        SELECT * FROM (
+        SELECT t1.P_SORT_NUM from HZ_BOM_LINE_RECORD t1
+         where t1.P_BOM_DIGIFAX_ID =(
         select t2.puid from Hz_Bom_Main_Record t2
         where
         t2.p_cfg0_of_which_project_puid=#{projectId,jdbcType=VARCHAR}
-        )
+        )order by CAST(t1.P_SORT_NUM as FLOAT) DESC)WHERE rownum = 1
     </select>
 
     <!--查询全部的2y层 lineindex 信息-->

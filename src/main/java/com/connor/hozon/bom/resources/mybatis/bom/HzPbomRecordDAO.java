@@ -74,7 +74,7 @@ public interface HzPbomRecordDAO {
      */
     int getHzBomLineCount(String projectId);
 
-    Integer getHzPbomMaxOrderNum(String projectId);
+    Double getHzPbomMaxOrderNum(String projectId);
 
     /**
      * 获取PBOM结构树
