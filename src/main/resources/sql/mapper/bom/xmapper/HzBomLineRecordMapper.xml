@@ -68,11 +68,11 @@
         <result column="P_EWO_NO" jdbcType="VARCHAR" property="ewoNo"/>
         <result column="P_LOU_LOA_FLAG" jdbcType="INTEGER" property="pLouaFlag"/>
     </resultMap>
-    <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs"
-               type="sql.pojo.bom.HzBomLineRecord">
-        <result column="P_BOM_LINE_BLOCK" jdbcType="BLOB"
-                property="bomLineBlock"/>
-    </resultMap>
+    <!--<resultMap extends="BaseResultMap" id="ResultMapWithBLOBs"-->
+               <!--type="sql.pojo.bom.HzBomLineRecord">-->
+        <!--<result column="P_BOM_LINE_BLOCK" jdbcType="BLOB"-->
+                <!--property="bomLineBlock"/>-->
+    <!--</resultMap>-->
     <sql id="Base_Column_List">
     PUID,
     P_PARENT_UID,
@@ -150,7 +150,7 @@
     P_FASTENER_LEVEL, P_TORQUE, P_DUTY_ENGINEER, P_SUPPLY, P_SUPPLY_CODE, P_REMARK, P_REGULATION_CODE,P_NUMBER,
     P_BUY_ENGINEER,P_EWO_NO,P_SORT_NUM
   </sql>
-    <sql id="Blob_Column_List">P_BOM_LINE_BLOCK</sql>
+    <!--<sql id="Blob_Column_List">P_BOM_LINE_BLOCK</sql>-->
     <sql id="Color_Column">P_COLOR_UID</sql>
     <sql id="values_by_batch">
 		#{item.puid,jdbcType=VARCHAR},
@@ -166,26 +166,22 @@
 		#{item.isDept,jdbcType=INTEGER},
 		#{item.pBomOfWhichDept,jdbcType=VARCHAR},
 		#{item.pBomLinePartName,jdbcType=VARCHAR},
-		#{item.pBomLinePartClass,jdbcType=VARCHAR},
-		#{item.bomLineBlock,jdbcType=BLOB}
+		#{item.pBomLinePartClass,jdbcType=VARCHAR}
+
     </sql>
     <select id="selectByPrimaryKey"
             parameterType="sql.pojo.bom.HzBomLineRecord"
-            resultMap="ResultMapWithBLOBs">
+            resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
-        ,
-        <include refid="Blob_Column_List"/>
         from HZ_BOM_LINE_RECORD
         where PUID = #{puid,jdbcType=VARCHAR}
     </select>
     <select id="selectByProjectPuid"
             parameterType="sql.pojo.bom.HzBomLineRecord"
-            resultMap="ResultMapWithBLOBs">
+            resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
-        ,
-        <include refid="Blob_Column_List"/>
         from HZ_BOM_LINE_RECORD
         where P_BOM_DIGIFAX_ID =(
         select t2.puid from Hz_Bom_Main_Record t2
@@ -204,7 +200,6 @@
         insert into ${tableName}
         (
         PUID,P_PARENT_UID,P_BOM_DIGIFAX_ID,P_LINE_INDEX,P_BOM_LINE_IS_HAS,P_BOM_LINE_PUID,P_BOM_LINE_ID,
-        P_BOM_LINE_BLOCK,
         P_BOM_LINE_IS_2Y,P_BOM_LINE_IS_PART,P_SORT_NUM,P_BOM_LINE_IS_DEPT,P_BOM_OF_WHICH_DEPT,
         P_BOM_LINE_PART_NAME,P_BOM_LINE_PART_CLASS,
         P_BOM_LINE_PART_EN_NAME,
@@ -226,7 +221,7 @@
         values
         (#{puid,jdbcType=VARCHAR},#{parentUid,jdbcType=VARCHAR},#{bomDigifaxId,jdbcType=VARCHAR},
         #{lineIndex,jdbcType=VARCHAR},#{isHas,jdbcType=INTEGER},#{linePuid,jdbcType=VARCHAR},
-        #{lineID,jdbcType=VARCHAR},#{bomLineBlock,jdbcType=BLOB},
+        #{lineID,jdbcType=VARCHAR},
         #{is2Y,jdbcType=INTEGER},#{isPart,jdbcType=INTEGER},
         #{sortNum,jdbcType=VARCHAR},#{isDept,jdbcType=INTEGER},
         #{pBomOfWhichDept,jdbcType=VARCHAR},#{pBomLinePartName,jdbcType=VARCHAR},#{pBomLinePartClass,jdbcType=VARCHAR},
@@ -255,8 +250,6 @@
                  separator=" ">
             into HZ_BOM_LINE_RECORD (
             <include refid="Base_Column_List"/>
-            ,
-            <include refid="Blob_Column_List"/>
             ) values (
             <include refid="values_by_batch"/>
             )
@@ -315,9 +308,9 @@
             <if test="pBomOfWhichDept != null">
                 P_BOM_OF_WHICH_DEPT = #{pBomOfWhichDept,jdbcType=VARCHAR},
             </if>
-            <if test="bomLineBlock != null">
-                P_BOM_LINE_BLOCK = #{bomLineBlock,jdbcType=VARCHAR},
-            </if>
+            <!--<if test="bomLineBlock != null">-->
+                <!--P_BOM_LINE_BLOCK = #{bomLineBlock,jdbcType=VARCHAR},-->
+            <!--</if>-->
             <if test="status != null">
                 P_EBOM_STATUS = #{status,jdbcType=VARCHAR},
             </if>

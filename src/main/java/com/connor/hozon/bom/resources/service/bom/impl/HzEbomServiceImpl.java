@@ -152,7 +152,7 @@ public class HzEbomServiceImpl implements HzEbomService {
     /**
      * 添加EBOM  最好使用事务
      * @param reqDTO
-     * @return 有很大的可优化性 时间紧迫 2期在优化
+     * @return
      */
     @Override
     public OperateResultMessageRespDTO addHzEbomRecord(AddHzEbomReqDTO reqDTO) {
@@ -341,10 +341,13 @@ public class HzEbomServiceImpl implements HzEbomService {
                                     //更新数据
                                     hzPbomRecordDAO.update(list2.get(i));
                                 }
-                                hzPbomLineRecord.seteBomPuid(puids.get(i));
+                                if(puids.size()>=list2.size()){
+                                    hzPbomLineRecord.seteBomPuid(puids.get(i));
+                                }else {
+                                    hzPbomLineRecord.seteBomPuid(puids.get(0));
+                                }
                                 hzPbomLineRecord.setParentUid(list2.get(i).geteBomPuid());
                                 hzPbomLineRecord.setIs2Y(0);
-                                hzPbomLineRecord.setLinePuid(puids.get(i));
                                 hzPbomLineRecord.setIsDept(0);
                                 hzPbomLineRecord.setIsHas(0);
                                 hzPbomLineRecord.setIsPart(1);
@@ -460,7 +463,11 @@ public class HzEbomServiceImpl implements HzEbomService {
                                 }
 
                                 hzMbomLineRecord.setBomDigifaxId(hzBomMainRecord.getPuid());
-                                hzMbomLineRecord.seteBomPuid(puids.get(i));
+                                if(puids.size()>=list2.size()){
+                                    hzMbomLineRecord.seteBomPuid(puids.get(i));
+                                }else {
+                                    hzMbomLineRecord.seteBomPuid(puids.get(0));
+                                }
                                 hzMbomLineRecord.setParentUid(list3.get(i).geteBomPuid());
                                 hzMbomLineRecord.setIs2Y(0);
                                 hzMbomLineRecord.setIsDept(0);
@@ -530,7 +537,6 @@ public class HzEbomServiceImpl implements HzEbomService {
                                         if(find){//找出当前合适的插入位置
                                             String index = re.getLineIndex();
                                             String lineIndexExceptLast= index.substring(0,index.lastIndexOf("."));
-                                            int lastNum = Integer.valueOf(index.split("\\.")[index.split("\\.").length - 1]);
                                             String s1 = String.valueOf(re.getSortNum());
                                             String s2 = hzMbomRecordDAO.findMinOrderNumWhichGreaterThanThisOrderNum(reqDTO.getProjectId(),s1);
                                             if(s2 == null){
@@ -567,7 +573,18 @@ public class HzEbomServiceImpl implements HzEbomService {
                                 hzMbomRecordDAO.insertList(hzMbomLineRecords);
                             }
                         }
-
+                        List<HzMaterielRecord> list = new ArrayList<>();
+                        HzMaterielRecord materielRecord = HzMaterielFactory.addHzEbomReqDTOMaterielRecord(reqDTO);
+                        materielRecord.setpMaterielDataType(BomResourceEnum.enumTypeToMaterielTypeNum(reqDTO.getpBomLinePartResource(),0));
+                        materielRecord.setMaterielResourceId(puid);
+                        HzMaterielQuery hzMaterielQuery = new HzMaterielQuery();
+                        hzMaterielQuery.setProjectId(reqDTO.getProjectId());
+                        hzMaterielQuery.setpMaterielCode(reqDTO.getLineId());
+                        boolean repeat = hzMaterielDAO.isRepeat(hzMaterielQuery);
+                        if(!repeat){
+                            list.add(materielRecord);
+                            hzMaterielDAO.insertList(list);
+                        }
                     }
             }
             return OperateResultMessageRespDTO.getSuccessResult();
@@ -684,14 +701,12 @@ public class HzEbomServiceImpl implements HzEbomService {
                     hzMaterielQuery.setProjectId(reqDTO.getProjectId());
                     hzMaterielQuery.setpMaterielCode(reqDTO.getLineId());
                     boolean repeat = hzMaterielDAO.isRepeat(hzMaterielQuery);
-                    if(repeat){
-                        List<HzMaterielRecord> list = hzMaterielDAO.findHzMaterielForList(hzMaterielQuery);
-                        list.forEach(record -> {
-                            hzMaterielRecord.setPuid(record.getPuid());
-                            hzMaterielDAO.update(hzMaterielRecord);
-                        });
-
-                    }else {
+                    if(!repeat){
+//                        List<HzMaterielRecord> list = hzMaterielDAO.findHzMaterielForList(hzMaterielQuery);
+//                        list.forEach(record -> {
+//                            hzMaterielRecord.setPuid(record.getPuid());
+//                            hzMaterielDAO.update(hzMaterielRecord);
+//                        });
                         List<HzMaterielRecord> hzMaterielRecords = new ArrayList<>();
                         hzMaterielRecords.add(hzMaterielRecord);
                         hzMaterielDAO.insertList(hzMaterielRecords);

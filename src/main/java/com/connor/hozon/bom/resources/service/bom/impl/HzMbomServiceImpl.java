@@ -266,7 +266,6 @@ public class HzMbomServiceImpl implements HzMbomService {
 
     @Override
     public OperateResultMessageRespDTO updateMbomRecord(UpdateMbomReqDTO reqDTO) {
-        OperateResultMessageRespDTO operateResultMessageRespDTO = new OperateResultMessageRespDTO();
         try {
             User user = UserInfo.getUser();
             boolean b = PrivilegeUtil.writePrivilege();

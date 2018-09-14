@@ -198,4 +198,9 @@ public class HzMbomRecordDAOImpl extends BaseSQLUtil implements HzMbomRecordDAO 
         map.put("sortNum",orderNum);
         return (String) super.findForObject("HzMbomRecordDAOImpl_findMinOrderNumWhichGreaterThanThisOrderNum",map);
     }
+
+    @Override
+    public List<HzMbomLineRecord> findHzMbomAll(String projectId) {
+        return super.findForList("HzMbomRecordDAOImpl_findHzMbomAll",projectId);
+    }
 }

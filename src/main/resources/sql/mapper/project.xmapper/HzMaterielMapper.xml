@@ -199,12 +199,12 @@
         <foreach collection="list" item="item" index="index" separator="UNION ALL">
             select
             #{item.puid,jdbcType=VARCHAR}, #{item.pMaterielCode,jdbcType=VARCHAR},
-            #{item.pMaterielType,jdbcType=VARCHAR},
+            #{item.pMaterielType,jdbcType=INTEGER},
             #{item.pMaterielDesc,jdbcType=VARCHAR}, #{item.pPertainToProjectPuid,jdbcType=VARCHAR},
             #{item.pMaterielDescEn,jdbcType=VARCHAR},
             #{item.pMaterielDataType,jdbcType=VARCHAR},
             #{item.pFactoryPuid,jdbcType=VARCHAR},#{item.type,jdbcType=INTEGER},
-            #{item.materielResourceId,jdbcType=INTEGER},1
+            #{item.materielResourceId,jdbcType=VARCHAR},1
             from DUAL
         </foreach>
     </insert>
@@ -226,15 +226,16 @@
             <if test="pMaterielDataType != null">
                 and P_MATERIEL_DATA_TYPE = #{pMaterielDataType,jdbcType=INTEGER}
             </if>
-            <if test="pMaterielDataType == null">
-                and (P_MATERIEL_DATA_TYPE = 11
-                or P_MATERIEL_DATA_TYPE =21
-                or P_MATERIEL_DATA_TYPE =31
-                or P_MATERIEL_DATA_TYPE =41
-                or P_MATERIEL_DATA_TYPE =51
-                or P_MATERIEL_DATA_TYPE =61
-                or P_MATERIEL_DATA_TYPE =71)
-            </if>
+            <!--<if test="pMaterielDataType == null">-->
+                <!--and (P_MATERIEL_DATA_TYPE = 11-->
+                <!--or P_MATERIEL_DATA_TYPE =21-->
+                <!--or P_MATERIEL_DATA_TYPE =31-->
+                <!--or P_MATERIEL_DATA_TYPE =41-->
+                <!--or P_MATERIEL_DATA_TYPE =51-->
+                <!--or P_MATERIEL_DATA_TYPE =61-->
+                <!--or P_MATERIEL_DATA_TYPE =71-->
+                <!--or P_MATERIEL_DATA_TYPE =81)-->
+            <!--</if>-->
             <if test="pMaterielCode != null and pMaterielCode != '' ">
                 and P_MATERIEL_CODE like CONCAT(CONCAT('%',#{pMaterielCode,jdbcType=VARCHAR}),'%')
             </if>
@@ -261,14 +262,16 @@
             <if test="pMaterielDataType != null">
                 and P_MATERIEL_DATA_TYPE = #{pMaterielDataType,jdbcType=INTEGER}
             </if>
-            <if test="pMaterielDataType == null">
-                and (P_MATERIEL_DATA_TYPE = 11 or P_MATERIEL_DATA_TYPE =21
-                or P_MATERIEL_DATA_TYPE =31
-                or P_MATERIEL_DATA_TYPE =41
-                or P_MATERIEL_DATA_TYPE =51
-                or P_MATERIEL_DATA_TYPE =61
-                or P_MATERIEL_DATA_TYPE =71)
-            </if>
+            <!--<if test="pMaterielDataType == null">-->
+                <!--and (P_MATERIEL_DATA_TYPE = 11 -->
+                <!--or P_MATERIEL_DATA_TYPE =21-->
+                <!--or P_MATERIEL_DATA_TYPE =31-->
+                <!--or P_MATERIEL_DATA_TYPE =41-->
+                <!--or P_MATERIEL_DATA_TYPE =51-->
+                <!--or P_MATERIEL_DATA_TYPE =61-->
+                <!--or P_MATERIEL_DATA_TYPE =71-->
+                <!--or P_MATERIEL_DATA_TYPE =81)-->
+            <!--</if>-->
             <if test="pMaterielCode != null and pMaterielCode != '' ">
                 and P_MATERIEL_CODE like CONCAT(CONCAT('%',#{pMaterielCode,jdbcType=VARCHAR}),'%')
             </if>
