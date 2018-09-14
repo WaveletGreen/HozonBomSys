@@ -1,7 +1,5 @@
 package sql.pojo.cfg;
 
-import org.springframework.data.rest.core.annotation.Description;
-
 public class HzCfg0ModelDetail {
     /***
      * 主键
@@ -103,7 +101,18 @@ public class HzCfg0ModelDetail {
      */
     @Deprecated
     private String pModelTransform;
-
+    /**
+     * 模型名
+     */
+    private String objectName;
+    /**
+     * 模型描述
+     */
+    private String objectDesc;
+    /**
+     * 模型基本信息
+     */
+    private String pCfg0ModelBasicDetail;
     public String getPuid() {
         return puid;
     }
@@ -278,5 +287,29 @@ public class HzCfg0ModelDetail {
 
     public void setpModelCfgMng(String pModelCfgMng) {
         this.pModelCfgMng = pModelCfgMng;
+    }
+
+    public String getObjectName() {
+        return objectName;
+    }
+
+    public void setObjectName(String objectName) {
+        this.objectName = objectName;
+    }
+
+    public String getObjectDesc() {
+        return objectDesc;
+    }
+
+    public void setObjectDesc(String objectDesc) {
+        this.objectDesc = objectDesc;
+    }
+
+    public String getpCfg0ModelBasicDetail() {
+        return pCfg0ModelBasicDetail;
+    }
+
+    public void setpCfg0ModelBasicDetail(String pCfg0ModelBasicDetail) {
+        this.pCfg0ModelBasicDetail = pCfg0ModelBasicDetail;
     }
 }

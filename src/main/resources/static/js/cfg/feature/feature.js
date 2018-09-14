@@ -1,3 +1,5 @@
+// import getProjectUid from './js/helper/projectHelper.js'
+
 $(document).ready(
     // $("#query").click(function () {
     loadData(getProjectUid()),
@@ -17,7 +19,9 @@ $(document).ready(
  * 加载数据，异步操作，方便调用
  */
 function loadData(projectPuid) {
-    $("#projectUid").val(projectPuid);
+    if (!checkIsSelectProject(projectPuid)) {
+        return;
+    }
     var $table = $("#dataTable");
     if ($table == null)
         return;

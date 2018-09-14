@@ -1,6 +1,8 @@
 function loadData(projectPuid) {
+    if (!checkIsSelectProject(projectPuid)) {
+        return;
+    }
     var $table = $("#dataTable");
-    $("#projectUid").val(projectPuid);
     $table.bootstrapTable('destroy');
     $("#refresh").removeAttr("disabled");
     $table.bootstrapTable({

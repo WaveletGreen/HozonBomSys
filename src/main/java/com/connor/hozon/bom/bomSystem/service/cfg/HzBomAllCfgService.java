@@ -729,7 +729,7 @@ public class HzBomAllCfgService {
             //模型名
             modelRecord.setObjectName(checkString(params.get("objectName")) ? params.get("objectName") : params.get("pModelVersion"));
             //模型描述
-            modelRecord.setObjectDesc(params.get("objectDesc"));
+            modelRecord.setObjectDesc(checkString(params.get("objectDesc")) ? params.get("objectDesc") : params.get("pModelVersion"));
             //模型基本信息
             modelRecord.setpCfg0ModelBasicDetail(params.get("pCfg0ModelBasicDetail"));
             //归属主配置
