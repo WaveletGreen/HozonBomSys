@@ -16,6 +16,7 @@ function doRefresh(projectId){
 function doQuery() {
     //$('#eplTable').bootstrapTable('refresh');    //刷新表格
     var projectPuid = $("#project", window.top.document).val();
+
     var mBomUrl = "mbom/record?projectId=" + projectPuid;
     // var level = $("#level").val();
     // mBomUrl += "&level=" + level;
@@ -93,6 +94,9 @@ function doQuery2() {
 }
 function initTable1(mBomUrl) {
     var projectPuid = $("#project", window.top.document).val();
+    if (!checkIsSelectProject(projectPuid)) {
+        return;
+    }
     var $mBomTable = $("#mbomMaintenanceTable");
     var currentProjectHead = $("#currentProjectHead", window.top.document).val();
     var column = [];

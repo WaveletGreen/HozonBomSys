@@ -99,7 +99,7 @@ public class HzRelevanceService2 {
                     relevanceCode += "( ";
                     for (int i = 0; i < size; i++) {
                         HzColorModel2 hzColorModel2 = hzColorModel2s1.get(i);
-                        relevanceCode = relevanceCode + "$ROOT.HZCSYS = '" + hzColorModel2.getColorCode() + "' ";
+                        relevanceCode = relevanceCode + "$ROOT.HZCSYS = '" + hzColorModel2.getpModelShell() + "' ";
                         if (size - i > 1) {
                             relevanceCode += "OR ";
                         }

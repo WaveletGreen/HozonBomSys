@@ -292,12 +292,9 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
 
     @Override
     public OperateResultMessageRespDTO deleteHzWorkProcess(String puid) {
-        OperateResultMessageRespDTO respDTO = new OperateResultMessageRespDTO();
-        User user = UserInfo.getUser();
-        if(user.getGroupId()!=9l){
-            respDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
-            respDTO.setErrMsg("您当前没有权限进行此操作！");
-            return respDTO;
+        boolean b = PrivilegeUtil.writePrivilege();
+        if(!b){
+            return OperateResultMessageRespDTO.getFailPrivilege();
         }
         try{
             HzWorkProcedure workProcess = hzWorkProcedureDAO.getHzWorkProcessByMaterielId(puid);

@@ -11,6 +11,7 @@ function doRefresh(projectId){
 function doQuery() {
     //$('#pbomManageTable').bootstrapTable('refresh');    //刷新表格
     var projectPuid = $("#project", window.top.document).val();
+
     var pBomUrl ="pbom/getBomManage?projectId=" + projectPuid;
     // var level = $("#level").val();
     // pBomUrl+="&level="+level;
@@ -39,6 +40,9 @@ function initTable(pBomUrl) {
     var $table = $("#pbomManageTable");
     var column = [];
     var projectPuid = $("#project", window.top.document).val();
+    if (!checkIsSelectProject(projectPuid)) {
+        return;
+    }
     $.ajax({
         url: "pbom/manage/title?project=" + projectPuid,
         type: "GET",
