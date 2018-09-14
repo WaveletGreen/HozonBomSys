@@ -149,4 +149,7 @@ public interface HzMbomRecordDAO {
 
 
     String findMinOrderNumWhichGreaterThanThisOrderNum(String projectId,String orderNum);
+
+
+    List<HzMbomLineRecord> findHzMbomAll(String projectId);
 }

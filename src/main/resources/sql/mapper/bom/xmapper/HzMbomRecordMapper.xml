@@ -783,4 +783,19 @@
         and  P_SORT_NUM &gt;#{sortNum,jdbcType=VARCHAR}
         ORDER BY  CAST(P_SORT_NUM as FLOAT))WHERE rownum =1
     </select>
+
+
+    <!--查询全部的MBOM-->
+    <select id="HzMbomRecordDAOImpl_findHzMbomAll" parameterType="java.lang.String" resultMap="MbomResultMap" >
+
+        SELECT * FROM HZ_MBOM_RECORD
+        where p_bom_digifax_id=(
+        select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(
+        select t2.puid from Hz_project_libs t2
+        <where>
+            t2.puid=#{projectId,jdbcType=VARCHAR}))
+        </where>
+        and P_MBOM_STATUS<![CDATA[ <> ]]>0
+    </select>
+
 </mapper>
