@@ -350,7 +350,7 @@ public class HzBomAllCfgService {
                             //标志，如model中存在该特性则为true
                             boolean flag = false;
                             for (HzFullCfgModel hzFullCfgModel : hzFullCfgModelsCheck) {
-                                if (hzFullCfgModel.getModCfg0Uid().equals(hzBomLineRecord.getPuid())) {
+                                if (hzFullCfgModel.getFlModelBomlineUid().equals(hzBomLineRecord.getPuid())) {
                                     flag = true;
                                 }
                             }
@@ -720,14 +720,14 @@ public class HzBomAllCfgService {
             //设置配置管理
             modelDetail.setpModelCfgMng(params.get("pModelCfgMng"));
             //车型
-            modelDetail.setpModelVehicle(projectHelper.getVehicle().getpVehicleCode());
+            modelDetail.setpModelMod(projectHelper.getVehicle().getpVehicleCode());
             //平台
             modelDetail.setpModelPlatform(projectHelper.getPlatform().getpPlatformCode());
             //品牌
-            modelDetail.setpModelBrand(projectHelper.getBrand().getpBrandCode());
+            modelDetail.setpModelBrand(projectHelper.getBrand().getpBrandName());
             //从TC继承过来的模型
             //模型名
-            modelRecord.setObjectName(params.get("objectName"));
+            modelRecord.setObjectName(checkString(params.get("objectName")) ? params.get("objectName") : params.get("pModelVersion"));
             //模型描述
             modelRecord.setObjectDesc(params.get("objectDesc"));
             //模型基本信息
@@ -754,5 +754,13 @@ public class HzBomAllCfgService {
         }
         return result;
 
+    }
+
+    public JSONObject query2YCfg(String projectId) {
+        JSONObject respons = new JSONObject();
+
+        List<HzFullCfgWithCfg> hzFullCfgWithCfgs = hzFullCfgWithCfgDao.query2YCfgByProjectId(projectId);
+        respons.put("cfgs", hzFullCfgWithCfgs);
+        return respons;
     }
 }

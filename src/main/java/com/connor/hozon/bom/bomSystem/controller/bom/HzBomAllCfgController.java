@@ -22,7 +22,7 @@ public class HzBomAllCfgController {
     private HzBomAllCfgService hzBomAllCfgService;
 
     @RequestMapping("/saveBom")
-    public JSONObject saveBom(@RequestParam Map<String, String> data) {
+    public JSONObject saveBom(@RequestParam Map<String, String> data){
         return new JSONObject();
     }
 
@@ -33,19 +33,19 @@ public class HzBomAllCfgController {
 
     @RequestMapping("/loadCfg0BomLineOfModel")
     @ResponseBody
-    public JSONObject loadCfg0BomLineOfModel(@RequestParam String bdf) {
+    public JSONObject loadCfg0BomLineOfModel(@RequestParam String bdf){
         return hzBomAllCfgService.parse(bdf);
     }
 
     @RequestMapping("/saveOneRow")
     @ResponseBody
-    public JSONObject saveOneRow(String bomLinePuid, String cfgPuid) {
-        return hzBomAllCfgService.saveOneRow(bomLinePuid, cfgPuid);
+    public JSONObject saveOneRow(String bomLinePuid, String cfgPuid){
+        return hzBomAllCfgService.saveOneRow(bomLinePuid,cfgPuid);
     }
 
     @RequestMapping("/savePoint")
     @ResponseBody
-    public JSONObject savePoint(@RequestBody Map<String, Map<String, String>> data) {
+    public JSONObject savePoint(@RequestBody Map<String, Map<String,String>> data){
         return hzBomAllCfgService.savePoint(data);
     }
 
@@ -89,6 +89,12 @@ public class HzBomAllCfgController {
     @ResponseBody
     public JSONObject setStage(@RequestBody Map<String, String> params) {
         return hzBomAllCfgService.setStage(params);
+    }
+
+    @RequestMapping("query2YCfg")
+    @ResponseBody
+    public JSONObject query2YCfg(@RequestParam String projectPuid) {
+        return hzBomAllCfgService.query2YCfg(projectPuid);
     }
 
     /**

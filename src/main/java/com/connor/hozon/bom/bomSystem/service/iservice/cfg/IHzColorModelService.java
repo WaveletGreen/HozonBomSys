@@ -56,6 +56,13 @@ public interface IHzColorModelService {
      */
     List<HzColorModel> doSelectByModelUidWithColor(String modelUid);
     /**
+     * 根据颜色模型，包括颜色一起筛选出来
+     *
+     * @param modelUid 车型UID
+     * @return
+     */
+    List<HzColorModel> doSelectByModelUidWithColor2(String modelUid);
+    /**
      * 根据项目ID查找
      *
      * @param projectUid

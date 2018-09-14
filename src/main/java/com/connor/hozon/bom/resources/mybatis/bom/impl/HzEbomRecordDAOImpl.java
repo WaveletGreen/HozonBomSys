@@ -109,6 +109,14 @@ public class HzEbomRecordDAOImpl extends BaseSQLUtil implements HzEbomRecordDAO 
     }
 
     @Override
+    public String findMinOrderNumWhichGreaterThanThisOrderNum(String projectId, String sortNum) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("projectId",projectId);
+        map.put("sortNum",sortNum);
+        return (String) super.findForObject("HzEbomRecordDAOImpl_findMinOrderNumWhichGreaterThanThisOrderNum",map);
+    }
+
+    @Override
     public int insert(HzEPLManageRecord record) {
         return super.insert("HzEbomRecordDAOImpl_insert",record);
     }
@@ -117,6 +125,14 @@ public class HzEbomRecordDAOImpl extends BaseSQLUtil implements HzEbomRecordDAO 
     public int importList(List<HzImportEbomRecord> records) {
 
         return super.insert("HzEbomRecordDAOImpl_importList",records);
+    }
+
+    @Override
+    public boolean sortNumRepeat(String projectId, String sortNum) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("projectId",projectId);
+        map.put("sortNum",sortNum);
+        return (int)super.findForObject("HzEbomRecordDAOImpl_sortNumRepeat",map)>0;
     }
 
 }

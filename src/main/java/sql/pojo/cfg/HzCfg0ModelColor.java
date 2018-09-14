@@ -9,7 +9,11 @@ import java.util.LinkedHashMap;
  * Time: 11:23
  */
 public class HzCfg0ModelColor {
+    /**
+     * 模型主键
+     */
     private String puid;
+
     private String pCfg0MainRecordOfMC;
     private String pCodeOfColorfulModel;
     private String pDescOfColorfulModel;

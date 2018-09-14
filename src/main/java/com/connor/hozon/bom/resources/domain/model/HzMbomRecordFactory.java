@@ -12,7 +12,7 @@ import java.util.UUID;
  * @Description:
  */
 public class HzMbomRecordFactory {
-    public static HzMbomLineRecord AddHzEbomReqDTOMbomRecord(AddHzEbomReqDTO reqDTO){
+    public static HzMbomLineRecord addHzEbomReqDTOMbomRecord(AddHzEbomReqDTO reqDTO){
         HzMbomLineRecord hzMbomLineRecord = new HzMbomLineRecord();
         hzMbomLineRecord.setUpdateName(UserInfo.getUser().getUserName());
         hzMbomLineRecord.setCreateName(UserInfo.getUser().getUserName());

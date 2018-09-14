@@ -2,7 +2,7 @@
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <body>
 <meta charset=utf-8/>
-<form class="form-horizontal" id="form" role="form" method="post" th:action="${action}">
+<form class="form-horizontal" id="addModelForm" role="form" method="post" th:action="${action}">
     <input class="form-control" id="pCfg0ModelOfMainRecord" name="pCfg0ModelOfMainRecord" type="hidden"
            th:value="${cfgmain.getPuid()}"
     />
@@ -25,7 +25,7 @@
         />
     </div>
     <div class="form-group col-lg-12">
-        <label for="pModelVersion">版型</label>
+        <label for="pModelVersion">版型<span style="color: red">*</span></label>
         <input class="form-control" id="pModelVersion" name="pModelVersion" type="text"
                placeholder="请输入版型"
         />
@@ -72,53 +72,67 @@
     <![CDATA[
     $(document).keydown(function (event) {
         if (event.keyCode == 13) {
-            $('form').each(function () {
+            $('addModelForm').each(function () {
                 event.preventDefault();
             });
         }
     });
     $(function () {
-        $('#form').bootstrapValidator({
+        $('#addModelForm').bootstrapValidator({
             message: 'This value is not valid',
             feedbackIcons: {
                 valid: 'glyphicon glyphicon-ok',
                 invalid: 'glyphicon glyphicon-remove',
                 validating: 'glyphicon glyphicon-refresh'
+            },
+            fields: {
+                pModelVersion: {
+                    message: '版型验证失败',
+                    validators: {
+                        notEmpty: {
+                            message: '版型不能为空'
+                        },
+                    }
+                }
             }
         });
         // 绑定dialog的确定按钮的监听事件
         $("#btnOk", window.top.document).click(function () {
-            var url = $("#form", window.top.document).attr('action');
-            var data = {};
-            var _d = $("#form").serializeArray();
-            for (var p in _d) {
-                data[_d[p].name] = _d[p].value;
-            }
-            $.ajax({
-                contentType:
-                    "application/json",
-                type:
-                    'POST',
-                url: url,
-                data: JSON.stringify(data),
-                success:
-                    function (result) {
-                        $('.modal-dialog', window.top.document).parent('div').remove()
-                        $('body', window.top.document).find('.modal-backdrop').remove();
-                        // jquery 调用刷新当前操作的table页面的refresh方法
-                        $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
-                        if (result) {
-                            layer.msg('添加模型成功!', {icon: 1, time: 2000})
-                        }
-                        else {
-                            window.Ewin.alert({message: '添加模型失败!'});
-                        }
-
-                    },
-                error: function (status) {
-                    window.Ewin.alert({message: status.status + ':添加模型失败!'});
+            var bootstrapValidator = $("#addModelForm", window.top.document).data('bootstrapValidator');
+            bootstrapValidator.validate();
+            if (bootstrapValidator.isValid()) {
+                var url = $("#addModelForm", window.top.document).attr('action');
+                var data = {};
+                var _d = $("#addModelForm").serializeArray();
+                for (var p in _d) {
+                    data[_d[p].name] = _d[p].value;
                 }
-            });
+                $.ajax({
+                    contentType:
+                        "application/json",
+                    type:
+                        'POST',
+                    url: url,
+                    data: JSON.stringify(data),
+                    success:
+                        function (result) {
+                            $('.modal-dialog', window.top.document).parent('div').remove()
+                            $('body', window.top.document).find('.modal-backdrop').remove();
+                            // jquery 调用刷新当前操作的table页面的refresh方法
+                            $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
+                            if (result) {
+                                layer.msg('添加模型成功!', {icon: 1, time: 2000})
+                            }
+                            else {
+                                window.Ewin.alert({message: '添加模型失败!'});
+                            }
+
+                        },
+                    error: function (status) {
+                        window.Ewin.alert({message: status.status + ':添加模型失败!'});
+                    }
+                });
+            }
         });
     })
     ]]>

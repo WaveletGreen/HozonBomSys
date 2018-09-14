@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import sql.pojo.cfg.HzCfg0OptionFamily;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Author: Fancyears·Maylos·Mayways
@@ -42,6 +43,15 @@ public interface HzCfg0OptionFamilyDao {
      * @return 返回一组系统名称
      */
     List<HzCfg0OptionFamily> selectNameByMainId2(@Param("mainId") String mainId);
+    /**
+     * Author: Fancyears·Maylos·Mayways
+     * Description: 根据产品配置器的puid获取到所有的配置系统层
+     * Date: 2018/5/23 9:49
+     *
+     * @param param
+     * @return 返回一组系统名称
+     */
+    List<HzCfg0OptionFamily> selectNameByMap(@Param("param") Map<String,Object> param);
 
     /**
      * @param family

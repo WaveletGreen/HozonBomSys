@@ -176,4 +176,16 @@
           (select ID from HZ_FULL_CFG_WITHCFG_RECORD where CFG_CFG0_UID = #{cfgCfg0Uid,jdbcType=VARCHAR}) is NULL
 
     </update>
+
+    <select id="query2YCfgByProjectId" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+          <include refid="Base_Column_List"/>
+        from
+          HZ_FULL_CFG_WITHCFG_RECORD
+        where
+          FL_CFG_VERSION =
+        (select ID from HZ_FULL_CFG_MAIN_RECORD where PROJECT_UID = #{projectId})
+        and
+        CFG_CFG0_UID is not null
+    </select>
 </mapper>

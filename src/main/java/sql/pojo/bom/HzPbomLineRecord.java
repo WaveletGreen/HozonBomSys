@@ -19,6 +19,7 @@ public class HzPbomLineRecord {
     private String linePuid;
     private byte[] bomLineBlock;
     private Integer isPart;
+    @Deprecated
     private Integer orderNum;
     private String projectPuid;
     private String pBomLinePartName;
@@ -118,6 +119,16 @@ public class HzPbomLineRecord {
     private String updateName;
 
     private Integer pLouaFlag;
+
+    private String sortNum;
+
+    public String getSortNum() {
+        return sortNum;
+    }
+
+    public void setSortNum(String sortNum) {
+        this.sortNum = sortNum;
+    }
 
     public Integer getpLouaFlag() {
         return pLouaFlag;
