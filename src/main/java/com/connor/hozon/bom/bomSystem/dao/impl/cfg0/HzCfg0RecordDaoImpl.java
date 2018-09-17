@@ -121,7 +121,7 @@ public class HzCfg0RecordDaoImpl implements HzCfg0RecordDao {
     }
 
     @Override
-    public List<HzCfg0Record> selectListByProjectPuid(String projectPuid, QueryBase queryBase) {
+    public List<HzCfg0Record> selectListByProjectPuid(String projectPuid, HzFeatureQueryDTO queryBase) {
         Map<String, Object> params = new HashMap<>();
         params.put("projectPuid", projectPuid);
         params.put("whichTable", "HZ_CFG0_RECORD");

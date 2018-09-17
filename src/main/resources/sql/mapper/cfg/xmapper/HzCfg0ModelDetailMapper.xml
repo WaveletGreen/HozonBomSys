@@ -25,6 +25,11 @@
         <result column="P_MODEL_TRANSFORM" jdbcType="VARCHAR" property="pModelTransform"/>
         <result column="P_MODEL_CFG_MNG" jdbcType="VARCHAR" property="pModelCfgMng"/>
     </resultMap>
+    <resultMap id="ExtendResultMap" extends="BaseResultMap" type="sql.pojo.cfg.HzCfg0ModelDetail">
+        <result column="object_Name" jdbcType="VARCHAR" property="objectName"/>
+        <result column="object_Desc" jdbcType="VARCHAR" property="objectDesc"/>
+        <result column="p_cfg0_model_basic_detail" jdbcType="VARCHAR" property="pCfg0ModelBasicDetail"/>
+    </resultMap>
     <sql id="Base_Column_List">
     PUID,
     P_MODEL_PUID,
@@ -54,6 +59,17 @@
         <include refid="Base_Column_List"/>
         from HZ_CFG0_MODEL_DETAIL
         where P_MODEL_PUID = #{pModelPuid,jdbcType=VARCHAR}
+    </select>
+    <select id="selectByModelId2" parameterType="sql.pojo.cfg.HzCfg0ModelDetail" resultMap="ExtendResultMap">
+        select
+        t.<include refid="Base_Column_List"/>,
+        t2.object_name,
+        t2.object_desc,
+        t2.p_cfg0_model_basic_detail
+        from HZ_CFG0_MODEL_DETAIL t
+        left join Hz_cfg0_model_record t2 on t.p_model_puid=t2.puid
+        where P_MODEL_PUID = #{pModelPuid,jdbcType=VARCHAR}
+
     </select>
     <insert id="insert" parameterType="sql.pojo.cfg.HzCfg0ModelDetail">
     insert into HZ_CFG0_MODEL_DETAIL (
@@ -133,11 +149,11 @@
 
     <select id="selectByModelIds" parameterType="sql.pojo.cfg.HzCfg0ModelDetail" resultMap="BaseResultMap">
         select
-          <include refid="Base_Column_List"/>
+        <include refid="Base_Column_List"/>
         from
-          HZ_CFG0_MODEL_DETAIL
+        HZ_CFG0_MODEL_DETAIL
         where
-          P_MODEL_PUID in
+        P_MODEL_PUID in
         <foreach collection="list" item="hzCfg0ModelRecord" open="(" close=")" separator=",">
             #{hzCfg0ModelRecord.pModelPuid}
         </foreach>

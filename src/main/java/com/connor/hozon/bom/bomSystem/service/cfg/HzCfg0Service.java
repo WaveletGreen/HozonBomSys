@@ -31,7 +31,7 @@ public class HzCfg0Service {
         return hzCfg0RecordDao.selectByPrimaryKey(projectPuid);
     }
 
-    public List<HzCfg0Record> doLoadCfgListByProjectPuid(String projectPuid, QueryBase queryBase) {
+    public List<HzCfg0Record> doLoadCfgListByProjectPuid(String projectPuid, HzFeatureQueryDTO queryBase) {
         return hzCfg0RecordDao.selectListByProjectPuid(projectPuid, queryBase);
     }
 
