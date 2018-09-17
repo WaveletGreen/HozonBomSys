@@ -38,6 +38,14 @@ public class HzMaterielFactory {
         hzMaterielRecord.setPuid(UUID.randomUUID().toString());
         hzMaterielRecord.setpPartImportantDegree(reqDTO.getpImportance());
         hzMaterielRecord.setpPertainToProjectPuid(reqDTO.getProjectId());
+        if("Y".equals(reqDTO.getColorPart())){
+            hzMaterielRecord.setpColorPart(1);
+        }else if("N".equals(reqDTO.getColorPart())){
+            hzMaterielRecord.setpColorPart(0);
+        }else {
+            hzMaterielRecord.setpColorPart(null);
+        }
+
         return hzMaterielRecord;
     }
 
@@ -66,6 +74,13 @@ public class HzMaterielFactory {
             hzMaterielRecord.setpInOutSideFlag(null);
         }
         hzMaterielRecord.setpPartImportantDegree(reqDTO.getpImportance());
+        if("Y".equals(reqDTO.getColorPart())){
+            hzMaterielRecord.setpColorPart(1);
+        }else if("N".equals(reqDTO.getColorPart())){
+            hzMaterielRecord.setpColorPart(0);
+        }else {
+            hzMaterielRecord.setpColorPart(null);
+        }
         return hzMaterielRecord;
     }
 }
