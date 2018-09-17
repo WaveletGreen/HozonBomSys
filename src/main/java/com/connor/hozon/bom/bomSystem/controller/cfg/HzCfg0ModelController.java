@@ -16,6 +16,8 @@ import sql.pojo.cfg.HzCfg0ModelRecord;
 import javax.validation.constraints.NotNull;
 import java.util.UUID;
 
+import static com.connor.hozon.bom.bomSystem.helper.StringHelper.checkString;
+
 @Controller
 @RequestMapping("/model")
 public class HzCfg0ModelController {
@@ -63,10 +65,15 @@ public class HzCfg0ModelController {
         if (isSuccess) {
             HzCfg0ModelRecord modelRecord = hzCfg0modelRecordService.doGetById(detail.getpModelPuid());
             //更新车型模型名，如果有修改
-            if (!(detail.getpModelVersion().equals(modelRecord.getObjectName()))) {
+            modelRecord.setObjectDesc(detail.getObjectDesc());
+            modelRecord.setpCfg0ModelBasicDetail(detail.getpCfg0ModelBasicDetail());
+            if (!checkString(detail.getObjectName()) || !detail.getpModelVersion().equals(detail.getObjectName())) {
                 modelRecord.setObjectName(detail.getpModelVersion());
-                isSuccess = hzCfg0modelRecordService.doUpdateModelName(modelRecord);
+            } else {
+                modelRecord.setObjectName(detail.getObjectName());
             }
+            isSuccess = hzCfg0modelRecordService.doUpdateModelName(modelRecord);
+
         }
         result.put("msg", sb + detail.getpModelVersion() + "成功");
         result.put("state", isSuccess);
@@ -77,7 +84,7 @@ public class HzCfg0ModelController {
     public String modifyModel(@RequestParam String pModelPuid, Model model) {
         HzCfg0ModelDetail fromDBDetail = new HzCfg0ModelDetail();
         fromDBDetail.setpModelPuid(pModelPuid);
-        fromDBDetail = hzCfg0ModelService.getOneByModelId(fromDBDetail);
+        fromDBDetail = hzCfg0ModelService.getOneByModelId2(fromDBDetail);
         HzCfg0ModelRecord hzCfg0ModelRecord = hzCfg0modelRecordService.doGetById(pModelPuid);
         HzCfg0MainRecord hzCfg0MainRecord = cfg0MainService.doGetByPrimaryKey(hzCfg0ModelRecord.getpCfg0ModelOfMainRecord());
 

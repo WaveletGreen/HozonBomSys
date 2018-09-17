@@ -38,6 +38,17 @@ public class HzCfg0ModelService {
     }
 
     /**
+     * @param entity
+     * @return sql.pojo.cfg.HzCfg0ModelDetail
+     * @Author: Fancyears·Maylos·Mayways
+     * @Description: 根据模型的ID，获取到相关的详细模型数据
+     * @Date: 2018/5/21 17:06
+     */
+    public HzCfg0ModelDetail getOneByModelId2(HzCfg0ModelDetail entity) {
+        return hzCfg0ModelDetailDao.selectByModelId2(entity);
+    }
+
+    /**
      * 根据主键查找1个车型模型
      *
      * @param puid
