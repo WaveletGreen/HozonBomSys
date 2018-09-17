@@ -20,7 +20,6 @@
       <result column="P_BOM_LINE_PART_RESOURCE" jdbcType="VARCHAR" property="pBomLinePartResource" />
       <result column="P_SORT_NUM" jdbcType="VARCHAR" property="sortNum" />
 
-      <result column="P_BOM_LINE_BLOCK" jdbcType="BLOB" property="bomLineBlock"/>
       <result column="P_FNA_INFO" jdbcType="VARCHAR" property="fna" />
       <result column="P_FASTENER" jdbcType="VARCHAR" property="pFastener" />
       <result column="P_LOUA_FLAG" jdbcType="INTEGER" property="pLouaFlag" />
@@ -95,7 +94,7 @@
     PUID, P_PARENT_UID, P_BOM_DIGIFAX_ID, P_LINE_INDEX, P_BOM_LINE_IS_HAS, P_BOM_LINE_PUID,
     P_BOM_LINE_ID, P_BOM_LINE_IS_2Y, P_BOM_LINE_IS_PART, P_BOM_ORDER_NUM, P_BOM_LINE_IS_DEPT,
     P_BOM_OF_WHICH_DEPT, P_BOM_LINE_PART_NAME, P_BOM_LINE_PART_CLASS, P_BOM_LINE_PART_EN_NAME,
-    P_BOM_LINE_PART_RESOURCE,P_BOM_LINE_BLOCK
+    P_BOM_LINE_PART_RESOURCE
   </sql>
 
   <!--<sql id="Pbom_List">-->
@@ -464,7 +463,6 @@
         insert into ${tableName}
         (
         PUID,P_PARENT_UID,P_BOM_DIGIFAX_ID,P_LINE_INDEX,P_BOM_LINE_IS_HAS,P_BOM_LINE_PUID,P_BOM_LINE_ID,
-        P_BOM_LINE_BLOCK,
         P_BOM_LINE_IS_2Y,P_BOM_LINE_IS_PART,P_SORT_NUM,P_BOM_LINE_IS_DEPT,P_BOM_OF_WHICH_DEPT,
         P_BOM_LINE_PART_NAME,P_BOM_LINE_PART_CLASS,
         P_BOM_LINE_PART_EN_NAME,
@@ -486,7 +484,7 @@
         values
         (#{puid,jdbcType=VARCHAR},#{parentUid,jdbcType=VARCHAR},#{bomDigifaxId,jdbcType=VARCHAR},
         #{lineIndex,jdbcType=VARCHAR},#{isHas,jdbcType=INTEGER},#{linePuid,jdbcType=VARCHAR},
-        #{lineID,jdbcType=VARCHAR},#{bomLineBlock,jdbcType=BLOB},
+        #{lineID,jdbcType=VARCHAR},
         #{is2Y,jdbcType=INTEGER},#{isPart,jdbcType=INTEGER},
         #{sortNum,jdbcType=VARCHAR},#{isDept,jdbcType=INTEGER},
         #{pBomOfWhichDept,jdbcType=VARCHAR},#{pBomLinePartName,jdbcType=VARCHAR},#{pBomLinePartClass,jdbcType=VARCHAR},
@@ -537,7 +535,7 @@
             #{item.puid,jdbcType=VARCHAR},#{item.parentId,jdbcType=VARCHAR},#{item.bomDigifaxId,jdbcType=VARCHAR},
             #{item.lineIndex,jdbcType=VARCHAR},#{item.isHas,jdbcType=INTEGER},#{item.linePuid,jdbcType=VARCHAR},
             #{item.lineId,jdbcType=VARCHAR},#{item.is2Y,jdbcType=INTEGER},#{item.isPart,jdbcType=INTEGER},
-            #{item.sortNum,jdbcType=INTEGER},#{item.pBomOfWhichDept,jdbcType=VARCHAR},#{item.pBomLinePartName,jdbcType=VARCHAR},
+            #{item.sortNum,jdbcType=VARCHAR},#{item.pBomOfWhichDept,jdbcType=VARCHAR},#{item.pBomLinePartName,jdbcType=VARCHAR},
             #{item.pBomLinePartClass,jdbcType=VARCHAR},#{item.pBomLinePartEnName,jdbcType=VARCHAR},
             #{item.pBomLinePartResource,jdbcType=VARCHAR}, #{item.pFnaInfo,jdbcType=VARCHAR},1,
             sysdate,sysdate, #{item.pFastener,jdbcType=VARCHAR}, #{item.p3cpartFlag,jdbcType=INTEGER}, #{item.pInOutSideFlag,jdbcType=INTEGER},

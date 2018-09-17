@@ -21,6 +21,7 @@
         <result column="P_BOM_LINE_PART_RESOURCE" jdbcType="VARCHAR" property="pBomLinePartResource"/>
         <result column="P_EBOM_STATUS" jdbcType="INTEGER" property="status"/>
         <result column="P_SORT_NUM" jdbcType="VARCHAR" property="sortNum" />
+        <result column="P_COLOR_PART" jdbcType="INTEGER" property="colorPart" />
 
         <result column="P_FNA_INFO" jdbcType="VARCHAR" property="pFnaInfo"/>
         <result column="P_CREATE_TIME" jdbcType="DATE" property="pCreateTime"/>
@@ -68,11 +69,11 @@
         <result column="P_EWO_NO" jdbcType="VARCHAR" property="ewoNo"/>
         <result column="P_LOU_LOA_FLAG" jdbcType="INTEGER" property="pLouaFlag"/>
     </resultMap>
-    <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs"
-               type="sql.pojo.bom.HzBomLineRecord">
-        <result column="P_BOM_LINE_BLOCK" jdbcType="BLOB"
-                property="bomLineBlock"/>
-    </resultMap>
+    <!--<resultMap extends="BaseResultMap" id="ResultMapWithBLOBs"-->
+               <!--type="sql.pojo.bom.HzBomLineRecord">-->
+        <!--<result column="P_BOM_LINE_BLOCK" jdbcType="BLOB"-->
+                <!--property="bomLineBlock"/>-->
+    <!--</resultMap>-->
     <sql id="Base_Column_List">
     PUID,
     P_PARENT_UID,
@@ -133,8 +134,9 @@
     P_NUMBER,
     P_BUY_ENGINEER,
     P_EWO_NO,
-    P_LOU_LOA_FLAG
-    P_SORT_NUM
+    P_LOU_LOA_FLAG,
+    P_SORT_NUM,
+    P_COLOR_PART
   </sql>
 
     <sql id="Bom_Column_For_Change">
@@ -148,9 +150,9 @@
     P_MANU_PROCESS, P_SYMMETRY, P_IMPORTANCE, P_REGULATION_FLAG, P_BWG_BOX_PART, P_DEVELOP_TYPE,
     P_DATA_VERSION, P_TARGET_WEIGHT, P_FEATURE_WEIGHT, P_ACTUAL_WEIGHT, P_FASTENER_STANDARD,
     P_FASTENER_LEVEL, P_TORQUE, P_DUTY_ENGINEER, P_SUPPLY, P_SUPPLY_CODE, P_REMARK, P_REGULATION_CODE,P_NUMBER,
-    P_BUY_ENGINEER,P_EWO_NO,P_SORT_NUM
+    P_BUY_ENGINEER,P_EWO_NO,P_SORT_NUM,P_COLOR_PART
   </sql>
-    <sql id="Blob_Column_List">P_BOM_LINE_BLOCK</sql>
+    <!--<sql id="Blob_Column_List">P_BOM_LINE_BLOCK</sql>-->
     <sql id="Color_Column">P_COLOR_UID</sql>
     <sql id="values_by_batch">
 		#{item.puid,jdbcType=VARCHAR},
@@ -166,26 +168,22 @@
 		#{item.isDept,jdbcType=INTEGER},
 		#{item.pBomOfWhichDept,jdbcType=VARCHAR},
 		#{item.pBomLinePartName,jdbcType=VARCHAR},
-		#{item.pBomLinePartClass,jdbcType=VARCHAR},
-		#{item.bomLineBlock,jdbcType=BLOB}
+		#{item.pBomLinePartClass,jdbcType=VARCHAR}
+
     </sql>
     <select id="selectByPrimaryKey"
             parameterType="sql.pojo.bom.HzBomLineRecord"
-            resultMap="ResultMapWithBLOBs">
+            resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
-        ,
-        <include refid="Blob_Column_List"/>
         from HZ_BOM_LINE_RECORD
         where PUID = #{puid,jdbcType=VARCHAR}
     </select>
     <select id="selectByProjectPuid"
             parameterType="sql.pojo.bom.HzBomLineRecord"
-            resultMap="ResultMapWithBLOBs">
+            resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
-        ,
-        <include refid="Blob_Column_List"/>
         from HZ_BOM_LINE_RECORD
         where P_BOM_DIGIFAX_ID =(
         select t2.puid from Hz_Bom_Main_Record t2
@@ -204,7 +202,6 @@
         insert into ${tableName}
         (
         PUID,P_PARENT_UID,P_BOM_DIGIFAX_ID,P_LINE_INDEX,P_BOM_LINE_IS_HAS,P_BOM_LINE_PUID,P_BOM_LINE_ID,
-        P_BOM_LINE_BLOCK,
         P_BOM_LINE_IS_2Y,P_BOM_LINE_IS_PART,P_SORT_NUM,P_BOM_LINE_IS_DEPT,P_BOM_OF_WHICH_DEPT,
         P_BOM_LINE_PART_NAME,P_BOM_LINE_PART_CLASS,
         P_BOM_LINE_PART_EN_NAME,
@@ -221,12 +218,12 @@
         P_DATA_VERSION, P_TARGET_WEIGHT, P_FEATURE_WEIGHT,
         P_ACTUAL_WEIGHT, P_FASTENER_STANDARD, P_FASTENER_LEVEL,
         P_TORQUE, P_DUTY_ENGINEER, P_SUPPLY,
-        P_SUPPLY_CODE, P_REMARK, P_REGULATION_CODE,P_NUMBER,P_BUY_ENGINEER
+        P_SUPPLY_CODE, P_REMARK, P_REGULATION_CODE,P_NUMBER,P_BUY_ENGINEER,P_COLOR_PART
         )
         values
         (#{puid,jdbcType=VARCHAR},#{parentUid,jdbcType=VARCHAR},#{bomDigifaxId,jdbcType=VARCHAR},
         #{lineIndex,jdbcType=VARCHAR},#{isHas,jdbcType=INTEGER},#{linePuid,jdbcType=VARCHAR},
-        #{lineID,jdbcType=VARCHAR},#{bomLineBlock,jdbcType=BLOB},
+        #{lineID,jdbcType=VARCHAR},
         #{is2Y,jdbcType=INTEGER},#{isPart,jdbcType=INTEGER},
         #{sortNum,jdbcType=VARCHAR},#{isDept,jdbcType=INTEGER},
         #{pBomOfWhichDept,jdbcType=VARCHAR},#{pBomLinePartName,jdbcType=VARCHAR},#{pBomLinePartClass,jdbcType=VARCHAR},
@@ -244,7 +241,7 @@
           #{pActualWeight,jdbcType=VARCHAR}, #{pFastenerStandard,jdbcType=VARCHAR}, #{pFastenerLevel,jdbcType=VARCHAR}, 
           #{pTorque,jdbcType=VARCHAR}, #{pDutyEngineer,jdbcType=VARCHAR}, #{pSupply,jdbcType=VARCHAR}, 
           #{pSupplyCode,jdbcType=VARCHAR}, #{pRemark,jdbcType=VARCHAR}, #{pRegulationCode,jdbcType=VARCHAR},
-          #{number,jdbcType=VARCHAR},#{pBuyEngineer,jdbcType=INTEGER}
+          #{number,jdbcType=VARCHAR},#{pBuyEngineer,jdbcType=INTEGER},#{colorPart,jdbcType=INTEGER}
       )
     </insert>
 
@@ -255,8 +252,6 @@
                  separator=" ">
             into HZ_BOM_LINE_RECORD (
             <include refid="Base_Column_List"/>
-            ,
-            <include refid="Blob_Column_List"/>
             ) values (
             <include refid="values_by_batch"/>
             )
@@ -315,9 +310,9 @@
             <if test="pBomOfWhichDept != null">
                 P_BOM_OF_WHICH_DEPT = #{pBomOfWhichDept,jdbcType=VARCHAR},
             </if>
-            <if test="bomLineBlock != null">
-                P_BOM_LINE_BLOCK = #{bomLineBlock,jdbcType=VARCHAR},
-            </if>
+            <!--<if test="bomLineBlock != null">-->
+                <!--P_BOM_LINE_BLOCK = #{bomLineBlock,jdbcType=VARCHAR},-->
+            <!--</if>-->
             <if test="status != null">
                 P_EBOM_STATUS = #{status,jdbcType=VARCHAR},
             </if>
@@ -446,7 +441,10 @@
                 P_BUY_ENGINEER = #{pBuyEngineer,jdbcType=VARCHAR},
             </if>
             <if test="ewoNo != null">
-                P_EWO_NO = #{ewoNo,jdbcType=VARCHAR}
+                P_EWO_NO = #{ewoNo,jdbcType=VARCHAR},
+            </if>
+            <if test="colorPart != null">
+                P_COLOR_PART = #{colorPart,jdbcType=VARCHAR}
             </if>
         </set>
         <where>
@@ -559,8 +557,7 @@
     <!--查询所有的装车件信息-->
     <select id="HzBomLineRecordDaoImpl_getLoadingCarPartBom" resultMap="BaseResultMap" parameterType="java.lang.String">
         select
-        t.
-        <include refid="Base_Column_List"/>
+        *
         from HZ_BOM_LINE_RECORD t
         where t.p_bom_digifax_id=(
         select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(
@@ -575,7 +572,7 @@
             t.P_BOM_LINE_PART_RESOURCE ='自用非标件'or
             t.P_BOM_LINE_PART_RESOURCE ='虚拟总成')
         </where>
-        and t.P_EBOM_STATUS=1
+        and t.P_EBOM_STATUS<![CDATA[ <> ]]>0
     </select>
 
 

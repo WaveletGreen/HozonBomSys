@@ -266,7 +266,6 @@ public class HzMbomServiceImpl implements HzMbomService {
 
     @Override
     public OperateResultMessageRespDTO updateMbomRecord(UpdateMbomReqDTO reqDTO) {
-        OperateResultMessageRespDTO operateResultMessageRespDTO = new OperateResultMessageRespDTO();
         try {
             User user = UserInfo.getUser();
             boolean b = PrivilegeUtil.writePrivilege();
@@ -731,7 +730,7 @@ public class HzMbomServiceImpl implements HzMbomService {
         hzMbomLineRecord.setpBomOfWhichDept(record.getpBomOfWhichDept());
         hzMbomLineRecord.setpBomLinePartEnName(record.getpBomLinePartEnName());
         hzMbomLineRecord.setpBomLinePartResource(record.getpBomLinePartResource());
-        hzMbomLineRecord.setOrderNum(record.getOrderNum());
+        hzMbomLineRecord.setSortNum(record.getSortNum());
         return hzMbomLineRecord;
     }
 

@@ -98,6 +98,7 @@ public class HzEbomController extends BaseController {
         tableTitle.put("fna","FNA");
         tableTitle.put("pFnaDesc","FNA描述" );
         tableTitle.put("number","数量" );
+        tableTitle.put("colorPart","是否颜色件");
         writeAjaxJSONResponse(ResultMessageBuilder.build(tableTitle), response);
     }
     
@@ -215,6 +216,7 @@ public class HzEbomController extends BaseController {
         recordRespDTO.setpRegulationFlag(object.getString("pRegulationFlag"));
         recordRespDTO.setpRegulationCode(object.getString("pRegulationCode"));
         recordRespDTO.setProjectId(projectId);
+        recordRespDTO.setColorPart(object.getString("colorPart"));
         recordRespDTO.setpBuyEngineer(object.getString("pBuyEngineer"));
         if(object.getString("number") != null){
             recordRespDTO.setNumber(object.getString("number"));
