@@ -111,7 +111,7 @@ public class HzMaterielRecord {
     private Integer pValidFlag;
 
     /**
-     * 类型（1 半成品工艺路线 2整车工艺路线  3总成分总成工艺路线  ）
+     * 类型（2 半成品工艺路线 1整车工艺路线）
      */
     private Integer type;
     /**

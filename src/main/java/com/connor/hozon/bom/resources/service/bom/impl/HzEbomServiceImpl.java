@@ -833,6 +833,7 @@ public class HzEbomServiceImpl implements HzEbomService {
                 HzMaterielQuery hzMaterielQuery = new HzMaterielQuery();
                 hzMaterielQuery.setProjectId(reqDTO.getProjectId());
                 hzMaterielQuery.setMaterielResourceId(reqDTO.getPuid());
+                hzMaterielQuery.setpMaterielCode(reqDTO.getLineId());
                 List<HzMaterielRecord> hzMaterielRecords = hzMaterielDAO.findHzMaterielForList(hzMaterielQuery);
 
                 if(type.contains(reqDTO.getpBomLinePartResource())){

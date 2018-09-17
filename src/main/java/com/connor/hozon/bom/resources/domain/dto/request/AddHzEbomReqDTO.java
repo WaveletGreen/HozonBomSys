@@ -130,6 +130,16 @@ public class AddHzEbomReqDTO {
 
     private String pBuyEngineer;
 
+    private String colorPart;
+
+    public String getColorPart() {
+        return colorPart;
+    }
+
+    public void setColorPart(String colorPart) {
+        this.colorPart = colorPart;
+    }
+
     public String getpBuyEngineer() {
         return pBuyEngineer;
     }

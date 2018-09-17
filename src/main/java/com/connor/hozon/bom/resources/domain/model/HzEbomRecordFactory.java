@@ -87,6 +87,14 @@ public class HzEbomRecordFactory {
         }else {
             hzBomLineRecord.setpRegulationFlag(null);
         }
+
+        if(reqDTO.getColorPart().equals("Y")){
+            hzBomLineRecord.setColorPart(1);
+        }else if(reqDTO.getColorPart().equals("N")){
+            hzBomLineRecord.setColorPart(0);
+        }else {
+            hzBomLineRecord.setColorPart(null);
+        }
         return hzBomLineRecord;
     }
 
@@ -156,6 +164,13 @@ public class HzEbomRecordFactory {
         hzBomLineRecord.setpSupply(reqDTO.getpSupply());
         hzBomLineRecord.setNumber(reqDTO.getNumber());
         hzBomLineRecord.setpBuyEngineer(reqDTO.getpDutyEngineer());
+        if(reqDTO.getColorPart().equals("Y")){
+            hzBomLineRecord.setColorPart(1);
+        }else if(reqDTO.getColorPart().equals("N")){
+            hzBomLineRecord.setColorPart(0);
+        }else {
+            hzBomLineRecord.setColorPart(null);
+        }
         return hzBomLineRecord;
     }
 
@@ -237,6 +252,13 @@ public class HzEbomRecordFactory {
         jsonObject.put("number",record.getNumber());
         jsonObject.put("pBuyEngineer",record.getpBuyEngineer());
         jsonObject.put("status",record.getStatus());
+        if(Integer.valueOf(1).equals(record.getColorPart())){
+            jsonObject.put("colorPart", "Y");
+        }else if(Integer.valueOf(0).equals(record.getColorPart())){
+            jsonObject.put("colorPart", "N");
+        }else {
+            jsonObject.put("colorPart", "");
+        }
         return jsonObject;
     }
 }

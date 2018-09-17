@@ -235,6 +235,20 @@ public class HzBomLineRecord {
     private String sortNum;
 
     private Integer pLouaFlag;
+
+    /**
+     * 颜色件 原PBOM移动到EBOM
+     */
+    private Integer colorPart;
+
+    public Integer getColorPart() {
+        return colorPart;
+    }
+
+    public void setColorPart(Integer colorPart) {
+        this.colorPart = colorPart;
+    }
+
     /**
      * 根据puid来进行判断重复 重写equals方法
      * @param o

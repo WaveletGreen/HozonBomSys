@@ -839,6 +839,9 @@ public class HzMaterielServiceImpl implements HzMaterielService {
         record.setpMaterielType("A002");
         record.setpPertainToProjectPuid(projectId);
         record.setpMaterielDataType(BomResourceEnum.enumTypeToMaterielTypeNum(hzMbomLineRecord.getpBomLinePartResource(),hzMbomLineRecord.getIs2Y()));
+        if(record.getpMaterielDataType().equals(71)){
+            record.setType(2);
+        }
         record.setPuid(UUID.randomUUID().toString());
         record.setMaterielResourceId(hzMbomLineRecord.geteBomPuid());
         return record;

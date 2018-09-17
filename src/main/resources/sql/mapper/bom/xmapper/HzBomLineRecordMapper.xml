@@ -21,6 +21,7 @@
         <result column="P_BOM_LINE_PART_RESOURCE" jdbcType="VARCHAR" property="pBomLinePartResource"/>
         <result column="P_EBOM_STATUS" jdbcType="INTEGER" property="status"/>
         <result column="P_SORT_NUM" jdbcType="VARCHAR" property="sortNum" />
+        <result column="P_COLOR_PART" jdbcType="INTEGER" property="colorPart" />
 
         <result column="P_FNA_INFO" jdbcType="VARCHAR" property="pFnaInfo"/>
         <result column="P_CREATE_TIME" jdbcType="DATE" property="pCreateTime"/>
@@ -133,8 +134,9 @@
     P_NUMBER,
     P_BUY_ENGINEER,
     P_EWO_NO,
-    P_LOU_LOA_FLAG
-    P_SORT_NUM
+    P_LOU_LOA_FLAG,
+    P_SORT_NUM,
+    P_COLOR_PART
   </sql>
 
     <sql id="Bom_Column_For_Change">
@@ -148,7 +150,7 @@
     P_MANU_PROCESS, P_SYMMETRY, P_IMPORTANCE, P_REGULATION_FLAG, P_BWG_BOX_PART, P_DEVELOP_TYPE,
     P_DATA_VERSION, P_TARGET_WEIGHT, P_FEATURE_WEIGHT, P_ACTUAL_WEIGHT, P_FASTENER_STANDARD,
     P_FASTENER_LEVEL, P_TORQUE, P_DUTY_ENGINEER, P_SUPPLY, P_SUPPLY_CODE, P_REMARK, P_REGULATION_CODE,P_NUMBER,
-    P_BUY_ENGINEER,P_EWO_NO,P_SORT_NUM
+    P_BUY_ENGINEER,P_EWO_NO,P_SORT_NUM,P_COLOR_PART
   </sql>
     <!--<sql id="Blob_Column_List">P_BOM_LINE_BLOCK</sql>-->
     <sql id="Color_Column">P_COLOR_UID</sql>
@@ -216,7 +218,7 @@
         P_DATA_VERSION, P_TARGET_WEIGHT, P_FEATURE_WEIGHT,
         P_ACTUAL_WEIGHT, P_FASTENER_STANDARD, P_FASTENER_LEVEL,
         P_TORQUE, P_DUTY_ENGINEER, P_SUPPLY,
-        P_SUPPLY_CODE, P_REMARK, P_REGULATION_CODE,P_NUMBER,P_BUY_ENGINEER
+        P_SUPPLY_CODE, P_REMARK, P_REGULATION_CODE,P_NUMBER,P_BUY_ENGINEER,P_COLOR_PART
         )
         values
         (#{puid,jdbcType=VARCHAR},#{parentUid,jdbcType=VARCHAR},#{bomDigifaxId,jdbcType=VARCHAR},
@@ -239,7 +241,7 @@
           #{pActualWeight,jdbcType=VARCHAR}, #{pFastenerStandard,jdbcType=VARCHAR}, #{pFastenerLevel,jdbcType=VARCHAR}, 
           #{pTorque,jdbcType=VARCHAR}, #{pDutyEngineer,jdbcType=VARCHAR}, #{pSupply,jdbcType=VARCHAR}, 
           #{pSupplyCode,jdbcType=VARCHAR}, #{pRemark,jdbcType=VARCHAR}, #{pRegulationCode,jdbcType=VARCHAR},
-          #{number,jdbcType=VARCHAR},#{pBuyEngineer,jdbcType=INTEGER}
+          #{number,jdbcType=VARCHAR},#{pBuyEngineer,jdbcType=INTEGER},#{colorPart,jdbcType=INTEGER}
       )
     </insert>
 
@@ -439,7 +441,10 @@
                 P_BUY_ENGINEER = #{pBuyEngineer,jdbcType=VARCHAR},
             </if>
             <if test="ewoNo != null">
-                P_EWO_NO = #{ewoNo,jdbcType=VARCHAR}
+                P_EWO_NO = #{ewoNo,jdbcType=VARCHAR},
+            </if>
+            <if test="colorPart != null">
+                P_COLOR_PART = #{colorPart,jdbcType=VARCHAR}
             </if>
         </set>
         <where>
