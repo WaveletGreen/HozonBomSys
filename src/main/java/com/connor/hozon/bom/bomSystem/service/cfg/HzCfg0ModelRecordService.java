@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sql.pojo.cfg.HzCfg0ModelRecord;
 
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -43,5 +42,15 @@ public class HzCfg0ModelRecordService {
      */
     public List<HzCfg0ModelRecord> doSelectByProjectUid(String projectUid) {
         return hzCfg0ModelRecordDao.selectByProjectPuid(projectUid);
+    }
+
+    /**
+     * 主键删除一个基本模型
+     *
+     * @param puid
+     * @return
+     */
+    public boolean doDeleteByUid(String puid) {
+        return hzCfg0ModelRecordDao.deleteModelById(puid) > 0 ? true : false;
     }
 }

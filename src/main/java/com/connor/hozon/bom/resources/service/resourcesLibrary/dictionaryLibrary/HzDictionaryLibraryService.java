@@ -1,6 +1,7 @@
 package com.connor.hozon.bom.resources.service.resourcesLibrary.dictionaryLibrary;
 
 import com.connor.hozon.bom.resources.domain.dto.request.AddHzDictionaryLibraryReqDTO;
+import com.connor.hozon.bom.resources.domain.dto.request.UpdateHzDictionaryLibraryReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzDictionaryLibraryRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.OperateResultMessageRespDTO;
 import com.connor.hozon.bom.resources.domain.query.HzDictionaryLibraryQuery;
@@ -25,7 +26,7 @@ public interface HzDictionaryLibraryService {
      * @param reqDTO
      * @return
      */
-    OperateResultMessageRespDTO updateHzDictionaryLibrary(AddHzDictionaryLibraryReqDTO reqDTO);
+    OperateResultMessageRespDTO updateHzDictionaryLibrary(UpdateHzDictionaryLibraryReqDTO reqDTO);
 
     /**
      * 分页获取字典库数据

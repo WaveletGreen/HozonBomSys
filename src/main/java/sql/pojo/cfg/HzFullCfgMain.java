@@ -8,11 +8,11 @@ public class HzFullCfgMain {
 
     private String projectUid;
 
-    private Object status;
+    private String status;
 
-    private Object stage;
+    private String stage;
 
-    private Object version;
+    private String version;
 
     private Date effectiveDate;
 
@@ -20,9 +20,9 @@ public class HzFullCfgMain {
 
     private Date updateDate;
 
-    private Object creator;
+    private String creator;
 
-    private Object updater;
+    private String updater;
 
     public BigDecimal getId() {
         return id;
@@ -40,27 +40,27 @@ public class HzFullCfgMain {
         this.projectUid = projectUid == null ? null : projectUid.trim();
     }
 
-    public Object getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(Object status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 
-    public Object getStage() {
+    public String getStage() {
         return stage;
     }
 
-    public void setStage(Object stage) {
+    public void setStage(String stage) {
         this.stage = stage;
     }
 
-    public Object getVersion() {
+    public String getVersion() {
         return version;
     }
 
-    public void setVersion(Object version) {
+    public void setVersion(String version) {
         this.version = version;
     }
 
@@ -88,19 +88,19 @@ public class HzFullCfgMain {
         this.updateDate = updateDate;
     }
 
-    public Object getCreator() {
+    public String getCreator() {
         return creator;
     }
 
-    public void setCreator(Object creator) {
+    public void setCreator(String creator) {
         this.creator = creator;
     }
 
-    public Object getUpdater() {
+    public String getUpdater() {
         return updater;
     }
 
-    public void setUpdater(Object updater) {
+    public void setUpdater(String updater) {
         this.updater = updater;
     }
 }

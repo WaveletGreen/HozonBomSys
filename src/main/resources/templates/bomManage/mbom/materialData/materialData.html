@@ -24,7 +24,7 @@
                 <div class="form-group">
                     <label for="pMaterielDataType">物料类别:</label>
                     <select class="form-control" name="pMaterielDataType" id="pMaterielDataType">
-                        <option>车型项目物料总表</option>
+                        <option value="">车型项目物料总表</option>
                         <option value="11">整车超级物料主数据</option>
                         <option value="21">整车衍生物料主数据</option>
                         <option value="31">虚拟物料主数据</option>
@@ -43,6 +43,7 @@
 <div class="content col-lg-12">
     <table class="table table-striped tableNormalStyle" id="materialDataTable"></table>
 </div>
+<script th:src="@{/js/helper/projectHelper.js}"></script>
 <script th:src="@{/js/bom/mbom/materialData.js}"></script>
 </body>
 </html>

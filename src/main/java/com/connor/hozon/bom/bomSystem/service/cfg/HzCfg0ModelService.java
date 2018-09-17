@@ -78,4 +78,8 @@ public class HzCfg0ModelService {
     public List<HzCfg0ModelRecord> doSelectByProjectPuid(String projectPuid) {
         return hzCfg0ModelRecordDao.selectByProjectPuid(projectPuid);
     }
+
+    public int deleteModelById(String modelId) {
+        return hzCfg0ModelRecordDao.deleteModelById(modelId);
+    }
 }

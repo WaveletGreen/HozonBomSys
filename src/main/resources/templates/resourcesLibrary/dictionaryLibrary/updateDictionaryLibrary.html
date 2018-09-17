@@ -1,11 +1,12 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <!--User: xulf Date: 2018/8/28 Time: 20:39-->
+<link th:href="@{/css/labelColor.css}" rel="stylesheet">
 <body>
 <form id="dictionaryLibraryForm" role="form" method="post" action="dict/updateById">
     <input id="puid"name="id" type="hidden" th:value="${data.puid}">
     <div class="form-group">
-        <label for="professionCh">专业部</label>
+        <label for="professionCh">专业部<span>*</span></label>
         <input class="form-control" id="professionCh" name="professionCh" type="text"
                th:value="${data.professionCh}"      placeholder="请输入专业部"/>
     </div>
@@ -15,7 +16,7 @@
                th:value="${data.professionEn}"     placeholder="请输入Professsion"/>
     </div>
     <div class="form-group">
-        <label for="classificationCh">分类</label>
+        <label for="classificationCh">分类<span>*</span></label>
         <input class="form-control" id="classificationCh" name="classificationCh" type="text"
                th:value="${data.classificationCh}"    placeholder="请输入分类"/>
     </div>
@@ -25,14 +26,14 @@
                th:value="${data.classificationEn}"     placeholder="请输入classification"/>
     </div>
     <div class="form-group">
-        <label for="groupCode">特征组代码</label>
+        <label for="groupCode">特性组代码</label>
         <input class="form-control" id="groupCode" name="groupCode" type="text"
-               th:value="${data.groupCode}"     placeholder="请输入特征组代码"/>
+               th:value="${data.groupCode}"     placeholder="请输入特性组代码"/>
     </div>
     <div class="form-group">
-        <label for="groupCh">特征组</label>
+        <label for="groupCh">特性组</label>
         <input class="form-control" id="groupCh" name="groupCh" type="text"
-               th:value="${data.groupCh}"  placeholder="请输入特征组"/>
+               th:value="${data.groupCh}"  placeholder="请输入特性组"/>
     </div>
     <div class="form-group">
         <label for="groupEn">group</label>
@@ -40,14 +41,14 @@
                th:value="${data.groupEn}"   placeholder="请输入group"/>
     </div>
     <div class="form-group">
-        <label for="famillyCode">特征族代码</label>
+        <label for="famillyCode">特性族代码</label>
         <input class="form-control" id="famillyCode" name="famillyCode" type="text"
-               th:value="${data.famillyCode}"  placeholder="请输入特征族代码"/>
+               th:value="${data.famillyCode}"  placeholder="请输入特性族代码"/>
     </div>
     <div class="form-group">
-        <label for="famillyCh">特征族</label>
+        <label for="famillyCh">特性族</label>
         <input class="form-control" id="famillyCh" name="famillyCh" type="text"
-               th:value="${data.famillyCh}"    placeholder="请输入特征族"/>
+               th:value="${data.famillyCh}"    placeholder="请输入特性族"/>
     </div>
     <div class="form-group">
         <label for="famillyEn">familly</label>
@@ -55,14 +56,14 @@
                th:value="${data.famillyEn}"  placeholder="请输入familly"/>
     </div>
     <div class="form-group">
-        <label for="eigenValue">特征值</label>
+        <label for="eigenValue">特性值<span>*</span></label>
         <input class="form-control" id="eigenValue" name="eigenValue" type="text"
-               th:value="${data.eigenValue}"    placeholder="请输入特征值"/>
+               th:value="${data.eigenValue}"    placeholder="请输入特性值"/>
     </div>
     <div class="form-group">
-        <label for="valueDescCh">特征值描述</label>
+        <label for="valueDescCh">特性值描述<span>*</span></label>
         <input class="form-control" id="valueDescCh" name="valueDescCh" type="text"
-               th:value="${data.valueDescCh}"  placeholder="请输入特征值描述"/>
+               th:value="${data.valueDescCh}"  placeholder="请输入特性值描述"/>
     </div>
     <div class="form-group">
         <label for="valueDescEn">value description</label>
@@ -75,18 +76,18 @@
                th:value="${data.type}"  placeholder="请输入类型"/>
     </div>
     <div class="form-group">
-        <label for="valueSource">特征值来源</label>
+        <label for="valueSource">特性值来源</label>
         <input class="form-control" id="valueSource" name="valueSource" type="text"
-               th:value="${data.valueSource}"  placeholder="请输入特征值来源"/>
+               th:value="${data.valueSource}"  placeholder="请输入特性 值来源"/>
     </div>
     <div class="form-group">
         <label for="effectTime">生效时间</label>
-        <input class="form-control" id="effectTime" name="effectTime" type="text"
+        <input class="form-control" id="effectTime" name="effectTime" type="date"
                th:value="${data.effectTime}"    placeholder="请输入生效时间"/>
     </div>
     <div class="form-group">
         <label for="failureTime">失效时间</label>
-        <input class="form-control" id="failureTime" name="failureTime" type="text"
+        <input class="form-control" id="failureTime" name="failureTime" type="date"
                th:value="${data.failureTime}"    placeholder="请输入失效时间"/>
     </div>
     <div class="form-group">
@@ -105,12 +106,60 @@
                 invalid: 'glyphicon glyphicon-remove',
                 validating: 'glyphicon glyphicon-refresh'
             },
-            id: {
-                factoryCode: {
-                    message: 'id验证失败',
+            fields: {
+                professionCh: {
+                    message: '专业部验证失败',
                     validators: {
                         notEmpty: {
-                            message: 'id不能为空'
+                            message: '专业部不能为空'
+                        }
+                    }
+                },
+                classificationCh: {
+                    message: '分类验证失败',
+                    validators: {
+                        notEmpty: {
+                            message: '分类不能为空'
+                        }
+                    }
+                },
+                eigenValue: {
+                    message: '特性值验证失败',
+                    validators: {
+                        notEmpty: {
+                            message: '特性值不能为空'
+                        }
+                    }
+                },
+                valueDescCh: {
+                    message: '特性值描述验证失败',
+                    validators: {
+                        notEmpty: {
+                            message: '特性值描述不能为空'
+                        }
+                    }
+                },
+                effectTime: {
+                    message : "生效时间验证失败",
+                    validators : {
+                        // notEmpty : {
+                        //     message : "生效时间不能为空"
+                        // },
+                        date : {
+                            format : "yyyy-MM-dd",
+                            message : "生效时间日期格式不正确,例如:2018-10-18"
+                        }
+                    }
+                },
+                failureTime: {
+                    message : "失效时间验证失败",
+                    validators : {
+                        // notEmpty : {
+                        //     message : "失效时间不能为空"
+                        // },
+                        date : {
+                            format : 'yyyy-MM-dd',
+                            message : "失效时间日期格式不正确,例如:2018-10-18"
                         }
                     }
                 },
@@ -168,6 +217,26 @@
                     }
                 });
             }
+        });
+        $('#effectTime').datetimepicker({
+            format: 'yyyy-mm-dd',//日期的格式
+            weekStart: 1,// 0（星期日）到6（星期六）
+            startDate: "2008-01-01",//选择器的开始日期
+            autoclose: true,//日期选择完成后是否关闭选择框
+            bootcssVer: 3,//显示向左向右的箭头
+            language: 'zh_CN',//语言
+            minView: 2,//表示日期选择的最小范围，默认是hour
+            todayBtn: true
+        });
+        $('#failureTime').datetimepicker({
+            format: 'yyyy-mm-dd',//日期的格式
+            weekStart: 1,// 0（星期日）到6（星期六）
+            startDate: "2008-01-01",//选择器的开始日期
+            autoclose: true,//日期选择完成后是否关闭选择框
+            bootcssVer: 3,//显示向左向右的箭头
+            language: 'zh_CN',//语言
+            minView: 2,//表示日期选择的最小范围，默认是hour
+            todayBtn: true
         });
     })
     $(document).keydown(function(event) {

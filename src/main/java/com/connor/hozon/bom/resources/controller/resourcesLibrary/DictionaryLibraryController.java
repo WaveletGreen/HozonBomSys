@@ -2,6 +2,7 @@ package com.connor.hozon.bom.resources.controller.resourcesLibrary;
 
 import com.connor.hozon.bom.resources.controller.BaseController;
 import com.connor.hozon.bom.resources.domain.dto.request.AddHzDictionaryLibraryReqDTO;
+import com.connor.hozon.bom.resources.domain.dto.request.UpdateHzDictionaryLibraryReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzDictionaryLibraryRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.OperateResultMessageRespDTO;
 import com.connor.hozon.bom.resources.domain.query.HzDictionaryLibraryQuery;
@@ -121,7 +122,7 @@ public class DictionaryLibraryController extends BaseController {
      * @param response
      */
     @RequestMapping(value = "updateById",method = RequestMethod.POST)
-    public void updateDiDictionaryLibrary(@RequestBody AddHzDictionaryLibraryReqDTO dto,HttpServletResponse response){
+    public void updateDiDictionaryLibrary(@RequestBody UpdateHzDictionaryLibraryReqDTO dto, HttpServletResponse response){
         OperateResultMessageRespDTO respDTO = hzDictionaryLibraryService.updateHzDictionaryLibrary(dto);
         writeAjaxJSONResponse(ResultMessageBuilder.build(OperateResultMessageRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
     }
@@ -149,17 +150,17 @@ public class DictionaryLibraryController extends BaseController {
         tableTitle.put("professionEn","Profession");
         tableTitle.put("classificationCh","分类");
         tableTitle.put("classificationEn","classification");
-        tableTitle.put("groupCode","特征组代码");
-        tableTitle.put("groupCh","特征组");
+        tableTitle.put("groupCode","特性组代码");
+        tableTitle.put("groupCh","特性组");
         tableTitle.put("groupEn","group");
-        tableTitle.put("famillyCode","特征族代码");
-        tableTitle.put("famillyCh","特征族");
+        tableTitle.put("famillyCode","特性族代码");
+        tableTitle.put("famillyCh","特性族");
         tableTitle.put("famillyEn","familly");
-        tableTitle.put("eigenValue","特征值");
-        tableTitle.put("valueDescCh","特征值描述");
+        tableTitle.put("eigenValue","特性值");
+        tableTitle.put("valueDescCh","特性值描述");
         tableTitle.put("valueDescEn","value description");
         tableTitle.put("type","类型");
-        tableTitle.put("valueSource","特征值来源");
+        tableTitle.put("valueSource","特性值来源");
         tableTitle.put("effectTime","生效时间");
         tableTitle.put("failureTime","失效时间");
         tableTitle.put("note","备注");

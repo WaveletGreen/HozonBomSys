@@ -59,18 +59,40 @@ public class HzCfg0ModelColorController {
         this.hzCfg0ModelColorService = hzCfg0ModelColorService;
         this.hzCfg0OptionFamilyService = hzCfg0OptionFamilyService;
         this.hzCfg0ColorSetService = hzCfg0ColorSetService;
+
     }
 
     @RequestMapping(value = "/loadAll", method = RequestMethod.GET)
     @ResponseBody
     public Map<String, Object> loadAll(@RequestParam String projectPuid) {
-        return hzCfg0ModelColorService.doLoadAll(projectPuid);
+        return hzCfg0ModelColorService.doLoadAll2(projectPuid);
     }
 
     @RequestMapping(value = "/addPage", method = RequestMethod.GET)
     public String addPage(@RequestParam String projectPuid, Model model) {
-        List<HzCfg0OptionFamily> columnList = hzCfg0OptionFamilyService.doGetCfg0OptionFamilyListByProjectPuid(projectPuid);
-        List<HzCfg0ColorSet> colorList = hzCfg0ColorSetService.doGetAll();
+        List<HzCfg0OptionFamily> columnList = hzCfg0OptionFamilyService.getFamilies(projectPuid);
+        List<HzCfg0ColorSet> colorList = hzCfg0ColorSetService.doGetAll();//颜色库所有数据
+        List<HzCfg0ColorSet> _colorList = new ArrayList<>(colorList);//将colorList复制到_colorList
+
+        HzCfg0ModelColor mc = new HzCfg0ModelColor();
+        HzCfg0MainRecord mainRecord = hzCfg0MainService.doGetbyProjectPuid(projectPuid);
+        mc.setpCfg0MainRecordOfMC(mainRecord.getPuid());
+        //配色方案中已有数据
+        List<HzCfg0ModelColor> colorList2 = hzCfg0ModelColorService.doLoadModelColorByMainId(mc);
+
+        Iterator<HzCfg0ColorSet> iterator = _colorList.iterator();
+        while (iterator.hasNext()) {
+            HzCfg0ColorSet hmc = iterator.next();
+            for (int i = 0; i < colorList2.size(); i++) {
+                if (colorList2.get(i).getpModelShellOfColorfulModel().equals(hmc.getpColorCode())) {
+                    iterator.remove();//去除（过滤）配色库已有数据
+                    break;
+                }
+            }
+        }
+
+        System.out.println("colorList.size===" + colorList.size());//8
+        System.out.println("colorList2.size===" + colorList2.size());//7
         //添加一个无色
         HzCfg0ColorSet set = new HzCfg0ColorSet();
         set.setpColorName("-");
@@ -79,9 +101,12 @@ public class HzCfg0ModelColorController {
         set.setpColorOfSet("-");
         set.setPuid("-");
         colorList.add(0, set);
+        _colorList.add(0, set);
         model.addAttribute("colorList", colorList);
+        model.addAttribute("colorList2", _colorList);
         model.addAttribute("columnList", columnList);
         model.addAttribute("pCfg0MainRecordOfMC", projectPuid);
+
         return "cfg/modelColorCfg/addModelColorCfg";
     }
 
@@ -97,7 +122,7 @@ public class HzCfg0ModelColorController {
         }
         HzCfg0MainRecord main = hzCfg0MainService.doGetByPrimaryKey(currentModel.getpCfg0MainRecordOfMC());
 //        List<String> columnList = hzCfg0OptionFamilyService.doGetColumnDef(main.getpCfg0OfWhichProjectPuid(), "\t");
-        List<HzCfg0OptionFamily> columnList = hzCfg0OptionFamilyService.doGetCfg0OptionFamilyListByProjectPuid(main.getpCfg0OfWhichProjectPuid());
+        List<HzCfg0OptionFamily> columnList = hzCfg0OptionFamilyService.getFamilies(main.getpCfg0OfWhichProjectPuid());
         List<HzCfg0ColorSet> colorList = hzCfg0ColorSetService.doGetAll();
         ArrayList<String> orgValue = new ArrayList<>();
         List<HzColorModel> cm = hzColorModelService.doSelectByModelUidWithColor(puid);
@@ -213,7 +238,7 @@ public class HzCfg0ModelColorController {
         if (projectPuid == null || "".equals(projectPuid)) {
             object.put("status", false);
         } else {
-            column = hzCfg0OptionFamilyService.doGetColumnDef2(projectPuid, "<br/>");
+            column = hzCfg0OptionFamilyService.getColumnNew(projectPuid, "<br/>");
             if (column == null || column.size() <= 0) {
                 object.put("status", false);
             } else {
@@ -235,9 +260,13 @@ public class HzCfg0ModelColorController {
     public boolean saveColorModel(@RequestBody LinkedHashMap<String, String> form) {
         User user = UserInfo.getUser();
         Date date = new Date();
+        List<HzCfg0OptionFamily> families;
+        Map<String, HzCfg0OptionFamily> mapOfFamilies = new HashMap<>();
         if (form != null) {
             HzCfg0ModelColor modelColor = new HzCfg0ModelColor();
-            form.forEach((key, value) -> {
+            for (String key :
+                    form.keySet()) {
+                String value = form.get(key);
                 if ("pCodeOfColorfulModel".equals(key)) {
                     modelColor.setpCodeOfColorfulModel(value);
                 } else if ("pDescOfColorfulModel".equals(key)) {
@@ -245,6 +274,10 @@ public class HzCfg0ModelColorController {
                 } else if ("pCfg0MainRecordOfMC".equals(key)) {
                     HzCfg0MainRecord mainRecord = hzCfg0MainService.doGetbyProjectPuid(value);
                     modelColor.setpCfg0MainRecordOfMC(mainRecord.getPuid());
+                    families = hzCfg0OptionFamilyService.doSelectByDesc(mainRecord.getPuid(), "车身颜色");
+                    for (HzCfg0OptionFamily family : families) {
+                        mapOfFamilies.put(family.getPuid(), family);
+                    }
                 } else if ("modelShell".equals(key)) {
                     HzCfg0ColorSet set = new HzCfg0ColorSet();
                     set.setPuid(value);
@@ -254,7 +287,7 @@ public class HzCfg0ModelColorController {
                 } else {
                     modelColor.getMapOfCfg0().put(key, value);
                 }
-            });
+            }
             modelColor.setPuid(UUIDHelper.generateUpperUid());
             List<HzColorModel> colorList = new ArrayList<>();
             for (Map.Entry<String, String> entry : modelColor.getMapOfCfg0().entrySet()) {
@@ -268,6 +301,11 @@ public class HzCfg0ModelColorController {
                 hzColorModel.setModifyDate(date);
                 hzColorModel.setCreator(user.getUserName());
                 hzColorModel.setModifier(user.getUserName());
+
+                if (mapOfFamilies.containsKey(entry.getKey())) {
+                    hzColorModel.setColorUid(modelColor.getpColorUid());
+                }
+
                 colorList.add(hzColorModel);
             }
             hzCfg0ModelColorService.doInsertOne(modelColor);

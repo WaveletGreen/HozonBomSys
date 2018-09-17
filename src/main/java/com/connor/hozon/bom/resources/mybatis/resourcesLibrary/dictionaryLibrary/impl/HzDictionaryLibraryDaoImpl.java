@@ -56,4 +56,14 @@ public class HzDictionaryLibraryDaoImpl extends BaseSQLUtil implements HzDiction
     public int delete(String puid) {
         return super.update("HzDictionaryLibraryDaoImpl_delete",puid);
     }
+
+    @Override
+    public int findDictionaryLibraryOrCodeToCount(String eigenValue) {
+        return (Integer) super.findForObject("HzDictionaryLibraryDaoImpl_findByCodeOrCount", eigenValue);
+    }
+
+    @Override
+    public HzDictionaryLibrary findDictionaryLibraryOrCode(String eigenValue) {
+        return (HzDictionaryLibrary) super.findForObject("HzDictionaryLibraryDaoImpl_findByCode",eigenValue);
+    }
 }

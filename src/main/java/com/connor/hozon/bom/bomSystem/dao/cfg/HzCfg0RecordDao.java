@@ -1,5 +1,6 @@
 package com.connor.hozon.bom.bomSystem.dao.cfg;
 
+import com.connor.hozon.bom.bomSystem.dto.HzFeatureQueryDTO;
 import com.connor.hozon.bom.bomSystem.dto.HzMaterielFeatureBean;
 import com.connor.hozon.bom.common.base.entity.QueryBase;
 import org.apache.ibatis.annotations.Param;
@@ -132,5 +133,12 @@ public interface HzCfg0RecordDao {
      * @param projectPuid
      * @return
      */
-    int tellMeHowManyOfThose(String projectPuid);
+    int tellMeHowManyOfThose(HzFeatureQueryDTO projectPuid);
+
+    /**
+     *
+     * @param queryBase
+     * @return
+     */
+    List<HzCfg0Record> selectByCondition(HzFeatureQueryDTO queryBase);
 }

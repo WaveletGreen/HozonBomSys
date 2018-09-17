@@ -16,12 +16,12 @@ function doQuery(){
     //$('#eplTable').bootstrapTable('refresh');    //刷新表格
     var projectPuid = $("#project", window.top.document).val();
     var eplUrl = "epl/record?projectId="+projectPuid;
-    var level = $("#level").val();
-    eplUrl+="&level="+level;
-    var pBomOfWhichDept = $("#pBomOfWhichDept").val();
-    eplUrl+="&pBomOfWhichDept="+pBomOfWhichDept;
-    var lineId = $("#lineId").val();
-    eplUrl += "&lineId="+lineId;
+    // var level = $("#level").val();
+    // eplUrl+="&level="+level;
+    // var pBomOfWhichDept = $("#pBomOfWhichDept").val();
+    // eplUrl+="&pBomOfWhichDept="+pBomOfWhichDept;
+    // var lineId = $("#lineId").val();
+    // eplUrl += "&lineId="+lineId;
     var pFastener = $("#pFastener").val();
     if (pFastener=="请选择是否紧固件") {
         eplUrl += "&pFastener="+"";
@@ -35,6 +35,9 @@ function doQuery(){
 
 function initTable(eplUrl){
     var projectPuid = $("#project", window.top.document).val();
+    if (!checkIsSelectProject(projectPuid)) {
+        return;
+    }
     var $table = $("#eplTable");
     var column = [];
     //var eplUrl = "epl/record?projectId="+projectPuid;

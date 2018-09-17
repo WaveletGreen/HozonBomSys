@@ -16,16 +16,19 @@ public class HzFullCfgModel {
 
     private Date flModUpdateDate;
 
-    private Object flModCreator;
+    private String flModCreator;
 
-    private Object flModLastUpdater;
+    private String flModLastUpdater;
 
     private BigDecimal flModVersion;
+    /**
+     * 2Y层主键
+     */
+    private String flModelBomlineUid;
 
     public BigDecimal getId() {
         return id;
     }
-
     public void setId(BigDecimal id) {
         this.id = id;
     }
@@ -70,19 +73,19 @@ public class HzFullCfgModel {
         this.flModUpdateDate = flModUpdateDate;
     }
 
-    public Object getFlModCreator() {
+    public String getFlModCreator() {
         return flModCreator;
     }
 
-    public void setFlModCreator(Object flModCreator) {
+    public void setFlModCreator(String flModCreator) {
         this.flModCreator = flModCreator;
     }
 
-    public Object getFlModLastUpdater() {
+    public String getFlModLastUpdater() {
         return flModLastUpdater;
     }
 
-    public void setFlModLastUpdater(Object flModLastUpdater) {
+    public void setFlModLastUpdater(String flModLastUpdater) {
         this.flModLastUpdater = flModLastUpdater;
     }
 
@@ -92,5 +95,13 @@ public class HzFullCfgModel {
 
     public void setFlModVersion(BigDecimal flModVersion) {
         this.flModVersion = flModVersion;
+    }
+
+    public String getFlModelBomlineUid() {
+        return flModelBomlineUid;
+    }
+
+    public void setFlModelBomlineUid(String flModelBomlineUid) {
+        this.flModelBomlineUid = flModelBomlineUid;
     }
 }

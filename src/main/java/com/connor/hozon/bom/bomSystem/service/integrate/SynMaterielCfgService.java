@@ -192,7 +192,11 @@ public class SynMaterielCfgService {
                 }
                 Map<String, Object> _map = new HashMap<>();
                 //设定需要更新特性值已发送,不用设定相关性值已发送
-                _map.put("isSent", 1);
+                if(option == ActionFlagOption.ADD){
+                    _map.put("isSent", 1);
+                }else if(option == ActionFlagOption.DELETE){
+                    _map.put("isSent", 0);
+                }
                 _map.put("list", needToUpdateStatus);
                 if (needToUpdateStatus.size() > 0) {
                     hzMaterielCfgService.doUpdateIsSent(_map);

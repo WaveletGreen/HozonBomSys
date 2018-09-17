@@ -4,8 +4,10 @@ import com.connor.hozon.bom.bomSystem.dao.cfg.HzFullCfgWithCfgDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import sql.IBaseSQLUtil;
+import sql.pojo.cfg.HzFullCfgModel;
 import sql.pojo.cfg.HzFullCfgWithCfg;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -27,8 +29,8 @@ public class HzFullCfgWithCfgDaoImpl implements HzFullCfgWithCfgDao {
     }
 
     @Override
-    public int insert(HzFullCfgWithCfg record) {
-        return baseSQLUtil.executeInsert(record, "com.connor.hozon.bom.bomSystem.dao.cfg.HzFullCfgWithCfgDao.insert");
+    public int insert(List<HzFullCfgWithCfg> hzFullCfgWithCfgs) {
+        return baseSQLUtil.executeInsert(hzFullCfgWithCfgs, "com.connor.hozon.bom.bomSystem.dao.cfg.HzFullCfgWithCfgDao.insert");
     }
 
     @Override
@@ -43,7 +45,7 @@ public class HzFullCfgWithCfgDaoImpl implements HzFullCfgWithCfgDao {
     }
 
     @Override
-    public List<HzFullCfgWithCfg> selectByMainID(Long flCfgVersion) {
+    public List<HzFullCfgWithCfg> selectByMainID(BigDecimal flCfgVersion) {
         WITH_CFG.setFlCfgVersion(flCfgVersion);
         return baseSQLUtil.executeQuery(WITH_CFG, "com.connor.hozon.bom.bomSystem.dao.cfg.HzFullCfgWithCfgDao.selectByMainID");
     }
@@ -56,5 +58,20 @@ public class HzFullCfgWithCfgDaoImpl implements HzFullCfgWithCfgDao {
     @Override
     public int updateByPrimaryKey(HzFullCfgWithCfg record) {
         return baseSQLUtil.executeUpdate(record, "com.connor.hozon.bom.bomSystem.dao.cfg.HzFullCfgWithCfgDao.updateByPrimaryKey");
+    }
+
+    @Override
+    public int insertBomLine(List<HzFullCfgWithCfg> hzFullCfgWithCfgs) {
+        return baseSQLUtil.executeInsert(hzFullCfgWithCfgs, "com.connor.hozon.bom.bomSystem.dao.cfg.HzFullCfgWithCfgDao.insertBomLine");
+    }
+
+    @Override
+    public int updateByBomLinePuid(HzFullCfgWithCfg hzFullCfgWithCfg) {
+        return baseSQLUtil.executeUpdate(hzFullCfgWithCfg, "com.connor.hozon.bom.bomSystem.dao.cfg.HzFullCfgWithCfgDao.updateByBomLinePuid");
+    }
+
+    @Override
+    public List<HzFullCfgWithCfg> query2YCfgByProjectId(String projectId) {
+        return baseSQLUtil.executeQueryByPass(new HzFullCfgWithCfg(), projectId,"com.connor.hozon.bom.bomSystem.dao.cfg.HzFullCfgWithCfgDao.query2YCfgByProjectId");
     }
 }

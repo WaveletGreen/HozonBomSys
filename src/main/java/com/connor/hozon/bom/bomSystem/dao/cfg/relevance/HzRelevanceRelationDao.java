@@ -21,4 +21,10 @@ public interface HzRelevanceRelationDao extends BasicDao<HzRelevanceRelation> {
      * @return
      */
     int deleteByBasicId(Long rrRelevanceId);
+
+    /**
+     * 单条插入
+     * @return
+     */
+    int insertOne(HzRelevanceRelation hzRelevanceRelation);
 }

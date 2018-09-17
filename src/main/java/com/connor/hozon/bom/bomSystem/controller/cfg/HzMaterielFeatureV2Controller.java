@@ -87,10 +87,6 @@ public class HzMaterielFeatureV2Controller extends ExtraIntegrate {
     HzComposeMFService hzComposeMFService;
 
 
-    @Autowired
-    public HzMaterielFeatureV2Controller() {
-    }
-
     @RequestMapping(value = "/composePage", method = RequestMethod.GET)
     public String composePage(@RequestParam String projectUid, Model model) {
         if (!checkString(projectUid)) {
@@ -124,7 +120,7 @@ public class HzMaterielFeatureV2Controller extends ExtraIntegrate {
             result.put("status", false);
             return result;
         }
-        hzComposeMFService.saveCompose(hzComposeMFDTO, result);
+        hzComposeMFService.saveCompose2(hzComposeMFDTO, result);
         return result;
     }
 

@@ -2,10 +2,11 @@
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <!--User: xulf Date: 2018/8/28 Time: 20:39-->
 <!--<link th:href="@{/css/autocomplete.css}" rel="stylesheet"/>-->
+<link th:href="@{/css/labelColor.css}" rel="stylesheet">
 <body>
 <form id="dictionaryLibraryForm" role="form" method="post" action="dict/add">
     <div class="form-group">
-        <label for="professionCh">专业部</label>
+        <label for="professionCh">专业部<span>*</span></label>
         <input class="form-control" id="professionCh" name="professionCh" type="text"
                placeholder="请输入专业部"/>
     </div>
@@ -15,7 +16,7 @@
                placeholder="请输入Professsion"/>
     </div>
     <div class="form-group">
-        <label for="classificationCh">分类</label>
+        <label for="classificationCh">分类<span>*</span></label>
         <input class="form-control" id="classificationCh" name="classificationCh" type="text"
                placeholder="请输入分类"/>
     </div>
@@ -25,14 +26,14 @@
                placeholder="请输入classification"/>
     </div>
     <div class="form-group">
-        <label for="groupCode">特征组代码</label>
+        <label for="groupCode">特性组代码</label>
         <input class="form-control" id="groupCode" name="groupCode" type="text"
-               placeholder="请输入特征组代码"/>
+               placeholder="请输入特性组代码"/>
     </div>
     <div class="form-group">
-        <label for="groupCh">特征组</label>
+        <label for="groupCh">特性组</label>
         <input class="form-control" id="groupCh" name="groupCh" type="text"
-               placeholder="请输入特征组"/>
+               placeholder="请输入特性组"/>
     </div>
     <div class="form-group">
         <label for="groupEn">group</label>
@@ -40,14 +41,14 @@
                placeholder="请输入group"/>
     </div>
     <div class="form-group">
-        <label for="famillyCode">特征族代码</label>
+        <label for="famillyCode">特性族代码</label>
         <input class="form-control" id="famillyCode" name="famillyCode" type="text"
-               placeholder="请输入特征族代码"/>
+               placeholder="请输入特性族代码"/>
     </div>
     <div class="form-group">
-        <label for="famillyCh">特征族</label>
+        <label for="famillyCh">特性族</label>
         <input class="form-control" id="famillyCh" name="famillyCh" type="text"
-               placeholder="请输入特征族"/>
+               placeholder="请输入特性族"/>
     </div>
     <div class="form-group">
         <label for="famillyEn">familly</label>
@@ -55,14 +56,14 @@
                placeholder="请输入familly"/>
     </div>
     <div class="form-group">
-        <label for="eigenValue">特征值</label>
+        <label for="eigenValue">特性值<span>*</span></label>
         <input class="form-control" id="eigenValue" name="eigenValue" type="text"
-               placeholder="请输入特征值"/>
+               placeholder="请输入特性值"/>
     </div>
     <div class="form-group">
-        <label for="valueDescCh">特征值描述</label>
+        <label for="valueDescCh">特性值描述<span>*</span></label>
         <input class="form-control" id="valueDescCh" name="valueDescCh" type="text"
-               placeholder="请输入特征值描述"/>
+               placeholder="请输入特性值描述"/>
     </div>
     <div class="form-group">
         <label for="valueDescEn">value description</label>
@@ -75,18 +76,18 @@
                placeholder="请输入类型"/>
     </div>
     <div class="form-group">
-        <label for="valueSource">特征值来源</label>
+        <label for="valueSource">特性值来源</label>
         <input class="form-control" id="valueSource" name="valueSource" type="text"
-               placeholder="请输入特征值来源"/>
+               placeholder="请输入特性值来源"/>
     </div>
     <div class="form-group">
         <label for="effectTime">生效时间</label>
-        <input class="form-control input-small" id="effectTime" name="effectTime" type="text"
+        <input class="form-control input-small" id="effectTime" name="effectTime" type="date"
                placeholder="请输入生效时间"/>
     </div>
     <div class="form-group">
         <label for="failureTime">失效时间</label>
-        <input class="form-control input-small" id="failureTime" name="failureTime" type="text"
+        <input class="form-control input-small" id="failureTime" name="failureTime" type="date"
                placeholder="请输入失效时间"/>
     </div>
     <div class="form-group">
@@ -105,12 +106,61 @@
                 invalid: 'glyphicon glyphicon-remove',
                 validating: 'glyphicon glyphicon-refresh'
             },
-            id: {
-                factoryCode: {
-                    message: 'id验证失败',
+            fields: {
+                professionCh: {
+                    message: '专业部验证失败',
                     validators: {
                         notEmpty: {
-                            message: 'id不能为空'
+                            message: '专业部不能为空'
+                        }
+                    }
+                },
+                classificationCh: {
+                    message: '分类验证失败',
+                    validators: {
+                        notEmpty: {
+                            message: '分类不能为空'
+                        }
+                    }
+                },
+                eigenValue: {
+                    message: '特性值验证失败',
+                    validators: {
+                        notEmpty: {
+                            message: '特性值不能为空'
+                        }
+                    }
+                },
+                valueDescCh: {
+                    message: '特性值描述验证失败',
+                    validators: {
+                        notEmpty: {
+                            message: '特性值描述不能为空'
+                        }
+                    }
+                },
+                effectTime: {
+                    trigger:'change',
+                    message : "生效时间验证失败",
+                    validators : {
+                        // notEmpty : {
+                        //     message : "生效时间不能为空"
+                        // },
+                        date : {
+                            format : "yyyy-MM-dd",
+                            message : "生效时间日期格式不正确,例如:2018-10-18"
+                        }
+                    }
+                },
+                failureTime: {
+                    message : "失效时间验证失败",
+                    validators : {
+                        // notEmpty : {
+                        //     message : "失效时间不能为空"
+                        // },
+                        date : {
+                            format : "yyyy-MM-dd",
+                            message : "失效时间日期格式不正确,例如:2018-10-18"
                         }
                     }
                 },

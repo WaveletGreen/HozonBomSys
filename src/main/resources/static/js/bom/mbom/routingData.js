@@ -12,10 +12,10 @@ function doQuery() {
     //$('#routingDataTable').bootstrapTable('refresh');    //刷新表格
     var projectId = $("#project", window.top.document).val();
     var url = "work/process/record/page?projectId="+projectId;
-    var pMaterielCode = $("#pMaterielCode").val();
-    url+="&pMaterielCode="+pMaterielCode;
-    var pMaterielDesc = $("#pMaterielDesc").val();
-    url+="&pMaterielDesc="+pMaterielDesc;
+    // var pMaterielCode = $("#pMaterielCode").val();
+    // url+="&pMaterielCode="+pMaterielCode;
+    // var pMaterielDesc = $("#pMaterielDesc").val();
+    // url+="&pMaterielDesc="+pMaterielDesc;
     var type = $("#type").val();
     if (type=="请选择工艺路线") {
         url += "&type="+"";
@@ -30,6 +30,9 @@ function doQuery() {
 
 function initTable(url) {
     var projectId = $("#project", window.top.document).val();
+    if (!checkIsSelectProject(projectId)) {
+        return;
+    }
     var  $table =  $("#routingDataTable");
     var  column = [];
     $.ajax({
@@ -206,6 +209,92 @@ function initTable(url) {
                                         type: "POST",
                                         //ajax需要添加打包名
                                         url: "work/process/submit?projectId="+projectId+"&materielIds="+materielIds,
+                                        success: function (result) {
+                                            if (result.success){
+                                                layer.msg('提交成功', {icon: 1, time: 2000})
+                                            }
+                                            else if (!result.success) {
+                                                window.Ewin.alert({message: result.errMsg});
+                                            }
+                                            $table.bootstrapTable("refresh");
+                                        },
+                                        error: function (info) {
+                                            window.Ewin.alert({message: "操作提交:" + info.status});
+                                        }
+                                    })
+                                }
+                            });
+                        }
+                    },
+                    {
+                        text: '删除MBOM到SAP',
+                        iconCls: 'glyphicon glyphicon-remove',
+                        handler: function () {
+                            var rows = $table.bootstrapTable('getSelections');
+                            var projectId = $("#project", window.top.document).val();
+                            if (rows.length == 0) {
+                                window.Ewin.alert({message: '请选择一条需要发送的数据!'});
+                                return false;
+                            }
+                            var _table = '<p>是否要发送您所选择的记录？</p>' +
+                                '<div style="max-height: 400px;overflow:scroll;"><table class="table table-striped tableNormalStyle" >';
+                            for (var index in rows) {
+                                _table += '<tr><td>' + rows[index].pMaterielDesc + '</td></tr>';
+                            }
+                            _table += '</table></div>';
+                            window.Ewin.confirm({title: '提示', message: _table, width: 500}).on(function (e) {
+                                if (e) {
+                                    var materielIds = new Array();
+                                    for(var i=0;i<rows.length;i++){
+                                        materielIds[i] = rows[i].materielId;
+                                    }
+                                    $.ajax({
+                                        type: "POST",
+                                        //ajax需要添加打包名
+                                        url: "work/process/delete1?projectId="+projectId+"&materielIds="+materielIds,
+                                        success: function (result) {
+                                            if (result.success){
+                                                layer.msg('提交成功', {icon: 1, time: 2000})
+                                            }
+                                            else if (!result.success) {
+                                                window.Ewin.alert({message: result.errMsg});
+                                            }
+                                            $table.bootstrapTable("refresh");
+                                        },
+                                        error: function (info) {
+                                            window.Ewin.alert({message: "操作提交:" + info.status});
+                                        }
+                                    })
+                                }
+                            });
+                        }
+                    },
+                    {
+                        text: '修改MBOM到SAP',
+                        iconCls: 'glyphicon glyphicon-remove',
+                        handler: function () {
+                            var rows = $table.bootstrapTable('getSelections');
+                            var projectId = $("#project", window.top.document).val();
+                            if (rows.length == 0) {
+                                window.Ewin.alert({message: '请选择一条需要发送的数据!'});
+                                return false;
+                            }
+                            var _table = '<p>是否要发送您所选择的记录？</p>' +
+                                '<div style="max-height: 400px;overflow:scroll;"><table class="table table-striped tableNormalStyle" >';
+                            for (var index in rows) {
+                                _table += '<tr><td>' + rows[index].pMaterielDesc + '</td></tr>';
+                            }
+                            _table += '</table></div>';
+                            window.Ewin.confirm({title: '提示', message: _table, width: 500}).on(function (e) {
+                                if (e) {
+                                    var materielIds = new Array();
+                                    for(var i=0;i<rows.length;i++){
+                                        materielIds[i] = rows[i].materielId;
+                                    }
+                                    $.ajax({
+                                        type: "POST",
+                                        //ajax需要添加打包名
+                                        url: "work/process/updata?projectId="+projectId+"&materielIds="+materielIds,
                                         success: function (result) {
                                             if (result.success){
                                                 layer.msg('提交成功', {icon: 1, time: 2000})

@@ -3,15 +3,17 @@ package com.connor.hozon.bom.bomSystem.controller.cfg;
 import com.connor.hozon.bom.bomSystem.controller.integrate.ExtraIntegrate;
 import com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0ModelColorDao;
 import com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0ToModelRecordDao;
+import com.connor.hozon.bom.bomSystem.dto.HzFeatureQueryDTO;
 import com.connor.hozon.bom.bomSystem.dto.HzMaterielFeatureBean;
 import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
 import com.connor.hozon.bom.bomSystem.service.cfg.*;
 import com.connor.hozon.bom.bomSystem.service.integrate.SynMaterielService;
 import com.connor.hozon.bom.bomSystem.service.iservice.cfg.IHzCfg0ModelFeatureService;
-import com.connor.hozon.bom.bomSystem.service.project.HzSuperMaterielService;
+import com.connor.hozon.bom.bomSystem.service.project.*;
 import com.connor.hozon.bom.common.base.entity.QueryBase;
 import com.connor.hozon.bom.resources.mybatis.factory.HzFactoryDAO;
 import integration.option.ActionFlagOption;
+import net.sf.json.JSON;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,7 +24,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import sql.pojo.cfg.*;
 import sql.pojo.factory.HzFactory;
-import sql.pojo.project.HzMaterielRecord;
+import sql.pojo.project.*;
 
 import java.util.*;
 
@@ -92,9 +94,18 @@ public class HzMaterielFeatureController extends ExtraIntegrate {
     @Autowired
     private SynMaterielService synMaterielService;
 
+    //车型基本数据
     @Autowired
-    public HzMaterielFeatureController() {
-    }
+    private HzProjectLibsService hzProjectLibsService;
+    @Autowired
+    private HzVehicleService hzVehicleService;
+    @Autowired
+    private HzPlatformService hzPlatformService;
+    @Autowired
+    private HzBrandService hzBrandService;
+
+    @Autowired
+    HzBomAllCfgService hzBomAllCfgService;
 
     /**
      * 根据项目的puid，获取到配置物料特性表的列设置
@@ -390,7 +401,7 @@ public class HzMaterielFeatureController extends ExtraIntegrate {
     public String addVehicleModelPage(@RequestParam String projectPuid, Model model) {
         if (checkString(projectPuid)) {
             HzCfg0MainRecord hzCfg0MainRecord = hzCfg0MainService.doGetbyProjectPuid(projectPuid);
-            List<HzCfg0Record> cfg0s = hzCfg0Service.doLoadCfgListByProjectPuid(projectPuid, new QueryBase());
+            List<HzCfg0Record> cfg0s = hzCfg0Service.doLoadCfgListByProjectPuid(projectPuid, new HzFeatureQueryDTO());
             Map<String, List<HzCfg0Record>> _map = new HashMap<>();
             cfg0s.forEach(cfg -> {
                 String id = cfg.getpCfg0FamilyDesc() + "\t" + cfg.getpCfg0FamilyName();
@@ -411,6 +422,48 @@ public class HzMaterielFeatureController extends ExtraIntegrate {
             model.addAttribute("_map", _map);
             model.addAttribute("action", "./materiel/addVehicleModel");
             return "cfg/materielFeature/addModel";
+        } else {
+            model.addAttribute("msg", "请选择项目再操作");
+            return "errorWithEntity";
+        }
+    }
+
+    @RequestMapping("/addVehicleModelPage2")
+    public String addVehicleModelPage2(@RequestParam String projectPuid, Model model) {
+        if (checkString(projectPuid)) {
+            HzProjectLibs project = hzProjectLibsService.doLoadProjectLibsById(projectPuid);
+            HzVehicleRecord vehicle = hzVehicleService.doGetByPuid(project.getpProjectPertainToVehicle());
+            HzPlatformRecord platform = hzPlatformService.doGetByPuid(vehicle.getpVehiclePertainToPlatform());
+            HzBrandRecord brand = hzBrandService.doGetByPuid(platform.getpPertainToBrandPuid());
+            HzCfg0ModelDetail hzCfg0ModelDetail = new HzCfg0ModelDetail();
+            hzCfg0ModelDetail.setpModelBrand(brand.getpBrandName());
+            hzCfg0ModelDetail.setpModelPlatform(platform.getpPlatformName());
+            hzCfg0ModelDetail.setpModelVehicle(vehicle.getpVehicleName());
+            model.addAttribute("hzCfg0ModelDetail", hzCfg0ModelDetail);
+
+
+            HzCfg0MainRecord hzCfg0MainRecord = hzCfg0MainService.doGetbyProjectPuid(projectPuid);
+            List<HzCfg0Record> cfg0s = hzCfg0Service.doLoadCfgListByProjectPuid(projectPuid, new HzFeatureQueryDTO());
+            Map<String, List<HzCfg0Record>> _map = new HashMap<>();
+            cfg0s.forEach(cfg -> {
+                String id = cfg.getpCfg0FamilyDesc() + "\t" + cfg.getpCfg0FamilyName();
+                if (_map.containsKey(id)) {
+                    _map.get(id).add(cfg);
+                } else {
+                    List<HzCfg0Record> record = new ArrayList<>();
+                    HzCfg0Record empty = new HzCfg0Record();
+                    empty.setPuid("");
+                    empty.setpCfg0ObjectId("-");
+                    record.add(empty);
+                    record.add(cfg);
+                    _map.put(id, record);
+                }
+            });
+
+            model.addAttribute("cfgmain", hzCfg0MainRecord);
+            model.addAttribute("_map", _map);
+            model.addAttribute("action", "./materiel/addVehicleModel2");
+            return "cfg/materielFeature/addModel2";
         } else {
             model.addAttribute("msg", "请选择项目再操作");
             return "errorWithEntity";
@@ -490,6 +543,12 @@ public class HzMaterielFeatureController extends ExtraIntegrate {
         } else {
             return false;
         }
+    }
+
+    @RequestMapping("/addVehicleModel2")
+    @ResponseBody
+    public JSONObject addVehicleModel2(@RequestBody Map<String, String> params) {
+        return hzBomAllCfgService.addVehicleModel(params);
     }
 
 

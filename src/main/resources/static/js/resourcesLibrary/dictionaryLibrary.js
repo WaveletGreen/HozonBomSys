@@ -14,18 +14,18 @@ $(document).ready((function () {
 function doQuery() {
     // $('#dictionaryLibraryTable').bootstrapTable('refresh');    //刷新表格
     var url = "dict/list";
-    var groupCode = $("#groupCode").val();
-    url += "?groupCode=" + groupCode;
-    var groupCh = $("#groupCh").val();
-    url += "&groupCh=" + groupCh;
-    var famillyCode = $("#famillyCode").val();
-    url += "&famillyCode=" + famillyCode;
-    var famillyCh = $("#famillyCh").val();
-    url += "&famillyCh=" + famillyCh;
-    var valueDescCh = $("#valueDescCh").val();
-    url += "&valueDescCh=" + valueDescCh;
-    var eigenValue = $("#eigenValue").val();
-    url += "&eigenValue=" + eigenValue;
+    // var groupCode = $("#groupCode").val();
+    // url += "?groupCode=" + groupCode;
+    // var groupCh = $("#groupCh").val();
+    // url += "&groupCh=" + groupCh;
+    // var famillyCode = $("#famillyCode").val();
+    // url += "&famillyCode=" + famillyCode;
+    // var famillyCh = $("#famillyCh").val();
+    // url += "&famillyCh=" + famillyCh;
+    // var valueDescCh = $("#valueDescCh").val();
+    // url += "&valueDescCh=" + valueDescCh;
+    // var eigenValue = $("#eigenValue").val();
+    // url += "&eigenValue=" + eigenValue;
     initTable(url);
     $('#dictionaryLibraryTable').bootstrapTable('destroy');
 }

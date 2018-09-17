@@ -28,8 +28,11 @@ $(document).ready(
 );
 
 function loadData(projectPuid) {
-    if (projectPuid.length <= 0) {
-        $("#myModal").modal('show');
+    // if (projectPuid.length <= 0) {
+    //     $("#myModal").modal('show');
+    //     return;
+    // }
+    if (!checkIsSelectProject(projectPuid)) {
         return;
     }
     var $table = $("#modelColorCfgTable");
@@ -40,7 +43,17 @@ function loadData(projectPuid) {
         type: "GET",
         success: function (result) {
             if (!result.status) {
-                alert("查无数据，请联系管理员");
+                swal({
+                    width: 500,
+                    height: 400,
+                    html: $('<span>')
+                        .addClass('some-class')
+                        .css("font-size", "24px")
+                        .css("color", "#ff4f6a")
+                        .text('没有找到数据，请尝试创建特性值'),
+                    animation: false,
+                    customClass: 'animated tada'
+                });
                 return;
             }
             var data = result.data;
@@ -115,7 +128,7 @@ function loadData(projectPuid) {
                                 title: "添加",
                                 url: "modelColor/addPage?projectPuid=" + projectPuid,
                                 gridId: "gridId",
-                                width: 500,
+                                width: 700,
                                 height: 600
                             })
                         }
@@ -134,7 +147,7 @@ function loadData(projectPuid) {
                                 title: "修改",
                                 url: "modelColor/modifyPage?puid=" + rows[0].puid,
                                 gridId: "gridId",
-                                width: 350,
+                                width: 700,
                                 height: 450
                             });
                         }

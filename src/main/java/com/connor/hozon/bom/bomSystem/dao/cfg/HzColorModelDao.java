@@ -3,6 +3,7 @@ package com.connor.hozon.bom.bomSystem.dao.cfg;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.context.annotation.Configuration;
 import sql.pojo.cfg.HzColorModel;
+import sql.pojo.cfg.HzColorModel2;
 
 import java.util.List;
 
@@ -81,4 +82,8 @@ public interface HzColorModelDao {
      * @return
      */
     int updateColorModelWithCfg(HzColorModel model);
+
+    List<HzColorModel2> selectByProjectPuid(String projectPuid);
+
+    List<HzColorModel> selectByModelUidWithColor2(String modelUid);
 }

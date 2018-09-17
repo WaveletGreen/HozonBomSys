@@ -6,7 +6,9 @@ import org.springframework.stereotype.Service;
 import sql.pojo.cfg.HzCfg0OptionFamily;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -18,6 +20,13 @@ import java.util.stream.Collectors;
 public class HzCfg0OptionFamilyService {
     @Autowired
     HzCfg0OptionFamilyDao hzCfg0OptionFamilyDao;
+    private static final Map<String, Object> paramMap = new HashMap<>();
+    private static final List<String> paramList = new ArrayList<>();
+
+    static {
+        paramList.add("车身颜色");
+        paramList.add("油漆车身总成");
+    }
 
     /**
      * 旧版方法，根据主配置的PUID排序
@@ -108,7 +117,7 @@ public class HzCfg0OptionFamilyService {
                 sb.append(def);
                 sb.append(f.getpOptionfamilyName() == null ? "" : f.getpOptionfamilyName());
                 //交换一下位置
-                result.set(0,sb.toString());
+                result.set(0, sb.toString());
                 result.add(localTemp);
             } else {
                 sb.append(f.getpOptionfamilyDesc() == null ? f.getpOptionfamilyName() : f.getpOptionfamilyDesc());
@@ -136,5 +145,51 @@ public class HzCfg0OptionFamilyService {
 
     public boolean doInsert(HzCfg0OptionFamily family) {
         return hzCfg0OptionFamilyDao.insert(family) > 0 ? true : false;
+    }
+
+    public List<HzCfg0OptionFamily> doSelectByDesc(String mainUid, String desc) {
+        HzCfg0OptionFamily family = new HzCfg0OptionFamily();
+        family.setpOfCfg0Main(mainUid);
+        family.setpOptionfamilyDesc(desc);
+        return hzCfg0OptionFamilyDao.selectByCodeAndDescWithMain2(family);
+    }
+
+    /**
+     * 获取排序好的列
+     *
+     * @param projectUid
+     * @param def
+     * @return
+     */
+    public List<String> getColumnNew(String projectUid, String def) {
+        List<HzCfg0OptionFamily> families = getFamilies(projectUid);
+        List<String> result = new ArrayList<>();
+        families.forEach(fn -> result.add(fn.getpOptionfamilyDesc() + def + fn.getpOptionfamilyName()));
+        return result;
+    }
+
+    /**
+     * 重新构造列信息
+     *
+     * @param families
+     * @param def
+     * @return
+     */
+    public List<String> getColumnNewWithFamilies(List<HzCfg0OptionFamily> families, String def) {
+        List<String> result = new ArrayList<>();
+        families.forEach(fn -> result.add(fn.getpOptionfamilyDesc() + def + fn.getpOptionfamilyName()));
+        return result;
+    }
+
+    public List<HzCfg0OptionFamily> getFamilies(String projectUid) {
+        paramMap.put("isIn", false);
+        paramMap.put("list", paramList);
+        paramMap.put("projectUid", projectUid);
+        List<HzCfg0OptionFamily> familiesNew1 = hzCfg0OptionFamilyDao.selectNameByMap(paramMap);
+        paramMap.put("isIn", true);
+        paramMap.put("list", paramList.subList(0, 1));
+        List<HzCfg0OptionFamily> familiesNew2 = hzCfg0OptionFamilyDao.selectNameByMap(paramMap);
+        familiesNew2.addAll(familiesNew1);
+        return familiesNew2;
     }
 }

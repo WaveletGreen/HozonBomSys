@@ -284,10 +284,23 @@
             </if>
             and STATUS =1
         </where>
-        order by INSERTTIME desc
+--         order by INSERTTIME desc
+        order by CLASSIFICATION_CH  ,EIGEN_VALUE asc
         ) t
         where ROWNUM &lt;=#{limit,jdbcType=INTEGER})
         where rn &gt;#{offset,jdbcType=INTEGER}
+    </select>
+    <!--根据特性值查询条数-->
+    <select id="HzDictionaryLibraryDaoImpl_findByCodeOrCount" parameterType="java.lang.String" resultType="java.lang.Integer">
+        select  count(*) FROM HZ_DICTIONARY_LIBRARY
+        where EIGEN_VALUE = #{eigenValue,jdbcType=VARCHAR} and STATUS=1
+    </select>
+    <!--根据特性值查询一条数据-->
+    <select id="HzDictionaryLibraryDaoImpl_findByCode" parameterType="java.lang.String" resultMap="BaseResultMap">
+      select
+        <include refid="Base_Column_List" />
+        from HZ_DICTIONARY_LIBRARY
+        where EIGEN_VALUE = #{eigenValue,jdbcType=VARCHAR} and STATUS=1
     </select>
 
 

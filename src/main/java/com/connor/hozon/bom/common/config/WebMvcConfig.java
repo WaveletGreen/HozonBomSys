@@ -56,6 +56,7 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         registry.addViewController("/feature").setViewName("/cfg/feature/feature");
         //相关性表
         registry.addViewController("/relevance").setViewName("/cfg/relevance/relevance");
+        registry.addViewController("/relevance2").setViewName("/cfg/relevance/relevance2");
         /**物料配置表*/
         registry.addViewController("/materielFeature").setViewName("/cfg/materielFeature/materielFeature");
         //特性表页面
@@ -94,6 +95,14 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         registry.addViewController("/dictionaryLibrary").setViewName("/resourcesLibrary/dictionaryLibrary/dictionaryLibrary");
         //合众VPPS库
         registry.addViewController("/VPPSLibrary").setViewName("/resourcesLibrary/VPPSLibrary/VPPSLibrary");
+        //单车BOM
+        registry.addViewController("/bikeBom").setViewName("/bikeBom/bikeBom");
+
+
+
+
+
+
         //变更管理VWO表单
         registry.addViewController("/vwoFormList").setViewName("/changeManage/vwo/vwoFormList");
         //变更管理EWO表单
@@ -108,6 +117,19 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         registry.addViewController("/workFrom").setViewName("/changeManage/workFrom");
         //变更管理CODPWO表单
         registry.addViewController("/codpwoFromList").setViewName("/changeManage/codpwo/codpwoFromList");
+
+
+
+
+
+
+
+
+
+
+
+        //更新日志
+        registry.addViewController("/updateLog").setViewName("/updateLog/updateLog");
     }
 
 

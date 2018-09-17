@@ -8,7 +8,7 @@ public interface HzFullCfgMainDao {
 
     int deleteByPrimaryKey(BigDecimal id);
 
-    int insert(HzFullCfgMain record);
+    BigDecimal insert(HzFullCfgMain record);
 
     int insertSelective(HzFullCfgMain record);
 
@@ -17,4 +17,6 @@ public interface HzFullCfgMainDao {
     int updateByPrimaryKeySelective(HzFullCfgMain record);
 
     int updateByPrimaryKey(HzFullCfgMain record);
+
+    HzFullCfgMain selectByProjectId(String id);
 }

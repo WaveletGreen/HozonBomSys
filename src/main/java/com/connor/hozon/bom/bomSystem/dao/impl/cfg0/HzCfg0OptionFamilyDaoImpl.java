@@ -7,6 +7,7 @@ import sql.IBaseSQLUtil;
 import sql.pojo.cfg.HzCfg0OptionFamily;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * User: Fancyears·Maylos·Mayways
@@ -42,9 +43,31 @@ public class HzCfg0OptionFamilyDaoImpl implements HzCfg0OptionFamilyDao {
         return baseSQLUtil.executeQueryByPass(FAMILY, mainId, "com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0OptionFamilyDao.selectNameByMainId2");
     }
 
+    /**
+     * Author: Fancyears·Maylos·Mayways
+     * Description: 根据产品配置器的puid获取到所有的配置系统层
+     * Date: 2018/5/23 9:49
+     *
+     * @param param
+     * @return 返回一组系统名称
+     */
+    @Override
+    public List<HzCfg0OptionFamily> selectNameByMap(Map<String, Object> param) {
+        return baseSQLUtil.executeQueryByPass(FAMILY, param, "com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0OptionFamilyDao.selectNameByMap");
+    }
+
     @Override
     public HzCfg0OptionFamily selectByCodeAndDescWithMain(HzCfg0OptionFamily family) {
         return baseSQLUtil.executeQueryById(family, "com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0OptionFamilyDao.selectByCodeAndDescWithMain");
+    }
+
+    /**
+     * @param family 包含主配置UID，描述和配置代码
+     * @return
+     */
+    @Override
+    public List<HzCfg0OptionFamily> selectByCodeAndDescWithMain2(HzCfg0OptionFamily family) {
+        return baseSQLUtil.executeQuery(family, "com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0OptionFamilyDao.selectByCodeAndDescWithMain");
     }
 
     @Override
