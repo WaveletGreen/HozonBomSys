@@ -80,7 +80,7 @@ public class HzBomAllCfgService {
     ProjectHelper projectHelper;
     private static final String[] selfDesc =
             {
-                    "pBomOfWhichDept", "operationType", "pBomLineId", "pBomLineName", "pH9featureenname", "owningUser", "pCfg0Desc", "pCfg0ObjectId", "comment"
+                    "operationType"/*操作类型*/, "pBomOfWhichDept"/*系统，即所属部门*/, "pBomLineId"/*总成零件号*/, "pBomLineName"/*总成零件名称*/, "pH9featureenname"/*总成英文名称*/, "owningUser"/*责任工程师*/, "pCfg0Desc"/*配置描述*/, "pCfg0ObjectId"/*配置代码*/, "isColorPart"/*是否颜色件*/, "comment"/*备注*/
             };
 
     private static Logger logger = LoggerFactory.getLogger(HzBomAllCfgService.class);

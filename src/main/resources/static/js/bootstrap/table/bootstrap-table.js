@@ -2078,13 +2078,15 @@
         this.options.queryParams = function (params) {
             var param = {
                 page: this.pageNumber,// 起始页面
-                limit: this.pageSize // 页面大小
+                limit: this.pageSize, // 页面大小
+                offset:params.offset//忘记加offset了吧
             }
             // if(formId!=undefined||formId!=''){
             //     $.each($("#"+formId).find("input"),function(index,info){
             //         param[info.name] = info.value;
             //     })
             // }
+            console.log(param);
             if (formId != undefined || formId != '') {
                 console.log(formId);
                 $.each($("#"+formId).find("input"), function (index, info) {

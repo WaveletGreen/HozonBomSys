@@ -40,7 +40,7 @@ public interface HzCfg0RecordDao {
      * @param queryBase
      * @return
      */
-    List<HzCfg0Record> selectListByProjectPuid(@Param("projectPuid") String projectPuid, QueryBase queryBase);
+    List<HzCfg0Record> selectListByProjectPuid(@Param("projectPuid") String projectPuid, HzFeatureQueryDTO queryBase);
 
     /***
      * 根据项目的puid搜索所有新添加的特性信息

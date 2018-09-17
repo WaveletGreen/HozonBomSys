@@ -25,6 +25,8 @@ function loadData(projectPuid) {
     var $table = $("#dataTable");
     if ($table == null)
         return;
+    /**设置项目*/
+    $("#projectUid").val(projectPuid);
     $table.bootstrapTable('destroy');
     $table.bootstrapTable({
         url: "cfg0/loadFeature?projectPuid=" + projectPuid,

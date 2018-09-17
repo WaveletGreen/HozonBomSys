@@ -2,7 +2,13 @@ function loadData(projectPuid) {
     if (!checkIsSelectProject(projectPuid)) {
         return;
     }
+
     var $table = $("#dataTable");
+    if ($table == null) {
+        return;
+    }
+    /**设置项目*/
+    $("#projectUid").val(projectPuid);
     $table.bootstrapTable('destroy');
     $("#refresh").removeAttr("disabled");
     $table.bootstrapTable({
