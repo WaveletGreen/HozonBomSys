@@ -1,5 +1,12 @@
 package com.connor.hozon.bom.resources.domain.model;
 
+
+import com.connor.hozon.bom.resources.mybatis.bom.HzEbomRecordDAO;
+import com.connor.hozon.bom.resources.mybatis.bom.impl.HzEbomRecordDAOImpl;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.Random;
+
 /**
  * @Author: haozt
  * @Date: 2018/9/6
@@ -37,4 +44,34 @@ public class HzBomSysFactory {
         int s1 = Integer.valueOf(lineIndex.split("\\.")[length]);
         return new String[]{line, String.valueOf(rank),String.format("%04d",s1)};
     }
+
+
+    /**
+     * 产生一个介于两个数字之间的一个数
+     * @param s1 较小数
+     * @param s2 较大数
+     * @return
+     */
+    public static String generateBomSortNum(String projectId,String s1,String s2){
+        Double d1 = Double.parseDouble(s1);
+        Double d2 = Double.parseDouble(s2);
+        if(d1>=d2){
+            return null;
+        }
+        Random random = new Random();
+        String s = "";
+        while (true){
+            double d = random.nextDouble()+d1;
+            if(d<d2){
+                s = String.valueOf(d);
+                HzEbomRecordDAO hzEbomRecordDAO = new HzEbomRecordDAOImpl();
+                boolean b = hzEbomRecordDAO.sortNumRepeat(projectId,s);
+                if(!b){
+                    break;
+                }
+            }
+        }
+        return s;
+    }
+
 }

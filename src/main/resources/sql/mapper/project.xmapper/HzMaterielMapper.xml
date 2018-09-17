@@ -116,6 +116,18 @@
     <update id="HzMaterialDAOImpl_update" parameterType="sql.pojo.project.HzMaterielRecord">
         update HZ_MATERIEL_RECORD
         <set>
+            <if test="pMaterielCode != null">
+                P_MATERIEL_CODE = #{pMaterielCode,jdbcType=VARCHAR},
+            </if>
+            <if test="pMaterielDesc != null">
+                P_MATERIEL_DESC = #{pMaterielDesc,jdbcType=VARCHAR},
+            </if>
+            <if test="pMaterielDescEn != null">
+                P_MATERIEL_DESC_EN = #{pMaterielDescEn,jdbcType=VARCHAR},
+            </if>
+            <if test="pMaterielType != null">
+                P_MATERIEL_TYPE = #{pMaterielType,jdbcType=VARCHAR},
+            </if>
             <if test="pSpareMaterial != null">
                 P_SPARE_MATERIAL = #{pSpareMaterial,jdbcType=VARCHAR},
             </if>
@@ -183,16 +195,16 @@
     <insert id="HzMaterialDAOImpl_insertList" useGeneratedKeys="false" parameterType="java.util.List">
         insert into HZ_MATERIEL_RECORD (PUID, P_MATERIEL_CODE, P_MATERIEL_TYPE,
         P_MATERIEL_DESC, P_PERTAIN_TO_PROJECT_PUID, P_MATERIEL_DESC_EN,P_MATERIEL_DATA_TYPE,
-        P_FACTORY_PUID,P_TYPE,P_MATERIEL_RESOURCE_ID,P_VALID_FLAG)
+        P_FACTORY_PUID,P_TYPE,P_MATERIEL_RESOURCE_ID,P_VALID_FLAG,P_COLOR_PART)
         <foreach collection="list" item="item" index="index" separator="UNION ALL">
             select
             #{item.puid,jdbcType=VARCHAR}, #{item.pMaterielCode,jdbcType=VARCHAR},
-            #{item.pMaterielType,jdbcType=VARCHAR},
+            #{item.pMaterielType,jdbcType=INTEGER},
             #{item.pMaterielDesc,jdbcType=VARCHAR}, #{item.pPertainToProjectPuid,jdbcType=VARCHAR},
             #{item.pMaterielDescEn,jdbcType=VARCHAR},
             #{item.pMaterielDataType,jdbcType=VARCHAR},
             #{item.pFactoryPuid,jdbcType=VARCHAR},#{item.type,jdbcType=INTEGER},
-            #{item.materielResourceId,jdbcType=INTEGER},1
+            #{item.materielResourceId,jdbcType=VARCHAR},1,#{item.pColorPart,jdbcType=INTEGER}
             from DUAL
         </foreach>
     </insert>
@@ -214,15 +226,16 @@
             <if test="pMaterielDataType != null">
                 and P_MATERIEL_DATA_TYPE = #{pMaterielDataType,jdbcType=INTEGER}
             </if>
-            <if test="pMaterielDataType == null">
-                and (P_MATERIEL_DATA_TYPE = 11
-                or P_MATERIEL_DATA_TYPE =21
-                or P_MATERIEL_DATA_TYPE =31
-                or P_MATERIEL_DATA_TYPE =41
-                or P_MATERIEL_DATA_TYPE =51
-                or P_MATERIEL_DATA_TYPE =61
-                or P_MATERIEL_DATA_TYPE =71)
-            </if>
+            <!--<if test="pMaterielDataType == null">-->
+                <!--and (P_MATERIEL_DATA_TYPE = 11-->
+                <!--or P_MATERIEL_DATA_TYPE =21-->
+                <!--or P_MATERIEL_DATA_TYPE =31-->
+                <!--or P_MATERIEL_DATA_TYPE =41-->
+                <!--or P_MATERIEL_DATA_TYPE =51-->
+                <!--or P_MATERIEL_DATA_TYPE =61-->
+                <!--or P_MATERIEL_DATA_TYPE =71-->
+                <!--or P_MATERIEL_DATA_TYPE =81)-->
+            <!--</if>-->
             <if test="pMaterielCode != null and pMaterielCode != '' ">
                 and P_MATERIEL_CODE like CONCAT(CONCAT('%',#{pMaterielCode,jdbcType=VARCHAR}),'%')
             </if>
@@ -249,14 +262,16 @@
             <if test="pMaterielDataType != null">
                 and P_MATERIEL_DATA_TYPE = #{pMaterielDataType,jdbcType=INTEGER}
             </if>
-            <if test="pMaterielDataType == null">
-                and (P_MATERIEL_DATA_TYPE = 11 or P_MATERIEL_DATA_TYPE =21
-                or P_MATERIEL_DATA_TYPE =31
-                or P_MATERIEL_DATA_TYPE =41
-                or P_MATERIEL_DATA_TYPE =51
-                or P_MATERIEL_DATA_TYPE =61
-                or P_MATERIEL_DATA_TYPE =71)
-            </if>
+            <!--<if test="pMaterielDataType == null">-->
+                <!--and (P_MATERIEL_DATA_TYPE = 11 -->
+                <!--or P_MATERIEL_DATA_TYPE =21-->
+                <!--or P_MATERIEL_DATA_TYPE =31-->
+                <!--or P_MATERIEL_DATA_TYPE =41-->
+                <!--or P_MATERIEL_DATA_TYPE =51-->
+                <!--or P_MATERIEL_DATA_TYPE =61-->
+                <!--or P_MATERIEL_DATA_TYPE =71-->
+                <!--or P_MATERIEL_DATA_TYPE =81)-->
+            <!--</if>-->
             <if test="pMaterielCode != null and pMaterielCode != '' ">
                 and P_MATERIEL_CODE like CONCAT(CONCAT('%',#{pMaterielCode,jdbcType=VARCHAR}),'%')
             </if>
@@ -287,6 +302,9 @@
             </if>
             <if test="materielResourceId != null and materielResourceId!=''">
                 and P_MATERIEL_RESOURCE_ID = #{materielResourceId,jdbcType=VARCHAR}
+            </if>
+            <if test="pMaterielCode != null">
+                and P_MATERIEL_CODE = #{pMaterielCode,jdbcType=VARCHAR}
             </if>
             and P_VALID_FLAG =1
         </where>
@@ -379,4 +397,21 @@
         where P_MATERIEL_RESOURCE_ID = #{materielResourceId,jdbcType=VARCHAR}
 
     </delete>
+
+
+
+    <!--查找重复-->
+    <select id="HzMaterialDAOImpl_isRepeat" parameterType="java.util.HashMap" resultType="java.lang.Integer">
+        select count(*) from HZ_MATERIEL_RECORD
+        <where>
+            1=1
+            <if test="projectId != null and projectId !=''">
+                and P_PERTAIN_TO_PROJECT_PUID = #{projectId,jdbcType=VARCHAR}
+            </if>
+            <if test="pMaterielCode != null">
+                and P_MATERIEL_CODE = #{pMaterielCode,jdbcType=VARCHAR}
+            </if>
+            and P_VALID_FLAG=1
+        </where>
+    </select>
 </mapper>

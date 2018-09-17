@@ -153,6 +153,16 @@ public class HzEbomRespDTO {
      */
     private Integer changeFlag;
 
+    private String colorPart;
+
+    public String getColorPart() {
+        return colorPart;
+    }
+
+    public void setColorPart(String colorPart) {
+        this.colorPart = colorPart;
+    }
+
     public Integer getChangeFlag() {
         return changeFlag;
     }

@@ -59,11 +59,9 @@ public class HzPbomServiceImpl implements HzPbomService {
     public OperateResultMessageRespDTO insertHzPbomRecord(AddHzPbomRecordReqDTO recordReqDTO) {
         OperateResultMessageRespDTO respDTO = new OperateResultMessageRespDTO();
         try {
-            User user = UserInfo.getUser();
-            if(user.getGroupId()!=9){
-                respDTO.setErrMsg("你当前没有权限执行此操作!");
-                respDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
-                return respDTO;
+            boolean b = PrivilegeUtil.writePrivilege();
+            if(!b){
+                return OperateResultMessageRespDTO.getFailPrivilege();
             }
 //            HzPbomRecord record = hzPbomRecordDAO.getHzPbomByEbomPuid(recordReqDTO.geteBomPuid());
 //            if(record!=null){
@@ -119,11 +117,11 @@ public class HzPbomServiceImpl implements HzPbomService {
                 }
             }
             hzPbomRecord.setPuid(UUID.randomUUID().toString());
-            Integer maxOrderNum = hzPbomRecordDAO.getHzPbomMaxOrderNum(recordReqDTO.getProjectId());
+            Double maxOrderNum = hzPbomRecordDAO.getHzPbomMaxOrderNum(recordReqDTO.getProjectId());
             if(maxOrderNum == null){
-                maxOrderNum = 100;
+                maxOrderNum = 100.0;
             }
-            hzPbomRecord.setOrderNum(maxOrderNum+100);
+            hzPbomRecord.setOrderNum(maxOrderNum.intValue()+100);
             List<HzPbomLineRecord> records = new ArrayList<>();
             records.add(hzPbomRecord);
             int i = hzPbomRecordDAO.insertList(records);
@@ -382,7 +380,7 @@ public class HzPbomServiceImpl implements HzPbomService {
         }
         int count = hzPbomRecordDAO.getHzBomLineCount(query.getProjectId());
         if(count<=0){
-            List<HzBomLineRecord> lineRecords = hzBomLineRecordDao.getAllBomLineRecordByProjectId(query.getProjectId());
+            List<HzBomLineRecord> lineRecords = hzBomLineRecordDao.getLoadingCarPartBom(query.getProjectId());
             if(ListUtil.isNotEmpty(lineRecords)){
                 int size = lineRecords.size();
                 //分批插入数据 一次1000条
@@ -495,11 +493,11 @@ public class HzPbomServiceImpl implements HzPbomService {
                 hzPbomLineRecord.setpBomOfWhichDept(recordReqDTO.getpBomOfWhichDept());
                 hzPbomLineRecord.setpBomLinePartName(recordReqDTO.getpBomLinePartName());
                 hzPbomLineRecord.setpBomLinePartClass(recordReqDTO.getpBomLinePartClass());
-                Integer num = hzPbomRecordDAO.getHzPbomMaxOrderNum(recordReqDTO.getProjectId());
+                Double num = hzPbomRecordDAO.getHzPbomMaxOrderNum(recordReqDTO.getProjectId());
                 if(num == null){
-                    num = 100;
+                    num = 100.0;
                 }
-                hzPbomLineRecord.setOrderNum(num+100);
+                hzPbomLineRecord.setSortNum(String.valueOf(num+100));
                 hzPbomLineRecord.seteBomPuid(puid);
                 Integer maxLineIndexFirstNum = hzPbomRecordDAO.getMaxLineIndexFirstNum(recordReqDTO.getProjectId());
                 if(maxLineIndexFirstNum == null){
@@ -924,7 +922,7 @@ public class HzPbomServiceImpl implements HzPbomService {
         hzPbomLineRecord.setpBomOfWhichDept(record.getpBomOfWhichDept());
         hzPbomLineRecord.setpBomLinePartEnName(record.getpBomLinePartEnName());
         hzPbomLineRecord.setpBomLinePartResource(record.getpBomLinePartResource());
-        hzPbomLineRecord.setOrderNum(record.getOrderNum());
+        hzPbomLineRecord.setSortNum(record.getSortNum());
         return hzPbomLineRecord;
     }
 

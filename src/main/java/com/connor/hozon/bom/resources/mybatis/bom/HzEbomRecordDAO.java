@@ -65,10 +65,13 @@ public interface HzEbomRecordDAO {
      * @param projectId
      * @return
      */
-    Integer findMinOrderNumWhichGreaterThanThisOrderNum(String projectId,int orderNum);
-
+    String findMinOrderNumWhichGreaterThanThisOrderNum(String projectId,String sortNum);
 
     int insert(HzEPLManageRecord record);
 
     int importList(List<HzImportEbomRecord> records);
+
+    boolean sortNumRepeat(String projectId,String sortNum);
+
+    boolean lineIndexRepeat(String projectId,String lineIndex);
 }

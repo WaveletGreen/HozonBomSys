@@ -100,12 +100,13 @@ public class HzEbomRecordDAOImpl extends BaseSQLUtil implements HzEbomRecordDAO 
         return super.findForList("HzEbomRecordDAOImpl_findEbom",map);
     }
 
+
     @Override
-    public Integer findMinOrderNumWhichGreaterThanThisOrderNum(String projectId,int orderNum) {
+    public String findMinOrderNumWhichGreaterThanThisOrderNum(String projectId, String sortNum) {
         Map<String,Object> map = new HashMap<>();
         map.put("projectId",projectId);
-        map.put("orderNum",orderNum);
-        return (Integer) super.findForObject("HzEbomRecordDAOImpl_findMinOrderNumWhichGreaterThanThisOrderNum",map);
+        map.put("sortNum",sortNum);
+        return (String) super.findForObject("HzEbomRecordDAOImpl_findMinOrderNumWhichGreaterThanThisOrderNum",map);
     }
 
     @Override
@@ -117,6 +118,22 @@ public class HzEbomRecordDAOImpl extends BaseSQLUtil implements HzEbomRecordDAO 
     public int importList(List<HzImportEbomRecord> records) {
 
         return super.insert("HzEbomRecordDAOImpl_importList",records);
+    }
+
+    @Override
+    public boolean sortNumRepeat(String projectId, String sortNum) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("projectId",projectId);
+        map.put("sortNum",sortNum);
+        return (int)super.findForObject("HzEbomRecordDAOImpl_sortNumRepeat",map)>0;
+    }
+
+    @Override
+    public boolean lineIndexRepeat(String projectId, String lineIndex) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("projectId",projectId);
+        map.put("lineIndex",lineIndex);
+        return (int)super.findForObject("HzEbomRecordDAOImpl_lineIndexRepeat",map)>0;
     }
 
 }

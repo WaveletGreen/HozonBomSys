@@ -65,7 +65,7 @@
         <!-- <table tableName="HZ_BOM_MAIN_RECORD" domainObjectName="HZBomMainRecord"> -->
         <!-- <property name="useActualColumnNames" value="false" /> -->
         <!-- </table> -->
-        <!-- <table tableName="HZ_BOM_LINE_RECORD" domainObjectName="HzBomLineRecord"> -->
+        <!-- <table tableName="HZ_BOM_LINE_RECORD" domainObjectName="HzBomLineRecordDO"> -->
         <!-- <property name="useActualColumnNames" value="false" /> -->
         <!-- </table> -->
         <!-- <table tableName="HZ_PREFERENCESETTING" domainObjectName="HzPreferenceSetting"> -->

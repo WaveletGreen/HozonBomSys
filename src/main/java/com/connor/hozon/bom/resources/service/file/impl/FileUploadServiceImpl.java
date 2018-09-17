@@ -80,7 +80,10 @@ public class FileUploadServiceImpl implements FileUploadService {
             List<List<HzImportEbomRecord>> list1 = new ArrayList<>();
 
             HZBomMainRecord hzBomMainRecord = hzBomMainRecordDao.selectByProjectPuid(projectId);
-            maxOrderNum = hzBomLineRecordDao.findMaxBomOrderNum(projectId);
+            Double maxSortNum = hzBomLineRecordDao.findMaxBomOrderNum(projectId);
+            if(maxSortNum != null){
+                maxOrderNum = maxSortNum.intValue();
+            }
             for(int numSheet = 0; numSheet < workbook.getNumberOfSheets(); numSheet++ ){
                 Sheet sheet = workbook.getSheetAt(numSheet);
                 String sheetName = workbook.getSheetName(numSheet);//sheet 表名 就一个sheet的话 没什么卵用
@@ -523,7 +526,6 @@ public class FileUploadServiceImpl implements FileUploadService {
             String parentId = "";
             String currentKey = record.getLevel()+"-"+high;
             int currentLevelNum = Integer.valueOf(level.replace("Y",""));
-            String currentLineIndex = lineIndexMap.get(currentKey);
             //找父id
             if(high!=0){
                 if(level.endsWith("Y")){
@@ -544,13 +546,13 @@ public class FileUploadServiceImpl implements FileUploadService {
             if(!level.endsWith("Y")){
                 record.setPuid(UUID.randomUUID().toString());
             }
-
+            double d = 0;
             if(maxOrderNum !=null){
-                record.setOrderNum(maxOrderNum+record.getNo()*100);
+                d = maxOrderNum+record.getNo()*100;
             }else {
-                record.setOrderNum(record.getNo()*100);
+                d = record.getNo()*100;
             }
-
+            record.setSortNum(String.valueOf(d));
             recordList.add(record);
         }
         return recordList;

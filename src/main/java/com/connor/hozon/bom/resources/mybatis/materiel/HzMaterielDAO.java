@@ -116,4 +116,7 @@ public interface HzMaterielDAO {
 
 
     int realDelete(String materielResourceId);
+
+    boolean isRepeat(HzMaterielQuery query);
+
 }
