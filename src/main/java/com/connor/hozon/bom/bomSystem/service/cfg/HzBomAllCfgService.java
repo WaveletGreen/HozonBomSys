@@ -80,7 +80,16 @@ public class HzBomAllCfgService {
     ProjectHelper projectHelper;
     private static final String[] selfDesc =
             {
-                    "operationType"/*操作类型*/, "pBomOfWhichDept"/*系统，即所属部门*/, "pBomLineId"/*总成零件号*/, "pBomLineName"/*总成零件名称*/, "pH9featureenname"/*总成英文名称*/, "owningUser"/*责任工程师*/, "pCfg0Desc"/*配置描述*/, "pCfg0ObjectId"/*配置代码*/, "isColorPart"/*是否颜色件*/, "comment"/*备注*/
+                    "operationType"/*操作类型*/,
+                    "pBomOfWhichDept"/*系统，即所属部门*/,
+                    "pBomLineId"/*总成零件号*/,
+                    "pBomLineName"/*总成零件名称*/,
+                    "pH9featureenname"/*总成英文名称*/,
+                    "owningUser"/*责任工程师*/,
+                    "pCfg0Desc"/*配置描述*/,
+                    "pCfg0ObjectId"/*配置代码*/,
+                    "isColorPart"/*是否颜色件*/,
+                    "comment"/*备注*/
             };
 
     private static Logger logger = LoggerFactory.getLogger(HzBomAllCfgService.class);
@@ -168,7 +177,7 @@ public class HzBomAllCfgService {
         for (HzBomLineRecord hzBomLineRecord : lines) {
             JSONObject data = new JSONObject();
             data.put(selfDesc[0], "");
-            data.put(selfDesc[1], "");
+            data.put(selfDesc[1], hzBomLineRecord.getpBomOfWhichDept()==null?"":hzBomLineRecord.getpBomOfWhichDept());
             data.put(selfDesc[2], hzBomLineRecord.getLineID() == null ? "" : hzBomLineRecord.getLineID());
             data.put(selfDesc[3], hzBomLineRecord.getpBomLinePartName() == null ? "" : hzBomLineRecord.getpBomLinePartName());
             data.put(selfDesc[4], hzBomLineRecord.getpBomLinePartEnName() == null ? "" : hzBomLineRecord.getpBomLinePartEnName());
