@@ -37,7 +37,7 @@ function doQuery() {
     else {
         mBomUrl += "&pBomLinePartResource=" + pBomLinePartResource;
     }
-    initTable(mBomUrl);
+    initTable1(mBomUrl);
     $('#mbomMaintenanceTable').bootstrapTable('destroy');
 }
 function doQuery1() {
