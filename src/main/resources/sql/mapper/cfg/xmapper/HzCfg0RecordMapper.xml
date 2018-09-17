@@ -109,10 +109,10 @@
         ROWNUM as rowno
         from ${whichTable} t where 1=1
         <if test="param.featureValue !=null">
-            and t.p_cfg0_object_id like '%'||upper(#{param.featureValue})||'%'
+            and t.p_cfg0_object_id like '%'||upper(trim(#{param.featureValue}))||'%'
         </if>
         <if test="param.feature !=null">
-            and t.p_cfg0_family_name like '%'||upper(#{param.feature})||'%'
+            and t.p_cfg0_family_name like '%'||upper(trim(#{param.feature}))||'%'
         </if>
         and t.p_cfg0_main_item_puid=(
         select t2.puid
@@ -191,6 +191,7 @@
         and t.P_CFG0_DESC=#{pCfg0Desc}
         and t.P_CFG0_FAMILY_NAME=#{pCfg0FamilyName}
         and t.P_CFG0_FAMILY_DESC=#{pCfg0FamilyDesc}
+        and t.p_cfg0_main_item_puid=#{pCfg0MainItemPuid}
     </select>
 
     <select id="tellMeHowManyOfThose" parameterType="com.connor.hozon.bom.bomSystem.dto.HzFeatureQueryDTO"

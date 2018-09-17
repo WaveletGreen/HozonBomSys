@@ -176,19 +176,22 @@ public class HzBomAllCfgService {
 //        }
         for (HzBomLineRecord hzBomLineRecord : lines) {
             JSONObject data = new JSONObject();
-            data.put(selfDesc[0], "");
-            data.put(selfDesc[1], hzBomLineRecord.getpBomOfWhichDept()==null?"":hzBomLineRecord.getpBomOfWhichDept());
+            HzFullCfgWithCfg cfg = hzFullCfgWithCfgDao.selectByBomLineUidWithVersion(hzFullCfgMain.getId(), hzBomLineRecord.getPuid());
+            data.put(selfDesc[0], cfg.getFlOperationType() == 1 ? "新增" : cfg.getFlOperationType() == 2 ? "更新" : cfg.getFlOperationType() == 0 ? "删除" : "新增");
+            data.put(selfDesc[1], hzBomLineRecord.getpBomOfWhichDept() == null ? "" : hzBomLineRecord.getpBomOfWhichDept());
             data.put(selfDesc[2], hzBomLineRecord.getLineID() == null ? "" : hzBomLineRecord.getLineID());
             data.put(selfDesc[3], hzBomLineRecord.getpBomLinePartName() == null ? "" : hzBomLineRecord.getpBomLinePartName());
             data.put(selfDesc[4], hzBomLineRecord.getpBomLinePartEnName() == null ? "" : hzBomLineRecord.getpBomLinePartEnName());
             data.put(selfDesc[5], "");
             data.put(selfDesc[6], "");
             data.put(selfDesc[7], "");
+            //颜色件
+            data.put(selfDesc[8], (null == hzBomLineRecord.getColorPart() || hzBomLineRecord.getColorPart() == 0) ? "N" : "Y");
 //            boolean flag = false;
             for (HzFullCfgWithCfg hzFullCfgWithCfg : hzFullCfgWithCfgs) {
                 if (hzFullCfgWithCfg.getCfgBomlineUid().equals(hzBomLineRecord.getPuid())) {
 //                    flag = true;
-                    data.put(selfDesc[5], hzFullCfgWithCfg.getFlCfgCreator() == null ? "" : hzFullCfgWithCfg.getFlCfgCreator());
+                    data.put(selfDesc[5], hzBomLineRecord.getpDutyEngineer() == null ? "" : hzBomLineRecord.getpDutyEngineer()/*hzFullCfgWithCfg.getFlCfgCreator() == null ? "" : hzFullCfgWithCfg.getFlCfgCreator()*/);
                     for (HzCfg0Record hzCfg0Record : hzCfg0Records) {
                         if (hzCfg0Record.getPuid().equals(hzFullCfgWithCfg.getCfgCfg0Uid())) {
                             data.put(selfDesc[6], hzCfg0Record.getpCfg0Desc() == null ? "" : hzCfg0Record.getpCfg0Desc());
@@ -202,7 +205,7 @@ public class HzBomAllCfgService {
 //                data.put(selfDesc[6], "");
 //                data.put(selfDesc[7], "");
 //            }
-            data.put(selfDesc[8], "");
+            data.put(selfDesc[9], cfg.getFlComment() == null ? "" : cfg.getFlComment());
             data.put("bomLinePuid", hzBomLineRecord.getPuid());
             _data.add(data);
         }
@@ -220,6 +223,8 @@ public class HzBomAllCfgService {
                 object.put("pModelAnnouncement", "");
                 object.put("pModelCfgDesc", "");
                 object.put("pModelCfgMng", "");
+                object.put("pModelTrailNum", "");
+                object.put("pModelGoodsNum", "");
             } else {
                 boolean flag = false;
                 for (HzCfg0ModelDetail hzCfg0ModelDetail : hzCfg0ModelDetails) {
@@ -228,6 +233,8 @@ public class HzBomAllCfgService {
                         object.put("pModelAnnouncement", hzCfg0ModelDetail.getpModelAnnouncement() == null ? "" : hzCfg0ModelDetail.getpModelAnnouncement());
                         object.put("pModelCfgDesc", hzCfg0ModelDetail.getpModelCfgDesc() == null ? "" : hzCfg0ModelDetail.getpModelCfgDesc());
                         object.put("pModelCfgMng", hzCfg0ModelDetail.getpModelCfgMng() == null ? "" : hzCfg0ModelDetail.getpModelCfgMng());
+                        object.put("pModelTrailNum", hzCfg0ModelDetail.getpModelTrailNum() == null ? "" : hzCfg0ModelDetail.getpModelTrailNum());
+                        object.put("pModelGoodsNum", hzCfg0ModelDetail.getpModelGoodsNum() == null ? "" : hzCfg0ModelDetail.getpModelGoodsNum());
                         flag = true;
                     }
                 }
@@ -236,6 +243,8 @@ public class HzBomAllCfgService {
                     object.put("pModelAnnouncement", "");
                     object.put("pModelCfgDesc", "");
                     object.put("pModelCfgMng", "");
+                    object.put("pModelTrailNum", "");
+                    object.put("pModelGoodsNum", "");
                 }
 
             }

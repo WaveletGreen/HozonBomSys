@@ -25,6 +25,8 @@ function loadData(projectUid) {
             var _ddd = JSON.parse(_data);
             var data = _ddd.data;
             var model = _ddd.model;
+            var startIndex = 12;
+            var rowCount = 11;
             modelSize = _ddd.modelSize;
             cfgSize = _ddd.cfgSize;
             array = _ddd.array;
@@ -35,18 +37,18 @@ function loadData(projectUid) {
             $table.removeClass("table").removeClass("table-striped");
             // $table.val("");
             var temp = "";
-            for (var i = 0; i < 9; i++) {
+            for (var i = 0; i < rowCount; i++) {
                 if (i == 0) {
-                    temp += "<tr id='tr" + i + "'><td id='row" + i + "' colspan='10' style='border: #fff'>阶段：" + main.stage + "</td></tr>";
+                    temp += "<tr id='tr" + i + "'><td id='row" + i + "' colspan='11' style='border: #fff'>阶段：" + main.stage + "</td></tr>";
                 }
                 else if (i == 1) {
-                    temp += "<tr id='tr" + i + "'><td id='row" + i + "' colspan='10' style='border: #fff'>版本：" + main.version + "</td></tr>";
+                    temp += "<tr id='tr" + i + "'><td id='row" + i + "' colspan='11' style='border: #fff'>版本：" + main.version + "</td></tr>";
                 }
                 else if (i == 2) {
-                    temp += "<tr id='tr" + i + "'><td id='row" + i + "' colspan='10' style='border: #fff'>生效日期：" + main.effectiveDate + "</td></tr>";
+                    temp += "<tr id='tr" + i + "'><td id='row" + i + "' colspan='11' style='border: #fff'>生效日期：" + main.effectiveDate + "</td></tr>";
                 }
                 else {
-                    temp += "<tr id='tr" + i + "'><td id='row" + i + "' colspan='10' style='border: #fff'></td></tr>";
+                    temp += "<tr id='tr" + i + "'><td id='row" + i + "' colspan='11' style='border: #fff'></td></tr>";
                 }
             }
 
@@ -62,6 +64,8 @@ function loadData(projectUid) {
             $("#tr6").append("<th id='th5'><div style='width: 200px'  >公告</div></th>");
             $("#tr7").append("<th id='th6'><div style='width: 200px'  >配置描述</div></th>");
             $("#tr8").append("<th id='th7'><div style='width: 200px'  >配置管理</div></th>");
+            $("#tr9").append("<th id='th8'><div style='width: 200px'  >试制号</div></th>");
+            $("#tr10").append("<th id='th9'><div style='width: 200px'  >商品号</div></th>");
 
 
             // var c = "<tr>" +
@@ -139,6 +143,7 @@ function loadData(projectUid) {
                 //描述的宽度应该大一点，保持可用
                 "<th ><div style='width: 150px' >配置描述</div></th>" +
                 "<th ><div style='width: 150px' >配置代码</div></th>" +
+                "<th ><div style='width: 150px' >是否颜色件</div></th>" +
                 "<th ><div style='width: 150px' >备注</div></th>" +
                 "</tr>"
             ;
@@ -146,7 +151,7 @@ function loadData(projectUid) {
             //动态拼接后台数据
             for (var i = 0; i < data.length; i++) {
                 var dataOfModel = data[i];
-                var j = i + 10;
+                var j = i + startIndex;
                 var cfgId = "in_in_" + i;
                 var delta = "<tr id='tr" + j + "'>" +
                     "<td style='text-align: center'><input class='btn btn-default' type='button' value='编辑' style='width: 50px' onclick='editorOrSave(this)'><input class='btn btn-default' type='button' value='取消' style='width: 50px; display: none' onclick='cancelEditor(this)'><div id='" + cfgId + "' style='display: none'>" + dataOfModel.bomLinePuid + "</div></td>"
@@ -166,9 +171,9 @@ function loadData(projectUid) {
                         for (var j = 0; j < array.length; j++) {
                             var cfg = array[j];
                             if (cfg.pCfg0ObjectId == dataOfModel[index]) {
-                                cfgSelect += "<option value='" + cfg.puid + "' selected='selected'>" + cfg.pCfg0ObjectId + "</option>";
+                                cfgSelect += "<option value='" + cfg.puid + "|" + cfg.pCfg0Desc + "' selected='selected'>" + cfg.pCfg0ObjectId + "</option>";
                             } else {
-                                cfgSelect += "<option value='" + cfg.puid + "'>" + cfg.pCfg0ObjectId + "</option>";
+                                cfgSelect += "<option value='" + cfg.puid + "|" + cfg.pCfg0Desc + "'>" + cfg.pCfg0ObjectId + "</option>";
                             }
                         }
                         cfgSelect += "</select>";
@@ -190,7 +195,7 @@ function loadData(projectUid) {
                 var v0 = modeli.key;
                 var v1 = modeli.hide;
 
-                $("#tr0").append("<td ><input class='btn btn-default' type='button' value='编辑' onclick='editPoint(this)'/><input class='btn btn-default' type='button' value='取消' style='display: none' onclick='cancelEditorPoint(this)'/><input class='btn btn-default' type='button' value='删除' style='background-color: red;display:none' onclick='deleteModel(this)'/><div style='display: none' id='in_"+i+"'>"+modeli.modelPuid+"</div></td>");
+                $("#tr0").append("<td ><input class='btn btn-default' type='button' value='编辑' onclick='editPoint(this)'/><input class='btn btn-default' type='button' value='取消' style='display: none' onclick='cancelEditorPoint(this)'/><input class='btn btn-default' type='button' value='删除' style='background-color: red;display:none' onclick='deleteModel(this)'/><div style='display: none' id='in_" + i + "'>" + modeli.modelPuid + "</div></td>");
                 //品牌
                 $("#tr1").append("<td ><div style='width: 200px'  >" + modeli.brand + "</div></td>");
                 //平台
@@ -202,23 +207,25 @@ function loadData(projectUid) {
                 $("#tr6").append("<td ><div style='width: 200px'  >" + modeli.pModelAnnouncement + "</div></td>");
                 $("#tr7").append("<td ><div style='width: 200px'  >" + modeli.pModelCfgDesc + "</div></td>");
                 $("#tr8").append("<td ><div style='width: 200px'  >" + modeli.pModelCfgMng + "</div></td>");
-                $("#tr9").append("<td ><div style='width: 200px'  >" + "" + "</div></td>");
+                $("#tr9").append("<td ><div style='width: 200px'  >" + modeli.pModelTrailNum + "</div></td>");
+                $("#tr10").append("<td ><div style='width: 200px'  >" + modeli.pModelGoodsNum + "</div></td>");
+                $("#tr11").append("<td ><div style='width: 200px'  >" + "" + "</div></td>");
                 var point = modeli.point;
-                for (var j = 10; j < (point.length + 10); j++) {
+                for (var j = startIndex; j < (point.length + startIndex); j++) {
                     var trNumber = "tr" + j;
-                    var pointId = "in_" + i + "in_in_" + (j - 10);
+                    var pointId = "in_" + i + "in_in_" + (j - startIndex);
                     var cfgObjectIdVar = $("#" + trNumber).find("select").find("option:selected").text();
-                    var cfgObjectId = point[j - 10].point;
+                    var cfgObjectId = point[j - startIndex].point;
                     //总成零件号和总成零件名称
-                    var bomLineId =  $("#"+trNumber).find("td:eq(4)").find("div").text();
-                    var bomLineName = $("#"+trNumber).find("td:eq(5)").find("div").text();
+                    var bomLineId = $("#" + trNumber).find("td:eq(4)").find("div").text();
+                    var bomLineName = $("#" + trNumber).find("td:eq(5)").find("div").text();
                     if (cfgObjectId == "" || cfgObjectId == "-") {
                         // $("#"+trNumber).append("<td class='edit'><select style='display: none'><option selected='selected'>-</option><option>●</option><option>○</option></select><div id='"+pointId+"' style='width: 150px'>" + point[j-10].point + "</div></td>");
-                        $("#" + trNumber).append("<td class='edit'><select style='display: none' title='总成零件号:    "+bomLineId+"&#10总成零件名称:    "+bomLineName+"'><option selected='selected' title='总成零件号:    "+bomLineId+"&#10总成零件名称:    "+bomLineName+"'>-</option><option title='总成零件号:    "+bomLineId+"&#10总成零件名称:    "+bomLineName+"'>●</option><option title='总成零件号:    "+bomLineId+"&#10总成零件名称:    "+bomLineName+"'>○</option></select><div id='" + pointId + "' style='width: 150px'>" + cfgObjectId + "</div></td>");
+                        $("#" + trNumber).append("<td class='edit'><select style='display: none' title='总成零件号:    " + bomLineId + "&#10总成零件名称:    " + bomLineName + "'><option selected='selected' title='总成零件号:    " + bomLineId + "&#10总成零件名称:    " + bomLineName + "'>-</option><option title='总成零件号:    " + bomLineId + "&#10总成零件名称:    " + bomLineName + "'>●</option><option title='总成零件号:    " + bomLineId + "&#10总成零件名称:    " + bomLineName + "'>○</option></select><div id='" + pointId + "' style='width: 150px'>" + cfgObjectId + "</div></td>");
                     } else if (cfgObjectId == "●") {
-                        $("#" + trNumber).append("<td class='edit'><select style='display: none' title='总成零件号:    "+bomLineId+"&#10总成零件名称:    "+bomLineName+"'><option title='总成零件号:    "+bomLineId+"&#10总成零件名称:    "+bomLineName+"'>-</option><option selected='selected' title='总成零件号:    "+bomLineId+"&#10总成零件名称:    "+bomLineName+"'>●</option><option title='总成零件号:    "+bomLineId+"&#10总成零件名称:    "+bomLineName+"'>○</option></select><div id='" + pointId + "' style='width: 150px'>" + cfgObjectId + "</div></td>");
+                        $("#" + trNumber).append("<td class='edit'><select style='display: none' title='总成零件号:    " + bomLineId + "&#10总成零件名称:    " + bomLineName + "'><option title='总成零件号:    " + bomLineId + "&#10总成零件名称:    " + bomLineName + "'>-</option><option selected='selected' title='总成零件号:    " + bomLineId + "&#10总成零件名称:    " + bomLineName + "'>●</option><option title='总成零件号:    " + bomLineId + "&#10总成零件名称:    " + bomLineName + "'>○</option></select><div id='" + pointId + "' style='width: 150px'>" + cfgObjectId + "</div></td>");
                     } else if (cfgObjectId == "○") {
-                        $("#" + trNumber).append("<td class='edit'><select style='display: none' title='总成零件号:    "+bomLineId+"&#10总成零件名称:    "+bomLineName+"'><option title='总成零件号:    "+bomLineId+"&#10总成零件名称:    "+bomLineName+"'>-</option><option title='总成零件号:    "+bomLineId+"&#10总成零件名称:    "+bomLineName+"'>●</option><option selected='selected' title='总成零件号:    "+bomLineId+"&#10总成零件名称:    "+bomLineName+"'>○</option></select><div id='" + pointId + "' style='width: 150px'>" + cfgObjectId + "</div></td>");
+                        $("#" + trNumber).append("<td class='edit'><select style='display: none' title='总成零件号:    " + bomLineId + "&#10总成零件名称:    " + bomLineName + "'><option title='总成零件号:    " + bomLineId + "&#10总成零件名称:    " + bomLineName + "'>-</option><option title='总成零件号:    " + bomLineId + "&#10总成零件名称:    " + bomLineName + "'>●</option><option selected='selected' title='总成零件号:    " + bomLineId + "&#10总成零件名称:    " + bomLineName + "'>○</option></select><div id='" + pointId + "' style='width: 150px'>" + cfgObjectId + "</div></td>");
                     }
                 }
                 // for(var j=9;j<(data.length+9);j++){
@@ -318,7 +325,6 @@ $('.edit').on('click', function () {
         $(this).find('div').is(':visible') && ($(this).find('input').show().prev().hide(), $(this).parent().find('.btn').html('保存'));
     }
 })
-
 
 
 function Botton(id) {
@@ -461,13 +467,24 @@ function editorOrSave(but) {
                         var select = $(item).find('select');
                         $(select).empty();
                         $(select).append("<option></option>");
-                        for (var i = 0; i < array.length; i++) {
-                            $(select).append("<option value='" + array[i].puid + "'>" + array[i].pCfg0ObjectId + "</option>");
+                        let [..._array] = array;
+                        console.log(_array);
+                        for (let j = 0; j < cfgs.length; j++) {
+                            for (let i = 0; i < _array.length; i++) {
+                                if (cfgs[j].cfgCfg0Uid == _array[i].puid) {
+                                    _array.splice(i,1);
+                                    break;
+                                }
+                            }
+
                         }
-                        for (var i = 0; i < cfgs.length; i++) {
-                            $("select option[value='" + cfgs[i].cfgCfg0Uid + "']").remove();
-                            // alert(cfgs[i].cfgCfg0Uid);
+                        for (let i = 0; i < _array.length; i++) {
+                            $(select).append("<option value='" + _array[i].puid + "|" + _array[i].pCfg0Desc + "'>" + _array[i].pCfg0ObjectId + "</option>");
                         }
+                        // for (var i = 0; i < cfgs.length; i++) {
+                        //     $("select option[value='" + cfgs[i].cfgCfg0Uid + "']").remove();
+                        //     // alert(cfgs[i].cfgCfg0Uid);
+                        // }
                         // var selectText = $(select).find("option:selected").text();
                         // if(selectText==null){
                         //     $('#'+selectText+ 'option:first').prop("selected", 'selected');
@@ -504,6 +521,7 @@ function editorOrSave(but) {
         var cfgPuid;
         var cfgIndex;
         var select;
+        var desc = "";
         $(but).parent().siblings().each(function (index, item) {
             if (index == 0) {
                 select = $(item).find('select');
@@ -513,8 +531,19 @@ function editorOrSave(but) {
                 bomLinePuid = $("#" + bomLinePuidDivId).text();
             } else if (index == 8) {
                 // cfgCode = $(item).find('select').text();
-                cfgPuid = $(item).find('select').val();
-                cfgIndex = $(item).find('select').get(0).selectedIndex;
+                let str = $(item).find('select').val();
+                /**避免出现前端异常问题*/
+                if (str == null || str == "") {
+                    cfgPuid = "";
+                    desc = "";
+                }
+                else {
+                    /**截取字符串*/
+                    cfgPuid = str.substring(0, str.indexOf("|"));//$(item).find('select').val();
+                    console.log(cfgPuid);
+                    desc = str.substring(str.indexOf("|") + 1, str.length);
+                    // cfgIndex = $(item).find('select').get(0).selectedIndex;
+                }
                 return false;
             }
         });
@@ -530,7 +559,7 @@ function editorOrSave(but) {
                                 $(item).find('div').text('');
                                 $(item).find('div').show();
                             } else {
-                                $(item).find('div').text(array[cfgIndex - 1].pCfg0Desc);
+                                $(item).find('div').text(desc/*array[cfgIndex - 1].pCfg0Desc*/);
                                 $(item).find('div').show();
                             }
                             // $(item).find('select').hide();

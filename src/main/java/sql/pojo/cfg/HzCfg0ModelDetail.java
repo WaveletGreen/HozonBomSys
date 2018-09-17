@@ -89,12 +89,10 @@ public class HzCfg0ModelDetail {
     /**
      * 试制号
      */
-    @Deprecated
     private String pModelTrailNum;
     /**
      * 商品号
      */
-    @Deprecated
     private String pModelGoodsNum;
     /**
      * 变形
