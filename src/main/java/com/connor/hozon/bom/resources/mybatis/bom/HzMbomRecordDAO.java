@@ -102,7 +102,7 @@ public interface HzMbomRecordDAO {
      * @param projectId
      * @return
      */
-    Integer getHzMbomMaxOrderNum(String projectId);
+    Double getHzMbomMaxOrderNum(String projectId);
 
     /**
      * 获取2Y层 分页获取 MBOM数据 （虚拟物料主数据）
@@ -149,4 +149,7 @@ public interface HzMbomRecordDAO {
 
 
     String findMinOrderNumWhichGreaterThanThisOrderNum(String projectId,String orderNum);
+
+
+    List<HzMbomLineRecord> findHzMbomAll(String projectId);
 }

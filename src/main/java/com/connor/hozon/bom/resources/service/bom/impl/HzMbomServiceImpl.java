@@ -216,13 +216,10 @@ public class HzMbomServiceImpl implements HzMbomService {
 
     @Override
     public OperateResultMessageRespDTO insertMbomRecord(AddMbomReqDTO reqDTO) {
-        OperateResultMessageRespDTO operateResultMessageRespDTO = new OperateResultMessageRespDTO();
         try {
-            User user = UserInfo.getUser();
-            if (user.getGroupId() != 9) {
-                operateResultMessageRespDTO.setErrMsg("你当前没有权限执行此操作!");
-                operateResultMessageRespDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
-                return operateResultMessageRespDTO;
+            boolean b = PrivilegeUtil.writePrivilege();
+            if(!b){
+                return OperateResultMessageRespDTO.getFailPrivilege();
             }
 //            HzMbomRecord record = hzMbomRecordDAO.findHzMbomByeBomPuid(reqDTO.geteBomPuid());
 //            if(record != null){
@@ -246,8 +243,8 @@ public class HzMbomServiceImpl implements HzMbomService {
             hzMbomRecord.setStandardPart(reqDTO.getStandardPart());
             hzMbomRecord.setTools(reqDTO.getTools());
             hzMbomRecord.setWasterProduct(reqDTO.getWasterProduct());
-            hzMbomRecord.setCreateName(user.getUserName());
-            hzMbomRecord.setUpdateName(user.getUserName());
+            hzMbomRecord.setCreateName(UserInfo.getUser().getUserName());
+            hzMbomRecord.setUpdateName(UserInfo.getUser().getUserName());
             Map<String, Object> map = new HashMap<>();
             map.put("pPuid", reqDTO.geteBomPuid());
             map.put("projectId", reqDTO.getProjectId());
@@ -269,13 +266,11 @@ public class HzMbomServiceImpl implements HzMbomService {
 
     @Override
     public OperateResultMessageRespDTO updateMbomRecord(UpdateMbomReqDTO reqDTO) {
-        OperateResultMessageRespDTO operateResultMessageRespDTO = new OperateResultMessageRespDTO();
         try {
             User user = UserInfo.getUser();
-            if (user.getGroupId() != 9) {
-                operateResultMessageRespDTO.setErrMsg("你当前没有权限执行此操作");
-                operateResultMessageRespDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
-                return operateResultMessageRespDTO;
+            boolean b = PrivilegeUtil.writePrivilege();
+            if(!b){
+                return OperateResultMessageRespDTO.getFailPrivilege();
             }
             HzMbomLineRecord record = new HzMbomLineRecord();
             record.setUpdateName(user.getUserName());
@@ -335,10 +330,9 @@ public class HzMbomServiceImpl implements HzMbomService {
         OperateResultMessageRespDTO respDTO = new OperateResultMessageRespDTO();
         try {
             User user = UserInfo.getUser();
-            if (user.getGroupId() != 9) {
-                respDTO.setErrMsg("你当前没有权限执行此操作");
-                respDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
-                return respDTO;
+            boolean b = PrivilegeUtil.writePrivilege();
+            if(!b){
+                return OperateResultMessageRespDTO.getFailPrivilege();
             }
             if (reqDTO.getPuids() == null || reqDTO.getPuids().equals("") || reqDTO.getProjectId() == null || reqDTO.getProjectId().equals("")) {
                 respDTO.setErrMsg("非法参数！");
@@ -736,7 +730,7 @@ public class HzMbomServiceImpl implements HzMbomService {
         hzMbomLineRecord.setpBomOfWhichDept(record.getpBomOfWhichDept());
         hzMbomLineRecord.setpBomLinePartEnName(record.getpBomLinePartEnName());
         hzMbomLineRecord.setpBomLinePartResource(record.getpBomLinePartResource());
-        hzMbomLineRecord.setOrderNum(record.getOrderNum());
+        hzMbomLineRecord.setSortNum(record.getSortNum());
         return hzMbomLineRecord;
     }
 

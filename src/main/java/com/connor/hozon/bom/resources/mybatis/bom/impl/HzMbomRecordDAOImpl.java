@@ -117,8 +117,12 @@ public class HzMbomRecordDAOImpl extends BaseSQLUtil implements HzMbomRecordDAO 
     }
 
     @Override
-    public Integer getHzMbomMaxOrderNum(String projectId) {
-        return (Integer) super.findForObject("HzMbomRecordDAOImpl_getHzMbomMaxOrderNum",projectId);
+    public Double getHzMbomMaxOrderNum(String projectId) {
+        String maxSortNum = (String)super.findForObject("HzMbomRecordDAOImpl_getHzMbomMaxOrderNum",projectId);
+        if(maxSortNum ==  null){
+            return null;
+        }
+        return Double.parseDouble(maxSortNum);
     }
 
     @Override
@@ -193,5 +197,10 @@ public class HzMbomRecordDAOImpl extends BaseSQLUtil implements HzMbomRecordDAO 
         map.put("projectId",projectId);
         map.put("sortNum",orderNum);
         return (String) super.findForObject("HzMbomRecordDAOImpl_findMinOrderNumWhichGreaterThanThisOrderNum",map);
+    }
+
+    @Override
+    public List<HzMbomLineRecord> findHzMbomAll(String projectId) {
+        return super.findForList("HzMbomRecordDAOImpl_findHzMbomAll",projectId);
     }
 }
