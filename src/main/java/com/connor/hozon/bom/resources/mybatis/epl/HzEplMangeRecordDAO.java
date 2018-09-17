@@ -13,4 +13,6 @@ public interface HzEplMangeRecordDAO {
     List<HzEPLManageRecord> getHzEplManageRecord();
 
     Page<HzEPLManageRecord> getEPLListForPage(HzEPLByPageQuery query);
+
+    Page<HzEPLManageRecord> getEPLListForPage2(HzEPLByPageQuery query);
 }
