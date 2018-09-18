@@ -411,7 +411,7 @@ public class BaseSQLUtil implements IBaseSQLUtil {
      * @param pageRequest 分页请求参数信息
      * @return
      */
-    public Page findPage(String sqlMapId, final String totalMapId, PageRequest pageRequest) {
+    public Page findPage(final String sqlMapId, final String totalMapId, PageRequest pageRequest) {
         Map filters = new HashMap();
         filters.putAll(pageRequest.getFilters());
         // 查询总数
