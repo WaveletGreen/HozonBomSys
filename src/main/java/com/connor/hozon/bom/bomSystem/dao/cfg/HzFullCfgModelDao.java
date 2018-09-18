@@ -30,4 +30,7 @@ public interface HzFullCfgModelDao {
 
     int updateByBomLinePuid(HzFullCfgWithCfg hzFullCfgWithCfg);
 
+    List<HzFullCfgModel> selectByModelUid(String modelUid);
+    List<HzFullCfgModel> selectByModelUidWithMarks(HzFullCfgModel withCfg);
+
 }

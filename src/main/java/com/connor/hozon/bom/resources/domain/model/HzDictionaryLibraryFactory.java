@@ -1,6 +1,7 @@
 package com.connor.hozon.bom.resources.domain.model;
 
 import com.connor.hozon.bom.resources.domain.dto.request.AddHzDictionaryLibraryReqDTO;
+import com.connor.hozon.bom.resources.domain.dto.request.UpdateHzDictionaryLibraryReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzDictionaryLibraryRespDTO;
 import com.connor.hozon.bom.resources.util.DateUtil;
 import sql.pojo.resourcesLibrary.dictionaryLibrary.HzDictionaryLibrary;
@@ -44,7 +45,31 @@ public class HzDictionaryLibraryFactory {
         library.setNote(reqDTO.getNote());
         return library;
     }
+    public static HzDictionaryLibrary updateDictionaryDTOHzDictionaryLibrary(UpdateHzDictionaryLibraryReqDTO reqDTO){
+        HzDictionaryLibrary library = new HzDictionaryLibrary();
+        library.setPuid(reqDTO.getPuid());
+        library.setProfessionCh(reqDTO.getProfessionCh());
+        library.setProfessionEn(reqDTO.getProfessionEn());
+        library.setClassificationCh(reqDTO.getClassificationCh());
+        library.setClassificationEn(reqDTO.getClassificationEn());
+        library.setGroupCode(reqDTO.getGroupCode());
+        library.setGroupCh(reqDTO.getGroupCh());
+        library.setGroupEn(reqDTO.getGroupEn());
+        library.setFamillyCode(reqDTO.getFamillyCode());
+        library.setFamillyCh(reqDTO.getFamillyCh());
+        library.setFamillyEn(reqDTO.getFamillyEn());
+        library.setEigenValue(reqDTO.getEigenValue());
+        library.setValueDescCh(reqDTO.getValueDescCh());
+        library.setValueDescEn(reqDTO.getValueDescEn());
+        library.setType(reqDTO.getType());
+        library.setValueSource(reqDTO.getValueSource());
 
+        library.setEffectTime(DateUtil.parseDefaultDate(reqDTO.getEffectTime()));
+        library.setFailureTime(DateUtil.parseDefaultDate(reqDTO.getFailureTime()));
+
+        library.setNote(reqDTO.getNote());
+        return library;
+    }
     public static HzDictionaryLibraryRespDTO libraryToRespDTO(HzDictionaryLibrary library){
         HzDictionaryLibraryRespDTO dto = new HzDictionaryLibraryRespDTO();
         dto.setPuid(library.getPuid());
@@ -63,8 +88,8 @@ public class HzDictionaryLibraryFactory {
         dto.setValueDescEn(library.getValueDescEn());
         dto.setType(library.getType());
         dto.setValueSource(library.getValueSource());
-        dto.setEffectTime(DateUtil.formatDirDate(library.getEffectTime()));
-        dto.setFailureTime(DateUtil.formatDirDate(library.getEffectTime()));
+        dto.setEffectTime(DateUtil.formatDefaultDate(library.getEffectTime()));
+        dto.setFailureTime(DateUtil.formatDefaultDate(library.getFailureTime()));
         dto.setNote(library.getNote());
         return  dto;
     }

@@ -69,4 +69,27 @@
         where t2.p_cfg0_of_which_project_puid =#{mainId}
         ) order by PUID ASC
     </select>
+    <select id="selectNameByMap" parameterType="java.util.Map" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from HZ_CFG0_OPTIONFAMILY_RECORD t
+        where P_OF_CFG0_MAIN = (
+        select t2.puid
+        from hz_cfg0_main_record t2
+        where t2.p_cfg0_of_which_project_puid =#{projectUid,jdbcType=VARCHAR}
+        )
+        <if test="list!=null">
+            and t.p_optionfamily_desc
+            <if test="isIn==true">
+                in
+            </if>
+            <if test="isIn==false">
+                not in
+            </if>
+            <foreach collection="list" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        order by P_OPTIONFAMILY_NAME ASC
+    </select>
 </mapper>

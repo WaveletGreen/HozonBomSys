@@ -3,7 +3,7 @@
 <body>
 <form id="form" role="form" method="post" action="./model/saveModelData">
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-8">
             <input class="form-control" id="pModelPuid" name="pModelPuid" type="hidden"
                    th:value="${entity.getpModelPuid()}"
             />
@@ -55,6 +55,35 @@
                 <input class="form-control" id="pModelCfgMng" name="pModelCfgMng" type="text"
                        placeholder="请输入配置描述" th:value="${entity.pModelCfgMng}"/>
             </div>
+            <div class="form-group">
+                <label for="pModelTrailNum">试制号</label>
+                <input class="form-control" id="pModelTrailNum" name="pModelTrailNum" type="text"
+                       placeholder="请输入试制号" th:value="${entity.getpModelTrailNum()}"/>
+            </div>
+            <div class="form-group">
+                <label for="pModelGoodsNum">商品号</label>
+                <input class="form-control" id="pModelGoodsNum" name="pModelGoodsNum" type="text"
+                       placeholder="请输入商品号" th:value="${entity.getpModelGoodsNum()}"/>
+            </div>
+            <div class="form-group">
+                <label for="objectName">模型名</label>
+                <input class="form-control" id="objectName" name="objectName" type="text"
+                       th:value="${entity.getObjectName()}"
+                />
+            </div>
+            <div class="form-group">
+                <label for="objectDesc">模型描述</label>
+                <input class="form-control" id="objectDesc" name="objectDesc" type="text"
+                       th:value="${entity.getObjectDesc()}"
+
+                />
+            </div>
+            <div class="form-group">
+                <label for="pCfg0ModelBasicDetail">模型基本信息</label>
+                <input class="form-control" id="pCfg0ModelBasicDetail" name="pCfg0ModelBasicDetail" type="text"
+                       th:value="${entity.getpCfg0ModelBasicDetail()}"
+                />
+            </div>
         </div>
     </div>
 </form>
@@ -93,9 +122,9 @@
                 for (var p in _d) {
                     data[_d[p].name] = _d[p].value;
                 }
-                data.pModelBrand=$("#pModelBrand").val();
-                data.pModelPlatform=$("#pModelPlatform").val();
-                data.pModelMod=$("#pModelMod").val();
+                data.pModelBrand = $("#pModelBrand").val();
+                data.pModelPlatform = $("#pModelPlatform").val();
+                data.pModelMod = $("#pModelMod").val();
                 $.ajax({
                     contentType:
                         "application/json",

@@ -1,14 +1,12 @@
 package com.connor.hozon.bom.bomSystem.dto;
 
-import com.connor.hozon.bom.common.base.entity.QueryBase;
-
 /**
  * @Author: Fancyears·Maylos·Maywas
  * @Description:
  * @Date: Created in 2018/9/6 13:19
  * @Modified By:
  */
-public class HzFeatureQueryDTO extends QueryBase {
+public class HzFeatureQueryDTO {
     /**
      * 要排序的字段名
      */
@@ -42,52 +40,42 @@ public class HzFeatureQueryDTO extends QueryBase {
      */
     private String projectUid;
 
-    @Override
     public String getSort() {
         return sort;
     }
 
-    @Override
     public void setSort(String sort) {
         this.sort = sort;
     }
 
-    @Override
     public String getOrder() {
         return order;
     }
 
-    @Override
     public void setOrder(String order) {
         this.order = order;
     }
 
-    @Override
     public Integer getLimit() {
         return limit;
     }
 
-    @Override
     public void setLimit(Integer limit) {
         this.limit = limit;
     }
 
-    @Override
     public Integer getPage() {
         return page;
     }
 
-    @Override
     public void setPage(Integer page) {
         this.page = page;
     }
 
-    @Override
     public Integer getOffset() {
         return offset;
     }
 
-    @Override
     public void setOffset(Integer offset) {
         this.offset = offset;
     }

@@ -82,12 +82,12 @@
     </div>
     <div class="form-group">
         <label for="effectTime">生效时间</label>
-        <input class="form-control input-small" id="effectTime" name="effectTime" type="text"
+        <input class="form-control input-small" id="effectTime" name="effectTime" type="date"
                placeholder="请输入生效时间"/>
     </div>
     <div class="form-group">
         <label for="failureTime">失效时间</label>
-        <input class="form-control input-small" id="failureTime" name="failureTime" type="text"
+        <input class="form-control input-small" id="failureTime" name="failureTime" type="date"
                placeholder="请输入失效时间"/>
     </div>
     <div class="form-group">
@@ -136,6 +136,31 @@
                     validators: {
                         notEmpty: {
                             message: '特性值描述不能为空'
+                        }
+                    }
+                },
+                effectTime: {
+                    trigger:'change',
+                    message : "生效时间验证失败",
+                    validators : {
+                        // notEmpty : {
+                        //     message : "生效时间不能为空"
+                        // },
+                        date : {
+                            format : "yyyy-MM-dd",
+                            message : "生效时间日期格式不正确,例如:2018-10-18"
+                        }
+                    }
+                },
+                failureTime: {
+                    message : "失效时间验证失败",
+                    validators : {
+                        // notEmpty : {
+                        //     message : "失效时间不能为空"
+                        // },
+                        date : {
+                            format : "yyyy-MM-dd",
+                            message : "失效时间日期格式不正确,例如:2018-10-18"
                         }
                     }
                 },

@@ -13,6 +13,7 @@ import com.connor.hozon.bom.bomSystem.service.project.*;
 import com.connor.hozon.bom.common.base.entity.QueryBase;
 import com.connor.hozon.bom.resources.mybatis.factory.HzFactoryDAO;
 import integration.option.ActionFlagOption;
+import net.sf.json.JSON;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -93,11 +94,7 @@ public class HzMaterielFeatureController extends ExtraIntegrate {
     @Autowired
     private SynMaterielService synMaterielService;
 
-    @Autowired
-    public HzMaterielFeatureController() {
-    }
-
-//车型基本数据
+    //车型基本数据
     @Autowired
     private HzProjectLibsService hzProjectLibsService;
     @Autowired
@@ -106,6 +103,10 @@ public class HzMaterielFeatureController extends ExtraIntegrate {
     private HzPlatformService hzPlatformService;
     @Autowired
     private HzBrandService hzBrandService;
+
+    @Autowired
+    HzBomAllCfgService hzBomAllCfgService;
+
     /**
      * 根据项目的puid，获取到配置物料特性表的列设置
      *
@@ -438,7 +439,7 @@ public class HzMaterielFeatureController extends ExtraIntegrate {
             hzCfg0ModelDetail.setpModelBrand(brand.getpBrandName());
             hzCfg0ModelDetail.setpModelPlatform(platform.getpPlatformName());
             hzCfg0ModelDetail.setpModelVehicle(vehicle.getpVehicleName());
-            model.addAttribute("hzCfg0ModelDetail",hzCfg0ModelDetail);
+            model.addAttribute("hzCfg0ModelDetail", hzCfg0ModelDetail);
 
 
             HzCfg0MainRecord hzCfg0MainRecord = hzCfg0MainService.doGetbyProjectPuid(projectPuid);
@@ -461,11 +462,9 @@ public class HzMaterielFeatureController extends ExtraIntegrate {
 
             model.addAttribute("cfgmain", hzCfg0MainRecord);
             model.addAttribute("_map", _map);
-            model.addAttribute("action", "./materiel/addVehicleModel");
-
-
+            model.addAttribute("action", "./materiel/addVehicleModel2");
             return "cfg/materielFeature/addModel2";
-        }else {
+        } else {
             model.addAttribute("msg", "请选择项目再操作");
             return "errorWithEntity";
         }
@@ -544,6 +543,12 @@ public class HzMaterielFeatureController extends ExtraIntegrate {
         } else {
             return false;
         }
+    }
+
+    @RequestMapping("/addVehicleModel2")
+    @ResponseBody
+    public JSONObject addVehicleModel2(@RequestBody Map<String, String> params) {
+        return hzBomAllCfgService.addVehicleModel(params);
     }
 
 

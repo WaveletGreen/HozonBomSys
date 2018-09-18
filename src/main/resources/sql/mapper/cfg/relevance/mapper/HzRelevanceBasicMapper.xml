@@ -164,10 +164,10 @@
         from Hz_Relevance_Basic t
         where t.rb_project_uid =#{projectUid,jdbcType=VARCHAR}
         <if test="featureCode!=null">
-            and t.rb_feature_code like '%'||upper(#{featureCode,jdbcType=VARCHAR})||'%'
+            and t.rb_feature_code like '%'||trim(upper(trim(#{featureCode,jdbcType=VARCHAR})))||'%'
         </if>
         <if test="featureValueCode!=null">
-            and t.rb_feature_value_code like '%'||upper(#{featureValueCode,jdbcType=VARCHAR})||'%'
+            and t.rb_feature_value_code like '%'||upper(trim(#{featureValueCode,jdbcType=VARCHAR}))||'%'
         </if>
 
         <if test="sort==null">

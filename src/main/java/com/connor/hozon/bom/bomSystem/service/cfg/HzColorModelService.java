@@ -81,6 +81,18 @@ public class HzColorModelService implements IHzColorModelService {
     }
 
     /**
+     * 根据颜色模型，包括颜色一起筛选出来
+     *
+     * @param modelUid 车型UID
+     * @return
+     */
+    @Override
+    public List<HzColorModel> doSelectByModelUidWithColor2(String modelUid) {
+        return hzColorModelDao.selectByModelUidWithColor2(modelUid);
+    }
+
+
+    /**
      * 根据项目ID查找
      *
      * @param projectUid

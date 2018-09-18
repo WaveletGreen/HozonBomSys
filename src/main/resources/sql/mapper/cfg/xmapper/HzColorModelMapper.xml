@@ -134,6 +134,15 @@
         left join Hz_Cfg0_Colorset t2 on t.p_color_uid=t2.puid
         where t.MODEL_UID = #{modelUid,jdbcType=VARCHAR} order by P_CFG_UID
     </select>
+    <select id="selectByModelUidWithColor2" parameterType="java.lang.String" resultMap="ResultMapWithColor">
+        select
+        t.<include refid="Base_Column_List"/>,
+        <include refid="Base_Column_List_With_Color"/>
+        from HZ_COLOR_MODEL t
+        left join Hz_Cfg0_Colorset t2 on t.p_color_uid=t2.puid
+        left join Hz_Cfg0_Optionfamily_Record t3 on t.p_cfg_uid=t3.puid
+        where t.MODEL_UID = #{modelUid,jdbcType=VARCHAR} order by t3.p_optionfamily_name
+    </select>
     <!--根据主配置ID查找-->
     <select id="selectByCfgMainUid" parameterType="java.lang.String" resultMap="BaseResultMap">
         select
@@ -194,15 +203,15 @@
     where MODEL_UID = #{modelUid,jdbcType=VARCHAR} and P_CFG_UID = #{cfgUid,jdbcType=VARCHAR}
   </update>
 
-  <select id="selectByProjectPuid" parameterType="java.lang.String" resultMap="BaseResultMap2">
-      select
+    <select id="selectByProjectPuid" parameterType="java.lang.String" resultMap="BaseResultMap2">
+        select
         <include refid="Base_Column_List2"/>
-      from
-        HZ_CFG0_MAIN_RECORD t join Hz_Cfg0_Model_Color_Record t2  on t.PUID = t2.P_CFG0_MAIN_RECORD_OF_MC
-        join  Hz_Color_Model t3 on  t2.puid = t3.model_uid
+        from
+        HZ_CFG0_MAIN_RECORD t join Hz_Cfg0_Model_Color_Record t2 on t.PUID = t2.P_CFG0_MAIN_RECORD_OF_MC
+        join Hz_Color_Model t3 on t2.puid = t3.model_uid
         join Hz_Cfg0_Optionfamily_Record t4 on t3.p_cfg_uid = t4.puid
         join Hz_Cfg0_Colorset t5 on t5.puid = t3.p_color_uid
-      where t.P_CFG0_OF_WHICH_PROJECT_PUID = #{projectPuid}
+        where t.P_CFG0_OF_WHICH_PROJECT_PUID = #{projectPuid}
 
-  </select>
+    </select>
 </mapper>

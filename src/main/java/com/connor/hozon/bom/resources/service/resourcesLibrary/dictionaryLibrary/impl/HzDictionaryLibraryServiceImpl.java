@@ -1,6 +1,7 @@
 package com.connor.hozon.bom.resources.service.resourcesLibrary.dictionaryLibrary.impl;
 
 import com.connor.hozon.bom.resources.domain.dto.request.AddHzDictionaryLibraryReqDTO;
+import com.connor.hozon.bom.resources.domain.dto.request.UpdateHzDictionaryLibraryReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzDictionaryLibraryRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.OperateResultMessageRespDTO;
 import com.connor.hozon.bom.resources.domain.model.HzDictionaryLibraryFactory;
@@ -62,7 +63,7 @@ public class HzDictionaryLibraryServiceImpl implements HzDictionaryLibraryServic
      * @return
      */
     @Override
-    public OperateResultMessageRespDTO updateHzDictionaryLibrary(AddHzDictionaryLibraryReqDTO reqDTO) {
+    public OperateResultMessageRespDTO updateHzDictionaryLibrary(UpdateHzDictionaryLibraryReqDTO reqDTO) {
         try {
             boolean b  = PrivilegeUtil.writePrivilege();
             if(!b){
@@ -80,7 +81,7 @@ public class HzDictionaryLibraryServiceImpl implements HzDictionaryLibraryServic
                 resultMessageRespDTO.setErrMsg("对不起！您修改的特性值已存在");
                 return resultMessageRespDTO;
             }
-            HzDictionaryLibrary library = HzDictionaryLibraryFactory.addDictionaryDTOHzDictionaryLibrary(reqDTO);
+            HzDictionaryLibrary library = HzDictionaryLibraryFactory.updateDictionaryDTOHzDictionaryLibrary(reqDTO);
             int i = hzDictionaryLibraryDao.update(library);
             if (i>0){
                 return OperateResultMessageRespDTO.getSuccessResult();
@@ -108,7 +109,7 @@ public class HzDictionaryLibraryServiceImpl implements HzDictionaryLibraryServic
             List<HzDictionaryLibraryRespDTO>reqDTOList = new ArrayList<>();
             for (HzDictionaryLibrary library :list){
                 HzDictionaryLibraryRespDTO respDTO =HzDictionaryLibraryFactory.libraryToRespDTO(library);
-                respDTO.setNo(num++);
+                respDTO.setNo(++num);
                 reqDTOList.add(respDTO);
             }
             return new Page<>(libraries.getPageNumber(),libraries.getPageSize(),libraries.getTotalCount(),reqDTOList);

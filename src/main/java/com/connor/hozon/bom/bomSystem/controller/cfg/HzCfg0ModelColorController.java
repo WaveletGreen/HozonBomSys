@@ -65,14 +65,14 @@ public class HzCfg0ModelColorController {
     @RequestMapping(value = "/loadAll", method = RequestMethod.GET)
     @ResponseBody
     public Map<String, Object> loadAll(@RequestParam String projectPuid) {
-        return hzCfg0ModelColorService.doLoadAll(projectPuid);
+        return hzCfg0ModelColorService.doLoadAll2(projectPuid);
     }
 
     @RequestMapping(value = "/addPage", method = RequestMethod.GET)
     public String addPage(@RequestParam String projectPuid, Model model) {
-        List<HzCfg0OptionFamily> columnList = hzCfg0OptionFamilyService.doGetCfg0OptionFamilyListByProjectPuid(projectPuid);
+        List<HzCfg0OptionFamily> columnList = hzCfg0OptionFamilyService.getFamilies(projectPuid);
         List<HzCfg0ColorSet> colorList = hzCfg0ColorSetService.doGetAll();//颜色库所有数据
-        List<HzCfg0ColorSet> _colorList=new ArrayList<>(colorList);//将colorList复制到_colorList
+        List<HzCfg0ColorSet> _colorList = new ArrayList<>(colorList);//将colorList复制到_colorList
 
         HzCfg0ModelColor mc = new HzCfg0ModelColor();
         HzCfg0MainRecord mainRecord = hzCfg0MainService.doGetbyProjectPuid(projectPuid);
@@ -82,7 +82,7 @@ public class HzCfg0ModelColorController {
 
         Iterator<HzCfg0ColorSet> iterator = _colorList.iterator();
         while (iterator.hasNext()) {
-            HzCfg0ColorSet hmc= iterator.next();
+            HzCfg0ColorSet hmc = iterator.next();
             for (int i = 0; i < colorList2.size(); i++) {
                 if (colorList2.get(i).getpModelShellOfColorfulModel().equals(hmc.getpColorCode())) {
                     iterator.remove();//去除（过滤）配色库已有数据
@@ -122,7 +122,7 @@ public class HzCfg0ModelColorController {
         }
         HzCfg0MainRecord main = hzCfg0MainService.doGetByPrimaryKey(currentModel.getpCfg0MainRecordOfMC());
 //        List<String> columnList = hzCfg0OptionFamilyService.doGetColumnDef(main.getpCfg0OfWhichProjectPuid(), "\t");
-        List<HzCfg0OptionFamily> columnList = hzCfg0OptionFamilyService.doGetCfg0OptionFamilyListByProjectPuid(main.getpCfg0OfWhichProjectPuid());
+        List<HzCfg0OptionFamily> columnList = hzCfg0OptionFamilyService.getFamilies(main.getpCfg0OfWhichProjectPuid());
         List<HzCfg0ColorSet> colorList = hzCfg0ColorSetService.doGetAll();
         ArrayList<String> orgValue = new ArrayList<>();
         List<HzColorModel> cm = hzColorModelService.doSelectByModelUidWithColor(puid);
@@ -238,7 +238,7 @@ public class HzCfg0ModelColorController {
         if (projectPuid == null || "".equals(projectPuid)) {
             object.put("status", false);
         } else {
-            column = hzCfg0OptionFamilyService.doGetColumnDef2(projectPuid, "<br/>");
+            column = hzCfg0OptionFamilyService.getColumnNew(projectPuid, "<br/>");
             if (column == null || column.size() <= 0) {
                 object.put("status", false);
             } else {
