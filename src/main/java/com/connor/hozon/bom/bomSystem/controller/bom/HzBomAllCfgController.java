@@ -24,8 +24,8 @@ public class HzBomAllCfgController {
     @Autowired
     private HzBomAllCfgService hzBomAllCfgService;
 
-    @Autowired
-    IHzConfigBomColorService iHzConfigBomColorService;
+//    @Autowired
+//    IHzConfigBomColorService iHzConfigBomColorService;
 
     @RequestMapping("/saveBom")
     public JSONObject saveBom(@RequestParam Map<String, String> data) {
@@ -46,7 +46,7 @@ public class HzBomAllCfgController {
     @RequestMapping("/saveOneRow")
     @ResponseBody
     public JSONObject saveOneRow(String bomLinePuid, String cfgPuid) {
-        List<HzConfigBomColorBean> beans = iHzConfigBomColorService.doSelectBy2YUidWithProject(bomLinePuid, "1c128c60-84a2-4076-9b1c-f7093e56e4df");
+//        List<HzConfigBomColorBean> beans = iHzConfigBomColorService.doSelectBy2YUidWithProject(bomLinePuid, "1c128c60-84a2-4076-9b1c-f7093e56e4df");
         return hzBomAllCfgService.saveOneRow(bomLinePuid, cfgPuid);
     }
 

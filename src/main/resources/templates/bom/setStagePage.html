@@ -9,28 +9,28 @@
                     <label for="stage">阶段</label>
                     <select class="form-control" id="stage" name="stage">
                         <option th:selected="${entity.getStage()=='' or entity.getStage() ==null?true:false}"
-                                value="">无
+                                value=-1>无
                         </option>
                         <!--<option th:selected="${entity.getStage()=='P-x-P0阶段'?true:false}" value="P-x-P0阶段">P-x-P0阶段</option>-->
-                        <option th:selected="${entity.getStage()=='P0-P1阶段'?true:false}" value="P0-P1阶段">P0-P1阶段
+                        <option th:selected="${entity.getStage()==1?true:false}" value=1>P0-P1阶段
                         </option>
-                        <option th:selected="${entity.getStage()=='P1-P2阶段'?true:false}" value="P1-P2阶段">P1-P2阶段
+                        <option th:selected="${entity.getStage()==2?true:false}" value=2>P1-P2阶段
                         </option>
-                        <option th:selected="${entity.getStage()=='P2-P3阶段'?true:false}" value="P2-P3阶段">P2-P3阶段
+                        <option th:selected="${entity.getStage()==3?true:false}" value=3>P2-P3阶段
                         </option>
-                        <option th:selected="${entity.getStage()=='P3-P4阶段'?true:false}" value="P3-P4阶段">P3-P4阶段
+                        <option th:selected="${entity.getStage()==4?true:false}" value=4>P3-P4阶段
                         </option>
-                        <option th:selected="${entity.getStage()=='P4-P5阶段'?true:false}" value="P4-P5阶段">P4-P5阶段
+                        <option th:selected="${entity.getStage()==5?true:false}" value=5>P4-P5阶段
                         </option>
-                        <option th:selected="${entity.getStage()=='P5-P6阶段'?true:false}" value="P5-P6阶段">P5-P6阶段
+                        <option th:selected="${entity.getStage()==6?true:false}" value=6>P5-P6阶段
                         </option>
-                        <option th:selected="${entity.getStage()=='P6-P7阶段'?true:false}" value="P6-P7阶段">P6-P7阶段
+                        <option th:selected="${entity.getStage()==7?true:false}" value=7>P6-P7阶段
                         </option>
-                        <option th:selected="${entity.getStage()=='P7-P8阶段'?true:false}" value="P7-P8阶段">P7-P8阶段
+                        <option th:selected="${entity.getStage()==8?true:false}" value=8>P7-P8阶段
                         </option>
-                        <option th:selected="${entity.getStage()=='P8-P9阶段'?true:false}" value="P8-P9阶段">P8-P9阶段
+                        <option th:selected="${entity.getStage()==0?true:false}" value=9>P8-P9阶段
                         </option>
-                        <option th:selected="${entity.getStage()=='P9-P10阶段'?true:false}" value="P9-P10阶段">P9-P10阶段
+                        <option th:selected="${entity.getStage()==10?true:false}" value=10>P9-P10阶段
                         </option>
                     </select>
                     <div class="form-group">
@@ -92,7 +92,7 @@
                         // $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.loadData();
                         // jquery 调用刷新当前操作的table页面的refresh方法
                         if (result.status) {
-                            $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.setStage(result);
+                            $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doRefresh(getProjectUid());
                             layer.msg(result.msg, {icon: 1, time: 2000});
                         } else {
                             window.Ewin.alert({message: result.msg});

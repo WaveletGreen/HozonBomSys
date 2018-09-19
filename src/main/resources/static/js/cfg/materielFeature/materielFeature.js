@@ -47,7 +47,6 @@ function loadData(projectPuid) {
                     customClass: 'animated tada'
                 });
                 return;
-                return;
             }
             var data = result.data;
             var column = [];

@@ -301,7 +301,7 @@ public class HzBomAllCfgService {
 
 
         JSONObject mainJson = new JSONObject();
-        mainJson.put("stage", hzFullCfgMain.getStage() == null ? "" : hzFullCfgMain.getStage());
+        mainJson.put("stage", HzFullCfgMain.parseStage(hzFullCfgMain.getStage()));
         mainJson.put("version", hzFullCfgMain.getVersion() == null ? "" : hzFullCfgMain.getVersion());
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         mainJson.put("effectiveDate", hzFullCfgMain.getEffectiveDate() == null ? "" : sdf.format(hzFullCfgMain.getEffectiveDate()));
@@ -658,7 +658,7 @@ public class HzBomAllCfgService {
                 }
             }
             fullCfgMain.setStatus("更新");
-            fullCfgMain.setStage(params.get("stage"));
+            fullCfgMain.setStage(Integer.parseInt(params.get("stage")));
             fullCfgMain.setUpdater(user.getUsername());
             fullCfgMain.setUpdateDate(new Date());
             fullCfgMain.setCreator(null);
