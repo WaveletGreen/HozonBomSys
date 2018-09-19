@@ -382,7 +382,7 @@ public class BaseSQLUtil implements IBaseSQLUtil {
      * @param pageRequest 分页请求参数信息 逻辑分页
      * @return
      */
-    public Page findForPage(String sqlMapId, final String totalMapId, PageRequest pageRequest) {
+    public Page findForPage(final String sqlMapId, final String totalMapId, PageRequest pageRequest) {
         Map filters = new HashMap();
         filters.putAll(pageRequest.getFilters());
         // 查询总数

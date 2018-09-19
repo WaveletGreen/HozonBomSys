@@ -725,7 +725,6 @@ public class HzMaterielServiceImpl implements HzMaterielService {
     }
 
 
-
     @Override
     public HzMaterielRespDTO getHzMateriel(HzMaterielQuery query) {
         try{

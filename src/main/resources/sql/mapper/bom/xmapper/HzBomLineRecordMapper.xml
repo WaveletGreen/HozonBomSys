@@ -444,7 +444,7 @@
                 P_EWO_NO = #{ewoNo,jdbcType=VARCHAR},
             </if>
             <if test="colorPart != null">
-                P_COLOR_PART = #{colorPart,jdbcType=VARCHAR}
+                P_COLOR_PART = #{colorPart,jdbcType=INTEGER}
             </if>
         </set>
         <where>
@@ -694,4 +694,20 @@
             and LENGTH(TRANSLATE(P_LINE_INDEX,',0123456789','.'))=1
         </where>
     </select>
+
+
+
+    <update id="HzBomLineRecordDaoImpl_updateColorPart" parameterType="java.util.HashMap">
+        update Hz_Bom_Line_Record
+        <set>
+            P_EBOM_STATUS = 2,
+            P_UPDATE_TIME =sysdate,
+            <if test="colorPart != null">
+                P_COLOR_PART = #{colorPart,jdbcType=INTEGER}
+            </if>
+        </set>
+        <where>
+            PUID = #{puid,jdbcType=VARCHAR}
+        </where>
+    </update>
 </mapper>

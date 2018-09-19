@@ -42,23 +42,23 @@ public class HzWorkProcessController extends BaseController {
     public void HzWorkProcessTitle(HttpServletResponse response) {
         LinkedHashMap<String, String> title = new LinkedHashMap<>();
         title.put("No", "序号");
-        title.put("pMaterielCode", "物料");
-        title.put("pMaterielDesc","物料名称");
-        title.put("factoryCode", "工厂");
-        title.put("purpose", "用途");
-        title.put("state", "状态");
-        title.put("pProcedureCode", "工序号");
-        title.put("pWorkCode", "工作中心");
-        title.put("pWorkDesc", "工作中心描述");
-        title.put("controlCode", "控制码");
-        title.put("pProcedureDesc", "工序描述");
-        title.put("pCount", "基本数量 ");
-        title.put("pDirectLabor", "直接人工时间");
-        title.put("pIndirectLabor", "间接人工时间");
-        title.put("pMachineLabor", "机器时间");
-        title.put("pBurn", "燃动能");
-        title.put("pMachineMaterialLabor", "机物料消耗");
-        title.put("pOtherCost", "其他费用");
+        title.put("pMaterielCode", "物料");//物料
+        title.put("pMaterielDesc","物料名称");//物料名称
+        title.put("factoryCode", "工厂");//工厂
+        title.put("purpose", "用途");//用途
+        title.put("state", "状态");//状态
+        title.put("pProcedureCode", "工序号");//工序号
+        title.put("pWorkCode", "工作中心");//工作中心
+        title.put("pWorkDesc", "工作中心描述");//工作中心描述
+        title.put("controlCode", "控制码");//控制码
+        title.put("pProcedureDesc", "工序描述");//工序描述
+        title.put("pCount", "基本数量 ");//基本数量
+        title.put("pDirectLabor", "直接人工/机物料消耗");//直接人工时间
+        title.put("pIndirectLabor", "间接人工/标准件消耗");//间接人工时间
+        title.put("pMachineLabor", "折旧/工具消耗");//机器时间
+        title.put("pBurn", "燃动费/废品损失");//燃动能
+        title.put("pMachineMaterialLabor", "辅助人工/设备维修");//机物料消耗
+        title.put("pOtherCost", "辅助折旧/辅助其他费用");//其他费用
         writeAjaxJSONResponse(ResultMessageBuilder.build(title), response);
     }
 
