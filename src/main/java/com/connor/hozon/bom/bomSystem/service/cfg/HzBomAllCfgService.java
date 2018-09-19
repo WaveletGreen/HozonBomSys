@@ -276,7 +276,9 @@ public class HzBomAllCfgService {
                     if (hzBomLineRecord.getPuid().equals(hzFullCfgModel.getFlModelBomlineUid()) && hzFullCfgModel.getModModelUid().equals(hzCfg0ModelRecord.getPuid())) {
                         Short sPoint = hzFullCfgModel.getModPointType();
                         String point;
-                        if (sPoint == 0) {
+                        if(sPoint==null){
+                            point = "";
+                        }else if (sPoint == 0) {
                             point = "-";
                         } else if (sPoint == 1) {
                             point = "○";
@@ -470,6 +472,7 @@ public class HzBomAllCfgService {
                 //2Y层id
                 hzFullCfgModel.setFlModelBomlineUid(hzBomLineRecord.getPuid());
                 //打点状态
+                String remark = hzBomLineRecord.getpRemark();
                 hzFullCfgModel.setModPointType((short) 0);
                 //创建人
                 hzFullCfgModel.setFlModCreator(user.getLogin());
@@ -555,6 +558,10 @@ public class HzBomAllCfgService {
         hzBomLineRecord.setPuid(bomLinePuid);
         hzBomLineRecord.setColorPart(colorPart);
         int updata2YNum = hzBomDataService.updata2Y(hzBomLineRecord);
+        if(updata2YNum!=1){
+            respone.put("flag", true);
+            return respone;
+        }
         HzFullCfgWithCfg hzFullCfgWithCfg = new HzFullCfgWithCfg();
         //bomLine PUID
         hzFullCfgWithCfg.setCfgBomlineUid(bomLinePuid);
@@ -810,9 +817,9 @@ public class HzBomAllCfgService {
             for(String modelKey : modelKeys){
                 String pointStr = modelMap.get(modelKey);
                 short point;
-                if ("-".equals(pointStr) || "".equals(pointStr)) {
+                if ("-".equals(pointStr)){
                     point = 0;
-                } else if ("○".equals(pointStr)) {
+                }else if ("○".equals(pointStr)) {
                     point = 1;
                 } else {
                     point = 2;
@@ -820,7 +827,9 @@ public class HzBomAllCfgService {
                 HzFullCfgModel hzFullCfgModel = new HzFullCfgModel();
                 hzFullCfgModel.setFlModelBomlineUid(bomLinekey);
                 hzFullCfgModel.setModModelUid(modelKey);
-                hzFullCfgModel.setModPointType(point);
+                if(!"".equals(pointStr)){
+                    hzFullCfgModel.setModPointType(point);
+                }
                 hzFullCfgModels.add(hzFullCfgModel);
             }
         }
