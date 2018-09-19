@@ -33,6 +33,8 @@ public class HzCfg0ModelColor {
      */
     private String pColorUid;
 
+    private String pShellCfg0Puid;
+
     public HzCfg0ModelColor() {
         mapOfCfg0 = new LinkedHashMap<>();
     }
@@ -116,5 +118,13 @@ public class HzCfg0ModelColor {
 
     public void setpColorUid(String pColorUid) {
         this.pColorUid = pColorUid;
+    }
+
+    public String getpShellCfg0Puid() {
+        return pShellCfg0Puid;
+    }
+
+    public void setpShellCfg0Puid(String pShellCfg0Puid) {
+        this.pShellCfg0Puid = pShellCfg0Puid;
     }
 }

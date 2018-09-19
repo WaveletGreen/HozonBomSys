@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.connor.hozon.bom.interaction.dao.HzConfigBomColorDao">
+    <resultMap id="BaseResultMap" type="sql.pojo.interaction.HzConfigBomColorBean">
+        <result column="CFG_BOMLINE_UID" jdbcType="VARCHAR" property="bomLineUid"/>
+        <result column="MODEL_UID" jdbcType="VARCHAR" property="colorModelUid"/>
+        <result column="P_DESC_OF_COLORFUL_MODEL" jdbcType="VARCHAR" property="colorModelDesc"/>
+        <result column="P_COLOR_CODE" jdbcType="VARCHAR" property="colorCode"/>
+        <result column="P_CFG0_OBJECT_ID" jdbcType="VARCHAR" property="featureValueCode"/>
+        <result column="P_CFG0_FAMILY_NAME" jdbcType="VARCHAR" property="featureCode"/>
+    </resultMap>
+    <sql id="ColumnWithColorCode">
+        CFG_BOMLINE_UID,
+        MODEL_UID,
+        P_DESC_OF_COLORFUL_MODEL,
+        P_COLOR_CODE
+    </sql>
+    <select id="selectBy2YUidWithProject" resultType="Map"
+            resultMap="BaseResultMap">
+            select
+            t.cfg_bomline_uid,
+            t5.model_uid,
+            t3.p_cfg0_object_id,
+            t3.p_cfg0_family_name,
+            t9.p_desc_of_colorful_model,
+            t99.p_color_code
+            from Hz_Full_Cfg_Withcfg_Record t
+            left join Hz_Bom_Line_Record t2 on t.cfg_bomline_uid=t2.puid
+            left join Hz_Cfg0_Record t3 on t.cfg_cfg0_uid=t3.puid
+            left join Hz_Color_Model t5 on t3.p_cfg0_family_puid=t5.p_cfg_uid
+            left join Hz_Cfg0_Model_Color_Record t9 on t5.model_uid=t9.puid
+            left join Hz_Cfg0_Colorset t99 on t5.p_color_uid=t99.puid
+             where t.fl_cfg_version=(
+            select id from Hz_Full_Cfg_Main_Record txx where txx.project_uid=#{projectUid,jdbcType=VARCHAR}
+            )
+            and t.cfg_bomline_uid=#{bomLineUid,jdbcType=VARCHAR}
+    </select>
+</mapper>

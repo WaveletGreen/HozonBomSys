@@ -2,16 +2,26 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0ModelColorDao">
     <resultMap id="BaseResultMap" type="sql.pojo.cfg.HzCfg0ModelColor">
+        <!--puid主键-->
         <id column="PUID" jdbcType="VARCHAR" property="puid"/>
+        <!--产品配置器puid-->
         <result column="P_CFG0_MAIN_RECORD_OF_MC" jdbcType="VARCHAR" property="pCfg0MainRecordOfMC"/>
+        <!--颜色车型代码-->
         <result column="P_CODE_OF_COLORFUL_MODEL" jdbcType="VARCHAR" property="pCodeOfColorfulModel"/>
+        <!--颜色车型描述-->
         <result column="P_DESC_OF_COLORFUL_MODEL" jdbcType="VARCHAR" property="pDescOfColorfulModel"/>
+        <!--油漆车身总成-->
         <result column="P_MODEL_SHELL" jdbcType="VARCHAR" property="pModelShellOfColorfulModel"/>
+        <!--新增的默认-->
         <result column="P_UPDATE_DEFAULT" jdbcType="INTEGER" property="updateDefault"/>
+        <!--颜色UID，外键-->
         <result column="P_COLOR_UID" jdbcType="VARCHAR" property="pColorUid"/>
+        <!--特性值的外键，只能是车身颜色的特性值-->
+        <result column="P_SHELL_CFG0_PUID" jdbcType="VARCHAR" property="pShellCfg0Puid"/>
     </resultMap>
     <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs"
                type="sql.pojo.cfg.HzCfg0ModelColor">
+        <!--系统层颜色记录-->
         <result column="P_COLORFUL_MAP_BLOCK" jdbcType="BLOB"
                 property="pColorfulMapBlock"/>
     </resultMap>

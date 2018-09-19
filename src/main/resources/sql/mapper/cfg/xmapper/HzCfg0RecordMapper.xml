@@ -83,6 +83,26 @@
         where PUID = #{puid,jdbcType=VARCHAR}
         order by P_CFG0_OBJECT_ID
     </select>
+    <!--HZCSYS+特性值搜索-->
+    <select id="selectByCodeAndDescWithMainItem" parameterType="sql.pojo.cfg.HzCfg0Record" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from ${whichTable} t
+        where
+        t.p_cfg0_family_name=#{pCfg0FamilyName,jdbcType=VARCHAR}
+        and t.p_cfg0_object_id=#{pCfg0ObjectId,jdbcType=VARCHAR}
+        and t.p_cfg0_main_item_puid=#{pCfg0MainItemPuid,jdbcType=VARCHAR}
+    </select>
+    <!--车身颜色+特性值搜索-->
+    <select id="selectByCodeAndCnDescWithMainItem" parameterType="sql.pojo.cfg.HzCfg0Record" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from ${whichTable} t
+        where
+        t.p_cfg0_family_desc=#{pCfg0FamilyDesc,jdbcType=VARCHAR}
+        and t.p_cfg0_object_id=#{pCfg0ObjectId,jdbcType=VARCHAR}
+        and t.p_cfg0_main_item_puid=#{pCfg0MainItemPuid,jdbcType=VARCHAR}
+    </select>
     <select id="selectByCondition" parameterType="com.connor.hozon.bom.bomSystem.dto.HzFeatureQueryDTO"
             resultMap="BaseResultMap">
 

@@ -267,6 +267,15 @@
             <artifactId>junit-jupiter-api</artifactId>
             <version>RELEASE</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
+        <!--不想写getter和setter了，加上下面的依赖吧-->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.2</version>
+            <scope>provided</scope>
+        </dependency>
+
         <!--<dependency>-->
             <!--<groupId>com.oracle</groupId>-->
             <!--<artifactId>ojdbc14</artifactId>-->

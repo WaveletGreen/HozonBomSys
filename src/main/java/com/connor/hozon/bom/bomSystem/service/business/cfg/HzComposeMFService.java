@@ -6,8 +6,6 @@ import com.connor.hozon.bom.bomSystem.dto.HzMaterielFeatureBean;
 import com.connor.hozon.bom.bomSystem.dto.cfg.compose.HzComposeDelDto;
 import com.connor.hozon.bom.bomSystem.dto.cfg.compose.HzComposeMFDTO;
 import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
-import com.connor.hozon.bom.bomSystem.service.bom.HzBomDataService;
-import com.connor.hozon.bom.bomSystem.service.bom.HzBomLineRecordService;
 import com.connor.hozon.bom.bomSystem.service.cfg.*;
 import com.connor.hozon.bom.bomSystem.service.project.HzSuperMaterielService;
 import com.connor.hozon.bom.common.base.entity.QueryBase;
@@ -19,7 +17,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sql.pojo.bom.HzBomLineRecord;
 import sql.pojo.cfg.*;
 import sql.pojo.epl.HzEPLManageRecord;
 import sql.pojo.factory.HzFactory;
@@ -101,7 +98,8 @@ public class HzComposeMFService {
     HzFullCfgWithCfgDao hzFullCfgWithCfgDao;
     @Autowired
     HzEbomRecordDAO hzEbomRecordDAO;
-
+    @Autowired
+    HzCfg0MainService hzCfg0MainService;
     /**
      * 日志
      */
@@ -238,6 +236,25 @@ public class HzComposeMFService {
             results.put("status", false);
             return;
         }
+
+        HzCfg0ModelColor modelColor = new HzCfg0ModelColor();
+        modelColor.setPuid(hzComposeMFDTO.getColorModel());
+        HzCfg0ModelRecord cmodel = hzCfg0ModelService.getModelByPuid(hzComposeMFDTO.getModelUid());
+        modelColor = hzCfg0ModelColorService.doGetById(modelColor);
+
+        HzCfg0MainRecord mainRecord = hzCfg0MainService.doGetbyProjectPuid(hzComposeMFDTO.getProjectUid());
+        HzCfg0Record local=new HzCfg0Record();
+        local.setpCfg0ObjectId(modelColor.getpModelShellOfColorfulModel());
+        HzCfg0Record shell = hzCfg0Service.doSelectByCodeAndDescWithMainItem(local);
+
+        if(shell==null){
+            if((shell=hzCfg0Service.doSelectByCodeAndCnDescWithMainItem(local))==null){
+                results.put("msg", "没有找到任何一个特性为'HZCSYS'、特性值为'"+modelColor.getpModelShellOfColorfulModel()+"'的特性值，请尝试添加特性值");
+                results.put("status", false);
+                return;
+            }
+        }
+
         HzFullCfgModel cfgModel = new HzFullCfgModel();
         cfgModel.setModModelUid(hzComposeMFDTO.getModelUid());
         cfgModel.setModPointType((short) 1);
@@ -300,10 +317,7 @@ public class HzComposeMFService {
             }
         }
 
-        HzCfg0ModelColor modelColor = new HzCfg0ModelColor();
-        modelColor.setPuid(hzComposeMFDTO.getColorModel());
-        HzCfg0ModelRecord cmodel = hzCfg0ModelService.getModelByPuid(hzComposeMFDTO.getModelUid());
-        modelColor = hzCfg0ModelColorService.doGetById(modelColor);
+
 
         feature.setpFeatureSingleVehicleCode(modelDetail.getpModelCfgMng().replace("**", modelColor.getpModelShellOfColorfulModel()));
         feature.setpFeatureCnDesc(hzComposeMFDTO.getpCfg0ModelBasicDetail());

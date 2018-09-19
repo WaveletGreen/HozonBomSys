@@ -50,6 +50,7 @@ public interface HzCfg0RecordDao {
     List<HzCfg0Record> selectAddedCfgListByProjectPuid(@Param("projectPuid") String projectPuid);
 
     List<HzMaterielFeatureBean> selectMaterielFeatureByProjectPuid(@Param("projectPuid") String projectPuid);
+
     /***
      * 根据puid查找1条特性数据
      * @param puid
@@ -81,6 +82,7 @@ public interface HzCfg0RecordDao {
 
     /**
      * 更新附加表中的数据
+     *
      * @param record
      * @return
      */
@@ -88,6 +90,7 @@ public interface HzCfg0RecordDao {
 
     /**
      * 批量删除附加表中的数据
+     *
      * @param records
      * @return
      */
@@ -95,20 +98,23 @@ public interface HzCfg0RecordDao {
 
     /**
      * 批量查找特性值
+     *
      * @param _map
      * @return
      */
-    List<HzCfg0Record> selectCfg0ListByPuids(Map<String,Object> _map);
+    List<HzCfg0Record> selectCfg0ListByPuids(Map<String, Object> _map);
 
     /**
      * 根据特性值和特性值描述进行查找
+     *
      * @param record
      * @return
      */
-    List<HzCfg0Record>  selectByCodeAndDesc(HzCfg0Record record);
+    List<HzCfg0Record> selectByCodeAndDesc(HzCfg0Record record);
 
     /**
      * 批量删除
+     *
      * @param records
      * @return
      */
@@ -116,29 +122,45 @@ public interface HzCfg0RecordDao {
 
     /**
      * 设置是否已经发送过ERP
+     *
      * @param _map
      * @return
      */
-    int setIsSent(Map<String,Object> _map);
+    int setIsSent(Map<String, Object> _map);
 
     /**
      * 设置进入流程状态
+     *
      * @param _map
      * @return
      */
-    int setToProcess(Map<String,Object> _map);
+    int setToProcess(Map<String, Object> _map);
 
     /**
      * 查询总数
+     *
      * @param projectPuid
      * @return
      */
     int tellMeHowManyOfThose(HzFeatureQueryDTO projectPuid);
 
     /**
-     *
      * @param queryBase
      * @return
      */
     List<HzCfg0Record> selectByCondition(HzFeatureQueryDTO queryBase);
+
+    /**
+     * 用HZCSYS+特性值（从颜色中来）查找一条车身颜色特性值
+     *
+     * @return
+     */
+    HzCfg0Record selectByCodeAndDescWithMainItem(HzCfg0Record record);
+
+    /**
+     * 用"车身颜色"+特性值（从颜色中来）查找一条车身颜色特性值
+     *
+     * @return
+     */
+    HzCfg0Record selectByCodeAndCnDescWithMainItem(HzCfg0Record record);
 }
