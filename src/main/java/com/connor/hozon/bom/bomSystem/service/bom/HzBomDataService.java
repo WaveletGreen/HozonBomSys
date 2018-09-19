@@ -142,4 +142,7 @@ public class HzBomDataService {
         return hzBomDataDao.selectVehicleAssembly(params);
     }
 
+    public int updata2Y(HzBomLineRecord hzBomLineRecord) {
+        return 1;
+    }
 }

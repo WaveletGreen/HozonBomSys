@@ -2,6 +2,7 @@ package com.connor.hozon.bom.bomSystem.controller.bom;
 
 import com.connor.hozon.bom.bomSystem.helper.DateStringHelper;
 import com.connor.hozon.bom.bomSystem.service.cfg.HzBomAllCfgService;
+import net.sf.json.JSON;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -39,8 +40,8 @@ public class HzBomAllCfgController {
 
     @RequestMapping("/saveOneRow")
     @ResponseBody
-    public JSONObject saveOneRow(String bomLinePuid, String cfgPuid){
-        return hzBomAllCfgService.saveOneRow(bomLinePuid,cfgPuid);
+    public JSONObject saveOneRow(String bomLinePuid, String cfgPuid,Integer colorPart, String msgVal){
+        return hzBomAllCfgService.saveOneRow(bomLinePuid, cfgPuid,colorPart, msgVal);
     }
 
     @RequestMapping("/savePoint")
@@ -93,8 +94,8 @@ public class HzBomAllCfgController {
 
     @RequestMapping("query2YCfg")
     @ResponseBody
-    public JSONObject query2YCfg(@RequestParam String projectPuid) {
-        return hzBomAllCfgService.query2YCfg(projectPuid);
+    public JSONObject query2YCfg(@RequestParam String projectPuid, @RequestParam String bomLineId) {
+        return hzBomAllCfgService.query2YCfg(projectPuid, bomLineId);
     }
 
     /**
@@ -109,6 +110,9 @@ public class HzBomAllCfgController {
         return hzBomAllCfgService.promote(projectUid);
     }
 
-
-
+    @RequestMapping(value = "saveBomLinePiont", method = RequestMethod.POST)
+    @ResponseBody
+    public JSONObject saveBomLinePiont(@RequestBody Map<String, Map<String, String>> dataMap){
+        return  hzBomAllCfgService.saveBomLinePiont(dataMap);
+    }
 }
