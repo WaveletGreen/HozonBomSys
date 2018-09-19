@@ -96,7 +96,7 @@ public class ProcessRoute {
      */
     public ProcessRoute(){
         this.zpptci006 = new ZPPTCI006();
-//        this.setWorkNumber1(new BigDecimal(1));
+        this.setWorkNumber1(new BigDecimal(1));
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         String date = df.format(new Date());
         this.setEffectiveDate(date);

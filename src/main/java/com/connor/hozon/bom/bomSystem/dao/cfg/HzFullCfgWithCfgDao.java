@@ -28,4 +28,8 @@ public interface HzFullCfgWithCfgDao {
     int updateByBomLinePuid(HzFullCfgWithCfg hzFullCfgWithCfg);
 
     List<HzFullCfgWithCfg> query2YCfgByProjectId(String projectId);
+
+    HzFullCfgWithCfg selectByBomLineUidWithVersion(BigDecimal version,String puid);
+
+    HzFullCfgWithCfg query2YCfgByBomLineId(String bomLineId);
 }

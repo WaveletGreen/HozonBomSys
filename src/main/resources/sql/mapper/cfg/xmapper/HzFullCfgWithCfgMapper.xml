@@ -11,10 +11,23 @@
         <result column="FL_CFG_UPDATOR" jdbcType="VARCHAR" property="flCfgUpdator"/>
         <result column="FL_CFG_BOMLINE_NAME" jdbcType="VARCHAR" property="flCfgBomlineName"/>
         <result column="FL_CFG_VERSION" jdbcType="DECIMAL" property="flCfgVersion"/>
+        <!--操作类型,1新增，2更新，3删除-->
+        <result column="FL_OPERATION_TYPE" jdbcType="DECIMAL" property="flOperationType"/>
+        <!--备注-->
+        <result column="FL_COMMENT" jdbcType="VARCHAR" property="flComment"/>
     </resultMap>
     <sql id="Base_Column_List">
-    ID, CFG_CFG0_UID, CFG_BOMLINE_UID, FL_CFG_CREATE_DATE, FL_CFG_UPDATE_DATE, FL_CFG_CREATOR, 
-    FL_CFG_UPDATOR, FL_CFG_BOMLINE_NAME, FL_CFG_VERSION
+        ID,
+        CFG_CFG0_UID,
+        CFG_BOMLINE_UID,
+        FL_CFG_CREATE_DATE,
+        FL_CFG_UPDATE_DATE,
+        FL_CFG_CREATOR,
+        FL_CFG_UPDATOR,
+        FL_CFG_BOMLINE_NAME,
+        FL_CFG_VERSION,
+        FL_OPERATION_TYPE,
+        FL_COMMENT
   </sql>
     <select id="selectByPrimaryKey" parameterType="sql.pojo.cfg.HzFullCfgWithCfg" resultMap="BaseResultMap">
         select
@@ -29,25 +42,33 @@
         from HZ_FULL_CFG_WITHCFG_RECORD
         where FL_CFG_VERSION = #{flCfgVersion,jdbcType=DECIMAL}
     </select>
+    <!--全配主配置和BOMLine一起找-->
+    <select id="selectByBomLineUidWithVersion" parameterType="sql.pojo.cfg.HzFullCfgWithCfg" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from HZ_FULL_CFG_WITHCFG_RECORD
+        where FL_CFG_VERSION = #{flCfgVersion,jdbcType=DECIMAL}
+        and CFG_BOMLINE_UID=#{cfgBomlineUid,jdbcType=VARCHAR}
+    </select>
     <delete id="deleteByPrimaryKey" parameterType="java.math.BigDecimal">
     delete from HZ_FULL_CFG_WITHCFG_RECORD
     where ID = #{id,jdbcType=DECIMAL}
   </delete>
     <insert id="insert" parameterType="java.util.List">
-    insert into HZ_FULL_CFG_WITHCFG_RECORD
+        insert into HZ_FULL_CFG_WITHCFG_RECORD
         (ID, CFG_CFG0_UID, FL_CFG_CREATOR,
-          FL_CFG_UPDATOR, FL_CFG_VERSION
+        FL_CFG_UPDATOR, FL_CFG_VERSION
         )
-      select SEQ_HZ_FL_CFG_CFG0_ID.NEXTVAL ,A.* from(
-      <foreach collection="list" index="index" item="hzFullCfgWithCfg" separator="union">
-          select
-          #{hzFullCfgWithCfg.cfgCfg0Uid,jdbcType=VARCHAR},  #{hzFullCfgWithCfg.flCfgCreator,jdbcType=VARCHAR},
-          #{hzFullCfgWithCfg.flCfgUpdator,jdbcType=VARCHAR}, #{hzFullCfgWithCfg.flCfgVersion,jdbcType=DECIMAL}
-          from
+        select SEQ_HZ_FL_CFG_CFG0_ID.NEXTVAL ,A.* from(
+        <foreach collection="list" index="index" item="hzFullCfgWithCfg" separator="union">
+            select
+            #{hzFullCfgWithCfg.cfgCfg0Uid,jdbcType=VARCHAR}, #{hzFullCfgWithCfg.flCfgCreator,jdbcType=VARCHAR},
+            #{hzFullCfgWithCfg.flCfgUpdator,jdbcType=VARCHAR}, #{hzFullCfgWithCfg.flCfgVersion,jdbcType=DECIMAL}
+            from
             dual
-      </foreach>
+        </foreach>
         )A
-  </insert>
+    </insert>
     <insert id="insertSelective" parameterType="sql.pojo.cfg.HzFullCfgWithCfg">
         insert into HZ_FULL_CFG_WITHCFG_RECORD
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -160,7 +181,8 @@
         select SEQ_HZ_FL_CFG_CFG0_ID.NEXTVAL ,A.* from(
         <foreach collection="list" index="index" item="hzFullCfgWithCfg" separator="union">
             select
-            #{hzFullCfgWithCfg.cfgBomlineUid,jdbcType=VARCHAR}, #{hzFullCfgWithCfg.flCfgBomlineName,jdbcType=VARCHAR}, #{hzFullCfgWithCfg.flCfgCreator,jdbcType=VARCHAR},
+            #{hzFullCfgWithCfg.cfgBomlineUid,jdbcType=VARCHAR}, #{hzFullCfgWithCfg.flCfgBomlineName,jdbcType=VARCHAR},
+            #{hzFullCfgWithCfg.flCfgCreator,jdbcType=VARCHAR},
             #{hzFullCfgWithCfg.flCfgUpdator,jdbcType=VARCHAR}, #{hzFullCfgWithCfg.flCfgVersion,jdbcType=DECIMAL}
             from
             dual
@@ -170,22 +192,36 @@
 
     <update id="updateByBomLinePuid" parameterType="sql.pojo.cfg.HzFullCfgWithCfg">
         update HZ_FULL_CFG_WITHCFG_RECORD
-        set CFG_CFG0_UID = #{cfgCfg0Uid,jdbcType=VARCHAR}
+        set
+          CFG_CFG0_UID = #{cfgCfg0Uid,jdbcType=VARCHAR},
+          FL_COMMENT = #{flComment, jdbcType=VARCHAR}
         where
           CFG_BOMLINE_UID = #{cfgBomlineUid,jdbcType=VARCHAR} and
-          (select ID from HZ_FULL_CFG_WITHCFG_RECORD where CFG_CFG0_UID = #{cfgCfg0Uid,jdbcType=VARCHAR}) is NULL
-
+          (
+            (select ID from HZ_FULL_CFG_WITHCFG_RECORD where CFG_CFG0_UID = #{cfgCfg0Uid,jdbcType=VARCHAR}) is NULL
+            or
+            (select CFG_CFG0_UID from HZ_FULL_CFG_WITHCFG_RECORD where CFG_BOMLINE_UID = #{cfgBomlineUid,jdbcType=VARCHAR}) = #{cfgCfg0Uid,jdbcType=VARCHAR}
+          )
     </update>
 
     <select id="query2YCfgByProjectId" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from
+        HZ_FULL_CFG_WITHCFG_RECORD
+        where
+        FL_CFG_VERSION =
+        (select ID from HZ_FULL_CFG_MAIN_RECORD where PROJECT_UID = #{projectId})
+        and
+        CFG_CFG0_UID is not null
+    </select>
+
+    <select id="query2YCfgByBomLineId" parameterType="java.lang.String" resultMap="BaseResultMap">
         select
           <include refid="Base_Column_List"/>
         from
           HZ_FULL_CFG_WITHCFG_RECORD
         where
-          FL_CFG_VERSION =
-        (select ID from HZ_FULL_CFG_MAIN_RECORD where PROJECT_UID = #{projectId})
-        and
-        CFG_CFG0_UID is not null
+          CFG_BOMLINE_UID = #{bomLineId, jdbcType=VARCHAR}
     </select>
 </mapper>
