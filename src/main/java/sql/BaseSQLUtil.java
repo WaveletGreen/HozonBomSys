@@ -382,7 +382,7 @@ public class BaseSQLUtil implements IBaseSQLUtil {
      * @param pageRequest 分页请求参数信息 逻辑分页
      * @return
      */
-    public Page findForPage(String sqlMapId, final String totalMapId, PageRequest pageRequest) {
+    public Page findForPage(final String sqlMapId, final String totalMapId, PageRequest pageRequest) {
         Map filters = new HashMap();
         filters.putAll(pageRequest.getFilters());
         // 查询总数
@@ -411,7 +411,7 @@ public class BaseSQLUtil implements IBaseSQLUtil {
      * @param pageRequest 分页请求参数信息
      * @return
      */
-    public Page findPage(String sqlMapId, final String totalMapId, PageRequest pageRequest) {
+    public Page findPage(final String sqlMapId, final String totalMapId, PageRequest pageRequest) {
         Map filters = new HashMap();
         filters.putAll(pageRequest.getFilters());
         // 查询总数
@@ -453,5 +453,41 @@ public class BaseSQLUtil implements IBaseSQLUtil {
             throw new DatabaseException("SQL执行出错: " + sqlMapId, e);
         }
 
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /*******************************************/
+
+    public Page findForPage2(String sqlMapId, final String totalMapId, PageRequest pageRequest) {
+        Map filters = new HashMap();
+        filters.putAll(pageRequest.getFilters());
+        // 查询总数
+        Number totalCount = (Number) findForObject(totalMapId, filters);
+        if (totalCount == null || totalCount.intValue() <= 0) {
+            return new Page(pageRequest, 0);
+        }
+        if (totalCount != null && totalCount.intValue() <= (pageRequest.getPageNumber() - 1) * pageRequest.getPageSize()) {
+            return new Page(pageRequest.getPageNumber(), pageRequest.getPageSize(), totalCount.intValue(), new ArrayList(0));
+        }
+        if(pageRequest.getPageSize() == 0){
+            pageRequest.setPageSize((int)totalCount);
+        }
+        Page page = new Page(pageRequest, totalCount.intValue());
+        List list = findForList(sqlMapId, filters, page.getFirstResult(), page.getPageSize());
+
+        page.setResult(list);
+
+        return page;
     }
 }

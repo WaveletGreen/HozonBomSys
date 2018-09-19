@@ -192,11 +192,16 @@
 
     <update id="updateByBomLinePuid" parameterType="sql.pojo.cfg.HzFullCfgWithCfg">
         update HZ_FULL_CFG_WITHCFG_RECORD
-        set CFG_CFG0_UID = #{cfgCfg0Uid,jdbcType=VARCHAR}
+        set
+          CFG_CFG0_UID = #{cfgCfg0Uid,jdbcType=VARCHAR},
+          FL_COMMENT = #{flComment, jdbcType=VARCHAR}
         where
           CFG_BOMLINE_UID = #{cfgBomlineUid,jdbcType=VARCHAR} and
-          (select ID from HZ_FULL_CFG_WITHCFG_RECORD where CFG_CFG0_UID = #{cfgCfg0Uid,jdbcType=VARCHAR}) is NULL
-
+          (
+            (select ID from HZ_FULL_CFG_WITHCFG_RECORD where CFG_CFG0_UID = #{cfgCfg0Uid,jdbcType=VARCHAR}) is NULL
+            or
+            (select CFG_CFG0_UID from HZ_FULL_CFG_WITHCFG_RECORD where CFG_BOMLINE_UID = #{cfgBomlineUid,jdbcType=VARCHAR}) = #{cfgCfg0Uid,jdbcType=VARCHAR}
+          )
     </update>
 
     <select id="query2YCfgByProjectId" parameterType="java.lang.String" resultMap="BaseResultMap">
@@ -209,5 +214,14 @@
         (select ID from HZ_FULL_CFG_MAIN_RECORD where PROJECT_UID = #{projectId})
         and
         CFG_CFG0_UID is not null
+    </select>
+
+    <select id="query2YCfgByBomLineId" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+          <include refid="Base_Column_List"/>
+        from
+          HZ_FULL_CFG_WITHCFG_RECORD
+        where
+          CFG_BOMLINE_UID = #{bomLineId, jdbcType=VARCHAR}
     </select>
 </mapper>

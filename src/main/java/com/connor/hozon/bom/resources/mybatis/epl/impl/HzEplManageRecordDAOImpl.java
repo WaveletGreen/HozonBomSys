@@ -37,4 +37,20 @@ public class HzEplManageRecordDAOImpl extends BaseSQLUtil implements HzEplMangeR
         return super.findForPage("HzEplManageRecordDAOImpl_getHzEplManageRecord","HzEplManageRecordDAOImpl_findTotalCount",request);
 
     }
+
+    @Override
+    public Page<HzEPLManageRecord> getEPLListForPage2(HzEPLByPageQuery query) {
+        PageRequest request = new PageRequest();
+        Map map = new HashMap();
+        map.put("projectId",query.getProjectId());
+        map.put("isHas",query.getIsHas());
+        map.put("pBomOfWhichDept",query.getpBomOfWhichDept());
+        map.put("lineIndex",query.getLineIndex());
+        map.put("lineId",query.getLineId());
+        map.put("pFastener",query.getpFastener());
+        request.setPageNumber(query.getPage());
+        request.setPageSize(query.getPageSize());
+        request.setFilters(map);
+        return super.findPage("HzEplManageRecordDAOImpl_getHzEplManageRecord2","HzEplManageRecordDAOImpl_findTotalCount2",request);
+    }
 }

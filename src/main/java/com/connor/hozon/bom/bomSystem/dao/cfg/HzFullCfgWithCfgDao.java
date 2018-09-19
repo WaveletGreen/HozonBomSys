@@ -30,4 +30,6 @@ public interface HzFullCfgWithCfgDao {
     List<HzFullCfgWithCfg> query2YCfgByProjectId(String projectId);
 
     HzFullCfgWithCfg selectByBomLineUidWithVersion(BigDecimal version,String puid);
+
+    HzFullCfgWithCfg query2YCfgByBomLineId(String bomLineId);
 }

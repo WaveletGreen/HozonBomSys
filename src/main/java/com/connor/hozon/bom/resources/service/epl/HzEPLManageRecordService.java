@@ -20,4 +20,5 @@ public interface HzEPLManageRecordService {
 
     String  getGroupNum(String projectId,String parentId);
 
+    Page<HzEPLRecordRespDTO> getHzEPLRecordForPage2(HzEPLByPageQuery query);
 }

@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import sql.BaseSQLUtil;
 import sql.pojo.bom.HzBomLineRecord;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -41,6 +42,18 @@ public class HzBomLineRecordDaoImpl extends BaseSQLUtil {
         return super.update("HzBomLineRecordDaoImpl_update", record);
     }
 
+    /**
+     * 跟新颜色件信息  1是颜色件 0不是
+     * @param puid
+     * @param isColorPart
+     * @return
+     */
+    public int updateColorPart(String puid,Integer isColorPart){
+        Map<String,Object> map  = new HashMap<>();
+        map.put("puid",puid);
+        map.put("colorPart",isColorPart);
+        return super.update("HzBomLineRecordDaoImpl_updateColorPart",map);
+    }
     /**
      * 找出最大排序号
      *
@@ -132,4 +145,5 @@ public class HzBomLineRecordDaoImpl extends BaseSQLUtil {
     public Integer getMaxLineIndexFirstNum(String projectId){
         return (Integer) super.findForObject("HzBomLineRecordDaoImpl_getMaxLineIndexFirstNum",projectId);
     }
+
 }

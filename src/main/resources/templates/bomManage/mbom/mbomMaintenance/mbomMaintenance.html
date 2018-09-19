@@ -6,20 +6,20 @@
 <meta charset="UTF-8">
 <title>MBOM维护</title>
 <body>
-<!--<ul id="myTab" class="nav nav-tabs">-->
-    <!--<li class="active">-->
-        <!--<a href="#mBom" data-toggle="tab">超级MBOM</a>-->
-    <!--</li>-->
-    <!--<li>-->
-        <!--<a href="#whiteBodyProduction" data-toggle="tab">白车身生产BOM</a>-->
-    <!--</li>-->
-    <!--<li>-->
-        <!--<a href="#whiteBodyFinancial" data-toggle="tab">白车身财务BOM</a>-->
-    <!--</li>-->
-<!--</ul>-->
-<!--<div id="myTabContent" class="tab-content">-->
-    <!--&lt;!&ndash;超级MBOM&ndash;&gt;-->
-    <!--<div class="tab-pane fade in active" id="mBom">-->
+<ul id="myTab" class="nav nav-tabs">
+    <li class="active">
+        <a href="#mBom" data-toggle="tab">超级MBOM</a>
+    </li>
+    <li>
+        <a href="#whiteBodyProduction" data-toggle="tab">白车身生产BOM</a>
+    </li>
+    <li>
+        <a href="#whiteBodyFinancial" data-toggle="tab">白车身财务BOM</a>
+    </li>
+</ul>
+<div id="myTabContent" class="tab-content">
+    <!--超级MBOM-->
+    <div class="tab-pane fade in active" id="mBom">
         <div class="panel-body" style="padding-bottom: 0;">
             <form class="form-inline" role="form" style="float: left; width: 100%;margin-left: 20px;" method="get"
                   id="queryMbomMain">
@@ -73,58 +73,58 @@
         <div class="content col-lg-12">
             <table class="table table-striped tableNormalStyle" id="mbomMaintenanceTable"></table>
         </div>
-    <!--</div>-->
-    <!--&lt;!&ndash;白车身生产&ndash;&gt;-->
-    <!--<div class="tab-pane fade" id="whiteBodyProduction">-->
-        <!--<div class="panel-body" style="padding-bottom: 0;">-->
-            <!--<form class="form-inline" role="form" style="float: left; width: 100%;margin-left: 20px;" method="get"-->
-                  <!--id="queryWhiteBodyProduction">-->
-                <!--<div class="form-group">-->
-                    <!--<label for="level">白车身生产:</label>-->
-                    <!--<input type="text" style="width: 140px;" class="form-control" name="level" id="leve"-->
-                           <!--placeholder="请输入白车身生产BOM"/>-->
-                <!--</div>-->
-                <!--<div class="form-group">-->
-                    <!--<label for="pBomOfWhichDept">白车身生产编号:</label>-->
-                    <!--<input type="text" style="width: 140px;" class="form-control" name="pBomOfWhichDept"-->
-                           <!--id="pBomOfWhichDep"-->
-                           <!--placeholder="请输入白车身生产编号"/>-->
-                <!--</div>-->
-                <!--<div class="form-group">-->
-                    <!--<button type="button" id="queryBtn1" onclick="doQuery1();" class="btn btn-primary">查询</button>-->
-                <!--</div>-->
-            <!--</form>-->
-        <!--</div>-->
-        <!--<div class="content col-lg-12">-->
-            <!--<table class="table table-striped tableNormalStyle" id="whiteBodyProductionTable"></table>-->
-        <!--</div>-->
-    <!--</div>-->
-    <!--&lt;!&ndash;白车身财务&ndash;&gt;-->
-    <!--<div class="tab-pane fade" id="whiteBodyFinancial">-->
-        <!--<div class="panel-body" style="padding-bottom: 0;">-->
-            <!--<form class="form-inline" role="form" style="float: left; width: 100%;margin-left: 20px;" method="get"-->
-                  <!--id="queryWhiteBodyFinancial">-->
-                <!--<div class="form-group">-->
-                    <!--<label for="level">白车身财务:</label>-->
-                    <!--<input type="text" style="width: 140px;" class="form-control" name="level" id="lev"-->
-                           <!--placeholder="请输入白车身财务BOM"/>-->
-                <!--</div>-->
-                <!--<div class="form-group">-->
-                    <!--<label for="pBomOfWhichDept">白车身财务编号:</label>-->
-                    <!--<input type="text" style="width: 140px;" class="form-control" name="pBomOfWhichDept"-->
-                           <!--id="pBomOfWhichDe"-->
-                           <!--placeholder="请输入白车身财务编号"/>-->
-                <!--</div>-->
-                <!--<div class="form-group">-->
-                    <!--<button type="button" id="queryBtn2" onclick="doQuery2();" class="btn btn-primary">查询</button>-->
-                <!--</div>-->
-            <!--</form>-->
-        <!--</div>-->
-        <!--<div class="content col-lg-12">-->
-            <!--<table class="table table-striped tableNormalStyle" id="whiteBodyFinancialTable"></table>-->
-        <!--</div>-->
-    <!--</div>-->
-<!--</div>-->
+    </div>
+    <!--白车身生产-->
+    <div class="tab-pane fade" id="whiteBodyProduction">
+        <div class="panel-body" style="padding-bottom: 0;">
+            <form class="form-inline" role="form" style="float: left; width: 100%;margin-left: 20px;" method="get"
+                  id="queryWhiteBodyProduction">
+                <div class="form-group">
+                    <label for="level">白车身生产:</label>
+                    <input type="text" style="width: 140px;" class="form-control" name="level" id="leve"
+                           placeholder="请输入白车身生产BOM"/>
+                </div>
+                <div class="form-group">
+                    <label for="pBomOfWhichDept">白车身生产编号:</label>
+                    <input type="text" style="width: 140px;" class="form-control" name="pBomOfWhichDept"
+                           id="pBomOfWhichDep"
+                           placeholder="请输入白车身生产编号"/>
+                </div>
+                <div class="form-group">
+                    <button type="button" id="queryBtn1" onclick="doQuery1();" class="btn btn-primary">查询</button>
+                </div>
+            </form>
+        </div>
+        <div class="content col-lg-12">
+            <table class="table table-striped tableNormalStyle" id="whiteBodyProductionTable"></table>
+        </div>
+    </div>
+    <!--白车身财务-->
+    <div class="tab-pane fade" id="whiteBodyFinancial">
+        <div class="panel-body" style="padding-bottom: 0;">
+            <form class="form-inline" role="form" style="float: left; width: 100%;margin-left: 20px;" method="get"
+                  id="queryWhiteBodyFinancial">
+                <div class="form-group">
+                    <label for="level">白车身财务:</label>
+                    <input type="text" style="width: 140px;" class="form-control" name="level" id="lev"
+                           placeholder="请输入白车身财务BOM"/>
+                </div>
+                <div class="form-group">
+                    <label for="pBomOfWhichDept">白车身财务编号:</label>
+                    <input type="text" style="width: 140px;" class="form-control" name="pBomOfWhichDept"
+                           id="pBomOfWhichDe"
+                           placeholder="请输入白车身财务编号"/>
+                </div>
+                <div class="form-group">
+                    <button type="button" id="queryBtn2" onclick="doQuery2();" class="btn btn-primary">查询</button>
+                </div>
+            </form>
+        </div>
+        <div class="content col-lg-12">
+            <table class="table table-striped tableNormalStyle" id="whiteBodyFinancialTable"></table>
+        </div>
+    </div>
+</div>
 <script th:src="@{/js/helper/projectHelper.js}"></script>
 <script th:src="@{/js/bom/mbom/mbomMaintenance.js}"></script>
 <!--<script th:src="@{/js/bom/mbom/whiteBodyProduction.js}"></script>-->

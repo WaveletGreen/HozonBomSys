@@ -83,5 +83,10 @@ public class HzFullCfgWithCfgDaoImpl implements HzFullCfgWithCfgDao {
         return baseSQLUtil.executeQueryById(cfg, "com.connor.hozon.bom.bomSystem.dao.cfg.HzFullCfgWithCfgDao.selectByBomLineUidWithVersion");
     }
 
+    @Override
+    public HzFullCfgWithCfg query2YCfgByBomLineId(String bomLineId) {
+        return baseSQLUtil.executeQueryByPass(new HzFullCfgWithCfg(), bomLineId,"com.connor.hozon.bom.bomSystem.dao.cfg.HzFullCfgWithCfgDao.query2YCfgByBomLineId",true);
+    }
+
 
 }

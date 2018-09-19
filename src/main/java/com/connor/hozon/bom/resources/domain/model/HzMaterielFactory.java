@@ -81,6 +81,7 @@ public class HzMaterielFactory {
         }else {
             hzMaterielRecord.setpColorPart(null);
         }
+        hzMaterielRecord.setpPertainToProjectPuid(reqDTO.getProjectId());
         return hzMaterielRecord;
     }
 }

@@ -886,6 +886,7 @@ public class HzEbomServiceImpl implements HzEbomService {
                         });
                     }else {
                         List<HzMaterielRecord> records = new ArrayList<>();
+                        hzMaterielRecord.setMaterielResourceId(reqDTO.getPuid());
                         hzMaterielRecord.setPuid(UUID.randomUUID().toString());
                         records.add(hzMaterielRecord);
                         hzMaterielDAO.insertList(records);

@@ -2,14 +2,12 @@ package com.connor.hozon.bom.bomSystem.controller.bom;
 
 import com.connor.hozon.bom.bomSystem.helper.DateStringHelper;
 import com.connor.hozon.bom.bomSystem.service.cfg.HzBomAllCfgService;
-import com.connor.hozon.bom.interaction.iservice.IHzConfigBomColorService;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import sql.pojo.cfg.HzFullCfgMain;
-import sql.pojo.interaction.HzConfigBomColorBean;
 
 import java.util.List;
 import java.util.Map;
@@ -24,11 +22,8 @@ public class HzBomAllCfgController {
     @Autowired
     private HzBomAllCfgService hzBomAllCfgService;
 
-//    @Autowired
-//    IHzConfigBomColorService iHzConfigBomColorService;
-
     @RequestMapping("/saveBom")
-    public JSONObject saveBom(@RequestParam Map<String, String> data) {
+    public JSONObject saveBom(@RequestParam Map<String, String> data){
         return new JSONObject();
     }
 
@@ -39,20 +34,20 @@ public class HzBomAllCfgController {
 
     @RequestMapping("/loadCfg0BomLineOfModel")
     @ResponseBody
-    public JSONObject loadCfg0BomLineOfModel(@RequestParam String bdf) {
+    public JSONObject loadCfg0BomLineOfModel(@RequestParam String bdf){
         return hzBomAllCfgService.parse(bdf);
     }
 
     @RequestMapping("/saveOneRow")
     @ResponseBody
-    public JSONObject saveOneRow(String bomLinePuid, String cfgPuid) {
+    public JSONObject saveOneRow(String bomLinePuid, String cfgPuid,Integer colorPart, String msgVal) {
 //        List<HzConfigBomColorBean> beans = iHzConfigBomColorService.doSelectBy2YUidWithProject(bomLinePuid, "1c128c60-84a2-4076-9b1c-f7093e56e4df");
-        return hzBomAllCfgService.saveOneRow(bomLinePuid, cfgPuid);
+        return hzBomAllCfgService.saveOneRow(bomLinePuid, cfgPuid,colorPart, msgVal);
     }
 
     @RequestMapping("/savePoint")
     @ResponseBody
-    public JSONObject savePoint(@RequestBody Map<String, Map<String, String>> data) {
+    public JSONObject savePoint(@RequestBody Map<String, Map<String,String>> data){
         return hzBomAllCfgService.savePoint(data);
     }
 
@@ -100,8 +95,8 @@ public class HzBomAllCfgController {
 
     @RequestMapping("query2YCfg")
     @ResponseBody
-    public JSONObject query2YCfg(@RequestParam String projectPuid) {
-        return hzBomAllCfgService.query2YCfg(projectPuid);
+    public JSONObject query2YCfg(@RequestParam String projectPuid, @RequestParam String bomLineId) {
+        return hzBomAllCfgService.query2YCfg(projectPuid, bomLineId);
     }
 
     /**
@@ -117,4 +112,9 @@ public class HzBomAllCfgController {
     }
 
 
+@RequestMapping(value = "saveBomLinePiont", method = RequestMethod.POST)
+    @ResponseBody
+    public JSONObject saveBomLinePiont(@RequestBody Map<String, Map<String, String>> dataMap){
+        return  hzBomAllCfgService.saveBomLinePiont(dataMap);
+    }
 }
