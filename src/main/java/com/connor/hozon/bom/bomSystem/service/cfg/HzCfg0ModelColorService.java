@@ -192,7 +192,7 @@ public class HzCfg0ModelColorService {
         User user = UserInfo.getUser();
         Map<String, Object> result = new HashMap<>();
         List<HzCfg0ModelColor> colorSet = hzCfg0ModelColorDao.selectAll(projectPuid);
-        List<HzCfg0OptionFamily> familiesNew = hzCfg0OptionFamilyService.getFamilies(projectPuid);//hzCfg0OptionFamilyDao.selectNameByMainId2(projectPuid);
+        List<HzCfg0OptionFamily> familiesNew = hzCfg0OptionFamilyService.getFamilies(projectPuid,0,1);//hzCfg0OptionFamilyDao.selectNameByMainId2(projectPuid);
         List<String> column = hzCfg0OptionFamilyService.getColumnNewWithFamilies(familiesNew, "<br/>");
         HzCfg0MainRecord mainRecord = hzCfg0MainService.doGetbyProjectPuid(projectPuid);
         /**

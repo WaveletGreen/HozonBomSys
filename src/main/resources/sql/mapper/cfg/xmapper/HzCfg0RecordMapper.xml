@@ -89,7 +89,7 @@
         <include refid="Base_Column_List"/>
         from ${whichTable} t
         where
-        t.p_cfg0_family_name=#{pCfg0FamilyName,jdbcType=VARCHAR}
+        t.p_cfg0_family_name like '%'||#{pCfg0FamilyName,jdbcType=VARCHAR}||'%'
         and t.p_cfg0_object_id=#{pCfg0ObjectId,jdbcType=VARCHAR}
         and t.p_cfg0_main_item_puid=#{pCfg0MainItemPuid,jdbcType=VARCHAR}
     </select>
@@ -99,7 +99,7 @@
         <include refid="Base_Column_List"/>
         from ${whichTable} t
         where
-        t.p_cfg0_family_desc=#{pCfg0FamilyDesc,jdbcType=VARCHAR}
+        t.p_cfg0_family_desc like '%'||#{pCfg0FamilyDesc,jdbcType=VARCHAR}||'%'
         and t.p_cfg0_object_id=#{pCfg0ObjectId,jdbcType=VARCHAR}
         and t.p_cfg0_main_item_puid=#{pCfg0MainItemPuid,jdbcType=VARCHAR}
     </select>

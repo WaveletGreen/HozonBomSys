@@ -40,6 +40,11 @@ public class HzRelevanceService2 {
     @Autowired
     private HzRelevanceRelationDao hzRelevanceRelationDao;
 
+    /**
+     *过滤特性为“车身颜色/HZCSYS”和特性为“内外饰/HZNWS”
+     * @param projectPuid
+     * @return
+     */
     public JSONObject addRelevance(String projectPuid) {
         JSONObject response = new JSONObject();
         JSONArray datas = new JSONArray();

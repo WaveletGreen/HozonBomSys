@@ -31,7 +31,7 @@ function loadData(projectPuid) {
     var column = [];
     $("#refresh").removeAttr("disabled");
     $.ajax({
-        url: "materiel/loadColumnByProjectPuid?projectPuid=" + projectPuid,
+        url: "materiel/loadColumnByProjectPuid2?projectPuid=" + projectPuid,
         type: "GET",
         success: function (result) {
             if (!result.status) {

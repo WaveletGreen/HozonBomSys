@@ -70,7 +70,7 @@ public class HzCfg0ModelColorController {
 
     @RequestMapping(value = "/addPage", method = RequestMethod.GET)
     public String addPage(@RequestParam String projectPuid, Model model) {
-        List<HzCfg0OptionFamily> columnList = hzCfg0OptionFamilyService.getFamilies(projectPuid);
+        List<HzCfg0OptionFamily> columnList = hzCfg0OptionFamilyService.getFamilies(projectPuid,0,1);
         List<HzCfg0ColorSet> colorList = hzCfg0ColorSetService.doGetAll();//颜色库所有数据
         List<HzCfg0ColorSet> _colorList = new ArrayList<>(colorList);//将colorList复制到_colorList
 
@@ -122,7 +122,7 @@ public class HzCfg0ModelColorController {
         }
         HzCfg0MainRecord main = hzCfg0MainService.doGetByPrimaryKey(currentModel.getpCfg0MainRecordOfMC());
 //        List<String> columnList = hzCfg0OptionFamilyService.doGetColumnDef(main.getpCfg0OfWhichProjectPuid(), "\t");
-        List<HzCfg0OptionFamily> columnList = hzCfg0OptionFamilyService.getFamilies(main.getpCfg0OfWhichProjectPuid());
+        List<HzCfg0OptionFamily> columnList = hzCfg0OptionFamilyService.getFamilies(main.getpCfg0OfWhichProjectPuid(),0,1);
         List<HzCfg0ColorSet> colorList = hzCfg0ColorSetService.doGetAll();
         ArrayList<String> orgValue = new ArrayList<>();
         List<HzColorModel> cm = hzColorModelService.doSelectByModelUidWithColor(puid);

@@ -119,7 +119,31 @@ public class HzMaterielFeatureController extends ExtraIntegrate {
         Map<String, Object> result = new HashMap<>();
         List<String> column = new ArrayList<>();
         List<String> _result;
-        if ((_result = hzCfg0OptionFamilyService.doGetColumnDef(projectPuid, "<br/>")) != null) {
+        if ((_result = hzCfg0OptionFamilyService.getColumnNew(projectPuid, "<br/>")) != null) {
+            column.addAll(_result);
+            //附加列信息
+//            appendColumn(column);
+            result.put("status", true);
+            result.put("data", column);
+        } else {
+            result.put("status", false);
+        }
+        return result;
+    }
+
+    /**
+     * 根据项目的puid，获取到配置物料特性表的列设置
+     *
+     * @param projectPuid 项目puid
+     * @return 列信息
+     */
+    @RequestMapping("/loadColumnByProjectPuid2")
+    @ResponseBody
+    public Map<String, Object> getColumn2(@RequestParam("projectPuid") String projectPuid) {
+        Map<String, Object> result = new HashMap<>();
+        List<String> column = new ArrayList<>();
+        List<String> _result;
+        if ((_result = hzCfg0OptionFamilyService.getColumnNew2(projectPuid, "<br/>")) != null) {
             column.addAll(_result);
             //附加列信息
 //            appendColumn(column);

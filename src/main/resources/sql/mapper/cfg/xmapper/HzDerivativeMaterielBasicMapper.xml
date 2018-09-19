@@ -28,6 +28,8 @@
         <result column="DMB_RESERVED_4" jdbcType="VARCHAR" property="dmbReserved4"/>
         <!--保留字段5-->
         <result column="DMB_RESERVED_5" jdbcType="VARCHAR" property="dmbReserved5"/>
+        <!--特殊的特性UID，特别是车身颜色-->
+        <result column="DMB_SPECIAL_FEATURE_UID" jdbcType="VARCHAR" property="dmbSpecialFeatureUid"/>
     </resultMap>
     <sql id="Base_Column_List">
         ID,
@@ -42,7 +44,8 @@
         DMB_RESERVED_2,
         DMB_RESERVED_3,
         DMB_RESERVED_4,
-        DMB_RESERVED_5
+        DMB_RESERVED_5,
+        DMB_SPECIAL_FEATURE_UID
   </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
         select
@@ -87,7 +90,8 @@
         DMB_RESERVED_2,
         DMB_RESERVED_3,
         DMB_RESERVED_4,
-        DMB_RESERVED_5
+        DMB_RESERVED_5,
+        DMB_SPECIAL_FEATURE_UID
         )
         values (
         #{id,jdbcType=DECIMAL},
@@ -102,7 +106,8 @@
         #{dmbReserved2,jdbcType=VARCHAR},
         #{dmbReserved3,jdbcType=VARCHAR},
         #{dmbReserved4,jdbcType=VARCHAR},
-        #{dmbReserved5,jdbcType=VARCHAR}
+        #{dmbReserved5,jdbcType=VARCHAR},
+        #{dmbSpecialFeatureUid,jdbcType=VARCHAR}
         )
     </insert>
     <insert id="insertSelective" parameterType="sql.pojo.cfg.HzDerivativeMaterielBasic">
@@ -147,6 +152,9 @@
             <if test="dmbReserved5 != null">
                 DMB_RESERVED_5,
             </if>
+            <if test="dmbSpecialFeatureUid != null">
+                DMB_SPECIAL_FEATURE_UID,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -184,6 +192,9 @@
             <if test="dmbReserved5 != null">
                 #{dmbReserved5,jdbcType=VARCHAR},
             </if>
+            <if test="dmbSpecialFeatureUid != null">
+                #{dmbSpecialFeatureUid,jdbcType=VARCHAR}
+            </if>
         </trim>
     </insert>
     <update id="updateByPrimaryKeySelective" parameterType="sql.pojo.cfg.HzDerivativeMaterielBasic">
@@ -220,6 +231,9 @@
             <if test="dmbReserved5 != null">
                 DMB_RESERVED_5 = #{dmbReserved5,jdbcType=VARCHAR},
             </if>
+            <if test="dmbSpecialFeatureUid != null">
+                DMB_SPECIAL_FEATURE_UID = #{dmbSpecialFeatureUid,jdbcType=VARCHAR},
+            </if>
         </set>
         where ID = #{id,jdbcType=DECIMAL}
     </update>
@@ -235,7 +249,8 @@
       DMB_RESERVED_2 = #{dmbReserved2,jdbcType=VARCHAR},
       DMB_RESERVED_3 = #{dmbReserved3,jdbcType=VARCHAR},
       DMB_RESERVED_4 = #{dmbReserved4,jdbcType=VARCHAR},
-      DMB_RESERVED_5 = #{dmbReserved5,jdbcType=VARCHAR}
+      DMB_RESERVED_5 = #{dmbReserved5,jdbcType=VARCHAR},
+      DMB_SPECIAL_FEATURE_UID = #{dmbSpecialFeatureUid,jdbcType=VARCHAR}
     where ID = #{id,jdbcType=DECIMAL}
   </update>
 </mapper>
