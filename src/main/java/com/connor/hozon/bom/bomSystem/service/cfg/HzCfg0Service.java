@@ -27,8 +27,8 @@ public class HzCfg0Service {
         this.hzCfg0RecordDao = hzCfg0RecordDao;
     }
 
-    public HzCfg0Record doGetByProjectPuid(String projectPuid) {
-        return hzCfg0RecordDao.selectByPrimaryKey(projectPuid);
+    public HzCfg0Record doSelectByPrimaryKey(String puid) {
+        return hzCfg0RecordDao.selectByPrimaryKey(puid);
     }
 
     public List<HzCfg0Record> doLoadCfgListByProjectPuid(String projectPuid, HzFeatureQueryDTO queryBase) {
@@ -183,5 +183,23 @@ public class HzCfg0Service {
 
     public List<HzCfg0Record> doLoadByCondition(HzFeatureQueryDTO queryBase) {
         return hzCfg0RecordDao.selectByCondition(queryBase);
+    }
+
+    /**
+     * 用HZCSYS+特性值（从颜色中来）查找一条车身颜色特性值
+     *
+     * @return
+     */
+    public HzCfg0Record doSelectByCodeAndDescWithMainItem(HzCfg0Record record) {
+        return hzCfg0RecordDao.selectByCodeAndDescWithMainItem(record);
+    }
+
+    /**
+     * 用"车身颜色"+特性值（从颜色中来）查找一条车身颜色特性值
+     *
+     * @return
+     */
+    public HzCfg0Record doSelectByCodeAndCnDescWithMainItem(HzCfg0Record record) {
+        return hzCfg0RecordDao.selectByCodeAndCnDescWithMainItem(record);
     }
 }

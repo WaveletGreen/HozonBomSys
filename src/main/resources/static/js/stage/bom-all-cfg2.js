@@ -147,7 +147,7 @@ function loadData(projectUid) {
                 "<th ><div style='width: 150px' >配置描述</div></th>" +
                 "<th ><div style='width: 150px' >配置代码</div></th>" +
                 "<th ><div style='width: 150px' >是否颜色件</div></th>" +
-                "<th ><div style='width: 150px' >备注</div></th>" +
+                "<th ><div style='width: 150px' >标配/选配</div></th>" +
                 "</tr>"
             ;
             $table.append(t);

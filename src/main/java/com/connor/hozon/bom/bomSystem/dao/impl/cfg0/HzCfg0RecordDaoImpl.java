@@ -120,6 +120,32 @@ public class HzCfg0RecordDaoImpl implements HzCfg0RecordDao {
         return baseSQLUtil.executeQueryByPass(RECORD, queryBase, "com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0RecordDao.selectByCondition");
     }
 
+    /**
+     * 用HZCSYS+特性值（从颜色中来）查找一条车身颜色特性值
+     *
+     * @param record
+     * @return
+     */
+    @Override
+    public HzCfg0Record selectByCodeAndDescWithMainItem(HzCfg0Record record) {
+        record.setWhichTable("HZ_CFG0_RECORD");
+//        record.setpCfg0FamilyName("HZCSYS");
+        return baseSQLUtil.executeQueryById(record, "com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0RecordDao.selectByCodeAndDescWithMainItem");
+    }
+
+    /**
+     * 用"车身颜色"+特性值（从颜色中来）查找一条车身颜色特性值
+     *
+     * @param record
+     * @return
+     */
+    @Override
+    public HzCfg0Record selectByCodeAndCnDescWithMainItem(HzCfg0Record record) {
+        record.setWhichTable("HZ_CFG0_RECORD");
+//        record.setpCfg0FamilyDesc("车身颜色");
+        return baseSQLUtil.executeQueryById(record, "com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0RecordDao.selectByCodeAndCnDescWithMainItem");
+    }
+
     @Override
     public List<HzCfg0Record> selectListByProjectPuid(String projectPuid, HzFeatureQueryDTO queryBase) {
         Map<String, Object> params = new HashMap<>();
