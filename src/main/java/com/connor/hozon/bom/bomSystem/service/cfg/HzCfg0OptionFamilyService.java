@@ -50,6 +50,20 @@ public class HzCfg0OptionFamilyService {
     }
 
     /**
+     * 在当前项目找出带颜色/不带颜色的特性，不能排除2特性值分别带颜色和不带颜色，因此会发生重复，需要进行排重
+     *
+     * @param projectUid 项目UID
+     * @param isColor    1，带颜色的特性；0，不带颜色的特性
+     * @return
+     */
+    public List<HzCfg0OptionFamily> selectForColorBluePrint(String projectUid, Integer isColor) {
+        Map<String, Object> param = new HashMap<>();
+        param.put("projectUid", projectUid);
+        param.put("isColor", isColor);
+        return hzCfg0OptionFamilyDao.selectForColorBluePrint(param);
+    }
+
+    /**
      * 根据主配置puid获取列信息定义，强制包含<br/>
      *
      * @param mainId 主配置puid

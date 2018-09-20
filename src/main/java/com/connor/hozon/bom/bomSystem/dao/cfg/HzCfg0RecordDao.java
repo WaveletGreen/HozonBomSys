@@ -163,4 +163,13 @@ public interface HzCfg0RecordDao {
      * @return
      */
     HzCfg0Record selectByCodeAndCnDescWithMainItem(HzCfg0Record record);
+
+    /**
+     * 根据项目和特性PUID(父)获取一组特性
+     *
+     * @param familyUid  特性UID
+     * @param projectUid 项目UID
+     * @return
+     */
+    List<HzCfg0Record> selectByFamilyUidWithProject(String familyUid, String projectUid);
 }

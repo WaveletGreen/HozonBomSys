@@ -214,6 +214,18 @@
         and t.p_cfg0_main_item_puid=#{pCfg0MainItemPuid}
     </select>
 
+    <select id="selectByFamilyUidWithProject" parameterType="sql.pojo.cfg.HzCfg0Record"
+            resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from HZ_CFG0_RECORD t
+        where t.P_CFG0_MAIN_ITEM_PUID=(
+        select puid from Hz_Cfg0_Main_Record t2
+        where t2.p_cfg0_of_which_project_puid=#{projectPuid,jdbcType=VARCHAR}
+        )
+        and t.P_CFG0_FAMILY_PUID=#{pCfg0FamilyPuid,jdbcType=VARCHAR}
+    </select>
+
     <select id="tellMeHowManyOfThose" parameterType="com.connor.hozon.bom.bomSystem.dto.HzFeatureQueryDTO"
             resultType="java.lang.Integer">
         select count(*) from HZ_CFG0_RECORD t
@@ -391,4 +403,6 @@
             )
         </if>
     </update>
+
+
 </mapper>

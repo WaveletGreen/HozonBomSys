@@ -184,5 +184,19 @@ public class HzCfg0RecordDaoImpl implements HzCfg0RecordDao {
         return baseSQLUtil.executeQueryById(record, "com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0RecordDao.selectByPrimaryKey");
     }
 
+    /**
+     * 根据项目和特性PUID(父)获取一组特性
+     *
+     * @param familyUid  特性UID
+     * @param projectUid 项目UID
+     * @return
+     */
+    @Override
+    public List<HzCfg0Record> selectByFamilyUidWithProject(String familyUid, String projectUid) {
+        HzCfg0Record record = new HzCfg0Record();
+        record.setpCfg0FamilyPuid(familyUid);
+        record.setProjectPuid(projectUid);
+        return baseSQLUtil.executeQuery(record, "com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0RecordDao.selectByFamilyUidWithProject");
+    }
 
 }

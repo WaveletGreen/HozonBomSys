@@ -56,6 +56,20 @@ public class HzCfg0OptionFamilyDaoImpl implements HzCfg0OptionFamilyDao {
         return baseSQLUtil.executeQueryByPass(FAMILY, param, "com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0OptionFamilyDao.selectNameByMap");
     }
 
+    /**
+     * Author: Fancyears·Maylos·Mayways
+     * Description: 根据产品配置器的puid获取到所有的配置系统层
+     * Date: 2018/5/23 9:49
+     *
+     * @param param
+     * @return 返回一组系统名称
+     */
+    @Override
+    public List<HzCfg0OptionFamily> selectForColorBluePrint(Map<String, Object> param) {
+        return baseSQLUtil.executeQueryByPass(FAMILY, param, "com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0OptionFamilyDao.selectForColorBluePrint");
+    }
+
+
     @Override
     public HzCfg0OptionFamily selectByCodeAndDescWithMain(HzCfg0OptionFamily family) {
         return baseSQLUtil.executeQueryById(family, "com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0OptionFamilyDao.selectByCodeAndDescWithMain");

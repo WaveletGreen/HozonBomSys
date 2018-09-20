@@ -36,6 +36,29 @@
             and P_OPTIONFAMILY_DESC=#{pOptionfamilyDesc,jdbcType=VARCHAR}
         </if>
     </select>
+    <select id="selectForColorBluePrint" parameterType="Map" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from Hz_Cfg0_Optionfamily_Record txx
+        where txx.puid in
+        (select distinct (t4.puid)
+        from HZ_FULL_CFG_WITHCFG_RECORD t
+        left join Hz_Bom_Line_Record t2
+        on t.cfg_bomline_uid = t2.puid
+        left join Hz_Cfg0_Record t3
+        on t3.puid = t.cfg_cfg0_uid
+        left join Hz_Cfg0_Optionfamily_Record t4
+        on t3.p_cfg0_family_puid = t4.puid
+        where t2.p_color_part = #{isColor,jdbcType=INTEGER}
+        and t.fl_cfg_version =
+        (select id
+        from Hz_Full_Cfg_Main_Record tm
+        where tm.project_uid =#{projectUid,jdbcType=VARCHAR}
+        )
+        )
+        order by txx.p_optionfamily_name asc
+
+    </select>
     <select id="insert" parameterType="sql.pojo.cfg.HzCfg0OptionFamily" resultMap="BaseResultMap">
         insert into
         HZ_CFG0_OPTIONFAMILY_RECORD

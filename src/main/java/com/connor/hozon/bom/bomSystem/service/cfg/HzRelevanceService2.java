@@ -59,7 +59,7 @@ public class HzRelevanceService2 {
         //搜索全部特性值，并经过P_CFG0_OBJECT_ID 升序排序
         QueryBase queryBase = new QueryBase();
         queryBase.setSort("P_CFG0_OBJECT_ID");
-        List<HzCfg0Record> hzCfg0Records = hzCfg0Service.doLoadCfgListByProjectPuid(projectPuid, new HzFeatureQueryDTO());
+         List<HzCfg0Record> hzCfg0Records = hzCfg0Service.doLoadCfgListByProjectPuid(projectPuid, new HzFeatureQueryDTO());
 
         //查询该项目下所有配色方案
         List<HzColorModel2> hzColorModel2s = hzColorModelDao.selectByProjectPuid(projectPuid);

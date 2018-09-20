@@ -5,6 +5,7 @@ import com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0OptionFamilyDao;
 import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
 import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.sys.entity.User;
+import net.sf.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +47,8 @@ public class HzCfg0ModelColorService {
     HzCfg0ColorSetService hzCfg0ColorSetService;
     @Autowired
     HzCfg0MainService hzCfg0MainService;
+    @Autowired
+    HzCfg0Service hzCfg0Service;
     /**
      * 日志
      */
@@ -192,7 +195,7 @@ public class HzCfg0ModelColorService {
         User user = UserInfo.getUser();
         Map<String, Object> result = new HashMap<>();
         List<HzCfg0ModelColor> colorSet = hzCfg0ModelColorDao.selectAll(projectPuid);
-        List<HzCfg0OptionFamily> familiesNew = hzCfg0OptionFamilyService.getFamilies(projectPuid,0,1);//hzCfg0OptionFamilyDao.selectNameByMainId2(projectPuid);
+        List<HzCfg0OptionFamily> familiesNew = hzCfg0OptionFamilyService.getFamilies(projectPuid, 0, 1);//hzCfg0OptionFamilyDao.selectNameByMainId2(projectPuid);
         List<String> column = hzCfg0OptionFamilyService.getColumnNewWithFamilies(familiesNew, "<br/>");
         HzCfg0MainRecord mainRecord = hzCfg0MainService.doGetbyProjectPuid(projectPuid);
         /**
@@ -349,4 +352,70 @@ public class HzCfg0ModelColorService {
         return hzCfg0ModelColorDao.updateOldData(color) > 0 ? true : false;
     }
 
+    /**
+     * 带全部的特性，旧版方法,2018-9-20 11:15
+     *
+     * @param projectUid
+     * @return
+     */
+    public JSONObject getColumn(String projectUid) {
+        JSONObject object = new JSONObject();
+        List<String> column;
+        if (projectUid == null || "".equals(projectUid)) {
+            object.put("status", false);
+        } else {
+            column = hzCfg0OptionFamilyService.getColumnNew(projectUid, "<br/>");
+
+            if (column == null || column.size() <= 0) {
+                object.put("status", false);
+            } else {
+                object.put("status", true);
+                object.put("data", column);
+            }
+        }
+        return object;
+    }
+
+    /**
+     * 单独查找有颜色的特性，没颜色的特性不允许出现，出现同一个特性出现歧义，则不允许生成表头
+     *
+     * @param projectUid
+     * @return
+     */
+    public JSONObject getColumnOnlyColor(String projectUid) {
+        JSONObject object = new JSONObject();
+        List<String> column;
+        List<String> error = new ArrayList<>();
+        if (projectUid == null || "".equals(projectUid)) {
+            object.put("status", false);
+        } else {
+            List<HzCfg0OptionFamily> withColor = hzCfg0OptionFamilyService.selectForColorBluePrint(projectUid, 1);
+            List<HzCfg0OptionFamily> withoutColor = hzCfg0OptionFamilyService.selectForColorBluePrint(projectUid, 0);
+            Map<String, HzCfg0OptionFamily> mapWithColor = new HashMap<>();
+            withColor.forEach(c -> mapWithColor.put(c.getPuid(), c));
+            for (int i = 0; i < withoutColor.size(); i++) {
+                if (mapWithColor.containsKey(withoutColor.get(i).getPuid())) {
+                    List<HzCfg0Record> list = hzCfg0Service.doSelectByFamilyUidWithProject(withoutColor.get(i).getPuid(), projectUid);
+                    StringBuilder _sb = new StringBuilder();
+                    list.forEach(l -> _sb.append(l.getpCfg0ObjectId() + " "));
+                    error.add(_sb.toString());
+                }
+            }
+            if (error.size() > 0) {
+                object.put("status", false);
+                object.put("entity", error);
+                return object;
+            } else {
+                column = new ArrayList<>();
+                withColor.forEach(c -> column.add(c.getpOptionfamilyDesc() + "<br>" + c.getpOptionfamilyName()));
+            }
+            if (column == null || column.size() <= 0) {
+                object.put("status", false);
+            } else {
+                object.put("status", true);
+                object.put("data", column);
+            }
+        }
+        return object;
+    }
 }

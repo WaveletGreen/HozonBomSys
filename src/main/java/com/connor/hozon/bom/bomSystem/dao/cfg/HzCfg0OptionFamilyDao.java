@@ -52,6 +52,15 @@ public interface HzCfg0OptionFamilyDao {
      * @return 返回一组系统名称
      */
     List<HzCfg0OptionFamily> selectNameByMap(@Param("param") Map<String,Object> param);
+    /**
+     * Author: Fancyears·Maylos·Mayways
+     * Description: 配色方案的表头，筛选带颜色和不带颜色的2Y
+     * Date: 2018/5/23 9:49
+     *
+     * @param param
+     * @return 返回一组特性
+     */
+    List<HzCfg0OptionFamily> selectForColorBluePrint(@Param("param") Map<String,Object> param);
 
     /**
      * @param family

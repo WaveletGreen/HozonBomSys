@@ -43,17 +43,15 @@ function loadData(projectPuid) {
         type: "GET",
         success: function (result) {
             if (!result.status) {
-                swal({
-                    width: 500,
-                    height: 400,
-                    html: $('<span>')
-                        .addClass('some-class')
-                        .css("font-size", "24px")
-                        .css("color", "#ff4f6a")
-                        .text('没有找到数据，请尝试创建特性值'),
-                    animation: false,
-                    customClass: 'animated tada'
-                });
+                let msg = "<div style='max-height: 400px;overflow: scroll'><table>";
+                let entity = result.entity;
+                for (let i in entity) {
+                    if (entity.hasOwnProperty(i)) {
+                        msg += "<tr><td><div><span style='color: #ac2925'>" + entity[i] + "</span>对于特性来说颜色定义存在歧义，请到全配置BOM一级清单中重新定义颜色" + "</div></td></tr>";
+                    }
+                }
+                msg += "</table></div>";
+                window.Ewin.alert({message: msg});
                 return;
             }
             var data = result.data;
