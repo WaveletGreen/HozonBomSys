@@ -656,8 +656,8 @@ function editorOrSave(but) {
                 var select = $(item).find('select');
                 colorPart = $(select).val();
                 $(div).text($(select).find("option:selected").text());
-                $(select).hide();
-                $(div).show();
+                // $(select).hide();
+                // $(div).show();
             }else if (index == 10) {
                 //获取备注值
                 msgVal = $(item).find('select').val();
@@ -718,6 +718,9 @@ function editorOrSave(but) {
                                            $(item).find('div').text(selectText);
                                            $(item).find('div').show();
                                            $(item).find('select').hide();
+                                       }else if(index==9){
+                                           var select = $(item).find('select').hide();
+                                           var div = $(item).find('div').show();
                                        }else if(index==10){
                                            var select = $(item).find('select');
                                            var div = $(item).find('div');
