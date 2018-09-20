@@ -526,14 +526,6 @@ public class HzComposeMFService {
                 result.put("msg", "删除衍生物料" + delDtos.get(i).getModeBasicDetailDesc() + "失败");
                 return;
             }
-//            HzDerivativeMaterielBasic basic = new HzDerivativeMaterielBasic();
-//            basic.setId(delDtos.get(i).getBasicId());
-//            if (hzDerivativeMaterielBasicDao.deleteByPrimaryKey(basic) <= 0) {
-//                logger.error("删除衍生物料" + delDtos.get(i).getModeBasicDetailDesc() + "基本映射数据失败");
-//                result.put("status", false);
-//                result.put("msg", "删除衍生物料" + delDtos.get(i).getModeBasicDetailDesc() + "基本映射数据失败");
-//                return;
-//            }
             result.put("status", true);
             result.put("msg", "删除衍生物料" + delDtos.get(i).getModeBasicDetailDesc() + "及其基本映射数据成功");
         }

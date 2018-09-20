@@ -3,6 +3,8 @@ package sql.pojo.cfg;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import static com.connor.hozon.bom.bomSystem.helper.StringHelper.checkString;
+
 public class HzFullCfgMain {
     private BigDecimal id;
 
@@ -25,6 +27,9 @@ public class HzFullCfgMain {
     private String updater;
 
     public static String parseStage(Integer code) {
+        if (null == code) {
+            return "";
+        }
         switch (code) {
             case 1:
                 return "P0-P1阶段";
