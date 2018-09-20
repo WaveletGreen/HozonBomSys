@@ -66,114 +66,116 @@ public class HzRelevanceService2 {
 
         //遍历特性值
         for (HzCfg0Record hzCfg0Record : hzCfg0Records) {
-            //将同一特性的配色方案分组
-            List<HzColorModel2> hzColorModel2List = new ArrayList<HzColorModel2>();
-            for (HzColorModel2 hzColorModel2 : hzColorModel2s) {
-                if (hzCfg0Record.getpCfg0FamilyName().equals(hzColorModel2.getpOptionfamilyName())) {
-                    hzColorModel2List.add(hzColorModel2);
-                }
-            }
-            //将同特性下不同颜色的配色方案放入Map
-            Map<String, List<HzColorModel2>> colorMap = new HashMap<String, List<HzColorModel2>>();
-            for (HzColorModel2 hzColorModel2 : hzColorModel2List) {
-                if ("-".equals(hzColorModel2.getColorCode())) {
-                    continue;
-                }
-                String colorcode = hzColorModel2.getColorCode();
-                if (colorMap.get(colorcode) == null) {
-                    colorMap.put(colorcode, new ArrayList<HzColorModel2>());
-                }
-                List<HzColorModel2> hzColorModel2List1 = colorMap.get(colorcode);
-                hzColorModel2List1.add(hzColorModel2);
-            }
-
-            Set<String> keys = colorMap.keySet();
-            //生成相关性
-            for (String key : keys) {
-                //拼接相关性
-                String relevance = hzCfg0Record.getpCfg0FamilyName() + "-" + hzCfg0Record.getpCfg0ObjectId() + "-" + key;
-                //拼接相关性描述
-                String relevanceDesc = hzCfg0Record.getpCfg0FamilyDesc() + "-" + colorMap.get(key).get(0).getColorName();
-                //拼接相关性代码
-                String relevanceCode = "$ROOT." + hzCfg0Record.getpCfg0FamilyName() + " = '" + hzCfg0Record.getpCfg0ObjectId() + "' AND ";
-                List<HzColorModel2> hzColorModel2s1 = colorMap.get(key);
-                int size = hzColorModel2s1.size();
-                if (size == 1) {
-                    relevanceCode += "$ROOT.HZCSYS = '" + key + "'";
-                } else if (size > 1) {
-                    relevanceCode += "( ";
-                    for (int i = 0; i < size; i++) {
-                        HzColorModel2 hzColorModel2 = hzColorModel2s1.get(i);
-                        relevanceCode = relevanceCode + "$ROOT.HZCSYS = '" + hzColorModel2.getpModelShell() + "' ";
-                        if (size - i > 1) {
-                            relevanceCode += "OR ";
-                        }
+            //车身颜色不参与相关性
+            if ((!"HZCSYS".equals(hzCfg0Record.getpCfg0FamilyName()))&&!"HZNSYS".equals(hzCfg0Record.getpCfg0FamilyName())){
+                //将同一特性的配色方案分组
+                List<HzColorModel2> hzColorModel2List = new ArrayList<HzColorModel2>();
+                for (HzColorModel2 hzColorModel2 : hzColorModel2s) {
+                    if (hzCfg0Record.getpCfg0FamilyName().equals(hzColorModel2.getpOptionfamilyName())) {
+                        hzColorModel2List.add(hzColorModel2);
                     }
-                    relevanceCode += " )";
+                }
+                //将同特性下不同颜色的配色方案放入Map
+                Map<String, List<HzColorModel2>> colorMap = new HashMap<String, List<HzColorModel2>>();
+                for (HzColorModel2 hzColorModel2 : hzColorModel2List) {
+                    if ("-".equals(hzColorModel2.getColorCode())) {
+                        continue;
+                    }
+                    String colorcode = hzColorModel2.getColorCode();
+                    if (colorMap.get(colorcode) == null) {
+                        colorMap.put(colorcode, new ArrayList<HzColorModel2>());
+                    }
+                    List<HzColorModel2> hzColorModel2List1 = colorMap.get(colorcode);
+                    hzColorModel2List1.add(hzColorModel2);
                 }
 
-                /**
-                 *后端添加
-                 * 1.添加相关性主表
-                 * 2.添加相关性关联表
-                 */
+                Set<String> keys = colorMap.keySet();
+                //生成相关性
+                for (String key : keys) {
+                    //拼接相关性
+                    String relevance = hzCfg0Record.getpCfg0FamilyName() + "-" + hzCfg0Record.getpCfg0ObjectId() + "-" + key;
+                    //拼接相关性描述
+                    String relevanceDesc = hzCfg0Record.getpCfg0FamilyDesc() + "-" + colorMap.get(key).get(0).getColorName();
+                    //拼接相关性代码
+                    String relevanceCode = "$ROOT." + hzCfg0Record.getpCfg0FamilyName() + " = '" + hzCfg0Record.getpCfg0ObjectId() + "' AND ";
+                    List<HzColorModel2> hzColorModel2s1 = colorMap.get(key);
+                    int size = hzColorModel2s1.size();
+                    if (size == 1) {
+                        relevanceCode += "$ROOT.HZCSYS = '" + key + "'";
+                    } else if (size > 1) {
+                        relevanceCode += "( ";
+                        for (int i = 0; i < size; i++) {
+                            HzColorModel2 hzColorModel2 = hzColorModel2s1.get(i);
+                            relevanceCode = relevanceCode + "$ROOT.HZCSYS = '" + hzColorModel2.getpModelShell() + "' ";
+                            if (size - i > 1) {
+                                relevanceCode += "OR ";
+                            }
+                        }
+                        relevanceCode += " )";
+                    }
 
-                //添加相关性主表
-                HzRelevanceBasic hzRelevanceBasic = new HzRelevanceBasic();
-                //颜色code
-                hzRelevanceBasic.setRbColorCode(key);
-                //颜色id
-                hzRelevanceBasic.setRbColorUid(colorMap.get(key).get(0).getpColorUid());
-                //特性code
-                hzRelevanceBasic.setRbFeatureCode(hzCfg0Record.getpCfg0FamilyName());
-                //特性id
-                hzRelevanceBasic.setRbFeatureUid(hzCfg0Record.getpCfg0FamilyPuid());
-                //特性值code
-                hzRelevanceBasic.setRbFeatureValueCode(hzCfg0Record.getpCfg0ObjectId());
-                //特性值id
-                hzRelevanceBasic.setRbFeatureValueUid(hzCfg0Record.getPuid());
-                //相关性
-                hzRelevanceBasic.setRbRelevance(relevance);
-                //相关性描述
-                hzRelevanceBasic.setRbRelevanceDesc(relevanceDesc);
-                //相关性代码
-                hzRelevanceBasic.setRbRelevanceCode(relevanceCode);
-                //项目代码
-                hzRelevanceBasic.setRbProjectUid(projectPuid);
-                //状态
-                hzRelevanceBasic.setRelevanceStatus(0);
-                //向相关性主表增加数据
-                Long relevanceUid = hzRelevanceBasicDao.insertBasic(hzRelevanceBasic);
+                    /**
+                     *后端添加
+                     * 1.添加相关性主表
+                     * 2.添加相关性关联表
+                     */
 
-
-                //添加相关性关联表
-                List<HzColorModel2> hzColorModel2List1 = colorMap.get(key);
-                for (HzColorModel2 hzColorModel2 : hzColorModel2List1) {
-                    HzRelevanceRelation hzRelevanceRelation = new HzRelevanceRelation();
-                    //特性id
-                    hzRelevanceRelation.setRrCfgFamilyUid(hzCfg0Record.getpCfg0FamilyPuid());
-                    //特性值id
-                    hzRelevanceRelation.setRrCfg0Uid(hzCfg0Record.getPuid());
+                    //添加相关性主表
+                    HzRelevanceBasic hzRelevanceBasic = new HzRelevanceBasic();
+                    //颜色code
+                    hzRelevanceBasic.setRbColorCode(key);
                     //颜色id
-                    hzRelevanceRelation.setRrColorUid(hzColorModel2.getpColorUid());
-                    //相关性id
-                    hzRelevanceRelation.setRrRelevanceId(relevanceUid);
-                    //配色方案的id
-                    hzRelevanceRelation.setRrColorModelUid(hzColorModel2.getModelUid());
-                    hzRelevanceRelationDao.insertOne(hzRelevanceRelation);
+                    hzRelevanceBasic.setRbColorUid(colorMap.get(key).get(0).getpColorUid());
+                    //特性code
+                    hzRelevanceBasic.setRbFeatureCode(hzCfg0Record.getpCfg0FamilyName());
+                    //特性id
+                    hzRelevanceBasic.setRbFeatureUid(hzCfg0Record.getpCfg0FamilyPuid());
+                    //特性值code
+                    hzRelevanceBasic.setRbFeatureValueCode(hzCfg0Record.getpCfg0ObjectId());
+                    //特性值id
+                    hzRelevanceBasic.setRbFeatureValueUid(hzCfg0Record.getPuid());
+                    //相关性
+                    hzRelevanceBasic.setRbRelevance(relevance);
+                    //相关性描述
+                    hzRelevanceBasic.setRbRelevanceDesc(relevanceDesc);
+                    //相关性代码
+                    hzRelevanceBasic.setRbRelevanceCode(relevanceCode);
+                    //项目代码
+                    hzRelevanceBasic.setRbProjectUid(projectPuid);
+                    //状态
+                    hzRelevanceBasic.setRelevanceStatus(0);
+                    //向相关性主表增加数据
+                    Long relevanceUid = hzRelevanceBasicDao.insertBasic(hzRelevanceBasic);
+
+
+                    //添加相关性关联表
+                    List<HzColorModel2> hzColorModel2List1 = colorMap.get(key);
+                    for (HzColorModel2 hzColorModel2 : hzColorModel2List1) {
+                        HzRelevanceRelation hzRelevanceRelation = new HzRelevanceRelation();
+                        //特性id
+                        hzRelevanceRelation.setRrCfgFamilyUid(hzCfg0Record.getpCfg0FamilyPuid());
+                        //特性值id
+                        hzRelevanceRelation.setRrCfg0Uid(hzCfg0Record.getPuid());
+                        //颜色id
+                        hzRelevanceRelation.setRrColorUid(hzColorModel2.getpColorUid());
+                        //相关性id
+                        hzRelevanceRelation.setRrRelevanceId(relevanceUid);
+                        //配色方案的id
+                        hzRelevanceRelation.setRrColorModelUid(hzColorModel2.getModelUid());
+                        hzRelevanceRelationDao.insertOne(hzRelevanceRelation);
+                    }
+
+
+                    //前端显示
+                    JSONObject data = new JSONObject();
+                    data.put("index", index);
+                    index++;
+                    data.put("relevance", hzCfg0Record.getpCfg0FamilyName() + "-" + hzCfg0Record.getpCfg0ObjectId() + "-" + key);
+                    data.put("relevanceDesc", hzCfg0Record.getpCfg0FamilyDesc() + "-" + colorMap.get(key).get(0).getColorName());
+                    data.put("relevanceCode", relevanceCode);
+                    datas.add(data);
                 }
-
-
-                //前端显示
-                JSONObject data = new JSONObject();
-                data.put("index", index);
-                index++;
-                data.put("relevance", hzCfg0Record.getpCfg0FamilyName() + "-" + hzCfg0Record.getpCfg0ObjectId() + "-" + key);
-                data.put("relevanceDesc", hzCfg0Record.getpCfg0FamilyDesc() + "-" + colorMap.get(key).get(0).getColorName());
-                data.put("relevanceCode", relevanceCode);
-                datas.add(data);
             }
-
         }
         response.put("totalCount", index - 1);
         response.put("result", datas);

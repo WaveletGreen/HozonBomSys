@@ -239,6 +239,7 @@ function loadData(projectUid) {
                     //总成零件号和总成零件名称
                     var bomLineId = $("#" + trNumber).find("td:eq(4)").find("div").text();
                     var bomLineName = $("#" + trNumber).find("td:eq(5)").find("div").text();
+                    //大版本大于等于2时打点图只有两个选项
                     if(versionHead>=2){
                         if (cfgObjectId == ""){
                             $("#" + trNumber).append("<td class='edit'><select style='display: none' title='总成零件号:    " + bomLineId + "&#10总成零件名称:    " + bomLineName + "'><option title='总成零件号:    " + bomLineId + "&#10总成零件名称:    " + bomLineName + "'>-</option><option title='总成零件号:    " + bomLineId + "&#10总成零件名称:    " + bomLineName + "'>●</option></select><div id='" + pointId + "' style='width: 150px'>" + cfgObjectId + "</div></td>");
@@ -249,6 +250,7 @@ function loadData(projectUid) {
                             $("#" + trNumber).append("<td class='edit'><select style='display: none' title='总成零件号:    " + bomLineId + "&#10总成零件名称:    " + bomLineName + "'><option title='总成零件号:    " + bomLineId + "&#10总成零件名称:    " + bomLineName + "'>-</option><option selected='selected' title='总成零件号:    " + bomLineId + "&#10总成零件名称:    " + bomLineName + "'>●</option></select><div id='" + pointId + "' style='width: 150px'>" + cfgObjectId + "</div></td>");
                         }
                     }else{
+                        //大版本为1时打点图3个选项
                         if (cfgObjectId == ""){
                             $("#" + trNumber).append("<td class='edit'><select style='display: none' title='总成零件号:    " + bomLineId + "&#10总成零件名称:    " + bomLineName + "'><option title='总成零件号:    " + bomLineId + "&#10总成零件名称:    " + bomLineName + "'>-</option><option title='总成零件号:    " + bomLineId + "&#10总成零件名称:    " + bomLineName + "'>●</option><option title='总成零件号:    " + bomLineId + "&#10总成零件名称:    " + bomLineName + "'>○</option></select><div id='" + pointId + "' style='width: 150px'>" + cfgObjectId + "</div></td>");
                         }else if(cfgObjectId == "-") {
@@ -612,14 +614,20 @@ function editorOrSave(but) {
     } else {
         $(but).val('编辑');
         $(but).parent().find('input:eq(1)').hide();
+        //2Y层id
         var bomLinePuid;
+        //特性Id
         var cfgPuid;
+        //备注值
         var msgVal;
+        //是否为颜色件
         var colorPart;
         var cfgIndex;
+        //第一个select
         var select;
         var desc = "";
         $(but).parent().siblings().each(function (index, item) {
+            //通过序号找到存放2Y层id值的DIV的id，然后获取2Y层ID值
             if (index == 0) {
                 select = $(item).find('select');
                 var divVal = $(item).find('div').text();
@@ -627,6 +635,7 @@ function editorOrSave(but) {
                 var bomLinePuidDivId = "in_in_" + (num - 1);
                 bomLinePuid = $("#" + bomLinePuidDivId).text();
             } else if (index == 8) {
+                //获取特性Id
                 // cfgCode = $(item).find('select').text();
                 let str = $(item).find('select').val();
                 /**避免出现前端异常问题*/
@@ -642,6 +651,7 @@ function editorOrSave(but) {
                     // cfgIndex = $(item).find('select').get(0).selectedIndex;
                 }
             }else if(index==9){
+                //获取是否为颜色件的值
                 var div = $(item).find('div');
                 var select = $(item).find('select');
                 colorPart = $(select).val();
@@ -649,17 +659,19 @@ function editorOrSave(but) {
                 $(select).hide();
                 $(div).show();
             }else if (index == 10) {
+                //获取备注值
                 msgVal = $(item).find('select').val();
                 return false;
             }
         });
+        //保存2Y层对应的各数据
         $.ajax({
             type: "POST",
             url: "bomAllCfg/saveOneRow?bomLinePuid=" + bomLinePuid + "&cfgPuid=" + cfgPuid+"&colorPart="+colorPart+"&msgVal=" + msgVal,
             contentType: 'application/json',
             success: function (result) {
                 if (result.flag) {
-
+                    //如果备注不为空则为所有车型对应该2Y层的打点图设置默认值
                     if(msgVal!=""&&msgVal!=null){
                         var object = {};
                         var params = {}
@@ -668,13 +680,16 @@ function editorOrSave(but) {
                             var modeId = $("#"+modelDivId).text();
                             // var cfgDivId = $(but).parent().find("div").attr("id");
                             // var cfgId = $("#"+modelDivId+cfgDivId).text();
+                            //备注为选配时
                             if(msgVal==0){
+                                //大版本小于2时
                                 if(versionHead<2){
                                     params[modeId] = "○";
                                 }else{
                                     params[modeId] = "";
                                 }
                             }else if(msgVal==1){
+                                //备注为标配时
                                 params[modeId] = "●";
                             }
                         }
@@ -791,13 +806,19 @@ function editPoint(but) {
     var modelDivId = $(but).parent().find("div").attr("id");
     if ($(but).val() == '编辑') {
         $(but).val('保存');
+        //显示取消和删除两个按钮
         $(but).parent().find("input:eq(1)").show();
         $(but).parent().find("input:eq(2)").show();
+        //查找当前车辆模型所有2Y层
         for (var i = 0; i < cfgSize; i++) {
+            //打点图id
             var pointId = modelDivId + "in_in_" + i;
+            //备注id
             var msgId = "msg"+i;
+            //备注值
             var msgVal = $("#"+msgId).text();
-            if(msgVal!='标配'||msgVal!=""){
+            //当备注不为标配和空时才可以编辑打点图
+            if(msgVal!='标配'&&msgVal!=""){
                 $("#" + pointId).parent().find("select").show();
                 $("#" + pointId).parent().find("div").hide();
             }
@@ -817,7 +838,7 @@ function editPoint(but) {
         //     params.push(obj);
         // }
         // object['data'] = params;
-
+        //将改车辆模型对应的所有2Y层的打点图、2Y层Id，车型ID封装成json格式的数据
         var object = {};
         var params = {};
         for (var j = 0; j < cfgSize; j++) {
@@ -833,6 +854,7 @@ function editPoint(but) {
         object[modelId] = params;
 
         var json = JSON.stringify(object);
+        //传给后台保存打点图
         $.ajax({
             type: "POST",
             url: "bomAllCfg/savePoint",
