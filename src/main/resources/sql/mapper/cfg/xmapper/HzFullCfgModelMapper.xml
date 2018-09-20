@@ -206,11 +206,11 @@
         select SEQ_HZ_FL_CFG_MODEL_ID.NEXTVAL , A.* from(
         <foreach collection="list" index="index" item="hzFullCfgModel" separator="union">
             select
-            #{hzFullCfgModel.modModelUid},
-            #{hzFullCfgModel.modPointType, jdbcType=VARCHAR},
-            #{hzFullCfgModel.flModCreator},
-            #{hzFullCfgModel.flModLastUpdater},
-            #{hzFullCfgModel.flModVersion},
+            #{hzFullCfgModel.modModelUid,jdbcType=VARCHAR},
+            #{hzFullCfgModel.modPointType,jdbcType=INTEGER},
+            #{hzFullCfgModel.flModCreator,jdbcType=VARCHAR},
+            #{hzFullCfgModel.flModLastUpdater,jdbcType=VARCHAR},
+            #{hzFullCfgModel.flModVersion,jdbcType=DOUBLE},
             #{hzFullCfgModel.flModelBomlineUid,jdbcType=VARCHAR}
             from
             dual
