@@ -179,7 +179,7 @@ public class HzBomAllCfgService {
         for (HzBomLineRecord hzBomLineRecord : lines) {
             JSONObject data = new JSONObject();
             HzFullCfgWithCfg cfg = hzFullCfgWithCfgDao.selectByBomLineUidWithVersion(hzFullCfgMain.getId(), hzBomLineRecord.getPuid());
-            data.put(selfDesc[0], cfg.getFlOperationType() == 1 ? "新增" : cfg.getFlOperationType() == 2 ? "更新" : cfg.getFlOperationType() == 0 ? "删除" : "新增");
+            data.put(selfDesc[0], cfg==null?"":cfg.getFlOperationType() == 1 ? "新增" : cfg.getFlOperationType() == 2 ? "更新" : cfg.getFlOperationType() == 0 ? "删除" : "新增");
             data.put(selfDesc[1], hzBomLineRecord.getpBomOfWhichDept() == null ? "" : hzBomLineRecord.getpBomOfWhichDept());
             data.put(selfDesc[2], hzBomLineRecord.getLineID() == null ? "" : hzBomLineRecord.getLineID());
             data.put(selfDesc[3], hzBomLineRecord.getpBomLinePartName() == null ? "" : hzBomLineRecord.getpBomLinePartName());
@@ -189,7 +189,7 @@ public class HzBomAllCfgService {
             data.put(selfDesc[7], "");
             //颜色件
             data.put(selfDesc[8], (null == hzBomLineRecord.getColorPart() || hzBomLineRecord.getColorPart() == 0) ? "N" : "Y");
-            data.put(selfDesc[9], cfg.getFlComment()==null?"":cfg.getFlComment());
+            data.put(selfDesc[9], cfg==null?"":cfg.getFlComment()==null?"":cfg.getFlComment());
 //            boolean flag = false;
             for (HzFullCfgWithCfg hzFullCfgWithCfg : hzFullCfgWithCfgs) {
                 if (hzFullCfgWithCfg.getCfgBomlineUid().equals(hzBomLineRecord.getPuid())) {
@@ -208,7 +208,7 @@ public class HzBomAllCfgService {
 //                data.put(selfDesc[6], "");
 //                data.put(selfDesc[7], "");
 //            }
-            data.put(selfDesc[9], cfg.getFlComment() == null ? "" : cfg.getFlComment());
+            data.put(selfDesc[9], cfg==null?"":cfg.getFlComment() == null ? "" : cfg.getFlComment());
             data.put("bomLinePuid", hzBomLineRecord.getPuid());
             _data.add(data);
         }

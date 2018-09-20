@@ -20,20 +20,23 @@
             <form class="form-inline" role="form" style="float: left; width: 100%;margin-left: 20px;" method="post"
                   id="queryLoadBom">
                 <div class="form-group">
-                    <label for="platforms">车型平台:</label>
-                    <input type="text" class="form-control" name="platforms" id="platforms" placeholder="请输入车型平台"/>
+                    <label for="td_part">总成零件号:</label>
+                    <input type="text" class="form-control" name="platforms" id="td_part" placeholder="请输入总成零件号" onfocus="focusQuery(this)"/>
                 </div>
                 <div class="form-group">
-                    <label for="modelnumber">车型项目编号:</label>
-                    <input type="text" class="form-control" name="modelnumber" id="modelnumber"
-                           placeholder="请输入车型项目编号"/>
+                    <label for="td_cfg">配置代码:</label>
+                    <input type="text" class="form-control" name="modelnumber" id="td_cfg" placeholder="请输入配置代码" onfocus="focusQuery(this)"/>
                 </div>
                 <div class="form-group">
-                    <label for="modelyear">车型年:</label>
-                    <input type="text" class="form-control" name="modelyear" id="modelyear" placeholder="请输入车型年"/>
+                    <label for="td_model">版型:</label>
+                    <input type="text" class="form-control" name="modelyear" id="td_model" placeholder="请输入版型" onfocus="focusQuery(this)"/>
                 </div>
                 <div class="form-group">
-                    <button type="button" id="searchBtn" onclick="" class="btn btn-primary">搜索</button>
+                    <label for="td_cfgmag">配置管理:</label>
+                    <input type="text" class="form-control" name="modelyear" id="td_cfgmag" placeholder="请输入配置管理" onfocus="focusQuery(this)"/>
+                </div>
+                <div class="form-group">
+                    <button type="button" id="searchBtn" onclick="query(this)" class="btn btn-primary">搜索</button>
                 </div>
             </form>
             <div class="content col-lg-12" style="overflow: auto;max-height: 550px">
@@ -48,9 +51,34 @@
 <script th:src="@{/js/helper/projectHelper.js}"></script>
 <script th:src="@{/js/stage/bom-all-cfg2.js}"></script>
 <script th:inline="javascript">
+    var focuseId = "";
+    var tdId = ""
     function doQuery() {
         $("#myButton").trigger('click');
         // $('#dataTable').bootstrapTable('refresh');    //刷新表格
+    }
+    
+    function focusQuery(self) {
+        focuseId = $(self).attr("id");
+    }
+    function query(but) {
+        if(tdId!=""){
+            $('#' + tdId).parent().css("background-color", "#ffffff");
+        }
+        tdId = focuseId+$("#"+focuseId).val();
+        // for(var i=0;i<4;i++){
+        //     var input = $(but).parent().parent().find("input:eq('"+i+"')");
+        //     var isFocus=$(input).is(":focus");
+        //     if(isFocus){
+        //         tdId = $(input).attr("id");
+        //         tdId+=$(input).val();
+        //         break;
+        //     }
+        // }
+
+        alert(tdId);
+        document.getElementById(tdId).scrollIntoView(true);
+        $('#' + tdId).parent().css("background-color", "red");
     }
 </script>
 </html>

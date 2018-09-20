@@ -152,7 +152,7 @@ function loadData(projectUid) {
                 "<th ><div style='width: 150px' >配置描述</div></th>" +
                 "<th ><div style='width: 150px' >配置代码</div></th>" +
                 "<th ><div style='width: 150px' >是否颜色件</div></th>" +
-                "<th ><div style='width: 150px' >标配/选配</div></th>" +
+                "<th ><div style='width: 150px' >备注</div></th>" +
                 "</tr>"
             ;
             $table.append(t);
@@ -171,9 +171,12 @@ function loadData(projectUid) {
                     if (index == "bomLinePuid") {
                         continue;
                     }
-                    if (aaa == 6) {
-                        delta = delta + "<td class='edit'><input type='text' value='" + dataOfModel[index] + "' style='display: none'><div style='width: 150px'>" + dataOfModel[index] + "</div></td>";
-                    } else if (aaa == 7) {
+                    // if (aaa == 6) {
+                    //     delta = delta + "<td class='edit'><input type='text' value='" + dataOfModel[index] + "' style='display: none'><div style='width: 150px'>" + dataOfModel[index] + "</div></td>";
+                    // } else
+                    if (aaa==2){
+                        delta = delta + "<td class='edit' id='td_part"+dataOfModel[index]+"'><div style='width: 150px;overflow: hidden' title='"+dataOfModel[index]+"'>" + dataOfModel[index] + "</div></td>";
+                    }else if (aaa == 7) {
                         var cfgSelect = "<select style='display: none;width: 83px'>";
                         cfgSelect += "<option></option>";
                         for (var j = 0; j < array.length; j++) {
@@ -186,7 +189,7 @@ function loadData(projectUid) {
                         }
                         cfgSelect += "</select>";
                         // delta = delta + "<td class='edit'><input type='text' value='"+dataOfModel[index]+"' style='display: none'><div style='width: 150px'>" + dataOfModel[index] + "</div></td>";
-                        delta = delta + "<td class='edit'>" + cfgSelect + "<div style='width: 150px'>" + dataOfModel[index] + "</div></td>";
+                        delta = delta + "<td class='edit' id='td_cfg"+dataOfModel[index]+"'>" + cfgSelect + "<div style='width: 150px'>" + dataOfModel[index] + "</div></td>";
                     }else if(aaa==8){
                         var colorPartId = "colorPart"+i;
                             delta+="<td class='edit'><div id='"+colorPartId+"'>"+dataOfModel[index]+"</div><select style='display: none'><option value='1'>Y</option><option value='0'>N</option></select></td>"
@@ -204,7 +207,7 @@ function loadData(projectUid) {
                     // else if(aaa>9){
                     // delta = delta + "<td class='edit'><select style='display: none'><option>-</option><option>●</option><option>○</option></select><div style='width: 150px'>" + dataOfModel[index] + "</div></td>";
                     else {
-                        delta = delta + "<td class='edit'><div style='width: 150px'>" + dataOfModel[index] + "</div></td>";
+                        delta = delta + "<td class='edit'><div style='width: 150px;overflow: hidden' title='"+dataOfModel[index]+"'>" + dataOfModel[index] + "</div></td>";
                     }
                     aaa++;
                 }
@@ -223,11 +226,11 @@ function loadData(projectUid) {
                 $("#tr2").append("<td ><div style='width: 200px'  >" + modeli.platform + "</div></td>");
                 //车型
                 $("#tr3").append("<td ><div style='width: 200px'  >" + modeli.vehicle + "</div></td>");
-                $("#tr4").append("<td ><div style='width: 200px'  ><a href='javascript:void(0);' onclick='Botton(\"" + v1 + "\")'>" + v0 + "</a></div></td>");
+                $("#tr4").append("<td id='td_model"+v0+"'><div style='width: 200px'  ><a href='javascript:void(0);' onclick='Botton(\"" + v1 + "\")'>" + v0 + "</a></div></td>");
                 $("#tr5").append("<td ><div style='width: 200px'  >" + modeli.pModelShape + "</div></td>");
                 $("#tr6").append("<td ><div style='width: 200px'  >" + modeli.pModelAnnouncement + "</div></td>");
                 $("#tr7").append("<td ><div style='width: 200px'  >" + modeli.pModelCfgDesc + "</div></td>");
-                $("#tr8").append("<td ><div style='width: 200px'  >" + modeli.pModelCfgMng + "</div></td>");
+                $("#tr8").append("<td id='td_cfgmag"+modeli.pModelCfgMng+"'><div style='width: 200px'  >" + modeli.pModelCfgMng + "</div></td>");
                 $("#tr9").append("<td ><div style='width: 200px'  >" + modeli.pModelTrailNum + "</div></td>");
                 $("#tr10").append("<td ><div style='width: 200px'  >" + modeli.pModelGoodsNum + "</div></td>");
                 $("#tr11").append("<td ><div style='width: 200px'  >" + "" + "</div></td>");
