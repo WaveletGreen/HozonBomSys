@@ -199,6 +199,7 @@ function loadData(projectUid) {
                             msgVal = "标配";
                         }
                         delta+="<td class='edit'><div id='"+messageId+"'>"+msgVal+"</div><select style='display: none'><option value='0'>选配</option><option value='1'>标配</option></select></td>";
+
                     }
                     // else if(aaa>9){
                     // delta = delta + "<td class='edit'><select style='display: none'><option>-</option><option>●</option><option>○</option></select><div style='width: 150px'>" + dataOfModel[index] + "</div></td>";
@@ -587,8 +588,15 @@ function editorOrSave(but) {
                         $(div).hide();
                         $(select).show();
                     }else if(index==10){
-                        $(item).find('select').show();
-                        $(item).find('div').hide();
+                        var select = $(item).find('select');
+                        var div = $(item).find('div');
+                        if($(div).text()=="选配"){
+                            $(select).val("0");
+                        }else{
+                            $(select).val("1");
+                        }
+                        $(select).show();
+                        $(div).hide();
                     }
                 })
 
