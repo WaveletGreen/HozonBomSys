@@ -306,7 +306,7 @@ public class HzBomAllCfgService {
 
 
         JSONObject mainJson = new JSONObject();
-        mainJson.put("stage", HzFullCfgMain.parseStage(hzFullCfgMain.getStage()));
+        mainJson.put("stage", hzFullCfgMain.getStage()==null?"":HzFullCfgMain.parseStage(hzFullCfgMain.getStage()));
         mainJson.put("version", hzFullCfgMain.getVersion() == null ? "" : hzFullCfgMain.getVersion());
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         mainJson.put("effectiveDate", hzFullCfgMain.getEffectiveDate() == null ? "" : sdf.format(hzFullCfgMain.getEffectiveDate()));
@@ -342,55 +342,14 @@ public class HzBomAllCfgService {
         if (hzFullCfgMain == null) {
             //为main新增一条信息
             BigDecimal mainPuid = addHzFullCfgMain(projectPuid, user);
-            //为model新增信息
-            addHzFullCfgModel(hzCfg0ModelRecords, hzBomLineRecords, user, mainPuid);
+            hzFullCfgMain.setId(mainPuid);
             //为withcfg新增数据
 //            addHzFullCfgWithCfg(hzCfg0Records, user, mainPuid);
             addHzFullCfgWithCfgForBomLine(hzBomLineRecords, user, mainPuid);
+            //为model新增信息
+            addHzFullCfgModel(hzCfg0ModelRecords, hzBomLineRecords, user, hzFullCfgMain);
         } else {
-            //判断model表是否为空，为空则添加数据
-            hzFullCfgModels = hzFullCfgModelDao.selectByMainPuid(hzFullCfgMain.getId());
-            if (hzFullCfgModels == null || hzFullCfgModels.size() == 0) {
-                addHzFullCfgModel(hzCfg0ModelRecords, hzBomLineRecords, user, hzFullCfgMain.getId());
-                //判断model表数据完整性
-            } else if (hzFullCfgModels.size() < (hzBomLineRecords.size() * hzCfg0ModelRecords.size())) {
-                //遍历所有的车辆模型
-                for (HzCfg0ModelRecord hzCfg0ModelRecord : hzCfg0ModelRecords) {
-                    //存放同一车辆模型数据据集合
-                    List<HzFullCfgModel> hzFullCfgModelsCheck = new ArrayList<HzFullCfgModel>();
-                    //遍历model表中数据，将同一车辆模型对象分开存放
-                    for (HzFullCfgModel hzFullCfgModel : hzFullCfgModels) {
-                        if (hzFullCfgModel.getModModelUid().equals(hzCfg0ModelRecord.getPuid())) {
-                            hzFullCfgModelsCheck.add(hzFullCfgModel);
-                        }
-                    }
-                    //判断同一车辆模型是否每个2Y都有值
-                    if (hzFullCfgModelsCheck.size() != hzBomLineRecords.size()) {
-                        //遍历特性数据，与model数据对比，如发现model中不存在某种特性则添加
-                        //存放model中不存在的特性
-                        List<HzBomLineRecord> hzBomLineRecordsChecck = new ArrayList<HzBomLineRecord>();
-                        for (HzBomLineRecord hzBomLineRecord : hzBomLineRecords) {
-                            //标志，如model中存在该特性则为true
-                            boolean flag = false;
-                            for (HzFullCfgModel hzFullCfgModel : hzFullCfgModelsCheck) {
-                                if (hzFullCfgModel.getFlModelBomlineUid().equals(hzBomLineRecord.getPuid())) {
-                                    flag = true;
-                                }
-                            }
-                            if (!flag) {
-                                hzBomLineRecordsChecck.add(hzBomLineRecord);
-                            }
-                        }
-                        //如果model中缺失特性，则新增该特性数据
-                        if (hzBomLineRecordsChecck.size() > 0) {
-                            List<HzCfg0ModelRecord> hzCfg0ModelRecordsInsert = new ArrayList<HzCfg0ModelRecord>();
-                            hzCfg0ModelRecordsInsert.add(hzCfg0ModelRecord);
-                            addHzFullCfgModel(hzCfg0ModelRecordsInsert, hzBomLineRecordsChecck, user, hzFullCfgMain.getId());
-                        }
-                    }
-                }
 
-            }
             //判断withcfg表是否为空，为空则添加数据
             hzFullCfgWithCfgs = hzFullCfgWithCfgDao.selectByMainID(hzFullCfgMain.getId());
 //            if(hzFullCfgModels==null||hzFullCfgWithCfgs.size()==0){
@@ -431,6 +390,49 @@ public class HzBomAllCfgService {
                 }
                 addHzFullCfgWithCfgForBomLine(hzBomLineRecordsInsert, user, hzFullCfgMain.getId());
             }
+            //判断model表是否为空，为空则添加数据
+            hzFullCfgModels = hzFullCfgModelDao.selectByMainPuid(hzFullCfgMain.getId());
+            if (hzFullCfgModels == null || hzFullCfgModels.size() == 0) {
+                addHzFullCfgModel(hzCfg0ModelRecords, hzBomLineRecords, user, hzFullCfgMain);
+                //判断model表数据完整性
+            } else if (hzFullCfgModels.size() < (hzBomLineRecords.size() * hzCfg0ModelRecords.size())) {
+                //遍历所有的车辆模型
+                for (HzCfg0ModelRecord hzCfg0ModelRecord : hzCfg0ModelRecords) {
+                    //存放同一车辆模型数据据集合
+                    List<HzFullCfgModel> hzFullCfgModelsCheck = new ArrayList<HzFullCfgModel>();
+                    //遍历model表中数据，将同一车辆模型对象分开存放
+                    for (HzFullCfgModel hzFullCfgModel : hzFullCfgModels) {
+                        if (hzFullCfgModel.getModModelUid().equals(hzCfg0ModelRecord.getPuid())) {
+                            hzFullCfgModelsCheck.add(hzFullCfgModel);
+                        }
+                    }
+                    //判断同一车辆模型是否每个2Y都有值
+                    if (hzFullCfgModelsCheck.size() != hzBomLineRecords.size()) {
+                        //遍历特性数据，与model数据对比，如发现model中不存在某种特性则添加
+                        //存放model中不存在的特性
+                        List<HzBomLineRecord> hzBomLineRecordsChecck = new ArrayList<HzBomLineRecord>();
+                        for (HzBomLineRecord hzBomLineRecord : hzBomLineRecords) {
+                            //标志，如model中存在该特性则为true
+                            boolean flag = false;
+                            for (HzFullCfgModel hzFullCfgModel : hzFullCfgModelsCheck) {
+                                if (hzFullCfgModel.getFlModelBomlineUid().equals(hzBomLineRecord.getPuid())) {
+                                    flag = true;
+                                }
+                            }
+                            if (!flag) {
+                                hzBomLineRecordsChecck.add(hzBomLineRecord);
+                            }
+                        }
+                        //如果model中缺失特性，则新增该特性数据
+                        if (hzBomLineRecordsChecck.size() > 0) {
+                            List<HzCfg0ModelRecord> hzCfg0ModelRecordsInsert = new ArrayList<HzCfg0ModelRecord>();
+                            hzCfg0ModelRecordsInsert.add(hzCfg0ModelRecord);
+                            addHzFullCfgModel(hzCfg0ModelRecordsInsert, hzBomLineRecordsChecck, user, hzFullCfgMain);
+                        }
+                    }
+                }
+
+            }
 
         }
     }
@@ -460,9 +462,10 @@ public class HzBomAllCfgService {
      * @param hzCfg0ModelRecords 所有的车辆模型集合
      * @param hzBomLineRecords   所有的2Y层集合
      * @param user               当前用户
-     * @param mainPuid           项目对应主表的ID
+     * @param hzFullCfgMain      主表对象
      */
-    private void addHzFullCfgModel(List<HzCfg0ModelRecord> hzCfg0ModelRecords, List<HzBomLineRecord> hzBomLineRecords, User user, BigDecimal mainPuid) {
+    private void addHzFullCfgModel(List<HzCfg0ModelRecord> hzCfg0ModelRecords, List<HzBomLineRecord> hzBomLineRecords, User user, HzFullCfgMain hzFullCfgMain) {
+        List<HzFullCfgWithCfg> hzFullCfgWithCfgs = hzFullCfgWithCfgDao.selectByMainID(hzFullCfgMain.getId());
         List<HzFullCfgModel> hzFullCfgModels = new ArrayList<HzFullCfgModel>();
         for (HzCfg0ModelRecord hzCfg0ModelRecord : hzCfg0ModelRecords) {
             for (HzBomLineRecord hzBomLineRecord : hzBomLineRecords) {
@@ -471,15 +474,38 @@ public class HzBomAllCfgService {
                 hzFullCfgModel.setModModelUid(hzCfg0ModelRecord.getPuid());
                 //2Y层id
                 hzFullCfgModel.setFlModelBomlineUid(hzBomLineRecord.getPuid());
-                //打点状态
-                String remark = hzBomLineRecord.getpRemark();
-                hzFullCfgModel.setModPointType((short) 0);
+                //根据版本、备注设置打点状态
+                String remark = "";
+                for(HzFullCfgWithCfg hzFullCfgWithCfg : hzFullCfgWithCfgs){
+                    if(hzFullCfgWithCfg.getCfgBomlineUid().equals(hzBomLineRecord.getPuid())){
+                        remark = hzFullCfgWithCfg.getFlComment();
+                        break;
+                    }
+                }
+                String version = hzFullCfgMain.getVersion();
+                String versionHeadStr = version.split("\\.")[0];
+                Integer versionHead = Integer.valueOf(versionHeadStr);
+                if(versionHead>=2){
+                    if("0".equals(remark)){
+                        //当备注为选配版本为2或以上打点图默认为空
+                    }else if("1".equals(remark)){
+                        hzFullCfgModel.setModPointType((short) 2);
+                    }
+                }else {
+                    if("0".equals(remark)){
+                        hzFullCfgModel.setModPointType((short) 1);
+                    }else if("1".equals(remark)){
+                        hzFullCfgModel.setModPointType((short) 2);
+                    }
+                }
+
+
                 //创建人
                 hzFullCfgModel.setFlModCreator(user.getLogin());
                 //最后修改人
                 hzFullCfgModel.setFlModLastUpdater(user.getLogin());
                 //版本
-                hzFullCfgModel.setFlModVersion(mainPuid);
+                hzFullCfgModel.setFlModVersion(hzFullCfgMain.getId());
                 hzFullCfgModels.add(hzFullCfgModel);
             }
         }

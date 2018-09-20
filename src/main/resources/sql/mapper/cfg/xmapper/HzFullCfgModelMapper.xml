@@ -207,7 +207,7 @@
         <foreach collection="list" index="index" item="hzFullCfgModel" separator="union">
             select
             #{hzFullCfgModel.modModelUid},
-            #{hzFullCfgModel.modPointType},
+            #{hzFullCfgModel.modPointType, jdbcType=VARCHAR},
             #{hzFullCfgModel.flModCreator},
             #{hzFullCfgModel.flModLastUpdater},
             #{hzFullCfgModel.flModVersion},
