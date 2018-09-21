@@ -6,33 +6,12 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="form-group">
-                    <label for="stage">阶段</label>
-                    <select class="form-control" id="stage" name="stage">
-                        <option th:selected="${entity.getStage()=='' or entity.getStage() ==null?true:false}"
-                                value=-1>无
-                        </option>
-                        <!--<option th:selected="${entity.getStage()=='P-x-P0阶段'?true:false}" value="P-x-P0阶段">P-x-P0阶段</option>-->
-                        <option th:selected="${entity.getStage()==1?true:false}" value=1>P0-P1阶段
-                        </option>
-                        <option th:selected="${entity.getStage()==2?true:false}" value=2>P1-P2阶段
-                        </option>
-                        <option th:selected="${entity.getStage()==3?true:false}" value=3>P2-P3阶段
-                        </option>
-                        <option th:selected="${entity.getStage()==4?true:false}" value=4>P3-P4阶段
-                        </option>
-                        <option th:selected="${entity.getStage()==5?true:false}" value=5>P4-P5阶段
-                        </option>
-                        <option th:selected="${entity.getStage()==6?true:false}" value=6>P5-P6阶段
-                        </option>
-                        <option th:selected="${entity.getStage()==7?true:false}" value=7>P6-P7阶段
-                        </option>
-                        <option th:selected="${entity.getStage()==8?true:false}" value=8>P7-P8阶段
-                        </option>
-                        <option th:selected="${entity.getStage()==0?true:false}" value=9>P8-P9阶段
-                        </option>
-                        <option th:selected="${entity.getStage()==10?true:false}" value=10>P9-P10阶段
-                        </option>
-                    </select>
+                    <div class="form-group">
+                        <label>阶段</label>
+                        <input class="form-control" th:value="${stageStr}"
+                               disabled="disabled"
+                        />
+                    </div>
                     <div class="form-group">
                         <label>更新版本</label>
                         <table>
@@ -40,7 +19,6 @@
                                 <td><input class="form-control col-md-7"
                                            th:value="${entity.getVersion().substring(0,entity.getVersion().indexOf('.'))}"
                                            id="version1" name="version1"
-                                           disabled="disabled"
                                 />
                                 </td>
                                 <td style="font-size: 32px">.</td>
