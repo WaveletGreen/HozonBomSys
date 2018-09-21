@@ -58,6 +58,8 @@ public class HzEbomRecordDAOImpl extends BaseSQLUtil implements HzEbomRecordDAO 
         Map<String,Object> map = new HashMap<>();
         map.put("projectId",query.getProjectId());
         map.put("puid",query.getPuid());
+        map.put("colorPart",query.getIsColorPart());
+        map.put("isCarPart",query.getIsColorPart());
         return super.findForList("HzEbomRecordDAOImpl_getHzBomLineChildren",map);
     }
 
@@ -134,6 +136,22 @@ public class HzEbomRecordDAOImpl extends BaseSQLUtil implements HzEbomRecordDAO 
         map.put("projectId",projectId);
         map.put("lineIndex",lineIndex);
         return (int)super.findForObject("HzEbomRecordDAOImpl_lineIndexRepeat",map)>0;
+    }
+
+    @Override
+    public List<HzEPLManageRecord> getAll2YBomRecord(String projectId,Integer colorPart) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("projectId",projectId);
+        map.put("colorPart",colorPart);
+        return super.findForList("HzEbomRecordDAOImpl_getAll2YBomRecord",map);
+    }
+
+    @Override
+    public List<HzEPLManageRecord> getSameNameLineId(String lineId, String projectId) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("lineId",lineId);
+        map.put("projectId",projectId);
+        return super.findForList("HzEbomRecordDAOImpl_getSameNameLineId",map);
     }
 
 }

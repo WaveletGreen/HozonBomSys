@@ -9,8 +9,8 @@ import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.page.PageRequest;
 import org.springframework.stereotype.Service;
 import sql.BaseSQLUtil;
-import sql.pojo.bom.HzBomLineRecord;
 import sql.pojo.bom.HzMbomLineRecord;
+import sql.pojo.bom.HzMbomLineRecordVO;
 import sql.pojo.bom.HzMbomRecord;
 
 import java.util.HashMap;
@@ -202,5 +202,13 @@ public class HzMbomRecordDAOImpl extends BaseSQLUtil implements HzMbomRecordDAO 
     @Override
     public List<HzMbomLineRecord> findHzMbomAll(String projectId) {
         return super.findForList("HzMbomRecordDAOImpl_findHzMbomAll",projectId);
+    }
+
+    @Override
+    public int insertVO(HzMbomLineRecordVO hzMbomLineRecordVO) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("tableName",hzMbomLineRecordVO.getTableName());
+        map.put("list",hzMbomLineRecordVO.getRecordList());
+        return super.insert("HzMbomRecordDAOImpl_insertVO",map);
     }
 }

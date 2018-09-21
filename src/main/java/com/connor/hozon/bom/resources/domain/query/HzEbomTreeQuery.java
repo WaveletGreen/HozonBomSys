@@ -16,6 +16,31 @@ public class HzEbomTreeQuery {
      */
     private String puid;
 
+    /**
+     * 是否哦颜色件
+     */
+    private Integer isColorPart;
+    /**
+     * 是否装车件
+     */
+    private Integer isCarPart;
+
+    public Integer getIsCarPart() {
+        return isCarPart;
+    }
+
+    public void setIsCarPart(Integer isCarPart) {
+        this.isCarPart = isCarPart;
+    }
+
+    public Integer getIsColorPart() {
+        return isColorPart;
+    }
+
+    public void setIsColorPart(Integer isColorPart) {
+        this.isColorPart = isColorPart;
+    }
+
     public String getPuid() {
         return puid;
     }

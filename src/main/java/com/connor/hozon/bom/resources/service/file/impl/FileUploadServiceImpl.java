@@ -317,13 +317,14 @@ public class FileUploadServiceImpl implements FileUploadService {
             }
         }catch (Exception e){
             try {
-                BigDecimal dec = new BigDecimal(ExcelUtil.getCell(row,28).getNumericCellValue());
-                pActualWeight =String.valueOf(dec.setScale(3, BigDecimal.ROUND_HALF_UP).doubleValue());
+                BigDecimal dec = new BigDecimal(ExcelUtil.getCell(row,44).getNumericCellValue());
+                number =String.valueOf(dec.setScale(3, BigDecimal.ROUND_HALF_UP).doubleValue());
             }catch (Exception e1){
                 number="";
             }
         }
 
+        String colorPart=ExcelUtil.getCell(row,45).getStringCellValue();
 
 
 
@@ -393,6 +394,10 @@ public class FileUploadServiceImpl implements FileUploadService {
         record.setpUpc(pUpc);
         record.setpUpdateName(UserInfo.getUser().getUserName());
         record.setLinePuid(UUID.randomUUID().toString());
+        if(colorPart!=null && !colorPart.equals(""))
+        record.setColorPart(colorPart.equals("Y")?1:0);
+        else
+        record.setColorPart(null);
         return record;
     }
 

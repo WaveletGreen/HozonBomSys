@@ -108,4 +108,14 @@ public interface HzMbomService {
 
 
     HzLouRespDTO getHzLouInfoById(HzLouaQuery query);
+
+    /**
+     * 获取超级MBOM信息
+     * @param query
+     * @return
+     */
+    Page<HzMbomRecordRespDTO> getSuperMbomRecordByPage(HzMbomByPageQuery query);
+
+
+    boolean refreshHzMbom(String projectId);
 }

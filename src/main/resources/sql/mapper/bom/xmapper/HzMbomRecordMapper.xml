@@ -798,4 +798,26 @@
         and P_MBOM_STATUS<![CDATA[ <> ]]>0
     </select>
 
+    <insert id="HzMbomRecordDAOImpl_insertVO" useGeneratedKeys="false" parameterType="java.util.HashMap">
+        insert  into ${tableName} (PUID,P_PARENT_UID,P_BOM_DIGIFAX_ID,P_BOM_PUID,
+        P_LINE_INDEX,P_BOM_LINE_IS_HAS,P_BOM_LINE_PUID,P_BOM_LINE_ID,P_BOM_LINE_IS_2Y,
+        P_BOM_LINE_IS_PART,P_BOM_LINE_IS_DEPT,P_BOM_OF_WHICH_DEPT,P_BOM_LINE_PART_NAME,
+        P_BOM_LINE_PART_CLASS,P_BOM_LINE_PART_EN_NAME,P_BOM_LINE_PART_RESOURCE,P_SORT_NUM,P_MBOM_STATUS,
+        P_CREATE_TIME, P_UPDATE_TIME, P_CREATE_NAME,
+        P_UPDATE_NAME)
+        <foreach collection="list" item="item" index="index" separator="UNION ALL">
+            select
+            #{item.puid,jdbcType=VARCHAR},#{item.parentUid,jdbcType=VARCHAR},
+            #{item.bomDigifaxId,jdbcType=VARCHAR},
+            #{item.eBomPuid,jdbcType=VARCHAR},
+            #{item.lineIndex,jdbcType=VARCHAR},
+            #{item.isHas,jdbcType=INTEGER},
+            #{item.linePuid,jdbcType=VARCHAR}, #{item.lineId,jdbcType=VARCHAR}, #{item.is2Y,jdbcType=INTEGER},
+            #{item.isPart,jdbcType=INTEGER}, #{item.isDept,jdbcType=INTEGER}, #{item.pBomOfWhichDept,jdbcType=VARCHAR},
+            #{item.pBomLinePartName,jdbcType=VARCHAR}, #{item.pBomLinePartClass,jdbcType=VARCHAR}, #{item.pBomLinePartEnName,jdbcType=VARCHAR},
+            #{item.pBomLinePartResource,jdbcType=VARCHAR},#{item.sortNum,jdbcType=VARCHAR},2,
+            sysdate, sysdate, #{item.createName,jdbcType=VARCHAR},#{item.updateName,jdbcType=VARCHAR}
+            from DUAL
+        </foreach>
+    </insert>
 </mapper>

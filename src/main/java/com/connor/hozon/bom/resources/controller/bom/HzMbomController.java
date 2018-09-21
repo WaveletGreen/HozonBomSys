@@ -295,6 +295,10 @@ public class HzMbomController extends BaseController {
        OperateResultMessageRespDTO respDTO =  hzMbomService.deleteMbomRecord(reqDTO);
         writeAjaxJSONResponse(ResultMessageBuilder.build(OperateResultMessageRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
     }
+    @RequestMapping(value = "1111",method = RequestMethod.GET)
+    public void getget(HttpServletResponse response){
+        hzMbomService.refreshHzMbom("1c128c60-84a2-4076-9b1c-f7093e56e4df");
+    }
 }
 
 

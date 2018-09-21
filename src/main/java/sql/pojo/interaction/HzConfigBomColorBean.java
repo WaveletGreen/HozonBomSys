@@ -37,4 +37,51 @@ public class HzConfigBomColorBean {
      */
     private String featureCode;
 
+    public String getBomLineUid() {
+        return bomLineUid;
+    }
+
+    public void setBomLineUid(String bomLineUid) {
+        this.bomLineUid = bomLineUid;
+    }
+
+    public String getColorCode() {
+        return colorCode;
+    }
+
+    public void setColorCode(String colorCode) {
+        this.colorCode = colorCode;
+    }
+
+    public String getColorModelUid() {
+        return colorModelUid;
+    }
+
+    public void setColorModelUid(String colorModelUid) {
+        this.colorModelUid = colorModelUid;
+    }
+
+    public String getColorModelDesc() {
+        return colorModelDesc;
+    }
+
+    public void setColorModelDesc(String colorModelDesc) {
+        this.colorModelDesc = colorModelDesc;
+    }
+
+    public String getFeatureValueCode() {
+        return featureValueCode;
+    }
+
+    public void setFeatureValueCode(String featureValueCode) {
+        this.featureValueCode = featureValueCode;
+    }
+
+    public String getFeatureCode() {
+        return featureCode;
+    }
+
+    public void setFeatureCode(String featureCode) {
+        this.featureCode = featureCode;
+    }
 }

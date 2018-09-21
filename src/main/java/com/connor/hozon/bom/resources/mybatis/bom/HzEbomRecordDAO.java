@@ -74,4 +74,14 @@ public interface HzEbomRecordDAO {
     boolean sortNumRepeat(String projectId,String sortNum);
 
     boolean lineIndexRepeat(String projectId,String lineIndex);
+
+    /**
+     * 查询全部的2Y层是否颜色件信息
+     * @param projectId
+     * @return
+     */
+    List<HzEPLManageRecord> getAll2YBomRecord(String projectId,Integer colorPart);
+
+
+    List<HzEPLManageRecord> getSameNameLineId(String lineId,String projectId);
 }

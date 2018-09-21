@@ -11,12 +11,12 @@ import com.connor.hozon.bom.resources.page.Page;
 public interface HzEPLManageRecordService {
     /**
      * 分页获取epl信息
-     * @param query
+     * @param
      * @return
      */
-    Page<HzEPLRecordRespDTO> getHzEPLRecordForPage(HzEPLByPageQuery query);
+//    Page<HzEPLRecordRespDTO> getHzEPLRecordForPage(HzEPLByPageQuery query);
 
-    JSONArray getEPLTittle(String projectId);
+//    JSONArray getEPLTittle(String projectId);
 
     String  getGroupNum(String projectId,String parentId);
 
