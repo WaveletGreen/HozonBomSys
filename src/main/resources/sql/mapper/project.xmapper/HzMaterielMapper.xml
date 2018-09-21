@@ -102,15 +102,19 @@
   </insert>
 
     <update id="updateByPrimaryKey" parameterType="sql.pojo.project.HzMaterielRecord">
-    update HZ_MATERIEL_RECORD
-    set P_MATERIEL_CODE = #{pMaterielCode,jdbcType=VARCHAR},
-      P_MATERIEL_TYPE = 'A006',
-      P_MATERIEL_WERK = #{pMaterielWerk,jdbcType=VARCHAR},
-      P_MATERIEL_DESC = #{pMaterielDesc,jdbcType=VARCHAR},
-      P_PERTAIN_TO_PROJECT_PUID = #{pPertainToProjectPuid,jdbcType=VARCHAR},
-      P_MATERIEL_DATA_TYPE = 11
-    where PUID = #{puid,jdbcType=VARCHAR}
-  </update>
+        update HZ_MATERIEL_RECORD
+        set P_MATERIEL_CODE = #{pMaterielCode,jdbcType=VARCHAR},
+        P_MATERIEL_TYPE = 'A006',
+        <if test="pMaterielWerk!=null">
+            P_MATERIEL_WERK = #{pMaterielWerk,jdbcType=VARCHAR},
+        </if>
+        <if test="pMaterielDesc!=null">
+            P_MATERIEL_DESC = #{pMaterielDesc,jdbcType=VARCHAR},
+        </if>
+        P_PERTAIN_TO_PROJECT_PUID = #{pPertainToProjectPuid,jdbcType=VARCHAR},
+        P_MATERIEL_DATA_TYPE = 11
+        where PUID = #{puid,jdbcType=VARCHAR}
+    </update>
 
     <!--编辑一条记录-->
     <update id="HzMaterialDAOImpl_update" parameterType="sql.pojo.project.HzMaterielRecord">
@@ -227,14 +231,14 @@
                 and P_MATERIEL_DATA_TYPE = #{pMaterielDataType,jdbcType=INTEGER}
             </if>
             <!--<if test="pMaterielDataType == null">-->
-                <!--and (P_MATERIEL_DATA_TYPE = 11-->
-                <!--or P_MATERIEL_DATA_TYPE =21-->
-                <!--or P_MATERIEL_DATA_TYPE =31-->
-                <!--or P_MATERIEL_DATA_TYPE =41-->
-                <!--or P_MATERIEL_DATA_TYPE =51-->
-                <!--or P_MATERIEL_DATA_TYPE =61-->
-                <!--or P_MATERIEL_DATA_TYPE =71-->
-                <!--or P_MATERIEL_DATA_TYPE =81)-->
+            <!--and (P_MATERIEL_DATA_TYPE = 11-->
+            <!--or P_MATERIEL_DATA_TYPE =21-->
+            <!--or P_MATERIEL_DATA_TYPE =31-->
+            <!--or P_MATERIEL_DATA_TYPE =41-->
+            <!--or P_MATERIEL_DATA_TYPE =51-->
+            <!--or P_MATERIEL_DATA_TYPE =61-->
+            <!--or P_MATERIEL_DATA_TYPE =71-->
+            <!--or P_MATERIEL_DATA_TYPE =81)-->
             <!--</if>-->
             <if test="pMaterielCode != null and pMaterielCode != '' ">
                 and P_MATERIEL_CODE like CONCAT(CONCAT('%',#{pMaterielCode,jdbcType=VARCHAR}),'%')
@@ -263,14 +267,14 @@
                 and P_MATERIEL_DATA_TYPE = #{pMaterielDataType,jdbcType=INTEGER}
             </if>
             <!--<if test="pMaterielDataType == null">-->
-                <!--and (P_MATERIEL_DATA_TYPE = 11 -->
-                <!--or P_MATERIEL_DATA_TYPE =21-->
-                <!--or P_MATERIEL_DATA_TYPE =31-->
-                <!--or P_MATERIEL_DATA_TYPE =41-->
-                <!--or P_MATERIEL_DATA_TYPE =51-->
-                <!--or P_MATERIEL_DATA_TYPE =61-->
-                <!--or P_MATERIEL_DATA_TYPE =71-->
-                <!--or P_MATERIEL_DATA_TYPE =81)-->
+            <!--and (P_MATERIEL_DATA_TYPE = 11 -->
+            <!--or P_MATERIEL_DATA_TYPE =21-->
+            <!--or P_MATERIEL_DATA_TYPE =31-->
+            <!--or P_MATERIEL_DATA_TYPE =41-->
+            <!--or P_MATERIEL_DATA_TYPE =51-->
+            <!--or P_MATERIEL_DATA_TYPE =61-->
+            <!--or P_MATERIEL_DATA_TYPE =71-->
+            <!--or P_MATERIEL_DATA_TYPE =81)-->
             <!--</if>-->
             <if test="pMaterielCode != null and pMaterielCode != '' ">
                 and P_MATERIEL_CODE like CONCAT(CONCAT('%',#{pMaterielCode,jdbcType=VARCHAR}),'%')
@@ -397,7 +401,6 @@
         where P_MATERIEL_RESOURCE_ID = #{materielResourceId,jdbcType=VARCHAR}
 
     </delete>
-
 
 
     <!--查找重复-->

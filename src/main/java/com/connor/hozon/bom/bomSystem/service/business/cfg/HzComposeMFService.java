@@ -323,7 +323,16 @@ public class HzComposeMFService {
         }
         HzCfg0ModelFeature feature = new HzCfg0ModelFeature();
         User user = UserInfo.getUser();
-        HzFactory factory = hzFactoryDAO.findFactory(null, hzComposeMFDTO.getFactoryCode());
+        /**
+         * 检索工厂
+         */
+        HzFactory factory = null;
+        if (checkString(hzComposeMFDTO.getFactoryCode())) {
+            factory = hzFactoryDAO.findFactory(null, hzComposeMFDTO.getFactoryCode());
+        } else {
+            //默认为1001
+            factory = hzFactoryDAO.findFactory(null, "1001");
+        }
         if (factory == null) {
             factory = new HzFactory();
             factory.setpFactoryCode(hzComposeMFDTO.getFactoryCode());
@@ -336,7 +345,22 @@ public class HzComposeMFService {
                 factory.setPuid(null);
             }
         }
-
+        /**
+         * 如果超级物料为空，则存储超级物料
+         */
+        HzMaterielRecord sm = hzSuperMaterielService.doSelectByProjectPuid(hzComposeMFDTO.getProjectUid());
+        if (null == sm) {
+            if (checkString(hzComposeMFDTO.getSuperMateriel())) {
+                sm = new HzMaterielRecord();
+                sm.setpMaterielCode(hzComposeMFDTO.getSuperMateriel());
+                sm.setPuid(UUIDHelper.generateUpperUid());
+                sm.setpFactoryPuid(factory.getPuid());
+                sm.setpPertainToProjectPuid(hzComposeMFDTO.getProjectUid());
+                if (!hzSuperMaterielService.doInsertOne(sm)) {
+                    logger.error("存储超级物料失败");
+                }
+            }
+        }
 
         feature.setpFeatureSingleVehicleCode(modelDetail.getpModelCfgMng().replace("**", modelColor.getpModelShellOfColorfulModel()));
         feature.setpFeatureCnDesc(hzComposeMFDTO.getpCfg0ModelBasicDetail());
@@ -475,7 +499,7 @@ public class HzComposeMFService {
         HzDerivativeMaterielDetail detail = new HzDerivativeMaterielDetail();
         List<Map<String, Object>> list = new ArrayList<>();
         HzMaterielRecord superMateriel = hzSuperMaterielService.doSelectByProjectPuid(projectUid);
-
+        Map<String, HzFactory> mapOffactories = new HashMap<>();//
         for (int i = 0; i < basics.size(); i++) {
             detail.setDmdDmbId(basics.get(i).getId());
             //详情
@@ -498,10 +522,21 @@ public class HzComposeMFService {
             } else {
                 _result.put("superMateriel", "");
             }
+            if (!mapOffactories.containsKey(feature.getFactoryCode())) {
+                HzFactory factory = hzFactoryDAO.findFactory(feature.getFactoryCode(), null);
+                if (factory == null) {
+                    factory = new HzFactory();
+                    factory.setPuid(feature.getFactoryCode());
+                    factory.setpFactoryCode("");
+                }
+                mapOffactories.put(factory.getPuid(), factory);
+            }
+            _result.put("factory", mapOffactories.get(feature.getFactoryCode()).getpFactoryCode());
+
             _result.put("puid", feature.getpPertainToModel());
             _result.put("basicId", basics.get(i).getId());
             _result.put("puidOfModelFeature", feature.getPuid());
-            _result.put("factory", feature.getFactoryCode());
+//            _result.put("factory", feature.getFactoryCode());
             _result.put("modeBasicDetail", feature.getpFeatureSingleVehicleCode());
             _result.put("modeBasicDetailDesc", feature.getpFeatureCnDesc());
             _result.put("cfg0MainPuid", modelRecord.getpCfg0ModelOfMainRecord());

@@ -1,5 +1,6 @@
 package com.connor.hozon.bom.bomSystem.dao.impl.cfg0;
 
+import com.connor.hozon.bom.bomSystem.bean.HzExFullCfgWithCfg;
 import com.connor.hozon.bom.bomSystem.dao.cfg.HzFullCfgWithCfgDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -85,7 +86,30 @@ public class HzFullCfgWithCfgDaoImpl implements HzFullCfgWithCfgDao {
 
     @Override
     public HzFullCfgWithCfg query2YCfgByBomLineId(String bomLineId) {
-        return baseSQLUtil.executeQueryByPass(new HzFullCfgWithCfg(), bomLineId,"com.connor.hozon.bom.bomSystem.dao.cfg.HzFullCfgWithCfgDao.query2YCfgByBomLineId",true);
+        return baseSQLUtil.executeQueryByPass(new HzFullCfgWithCfg(), bomLineId, "com.connor.hozon.bom.bomSystem.dao.cfg.HzFullCfgWithCfgDao.query2YCfgByBomLineId", true);
+    }
+
+    @Override
+    public HzExFullCfgWithCfg selectByBLOutWithCfg(BigDecimal version, String puid) {
+        HzExFullCfgWithCfg cfg = new HzExFullCfgWithCfg();
+        cfg.setFlCfgVersion(version);
+        cfg.setCfgBomlineUid(puid);
+        return baseSQLUtil.executeQueryById(cfg, "com.connor.hozon.bom.bomSystem.dao.cfg.HzFullCfgWithCfgDao.selectByBLOutWithCfg");
+    }
+
+    /**
+     * 根据2Y和全配主键一起查询，连带出特性值对象和BOMLine对象
+     *
+     * @param version
+     * @param puid
+     * @return
+     */
+    @Override
+    public HzExFullCfgWithCfg selectByBLOutWithCfgAndBL(BigDecimal version, String puid) {
+        HzExFullCfgWithCfg cfg = new HzExFullCfgWithCfg();
+        cfg.setFlCfgVersion(version);
+        cfg.setCfgBomlineUid(puid);
+        return baseSQLUtil.executeQueryById(cfg, "com.connor.hozon.bom.bomSystem.dao.cfg.HzFullCfgWithCfgDao.selectByBLOutWithCfgAndBL");
     }
 
 

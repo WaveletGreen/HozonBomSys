@@ -157,7 +157,7 @@
 
     function xsearch2() {
         let el = $('#feature').val();
-        if ($("#" + el)) {
+        if ($("#" + el) && document.getElementById(el)) {
             document.getElementById(el).scrollIntoView(true);
             if (temp != null || temp != undefined || temp != "") {
                 if (temp != el) {

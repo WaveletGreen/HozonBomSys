@@ -3,6 +3,7 @@ package com.connor.hozon.bom.bomSystem.service.cfg;
 import com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0ModelColorDao;
 import com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0OptionFamilyDao;
 import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
+import com.connor.hozon.bom.bomSystem.option.SpecialFeatureOption;
 import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.sys.entity.User;
 import net.sf.json.JSONObject;
@@ -14,6 +15,7 @@ import sql.pojo.cfg.*;
 import sql.redis.SerializeUtil;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * User: Fancyears·Maylos·Mayways
@@ -195,8 +197,11 @@ public class HzCfg0ModelColorService {
         User user = UserInfo.getUser();
         Map<String, Object> result = new HashMap<>();
         List<HzCfg0ModelColor> colorSet = hzCfg0ModelColorDao.selectAll(projectPuid);
-        List<HzCfg0OptionFamily> familiesNew = hzCfg0OptionFamilyService.getFamilies(projectPuid, 0, 1);//hzCfg0OptionFamilyDao.selectNameByMainId2(projectPuid);
-        List<String> column = hzCfg0OptionFamilyService.getColumnNewWithFamilies(familiesNew, "<br/>");
+        List<HzCfg0OptionFamily> familiesNewFromDb = hzCfg0OptionFamilyService.selectForColorBluePrint(projectPuid, 1);//.getFamilies(projectPuid, 0, 1);//hzCfg0OptionFamilyDao.selectNameByMainId2(projectPuid);
+        List<HzCfg0OptionFamily> familiesNew = new ArrayList<>();
+        familiesNew.addAll(familiesNewFromDb.stream().filter(c -> false == SpecialFeatureOption.YQCSCODE.getDesc().equals(c.getpOptionfamilyName()))
+                .collect(Collectors.toList()));
+        //.forEach(c -> mapWithColor.put(c.getPuid(), c));
         HzCfg0MainRecord mainRecord = hzCfg0MainService.doGetbyProjectPuid(projectPuid);
         /**
          * 用于筛选颜色集
@@ -391,8 +396,9 @@ public class HzCfg0ModelColorService {
         } else {
             List<HzCfg0OptionFamily> withColor = hzCfg0OptionFamilyService.selectForColorBluePrint(projectUid, 1);
             List<HzCfg0OptionFamily> withoutColor = hzCfg0OptionFamilyService.selectForColorBluePrint(projectUid, 0);
-            Map<String, HzCfg0OptionFamily> mapWithColor = new HashMap<>();
-            withColor.forEach(c -> mapWithColor.put(c.getPuid(), c));
+            Map<String, HzCfg0OptionFamily> mapWithColor = new LinkedHashMap<>();
+            withColor.stream().filter(c -> false == SpecialFeatureOption.YQCSCODE.getDesc().equals(c.getpOptionfamilyName()))
+                    .collect(Collectors.toList()).forEach(c -> mapWithColor.put(c.getPuid(), c));
             for (int i = 0; i < withoutColor.size(); i++) {
                 if (mapWithColor.containsKey(withoutColor.get(i).getPuid())) {
                     List<HzCfg0Record> list = hzCfg0Service.doSelectByFamilyUidWithProject(withoutColor.get(i).getPuid(), projectUid);
@@ -402,17 +408,18 @@ public class HzCfg0ModelColorService {
                 }
             }
             if (error.size() > 0) {
-                object.put("status", false);
-                object.put("entity", error);
+                object.put("status", 0);
+                object.put("msg", error);
                 return object;
             } else {
                 column = new ArrayList<>();
-                withColor.forEach(c -> column.add(c.getpOptionfamilyDesc() + "<br>" + c.getpOptionfamilyName()));
+                mapWithColor.forEach((key, value) -> column.add(value.getpOptionfamilyDesc() + "<br>" + value.getpOptionfamilyName()));
             }
             if (column == null || column.size() <= 0) {
-                object.put("status", false);
+                object.put("status", 1);
+                object.put("msg", "没有找到特性");
             } else {
-                object.put("status", true);
+                object.put("status", 99);
                 object.put("data", column);
             }
         }

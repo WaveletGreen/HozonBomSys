@@ -5,6 +5,7 @@
 <form class="form-horizontal" id="form" role="form" method="post" th:action="${action}">
     <fieldset>
         <input id="puid" name="puid" type="hidden" th:value="${entity.puid}"/>
+        <input id="projectUid" name="projectUid" type="hidden" th:value="${projectUid}"/>
         <input id="modelFeaturePuid" name="modelFeaturePuid" type="hidden" th:value="${modelFeature.puid}"/>
         <div id="legend" class="">
             <legend class="">更新车型模型详细信息</legend>
@@ -16,12 +17,12 @@
                    disabled="disabled" th:value="${entity.objectName}"
             />
         </div>
-        <div class="form-group col-lg-12">
-            <label for="objectDesc">模型描述</label>
-            <input class="form-control" id="objectDesc" name="objectDesc" type="text"
-                   disabled="disabled" th:value="${entity.objectDesc}"
-            />
-        </div>
+        <!--<div class="form-group col-lg-12">-->
+        <!--<label for="objectDesc">模型描述</label>-->
+        <!--<input class="form-control" id="objectDesc" name="objectDesc" type="text"-->
+        <!--disabled="disabled" th:value="${entity.objectDesc}"-->
+        <!--/>-->
+        <!--</div>-->
         <div class="form-group col-lg-12">
             <label for="pFeatureSingleVehicleCode">基本信息代码</label>
             <input class="form-control" id="pFeatureSingleVehicleCode" name="pFeatureSingleVehicleCode" type="text"
@@ -35,159 +36,166 @@
                    th:value="${modelFeature.getpFeatureCnDesc()}"
             />
         </div>
+        <div class="form-group col-lg-12">
+            <label for="superMateriel">超级物料号</label>
+            <input class="form-control" id="superMateriel" name="superMateriel" type="text"
+                   placeholder="请超级物料号" th:value="${superMateriel}"
+            />
+            <!--th:disabled="${model.superMateriel==null}"-->
+        </div>
         <!--<div class="form-group col-lg-10">-->
         <!--<label for="pFeatureCnDesc">中文描述</label>-->
         <!--<input class="form-control" id="pFeatureCnDesc" name="pFeatureCnDesc" type="text" type="hidden"-->
         <!--disabled="disabled"-->
         <!--th:value="${modelFeature.getpFeatureCnDesc()}"-->
         <!--/>-->
-        <div class="form-group col-lg-10">
+        <div class="form-group col-lg-12">
             <label for="factoryCode">工厂</label>
             <input class="form-control" id="factoryCode" name="factoryCode" type="text"
                    th:value="${modelFeature.getFactoryCode()}"
             />
         </div>
-        <div class="form-group col-lg-10">
-            <label for="materialCode">物料编码</label>
-            <input class="form-control" id="materialCode" name="materialCode" type="text"
-                   th:value="${modelFeature.getMaterialCode()}"
-            />
-        </div>
-        <div class="form-group col-lg-10">
-            <label for="oldMaterielCode">旧物料编码</label>
-            <input class="form-control" id="oldMaterielCode" name="oldMaterielCode" type="text"
-                   th:value="${modelFeature.getOldMaterielCode()}"
-            />
-        </div>
-        <div class="form-group col-lg-10">
-            <label for="materielDesc">物料中文描述</label>
-            <input class="form-control" id="materielDesc" name="materielDesc" type="text"
-                   th:value="${modelFeature.getMaterielDesc()}"
-            />
-        </div>
-        <div class="form-group col-lg-10">
-            <label for="materielEnDesc">物料英文描述</label>
-            <input class="form-control" id="materielEnDesc" name="materielEnDesc" type="text"
-                   th:value="${modelFeature.getMaterielEnDesc()}"
-            />
-        </div>
-        <div class="form-group col-lg-10">
-            <label for="basicCountUnit">基本计量单位*</label>
-            <input class="form-control" id="basicCountUnit" name="basicCountUnit" type="text"
-                   th:value="${modelFeature.getBasicCountUnit()}"
-            />
-        </div>
-        <div class="form-group col-lg-10">
-            <label for="materielType">物料类型*</label>
-            <input class="form-control" id="materielType" name="materielType" type="text" disabled="disabled"
-                   th:value="${modelFeature.getMaterielType()}"
-            />
-        </div>
-        <div class="form-group col-lg-10">
-            <label for="virtualFlag">虚拟件标示*</label>
-            <select class="form-control input-small" data-style="btn-info"
-                    id="virtualFlag" name="virtualFlag">
-                <option th:value="0" th:text="否"
-                        th:selected="${modelFeature.getVirtualFlag()==0 or modelFeature.getVirtualFlag()==null?true:false}">
-                </option>
-                <option th:value="1" th:text="是" th:selected="${modelFeature.getVirtualFlag()==1?true:false}">
-                </option>
-            </select>
-        </div>
-        <div class="form-group col-lg-10">
-            <label for="purchaseType">采购类型*</label>
-            <select class="form-control input-small" data-style="btn-info"
-                    id="purchaseType" name="purchaseType">
-                <option th:value="E" th:text="E" th:selected="${modelFeature.getPurchaseType()=='E'?true:false}">
-                </option>
-                <option th:value="F" th:text="F" th:selected="${modelFeature.getPurchaseType()=='F'?true:false}">
-                </option>
-                <option th:value="X" th:text="X" th:selected="${modelFeature.getPurchaseType()=='X'?true:false}">
-                </option>
-                <option value="-" text="-"></option>
-            </select>
-        </div>
-        <div class="form-group col-lg-10">
-            <label for="vinCode">VIN前置号</label>
-            <input class="form-control" id="vinCode" name="vinCode" type="text"
-                   th:value="${modelFeature.getVinCode()}"
-            />
-        </div>
-        <div class="form-group col-lg-10">
-            <label for="color">颜色件标识</label>
-            <select class="form-control input-small" data-style="btn-info"
-                    id="color" name="color">
-                <option th:value="0" th:text="N"
-                        th:selected="${modelFeature.getColor()==0 or modelFeature.getColor()==null?true:false}">
-                </option>
-                <option th:value="1" th:text="Y" th:selected="${modelFeature.getLabelFlag()==1?true:false}">
-                </option>
-            </select>
-        </div>
-        <div class="form-group col-lg-10">
-            <label for="grossWeight">毛重</label>
-            <input class="form-control" id="grossWeight" name="grossWeight" type="text"
-                   th:value="${modelFeature.getGrossWeight()}"
-            />
-        </div>
-        <div class="form-group col-lg-10">
-            <label for="labelFlag">内外饰标识</label>
-            <select class="form-control input-small" data-style="btn-info"
-                    id="labelFlag" name="labelFlag">
-                <option th:value="0" th:text="N"
-                        th:selected="${modelFeature.getLabelFlag()==0 or modelFeature.getLabelFlag()==null?true:false}">
-                </option>
-                <option th:value="1" th:text="Y" th:selected="${modelFeature.getLabelFlag()==1?true:false}">
-                </option>
-            </select>
-        </div>
-        <div class="form-group col-lg-10">
-            <label for="rulesFlag">3C件标识</label>
-            <select class="form-control input-small" data-style="btn-info"
-                    id="rulesFlag" name="rulesFlag">
-                <option th:value="0" th:text="N"
-                        th:selected="${modelFeature.getRulesFlag()==0 or modelFeature.getRulesFlag()==null?true:false}">
-                </option>
-                <option th:value="1" th:text="Y" th:selected="${modelFeature.getRulesFlag()==1?true:false}">
-                </option>
-            </select>
-        </div>
-        <div class="form-group col-lg-10">
-            <label for="importance">零件重要度</label>
-            <select class="form-control input-small" data-style="btn-info"
-                    id="importance" name="importance">
-                <option th:value="0" th:text="N"
-                        th:selected="${modelFeature.getImportance()==0 or modelFeature.getImportance()==null?true:false}">
-                </option>
-                <option th:value="1" th:text="Y" th:selected="${modelFeature.getImportance()==1?true:false}">
-                </option>
-            </select>
-        </div>
-        <div class="form-group col-lg-10">
-            <label for="deleteFlag">删除标示</label>
-            <select class="form-control input-small" data-style="btn-info"
-                    id="deleteFlag" name="deleteFlag">
-                <option th:value="0" th:text="N"
-                        th:selected="${modelFeature.getDeleteFlag()==0 or modelFeature.getDeleteFlag()==null?true:false}">
-                </option>
-                <option th:value="1" th:text="Y"
-                        th:selected="${modelFeature.getDeleteFlag()==1?true:false}">
-                </option>
-            </select>
-        </div>
-        <div class="form-group col-lg-10">
-            <label for="mrpController">MRP控制者*</label>
-            <input class="form-control" id="mrpController" name="mrpController" type="text"
-                   th:value="${modelFeature.getMrpController()}"
-            />
-        </div>
+        <!--<div class="form-group col-lg-10">-->
+        <!--<label for="materialCode">物料编码</label>-->
+        <!--<input class="form-control" id="materialCode" name="materialCode" type="text"-->
+        <!--th:value="${modelFeature.getMaterialCode()}"-->
+        <!--/>-->
+        <!--</div>-->
+        <!--<div class="form-group col-lg-10">-->
+        <!--<label for="oldMaterielCode">旧物料编码</label>-->
+        <!--<input class="form-control" id="oldMaterielCode" name="oldMaterielCode" type="text"-->
+        <!--th:value="${modelFeature.getOldMaterielCode()}"-->
+        <!--/>-->
+        <!--</div>-->
+        <!--<div class="form-group col-lg-10">-->
+        <!--<label for="materielDesc">物料中文描述</label>-->
+        <!--<input class="form-control" id="materielDesc" name="materielDesc" type="text"-->
+        <!--th:value="${modelFeature.getMaterielDesc()}"-->
+        <!--/>-->
+        <!--</div>-->
+        <!--<div class="form-group col-lg-10">-->
+        <!--<label for="materielEnDesc">物料英文描述</label>-->
+        <!--<input class="form-control" id="materielEnDesc" name="materielEnDesc" type="text"-->
+        <!--th:value="${modelFeature.getMaterielEnDesc()}"-->
+        <!--/>-->
+        <!--</div>-->
+        <!--<div class="form-group col-lg-10">-->
+        <!--<label for="basicCountUnit">基本计量单位*</label>-->
+        <!--<input class="form-control" id="basicCountUnit" name="basicCountUnit" type="text"-->
+        <!--th:value="${modelFeature.getBasicCountUnit()}"-->
+        <!--/>-->
+        <!--</div>-->
+        <!--<div class="form-group col-lg-10">-->
+        <!--<label for="materielType">物料类型*</label>-->
+        <!--<input class="form-control" id="materielType" name="materielType" type="text" disabled="disabled"-->
+        <!--th:value="${modelFeature.getMaterielType()}"-->
+        <!--/>-->
+        <!--</div>-->
+        <!--<div class="form-group col-lg-10">-->
+        <!--<label for="virtualFlag">虚拟件标示*</label>-->
+        <!--<select class="form-control input-small" data-style="btn-info"-->
+        <!--id="virtualFlag" name="virtualFlag">-->
+        <!--<option th:value="0" th:text="否"-->
+        <!--th:selected="${modelFeature.getVirtualFlag()==0 or modelFeature.getVirtualFlag()==null?true:false}">-->
+        <!--</option>-->
+        <!--<option th:value="1" th:text="是" th:selected="${modelFeature.getVirtualFlag()==1?true:false}">-->
+        <!--</option>-->
+        <!--</select>-->
+        <!--</div>-->
+        <!--<div class="form-group col-lg-10">-->
+        <!--<label for="purchaseType">采购类型*</label>-->
+        <!--<select class="form-control input-small" data-style="btn-info"-->
+        <!--id="purchaseType" name="purchaseType">-->
+        <!--<option th:value="E" th:text="E" th:selected="${modelFeature.getPurchaseType()=='E'?true:false}">-->
+        <!--</option>-->
+        <!--<option th:value="F" th:text="F" th:selected="${modelFeature.getPurchaseType()=='F'?true:false}">-->
+        <!--</option>-->
+        <!--<option th:value="X" th:text="X" th:selected="${modelFeature.getPurchaseType()=='X'?true:false}">-->
+        <!--</option>-->
+        <!--<option value="-" text="-"></option>-->
+        <!--</select>-->
+        <!--</div>-->
+        <!--<div class="form-group col-lg-10">-->
+        <!--<label for="vinCode">VIN前置号</label>-->
+        <!--<input class="form-control" id="vinCode" name="vinCode" type="text"-->
+        <!--th:value="${modelFeature.getVinCode()}"-->
+        <!--/>-->
+        <!--</div>-->
+        <!--<div class="form-group col-lg-10">-->
+        <!--<label for="color">颜色件标识</label>-->
+        <!--<select class="form-control input-small" data-style="btn-info"-->
+        <!--id="color" name="color">-->
+        <!--<option th:value="0" th:text="N"-->
+        <!--th:selected="${modelFeature.getColor()==0 or modelFeature.getColor()==null?true:false}">-->
+        <!--</option>-->
+        <!--<option th:value="1" th:text="Y" th:selected="${modelFeature.getLabelFlag()==1?true:false}">-->
+        <!--</option>-->
+        <!--</select>-->
+        <!--</div>-->
+        <!--<div class="form-group col-lg-10">-->
+        <!--<label for="grossWeight">毛重</label>-->
+        <!--<input class="form-control" id="grossWeight" name="grossWeight" type="text"-->
+        <!--th:value="${modelFeature.getGrossWeight()}"-->
+        <!--/>-->
+        <!--</div>-->
+        <!--<div class="form-group col-lg-10">-->
+        <!--<label for="labelFlag">内外饰标识</label>-->
+        <!--<select class="form-control input-small" data-style="btn-info"-->
+        <!--id="labelFlag" name="labelFlag">-->
+        <!--<option th:value="0" th:text="N"-->
+        <!--th:selected="${modelFeature.getLabelFlag()==0 or modelFeature.getLabelFlag()==null?true:false}">-->
+        <!--</option>-->
+        <!--<option th:value="1" th:text="Y" th:selected="${modelFeature.getLabelFlag()==1?true:false}">-->
+        <!--</option>-->
+        <!--</select>-->
+        <!--</div>-->
+        <!--<div class="form-group col-lg-10">-->
+        <!--<label for="rulesFlag">3C件标识</label>-->
+        <!--<select class="form-control input-small" data-style="btn-info"-->
+        <!--id="rulesFlag" name="rulesFlag">-->
+        <!--<option th:value="0" th:text="N"-->
+        <!--th:selected="${modelFeature.getRulesFlag()==0 or modelFeature.getRulesFlag()==null?true:false}">-->
+        <!--</option>-->
+        <!--<option th:value="1" th:text="Y" th:selected="${modelFeature.getRulesFlag()==1?true:false}">-->
+        <!--</option>-->
+        <!--</select>-->
+        <!--</div>-->
+        <!--<div class="form-group col-lg-10">-->
+        <!--<label for="importance">零件重要度</label>-->
+        <!--<select class="form-control input-small" data-style="btn-info"-->
+        <!--id="importance" name="importance">-->
+        <!--<option th:value="0" th:text="N"-->
+        <!--th:selected="${modelFeature.getImportance()==0 or modelFeature.getImportance()==null?true:false}">-->
+        <!--</option>-->
+        <!--<option th:value="1" th:text="Y" th:selected="${modelFeature.getImportance()==1?true:false}">-->
+        <!--</option>-->
+        <!--</select>-->
+        <!--</div>-->
+        <!--<div class="form-group col-lg-10">-->
+        <!--<label for="deleteFlag">删除标示</label>-->
+        <!--<select class="form-control input-small" data-style="btn-info"-->
+        <!--id="deleteFlag" name="deleteFlag">-->
+        <!--<option th:value="0" th:text="N"-->
+        <!--th:selected="${modelFeature.getDeleteFlag()==0 or modelFeature.getDeleteFlag()==null?true:false}">-->
+        <!--</option>-->
+        <!--<option th:value="1" th:text="Y"-->
+        <!--th:selected="${modelFeature.getDeleteFlag()==1?true:false}">-->
+        <!--</option>-->
+        <!--</select>-->
+        <!--</div>-->
+        <!--<div class="form-group col-lg-10">-->
+        <!--<label for="mrpController">MRP控制者*</label>-->
+        <!--<input class="form-control" id="mrpController" name="mrpController" type="text"-->
+        <!--th:value="${modelFeature.getMrpController()}"-->
+        <!--/>-->
+        <!--</div>-->
 
-        <div class="form-group col-lg-10">
-            <label for="bulletinNum">公告号(BOM没加)*</label>
-            <input class="form-control" id="bulletinNum" name="bulletinNum" type="text"
-                   th:value="${modelFeature.getBulletinNum()}"
-            />
-        </div>
+        <!--<div class="form-group col-lg-10">-->
+        <!--<label for="bulletinNum">公告号(BOM没加)*</label>-->
+        <!--<input class="form-control" id="bulletinNum" name="bulletinNum" type="text"-->
+        <!--th:value="${modelFeature.getBulletinNum()}"-->
+        <!--/>-->
+        <!--</div>-->
         <!--<div class="form-group col-lg-10">-->
         <!--<label for="pFeatureSingleVehicleCode">单车配置码</label>-->
         <!--<input class="form-control" id="pFeatureSingleVehicleCode" name="pFeatureSingleVehicleCode" type="text"-->
@@ -215,8 +223,11 @@
             // if (bootstrapValidator.isValid()) {
             var url = $("#form", window.top.document).attr('action');
             var data = {};
-            url += "?";
-            url += "puid=" + $("#puid").val() + "&pCfg0ModelBasicDetail=" + $("#pCfg0ModelBasicDetail").val()
+            url += "?" +
+                "puid=" + $("#puid").val() +
+                "&pCfg0ModelBasicDetail=" + $("#pCfg0ModelBasicDetail").val() +
+                "&projectUid=" + $("#projectUid").val() +
+                "&superMateriel=" + $("#superMateriel").val()
             ;
             var _d = $("#form").serializeArray();
             for (var p in _d) {
@@ -224,6 +235,7 @@
             }
             data.puid = $("#puid").val();
             data.pCfg0ModelBasicDetail = $("#pCfg0ModelBasicDetail").val();
+            console.log(data);
             $.ajax({
                 contentType:
                     "application/json",
@@ -237,12 +249,12 @@
                         $('body', window.top.document).find('.modal-backdrop').remove();
                         // jquery 调用刷新当前操作的table页面的refresh方法
                         $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
-                        if (result) {
-                            layer.msg('修改数据成功!', {icon: 1, time: 2000})
+                        if (result.status) {
+                            layer.msg(result.msg, {icon: 1, time: 2000})
                             // window.Ewin.alert({message: '修改数据成功!'});
                         }
                         else {
-                            window.Ewin.alert({message: '修改数据失败!'});
+                            window.Ewin.alert({message: result.msg});
                         }
 
                     },

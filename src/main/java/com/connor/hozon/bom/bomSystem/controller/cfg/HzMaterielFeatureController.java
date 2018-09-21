@@ -11,10 +11,14 @@ import com.connor.hozon.bom.bomSystem.service.integrate.SynMaterielService;
 import com.connor.hozon.bom.bomSystem.service.iservice.cfg.IHzCfg0ModelFeatureService;
 import com.connor.hozon.bom.bomSystem.service.project.*;
 import com.connor.hozon.bom.common.base.entity.QueryBase;
+import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.resources.mybatis.factory.HzFactoryDAO;
+import com.connor.hozon.bom.sys.entity.User;
 import integration.option.ActionFlagOption;
 import net.sf.json.JSON;
 import net.sf.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -106,6 +110,8 @@ public class HzMaterielFeatureController extends ExtraIntegrate {
 
     @Autowired
     HzBomAllCfgService hzBomAllCfgService;
+
+    private static Logger logger = LoggerFactory.getLogger(HzMaterielFeatureController.class);
 
     /**
      * 根据项目的puid，获取到配置物料特性表的列设置
@@ -307,7 +313,7 @@ public class HzMaterielFeatureController extends ExtraIntegrate {
      * @return
      */
     @RequestMapping("/modifyPage")
-    public String modPage(@RequestParam String puid, @RequestParam String puidOfModelFeature, @RequestParam String page, Model model) {
+    public String modPage(@RequestParam String projectUid, @RequestParam String puid, @RequestParam String puidOfModelFeature, @RequestParam String page, Model model) {
         //啥也不做
         if (page == null || puid == null)
             ;
@@ -323,8 +329,14 @@ public class HzMaterielFeatureController extends ExtraIntegrate {
             //没有找到
             if (hzCfg0ModelFeature == null)
                 hzCfg0ModelFeature = new HzCfg0ModelFeature();
+
+            HzMaterielRecord sm = hzSuperMaterielService.doSelectByProjectPuid(projectUid);
+
+
             model.addAttribute("entity", modelRecord);
             model.addAttribute("modelFeature", hzCfg0ModelFeature);
+            model.addAttribute("projectUid", projectUid);
+            model.addAttribute("superMateriel", sm == null ? "" : sm.getpMaterielCode());
 
             model.addAttribute("action", "./materiel/updateModelBasic");
             return "cfg/materielFeature/updateModelBasic";
@@ -355,19 +367,23 @@ public class HzMaterielFeatureController extends ExtraIntegrate {
     public JSONObject updateModelBasic(
             @RequestParam String pCfg0ModelBasicDetail,
             @RequestParam String puid,
+            @RequestParam String projectUid,
+            @RequestParam String superMateriel,
             @RequestBody HzCfg0ModelFeature modelFeature
     ) {
         JSONObject _result = new JSONObject();
         HzCfg0ModelRecord modelRecord = new HzCfg0ModelRecord();
         modelRecord.setPuid(puid);
         modelRecord.setpCfg0ModelBasicDetail(pCfg0ModelBasicDetail);
-
+        Date now = new Date();
+        User user = UserInfo.getUser();
         boolean result = hzCfg0ModelRecordService.doUpdateBasic(modelRecord);
         if (result == false) {
             _result.put("status", false);
             _result.put("msg", "更新模型信息失败");
             return _result;
         }
+
         if (modelFeature.getPuid() == null || "".equals(modelFeature.getPuid())) {
             modelFeature.setPuid(UUID.randomUUID().toString());
             if (hzCfg0ModelFeatureService.doInsert(modelFeature)) {
@@ -380,19 +396,57 @@ public class HzMaterielFeatureController extends ExtraIntegrate {
         } else if (null != (hzCfg0ModelFeatureService.doSelectByPrimaryKey(modelFeature.getModelFeaturePuid()))) {
             modelFeature.setPuid(modelFeature.getModelFeaturePuid());
             modelFeature.setMaterielType("A001");
-            HzFactory factory = hzFactoryDAO.findFactory("", modelFeature.getFactoryCode());
+            HzFactory factory = hzFactoryDAO.findFactory("", checkString(modelFeature.getFactoryCode())?modelFeature.getFactoryCode():"1001");
+            HzFactory factory1001 = hzFactoryDAO.findFactory(null, "1001");
             if (factory == null) {
-                _result.put("status", false);
-                _result.put("msg", "没有找到工厂" + modelFeature.getFactoryCode());
-                return _result;
+                logger.warn("自动创建工厂" + modelFeature.getFactoryCode());
+                factory = new HzFactory();
+                factory.setpFactoryCode(modelFeature.getFactoryCode());
+                factory.setPuid(UUIDHelper.generateUpperUid());
+                factory.setpCreateTime(now);
+                factory.setpCreateName(user.getUsername());
+                factory.setpUpdateTime(now);
+                factory.setpUpdateName(user.getUsername());
+                factory.setpFactoryDesc("由系统进行自动创建");
+                if (hzFactoryDAO.insert(factory) < 0) {
+                    logger.error("自动创建工厂" + modelFeature.getFactoryCode() + "失败");
+                    _result.put("status", false);
+                    _result.put("msg", "没有找到工厂" + modelFeature.getFactoryCode());
+                    return _result;
+                }
             }
-            modelFeature.setFactoryCode(factory.getPuid());
+            modelFeature.setFactoryCode(factory == null ? factory1001.getPuid() : factory.getPuid());
             if (hzCfg0ModelFeatureService.doUpdateByPrimaryKey(modelFeature)) {
                 _result.put("status", true);
                 _result.put("msg", "更新衍生物料基本数据成功");
             } else {
                 _result.put("status", false);
                 _result.put("msg", "更新衍生物料基本数据失败");
+            }
+
+            /**
+             * 更新超级物料
+             */
+            HzMaterielRecord sm = hzSuperMaterielService.doSelectByProjectPuid(projectUid);
+            if (checkString(superMateriel)) {
+                if (null == sm) {
+                    logger.warn("没有超级物料号，进行申请");
+                    sm = new HzMaterielRecord();
+                    sm.setpMaterielCode(superMateriel);
+                    sm.setPuid(UUIDHelper.generateUpperUid());
+                    sm.setpFactoryPuid(factory == null ? factory1001.getPuid() : factory.getPuid());
+                    sm.setpPertainToProjectPuid(projectUid);
+                    if (!hzSuperMaterielService.doInsertOne(sm)) {
+                        logger.error("存储超级物料号失败");
+                    }
+                }
+                if (!superMateriel.equals(sm.getpMaterielCode())) {
+                    logger.warn("已有超级物料号，进行更新超级物料号");
+                    sm.setpMaterielCode(superMateriel);
+                    if (!hzSuperMaterielService.doUpdateByPrimaryKey(sm)) {
+                        logger.error("更新超级物料号失败");
+                    }
+                }
             }
             return _result;
         } else {
