@@ -45,6 +45,31 @@ public class HzMbomByPageQuery extends DefaultPageQuery {
      */
     private String pBomLinePartClass;
 
+    /**
+     * 类型 2超级MBOM  1白车身生产BOM  6 白车身财务BOM
+     */
+    private Integer type;
+
+    /**
+     * 数据库表名
+     */
+    private String tableName;
+
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
+    }
+
+    public String getTableName() {
+        return tableName;
+    }
+
+    public void setTableName(String tableName) {
+        this.tableName = tableName;
+    }
 
     public String getpBomLinePartClass() {
         return pBomLinePartClass;

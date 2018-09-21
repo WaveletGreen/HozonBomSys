@@ -116,7 +116,11 @@ public class HzMbomRecordFactory {
         hzMbomLineRecord.setBomDigifaxId(record.getBomDigifaxId());
         hzMbomLineRecord.seteBomPuid(record.getPuid());
         hzMbomLineRecord.setIsDept(record.getIsDept());
-        hzMbomLineRecord.setLineId(record.getLineID());
+        if(record.getLineID().endsWith("YY0")){
+            hzMbomLineRecord.setLineId(record.getLineID().substring(0,record.getLineID().length()-3));
+        }else {
+            hzMbomLineRecord.setLineId(record.getLineID());
+        }
         hzMbomLineRecord.setIsPart(record.getIsPart());
         hzMbomLineRecord.setIs2Y(record.getIs2Y());
         hzMbomLineRecord.setLineIndex(record.getLineIndex());
@@ -167,11 +171,14 @@ public class HzMbomRecordFactory {
     public static HzMbomLineRecord generateSupMbom(HzEPLManageRecord record, int i, String projectId, List<HzConfigBomColorBean> beans){
         HzMbomLineRecord mbomLineRecord = HzMbomRecordFactory.ebomRecordToMbomRecord(record);
         String lineId = HzBomSysFactory.resultLineId(record.getLineID(),projectId);
+
         if(Integer.valueOf(1).equals(record.getColorPart())){
-            mbomLineRecord.setLineId(lineId+beans.get(i).getColorCode());
-        }else {
-            mbomLineRecord.setLineId(lineId);
+            if(i!=0){
+                lineId = lineId+beans.get(i).getColorCode();
+            }
         }
+
+        mbomLineRecord.setLineId(lineId);
 
         String lineIndex = record.getLineIndex();
         String sortNum = record.getSortNum();

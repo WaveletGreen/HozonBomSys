@@ -46,7 +46,6 @@ public class FileUploadServiceImpl implements FileUploadService {
     @Override
     public OperateResultMessageRespDTO UploadEbomToDB(MultipartFile file, String projectId) {
         try {
-            long a = System.currentTimeMillis();
             //判断权限
             boolean b = PrivilegeUtil.writePrivilege();
             if(!b){
@@ -180,8 +179,6 @@ public class FileUploadServiceImpl implements FileUploadService {
                 }
             }
             ExcelUtil.deleteFile();
-            long m = System.currentTimeMillis();
-            System.out.println((m-a)+"ms");
         }catch (Exception e){
             return OperateResultMessageRespDTO.getFailResult();
 
