@@ -8,13 +8,13 @@
 <body>
 <ul id="myTab" class="nav nav-tabs">
     <li class="active">
-        <a href="#mBom" data-toggle="tab">超级MBOM</a>
+        <a href="#mBom"onclick="doMBom()"id="mb" data-toggle="tab">超级MBOM</a>
     </li>
     <li>
-        <a href="#whiteBodyProduction" data-toggle="tab">白车身生产BOM</a>
+        <a href="#whiteBodyProduction"onclick="doProduction()" data-toggle="tab">白车身生产BOM</a>
     </li>
     <li>
-        <a href="#whiteBodyFinancial" data-toggle="tab">白车身财务BOM</a>
+        <a href="#whiteBodyFinancial"onclick="doFinancial()" data-toggle="tab">白车身财务BOM</a>
     </li>
 </ul>
 <div id="myTabContent" class="tab-content">
@@ -70,9 +70,9 @@
                 </div>
             </form>
         </div>
-        <div class="content col-lg-12">
+        <!--<div class="content col-lg-12">-->
             <table class="table table-striped tableNormalStyle" id="mbomMaintenanceTable"></table>
-        </div>
+        <!--</div>-->
     </div>
     <!--白车身生产-->
     <div class="tab-pane fade" id="whiteBodyProduction">
@@ -95,9 +95,9 @@
                 </div>
             </form>
         </div>
-        <div class="content col-lg-12">
+        <!--<div class="content col-lg-12">-->
             <table class="table table-striped tableNormalStyle" id="whiteBodyProductionTable"></table>
-        </div>
+        <!--</div>-->
     </div>
     <!--白车身财务-->
     <div class="tab-pane fade" id="whiteBodyFinancial">
@@ -120,15 +120,13 @@
                 </div>
             </form>
         </div>
-        <div class="content col-lg-12">
+        <!--<div class="content col-lg-12">-->
             <table class="table table-striped tableNormalStyle" id="whiteBodyFinancialTable"></table>
-        </div>
+        <!--</div>-->
     </div>
 </div>
 <script th:src="@{/js/helper/projectHelper.js}"></script>
 <script th:src="@{/js/bom/mbom/mbomMaintenance.js}"></script>
-<!--<script th:src="@{/js/bom/mbom/whiteBodyProduction.js}"></script>-->
-<!--<script th:src="@{/js/bom/mbom/whiteBodyFinancial.js}"></script>-->
 <script th:src="@{/js/jq.resizableColumns.js}"></script>
 <script th:src="@{/js/lodash.min.js}"></script>
 </body>

@@ -299,6 +299,24 @@ public class HzMbomController extends BaseController {
     public void getget(HttpServletResponse response){
         hzMbomService.refreshHzMbom("1c128c60-84a2-4076-9b1c-f7093e56e4df");
     }
+
+    /**
+     * 跳转到白车身生产的修改页面
+     * @return
+     */
+    @RequestMapping(value = "updateProduction", method = RequestMethod.GET)
+    public String updateWhiteBodyProduction() {
+        return"bomManage/mbom/mbomMaintenance/updateProduction";
+    }
+
+    /**
+     * 跳转到白车身财务的修改页面
+     * @return
+     */
+    @RequestMapping(value = "updateFinancial", method = RequestMethod.GET)
+    public String updateWhiteBodyFinancial() {
+        return"bomManage/mbom/mbomMaintenance/updateFinancial";
+    }
 }
 
 

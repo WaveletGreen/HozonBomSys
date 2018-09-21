@@ -84,6 +84,15 @@ public class HzWorkProcedure {
     private String purpose;
 
     /**
+     * 物料代码
+     */
+    private Object pMaterielCode;
+
+    /**
+     * 物料中文描述
+     */
+    private Object pMaterielDesc;
+    /**
      * 状态
      */
     private String state;
@@ -202,6 +211,22 @@ public class HzWorkProcedure {
 
     public void setpMachineMaterialLabor(String pMachineMaterialLabor) {
         this.pMachineMaterialLabor = pMachineMaterialLabor;
+    }
+
+    public Object getpMaterielCode() {
+        return pMaterielCode;
+    }
+
+    public void setpMaterielCode(Object pMaterielCode) {
+        this.pMaterielCode = pMaterielCode;
+    }
+
+    public Object getpMaterielDesc() {
+        return pMaterielDesc;
+    }
+
+    public void setpMaterielDesc(Object pMaterielDesc) {
+        this.pMaterielDesc = pMaterielDesc;
     }
 
     public String getpOtherCost() {

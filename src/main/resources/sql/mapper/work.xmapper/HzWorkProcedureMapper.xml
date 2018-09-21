@@ -23,13 +23,14 @@
     <result column="P_PURPOSE" jdbcType="VARCHAR" property="purpose" />
     <result column="P_STATE" jdbcType="VARCHAR" property="state" />
     <result column="P_CONTROL_CODE" jdbcType="VARCHAR" property="controlCode" />
-
+    <result column="P_MATERIEL_CODE" jdbcType="VARCHAR" property="pMaterielCode" />
+    <result column="P_MATERIEL_DESC" jdbcType="VARCHAR" property="pMaterielDesc" />
   </resultMap>
 
 
   <resultMap extends="BaseResultMap" id="HzWorkProcessMap" type="sql.pojo.work.HzWorkProcess">
-    <result column="P_MATERIEL_CODE" jdbcType="OTHER" property="pMaterielCode"/>
-    <result column="P_MATERIEL_DESC" jdbcType="OTHER" property="pMaterielDesc"/>
+    <!--<result column="P_MATERIEL_CODE" jdbcType="OTHER" property="pMaterielCode"/>-->
+    <!--<result column="P_MATERIEL_DESC" jdbcType="OTHER" property="pMaterielDesc"/>-->
     <result column="P_FACTORY_CODE" jdbcType="VARCHAR" property="factoryCode" />
     <result column="P_WORK_CODE" jdbcType="VARCHAR" property="workCenterCode" />
     <result column="P_WORK_DESC" jdbcType="VARCHAR" property="workCenterDesc" />
@@ -46,7 +47,7 @@
     P_MACHINE_LABOR, P_BURN, P_MACHINE_MATERIAL_LABOR, P_OTHER_COST, P_COUNT,
     P_CREATE_TIME, P_UPDATE_TIME, P_CREATE_NAME, P_UPDATE_NAME, P_STATUS,P_PROJECT_PUID,
     P_MATERIEL_PUID,
-    P_PURPOSE, P_STATE, P_CONTROL_CODE
+    P_PURPOSE, P_STATE, P_CONTROL_CODE, P_MATERIEL_CODE, P_MATERIEL_DESC
   </sql>
 
 
@@ -202,6 +203,12 @@
       <if test="controlCode != null">
         P_CONTROL_CODE,
       </if>
+      <if test="pMaterielCode != null">
+        P_MATERIEL_CODE,
+      </if>
+      <if test="pMaterielDesc != null">
+        P_MATERIEL_DESC,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="puid != null">
@@ -261,6 +268,12 @@
       <if test="controlCode != null">
         #{controlCode,jdbcType=VARCHAR},
       </if>
+      <if test="pMaterielCode != null">
+        #{pMaterielCode,jdbcType=VARCHAR},
+      </if>
+      <if test="pMaterielDesc != null">
+        #{pMaterielDesc,jdbcType=VARCHAR},
+      </if>
     </trim>
   </insert>
 
@@ -317,6 +330,12 @@
       </if>
       <if test="controlCode != null">
         P_CONTROL_CODE = #{controlCode,jdbcType=VARCHAR},
+      </if>
+      <if test="pMaterielCode != null">
+        P_MATERIEL_CODE = #{pMaterielCode,jdbcType=VARCHAR},
+      </if>
+      <if test="pMaterielDesc != null">
+        P_MATERIEL_DESC = #{pMaterielDesc,jdbcType=VARCHAR},
       </if>
     </set>
     where P_MATERIEL_PUID = #{materielId,jdbcType=VARCHAR}
