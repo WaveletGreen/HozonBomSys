@@ -295,6 +295,24 @@ public class HzMbomController extends BaseController {
        OperateResultMessageRespDTO respDTO =  hzMbomService.deleteMbomRecord(reqDTO);
         writeAjaxJSONResponse(ResultMessageBuilder.build(OperateResultMessageRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
     }
+
+    /**
+     * 跳转到白车身生产的修改页面
+     * @return
+     */
+    @RequestMapping(value = "updateProduction", method = RequestMethod.GET)
+    public String updateWhiteBodyProduction() {
+        return"bomManage/mbom/mbomMaintenance/updateProduction";
+    }
+
+    /**
+     * 跳转到白车身财务的修改页面
+     * @return
+     */
+    @RequestMapping(value = "updateFinancial", method = RequestMethod.GET)
+    public String updateWhiteBodyFinancial() {
+        return"bomManage/mbom/mbomMaintenance/updateFinancial";
+    }
 }
 
 
