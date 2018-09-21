@@ -194,5 +194,13 @@ public class HzWorkProcessController extends BaseController {
         OperateResultMessageRespDTO respDTO =  hzWorkProcessService.applyMbomDataToHzMaterielOneKey(reqDTO);
         writeAjaxJSONResponse(ResultMessageBuilder.build(OperateResultMessageRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
     }
-
+    /**
+     * 跳转到修改四大工艺的修改页面
+     * @return
+     */
+    @RequestMapping(value = "four",method = RequestMethod.GET)
+    public String updateWorkProcessFourToPage(String puids,String projectId,Model model){
+        model.addAttribute("data",puids);
+        return  "bomManage/mbom/routingData/updateFourProcess";
+    }
 }
