@@ -2,15 +2,24 @@ $(document).ready((function () {
     var projectId = $("#project", window.top.document).val();
     var mBomUrl = "mbom/record?projectId=" + projectId;
     initTable1(mBomUrl);
-    var productionUrl = "mbom/record?projectId=" + projectId;
-    initTable2(productionUrl);
-    var financialUrl = "mbom/record?projectId=" + projectId;
-    initTable3(financialUrl);
+    var url = "materiel/getMateriel?projectId=" + projectId;
+    initTable2(url);
+    // var financialUrl = "mbom/record?projectId=" + projectId;
+    // initTable3(financialUrl);
+    var url = "work/process/record/page?projectId="+projectId;
+    initTable3(url);
 }))
 function doRefresh(projectId){
     $('#mbomMaintenanceTable').bootstrapTable('destroy');
+    if ($("#")) {
+
+    }
     var mBomUrl = "mbom/record?projectId=" + projectId;
     initTable1(mBomUrl);
+    var url = "materiel/getMateriel?projectId=" + projectId;
+    initTable2(url);
+    var url = "work/process/record/page?projectId="+projectId;
+    initTable3(url);
 }
 
 function doQuery() {
@@ -43,53 +52,57 @@ function doQuery() {
 function doQuery1() {
     //$('#eplTable').bootstrapTable('refresh');    //刷新表格
     var projectId = $("#project", window.top.document).val();
-    var productionUrl = "mbom/record?projectId=" + projectId;
+    // var productionUrl = "mbom/record?projectId=" + projectId;
+    var url = "materiel/getMateriel?projectId=" + projectId;
+    initTable2(url);
     // var level = $("#level").val();
     // productionUrl += "&level=" + level;
     // var pBomOfWhichDept = $("#pBomOfWhichDept").val();
     // productionUrl += "&pBomOfWhichDept=" + pBomOfWhichDept;
     // var lineId = $("#lineId").val();
     // productionUrl += "&lineId=" + lineId;
-    var pBomLinePartClass = $("#pBomLinePartClass").val();
-    if (pBomLinePartClass =="请选择零件分类") {
-        productionUrl += "&pBomLinePartClass="+ "";
-    }else {
-        productionUrl += "&pBomLinePartClass=" + pBomLinePartClass;
-    }
-    var pBomLinePartResource = $("#pBomLinePartResource").val();
-    if (pBomLinePartResource == "请选择零件来源") {
-        productionUrl += "&pBomLinePartResource="+ "";
-    }
-    else {
-        productionUrl += "&pBomLinePartResource=" + pBomLinePartResource;
-    }
-    initTable2(productionUrl);
+    // var pBomLinePartClass = $("#pBomLinePartClass").val();
+    // if (pBomLinePartClass =="请选择零件分类") {
+    //     productionUrl += "&pBomLinePartClass="+ "";
+    // }else {
+    //     productionUrl += "&pBomLinePartClass=" + pBomLinePartClass;
+    // }
+    // var pBomLinePartResource = $("#pBomLinePartResource").val();
+    // if (pBomLinePartResource == "请选择零件来源") {
+    //     productionUrl += "&pBomLinePartResource="+ "";
+    // }
+    // else {
+    //     productionUrl += "&pBomLinePartResource=" + pBomLinePartResource;
+    // }
+    // initTable2(productionUrl);
     $('#whiteBodyProductionTable').bootstrapTable('destroy');
 }
 function doQuery2() {
     //$('#eplTable').bootstrapTable('refresh');    //刷新表格
     var projectId = $("#project", window.top.document).val();
-    var financialUrl = "mbom/record?projectId=" + projectId;
+    var url = "work/process/record/page?projectId="+projectId;
+    initTable3(url);
+    // var financialUrl = "mbom/record?projectId=" + projectId;
     // var level = $("#level").val();
     // financialUrl += "&level=" + level;
     // var pBomOfWhichDept = $("#pBomOfWhichDept").val();
     // financialUrl += "&pBomOfWhichDept=" + pBomOfWhichDept;
     // var lineId = $("#lineId").val();
     // financialUrl += "&lineId=" + lineId;
-    var pBomLinePartClass = $("#pBomLinePartClass").val();
-    if (pBomLinePartClass =="请选择零件分类") {
-        financialUrl += "&pBomLinePartClass="+ "";
-    }else {
-        financialUrl += "&pBomLinePartClass=" + pBomLinePartClass;
-    }
-    var pBomLinePartResource = $("#pBomLinePartResource").val();
-    if (pBomLinePartResource == "请选择零件来源") {
-        financialUrl += "&pBomLinePartResource="+ "";
-    }
-    else {
-        financialUrl += "&pBomLinePartResource=" + pBomLinePartResource;
-    }
-    initTable3(financialUrl);
+    // var pBomLinePartClass = $("#pBomLinePartClass").val();
+    // if (pBomLinePartClass =="请选择零件分类") {
+    //     financialUrl += "&pBomLinePartClass="+ "";
+    // }else {
+    //     financialUrl += "&pBomLinePartClass=" + pBomLinePartClass;
+    // }
+    // var pBomLinePartResource = $("#pBomLinePartResource").val();
+    // if (pBomLinePartResource == "请选择零件来源") {
+    //     financialUrl += "&pBomLinePartResource="+ "";
+    // }
+    // else {
+    //     financialUrl += "&pBomLinePartResource=" + pBomLinePartResource;
+    // }
+    // initTable3(financialUrl);
     $('#whiteBodyFinancialTable').bootstrapTable('destroy');
 }
 function initTable1(mBomUrl) {
@@ -621,7 +634,7 @@ function initTable1(mBomUrl) {
         }
     });
 }
-function initTable2(productionUrl) {
+function initTable2(url) {
     var projectId = $("#project", window.top.document).val();
     var $productionTable = $("#whiteBodyProductionTable");
     var currentProjectHead = $("#currentProjectHead", window.top.document).val();
@@ -629,7 +642,7 @@ function initTable2(productionUrl) {
     selections = [];
 
     $.ajax({
-        url: "mbom/manage/title?projectId=" + projectId,
+        url: "materiel/title",
         type: "GET",
         success: function (result) {
             var column = [];
@@ -694,7 +707,7 @@ function initTable2(productionUrl) {
                 }
             }
             $productionTable.bootstrapTable({
-                url: productionUrl,
+                url: url,
                 method: 'GET',
                 dataType: 'json',
                 cache: false,
@@ -1111,7 +1124,7 @@ function initTable2(productionUrl) {
         }
     });
 }
-function initTable3(financialUrl) {
+function initTable3(url) {
     var projectId = $("#project", window.top.document).val();
     var $financialTable = $("#whiteBodyFinancialTable");
     var currentProjectHead = $("#currentProjectHead", window.top.document).val();
@@ -1119,7 +1132,7 @@ function initTable3(financialUrl) {
     selections = [];
 
     $.ajax({
-        url: "mbom/manage/title?projectId=" + projectId,
+        url: "work/process/title",
         type: "GET",
         success: function (result) {
             var column = [];
@@ -1162,7 +1175,7 @@ function initTable3(financialUrl) {
                             // align: 'center',
                             valign: 'middle',
                             formatter: function (value, row, index) {
-                                console.log(row)
+                                // console.log(row)
                                 if (value =="LOA") {
                                     return [
                                         '<a href="javascript:void(0)" onclick="queryLoa(' + row.eBomPuid + ')">' + value + '</a>'
@@ -1185,7 +1198,7 @@ function initTable3(financialUrl) {
                 }
             }
             $financialTable.bootstrapTable({
-                url: financialUrl,
+                url: url,
                 method: 'GET',
                 dataType: 'json',
                 cache: false,
