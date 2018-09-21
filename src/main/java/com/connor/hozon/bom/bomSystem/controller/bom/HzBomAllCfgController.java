@@ -63,8 +63,8 @@ public class HzBomAllCfgController {
      * @return
      * @Autor Fancyears
      */
-    @RequestMapping("setStagePage")
-    public String setStagePage(@RequestParam String projectUid, Model model) {
+    @RequestMapping("setStageOrVersionPage")
+    public String setStagePage(@RequestParam String projectUid, String setName, Model model) {
         if (!checkString(projectUid)) {
             model.addAttribute("msg", "请选择一个项目进行操作");
             return "errorWithEntity";
@@ -75,10 +75,33 @@ public class HzBomAllCfgController {
             return "errorWithEntity";
         }
         String releaseDate = fullCfgMain.getEffectiveDate() == null ? "" : DateStringHelper.dateToString(fullCfgMain.getEffectiveDate());
-        model.addAttribute("entity", fullCfgMain);
+//        model.addAttribute("entity", fullCfgMain);
         model.addAttribute("releaseDate", releaseDate);
-        model.addAttribute("action", "./bomAllCfg/setStage");
-        return "bom/setStagePage";
+        if(setName!=null&&"version".equals(setName)){
+            Integer stage = fullCfgMain.getStage();
+            String stageStr = HzFullCfgMain.parseStage(stage);
+            model.addAttribute("entity", fullCfgMain);
+            model.addAttribute("stageStr",stageStr);
+            model.addAttribute("action", "./bomAllCfg/setVersion");
+            return "bom/setVersionPage";
+        }else  if(setName!=null&&"stage".equals(setName)){
+            model.addAttribute("entity", fullCfgMain);
+            model.addAttribute("action", "./bomAllCfg/setStage");
+            return "bom/setStagePage";
+        }
+        return "";
+    }
+
+    /**
+     * 保存版本数据
+     *
+     * @param params
+     * @return
+     */
+    @RequestMapping("setVersion")
+    @ResponseBody
+    public JSONObject setVersion(@RequestBody Map<String, String> params) {
+        return hzBomAllCfgService.setVersion(params);
     }
 
     /**

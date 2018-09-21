@@ -10,7 +10,8 @@
     <div class="input-group">
         <button class="btn btn-default" id="myButton" type="button">刷新</button>
         <button class="btn btn-default" id="addVehicle" type="button">添加列信息</button>
-        <button class="btn btn-default" id="setStage" type="button">设置阶段与版本</button>
+        <button class="btn btn-default" id="setVersion" type="button">设置版本</button>
+        <button class="btn btn-default" id="setStage" type="button">设置阶段</button>
         <button class="btn btn-default" id="release" type="button">发布</button>
         <!--<button class="btn btn-default" id="reflect2Y" type="button">特性关联2Y层</button>-->
         <!--<button class="btn btn-default" id="save" type="button" onclick="save()">保存</button>-->
@@ -21,7 +22,7 @@
                   id="queryLoadBom">
                 <div class="form-group">
                     <label for="td_part">总成零件号:</label>
-                    <input type="text" class="form-control" name="platforms" id="td_part" placeholder="请输入总成零件号" onfocus="focusQuery(this)"/>
+                    <input type="text" class="form-control" name="platforms" id="td_part" placeholder="请输入总成零件号" onfocus="focusQuery(this)" onclick="inpSelect(this)"/>
                 </div>
                 <div class="form-group">
                     <label for="td_cfg">配置代码:</label>
@@ -65,20 +66,20 @@
         if(tdId!=""){
             $('#' + tdId).parent().css("background-color", "#ffffff");
         }
-        tdId = focuseId+$("#"+focuseId).val();
-        // for(var i=0;i<4;i++){
-        //     var input = $(but).parent().parent().find("input:eq('"+i+"')");
-        //     var isFocus=$(input).is(":focus");
-        //     if(isFocus){
-        //         tdId = $(input).attr("id");
-        //         tdId+=$(input).val();
-        //         break;
-        //     }
-        // }
+        var focuseVal = $("#"+focuseId).val();
+        if(focuseVal!==""&&focuseVal!=null){
+            tdId = focuseId+focuseVal;
+            if($('#' + tdId)){
+                document.getElementById(tdId).scrollIntoView(true);
+                $('#' + tdId).parent().css("background-color", "red");
+            }
+        }
+    }
 
-        alert(tdId);
-        document.getElementById(tdId).scrollIntoView(true);
-        $('#' + tdId).parent().css("background-color", "red");
+    function inpSelect(inp) {
+        var inputId = $(inp).attr("id");
+       // alert(JSON.stringify(partIdArr));
+
     }
 </script>
 </html>

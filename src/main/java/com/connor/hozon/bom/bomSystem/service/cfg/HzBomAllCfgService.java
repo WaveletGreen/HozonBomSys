@@ -655,6 +655,11 @@ public class HzBomAllCfgService {
         return respons;
     }
 
+    /**
+     * 删除车辆模型
+     * @param modelId
+     * @return
+     */
     public JSONObject deleteModel(String modelId) {
         JSONObject respons = new JSONObject();
         int deleteRow = hzCfg0ModelService.deleteModelById(modelId);
@@ -677,12 +682,12 @@ public class HzBomAllCfgService {
     }
 
     /**
-     * 存储阶段信息
+     * 存储版本信息
      *
      * @param params
      * @return
      */
-    public JSONObject setStage(Map<String, String> params) {
+    public JSONObject setVersion(Map<String, String> params) {
         JSONObject result = new JSONObject();
         result.put("status", false);
         result.put("msg", "更新全配置BOM一级清单主数据失败");
@@ -701,6 +706,36 @@ public class HzBomAllCfgService {
                 }
             }
             fullCfgMain.setStatus("更新");
+//            fullCfgMain.setStage(Integer.parseInt(params.get("stage")));
+            fullCfgMain.setUpdater(user.getUsername());
+            fullCfgMain.setUpdateDate(new Date());
+            fullCfgMain.setCreator(null);
+            fullCfgMain.setCreateDate(null);
+            if (hzFullCfgMainDao.updateByPrimaryKeySelective(fullCfgMain) > 0) {
+                logger.info("更新全配置BOM一级清单主数据成功");
+                result.put("status", true);
+                result.put("msg", "更新全配置BOM一级清单主数据成功");
+                result.put("version", fullCfgMain.getVersion());
+                result.put("stage", fullCfgMain.getStage());
+            }
+        }
+        return result;
+    }
+
+    /**
+     * 存储阶段信息
+     *
+     * @param params
+     * @return
+     */
+    public JSONObject setStage(Map<String, String> params) {
+        JSONObject result = new JSONObject();
+        result.put("status", false);
+        result.put("msg", "更新全配置BOM一级清单主数据失败");
+        User user = UserInfo.getUser();
+        HzFullCfgMain fullCfgMain = hzFullCfgMainDao.selectByProjectId(params.get("projectPuid"));
+        if (fullCfgMain != null) {
+            fullCfgMain.setStatus("更新");
             fullCfgMain.setStage(Integer.parseInt(params.get("stage")));
             fullCfgMain.setUpdater(user.getUsername());
             fullCfgMain.setUpdateDate(new Date());
@@ -717,6 +752,11 @@ public class HzBomAllCfgService {
         return result;
     }
 
+    /**
+     * 发布，升小版本
+     * @param projectUid
+     * @return
+     */
     public JSONObject promote(String projectUid) {
         JSONObject result = new JSONObject();
         result.put("status", false);
@@ -817,6 +857,12 @@ public class HzBomAllCfgService {
 
     }
 
+    /**
+     * 查询所有以关联2Y层的特性和当前2Y层关联的特性，实现前端特性选择下拉列表的动态效果
+     * @param projectId
+     * @param bomLineId
+     * @return
+     */
     public JSONObject query2YCfg(String projectId, String bomLineId) {
         JSONObject respons = new JSONObject();
 
@@ -859,7 +905,6 @@ public class HzBomAllCfgService {
                 hzFullCfgModels.add(hzFullCfgModel);
             }
         }
-
         int updataNumber = 0;
         if (hzFullCfgModels.size() > 0) {
             updataNumber = hzFullCfgModelDao.updateByHzFullCfgModelList(hzFullCfgModels);
