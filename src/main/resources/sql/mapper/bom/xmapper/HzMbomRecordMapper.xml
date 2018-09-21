@@ -114,7 +114,7 @@
 
     <!--查询Mbom信息 总数分页-->
     <select id="HzMbomRecordDAOImpl_getTotalCount" resultType="java.lang.Integer" parameterType="java.util.HashMap">
-        select count(*) from  HZ_MBOM_RECORD t
+        select count(*) from  ${tableName} t
         where t.p_bom_digifax_id=(
         select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(
         select t2.puid from Hz_project_libs t2
@@ -148,7 +148,7 @@
 
     <!--获取一条 MBOM信息-->
     <select id="HzMbomRecordDAOImpl_findHzMbomByPuid" resultMap="MbomResultMap" parameterType="java.util.HashMap">
-        select t.* from  HZ_MBOM_RECORD t
+        select t.* from  ${tableName} t
         where t.p_bom_digifax_id=(
         select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(
         select t2.puid from Hz_project_libs t2

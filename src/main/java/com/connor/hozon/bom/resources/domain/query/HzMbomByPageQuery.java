@@ -46,7 +46,7 @@ public class HzMbomByPageQuery extends DefaultPageQuery {
     private String pBomLinePartClass;
 
     /**
-     * 类型 2超级MBOM  1白车身生产BOM  6 白车身财务BOM
+     * 类型 1白车身生产BOM  6 白车身财务BOM
      */
     private Integer type;
 

@@ -15,9 +15,9 @@ import com.connor.hozon.bom.resources.domain.dto.response.*;
 import com.connor.hozon.bom.resources.domain.model.HzBomSysFactory;
 import com.connor.hozon.bom.resources.domain.model.HzMbomRecordFactory;
 import com.connor.hozon.bom.resources.domain.query.*;
+import com.connor.hozon.bom.resources.enumtype.MbomTableNameEnum;
 import com.connor.hozon.bom.resources.mybatis.bom.HzEbomRecordDAO;
 import com.connor.hozon.bom.resources.mybatis.bom.HzMbomRecordDAO;
-import com.connor.hozon.bom.resources.mybatis.bom.impl.HzMbomRecordDAOImpl;
 import com.connor.hozon.bom.resources.mybatis.factory.HzFactoryDAO;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.service.AddMbomThread;
@@ -25,27 +25,17 @@ import com.connor.hozon.bom.resources.service.bom.HzMbomService;
 import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.resources.util.PrivilegeUtil;
 import com.connor.hozon.bom.sys.entity.User;
-import net.sf.json.JSONObject;
-import org.apache.xerces.xs.datatypes.ObjectList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sql.pojo.bom.HzBomLineRecord;
 import sql.pojo.bom.HzMbomLineRecord;
 import sql.pojo.bom.HzMbomLineRecordVO;
 import sql.pojo.cfg.HzCfg0OfBomLineRecord;
-import sql.pojo.cfg.HzCfg0Record;
 import sql.pojo.epl.HzEPLManageRecord;
 import sql.pojo.factory.HzFactory;
 import sql.pojo.interaction.HzConfigBomColorBean;
-import sql.redis.SerializeUtil;
 
 import java.util.*;
 import java.util.concurrent.CountDownLatch;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import static com.connor.hozon.bom.resources.domain.model.HzBomSysFactory.getLevelAndRank;
-
 
 /**
  * @Author: haozt
@@ -116,7 +106,7 @@ public class HzMbomServiceImpl implements HzMbomService{
                 }
                 respDTOList.add(respDTO);
             }
-            return new Page<>(recordPage.getPageNumber(), recordPage.getPageSize(), recordPage.getTotalCount(), null);
+            return new Page<>(recordPage.getPageNumber(), recordPage.getPageSize(), recordPage.getTotalCount(), respDTOList);
         } catch (Exception e) {
             return null;
         }
@@ -124,11 +114,12 @@ public class HzMbomServiceImpl implements HzMbomService{
 
 
     @Override
-    public HzMbomRecordRespDTO findHzMbomByPuid(String projectId, String puid) {
+    public HzMbomRecordRespDTO findHzMbomByPuid(HzMbomByIdQuery query) {
         try {
             Map<String, Object> map = new HashMap<>();
-            map.put("projectId", projectId);
-            map.put("pPuid", puid);
+            map.put("projectId", query.getProjectId());
+            map.put("pPuid", query.getPuid());
+            map.put("tableName",MbomTableNameEnum.tableName(query.getType()));
             List<HzMbomLineRecord> records = hzMbomRecordDAO.findHzMbomByPuid(map);
             if (ListUtil.isNotEmpty(records)) {
                 HzMbomLineRecord record = records.get(0);
@@ -193,13 +184,7 @@ public class HzMbomServiceImpl implements HzMbomService{
                 return OperateResultMessageRespDTO.getFailPrivilege();
             }
             HzMbomLineRecord record = new HzMbomLineRecord();
-            if(Integer.valueOf(1).equals(reqDTO.getType())){
-                record.setTableName("HZ_MBOM_OF_PRODUCT");
-            }else if(Integer.valueOf(6).equals(reqDTO.getType())){
-                record.setTableName("HZ_MBOM_OF_FINANCE");
-            }else {
-                record.setTableName("HZ_MBOM_RECORD");
-            }
+            record.setTableName(MbomTableNameEnum.tableName(reqDTO.getType()));
             record.setUpdateName(user.getUserName());
             record.setWasterProduct(reqDTO.getWasterProduct());
             record.setTools(reqDTO.getTools());
@@ -271,11 +256,7 @@ public class HzMbomServiceImpl implements HzMbomService{
                 HzMbomTreeQuery treeQuery = new HzMbomTreeQuery();
                 treeQuery.setProjectId(reqDTO.getProjectId());
                 treeQuery.setPuid(puid);
-                if(Integer.valueOf(1).equals(reqDTO.getType())){
-                    treeQuery.setTableName("HZ_MBOM_OF_PRODUCT");
-                }else if(Integer.valueOf(6).equals(reqDTO.getType())){
-                    treeQuery.setTableName("HZ_MBOM_OF_FINANCE");
-                }
+                treeQuery.setTableName(MbomTableNameEnum.tableName(reqDTO.getType()));
 
                 List<HzMbomLineRecord> lineRecords = hzMbomRecordDAO.getHzMbomTree(treeQuery);//自己
                 Set<String> set = new HashSet<>();//去除重复
@@ -301,13 +282,7 @@ public class HzMbomServiceImpl implements HzMbomService{
                 for (String s : set) {
                     DeleteHzMbomReqDTO deleteHzPbomReqDTO = new DeleteHzMbomReqDTO();
                     deleteHzPbomReqDTO.setPuid(s);
-                    if(Integer.valueOf(1).equals(reqDTO.getType())){
-                        deleteHzPbomReqDTO.setTableName("HZ_MBOM_OF_PRODUCT");
-                    }else if(Integer.valueOf(6).equals(reqDTO.getType())){
-                        deleteHzPbomReqDTO.setTableName("HZ_MBOM_OF_FINANCE");
-                    }else {
-                        deleteHzPbomReqDTO.setTableName("HZ_MBOM_RECORD");
-                    }
+                    deleteHzPbomReqDTO.setTableName(MbomTableNameEnum.tableName(reqDTO.getType()));
                     list.add(deleteHzPbomReqDTO);
                 }
                 if (ListUtil.isNotEmpty(list)) {
@@ -496,6 +471,7 @@ public class HzMbomServiceImpl implements HzMbomService{
 
     @Override
     public boolean refreshHzMbom(String projectId) {
+        long a = System.currentTimeMillis();
         try {
             Double sortNumber = 0.0;
             //颜色件 非颜色件
@@ -645,6 +621,8 @@ public class HzMbomServiceImpl implements HzMbomService{
                     return false;
                 }
             }
+            long b = System.currentTimeMillis();
+            System.out.println((b-a)+"ms");
             return true;
         }catch (Exception e){
             return false;

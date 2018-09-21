@@ -10,6 +10,7 @@ import com.connor.hozon.bom.resources.domain.dto.response.HzMbomRecordRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzSuperMbomRecordRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzVehicleModelRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.OperateResultMessageRespDTO;
+import com.connor.hozon.bom.resources.domain.query.HzMbomByIdQuery;
 import com.connor.hozon.bom.resources.domain.query.HzMbomByPageQuery;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.service.bom.HzMbomService;
@@ -38,7 +39,7 @@ public class HzMbomController extends BaseController {
 
     @Autowired
     private HzMbomService hzMbomService;
-    
+
     /**
      * MBOM管理标题
      *
@@ -140,7 +141,10 @@ public class HzMbomController extends BaseController {
      */
     @RequestMapping(value = "addMBom", method = RequestMethod.GET)
     public String addMBomToPage(String projectId, String eBomPuid, Model model) {
-        HzMbomRecordRespDTO respDTO = hzMbomService.findHzMbomByPuid(projectId,eBomPuid);
+        HzMbomByIdQuery query = new HzMbomByIdQuery();
+        query.setProjectId(projectId);
+        query.setPuid(eBomPuid);
+        HzMbomRecordRespDTO respDTO = hzMbomService.findHzMbomByPuid(query);
         if(respDTO == null){
             return "";
         }
@@ -163,7 +167,10 @@ public class HzMbomController extends BaseController {
      */
     @RequestMapping(value = "updateMBom", method = RequestMethod.GET)
     public String updateMbomToPage(String projectId,String eBomPuid,Model model) {
-        HzMbomRecordRespDTO respDTO =hzMbomService.findHzMbomByPuid(projectId,eBomPuid);
+        HzMbomByIdQuery query = new HzMbomByIdQuery();
+        query.setProjectId(projectId);
+        query.setPuid(eBomPuid);
+        HzMbomRecordRespDTO respDTO =hzMbomService.findHzMbomByPuid(query);
         if(respDTO== null){
             return "";
         }
@@ -213,7 +220,16 @@ public class HzMbomController extends BaseController {
      * @return
      */
     @RequestMapping(value = "updateProduction", method = RequestMethod.GET)
-    public String updateWhiteBodyProduction() {
+    public String updateWhiteBodyProduction(String projectId,String eBomPuid,Integer type,Model model) {
+        HzMbomByIdQuery query = new HzMbomByIdQuery();
+        query.setProjectId(projectId);
+        query.setType(type);
+        query.setPuid(eBomPuid);
+        HzMbomRecordRespDTO respDTO =hzMbomService.findHzMbomByPuid(query);
+        if(respDTO== null){
+            return "";
+        }
+        model.addAttribute("data",respDTO);
         return"bomManage/mbom/mbomMaintenance/updateProduction";
     }
 
@@ -222,7 +238,16 @@ public class HzMbomController extends BaseController {
      * @return
      */
     @RequestMapping(value = "updateFinancial", method = RequestMethod.GET)
-    public String updateWhiteBodyFinancial() {
+    public String updateWhiteBodyFinancial(String projectId,String eBomPuid,Integer type,Model model) {
+        HzMbomByIdQuery query = new HzMbomByIdQuery();
+        query.setProjectId(projectId);
+        query.setType(type);
+        query.setPuid(eBomPuid);
+        HzMbomRecordRespDTO respDTO =hzMbomService.findHzMbomByPuid(query);
+        if(respDTO== null){
+            return "";
+        }
+        model.addAttribute("data",respDTO);
         return"bomManage/mbom/mbomMaintenance/updateFinancial";
     }
 }

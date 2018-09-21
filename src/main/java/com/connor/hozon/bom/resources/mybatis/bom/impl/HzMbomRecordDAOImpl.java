@@ -4,6 +4,7 @@ import com.connor.hozon.bom.resources.domain.dto.request.DeleteHzMbomReqDTO;
 import com.connor.hozon.bom.resources.domain.query.HzBomRecycleByPageQuery;
 import com.connor.hozon.bom.resources.domain.query.HzMbomByPageQuery;
 import com.connor.hozon.bom.resources.domain.query.HzMbomTreeQuery;
+import com.connor.hozon.bom.resources.enumtype.MbomTableNameEnum;
 import com.connor.hozon.bom.resources.mybatis.bom.HzMbomRecordDAO;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.page.PageRequest;
@@ -38,6 +39,9 @@ public class HzMbomRecordDAOImpl extends BaseSQLUtil implements HzMbomRecordDAO 
 
     @Override
     public int update(HzMbomLineRecord record) {
+        if(record.getTableName() == null || "".equals(record.getTableName())){
+            record.setTableName("HZ_MBOM_RECORD");
+        }
         return super.update("HzMbomRecordDAOImpl_update",record);
     }
     @Override
@@ -61,15 +65,8 @@ public class HzMbomRecordDAOImpl extends BaseSQLUtil implements HzMbomRecordDAO 
         map.put("lineId",query.getLineId());
         map.put("pBomLinePartClass",query.getpBomLinePartClass());
         map.put("pBomLinePartResource",query.getpBomLinePartResource());
-        if(query.getType().equals(2)){
-            map.put("tableName","HZ_MBOM_RECORD");
-        }else if(query.getType().equals(1)){
-            map.put("tableName","HZ_MBOM_OF_PRODUCT");
-        }else if(query.getType().equals(6)){
-            map.put("tableName","HZ_MBOM_OF_FINANCE");
-        }else {
-            map.put("tableName","HZ_MBOM_RECORD");
-        }
+        map.put("tableName",MbomTableNameEnum.tableName(query.getType()));
+
         request.setPageNumber(query.getPage());
         request.setPageSize(query.getPageSize());
         request.setFilters(map);
@@ -79,6 +76,9 @@ public class HzMbomRecordDAOImpl extends BaseSQLUtil implements HzMbomRecordDAO 
 
     @Override
     public List<HzMbomLineRecord> findHzMbomByPuid(Map<String, Object> map) {
+        if(map.get("tableName")==null || map.get("tableName") == ""){
+            map.put("tableName","HZ_MBOM_RECORD");
+        }
         return  super.findForList("HzMbomRecordDAOImpl_findHzMbomByPuid",map);
     }
 

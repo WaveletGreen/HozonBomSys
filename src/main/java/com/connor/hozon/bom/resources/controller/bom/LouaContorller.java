@@ -4,10 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.connor.hozon.bom.resources.controller.BaseController;
 import com.connor.hozon.bom.resources.domain.dto.request.SetLouReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.*;
-import com.connor.hozon.bom.resources.domain.query.HzEbomTreeQuery;
-import com.connor.hozon.bom.resources.domain.query.HzLouaQuery;
-import com.connor.hozon.bom.resources.domain.query.HzMbomTreeQuery;
-import com.connor.hozon.bom.resources.domain.query.HzPbomTreeQuery;
+import com.connor.hozon.bom.resources.domain.query.*;
 import com.connor.hozon.bom.resources.service.bom.HzEbomService;
 import com.connor.hozon.bom.resources.service.bom.HzMbomService;
 import com.connor.hozon.bom.resources.service.bom.HzPbomService;
@@ -177,7 +174,10 @@ public class LouaContorller extends BaseController {
             }
             String parentId = record.getParentUid();
             if(parentId != null){
-                respDTO = hzMbomService.findHzMbomByPuid(query.getProjectId(),parentId);//父
+                HzMbomByIdQuery query1 = new HzMbomByIdQuery();
+                query1.setPuid(parentId);
+                query1.setProjectId(query.getProjectId());
+                respDTO = hzMbomService.findHzMbomByPuid(query1);//父
             }
         }
         recordArrayList.forEach(record -> {
@@ -356,7 +356,10 @@ public class LouaContorller extends BaseController {
             }
             String parentId = record.getParentUid();
             if(parentId != null){
-                respDTO = hzMbomService.findHzMbomByPuid(query.getProjectId(),parentId);//父
+                HzMbomByIdQuery hzMbomByIdQuery = new HzMbomByIdQuery();
+                hzMbomByIdQuery.setProjectId(query.getProjectId());
+                hzMbomByIdQuery.setPuid(parentId);
+                respDTO = hzMbomService.findHzMbomByPuid(hzMbomByIdQuery);//父
             }
         }
         recordArrayList.forEach(record -> {

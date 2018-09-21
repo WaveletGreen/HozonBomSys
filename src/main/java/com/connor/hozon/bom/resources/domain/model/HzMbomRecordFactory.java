@@ -169,8 +169,8 @@ public class HzMbomRecordFactory {
 
 
     public static HzMbomLineRecord generateSupMbom(HzEPLManageRecord record, int i, String projectId, List<HzConfigBomColorBean> beans){
-        HzMbomLineRecord mbomLineRecord = HzMbomRecordFactory.ebomRecordToMbomRecord(record);
-        String lineId = HzBomSysFactory.resultLineId(record.getLineID(),projectId);
+        HzMbomLineRecord mbomLineRecord = ebomRecordToMbomRecord(record);
+        String lineId = HzBomSysFactory.resultLineId(mbomLineRecord.getLineId(),projectId);
 
         if(Integer.valueOf(1).equals(record.getColorPart())){
             if(i!=0){
