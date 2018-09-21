@@ -6,6 +6,7 @@ import com.connor.hozon.bom.resources.domain.query.HzMbomByPageQuery;
 import com.connor.hozon.bom.resources.domain.query.HzMbomTreeQuery;
 import com.connor.hozon.bom.resources.page.Page;
 import sql.pojo.bom.HzMbomLineRecord;
+import sql.pojo.bom.HzMbomLineRecordVO;
 import sql.pojo.bom.HzMbomRecord;
 
 import java.util.List;
@@ -152,4 +153,7 @@ public interface HzMbomRecordDAO {
 
 
     List<HzMbomLineRecord> findHzMbomAll(String projectId);
+
+
+    int insertVO(HzMbomLineRecordVO hzMbomLineRecordVO);
 }

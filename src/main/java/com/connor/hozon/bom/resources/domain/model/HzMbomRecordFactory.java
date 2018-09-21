@@ -6,6 +6,7 @@ import com.connor.hozon.bom.resources.domain.dto.response.HzMbomRecordRespDTO;
 import sql.pojo.bom.HzBomLineRecord;
 import sql.pojo.bom.HzMbomLineRecord;
 import sql.pojo.epl.HzEPLManageRecord;
+import sql.pojo.interaction.HzConfigBomColorBean;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -160,6 +161,26 @@ public class HzMbomRecordFactory {
         }
 
         return recordList;
+    }
+
+
+    public static HzMbomLineRecord generateSupMbom(HzEPLManageRecord record, int i, String projectId, List<HzConfigBomColorBean> beans){
+        HzMbomLineRecord mbomLineRecord = HzMbomRecordFactory.ebomRecordToMbomRecord(record);
+        String lineId = HzBomSysFactory.resultLineId(record.getLineID(),projectId);
+        if(Integer.valueOf(1).equals(record.getColorPart())){
+            mbomLineRecord.setLineId(lineId+beans.get(i).getColorCode());
+        }else {
+            mbomLineRecord.setLineId(lineId);
+        }
+
+        String lineIndex = record.getLineIndex();
+        String sortNum = record.getSortNum();
+        String firstIndex = lineIndex.split("\\.")[0];
+        String othersIndex = lineIndex.substring(firstIndex.length(),lineIndex.length());
+        Integer first = Integer.valueOf(firstIndex+Integer.valueOf(firstIndex)*i);
+        mbomLineRecord.setLineIndex(String.valueOf(first)+othersIndex);
+        mbomLineRecord.setSortNum(String.valueOf(Double.parseDouble(sortNum)+100*i));
+        return mbomLineRecord;
     }
 
 }

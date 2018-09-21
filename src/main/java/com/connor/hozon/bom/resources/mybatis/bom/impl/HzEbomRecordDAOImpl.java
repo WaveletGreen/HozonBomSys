@@ -143,7 +143,7 @@ public class HzEbomRecordDAOImpl extends BaseSQLUtil implements HzEbomRecordDAO 
         Map<String,Object> map = new HashMap<>();
         map.put("projectId",projectId);
         map.put("colorPart",colorPart);
-        return super.findForList("HzEbomRecordDAOImpl_getAll2YBomRecord",projectId);
+        return super.findForList("HzEbomRecordDAOImpl_getAll2YBomRecord",map);
     }
 
     @Override
