@@ -80,7 +80,7 @@
 
     <!--查询Mbom信息 分页-->
     <select id="HzMbomRecordDAOImpl_getMBomRecord" resultMap="MbomResultMap" parameterType="java.util.HashMap">
-        select t.* from HZ_MBOM_RECORD t
+        select t.* from ${tableName} t
         where t.p_bom_digifax_id=(
         select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(
         select t2.puid from Hz_project_libs t2
@@ -114,7 +114,7 @@
 
     <!--查询Mbom信息 总数分页-->
     <select id="HzMbomRecordDAOImpl_getTotalCount" resultType="java.lang.Integer" parameterType="java.util.HashMap">
-        select count(*) from  HZ_MBOM_RECORD t
+        select count(*) from  ${tableName} t
         where t.p_bom_digifax_id=(
         select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(
         select t2.puid from Hz_project_libs t2
@@ -148,7 +148,7 @@
 
     <!--获取一条 MBOM信息-->
     <select id="HzMbomRecordDAOImpl_findHzMbomByPuid" resultMap="MbomResultMap" parameterType="java.util.HashMap">
-        select t.* from  HZ_MBOM_RECORD t
+        select t.* from  ${tableName} t
         where t.p_bom_digifax_id=(
         select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(
         select t2.puid from Hz_project_libs t2
@@ -318,7 +318,7 @@
 
     <!--更新数据-->
     <update id="HzMbomRecordDAOImpl_update" parameterType="sql.pojo.bom.HzMbomLineRecord">
-        update HZ_MBOM_RECORD
+        update ${tableName}
         <set>
             <if test="sparePart != null">
                 P_SPARE_PART = #{sparePart,jdbcType=VARCHAR},
@@ -679,7 +679,7 @@
 
     <!--获取MBOM结构树-->
     <select id="HzMbomRecordDAOImpl_getHzMbomTree" parameterType="java.util.HashMap" resultMap="MbomResultMap">
-        select * from HZ_MBOM_RECORD t
+        select * from ${tableName} t
         where t.p_bom_digifax_id=(
         select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(
         select t2.puid from Hz_project_libs t2
@@ -696,7 +696,7 @@
     <!--批量删除-->
     <update id="HzMbomRecordDAOImpl_deleteList"  parameterType="java.util.List">
         <foreach collection="list" item="item" index="index" open="begin" close=";end;" separator=";">
-            update HZ_MBOM_RECORD
+            update update ${item.tableName}
             <set>
                 P_MBOM_STATUS=0,
                 P_UPDATE_TIME =sysdate

@@ -581,26 +581,26 @@ function initTable1(mBomUrl) {
 function doQuery1() {
     //$('#eplTable').bootstrapTable('refresh');    //刷新表格
     var projectId = $("#project", window.top.document).val();
-    var productionUrl = "mbom/record?projectId=" + projectId;
+    var productionUrl = "mbom/record?projectId=" + projectId+"&type="+1;
     // var level = $("#level").val();
     // productionUrl += "&level=" + level;
     // var pBomOfWhichDept = $("#pBomOfWhichDept").val();
     // productionUrl += "&pBomOfWhichDept=" + pBomOfWhichDept;
     // var lineId = $("#lineId").val();
     // productionUrl += "&lineId=" + lineId;
-    // var pBomLinePartClass = $("#pBomLinePartClass").val();
-    // if (pBomLinePartClass =="请选择零件分类") {
-    //     productionUrl += "&pBomLinePartClass="+ "";
-    // }else {
-    //     productionUrl += "&pBomLinePartClass=" + pBomLinePartClass;
-    // }
-    // var pBomLinePartResource = $("#pBomLinePartResource").val();
-    // if (pBomLinePartResource == "请选择零件来源") {
-    //     productionUrl += "&pBomLinePartResource="+ "";
-    // }
-    // else {
-    //     productionUrl += "&pBomLinePartResource=" + pBomLinePartResource;
-    // }
+    var pBomLinePartClass = $("#pBomLinePartClass1").val();
+    if (pBomLinePartClass =="请选择零件分类") {
+        productionUrl += "&pBomLinePartClass="+ "";
+    }else {
+        productionUrl += "&pBomLinePartClass=" + pBomLinePartClass;
+    }
+    var pBomLinePartResource = $("#pBomLinePartResource1").val();
+    if (pBomLinePartResource == "请选择零件来源") {
+        productionUrl += "&pBomLinePartResource="+ "";
+    }
+    else {
+        productionUrl += "&pBomLinePartResource=" + pBomLinePartResource;
+    }
     initTable2(productionUrl);
     $('#whiteBodyProductionTable').bootstrapTable('destroy');
 }
@@ -741,7 +741,7 @@ function initTable2(productionUrl) {
                             }
                             window.Ewin.dialog({
                                 title: "修改",
-                                url: "mbom/updateProduction",
+                                url: "mbom/updateProduction?projectId=" + projectId + "&eBomPuid=" + rows[0].eBomPuid+"&type="+1,
                                 gridId: "gridId",
                                 width: 500,
                                 height: 500
@@ -761,6 +761,7 @@ function initTable2(productionUrl) {
                             var myData = JSON.stringify({
                                 "projectId": $("#project", window.top.document).val(),
                                 "puids": puids,
+                                "type":1,
                             });
                             if (rows.length == 0) {
                                 window.Ewin.alert({message: '请选择一条需要删除的数据!'});
@@ -1100,26 +1101,26 @@ function initTable2(productionUrl) {
 function doQuery2() {
     //$('#eplTable').bootstrapTable('refresh');    //刷新表格
     var projectId = $("#project", window.top.document).val();
-    var financialUrl = "mbom/record?projectId=" + projectId;
+    var financialUrl = "mbom/record?projectId=" + projectId+"&type="+6;
     // var level = $("#level").val();
     // financialUrl += "&level=" + level;
     // var pBomOfWhichDept = $("#pBomOfWhichDept").val();
     // financialUrl += "&pBomOfWhichDept=" + pBomOfWhichDept;
     // var lineId = $("#lineId").val();
     // financialUrl += "&lineId=" + lineId;
-    // var pBomLinePartClass = $("#pBomLinePartClass").val();
-    // if (pBomLinePartClass =="请选择零件分类") {
-    //     financialUrl += "&pBomLinePartClass="+ "";
-    // }else {
-    //     financialUrl += "&pBomLinePartClass=" + pBomLinePartClass;
-    // }
-    // var pBomLinePartResource = $("#pBomLinePartResource").val();
-    // if (pBomLinePartResource == "请选择零件来源") {
-    //     financialUrl += "&pBomLinePartResource="+ "";
-    // }
-    // else {
-    //     financialUrl += "&pBomLinePartResource=" + pBomLinePartResource;
-    // }
+    var pBomLinePartClass = $("#pBomLinePartClass6").val();
+    if (pBomLinePartClass =="请选择零件分类") {
+        financialUrl += "&pBomLinePartClass="+ "";
+    }else {
+        financialUrl += "&pBomLinePartClass=" + pBomLinePartClass;
+    }
+    var pBomLinePartResource = $("#pBomLinePartResource6").val();
+    if (pBomLinePartResource == "请选择零件来源") {
+        financialUrl += "&pBomLinePartResource="+ "";
+    }
+    else {
+        financialUrl += "&pBomLinePartResource=" + pBomLinePartResource;
+    }
     initTable3(financialUrl);
     $('#whiteBodyFinancialTable').bootstrapTable('destroy');
 }
@@ -1260,7 +1261,7 @@ function initTable3(financialUrl) {
                             }
                             window.Ewin.dialog({
                                 title: "修改",
-                                url: "mbom/updateFinancial",
+                                url: "mbom/updateFinancial?projectId=" + projectId + "&eBomPuid=" + rows[0].eBomPuid+"&type="+6,
                                 gridId: "gridId",
                                 width: 500,
                                 height: 500
@@ -1280,6 +1281,7 @@ function initTable3(financialUrl) {
                             var myData = JSON.stringify({
                                 "projectId": $("#project", window.top.document).val(),
                                 "puids": puids,
+                                "type":6,
                             });
                             if (rows.length == 0) {
                                 window.Ewin.alert({message: '请选择一条需要删除的数据!'});
@@ -1626,7 +1628,7 @@ function doMBom() {
 function doProduction() {
     $(document).ready((function () {
         var projectId = $("#project", window.top.document).val();
-        var productionUrl = "mbom/record?projectId=" + projectId;
+        var productionUrl = "mbom/record?projectId=" + projectId+"&type="+1;
         initTable2(productionUrl);
     }))
 }
@@ -1634,7 +1636,7 @@ function doProduction() {
 function doFinancial() {
     $(document).ready((function () {
         var projectId = $("#project", window.top.document).val();
-        var financialUrl = "mbom/record?projectId=" + projectId;
+        var financialUrl = "mbom/record?projectId=" + projectId+"&type="+6;
         initTable3(financialUrl);
     }))
 }

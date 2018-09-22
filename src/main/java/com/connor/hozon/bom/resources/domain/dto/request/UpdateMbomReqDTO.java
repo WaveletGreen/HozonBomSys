@@ -63,6 +63,19 @@ public class UpdateMbomReqDTO {
 
     private String pFactoryCode;
 
+    /**
+     * 1生产 6财务
+     */
+    private Integer type;
+
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
+    }
+
     public String getpBomType() {
         return pBomType;
     }
