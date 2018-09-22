@@ -8,6 +8,7 @@ import com.connor.hozon.bom.resources.domain.query.HzMaterielByPageQuery;
 import com.connor.hozon.bom.resources.domain.query.HzMaterielQuery;
 import com.connor.hozon.bom.resources.domain.query.HzMbomByPageQuery;
 import com.connor.hozon.bom.resources.enumtype.BomResourceEnum;
+import com.connor.hozon.bom.resources.enumtype.MbomTableNameEnum;
 import com.connor.hozon.bom.resources.mybatis.bom.HzMbomRecordDAO;
 import com.connor.hozon.bom.resources.mybatis.factory.HzFactoryDAO;
 import com.connor.hozon.bom.resources.mybatis.materiel.HzMaterielDAO;
@@ -236,7 +237,7 @@ public class HzMaterielServiceImpl implements HzMaterielService {
 
             int m = m3+m4+m5+m6+m7;
             if(m<=0){
-                List<HzMbomLineRecord> records= hzMbomRecordDAO.findHzMbomAll(query.getProjectId());
+                List<HzMbomLineRecord> records= hzMbomRecordDAO.findHzMbomAll(query.getProjectId(),MbomTableNameEnum.tableName(0));
                 if(ListUtil.isNotEmpty(records)){
                     int size = records.size();
                     //分批插入数据 一次1000条

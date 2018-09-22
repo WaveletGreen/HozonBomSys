@@ -7,18 +7,18 @@ import java.util.concurrent.CountDownLatch;
  * @Date: 2018/9/21
  * @Description:
  */
-public abstract class AddMbomThread implements Runnable{
+public abstract class RefreshMbomThread implements Runnable{
 
     private CountDownLatch latch;
 
-    public AddMbomThread(CountDownLatch latch) {
+    public RefreshMbomThread(CountDownLatch latch) {
         this.latch = latch;
     }
 
     @Override
     public void run() {
         try {
-           insertMbom();
+            refreshMbom();
         }catch (Exception e){
 
         }finally {
@@ -28,5 +28,5 @@ public abstract class AddMbomThread implements Runnable{
         }
     }
 
-    public abstract void insertMbom();
+    public abstract void refreshMbom();
 }

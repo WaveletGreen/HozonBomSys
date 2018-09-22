@@ -3,6 +3,7 @@ package com.connor.hozon.bom.resources.domain.model;
 import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.resources.domain.dto.request.AddHzEbomReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzMbomRecordRespDTO;
+import com.connor.hozon.bom.resources.util.ListUtil;
 import sql.pojo.bom.HzBomLineRecord;
 import sql.pojo.bom.HzMbomLineRecord;
 import sql.pojo.epl.HzEPLManageRecord;
@@ -130,6 +131,7 @@ public class HzMbomRecordFactory {
         hzMbomLineRecord.setpBomOfWhichDept(record.getpBomOfWhichDept());
         hzMbomLineRecord.setpBomLinePartEnName(record.getpBomLinePartEnName());
         hzMbomLineRecord.setpBomLinePartResource(record.getpBomLinePartResource());
+        hzMbomLineRecord.setIsColorPart(record.getColorPart());
         return hzMbomLineRecord;
     }
 
@@ -170,11 +172,10 @@ public class HzMbomRecordFactory {
 
     public static HzMbomLineRecord generateSupMbom(HzEPLManageRecord record, int i, String projectId, List<HzConfigBomColorBean> beans){
         HzMbomLineRecord mbomLineRecord = ebomRecordToMbomRecord(record);
-        String lineId = HzBomSysFactory.resultLineId(mbomLineRecord.getLineId(),projectId);
-
-        if(Integer.valueOf(1).equals(record.getColorPart())){
-            if(i!=0){
-                lineId = lineId+beans.get(i).getColorCode();
+        String lineId = record.getLineID();
+        if(Integer.valueOf(1).equals(record.getColorPart())&&ListUtil.isNotEmpty(beans)){
+            if(!beans.get(i).getColorCode().equals("-")){
+                lineId = HzBomSysFactory.resultLineId(mbomLineRecord.getLineId(),projectId)+beans.get(i).getColorCode();
             }
         }
 

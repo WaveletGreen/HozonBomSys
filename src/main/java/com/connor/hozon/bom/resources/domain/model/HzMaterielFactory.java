@@ -2,6 +2,8 @@ package com.connor.hozon.bom.resources.domain.model;
 
 import com.connor.hozon.bom.resources.domain.dto.request.AddHzEbomReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.request.UpdateHzEbomReqDTO;
+import com.connor.hozon.bom.resources.enumtype.BomResourceEnum;
+import sql.pojo.bom.HzMbomLineRecord;
 import sql.pojo.project.HzMaterielRecord;
 
 import java.util.UUID;
@@ -82,6 +84,20 @@ public class HzMaterielFactory {
             hzMaterielRecord.setpColorPart(null);
         }
         hzMaterielRecord.setpPertainToProjectPuid(reqDTO.getProjectId());
+        return hzMaterielRecord;
+    }
+
+    public static HzMaterielRecord mbomRecordToMaterielRecord(String projectId, HzMbomLineRecord record){
+        HzMaterielRecord hzMaterielRecord = new HzMaterielRecord();
+        hzMaterielRecord.setpMaterielCode(record.getLineId());
+        hzMaterielRecord.setpMaterielDesc(record.getpBomLinePartName());
+        hzMaterielRecord.setpMaterielDescEn(record.getpBomLinePartEnName());
+        hzMaterielRecord.setpMaterielType("A002");
+        hzMaterielRecord.setpPertainToProjectPuid(projectId);
+        hzMaterielRecord.setpMaterielDataType(BomResourceEnum.enumTypeToMaterielTypeNum(record.getpBomLinePartResource(),record.getIs2Y()));
+        hzMaterielRecord.setPuid(UUID.randomUUID().toString());
+        hzMaterielRecord.setMaterielResourceId(record.geteBomPuid());
+        hzMaterielRecord.setpColorPart(record.getIsColorPart());
         return hzMaterielRecord;
     }
 }

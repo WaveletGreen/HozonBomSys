@@ -49,23 +49,25 @@ public enum BomResourceEnum {
      */
 
     public static Integer enumTypeToMaterielTypeNum(String resource,Integer is2Y){
-        if(resource.equals(BomResourceEnum.MADE_PART.getResourceMsg())){
-            return 41;
-        }else if(resource.equals(BomResourceEnum.PURCHASE_PART.getResourceMsg())){
-            return 51;
-        }else if(resource.equals(BomResourceEnum.MADE_ASSEMBLY.getResourceMsg())){
-            return 71;
-        }else if(Integer.valueOf(1).equals(is2Y)){
-            return 31;
-        }else if(null == is2Y || Integer.valueOf(0).equals(is2Y)){
-            if(resource.equals(BomResourceEnum.MADE_SELF_USE_STANDARD.getResourceMsg())){
-                return 81;
-            }
-            if(resource.equals(BomResourceEnum.MADE_SELF_USE_OFF_STANDARD.getResourceMsg())){
-                return 81;
-            }
-            if(resource.equals(BomResourceEnum.VIRTUAL_ASSEMBLY.getResourceMsg())){
-                return 81;
+        if(resource!=null){
+            if(resource.equals(BomResourceEnum.MADE_PART.getResourceMsg())){
+                return 41;
+            }else if(resource.equals(BomResourceEnum.PURCHASE_PART.getResourceMsg())){
+                return 51;
+            }else if(resource.equals(BomResourceEnum.MADE_ASSEMBLY.getResourceMsg())){
+                return 71;
+            }else if(Integer.valueOf(1).equals(is2Y)){
+                return 31;
+            }else if(null == is2Y || Integer.valueOf(0).equals(is2Y)){
+                if(resource.equals(BomResourceEnum.MADE_SELF_USE_STANDARD.getResourceMsg())){
+                    return 81;
+                }
+                if(resource.equals(BomResourceEnum.MADE_SELF_USE_OFF_STANDARD.getResourceMsg())){
+                    return 81;
+                }
+                if(resource.equals(BomResourceEnum.VIRTUAL_ASSEMBLY.getResourceMsg())){
+                    return 81;
+                }
             }
         }
         return null;

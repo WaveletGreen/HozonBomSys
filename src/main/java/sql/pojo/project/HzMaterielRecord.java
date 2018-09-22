@@ -1,6 +1,7 @@
 package sql.pojo.project;
 
 import java.util.Date;
+import java.util.Objects;
 
 public class HzMaterielRecord {
     /**
@@ -124,6 +125,24 @@ public class HzMaterielRecord {
      * 发送到SAP 成功标志 （1 成功 0 失败）
      */
     private Integer sendSapFlag;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        HzMaterielRecord that = (HzMaterielRecord) o;
+        return
+                Objects.equals(pMaterielCode, that.pMaterielCode) ;
+
+
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(pMaterielCode);
+    }
+
     public Integer getSendSapFlag() {
         return sendSapFlag;
     }
