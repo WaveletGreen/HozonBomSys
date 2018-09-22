@@ -18,6 +18,7 @@
     P_OPTIONFAMILY_NAME,
     P_OPTIONFAMILY_DESC
   </sql>
+    <!--**************************************select**************************************-->
     <select id="selectByPrimaryKey" parameterType="sql.pojo.cfg.HzCfg0OptionFamily" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
@@ -115,4 +116,8 @@
         </if>
         order by P_OPTIONFAMILY_NAME ASC
     </select>
+    <!--**************************************delete**************************************-->
+    <delete id="deleteByPrimaryKey" parameterType="sql.pojo.cfg.HzCfg0OptionFamily">
+        delete HZ_CFG0_OPTIONFAMILY_RECORD t where t.PUID=#{puid,jdbcType=VARCHAR}
+    </delete>
 </mapper>

@@ -316,6 +316,9 @@ public class HzComposeMFService {
         for (HzFullCfgModel modelCfg : modelCfgs) {
             if (!checkString(modelCfg.getModCfg0Uid())) {
                 HzEPLManageRecord hzEPLManageRecord = hzEbomRecordDAO.findEbomById(modelCfg.getFlModelBomlineUid(), hzComposeMFDTO.getProjectUid());
+                if(hzEPLManageRecord==null){
+                    continue;
+                }
                 results.put("status", false);
                 results.put("msg", "在车型模型" + modelDetail.getpModelVersion() + "存在标配打点图，但是忘记为2Y:" + hzEPLManageRecord.getLineID() + "选择特性值，请添加特性值");
                 return;

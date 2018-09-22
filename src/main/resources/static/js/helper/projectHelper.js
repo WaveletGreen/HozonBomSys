@@ -11,7 +11,6 @@ function checkIsSelectProject(data) {
         swal({
             title: '错误',
             width: 500,
-            height: 400,
             html: $('<span>')
                 .addClass('some-class')
                 .css("font-size", "24px")

@@ -10,14 +10,18 @@
 <div id="content" class="row-fluid" style="height:auto">
     <div id="demo3" hidden="hidden"></div>
     <div class="content row-fluid col-md-4 col-lg-4" id="demo4">
-        <div style="max-width: 250px;float: right">
+        <div id="info_div" style="max-width: 300px;position: absolute;left: 60%;top: 9%;">
+            <!--float: right;margin-top: 4em-->
+            <img id="info_img_1" style="max-width: 36px;" th:src="@{/img/my_left_arrow.png}">
             <span>第一步：查询需要合成的零件</span>
+            <img id="info_img_2" style="max-width: 36px;" th:src="@{/img/my_left_arrow.png}" style="display: none">
         </div>
         <h3><p class="text-primary" id="demo1">请选择您要合成的零件</p></h3>
         <form class="form-inline" id="demo2">
             <div class="form-group">
                 <label for="queryLineId">零件号:</label>
-                <input type="text" class="form-control"style="width: 150px" name="queryLineId" id="queryLineId" placeholder="请输入查询的零件号"/>
+                <input type="text" class="form-control" style="width: 150px" name="queryLineId" id="queryLineId"
+                       placeholder="请输入查询的零件号"/>
             </div>
             <div class="form-group">
                 <button type="button" id="queryBtn1" class="btn btn-primary">查询</button>
@@ -28,8 +32,10 @@
     </div>
     <div class="content col-md-4 col-lg-4">
         <div class="form-group">
-            <button type="button" id="synthetic" class="btn btn-primary"style="width: 145px;margin-top: 57px">生成工艺合件</button>
-            <button type="button" id="synthetic1" class="btn btn-primary"style="width: 145px;margin-top: 57px">指定合件位置</button>
+            <button type="button" id="synthetic" class="btn btn-primary" style="width: 145px;margin-top: 57px">生成工艺合件
+            </button>
+            <button type="button" id="synthetic1" class="btn btn-primary" style="width: 145px;margin-top: 57px">指定合件位置
+            </button>
         </div>
         <div style="width:350px;height:500px;overflow-y:scroll; overflow:auto;">
             <table align="center" valign="center" class="table table-striped tableNormalStyle" id="detailTable">
@@ -41,7 +47,8 @@
         <form class="form-inline">
             <div class="form-group">
                 <label for="queryLineId2">零件号:</label>
-                <input type="text" class="form-control" style="width: 150px" name="queryLineId2" id="queryLineId2" placeholder="请输入查询的零件号"/>
+                <input type="text" class="form-control" style="width: 150px" name="queryLineId2" id="queryLineId2"
+                       placeholder="请输入查询的零件号"/>
             </div>
             <div class="form-group">
                 <button type="button" id="queryBtn2" class="btn btn-primary">查询</button>
@@ -52,7 +59,8 @@
     </div>
 </div>
 <script th:src="@{/js/helper/projectHelper.js}"></script>
-<script th:src="@{/js/bom/pbom/craftFitting.js}"></script>
+<script th:src="@{/js/helper/zTreeHelper.js}"></script>
+<script th:src="@{/js/bom/pbom/craftFitting2.js}"></script>
 <script th:src="@{/js/bom/pbom/demo.js}"></script>
 </body>
 </html>

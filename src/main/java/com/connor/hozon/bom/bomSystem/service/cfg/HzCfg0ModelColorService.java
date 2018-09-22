@@ -397,10 +397,15 @@ public class HzCfg0ModelColorService {
             List<HzCfg0OptionFamily> withColor = hzCfg0OptionFamilyService.selectForColorBluePrint(projectUid, 1);
             List<HzCfg0OptionFamily> withoutColor = hzCfg0OptionFamilyService.selectForColorBluePrint(projectUid, 0);
             Map<String, HzCfg0OptionFamily> mapWithColor = new LinkedHashMap<>();
-            withColor.stream().filter(c -> false == SpecialFeatureOption.YQCSCODE.getDesc().equals(c.getpOptionfamilyName()))
+            withColor.stream().filter(c -> c != null).filter(c -> false == SpecialFeatureOption.YQCSCODE.getDesc().equals(c.getpOptionfamilyName()))
                     .collect(Collectors.toList()).forEach(c -> mapWithColor.put(c.getPuid(), c));
+            if (mapWithColor.isEmpty()) {
+                object.put("status", 1);
+                object.put("msg", "没有找到表头，请到全配置BOM一级清单中将特性值和带颜色的2Y进行关联");
+                return object;
+            }
             for (int i = 0; i < withoutColor.size(); i++) {
-                if (mapWithColor.containsKey(withoutColor.get(i).getPuid())) {
+                if (withoutColor.get(i) != null && mapWithColor.containsKey(withoutColor.get(i).getPuid())) {
                     List<HzCfg0Record> list = hzCfg0Service.doSelectByFamilyUidWithProject(withoutColor.get(i).getPuid(), projectUid);
                     StringBuilder _sb = new StringBuilder();
                     list.forEach(l -> _sb.append(l.getpCfg0ObjectId() + " "));
