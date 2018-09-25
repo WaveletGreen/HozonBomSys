@@ -288,6 +288,42 @@ function initTable1(mBomUrl) {
                             });
                         }
                     },
+                    {
+                        text: '数据同步',
+                        iconCls: 'glyphicon glyphicon-repeat',
+                        handler: function () {
+
+                            var myData = JSON.stringify({
+                                "projectId": $("#project", window.top.document).val(),
+                            });
+                            window.Ewin.confirm({
+                                title: '提示',
+                                message: '确定要同步数据到MBOM吗?',
+                                width: 500
+                            }).on(function (e) {
+                                if (e) {
+                                    $.ajax({
+                                        type: "POST",
+                                        //ajax需要添加打包名
+                                        url: "mbom/delete",
+                                        data: myData,
+                                        contentType: "application/json",
+                                        success: function (result) {
+                                            if (result.success) {
+                                                layer.msg('同步成功', {icon: 1, time: 2000})
+                                            } else if (!result.success) {
+                                                window.Ewin.alert({message: result.errMsg});
+                                            }
+                                            $mBomTable.bootstrapTable("refresh");
+                                        },
+                                        error: function (info) {
+                                            window.Ewin.alert({message: "操作失败:" + info.status});
+                                        }
+                                    })
+                                }
+                            });
+                        }
+                    },
                     // {
                     //     text: '设置为LOU/取消',
                     //     iconCls: 'glyphicon glyphicon-cog',
