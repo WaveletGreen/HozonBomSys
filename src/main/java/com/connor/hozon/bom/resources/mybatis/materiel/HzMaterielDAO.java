@@ -119,4 +119,5 @@ public interface HzMaterielDAO {
 
     boolean isRepeat(HzMaterielQuery query);
 
+    List<HzMaterielRecord> findHzMaterielForProcess(String projectId);
 }

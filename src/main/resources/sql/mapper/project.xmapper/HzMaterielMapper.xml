@@ -414,4 +414,16 @@
             and P_VALID_FLAG=1
         </where>
     </select>
+
+    <select id="HzMaterialDAOImpl_findHzMaterielForProcess" parameterType="java.lang.String" resultMap="HzMaterielRecordMap">
+        select
+        <include refid="HzMaterielRecordList"/>
+        from
+          HZ_MATERIEL_RECORD
+        where
+          P_PERTAIN_TO_PROJECT_PUID = #{projectId,jdbcType=VARCHAR}
+        and
+        P_MATERIEL_DATA_TYPE in(71)
+        <!--P_MATERIEL_DATA_TYPE in(11,21,71)-->
+    </select>
 </mapper>

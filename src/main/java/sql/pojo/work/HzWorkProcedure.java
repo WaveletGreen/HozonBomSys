@@ -101,6 +101,11 @@ public class HzWorkProcedure {
      */
     private String controlCode;
 
+    /**
+     * 工厂ID
+     */
+    private String pFactoryId;
+
     public String getControlCode() {
         return controlCode;
     }
@@ -283,5 +288,13 @@ public class HzWorkProcedure {
 
     public void setpStatus(Integer pStatus) {
         this.pStatus = pStatus;
+    }
+
+    public void setpFactoryId(String pFactoryId) {
+        this.pFactoryId = pFactoryId;
+    }
+
+    public String getpFactoryId() {
+        return pFactoryId;
     }
 }

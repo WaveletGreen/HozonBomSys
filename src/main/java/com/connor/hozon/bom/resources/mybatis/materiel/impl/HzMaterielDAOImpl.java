@@ -135,4 +135,9 @@ public class HzMaterielDAOImpl extends BaseSQLUtil implements HzMaterielDAO {
         map.put("projectId",query.getProjectId());
         return (int)super.findForObject("HzMaterialDAOImpl_isRepeat",map)>0;
     }
+
+    @Override
+    public List<HzMaterielRecord> findHzMaterielForProcess(String projectId) {
+        return super.executeQueryByPass(new HzMaterielRecord(), projectId,"HzMaterialDAOImpl_findHzMaterielForProcess");
+    }
 }
