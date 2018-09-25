@@ -166,7 +166,7 @@ function initTable1(mBomUrl) {
                 cache: false,
                 striped: true,                              //是否显示行间隔色
                 sidePagination: "server",           //分页方式：client客户端分页，server服务端分页（*）
-                height: $(window.parent.document).find("#wrapper").height() - 135,
+                height: $(window.parent.document).find("#wrapper").height() - 170,
                 width: $(window).width(),
                 formId: "queryMbomMain",
                 undefinedText: "",//当数据为 undefined 时显示的字符
@@ -721,7 +721,7 @@ function initTable2(productionUrl) {
                 cache: false,
                 striped: true,                              //是否显示行间隔色
                 sidePagination: "server",           //分页方式：client客户端分页，server服务端分页（*）
-                height: $(window.parent.document).find("#wrapper").height() - 135,
+                height: $(window.parent.document).find("#wrapper").height() - 320,
                 width: $(window).width(),
                 formId: "queryWhiteBodyProduction",
                 undefinedText: "",//当数据为 undefined 时显示的字符
@@ -1241,7 +1241,7 @@ function initTable3(financialUrl) {
                 cache: false,
                 striped: true,                              //是否显示行间隔色
                 sidePagination: "server",           //分页方式：client客户端分页，server服务端分页（*）
-                height: $(window.parent.document).find("#wrapper").height() - 135,
+                height: $(window.parent.document).find("#wrapper").height() - 320,
                 width: $(window).width(),
                 formId: "queryMbomMain",
                 undefinedText: "",//当数据为 undefined 时显示的字符
