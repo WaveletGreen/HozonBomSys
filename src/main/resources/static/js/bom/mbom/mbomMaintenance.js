@@ -292,21 +292,23 @@ function initTable1(mBomUrl) {
                         text: '数据同步',
                         iconCls: 'glyphicon glyphicon-repeat',
                         handler: function () {
+                            var url = "";
+                            // var myData = JSON.parse({
+                            //     "projectId": $("#project", window.top.document).val(),
+                            // });
 
-                            var myData = JSON.stringify({
-                                "projectId": $("#project", window.top.document).val(),
-                            });
                             window.Ewin.confirm({
                                 title: '提示',
                                 message: '确定要同步数据到MBOM吗?',
                                 width: 500
                             }).on(function (e) {
                                 if (e) {
+                                    url = "mbom/refresh?projectId="+$("#project", window.top.document).val();
                                     $.ajax({
                                         type: "POST",
                                         //ajax需要添加打包名
-                                        url: "mbom/delete",
-                                        data: myData,
+                                        url: url,
+                                        // data: myData,
                                         contentType: "application/json",
                                         success: function (result) {
                                             if (result.success) {
