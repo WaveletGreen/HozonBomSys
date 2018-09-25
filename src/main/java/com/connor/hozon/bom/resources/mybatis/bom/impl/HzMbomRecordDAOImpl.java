@@ -217,8 +217,11 @@ public class HzMbomRecordDAOImpl extends BaseSQLUtil implements HzMbomRecordDAO 
     }
 
     @Override
-    public List<HzMbomLineRecord> findHzMbomAll(String projectId) {
-        return super.findForList("HzMbomRecordDAOImpl_findHzMbomAll",projectId);
+    public List<HzMbomLineRecord> findHzMbomAll(String projectId,String tableName) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("projectId",projectId);
+        map.put("tableName",tableName);
+        return super.findForList("HzMbomRecordDAOImpl_findHzMbomAll",map);
     }
 
     @Override
@@ -232,34 +235,107 @@ public class HzMbomRecordDAOImpl extends BaseSQLUtil implements HzMbomRecordDAO 
                 //分批插入数据 一次1000条
                 int i = 0;
                 int cout = 0;
-                if (size > 1000) {
-                    for (i = 0; i < size / 1000; i++) {
+                synchronized (this){
+                    if (size > 1000) {
+                        for (i = 0; i < size / 1000; i++) {
+                            List<HzMbomLineRecord> list = new ArrayList<>();
+                            for (int j = 0; j < 1000; j++) {
+                                list.add(lineRecords.get(cout));
+                                cout++;
+                            }
+                            map.put("list",list);
+
+                            super.insert("HzMbomRecordDAOImpl_insertVO",map);
+
+                        }
+                    }
+                    if (i * 1000 < size) {
                         List<HzMbomLineRecord> list = new ArrayList<>();
-                        for (int j = 0; j < 1000; j++) {
+                        for (int j = 0; j < size - i * 1000; j++) {
                             list.add(lineRecords.get(cout));
                             cout++;
                         }
                         map.put("list",list);
-                        synchronized (this){
-                            super.insert("HzMbomRecordDAOImpl_insertVO",map);
-                        }
-                    }
-                }
-                if (i * 1000 < size) {
-                    List<HzMbomLineRecord> list = new ArrayList<>();
-                    for (int j = 0; j < size - i * 1000; j++) {
-                        list.add(lineRecords.get(cout));
-                        cout++;
-                    }
-                    map.put("list",list);
-                    synchronized (this){
+
                         super.insert("HzMbomRecordDAOImpl_insertVO",map);
+
                     }
                 }
+
             }
             return 1;
         }catch (Exception e){
             return 0;
         }
+    }
+
+    @Override
+    public int updateVO(HzMbomLineRecordVO hzMbomLineRecordVO) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("tableName",hzMbomLineRecordVO.getTableName());
+        try {
+            if (ListUtil.isNotEmpty(hzMbomLineRecordVO.getRecordList())) {
+                List<HzMbomLineRecord> lineRecords = hzMbomLineRecordVO.getRecordList();
+                int size = lineRecords.size();
+                //分批更新数据 一次1000条
+                int i = 0;
+                int cout = 0;
+                synchronized (this){
+                    if (size > 1000) {
+                        for (i = 0; i < size / 1000; i++) {
+                            List<HzMbomLineRecord> list = new ArrayList<>();
+                            for (int j = 0; j < 1000; j++) {
+                                list.add(lineRecords.get(cout));
+                                cout++;
+                            }
+                            map.put("list",list);
+
+                            super.update("HzMbomRecordDAOImpl_updateVO",map);
+
+                        }
+                    }
+                    if (i * 1000 < size) {
+                        List<HzMbomLineRecord> list = new ArrayList<>();
+                        for (int j = 0; j < size - i * 1000; j++) {
+                            list.add(lineRecords.get(cout));
+                            cout++;
+                        }
+                        map.put("list",list);
+
+                        super.update("HzMbomRecordDAOImpl_updateVO",map);
+
+                    }
+                }
+
+            }
+            return 1;
+        }catch (Exception e){
+            return 0;
+        }
+    }
+
+    @Override
+    public HzMbomLineRecord findHzMbomByEbomIdAndLineIndex(String ebomPuid, String lineIndex,String tableName) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("puid",ebomPuid);
+        map.put("lineIndex",lineIndex);
+        map.put("tableName",tableName);
+        return (HzMbomLineRecord)super.findForObject("HzMbomRecordDAOImpl_findHzMbomByEbomIdAndLineIndex",map);
+    }
+
+    @Override
+    public int deleteMbomList(HzMbomLineRecordVO record) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("tableName",record.getTableName());
+        map.put("list",record.getRecordList());
+        try {
+            synchronized (this){
+                super.delete("HzMbomRecordDAOImpl_deleteMbomList",map);
+            }
+        }catch (Exception e){
+           return 0;
+        }
+
+        return 1;
     }
 }

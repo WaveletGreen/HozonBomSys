@@ -84,5 +84,5 @@ public interface HzMbomService {
      * @param projectId
      * @return
      */
-    boolean refreshHzMbom(String projectId);
+    OperateResultMessageRespDTO refreshHzMbom(String projectId);
 }

@@ -84,4 +84,6 @@ public interface HzEbomRecordDAO {
 
 
     List<HzEPLManageRecord> getSameNameLineId(String lineId,String projectId);
+
+    List<HzEPLManageRecord> getPaintAndWhiteBody(String puid,String projectId);
 }

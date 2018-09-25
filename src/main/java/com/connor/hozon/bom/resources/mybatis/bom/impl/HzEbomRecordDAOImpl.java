@@ -154,4 +154,12 @@ public class HzEbomRecordDAOImpl extends BaseSQLUtil implements HzEbomRecordDAO 
         return super.findForList("HzEbomRecordDAOImpl_getSameNameLineId",map);
     }
 
+    @Override
+    public List<HzEPLManageRecord> getPaintAndWhiteBody(String puid, String projectId) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("puid",puid);
+        map.put("projectId",projectId);
+        return super.findForList("HzEbomRecordDAOImpl_getPaintAndWhiteBody",map);
+    }
+
 }
