@@ -120,6 +120,8 @@
 
         <!--配置和BOM进行交互的映射文件-->
         <mapper resource="sql/mapper/interaction/HzConfigBomColorMapper.xml"/>
+        <mapper resource="sql/mapper/interaction/HzSingleVehiclesBomLineMapper.xml"/>
+        <mapper resource="sql/mapper/interaction/HzSingleVehiclesMapper.xml"/>
 
     </mappers>
 </configuration>

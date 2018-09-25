@@ -1,0 +1,484 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.connor.hozon.bom.interaction.dao.HzSingleVehiclesDao">
+    <!--数据库字段-->
+    <resultMap id="BaseResultMap" type="sql.pojo.interaction.HzSingleVehicles">
+        <!--主键-->
+        <id column="ID" jdbcType="DECIMAL" property="id"/>
+        <!--项目UID，外键-->
+        <result column="SVL_PROJECT_UID" jdbcType="VARCHAR" property="svlProjectUid"/>
+        <!--配置物料特性表的单车配置外键-->
+        <result column="SVL_DMB_ID" jdbcType="DECIMAL" property="svlDmbId"/>
+        <!--内饰颜色代码-->
+        <result column="SVL_INNER_COLOR_CODE" jdbcType="VARCHAR" property="svlInnerColorCode"/>
+        <!--内饰颜色名称-->
+        <result column="SVL_INNER_COLOR_NAME" jdbcType="VARCHAR" property="svlInnerColorName"/>
+        <!--颜色代码，工程师手动填-->
+        <result column="SVL_COLOR_CODE" jdbcType="VARCHAR" property="svlColorCode"/>
+        <!--颜色名称-->
+        <result column="SVL_COLOR_NAME" jdbcType="VARCHAR" property="svlColorName"/>
+        <!--电池型号-->
+        <result column="SVL_BATTERY_CODE" jdbcType="VARCHAR" property="svlBatteryCode"/>
+        <!--电机型号-->
+        <result column="SVL_MOTOR_CODE" jdbcType="VARCHAR" property="svlMotorCode"/>
+        <!--保留字段-->
+        <result column="SVL_RESERVED_1" jdbcType="VARCHAR" property="svlReserved1"/>
+        <!--保留字段-->
+        <result column="SVL_RESERVED_2" jdbcType="VARCHAR" property="svlReserved2"/>
+        <!--保留字段-->
+        <result column="SVL_RESERVED_3" jdbcType="VARCHAR" property="svlReserved3"/>
+        <!--保留字段-->
+        <result column="SVL_RESERVED_4" jdbcType="VARCHAR" property="svlReserved4"/>
+        <!--保留字段-->
+        <result column="SVL_RESERVED_5" jdbcType="VARCHAR" property="svlReserved5"/>
+        <!--保留字段-->
+        <result column="SVL_RESERVED_6" jdbcType="VARCHAR" property="svlReserved6"/>
+        <!--保留字段-->
+        <result column="SVL_RESERVED_7" jdbcType="VARCHAR" property="svlReserved7"/>
+        <!--保留字段-->
+        <result column="SVL_RESERVED_8" jdbcType="VARCHAR" property="svlReserved8"/>
+        <!--保留字段-->
+        <result column="SVL_RESERVED_9" jdbcType="VARCHAR" property="svlReserved9"/>
+        <!--保留字段-->
+        <result column="SVL_RESERVED_10" jdbcType="VARCHAR" property="svlReserved10"/>
+        <!--保留字段-->
+        <result column="SVL_RESERVED_11" jdbcType="VARCHAR" property="svlReserved11"/>
+        <!--保留字段-->
+        <result column="SVL_RESERVED_12" jdbcType="VARCHAR" property="svlReserved12"/>
+        <!--保留字段-->
+        <result column="SVL_RESERVED_13" jdbcType="VARCHAR" property="svlReserved13"/>
+        <!--保留字段-->
+        <result column="SVL_RESERVED_14" jdbcType="VARCHAR" property="svlReserved14"/>
+        <!--保留字段-->
+        <result column="SVL_RESERVED_15" jdbcType="VARCHAR" property="svlReserved15"/>
+        <!--配置特性表主数据-->
+        <result column="SVL_CFG_MATERIAL_UID" jdbcType="VARCHAR" property="svlCfgMaterialUid"/>
+    </resultMap>
+    <!--拓展结果-->
+    <resultMap id="ExWithProjectBaseResult" extends="BaseResultMap" type="sql.pojo.interaction.HzSingleVehicles">
+        <!--物料编号-->
+        <result column="svl_Material_Code" jdbcType="VARCHAR" property="svlMaterialCode"/>
+        <!--基本信息-->
+        <result column="svl_Material_Basic_Info" jdbcType="VARCHAR" property="svlMaterialBasicInfo"/>
+        <!--品牌代码-->
+        <result column="p_brand_code" jdbcType="VARCHAR" property="brandCode"/>
+        <!--平台代码-->
+        <result column="p_brand_name" jdbcType="VARCHAR" property="brandName"/>
+        <!--平台代码-->
+        <result column="p_platform_code" jdbcType="VARCHAR" property="platformCode"/>
+        <!--平台名称-->
+        <result column="p_platform_name" jdbcType="VARCHAR" property="platformName"/>
+        <!--车型代码-->
+        <result column="p_vehicle_code" jdbcType="VARCHAR" property="vehicleCode"/>
+        <!--车型名称-->
+        <result column="p_vehicle_name" jdbcType="VARCHAR" property="vehicleName"/>
+        <!--颜色代码-->
+        <result column="p_Color_code" jdbcType="VARCHAR" property="colorCode"/>
+        <!--颜色名称-->
+        <result column="p_Color_Name" jdbcType="VARCHAR" property="colorName"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        ID,
+        SVL_PROJECT_UID,
+        SVL_DMB_ID,
+        SVL_INNER_COLOR_CODE,
+        SVL_INNER_COLOR_NAME,
+        SVL_COLOR_CODE,
+        SVL_COLOR_NAME,
+        SVL_BATTERY_CODE,
+        SVL_MOTOR_CODE,
+        SVL_RESERVED_1,
+        SVL_RESERVED_2,
+        SVL_RESERVED_3,
+        SVL_RESERVED_4,
+        SVL_RESERVED_5,
+        SVL_RESERVED_6,
+        SVL_RESERVED_7,
+        SVL_RESERVED_8,
+        SVL_RESERVED_9,
+        SVL_RESERVED_10,
+        SVL_RESERVED_11,
+        SVL_RESERVED_12,
+        SVL_RESERVED_13,
+        SVL_RESERVED_14,
+        SVL_RESERVED_15,
+        SVL_CFG_MATERIAL_UID
+    </sql>
+    <sql id="ExWithProject_Column_List">
+        p_brand_code,
+        p_brand_name,
+        p_platform_code,
+        p_platform_name,
+        p_vehicle_code,
+        p_vehicle_name
+    </sql>
+    <!--**************************************select**************************************-->
+    <select id="selectByPrimaryKey" parameterType="sql.pojo.interaction.HzSingleVehicles" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from HZ_SINGLE_VEHICLES
+        where ID = #{id,jdbcType=DECIMAL}
+    </select>
+    <!--查询器查询，可以加多个条件，甚至加分页查询都可以-->
+    <select id="selectListByInquirer" parameterType="com.connor.hozon.bom.interaction.inquirer.HzSingleVehiclesInquirer"
+            resultMap="ExWithProjectBaseResult">
+        select
+        <include refid="Base_Column_List"/>
+        ,
+        t6.p_feature_single_vehicle_code as svl_Material_Code,
+        t6.p_feature_cn_desc as svl_Material_Basic_Info,
+        <include refid="ExWithProject_Column_List"/>,
+        t9.p_color_name,
+        t9.p_color_code
+        from Hz_single_vehicles t
+        left join Hz_Cfg0_Model_Feature t6
+        on t.svl_cfg_material_uid = t6.puid
+        left join Hz_Cfg0_Model_Record t7
+        on t6.p_pertain_to_model = t6.puid
+        left join Hz_Cfg0_Main_Record t8
+        on t7.p_cfg0_model_of_main_record = t8.puid
+        left join Hz_Cfg0_Model_Color_Record t20
+        on t6.p_pertain_to_color_model = t20.puid
+        left join Hz_Cfg0_Colorset t9
+        on t20.p_color_uid = t9.puid
+        left join Hz_Project_Libs t2
+        on t.svl_project_uid = t2.puid
+        left join Hz_Vehicle_Record t3
+        on t3.puid = t2.p_project_pertain_to_vehicle
+        left join Hz_Platform_Record t4
+        on t4.puid = t3.p_vehicle_pertain_to_platform
+        left join Hz_Brand_Record t5
+        on t5.puid = t4.puid
+        <where>
+            <if test="svlProjectUid!=null">
+                t.svl_project_uid=#{svlProjectUid,jdbcType=VARCHAR}
+            </if>
+            <if test="svlDmbId!=null">
+                and t.SVL_DMB_ID=#{svlDmbId,jdbcType=VARCHAR}
+            </if>
+        </where>
+    </select>
+    <!--查询器查询，可以加多个条件，甚至加分页查询都可以-->
+    <select id="selectOrgByInquirer" parameterType="com.connor.hozon.bom.interaction.inquirer.HzSingleVehiclesInquirer"
+            resultMap="ExWithProjectBaseResult">
+        select
+        t.p_feature_single_vehicle_code as svl_Material_Code,
+        t.p_feature_cn_desc as svl_Material_Basic_Info,
+        <include refid="ExWithProject_Column_List"/>,
+        t9.p_color_name,
+        t9.p_color_code
+        /* t4.p_project_name,
+        t4.p_project_code,
+        t5.p_vehicle_name,
+        t5.p_vehicle_code,
+        t6.p_platform_name,
+        t6.p_platform_name,
+        t7.p_brand_name,
+        t7.p_brand_code*/
+        from Hz_Cfg0_Model_Feature t
+        left join Hz_Cfg0_Model_Record t2 on t.p_pertain_to_model=t2.puid
+        left join Hz_Cfg0_Main_Record t3 on t2.p_cfg0_model_of_main_record=t3.puid
+        left join Hz_Project_Libs t4 on t3.p_cfg0_of_which_project_puid=t4.puid
+        left join Hz_Vehicle_Record t5 on t4.p_project_pertain_to_vehicle=t5.puid
+        left join Hz_Platform_Record t6 on t5.p_vehicle_pertain_to_platform=t6.puid
+        left join Hz_Brand_Record t7 on t6.p_pertain_to_brand_puid=t7.puid
+        left join Hz_Cfg0_Model_Color_Record t8 on t.p_pertain_to_color_model=t8.puid
+        left join Hz_Cfg0_Colorset t9 on t8.p_color_uid=t9.puid
+        <where>
+            <if test="svlProjectUid!=null">
+                t4.puid=#{svlProjectUid,jdbcType=VARCHAR}
+            </if>
+        </where>
+    </select>
+    <!--**************************************delete**************************************-->
+    <delete id="deleteByPrimaryKey" parameterType="sql.pojo.interaction.HzSingleVehicles">
+    delete from HZ_SINGLE_VEHICLES
+    where ID = #{id,jdbcType=DECIMAL}
+  </delete>
+    <!--**************************************insert**************************************-->
+    <insert id="insert" parameterType="sql.pojo.interaction.HzSingleVehicles">
+    insert into HZ_SINGLE_VEHICLES (ID, SVL_PROJECT_UID, SVL_DMB_ID,
+      SVL_INNER_COLOR_CODE, SVL_INNER_COLOR_NAME, SVL_COLOR_CODE,
+      SVL_COLOR_NAME, SVL_BATTERY_CODE, SVL_MOTOR_CODE,
+      SVL_RESERVED_1, SVL_RESERVED_2, SVL_RESERVED_3,
+      SVL_RESERVED_4, SVL_RESERVED_5, SVL_RESERVED_6,
+      SVL_RESERVED_7, SVL_RESERVED_8, SVL_RESERVED_9,
+      SVL_RESERVED_10, SVL_RESERVED_11, SVL_RESERVED_12,
+      SVL_RESERVED_13, SVL_RESERVED_14, SVL_RESERVED_15,SVL_CFG_MATERIAL_UID
+      )
+    values (#{id,jdbcType=DECIMAL}, #{svlProjectUid,jdbcType=VARCHAR}, #{svlDmbId,jdbcType=DECIMAL},
+      #{svlInnerColorCode,jdbcType=VARCHAR}, #{svlInnerColorName,jdbcType=VARCHAR}, #{svlColorCode,jdbcType=VARCHAR},
+      #{svlColorName,jdbcType=VARCHAR}, #{svlBatteryCode,jdbcType=VARCHAR}, #{svlMotorCode,jdbcType=VARCHAR},
+      #{svlReserved1,jdbcType=VARCHAR}, #{svlReserved2,jdbcType=VARCHAR}, #{svlReserved3,jdbcType=VARCHAR},
+      #{svlReserved4,jdbcType=VARCHAR}, #{svlReserved5,jdbcType=VARCHAR}, #{svlReserved6,jdbcType=VARCHAR},
+      #{svlReserved7,jdbcType=VARCHAR}, #{svlReserved8,jdbcType=VARCHAR}, #{svlReserved9,jdbcType=VARCHAR},
+      #{svlReserved10,jdbcType=VARCHAR}, #{svlReserved11,jdbcType=VARCHAR}, #{svlReserved12,jdbcType=VARCHAR},
+      #{svlReserved13,jdbcType=VARCHAR}, #{svlReserved14,jdbcType=VARCHAR}, #{svlReserved15,jdbcType=VARCHAR},
+      #{svlCfgMaterialUid,jdbcType=VARCHAR}
+      )
+  </insert>
+    <insert id="insertSelective" parameterType="sql.pojo.interaction.HzSingleVehicles">
+        insert into HZ_SINGLE_VEHICLES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                ID,
+            </if>
+            <if test="svlProjectUid != null">
+                SVL_PROJECT_UID,
+            </if>
+            <if test="svlCfgMaterialUid != null">
+                SVL_DMB_ID,
+            </if>
+            <if test="svlInnerColorCode != null">
+                SVL_INNER_COLOR_CODE,
+            </if>
+            <if test="svlInnerColorName != null">
+                SVL_INNER_COLOR_NAME,
+            </if>
+            <if test="svlColorCode != null">
+                SVL_COLOR_CODE,
+            </if>
+            <if test="svlColorName != null">
+                SVL_COLOR_NAME,
+            </if>
+            <if test="svlBatteryCode != null">
+                SVL_BATTERY_CODE,
+            </if>
+            <if test="svlMotorCode != null">
+                SVL_MOTOR_CODE,
+            </if>
+            <if test="svlReserved1 != null">
+                SVL_RESERVED_1,
+            </if>
+            <if test="svlReserved2 != null">
+                SVL_RESERVED_2,
+            </if>
+            <if test="svlReserved3 != null">
+                SVL_RESERVED_3,
+            </if>
+            <if test="svlReserved4 != null">
+                SVL_RESERVED_4,
+            </if>
+            <if test="svlReserved5 != null">
+                SVL_RESERVED_5,
+            </if>
+            <if test="svlReserved6 != null">
+                SVL_RESERVED_6,
+            </if>
+            <if test="svlReserved7 != null">
+                SVL_RESERVED_7,
+            </if>
+            <if test="svlReserved8 != null">
+                SVL_RESERVED_8,
+            </if>
+            <if test="svlReserved9 != null">
+                SVL_RESERVED_9,
+            </if>
+            <if test="svlReserved10 != null">
+                SVL_RESERVED_10,
+            </if>
+            <if test="svlReserved11 != null">
+                SVL_RESERVED_11,
+            </if>
+            <if test="svlReserved12 != null">
+                SVL_RESERVED_12,
+            </if>
+            <if test="svlReserved13 != null">
+                SVL_RESERVED_13,
+            </if>
+            <if test="svlReserved14 != null">
+                SVL_RESERVED_14,
+            </if>
+            <if test="svlReserved15 != null">
+                SVL_RESERVED_15,
+            </if>
+            <if test="svlCfgMaterialUid != null">
+                SVL_CFG_MATERIAL_UID,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=DECIMAL},
+            </if>
+            <if test="svlProjectUid != null">
+                #{svlProjectUid,jdbcType=VARCHAR},
+            </if>
+            <if test="svlCfgMaterialUid != null">
+                #{svlCfgMaterialUid,jdbcType=VARCHAR},
+            </if>
+            <if test="svlInnerColorCode != null">
+                #{svlInnerColorCode,jdbcType=VARCHAR},
+            </if>
+            <if test="svlInnerColorName != null">
+                #{svlInnerColorName,jdbcType=VARCHAR},
+            </if>
+            <if test="svlColorCode != null">
+                #{svlColorCode,jdbcType=VARCHAR},
+            </if>
+            <if test="svlColorName != null">
+                #{svlColorName,jdbcType=VARCHAR},
+            </if>
+            <if test="svlBatteryCode != null">
+                #{svlBatteryCode,jdbcType=VARCHAR},
+            </if>
+            <if test="svlMotorCode != null">
+                #{svlMotorCode,jdbcType=VARCHAR},
+            </if>
+            <if test="svlReserved1 != null">
+                #{svlReserved1,jdbcType=VARCHAR},
+            </if>
+            <if test="svlReserved2 != null">
+                #{svlReserved2,jdbcType=VARCHAR},
+            </if>
+            <if test="svlReserved3 != null">
+                #{svlReserved3,jdbcType=VARCHAR},
+            </if>
+            <if test="svlReserved4 != null">
+                #{svlReserved4,jdbcType=VARCHAR},
+            </if>
+            <if test="svlReserved5 != null">
+                #{svlReserved5,jdbcType=VARCHAR},
+            </if>
+            <if test="svlReserved6 != null">
+                #{svlReserved6,jdbcType=VARCHAR},
+            </if>
+            <if test="svlReserved7 != null">
+                #{svlReserved7,jdbcType=VARCHAR},
+            </if>
+            <if test="svlReserved8 != null">
+                #{svlReserved8,jdbcType=VARCHAR},
+            </if>
+            <if test="svlReserved9 != null">
+                #{svlReserved9,jdbcType=VARCHAR},
+            </if>
+            <if test="svlReserved10 != null">
+                #{svlReserved10,jdbcType=VARCHAR},
+            </if>
+            <if test="svlReserved11 != null">
+                #{svlReserved11,jdbcType=VARCHAR},
+            </if>
+            <if test="svlReserved12 != null">
+                #{svlReserved12,jdbcType=VARCHAR},
+            </if>
+            <if test="svlReserved13 != null">
+                #{svlReserved13,jdbcType=VARCHAR},
+            </if>
+            <if test="svlReserved14 != null">
+                #{svlReserved14,jdbcType=VARCHAR},
+            </if>
+            <if test="svlReserved15 != null">
+                #{svlReserved15,jdbcType=VARCHAR},
+            </if>
+            <if test="svlCfgMaterialUid != null">
+                #{svlCfgMaterialUid,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <!--**************************************update**************************************-->
+    <update id="updateByPrimaryKeySelective" parameterType="sql.pojo.interaction.HzSingleVehicles">
+        update HZ_SINGLE_VEHICLES
+        <set>
+            <if test="svlProjectUid != null">
+                SVL_PROJECT_UID = #{svlProjectUid,jdbcType=VARCHAR},
+            </if>
+            <if test="svlDmbId != null">
+                SVL_DMB_ID = #{svlDmbId,jdbcType=DECIMAL},
+            </if>
+            <if test="svlInnerColorCode != null">
+                SVL_INNER_COLOR_CODE = #{svlInnerColorCode,jdbcType=VARCHAR},
+            </if>
+            <if test="svlInnerColorName != null">
+                SVL_INNER_COLOR_NAME = #{svlInnerColorName,jdbcType=VARCHAR},
+            </if>
+            <if test="svlColorCode != null">
+                SVL_COLOR_CODE = #{svlColorCode,jdbcType=VARCHAR},
+            </if>
+            <if test="svlColorName != null">
+                SVL_COLOR_NAME = #{svlColorName,jdbcType=VARCHAR},
+            </if>
+            <if test="svlBatteryCode != null">
+                SVL_BATTERY_CODE = #{svlBatteryCode,jdbcType=VARCHAR},
+            </if>
+            <if test="svlMotorCode != null">
+                SVL_MOTOR_CODE = #{svlMotorCode,jdbcType=VARCHAR},
+            </if>
+            <if test="svlReserved1 != null">
+                SVL_RESERVED_1 = #{svlReserved1,jdbcType=VARCHAR},
+            </if>
+            <if test="svlReserved2 != null">
+                SVL_RESERVED_2 = #{svlReserved2,jdbcType=VARCHAR},
+            </if>
+            <if test="svlReserved3 != null">
+                SVL_RESERVED_3 = #{svlReserved3,jdbcType=VARCHAR},
+            </if>
+            <if test="svlReserved4 != null">
+                SVL_RESERVED_4 = #{svlReserved4,jdbcType=VARCHAR},
+            </if>
+            <if test="svlReserved5 != null">
+                SVL_RESERVED_5 = #{svlReserved5,jdbcType=VARCHAR},
+            </if>
+            <if test="svlReserved6 != null">
+                SVL_RESERVED_6 = #{svlReserved6,jdbcType=VARCHAR},
+            </if>
+            <if test="svlReserved7 != null">
+                SVL_RESERVED_7 = #{svlReserved7,jdbcType=VARCHAR},
+            </if>
+            <if test="svlReserved8 != null">
+                SVL_RESERVED_8 = #{svlReserved8,jdbcType=VARCHAR},
+            </if>
+            <if test="svlReserved9 != null">
+                SVL_RESERVED_9 = #{svlReserved9,jdbcType=VARCHAR},
+            </if>
+            <if test="svlReserved10 != null">
+                SVL_RESERVED_10 = #{svlReserved10,jdbcType=VARCHAR},
+            </if>
+            <if test="svlReserved11 != null">
+                SVL_RESERVED_11 = #{svlReserved11,jdbcType=VARCHAR},
+            </if>
+            <if test="svlReserved12 != null">
+                SVL_RESERVED_12 = #{svlReserved12,jdbcType=VARCHAR},
+            </if>
+            <if test="svlReserved13 != null">
+                SVL_RESERVED_13 = #{svlReserved13,jdbcType=VARCHAR},
+            </if>
+            <if test="svlReserved14 != null">
+                SVL_RESERVED_14 = #{svlReserved14,jdbcType=VARCHAR},
+            </if>
+            <if test="svlReserved15 != null">
+                SVL_RESERVED_15 = #{svlReserved15,jdbcType=VARCHAR},
+            </if>
+            <if test="svlCfgMaterialUid != null">
+                SVL_CFG_MATERIAL_UID = #{svlCfgMaterialUid,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where ID = #{id,jdbcType=DECIMAL}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="sql.pojo.interaction.HzSingleVehicles">
+    update HZ_SINGLE_VEHICLES
+    set SVL_PROJECT_UID = #{svlProjectUid,jdbcType=VARCHAR},
+      SVL_DMB_ID = #{svlDmbId,jdbcType=DECIMAL},
+      SVL_INNER_COLOR_CODE = #{svlInnerColorCode,jdbcType=VARCHAR},
+      SVL_INNER_COLOR_NAME = #{svlInnerColorName,jdbcType=VARCHAR},
+      SVL_COLOR_CODE = #{svlColorCode,jdbcType=VARCHAR},
+      SVL_COLOR_NAME = #{svlColorName,jdbcType=VARCHAR},
+      SVL_BATTERY_CODE = #{svlBatteryCode,jdbcType=VARCHAR},
+      SVL_MOTOR_CODE = #{svlMotorCode,jdbcType=VARCHAR},
+      SVL_RESERVED_1 = #{svlReserved1,jdbcType=VARCHAR},
+      SVL_RESERVED_2 = #{svlReserved2,jdbcType=VARCHAR},
+      SVL_RESERVED_3 = #{svlReserved3,jdbcType=VARCHAR},
+      SVL_RESERVED_4 = #{svlReserved4,jdbcType=VARCHAR},
+      SVL_RESERVED_5 = #{svlReserved5,jdbcType=VARCHAR},
+      SVL_RESERVED_6 = #{svlReserved6,jdbcType=VARCHAR},
+      SVL_RESERVED_7 = #{svlReserved7,jdbcType=VARCHAR},
+      SVL_RESERVED_8 = #{svlReserved8,jdbcType=VARCHAR},
+      SVL_RESERVED_9 = #{svlReserved9,jdbcType=VARCHAR},
+      SVL_RESERVED_10 = #{svlReserved10,jdbcType=VARCHAR},
+      SVL_RESERVED_11 = #{svlReserved11,jdbcType=VARCHAR},
+      SVL_RESERVED_12 = #{svlReserved12,jdbcType=VARCHAR},
+      SVL_RESERVED_13 = #{svlReserved13,jdbcType=VARCHAR},
+      SVL_RESERVED_14 = #{svlReserved14,jdbcType=VARCHAR},
+      SVL_RESERVED_15 = #{svlReserved15,jdbcType=VARCHAR},
+      SVL_CFG_MATERIAL_UID = #{svlCfgMaterialUid,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+</mapper>

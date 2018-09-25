@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.connor.hozon.bom.interaction.dao.HzSingleVehicleBomLineDao">
+    <resultMap id="BaseResultMap" type="sql.pojo.interaction.HzSingleVehicleBomLineBean">
+        <result column="CFG_BOMLINE_UID" jdbcType="VARCHAR" property="bomLineUid"/>
+    </resultMap>
+    <sql id="ColumnWithColorCode">
+        CFG_BOMLINE_UID
+    </sql>
+    <select id="selectListByInquirer"
+            resultType="com.connor.hozon.bom.interaction.inquirer.HzSingleVehicleBLInquirer"
+            resultMap="BaseResultMap">
+        select * from HZ_DERIVATIVE_MATERIEL_DETAIL t
+        left join Hz_Derivative_Materiel_Basic t2 on t2.id=t.dmd_dmb_id
+        left join Hz_Full_Cfg_Withcfg_Record t3 on t.dmd_cfg0_uid=t3.cfg_cfg0_uid
+        where
+        t.dmd_dmb_id=#{dmbId,jdbcType=DECIMAL}
+        and t2.dmb_project_uid=#{projectUid,jdbcType=VARCHAR}
+        <if test="isNotNull!=null and true==isNotNull">
+            and t3.cfg_bomline_uid is not null
+        </if>
+    </select>
+</mapper>

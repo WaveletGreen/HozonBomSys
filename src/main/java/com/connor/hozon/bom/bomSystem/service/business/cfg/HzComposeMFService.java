@@ -11,6 +11,8 @@ import com.connor.hozon.bom.bomSystem.service.cfg.*;
 import com.connor.hozon.bom.bomSystem.service.project.HzSuperMaterielService;
 import com.connor.hozon.bom.common.base.entity.QueryBase;
 import com.connor.hozon.bom.common.util.user.UserInfo;
+import com.connor.hozon.bom.interaction.dao.HzSingleVehicleBomLineDao;
+import com.connor.hozon.bom.interaction.dao.HzSingleVehiclesDao;
 import com.connor.hozon.bom.resources.mybatis.bom.HzEbomRecordDAO;
 import com.connor.hozon.bom.resources.mybatis.factory.HzFactoryDAO;
 import com.connor.hozon.bom.sys.entity.User;
@@ -21,6 +23,8 @@ import org.springframework.stereotype.Service;
 import sql.pojo.cfg.*;
 import sql.pojo.epl.HzEPLManageRecord;
 import sql.pojo.factory.HzFactory;
+import sql.pojo.interaction.HzSingleVehicleBomLineBean;
+import sql.pojo.interaction.HzSingleVehicles;
 import sql.pojo.project.HzMaterielRecord;
 
 import java.util.ArrayList;
@@ -117,6 +121,12 @@ public class HzComposeMFService {
      * 日志
      */
     private static Logger logger = LoggerFactory.getLogger(HzComposeMFService.class);
+
+    @Autowired
+    HzSingleVehiclesDao hzSingleVehiclesDao;
+    @Autowired
+    HzSingleVehicleBomLineDao hzSingleVehicleBomLineDao;
+
 
     private static final boolean finalAddCSYS = true;
 
@@ -316,7 +326,7 @@ public class HzComposeMFService {
         for (HzFullCfgModel modelCfg : modelCfgs) {
             if (!checkString(modelCfg.getModCfg0Uid())) {
                 HzEPLManageRecord hzEPLManageRecord = hzEbomRecordDAO.findEbomById(modelCfg.getFlModelBomlineUid(), hzComposeMFDTO.getProjectUid());
-                if(hzEPLManageRecord==null){
+                if (hzEPLManageRecord == null) {
                     continue;
                 }
                 results.put("status", false);
@@ -513,6 +523,24 @@ public class HzComposeMFService {
             HzCfg0ModelFeature feature = hzCfg0ModelFeatureService.doSelectByModelAndColorPuids(basics.get(i).getDmbModelUid(), basics.get(i).getDmbColorModelUid());
             HzCfg0ModelRecord modelRecord = hzCfg0ModelService.getModelByPuid(feature.getpPertainToModel());
             Map<String, Object> _result = new HashMap<>();
+//            /**
+//             * 从配置中包括品牌平台车型项目等单车信息数据，包括了衍生物料和基本信息数据，不能当作返回前端的数据，因为前端需要从其他地方获取到内饰颜色等信息
+//             */
+            List<HzSingleVehicles> vehicles = hzSingleVehiclesDao.selectOrgByProjectUid(projectUid);
+            /**
+             * 从表中查询单车清单数据，一开始都是0个，需要进行差异数据对比，对比的是数量,再返回前端
+             */
+            List<HzSingleVehicles> hzSingleVehicles = hzSingleVehiclesDao.selectByProjectUid(projectUid);
+            /**
+             * 单车主配置+项目查询1条单车数据，单车主配置是配置物料特性表中的1行数据的主键
+             */
+            HzSingleVehicles hzSingleVehicle = hzSingleVehiclesDao.selectByDmbIdWithProjectUid(basics.get(i).getId(), projectUid);
+            /**
+             * 单车主配置+项目查询单车的所有2Y
+             */
+            List<HzSingleVehicleBomLineBean> hzSingleVehicleBomLineBeans = hzSingleVehicleBomLineDao.selectByProjectUidWithSv(projectUid, basics.get(i).getId());
+
+
             for (int i1 = 0; i1 < columns.size(); i1++) {
                 if (mapOfDetails.get(columns.get(i1).getPuid()) != null) {
                     _result.put("s" + i1, mapOfDetails.get(columns.get(i1).getPuid()).getDmdFeatureValue());
