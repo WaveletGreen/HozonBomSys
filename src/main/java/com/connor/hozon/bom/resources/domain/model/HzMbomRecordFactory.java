@@ -6,6 +6,7 @@ import com.connor.hozon.bom.resources.domain.dto.response.HzMbomRecordRespDTO;
 import com.connor.hozon.bom.resources.util.ListUtil;
 import sql.pojo.bom.HzBomLineRecord;
 import sql.pojo.bom.HzMbomLineRecord;
+import sql.pojo.bom.HzPbomLineRecord;
 import sql.pojo.epl.HzEPLManageRecord;
 import sql.pojo.interaction.HzConfigBomColorBean;
 
@@ -46,14 +47,18 @@ public class HzMbomRecordFactory {
         return hzMbomLineRecord;
     }
 
-    public static HzMbomLineRecord bomLineRecordToMbomRecord(HzBomLineRecord record){
+    public static HzMbomLineRecord pBomRecordToMbomRecord(HzPbomLineRecord record){
         HzMbomLineRecord hzMbomLineRecord = new HzMbomLineRecord();
         hzMbomLineRecord.setPuid(UUID.randomUUID().toString());
         hzMbomLineRecord.setIsHas(record.getIsHas());
         hzMbomLineRecord.setBomDigifaxId(record.getBomDigifaxId());
         hzMbomLineRecord.seteBomPuid(record.getPuid());
         hzMbomLineRecord.setIsDept(record.getIsDept());
-        hzMbomLineRecord.setLineId(record.getLineID());
+        if(record.getLineId().endsWith("YY0")){
+            hzMbomLineRecord.setLineId(record.getLineId().substring(0,record.getLineId().length()-3));
+        }else {
+            hzMbomLineRecord.setLineId(record.getLineId());
+        }
         hzMbomLineRecord.setIsPart(record.getIsPart());
         hzMbomLineRecord.setIs2Y(record.getIs2Y());
         hzMbomLineRecord.setLineIndex(record.getLineIndex());
@@ -64,6 +69,7 @@ public class HzMbomRecordFactory {
         hzMbomLineRecord.setpBomLinePartEnName(record.getpBomLinePartEnName());
         hzMbomLineRecord.setpBomLinePartResource(record.getpBomLinePartResource());
         hzMbomLineRecord.setSortNum(record.getSortNum());
+        hzMbomLineRecord.setIsColorPart(record.getColorPart());
         return hzMbomLineRecord;
     }
 
@@ -141,14 +147,14 @@ public class HzMbomRecordFactory {
      * @param records BOM结构
      * @return
      */
-    public  List<HzMbomLineRecord> movePartBomStructureToThis(HzMbomLineRecord record,List<HzEPLManageRecord> records){
+    public  List<HzMbomLineRecord> movePartBomStructureToThis(HzMbomLineRecord record,List<HzPbomLineRecord> records){
         int n=1;
         List<HzMbomLineRecord> recordList = new ArrayList<>();
         String lindIndex = record.getLineIndex();
         Double sortNum = Double.parseDouble(record.getSortNum());
         record.setIsHas(1);
         for(int i = 1;i<records.size();i++){
-            HzMbomLineRecord lineRecord = ebomRecordToMbomRecord(records.get(i));
+            HzMbomLineRecord lineRecord = pBomRecordToMbomRecord(records.get(i));
             String originalLineIndex = lineRecord.getLineIndex();
             String []lineIns = originalLineIndex.split("\\.");
             if(i ==1){
@@ -170,9 +176,9 @@ public class HzMbomRecordFactory {
     }
 
 
-    public static HzMbomLineRecord generateSupMbom(HzEPLManageRecord record, int i, String projectId, List<HzConfigBomColorBean> beans){
-        HzMbomLineRecord mbomLineRecord = ebomRecordToMbomRecord(record);
-        String lineId = record.getLineID();
+    public static HzMbomLineRecord generateSupMbom(HzPbomLineRecord record, int i, String projectId, List<HzConfigBomColorBean> beans){
+        HzMbomLineRecord mbomLineRecord = pBomRecordToMbomRecord(record);
+        String lineId = record.getLineId();
         if(Integer.valueOf(1).equals(record.getColorPart())&&ListUtil.isNotEmpty(beans)){
             if(!beans.get(i).getColorCode().equals("-")){
                 lineId = HzBomSysFactory.resultLineId(mbomLineRecord.getLineId(),projectId)+beans.get(i).getColorCode();

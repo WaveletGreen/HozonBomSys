@@ -3,6 +3,7 @@ package sql.pojo.bom;
 import io.swagger.models.auth.In;
 
 import java.util.Date;
+import java.util.Objects;
 
 /**
  * Created by haozt on 2018/5/25
@@ -121,6 +122,20 @@ public class HzPbomLineRecord {
     private Integer pLouaFlag;
 
     private String sortNum;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        HzPbomLineRecord that = (HzPbomLineRecord) o;
+        return Objects.equals(eBomPuid, that.eBomPuid);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(eBomPuid);
+        return result;
+    }
 
     public String getSortNum() {
         return sortNum;

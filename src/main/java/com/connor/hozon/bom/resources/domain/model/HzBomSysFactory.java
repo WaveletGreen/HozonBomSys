@@ -2,9 +2,12 @@ package com.connor.hozon.bom.resources.domain.model;
 
 
 import com.connor.hozon.bom.resources.mybatis.bom.HzEbomRecordDAO;
+import com.connor.hozon.bom.resources.mybatis.bom.HzPbomRecordDAO;
 import com.connor.hozon.bom.resources.mybatis.bom.impl.HzEbomRecordDAOImpl;
+import com.connor.hozon.bom.resources.mybatis.bom.impl.HzPbomRecordDAOImpl;
 import com.connor.hozon.bom.resources.util.ListUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import sql.pojo.bom.HzPbomLineRecord;
 import sql.pojo.epl.HzEPLManageRecord;
 
 import java.util.List;
@@ -87,13 +90,13 @@ public class HzBomSysFactory {
             Pattern p = Pattern.compile("[a-zA-Z]");
             Matcher matcher = p.matcher(s);
             if(!matcher.find()){
-                HzEbomRecordDAO hzEbomRecordDAO = new HzEbomRecordDAOImpl();
-                List<HzEPLManageRecord> nameList = hzEbomRecordDAO.getSameNameLineId(lineId,projectId);
+                HzPbomRecordDAO hzPbomRecordDAO = new HzPbomRecordDAOImpl();
+                List<HzPbomLineRecord> nameList = hzPbomRecordDAO.getSameNameLineId(lineId,projectId);
                 if(ListUtil.isNotEmpty(nameList) && nameList.size()>1){
-                   for(HzEPLManageRecord record:nameList){
-                       String s1 = record.getLineID().substring(record.getLineID().length()-2,record.getLineID().length());
+                   for(HzPbomLineRecord record:nameList){
+                       String s1 = record.getLineId().substring(record.getLineId().length()-2,record.getLineId().length());
                        Matcher matcher1 = p.matcher(s1);
-                       if(matcher1.find() && record.getLineID().length()==length+2){
+                       if(matcher1.find() && record.getLineId().length()==length+2){
                            result = result+"AA";
                            break;
                        }

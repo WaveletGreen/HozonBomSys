@@ -713,9 +713,11 @@ public class HzMaterielServiceImpl implements HzMaterielService {
             for(HzMaterielRecord record:recordList){
                 HzMaterielRespDTO respDTO = recordToRespDTO(record);
                 respDTO.setNo(++num);
-                HzFactory hzFactory = hzFactoryDAO.findFactory(record.getpFactoryPuid(),"");
-                if(factory !=null){
+                if(null !=record.getpFactoryPuid()){
+                    HzFactory hzFactory = hzFactoryDAO.findFactory(record.getpFactoryPuid(),"");
                     respDTO.setFactoryCode(hzFactory.getpFactoryCode());
+                }else {
+                    respDTO.setFactoryCode("1001");
                 }
                 respDTOS.add(respDTO);
             }

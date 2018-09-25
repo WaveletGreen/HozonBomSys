@@ -103,6 +103,7 @@ public class HzPbomRecordDAOImpl extends BaseSQLUtil implements HzPbomRecordDAO 
         Map<String,Object> map = new HashMap<>();
         map.put("projectId",query.getProjectId());
         map.put("puid",query.getPuid());
+        map.put("colorPart",query.getIsColorPart());
         return super.findForList("HzPbomRecordDAOImpl_getHzPbomTree",map);
     }
 
@@ -139,7 +140,34 @@ public class HzPbomRecordDAOImpl extends BaseSQLUtil implements HzPbomRecordDAO 
     }
 
     @Override
+    public List<HzPbomLineRecord> getAll2YBomRecord(String projectId) {
+
+        return super.findForList("HzPbomRecordDAOImpl_getAll2YBomRecord",projectId);
+    }
+
+    @Override
     public int delete(String eBomPuid) {
         return super.delete("HzPbomRecordDAOImpl_delete",eBomPuid);
+    }
+
+    @Override
+    public List<HzPbomLineRecord> findPbom(Map<String, Object> map) {
+        return super.findForList("HzPbomRecordDAOImpl_findPbom",map);
+    }
+
+    @Override
+    public List<HzPbomLineRecord> getPaintAndWhiteBody(String puid, String projectId) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("puid",puid);
+        map.put("projectId",projectId);
+        return super.findForList("HzPbomRecordDAOImpl_getPaintAndWhiteBody",map);
+    }
+
+    @Override
+    public List<HzPbomLineRecord> getSameNameLineId(String lineId, String projectId) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("lineId",lineId);
+        map.put("projectId",projectId);
+        return super.findForList("HzPbomRecordDAOImpl_getSameNameLineId",map);
     }
 }
