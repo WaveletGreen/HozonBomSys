@@ -1025,9 +1025,9 @@ public class HzEbomServiceImpl implements HzEbomService {
                                 HzBomLineRecord hzBomLineRecord = new HzBomLineRecord();
                                 hzBomLineRecord.setIsHas(0);
                                 hzBomLineRecord.setIsPart(1);
-                                if(hzEPLManageRecord.getIs2Y().equals(1)){
-                                    hzBomLineRecord.setIs2Y(0);
-                                }
+//                                if(hzEPLManageRecord.getIs2Y().equals(1)){
+//                                    hzBomLineRecord.setIs2Y(0);
+//                                }
                                 hzBomLineRecordDao.update(hzBomLineRecord);
                             }
 

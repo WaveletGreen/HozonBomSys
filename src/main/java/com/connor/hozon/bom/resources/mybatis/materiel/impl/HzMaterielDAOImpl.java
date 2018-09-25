@@ -5,12 +5,14 @@ import com.connor.hozon.bom.resources.domain.query.HzMaterielQuery;
 import com.connor.hozon.bom.resources.mybatis.materiel.HzMaterielDAO;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.page.PageRequest;
+import com.connor.hozon.bom.resources.util.ListUtil;
 import org.springframework.stereotype.Service;
 import sql.BaseSQLUtil;
 import sql.pojo.bom.HzMbomLineRecord;
 import sql.pojo.cfg.HzCfg0ModelRecord;
 import sql.pojo.project.HzMaterielRecord;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,7 +42,43 @@ public class HzMaterielDAOImpl extends BaseSQLUtil implements HzMaterielDAO {
 
     @Override
     public int insertList(List<HzMaterielRecord> hzMaterielRecords) {
-        return super.insert("HzMaterialDAOImpl_insertList", hzMaterielRecords);
+        try {
+            if (ListUtil.isNotEmpty(hzMaterielRecords)) {
+                int size = hzMaterielRecords.size();
+                //分批插入数据 一次1000条
+                int i = 0;
+                int cout = 0;
+                synchronized (this){
+                    if (size > 1000) {
+                        for (i = 0; i < size / 1000; i++) {
+                            List<HzMaterielRecord> list1 = new ArrayList<>();
+                            for (int j = 0; j < 1000; j++) {
+                                list1.add(hzMaterielRecords.get(cout));
+                                cout++;
+                            }
+
+                            super.insert("HzMaterialDAOImpl_insertList",list1);
+
+                        }
+                    }
+                    if (i * 1000 < size) {
+                        List<HzMaterielRecord> list1 = new ArrayList<>();
+                        for (int j = 0; j < size - i * 1000; j++) {
+                            list1.add(hzMaterielRecords.get(cout));
+                            cout++;
+                        }
+
+                        super.insert("HzMaterialDAOImpl_insertList",list1);
+
+                    }
+                }
+
+            }
+            return 1;
+        }catch (Exception e){
+            return 0;
+        }
+//        return super.insert("HzMaterialDAOImpl_insertList", hzMaterielRecords);
     }
 
     @Override
@@ -134,6 +172,65 @@ public class HzMaterielDAOImpl extends BaseSQLUtil implements HzMaterielDAO {
         map.put("pMaterielCode",query.getpMaterielCode());
         map.put("projectId",query.getProjectId());
         return (int)super.findForObject("HzMaterialDAOImpl_isRepeat",map)>0;
+    }
+
+    @Override
+    public List<HzMaterielRecord> getAllMaterielExceptVehicleMateriel(String projectId) {
+
+        return super.findForList("HzMaterialDAOImpl_getAllMaterielExceptVehicleMateriel",projectId);
+    }
+
+    @Override
+    public int deleteMaterielList(List<HzMaterielRecord> list) {
+        int i;
+        try {
+            synchronized (this){
+                i = super.delete("HzMaterialDAOImpl_deleteMaterielList",list);
+            }
+        }catch (Exception e){
+            return 0;
+        }
+        return i;
+    }
+
+    @Override
+    public int updateList(List<HzMaterielRecord> list) {
+        try {
+            if (ListUtil.isNotEmpty(list)) {
+                int size = list.size();
+                //分批更新数据 一次1000条
+                int i = 0;
+                int cout = 0;
+                synchronized (this){
+                    if (size > 1000) {
+                        for (i = 0; i < size / 1000; i++) {
+                            List<HzMaterielRecord> list1 = new ArrayList<>();
+                            for (int j = 0; j < 1000; j++) {
+                                list1.add(list.get(cout));
+                                cout++;
+                            }
+
+                            super.update("HzMaterialDAOImpl_updateList",list1);
+
+                        }
+                    }
+                    if (i * 1000 < size) {
+                        List<HzMaterielRecord> list1 = new ArrayList<>();
+                        for (int j = 0; j < size - i * 1000; j++) {
+                            list1.add(list.get(cout));
+                            cout++;
+                        }
+
+                        super.update("HzMaterialDAOImpl_updateList",list1);
+
+                    }
+                }
+
+            }
+            return 1;
+        }catch (Exception e){
+            return 0;
+        }
     }
 
     @Override

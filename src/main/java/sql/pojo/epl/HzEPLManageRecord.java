@@ -1,6 +1,8 @@
 package sql.pojo.epl;
 
+import java.util.Arrays;
 import java.util.Date;
+import java.util.Objects;
 
 /**
  * Created by haozt on 2018/06/05
@@ -260,6 +262,20 @@ public class HzEPLManageRecord {
     private Integer pLouaFlag;
 
     private String sortNum;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        HzEPLManageRecord that = (HzEPLManageRecord) o;
+        return Objects.equals(puid, that.puid);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(puid);
+        return result;
+    }
 
     public String getSortNum() {
         return sortNum;

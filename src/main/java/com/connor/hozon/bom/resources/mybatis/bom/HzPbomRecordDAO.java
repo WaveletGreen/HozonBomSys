@@ -92,5 +92,15 @@ public interface HzPbomRecordDAO {
 
     String findMinOrderNumWhichGreaterThanThisOrderNum(String projectId,String orderNum);
 
+    List<HzPbomLineRecord> getAll2YBomRecord(String projectId);
+
     int delete(String eBomPuid);
+
+    List<HzPbomLineRecord> findPbom(Map<String,Object> map);
+
+
+    List<HzPbomLineRecord> getPaintAndWhiteBody(String puid,String projectId);
+
+
+    List<HzPbomLineRecord> getSameNameLineId(String lineId,String projectId);
 }

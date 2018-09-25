@@ -5,10 +5,7 @@ import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by haozt on 2018/5/22
@@ -42,6 +39,21 @@ public class ListUtil {
         }
         return false;
     }
+
+    public static<V>  boolean isEmpty(Set<V> list){
+        if(null !=list){
+            return list.isEmpty();
+        }
+        return true;
+    }
+
+    public static<V>  boolean isNotEmpty(Set<V> list){
+        if(null !=list){
+            return !list.isEmpty();
+        }
+        return false;
+    }
+
     /**
      * 对list 记录进行分类
      */

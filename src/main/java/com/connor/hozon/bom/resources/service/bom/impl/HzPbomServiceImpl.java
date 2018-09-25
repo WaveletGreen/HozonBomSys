@@ -74,7 +74,6 @@ public class HzPbomServiceImpl implements HzPbomService {
             hzPbomRecord.setCreateName(UserInfo.getUser().getUserName());
             hzPbomRecord.setUpdateName(UserInfo.getUser().getUserName());
             String buyUnit = recordReqDTO.getBuyUnit();
-            String colorPart = recordReqDTO.getColorPart();
             String type = recordReqDTO.getType();
             if("Y".equals(buyUnit)){
                 hzPbomRecord.setBuyUnit(1);
@@ -82,13 +81,6 @@ public class HzPbomServiceImpl implements HzPbomService {
                 hzPbomRecord.setBuyUnit(0);
             }else{
                 hzPbomRecord.setBuyUnit(2);
-            }
-            if("Y".equals(colorPart)){
-                hzPbomRecord.setColorPart(1);
-            }else if("N".equals(colorPart)){
-                hzPbomRecord.setColorPart(0);
-            }else{
-                hzPbomRecord.setColorPart(2);
             }
             if("Y".equals(type)){
                 hzPbomRecord.setType(1);
@@ -152,7 +144,6 @@ public class HzPbomServiceImpl implements HzPbomService {
             hzPbomRecord.seteBomPuid(recordReqDTO.geteBomPuid());
 //            hzPbomRecord.setPuid(UUID.randomUUID().toString());
             String buyUnit = recordReqDTO.getBuyUnit();
-            String colorPart = recordReqDTO.getColorPart();
             String type = recordReqDTO.getType();
             if(buyUnit.equals("Y")){
                 hzPbomRecord.setBuyUnit(1);
@@ -160,13 +151,6 @@ public class HzPbomServiceImpl implements HzPbomService {
                 hzPbomRecord.setBuyUnit(0);
             }else{
                 hzPbomRecord.setBuyUnit(null);
-            }
-            if(colorPart.equals("Y")){
-                hzPbomRecord.setColorPart(1);
-            }else if(colorPart.equals("N")){
-                hzPbomRecord.setColorPart(0);
-            }else{
-                hzPbomRecord.setColorPart(null);
             }
             if(type.equals("Y")){
                 hzPbomRecord.setType(1);
@@ -317,23 +301,22 @@ public class HzPbomServiceImpl implements HzPbomService {
             }
             jsonObject.put("groupNum", groupNum);
             jsonObject.put("eBomPuid", record.geteBomPuid());
-            jsonObject.put("lineId", record.getLineId() == null ?"":record.getLineId());
+            jsonObject.put("lineId", record.getLineId());
 
-            jsonObject.put("pBomLinePartName", record.getpBomLinePartName()==null?"":record.getpBomLinePartName());
-            jsonObject.put("pBomLinePartClass", record.getpBomLinePartClass()==null?"":record.getpBomLinePartClass());
-            jsonObject.put("pBomLinePartResource", record.getpBomLinePartResource()==null?"":record.getpBomLinePartResource());
-            jsonObject.put("pBomLinePartEnName", record.getpBomLinePartEnName()==null?"":record.getpBomLinePartEnName());
+            jsonObject.put("pBomLinePartName", record.getpBomLinePartName());
+            jsonObject.put("pBomLinePartClass", record.getpBomLinePartClass());
+            jsonObject.put("pBomLinePartResource", record.getpBomLinePartResource());
+            jsonObject.put("pBomLinePartEnName", record.getpBomLinePartEnName());
 
-            jsonObject.put("resource", record.getResource()==null?"":record.getResource());
-            jsonObject.put("workShop1", record.getWorkShop1() ==null?"":record.getWorkShop1());
-            jsonObject.put("workShop2", record.getWorkShop2() == null ?"":record.getWorkShop2());
-            jsonObject.put("productLine", record.getProductLine() == null?"":record.getProductLine());
-            jsonObject.put("mouldType", record.getMouldType() == null?"":record.getMouldType());
-            jsonObject.put("outerPart", record.getOuterPart()==null?"":record.getOuterPart());
-            jsonObject.put("station",record.getStation() == null?"":record.getStation());
+            jsonObject.put("resource", record.getResource());
+            jsonObject.put("workShop1", record.getWorkShop1() );
+            jsonObject.put("workShop2", record.getWorkShop2());
+            jsonObject.put("productLine", record.getProductLine() );
+            jsonObject.put("mouldType", record.getMouldType() );
+            jsonObject.put("outerPart", record.getOuterPart());
+            jsonObject.put("station",record.getStation());
             Integer type = record.getType();
             Integer buyUnit = record.getBuyUnit();
-            Integer colorPart = record.getColorPart();
             if (Integer.valueOf(0).equals(type)) {
                 jsonObject.put("type","N");
             } else if (Integer.valueOf(1).equals(type)) {
@@ -347,13 +330,6 @@ public class HzPbomServiceImpl implements HzPbomService {
                 jsonObject.put("buyUnit", "Y");
             } else {
                 jsonObject.put("buyUnit", "");
-            }
-            if (Integer.valueOf(0).equals(colorPart)) {
-                jsonObject.put("colorPart", "N");
-            } else if (Integer.valueOf(1).equals(colorPart)) {
-                jsonObject.put("colorPart", "Y");
-            } else {
-                jsonObject.put("colorPart", "");
             }
             jsonArray.add(jsonObject);
             return jsonArray;
@@ -513,7 +489,6 @@ public class HzPbomServiceImpl implements HzPbomService {
                 hzPbomLineRecord.setCreateName(UserInfo.getUser().getUserName());
                 hzPbomLineRecord.setUpdateName(UserInfo.getUser().getUserName());
                 String buyUnit = recordReqDTO.getBuyUnit();
-                String colorPart = recordReqDTO.getColorPart();
                 String type = recordReqDTO.getType();
                 if ("Y".equals(buyUnit)) {
                     hzPbomLineRecord.setBuyUnit(1);
@@ -521,13 +496,6 @@ public class HzPbomServiceImpl implements HzPbomService {
                     hzPbomLineRecord.setBuyUnit(0);
                 } else {
                     hzPbomLineRecord.setBuyUnit(2);
-                }
-                if ("Y".equals(colorPart)) {
-                    hzPbomLineRecord.setColorPart(1);
-                } else if ("N".equals(colorPart)) {
-                    hzPbomLineRecord.setColorPart(0);
-                } else {
-                    hzPbomLineRecord.setColorPart(2);
                 }
                 if ("Y".equals(type)) {
                     hzPbomLineRecord.setType(1);
@@ -923,6 +891,7 @@ public class HzPbomServiceImpl implements HzPbomService {
         hzPbomLineRecord.setpBomLinePartEnName(record.getpBomLinePartEnName());
         hzPbomLineRecord.setpBomLinePartResource(record.getpBomLinePartResource());
         hzPbomLineRecord.setSortNum(record.getSortNum());
+        hzPbomLineRecord.setColorPart(record.getColorPart());
         return hzPbomLineRecord;
     }
 
@@ -958,10 +927,9 @@ public class HzPbomServiceImpl implements HzPbomService {
                 respDTO.setpBomLinePartClass(record.getpBomLinePartClass());
                 respDTO.setpBomLinePartResource(record.getpBomLinePartResource());
                 respDTO.setNo(++num);
-                respDTO.setResource(record.getResource() == null ? "/" : record.getResource());
+                respDTO.setResource(record.getResource());
                 Integer type = record.getType();
                 Integer buyUnit = record.getBuyUnit();
-                Integer colorPart = record.getColorPart();
                 if (Integer.valueOf(0).equals(type)) {
                     respDTO.setType("N");
                 } else if (Integer.valueOf(1).equals(type)) {
@@ -975,13 +943,6 @@ public class HzPbomServiceImpl implements HzPbomService {
                     respDTO.setBuyUnit("Y");
                 } else {
                     respDTO.setBuyUnit("");
-                }
-                if (Integer.valueOf(0).equals(colorPart)) {
-                    respDTO.setColorPart("N");
-                } else if (Integer.valueOf(1).equals(colorPart)) {
-                    respDTO.setColorPart("Y");
-                } else {
-                    respDTO.setColorPart("");
                 }
                 respDTO.seteBomPuid(record.geteBomPuid());
                 respDTO.setPuid(record.getPuid());

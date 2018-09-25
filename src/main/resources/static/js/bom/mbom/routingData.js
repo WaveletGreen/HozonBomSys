@@ -139,7 +139,7 @@ function initTable(url) {
                         }
                     },
                     {
-                        text: '修改四大工艺',
+                        text: '选择工艺',
                         iconCls: 'glyphicon glyphicon-pencil',
                         handler: function () {
                             var rows = $table.bootstrapTable('getSelections');
@@ -167,11 +167,6 @@ function initTable(url) {
                                 // data:myData,
                                 width: 350,
                                 height: 300,
-                                // onReady:function () {
-                                //     $("#ms").multiselect({
-                                //         selectAll:true
-                                //     })
-                                // }
                             });
                         }
                     },

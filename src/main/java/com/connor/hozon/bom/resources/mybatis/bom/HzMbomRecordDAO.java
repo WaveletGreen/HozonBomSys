@@ -6,6 +6,7 @@ import com.connor.hozon.bom.resources.domain.query.HzMbomByPageQuery;
 import com.connor.hozon.bom.resources.domain.query.HzMbomTreeQuery;
 import com.connor.hozon.bom.resources.page.Page;
 import sql.pojo.bom.HzMbomLineRecord;
+import sql.pojo.bom.HzMbomLineRecordVO;
 import sql.pojo.bom.HzMbomRecord;
 
 import java.util.List;
@@ -35,7 +36,7 @@ public interface HzMbomRecordDAO {
     int update(HzMbomLineRecord record);
 
     /**
-     * 删除BOM维护 通过外键删除
+     * 删除BOM恢复 通过外键恢复
      * @param eBomPuid
      * @return
      */
@@ -151,5 +152,21 @@ public interface HzMbomRecordDAO {
     String findMinOrderNumWhichGreaterThanThisOrderNum(String projectId,String orderNum);
 
 
-    List<HzMbomLineRecord> findHzMbomAll(String projectId);
+    List<HzMbomLineRecord> findHzMbomAll(String projectId,String tableName);
+
+
+    int insertVO(HzMbomLineRecordVO hzMbomLineRecordVO);
+
+    int updateVO(HzMbomLineRecordVO hzMbomLineRecordVO);
+
+    /**
+     * 通过外键ID 和层级查询MBOM
+     * @param ebomPuid
+     * @param lineIndex
+     * @return
+     */
+    HzMbomLineRecord findHzMbomByEbomIdAndLineIndex(String ebomPuid,String lineIndex,String tableName);
+
+
+    int deleteMbomList(HzMbomLineRecordVO record);
 }

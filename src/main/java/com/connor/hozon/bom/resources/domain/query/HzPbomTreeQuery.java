@@ -15,6 +15,18 @@ public class HzPbomTreeQuery {
      * 当前查询树结构的根节点
      */
     private String puid;
+    /**
+     * 是否颜色件
+     */
+    private Integer isColorPart;
+
+    public Integer getIsColorPart() {
+        return isColorPart;
+    }
+
+    public void setIsColorPart(Integer isColorPart) {
+        this.isColorPart = isColorPart;
+    }
 
     public String getProjectId() {
         return projectId;

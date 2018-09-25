@@ -173,7 +173,6 @@ public class HzEbomController extends BaseController {
         recordRespDTO.setpBomOfWhichDept(object.getString("pBomOfWhichDept"));
         recordRespDTO.setpLouaFlag(object.getString("pLouaFlag"));
         recordRespDTO.setRank(object.getString("rank"));
-        recordRespDTO.setLineNo(object.getString("lineNo"));
         recordRespDTO.setGroupNum(object.getString("groupNum"));
         recordRespDTO.setLevel(object.getString("level"));
         recordRespDTO.setLineId(object.getString("lineId"));

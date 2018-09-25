@@ -2,29 +2,18 @@ package com.connor.hozon.bom.resources.domain.query;
 
 /**
  * @Author: haozt
- * @Date: 2018/7/11
+ * @Date: 2018/9/21
  * @Description:
  */
-public class HzMbomTreeQuery {
-    /**
-     * 项目id
-     */
+public class HzMbomByIdQuery {
     private String projectId;
 
     /**
-     * 当前查询树结构的根节点
+     * 1 生产 6 财务
      */
+    private Integer type;
+
     private String puid;
-
-    private String tableName;
-
-    public String getTableName() {
-        return tableName;
-    }
-
-    public void setTableName(String tableName) {
-        this.tableName = tableName;
-    }
 
     public String getProjectId() {
         return projectId;
@@ -32,6 +21,14 @@ public class HzMbomTreeQuery {
 
     public void setProjectId(String projectId) {
         this.projectId = projectId;
+    }
+
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
     }
 
     public String getPuid() {

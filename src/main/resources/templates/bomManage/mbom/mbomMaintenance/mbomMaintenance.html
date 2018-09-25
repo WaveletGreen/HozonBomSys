@@ -8,13 +8,13 @@
 <body>
 <ul id="myTab" class="nav nav-tabs">
     <li class="active">
-        <a href="#mBom" data-toggle="tab">超级MBOM</a>
+        <a href="#mBom"onclick="doMBom()"id="mb" data-toggle="tab">超级MBOM</a>
     </li>
     <li>
-        <a href="#whiteBodyProduction" data-toggle="tab">白车身生产BOM</a>
+        <a href="#whiteBodyProduction"onclick="doProduction()" data-toggle="tab">白车身生产BOM</a>
     </li>
     <li>
-        <a href="#whiteBodyFinancial" data-toggle="tab">白车身财务BOM</a>
+        <a href="#whiteBodyFinancial"onclick="doFinancial()" data-toggle="tab">白车身财务BOM</a>
     </li>
 </ul>
 <div id="myTabContent" class="tab-content">
@@ -70,9 +70,9 @@
                 </div>
             </form>
         </div>
-        <div class="content col-lg-12">
+        <!--<div class="content col-lg-12">-->
             <table class="table table-striped tableNormalStyle" id="mbomMaintenanceTable"></table>
-        </div>
+        <!--</div>-->
     </div>
     <!--白车身生产-->
     <div class="tab-pane fade" id="whiteBodyProduction">
@@ -80,24 +80,55 @@
             <form class="form-inline" role="form" style="float: left; width: 100%;margin-left: 20px;" method="get"
                   id="queryWhiteBodyProduction">
                 <div class="form-group">
-                    <label for="level">白车身生产:</label>
-                    <input type="text" style="width: 140px;" class="form-control" name="level" id="leve"
-                           placeholder="请输入白车身生产BOM"/>
+                    <label for="level">层级:</label>
+                    <input type="text" style="width: 140px;" class="form-control" name="level" id="level1"
+                           placeholder="请输入层级"/>
                 </div>
                 <div class="form-group">
-                    <label for="pBomOfWhichDept">白车身生产编号:</label>
+                    <label for="pBomOfWhichDept">专业:</label>
                     <input type="text" style="width: 140px;" class="form-control" name="pBomOfWhichDept"
-                           id="pBomOfWhichDep"
-                           placeholder="请输入白车身生产编号"/>
+                           id="pBomOfWhichDept1"
+                           placeholder="请输入专业"/>
+                </div>
+                <div class="form-group">
+                    <label for="lineId">零件号:</label>
+                    <input type="text" style="width: 140px;" class="form-control" name="lineId" id="lineId1"
+                           placeholder="请输入零件号"/>
+                </div>
+                <div class="form-group">
+                    <label for="pBomLinePartClass">零件分类:</label>
+                    <select class="form-control" style="width: 140px;" name="pBomLinePartClass" id="pBomLinePartClass1">
+                        <option>请选择零件分类</option>
+                        <option>自制</option>
+                        <option>外协</option>
+                        <option>虚拟总成</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="pBomLinePartResource">零件来源:</label>
+                    <select class="form-control" style="width: 140px;" name="pBomLinePartResource"
+                            id="pBomLinePartResource1">
+                        <option>请选择零件来源</option>
+                        <option>采购件</option>
+                        <option>采购拆分单件</option>
+                        <option>采购拆分总成件</option>
+                        <option>采购拆分标准件</option>
+                        <option>采购拆分非标件</option>
+                        <option>自制总成</option>
+                        <option>自制单件</option>
+                        <option>自用标准件</option>
+                        <option>自用非标件</option>
+                        <option>虚拟总成</option>
+                    </select>
                 </div>
                 <div class="form-group">
                     <button type="button" id="queryBtn1" onclick="doQuery1();" class="btn btn-primary">查询</button>
                 </div>
             </form>
         </div>
-        <div class="content col-lg-12">
+        <!--<div class="content col-lg-12">-->
             <table class="table table-striped tableNormalStyle" id="whiteBodyProductionTable"></table>
-        </div>
+        <!--</div>-->
     </div>
     <!--白车身财务-->
     <div class="tab-pane fade" id="whiteBodyFinancial">
@@ -105,30 +136,59 @@
             <form class="form-inline" role="form" style="float: left; width: 100%;margin-left: 20px;" method="get"
                   id="queryWhiteBodyFinancial">
                 <div class="form-group">
-                    <label for="level">白车身财务:</label>
-                    <input type="text" style="width: 140px;" class="form-control" name="level" id="lev"
-                           placeholder="请输入白车身财务BOM"/>
+                    <label for="level">层级:</label>
+                    <input type="text" style="width: 140px;" class="form-control" name="level" id="level6"
+                           placeholder="请输入层级"/>
                 </div>
                 <div class="form-group">
-                    <label for="pBomOfWhichDept">白车身财务编号:</label>
+                    <label for="pBomOfWhichDept">专业:</label>
                     <input type="text" style="width: 140px;" class="form-control" name="pBomOfWhichDept"
-                           id="pBomOfWhichDe"
-                           placeholder="请输入白车身财务编号"/>
+                           id="pBomOfWhichDept6"
+                           placeholder="请输入专业"/>
+                </div>
+                <div class="form-group">
+                    <label for="lineId">零件号:</label>
+                    <input type="text" style="width: 140px;" class="form-control" name="lineId" id="lineId6"
+                           placeholder="请输入零件号"/>
+                </div>
+                <div class="form-group">
+                    <label for="pBomLinePartClass">零件分类:</label>
+                    <select class="form-control" style="width: 140px;" name="pBomLinePartClass" id="pBomLinePartClass6">
+                        <option>请选择零件分类</option>
+                        <option>自制</option>
+                        <option>外协</option>
+                        <option>虚拟总成</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="pBomLinePartResource">零件来源:</label>
+                    <select class="form-control" style="width: 140px;" name="pBomLinePartResource"
+                            id="pBomLinePartResource6">
+                        <option>请选择零件来源</option>
+                        <option>采购件</option>
+                        <option>采购拆分单件</option>
+                        <option>采购拆分总成件</option>
+                        <option>采购拆分标准件</option>
+                        <option>采购拆分非标件</option>
+                        <option>自制总成</option>
+                        <option>自制单件</option>
+                        <option>自用标准件</option>
+                        <option>自用非标件</option>
+                        <option>虚拟总成</option>
+                    </select>
                 </div>
                 <div class="form-group">
                     <button type="button" id="queryBtn2" onclick="doQuery2();" class="btn btn-primary">查询</button>
                 </div>
             </form>
         </div>
-        <div class="content col-lg-12">
+        <!--<div class="content col-lg-12">-->
             <table class="table table-striped tableNormalStyle" id="whiteBodyFinancialTable"></table>
-        </div>
+        <!--</div>-->
     </div>
 </div>
 <script th:src="@{/js/helper/projectHelper.js}"></script>
 <script th:src="@{/js/bom/mbom/mbomMaintenance.js}"></script>
-<!--<script th:src="@{/js/bom/mbom/whiteBodyProduction.js}"></script>-->
-<!--<script th:src="@{/js/bom/mbom/whiteBodyFinancial.js}"></script>-->
 <script th:src="@{/js/jq.resizableColumns.js}"></script>
 <script th:src="@{/js/lodash.min.js}"></script>
 </body>

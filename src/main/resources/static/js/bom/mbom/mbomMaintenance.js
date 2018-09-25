@@ -1,27 +1,25 @@
 $(document).ready((function () {
-    var projectId = $("#project", window.top.document).val();
-    var mBomUrl = "mbom/record?projectId=" + projectId;
-    initTable1(mBomUrl);
-    var url = "materiel/getMateriel?projectId=" + projectId;
-    initTable2(url);
-    // var financialUrl = "mbom/record?projectId=" + projectId;
-    // initTable3(financialUrl);
-    var url = "work/process/record/page?projectId="+projectId;
-    initTable3(url);
+
 }))
-function doRefresh(projectId){
-    $('#mbomMaintenanceTable').bootstrapTable('destroy');
-    if ($("#")) {
 
+setTimeout(function() {
+    // IE
+    if(document.all) {
+        document.getElementById("mb").click();
     }
+    // 其它浏览器
+    else {
+        var e = document.createEvent("MouseEvents");
+        e.initEvent("click", true, true);
+        document.getElementById("mb").dispatchEvent(e);
+    }
+}, 100);
+
+function doRefresh(projectId) {
+    $('#mbomMaintenanceTable').bootstrapTable('destroy');
     var mBomUrl = "mbom/record?projectId=" + projectId;
     initTable1(mBomUrl);
-    var url = "materiel/getMateriel?projectId=" + projectId;
-    initTable2(url);
-    var url = "work/process/record/page?projectId="+projectId;
-    initTable3(url);
 }
-
 function doQuery() {
     //$('#eplTable').bootstrapTable('refresh');    //刷新表格
     var projectPuid = $("#project", window.top.document).val();
@@ -34,14 +32,14 @@ function doQuery() {
     // var lineId = $("#lineId").val();
     // mBomUrl += "&lineId=" + lineId;
     var pBomLinePartClass = $("#pBomLinePartClass").val();
-    if (pBomLinePartClass =="请选择零件分类") {
-        mBomUrl += "&pBomLinePartClass="+ "";
-    }else {
+    if (pBomLinePartClass == "请选择零件分类") {
+        mBomUrl += "&pBomLinePartClass=" + "";
+    } else {
         mBomUrl += "&pBomLinePartClass=" + pBomLinePartClass;
     }
     var pBomLinePartResource = $("#pBomLinePartResource").val();
     if (pBomLinePartResource == "请选择零件来源") {
-        mBomUrl += "&pBomLinePartResource="+ "";
+        mBomUrl += "&pBomLinePartResource=" + "";
     }
     else {
         mBomUrl += "&pBomLinePartResource=" + pBomLinePartResource;
@@ -49,68 +47,13 @@ function doQuery() {
     initTable1(mBomUrl);
     $('#mbomMaintenanceTable').bootstrapTable('destroy');
 }
-function doQuery1() {
-    //$('#eplTable').bootstrapTable('refresh');    //刷新表格
-    var projectId = $("#project", window.top.document).val();
-    // var productionUrl = "mbom/record?projectId=" + projectId;
-    var url = "materiel/getMateriel?projectId=" + projectId;
-    initTable2(url);
-    // var level = $("#level").val();
-    // productionUrl += "&level=" + level;
-    // var pBomOfWhichDept = $("#pBomOfWhichDept").val();
-    // productionUrl += "&pBomOfWhichDept=" + pBomOfWhichDept;
-    // var lineId = $("#lineId").val();
-    // productionUrl += "&lineId=" + lineId;
-    // var pBomLinePartClass = $("#pBomLinePartClass").val();
-    // if (pBomLinePartClass =="请选择零件分类") {
-    //     productionUrl += "&pBomLinePartClass="+ "";
-    // }else {
-    //     productionUrl += "&pBomLinePartClass=" + pBomLinePartClass;
-    // }
-    // var pBomLinePartResource = $("#pBomLinePartResource").val();
-    // if (pBomLinePartResource == "请选择零件来源") {
-    //     productionUrl += "&pBomLinePartResource="+ "";
-    // }
-    // else {
-    //     productionUrl += "&pBomLinePartResource=" + pBomLinePartResource;
-    // }
-    // initTable2(productionUrl);
-    $('#whiteBodyProductionTable').bootstrapTable('destroy');
-}
-function doQuery2() {
-    //$('#eplTable').bootstrapTable('refresh');    //刷新表格
-    var projectId = $("#project", window.top.document).val();
-    var url = "work/process/record/page?projectId="+projectId;
-    initTable3(url);
-    // var financialUrl = "mbom/record?projectId=" + projectId;
-    // var level = $("#level").val();
-    // financialUrl += "&level=" + level;
-    // var pBomOfWhichDept = $("#pBomOfWhichDept").val();
-    // financialUrl += "&pBomOfWhichDept=" + pBomOfWhichDept;
-    // var lineId = $("#lineId").val();
-    // financialUrl += "&lineId=" + lineId;
-    // var pBomLinePartClass = $("#pBomLinePartClass").val();
-    // if (pBomLinePartClass =="请选择零件分类") {
-    //     financialUrl += "&pBomLinePartClass="+ "";
-    // }else {
-    //     financialUrl += "&pBomLinePartClass=" + pBomLinePartClass;
-    // }
-    // var pBomLinePartResource = $("#pBomLinePartResource").val();
-    // if (pBomLinePartResource == "请选择零件来源") {
-    //     financialUrl += "&pBomLinePartResource="+ "";
-    // }
-    // else {
-    //     financialUrl += "&pBomLinePartResource=" + pBomLinePartResource;
-    // }
-    // initTable3(financialUrl);
-    $('#whiteBodyFinancialTable').bootstrapTable('destroy');
-}
 function initTable1(mBomUrl) {
     var projectPuid = $("#project", window.top.document).val();
     if (!checkIsSelectProject(projectPuid)) {
         return;
     }
     var $mBomTable = $("#mbomMaintenanceTable");
+    // $mBomTable.bootstrapTable('destroy');
     var currentProjectHead = $("#currentProjectHead", window.top.document).val();
     var column = [];
     selections = [];
@@ -136,19 +79,19 @@ function initTable1(mBomUrl) {
             var values;
             for (var key in data) {
                 if (data.hasOwnProperty(key)) {
-                    if('pLouaFlag'===key){
+                    if ('pLouaFlag' === key) {
                         var json = {
                             field: key,
                             title: data[key],
                             // align: 'center',
                             valign: 'middle',
                             formatter: function (value, row, index) {
-                                if (value =="LOA") {
+                                if (value == "LOA") {
                                     return [
                                         '<a href="javascript:void(0)" onclick="queryLoa(\'' + row.eBomPuid + '\')">' + value + '</a>'
                                     ].join("");
                                 }
-                                else if (value == "LOU"){
+                                else if (value == "LOU") {
                                     return [
                                         '<a href="javascript:void(0)" onclick="queryLou(\'' + row.eBomPuid + '\')">' + value + '</a>'
                                     ].join("");
@@ -162,19 +105,19 @@ function initTable1(mBomUrl) {
                         };
                         column.push(json);
                     }
-                    else{
+                    else {
                         var json = {
                             field: key,
                             title: data[key],
                             // align: 'center',
                             valign: 'middle',
                             formatter: function (value, row, index) {
-                                if (value =="LOA") {
+                                if (value == "LOA") {
                                     return [
                                         '<a href="javascript:void(0)" onclick="queryLoa(' + row.eBomPuid + ')">' + value + '</a>'
                                     ].join("");
                                 }
-                                else if (value == "LOU"){
+                                else if (value == "LOU") {
                                     return [
                                         '<a href="javascript:void(0)" onclick="queryLou(\'' + row.eBomPuid + '\')">' + value + '</a>'
                                     ].join("");
@@ -208,10 +151,10 @@ function initTable1(mBomUrl) {
                     if (4 == value || "4" == value) {
                         return "<span style='color: #a90009'>删除状态</span>";
                     }
-                    if (value == 5 || value == "5"){
+                    if (value == 5 || value == "5") {
                         return "<span style='color: #e2ab2f'>审核中</span>"
                     }
-                    if (value == 6 || value == "6"){
+                    if (value == 6 || value == "6") {
                         return "<span style='color: #e2ab2f'>审核中</span>"
                     }
                 }
@@ -228,9 +171,9 @@ function initTable1(mBomUrl) {
                 formId: "queryMbomMain",
                 undefinedText: "",//当数据为 undefined 时显示的字符
                 pagination: true,
-                pageNumber:1,                       //初始化加载第一页，默认第一页
+                pageNumber: 1,                       //初始化加载第一页，默认第一页
                 pageSize: 20,                       //每页的记录行数（*）
-                pageList: ['ALL',20,50,100,200,500,1000],        //可供选择的每页的行数（*）
+                pageList: ['ALL', 20, 50, 100, 200, 500, 1000],        //可供选择的每页的行数（*）
                 uniqueId: "puid",                     //每一行的唯一标识，一般为主键列
                 showExport: true,
                 //exportDataType: 'all',
@@ -292,12 +235,13 @@ function initTable1(mBomUrl) {
                         handler: function () {
                             var rows = $mBomTable.bootstrapTable('getSelections');
                             var puids = "";
-                            for (var i = 0 ; i<rows.length;i++){
-                                puids += rows[i].eBomPuid+",";
-                            };
+                            for (var i = 0; i < rows.length; i++) {
+                                puids += rows[i].eBomPuid + ",";
+                            }
+                            ;
                             var myData = JSON.stringify({
                                 "projectId": $("#project", window.top.document).val(),
-                                "puids":puids,
+                                "puids": puids,
                             });
                             if (rows.length == 0) {
                                 window.Ewin.alert({message: '请选择一条需要删除的数据!'});
@@ -329,9 +273,9 @@ function initTable1(mBomUrl) {
                                             else {
                                                 window.Ewin.alert({message: ":" + result.errMsg});
                                             }*/
-                                            if (result.success){
+                                            if (result.success) {
                                                 layer.msg('删除成功', {icon: 1, time: 2000})
-                                            } else if(!result.success){
+                                            } else if (!result.success) {
                                                 window.Ewin.alert({message: result.errMsg});
                                             }
                                             $mBomTable.bootstrapTable("refresh");
@@ -634,15 +578,43 @@ function initTable1(mBomUrl) {
         }
     });
 }
-function initTable2(url) {
+function doQuery1() {
+    //$('#eplTable').bootstrapTable('refresh');    //刷新表格
+    var projectId = $("#project", window.top.document).val();
+    var productionUrl = "mbom/record?projectId=" + projectId+"&type="+1;
+    // var level = $("#level").val();
+    // productionUrl += "&level=" + level;
+    // var pBomOfWhichDept = $("#pBomOfWhichDept").val();
+    // productionUrl += "&pBomOfWhichDept=" + pBomOfWhichDept;
+    // var lineId = $("#lineId").val();
+    // productionUrl += "&lineId=" + lineId;
+    var pBomLinePartClass = $("#pBomLinePartClass1").val();
+    if (pBomLinePartClass =="请选择零件分类") {
+        productionUrl += "&pBomLinePartClass="+ "";
+    }else {
+        productionUrl += "&pBomLinePartClass=" + pBomLinePartClass;
+    }
+    var pBomLinePartResource = $("#pBomLinePartResource1").val();
+    if (pBomLinePartResource == "请选择零件来源") {
+        productionUrl += "&pBomLinePartResource="+ "";
+    }
+    else {
+        productionUrl += "&pBomLinePartResource=" + pBomLinePartResource;
+    }
+    initTable2(productionUrl);
+    $('#whiteBodyProductionTable').bootstrapTable('destroy');
+}
+function initTable2(productionUrl) {
     var projectId = $("#project", window.top.document).val();
     var $productionTable = $("#whiteBodyProductionTable");
+    // $productionTable.bootstrapTable('destroy');
+
     var currentProjectHead = $("#currentProjectHead", window.top.document).val();
     var column = [];
     selections = [];
 
     $.ajax({
-        url: "materiel/title",
+        url: "mbom/manage/title?projectId=" + projectId,
         type: "GET",
         success: function (result) {
             var column = [];
@@ -652,19 +624,19 @@ function initTable2(url) {
             var values;
             for (var key in data) {
                 if (data.hasOwnProperty(key)) {
-                    if('pLouaFlag'===key){
+                    if ('pLouaFlag' === key) {
                         var json = {
                             field: key,
                             title: data[key],
                             // align: 'center',
                             valign: 'middle',
                             formatter: function (value, row, index) {
-                                if (value =="LOA") {
+                                if (value == "LOA") {
                                     return [
                                         '<a href="javascript:void(0)" onclick="queryLoa(\'' + row.eBomPuid + '\')">' + value + '</a>'
                                     ].join("");
                                 }
-                                else if (value == "LOU"){
+                                else if (value == "LOU") {
                                     return [
                                         '<a href="javascript:void(0)" onclick="queryLou(\'' + row.eBomPuid + '\')">' + value + '</a>'
                                     ].join("");
@@ -678,19 +650,19 @@ function initTable2(url) {
                         };
                         column.push(json);
                     }
-                    else{
+                    else {
                         var json = {
                             field: key,
                             title: data[key],
                             // align: 'center',
                             valign: 'middle',
                             formatter: function (value, row, index) {
-                                if (value =="LOA") {
+                                if (value == "LOA") {
                                     return [
                                         '<a href="javascript:void(0)" onclick="queryLoa(' + row.eBomPuid + ')">' + value + '</a>'
                                     ].join("");
                                 }
-                                else if (value == "LOU"){
+                                else if (value == "LOU") {
                                     return [
                                         '<a href="javascript:void(0)" onclick="queryLou(\'' + row.eBomPuid + '\')">' + value + '</a>'
                                     ].join("");
@@ -707,7 +679,7 @@ function initTable2(url) {
                 }
             }
             $productionTable.bootstrapTable({
-                url: url,
+                url: productionUrl,
                 method: 'GET',
                 dataType: 'json',
                 cache: false,
@@ -718,9 +690,9 @@ function initTable2(url) {
                 formId: "queryWhiteBodyProduction",
                 undefinedText: "",//当数据为 undefined 时显示的字符
                 pagination: true,
-                pageNumber:1,                       //初始化加载第一页，默认第一页
+                pageNumber: 1,                       //初始化加载第一页，默认第一页
                 pageSize: 20,                       //每页的记录行数（*）
-                pageList: ['ALL',20,50,100,200,500,1000],        //可供选择的每页的行数（*）
+                pageList: ['ALL', 20, 50, 100, 200, 500, 1000],        //可供选择的每页的行数（*）
                 uniqueId: "puid",                     //每一行的唯一标识，一般为主键列
                 showExport: true,
                 //exportDataType: 'all',
@@ -737,8 +709,8 @@ function initTable2(url) {
                 showRefresh: true,                  //是否显示刷新按钮
                 minimumCountColumns: 4,
                 //responseHandler:responseHandler, //在渲染页面数据之前执行的方法，此配置很重要!!!!!!!
-                /*toolbars: [
-                    /!*{
+                toolbars: [
+                    /*{
                         text: '添加',
                         iconCls: 'glyphicon glyphicon-plus',
                         handler: function () {
@@ -756,7 +728,7 @@ function initTable2(url) {
                                 height: 650
                             })
                         }
-                    },*!/
+                    },*/
                     {
                         text: '修改',
                         iconCls: 'glyphicon glyphicon-pencil',
@@ -769,7 +741,7 @@ function initTable2(url) {
                             }
                             window.Ewin.dialog({
                                 title: "修改",
-                                url: "mbom/updateMBom?projectId=" + projectPuid + "&eBomPuid=" + rows[0].eBomPuid,
+                                url: "mbom/updateProduction?projectId=" + projectId + "&eBomPuid=" + rows[0].eBomPuid+"&type="+1,
                                 gridId: "gridId",
                                 width: 500,
                                 height: 500
@@ -782,12 +754,14 @@ function initTable2(url) {
                         handler: function () {
                             var rows = $productionTable.bootstrapTable('getSelections');
                             var puids = "";
-                            for (var i = 0 ; i<rows.length;i++){
-                                puids += rows[i].eBomPuid+",";
-                            };
+                            for (var i = 0; i < rows.length; i++) {
+                                puids += rows[i].eBomPuid + ",";
+                            }
+                            ;
                             var myData = JSON.stringify({
                                 "projectId": $("#project", window.top.document).val(),
-                                "puids":puids,
+                                "puids": puids,
+                                "type":1,
                             });
                             if (rows.length == 0) {
                                 window.Ewin.alert({message: '请选择一条需要删除的数据!'});
@@ -812,16 +786,16 @@ function initTable2(url) {
                                         data: myData,
                                         contentType: "application/json",
                                         success: function (result) {
-                                            /!*if (result.status) {
+                                            /*if (result.status) {
                                                 window.Ewin.alert({message: result.errMsg});
                                                 //刷新，会重新申请数据库数据
                                             }
                                             else {
                                                 window.Ewin.alert({message: ":" + result.errMsg});
-                                            }*!/
-                                            if (result.success){
+                                            }*/
+                                            if (result.success) {
                                                 layer.msg('删除成功', {icon: 1, time: 2000})
-                                            } else if(!result.success){
+                                            } else if (!result.success) {
                                                 window.Ewin.alert({message: result.errMsg});
                                             }
                                             $productionTable.bootstrapTable("refresh");
@@ -915,13 +889,13 @@ function initTable2(url) {
                     //                     data: JSON.stringify(rows),
                     //                     contentType: "application/json",
                     //                     success: function (result) {
-                    //                         /!*if (result.status) {
+                    //                         /*if (result.status) {
                     //                             window.Ewin.alert({message: result.errMsg});
                     //                             //刷新，会重新申请数据库数据
                     //                         }
                     //                         else {
                     //                             window.Ewin.alert({message: ":" + result.errMsg});
-                    //                         }*!/
+                    //                         }*/
                     //                         window.Ewin.alert({message: result.errMsg});
                     //                         $productionTable.bootstrapTable("refresh");
                     //                     },
@@ -955,13 +929,13 @@ function initTable2(url) {
                     //                     data: JSON.stringify(rows),
                     //                     contentType: "application/json",
                     //                     success: function (result) {
-                    //                         /!*if (result.status) {
+                    //                         /*if (result.status) {
                     //                             window.Ewin.alert({message: result.errMsg});
                     //                             //刷新，会重新申请数据库数据
                     //                         }
                     //                         else {
                     //                             window.Ewin.alert({message: ":" + result.errMsg});
-                    //                         }*!/
+                    //                         }*/
                     //                         window.Ewin.alert({message: result.errMsg});
                     //                         $productionTable.bootstrapTable("refresh");
                     //                     },
@@ -973,166 +947,193 @@ function initTable2(url) {
                     //         });
                     //     }
                     // },
-                    {
-                        text: '发送MBOM到SAP',
-                        iconCls: 'glyphicon glyphicon-send',
-                        handler: function () {
-                            var rows = $productionTable.bootstrapTable('getSelections');
-                            var confirm = undefined;
-                            var localUrl = "";
-                            var datas = null;
-                            if (rows.length == 0) {
-                                window.Ewin.confirm({
-                                    title: '提示',
-                                    message: '<p ><strong style="color: red">注意：正在进行耗时操作</strong></p>' +
-                                    '您未选择任何一条数据，是否将当前项目' + currentProjectHead + '下的所有物料数据发送到ERP系统?'
-                                    ,
-                                    width: 1000
-                                }).on(function (e) {
-                                    //发送全部
-                                    if (e) {
-                                        localUrl = "synBom/synAllBomByProjectPuid?projectUid=" + projectPuid;
-                                        datas = null;
-                                        $.ajax({
-                                            type: "POST",
-                                            //ajax需要添加打包名
-                                            url: localUrl,
-                                            data: datas,
-                                            contentType: "application/json",
-                                            success: function (result) {
-                                                window.Ewin.alert({message: result, width: 800});
-                                                $productionTable.bootstrapTable("refresh");
-                                            },
-                                            error: function (info) {
-                                                window.Ewin.alert({message: "操作失败:" + info.status});
-                                            }
-                                        })
-                                    }
-                                });
-                            }
-                            else {
-                                window.Ewin.confirm({
-                                    title: '提示',
-                                    message: '是否要重新发送您所选择的记录？',
-                                    width: 800
-                                }).on(function (e) {
-                                    if (e) {
-                                        localUrl = "synBom/updateByUids?projectUid=" + projectPuid;
-                                        datas = JSON.stringify(rows);
-                                        $.ajax({
-                                            type: "POST",
-                                            //ajax需要添加打包名
-                                            url: localUrl,
-                                            data: datas,
-                                            contentType: "application/json",
-                                            success: function (result) {
-                                                // if (result.status) {
-                                                //     window.Ewin.alert({message: result.msg});
-                                                //     //刷新，会重新申请数据库数据
-                                                // }
-                                                // else {
-                                                //     window.Ewin.alert({message: ":" + result.errMsg});
-                                                // }
-                                                window.Ewin.alert({message: result, width: 1000});
-                                                $productionTable.bootstrapTable("refresh");
-                                            },
-                                            error: function (info) {
-                                                window.Ewin.alert({message: "操作失败:" + info.status});
-                                            }
-                                        })
-                                    }
-                                });
-                            }
-                        }
-                    },
-                    {
-                        text: '发送单条MBOM到SAP',
-                        iconCls: 'glyphicon glyphicon-send',
-                        handler: function () {
-                            var rows = $productionTable.bootstrapTable('getSelections');
-                            var confirm = undefined;
-                            var localUrl = "";
-                            var datas = null;
-                            if (rows.length != 1) {
-                                // window.Ewin.confirm({
-                                //     title: '提示',
-                                //     message: '<p ><strong style="color: red">注意：正在进行耗时操作</strong></p>' +
-                                //     '您未选择任何一条数据，是否将当前项目' + currentProjectHead + '下的所有物料数据发送到ERP系统?'
-                                //     ,
-                                //     width: 1000
-                                // }).on(function (e) {
-                                //     //发送全部
-                                //     if (e) {
-                                //         localUrl = "synBom/addByUids?projectUid=" + projectPuid;
-                                //         datas = null;
-                                //         $.ajax({
-                                //             type: "POST",
-                                //             //ajax需要添加打包名
-                                //             url: localUrl,
-                                //             data: datas,
-                                //             contentType: "application/json",
-                                //             success: function (result) {
-                                //                 window.Ewin.alert({message: result, width: 800});
-                                //                 $productionTable.bootstrapTable("refresh");
-                                //             },
-                                //             error: function (info) {
-                                //                 window.Ewin.alert({message: "操作失败:" + info.status});
-                                //             }
-                                //         })
-                                //     }
-                                // });
-                            }
-                            else {
-                                window.Ewin.confirm({
-                                    title: '提示',
-                                    message: '是否要发送您所选择的记录？',
-                                    width: 800
-                                }).on(function (e) {
-                                    if (e) {
-                                        localUrl = "synBom/addByUids?projectUid=" + projectPuid;
-                                        datas = JSON.stringify(rows);
-                                        $.ajax({
-                                            type: "POST",
-                                            //ajax需要添加打包名
-                                            url: localUrl,
-                                            data: datas,
-                                            contentType: "application/json",
-                                            success: function (result) {
-                                                // if (result.status) {
-                                                //     window.Ewin.alert({message: result.msg});
-                                                //     //刷新，会重新申请数据库数据
-                                                // }
-                                                // else {
-                                                //     window.Ewin.alert({message: ":" + result.errMsg});
-                                                // }
-                                                window.Ewin.alert({message: result, width: 1000});
-                                                $productionTable.bootstrapTable("refresh");
-                                            },
-                                            error: function (info) {
-                                                window.Ewin.alert({message: "操作失败:" + info.status});
-                                            }
-                                        })
-                                    }
-                                });
-                            }
-                        }
-                    }
+                    // {
+                    //     text: '发送MBOM到SAP',
+                    //     iconCls: 'glyphicon glyphicon-send',
+                    //     handler: function () {
+                    //         var rows = $productionTable.bootstrapTable('getSelections');
+                    //         var confirm = undefined;
+                    //         var localUrl = "";
+                    //         var datas = null;
+                    //         if (rows.length == 0) {
+                    //             window.Ewin.confirm({
+                    //                 title: '提示',
+                    //                 message: '<p ><strong style="color: red">注意：正在进行耗时操作</strong></p>' +
+                    //                 '您未选择任何一条数据，是否将当前项目' + currentProjectHead + '下的所有物料数据发送到ERP系统?'
+                    //                 ,
+                    //                 width: 1000
+                    //             }).on(function (e) {
+                    //                 //发送全部
+                    //                 if (e) {
+                    //                     localUrl = "synBom/synAllBomByProjectPuid?projectUid=" + projectPuid;
+                    //                     datas = null;
+                    //                     $.ajax({
+                    //                         type: "POST",
+                    //                         //ajax需要添加打包名
+                    //                         url: localUrl,
+                    //                         data: datas,
+                    //                         contentType: "application/json",
+                    //                         success: function (result) {
+                    //                             window.Ewin.alert({message: result, width: 800});
+                    //                             $productionTable.bootstrapTable("refresh");
+                    //                         },
+                    //                         error: function (info) {
+                    //                             window.Ewin.alert({message: "操作失败:" + info.status});
+                    //                         }
+                    //                     })
+                    //                 }
+                    //             });
+                    //         }
+                    //         else {
+                    //             window.Ewin.confirm({
+                    //                 title: '提示',
+                    //                 message: '是否要重新发送您所选择的记录？',
+                    //                 width: 800
+                    //             }).on(function (e) {
+                    //                 if (e) {
+                    //                     localUrl = "synBom/updateByUids?projectUid=" + projectPuid;
+                    //                     datas = JSON.stringify(rows);
+                    //                     $.ajax({
+                    //                         type: "POST",
+                    //                         //ajax需要添加打包名
+                    //                         url: localUrl,
+                    //                         data: datas,
+                    //                         contentType: "application/json",
+                    //                         success: function (result) {
+                    //                             // if (result.status) {
+                    //                             //     window.Ewin.alert({message: result.msg});
+                    //                             //     //刷新，会重新申请数据库数据
+                    //                             // }
+                    //                             // else {
+                    //                             //     window.Ewin.alert({message: ":" + result.errMsg});
+                    //                             // }
+                    //                             window.Ewin.alert({message: result, width: 1000});
+                    //                             $productionTable.bootstrapTable("refresh");
+                    //                         },
+                    //                         error: function (info) {
+                    //                             window.Ewin.alert({message: "操作失败:" + info.status});
+                    //                         }
+                    //                     })
+                    //                 }
+                    //             });
+                    //         }
+                    //     }
+                    // },
+                    // {
+                    //     text: '发送单条MBOM到SAP',
+                    //     iconCls: 'glyphicon glyphicon-send',
+                    //     handler: function () {
+                    //         var rows = $productionTable.bootstrapTable('getSelections');
+                    //         var confirm = undefined;
+                    //         var localUrl = "";
+                    //         var datas = null;
+                    //         if (rows.length != 1) {
+                    //             // window.Ewin.confirm({
+                    //             //     title: '提示',
+                    //             //     message: '<p ><strong style="color: red">注意：正在进行耗时操作</strong></p>' +
+                    //             //     '您未选择任何一条数据，是否将当前项目' + currentProjectHead + '下的所有物料数据发送到ERP系统?'
+                    //             //     ,
+                    //             //     width: 1000
+                    //             // }).on(function (e) {
+                    //             //     //发送全部
+                    //             //     if (e) {
+                    //             //         localUrl = "synBom/addByUids?projectUid=" + projectPuid;
+                    //             //         datas = null;
+                    //             //         $.ajax({
+                    //             //             type: "POST",
+                    //             //             //ajax需要添加打包名
+                    //             //             url: localUrl,
+                    //             //             data: datas,
+                    //             //             contentType: "application/json",
+                    //             //             success: function (result) {
+                    //             //                 window.Ewin.alert({message: result, width: 800});
+                    //             //                 $productionTable.bootstrapTable("refresh");
+                    //             //             },
+                    //             //             error: function (info) {
+                    //             //                 window.Ewin.alert({message: "操作失败:" + info.status});
+                    //             //             }
+                    //             //         })
+                    //             //     }
+                    //             // });
+                    //         }
+                    //         else {
+                    //             window.Ewin.confirm({
+                    //                 title: '提示',
+                    //                 message: '是否要发送您所选择的记录？',
+                    //                 width: 800
+                    //             }).on(function (e) {
+                    //                 if (e) {
+                    //                     localUrl = "synBom/addByUids?projectUid=" + projectPuid;
+                    //                     datas = JSON.stringify(rows);
+                    //                     $.ajax({
+                    //                         type: "POST",
+                    //                         //ajax需要添加打包名
+                    //                         url: localUrl,
+                    //                         data: datas,
+                    //                         contentType: "application/json",
+                    //                         success: function (result) {
+                    //                             // if (result.status) {
+                    //                             //     window.Ewin.alert({message: result.msg});
+                    //                             //     //刷新，会重新申请数据库数据
+                    //                             // }
+                    //                             // else {
+                    //                             //     window.Ewin.alert({message: ":" + result.errMsg});
+                    //                             // }
+                    //                             window.Ewin.alert({message: result, width: 1000});
+                    //                             $productionTable.bootstrapTable("refresh");
+                    //                         },
+                    //                         error: function (info) {
+                    //                             window.Ewin.alert({message: "操作失败:" + info.status});
+                    //                         }
+                    //                     })
+                    //                 }
+                    //             });
+                    //         }
+                    //     }
+                    // }
 
-                ],*/
+                ],
             });
             // $productionTable.bootstrapTable('hideColumn', 'eBomPuid');
         }
     });
 }
-function initTable3(url) {
+function doQuery2() {
+    //$('#eplTable').bootstrapTable('refresh');    //刷新表格
+    var projectId = $("#project", window.top.document).val();
+    var financialUrl = "mbom/record?projectId=" + projectId+"&type="+6;
+    // var level = $("#level").val();
+    // financialUrl += "&level=" + level;
+    // var pBomOfWhichDept = $("#pBomOfWhichDept").val();
+    // financialUrl += "&pBomOfWhichDept=" + pBomOfWhichDept;
+    // var lineId = $("#lineId").val();
+    // financialUrl += "&lineId=" + lineId;
+    var pBomLinePartClass = $("#pBomLinePartClass6").val();
+    if (pBomLinePartClass =="请选择零件分类") {
+        financialUrl += "&pBomLinePartClass="+ "";
+    }else {
+        financialUrl += "&pBomLinePartClass=" + pBomLinePartClass;
+    }
+    var pBomLinePartResource = $("#pBomLinePartResource6").val();
+    if (pBomLinePartResource == "请选择零件来源") {
+        financialUrl += "&pBomLinePartResource="+ "";
+    }
+    else {
+        financialUrl += "&pBomLinePartResource=" + pBomLinePartResource;
+    }
+    initTable3(financialUrl);
+    $('#whiteBodyFinancialTable').bootstrapTable('destroy');
+}
+function initTable3(financialUrl) {
     var projectId = $("#project", window.top.document).val();
     var $financialTable = $("#whiteBodyFinancialTable");
     var currentProjectHead = $("#currentProjectHead", window.top.document).val();
     var column = [];
     selections = [];
+    // $financialTable.bootstrapTable('destroy');
 
     $.ajax({
-        url: "work/process/title",
+        url: "mbom/manage/title?projectId=" + projectId,
         type: "GET",
         success: function (result) {
             var column = [];
@@ -1142,19 +1143,19 @@ function initTable3(url) {
             var values;
             for (var key in data) {
                 if (data.hasOwnProperty(key)) {
-                    if('pLouaFlag'===key){
+                    if ('pLouaFlag' === key) {
                         var json = {
                             field: key,
                             title: data[key],
                             // align: 'center',
                             valign: 'middle',
                             formatter: function (value, row, index) {
-                                if (value =="LOA") {
+                                if (value == "LOA") {
                                     return [
                                         '<a href="javascript:void(0)" onclick="queryLoa(\'' + row.eBomPuid + '\')">' + value + '</a>'
                                     ].join("");
                                 }
-                                else if (value == "LOU"){
+                                else if (value == "LOU") {
                                     return [
                                         '<a href="javascript:void(0)" onclick="queryLou(\'' + row.eBomPuid + '\')">' + value + '</a>'
                                     ].join("");
@@ -1168,7 +1169,7 @@ function initTable3(url) {
                         };
                         column.push(json);
                     }
-                    else{
+                    else {
                         var json = {
                             field: key,
                             title: data[key],
@@ -1176,12 +1177,12 @@ function initTable3(url) {
                             valign: 'middle',
                             formatter: function (value, row, index) {
                                 // console.log(row)
-                                if (value =="LOA") {
+                                if (value == "LOA") {
                                     return [
                                         '<a href="javascript:void(0)" onclick="queryLoa(' + row.eBomPuid + ')">' + value + '</a>'
                                     ].join("");
                                 }
-                                else if (value == "LOU"){
+                                else if (value == "LOU") {
                                     return [
                                         '<a href="javascript:void(0)" onclick="queryLou(\'' + row.eBomPuid + '\')">' + value + '</a>'
                                     ].join("");
@@ -1198,7 +1199,7 @@ function initTable3(url) {
                 }
             }
             $financialTable.bootstrapTable({
-                url: url,
+                url: financialUrl,
                 method: 'GET',
                 dataType: 'json',
                 cache: false,
@@ -1209,9 +1210,9 @@ function initTable3(url) {
                 formId: "queryMbomMain",
                 undefinedText: "",//当数据为 undefined 时显示的字符
                 pagination: true,
-                pageNumber:1,                       //初始化加载第一页，默认第一页
+                pageNumber: 1,                       //初始化加载第一页，默认第一页
                 pageSize: 20,                       //每页的记录行数（*）
-                pageList: ['ALL',20,50,100,200,500,1000],        //可供选择的每页的行数（*）
+                pageList: ['ALL', 20, 50, 100, 200, 500, 1000],        //可供选择的每页的行数（*）
                 uniqueId: "puid",                     //每一行的唯一标识，一般为主键列
                 showExport: true,
                 //exportDataType: 'all',
@@ -1228,8 +1229,8 @@ function initTable3(url) {
                 showRefresh: true,                  //是否显示刷新按钮
                 minimumCountColumns: 4,
                 //responseHandler:responseHandler, //在渲染页面数据之前执行的方法，此配置很重要!!!!!!!
-                /*toolbars: [
-                    /!*{
+                toolbars: [
+                    /*{
                         text: '添加',
                         iconCls: 'glyphicon glyphicon-plus',
                         handler: function () {
@@ -1247,7 +1248,7 @@ function initTable3(url) {
                                 height: 650
                             })
                         }
-                    },*!/
+                    },*/
                     {
                         text: '修改',
                         iconCls: 'glyphicon glyphicon-pencil',
@@ -1260,7 +1261,7 @@ function initTable3(url) {
                             }
                             window.Ewin.dialog({
                                 title: "修改",
-                                url: "mbom/updateMBom?projectId=" + projectPuid + "&eBomPuid=" + rows[0].eBomPuid,
+                                url: "mbom/updateFinancial?projectId=" + projectId + "&eBomPuid=" + rows[0].eBomPuid+"&type="+6,
                                 gridId: "gridId",
                                 width: 500,
                                 height: 500
@@ -1273,12 +1274,14 @@ function initTable3(url) {
                         handler: function () {
                             var rows = $financialTable.bootstrapTable('getSelections');
                             var puids = "";
-                            for (var i = 0 ; i<rows.length;i++){
-                                puids += rows[i].eBomPuid+",";
-                            };
+                            for (var i = 0; i < rows.length; i++) {
+                                puids += rows[i].eBomPuid + ",";
+                            }
+                            ;
                             var myData = JSON.stringify({
                                 "projectId": $("#project", window.top.document).val(),
-                                "puids":puids,
+                                "puids": puids,
+                                "type":6,
                             });
                             if (rows.length == 0) {
                                 window.Ewin.alert({message: '请选择一条需要删除的数据!'});
@@ -1303,16 +1306,16 @@ function initTable3(url) {
                                         data: myData,
                                         contentType: "application/json",
                                         success: function (result) {
-                                            /!*if (result.status) {
+                                            /*if (result.status) {
                                                 window.Ewin.alert({message: result.errMsg});
                                                 //刷新，会重新申请数据库数据
                                             }
                                             else {
                                                 window.Ewin.alert({message: ":" + result.errMsg});
-                                            }*!/
-                                            if (result.success){
+                                            }*/
+                                            if (result.success) {
                                                 layer.msg('删除成功', {icon: 1, time: 2000})
-                                            } else if(!result.success){
+                                            } else if (!result.success) {
                                                 window.Ewin.alert({message: result.errMsg});
                                             }
                                             $financialTable.bootstrapTable("refresh");
@@ -1406,13 +1409,13 @@ function initTable3(url) {
                     //                     data: JSON.stringify(rows),
                     //                     contentType: "application/json",
                     //                     success: function (result) {
-                    //                         /!*if (result.status) {
+                    //                         /*if (result.status) {
                     //                             window.Ewin.alert({message: result.errMsg});
                     //                             //刷新，会重新申请数据库数据
                     //                         }
                     //                         else {
                     //                             window.Ewin.alert({message: ":" + result.errMsg});
-                    //                         }*!/
+                    //                         }*/
                     //                         window.Ewin.alert({message: result.errMsg});
                     //                         $financialTable.bootstrapTable("refresh");
                     //                     },
@@ -1446,13 +1449,13 @@ function initTable3(url) {
                     //                     data: JSON.stringify(rows),
                     //                     contentType: "application/json",
                     //                     success: function (result) {
-                    //                         /!*if (result.status) {
+                    //                         /*if (result.status) {
                     //                             window.Ewin.alert({message: result.errMsg});
                     //                             //刷新，会重新申请数据库数据
                     //                         }
                     //                         else {
                     //                             window.Ewin.alert({message: ":" + result.errMsg});
-                    //                         }*!/
+                    //                         }*/
                     //                         window.Ewin.alert({message: result.errMsg});
                     //                         $financialTable.bootstrapTable("refresh");
                     //                     },
@@ -1464,159 +1467,182 @@ function initTable3(url) {
                     //         });
                     //     }
                     // },
-                    {
-                        text: '发送MBOM到SAP',
-                        iconCls: 'glyphicon glyphicon-send',
-                        handler: function () {
-                            var rows = $financialTable.bootstrapTable('getSelections');
-                            var confirm = undefined;
-                            var localUrl = "";
-                            var datas = null;
-                            if (rows.length == 0) {
-                                window.Ewin.confirm({
-                                    title: '提示',
-                                    message: '<p ><strong style="color: red">注意：正在进行耗时操作</strong></p>' +
-                                    '您未选择任何一条数据，是否将当前项目' + currentProjectHead + '下的所有物料数据发送到ERP系统?'
-                                    ,
-                                    width: 1000
-                                }).on(function (e) {
-                                    //发送全部
-                                    if (e) {
-                                        localUrl = "synBom/synAllBomByProjectPuid?projectUid=" + projectPuid;
-                                        datas = null;
-                                        $.ajax({
-                                            type: "POST",
-                                            //ajax需要添加打包名
-                                            url: localUrl,
-                                            data: datas,
-                                            contentType: "application/json",
-                                            success: function (result) {
-                                                window.Ewin.alert({message: result, width: 800});
-                                                $financialTable.bootstrapTable("refresh");
-                                            },
-                                            error: function (info) {
-                                                window.Ewin.alert({message: "操作失败:" + info.status});
-                                            }
-                                        })
-                                    }
-                                });
-                            }
-                            else {
-                                window.Ewin.confirm({
-                                    title: '提示',
-                                    message: '是否要重新发送您所选择的记录？',
-                                    width: 800
-                                }).on(function (e) {
-                                    if (e) {
-                                        localUrl = "synBom/updateByUids?projectUid=" + projectPuid;
-                                        datas = JSON.stringify(rows);
-                                        $.ajax({
-                                            type: "POST",
-                                            //ajax需要添加打包名
-                                            url: localUrl,
-                                            data: datas,
-                                            contentType: "application/json",
-                                            success: function (result) {
-                                                // if (result.status) {
-                                                //     window.Ewin.alert({message: result.msg});
-                                                //     //刷新，会重新申请数据库数据
-                                                // }
-                                                // else {
-                                                //     window.Ewin.alert({message: ":" + result.errMsg});
-                                                // }
-                                                window.Ewin.alert({message: result, width: 1000});
-                                                $financialTable.bootstrapTable("refresh");
-                                            },
-                                            error: function (info) {
-                                                window.Ewin.alert({message: "操作失败:" + info.status});
-                                            }
-                                        })
-                                    }
-                                });
-                            }
-                        }
-                    },
-                    {
-                        text: '发送单条MBOM到SAP',
-                        iconCls: 'glyphicon glyphicon-send',
-                        handler: function () {
-                            var rows = $financialTable.bootstrapTable('getSelections');
-                            var confirm = undefined;
-                            var localUrl = "";
-                            var datas = null;
-                            if (rows.length != 1) {
-                                // window.Ewin.confirm({
-                                //     title: '提示',
-                                //     message: '<p ><strong style="color: red">注意：正在进行耗时操作</strong></p>' +
-                                //     '您未选择任何一条数据，是否将当前项目' + currentProjectHead + '下的所有物料数据发送到ERP系统?'
-                                //     ,
-                                //     width: 1000
-                                // }).on(function (e) {
-                                //     //发送全部
-                                //     if (e) {
-                                //         localUrl = "synBom/addByUids?projectUid=" + projectPuid;
-                                //         datas = null;
-                                //         $.ajax({
-                                //             type: "POST",
-                                //             //ajax需要添加打包名
-                                //             url: localUrl,
-                                //             data: datas,
-                                //             contentType: "application/json",
-                                //             success: function (result) {
-                                //                 window.Ewin.alert({message: result, width: 800});
-                                //                 $financialTable.bootstrapTable("refresh");
-                                //             },
-                                //             error: function (info) {
-                                //                 window.Ewin.alert({message: "操作失败:" + info.status});
-                                //             }
-                                //         })
-                                //     }
-                                // });
-                            }
-                            else {
-                                window.Ewin.confirm({
-                                    title: '提示',
-                                    message: '是否要发送您所选择的记录？',
-                                    width: 800
-                                }).on(function (e) {
-                                    if (e) {
-                                        localUrl = "synBom/addByUids?projectUid=" + projectPuid;
-                                        datas = JSON.stringify(rows);
-                                        $.ajax({
-                                            type: "POST",
-                                            //ajax需要添加打包名
-                                            url: localUrl,
-                                            data: datas,
-                                            contentType: "application/json",
-                                            success: function (result) {
-                                                // if (result.status) {
-                                                //     window.Ewin.alert({message: result.msg});
-                                                //     //刷新，会重新申请数据库数据
-                                                // }
-                                                // else {
-                                                //     window.Ewin.alert({message: ":" + result.errMsg});
-                                                // }
-                                                window.Ewin.alert({message: result, width: 1000});
-                                                $financialTable.bootstrapTable("refresh");
-                                            },
-                                            error: function (info) {
-                                                window.Ewin.alert({message: "操作失败:" + info.status});
-                                            }
-                                        })
-                                    }
-                                });
-                            }
-                        }
-                    }
+                    // {
+                    //     text: '发送MBOM到SAP',
+                    //     iconCls: 'glyphicon glyphicon-send',
+                    //     handler: function () {
+                    //         var rows = $financialTable.bootstrapTable('getSelections');
+                    //         var confirm = undefined;
+                    //         var localUrl = "";
+                    //         var datas = null;
+                    //         if (rows.length == 0) {
+                    //             window.Ewin.confirm({
+                    //                 title: '提示',
+                    //                 message: '<p ><strong style="color: red">注意：正在进行耗时操作</strong></p>' +
+                    //                 '您未选择任何一条数据，是否将当前项目' + currentProjectHead + '下的所有物料数据发送到ERP系统?'
+                    //                 ,
+                    //                 width: 1000
+                    //             }).on(function (e) {
+                    //                 //发送全部
+                    //                 if (e) {
+                    //                     localUrl = "synBom/synAllBomByProjectPuid?projectUid=" + projectPuid;
+                    //                     datas = null;
+                    //                     $.ajax({
+                    //                         type: "POST",
+                    //                         //ajax需要添加打包名
+                    //                         url: localUrl,
+                    //                         data: datas,
+                    //                         contentType: "application/json",
+                    //                         success: function (result) {
+                    //                             window.Ewin.alert({message: result, width: 800});
+                    //                             $financialTable.bootstrapTable("refresh");
+                    //                         },
+                    //                         error: function (info) {
+                    //                             window.Ewin.alert({message: "操作失败:" + info.status});
+                    //                         }
+                    //                     })
+                    //                 }
+                    //             });
+                    //         }
+                    //         else {
+                    //             window.Ewin.confirm({
+                    //                 title: '提示',
+                    //                 message: '是否要重新发送您所选择的记录？',
+                    //                 width: 800
+                    //             }).on(function (e) {
+                    //                 if (e) {
+                    //                     localUrl = "synBom/updateByUids?projectUid=" + projectPuid;
+                    //                     datas = JSON.stringify(rows);
+                    //                     $.ajax({
+                    //                         type: "POST",
+                    //                         //ajax需要添加打包名
+                    //                         url: localUrl,
+                    //                         data: datas,
+                    //                         contentType: "application/json",
+                    //                         success: function (result) {
+                    //                             // if (result.status) {
+                    //                             //     window.Ewin.alert({message: result.msg});
+                    //                             //     //刷新，会重新申请数据库数据
+                    //                             // }
+                    //                             // else {
+                    //                             //     window.Ewin.alert({message: ":" + result.errMsg});
+                    //                             // }
+                    //                             window.Ewin.alert({message: result, width: 1000});
+                    //                             $financialTable.bootstrapTable("refresh");
+                    //                         },
+                    //                         error: function (info) {
+                    //                             window.Ewin.alert({message: "操作失败:" + info.status});
+                    //                         }
+                    //                     })
+                    //                 }
+                    //             });
+                    //         }
+                    //     }
+                    // },
+                    // {
+                    //     text: '发送单条MBOM到SAP',
+                    //     iconCls: 'glyphicon glyphicon-send',
+                    //     handler: function () {
+                    //         var rows = $financialTable.bootstrapTable('getSelections');
+                    //         var confirm = undefined;
+                    //         var localUrl = "";
+                    //         var datas = null;
+                    //         if (rows.length != 1) {
+                    //             // window.Ewin.confirm({
+                    //             //     title: '提示',
+                    //             //     message: '<p ><strong style="color: red">注意：正在进行耗时操作</strong></p>' +
+                    //             //     '您未选择任何一条数据，是否将当前项目' + currentProjectHead + '下的所有物料数据发送到ERP系统?'
+                    //             //     ,
+                    //             //     width: 1000
+                    //             // }).on(function (e) {
+                    //             //     //发送全部
+                    //             //     if (e) {
+                    //             //         localUrl = "synBom/addByUids?projectUid=" + projectPuid;
+                    //             //         datas = null;
+                    //             //         $.ajax({
+                    //             //             type: "POST",
+                    //             //             //ajax需要添加打包名
+                    //             //             url: localUrl,
+                    //             //             data: datas,
+                    //             //             contentType: "application/json",
+                    //             //             success: function (result) {
+                    //             //                 window.Ewin.alert({message: result, width: 800});
+                    //             //                 $financialTable.bootstrapTable("refresh");
+                    //             //             },
+                    //             //             error: function (info) {
+                    //             //                 window.Ewin.alert({message: "操作失败:" + info.status});
+                    //             //             }
+                    //             //         })
+                    //             //     }
+                    //             // });
+                    //         }
+                    //         else {
+                    //             window.Ewin.confirm({
+                    //                 title: '提示',
+                    //                 message: '是否要发送您所选择的记录？',
+                    //                 width: 800
+                    //             }).on(function (e) {
+                    //                 if (e) {
+                    //                     localUrl = "synBom/addByUids?projectUid=" + projectPuid;
+                    //                     datas = JSON.stringify(rows);
+                    //                     $.ajax({
+                    //                         type: "POST",
+                    //                         //ajax需要添加打包名
+                    //                         url: localUrl,
+                    //                         data: datas,
+                    //                         contentType: "application/json",
+                    //                         success: function (result) {
+                    //                             // if (result.status) {
+                    //                             //     window.Ewin.alert({message: result.msg});
+                    //                             //     //刷新，会重新申请数据库数据
+                    //                             // }
+                    //                             // else {
+                    //                             //     window.Ewin.alert({message: ":" + result.errMsg});
+                    //                             // }
+                    //                             window.Ewin.alert({message: result, width: 1000});
+                    //                             $financialTable.bootstrapTable("refresh");
+                    //                         },
+                    //                         error: function (info) {
+                    //                             window.Ewin.alert({message: "操作失败:" + info.status});
+                    //                         }
+                    //                     })
+                    //                 }
+                    //             });
+                    //         }
+                    //     }
+                    // }
 
-                ],*/
+                ],
             });
             // $financialTable.bootstrapTable('hideColumn', 'eBomPuid');
         }
     });
 }
-function  queryLoa(row){
-    var myData= JSON.stringify({
+function doMBom() {
+    $(document).ready((function () {
+    var projectId = $("#project", window.top.document).val();
+    var mBomUrl = "mbom/record?projectId=" + projectId;
+    initTable1(mBomUrl);
+    }))
+}
+function doProduction() {
+    $(document).ready((function () {
+        var projectId = $("#project", window.top.document).val();
+        var productionUrl = "mbom/record?projectId=" + projectId+"&type="+1;
+        initTable2(productionUrl);
+    }))
+}
+
+function doFinancial() {
+    $(document).ready((function () {
+        var projectId = $("#project", window.top.document).val();
+        var financialUrl = "mbom/record?projectId=" + projectId+"&type="+6;
+        initTable3(financialUrl);
+    }))
+}
+
+function queryLoa(row) {
+    var myData = JSON.stringify({
         "projectId": $("#project", window.top.document).val(),
         "puid": row
     });
@@ -1628,25 +1654,26 @@ function  queryLoa(row){
         contentType: "application/json",
         success: function (result) {
             var child = result.data.child;
-            var parent =result.data.parent;
-            var parentLevel= (parent.parentLevel==undefined?"":parent.parentLevel);
-            var parentLineId= (parent.parentLineId==undefined?"":parent.parentLineId);
-            var parentName= (parent.parentName==undefined?"":parent.parentName);
+            var parent = result.data.parent;
+            var parentLevel = (parent.parentLevel == undefined ? "" : parent.parentLevel);
+            var parentLineId = (parent.parentLineId == undefined ? "" : parent.parentLineId);
+            var parentName = (parent.parentName == undefined ? "" : parent.parentName);
             var _table = '<div style="max-height: 400px;overflow:scroll;"><table class="table table-striped tableNormalStyle" >';
-            _table+='<tr><td>父层级</td><td>父零件号</td><td>父名称</td></tr>'
+            _table += '<tr><td>父层级</td><td>父零件号</td><td>父名称</td></tr>'
             // for (var i=0;i<parent.length; i++) {
-            _table += '<tr><td>' + parentLevel + '</td><td>'+parentLineId+'</td><td>'+parentName+'</td></tr>';
+            _table += '<tr><td>' + parentLevel + '</td><td>' + parentLineId + '</td><td>' + parentName + '</td></tr>';
             // }
             _table += '</table></div>' + '<div style="max-height: 400px;overflow:scroll;"><table class="table table-striped tableNormalStyle" >';
-            _table+='<tr><td>子层级</td><td>子零件号</td><td>子名称</td></tr>'
-            for (var i=0;i<child.length; i++) {
-                _table += '<tr><td>' + child[i].childLevel + '</td><td>'+child[i].childLineId+'</td><td>'+child[i].childName+'</td></tr>';
+            _table += '<tr><td>子层级</td><td>子零件号</td><td>子名称</td></tr>'
+            for (var i = 0; i < child.length; i++) {
+                _table += '<tr><td>' + child[i].childLevel + '</td><td>' + child[i].childLineId + '</td><td>' + child[i].childName + '</td></tr>';
             }
             _table += '</table></div>';
             window.Ewin.confirm({title: '提示', message: _table, width: 500});
         }
     })
 }
+
 function queryLou(row) {
     // var myData = JSON.stringify({
     //     "projectId": $("#project", window.top.document).val(),
@@ -1656,7 +1683,7 @@ function queryLou(row) {
     $.ajax({
         type: "GET",
         //ajax需要添加打包名
-        url: "loa/getLou/mBom?projectId="+projectId+"&puid="+row,
+        url: "loa/getLou/mBom?projectId=" + projectId + "&puid=" + row,
         // data: myData,
         // contentType: "application/json",
         undefinedText: "",
@@ -1678,7 +1705,7 @@ function queryLou(row) {
             _table += '<tr><td>' + parentLevel + '</td><td>' + parentLineId + '</td><td>' + parentName + '</td></tr>';
             _table += '</table></div>' + '<div style="max-height: 400px;overflow:scroll;"><table class="table table-striped tableNormalStyle" >';
             _table += '<tr><td>配置名</td><td>特性值描述</td><td>族名</td><td>特性描述</td></tr>'
-            _table += '<tr><td>' + pCfg0name + '</td><td>' + cfg0Desc + '</td><td>' + pCfg0familyname + '</td><td>'+cfg0FamilyDesc+'</td></tr>';
+            _table += '<tr><td>' + pCfg0name + '</td><td>' + cfg0Desc + '</td><td>' + pCfg0familyname + '</td><td>' + cfg0FamilyDesc + '</td></tr>';
             _table += '</table></div>' + '<div style="max-height: 400px;overflow:scroll;"><table class="table table-striped tableNormalStyle" >';
             _table += '<tr><td>子层级</td><td>子零件号</td><td>子名称</td></tr>'
             for (var i = 0; i < child.length; i++) {
@@ -1689,9 +1716,10 @@ function queryLou(row) {
         }
     })
 }
-$(document).keydown(function(event) {
+
+$(document).keydown(function (event) {
     if (event.keyCode == 13) {
-        $('form').each(function() {
+        $('form').each(function () {
             event.preventDefault();
         });
     }

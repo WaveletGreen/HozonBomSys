@@ -5,10 +5,7 @@ import com.connor.hozon.bom.resources.domain.dto.request.DeleteHzMbomReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.request.SetLouReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.request.UpdateMbomReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.*;
-import com.connor.hozon.bom.resources.domain.query.HzBomRecycleByPageQuery;
-import com.connor.hozon.bom.resources.domain.query.HzLouaQuery;
-import com.connor.hozon.bom.resources.domain.query.HzMbomByPageQuery;
-import com.connor.hozon.bom.resources.domain.query.HzMbomTreeQuery;
+import com.connor.hozon.bom.resources.domain.query.*;
 import com.connor.hozon.bom.resources.page.Page;
 import sql.pojo.bom.HzMbomLineRecord;
 
@@ -26,14 +23,12 @@ public interface HzMbomService {
      * @return
      */
     Page<HzMbomRecordRespDTO> findHzMbomForPage(HzMbomByPageQuery query);
-
     /**
      * 获取一条MBOM
-     * @param projectId
-     * @param puid
+     * @param query
      * @return
      */
-    HzMbomRecordRespDTO findHzMbomByPuid(String projectId,String puid);
+    HzMbomRecordRespDTO findHzMbomByPuid(HzMbomByIdQuery query);
 
     /**
      * 插入一条MBOM信息
@@ -50,36 +45,11 @@ public interface HzMbomService {
     OperateResultMessageRespDTO updateMbomRecord(UpdateMbomReqDTO reqDTO);
 
     /**
-     * 删除一条MBOM
+     * 删除MBOM
      * @param
      * @return
      */
     OperateResultMessageRespDTO deleteMbomRecord(DeleteHzMbomReqDTO reqDTO);
-
-    /**
-     * 获取超级Mbom信息 作废
-     * @param query
-     * @return
-     */
-    @Deprecated
-    Page<HzSuperMbomRecordRespDTO> getHzSuperMbomPage(HzMbomByPageQuery query);
-
-    /**
-     * 获取车辆模型信息 作废
-     * @param projectId
-     * @return
-     */
-    @Deprecated
-    List<HzVehicleModelRespDTO> getHzVehicleModelByProjectId(String projectId);
-
-    /**
-     * 获取超级MBOM信息 作废
-     * @param projectId
-     * @param puid
-     * @return
-     */
-    @Deprecated
-    HzMbomLineRecord getHzSuperMbomByPuid(String projectId,String puid);
 
     /**
      * 获取MBOM树
@@ -108,4 +78,11 @@ public interface HzMbomService {
 
 
     HzLouRespDTO getHzLouInfoById(HzLouaQuery query);
+
+    /**
+     * 刷新按钮 更新MBOM数据
+     * @param projectId
+     * @return
+     */
+    OperateResultMessageRespDTO refreshHzMbom(String projectId);
 }

@@ -43,7 +43,7 @@ public class HzBomLineRecordDaoImpl extends BaseSQLUtil {
     }
 
     /**
-     * 跟新颜色件信息  1是颜色件 0不是
+     * 更新颜色件信息  1是颜色件 0不是
      * @param puid
      * @param isColorPart
      * @return
@@ -111,7 +111,6 @@ public class HzBomLineRecordDaoImpl extends BaseSQLUtil {
 
     /**
      * 找出全部的2或者2Y层级结构
-     *
      * @return
      */
     public List<String> findBomLineIndex(Map map) {

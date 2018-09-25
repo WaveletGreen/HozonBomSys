@@ -195,6 +195,16 @@ public class HzImportEbomRecord {
      */
     private String pBuyEngineer;
 
+    private Integer colorPart;
+
+    public Integer getColorPart() {
+        return colorPart;
+    }
+
+    public void setColorPart(Integer colorPart) {
+        this.colorPart = colorPart;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
