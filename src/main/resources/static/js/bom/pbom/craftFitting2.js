@@ -90,7 +90,7 @@ $(document).ready(function () {
                     window.Ewin.alert({message: "不能选择最顶层进行合成!"});
                     return false;
                 }
-
+                console.log("****************************************************************");
                 console.log("-----------------打印对象xxx父层-----------");
                 console.log(parent);
                 console.log("-----------------打印对象xxx父层-----------");
@@ -98,6 +98,65 @@ $(document).ready(function () {
                 console.log("-----------------打印对象子层-----------");
                 console.log(children);
                 console.log("-----------------打印对象子层-----------");
+
+                console.log("-----------------打印对象xxx父层节点-----------");
+                console.log(parentNode);
+                console.log("-----------------打印对象xxx父层节点-----------");
+
+                console.log("-----------------打印对象xxx子层节点-----------");
+                console.log(childrenNode);
+                console.log("-----------------打印对象xxx子层节点-----------");
+                console.log("#################################################################");
+
+                //提示表格
+                let selectedToCraftTable = $("#selectedToCraftTable");
+                selectedToCraftTable.html("");
+                let _tr = document.createElement("tr");
+                let _th = document.createElement("th");
+
+                let size = 0;
+                _th.innerHTML = "已选择的节点是:";
+                _tr.appendChild(_th);
+                selectedToCraftTable.append(_tr);
+                //动态显示选择的节点
+                for (let i in parentNode) {
+                    if (parentNode.hasOwnProperty(i)) {
+                        let tr = document.createElement("tr");
+                        let td = document.createElement("td");
+                        td.innerHTML = parentNode[i].lineId;
+                        tr.appendChild(td);
+                        selectedToCraftTable.append(tr);
+                        size++;
+                    }
+                }
+                for (let i in childrenNode) {
+                    if (childrenNode.hasOwnProperty(i)) {
+                        for (let j in childrenNode[i]) {
+                            let tr = document.createElement("tr");
+                            let td = document.createElement("td");
+                            td.innerHTML = childrenNode[i][j].lineId;
+                            tr.appendChild(td);
+                            selectedToCraftTable.append(tr);
+                            size++;
+                        }
+                    }
+                }
+                //动态提示
+                if (size >= 2) {
+                    $("#info_div span").text("第三步：点击“生成工艺合件”");
+                    $("#info_div").css("top", "8%");
+                    $("#info_img_2").css("display", "inline");
+                    $("#info_img_2").css("max-width", "36px");
+                    $("#info_img_1").css("display", "none");
+
+                }
+                else {
+                    $("#info_div span").text("第二步：选择需要合成的零件(选父影响子，选子不影响父)");
+                    $("#info_div").css("top", "20%");
+                    $("#info_img_1").css("display", "inline");
+                    $("#info_img_1").css("max-width", "36px");
+                    $("#info_img_2").css("display", "none");
+                }
 
                 for (var i = 0; i < nodes.length; i++) {
                     if (!nodes[i].isParent) {
