@@ -812,6 +812,9 @@
             <if test="lineID != null and lineID!=''">
                 and t1.P_BOM_LINE_ID = #{lineID,jdbcType=VARCHAR}
             </if>
+            <if test="parentId != null and parentId!=''">
+                and t1.P_PARENT_UID = #{parentId,jdbcType=VARCHAR}
+            </if>
             and t1.P_EBOM_STATUS <![CDATA[ <> ]]>0
             order by CAST(t1.P_SORT_NUM as FLOAT)
         </where>
@@ -984,5 +987,28 @@
                 and t1.P_BOM_LINE_ID like CONCAT(CONCAT('%',#{lineId,jdbcType=VARCHAR}),'%')
             </if>
         </where>
+    </select>
+
+    <!--查询油漆车身总成和白车身总成-->
+    <select id="HzEbomRecordDAOImpl_getPaintAndWhiteBody" parameterType="java.util.HashMap" resultMap="BaseResultMap">
+        SELECT t1.* from HZ_BOM_LINE_RECORD t1
+        where t1.p_bom_digifax_id=(
+        select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(
+        select t2.puid from Hz_project_libs t2
+        <where>
+            t2.puid=#{projectId,jdbcType=VARCHAR}))
+            and (t1.P_BOM_LINE_PART_NAME like '白车身总成%'
+            or t1.P_BOM_LINE_PART_NAME like '油漆车身总成%')
+
+            and (t1.P_BOM_LINE_PART_RESOURCE ='采购件'or
+            t1.P_BOM_LINE_PART_RESOURCE ='自制总成' or
+            t1.P_BOM_LINE_PART_RESOURCE ='自制单件'or
+            t1.P_BOM_LINE_PART_RESOURCE ='自用标准件'or
+            t1.P_BOM_LINE_PART_RESOURCE ='自用非标件'or
+            t1.P_BOM_LINE_PART_RESOURCE ='虚拟总成')
+        </where>
+        start with t1.puid = #{puid,jdbcType=VARCHAR} and t1.P_EBOM_STATUS<![CDATA[ <> ]]>0
+        connect by prior t1.puid = t1.p_parent_uid  and t1.P_EBOM_STATUS<![CDATA[ <> ]]>0
+        order by CAST(t1.P_SORT_NUM as FLOAT)
     </select>
 </mapper>
