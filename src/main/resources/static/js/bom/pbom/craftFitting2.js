@@ -19,7 +19,7 @@ $(document).ready(function () {
         else {
             $.ajax({
                 type: "GET",
-                url: "pbom/processComposeTree?lineId=" + val + "&projectId=" + projectId,
+                url: "pbom/processComposeTree?lineId=" + val + "&projectId=" + getProjectUid(),
                 undefinedText: "",//当数据为 undefined 时显示的字符
                 success: function (data) {
                     if (!data.success) {
@@ -70,11 +70,26 @@ $(document).ready(function () {
             /*beforeClick:function(treeId, treeNode) {
                 return !treeNode.isParent;//当是父节点 返回false 不让选取
             },*/
+            /**
+             * 不能选择最顶层
+             */
+            beforeCheck: function (treeId, treeNode) {
+                if (treeNode.getParentNode() == null) {
+                    window.Ewin.alert({message: "您不能选中顶层进行合成"});
+                    return false;
+                }
+            },
             onCheck: function (e, treeId, treeNode) {
                 var treeObj = $.fn.zTree.getZTreeObj("Ztree1");
                 var nodes = treeObj.getCheckedNodes(true);
-
-                sortOnlyByParent(treeNode);
+                /**
+                 * 只能父影响子，不能子影响父
+                 */
+                let localCode = sortOnlyByParent(treeNode, treeId);
+                if (localCode == -1) {
+                    window.Ewin.alert({message: "不能选择最顶层进行合成!"});
+                    return false;
+                }
 
                 console.log("-----------------打印对象xxx父层-----------");
                 console.log(parent);
@@ -118,7 +133,7 @@ $(document).ready(function () {
                 // }
                 localSelectedNode = treeNode;
                 $.ajax({
-                    url: "pbom/detail?puid=" + localSelectedNode.puid + "&projectId=" + projectId,
+                    url: "pbom/detail?puid=" + localSelectedNode.puid + "&projectId=" + getProjectUid(),
                     type: "GET",
                     undefinedText: "",//当数据为 undefined 时显示的字符
                     success: function (data) {
@@ -231,7 +246,7 @@ $(document).ready(function () {
         if (coach1.length != 0) {
             var myData = JSON.stringify({
                 "eBomPuid": coach1[0],
-                "projectId": $("#project", window.top.document).val(),
+                "projectId": getProjectUid(),
                 "puids": puids
             })
             $.ajax({
@@ -252,7 +267,7 @@ $(document).ready(function () {
                         var val = $("#queryLineId2").val();
                         $.ajax({
                             type: "GET",
-                            url: "pbom/processComposeTree?lineId=" + val + "&projectId=" + projectId,
+                            url: "pbom/processComposeTree?lineId=" + val + "&projectId=" + getProjectUid(),
                             undefinedText: "",//当数据为 undefined 时显示的字符
                             success: function (data) {
                                 if (!data.success) {
@@ -320,7 +335,7 @@ $(document).ready(function () {
                                             // }
                                             localSelectedNode1 = treeNode;
                                             $.ajax({
-                                                url: "pbom/detail?puid=" + localSelectedNode1.puid + "&projectId=" + projectId,
+                                                url: "pbom/detail?puid=" + localSelectedNode1.puid + "&projectId=" + getProjectUid(),
                                                 type: "GET",
                                                 undefinedText: "",//当数据为 undefined 时显示的字符
                                                 success: function (data) {
@@ -443,7 +458,7 @@ $(document).ready(function () {
         else {
             $.ajax({
                 type: "GET",
-                url: "pbom/processComposeTree?lineId=" + val + "&projectId=" + projectId,
+                url: "pbom/processComposeTree?lineId=" + val + "&projectId=" + getProjectUid(),
                 undefinedText: "",//当数据为 undefined 时显示的字符
                 success: function (data) {
                     if (!data.success) {
@@ -511,7 +526,7 @@ $(document).ready(function () {
                                 // }
                                 localSelectedNode1 = treeNode;
                                 $.ajax({
-                                    url: "pbom/detail?puid=" + localSelectedNode1.puid + "&projectId=" + projectId,
+                                    url: "pbom/detail?puid=" + localSelectedNode1.puid + "&projectId=" + getProjectUid(),
                                     type: "GET",
                                     undefinedText: "",//当数据为 undefined 时显示的字符
                                     success: function (data) {

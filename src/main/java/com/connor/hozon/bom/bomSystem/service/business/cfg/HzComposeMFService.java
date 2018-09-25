@@ -526,19 +526,19 @@ public class HzComposeMFService {
 //            /**
 //             * 从配置中包括品牌平台车型项目等单车信息数据，包括了衍生物料和基本信息数据，不能当作返回前端的数据，因为前端需要从其他地方获取到内饰颜色等信息
 //             */
-//            List<HzSingleVehicles> vehicles = hzSingleVehiclesDao.selectOrgByProjectUid(projectUid);
-//            /**
-//             * 从表中查询单车清单数据，一开始都是0个，需要进行差异数据对比，对比的是数量,再返回前端
-//             */
-//            List<HzSingleVehicles> hzSingleVehicles = hzSingleVehiclesDao.selectByProjectUid(projectUid);
-//            /**
-//             * 单车主配置+项目查询1条单车数据，单车主配置是配置物料特性表中的1行数据的主键
-//             */
-//            HzSingleVehicles hzSingleVehicle = hzSingleVehiclesDao.selectByDmbIdWithProjectUid(basics.get(i).getId(), projectUid);
-//            /**
-//             * 单车主配置+项目查询单车的所有2Y
-//             */
-//            List<HzSingleVehicleBomLineBean> hzSingleVehicleBomLineBeans = hzSingleVehicleBomLineDao.selectByProjectUidWithSv(projectUid, basics.get(i).getId());
+            List<HzSingleVehicles> vehicles = hzSingleVehiclesDao.selectOrgByProjectUid(projectUid);
+            /**
+             * 从表中查询单车清单数据，一开始都是0个，需要进行差异数据对比，对比的是数量,再返回前端
+             */
+            List<HzSingleVehicles> hzSingleVehicles = hzSingleVehiclesDao.selectByProjectUid(projectUid);
+            /**
+             * 单车主配置+项目查询1条单车数据，单车主配置是配置物料特性表中的1行数据的主键
+             */
+            HzSingleVehicles hzSingleVehicle = hzSingleVehiclesDao.selectByDmbIdWithProjectUid(basics.get(i).getId(), projectUid);
+            /**
+             * 单车主配置+项目查询单车的所有2Y
+             */
+            List<HzSingleVehicleBomLineBean> hzSingleVehicleBomLineBeans = hzSingleVehicleBomLineDao.selectByProjectUidWithSv(projectUid, basics.get(i).getId());
 
 
             for (int i1 = 0; i1 < columns.size(); i1++) {

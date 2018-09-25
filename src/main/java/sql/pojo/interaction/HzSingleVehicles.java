@@ -137,5 +137,12 @@ public class HzSingleVehicles {
      * 车型名称
      */
     private String vehicleName;
-
+    /**
+     * 颜色代码
+     */
+    private String colorCode;
+    /**
+     * 颜色名称
+     */
+    private String colorName;
 }

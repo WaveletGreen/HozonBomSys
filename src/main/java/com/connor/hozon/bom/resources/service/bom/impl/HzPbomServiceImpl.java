@@ -238,7 +238,7 @@ public class HzPbomServiceImpl implements HzPbomService {
     public JSONArray getPbomForProcessCompose(HzPbomProcessComposeReqDTO reqDTO) {
         Map<String, Object> map = new HashMap<>();
         map.put("projectId", reqDTO.getProjectId());
-        map.put("lineId", reqDTO.getLineId());
+        map.put("lineId", reqDTO.getLineId().trim());
         List<HzPbomLineRecord> records = hzPbomRecordDAO.getPbomById(map);
         if (ListUtil.isEmpty(records)) {
             return null;

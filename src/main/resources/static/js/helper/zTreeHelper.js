@@ -11,9 +11,17 @@ var children = {};
  *
  * @param treeNode zTree的节点
  */
-function sortOnlyByParent(treeNode) {
+function sortOnlyByParent(treeNode, treeId) {
     let now = treeNode.tId;
-    let parentId = treeNode.getParentNode().tId;
+    let parentId = "#";
+    if (treeNode.getParentNode() != null) {
+        parentId = treeNode.getParentNode().tId;
+    }
+    else {
+        return -1;
+    }
+    var ztreeObj = $.fn.zTree.getZTreeObj(treeId);
+
     let nowPuid = treeNode.puid;
     let parentPuid = treeNode.puid;
     /**
@@ -24,6 +32,15 @@ function sortOnlyByParent(treeNode) {
          * 父层进入父缓存
          */
         if (treeNode.isParent) {
+            let cNodes = treeNode.children;
+            for (let i in cNodes) {
+                cNodes[i].chkDisabled = true;
+                cNodes[i].checked = true;
+                ztreeObj.updateNode(cNodes[i]);
+                if (cNodes[i].children != null && cNodes[i].children.length > 0) {
+                    loopChidren(cNodes[i], ztreeObj, true, true);
+                }
+            }
             if (!parent.hasOwnProperty(now)) {
                 parent[now] = nowPuid;
                 /**
@@ -62,6 +79,13 @@ function sortOnlyByParent(treeNode) {
          * 父层补选中，删除父缓存，删除子中的父缓存
          */
         if (treeNode.isParent && parent.hasOwnProperty(now)) {
+            let cNodes = treeNode.children;
+            for (var i in cNodes) {
+                cNodes[i].chkDisabled = false;
+                cNodes[i].checked = false;
+                ztreeObj.updateNode(cNodes[i])
+                loopChidren(cNodes[i], ztreeObj, false, false);
+            }
             delete parent[now];
             delete children[now];
         }
@@ -72,6 +96,30 @@ function sortOnlyByParent(treeNode) {
             delete children[parentId][now];
             if ($.isEmptyObject(children[parentId])) {
                 delete children[parentId];
+            }
+        }
+    }
+}
+
+/**
+ * 递归设置子节点的状态
+ * @param childNode 有子节点的父节点
+ * @param ztreeObj zTree对象
+ * @param isCheck 是否是选中和是否禁用
+ */
+function loopChidren(childNode, ztreeObj, isCheck, isChkDisabled) {
+    childNode.chkDisabled = isCheck;
+    childNode.checked = isCheck;
+    ztreeObj.updateNode(childNode);
+    if (childNode.children != null && childNode.children.length > 0) {
+        let cNodes = childNode.children;
+        for (let i in cNodes) {
+            cNodes[i].chkDisabled = isChkDisabled;
+            ztreeObj.updateNode(cNodes[i]);
+            cNodes[i].checked = isCheck;
+            ztreeObj.updateNode(cNodes[i]);
+            if (cNodes[i].children != null && cNodes[i].children.length > 0) {
+                loopChidren(cNodes[i], ztreeObj, isCheck, isChkDisabled);
             }
         }
     }
