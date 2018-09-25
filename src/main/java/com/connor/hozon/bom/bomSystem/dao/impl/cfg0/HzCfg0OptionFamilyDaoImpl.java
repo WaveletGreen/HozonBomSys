@@ -1,5 +1,6 @@
 package com.connor.hozon.bom.bomSystem.dao.impl.cfg0;
 
+import com.connor.hozon.bom.bomSystem.dao.BasicDaoImpl;
 import com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0OptionFamilyDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,14 +16,11 @@ import java.util.Map;
  * Time: 9:23
  */
 @Service("hzCfg0OptionFamilyDao")
-public class HzCfg0OptionFamilyDaoImpl implements HzCfg0OptionFamilyDao {
-    @Autowired
-    IBaseSQLUtil baseSQLUtil;
+public class HzCfg0OptionFamilyDaoImpl extends BasicDaoImpl<HzCfg0OptionFamily> implements HzCfg0OptionFamilyDao {
     private final static HzCfg0OptionFamily FAMILY = new HzCfg0OptionFamily();
 
-    @Override
-    public HzCfg0OptionFamily selectByPrimaryKey(HzCfg0OptionFamily family) {
-        return baseSQLUtil.executeQueryById(family, "com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0OptionFamilyDao.selectByPrimaryKey");
+    public HzCfg0OptionFamilyDaoImpl() {
+        clz = HzCfg0OptionFamilyDao.class;
     }
 
     @Override
@@ -56,6 +54,20 @@ public class HzCfg0OptionFamilyDaoImpl implements HzCfg0OptionFamilyDao {
         return baseSQLUtil.executeQueryByPass(FAMILY, param, "com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0OptionFamilyDao.selectNameByMap");
     }
 
+    /**
+     * Author: Fancyears·Maylos·Mayways
+     * Description: 根据产品配置器的puid获取到所有的配置系统层
+     * Date: 2018/5/23 9:49
+     *
+     * @param param
+     * @return 返回一组系统名称
+     */
+    @Override
+    public List<HzCfg0OptionFamily> selectForColorBluePrint(Map<String, Object> param) {
+        return baseSQLUtil.executeQueryByPass(FAMILY, param, "com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0OptionFamilyDao.selectForColorBluePrint");
+    }
+
+
     @Override
     public HzCfg0OptionFamily selectByCodeAndDescWithMain(HzCfg0OptionFamily family) {
         return baseSQLUtil.executeQueryById(family, "com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0OptionFamilyDao.selectByCodeAndDescWithMain");
@@ -68,11 +80,6 @@ public class HzCfg0OptionFamilyDaoImpl implements HzCfg0OptionFamilyDao {
     @Override
     public List<HzCfg0OptionFamily> selectByCodeAndDescWithMain2(HzCfg0OptionFamily family) {
         return baseSQLUtil.executeQuery(family, "com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0OptionFamilyDao.selectByCodeAndDescWithMain");
-    }
-
-    @Override
-    public int insert(HzCfg0OptionFamily family) {
-        return baseSQLUtil.executeInsert(family, "com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0OptionFamilyDao.insert");
     }
 
 }

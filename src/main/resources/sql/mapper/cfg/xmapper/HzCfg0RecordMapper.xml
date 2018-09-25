@@ -89,7 +89,7 @@
         <include refid="Base_Column_List"/>
         from ${whichTable} t
         where
-        t.p_cfg0_family_name=#{pCfg0FamilyName,jdbcType=VARCHAR}
+        t.p_cfg0_family_name like '%'||#{pCfg0FamilyName,jdbcType=VARCHAR}||'%'
         and t.p_cfg0_object_id=#{pCfg0ObjectId,jdbcType=VARCHAR}
         and t.p_cfg0_main_item_puid=#{pCfg0MainItemPuid,jdbcType=VARCHAR}
     </select>
@@ -99,7 +99,7 @@
         <include refid="Base_Column_List"/>
         from ${whichTable} t
         where
-        t.p_cfg0_family_desc=#{pCfg0FamilyDesc,jdbcType=VARCHAR}
+        t.p_cfg0_family_desc like '%'||#{pCfg0FamilyDesc,jdbcType=VARCHAR}||'%'
         and t.p_cfg0_object_id=#{pCfg0ObjectId,jdbcType=VARCHAR}
         and t.p_cfg0_main_item_puid=#{pCfg0MainItemPuid,jdbcType=VARCHAR}
     </select>
@@ -212,6 +212,18 @@
         and t.P_CFG0_FAMILY_NAME=#{pCfg0FamilyName}
         and t.P_CFG0_FAMILY_DESC=#{pCfg0FamilyDesc}
         and t.p_cfg0_main_item_puid=#{pCfg0MainItemPuid}
+    </select>
+
+    <select id="selectByFamilyUidWithProject" parameterType="sql.pojo.cfg.HzCfg0Record"
+            resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from HZ_CFG0_RECORD t
+        where t.P_CFG0_MAIN_ITEM_PUID=(
+        select puid from Hz_Cfg0_Main_Record t2
+        where t2.p_cfg0_of_which_project_puid=#{projectPuid,jdbcType=VARCHAR}
+        )
+        and t.P_CFG0_FAMILY_PUID=#{pCfg0FamilyPuid,jdbcType=VARCHAR}
     </select>
 
     <select id="tellMeHowManyOfThose" parameterType="com.connor.hozon.bom.bomSystem.dto.HzFeatureQueryDTO"
@@ -391,4 +403,6 @@
             )
         </if>
     </update>
+
+
 </mapper>

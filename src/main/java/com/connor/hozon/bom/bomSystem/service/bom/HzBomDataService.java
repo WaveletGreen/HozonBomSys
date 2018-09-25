@@ -2,6 +2,7 @@ package com.connor.hozon.bom.bomSystem.service.bom;
 
 import com.connor.hozon.bom.bomSystem.dao.bom.HzBomDataDao;
 import com.connor.hozon.bom.bomSystem.dao.bom.HzBomMainRecordDao;
+import com.connor.hozon.bom.bomSystem.dao.impl.bom.HzBomLineRecordDaoImpl;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +31,8 @@ public class HzBomDataService {
     HzBomDataDao hzBomDataDao;
     @Autowired
     HzBomMainRecordDao hzBomMainRecordDao;
-
+    @Autowired
+    HzBomLineRecordDaoImpl hzBomLineRecordDao;
     /**
      * 根据项目puid获取到bom列的设置
      *
@@ -143,6 +145,6 @@ public class HzBomDataService {
     }
 
     public int updata2Y(HzBomLineRecord hzBomLineRecord) {
-        return 1;
+        return hzBomLineRecordDao.updateColorPart(hzBomLineRecord.getPuid(),hzBomLineRecord.getColorPart());
     }
 }

@@ -31,7 +31,7 @@ function loadData(projectPuid) {
     var column = [];
     $("#refresh").removeAttr("disabled");
     $.ajax({
-        url: "materiel/loadColumnByProjectPuid?projectPuid=" + projectPuid,
+        url: "materiel/loadColumnByProjectPuid2?projectPuid=" + projectPuid,
         type: "GET",
         success: function (result) {
             if (!result.status) {
@@ -47,7 +47,6 @@ function loadData(projectPuid) {
                     customClass: 'animated tada'
                 });
                 return;
-                return;
             }
             var data = result.data;
             var column = [];
@@ -57,6 +56,7 @@ function loadData(projectPuid) {
             // column.push({field: 'puidOfModelFeature', title: 'puidOfModelFeature'});
             // column.push({field: 'cfg0MainPuid', title: 'cfg0MainPuid'});
             column.push({field: 'modeBasicDetail', title: '基本信息代码'});
+            column.push({field: 'factory', title: '工厂'});
             column.push({field: 'modeBasicDetailDesc', title: '基本信息'});
             column.push({field: 'superMateriel', title: '超级物料'});
             for (var i = 0; i < data.length; i++) {
@@ -114,33 +114,33 @@ function loadData(projectPuid) {
                             window.Ewin.dialog({
                                 // 这个puid就是车型模型的puid，直接修改了车型模型的基本信息（在bom系统维护的字段）
                                 title: "修改基本信息",
-                                url: "materiel/modifyPage?puid=" + rows[0].puid + "&puidOfModelFeature=" + rows[0].puidOfModelFeature + "&page=model",
+                                url: "materiel/modifyPage?projectUid=" + projectPuid + "&puid=" + rows[0].puid + "&puidOfModelFeature=" + rows[0].puidOfModelFeature + "&page=model",
                                 gridId: "gridId",
                                 width: 350,
                                 height: 450
                             });
                         }
                     },
-                    {
-                        text: '修改超级物料',
-                        iconCls: 'glyphicon glyphicon-pencil',
-                        handler: function () {
-                            var rows = $table.bootstrapTable('getSelections');
-                            //只能选一条
-                            if (rows.length != 1) {
-                                window.Ewin.alert({message: '请选择一条需要修改的数据!'});
-                                return false;
-                            }
-                            window.Ewin.dialog({
-                                title: "修改超级物料",
-                                //直接修改了超级物料表的数据，要根据配置器的puid找，否则就不能根据所见即所改
-                                url: "materiel/modifyPage?puid=" + rows[0].cfg0MainPuid + "&puidOfModelFeature=" + rows[0].puidOfModelFeature + "&page=superMateriel",
-                                gridId: "gridId",
-                                width: 350,
-                                height: 450
-                            });
-                        }
-                    },
+                    // {
+                    //     text: '修改超级物料',
+                    //     iconCls: 'glyphicon glyphicon-pencil',
+                    //     handler: function () {
+                    //         var rows = $table.bootstrapTable('getSelections');
+                    //         //只能选一条
+                    //         if (rows.length != 1) {
+                    //             window.Ewin.alert({message: '请选择一条需要修改的数据!'});
+                    //             return false;
+                    //         }
+                    //         window.Ewin.dialog({
+                    //             title: "修改超级物料",
+                    //             //直接修改了超级物料表的数据，要根据配置器的puid找，否则就不能根据所见即所改
+                    //             url: "materiel/modifyPage?puid=" + rows[0].cfg0MainPuid + "&puidOfModelFeature=" + rows[0].puidOfModelFeature + "&page=superMateriel",
+                    //             gridId: "gridId",
+                    //             width: 350,
+                    //             height: 450
+                    //         });
+                    //     }
+                    // },
                     {
                         text: '删除衍生物料',
                         iconCls: 'glyphicon glyphicon-pencil',

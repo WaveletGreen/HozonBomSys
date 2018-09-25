@@ -6,6 +6,7 @@ import com.connor.hozon.bom.bomSystem.dto.HzMaterielFeatureBean;
 import com.connor.hozon.bom.bomSystem.dto.cfg.compose.HzComposeDelDto;
 import com.connor.hozon.bom.bomSystem.dto.cfg.compose.HzComposeMFDTO;
 import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
+import com.connor.hozon.bom.bomSystem.option.SpecialFeatureOption;
 import com.connor.hozon.bom.bomSystem.service.cfg.*;
 import com.connor.hozon.bom.bomSystem.service.project.HzSuperMaterielService;
 import com.connor.hozon.bom.common.base.entity.QueryBase;
@@ -92,18 +93,32 @@ public class HzComposeMFService {
      */
     @Autowired
     HzCfg0ColorSetService hzCfg0ColorSetService;
+    /**
+     * 全配置BOM一级清单的车型模型
+     */
     @Autowired
     HzFullCfgModelDao fullCfgModelDao;
+    /**
+     * 全配置BOM一级清单2Y对应的特性值
+     */
     @Autowired
     HzFullCfgWithCfgDao hzFullCfgWithCfgDao;
+    /**
+     * EBOM dao层
+     */
     @Autowired
     HzEbomRecordDAO hzEbomRecordDAO;
+    /**
+     * 主配置
+     */
     @Autowired
     HzCfg0MainService hzCfg0MainService;
     /**
      * 日志
      */
     private static Logger logger = LoggerFactory.getLogger(HzComposeMFService.class);
+
+    private static final boolean finalAddCSYS = true;
 
     public void saveCompose(HzComposeMFDTO hzComposeMFDTO, JSONObject results) {
 //        Map<String, Object> result = new HashMap<>();
@@ -243,13 +258,18 @@ public class HzComposeMFService {
         modelColor = hzCfg0ModelColorService.doGetById(modelColor);
 
         HzCfg0MainRecord mainRecord = hzCfg0MainService.doGetbyProjectPuid(hzComposeMFDTO.getProjectUid());
-        HzCfg0Record local=new HzCfg0Record();
+        HzCfg0Record local = new HzCfg0Record();
         local.setpCfg0ObjectId(modelColor.getpModelShellOfColorfulModel());
+        /**强制设置为HZCSYS*/
+        local.setpCfg0FamilyName(SpecialFeatureOption.CSCODE.getDesc());
+        local.setpCfg0MainItemPuid(mainRecord.getPuid());
         HzCfg0Record shell = hzCfg0Service.doSelectByCodeAndDescWithMainItem(local);
 
-        if(shell==null){
-            if((shell=hzCfg0Service.doSelectByCodeAndCnDescWithMainItem(local))==null){
-                results.put("msg", "没有找到任何一个特性为'HZCSYS'、特性值为'"+modelColor.getpModelShellOfColorfulModel()+"'的特性值，请尝试添加特性值");
+        if (shell == null) {
+            /**强制设置为中文描述“车身颜色”*/
+            local.setpCfg0FamilyDesc(SpecialFeatureOption.CSNAME.getDesc());
+            if ((shell = hzCfg0Service.doSelectByCodeAndCnDescWithMainItem(local)) == null) {
+                results.put("msg", "没有找到任何一个特性为'HZCSYS'、特性值为'" + modelColor.getpModelShellOfColorfulModel() + "'的特性值，请尝试添加特性值");
                 results.put("status", false);
                 return;
             }
@@ -296,6 +316,9 @@ public class HzComposeMFService {
         for (HzFullCfgModel modelCfg : modelCfgs) {
             if (!checkString(modelCfg.getModCfg0Uid())) {
                 HzEPLManageRecord hzEPLManageRecord = hzEbomRecordDAO.findEbomById(modelCfg.getFlModelBomlineUid(), hzComposeMFDTO.getProjectUid());
+                if(hzEPLManageRecord==null){
+                    continue;
+                }
                 results.put("status", false);
                 results.put("msg", "在车型模型" + modelDetail.getpModelVersion() + "存在标配打点图，但是忘记为2Y:" + hzEPLManageRecord.getLineID() + "选择特性值，请添加特性值");
                 return;
@@ -303,7 +326,16 @@ public class HzComposeMFService {
         }
         HzCfg0ModelFeature feature = new HzCfg0ModelFeature();
         User user = UserInfo.getUser();
-        HzFactory factory = hzFactoryDAO.findFactory(null, hzComposeMFDTO.getFactoryCode());
+        /**
+         * 检索工厂
+         */
+        HzFactory factory = null;
+        if (checkString(hzComposeMFDTO.getFactoryCode())) {
+            factory = hzFactoryDAO.findFactory(null, hzComposeMFDTO.getFactoryCode());
+        } else {
+            //默认为1001
+            factory = hzFactoryDAO.findFactory(null, "1001");
+        }
         if (factory == null) {
             factory = new HzFactory();
             factory.setpFactoryCode(hzComposeMFDTO.getFactoryCode());
@@ -316,8 +348,22 @@ public class HzComposeMFService {
                 factory.setPuid(null);
             }
         }
-
-
+        /**
+         * 如果超级物料为空，则存储超级物料
+         */
+        HzMaterielRecord sm = hzSuperMaterielService.doSelectByProjectPuid(hzComposeMFDTO.getProjectUid());
+        if (null == sm) {
+            if (checkString(hzComposeMFDTO.getSuperMateriel())) {
+                sm = new HzMaterielRecord();
+                sm.setpMaterielCode(hzComposeMFDTO.getSuperMateriel());
+                sm.setPuid(UUIDHelper.generateUpperUid());
+                sm.setpFactoryPuid(factory.getPuid());
+                sm.setpPertainToProjectPuid(hzComposeMFDTO.getProjectUid());
+                if (!hzSuperMaterielService.doInsertOne(sm)) {
+                    logger.error("存储超级物料失败");
+                }
+            }
+        }
 
         feature.setpFeatureSingleVehicleCode(modelDetail.getpModelCfgMng().replace("**", modelColor.getpModelShellOfColorfulModel()));
         feature.setpFeatureCnDesc(hzComposeMFDTO.getpCfg0ModelBasicDetail());
@@ -340,6 +386,7 @@ public class HzComposeMFService {
         basic.setDmbCreator(user.getUsername());
         basic.setDmbUpdater(user.getUsername());
         basic.setDmbProjectUid(hzComposeMFDTO.getProjectUid());
+        basic.setDmbSpecialFeatureUid(shell.getPuid());
         if (hzDerivativeMaterielBasicDao.insert(basic) <= 0) {
             logger.error("存储配置物料主数据失败");
             results.put("status", false);
@@ -351,8 +398,19 @@ public class HzComposeMFService {
 
         List<Map<String, Object>> data = new ArrayList<>();
         HzCfg0Record record = null;
+        Map<String, List<HzCfg0Record>> mapOfTemp = new HashMap<>();
+
         for (HzFullCfgModel modelCfg : modelCfgs) {
             if ((record = hzCfg0Service.doSelectOneByPuid(modelCfg.getModCfg0Uid())) != null) {
+                /**进行特性的查重，不应该有2个以上的相同特性*/
+                if (mapOfTemp.containsKey(record.getpCfg0FamilyPuid())) {
+                    logger.error("存在2个及以上特性值拥有相同的特性");
+                    mapOfTemp.get(record.getpCfg0FamilyPuid()).add(record);
+                } else {
+                    List<HzCfg0Record> list = new ArrayList<>();
+                    list.add(record);
+                    mapOfTemp.put(record.getpCfg0FamilyPuid(), list);
+                }
                 HzDerivativeMaterielDetail detail = new HzDerivativeMaterielDetail();
                 detail.setDmdCreator(user.getUsername());
                 detail.setDmdDmbId(basic.getId());
@@ -364,6 +422,17 @@ public class HzComposeMFService {
             } else {
                 logger.error("没有找到特性值数据");
             }
+        }
+        /**最后添加一个车身颜色*/
+        if (finalAddCSYS) {
+            HzDerivativeMaterielDetail detail = new HzDerivativeMaterielDetail();
+            detail.setDmdCreator(user.getUsername());
+            detail.setDmdDmbId(basic.getId());
+            detail.setDmdUpdater(user.getUsername());
+            detail.setDmdCfg0Uid(shell.getPuid());
+            detail.setDmdFeatureValue(shell.getpCfg0ObjectId());
+            detail.setDmdCfg0FamilyUid(shell.getpCfg0FamilyPuid());
+            details.add(detail);
         }
         if (true) {
             boolean hasFail = false;
@@ -425,19 +494,21 @@ public class HzComposeMFService {
 
         HzDerivativeMaterielBasic basic = new HzDerivativeMaterielBasic();
         basic.setDmbProjectUid(projectUid);
-        List<HzCfg0OptionFamily> columns = hzCfg0OptionFamilyService.doGetCfg0OptionFamilyListByProjectPuid(projectUid);
+//        List<HzCfg0OptionFamily> columns = hzCfg0OptionFamilyService.doGetCfg0OptionFamilyListByProjectPuid(projectUid);
+        List<HzCfg0OptionFamily> columns = hzCfg0OptionFamilyService.getFamilies(projectUid, 0, 2);
         Map<String, Object> params = new HashMap<>();
         params.put("basic", basic);
         List<HzDerivativeMaterielBasic> basics = hzDerivativeMaterielBasicDao.selectByProjectUid(params);
         HzDerivativeMaterielDetail detail = new HzDerivativeMaterielDetail();
         List<Map<String, Object>> list = new ArrayList<>();
         HzMaterielRecord superMateriel = hzSuperMaterielService.doSelectByProjectPuid(projectUid);
-
+        Map<String, HzFactory> mapOffactories = new HashMap<>();//
         for (int i = 0; i < basics.size(); i++) {
             detail.setDmdDmbId(basics.get(i).getId());
             //详情
             List<HzDerivativeMaterielDetail> details = hzDerivativeMaterielDetailDao.selectByBasicWithCfg(detail);
             Map<String, HzDerivativeMaterielDetail> mapOfDetails = new HashMap<>();
+            /**没有加排序，存在相同特性的特性值，最后的特性值将覆盖前面的，显示在前端就是最后一个，这样的话会造成解算出错*/
             details.forEach(d -> mapOfDetails.put(d.getDmdCfg0FamilyUid(), d));
             HzCfg0ModelFeature feature = hzCfg0ModelFeatureService.doSelectByModelAndColorPuids(basics.get(i).getDmbModelUid(), basics.get(i).getDmbColorModelUid());
             HzCfg0ModelRecord modelRecord = hzCfg0ModelService.getModelByPuid(feature.getpPertainToModel());
@@ -454,10 +525,21 @@ public class HzComposeMFService {
             } else {
                 _result.put("superMateriel", "");
             }
+            if (!mapOffactories.containsKey(feature.getFactoryCode())) {
+                HzFactory factory = hzFactoryDAO.findFactory(feature.getFactoryCode(), null);
+                if (factory == null) {
+                    factory = new HzFactory();
+                    factory.setPuid(feature.getFactoryCode());
+                    factory.setpFactoryCode("");
+                }
+                mapOffactories.put(factory.getPuid(), factory);
+            }
+            _result.put("factory", mapOffactories.get(feature.getFactoryCode()).getpFactoryCode());
+
             _result.put("puid", feature.getpPertainToModel());
             _result.put("basicId", basics.get(i).getId());
             _result.put("puidOfModelFeature", feature.getPuid());
-            _result.put("factory", feature.getFactoryCode());
+//            _result.put("factory", feature.getFactoryCode());
             _result.put("modeBasicDetail", feature.getpFeatureSingleVehicleCode());
             _result.put("modeBasicDetailDesc", feature.getpFeatureCnDesc());
             _result.put("cfg0MainPuid", modelRecord.getpCfg0ModelOfMainRecord());
@@ -482,14 +564,6 @@ public class HzComposeMFService {
                 result.put("msg", "删除衍生物料" + delDtos.get(i).getModeBasicDetailDesc() + "失败");
                 return;
             }
-//            HzDerivativeMaterielBasic basic = new HzDerivativeMaterielBasic();
-//            basic.setId(delDtos.get(i).getBasicId());
-//            if (hzDerivativeMaterielBasicDao.deleteByPrimaryKey(basic) <= 0) {
-//                logger.error("删除衍生物料" + delDtos.get(i).getModeBasicDetailDesc() + "基本映射数据失败");
-//                result.put("status", false);
-//                result.put("msg", "删除衍生物料" + delDtos.get(i).getModeBasicDetailDesc() + "基本映射数据失败");
-//                return;
-//            }
             result.put("status", true);
             result.put("msg", "删除衍生物料" + delDtos.get(i).getModeBasicDetailDesc() + "及其基本映射数据成功");
         }

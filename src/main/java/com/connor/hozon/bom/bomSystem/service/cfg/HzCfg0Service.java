@@ -202,4 +202,8 @@ public class HzCfg0Service {
     public HzCfg0Record doSelectByCodeAndCnDescWithMainItem(HzCfg0Record record) {
         return hzCfg0RecordDao.selectByCodeAndCnDescWithMainItem(record);
     }
+
+    public List<HzCfg0Record> doSelectByFamilyUidWithProject(String familyUid,String projectUid){
+        return hzCfg0RecordDao.selectByFamilyUidWithProject(familyUid,projectUid);
+    }
 }

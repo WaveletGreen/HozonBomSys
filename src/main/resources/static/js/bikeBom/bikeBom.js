@@ -45,6 +45,7 @@ function initTable() {
     column.push({field: 'title', title: '平台名称', align: 'center', valign: 'middle'});
     column.push({field: 'title', title: '车型代码', align: 'center', valign: 'middle'});
     column.push({field: 'title', title: '车型名称', align: 'center', valign: 'middle'});
+    column.push({field: 'formCreateTime', title: '内饰颜色代码', align: 'center', valign: 'middle'});
     column.push({field: 'formCreateTime', title: '内饰颜色名称', align: 'center', valign: 'middle'});
     column.push({field: 'dept', title: '颜色代码', align: 'center', valign: 'middle'});
     column.push({field: 'changeType', title: '颜色名称', align: 'center', valign: 'middle'});

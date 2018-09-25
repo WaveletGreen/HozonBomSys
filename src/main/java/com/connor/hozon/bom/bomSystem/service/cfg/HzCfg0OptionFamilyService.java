@@ -1,6 +1,7 @@
 package com.connor.hozon.bom.bomSystem.service.cfg;
 
 import com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0OptionFamilyDao;
+import com.connor.hozon.bom.bomSystem.option.SpecialFeatureOption;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sql.pojo.cfg.HzCfg0OptionFamily;
@@ -24,8 +25,8 @@ public class HzCfg0OptionFamilyService {
     private static final List<String> paramList = new ArrayList<>();
 
     static {
-        paramList.add("车身颜色");
-        paramList.add("油漆车身总成");
+        paramList.add(SpecialFeatureOption.CSNAME.getDesc());
+        paramList.add(SpecialFeatureOption.YQCSNAME.getDesc());
     }
 
     /**
@@ -46,6 +47,20 @@ public class HzCfg0OptionFamilyService {
      */
     public List<HzCfg0OptionFamily> doGetCfg0OptionFamilyListByProjectPuid2(String mainId) {
         return hzCfg0OptionFamilyDao.selectNameByMainId2(mainId);
+    }
+
+    /**
+     * 在当前项目找出带颜色/不带颜色的特性，不能排除2特性值分别带颜色和不带颜色，因此会发生重复，需要进行排重
+     *
+     * @param projectUid 项目UID
+     * @param isColor    1，带颜色的特性；0，不带颜色的特性
+     * @return
+     */
+    public List<HzCfg0OptionFamily> selectForColorBluePrint(String projectUid, Integer isColor) {
+        Map<String, Object> param = new HashMap<>();
+        param.put("projectUid", projectUid);
+        param.put("isColor", isColor);
+        return hzCfg0OptionFamilyDao.selectForColorBluePrint(param);
     }
 
     /**
@@ -162,7 +177,21 @@ public class HzCfg0OptionFamilyService {
      * @return
      */
     public List<String> getColumnNew(String projectUid, String def) {
-        List<HzCfg0OptionFamily> families = getFamilies(projectUid);
+        List<HzCfg0OptionFamily> families = getFamilies(projectUid, 0, 1);
+        List<String> result = new ArrayList<>();
+        families.forEach(fn -> result.add(fn.getpOptionfamilyDesc() + def + fn.getpOptionfamilyName()));
+        return result;
+    }
+
+    /**
+     * 获取排序好的列
+     *
+     * @param projectUid
+     * @param def
+     * @return
+     */
+    public List<String> getColumnNew2(String projectUid, String def) {
+        List<HzCfg0OptionFamily> families = getFamilies(projectUid, 0, 2);
         List<String> result = new ArrayList<>();
         families.forEach(fn -> result.add(fn.getpOptionfamilyDesc() + def + fn.getpOptionfamilyName()));
         return result;
@@ -181,13 +210,16 @@ public class HzCfg0OptionFamilyService {
         return result;
     }
 
-    public List<HzCfg0OptionFamily> getFamilies(String projectUid) {
+    public List<HzCfg0OptionFamily> getFamilies(String projectUid, int start, int end) {
         paramMap.put("isIn", false);
         paramMap.put("list", paramList);
         paramMap.put("projectUid", projectUid);
         List<HzCfg0OptionFamily> familiesNew1 = hzCfg0OptionFamilyDao.selectNameByMap(paramMap);
         paramMap.put("isIn", true);
-        paramMap.put("list", paramList.subList(0, 1));
+        /**
+         * 拆分list
+         */
+        paramMap.put("list", paramList.subList(start, end));
         List<HzCfg0OptionFamily> familiesNew2 = hzCfg0OptionFamilyDao.selectNameByMap(paramMap);
         familiesNew2.addAll(familiesNew1);
         return familiesNew2;

@@ -10,11 +10,11 @@
         </div>
 
         <div class="form-group col-lg-12">
-            <label for="modelUid">车型模型</label>
+            <label for="modelUid">模型</label>
             <select class="form-control input-small" name="modelUid" id="modelUid">
                 <option th:each="model:${models}"
                         th:value="${model.getPuid()}"
-                        th:text="${model.getObjectName()+'--'+(model.getObjectDesc()==null?'':model.getObjectDesc())}"
+                        th:text="${model.getObjectName()}"
                 >
                 </option>
             </select>
@@ -24,7 +24,7 @@
             <select class="form-control input-small" name="colorModel" id="colorModel">
                 <option th:each="colorModel:${colorModels}"
                         th:value="${colorModel.getPuid()}"
-                        th:text="${colorModel.getpDescOfColorfulModel()+'--'+colorModel.getpCodeOfColorfulModel()}"
+                        th:text="${colorModel.getpDescOfColorfulModel()}"
                 >
                 </option>
             </select>
@@ -35,153 +35,160 @@
                    placeholder="请数据衍生物料基本信息"
             />
         </div>
-        <div class="form-group col-lg-10">
-            <label for="factoryCode">工厂</label>
+        <div class="form-group col-lg-12">
+            <label for="superMateriel">超级物料号</label>
+            <input class="form-control" id="superMateriel" name="superMateriel" type="text"
+                   placeholder="请超级物料号"
+            />
+            <!--th:disabled="${model.superMateriel==null}"-->
+        </div>
+        <div class="form-group col-lg-12">
+            <label for="factoryCode">工厂(默认1001)</label>
             <input class="form-control" id="factoryCode" name="factoryCode" type="text"
             />
         </div>
-        <div class="form-group col-lg-12">
-            <label for="materialCode">物料编码</label>
-            <input class="form-control" id="materialCode" name="materialCode" type="text"
-            />
-        </div>
-        <div class="form-group col-lg-12">
-            <label for="oldMaterielCode">旧物料编码</label>
-            <input class="form-control" id="oldMaterielCode" name="oldMaterielCode" type="text"
-            />
-        </div>
-        <div class="form-group col-lg-12">
-            <label for="materielDesc">物料中文描述</label>
-            <input class="form-control" id="materielDesc" name="materielDesc" type="text"
-            />
-        </div>
-        <div class="form-group col-lg-12">
-            <label for="materielEnDesc">物料英文描述</label>
-            <input class="form-control" id="materielEnDesc" name="materielEnDesc" type="text"
-            />
-        </div>
-        <div class="form-group col-lg-12">
-            <label for="basicCountUnit">基本计量单位*</label>
-            <input class="form-control" id="basicCountUnit" name="basicCountUnit" type="text"
-            />
-        </div>
-        <div class="form-group col-lg-12">
-            <label for="materielType">物料类型*</label>
-            <input class="form-control" id="materielType" name="materielType" type="text" disabled="disabled"
-            />
-        </div>
-        <div class="form-group col-lg-12">
-            <label for="virtualFlag">虚拟件标示*</label>
-            <select class="form-control input-small" data-style="btn-info"
-                    id="virtualFlag" name="virtualFlag">
-                <option th:value="0" th:text="否"
-                >
-                </option>
-                <option th:value="1" th:text="是"
-                >
-                </option>
-            </select>
-        </div>
-        <div class="form-group col-lg-12">
-            <label for="purchaseType">采购类型*</label>
-            <select class="form-control input-small" data-style="btn-info"
-                    id="purchaseType" name="purchaseType">
-                <option
-                        th:value="E" th:text="E"
-                >
-                </option>
-                <option
-                        th:value="F" th:text="F"
-                >
-                </option>
-                <option
-                        th:value="X" th:text="X"
-                >
-                </option>
-                <option value="-" text="-"></option>
-            </select>
-        </div>
-        <div class="form-group col-lg-12">
-            <label for="vinCode">VIN前置号</label>
-            <input class="form-control" id="vinCode" name="vinCode" type="text"
-            />
-        </div>
-        <div class="form-group col-lg-12">
-            <label for="color">颜色件标识</label>
-            <select class="form-control input-small" data-style="btn-info"
-                    id="color" name="color">
-                <option th:value="0" th:text="N"
-                >
-                </option>
-                <option th:value="1" th:text="Y"
-                >
-                </option>
-            </select>
-        </div>
-        <div class="form-group col-lg-12">
-            <label for="grossWeight">毛重</label>
-            <input class="form-control" id="grossWeight" name="grossWeight" type="text"
-            />
-        </div>
-        <div class="form-group col-lg-12">
-            <label for="labelFlag">内外饰标识</label>
-            <select class="form-control input-small" data-style="btn-info"
-                    id="labelFlag" name="labelFlag">
-                <option th:value="0" th:text="N"
-                >
-                </option>
-                <option th:value="1" th:text="Y"
-                >
-                </option>
-            </select>
-        </div>
-        <div class="form-group col-lg-12">
-            <label for="rulesFlag">3C件标识</label>
-            <select class="form-control input-small" data-style="btn-info"
-                    id="rulesFlag" name="rulesFlag">
-                <option th:value="0" th:text="N"
-                >
-                </option>
-                <option th:value="1" th:text="Y"
-                >
-                </option>
-            </select>
-        </div>
-        <div class="form-group col-lg-12">
-            <label for="importance">零件重要度</label>
-            <select class="form-control input-small" data-style="btn-info"
-                    id="importance" name="importance">
-                <option th:value="0" th:text="N"
-                >
-                </option>
-                <option th:value="1" th:text="Y"
-                >
-                </option>
-            </select>
-        </div>
-        <div class="form-group col-lg-12">
-            <label for="deleteFlag">删除标示</label>
-            <select class="form-control input-small" data-style="btn-info"
-                    id="deleteFlag" name="deleteFlag">
-                <option th:value="0" th:text="N"
-                >
-                </option>
-                <option th:value="1" th:text="Y"
-                >
-                </option>
-            </select>
-        </div>
-        <div class="form-group col-lg-12">
-            <label for="mrpController">MRP控制者*</label>
-            <input class="form-control" id="mrpController" name="mrpController" type="text"
-            />
-        </div>
+        <!--<div class="form-group col-lg-12">-->
+        <!--<label for="materialCode">物料编码</label>-->
+        <!--<input class="form-control" id="materialCode" name="materialCode" type="text"-->
+        <!--/>-->
+        <!--</div>-->
+        <!--<div class="form-group col-lg-12">-->
+        <!--<label for="oldMaterielCode">旧物料编码</label>-->
+        <!--<input class="form-control" id="oldMaterielCode" name="oldMaterielCode" type="text"-->
+        <!--/>-->
+        <!--</div>-->
+        <!--<div class="form-group col-lg-12">-->
+        <!--<label for="materielDesc">物料中文描述</label>-->
+        <!--<input class="form-control" id="materielDesc" name="materielDesc" type="text"-->
+        <!--/>-->
+        <!--</div>-->
+        <!--<div class="form-group col-lg-12">-->
+        <!--<label for="materielEnDesc">物料英文描述</label>-->
+        <!--<input class="form-control" id="materielEnDesc" name="materielEnDesc" type="text"-->
+        <!--/>-->
+        <!--</div>-->
+        <!--<div class="form-group col-lg-12">-->
+        <!--<label for="basicCountUnit">基本计量单位*</label>-->
+        <!--<input class="form-control" id="basicCountUnit" name="basicCountUnit" type="text"-->
+        <!--/>-->
+        <!--</div>-->
+        <!--<div class="form-group col-lg-12">-->
+        <!--<label for="materielType">物料类型*</label>-->
+        <!--<input class="form-control" id="materielType" name="materielType" type="text" disabled="disabled"-->
+        <!--/>-->
+        <!--</div>-->
+        <!--<div class="form-group col-lg-12">-->
+        <!--<label for="virtualFlag">虚拟件标示*</label>-->
+        <!--<select class="form-control input-small" data-style="btn-info"-->
+        <!--id="virtualFlag" name="virtualFlag">-->
+        <!--<option th:value="0" th:text="否"-->
+        <!--&gt;-->
+        <!--</option>-->
+        <!--<option th:value="1" th:text="是"-->
+        <!--&gt;-->
+        <!--</option>-->
+        <!--</select>-->
+        <!--</div>-->
+        <!--<div class="form-group col-lg-12">-->
+        <!--<label for="purchaseType">采购类型*</label>-->
+        <!--<select class="form-control input-small" data-style="btn-info"-->
+        <!--id="purchaseType" name="purchaseType">-->
+        <!--<option-->
+        <!--th:value="E" th:text="E"-->
+        <!--&gt;-->
+        <!--</option>-->
+        <!--<option-->
+        <!--th:value="F" th:text="F"-->
+        <!--&gt;-->
+        <!--</option>-->
+        <!--<option-->
+        <!--th:value="X" th:text="X"-->
+        <!--&gt;-->
+        <!--</option>-->
+        <!--<option value="-" text="-"></option>-->
+        <!--</select>-->
+        <!--</div>-->
+        <!--<div class="form-group col-lg-12">-->
+        <!--<label for="vinCode">VIN前置号</label>-->
+        <!--<input class="form-control" id="vinCode" name="vinCode" type="text"-->
+        <!--/>-->
+        <!--</div>-->
+        <!--<div class="form-group col-lg-12">-->
+        <!--<label for="color">颜色件标识</label>-->
+        <!--<select class="form-control input-small" data-style="btn-info"-->
+        <!--id="color" name="color">-->
+        <!--<option th:value="0" th:text="N"-->
+        <!--&gt;-->
+        <!--</option>-->
+        <!--<option th:value="1" th:text="Y"-->
+        <!--&gt;-->
+        <!--</option>-->
+        <!--</select>-->
+        <!--</div>-->
+        <!--<div class="form-group col-lg-12">-->
+        <!--<label for="grossWeight">毛重</label>-->
+        <!--<input class="form-control" id="grossWeight" name="grossWeight" type="text"-->
+        <!--/>-->
+        <!--</div>-->
+        <!--<div class="form-group col-lg-12">-->
+        <!--<label for="labelFlag">内外饰标识</label>-->
+        <!--<select class="form-control input-small" data-style="btn-info"-->
+        <!--id="labelFlag" name="labelFlag">-->
+        <!--<option th:value="0" th:text="N"-->
+        <!--&gt;-->
+        <!--</option>-->
+        <!--<option th:value="1" th:text="Y"-->
+        <!--&gt;-->
+        <!--</option>-->
+        <!--</select>-->
+        <!--</div>-->
+        <!--<div class="form-group col-lg-12">-->
+        <!--<label for="rulesFlag">3C件标识</label>-->
+        <!--<select class="form-control input-small" data-style="btn-info"-->
+        <!--id="rulesFlag" name="rulesFlag">-->
+        <!--<option th:value="0" th:text="N"-->
+        <!--&gt;-->
+        <!--</option>-->
+        <!--<option th:value="1" th:text="Y"-->
+        <!--&gt;-->
+        <!--</option>-->
+        <!--</select>-->
+        <!--</div>-->
+        <!--<div class="form-group col-lg-12">-->
+        <!--<label for="importance">零件重要度</label>-->
+        <!--<select class="form-control input-small" data-style="btn-info"-->
+        <!--id="importance" name="importance">-->
+        <!--<option th:value="0" th:text="N"-->
+        <!--&gt;-->
+        <!--</option>-->
+        <!--<option th:value="1" th:text="Y"-->
+        <!--&gt;-->
+        <!--</option>-->
+        <!--</select>-->
+        <!--</div>-->
+        <!--<div class="form-group col-lg-12">-->
+        <!--<label for="deleteFlag">删除标示</label>-->
+        <!--<select class="form-control input-small" data-style="btn-info"-->
+        <!--id="deleteFlag" name="deleteFlag">-->
+        <!--<option th:value="0" th:text="N"-->
+        <!--&gt;-->
+        <!--</option>-->
+        <!--<option th:value="1" th:text="Y"-->
+        <!--&gt;-->
+        <!--</option>-->
+        <!--</select>-->
+        <!--</div>-->
+        <!--<div class="form-group col-lg-12">-->
+        <!--<label for="mrpController">MRP控制者*</label>-->
+        <!--<input class="form-control" id="mrpController" name="mrpController" type="text"-->
+        <!--/>-->
+        <!--</div>-->
 
-        <div class="form-group col-lg-12">
-            <label for="bulletinNum">公告号(BOM没加)*</label>
-            <input class="form-control" id="bulletinNum" name="bulletinNum" type="text"
-            />
-        </div>
+        <!--<div class="form-group col-lg-12">-->
+        <!--<label for="bulletinNum">公告号(BOM没加)*</label>-->
+        <!--<input class="form-control" id="bulletinNum" name="bulletinNum" type="text"-->
+        <!--/>-->
+        <!--</div>-->
         <!--<div class="form-group col-lg-10">-->
         <!--<label for="pFeatureSingleVehicleCode">单车配置码</label>-->
         <!--<input class="form-control" id="pFeatureSingleVehicleCode" name="pFeatureSingleVehicleCode" type="text"-->
@@ -194,13 +201,19 @@
 <script th:inline="javascript">
     <![CDATA[
     $(document).keydown(function (event) {
-        if (event.keyCode == 13 ) {
+        if (event.keyCode == 13) {
             $('form').each(function () {
                 event.preventDefault();
             });
         }
     });
     $(function () {
+        var sm = [[${sm}]];
+        console.log(sm);
+        if (null != sm) {
+            $("#superMateriel").val(sm.pMaterielCode);
+            $('#superMateriel').attr("disabled", "disabled");
+        }
         $('#form').bootstrapValidator({
             message: 'This value is not valid',
             feedbackIcons: {

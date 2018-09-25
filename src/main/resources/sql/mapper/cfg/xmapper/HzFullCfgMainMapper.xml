@@ -5,7 +5,7 @@
         <id column="ID" jdbcType="DECIMAL" property="id"/>
         <result column="PROJECT_UID" jdbcType="VARCHAR" property="projectUid"/>
         <result column="STATUS" jdbcType="VARCHAR" property="status"/>
-        <result column="STAGE" jdbcType="VARCHAR" property="stage"/>
+        <result column="STAGE" jdbcType="INTEGER" property="stage"/>
         <result column="VERSION" jdbcType="VARCHAR" property="version"/>
         <result column="EFFECTIVE_DATE" jdbcType="TIMESTAMP" property="effectiveDate"/>
         <result column="CREATE_DATE" jdbcType="TIMESTAMP" property="createDate"/>
@@ -83,7 +83,7 @@
                 #{status,jdbcType=VARCHAR},
             </if>
             <if test="stage != null">
-                #{stage,jdbcType=VARCHAR},
+                #{stage,jdbcType=INTEGER},
             </if>
             <if test="version != null">
                 #{version,jdbcType=VARCHAR},
@@ -115,7 +115,7 @@
                 STATUS = #{status,jdbcType=VARCHAR},
             </if>
             <if test="stage != null">
-                STAGE = #{stage,jdbcType=VARCHAR},
+                STAGE = #{stage,jdbcType=INTEGER},
             </if>
             <if test="version != null">
                 VERSION = #{version,jdbcType=VARCHAR},
@@ -142,7 +142,7 @@
     update HZ_FULL_CFG_MAIN_RECORD
     set PROJECT_UID = #{projectUid,jdbcType=VARCHAR},
       STATUS = #{status,jdbcType=VARCHAR},
-      STAGE = #{stage,jdbcType=VARCHAR},
+      STAGE = #{stage,jdbcType=INTEGER},
       VERSION = #{version,jdbcType=VARCHAR},
       EFFECTIVE_DATE = #{effectiveDate,jdbcType=TIMESTAMP},
       CREATE_DATE = #{createDate,jdbcType=TIMESTAMP},

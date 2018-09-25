@@ -1,10 +1,11 @@
 $(document).ready(function () {
-    var count =0;
+
+    var count = 0;
     var localSelectedNode;
     var localSelectedNode1;
     var coach = [];
-    var puids="";
-    var allPuids="";
+    var puids = "";
+    var allPuids = "";
     var coach1 = [];
     var projectId = $("#project", window.top.document).val();
     if (!checkIsSelectProject(projectId)) {
@@ -21,12 +22,14 @@ $(document).ready(function () {
                 url: "pbom/processComposeTree?lineId=" + val + "&projectId=" + projectId,
                 undefinedText: "",//当数据为 undefined 时显示的字符
                 success: function (data) {
-                    if(!data.success){
+                    if (!data.success) {
                         window.Ewin.alert({message: data.errMsg});
                         return;
                     }
                     var zNodes = data.externalObject;
                     initZtree(zNodes);
+                    $("#info_div span").text("第二步：选择需要合成的零件(选父影响子，选子不影响父)");
+                    $("#info_div").css("top", "20%");
                 },
             });
         }
@@ -42,7 +45,7 @@ $(document).ready(function () {
         check: {
             enable: true,
             chkStyle: "checkbox",
-            chkboxType: { "Y": "s", "N": "s"}
+            chkboxType: {"Y": "s", "N": "s"}
         },
         data: {
             simpleData: {
@@ -70,12 +73,23 @@ $(document).ready(function () {
             onCheck: function (e, treeId, treeNode) {
                 var treeObj = $.fn.zTree.getZTreeObj("Ztree1");
                 var nodes = treeObj.getCheckedNodes(true);
+
+                sortOnlyByParent(treeNode);
+
+                console.log("-----------------打印对象xxx父层-----------");
+                console.log(parent);
+                console.log("-----------------打印对象xxx父层-----------");
+
+                console.log("-----------------打印对象子层-----------");
+                console.log(children);
+                console.log("-----------------打印对象子层-----------");
+
                 for (var i = 0; i < nodes.length; i++) {
                     if (!nodes[i].isParent) {
                         coach.push(nodes[nodes.length - 1].puid);
-                        puids +=nodes[nodes.length - 1].puid+",";
+                        puids += nodes[nodes.length - 1].puid + ",";
                         break;
-                    }else{
+                    } else {
                         count++;//记录父节点个数
                     }
                 }
@@ -83,16 +97,16 @@ $(document).ready(function () {
                 //2.逐一选择子节点
                 //3.选择子节点 有取消部分已选择子节点
                 //4.选择父节点 又放弃选择
-                if(nodes.length == 0){
-                    coach.splice(0,coach.length);
+                if (nodes.length == 0) {
+                    coach.splice(0, coach.length);
                     puids = "";
-                }else if(count+coach.length!=nodes.length){
-                    coach.splice(0,coach.length);
-                    puids ="";
-                    for(var i = 0;i<nodes.length;i++){
+                } else if (count + coach.length != nodes.length) {
+                    coach.splice(0, coach.length);
+                    puids = "";
+                    for (var i = 0; i < nodes.length; i++) {
                         if (!nodes[i].isParent) {
                             coach.push(nodes[i].puid);
-                            puids+=nodes[i].puid+",";
+                            puids += nodes[i].puid + ",";
                         }
                     }
                 }
@@ -116,7 +130,7 @@ $(document).ready(function () {
                         rel += "<tr>" +
                             "<th>序号</th>" +
                             "<td></td>" +
-                            "</tr><tr>"+
+                            "</tr><tr>" +
                             "<th>层级</th>" +
                             "<td>" + va.level + "</td>" +
                             "</tr><tr>" +
@@ -185,9 +199,9 @@ $(document).ready(function () {
             },
         }
     };
-    initZtree=function (zNodes) {
+    initZtree = function (zNodes) {
         var treeObj = $.fn.zTree.getZTreeObj("Ztree1");
-        if(treeObj!=null||treeObj!=undefined){
+        if (treeObj != null || treeObj != undefined) {
             treeObj.destroy("#Ztree1");
             // treeObj.destroy();
         }
@@ -200,7 +214,7 @@ $(document).ready(function () {
         else {
             window.Ewin.dialog({
                 title: "生成工艺合件",
-                url: "pbom/updataProcessOfFitting?puids="+puids,
+                url: "pbom/updataProcessOfFitting?puids=" + puids,
                 gridId: "gridId",
                 width: 500,
                 height: 500
@@ -209,29 +223,30 @@ $(document).ready(function () {
     })
     $("#synthetic1").click(function () {
         allPuids = document.getElementById("demo3").innerText;
-        if(allPuids == null || allPuids == ""){
+        if (allPuids == null || allPuids == "") {
             window.Ewin.alert({message: "请选择您要生成工艺合件的零件号"});
             return;
         }
         puids = allPuids;
-        if (coach1.length!=0){
+        if (coach1.length != 0) {
             var myData = JSON.stringify({
-                "eBomPuid" :coach1[0],
+                "eBomPuid": coach1[0],
                 "projectId": $("#project", window.top.document).val(),
-                "puids":puids
+                "puids": puids
             })
             $.ajax({
-                url:"pbom/add/processCompose",
-                data:myData,
-                type:"POST",
+                url: "pbom/add/processCompose",
+                data: myData,
+                type: "POST",
                 contentType: "application/json",
                 success: function (result) {
                     window.Ewin.alert({message: result.errMsg});
-                    if(result.success){//成功
+                    if (result.success) {//成功
+                        /////////////////////////////////在这里清空结构//////////////////////////////////
                         var zTreeObj = $.fn.zTree.getZTreeObj("Ztree1");
                         zTreeObj.destroy();
-                        $("#demo4").html("<p>"+""+"</p>")
-                        $("#demo3").html( "<p>"+""+"</p>");
+                        $("#demo4").html("<p>" + "" + "</p>")
+                        $("#demo3").html("<p>" + "" + "</p>");
                         var zTree = $.fn.zTree.getZTreeObj("Ztree3");
                         zTree.destroy();
                         var val = $("#queryLineId2").val();
@@ -240,7 +255,7 @@ $(document).ready(function () {
                             url: "pbom/processComposeTree?lineId=" + val + "&projectId=" + projectId,
                             undefinedText: "",//当数据为 undefined 时显示的字符
                             success: function (data) {
-                                if(!data.success){
+                                if (!data.success) {
                                     window.Ewin.alert({message: data.errMsg});
                                     return;
                                 }
@@ -284,18 +299,18 @@ $(document).ready(function () {
                                             var nodes =
                                                 // treeObj.getSelectedNodes();
                                                 treeObj.getCheckedNodes(true);
-                                            if (nodes.length>1){
+                                            if (nodes.length > 1) {
                                                 window.Ewin.alert({message: "只能指定一个工艺合件的位置"});
-                                                for(var k=0;k<nodes.length;k++){
+                                                for (var k = 0; k < nodes.length; k++) {
                                                     treeObj.checkNode(nodes[k]);
                                                 }
                                                 return;
                                             }
-                                            else if (nodes.length>0&&nodes.length<2) {
-                                                coach1.splice(0,coach1.length);
+                                            else if (nodes.length > 0 && nodes.length < 2) {
+                                                coach1.splice(0, coach1.length);
                                                 coach1.push(nodes[0].puid);
-                                            }else {
-                                                coach1.splice(0,coach1.length);
+                                            } else {
+                                                coach1.splice(0, coach1.length);
                                             }
                                         },
                                         onClick: function (event, treeId, treeNode) {
@@ -317,7 +332,7 @@ $(document).ready(function () {
                                                     rel += "<tr>" +
                                                         "<th>序号</th>" +
                                                         "<td></td>" +
-                                                        "</tr><tr>"+
+                                                        "</tr><tr>" +
                                                         "<th>层级</th>" +
                                                         "<td>" + va.level + "</td>" +
                                                         "</tr><tr>" +
@@ -394,7 +409,7 @@ $(document).ready(function () {
                             },
                         });
                     }
-                    if(!result.success){//失败
+                    if (!result.success) {//失败
 
                     }
 
@@ -403,10 +418,11 @@ $(document).ready(function () {
                     window.Ewin.alert({message: status.status + ':生成工艺合件失败!'});
                 }
             })
-        }else {
+        } else {
             window.Ewin.alert({message: "请指定您要合成的位置"});
         }
     })
+
     function refreshParentNode() {
         var zTree = $.fn.zTree.getZTreeObj("Ztree3"),
             type = "refresh",
@@ -418,6 +434,7 @@ $(document).ready(function () {
         zTree.selectNode(parentNode);
         zTree.reAsyncChildNodes(parentNode, type, silent);
     }
+
     $("#queryBtn2").click(function () {
         var val = $("#queryLineId2").val();
         if (val == "") {
@@ -429,7 +446,7 @@ $(document).ready(function () {
                 url: "pbom/processComposeTree?lineId=" + val + "&projectId=" + projectId,
                 undefinedText: "",//当数据为 undefined 时显示的字符
                 success: function (data) {
-                    if(!data.success){
+                    if (!data.success) {
                         window.Ewin.alert({message: data.errMsg});
                         return;
                     }
@@ -472,19 +489,19 @@ $(document).ready(function () {
                                 var treeObj = $.fn.zTree.getZTreeObj("Ztree3");
                                 var nodes =
                                     // treeObj.getSelectedNodes();
-                                treeObj.getCheckedNodes(true);
-                                if (nodes.length>1){
+                                    treeObj.getCheckedNodes(true);
+                                if (nodes.length > 1) {
                                     window.Ewin.alert({message: "只能指定一个工艺合件的位置"});
-                                    for(var k=0;k<nodes.length;k++){
+                                    for (var k = 0; k < nodes.length; k++) {
                                         treeObj.checkNode(nodes[k]);
                                     }
                                     return;
                                 }
-                                else if (nodes.length>0&&nodes.length<2) {
-                                    coach1.splice(0,coach1.length);
+                                else if (nodes.length > 0 && nodes.length < 2) {
+                                    coach1.splice(0, coach1.length);
                                     coach1.push(nodes[0].puid);
-                                }else {
-                                    coach1.splice(0,coach1.length);
+                                } else {
+                                    coach1.splice(0, coach1.length);
                                 }
                             },
                             onClick: function (event, treeId, treeNode) {
@@ -506,7 +523,7 @@ $(document).ready(function () {
                                         rel += "<tr>" +
                                             "<th>序号</th>" +
                                             "<td></td>" +
-                                            "</tr><tr>"+
+                                            "</tr><tr>" +
                                             "<th>层级</th>" +
                                             "<td>" + va.level + "</td>" +
                                             "</tr><tr>" +
@@ -586,9 +603,9 @@ $(document).ready(function () {
     })
 
 })
-$(document).keydown(function(event) {
+$(document).keydown(function (event) {
     if (event.keyCode == 13) {
-        $('form').each(function() {
+        $('form').each(function () {
             event.preventDefault();
         });
     }
