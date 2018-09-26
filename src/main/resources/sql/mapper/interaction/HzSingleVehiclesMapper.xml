@@ -153,7 +153,7 @@
         left join Hz_Platform_Record t4
         on t4.puid = t3.p_vehicle_pertain_to_platform
         left join Hz_Brand_Record t5
-        on t5.puid = t4.puid
+        on t5.puid = t4.p_pertain_to_brand_puid
         <where>
             <if test="svlProjectUid!=null">
                 t.svl_project_uid=#{svlProjectUid,jdbcType=VARCHAR}
