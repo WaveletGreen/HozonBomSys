@@ -57,4 +57,6 @@ public interface HzWorkProcessService {
     int insertHzWorkProcedures(List<HzWorkProcedure> hzWorkProcedures);
 
     void initProcess(String projectId);
+
+    int deleteHzWorkProcessByMaterielIds(List<HzWorkProcedure> hzWorkProceduresDel);
 }
