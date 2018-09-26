@@ -13,15 +13,15 @@
 <body>
 <form id="fourProcessForm" role="form" method="post" action="">
     <input id="puids" type="hidden"th:value="${data}">
-    <input type="hidden" th:value="${type}">
+    <input id="types" type="hidden" th:value="${type}">
     <label>四大工艺</label>
     <!--<select id="box" class="form-control" style="width: 260px"></select>-->
     <div id="selectBox" style="border: solid 1px black;width: 200px;height: 100px">
         <ul>
-            <li style="list-style: none;"><input type="checkbox" value="冲压">冲压</li>
+            <li id="stamping" style="list-style: none;"><input type="checkbox" value="冲压">冲压</li>
             <li style="list-style: none;"><input type="checkbox" value="焊装">焊装</li>
             <li style="list-style: none;"><input type="checkbox" value="涂装">涂装</li>
-            <li style="list-style: none;"><input type="checkbox" value="总装 ">总装</li>
+            <li style="list-style: none;"><input type="checkbox" value="总装">总装</li>
         </ul>
         <!--<button value="5">确定</button>-->
     </div>
@@ -53,6 +53,10 @@
 <script th:inline="javascript">
     <![CDATA[
     $(function () {
+        var types = $("#types").val();
+        if (types =="1"){
+            $("#stamping").hide();
+        }
         var arr = [];//定义一个数组用来接收多选框的值
         //初始化让下拉列表不显示
         // $(function () {
