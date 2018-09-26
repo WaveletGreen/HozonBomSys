@@ -264,29 +264,14 @@ public class HzPbomController extends BaseController {
 
     /**
      * 合成工艺合件
-     *
+     *@Autor Fancyears·Malos
      * @param
      * @param param
      */
     @RequestMapping(value = "/add/processCompose2", method = RequestMethod.POST)
     @ResponseBody
     public JSONObject addProcessCompose2(@RequestBody Map<String, Object> param) {
-        JSONObject result = new JSONObject();
-        result.put("status", false);
-        result.put("msg", "合成失败");
-        return result;
-//        OperateResultMessageRespDTO operateResultMessageRespDTO = hzPbomService.andProcessCompose(recordReqDTO);
-//        JSONArray jsonArray = new JSONArray();
-//        if (OperateResultMessageRespDTO.isSuccess(operateResultMessageRespDTO)) {
-//            HzPbomProcessComposeReqDTO reqDTO = new HzPbomProcessComposeReqDTO();
-//            if (recordReqDTO.getLineId() != null) {
-//                reqDTO.setLineId(recordReqDTO.getLineId());
-//            }
-//            reqDTO.setProjectId(recordReqDTO.getProjectId());
-//            jsonArray = hzPbomService.getPbomForProcessCompose(reqDTO);
-//        }
-//        writeAjaxJSONResponse(ResultMessageBuilder.build(
-//                OperateResultMessageRespDTO.isSuccess(operateResultMessageRespDTO), operateResultMessageRespDTO.getErrMsg(), jsonArray), response);
+        return hzPbomService.simulateCraftingPart(param);
     }
 
 

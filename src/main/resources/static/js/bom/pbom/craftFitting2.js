@@ -123,9 +123,13 @@ $(document).ready(function () {
                 let indexx = 1;
                 let parentLength = 0;
                 let childrenLength = 0;
-
-                parentsPuids = [];
-                childrenPuids = [];
+                /**清空*/
+                if (parentsPuids.length > 0) {
+                    parentsPuids.splice(0, parentsPuids.length);
+                }
+                if (childrenPuids.length > 0) {
+                    childrenPuids.splice(0, childrenPuids.length);
+                }
 
                 /*** 先获获取长度*/
                 parentLength = getLength(parentNode);
@@ -160,6 +164,9 @@ $(document).ready(function () {
                             let td = document.createElement("td");
                             td.innerHTML = parentNode[i].lineId;
                             tr.appendChild(td);
+
+                            parentsPuids.push(parentNode[i].puid);
+
                             size++;
                             indexx++;
                         }
@@ -205,6 +212,9 @@ $(document).ready(function () {
                                 let td = document.createElement("td");
                                 td.innerHTML = childrenNode[i][j].lineId;
                                 tr.appendChild(td);
+
+                                childrenPuids.push(childrenNode[i][j].puid);
+
                                 indexx++;
                                 size++;
                             }

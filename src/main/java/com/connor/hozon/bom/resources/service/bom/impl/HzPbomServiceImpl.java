@@ -968,4 +968,42 @@ public class HzPbomServiceImpl implements HzPbomService {
         }
         return null;
     }
+
+    /**
+     * 开始模拟合成工艺合件，不进行pBom数据的影响
+     *
+     * @param param
+     * @return
+     * @Author Fancyears·Maylos·Mayways
+     */
+    @Override
+    public JSONObject simulateCraftingPart(Map<String, Object> param) {
+        if (param != null && param.size() > 0) {
+            Object parentUidsObj = param.get("parentUids");
+            Object childrenUidsObj = param.get("childrenUids");
+            Object dataObj = param.get("data");
+            Object projectUidObj = param.get("projectUid");
+            //父层数据
+            HzPbomTreeQuery query = new HzPbomTreeQuery();
+
+            //偷偷过来的数据
+            if (projectUidObj instanceof String) {
+                query.setProjectId((String) projectUidObj);
+            }
+            //采集过来的数据
+            if (dataObj instanceof LinkedHashMap) {
+            }
+            if (parentUidsObj instanceof ArrayList) {
+                for (int i = 0; i < ((ArrayList) parentUidsObj).size(); i++) {
+                    hzPbomRecordDAO.getHzPbomTree(query);
+                }
+            }
+            //子层数据
+            if (childrenUidsObj instanceof ArrayList) {
+
+            }
+
+        }
+        return null;
+    }
 }
