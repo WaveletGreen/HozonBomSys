@@ -12,9 +12,9 @@
     <div class="content row-fluid col-md-4 col-lg-4" id="demo4">
         <div id="info_div" style="max-width: 300px;position: absolute;left: 60%;top: 9%;">
             <!--float: right;margin-top: 4em-->
-            <img id="info_img_1" style="max-width: 36px;" th:src="@{/img/my_left_arrow.png}">
+            <img id="info_img_1" style="max-width: 36px;display: inline" th:src="@{/img/my_left_arrow.png}">
             <span>第一步：查询需要合成的零件</span>
-            <img id="info_img_2" style="max-width: 36px;" th:src="@{/img/my_left_arrow.png}" style="display: none">
+            <img id="info_img_2" style="max-width: 36px;display: none" th:src="@{/img/my_right_arrow.png}">
         </div>
         <h3><p class="text-primary" id="demo1">请选择您要合成的零件</p></h3>
         <form class="form-inline" id="demo2">
@@ -29,6 +29,9 @@
         </form>
         <ul id="Ztree1" class="ztree  col-md-4"
             style="width:300px;overflow-y: scroll;height: 500px; overflow:auto;"></ul>
+        <div class="col-md-12" style="overflow: paged-y;margin-top: 20px">
+            <table id="selectedToCraftTable"></table>
+        </div>
     </div>
     <div class="content col-md-4 col-lg-4">
         <div class="form-group">
