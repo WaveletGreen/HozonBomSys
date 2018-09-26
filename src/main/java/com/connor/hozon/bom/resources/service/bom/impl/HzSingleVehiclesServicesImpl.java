@@ -35,8 +35,12 @@ public class HzSingleVehiclesServicesImpl implements HzSingleVehiclesServices {
     private HzSingleVehiclesDao hzSingleVehiclesDao;
     @Override
     public List<HzSingleVehiclesRespDTO> singleVehiclesList(String projectId) {
+
         try {
             List<HzSingleVehiclesRespDTO> vehiclesRespDTOS = new ArrayList<>();
+            if(StringUtil.isEmpty(projectId)){
+                return vehiclesRespDTOS;
+            }
             List<HzSingleVehicles> hzSingleVehicles = hzSingleVehiclesDao.selectByProjectUid(projectId);
             if(ListUtil.isNotEmpty(hzSingleVehicles)){
                 for(HzSingleVehicles vehicles :hzSingleVehicles){
