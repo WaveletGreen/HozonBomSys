@@ -499,7 +499,9 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
      */
     @Override
     public void initProcess(String projectId) {
+        //查询所有数据类型为11、21、71的物料
         List<HzMaterielRecord> hzMaterielRecords = hzMaterielDAO.findHzMaterielForProcess(projectId);
+        //查询所有工艺路线
         List<HzWorkProcedure> hzWorkProcedures = hzWorkProcedureDAO.findHzWorkProcessByProjectId(projectId);
         List<HzMaterielRecord> hzMaterielRecordAddList = new ArrayList<HzMaterielRecord>();
 
@@ -507,7 +509,7 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
         for(HzMaterielRecord hzMaterielRecord : hzMaterielRecords){
             boolean flag = false;
             for(HzWorkProcedure hzWorkProcedure : hzWorkProcedures){
-                if(hzMaterielRecord.getpMaterielCode().equals(hzWorkProcedure.getpMaterielCode())){
+                if(hzMaterielRecord.getPuid().equals(hzWorkProcedure.getMaterielId())){
                     flag = true;
                     break;
                 }
@@ -519,22 +521,25 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
         //为物料生成工艺路线
         List<HzWorkProcedure> hzWorkProceduresAdd = new ArrayList<HzWorkProcedure>();
         for(HzMaterielRecord hzMaterielRecord : hzMaterielRecordAddList ){
-            HzWorkProcedure hzWorkProcess = new HzWorkProcedure();
+            HzWorkProcedure hzWorkProcedure = new HzWorkProcedure();
             //puid
             String puid = UUID.randomUUID().toString();
-            hzWorkProcess.setPuid(puid);
+            hzWorkProcedure.setPuid(puid);
             //项目ID
-            hzWorkProcess.setProjectId(projectId);
-            //物料编码
-            hzWorkProcess.setpMaterielCode(hzMaterielRecord.getpMaterielCode());
-            //物料描述
-            hzWorkProcess.setpMaterielDesc(hzMaterielRecord.getpMaterielDesc());
+            hzWorkProcedure.setProjectId(projectId);
+            //物料id
+            hzWorkProcedure.setMaterielId(hzMaterielRecord.getPuid());
             //工厂
-            hzWorkProcess.setpFactoryId("1001");
-            hzWorkProceduresAdd.add(hzWorkProcess);
+            hzWorkProcedure.setpFactoryId("1001");
+            hzWorkProceduresAdd.add(hzWorkProcedure);
         }
         if(hzWorkProceduresAdd!=null&&hzWorkProceduresAdd.size()!=0){
             hzWorkProcedureDAO.insertHzWorkProcedures(hzWorkProceduresAdd);
         }
+    }
+
+    @Override
+    public int deleteHzWorkProcessByMaterielIds(List<HzWorkProcedure> hzWorkProceduresDel) {
+        return hzWorkProcedureDAO.deleteHzWorkProcessByMaterielIds(hzWorkProceduresDel);
     }
 }

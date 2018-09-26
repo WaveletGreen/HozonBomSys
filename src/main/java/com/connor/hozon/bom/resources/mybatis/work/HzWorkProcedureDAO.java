@@ -34,4 +34,5 @@ public interface HzWorkProcedureDAO {
 
     List<HzWorkProcedure> findHzWorkProcessByProjectId(String projectId);
 
+    int deleteHzWorkProcessByMaterielIds(List<HzWorkProcedure> hzWorkProceduresDel);
 }

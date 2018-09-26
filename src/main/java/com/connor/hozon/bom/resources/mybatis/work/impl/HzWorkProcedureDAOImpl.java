@@ -61,7 +61,7 @@ public class HzWorkProcedureDAOImpl  extends BaseSQLUtil implements HzWorkProced
         map.put("pMaterielCode",query.getpMaterielCode());
         map.put("pMaterielDesc",query.getpMaterielDesc());
         pageRequest.setFilters(map);
-        return super.findPage("HzWorkProcedureDAOImpl_findHzWorkProcessByPage2","HzWorkProcedureDAOImpl_getTotalCount",pageRequest);
+        return super.findPage("HzWorkProcedureDAOImpl_findHzWorkProcessByPage2","HzWorkProcedureDAOImpl_getTotalCount2",pageRequest);
     }
 
     @Override
@@ -92,6 +92,11 @@ public class HzWorkProcedureDAOImpl  extends BaseSQLUtil implements HzWorkProced
     @Override
     public List<HzWorkProcedure> findHzWorkProcessByProjectId(String projectId) {
         return super.executeQueryByPass(new HzWorkProcedure(), projectId, "HzWorkProcedureDAOImpl_findHzWorkProcessByProjectId");
+    }
+
+    @Override
+    public int deleteHzWorkProcessByMaterielIds(List<HzWorkProcedure> hzWorkProceduresDel) {
+        return super.executeDelete(hzWorkProceduresDel,"HzWorkProcedureDAOImpl_deleteHzWorkProcessByMaterielIds");
     }
 
 }

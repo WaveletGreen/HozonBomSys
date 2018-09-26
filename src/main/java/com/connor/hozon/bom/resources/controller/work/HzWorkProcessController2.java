@@ -210,14 +210,16 @@ public class HzWorkProcessController2 extends BaseController {
         String puids = (String)data.get("puids");
         String projectId = (String)data.get("projectId");
         List<String> routings = (List<String>)data.get("routing");
+
         String[] puidArr = puids.split(",");
-        List<HzWorkProcedure> hzWorkProcedures = new ArrayList<HzWorkProcedure>();
-        for(String puid : puidArr){
+
+        List<HzWorkProcedure> hzWorkProceduresAdd = new ArrayList<HzWorkProcedure>();
+        for(int i=0;i<puidArr.length;i++){
             for(String routing : routings){
                 HzWorkProcedure hzWorkProcedure1 = new HzWorkProcedure();
                 String puid1 = UUID.randomUUID().toString();
                 hzWorkProcedure1.setPuid(puid1);
-                hzWorkProcedure1.setpMaterielCode(puid);
+                hzWorkProcedure1.setMaterielId(puidArr[i]);
                 hzWorkProcedure1.setProjectId(projectId);
                 hzWorkProcedure1.setpFactoryId("1001");
                 hzWorkProcedure1.setpProcedureDesc(routing+"-时间维度");
@@ -225,17 +227,27 @@ public class HzWorkProcessController2 extends BaseController {
                 HzWorkProcedure hzWorkProcedure2 = new HzWorkProcedure();
                 String puid2 = UUID.randomUUID().toString();
                 hzWorkProcedure2.setPuid(puid2);
-                hzWorkProcedure2.setpMaterielCode(puid);
+                hzWorkProcedure2.setMaterielId(puidArr[i]);
                 hzWorkProcedure2.setProjectId(projectId);
                 hzWorkProcedure2.setpFactoryId("1001");
                 hzWorkProcedure2.setpProcedureDesc(routing+"-数量维度");
-                hzWorkProcedures.add(hzWorkProcedure1);
-                hzWorkProcedures.add(hzWorkProcedure2);
+                hzWorkProceduresAdd.add(hzWorkProcedure1);
+                hzWorkProceduresAdd.add(hzWorkProcedure2);
             }
         }
+        List<HzWorkProcedure> hzWorkProceduresDel = new ArrayList<HzWorkProcedure>();
+        for(String puid : puidArr){
+            HzWorkProcedure hzWorkProcedure = new HzWorkProcedure();
+            hzWorkProcedure.setMaterielId(puid);
+            hzWorkProcedure.setProjectId(projectId);
+            hzWorkProceduresDel.add(hzWorkProcedure);
+        }
+        int delNum = hzWorkProcessService.deleteHzWorkProcessByMaterielIds(hzWorkProceduresDel);
+        if(delNum==puidArr.length){
+            int insertNum = hzWorkProcessService.insertHzWorkProcedures(hzWorkProceduresAdd);
+        }
 
-
-        int insertNum = hzWorkProcessService.insertHzWorkProcedures(hzWorkProcedures);
+        result.put("success",true);
         return result;
     }
 }

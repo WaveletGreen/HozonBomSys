@@ -137,6 +137,65 @@ public class HzMaterielDAOImpl extends BaseSQLUtil implements HzMaterielDAO {
     }
 
     @Override
+    public List<HzMaterielRecord> getAllMaterielExceptVehicleMateriel(String projectId) {
+
+        return super.findForList("HzMaterialDAOImpl_getAllMaterielExceptVehicleMateriel",projectId);
+    }
+
+    @Override
+    public int deleteMaterielList(List<HzMaterielRecord> list) {
+        int i;
+        try {
+            synchronized (this){
+                i = super.delete("HzMaterialDAOImpl_deleteMaterielList",list);
+            }
+        }catch (Exception e){
+            return 0;
+        }
+        return i;
+    }
+
+    @Override
+    public int updateList(List<HzMaterielRecord> list) {
+        try {
+            if (ListUtil.isNotEmpty(list)) {
+                int size = list.size();
+                //分批更新数据 一次1000条
+                int i = 0;
+                int cout = 0;
+                synchronized (this){
+                    if (size > 1000) {
+                        for (i = 0; i < size / 1000; i++) {
+                            List<HzMaterielRecord> list1 = new ArrayList<>();
+                            for (int j = 0; j < 1000; j++) {
+                                list1.add(list.get(cout));
+                                cout++;
+                            }
+
+                            super.update("HzMaterialDAOImpl_updateList",list1);
+
+                        }
+                    }
+                    if (i * 1000 < size) {
+                        List<HzMaterielRecord> list1 = new ArrayList<>();
+                        for (int j = 0; j < size - i * 1000; j++) {
+                            list1.add(list.get(cout));
+                            cout++;
+                        }
+
+                        super.update("HzMaterialDAOImpl_updateList",list1);
+
+                    }
+                }
+
+            }
+            return 1;
+        }catch (Exception e){
+            return 0;
+        }
+    }
+
+    @Override
     public List<HzMaterielRecord> findHzMaterielForProcess(String projectId) {
         return super.executeQueryByPass(new HzMaterielRecord(), projectId,"HzMaterialDAOImpl_findHzMaterielForProcess");
     }
