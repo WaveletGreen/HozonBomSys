@@ -16,10 +16,9 @@ import com.connor.hozon.bom.resources.domain.query.*;
 import com.connor.hozon.bom.resources.enumtype.MbomTableNameEnum;
 import com.connor.hozon.bom.resources.mybatis.bom.HzEbomRecordDAO;
 import com.connor.hozon.bom.resources.mybatis.bom.HzMbomRecordDAO;
-import com.connor.hozon.bom.resources.mybatis.bom.impl.HzMbomRecordDAOImpl;
+import com.connor.hozon.bom.resources.mybatis.bom.HzPbomRecordDAO;
 import com.connor.hozon.bom.resources.mybatis.factory.HzFactoryDAO;
 import com.connor.hozon.bom.resources.mybatis.materiel.HzMaterielDAO;
-import com.connor.hozon.bom.resources.mybatis.materiel.impl.HzMaterielDAOImpl;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.service.RefreshMbomThread;
 import com.connor.hozon.bom.resources.service.bom.HzMbomService;
@@ -30,6 +29,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sql.pojo.bom.HzMbomLineRecord;
 import sql.pojo.bom.HzMbomLineRecordVO;
+import sql.pojo.bom.HzPbomLineRecord;
 import sql.pojo.cfg.HzCfg0OfBomLineRecord;
 import sql.pojo.epl.HzEPLManageRecord;
 import sql.pojo.factory.HzFactory;
@@ -67,6 +67,9 @@ public class HzMbomServiceImpl implements HzMbomService{
 
     @Autowired
     private HzMaterielDAO hzMaterielDAO;
+
+    @Autowired
+    private HzPbomRecordDAO hzPbomRecordDAO;
     @Override
     public Page<HzMbomRecordRespDTO> findHzMbomForPage(HzMbomByPageQuery query) {
         try {
@@ -477,6 +480,7 @@ public class HzMbomServiceImpl implements HzMbomService{
 
     /**
      * 配色方案发生变更时，需要和进行数据同步
+     * 这里的数据源直接从PBOM获取数据
      * 1.分超级MBOM，白车身生产MBOM，白车身财务MBOM 3种
      * 2.每种BOM可分为3种情况进行数据同步
      * 2.1查询数据，找到原来的数据，若存在，则进行数据更新
@@ -490,11 +494,13 @@ public class HzMbomServiceImpl implements HzMbomService{
 
     @Override
     public OperateResultMessageRespDTO refreshHzMbom(String projectId) {
-        long a = System.currentTimeMillis();
+        if(null == projectId || ""==projectId){
+            return OperateResultMessageRespDTO.IllgalArgument();
+        }
         try {
             Double sortNumber = 0.0;
             //颜色件 非颜色件
-            List<HzEPLManageRecord> records = hzEbomRecordDAO.getAll2YBomRecord(projectId,null);//全部的2Y层
+            List<HzPbomLineRecord> records = hzPbomRecordDAO.getAll2YBomRecord(projectId);//全部的2Y层
             //S00-1001YY0->S00-1001BA/S00-1001BB       1001  1001AAAA
             //类型  1生产 6 财务
             if(ListUtil.isNotEmpty(records)){
@@ -515,43 +521,48 @@ public class HzMbomServiceImpl implements HzMbomService{
                 Set<HzMaterielRecord> deleteMaterielRecords = new HashSet<>();//物料数据 删除
 
 
-                for(HzEPLManageRecord record:records){
-                    Set<HzEPLManageRecord> bodyOfWhiteSet = new HashSet<>();
-
+                for(HzPbomLineRecord record:records){
+                    Set<HzPbomLineRecord> bodyOfWhiteSet = new HashSet<>();
+                    boolean b = false;
                     if(Integer.valueOf(1).equals(record.getColorPart())){//是颜色件 找出对应的颜色 多色时，需要乘以颜色信息
-                        List<HzConfigBomColorBean> beans = iHzConfigBomColorService.doSelectBy2YUidWithProject(record.getPuid(), projectId);
+                        List<HzConfigBomColorBean> beans = iHzConfigBomColorService.doSelectBy2YUidWithProject(record.geteBomPuid(), projectId);
                         if(ListUtil.isNotEmpty(beans)){
-                            for(HzConfigBomColorBean bean:beans){
-                                if(null == bean.getColorCode()){
-                                    beans.remove(bean);
+                            for(int i =0;i<beans.size();i++){
+                                if(null == beans.get(i).getColorCode()){
+                                    beans.remove(beans.get(i));
                                 }
                             }
                         }
 
+
                         if(ListUtil.isNotEmpty(beans)){//找到对应的颜色件
                             for(int i =0;i<beans.size();i++){
-                                analysisMbom(record,i,projectId,bodyOfWhiteSet,beans,superMboms);
+                                b = analysisMbom(record,i,projectId,bodyOfWhiteSet,beans,superMboms);
                             }
                         }else {
-                            analysisMbom(record,0,projectId,bodyOfWhiteSet,null,superMboms);
+                            b= analysisMbom(record,0,projectId,bodyOfWhiteSet,null,superMboms);
                         }
 
                     }else {
-                        analysisMbom(record,0,projectId,bodyOfWhiteSet,null,superMboms);
+                        b=analysisMbom(record,0,projectId,bodyOfWhiteSet,null,superMboms);
                     }
-
+                    if(!b){
+                        OperateResultMessageRespDTO respDTO  = new OperateResultMessageRespDTO();
+                        respDTO.setErrMsg("BOM结构不正确，油漆车身下面必须挂有白车身总成！");
+                        respDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
+                        return respDTO;
+                    }
                     if(ListUtil.isNotEmpty(bodyOfWhiteSet)){//白车身总成
-                        for(HzEPLManageRecord eplManageRecord :bodyOfWhiteSet){
-                            HzEbomTreeQuery ebomTreeQuery = new HzEbomTreeQuery();//找出白车身的全部子件
+                        for(HzPbomLineRecord pbomLineRecord :bodyOfWhiteSet){
+                            HzPbomTreeQuery ebomTreeQuery = new HzPbomTreeQuery();//找出白车身的全部子件
                             ebomTreeQuery.setProjectId(projectId);
-                            ebomTreeQuery.setPuid(eplManageRecord.getPuid());
-                            ebomTreeQuery.setIsCarPart(1);
-                            List<HzEPLManageRecord> whiteBodys = hzEbomRecordDAO.getHzBomLineChildren(ebomTreeQuery);
+                            ebomTreeQuery.setPuid(pbomLineRecord.geteBomPuid());
+                            List<HzPbomLineRecord> whiteBodys = hzPbomRecordDAO.getHzPbomTree(ebomTreeQuery);
                             int m = 0;
                             if(ListUtil.isNotEmpty(whiteBodys)){
                                 for(int j =0;j<whiteBodys.size();j++){
-                                    HzEPLManageRecord whiteBody = whiteBodys.get(j);
-                                    HzMbomLineRecord mbomRecord = HzMbomRecordFactory.ebomRecordToMbomRecord(whiteBody);
+                                    HzPbomLineRecord whiteBody = whiteBodys.get(j);
+                                    HzMbomLineRecord mbomRecord = HzMbomRecordFactory.pBomRecordToMbomRecord(whiteBody);
                                     String lineIndex = whiteBody.getLineIndex();
                                     String firstIndex = lineIndex.split("\\.")[0];
                                     String othersIndex = lineIndex.substring(firstIndex.length(),lineIndex.length());
@@ -568,33 +579,31 @@ public class HzMbomServiceImpl implements HzMbomService{
                                         financeMboms.add(mbomRecord);
                                         productMboms.add(mbomRecord);
                                     }else if(whiteBody.getpBomLinePartResource().equals("采购件")){
-                                        mbomRecord.setParentUid(eplManageRecord.getPuid());
-                                        mbomRecord.setLineIndex(eplManageRecord.getLineIndex()+"."+(10+(m*10)));
+                                        mbomRecord.setParentUid(pbomLineRecord.geteBomPuid());
+                                        mbomRecord.setLineIndex(pbomLineRecord.getLineIndex()+"."+(10+(m*10)));
                                         mbomRecord.setIsHas(0);
                                         m+=1;
                                         productMboms.add(mbomRecord);
-                                        HzEbomTreeQuery query = new HzEbomTreeQuery();
+                                        HzPbomTreeQuery query = new HzPbomTreeQuery();
                                         query.setProjectId(projectId);
-                                        query.setPuid(whiteBody.getPuid());
-                                        query.setIsCarPart(1);
-                                        List<HzEPLManageRecord> buyRecords = hzEbomRecordDAO.getHzBomLineChildren(query);
+                                        query.setPuid(whiteBody.geteBomPuid());
+                                        List<HzPbomLineRecord> buyRecords = hzPbomRecordDAO.getHzPbomTree(query);
                                         if(ListUtil.isNotEmpty(buyRecords)){
                                             j+=buyRecords.size()-1;
                                         }
 
                                     }else if(whiteBody.getpBomLinePartResource().equals("自制单件")){
-                                        mbomRecord.setParentUid(eplManageRecord.getPuid());
-                                        mbomRecord.setLineIndex(eplManageRecord.getLineIndex()+"."+(10+(m*10)));
+                                        mbomRecord.setParentUid(pbomLineRecord.geteBomPuid());
+                                        mbomRecord.setLineIndex(pbomLineRecord.getLineIndex()+"."+(10+(m*10)));
                                         mbomRecord.setIsHas(0);
                                         m+=1;
-                                        HzEbomTreeQuery query = new HzEbomTreeQuery();
+                                        HzPbomTreeQuery query = new HzPbomTreeQuery();
                                         query.setProjectId(projectId);
-                                        query.setPuid(whiteBody.getPuid());
-                                        query.setIsCarPart(1);
-                                        List<HzEPLManageRecord> makeRecords = hzEbomRecordDAO.getHzBomLineChildren(query);
+                                        query.setPuid(whiteBody.geteBomPuid());
+                                        productMboms.add(mbomRecord);
+                                        List<HzPbomLineRecord> makeRecords = hzPbomRecordDAO.getHzPbomTree(query);
                                         if(ListUtil.isNotEmpty(makeRecords) && makeRecords.size()>1){
                                             mbomRecord.setIsHas(1);
-                                            productMboms.add(mbomRecord);
                                             HzMbomRecordFactory factory = new HzMbomRecordFactory();
                                             productMboms.addAll(factory.movePartBomStructureToThis(mbomRecord,makeRecords));
                                             sortNumber = factory.getMaxSortNum();
@@ -812,8 +821,6 @@ public class HzMbomServiceImpl implements HzMbomService{
                     return OperateResultMessageRespDTO.getFailResult();
                 }
             }
-            long b = System.currentTimeMillis();
-            System.out.println((b-a)+"ms");
             return OperateResultMessageRespDTO.getSuccessResult();
         }catch (Exception e){
             return OperateResultMessageRespDTO.getFailResult();
@@ -826,7 +833,7 @@ public class HzMbomServiceImpl implements HzMbomService{
 
 
 
-    public boolean analysisMbom(HzEPLManageRecord record,int i,String projectId,Set<HzEPLManageRecord> bodyOfWhiteSet,
+    public boolean analysisMbom(HzPbomLineRecord record,int i,String projectId,Set<HzPbomLineRecord> bodyOfWhiteSet,
                              List<HzConfigBomColorBean> beans,List<HzMbomLineRecord> superMboms){
         //解析产生油漆车身总成 在解析其他bom  油漆车身需要产生白车身
         if(record.getpBomLinePartName().contains("油漆车身总成") && record.getIs2Y().equals(1)){
@@ -834,12 +841,12 @@ public class HzMbomServiceImpl implements HzMbomService{
             //找出对应的油漆车身超级MBOM 以及对应白车身
             //油漆车身总成下面一定会出现白车身总成 否则就直接报错
             Map<String,Object> map = new HashMap<>();
-            map.put("parentId",record.getPuid());
+            map.put("parentId",record.geteBomPuid());
             map.put("projectId",projectId);
-            List<HzEPLManageRecord> records1 = hzEbomRecordDAO.findEbom(map);
+            List<HzPbomLineRecord> records1 = hzPbomRecordDAO.findPbom(map);
             if(ListUtil.isNotEmpty(records1)){
                 boolean b = false;
-                for(HzEPLManageRecord manageRecord:records1){
+                for(HzPbomLineRecord manageRecord:records1){
                     if(manageRecord.getpBomLinePartName().contains("白车身总成")){
                         b = true;
                         break;
@@ -852,13 +859,13 @@ public class HzMbomServiceImpl implements HzMbomService{
                 return false;
             }
             //油漆车身 和白车身
-            List<HzEPLManageRecord> recordList = hzEbomRecordDAO.getPaintAndWhiteBody(record.getPuid(),projectId);
+            List<HzPbomLineRecord> recordList = hzPbomRecordDAO.getPaintAndWhiteBody(record.geteBomPuid(),projectId);
 
             if(ListUtil.isNotEmpty(recordList)){//lineId lineIndex sortNum
 
-                for(HzEPLManageRecord eplManageRecord:recordList){
-                    if(eplManageRecord.getpBomLinePartName().contains("白车身总成")){
-                        bodyOfWhiteSet.add(eplManageRecord);
+                for(HzPbomLineRecord pbomManageRecord:recordList){
+                    if(pbomManageRecord.getpBomLinePartName().contains("白车身总成")){
+                        bodyOfWhiteSet.add(pbomManageRecord);
                     }
                 }
 
@@ -890,19 +897,18 @@ public class HzMbomServiceImpl implements HzMbomService{
 
                 if(ListUtil.isNotEmpty(records1)){//超级MBOM
                     records1.add(record);//油漆车身也添加进去
-                    for(HzEPLManageRecord eplManageRecord :records1){
-                        HzEbomTreeQuery query = new HzEbomTreeQuery();
-                        if(eplManageRecord.getpBomLinePartName().contains("油漆车身总成")||
-                                eplManageRecord.getpBomLinePartName().contains("白车身总成")){
-                            HzMbomLineRecord mbomLineRecord = HzMbomRecordFactory.generateSupMbom(eplManageRecord,i,projectId,beans);
+                    for(HzPbomLineRecord pbomLineRecord :records1){
+                        HzPbomTreeQuery query = new HzPbomTreeQuery();
+                        if(pbomLineRecord.getpBomLinePartName().contains("油漆车身总成")||
+                                pbomLineRecord.getpBomLinePartName().contains("白车身总成")){
+                            HzMbomLineRecord mbomLineRecord = HzMbomRecordFactory.generateSupMbom(pbomLineRecord,i,projectId,beans);
                             superMboms.add(mbomLineRecord);
                         }else {
-                            query.setPuid(eplManageRecord.getPuid());
-                            query.setIsCarPart(1);
+                            query.setPuid(pbomLineRecord.geteBomPuid());
                             query.setProjectId(projectId);
-                            List<HzEPLManageRecord> manageRecords = hzEbomRecordDAO.getHzBomLineChildren(query);
+                            List<HzPbomLineRecord> manageRecords = hzPbomRecordDAO.getHzPbomTree(query);
                             if(ListUtil.isNotEmpty(manageRecords)){
-                                for(HzEPLManageRecord r :manageRecords){
+                                for(HzPbomLineRecord r :manageRecords){
                                     HzMbomLineRecord mbomLineRecord = HzMbomRecordFactory.generateSupMbom(r,i,projectId,beans);
                                     superMboms.add(mbomLineRecord);
                                 }
@@ -912,13 +918,12 @@ public class HzMbomServiceImpl implements HzMbomService{
                 }
             }
         }else {//非油漆车身总成下面的件 直接加到超级MBOM
-            HzEbomTreeQuery hzEbomTreeQuery = new HzEbomTreeQuery();//找出油漆车身的全部子件
-            hzEbomTreeQuery.setProjectId(projectId);
-            hzEbomTreeQuery.setPuid(record.getPuid());
-            hzEbomTreeQuery.setIsCarPart(1);
-            List<HzEPLManageRecord> recordList = hzEbomRecordDAO.getHzBomLineChildren(hzEbomTreeQuery);
+            HzPbomTreeQuery hzPbomTreeQuery = new HzPbomTreeQuery();//找出油漆车身的全部子件
+            hzPbomTreeQuery.setProjectId(projectId);
+            hzPbomTreeQuery.setPuid(record.geteBomPuid());
+            List<HzPbomLineRecord> recordList = hzPbomRecordDAO.getHzPbomTree(hzPbomTreeQuery);
             if(ListUtil.isNotEmpty(recordList)){
-                for(HzEPLManageRecord eplManageRecord:recordList){
+                for(HzPbomLineRecord eplManageRecord:recordList){
                     HzMbomLineRecord mbomLineRecord = HzMbomRecordFactory.generateSupMbom(eplManageRecord,i,projectId,beans);
 //                    HzMbomLineRecord lineRecord = hzMbomRecordDAO.findHzMbomByEbomIdAndLineIndex(mbomLineRecord.geteBomPuid(),mbomLineRecord.getLineIndex(),MbomTableNameEnum.tableName(0));
                     superMboms.add(mbomLineRecord);
