@@ -37,6 +37,33 @@ public interface HzSingleVehiclesDao extends BasicDao<HzSingleVehicles> {
      */
     HzSingleVehicles selectByDmbIdWithProjectUid(Long svlDmbId, String projectUid);
 
-    int insert(HzSingleVehicles hzSingleVehicles);
+    /**
+     * 批量插入
+     * @param hzSingleVehicles
+     * @return
+     */
+    int insertList(List<HzSingleVehicles> hzSingleVehicles);
 
+    /**
+     * 查询存在记录
+     * @param projectId
+     * @param svlCfgMaterialUid
+     * @return
+     */
+    boolean checkExist(String projectId,String svlCfgMaterialUid);
+
+    /**
+     * 更新单车信息
+     * @param hzSingleVehicles
+     * @return
+     */
+    int updateSingleVehicles(HzSingleVehicles hzSingleVehicles);
+
+    /**
+     * 获取一条单车清单信息
+     * @param projectId
+     * @param id
+     * @return
+     */
+    HzSingleVehicles getSingleVehiclesById(String projectId,Long id);
 }

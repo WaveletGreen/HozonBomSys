@@ -60,9 +60,6 @@ public class HzMbomServiceImpl implements HzMbomService{
     private HzCfg0OfBomLineService hzCfg0OfBomLineService;
 
     @Autowired
-    private HzEbomRecordDAO hzEbomRecordDAO;
-
-    @Autowired
     private IHzConfigBomColorService iHzConfigBomColorService;
 
     @Autowired
@@ -494,6 +491,9 @@ public class HzMbomServiceImpl implements HzMbomService{
 
     @Override
     public OperateResultMessageRespDTO refreshHzMbom(String projectId) {
+        if(!PrivilegeUtil.writePrivilege()){
+            return OperateResultMessageRespDTO.getFailPrivilege();
+        }
         if(null == projectId || ""==projectId){
             return OperateResultMessageRespDTO.IllgalArgument();
         }
