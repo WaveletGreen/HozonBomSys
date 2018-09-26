@@ -25,6 +25,7 @@
     <result column="P_CONTROL_CODE" jdbcType="VARCHAR" property="controlCode" />
     <result column="P_MATERIEL_CODE" jdbcType="VARCHAR" property="pMaterielCode" />
     <result column="P_MATERIEL_DESC" jdbcType="VARCHAR" property="pMaterielDesc" />
+    <result column="P_FACTORYID" jdbcType="VARCHAR" property="pFactoryId" />
   </resultMap>
 
 
@@ -93,6 +94,42 @@
       and (t2.P_STATUS is null or t2.P_STATUS=1)
    </where>
     )t
+    WHERE ROWNUM &lt;=#{limit,jdbcType=INTEGER}) where rn &gt;#{offset,jdbcType=INTEGER}
+  </select>
+
+  <!--查询工艺路线2-->
+  <select id="HzWorkProcedureDAOImpl_findHzWorkProcessByPage2" parameterType="java.util.HashMap" resultMap="HzWorkProcessMap">
+    select * from
+    (select t.*,ROWNUM as rn from
+    (SELECT t1.P_MATERIEL_CODE,t1.P_MATERIEL_DESC,t1.PUID,t2.P_PROCEDURE_CODE,t2.P_PROCEDURE_DESC, t2.P_DIRECT_LABOR,
+    t2.P_INDIRECT_LABOR,t2.P_MACHINE_LABOR, t2.P_BURN, t2.P_MACHINE_MATERIAL_LABOR, t2.P_OTHER_COST, t2.P_COUNT,t2.P_PURPOSE,
+    t2.P_STATE, t2.P_CONTROL_CODE,t3.P_WORK_CODE,t3.P_WORK_DESC,
+    t4.P_FACTORY_CODE FROM HZ_MATERIEL_RECORD t1
+    LEFT OUTER JOIN HZ_WORK_PROCEDURE t2 On T1.puid =
+    T2.P_MATERIEL_PUID
+    LEFT OUTER JOIN HZ_WORK_CENTER t3 ON t2.P_Work_PUID=t3.PUID
+    LEFT OUTER JOIN HZ_FACTORY t4 ON t1.P_Factory_PUID = t4.PUID
+    <where>
+      1=1
+      <if test="projectId != null and projectId != ''">
+        and t1.P_PERTAIN_TO_PROJECT_PUID = #{projectId,jdbcType=VARCHAR}
+      </if>
+      <if test="type != null">
+        and t1.P_TYPE = #{type,jdbcType=INTEGER}
+      </if>
+      <if test="type == null">
+        and (t1.P_TYPE = 1 or t1.P_TYPE=2)
+      </if>
+      <if test="pMaterielCode != null and pMaterielCode!='' ">
+        and t1.P_MATERIEL_CODE like CONCAT(CONCAT('%',#{pMaterielCode,jdbcType=VARCHAR}),'%')
+      </if>
+      <if test="pMaterielDesc != null and pMaterielDesc!='' ">
+        and t1.P_MATERIEL_DESC like CONCAT(CONCAT('%',#{pMaterielDesc,jdbcType=VARCHAR}),'%')
+      </if>
+      and t1.P_VALID_FLAG =1
+      and (t2.P_STATUS is null or t2.P_STATUS=1)
+   </where>
+    order by t1.P_MATERIEL_CODE)t
     WHERE ROWNUM &lt;=#{limit,jdbcType=INTEGER}) where rn &gt;#{offset,jdbcType=INTEGER}
   </select>
 
@@ -391,5 +428,29 @@
       ('')
     </if>
    </update>
+
+  <insert id="HzWorkProcedureDAOImpl_insertHzWorkProcedures" parameterType="java.util.List">
+      insert into
+          HZ_WORK_PROCEDURE
+      (PUID,P_MATERIEL_CODE, P_PROJECT_PUID, P_PROCEDURE_DESC, P_FACTORYID, P_MATERIEL_PUID)
+      <foreach collection="list" index="index" item="hzWorkProcedure" separator="union" open="(" close=")">
+        select
+          #{hzWorkProcedure.puid, jdbcType=VARCHAR},
+          #{hzWorkProcedure.pMaterielCode, jdbcType=VARCHAR},
+          #{hzWorkProcedure.projectId, jdbcType=VARCHAR},
+          #{hzWorkProcedure.pProcedureDesc, jdbcType=VARCHAR},
+        (select PUID from HZ_FACTORY where P_FACTORY_CODE = #{hzWorkProcedure.pFactoryId, jdbcType=VARCHAR}),
+        (select PUID from HZ_MATERIEL_RECORD where P_MATERIEL_CODE = #{hzWorkProcedure.pMaterielCode, jdbcType=VARCHAR})
+        from
+          dual
+      </foreach>
+  </insert>
+
+  <select id="HzWorkProcedureDAOImpl_findHzWorkProcessByProjectId" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from HZ_WORK_PROCEDURE
+    where P_PROJECT_PUID = #{projectId,jdbcType=VARCHAR}
+  </select>
 
 </mapper>

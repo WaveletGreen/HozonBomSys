@@ -119,9 +119,5 @@ public interface HzMaterielDAO {
 
     boolean isRepeat(HzMaterielQuery query);
 
-    List<HzMaterielRecord> getAllMaterielExceptVehicleMateriel(String projectId);
-
-    int deleteMaterielList(List<HzMaterielRecord> list);
-
-    int updateList(List<HzMaterielRecord> list);
+    List<HzMaterielRecord> findHzMaterielForProcess(String projectId);
 }

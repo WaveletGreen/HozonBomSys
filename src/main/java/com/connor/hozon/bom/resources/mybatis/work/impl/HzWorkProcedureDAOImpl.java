@@ -10,6 +10,7 @@ import sql.pojo.work.HzWorkProcedure;
 import sql.pojo.work.HzWorkProcess;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -50,6 +51,20 @@ public class HzWorkProcedureDAOImpl  extends BaseSQLUtil implements HzWorkProced
     }
 
     @Override
+    public Page<HzWorkProcess> findHzWorkProcessByPage2(HzWorkProcessByPageQuery query) {
+        PageRequest pageRequest = new PageRequest();
+        pageRequest.setPageSize(query.getPageSize());
+        pageRequest.setPageNumber(query.getPage());
+        Map<String,Object> map = new HashMap<>();
+        map.put("projectId",query.getProjectId());
+        map.put("type",query.getType());
+        map.put("pMaterielCode",query.getpMaterielCode());
+        map.put("pMaterielDesc",query.getpMaterielDesc());
+        pageRequest.setFilters(map);
+        return super.findPage("HzWorkProcedureDAOImpl_findHzWorkProcessByPage2","HzWorkProcedureDAOImpl_getTotalCount",pageRequest);
+    }
+
+    @Override
     public HzWorkProcess getHzWorkProcess(String materielId, String projectId) {
         Map<String,Object> map = new HashMap<>();
         map.put("materielId",materielId);
@@ -68,4 +83,15 @@ public class HzWorkProcedureDAOImpl  extends BaseSQLUtil implements HzWorkProced
     public int updateSendFlag(Map<String, Object> map) {
         return super.update("HzWorkProcedureDAOImpl_updateSendFlag",map);
     }
+
+    @Override
+    public int insertHzWorkProcedures(List<HzWorkProcedure> hzWorkProcedures) {
+        return super.executeInsert(hzWorkProcedures, "HzWorkProcedureDAOImpl_insertHzWorkProcedures");
+    }
+
+    @Override
+    public List<HzWorkProcedure> findHzWorkProcessByProjectId(String projectId) {
+        return super.executeQueryByPass(new HzWorkProcedure(), projectId, "HzWorkProcedureDAOImpl_findHzWorkProcessByProjectId");
+    }
+
 }
