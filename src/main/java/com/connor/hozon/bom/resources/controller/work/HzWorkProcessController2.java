@@ -198,8 +198,9 @@ public class HzWorkProcessController2 extends BaseController {
      * @return
      */
     @RequestMapping(value = "four2",method = RequestMethod.GET)
-    public String updateWorkProcessFourToPage(String puids,String projectId,Model model){
+    public String updateWorkProcessFourToPage(String puids,String projectId,String type, Model model){
         model.addAttribute("data",puids);
+        model.addAttribute("type",type);
         return  "bomManage/mbom/routingData/updateFourProcess";
     }
 
