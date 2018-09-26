@@ -37,5 +37,6 @@ public interface HzSingleVehiclesDao extends BasicDao<HzSingleVehicles> {
      */
     HzSingleVehicles selectByDmbIdWithProjectUid(Long svlDmbId, String projectUid);
 
+    int insert(HzSingleVehicles hzSingleVehicles);
 
 }
