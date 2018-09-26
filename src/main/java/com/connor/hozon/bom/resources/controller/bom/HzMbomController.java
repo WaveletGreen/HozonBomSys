@@ -2,6 +2,7 @@ package com.connor.hozon.bom.resources.controller.bom;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.connor.hozon.bom.bomSystem.service.business.cfg.HzComposeMFService;
 import com.connor.hozon.bom.resources.controller.BaseController;
 import com.connor.hozon.bom.resources.domain.dto.request.AddMbomReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.request.DeleteHzMbomReqDTO;
@@ -40,6 +41,8 @@ public class HzMbomController extends BaseController {
     @Autowired
     private HzMbomService hzMbomService;
 
+    @Autowired
+    HzComposeMFService hzComposeMFService;
     /**
      * MBOM管理标题
      *
@@ -210,9 +213,10 @@ public class HzMbomController extends BaseController {
        OperateResultMessageRespDTO respDTO =  hzMbomService.deleteMbomRecord(reqDTO);
         writeAjaxJSONResponse(ResultMessageBuilder.build(OperateResultMessageRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
     }
-    @RequestMapping(value = "1111",method = RequestMethod.GET)
-    public void getget(HttpServletResponse response){
-        hzMbomService.refreshHzMbom("1c128c60-84a2-4076-9b1c-f7093e56e4df");
+    @RequestMapping(value = "refresh",method = RequestMethod.POST)
+    public void refreshMbom(String projectId,HttpServletResponse response){
+        OperateResultMessageRespDTO resultMessageRespDTO = hzMbomService.refreshHzMbom(projectId);
+        writeAjaxJSONResponse(ResultMessageBuilder.build(OperateResultMessageRespDTO.isSuccess(resultMessageRespDTO),resultMessageRespDTO.getErrMsg()),response);
     }
 
     /**
@@ -249,6 +253,11 @@ public class HzMbomController extends BaseController {
         }
         model.addAttribute("data",respDTO);
         return"bomManage/mbom/mbomMaintenance/updateFinancial";
+    }
+
+    @RequestMapping(value = "test",method = RequestMethod.GET)
+    public void test(){
+        hzComposeMFService.loadComposes("1c128c60-84a2-4076-9b1c-f7093e56e4df",null);
     }
 }
 

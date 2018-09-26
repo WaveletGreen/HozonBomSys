@@ -166,7 +166,7 @@ function initTable1(mBomUrl) {
                 cache: false,
                 striped: true,                              //是否显示行间隔色
                 sidePagination: "server",           //分页方式：client客户端分页，server服务端分页（*）
-                height: $(window.parent.document).find("#wrapper").height() - 135,
+                height: $(window.parent.document).find("#wrapper").height() - 170,
                 width: $(window).width(),
                 formId: "queryMbomMain",
                 undefinedText: "",//当数据为 undefined 时显示的字符
@@ -275,6 +275,44 @@ function initTable1(mBomUrl) {
                                             }*/
                                             if (result.success) {
                                                 layer.msg('删除成功', {icon: 1, time: 2000})
+                                            } else if (!result.success) {
+                                                window.Ewin.alert({message: result.errMsg});
+                                            }
+                                            $mBomTable.bootstrapTable("refresh");
+                                        },
+                                        error: function (info) {
+                                            window.Ewin.alert({message: "操作失败:" + info.status});
+                                        }
+                                    })
+                                }
+                            });
+                        }
+                    },
+                    {
+                        text: '数据同步',
+                        iconCls: 'glyphicon glyphicon-repeat',
+                        handler: function () {
+                            var url = "";
+                            // var myData = JSON.parse({
+                            //     "projectId": $("#project", window.top.document).val(),
+                            // });
+
+                            window.Ewin.confirm({
+                                title: '提示',
+                                message: '确定要同步数据到MBOM吗?',
+                                width: 500
+                            }).on(function (e) {
+                                if (e) {
+                                    url = "mbom/refresh?projectId="+$("#project", window.top.document).val();
+                                    $.ajax({
+                                        type: "POST",
+                                        //ajax需要添加打包名
+                                        url: url,
+                                        // data: myData,
+                                        contentType: "application/json",
+                                        success: function (result) {
+                                            if (result.success) {
+                                                layer.msg('同步成功', {icon: 1, time: 2000})
                                             } else if (!result.success) {
                                                 window.Ewin.alert({message: result.errMsg});
                                             }
@@ -685,7 +723,7 @@ function initTable2(productionUrl) {
                 cache: false,
                 striped: true,                              //是否显示行间隔色
                 sidePagination: "server",           //分页方式：client客户端分页，server服务端分页（*）
-                height: $(window.parent.document).find("#wrapper").height() - 135,
+                height: $(window.parent.document).find("#wrapper").height() - 320,
                 width: $(window).width(),
                 formId: "queryWhiteBodyProduction",
                 undefinedText: "",//当数据为 undefined 时显示的字符
@@ -1205,7 +1243,7 @@ function initTable3(financialUrl) {
                 cache: false,
                 striped: true,                              //是否显示行间隔色
                 sidePagination: "server",           //分页方式：client客户端分页，server服务端分页（*）
-                height: $(window.parent.document).find("#wrapper").height() - 135,
+                height: $(window.parent.document).find("#wrapper").height() - 320,
                 width: $(window).width(),
                 formId: "queryMbomMain",
                 undefinedText: "",//当数据为 undefined 时显示的字符

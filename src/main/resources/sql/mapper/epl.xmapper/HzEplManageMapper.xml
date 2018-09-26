@@ -975,7 +975,7 @@
         </where>
     </select>
 
-
+    <!--获取除变形外的相同的零件号-->
     <select id="HzEbomRecordDAOImpl_getSameNameLineId" parameterType="java.util.HashMap" resultMap="BaseResultMap">
         select * from HZ_BOM_LINE_RECORD t1
         where t1.p_bom_digifax_id=(

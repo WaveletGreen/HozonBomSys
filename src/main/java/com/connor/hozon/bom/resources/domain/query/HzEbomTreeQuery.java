@@ -17,7 +17,7 @@ public class HzEbomTreeQuery {
     private String puid;
 
     /**
-     * 是否哦颜色件
+     * 是否颜色件
      */
     private Integer isColorPart;
     /**

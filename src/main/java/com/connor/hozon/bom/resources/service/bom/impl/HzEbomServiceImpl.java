@@ -480,7 +480,7 @@ public class HzEbomServiceImpl implements HzEbomService {
                                 }
 
                                 hzMbomLineRecord.setBomDigifaxId(hzBomMainRecord.getPuid());
-                                if (puids.size() >= list2.size()) {
+                                if (puids.size() >= list3.size()) {
                                     hzMbomLineRecord.seteBomPuid(puids.get(i));
                                 } else {
                                     hzMbomLineRecord.seteBomPuid(puids.get(0));

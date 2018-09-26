@@ -891,6 +891,7 @@ public class HzPbomServiceImpl implements HzPbomService {
         hzPbomLineRecord.setpBomLinePartEnName(record.getpBomLinePartEnName());
         hzPbomLineRecord.setpBomLinePartResource(record.getpBomLinePartResource());
         hzPbomLineRecord.setSortNum(record.getSortNum());
+        hzPbomLineRecord.setColorPart(record.getColorPart());
         return hzPbomLineRecord;
     }
 

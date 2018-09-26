@@ -6,6 +6,7 @@ import com.connor.hozon.bom.resources.domain.dto.response.HzMbomRecordRespDTO;
 import com.connor.hozon.bom.resources.util.ListUtil;
 import sql.pojo.bom.HzBomLineRecord;
 import sql.pojo.bom.HzMbomLineRecord;
+import sql.pojo.bom.HzPbomLineRecord;
 import sql.pojo.epl.HzEPLManageRecord;
 import sql.pojo.interaction.HzConfigBomColorBean;
 
@@ -46,14 +47,18 @@ public class HzMbomRecordFactory {
         return hzMbomLineRecord;
     }
 
-    public static HzMbomLineRecord bomLineRecordToMbomRecord(HzBomLineRecord record){
+    public static HzMbomLineRecord pBomRecordToMbomRecord(HzPbomLineRecord record){
         HzMbomLineRecord hzMbomLineRecord = new HzMbomLineRecord();
         hzMbomLineRecord.setPuid(UUID.randomUUID().toString());
         hzMbomLineRecord.setIsHas(record.getIsHas());
         hzMbomLineRecord.setBomDigifaxId(record.getBomDigifaxId());
-        hzMbomLineRecord.seteBomPuid(record.getPuid());
+        hzMbomLineRecord.seteBomPuid(record.geteBomPuid());
         hzMbomLineRecord.setIsDept(record.getIsDept());
-        hzMbomLineRecord.setLineId(record.getLineID());
+        if(record.getLineId().endsWith("YY0")){
+            hzMbomLineRecord.setLineId(record.getLineId().substring(0,record.getLineId().length()-3));
+        }else {
+            hzMbomLineRecord.setLineId(record.getLineId());
+        }
         hzMbomLineRecord.setIsPart(record.getIsPart());
         hzMbomLineRecord.setIs2Y(record.getIs2Y());
         hzMbomLineRecord.setLineIndex(record.getLineIndex());
@@ -64,6 +69,7 @@ public class HzMbomRecordFactory {
         hzMbomLineRecord.setpBomLinePartEnName(record.getpBomLinePartEnName());
         hzMbomLineRecord.setpBomLinePartResource(record.getpBomLinePartResource());
         hzMbomLineRecord.setSortNum(record.getSortNum());
+        hzMbomLineRecord.setIsColorPart(record.getColorPart());
         return hzMbomLineRecord;
     }
 
@@ -141,41 +147,47 @@ public class HzMbomRecordFactory {
      * @param records BOM结构
      * @return
      */
-    public  List<HzMbomLineRecord> movePartBomStructureToThis(HzMbomLineRecord record,List<HzEPLManageRecord> records){
+    public  List<HzMbomLineRecord> movePartBomStructureToThis(HzMbomLineRecord record,List<HzPbomLineRecord> records){
         int n=1;
         List<HzMbomLineRecord> recordList = new ArrayList<>();
         String lindIndex = record.getLineIndex();
         Double sortNum = Double.parseDouble(record.getSortNum());
-        record.setIsHas(1);
-        for(int i = 1;i<records.size();i++){
-            HzMbomLineRecord lineRecord = ebomRecordToMbomRecord(records.get(i));
-            String originalLineIndex = lineRecord.getLineIndex();
-            String []lineIns = originalLineIndex.split("\\.");
-            if(i ==1){
-                lineRecord.setParentUid(record.geteBomPuid());
-            }
-            lineRecord.setSortNum(String.valueOf(sortNum+n*100));
-            this.maxSortNum = sortNum+n*100;
-            n++;
-            StringBuffer stringBuffer = new StringBuffer();
-            for(int j = lineIns.length-1;j>lineIns.length-1-i;j--){
-                stringBuffer.append("."+lineIns[j]);
-            }
+        if(ListUtil.isNotEmpty(records)){
+            int length = records.get(0).getLineIndex().split("\\.").length;
+            for(int i = 1;i<records.size();i++){
 
-            lineRecord.setLineIndex(lindIndex+stringBuffer.toString());
-            recordList.add(lineRecord);
+                HzMbomLineRecord lineRecord = pBomRecordToMbomRecord(records.get(i));
+                String childrenLineIndex = lineRecord.getLineIndex();
+                String []lineIns = childrenLineIndex.split("\\.");
+                int len = lineIns.length;
+                if(len -length == 1){
+                    lineRecord.setParentUid(record.geteBomPuid());
+                }
+                lineRecord.setSortNum(String.valueOf(sortNum+n*100));
+                this.maxSortNum = sortNum+n*100;
+                n++;
+                StringBuffer stringBuffer = new StringBuffer();
+                for(int j = length;j<len;j++){
+                    stringBuffer.append("."+lineIns[j]);
+                }
+                lineRecord.setLineIndex(lindIndex+stringBuffer.toString());
+                recordList.add(lineRecord);
+            }
+        }else {
+            throw new RuntimeException("数据操作异常!");
         }
 
         return recordList;
     }
 
 
-    public static HzMbomLineRecord generateSupMbom(HzEPLManageRecord record, int i, String projectId, List<HzConfigBomColorBean> beans){
-        HzMbomLineRecord mbomLineRecord = ebomRecordToMbomRecord(record);
-        String lineId = record.getLineID();
+    public static HzMbomLineRecord generateSupMbom(HzPbomLineRecord record, int i, String projectId, List<HzConfigBomColorBean> beans){
+        HzMbomLineRecord mbomLineRecord = pBomRecordToMbomRecord(record);
+        String lineId = mbomLineRecord.getLineId();
         if(Integer.valueOf(1).equals(record.getColorPart())&&ListUtil.isNotEmpty(beans)){
             if(!beans.get(i).getColorCode().equals("-")){
                 lineId = HzBomSysFactory.resultLineId(mbomLineRecord.getLineId(),projectId)+beans.get(i).getColorCode();
+                mbomLineRecord.setColorId(beans.get(i).getColorUid());
             }
         }
 
@@ -191,4 +203,20 @@ public class HzMbomRecordFactory {
         return mbomLineRecord;
     }
 
+
+//    public static void main(String[] a){
+//        String s1 = "2.3.34.5.65.432.5.32";//原父
+//        String s2 = "2.3.34.5.65.432.5.32.23.1.23.23";//原父的子孙
+//        String s3 = "10.10.5";//新父
+//        String s4 = "10.10.5.23.1.23.23";//期望的结果
+//
+//        int i1 = s1.split("\\.").length;
+//        int i2 = s2.split("\\.").length;
+//        String ss[] = s2.split("\\.");
+//        StringBuffer stringBuffer = new StringBuffer();
+//        for(int i =i1;i<i2;i++){
+//            stringBuffer.append("."+ss[i]);
+//        }
+//        System.out.println(s3+stringBuffer.toString());
+//    }
 }

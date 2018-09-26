@@ -112,6 +112,8 @@
         p_vehicle_code,
         p_vehicle_name
     </sql>
+
+
     <!--**************************************select**************************************-->
     <select id="selectByPrimaryKey" parameterType="sql.pojo.interaction.HzSingleVehicles" resultMap="BaseResultMap">
         select
@@ -119,6 +121,9 @@
         from HZ_SINGLE_VEHICLES
         where ID = #{id,jdbcType=DECIMAL}
     </select>
+
+
+
     <!--查询器查询，可以加多个条件，甚至加分页查询都可以-->
     <select id="selectListByInquirer" parameterType="com.connor.hozon.bom.interaction.inquirer.HzSingleVehiclesInquirer"
             resultMap="ExWithProjectBaseResult">
