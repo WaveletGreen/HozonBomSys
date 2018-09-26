@@ -28,7 +28,7 @@ $(document).ready(function () {
                     }
                     var zNodes = data.externalObject;
                     initZtree(zNodes);
-                    $("#info_div span").text("第二步：选择需要合成的零件(选父影响子，选子不影响父)");
+                    $("#info_div span").text("第二步：选择需要合成的零件(至少2个,选父影响子，选子不影响父)");
                     $("#info_div").css("top", "20%");
                 },
             });
@@ -108,38 +108,98 @@ $(document).ready(function () {
                 console.log("-----------------打印对象xxx子层节点-----------");
                 console.log("#################################################################");
 
+                let size = 0;
                 //提示表格
                 let selectedToCraftTable = $("#selectedToCraftTable");
                 selectedToCraftTable.html("");
                 let _tr = document.createElement("tr");
                 let _th = document.createElement("th");
-
-                let size = 0;
-                _th.innerHTML = "已选择的节点是:";
+                _th.innerHTML = "已选择的父节点是:";
                 _tr.appendChild(_th);
                 selectedToCraftTable.append(_tr);
+
+                let indexx = 1;
+                let parentLength = 0;
+                let childrenLength = 0;
+
+                /*** 先获获取长度*/
+                parentLength = getLength(parentNode);
+                childrenLength = getLength2(childrenNode);
                 //动态显示选择的节点
-                for (let i in parentNode) {
-                    if (parentNode.hasOwnProperty(i)) {
-                        let tr = document.createElement("tr");
-                        let td = document.createElement("td");
-                        td.innerHTML = parentNode[i].lineId;
-                        tr.appendChild(td);
-                        selectedToCraftTable.append(tr);
-                        size++;
-                    }
-                }
-                for (let i in childrenNode) {
-                    if (childrenNode.hasOwnProperty(i)) {
-                        for (let j in childrenNode[i]) {
-                            let tr = document.createElement("tr");
+                let tr = document.createElement("tr");
+                /**存放在3列中**/
+                if (parentLength >= 3) {
+                    for (let i in parentNode) {
+                        if (parentNode.hasOwnProperty(i)) {
                             let td = document.createElement("td");
-                            td.innerHTML = childrenNode[i][j].lineId;
+                            td.innerHTML = parentNode[i].lineId;
                             tr.appendChild(td);
-                            selectedToCraftTable.append(tr);
+                            if (indexx % 3 == 0) {
+                                selectedToCraftTable.append(tr);
+                                tr = document.createElement("tr");
+                            }
+                            else if (parentLength == indexx) {
+                                selectedToCraftTable.append(tr);
+                            }
                             size++;
+                            indexx++;
                         }
                     }
+                }
+                else if (parentLength < 3) {
+                    for (let i in parentNode) {
+                        if (parentNode.hasOwnProperty(i)) {
+                            let td = document.createElement("td");
+                            td.innerHTML = parentNode[i].lineId;
+                            tr.appendChild(td);
+                            size++;
+                            indexx++;
+                        }
+                    }
+                    selectedToCraftTable.append(tr);
+                }
+
+                let _tr2 = document.createElement("tr");
+                let _th2 = document.createElement("th");
+                _th2.innerHTML = "已选择的子节点是:";
+                _tr2.appendChild(_th2);
+                selectedToCraftTable.append(_tr2);
+                indexx = 1;
+                tr = document.createElement("tr");
+                if (childrenLength >= 3) {
+                    for (let i in childrenNode) {
+                        if (childrenNode.hasOwnProperty(i)) {
+                            for (let j in childrenNode[i]) {
+                                let td = document.createElement("td");
+                                td.innerHTML = childrenNode[i][j].lineId;
+                                tr.appendChild(td);
+                                if (indexx % 3 == 0) {
+                                    selectedToCraftTable.append(tr);
+                                    tr = document.createElement("tr");
+                                }
+                                else if (childrenLength == indexx) {
+                                    selectedToCraftTable.append(tr);
+                                }
+                                size++;
+                                indexx++;
+                            }
+                        }
+                    }
+                }
+                else {
+                    let tr = document.createElement("tr");
+                    for (let i in childrenNode) {
+                        if (childrenNode.hasOwnProperty(i)) {
+                            for (let j in childrenNode[i]) {
+                                let td = document.createElement("td");
+                                td.innerHTML = childrenNode[i][j].lineId;
+                                tr.appendChild(td);
+                                indexx++;
+                                size++;
+                            }
+                        }
+                    }
+                    selectedToCraftTable.append(tr);
                 }
                 //动态提示
                 if (size >= 2) {
@@ -148,10 +208,10 @@ $(document).ready(function () {
                     $("#info_img_2").css("display", "inline");
                     $("#info_img_2").css("max-width", "36px");
                     $("#info_img_1").css("display", "none");
-
+                    $("")
                 }
                 else {
-                    $("#info_div span").text("第二步：选择需要合成的零件(选父影响子，选子不影响父)");
+                    $("#info_div span").text("第二步：选择需要合成的零件(至少2个,选父影响子，选子不影响父)");
                     $("#info_div").css("top", "20%");
                     $("#info_img_1").css("display", "inline");
                     $("#info_img_1").css("max-width", "36px");
@@ -270,7 +330,8 @@ $(document).ready(function () {
                     }
                 })
                 localSelectedNode = treeNode;
-            },
+            }
+            ,
         }
     };
     initZtree = function (zNodes) {

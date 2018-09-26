@@ -166,7 +166,9 @@
         t.p_feature_cn_desc as svl_Material_Basic_Info,
         <include refid="ExWithProject_Column_List"/>,
         t9.p_color_name,
-        t9.p_color_code
+        t9.p_color_code,
+        dmb.id as SVL_DMB_ID,
+        dmb.dmb_model_feature_uid as SVL_CFG_MATERIAL_UID
         /* t4.p_project_name,
         t4.p_project_code,
         t5.p_vehicle_name,
@@ -184,6 +186,7 @@
         left join Hz_Brand_Record t7 on t6.p_pertain_to_brand_puid=t7.puid
         left join Hz_Cfg0_Model_Color_Record t8 on t.p_pertain_to_color_model=t8.puid
         left join Hz_Cfg0_Colorset t9 on t8.p_color_uid=t9.puid
+        left join Hz_Derivative_Materiel_Basic dmb on t.puid=dmb.dmb_model_feature_uid
         <where>
             <if test="svlProjectUid!=null">
                 t4.puid=#{svlProjectUid,jdbcType=VARCHAR}
