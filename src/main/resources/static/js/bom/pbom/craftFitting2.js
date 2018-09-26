@@ -19,7 +19,7 @@ $(document).ready(function () {
         else {
             $.ajax({
                 type: "GET",
-                url: "pbom/processComposeTree?lineId=" + val + "&projectId=" + projectId,
+                url: "pbom/processComposeTree?lineId=" + val + "&projectId=" + getProjectUid(),
                 undefinedText: "",//当数据为 undefined 时显示的字符
                 success: function (data) {
                     if (!data.success) {
@@ -70,12 +70,27 @@ $(document).ready(function () {
             /*beforeClick:function(treeId, treeNode) {
                 return !treeNode.isParent;//当是父节点 返回false 不让选取
             },*/
+            /**
+             * 不能选择最顶层
+             */
+            beforeCheck: function (treeId, treeNode) {
+                if (treeNode.getParentNode() == null) {
+                    window.Ewin.alert({message: "您不能选中顶层进行合成"});
+                    return false;
+                }
+            },
             onCheck: function (e, treeId, treeNode) {
                 var treeObj = $.fn.zTree.getZTreeObj("Ztree1");
                 var nodes = treeObj.getCheckedNodes(true);
-
-                sortOnlyByParent(treeNode);
-
+                /**
+                 * 只能父影响子，不能子影响父
+                 */
+                let localCode = sortOnlyByParent(treeNode, treeId);
+                if (localCode == -1) {
+                    window.Ewin.alert({message: "不能选择最顶层进行合成!"});
+                    return false;
+                }
+                console.log("****************************************************************");
                 console.log("-----------------打印对象xxx父层-----------");
                 console.log(parent);
                 console.log("-----------------打印对象xxx父层-----------");
@@ -83,6 +98,65 @@ $(document).ready(function () {
                 console.log("-----------------打印对象子层-----------");
                 console.log(children);
                 console.log("-----------------打印对象子层-----------");
+
+                console.log("-----------------打印对象xxx父层节点-----------");
+                console.log(parentNode);
+                console.log("-----------------打印对象xxx父层节点-----------");
+
+                console.log("-----------------打印对象xxx子层节点-----------");
+                console.log(childrenNode);
+                console.log("-----------------打印对象xxx子层节点-----------");
+                console.log("#################################################################");
+
+                //提示表格
+                let selectedToCraftTable = $("#selectedToCraftTable");
+                selectedToCraftTable.html("");
+                let _tr = document.createElement("tr");
+                let _th = document.createElement("th");
+
+                let size = 0;
+                _th.innerHTML = "已选择的节点是:";
+                _tr.appendChild(_th);
+                selectedToCraftTable.append(_tr);
+                //动态显示选择的节点
+                for (let i in parentNode) {
+                    if (parentNode.hasOwnProperty(i)) {
+                        let tr = document.createElement("tr");
+                        let td = document.createElement("td");
+                        td.innerHTML = parentNode[i].lineId;
+                        tr.appendChild(td);
+                        selectedToCraftTable.append(tr);
+                        size++;
+                    }
+                }
+                for (let i in childrenNode) {
+                    if (childrenNode.hasOwnProperty(i)) {
+                        for (let j in childrenNode[i]) {
+                            let tr = document.createElement("tr");
+                            let td = document.createElement("td");
+                            td.innerHTML = childrenNode[i][j].lineId;
+                            tr.appendChild(td);
+                            selectedToCraftTable.append(tr);
+                            size++;
+                        }
+                    }
+                }
+                //动态提示
+                if (size >= 2) {
+                    $("#info_div span").text("第三步：点击“生成工艺合件”");
+                    $("#info_div").css("top", "8%");
+                    $("#info_img_2").css("display", "inline");
+                    $("#info_img_2").css("max-width", "36px");
+                    $("#info_img_1").css("display", "none");
+
+                }
+                else {
+                    $("#info_div span").text("第二步：选择需要合成的零件(选父影响子，选子不影响父)");
+                    $("#info_div").css("top", "20%");
+                    $("#info_img_1").css("display", "inline");
+                    $("#info_img_1").css("max-width", "36px");
+                    $("#info_img_2").css("display", "none");
+                }
 
                 for (var i = 0; i < nodes.length; i++) {
                     if (!nodes[i].isParent) {
@@ -118,7 +192,7 @@ $(document).ready(function () {
                 // }
                 localSelectedNode = treeNode;
                 $.ajax({
-                    url: "pbom/detail?puid=" + localSelectedNode.puid + "&projectId=" + projectId,
+                    url: "pbom/detail?puid=" + localSelectedNode.puid + "&projectId=" + getProjectUid(),
                     type: "GET",
                     undefinedText: "",//当数据为 undefined 时显示的字符
                     success: function (data) {
@@ -231,7 +305,7 @@ $(document).ready(function () {
         if (coach1.length != 0) {
             var myData = JSON.stringify({
                 "eBomPuid": coach1[0],
-                "projectId": $("#project", window.top.document).val(),
+                "projectId": getProjectUid(),
                 "puids": puids
             })
             $.ajax({
@@ -252,7 +326,7 @@ $(document).ready(function () {
                         var val = $("#queryLineId2").val();
                         $.ajax({
                             type: "GET",
-                            url: "pbom/processComposeTree?lineId=" + val + "&projectId=" + projectId,
+                            url: "pbom/processComposeTree?lineId=" + val + "&projectId=" + getProjectUid(),
                             undefinedText: "",//当数据为 undefined 时显示的字符
                             success: function (data) {
                                 if (!data.success) {
@@ -320,7 +394,7 @@ $(document).ready(function () {
                                             // }
                                             localSelectedNode1 = treeNode;
                                             $.ajax({
-                                                url: "pbom/detail?puid=" + localSelectedNode1.puid + "&projectId=" + projectId,
+                                                url: "pbom/detail?puid=" + localSelectedNode1.puid + "&projectId=" + getProjectUid(),
                                                 type: "GET",
                                                 undefinedText: "",//当数据为 undefined 时显示的字符
                                                 success: function (data) {
@@ -443,7 +517,7 @@ $(document).ready(function () {
         else {
             $.ajax({
                 type: "GET",
-                url: "pbom/processComposeTree?lineId=" + val + "&projectId=" + projectId,
+                url: "pbom/processComposeTree?lineId=" + val + "&projectId=" + getProjectUid(),
                 undefinedText: "",//当数据为 undefined 时显示的字符
                 success: function (data) {
                     if (!data.success) {
@@ -511,7 +585,7 @@ $(document).ready(function () {
                                 // }
                                 localSelectedNode1 = treeNode;
                                 $.ajax({
-                                    url: "pbom/detail?puid=" + localSelectedNode1.puid + "&projectId=" + projectId,
+                                    url: "pbom/detail?puid=" + localSelectedNode1.puid + "&projectId=" + getProjectUid(),
                                     type: "GET",
                                     undefinedText: "",//当数据为 undefined 时显示的字符
                                     success: function (data) {

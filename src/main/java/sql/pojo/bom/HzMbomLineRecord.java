@@ -221,6 +221,16 @@ public class HzMbomLineRecord {
 
     private Integer isColorPart;
 
+    private String colorId;
+
+    public String getColorId() {
+        return colorId;
+    }
+
+    public void setColorId(String colorId) {
+        this.colorId = colorId;
+    }
+
     public Integer getIsColorPart() {
         return isColorPart;
     }

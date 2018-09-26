@@ -151,7 +151,6 @@ public class HzMbomRecordFactory {
         int n=1;
         List<HzMbomLineRecord> recordList = new ArrayList<>();
         String lindIndex = record.getLineIndex();
-        int originalLength = lindIndex.split("\\.").length;
         Double sortNum = Double.parseDouble(record.getSortNum());
         if(ListUtil.isNotEmpty(records)){
             int length = records.get(0).getLineIndex().split("\\.").length;
@@ -188,6 +187,7 @@ public class HzMbomRecordFactory {
         if(Integer.valueOf(1).equals(record.getColorPart())&&ListUtil.isNotEmpty(beans)){
             if(!beans.get(i).getColorCode().equals("-")){
                 lineId = HzBomSysFactory.resultLineId(mbomLineRecord.getLineId(),projectId)+beans.get(i).getColorCode();
+                mbomLineRecord.setColorId(beans.get(i).getColorUid());
             }
         }
 

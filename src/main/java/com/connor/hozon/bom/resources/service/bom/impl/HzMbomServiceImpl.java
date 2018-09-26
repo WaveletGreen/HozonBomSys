@@ -571,7 +571,12 @@ public class HzMbomServiceImpl implements HzMbomService{
                                     String lineId = HzBomSysFactory.resultLineId(mbomRecord.getLineId(),projectId);
 
                                     mbomRecord.setLineId(lineId);
-
+                                    if(null == whiteBody.getpBomLinePartName()){
+                                        continue;
+                                    }
+                                    if(null == whiteBody.getpBomLinePartResource()){
+                                        continue;
+                                    }
                                     if(whiteBody.getpBomLinePartName().contains("白车身总成")){
                                         Integer first = Integer.valueOf(firstIndex+Integer.valueOf(firstIndex));
                                         mbomRecord.setLineIndex(String.valueOf(first)+othersIndex);
@@ -823,6 +828,7 @@ public class HzMbomServiceImpl implements HzMbomService{
             }
             return OperateResultMessageRespDTO.getSuccessResult();
         }catch (Exception e){
+            e.printStackTrace();
             return OperateResultMessageRespDTO.getFailResult();
         }
 
