@@ -144,7 +144,7 @@ public class HzMbomRecordFactory {
     /**
      * 移动部分BOM结构到当前的结构下
      * @param record 当前结构(MBOM)
-     * @param records BOM结构
+     * @param records BOM结构(PBOM)
      * @return
      */
     public  List<HzMbomLineRecord> movePartBomStructureToThis(HzMbomLineRecord record,List<HzPbomLineRecord> records){

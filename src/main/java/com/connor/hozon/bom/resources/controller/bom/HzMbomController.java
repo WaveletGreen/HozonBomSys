@@ -15,6 +15,7 @@ import com.connor.hozon.bom.resources.domain.query.HzMbomByIdQuery;
 import com.connor.hozon.bom.resources.domain.query.HzMbomByPageQuery;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.service.bom.HzMbomService;
+import com.connor.hozon.bom.resources.service.bom.HzSingleVehiclesServices;
 import com.connor.hozon.bom.resources.util.ResultMessageBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -43,13 +44,15 @@ public class HzMbomController extends BaseController {
 
     @Autowired
     HzComposeMFService hzComposeMFService;
+    @Autowired
+    HzSingleVehiclesServices hzSingleVehiclesServices;
     /**
      * MBOM管理标题
      *
      * @param response
      */
     @RequestMapping(value = "manage/title", method = RequestMethod.GET)
-    public void getPbomLineTitle(HttpServletResponse response) {
+    public void mbomTitle(HttpServletResponse response) {
         LinkedHashMap<String, String> tableTitle = new LinkedHashMap<>();
         tableTitle.put("No", "序号");
         tableTitle.put("lineId", "零件号");
@@ -253,11 +256,6 @@ public class HzMbomController extends BaseController {
         }
         model.addAttribute("data",respDTO);
         return"bomManage/mbom/mbomMaintenance/updateFinancial";
-    }
-
-    @RequestMapping(value = "test",method = RequestMethod.GET)
-    public void test(){
-        hzComposeMFService.loadComposes("1c128c60-84a2-4076-9b1c-f7093e56e4df",null);
     }
 }
 
