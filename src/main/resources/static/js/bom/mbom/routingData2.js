@@ -153,7 +153,8 @@ function initTable(url) {
                             };
                             var myData = JSON.stringify({
                                 "projectId": $("#project", window.top.document).val(),
-                                "puids": puids,
+                                "puids": puids
+
                             });
                             if (rows.length < 1) {
                                 window.Ewin.alert({message: '请至少选择一条需要修改的数据!'});
@@ -162,7 +163,7 @@ function initTable(url) {
                             window.Ewin.dialog({
                                 title: "修改四大工艺",
                                 // url: "work/process/updateWorkProcess?projectId="+projectId+"&materielId="+rows[0].materielId,
-                                url:"work/process/four2?projectId="+projectId+"&puids="+puids,
+                                url:"work/process/four2?projectId="+projectId+"&puids="+puids+"&type="+type,
                                 gridId: "gridId",
                                 // data:myData,
                                 width: 350,
