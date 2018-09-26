@@ -19,8 +19,10 @@ function doRefresh(projectId) {
     $('#mbomMaintenanceTable').bootstrapTable('destroy');
     var mBomUrl = "mbom/record?projectId=" + projectId;
     initTable1(mBomUrl);
+    $('#whiteBodyProductionTable').bootstrapTable('destroy');
     var productionUrl = "mbom/record?projectId=" + projectId+"&type="+1;
     initTable2(productionUrl);
+    $('#whiteBodyFinancialTable').bootstrapTable('destroy');
     var financialUrl = "mbom/record?projectId=" + projectId+"&type="+6;
     initTable3(financialUrl);
 }
@@ -307,6 +309,14 @@ function initTable1(mBomUrl) {
                                 width: 500
                             }).on(function (e) {
                                 if (e) {
+                                    var _table ="<p><strong style='font-size: 20px'>数据正在同步中,请耐心等待...</strong></p>"
+                                        _table+="<p><strong style='color: red'>警告:请勿进行其他的操作!</strong></p>"
+                                        _table+="<div style='margin-top: 50px;text-align: center;z-index: 100;'><img src='/hozon/img/img.gif'/></div>"
+                                    window.Ewin.confirm({
+                                        title: '提示',
+                                        message: _table,
+                                        width: 500
+                                    })
                                     url = "mbom/refresh?projectId="+$("#project", window.top.document).val();
                                     $.ajax({
                                         type: "POST",
@@ -315,6 +325,8 @@ function initTable1(mBomUrl) {
                                         // data: myData,
                                         contentType: "application/json",
                                         success: function (result) {
+                                            $('.modal-dialog', window.top.document).parent('div').remove()
+                                            $('body', window.top.document).find('.modal-backdrop').remove();
                                             if (result.success) {
                                                 layer.msg('同步成功', {icon: 1, time: 2000})
                                             } else if (!result.success) {
