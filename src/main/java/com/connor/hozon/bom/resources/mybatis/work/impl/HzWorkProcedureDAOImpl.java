@@ -31,6 +31,10 @@ public class HzWorkProcedureDAOImpl  extends BaseSQLUtil implements HzWorkProced
         return super.update("HzWorkProcedureDAOImpl_update",hzWorkProcedure);
     }
 
+    public int update2(HzWorkProcedure hzWorkProcedure) {
+        return super.update("HzWorkProcedureDAOImpl_update2",hzWorkProcedure);
+    }
+
     @Override
     public int delete(String puid) {
         return super.update("HzWorkProcedureDAOImpl_delete",puid);
@@ -73,6 +77,17 @@ public class HzWorkProcedureDAOImpl  extends BaseSQLUtil implements HzWorkProced
     }
 
     @Override
+    public HzWorkProcess getHzWorkProcess2(String materielId, String projectId, String procedureDesc) {
+        Map<String,Object> map = new HashMap<>();
+        if(procedureDesc!=null&&!"null".equals(procedureDesc)){
+            map.put("procedureDesc",procedureDesc);
+        }
+        map.put("materielId",materielId);
+        map.put("projectId",projectId);
+        return (HzWorkProcess) super.findForObject("HzWorkProcedureDAOImpl_getHzWorkProcess2",map);
+    }
+
+    @Override
     public HzWorkProcedure getHzWorkProcessByMaterielId(String materielId) {
         Map<String,Object> map = new HashMap<>();
         map.put("materielId",materielId);
@@ -97,6 +112,16 @@ public class HzWorkProcedureDAOImpl  extends BaseSQLUtil implements HzWorkProced
     @Override
     public int deleteHzWorkProcessByMaterielIds(List<HzWorkProcedure> hzWorkProceduresDel) {
         return super.executeDelete(hzWorkProceduresDel,"HzWorkProcedureDAOImpl_deleteHzWorkProcessByMaterielIds");
+    }
+
+    @Override
+    public List<String> queryProcessDescsByPuid(List<String> puidList) {
+        return super.executeQueryByPass(new String(), puidList,"HzWorkProcedureDAOImpl_queryProcessDescsByPuid");
+    }
+
+    @Override
+    public int deleteHzWorkProcesses(List<HzWorkProcedure> hzWorkProceduresDel) {
+        return super.executeDelete(hzWorkProceduresDel, "HzWorkProcedureDAOImpl_deleteHzWorkProcesses");
     }
 
 }

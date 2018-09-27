@@ -31,6 +31,12 @@ public interface HzWorkProcessService {
      * @return
      */
     OperateResultMessageRespDTO updateHzWorkProcess(UpdateHzProcessReqDTO reqDTO);
+    /**
+     * 编辑一条数据2
+     * @param reqDTO
+     * @return
+     */
+    OperateResultMessageRespDTO updateHzWorkProcess2(UpdateHzProcessReqDTO reqDTO);
 
     /**
      * 删除一条数据
@@ -38,6 +44,12 @@ public interface HzWorkProcessService {
      * @return
      */
     OperateResultMessageRespDTO deleteHzWorkProcess(String puid);
+    /**
+     * 删除多条数据
+     * @param datas
+     * @return
+     */
+    OperateResultMessageRespDTO deleteHzWorkProcesses(Map<String, List<String>> datas);
 
     /**
      * 分页获取数据
@@ -50,6 +62,8 @@ public interface HzWorkProcessService {
 
     HzWorkProcessRespDTO findHzWorkProcess(String materielId,String projectId);
 
+    HzWorkProcessRespDTO findHzWorkProcess2(String materielId,String projectId, String procedureDesc);
+
     OperateResultMessageRespDTO applyMbomDataToHzMaterielOneKey(ApplyMbomDataTOHzMaterielReqDTO reqDTO);
 
     int doUpdateByBatch(Map<String,Object> map);
@@ -59,4 +73,6 @@ public interface HzWorkProcessService {
     void initProcess(String projectId);
 
     int deleteHzWorkProcessByMaterielIds(List<HzWorkProcedure> hzWorkProceduresDel);
+
+    List<String> queryProcessDesc(String puids);
 }

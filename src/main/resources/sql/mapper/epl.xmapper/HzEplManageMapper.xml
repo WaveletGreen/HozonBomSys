@@ -531,17 +531,17 @@
         )u
         WHERE
         ROWNUM &lt;=(#{limit,jdbcType=INTEGER}*(#{offset,jdbcType=INTEGER}+1))
-        <if test="lineId!=null and lineId!=''">
-            and P_BOM_LINE_ID like CONCAT(CONCAT('%',#{lineId, jdbcType=VARCHAR}), '%')
+        <if test="lineId != null and lineId!='' ">
+            and u.P_BOM_LINE_ID like concat(concat('%', #{lineId, jdbcType=VARCHAR}), '%')
         </if>
-        <if test="pBomOfWhichDept != null and pBomOfWhichDept!='' ">
-            and P_BOM_OF_WHICH_DEPT like CONCAT(CONCAT('%', #{pBomOfWhichDept, jdbcType=VARCHAR}), '%')
+        <if test="pBomOfWhichDept !=null and pBomOfWhichDept!='' ">
+            and u.P_BOM_OF_WHICH_DEPT like concat(concat('%', #{pBomOfWhichDept, jdbcType=VARCHAR}), '%')
         </if>
-        <if test="P_FASTENER==1">
-            and P_FASTENER is not null and P_FASTENER!='/'
+        <if test="pFastener==1">
+            and u.P_FASTENER is not null and u.P_FASTENER!='/'
         </if>
-        <if test="P_FASTENER==2">
-            and (P_FASTENER is null or P_FASTENER='/')
+        <if test="pFastener==2">
+            and (u.P_FASTENER is null or u.P_FASTENER='/')
         </if>
         order by CAST(P_SORT_NUM as FLOAT)) where rn &gt;(#{limit,jdbcType=INTEGER}*#{offset,jdbcType=INTEGER})
     </select>
@@ -580,7 +580,87 @@
   </select>
 
     <select id="HzEplManageRecordDAOImpl_findTotalCount2" resultType="java.lang.Integer" parameterType="java.util.HashMap">
-        select count(count(*)) from (
+        <!--select count(count(*)) from (-->
+        <!--select-->
+        <!--t.PUID PUID,-->
+        <!--t.P_BOM_LINE_ID,-->
+        <!--t.P_BOM_OF_WHICH_DEPT,-->
+        <!--t.P_FASTENER-->
+        <!--from (-->
+        <!--select-->
+        <!--t1.PUID PUID,-->
+        <!--t1.P_BOM_LINE_ID,-->
+        <!--t1.P_BOM_OF_WHICH_DEPT,-->
+        <!--t1.P_FASTENER-->
+        <!--from HZ_BOM_LINE_RECORD t1-->
+        <!--where t1.P_BOM_LINE_ID in(-->
+
+        <!--SELECT P_BOM_LINE_ID FROM HZ_BOM_LINE_RECORD t1 where t1.p_bom_digifax_id =(-->
+        <!--SELECT t3.puid FROM Hz_Bom_Main_Record t3 WHERE t3.p_cfg0_of_which_project_puid = (-->
+        <!--SELECT t2.puid FROM Hz_project_libs t2 where-->
+        <!--t2.puid=#{projectId,jdbcType=VARCHAR}))GROUP BY P_BOM_LINE_ID)-->
+        <!--AND-->
+        <!--rowid  in(-->
+        <!--SELECT min(rowid) FROM(-->
+        <!--SELECT P_BOM_LINE_ID FROM HZ_BOM_LINE_RECORD t1 WHERE t1.p_bom_digifax_id = (-->
+        <!--SELECT t3.puid FROM Hz_Bom_Main_Record t3 WHERE t3.p_cfg0_of_which_project_puid = (-->
+        <!--SELECT t2.puid FROM Hz_project_libs t2 where t2.puid=#{projectId,jdbcType=VARCHAR})) ) GROUP BY P_BOM_LINE_ID-->
+        <!--)-->
+
+        <!--)t-->
+        <!--LEFT OUTER JOIN HZ_MBOM_RECORD t2 on t.Puid = t2.P_BOM_PUID-->
+        <!--LEFT OUTER JOIN HZ_PBOM_RECORD t3 on t.PUID=t3.P_E_BOM_PUID-->
+
+        <!--UNION ALL-->
+
+        <!--select-->
+        <!--t3.PUID		PUID,-->
+        <!--t3.P_BOM_LINE_ID,-->
+        <!--t.P_BOM_OF_WHICH_DEPT,-->
+        <!--t.P_FASTENER-->
+        <!--from HZ_BOM_LINE_RECORD t-->
+        <!--LEFT OUTER JOIN HZ_MBOM_RECORD t2 on t.Puid = t2.P_BOM_PUID-->
+        <!--RIGHT  OUTER JOIN-->
+        <!--(-->
+        <!--select-->
+        <!--t1.PUID		PUID,-->
+        <!--t1.P_BOM_LINE_ID,-->
+        <!--t1.P_E_BOM_PUID		P_E_BOM_PUID-->
+        <!--from HZ_PBOM_RECORD t1-->
+        <!--where t1.P_BOM_LINE_ID in(-->
+
+        <!--SELECT P_BOM_LINE_ID FROM HZ_PBOM_RECORD t1 where t1.p_bom_digifax_id =(-->
+        <!--SELECT t3.puid FROM Hz_Bom_Main_Record t3 WHERE t3.p_cfg0_of_which_project_puid = (-->
+        <!--SELECT t2.puid FROM Hz_project_libs t2 where-->
+        <!--t2.puid=#{projectId,jdbcType=VARCHAR}))GROUP BY P_BOM_LINE_ID)-->
+        <!--AND-->
+        <!--rowid  in(-->
+        <!--SELECT min(rowid) FROM(-->
+        <!--SELECT P_BOM_LINE_ID FROM HZ_PBOM_RECORD t1 WHERE t1.p_bom_digifax_id = (-->
+        <!--SELECT t3.puid FROM Hz_Bom_Main_Record t3 WHERE t3.p_cfg0_of_which_project_puid = (-->
+        <!--SELECT t2.puid FROM Hz_project_libs t2 where t2.puid=#{projectId,jdbcType=VARCHAR})) ) GROUP BY P_BOM_LINE_ID-->
+        <!--)-->
+        <!--)t3	on t.PUID=t3.P_E_BOM_PUID-->
+        <!--)t-->
+        <!--where-->
+          <!--1=1-->
+        <!--<if test="lineId != null and lineId!='' ">-->
+            <!--and t.P_BOM_LINE_ID like concat(concat('%', #{lineId, jdbcType=VARCHAR}), '%')-->
+        <!--</if>-->
+        <!--<if test="pBomOfWhichDept !=null and pBomOfWhichDept!='' ">-->
+            <!--and t.P_BOM_OF_WHICH_DEPT like concat(concat('%', #{pBomOfWhichDept, jdbcType=VARCHAR}), '%')-->
+        <!--</if>-->
+        <!--<if test="pFastener==1">-->
+            <!--and t.P_FASTENER is not null and t.P_FASTENER!='/'-->
+        <!--</if>-->
+        <!--<if test="pFastener==2">-->
+            <!--and (t.P_FASTENER is null or t.P_FASTENER='/')-->
+        <!--</if>-->
+        <!--GROUP BY t.P_BOM_LINE_ID-->
+
+
+
+        select count(*) from (
         select
         t.PUID PUID,
         t.P_BOM_LINE_ID,
@@ -643,58 +723,166 @@
         )t3	on t.PUID=t3.P_E_BOM_PUID
         )t
         where
-          1=1
-          <if test="lineId != null and lineId!='' ">
-              and t.P_BOM_LINE_ID like concat(concat('%', #{lineId, jdbcType=VARCHAR}), '%')
-          </if>
-          <if test="pBomOfWhichDept !=null and pBomOfWhichDept!='' ">
-              and t.P_BOM_OF_WHICH_DEPT like concat(concat('%', #{pBomOfWhichDept, jdbcType=VARCHAR}), '%')
-          </if>
-          <if test="pFastener==1">
-              and t.P_FASTENER is not null and t.P_FASTENER!='/'
-          </if>
-          <if test="pFastener==2">
-              and (t.P_FASTENER is null or t.P_FASTENER='/')
-          </if>
-        GROUP BY t.P_BOM_LINE_ID
-    </select>
-  <!--分页查询 EBOM全信息-->
-  <select id="HzEbomRecordDAOImpl_getHzEbomList" resultMap="BaseResultMap" parameterType="java.util.HashMap">
-      select * FROM
-      (SELECT u.*,rownum as rn from
-      (SELECT * from HZ_BOM_LINE_RECORD
-      where p_bom_digifax_id=(
-      select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(
-      select t2.puid from Hz_project_libs t2
-      <where>
-        t2.puid=#{projectId,jdbcType=VARCHAR}))
-      <if test="puid != null">
-           and puid = #{puid,jdbcType=VARCHAR}
-      </if>
-      <if test="lineIndex != null and lineIndex!=''">
-          and LENGTH(TRANSLATE(P_LINE_INDEX,',0123456789','.'))=#{lineIndex,jdbcType=VARCHAR}
-      </if>
-      <if test="isHas != null and isHas==0">
-          and P_BOM_LINE_IS_HAS = 0
-      </if>
-      <if test="isHas != null and isHas==1">
-          and P_BOM_LINE_IS_HAS = 1
-      </if>
-      <if test="lineId != null and lineId!=''" >
-          and P_BOM_LINE_ID like CONCAT(CONCAT('%',#{lineId,jdbcType=VARCHAR}),'%')
-      </if>
-      <if test="pBomOfWhichDept != null and  pBomOfWhichDept!='' " >
-          and P_BOM_OF_WHICH_DEPT like CONCAT(CONCAT('%',#{pBomOfWhichDept,jdbcType=VARCHAR}),'%')
-      </if>
-      <if test="pBomLinePartClass != null and pBomLinePartClass!=''">
-          and P_BOM_LINE_PART_CLASS = #{pBomLinePartClass,jdbcType=VARCHAR}
-      </if>
-      <if test="pBomLinePartResource != null and pBomLinePartResource!=''">
-          and P_BOM_LINE_PART_RESOURCE = #{pBomLinePartResource,jdbcType=VARCHAR}
-      </if>
-          and P_EBOM_STATUS <![CDATA[ <> ]]>0  order by CAST(P_SORT_NUM as FLOAT))u
-      </where>
-         WHERE ROWNUM &lt;=#{limit,jdbcType=INTEGER}) where rn &gt;#{offset,jdbcType=INTEGER}
+
+        PUID IN (
+        SELECT
+        MAX (PUID)
+        FROM
+        (
+        SELECT
+        T .PUID PUID,
+        T .P_BOM_LINE_ID
+        FROM
+        (
+        SELECT
+        t1.PUID PUID,
+        t1.P_BOM_LINE_ID
+        FROM
+        HZ_BOM_LINE_RECORD t1
+        WHERE
+        t1.P_BOM_LINE_ID IN (
+        SELECT
+        P_BOM_LINE_ID
+        FROM
+        HZ_BOM_LINE_RECORD t1
+        WHERE
+        t1.p_bom_digifax_id = (
+        SELECT
+        t3.puid
+        FROM
+        Hz_Bom_Main_Record t3
+        WHERE
+        t3.p_cfg0_of_which_project_puid = (
+        SELECT
+        t2.puid
+        FROM
+        Hz_project_libs t2
+        WHERE
+        t2.puid = #{projectId,jdbcType=VARCHAR}
+        )
+        )
+        GROUP BY
+        P_BOM_LINE_ID
+        )
+        AND ROWID IN (
+        SELECT
+        MIN (ROWID)
+        FROM
+        (
+        SELECT
+        P_BOM_LINE_ID
+        FROM
+        HZ_BOM_LINE_RECORD t1
+        WHERE
+        t1.p_bom_digifax_id = (
+        SELECT
+        t3.puid
+        FROM
+        Hz_Bom_Main_Record t3
+        WHERE
+        t3.p_cfg0_of_which_project_puid = (
+        SELECT
+        t2.puid
+        FROM
+        Hz_project_libs t2
+        WHERE
+        t2.puid = #{projectId,jdbcType=VARCHAR}
+        )
+        )
+        )
+        GROUP BY
+        P_BOM_LINE_ID
+        )
+        ) T
+        LEFT OUTER JOIN HZ_MBOM_RECORD t2 ON T .Puid = t2.P_BOM_PUID
+        LEFT OUTER JOIN HZ_PBOM_RECORD t3 ON T .PUID = t3.P_E_BOM_PUID
+        UNION ALL
+        SELECT
+        t3.PUID PUID,
+        t3.P_BOM_LINE_ID
+        FROM
+        HZ_BOM_LINE_RECORD T
+        LEFT OUTER JOIN HZ_MBOM_RECORD t2 ON T .Puid = t2.P_BOM_PUID
+        RIGHT OUTER JOIN (
+        SELECT
+        t1.PUID PUID,
+        t1.P_BOM_LINE_ID,
+        t1.P_E_BOM_PUID P_E_BOM_PUID
+        FROM
+        HZ_PBOM_RECORD t1
+        WHERE
+        t1.P_BOM_LINE_ID IN (
+        SELECT
+        P_BOM_LINE_ID
+        FROM
+        HZ_PBOM_RECORD t1
+        WHERE
+        t1.p_bom_digifax_id = (
+        SELECT
+        t3.puid
+        FROM
+        Hz_Bom_Main_Record t3
+        WHERE
+        t3.p_cfg0_of_which_project_puid = (
+        SELECT
+        t2.puid
+        FROM
+        Hz_project_libs t2
+        WHERE
+        t2.puid = #{projectId,jdbcType=VARCHAR}
+        )
+        )
+        GROUP BY
+        P_BOM_LINE_ID
+        )
+        AND ROWID IN (
+        SELECT
+        MIN (ROWID)
+        FROM
+        (
+        SELECT
+        P_BOM_LINE_ID
+        FROM
+        HZ_PBOM_RECORD t1
+        WHERE
+        t1.p_bom_digifax_id = (
+        SELECT
+        t3.puid
+        FROM
+        Hz_Bom_Main_Record t3
+        WHERE
+        t3.p_cfg0_of_which_project_puid = (
+        SELECT
+        t2.puid
+        FROM
+        Hz_project_libs t2
+        WHERE
+        t2.puid = #{projectId,jdbcType=VARCHAR}
+        )
+        )
+        )
+        GROUP BY
+        P_BOM_LINE_ID
+        )
+        ) t3 ON T .PUID = t3.P_E_BOM_PUID
+        ) T
+        GROUP BY
+        T .P_BOM_LINE_ID
+        )
+
+        <if test="lineId != null and lineId!='' ">
+            and t.P_BOM_LINE_ID like concat(concat('%', #{lineId, jdbcType=VARCHAR}), '%')
+        </if>
+        <if test="pBomOfWhichDept !=null and pBomOfWhichDept!='' ">
+            and t.P_BOM_OF_WHICH_DEPT like concat(concat('%', #{pBomOfWhichDept, jdbcType=VARCHAR}), '%')
+        </if>
+        <if test="pFastener==1">
+            and t.P_FASTENER is not null and t.P_FASTENER!='/'
+        </if>
+        <if test="pFastener==2">
+            and (t.P_FASTENER is null or t.P_FASTENER='/')
+        </if>
+
   </select>
 
 
