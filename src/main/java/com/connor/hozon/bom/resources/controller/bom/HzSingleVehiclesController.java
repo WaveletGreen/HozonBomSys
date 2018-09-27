@@ -108,9 +108,12 @@ public class HzSingleVehiclesController extends BaseController {
                 _res.put("svlMotorCode", dto.getSvlMotorCode());
                 _list.add(_res);
             });
+            ret.put("totalCount", respDTOS.size());
+        }else {
+            ret.put("totalCount",0);
         }
-        ret.put("totalCount", respDTOS.size());
         ret.put("result", _list);
+
         return ret;
     }
     

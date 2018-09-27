@@ -359,6 +359,48 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
             return null;
         }
     }
+    @Override
+    public Page<HzWorkProcessRespDTO> findHzWorkProcessForPage2(HzWorkProcessByPageQuery query) {
+        try {
+            Page<HzWorkProcess> hzWorkProcessPage = hzWorkProcedureDAO.findHzWorkProcessByPage2(query);
+            if(hzWorkProcessPage == null || hzWorkProcessPage.getResult() == null){
+                return  new Page<>(hzWorkProcessPage.getPageNumber(),hzWorkProcessPage.getPageSize(),0);
+            }
+            int num = (hzWorkProcessPage.getPageNumber()-1)*hzWorkProcessPage.getPageSize();
+            List<HzWorkProcess> list = hzWorkProcessPage.getResult();
+            List<HzWorkProcessRespDTO> respDTOS = new ArrayList<>();
+            for(HzWorkProcess process:list){
+                HzWorkProcessRespDTO respDTO = new HzWorkProcessRespDTO();
+                respDTO.setNo(++num);
+                if(process.getFactoryCode() == null){
+                    respDTO.setFactoryCode("1001");
+                }else{
+                    respDTO.setFactoryCode(process.getFactoryCode());
+                }
+                respDTO.setpBurn(process.getpBurn());
+                respDTO.setpCount(process.getpCount());
+                respDTO.setpDirectLabor(process.getpDirectLabor());
+                respDTO.setpIndirectLabor(process.getpIndirectLabor());
+                respDTO.setpMachineMaterialLabor(process.getpMachineMaterialLabor());
+                respDTO.setpMachineLabor(process.getpMachineLabor());
+                respDTO.setpOtherCost(process.getpOtherCost());
+                respDTO.setpProcedureCode(process.getpProcedureCode());
+                respDTO.setpProcedureDesc(process.getpProcedureDesc());
+                respDTO.setpWorkCode(process.getWorkCenterCode());
+                respDTO.setpWorkDesc(process.getWorkCenterDesc());
+                respDTO.setMaterielId(process.getPuid());
+                respDTO.setpMaterielCode(process.getpMaterielCode());
+                respDTO.setpMaterielDesc(process.getpMaterielDesc());
+                respDTO.setControlCode(process.getControlCode());
+                respDTO.setPurpose(process.getPurpose());
+                respDTO.setState(process.getState());
+                respDTOS.add(respDTO);
+            }
+            return new Page<>(hzWorkProcessPage.getPageNumber(),hzWorkProcessPage.getPageSize(),hzWorkProcessPage.getTotalCount(),respDTOS);
+        }catch (Exception e){
+            return null;
+        }
+    }
 
     @Override
     public HzWorkProcessRespDTO findHzWorkProcess(String materielId,String projectId) {
@@ -444,5 +486,60 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
     @Override
     public int doUpdateByBatch(Map<String, Object> map) {
         return hzWorkProcedureDAO.updateSendFlag(map);
+    }
+
+    @Override
+    public int insertHzWorkProcedures(List<HzWorkProcedure> hzWorkProcedures) {
+        return hzWorkProcedureDAO.insertHzWorkProcedures(hzWorkProcedures);
+    }
+
+    /**
+     * 工艺路线初始化
+     * @param projectId
+     */
+    @Override
+    public void initProcess(String projectId) {
+        //查询所有数据类型为11、21、71的物料
+        List<HzMaterielRecord> hzMaterielRecords = hzMaterielDAO.findHzMaterielForProcess(projectId);
+        //查询所有工艺路线
+        List<HzWorkProcedure> hzWorkProcedures = hzWorkProcedureDAO.findHzWorkProcessByProjectId(projectId);
+        List<HzMaterielRecord> hzMaterielRecordAddList = new ArrayList<HzMaterielRecord>();
+
+        //找出所有没有工艺路线的物料
+        for(HzMaterielRecord hzMaterielRecord : hzMaterielRecords){
+            boolean flag = false;
+            for(HzWorkProcedure hzWorkProcedure : hzWorkProcedures){
+                if(hzMaterielRecord.getPuid().equals(hzWorkProcedure.getMaterielId())){
+                    flag = true;
+                    break;
+                }
+            }
+            if(!flag){
+                hzMaterielRecordAddList.add(hzMaterielRecord);
+            }
+        }
+        //为物料生成工艺路线
+        List<HzWorkProcedure> hzWorkProceduresAdd = new ArrayList<HzWorkProcedure>();
+        for(HzMaterielRecord hzMaterielRecord : hzMaterielRecordAddList ){
+            HzWorkProcedure hzWorkProcedure = new HzWorkProcedure();
+            //puid
+            String puid = UUID.randomUUID().toString();
+            hzWorkProcedure.setPuid(puid);
+            //项目ID
+            hzWorkProcedure.setProjectId(projectId);
+            //物料id
+            hzWorkProcedure.setMaterielId(hzMaterielRecord.getPuid());
+            //工厂
+            hzWorkProcedure.setpFactoryId("1001");
+            hzWorkProceduresAdd.add(hzWorkProcedure);
+        }
+        if(hzWorkProceduresAdd!=null&&hzWorkProceduresAdd.size()!=0){
+            hzWorkProcedureDAO.insertHzWorkProcedures(hzWorkProceduresAdd);
+        }
+    }
+
+    @Override
+    public int deleteHzWorkProcessByMaterielIds(List<HzWorkProcedure> hzWorkProceduresDel) {
+        return hzWorkProcedureDAO.deleteHzWorkProcessByMaterielIds(hzWorkProceduresDel);
     }
 }

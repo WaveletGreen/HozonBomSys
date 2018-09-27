@@ -5,6 +5,7 @@ import com.connor.hozon.bom.resources.page.Page;
 import sql.pojo.work.HzWorkProcedure;
 import sql.pojo.work.HzWorkProcess;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -21,9 +22,17 @@ public interface HzWorkProcedureDAO {
 
     Page<HzWorkProcess> findHzWorkProcessByPage(HzWorkProcessByPageQuery query);
 
+    Page<HzWorkProcess> findHzWorkProcessByPage2(HzWorkProcessByPageQuery query);
+
     HzWorkProcess getHzWorkProcess(String materielId,String projectId);
 
     HzWorkProcedure getHzWorkProcessByMaterielId(String materielId);
 
     int updateSendFlag(Map<String,Object> map);
+
+    int insertHzWorkProcedures(List<HzWorkProcedure> hzWorkProcedures);
+
+    List<HzWorkProcedure> findHzWorkProcessByProjectId(String projectId);
+
+    int deleteHzWorkProcessByMaterielIds(List<HzWorkProcedure> hzWorkProceduresDel);
 }
