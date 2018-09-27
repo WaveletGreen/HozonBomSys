@@ -75,6 +75,7 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         registry.addViewController("/craftFitting2").setViewName("/bomManage/pbom/processOfFitting/craftFitting2");
         //PBOM工艺辅料页面
         registry.addViewController("/processAids").setViewName("/bomManage/pbom/processAids/processAids");
+        registry.addViewController("/accessoriesLibrary").setViewName("/resourcesLibrary/accessoriesLibrary/accessoriesLibrary");
         //MBOM维护页面
         registry.addViewController("/mbomMaintenance").setViewName("/bomManage/mbom/mbomMaintenance/mbomMaintenance");
         //Mbom的超级MBOM页面
