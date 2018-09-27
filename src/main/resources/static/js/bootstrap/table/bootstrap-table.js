@@ -1109,7 +1109,10 @@
                 toolbar.innerHTML = "<span class='" + this.options.toolbars[i].iconCls + "' aria-hidden='true'></span>" + this.options.toolbars[i].text;
                 toolbargroup.appendChild(toolbar);
             }
-            $('.fixed-table-toolbar').append(toolbargroup);
+            //源码
+            //$('.fixed-table-toolbar').append(toolbargroup);
+            //直接修改源码
+            this.$toolbar.append(toolbargroup);
         }
 
         if (typeof this.options.toolbar === 'string' || typeof this.options.toolbar === 'object') {
@@ -2079,7 +2082,7 @@
             var param = {
                 page: this.pageNumber,// 起始页面
                 limit: this.pageSize, // 页面大小
-                offset:params.offset//忘记加offset了吧
+                offset: params.offset//忘记加offset了吧
             }
             // if(formId!=undefined||formId!=''){
             //     $.each($("#"+formId).find("input"),function(index,info){
@@ -2088,7 +2091,7 @@
             // }
             if (formId != undefined || formId != '') {
                 console.log(formId);
-                $.each($("#"+formId).find("input"), function (index, info) {
+                $.each($("#" + formId).find("input"), function (index, info) {
                     param[info.name] = info.value;
                     console.log(param[info.name]);
                 })

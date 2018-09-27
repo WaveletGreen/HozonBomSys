@@ -3,6 +3,7 @@ package com.connor.hozon.bom.bomSystem.controller.cfg;
 import com.connor.hozon.bom.bomSystem.dao.impl.bom.HzBomLineRecordDaoImpl;
 import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
 import com.connor.hozon.bom.bomSystem.option.SpecialFeatureOption;
+import com.connor.hozon.bom.bomSystem.option.SpecialSetting;
 import com.connor.hozon.bom.bomSystem.service.bom.HzBomDataService;
 import com.connor.hozon.bom.bomSystem.service.bom.HzBomLineRecordService;
 import com.connor.hozon.bom.bomSystem.service.cfg.*;
@@ -22,6 +23,7 @@ import sql.pojo.cfg.*;
 import sql.pojo.epl.HzEPLManageRecord;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static com.connor.hozon.bom.bomSystem.helper.StringHelper.checkString;
 
@@ -71,10 +73,13 @@ public class HzCfg0ModelColorController {
 
     @RequestMapping(value = "/addPage", method = RequestMethod.GET)
     public String addPage(@RequestParam String projectPuid, Model model) {
-        List<HzCfg0OptionFamily> columnList = hzCfg0OptionFamilyService.getFamilies(projectPuid, 0, 1);
+        List<HzCfg0OptionFamily> _columnList = hzCfg0OptionFamilyService.selectForColorBluePrint(projectPuid, 1);//getFamilies(projectPuid, 0, 1);
+        List<HzCfg0OptionFamily> columnList = new ArrayList<>();
+        /**过滤油漆车身总成*/
+        columnList.addAll(_columnList.stream().filter(c -> false == SpecialFeatureOption.YQCSCODE.getDesc().equals(c.getpOptionfamilyName()))
+                .collect(Collectors.toList()));
         List<HzCfg0ColorSet> colorList = hzCfg0ColorSetService.doGetAll();//颜色库所有数据
         List<HzCfg0ColorSet> _colorList = new ArrayList<>(colorList);//将colorList复制到_colorList
-
         HzCfg0ModelColor mc = new HzCfg0ModelColor();
         HzCfg0MainRecord mainRecord = hzCfg0MainService.doGetbyProjectPuid(projectPuid);
         mc.setpCfg0MainRecordOfMC(mainRecord.getPuid());
@@ -123,7 +128,11 @@ public class HzCfg0ModelColorController {
         }
         HzCfg0MainRecord main = hzCfg0MainService.doGetByPrimaryKey(currentModel.getpCfg0MainRecordOfMC());
 //        List<String> columnList = hzCfg0OptionFamilyService.doGetColumnDef(main.getpCfg0OfWhichProjectPuid(), "\t");
-        List<HzCfg0OptionFamily> columnList = hzCfg0OptionFamilyService.getFamilies(main.getpCfg0OfWhichProjectPuid(), 0, 1);
+        List<HzCfg0OptionFamily> _columnList = hzCfg0OptionFamilyService.selectForColorBluePrint(main.getpCfg0OfWhichProjectPuid(), 1);//getFamilies(main.getpCfg0OfWhichProjectPuid(), 0, 1);
+        List<HzCfg0OptionFamily> columnList = new ArrayList<>();
+        /**过滤油漆车身总成*/
+        columnList.addAll(_columnList.stream().filter(c -> false == SpecialFeatureOption.YQCSCODE.getDesc().equals(c.getpOptionfamilyName()))
+                .collect(Collectors.toList()));
         List<HzCfg0ColorSet> colorList = hzCfg0ColorSetService.doGetAll();
         ArrayList<String> orgValue = new ArrayList<>();
         List<HzColorModel> cm = hzColorModelService.doSelectByModelUidWithColor(puid);
@@ -295,6 +304,15 @@ public class HzCfg0ModelColorController {
                     return result;
                 } else {
                     modelColor.getMapOfCfg0().put(fromDb.getPuid(), modelColor.getpColorUid());
+                }
+            }
+            /**
+             * 追加无色
+             */
+            if (SpecialSetting.COLOR_MODEL_APPEND_COLORLESS) {
+                List<HzCfg0OptionFamily> withoutColor = hzCfg0OptionFamilyService.selectForColorBluePrint(mainRecord.getpCfg0OfWhichProjectPuid(), 0);
+                for (int i = 0; i < withoutColor.size(); i++) {
+                    modelColor.getMapOfCfg0().put(withoutColor.get(i).getPuid(), "-");
                 }
             }
             modelColor.setPuid(UUIDHelper.generateUpperUid());

@@ -259,8 +259,8 @@
       and (t1.P_BOM_LINE_PART_NAME like '白车身总成%'
       or t1.P_BOM_LINE_PART_NAME like '油漆车身总成%')
     </where>
-    start with t1.puid = #{puid,jdbcType=VARCHAR} and t1.P_PBOM_STATUS<![CDATA[ <> ]]>0
-    connect by prior t1.puid = t1.p_parent_uid  and t1.P_PBOM_STATUS<![CDATA[ <> ]]>0
+    start with t1.P_E_BOM_PUID = #{puid,jdbcType=VARCHAR} and t1.P_PBOM_STATUS<![CDATA[ <> ]]>0
+    connect by prior t1.P_E_BOM_PUID = t1.p_parent_uid  and t1.P_PBOM_STATUS<![CDATA[ <> ]]>0
     order by CAST(t1.P_SORT_NUM as FLOAT)
   </select>
 

@@ -16,8 +16,10 @@ public class BasicDaoImpl<T> implements BasicDao<T> {
      * 目标类
      */
     protected Class clz;
-
-
+    /**
+     * 目标类完整限定名
+     */
+    protected String clzName;
     @Autowired
     protected IBaseSQLUtil baseSQLUtil;
 
