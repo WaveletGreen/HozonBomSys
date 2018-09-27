@@ -61,7 +61,7 @@ public class HzSingleVehiclesController extends BaseController {
     }
     
     
-    @RequestMapping(value = "get/detail",method = RequestMethod.GET)
+    @RequestMapping(value = "getDetail",method = RequestMethod.GET)
     public String getDetailBikeBomToPage(String id,Model model){
         model.addAttribute("data",id);
         return "bikeBom/detailBikeBom";
