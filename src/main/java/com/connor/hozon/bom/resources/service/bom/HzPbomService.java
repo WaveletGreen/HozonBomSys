@@ -126,4 +126,11 @@ public interface HzPbomService {
      * @Author Fancyears·Maylos·Mayways
      */
     JSONObject simulateCraftingPart(Map<String, Object> param);
+
+    /**
+     * 真的生成工艺合件
+     * @param param
+     * @return
+     */
+    JSONObject doGenerateProcessCompose(Map<String, Object> param);
 }

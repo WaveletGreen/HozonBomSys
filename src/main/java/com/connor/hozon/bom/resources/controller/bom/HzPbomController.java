@@ -264,14 +264,28 @@ public class HzPbomController extends BaseController {
 
     /**
      * 合成工艺合件
-     *@Autor Fancyears·Malos
+     *
      * @param
      * @param param
+     * @Autor Fancyears·Malos
      */
     @RequestMapping(value = "/add/processCompose2", method = RequestMethod.POST)
     @ResponseBody
     public JSONObject addProcessCompose2(@RequestBody Map<String, Object> param) {
         return hzPbomService.simulateCraftingPart(param);
+    }
+
+    /**
+     * 合成工艺合件
+     *
+     * @param
+     * @param param
+     * @Autor Fancyears·Malos
+     */
+    @RequestMapping(value = "/doGenerateProcessCompose", method = RequestMethod.POST)
+    @ResponseBody
+    public JSONObject doGenerateProcessCompose(@RequestBody Map<String, Object> param) {
+        return hzPbomService.doGenerateProcessCompose(param);
     }
 
 
