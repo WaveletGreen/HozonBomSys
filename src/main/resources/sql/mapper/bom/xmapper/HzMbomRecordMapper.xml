@@ -570,7 +570,7 @@
 
     <!--获取超级MBOM一条信息-->
     <select id="HzMbomRecordDAOImpl_getHzMbom" parameterType="java.util.HashMap" resultMap="MbomResultMap">
-        select t.* from HZ_BOM_LINE_RECORD t
+        select t.* from HZ_MBOM_RECORD t
         where t.p_bom_digifax_id=(
         select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(
         select t2.puid from Hz_project_libs t2
@@ -685,6 +685,9 @@
         select t2.puid from Hz_project_libs t2
         <where>
             t2.puid = #{projectId,jdbcType=VARCHAR}))
+            <if test="colorId != null and colorId !='' " >
+                and t.P_COLOR_PUID =#{colorId,jdbcType=VARCHAR}
+            </if>
         </where>
         start with t.P_BOM_PUID = #{puid,jdbcType=VARCHAR} and t.P_MBOM_STATUS <![CDATA[ <> ]]>0
         connect by prior t.P_BOM_PUID = t.p_parent_uid and t.P_MBOM_STATUS <![CDATA[ <> ]]>0

@@ -522,14 +522,21 @@ public class HzMbomServiceImpl implements HzMbomService{
 
 
                 for(HzPbomLineRecord record:records){
+                    if(null == record.getpBomLinePartResource()){
+                        continue;
+                    }
+                    if(null == record.getLineId()){
+                        continue;
+                    }
                     Set<HzPbomLineRecord> bodyOfWhiteSet = new HashSet<>();
                     boolean b = false;
                     if(Integer.valueOf(1).equals(record.getColorPart())){//是颜色件 找出对应的颜色 多色时，需要乘以颜色信息
                         List<HzConfigBomColorBean> beans = iHzConfigBomColorService.doSelectBy2YUidWithProject(record.geteBomPuid(), projectId);
                         if(ListUtil.isNotEmpty(beans)){
                             for(int i =0;i<beans.size();i++){
-                                if(null == beans.get(i).getColorCode()){
+                                if(null == beans.get(i).getColorCode() ||"-".equals(beans.get(i).getColorCode())){
                                     beans.remove(beans.get(i));
+                                    i--;
                                 }
                             }
                         }

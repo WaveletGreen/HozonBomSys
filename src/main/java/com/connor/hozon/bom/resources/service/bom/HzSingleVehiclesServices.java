@@ -1,5 +1,6 @@
 package com.connor.hozon.bom.resources.service.bom;
 
+import com.connor.hozon.bom.resources.domain.dto.request.AnalysisSingleVehicleBOMReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.request.UpdateHzSingleVehiclesReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzSingleVehiclesRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.OperateResultMessageRespDTO;
@@ -40,4 +41,6 @@ public interface HzSingleVehiclesServices {
      * @return
      */
     HzSingleVehiclesRespDTO getSingleVehiclesById(String projectId,Long id);
+
+
 }

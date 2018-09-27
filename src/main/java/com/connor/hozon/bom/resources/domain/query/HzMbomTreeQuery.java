@@ -16,7 +16,23 @@ public class HzMbomTreeQuery {
      */
     private String puid;
 
+    /**
+     * 数据库表名
+     */
     private String tableName;
+
+    /**
+     * 颜色id
+     */
+    private String colorId;
+
+    public String getColorId() {
+        return colorId;
+    }
+
+    public void setColorId(String colorId) {
+        this.colorId = colorId;
+    }
 
     public String getTableName() {
         return tableName;

@@ -180,6 +180,7 @@ public class FileUploadServiceImpl implements FileUploadService {
             }
             ExcelUtil.deleteFile();
         }catch (Exception e){
+            e.printStackTrace();
             return OperateResultMessageRespDTO.getFailResult();
 
         }
