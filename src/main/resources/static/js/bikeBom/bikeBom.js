@@ -40,10 +40,9 @@ function initTable(url) {
         align: 'center',
         valign: 'middle',
         formatter: function (value, row, index) {
-            var id = row.id
             return [
                 // '<a href="ewo/base/info?id='+id +'">' + value + '</a>'
-                '<a href="javascript:void(0)" onclick="queryLou(' + id + ')">' + value + '</a>'
+                '<a href="javascript:void(0)" onclick="queryLou(' +  row.id +  ')">' + value + '</a>'
             ].join("");
         }
     });
@@ -182,9 +181,10 @@ function initTable(url) {
         ],
     });
     $table.bootstrapTable('hideColumn', 'id');
-    function queryLou(id) {
-        window.location.href="ewo/base/info?id="+id;
-    }
     //     }
     // })
+}
+
+function queryLou(row) {
+    window.location.href="singleVehicles/get/detail?id="+row.id;
 }
