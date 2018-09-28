@@ -7,7 +7,7 @@ $(document).ready((function (){
 }))
 function doRefresh(projectId){
     $('#routingDataTable').bootstrapTable('destroy');
-    var url = "work/process/record/page?projectId="+projectId;
+    var url = "work/process/record/page2?projectId="+projectId;
     initTable(url);
 }
 function doQuery() {
@@ -131,7 +131,7 @@ function initTable(url) {
                             }
                             window.Ewin.dialog({
                                 title: "修改",
-                                url: "work/process/updateWorkProcess?projectId="+projectId+"&materielId="+rows[0].materielId,
+                                url: "work/process/updateWorkProcess2?projectId="+projectId+"&materielId="+rows[0].materielId+"&procedureDesc="+rows[0].pProcedureDesc,
                                 gridId: "gridId",
                                 width: 500,
                                 height: 500
@@ -181,6 +181,8 @@ function initTable(url) {
                         iconCls: 'glyphicon glyphicon-remove',
                         handler: function () {
                             var rows = $table.bootstrapTable('getSelections');
+                            var materielIds = [];
+                            var procedureDesc = [];
                             if (rows.length == 0) {
                                 window.Ewin.alert({message: '请选择一条需要删除的数据!'});
                                 return false;
@@ -189,15 +191,20 @@ function initTable(url) {
                                 '<div style="max-height: 400px;overflow:scroll;"><table class="table table-striped tableNormalStyle" >';
                             for (var index in rows) {
                                 _table += '<tr><td>' + rows[index].pMaterielDesc + '</td></tr>';
+                                materielIds.push(rows[index].materielId);
+                                procedureDesc.push(rows[index].pProcedureDesc);
                             }
+                            var data = {};
+                            data["materielIds"] = materielIds;
+                            data["procedureDesc"] = procedureDesc;
                             _table += '</table></div>';
                             window.Ewin.confirm({title: '提示', message: _table, width: 500}).on(function (e) {
                                 if (e) {
                                     $.ajax({
                                         type: "POST",
                                         //ajax需要添加打包名
-                                        url: "work/process/delete?materielId="+rows[0].materielId,
-                                        // data: JSON.stringify(rows),
+                                        url: "work/process/delete2",
+                                        data: JSON.stringify(data),
                                         contentType: "application/json",
                                         success: function (result) {
                                             /*if (result.status) {

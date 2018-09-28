@@ -18,6 +18,8 @@ public interface HzWorkProcedureDAO {
 
     int update(HzWorkProcedure hzWorkProcedure);
 
+    int update2(HzWorkProcedure hzWorkProcedure);
+
     int delete(String puid);
 
     Page<HzWorkProcess> findHzWorkProcessByPage(HzWorkProcessByPageQuery query);
@@ -25,6 +27,8 @@ public interface HzWorkProcedureDAO {
     Page<HzWorkProcess> findHzWorkProcessByPage2(HzWorkProcessByPageQuery query);
 
     HzWorkProcess getHzWorkProcess(String materielId,String projectId);
+
+    HzWorkProcess getHzWorkProcess2(String materielId,String projectId, String procedureDesc);
 
     HzWorkProcedure getHzWorkProcessByMaterielId(String materielId);
 
@@ -35,4 +39,8 @@ public interface HzWorkProcedureDAO {
     List<HzWorkProcedure> findHzWorkProcessByProjectId(String projectId);
 
     int deleteHzWorkProcessByMaterielIds(List<HzWorkProcedure> hzWorkProceduresDel);
+
+    List<String> queryProcessDescsByPuid(List<String> puidList);
+
+    int deleteHzWorkProcesses(List<HzWorkProcedure> hzWorkProceduresDel);
 }

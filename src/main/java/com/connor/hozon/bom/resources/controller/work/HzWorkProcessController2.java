@@ -73,16 +73,16 @@ public class HzWorkProcessController2 extends BaseController {
 //        model.addAttribute("data",respDTO);
 //        return  "bomManage/mbom/routingData/addRoutingData";
 //    }
-//    /**
-//     * 跳转到工艺路线修改页面
-//     * @return
-//     */
-//    @RequestMapping(value = "updateWorkProcess",method = RequestMethod.GET)
-//    public String updateWorkProcessToPage(String materielId, String projectId, Model model){
-//        HzWorkProcessRespDTO respDTO = hzWorkProcessService.findHzWorkProcess(materielId,projectId);
-//        model.addAttribute("data",respDTO);
-//      return  "bomManage/mbom/routingData/updateRoutingData";
-//    }
+    /**
+     * 跳转到工艺路线修改页面
+     * @return
+     */
+    @RequestMapping(value = "updateWorkProcess2",method = RequestMethod.GET)
+    public String updateWorkProcessToPage(String materielId, String projectId,String procedureDesc, Model model){
+        HzWorkProcessRespDTO respDTO = hzWorkProcessService.findHzWorkProcess2(materielId, projectId, procedureDesc);
+        model.addAttribute("data",respDTO);
+      return  "bomManage/mbom/routingData/updateRoutingData2";
+    }
 //
 //
 //    /**
@@ -96,27 +96,27 @@ public class HzWorkProcessController2 extends BaseController {
 //        writeAjaxJSONResponse(ResultMessageBuilder.build(OperateResultMessageRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
 //    }
 //
-//    /**
-//     * 编辑一条记录
-//     * @param reqDTO
-//     * @param response
-//     */
-//    @RequestMapping(value = "update",method = RequestMethod.POST)
-//    public void updateHzWorkProcessToDB(@RequestBody UpdateHzProcessReqDTO reqDTO, HttpServletResponse response){
-//        OperateResultMessageRespDTO respDTO = hzWorkProcessService.updateHzWorkProcess(reqDTO);
-//        writeAjaxJSONResponse(ResultMessageBuilder.build(OperateResultMessageRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
-//    }
-//
-//    /**
-//     * 删除一条记录
-//     * @param materielId
-//     * @param response
-//     */
-//    @RequestMapping(value = "delete",method = RequestMethod.POST)
-//    public void deleteHzWorkProcess(String materielId,HttpServletResponse response){
-//        OperateResultMessageRespDTO respDTO =  hzWorkProcessService.deleteHzWorkProcess(materielId);
-//        writeAjaxJSONResponse(ResultMessageBuilder.build(OperateResultMessageRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
-//    }
+    /**
+     * 编辑一条记录
+     * @param reqDTO
+     * @param response
+     */
+    @RequestMapping(value = "update2",method = RequestMethod.POST)
+    public void updateHzWorkProcessToDB(@RequestBody UpdateHzProcessReqDTO reqDTO, HttpServletResponse response){
+        OperateResultMessageRespDTO respDTO = hzWorkProcessService.updateHzWorkProcess2(reqDTO);
+        writeAjaxJSONResponse(ResultMessageBuilder.build(OperateResultMessageRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
+    }
+
+    /**
+     * 删除一条记录
+     * @param datas
+     * @param response
+     */
+    @RequestMapping(value = "delete2",method = RequestMethod.POST)
+    public void deleteHzWorkProcess(@RequestBody Map<String, List<String>> datas,HttpServletResponse response){
+        OperateResultMessageRespDTO respDTO =  hzWorkProcessService.deleteHzWorkProcesses(datas);
+        writeAjaxJSONResponse(ResultMessageBuilder.build(OperateResultMessageRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
+    }
 
     /**
      * 分页获取工艺数据 记录
@@ -199,8 +199,21 @@ public class HzWorkProcessController2 extends BaseController {
      */
     @RequestMapping(value = "four2",method = RequestMethod.GET)
     public String updateWorkProcessFourToPage(String puids,String projectId,String type, Model model){
+
+        List<String> processDescHeadList = hzWorkProcessService.queryProcessDesc(puids);
         model.addAttribute("data",puids);
         model.addAttribute("type",type);
+        for(String processDescHead : processDescHeadList){
+            if("冲压".equals(processDescHead)){
+                model.addAttribute("cy",processDescHead);
+            }else if("焊装".equals(processDescHead)){
+                model.addAttribute("hz",processDescHead);
+            }else if("涂装".equals(processDescHead)){
+                model.addAttribute("tz",processDescHead);
+            }else if("总装".equals(processDescHead)){
+                model.addAttribute("zz",processDescHead);
+            }
+        }
         return  "bomManage/mbom/routingData/updateFourProcess";
     }
 
@@ -243,10 +256,10 @@ public class HzWorkProcessController2 extends BaseController {
             hzWorkProcedure.setProjectId(projectId);
             hzWorkProceduresDel.add(hzWorkProcedure);
         }
-        int delNum = hzWorkProcessService.deleteHzWorkProcessByMaterielIds(hzWorkProceduresDel);
-        if(delNum==puidArr.length){
-            int insertNum = hzWorkProcessService.insertHzWorkProcedures(hzWorkProceduresAdd);
-        }
+        //如有初始工艺路线，将其删除
+        hzWorkProcessService.deleteHzWorkProcessByMaterielIds(hzWorkProceduresDel);
+        //添加新生工艺路线
+        hzWorkProcessService.insertHzWorkProcedures(hzWorkProceduresAdd);
 
         result.put("success",true);
         return result;
