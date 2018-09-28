@@ -264,10 +264,9 @@ public class HzPbomController extends BaseController {
 
     /**
      * 合成工艺合件
-     *
+     *@Autor Fancyears·Malos
      * @param
      * @param param
-     * @Autor Fancyears·Malos
      */
     @RequestMapping(value = "/add/processCompose2", method = RequestMethod.POST)
     @ResponseBody
