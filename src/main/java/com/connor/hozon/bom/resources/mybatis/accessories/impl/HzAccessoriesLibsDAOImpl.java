@@ -62,4 +62,11 @@ public class HzAccessoriesLibsDAOImpl  extends BaseSQLUtil implements HzAccessor
     public HzAccessoriesLibs getHzAccessoriesLibsByCode(String pMaterielCode) {
         return (HzAccessoriesLibs)super.findForObject("HzAccessoriesLibsDAOImpl_findByCode",pMaterielCode);
     }
+
+    @Override
+    public HzAccessoriesLibs queryAccessoriesByMaterielCode(String materielCode) {
+        HzAccessoriesLibs hzAccessoriesLibs = new HzAccessoriesLibs();
+        hzAccessoriesLibs.setpMaterielCode(materielCode);
+        return super.executeQueryById(hzAccessoriesLibs, "HzAccessoriesLibsDAOImpl_queryAccessoriesByMaterielCode");
+    }
 }

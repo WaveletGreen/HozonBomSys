@@ -126,4 +126,8 @@ public interface HzPbomService {
      * @Author Fancyears·Maylos·Mayways
      */
     JSONObject simulateCraftingPart(Map<String, Object> param);
+
+    JSONObject queryAccessories(String materielCode);
+
+    JSONObject addAccessories(String puid, String materielCode, String projectId);
 }

@@ -103,4 +103,8 @@ public interface HzPbomRecordDAO {
 
 
     List<HzPbomLineRecord> getSameNameLineId(String lineId,String projectId);
+
+    int insertAccessories(String puid, String materielCode);
+
+    List<HzPbomLineRecord> queryAllBomLineIdByPuid(String puid);
 }

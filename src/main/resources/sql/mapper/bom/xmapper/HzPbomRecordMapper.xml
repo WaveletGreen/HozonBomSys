@@ -620,4 +620,21 @@
       and t1.P_BOM_LINE_IS_2Y=1
     </where>
   </select>
+  
+  <insert id="HzPbomRecordDAOImpl_insertAccessories" parameterType="java.util.Map">
+      insert into HZ_PBOM_RECORD
+      set (PUID, P_BOM_LINE_ID, P_BOM_LINE_PART_NAME)
+
+  </insert>
+
+  <select id="HzPbomRecordDAOImpl_queryAllBomLineIdByPuid" parameterType="java.lang.String" resultMap="HzPbomLineRecord">
+    select
+      <include refid="Pbom_List"/>
+    from
+      HZ_PBOM_RECORD
+    where
+      P_BOM_LINE_ID = (select P_BOM_LINE_ID from HZ_PBOM_RECORD where PUID = #{puid, jdbcType=VARCHAR})
+    and
+      P_PBOM_STATUS = 1
+  </select>
 </mapper>

@@ -275,4 +275,15 @@ public class HzPbomController extends BaseController {
     }
 
 
+    @RequestMapping("/query/accessories")
+    @ResponseBody
+    public JSONObject queryAccessories(String materielCode){
+        return hzPbomService.queryAccessories(materielCode);
+    }
+
+    @RequestMapping("/add/accessories")
+    @ResponseBody
+    public JSONObject addAccessories(String materielCode, String puid, String projectId){
+        return hzPbomService.addAccessories(puid, materielCode, projectId);
+    }
 }
