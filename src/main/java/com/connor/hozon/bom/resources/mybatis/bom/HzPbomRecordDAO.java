@@ -104,6 +104,10 @@ public interface HzPbomRecordDAO {
 
     List<HzPbomLineRecord> getSameNameLineId(String lineId,String projectId);
 
-    List<HzPbomLineRecord> doggyfindMyChildrenByMyUid(String s);
-
+    /**
+     * 获取当前BOM的子一层结构
+     * @param projectId
+     * @return
+     */
+    List<HzPbomLineRecord> getFirstLevelBomByParentId(String parentId,String projectId);
 }

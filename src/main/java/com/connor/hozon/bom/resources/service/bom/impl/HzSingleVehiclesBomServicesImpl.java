@@ -142,8 +142,8 @@ public class HzSingleVehiclesBomServicesImpl implements HzSingleVehiclesBomServi
             List<HzSingleVehiclesBomRecord> records = recordPage.getResult();
             List<HzSingleVehiclesBomRespDTO> respDTOS = new ArrayList<>();
             if(ListUtil.isNotEmpty(records)){
+                int num = (recordPage.getPageNumber() - 1) * recordPage.getPageSize();
                 for(HzSingleVehiclesBomRecord record :records){
-                    int num = (recordPage.getPageNumber() - 1) * recordPage.getPageSize();
                     HzSingleVehiclesBomRespDTO respDTO = HzSingleVehiclesFactory.hzSingleVehiclesBomRecordToRespDTO(record);
                     respDTO.setNo(++num);
                     respDTOS.add(respDTO);

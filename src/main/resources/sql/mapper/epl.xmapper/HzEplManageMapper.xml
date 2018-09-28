@@ -973,20 +973,15 @@
     select t2.puid from Hz_project_libs t2
     <where>
       t2.puid=#{projectId,jdbcType=VARCHAR}))
-      <if test="colorPart != null">
-        and t1.P_COLOR_PART = #{colorPart,jdbcType=INTEGER}
-    </if>
-        <if test="isCarPart == 1">
-            and (t1.P_BOM_LINE_PART_RESOURCE ='采购件'or
-            t1.P_BOM_LINE_PART_RESOURCE ='自制总成' or
-            t1.P_BOM_LINE_PART_RESOURCE ='自制单件'or
-            t1.P_BOM_LINE_PART_RESOURCE ='自用标准件'or
-            t1.P_BOM_LINE_PART_RESOURCE ='自用非标件'or
-            t1.P_BOM_LINE_PART_RESOURCE ='虚拟总成')
-        </if>
     </where>
       start with t1.puid = #{puid,jdbcType=VARCHAR} and t1.P_EBOM_STATUS<![CDATA[ <> ]]>0
+      <if test="colorPart != null">
+          and t1.P_COLOR_PART = #{colorPart,jdbcType=INTEGER}
+      </if>
       connect by prior t1.puid = t1.p_parent_uid  and t1.P_EBOM_STATUS<![CDATA[ <> ]]>0
+      <if test="colorPart != null">
+          and t1.P_COLOR_PART = #{colorPart,jdbcType=INTEGER}
+      </if>
       order by CAST(t1.P_SORT_NUM as FLOAT)
   </select>
 
@@ -1097,7 +1092,7 @@
         <where>
         t2.puid=#{projectId,jdbcType=VARCHAR}))
         </where>
-        and  P_SORT_NUM &gt;#{sortNum,jdbcType=VARCHAR}
+        and  CAST(P_SORT_NUM as FLOAT) &gt;#{sortNum,jdbcType=DOUBLE}
         ORDER BY  CAST(P_SORT_NUM as FLOAT))WHERE rownum =1
     </select>
 

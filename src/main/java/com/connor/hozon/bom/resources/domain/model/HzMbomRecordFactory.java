@@ -28,6 +28,16 @@ public class HzMbomRecordFactory {
         return maxSortNum;
     }
 
+    private double sortNum = 0.0;
+
+    public double getSortNum() {
+        return sortNum;
+    }
+
+    public void setSortNum(double sortNum) {
+        this.sortNum = sortNum;
+    }
+
     public void setMaxSortNum(double maxSortNum) {
         this.maxSortNum = maxSortNum;
     }
@@ -156,7 +166,7 @@ public class HzMbomRecordFactory {
     }
 
 
-    public static HzMbomLineRecord generateSupMbom(HzPbomLineRecord record, int i, String projectId, List<HzConfigBomColorBean> beans){
+    public  HzMbomLineRecord generateSupMbom(HzPbomLineRecord record, int i, String projectId, List<HzConfigBomColorBean> beans){
         HzMbomLineRecord mbomLineRecord = pBomRecordToMbomRecord(record);
         String lineId = mbomLineRecord.getLineId();
         if(Integer.valueOf(1).equals(record.getColorPart())&&ListUtil.isNotEmpty(beans)){
@@ -171,11 +181,13 @@ public class HzMbomRecordFactory {
 
         String lineIndex = record.getLineIndex();
         String sortNum = record.getSortNum();
+
         String firstIndex = lineIndex.split("\\.")[0];
         String othersIndex = lineIndex.substring(firstIndex.length(),lineIndex.length());
         Integer first = Integer.valueOf(firstIndex+Integer.valueOf(firstIndex)*i);
         mbomLineRecord.setLineIndex(String.valueOf(first)+othersIndex);
-        mbomLineRecord.setSortNum(String.valueOf(Double.parseDouble(sortNum)+100*i));
+        mbomLineRecord.setSortNum(String.valueOf(this.sortNum*100+100));//重新分配排序号
+        this.sortNum ++;
         return mbomLineRecord;
     }
 
