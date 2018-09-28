@@ -357,37 +357,37 @@ public class HzPbomServiceImpl implements HzPbomService {
                 query.setLineIndex(String.valueOf(length));
             }
         }
-        int count = hzPbomRecordDAO.getHzBomLineCount(query.getProjectId());
-        if (count <= 0) {
-            List<HzBomLineRecord> lineRecords = hzBomLineRecordDao.getLoadingCarPartBom(query.getProjectId());
-            if (ListUtil.isNotEmpty(lineRecords)) {
-                int size = lineRecords.size();
-                //分批插入数据 一次1000条
-                int i = 0;
-                int cou = 0;
-                if (size > 1000) {
-                    for (i = 0; i < size / 1000; i++) {
-                        List<HzPbomLineRecord> list = new ArrayList<>();
-
-                        for (int j = 0; j < 1000; j++) {
-                            HzPbomLineRecord hzPbomLineRecord = bomLineToPbomLine(lineRecords.get(cou));
-                            list.add(hzPbomLineRecord);
-                            cou++;
-                        }
-                        hzPbomRecordDAO.insertList(list);
-                    }
-                }
-                if (i * 1000 < size) {
-                    List<HzPbomLineRecord> list = new ArrayList<>();
-                    for (int j = 0; j < size - i * 1000; j++) {
-                        HzPbomLineRecord hzPbomLineRecord = bomLineToPbomLine(lineRecords.get(cou));
-                        list.add(hzPbomLineRecord);
-                        cou++;
-                    }
-                    hzPbomRecordDAO.insertList(list);
-                }
-            }
-        }
+//        int count = hzPbomRecordDAO.getHzBomLineCount(query.getProjectId());
+//        if (count <= 0) {
+//            List<HzBomLineRecord> lineRecords = hzBomLineRecordDao.getLoadingCarPartBom(query.getProjectId());
+//            if (ListUtil.isNotEmpty(lineRecords)) {
+//                int size = lineRecords.size();
+//                //分批插入数据 一次1000条
+//                int i = 0;
+//                int cou = 0;
+//                if (size > 1000) {
+//                    for (i = 0; i < size / 1000; i++) {
+//                        List<HzPbomLineRecord> list = new ArrayList<>();
+//
+//                        for (int j = 0; j < 1000; j++) {
+//                            HzPbomLineRecord hzPbomLineRecord = bomLineToPbomLine(lineRecords.get(cou));
+//                            list.add(hzPbomLineRecord);
+//                            cou++;
+//                        }
+//                        hzPbomRecordDAO.insertList(list);
+//                    }
+//                }
+//                if (i * 1000 < size) {
+//                    List<HzPbomLineRecord> list = new ArrayList<>();
+//                    for (int j = 0; j < size - i * 1000; j++) {
+//                        HzPbomLineRecord hzPbomLineRecord = bomLineToPbomLine(lineRecords.get(cou));
+//                        list.add(hzPbomLineRecord);
+//                        cou++;
+//                    }
+//                    hzPbomRecordDAO.insertList(list);
+//                }
+//            }
+//        }
         try {
             Page<HzPbomLineRecord> recordPage = hzPbomRecordDAO.getHzPbomRecordByPage(query);
             if (recordPage == null || recordPage.getResult() == null) {
