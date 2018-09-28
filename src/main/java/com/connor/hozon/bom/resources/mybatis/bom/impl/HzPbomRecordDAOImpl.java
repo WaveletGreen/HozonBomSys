@@ -201,15 +201,6 @@ public class HzPbomRecordDAOImpl extends BaseSQLUtil implements HzPbomRecordDAO 
         return super.findForList("HzPbomRecordDAOImpl_getSameNameLineId",map);
     }
 
-    @Override
-    public int insertAccessories(String puid, String materielCode) {
-        Map<String, String> map = new HashMap<String, String>();
-        map.put("puid",puid);
-        map.put("materielCode",materielCode);
-        String secondPuid = UUIDHelper.generateUid();
-        map.put("secondPuid",secondPuid);
-        return super.executeInsert(map,"HzPbomRecordDAOImpl_insertAccessories");
-    }
 
     @Override
     public List<HzPbomLineRecord> queryAllBomLineIdByPuid(String puid) {

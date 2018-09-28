@@ -127,7 +127,10 @@ public class HzComposeMFService {
     @Autowired
     HzSingleVehicleBomLineDao hzSingleVehicleBomLineDao;
 
-
+    @Autowired
+    private HzCfg0ModelColorDao hzCfg0ModelColorDao;
+    @Autowired
+    private HzCfg0ModelRecordService hzCfg0ModelRecordService;
     private static final boolean finalAddCSYS = true;
 
     public void saveCompose(HzComposeMFDTO hzComposeMFDTO, JSONObject results) {
@@ -601,5 +604,16 @@ public class HzComposeMFService {
             result.put("status", true);
             result.put("msg", "删除衍生物料" + delDtos.get(i).getModeBasicDetailDesc() + "及其基本映射数据成功");
         }
+    }
+
+    public JSONObject saveCompose3(String projectPuid) {
+        JSONObject result = new JSONObject();
+        //项目下的所有颜色车型
+        List<HzCfg0ModelColor> colorModels = hzCfg0ModelColorDao.selectAll(projectPuid);
+        //项目下的所有基本车型
+        List<HzCfg0ModelRecord> models = hzCfg0ModelRecordService.doSelectByProjectUid(projectPuid);
+        List<HzComposeMFDTO> composes = new ArrayList<HzComposeMFDTO>();
+        
+        return result;
     }
 }

@@ -5,6 +5,11 @@ var $table = null;
 /**工具条设置*/
 var toolbarSetting = [
     {
+        text: '一键生成',
+        iconCls: 'glyphicon glyphicon-plus',
+        handler: saveCompose
+    },
+    {
         text: '添加衍生物料',
         iconCls: 'glyphicon glyphicon-plus',
         handler: addVehicleDialog
@@ -372,4 +377,17 @@ function gotIt(result) {
         // sortOrder: "asc",                   //排序方式
         toolbars: toolbarSetting,
     });
+}
+
+function saveCompose() {
+    $.ajax({
+        type : "get",
+        url : "materielV2/saveCompose?projectPuid="+projectPuid,
+        success : function (result) {
+            window.Ewin.alert({message: '生成成功!'});
+        },
+        error : function (result) {
+            window.Ewin.alert({message: '生成失败!'});
+        }
+    })
 }
