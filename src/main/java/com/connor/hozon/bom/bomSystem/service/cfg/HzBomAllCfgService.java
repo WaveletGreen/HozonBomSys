@@ -415,6 +415,9 @@ public class HzBomAllCfgService {
                             //标志，如model中存在该特性则为true
                             boolean flag = false;
                             for (HzFullCfgModel hzFullCfgModel : hzFullCfgModelsCheck) {
+//                                if(!checkString(hzFullCfgModel.getFlModelBomlineUid())){
+//                                    continue;
+//                                }
                                 if (hzFullCfgModel.getFlModelBomlineUid().equals(hzBomLineRecord.getPuid())) {
                                     flag = true;
                                 }

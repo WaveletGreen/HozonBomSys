@@ -1,0 +1,212 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<!--User: xulf Date: 2018/7/4 Time: 14:29-->
+<head>
+    <title>合成工艺合件</title>
+</head>
+<body>
+<form id="craftingNewPartForm" role="form" method="post" action="./pbom/add/processCompose2">
+    <div class="form-group">
+        <label for="lineId">合成零件号<span style="color: red">*</span></label>
+        <input class="form-control" id="lineId" name="lineId" type="text"
+               placeholder="请输入合成零件号"/><!--th:value="${entity.level}"-->
+    </div>
+    <div class="form-group">
+        <label for="pBomOfWhichDept">专业</label>
+        <input class="form-control" id="pBomOfWhichDept" name="pBomOfWhichDept" type="text"
+               placeholder="请输入专业"/><!--th:value="${entity.level}"-->
+    </div>
+    <div class="form-group">
+        <label for="pBomLinePartName">名称</label>
+        <input class="form-control" id="pBomLinePartName" name="pBomLinePartName" type="text"
+               placeholder="请输入名称"/><!--th:value="${entity.level}"-->
+    </div>
+    <div class="form-group">
+        <label for="pBomLinePartEnName">英文名称</label>
+        <input class="form-control" id="pBomLinePartEnName" name="pBomLinePartEnName" type="text"
+               placeholder="请输入英文名称"/><!--th:value="${entity.level}"-->
+    </div>
+    <div class="form-group">
+        <label for="pBomLinePartClass">零件分类</label>
+        <select class="form-control" name="pBomLinePartClass" id="pBomLinePartClass" placeholder="请选择零件分类">
+            <option></option>
+            <option>自制</option>
+            <option>外协</option>
+            <option>标准件</option>
+            <option>非标件</option>
+            <option>虚拟总成</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="pBomLinePartResource">零件来源</label>
+        <select class="form-control" name="pBomLinePartResource" id="pBomLinePartResource" placeholder="请选择零件来源">
+            <option></option>
+            <option>采购件</option>
+            <option>采购拆分单件</option>
+            <option>采购拆分总成件</option>
+            <option>采购拆分标准件</option>
+            <option>采购拆分非标件</option>
+            <option>自制总成</option>
+            <option>自制单件</option>
+            <option>自用标准件</option>
+            <option>自用非标件</option>
+            <option>虚拟总成</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="resource">自制/采购</label>
+        <select class="form-control" name="resource" id="resource" placeholder="请选择来源">
+            <option></option>
+            <option>MAKE</option>
+            <option>BUY</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="type">焊接/装配</label>
+        <select class="form-control" name="type" id="type" placeholder="请选择是否为焊接类型">
+            <option></option>
+            <option>Y</option>
+            <option>N</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="buyUnit">采购单元</label>
+        <select class="form-control" name="buyUnit" id="buyUnit" placeholder="请选择是否为采购单元">
+            <option></option>
+            <option>Y</option>
+            <option>N</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="workShop1">车间1</label>
+        <input class="form-control" id="workShop1" name="workShop1" type="text"
+               placeholder="请输入车间1"/><!--th:value="${entity.level}"-->
+    </div>
+    <div class="form-group">
+        <label for="workShop2">车间2</label>
+        <input class="form-control" id="workShop2" name="workShop2" type="text"
+               placeholder="请输入车间2"/><!--th:value="${entity.level}"-->
+    </div>
+    <div class="form-group">
+        <label for="productLine">生产线</label>
+        <input class="form-control" id="productLine" name="productLine" type="text"
+               placeholder="请输入生产线"/><!--th:value="${entity.level}"-->
+    </div>
+    <div class="form-group">
+        <label for="mouldType">模具类型</label>
+        <input class="form-control" id="mouldType" name="mouldType" type="text"
+               placeholder="请输入模具类型"/><!--th:value="${entity.level}"-->
+    </div>
+    <div class="form-group">
+        <label for="outerPart">外委件</label>
+        <input class="form-control" id="outerPart" name="outerPart" type="text"
+               placeholder="请输入外委件"/><!--th:value="${entity.level}"-->
+    </div>
+    <div class="form-group">
+        <label for="colorPart">颜色件</label>
+        <select class="form-control" name="colorPart" id="colorPart" placeholder="请选择是否为颜色件">
+            <option></option>
+            <option>Y</option>
+            <option>N</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="station">工位</label>
+        <input class="form-control" id="station" name="station" type="text"
+               placeholder="请输入工位"/><!--th:value="${entity.level}"-->
+    </div>
+</form>
+<script th:inline="javascript">
+    <![CDATA[
+    $(function () {
+        $('#craftingNewPartForm').bootstrapValidator({
+            message: 'This value is not valid',
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            fields: {
+                lineId: {
+                    message: '合成零件号验证失败',
+                    validators: {
+                        notEmpty: {
+                            message: '合成的零件号不能为空'
+                        }
+                    }
+                }
+            }
+        });
+        // 绑定dialog的确定按钮的监听事件
+        $("#btnOk", window.top.document).click(function () {
+            var bootstrapValidator = $("#craftingNewPartForm", window.top.document).data('bootstrapValidator');
+            bootstrapValidator.validate();
+            // bootstrapValidator.revalidateField("pProjectCode");
+            if (bootstrapValidator.isValid()) {
+                var url = $("#craftingNewPartForm", window.top.document).attr('action');
+                <!--其实不要puid，puid会在服务器上生成-->
+                var data = {};
+                var _d = $("#craftingNewPartForm").serializeArray();
+                for (var p in _d) {
+                    data[_d[p].name] = _d[p].value;
+                }
+                var parentUids = $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.getParentUids();
+                var childrenUids = $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.getChildrenUids();
+                var projectUid = $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.getProjectUid();
+                // data.pProjectPertainToPlatform=$("#pProjectPertainToPlatform").val();
+                var params = {projectUid: projectUid, parentUids: parentUids, childrenUids: childrenUids, data: data}
+                console.log(params);
+                console.log(JSON.stringify(params));
+                $.ajax({
+                    type:
+                        'POST',
+                    contentType:
+                        "application/json",
+                    url: url,
+                    data: JSON.stringify(params),
+                    success:
+                        function (result) {
+                            if (result.status) {
+                                layer.msg(result.msg, {icon: 1, time: 2000});
+                            }
+                            else {
+                                window.Ewin.alert({message: result.msg});
+                            }
+                            // $('.modal-dialog', window.top.document).parent('div').remove()
+                            // $('body', window.top.document).find('.modal-backdrop').remove();
+                            // // jquery 调用刷新当前操作的table页面的refresh方法
+                            // var zTree = $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.zTree;
+                            // var selectNode = $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.selectNode;
+                            // if (result.status == 1) {
+                            //     var entity = result.entity;
+                            //     zTree.addNodes(selectNode, {
+                            //         puid: entity.puid,
+                            //         pPuid: entity.pProjectPertainToVehicle,
+                            //         name: entity.pProjectName
+                            //     });
+                            //     if (result.status1 == 0 || result.status2 == 0 || result.status3 == 0) {
+                            //         window.Ewin.alert({message: result.settingMsg + "<br>" + result.dxgMainMsg + "<br>" + result.cfgMsg});
+                            //     }
+                            //     else {
+                            //         layer.msg('添加项目成功', {icon: 1, time: 2000})
+                            //     }
+                            //     // window.Ewin.alert({message: "添加项目成功"});
+                            // }
+                            // else if (result.status == 0) {
+                            //     window.Ewin.alert({message: "已存在的项目代码，请修改或者更换项目代码"});
+                            // }
+                            // else {
+                            //     window.Ewin.alert({message: "添加失败，请联系管理员"});
+                            // }
+                        },
+                    error: function (status) {
+                        window.Ewin.alert({message: status.status + ':操作失败!'});
+                    }
+                });
+            }
+        });
+    })
+    ]]>
+</script>
+</body>
+</html>

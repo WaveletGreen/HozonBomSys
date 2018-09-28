@@ -40,7 +40,9 @@ $(document).ready(function () {
                 true,
         },
         check: {
-            enable: true
+            enable: true,
+            chkStyle: "checkbox",
+            chkboxType: { "Y": "s", "N": "s"}
         },
         data: {
             simpleData: {

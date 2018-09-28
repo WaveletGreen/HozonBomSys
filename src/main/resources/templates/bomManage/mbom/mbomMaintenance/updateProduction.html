@@ -29,6 +29,35 @@
                placeholder="请输入专业"/><!--th:value="${entity.pBomOfWhichDept}"-->
     </div>
     <div class="form-group">
+        <label for="pBomLinePartClass">零件分类</label>
+        <!--<select class="form-control" name="pBomLinePartClass" id="pBomLinePartClass" placeholder="请选择零件分类">-->
+        <!--<option></option>-->
+        <!--<option th:selected="data.getpBomLinePartClass()=='自制'?true:false">自制</option> &lt;!&ndash;th:selected="${data.getResource()=='MAKE'?true:false}"&ndash;&gt;-->
+        <!--<option th:selected="data.getpBomLinePartClass()=='外协'?true:false">外协</option>-->
+        <!--<option th:selected="data.getpBomLinePartClass()=='虚拟总成'?true:false">虚拟总成</option>-->
+        <!--</select>-->
+        <input class="form-control" id="pBomLinePartClass" name="pBomLinePartClass" type="text" disabled="disabled" th:value="${data.pBomLinePartClass}"
+               placeholder=""/>
+    </div>
+    <div class="form-group">
+        <label for="pBomLinePartResource">零部件来源</label>
+        <!--<select class="form-control" name="pBomLinePartResource" id="pBomLinePartResource" placeholder="请选择零件来源">-->
+        <!--<option></option>-->
+        <!--<option th:selected="data.getpBomLinePartResource()=='采购件'?true:false">采购件</option>-->
+        <!--<option th:selected="data.getpBomLinePartResource()=='采购拆分单件'?true:false">采购拆分单件</option>-->
+        <!--<option th:selected="data.getpBomLinePartResource()=='采购拆分总成件'?true:false">采购拆分总成件</option>-->
+        <!--<option th:selected="data.getpBomLinePartResource()=='采购拆分标准件'?true:false">采购拆分标准件</option>-->
+        <!--<option th:selected="data.getpBomLinePartResource()=='采购拆分非标件'?true:false">采购拆分非标件</option>-->
+        <!--<option th:selected="data.getpBomLinePartResource()=='自制总成'?true:false">自制总成</option>-->
+        <!--<option th:selected="data.getpBomLinePartResource()=='自制单件'?true:false">自制单件</option>-->
+        <!--<option th:selected="data.getpBomLinePartResource()=='自用标准件'?true:false">自用标准件</option>-->
+        <!--<option th:selected="data.getpBomLinePartResource()=='自用非标件'?true:false">自用非标件</option>-->
+        <!--<option th:selected="data.getpBomLinePartResource()=='虚拟总成'?true:false">虚拟总成</option>-->
+        <!--</select>-->
+        <input class="form-control" id="pBomLinePartResource" name="pBomLinePartResource" type="text" disabled="disabled" th:value="${data.pBomLinePartResource}"
+               placeholder=""/>
+    </div>
+    <div class="form-group">
         <label for="sparePart">备件</label>
         <input class="form-control" id="sparePart" name="sparePart" type="text"
                th:value="${data.sparePart}"

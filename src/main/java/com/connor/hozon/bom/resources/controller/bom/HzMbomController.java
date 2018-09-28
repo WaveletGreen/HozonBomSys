@@ -2,6 +2,7 @@ package com.connor.hozon.bom.resources.controller.bom;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.connor.hozon.bom.bomSystem.service.business.cfg.HzComposeMFService;
 import com.connor.hozon.bom.resources.controller.BaseController;
 import com.connor.hozon.bom.resources.domain.dto.request.AddMbomReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.request.DeleteHzMbomReqDTO;
@@ -14,6 +15,7 @@ import com.connor.hozon.bom.resources.domain.query.HzMbomByIdQuery;
 import com.connor.hozon.bom.resources.domain.query.HzMbomByPageQuery;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.service.bom.HzMbomService;
+import com.connor.hozon.bom.resources.service.bom.HzSingleVehiclesServices;
 import com.connor.hozon.bom.resources.util.ResultMessageBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -40,13 +42,17 @@ public class HzMbomController extends BaseController {
     @Autowired
     private HzMbomService hzMbomService;
 
+    @Autowired
+    HzComposeMFService hzComposeMFService;
+    @Autowired
+    HzSingleVehiclesServices hzSingleVehiclesServices;
     /**
      * MBOM管理标题
      *
      * @param response
      */
     @RequestMapping(value = "manage/title", method = RequestMethod.GET)
-    public void getPbomLineTitle(HttpServletResponse response) {
+    public void mbomTitle(HttpServletResponse response) {
         LinkedHashMap<String, String> tableTitle = new LinkedHashMap<>();
         tableTitle.put("No", "序号");
         tableTitle.put("lineId", "零件号");
@@ -210,9 +216,10 @@ public class HzMbomController extends BaseController {
        OperateResultMessageRespDTO respDTO =  hzMbomService.deleteMbomRecord(reqDTO);
         writeAjaxJSONResponse(ResultMessageBuilder.build(OperateResultMessageRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
     }
-    @RequestMapping(value = "1111",method = RequestMethod.GET)
-    public void getget(HttpServletResponse response){
-        hzMbomService.refreshHzMbom("1c128c60-84a2-4076-9b1c-f7093e56e4df");
+    @RequestMapping(value = "refresh",method = RequestMethod.POST)
+    public void refreshMbom(String projectId,HttpServletResponse response){
+        OperateResultMessageRespDTO resultMessageRespDTO = hzMbomService.refreshHzMbom(projectId);
+        writeAjaxJSONResponse(ResultMessageBuilder.build(OperateResultMessageRespDTO.isSuccess(resultMessageRespDTO),resultMessageRespDTO.getErrMsg()),response);
     }
 
     /**

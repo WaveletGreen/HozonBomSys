@@ -8,18 +8,21 @@
 $(document).ready((function () {
     var $table = $("#detailBikeBomTable");
     var projectId = $("#project", window.top.document).val();
-    var mBomUrl = "record?projectId=" + projectId;
-    initTable(mBomUrl);
+    var singleVehiclesId = $("#singleVehiclesId").val();
+    var url = "bom/record?projectId=" + projectId+"&singleVehiclesId="+singleVehiclesId;
+    initTable(url);
 }))
 function doRefresh(projectId){
     $('#detailBikeBomTable').bootstrapTable('destroy');
-    var mBomUrl = "record?projectId=" + projectId;
-    initTable(mBomUrl);
+    var singleVehiclesId = $("#singleVehiclesId").val();
+    var url = "bom/record?projectId=" + projectId+"&singleVehiclesId="+singleVehiclesId;
+    initTable(url);
 }
 function doQuery() {
     // $('#detailBikeBomTable').bootstrapTable('refresh');
     var projectId = $("#project", window.top.document).val();
-    var mBomUrl = "record?projectId=" + projectId;
+    var singleVehiclesId = $("#singleVehiclesId").val();
+    var url = "bom/record?projectId=" + projectId+"&singleVehiclesId="+singleVehiclesId;
     // var level = $("#level").val();
     // mBomUrl += "&level=" + level;
     // var pBomOfWhichDept = $("#pBomOfWhichDept").val();
@@ -28,27 +31,27 @@ function doQuery() {
     // mBomUrl += "&lineId=" + lineId;
     var pBomLinePartClass = $("#pBomLinePartClass").val();
     if (pBomLinePartClass =="请选择零件分类") {
-        mBomUrl += "&pBomLinePartClass="+ "";
+        url += "&pBomLinePartClass="+ "";
     }else {
-        mBomUrl += "&pBomLinePartClass=" + pBomLinePartClass;
+        url += "&pBomLinePartClass=" + pBomLinePartClass;
     }
     var pBomLinePartResource = $("#pBomLinePartResource").val();
     if (pBomLinePartResource == "请选择零件来源") {
-        mBomUrl += "&pBomLinePartResource="+ "";
+        url += "&pBomLinePartResource="+ "";
     }
     else {
-        mBomUrl += "&pBomLinePartResource=" + pBomLinePartResource;
+        url += "&pBomLinePartResource=" + pBomLinePartResource;
     }
-    initTable(mBomUrl);
+    initTable(url);
     $('#detailBikeBomTable').bootstrapTable('destroy');
 }
 
-function initTable() {
+function initTable(url) {
     var projectId = $("#project", window.top.document).val();
     var $table = $("#detailBikeBomTable");
     var column = [];
     $.ajax({
-        url: "title?projectId=" + projectId,
+        url: "bom/title",
         type: "GET",
         success: function (result) {
             var column = [];
@@ -107,7 +110,7 @@ function initTable() {
                 //         }
                 //     })
                 // },
-                url: "record?projectId=" + projectId,
+                url: url,
                 method: 'get',
                 height: $(window.parent.document).find("#wrapper").height() - 90,
                 width: $(window).width(),

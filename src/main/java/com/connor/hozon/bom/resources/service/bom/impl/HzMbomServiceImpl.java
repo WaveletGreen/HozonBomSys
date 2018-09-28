@@ -60,9 +60,6 @@ public class HzMbomServiceImpl implements HzMbomService{
     private HzCfg0OfBomLineService hzCfg0OfBomLineService;
 
     @Autowired
-    private HzEbomRecordDAO hzEbomRecordDAO;
-
-    @Autowired
     private IHzConfigBomColorService iHzConfigBomColorService;
 
     @Autowired
@@ -494,7 +491,12 @@ public class HzMbomServiceImpl implements HzMbomService{
 
     @Override
     public OperateResultMessageRespDTO refreshHzMbom(String projectId) {
-        long a = System.currentTimeMillis();
+        if(!PrivilegeUtil.writePrivilege()){
+            return OperateResultMessageRespDTO.getFailPrivilege();
+        }
+        if(null == projectId || ""==projectId){
+            return OperateResultMessageRespDTO.IllgalArgument();
+        }
         try {
             Double sortNumber = 0.0;
             //颜色件 非颜色件
@@ -520,30 +522,43 @@ public class HzMbomServiceImpl implements HzMbomService{
 
 
                 for(HzPbomLineRecord record:records){
+                    if(null == record.getpBomLinePartResource()){
+                        continue;
+                    }
+                    if(null == record.getLineId()){
+                        continue;
+                    }
                     Set<HzPbomLineRecord> bodyOfWhiteSet = new HashSet<>();
-
+                    boolean b = false;
                     if(Integer.valueOf(1).equals(record.getColorPart())){//是颜色件 找出对应的颜色 多色时，需要乘以颜色信息
                         List<HzConfigBomColorBean> beans = iHzConfigBomColorService.doSelectBy2YUidWithProject(record.geteBomPuid(), projectId);
                         if(ListUtil.isNotEmpty(beans)){
-                            for(HzConfigBomColorBean bean:beans){
-                                if(null == bean.getColorCode()){
-                                    beans.remove(bean);
+                            for(int i =0;i<beans.size();i++){
+                                if(null == beans.get(i).getColorCode() ||"-".equals(beans.get(i).getColorCode())){
+                                    beans.remove(beans.get(i));
+                                    i--;
                                 }
                             }
                         }
 
+
                         if(ListUtil.isNotEmpty(beans)){//找到对应的颜色件
                             for(int i =0;i<beans.size();i++){
-                                analysisMbom(record,i,projectId,bodyOfWhiteSet,beans,superMboms);
+                                b = analysisMbom(record,i,projectId,bodyOfWhiteSet,beans,superMboms);
                             }
                         }else {
-                            analysisMbom(record,0,projectId,bodyOfWhiteSet,null,superMboms);
+                            b= analysisMbom(record,0,projectId,bodyOfWhiteSet,null,superMboms);
                         }
 
                     }else {
-                        analysisMbom(record,0,projectId,bodyOfWhiteSet,null,superMboms);
+                        b=analysisMbom(record,0,projectId,bodyOfWhiteSet,null,superMboms);
                     }
-
+                    if(!b){
+                        OperateResultMessageRespDTO respDTO  = new OperateResultMessageRespDTO();
+                        respDTO.setErrMsg("BOM结构不正确，油漆车身下面必须挂有白车身总成！");
+                        respDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
+                        return respDTO;
+                    }
                     if(ListUtil.isNotEmpty(bodyOfWhiteSet)){//白车身总成
                         for(HzPbomLineRecord pbomLineRecord :bodyOfWhiteSet){
                             HzPbomTreeQuery ebomTreeQuery = new HzPbomTreeQuery();//找出白车身的全部子件
@@ -563,7 +578,12 @@ public class HzMbomServiceImpl implements HzMbomService{
                                     String lineId = HzBomSysFactory.resultLineId(mbomRecord.getLineId(),projectId);
 
                                     mbomRecord.setLineId(lineId);
-
+                                    if(null == whiteBody.getpBomLinePartName()){
+                                        continue;
+                                    }
+                                    if(null == whiteBody.getpBomLinePartResource()){
+                                        continue;
+                                    }
                                     if(whiteBody.getpBomLinePartName().contains("白车身总成")){
                                         Integer first = Integer.valueOf(firstIndex+Integer.valueOf(firstIndex));
                                         mbomRecord.setLineIndex(String.valueOf(first)+othersIndex);
@@ -592,10 +612,10 @@ public class HzMbomServiceImpl implements HzMbomService{
                                         HzPbomTreeQuery query = new HzPbomTreeQuery();
                                         query.setProjectId(projectId);
                                         query.setPuid(whiteBody.geteBomPuid());
+                                        productMboms.add(mbomRecord);
                                         List<HzPbomLineRecord> makeRecords = hzPbomRecordDAO.getHzPbomTree(query);
                                         if(ListUtil.isNotEmpty(makeRecords) && makeRecords.size()>1){
                                             mbomRecord.setIsHas(1);
-                                            productMboms.add(mbomRecord);
                                             HzMbomRecordFactory factory = new HzMbomRecordFactory();
                                             productMboms.addAll(factory.movePartBomStructureToThis(mbomRecord,makeRecords));
                                             sortNumber = factory.getMaxSortNum();
@@ -813,10 +833,9 @@ public class HzMbomServiceImpl implements HzMbomService{
                     return OperateResultMessageRespDTO.getFailResult();
                 }
             }
-            long b = System.currentTimeMillis();
-            System.out.println((b-a)+"ms");
             return OperateResultMessageRespDTO.getSuccessResult();
         }catch (Exception e){
+            e.printStackTrace();
             return OperateResultMessageRespDTO.getFailResult();
         }
 

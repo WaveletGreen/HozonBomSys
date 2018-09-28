@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="sql.mapper.imapper.HzAccessoriesLibsMapper">
+  <resultMap id="BaseResultMap" type="sql.pojo.accessories.HzAccessoriesLibs">
+    <result column="PUID" jdbcType="VARCHAR" property="puid" />
+    <result column="P_MATERIEL_CODE" jdbcType="VARCHAR" property="pMaterielCode" />
+    <result column="P_MATERIEL_NAME" jdbcType="VARCHAR" property="pMaterielName" />
+    <result column="P_TECHNICAL_CONDITIONS" jdbcType="VARCHAR" property="pTechnicalConditions" />
+    <result column="P_MEASURING_UNIT" jdbcType="VARCHAR" property="pMeasuringUnit" />
+    <result column="P_MATERIEL_PURPOSE" jdbcType="VARCHAR" property="pMaterielPurpose" />
+    <result column="P_DOSAGE_BICYCLE" jdbcType="VARCHAR" property="pDosageBicycle" />
+    <result column="P_NOTE" jdbcType="VARCHAR" property="pNote" />
+    <result column="P_STATUS" jdbcType="DECIMAL" property="pStatus" />
+    <result column="P_CREATE_TIME" jdbcType="DATE" property="pCreateTime" />
+    <result column="P_UPDATE_TIME" jdbcType="DATE" property="pUpdateTime" />
+    <result column="P_CREATE_NAME" jdbcType="VARCHAR" property="pCreateName" />
+    <result column="P_UPDATE_NAME" jdbcType="VARCHAR" property="pUpdateName" />
+  </resultMap>
+  <insert id="HzAccessoriesLibsDAOImpl_insert" parameterType="sql.pojo.accessories.HzAccessoriesLibs">
+    insert into HZ_ACCESSORIES_LIBS
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="puid != null">
+        PUID,
+      </if>
+      <if test="pMaterielCode != null">
+        P_MATERIEL_CODE,
+      </if>
+      <if test="pMaterielName != null">
+        P_MATERIEL_NAME,
+      </if>
+      <if test="pTechnicalConditions != null">
+        P_TECHNICAL_CONDITIONS,
+      </if>
+      <if test="pMeasuringUnit != null">
+        P_MEASURING_UNIT,
+      </if>
+      <if test="pMaterielPurpose != null">
+        P_MATERIEL_PURPOSE,
+      </if>
+      <if test="pDosageBicycle != null">
+        P_DOSAGE_BICYCLE,
+      </if>
+      <if test="pNote != null">
+        P_NOTE,
+      </if>
+      P_STATUS,
+      P_CREATE_TIME,
+      P_UPDATE_TIME,
+      <if test="pCreateName != null">
+        P_CREATE_NAME,
+      </if>
+      <if test="pUpdateName != null">
+        P_UPDATE_NAME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="puid != null">
+        #{puid,jdbcType=VARCHAR},
+      </if>
+      <if test="pMaterielCode != null">
+        #{pMaterielCode,jdbcType=VARCHAR},
+      </if>
+      <if test="pMaterielName != null">
+        #{pMaterielName,jdbcType=VARCHAR},
+      </if>
+      <if test="pTechnicalConditions != null">
+        #{pTechnicalConditions,jdbcType=VARCHAR},
+      </if>
+      <if test="pMeasuringUnit != null">
+        #{pMeasuringUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="pMaterielPurpose != null">
+        #{pMaterielPurpose,jdbcType=VARCHAR},
+      </if>
+      <if test="pDosageBicycle != null">
+        #{pDosageBicycle,jdbcType=VARCHAR},
+      </if>
+      <if test="pNote != null">
+        #{pNote,jdbcType=VARCHAR},
+      </if>
+      1,
+      sysdate,
+      sysdate,
+      <if test="pCreateName != null">
+        #{pCreateName,jdbcType=VARCHAR},
+      </if>
+      <if test="pUpdateName != null">
+        #{pUpdateName,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+
+  <update id="HzAccessoriesLibsDAOImpl_update" parameterType="sql.pojo.accessories.HzAccessoriesLibs">
+    update  HZ_ACCESSORIES_LIBS
+    <set>
+      <if test="puid != null">
+        PUID= #{puid,jdbcType=VARCHAR},
+      </if>
+      <if test="pMaterielCode != null">
+        P_MATERIEL_CODE= #{pMaterielCode,jdbcType=VARCHAR},
+      </if>
+      <if test="pMaterielName != null">
+        P_MATERIEL_NAME= #{pMaterielName,jdbcType=VARCHAR},
+      </if>
+      <if test="pTechnicalConditions != null">
+        P_TECHNICAL_CONDITIONS= #{pTechnicalConditions,jdbcType=VARCHAR},
+      </if>
+      <if test="pMeasuringUnit != null">
+        P_MEASURING_UNIT= #{pMeasuringUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="pMaterielPurpose != null">
+        P_MATERIEL_PURPOSE= #{pMaterielPurpose,jdbcType=VARCHAR},
+      </if>
+      <if test="pDosageBicycle != null">
+        P_DOSAGE_BICYCLE= #{pDosageBicycle,jdbcType=VARCHAR},
+      </if>
+      <if test="pNote != null">
+        P_NOTE= #{pNote,jdbcType=VARCHAR},
+      </if>
+      P_UPDATE_TIME =sysdate,
+      <if test="pUpdateName != null">
+        P_UPDATE_NAME= #{pUpdateName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <where>
+      PUID = #{puid,jdbcType=VARCHAR}
+    </where>
+  </update>
+
+  <select id="HzAccessoriesLibsDAOImpl_getHzAccessoriesLibs" parameterType="java.util.HashMap" resultMap="BaseResultMap">
+    select  * from HZ_ACCESSORIES_LIBS
+    <where>
+      and  PUID = #{puid,jdbcType=VARCHAR}
+      and P_STATUS =1
+    </where>
+  </select>
+
+  <select id="HzAccessoriesLibsDAOImpl_getHzAccessoriesByPage" parameterType="java.util.HashMap" resultMap="BaseResultMap">
+    select * FROM
+    (SELECT u.*,rownum as rn from
+    (SELECT * from HZ_ACCESSORIES_LIBS
+    where P_STATUS=1
+    order by P_UPDATE_TIME DESC)u
+    WHERE ROWNUM &lt;=#{limit,jdbcType=INTEGER}) where rn &gt;#{offset,jdbcType=INTEGER}
+  </select>
+
+  <select id="HzAccessoriesLibsDAOImpl_getHzAccessoriesTotalCount" parameterType="java.util.HashMap" resultType="java.lang.Integer">
+    select count(*) from HZ_ACCESSORIES_LIBS where P_STATUS =1
+  </select>
+
+
+  <update id="HzAccessoriesLibsDAOImpl_deleteList"  parameterType="java.util.List">
+    <foreach collection="list" item="item" index="index" open="begin" close=";end;" separator=";">
+      update HZ_ACCESSORIES_LIBS
+      <set>
+        P_STATUS=0
+      </set>
+      where PUID = #{item.puid,jdbcType=VARCHAR}
+    </foreach>
+  </update>
+</mapper>
