@@ -276,7 +276,7 @@ public class HzPbomController extends BaseController {
     }
 
     /**
-     * 合成工艺合件
+     * 合成工艺合件操作
      *
      * @param
      * @param param

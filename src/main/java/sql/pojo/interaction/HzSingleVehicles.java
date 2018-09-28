@@ -2,6 +2,8 @@ package sql.pojo.interaction;
 
 import lombok.Data;
 
+import java.util.Date;
+
 @Data
 public class HzSingleVehicles {
     /**
@@ -145,4 +147,20 @@ public class HzSingleVehicles {
      * 颜色名称
      */
     private String colorName;
+    /**
+     * 创建者
+     */
+    private String svlCreator;
+    /**
+     * 更新者
+     */
+    private String svlUpdater;
+    /**
+     * 创建时间
+     */
+    private Date svlCreateDate;
+    /**
+     * 更新时间
+     */
+    private Date svlUpdateDate;
 }

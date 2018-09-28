@@ -53,8 +53,8 @@ website:    http://code.google.com/p/jquerytree/
 .ztree li span.button.chk.radio_true_disable {background-position: -68px -89px;}
 
 .ztree li span.button.switch {width:21px; height:21px}
-.ztree li span.button.root_open{background-position:-92px -54px}
-.ztree li span.button.root_close{background-position:-74px -54px}
+.ztree li span.button.root_open{background-position:-105px -64px}
+.ztree li span.button.root_close{background-position:-126px -64px}
 .ztree li span.button.roots_open{background-position: -105px 0;}
 .ztree li span.button.roots_close{background-position: -126px 0;}
 .ztree li span.button.center_open{background-position: -105px -21px;}
@@ -63,15 +63,16 @@ website:    http://code.google.com/p/jquerytree/
 .ztree li span.button.bottom_close{background-position: -126px -42px;}
 .ztree li span.button.noline_open{background-position: -126px -84px;}
 .ztree li span.button.noline_close{background-position: -105px -84px;}
-.ztree li span.button.root_docu{ background:none;}
+.ztree li span.button.root_docu{background:none;}
 .ztree li span.button.roots_docu{background-position: -84px 0;}
 .ztree li span.button.center_docu{background-position: -84px -21px;}
 .ztree li span.button.bottom_docu{background-position: -84px -42px;}
 .ztree li span.button.noline_docu{ background:none;}
-
-.ztree li span.button.ico_open{margin-right:2px; background-position: -147px -21px; vertical-align:top; *vertical-align:middle}
-.ztree li span.button.ico_close{margin-right:2px; margin-right:2px; background-position: -147px 0; vertical-align:top; *vertical-align:middle}
-.ztree li span.button.ico_docu{margin-right:2px; background-position: -147px -42px; vertical-align:top; *vertical-align:middle}
+/***手动改了源码**/
+.ztree li span.button.ico_open{margin-right:2px; background:url(img/leafOpen2.png) no-repeat scroll 0 2px transparent ; background-size:16px 16px;vertical-align:top; *vertical-align:middle}
+.ztree li span.button.ico_close{margin-right:2px; margin-right:2px; background:url(img/close.png) no-repeat scroll 0 2px transparent ; background-size:16px 16px;vertical-align:top; *vertical-align:middle}
+.ztree li span.button.ico_docu{margin-right:2px; background:url(img/leaf.png) no-repeat scroll 0 2px transparent ;background-size:16px 16px;/*background-position: -45px -117px; */vertical-align:top; *vertical-align:middle}
+/***手动改了源码**/
 .ztree li span.button.edit {margin-left:2px; margin-right: -1px; background-position: -189px -21px; vertical-align:top; *vertical-align:middle}
 .ztree li span.button.edit:hover {
   background-position: -168px -21px;
