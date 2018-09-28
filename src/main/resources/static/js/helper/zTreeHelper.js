@@ -221,3 +221,26 @@ function loopChildren(childNode, ztreeObj, isCheck, isChkDisabled) {
 
 
 }
+
+/**
+ * 返回所有根节点集合
+ * @param treeObj zTree树结构
+ * @returns {*}
+ */
+function getRoots(treeObj) {
+    //返回根节点集合
+    return treeObj.getNodesByFilter(function (node) {
+        return node.level == 0
+    });
+}
+
+/**
+ * 返回一个根节点
+ * @param treeObj
+ * @returns {*}
+ */
+function getRoot(treeObj) {
+    return treeObj.getNodesByFilter(function (node) {
+        return node.level == 0
+    }, true);
+}

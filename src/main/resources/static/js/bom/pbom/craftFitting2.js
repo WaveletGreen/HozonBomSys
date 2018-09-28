@@ -1007,9 +1007,18 @@ var setting3 = {
             else {
                 ///如果需要取消选中根节点之后，不将根节点下的数据删除，重新刷新一下tree，或者对根节点进行单独判断
                 if (isContinue) {
-                    treeObj.firstChild;
-                    if(treeNode.lineId==)
-                    treeObj.removeChildNodes(treeNode);
+                    if (treeNode.isParent) {
+                        let children = treeNode.children;
+                        //返回一个根节点
+                        var first = getRoot(tree1);
+                        for (let i in children) {
+                            if (children[i].lineId == first.lineId) {
+                                treeObj.removeNode(children[i]);
+                                break;
+                            }
+                        }
+                    }
+                    // treeObj.removeChildNodes(treeNode);
                 }
             }
             return isContinue;
@@ -1935,6 +1944,7 @@ function setUnCheckable(treeNode, treeObj) {
                 setUnCheckable(children[i], treeObj);
             }
         }
+        treeObj.setting.view.fontCss["color"] = "#ff5458";
         treeNode.chkDisabled = true;
         treeObj.updateNode(treeNode);
     }
