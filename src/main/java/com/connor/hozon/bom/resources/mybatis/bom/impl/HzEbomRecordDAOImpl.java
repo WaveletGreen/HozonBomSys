@@ -108,7 +108,7 @@ public class HzEbomRecordDAOImpl extends BaseSQLUtil implements HzEbomRecordDAO 
     public String findMinOrderNumWhichGreaterThanThisOrderNum(String projectId, String sortNum) {
         Map<String,Object> map = new HashMap<>();
         map.put("projectId",projectId);
-        map.put("sortNum",sortNum);
+        map.put("sortNum",Double.parseDouble(sortNum));
         return (String) super.findForObject("HzEbomRecordDAOImpl_findMinOrderNumWhichGreaterThanThisOrderNum",map);
     }
 

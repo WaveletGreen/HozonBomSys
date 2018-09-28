@@ -104,5 +104,12 @@ public interface HzPbomRecordDAO {
 
     List<HzPbomLineRecord> getSameNameLineId(String lineId,String projectId);
 
+    /**
+     * 获取当前BOM的子一层结构
+     * @param projectId
+     * @return
+     */
+    List<HzPbomLineRecord> getFirstLevelBomByParentId(String parentId,String projectId);
+
     List<HzPbomLineRecord> queryAllBomLineIdByPuid(String puid, String projectId);
 }
