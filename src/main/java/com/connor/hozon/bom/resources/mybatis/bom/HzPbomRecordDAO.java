@@ -103,4 +103,7 @@ public interface HzPbomRecordDAO {
 
 
     List<HzPbomLineRecord> getSameNameLineId(String lineId,String projectId);
+
+    List<HzPbomLineRecord> doggyfindMyChildrenByMyUid(String s);
+
 }

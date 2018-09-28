@@ -199,7 +199,7 @@
       #{item.isHas,jdbcType=INTEGER},#{item.linePuid,jdbcType=VARCHAR}, #{item.lineId,jdbcType=VARCHAR}, #{item.is2Y,jdbcType=INTEGER},
       #{item.isPart,jdbcType=INTEGER}, #{item.isDept,jdbcType=INTEGER}, #{item.pBomOfWhichDept,jdbcType=VARCHAR},
       #{item.pBomLinePartName,jdbcType=VARCHAR}, #{item.pBomLinePartClass,jdbcType=VARCHAR}, #{item.pBomLinePartEnName,jdbcType=VARCHAR},
-      #{item.pBomLinePartResource,jdbcType=VARCHAR}，#{item.sortNum,jdbcType=VARCHAR},1
+      #{item.pBomLinePartResource,jdbcType=VARCHAR},#{item.sortNum,jdbcType=VARCHAR},1
       from DUAL
     </foreach>
   </insert>

@@ -199,4 +199,10 @@ public class HzPbomRecordDAOImpl extends BaseSQLUtil implements HzPbomRecordDAO 
         map.put("projectId",projectId);
         return super.findForList("HzPbomRecordDAOImpl_getSameNameLineId",map);
     }
+
+    @Override
+    public List<HzPbomLineRecord> doggyfindMyChildrenByMyUid(String s) {
+        return null;
+    }
+
 }

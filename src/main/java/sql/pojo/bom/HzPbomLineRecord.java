@@ -9,7 +9,7 @@ import java.util.Objects;
  * Created by haozt on 2018/5/25
  * EBOM 和PBOM 两张表信息  继承自EBOM  维护PBOM
  */
-public class HzPbomLineRecord {
+public class HzPbomLineRecord implements Cloneable {
     /**
      * EBOM 表主键
      */
@@ -51,7 +51,7 @@ public class HzPbomLineRecord {
     private String pBomOfWhichDept;
 
     /**
-     *主键id
+     * 主键id
      */
     private String puid;
 
@@ -68,15 +68,15 @@ public class HzPbomLineRecord {
      */
     private Integer buyUnit;
     /**
-     *车间1
+     * 车间1
      */
     private String workShop1;
     /**
-     *车间2
+     * 车间2
      */
     private String workShop2;
     /**
-     *生产线
+     * 生产线
      */
     private String productLine;
     /**
@@ -198,7 +198,7 @@ public class HzPbomLineRecord {
     }
 
     public void setLineId(String lineId) {
-        this.lineId= lineId;
+        this.lineId = lineId;
     }
 
     public Integer getIsHas() {
@@ -432,5 +432,10 @@ public class HzPbomLineRecord {
 
     public void setUpdateName(String updateName) {
         this.updateName = updateName;
+    }
+
+    @Override
+    public HzPbomLineRecord clone() throws CloneNotSupportedException {
+        return (HzPbomLineRecord) super.clone();
     }
 }
