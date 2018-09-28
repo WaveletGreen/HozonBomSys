@@ -274,6 +274,17 @@ public class HzPbomController extends BaseController {
         return hzPbomService.simulateCraftingPart(param);
     }
 
+    @RequestMapping(value = "update/accessories",method = RequestMethod.GET)
+    public String getupdate(String projectId,String eBomPuid,Model model){
+        if (eBomPuid == null) {
+            return "";
+        }
+        model.addAttribute("data",eBomPuid);
+        return "bomManage/pbom/pbomManage/updateAccessoriesLibrary";
+    }
+
+
+    @RequestMapping("query/accessories")
     /**
      * 合成工艺合件操作
      *
