@@ -24,4 +24,8 @@ public interface HzAccessoriesLibsDAO {
     List<HzAccessoriesLibs> getHzAccessoriesLibs(String puid);
 
     Page<HzAccessoriesLibs> getHzAccessoriesByPage(HzAccessoriesLibsPageQuery query);
+
+    int selectHzAccessoriesLibsByCount(String pMaterielCode);
+
+    HzAccessoriesLibs getHzAccessoriesLibsByCode(String pMaterielCode);
 }
