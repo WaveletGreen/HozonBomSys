@@ -109,5 +109,5 @@ public interface HzPbomRecordDAO {
      * @param projectId
      * @return
      */
-    List<HzPbomLineRecord> getFirstLevelBomByParentLineIndexLength(String parentId,String projectId);
+    List<HzPbomLineRecord> getFirstLevelBomByParentId(String parentId,String projectId);
 }
