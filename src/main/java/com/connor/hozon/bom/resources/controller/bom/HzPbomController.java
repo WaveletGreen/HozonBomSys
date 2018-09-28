@@ -284,7 +284,6 @@ public class HzPbomController extends BaseController {
     }
 
 
-    @RequestMapping("query/accessories")
     /**
      * 合成工艺合件操作
      *

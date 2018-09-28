@@ -1089,8 +1089,13 @@ public class HzPbomServiceImpl implements HzPbomService {
     @Override
     public JSONObject addAccessories(String puid, String materielCode, String projectId) {
         JSONObject result = new JSONObject();
+        //projectPuid
+        HZBomMainRecord hzBomMainRecord = hzBomMainRecordDao.selectByProjectPuid(projectId);
+        String projectPuid = hzBomMainRecord.getPuid();
+        //puid
+        String puidSon = UUIDHelper.generateUid();
         //根据父的puid查找出所有跟父BomLineId相同的PBOM
-        List<HzPbomLineRecord> hzPbomLineRecords = hzPbomRecordDAO.queryAllBomLineIdByPuid(puid);
+        List<HzPbomLineRecord> hzPbomLineRecords = hzPbomRecordDAO.queryAllBomLineIdByPuid(puid, projectId);
         //根据materielCode查找工艺辅料
         HzAccessoriesLibs hzAccessoriesLibs = hzAccessoriesLibsDAO.queryAccessoriesByMaterielCode(materielCode);
         //生成子PBOM
@@ -1099,7 +1104,7 @@ public class HzPbomServiceImpl implements HzPbomService {
         for(HzPbomLineRecord hzPbomLineRecord : hzPbomLineRecords){
             HzPbomLineRecord hzPbomLineRecordAddSon = new HzPbomLineRecord();
             //父id
-            String fatherPuid = hzPbomLineRecord.getPuid();
+            String fatherPuid = hzPbomLineRecord.geteBomPuid();
             hzPbomLineRecordAddSon.setParentUid(fatherPuid);
 
 
@@ -1114,20 +1119,26 @@ public class HzPbomServiceImpl implements HzPbomService {
             String maxIndexStr = "";
             int maxIndexEnd = 0;
             String upNum = "";
-            for(HzPbomLineRecord pbomSon : pbomsons){
-                String[] indexStrs = pbomSon.getLineIndex().split("\\.");
-                int pbomSonIndexLength = indexStrs.length;
-                if(pbomSonIndexLength-1==fatherIndexLength ){
-                    Integer indexEnd = Integer.valueOf(indexStrs[indexStrs.length-1]);
-                    if(indexEnd>maxIndexEnd){
-                        maxIndexEnd = indexEnd;
-                        maxIndexStr = pbomSon.getLineIndex();
-                        upNum = pbomSon.getSortNum();
+            if(pbomsons.size()==1){
+                maxIndexStr = pbomsons.get(0).getLineIndex()+".";
+                upNum = pbomsons.get(0).getSortNum();
+            }else {
+                for(HzPbomLineRecord pbomSon : pbomsons){
+                    String[] indexStrs = pbomSon.getLineIndex().split("\\.");
+                    int pbomSonIndexLength = indexStrs.length;
+                    if(pbomSonIndexLength-1==fatherIndexLength ){
+                        Integer indexEnd = Integer.valueOf(indexStrs[indexStrs.length-1]);
+                        if(indexEnd>maxIndexEnd){
+                            maxIndexEnd = indexEnd;
+                            maxIndexStr = pbomSon.getLineIndex();
+                            upNum = pbomSon.getSortNum();
+                        }
                     }
                 }
             }
-            int splitIndex = maxIndexStr.lastIndexOf("\\.");
-            String indexStr = maxIndexStr.substring(0,splitIndex)+"\\."+String.valueOf(maxIndexEnd+10);
+
+            int splitIndex = maxIndexStr.lastIndexOf(".");
+            String indexStr = maxIndexStr.substring(0,splitIndex)+"."+String.valueOf(maxIndexEnd+10);
             hzPbomLineRecordAddSon.setLineIndex(indexStr);
 
             //num
@@ -1135,12 +1146,20 @@ public class HzPbomServiceImpl implements HzPbomService {
             String num = HzBomSysFactory.generateBomSortNum(projectId,upNum,downNum);
             hzPbomLineRecordAddSon.setSortNum(num);
 
+            //PUID
+            hzPbomLineRecordAddSon.setPuid(puidSon);
             //P_E_BOM_PUID
-            hzPbomLineRecordAddSon.seteBomPuid(puid);
+            hzPbomLineRecordAddSon.seteBomPuid(puidSon);
             //P_BOM_LINE_PART_NAME
             hzPbomLineRecordAddSon.setpBomLinePartName(hzAccessoriesLibs.getpMaterielName());
             //P_BOM_LINE_ID
             hzPbomLineRecordAddSon.setLineId(hzAccessoriesLibs.getpMaterielCode());
+            //P_BOM_DIGIFAX_ID
+            hzPbomLineRecordAddSon.setBomDigifaxId(projectPuid);
+            //is2Y
+            hzPbomLineRecordAddSon.setIs2Y(0);
+            //isHas
+            hzPbomLineRecordAddSon.setIsHas(0);
             hzPbomLineRecordsAddSons.add(hzPbomLineRecordAddSon);
         }
         if(hzPbomLineRecordsAddSons.size()>0&&hzPbomLineRecordsAddSons!=null){
