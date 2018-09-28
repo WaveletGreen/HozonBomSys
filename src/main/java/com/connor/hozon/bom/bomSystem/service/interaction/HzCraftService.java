@@ -48,8 +48,14 @@ public class HzCraftService implements IHzCraftService {
      * 该集合下的所有子都需要进行查找编号的重新编排，同一个父，出现了多个元素进行合成，需要重新编排
      */
     private Map<String, Map<String, HzPbomLineRecord>> toChildrenNeedToUpdateItsLineIndex = new LinkedHashMap<>();
+    /**
+     * 同父层下的所有子层
+     */
+    private Map<String, Map<String, HzPbomLineRecord>> myWavelet = new LinkedHashMap<>();
 
+    private Map<String, Map<String, HzPbomLineRecord>> myLovelyWavelet = new LinkedHashMap<>();
     private static final Logger logger = LoggerFactory.getLogger(HzCraftService.class);
+    private Map<String, Object> param = new HashMap<>();
 
     /**
      * 创建一个PBOM对象，作为新件
@@ -120,9 +126,16 @@ public class HzCraftService implements IHzCraftService {
      */
     @Override
     public List<HzPbomLineRecord> craftParents(List<String> parentUids, HzPbomLineRecord part) throws CloneNotSupportedException {
-        HzPbomLineRecord hzPbomLineRecord = new HzPbomLineRecord();
-        hzPbomLineRecord.setParentUid("111");
-        HzPbomLineRecord hzPbomLineRecord1 = hzPbomLineRecord.clone();
+        for (int i = 0; i < parentUids.size(); i++) {
+            HzPbomLineRecord parent = hzPbomRecordDAO.getHzPbomByEbomPuid(parentUids.get(i), projectUid);
+            if (myLovelyWavelet.containsKey(parent.getLineId())) {
+                myLovelyWavelet.get(parent.getLineId()).put(parent.getPuid(), parent);
+            } else {
+                Map<String, HzPbomLineRecord> map = new LinkedHashMap<>();
+                map.put(parent.getPuid(), parent);
+                myLovelyWavelet.put(parent.getLineId(), map);
+            }
+        }
         return null;
     }
 
@@ -135,63 +148,85 @@ public class HzCraftService implements IHzCraftService {
      */
     @Override
     public void craftChildren(List<String> childrenUids, HzPbomLineRecord part) {
-        Map<String, Object> param = new HashMap<>();
-        param.put("projectId", projectUid);
         for (int i = 0; i < childrenUids.size(); i++) {
-            //根据ebom uid找到当前的bom行
             HzPbomLineRecord line = hzPbomRecordDAO.getHzPbomByEbomPuid(childrenUids.get(i), projectUid);
-            if (line != null && checkString(line.getParentUid())) {
-                //找pbom bom行的父行
-                HzPbomLineRecord parent = hzPbomRecordDAO.getHzPbomByEbomPuid(line.getParentUid(), projectUid);
-                List<HzPbomLineRecord> ohMyChildren = hzPbomRecordDAO.doggyfindMyChildrenByMyUid(parent.geteBomPuid());
+            if (myWavelet.containsKey(line.getParentUid())) {
+                myWavelet.get(line.getParentUid()).put(line.getLineIndex(), line);
+            } else {
+                Map<String, HzPbomLineRecord> wavelet = new LinkedHashMap<>();
+                wavelet.put(line.getLineIndex(), line);
+                myWavelet.put(line.getParentUid(), wavelet);
+            }
+        }
+        Iterator<Map.Entry<String, Map<String, HzPbomLineRecord>>> iterator = myWavelet.entrySet().iterator();
+        while (iterator.hasNext()) {
+            Map.Entry entry = iterator.next();
+            Map<String, HzPbomLineRecord> values = (Map<String, HzPbomLineRecord>) entry.getValue();
+            //父层
+            HzPbomLineRecord parent = hzPbomRecordDAO.getHzPbomByEbomPuid((String) entry.getKey(), projectUid);
+            if (parent != null && checkString(parent.getLineId())) {
+                //获取名下子一层
+                List<HzPbomLineRecord> ohMyChildren = hzPbomRecordDAO.getFirstLevelBomByParentId(parent.geteBomPuid(), projectUid);
                 //父层没有子，不进行剪切操作
                 if (ohMyChildren == null || ohMyChildren.isEmpty()) {
+                    logger.warn("Oops," + parent.getLineId() + "(PUID:" + parent.getPuid() + ")下的子删除或剪切了");
                     continue;
                 }
-                if (parent != null && checkString(parent.getLineId())) {
-                    //找到所有的父行
-                    param.put("lineId", parent.getLineId());
-                    List<HzPbomLineRecord> allCodeIsWithToParentCode = hzPbomRecordDAO.findPbom(param);
-                    if (allCodeIsWithToParentCode != null && !allCodeIsWithToParentCode.isEmpty()) {
-                        for (int i1 = 0; i1 < allCodeIsWithToParentCode.size(); i1++) {
-                            /**父行下的所有子一层，子一层的lineId和查找编号必须匹配当前子层的lineId和查找编号，
-                             * 如果是这样，则认为是操作了当前行，则需要将当前父下该子行移除，然后调整当前父下的所有子行的查找编号*/
-                            List<HzPbomLineRecord> isWithsChildren = hzPbomRecordDAO.doggyfindMyChildrenByMyUid(allCodeIsWithToParentCode.get(i1).geteBomPuid());
-                            if (isWithsChildren == null || isWithsChildren.isEmpty()) {
-                                continue;
-                            }
-                            if (isWithsChildren.size() != ohMyChildren.size()) {
-                                logger.warn("PBOM BOM行的PUID为" + allCodeIsWithToParentCode.get(i1).getPuid() +
-                                        "的子层数量与合成源EBOM PUID为" + childrenUids.get(i) +
-                                        "的父层的子数量不一致，认定不是同一个PBOM，或者PBOM是错的，需要更正PBOM");
-                                continue;
-                            }
-                            boolean isNeedToUpdate = false;
-                            Map<String, HzPbomLineRecord> tempToUpdate = new LinkedHashMap<>();
-                            for (HzPbomLineRecord isWithsChild : isWithsChildren) {
-                                //余认为零件号与查找编号相等则为同一个BOM
-                                if (isWithsChild.getLineId().equals(line.getLineId()) && isWithsChild.getLineIndex().equals(line.getLineIndex())) {
-                                    theChildrenNeedToDelete.add(isWithsChild);
-                                    isNeedToUpdate = true;
-                                }
-                                if (!isNeedToUpdate) {
-                                    tempToUpdate.put(isWithsChild.getPuid(), isWithsChild);
-                                }
-                            }
-                            if (isNeedToUpdate) {
-                                toChildrenNeedToUpdateItsLineIndex.put(allCodeIsWithToParentCode.get(i1).getPuid(), tempToUpdate);
+                //找到所有的父行
+                param.put("lineId", parent.getLineId());
+                List<HzPbomLineRecord> allCodeIsWithToParentCode = hzPbomRecordDAO.findPbom(param);
+
+                if (allCodeIsWithToParentCode != null && !allCodeIsWithToParentCode.isEmpty()) {
+                    for (int i1 = 0; i1 < allCodeIsWithToParentCode.size(); i1++) {
+
+                        /**父行下的所有子一层，子一层的lineId和查找编号必须匹配当前子层的lineId和查找编号，
+                         * 如果是这样，则认为是操作了当前行，则需要将当前父下该子行移除，然后调整当前父下的所有子行的查找编号*/
+                        List<HzPbomLineRecord> isWithsChildren = hzPbomRecordDAO.getFirstLevelBomByParentId(allCodeIsWithToParentCode.get(i1).geteBomPuid(), projectUid);
+                        if (isWithsChildren == null || isWithsChildren.isEmpty()) {
+                            continue;
+                        }
+                        if (isWithsChildren.size() != ohMyChildren.size()) {
+                            logger.warn("PBOM BOM行的PUID为" + allCodeIsWithToParentCode.get(i1).getPuid() +
+                                    "的子层数量与合成源EBOM的父层的子数量不一致，认定不是同一个PBOM，或者PBOM是错的，需要更正PBOM");
+                            continue;
+                        }
+                        boolean isNeedToUpdate = false;
+                        Map<String, HzPbomLineRecord> tempToUpdate = new LinkedHashMap<>();
+                        //找到相同父下的所有非合成源的子
+                        for (HzPbomLineRecord isWithsChild : isWithsChildren) {
+                            //余认为零件号与查找编号相等则为同一个BOM
+                            if (values.containsKey(isWithsChild.getLineIndex()) && values.get(isWithsChild.getLineIndex()).getLineId().equals(isWithsChild.getLineId())) {
+                                logger.warn("新郎新娘可以接吻了");
+                                theChildrenNeedToDelete.add(isWithsChild);
+                                isNeedToUpdate = true;
                             } else {
-                                logger.warn("虽然PBOM中PUID为" + allCodeIsWithToParentCode.get(i1).getPuid() +
-                                        "的所有子层与合成源EBOM PUID为" + childrenUids.get(i) +
-                                        "的父层的子数量一致，但是没有找到合成源" + line.getLineId() + "所在的查找编号为" +
-                                        line.getLineIndex() + "的BOM行，认定不是同一个BOM，或者BOM错误，又或是BOM已被更改"
-                                );
+                                tempToUpdate.put(isWithsChild.getLineIndex(), isWithsChild);
                             }
                         }
+                        if (isNeedToUpdate) {
+                            toChildrenNeedToUpdateItsLineIndex.put(allCodeIsWithToParentCode.get(i1).getPuid(), tempToUpdate);
+                        } else {
+                            logger.warn("虽然PBOM中PUID为" + allCodeIsWithToParentCode.get(i1).getPuid() +
+                                    "的所有子层与合成源父层的子数量一致，但是没有找到合成源的父层" + parent.getLineId() + "(" +
+                                    parent.getPuid() + ")与合成源的查找编号一致的BOM行，认定不是同一个BOM，或者BOM错误，又或是BOM已被更改"
+                            );
+                        }
                     }
+                } else {
+                    logger.warn("卧槽，没找找到我爸爸");
                 }
             }
         }
+//            for (int i = 0; i < childrenUids.size(); i++) {
+//                //根据ebom uid找到当前的bom行
+//                HzPbomLineRecord line = hzPbomRecordDAO.getHzPbomByEbomPuid(childrenUids.get(i), projectUid);
+//
+//
+//                if (line != null && checkString(line.getParentUid())) {
+//                    //找pbom bom行的父行
+//
+//                }
+//            }
         logger.info("完成查找需要更新子层的父层");
     }
 
@@ -232,8 +267,10 @@ public class HzCraftService implements IHzCraftService {
     public boolean autoCraft(String projectUid, List<String> parentUids, List<String> childrenUids, List<String> targetUids, Map<String, String> collectedData) {
         HzPbomLineRecord pbom = craftNewPart(collectedData);
         this.projectUid = projectUid;
+        param.put("projectId", projectUid);
         try {
             craftChildren(childrenUids, pbom);
+            craftChildren(parentUids, pbom);
             craftParents(parentUids, pbom);
         } catch (CloneNotSupportedException e) {
             e.printStackTrace();

@@ -236,7 +236,7 @@
         and t1.P_E_BOM_PUID = #{eBomPuid,jdbcType=VARCHAR}
       </if>
       <if test="lineId != null and lineId!=''">
-        and t1.P_BOM_LINE_ID = #{lineID,jdbcType=VARCHAR}
+        and t1.P_BOM_LINE_ID = #{lineId,jdbcType=VARCHAR}
       </if>
       <if test="parentId != null and parentId!=''">
         and t1.P_PARENT_UID = #{parentId,jdbcType=VARCHAR}
