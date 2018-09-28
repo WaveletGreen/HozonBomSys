@@ -14,14 +14,18 @@
 <form id="fourProcessForm" role="form" method="post" action="">
     <input id="puids" type="hidden"th:value="${data}">
     <input id="types" type="hidden" th:value="${type}">
+    <input id="chongya" type="hidden" th:value="${cy}">
+    <input id="hanzhuang" type="hidden" th:value="${hz}">
+    <input id="tuzhuang" type="hidden" th:value="${tz}">
+    <input id="zongzhuang" type="hidden" th:value="${zz}">
     <label>四大工艺</label>
     <!--<select id="box" class="form-control" style="width: 260px"></select>-->
     <div id="selectBox" style="border: solid 1px black;width: 200px;height: 100px">
         <ul>
-            <li id="stamping" style="list-style: none;"><input type="checkbox" value="冲压">冲压</li>
-            <li style="list-style: none;"><input type="checkbox" value="焊装">焊装</li>
-            <li style="list-style: none;"><input type="checkbox" value="涂装">涂装</li>
-            <li style="list-style: none;"><input type="checkbox" value="总装">总装</li>
+            <li id="stamping" style="list-style: none;"><input id="cycb" type="checkbox" value="冲压">冲压</li>
+            <li style="list-style: none;"><input id="hzcb" type="checkbox" value="焊装">焊装</li>
+            <li style="list-style: none;"><input id="tzcb" type="checkbox" value="涂装">涂装</li>
+            <li style="list-style: none;"><input id="zzcb" type="checkbox" value="总装">总装</li>
         </ul>
         <!--<button value="5">确定</button>-->
     </div>
@@ -56,6 +60,22 @@
         var types = $("#types").val();
         if (types =="1"){
             $("#stamping").hide();
+        }
+        var chongya = $("#chongya").val();
+        var hanzhuang = $("#hanzhuang").val();
+        var tuzhuang = $("#tuzhuang").val();
+        var zongzhuang = $("#zongzhuang").val();
+        if(chongya!=""&&chongya !=null){
+            $("#cycb").attr("disabled","true");
+        }
+        if(hanzhuang!=""&&hanzhuang !=null){
+            $("#hzcb").attr("disabled","true");
+        }
+        if(tuzhuang!=""&&tuzhuang !=null){
+            $("#tzcb").attr("disabled","true");
+        }
+        if(zongzhuang!=""&&zongzhuang !=null){
+            $("#zzcb").attr("disabled","true");
         }
         var arr = [];//定义一个数组用来接收多选框的值
         //初始化让下拉列表不显示

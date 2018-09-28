@@ -328,25 +328,25 @@ function initTable(pBomUrl) {
                             // });
                         }
                     },
-                    {
-                        text: '添加工艺辅料',
-                        iconCls: 'glyphicon glyphicon-plus',
-                        handler: function () {
-                            var rows = $table.bootstrapTable('getSelections');
-                            //只能选一条
-                            if (rows.length != 1) {
-                                window.Ewin.alert({message: '请选择一条需要添加的数据!'});
-                                return false;
-                            }
-                            window.Ewin.dialog({
-                                title: "添加",
-                                url: "pbom/addPbomManage?projectId=" + projectPuid + "&eBomPuid=" + rows[0].eBomPuid,
-                                gridId: "gridId",
-                                width: 500,
-                                height: 500
-                            })
-                        }
-                    },
+                    // {
+                    //     text: '添加工艺辅料',
+                    //     iconCls: 'glyphicon glyphicon-plus',
+                    //     handler: function () {
+                    //         var rows = $table.bootstrapTable('getSelections');
+                    //         //只能选一条
+                    //         if (rows.length != 1) {
+                    //             window.Ewin.alert({message: '请选择一条需要添加的数据!'});
+                    //             return false;
+                    //         }
+                    //         window.Ewin.dialog({
+                    //             title: "添加",
+                    //             url: "pbom/addPbomManage?projectId=" + projectPuid + "&eBomPuid=" + rows[0].eBomPuid,
+                    //             gridId: "gridId",
+                    //             width: 500,
+                    //             height: 500
+                    //         })
+                    //     }
+                    // },
                 ],
             });
             // $table.bootstrapTable('hideColumn', 'eBomPuid');
