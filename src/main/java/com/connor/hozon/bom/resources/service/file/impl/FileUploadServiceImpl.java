@@ -171,7 +171,22 @@ public class FileUploadServiceImpl implements FileUploadService {
             if(ListUtil.isNotEmpty(records)){
                 records.forEach(record -> {
                     if(carParts.contains(record.getpBomLinePartResource())){
-                        hzPbomLineRecords.add(HzPbomRecordFactory.ImportEbomRecordToPbomRecord(record));
+                        HzPbomLineRecord pbomLineRecord = HzPbomRecordFactory.ImportEbomRecordToPbomRecord(record);
+                        if(Integer.valueOf(1).equals(pbomLineRecord.getIsHas())){
+                            boolean findChildren = false;
+                            for(HzImportEbomRecord r :records){
+                                if(carParts.contains(r.getpBomLinePartResource())){
+                                    if(pbomLineRecord.geteBomPuid().equals(r.getParentId())){
+                                        findChildren = true;
+                                        break;
+                                    }
+                                }
+                            }
+                            if(!findChildren){
+                                pbomLineRecord.setIsHas(0);
+                            }
+                        }
+                        hzPbomLineRecords.add(pbomLineRecord);
                     }
                 });
 
