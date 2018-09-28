@@ -186,5 +186,5 @@ function initTable(url) {
 }
 
 function queryLou(row) {
-    window.location.href="singleVehicles/get/detail?id="+row.id;
+    window.location.href="singleVehicles/getDetail?id="+row;
 }

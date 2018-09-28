@@ -116,31 +116,6 @@ public class HzMbomRecordFactory {
     }
 
 
-    public static HzMbomLineRecord ebomRecordToMbomRecord(HzEPLManageRecord record){
-        HzMbomLineRecord hzMbomLineRecord = new HzMbomLineRecord();
-        hzMbomLineRecord.setPuid(UUID.randomUUID().toString());
-        hzMbomLineRecord.setIsHas(record.getIsHas());
-        hzMbomLineRecord.setBomDigifaxId(record.getBomDigifaxId());
-        hzMbomLineRecord.seteBomPuid(record.getPuid());
-        hzMbomLineRecord.setIsDept(record.getIsDept());
-        if(record.getLineID().endsWith("YY0")){
-            hzMbomLineRecord.setLineId(record.getLineID().substring(0,record.getLineID().length()-3));
-        }else {
-            hzMbomLineRecord.setLineId(record.getLineID());
-        }
-        hzMbomLineRecord.setIsPart(record.getIsPart());
-        hzMbomLineRecord.setIs2Y(record.getIs2Y());
-        hzMbomLineRecord.setLineIndex(record.getLineIndex());
-        hzMbomLineRecord.setParentUid(record.getParentUid());
-        hzMbomLineRecord.setpBomLinePartClass(record.getpBomLinePartClass());
-        hzMbomLineRecord.setpBomLinePartName(record.getpBomLinePartName());
-        hzMbomLineRecord.setpBomOfWhichDept(record.getpBomOfWhichDept());
-        hzMbomLineRecord.setpBomLinePartEnName(record.getpBomLinePartEnName());
-        hzMbomLineRecord.setpBomLinePartResource(record.getpBomLinePartResource());
-        hzMbomLineRecord.setIsColorPart(record.getColorPart());
-        return hzMbomLineRecord;
-    }
-
     /**
      * 移动部分BOM结构到当前的结构下
      * @param record 当前结构(MBOM)
@@ -187,10 +162,11 @@ public class HzMbomRecordFactory {
         if(Integer.valueOf(1).equals(record.getColorPart())&&ListUtil.isNotEmpty(beans)){
             if(!beans.get(i).getColorCode().equals("-")){
                 lineId = HzBomSysFactory.resultLineId(mbomLineRecord.getLineId(),projectId)+beans.get(i).getColorCode();
-                mbomLineRecord.setColorId(beans.get(i).getColorUid());
             }
         }
-
+        if(ListUtil.isNotEmpty(beans)){
+            mbomLineRecord.setColorId(beans.get(i).getColorUid());
+        }
         mbomLineRecord.setLineId(lineId);
 
         String lineIndex = record.getLineIndex();

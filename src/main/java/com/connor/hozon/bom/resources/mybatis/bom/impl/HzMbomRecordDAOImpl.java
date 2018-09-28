@@ -182,7 +182,7 @@ public class HzMbomRecordDAOImpl extends BaseSQLUtil implements HzMbomRecordDAO 
         }else {
             map.put("tableName",query.getTableName());
         }
-
+        map.put("colorId",query.getColorId());
         return super.findForList("HzMbomRecordDAOImpl_getHzMbomTree",map);
     }
 

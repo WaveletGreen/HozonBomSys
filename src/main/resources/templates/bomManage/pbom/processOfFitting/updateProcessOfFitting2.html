@@ -150,11 +150,11 @@
                 for (var p in _d) {
                     data[_d[p].name] = _d[p].value;
                 }
-
                 var parentUids = $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.getParentUids();
                 var childrenUids = $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.getChildrenUids();
+                var projectUid = $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.getProjectUid();
                 // data.pProjectPertainToPlatform=$("#pProjectPertainToPlatform").val();
-                var params = {parentUids: parentUids, childrenUids: childrenUids, data: data}
+                var params = {projectUid: projectUid, parentUids: parentUids, childrenUids: childrenUids, data: data}
                 console.log(params);
                 console.log(JSON.stringify(params));
                 $.ajax({

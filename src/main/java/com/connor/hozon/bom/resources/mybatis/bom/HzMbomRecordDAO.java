@@ -69,6 +69,7 @@ public interface HzMbomRecordDAO {
      * @param projectId
      * @return
      */
+    @Deprecated
     List<HzMbomLineRecord> getHzVehicleModelName(String projectId);
 
     /**
@@ -96,6 +97,7 @@ public interface HzMbomRecordDAO {
      * @param projectId
      * @return
      */
+    @Deprecated
     Integer getHzMbomTotalCount(String projectId);
 
     /**
@@ -110,6 +112,7 @@ public interface HzMbomRecordDAO {
      * @param query
      * @return
      */
+    @Deprecated
     List<HzMbomLineRecord> findHz2YMbomRecord(HzMbomByPageQuery query);
 
     /**
@@ -117,6 +120,7 @@ public interface HzMbomRecordDAO {
      * @param query
      * @return
      */
+    @Deprecated
     List<HzMbomLineRecord> findHzMbomByResource(HzMbomByPageQuery query);
 
 
@@ -125,6 +129,7 @@ public interface HzMbomRecordDAO {
      * @param query
      * @return
      */
+    @Deprecated
     List<HzMbomLineRecord> findHz2YMbomRecordAll(HzMbomByPageQuery query);
 
     /**
@@ -132,6 +137,7 @@ public interface HzMbomRecordDAO {
      * @param query
      * @return
      */
+    @Deprecated
     List<HzMbomLineRecord> findHzMbomByResourceAll(HzMbomByPageQuery query);
 
     /**
