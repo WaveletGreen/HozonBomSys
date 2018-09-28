@@ -1092,8 +1092,7 @@ public class HzPbomServiceImpl implements HzPbomService {
         //projectPuid
         HZBomMainRecord hzBomMainRecord = hzBomMainRecordDao.selectByProjectPuid(projectId);
         String projectPuid = hzBomMainRecord.getPuid();
-        //puid
-        String puidSon = UUIDHelper.generateUid();
+
         //根据父的puid查找出所有跟父BomLineId相同的PBOM
         List<HzPbomLineRecord> hzPbomLineRecords = hzPbomRecordDAO.queryAllBomLineIdByPuid(puid, projectId);
         //根据materielCode查找工艺辅料
@@ -1103,6 +1102,8 @@ public class HzPbomServiceImpl implements HzPbomService {
         //循环父，生成父id、index、num不同的子
         for(HzPbomLineRecord hzPbomLineRecord : hzPbomLineRecords){
             HzPbomLineRecord hzPbomLineRecordAddSon = new HzPbomLineRecord();
+            //puid
+            String puidSon = UUIDHelper.generateUid();
             //父id
             String fatherPuid = hzPbomLineRecord.geteBomPuid();
             hzPbomLineRecordAddSon.setParentUid(fatherPuid);
@@ -1161,16 +1162,23 @@ public class HzPbomServiceImpl implements HzPbomService {
             //isHas
             hzPbomLineRecordAddSon.setIsHas(0);
             hzPbomLineRecordsAddSons.add(hzPbomLineRecordAddSon);
+            //修改父的isHas
+            if(hzPbomLineRecord.getIsHas()!=1){
+                hzPbomLineRecord.setIsHas(1);
+                hzPbomRecordDAO.update(hzPbomLineRecord);
+            }
         }
         if(hzPbomLineRecordsAddSons.size()>0&&hzPbomLineRecordsAddSons!=null){
-            int insertNum = hzPbomRecordDAO.insertList(hzPbomLineRecordsAddSons);
-            if(insertNum==hzPbomLineRecordsAddSons.size()){
-                result.put("flag",true);
+            int insertFlag = hzPbomRecordDAO.insertList(hzPbomLineRecordsAddSons);
+            if(insertFlag==1){
+                result.put("success",true);
             }else{
-                result.put("flag",false);
+                result.put("success",false);
+                result.put("errMsg","添加失败");
             }
         }else {
-            result.put("flag",false);
+            result.put("success",false);
+            result.put("errMsg","添加失败");
         }
 
         return result;
