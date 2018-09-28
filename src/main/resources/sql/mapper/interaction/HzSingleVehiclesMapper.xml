@@ -4,7 +4,7 @@
     <!--数据库字段-->
     <resultMap id="BaseResultMap" type="sql.pojo.interaction.HzSingleVehicles">
         <!--主键-->
-        <id column="ID" jdbcType="DECIMAL" property="id"/>
+        <id column="ID" jdbcType="DOUBLE" property="id"/>
         <!--项目UID，外键-->
         <result column="SVL_PROJECT_UID" jdbcType="VARCHAR" property="svlProjectUid"/>
         <!--配置物料特性表的单车配置外键-->
@@ -122,7 +122,12 @@
         where ID = #{id,jdbcType=DECIMAL}
     </select>
 
-
+    <select id="checkExist" parameterType="java.lang.String" resultType="java.lang.Integer">
+        select
+        count(*)
+        from HZ_SINGLE_VEHICLES
+        where SVL_CFG_MATERIAL_UID =#{svlCfgMaterialUid,jdbcType=VARCHAR}
+    </select>
 
     <!--查询器查询，可以加多个条件，甚至加分页查询都可以-->
     <select id="selectListByInquirer" parameterType="com.connor.hozon.bom.interaction.inquirer.HzSingleVehiclesInquirer"
@@ -198,12 +203,74 @@
             </if>
         </where>
     </select>
+
+
+    <!--查询一条单车清单信息-->
+    <select id="getSingleVehiclesById" parameterType="java.util.HashMap"
+            resultMap="ExWithProjectBaseResult">
+        select
+        <include refid="Base_Column_List"/>
+        ,
+        t6.p_feature_single_vehicle_code as svl_Material_Code,
+        t6.p_feature_cn_desc as svl_Material_Basic_Info,
+        <include refid="ExWithProject_Column_List"/>,
+        t9.p_color_name,
+        t9.p_color_code
+        from Hz_single_vehicles t
+        left join Hz_Cfg0_Model_Feature t6
+        on t.svl_cfg_material_uid = t6.puid
+        left join Hz_Cfg0_Model_Record t7
+        on t6.p_pertain_to_model = t6.puid
+        left join Hz_Cfg0_Main_Record t8
+        on t7.p_cfg0_model_of_main_record = t8.puid
+        left join Hz_Cfg0_Model_Color_Record t20
+        on t6.p_pertain_to_color_model = t20.puid
+        left join Hz_Cfg0_Colorset t9
+        on t20.p_color_uid = t9.puid
+        left join Hz_Project_Libs t2
+        on t.svl_project_uid = t2.puid
+        left join Hz_Vehicle_Record t3
+        on t3.puid = t2.p_project_pertain_to_vehicle
+        left join Hz_Platform_Record t4
+        on t4.puid = t3.p_vehicle_pertain_to_platform
+        left join Hz_Brand_Record t5
+        on t5.puid = t4.p_pertain_to_brand_puid
+        <where>
+            <if test="projectId!=null">
+                t.svl_project_uid=#{projectId,jdbcType=VARCHAR}
+            </if>
+            <if test="id!=null">
+                and t.id=#{id,jdbcType=DOUBLE}
+            </if>
+        </where>
+    </select>
+
+
     <!--**************************************delete**************************************-->
     <delete id="deleteByPrimaryKey" parameterType="sql.pojo.interaction.HzSingleVehicles">
     delete from HZ_SINGLE_VEHICLES
     where ID = #{id,jdbcType=DECIMAL}
   </delete>
     <!--**************************************insert**************************************-->
+
+    <!--批量插入-->
+    <insert id="insertList" parameterType="java.util.List">
+     insert into HZ_SINGLE_VEHICLES (ID, SVL_PROJECT_UID, SVL_DMB_ID,
+     SVL_CFG_MATERIAL_UID)
+     select SEQ_HZ_SINGLE_VEHICLES.nextval,t.* from
+        (
+        <foreach collection="list" item="item" index="index" separator="UNION ALL">
+            select
+            #{item.svlProjectUid,jdbcType=VARCHAR},
+            #{item.svlDmbId,jdbcType=DOUBLE},
+            #{item.svlCfgMaterialUid,jdbcType=VARCHAR}
+            from DUAL
+        </foreach>
+        )t
+  </insert>
+
+
+
     <insert id="insert" parameterType="sql.pojo.interaction.HzSingleVehicles">
     insert into HZ_SINGLE_VEHICLES (ID, SVL_PROJECT_UID, SVL_DMB_ID,
       SVL_INNER_COLOR_CODE, SVL_INNER_COLOR_NAME, SVL_COLOR_CODE,
@@ -225,6 +292,9 @@
       #{svlCfgMaterialUid,jdbcType=VARCHAR}
       )
   </insert>
+
+
+
     <insert id="insertSelective" parameterType="sql.pojo.interaction.HzSingleVehicles">
         insert into HZ_SINGLE_VEHICLES
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -382,6 +452,19 @@
             </if>
         </trim>
     </insert>
+
+
+
+
+
+
+
+
+
+
+
+
+
     <!--**************************************update**************************************-->
     <update id="updateByPrimaryKeySelective" parameterType="sql.pojo.interaction.HzSingleVehicles">
         update HZ_SINGLE_VEHICLES
@@ -488,5 +571,25 @@
       SVL_RESERVED_15 = #{svlReserved15,jdbcType=VARCHAR},
       SVL_CFG_MATERIAL_UID = #{svlCfgMaterialUid,jdbcType=VARCHAR}
     where ID = #{id,jdbcType=DECIMAL}
+  </update>
+
+
+    <update id="updateSingleVehicles" parameterType="sql.pojo.interaction.HzSingleVehicles">
+        update HZ_SINGLE_VEHICLES
+        <set>
+            <if test="svlInnerColorCode != null">
+                SVL_INNER_COLOR_CODE = #{svlInnerColorCode,jdbcType=VARCHAR},
+            </if>
+            <if test="svlInnerColorName != null">
+                SVL_INNER_COLOR_NAME = #{svlInnerColorName,jdbcType=VARCHAR},
+            </if>
+            <if test="svlBatteryCode != null">
+                SVL_BATTERY_CODE = #{svlBatteryCode,jdbcType=VARCHAR},
+            </if>
+            <if test="svlMotorCode != null">
+                SVL_MOTOR_CODE = #{svlMotorCode,jdbcType=VARCHAR}
+            </if>
+        </set>
+        where ID = #{id,jdbcType=DOUBLE}
   </update>
 </mapper>

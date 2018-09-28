@@ -7,7 +7,9 @@ import com.connor.hozon.bom.resources.domain.dto.response.HzWorkProcessRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.OperateResultMessageRespDTO;
 import com.connor.hozon.bom.resources.domain.query.HzWorkProcessByPageQuery;
 import com.connor.hozon.bom.resources.page.Page;
+import sql.pojo.work.HzWorkProcedure;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -44,9 +46,17 @@ public interface HzWorkProcessService {
      */
     Page<HzWorkProcessRespDTO> findHzWorkProcessForPage(HzWorkProcessByPageQuery query);
 
+    Page<HzWorkProcessRespDTO> findHzWorkProcessForPage2(HzWorkProcessByPageQuery query);
+
     HzWorkProcessRespDTO findHzWorkProcess(String materielId,String projectId);
 
     OperateResultMessageRespDTO applyMbomDataToHzMaterielOneKey(ApplyMbomDataTOHzMaterielReqDTO reqDTO);
 
     int doUpdateByBatch(Map<String,Object> map);
+
+    int insertHzWorkProcedures(List<HzWorkProcedure> hzWorkProcedures);
+
+    void initProcess(String projectId);
+
+    int deleteHzWorkProcessByMaterielIds(List<HzWorkProcedure> hzWorkProceduresDel);
 }

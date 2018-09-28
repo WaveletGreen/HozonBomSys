@@ -140,7 +140,7 @@ public class HzBomAllCfgController {
     }
 
 
-    @RequestMapping(value = "saveBomLinePiont", method = RequestMethod.POST)
+@RequestMapping(value = "saveBomLinePiont", method = RequestMethod.POST)
     @ResponseBody
     public JSONObject saveBomLinePiont(@RequestBody Map<String, Map<String, String>> dataMap) {
         return hzBomAllCfgService.saveBomLinePiont(dataMap);

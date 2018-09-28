@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="HzSingleVehiclesBomRecord">
+
+    <resultMap id="BaseResultMap" type="sql.pojo.bom.HzSingleVehiclesBomRecord">
+        <result column="ID" jdbcType="DOUBLE" property="id"/>
+        <result column="P_EBOM_PUID" jdbcType="VARCHAR" property="eBomPuid"/>
+        <result column="P_MBOM_PUID" jdbcType="VARCHAR" property="mBomPuid"/>
+        <result column="P_SPARE_PART" jdbcType="VARCHAR" property="sparePart"/>
+        <result column="P_SPARE_PART_NUM" jdbcType="VARCHAR" property="sparePartNum"/>
+        <result column="P_PROCESS_ROUTE" jdbcType="VARCHAR" property="processRoute"/>
+        <result column="P_LABOR_HOUR" jdbcType="VARCHAR" property="laborHour"/>
+        <result column="P_RHYTHM" jdbcType="VARCHAR" property="rhythm"/>
+        <result column="P_SOLDER_JOINT" jdbcType="VARCHAR" property="solderJoint"/>
+        <result column="P_MACHINE_MATERIAL" jdbcType="VARCHAR" property="machineMaterial"/>
+        <result column="P_STANDARD_PART" jdbcType="VARCHAR" property="standardPart"/>
+        <result column="P_TOOLS" jdbcType="VARCHAR" property="tools"/>
+        <result column="P_WASTER_PRODUCT" jdbcType="VARCHAR" property="wasterProduct"/>
+        <result column="P_CHANGE" jdbcType="VARCHAR" property="change"/>
+        <result column="P_CHANGE_NUM" jdbcType="VARCHAR" property="changeNum"/>
+        <result column="P_CREATE_TIME" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="P_UPDATE_TIME" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="P_CREATE_NAME" jdbcType="VARCHAR" property="createName"/>
+        <result column="P_UPDATE_NAME" jdbcType="VARCHAR" property="updateName"/>
+        <result column="P_PARENT_UID" jdbcType="VARCHAR" property="parentUid" />
+        <result column="P_BOM_DIGIFAX_ID" jdbcType="VARCHAR" property="bomDigifaxId" />
+        <result column="P_LINE_INDEX" jdbcType="VARCHAR" property="lineIndex" />
+        <result column="P_BOM_LINE_IS_HAS" jdbcType="INTEGER" property="isHas" />
+        <result column="P_BOM_LINE_ID" jdbcType="VARCHAR" property="lineId" />
+        <result column="P_BOM_LINE_IS_2Y" jdbcType="INTEGER" property="is2Y" />
+        <result column="P_BOM_LINE_IS_PART" jdbcType="INTEGER" property="isPart" />
+        <result column="P_BOM_LINE_IS_DEPT" jdbcType="INTEGER" property="isDept" />
+        <result column="P_BOM_OF_WHICH_DEPT" jdbcType="VARCHAR" property="pBomOfWhichDept" />
+        <result column="P_BOM_LINE_PART_NAME" jdbcType="VARCHAR" property="pBomLinePartName" />
+        <result column="P_BOM_LINE_PART_CLASS" jdbcType="VARCHAR" property="pBomLinePartClass" />
+        <result column="P_BOM_LINE_PART_EN_NAME" jdbcType="VARCHAR" property="pBomLinePartEnName" />
+        <result column="P_BOM_LINE_PART_RESOURCE" jdbcType="VARCHAR" property="pBomLinePartResource" />
+        <result column="P_SORT_NUM" jdbcType="VARCHAR" property="sortNum" />
+        <result column="P_STOCK_LOCATION" jdbcType="VARCHAR" property="pStockLocation" />
+        <result column="P_FACTORY_ID" jdbcType="VARCHAR" property="pFactoryId" />
+        <result column="P_SINGLE_VEHICLES_ID" jdbcType="DOUBLE" property="singleVehiclesId" />
+    </resultMap>
+    
+
+    <sql id="SingleVehiclesList">
+        ID, P_SPARE_PART, P_SPARE_PART_NUM, 
+      P_PROCESS_ROUTE, P_LABOR_HOUR, P_RHYTHM, 
+      P_SOLDER_JOINT, P_MACHINE_MATERITAL, P_STANDARD_PART, 
+      P_TOOLS, P_WASTER_PRODUCT, P_CHANGE, 
+      P_CHANGE_NUM, P_MBOM_PUID, 
+      P_CREATE_TIME, P_UPDATE_TIME, P_CREATE_NAME, 
+      P_UPDATE_NAME, P_PARENT_UID, P_BOM_DIGIFAX_ID, 
+      P_LINE_INDEX, P_BOM_LINE_IS_HAS, P_BOM_LINE_ID, 
+      P_BOM_LINE_IS_2Y, P_BOM_LINE_IS_PART, P_BOM_LINE_IS_DEPT, 
+      P_BOM_OF_WHICH_DEPT, P_BOM_LINE_PART_NAME, P_BOM_LINE_PART_CLASS, 
+      P_BOM_LINE_PART_EN_NAME, P_BOM_LINE_PART_RESOURCE, 
+      P_STOCK_LOCATION, P_FACTORY_ID,
+      P_SORT_NUM, P_SINGLE_VEHICLES_ID, P_EBOM_PUID
+  </sql>
+
+
+    <!--查询单车信息 分页-->
+    <select id="HzSingleVehiclesBomDAOImpl_getHzSingleVehiclesBomByPage" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+        select * FROM
+        (SELECT u.*,rownum as rn from
+        (SELECT * from HZ_SINGLE_VEHICLES_BOM
+        where p_bom_digifax_id=(
+        select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(
+        select t2.puid from Hz_project_libs t2
+        <where>
+            t2.puid=#{projectId,jdbcType=VARCHAR}))
+            <if test="singleVehiclesId != null">
+                and P_SINGLE_VEHICLES_ID = #{singleVehiclesId,jdbcType=VARCHAR}
+            </if>
+            <if test="lineIndex != null and lineIndex!=''">
+                and LENGTH(TRANSLATE(P_LINE_INDEX,',0123456789','.'))=#{lineIndex,jdbcType=VARCHAR}
+            </if>
+            <if test="isHas != null and isHas==0">
+                and P_BOM_LINE_IS_HAS = 0
+            </if>
+            <if test="isHas != null and isHas==1">
+                and P_BOM_LINE_IS_HAS = 1
+            </if>
+            <if test="lineId != null and lineId!=''" >
+                and P_BOM_LINE_ID like CONCAT(CONCAT('%',#{lineId,jdbcType=VARCHAR}),'%')
+            </if>
+            <if test="pBomOfWhichDept != null and  pBomOfWhichDept!='' " >
+                and P_BOM_OF_WHICH_DEPT like CONCAT(CONCAT('%',#{pBomOfWhichDept,jdbcType=VARCHAR}),'%')
+            </if>
+            <if test="pBomLinePartClass != null and pBomLinePartClass!=''">
+                and P_BOM_LINE_PART_CLASS = #{pBomLinePartClass,jdbcType=VARCHAR}
+            </if>
+            <if test="pBomLinePartResource != null and pBomLinePartResource!=''">
+                and P_BOM_LINE_PART_RESOURCE = #{pBomLinePartResource,jdbcType=VARCHAR}
+            </if>
+            order by CAST(P_SORT_NUM as FLOAT))u
+        </where>
+        WHERE ROWNUM &lt;=#{limit,jdbcType=INTEGER}) where rn &gt;#{offset,jdbcType=INTEGER}
+    </select>
+
+
+
+
+
+
+
+
+
+    <!--查询单车bom信息 总数分页-->
+    <select id="HzSingleVehiclesBomDAOImpl_getHzSingleVehiclesBomTotalCount" resultType="java.lang.Integer" parameterType="java.util.HashMap">
+        select count(*) from  HZ_SINGLE_VEHICLES_BOM t
+        where t.p_bom_digifax_id=(
+        select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(
+        select t2.puid from Hz_project_libs t2
+        <where>
+            t2.puid=#{projectId,jdbcType=VARCHAR}))
+            <if test="singleVehiclesId != null">
+                and P_SINGLE_VEHICLES_ID = #{singleVehiclesId,jdbcType=VARCHAR}
+            </if>
+            <if test="lineIndex != null and lineIndex!=''">
+                and LENGTH(TRANSLATE(t.P_LINE_INDEX,',0123456789','.'))=#{lineIndex,jdbcType=VARCHAR}
+            </if>
+            <if test="isHas != null and isHas==0">
+                and (t.P_BOM_LINE_IS_HAS = 0)
+            </if>
+            <if test="isHas != null and isHas==1">
+                and t.P_BOM_LINE_IS_HAS = 1
+            </if>
+            <if test="lineId != null and lineId!=''">
+                and t.P_BOM_LINE_ID like CONCAT(CONCAT('%',#{lineId,jdbcType=VARCHAR}),'%')
+            </if>
+            <if test="pBomOfWhichDept != null and  pBomOfWhichDept!='' ">
+                and t.P_BOM_OF_WHICH_DEPT like CONCAT(CONCAT('%',#{pBomOfWhichDept,jdbcType=VARCHAR}),'%')
+            </if>
+            <if test="pBomLinePartClass != null and pBomLinePartClass!=''">
+                and t.P_BOM_LINE_PART_CLASS = #{pBomLinePartClass,jdbcType=VARCHAR}
+            </if>
+            <if test="pBomLinePartResource != null and pBomLinePartResource!=''">
+                and t.P_BOM_LINE_PART_RESOURCE = #{pBomLinePartResource,jdbcType=VARCHAR}
+            </if>
+        </where>
+    </select>
+
+
+
+
+    <!--插入单车BOM-->
+    <insert id="HzSingleVehiclesBomDAOImpl_insertList"  parameterType="java.util.List">
+        insert into HZ_SINGLE_VEHICLES_BOM (ID, P_SPARE_PART, P_SPARE_PART_NUM,
+        P_PROCESS_ROUTE, P_LABOR_HOUR, P_RHYTHM,
+        P_SOLDER_JOINT, P_MACHINE_MATERITAL, P_STANDARD_PART,
+        P_TOOLS, P_WASTER_PRODUCT, P_CHANGE,
+        P_CHANGE_NUM, P_MBOM_PUID,
+        P_CREATE_TIME, P_UPDATE_TIME, P_CREATE_NAME,
+        P_UPDATE_NAME, P_PARENT_UID, P_BOM_DIGIFAX_ID,
+        P_LINE_INDEX, P_BOM_LINE_IS_HAS, P_BOM_LINE_ID,
+        P_BOM_LINE_IS_2Y, P_BOM_LINE_IS_PART, P_BOM_LINE_IS_DEPT,
+        P_BOM_OF_WHICH_DEPT, P_BOM_LINE_PART_NAME, P_BOM_LINE_PART_CLASS,
+        P_BOM_LINE_PART_EN_NAME, P_BOM_LINE_PART_RESOURCE,
+        P_STOCK_LOCATION, P_FACTORY_ID,
+        P_SORT_NUM, P_SINGLE_VEHICLES_ID, P_EBOM_PUID
+        )
+        select SEQ_HZ_SINGLE_VEHICLES_BOM.nextval,t.* from
+        (
+        <foreach collection="list" item="item" index="index" separator="UNION ALL">
+            select
+            #{item.sparePart,jdbcType=VARCHAR}, #{item.sparePartNum,jdbcType=VARCHAR},
+            #{item.processRoute,jdbcType=VARCHAR}, #{item.laborHour,jdbcType=VARCHAR}, #{item.rhythm,jdbcType=VARCHAR},
+            #{item.solderJoint,jdbcType=VARCHAR}, #{item.machineMaterial,jdbcType=VARCHAR},
+            #{item.standardPart,jdbcType=VARCHAR},
+            #{item.tools,jdbcType=VARCHAR}, #{item.wasterProduct,jdbcType=VARCHAR}, #{item.change,jdbcType=VARCHAR},
+            #{item.changeNum,jdbcType=VARCHAR}, #{item.mBomPuid,jdbcType=VARCHAR},
+            #{item.createTime,jdbcType=TIMESTAMP}, #{item.updateTime,jdbcType=TIMESTAMP}, #{item.createName,jdbcType=VARCHAR},
+            #{item.updateName,jdbcType=VARCHAR}, #{item.parentUid,jdbcType=VARCHAR},
+            #{item.bomDigifaxId,jdbcType=VARCHAR},
+            #{item.lineIndex,jdbcType=VARCHAR}, #{item.isHas,jdbcType=INTEGER}, #{item.lineId,jdbcType=VARCHAR},
+            #{item.is2Y,jdbcType=INTEGER}, #{item.isPart,jdbcType=INTEGER}, #{item.isDept,jdbcType=INTEGER},
+            #{item.pBomOfWhichDept,jdbcType=VARCHAR}, #{item.pBomLinePartName,jdbcType=VARCHAR},
+            #{item.pBomLinePartClass,jdbcType=VARCHAR},
+            #{item.pBomLinePartEnName,jdbcType=VARCHAR}, #{item.pBomLinePartResource,jdbcType=VARCHAR},
+            #{item.pStockLocation,jdbcType=VARCHAR}, #{item.pFactoryId,jdbcType=VARCHAR},
+            #{item.sortNum,jdbcType=VARCHAR}, #{item.singleVehiclesId,jdbcType=DOUBLE},
+            #{item.eBomPuid,jdbcType=VARCHAR}
+            from DUAL
+        </foreach>
+        )t
+    </insert>
+
+
+    <!--删除单车BOM-->
+    <delete id="HzSingleVehiclesBomDAOImpl_deleteByProjectId" parameterType="java.lang.String">
+
+        delete HZ_SINGLE_VEHICLES_BOM
+        where p_bom_digifax_id=(
+        select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(
+        select t2.puid from Hz_project_libs t2
+        where
+        t2.puid=#{projectId,jdbcType=VARCHAR}))
+
+    </delete>
+</mapper>

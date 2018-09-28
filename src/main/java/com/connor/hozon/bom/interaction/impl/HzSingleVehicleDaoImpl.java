@@ -6,7 +6,9 @@ import com.connor.hozon.bom.interaction.inquirer.HzSingleVehiclesInquirer;
 import org.springframework.context.annotation.Configuration;
 import sql.pojo.interaction.HzSingleVehicles;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author: Fancyears·Maylos·Maywas
@@ -85,6 +87,32 @@ public class HzSingleVehicleDaoImpl extends BasicDaoImpl<HzSingleVehicles> imple
         inquirer.setSvlProjectUid(projectUid);
         List<HzSingleVehicles> vehicles = selectListByInquirer(inquirer);
         return vehicles == null || vehicles.size() <= 0 ? null : vehicles.get(0);
+    }
+
+    @Override
+    public int insertList(List<HzSingleVehicles> hzSingleVehicles) {
+        return baseSQLUtil.executeInsert(hzSingleVehicles,clzName+".insertList");
+    }
+
+    @Override
+    public boolean checkExist(String projectId, String svlCfgMaterialUid) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("projectId",projectId);
+        map.put("svlCfgMaterialUid",svlCfgMaterialUid);
+        return (int)baseSQLUtil.findForObject(clzName+".checkExist",map)>0;
+    }
+
+    @Override
+    public int updateSingleVehicles(HzSingleVehicles hzSingleVehicles) {
+        return baseSQLUtil.executeUpdate(hzSingleVehicles,clzName+".updateSingleVehicles");
+    }
+
+    @Override
+    public HzSingleVehicles getSingleVehiclesById(String projectId, Long id) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("projectId",projectId);
+        map.put("id",id);
+        return (HzSingleVehicles)baseSQLUtil.findForObject(clzName+".getSingleVehiclesById",map);
     }
 
 }

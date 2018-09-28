@@ -75,6 +75,7 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         registry.addViewController("/craftFitting2").setViewName("/bomManage/pbom/processOfFitting/craftFitting2");
         //PBOM工艺辅料页面
         registry.addViewController("/processAids").setViewName("/bomManage/pbom/processAids/processAids");
+        registry.addViewController("/accessoriesLibrary").setViewName("/resourcesLibrary/accessoriesLibrary/accessoriesLibrary");
         //MBOM维护页面
         registry.addViewController("/mbomMaintenance").setViewName("/bomManage/mbom/mbomMaintenance/mbomMaintenance");
         //Mbom的超级MBOM页面
@@ -91,6 +92,7 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         registry.addViewController("/halfRouting").setViewName("/bomManage/mbom/halfRouting/halfRouting");
         //MBOM的工艺路线页面
         registry.addViewController("/routingData").setViewName("/bomManage/mbom/routingData/routingData");
+        registry.addViewController("/routingData2").setViewName("/bomManage/mbom/routingData/routingData2");
         //MBOM的工艺路线页面
         registry.addViewController("/recycleBin").setViewName("/bomManage/recycleBin/recycleBin");
         //合众字典库

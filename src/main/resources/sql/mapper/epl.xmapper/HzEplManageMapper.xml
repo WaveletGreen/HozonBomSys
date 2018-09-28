@@ -10,7 +10,7 @@
     <result column="P_BOM_OF_WHICH_DEPT" jdbcType="VARCHAR" property="pBomOfWhichDept" />
     <result column="P_PARENT_UID" jdbcType="VARCHAR" property="parentUid"/>
     <result column="P_BOM_DIGIFAX_ID" jdbcType="VARCHAR" property="bomDigifaxId"/>
-        <result column="P_BOM_LINE_PUID" jdbcType="VARCHAR" property="linePuid"/>
+      <result column="P_BOM_LINE_PUID" jdbcType="VARCHAR" property="linePuid"/>
     <result column="P_BOM_LINE_IS_PART" jdbcType="INTEGER" property="isPart"/>
     <result column="P_BOM_ORDER_NUM" jdbcType="INTEGER" property="orderNum"/>
     <result column="P_BOM_LINE_IS_DEPT" jdbcType="INTEGER" property="isDept"/>
@@ -529,7 +529,21 @@
 
         )
         )u
-        WHERE ROWNUM &lt;=(#{limit,jdbcType=INTEGER}*(#{offset,jdbcType=INTEGER}+1)) order by CAST(P_SORT_NUM as FLOAT)) where rn &gt;(#{limit,jdbcType=INTEGER}*#{offset,jdbcType=INTEGER})
+        WHERE
+        ROWNUM &lt;=(#{limit,jdbcType=INTEGER}*(#{offset,jdbcType=INTEGER}+1))
+        <if test="lineId!=null and lineId!=''">
+            and P_BOM_LINE_ID like CONCAT(CONCAT('%',#{lineId, jdbcType=VARCHAR}), '%')
+        </if>
+        <if test="pBomOfWhichDept != null and pBomOfWhichDept!='' ">
+            and P_BOM_OF_WHICH_DEPT like CONCAT(CONCAT('%', #{pBomOfWhichDept, jdbcType=VARCHAR}), '%')
+        </if>
+        <if test="P_FASTENER==1">
+            and P_FASTENER is not null and P_FASTENER!='/'
+        </if>
+        <if test="P_FASTENER==2">
+            and (P_FASTENER is null or P_FASTENER='/')
+        </if>
+        order by CAST(P_SORT_NUM as FLOAT)) where rn &gt;(#{limit,jdbcType=INTEGER}*#{offset,jdbcType=INTEGER})
     </select>
   <!--查询EPL信息总数-->
   <select id="HzEplManageRecordDAOImpl_findTotalCount" resultType="java.lang.Integer" parameterType="java.util.HashMap">
@@ -556,10 +570,10 @@
       <if test="pBomOfWhichDept != null and  pBomOfWhichDept!='' " >
           and t1.P_BOM_OF_WHICH_DEPT like CONCAT(CONCAT('%',#{pBomOfWhichDept,jdbcType=VARCHAR}),'%')
       </if>
-      <if test="pFastener == 1" >
+      <if test="pFastener=1" >
           and t1.P_FASTENER is not null
       </if>
-      <if test="pFastener ==2 " >
+      <if test="pFastener=2 " >
           and t1.P_FASTENER is  null
       </if>
       </where>
@@ -569,12 +583,15 @@
         select count(count(*)) from (
         select
         t.PUID PUID,
-        t.P_BOM_LINE_ID
+        t.P_BOM_LINE_ID,
+        t.P_BOM_OF_WHICH_DEPT,
+        t.P_FASTENER
         from (
         select
         t1.PUID PUID,
-        t1.P_BOM_LINE_ID
-
+        t1.P_BOM_LINE_ID,
+        t1.P_BOM_OF_WHICH_DEPT,
+        t1.P_FASTENER
         from HZ_BOM_LINE_RECORD t1
         where t1.P_BOM_LINE_ID in(
 
@@ -598,7 +615,9 @@
 
         select
         t3.PUID		PUID,
-        t3.P_BOM_LINE_ID
+        t3.P_BOM_LINE_ID,
+        t.P_BOM_OF_WHICH_DEPT,
+        t.P_FASTENER
         from HZ_BOM_LINE_RECORD t
         LEFT OUTER JOIN HZ_MBOM_RECORD t2 on t.Puid = t2.P_BOM_PUID
         RIGHT  OUTER JOIN
@@ -623,6 +642,20 @@
         )
         )t3	on t.PUID=t3.P_E_BOM_PUID
         )t
+        where
+          1=1
+          <if test="lineId != null and lineId!='' ">
+              and t.P_BOM_LINE_ID like concat(concat('%', #{lineId, jdbcType=VARCHAR}), '%')
+          </if>
+          <if test="pBomOfWhichDept !=null and pBomOfWhichDept!='' ">
+              and t.P_BOM_OF_WHICH_DEPT like concat(concat('%', #{pBomOfWhichDept, jdbcType=VARCHAR}), '%')
+          </if>
+          <if test="pFastener==1">
+              and t.P_FASTENER is not null and t.P_FASTENER!='/'
+          </if>
+          <if test="pFastener==2">
+              and (t.P_FASTENER is null or t.P_FASTENER='/')
+          </if>
         GROUP BY t.P_BOM_LINE_ID
     </select>
   <!--分页查询 EBOM全信息-->

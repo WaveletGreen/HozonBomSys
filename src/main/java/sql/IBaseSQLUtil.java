@@ -129,4 +129,11 @@ public interface IBaseSQLUtil {
      */
     List findForList(final String sqlMapId, final Object param);
 
+    /**
+     * 查询获取一个对象
+     * @param sqlMapId
+     * @param param
+     * @return
+     */
+    Object findForObject(final String sqlMapId, final Object param);
 }
