@@ -13,6 +13,7 @@ import sql.BaseSQLUtil;
 import sql.pojo.bom.HzPbomLineRecord;
 import sql.pojo.bom.HzPbomRecord;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,7 +37,35 @@ public class HzPbomRecordDAOImpl extends BaseSQLUtil implements HzPbomRecordDAO 
 
     @Override
     public int insertList(List<HzPbomLineRecord> records) {
-        return super.insert("HzPbomRecordDAOImpl_insertList",records);
+        int size = records.size();
+        //分批插入数据 一次1000条
+        int i = 0;
+        int cout = 0;
+        try {
+            synchronized (this){
+                if (size > 1000) {
+                    for (i = 0; i < size / 1000; i++) {
+                        List<HzPbomLineRecord> list = new ArrayList<>();
+                        for (int j = 0; j < 1000; j++) {
+                            list.add(records.get(cout));
+                            cout++;
+                        }
+                        super.insert("HzPbomRecordDAOImpl_insertList",list);
+                    }
+                }
+                if (i * 1000 < size) {
+                    List<HzPbomLineRecord> list = new ArrayList<>();
+                    for (int j = 0; j < size - i * 1000; j++) {
+                        list.add(records.get(cout));
+                        cout++;
+                    }
+                    super.insert("HzPbomRecordDAOImpl_insertList",list);
+                }
+            }
+            return 1;
+        }catch (Exception e){
+            return 0;
+        }
     }
 
     @Override

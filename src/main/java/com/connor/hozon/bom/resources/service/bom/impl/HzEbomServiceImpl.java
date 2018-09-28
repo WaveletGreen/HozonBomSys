@@ -144,6 +144,7 @@ public class HzEbomServiceImpl implements HzEbomService {
             recordRespDTOList.add(recordRespDTO);
             return new Page<>(recordPage.getPageNumber(), recordPage.getPageSize(), recordPage.getTotalCount(), recordRespDTOList);
         } catch (Exception e) {
+            e.printStackTrace();
             return null;
         }
     }
@@ -211,7 +212,7 @@ public class HzEbomServiceImpl implements HzEbomService {
                     objectMap.put("projectId", reqDTO.getProjectId());
                     List<HzEPLManageRecord> list1 = hzEbomRecordDAO.findEbom(objectMap);
                     List<HzPbomLineRecord> list2 = hzPbomRecordDAO.getPbomById(objectMap);
-                    List<HzMbomLineRecord> list3 = hzMbomRecordDAO.findHzMbomByPuid(objectMap);
+//                    List<HzMbomLineRecord> list3 = hzMbomRecordDAO.findHzMbomByPuid(objectMap);
                     String puid = "";
 
                     if (ListUtil.isNotEmpty(list1)) {
@@ -468,140 +469,140 @@ public class HzEbomServiceImpl implements HzEbomService {
                             hzPbomRecordDAO.insertList(pbomLineRecords);
                         }
 
-                        if (ListUtil.isNotEmpty(list3)) {
-                            List<HzMbomLineRecord> hzMbomLineRecords = new ArrayList<>();
-                            for (int i = 0; i < list3.size(); i++) {
-                                HzMbomLineRecord hzMbomLineRecord = HzMbomRecordFactory.addHzEbomReqDTOMbomRecord(reqDTO);//MBOM
-                                if (list3.get(i).getIsHas().equals(0) || list3.get(i).getIsPart().equals(1)) {
-                                    list3.get(i).setIsHas(1);
-                                    list3.get(i).setIsPart(0);
-                                    //更新数据
-                                    hzMbomRecordDAO.update(list3.get(i));
-                                }
-
-                                hzMbomLineRecord.setBomDigifaxId(hzBomMainRecord.getPuid());
-                                if (puids.size() >= list3.size()) {
-                                    hzMbomLineRecord.seteBomPuid(puids.get(i));
-                                } else {
-                                    hzMbomLineRecord.seteBomPuid(puids.get(0));
-                                }
-                                hzMbomLineRecord.setParentUid(list3.get(i).geteBomPuid());
-                                hzMbomLineRecord.setIs2Y(0);
-                                hzMbomLineRecord.setIsDept(0);
-                                hzMbomLineRecord.setIsHas(0);
-                                hzMbomLineRecord.setIsPart(1);
-
-                                HzMbomTreeQuery hzMbomTreeQuery = new HzMbomTreeQuery();
-                                hzMbomTreeQuery.setPuid(list3.get(i).geteBomPuid());
-                                hzMbomTreeQuery.setProjectId(reqDTO.getProjectId());
-                                List<HzMbomLineRecord> records2 = hzMbomRecordDAO.getHzMbomTree(hzMbomTreeQuery);
-                                String lineIndex1 = list3.get(i).getLineIndex();
-                                if (ListUtil.isEmpty(records2)) {
-                                    continue;
-                                }
-                                if (records2.size() == 1) {
-                                    hzMbomLineRecord.setLineIndex(lineIndex1 + "." + 10);
-                                    Double d = Double.parseDouble(list3.get(i).getSortNum()) + 100;
-                                    hzMbomLineRecord.setSortNum(String.valueOf(d));
-                                } else {
-                                    int length = lineIndex1.split("\\.").length + 1;
-                                    List<HzMbomLineRecord> l = new ArrayList<>();
-                                    for (int k = 0; k < records2.size(); k++) {
-                                        int len = records2.get(k).getLineIndex().split("\\.").length;
-                                        if (length == len) {
-                                            l.add(records2.get(k));
-                                        }
-                                    }
-                                    if (lineNo.equals("")) {//用户没有输入查找编号，默认添加到末尾位置
-                                        double max = 0;
-                                        HzMbomLineRecord lastRecord = new HzMbomLineRecord();
-                                        for (HzMbomLineRecord manageRecord : l) {
-                                            double d = Double.parseDouble(manageRecord.getSortNum());
-                                            if (max < d) {
-                                                max = d;
-                                                lastRecord = manageRecord;
-                                            }
-                                        }
-                                        String index = lastRecord.getLineIndex();
-                                        String lineIndexExceptLastNum = index.substring(0, index.lastIndexOf("."));
-                                        int lastNum = Integer.valueOf(index.split("\\.")[index.split("\\.").length - 1]);
-                                        hzMbomLineRecord.setLineIndex(lineIndexExceptLastNum + "." + (lastNum + 10));
-                                        String s1 = String.valueOf(max);
-                                        String s2 = hzMbomRecordDAO.findMinOrderNumWhichGreaterThanThisOrderNum(reqDTO.getProjectId(), s1);
-                                        if (s2 == null) {
-                                            hzMbomLineRecord.setSortNum(String.valueOf(max + 100));
-                                        } else {
-                                            String sortNum = HzBomSysFactory.generateBomSortNum(reqDTO.getProjectId(), s1, s2);
-                                            hzMbomLineRecord.setSortNum(sortNum);
-                                        }
-                                    } else {
-                                        int lineNum = Integer.valueOf(lineNo);
-                                        boolean find = false;
-                                        HzMbomLineRecord re = new HzMbomLineRecord();
-                                        double max = Double.parseDouble(l.get(l.size() - 1).getSortNum());
-                                        for (int j = 0; j < l.size() - 1; j++) {
-                                            String index = l.get(j).getLineIndex();
-                                            String nextIndex = l.get(j + 1).getLineIndex();
-                                            int lastNum = Integer.valueOf(index.split("\\.")[index.split("\\.").length - 1]);
-                                            int nextLastNum = Integer.valueOf(nextIndex.split("\\.")[index.split("\\.").length - 1]);
-                                            if (lineNum > lastNum && lineNum < nextLastNum) {
-                                                find = true;
-                                                re = l.get(j);
-                                                break;
-                                            }
-                                        }
-
-                                        if (find) {//找出当前合适的插入位置
-                                            String index = re.getLineIndex();
-                                            String lineIndexExceptLast = index.substring(0, index.lastIndexOf("."));
-                                            String s1 = String.valueOf(re.getSortNum());
-                                            String s2 = hzMbomRecordDAO.findMinOrderNumWhichGreaterThanThisOrderNum(reqDTO.getProjectId(), s1);
-                                            if (s2 == null) {
-                                                hzMbomLineRecord.setSortNum(String.valueOf(max + 100));
-                                            } else {
-                                                String sortNum = HzBomSysFactory.generateBomSortNum(reqDTO.getProjectId(), s1, s2);
-                                                hzMbomLineRecord.setSortNum(sortNum);
-                                            }
-                                            hzMbomLineRecord.setLineIndex(lineIndexExceptLast + "." + (Integer.valueOf(lineNo)));
-                                        } else {
-                                            re = l.get(l.size() - 1);
-                                            int lastNum = Integer.valueOf(re.getLineIndex().split("\\.")[re.getLineIndex().split("\\.").length - 1]);
-                                            hzMbomLineRecord.setLineIndex(lineIndex1 + "." + lineNo);
-                                            String s1 = "";
-                                            if (lineNum > lastNum) {
-                                                s1 = re.getSortNum();
-                                            } else {
-                                                s1 = list2.get(i).getSortNum();
-                                            }
-                                            String s2 = hzMbomRecordDAO.findMinOrderNumWhichGreaterThanThisOrderNum(reqDTO.getProjectId(), s1);
-                                            if (s2 == null) {
-                                                hzMbomLineRecord.setSortNum(String.valueOf(max + 100));
-                                            } else {
-                                                String sortNum = HzBomSysFactory.generateBomSortNum(reqDTO.getProjectId(), s1, s2);
-                                                hzMbomLineRecord.setSortNum(sortNum);
-                                            }
-                                        }
-                                    }
-                                }
-                                hzMbomLineRecords.add(hzMbomLineRecord);
-                            }
-
-                            if (ListUtil.isNotEmpty(hzMbomLineRecords)) {
-                                hzMbomRecordDAO.insertList(hzMbomLineRecords);
-                            }
-                        }
-                        List<HzMaterielRecord> list = new ArrayList<>();
-                        HzMaterielRecord materielRecord = HzMaterielFactory.addHzEbomReqDTOMaterielRecord(reqDTO);
-                        materielRecord.setpMaterielDataType(BomResourceEnum.enumTypeToMaterielTypeNum(reqDTO.getpBomLinePartResource(), 0));
-                        materielRecord.setMaterielResourceId(puid);
-                        HzMaterielQuery hzMaterielQuery = new HzMaterielQuery();
-                        hzMaterielQuery.setProjectId(reqDTO.getProjectId());
-                        hzMaterielQuery.setpMaterielCode(reqDTO.getLineId());
-                        boolean repeat = hzMaterielDAO.isRepeat(hzMaterielQuery);
-                        if (!repeat) {
-                            list.add(materielRecord);
-                            hzMaterielDAO.insertList(list);
-                        }
+//                        if (ListUtil.isNotEmpty(list3)) {
+//                            List<HzMbomLineRecord> hzMbomLineRecords = new ArrayList<>();
+//                            for (int i = 0; i < list3.size(); i++) {
+//                                HzMbomLineRecord hzMbomLineRecord = HzMbomRecordFactory.addHzEbomReqDTOMbomRecord(reqDTO);//MBOM
+//                                if (list3.get(i).getIsHas().equals(0) || list3.get(i).getIsPart().equals(1)) {
+//                                    list3.get(i).setIsHas(1);
+//                                    list3.get(i).setIsPart(0);
+//                                    //更新数据
+//                                    hzMbomRecordDAO.update(list3.get(i));
+//                                }
+//
+//                                hzMbomLineRecord.setBomDigifaxId(hzBomMainRecord.getPuid());
+//                                if (puids.size() >= list3.size()) {
+//                                    hzMbomLineRecord.seteBomPuid(puids.get(i));
+//                                } else {
+//                                    hzMbomLineRecord.seteBomPuid(puids.get(0));
+//                                }
+//                                hzMbomLineRecord.setParentUid(list3.get(i).geteBomPuid());
+//                                hzMbomLineRecord.setIs2Y(0);
+//                                hzMbomLineRecord.setIsDept(0);
+//                                hzMbomLineRecord.setIsHas(0);
+//                                hzMbomLineRecord.setIsPart(1);
+//
+//                                HzMbomTreeQuery hzMbomTreeQuery = new HzMbomTreeQuery();
+//                                hzMbomTreeQuery.setPuid(list3.get(i).geteBomPuid());
+//                                hzMbomTreeQuery.setProjectId(reqDTO.getProjectId());
+//                                List<HzMbomLineRecord> records2 = hzMbomRecordDAO.getHzMbomTree(hzMbomTreeQuery);
+//                                String lineIndex1 = list3.get(i).getLineIndex();
+//                                if (ListUtil.isEmpty(records2)) {
+//                                    continue;
+//                                }
+//                                if (records2.size() == 1) {
+//                                    hzMbomLineRecord.setLineIndex(lineIndex1 + "." + 10);
+//                                    Double d = Double.parseDouble(list3.get(i).getSortNum()) + 100;
+//                                    hzMbomLineRecord.setSortNum(String.valueOf(d));
+//                                } else {
+//                                    int length = lineIndex1.split("\\.").length + 1;
+//                                    List<HzMbomLineRecord> l = new ArrayList<>();
+//                                    for (int k = 0; k < records2.size(); k++) {
+//                                        int len = records2.get(k).getLineIndex().split("\\.").length;
+//                                        if (length == len) {
+//                                            l.add(records2.get(k));
+//                                        }
+//                                    }
+//                                    if (lineNo.equals("")) {//用户没有输入查找编号，默认添加到末尾位置
+//                                        double max = 0;
+//                                        HzMbomLineRecord lastRecord = new HzMbomLineRecord();
+//                                        for (HzMbomLineRecord manageRecord : l) {
+//                                            double d = Double.parseDouble(manageRecord.getSortNum());
+//                                            if (max < d) {
+//                                                max = d;
+//                                                lastRecord = manageRecord;
+//                                            }
+//                                        }
+//                                        String index = lastRecord.getLineIndex();
+//                                        String lineIndexExceptLastNum = index.substring(0, index.lastIndexOf("."));
+//                                        int lastNum = Integer.valueOf(index.split("\\.")[index.split("\\.").length - 1]);
+//                                        hzMbomLineRecord.setLineIndex(lineIndexExceptLastNum + "." + (lastNum + 10));
+//                                        String s1 = String.valueOf(max);
+//                                        String s2 = hzMbomRecordDAO.findMinOrderNumWhichGreaterThanThisOrderNum(reqDTO.getProjectId(), s1);
+//                                        if (s2 == null) {
+//                                            hzMbomLineRecord.setSortNum(String.valueOf(max + 100));
+//                                        } else {
+//                                            String sortNum = HzBomSysFactory.generateBomSortNum(reqDTO.getProjectId(), s1, s2);
+//                                            hzMbomLineRecord.setSortNum(sortNum);
+//                                        }
+//                                    } else {
+//                                        int lineNum = Integer.valueOf(lineNo);
+//                                        boolean find = false;
+//                                        HzMbomLineRecord re = new HzMbomLineRecord();
+//                                        double max = Double.parseDouble(l.get(l.size() - 1).getSortNum());
+//                                        for (int j = 0; j < l.size() - 1; j++) {
+//                                            String index = l.get(j).getLineIndex();
+//                                            String nextIndex = l.get(j + 1).getLineIndex();
+//                                            int lastNum = Integer.valueOf(index.split("\\.")[index.split("\\.").length - 1]);
+//                                            int nextLastNum = Integer.valueOf(nextIndex.split("\\.")[index.split("\\.").length - 1]);
+//                                            if (lineNum > lastNum && lineNum < nextLastNum) {
+//                                                find = true;
+//                                                re = l.get(j);
+//                                                break;
+//                                            }
+//                                        }
+//
+//                                        if (find) {//找出当前合适的插入位置
+//                                            String index = re.getLineIndex();
+//                                            String lineIndexExceptLast = index.substring(0, index.lastIndexOf("."));
+//                                            String s1 = String.valueOf(re.getSortNum());
+//                                            String s2 = hzMbomRecordDAO.findMinOrderNumWhichGreaterThanThisOrderNum(reqDTO.getProjectId(), s1);
+//                                            if (s2 == null) {
+//                                                hzMbomLineRecord.setSortNum(String.valueOf(max + 100));
+//                                            } else {
+//                                                String sortNum = HzBomSysFactory.generateBomSortNum(reqDTO.getProjectId(), s1, s2);
+//                                                hzMbomLineRecord.setSortNum(sortNum);
+//                                            }
+//                                            hzMbomLineRecord.setLineIndex(lineIndexExceptLast + "." + (Integer.valueOf(lineNo)));
+//                                        } else {
+//                                            re = l.get(l.size() - 1);
+//                                            int lastNum = Integer.valueOf(re.getLineIndex().split("\\.")[re.getLineIndex().split("\\.").length - 1]);
+//                                            hzMbomLineRecord.setLineIndex(lineIndex1 + "." + lineNo);
+//                                            String s1 = "";
+//                                            if (lineNum > lastNum) {
+//                                                s1 = re.getSortNum();
+//                                            } else {
+//                                                s1 = list2.get(i).getSortNum();
+//                                            }
+//                                            String s2 = hzMbomRecordDAO.findMinOrderNumWhichGreaterThanThisOrderNum(reqDTO.getProjectId(), s1);
+//                                            if (s2 == null) {
+//                                                hzMbomLineRecord.setSortNum(String.valueOf(max + 100));
+//                                            } else {
+//                                                String sortNum = HzBomSysFactory.generateBomSortNum(reqDTO.getProjectId(), s1, s2);
+//                                                hzMbomLineRecord.setSortNum(sortNum);
+//                                            }
+//                                        }
+//                                    }
+//                                }
+//                                hzMbomLineRecords.add(hzMbomLineRecord);
+//                            }
+//
+//                            if (ListUtil.isNotEmpty(hzMbomLineRecords)) {
+//                                hzMbomRecordDAO.insertList(hzMbomLineRecords);
+//                            }
+//                        }
+//                        List<HzMaterielRecord> list = new ArrayList<>();
+//                        HzMaterielRecord materielRecord = HzMaterielFactory.addHzEbomReqDTOMaterielRecord(reqDTO);
+//                        materielRecord.setpMaterielDataType(BomResourceEnum.enumTypeToMaterielTypeNum(reqDTO.getpBomLinePartResource(), 0));
+//                        materielRecord.setMaterielResourceId(puid);
+//                        HzMaterielQuery hzMaterielQuery = new HzMaterielQuery();
+//                        hzMaterielQuery.setProjectId(reqDTO.getProjectId());
+//                        hzMaterielQuery.setpMaterielCode(reqDTO.getLineId());
+//                        boolean repeat = hzMaterielDAO.isRepeat(hzMaterielQuery);
+//                        if (!repeat) {
+//                            list.add(materielRecord);
+//                            hzMaterielDAO.insertList(list);
+//                        }
                     }
                 }
                 return OperateResultMessageRespDTO.getSuccessResult();
@@ -681,52 +682,52 @@ public class HzEbomServiceImpl implements HzEbomService {
                     hzPbomRecordDAO.insertList(pbomLineRecords);
 
 
-                    HzMbomLineRecord hzMbomLineRecord = HzMbomRecordFactory.addHzEbomReqDTOMbomRecord(reqDTO);//MBOM
-                    Double mbomMaxOrderNum = hzMbomRecordDAO.getHzMbomMaxOrderNum(reqDTO.getProjectId());
-                    if (mbomMaxOrderNum == null) {
-                        mbomMaxOrderNum = 100.0;
-                        hzMbomLineRecord.setSortNum(String.valueOf(mbomMaxOrderNum));
-                    } else {
-                        mbomMaxOrderNum += 100;
-                        int m = mbomMaxOrderNum.intValue();
-                        hzMbomLineRecord.setSortNum(String.valueOf(m));
-                    }
-                    Integer maxIndexFirstNum = hzMbomRecordDAO.getMaxLineIndexFirstNum(reqDTO.getProjectId());
-                    if (maxIndexFirstNum == null) {
-                        hzMbomLineRecord.setLineIndex("10.10");
-                    } else {
-                        maxIndexFirstNum += 10;
-                        hzMbomLineRecord.setLineIndex(maxIndexFirstNum + ".10");
-                    }
-                    hzMbomLineRecord.seteBomPuid(puid);
-                    hzMbomLineRecord.setIs2Y(1);
-                    hzMbomLineRecord.setIsDept(1);
-                    hzMbomLineRecord.setIsHas(1);
-                    hzMbomLineRecord.setIsPart(0);
-                    hzMbomLineRecord.setBomDigifaxId(hzBomMainRecord.getPuid());
-                    List<HzMbomLineRecord> mbomLineRecords = new ArrayList<>();
-                    mbomLineRecords.add(hzMbomLineRecord);
-                    hzMbomRecordDAO.insertList(mbomLineRecords);
-
-
-                    HzMaterielRecord hzMaterielRecord = HzMaterielFactory.addHzEbomReqDTOMaterielRecord(reqDTO);
-                    hzMaterielRecord.setpMaterielDataType(BomResourceEnum.enumTypeToMaterielTypeNum(reqDTO.getpBomLinePartResource(), 1));
-                    hzMaterielRecord.setMaterielResourceId(puid);
-
-                    HzMaterielQuery hzMaterielQuery = new HzMaterielQuery();
-                    hzMaterielQuery.setProjectId(reqDTO.getProjectId());
-                    hzMaterielQuery.setpMaterielCode(reqDTO.getLineId());
-                    boolean repeat = hzMaterielDAO.isRepeat(hzMaterielQuery);
-                    if (!repeat) {
-//                        List<HzMaterielRecord> list = hzMaterielDAO.findHzMaterielForList(hzMaterielQuery);
-//                        list.forEach(record -> {
-//                            hzMaterielRecord.setPuid(record.getPuid());
-//                            hzMaterielDAO.update(hzMaterielRecord);
-//                        });
-                        List<HzMaterielRecord> hzMaterielRecords = new ArrayList<>();
-                        hzMaterielRecords.add(hzMaterielRecord);
-                        hzMaterielDAO.insertList(hzMaterielRecords);
-                    }
+//                    HzMbomLineRecord hzMbomLineRecord = HzMbomRecordFactory.addHzEbomReqDTOMbomRecord(reqDTO);//MBOM
+//                    Double mbomMaxOrderNum = hzMbomRecordDAO.getHzMbomMaxOrderNum(reqDTO.getProjectId());
+//                    if (mbomMaxOrderNum == null) {
+//                        mbomMaxOrderNum = 100.0;
+//                        hzMbomLineRecord.setSortNum(String.valueOf(mbomMaxOrderNum));
+//                    } else {
+//                        mbomMaxOrderNum += 100;
+//                        int m = mbomMaxOrderNum.intValue();
+//                        hzMbomLineRecord.setSortNum(String.valueOf(m));
+//                    }
+//                    Integer maxIndexFirstNum = hzMbomRecordDAO.getMaxLineIndexFirstNum(reqDTO.getProjectId());
+//                    if (maxIndexFirstNum == null) {
+//                        hzMbomLineRecord.setLineIndex("10.10");
+//                    } else {
+//                        maxIndexFirstNum += 10;
+//                        hzMbomLineRecord.setLineIndex(maxIndexFirstNum + ".10");
+//                    }
+//                    hzMbomLineRecord.seteBomPuid(puid);
+//                    hzMbomLineRecord.setIs2Y(1);
+//                    hzMbomLineRecord.setIsDept(1);
+//                    hzMbomLineRecord.setIsHas(1);
+//                    hzMbomLineRecord.setIsPart(0);
+//                    hzMbomLineRecord.setBomDigifaxId(hzBomMainRecord.getPuid());
+//                    List<HzMbomLineRecord> mbomLineRecords = new ArrayList<>();
+//                    mbomLineRecords.add(hzMbomLineRecord);
+//                    hzMbomRecordDAO.insertList(mbomLineRecords);
+//
+//
+//                    HzMaterielRecord hzMaterielRecord = HzMaterielFactory.addHzEbomReqDTOMaterielRecord(reqDTO);
+//                    hzMaterielRecord.setpMaterielDataType(BomResourceEnum.enumTypeToMaterielTypeNum(reqDTO.getpBomLinePartResource(), 1));
+//                    hzMaterielRecord.setMaterielResourceId(puid);
+//
+//                    HzMaterielQuery hzMaterielQuery = new HzMaterielQuery();
+//                    hzMaterielQuery.setProjectId(reqDTO.getProjectId());
+//                    hzMaterielQuery.setpMaterielCode(reqDTO.getLineId());
+//                    boolean repeat = hzMaterielDAO.isRepeat(hzMaterielQuery);
+//                    if (!repeat) {
+////                        List<HzMaterielRecord> list = hzMaterielDAO.findHzMaterielForList(hzMaterielQuery);
+////                        list.forEach(record -> {
+////                            hzMaterielRecord.setPuid(record.getPuid());
+////                            hzMaterielDAO.update(hzMaterielRecord);
+////                        });
+//                        List<HzMaterielRecord> hzMaterielRecords = new ArrayList<>();
+//                        hzMaterielRecords.add(hzMaterielRecord);
+//                        hzMaterielDAO.insertList(hzMaterielRecords);
+//                    }
                 }
                 return OperateResultMessageRespDTO.getSuccessResult();
             }
@@ -844,69 +845,69 @@ public class HzEbomServiceImpl implements HzEbomService {
             List<HzPbomLineRecord> hzPbomLineRecords = hzPbomRecordDAO.getPbomById(map);
 
             List<String> type = hzMbomService.loadingCarPartType();
-            List<HzMbomLineRecord> hzMbomLineRecords = hzMbomRecordDAO.findHzMbomByPuid(map);
+//            List<HzMbomLineRecord> hzMbomLineRecords = hzMbomRecordDAO.findHzMbomByPuid(map);
 
-            HzMaterielQuery hzMaterielQuery = new HzMaterielQuery();
-            hzMaterielQuery.setProjectId(reqDTO.getProjectId());
-            hzMaterielQuery.setMaterielResourceId(reqDTO.getPuid());
-            hzMaterielQuery.setpMaterielCode(reqDTO.getLineId());
-            List<HzMaterielRecord> hzMaterielRecords = hzMaterielDAO.findHzMaterielForList(hzMaterielQuery);
+//            HzMaterielQuery hzMaterielQuery = new HzMaterielQuery();
+//            hzMaterielQuery.setProjectId(reqDTO.getProjectId());
+//            hzMaterielQuery.setMaterielResourceId(reqDTO.getPuid());
+//            hzMaterielQuery.setpMaterielCode(reqDTO.getLineId());
+//            List<HzMaterielRecord> hzMaterielRecords = hzMaterielDAO.findHzMaterielForList(hzMaterielQuery);
 
             if (type.contains(reqDTO.getpBomLinePartResource())) {
-                HzMbomLineRecord hzMbomLineRecord = new HzMbomLineRecord();
-                hzMbomLineRecord.setUpdateName(UserInfo.getUser().getUserName());
-                hzMbomLineRecord.setpBomLinePartEnName(reqDTO.getpBomLinePartEnName());
-                hzMbomLineRecord.setpBomOfWhichDept(reqDTO.getpBomOfWhichDept());
-                hzMbomLineRecord.setpBomLinePartResource(reqDTO.getpBomLinePartResource());
-                hzMbomLineRecord.setpBomLinePartName(reqDTO.getpBomLinePartName());
-                hzMbomLineRecord.setpBomLinePartClass(reqDTO.getpBomLinePartClass());
-                hzMbomLineRecord.setBomDigifaxId(hzBomMainRecord.getPuid());
-                hzMbomLineRecord.setLineId(reqDTO.getLineId());
+//                HzMbomLineRecord hzMbomLineRecord = new HzMbomLineRecord();
+//                hzMbomLineRecord.setUpdateName(UserInfo.getUser().getUserName());
+//                hzMbomLineRecord.setpBomLinePartEnName(reqDTO.getpBomLinePartEnName());
+//                hzMbomLineRecord.setpBomOfWhichDept(reqDTO.getpBomOfWhichDept());
+//                hzMbomLineRecord.setpBomLinePartResource(reqDTO.getpBomLinePartResource());
+//                hzMbomLineRecord.setpBomLinePartName(reqDTO.getpBomLinePartName());
+//                hzMbomLineRecord.setpBomLinePartClass(reqDTO.getpBomLinePartClass());
+//                hzMbomLineRecord.setBomDigifaxId(hzBomMainRecord.getPuid());
+//                hzMbomLineRecord.setLineId(reqDTO.getLineId());
 
 
                 HzEPLManageRecord record = new HzEPLManageRecord();
-                if (ListUtil.isEmpty(hzMbomLineRecords)) {
+//                if (ListUtil.isEmpty(hzMbomLineRecords)) {
                     for (HzEPLManageRecord hzEPLManageRecord : hzEPLManageRecords) {
                         if (hzEPLManageRecord.getPuid().equals(reqDTO.getPuid())) {
                             record = hzEPLManageRecord;
                         }
                         break;
                     }
-                    if (record != null) {
-                        hzMbomLineRecord.setPuid(UUID.randomUUID().toString());
-                        hzMbomLineRecord.setSortNum(record.getSortNum());
-                        hzMbomLineRecord.setLineIndex(record.getLineIndex());
-                        hzMbomLineRecord.setIs2Y(record.getIs2Y());
-                        hzMbomLineRecord.setIsPart(record.getIsPart());
-                        hzMbomLineRecord.setIsHas(record.getIsHas());
-                        hzMbomLineRecord.setParentUid(record.getParentUid());
-                        hzMbomLineRecord.setIsDept(record.getIsDept());
-                        hzMbomLineRecord.seteBomPuid(record.getPuid());
-                        hzMbomLineRecord.setLinePuid(record.getLinePuid());
-                        List<HzMbomLineRecord> records = new ArrayList<>();
-                        records.add(hzMbomLineRecord);
-                        hzMbomRecordDAO.insertList(records);
-                    }
-                } else {
-                    hzMbomLineRecords.forEach(re -> {
-                        hzMbomLineRecord.seteBomPuid(re.geteBomPuid());
-                        hzMbomRecordDAO.update(hzMbomLineRecord);
-                    });
-                }
-
-                HzMaterielRecord hzMaterielRecord = HzMaterielFactory.updateHzEbomReqDTOMaterielRecord(reqDTO);
-                if (ListUtil.isNotEmpty(hzMaterielRecords)) {
-                    hzMaterielRecords.forEach(re -> {
-                        hzMaterielRecord.setPuid(re.getPuid());
-                        hzMaterielDAO.update(hzMaterielRecord);
-                    });
-                } else {
-                    List<HzMaterielRecord> records = new ArrayList<>();
-                    hzMaterielRecord.setMaterielResourceId(reqDTO.getPuid());
-                    hzMaterielRecord.setPuid(UUID.randomUUID().toString());
-                    records.add(hzMaterielRecord);
-                    hzMaterielDAO.insertList(records);
-                }
+//                    if (record != null) {
+//                        hzMbomLineRecord.setPuid(UUID.randomUUID().toString());
+//                        hzMbomLineRecord.setSortNum(record.getSortNum());
+//                        hzMbomLineRecord.setLineIndex(record.getLineIndex());
+//                        hzMbomLineRecord.setIs2Y(record.getIs2Y());
+//                        hzMbomLineRecord.setIsPart(record.getIsPart());
+//                        hzMbomLineRecord.setIsHas(record.getIsHas());
+//                        hzMbomLineRecord.setParentUid(record.getParentUid());
+//                        hzMbomLineRecord.setIsDept(record.getIsDept());
+//                        hzMbomLineRecord.seteBomPuid(record.getPuid());
+//                        hzMbomLineRecord.setLinePuid(record.getLinePuid());
+//                        List<HzMbomLineRecord> records = new ArrayList<>();
+//                        records.add(hzMbomLineRecord);
+//                        hzMbomRecordDAO.insertList(records);
+//                    }
+//                } else {
+//                    hzMbomLineRecords.forEach(re -> {
+//                        hzMbomLineRecord.seteBomPuid(re.geteBomPuid());
+//                        hzMbomRecordDAO.update(hzMbomLineRecord);
+//                    });
+//                }
+//
+//                HzMaterielRecord hzMaterielRecord = HzMaterielFactory.updateHzEbomReqDTOMaterielRecord(reqDTO);
+//                if (ListUtil.isNotEmpty(hzMaterielRecords)) {
+//                    hzMaterielRecords.forEach(re -> {
+//                        hzMaterielRecord.setPuid(re.getPuid());
+//                        hzMaterielDAO.update(hzMaterielRecord);
+//                    });
+//                } else {
+//                    List<HzMaterielRecord> records = new ArrayList<>();
+//                    hzMaterielRecord.setMaterielResourceId(reqDTO.getPuid());
+//                    hzMaterielRecord.setPuid(UUID.randomUUID().toString());
+//                    records.add(hzMaterielRecord);
+//                    hzMaterielDAO.insertList(records);
+//                }
 
                 HzPbomLineRecord hzPbomLineRecord = HzPbomRecordFactory.updateHzEbomReqDTOPbomRecord(reqDTO);
                 hzPbomLineRecord.setBomDigifaxId(hzBomMainRecord.getPuid());
@@ -917,32 +918,36 @@ public class HzEbomServiceImpl implements HzEbomService {
                         hzPbomRecordDAO.update(hzPbomLineRecord);
                     });
                 } else {
-                    List<HzPbomLineRecord> records = new ArrayList<>();
-                    hzPbomLineRecord.setPuid(UUID.randomUUID().toString());
-                    hzPbomLineRecord.setSortNum(record.getSortNum());
-                    hzPbomLineRecord.setLineIndex(record.getLineIndex());
-                    hzPbomLineRecord.setIs2Y(record.getIs2Y());
-                    hzPbomLineRecord.setIsPart(record.getIsPart());
-                    hzPbomLineRecord.setIsHas(record.getIsHas());
-                    hzPbomLineRecord.setParentUid(record.getParentUid());
-                    hzPbomLineRecord.setIsDept(record.getIsDept());
-                    hzPbomLineRecord.seteBomPuid(record.getPuid());
-                    hzPbomLineRecord.setLinePuid(record.getLinePuid());
-                    records.add(hzPbomLineRecord);
-                    hzPbomRecordDAO.insertList(records);
+                    if(record!=null){
+                        List<HzPbomLineRecord> records = new ArrayList<>();
+                        hzPbomLineRecord.setPuid(UUID.randomUUID().toString());
+                        hzPbomLineRecord.setSortNum(record.getSortNum());
+                        hzPbomLineRecord.setLineIndex(record.getLineIndex());
+                        hzPbomLineRecord.setIs2Y(record.getIs2Y());
+                        hzPbomLineRecord.setIsPart(record.getIsPart());
+                        hzPbomLineRecord.setIsHas(record.getIsHas());
+                        hzPbomLineRecord.setParentUid(record.getParentUid());
+                        hzPbomLineRecord.setIsDept(record.getIsDept());
+                        hzPbomLineRecord.seteBomPuid(record.getPuid());
+                        hzPbomLineRecord.setLinePuid(record.getLinePuid());
+                        records.add(hzPbomLineRecord);
+                        hzPbomRecordDAO.insertList(records);
+                    }
+
                 }
 
-            } else {
-                if (ListUtil.isNotEmpty(hzMbomLineRecords)) {
-                    hzMbomLineRecords.forEach(hzMbomLineRecord -> {
-                        hzMbomRecordDAO.delete(hzMbomLineRecord.geteBomPuid());
-                    });
-                }
-                if (ListUtil.isNotEmpty(hzMaterielRecords)) {
-                    hzMaterielRecords.forEach(hzMaterielRecord -> {
-                        hzMaterielDAO.delete(hzMaterielRecord.getMaterielResourceId());
-                    });
-                }
+            }
+            else {
+//                if (ListUtil.isNotEmpty(hzMbomLineRecords)) {
+//                    hzMbomLineRecords.forEach(hzMbomLineRecord -> {
+//                        hzMbomRecordDAO.delete(hzMbomLineRecord.geteBomPuid());
+//                    });
+//                }
+//                if (ListUtil.isNotEmpty(hzMaterielRecords)) {
+//                    hzMaterielRecords.forEach(hzMaterielRecord -> {
+//                        hzMaterielDAO.delete(hzMaterielRecord.getMaterielResourceId());
+//                    });
+//                }
 
                 if (ListUtil.isNotEmpty(hzPbomLineRecords)) {
                     hzPbomLineRecords.forEach(hzPbomLineRecord -> {

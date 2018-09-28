@@ -66,7 +66,7 @@ public class HzCfg0ModelController {
             HzCfg0ModelRecord modelRecord = hzCfg0modelRecordService.doGetById(detail.getpModelPuid());
             //更新车型模型名，如果有修改
             modelRecord.setObjectDesc(detail.getObjectDesc());
-            modelRecord.setpCfg0ModelBasicDetail(detail.getpCfg0ModelBasicDetail());
+            modelRecord.setpCfg0ModelBasicDetail(detail.getpModelCfgMng());
             if (!checkString(detail.getObjectName()) || !detail.getpModelVersion().equals(detail.getObjectName())) {
                 modelRecord.setObjectName(detail.getpModelVersion());
             } else {

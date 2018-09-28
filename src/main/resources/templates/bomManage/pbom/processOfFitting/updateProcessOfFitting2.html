@@ -7,7 +7,8 @@
 <body>
 <form id="craftingNewPartForm" role="form" method="post" action="./pbom/add/processCompose2">
     <div class="form-group">
-        <label for="lineId">合成零件号<span style="color: red">*</span></label>
+        <label for="lineId">合成零件号<span style="color: red">*</span><img th:src="@{/img/my_left_arrow.png}"
+                                                                       style="transform: rotate(-90deg);width: 36px"/>(第四步：填写新合成的零件号)</label>
         <input class="form-control" id="lineId" name="lineId" type="text"
                placeholder="请输入合成零件号"/><!--th:value="${entity.level}"-->
     </div>
@@ -167,37 +168,16 @@
                     success:
                         function (result) {
                             if (result.status) {
+                                $('.modal-dialog', window.top.document).parent('div').remove()
+                                $('body', window.top.document).find('.modal-backdrop').remove();
                                 layer.msg(result.msg, {icon: 1, time: 2000});
+                                if (result.status) {
+                                    $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doReloadTree(result);
+                                }
                             }
                             else {
                                 window.Ewin.alert({message: result.msg});
                             }
-                            // $('.modal-dialog', window.top.document).parent('div').remove()
-                            // $('body', window.top.document).find('.modal-backdrop').remove();
-                            // // jquery 调用刷新当前操作的table页面的refresh方法
-                            // var zTree = $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.zTree;
-                            // var selectNode = $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.selectNode;
-                            // if (result.status == 1) {
-                            //     var entity = result.entity;
-                            //     zTree.addNodes(selectNode, {
-                            //         puid: entity.puid,
-                            //         pPuid: entity.pProjectPertainToVehicle,
-                            //         name: entity.pProjectName
-                            //     });
-                            //     if (result.status1 == 0 || result.status2 == 0 || result.status3 == 0) {
-                            //         window.Ewin.alert({message: result.settingMsg + "<br>" + result.dxgMainMsg + "<br>" + result.cfgMsg});
-                            //     }
-                            //     else {
-                            //         layer.msg('添加项目成功', {icon: 1, time: 2000})
-                            //     }
-                            //     // window.Ewin.alert({message: "添加项目成功"});
-                            // }
-                            // else if (result.status == 0) {
-                            //     window.Ewin.alert({message: "已存在的项目代码，请修改或者更换项目代码"});
-                            // }
-                            // else {
-                            //     window.Ewin.alert({message: "添加失败，请联系管理员"});
-                            // }
                         },
                     error: function (status) {
                         window.Ewin.alert({message: status.status + ':操作失败!'});

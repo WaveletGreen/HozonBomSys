@@ -886,6 +886,51 @@
   </select>
 
 
+
+
+
+
+
+
+
+
+    <!--分页查询 EBOM全信息-->
+    <select id="HzEbomRecordDAOImpl_getHzEbomList" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+        select * FROM
+        (SELECT u.*,rownum as rn from
+        (SELECT * from HZ_BOM_LINE_RECORD
+        where p_bom_digifax_id=(
+        select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(
+        select t2.puid from Hz_project_libs t2
+        <where>
+            t2.puid=#{projectId,jdbcType=VARCHAR}))
+            <if test="lineIndex != null and lineIndex!=''">
+                and LENGTH(TRANSLATE(P_LINE_INDEX,',0123456789','.'))=#{lineIndex,jdbcType=VARCHAR}
+            </if>
+            <if test="isHas != null and isHas==0">
+                and P_BOM_LINE_IS_HAS = 0
+            </if>
+            <if test="isHas != null and isHas==1">
+                and P_BOM_LINE_IS_HAS = 1
+            </if>
+            <if test="lineId != null and lineId!=''" >
+                and P_BOM_LINE_ID like CONCAT(CONCAT('%',#{lineId,jdbcType=VARCHAR}),'%')
+            </if>
+            <if test="pBomOfWhichDept != null and  pBomOfWhichDept!='' " >
+                and P_BOM_OF_WHICH_DEPT like CONCAT(CONCAT('%',#{pBomOfWhichDept,jdbcType=VARCHAR}),'%')
+            </if>
+            <if test="pBomLinePartClass != null and pBomLinePartClass!=''">
+                and P_BOM_LINE_PART_CLASS = #{pBomLinePartClass,jdbcType=VARCHAR}
+            </if>
+            <if test="pBomLinePartResource != null and pBomLinePartResource!=''">
+                and P_BOM_LINE_PART_RESOURCE = #{pBomLinePartResource,jdbcType=VARCHAR}
+            </if>
+            and P_EBOM_STATUS <![CDATA[ <> ]]>0  order by CAST(P_SORT_NUM as FLOAT))u
+        </where>
+        WHERE ROWNUM &lt;=#{limit,jdbcType=INTEGER}) where rn &gt;#{offset,jdbcType=INTEGER}
+    </select>
+
+
   <!--查询 EBOM总数-->
   <select id="HzEbomRecordDAOImpl_findTotalCount" resultType="java.lang.Integer" parameterType="java.util.HashMap">
     SELECT count(*) from HZ_BOM_LINE_RECORD t1
