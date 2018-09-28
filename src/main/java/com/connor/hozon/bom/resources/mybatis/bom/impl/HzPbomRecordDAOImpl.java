@@ -202,11 +202,10 @@ public class HzPbomRecordDAOImpl extends BaseSQLUtil implements HzPbomRecordDAO 
     }
 
     @Override
-    public List<HzPbomLineRecord> getFirstLevelBomByParentLineIndexLength(String length,String eBomPuid, String projectId) {
+    public List<HzPbomLineRecord> getFirstLevelBomByParentLineIndexLength(String parnetId, String projectId) {
         Map<String,Object> map = new HashMap<>();
-        map.put("length",length);
+        map.put("parentId",parnetId);
         map.put("projectId",projectId);
-        map.put("puid",eBomPuid);
         return super.findForList("HzPbomRecordDAOImpl_getFirstLevelBomByParentLineIndexLength",map);
     }
 }

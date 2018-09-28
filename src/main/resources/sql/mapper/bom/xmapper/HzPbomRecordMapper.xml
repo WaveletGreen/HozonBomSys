@@ -628,17 +628,31 @@
 
 
   <!--获取当前BOM的子一层结构-->
-  <select id="HzPbomRecordDAOImpl_getFirstLevelBomByParentLineIndexLength" parameterType="java.util.HashMap" resultMap="HzPbomLineRecord">
-    select * from HZ_PBOM_RECORD t1
-    where t1.p_bom_digifax_id=(
-    select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(
-    select t2.puid from Hz_project_libs t2
-    <where>
-      t2.puid=#{projectId,jdbcType=VARCHAR}))
-      and LENGTH(TRANSLATE(t1.P_LINE_INDEX,',0123456789','.'))=#{length,jdbcType=VARCHAR}
-      start with t1.P_E_BOM_PUID = #{puid,jdbcType=VARCHAR} and t.P_PBOM_STATUS <![CDATA[ <> ]]>0
-      connect by prior t1.P_E_BOM_PUID = t.p_parent_uid and t.P_PBOM_STATUS<![CDATA[ <> ]]>0
-      order by CAST(t1.P_SORT_NUM as FLOAT)
-    </where>
-  </select>
+    <select id="HzPbomRecordDAOImpl_getFirstLevelBomByParentLineIndexLength" parameterType="java.util.HashMap" resultMap="HzPbomLineRecord">
+        select * from HZ_PBOM_RECORD t1
+        where t1.p_bom_digifax_id=(
+        select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(
+        select t2.puid from Hz_project_libs t2
+        <where>
+            t2.puid=#{projectId,jdbcType=VARCHAR}))
+            <if test="parentId != null">
+                and t1.P_PARENT_UID = #{parentId,jdbcType=VARCHAR}
+            </if>
+            and t1.P_PBOM_STATUS<![CDATA[ <> ]]>0
+        </where>
+    </select>
+
+  <!--<select id="HzPbomRecordDAOImpl_getFirstLevelBomByParentLineIndexLength" parameterType="java.util.HashMap" resultMap="HzPbomLineRecord">-->
+    <!--select * from HZ_PBOM_RECORD t1-->
+    <!--where t1.p_bom_digifax_id=(-->
+    <!--select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(-->
+    <!--select t2.puid from Hz_project_libs t2-->
+    <!--<where>-->
+      <!--t2.puid=#{projectId,jdbcType=VARCHAR}))-->
+      <!--and LENGTH(TRANSLATE(t1.P_LINE_INDEX,',0123456789','.'))=#{length,jdbcType=VARCHAR}-->
+      <!--start with t1.P_E_BOM_PUID = #{puid,jdbcType=VARCHAR} and t.P_PBOM_STATUS <![CDATA[ <> ]]>0-->
+      <!--connect by prior t1.P_E_BOM_PUID = t.p_parent_uid and t.P_PBOM_STATUS<![CDATA[ <> ]]>0-->
+      <!--order by CAST(t1.P_SORT_NUM as FLOAT)-->
+    <!--</where>-->
+  <!--</select>-->
 </mapper>
