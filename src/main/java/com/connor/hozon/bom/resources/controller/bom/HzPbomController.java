@@ -278,7 +278,7 @@ public class HzPbomController extends BaseController {
     public String getupdate(String projectId,String eBomPuid,Model model){
         if (eBomPuid == null) {
             return "";
-        }
+        } 
         model.addAttribute("data",eBomPuid);
         return "bomManage/pbom/pbomManage/updateAccessoriesLibrary";
     }
