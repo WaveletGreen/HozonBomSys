@@ -21,21 +21,21 @@
     PUID,P_MATERIEL_CODE,P_MATERIEL_NAME,P_TECHNICAL_CONDITIONS，P_MEASURING_UNIT，P_MATERIEL_PURPOSE，
     P_DOSAGE_BICYCLE，P_NOTE，P_STATUS，P_CREATE_TIME，P_UPDATE_TIME，P_CREATE_NAME，P_UPDATE_NAME
   </sql>
-  <sql id="Base_Column_List">
-      PUID,
-      P_MATERIEL_CODE,
-      P_MATERIEL_NAME,
-      P_TECHNICAL_CONDITIONS,
-      P_MEASURING_UNIT,
-      P_MATERIEL_PURPOSE,
-      P_DOSAGE_BICYCLE,
-      P_NOTE,
-      P_STATUS,
-      P_CREATE_TIME,
-      P_UPDATE_TIME,
-      P_CREATE_NAME,
-      P_UPDATE_NAME
-  </sql>
+  <!--<sql id="Base_Column_List">-->
+      <!--PUID,-->
+      <!--P_MATERIEL_CODE,-->
+      <!--P_MATERIEL_NAME,-->
+      <!--P_TECHNICAL_CONDITIONS,-->
+      <!--P_MEASURING_UNIT,-->
+      <!--P_MATERIEL_PURPOSE,-->
+      <!--P_DOSAGE_BICYCLE,-->
+      <!--P_NOTE,-->
+      <!--P_STATUS,-->
+      <!--P_CREATE_TIME,-->
+      <!--P_UPDATE_TIME,-->
+      <!--P_CREATE_NAME,-->
+      <!--P_UPDATE_NAME-->
+  <!--</sql>-->
   <insert id="HzAccessoriesLibsDAOImpl_insert" parameterType="sql.pojo.accessories.HzAccessoriesLibs">
     insert into HZ_ACCESSORIES_LIBS
     <trim prefix="(" suffix=")" suffixOverrides=",">

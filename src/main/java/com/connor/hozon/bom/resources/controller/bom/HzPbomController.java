@@ -274,14 +274,23 @@ public class HzPbomController extends BaseController {
         return hzPbomService.simulateCraftingPart(param);
     }
 
+    @RequestMapping(value = "update/accessories",method = RequestMethod.GET)
+    public String getupdate(String projectId,String eBomPuid,Model model){
+        if (eBomPuid == null) {
+            return "";
+        }
+        model.addAttribute("data",eBomPuid);
+        return "bomManage/pbom/pbomManage/updateAccessoriesLibrary";
+    }
 
-    @RequestMapping("/query/accessories")
+
+    @RequestMapping("query/accessories")
     @ResponseBody
     public JSONObject queryAccessories(String materielCode){
         return hzPbomService.queryAccessories(materielCode);
     }
 
-    @RequestMapping("/add/accessories")
+    @RequestMapping("add/accessories")
     @ResponseBody
     public JSONObject addAccessories(String materielCode, String puid, String projectId){
         return hzPbomService.addAccessories(puid, materielCode, projectId);
