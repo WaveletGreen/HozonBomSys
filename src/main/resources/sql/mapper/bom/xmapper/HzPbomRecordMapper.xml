@@ -492,12 +492,15 @@
     select t2.puid from Hz_project_libs t2
     <where>
       t2.puid = #{projectId,jdbcType=VARCHAR}))
-      <if test="colorPart != null">
-        and t.P_COLOR_PART = #{colorPart,jdbcType=INTEGER}
-      </if>
     </where>
     start with t.P_E_BOM_PUID = #{puid,jdbcType=VARCHAR} and t.P_PBOM_STATUS <![CDATA[ <> ]]>0
+    <if test="colorPart != null">
+      and t.P_COLOR_PART = #{colorPart,jdbcType=INTEGER}
+    </if>
     connect by prior t.P_E_BOM_PUID = t.p_parent_uid and t.P_PBOM_STATUS<![CDATA[ <> ]]>0
+    <if test="colorPart != null">
+      and t.P_COLOR_PART = #{colorPart,jdbcType=INTEGER}
+    </if>
     order by CAST(t.P_SORT_NUM as FLOAT)
 </select>
 
@@ -591,7 +594,7 @@
       t2.puid=#{projectId,jdbcType=VARCHAR}))
     </where>
     and   P_PBOM_STATUS <![CDATA[ <> ]]>0
-    and  P_SORT_NUM &gt;#{sortNum,jdbcType=VARCHAR}
+    and  CAST(P_SORT_NUM as FLOAT)&gt;#{sortNum,jdbcType=DOUBLE}
     ORDER BY  CAST(P_SORT_NUM as FLOAT))WHERE rownum =1
   </select>
 
@@ -618,6 +621,24 @@
     <where>
       t2.puid=#{projectId,jdbcType=VARCHAR}))
       and t1.P_BOM_LINE_IS_2Y=1
+    </where>
+  </select>
+
+
+
+
+  <!--获取当前BOM的子一层结构-->
+  <select id="HzPbomRecordDAOImpl_getFirstLevelBomByParentLineIndexLength" parameterType="java.util.HashMap" resultMap="HzPbomLineRecord">
+    select * from HZ_PBOM_RECORD t1
+    where t1.p_bom_digifax_id=(
+    select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(
+    select t2.puid from Hz_project_libs t2
+    <where>
+      t2.puid=#{projectId,jdbcType=VARCHAR}))
+      and LENGTH(TRANSLATE(t1.P_LINE_INDEX,',0123456789','.'))=#{length,jdbcType=VARCHAR}
+      start with t1.P_E_BOM_PUID = #{puid,jdbcType=VARCHAR} and t.P_PBOM_STATUS <![CDATA[ <> ]]>0
+      connect by prior t1.P_E_BOM_PUID = t.p_parent_uid and t.P_PBOM_STATUS<![CDATA[ <> ]]>0
+      order by CAST(t1.P_SORT_NUM as FLOAT)
     </where>
   </select>
 </mapper>

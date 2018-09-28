@@ -67,6 +67,8 @@ public class HzMbomServiceImpl implements HzMbomService{
 
     @Autowired
     private HzPbomRecordDAO hzPbomRecordDAO;
+
+
     @Override
     public Page<HzMbomRecordRespDTO> findHzMbomForPage(HzMbomByPageQuery query) {
         try {
@@ -504,6 +506,9 @@ public class HzMbomServiceImpl implements HzMbomService{
             //S00-1001YY0->S00-1001BA/S00-1001BB       1001  1001AAAA
             //类型  1生产 6 财务
             if(ListUtil.isNotEmpty(records)){
+
+                HzMbomRecordFactory fac = new HzMbomRecordFactory();
+
                 List<HzMbomLineRecord> superMboms = new ArrayList<>();//超级MBOM 新增
                 List<HzMbomLineRecord> productMboms = new ArrayList<>();//生产用MBOM 新增
                 List<HzMbomLineRecord> financeMboms = new ArrayList<>();//财务用MBOM 新增
@@ -544,14 +549,14 @@ public class HzMbomServiceImpl implements HzMbomService{
 
                         if(ListUtil.isNotEmpty(beans)){//找到对应的颜色件
                             for(int i =0;i<beans.size();i++){
-                                b = analysisMbom(record,i,projectId,bodyOfWhiteSet,beans,superMboms);
+                                b = analysisMbom(record,i,projectId,bodyOfWhiteSet,beans,superMboms,fac);
                             }
                         }else {
-                            b= analysisMbom(record,0,projectId,bodyOfWhiteSet,null,superMboms);
+                            b= analysisMbom(record,0,projectId,bodyOfWhiteSet,null,superMboms,fac);
                         }
 
                     }else {
-                        b=analysisMbom(record,0,projectId,bodyOfWhiteSet,null,superMboms);
+                        b=analysisMbom(record,0,projectId,bodyOfWhiteSet,null,superMboms,fac);
                     }
                     if(!b){
                         OperateResultMessageRespDTO respDTO  = new OperateResultMessageRespDTO();
@@ -659,6 +664,14 @@ public class HzMbomServiceImpl implements HzMbomService{
                 if(ListUtil.isNotEmpty(allMbomWillBeAddToDBList)){
                     for(HzMbomLineRecord record :allMbomWillBeAddToDBList){
                         HzMaterielRecord hzMaterielRecord = HzMaterielFactory.mbomRecordToMaterielRecord(projectId,record);
+                        HzMaterielQuery query = new HzMaterielQuery();
+                        query.setProjectId(projectId);
+                        query.setpMaterielCode(hzMaterielRecord.getpMaterielCode());
+                        List<HzMaterielRecord> recordList = hzMaterielDAO.findHzMaterielForList(query);
+                        if(ListUtil.isNotEmpty(recordList)){
+                            updateMaterielRecords.add(recordList.get(0));
+                            continue;
+                        }
                         materielRecords.add(hzMaterielRecord);
                     }
                 }
@@ -667,7 +680,8 @@ public class HzMbomServiceImpl implements HzMbomService{
                     hzMaterielQuery.setProjectId(projectId);
                     for(HzMbomLineRecord record:allMbomWillBeUpdateToDBList){
                         HzMaterielRecord hzMaterielRecord = HzMaterielFactory.mbomRecordToMaterielRecord(projectId,record);
-                        hzMaterielQuery.setpMaterielCode(hzMaterielRecord.getpMaterielCode());
+                        hzMaterielQuery.setMaterielResourceId(hzMaterielQuery.getMaterielResourceId());
+//                        hzMaterielQuery.setpMaterielCode(hzMaterielRecord.getpMaterielCode());
                         List<HzMaterielRecord> recordList = hzMaterielDAO.findHzMaterielForList(hzMaterielQuery);
                         if(ListUtil.isNotEmpty(recordList)){
                             hzMaterielRecord.setPuid(recordList.get(0).getPuid());
@@ -847,7 +861,7 @@ public class HzMbomServiceImpl implements HzMbomService{
 
 
     public boolean analysisMbom(HzPbomLineRecord record,int i,String projectId,Set<HzPbomLineRecord> bodyOfWhiteSet,
-                             List<HzConfigBomColorBean> beans,List<HzMbomLineRecord> superMboms){
+                             List<HzConfigBomColorBean> beans,List<HzMbomLineRecord> superMboms,HzMbomRecordFactory factory){
         //解析产生油漆车身总成 在解析其他bom  油漆车身需要产生白车身
         if(record.getpBomLinePartName().contains("油漆车身总成") && record.getIs2Y().equals(1)){
             //找出全部的子件 是颜色件的需要乘以颜色
@@ -914,7 +928,7 @@ public class HzMbomServiceImpl implements HzMbomService{
                         HzPbomTreeQuery query = new HzPbomTreeQuery();
                         if(pbomLineRecord.getpBomLinePartName().contains("油漆车身总成")||
                                 pbomLineRecord.getpBomLinePartName().contains("白车身总成")){
-                            HzMbomLineRecord mbomLineRecord = HzMbomRecordFactory.generateSupMbom(pbomLineRecord,i,projectId,beans);
+                            HzMbomLineRecord mbomLineRecord = factory.generateSupMbom(pbomLineRecord,i,projectId,beans);
                             superMboms.add(mbomLineRecord);
                         }else {
                             query.setPuid(pbomLineRecord.geteBomPuid());
@@ -922,7 +936,7 @@ public class HzMbomServiceImpl implements HzMbomService{
                             List<HzPbomLineRecord> manageRecords = hzPbomRecordDAO.getHzPbomTree(query);
                             if(ListUtil.isNotEmpty(manageRecords)){
                                 for(HzPbomLineRecord r :manageRecords){
-                                    HzMbomLineRecord mbomLineRecord = HzMbomRecordFactory.generateSupMbom(r,i,projectId,beans);
+                                    HzMbomLineRecord mbomLineRecord = factory.generateSupMbom(r,i,projectId,beans);
                                     superMboms.add(mbomLineRecord);
                                 }
                             }
@@ -936,8 +950,8 @@ public class HzMbomServiceImpl implements HzMbomService{
             hzPbomTreeQuery.setPuid(record.geteBomPuid());
             List<HzPbomLineRecord> recordList = hzPbomRecordDAO.getHzPbomTree(hzPbomTreeQuery);
             if(ListUtil.isNotEmpty(recordList)){
-                for(HzPbomLineRecord eplManageRecord:recordList){
-                    HzMbomLineRecord mbomLineRecord = HzMbomRecordFactory.generateSupMbom(eplManageRecord,i,projectId,beans);
+                for(HzPbomLineRecord pbomLineRecord:recordList){
+                    HzMbomLineRecord mbomLineRecord = factory.generateSupMbom(pbomLineRecord,i,projectId,beans);
 //                    HzMbomLineRecord lineRecord = hzMbomRecordDAO.findHzMbomByEbomIdAndLineIndex(mbomLineRecord.geteBomPuid(),mbomLineRecord.getLineIndex(),MbomTableNameEnum.tableName(0));
                     superMboms.add(mbomLineRecord);
                 }

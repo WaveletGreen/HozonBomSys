@@ -103,4 +103,12 @@ public interface HzPbomRecordDAO {
 
 
     List<HzPbomLineRecord> getSameNameLineId(String lineId,String projectId);
+
+    /**
+     * 获取当前BOM的子一层结构
+     * @param length 当前BOM的lineIndex 以“.”拆分的数组长度
+     * @param projectId
+     * @return
+     */
+    List<HzPbomLineRecord> getFirstLevelBomByParentLineIndexLength(String length,String eBomPuid,String projectId);
 }
