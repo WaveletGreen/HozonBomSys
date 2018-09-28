@@ -984,9 +984,11 @@ var setting3 = {
                 $("#synthetic1").attr("disabled", "disabled");
             }
             //显示节点数据
+            //带上的tree
+            var tree1 = $.fn.zTree.getZTreeObj("Ztree1");
             if (treeNode.CHECKED) {
                 if (isContinue) {
-                    var tree1 = $.fn.zTree.getZTreeObj("Ztree1");
+
                     var node = tree1.getNodes(); //可以获取所有的父节点
                     treeObj.addNodes(treeNode, node);
                     let c = treeNode.children;
@@ -1005,6 +1007,8 @@ var setting3 = {
             else {
                 ///如果需要取消选中根节点之后，不将根节点下的数据删除，重新刷新一下tree，或者对根节点进行单独判断
                 if (isContinue) {
+                    treeObj.firstChild;
+                    if(treeNode.lineId==)
                     treeObj.removeChildNodes(treeNode);
                 }
             }

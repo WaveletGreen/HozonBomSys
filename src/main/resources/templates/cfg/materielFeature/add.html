@@ -14,7 +14,7 @@
             <select class="form-control input-small" name="modelUid" id="modelUid">
                 <option th:each="model:${models}"
                         th:value="${model.getPuid()}"
-                        th:text="${model.getObjectName()}"
+                        th:text="${model.getObjectName()+'-'+(model.getpCfg0ModelBasicDetail()==null?'':model.getpCfg0ModelBasicDetail())}"
                 >
                 </option>
             </select>
