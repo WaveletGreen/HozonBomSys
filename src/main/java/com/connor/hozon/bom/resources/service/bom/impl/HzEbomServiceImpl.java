@@ -144,6 +144,7 @@ public class HzEbomServiceImpl implements HzEbomService {
             recordRespDTOList.add(recordRespDTO);
             return new Page<>(recordPage.getPageNumber(), recordPage.getPageSize(), recordPage.getTotalCount(), recordRespDTOList);
         } catch (Exception e) {
+            e.printStackTrace();
             return null;
         }
     }
