@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<!--User: xulf Date: 2018/6/26 Time: 15:46-->
+<head th:include="include/headBom"></head>
+<link th:href="@{/css/bom/pbom/processOfFitting.css}" rel="stylesheet"/>
+<meta charset="UTF-8">
+<title>工艺合件</title>
+</head>
+<body>
+<div id="content" class="row-fluid" style="height:auto">
+    <div id="demo3" hidden="hidden"></div>
+    <div class="content row-fluid col-md-4 col-lg-4" id="demo4">
+        <div id="info_div" style="max-width: 300px;position: absolute;left: 60%;top: 9%;">
+            <!--float: right;margin-top: 4em-->
+            <img id="info_img_1" style="width: 36px;display: inline" th:src="@{/img/my_left_arrow.png}">
+            <span>第一步：查询需要合成的零件</span>
+            <img id="info_img_2" style="width: 36px;display: none" th:src="@{/img/my_right_arrow.png}">
+        </div>
+        <h3><p class="text-primary" id="demo1">请选择您要合成的零件</p></h3>
+        <form class="form-inline" id="demo2">
+            <div class="form-group">
+                <label for="queryLineId">零件号:</label>
+                <input type="text" class="form-control" style="width: 150px" name="queryLineId" id="queryLineId"
+                       placeholder="请输入查询的零件号" value="S00-5000000BBYY0"/>
+            </div>
+            <div class="form-group">
+                <button type="button" id="queryBtn1" class="btn btn-primary">查询</button>
+            </div>
+        </form>
+        <ul id="Ztree1" class="ztree  col-md-4"
+            style="width:300px;overflow-y: scroll;height: 500px; overflow:auto;"></ul>
+        <div class="col-md-12" style="overflow-y: auto;margin-top: 20px;max-height: 150px">
+            <table class="table table-striped" id="selectedToCraftTable"></table>
+        </div>
+    </div>
+    <div class="content col-md-4 col-lg-4">
+        <div class="form-group">
+            <button type="button" id="synthetic" class="btn btn-primary" style="width: 145px;margin-top: 57px"
+                    disabled="disabled">生成工艺合件
+            </button>
+            <button type="button" id="synthetic1" class="btn btn-primary" style="width: 145px;margin-top: 57px"
+                    disabled="disabled">指定合件位置
+            </button>
+            <div id="info_div3" style="max-width: 300px;position: absolute;left:60%;top: 9%;display: none">
+                <!--float: right;margin-top: 4em-->
+                <img id="info_img_3_1" style="width: 36px;display:inline" th:src="@{/img/my_left_arrow.png}">
+                <span>第七步：点击确定合成</span>
+                <img id="info_img_3_2" style="width: 36px;display: none" th:src="@{/img/my_right_arrow.png}">
+            </div>
+        </div>
+        <div style="width:350px;height:500px;overflow-y:scroll; overflow:auto;">
+            <table align="center" valign="center" class="table table-striped tableNormalStyle" id="detailTable">
+            </table>
+        </div>
+    </div>
+    <div class="content row-fluid col-md-4 col-lg-4">
+        <h3><p class="text-primary">请指定工艺合件的位置</p></h3>
+        <form class="form-inline">
+            <div class="form-group">
+                <label for="queryLineId2">零件号:</label>
+                <input type="text" class="form-control" style="width: 150px" name="queryLineId2" id="queryLineId2"
+                       placeholder="请输入查询的零件号" value="S00-6105030"/>
+            </div>
+            <div class="form-group">
+                <button class="btn btn-primary" id="queryBtn2" type="button" disabled>查询</button>
+            </div>
+            <div id="info_div2" style="max-width: 300px;position: absolute;left:60%;top: 9%;display: none">
+                <!--float: right;margin-top: 4em-->
+                <img id="info_img_2_1" style="width: 36px;display:inline" th:src="@{/img/my_left_arrow.png}">
+                <span>第五步：查询工艺合件挂在对象</span>
+                <img id="info_img_2_2" style="width: 36px;display: none" th:src="@{/img/my_right_arrow.png}">
+            </div>
+        </form>
+        <ul id="Ztree3" class="ztree  col-md-4"
+            style="width:300px;overflow-y: scroll;height: 500px; overflow:auto;"></ul>
+        <div class="col-md-12" style="overflow-y: auto;margin-top: 20px;max-height: 150px">
+            <table class="table table-striped" id="selectedTargetTable"></table>
+        </div>
+    </div>
+</div>
+<script th:src="@{/js/helper/projectHelper.js}"></script>
+<script th:src="@{/js/helper/jsonHelper.js}"></script>
+<script th:src="@{/js/helper/zTreeHelper.js}"></script>
+<script th:src="@{/js/bom/pbom/craftFitting2.js}"></script>
+<script th:src="@{/js/bom/pbom/demo.js}"></script>
+</body>
+</html>

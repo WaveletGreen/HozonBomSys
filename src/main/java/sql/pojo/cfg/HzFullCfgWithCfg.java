@@ -21,6 +21,14 @@ public class HzFullCfgWithCfg {
     private String flCfgBomlineName;
 
     private BigDecimal flCfgVersion;
+    /**
+     * 操作类型,1新增，2更新，3删除
+     */
+    private Integer flOperationType;
+    /**
+     * 备注
+     */
+    private String flComment;
 
     public Long getId() {
         return id;
@@ -92,5 +100,21 @@ public class HzFullCfgWithCfg {
 
     public void setFlCfgVersion(BigDecimal flCfgVersion) {
         this.flCfgVersion = flCfgVersion;
+    }
+
+    public Integer getFlOperationType() {
+        return flOperationType;
+    }
+
+    public void setFlOperationType(Integer flOperationType) {
+        this.flOperationType = flOperationType;
+    }
+
+    public String getFlComment() {
+        return flComment;
+    }
+
+    public void setFlComment(String flComment) {
+        this.flComment = flComment;
     }
 }

@@ -35,6 +35,9 @@ function doQuery(){
 
 function initTable(eplUrl){
     var projectPuid = $("#project", window.top.document).val();
+    if (!checkIsSelectProject(projectPuid)) {
+        return;
+    }
     var $table = $("#eplTable");
     var column = [];
     //var eplUrl = "epl/record?projectId="+projectPuid;

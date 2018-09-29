@@ -55,6 +55,7 @@
         <mapper resource="sql/mapper/bom/xmapper/HzMbomRecordMapper.xml"/>
         <mapper resource="sql/mapper/bom/xmapper/HzBomStateMapper.xml"/>
         <mapper resource="sql/mapper/bom/xmapper/HzMBomToERPMapper.xml"/>
+        <mapper resource="sql/mapper/bom/xmapper/HzSingleVehiclesBomRecordMapper.xml"/>
 
         <!--配置-->
         <mapper resource="sql/mapper/cfg/xmapper/HzCfg0MainRecordMapper.xml"/>
@@ -108,6 +109,7 @@
         <mapper resource="sql/mapper/work.xmapper/HzWorkProcedureMapper.xml"/>
         <!--工艺辅料库-->
         <mapper resource="sql/mapper/accessories.xmapper/HzAccessoriesLibMapper.xml"/>
+        <mapper resource="sql/mapper/accessories.xmapper/HzAccessoriesLibsMapper.xml"/>
         <!--变更管理-->
         <mapper resource="sql/mapper/change.xmapper/HzEWOBasicInfoMapper.xml"/>
         <mapper resource="sql/mapper/change.xmapper/HzEWOImpactReferenceMapper.xml"/>
@@ -117,5 +119,11 @@
         <mapper resource="sql/mapper/resourcesLibrary/dictionaryLibrary.xmapper/HzDictionaryLibraryMapper.xml"/>
         <!--VPPS库-->
         <mapper resource="sql/mapper/resourcesLibrary/VPPSLibrary.xmapper/HzVPPSLibraryMapper.xml"/>
+
+        <!--配置和BOM进行交互的映射文件-->
+        <mapper resource="sql/mapper/interaction/HzConfigBomColorMapper.xml"/>
+        <mapper resource="sql/mapper/interaction/HzSingleVehiclesBomLineMapper.xml"/>
+        <mapper resource="sql/mapper/interaction/HzSingleVehiclesMapper.xml"/>
+
     </mappers>
 </configuration>

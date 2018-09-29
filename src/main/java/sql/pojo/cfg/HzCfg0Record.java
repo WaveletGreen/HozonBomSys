@@ -322,4 +322,5 @@ public class HzCfg0Record {
     public void setVwoId(Long vwoId) {
         this.vwoId = vwoId;
     }
+
 }

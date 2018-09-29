@@ -1,0 +1,184 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<!--User: xulf Date: 2018/9/17 Time: 14:52-->
+<!--<head th:include="include/headBom"></head>-->
+<!--<link th:href="@{/css/bootstrap.min.css}" rel="stylesheet"/>-->
+<!--<link th:href="@{/css/bootstrap-multiselect.css}" rel="stylesheet"/>-->
+<!--<script th:src="@{/js/jquery.js}"></script>-->
+<!--<script th:src="@{/js/bootstrap.js}"></script>-->
+<!--<script th:src="@{/js/bootstrap-multiselect.js}"></script>-->
+<!--<link th:href="@{/css/stage/routing.css}" rel="stylesheet"/>-->
+<!--<link th:href="@{/css/stage/routing.css}" rel="stylesheet"/>-->
+<script th:src="@{/layer/layer.js}"></script>
+<body>
+<form id="fourProcessForm" role="form" method="post" action="">
+    <input id="puids" type="hidden"th:value="${data}">
+    <input id="types" type="hidden" th:value="${type}">
+    <input id="chongya" type="hidden" th:value="${cy}">
+    <input id="hanzhuang" type="hidden" th:value="${hz}">
+    <input id="tuzhuang" type="hidden" th:value="${tz}">
+    <input id="zongzhuang" type="hidden" th:value="${zz}">
+    <label>四大工艺</label>
+    <!--<select id="box" class="form-control" style="width: 260px"></select>-->
+    <div id="selectBox" style="border: solid 1px black;width: 200px;height: 100px">
+        <ul>
+            <li id="stamping" style="list-style: none;"><input id="cycb" type="checkbox" value="冲压">冲压</li>
+            <li style="list-style: none;"><input id="hzcb" type="checkbox" value="焊装">焊装</li>
+            <li style="list-style: none;"><input id="tzcb" type="checkbox" value="涂装">涂装</li>
+            <li style="list-style: none;"><input id="zzcb" type="checkbox" value="总装">总装</li>
+        </ul>
+        <!--<button value="5">确定</button>-->
+    </div>
+
+    <!--<div class="form-group">-->
+        <!--<label for="ms">四大工艺</label>-->
+        <!--<select id="ms" class="routing" multiple="multiple">-->
+            <!--<option value="1">冲压</option>-->
+            <!--<option value="2">焊装</option>-->
+            <!--<option value="3">涂装</option>-->
+            <!--<option value="4">总装</option>-->
+        <!--</select>-->
+    <!--</div>-->
+    <!--<table class="table table-striped tableNormalStyle" id="fourProcessTable">
+        <tr>
+            <td class="bs-checkbox "><input data-index="0" name="btSelectItem" type="checkbox"></td>
+            <td>冲压</td>
+            <td class="bs-checkbox "><input data-index="0" name="btSelectItem" type="checkbox"></td>
+            <td>焊装</td>
+        </tr>
+        <tr>
+            <td class="bs-checkbox "><input data-index="0" name="btSelectItem" type="checkbox"></td>
+            <td>涂装</td>
+            <td class="bs-checkbox "><input data-index="0" name="btSelectItem" type="checkbox"></td>
+            <td>总装</td>
+        </tr>
+    </table>-->
+</form>
+<script th:inline="javascript">
+    <![CDATA[
+    $(function () {
+        var types = $("#types").val();
+        if (types =="1"){
+            $("#stamping").hide();
+        }
+        var chongya = $("#chongya").val();
+        var hanzhuang = $("#hanzhuang").val();
+        var tuzhuang = $("#tuzhuang").val();
+        var zongzhuang = $("#zongzhuang").val();
+        if(chongya!=""&&chongya !=null){
+            $("#cycb").attr("disabled","true");
+        }
+        if(hanzhuang!=""&&hanzhuang !=null){
+            $("#hzcb").attr("disabled","true");
+        }
+        if(tuzhuang!=""&&tuzhuang !=null){
+            $("#tzcb").attr("disabled","true");
+        }
+        if(zongzhuang!=""&&zongzhuang !=null){
+            $("#zzcb").attr("disabled","true");
+        }
+        var arr = [];//定义一个数组用来接收多选框的值
+        //初始化让下拉列表不显示
+        // $(function () {
+        //     $('#selectBox').show();
+        // })
+        // $(function () {
+        //     $('#selectBox').hide();
+        // })
+        //单击下拉列表时显示/隐藏下拉列表
+        // $('#box').click(function () {
+        //     $('#selectBox').toggle();
+        // })
+        //监听checkbox的value值 改变则执行下列操作
+        $("input").change(function () {
+            if ($(this).prop("checked")) {
+                arr.push($(this).val());//将选中的选项添加到数组中
+            } else {
+                var index = getIndex(arr, $(this).val())//找到没有选中的选项在数组中的索引
+                arr.splice(index, 1);//在数组中删除该选项
+            }
+        })
+        //这个函数用于获取指定值在数组中的索引
+        function getIndex(arr, value) {
+            for (var i = 0; i < arr.length; i++) {
+                if (arr[i] == value) {
+                    return i
+                }
+            }
+        }
+        // //点击按钮是弹出数组
+        // $('button').click(function () {
+        //     alert(arr)
+        // })
+
+        $('#fourProcessForm').bootstrapValidator({
+            message: 'This value is not valid',
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            fields: {
+                factoryCode: {
+                    message: '工厂验证失败',
+                    validators: {
+                        notEmpty: {
+                            message: '工厂不能为空'
+                        }
+                    }
+                },
+            }
+        });
+        // 绑定dialog的确定按钮的监听事件
+        $("#btnOk", window.top.document).click(function () {
+            var bootstrapValidator = $("#fourProcessForm", window.top.document).data('bootstrapValidator');
+            bootstrapValidator.validate();
+            if (bootstrapValidator.isValid()) {
+                var url = $("#fourProcessForm ", window.top.document).attr('action');
+                var myData = JSON.stringify({
+                    "puids": $("#puids").val(),
+                    "projectId":$("#project", window.top.document).val(),
+                    "routing":arr,
+                });
+                $.ajax({
+                    contentType:
+                        "application/json",
+                    type:
+                        'POST',
+                    url: "work/process/add/four",
+                    data: myData,
+                    success:
+                        function (result) {
+                            $('.modal-dialog', window.top.document).parent('div').remove()
+                            $('body', window.top.document).find('.modal-backdrop').remove();
+                            // jquery 调用刷新当前操作的table页面的refresh方法
+                            $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
+                            /*if (result)
+                                window.Ewin.alert({message: '修改数据成功!'});
+                            else
+                                window.Ewin.alert({message: '修改数据失败!'});*/
+                            if (result.success) {
+                                layer.msg('修改成功', {icon: 1, time: 2000})
+                            }
+                            else if (!result.success) {
+                                window.Ewin.alert({message: result.errMsg})
+                            }
+                        },
+                    error: function (status) {
+                        window.Ewin.alert({message: status.status + ':修改数据失败!'});
+                    }
+                });
+            }
+        });
+    })
+    $(document).keydown(function (event) {
+        if (event.keyCode == 13) {
+            $('form').each(function () {
+                event.preventDefault();
+            });
+        }
+    });
+    ]]>
+</script>
+</body>
+</html>

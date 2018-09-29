@@ -6,7 +6,6 @@ import com.connor.hozon.bom.resources.domain.query.HzPbomByPageQuery;
 import com.connor.hozon.bom.resources.domain.query.HzPbomTreeQuery;
 import com.connor.hozon.bom.resources.page.Page;
 import sql.pojo.bom.HzPbomLineRecord;
-import sql.pojo.bom.HzPbomRecord;
 
 import java.util.List;
 import java.util.Map;
@@ -28,7 +27,7 @@ public interface HzPbomRecordDAO {
      * @param record
      * @return
      */
-    int insert(HzPbomRecord record);
+    int insert(HzPbomLineRecord record);
 
 
     int insertList(List<HzPbomLineRecord> records);
@@ -92,5 +91,22 @@ public interface HzPbomRecordDAO {
 
     String findMinOrderNumWhichGreaterThanThisOrderNum(String projectId,String orderNum);
 
+    List<HzPbomLineRecord> getAll2YBomRecord(String projectId);
+
     int delete(String eBomPuid);
+
+    List<HzPbomLineRecord> findPbom(Map<String,Object> map);
+
+
+    List<HzPbomLineRecord> getPaintAndWhiteBody(String puid,String projectId);
+
+
+    List<HzPbomLineRecord> getSameNameLineId(String lineId,String projectId);
+
+    /**
+     * 获取当前BOM的子一层结构
+     * @param projectId
+     * @return
+     */
+    List<HzPbomLineRecord> getFirstLevelBomByParentId(String parentId,String projectId);
 }

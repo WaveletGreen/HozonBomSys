@@ -319,6 +319,14 @@
         <input class="form-control" id="number" name="number" type="text"
                placeholder="请输入数量"/>
     </div>
+    <div class="form-group">
+        <label for="colorPart">颜色件</label>
+        <select class="form-control" name="colorPart" id="colorPart" placeholder="请选择是否为颜色件">
+            <option></option>
+            <option th:selected="${data.getColorPart()=='Y'?true:false}">Y</option>
+            <option th:selected="${data.getColorPart()=='N'?true:false}">N</option>
+        </select>
+    </div>
     <!--<input id="puid" name="puid" type="hidden" th:value="${puid}"/>-->
     <!--&lt;!&ndash;循环放入数据&ndash;&gt;-->
     <!--<div class="form-group " th:each="_data,c:${data[0]}">-->
@@ -449,6 +457,7 @@
                     "fna": $("#fna").val(),
                     "pFnaDesc": $("#pFnaDesc").val(),
                     "number": $("#number").val(),
+                    "colorPart": $("#colorPart").val(),
                     "projectId": $("#project", window.top.document).val(),
                 });
                 if (puid = "") {

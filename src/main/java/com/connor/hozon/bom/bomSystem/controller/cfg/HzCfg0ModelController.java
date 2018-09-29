@@ -2,12 +2,8 @@ package com.connor.hozon.bom.bomSystem.controller.cfg;
 
 import com.connor.hozon.bom.bomSystem.helper.ProjectHelper;
 import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0MainService;
-import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0ModelService;
 import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0ModelRecordService;
-import com.connor.hozon.bom.bomSystem.service.iservice.project.IHzVehicleService;
-import com.connor.hozon.bom.bomSystem.service.project.HzBrandService;
-import com.connor.hozon.bom.bomSystem.service.project.HzPlatformService;
-import com.connor.hozon.bom.bomSystem.service.project.HzProjectLibsService;
+import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0ModelService;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,14 +12,11 @@ import org.springframework.web.bind.annotation.*;
 import sql.pojo.cfg.HzCfg0MainRecord;
 import sql.pojo.cfg.HzCfg0ModelDetail;
 import sql.pojo.cfg.HzCfg0ModelRecord;
-import sql.pojo.project.HzBrandRecord;
-import sql.pojo.project.HzPlatformRecord;
-import sql.pojo.project.HzProjectLibs;
-import sql.pojo.project.HzVehicleRecord;
 
 import javax.validation.constraints.NotNull;
-import java.util.List;
 import java.util.UUID;
+
+import static com.connor.hozon.bom.bomSystem.helper.StringHelper.checkString;
 
 @Controller
 @RequestMapping("/model")
@@ -72,10 +65,15 @@ public class HzCfg0ModelController {
         if (isSuccess) {
             HzCfg0ModelRecord modelRecord = hzCfg0modelRecordService.doGetById(detail.getpModelPuid());
             //更新车型模型名，如果有修改
-            if(!(modelRecord.getObjectName().equals(detail.getpModelVersion()))){
+            modelRecord.setObjectDesc(detail.getObjectDesc());
+            modelRecord.setpCfg0ModelBasicDetail(detail.getpModelCfgMng());
+            if (!checkString(detail.getObjectName()) || !detail.getpModelVersion().equals(detail.getObjectName())) {
                 modelRecord.setObjectName(detail.getpModelVersion());
-                isSuccess = hzCfg0modelRecordService.doUpdateModelName(modelRecord);
+            } else {
+                modelRecord.setObjectName(detail.getObjectName());
             }
+            isSuccess = hzCfg0modelRecordService.doUpdateModelName(modelRecord);
+
         }
         result.put("msg", sb + detail.getpModelVersion() + "成功");
         result.put("state", isSuccess);
@@ -86,12 +84,11 @@ public class HzCfg0ModelController {
     public String modifyModel(@RequestParam String pModelPuid, Model model) {
         HzCfg0ModelDetail fromDBDetail = new HzCfg0ModelDetail();
         fromDBDetail.setpModelPuid(pModelPuid);
-        fromDBDetail = hzCfg0ModelService.getOneByModelId(fromDBDetail);
+        fromDBDetail = hzCfg0ModelService.getOneByModelId2(fromDBDetail);
         HzCfg0ModelRecord hzCfg0ModelRecord = hzCfg0modelRecordService.doGetById(pModelPuid);
         HzCfg0MainRecord hzCfg0MainRecord = cfg0MainService.doGetByPrimaryKey(hzCfg0ModelRecord.getpCfg0ModelOfMainRecord());
 
         projectHelper.doGetProjectTreeByProjectId(hzCfg0MainRecord.getpCfg0OfWhichProjectPuid());
-
         if (projectHelper.getProject() == null ||
                 projectHelper.getVehicle() == null ||
                 projectHelper.getPlatform() == null ||
@@ -113,8 +110,6 @@ public class HzCfg0ModelController {
                 fromDBDetail.setpModelVersion(record.getObjectName());
                 fromDBDetail.setpModelDesc(record.getObjectDesc());
                 fromDBDetail.setpModelPuid(hzCfg0ModelRecord.getPuid());
-//                detail.setpModelName(record.getObjectName());
-//                detail.setpModelDesc(record.getObjectDesc());
                 model.addAttribute("entity", fromDBDetail);
             }
         } else {

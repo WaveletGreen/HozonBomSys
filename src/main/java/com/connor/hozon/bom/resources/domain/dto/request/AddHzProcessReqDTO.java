@@ -71,6 +71,15 @@ public class AddHzProcessReqDTO {
      * 控制码
      */
     private String controlCode;
+    /**
+     * 物料代码
+     */
+    private Object pMaterielCode;
+
+    /**
+     * 物料中文描述
+     */
+    private Object pMaterielDesc;
 
     public String getFactoryCode() {
         return factoryCode;
@@ -206,5 +215,21 @@ public class AddHzProcessReqDTO {
 
     public void setControlCode(String controlCode) {
         this.controlCode = controlCode;
+    }
+
+    public Object getpMaterielCode() {
+        return pMaterielCode;
+    }
+
+    public void setpMaterielCode(Object pMaterielCode) {
+        this.pMaterielCode = pMaterielCode;
+    }
+
+    public Object getpMaterielDesc() {
+        return pMaterielDesc;
+    }
+
+    public void setpMaterielDesc(Object pMaterielDesc) {
+        this.pMaterielDesc = pMaterielDesc;
     }
 }

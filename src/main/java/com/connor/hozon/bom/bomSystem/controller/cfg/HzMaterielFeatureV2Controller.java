@@ -18,6 +18,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import sql.pojo.cfg.HzCfg0ModelColor;
 import sql.pojo.cfg.HzCfg0ModelRecord;
+import sql.pojo.project.HzMaterielRecord;
 
 import java.util.List;
 import java.util.Map;
@@ -87,10 +88,6 @@ public class HzMaterielFeatureV2Controller extends ExtraIntegrate {
     HzComposeMFService hzComposeMFService;
 
 
-    @Autowired
-    public HzMaterielFeatureV2Controller() {
-    }
-
     @RequestMapping(value = "/composePage", method = RequestMethod.GET)
     public String composePage(@RequestParam String projectUid, Model model) {
         if (!checkString(projectUid)) {
@@ -107,9 +104,11 @@ public class HzMaterielFeatureV2Controller extends ExtraIntegrate {
             model.addAttribute("msg", "没有车型模型，请至少添加一个车型模型");
             return "errorWithEntity";
         }
+        HzMaterielRecord sm = hzSuperMaterielService.doSelectByProjectPuid(projectUid);
         model.addAttribute("colorModels", colorModels);
         model.addAttribute("models", models);
         model.addAttribute("projectUid", projectUid);
+        model.addAttribute("sm", sm);
         model.addAttribute("action", "./materielV2/saveCompose");
         return "cfg/materielFeature/add";
     }
@@ -124,7 +123,7 @@ public class HzMaterielFeatureV2Controller extends ExtraIntegrate {
             result.put("status", false);
             return result;
         }
-        hzComposeMFService.saveCompose(hzComposeMFDTO, result);
+        hzComposeMFService.saveCompose2(hzComposeMFDTO, result);
         return result;
     }
 

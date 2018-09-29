@@ -1,0 +1,153 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<body>
+<meta charset=utf-8/>
+<form class="form-horizontal" id="addModelForm" role="form" method="post" th:action="${action}">
+    <input class="form-control" id="pCfg0ModelOfMainRecord" name="pCfg0ModelOfMainRecord" type="hidden"
+           th:value="${cfgmain.getPuid()}"
+    />
+    <div class="form-group col-lg-12">
+        <label for="pModelBrand">品牌</label>
+        <input class="form-control" id="pModelBrand" name="pModelBrand" type="text"
+               placeholder="请输入品牌" th:value="${hzCfg0ModelDetail.getpModelBrand()}" disabled="disabled"
+        />
+    </div>
+    <div class="form-group col-lg-12">
+        <label for="pModelPlatform">平台</label>
+        <input class="form-control" id="pModelPlatform" name="pModelPlatform" type="text"
+               placeholder="请输入平台" th:value="${hzCfg0ModelDetail.getpModelPlatform()}" disabled="disabled"
+        />
+    </div>
+    <div class="form-group col-lg-12">
+        <label for="pModelMod">车型</label>
+        <input class="form-control" id="pModelMod" name="pModelMod" type="text"
+               placeholder="请输入车型" th:value="${hzCfg0ModelDetail.getpModelVehicle()}" disabled="disabled"
+        />
+    </div>
+    <div class="form-group col-lg-12">
+        <label for="pModelVersion">版型<span style="color: red">*</span></label>
+        <input class="form-control" id="pModelVersion" name="pModelVersion" type="text"
+               placeholder="请输入版型"
+        />
+    </div>
+    <div class="form-group col-lg-12">
+        <label for="pModelShape">车身形式</label>
+        <input class="form-control" id="pModelShape" name="pModelShape" type="text"
+               placeholder="请输入车身形式"
+        />
+    </div>
+    <div class="form-group col-lg-12">
+        <label for="pModelAnnouncement">公告</label>
+        <input class="form-control" id="pModelAnnouncement" name="pModelAnnouncement" type="text"
+               placeholder="请输入公告"/>
+    </div>
+    <div class="form-group col-lg-12">
+        <label for="pModelCfgDesc">配置描述</label>
+        <input class="form-control" id="pModelCfgDesc" name="pModelCfgDesc" type="text"
+               placeholder="请输入配置描述"/>
+    </div>
+    <div class="form-group col-lg-12">
+        <label for="pModelCfgMng">配置管理</label>
+        <input class="form-control" id="pModelCfgMng" name="pModelCfgMng" type="text"
+               placeholder="请输入配置描述"/>
+    </div>
+    <div class="form-group col-lg-12">
+        <label for="pModelTrailNum">试制号</label>
+        <input class="form-control" id="pModelTrailNum" name="pModelTrailNum" type="text"
+               placeholder="请输入试制号"
+        />
+    </div>
+    <div class="form-group col-lg-12">
+        <label for="pModelGoodsNum">商品号</label>
+        <input class="form-control" id="pModelGoodsNum" name="pModelGoodsNum" type="text"
+               placeholder="请输入商品号"
+        />
+    </div>
+    <!--<div class="form-group col-lg-12">-->
+        <!--<label for="objectName">模型名</label>-->
+        <!--<input class="form-control" id="objectName" name="objectName" type="text"-->
+        <!--/>-->
+    <!--</div>-->
+    <!--<div class="form-group col-lg-12">-->
+        <!--<label for="objectDesc">模型描述</label>-->
+        <!--<input class="form-control" id="objectDesc" name="objectDesc" type="text"-->
+        <!--/>-->
+    <!--</div>-->
+    <!--<div class="form-group col-lg-12">-->
+        <!--<label for="pCfg0ModelBasicDetail">模型基本信息</label>-->
+        <!--<input class="form-control" id="pCfg0ModelBasicDetail" name="pCfg0ModelBasicDetail" type="text"-->
+        <!--/>-->
+    <!--</div>-->
+</form>
+</body>
+<script th:inline="javascript">
+    <![CDATA[
+    $(document).keydown(function (event) {
+        if (event.keyCode == 13) {
+            $('addModelForm').each(function () {
+                event.preventDefault();
+            });
+        }
+    });
+    $(function () {
+        $('#addModelForm').bootstrapValidator({
+            message: 'This value is not valid',
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            fields: {
+                pModelVersion: {
+                    message: '版型验证失败',
+                    validators: {
+                        notEmpty: {
+                            message: '版型不能为空'
+                        },
+                    }
+                }
+            }
+        });
+        // 绑定dialog的确定按钮的监听事件
+        $("#btnOk", window.top.document).click(function () {
+            var bootstrapValidator = $("#addModelForm", window.top.document).data('bootstrapValidator');
+            bootstrapValidator.validate();
+            if (bootstrapValidator.isValid()) {
+                var url = $("#addModelForm", window.top.document).attr('action');
+                var data = {};
+                var _d = $("#addModelForm").serializeArray();
+                for (var p in _d) {
+                    data[_d[p].name] = _d[p].value;
+                }
+                $.ajax({
+                    contentType:
+                        "application/json",
+                    type:
+                        'POST',
+                    url: url,
+                    data: JSON.stringify(data),
+                    success:
+                        function (result) {
+                            $('.modal-dialog', window.top.document).parent('div').remove()
+                            $('body', window.top.document).find('.modal-backdrop').remove();
+                            // jquery 调用刷新当前操作的table页面的refresh方法
+                            $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
+                            if (result) {
+                                layer.msg('添加模型成功!', {icon: 1, time: 2000})
+                            }
+                            else {
+                                window.Ewin.alert({message: '添加模型失败!'});
+                            }
+
+                        },
+                    error: function (status) {
+                        window.Ewin.alert({message: status.status + ':添加模型失败!'});
+                    }
+                });
+            }
+        });
+    })
+    ]]>
+</script>
+<script th:src="@{/layer/layer.js}"></script>
+</html>

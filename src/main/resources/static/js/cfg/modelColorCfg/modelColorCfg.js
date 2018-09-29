@@ -28,8 +28,11 @@ $(document).ready(
 );
 
 function loadData(projectPuid) {
-    if (projectPuid.length <= 0) {
-        $("#myModal").modal('show');
+    // if (projectPuid.length <= 0) {
+    //     $("#myModal").modal('show');
+    //     return;
+    // }
+    if (!checkIsSelectProject(projectPuid)) {
         return;
     }
     var $table = $("#modelColorCfgTable");
@@ -39,8 +42,21 @@ function loadData(projectPuid) {
         url: "modelColor/getColumn?projectPuid=" + projectPuid,
         type: "GET",
         success: function (result) {
-            if (!result.status) {
-                alert("查无数据，请联系管理员");
+            if (result.status != 99) {
+                if (result.status == 1) {
+                    window.Ewin.alert({message: result.msg});
+                }
+                else if (result.status == 0) {
+                    let msg = "<div style='max-height: 400px;overflow: scroll'><table>";
+                    let entity = result.msg;
+                    for (let i in entity) {
+                        if (entity.hasOwnProperty(i)) {
+                            msg += "<tr><td><div><span style='color: #ac2925'>" + entity[i] + "</span>对于特性来说颜色定义存在歧义，请到全配置BOM一级清单中重新定义颜色" + "</div></td></tr>";
+                        }
+                    }
+                    msg += "</table></div>";
+                    window.Ewin.alert({message: msg});
+                }
                 return;
             }
             var data = result.data;

@@ -7,6 +7,9 @@ $(document).ready(function () {
     var allPuids="";
     var coach1 = [];
     var projectId = $("#project", window.top.document).val();
+    if (!checkIsSelectProject(projectId)) {
+        return;
+    }
     $("#queryBtn1").click(function () {
         var val = $("#queryLineId").val();
         if (val == "") {
@@ -37,7 +40,9 @@ $(document).ready(function () {
                 true,
         },
         check: {
-            enable: true
+            enable: true,
+            chkStyle: "checkbox",
+            chkboxType: { "Y": "s", "N": "s"}
         },
         data: {
             simpleData: {

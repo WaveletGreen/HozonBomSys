@@ -2,55 +2,76 @@
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <body>
 <meta charset=utf-8/>
-<form class="form-horizontal" id="form" role="form" method="post" action="./modelColor/saveColorModel">
-    <fieldset>
-        <input th:value="${columnList.size()}" type="hidden" id="counter"/>
-        <input th:value="${pCfg0MainRecordOfMC}" type="hidden" id="pCfg0MainRecordOfMC"/>
+<div class="col-lg-7">
+    <form class="form-horizontal" id="form" role="form" method="post" action="./modelColor/saveColorModel">
+        <fieldset>
+            <input th:value="${columnList.size()}" type="hidden" id="counter"/>
+            <input th:value="${pCfg0MainRecordOfMC}" type="hidden" id="pCfg0MainRecordOfMC"/>
 
-        <div id="legend" class="">
-            <legend class="">添加颜色车型</legend>
-        </div>
+            <div id="legend" class="">
+                <legend class="">添加颜色车型</legend>
+            </div>
 
-        <div class="form-group col-lg-10">
-            <label for="pCodeOfColorfulModel">车型颜色代码</label>
-            <input class="form-control" id="pCodeOfColorfulModel" name="pCodeOfColorfulModel" type="text"
-                   placeholder="请输入车型颜色代码" disabled="disabled"
-            />
-        </div>
-        <div class="form-group col-lg-10">
-            <label for="pDescOfColorfulModel">描述</label>
-            <input class="form-control" id="pDescOfColorfulModel" name="pDescOfColorfulModel" type="text"
-                   placeholder="请输入描述"/>
-        </div>
-        <div class="form-group col-lg-10">
-            <label>油漆车身总成</label>
-            <select class="form-control input-small" data-style="btn-info"
-                    th:id="modelShell" th:name="modelShell">
-                <option th:each="color:${colorList2}" th:value="${color.getPuid()}"
-                        th:text="${color.pColorCode+' -- '+color.pColorName+' -- '+color.getpColorComment()+' -- '+color.getpColorOfSet()}"
-                >
-                </option>
-            </select>
-        </div>
-        <!--循环放入数据-->
-        <div class="form-group col-lg-10" th:each="column,c:${columnList}">
-            <label class="control-label" th:text="${column.getpOptionfamilyName()+'-'+column.getpOptionfamilyDesc()}"
-                   th:for="${column.getPuid()}"></label>
-            <select class="form-control input-small" th:name="${column.getPuid()}" data-style="btn-info"
-                    th:id="${column.getPuid()}">
-                <option th:each="color:${colorList}" th:value="${color.puid}"
-                        th:text="${color.pColorCode+' -- '+color.pColorName+' -- '+color.getpColorComment()+' -- '+color.getpColorOfSet()}"
-                >
-                </option>
+            <div class="form-group col-lg-12">
+                <label for="pCodeOfColorfulModel">车型颜色代码</label>
+                <input class="form-control" id="pCodeOfColorfulModel" name="pCodeOfColorfulModel" type="text"
+                       placeholder="请输入车型颜色代码" disabled="disabled"
+                />
+            </div>
+            <div class="form-group col-lg-12">
+                <label for="pDescOfColorfulModel">描述</label>
+                <input class="form-control" id="pDescOfColorfulModel" name="pDescOfColorfulModel" type="text"
+                       placeholder="请输入描述"/>
+            </div>
+            <div class="form-group col-lg-12">
+                <label>油漆车身总成</label>
+                <select class="form-control input-small" data-style="btn-info"
+                        th:id="modelShell" th:name="modelShell">
+                    <option th:each="color:${colorList2}" th:value="${color.getPuid()}"
+                            th:text="${color.pColorCode+' -- '+color.pColorName+' -- '+color.getpColorComment()+' -- '+color.getpColorOfSet()}"
+                    >
+                    </option>
+                </select>
+            </div>
+            <!--循环放入数据 -->
+            <div class="form-group col-lg-12" th:each="column,c:${columnList}">
+                <label class="control-label"
+                       th:text="${column.getpOptionfamilyName()+'-'+column.getpOptionfamilyDesc()}"
+                       th:for="${column.getPuid()}"
+                       th:id="${column.getpOptionfamilyName()}"
+                ></label>
+                <select class="form-control input-small" th:name="${column.getPuid()}" data-style="btn-info"
+                        th:id="${column.getPuid()}">
+                    <option th:each="color:${colorList}" th:value="${color.puid}"
+                            th:text="${color.pColorCode+' -- '+color.pColorName+' -- '+color.getpColorComment()+' -- '+color.getpColorOfSet()}"
+                    >
+                    </option>
 
-            </select>
-        </div>
-    </fieldset>
-</form>
-
+                </select>
+            </div>
+        </fieldset>
+    </form>
+</div>
+<div class="col-lg-5" style="position: fixed;margin-left:65%;margin-top: 100px;z-index:99999;">
+    <div class="col-lg-12">
+        <label for="feature">特性代码:</label>
+        <input class="typeahead form-control" style="width: 200px;" id="feature" name="feature"
+               data-provide="typeahead"
+               type="text"
+               placeholder="请输入查找的特性"
+        />
+        <a id="search" href="javascript:void(0)"><span>搜索</span></a>
+    </div>
+</div>
 <script th:inline="javascript">
     <![CDATA[
+    var availableTags = [];
+    var message = null;
     $(function () {
+            message = [[${columnList}]];
+            for (let index in message) {
+                availableTags.push(message[index].pOptionfamilyName);
+            }
             $('#form').bootstrapValidator({
                 message: 'This value is not valid',
                 feedbackIcons: {
@@ -63,7 +84,7 @@
                         message: '车型颜色代码验证失败',
                         validators: {
                             notEmpty: {
-                                message: '车型颜色代码不能为空'
+                                message: '车型颜色代码不能为空',
                             }
                         }
                     },
@@ -84,17 +105,6 @@
             // 绑定dialog的确定按钮的监听事件
             <!--th:selected="${c.index}==${color.pColorName}"-->
             $("#btnOk", window.top.document).click(function () {
-                // var count = parseInt($("#counter").val());
-                // var data = {};
-                //
-                <!--其实不要puid，puid会在服务器上生成-->
-                // data.pCodeOfColorfulModel = $("#pCodeOfColorfulModel").val();
-                // data.pDescOfColorfulModel = $("#pDescOfColorfulModel").val();
-                // data.pCfg0MainRecordOfMC = $("#pCfg0MainRecordOfMC").val();
-                // data.modelShell = $("#modelShell").val();
-                // for (var i = 0; i < count; i++) {
-                //     eval(('data.s' + i + '=$("#select' + i + '").val()'));
-                // }
 
                 var data = {};
                 var _d = $("#form").serializeArray();
@@ -103,7 +113,6 @@
                 }
                 data.pCfg0MainRecordOfMC = $("#pCfg0MainRecordOfMC").val();
                 data.pCodeOfColorfulModel = $("#pCodeOfColorfulModel").val();
-
                 var bootstrapValidator = $("#form", window.top.document).data('bootstrapValidator');
                 bootstrapValidator.validate();
                 if (bootstrapValidator.isValid()) {
@@ -121,10 +130,12 @@
                                 $('body', window.top.document).find('.modal-backdrop').remove();
                                 // jquery 调用刷新当前操作的table页面的refresh方法
                                 $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
-                                if (result) {
-                                    layer.msg('添加数据成功!', {icon: 1, time: 2000})
+                                if (result.status) {
+                                    layer.msg(result.msg, {icon: 1, time: 2000})
                                 }
-                                // window.Ewin.alert({message: "添加数据成功"});
+                                else {
+                                    window.Ewin.alert({message: result.msg});
+                                }
                             },
                         error: function (status) {
                             window.Ewin.alert({message: status.status + ':添加数据失败!'});
@@ -136,9 +147,32 @@
         $("#modelShell").change(function () {
             $("#pCodeOfColorfulModel").val($('#modelShell option:selected').text().split(' -- ')[0]);
             $("#pDescOfColorfulModel").val($("#pCodeOfColorfulModel").val() + $('#modelShell option:selected').text().split(' -- ')[1]);
-            console.log("已选择油漆车身颜色");
-        })
-    )
+        }),
+        $('#feature').typeahead({
+            source: availableTags
+        }),
+        $("#search").attr("onclick", "xsearch2();")
+    );
+    var temp = null;
+
+    function xsearch2() {
+        let el = $('#feature').val();
+        if ($("#" + el) && document.getElementById(el)) {
+            document.getElementById(el).scrollIntoView(true);
+            if (temp != null || temp != undefined || temp != "") {
+                if (temp != el) {
+                    $('#' + el).css("color", "red");
+                    $('#' + temp).css("color", "black");
+                    temp = el;
+                }
+            }
+            else {
+                temp = el;
+                $('#' + el).css("color", "red");
+            }
+        }
+    }
+
     ]]>
 </script>
 <script th:src="@{/layer/layer.js}"></script>

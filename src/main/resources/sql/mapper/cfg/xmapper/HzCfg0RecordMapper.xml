@@ -83,6 +83,26 @@
         where PUID = #{puid,jdbcType=VARCHAR}
         order by P_CFG0_OBJECT_ID
     </select>
+    <!--HZCSYS+特性值搜索-->
+    <select id="selectByCodeAndDescWithMainItem" parameterType="sql.pojo.cfg.HzCfg0Record" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from ${whichTable} t
+        where
+        t.p_cfg0_family_name like '%'||#{pCfg0FamilyName,jdbcType=VARCHAR}||'%'
+        and t.p_cfg0_object_id=#{pCfg0ObjectId,jdbcType=VARCHAR}
+        and t.p_cfg0_main_item_puid=#{pCfg0MainItemPuid,jdbcType=VARCHAR}
+    </select>
+    <!--车身颜色+特性值搜索-->
+    <select id="selectByCodeAndCnDescWithMainItem" parameterType="sql.pojo.cfg.HzCfg0Record" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from ${whichTable} t
+        where
+        t.p_cfg0_family_desc like '%'||#{pCfg0FamilyDesc,jdbcType=VARCHAR}||'%'
+        and t.p_cfg0_object_id=#{pCfg0ObjectId,jdbcType=VARCHAR}
+        and t.p_cfg0_main_item_puid=#{pCfg0MainItemPuid,jdbcType=VARCHAR}
+    </select>
     <select id="selectByCondition" parameterType="com.connor.hozon.bom.bomSystem.dto.HzFeatureQueryDTO"
             resultMap="BaseResultMap">
 
@@ -109,10 +129,10 @@
         ROWNUM as rowno
         from ${whichTable} t where 1=1
         <if test="param.featureValue !=null">
-            and t.p_cfg0_object_id like '%'||upper(#{param.featureValue})||'%'
+            and t.p_cfg0_object_id like '%'||upper(trim(#{param.featureValue}))||'%'
         </if>
         <if test="param.feature !=null">
-            and t.p_cfg0_family_name like '%'||upper(#{param.feature})||'%'
+            and t.p_cfg0_family_name like '%'||upper(trim(#{param.feature}))||'%'
         </if>
         and t.p_cfg0_main_item_puid=(
         select t2.puid
@@ -191,6 +211,19 @@
         and t.P_CFG0_DESC=#{pCfg0Desc}
         and t.P_CFG0_FAMILY_NAME=#{pCfg0FamilyName}
         and t.P_CFG0_FAMILY_DESC=#{pCfg0FamilyDesc}
+        and t.p_cfg0_main_item_puid=#{pCfg0MainItemPuid}
+    </select>
+
+    <select id="selectByFamilyUidWithProject" parameterType="sql.pojo.cfg.HzCfg0Record"
+            resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from HZ_CFG0_RECORD t
+        where t.P_CFG0_MAIN_ITEM_PUID=(
+        select puid from Hz_Cfg0_Main_Record t2
+        where t2.p_cfg0_of_which_project_puid=#{projectPuid,jdbcType=VARCHAR}
+        )
+        and t.P_CFG0_FAMILY_PUID=#{pCfg0FamilyPuid,jdbcType=VARCHAR}
     </select>
 
     <select id="tellMeHowManyOfThose" parameterType="com.connor.hozon.bom.bomSystem.dto.HzFeatureQueryDTO"
@@ -370,4 +403,6 @@
             )
         </if>
     </update>
+
+
 </mapper>

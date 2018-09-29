@@ -12,6 +12,29 @@ public class DeleteHzMbomReqDTO {
 
     private String puid;
 
+    /**
+     * 1 生产 6财务
+     */
+    private Integer type;
+
+    private String tableName;
+
+    public String getTableName() {
+        return tableName;
+    }
+
+    public void setTableName(String tableName) {
+        this.tableName = tableName;
+    }
+
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
+    }
+
     public String getPuids() {
         return puids;
     }

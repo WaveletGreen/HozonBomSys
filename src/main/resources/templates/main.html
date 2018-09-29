@@ -4,13 +4,12 @@
     <script th:src="@{user.js}"></script>
     <title>合众BOM管理系统</title>
 </head>
-
 <body>
+<!--<link rel="shortcut icon" href="http://www.weather.com.cn/favicon.ico" type="image/x-icon"/>-->
 <link th:href="@{css/sb-admin.css}" rel="stylesheet"/>
 <div id="wrapper">
     <!-- Navigation -->
     <nav class="navbar navbar-inverse navbar-fixed-top nav_custom" role="navigation">
-        <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header" id="navbar_header">
             <a class="navbar-brand" href="main"><img th:src="@{/img/logo.png}"><span>BOM管理系统</span></a>
         </div>
@@ -25,60 +24,6 @@
                 </a>
                 <ul class="dropdown-menu" id="projectList" style="max-height: 300px;overflow-y:scroll;"></ul>
             </li>
-            <!--<li class="dropdown">-->
-            <!--<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-envelope"></i> <b-->
-            <!--class="caret"></b></a>-->
-            <!--<ul class="dropdown-menu message-dropdown">-->
-            <!--<li class="message-preview">-->
-            <!--<a href="#">-->
-            <!--<div class="media">-->
-            <!--<span class="pull-left">-->
-            <!--<img class="media-object" src="http://placehold.it/50x50" alt=""/>-->
-            <!--</span>-->
-            <!--<div class="media-body">-->
-            <!--<h5 class="media-heading"><strong>John Smith</strong>-->
-            <!--</h5>-->
-            <!--<p class="small text-muted"><i class="fa fa-clock-o"></i> Yesterday at 4:32 PM</p>-->
-            <!--<p>Lorem ipsum dolor sit amet, consectetur...</p>-->
-            <!--</div>-->
-            <!--</div>-->
-            <!--</a>-->
-            <!--</li>-->
-            <!--<li class="message-preview">-->
-            <!--<a href="#">-->
-            <!--<div class="media">-->
-            <!--<span class="pull-left">-->
-            <!--<img class="media-object" src="http://placehold.it/50x50" alt=""/>-->
-            <!--</span>-->
-            <!--<div class="media-body">-->
-            <!--<h5 class="media-heading"><strong>John Smith</strong>-->
-            <!--</h5>-->
-            <!--<p class="small text-muted"><i class="fa fa-clock-o"></i> Yesterday at 4:32 PM</p>-->
-            <!--<p>Lorem ipsum dolor sit amet, consectetur...</p>-->
-            <!--</div>-->
-            <!--</div>-->
-            <!--</a>-->
-            <!--</li>-->
-            <!--<li class="message-preview">-->
-            <!--<a href="#">-->
-            <!--<div class="media">-->
-            <!--<span class="pull-left">-->
-            <!--<img class="media-object" src="http://placehold.it/50x50" alt=""/>-->
-            <!--</span>-->
-            <!--<div class="media-body">-->
-            <!--<h5 class="media-heading"><strong>John Smith</strong>-->
-            <!--</h5>-->
-            <!--<p class="small text-muted"><i class="fa fa-clock-o"></i> Yesterday at 4:32 PM</p>-->
-            <!--<p>Lorem ipsum dolor sit amet, consectetur...</p>-->
-            <!--</div>-->
-            <!--</div>-->
-            <!--</a>-->
-            <!--</li>-->
-            <!--<li class="message-footer">-->
-            <!--<a href="#">Read All New Messages</a>-->
-            <!--</li>-->
-            <!--</ul>-->
-            <!--</li>-->
             <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> <font
                         th:text="${#authentication.name}"></font> <b class="caret"></b></a>
@@ -109,27 +54,7 @@
         <div id="tabContainer"></div>
     </div>
 </div>
-<!--
-<div th:text="${#authentication.name}">
-    The value of the "name" property of the authentication object should appear here.
-</div>
-这是一个登陆成功以后的首页
-<div class="row">
-    <div class="col-md-12">
-        <table id="conversation" class="table table-striped">
-            <thead>
-            <tr>
-                <th>Greetings</th>
-            </tr>
-            </thead>
-            <tbody id="greetings">
-            </tbody>
-        </table>
-    </div>
-</div>
--->
 </body>
-
 <script th:inline="javascript">
     $(document).ready(
         (function () {
@@ -146,9 +71,6 @@
                 // $("#greetings").append("<tr><td>" + JSON.parse(greeting.body).content + "</td></tr>");
             }
             $.fn.socketConnect(options);
-            // 初始化nav
-            // $.fn.bootstrapNav({index: 'main', navTitle: '合众BOM管理系统'});
-            // 初始化标签页
             $("#tabContainer").tabs({
                 data: [{
                     id: '99999999',
@@ -183,6 +105,12 @@
                     var _data = data.data;
                     var ok = true;
                     if (_data) {
+                        $("#projectList").append(
+                            "<li>" +
+                            "<a href='javascript:void(0)' class='project' onclick='doChangeProject(\"" + "\")'>请选择项目</a>" +
+                            "</li>" +
+                            "<li class='divider'></li>"
+                        );
                         for (var i in _data) {
                             // if (i == 0 && ok) {
                             //     $("#projectList", window.top.document).val(_data[i].puid);

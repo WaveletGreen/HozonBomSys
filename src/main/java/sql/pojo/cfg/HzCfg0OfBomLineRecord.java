@@ -21,7 +21,7 @@ public class HzCfg0OfBomLineRecord {
      */
     private String cfg0Desc;
     /**
-     * 族名
+     * 族名(特性名称)
      */
     private String pCfg0familyname;
     /**

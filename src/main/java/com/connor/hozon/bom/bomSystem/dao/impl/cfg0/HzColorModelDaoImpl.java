@@ -70,6 +70,10 @@ public class HzColorModelDaoImpl implements HzColorModelDao {
         return baseSQLUtil.executeQueryByPass(model, modelUid, "com.connor.hozon.bom.bomSystem.dao.cfg.HzColorModelDao.selectByModelUidWithColor");
     }
 
+    @Override
+    public List<HzColorModel> selectByModelUidWithColor2(String modelUid) {
+        return baseSQLUtil.executeQueryByPass(model, modelUid, "com.connor.hozon.bom.bomSystem.dao.cfg.HzColorModelDao.selectByModelUidWithColor2");
+    }
     /**
      * 根据项目ID查找
      *
@@ -112,6 +116,7 @@ public class HzColorModelDaoImpl implements HzColorModelDao {
     public List<HzColorModel2> selectByProjectPuid(String projectPuid) {
         return  baseSQLUtil.executeQueryByPass(new HzColorModel2(), projectPuid, "com.connor.hozon.bom.bomSystem.dao.cfg.HzColorModelDao.selectByProjectPuid");
     }
+
 
 
 }

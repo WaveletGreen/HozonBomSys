@@ -45,7 +45,7 @@ public abstract class BaseController {
     }
 
     /**
-     * send the string message back
+     * JSON格式数据返回
      * @param returnResult
      * @param response
      */
@@ -69,6 +69,7 @@ public abstract class BaseController {
     }
 
     /**
+     * JSON格式数据返回
      * @param writer
      */
     protected void writeAjaxJSONResponse(Object responseObj, PrintWriter writer) {
@@ -84,6 +85,7 @@ public abstract class BaseController {
     }
 
     /**
+     * JSON格式数据返回
      * @param responseObj
      * @param cirReferDetect
      */
@@ -107,6 +109,7 @@ public abstract class BaseController {
     }
 
     /**
+     * JSON格式数据返回
      * @param responseObj
      * @param writer
      * @param dateFormat
@@ -126,6 +129,7 @@ public abstract class BaseController {
     }
 
     /**
+     * JSON格式数据返回
      * @param responseObj
      * @param response
      */
@@ -136,13 +140,6 @@ public abstract class BaseController {
         response.setDateHeader("Expires", 0); // Proxies.
         response.setCharacterEncoding("UTF-8");
         response.setContentType("application/json;charset=UTF-8");
-
-        /**
-         * for ajax-cross-domain request
-         * TODO get the ip address from configration(ajax-cross-domain.properties)
-         */
-        //response.setHeader("Access-Control-Allow-Origin","http://115.238.97.150");
-
         PrintWriter writer = getWriter(response);
         writeAjaxJSONResponse(responseObj, writer);
     }
@@ -156,12 +153,6 @@ public abstract class BaseController {
         response.setCharacterEncoding("UTF-8");
         response.setContentType("application/json;charset=UTF-8");
 
-        /**
-         * for ajax-cross-domain request
-         * TODO get the ip address from configration(ajax-cross-domain.properties)
-         */
-        //response.setHeader("Access-Control-Allow-Origin","http://115.238.97.150");
-
         PrintWriter writer = getWriter(response);
         writeAjaxJSONResponse(responseObj, writer);
     }
@@ -169,9 +160,7 @@ public abstract class BaseController {
 
 
     /**
-     * description:send the ajax response back to the client side (Date object
-     * will be formatted as per the given <code>dateFormat</code>).
-     *
+     *JSON格式数据返回 带日期格式
      * @param responseObj
      * @param response
      * @param dateFormat

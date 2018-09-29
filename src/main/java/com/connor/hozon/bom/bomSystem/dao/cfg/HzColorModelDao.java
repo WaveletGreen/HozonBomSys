@@ -84,4 +84,6 @@ public interface HzColorModelDao {
     int updateColorModelWithCfg(HzColorModel model);
 
     List<HzColorModel2> selectByProjectPuid(String projectPuid);
+
+    List<HzColorModel> selectByModelUidWithColor2(String modelUid);
 }

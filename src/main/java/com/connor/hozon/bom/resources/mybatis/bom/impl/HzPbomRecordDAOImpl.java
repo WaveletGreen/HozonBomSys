@@ -10,8 +10,8 @@ import com.connor.hozon.bom.resources.page.PageRequest;
 import org.springframework.stereotype.Service;
 import sql.BaseSQLUtil;
 import sql.pojo.bom.HzPbomLineRecord;
-import sql.pojo.bom.HzPbomRecord;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,13 +29,41 @@ public class HzPbomRecordDAOImpl extends BaseSQLUtil implements HzPbomRecordDAO 
     }
 
     @Override
-    public int insert(HzPbomRecord record) {
+    public int insert(HzPbomLineRecord record) {
         return super.insert("HzPbomRecordDAOImpl_insert",record);
     }
 
     @Override
     public int insertList(List<HzPbomLineRecord> records) {
-        return super.insert("HzPbomRecordDAOImpl_insertList",records);
+        int size = records.size();
+        //分批插入数据 一次1000条
+        int i = 0;
+        int cout = 0;
+        try {
+            synchronized (this){
+                if (size > 1000) {
+                    for (i = 0; i < size / 1000; i++) {
+                        List<HzPbomLineRecord> list = new ArrayList<>();
+                        for (int j = 0; j < 1000; j++) {
+                            list.add(records.get(cout));
+                            cout++;
+                        }
+                        super.insert("HzPbomRecordDAOImpl_insertList",list);
+                    }
+                }
+                if (i * 1000 < size) {
+                    List<HzPbomLineRecord> list = new ArrayList<>();
+                    for (int j = 0; j < size - i * 1000; j++) {
+                        list.add(records.get(cout));
+                        cout++;
+                    }
+                    super.insert("HzPbomRecordDAOImpl_insertList",list);
+                }
+            }
+            return 1;
+        }catch (Exception e){
+            return 0;
+        }
     }
 
     @Override
@@ -103,6 +131,7 @@ public class HzPbomRecordDAOImpl extends BaseSQLUtil implements HzPbomRecordDAO 
         Map<String,Object> map = new HashMap<>();
         map.put("projectId",query.getProjectId());
         map.put("puid",query.getPuid());
+        map.put("colorPart",query.getIsColorPart());
         return super.findForList("HzPbomRecordDAOImpl_getHzPbomTree",map);
     }
 
@@ -134,12 +163,49 @@ public class HzPbomRecordDAOImpl extends BaseSQLUtil implements HzPbomRecordDAO 
     public String findMinOrderNumWhichGreaterThanThisOrderNum(String projectId,String orderNum) {
         Map<String,Object> map = new HashMap<>();
         map.put("projectId",projectId);
-        map.put("sortNum",orderNum);
+        map.put("sortNum",Double.parseDouble(orderNum));
         return (String) super.findForObject("HzPbomRecordDAOImpl_findMinOrderNumWhichGreaterThanThisOrderNum",map);
+    }
+
+    @Override
+    public List<HzPbomLineRecord> getAll2YBomRecord(String projectId) {
+
+        return super.findForList("HzPbomRecordDAOImpl_getAll2YBomRecord",projectId);
     }
 
     @Override
     public int delete(String eBomPuid) {
         return super.delete("HzPbomRecordDAOImpl_delete",eBomPuid);
     }
+
+    @Override
+    public List<HzPbomLineRecord> findPbom(Map<String, Object> map) {
+        return super.findForList("HzPbomRecordDAOImpl_findPbom",map);
+    }
+
+    @Override
+    public List<HzPbomLineRecord> getPaintAndWhiteBody(String puid, String projectId) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("puid",puid);
+        map.put("projectId",projectId);
+        return super.findForList("HzPbomRecordDAOImpl_getPaintAndWhiteBody",map);
+    }
+
+    @Override
+    public List<HzPbomLineRecord> getSameNameLineId(String lineId, String projectId) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("lineId",lineId);
+        map.put("projectId",projectId);
+
+        return super.findForList("HzPbomRecordDAOImpl_getSameNameLineId",map);
+    }
+
+    @Override
+    public List<HzPbomLineRecord> getFirstLevelBomByParentId(String parnetId, String projectId) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("parentId",parnetId);
+        map.put("projectId",projectId);
+        return super.findForList("HzPbomRecordDAOImpl_getFirstLevelBomByParentId",map);
+    }
+    
 }

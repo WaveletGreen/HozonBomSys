@@ -84,6 +84,15 @@ public class HzWorkProcedure {
     private String purpose;
 
     /**
+     * 物料代码
+     */
+    private Object pMaterielCode;
+
+    /**
+     * 物料中文描述
+     */
+    private Object pMaterielDesc;
+    /**
      * 状态
      */
     private String state;
@@ -91,6 +100,11 @@ public class HzWorkProcedure {
      * 控制码
      */
     private String controlCode;
+
+    /**
+     * 工厂ID
+     */
+    private String pFactoryId;
 
     public String getControlCode() {
         return controlCode;
@@ -204,6 +218,22 @@ public class HzWorkProcedure {
         this.pMachineMaterialLabor = pMachineMaterialLabor;
     }
 
+    public Object getpMaterielCode() {
+        return pMaterielCode;
+    }
+
+    public void setpMaterielCode(Object pMaterielCode) {
+        this.pMaterielCode = pMaterielCode;
+    }
+
+    public Object getpMaterielDesc() {
+        return pMaterielDesc;
+    }
+
+    public void setpMaterielDesc(Object pMaterielDesc) {
+        this.pMaterielDesc = pMaterielDesc;
+    }
+
     public String getpOtherCost() {
         return pOtherCost;
     }
@@ -258,5 +288,13 @@ public class HzWorkProcedure {
 
     public void setpStatus(Integer pStatus) {
         this.pStatus = pStatus;
+    }
+
+    public void setpFactoryId(String pFactoryId) {
+        this.pFactoryId = pFactoryId;
+    }
+
+    public String getpFactoryId() {
+        return pFactoryId;
     }
 }

@@ -1,10 +1,12 @@
 package com.connor.hozon.bom.bomSystem.dao.cfg;
 
+import com.connor.hozon.bom.bomSystem.dao.BasicDao;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.context.annotation.Configuration;
 import sql.pojo.cfg.HzCfg0OptionFamily;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Author: Fancyears·Maylos·Mayways
@@ -12,16 +14,7 @@ import java.util.List;
  * Date: 2018/5/23 9:47
  */
 @Configuration
-public interface HzCfg0OptionFamilyDao {
-    /**
-     * Author: Fancyears·Maylos·Mayways
-     * Description: 根据主键获取到一个配置系统数据
-     * Date: 2018/5/23 9:48
-     *
-     * @param family 配置系统传入的主键
-     * @return HzCfg0OptionFamily
-     */
-    HzCfg0OptionFamily selectByPrimaryKey(HzCfg0OptionFamily family);
+public interface HzCfg0OptionFamilyDao extends BasicDao<HzCfg0OptionFamily>{
 
     /**
      * Author: Fancyears·Maylos·Mayways
@@ -42,6 +35,24 @@ public interface HzCfg0OptionFamilyDao {
      * @return 返回一组系统名称
      */
     List<HzCfg0OptionFamily> selectNameByMainId2(@Param("mainId") String mainId);
+    /**
+     * Author: Fancyears·Maylos·Mayways
+     * Description: 根据产品配置器的puid获取到所有的配置系统层
+     * Date: 2018/5/23 9:49
+     *
+     * @param param
+     * @return 返回一组系统名称
+     */
+    List<HzCfg0OptionFamily> selectNameByMap(@Param("param") Map<String,Object> param);
+    /**
+     * Author: Fancyears·Maylos·Mayways
+     * Description: 配色方案的表头，筛选带颜色和不带颜色的2Y
+     * Date: 2018/5/23 9:49
+     *
+     * @param param
+     * @return 返回一组特性
+     */
+    List<HzCfg0OptionFamily> selectForColorBluePrint(@Param("param") Map<String,Object> param);
 
     /**
      * @param family
@@ -55,11 +66,4 @@ public interface HzCfg0OptionFamilyDao {
      */
     List<HzCfg0OptionFamily> selectByCodeAndDescWithMain2(HzCfg0OptionFamily family);
 
-    /**
-     * 插入1个配置族
-     *
-     * @param family
-     * @return
-     */
-    int insert(HzCfg0OptionFamily family);
 }

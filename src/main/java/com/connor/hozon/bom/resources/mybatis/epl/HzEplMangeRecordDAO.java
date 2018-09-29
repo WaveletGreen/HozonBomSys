@@ -10,7 +10,9 @@ import java.util.List;
  * Created by haozt on 2018/06/05
  */
 public interface HzEplMangeRecordDAO {
-    List<HzEPLManageRecord> getHzEplManageRecord();
+//    List<HzEPLManageRecord> getHzEplManageRecord();
+//
+//    Page<HzEPLManageRecord> getEPLListForPage(HzEPLByPageQuery query);
 
-    Page<HzEPLManageRecord> getEPLListForPage(HzEPLByPageQuery query);
+    Page<HzEPLManageRecord> getEPLListForPage2(HzEPLByPageQuery query);
 }

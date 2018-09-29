@@ -34,5 +34,12 @@ public interface HzCfg0ModelDetailDao {
      */
     HzCfg0ModelDetail selectByModelId(HzCfg0ModelDetail detail);
 
+    /**
+     * 连同车型模型的数据都一起查出来
+     * @param detail
+     * @return
+     */
+    HzCfg0ModelDetail selectByModelId2(HzCfg0ModelDetail detail);
+
     List<HzCfg0ModelDetail> selectByModelIds(List<HzCfg0ModelDetail> hzCfg0ModelRecords);
 }

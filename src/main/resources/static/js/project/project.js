@@ -28,18 +28,25 @@ $(document).ready(
                     window.Ewin.alert("初始化系统成功，请点击新建品牌按钮新建品牌并刷新界面");
                 }
                 else {
+                    $("#project", window.top.document).val("");
+                    $("#currentProject").text("当前工作项目:");
+                    $("#currentProjectHead", window.top.document).text("");
+                    $("#fastOption").append("<option value='" + '' + "' ;selected='selected'>请选择项目</option>");
                     for (var i in _data) {
-                        if (i == 0 && ok) {
-                            $("#project", window.top.document).val(_data[i].puid);
-                            $("#currentProject").text("当前工作项目:" + _data[i].pProjectName);
-                            $("#currentProjectHead", window.top.document).text(_data[i].pProjectName);
-                            ok = false;
-                            if (!auth) {
-                                break;
-                            }
-                        }
+                        // if (i == 0 && ok) {
+                        //     $("#project", window.top.document).val(_data[i].puid);
+                        //     $("#currentProject").text("当前工作项目:" + _data[i].pProjectName);
+                        //     $("#currentProjectHead", window.top.document).text(_data[i].pProjectName);
+                        //     ok = false;
+                        // if (!auth) {
+                        //     break;
+                        // }
+                        // }
                         if (auth) {
                             $("#fastOption").append("<option value='" + _data[i].puid + "'>" + _data[i].pProjectName + "</option>");
+                        }
+                        else {
+                            break;
                         }
                     }
                     console.log("加载项目成功");

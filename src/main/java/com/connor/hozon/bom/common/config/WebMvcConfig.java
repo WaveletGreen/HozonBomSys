@@ -71,8 +71,11 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         registry.addViewController("/pbomManage").setViewName("/bomManage/pbom/pbomManage/pbomManage");
         //PBOM工艺合件页面
         registry.addViewController("/craftFitting").setViewName("/bomManage/pbom/processOfFitting/craftFitting");
+        //PBOM工艺合件页面
+        registry.addViewController("/craftFitting2").setViewName("/bomManage/pbom/processOfFitting/craftFitting2");
         //PBOM工艺辅料页面
         registry.addViewController("/processAids").setViewName("/bomManage/pbom/processAids/processAids");
+        registry.addViewController("/accessoriesLibrary").setViewName("/resourcesLibrary/accessoriesLibrary/accessoriesLibrary");
         //MBOM维护页面
         registry.addViewController("/mbomMaintenance").setViewName("/bomManage/mbom/mbomMaintenance/mbomMaintenance");
         //Mbom的超级MBOM页面
@@ -89,12 +92,21 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         registry.addViewController("/halfRouting").setViewName("/bomManage/mbom/halfRouting/halfRouting");
         //MBOM的工艺路线页面
         registry.addViewController("/routingData").setViewName("/bomManage/mbom/routingData/routingData");
+        registry.addViewController("/routingData2").setViewName("/bomManage/mbom/routingData/routingData2");
         //MBOM的工艺路线页面
         registry.addViewController("/recycleBin").setViewName("/bomManage/recycleBin/recycleBin");
         //合众字典库
         registry.addViewController("/dictionaryLibrary").setViewName("/resourcesLibrary/dictionaryLibrary/dictionaryLibrary");
         //合众VPPS库
         registry.addViewController("/VPPSLibrary").setViewName("/resourcesLibrary/VPPSLibrary/VPPSLibrary");
+        //单车BOM
+        registry.addViewController("/bikeBom").setViewName("/bikeBom/bikeBom");
+
+
+
+
+
+
         //变更管理VWO表单
         registry.addViewController("/vwoFormList").setViewName("/changeManage/vwo/vwoFormList");
         //变更管理EWO表单
@@ -109,6 +121,19 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         registry.addViewController("/workFrom").setViewName("/changeManage/workFrom");
         //变更管理CODPWO表单
         registry.addViewController("/codpwoFromList").setViewName("/changeManage/codpwo/codpwoFromList");
+
+
+
+
+
+
+
+
+
+
+
+        //更新日志
+        registry.addViewController("/updateLog").setViewName("/updateLog/updateLog");
     }
 
 

@@ -3,16 +3,13 @@ package sql.pojo.bom;
 import io.swagger.models.auth.In;
 
 import java.util.Date;
+import java.util.Objects;
 
 /**
  * Created by haozt on 2018/5/25
  * EBOM 和PBOM 两张表信息  继承自EBOM  维护PBOM
  */
 public class HzPbomLineRecord {
-    /**
-     * EBOM 表主键
-     */
-    private String pPuid;
     private String parentUid;
     private Integer isDept;
     private String bomDigifaxId;
@@ -122,6 +119,30 @@ public class HzPbomLineRecord {
 
     private String sortNum;
 
+    private Integer isNewPart;
+
+    public Integer getIsNewPart() {
+        return isNewPart;
+    }
+
+    public void setIsNewPart(Integer isNewPart) {
+        this.isNewPart = isNewPart;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        HzPbomLineRecord that = (HzPbomLineRecord) o;
+        return Objects.equals(eBomPuid, that.eBomPuid);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(eBomPuid);
+        return result;
+    }
+
     public String getSortNum() {
         return sortNum;
     }
@@ -162,13 +183,6 @@ public class HzPbomLineRecord {
         this.eBomPuid = eBomPuid;
     }
 
-    public String getpPuid() {
-        return pPuid;
-    }
-
-    public void setpPuid(String pPuid) {
-        this.pPuid = pPuid;
-    }
 
     public String getLineIndex() {
         return lineIndex;

@@ -17,12 +17,29 @@ import java.util.Map;
  */
 @Service("HzEplMangeRecordDAO")
 public class HzEplManageRecordDAOImpl extends BaseSQLUtil implements HzEplMangeRecordDAO {
-    @Override
-    public List<HzEPLManageRecord> getHzEplManageRecord() {
-        return super.findForList("HzEplManageRecordDAOImpl_getHzEplManageRecord",null);
-    }
+//    @Override
+//    public List<HzEPLManageRecord> getHzEplManageRecord() {
+//        return super.findForList("HzEplManageRecordDAOImpl_getHzEplManageRecord",null);
+//    }
+//
+//    public Page<HzEPLManageRecord> getEPLListForPage(HzEPLByPageQuery query){
+//        PageRequest request = new PageRequest();
+//        Map map = new HashMap();
+//        map.put("projectId",query.getProjectId());
+//        map.put("isHas",query.getIsHas());
+//        map.put("pBomOfWhichDept",query.getpBomOfWhichDept());
+//        map.put("lineIndex",query.getLineIndex());
+//        map.put("lineId",query.getLineId());
+//        map.put("pFastener",query.getpFastener());
+//        request.setPageNumber(query.getPage());
+//        request.setPageSize(query.getPageSize());
+//        request.setFilters(map);
+//        return super.findForPage("HzEplManageRecordDAOImpl_getHzEplManageRecord","HzEplManageRecordDAOImpl_findTotalCount",request);
+//
+//    }
 
-    public Page<HzEPLManageRecord> getEPLListForPage(HzEPLByPageQuery query){
+    @Override
+    public Page<HzEPLManageRecord> getEPLListForPage2(HzEPLByPageQuery query) {
         PageRequest request = new PageRequest();
         Map map = new HashMap();
         map.put("projectId",query.getProjectId());
@@ -34,7 +51,6 @@ public class HzEplManageRecordDAOImpl extends BaseSQLUtil implements HzEplMangeR
         request.setPageNumber(query.getPage());
         request.setPageSize(query.getPageSize());
         request.setFilters(map);
-        return super.findForPage("HzEplManageRecordDAOImpl_getHzEplManageRecord","HzEplManageRecordDAOImpl_findTotalCount",request);
-
+        return super.findPage("HzEplManageRecordDAOImpl_getHzEplManageRecord2","HzEplManageRecordDAOImpl_findTotalCount2",request);
     }
 }

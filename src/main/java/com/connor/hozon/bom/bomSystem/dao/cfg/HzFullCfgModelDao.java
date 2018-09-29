@@ -1,11 +1,10 @@
 package com.connor.hozon.bom.bomSystem.dao.cfg;
 
-import sql.pojo.cfg.HzCfg0ModelRecord;
 import sql.pojo.cfg.HzFullCfgModel;
+import sql.pojo.cfg.HzFullCfgWithCfg;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Map;
 
 public interface HzFullCfgModelDao {
 
@@ -28,4 +27,10 @@ public interface HzFullCfgModelDao {
     List<HzFullCfgModel> selectByMainPuid(BigDecimal mainPuid);
 
     int updateByHzFullCfgModelList(List<HzFullCfgModel> hzFullCfgModels);
+
+    int updateByBomLinePuid(HzFullCfgWithCfg hzFullCfgWithCfg);
+
+    List<HzFullCfgModel> selectByModelUid(String modelUid);
+    List<HzFullCfgModel> selectByModelUidWithMarks(HzFullCfgModel withCfg);
+
 }

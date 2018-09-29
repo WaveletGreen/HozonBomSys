@@ -98,6 +98,7 @@ public class HzEbomController extends BaseController {
         tableTitle.put("fna","FNA");
         tableTitle.put("pFnaDesc","FNA描述" );
         tableTitle.put("number","数量" );
+        tableTitle.put("colorPart","是否颜色件");
         writeAjaxJSONResponse(ResultMessageBuilder.build(tableTitle), response);
     }
     
@@ -153,7 +154,7 @@ public class HzEbomController extends BaseController {
 
 
     @RequestMapping(value = "addEbom",method = RequestMethod.GET)
-    public String addEbom(String projectId,String puid,Model model) {
+    public String addEbom(String puid,Model model) {
         HzEbomRespDTO respDTO = new HzEbomRespDTO();
         respDTO.setPuid(puid);
         model.addAttribute("data",respDTO);
@@ -172,7 +173,6 @@ public class HzEbomController extends BaseController {
         recordRespDTO.setpBomOfWhichDept(object.getString("pBomOfWhichDept"));
         recordRespDTO.setpLouaFlag(object.getString("pLouaFlag"));
         recordRespDTO.setRank(object.getString("rank"));
-        recordRespDTO.setLineNo(object.getString("lineNo"));
         recordRespDTO.setGroupNum(object.getString("groupNum"));
         recordRespDTO.setLevel(object.getString("level"));
         recordRespDTO.setLineId(object.getString("lineId"));
@@ -215,6 +215,7 @@ public class HzEbomController extends BaseController {
         recordRespDTO.setpRegulationFlag(object.getString("pRegulationFlag"));
         recordRespDTO.setpRegulationCode(object.getString("pRegulationCode"));
         recordRespDTO.setProjectId(projectId);
+        recordRespDTO.setColorPart(object.getString("colorPart"));
         recordRespDTO.setpBuyEngineer(object.getString("pBuyEngineer"));
         if(object.getString("number") != null){
             recordRespDTO.setNumber(object.getString("number"));

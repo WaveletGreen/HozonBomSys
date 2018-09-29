@@ -120,8 +120,34 @@ public class HzCfg0RecordDaoImpl implements HzCfg0RecordDao {
         return baseSQLUtil.executeQueryByPass(RECORD, queryBase, "com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0RecordDao.selectByCondition");
     }
 
+    /**
+     * 用HZCSYS+特性值（从颜色中来）查找一条车身颜色特性值
+     *
+     * @param record
+     * @return
+     */
     @Override
-    public List<HzCfg0Record> selectListByProjectPuid(String projectPuid, QueryBase queryBase) {
+    public HzCfg0Record selectByCodeAndDescWithMainItem(HzCfg0Record record) {
+        record.setWhichTable("HZ_CFG0_RECORD");
+//        record.setpCfg0FamilyName("HZCSYS");
+        return baseSQLUtil.executeQueryById(record, "com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0RecordDao.selectByCodeAndDescWithMainItem");
+    }
+
+    /**
+     * 用"车身颜色"+特性值（从颜色中来）查找一条车身颜色特性值
+     *
+     * @param record
+     * @return
+     */
+    @Override
+    public HzCfg0Record selectByCodeAndCnDescWithMainItem(HzCfg0Record record) {
+        record.setWhichTable("HZ_CFG0_RECORD");
+//        record.setpCfg0FamilyDesc("车身颜色");
+        return baseSQLUtil.executeQueryById(record, "com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0RecordDao.selectByCodeAndCnDescWithMainItem");
+    }
+
+    @Override
+    public List<HzCfg0Record> selectListByProjectPuid(String projectPuid, HzFeatureQueryDTO queryBase) {
         Map<String, Object> params = new HashMap<>();
         params.put("projectPuid", projectPuid);
         params.put("whichTable", "HZ_CFG0_RECORD");
@@ -158,5 +184,19 @@ public class HzCfg0RecordDaoImpl implements HzCfg0RecordDao {
         return baseSQLUtil.executeQueryById(record, "com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0RecordDao.selectByPrimaryKey");
     }
 
+    /**
+     * 根据项目和特性PUID(父)获取一组特性
+     *
+     * @param familyUid  特性UID
+     * @param projectUid 项目UID
+     * @return
+     */
+    @Override
+    public List<HzCfg0Record> selectByFamilyUidWithProject(String familyUid, String projectUid) {
+        HzCfg0Record record = new HzCfg0Record();
+        record.setpCfg0FamilyPuid(familyUid);
+        record.setProjectPuid(projectUid);
+        return baseSQLUtil.executeQuery(record, "com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0RecordDao.selectByFamilyUidWithProject");
+    }
 
 }

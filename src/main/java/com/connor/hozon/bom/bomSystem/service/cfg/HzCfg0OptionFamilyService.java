@@ -1,12 +1,15 @@
 package com.connor.hozon.bom.bomSystem.service.cfg;
 
 import com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0OptionFamilyDao;
+import com.connor.hozon.bom.bomSystem.option.SpecialFeatureOption;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sql.pojo.cfg.HzCfg0OptionFamily;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -18,6 +21,13 @@ import java.util.stream.Collectors;
 public class HzCfg0OptionFamilyService {
     @Autowired
     HzCfg0OptionFamilyDao hzCfg0OptionFamilyDao;
+    private static final Map<String, Object> paramMap = new HashMap<>();
+    private static final List<String> paramList = new ArrayList<>();
+
+    static {
+        paramList.add(SpecialFeatureOption.CSNAME.getDesc());
+        paramList.add(SpecialFeatureOption.YQCSNAME.getDesc());
+    }
 
     /**
      * 旧版方法，根据主配置的PUID排序
@@ -37,6 +47,20 @@ public class HzCfg0OptionFamilyService {
      */
     public List<HzCfg0OptionFamily> doGetCfg0OptionFamilyListByProjectPuid2(String mainId) {
         return hzCfg0OptionFamilyDao.selectNameByMainId2(mainId);
+    }
+
+    /**
+     * 在当前项目找出带颜色/不带颜色的特性，不能排除2特性值分别带颜色和不带颜色，因此会发生重复，需要进行排重
+     *
+     * @param projectUid 项目UID
+     * @param isColor    1，带颜色的特性；0，不带颜色的特性
+     * @return
+     */
+    public List<HzCfg0OptionFamily> selectForColorBluePrint(String projectUid, Integer isColor) {
+        Map<String, Object> param = new HashMap<>();
+        param.put("projectUid", projectUid);
+        param.put("isColor", isColor);
+        return hzCfg0OptionFamilyDao.selectForColorBluePrint(param);
     }
 
     /**
@@ -143,5 +167,61 @@ public class HzCfg0OptionFamilyService {
         family.setpOfCfg0Main(mainUid);
         family.setpOptionfamilyDesc(desc);
         return hzCfg0OptionFamilyDao.selectByCodeAndDescWithMain2(family);
+    }
+
+    /**
+     * 获取排序好的列
+     *
+     * @param projectUid
+     * @param def
+     * @return
+     */
+    public List<String> getColumnNew(String projectUid, String def) {
+        List<HzCfg0OptionFamily> families = getFamilies(projectUid, 0, 1);
+        List<String> result = new ArrayList<>();
+        families.forEach(fn -> result.add(fn.getpOptionfamilyDesc() + def + fn.getpOptionfamilyName()));
+        return result;
+    }
+
+    /**
+     * 获取排序好的列
+     *
+     * @param projectUid
+     * @param def
+     * @return
+     */
+    public List<String> getColumnNew2(String projectUid, String def) {
+        List<HzCfg0OptionFamily> families = getFamilies(projectUid, 0, 2);
+        List<String> result = new ArrayList<>();
+        families.forEach(fn -> result.add(fn.getpOptionfamilyDesc() + def + fn.getpOptionfamilyName()));
+        return result;
+    }
+
+    /**
+     * 重新构造列信息
+     *
+     * @param families
+     * @param def
+     * @return
+     */
+    public List<String> getColumnNewWithFamilies(List<HzCfg0OptionFamily> families, String def) {
+        List<String> result = new ArrayList<>();
+        families.forEach(fn -> result.add(fn.getpOptionfamilyDesc() + def + fn.getpOptionfamilyName()));
+        return result;
+    }
+
+    public List<HzCfg0OptionFamily> getFamilies(String projectUid, int start, int end) {
+        paramMap.put("isIn", false);
+        paramMap.put("list", paramList);
+        paramMap.put("projectUid", projectUid);
+        List<HzCfg0OptionFamily> familiesNew1 = hzCfg0OptionFamilyDao.selectNameByMap(paramMap);
+        paramMap.put("isIn", true);
+        /**
+         * 拆分list
+         */
+        paramMap.put("list", paramList.subList(start, end));
+        List<HzCfg0OptionFamily> familiesNew2 = hzCfg0OptionFamilyDao.selectNameByMap(paramMap);
+        familiesNew2.addAll(familiesNew1);
+        return familiesNew2;
     }
 }

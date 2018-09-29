@@ -1,0 +1,174 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<!--User: xulf Date: 2018/9/13 Time: 10:45-->
+<body>
+<form id="BikeBomForm" role="form" method="post" action="singleVehicles/update">
+    <input type="hidden" id="id" th:value="${data.id}">
+    <div class="form-group">
+        <label for="svlMaterialCode">物料编号</label>
+        <input class="form-control" id="svlMaterialCode" name="svlMaterialCode" type="text"disabled="disabled"
+               th:value="${data.svlMaterialCode}"
+               placeholder="请输入物料编号"/>
+    </div>
+    <div class="form-group">
+        <label for="svlMaterialBasicInfo">基本信息</label>
+        <input class="form-control" id="svlMaterialBasicInfo" name="svlMaterialBasicInfo" type="text"disabled="disabled"
+               th:value="${data.svlMaterialBasicInfo}"
+               placeholder="请输入基本信息"/>
+    </div>
+    <div class="form-group">
+        <label for="brandCode">品牌代码</label>
+        <input class="form-control" id="brandCode" name="brandCode" type="text"disabled="disabled"
+               th:value="${data.brandCode}"
+               placeholder="请输入品牌代码"/>
+    </div>
+    <div class="form-group">
+        <label for="brandName">中文品牌</label>
+        <input class="form-control" id="brandName" name="brandName" type="text"disabled="disabled"
+               th:value="${data.brandName}"
+               placeholder="请输入中文品牌"/>
+    </div>
+    <div class="form-group">
+        <label for="platformCode">平台代码</label>
+        <input class="form-control" id="platformCode" name="platformCode" type="text"disabled="disabled"
+               th:value="${data.platformCode}"
+               placeholder="请输入平台代码"/>
+    </div>
+    <div class="form-group">
+        <label for="platformName">平台名称</label>
+        <input class="form-control" id="platformName" name="platformName" type="text"disabled="disabled"
+               th:value="${data.platformName}"
+               placeholder="请输入平台名称"/>
+    </div>
+    <div class="form-group">
+        <label for="vehicleCode">车型代码</label>
+        <input class="form-control" id="vehicleCode" name="vehicleCode" type="text"disabled="disabled"
+               th:value="${data.vehicleCode}"
+               placeholder="请输入车型代码"/>
+    </div>
+    <div class="form-group">
+        <label for="vehicleName">车型名称</label>
+        <input class="form-control" id="vehicleName" name="vehicleName" type="text"disabled="disabled"
+               th:value="${data.vehicleName}"
+               placeholder="请输入车型名称"/>
+    </div>
+    <div class="form-group">
+        <label for="svlInnerColorCode">内饰颜色代码</label>
+        <input class="form-control" id="svlInnerColorCode" name="svlInnerColorCode" type="text"
+               th:value="${data.svlInnerColorCode}"
+               placeholder="请输入内饰颜色代码"/>
+    </div>
+    <div class="form-group">
+        <label for="svlInnerColorName">内饰颜色名称</label>
+        <input class="form-control" id="svlInnerColorName" name="svlInnerColorName" type="text"
+               th:value="${data.svlInnerColorName}"
+               placeholder="请输入内饰颜色名称"/>
+    </div>
+    <div class="form-group">
+        <label for="colorCode">颜色代码</label>
+        <input class="form-control" id="colorCode" name="colorCode" type="text"disabled="disabled"
+               th:value="${data.colorCode}"
+               placeholder="请输入颜色代码"/>
+    </div>
+    <div class="form-group">
+        <label for="colorName">颜色名称</label>
+        <input class="form-control" id="colorName" name="colorName" type="text"disabled="disabled"
+               th:value="${data.colorName}"
+               placeholder="请输入颜色名称"/>
+    </div>
+    <div class="form-group">
+        <label for="svlBatteryCode">电池型号</label>
+        <input class="form-control" id="svlBatteryCode" name="svlBatteryCode" type="text"
+               th:value="${data.svlBatteryCode}"
+               placeholder="请输入电池型号"/>
+    </div>
+    <div class="form-group">
+        <label for="svlMotorCode">电机型号</label>
+        <input class="form-control" id="svlMotorCode" name="svlMotorCode" type="text"
+               th:value="${data.svlMotorCode}"
+               placeholder="请输入电机型号"/>
+    </div>
+</form>
+<script th:inline="javascript">
+    <![CDATA[
+    $(function () {
+        $('#BikeBomForm').bootstrapValidator({
+            message: 'This value is not valid',
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            fields: {
+                vppsLevel: {
+                    message: 'VPPS层级验证失败',
+                    validators: {
+                        notEmpty: {
+                            message: 'VPPS层级不能为空'
+                        }
+                    }
+                },
+            }
+        });
+        // 绑定dialog的确定按钮的监听事件
+        $("#btnOk", window.top.document).click(function () {
+            var bootstrapValidator = $("#BikeBomForm", window.top.document).data('bootstrapValidator');
+            bootstrapValidator.validate();
+            if (bootstrapValidator.isValid()) {
+                var url = $("#BikeBomForm", window.top.document).attr('action');
+                var myData = JSON.stringify({
+                    "id": $("#id").val(),
+                    "svlMaterialCode": $("#svlMaterialCode").val(),
+                    "svlMaterialBasicInfo": $("#svlMaterialBasicInfo").val(),
+                    "brandCode": $("#brandCode").val(),
+                    "brandName": $("#brandName").val(),
+                    "platformCode": $("#platformCode").val(),
+                    "platformName": $("#platformName").val(),
+                    "vehicleCode": $("#vehicleCode").val(),
+                    "vehicleName": $("#vehicleName").val(),
+                    "svlInnerColorCode": $("#svlInnerColorCode").val(),
+                    "svlInnerColorName": $("#svlInnerColorName").val(),
+                    "colorCode": $("#colorCode").val(),
+                    "colorName": $("#colorName").val(),
+                    "svlBatteryCode": $("#svlBatteryCode").val(),
+                    "svlMotorCode": $("#svlMotorCode").val(),
+                });
+                $.ajax({
+                    contentType:
+                        "application/json",
+                    type:
+                        'POST',
+                    url: url,
+                    data: myData,
+                    success:
+                        function (result) {
+                            $('.modal-dialog', window.top.document).parent('div').remove()
+                            $('body', window.top.document).find('.modal-backdrop').remove();
+                            // jquery 调用刷新当前操作的table页面的refresh方法
+                            $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
+                            if (result.success) {
+                                layer.msg('修改成功', {icon: 1, time: 2000})
+                            }
+                            else if(!result.success){
+                                window.Ewin.alert({message: result.errMsg})
+                            }
+                        },
+                    error: function (status) {
+                        window.Ewin.alert({message: status.status + ':修改数据失败!'});
+                    }
+                });
+            }
+        });
+    })
+    $(document).keydown(function(event) {
+        if (event.keyCode == 13) {
+            $('form').each(function() {
+                event.preventDefault();
+            });
+        }
+    });
+    ]]>
+</script>
+<script th:src="@{/layer/layer.js}"></script>
+</body>
+</html>

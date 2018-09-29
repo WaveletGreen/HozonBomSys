@@ -9,7 +9,11 @@ import java.util.LinkedHashMap;
  * Time: 11:23
  */
 public class HzCfg0ModelColor {
+    /**
+     * 模型主键
+     */
     private String puid;
+
     private String pCfg0MainRecordOfMC;
     private String pCodeOfColorfulModel;
     private String pDescOfColorfulModel;
@@ -28,6 +32,8 @@ public class HzCfg0ModelColor {
      * 颜色UID
      */
     private String pColorUid;
+
+    private String pShellCfg0Puid;
 
     public HzCfg0ModelColor() {
         mapOfCfg0 = new LinkedHashMap<>();
@@ -112,5 +118,13 @@ public class HzCfg0ModelColor {
 
     public void setpColorUid(String pColorUid) {
         this.pColorUid = pColorUid;
+    }
+
+    public String getpShellCfg0Puid() {
+        return pShellCfg0Puid;
+    }
+
+    public void setpShellCfg0Puid(String pShellCfg0Puid) {
+        this.pShellCfg0Puid = pShellCfg0Puid;
     }
 }

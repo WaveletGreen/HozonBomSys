@@ -4,11 +4,16 @@ import com.connor.hozon.bom.bomSystem.dao.bom.HzBomMainRecordDao;
 import com.connor.hozon.bom.bomSystem.dao.impl.bom.HzBomLineRecordDaoImpl;
 import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.resources.domain.dto.response.OperateResultMessageRespDTO;
+import com.connor.hozon.bom.resources.domain.model.HzPbomRecordFactory;
 import com.connor.hozon.bom.resources.mybatis.bom.HzEbomRecordDAO;
+import com.connor.hozon.bom.resources.mybatis.bom.HzPbomRecordDAO;
+import com.connor.hozon.bom.resources.service.RefreshMbomThread;
+import com.connor.hozon.bom.resources.service.bom.HzMbomService;
 import com.connor.hozon.bom.resources.service.file.FileUploadService;
 import com.connor.hozon.bom.resources.util.ExcelUtil;
 import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.resources.util.PrivilegeUtil;
+import com.connor.hozon.bom.resources.util.StringUtil;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -17,9 +22,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import sql.pojo.bom.HZBomMainRecord;
 import sql.pojo.bom.HzImportEbomRecord;
+import sql.pojo.bom.HzPbomLineRecord;
 
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.concurrent.CountDownLatch;
 
 /**
  * @Author: haozt
@@ -38,6 +45,12 @@ public class FileUploadServiceImpl implements FileUploadService {
     @Autowired
     private HzEbomRecordDAO hzEbomRecordDAO;
 
+    @Autowired
+    private HzPbomRecordDAO hzPbomRecordDAO;
+
+    @Autowired
+    private HzMbomService hzMbomService;
+
     private int errorCount = 0;
 
     private int lineIndexFirst =10;
@@ -46,7 +59,6 @@ public class FileUploadServiceImpl implements FileUploadService {
     @Override
     public OperateResultMessageRespDTO UploadEbomToDB(MultipartFile file, String projectId) {
         try {
-            long a = System.currentTimeMillis();
             //判断权限
             boolean b = PrivilegeUtil.writePrivilege();
             if(!b){
@@ -153,36 +165,68 @@ public class FileUploadServiceImpl implements FileUploadService {
                 }
             }
 
+
+
+            List<HzPbomLineRecord> hzPbomLineRecords = new ArrayList<>();
+            List<String> carParts = hzMbomService.loadingCarPartType();
             if(ListUtil.isNotEmpty(records)){
-                int size = records.size();
-                //分批插入数据 一次1000条
-                int i =0;
-                int cou = 0;
-                if(size>1000){
-                    for(i =0;i<size/1000;i++){
-                        List<HzImportEbomRecord> list = new ArrayList<>();
-                        for(int k = 0;k<1000;k++){
-                            HzImportEbomRecord hzImportEbomRecord =records.get(cou);
-                            list.add(hzImportEbomRecord);
-                            cou++;
+                records.forEach(record -> {
+                    if(carParts.contains(record.getpBomLinePartResource())){
+                        HzPbomLineRecord pbomLineRecord = HzPbomRecordFactory.ImportEbomRecordToPbomRecord(record);
+                        if(Integer.valueOf(1).equals(pbomLineRecord.getIsHas())){
+                            boolean findChildren = false;
+                            for(HzImportEbomRecord r :records){
+                                if(carParts.contains(r.getpBomLinePartResource())){
+                                    if(pbomLineRecord.geteBomPuid().equals(r.getParentId())){
+                                        findChildren = true;
+                                        break;
+                                    }
+                                }
+                            }
+                            if(!findChildren){
+                                pbomLineRecord.setIsHas(0);
+                            }
                         }
-                        hzEbomRecordDAO.importList(list);
+                        hzPbomLineRecords.add(pbomLineRecord);
                     }
-                }
-                if(i*1000<size){
-                    List<HzImportEbomRecord> list = new ArrayList<>();
-                    for(int k = 0;k<size-i*1000;k++){
-                        HzImportEbomRecord hzImportEbomRecord =records.get(cou);
-                        list.add(hzImportEbomRecord);
-                        cou++;
+                });
+
+                List<Thread> threads = new ArrayList<>();
+                CountDownLatch countDownLatch = new CountDownLatch(2);
+                RefreshMbomThread eBomThread = new RefreshMbomThread(countDownLatch) {
+                    @Override
+                    public void refreshMbom() {
+                        hzEbomRecordDAO.importList(records);
                     }
-                    hzEbomRecordDAO.importList(list);
+                };
+                threads.add(new Thread(eBomThread));
+
+                RefreshMbomThread pBomThread = new RefreshMbomThread(countDownLatch) {
+                    @Override
+                    public void refreshMbom() {
+                        if(ListUtil.isNotEmpty(hzPbomLineRecords)){
+                            hzPbomRecordDAO.insertList(hzPbomLineRecords);
+                        }
+                    }
+                };
+
+                threads.add(new Thread(pBomThread));
+
+                for(Thread th:threads){
+                    th.start();
                 }
+                try {
+                    // 等待中 等子线程全部ok 继续
+                    countDownLatch.await();
+                }catch (Exception e){
+                    return OperateResultMessageRespDTO.getFailResult();
+                }
+
             }
+
             ExcelUtil.deleteFile();
-            long m = System.currentTimeMillis();
-            System.out.println((m-a)+"ms");
         }catch (Exception e){
+            e.printStackTrace();
             return OperateResultMessageRespDTO.getFailResult();
 
         }
@@ -317,13 +361,14 @@ public class FileUploadServiceImpl implements FileUploadService {
             }
         }catch (Exception e){
             try {
-                BigDecimal dec = new BigDecimal(ExcelUtil.getCell(row,28).getNumericCellValue());
-                pActualWeight =String.valueOf(dec.setScale(3, BigDecimal.ROUND_HALF_UP).doubleValue());
+                BigDecimal dec = new BigDecimal(ExcelUtil.getCell(row,44).getNumericCellValue());
+                number =String.valueOf(dec.setScale(3, BigDecimal.ROUND_HALF_UP).doubleValue());
             }catch (Exception e1){
                 number="";
             }
         }
 
+        String colorPart=ExcelUtil.getCell(row,45).getStringCellValue();
 
 
 
@@ -393,6 +438,10 @@ public class FileUploadServiceImpl implements FileUploadService {
         record.setpUpc(pUpc);
         record.setpUpdateName(UserInfo.getUser().getUserName());
         record.setLinePuid(UUID.randomUUID().toString());
+        if(colorPart!=null && !colorPart.equals(""))
+        record.setColorPart(colorPart.equals("Y")?1:0);
+        else
+        record.setColorPart(null);
         return record;
     }
 
@@ -579,30 +628,71 @@ public class FileUploadServiceImpl implements FileUploadService {
         for(int numSheet = 0; numSheet < workbook.getNumberOfSheets(); numSheet++ ){
             Sheet sheet = workbook.getSheetAt(numSheet);
             for(int rowNum = 1; rowNum <= sheet.getLastRowNum(); rowNum++){
+                String lineId=ExcelUtil.getCell(sheet.getRow(rowNum),1).getStringCellValue();
                 String level = ExcelUtil.getCell(sheet.getRow(rowNum),3).getStringCellValue();
-                if(level.endsWith("Y") && rowNum !=sheet.getLastRowNum()){
-                    int lev = Integer.valueOf(level.replace("Y",""))+1;
-                    String nextLevel = ExcelUtil.getCell(sheet.getRow(rowNum+1),3).getStringCellValue();
-                    if(!nextLevel.equals(lev+"Y") && !nextLevel.equals(String.valueOf(lev-1))){
-                        stringBuffer.append("第"+(rowNum+1)+"行的层级填写不正确，" +
-                                ""+level+"下的层级应该为:<strong>"+lev+"Y</strong>"+"或者<strong>"+(lev-1)+"</strong>" +
-                                ";而实际为:"+nextLevel+"</br>");
-                        this.errorCount++;
-                        continue;
-                    }
+                String pBomLinePartResource=ExcelUtil.getCell(sheet.getRow(rowNum),39).getStringCellValue();
+                if(StringUtil.isEmpty(lineId)){
+                    stringBuffer.append("第"+(rowNum)+"行的零件名称不能为<strong>空</strong></br>") ;
+                    this.errorCount++;
                 }
-
-
-                if(rowNum == sheet.getLastRowNum()){
-                    if(level.endsWith("Y")){
-                        stringBuffer.append("最后一行的层级不能带Y,因为找不到他的子层!");
-                        this.errorCount++;
-                        continue;
-                    }
+                if(StringUtil.isEmpty(level)){
+                    stringBuffer.append("第"+(rowNum)+"行的层级不能为<strong>空</strong></br>") ;
+                    this.errorCount++;
+                }else if(level.endsWith("y")){
+                    stringBuffer.append("第"+(rowNum)+"行的层级填写不正确，层级尾缀应该填写为:<strong>Y</strong></br>") ;
+                    this.errorCount++;
                 }
+                if(StringUtil.isEmpty(pBomLinePartResource)){
+                    this.errorCount++;
+                    stringBuffer.append("第"+(rowNum)+"行的零部件来源不能为<strong>空</strong></br>") ;
+                }
+                continue;
             }
-
         }
+        if(this.errorCount == 0){
+            for(int numSheet = 0; numSheet < workbook.getNumberOfSheets(); numSheet++ ){
+                Sheet sheet = workbook.getSheetAt(numSheet);
+                for(int rowNum = 1; rowNum <= sheet.getLastRowNum(); rowNum++){
+                    String level = ExcelUtil.getCell(sheet.getRow(rowNum),3).getStringCellValue();
+                    int lev = Integer.valueOf(level.replace("Y",""))+1;
+                    if(level.endsWith("Y") && (rowNum)!=sheet.getLastRowNum()){
+                        String nextLevel = ExcelUtil.getCell(sheet.getRow(rowNum+1),3).getStringCellValue();
+                        if(!nextLevel.equals(lev+"Y") && !nextLevel.equals(String.valueOf(lev-1))){
+                            stringBuffer.append("第"+(rowNum+1)+"行的层级填写不正确，" +
+                                    ""+level+"下的层级应该为:<strong>"+lev+"Y</strong>"+"或者<strong>"+(lev-1)+"</strong>" +
+                                    ";而实际为:"+nextLevel+"</br>");
+                            this.errorCount++;
+                            continue;
+                        }
+                    }
+
+                    for(int i = rowNum+1;i<sheet.getLastRowNum();i++){
+                        String nextLevel = ExcelUtil.getCell(sheet.getRow(i),3).getStringCellValue();
+                        String nextLev = level.replace("Y","");
+                        int nextL = Integer.valueOf(nextLev);
+                        if(nextLevel.endsWith("Y")){
+                            break;
+                        }else if(!nextLevel.equals(nextLev) && Integer.valueOf(nextLevel)>nextL){
+                            stringBuffer.append("第"+(i)+"行的层级填写不正确，" +
+                                    "应该为:<strong>"+(lev)+"Y</strong>"+"或者<strong>"+(lev-1)+"</strong>" +
+                                    ";而实际为:"+nextLevel+"</br>");
+                            this.errorCount++;
+                            break;
+                        }
+                    }
+
+                    if(rowNum == sheet.getLastRowNum()){
+                        if(level.endsWith("Y")){
+                            stringBuffer.append("最后一行的层级不能带Y,因为找不到他的子层!</br>");
+                            this.errorCount++;
+                            continue;
+                        }
+                    }
+                }
+
+            }
+        }
+
         return stringBuffer.toString();
     }
 }

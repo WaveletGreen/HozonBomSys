@@ -134,6 +134,16 @@ public class UpdateHzEbomReqDTO {
      */
     private Integer status;
 
+    private String colorPart;
+
+    public String getColorPart() {
+        return colorPart;
+    }
+
+    public void setColorPart(String colorPart) {
+        this.colorPart = colorPart;
+    }
+
     public Integer getStatus() {
         return status;
     }

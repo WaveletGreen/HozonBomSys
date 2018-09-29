@@ -3,16 +3,18 @@ package sql.pojo.cfg;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import static com.connor.hozon.bom.bomSystem.helper.StringHelper.checkString;
+
 public class HzFullCfgMain {
     private BigDecimal id;
 
     private String projectUid;
 
-    private Object status;
+    private String status;
 
-    private Object stage;
+    private Integer stage;
 
-    private Object version;
+    private String version;
 
     private Date effectiveDate;
 
@@ -20,9 +22,39 @@ public class HzFullCfgMain {
 
     private Date updateDate;
 
-    private Object creator;
+    private String creator;
 
-    private Object updater;
+    private String updater;
+
+    public static String parseStage(Integer code) {
+        if (null == code) {
+            return "";
+        }
+        switch (code) {
+            case 1:
+                return "P0-P1阶段";
+            case 2:
+                return "P1-P2阶段";
+            case 3:
+                return "P2-P3阶段";
+            case 4:
+                return "P3-P4阶段";
+            case 5:
+                return "P4-P5阶段";
+            case 6:
+                return "P5-P6阶段";
+            case 7:
+                return "P6-P7阶段";
+            case 8:
+                return "P7-P8阶段";
+            case 9:
+                return "P8-P9阶段";
+            case 10:
+                return "P9-P10阶段";
+            default:
+                return "";
+        }
+    }
 
     public BigDecimal getId() {
         return id;
@@ -40,27 +72,27 @@ public class HzFullCfgMain {
         this.projectUid = projectUid == null ? null : projectUid.trim();
     }
 
-    public Object getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(Object status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 
-    public Object getStage() {
+    public Integer getStage() {
         return stage;
     }
 
-    public void setStage(Object stage) {
+    public void setStage(Integer stage) {
         this.stage = stage;
     }
 
-    public Object getVersion() {
+    public String getVersion() {
         return version;
     }
 
-    public void setVersion(Object version) {
+    public void setVersion(String version) {
         this.version = version;
     }
 
@@ -88,19 +120,19 @@ public class HzFullCfgMain {
         this.updateDate = updateDate;
     }
 
-    public Object getCreator() {
+    public String getCreator() {
         return creator;
     }
 
-    public void setCreator(Object creator) {
+    public void setCreator(String creator) {
         this.creator = creator;
     }
 
-    public Object getUpdater() {
+    public String getUpdater() {
         return updater;
     }
 
-    public void setUpdater(Object updater) {
+    public void setUpdater(String updater) {
         this.updater = updater;
     }
 }

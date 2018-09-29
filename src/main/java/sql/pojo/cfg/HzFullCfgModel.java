@@ -16,9 +16,9 @@ public class HzFullCfgModel {
 
     private Date flModUpdateDate;
 
-    private Object flModCreator;
+    private String flModCreator;
 
-    private Object flModLastUpdater;
+    private String flModLastUpdater;
 
     private BigDecimal flModVersion;
     /**
@@ -73,19 +73,19 @@ public class HzFullCfgModel {
         this.flModUpdateDate = flModUpdateDate;
     }
 
-    public Object getFlModCreator() {
+    public String getFlModCreator() {
         return flModCreator;
     }
 
-    public void setFlModCreator(Object flModCreator) {
+    public void setFlModCreator(String flModCreator) {
         this.flModCreator = flModCreator;
     }
 
-    public Object getFlModLastUpdater() {
+    public String getFlModLastUpdater() {
         return flModLastUpdater;
     }
 
-    public void setFlModLastUpdater(Object flModLastUpdater) {
+    public void setFlModLastUpdater(String flModLastUpdater) {
         this.flModLastUpdater = flModLastUpdater;
     }
 

@@ -6,6 +6,7 @@ import com.connor.hozon.bom.resources.domain.query.HzMbomByPageQuery;
 import com.connor.hozon.bom.resources.domain.query.HzMbomTreeQuery;
 import com.connor.hozon.bom.resources.page.Page;
 import sql.pojo.bom.HzMbomLineRecord;
+import sql.pojo.bom.HzMbomLineRecordVO;
 import sql.pojo.bom.HzMbomRecord;
 
 import java.util.List;
@@ -35,7 +36,7 @@ public interface HzMbomRecordDAO {
     int update(HzMbomLineRecord record);
 
     /**
-     * 删除BOM维护 通过外键删除
+     * 删除BOM恢复 通过外键恢复
      * @param eBomPuid
      * @return
      */
@@ -68,6 +69,7 @@ public interface HzMbomRecordDAO {
      * @param projectId
      * @return
      */
+    @Deprecated
     List<HzMbomLineRecord> getHzVehicleModelName(String projectId);
 
     /**
@@ -95,6 +97,7 @@ public interface HzMbomRecordDAO {
      * @param projectId
      * @return
      */
+    @Deprecated
     Integer getHzMbomTotalCount(String projectId);
 
     /**
@@ -109,6 +112,7 @@ public interface HzMbomRecordDAO {
      * @param query
      * @return
      */
+    @Deprecated
     List<HzMbomLineRecord> findHz2YMbomRecord(HzMbomByPageQuery query);
 
     /**
@@ -116,6 +120,7 @@ public interface HzMbomRecordDAO {
      * @param query
      * @return
      */
+    @Deprecated
     List<HzMbomLineRecord> findHzMbomByResource(HzMbomByPageQuery query);
 
 
@@ -124,6 +129,7 @@ public interface HzMbomRecordDAO {
      * @param query
      * @return
      */
+    @Deprecated
     List<HzMbomLineRecord> findHz2YMbomRecordAll(HzMbomByPageQuery query);
 
     /**
@@ -131,6 +137,7 @@ public interface HzMbomRecordDAO {
      * @param query
      * @return
      */
+    @Deprecated
     List<HzMbomLineRecord> findHzMbomByResourceAll(HzMbomByPageQuery query);
 
     /**
@@ -151,5 +158,28 @@ public interface HzMbomRecordDAO {
     String findMinOrderNumWhichGreaterThanThisOrderNum(String projectId,String orderNum);
 
 
-    List<HzMbomLineRecord> findHzMbomAll(String projectId);
+    List<HzMbomLineRecord> findHzMbomAll(String projectId,String tableName);
+
+
+    int insertVO(HzMbomLineRecordVO hzMbomLineRecordVO);
+
+    int updateVO(HzMbomLineRecordVO hzMbomLineRecordVO);
+
+    /**
+     * 通过外键ID 和层级查询MBOM
+     * @param ebomPuid
+     * @param lineIndex
+     * @return
+     */
+    HzMbomLineRecord findHzMbomByEbomIdAndLineIndex(String ebomPuid,String lineIndex,String tableName);
+
+
+    int deleteMbomList(HzMbomLineRecordVO record);
+
+    /**
+     * 删除当前项目的MBOM数据
+     * @param projectId
+     * @return
+     */
+    int deleteMbomByProjectId(String projectId,String tableName);
 }

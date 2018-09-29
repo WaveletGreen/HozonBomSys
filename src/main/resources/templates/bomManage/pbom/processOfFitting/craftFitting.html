@@ -10,6 +10,9 @@
 <div id="content" class="row-fluid" style="height:auto">
     <div id="demo3" hidden="hidden"></div>
     <div class="content row-fluid col-md-4 col-lg-4" id="demo4">
+        <div style="max-width: 250px;float: right">
+            <span>第一步：查询需要合成的零件</span>
+        </div>
         <h3><p class="text-primary" id="demo1">请选择您要合成的零件</p></h3>
         <form class="form-inline" id="demo2">
             <div class="form-group">
@@ -48,6 +51,7 @@
             style="width:300px;overflow-y: scroll;height: 500px; overflow:auto;"></ul>
     </div>
 </div>
+<script th:src="@{/js/helper/projectHelper.js}"></script>
 <script th:src="@{/js/bom/pbom/craftFitting.js}"></script>
 <script th:src="@{/js/bom/pbom/demo.js}"></script>
 </body>

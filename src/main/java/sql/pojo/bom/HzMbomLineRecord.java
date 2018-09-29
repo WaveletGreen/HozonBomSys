@@ -1,6 +1,8 @@
 package sql.pojo.bom;
 
+import java.util.Arrays;
 import java.util.Date;
+import java.util.Objects;
 
 /**
  * Created by haozt on 2018/5/24
@@ -214,6 +216,63 @@ public class HzMbomLineRecord {
     private Integer pLouaFlag;
 
     private String sortNum;
+
+    private String tableName;
+
+    private Integer isColorPart;
+
+    private String colorId;
+
+    private String factoryCode;
+
+    public String getFactoryCode() {
+        return factoryCode;
+    }
+
+    public void setFactoryCode(String factoryCode) {
+        this.factoryCode = factoryCode;
+    }
+
+    public String getColorId() {
+        return colorId;
+    }
+
+    public void setColorId(String colorId) {
+        this.colorId = colorId;
+    }
+
+    public Integer getIsColorPart() {
+        return isColorPart;
+    }
+
+    public void setIsColorPart(Integer isColorPart) {
+        this.isColorPart = isColorPart;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        HzMbomLineRecord that = (HzMbomLineRecord) o;
+        return
+                Objects.equals(lineIndex, that.lineIndex) &&
+                Objects.equals(eBomPuid, that.eBomPuid);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hash( lineIndex, eBomPuid);
+        return result;
+    }
+
+    public String getTableName() {
+        return tableName;
+    }
+
+    public void setTableName(String tableName) {
+        this.tableName = tableName;
+    }
 
     public String getSortNum() {
         return sortNum;

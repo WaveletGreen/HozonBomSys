@@ -96,6 +96,7 @@ public class HzCfg0Controller extends ExtraIntegrate {
     public Map<String, Object> loadCfg0(@RequestParam("projectPuid") String projectPuid, HzFeatureQueryDTO queryBase) {
         Map<String, Object> result = new HashMap<>();
         queryBase.setSort(HzCfg0Record.reflectToDBField(queryBase.getSort()));
+        queryBase.setProjectUid(projectPuid);
         List<HzCfg0Record> records = hzCfg0Service.doLoadCfgListByProjectPuid(projectPuid, queryBase);
 //        List<HzCfg0Record> list=hzCfg0Service.doLoadByCondition(queryBase);
         int totalCount = hzCfg0Service.tellMeHowManyOfThose(queryBase);
@@ -343,10 +344,33 @@ public class HzCfg0Controller extends ExtraIntegrate {
         if (_toDelete.size() == 0) {
             _toDelete.addAll(records);
         }
-        if (_toDelete.size() > 0 && hzCfg0Service.doDeleteCfgByList(_toDelete)) {
-            result.put("status", true);
-            result.put("msg", "删除成功");
+
+        HzCfg0MainRecord main = null;
+        Map<String, HzCfg0MainRecord> mapOfMain = new HashMap<>();
+        HzCfg0OptionFamily family = new HzCfg0OptionFamily();
+
+        for (int i = 0; i < _toDelete.size(); i++) {
+            if (mapOfMain.containsKey(_toDelete.get(i).getpCfg0MainItemPuid())) {
+                main = mapOfMain.get(_toDelete.get(i).getpCfg0MainItemPuid());
+            } else {
+                main = hzCfg0MainRecordDao.selectByPrimaryKey(_toDelete.get(i).getpCfg0MainItemPuid());
+                mapOfMain.put(main.getPuid(), main);
+            }
+            List<HzCfg0Record> children = hzCfg0Service.doSelectByFamilyUidWithProject(_toDelete.get(i).getpCfg0FamilyPuid(), main.getpCfg0OfWhichProjectPuid());
+            if (children.size() <= 1 && children.get(0).getPuid().equals(_toDelete.get(i).getPuid())) {
+                family.setPuid(_toDelete.get(i).getpCfg0FamilyPuid());
+                logger.warn("正在自动删除特性");
+                if (hzCfg0OptionFamilyDao.deleteByPrimaryKey(family) <= 0) {
+                    logger.warn("自动删除特性失败，请手动删除");
+                }
+            }
         }
+
+        if (_toDelete.size() > 0) {
+            logger.warn(hzCfg0Service.doDeleteCfgByList(_toDelete) ? "删除特性多个" : "删除失败或已经删除族");
+        }
+        result.put("status", true);
+        result.put("msg", "删除成功");
 
         return result;
     }

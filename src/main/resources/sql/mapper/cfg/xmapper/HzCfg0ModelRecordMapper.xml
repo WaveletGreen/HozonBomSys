@@ -87,7 +87,16 @@
     <update id="updateModelName">
         update HZ_CFG0_MODEL_RECORD t
           set t.OBJECT_NAME=#{objectName,jdbcType=VARCHAR},
+              t.OBJECT_DESC=#{objectDesc,jdbcType=VARCHAR},
+              t.P_CFG0_MODEL_BASIC_DETAIL=#{pCfg0ModelBasicDetail,jdbcType=VARCHAR},
               t.MODEL_UPDATE_DATE=sysdate
         where t.PUID=#{puid,jdbcType=VARCHAR}
     </update>
+
+    <delete id="deleteModelById" parameterType="java.lang.String">
+        delete from
+          HZ_CFG0_MODEL_RECORD
+        where
+          PUID = #{puid,jdbcType=VARCHAR}
+    </delete>
 </mapper>

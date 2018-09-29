@@ -1,4 +1,6 @@
+var type ;
 $(document).ready((function (){
+    // $("#ms").multiselect();
     var projectId = $("#project", window.top.document).val();
     var url = "work/process/record/page?projectId="+projectId;
     initTable(url);
@@ -16,7 +18,7 @@ function doQuery() {
     // url+="&pMaterielCode="+pMaterielCode;
     // var pMaterielDesc = $("#pMaterielDesc").val();
     // url+="&pMaterielDesc="+pMaterielDesc;
-    var type = $("#type").val();
+    type = $("#type").val();
     if (type=="请选择工艺路线") {
         url += "&type="+"";
     }
@@ -30,6 +32,9 @@ function doQuery() {
 
 function initTable(url) {
     var projectId = $("#project", window.top.document).val();
+    if (!checkIsSelectProject(projectId)) {
+        return;
+    }
     var  $table =  $("#routingDataTable");
     var  column = [];
     $.ajax({
@@ -130,6 +135,38 @@ function initTable(url) {
                                 gridId: "gridId",
                                 width: 500,
                                 height: 500
+                            });
+                        }
+                    },
+                    {
+                        text: '选择工艺',
+                        iconCls: 'glyphicon glyphicon-pencil',
+                        handler: function () {
+                            var rows = $table.bootstrapTable('getSelections');
+                            if (type!="1"&&type!="2"){
+                                window.Ewin.alert({message:'请先选择工艺路线'})
+                                return false;
+                            }
+                            var puids = "";
+                            for (var i = 0; i < rows.length; i++) {
+                                puids += rows[i].materielId + ",";
+                            };
+                            var myData = JSON.stringify({
+                                "projectId": $("#project", window.top.document).val(),
+                                "puids": puids,
+                            });
+                            if (rows.length < 1) {
+                                window.Ewin.alert({message: '请至少选择一条需要修改的数据!'});
+                                return false;
+                            }
+                            window.Ewin.dialog({
+                                title: "修改四大工艺",
+                                // url: "work/process/updateWorkProcess?projectId="+projectId+"&materielId="+rows[0].materielId,
+                                url:"work/process/four?projectId="+projectId+"&puids="+puids,
+                                gridId: "gridId",
+                                // data:myData,
+                                width: 350,
+                                height: 300,
                             });
                         }
                     },
