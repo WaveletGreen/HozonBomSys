@@ -145,7 +145,7 @@
     <!--查找项目下的所有衍生物料-->
     <select id="selectAllByProjectUid" parameterType="java.lang.String" resultMap="BaseResultMap">
         select
-        <include refid="Base_Column_List"/>
+        t.*
         from HZ_CFG0_MODEL_FEATURE t
         left join Hz_Cfg0_Model_Record t10 on t.p_pertain_to_model=t10.puid
         left join Hz_Cfg0_Main_Record t20 on t10.p_cfg0_model_of_main_record=t20.puid
