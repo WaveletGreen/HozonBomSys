@@ -52,9 +52,17 @@ public class HzCraftService implements IHzCraftService {
      * 同父层下的所有子层
      */
     private Map<String, Map<String, HzPbomLineRecord>> myWavelet = new LinkedHashMap<>();
-
+    /**
+     * 祖父层的所有的子（父层兄弟层）需要进行重新编排的PBOM
+     */
     private Map<String, Map<String, HzPbomLineRecord>> myLovelyWavelet = new LinkedHashMap<>();
+    /**
+     * 日志
+     */
     private static final Logger logger = LoggerFactory.getLogger(HzCraftService.class);
+    /**
+     * 查询参数
+     */
     private Map<String, Object> param = new HashMap<>();
 
     /**
@@ -147,7 +155,7 @@ public class HzCraftService implements IHzCraftService {
      * @return
      */
     @Override
-    public void craftChildren(List<String> childrenUids, HzPbomLineRecord part) {
+    public void craftChildren(List<String> childrenUids, HzPbomLineRecord part) throws Exception {
         for (int i = 0; i < childrenUids.size(); i++) {
             HzPbomLineRecord line = hzPbomRecordDAO.getHzPbomByEbomPuid(childrenUids.get(i), projectUid);
             if (myWavelet.containsKey(line.getParentUid())) {
@@ -191,7 +199,6 @@ public class HzCraftService implements IHzCraftService {
                             continue;
                         }
                         boolean isNeedToUpdate = false;
-                        Map<String, HzPbomLineRecord> tempToUpdate = new LinkedHashMap<>();
                         //找到相同父下的所有非合成源的子
                         for (HzPbomLineRecord isWithsChild : isWithsChildren) {
                             //余认为零件号与查找编号相等则为同一个BOM
@@ -200,17 +207,32 @@ public class HzCraftService implements IHzCraftService {
                                 theChildrenNeedToDelete.add(isWithsChild);
                                 isNeedToUpdate = true;
                             } else {
-                                tempToUpdate.put(isWithsChild.getLineIndex(), isWithsChild);
+                                String ld = isWithsChild.getLineIndex();
+                                boolean isIt = false;
+                                for (Map.Entry<String, HzPbomLineRecord> et : values.entrySet()) {
+                                    if (compare(ld, et.getKey()) > 0) {
+                                        isIt = true;
+                                    }
+                                }
+                                if (isIt) {
+                                    if (toChildrenNeedToUpdateItsLineIndex.containsKey(allCodeIsWithToParentCode.get(i1).getPuid())) {
+                                        toChildrenNeedToUpdateItsLineIndex.get(allCodeIsWithToParentCode.get(i1).getPuid()).put(isWithsChild.getLineIndex(), isWithsChild);
+                                    } else {
+                                        Map<String, HzPbomLineRecord> tempToUpdate = new LinkedHashMap<>();
+                                        tempToUpdate.put(isWithsChild.getLineIndex(), isWithsChild);
+                                        toChildrenNeedToUpdateItsLineIndex.put(allCodeIsWithToParentCode.get(i1).getPuid(), tempToUpdate);
+                                    }
+                                }
                             }
                         }
-                        if (isNeedToUpdate) {
-                            toChildrenNeedToUpdateItsLineIndex.put(allCodeIsWithToParentCode.get(i1).getPuid(), tempToUpdate);
-                        } else {
-                            logger.warn("虽然PBOM中PUID为" + allCodeIsWithToParentCode.get(i1).getPuid() +
-                                    "的所有子层与合成源父层的子数量一致，但是没有找到合成源的父层" + parent.getLineId() + "(" +
-                                    parent.getPuid() + ")与合成源的查找编号一致的BOM行，认定不是同一个BOM，或者BOM错误，又或是BOM已被更改"
-                            );
-                        }
+//                        if (isNeedToUpdate) {
+//
+//                        } else {
+//                            logger.warn("虽然PBOM中PUID为" + allCodeIsWithToParentCode.get(i1).getPuid() +
+//                                    "的所有子层与合成源父层的子数量一致，但是没有找到合成源的父层" + parent.getLineId() + "(" +
+//                                    parent.getPuid() + ")与合成源的查找编号一致的BOM行，认定不是同一个BOM，或者BOM错误，又或是BOM已被更改"
+//                            );
+//                        }
                     }
                 } else {
                     logger.warn("卧槽，没找找到我爸爸");
@@ -274,6 +296,8 @@ public class HzCraftService implements IHzCraftService {
             craftParents(parentUids, pbom);
         } catch (CloneNotSupportedException e) {
             e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return false;
     }
@@ -286,5 +310,31 @@ public class HzCraftService implements IHzCraftService {
     @Override
     public List<String> getTargetPartCodes() {
         return this.targetPartCodes;
+    }
+
+
+    public int compare(String src, String tar) throws Exception {
+        if (src.contains(".") && tar.contains(".")) {
+            String[] source = src.split("[.]");
+            String[] target = tar.split("[.]");
+            int len1 = source.length;
+            int len2 = target.length;
+            if (len1 != len2) {
+                throw new Exception("比较的查找编号长度不相等");
+            } else {
+                int i = 0;
+                while (i < len1) {
+                    int srci = Integer.parseInt(source[i]);
+                    int tari = Integer.parseInt(target[i]);
+                    if (srci != tari) {
+                        return srci - tari;
+                    }
+                    i++;
+                }
+            }
+        } else {
+            throw new Exception("查找编号错误");
+        }
+        return 0;
     }
 }

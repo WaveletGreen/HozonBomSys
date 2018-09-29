@@ -38,7 +38,7 @@ public interface IHzCraftService {
      * @param part
      * @return
      */
-    void craftChildren(List<String> childrenUids, HzPbomLineRecord part);
+    void craftChildren(List<String> childrenUids, HzPbomLineRecord part) throws Exception;
 
     /**
      * 将合成的新件挂载到目标件下

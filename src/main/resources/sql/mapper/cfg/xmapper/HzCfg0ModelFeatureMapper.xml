@@ -81,6 +81,7 @@
         P_MF_CREATE_DATE,
         P_MF_UPDATE_DATE
   </sql>
+    <!--**************************************select**************************************-->
     <!--根据主键查找-->
     <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
         select
@@ -141,12 +142,23 @@
         P_PERTAIN_TO_MODEL = #{pPertainToModel,jdbcType=VARCHAR}
         AND P_PERTAIN_TO_COLOR_MODEL = #{pPertainToColorModel,jdbcType=VARCHAR}
     </select>
+    <!--查找项目下的所有衍生物料-->
+    <select id="selectAllByProjectUid" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from HZ_CFG0_MODEL_FEATURE t
+        left join Hz_Cfg0_Model_Record t10 on t.p_pertain_to_model=t10.puid
+        left join Hz_Cfg0_Main_Record t20 on t10.p_cfg0_model_of_main_record=t20.puid
+        where t20.p_cfg0_of_which_project_puid=#{projectUid,jdbcType=VARCHAR}
+    </select>
     <!--根据主键删除-->
+    <!--**************************************delete**************************************-->
     <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
         delete from HZ_CFG0_MODEL_FEATURE
         where PUID = #{puid,jdbcType=VARCHAR}
   </delete>
     <!--插入1条车型特性数据，1阶段不包含颜色车身-->
+    <!--**************************************insert**************************************-->
     <insert id="insert" parameterType="sql.pojo.cfg.HzCfg0ModelFeature">
         insert into
         HZ_CFG0_MODEL_FEATURE (
@@ -182,6 +194,7 @@
         )
     </insert>
     <!--根据主键更新1条车型特性数据-->
+    <!--**************************************update**************************************-->
     <update id="updateByPrimaryKey" parameterType="sql.pojo.cfg.HzCfg0ModelFeature">
         update HZ_CFG0_MODEL_FEATURE
         <set>

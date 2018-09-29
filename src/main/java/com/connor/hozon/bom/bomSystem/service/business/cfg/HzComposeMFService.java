@@ -507,7 +507,7 @@ public class HzComposeMFService {
      */
     public Map<String, Object> loadComposes(String projectUid, QueryBase queryBase) {
         Map<String, Object> result = new HashMap<>();
-
+        Object o = hzCfg0ModelFeatureService.doSelectAllByProjectUid(projectUid);
         HzDerivativeMaterielBasic basic = new HzDerivativeMaterielBasic();
         basic.setDmbProjectUid(projectUid);
 //        List<HzCfg0OptionFamily> columns = hzCfg0OptionFamilyService.doGetCfg0OptionFamilyListByProjectPuid(projectUid);
