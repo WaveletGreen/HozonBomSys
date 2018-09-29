@@ -131,6 +131,9 @@ public class HzComposeMFService {
     private HzCfg0ModelColorDao hzCfg0ModelColorDao;
     @Autowired
     private HzCfg0ModelRecordService hzCfg0ModelRecordService;
+    @Autowired
+    private HzComposeMFService hzComposeMFService;
+
     private static final boolean finalAddCSYS = true;
 
     public void saveCompose(HzComposeMFDTO hzComposeMFDTO, JSONObject results) {
@@ -466,6 +469,7 @@ public class HzComposeMFService {
                 results.put("msg", "存储配置物料详情数据失败，请联系管理员查看日志");
             }
         }
+        results.put("status", true);
         System.out.println();
     }
 
@@ -613,7 +617,21 @@ public class HzComposeMFService {
         //项目下的所有基本车型
         List<HzCfg0ModelRecord> models = hzCfg0ModelRecordService.doSelectByProjectUid(projectPuid);
         List<HzComposeMFDTO> composes = new ArrayList<HzComposeMFDTO>();
-        
+
+        //组合车型和颜色
+        for(HzCfg0ModelColor colorModel: colorModels){
+            for(HzCfg0ModelRecord model : models){
+                HzComposeMFDTO hzComposeMFDTO = new HzComposeMFDTO();
+                hzComposeMFDTO.setProjectUid(projectPuid);
+                hzComposeMFDTO.setModelUid(model.getPuid());
+                hzComposeMFDTO.setColorModel(colorModel.getPuid());
+                hzComposeMFService.saveCompose2(hzComposeMFDTO, result);
+                boolean status = (boolean)result.get("status");
+                if(status==false){
+                    return result;
+                }
+            }
+        }
         return result;
     }
 }

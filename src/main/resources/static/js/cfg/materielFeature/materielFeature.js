@@ -381,13 +381,17 @@ function gotIt(result) {
 
 function saveCompose() {
     $.ajax({
-        type : "get",
-        url : "materielV2/saveCompose?projectPuid="+projectPuid,
+        type : "GET",
+        url : "materielV2/saveCompose?projectPuid="+projectUid ,
         success : function (result) {
-            window.Ewin.alert({message: '生成成功!'});
+            if(result.status!=false){
+                window.Ewin.alert({message: '生成成功!'});
+            }else {
+                window.Ewin.alert({message: result.msg});
+            }
         },
         error : function (result) {
-            window.Ewin.alert({message: '生成失败!'});
+            window.Ewin.alert({message: result.msg});
         }
     })
 }
