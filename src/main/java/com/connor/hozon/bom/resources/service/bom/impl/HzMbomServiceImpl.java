@@ -527,7 +527,9 @@ public class HzMbomServiceImpl implements HzMbomService{
                     boolean b = false;
                     if(Integer.valueOf(1).equals(record.getColorPart())){//是颜色件 找出对应的颜色 多色时，需要乘以颜色信息
                         List<HzConfigBomColorBean> beans = iHzConfigBomColorService.doSelectBy2YUidWithProject(record.geteBomPuid(), projectId);
-                        if(ListUtil.isNotEmpty(beans)){
+                        Set<HzConfigBomColorBean> colorBeans = new HashSet<>(beans);
+                        beans = new ArrayList<>(colorBeans);
+                        if(ListUtil.isNotEmpty(colorBeans)){
                             for(int i =0;i<beans.size();i++){
                                 if(null == beans.get(i).getColorCode() ||"-".equals(beans.get(i).getColorCode())){
                                     beans.remove(beans.get(i));
@@ -535,7 +537,6 @@ public class HzMbomServiceImpl implements HzMbomService{
                                 }
                             }
                         }
-
 
                         if(ListUtil.isNotEmpty(beans)){//找到对应的颜色件
                             for(int i =0;i<beans.size();i++){
