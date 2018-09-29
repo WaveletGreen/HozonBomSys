@@ -154,7 +154,7 @@ public class HzEbomController extends BaseController {
 
 
     @RequestMapping(value = "addEbom",method = RequestMethod.GET)
-    public String addEbom(String projectId,String puid,Model model) {
+    public String addEbom(String puid,Model model) {
         HzEbomRespDTO respDTO = new HzEbomRespDTO();
         respDTO.setPuid(puid);
         model.addAttribute("data",respDTO);

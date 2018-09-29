@@ -10,7 +10,6 @@ import com.connor.hozon.bom.resources.page.PageRequest;
 import org.springframework.stereotype.Service;
 import sql.BaseSQLUtil;
 import sql.pojo.bom.HzPbomLineRecord;
-import sql.pojo.bom.HzPbomRecord;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -30,7 +29,7 @@ public class HzPbomRecordDAOImpl extends BaseSQLUtil implements HzPbomRecordDAO 
     }
 
     @Override
-    public int insert(HzPbomRecord record) {
+    public int insert(HzPbomLineRecord record) {
         return super.insert("HzPbomRecordDAOImpl_insert",record);
     }
 
@@ -208,4 +207,5 @@ public class HzPbomRecordDAOImpl extends BaseSQLUtil implements HzPbomRecordDAO 
         map.put("projectId",projectId);
         return super.findForList("HzPbomRecordDAOImpl_getFirstLevelBomByParentId",map);
     }
+    
 }

@@ -10,10 +10,6 @@ import java.util.Objects;
  * EBOM 和PBOM 两张表信息  继承自EBOM  维护PBOM
  */
 public class HzPbomLineRecord {
-    /**
-     * EBOM 表主键
-     */
-    private String pPuid;
     private String parentUid;
     private Integer isDept;
     private String bomDigifaxId;
@@ -123,6 +119,16 @@ public class HzPbomLineRecord {
 
     private String sortNum;
 
+    private Integer isNewPart;
+
+    public Integer getIsNewPart() {
+        return isNewPart;
+    }
+
+    public void setIsNewPart(Integer isNewPart) {
+        this.isNewPart = isNewPart;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -177,13 +183,6 @@ public class HzPbomLineRecord {
         this.eBomPuid = eBomPuid;
     }
 
-    public String getpPuid() {
-        return pPuid;
-    }
-
-    public void setpPuid(String pPuid) {
-        this.pPuid = pPuid;
-    }
 
     public String getLineIndex() {
         return lineIndex;

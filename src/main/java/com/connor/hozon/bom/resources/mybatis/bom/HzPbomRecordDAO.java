@@ -6,7 +6,6 @@ import com.connor.hozon.bom.resources.domain.query.HzPbomByPageQuery;
 import com.connor.hozon.bom.resources.domain.query.HzPbomTreeQuery;
 import com.connor.hozon.bom.resources.page.Page;
 import sql.pojo.bom.HzPbomLineRecord;
-import sql.pojo.bom.HzPbomRecord;
 
 import java.util.List;
 import java.util.Map;
@@ -28,7 +27,7 @@ public interface HzPbomRecordDAO {
      * @param record
      * @return
      */
-    int insert(HzPbomRecord record);
+    int insert(HzPbomLineRecord record);
 
 
     int insertList(List<HzPbomLineRecord> records);
