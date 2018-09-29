@@ -4,6 +4,7 @@ import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.resources.domain.dto.request.EditHzMaterielReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzMaterielRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.OperateResultMessageRespDTO;
+import com.connor.hozon.bom.resources.domain.model.HzMaterielFactory;
 import com.connor.hozon.bom.resources.domain.query.HzMaterielByPageQuery;
 import com.connor.hozon.bom.resources.domain.query.HzMaterielQuery;
 import com.connor.hozon.bom.resources.domain.query.HzMbomByPageQuery;
@@ -16,6 +17,7 @@ import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.service.materiel.HzMaterielService;
 import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.resources.util.PrivilegeUtil;
+import com.connor.hozon.bom.resources.util.StringUtil;
 import com.connor.hozon.bom.sys.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -711,19 +713,13 @@ public class HzMaterielServiceImpl implements HzMaterielService {
             List<HzMaterielRecord> recordList = page.getResult();
             List<HzMaterielRespDTO> respDTOS = new ArrayList<>();
             for(HzMaterielRecord record:recordList){
-                HzMaterielRespDTO respDTO = recordToRespDTO(record);
+                HzMaterielRespDTO respDTO = HzMaterielFactory.hzMaterielRecordToRespDTO(record);
                 respDTO.setNo(++num);
-                if(null !=record.getpFactoryPuid()){
-                    HzFactory hzFactory = hzFactoryDAO.findFactory(record.getpFactoryPuid(),"");
-                    respDTO.setFactoryCode(hzFactory.getpFactoryCode());
-                }else {
-                    respDTO.setFactoryCode("1001");
-                }
                 respDTOS.add(respDTO);
             }
             return new Page<>(page.getPageNumber(),page.getPageSize(),page.getTotalCount(),respDTOS);
         }catch (Exception e){
-            return null;
+            return new Page<>(0,0,0);
         }
     }
 
@@ -733,7 +729,7 @@ public class HzMaterielServiceImpl implements HzMaterielService {
         try{
             HzMaterielRecord record = hzMaterielDAO.getHzMaterielRecord(query);
             if(record!= null){
-               return recordToRespDTO(record);
+               return HzMaterielFactory.hzMaterielRecordToRespDTO(record);
             }
         }catch (Exception e){
             return null;
@@ -742,78 +738,7 @@ public class HzMaterielServiceImpl implements HzMaterielService {
     }
 
 
-    private HzMaterielRespDTO recordToRespDTO(HzMaterielRecord record){
-        HzMaterielRespDTO respDTO = new HzMaterielRespDTO();
-        respDTO.setpBasicUnitMeasure(record.getpBasicUnitMeasure());
-        respDTO.setpMaterielCode(record.getpMaterielCode());
-        respDTO.setpMaterielDesc(record.getpMaterielDesc());
-        respDTO.setpMaterielDescEn(record.getpMaterielDescEn());
-        respDTO.setpMaterielType(record.getpMaterielType());
-        respDTO.setpMrpController(record.getpMrpController());
 
-
-        if(record.getpFactoryPuid() != null){
-            HzFactory hzFactory = hzFactoryDAO.findFactory(record.getpFactoryPuid(),"");
-            if(hzFactory !=null){
-                respDTO.setFactoryCode(hzFactory.getpFactoryCode());
-            }else{
-                respDTO.setFactoryCode("1001");
-            }
-        }else {
-            respDTO.setFactoryCode("1001");
-        }
-        respDTO.setPuid(record.getPuid());
-        Integer p3CPartFlag = record.getP3cPartFlag();
-        Integer colorPart = record.getpColorPart();
-        Integer inOutSideFlag = record.getpInOutSideFlag();
-        Integer inventedFlag = record.getpInventedPart();
-        Integer loosePartFlag = record.getpLoosePartFlag();
-        if (Integer.valueOf(0).equals(p3CPartFlag)) {
-            respDTO.setP3cPartFlag("N");
-        } else if (Integer.valueOf(1).equals(p3CPartFlag)) {
-            respDTO.setP3cPartFlag("Y");
-        } else {
-            respDTO.setP3cPartFlag("-");
-        }
-
-        if (Integer.valueOf(0).equals(inventedFlag)) {
-            respDTO.setpInventedPart("N");
-        } else if (Integer.valueOf(1).equals(inventedFlag)) {
-            respDTO.setpInventedPart("Y");
-        } else {
-            respDTO.setpInventedPart("-");
-        }
-
-        if (Integer.valueOf(0).equals(colorPart)) {
-            respDTO.setpColorPart("N");
-        } else if (Integer.valueOf(1).equals(colorPart)) {
-            respDTO.setpColorPart("Y");
-        } else {
-            respDTO.setpColorPart("-");
-        }
-
-        if (Integer.valueOf(1).equals(inOutSideFlag)) {
-            respDTO.setpInOutSideFlag("内饰件");
-        } else if (Integer.valueOf(0).equals(inOutSideFlag)) {
-            respDTO.setpInOutSideFlag("外饰件");
-        } else {
-            respDTO.setpInOutSideFlag("-");
-        }
-
-        if (Integer.valueOf(1).equals(loosePartFlag)) {
-            respDTO.setpLoosePartFlag("Y");
-        } else if (Integer.valueOf(0).equals(loosePartFlag)) {
-            respDTO.setpLoosePartFlag("N");
-        } else {
-            respDTO.setpLoosePartFlag("-");
-        }
-        respDTO.setpHeight(record.getpHeight());
-        respDTO.setpPartImportantDegree(record.getpPartImportantDegree());
-        respDTO.setpSpareMaterial(record.getpSpareMaterial());
-        respDTO.setpVinPerNo(record.getpVinPerNo());
-        respDTO.setResource(record.getResource());
-        return respDTO;
-    }
 
 
 

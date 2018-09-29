@@ -125,4 +125,6 @@ public interface HzMaterielDAO {
 
     int updateList(List<HzMaterielRecord> list);
     List<HzMaterielRecord> findHzMaterielForProcess(String projectId);
+
+    int deleteMaterielByProjectId(String projectId);
 }

@@ -621,6 +621,7 @@
     <where>
       t2.puid=#{projectId,jdbcType=VARCHAR}))
       and t1.P_BOM_LINE_IS_2Y=1
+      and t1.P_PBOM_STATUS<![CDATA[ <> ]]>0
     </where>
   </select>
 
