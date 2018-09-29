@@ -137,8 +137,4 @@ public interface HzPbomService {
      * @return
      */
     JSONObject doGenerateProcessCompose(Map<String, Object> param);
-
-    JSONObject queryAccessories(String materielCode);
-
-    JSONObject addAccessories(String puid, String materielCode, String projectId);
 }
