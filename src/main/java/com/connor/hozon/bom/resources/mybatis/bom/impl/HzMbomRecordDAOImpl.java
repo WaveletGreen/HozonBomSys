@@ -212,7 +212,7 @@ public class HzMbomRecordDAOImpl extends BaseSQLUtil implements HzMbomRecordDAO 
     public String findMinOrderNumWhichGreaterThanThisOrderNum(String projectId,String orderNum) {
         Map<String,Object> map = new HashMap<>();
         map.put("projectId",projectId);
-        map.put("sortNum",orderNum);
+        map.put("sortNum",Double.parseDouble(orderNum));
         return (String) super.findForObject("HzMbomRecordDAOImpl_findMinOrderNumWhichGreaterThanThisOrderNum",map);
     }
 
@@ -337,5 +337,13 @@ public class HzMbomRecordDAOImpl extends BaseSQLUtil implements HzMbomRecordDAO 
         }
 
         return 1;
+    }
+
+    @Override
+    public int deleteMbomByProjectId(String projectId,String tableName) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("projectId",projectId);
+        map.put("tableName",tableName);
+        return super.delete("HzMbomRecordDAOImpl_deleteMbomByProjectId",map);
     }
 }

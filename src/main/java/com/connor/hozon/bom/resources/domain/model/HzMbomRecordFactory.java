@@ -4,6 +4,7 @@ import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.resources.domain.dto.request.AddHzEbomReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzMbomRecordRespDTO;
 import com.connor.hozon.bom.resources.util.ListUtil;
+import com.connor.hozon.bom.resources.util.StringUtil;
 import sql.pojo.bom.HzBomLineRecord;
 import sql.pojo.bom.HzMbomLineRecord;
 import sql.pojo.bom.HzPbomLineRecord;
@@ -26,6 +27,16 @@ public class HzMbomRecordFactory {
 
     public double getMaxSortNum() {
         return maxSortNum;
+    }
+
+    private double sortNum = 0.0;
+
+    public double getSortNum() {
+        return sortNum;
+    }
+
+    public void setSortNum(double sortNum) {
+        this.sortNum = sortNum;
     }
 
     public void setMaxSortNum(double maxSortNum) {
@@ -81,6 +92,7 @@ public class HzMbomRecordFactory {
         Integer hasChildren = record.getIsHas();
         String lineIndex = record.getLineIndex();
         String[] strings = getLevelAndRank(lineIndex, is2Y, hasChildren);
+        respDTO.setRank(strings[1]);
         respDTO.setLevel(strings[0]);//层级
         respDTO.setLineNo(strings[2]);
         respDTO.setLineId(record.getLineId());
@@ -109,6 +121,11 @@ public class HzMbomRecordFactory {
             respDTO.setpBomType("财务");
         } else {
             respDTO.setpBomType("");
+        }
+        if(StringUtil.isEmpty(record.getFactoryCode())){
+            respDTO.setpFactoryCode("1001");
+        }else {
+            respDTO.setpFactoryCode(record.getFactoryCode());
         }
         respDTO.setStatus(record.getStatus());
         respDTO.setpStockLocation(record.getpStockLocation());
@@ -156,7 +173,7 @@ public class HzMbomRecordFactory {
     }
 
 
-    public static HzMbomLineRecord generateSupMbom(HzPbomLineRecord record, int i, String projectId, List<HzConfigBomColorBean> beans){
+    public  HzMbomLineRecord generateSupMbom(HzPbomLineRecord record, int i, String projectId, List<HzConfigBomColorBean> beans){
         HzMbomLineRecord mbomLineRecord = pBomRecordToMbomRecord(record);
         String lineId = mbomLineRecord.getLineId();
         if(Integer.valueOf(1).equals(record.getColorPart())&&ListUtil.isNotEmpty(beans)){
@@ -171,11 +188,13 @@ public class HzMbomRecordFactory {
 
         String lineIndex = record.getLineIndex();
         String sortNum = record.getSortNum();
+
         String firstIndex = lineIndex.split("\\.")[0];
         String othersIndex = lineIndex.substring(firstIndex.length(),lineIndex.length());
         Integer first = Integer.valueOf(firstIndex+Integer.valueOf(firstIndex)*i);
         mbomLineRecord.setLineIndex(String.valueOf(first)+othersIndex);
-        mbomLineRecord.setSortNum(String.valueOf(Double.parseDouble(sortNum)+100*i));
+        mbomLineRecord.setSortNum(String.valueOf(this.sortNum*100+100));//重新分配排序号
+        this.sortNum ++;
         return mbomLineRecord;
     }
 

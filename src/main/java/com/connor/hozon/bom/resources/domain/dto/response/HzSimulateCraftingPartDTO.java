@@ -4,7 +4,7 @@ import lombok.Data;
 
 /**
  * @Author: Fancyears·Maylos·Maywas
- * @Description:
+ * @Description: 模拟合成工艺合件的结果
  * @Date: Created in 2018/9/26 16:10
  * @Modified By:
  */

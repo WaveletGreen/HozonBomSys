@@ -36,6 +36,7 @@
         <result column="P_MATERIEL_RESOURCE_ID" jdbcType="VARCHAR" property="materielResourceId"/>
         <result column="IS_SENT" jdbcType="INTEGER" property="sendSapFlag"/>
 
+        <result column="P_FACTORY_CODE" jdbcType="VARCHAR" property="factoryCode" />
     </resultMap>
 
     <!--整车衍生物料主数据-->
@@ -219,15 +220,18 @@
         select * from
         (select t.*,ROWNUM as rn from
         (select
-        <include refid="HzMaterielRecordList"/>
-        from HZ_MATERIEL_RECORD
+        t.*,t1.P_FACTORY_CODE
+        from HZ_MATERIEL_RECORD t left join HZ_FACTORY t1
+        on t.P_FACTORY_PUID = t1.puid
+        and t.P_VALID_FLAG =1
+        and t1.P_FACTORY_STATUS <![CDATA[ <> ]]>0
         <where>
             1=1
             <if test="projectId != null and projectId!=''">
-                and P_PERTAIN_TO_PROJECT_PUID = #{projectId,jdbcType=VARCHAR}
+                and t.P_PERTAIN_TO_PROJECT_PUID = #{projectId,jdbcType=VARCHAR}
             </if>
             <if test="pMaterielDataType != null">
-                and P_MATERIEL_DATA_TYPE = #{pMaterielDataType,jdbcType=INTEGER}
+                and t.P_MATERIEL_DATA_TYPE = #{pMaterielDataType,jdbcType=INTEGER}
             </if>
             <!--<if test="pMaterielDataType == null">-->
                 <!--and (P_MATERIEL_DATA_TYPE = 11-->
@@ -240,12 +244,11 @@
                 <!--or P_MATERIEL_DATA_TYPE =81)-->
             <!--</if>-->
             <if test="pMaterielCode != null and pMaterielCode != '' ">
-                and P_MATERIEL_CODE like CONCAT(CONCAT('%',#{pMaterielCode,jdbcType=VARCHAR}),'%')
+                and t.P_MATERIEL_CODE like CONCAT(CONCAT('%',#{pMaterielCode,jdbcType=VARCHAR}),'%')
             </if>
             <if test="pMaterielType != null and pMaterielType != ''">
-                and P_MATERIEL_TYPE like CONCAT(CONCAT('%',#{pMaterielType,jdbcType=VARCHAR}),'%')
+                and t.P_MATERIEL_TYPE like CONCAT(CONCAT('%',#{pMaterielType,jdbcType=VARCHAR}),'%')
             </if>
-            and P_VALID_FLAG =1
         </where>
         )t
         WHERE ROWNUM &lt;=#{limit,jdbcType=INTEGER}) where rn &gt;#{offset,jdbcType=INTEGER}
@@ -521,4 +524,12 @@
         P_MATERIEL_DATA_TYPE in(71)
         <!--P_MATERIEL_DATA_TYPE in(11,21,71)-->
     </select>
+
+    <!--删除当前项目下的所有物料-->
+    <delete id="HzMaterialDAOImpl_deleteMaterielByProjectId" parameterType="java.lang.String">
+        delete HZ_MATERIEL_RECORD where
+        P_PERTAIN_TO_PROJECT_PUID = #{projectId,jdbcType=VARCHAR}
+    </delete>
+
+
 </mapper>

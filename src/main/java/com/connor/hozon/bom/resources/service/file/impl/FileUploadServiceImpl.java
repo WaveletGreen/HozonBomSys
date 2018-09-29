@@ -4,7 +4,11 @@ import com.connor.hozon.bom.bomSystem.dao.bom.HzBomMainRecordDao;
 import com.connor.hozon.bom.bomSystem.dao.impl.bom.HzBomLineRecordDaoImpl;
 import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.resources.domain.dto.response.OperateResultMessageRespDTO;
+import com.connor.hozon.bom.resources.domain.model.HzPbomRecordFactory;
 import com.connor.hozon.bom.resources.mybatis.bom.HzEbomRecordDAO;
+import com.connor.hozon.bom.resources.mybatis.bom.HzPbomRecordDAO;
+import com.connor.hozon.bom.resources.service.RefreshMbomThread;
+import com.connor.hozon.bom.resources.service.bom.HzMbomService;
 import com.connor.hozon.bom.resources.service.file.FileUploadService;
 import com.connor.hozon.bom.resources.util.ExcelUtil;
 import com.connor.hozon.bom.resources.util.ListUtil;
@@ -17,9 +21,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import sql.pojo.bom.HZBomMainRecord;
 import sql.pojo.bom.HzImportEbomRecord;
+import sql.pojo.bom.HzPbomLineRecord;
 
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.concurrent.CountDownLatch;
 
 /**
  * @Author: haozt
@@ -37,6 +43,12 @@ public class FileUploadServiceImpl implements FileUploadService {
 
     @Autowired
     private HzEbomRecordDAO hzEbomRecordDAO;
+
+    @Autowired
+    private HzPbomRecordDAO hzPbomRecordDAO;
+
+    @Autowired
+    private HzMbomService hzMbomService;
 
     private int errorCount = 0;
 
@@ -152,32 +164,65 @@ public class FileUploadServiceImpl implements FileUploadService {
                 }
             }
 
+
+
+            List<HzPbomLineRecord> hzPbomLineRecords = new ArrayList<>();
+            List<String> carParts = hzMbomService.loadingCarPartType();
             if(ListUtil.isNotEmpty(records)){
-                int size = records.size();
-                //分批插入数据 一次1000条
-                int i =0;
-                int cou = 0;
-                if(size>1000){
-                    for(i =0;i<size/1000;i++){
-                        List<HzImportEbomRecord> list = new ArrayList<>();
-                        for(int k = 0;k<1000;k++){
-                            HzImportEbomRecord hzImportEbomRecord =records.get(cou);
-                            list.add(hzImportEbomRecord);
-                            cou++;
+                records.forEach(record -> {
+                    if(carParts.contains(record.getpBomLinePartResource())){
+                        HzPbomLineRecord pbomLineRecord = HzPbomRecordFactory.ImportEbomRecordToPbomRecord(record);
+                        if(Integer.valueOf(1).equals(pbomLineRecord.getIsHas())){
+                            boolean findChildren = false;
+                            for(HzImportEbomRecord r :records){
+                                if(carParts.contains(r.getpBomLinePartResource())){
+                                    if(pbomLineRecord.geteBomPuid().equals(r.getParentId())){
+                                        findChildren = true;
+                                        break;
+                                    }
+                                }
+                            }
+                            if(!findChildren){
+                                pbomLineRecord.setIsHas(0);
+                            }
                         }
-                        hzEbomRecordDAO.importList(list);
+                        hzPbomLineRecords.add(pbomLineRecord);
                     }
-                }
-                if(i*1000<size){
-                    List<HzImportEbomRecord> list = new ArrayList<>();
-                    for(int k = 0;k<size-i*1000;k++){
-                        HzImportEbomRecord hzImportEbomRecord =records.get(cou);
-                        list.add(hzImportEbomRecord);
-                        cou++;
+                });
+
+                List<Thread> threads = new ArrayList<>();
+                CountDownLatch countDownLatch = new CountDownLatch(2);
+                RefreshMbomThread eBomThread = new RefreshMbomThread(countDownLatch) {
+                    @Override
+                    public void refreshMbom() {
+                        hzEbomRecordDAO.importList(records);
                     }
-                    hzEbomRecordDAO.importList(list);
+                };
+                threads.add(new Thread(eBomThread));
+
+                RefreshMbomThread pBomThread = new RefreshMbomThread(countDownLatch) {
+                    @Override
+                    public void refreshMbom() {
+                        if(ListUtil.isNotEmpty(hzPbomLineRecords)){
+                            hzPbomRecordDAO.insertList(hzPbomLineRecords);
+                        }
+                    }
+                };
+
+                threads.add(new Thread(pBomThread));
+
+                for(Thread th:threads){
+                    th.start();
                 }
+                try {
+                    // 等待中 等子线程全部ok 继续
+                    countDownLatch.await();
+                }catch (Exception e){
+                    return OperateResultMessageRespDTO.getFailResult();
+                }
+
             }
+
             ExcelUtil.deleteFile();
         }catch (Exception e){
             e.printStackTrace();

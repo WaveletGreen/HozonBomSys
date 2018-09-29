@@ -17,6 +17,11 @@ public class HzMbomRecordRespDTO {
      * 专业
      */
     private String pBomOfWhichDept;
+
+    /**
+     * 级别
+     */
+    private String rank;
     /**
      * 零件号
      */
@@ -118,6 +123,14 @@ public class HzMbomRecordRespDTO {
      * 1 已生效 0 删除  2草稿状态  3废除状态 4删除状态
      */
     private Integer status;
+
+    public String getRank() {
+        return rank;
+    }
+
+    public void setRank(String rank) {
+        this.rank = rank;
+    }
 
     public Integer getStatus() {
         return status;

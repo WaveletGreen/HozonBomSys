@@ -12,6 +12,7 @@ import sql.BaseSQLUtil;
 import sql.pojo.bom.HzImportEbomRecord;
 import sql.pojo.epl.HzEPLManageRecord;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -107,7 +108,7 @@ public class HzEbomRecordDAOImpl extends BaseSQLUtil implements HzEbomRecordDAO 
     public String findMinOrderNumWhichGreaterThanThisOrderNum(String projectId, String sortNum) {
         Map<String,Object> map = new HashMap<>();
         map.put("projectId",projectId);
-        map.put("sortNum",sortNum);
+        map.put("sortNum",Double.parseDouble(sortNum));
         return (String) super.findForObject("HzEbomRecordDAOImpl_findMinOrderNumWhichGreaterThanThisOrderNum",map);
     }
 
@@ -118,8 +119,36 @@ public class HzEbomRecordDAOImpl extends BaseSQLUtil implements HzEbomRecordDAO 
 
     @Override
     public int importList(List<HzImportEbomRecord> records) {
+        int size = records.size();
+        //分批插入数据 一次1000条
+        int i = 0;
+        int cout = 0;
+        try {
+            synchronized (this){
+                if (size > 1000) {
+                    for (i = 0; i < size / 1000; i++) {
+                        List<HzImportEbomRecord> list = new ArrayList<>();
+                        for (int j = 0; j < 1000; j++) {
+                            list.add(records.get(cout));
+                            cout++;
+                        }
+                        super.insert("HzEbomRecordDAOImpl_importList",list);
+                    }
+                }
+                if (i * 1000 < size) {
+                    List<HzImportEbomRecord> list = new ArrayList<>();
+                    for (int j = 0; j < size - i * 1000; j++) {
+                        list.add(records.get(cout));
+                        cout++;
+                    }
+                    super.insert("HzEbomRecordDAOImpl_importList",list);
+                }
+            }
+            return 1;
+        }catch (Exception e){
+            return 0;
+        }
 
-        return super.insert("HzEbomRecordDAOImpl_importList",records);
     }
 
     @Override

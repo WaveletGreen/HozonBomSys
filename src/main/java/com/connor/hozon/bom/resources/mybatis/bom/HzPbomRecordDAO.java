@@ -107,4 +107,11 @@ public interface HzPbomRecordDAO {
     int insertAccessories(String puid, String materielCode);
 
     List<HzPbomLineRecord> queryAllBomLineIdByPuid(String puid);
+
+    /**
+     * 获取当前BOM的子一层结构
+     * @param projectId
+     * @return
+     */
+    List<HzPbomLineRecord> getFirstLevelBomByParentId(String parentId,String projectId);
 }

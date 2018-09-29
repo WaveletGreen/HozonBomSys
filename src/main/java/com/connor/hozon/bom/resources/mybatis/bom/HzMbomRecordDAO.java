@@ -175,4 +175,11 @@ public interface HzMbomRecordDAO {
 
 
     int deleteMbomList(HzMbomLineRecordVO record);
+
+    /**
+     * 删除当前项目的MBOM数据
+     * @param projectId
+     * @return
+     */
+    int deleteMbomByProjectId(String projectId,String tableName);
 }

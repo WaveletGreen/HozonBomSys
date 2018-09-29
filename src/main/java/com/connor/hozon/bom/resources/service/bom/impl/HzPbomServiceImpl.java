@@ -4,11 +4,13 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.connor.hozon.bom.bomSystem.dao.bom.HzBomMainRecordDao;
 import com.connor.hozon.bom.bomSystem.dao.impl.bom.HzBomLineRecordDaoImpl;
+import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
 import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0OfBomLineService;
 import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.resources.domain.dto.request.*;
 import com.connor.hozon.bom.resources.domain.dto.response.HzLouRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzPbomLineRespDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.HzSimulateCraftingPartDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.OperateResultMessageRespDTO;
 import com.connor.hozon.bom.resources.domain.model.HzBomSysFactory;
 import com.connor.hozon.bom.resources.domain.query.HzBomRecycleByPageQuery;
@@ -360,37 +362,61 @@ public class HzPbomServiceImpl implements HzPbomService {
                 query.setLineIndex(String.valueOf(length));
             }
         }
-        int count = hzPbomRecordDAO.getHzBomLineCount(query.getProjectId());
-        if (count <= 0) {
-            List<HzBomLineRecord> lineRecords = hzBomLineRecordDao.getLoadingCarPartBom(query.getProjectId());
-            if (ListUtil.isNotEmpty(lineRecords)) {
-                int size = lineRecords.size();
-                //分批插入数据 一次1000条
-                int i = 0;
-                int cou = 0;
-                if (size > 1000) {
-                    for (i = 0; i < size / 1000; i++) {
-                        List<HzPbomLineRecord> list = new ArrayList<>();
-
-                        for (int j = 0; j < 1000; j++) {
-                            HzPbomLineRecord hzPbomLineRecord = bomLineToPbomLine(lineRecords.get(cou));
-                            list.add(hzPbomLineRecord);
-                            cou++;
-                        }
-                        hzPbomRecordDAO.insertList(list);
-                    }
-                }
-                if (i * 1000 < size) {
-                    List<HzPbomLineRecord> list = new ArrayList<>();
-                    for (int j = 0; j < size - i * 1000; j++) {
-                        HzPbomLineRecord hzPbomLineRecord = bomLineToPbomLine(lineRecords.get(cou));
-                        list.add(hzPbomLineRecord);
-                        cou++;
-                    }
-                    hzPbomRecordDAO.insertList(list);
-                }
-            }
-        }
+        //数据同步  临时
+//        int count = hzPbomRecordDAO.getHzBomLineCount(query.getProjectId());
+//        if (count <= 0) {
+//            List<HzBomLineRecord> lineRecords = hzBomLineRecordDao.getLoadingCarPartBom(query.getProjectId());
+//            if (ListUtil.isNotEmpty(lineRecords)) {
+//                int size = lineRecords.size();
+//                //分批插入数据 一次1000条
+//                int i = 0;
+//                int cou = 0;
+//                if (size > 1000) {
+//                    for (i = 0; i < size / 1000; i++) {
+//                        List<HzPbomLineRecord> list = new ArrayList<>();
+//                        for (int j = 0; j < 1000; j++) {
+//                            HzPbomLineRecord hzPbomLineRecord = bomLineToPbomLine(lineRecords.get(cou));
+//                            if(Integer.valueOf(1).equals(hzPbomLineRecord.getIsHas())){
+//                                boolean findChildren = false;
+//                                for(HzBomLineRecord r :lineRecords){
+//                                    if(hzPbomLineRecord.geteBomPuid().equals(r.getParentUid())){
+//                                        findChildren = true;
+//                                        break;
+//                                    }
+//                                }
+//                                if(!findChildren){
+//                                    hzPbomLineRecord.setIsHas(0);
+//                                }
+//                            }
+//                            list.add(hzPbomLineRecord);
+//                            cou++;
+//                        }
+//                        hzPbomRecordDAO.insertList(list);
+//                    }
+//                }
+//                if (i * 1000 < size) {
+//                    List<HzPbomLineRecord> list = new ArrayList<>();
+//                    for (int j = 0; j < size - i * 1000; j++) {
+//                        HzPbomLineRecord hzPbomLineRecord = bomLineToPbomLine(lineRecords.get(cou));
+//                        if(Integer.valueOf(1).equals(hzPbomLineRecord.getIsHas())){
+//                            boolean findChildren = false;
+//                            for(HzBomLineRecord r :lineRecords){
+//                                if(hzPbomLineRecord.geteBomPuid().equals(r.getParentUid())){
+//                                    findChildren = true;
+//                                    break;
+//                                }
+//                            }
+//                            if(!findChildren){
+//                                hzPbomLineRecord.setIsHas(0);
+//                            }
+//                        }
+//                        list.add(hzPbomLineRecord);
+//                        cou++;
+//                    }
+//                    hzPbomRecordDAO.insertList(list);
+//                }
+//            }
+//        }
         try {
             Page<HzPbomLineRecord> recordPage = hzPbomRecordDAO.getHzPbomRecordByPage(query);
             if (recordPage == null || recordPage.getResult() == null) {
@@ -983,6 +1009,9 @@ public class HzPbomServiceImpl implements HzPbomService {
      */
     @Override
     public JSONObject simulateCraftingPart(Map<String, Object> param) {
+        JSONObject result = new JSONObject();
+        result.put("status", false);
+        result.put("msg", "合成失败");
         if (param != null && param.size() > 0) {
             Object parentUidsObj = param.get("parentUids");
             Object childrenUidsObj = param.get("childrenUids");
@@ -991,25 +1020,85 @@ public class HzPbomServiceImpl implements HzPbomService {
             //父层数据
             HzPbomTreeQuery query = new HzPbomTreeQuery();
 
+            //新件的UID
+            String newPartUid = UUIDHelper.generateUpperUid();
+
+            List<HzSimulateCraftingPartDTO> dtos = new ArrayList<>();
             //偷偷过来的数据
             if (projectUidObj instanceof String) {
                 query.setProjectId((String) projectUidObj);
             }
             //采集过来的数据
             if (dataObj instanceof LinkedHashMap) {
+                HzSimulateCraftingPartDTO dto = new HzSimulateCraftingPartDTO();
+                dto.setLineId((String) ((LinkedHashMap) dataObj).get("lineId"));
+                dto.setParentUid("#");
+                dto.setPuid(newPartUid);
+                dtos.add(dto);
             }
             if (parentUidsObj instanceof ArrayList) {
-                for (int i = 0; i < ((ArrayList) parentUidsObj).size(); i++) {
-                    hzPbomRecordDAO.getHzPbomTree(query);
+                if (parentUidsObj != null && !((ArrayList) parentUidsObj).isEmpty()) {
+                    loopToGetBom((ArrayList) parentUidsObj, query, newPartUid, dtos);
                 }
             }
             //子层数据
             if (childrenUidsObj instanceof ArrayList) {
-
+                if (childrenUidsObj != null && !((ArrayList) childrenUidsObj).isEmpty()) {
+                    loopToGetBom((ArrayList) childrenUidsObj, query, newPartUid, dtos);
+                }
             }
 
+            result.put("status", true);
+            result.put("data", dtos);
+            result.put("collectedData", dataObj);
+            result.put("projectUid", projectUidObj);
+            result.put("msg", "合成成功");
         }
-        return null;
+        return result;
+    }
+
+    /**
+     * 真的生成工艺合件
+     *
+     * @param param
+     * @return
+     */
+    @Override
+    public JSONObject doGenerateProcessCompose(Map<String, Object> param) {
+        JSONObject result = new JSONObject();
+        result.put("status", false);
+        result.put("msg", "合成失败");
+        return result;
+    }
+
+    /**
+     * 从List中获取树结构
+     *
+     * @param list       源List
+     * @param query      查询树结构条件
+     * @param newPartUid 新件UID
+     * @param dtos       结果
+     * @return
+     */
+    private List<HzSimulateCraftingPartDTO> loopToGetBom(ArrayList list, HzPbomTreeQuery query, String newPartUid, List<HzSimulateCraftingPartDTO> dtos) {
+        for (int i = 0; i < ((ArrayList<String>) list).size(); i++) {
+            String uid = (String) list.get(i);
+            query.setPuid(uid);
+            List<HzPbomLineRecord> pBomTree = hzPbomRecordDAO.getHzPbomTree(query);
+            if (pBomTree != null) {
+                for (int i1 = 0; i1 < pBomTree.size(); i1++) {
+                    if (pBomTree.get(i1).geteBomPuid().equals(uid)) {
+                        pBomTree.get(i1).setParentUid(newPartUid);
+                    }
+                    HzSimulateCraftingPartDTO dto = new HzSimulateCraftingPartDTO();
+                    dto.setLineId(pBomTree.get(i1).getLineId());
+                    dto.setParentUid(pBomTree.get(i1).getParentUid());
+                    dto.setPuid(pBomTree.get(i1).geteBomPuid());
+                    dtos.add(dto);
+                }
+            }
+        }
+        return dtos;
     }
 
     @Override
@@ -1089,4 +1178,6 @@ public class HzPbomServiceImpl implements HzPbomService {
 
         return result;
     }
+
+
 }

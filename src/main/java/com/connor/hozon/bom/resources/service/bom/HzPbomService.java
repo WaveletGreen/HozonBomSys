@@ -130,4 +130,11 @@ public interface HzPbomService {
     JSONObject queryAccessories(String materielCode);
 
     JSONObject addAccessories(String puid, String materielCode, String projectId);
+
+    /**
+     * 真的生成工艺合件
+     * @param param
+     * @return
+     */
+    JSONObject doGenerateProcessCompose(Map<String, Object> param);
 }
