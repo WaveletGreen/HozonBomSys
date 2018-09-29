@@ -224,4 +224,13 @@ public class HzPbomRecordDAOImpl extends BaseSQLUtil implements HzPbomRecordDAO 
         map.put("projectId",projectId);
         return super.findForList("HzPbomRecordDAOImpl_getFirstLevelBomByParentId",map);
     }
+
+
+    @Override
+    public List<HzPbomLineRecord> queryAllBomLineIdByPuid(String puid, String projectId) {
+        Map<String, String> map = new HashMap<String, String>();
+        map.put("puid",puid);
+        map.put("projectId",projectId);
+        return super.executeQueryByPass(new HzPbomLineRecord(),map,"HzPbomRecordDAOImpl_queryAllBomLineIdByPuid");
+    }
 }

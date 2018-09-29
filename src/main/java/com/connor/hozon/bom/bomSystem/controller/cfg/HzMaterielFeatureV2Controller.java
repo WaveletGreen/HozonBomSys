@@ -147,4 +147,10 @@ public class HzMaterielFeatureV2Controller extends ExtraIntegrate {
     public Map<String, Object> loadComposes(@RequestParam String projectPuid) {
         return hzComposeMFService.loadComposes(projectPuid, new QueryBase());
     }
+
+    @RequestMapping("/saveCompose")
+    @ResponseBody
+    public JSONObject saveCompose(String projectPuid){
+        return hzComposeMFService.saveCompose3(projectPuid);
+    }
 }
