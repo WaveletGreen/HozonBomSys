@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sql.pojo.cfg.HzCfg0ModelFeature;
 
+import java.util.List;
+
 @Service("hzCfg0ModelFeatureService")
 public class HzCfg0ModelFeatureService implements IHzCfg0ModelFeatureService {
     /**
@@ -76,4 +78,17 @@ public class HzCfg0ModelFeatureService implements IHzCfg0ModelFeatureService {
         hzCfg0ModelFeature.setpFeatureSingleVehicleCode(pFeatureSingleVehicleCode);
         return hzCfg0ModelFeatureDao.updateByModelPuidWithBasic(hzCfg0ModelFeature) > 0 ? true : false;
     }
+
+    /**
+     * 获取项目下所有的衍生物料基本信息
+     *
+     * @param projectUid
+     * @return
+     */
+    @Override
+    public List<HzCfg0ModelFeature> doSelectAllByProjectUid(String projectUid) {
+        return hzCfg0ModelFeatureDao.selectAllByProjectUid(projectUid);
+    }
+
+
 }

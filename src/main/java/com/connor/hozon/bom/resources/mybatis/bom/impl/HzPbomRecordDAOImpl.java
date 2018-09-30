@@ -233,4 +233,5 @@ public class HzPbomRecordDAOImpl extends BaseSQLUtil implements HzPbomRecordDAO 
         map.put("projectId",projectId);
         return super.executeQueryByPass(new HzPbomLineRecord(),map,"HzPbomRecordDAOImpl_queryAllBomLineIdByPuid");
     }
+
 }

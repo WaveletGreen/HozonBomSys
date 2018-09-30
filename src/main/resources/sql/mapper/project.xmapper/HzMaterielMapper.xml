@@ -198,17 +198,27 @@
     <insert id="HzMaterialDAOImpl_insertList" useGeneratedKeys="false" parameterType="java.util.List">
         insert into HZ_MATERIEL_RECORD (PUID, P_MATERIEL_CODE, P_MATERIEL_TYPE,
         P_MATERIEL_DESC, P_PERTAIN_TO_PROJECT_PUID, P_MATERIEL_DESC_EN,P_MATERIEL_DATA_TYPE,
-        P_FACTORY_PUID,P_MATERIEL_RESOURCE_ID,P_VALID_FLAG,P_COLOR_PART,P_CREATE_TIME, P_UPDATE_TIME)
+        P_FACTORY_PUID,P_MATERIEL_RESOURCE_ID,P_VALID_FLAG,P_COLOR_PART,P_CREATE_TIME, P_UPDATE_TIME
+        ,P_CREATE_NAME,P_UPDATE_NAME,P_BASIC_UNIT_MEASURE,P_INVENTED_PART, P_SPARE_MATERIAL, P_VIN_PER_NO,
+         P_HEIGHT, P_IN_OUT_SIDE_FLAG, P_3C_PART_FLAG, P_MRP_CONTROLLER, P_PART_IMPORTANT_DEGREE,
+        P_LOOSE_PART_FLAG)
         <foreach collection="list" item="item" index="index" separator="UNION ALL">
             select
             #{item.puid,jdbcType=VARCHAR}, #{item.pMaterielCode,jdbcType=VARCHAR},
             #{item.pMaterielType,jdbcType=VARCHAR},
             #{item.pMaterielDesc,jdbcType=VARCHAR}, #{item.pPertainToProjectPuid,jdbcType=VARCHAR},
             #{item.pMaterielDescEn,jdbcType=VARCHAR},
-            #{item.pMaterielDataType,jdbcType=VARCHAR},
+            #{item.pMaterielDataType,jdbcType=INTEGER},
             #{item.pFactoryPuid,jdbcType=VARCHAR},
             #{item.materielResourceId,jdbcType=VARCHAR},1,#{item.pColorPart,jdbcType=INTEGER},
-            sysdate,sysdate
+            sysdate,sysdate,#{item.pCreateName,jdbcType=VARCHAR},#{item.pUpdateName,jdbcType=VARCHAR},
+            #{item.pBasicUnitMeasure,jdbcType=VARCHAR}, #{item.pInventedPart,jdbcType=INTEGER},
+            #{item.pSpareMaterial,jdbcType=VARCHAR},
+            #{item.pVinPerNo,jdbcType=VARCHAR}, #{item.pHeight,jdbcType=VARCHAR},
+            #{item.pInOutSideFlag,jdbcType=INTEGER},
+            #{item.p3cPartFlag,jdbcType=INTEGER},
+            #{item.pMrpController,jdbcType=VARCHAR},
+            #{item.pPartImportantDegree,jdbcType=VARCHAR},#{item.pLoosePartFlag,jdbcType=INTEGER}
             from DUAL
         </foreach>
     </insert>

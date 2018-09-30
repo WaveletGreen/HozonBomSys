@@ -6,6 +6,7 @@ import com.connor.hozon.bom.bomSystem.dao.bom.HzBomMainRecordDao;
 import com.connor.hozon.bom.bomSystem.dao.impl.bom.HzBomLineRecordDaoImpl;
 import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
 import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0OfBomLineService;
+import com.connor.hozon.bom.bomSystem.service.iservice.interaction.IHzCraftService;
 import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.resources.domain.dto.request.*;
 import com.connor.hozon.bom.resources.domain.dto.response.HzLouRespDTO;
@@ -60,6 +61,10 @@ public class HzPbomServiceImpl implements HzPbomService {
 
     @Autowired
     private HzEPLManageRecordService hzEPLManageRecordService;
+
+    @Autowired
+    IHzCraftService iHzCraftService;
+
     //工艺辅料库
     @Autowired
     private HzAccessoriesLibsDAO hzAccessoriesLibsDAO;
@@ -1066,9 +1071,53 @@ public class HzPbomServiceImpl implements HzPbomService {
     @Override
     public JSONObject doGenerateProcessCompose(Map<String, Object> param) {
         JSONObject result = new JSONObject();
-        result.put("status", false);
-        result.put("msg", "合成失败");
+        if (param == null || param.size() != 5) {
+            result.put("status", false);
+            result.put("msg", "合成失败，操作数据不完全");
+        }
+        Object projectUidObj = param.get("projectUid");
+        Object parentUidsObj = param.get("parentUids");
+        Object childrenUidsObj = param.get("childrenUids");
+        Object targetPointPuidsObj = param.get("targetPointPuids");
+        Object collectedDataObj = param.get("collectedData");
+
+        String projectUid = null;
+        List<String> parentUids = null;
+        List<String> childrenUids = null;
+        List<String> targetUids = null;
+        Map<String, String> collectedData = null;
+
+        /**项目UID*/
+        if (projectUidObj instanceof String) {
+            projectUid = (String) projectUidObj;
+        }
+        /**合成源父层*/
+        if (parentUidsObj instanceof ArrayList) {
+            parentUids = (List<String>) parentUidsObj;
+        }
+        /**合成源子层*/
+        if (childrenUidsObj instanceof ArrayList) {
+            childrenUids = (List<String>) childrenUidsObj;
+        }
+        /**合成目标层*/
+        if (targetPointPuidsObj instanceof ArrayList) {
+            targetUids = (List<String>) targetPointPuidsObj;
+        }
+        /**新件数据*/
+        if (collectedDataObj instanceof LinkedHashMap) {
+            collectedData = (Map<String, String>) collectedDataObj;
+        }
+        if (iHzCraftService.autoCraft(projectUid, parentUids, childrenUids, targetUids, collectedData)) {
+            result.put("status", true);
+            StringBuilder sb = new StringBuilder();
+            for (String partCode : iHzCraftService.getTargetPartCodes()) {
+                sb.append(partCode + ",");
+            }
+            sb.replace(sb.lastIndexOf(","), sb.length(), "");
+            result.put("msg", "合成新件:" + collectedData.get("lineId") + "成功，并成功挂载到" + sb);
+        }
         return result;
+
     }
 
     /**

@@ -673,9 +673,12 @@ public class FileUploadServiceImpl implements FileUploadService {
                         if(nextLevel.endsWith("Y")){
                             break;
                         }else if(!nextLevel.equals(nextLev) && Integer.valueOf(nextLevel)>nextL){
-                            stringBuffer.append("第"+(i)+"行的层级填写不正确，" +
+                            String s = "第"+(i)+"行的层级填写不正确，" +
                                     "应该为:<strong>"+(lev)+"Y</strong>"+"或者<strong>"+(lev-1)+"</strong>" +
-                                    ";而实际为:"+nextLevel+"</br>");
+                                    ";而实际为:"+nextLevel+"</br>";
+                            if(!stringBuffer.toString().contains(s)){
+                                stringBuffer.append(s);
+                            }
                             this.errorCount++;
                             break;
                         }
@@ -695,4 +698,5 @@ public class FileUploadServiceImpl implements FileUploadService {
 
         return stringBuffer.toString();
     }
+
 }
