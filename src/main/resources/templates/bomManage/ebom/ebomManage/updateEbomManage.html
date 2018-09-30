@@ -360,30 +360,23 @@
 <script th:inline="javascript">
     <![CDATA[
      $(
-        (function(){
-            var level = $("#level").val();
-    //         var lineNo = $("#lineNo").val();
-    //         var lineNumber = $("#lineNumber").val();
-            if (level=="2Y") {
-                // $("#colorPart").removeAttr("disabled");
-            // } else {
-                // $("#parentLineId").removeAttr("disabled");
-                $("#colorPart").attr({"disabled": "disabled"});
-            }
-        }),
+    //     (function(){
+    //         var level = $("#level").val();
+    // //         var lineNo = $("#lineNo").val();
+    // //         var lineNumber = $("#lineNumber").val();
+    //         if (level=="2Y") {
+    //             // $("#colorPart").removeAttr("disabled");
+    //         // } else {
+    //             // $("#parentLineId").removeAttr("disabled");
+    //             $("#colorPart").attr({"disabled": "disabled"});
+    //         }
+    //     }),
 
         function () {
-            $("#parentLineId").attr({"disabled": "disabled"});
-            $('#lineNo').on('input propertychange', function () {
-                var lineNo = $("#lineNo").val();
-                var lineNumber = $("#lineNumber").val();
-                if (lineNo != lineNumber) {
-                    $("#parentLineId").removeAttr("disabled");
-                } else {
-                    // $("#parentLineId").removeAttr("disabled");
-                    $("#parentLineId").attr({"disabled": "disabled"});
-                }
-            })
+            var level = $("#level").val();
+            if (level=="2Y") {
+                $("#colorPart").attr({"disabled": "disabled"});
+            }
         $('#ebomMainForm').bootstrapValidator({
             message: 'This value is not valid',
             feedbackIcons: {
@@ -408,31 +401,32 @@
                         }
                     }
                 },
-                lineNo: {
-                    message: '编号验证失败',
-                    validators: {
-                        stringLength: {
-                            /*长度提示*/
-                            min: 4,
-                            max: 4,
-                            message: '编号长度必须是4位数字'
-                        },
-                        //正则校验
-
-                        regexp: {
-
-                            regexp: /^[0-9]+$/, /* ^ 指的是匹配字符串开始的位置 + 匹配一个或者多个*/
-
-                            message: '编号只能为数字'
-
-                        },
-
-                    }
-                },
+                // lineNo: {
+                //     message: '编号验证失败',
+                //     validators: {
+                //         stringLength: {
+                //             /*长度提示*/
+                //             min: 4,
+                //             max: 4,
+                //             message: '编号长度必须是4位数字'
+                //         },
+                //         //正则校验
+                //
+                //         regexp: {
+                //
+                //             regexp: /^[0-9]+$/, /* ^ 指的是匹配字符串开始的位置 + 匹配一个或者多个*/
+                //
+                //             message: '编号只能为数字'
+                //
+                //         },
+                //
+                //     }
+                // },
             }
         });
         // 绑定dialog的确定按钮的监听事件
         $("#btnOk", window.top.document).click(function () {
+            console.log(1111);
             var bootstrapValidator = $("#ebomMainForm", window.top.document).data('bootstrapValidator');
             bootstrapValidator.validate();
             if (bootstrapValidator.isValid()) {
@@ -441,12 +435,12 @@
                     "puid": $("#puid").val(),
                     "lineId": $("#lineId").val(),
                     "pBomLinePartName": $("#pBomLinePartName").val(),
-                    "level": $("#level").val(),
+                    // "level": $("#level").val(),
                     "pBomOfWhichDept": $("#pBomOfWhichDept").val(),
                     // "rank": $("#rank").val(),
                     // "groupNum": $("#groupNum").val(),
                     "pBomLinePartEnName": $("#pBomLinePartEnName").val(),
-                    "lineNo": $("#lineNo").val(),
+                    // "lineNo": $("#lineNo").val(),
                     "parentLineId": $("#parentLineId").val(),
                     "pLouaFlag": $("#pLouaFlag").val(),
                     "pUnit": $("#pUnit").val(),

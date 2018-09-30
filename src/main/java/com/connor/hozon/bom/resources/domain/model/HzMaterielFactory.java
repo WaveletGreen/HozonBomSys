@@ -1,11 +1,13 @@
 package com.connor.hozon.bom.resources.domain.model;
 
+import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.resources.domain.dto.request.AddHzEbomReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.request.UpdateHzEbomReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzMaterielRespDTO;
 import com.connor.hozon.bom.resources.enumtype.BomResourceEnum;
 import com.connor.hozon.bom.resources.util.StringUtil;
 import sql.pojo.bom.HzMbomLineRecord;
+import sql.pojo.cfg.HzCfg0ModelFeature;
 import sql.pojo.project.HzMaterielRecord;
 
 import java.util.UUID;
@@ -173,4 +175,31 @@ public class HzMaterielFactory {
         respDTO.setResource(record.getResource());
         return respDTO;
     }
+
+
+    public static HzMaterielRecord featureToMaterielRecord(HzCfg0ModelFeature feature,String projectId){
+        HzMaterielRecord hzMaterielRecord = new HzMaterielRecord();
+        hzMaterielRecord.setpFactoryPuid(feature.getFactoryCode());
+        hzMaterielRecord.setpColorPart(feature.getColor());
+        hzMaterielRecord.setPuid(UUID.randomUUID().toString());
+        hzMaterielRecord.setpPertainToProjectPuid(projectId);
+        hzMaterielRecord.setpMaterielDataType(21);
+        hzMaterielRecord.setpMaterielCode(feature.getpFeatureSingleVehicleCode());
+        hzMaterielRecord.setpMaterielDesc(feature.getMaterielDesc());
+        hzMaterielRecord.setpMaterielDescEn(feature.getMaterielEnDesc());
+        hzMaterielRecord.setpCreateName(UserInfo.getUser().getUserName());
+        hzMaterielRecord.setpUpdateName(UserInfo.getUser().getUserName());
+        hzMaterielRecord.setpMrpController(feature.getMrpController());
+        hzMaterielRecord.setpVinPerNo(feature.getVinCode());
+        hzMaterielRecord.setResource(feature.getPurchaseType());
+        hzMaterielRecord.setpInOutSideFlag(feature.getLabelFlag());
+        hzMaterielRecord.setpBasicUnitMeasure(feature.getBasicCountUnit());
+        hzMaterielRecord.setMaterielResourceId(feature.getPuid());
+        hzMaterielRecord.setpPartImportantDegree(String.valueOf(feature.getImportance()));
+        hzMaterielRecord.setP3cPartFlag(feature.getRulesFlag());
+        hzMaterielRecord.setpInventedPart(feature.getVirtualFlag());
+        hzMaterielRecord.setpMaterielType("A001");
+        return hzMaterielRecord;
+    }
+
 }

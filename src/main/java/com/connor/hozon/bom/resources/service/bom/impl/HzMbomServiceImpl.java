@@ -30,6 +30,7 @@ import org.springframework.stereotype.Service;
 import sql.pojo.bom.HzMbomLineRecord;
 import sql.pojo.bom.HzMbomLineRecordVO;
 import sql.pojo.bom.HzPbomLineRecord;
+import sql.pojo.cfg.HzCfg0ModelFeature;
 import sql.pojo.cfg.HzCfg0OfBomLineRecord;
 import sql.pojo.epl.HzEPLManageRecord;
 import sql.pojo.factory.HzFactory;
@@ -68,6 +69,8 @@ public class HzMbomServiceImpl implements HzMbomService{
     @Autowired
     private HzPbomRecordDAO hzPbomRecordDAO;
 
+    @Autowired
+    private HzCfg0ModelFeatureService hzCfg0ModelFeatureService;
 
     @Override
     public Page<HzMbomRecordRespDTO> findHzMbomForPage(HzMbomByPageQuery query) {
@@ -704,6 +707,23 @@ public class HzMbomServiceImpl implements HzMbomService{
                         deleteMaterielRecords = new HashSet<>(n);
                     }
                 }
+
+                //衍生物料
+                List<HzCfg0ModelFeature> features = hzCfg0ModelFeatureService.doSelectAllByProjectUid(projectId);
+                if(ListUtil.isNotEmpty(features)){
+                    features.forEach(feature -> {
+                        HzMaterielRecord record = HzMaterielFactory.featureToMaterielRecord(feature,projectId);
+                        HzMaterielQuery query = new HzMaterielQuery();
+                        query.setProjectId(projectId);
+                        query.setpMaterielCode(record.getpMaterielCode());
+                        List<HzMaterielRecord> recordList = hzMaterielDAO.findHzMaterielForList(query);
+                        if(ListUtil.isEmpty(recordList)){
+                            materielRecords.add(record);
+                        }
+                    });
+
+                }
+
 
                 //判断财务型MBOM的是否具有子层
                 //PBOM过渡到财务型MBOM 有部分数据会被剪切到生产型MBOM，因此 此处需要判断
