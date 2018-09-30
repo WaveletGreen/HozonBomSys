@@ -631,6 +631,7 @@ function initTable1(mBomUrl) {
                 ],
             });
             // $mBomTable.bootstrapTable('hideColumn', 'eBomPuid');
+            $mBomTable.bootstrapTable('hideColumn', 'level');
         }
     });
 }
@@ -662,7 +663,7 @@ function doQuery1() {
 }
 function initTable2(productionUrl) {
     var projectId = $("#project", window.top.document).val();
-    var $productionTable = $("#whiteBodyProductionTable");
+    var  $productionTable = $("#whiteBodyProductionTable");
     // $productionTable.bootstrapTable('destroy');
 
     var currentProjectHead = $("#currentProjectHead", window.top.document).val();
@@ -849,6 +850,7 @@ function initTable2(productionUrl) {
                 ],
             });
             // $productionTable.bootstrapTable('hideColumn', 'eBomPuid');
+            $productionTable.bootstrapTable('hideColumn', 'level');
         }
     });
 }
@@ -1066,6 +1068,8 @@ function initTable3(financialUrl) {
                 ],
             });
             // $financialTable.bootstrapTable('hideColumn', 'eBomPuid');
+            $financialTable.bootstrapTable('hideColumn', 'level');
+
         }
     });
 }
