@@ -4,6 +4,8 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.context.annotation.Configuration;
 import sql.pojo.cfg.HzCfg0ModelFeature;
 
+import java.util.List;
+
 @Configuration
 public interface IHzCfg0ModelFeatureService {
     /**
@@ -32,6 +34,7 @@ public interface IHzCfg0ModelFeatureService {
 
     /**
      * 连同工厂编号一起查出来
+     *
      * @param puid
      * @return
      */
@@ -71,4 +74,12 @@ public interface IHzCfg0ModelFeatureService {
     boolean doUpdateByPrimaryKey(HzCfg0ModelFeature record);
 
     boolean doUpdateByModelPuidWithBasic(String puid, String pFeatureCnDesc, String pFeatureSingleVehicleCode);
+
+    /**
+     * 获取项目下所有的衍生物料基本信息
+     *
+     * @param projectUid
+     * @return
+     */
+    List<HzCfg0ModelFeature> doSelectAllByProjectUid(String projectUid);
 }

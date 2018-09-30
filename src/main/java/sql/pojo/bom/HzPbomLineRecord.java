@@ -197,7 +197,7 @@ public class HzPbomLineRecord {
     }
 
     public void setLineId(String lineId) {
-        this.lineId= lineId;
+        this.lineId = lineId;
     }
 
     public Integer getIsHas() {
@@ -431,5 +431,10 @@ public class HzPbomLineRecord {
 
     public void setUpdateName(String updateName) {
         this.updateName = updateName;
+    }
+
+    @Override
+    public HzPbomLineRecord clone() throws CloneNotSupportedException {
+        return (HzPbomLineRecord) super.clone();
     }
 }
