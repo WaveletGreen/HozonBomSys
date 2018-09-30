@@ -38,7 +38,7 @@ public interface IHzCraftService {
      * @param part
      * @return
      */
-    void craftChildren(List<String> childrenUids, HzPbomLineRecord part) throws Exception;
+    void craftChildren(List<String> childrenUids, HzPbomLineRecord part,Map<String, Map<String, HzPbomLineRecord>> myWavelet) throws Exception;
 
     /**
      * 将合成的新件挂载到目标件下

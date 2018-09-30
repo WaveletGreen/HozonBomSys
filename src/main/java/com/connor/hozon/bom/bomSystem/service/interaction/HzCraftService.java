@@ -5,8 +5,8 @@ import com.connor.hozon.bom.bomSystem.service.iservice.interaction.IHzCraftServi
 import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.resources.domain.query.HzPbomTreeQuery;
 import com.connor.hozon.bom.resources.mybatis.bom.HzPbomRecordDAO;
-import com.connor.hozon.bom.resources.service.bom.HzPbomService;
 import com.connor.hozon.bom.sys.entity.User;
+import lombok.Data;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,12 +19,19 @@ import static com.connor.hozon.bom.bomSystem.helper.StringHelper.checkString;
 
 /**
  * @Author: Fancyears·Maylos·Maywas
- * @Description:
+ * @Description: 工艺合件
+ * 作为子：筛选所有需要进行合成的源，同时找到所有源的父层的查找编号比源大的兄弟层，将兄弟层的查找编号进行重新排序
+ * 作为父：查找已合成源为基准，递归查找源下的所有子层，作为合成结果，合成结果挂载到合成目标下，对合成结果的每一份进行复制，
+ * 将重新构建树形结构
  * @Date: Created in 2018/9/28 14:45
  * @Modified By:
  */
 @Configuration
 public class HzCraftService implements IHzCraftService {
+    /**
+     * 预设随机数产生的精度后移位
+     */
+    public static final double RANDOM_SETTING = 0.1;
     /**
      * 目标挂载对象零件代码
      */
@@ -49,6 +56,10 @@ public class HzCraftService implements IHzCraftService {
      */
     private Map<String, Map<String, HzPbomLineRecord>> toChildrenNeedToUpdateItsLineIndex = new LinkedHashMap<>();
     /**
+     * 重设查找编号的子层
+     */
+    private Map<String, Map<String, HzPbomLineRecord>> orderIsResetChildren = new LinkedHashMap<>();
+    /**
      * 同父层下的所有子层
      */
     private Map<String, Map<String, HzPbomLineRecord>> myWavelet = new LinkedHashMap<>();
@@ -64,6 +75,379 @@ public class HzCraftService implements IHzCraftService {
      * 查询参数
      */
     private Map<String, Object> param = new HashMap<>();
+
+    private Map<String, List<Integer>> orgOrder = new LinkedHashMap<>();
+
+    private Map<String, String> theKeyToAllSameParent = new LinkedHashMap<>();
+    /**
+     * 最大的查找编号
+     */
+    private Map<String, LocalCraft> theMaxInorder = new LinkedHashMap<>();
+    private boolean isDebug = true;
+    private boolean isInsertDebug = false;
+    /**
+     * 一份父层的属性结构图
+     */
+    private Map<String, Map<String, List<HzPbomLineRecord>>> allParentTree = new LinkedHashMap<>();
+
+    private Map<String, LocalCraftTarget> targetTreeMap = new LinkedHashMap<>();
+
+
+    /**
+     * 自动生成工艺合件
+     *
+     * @param projectUid    项目UID
+     * @param parentUids    合成源父层
+     * @param childrenUids  合成源子层
+     * @param targetUids    挂载目标UID
+     * @param collectedData 新件数据
+     * @return
+     */
+    @Override
+    public boolean autoCraft(String projectUid, List<String> parentUids, List<String> childrenUids, List<String> targetUids, Map<String, String> collectedData) {
+        HzPbomLineRecord pbom = craftNewPart(collectedData);
+        myWavelet.clear();
+        myLovelyWavelet.clear();
+        toChildrenNeedToUpdateItsLineIndex.clear();
+        theChildrenNeedToDelete.clear();
+        orderIsResetChildren.clear();
+        orgOrder.clear();
+        theKeyToAllSameParent.clear();
+        this.projectUid = projectUid;
+        param.put("projectId", projectUid);
+        allParentTree.clear();
+        theMaxInorder.clear();
+        targetTreeMap.clear();
+        try {
+            craftChildren(childrenUids, pbom, myWavelet);
+            craftChildren(parentUids, pbom, myLovelyWavelet);
+            craftParentTree(parentUids);
+            craftTarget(targetUids);
+            craftResetOrder();
+            craftBuildNewTree(theMaxInorder, pbom);
+            //设置合成源的父层是否isHas，是否为Y
+            craftSrcParent();
+            craftInsert(targetTreeMap);
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    /**
+     * 将新件批量插入到数据库
+     *
+     * @param targetTreeMap
+     */
+    private void craftInsert(Map<String, LocalCraftTarget> targetTreeMap) {
+        for (Map.Entry<String, LocalCraftTarget> entry : targetTreeMap.entrySet()) {
+            LocalCraftTarget craftTarget = entry.getValue();
+            if (!isInsertDebug) {
+                if (hzPbomRecordDAO.insertList(craftTarget.getChildrenTree()) != 1) {
+                    logger.error("批量插入数据失败");
+                    break;
+                }
+            }
+        }
+    }
+
+    private void craftSrcParent() {
+    }
+
+    /**
+     * 构建新树
+     *
+     * @param theMaxInorder
+     * @param pbom
+     */
+    private void craftBuildNewTree(Map<String, LocalCraft> theMaxInorder, HzPbomLineRecord pbom) throws CloneNotSupportedException {
+        double mymy;
+        double youryour;
+        int lineIndex;
+        int pLineIndex;
+        for (Map.Entry<String, LocalCraft> entry : theMaxInorder.entrySet()) {
+            LocalCraft craft = entry.getValue();
+            String mySortNum = craft.getLine().getSortNum();
+            String localSortNum = hzPbomRecordDAO.findMinOrderNumWhichGreaterThanThisOrderNum(projectUid, mySortNum);
+            mymy = Double.parseDouble(mySortNum);
+            //你比我大
+            youryour = Double.parseDouble(localSortNum);
+            double _temp = mymy;
+            //需要插入到数据库中的数据
+            LocalCraftTarget target = new LocalCraftTarget();
+            //设置识别UID
+            target.setUid(craft.getUid());
+            //生成首位排序号
+            _temp = generateRandom(_temp, youryour);
+            //查找编号重新排
+            lineIndex = craft.getIndex();
+            pLineIndex = lineIndex;
+            //设置数模层
+            pbom.setBomDigifaxId(craft.getLine().getBomDigifaxId());
+            //新件设置一份单独的PUID
+            pbom.setPuid(UUIDHelper.generateUpperUid());
+            //设置自身的eUId
+            pbom.seteBomPuid(pbom.getPuid());
+            //父层的UID即为挂载目标
+            pbom.setParentUid(craft.getLine().geteBomPuid());
+            //设置第一位排序号
+            pbom.setSortNum(String.valueOf(_temp));
+            //设置查找编号
+            pbom.setLineIndex(craft.getLine().getLineIndex());
+            //设置层级
+            //克隆一份出来
+            target.getChildrenTree().add(pbom.clone());
+            //循环挂载所有的子
+            for (Map.Entry<String, Map<String, List<HzPbomLineRecord>>> etr : allParentTree.entrySet()) {
+                if (etr.getValue() != null && !etr.getValue().isEmpty()) {
+                    for (Map.Entry<String, List<HzPbomLineRecord>> values : etr.getValue().entrySet()) {
+                        Map<String, String> newEbomUid = new LinkedHashMap<>();
+                        Map<String, String> newEbomUidReverse = new LinkedHashMap<>();
+                        Map<String, HzPbomLineRecord> parent = new LinkedHashMap<>();
+                        Map<String, Integer> newEbomUidLineIndex = new LinkedHashMap<>();
+                        for (int i = 0; i < values.getValue().size(); i++) {
+                            HzPbomLineRecord record = values.getValue().get(i);
+                            //重新生成排序号
+                            _temp = generateRandom(_temp, youryour);
+                            values.getValue().get(i).setSortNum(String.valueOf(_temp));
+                            //如果有子层
+                            if (record.getIsHas() == 1) {
+                                String firstNodeEUID = UUIDHelper.generateUpperUid();
+                                //缓存新老UID对应关系
+                                newEbomUid.put(record.geteBomPuid(), firstNodeEUID);
+                                newEbomUidReverse.put(firstNodeEUID, record.geteBomPuid());
+                                //找到了上层的父
+                                if (newEbomUid.containsKey(record.getParentUid())) {
+                                    //设置源的UID
+                                    values.getValue().get(i).setPuid(firstNodeEUID);
+                                    //设置父层UID
+                                    values.getValue().get(i).setParentUid(newEbomUid.get(record.getParentUid()));
+                                    //存储历史puid与新的UID对应关系
+                                    newEbomUid.put(values.getValue().get(i).geteBomPuid(), values.getValue().get(i).getPuid());
+                                    //再设置新的eBom UID
+                                    values.getValue().get(i).seteBomPuid(values.getValue().get(i).getPuid());
+                                    //设置查找编号
+                                    if (newEbomUidLineIndex.containsKey(record.getParentUid())) {
+                                        int _lineIndex = newEbomUidLineIndex.get(record.getParentUid());
+                                        if (record.getParentUid() == null) {
+                                            System.out.println();
+                                        }
+                                        String parentLineIndex = parent.get(record.getParentUid()).getLineIndex();
+                                        values.getValue().get(i).setLineIndex(parentLineIndex + "." + _lineIndex);
+                                        //存储最新的编号
+                                        _lineIndex += 10;
+                                        newEbomUidLineIndex.put(record.getParentUid(), _lineIndex);
+                                    } else {
+                                        if (parent.containsKey(record.getParentUid())) {
+                                            values.getValue().get(i).setLineIndex(parent.get(record.getParentUid()).getLineIndex() + ".10");
+                                        } else {
+                                            values.getValue().get(i).setLineIndex(pbom.getLineIndex() + "." + pLineIndex);
+                                            pLineIndex += 10;
+                                        }
+                                        newEbomUidLineIndex.put(record.geteBomPuid(), pLineIndex);
+                                    }
+                                    parent.put(values.getValue().get(i).getPuid(), values.getValue().get(i));
+                                }
+                                //永远没有找到父层，那一定是第一层
+                                else {
+                                    //设置源的UID
+                                    values.getValue().get(i).setPuid(firstNodeEUID);
+                                    //设置父层UID
+                                    values.getValue().get(i).setParentUid(pbom.geteBomPuid());
+                                    //存储历史puid与新的UID对应关系
+                                    newEbomUid.put(values.getValue().get(i).geteBomPuid(), values.getValue().get(i).getPuid());
+                                    //再设置新的eBom UID
+                                    values.getValue().get(i).seteBomPuid(values.getValue().get(i).getPuid());
+                                    //设置查找编号
+                                    if (newEbomUidLineIndex.containsKey(record.getParentUid())) {
+                                        int _lineIndex = newEbomUidLineIndex.get(record.getParentUid());
+                                        if (record.getParentUid() == null) {
+                                            System.out.println();
+                                        }
+                                        String parentLineIndex = parent.get(record.getParentUid()).getLineIndex();
+                                        values.getValue().get(i).setLineIndex(parentLineIndex + "." + _lineIndex);
+                                        //存储最新的编号
+                                        _lineIndex += 10;
+                                        newEbomUidLineIndex.put(record.getParentUid(), _lineIndex);
+                                    } else {
+                                        if (parent.containsKey(record.getParentUid())) {
+                                            values.getValue().get(i).setLineIndex(parent.get(record.getParentUid()).getLineIndex() + ".10");
+                                        } else {
+                                            values.getValue().get(i).setLineIndex(pbom.getLineIndex() + "." + pLineIndex);
+                                            pLineIndex += 10;
+                                        }
+                                        newEbomUidLineIndex.put(record.geteBomPuid(), pLineIndex);
+                                    }
+                                    //缓存原对象
+                                    parent.put(values.getValue().get(i).getPuid(), values.getValue().get(i));
+
+                                }
+                            } else {
+                                if (newEbomUid.containsKey(record.getParentUid())) {
+                                    String uid = UUIDHelper.generateUpperUid();
+                                    newEbomUid.put(record.geteBomPuid(), uid);
+                                    newEbomUidReverse.put(uid, record.geteBomPuid());
+                                    //设置源的UID
+                                    values.getValue().get(i).setPuid(uid);
+                                    //设置父层UID
+                                    values.getValue().get(i).setParentUid(newEbomUid.get(record.getParentUid()));
+                                    //存储历史puid与新的UID对应关系
+                                    newEbomUid.put(values.getValue().get(i).geteBomPuid(), values.getValue().get(i).getPuid());
+                                    //再设置新的eBom UID
+                                    values.getValue().get(i).seteBomPuid(values.getValue().get(i).getPuid());
+                                    //设置查找编号
+                                    if (newEbomUidLineIndex.containsKey(record.getParentUid())) {
+                                        int _lineIndex = newEbomUidLineIndex.get(record.getParentUid());
+                                        if (record.getParentUid() == null || parent.get(record.getParentUid()) == null) {
+                                            System.out.println();
+                                        }
+                                        String parentLineIndex = parent.get(record.getParentUid()).getLineIndex();
+                                        values.getValue().get(i).setLineIndex(parentLineIndex + "." + _lineIndex);
+                                        //存储最新的编号
+                                        _lineIndex += 10;
+                                        newEbomUidLineIndex.put(record.getParentUid(), _lineIndex);
+                                    } else {
+                                        if (parent.containsKey(record.getParentUid())) {
+                                            values.getValue().get(i).setLineIndex(parent.get(record.getParentUid()).getLineIndex() + ".10");
+                                        } else {
+                                            values.getValue().get(i).setLineIndex(pbom.getLineIndex() + "." + pLineIndex);
+                                            pLineIndex += 10;
+                                        }
+                                        newEbomUidLineIndex.put(record.geteBomPuid(), pLineIndex);
+                                    }
+                                    //缓存原对象
+                                    parent.put(values.getValue().get(i).getPuid(), values.getValue().get(i));
+                                }
+                                //永远没有找到父层，那一定是第一层
+                                else {
+                                    logger.error("没有子层的合成源找不到父层UID，但它本身的父层一定是存在的");
+                                }
+                            }
+//                            values.getValue().get(i).setSortNum(String.valueOf(_temp));
+//                            values.getValue().get(i).setPuid(UUIDHelper.generateUpperUid());
+//                            if (isFirst) {
+//                                values.getValue().get(i).setLineIndex(craft.getLine().getLineIndex() + "." + craft.getIndex());
+//                                isFirst = false;
+//                            }
+
+//                            if (isFirst) {
+//                                values.getValue().get(i).setParentUid(etr.getKey());
+//                            } else {
+//                                for (int j = i; j > 0; j--) {
+//                                    if (values.getValue().get(j).getParentUid().equals(values.getValue().get(j).geteBomPuid())) {
+////                                        if (isFirst) {
+////                                            //更新第一个对象的UID和ParentUID
+////                                            String newUid = UUIDHelper.generateUpperUid();
+////                                            newEbomUid.put(values.getValue().get(i).geteBomPuid(), newUid);
+////                                            values.getValue().get(i).seteBomPuid(newUid);
+////                                            //自身的UID重新生成
+////                                            values.getValue().get(i).setPuid(UUIDHelper.generateUpperUid());
+////                                        } else if (newEbomUid.containsKey(values.getValue().get(i).getParentUid())) {
+////                                            values.getValue().get(i).setParentUid(newEbomUid.get(values.getValue().get(i).getParentUid()));
+////                                            values.getValue().get(i).seteBomPuid(newEbomUid.get(values.getValue().get(i).geteBomPuid()));
+////
+////                                        } else {
+////                                            //装填新的UID
+////
+////                                        }
+//                                        //如果有子层
+//                                        if (values.getValue().get(j).getIsHas() == 1) {
+//
+//                                        }
+//                                    }
+//                                }
+//
+//                            }
+                            //克隆一份出来
+                            target.getChildrenTree().add(values.getValue().get(i).clone());
+                        }
+                    }
+                }
+            }
+            if (!myWavelet.isEmpty()) {
+                for (Map.Entry<String, Map<String, HzPbomLineRecord>> childrenEntry : myWavelet.entrySet()) {
+                    if (childrenEntry != null) {
+                        String parent = childrenEntry.getKey();
+                        Map<String, HzPbomLineRecord> values = childrenEntry.getValue();
+                        if (values != null && !values.isEmpty()) {
+                            for (Map.Entry<String, HzPbomLineRecord> ebony : values.entrySet()) {
+                                //查找编号进位10
+                                lineIndex += 10;
+                                HzPbomLineRecord record = ebony.getValue();
+                                String uid = UUIDHelper.generateUpperUid();
+                                _temp = generateRandom(_temp, youryour);
+                                //设置排序号
+                                record.setSortNum(String.valueOf(_temp));
+                                //设置主键
+                                record.setPuid(uid);
+                                //设置
+                                record.seteBomPuid(uid);
+                                //设置父层UID
+                                record.setParentUid(pbom.geteBomPuid());
+                                //设置查找编号
+                                record.setLineIndex(craft.getLine().getLineIndex() + "." + (lineIndex));
+                                //克隆一份
+                                target.getChildrenTree().add(record.clone());
+
+                            }
+                        }
+                    }
+
+                }
+            }
+            targetTreeMap.put(target.getUid(), target);
+        }
+        logger.warn("重新设置排序号");
+    }
+
+    /**
+     * 目标节点
+     *
+     * @param targetUids
+     */
+    private void craftTarget(List<String> targetUids) {
+        for (int i = 0; i < targetUids.size(); i++) {
+            LocalCraft craft = new LocalCraft();
+            String tar = targetUids.get(i);
+            String str;
+            HzPbomLineRecord record = hzPbomRecordDAO.getHzPbomByEbomPuid(tar, projectUid);
+            List<HzPbomLineRecord> isWithsChildren = hzPbomRecordDAO.getFirstLevelBomByParentId(record.geteBomPuid(), projectUid);
+            int max = 10;
+            if (isWithsChildren != null) {
+                for (int i1 = 0; i1 < isWithsChildren.size(); i1++) {
+                    str = isWithsChildren.get(i1).getLineIndex();
+                    int temp = Integer.parseInt(str.substring(str.lastIndexOf(".") + 1));
+                    max = temp > max ? temp : max;
+                }
+            }
+            //没有子层，则查找编号为首位
+            craft.setUid(UUIDHelper.generateUpperUid());
+            craft.setIndex(max);
+            craft.setLine(record);
+            theMaxInorder.put(tar, craft);
+        }
+    }
+
+    /**
+     * 构建父层树
+     *
+     * @param parentUids
+     */
+    private void craftParentTree(List<String> parentUids) {
+        HzPbomTreeQuery query = new HzPbomTreeQuery();
+        query.setProjectId(projectUid);
+        for (int i = 0; i < parentUids.size(); i++) {
+            //递归查询所有的子
+            query.setPuid(parentUids.get(i));
+            List<HzPbomLineRecord> parensTree = hzPbomRecordDAO.getHzPbomTree(query);
+            //保存到缓存中
+            Map<String, List<HzPbomLineRecord>> map = new LinkedHashMap<>();
+            map.put(parentUids.get(i), parensTree);
+            allParentTree.put(parentUids.get(i), map);
+        }
+    }
 
     /**
      * 创建一个PBOM对象，作为新件
@@ -110,6 +494,10 @@ public class HzCraftService implements IHzCraftService {
         record.setStatus(1);
         //不是颜色件
         record.setColorPart(0);
+
+        //设置为工艺合件
+//        record.setIsNewPart(2);
+
         ///lineIndex根据挂载位置进行规则进行设置
         //sortNum根据挂载位置进行规则进行设置
         //工艺合件不来源于EBOM，设置来源UID为自身UID
@@ -134,16 +522,6 @@ public class HzCraftService implements IHzCraftService {
      */
     @Override
     public List<HzPbomLineRecord> craftParents(List<String> parentUids, HzPbomLineRecord part) throws CloneNotSupportedException {
-        for (int i = 0; i < parentUids.size(); i++) {
-            HzPbomLineRecord parent = hzPbomRecordDAO.getHzPbomByEbomPuid(parentUids.get(i), projectUid);
-            if (myLovelyWavelet.containsKey(parent.getLineId())) {
-                myLovelyWavelet.get(parent.getLineId()).put(parent.getPuid(), parent);
-            } else {
-                Map<String, HzPbomLineRecord> map = new LinkedHashMap<>();
-                map.put(parent.getPuid(), parent);
-                myLovelyWavelet.put(parent.getLineId(), map);
-            }
-        }
         return null;
     }
 
@@ -155,7 +533,7 @@ public class HzCraftService implements IHzCraftService {
      * @return
      */
     @Override
-    public void craftChildren(List<String> childrenUids, HzPbomLineRecord part) throws Exception {
+    public void craftChildren(List<String> childrenUids, HzPbomLineRecord part, Map<String, Map<String, HzPbomLineRecord>> myWavelet) throws Exception {
         for (int i = 0; i < childrenUids.size(); i++) {
             HzPbomLineRecord line = hzPbomRecordDAO.getHzPbomByEbomPuid(childrenUids.get(i), projectUid);
             if (myWavelet.containsKey(line.getParentUid())) {
@@ -209,18 +587,44 @@ public class HzCraftService implements IHzCraftService {
                             } else {
                                 String ld = isWithsChild.getLineIndex();
                                 boolean isIt = false;
+                                String localIndex = "";
                                 for (Map.Entry<String, HzPbomLineRecord> et : values.entrySet()) {
-                                    if (compare(ld, et.getKey()) > 0) {
+                                    localIndex = et.getKey();
+                                    if (compare(ld, localIndex) > 0) {
                                         isIt = true;
                                     }
                                 }
                                 if (isIt) {
-                                    if (toChildrenNeedToUpdateItsLineIndex.containsKey(allCodeIsWithToParentCode.get(i1).getPuid())) {
-                                        toChildrenNeedToUpdateItsLineIndex.get(allCodeIsWithToParentCode.get(i1).getPuid()).put(isWithsChild.getLineIndex(), isWithsChild);
+                                    String ebomUid = allCodeIsWithToParentCode.get(i1).geteBomPuid();
+                                    String myUid = allCodeIsWithToParentCode.get(i1).getPuid();
+                                    if (this.myWavelet.containsKey(ebomUid) && this.myWavelet.get(ebomUid).containsKey(isWithsChild.getLineIndex())) {
+                                        if (toChildrenNeedToUpdateItsLineIndex.containsKey(myUid)) {
+                                            toChildrenNeedToUpdateItsLineIndex.get(allCodeIsWithToParentCode.get(i1).getPuid()).remove(isWithsChild.getLineIndex());
+                                        }
+//                                        this.myWavelet.get(allCodeIsWithToParentCode.get(i1).geteBomPuid()).remove(isWithsChild.getLineIndex());
+                                        continue;
+                                    }
+                                    if (this.myLovelyWavelet.containsKey(ebomUid) && this.myLovelyWavelet.get(ebomUid).containsKey(isWithsChild.getLineIndex())) {
+//                                        this.myLovelyWavelet.get(allCodeIsWithToParentCode.get(i1).geteBomPuid()).remove(isWithsChild.getLineIndex());
+                                        if (toChildrenNeedToUpdateItsLineIndex.containsKey(myUid)) {
+                                            toChildrenNeedToUpdateItsLineIndex.get(ebomUid).remove(isWithsChild.getLineIndex());
+                                        }
+                                        continue;
+                                    }
+
+                                    if (toChildrenNeedToUpdateItsLineIndex.containsKey(myUid)) {
+//                                        if (toChildrenNeedToUpdateItsLineIndex.get(allCodeIsWithToParentCode.get(i1).getPuid()).containsKey(isWithsChild.getLineIndex())) {
+//                                            toChildrenNeedToUpdateItsLineIndex.get(allCodeIsWithToParentCode.get(i1).getPuid()).remove(isWithsChild.getLineIndex());
+//                                        } else {
+                                        toChildrenNeedToUpdateItsLineIndex.get(myUid).put(isWithsChild.getLineIndex(), isWithsChild);
+//                                        }
                                     } else {
                                         Map<String, HzPbomLineRecord> tempToUpdate = new LinkedHashMap<>();
                                         tempToUpdate.put(isWithsChild.getLineIndex(), isWithsChild);
-                                        toChildrenNeedToUpdateItsLineIndex.put(allCodeIsWithToParentCode.get(i1).getPuid(), tempToUpdate);
+                                        toChildrenNeedToUpdateItsLineIndex.put(myUid, tempToUpdate);
+                                        if (!theKeyToAllSameParent.containsKey(myUid)) {
+                                            theKeyToAllSameParent.put(myUid, parent.geteBomPuid());
+                                        }
                                     }
                                 }
                             }
@@ -275,32 +679,6 @@ public class HzCraftService implements IHzCraftService {
         return false;
     }
 
-    /**
-     * 自动生成工艺合件
-     *
-     * @param projectUid    项目UID
-     * @param parentUids    合成源父层
-     * @param childrenUids  合成源子层
-     * @param targetUids    挂载目标UID
-     * @param collectedData 新件数据
-     * @return
-     */
-    @Override
-    public boolean autoCraft(String projectUid, List<String> parentUids, List<String> childrenUids, List<String> targetUids, Map<String, String> collectedData) {
-        HzPbomLineRecord pbom = craftNewPart(collectedData);
-        this.projectUid = projectUid;
-        param.put("projectId", projectUid);
-        try {
-            craftChildren(childrenUids, pbom);
-            craftChildren(parentUids, pbom);
-            craftParents(parentUids, pbom);
-        } catch (CloneNotSupportedException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
 
     /**
      * 获取当前挂载对象的零件号
@@ -312,7 +690,14 @@ public class HzCraftService implements IHzCraftService {
         return this.targetPartCodes;
     }
 
-
+    /**
+     * 比较查找编号
+     *
+     * @param src
+     * @param tar
+     * @return
+     * @throws Exception
+     */
     public int compare(String src, String tar) throws Exception {
         if (src.contains(".") && tar.contains(".")) {
             String[] source = src.split("[.]");
@@ -337,4 +722,134 @@ public class HzCraftService implements IHzCraftService {
         }
         return 0;
     }
+
+    /**
+     * 对于子层，重设查找编号
+     */
+    private void craftResetOrder() {
+        sortorder();
+        doReset();
+    }
+
+    /**
+     * 重置查找编号
+     */
+    private void doReset() {
+        for (Map.Entry<String, Map<String, HzPbomLineRecord>> entry : toChildrenNeedToUpdateItsLineIndex.entrySet()) {
+            Map<String, HzPbomLineRecord> value = entry.getValue();
+            String key = entry.getKey();
+            int index = -1;
+            if (theKeyToAllSameParent.containsKey(key)) {
+                index = orgOrder.get(theKeyToAllSameParent.get(key)).get(0);
+            } else {
+                continue;
+            }
+            if (value != null && !value.isEmpty()) {
+                for (Map.Entry<String, HzPbomLineRecord> _entry : value.entrySet()) {
+                    HzPbomLineRecord _value = _entry.getValue();
+                    String lineIndex;
+                    if (!orderIsResetChildren.containsKey(key)) {
+                        Map<String, HzPbomLineRecord> map = new LinkedHashMap<>();
+                        orderIsResetChildren.put(key, map);
+                    }
+                    lineIndex = _value.getLineIndex();
+                    lineIndex = lineIndex.substring(0, lineIndex.lastIndexOf(".")) + "." + index;
+                    _value.setLineIndex(lineIndex);
+                    orderIsResetChildren.get(key).put(lineIndex, _value);
+                    index += 10;
+                }
+            }
+        }
+
+        if (!isDebug) {
+            toChildrenNeedToUpdateItsLineIndex.clear();
+        }
+
+    }
+
+    private void sortorder() {
+        getSortSrc(myWavelet);
+        getSortSrc(myLovelyWavelet);
+        sortIt();
+        logger.warn("获取排序源成功");
+    }
+
+    /**
+     * 排序
+     */
+    private void sortIt() {
+        if (!orgOrder.isEmpty()) {
+            orgOrder.forEach((key, value) -> {
+                if (value != null && !value.isEmpty()) {
+                    Collections.sort(value);
+                }
+            });
+        }
+    }
+
+    /**
+     * 获取排序源
+     *
+     * @param myLovelyWavelet
+     */
+    private void getSortSrc(Map<String, Map<String, HzPbomLineRecord>> myLovelyWavelet) {
+        if (!myLovelyWavelet.isEmpty()) {
+            myLovelyWavelet.forEach((key, value) -> {
+                if (value != null && !value.isEmpty())
+                    value.forEach((_key, _value) -> {
+                        if (!orgOrder.containsKey(key)) {
+                            List<Integer> list = new ArrayList<>();
+                            orgOrder.put(key, list);
+                        }
+                        orgOrder.get(key).add(Integer.parseInt(_value.getLineIndex().substring(_value.getLineIndex().lastIndexOf(".") + 1)));
+                    });
+            });
+        }
+    }
+
+    /**
+     * 判断是否为整数
+     *
+     * @param s
+     * @return
+     */
+    public final boolean isNumeric(String s) {
+        if (s != null && !"".equals(s.trim()))
+            return s.matches("^[0-9]*$");
+        else
+            return false;
+    }
+
+    public double generateRandom(Double d1, Double d2) {
+        Random rand = new Random();
+        double d = rand.nextDouble() * RANDOM_SETTING;
+        while (d1 + d >= d2) {
+            d = rand.nextDouble() * RANDOM_SETTING;
+        }
+        return d + d1;
+    }
+
+
+    @Data
+    class LocalCraft {
+        private String uid;
+        private Integer index;
+        private HzPbomLineRecord line;
+        private HzPbomLineRecord assignPoint;
+    }
+
+    @Data
+    class LocalCraftTarget {
+        private String uid;
+        private List<HzPbomLineRecord> childrenTree = new ArrayList<>();
+    }
+
+    @Data
+    class LocalCraftChildNode {
+        private String orgEbomUid;
+        private String newEbomUid;
+        private HzPbomLineRecord line;
+
+    }
 }
+
