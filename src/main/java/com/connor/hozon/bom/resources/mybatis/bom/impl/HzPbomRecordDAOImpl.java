@@ -1,6 +1,5 @@
 package com.connor.hozon.bom.resources.mybatis.bom.impl;
 
-import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
 import com.connor.hozon.bom.resources.domain.dto.request.DeleteHzPbomReqDTO;
 import com.connor.hozon.bom.resources.domain.query.HzBomRecycleByPageQuery;
 import com.connor.hozon.bom.resources.domain.query.HzPbomByPageQuery;
@@ -113,9 +112,9 @@ public class HzPbomRecordDAOImpl extends BaseSQLUtil implements HzPbomRecordDAO 
 
     @Override
     public int  getHzBomLineCount(String projectId) {
-       Map<String,Object> map = new HashMap<>();
-       map.put("projectId",projectId);
-       return (int)super.findForObject("HzPbomRecordDAOImpl_getTotalCount",map);
+        Map<String,Object> map = new HashMap<>();
+        map.put("projectId",projectId);
+        return (int)super.findForObject("HzPbomRecordDAOImpl_getTotalCount",map);
     }
 
     @Override
@@ -233,5 +232,4 @@ public class HzPbomRecordDAOImpl extends BaseSQLUtil implements HzPbomRecordDAO 
         map.put("projectId",projectId);
         return super.executeQueryByPass(new HzPbomLineRecord(),map,"HzPbomRecordDAOImpl_queryAllBomLineIdByPuid");
     }
-
 }

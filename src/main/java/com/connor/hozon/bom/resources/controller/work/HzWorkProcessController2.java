@@ -14,6 +14,8 @@ import com.connor.hozon.bom.resources.util.ResultMessageBuilder;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import sql.pojo.work.HzWorkProcedure;
@@ -217,9 +219,10 @@ public class HzWorkProcessController2 extends BaseController {
         return  "bomManage/mbom/routingData/updateFourProcess";
     }
 
+
     @RequestMapping(value = "add/four",method = RequestMethod.POST)
     @ResponseBody
-    public JSONObject updateWorkProcessFour(@RequestBody Map<String,Object> data){
+    public JSONObject updateWorkProcessFour(@RequestBody Map<String,Object> data) throws  Exception{
         JSONObject result = new JSONObject();
         String puids = (String)data.get("puids");
         String projectId = (String)data.get("projectId");

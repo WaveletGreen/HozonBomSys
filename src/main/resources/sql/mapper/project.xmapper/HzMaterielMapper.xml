@@ -531,8 +531,8 @@
         where
           P_PERTAIN_TO_PROJECT_PUID = #{projectId,jdbcType=VARCHAR}
         and
-        P_MATERIEL_DATA_TYPE in(71)
-        <!--P_MATERIEL_DATA_TYPE in(11,21,71)-->
+        <!--P_MATERIEL_DATA_TYPE in(71)-->
+        P_MATERIEL_DATA_TYPE in(11,21,71)
     </select>
 
     <!--删除当前项目下的所有物料-->
