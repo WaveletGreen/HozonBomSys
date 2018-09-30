@@ -126,6 +126,12 @@ public class HzMaterielRecord {
      */
     private Integer sendSapFlag;
 
+    /**
+     * 工厂代码
+     */
+    private String factoryCode;
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -141,6 +147,14 @@ public class HzMaterielRecord {
     public int hashCode() {
 
         return Objects.hash(pMaterielCode);
+    }
+
+    public String getFactoryCode() {
+        return factoryCode;
+    }
+
+    public void setFactoryCode(String factoryCode) {
+        this.factoryCode = factoryCode;
     }
 
     public Integer getSendSapFlag() {

@@ -362,6 +362,7 @@ public class HzPbomServiceImpl implements HzPbomService {
                 query.setLineIndex(String.valueOf(length));
             }
         }
+        //数据同步  临时
 //        int count = hzPbomRecordDAO.getHzBomLineCount(query.getProjectId());
 //        if (count <= 0) {
 //            List<HzBomLineRecord> lineRecords = hzBomLineRecordDao.getLoadingCarPartBom(query.getProjectId());
@@ -373,9 +374,20 @@ public class HzPbomServiceImpl implements HzPbomService {
 //                if (size > 1000) {
 //                    for (i = 0; i < size / 1000; i++) {
 //                        List<HzPbomLineRecord> list = new ArrayList<>();
-//
 //                        for (int j = 0; j < 1000; j++) {
 //                            HzPbomLineRecord hzPbomLineRecord = bomLineToPbomLine(lineRecords.get(cou));
+//                            if(Integer.valueOf(1).equals(hzPbomLineRecord.getIsHas())){
+//                                boolean findChildren = false;
+//                                for(HzBomLineRecord r :lineRecords){
+//                                    if(hzPbomLineRecord.geteBomPuid().equals(r.getParentUid())){
+//                                        findChildren = true;
+//                                        break;
+//                                    }
+//                                }
+//                                if(!findChildren){
+//                                    hzPbomLineRecord.setIsHas(0);
+//                                }
+//                            }
 //                            list.add(hzPbomLineRecord);
 //                            cou++;
 //                        }
@@ -386,6 +398,18 @@ public class HzPbomServiceImpl implements HzPbomService {
 //                    List<HzPbomLineRecord> list = new ArrayList<>();
 //                    for (int j = 0; j < size - i * 1000; j++) {
 //                        HzPbomLineRecord hzPbomLineRecord = bomLineToPbomLine(lineRecords.get(cou));
+//                        if(Integer.valueOf(1).equals(hzPbomLineRecord.getIsHas())){
+//                            boolean findChildren = false;
+//                            for(HzBomLineRecord r :lineRecords){
+//                                if(hzPbomLineRecord.geteBomPuid().equals(r.getParentUid())){
+//                                    findChildren = true;
+//                                    break;
+//                                }
+//                            }
+//                            if(!findChildren){
+//                                hzPbomLineRecord.setIsHas(0);
+//                            }
+//                        }
 //                        list.add(hzPbomLineRecord);
 //                        cou++;
 //                    }

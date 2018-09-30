@@ -4,6 +4,7 @@ import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.resources.domain.dto.request.AddHzEbomReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzMbomRecordRespDTO;
 import com.connor.hozon.bom.resources.util.ListUtil;
+import com.connor.hozon.bom.resources.util.StringUtil;
 import sql.pojo.bom.HzBomLineRecord;
 import sql.pojo.bom.HzMbomLineRecord;
 import sql.pojo.bom.HzPbomLineRecord;
@@ -91,6 +92,7 @@ public class HzMbomRecordFactory {
         Integer hasChildren = record.getIsHas();
         String lineIndex = record.getLineIndex();
         String[] strings = getLevelAndRank(lineIndex, is2Y, hasChildren);
+        respDTO.setRank(strings[1]);
         respDTO.setLevel(strings[0]);//层级
         respDTO.setLineNo(strings[2]);
         respDTO.setLineId(record.getLineId());
@@ -119,6 +121,11 @@ public class HzMbomRecordFactory {
             respDTO.setpBomType("财务");
         } else {
             respDTO.setpBomType("");
+        }
+        if(StringUtil.isEmpty(record.getFactoryCode())){
+            respDTO.setpFactoryCode("1001");
+        }else {
+            respDTO.setpFactoryCode(record.getFactoryCode());
         }
         respDTO.setStatus(record.getStatus());
         respDTO.setpStockLocation(record.getpStockLocation());

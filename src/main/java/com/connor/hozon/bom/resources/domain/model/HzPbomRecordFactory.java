@@ -36,6 +36,7 @@ public class HzPbomRecordFactory {
         hzPbomLineRecord.setpBomLinePartClass(reqDTO.getpBomLinePartClass());
         hzPbomLineRecord.setLineId(reqDTO.getLineId());
         hzPbomLineRecord.setPuid(UUID.randomUUID().toString());
+        hzPbomLineRecord.setIsNewPart(0);
         return hzPbomLineRecord;
     }
 
@@ -73,6 +74,7 @@ public class HzPbomRecordFactory {
         hzPbomLineRecord.setpBomLinePartResource(record.getpBomLinePartResource());
         hzPbomLineRecord.setSortNum(record.getSortNum());
         hzPbomLineRecord.setColorPart(record.getColorPart());
+        hzPbomLineRecord.setIsNewPart(0);
         return hzPbomLineRecord;
     }
 }
