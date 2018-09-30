@@ -1185,6 +1185,8 @@ public class HzPbomServiceImpl implements HzPbomService {
             hzPbomLineRecordAddSon.setIs2Y(0);
             //isHas
             hzPbomLineRecordAddSon.setIsHas(0);
+            //P_IS_NEW_PART     是否为新产生件
+            hzPbomLineRecordAddSon.setIsNewPart(2);
             hzPbomLineRecordsAddSons.add(hzPbomLineRecordAddSon);
             //修改父的isHas
             if(hzPbomLineRecord.getIsHas()!=1){

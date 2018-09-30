@@ -6,9 +6,7 @@ import com.connor.hozon.bom.resources.mybatis.bom.HzPbomRecordDAO;
 import com.connor.hozon.bom.resources.mybatis.bom.impl.HzEbomRecordDAOImpl;
 import com.connor.hozon.bom.resources.mybatis.bom.impl.HzPbomRecordDAOImpl;
 import com.connor.hozon.bom.resources.util.ListUtil;
-import org.springframework.beans.factory.annotation.Autowired;
 import sql.pojo.bom.HzPbomLineRecord;
-import sql.pojo.epl.HzEPLManageRecord;
 
 import java.util.List;
 import java.util.Random;
