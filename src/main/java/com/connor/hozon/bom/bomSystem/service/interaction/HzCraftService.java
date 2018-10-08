@@ -83,7 +83,7 @@ public class HzCraftService implements IHzCraftService {
      * 最大的查找编号
      */
     private Map<String, LocalCraft> theMaxInorder = new LinkedHashMap<>();
-    private boolean isDebug = true;
+    public static boolean isDebug = true;
     private boolean isInsertDebug = false;
     /**
      * 一份父层的属性结构图
@@ -184,6 +184,7 @@ public class HzCraftService implements IHzCraftService {
         double youryour;
         int lineIndex;
         int pLineIndex;
+        int pTrueParent = 10;
         for (Map.Entry<String, LocalCraft> entry : theMaxInorder.entrySet()) {
             LocalCraft craft = entry.getValue();
             String mySortNum = craft.getLine().getSortNum();
@@ -212,7 +213,7 @@ public class HzCraftService implements IHzCraftService {
             //设置第一位排序号
             pbom.setSortNum(String.valueOf(_temp));
             //设置查找编号
-            pbom.setLineIndex(craft.getLine().getLineIndex()+"."+craft.getIndex());
+            pbom.setLineIndex(craft.getLine().getLineIndex() + "." + craft.getIndex());
             //设置层级
             //克隆一份出来
             target.getChildrenTree().add(pbom.clone());
@@ -258,12 +259,16 @@ public class HzCraftService implements IHzCraftService {
                                         newEbomUidLineIndex.put(record.getParentUid(), _lineIndex);
                                     } else {
                                         if (parent.containsKey(record.getParentUid())) {
-                                            values.getValue().get(i).setLineIndex(parent.get(record.getParentUid()).getLineIndex() + ".10");
+                                            if (!newEbomUidLineIndex.containsKey(record.getParentUid())) {
+                                                newEbomUidLineIndex.put(record.getParentUid(), 10);
+                                            }
+                                            values.getValue().get(i).setLineIndex(parent.get(record.getParentUid()).getLineIndex() + "." + newEbomUidLineIndex.get(record.getParentUid()));
+                                            newEbomUidLineIndex.put(record.getParentUid(), newEbomUidLineIndex.get(record.getParentUid()) + 10);
                                         } else {
                                             values.getValue().get(i).setLineIndex(pbom.getLineIndex() + "." + pLineIndex);
                                             pLineIndex += 10;
+                                            newEbomUidLineIndex.put(record.geteBomPuid(), pLineIndex);
                                         }
-                                        newEbomUidLineIndex.put(record.geteBomPuid(), pLineIndex);
                                     }
                                     parent.put(values.getValue().get(i).getPuid(), values.getValue().get(i));
                                 }
@@ -286,16 +291,19 @@ public class HzCraftService implements IHzCraftService {
                                         String parentLineIndex = parent.get(record.getParentUid()).getLineIndex();
                                         values.getValue().get(i).setLineIndex(parentLineIndex + "." + _lineIndex);
                                         //存储最新的编号
-                                        _lineIndex += 10;
                                         newEbomUidLineIndex.put(record.getParentUid(), _lineIndex);
                                     } else {
                                         if (parent.containsKey(record.getParentUid())) {
-                                            values.getValue().get(i).setLineIndex(parent.get(record.getParentUid()).getLineIndex() + ".10");
+                                            if (!newEbomUidLineIndex.containsKey(record.getParentUid())) {
+                                                newEbomUidLineIndex.put(record.getParentUid(), 10);
+                                            }
+                                            values.getValue().get(i).setLineIndex(parent.get(record.getParentUid()).getLineIndex() + "." + newEbomUidLineIndex.get(record.getParentUid()));
+                                            newEbomUidLineIndex.put(record.getParentUid(), newEbomUidLineIndex.get(record.getParentUid()) + 10);
                                         } else {
-                                            values.getValue().get(i).setLineIndex(pbom.getLineIndex() + "." + pLineIndex);
-                                            pLineIndex += 10;
+                                            values.getValue().get(i).setLineIndex(pbom.getLineIndex() + "." + lineIndex);
+//                                            pLineIndex += 10;
+                                            newEbomUidLineIndex.put(record.geteBomPuid(), 10);
                                         }
-                                        newEbomUidLineIndex.put(record.geteBomPuid(), pLineIndex);
                                     }
                                     //缓存原对象
                                     parent.put(values.getValue().get(i).getPuid(), values.getValue().get(i));
@@ -327,12 +335,16 @@ public class HzCraftService implements IHzCraftService {
                                         newEbomUidLineIndex.put(record.getParentUid(), _lineIndex);
                                     } else {
                                         if (parent.containsKey(record.getParentUid())) {
-                                            values.getValue().get(i).setLineIndex(parent.get(record.getParentUid()).getLineIndex() + ".10");
+                                            if (!newEbomUidLineIndex.containsKey(record.getParentUid())) {
+                                                newEbomUidLineIndex.put(record.getParentUid(), 10);
+                                            }
+                                            values.getValue().get(i).setLineIndex(parent.get(record.getParentUid()).getLineIndex() + "." + newEbomUidLineIndex.get(record.getParentUid()));
+                                            newEbomUidLineIndex.put(record.getParentUid(), newEbomUidLineIndex.get(record.getParentUid()) + 10);
                                         } else {
                                             values.getValue().get(i).setLineIndex(pbom.getLineIndex() + "." + pLineIndex);
                                             pLineIndex += 10;
+                                            newEbomUidLineIndex.put(record.geteBomPuid(), pLineIndex);
                                         }
-                                        newEbomUidLineIndex.put(record.geteBomPuid(), pLineIndex);
                                     }
                                     //缓存原对象
                                     parent.put(values.getValue().get(i).getPuid(), values.getValue().get(i));
@@ -382,6 +394,7 @@ public class HzCraftService implements IHzCraftService {
                         }
                     }
                 }
+                lineIndex += 10;
             }
             //不是父层的层级进行调整层级
             if (!myWavelet.isEmpty()) {
@@ -392,7 +405,6 @@ public class HzCraftService implements IHzCraftService {
                         if (values != null && !values.isEmpty()) {
                             for (Map.Entry<String, HzPbomLineRecord> ebony : values.entrySet()) {
                                 //查找编号进位10
-                                lineIndex += 10;
                                 HzPbomLineRecord record = ebony.getValue();
                                 String uid = UUIDHelper.generateUpperUid();
                                 _temp = generateRandom(_temp, youryour);
@@ -408,7 +420,7 @@ public class HzCraftService implements IHzCraftService {
                                 record.setLineIndex(pbom.getLineIndex() + "." + (lineIndex));
                                 //克隆一份
                                 target.getChildrenTree().add(record.clone());
-
+                                lineIndex += 10;
                             }
                         }
                     }

@@ -6,6 +6,7 @@ import com.connor.hozon.bom.bomSystem.dao.bom.HzBomMainRecordDao;
 import com.connor.hozon.bom.bomSystem.dao.impl.bom.HzBomLineRecordDaoImpl;
 import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
 import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0OfBomLineService;
+import com.connor.hozon.bom.bomSystem.service.interaction.HzCraftService;
 import com.connor.hozon.bom.bomSystem.service.iservice.interaction.IHzCraftService;
 import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.resources.domain.dto.request.*;
@@ -328,6 +329,9 @@ public class HzPbomServiceImpl implements HzPbomService {
             jsonObject.put("mouldType", record.getMouldType());
             jsonObject.put("outerPart", record.getOuterPart());
             jsonObject.put("station", record.getStation());
+            //            测试用
+            if (HzCraftService.isDebug)
+                jsonObject.put("lineIndex", record.getLineIndex());
             Integer type = record.getType();
             Integer buyUnit = record.getBuyUnit();
             if (Integer.valueOf(0).equals(type)) {
@@ -1151,11 +1155,10 @@ public class HzPbomServiceImpl implements HzPbomService {
     }
 
 
-
     @Override
     public JSONObject queryAccessories(String materielCode) {
         HzAccessoriesLibs hzAccessoriesLibs = hzAccessoriesLibsDAO.queryAccessoriesByMaterielCode(materielCode);
-        JSONObject jsonData = (JSONObject)JSONObject.toJSON(hzAccessoriesLibs);
+        JSONObject jsonData = (JSONObject) JSONObject.toJSON(hzAccessoriesLibs);
         return jsonData;
     }
 
@@ -1173,7 +1176,7 @@ public class HzPbomServiceImpl implements HzPbomService {
         //生成子PBOM
         List<HzPbomLineRecord> hzPbomLineRecordsAddSons = new ArrayList<HzPbomLineRecord>();
         //循环父，生成父id、index、num不同的子
-        for(HzPbomLineRecord hzPbomLineRecord : hzPbomLineRecords){
+        for (HzPbomLineRecord hzPbomLineRecord : hzPbomLineRecords) {
             HzPbomLineRecord hzPbomLineRecordAddSon = new HzPbomLineRecord();
             //puid
             String puidSon = UUIDHelper.generateUid();
@@ -1193,16 +1196,16 @@ public class HzPbomServiceImpl implements HzPbomService {
             String maxIndexStr = "";
             int maxIndexEnd = 0;
             String upNum = "";
-            if(pbomsons.size()==1){
-                maxIndexStr = pbomsons.get(0).getLineIndex()+".";
+            if (pbomsons.size() == 1) {
+                maxIndexStr = pbomsons.get(0).getLineIndex() + ".";
                 upNum = pbomsons.get(0).getSortNum();
-            }else {
-                for(HzPbomLineRecord pbomSon : pbomsons){
+            } else {
+                for (HzPbomLineRecord pbomSon : pbomsons) {
                     String[] indexStrs = pbomSon.getLineIndex().split("\\.");
                     int pbomSonIndexLength = indexStrs.length;
-                    if(pbomSonIndexLength-1==fatherIndexLength ){
-                        Integer indexEnd = Integer.valueOf(indexStrs[indexStrs.length-1]);
-                        if(indexEnd>maxIndexEnd){
+                    if (pbomSonIndexLength - 1 == fatherIndexLength) {
+                        Integer indexEnd = Integer.valueOf(indexStrs[indexStrs.length - 1]);
+                        if (indexEnd > maxIndexEnd) {
                             maxIndexEnd = indexEnd;
                             maxIndexStr = pbomSon.getLineIndex();
                             upNum = pbomSon.getSortNum();
@@ -1212,12 +1215,12 @@ public class HzPbomServiceImpl implements HzPbomService {
             }
 
             int splitIndex = maxIndexStr.lastIndexOf(".");
-            String indexStr = maxIndexStr.substring(0,splitIndex)+"."+String.valueOf(maxIndexEnd+10);
+            String indexStr = maxIndexStr.substring(0, splitIndex) + "." + String.valueOf(maxIndexEnd + 10);
             hzPbomLineRecordAddSon.setLineIndex(indexStr);
 
             //num
-            String downNum = hzPbomRecordDAO.findMinOrderNumWhichGreaterThanThisOrderNum(projectId,upNum);
-            String num = HzBomSysFactory.generateBomSortNum(projectId,upNum,downNum);
+            String downNum = hzPbomRecordDAO.findMinOrderNumWhichGreaterThanThisOrderNum(projectId, upNum);
+            String num = HzBomSysFactory.generateBomSortNum(projectId, upNum, downNum);
             hzPbomLineRecordAddSon.setSortNum(num);
 
             //PUID
@@ -1236,22 +1239,22 @@ public class HzPbomServiceImpl implements HzPbomService {
             hzPbomLineRecordAddSon.setIsHas(0);
             hzPbomLineRecordsAddSons.add(hzPbomLineRecordAddSon);
             //修改父的isHas
-            if(hzPbomLineRecord.getIsHas()!=1){
+            if (hzPbomLineRecord.getIsHas() != 1) {
                 hzPbomLineRecord.setIsHas(1);
                 hzPbomRecordDAO.update(hzPbomLineRecord);
             }
         }
-        if(hzPbomLineRecordsAddSons.size()>0&&hzPbomLineRecordsAddSons!=null){
+        if (hzPbomLineRecordsAddSons.size() > 0 && hzPbomLineRecordsAddSons != null) {
             int insertFlag = hzPbomRecordDAO.insertList(hzPbomLineRecordsAddSons);
-            if(insertFlag==1){
-                result.put("success",true);
-            }else{
-                result.put("success",false);
-                result.put("errMsg","添加失败");
+            if (insertFlag == 1) {
+                result.put("success", true);
+            } else {
+                result.put("success", false);
+                result.put("errMsg", "添加失败");
             }
-        }else {
-            result.put("success",false);
-            result.put("errMsg","添加失败");
+        } else {
+            result.put("success", false);
+            result.put("errMsg", "添加失败");
         }
 
         return result;

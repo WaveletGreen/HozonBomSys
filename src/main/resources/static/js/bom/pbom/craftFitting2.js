@@ -1151,8 +1151,13 @@ function doGetTableByNode(va) {
         "</tr><tr>" +
         "<th>工位</th>" +
         "<td>" + (va.station == undefined ? "" : va.station) + "</td>" +
-        "</tr>" +
-        "</table>";
+        "</tr>" + "<tr>";
+    if (undefined != va.lineIndex && null != va.lineIndex) {
+        rel += "<th>工位</th>" +
+            "<td>" + (va.lineIndex == undefined ? "" : va.lineIndex) + "</td>" +
+            "</tr>"
+    }
+    rel += "</table>";
     return rel;
 }
 
