@@ -634,9 +634,7 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
                 if("F".equals(materielCodeHeadUp)||"Q".equals(materielCodeHeadUp)){
                     iterator.remove();
                 }
-            }catch (Exception e){
-
-            }
+            }catch (Exception e){ }
         }
         //找出所有没有工艺路线的物料
         for(HzMaterielRecord hzMaterielRecord : hzMaterielRecords){
