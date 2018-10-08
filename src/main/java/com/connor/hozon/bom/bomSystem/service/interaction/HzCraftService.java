@@ -128,12 +128,29 @@ public class HzCraftService implements IHzCraftService {
             //设置合成源的父层是否isHas，是否为Y
             craftSrcParent();
             craftInsert(targetTreeMap);
+            craftTargetsIsHas(targetUids);
         } catch (CloneNotSupportedException e) {
             e.printStackTrace();
         } catch (Exception e) {
             e.printStackTrace();
         }
         return false;
+    }
+
+    /**
+     * 目标节点需要设置isHas为1
+     *
+     * @param targetUids
+     */
+    private void craftTargetsIsHas(List<String> targetUids) {
+        HzPbomLineRecord record = new HzPbomLineRecord();
+        for (int i = 0; i < targetUids.size(); i++) {
+            record.setIsHas(1);
+            record.seteBomPuid(targetUids.get(i));
+            if (!isInsertDebug) {
+                hzPbomRecordDAO.update(record);
+            }
+        }
     }
 
     /**
@@ -195,7 +212,7 @@ public class HzCraftService implements IHzCraftService {
             //设置第一位排序号
             pbom.setSortNum(String.valueOf(_temp));
             //设置查找编号
-            pbom.setLineIndex(craft.getLine().getLineIndex());
+            pbom.setLineIndex(craft.getLine().getLineIndex()+"."+craft.getIndex());
             //设置层级
             //克隆一份出来
             target.getChildrenTree().add(pbom.clone());
@@ -366,6 +383,7 @@ public class HzCraftService implements IHzCraftService {
                     }
                 }
             }
+            //不是父层的层级进行调整层级
             if (!myWavelet.isEmpty()) {
                 for (Map.Entry<String, Map<String, HzPbomLineRecord>> childrenEntry : myWavelet.entrySet()) {
                     if (childrenEntry != null) {
@@ -387,7 +405,7 @@ public class HzCraftService implements IHzCraftService {
                                 //设置父层UID
                                 record.setParentUid(pbom.geteBomPuid());
                                 //设置查找编号
-                                record.setLineIndex(craft.getLine().getLineIndex() + "." + (lineIndex));
+                                record.setLineIndex(pbom.getLineIndex() + "." + (lineIndex));
                                 //克隆一份
                                 target.getChildrenTree().add(record.clone());
 
@@ -496,7 +514,7 @@ public class HzCraftService implements IHzCraftService {
         record.setColorPart(0);
 
         //设置为工艺合件
-//        record.setIsNewPart(2);
+        record.setIsNewPart(2);
 
         ///lineIndex根据挂载位置进行规则进行设置
         //sortNum根据挂载位置进行规则进行设置

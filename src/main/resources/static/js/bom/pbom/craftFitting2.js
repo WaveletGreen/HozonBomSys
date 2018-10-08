@@ -57,27 +57,7 @@ $(document).ready(function () {
         return;
     }
     $("#queryBtn1").click(function () {
-        var val = $("#queryLineId").val();
-        if (val == "") {
-            window.Ewin.alert({message: "请输入您要查询的零件号"});
-        }
-        else {
-            $.ajax({
-                type: "GET",
-                url: "pbom/processComposeTree?lineId=" + val + "&projectId=" + getProjectUid(),
-                undefinedText: "",//当数据为 undefined 时显示的字符
-                success: function (data) {
-                    if (!data.success) {
-                        window.Ewin.alert({message: data.errMsg});
-                        return;
-                    }
-                    var zNodes = data.externalObject;
-                    initZtree(zNodes);
-                    $("#info_div span").text("第二步：选择需要合成的零件(至少2个,选父影响子，选子不影响父)");
-                    $("#info_div").css("top", "20%");
-                },
-            });
-        }
+        querySrc();
     })
     initZtree = function (zNodes) {
         var treeObj = $.fn.zTree.getZTreeObj("Ztree1");
@@ -515,8 +495,8 @@ var setting = {
                 console.log("#################################################################");
             }
             //提示表格
+            clearInfoTable();
             let selectedToCraftTable = $("#selectedToCraftTable");
-            selectedToCraftTable.html("");
             let _tr = document.createElement("tr");
             let _th = document.createElement("th");
             _th.innerHTML = "已选择的父节点是:";
@@ -527,15 +507,8 @@ var setting = {
             let parentLength = 0;
             let childrenLength = 0;
             /**清空*/
-            if (parentsPuids.length > 0) {
-                parentsPuids.splice(0, parentsPuids.length);
-                parentsParts.splice(0, parentsParts.length);
-            }
-            if (childrenPuids.length > 0) {
-                childrenPuids.splice(0, childrenPuids.length);
-                childrenParts.splice(0, childrenParts.length);
-            }
-
+            removeParents();
+            removeChildren();
             /*** 先获获取长度*/
             parentLength = getLength(parentNode);
             childrenLength = getLength2(childrenNode);
@@ -1608,6 +1581,8 @@ function assignPoints() {
  * 查询挂载树
  */
 function queryAssignTree() {
+    removeTargets();
+    clearTargetTable();
     var val = $("#queryLineId2").val();
     if (val == "") {
         window.Ewin.alert({message: "请输入您要查询的零件号"});
@@ -1843,7 +1818,7 @@ function checkAssignToItself(treeNode, checked) {
  */
 function tellMeWhatISelected() {
     let selectedTargetTable = $("#selectedTargetTable");
-    selectedTargetTable.html("");
+    clearTargetTable();
     let _tr = document.createElement("tr");
     let _th = document.createElement("th");
     _th.innerHTML = "已选择节点是:";
@@ -1956,5 +1931,100 @@ function setUnCheckable(treeNode, treeObj) {
         treeObj.setting.view.fontCss["color"] = "#c6ff6c";
         treeNode.chkDisabled = true;
         treeObj.updateNode(treeNode);
+    }
+}
+
+/**
+ * 清空父层缓存
+ */
+function removeParents() {
+    if (parentsPuids.length > 0) {
+        parentsPuids.splice(0, parentsPuids.length);
+        parentsParts.splice(0, parentsParts.length);
+    }
+
+}
+
+/**
+ * 移除已选择的父层
+ */
+function removeCheckedParent() {
+    parent = {};
+    parentNode = {};
+}
+
+/**
+ * 清空子层缓存
+ */
+function removeChildren() {
+    if (childrenPuids.length > 0) {
+        childrenPuids.splice(0, childrenPuids.length);
+        childrenParts.splice(0, childrenParts.length);
+    }
+}
+
+/**
+ * 移除已选择的子层
+ */
+function removeCheckedChildren() {
+    children = {};
+    childrenNode = {};
+}
+
+/**
+ * 清空目标缓存
+ */
+function removeTargets() {
+    if (targetNode.length > 0) {
+        targetNode.splice(0, targetNode.length);
+        targetPointPuids.splice(0, targetPointPuids.length);
+        targetPointParts.splice(0, targetPointParts.length);
+    }
+}
+
+/**
+ * 清空提示表
+ */
+function clearInfoTable() {
+    $("#selectedToCraftTable").html("");
+}
+
+/**
+ * 清空目标提示表
+ */
+function clearTargetTable() {
+    $("#selectedTargetTable").html("");
+}
+
+/**
+ * 查询合成源
+ */
+function querySrc() {
+    removeParents();
+    removeChildren();
+    removeCheckedParent();
+    removeCheckedChildren();
+    clearInfoTable();
+    var val = $("#queryLineId").val();
+
+    if (val == "") {
+        window.Ewin.alert({message: "请输入您要查询的零件号"});
+    }
+    else {
+        $.ajax({
+            type: "GET",
+            url: "pbom/processComposeTree?lineId=" + val + "&projectId=" + getProjectUid(),
+            undefinedText: "",//当数据为 undefined 时显示的字符
+            success: function (data) {
+                if (!data.success) {
+                    window.Ewin.alert({message: data.errMsg});
+                    return;
+                }
+                var zNodes = data.externalObject;
+                initZtree(zNodes);
+                $("#info_div span").text("第二步：选择需要合成的零件(至少2个,选父影响子，选子不影响父)");
+                $("#info_div").css("top", "20%");
+            },
+        });
     }
 }
