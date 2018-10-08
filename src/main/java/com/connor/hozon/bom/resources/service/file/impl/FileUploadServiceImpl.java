@@ -13,6 +13,7 @@ import com.connor.hozon.bom.resources.service.file.FileUploadService;
 import com.connor.hozon.bom.resources.util.ExcelUtil;
 import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.resources.util.PrivilegeUtil;
+import com.connor.hozon.bom.resources.util.StringUtil;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -171,7 +172,22 @@ public class FileUploadServiceImpl implements FileUploadService {
             if(ListUtil.isNotEmpty(records)){
                 records.forEach(record -> {
                     if(carParts.contains(record.getpBomLinePartResource())){
-                        hzPbomLineRecords.add(HzPbomRecordFactory.ImportEbomRecordToPbomRecord(record));
+                        HzPbomLineRecord pbomLineRecord = HzPbomRecordFactory.ImportEbomRecordToPbomRecord(record);
+                        if(Integer.valueOf(1).equals(pbomLineRecord.getIsHas())){
+                            boolean findChildren = false;
+                            for(HzImportEbomRecord r :records){
+                                if(carParts.contains(r.getpBomLinePartResource())){
+                                    if(pbomLineRecord.geteBomPuid().equals(r.getParentId())){
+                                        findChildren = true;
+                                        break;
+                                    }
+                                }
+                            }
+                            if(!findChildren){
+                                pbomLineRecord.setIsHas(0);
+                            }
+                        }
+                        hzPbomLineRecords.add(pbomLineRecord);
                     }
                 });
 
@@ -612,30 +628,75 @@ public class FileUploadServiceImpl implements FileUploadService {
         for(int numSheet = 0; numSheet < workbook.getNumberOfSheets(); numSheet++ ){
             Sheet sheet = workbook.getSheetAt(numSheet);
             for(int rowNum = 1; rowNum <= sheet.getLastRowNum(); rowNum++){
+                String lineId=ExcelUtil.getCell(sheet.getRow(rowNum),1).getStringCellValue();
                 String level = ExcelUtil.getCell(sheet.getRow(rowNum),3).getStringCellValue();
-                if(level.endsWith("Y") && rowNum !=sheet.getLastRowNum()){
-                    int lev = Integer.valueOf(level.replace("Y",""))+1;
-                    String nextLevel = ExcelUtil.getCell(sheet.getRow(rowNum+1),3).getStringCellValue();
-                    if(!nextLevel.equals(lev+"Y") && !nextLevel.equals(String.valueOf(lev-1))){
-                        stringBuffer.append("第"+(rowNum+1)+"行的层级填写不正确，" +
-                                ""+level+"下的层级应该为:<strong>"+lev+"Y</strong>"+"或者<strong>"+(lev-1)+"</strong>" +
-                                ";而实际为:"+nextLevel+"</br>");
-                        this.errorCount++;
-                        continue;
-                    }
+                String pBomLinePartResource=ExcelUtil.getCell(sheet.getRow(rowNum),39).getStringCellValue();
+                if(StringUtil.isEmpty(lineId)){
+                    stringBuffer.append("第"+(rowNum)+"行的零件名称不能为<strong>空</strong></br>") ;
+                    this.errorCount++;
                 }
-
-
-                if(rowNum == sheet.getLastRowNum()){
-                    if(level.endsWith("Y")){
-                        stringBuffer.append("最后一行的层级不能带Y,因为找不到他的子层!");
-                        this.errorCount++;
-                        continue;
-                    }
+                if(StringUtil.isEmpty(level)){
+                    stringBuffer.append("第"+(rowNum)+"行的层级不能为<strong>空</strong></br>") ;
+                    this.errorCount++;
+                }else if(level.endsWith("y")){
+                    stringBuffer.append("第"+(rowNum)+"行的层级填写不正确，层级尾缀应该填写为:<strong>Y</strong></br>") ;
+                    this.errorCount++;
                 }
+                if(StringUtil.isEmpty(pBomLinePartResource)){
+                    this.errorCount++;
+                    stringBuffer.append("第"+(rowNum)+"行的零部件来源不能为<strong>空</strong></br>") ;
+                }
+                continue;
             }
-
         }
+        if(this.errorCount == 0){
+            for(int numSheet = 0; numSheet < workbook.getNumberOfSheets(); numSheet++ ){
+                Sheet sheet = workbook.getSheetAt(numSheet);
+                for(int rowNum = 1; rowNum <= sheet.getLastRowNum(); rowNum++){
+                    String level = ExcelUtil.getCell(sheet.getRow(rowNum),3).getStringCellValue();
+                    int lev = Integer.valueOf(level.replace("Y",""))+1;
+                    if(level.endsWith("Y") && (rowNum)!=sheet.getLastRowNum()){
+                        String nextLevel = ExcelUtil.getCell(sheet.getRow(rowNum+1),3).getStringCellValue();
+                        if(!nextLevel.equals(lev+"Y") && !nextLevel.equals(String.valueOf(lev-1))){
+                            stringBuffer.append("第"+(rowNum+1)+"行的层级填写不正确，" +
+                                    ""+level+"下的层级应该为:<strong>"+lev+"Y</strong>"+"或者<strong>"+(lev-1)+"</strong>" +
+                                    ";而实际为:"+nextLevel+"</br>");
+                            this.errorCount++;
+                            continue;
+                        }
+                    }
+
+                    for(int i = rowNum+1;i<sheet.getLastRowNum();i++){
+                        String nextLevel = ExcelUtil.getCell(sheet.getRow(i),3).getStringCellValue();
+                        String nextLev = level.replace("Y","");
+                        int nextL = Integer.valueOf(nextLev);
+                        if(nextLevel.endsWith("Y")){
+                            break;
+                        }else if(!nextLevel.equals(nextLev) && Integer.valueOf(nextLevel)>nextL){
+                            String s = "第"+(i)+"行的层级填写不正确，" +
+                                    "应该为:<strong>"+(lev)+"Y</strong>"+"或者<strong>"+(lev-1)+"</strong>" +
+                                    ";而实际为:"+nextLevel+"</br>";
+                            if(!stringBuffer.toString().contains(s)){
+                                stringBuffer.append(s);
+                            }
+                            this.errorCount++;
+                            break;
+                        }
+                    }
+
+                    if(rowNum == sheet.getLastRowNum()){
+                        if(level.endsWith("Y")){
+                            stringBuffer.append("最后一行的层级不能带Y,因为找不到他的子层!</br>");
+                            this.errorCount++;
+                            continue;
+                        }
+                    }
+                }
+
+            }
+        }
+
         return stringBuffer.toString();
     }
+
 }

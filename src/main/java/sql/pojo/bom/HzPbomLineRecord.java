@@ -9,11 +9,7 @@ import java.util.Objects;
  * Created by haozt on 2018/5/25
  * EBOM 和PBOM 两张表信息  继承自EBOM  维护PBOM
  */
-public class HzPbomLineRecord implements Cloneable {
-    /**
-     * EBOM 表主键
-     */
-    private String pPuid;
+public class HzPbomLineRecord {
     private String parentUid;
     private Integer isDept;
     private String bomDigifaxId;
@@ -51,7 +47,7 @@ public class HzPbomLineRecord implements Cloneable {
     private String pBomOfWhichDept;
 
     /**
-     * 主键id
+     *主键id
      */
     private String puid;
 
@@ -68,15 +64,15 @@ public class HzPbomLineRecord implements Cloneable {
      */
     private Integer buyUnit;
     /**
-     * 车间1
+     *车间1
      */
     private String workShop1;
     /**
-     * 车间2
+     *车间2
      */
     private String workShop2;
     /**
-     * 生产线
+     *生产线
      */
     private String productLine;
     /**
@@ -122,6 +118,16 @@ public class HzPbomLineRecord implements Cloneable {
     private Integer pLouaFlag;
 
     private String sortNum;
+
+    private Integer isNewPart;
+
+    public Integer getIsNewPart() {
+        return isNewPart;
+    }
+
+    public void setIsNewPart(Integer isNewPart) {
+        this.isNewPart = isNewPart;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -177,13 +183,6 @@ public class HzPbomLineRecord implements Cloneable {
         this.eBomPuid = eBomPuid;
     }
 
-    public String getpPuid() {
-        return pPuid;
-    }
-
-    public void setpPuid(String pPuid) {
-        this.pPuid = pPuid;
-    }
 
     public String getLineIndex() {
         return lineIndex;

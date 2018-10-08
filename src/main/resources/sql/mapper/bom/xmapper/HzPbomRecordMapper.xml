@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="HzPbomRecord">
-  <resultMap id="BaseResultMap" type="sql.pojo.bom.HzPbomRecord">
+<mapper namespace="HzPbomRecordMapper">
+  <resultMap id="HzPbomLineRecord" type="sql.pojo.bom.HzPbomLineRecord">
     <id column="PUID" jdbcType="VARCHAR" property="puid" />
     <result column="P_RESOURCE" jdbcType="VARCHAR" property="resource" />
     <result column="P_TYPE" jdbcType="INTEGER" property="type" />
@@ -19,9 +19,8 @@
     <result column="P_UPDATE_NAME" jdbcType="VARCHAR" property="updateName" />
     <result column="P_PBOM_STATUS" jdbcType="INTEGER" property="status" />
     <result column="P_E_BOM_PUID" jdbcType="VARCHAR" property="eBomPuid" />
-  </resultMap>
 
-  <resultMap extends="BaseResultMap"  id="HzPbomLineRecord" type="sql.pojo.bom.HzPbomLineRecord">
+
     <result column="P_PARENT_UID" jdbcType="VARCHAR" property="parentUid" />
     <result column="P_BOM_DIGIFAX_ID" jdbcType="VARCHAR" property="bomDigifaxId" />
     <result column="P_LINE_INDEX" jdbcType="VARCHAR" property="lineIndex" />
@@ -40,6 +39,7 @@
     <result column="P_LOU_LOA_FLAG" jdbcType="INTEGER" property="pLouaFlag"/>
     <result column="P_SORT_NUM" jdbcType="VARCHAR" property="sortNum" />
     <result column="P_COLOR_PART" jdbcType="INTEGER" property="colorPart" />
+    <result column="P_IS_NEW_PART" jdbcType="INTEGER" property="isNewPart" />
   </resultMap>
 
   <sql id="Pbom_List">
@@ -49,7 +49,7 @@
     P_LINE_INDEX, P_BOM_LINE_IS_HAS, P_BOM_LINE_PUID, P_BOM_LINE_ID, P_BOM_LINE_IS_2Y,
     P_BOM_LINE_IS_PART, P_BOM_LINE_IS_DEPT, P_BOM_OF_WHICH_DEPT, P_BOM_LINE_PART_NAME,
     P_BOM_LINE_PART_CLASS, P_BOM_LINE_PART_EN_NAME, P_BOM_LINE_PART_RESOURCE,P_BOM_ORDER_NUM,P_SORT_NUM,
-    P_COLOR_PART
+    P_COLOR_PART,P_IS_NEW_PART
   </sql>
 
 
@@ -187,7 +187,7 @@
     P_UPDATE_NAME, P_STATION,P_PARENT_UID,P_BOM_DIGIFAX_ID,P_E_BOM_PUID,
     P_LINE_INDEX,P_BOM_LINE_IS_HAS,P_BOM_LINE_PUID,P_BOM_LINE_ID,P_BOM_LINE_IS_2Y,
     P_BOM_LINE_IS_PART,P_BOM_LINE_IS_DEPT,P_BOM_OF_WHICH_DEPT,P_BOM_LINE_PART_NAME,
-    P_BOM_LINE_PART_CLASS,P_BOM_LINE_PART_EN_NAME,P_BOM_LINE_PART_RESOURCE,P_SORT_NUM,P_PBOM_STATUS)
+    P_BOM_LINE_PART_CLASS,P_BOM_LINE_PART_EN_NAME,P_BOM_LINE_PART_RESOURCE,P_SORT_NUM,P_PBOM_STATUS,P_IS_NEW_PART)
     <foreach collection="list" item="item" index="index" separator="UNION ALL">
       select
       #{item.puid,jdbcType=VARCHAR},#{item.resource,jdbcType=VARCHAR}, #{item.colorPart,jdbcType=INTEGER},
@@ -199,7 +199,7 @@
       #{item.isHas,jdbcType=INTEGER},#{item.linePuid,jdbcType=VARCHAR}, #{item.lineId,jdbcType=VARCHAR}, #{item.is2Y,jdbcType=INTEGER},
       #{item.isPart,jdbcType=INTEGER}, #{item.isDept,jdbcType=INTEGER}, #{item.pBomOfWhichDept,jdbcType=VARCHAR},
       #{item.pBomLinePartName,jdbcType=VARCHAR}, #{item.pBomLinePartClass,jdbcType=VARCHAR}, #{item.pBomLinePartEnName,jdbcType=VARCHAR},
-      #{item.pBomLinePartResource,jdbcType=VARCHAR},#{item.sortNum,jdbcType=VARCHAR},1
+      #{item.pBomLinePartResource,jdbcType=VARCHAR}，#{item.sortNum,jdbcType=VARCHAR},1,#{item.isNewPart,jdbcType=INTEGER}
       from DUAL
     </foreach>
   </insert>
@@ -278,104 +278,40 @@
       </if>
     </where>
   </select>
-  <!--插入-->
-  <insert id="HzPbomRecordDAOImpl_insert" parameterType="sql.pojo.bom.HzPbomRecord">
-    insert into HZ_PBOM_RECORD
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="puid != null">
-        PUID,
-      </if>
-      <if test="station != null">
-        P_STATION,
-      </if>
-      <if test="resource != null">
-        P_RESOURCE,
-      </if>
-      <if test="type != null">
-        P_TYPE,
-      </if>
-      <if test="buyUnit != null">
-        P_BUY_UNIT,
-      </if>
-      <if test="workShop1 != null">
-        P_WORK_SHOP1,
-      </if>
-      <if test="workShop2 != null">
-        P_WORK_SHOP2,
-      </if>
-      <if test="productLine != null">
-        P_PRODUCT_LINE,
-      </if>
-      <if test="mouldType != null">
-        P_MOULD_TYPE,
-      </if>
-      <if test="outerPart != null">
-        P_OUTER_PART,
-      </if>
-      <if test="colorPart != null">
-        P_COLOR_PART,
-      </if>
-        P_CREATE_TIME,
-        P_UPDATE_TIME,
-      <if test="createName != null">
-        P_CREATE_NAME,
-      </if>
-      <if test="updateName != null">
-        P_UPDATE_NAME,
-      </if>
-      <if test="sortNum != null">
-        P_SORT_NUM,
-      </if>
-        P_PBOM_STATUS
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="puid != null">
-        #{puid,jdbcType=VARCHAR},
-      </if>
-      <if test="station != null">
-        #{station,jdbcType=VARCHAR},
-      </if>
-      <if test="resource != null">
-        #{resource,jdbcType=VARCHAR},
-      </if>
-      <if test="type != null">
-        #{type,jdbcType=INTEGER},
-      </if>
-      <if test="buyUnit != null">
-        #{buyUnit,jdbcType=INTEGER},
-      </if>
-      <if test="workShop1 != null">
-        #{workShop1,jdbcType=VARCHAR},
-      </if>
-      <if test="workShop2 != null">
-        #{workShop2,jdbcType=VARCHAR},
-      </if>
-      <if test="productLine != null">
-        #{productLine,jdbcType=VARCHAR},
-      </if>
-      <if test="mouldType != null">
-        #{mouldType,jdbcType=VARCHAR},
-      </if>
-      <if test="outerPart != null">
-        #{outerPart,jdbcType=VARCHAR},
-      </if>
-      <if test="colorPart != null">
-        #{colorPart,jdbcType=INTEGER},
-      </if>
-      sysdate,
-      sysdate,
-      <if test="createName != null">
-          #{createName,jdbcType=VARCHAR},
-      </if>
-      <if test="updateName != null">
-          #{updateName,jdbcType=VARCHAR},
-      </if>
-      <if test="sortNum != null">
-        #{sortNum,jdbcType=VARCHAR},
-      </if>
-      2
-    </trim>
+
+
+  <!--插入单条-->
+  <insert id="HzPbomRecordDAOImpl_insert" parameterType="sql.pojo.bom.HzPbomLineRecord">
+    insert into HZ_PBOM_RECORD (PUID, P_RESOURCE, P_COLOR_PART,
+      P_E_BOM_PUID, P_PBOM_STATUS, P_TYPE,
+      P_BUY_UNIT, P_WORK_SHOP1, P_WORK_SHOP2,
+      P_PRODUCT_LINE, P_MOULD_TYPE, P_OUTER_PART,
+      P_CREATE_TIME, P_UPDATE_TIME, P_CREATE_NAME,
+      P_UPDATE_NAME, P_STATION, P_PARENT_UID,
+      P_BOM_DIGIFAX_ID, P_LINE_INDEX, P_BOM_LINE_IS_HAS,
+      P_BOM_LINE_PUID, P_BOM_LINE_ID, P_BOM_LINE_IS_2Y,
+      P_BOM_LINE_IS_PART, P_BOM_LINE_IS_DEPT, P_BOM_OF_WHICH_DEPT,
+      P_BOM_LINE_PART_NAME, P_BOM_LINE_PART_CLASS, P_BOM_LINE_PART_EN_NAME,
+      P_BOM_LINE_PART_RESOURCE,
+      P_LOU_LOA_FLAG, P_SORT_NUM, P_IS_NEW_PART
+      )
+    values (#{puid,jdbcType=VARCHAR}, #{resource,jdbcType=VARCHAR}, #{colorPart,jdbcType=INTEGER},
+      #{eBomPuid,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, #{type,jdbcType=INTEGER},
+      #{buyUnit,jdbcType=INTEGER}, #{workShop1,jdbcType=VARCHAR}, #{workShop2,jdbcType=VARCHAR},
+      #{productLine,jdbcType=VARCHAR}, #{mouldType,jdbcType=VARCHAR}, #{outerPart,jdbcType=VARCHAR},
+      sysdate,sysdate, #{createName,jdbcType=VARCHAR},
+      #{updateName,jdbcType=VARCHAR}, #{station,jdbcType=VARCHAR}, #{parentUid,jdbcType=VARCHAR},
+      #{bomDigifaxId,jdbcType=VARCHAR}, #{lineIndex,jdbcType=VARCHAR}, #{isHas,jdbcType=INTEGER},
+      #{linePuid,jdbcType=VARCHAR}, #{lineId,jdbcType=VARCHAR}, #{is2Y,jdbcType=INTEGER},
+      #{isPart,jdbcType=INTEGER}, #{isDept,jdbcType=INTEGER}, #{pBomOfWhichDept,jdbcType=VARCHAR},
+      #{pBomLinePartName,jdbcType=VARCHAR}, #{pBomLinePartClass,jdbcType=VARCHAR}, #{pBomLinePartEnName,jdbcType=VARCHAR},
+      #{pBomLinePartResource,jdbcType=VARCHAR},
+      #{pLouaFlag,jdbcType=INTEGER}, #{sortNum,jdbcType=VARCHAR}, #{isNewPart,jdbcType=INTEGER}
+      )
   </insert>
+
+
+
 
   <!--更新-->
   <update id="HzPbomRecordDAOImpl_update" parameterType="sql.pojo.bom.HzPbomLineRecord">
@@ -621,6 +557,7 @@
     <where>
       t2.puid=#{projectId,jdbcType=VARCHAR}))
       and t1.P_BOM_LINE_IS_2Y=1
+      and t1.P_PBOM_STATUS<![CDATA[ <> ]]>0
     </where>
   </select>
 

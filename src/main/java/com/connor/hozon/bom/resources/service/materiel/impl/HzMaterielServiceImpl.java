@@ -4,6 +4,7 @@ import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.resources.domain.dto.request.EditHzMaterielReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzMaterielRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.OperateResultMessageRespDTO;
+import com.connor.hozon.bom.resources.domain.model.HzMaterielFactory;
 import com.connor.hozon.bom.resources.domain.query.HzMaterielByPageQuery;
 import com.connor.hozon.bom.resources.domain.query.HzMaterielQuery;
 import com.connor.hozon.bom.resources.domain.query.HzMbomByPageQuery;
@@ -16,6 +17,7 @@ import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.service.materiel.HzMaterielService;
 import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.resources.util.PrivilegeUtil;
+import com.connor.hozon.bom.resources.util.StringUtil;
 import com.connor.hozon.bom.sys.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -171,69 +173,69 @@ public class HzMaterielServiceImpl implements HzMaterielService {
          * 61自制备件物料主数据）
          */
         try{
-            Integer type = query.getpMaterielDataType();
-            //默认工厂为1001工厂
-            HzFactory factory = hzFactoryDAO.findFactory("","1001");
-            String puid = UUID.randomUUID().toString();
-            if(factory == null) {
-                factory = new HzFactory();
-                factory.setPuid(puid);
-                factory.setpFactoryCode("1001");
-                factory.setpUpdateName(user.getUserName());
-                factory.setpCreateName(user.getUserName());
-                hzFactoryDAO.insert(factory);
-            }
+//            Integer type = query.getpMaterielDataType();
+//            //默认工厂为1001工厂
+//            HzFactory factory = hzFactoryDAO.findFactory("","1001");
+//            String puid = UUID.randomUUID().toString();
+//            if(factory == null) {
+//                factory = new HzFactory();
+//                factory.setPuid(puid);
+//                factory.setpFactoryCode("1001");
+//                factory.setpUpdateName(user.getUserName());
+//                factory.setpCreateName(user.getUserName());
+//                hzFactoryDAO.insert(factory);
+//            }
 
             //一次性同步所有数据，后期对应数据变化 进行分步 同步
-            int m2=hzMaterielDAO.getHzMaterielCount(query.getProjectId(),21);
-            int m3= hzMaterielDAO.getHzMaterielCount(query.getProjectId(),31);
-            int m4 =hzMaterielDAO.getHzMaterielCount(query.getProjectId(),41);
-            int m5 =hzMaterielDAO.getHzMaterielCount(query.getProjectId(),51);
-            int m6 =hzMaterielDAO.getHzMaterielCount(query.getProjectId(),61);
-            int m7 = hzMaterielDAO.getHzMaterielCount(query.getProjectId(),71);
-            if(m2<=0){
-                List<HzCfg0ModelRecord> cfg0ModelRecords = hzMaterielDAO.findHzCfg0ModelRecordAll(query);
-                if(ListUtil.isNotEmpty(cfg0ModelRecords)){
-                    int size = cfg0ModelRecords.size();
-                    //分批插入数据 一次1000条
-                    int i =0;
-                    int cou = 0;
-                    if(size>1000){
-                        for(i =0;i<size/1000;i++){
-                            List<HzMaterielRecord> materielRecords2 = new ArrayList<>();
-                            for(int j = 0;j<1000;j++){
-                                HzCfg0ModelRecord record = cfg0ModelRecords.get(cou);
-                                HzMaterielRecord hzMaterielRecord  =m2(record,query.getProjectId());
-                                if(factory!=null){
-                                    hzMaterielRecord.setpFactoryPuid(factory.getPuid());
-                                }
-                                else{
-                                    hzMaterielRecord.setpFactoryPuid(puid);
-                                }
-                                materielRecords2.add(hzMaterielRecord);
-                                cou++;
-                            }
-                            hzMaterielDAO.insertList(materielRecords2);
-                        }
-                    }
-                    if(i*1000<size){
-                        List<HzMaterielRecord> materielRecords2 = new ArrayList<>();
-                        for(int j = 0;j<size-i*1000;j++){
-                            HzCfg0ModelRecord record = cfg0ModelRecords.get(cou);
-                            HzMaterielRecord hzMaterielRecord  =m2(record,query.getProjectId());
-                            if(factory!=null){
-                                hzMaterielRecord.setpFactoryPuid(factory.getPuid());
-                            }
-                            else{
-                                hzMaterielRecord.setpFactoryPuid(puid);
-                            }
-                            materielRecords2.add(hzMaterielRecord);
-                            cou++;
-                        }
-                        hzMaterielDAO.insertList(materielRecords2);
-                    }
-                }
-            }
+//            int m2=hzMaterielDAO.getHzMaterielCount(query.getProjectId(),21);
+//            int m3= hzMaterielDAO.getHzMaterielCount(query.getProjectId(),31);
+//            int m4 =hzMaterielDAO.getHzMaterielCount(query.getProjectId(),41);
+//            int m5 =hzMaterielDAO.getHzMaterielCount(query.getProjectId(),51);
+//            int m6 =hzMaterielDAO.getHzMaterielCount(query.getProjectId(),61);
+//            int m7 = hzMaterielDAO.getHzMaterielCount(query.getProjectId(),71);
+//            if(m2<=0){
+//                List<HzCfg0ModelRecord> cfg0ModelRecords = hzMaterielDAO.findHzCfg0ModelRecordAll(query);
+//                if(ListUtil.isNotEmpty(cfg0ModelRecords)){
+//                    int size = cfg0ModelRecords.size();
+//                    //分批插入数据 一次1000条
+//                    int i =0;
+//                    int cou = 0;
+//                    if(size>1000){
+//                        for(i =0;i<size/1000;i++){
+//                            List<HzMaterielRecord> materielRecords2 = new ArrayList<>();
+//                            for(int j = 0;j<1000;j++){
+//                                HzCfg0ModelRecord record = cfg0ModelRecords.get(cou);
+//                                HzMaterielRecord hzMaterielRecord  =m2(record,query.getProjectId());
+//                                if(factory!=null){
+//                                    hzMaterielRecord.setpFactoryPuid(factory.getPuid());
+//                                }
+//                                else{
+//                                    hzMaterielRecord.setpFactoryPuid(puid);
+//                                }
+//                                materielRecords2.add(hzMaterielRecord);
+//                                cou++;
+//                            }
+//                            hzMaterielDAO.insertList(materielRecords2);
+//                        }
+//                    }
+//                    if(i*1000<size){
+//                        List<HzMaterielRecord> materielRecords2 = new ArrayList<>();
+//                        for(int j = 0;j<size-i*1000;j++){
+//                            HzCfg0ModelRecord record = cfg0ModelRecords.get(cou);
+//                            HzMaterielRecord hzMaterielRecord  =m2(record,query.getProjectId());
+//                            if(factory!=null){
+//                                hzMaterielRecord.setpFactoryPuid(factory.getPuid());
+//                            }
+//                            else{
+//                                hzMaterielRecord.setpFactoryPuid(puid);
+//                            }
+//                            materielRecords2.add(hzMaterielRecord);
+//                            cou++;
+//                        }
+//                        hzMaterielDAO.insertList(materielRecords2);
+//                    }
+//                }
+//            }
 
 //            int m = m3+m4+m5+m6+m7;
 //            if(m<=0){
@@ -522,10 +524,10 @@ public class HzMaterielServiceImpl implements HzMaterielService {
 //                }
 //            }
 
-            if(type!=null){
-                List<HzMaterielRecord> list = new ArrayList<>();
-                switch (type){
-                    case 11:
+//            if(type!=null){
+//                List<HzMaterielRecord> list = new ArrayList<>();
+//                switch (type){
+//                    case 11:
 //                        HzMbomByPageQuery hzMbomByPageQuery = new HzMbomByPageQuery();
 //                        hzMbomByPageQuery.setProjectId(query.getProjectId());
 //                        hzMbomByPageQuery.setpBomLinePartResource("自制总成");
@@ -553,36 +555,36 @@ public class HzMaterielServiceImpl implements HzMaterielService {
 //                                hzMaterielDAO.insertList(list);
 //                            }
 //                        }
-                        break;
-                    case 21:
-                        List<HzCfg0ModelRecord> cfg0ModelRecords = hzMaterielDAO.findHzCfg0ModelRecordAll(query);
-                        if(ListUtil.isNotEmpty(cfg0ModelRecords)){
-                            for(HzCfg0ModelRecord record :cfg0ModelRecords){
-                                Map<String,Object> map = new HashMap<>();
-                                //外键id
-                                map.put("materielResourceId",record.getPuid());
-                                map.put("projectId",query.getProjectId());
-                                boolean b = hzMaterielDAO.HzMaterielIsExist(map);
-                                if(b){
-                                    continue;
-                                }else{
-                                    HzMaterielRecord hzMaterielRecord = m2(record,query.getProjectId());
-                                    if(factory!=null){
-                                        hzMaterielRecord.setpFactoryPuid(factory.getPuid());
-                                    }
-                                    else{
-                                        hzMaterielRecord.setpFactoryPuid(puid);
-                                    }
-                                    list.add(hzMaterielRecord);
-                                }
-                            }
-                            if(ListUtil.isNotEmpty(list)){
-                                hzMaterielDAO.insertList(list);
-                            }
-                        }
-                        break;
-
-                    case 31:
+//                        break;
+//                    case 21:
+//                        List<HzCfg0ModelRecord> cfg0ModelRecords = hzMaterielDAO.findHzCfg0ModelRecordAll(query);
+//                        if(ListUtil.isNotEmpty(cfg0ModelRecords)){
+//                            for(HzCfg0ModelRecord record :cfg0ModelRecords){
+//                                Map<String,Object> map = new HashMap<>();
+//                                //外键id
+//                                map.put("materielResourceId",record.getPuid());
+//                                map.put("projectId",query.getProjectId());
+//                                boolean b = hzMaterielDAO.HzMaterielIsExist(map);
+//                                if(b){
+//                                    continue;
+//                                }else{
+//                                    HzMaterielRecord hzMaterielRecord = m2(record,query.getProjectId());
+//                                    if(factory!=null){
+//                                        hzMaterielRecord.setpFactoryPuid(factory.getPuid());
+//                                    }
+//                                    else{
+//                                        hzMaterielRecord.setpFactoryPuid(puid);
+//                                    }
+//                                    list.add(hzMaterielRecord);
+//                                }
+//                            }
+//                            if(ListUtil.isNotEmpty(list)){
+//                                hzMaterielDAO.insertList(list);
+//                            }
+//                        }
+//                        break;
+//
+//                    case 31:
 //                        HzMbomByPageQuery mbomByPageQuery = new HzMbomByPageQuery();
 //                        mbomByPageQuery.setProjectId(query.getProjectId());
 //                        List<HzMbomLineRecord> hzMbomLineRecords = hzMbomRecordDAO.findHz2YMbomRecordAll(mbomByPageQuery);
@@ -610,8 +612,8 @@ public class HzMaterielServiceImpl implements HzMaterielService {
 //                                hzMaterielDAO.insertList(list);
 //                            }
 //                        }
-                        break;
-                    case 41:
+//                        break;
+//                    case 41:
 //                        HzMbomByPageQuery mbom = new HzMbomByPageQuery();
 //                        mbom.setProjectId(query.getProjectId());
 //                        mbom.setpBomLinePartResource("自制单件");
@@ -698,10 +700,10 @@ public class HzMaterielServiceImpl implements HzMaterielService {
 //                                hzMaterielDAO.insertList(list);
 //                            }
 //                        }
-                        break;
-                    default:break;
-                }
-            }
+//                        break;
+//                    default:break;
+//                }
+//            }
             Page<HzMaterielRecord> page = hzMaterielDAO.findHzMaterielForPage(query);
             int num = (page.getPageNumber()-1)*page.getPageSize();
             if(page == null || page.getResult() == null){
@@ -711,19 +713,13 @@ public class HzMaterielServiceImpl implements HzMaterielService {
             List<HzMaterielRecord> recordList = page.getResult();
             List<HzMaterielRespDTO> respDTOS = new ArrayList<>();
             for(HzMaterielRecord record:recordList){
-                HzMaterielRespDTO respDTO = recordToRespDTO(record);
+                HzMaterielRespDTO respDTO = HzMaterielFactory.hzMaterielRecordToRespDTO(record);
                 respDTO.setNo(++num);
-                if(null !=record.getpFactoryPuid()){
-                    HzFactory hzFactory = hzFactoryDAO.findFactory(record.getpFactoryPuid(),"");
-                    respDTO.setFactoryCode(hzFactory.getpFactoryCode());
-                }else {
-                    respDTO.setFactoryCode("1001");
-                }
                 respDTOS.add(respDTO);
             }
             return new Page<>(page.getPageNumber(),page.getPageSize(),page.getTotalCount(),respDTOS);
         }catch (Exception e){
-            return null;
+            return new Page<>(0,0,0);
         }
     }
 
@@ -733,7 +729,7 @@ public class HzMaterielServiceImpl implements HzMaterielService {
         try{
             HzMaterielRecord record = hzMaterielDAO.getHzMaterielRecord(query);
             if(record!= null){
-               return recordToRespDTO(record);
+               return HzMaterielFactory.hzMaterielRecordToRespDTO(record);
             }
         }catch (Exception e){
             return null;
@@ -742,78 +738,7 @@ public class HzMaterielServiceImpl implements HzMaterielService {
     }
 
 
-    private HzMaterielRespDTO recordToRespDTO(HzMaterielRecord record){
-        HzMaterielRespDTO respDTO = new HzMaterielRespDTO();
-        respDTO.setpBasicUnitMeasure(record.getpBasicUnitMeasure());
-        respDTO.setpMaterielCode(record.getpMaterielCode());
-        respDTO.setpMaterielDesc(record.getpMaterielDesc());
-        respDTO.setpMaterielDescEn(record.getpMaterielDescEn());
-        respDTO.setpMaterielType(record.getpMaterielType());
-        respDTO.setpMrpController(record.getpMrpController());
 
-
-        if(record.getpFactoryPuid() != null){
-            HzFactory hzFactory = hzFactoryDAO.findFactory(record.getpFactoryPuid(),"");
-            if(hzFactory !=null){
-                respDTO.setFactoryCode(hzFactory.getpFactoryCode());
-            }else{
-                respDTO.setFactoryCode("1001");
-            }
-        }else {
-            respDTO.setFactoryCode("1001");
-        }
-        respDTO.setPuid(record.getPuid());
-        Integer p3CPartFlag = record.getP3cPartFlag();
-        Integer colorPart = record.getpColorPart();
-        Integer inOutSideFlag = record.getpInOutSideFlag();
-        Integer inventedFlag = record.getpInventedPart();
-        Integer loosePartFlag = record.getpLoosePartFlag();
-        if (Integer.valueOf(0).equals(p3CPartFlag)) {
-            respDTO.setP3cPartFlag("N");
-        } else if (Integer.valueOf(1).equals(p3CPartFlag)) {
-            respDTO.setP3cPartFlag("Y");
-        } else {
-            respDTO.setP3cPartFlag("-");
-        }
-
-        if (Integer.valueOf(0).equals(inventedFlag)) {
-            respDTO.setpInventedPart("N");
-        } else if (Integer.valueOf(1).equals(inventedFlag)) {
-            respDTO.setpInventedPart("Y");
-        } else {
-            respDTO.setpInventedPart("-");
-        }
-
-        if (Integer.valueOf(0).equals(colorPart)) {
-            respDTO.setpColorPart("N");
-        } else if (Integer.valueOf(1).equals(colorPart)) {
-            respDTO.setpColorPart("Y");
-        } else {
-            respDTO.setpColorPart("-");
-        }
-
-        if (Integer.valueOf(1).equals(inOutSideFlag)) {
-            respDTO.setpInOutSideFlag("内饰件");
-        } else if (Integer.valueOf(0).equals(inOutSideFlag)) {
-            respDTO.setpInOutSideFlag("外饰件");
-        } else {
-            respDTO.setpInOutSideFlag("-");
-        }
-
-        if (Integer.valueOf(1).equals(loosePartFlag)) {
-            respDTO.setpLoosePartFlag("Y");
-        } else if (Integer.valueOf(0).equals(loosePartFlag)) {
-            respDTO.setpLoosePartFlag("N");
-        } else {
-            respDTO.setpLoosePartFlag("-");
-        }
-        respDTO.setpHeight(record.getpHeight());
-        respDTO.setpPartImportantDegree(record.getpPartImportantDegree());
-        respDTO.setpSpareMaterial(record.getpSpareMaterial());
-        respDTO.setpVinPerNo(record.getpVinPerNo());
-        respDTO.setResource(record.getResource());
-        return respDTO;
-    }
 
 
 

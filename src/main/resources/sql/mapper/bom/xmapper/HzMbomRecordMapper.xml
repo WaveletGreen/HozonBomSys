@@ -46,6 +46,7 @@
         <result column="P_SORT_NUM" jdbcType="VARCHAR" property="sortNum" />
         <result column="P_COLOR_PUID" jdbcType="VARCHAR" property="colorId" />
 
+
         <result column="P_BOM_TYPE" jdbcType="INTEGER" property="pBomType" />
         <result column="P_STOCK_LOCATION" jdbcType="VARCHAR" property="pStockLocation" />
         <result column="P_FACTORY_ID" jdbcType="VARCHAR" property="pFactoryId" />
@@ -58,6 +59,8 @@
         <result column="OBJECT_NAME" jdbcType="VARCHAR" property="objectName"/>
         <result column="OBJECT_DESC" jdbcType="VARCHAR" property="objectDesc"/>
         <result column="P_CFG0_MODEL_BASIC_DETAIL" jdbcType="VARCHAR" property="cfg0ModelBasicDetail"/>
+
+        <result column="P_FACTORY_CODE" jdbcType="VARCHAR" property="factoryCode" />
     </resultMap>
 
 
@@ -81,7 +84,10 @@
 
     <!--查询Mbom信息 分页-->
     <select id="HzMbomRecordDAOImpl_getMBomRecord" resultMap="MbomResultMap" parameterType="java.util.HashMap">
-        select t.* from ${tableName} t
+        select t.*,tt.P_FACTORY_CODE from ${tableName} t
+        left join HZ_FACTORY tt on t.p_factory_id = tt.puid
+        and t.P_MBOM_STATUS<![CDATA[ <> ]]>0
+        and tt.P_FACTORY_STATUS <![CDATA[ <> ]]>0
         where t.p_bom_digifax_id=(
         select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(
         select t2.puid from Hz_project_libs t2
@@ -103,12 +109,12 @@
                 and t.P_BOM_OF_WHICH_DEPT like CONCAT(CONCAT('%',#{pBomOfWhichDept,jdbcType=VARCHAR}),'%')
             </if>
             <if test="pBomLinePartClass != null and pBomLinePartClass!=''">
-                and P_BOM_LINE_PART_CLASS = #{pBomLinePartClass,jdbcType=VARCHAR}
+                and t.P_BOM_LINE_PART_CLASS = #{pBomLinePartClass,jdbcType=VARCHAR}
             </if>
             <if test="pBomLinePartResource != null and pBomLinePartResource!=''">
-                and P_BOM_LINE_PART_RESOURCE = #{pBomLinePartResource,jdbcType=VARCHAR}
+                and t.P_BOM_LINE_PART_RESOURCE = #{pBomLinePartResource,jdbcType=VARCHAR}
             </if>
-            and t.P_MBOM_STATUS<![CDATA[ <> ]]>0 order by CAST(t.P_SORT_NUM as FLOAT)
+            order by t.P_BOM_OF_WHICH_DEPT,CAST(t.P_SORT_NUM as FLOAT)
         </where>
     </select>
 
@@ -917,5 +923,18 @@
             delete ${tableName}
             where PUID = #{item.puid,jdbcType=VARCHAR}
         </foreach>
+    </delete>
+
+
+
+    <!--删除当前项目下的全部MBOM-->
+    <delete id="HzMbomRecordDAOImpl_deleteMbomByProjectId" parameterType="java.util.HashMap">
+            delete ${tableName}
+            where p_bom_digifax_id=(
+            select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(
+            select t2.puid from Hz_project_libs t2
+            <where>
+                t2.puid=#{projectId,jdbcType=VARCHAR}))
+            </where>
     </delete>
 </mapper>

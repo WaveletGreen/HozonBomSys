@@ -223,6 +223,16 @@ public class HzMbomLineRecord {
 
     private String colorId;
 
+    private String factoryCode;
+
+    public String getFactoryCode() {
+        return factoryCode;
+    }
+
+    public void setFactoryCode(String factoryCode) {
+        this.factoryCode = factoryCode;
+    }
+
     public String getColorId() {
         return colorId;
     }

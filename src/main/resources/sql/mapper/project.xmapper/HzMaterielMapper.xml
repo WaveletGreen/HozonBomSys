@@ -36,6 +36,7 @@
         <result column="P_MATERIEL_RESOURCE_ID" jdbcType="VARCHAR" property="materielResourceId"/>
         <result column="IS_SENT" jdbcType="INTEGER" property="sendSapFlag"/>
 
+        <result column="P_FACTORY_CODE" jdbcType="VARCHAR" property="factoryCode" />
     </resultMap>
 
     <!--整车衍生物料主数据-->
@@ -197,17 +198,27 @@
     <insert id="HzMaterialDAOImpl_insertList" useGeneratedKeys="false" parameterType="java.util.List">
         insert into HZ_MATERIEL_RECORD (PUID, P_MATERIEL_CODE, P_MATERIEL_TYPE,
         P_MATERIEL_DESC, P_PERTAIN_TO_PROJECT_PUID, P_MATERIEL_DESC_EN,P_MATERIEL_DATA_TYPE,
-        P_FACTORY_PUID,P_MATERIEL_RESOURCE_ID,P_VALID_FLAG,P_COLOR_PART,P_CREATE_TIME, P_UPDATE_TIME)
+        P_FACTORY_PUID,P_MATERIEL_RESOURCE_ID,P_VALID_FLAG,P_COLOR_PART,P_CREATE_TIME, P_UPDATE_TIME
+        ,P_CREATE_NAME,P_UPDATE_NAME,P_BASIC_UNIT_MEASURE,P_INVENTED_PART, P_SPARE_MATERIAL, P_VIN_PER_NO,
+         P_HEIGHT, P_IN_OUT_SIDE_FLAG, P_3C_PART_FLAG, P_MRP_CONTROLLER, P_PART_IMPORTANT_DEGREE,
+        P_LOOSE_PART_FLAG)
         <foreach collection="list" item="item" index="index" separator="UNION ALL">
             select
             #{item.puid,jdbcType=VARCHAR}, #{item.pMaterielCode,jdbcType=VARCHAR},
             #{item.pMaterielType,jdbcType=VARCHAR},
             #{item.pMaterielDesc,jdbcType=VARCHAR}, #{item.pPertainToProjectPuid,jdbcType=VARCHAR},
             #{item.pMaterielDescEn,jdbcType=VARCHAR},
-            #{item.pMaterielDataType,jdbcType=VARCHAR},
+            #{item.pMaterielDataType,jdbcType=INTEGER},
             #{item.pFactoryPuid,jdbcType=VARCHAR},
             #{item.materielResourceId,jdbcType=VARCHAR},1,#{item.pColorPart,jdbcType=INTEGER},
-            sysdate,sysdate
+            sysdate,sysdate,#{item.pCreateName,jdbcType=VARCHAR},#{item.pUpdateName,jdbcType=VARCHAR},
+            #{item.pBasicUnitMeasure,jdbcType=VARCHAR}, #{item.pInventedPart,jdbcType=INTEGER},
+            #{item.pSpareMaterial,jdbcType=VARCHAR},
+            #{item.pVinPerNo,jdbcType=VARCHAR}, #{item.pHeight,jdbcType=VARCHAR},
+            #{item.pInOutSideFlag,jdbcType=INTEGER},
+            #{item.p3cPartFlag,jdbcType=INTEGER},
+            #{item.pMrpController,jdbcType=VARCHAR},
+            #{item.pPartImportantDegree,jdbcType=VARCHAR},#{item.pLoosePartFlag,jdbcType=INTEGER}
             from DUAL
         </foreach>
     </insert>
@@ -219,15 +230,18 @@
         select * from
         (select t.*,ROWNUM as rn from
         (select
-        <include refid="HzMaterielRecordList"/>
-        from HZ_MATERIEL_RECORD
+        t.*,t1.P_FACTORY_CODE
+        from HZ_MATERIEL_RECORD t left join HZ_FACTORY t1
+        on t.P_FACTORY_PUID = t1.puid
+        and t.P_VALID_FLAG =1
+        and t1.P_FACTORY_STATUS <![CDATA[ <> ]]>0
         <where>
             1=1
             <if test="projectId != null and projectId!=''">
-                and P_PERTAIN_TO_PROJECT_PUID = #{projectId,jdbcType=VARCHAR}
+                and t.P_PERTAIN_TO_PROJECT_PUID = #{projectId,jdbcType=VARCHAR}
             </if>
             <if test="pMaterielDataType != null">
-                and P_MATERIEL_DATA_TYPE = #{pMaterielDataType,jdbcType=INTEGER}
+                and t.P_MATERIEL_DATA_TYPE = #{pMaterielDataType,jdbcType=INTEGER}
             </if>
             <!--<if test="pMaterielDataType == null">-->
                 <!--and (P_MATERIEL_DATA_TYPE = 11-->
@@ -240,12 +254,11 @@
                 <!--or P_MATERIEL_DATA_TYPE =81)-->
             <!--</if>-->
             <if test="pMaterielCode != null and pMaterielCode != '' ">
-                and P_MATERIEL_CODE like CONCAT(CONCAT('%',#{pMaterielCode,jdbcType=VARCHAR}),'%')
+                and t.P_MATERIEL_CODE like CONCAT(CONCAT('%',#{pMaterielCode,jdbcType=VARCHAR}),'%')
             </if>
             <if test="pMaterielType != null and pMaterielType != ''">
-                and P_MATERIEL_TYPE like CONCAT(CONCAT('%',#{pMaterielType,jdbcType=VARCHAR}),'%')
+                and t.P_MATERIEL_TYPE like CONCAT(CONCAT('%',#{pMaterielType,jdbcType=VARCHAR}),'%')
             </if>
-            and P_VALID_FLAG =1
         </where>
         )t
         WHERE ROWNUM &lt;=#{limit,jdbcType=INTEGER}) where rn &gt;#{offset,jdbcType=INTEGER}
@@ -521,4 +534,12 @@
         P_MATERIEL_DATA_TYPE in(71)
         <!--P_MATERIEL_DATA_TYPE in(11,21,71)-->
     </select>
+
+    <!--删除当前项目下的所有物料-->
+    <delete id="HzMaterialDAOImpl_deleteMaterielByProjectId" parameterType="java.lang.String">
+        delete HZ_MATERIEL_RECORD where
+        P_PERTAIN_TO_PROJECT_PUID = #{projectId,jdbcType=VARCHAR}
+    </delete>
+
+
 </mapper>
