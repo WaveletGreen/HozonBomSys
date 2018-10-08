@@ -13,10 +13,12 @@ import com.connor.hozon.bom.resources.domain.dto.response.HzLouRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzPbomLineRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzSimulateCraftingPartDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.OperateResultMessageRespDTO;
+import com.connor.hozon.bom.resources.domain.model.HzBomSysFactory;
 import com.connor.hozon.bom.resources.domain.query.HzBomRecycleByPageQuery;
 import com.connor.hozon.bom.resources.domain.query.HzLouaQuery;
 import com.connor.hozon.bom.resources.domain.query.HzPbomByPageQuery;
 import com.connor.hozon.bom.resources.domain.query.HzPbomTreeQuery;
+import com.connor.hozon.bom.resources.mybatis.accessories.HzAccessoriesLibsDAO;
 import com.connor.hozon.bom.resources.mybatis.bom.HzMbomRecordDAO;
 import com.connor.hozon.bom.resources.mybatis.bom.HzPbomRecordDAO;
 import com.connor.hozon.bom.resources.page.Page;
@@ -29,6 +31,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
+import sql.pojo.accessories.HzAccessoriesLibs;
 import sql.pojo.bom.*;
 import sql.pojo.cfg.HzCfg0OfBomLineRecord;
 
@@ -58,6 +61,9 @@ public class HzPbomServiceImpl implements HzPbomService {
 
     @Autowired
     private HzEPLManageRecordService hzEPLManageRecordService;
+    //工艺辅料库
+    @Autowired
+    private HzAccessoriesLibsDAO hzAccessoriesLibsDAO;
 
     @Autowired
     IHzCraftService iHzCraftService;
@@ -1145,4 +1151,111 @@ public class HzPbomServiceImpl implements HzPbomService {
     }
 
 
+
+    @Override
+    public JSONObject queryAccessories(String materielCode) {
+        HzAccessoriesLibs hzAccessoriesLibs = hzAccessoriesLibsDAO.queryAccessoriesByMaterielCode(materielCode);
+        JSONObject jsonData = (JSONObject)JSONObject.toJSON(hzAccessoriesLibs);
+        return jsonData;
+    }
+
+    @Override
+    public JSONObject addAccessories(String puid, String materielCode, String projectId) {
+        JSONObject result = new JSONObject();
+        //projectPuid
+        HZBomMainRecord hzBomMainRecord = hzBomMainRecordDao.selectByProjectPuid(projectId);
+        String projectPuid = hzBomMainRecord.getPuid();
+
+        //根据父的puid查找出所有跟父BomLineId相同的PBOM
+        List<HzPbomLineRecord> hzPbomLineRecords = hzPbomRecordDAO.queryAllBomLineIdByPuid(puid, projectId);
+        //根据materielCode查找工艺辅料
+        HzAccessoriesLibs hzAccessoriesLibs = hzAccessoriesLibsDAO.queryAccessoriesByMaterielCode(materielCode);
+        //生成子PBOM
+        List<HzPbomLineRecord> hzPbomLineRecordsAddSons = new ArrayList<HzPbomLineRecord>();
+        //循环父，生成父id、index、num不同的子
+        for(HzPbomLineRecord hzPbomLineRecord : hzPbomLineRecords){
+            HzPbomLineRecord hzPbomLineRecordAddSon = new HzPbomLineRecord();
+            //puid
+            String puidSon = UUIDHelper.generateUid();
+            //父id
+            String fatherPuid = hzPbomLineRecord.geteBomPuid();
+            hzPbomLineRecordAddSon.setParentUid(fatherPuid);
+
+
+            //index
+            //构建查询对象
+            HzPbomTreeQuery query = new HzPbomTreeQuery();
+            query.setPuid(fatherPuid);
+            query.setProjectId(projectId);
+            List<HzPbomLineRecord> pbomsons = hzPbomRecordDAO.getHzPbomTree(query);
+            //父index位数
+            int fatherIndexLength = hzPbomLineRecord.getLineIndex().split("\\.").length;
+            String maxIndexStr = "";
+            int maxIndexEnd = 0;
+            String upNum = "";
+            if(pbomsons.size()==1){
+                maxIndexStr = pbomsons.get(0).getLineIndex()+".";
+                upNum = pbomsons.get(0).getSortNum();
+            }else {
+                for(HzPbomLineRecord pbomSon : pbomsons){
+                    String[] indexStrs = pbomSon.getLineIndex().split("\\.");
+                    int pbomSonIndexLength = indexStrs.length;
+                    if(pbomSonIndexLength-1==fatherIndexLength ){
+                        Integer indexEnd = Integer.valueOf(indexStrs[indexStrs.length-1]);
+                        if(indexEnd>maxIndexEnd){
+                            maxIndexEnd = indexEnd;
+                            maxIndexStr = pbomSon.getLineIndex();
+                            upNum = pbomSon.getSortNum();
+                        }
+                    }
+                }
+            }
+
+            int splitIndex = maxIndexStr.lastIndexOf(".");
+            String indexStr = maxIndexStr.substring(0,splitIndex)+"."+String.valueOf(maxIndexEnd+10);
+            hzPbomLineRecordAddSon.setLineIndex(indexStr);
+
+            //num
+            String downNum = hzPbomRecordDAO.findMinOrderNumWhichGreaterThanThisOrderNum(projectId,upNum);
+            String num = HzBomSysFactory.generateBomSortNum(projectId,upNum,downNum);
+            hzPbomLineRecordAddSon.setSortNum(num);
+
+            //PUID
+            hzPbomLineRecordAddSon.setPuid(puidSon);
+            //P_E_BOM_PUID
+            hzPbomLineRecordAddSon.seteBomPuid(puidSon);
+            //P_BOM_LINE_PART_NAME
+            hzPbomLineRecordAddSon.setpBomLinePartName(hzAccessoriesLibs.getpMaterielName());
+            //P_BOM_LINE_ID
+            hzPbomLineRecordAddSon.setLineId(hzAccessoriesLibs.getpMaterielCode());
+            //P_BOM_DIGIFAX_ID
+            hzPbomLineRecordAddSon.setBomDigifaxId(projectPuid);
+            //is2Y
+            hzPbomLineRecordAddSon.setIs2Y(0);
+            //isHas
+            hzPbomLineRecordAddSon.setIsHas(0);
+            //P_IS_NEW_PART     是否为新产生件
+            hzPbomLineRecordAddSon.setIsNewPart(2);
+            hzPbomLineRecordsAddSons.add(hzPbomLineRecordAddSon);
+            //修改父的isHas
+            if(hzPbomLineRecord.getIsHas()!=1){
+                hzPbomLineRecord.setIsHas(1);
+                hzPbomRecordDAO.update(hzPbomLineRecord);
+            }
+        }
+        if(hzPbomLineRecordsAddSons.size()>0&&hzPbomLineRecordsAddSons!=null){
+            int insertFlag = hzPbomRecordDAO.insertList(hzPbomLineRecordsAddSons);
+            if(insertFlag==1){
+                result.put("success",true);
+            }else{
+                result.put("success",false);
+                result.put("errMsg","添加失败");
+            }
+        }else {
+            result.put("success",false);
+            result.put("errMsg","添加失败");
+        }
+
+        return result;
+    }
 }

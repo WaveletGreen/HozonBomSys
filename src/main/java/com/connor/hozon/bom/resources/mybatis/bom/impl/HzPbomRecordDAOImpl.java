@@ -163,7 +163,7 @@ public class HzPbomRecordDAOImpl extends BaseSQLUtil implements HzPbomRecordDAO 
     public String findMinOrderNumWhichGreaterThanThisOrderNum(String projectId,String orderNum) {
         Map<String,Object> map = new HashMap<>();
         map.put("projectId",projectId);
-        map.put("sortNum",orderNum);
+        map.put("sortNum",Double.parseDouble(orderNum));
         return (String) super.findForObject("HzPbomRecordDAOImpl_findMinOrderNumWhichGreaterThanThisOrderNum",map);
     }
 
@@ -208,4 +208,11 @@ public class HzPbomRecordDAOImpl extends BaseSQLUtil implements HzPbomRecordDAO 
         return super.findForList("HzPbomRecordDAOImpl_getFirstLevelBomByParentId",map);
     }
 
+    @Override
+    public List<HzPbomLineRecord> queryAllBomLineIdByPuid(String puid, String projectId) {
+        Map<String, String> map = new HashMap<String, String>();
+        map.put("puid",puid);
+        map.put("projectId",projectId);
+        return super.executeQueryByPass(new HzPbomLineRecord(),map,"HzPbomRecordDAOImpl_queryAllBomLineIdByPuid");
+    }
 }

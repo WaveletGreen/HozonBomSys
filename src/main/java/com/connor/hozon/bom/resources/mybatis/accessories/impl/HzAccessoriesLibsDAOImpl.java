@@ -52,4 +52,21 @@ public class HzAccessoriesLibsDAOImpl  extends BaseSQLUtil implements HzAccessor
         request.setFilters(map);
         return super.findPage("HzAccessoriesLibsDAOImpl_getHzAccessoriesByPage","HzAccessoriesLibsDAOImpl_getHzAccessoriesTotalCount",request);
     }
+
+    @Override
+    public int selectHzAccessoriesLibsByCount(String pMaterielCode) {
+        return (Integer)super.findForObject("HzAccessoriesLibsDAOImpl_findByCodeOrCount",pMaterielCode);
+    }
+
+    @Override
+    public HzAccessoriesLibs getHzAccessoriesLibsByCode(String pMaterielCode) {
+        return (HzAccessoriesLibs)super.findForObject("HzAccessoriesLibsDAOImpl_findByCode",pMaterielCode);
+    }
+
+    @Override
+    public HzAccessoriesLibs queryAccessoriesByMaterielCode(String materielCode) {
+        HzAccessoriesLibs hzAccessoriesLibs = new HzAccessoriesLibs();
+        hzAccessoriesLibs.setpMaterielCode(materielCode);
+        return super.executeQueryById(hzAccessoriesLibs, "HzAccessoriesLibsDAOImpl_queryAccessoriesByMaterielCode");
+    }
 }

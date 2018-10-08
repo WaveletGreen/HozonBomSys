@@ -2,7 +2,7 @@
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <!--User: xulf Date: 2018/5/31 Time: 15:29-->
 <body>
-<form id="pbomManageForm" role="4form" method="post" action="pbom/update">
+<form id="pbomManageForm" role="form" method="post" action="pbom/update">
     <input id="eBomPuid" name="eBomPuid" type="hidden" th:value="${data.eBomPuid}"/><!--th:value="${entity.eBomPuid}"-->
     <div class="form-group">
         <label for="lineId">零件号</label>
