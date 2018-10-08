@@ -56,7 +56,7 @@ function initTable(url) {
         success: function (result) {
             var column = [];
             // column.push({field: 'id', title: '主键'});
-            // column.push({field: 'ck', checkbox: true, width: 50});
+            column.push({field: 'ck', checkbox: true, width: 50});
             // column.push({
             //     field: 'ewoNo',
             //     title: '内饰颜色代码',
@@ -237,26 +237,28 @@ function initTable(url) {
                                         width: 500
                                     })
                                     url = "bom/refresh?projectId="+$("#project", window.top.document).val();
-                                    $.ajax({
-                                        type: "POST",
-                                        //ajax需要添加打包名
-                                        url: url,
-                                        // data: myData,
-                                        contentType: "application/json",
-                                        success: function (result) {
-                                            $('.modal-dialog', window.top.document).parent('div').remove()
-                                            $('body', window.top.document).find('.modal-backdrop').remove();
-                                            if (result.success) {
-                                                layer.msg('同步成功', {icon: 1, time: 2000})
-                                            } else if (!result.success) {
-                                                window.Ewin.alert({message: result.errMsg});
+                                    setTimeout(function() {
+                                        $.ajax({
+                                            type: "POST",
+                                            //ajax需要添加打包名
+                                            url: url,
+                                            // data: myData,
+                                            contentType: "application/json",
+                                            success: function (result) {
+                                                $('.modal-dialog', window.top.document).parent('div').remove()
+                                                $('body', window.top.document).find('.modal-backdrop').remove();
+                                                if (result.success) {
+                                                    layer.msg('同步成功', {icon: 1, time: 2000})
+                                                } else if (!result.success) {
+                                                    window.Ewin.alert({message: result.errMsg});
+                                                }
+                                                $table.bootstrapTable("refresh");
+                                            },
+                                            error: function (info) {
+                                                window.Ewin.alert({message: "操作失败:" + info.status});
                                             }
-                                            $table.bootstrapTable("refresh");
-                                        },
-                                        error: function (info) {
-                                            window.Ewin.alert({message: "操作失败:" + info.status});
-                                        }
-                                    })
+                                        })
+                                    },500)
                                 }
                             });
                         }

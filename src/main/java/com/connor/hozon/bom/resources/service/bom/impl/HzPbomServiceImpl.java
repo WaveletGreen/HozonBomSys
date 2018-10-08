@@ -61,12 +61,13 @@ public class HzPbomServiceImpl implements HzPbomService {
 
     @Autowired
     private HzEPLManageRecordService hzEPLManageRecordService;
-    //工艺辅料库
-    @Autowired
-    private HzAccessoriesLibsDAO hzAccessoriesLibsDAO;
 
     @Autowired
     IHzCraftService iHzCraftService;
+
+    //工艺辅料库
+    @Autowired
+    private HzAccessoriesLibsDAO hzAccessoriesLibsDAO;
 
     @Override
     public OperateResultMessageRespDTO insertHzPbomRecord(AddHzPbomRecordReqDTO recordReqDTO) {
@@ -1258,4 +1259,6 @@ public class HzPbomServiceImpl implements HzPbomService {
 
         return result;
     }
+
+
 }

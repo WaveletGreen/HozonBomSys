@@ -58,6 +58,7 @@ public class HzMbomController extends BaseController {
         tableTitle.put("lineId", "零件号");
         tableTitle.put("pBomLinePartName", "名称");
         tableTitle.put("level", "层级");
+        tableTitle.put("rank", "级别");
         tableTitle.put("pBomOfWhichDept", "专业");
         tableTitle.put("lineNo","查找编号");
         tableTitle.put("pLouaFlag","LOU/LOA");

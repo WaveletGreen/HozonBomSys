@@ -37,7 +37,7 @@ public class HzMaterielDAOImpl extends BaseSQLUtil implements HzMaterielDAO {
 
     @Override
     public int delete(String puid) {
-        return super.update("HzMaterialDAOImpl_delete", puid);
+        return super.delete("HzMaterialDAOImpl_delete", puid);
     }
 
     @Override

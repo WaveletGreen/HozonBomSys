@@ -561,8 +561,11 @@
     </where>
   </select>
 
+  <insert id="HzPbomRecordDAOImpl_insertAccessories" parameterType="java.util.Map">
+      insert into HZ_PBOM_RECORD
+      set (PUID, P_BOM_LINE_ID, P_BOM_LINE_PART_NAME)
 
-
+  </insert>
 
   <!--获取当前BOM的子一层结构-->
     <select id="HzPbomRecordDAOImpl_getFirstLevelBomByParentId" parameterType="java.util.HashMap" resultMap="HzPbomLineRecord">
