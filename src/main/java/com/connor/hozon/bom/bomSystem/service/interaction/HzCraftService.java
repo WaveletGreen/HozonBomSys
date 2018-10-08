@@ -1,5 +1,6 @@
 package com.connor.hozon.bom.bomSystem.service.interaction;
 
+import com.connor.hozon.bom.bomSystem.helper.PropertiesHelper;
 import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
 import com.connor.hozon.bom.bomSystem.service.iservice.interaction.IHzCraftService;
 import com.connor.hozon.bom.common.util.user.UserInfo;
@@ -80,7 +81,7 @@ public class HzCraftService implements IHzCraftService {
      */
     private Map<String, LocalCraft> theMaxInorder = new LinkedHashMap<>();
     public static boolean isDebug = true;
-    private boolean isInsertDebug = false;
+    private boolean isInsertDebug = true;
     /**
      * 一份父层的属性结构图
      */
@@ -100,12 +101,17 @@ public class HzCraftService implements IHzCraftService {
      */
     @Override
     public boolean autoCraft(String projectUid, List<String> parentUids, List<String> childrenUids, List<String> targetUids, Map<String, String> collectedData) {
+
         HzPbomLineRecord pbom = craftNewPart(collectedData);
         clearCoach();
         this.targetPartCodes.clear();
         this.projectUid = projectUid;
         param.put("projectId", projectUid);
         try {
+            PropertiesHelper helper = new PropertiesHelper();
+            Properties properties = helper.load();
+            isDebug = Boolean.valueOf(properties.getProperty("isCraft"));
+            isInsertDebug = Boolean.valueOf(properties.getProperty("isCraftInsert"));
             craftChildren(childrenUids, pbom, myWavelet);
             craftChildren(parentUids, pbom, myLovelyWavelet);
             craftParentTree(parentUids);
