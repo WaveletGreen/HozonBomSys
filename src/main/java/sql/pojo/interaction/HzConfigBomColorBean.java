@@ -2,6 +2,8 @@ package sql.pojo.interaction;
 
 import lombok.Data;
 
+import java.util.Objects;
+
 /**
  * @Author: Fancyears·Maylos·Maywas
  * @Description:
@@ -41,4 +43,19 @@ public class HzConfigBomColorBean {
      * 特性代码
      */
     private String featureCode;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        HzConfigBomColorBean bean = (HzConfigBomColorBean) o;
+        return Objects.equals(colorCode, bean.colorCode) &&
+                Objects.equals(colorUid, bean.colorUid);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(colorCode, colorUid);
+    }
 }

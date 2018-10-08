@@ -74,4 +74,17 @@ public class HzCfg0ModelFeatureDaoImpl implements HzCfg0ModelFeatureDao {
     public int updateByModelPuidWithBasic(HzCfg0ModelFeature record) {
         return baseSQLUtil.executeUpdate(record, "com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0ModelFeatureDao.updateByModelPuidWithBasic");
     }
+
+    /**
+     * 查找项目下的所有衍生物料
+     *
+     * @param projectUid 项目UID
+     * @return
+     */
+    @Override
+    public List<HzCfg0ModelFeature> selectAllByProjectUid(String projectUid) {
+        return baseSQLUtil.executeQueryByPass(MODEL_FEATURE, projectUid, "com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0ModelFeatureDao.selectAllByProjectUid");
+    }
+
+
 }

@@ -4,6 +4,8 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.context.annotation.Configuration;
 import sql.pojo.cfg.HzCfg0ModelFeature;
 
+import java.util.List;
+
 @Configuration
 public interface HzCfg0ModelFeatureDao {
     /**
@@ -77,4 +79,12 @@ public interface HzCfg0ModelFeatureDao {
      * @return
      */
     int updateByModelPuidWithBasic(HzCfg0ModelFeature record);
+
+    /**
+     * 查找项目下的所有衍生物料
+     *
+     * @param projectUid 项目UID
+     * @return
+     */
+    List<HzCfg0ModelFeature> selectAllByProjectUid(@Param("projectUid") String projectUid);
 }

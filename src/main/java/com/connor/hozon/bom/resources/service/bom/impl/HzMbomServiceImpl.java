@@ -30,6 +30,7 @@ import org.springframework.stereotype.Service;
 import sql.pojo.bom.HzMbomLineRecord;
 import sql.pojo.bom.HzMbomLineRecordVO;
 import sql.pojo.bom.HzPbomLineRecord;
+import sql.pojo.cfg.HzCfg0ModelFeature;
 import sql.pojo.cfg.HzCfg0OfBomLineRecord;
 import sql.pojo.epl.HzEPLManageRecord;
 import sql.pojo.factory.HzFactory;
@@ -68,6 +69,8 @@ public class HzMbomServiceImpl implements HzMbomService{
     @Autowired
     private HzPbomRecordDAO hzPbomRecordDAO;
 
+    @Autowired
+    private HzCfg0ModelFeatureService hzCfg0ModelFeatureService;
 
     @Override
     public Page<HzMbomRecordRespDTO> findHzMbomForPage(HzMbomByPageQuery query) {
@@ -527,7 +530,9 @@ public class HzMbomServiceImpl implements HzMbomService{
                     boolean b = false;
                     if(Integer.valueOf(1).equals(record.getColorPart())){//是颜色件 找出对应的颜色 多色时，需要乘以颜色信息
                         List<HzConfigBomColorBean> beans = iHzConfigBomColorService.doSelectBy2YUidWithProject(record.geteBomPuid(), projectId);
-                        if(ListUtil.isNotEmpty(beans)){
+                        Set<HzConfigBomColorBean> colorBeans = new HashSet<>(beans);
+                        beans = new ArrayList<>(colorBeans);
+                        if(ListUtil.isNotEmpty(colorBeans)){
                             for(int i =0;i<beans.size();i++){
                                 if(null == beans.get(i).getColorCode() ||"-".equals(beans.get(i).getColorCode())){
                                     beans.remove(beans.get(i));
@@ -535,7 +540,6 @@ public class HzMbomServiceImpl implements HzMbomService{
                                 }
                             }
                         }
-
 
                         if(ListUtil.isNotEmpty(beans)){//找到对应的颜色件
                             for(int i =0;i<beans.size();i++){
@@ -703,6 +707,23 @@ public class HzMbomServiceImpl implements HzMbomService{
                         deleteMaterielRecords = new HashSet<>(n);
                     }
                 }
+
+                //衍生物料
+                List<HzCfg0ModelFeature> features = hzCfg0ModelFeatureService.doSelectAllByProjectUid(projectId);
+                if(ListUtil.isNotEmpty(features)){
+                    features.forEach(feature -> {
+                        HzMaterielRecord record = HzMaterielFactory.featureToMaterielRecord(feature,projectId);
+                        HzMaterielQuery query = new HzMaterielQuery();
+                        query.setProjectId(projectId);
+                        query.setpMaterielCode(record.getpMaterielCode());
+                        List<HzMaterielRecord> recordList = hzMaterielDAO.findHzMaterielForList(query);
+                        if(ListUtil.isEmpty(recordList)){
+                            materielRecords.add(record);
+                        }
+                    });
+
+                }
+
 
                 //判断财务型MBOM的是否具有子层
                 //PBOM过渡到财务型MBOM 有部分数据会被剪切到生产型MBOM，因此 此处需要判断
