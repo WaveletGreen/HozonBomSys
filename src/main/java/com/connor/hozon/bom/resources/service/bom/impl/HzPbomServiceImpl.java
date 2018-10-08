@@ -1113,12 +1113,23 @@ public class HzPbomServiceImpl implements HzPbomService {
         }
         if (iHzCraftService.autoCraft(projectUid, parentUids, childrenUids, targetUids, collectedData)) {
             result.put("status", true);
-            StringBuilder sb = new StringBuilder();
-            for (String partCode : iHzCraftService.getTargetPartCodes()) {
-                sb.append(partCode + ",");
+            List<String> codes = iHzCraftService.getTargetPartCodes();
+            StringBuilder sb = null;
+            if (codes != null && codes.size() > 0) {
+                sb = new StringBuilder();
+                for (int i = 0; i < codes.size(); i++) {
+                    if (i != codes.size() - 1) {
+                        sb.append(codes + "、");
+                    } else {
+                        sb.append(codes.get(i));
+                    }
+                }
             }
-            sb.replace(sb.lastIndexOf(","), sb.length(), "");
-            result.put("msg", "合成新件:" + collectedData.get("lineId") + "成功，并成功挂载到" + sb);
+            if (sb != null) {
+                result.put("msg", "合成新件:" + collectedData.get("lineId") + "成功，并成功挂载到" + sb + "上");
+            } else {
+                result.put("msg", "合成新件:" + collectedData.get("lineId") + "成功");
+            }
         }
         return result;
 

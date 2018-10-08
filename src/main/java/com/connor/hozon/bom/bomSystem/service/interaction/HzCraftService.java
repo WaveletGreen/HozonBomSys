@@ -3,6 +3,7 @@ package com.connor.hozon.bom.bomSystem.service.interaction;
 import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
 import com.connor.hozon.bom.bomSystem.service.iservice.interaction.IHzCraftService;
 import com.connor.hozon.bom.common.util.user.UserInfo;
+import com.connor.hozon.bom.resources.domain.dto.request.DeleteHzPbomReqDTO;
 import com.connor.hozon.bom.resources.domain.query.HzPbomTreeQuery;
 import com.connor.hozon.bom.resources.mybatis.bom.HzPbomRecordDAO;
 import com.connor.hozon.bom.sys.entity.User;
@@ -35,18 +36,13 @@ public class HzCraftService implements IHzCraftService {
     /**
      * 目标挂载对象零件代码
      */
-    private List<String> targetPartCodes;
+    private List<String> targetPartCodes = new ArrayList<>();
     /**
      * 项目UID
      */
     private String projectUid;
     @Autowired
     HzPbomRecordDAO hzPbomRecordDAO;
-    /**
-     * 父层树形结构集合
-     */
-    private Map<String, List<HzPbomLineRecord>> mapParentTree = new HashMap<>();
-
     /**
      * 需要删除的子层
      */
@@ -92,7 +88,6 @@ public class HzCraftService implements IHzCraftService {
 
     private Map<String, LocalCraftTarget> targetTreeMap = new LinkedHashMap<>();
 
-
     /**
      * 自动生成工艺合件
      *
@@ -106,35 +101,87 @@ public class HzCraftService implements IHzCraftService {
     @Override
     public boolean autoCraft(String projectUid, List<String> parentUids, List<String> childrenUids, List<String> targetUids, Map<String, String> collectedData) {
         HzPbomLineRecord pbom = craftNewPart(collectedData);
-        myWavelet.clear();
-        myLovelyWavelet.clear();
-        toChildrenNeedToUpdateItsLineIndex.clear();
-        theChildrenNeedToDelete.clear();
-        orderIsResetChildren.clear();
-        orgOrder.clear();
-        theKeyToAllSameParent.clear();
+        clearCoach();
+        this.targetPartCodes.clear();
         this.projectUid = projectUid;
         param.put("projectId", projectUid);
-        allParentTree.clear();
-        theMaxInorder.clear();
-        targetTreeMap.clear();
         try {
             craftChildren(childrenUids, pbom, myWavelet);
             craftChildren(parentUids, pbom, myLovelyWavelet);
             craftParentTree(parentUids);
             craftTarget(targetUids);
             craftResetOrder();
+            //构建新的树形结构
             craftBuildNewTree(theMaxInorder, pbom);
             //设置合成源的父层是否isHas，是否为Y
             craftSrcParent();
             craftInsert(targetTreeMap);
             craftTargetsIsHas(targetUids);
-        } catch (CloneNotSupportedException e) {
-            e.printStackTrace();
+            craftDelete();
+            craftUpdate();
         } catch (Exception e) {
             e.printStackTrace();
+            return false;
+        } finally {
+            clearCoach();
         }
-        return false;
+        return true;
+    }
+
+    /**
+     * 更新查找编号
+     */
+    private void craftUpdate() {
+        toChildrenNeedToUpdateItsLineIndex.entrySet().iterator();
+        for (String key : toChildrenNeedToUpdateItsLineIndex.keySet()) {
+            for (String _key : toChildrenNeedToUpdateItsLineIndex.get(key).keySet()) {
+                if (isInsertDebug) {
+                    HzPbomLineRecord record = toChildrenNeedToUpdateItsLineIndex.get(key).get(_key);
+                    HzPbomLineRecord toUpdate = new HzPbomLineRecord();
+                    toUpdate.seteBomPuid(record.geteBomPuid());
+                    toUpdate.setLineIndex(record.getLineIndex());
+                    if (hzPbomRecordDAO.update(toUpdate) <= 0) {
+                        logger.error("更新需要重新排序的子层" + record.getLineId() + "查找编号失败");
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * 删除合成源
+     */
+    private void craftDelete() {
+        List<DeleteHzPbomReqDTO> listOfDto = new ArrayList<>();
+        for (int i = 0; i < theChildrenNeedToDelete.size(); i++) {
+            HzPbomLineRecord record = theChildrenNeedToDelete.get(i);
+            DeleteHzPbomReqDTO dto = new DeleteHzPbomReqDTO();
+            dto.seteBomPuid(record.geteBomPuid());
+            dto.setProjectId(projectUid);
+            dto.setPuids(record.getPuid());
+            listOfDto.add(dto);
+        }
+        if (!isInsertDebug) {
+            if (hzPbomRecordDAO.deleteList(listOfDto) <= 0) {
+                logger.error("删除合成源数据失败");
+            }
+        }
+    }
+
+    /**
+     * 清除缓存
+     */
+    private void clearCoach() {
+        this.myWavelet.clear();
+        this.myLovelyWavelet.clear();
+        this.toChildrenNeedToUpdateItsLineIndex.clear();
+        this.theChildrenNeedToDelete.clear();
+        this.orderIsResetChildren.clear();
+        this.orgOrder.clear();
+        this.theKeyToAllSameParent.clear();
+        this.allParentTree.clear();
+        this.theMaxInorder.clear();
+        this.targetTreeMap.clear();
     }
 
     /**
@@ -148,8 +195,11 @@ public class HzCraftService implements IHzCraftService {
             record.setIsHas(1);
             record.seteBomPuid(targetUids.get(i));
             if (!isInsertDebug) {
-                hzPbomRecordDAO.update(record);
+                if (hzPbomRecordDAO.update(record) <= 0) {
+                    logger.error("更新是否有子层数据失败");
+                }
             }
+
         }
     }
 
@@ -170,7 +220,86 @@ public class HzCraftService implements IHzCraftService {
         }
     }
 
+    /**
+     * 设置检查合成源切除之后是否还有子，没有子的话需要设置isHas为0
+     */
     private void craftSrcParent() {
+        Map<String, List<HzPbomLineRecord>> coach = new LinkedHashMap<>();
+        Map<String, Integer> temp = new LinkedHashMap<>();
+        for (int i = 0; i < theChildrenNeedToDelete.size(); i++) {
+            HzPbomLineRecord record = theChildrenNeedToDelete.get(i);
+            if (!coach.containsKey(record.getParentUid())) {
+                List<HzPbomLineRecord> list = new ArrayList<>();
+                list.add(record);
+                coach.put(record.getParentUid(), list);
+            } else {
+                coach.get(record.getParentUid()).add(record);
+            }
+        }
+        //循环找出需要删除的子层
+        Iterator<Map.Entry<String, List<HzPbomLineRecord>>> it = coach.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry<String, List<HzPbomLineRecord>> entry = it.next();
+            String parentUid = entry.getKey();
+            List<HzPbomLineRecord> values = entry.getValue();
+            //寻找父层单条
+            HzPbomLineRecord line = hzPbomRecordDAO.getHzPbomByEbomPuid(parentUid, projectUid);
+            if (line != null) {
+                //找到所有同名的父层
+                param.put("lineId", line.getLineId());
+                List<HzPbomLineRecord> allCodeIsWithToParentCode = hzPbomRecordDAO.findPbom(param);
+                //循环对比需要删除的子层
+                for (int i1 = 0; i1 < allCodeIsWithToParentCode.size(); i1++) {
+                    List<HzPbomLineRecord> isWithsChildren = hzPbomRecordDAO.getFirstLevelBomByParentId(allCodeIsWithToParentCode.get(i1).geteBomPuid(), projectUid);
+                    Iterator<HzPbomLineRecord> ito = isWithsChildren.iterator();
+                    while (ito.hasNext()) {
+                        HzPbomLineRecord next = ito.next();
+                        for (int i = 0; i < values.size(); i++) {
+                            if (next.getLineId().equals(values.get(i).getLineId())) {
+                                ito.remove();
+                                break;
+                            }
+                        }
+
+                    }
+                    if (isWithsChildren.size() <= 0) {
+                        temp.put(allCodeIsWithToParentCode.get(i1).geteBomPuid(), 0);
+                    }
+                }
+            } else {
+                logger.error("没有找到父层");
+            }
+        }
+        temp.forEach((key, value) -> {
+            HzPbomLineRecord record = new HzPbomLineRecord();
+            record.seteBomPuid(key);
+            record.setIsHas(value);
+            if (hzPbomRecordDAO.update(record) <= 0) {
+                logger.error("更新isHas数据为0操作失败");
+            }
+        });
+//            if (!coach.containsKey(theChildrenNeedToDelete.get(i).getParentUid())) {
+//                coach.put(theChildrenNeedToDelete.get(i).getParentUid(), theChildrenNeedToDelete.get(i).getParentUid());
+//            } else {
+//
+//            }
+//            HzPbomLineRecord line = hzPbomRecordDAO.getHzPbomByEbomPuid(theChildrenNeedToDelete.get(i).getParentUid(), projectUid);
+//            param.put("lineId", line.getLineId());
+//            //同号的父层节点
+//            List<HzPbomLineRecord> allCodeIsWithToParentCode = hzPbomRecordDAO.findPbom(param);
+//            for (int i1 = 0; i1 < allCodeIsWithToParentCode.size(); i1++) {
+//                List<HzPbomLineRecord> isWithsChildren = hzPbomRecordDAO.getFirstLevelBomByParentId(allCodeIsWithToParentCode.get(i1).geteBomPuid(), projectUid);
+//                Iterator<HzPbomLineRecord> it = isWithsChildren.iterator();
+//                while (it.hasNext()) {
+//                    HzPbomLineRecord next = it.next();
+//                    if (next.getLineId().equals(theChildrenNeedToDelete.get(i).getLineId())) {
+//                        it.remove();
+//                    }
+//                }
+//                temp.put(allCodeIsWithToParentCode.get(i1).geteBomPuid() + "|" + allCodeIsWithToParentCode.get(i1).getLineIndex(), isWithsChildren);
+//            }
+//        }
+        System.out.println();
     }
 
     /**
@@ -184,10 +313,11 @@ public class HzCraftService implements IHzCraftService {
         double youryour;
         int lineIndex;
         int pLineIndex;
-        int pTrueParent = 10;
+        int topLineIndex;
         for (Map.Entry<String, LocalCraft> entry : theMaxInorder.entrySet()) {
             LocalCraft craft = entry.getValue();
-            String mySortNum = craft.getLine().getSortNum();
+            //有子层的情况下取子层最大的一个sortNum，反之取当前目标的sortNum
+            String mySortNum = craft.getSortNum() == null ? craft.getLine().getSortNum() : craft.getSortNum();
             String localSortNum = hzPbomRecordDAO.findMinOrderNumWhichGreaterThanThisOrderNum(projectUid, mySortNum);
             mymy = Double.parseDouble(mySortNum);
             //你比我大
@@ -200,8 +330,9 @@ public class HzCraftService implements IHzCraftService {
             //生成首位排序号
             _temp = generateRandom(_temp, youryour);
             //查找编号重新排
-            lineIndex = craft.getIndex();
-            pLineIndex = lineIndex;
+            lineIndex = 10;
+            pLineIndex = 10;
+            topLineIndex = craft.getIndex() == 0 ? 10 : craft.getIndex() + 10;
             //设置数模层
             pbom.setBomDigifaxId(craft.getLine().getBomDigifaxId());
             //新件设置一份单独的PUID
@@ -213,7 +344,7 @@ public class HzCraftService implements IHzCraftService {
             //设置第一位排序号
             pbom.setSortNum(String.valueOf(_temp));
             //设置查找编号
-            pbom.setLineIndex(craft.getLine().getLineIndex() + "." + craft.getIndex());
+            pbom.setLineIndex(craft.getLine().getLineIndex() + "." + topLineIndex);
             //设置层级
             //克隆一份出来
             target.getChildrenTree().add(pbom.clone());
@@ -428,6 +559,7 @@ public class HzCraftService implements IHzCraftService {
                 }
             }
             targetTreeMap.put(target.getUid(), target);
+            targetPartCodes.add(craft.getLine().getLineId());
         }
         logger.warn("重新设置排序号");
     }
@@ -444,18 +576,25 @@ public class HzCraftService implements IHzCraftService {
             String str;
             HzPbomLineRecord record = hzPbomRecordDAO.getHzPbomByEbomPuid(tar, projectUid);
             List<HzPbomLineRecord> isWithsChildren = hzPbomRecordDAO.getFirstLevelBomByParentId(record.geteBomPuid(), projectUid);
-            int max = 10;
+            int max = 0;
+            String sortNum = null;
             if (isWithsChildren != null) {
                 for (int i1 = 0; i1 < isWithsChildren.size(); i1++) {
                     str = isWithsChildren.get(i1).getLineIndex();
                     int temp = Integer.parseInt(str.substring(str.lastIndexOf(".") + 1));
-                    max = temp > max ? temp : max;
+//                    max = temp > max ? temp : max;
+                    if (temp > max) {
+                        max = temp;
+                        sortNum = isWithsChildren.get(i1).getSortNum();
+                    }
+
                 }
             }
             //没有子层，则查找编号为首位
             craft.setUid(UUIDHelper.generateUpperUid());
             craft.setIndex(max);
             craft.setLine(record);
+            craft.setSortNum(sortNum);
             theMaxInorder.put(tar, craft);
         }
     }
@@ -566,6 +705,9 @@ public class HzCraftService implements IHzCraftService {
     public void craftChildren(List<String> childrenUids, HzPbomLineRecord part, Map<String, Map<String, HzPbomLineRecord>> myWavelet) throws Exception {
         for (int i = 0; i < childrenUids.size(); i++) {
             HzPbomLineRecord line = hzPbomRecordDAO.getHzPbomByEbomPuid(childrenUids.get(i), projectUid);
+            if (line == null) {
+                throw new Exception("没有找到合成的零件");
+            }
             if (myWavelet.containsKey(line.getParentUid())) {
                 myWavelet.get(line.getParentUid()).put(line.getLineIndex(), line);
             } else {
@@ -864,6 +1006,7 @@ public class HzCraftService implements IHzCraftService {
     class LocalCraft {
         private String uid;
         private Integer index;
+        private String sortNum;
         private HzPbomLineRecord line;
         private HzPbomLineRecord assignPoint;
     }
@@ -874,12 +1017,5 @@ public class HzCraftService implements IHzCraftService {
         private List<HzPbomLineRecord> childrenTree = new ArrayList<>();
     }
 
-    @Data
-    class LocalCraftChildNode {
-        private String orgEbomUid;
-        private String newEbomUid;
-        private HzPbomLineRecord line;
-
-    }
 }
 
