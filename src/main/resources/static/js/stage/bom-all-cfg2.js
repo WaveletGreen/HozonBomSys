@@ -7,7 +7,14 @@ var array;
 var cfgSize;
 //版本头
 var versionHead;
-
+//总成零件号数组
+var partIdArr = [];
+//配置代码数组
+var cfgValArr = [];
+//版型数组
+var modelArr = [];
+//配置管理
+var cfgmagArr = [];
 function doRefresh(projectUid) {
     loadData(projectUid);
 }
@@ -24,13 +31,13 @@ function loadData(projectUid) {
         },
         success: function (myData) {
             //总成零件号数组
-            var partIdArr = [];
+            partIdArr = [];
             //配置代码数组
-            var cfgValArr = [];
+            cfgValArr = [];
             //版型数组
-            var modelArr = [];
+            modelArr = [];
             //配置管理
-            var cfgmagArr = [];
+            cfgmagArr = [];
             if (myData == null) {
                 window.Ewin.alert({message: "查无数据，请联系项目经理或管理员"});
                 return;
