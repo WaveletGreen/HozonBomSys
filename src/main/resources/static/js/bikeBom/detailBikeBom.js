@@ -56,7 +56,7 @@ function initTable(url) {
         success: function (result) {
             var column = [];
             // column.push({field: 'id', title: '主键'});
-            // column.push({field: 'ck', checkbox: true, width: 50});
+            column.push({field: 'ck', checkbox: true, width: 50});
             // column.push({
             //     field: 'ewoNo',
             //     title: '内饰颜色代码',

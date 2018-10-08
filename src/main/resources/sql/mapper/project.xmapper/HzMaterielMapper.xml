@@ -180,9 +180,7 @@
 
     <!--删除一条记录-->
     <update id="HzMaterialDAOImpl_delete" parameterType="java.lang.String">
-        update HZ_MATERIEL_RECORD
-        set
-        P_VALID_FLAG = 0
+        delete HZ_MATERIEL_RECORD
         where PUID = #{puid,jdbcType=VARCHAR}
     </update>
 
@@ -259,6 +257,7 @@
             <if test="pMaterielType != null and pMaterielType != ''">
                 and t.P_MATERIEL_TYPE like CONCAT(CONCAT('%',#{pMaterielType,jdbcType=VARCHAR}),'%')
             </if>
+            and t.P_VALID_FLAG =1
         </where>
         )t
         WHERE ROWNUM &lt;=#{limit,jdbcType=INTEGER}) where rn &gt;#{offset,jdbcType=INTEGER}
