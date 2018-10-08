@@ -64,14 +64,14 @@
     }
     function query(but) {
         if(tdId!=""){
-            $('#' + tdId).parent().css("background-color", "#ffffff");
+            $('#' + tdId).css("background-color", "#ffffff");
         }
         var focuseVal = $("#"+focuseId).val();
         if(focuseVal!==""&&focuseVal!=null){
             tdId = focuseId+focuseVal;
             if($('#' + tdId)){
                 document.getElementById(tdId).scrollIntoView(true);
-                $('#' + tdId).parent().css("background-color", "red");
+                $('#' + tdId).css("background-color", "red");
             }
         }
     }
