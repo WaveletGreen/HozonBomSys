@@ -369,6 +369,14 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
     public OperateResultMessageRespDTO deleteHzWorkProcesses(Map<String, List<String>> datas){
         List<String> materielIds = datas.get("materielIds");
         List<String> procedureDesc = datas.get("procedureDesc");
+        if(procedureDesc.size()==0||procedureDesc==null){
+            return OperateResultMessageRespDTO.cantDelete();
+        }
+        for(String pd : procedureDesc){
+            if(pd==null){
+                return OperateResultMessageRespDTO.cantDelete();
+            }
+        }
         List<HzWorkProcedure> hzWorkProceduresDel = new ArrayList<HzWorkProcedure>();
         for(int i=0;i<materielIds.size();i++){
             HzWorkProcedure hzWorkProcedure = new HzWorkProcedure();
@@ -608,6 +616,9 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
     public void initProcess(String projectId) {
         //查询所有数据类型为11、21、71的物料
         List<HzMaterielRecord> hzMaterielRecords = hzMaterielDAO.findHzMaterielForProcess(projectId);
+        if(hzMaterielRecords==null||hzMaterielRecords.size()==0){
+            return;
+        }
         //查询所有工艺路线
         List<HzWorkProcedure> hzWorkProcedures = hzWorkProcedureDAO.findHzWorkProcessByProjectId(projectId);
         List<HzMaterielRecord> hzMaterielRecordAddList = new ArrayList<HzMaterielRecord>();
@@ -617,10 +628,14 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
         while(iterator.hasNext()){
             HzMaterielRecord hzMaterielRecord = iterator.next();
             String materielCode = hzMaterielRecord.getpMaterielCode();
-            String materielCodeHead = materielCode.substring(0, 1);
-            String materielCodeHeadUp = materielCodeHead.toUpperCase();
-            if("F".equals(materielCodeHeadUp)||"Q".equals(materielCodeHeadUp)){
-                iterator.remove();
+            try {
+                String materielCodeHead = materielCode.substring(0, 1);
+                String materielCodeHeadUp = materielCodeHead.toUpperCase();
+                if("F".equals(materielCodeHeadUp)||"Q".equals(materielCodeHeadUp)){
+                    iterator.remove();
+                }
+            }catch (Exception e){
+
             }
         }
         //找出所有没有工艺路线的物料
