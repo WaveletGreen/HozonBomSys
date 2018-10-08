@@ -127,6 +127,10 @@ public interface HzPbomService {
      */
     JSONObject simulateCraftingPart(Map<String, Object> param);
 
+    JSONObject queryAccessories(String materielCode);
+
+    JSONObject addAccessories(String puid, String materielCode, String projectId);
+
     /**
      * 真的生成工艺合件
      * @param param

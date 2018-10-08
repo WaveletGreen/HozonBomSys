@@ -1,7 +1,9 @@
 package com.connor.hozon.bom.resources.controller.accessories;
 
+import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.resources.controller.BaseController;
 import com.connor.hozon.bom.resources.domain.dto.request.DeleteHzAccessoriesLibsDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.OperateResultMessageRespDTO;
 import com.connor.hozon.bom.resources.domain.query.HzAccessoriesLibsPageQuery;
 import com.connor.hozon.bom.resources.mybatis.accessories.HzAccessoriesLibsDAO;
 import com.connor.hozon.bom.resources.page.Page;
@@ -57,8 +59,14 @@ public class HzAccessoriesLibsController extends BaseController {
      */
     @RequestMapping(value = "insert", method = RequestMethod.POST)
     public void insert(@RequestBody HzAccessoriesLibs hzAccessoriesLibs, HttpServletResponse response) {
+        int j = hzAccessoriesLibsDAO.selectHzAccessoriesLibsByCount(hzAccessoriesLibs.getpMaterielCode());
+        if (j>0){
+            writeAjaxJSONResponse(ResultMessageBuilder.build(false, "对不起！您添加的物料号已存在！"), response);
+            return;
+        }
         String puid = UUID.randomUUID().toString();
         hzAccessoriesLibs.setPuid(puid);
+        hzAccessoriesLibs.setpCreateName(UserInfo.getUser().getUserName());
         int i = hzAccessoriesLibsDAO.insert(hzAccessoriesLibs);
         if (i > 0) {
             writeAjaxJSONResponse(ResultMessageBuilder.build(true, "操作成功！"), response);
@@ -76,6 +84,16 @@ public class HzAccessoriesLibsController extends BaseController {
      */
     @RequestMapping(value = "update", method = RequestMethod.POST)
     public void update(@RequestBody HzAccessoriesLibs hzAccessoriesLibs, HttpServletResponse response) {
+        int j = hzAccessoriesLibsDAO.selectHzAccessoriesLibsByCount(hzAccessoriesLibs.getpMaterielCode());
+        HzAccessoriesLibs libs = hzAccessoriesLibsDAO.getHzAccessoriesLibsByCode(hzAccessoriesLibs.getpMaterielCode());
+        if (j>1){
+            writeAjaxJSONResponse(ResultMessageBuilder.build(false, "对不起！您修改后的物料号已存在！"), response);
+            return;
+        }else if (j==1&&libs.getPuid().equals(hzAccessoriesLibs.getPuid())==false){
+            writeAjaxJSONResponse(ResultMessageBuilder.build(false, "对不起！您修改后的物料号已存在！"), response);
+            return;
+        }
+        hzAccessoriesLibs.setpUpdateName(UserInfo.getUser().getUserName());
         int i = hzAccessoriesLibsDAO.update(hzAccessoriesLibs);
         if (i > 0) {
             writeAjaxJSONResponse(ResultMessageBuilder.build(true, "操作成功！"), response);

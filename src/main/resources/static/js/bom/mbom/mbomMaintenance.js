@@ -318,26 +318,28 @@ function initTable1(mBomUrl) {
                                         width: 500
                                     })
                                     url = "mbom/refresh?projectId="+$("#project", window.top.document).val();
-                                    $.ajax({
-                                        type: "POST",
-                                        //ajax需要添加打包名
-                                        url: url,
-                                        // data: myData,
-                                        contentType: "application/json",
-                                        success: function (result) {
-                                            $('.modal-dialog', window.top.document).parent('div').remove()
-                                            $('body', window.top.document).find('.modal-backdrop').remove();
-                                            if (result.success) {
-                                                layer.msg('同步成功', {icon: 1, time: 2000})
-                                            } else if (!result.success) {
-                                                window.Ewin.alert({message: result.errMsg});
+                                    setTimeout(function() {
+                                        $.ajax({
+                                            type: "POST",
+                                            //ajax需要添加打包名
+                                            url: url,
+                                            // data: myData,
+                                            contentType: "application/json",
+                                            success: function (result) {
+                                                $('.modal-dialog', window.top.document).parent('div').remove()
+                                                $('body', window.top.document).find('.modal-backdrop').remove();
+                                                if (result.success) {
+                                                    layer.msg('同步成功', {icon: 1, time: 2000})
+                                                } else if (!result.success) {
+                                                    window.Ewin.alert({message: result.errMsg});
+                                                }
+                                                $mBomTable.bootstrapTable("refresh");
+                                            },
+                                            error: function (info) {
+                                                window.Ewin.alert({message: "操作失败:" + info.status});
                                             }
-                                            $mBomTable.bootstrapTable("refresh");
-                                        },
-                                        error: function (info) {
-                                            window.Ewin.alert({message: "操作失败:" + info.status});
-                                        }
-                                    })
+                                        })
+                                    },500)
                                 }
                             });
                         }
@@ -629,6 +631,7 @@ function initTable1(mBomUrl) {
                 ],
             });
             // $mBomTable.bootstrapTable('hideColumn', 'eBomPuid');
+            $mBomTable.bootstrapTable('hideColumn', 'level');
         }
     });
 }
@@ -660,7 +663,7 @@ function doQuery1() {
 }
 function initTable2(productionUrl) {
     var projectId = $("#project", window.top.document).val();
-    var $productionTable = $("#whiteBodyProductionTable");
+    var  $productionTable = $("#whiteBodyProductionTable");
     // $productionTable.bootstrapTable('destroy');
 
     var currentProjectHead = $("#currentProjectHead", window.top.document).val();
@@ -739,7 +742,7 @@ function initTable2(productionUrl) {
                 cache: false,
                 striped: true,                              //是否显示行间隔色
                 sidePagination: "server",           //分页方式：client客户端分页，server服务端分页（*）
-                height: $(window.parent.document).find("#wrapper").height() - 320,
+                height: $(window.parent.document).find("#wrapper").height() - 170,
                 width: $(window).width(),
                 formId: "queryWhiteBodyProduction",
                 undefinedText: "",//当数据为 undefined 时显示的字符
@@ -847,6 +850,7 @@ function initTable2(productionUrl) {
                 ],
             });
             // $productionTable.bootstrapTable('hideColumn', 'eBomPuid');
+            $productionTable.bootstrapTable('hideColumn', 'level');
         }
     });
 }
@@ -957,9 +961,9 @@ function initTable3(financialUrl) {
                 cache: false,
                 striped: true,                              //是否显示行间隔色
                 sidePagination: "server",           //分页方式：client客户端分页，server服务端分页（*）
-                height: $(window.parent.document).find("#wrapper").height() - 320,
+                height: $(window.parent.document).find("#wrapper").height() - 170,
                 width: $(window).width(),
-                formId: "queryMbomMain",
+                formId: "queryWhiteBodyFinancial",
                 undefinedText: "",//当数据为 undefined 时显示的字符
                 pagination: true,
                 pageNumber: 1,                       //初始化加载第一页，默认第一页
@@ -1064,6 +1068,8 @@ function initTable3(financialUrl) {
                 ],
             });
             // $financialTable.bootstrapTable('hideColumn', 'eBomPuid');
+            $financialTable.bootstrapTable('hideColumn', 'level');
+
         }
     });
 }

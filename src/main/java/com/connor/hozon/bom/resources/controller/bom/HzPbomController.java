@@ -264,16 +264,25 @@ public class HzPbomController extends BaseController {
 
     /**
      * 合成工艺合件
-     *
+     *@Autor Fancyears·Malos
      * @param
      * @param param
-     * @Autor Fancyears·Malos
      */
     @RequestMapping(value = "/add/processCompose2", method = RequestMethod.POST)
     @ResponseBody
     public JSONObject addProcessCompose2(@RequestBody Map<String, Object> param) {
         return hzPbomService.simulateCraftingPart(param);
     }
+
+    @RequestMapping(value = "update/accessories",method = RequestMethod.GET)
+    public String getupdate(String projectId,String eBomPuid,Model model){
+        if (eBomPuid == null) {
+            return "";
+        }
+        model.addAttribute("data",eBomPuid);
+        return "bomManage/pbom/pbomManage/updateAccessoriesLibrary";
+    }
+
 
     /**
      * 合成工艺合件操作
@@ -289,4 +298,15 @@ public class HzPbomController extends BaseController {
     }
 
 
+    @RequestMapping("/query/accessories")
+    @ResponseBody
+    public JSONObject queryAccessories(String materielCode){
+        return hzPbomService.queryAccessories(materielCode);
+    }
+
+    @RequestMapping("/add/accessories")
+    @ResponseBody
+    public JSONObject addAccessories(String materielCode, String puid, String projectId){
+        return hzPbomService.addAccessories(puid, materielCode, projectId);
+    }
 }

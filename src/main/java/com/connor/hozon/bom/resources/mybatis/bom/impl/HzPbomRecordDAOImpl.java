@@ -1,5 +1,6 @@
 package com.connor.hozon.bom.resources.mybatis.bom.impl;
 
+import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
 import com.connor.hozon.bom.resources.domain.dto.request.DeleteHzPbomReqDTO;
 import com.connor.hozon.bom.resources.domain.query.HzBomRecycleByPageQuery;
 import com.connor.hozon.bom.resources.domain.query.HzPbomByPageQuery;
@@ -201,6 +202,21 @@ public class HzPbomRecordDAOImpl extends BaseSQLUtil implements HzPbomRecordDAO 
     }
 
     @Override
+    public int insertAccessories(String puid, String materielCode) {
+        Map<String, String> map = new HashMap<String, String>();
+        map.put("puid",puid);
+        map.put("materielCode",materielCode);
+        String secondPuid = UUIDHelper.generateUid();
+        map.put("secondPuid",secondPuid);
+        return super.executeInsert(map,"HzPbomRecordDAOImpl_insertAccessories");
+    }
+
+    @Override
+    public List<HzPbomLineRecord> queryAllBomLineIdByPuid(String puid) {
+        return super.executeQueryByPass(new HzPbomLineRecord(),puid,"HzPbomRecordDAOImpl_queryAllBomLineIdByPuid");
+    }
+
+    @Override
     public List<HzPbomLineRecord> getFirstLevelBomByParentId(String parnetId, String projectId) {
         Map<String,Object> map = new HashMap<>();
         map.put("parentId",parnetId);
@@ -208,4 +224,13 @@ public class HzPbomRecordDAOImpl extends BaseSQLUtil implements HzPbomRecordDAO 
         return super.findForList("HzPbomRecordDAOImpl_getFirstLevelBomByParentId",map);
     }
 
+
+
+    @Override
+    public List<HzPbomLineRecord> queryAllBomLineIdByPuid(String puid, String projectId) {
+        Map<String, String> map = new HashMap<String, String>();
+        map.put("puid",puid);
+        map.put("projectId",projectId);
+        return super.executeQueryByPass(new HzPbomLineRecord(),map,"HzPbomRecordDAOImpl_queryAllBomLineIdByPuid");
+    }
 }
