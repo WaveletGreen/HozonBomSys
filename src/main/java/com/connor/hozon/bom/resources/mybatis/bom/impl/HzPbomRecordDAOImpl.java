@@ -113,9 +113,9 @@ public class HzPbomRecordDAOImpl extends BaseSQLUtil implements HzPbomRecordDAO 
 
     @Override
     public int  getHzBomLineCount(String projectId) {
-       Map<String,Object> map = new HashMap<>();
-       map.put("projectId",projectId);
-       return (int)super.findForObject("HzPbomRecordDAOImpl_getTotalCount",map);
+        Map<String,Object> map = new HashMap<>();
+        map.put("projectId",projectId);
+        return (int)super.findForObject("HzPbomRecordDAOImpl_getTotalCount",map);
     }
 
     @Override
@@ -164,7 +164,7 @@ public class HzPbomRecordDAOImpl extends BaseSQLUtil implements HzPbomRecordDAO 
     public String findMinOrderNumWhichGreaterThanThisOrderNum(String projectId,String orderNum) {
         Map<String,Object> map = new HashMap<>();
         map.put("projectId",projectId);
-        map.put("sortNum",orderNum);
+        map.put("sortNum",Double.parseDouble(orderNum));
         return (String) super.findForObject("HzPbomRecordDAOImpl_findMinOrderNumWhichGreaterThanThisOrderNum",map);
     }
 

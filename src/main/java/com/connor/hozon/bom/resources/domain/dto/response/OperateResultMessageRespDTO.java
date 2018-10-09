@@ -13,6 +13,7 @@ public class OperateResultMessageRespDTO {
     public static final String ILLGAL_ARGUMENT = "非法参数！";
     public static final String FILE_SIZE_OVER_FLOW ="文件过大！";
     public static final String FILE_IS_NOT_EXCEL ="传入的文件格式不是excel！";
+    public static final String CANT_DELETE = "不能删除基础工艺对象";
 
     public static final Long SUCCESS_CODE = 1000L;
     public static final Long FAILED_CODE = 1001L;
@@ -88,6 +89,13 @@ public class OperateResultMessageRespDTO {
     public static OperateResultMessageRespDTO fileIsNotExcel(){
         OperateResultMessageRespDTO operateResultMessageRespDTO = new OperateResultMessageRespDTO();
         operateResultMessageRespDTO.setErrMsg(FILE_IS_NOT_EXCEL);
+        operateResultMessageRespDTO.setErrCode(FAILED_CODE);
+        return operateResultMessageRespDTO;
+    }
+
+    public static OperateResultMessageRespDTO cantDelete(){
+        OperateResultMessageRespDTO operateResultMessageRespDTO = new OperateResultMessageRespDTO();
+        operateResultMessageRespDTO.setErrMsg(CANT_DELETE);
         operateResultMessageRespDTO.setErrCode(FAILED_CODE);
         return operateResultMessageRespDTO;
     }
