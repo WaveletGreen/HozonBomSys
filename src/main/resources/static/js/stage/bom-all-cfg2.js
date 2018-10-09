@@ -839,6 +839,11 @@ function editorOrSave(but) {
                                             var div = $(item).find('div');
                                             $(select).hide();
                                             $(div).text($(select).find("option:selected").text());
+                                            if($(div).text()=="选配"){
+                                                $(div).css('color','#8449d6');
+                                            }else{
+                                                $(div).css('color','#43da4e');
+                                            }
                                             $(div).show();
                                             msgVal = $(select).val();
                                         } else if (index > 10) {

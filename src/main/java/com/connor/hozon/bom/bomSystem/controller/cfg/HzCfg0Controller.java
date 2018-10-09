@@ -14,6 +14,8 @@ import com.connor.hozon.bom.bomSystem.service.iservice.integrate.ISynFeatureServ
 import com.connor.hozon.bom.bomSystem.service.iservice.integrate.ISynRelevanceService;
 import com.connor.hozon.bom.common.base.entity.QueryBase;
 import com.connor.hozon.bom.common.util.user.UserInfo;
+import com.connor.hozon.bom.resources.domain.dto.response.HzDictionaryLibraryRespDTO;
+import com.connor.hozon.bom.resources.service.resourcesLibrary.dictionaryLibrary.HzDictionaryLibraryService;
 import com.connor.hozon.bom.sys.entity.User;
 import integration.Author;
 import integration.service.impl.cfg2.TransCfgService;
@@ -29,6 +31,7 @@ import sql.pojo.cfg.HzCfg0MainRecord;
 import sql.pojo.cfg.HzCfg0OptionFamily;
 import sql.pojo.cfg.HzCfg0Record;
 import sql.pojo.cfg.vwo.HzFeatureChangeBean;
+import sql.pojo.resourcesLibrary.dictionaryLibrary.HzDictionaryLibrary;
 
 import java.util.*;
 
@@ -77,6 +80,9 @@ public class HzCfg0Controller extends ExtraIntegrate {
     @Autowired
     IHzFeatureChangeService iHzFeatureChangeService;
 
+    @Autowired
+    HzDictionaryLibraryService hzDictionaryLibraryService;
+
     /**
      * 日志记录
      */
@@ -117,6 +123,16 @@ public class HzCfg0Controller extends ExtraIntegrate {
         return "cfg/feature/addFeature";
     }
 
+    @RequestMapping("/addPage2")
+    public String addPage2(@RequestParam("projectPuid") String projectPuid, Model model) {
+        HzCfg0MainRecord mainRecord = hzCfg0MainRecordDao.selectByProjectPuid(projectPuid);
+        if (mainRecord == null) {
+            return "error";
+        }
+        model.addAttribute("entity", mainRecord);
+        return "cfg/feature/addFeature2";
+    }
+
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     @ResponseBody
     public JSONObject add(@RequestBody HzCfg0Record record) throws Exception {
@@ -129,6 +145,92 @@ public class HzCfg0Controller extends ExtraIntegrate {
         record.setCreator(user.getUserName());
         record.setLastModifier(user.getUserName());
         record.setCfgAbolishDate(DateStringHelper.forever());
+        if (!hzCfg0Service.preCheck(record)) {
+            result.put("status", false);
+            result.put("msg", "<p style='color:red;'>特性值已存在</p>");
+            return result;
+        }
+        /**生成自身的puid*/
+        record.setPuid(UUIDHelper.generateUpperUid());
+
+        HzCfg0OptionFamily family = new HzCfg0OptionFamily();
+        //主配置
+        family.setpOfCfg0Main(record.getpCfg0MainItemPuid());
+        //特性代码
+        family.setpOptionfamilyName(record.getpCfg0FamilyName());
+        //特性描述
+        family.setpOptionfamilyDesc(record.getpCfg0FamilyDesc());
+
+        HzCfg0OptionFamily _family = cfg0OptionFamilyService.doGetByCodeAndDescWithMain(family);
+        //检查当前项目有没有用到特定的特性
+        if (_family == null) {
+            family.setPuid(UUIDHelper.generateUpperUid());
+            //没有用到，则进行特性插入
+            if (!cfg0OptionFamilyService.doInsert(family)) {
+                result.put("status", false);
+                result.put("msg", "添加特性" + family.getpOptionfamilyName() + "失败，请联系系统管理员");
+                return result;
+            }
+        } else {
+            family = _family;
+        }
+
+        //关联到特性的UID
+        record.setpCfg0FamilyPuid(family.getPuid());
+        if (!checkString(record.getpCfg0Relevance())) {
+            record.setpCfg0Relevance("$ROOT." + record.getpCfg0FamilyName() + " = '" + record.getpCfg0ObjectId() + "'");
+        }
+        //将特性值插入到表中
+        if (hzCfg0Service.doInsertOne(record)) {
+            result.put("status", true);
+            result.put("msg", "添加特性值" + record.getpCfg0ObjectId() + "成功");
+//            //发送到SAP,走流程
+//            if (!SynMaterielService.debug) {
+//                iSynFeatureService.addFeature(Collections.singletonList(record));
+//            }
+            record = hzCfg0Service.doSelectOneByPuid(record.getPuid());
+            if (iHzFeatureChangeService.insertByCfgAfter(record) <= 0) {
+                logger.error("创建后自动同步变更后记录值失败，请联系管理员");
+            }
+            HzCfg0Record record1 = new HzCfg0Record();
+            record1.setPuid(record.getPuid());
+            if (iHzFeatureChangeService.insertByCfgBefore(record1) <= 0) {
+                logger.error("创建后自动同步变更前记录值失败，请联系管理员");
+            }
+
+
+        } else {
+            result.put("status", false);
+            result.put("msg", "添加特性值" + record.getpCfg0ObjectId() + "失败，请联系系统管理员");
+        }
+        return result;
+    }
+
+    @RequestMapping(value = "/add2", method = RequestMethod.POST)
+    @ResponseBody
+    public JSONObject add2(@RequestBody HzCfg0Record record) throws Exception {
+        JSONObject result = new JSONObject();
+        User user = UserInfo.getUser();
+
+        //获取特性值
+        String cfgObjectId = record.getpCfg0ObjectId();
+        HzDictionaryLibrary hzDictionaryLibrary = hzDictionaryLibraryService.queryLibraryDTOByCfgObject(cfgObjectId);
+        if(hzDictionaryLibrary==null||hzDictionaryLibrary.getPuid()==null){
+            result.put("status", false);
+            result.put("msg", "<p style='color:red;'>特性值在配置字典中不存在</p>");
+            return result;
+        }
+        record.setpCfg0FamilyName(hzDictionaryLibrary.getFamillyCode().toUpperCase());
+        record.setpCfg0ObjectId(hzDictionaryLibrary.getEigenValue().toUpperCase());
+        //创建人和修改人
+        record.setCreator(user.getUserName());
+        record.setLastModifier(user.getUserName());
+        record.setCfgAbolishDate(DateStringHelper.forever());
+        //基本信息
+        record.setpCfg0FamilyDesc(hzDictionaryLibrary.getFamillyCh());
+        record.setpCfg0Desc(hzDictionaryLibrary.getValueDescCh());
+        record.setpH9featureenname(hzDictionaryLibrary.getValueDescEn());
+
         if (!hzCfg0Service.preCheck(record)) {
             result.put("status", false);
             result.put("msg", "<p style='color:red;'>特性值已存在</p>");
@@ -517,4 +619,18 @@ public class HzCfg0Controller extends ExtraIntegrate {
         return "stage/templateOfIntegrate";
     }
 
+    @RequestMapping("/returnCfgMsg")
+    @ResponseBody
+    public JSONObject returnCfgMsg (String cfgVal){
+        JSONObject result = new JSONObject();
+        HzDictionaryLibrary hzDictionaryLibrary = hzDictionaryLibraryService.queryLibraryDTOByCfgObject(cfgVal);
+        if(hzDictionaryLibrary!=null&&hzDictionaryLibrary.getPuid()!=null){
+            JSONObject libraryJson = JSONObject.fromObject(hzDictionaryLibrary);
+            result.put("stage",true);
+            result.put("data",libraryJson);
+        }else {
+            result.put("stage",false);
+        }
+        return result;
+    }
 }
