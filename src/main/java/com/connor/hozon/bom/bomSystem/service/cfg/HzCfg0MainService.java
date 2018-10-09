@@ -25,4 +25,14 @@ public class HzCfg0MainService {
         return hzCfg0MainRecordDao.selectByPrimaryKey(puid);
     }
 
+    /**
+     * 选择更新
+     *
+     * @param mainRecord
+     * @return
+     */
+    public boolean doUpdateByPrimaryKeySelective(HzCfg0MainRecord mainRecord) {
+        return hzCfg0MainRecordDao.updateByPrimaryKeySelective(mainRecord) > 0 ? true : false;
+    }
+
 }

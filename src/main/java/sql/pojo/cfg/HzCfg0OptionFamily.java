@@ -1,5 +1,8 @@
 package sql.pojo.cfg;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public class HzCfg0OptionFamily {
     /**
      * 主键
@@ -17,6 +20,11 @@ public class HzCfg0OptionFamily {
      * 特性描述
      */
     private String pOptionfamilyDesc;
+
+    @Getter
+    @Setter
+    private String ofDicLibUid;
+
     public String getPuid() {
         return puid;
     }

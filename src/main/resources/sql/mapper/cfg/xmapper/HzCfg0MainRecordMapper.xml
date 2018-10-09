@@ -11,6 +11,7 @@
         <result column="P_CFG0_OF_WHICH_PROJECT_PUID" jdbcType="VARCHAR" property="pCfg0OfWhichProjectPuid"/>
         <result column="P_CFG0_LAST_MOD_DATE" jdbcType="TIMESTAMP" property="pCfg0LastModDate"/>
         <result column="P_CFG0_ORG_POSTER" jdbcType="VARCHAR" property="pCfg0OrgPoster"/>
+        <result column="FEATURE_SYN_DIC_FLAG" jdbcType="INTEGER" property="featureSynDicFlag"/>
     </resultMap>
     <sql id="Base_Column_List">
         PUID,
@@ -21,7 +22,8 @@
         P_CFG0_OF_WHICH_PROJECT,
         P_CFG0_OF_WHICH_PROJECT_PUID,
         P_CFG0_LAST_MOD_DATE,
-        P_CFG0_ORG_POSTER
+        P_CFG0_ORG_POSTER,
+        FEATURE_SYN_DIC_FLAG
   </sql>
     <sql id="Base_Values_List">
         #{puid,jdbcType=VARCHAR},
@@ -32,7 +34,8 @@
         #{pCfg0OfWhichProject,jdbcType=VARCHAR},
         #{pCfg0OfWhichProjectPuid,jdbcType=VARCHAR},
         #{pCfg0LastModDate,jdbcType=TIMESTAMP},
-        #{pCfg0OrgPoster,jdbcType=VARCHAR}
+        #{pCfg0OrgPoster,jdbcType=VARCHAR},
+        #{featureSynDicFlag,jdbcType=INTEGER}
     </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
         select
@@ -54,4 +57,16 @@
         <include refid="Base_Values_List"/>
         )
     </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="sql.pojo.cfg.HzCfg0MainRecord">
+        UPDATE HZ_CFG0_MAIN_RECORD t
+        <set>
+            <if test="featureSynDicFlag!=null">
+                FEATURE_SYN_DIC_FLAG=#{featureSynDicFlag,jdbcType=INTEGER}
+            </if>
+        </set>
+        <where>
+            t.PUID = #{puid,jdbcType=VARCHAR}
+        </where>
+
+    </update>
 </mapper>

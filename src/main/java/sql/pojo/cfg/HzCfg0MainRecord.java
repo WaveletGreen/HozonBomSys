@@ -1,5 +1,8 @@
 package sql.pojo.cfg;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.Date;
 
 public class HzCfg0MainRecord {
@@ -20,6 +23,10 @@ public class HzCfg0MainRecord {
     private Date pCfg0LastModDate;
 
     private Object pCfg0OrgPoster;
+
+    @Getter
+    @Setter
+    private Integer featureSynDicFlag;
 
     public String getPuid() {
         return puid;
