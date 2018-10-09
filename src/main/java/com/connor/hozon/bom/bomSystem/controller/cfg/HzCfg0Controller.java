@@ -138,13 +138,18 @@ public class HzCfg0Controller extends ExtraIntegrate {
         record.setPuid(UUIDHelper.generateUpperUid());
 
         HzCfg0OptionFamily family = new HzCfg0OptionFamily();
+        //主配置
         family.setpOfCfg0Main(record.getpCfg0MainItemPuid());
+        //特性代码
         family.setpOptionfamilyName(record.getpCfg0FamilyName());
+        //特性描述
         family.setpOptionfamilyDesc(record.getpCfg0FamilyDesc());
 
         HzCfg0OptionFamily _family = cfg0OptionFamilyService.doGetByCodeAndDescWithMain(family);
+        //检查当前项目有没有用到特定的特性
         if (_family == null) {
             family.setPuid(UUIDHelper.generateUpperUid());
+            //没有用到，则进行特性插入
             if (!cfg0OptionFamilyService.doInsert(family)) {
                 result.put("status", false);
                 result.put("msg", "添加特性" + family.getpOptionfamilyName() + "失败，请联系系统管理员");
@@ -154,10 +159,12 @@ public class HzCfg0Controller extends ExtraIntegrate {
             family = _family;
         }
 
+        //关联到特性的UID
         record.setpCfg0FamilyPuid(family.getPuid());
         if (!checkString(record.getpCfg0Relevance())) {
             record.setpCfg0Relevance("$ROOT." + record.getpCfg0FamilyName() + " = '" + record.getpCfg0ObjectId() + "'");
         }
+        //将特性值插入到表中
         if (hzCfg0Service.doInsertOne(record)) {
             result.put("status", true);
             result.put("msg", "添加特性值" + record.getpCfg0ObjectId() + "成功");

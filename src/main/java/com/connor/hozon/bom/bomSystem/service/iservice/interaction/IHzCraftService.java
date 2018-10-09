@@ -22,14 +22,6 @@ public interface IHzCraftService {
      */
     HzPbomLineRecord craftNewPart(Map<String, String> data);
 
-    /**
-     * 将合成源父层挂载在新件下
-     *
-     * @param parentUids
-     * @param part
-     * @return
-     */
-    List<HzPbomLineRecord> craftParents(List<String> parentUids, HzPbomLineRecord part) throws CloneNotSupportedException;
 
     /**
      * 将合成源子层挂载到新件下
@@ -40,22 +32,7 @@ public interface IHzCraftService {
      */
     void craftChildren(List<String> childrenUids, HzPbomLineRecord part,Map<String, Map<String, HzPbomLineRecord>> myWavelet) throws Exception;
 
-    /**
-     * 将合成的新件挂载到目标件下
-     *
-     * @param targetUids
-     * @param part
-     * @return
-     */
-    List<HzPbomLineRecord> craftAssignToTarget(List<String> targetUids, HzPbomLineRecord part);
 
-    /**
-     * 将受影响的件进行更新
-     *
-     * @param parts
-     * @return
-     */
-    boolean doSaveToDb(List<HzPbomLineRecord> parts);
 
     /**
      * 自动生成工艺合件
