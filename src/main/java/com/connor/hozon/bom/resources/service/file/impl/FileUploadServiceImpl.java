@@ -57,7 +57,7 @@ public class FileUploadServiceImpl implements FileUploadService {
 
     private Integer maxOrderNum = null;
     @Override
-    public OperateResultMessageRespDTO UploadEbomToDB(MultipartFile file, String projectId) {
+    public OperateResultMessageRespDTO uploadEbomToDB(MultipartFile file, String projectId) {
         try {
             //判断权限
             boolean b = PrivilegeUtil.writePrivilege();

@@ -179,8 +179,7 @@ function initTable1(mBomUrl) {
                 pagination: true,
                 pageNumber: 1,                       //初始化加载第一页，默认第一页
                 pageSize: 20,                       //每页的记录行数（*）
-                pageList: ['ALL', 20, 50, 100, 200, 500, 1000],        //可供选择的每页的行数（*）
-                uniqueId: "puid",                     //每一行的唯一标识，一般为主键列
+                pageList: ['ALL', 10, 20, 50, 100, 200, 500, 1000],        //可供选择的每页的行数（*）                uniqueId: "puid",                     //每一行的唯一标识，一般为主键列
                 showExport: true,
                 //exportDataType: 'all',
                 columns: column,
@@ -749,8 +748,7 @@ function initTable2(productionUrl) {
                 pagination: true,
                 pageNumber: 1,                       //初始化加载第一页，默认第一页
                 pageSize: 20,                       //每页的记录行数（*）
-                pageList: ['ALL', 20, 50, 100, 200, 500, 1000],        //可供选择的每页的行数（*）
-                uniqueId: "puid",                     //每一行的唯一标识，一般为主键列
+                pageList: ['ALL', 10, 20, 50, 100, 200, 500, 1000],        //可供选择的每页的行数（*）                uniqueId: "puid",                     //每一行的唯一标识，一般为主键列
                 showExport: true,
                 //exportDataType: 'all',
                 columns: column,
@@ -968,8 +966,7 @@ function initTable3(financialUrl) {
                 pagination: true,
                 pageNumber: 1,                       //初始化加载第一页，默认第一页
                 pageSize: 20,                       //每页的记录行数（*）
-                pageList: ['ALL', 20, 50, 100, 200, 500, 1000],        //可供选择的每页的行数（*）
-                uniqueId: "puid",                     //每一行的唯一标识，一般为主键列
+                pageList: ['ALL', 10, 20, 50, 100, 200, 500, 1000],        //可供选择的每页的行数（*）                uniqueId: "puid",                     //每一行的唯一标识，一般为主键列
                 showExport: true,
                 //exportDataType: 'all',
                 columns: column,

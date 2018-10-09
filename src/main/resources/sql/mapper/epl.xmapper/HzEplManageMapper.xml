@@ -748,7 +748,7 @@
               )
            )u
         WHERE
-            ROWNUM &lt;=(#{limit,jdbcType=INTEGER}*(#{offset,jdbcType=INTEGER}+1))
+            ROWNUM &lt;=(#{limit,jdbcType=INTEGER})
             <if test="lineId != null and lineId!='' ">
                 and u.P_BOM_LINE_ID like concat(concat('%', #{lineId, jdbcType=VARCHAR}), '%')
             </if>
@@ -764,7 +764,7 @@
             order by CAST(P_SORT_NUM as FLOAT)
         )
         where
-          rn &gt;(#{limit,jdbcType=INTEGER}*#{offset,jdbcType=INTEGER})
+          rn &gt;(#{offset,jdbcType=INTEGER})
     </select>
   <!--查询EPL信息总数-->
   <select id="HzEplManageRecordDAOImpl_findTotalCount" resultType="java.lang.Integer" parameterType="java.util.HashMap">
@@ -1273,7 +1273,7 @@
 
     <!--根据零件号查询bom-->
     <select id="HzEbomRecordDAOImpl_findEbom" resultMap="BaseResultMap" parameterType="java.util.HashMap">
-        SELECT t1.*from HZ_BOM_LINE_RECORD t1
+        SELECT t1.* from HZ_BOM_LINE_RECORD t1
         where t1.p_bom_digifax_id=(
         select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(
         select t2.puid from Hz_project_libs t2
