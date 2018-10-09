@@ -9,7 +9,7 @@ import java.util.Objects;
  * Created by haozt on 2018/5/25
  * EBOM 和PBOM 两张表信息  继承自EBOM  维护PBOM
  */
-public class HzPbomLineRecord {
+public class HzPbomLineRecord implements Cloneable{
     private String parentUid;
     private Integer isDept;
     private String bomDigifaxId;
