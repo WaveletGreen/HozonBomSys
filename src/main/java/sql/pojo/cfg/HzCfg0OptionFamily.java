@@ -1,11 +1,21 @@
 package sql.pojo.cfg;
 
 public class HzCfg0OptionFamily {
+    /**
+     * 主键
+     */
     private String puid;
-
+    /**
+     * 主配置外键，可从项目UID获取到
+     */
     private String pOfCfg0Main;
-
+    /**
+     * 特性代码
+     */
     private String pOptionfamilyName;
+    /**
+     * 特性描述
+     */
     private String pOptionfamilyDesc;
     public String getPuid() {
         return puid;

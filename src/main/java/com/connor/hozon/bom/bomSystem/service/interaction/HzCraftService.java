@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import sql.pojo.bom.HzPbomLineRecord;
 
+import java.io.IOException;
 import java.util.*;
 
 import static com.connor.hozon.bom.bomSystem.helper.StringHelper.checkString;
@@ -30,10 +31,13 @@ import static com.connor.hozon.bom.bomSystem.helper.StringHelper.checkString;
  */
 @Configuration
 public class HzCraftService implements IHzCraftService {
+
+    @Autowired
+    HzPbomRecordDAO hzPbomRecordDAO;
     /**
      * 预设随机数产生的精度后移位
      */
-    public static final double RANDOM_SETTING = 0.1;
+    public static double RANDOM_SETTING = 0.1;
     /**
      * 目标挂载对象零件代码
      */
@@ -42,8 +46,6 @@ public class HzCraftService implements IHzCraftService {
      * 项目UID
      */
     private String projectUid;
-    @Autowired
-    HzPbomRecordDAO hzPbomRecordDAO;
     /**
      * 需要删除的子层
      */
@@ -72,22 +74,38 @@ public class HzCraftService implements IHzCraftService {
      * 查询参数
      */
     private Map<String, Object> param = new HashMap<>();
-
+    /**
+     * 原始排序号，实则需要排序后的第一位查找编号，用于重新对受影响的子层进行查找编号进行重新编排
+     */
     private Map<String, List<Integer>> orgOrder = new LinkedHashMap<>();
-
+    /**
+     * 对于相同id的零件号，其所在的BOM位置是不一样的，因此需要对不同位置的BOM进行新UID和原始UID做对应，为子进行重新查找到原来的父做索引
+     */
     private Map<String, String> theKeyToAllSameParent = new LinkedHashMap<>();
     /**
      * 最大的查找编号
      */
     private Map<String, LocalCraft> theMaxInorder = new LinkedHashMap<>();
-    public static boolean isDebug = true;
+    /**
+     * 调试阶段
+     */
+    public static boolean CRAFT_DEBUG = true;
+    /**
+     * 插入测试，true则不进行插入
+     */
     private boolean isInsertDebug = true;
     /**
      * 一份父层的属性结构图
      */
     private Map<String, Map<String, List<HzPbomLineRecord>>> allParentTree = new LinkedHashMap<>();
-
+    /**
+     * 合成目标位置的BOM行记录数据
+     */
     private Map<String, LocalCraftTarget> targetTreeMap = new LinkedHashMap<>();
+    /**
+     * 产生随机数
+     */
+    private final static Random RAND = new Random();
 
     /**
      * 自动生成工艺合件
@@ -101,17 +119,13 @@ public class HzCraftService implements IHzCraftService {
      */
     @Override
     public boolean autoCraft(String projectUid, List<String> parentUids, List<String> childrenUids, List<String> targetUids, Map<String, String> collectedData) {
-
         HzPbomLineRecord pbom = craftNewPart(collectedData);
         clearCoach();
         this.targetPartCodes.clear();
         this.projectUid = projectUid;
         param.put("projectId", projectUid);
         try {
-            PropertiesHelper helper = new PropertiesHelper();
-            Properties properties = helper.load();
-            isDebug = Boolean.valueOf(properties.getProperty("isCraft"));
-            isInsertDebug = Boolean.valueOf(properties.getProperty("isCraftInsert"));
+            preSetFromProperties();
             craftChildren(childrenUids, pbom, myWavelet);
             craftChildren(parentUids, pbom, myLovelyWavelet);
             craftParentTree(parentUids);
@@ -132,6 +146,17 @@ public class HzCraftService implements IHzCraftService {
             clearCoach();
         }
         return true;
+    }
+
+    /**
+     * 从配置文件中获取配置设置
+     */
+    private void preSetFromProperties() throws IOException {
+        PropertiesHelper helper = new PropertiesHelper();
+        Properties properties = helper.load();
+        CRAFT_DEBUG = Boolean.valueOf(properties.getProperty("CRAFT_DEBUG"));
+        isInsertDebug = Boolean.valueOf(properties.getProperty("CRAFT_INSERT_SETTING"));
+        RANDOM_SETTING = Double.parseDouble(properties.getProperty("CRAFT_RANDOM_SETTING"));
     }
 
     /**
@@ -334,7 +359,7 @@ public class HzCraftService implements IHzCraftService {
             //设置识别UID
             target.setUid(craft.getUid());
             //生成首位排序号
-            _temp = generateRandom(_temp, youryour);
+            _temp = GENERATE_RANDOM_DB(_temp, youryour);
             //查找编号重新排
             lineIndex = 10;
             pLineIndex = 10;
@@ -365,7 +390,7 @@ public class HzCraftService implements IHzCraftService {
                         for (int i = 0; i < values.getValue().size(); i++) {
                             HzPbomLineRecord record = values.getValue().get(i);
                             //重新生成排序号
-                            _temp = generateRandom(_temp, youryour);
+                            _temp = GENERATE_RANDOM_DB(_temp, youryour);
                             values.getValue().get(i).setSortNum(String.valueOf(_temp));
                             //如果有子层
                             if (record.getIsHas() == 1) {
@@ -544,7 +569,7 @@ public class HzCraftService implements IHzCraftService {
                                 //查找编号进位10
                                 HzPbomLineRecord record = ebony.getValue();
                                 String uid = UUIDHelper.generateUpperUid();
-                                _temp = generateRandom(_temp, youryour);
+                                _temp = GENERATE_RANDOM_DB(_temp, youryour);
                                 //设置排序号
                                 record.setSortNum(String.valueOf(_temp));
                                 //设置主键
@@ -632,9 +657,9 @@ public class HzCraftService implements IHzCraftService {
      */
     @Override
     public HzPbomLineRecord craftNewPart(Map<String, String> data) {
+        HzPbomLineRecord record = new HzPbomLineRecord();
         User user = UserInfo.getUser();
         Date now = new Date();
-        HzPbomLineRecord record = new HzPbomLineRecord();
         /**从前端搜索过来的数据***/
         record.setLineId(data.get("lineId"));
         record.setpBomOfWhichDept(data.get("pBomOfWhichDept"));
@@ -669,35 +694,14 @@ public class HzCraftService implements IHzCraftService {
         record.setStatus(1);
         //不是颜色件
         record.setColorPart(0);
-
         //设置为工艺合件
         record.setIsNewPart(2);
-
         ///lineIndex根据挂载位置进行规则进行设置
         //sortNum根据挂载位置进行规则进行设置
         //工艺合件不来源于EBOM，设置来源UID为自身UID
         // 自身主键和来源主键根据挂载位置决定
         // 数模层的数据也来源于挂载位置
-
-        if (false) {
-            if (hzPbomRecordDAO.insertList(Collections.singletonList(record)) <= 0) {
-                logger.error("插入PBOM数据失败");
-                return record;
-            }
-        }
         return record;
-    }
-
-    /**
-     * 将合成源父层挂载在新件下，每一个合成源的parent uid都要设置为新件的数据
-     *
-     * @param parentUids
-     * @param part
-     * @return
-     */
-    @Override
-    public List<HzPbomLineRecord> craftParents(List<String> parentUids, HzPbomLineRecord part) throws CloneNotSupportedException {
-        return null;
     }
 
     /**
@@ -834,29 +838,6 @@ public class HzCraftService implements IHzCraftService {
         logger.info("完成查找需要更新子层的父层");
     }
 
-    /**
-     * 将合成的新件挂载到目标件下
-     *
-     * @param targetUids
-     * @param part
-     * @return
-     */
-    @Override
-    public List<HzPbomLineRecord> craftAssignToTarget(List<String> targetUids, HzPbomLineRecord part) {
-        return null;
-    }
-
-    /**
-     * 将受影响的件进行更新
-     *
-     * @param parts
-     * @return
-     */
-    @Override
-    public boolean doSaveToDb(List<HzPbomLineRecord> parts) {
-        return false;
-    }
-
 
     /**
      * 获取当前挂载对象的零件号
@@ -896,7 +877,7 @@ public class HzCraftService implements IHzCraftService {
                 }
             }
         } else {
-            throw new Exception("查找编号错误");
+            throw new Exception("查找编号错误，查找编号必须为包含'.'的数字串");
         }
         return 0;
     }
@@ -905,7 +886,8 @@ public class HzCraftService implements IHzCraftService {
      * 对于子层，重设查找编号
      */
     private void craftResetOrder() {
-        sortorder();
+        //先进行排序
+        sortOrder();
         doReset();
     }
 
@@ -917,12 +899,17 @@ public class HzCraftService implements IHzCraftService {
             Map<String, HzPbomLineRecord> value = entry.getValue();
             String key = entry.getKey();
             int index = -1;
+            //进行循环的数据的映射key需要包含在theKeyToAllSameParent中，否则找不到子
             if (theKeyToAllSameParent.containsKey(key)) {
+                //第一位为需要切除的pBom的查找编号末尾数值，因此只需要将其进行排序号之后获取第一位即可
                 index = orgOrder.get(theKeyToAllSameParent.get(key)).get(0);
             } else {
+                logger.warn("没有找到有相同父的映射key，则没有找到排序好后的开始影响的pBom的查找编号");
                 continue;
             }
+            ///
             if (value != null && !value.isEmpty()) {
+                //进行循环，对查找编号进行重置
                 for (Map.Entry<String, HzPbomLineRecord> _entry : value.entrySet()) {
                     HzPbomLineRecord _value = _entry.getValue();
                     String lineIndex;
@@ -931,21 +918,26 @@ public class HzCraftService implements IHzCraftService {
                         orderIsResetChildren.put(key, map);
                     }
                     lineIndex = _value.getLineIndex();
+                    //替换末尾的号
                     lineIndex = lineIndex.substring(0, lineIndex.lastIndexOf(".")) + "." + index;
+                    //重新设置查找编号
                     _value.setLineIndex(lineIndex);
+                    //缓存
                     orderIsResetChildren.get(key).put(lineIndex, _value);
+                    //后面的查找编号进行递增10
                     index += 10;
                 }
+            } else {
+                logger.warn("需要重置查找编号的数据量map为空，key=" + key);
             }
         }
-
-        if (!isDebug) {
-            toChildrenNeedToUpdateItsLineIndex.clear();
-        }
-
+        logger.warn("重置受影响的子BOM查找编号成功");
     }
 
-    private void sortorder() {
+    /**
+     * 开始对对查找编号进行排序，分别对子层和父层进行排序
+     */
+    private void sortOrder() {
         getSortSrc(myWavelet);
         getSortSrc(myLovelyWavelet);
         sortIt();
@@ -953,7 +945,7 @@ public class HzCraftService implements IHzCraftService {
     }
 
     /**
-     * 排序
+     * 集合排序
      */
     private void sortIt() {
         if (!orgOrder.isEmpty()) {
@@ -998,28 +990,51 @@ public class HzCraftService implements IHzCraftService {
             return false;
     }
 
-    public double generateRandom(Double d1, Double d2) {
-        Random rand = new Random();
-        double d = rand.nextDouble() * RANDOM_SETTING;
+    /**
+     * 产生区域随机小数
+     *
+     * @param d1 下限区域
+     * @param d2 上限区域
+     * @return 处于上下限区域范围内的小数
+     */
+    public static double GENERATE_RANDOM_DB(Double d1, Double d2) {
+        double d = RAND.nextDouble() * RANDOM_SETTING;
         while (d1 + d >= d2) {
-            d = rand.nextDouble() * RANDOM_SETTING;
+            d = RAND.nextDouble() * RANDOM_SETTING;
         }
         return d + d1;
     }
 
-
     @Data
     class LocalCraft {
+        /**
+         * BOMLine主键
+         */
         private String uid;
+        /**
+         * 最大的查找编号
+         */
         private Integer index;
+        /**
+         * 最大的排序号
+         */
         private String sortNum;
+        /**
+         * pBOMLine
+         */
         private HzPbomLineRecord line;
-        private HzPbomLineRecord assignPoint;
+
     }
 
     @Data
     class LocalCraftTarget {
+        /**
+         * 主键
+         */
         private String uid;
+        /**
+         * 所有的子
+         */
         private List<HzPbomLineRecord> childrenTree = new ArrayList<>();
     }
 

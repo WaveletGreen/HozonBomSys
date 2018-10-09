@@ -27,7 +27,6 @@ import com.connor.hozon.bom.resources.service.bom.HzPbomService;
 import com.connor.hozon.bom.resources.service.epl.HzEPLManageRecordService;
 import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.resources.util.PrivilegeUtil;
-import com.connor.hozon.bom.sys.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -330,7 +329,7 @@ public class HzPbomServiceImpl implements HzPbomService {
             jsonObject.put("outerPart", record.getOuterPart());
             jsonObject.put("station", record.getStation());
             //            测试用
-            if (HzCraftService.isDebug)
+            if (HzCraftService.CRAFT_DEBUG)
                 jsonObject.put("lineIndex", record.getLineIndex());
             Integer type = record.getType();
             Integer buyUnit = record.getBuyUnit();
