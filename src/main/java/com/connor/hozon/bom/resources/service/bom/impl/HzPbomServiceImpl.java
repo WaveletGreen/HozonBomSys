@@ -329,8 +329,10 @@ public class HzPbomServiceImpl implements HzPbomService {
             jsonObject.put("outerPart", record.getOuterPart());
             jsonObject.put("station", record.getStation());
             //            测试用
-            if (HzCraftService.CRAFT_DEBUG)
+            if (HzCraftService.CRAFT_DEBUG){
                 jsonObject.put("lineIndex", record.getLineIndex());
+                jsonObject.put("sortNum", record.getSortNum());
+            }
             Integer type = record.getType();
             Integer buyUnit = record.getBuyUnit();
             if (Integer.valueOf(0).equals(type)) {

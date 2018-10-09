@@ -12,11 +12,11 @@ import java.util.Properties;
  */
 public class PropertiesHelper {
     private Properties properties;
-    private final static String src = "resource.properties";
+    public final static String SRC = "resource.properties";
 
     public Properties load() throws IOException {
         properties = new Properties();
-        InputStream in = getClass().getClassLoader().getResourceAsStream(src);
+        InputStream in = getClass().getClassLoader().getResourceAsStream(SRC);
         properties.load(in);
         in.close();
         return properties;
