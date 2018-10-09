@@ -189,7 +189,9 @@ function initTable(url) {
                             var _table = '<p>是否要删除您所选择的记录？</p>' +
                                 '<div style="max-height: 400px;overflow:scroll;"><table class="table table-striped tableNormalStyle" >';
                             for (var index in rows) {
-                                _table += '<tr><td>' + rows[index].pMaterielDesc + '</td></tr>';
+                                var pMaterielDesc = (rows[index].pMaterielDesc == undefined ? "" : rows[index].pMaterielDesc);
+                                var pMaterielDesc = (rows[index].pMaterielDesc == null ? "" : rows[index].pMaterielDesc);
+                                _table += '<tr><td>' + pMaterielDesc + '</td></tr>';
                                 materielIds.push(rows[index].materielId);
                                 procedureDesc.push(rows[index].pProcedureDesc);
                             }
