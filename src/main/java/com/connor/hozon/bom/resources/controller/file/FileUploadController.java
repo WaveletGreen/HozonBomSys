@@ -29,7 +29,7 @@ public class FileUploadController extends BaseController{
     public void filesUpload (@RequestParam("file") MultipartFile file,
 
                              @RequestParam("projectId") String projectId,HttpServletResponse response){
-        OperateResultMessageRespDTO respDTO = fileUploadService.UploadEbomToDB(file,projectId);
+        OperateResultMessageRespDTO respDTO = fileUploadService.uploadEbomToDB(file,projectId);
         writeAjaxJSONResponse(ResultMessageBuilder.build(OperateResultMessageRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
     }
 }

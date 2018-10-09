@@ -50,6 +50,13 @@ public class HzPbomRecordFactory {
         hzPbomLineRecord.setpBomLinePartClass(reqDTO.getpBomLinePartClass());
         hzPbomLineRecord.setLinePuid(UUID.randomUUID().toString());
         hzPbomLineRecord.setLineId(reqDTO.getLineId());
+        if(reqDTO.getColorPart().equals("Y")){
+            hzPbomLineRecord.setColorPart(1);
+        }else if(reqDTO.getColorPart().equals("N")){
+            hzPbomLineRecord.setColorPart(0);
+        }else {
+            hzPbomLineRecord.setColorPart(null);
+        }
         return hzPbomLineRecord;
     }
 

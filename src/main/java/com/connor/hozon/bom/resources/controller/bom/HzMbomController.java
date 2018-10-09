@@ -60,7 +60,7 @@ public class HzMbomController extends BaseController {
         tableTitle.put("level", "层级");
         tableTitle.put("rank", "级别");
         tableTitle.put("pBomOfWhichDept", "专业");
-        tableTitle.put("lineNo","查找编号");
+//        tableTitle.put("lineNo","查找编号");
         tableTitle.put("pLouaFlag","LOU/LOA");
         tableTitle.put("pBomLinePartClass", "零件分类");
         tableTitle.put("pBomLinePartResource", "零部件来源");
@@ -113,7 +113,7 @@ public class HzMbomController extends BaseController {
             _res.put("No", dto.getNo());
             _res.put("rank",dto.getRank());
             _res.put("level", dto.getLevel());
-            _res.put("lineNo",dto.getLineNo());
+//            _res.put("lineNo",dto.getLineNo());
             _res.put("pBomOfWhichDept", dto.getpBomOfWhichDept());
             _res.put("lineId", dto.getLineId());
             _res.put("pBomLinePartName", dto.getpBomLinePartName());

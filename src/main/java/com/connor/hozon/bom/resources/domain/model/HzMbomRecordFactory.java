@@ -173,12 +173,12 @@ public class HzMbomRecordFactory {
     }
 
 
-    public  HzMbomLineRecord generateSupMbom(HzPbomLineRecord record, int i, String projectId, List<HzConfigBomColorBean> beans){
+    public  HzMbomLineRecord generateSupMbom(HzPbomLineRecord record, int i, List<HzConfigBomColorBean> beans){
         HzMbomLineRecord mbomLineRecord = pBomRecordToMbomRecord(record);
         String lineId = mbomLineRecord.getLineId();
         if(Integer.valueOf(1).equals(record.getColorPart())&&ListUtil.isNotEmpty(beans)){
             if(!beans.get(i).getColorCode().equals("-")){
-                lineId = HzBomSysFactory.resultLineId(mbomLineRecord.getLineId(),projectId)+beans.get(i).getColorCode();
+                lineId = HzBomSysFactory.resultLineId(lineId)+beans.get(i).getColorCode();
             }
         }
         if(ListUtil.isNotEmpty(beans)){

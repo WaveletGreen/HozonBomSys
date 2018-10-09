@@ -374,15 +374,13 @@ public class HzEPLManageRecordServiceImpl implements HzEPLManageRecordService {
             List<HzEPLManageRecord> records = recordPage.getResult();
             for(HzEPLManageRecord record:records){
                 JSONObject jsonObject = new JSONObject();
-                jsonObject.put("puid", record.getPuid());
-                jsonObject.put("parentUid", record.getParentUid());
                 jsonObject.put("No",++num);
                 jsonObject.put("pBomOfWhichDept", record.getpBomOfWhichDept());
                 jsonObject.put("lineId", record.getLineID());
                 jsonObject.put("fna",record.getFna());
-                if(record.getStatus().equals(0)){
+                if(Integer.valueOf(0).equals(record.getStatus())){
                     jsonObject.put("status","D");
-                }else if(record.getStatus().equals(1)){
+                }else if(Integer.valueOf(1).equals(record.getStatus())){
                     jsonObject.put("status","A");
                 }else{
                     jsonObject.put("status","U");
@@ -393,11 +391,7 @@ public class HzEPLManageRecordServiceImpl implements HzEPLManageRecordService {
                 jsonObject.put("pBomLinePartEnName",record.getpBomLinePartEnName());
                 jsonObject.put("pBomLinePartResource", record.getpBomLinePartResource());
                 jsonObject.put("pFastener", record.getpFastener());
-                if(Integer.valueOf(1).equals(record.getIs2Y())){
-                    jsonObject.put("pLouaFlag","LOU");
-                }else{
-                    jsonObject.put("pLouaFlag","LOA");
-                }
+
                 if(Integer.valueOf(1).equals(record.getP3cpartFlag())){
                     jsonObject.put("p3cpartFlag", "Y");
                 }else {
@@ -454,7 +448,14 @@ public class HzEPLManageRecordServiceImpl implements HzEPLManageRecordService {
                 jsonObject.put("productLine", record.getProductLine());
                 jsonObject.put("mouldType", record.getMouldType());
                 jsonObject.put("outerPart", record.getOuterPart());
-                jsonObject.put("colorPart", record.getColorPart());
+
+                if(Integer.valueOf(1).equals(record.getColorPart())){
+                    jsonObject.put("colorPart", "Y");
+                }else if(Integer.valueOf(0).equals(record.getColorPart())){
+                    jsonObject.put("colorPart", "N");
+                }else {
+                    jsonObject.put("colorPart", "");
+                }
 
                 jsonObject.put("sparePart", record.getSparePart());
                 jsonObject.put("sparePartNum", record.getSparePartNum());
