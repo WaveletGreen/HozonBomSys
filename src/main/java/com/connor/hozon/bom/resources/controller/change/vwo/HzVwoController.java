@@ -211,6 +211,11 @@ public class HzVwoController {
         if (change != null) {
             User user = new User();
             try {
+                if (null == change.getPersonId()) {
+                    logger.error("没有选择正确的人员，可能选择了部门");
+                    result.put("status", false);
+                    result.put("msg", "没有选择正确的人员");
+                }
                 user.setId(Math.toIntExact(change.getPersonId()));
             } catch (ArithmeticException e) {
                 logger.error("没有选择正确的人员，可能选择了部门");
