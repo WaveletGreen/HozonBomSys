@@ -5,7 +5,7 @@ import java.util.Date;
 /**
  * 所有外键都进行了级联删除
  */
-public class HzColorModel {
+public class HzCfg0ModelColorDetail {
     /**
      * 主键
      */

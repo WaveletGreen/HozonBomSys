@@ -135,16 +135,16 @@ public class HzCfg0ModelColorController {
                 .collect(Collectors.toList()));
         List<HzCfg0ColorSet> colorList = hzCfg0ColorSetService.doGetAll();
         ArrayList<String> orgValue = new ArrayList<>();
-        List<HzColorModel> cm = hzColorModelService.doSelectByModelUidWithColor(puid);
+        List<HzCfg0ModelColorDetail> cm = hzColorModelService.doSelectByModelUidWithColor(puid);
 
         Map<String, HzCfg0OptionFamily> columnPuid = new LinkedHashMap<>();
-        Map<String, HzColorModel> cmx = new LinkedHashMap<>();
-        List<HzColorModel> toInsert = new ArrayList<>();
+        Map<String, HzCfg0ModelColorDetail> cmx = new LinkedHashMap<>();
+        List<HzCfg0ModelColorDetail> toInsert = new ArrayList<>();
 
         for (HzCfg0OptionFamily family : columnList) {
             columnPuid.put(family.getPuid(), family);
         }
-        for (HzColorModel hcm : cm) {
+        for (HzCfg0ModelColorDetail hcm : cm) {
             cmx.put(hcm.getCfgUid(), hcm);
         }
         //筛选出不足项，将不足项进行插入，但不会筛选出多余项,如果不按顺序进行排序会怎么样？
@@ -154,7 +154,7 @@ public class HzCfg0ModelColorController {
             } else {
                 //添加进结果集中
                 orgValue.add("-");
-                HzColorModel model1 = new HzColorModel();
+                HzCfg0ModelColorDetail model1 = new HzCfg0ModelColorDetail();
                 model1.setCfgUid(entry.getKey());
                 model1.setCfgMainUid(main.getPuid());
                 model1.setColorUid("-");
@@ -192,9 +192,9 @@ public class HzCfg0ModelColorController {
     public boolean updateColorModel(@RequestBody LinkedHashMap<String, String> form) {
         User user = UserInfo.getUser();
         Date date = new Date();
-        List<HzColorModel> colorModels = new ArrayList<>();
+        List<HzCfg0ModelColorDetail> colorModels = new ArrayList<>();
         /*修改之后需要进入流程的*/
-        List<HzColorModel> toProcess = new ArrayList<>();
+        List<HzCfg0ModelColorDetail> toProcess = new ArrayList<>();
         if (form != null && form.size() > 0) {
             HzCfg0ModelColor color = new HzCfg0ModelColor();
             form.forEach((key, value) -> {
@@ -213,7 +213,7 @@ public class HzCfg0ModelColorController {
                         break;
                 }
             });
-            List<HzColorModel> history = hzColorModelService.doSelectByModelUidWithColor(color.getPuid());
+            List<HzCfg0ModelColorDetail> history = hzColorModelService.doSelectByModelUidWithColor(color.getPuid());
             Map<String, String> mHistory = new HashMap<>();
             history.forEach(h -> mHistory.put(h.getCfgUid(), h.getColorUid()));
             //没有更新过的值不需要进行更新
@@ -223,7 +223,7 @@ public class HzCfg0ModelColorController {
                         continue;
                     }
                 }
-                HzColorModel model = new HzColorModel();
+                HzCfg0ModelColorDetail model = new HzCfg0ModelColorDetail();
                 model.setModelUid(color.getPuid());
                 model.setColorUid(entry.getValue());
                 model.setCfgUid(entry.getKey());
@@ -316,25 +316,25 @@ public class HzCfg0ModelColorController {
                 }
             }
             modelColor.setPuid(UUIDHelper.generateUpperUid());
-            List<HzColorModel> colorList = new ArrayList<>();
+            List<HzCfg0ModelColorDetail> colorList = new ArrayList<>();
             for (Map.Entry<String, String> entry : modelColor.getMapOfCfg0().entrySet()) {
 
-                HzColorModel hzColorModel = new HzColorModel();
-                hzColorModel.setPuid(UUIDHelper.generateUpperUid());
-                hzColorModel.setModelUid(modelColor.getPuid());
-                hzColorModel.setColorUid(entry.getValue());
-                hzColorModel.setCfgUid(entry.getKey());
-                hzColorModel.setCfgMainUid(modelColor.getpCfg0MainRecordOfMC());
-                hzColorModel.setCreateDate(date);
-                hzColorModel.setModifyDate(date);
-                hzColorModel.setCreator(user.getUserName());
-                hzColorModel.setModifier(user.getUserName());
+                HzCfg0ModelColorDetail hzCfg0ModelColorDetail = new HzCfg0ModelColorDetail();
+                hzCfg0ModelColorDetail.setPuid(UUIDHelper.generateUpperUid());
+                hzCfg0ModelColorDetail.setModelUid(modelColor.getPuid());
+                hzCfg0ModelColorDetail.setColorUid(entry.getValue());
+                hzCfg0ModelColorDetail.setCfgUid(entry.getKey());
+                hzCfg0ModelColorDetail.setCfgMainUid(modelColor.getpCfg0MainRecordOfMC());
+                hzCfg0ModelColorDetail.setCreateDate(date);
+                hzCfg0ModelColorDetail.setModifyDate(date);
+                hzCfg0ModelColorDetail.setCreator(user.getUserName());
+                hzCfg0ModelColorDetail.setModifier(user.getUserName());
 
                 if (mapOfFamilies.containsKey(entry.getKey())) {
-                    hzColorModel.setColorUid(modelColor.getpColorUid());
+                    hzCfg0ModelColorDetail.setColorUid(modelColor.getpColorUid());
                 }
 
-                colorList.add(hzColorModel);
+                colorList.add(hzCfg0ModelColorDetail);
             }
             hzCfg0ModelColorService.doInsertOne(modelColor);
             hzColorModelService.doInsertByBatch(colorList);
