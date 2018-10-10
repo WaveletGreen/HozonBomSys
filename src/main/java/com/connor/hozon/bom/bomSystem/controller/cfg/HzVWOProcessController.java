@@ -40,7 +40,7 @@ import java.util.stream.Collectors;
  */
 @Controller
 @RequestMapping("/vwoProcess")
-public class HzVWOProecrssController {
+public class HzVWOProcessController {
 
     @Autowired
     IHzVWOManagerService iHzVWOManagerService;
