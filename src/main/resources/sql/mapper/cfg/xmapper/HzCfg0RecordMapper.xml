@@ -23,6 +23,13 @@
         <result column="CFG_STATUS" jdbcType="INTEGER" property="cfgStatus"/>
         <result column="CFG_IS_IN_PROCESS" jdbcType="INTEGER" property="cfgIsInProcess"/>
         <result column="VWO_ID" jdbcType="DECIMAL" property="vwoId"/>
+        <!--新增-->
+        <result column="CFG_DIC_LIB_UID" jdbcType="VARCHAR" property="cfgDicLibUid"/>
+        <result column="CFG_REVERSE_2" jdbcType="VARCHAR" property="cfgReverse2"/>
+        <result column="CFG_REVERSE_3" jdbcType="VARCHAR" property="cfgReverse3"/>
+        <result column="CFG_REVERSE_4" jdbcType="VARCHAR" property="cfgReverse4"/>
+        <result column="CFG_REVERSE_5" jdbcType="VARCHAR" property="cfgReverse5"/>
+        <result column="CFG_REVERSE_6" jdbcType="VARCHAR" property="cfgReverse6"/>
     </resultMap>
 
     <resultMap id="MaterielFeatureMap" type="com.connor.hozon.bom.bomSystem.dto.HzMaterielFeatureBean">
@@ -59,7 +66,13 @@
         CFG_ABOLISH_DATE,
         CFG_STATUS,
         CFG_IS_IN_PROCESS,
-        VWO_ID
+        VWO_ID,
+        CFG_DIC_LIB_UID,
+        CFG_REVERSE_2,
+        CFG_REVERSE_3,
+        CFG_REVERSE_4,
+        CFG_REVERSE_5,
+        CFG_REVERSE_6
   </sql>
     <!--物料特性表列信息-->
     <sql id="Materiel_Feature_Column_List">
@@ -76,6 +89,7 @@
         t3.IS_SENT
   </sql>
     <!--根据主键搜索-->
+    <!--**************************************select**************************************-->
     <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
@@ -158,15 +172,6 @@
             and temp2.rown &lt;= ${param.page}*${param.limit}
         </if>
 
-        <!--select
-        <include refid="Base_Column_List"/>
-        from ${whichTable} t where
-        t.p_cfg0_main_item_puid=(
-        select t2.puid
-        from Hz_Cfg0_Main_Record t2
-        where t2.p_cfg0_of_which_project_puid=#{projectPuid,jdbcType=VARCHAR}
-        )
-        order by P_CFG0_OBJECT_ID-->
     </select>
     <!--根据主键列表进行搜索-->
     <select id="selectCfg0ListByPuids" parameterType="java.util.Map" resultMap="BaseResultMap">
@@ -213,7 +218,6 @@
         and t.P_CFG0_FAMILY_DESC=#{pCfg0FamilyDesc}
         and t.p_cfg0_main_item_puid=#{pCfg0MainItemPuid}
     </select>
-
     <select id="selectByFamilyUidWithProject" parameterType="sql.pojo.cfg.HzCfg0Record"
             resultMap="BaseResultMap">
         select
@@ -225,7 +229,6 @@
         )
         and t.P_CFG0_FAMILY_PUID=#{pCfg0FamilyPuid,jdbcType=VARCHAR}
     </select>
-
     <select id="tellMeHowManyOfThose" parameterType="com.connor.hozon.bom.bomSystem.dto.HzFeatureQueryDTO"
             resultType="java.lang.Integer">
         select count(*) from HZ_CFG0_RECORD t
@@ -240,6 +243,7 @@
             and t.p_cfg0_family_name like upper(#{feature})||'%'
         </if>
     </select>
+    <!--**************************************delete**************************************-->
     <!--根据主键删除-->
     <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from ${0}
@@ -268,6 +272,7 @@
 
     </delete>
     <!--插入1个特性值-->
+    <!--**************************************insert**************************************-->
     <insert id="insert" parameterType="sql.pojo.cfg.HzCfg0Record">
     insert into ${whichTable}
       (
@@ -286,7 +291,13 @@
         CFG_ABOLISH_DATE,
         CFG_STATUS,
         CFG_IS_IN_PROCESS,
-        VWO_ID
+        VWO_ID,
+        CFG_DIC_LIB_UID,
+        CFG_REVERSE_2,
+        CFG_REVERSE_3,
+        CFG_REVERSE_4,
+        CFG_REVERSE_5,
+        CFG_REVERSE_6
         )
     values (
         #{puid,jdbcType=VARCHAR},
@@ -304,9 +315,16 @@
         #{cfgAbolishDate,jdbcType=TIMESTAMP},
         0,
         0,
-        #{vwoId,jdbcType=VARCHAR}
+        #{vwoId,jdbcType=VARCHAR},
+        #{cfgDicLibUid,jdbcType=VARCHAR},
+        #{cfgReverse2,jdbcType=VARCHAR},
+        #{cfgReverse3,jdbcType=VARCHAR},
+        #{cfgReverse4,jdbcType=VARCHAR},
+        #{cfgReverse5,jdbcType=VARCHAR},
+        #{cfgReverse6,jdbcType=VARCHAR}
         )
   </insert>
+    <!--**************************************update**************************************-->
     <!--根据主键更新数据-->
     <update id="updateByPrimaryKey" parameterType="sql.pojo.cfg.HzCfg0Record">
         update ${whichTable}
@@ -353,6 +371,24 @@
             <if test="vwoId!=null">
                 VWO_ID = #{vwoId,jdbcType=DECIMAL},
             </if>
+            <if test="cfgDicLibUid!=null">
+                CFG_DIC_LIB_UID = #{cfgDicLibUid,jdbcType=VARCHAR},
+            </if>
+            <if test="cfgReverse2!=null">
+                CFG_REVERSE_2 = #{cfgReverse2,jdbcType=VARCHAR},
+            </if>
+            <if test="cfgReverse3!=null">
+                CFG_REVERSE_3 = #{cfgReverse3,jdbcType=VARCHAR},
+            </if>
+            <if test="cfgReverse4!=null">
+                CFG_REVERSE_4 = #{cfgReverse4,jdbcType=VARCHAR},
+            </if>
+            <if test="cfgReverse5!=null">
+                CFG_REVERSE_5 = #{cfgReverse5,jdbcType=VARCHAR},
+            </if>
+            <if test="cfgReverse6!=null">
+                CFG_REVERSE_6 = #{cfgReverse6,jdbcType=VARCHAR},
+            </if>
             P_FEATURE_LAST_MODIFY_DATE = sysdate
         </set>
         <where>
@@ -383,7 +419,6 @@
             )
         </if>
     </update>
-
     <update id="updateIsSent" parameterType="java.util.Map">
         update HZ_CFG0_MODEL_RECORD
         set
@@ -403,6 +438,4 @@
             )
         </if>
     </update>
-
-
 </mapper>

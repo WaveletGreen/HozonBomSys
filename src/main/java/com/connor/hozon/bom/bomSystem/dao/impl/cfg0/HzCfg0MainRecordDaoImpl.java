@@ -1,5 +1,6 @@
 package com.connor.hozon.bom.bomSystem.dao.impl.cfg0;
 
+import com.connor.hozon.bom.bomSystem.dao.BasicDaoImpl;
 import com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0MainRecordDao;
 import com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0ModelRecordDao;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,22 +16,27 @@ import sql.pojo.cfg.HzCfg0MainRecord;
  *
  * ***********************************************************************************************************************/
 @Service("hzCfg0MainRecordDao")
-public class HzCfg0MainRecordDaoImpl implements HzCfg0MainRecordDao {
+public class HzCfg0MainRecordDaoImpl extends BasicDaoImpl<HzCfg0MainRecord> implements HzCfg0MainRecordDao {
     @Autowired
     IBaseSQLUtil baseSQLUtil;
 
+    public HzCfg0MainRecordDaoImpl() {
+        clz = HzCfg0MainRecordDao.class;
+        clzName = clz.getCanonicalName();
+    }
+
     @Override
     public HzCfg0MainRecord selectByPrimaryKey(String puid) {
-        return baseSQLUtil.executeQueryByPass(new HzCfg0MainRecord(), puid, "com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0MainRecordDao.selectByPrimaryKey", true);
+        return baseSQLUtil.executeQueryByPass(new HzCfg0MainRecord(), puid, clzName + ".selectByPrimaryKey", true);
     }
 
     @Override
     public HzCfg0MainRecord selectByProjectPuid(String projectPuid) {
-        return baseSQLUtil.executeQueryByPass(new HzCfg0MainRecord(), projectPuid, "com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0MainRecordDao.selectByProjectPuid", true);
+        return baseSQLUtil.executeQueryByPass(new HzCfg0MainRecord(), projectPuid, clzName + ".selectByProjectPuid", true);
     }
 
-    @Override
-    public int insert(HzCfg0MainRecord hzCfg0MainRecord) {
-        return baseSQLUtil.executeInsert(hzCfg0MainRecord, "com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0MainRecordDao.insert");
-    }
+//    @Override
+//    public int insert(HzCfg0MainRecord hzCfg0MainRecord) {
+//        return baseSQLUtil.executeInsert(hzCfg0MainRecord, "com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0MainRecordDao.insert");
+//    }
 }

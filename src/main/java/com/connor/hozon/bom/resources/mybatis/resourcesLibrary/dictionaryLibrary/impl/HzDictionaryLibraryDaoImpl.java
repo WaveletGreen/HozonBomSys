@@ -9,6 +9,7 @@ import sql.BaseSQLUtil;
 import sql.pojo.resourcesLibrary.dictionaryLibrary.HzDictionaryLibrary;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -66,4 +67,5 @@ public class HzDictionaryLibraryDaoImpl extends BaseSQLUtil implements HzDiction
     public HzDictionaryLibrary findDictionaryLibraryOrCode(String eigenValue) {
         return (HzDictionaryLibrary) super.findForObject("HzDictionaryLibraryDaoImpl_findByCode",eigenValue);
     }
+
 }

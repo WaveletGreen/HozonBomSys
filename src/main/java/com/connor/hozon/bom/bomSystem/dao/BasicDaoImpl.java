@@ -67,8 +67,8 @@ public class BasicDaoImpl<T> implements BasicDao<T> {
      */
     @Override
     public T selectByPrimaryKey(T t) {
-        System.out.println("---------->" + clz.getCanonicalName() + "<-------insertSelective-------");
-        return baseSQLUtil.executeQueryById(t, clz.getCanonicalName() + ".insertSelective");
+        System.out.println("---------->" + clz.getCanonicalName() + "<-------selectByPrimaryKey-------");
+        return baseSQLUtil.executeQueryById(t, clz.getCanonicalName() + ".selectByPrimaryKey");
     }
 
     /**

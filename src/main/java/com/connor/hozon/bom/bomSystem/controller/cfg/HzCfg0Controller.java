@@ -45,9 +45,12 @@ import static com.connor.hozon.bom.bomSystem.helper.StringHelper.checkString;
 @Controller
 @RequestMapping("/cfg0")
 public class HzCfg0Controller extends ExtraIntegrate {
-    private final HzCfg0Service hzCfg0Service;
-    private final HzCfg0MainRecordDao hzCfg0MainRecordDao;
-    private final HzCfg0OptionFamilyDao hzCfg0OptionFamilyDao;
+    @Autowired
+    HzCfg0Service hzCfg0Service;
+    @Autowired
+    HzCfg0MainRecordDao hzCfg0MainRecordDao;
+    @Autowired
+    HzCfg0OptionFamilyDao hzCfg0OptionFamilyDao;
 
     /**
      * 同步特性
@@ -89,13 +92,6 @@ public class HzCfg0Controller extends ExtraIntegrate {
     private final static Logger logger = LoggerFactory.getLogger(HzCfg0Controller.class);
 
 
-    @Autowired
-    public HzCfg0Controller(HzCfg0Service hzCfg0Service, HzCfg0MainRecordDao hzCfg0MainRecordDao, HzCfg0OptionFamilyDao hzCfg0OptionFamilyDao) {
-        this.hzCfg0Service = hzCfg0Service;
-        this.hzCfg0MainRecordDao = hzCfg0MainRecordDao;
-        this.hzCfg0OptionFamilyDao = hzCfg0OptionFamilyDao;
-    }
-
     /******************************************特性表***********************************************/
     @RequestMapping("/loadFeature")
     @ResponseBody
@@ -110,6 +106,7 @@ public class HzCfg0Controller extends ExtraIntegrate {
 //        int totalCount = hzCfg0Service.tellMeHowManyOfThose(projectPuid);
         result.put("totalCount", totalCount);
         result.put("result", records);
+        hzCfg0Service.synDictionaryAfterOption(projectPuid);
         return result;
     }
 

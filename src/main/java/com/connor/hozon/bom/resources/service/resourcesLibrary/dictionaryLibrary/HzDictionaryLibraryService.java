@@ -38,6 +38,7 @@ public interface HzDictionaryLibraryService {
 
     /**
      * 根据PUID查询一条数据
+     *
      * @param puid
      * @return
      */
@@ -45,10 +46,13 @@ public interface HzDictionaryLibraryService {
 
     /**
      * 根据PUID删除一条数据
+     *
      * @param puid
      * @return
      */
     OperateResultMessageRespDTO deleteHzDictionaryLibrary(String puid);
+
+
 
     HzDictionaryLibrary queryLibraryDTOByCfgObject(String cfgObjectId);
 }

@@ -14,25 +14,6 @@ import java.util.Map;
  */
 @Service("hzCraftService")
 public interface IHzCraftService {
-    /**
-     * 创建一个PBOM对象，作为新件
-     *
-     * @param data
-     * @return
-     */
-    HzPbomLineRecord craftNewPart(Map<String, String> data);
-
-
-    /**
-     * 将合成源子层挂载到新件下
-     *
-     * @param childrenUids
-     * @param part
-     * @return
-     */
-    void craftChildren(List<String> childrenUids, HzPbomLineRecord part,Map<String, Map<String, HzPbomLineRecord>> myWavelet) throws Exception;
-
-
 
     /**
      * 自动生成工艺合件

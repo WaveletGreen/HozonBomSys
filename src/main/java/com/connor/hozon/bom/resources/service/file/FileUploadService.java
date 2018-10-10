@@ -14,5 +14,5 @@ public interface FileUploadService {
      * @param file
      * @return
      */
-    OperateResultMessageRespDTO UploadEbomToDB(MultipartFile file, String projectId);
+    OperateResultMessageRespDTO uploadEbomToDB(MultipartFile file, String projectId);
 }

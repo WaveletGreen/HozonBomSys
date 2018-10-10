@@ -6,10 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sql.pojo.cfg.HzCfg0OptionFamily;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -224,4 +221,31 @@ public class HzCfg0OptionFamilyService {
         familiesNew2.addAll(familiesNew1);
         return familiesNew2;
     }
+
+    /**
+     * @param projectUid 项目UID
+     * @param names      特性描述是否符合列表中出现的字符串数据
+     * @param isIn       当names为null时，是否将不起作用，该标识用于标识当前项目中的names是否会出现再查询条件中，
+     *                   如果为true且names!=null，则会搜索出匹配names列表中的所有特性
+     *                   如果未false且names！=null，则搜索出不匹配names列表中的所有特性
+     * @return
+     * @Desc 如果想查询项目中的使用的特性，且特性经过特性代码排序后的数据，将names设为null即可
+     */
+    public List<HzCfg0OptionFamily> doSelectNameByMap(String projectUid, List<String> names, boolean isIn) {
+        Map<String, Object> params = new LinkedHashMap<>();
+        params.put("isIn", isIn);
+        params.put("list", names);
+        params.put("projectUid", projectUid);
+        return hzCfg0OptionFamilyDao.selectNameByMap(params);
+    }
+
+    /**
+     * 选择性更新项目下的特性
+     * @param family 特性对象
+     * @return
+     */
+    public boolean doUpdateByPrimaryKeySelective(HzCfg0OptionFamily family) {
+        return hzCfg0OptionFamilyDao.updateByPrimaryKeySelective(family) > 0 ? true : false;
+    }
+
 }

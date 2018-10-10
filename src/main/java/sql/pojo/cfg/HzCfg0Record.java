@@ -1,5 +1,8 @@
 package sql.pojo.cfg;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.Date;
 
 public class HzCfg0Record {
@@ -93,6 +96,45 @@ public class HzCfg0Record {
      * vwo号的ID
      */
     private Long vwoId;
+    /**
+     * 配置字典对应的特性值UID
+     */
+    @Getter
+    @Setter
+    private String cfgDicLibUid;
+    /**
+     * 预留字段
+     */
+    @Getter
+    @Setter
+    private String cfgReverse2;
+    /**
+     * 预留字段
+     */
+    @Getter
+    @Setter
+    private String cfgReverse3;
+    /**
+     * 预留字段
+     */
+    @Getter
+    @Setter
+    private String cfgReverse4;
+    /**
+     * 预留字段
+     */
+    @Getter
+    @Setter
+    private String cfgReverse5;
+    /**
+     * 预留字段
+     */
+    @Getter
+    @Setter
+    private String cfgReverse6;
+
+
+
     public static String reflectToDBField(String property) {
         switch (property) {
             /**

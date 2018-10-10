@@ -365,6 +365,8 @@ public class HzProjectLibsController {
                     hzCfg0MainRecord.setPostDate(now);
                     hzCfg0MainRecord.setPoster(user.getUserName());
                     hzCfg0MainRecord.setpCfg0OrgPoster(user.getUserName());
+                    //新的项目的特性都将继承配置字典的数据
+                    hzCfg0MainRecord.setFeatureSynDicFlag(1);
 
                     //同步插入数模层和主配置
                     if (hzCfg0MainRecordDao.insert(hzCfg0MainRecord) > 0) {
