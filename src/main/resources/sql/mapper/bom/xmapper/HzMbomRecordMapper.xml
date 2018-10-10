@@ -114,7 +114,7 @@
             <if test="pBomLinePartResource != null and pBomLinePartResource!=''">
                 and t.P_BOM_LINE_PART_RESOURCE = #{pBomLinePartResource,jdbcType=VARCHAR}
             </if>
-            order by t.P_BOM_OF_WHICH_DEPT,CAST(t.P_SORT_NUM as FLOAT)
+            order by CAST(t.P_SORT_NUM as FLOAT),t.P_BOM_OF_WHICH_DEPT
         </where>
     </select>
 
@@ -836,7 +836,7 @@
 
     <!--根据层级和ebomPuid获取一条MBOM-->
     <select id="HzMbomRecordDAOImpl_findHzMbomByEbomIdAndLineIndex" parameterType="java.util.HashMap" resultMap="MbomResultMap" >
-        SELECT PUID,P_LINE_INDEX,P_BOM_LINE_ID,P_BOM_PUID FROM ${tableName}
+        SELECT * FROM ${tableName}
 
         <where>
             1=1

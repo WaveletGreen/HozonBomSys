@@ -115,4 +115,11 @@ public interface HzPbomRecordDAO {
     List<HzPbomLineRecord> getFirstLevelBomByParentId(String parentId,String projectId);
 
     List<HzPbomLineRecord> queryAllBomLineIdByPuid(String puid, String projectId);
+
+    /**
+     * 分页获取PBOM树结构
+     * @param query
+     * @return
+     */
+    Page<HzPbomLineRecord> getPbomTreeByPage(HzPbomByPageQuery query);
 }

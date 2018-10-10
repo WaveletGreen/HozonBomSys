@@ -69,14 +69,12 @@ public class HzBomSysFactory {
     }
 
     public static String resultLineId(String lineId){
-        String result = ""; //S00-1001  S00-1001BA  S00-1001111BA
+        String result = lineId; //S00-1001  S00-1001BA  S00-1001111BA
         if(lineId.contains("-")){
             String s = lineId.substring(lineId.length()-2,lineId.length());
             Pattern p = Pattern.compile("[a-zA-Z]");
             Matcher matcher = p.matcher(s);
-            if(matcher.find()){
-                result = lineId;
-            }else {
+            if(!matcher.find()){
                 result = lineId +"AA";
             }
 

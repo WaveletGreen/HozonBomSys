@@ -45,9 +45,6 @@ import static com.connor.hozon.bom.resources.domain.model.HzBomSysFactory.getLev
 @Service("HzPbomService")
 public class HzPbomServiceImpl implements HzPbomService {
     @Autowired
-    private HzBomLineRecordDaoImpl hzBomLineRecordDao;
-
-    @Autowired
     private HzPbomRecordDAO hzPbomRecordDAO;
 
     @Autowired
@@ -307,7 +304,7 @@ public class HzPbomServiceImpl implements HzPbomService {
                 try {
                     groupNum = groupNum.split("-")[1].substring(0, 4);
                 } catch (Exception e) {
-                    groupNum = "-后面的长度不足！";
+                    groupNum = "-";
                 }
             } else {
                 String parentId = record.getParentUid();
@@ -424,7 +421,14 @@ public class HzPbomServiceImpl implements HzPbomService {
 //            }
 //        }
         try {
-            Page<HzPbomLineRecord> recordPage = hzPbomRecordDAO.getHzPbomRecordByPage(query);
+            Page<HzPbomLineRecord> recordPage = new Page<>();
+            if(Integer.valueOf(1).equals(query.getShowBomStructure())){
+                //展示BOM结构树 当前查询树结构平铺
+                 recordPage = hzPbomRecordDAO.getPbomTreeByPage(query);
+            }else {
+                //展示全部平铺结构
+                 recordPage = hzPbomRecordDAO.getHzPbomRecordByPage(query);
+            }
             if (recordPage == null || recordPage.getResult() == null) {
                 return null;
             }
@@ -433,6 +437,7 @@ public class HzPbomServiceImpl implements HzPbomService {
             List<HzPbomLineRespDTO> respDTOS = pbomLineRecordToRespDTOS(records, query.getProjectId(), num);
             return new Page<>(recordPage.getPageNumber(), recordPage.getPageSize(), recordPage.getTotalCount(), respDTOS);
         } catch (Exception e) {
+            e.printStackTrace();
             return null;
         }
     }
@@ -763,6 +768,7 @@ public class HzPbomServiceImpl implements HzPbomService {
             List<HzPbomLineRespDTO> respDTOS = pbomLineRecordToRespDTOS(records, query.getProjectId(), num);
             return new Page<>(recordPage.getPageNumber(), recordPage.getPageSize(), recordPage.getTotalCount(), respDTOS);
         } catch (Exception e) {
+            e.printStackTrace();
             return null;
         }
     }
@@ -909,28 +915,6 @@ public class HzPbomServiceImpl implements HzPbomService {
         }
     }
 
-
-    private HzPbomLineRecord bomLineToPbomLine(HzBomLineRecord record) {
-        HzPbomLineRecord hzPbomLineRecord = new HzPbomLineRecord();
-        hzPbomLineRecord.setPuid(UUID.randomUUID().toString());
-        hzPbomLineRecord.setIsHas(record.getIsHas());
-        hzPbomLineRecord.setBomDigifaxId(record.getBomDigifaxId());
-        hzPbomLineRecord.seteBomPuid(record.getPuid());
-        hzPbomLineRecord.setIsDept(record.getIsDept());
-        hzPbomLineRecord.setLineId(record.getLineID());
-        hzPbomLineRecord.setIsPart(record.getIsPart());
-        hzPbomLineRecord.setIs2Y(record.getIs2Y());
-        hzPbomLineRecord.setLineIndex(record.getLineIndex());
-        hzPbomLineRecord.setParentUid(record.getParentUid());
-        hzPbomLineRecord.setpBomLinePartClass(record.getpBomLinePartClass());
-        hzPbomLineRecord.setpBomLinePartName(record.getpBomLinePartName());
-        hzPbomLineRecord.setpBomOfWhichDept(record.getpBomOfWhichDept());
-        hzPbomLineRecord.setpBomLinePartEnName(record.getpBomLinePartEnName());
-        hzPbomLineRecord.setpBomLinePartResource(record.getpBomLinePartResource());
-        hzPbomLineRecord.setSortNum(record.getSortNum());
-        hzPbomLineRecord.setColorPart(record.getColorPart());
-        return hzPbomLineRecord;
-    }
 
     private List<HzPbomLineRespDTO> pbomLineRecordToRespDTOS(List<HzPbomLineRecord> records, String projectId, int num) {
         try {

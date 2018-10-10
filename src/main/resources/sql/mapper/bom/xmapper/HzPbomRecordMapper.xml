@@ -440,6 +440,151 @@
     order by CAST(t.P_SORT_NUM as FLOAT)
 </select>
 
+
+
+  <!--分页获取PBOM结构树-->
+  <select id="HzPbomRecordDAOImpl_getHzPbomTreeByPage" parameterType="java.util.HashMap" resultMap="HzPbomLineRecord">
+    <if test="eBomPuids != null and eBomPuids.size()>0">
+      <foreach collection="eBomPuids" index="index" item="item"  separator="union all">
+        select * from
+        (
+        select * from HZ_PBOM_RECORD t
+        where t.p_bom_digifax_id=(
+        select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(
+        select t2.puid from Hz_project_libs t2
+        <where>
+          t2.puid = #{projectId,jdbcType=VARCHAR}))
+        </where>
+
+        start with t.P_E_BOM_PUID = #{eBomPuids[${index}]}
+        <if test="lineIndex != null and lineIndex!=''">
+          and LENGTH(TRANSLATE(t.P_LINE_INDEX,',0123456789','.'))=#{lineIndex,jdbcType=VARCHAR}
+        </if>
+        <if test="isHas != null and isHas==0">
+          and (t.P_BOM_LINE_IS_HAS = 0)
+        </if>
+        <if test="isHas != null and isHas==1">
+          and t.P_BOM_LINE_IS_HAS = 1
+        </if>
+        <if test="lineId != null and lineId!=''" >
+          and t.P_BOM_LINE_ID like CONCAT(CONCAT('%',#{lineId,jdbcType=VARCHAR}),'%')
+        </if>
+        <if test="pBomOfWhichDept != null and  pBomOfWhichDept!='' " >
+          and t.P_BOM_OF_WHICH_DEPT like CONCAT(CONCAT('%',#{pBomOfWhichDept,jdbcType=VARCHAR}),'%')
+        </if>
+        <if test="pBomLinePartClass != null and pBomLinePartClass!=''">
+          and t.P_BOM_LINE_PART_CLASS = #{pBomLinePartClass,jdbcType=VARCHAR}
+        </if>
+        <if test="pBomLinePartResource != null and pBomLinePartResource!=''">
+          and t.P_BOM_LINE_PART_RESOURCE = #{pBomLinePartResource,jdbcType=VARCHAR}
+        </if>
+
+        and t.P_PBOM_STATUS <![CDATA[ <> ]]>0
+        connect by nocycle prior t.P_E_BOM_PUID = t.p_parent_uid
+
+        <if test="lineIndex != null and lineIndex!=''">
+          and LENGTH(TRANSLATE(t.P_LINE_INDEX,',0123456789','.'))=#{lineIndex,jdbcType=VARCHAR}
+        </if>
+        <if test="isHas != null and isHas==0">
+          and (t.P_BOM_LINE_IS_HAS = 0)
+        </if>
+        <if test="isHas != null and isHas==1">
+          and t.P_BOM_LINE_IS_HAS = 1
+        </if>
+        <if test="lineId != null and lineId!=''" >
+          and t.P_BOM_LINE_ID like CONCAT(CONCAT('%',#{lineId,jdbcType=VARCHAR}),'%')
+        </if>
+        <if test="pBomOfWhichDept != null and  pBomOfWhichDept!='' " >
+          and t.P_BOM_OF_WHICH_DEPT like CONCAT(CONCAT('%',#{pBomOfWhichDept,jdbcType=VARCHAR}),'%')
+        </if>
+        <if test="pBomLinePartClass != null and pBomLinePartClass!=''">
+          and t.P_BOM_LINE_PART_CLASS = #{pBomLinePartClass,jdbcType=VARCHAR}
+        </if>
+        <if test="pBomLinePartResource != null and pBomLinePartResource!=''">
+          and t.P_BOM_LINE_PART_RESOURCE = #{pBomLinePartResource,jdbcType=VARCHAR}
+        </if>
+        and t.P_PBOM_STATUS<![CDATA[ <> ]]>0
+        order by CAST(t.P_SORT_NUM as FLOAT)
+        )
+      </foreach>
+    </if>
+
+  </select>
+
+
+  <!--分页获取PBOM结构树总数-->
+  <select id="HzPbomRecordDAOImpl_getHzPbomTreeTotalCount" parameterType="java.util.HashMap" resultType="java.lang.Integer">
+    <if test="eBomPuids != null and eBomPuids.size()>0">
+      select sum(c) from
+      (
+      <foreach collection="eBomPuids" index="index" item="item" separator="union all">
+        select count(*) c
+        from HZ_PBOM_RECORD t
+        where t.p_bom_digifax_id=(
+        select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(
+        select t2.puid from Hz_project_libs t2
+        <where>
+          t2.puid = #{projectId,jdbcType=VARCHAR}))
+        </where>
+
+        start with t.P_E_BOM_PUID = #{eBomPuids[${index}]}
+
+        <if test="lineIndex != null and lineIndex!=''">
+          and LENGTH(TRANSLATE(t.P_LINE_INDEX,',0123456789','.'))=#{lineIndex,jdbcType=VARCHAR}
+        </if>
+        <if test="isHas != null and isHas==0">
+          and (t.P_BOM_LINE_IS_HAS = 0)
+        </if>
+        <if test="isHas != null and isHas==1">
+          and t.P_BOM_LINE_IS_HAS = 1
+        </if>
+        <if test="lineId != null and lineId!=''" >
+          and t.P_BOM_LINE_ID like CONCAT(CONCAT('%',#{lineId,jdbcType=VARCHAR}),'%')
+        </if>
+        <if test="pBomOfWhichDept != null and  pBomOfWhichDept!='' " >
+          and t.P_BOM_OF_WHICH_DEPT like CONCAT(CONCAT('%',#{pBomOfWhichDept,jdbcType=VARCHAR}),'%')
+        </if>
+        <if test="pBomLinePartClass != null and pBomLinePartClass!=''">
+          and t.P_BOM_LINE_PART_CLASS = #{pBomLinePartClass,jdbcType=VARCHAR}
+        </if>
+        <if test="pBomLinePartResource != null and pBomLinePartResource!=''">
+          and t.P_BOM_LINE_PART_RESOURCE = #{pBomLinePartResource,jdbcType=VARCHAR}
+        </if>
+        and t.P_PBOM_STATUS <![CDATA[ <> ]]>0
+
+        connect by nocycle prior t.P_E_BOM_PUID = t.p_parent_uid
+
+
+        <if test="lineIndex != null and lineIndex!=''">
+          and LENGTH(TRANSLATE(t.P_LINE_INDEX,',0123456789','.'))=#{lineIndex,jdbcType=VARCHAR}
+        </if>
+        <if test="isHas != null and isHas==0">
+          and (t.P_BOM_LINE_IS_HAS = 0)
+        </if>
+        <if test="isHas != null and isHas==1">
+          and t.P_BOM_LINE_IS_HAS = 1
+        </if>
+        <if test="lineId != null and lineId!=''" >
+          and t.P_BOM_LINE_ID like CONCAT(CONCAT('%',#{lineId,jdbcType=VARCHAR}),'%')
+        </if>
+        <if test="pBomOfWhichDept != null and  pBomOfWhichDept!='' " >
+          and t.P_BOM_OF_WHICH_DEPT like CONCAT(CONCAT('%',#{pBomOfWhichDept,jdbcType=VARCHAR}),'%')
+        </if>
+        <if test="pBomLinePartClass != null and pBomLinePartClass!=''">
+          and t.P_BOM_LINE_PART_CLASS = #{pBomLinePartClass,jdbcType=VARCHAR}
+        </if>
+        <if test="pBomLinePartResource != null and pBomLinePartResource!=''">
+          and t.P_BOM_LINE_PART_RESOURCE = #{pBomLinePartResource,jdbcType=VARCHAR}
+        </if>
+        and t.P_PBOM_STATUS<![CDATA[ <> ]]>0
+      </foreach>
+      )
+    </if>
+
+  </select>
+
+
+
   <!--获取PBOM 2Y层 对应的lineIndex的第一个字母最大值-->
   <select id="HzPbomRecordDAOImpl_getMaxLineIndexFirstNum" parameterType="java.lang.String" resultType="java.lang.Integer">
     select max(TO_NUMBER((substr(P_LINE_INDEX,instr(P_LINE_INDEX,'.',0),instr(P_LINE_INDEX,'.',1)-1)))) m
@@ -559,6 +704,7 @@
       and t1.P_BOM_LINE_IS_2Y=1
       and t1.P_PBOM_STATUS<![CDATA[ <> ]]>0
     </where>
+    ORDER BY  CAST(P_SORT_NUM as FLOAT)
   </select>
 
   <insert id="HzPbomRecordDAOImpl_insertAccessories" parameterType="java.util.Map">
