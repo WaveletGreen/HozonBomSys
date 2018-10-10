@@ -4,14 +4,14 @@ import com.connor.hozon.bom.bomSystem.dao.cfg.HzColorModelDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import sql.IBaseSQLUtil;
-import sql.pojo.cfg.HzColorModel;
+import sql.pojo.cfg.HzCfg0ModelColorDetail;
 import sql.pojo.cfg.HzColorModel2;
 
 import java.util.List;
 
 @Configuration
 public class HzColorModelDaoImpl implements HzColorModelDao {
-    private static HzColorModel model = new HzColorModel();
+    private static HzCfg0ModelColorDetail model = new HzCfg0ModelColorDetail();
     @Autowired
     IBaseSQLUtil baseSQLUtil;
 
@@ -33,7 +33,7 @@ public class HzColorModelDaoImpl implements HzColorModelDao {
      * @return
      */
     @Override
-    public int insert(HzColorModel record) {
+    public int insert(HzCfg0ModelColorDetail record) {
         return baseSQLUtil.executeInsert(record, "com.connor.hozon.bom.bomSystem.dao.cfg.HzColorModelDao.insert");
     }
 
@@ -44,7 +44,7 @@ public class HzColorModelDaoImpl implements HzColorModelDao {
      * @return
      */
     @Override
-    public HzColorModel selectByPrimaryKey(String puid) {
+    public HzCfg0ModelColorDetail selectByPrimaryKey(String puid) {
         return baseSQLUtil.executeQueryByPass(model, puid, "com.connor.hozon.bom.bomSystem.dao.cfg.HzColorModelDao.selectByPrimaryKey", true);
     }
 
@@ -55,7 +55,7 @@ public class HzColorModelDaoImpl implements HzColorModelDao {
      * @return
      */
     @Override
-    public List<HzColorModel> selectByModelUid(String modelUid) {
+    public List<HzCfg0ModelColorDetail> selectByModelUid(String modelUid) {
         return baseSQLUtil.executeQueryByPass(model, modelUid, "com.connor.hozon.bom.bomSystem.dao.cfg.HzColorModelDao.selectByModelUid");
     }
 
@@ -66,12 +66,12 @@ public class HzColorModelDaoImpl implements HzColorModelDao {
      * @return
      */
     @Override
-    public List<HzColorModel> selectByModelUidWithColor(String modelUid) {
+    public List<HzCfg0ModelColorDetail> selectByModelUidWithColor(String modelUid) {
         return baseSQLUtil.executeQueryByPass(model, modelUid, "com.connor.hozon.bom.bomSystem.dao.cfg.HzColorModelDao.selectByModelUidWithColor");
     }
 
     @Override
-    public List<HzColorModel> selectByModelUidWithColor2(String modelUid) {
+    public List<HzCfg0ModelColorDetail> selectByModelUidWithColor2(String modelUid) {
         return baseSQLUtil.executeQueryByPass(model, modelUid, "com.connor.hozon.bom.bomSystem.dao.cfg.HzColorModelDao.selectByModelUidWithColor2");
     }
     /**
@@ -81,7 +81,7 @@ public class HzColorModelDaoImpl implements HzColorModelDao {
      * @return
      */
     @Override
-    public List<HzColorModel> selectByCfgMainUid(String projectUid) {
+    public List<HzCfg0ModelColorDetail> selectByCfgMainUid(String projectUid) {
         return baseSQLUtil.executeQueryByPass(model, projectUid, "com.connor.hozon.bom.bomSystem.dao.cfg.HzColorModelDao.selectByCfgMainUid");
     }
 
@@ -92,7 +92,7 @@ public class HzColorModelDaoImpl implements HzColorModelDao {
      * @return
      */
     @Override
-    public int updateByPrimaryKey(HzColorModel record) {
+    public int updateByPrimaryKey(HzCfg0ModelColorDetail record) {
         return baseSQLUtil.executeUpdate(record, "com.connor.hozon.bom.bomSystem.dao.cfg.HzColorModelDao.updateByPrimaryKey");
     }
 
@@ -103,12 +103,12 @@ public class HzColorModelDaoImpl implements HzColorModelDao {
      * @return
      */
     @Override
-    public int insertByBatch(List<HzColorModel> colorModels) {
+    public int insertByBatch(List<HzCfg0ModelColorDetail> colorModels) {
         return baseSQLUtil.executeInsert(colorModels, "com.connor.hozon.bom.bomSystem.dao.cfg.HzColorModelDao.insertByBatch");
     }
 
     @Override
-    public int updateColorModelWithCfg(HzColorModel colorModels) {
+    public int updateColorModelWithCfg(HzCfg0ModelColorDetail colorModels) {
         return baseSQLUtil.executeUpdate(colorModels, "com.connor.hozon.bom.bomSystem.dao.cfg.HzColorModelDao.updateColorModelWithCfg");
     }
 

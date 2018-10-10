@@ -2,7 +2,7 @@ package com.connor.hozon.bom.bomSystem.dao.cfg;
 
 import org.apache.ibatis.annotations.Param;
 import org.springframework.context.annotation.Configuration;
-import sql.pojo.cfg.HzColorModel;
+import sql.pojo.cfg.HzCfg0ModelColorDetail;
 import sql.pojo.cfg.HzColorModel2;
 
 import java.util.List;
@@ -24,7 +24,7 @@ public interface HzColorModelDao {
      * @param record
      * @return
      */
-    int insert(HzColorModel record);
+    int insert(HzCfg0ModelColorDetail record);
 
     /**
      * 主键筛选
@@ -33,7 +33,7 @@ public interface HzColorModelDao {
      * @return
      */
 
-    HzColorModel selectByPrimaryKey(@Param("puid")String puid);
+    HzCfg0ModelColorDetail selectByPrimaryKey(@Param("puid")String puid);
 
     /**
      * 根据颜色模型
@@ -42,7 +42,7 @@ public interface HzColorModelDao {
      * @return
      */
 
-    List<HzColorModel> selectByModelUid(@Param("modelUid")String modelUid);
+    List<HzCfg0ModelColorDetail> selectByModelUid(@Param("modelUid")String modelUid);
 
     /**
      * 根据颜色模型，包括颜色一起筛选出来
@@ -50,7 +50,7 @@ public interface HzColorModelDao {
      * @param modelUid 车型UID
      * @return
      */
-    List<HzColorModel> selectByModelUidWithColor(@Param("modelUid") String modelUid);
+    List<HzCfg0ModelColorDetail> selectByModelUidWithColor(@Param("modelUid") String modelUid);
 
     /**
      * 根据主配置查找
@@ -59,7 +59,7 @@ public interface HzColorModelDao {
      * @return
      */
 
-    List<HzColorModel> selectByCfgMainUid(@Param("cfgMainUid")String cfgMainUid);
+    List<HzCfg0ModelColorDetail> selectByCfgMainUid(@Param("cfgMainUid")String cfgMainUid);
 
     /**
      * 主键更新
@@ -67,23 +67,23 @@ public interface HzColorModelDao {
      * @param record 颜色车型
      * @return
      */
-    int updateByPrimaryKey(HzColorModel record);
+    int updateByPrimaryKey(HzCfg0ModelColorDetail record);
 
     /**
      * 批量插入
      *
      * @return
      */
-    int insertByBatch(List<HzColorModel> colorModels);
+    int insertByBatch(List<HzCfg0ModelColorDetail> colorModels);
 
     /**
      * 批量更新车型配置的颜色
      * @param model 车型配置集合
      * @return
      */
-    int updateColorModelWithCfg(HzColorModel model);
+    int updateColorModelWithCfg(HzCfg0ModelColorDetail model);
 
     List<HzColorModel2> selectByProjectPuid(String projectPuid);
 
-    List<HzColorModel> selectByModelUidWithColor2(String modelUid);
+    List<HzCfg0ModelColorDetail> selectByModelUidWithColor2(String modelUid);
 }

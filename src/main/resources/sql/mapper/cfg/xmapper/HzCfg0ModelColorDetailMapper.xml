@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.connor.hozon.bom.bomSystem.dao.cfg.HzColorModelDao">
-    <resultMap id="BaseResultMap" type="sql.pojo.cfg.HzColorModel">
+    <resultMap id="BaseResultMap" type="sql.pojo.cfg.HzCfg0ModelColorDetail">
         <!--主键-->
         <id column="PUID" jdbcType="VARCHAR" property="puid"/>
         <!--模型外键-->
@@ -21,7 +21,7 @@
         <!--修改者-->
         <result column="MODIFIER" jdbcType="VARCHAR" property="modifier"/>
     </resultMap>
-    <resultMap id="ResultMapWithColor" extends="BaseResultMap" type="sql.pojo.cfg.HzColorModel">
+    <resultMap id="ResultMapWithColor" extends="BaseResultMap" type="sql.pojo.cfg.HzCfg0ModelColorDetail">
         <!--色集-->
         <result column="P_COLOR_OF_SET" jdbcType="VARCHAR" property="pColorOfSet"/>
         <!--颜色名称-->
@@ -156,7 +156,7 @@
     where PUID = #{puid,jdbcType=VARCHAR}
   </delete>
     <!--插入-->
-    <insert id="insert" parameterType="sql.pojo.cfg.HzColorModel">
+    <insert id="insert" parameterType="sql.pojo.cfg.HzCfg0ModelColorDetail">
         insert into HZ_COLOR_MODEL (
         <include refid="Base_Column_List"/>
         )
@@ -186,7 +186,7 @@
         select 1 from dual
     </insert>
     <!--主键更新-->
-    <update id="updateByPrimaryKey" parameterType="sql.pojo.cfg.HzColorModel">
+    <update id="updateByPrimaryKey" parameterType="sql.pojo.cfg.HzCfg0ModelColorDetail">
     update HZ_COLOR_MODEL
     set MODEL_PUID = #{modelUid,jdbcType=VARCHAR},
       P_CFG_PUID = #{cfgUid,jdbcType=VARCHAR},
@@ -194,7 +194,7 @@
     where PUID = #{puid,jdbcType=VARCHAR}
   </update>
     <!--按车型和配置更新颜色，进行单点更新-->
-    <update id="updateColorModelWithCfg" parameterType="sql.pojo.cfg.HzColorModel">
+    <update id="updateColorModelWithCfg" parameterType="sql.pojo.cfg.HzCfg0ModelColorDetail">
     update HZ_COLOR_MODEL
     set
       P_COLOR_UID = #{colorUid,jdbcType=VARCHAR},
