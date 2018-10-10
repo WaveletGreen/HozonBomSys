@@ -1,6 +1,6 @@
 package com.connor.hozon.bom.bomSystem.service.cfg.vwo;
 
-import com.connor.hozon.bom.bomSystem.controller.cfg.HzVWOProecrssController;
+import com.connor.hozon.bom.bomSystem.controller.cfg.HzVWOProcessController;
 import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0Service;
 import com.connor.hozon.bom.bomSystem.service.iservice.cfg.vwo.IHzFeatureChangeService;
 import com.connor.hozon.bom.bomSystem.service.iservice.cfg.vwo.IHzVWOManagerService;
@@ -78,7 +78,7 @@ public class HzVwoManagerService implements IHzVWOManagerService {
     /**
      * 日志
      */
-    private Logger logger = LoggerFactory.getLogger(HzVWOProecrssController.class);
+    private Logger logger = LoggerFactory.getLogger(HzVWOProcessController.class);
 
     /**
      * 特性进入vwo流程
@@ -161,6 +161,10 @@ public class HzVwoManagerService implements IHzVWOManagerService {
                             before = iHzFeatureChangeService.doSelectBeforeByPk(before);
                         }
 
+                        ///如果变更前后数据不为空，则是第二次变更
+                        /***
+                         * 第二次变更，将变更后的数据同步到变更前中，然后再次插入数据库
+                         */
 //                    after.setTableName("HZ_CFG0_AFTER_CHANGE_RECORD");
 //                    before.setTableName("HZ_CFG0_BEFORE_CHANGE_RECORD");
 
