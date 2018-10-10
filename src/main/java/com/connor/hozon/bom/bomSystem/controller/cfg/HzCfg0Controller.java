@@ -243,7 +243,8 @@ public class HzCfg0Controller extends ExtraIntegrate {
         family.setpOptionfamilyName(record.getpCfg0FamilyName());
         //特性描述
         family.setpOptionfamilyDesc(record.getpCfg0FamilyDesc());
-
+        //配置字典外键
+        family.setOfDicLibUid(hzDictionaryLibrary.getPuid());
         HzCfg0OptionFamily _family = cfg0OptionFamilyService.doGetByCodeAndDescWithMain(family);
         //检查当前项目有没有用到特定的特性
         if (_family == null) {
@@ -260,6 +261,7 @@ public class HzCfg0Controller extends ExtraIntegrate {
 
         //关联到特性的UID
         record.setpCfg0FamilyPuid(family.getPuid());
+        record.setCfgDicLibUid(hzDictionaryLibrary.getPuid());
         if (!checkString(record.getpCfg0Relevance())) {
             record.setpCfg0Relevance("$ROOT." + record.getpCfg0FamilyName() + " = '" + record.getpCfg0ObjectId() + "'");
         }
