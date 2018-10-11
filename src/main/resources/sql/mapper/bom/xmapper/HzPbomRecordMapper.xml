@@ -445,7 +445,9 @@
   <!--分页获取PBOM结构树-->
   <select id="HzPbomRecordDAOImpl_getHzPbomTreeByPage" parameterType="java.util.HashMap" resultMap="HzPbomLineRecord">
     <if test="eBomPuids != null and eBomPuids.size()>0">
-      <foreach collection="eBomPuids" index="index" item="item"  separator="union all">
+      select * from(
+      select u.*,rownum as rn from (
+      <foreach collection="eBomPuids" index="index" item="item" separator="union all">
         select * from
         (
         select * from HZ_PBOM_RECORD t
@@ -455,16 +457,16 @@
         <where>
           t2.puid = #{projectId,jdbcType=VARCHAR}))
         </where>
-
         start with t.P_E_BOM_PUID = #{eBomPuids[${index}]}
-
         and t.P_PBOM_STATUS <![CDATA[ <> ]]>0
         connect by nocycle prior t.P_E_BOM_PUID = t.p_parent_uid
-
         and t.P_PBOM_STATUS<![CDATA[ <> ]]>0
         order by CAST(t.P_SORT_NUM as FLOAT)
         )
       </foreach>
+      ) u
+      where  ROWNUM &lt;=#{limit,jdbcType=INTEGER})
+      where  rn &gt;#{offset,jdbcType=INTEGER}
     </if>
 
   </select>
@@ -484,13 +486,9 @@
         <where>
           t2.puid = #{projectId,jdbcType=VARCHAR}))
         </where>
-
         start with t.P_E_BOM_PUID = #{eBomPuids[${index}]}
-
         and t.P_PBOM_STATUS <![CDATA[ <> ]]>0
-
         connect by nocycle prior t.P_E_BOM_PUID = t.p_parent_uid
-
         and t.P_PBOM_STATUS<![CDATA[ <> ]]>0
       </foreach>
       )

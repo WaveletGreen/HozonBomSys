@@ -72,7 +72,6 @@ public interface HzPbomService {
 
     /**
      * 获取一条pbom信息
-     *
      * @param projectId
      * @param puid
      * @return

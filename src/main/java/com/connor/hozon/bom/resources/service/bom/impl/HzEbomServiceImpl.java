@@ -110,8 +110,14 @@ public class HzEbomServiceImpl implements HzEbomService {
                     query.setLineIndex(String.valueOf(length));
                 }
             }
-
-            Page<HzEPLManageRecord> recordPage = hzEbomRecordDAO.getHzEbomPage(query);
+            Page<HzEPLManageRecord> recordPage;
+            if(Integer.valueOf(1).equals(query.getShowBomStructure())){
+                //展示BOM结构树 当前查询树结构平铺
+                recordPage = hzEbomRecordDAO.getHzEbomTreeByPage(query);
+            }else {
+                //展示全部平铺结构
+                recordPage = hzEbomRecordDAO.getHzEbomPage(query);
+            }
             if (recordPage == null || recordPage.getResult() == null || recordPage.getResult().size() == 0) {
                 return new Page<>(recordPage.getPageNumber(), recordPage.getPageSize(), 0);
             }
@@ -119,25 +125,25 @@ public class HzEbomServiceImpl implements HzEbomService {
             for (HzEPLManageRecord record : records) {
                 JSONObject jsonObject = HzEbomRecordFactory.bomLineRecordTORespDTO(record);
                 //获取分组号
-//                String fastener = record.getpFastener();
-//                String groupNum = record.getLineID();
+                String fastener = record.getpFastener();
+                String groupNum = record.getLineID();
                 try {
-//                    if (fastener.equals("/") || fastener.equals("")) {
-//                        if (groupNum.contains("-")) {
-//                            groupNum = groupNum.split("-")[1].substring(0, 4);
-//                        } else {
-//                            groupNum = "";
-//                        }
-//
-//                    } else {
-//                        String parentId = record.getParentUid();
-//                        groupNum = hzEPLManageRecordService.getGroupNum(query.getProjectId(), parentId);
-//                    }
+                    if (fastener.equals("/") || fastener.equals("")) {
+                        if (groupNum.contains("-")) {
+                            groupNum = groupNum.split("-")[1].substring(0, 4);
+                        } else {
+                            groupNum = "";
+                        }
+
+                    } else {
+                        String parentId = record.getParentUid();
+                        groupNum = hzEPLManageRecordService.getGroupNum(query.getProjectId(), parentId);
+                    }
                 } catch (Exception e) {
-//                    groupNum = "";
+                    groupNum = "";
                 }
                 jsonObject.put("No", ++num);
-                jsonObject.put("groupNum", "-");
+                jsonObject.put("groupNum",groupNum);
                 array.add(jsonObject);
             }
             recordRespDTO.setJsonArray(array);

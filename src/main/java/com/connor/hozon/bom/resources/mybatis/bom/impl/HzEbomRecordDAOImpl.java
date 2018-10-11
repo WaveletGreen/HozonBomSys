@@ -7,6 +7,7 @@ import com.connor.hozon.bom.resources.domain.query.HzEbomTreeQuery;
 import com.connor.hozon.bom.resources.mybatis.bom.HzEbomRecordDAO;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.page.PageRequest;
+import com.google.common.collect.Lists;
 import org.springframework.stereotype.Service;
 import sql.BaseSQLUtil;
 import sql.pojo.bom.HzImportEbomRecord;
@@ -189,6 +190,19 @@ public class HzEbomRecordDAOImpl extends BaseSQLUtil implements HzEbomRecordDAO 
         map.put("puid",puid);
         map.put("projectId",projectId);
         return super.findForList("HzEbomRecordDAOImpl_getPaintAndWhiteBody",map);
+    }
+
+    @Override
+    public Page<HzEPLManageRecord> getHzEbomTreeByPage(HzEbomByPageQuery query) {
+        PageRequest request = new PageRequest();
+        Map map = new HashMap();
+        map.put("puids", Lists.newArrayList(query.getPuids()));
+        map.put("projectId",query.getProjectId());
+        request.setPageNumber(query.getPage());
+        request.setPageSize(query.getPageSize());
+        request.setFilters(map);
+        return super.findPage("HzEbomRecordDAOImpl_getHzEbomTreeByPage","HzEbomRecordDAOImpl_getHzEbomTreeTotalCount",request);
+
     }
 
 }

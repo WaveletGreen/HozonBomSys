@@ -74,13 +74,6 @@ public class HzPbomServiceImpl implements HzPbomService {
             if (!b) {
                 return OperateResultMessageRespDTO.getFailPrivilege();
             }
-//            HzPbomRecord record = hzPbomRecordDAO.getHzPbomByEbomPuid(recordReqDTO.geteBomPuid());
-//            if(record!=null){
-//                respDTO.setErrMsg("当前插入的对象已存在,编辑属性请点击修改按钮进行操作!");
-//                respDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
-//                return respDTO;
-//            }
-
             HzPbomLineRecord hzPbomRecord = new HzPbomLineRecord();
             hzPbomRecord.setCreateName(UserInfo.getUser().getUserName());
             hzPbomRecord.setUpdateName(UserInfo.getUser().getUserName());
@@ -421,7 +414,7 @@ public class HzPbomServiceImpl implements HzPbomService {
 //            }
 //        }
         try {
-            Page<HzPbomLineRecord> recordPage = new Page<>();
+            Page<HzPbomLineRecord> recordPage;
             if(Integer.valueOf(1).equals(query.getShowBomStructure())){
                 //展示BOM结构树 当前查询树结构平铺
                  recordPage = hzPbomRecordDAO.getPbomTreeByPage(query);
