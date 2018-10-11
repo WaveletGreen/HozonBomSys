@@ -1,5 +1,9 @@
 package sql.pojo.cfg.modelColor;
 
+import lombok.Getter;
+import lombok.Setter;
+
+import java.util.Date;
 import java.util.LinkedHashMap;
 
 /**
@@ -35,6 +39,42 @@ public class HzCfg0ModelColor {
     private String pColorUid;
 
     private String pShellCfg0Puid;
+    @Getter
+    @Setter
+    //VWO变更号
+    private Long cmcrVwoId;
+    //创建时间
+    @Getter
+    @Setter
+    private Date cmcrCreateDate;
+    //创建人
+    @Getter
+    @Setter
+    private String cmcrCreator;
+    //跟新时间
+    @Getter
+    @Setter
+    private Date cmcrUpdateDate;
+    //跟新人
+    @Getter
+    @Setter
+    private String cmcrUpdater;
+    //保留字段1-5
+    @Getter
+    @Setter
+    private String cmcrReserve1;
+    @Getter
+    @Setter
+    private String cmcrReserve2;
+    @Getter
+    @Setter
+    private String cmcrReserve3;
+    @Getter
+    @Setter
+    private String cmcrReserve4;
+    @Getter
+    @Setter
+    private String cmcrReserve5;
 
     public HzCfg0ModelColor() {
         mapOfCfg0 = new LinkedHashMap<>();

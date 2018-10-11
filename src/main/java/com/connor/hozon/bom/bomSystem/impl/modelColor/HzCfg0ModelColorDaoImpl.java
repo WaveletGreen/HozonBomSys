@@ -60,4 +60,16 @@ public class HzCfg0ModelColorDaoImpl extends BasicDaoImpl<HzCfg0ModelColor> impl
         return baseSQLUtil.executeDelete(colors,
                 clzName + ".deleteByBatch");
     }
+
+    @Override
+    public List<HzCfg0ModelColor> selectByPuids(List<HzCfg0ModelColor> colors) {
+        return baseSQLUtil.executeQueryByPass(COLOR, colors,
+                clzName + ".selectByPuids");
+    }
+
+    @Override
+    public int updateListData(List<HzCfg0ModelColor> hzCfg0ModelColors) {
+        return baseSQLUtil.executeUpdate(hzCfg0ModelColors,
+                clzName + ".updateListData");
+    }
 }
