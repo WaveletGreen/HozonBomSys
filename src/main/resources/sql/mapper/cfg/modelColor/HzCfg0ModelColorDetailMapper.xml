@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (c) 2018.
+  ~ This file was wrote by fancyears·milos·maywas @connor. Any question/bug you can post to 1243093366@qq.com.
+  ~ ALL RIGHTS RESERVED.
+  -->
+
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.connor.hozon.bom.bomSystem.dao.modelColor.HzColorModelDao">
     <resultMap id="BaseResultMap" type="sql.pojo.cfg.modelColor.HzCfg0ModelColorDetail">
@@ -213,5 +219,17 @@
         join Hz_Cfg0_Colorset t5 on t5.puid = t3.p_color_uid
         where t.P_CFG0_OF_WHICH_PROJECT_PUID = #{projectPuid}
 
+    </select>
+
+    <select id="selectByModelColors" parameterType="sql.pojo.cfg.HzCfg0ModelColor" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from
+        HZ_COLOR_MODEL t
+        where
+        t.MODEL_UID in
+        <foreach collection="list" index="index" item="hzCfg0ModelColor" open="(" separator="," close=")">
+            #{hzCfg0ModelColor.puid}
+        </foreach>
     </select>
 </mapper>

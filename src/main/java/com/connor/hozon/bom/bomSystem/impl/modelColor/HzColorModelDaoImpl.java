@@ -11,6 +11,7 @@ import com.connor.hozon.bom.bomSystem.impl.BasicDaoImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import sql.IBaseSQLUtil;
+import sql.pojo.cfg.modelColor.HzCfg0ModelColor;
 import sql.pojo.cfg.modelColor.HzCfg0ModelColorDetail;
 import sql.pojo.cfg.modelColor.HzColorModel2;
 
@@ -78,6 +79,18 @@ public class HzColorModelDaoImpl extends BasicDaoImpl<HzCfg0ModelColorDetail> im
     public List<HzCfg0ModelColorDetail> selectByModelUidWithColor2(String modelUid) {
         return baseSQLUtil.executeQueryByPass(DETAIL, modelUid,
                 clzName + ".selectByModelUidWithColor2");
+    }
+
+    /**
+     * 根据颜色车型查询对应的车型配置
+     *
+     * @param hzCfg0ModelColors
+     * @return
+     */
+    @Override
+    public List<HzCfg0ModelColorDetail> selectByModelColors(List<HzCfg0ModelColor> hzCfg0ModelColors) {
+        return baseSQLUtil.executeQueryByPass(DETAIL, hzCfg0ModelColors,
+                clzName + ".selectByModelColors");
     }
 
     /**
