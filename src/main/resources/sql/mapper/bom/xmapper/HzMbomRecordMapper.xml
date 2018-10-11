@@ -962,12 +962,12 @@
                         t2.puid = #{projectId,jdbcType=VARCHAR}))
                     </where>
                     start with t.P_BOM_PUID = #{eBomPuids[${index}]}
-                    <if test="colorIds[${index}] != null and colorIds[${index}] !='' " >
+                    <if test="null !=colorIds[index] and colorIds[index] !='null' " >
                         and t.P_COLOR_PUID =#{colorIds[${index}]}
                     </if>
                     and t.P_MBOM_STATUS <![CDATA[ <> ]]>0
                     connect by nocycle prior t.P_BOM_PUID = t.p_parent_uid
-                    <if test="colorIds[${index}] != null and colorIds[${index}] !='' " >
+                    <if test="null !=colorIds[index] and colorIds[index] !='null' " >
                         and t.P_COLOR_PUID =#{colorIds[${index}]}
                     </if>
                     and t.P_MBOM_STATUS<![CDATA[ <> ]]>0
@@ -998,12 +998,12 @@
                     t2.puid = #{projectId,jdbcType=VARCHAR}))
                 </where>
                 start with t.P_BOM_PUID = #{eBomPuids[${index}]}
-                <if test="colorIds[${index}] != null and colorIds[${index}] !='' " >
+                <if test="null !=colorIds[index] and colorIds[index] !='null' " >
                     and t.P_COLOR_PUID =#{colorIds[${index}]}
                 </if>
                 and t.P_MBOM_STATUS <![CDATA[ <> ]]>0
                 connect by nocycle prior t.P_BOM_PUID = t.p_parent_uid
-                <if test="colorIds[${index}] != null and colorIds[${index}] !='' " >
+                <if test="null !=colorIds[index] and colorIds[index] !='null' " >
                     and t.P_COLOR_PUID =#{colorIds[${index}]}
                 </if>
                 and t.P_MBOM_STATUS<![CDATA[ <> ]]>0

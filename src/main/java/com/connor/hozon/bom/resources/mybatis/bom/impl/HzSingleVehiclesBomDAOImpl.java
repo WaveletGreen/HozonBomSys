@@ -74,9 +74,9 @@ public class HzSingleVehiclesBomDAOImpl extends BaseSQLUtil implements HzSingleV
         Map map = new HashMap();
         map.put("projectId",query.getProjectId());
         map.put("isHas",query.getIsHas());
-        map.put("pBomOfWhichDept",query.getPBomOfWhichDept());
+        map.put("pBomOfWhichDept",query.getPBomOfWhichDept().trim());
         map.put("lineIndex",query.getLineIndex());
-        map.put("lineId",query.getLineId());
+        map.put("lineId",query.getLineId().trim());
         map.put("pBomLinePartClass",query.getPBomLinePartClass());
         map.put("pBomLinePartResource",query.getPBomLinePartResource());
         map.put("singleVehiclesId",query.getSingleVehiclesId());

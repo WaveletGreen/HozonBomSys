@@ -75,15 +75,15 @@ public class HzMbomServiceImpl implements HzMbomService{
     @Override
     public Page<HzMbomRecordRespDTO> findHzMbomForPage(HzMbomByPageQuery query) {
         try {
-            String level = query.getLevel();
+            String level = query.getLevel().trim();
             if (level != null && level!="") {
-                if(level.trim().toUpperCase().endsWith("Y")){
+                if(level.toUpperCase().endsWith("Y")){
                     int length = Integer.valueOf(level.replace("Y",""));
                     query.setIsHas(1);
                     query.setLineIndex(String.valueOf(length-1));
                 }else {
                     query.setIsHas(0);
-                    int length = Integer.valueOf(level.trim());
+                    int length = Integer.valueOf(level);
                     query.setLineIndex(String.valueOf(length));
                 }
             }
@@ -1088,6 +1088,7 @@ public class HzMbomServiceImpl implements HzMbomService{
                     lineRecords.add(record);
                     lineRecord.setLineId(record.getLineId());
                     lineRecord.setIsColorPart(record.getIsColorPart());
+                    lineRecord.setColorId(record.getColorId());
                     u.add(lineRecord);
                 }
             }
