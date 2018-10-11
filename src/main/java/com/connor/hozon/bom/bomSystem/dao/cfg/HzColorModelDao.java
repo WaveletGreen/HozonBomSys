@@ -2,6 +2,7 @@ package com.connor.hozon.bom.bomSystem.dao.cfg;
 
 import org.apache.ibatis.annotations.Param;
 import org.springframework.context.annotation.Configuration;
+import sql.pojo.cfg.HzCfg0ModelColor;
 import sql.pojo.cfg.HzCfg0ModelColorDetail;
 import sql.pojo.cfg.HzColorModel2;
 
@@ -86,4 +87,11 @@ public interface HzColorModelDao {
     List<HzColorModel2> selectByProjectPuid(String projectPuid);
 
     List<HzCfg0ModelColorDetail> selectByModelUidWithColor2(String modelUid);
+
+    /**
+     * 根据颜色车型查询对应的车型配置
+     * @param hzCfg0ModelColors
+     * @return
+     */
+    List<HzCfg0ModelColorDetail> selectByModelColors(List<HzCfg0ModelColor> hzCfg0ModelColors);
 }

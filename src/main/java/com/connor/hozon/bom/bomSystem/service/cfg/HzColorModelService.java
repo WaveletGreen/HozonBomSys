@@ -1,9 +1,15 @@
 package com.connor.hozon.bom.bomSystem.service.cfg;
 
+import com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0ModelColorDao;
 import com.connor.hozon.bom.bomSystem.dao.cfg.HzColorModelDao;
+import com.connor.hozon.bom.bomSystem.service.cfg.vwo.HzVwoManagerService;
 import com.connor.hozon.bom.bomSystem.service.iservice.cfg.IHzColorModelService;
+import com.connor.hozon.bom.common.util.user.UserInfo;
+import com.connor.hozon.bom.sys.entity.User;
+import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import sql.pojo.cfg.HzCfg0ModelColor;
 import sql.pojo.cfg.HzCfg0ModelColorDetail;
 
 import java.util.List;
@@ -124,6 +130,5 @@ public class HzColorModelService implements IHzColorModelService {
     public boolean doUpdateColorModelWithCfg(HzCfg0ModelColorDetail model) {
         return hzColorModelDao.updateColorModelWithCfg(model) > 0 ? true : false;
     }
-
 
 }

@@ -25,9 +25,19 @@
         <result column="P_COLORFUL_MAP_BLOCK" jdbcType="BLOB"
                 property="pColorfulMapBlock"/>
     </resultMap>
-    <resultMap extends="ResultMapWithBLOBs" id="ResultMapWithColorJudge"
+    <resultMap extends="BaseResultMap" id="ResultMapWithColorJudge"
                type="sql.pojo.cfg.HzCfg0ModelColor">
         <result column="P_COLOR_IS_MULTIPLY" jdbcType="VARCHAR" property="pColorIsMultiply"/>
+        <result column="CMCR_VWO_ID" jdbcType="BIGINT" property="cmcrVwoId"/>
+        <result column="CMCR_CREATE_DATE" jdbcType="DATE"  property="cmcrCreateDate"/>
+        <result column="CMCR_CREATOR" jdbcType="VARCHAR" property="cmcrCreator"/>
+        <result column="CMCR_UPDATE_DATE" jdbcType="DATE" property="cmcrUpdateDate"/>
+        <result column="CMCR_UPDATER" jdbcType="VARCHAR" property="cmcrUpdater"/>
+        <result column="CMCR_RESERVE1" jdbcType="VARCHAR" property="cmcrReserve1"/>
+        <result column="CMCR_RESERVE2" jdbcType="VARCHAR" property="cmcrReserve2"/>
+        <result column="CMCR_RESERVE3" jdbcType="VARCHAR" property="cmcrReserve3"/>
+        <result column="CMCR_RESERVE4" jdbcType="VARCHAR" property="cmcrReserve4"/>
+        <result column="CMCR_RESERVE5" jdbcType="VARCHAR" property="cmcrReserve5"/>
     </resultMap>
 
     <sql id="Base_Column_List">
@@ -43,7 +53,17 @@
     P_COLORFUL_MAP_BLOCK
     </sql>
     <sql id="Color_Is_Multiply">
-    P_COLOR_IS_MULTIPLY
+        P_COLOR_IS_MULTIPLY,
+        CMCR_VWO_ID,
+        CMCR_CREATE_DATE,
+        CMCR_CREATOR,
+        CMCR_UPDATE_DATE,
+        CMCR_UPDATER,
+        CMCR_RESERVE1,
+        CMCR_RESERVE2,
+        CMCR_RESERVE3,
+        CMCR_RESERVE4,
+        CMCR_RESERVE5
     </sql>
     <sql id="values">
         #{puid,jdbcType=VARCHAR},
@@ -58,13 +78,13 @@
       P_DESC_OF_COLORFUL_MODEL = #{pDescOfColorfulModel,jdbcType=VARCHAR}
     </sql>
 
-    <select id="selectByMainId" parameterType="sql.pojo.cfg.HzCfg0ModelColor" resultMap="ResultMapWithBLOBs">
+    <select id="selectByMainId" parameterType="sql.pojo.cfg.HzCfg0ModelColor" resultMap="ResultMapWithColorJudge">
         select
         <include refid="Base_Column_List"/>
         from HZ_CFG0_MODEL_COLOR_RECORD where P_CFG0_MAIN_RECORD_OF_MC=#{pCfg0MainRecordOfMC,jdbcType=VARCHAR}
     </select>
 
-    <select id="selectByPrimaryKey" parameterType="sql.pojo.cfg.HzCfg0ModelColor" resultMap="ResultMapWithBLOBs">
+    <select id="selectByPrimaryKey" parameterType="sql.pojo.cfg.HzCfg0ModelColor" resultMap="ResultMapWithColorJudge">
         select
         <include refid="Base_Column_List"/>
         from HZ_CFG0_MODEL_COLOR_RECORD where PUID=#{puid,jdbcType=VARCHAR}
@@ -116,4 +136,32 @@
         )
     </delete>
 
+    <select id="selectByPuids" parameterType="sql.pojo.cfg.HzCfg0ModelColor" resultMap="ResultMapWithColorJudge">
+        select
+          <include refid="Base_Column_List"/>,
+          <include refid="Color_Is_Multiply"/>
+        from
+          HZ_CFG0_MODEL_COLOR_RECORD t
+        where
+          t.PUID in
+        <foreach collection="list" item="color" index="index" open="(" separator="," close=")">
+            #{color.puid, jdbcType=VARCHAR}
+        </foreach>
+    </select>
+
+    <update id="updateListData" parameterType="java.util.List">
+        update
+          HZ_CFG0_MODEL_COLOR_RECORD t
+        set t.CMCR_VWO_ID=
+        <foreach collection="list" item="hzCfg0ModelColor" open="case" close="end">
+            when t.PUID=#{hzCfg0ModelColor.puid,jdbcType=VARCHAR}
+            then
+              #{hzCfg0ModelColor.cmcrVwoId,jdbcType=BIGINT}
+        </foreach>
+        where
+        t.PUID in
+        <foreach collection="list" item="hzCfg0ModelColor" open="(" separator="," close=")">
+            #{hzCfg0ModelColor.puid,jdbcType=VARCHAR}
+        </foreach>
+    </update>
 </mapper>

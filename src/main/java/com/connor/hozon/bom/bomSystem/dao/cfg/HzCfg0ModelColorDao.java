@@ -79,4 +79,18 @@ public interface HzCfg0ModelColorDao {
      * @return
      */
     int deleteByBatch(List<HzCfg0ModelColor> colors);
+
+    /**
+     * 根据puid集合批量查询颜色车型
+     * @param colors
+     * @return
+     */
+    List<HzCfg0ModelColor> selectByPuids(List<HzCfg0ModelColor> colors);
+
+    /**
+     * 批量修改颜色车型
+     * @param hzCfg0ModelColors
+     * @return
+     */
+    int updateListData(List<HzCfg0ModelColor> hzCfg0ModelColors);
 }

@@ -524,4 +524,10 @@ public class HzCfg0ModelColorController {
     }
 
 
+    @RequestMapping("/getVWO")
+    @ResponseBody
+    public JSONObject getVWO(@RequestBody List<HzCfg0ModelColor> colors,String projectPuid){
+        return hzCfg0ModelColorService.getVWO(colors,projectPuid);
+    }
+
 }

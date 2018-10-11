@@ -58,4 +58,14 @@ public class HzCfg0ModelColorDaoImpl implements HzCfg0ModelColorDao {
     public int deleteByBatch(List<HzCfg0ModelColor> colors) {
         return baseSQLUtil.executeDelete(colors, "com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0ModelColorDao.deleteByBatch");
     }
+
+    @Override
+    public List<HzCfg0ModelColor> selectByPuids(List<HzCfg0ModelColor> colors) {
+        return baseSQLUtil.executeQueryByPass(new HzCfg0ModelColor(),colors,"com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0ModelColorDao.selectByPuids");
+    }
+
+    @Override
+    public int updateListData(List<HzCfg0ModelColor> hzCfg0ModelColors) {
+        return baseSQLUtil.executeUpdate(hzCfg0ModelColors, "com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0ModelColorDao.updateListData");
+    }
 }

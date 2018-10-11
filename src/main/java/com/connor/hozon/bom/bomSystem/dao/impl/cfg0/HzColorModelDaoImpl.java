@@ -4,6 +4,7 @@ import com.connor.hozon.bom.bomSystem.dao.cfg.HzColorModelDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import sql.IBaseSQLUtil;
+import sql.pojo.cfg.HzCfg0ModelColor;
 import sql.pojo.cfg.HzCfg0ModelColorDetail;
 import sql.pojo.cfg.HzColorModel2;
 
@@ -74,6 +75,12 @@ public class HzColorModelDaoImpl implements HzColorModelDao {
     public List<HzCfg0ModelColorDetail> selectByModelUidWithColor2(String modelUid) {
         return baseSQLUtil.executeQueryByPass(model, modelUid, "com.connor.hozon.bom.bomSystem.dao.cfg.HzColorModelDao.selectByModelUidWithColor2");
     }
+
+    @Override
+    public List<HzCfg0ModelColorDetail> selectByModelColors(List<HzCfg0ModelColor> hzCfg0ModelColors) {
+        return baseSQLUtil.executeQueryByPass(new HzCfg0ModelColorDetail(), hzCfg0ModelColors, "com.connor.hozon.bom.bomSystem.dao.cfg.HzColorModelDao.selectByModelColors");
+    }
+
     /**
      * 根据项目ID查找
      *

@@ -214,4 +214,16 @@
         where t.P_CFG0_OF_WHICH_PROJECT_PUID = #{projectPuid}
 
     </select>
+
+    <select id="selectByModelColors" parameterType="sql.pojo.cfg.HzCfg0ModelColor" resultMap="BaseResultMap">
+        select
+          <include refid="Base_Column_List"/>
+        from
+          HZ_COLOR_MODEL t
+        where
+          t.MODEL_UID in
+        <foreach collection="list" index="index" item="hzCfg0ModelColor" open="(" separator="," close=")">
+            #{hzCfg0ModelColor.puid}
+        </foreach>
+    </select>
 </mapper>

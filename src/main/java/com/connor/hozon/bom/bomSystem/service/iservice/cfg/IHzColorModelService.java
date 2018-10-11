@@ -1,6 +1,8 @@
 package com.connor.hozon.bom.bomSystem.service.iservice.cfg;
 
+import net.sf.json.JSONObject;
 import org.springframework.context.annotation.Configuration;
+import sql.pojo.cfg.HzCfg0ModelColor;
 import sql.pojo.cfg.HzCfg0ModelColorDetail;
 
 import java.util.List;
@@ -86,4 +88,5 @@ public interface IHzColorModelService {
      */
 
     boolean doUpdateColorModelWithCfg(HzCfg0ModelColorDetail model);
+
 }
