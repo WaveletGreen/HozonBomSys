@@ -114,6 +114,7 @@ public class HzMbomController extends BaseController {
             Map<String, Object> _res = new HashMap<>();
             _res.put("eBomPuid", dto.geteBomPuid());
             _res.put("puid", dto.getPuid());
+            _res.put("colorId",dto.getColorId());
             _res.put("No", dto.getNo());
             _res.put("rank",dto.getRank());
             _res.put("level", dto.getLevel());

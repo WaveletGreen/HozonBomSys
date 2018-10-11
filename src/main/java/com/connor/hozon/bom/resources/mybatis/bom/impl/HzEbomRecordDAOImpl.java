@@ -196,7 +196,7 @@ public class HzEbomRecordDAOImpl extends BaseSQLUtil implements HzEbomRecordDAO 
     public Page<HzEPLManageRecord> getHzEbomTreeByPage(HzEbomByPageQuery query) {
         PageRequest request = new PageRequest();
         Map map = new HashMap();
-        map.put("puids", Lists.newArrayList(query.getPuids()));
+        map.put("puids", Lists.newArrayList(query.getPuids().split(",")));
         map.put("projectId",query.getProjectId());
         request.setPageNumber(query.getPage());
         request.setPageSize(query.getPageSize());

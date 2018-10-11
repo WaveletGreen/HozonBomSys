@@ -87,8 +87,12 @@ public class HzMbomServiceImpl implements HzMbomService{
                     query.setLineIndex(String.valueOf(length));
                 }
             }
-
-            Page<HzMbomLineRecord> recordPage = hzMbomRecordDAO.findMbomForPage(query);
+            Page<HzMbomLineRecord> recordPage;
+            if(Integer.valueOf(1).equals(query.getShowBomStructure())){
+                recordPage = hzMbomRecordDAO.getHzMbomTreeByPage(query);
+            }else {
+                recordPage = hzMbomRecordDAO.findMbomForPage(query);
+            }
             int num = (recordPage.getPageNumber() - 1) * recordPage.getPageSize();
             if (recordPage == null || recordPage.getResult() == null) {
                 return new Page<>(recordPage.getPageNumber(), recordPage.getPageSize(), 0);

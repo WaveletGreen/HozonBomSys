@@ -6,6 +6,7 @@ import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.page.PageRequest;
 import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.resources.util.StringUtil;
+import com.google.common.collect.Lists;
 import org.springframework.stereotype.Service;
 import sql.BaseSQLUtil;
 import sql.pojo.bom.HzSingleVehiclesBomRecord;
@@ -83,5 +84,19 @@ public class HzSingleVehiclesBomDAOImpl extends BaseSQLUtil implements HzSingleV
         request.setPageSize(query.getPageSize());
         request.setFilters(map);
         return super.findPage("HzSingleVehiclesBomDAOImpl_getHzSingleVehiclesBomByPage","HzSingleVehiclesBomDAOImpl_getHzSingleVehiclesBomTotalCount",request);
+    }
+
+    @Override
+    public Page<HzSingleVehiclesBomRecord> getHzSingleVehiclesBomTreeByPage(HzSingleVehiclesBomByPageQuery query) {
+        PageRequest request = new PageRequest();
+        Map map = new HashMap();
+        map.put("projectId",query.getProjectId());
+        map.put("eBomPuids", Lists.newArrayList(query.getEBomPuids().split(",")));
+        map.put("singleVehiclesId",query.getSingleVehiclesId());
+        request.setPageNumber(query.getPage());
+        request.setPageSize(query.getPageSize());
+        request.setFilters(map);
+        return super.findPage("HzSingleVehiclesBomDAOImpl_getHzSingleVehiclesBomTreeByPage","HzSingleVehiclesBomDAOImpl_getHzSingleVehiclesBomTreeTotalCount",request);
+
     }
 }

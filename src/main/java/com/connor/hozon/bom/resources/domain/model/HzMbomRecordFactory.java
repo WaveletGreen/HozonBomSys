@@ -129,6 +129,7 @@ public class HzMbomRecordFactory {
         }
         respDTO.setStatus(record.getStatus());
         respDTO.setpStockLocation(record.getpStockLocation());
+        respDTO.setColorId(record.getColorId());
         return respDTO;
     }
 

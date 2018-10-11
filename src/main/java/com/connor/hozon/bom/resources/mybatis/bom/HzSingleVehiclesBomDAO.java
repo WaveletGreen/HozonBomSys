@@ -33,4 +33,11 @@ public interface HzSingleVehiclesBomDAO {
      * @return
      */
     Page<HzSingleVehiclesBomRecord>getHzSingleVehiclesBomByPage(HzSingleVehiclesBomByPageQuery query);
+
+    /**
+     * 分页获取单车BOM树状结构
+     * @param query
+     * @return
+     */
+    Page<HzSingleVehiclesBomRecord> getHzSingleVehiclesBomTreeByPage(HzSingleVehiclesBomByPageQuery query);
 }
