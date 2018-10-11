@@ -181,10 +181,18 @@ function initTable(url) {
                         iconCls: 'glyphicon glyphicon-eye-open',
                         handler: function () {
                             var rows = $table.bootstrapTable('getSelections');
-                            //只能选一条
-                            if (rows.length != 1) {
-                                window.Ewin.alert({message: '请选择一条需要显示层级的数据!'});
+                            var lineIds = "";
+                            for (var i = 0; i < rows.length; i++) {
+                                lineIds += rows[i].eBomPuid + ",";
+                            }
+                            ;
+                            if (rows.length <= 0) {
+                                window.Ewin.alert({message: '请至少选择一条需要显示层级的数据!'});
                                 return false;
+                            }
+                            if (this.innerText == '显示子层') {
+                                $table.bootstrapTable('destroy');
+                                initTable1(url, lineIds);
                             }
                             if (this.innerText == '显示子层') {
                                 this.innerText = '取消显示子层'
@@ -202,7 +210,7 @@ function initTable(url) {
     })
 }
 
-function initTable1(url) {
+function initTable1(url,lineIds) {
     var projectId = $("#project", window.top.document).val();
     var $table = $("#detailBikeBomTable");
     var column = [];
@@ -266,7 +274,7 @@ function initTable1(url) {
                 //         }
                 //     })
                 // },
-                url: url,
+                url: url+"&eBomPuids="+lineIds+"&showBomStructure=1",
                 method: 'get',
                 height: $(window.parent.document).find("#wrapper").height() - 90,
                 width: $(window).width(),
@@ -342,7 +350,10 @@ function initTable1(url) {
                             //     window.Ewin.alert({message: '请选择一条需要显示层级的数据!'});
                             //     return false;
                             // }
-                            if (this.innerText)
+                            if (this.innerText == '取消显示子层'){
+                                $table.bootstrapTable('destroy');
+                                initTable(url);
+                            }
                             if (this.innerText == '显示子层') {
                                 this.innerText = '取消显示子层'
                             }
