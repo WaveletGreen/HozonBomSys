@@ -2090,7 +2090,6 @@
             //     })
             // }
             if (formId != undefined || formId != '') {
-                console.log(formId);
                 $.each($("#" + formId).find("input"), function (index, info) {
                     param[info.name] = info.value;
                 })
