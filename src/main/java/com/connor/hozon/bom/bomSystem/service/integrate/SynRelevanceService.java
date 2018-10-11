@@ -1,13 +1,12 @@
 package com.connor.hozon.bom.bomSystem.service.integrate;
 
-import com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0ModelGroupDao;
+import com.connor.hozon.bom.bomSystem.dao.derivative.HzCfg0ModelGroupDao;
 import com.connor.hozon.bom.bomSystem.dto.HzFeatureQueryDTO;
 import com.connor.hozon.bom.bomSystem.dto.HzRelevanceBean;
 import com.connor.hozon.bom.bomSystem.helper.IntegrateMsgDTO;
 import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
 import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0Service;
-import com.connor.hozon.bom.bomSystem.service.iservice.integrate.ISynRelevanceService;
-import com.connor.hozon.bom.common.base.entity.QueryBase;
+import com.connor.hozon.bom.bomSystem.iservice.integrate.ISynRelevanceService;
 import integration.base.relevance.ZPPTCO004;
 import integration.logic.Correlate;
 import integration.option.ActionFlagOption;
@@ -16,7 +15,7 @@ import integration.service.impl.feature4.TransOptionsService;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
-import sql.pojo.cfg.HzCfg0Record;
+import sql.pojo.cfg.cfg0.HzCfg0Record;
 
 import java.util.*;
 

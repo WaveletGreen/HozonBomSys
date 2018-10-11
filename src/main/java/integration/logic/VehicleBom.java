@@ -1,11 +1,9 @@
 package integration.logic;
 
-import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
-import com.connor.hozon.bom.bomSystem.service.cfg.HzMaterielCfgService;
-import com.connor.hozon.bom.bomSystem.service.iservice.cfg.IHzMaterielCfgService;
+import com.connor.hozon.bom.bomSystem.iservice.cfg.IHzMaterielCfgService;
 import integration.base.productAttributes.ZPPTCI007;
 import integration.option.ActionFlagOption;
-import sql.pojo.cfg.HzMaterielCfgBean;
+import sql.pojo.cfg.derivative.HzMaterielCfgBean;
 
 import java.util.ArrayList;
 import java.util.List;

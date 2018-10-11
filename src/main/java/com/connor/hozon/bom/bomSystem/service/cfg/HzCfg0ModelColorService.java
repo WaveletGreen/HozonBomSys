@@ -1,7 +1,7 @@
 package com.connor.hozon.bom.bomSystem.service.cfg;
 
-import com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0ModelColorDao;
-import com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0OptionFamilyDao;
+import com.connor.hozon.bom.bomSystem.dao.modelColor.HzCfg0ModelColorDao;
+import com.connor.hozon.bom.bomSystem.dao.cfg0.HzCfg0OptionFamilyDao;
 import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
 import com.connor.hozon.bom.bomSystem.option.SpecialFeatureOption;
 import com.connor.hozon.bom.common.util.user.UserInfo;
@@ -11,7 +11,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sql.pojo.cfg.*;
+import sql.pojo.cfg.cfg0.HzCfg0OptionFamily;
+import sql.pojo.cfg.cfg0.HzCfg0Record;
+import sql.pojo.cfg.color.HzCfg0ColorSet;
+import sql.pojo.cfg.main.HzCfg0MainRecord;
+import sql.pojo.cfg.modelColor.HzCfg0ModelColor;
+import sql.pojo.cfg.modelColor.HzCfg0ModelColorDetail;
 import sql.redis.SerializeUtil;
 
 import java.util.*;
@@ -65,8 +70,8 @@ public class HzCfg0ModelColorService {
         return hzCfg0ModelColorDao.updateByPrimaryKey(color) == 1 ? true : false;
     }
 
-    public boolean doInsertOne(HzCfg0ModelColor color) {
-        return hzCfg0ModelColorDao.insertOne(color) > 0 ? true : false;
+    public boolean doInsert(HzCfg0ModelColor color) {
+        return hzCfg0ModelColorDao.insert(color) > 0 ? true : false;
     }
 
     public HzCfg0ModelColor doGetById(HzCfg0ModelColor color) {

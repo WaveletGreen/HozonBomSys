@@ -1,6 +1,6 @@
 package com.connor.hozon.bom.interaction.impl;
 
-import com.connor.hozon.bom.bomSystem.dao.BasicDaoImpl;
+import com.connor.hozon.bom.bomSystem.impl.BasicDaoImpl;
 import com.connor.hozon.bom.interaction.dao.HzSingleVehiclesDao;
 import com.connor.hozon.bom.interaction.inquirer.HzSingleVehiclesInquirer;
 import org.springframework.context.annotation.Configuration;

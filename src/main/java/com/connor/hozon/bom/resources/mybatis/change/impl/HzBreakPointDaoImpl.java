@@ -1,6 +1,6 @@
 package com.connor.hozon.bom.resources.mybatis.change.impl;
 
-import com.connor.hozon.bom.bomSystem.dao.BasicDaoImpl;
+import com.connor.hozon.bom.bomSystem.impl.BasicDaoImpl;
 import com.connor.hozon.bom.common.base.entity.QueryBase;
 import com.connor.hozon.bom.resources.mybatis.change.breakpoint.HzBreakPointDao;
 import org.springframework.beans.factory.annotation.Autowired;

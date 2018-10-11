@@ -1,5 +1,6 @@
 package com.connor.hozon.bom.bomSystem.dao.bom;
 
+import com.connor.hozon.bom.bomSystem.dao.BasicDao;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.context.annotation.Configuration;
 import sql.pojo.HzPreferenceSetting;
@@ -15,7 +16,7 @@ import java.util.Map;
  * Time: 17:35
  */
 @Configuration
-public interface HzBomDataDao {
+public interface HzBomDataDao extends BasicDao<HzBomLineRecord>{
     /**
      * Author: Fancyears·Maylos·Mayways
      * Description: 根据数模层puid获取到所有的BomLine

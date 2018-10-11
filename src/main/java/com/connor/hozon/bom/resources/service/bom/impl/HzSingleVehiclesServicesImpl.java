@@ -1,30 +1,19 @@
 package com.connor.hozon.bom.resources.service.bom.impl;
 
-import com.connor.hozon.bom.bomSystem.dao.cfg.HzDerivativeMaterielBasicDao;
-import com.connor.hozon.bom.bomSystem.dao.project.HzProjectLibsDao;
-import com.connor.hozon.bom.interaction.dao.HzSingleVehicleBomLineDao;
+import com.connor.hozon.bom.bomSystem.dao.derivative.HzDerivativeMaterielBasicDao;
 import com.connor.hozon.bom.interaction.dao.HzSingleVehiclesDao;
-import com.connor.hozon.bom.resources.domain.dto.request.AnalysisSingleVehicleBOMReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.request.UpdateHzSingleVehiclesReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzSingleVehiclesRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.OperateResultMessageRespDTO;
 import com.connor.hozon.bom.resources.domain.model.HzSingleVehiclesFactory;
-import com.connor.hozon.bom.resources.domain.query.HzMbomTreeQuery;
-import com.connor.hozon.bom.resources.enumtype.MbomTableNameEnum;
-import com.connor.hozon.bom.resources.mybatis.bom.HzMbomRecordDAO;
-import com.connor.hozon.bom.resources.mybatis.bom.HzSingleVehiclesBomDAO;
 import com.connor.hozon.bom.resources.service.bom.HzSingleVehiclesServices;
 import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.resources.util.PrivilegeUtil;
 import com.connor.hozon.bom.resources.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sql.pojo.bom.HzMbomLineRecord;
-import sql.pojo.bom.HzSingleVehiclesBomRecord;
-import sql.pojo.cfg.HzDerivativeMaterielBasic;
-import sql.pojo.interaction.HzSingleVehicleBomLineBean;
+import sql.pojo.cfg.derivative.HzDerivativeMaterielBasic;
 import sql.pojo.interaction.HzSingleVehicles;
-import sql.pojo.project.HzProjectLibs;
 
 import java.util.ArrayList;
 import java.util.HashMap;

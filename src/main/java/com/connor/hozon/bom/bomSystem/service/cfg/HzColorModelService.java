@@ -1,10 +1,10 @@
 package com.connor.hozon.bom.bomSystem.service.cfg;
 
-import com.connor.hozon.bom.bomSystem.dao.cfg.HzColorModelDao;
-import com.connor.hozon.bom.bomSystem.service.iservice.cfg.IHzColorModelService;
+import com.connor.hozon.bom.bomSystem.dao.modelColor.HzColorModelDao;
+import com.connor.hozon.bom.bomSystem.iservice.cfg.IHzColorModelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sql.pojo.cfg.HzCfg0ModelColorDetail;
+import sql.pojo.cfg.modelColor.HzCfg0ModelColorDetail;
 
 import java.util.List;
 

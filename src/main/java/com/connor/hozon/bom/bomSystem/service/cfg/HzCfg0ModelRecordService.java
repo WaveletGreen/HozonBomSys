@@ -1,9 +1,9 @@
 package com.connor.hozon.bom.bomSystem.service.cfg;
 
-import com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0ModelRecordDao;
+import com.connor.hozon.bom.bomSystem.dao.model.HzCfg0ModelRecordDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sql.pojo.cfg.HzCfg0ModelRecord;
+import sql.pojo.cfg.model.HzCfg0ModelRecord;
 
 import java.util.List;
 

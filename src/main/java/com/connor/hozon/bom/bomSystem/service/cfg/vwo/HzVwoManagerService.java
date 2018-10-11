@@ -1,10 +1,10 @@
 package com.connor.hozon.bom.bomSystem.service.cfg.vwo;
 
-import com.connor.hozon.bom.bomSystem.controller.cfg.HzVWOProcessController;
+import com.connor.hozon.bom.bomSystem.controller.vwo.HzVWOProcessController;
 import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0Service;
-import com.connor.hozon.bom.bomSystem.service.iservice.cfg.vwo.IHzFeatureChangeService;
-import com.connor.hozon.bom.bomSystem.service.iservice.cfg.vwo.IHzVWOManagerService;
-import com.connor.hozon.bom.bomSystem.service.iservice.cfg.vwo.IHzVwoInfoService;
+import com.connor.hozon.bom.bomSystem.iservice.cfg.vwo.IHzFeatureChangeService;
+import com.connor.hozon.bom.bomSystem.iservice.cfg.vwo.IHzVWOManagerService;
+import com.connor.hozon.bom.bomSystem.iservice.cfg.vwo.IHzVwoInfoService;
 import com.connor.hozon.bom.bomSystem.service.project.HzPlatformService;
 import com.connor.hozon.bom.bomSystem.service.project.HzProjectLibsService;
 import com.connor.hozon.bom.bomSystem.service.project.HzVehicleService;
@@ -17,7 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sql.pojo.cfg.HzCfg0Record;
+import sql.pojo.cfg.cfg0.HzCfg0Record;
 import sql.pojo.cfg.vwo.HzFeatureChangeBean;
 import sql.pojo.cfg.vwo.HzVwoInfo;
 import sql.pojo.project.HzPlatformRecord;

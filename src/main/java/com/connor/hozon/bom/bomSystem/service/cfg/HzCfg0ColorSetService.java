@@ -1,10 +1,10 @@
 package com.connor.hozon.bom.bomSystem.service.cfg;
 
-import com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0ColorSetDao;
+import com.connor.hozon.bom.bomSystem.dao.color.HzCfg0ColorSetDao;
 import com.connor.hozon.bom.common.base.entity.QueryBase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sql.pojo.cfg.HzCfg0ColorSet;
+import sql.pojo.cfg.color.HzCfg0ColorSet;
 
 import java.util.*;
 
@@ -50,7 +50,7 @@ public class HzCfg0ColorSetService {
         }
         //更新废止的颜色信息状态，设置为不可用状态
         toUpdate.forEach(set -> {
-            hzCfg0ColorSetDao.updateStatusByPk(set);
+            hzCfg0ColorSetDao.updateStatusByPrimaryKey(set);
         });
         result.put("totalCount", hzCfg0ColorSetDao.tellMeHowManyOfIt());
         result.put("result", colorSet);
@@ -81,7 +81,7 @@ public class HzCfg0ColorSetService {
      * Date: 2018/5/21 17:08
      */
     public HzCfg0ColorSet getById(HzCfg0ColorSet entity) {
-        return hzCfg0ColorSetDao.selectById(entity);
+        return hzCfg0ColorSetDao.selectByPrimaryKey(entity);
     }
 
     /**
@@ -91,7 +91,7 @@ public class HzCfg0ColorSetService {
      * Date: 2018/5/21 17:08
      */
     public boolean doUpdate(HzCfg0ColorSet entity) {
-        return hzCfg0ColorSetDao.updateOne(entity) == 1 ? true : false;
+        return hzCfg0ColorSetDao.updateByPrimaryKey(entity) == 1 ? true : false;
     }
 
     /**
@@ -111,7 +111,7 @@ public class HzCfg0ColorSetService {
      * Date: 2018/5/21 17:07
      */
     public boolean doAddOne(HzCfg0ColorSet entity) {
-        return hzCfg0ColorSetDao.insertOne(entity) > 0 ? true : false;
+        return hzCfg0ColorSetDao.insert(entity) > 0 ? true : false;
     }
 
     /**
@@ -131,7 +131,7 @@ public class HzCfg0ColorSetService {
      * @return
      */
     public boolean doUpdateStatusByPk(HzCfg0ColorSet entity) {
-        return hzCfg0ColorSetDao.updateStatusByPk(entity) > 0 ? true : false;
+        return hzCfg0ColorSetDao.updateStatusByPrimaryKey(entity) > 0 ? true : false;
     }
 
     /**

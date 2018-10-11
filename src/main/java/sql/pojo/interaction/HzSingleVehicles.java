@@ -4,6 +4,9 @@ import lombok.Data;
 
 import java.util.Date;
 
+/**
+ * 单车BOM单车主数据
+ */
 @Data
 public class HzSingleVehicles {
     /**

@@ -5,6 +5,9 @@ import com.connor.hozon.bom.bomSystem.service.project.IProject;
 import java.util.Calendar;
 import java.util.Date;
 
+/**
+ * 项目
+ */
 public class HzProjectLibs implements IProject {
     private String puid;
     /***

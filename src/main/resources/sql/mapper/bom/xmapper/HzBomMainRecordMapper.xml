@@ -48,7 +48,7 @@
         <include refid="Base_Column_List"/>
         from HZ_BOM_MAIN_RECORD
         where P_CFG0_OF_WHICH_PROJECT_PUID =
-        #{projectPuid,jdbcType=VARCHAR}
+        #{projectUid,jdbcType=VARCHAR}
     </select>
 
     <insert id="insert" parameterType="sql.pojo.bom.HZBomMainRecord">

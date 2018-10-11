@@ -1,11 +1,10 @@
 package com.connor.hozon.bom.bomSystem.service.cfg;
 
-import com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0OfBomLineRecordDao;
-import com.connor.hozon.bom.bomSystem.service.iservice.cfg.IHzCfg0OfBomLineService;
+import com.connor.hozon.bom.bomSystem.dao.fullCfg.HzCfg0OfBomLineRecordDao;
+import com.connor.hozon.bom.bomSystem.iservice.cfg.IHzCfg0OfBomLineService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Service;
-import sql.pojo.cfg.HzCfg0OfBomLineRecord;
+import sql.pojo.cfg.fullCfg.HzCfg0OfBomLineRecord;
 
 import java.util.List;
 

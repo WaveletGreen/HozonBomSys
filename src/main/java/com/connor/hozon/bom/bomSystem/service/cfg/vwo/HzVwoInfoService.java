@@ -1,8 +1,8 @@
 package com.connor.hozon.bom.bomSystem.service.cfg.vwo;
 
-import com.connor.hozon.bom.bomSystem.dao.cfg.vwo.HzVwoInfoDao;
+import com.connor.hozon.bom.bomSystem.dao.vwo.HzVwoInfoDao;
 import com.connor.hozon.bom.bomSystem.helper.DateStringHelper;
-import com.connor.hozon.bom.bomSystem.service.iservice.cfg.vwo.IHzVwoInfoService;
+import com.connor.hozon.bom.bomSystem.iservice.cfg.vwo.IHzVwoInfoService;
 import com.connor.hozon.bom.common.base.entity.QueryBase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

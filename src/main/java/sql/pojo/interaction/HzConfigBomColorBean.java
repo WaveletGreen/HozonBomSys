@@ -8,7 +8,7 @@ import java.util.Objects;
  * @Author: Fancyears·Maylos·Maywas
  * @Description:
  * @Date: Created in 2018/9/19 12:10
- * @Modified By:
+ * @Modified By: 配置+2Y+颜色对应的bean，超级BOM计算用
  */
 
 @Data

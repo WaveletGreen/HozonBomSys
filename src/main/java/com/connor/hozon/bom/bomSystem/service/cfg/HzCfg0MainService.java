@@ -1,9 +1,9 @@
 package com.connor.hozon.bom.bomSystem.service.cfg;
 
-import com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0MainRecordDao;
+import com.connor.hozon.bom.bomSystem.dao.main.HzCfg0MainRecordDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sql.pojo.cfg.HzCfg0MainRecord;
+import sql.pojo.cfg.main.HzCfg0MainRecord;
 
 /*************************************************************************************************************************
  *                                  Author: Fancyears·Maylos·Mayways

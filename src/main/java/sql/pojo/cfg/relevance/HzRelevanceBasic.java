@@ -2,6 +2,9 @@ package sql.pojo.cfg.relevance;
 
 import java.util.Date;
 
+/**
+ * 相关性主数据
+ */
 public class HzRelevanceBasic {
     /**
      * 主键
