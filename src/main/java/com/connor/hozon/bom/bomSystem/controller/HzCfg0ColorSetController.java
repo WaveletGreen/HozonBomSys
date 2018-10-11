@@ -79,7 +79,7 @@ public class HzCfg0ColorSetController {
             return "cfg/color/colorUpdate";
         } else {
             Error error = new Error();
-            error.setMsg("查找不到颜色信息:" + entity.getpColorName());
+            error.setMsg("查找不到颜色信息:" + entity.getPColorName());
             model.addAttribute("entity", error);
             return "error";
         }
@@ -121,8 +121,8 @@ public class HzCfg0ColorSetController {
         } else {
             set.setpColorStatus(0);
         }*/
-        set.setpColorModifier(user.getUserName());
-        set.setpColorModifyDate(now);
+        set.setPColorModifier(user.getUserName());
+        set.setPColorModifyDate(now);
         return colorSerService.doUpdate(set);
     }
 
@@ -159,13 +159,13 @@ public class HzCfg0ColorSetController {
             logger.error("从字符串解析时间失败", e);
         }*/
         //生效时间由审核完成只有更新
-        set.setpColorModifyDate(now);
+        set.setPColorModifyDate(now);
         //失效时间设置为9999
-        set.setpColorAbolishDate(DateStringHelper.forever());
+        set.setPColorAbolishDate(DateStringHelper.forever());
         //创建时间由数据库默认值定义
         //  set.setpColorCreateDate(now);
-        set.setpColorModifier(user.getUserName());
-        set.setpColorStatus(0);
+        set.setPColorModifier(user.getUserName());
+        set.setPColorStatus(0);
 
         while (true) {
             if (colorSerService.getById(set) == null) {
@@ -177,10 +177,10 @@ public class HzCfg0ColorSetController {
         }
         if (resultFromDB) {
             result.put("status", resultFromDB);
-            result.put("msg", "添加颜色信息:" + set.getpColorName() + "成功");
+            result.put("msg", "添加颜色信息:" + set.getPColorName() + "成功");
         } else {
             result.put("status", resultFromDB);
-            result.put("msg", "添加颜色信息:" + set.getpColorName() + "失败,请联系系统管理员");
+            result.put("msg", "添加颜色信息:" + set.getPColorName() + "失败,请联系系统管理员");
         }
         return result;
     }
@@ -198,7 +198,7 @@ public class HzCfg0ColorSetController {
         JSONObject result = new JSONObject();
         StringBuilder sb = new StringBuilder();
         set.forEach(_set ->
-                sb.append(_set.getpColorName() + ", ")
+                sb.append(_set.getPColorName() + ", ")
         );
         if (colorSerService.doDeleteByList(set)) {
             result.put("status", true);
@@ -221,7 +221,7 @@ public class HzCfg0ColorSetController {
         if (checkString(set.getPuid())) {
             _set = colorSerService.getById(set);
             //根据puid查出来的同名，代表自身，则验证通过
-            if (_set.getpColorCode().equals(set.getpColorCode())) {
+            if (_set.getPColorCode().equals(set.getPColorCode())) {
                 result.put("valid", true);
             } else if ((_set = colorSerService.doGetByColorCode(set)) != null) {
                 //不是自身，更换了代号，检查是否有同代号的，有同代号则不允许验证通过

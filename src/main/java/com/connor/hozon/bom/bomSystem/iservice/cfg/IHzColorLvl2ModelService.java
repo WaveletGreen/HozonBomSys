@@ -27,7 +27,7 @@ public interface IHzColorLvl2ModelService {
      * @param record 二级配色方案
      * @return
      */
-    int doInsert(HzColorLvl2Model record);
+    int doInsert(HzColorLvl2Model record) throws Exception;
 
     /**
      * 主键筛选
@@ -43,7 +43,7 @@ public interface IHzColorLvl2ModelService {
      * @param record 二级配色方案
      * @return
      */
-    int doUpdateByPrimaryKey(HzColorLvl2Model record);
+    int doUpdateByPrimaryKey(HzColorLvl2Model record) throws Exception;
 
     /**
      * 根据模型寻找所有2级配色方案

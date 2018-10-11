@@ -37,7 +37,7 @@ public class HzColorLvl2ModelService implements IHzColorLvl2ModelService {
      * @return
      */
     @Override
-    public int doInsert(HzColorLvl2Model record) {
+    public int doInsert(HzColorLvl2Model record) throws Exception {
         return hzColorLvl2ModelDao.insert(record);
     }
 
@@ -59,7 +59,7 @@ public class HzColorLvl2ModelService implements IHzColorLvl2ModelService {
      * @return
      */
     @Override
-    public int doUpdateByPrimaryKey(HzColorLvl2Model record) {
+    public int doUpdateByPrimaryKey(HzColorLvl2Model record) throws Exception {
         return hzColorLvl2ModelDao.updateByPrimaryKey(record);
     }
 

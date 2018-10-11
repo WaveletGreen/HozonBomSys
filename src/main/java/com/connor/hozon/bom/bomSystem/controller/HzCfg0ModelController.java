@@ -110,7 +110,7 @@ public class HzCfg0ModelController {
             } else {
                 fromDBDetail = new HzCfg0ModelDetail();
                 fromDBDetail.setpModelPuid(record.getPuid());
-                fromDBDetail.setpModelBrand(projectHelper.getBrand().getpBrandName());
+                fromDBDetail.setpModelBrand(projectHelper.getBrand().getPBrandName());
                 fromDBDetail.setpModelPlatform(projectHelper.getPlatform().getpPlatformName());
                 fromDBDetail.setpModelMod(projectHelper.getVehicle().getpVehicleName());
                 fromDBDetail.setpModelVersion(record.getObjectName());

@@ -121,7 +121,7 @@ public class HzProjectLibsController {
             HzProjectBean bean = new HzProjectBean();
             bean.setpPuid("#");
             bean.setPuid(brand.getPuid());
-            bean.setName(brand.getpBrandName());
+            bean.setName(brand.getPBrandName());
             beans.add(bean);
         });
         //平台
@@ -243,12 +243,12 @@ public class HzProjectLibsController {
         if (!hzBrandService.validate(brand)) {
             result.put("status", -1);
         }
-        if (null == hzBrandService.doGetByBrandCode(brand.getpBrandCode())) {
+        if (null == hzBrandService.doGetByBrandCode(brand.getPBrandCode())) {
             Date date = new Date();
             brand.setPuid(UUID.randomUUID().toString());
-            brand.setpBrandCreateDate(date);
-            brand.setpBrandLastModDate(date);
-            brand.setpBrandLastModifier(user.getUsername());
+            brand.setPBrandCreateDate(date);
+            brand.setPBrandLastModDate(date);
+            brand.setPBrandLastModifier(user.getUsername());
             if (hzBrandService.doInsertOne(brand)) {
                 result.put("status", 1);
                 result.put("entity", brand);
@@ -510,15 +510,15 @@ public class HzProjectLibsController {
             result.put("status", -1);
         }
         if (null != hzBrandService.doGetByPuid(brand.getPuid())) {
-//            if (null != hzBrandService.doGetByBrandCode(brand.getpBrandCode())) {
+//            if (null != hzBrandService.doGetByBrandCode(brand.getPBrandCode())) {
 //                result.put("status", -1);
 //            } else {
-            brand.setpBrandLastModifier(user.getUsername());
-            brand.setpBrandLastModDate(new Date());
+            brand.setPBrandLastModifier(user.getUsername());
+            brand.setPBrandLastModDate(new Date());
             if (hzBrandService.doUpdateSelective(brand)) {
                 result.put("status", 1);
                 brand = hzBrandService.doGetByPuid(brand.getPuid());
-//                brand.setpBrandCreateDate(new Date());
+//                brand.setPBrandCreateDate(new Date());
                 result.put("entity", brand);
             } else {
                 result.put("status", -1);

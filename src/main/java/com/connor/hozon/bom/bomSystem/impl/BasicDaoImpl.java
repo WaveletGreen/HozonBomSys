@@ -31,7 +31,7 @@ public class BasicDaoImpl<T> implements BasicDao<T> {
      * @return
      */
     @Override
-    public int deleteByPrimaryKey(T t) {
+    public int deleteByPrimaryKey(T t)  {
         System.out.println("---------->" + clz.getCanonicalName() + "<------deleteByPrimaryKey--------");
         return baseSQLUtil.executeDelete(t, clz.getCanonicalName() + ".deleteByPrimaryKey");
     }

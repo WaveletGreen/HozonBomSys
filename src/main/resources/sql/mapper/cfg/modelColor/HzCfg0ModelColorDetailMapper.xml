@@ -221,7 +221,7 @@
 
     </select>
 
-    <select id="selectByModelColors" parameterType="sql.pojo.cfg.HzCfg0ModelColor" resultMap="BaseResultMap">
+    <select id="selectByModelColors" parameterType="sql.pojo.cfg.modelColor.HzCfg0ModelColor" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from

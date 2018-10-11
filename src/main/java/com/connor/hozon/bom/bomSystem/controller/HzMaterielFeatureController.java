@@ -523,7 +523,7 @@ public class HzMaterielFeatureController extends ExtraIntegrate {
             HzPlatformRecord platform = hzPlatformService.doGetByPuid(vehicle.getpVehiclePertainToPlatform());
             HzBrandRecord brand = hzBrandService.doGetByPuid(platform.getpPertainToBrandPuid());
             HzCfg0ModelDetail hzCfg0ModelDetail = new HzCfg0ModelDetail();
-            hzCfg0ModelDetail.setpModelBrand(brand.getpBrandName());
+            hzCfg0ModelDetail.setpModelBrand(brand.getPBrandName());
             hzCfg0ModelDetail.setpModelPlatform(platform.getpPlatformName());
             hzCfg0ModelDetail.setpModelVehicle(vehicle.getpVehicleName());
             model.addAttribute("hzCfg0ModelDetail", hzCfg0ModelDetail);

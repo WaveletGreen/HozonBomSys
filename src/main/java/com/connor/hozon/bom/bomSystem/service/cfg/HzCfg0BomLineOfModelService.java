@@ -188,7 +188,7 @@ public class HzCfg0BomLineOfModelService {
                 HzCfg0ModelDetail detail = new HzCfg0ModelDetail();
                 detail.setpModelPuid(value.getModelPuid());
                 JSONObject object = new JSONObject();
-                object.put("brand", brand.getpBrandName());
+                object.put("brand", brand.getPBrandName());
                 object.put("platform", platform.getpPlatformName());
                 object.put("vehicle", vehicle.getpVehicleName());
                 object.put("key", key);

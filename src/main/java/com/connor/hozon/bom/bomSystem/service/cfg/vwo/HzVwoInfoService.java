@@ -42,7 +42,7 @@ public class HzVwoInfoService implements IHzVwoInfoService {
      * @return
      */
     @Override
-    public Long doInsert(HzVwoInfo record) {
+    public Long doInsert(HzVwoInfo record)  {
         hzVwoInfoDao.insert(record);
         return record.getId();
     }
@@ -65,7 +65,7 @@ public class HzVwoInfoService implements IHzVwoInfoService {
      * @return
      */
     @Override
-    public boolean doUpdateByPrimaryKey(HzVwoInfo record) {
+    public boolean doUpdateByPrimaryKey(HzVwoInfo record)  {
         return hzVwoInfoDao.updateByPrimaryKey(record) > 0 ? true : false;
     }
 

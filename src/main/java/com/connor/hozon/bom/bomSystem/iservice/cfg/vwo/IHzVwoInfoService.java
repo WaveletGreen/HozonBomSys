@@ -26,7 +26,7 @@ public interface IHzVwoInfoService {
      * @param record
      * @return
      */
-    Long doInsert(HzVwoInfo record);
+    Long doInsert(HzVwoInfo record) ;
 
     /**
      * 主键搜索
@@ -42,7 +42,7 @@ public interface IHzVwoInfoService {
      * @param record
      * @return
      */
-    boolean doUpdateByPrimaryKey(HzVwoInfo record);
+    boolean doUpdateByPrimaryKey(HzVwoInfo record) ;
 
     /**
      * 寻找当月最大的vwo

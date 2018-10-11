@@ -41,10 +41,10 @@ public class HzCfg0ColorSetService {
 //                    toUpdate.add(set);
 //                });
         for (HzCfg0ColorSet set : colorSet) {
-            if (set.getpColorAbolishDate() == null) {
+            if (set.getPColorAbolishDate() == null) {
                 continue;
             }
-            if (now.after(set.getpColorAbolishDate())) {
+            if (now.after(set.getPColorAbolishDate())) {
                 toUpdate.add(set);
             }
         }

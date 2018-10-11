@@ -20,10 +20,9 @@ import sql.pojo.cfg.modelColor.HzCmcrChange;
  * @Modified By:
  */
 public class HzCmcrChangeDaoImpl extends BasicDaoImpl<HzCmcrChange> implements HzCmcrChangeDao {
-    private final static HzCmcrChange CHANGE = new HzCmcrChange();
-    private final static HzCmcrChange CHANGE_POJO = new HzCmcrChange();
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(BasicDaoImpl.class);
+    private final static HzCmcrChange CHANGE_POJO = new HzCmcrChange();
+    private final static Logger LOGGER = LoggerFactory.getLogger(HzCmcrChangeDaoImpl.class);
 
     public HzCmcrChangeDaoImpl() {
         clz = HzCmcrChangeDao.class;
@@ -38,7 +37,7 @@ public class HzCmcrChangeDaoImpl extends BasicDaoImpl<HzCmcrChange> implements H
      */
     public Long insertAfter(HzCmcrChange cmcr) throws Exception {
         preSetAfter(cmcr);
-        return executeInsert(cmcr, "insertAfter");
+        return executeInsert(cmcr, "insert");
 
     }
 
@@ -51,7 +50,7 @@ public class HzCmcrChangeDaoImpl extends BasicDaoImpl<HzCmcrChange> implements H
      */
     public Long insertBefore(HzCmcrChange cmcr) throws Exception {
         preSetBefore(cmcr);
-        return executeInsert(cmcr, "insertBefore");
+        return executeInsert(cmcr, "insert");
     }
 
     /**
@@ -63,7 +62,7 @@ public class HzCmcrChangeDaoImpl extends BasicDaoImpl<HzCmcrChange> implements H
     @Override
     public Long insertAfterSelective(HzCmcrChange cmcr) throws Exception {
         preSetAfter(cmcr);
-        return executeInsert(cmcr, "insertAfterSelective");
+        return executeInsert(cmcr, "insertSelective");
 
     }
 
@@ -76,7 +75,7 @@ public class HzCmcrChangeDaoImpl extends BasicDaoImpl<HzCmcrChange> implements H
     @Override
     public Long insertBeforeSelective(HzCmcrChange cmcr) throws Exception {
         preSetBefore(cmcr);
-        return executeInsert(cmcr, "insertBeforeSelective");
+        return executeInsert(cmcr, "insertSelective");
     }
 
     /**

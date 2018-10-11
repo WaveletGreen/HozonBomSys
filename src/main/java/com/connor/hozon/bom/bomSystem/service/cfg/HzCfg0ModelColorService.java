@@ -100,7 +100,7 @@ public class HzCfg0ModelColorService {
          */
         List<HzCfg0ColorSet> colorSets = hzCfg0ColorSetService.doGetAll();
         Map<String, HzCfg0ColorSet> mapOfColorSet = new HashMap<>();
-        colorSets.forEach(set -> mapOfColorSet.put(set.getpColorCode(), set));
+        colorSets.forEach(set -> mapOfColorSet.put(set.getPColorCode(), set));
 
         List<Map<String, String>> res = new ArrayList<>();
         colorSet.forEach(color -> {
@@ -223,7 +223,7 @@ public class HzCfg0ModelColorService {
          */
         List<HzCfg0ColorSet> colorSets = hzCfg0ColorSetService.doGetAll();
         Map<String, HzCfg0ColorSet> mapOfColorSet = new HashMap<>();
-        colorSets.forEach(set -> mapOfColorSet.put(set.getpColorCode(), set));
+        colorSets.forEach(set -> mapOfColorSet.put(set.getPColorCode(), set));
 
         List<Map<String, String>> res = new ArrayList<>();
         Map<String, HzCfg0ModelColorDetail> coach = new LinkedHashMap<>();

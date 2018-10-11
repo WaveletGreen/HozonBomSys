@@ -221,7 +221,7 @@ public class HzBomAllCfgService {
         for (HzCfg0ModelRecord hzCfg0ModelRecord : hzCfg0ModelRecords) {
             JSONObject object = new JSONObject();
             object.put("modelPuid", hzCfg0ModelRecord.getPuid());
-            object.put("brand", brand.getpBrandName());
+            object.put("brand", brand.getPBrandName());
             object.put("platform", platform.getpPlatformName());
             object.put("vehicle", vehicle.getpVehicleName());
             object.put("key", hzCfg0ModelRecord.getObjectName());
@@ -834,7 +834,7 @@ public class HzBomAllCfgService {
             //平台
             modelDetail.setpModelPlatform(projectHelper.getPlatform().getpPlatformCode());
             //品牌
-            modelDetail.setpModelBrand(projectHelper.getBrand().getpBrandName());
+            modelDetail.setpModelBrand(projectHelper.getBrand().getPBrandName());
             //从TC继承过来的模型
             //模型名
             modelRecord.setObjectName(checkString(params.get("objectName")) ? params.get("objectName") : params.get("pModelVersion"));

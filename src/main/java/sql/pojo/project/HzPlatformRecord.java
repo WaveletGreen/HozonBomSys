@@ -94,11 +94,11 @@ public class HzPlatformRecord implements IProject{
         this.pPlatformLastModDate = pPlatformLastModDate;
     }
 
-    public String getpPlatformComment() {
+    public String getPPlatformComment() {
         return pPlatformComment;
     }
 
-    public void setpPlatformComment(String pPlatformComment) {
+    public void setPPlatformComment(String pPlatformComment) {
         this.pPlatformComment = pPlatformComment;
     }
 

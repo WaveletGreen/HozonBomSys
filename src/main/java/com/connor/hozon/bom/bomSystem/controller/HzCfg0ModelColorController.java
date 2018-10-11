@@ -101,7 +101,7 @@ public class HzCfg0ModelColorController {
         while (iterator.hasNext()) {
             HzCfg0ColorSet hmc = iterator.next();
             for (int i = 0; i < colorList2.size(); i++) {
-                if (colorList2.get(i).getpModelShellOfColorfulModel().equals(hmc.getpColorCode())) {
+                if (colorList2.get(i).getpModelShellOfColorfulModel().equals(hmc.getPColorCode())) {
                     iterator.remove();//去除（过滤）配色库已有数据
                     break;
                 }
@@ -112,10 +112,10 @@ public class HzCfg0ModelColorController {
         System.out.println("colorList2.size===" + colorList2.size());//7
         //添加一个无色
         HzCfg0ColorSet set = new HzCfg0ColorSet();
-        set.setpColorName("-");
-        set.setpColorCode("-");
-        set.setpColorComment("-");
-        set.setpColorOfSet("-");
+        set.setPColorName("-");
+        set.setPColorCode("-");
+        set.setPColorComment("-");
+        set.setPColorOfSet("-");
         set.setPuid("-");
         colorList.add(0, set);
         _colorList.add(0, set);
@@ -185,10 +185,10 @@ public class HzCfg0ModelColorController {
 
         //添加一个无色
         HzCfg0ColorSet set = new HzCfg0ColorSet();
-        set.setpColorName("-");
-        set.setpColorCode("-");
-        set.setpColorComment("-");
-        set.setpColorOfSet("-");
+        set.setPColorName("-");
+        set.setPColorCode("-");
+        set.setPColorComment("-");
+        set.setPColorOfSet("-");
         set.setPuid("-");
         colorList.add(0, set);
         model.addAttribute("colorList", colorList);
@@ -294,7 +294,7 @@ public class HzCfg0ModelColorController {
                     HzCfg0ColorSet set = new HzCfg0ColorSet();
                     set.setPuid(value);
                     set = hzCfg0ColorSetService.getById(set);
-                    modelColor.setpModelShellOfColorfulModel(set.getpColorCode());
+                    modelColor.setpModelShellOfColorfulModel(set.getPColorCode());
                     modelColor.setpColorUid(set.getPuid());
                 } else {
                     modelColor.getMapOfCfg0().put(key, value);
