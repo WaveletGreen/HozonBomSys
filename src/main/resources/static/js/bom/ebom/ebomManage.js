@@ -435,6 +435,24 @@ function initTable(eBomUrl) {
                             window.Ewin.dialog({title: "导入", url: "ebom/importExcel", width: 600, height: 500})
                         }
                     },
+                    {
+                        text: '显示子层',
+                        iconCls: 'glyphicon glyphicon-eye-open',
+                        handler: function () {
+                            var rows = $table.bootstrapTable('getSelections');
+                            //只能选一条
+                            if (rows.length != 1) {
+                                window.Ewin.alert({message: '请选择一条需要显示层级的数据!'});
+                                return false;
+                            }
+                            if (this.innerText == '显示子层') {
+                                this.innerText = '取消显示子层'
+                            }
+                            else {
+                                this.innerText = '显示子层'
+                            }
+                        }
+                    },
                 ],
             });
             //$table.bootstrapTable('hideColumn','puid');

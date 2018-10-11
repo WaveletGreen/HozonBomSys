@@ -2,9 +2,9 @@ $(document).ready((function () {
 
 }))
 
-setTimeout(function() {
+setTimeout(function () {
     // IE
-    if(document.all) {
+    if (document.all) {
         document.getElementById("mb").click();
     }
     // 其它浏览器
@@ -20,12 +20,13 @@ function doRefresh(projectId) {
     var mBomUrl = "mbom/record?projectId=" + projectId;
     initTable1(mBomUrl);
     $('#whiteBodyProductionTable').bootstrapTable('destroy');
-    var productionUrl = "mbom/record?projectId=" + projectId+"&type="+1;
+    var productionUrl = "mbom/record?projectId=" + projectId + "&type=" + 1;
     initTable2(productionUrl);
     $('#whiteBodyFinancialTable').bootstrapTable('destroy');
-    var financialUrl = "mbom/record?projectId=" + projectId+"&type="+6;
+    var financialUrl = "mbom/record?projectId=" + projectId + "&type=" + 6;
     initTable3(financialUrl);
 }
+
 function doQuery() {
     //$('#eplTable').bootstrapTable('refresh');    //刷新表格
     var projectPuid = $("#project", window.top.document).val();
@@ -53,6 +54,7 @@ function doQuery() {
     initTable1(mBomUrl);
     $('#mbomMaintenanceTable').bootstrapTable('destroy');
 }
+
 function initTable1(mBomUrl) {
     var projectPuid = $("#project", window.top.document).val();
     if (!checkIsSelectProject(projectPuid)) {
@@ -308,16 +310,16 @@ function initTable1(mBomUrl) {
                                 width: 500
                             }).on(function (e) {
                                 if (e) {
-                                    var _table ="<p><strong style='font-size: 20px'>数据正在同步中,请耐心等待...</strong></p>"
-                                        _table+="<p><strong style='color: red'>警告:请勿进行其他的操作!</strong></p>"
-                                        _table+="<div style='margin-top: 50px;text-align: center;z-index: 100;'><img src='/hozon/img/img.gif'/></div>"
+                                    var _table = "<p><strong style='font-size: 20px'>数据正在同步中,请耐心等待...</strong></p>"
+                                    _table += "<p><strong style='color: red'>警告:请勿进行其他的操作!</strong></p>"
+                                    _table += "<div style='margin-top: 50px;text-align: center;z-index: 100;'><img src='/hozon/img/img.gif'/></div>"
                                     window.Ewin.confirm({
                                         title: '提示',
                                         message: _table,
                                         width: 500
                                     })
-                                    url = "mbom/refresh?projectId="+$("#project", window.top.document).val();
-                                    setTimeout(function() {
+                                    url = "mbom/refresh?projectId=" + $("#project", window.top.document).val();
+                                    setTimeout(function () {
                                         $.ajax({
                                             type: "POST",
                                             //ajax需要添加打包名
@@ -338,7 +340,7 @@ function initTable1(mBomUrl) {
                                                 window.Ewin.alert({message: "操作失败:" + info.status});
                                             }
                                         })
-                                    },500)
+                                    }, 500)
                                 }
                             });
                         }
@@ -625,8 +627,25 @@ function initTable1(mBomUrl) {
                                 });
                             }
                         }
-                    }
-
+                    },
+                    {
+                        text: '显示子层',
+                        iconCls: 'glyphicon glyphicon-eye-open',
+                        handler: function () {
+                            var rows = $table.bootstrapTable('getSelections');
+                            //只能选一条
+                            if (rows.length != 1) {
+                                window.Ewin.alert({message: '请选择一条需要显示层级的数据!'});
+                                return false;
+                            }
+                            if (this.innerText == '显示子层') {
+                                this.innerText = '取消显示子层'
+                            }
+                            else {
+                                this.innerText = '显示子层'
+                            }
+                        }
+                    },
                 ],
             });
             // $mBomTable.bootstrapTable('hideColumn', 'eBomPuid');
@@ -634,10 +653,11 @@ function initTable1(mBomUrl) {
         }
     });
 }
+
 function doQuery1() {
     //$('#eplTable').bootstrapTable('refresh');    //刷新表格
     var projectId = $("#project", window.top.document).val();
-    var productionUrl = "mbom/record?projectId=" + projectId+"&type="+1;
+    var productionUrl = "mbom/record?projectId=" + projectId + "&type=" + 1;
     // var level = $("#level").val();
     // productionUrl += "&level=" + level;
     // var pBomOfWhichDept = $("#pBomOfWhichDept").val();
@@ -645,14 +665,14 @@ function doQuery1() {
     // var lineId = $("#lineId").val();
     // productionUrl += "&lineId=" + lineId;
     var pBomLinePartClass = $("#pBomLinePartClass1").val();
-    if (pBomLinePartClass =="请选择零件分类") {
-        productionUrl += "&pBomLinePartClass="+ "";
-    }else {
+    if (pBomLinePartClass == "请选择零件分类") {
+        productionUrl += "&pBomLinePartClass=" + "";
+    } else {
         productionUrl += "&pBomLinePartClass=" + pBomLinePartClass;
     }
     var pBomLinePartResource = $("#pBomLinePartResource1").val();
     if (pBomLinePartResource == "请选择零件来源") {
-        productionUrl += "&pBomLinePartResource="+ "";
+        productionUrl += "&pBomLinePartResource=" + "";
     }
     else {
         productionUrl += "&pBomLinePartResource=" + pBomLinePartResource;
@@ -660,9 +680,10 @@ function doQuery1() {
     initTable2(productionUrl);
     $('#whiteBodyProductionTable').bootstrapTable('destroy');
 }
+
 function initTable2(productionUrl) {
     var projectId = $("#project", window.top.document).val();
-    var  $productionTable = $("#whiteBodyProductionTable");
+    var $productionTable = $("#whiteBodyProductionTable");
     // $productionTable.bootstrapTable('destroy');
 
     var currentProjectHead = $("#currentProjectHead", window.top.document).val();
@@ -777,7 +798,7 @@ function initTable2(productionUrl) {
                             }
                             window.Ewin.dialog({
                                 title: "修改",
-                                url: "mbom/updateProduction?projectId=" + projectId + "&eBomPuid=" + rows[0].eBomPuid+"&type="+1,
+                                url: "mbom/updateProduction?projectId=" + projectId + "&eBomPuid=" + rows[0].eBomPuid + "&type=" + 1,
                                 gridId: "gridId",
                                 width: 500,
                                 height: 500
@@ -797,7 +818,7 @@ function initTable2(productionUrl) {
                             var myData = JSON.stringify({
                                 "projectId": $("#project", window.top.document).val(),
                                 "puids": puids,
-                                "type":1,
+                                "type": 1,
                             });
                             if (rows.length == 0) {
                                 window.Ewin.alert({message: '请选择一条需要删除的数据!'});
@@ -844,6 +865,24 @@ function initTable2(productionUrl) {
                             });
                         }
                     },
+                    {
+                        text: '显示子层',
+                        iconCls: 'glyphicon glyphicon-eye-open',
+                        handler: function () {
+                            var rows = $table.bootstrapTable('getSelections');
+                            //只能选一条
+                            if (rows.length != 1) {
+                                window.Ewin.alert({message: '请选择一条需要显示层级的数据!'});
+                                return false;
+                            }
+                            if (this.innerText == '显示子层') {
+                                this.innerText = '取消显示子层'
+                            }
+                            else {
+                                this.innerText = '显示子层'
+                            }
+                        }
+                    },
 
                 ],
             });
@@ -852,10 +891,11 @@ function initTable2(productionUrl) {
         }
     });
 }
+
 function doQuery2() {
     //$('#eplTable').bootstrapTable('refresh');    //刷新表格
     var projectId = $("#project", window.top.document).val();
-    var financialUrl = "mbom/record?projectId=" + projectId+"&type="+6;
+    var financialUrl = "mbom/record?projectId=" + projectId + "&type=" + 6;
     // var level = $("#level").val();
     // financialUrl += "&level=" + level;
     // var pBomOfWhichDept = $("#pBomOfWhichDept").val();
@@ -863,14 +903,14 @@ function doQuery2() {
     // var lineId = $("#lineId").val();
     // financialUrl += "&lineId=" + lineId;
     var pBomLinePartClass = $("#pBomLinePartClass6").val();
-    if (pBomLinePartClass =="请选择零件分类") {
-        financialUrl += "&pBomLinePartClass="+ "";
-    }else {
+    if (pBomLinePartClass == "请选择零件分类") {
+        financialUrl += "&pBomLinePartClass=" + "";
+    } else {
         financialUrl += "&pBomLinePartClass=" + pBomLinePartClass;
     }
     var pBomLinePartResource = $("#pBomLinePartResource6").val();
     if (pBomLinePartResource == "请选择零件来源") {
-        financialUrl += "&pBomLinePartResource="+ "";
+        financialUrl += "&pBomLinePartResource=" + "";
     }
     else {
         financialUrl += "&pBomLinePartResource=" + pBomLinePartResource;
@@ -878,6 +918,7 @@ function doQuery2() {
     initTable3(financialUrl);
     $('#whiteBodyFinancialTable').bootstrapTable('destroy');
 }
+
 function initTable3(financialUrl) {
     var projectId = $("#project", window.top.document).val();
     var $financialTable = $("#whiteBodyFinancialTable");
@@ -995,7 +1036,7 @@ function initTable3(financialUrl) {
                             }
                             window.Ewin.dialog({
                                 title: "修改",
-                                url: "mbom/updateFinancial?projectId=" + projectId + "&eBomPuid=" + rows[0].eBomPuid+"&type="+6,
+                                url: "mbom/updateFinancial?projectId=" + projectId + "&eBomPuid=" + rows[0].eBomPuid + "&type=" + 6,
                                 gridId: "gridId",
                                 width: 500,
                                 height: 500
@@ -1015,7 +1056,7 @@ function initTable3(financialUrl) {
                             var myData = JSON.stringify({
                                 "projectId": $("#project", window.top.document).val(),
                                 "puids": puids,
-                                "type":6,
+                                "type": 6,
                             });
                             if (rows.length == 0) {
                                 window.Ewin.alert({message: '请选择一条需要删除的数据!'});
@@ -1062,6 +1103,24 @@ function initTable3(financialUrl) {
                             });
                         }
                     },
+                    {
+                        text: '显示子层',
+                        iconCls: 'glyphicon glyphicon-eye-open',
+                        handler: function () {
+                            var rows = $table.bootstrapTable('getSelections');
+                            //只能选一条
+                            if (rows.length != 1) {
+                                window.Ewin.alert({message: '请选择一条需要显示层级的数据!'});
+                                return false;
+                            }
+                            if (this.innerText == '显示子层') {
+                                this.innerText = '取消显示子层'
+                            }
+                            else {
+                                this.innerText = '显示子层'
+                            }
+                        }
+                    },
                 ],
             });
             // $financialTable.bootstrapTable('hideColumn', 'eBomPuid');
@@ -1070,17 +1129,19 @@ function initTable3(financialUrl) {
         }
     });
 }
+
 function doMBom() {
     $(document).ready((function () {
-    var projectId = $("#project", window.top.document).val();
-    var mBomUrl = "mbom/record?projectId=" + projectId;
-    initTable1(mBomUrl);
+        var projectId = $("#project", window.top.document).val();
+        var mBomUrl = "mbom/record?projectId=" + projectId;
+        initTable1(mBomUrl);
     }))
 }
+
 function doProduction() {
     $(document).ready((function () {
         var projectId = $("#project", window.top.document).val();
-        var productionUrl = "mbom/record?projectId=" + projectId+"&type="+1;
+        var productionUrl = "mbom/record?projectId=" + projectId + "&type=" + 1;
         initTable2(productionUrl);
     }))
 }
@@ -1088,7 +1149,7 @@ function doProduction() {
 function doFinancial() {
     $(document).ready((function () {
         var projectId = $("#project", window.top.document).val();
-        var financialUrl = "mbom/record?projectId=" + projectId+"&type="+6;
+        var financialUrl = "mbom/record?projectId=" + projectId + "&type=" + 6;
         initTable3(financialUrl);
     }))
 }

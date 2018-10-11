@@ -2093,7 +2093,6 @@
                 console.log(formId);
                 $.each($("#" + formId).find("input"), function (index, info) {
                     param[info.name] = info.value;
-                    console.log(param[info.name]);
                 })
             }
             if (sortName != undefined) {
