@@ -2269,6 +2269,25 @@ function queryLou(row) {
     })
 }
 
+
+function toPage() {
+    var pageNum = $("#pageNum").val();
+    if (pageNum) {
+        $('#mbomMaintenanceTable').bootstrapTable('selectPage', parseInt(pageNum));
+    }
+}
+function toPage() {
+    var pageNum = $("#pageNum").val();
+    if (pageNum) {
+        $('#whiteBodyProductionTable').bootstrapTable('selectPage', parseInt(pageNum));
+    }
+}
+function toPage() {
+    var pageNum = $("#pageNum").val();
+    if (pageNum) {
+        $('#whiteBodyFinancialTable').bootstrapTable('selectPage', parseInt(pageNum));
+    }
+}
 $(document).keydown(function (event) {
     if (event.keyCode == 13) {
         $('form').each(function () {
