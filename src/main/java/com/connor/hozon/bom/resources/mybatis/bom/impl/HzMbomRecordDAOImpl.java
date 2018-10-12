@@ -9,6 +9,7 @@ import com.connor.hozon.bom.resources.mybatis.bom.HzMbomRecordDAO;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.page.PageRequest;
 import com.connor.hozon.bom.resources.util.ListUtil;
+import com.google.common.collect.Lists;
 import org.springframework.stereotype.Service;
 import sql.BaseSQLUtil;
 import sql.pojo.bom.HzMbomLineRecord;
@@ -345,5 +346,24 @@ public class HzMbomRecordDAOImpl extends BaseSQLUtil implements HzMbomRecordDAO 
         map.put("projectId",projectId);
         map.put("tableName",tableName);
         return super.delete("HzMbomRecordDAOImpl_deleteMbomByProjectId",map);
+    }
+
+    @Override
+    public Page<HzMbomLineRecord> getHzMbomTreeByPage(HzMbomByPageQuery query) {
+        PageRequest request = new PageRequest();
+        Map map = new HashMap();
+        map.put("projectId",query.getProjectId());
+        map.put("eBomPuids", Lists.newArrayList(query.geteBomPuids().split(",")));
+        map.put("tableName",MbomTableNameEnum.tableName(query.getType()));
+        if(ListUtil.isNotEmpty(Lists.newArrayList(query.getColorIds().split(",")))){
+            map.put("colorIds",Lists.newArrayList(query.getColorIds().split(",")));
+        }else {
+            map.put("colorIds",null);
+        }
+        request.setPageNumber(query.getPage());
+        request.setPageSize(query.getPageSize());
+        request.setFilters(map);
+        return super.findPage("HzMbomRecordDAOImpl_getHzMbomTreeByPage","HzMbomRecordDAOImpl_getHzMbomTreeTotalCount",request);
+
     }
 }

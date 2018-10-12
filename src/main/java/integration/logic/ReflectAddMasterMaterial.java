@@ -1,6 +1,6 @@
 package integration.logic;
 
-import sql.pojo.cfg.HzCfg0ModelFeature;
+import sql.pojo.cfg.derivative.HzCfg0ModelFeature;
 import sql.pojo.project.HzMaterielRecord;
 
 public class ReflectAddMasterMaterial {

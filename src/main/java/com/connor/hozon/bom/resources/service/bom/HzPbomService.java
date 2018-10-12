@@ -72,7 +72,6 @@ public interface HzPbomService {
 
     /**
      * 获取一条pbom信息
-     *
      * @param projectId
      * @param puid
      * @return
@@ -137,4 +136,5 @@ public interface HzPbomService {
      * @return
      */
     JSONObject doGenerateProcessCompose(Map<String, Object> param);
+
 }

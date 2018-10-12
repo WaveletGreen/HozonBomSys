@@ -3,7 +3,7 @@ package com.connor.hozon.bom.bomSystem.service.integrate;
 import com.connor.hozon.bom.bomSystem.dao.bom.HzMBomToERPDao;
 import com.connor.hozon.bom.bomSystem.helper.IntegrateMsgDTO;
 import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
-import com.connor.hozon.bom.bomSystem.service.iservice.integrate.ISynBomService;
+import com.connor.hozon.bom.bomSystem.iservice.integrate.ISynBomService;
 import integration.base.bom.ZPPTCO005;
 import integration.logic.ReflectBom;
 import integration.option.ActionFlagOption;
@@ -14,7 +14,6 @@ import org.springframework.context.annotation.Configuration;
 import sql.pojo.bom.HzMBomToERPBean;
 
 import java.util.*;
-
 
 @Configuration
 public class SynBomService implements ISynBomService {

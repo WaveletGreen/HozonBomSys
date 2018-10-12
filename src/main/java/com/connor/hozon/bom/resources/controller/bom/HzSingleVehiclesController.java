@@ -192,6 +192,7 @@ public class HzSingleVehiclesController extends BaseController {
             Map<String, Object> _res = new HashMap<>();
             _res.put("No", dto.getNo());
             _res.put("level", dto.getLevel());
+            _res.put("eBomPuid",dto.getEBomPuid());
             _res.put("pBomOfWhichDept", dto.getPBomOfWhichDept());
             _res.put("lineId", dto.getLineId());
             _res.put("pBomLinePartName", dto.getPBomLinePartName());

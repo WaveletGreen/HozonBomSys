@@ -1,6 +1,6 @@
 package com.connor.hozon.bom.bomSystem.controller.integrate;
 
-import com.connor.hozon.bom.bomSystem.service.iservice.integrate.ISynMaterielService;
+import com.connor.hozon.bom.bomSystem.iservice.integrate.ISynMaterielService;
 import com.connor.hozon.bom.resources.domain.dto.request.EditHzMaterielReqDTO;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;

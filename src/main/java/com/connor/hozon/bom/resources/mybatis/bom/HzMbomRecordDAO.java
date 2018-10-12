@@ -182,4 +182,12 @@ public interface HzMbomRecordDAO {
      * @return
      */
     int deleteMbomByProjectId(String projectId,String tableName);
+
+
+    /**
+     * 分页展示MBOM树状结构
+     * @param query
+     * @return
+     */
+    Page<HzMbomLineRecord> getHzMbomTreeByPage(HzMbomByPageQuery query);
 }

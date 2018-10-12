@@ -1,21 +1,21 @@
 package com.connor.hozon.bom.bomSystem.service.cfg;
 
-import com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0RecordDao;
+import com.connor.hozon.bom.bomSystem.dao.cfg0.HzCfg0RecordDao;
 import com.connor.hozon.bom.bomSystem.dto.HzFeatureQueryDTO;
 import com.connor.hozon.bom.bomSystem.dto.HzMaterielFeatureBean;
 import com.connor.hozon.bom.bomSystem.dto.HzRelevanceBean;
 import com.connor.hozon.bom.bomSystem.helper.DateStringHelper;
 import com.connor.hozon.bom.bomSystem.helper.StringHelper;
 import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
+import com.connor.hozon.bom.bomSystem.service.main.HzCfg0MainService;
 import com.connor.hozon.bom.resources.mybatis.resourcesLibrary.dictionaryLibrary.HzDictionaryLibraryDao;
-import com.connor.hozon.bom.resources.service.resourcesLibrary.dictionaryLibrary.HzDictionaryLibraryService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sql.pojo.cfg.HzCfg0MainRecord;
-import sql.pojo.cfg.HzCfg0OptionFamily;
-import sql.pojo.cfg.HzCfg0Record;
+import sql.pojo.cfg.main.HzCfg0MainRecord;
+import sql.pojo.cfg.cfg0.HzCfg0OptionFamily;
+import sql.pojo.cfg.cfg0.HzCfg0Record;
 import sql.pojo.resourcesLibrary.dictionaryLibrary.HzDictionaryLibrary;
 
 import java.util.*;
@@ -73,16 +73,6 @@ public class HzCfg0Service {
         return hzCfg0RecordDao.selectListByProjectPuid(projectPuid, queryBase);
     }
 
-    /**
-     * 附加的特性
-     *
-     * @param projectPuid
-     * @return
-     */
-    @Deprecated
-    public List<HzCfg0Record> doLoadAddedCfgListByProjectPuid(String projectPuid) {
-        return hzCfg0RecordDao.selectAddedCfgListByProjectPuid(projectPuid);
-    }
 
     public List<HzMaterielFeatureBean> doSelectMaterielFeatureByProjectPuid(String projectPuid) {
         return hzCfg0RecordDao.selectMaterielFeatureByProjectPuid(projectPuid);
@@ -98,16 +88,6 @@ public class HzCfg0Service {
         return hzCfg0RecordDao.insert(record) > 0 ? true : false;
     }
 
-    /**
-     * 想附加表中插入1条特性值
-     *
-     * @param record
-     * @return
-     */
-    @Deprecated
-    public boolean doInsertAddCfg(HzCfg0Record record) {
-        return hzCfg0RecordDao.insertAddCfg(record) > 0 ? true : false;
-    }
 
     /**
      * 主键查询
@@ -119,16 +99,6 @@ public class HzCfg0Service {
         return hzCfg0RecordDao.selectByPrimaryKey(puid);
     }
 
-    /**
-     * 附加表主键查询
-     *
-     * @param puid
-     * @return
-     */
-    @Deprecated
-    public HzCfg0Record doSelectOneAddedCfgByPuid(String puid) {
-        return hzCfg0RecordDao.selectOneAddedCfgByPuid(puid);
-    }
 
     /**
      * 更新单条特性值数据
@@ -150,28 +120,16 @@ public class HzCfg0Service {
         return hzCfg0RecordDao.setIsSent(record) > 0 ? true : false;
     }
 
-    @Deprecated
-    public boolean doUpdateAddedCfg(HzCfg0Record record) {
-        return hzCfg0RecordDao.updateAddedCfgByPrimaryKey(record) > 0 ? true : false;
-    }
 
     public boolean doDeleteByPuid(HzCfg0Record record) {
         return false;
     }
 
-    @Deprecated
-    public boolean doDeleteAddedCfgByList(List<HzCfg0Record> records) {
-        return hzCfg0RecordDao.deleteAddedCfgByList(records) > 0 ? true : false;
-    }
 
     public boolean doDeleteCfgByList(List<HzCfg0Record> records) {
         return hzCfg0RecordDao.deleteCfgByList(records) > 0 ? true : false;
     }
 
-    @Deprecated
-    public boolean doDeleteAddedCfgById(HzCfg0Record record) {
-        return hzCfg0RecordDao.deleteAddCfgByPrimaryKey(record.getPuid()) > 0 ? true : false;
-    }
 
     /***
      * 根据table，进行查询并拼接成相关性值
@@ -186,9 +144,10 @@ public class HzCfg0Service {
         List<HzCfg0Record> needToUpdate = new ArrayList<>();
         if ("HZ_CFG0_RECORD".equals(_table)) {
             records = doLoadCfgListByProjectPuid(projectPuid, new HzFeatureQueryDTO());
-        } else if ("HZ_CFG0_ADD_CFG_RECORD".equals(_table)) {
-            records = doLoadAddedCfgListByProjectPuid(projectPuid);
         }
+//        else if ("HZ_CFG0_ADD_CFG_RECORD".equals(_table)) {
+//            records = doLoadAddedCfgListByProjectPuid(projectPuid);
+//        }
         for (HzCfg0Record record : records) {
             HzRelevanceBean bean = new HzRelevanceBean();
             bean.set_table(_table);
@@ -219,9 +178,9 @@ public class HzCfg0Service {
             case "HZ_CFG0_RECORD":
                 list.forEach(_l -> hzCfg0RecordDao.updateByPrimaryKey(_l));
                 break;
-            case "HZ_CFG0_ADD_CFG_RECORD":
-                list.forEach(_l -> hzCfg0RecordDao.updateAddedCfgByPrimaryKey(_l));
-                break;
+//            case "HZ_CFG0_ADD_CFG_RECORD":
+//                list.forEach(_l -> hzCfg0RecordDao.updateAddedCfgByPrimaryKey(_l));
+//                break;
         }
     }
 
@@ -234,11 +193,12 @@ public class HzCfg0Service {
         List<HzCfg0Record> list;
         list = hzCfg0RecordDao.selectByCodeAndDesc(record);
         if (list == null || list.isEmpty()) {
-            record.setWhichTable("HZ_CFG0_ADD_CFG_RECORD");
-            list = hzCfg0RecordDao.selectByCodeAndDesc(record);
-            if (list == null || list.isEmpty()) {
-                return true;
-            }
+//            record.setWhichTable("HZ_CFG0_ADD_CFG_RECORD");
+//            list = hzCfg0RecordDao.selectByCodeAndDesc(record);
+//            if (list == null || list.isEmpty()) {
+//                return true;
+//            }
+            return true;
         }
         return false;
     }

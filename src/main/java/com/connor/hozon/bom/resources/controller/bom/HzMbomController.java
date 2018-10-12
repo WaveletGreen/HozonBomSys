@@ -1,18 +1,16 @@
 package com.connor.hozon.bom.resources.controller.bom;
 
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
-import com.connor.hozon.bom.bomSystem.service.business.cfg.HzComposeMFService;
+import com.connor.hozon.bom.bomSystem.service.derivative.HzComposeMFService;
 import com.connor.hozon.bom.resources.controller.BaseController;
 import com.connor.hozon.bom.resources.domain.dto.request.AddMbomReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.request.DeleteHzMbomReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.request.UpdateMbomReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzMbomRecordRespDTO;
-import com.connor.hozon.bom.resources.domain.dto.response.HzSuperMbomRecordRespDTO;
-import com.connor.hozon.bom.resources.domain.dto.response.HzVehicleModelRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.OperateResultMessageRespDTO;
 import com.connor.hozon.bom.resources.domain.query.HzMbomByIdQuery;
 import com.connor.hozon.bom.resources.domain.query.HzMbomByPageQuery;
+import com.connor.hozon.bom.resources.domain.query.HzPbomByPageQuery;
+import com.connor.hozon.bom.resources.mybatis.bom.HzPbomRecordDAO;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.service.bom.HzMbomService;
 import com.connor.hozon.bom.resources.service.bom.HzSingleVehiclesServices;
@@ -46,6 +44,8 @@ public class HzMbomController extends BaseController {
     HzComposeMFService hzComposeMFService;
     @Autowired
     HzSingleVehiclesServices hzSingleVehiclesServices;
+    @Autowired
+    HzPbomRecordDAO hzPbomRecordDAO;
     /**
      * MBOM管理标题
      *
@@ -110,6 +110,7 @@ public class HzMbomController extends BaseController {
             Map<String, Object> _res = new HashMap<>();
             _res.put("eBomPuid", dto.geteBomPuid());
             _res.put("puid", dto.getPuid());
+            _res.put("colorId",dto.getColorId());
             _res.put("No", dto.getNo());
             _res.put("rank",dto.getRank());
             _res.put("level", dto.getLevel());
@@ -258,6 +259,11 @@ public class HzMbomController extends BaseController {
         }
         model.addAttribute("data",respDTO);
         return"bomManage/mbom/mbomMaintenance/updateFinancial";
+    }
+
+    @RequestMapping(value = "111",method = RequestMethod.GET)
+    public void test(HzPbomByPageQuery query, HttpServletResponse response){
+        hzPbomRecordDAO.getPbomTreeByPage(query);
     }
 }
 

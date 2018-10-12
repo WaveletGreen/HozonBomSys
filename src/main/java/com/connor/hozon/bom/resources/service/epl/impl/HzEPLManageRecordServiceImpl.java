@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.connor.hozon.bom.bomSystem.dao.bom.HzBomDataDao;
 import com.connor.hozon.bom.bomSystem.dao.bom.HzBomMainRecordDao;
-import com.connor.hozon.bom.bomSystem.dao.impl.bom.HzBomLineRecordDaoImpl;
+import com.connor.hozon.bom.bomSystem.impl.bom.HzBomLineRecordDaoImpl;
 import com.connor.hozon.bom.resources.domain.dto.response.HzEPLRecordRespDTO;
 import com.connor.hozon.bom.resources.domain.query.HzEPLByPageQuery;
 import com.connor.hozon.bom.resources.mybatis.epl.HzEplMangeRecordDAO;

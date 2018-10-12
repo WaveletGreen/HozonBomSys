@@ -6,7 +6,7 @@ import lombok.Data;
  * @Author: Fancyears·Maylos·Maywas
  * @Description:
  * @Date: Created in 2018/9/25 13:18
- * @Modified By:
+ * @Modified By:单车解算用，特性+2++颜色
  */
 @Data
 public class HzSingleVehicleBomLineBean {

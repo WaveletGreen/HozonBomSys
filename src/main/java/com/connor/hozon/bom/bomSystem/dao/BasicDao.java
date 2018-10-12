@@ -13,7 +13,7 @@ public interface BasicDao<T> {
      * @param t
      * @return
      */
-    int deleteByPrimaryKey(T t);
+    int deleteByPrimaryKey(T t) ;
 
     /**
      * 全插入
@@ -21,7 +21,7 @@ public interface BasicDao<T> {
      * @param t
      * @return
      */
-    int insert(T t);
+    int insert(T t) ;
 
     /**
      * 选择插入
@@ -29,7 +29,7 @@ public interface BasicDao<T> {
      * @param t
      * @return
      */
-    int insertSelective(T t);
+    int insertSelective(T t) ;
 
     /**
      * 主键查询
@@ -37,7 +37,7 @@ public interface BasicDao<T> {
      * @param t
      * @return
      */
-    T selectByPrimaryKey(T t);
+    T selectByPrimaryKey(T t) ;
 
     /**
      * 主键选择更新
@@ -45,7 +45,7 @@ public interface BasicDao<T> {
      * @param t
      * @return
      */
-    int updateByPrimaryKeySelective(T t);
+    int updateByPrimaryKeySelective(T t) ;
 
     /**
      * 主键全更新
@@ -53,5 +53,5 @@ public interface BasicDao<T> {
      * @param t
      * @return
      */
-    int updateByPrimaryKey(T t);
+    int updateByPrimaryKey(T t) ;
 }

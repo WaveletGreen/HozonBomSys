@@ -86,4 +86,11 @@ public interface HzEbomRecordDAO {
     List<HzEPLManageRecord> getSameNameLineId(String lineId,String projectId);
 
     List<HzEPLManageRecord> getPaintAndWhiteBody(String puid,String projectId);
+
+    /**
+     * 分页获取EBOM结构树
+     * @param query
+     * @return
+     */
+    Page<HzEPLManageRecord> getHzEbomTreeByPage(HzEbomByPageQuery query);
 }

@@ -2,7 +2,7 @@ package com.connor.hozon.bom.bomSystem.bean;
 
 import lombok.Data;
 import sql.pojo.bom.HzBomLineRecord;
-import sql.pojo.cfg.HzCfg0Record;
+import sql.pojo.cfg.cfg0.HzCfg0Record;
 
 import java.math.BigDecimal;
 import java.util.Date;

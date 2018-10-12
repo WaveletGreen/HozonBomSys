@@ -368,7 +368,7 @@ function gotIt(result) {
         showToggle: true,                   //是否显示详细视图和列表视图的切换按钮
         showRefresh: true,                  //是否显示刷新按钮
         pageSize: 10,
-        pagination: true,                   //是否显示分页（*）
+        pagination: false,                   //是否显示分页（*）
         clickToSelect: true,                // 单击某一行的时候选中某一条记录
         formId: "hide",
         /**列信息，需要预先定义好*/
@@ -377,6 +377,9 @@ function gotIt(result) {
         // sortOrder: "asc",                   //排序方式
         toolbars: toolbarSetting,
     });
+
+    //设置跳转的tableID，放在table初始化语句之后
+    setTargetTableId("materielFeature");
 }
 
 function saveCompose() {

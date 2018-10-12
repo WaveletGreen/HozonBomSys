@@ -1,20 +1,16 @@
 package com.connor.hozon.bom.bomSystem.dao.project;
 
+import com.connor.hozon.bom.bomSystem.dao.BasicDao;
 import org.apache.ibatis.annotations.Param;
 import sql.pojo.project.HzPlatformRecord;
 
 import java.util.List;
 
-public interface HzPlatformRecordDao {
+public interface HzPlatformRecordDao extends BasicDao<HzPlatformRecord> {
 
     int deleteByPrimaryKey(@Param("puid") String puid);
 
-    int insert(HzPlatformRecord record);
-
-
     HzPlatformRecord selectByPrimaryKey(@Param("puid") String puid);
-
-    int updateByPrimaryKey(HzPlatformRecord record);
 
     List<HzPlatformRecord> selectAll();
 

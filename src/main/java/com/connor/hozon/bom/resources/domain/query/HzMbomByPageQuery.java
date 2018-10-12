@@ -55,6 +55,45 @@ public class HzMbomByPageQuery extends DefaultPageQuery {
      */
     private String tableName;
 
+    /**
+     * 对应的颜色件ids
+     */
+    private String colorIds;
+
+    /**
+     * eBom表的ids 用于展示树状结构
+     */
+    private String eBomPuids;
+
+    /**
+     * 是否展示层级（1展示层级结构  0不展示层级结构）
+     */
+    private Integer showBomStructure;
+
+    public String getColorIds() {
+        return colorIds;
+    }
+
+    public void setColorIds(String colorIds) {
+        this.colorIds = colorIds;
+    }
+
+    public String geteBomPuids() {
+        return eBomPuids;
+    }
+
+    public void seteBomPuids(String eBomPuids) {
+        this.eBomPuids = eBomPuids;
+    }
+
+    public Integer getShowBomStructure() {
+        return showBomStructure;
+    }
+
+    public void setShowBomStructure(Integer showBomStructure) {
+        this.showBomStructure = showBomStructure;
+    }
+
     public Integer getType() {
         return type;
     }

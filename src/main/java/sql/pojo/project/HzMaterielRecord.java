@@ -3,6 +3,9 @@ package sql.pojo.project;
 import java.util.Date;
 import java.util.Objects;
 
+/**
+ * 物料
+ */
 public class HzMaterielRecord {
     /**
      * 主键id

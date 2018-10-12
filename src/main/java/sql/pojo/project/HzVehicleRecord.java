@@ -5,6 +5,9 @@ import com.connor.hozon.bom.bomSystem.service.project.IProject;
 import java.util.Calendar;
 import java.util.Date;
 
+/**
+ * 车型
+ */
 public class HzVehicleRecord implements IProject {
     /**
      * puid

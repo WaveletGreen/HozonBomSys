@@ -138,7 +138,15 @@ public class HzSingleVehiclesBomServicesImpl implements HzSingleVehiclesBomServi
                     query.setLineIndex(String.valueOf(length));
                 }
             }
-            Page<HzSingleVehiclesBomRecord> recordPage = hzSingleVehiclesBomDAO.getHzSingleVehiclesBomByPage(query);
+            Page<HzSingleVehiclesBomRecord> recordPage;
+            if(Integer.valueOf(1).equals(query.getShowBomStructure())){
+                recordPage = hzSingleVehiclesBomDAO.getHzSingleVehiclesBomTreeByPage(query);
+            }else {
+                recordPage = hzSingleVehiclesBomDAO.getHzSingleVehiclesBomByPage(query);
+            }
+            if (recordPage == null || recordPage.getResult() == null) {
+                return new Page<>(recordPage.getPageNumber(), recordPage.getPageSize(), 0);
+            }
             List<HzSingleVehiclesBomRecord> records = recordPage.getResult();
             List<HzSingleVehiclesBomRespDTO> respDTOS = new ArrayList<>();
             if(ListUtil.isNotEmpty(records)){

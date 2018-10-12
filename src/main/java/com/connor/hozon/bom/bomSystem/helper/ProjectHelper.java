@@ -1,6 +1,6 @@
 package com.connor.hozon.bom.bomSystem.helper;
 
-import com.connor.hozon.bom.bomSystem.service.iservice.project.IHzVehicleService;
+import com.connor.hozon.bom.bomSystem.iservice.project.IHzVehicleService;
 import com.connor.hozon.bom.bomSystem.service.project.HzBrandService;
 import com.connor.hozon.bom.bomSystem.service.project.HzPlatformService;
 import com.connor.hozon.bom.bomSystem.service.project.HzProjectLibsService;

@@ -1,5 +1,6 @@
 package com.connor.hozon.bom.bomSystem.dao.project;
 
+import com.connor.hozon.bom.bomSystem.dao.BasicDao;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.context.annotation.Configuration;
 import sql.pojo.project.HzVehicleRecord;
@@ -7,7 +8,7 @@ import sql.pojo.project.HzVehicleRecord;
 import java.util.List;
 
 @Configuration
-public interface HzVehicleRecordDao {
+public interface HzVehicleRecordDao  extends BasicDao<HzVehicleRecord>{
     /**
      * 根据主键删除
      *
@@ -16,13 +17,6 @@ public interface HzVehicleRecordDao {
      */
     int deleteByPrimaryKey(@Param("puid") String puid);
 
-    /**
-     * 插入1条完整的车型数据
-     *
-     * @param record 车型数据
-     * @return
-     */
-    int insert(HzVehicleRecord record);
 
     /**
      * 根据主键获取1条车型数据
@@ -32,13 +26,6 @@ public interface HzVehicleRecordDao {
      */
     HzVehicleRecord selectByPrimaryKey(@Param("puid") String puid);
 
-    /**
-     * 根据主键更新1条车型数据
-     *
-     * @param record
-     * @return
-     */
-    int updateByPrimaryKey(HzVehicleRecord record);
 
     /**
      * 查找所有的车型信息

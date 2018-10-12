@@ -46,4 +46,14 @@ public class HzSingleVehiclesBomByPageQuery extends DefaultPageQuery {
      * 单车Id
      */
     private Long singleVehiclesId;
+
+    /**
+     * eBom表的ids 用于展示树状结构
+     */
+    private String eBomPuids;
+
+    /**
+     * 是否展示层级（1展示层级结构  0不展示层级结构）
+     */
+    private Integer showBomStructure;
 }

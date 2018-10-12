@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.connor.hozon.bom.bomSystem.dao.modelColor.HzColorLvl2ModelDao">
+    <resultMap id="BaseResultMap" type="sql.pojo.cfg.modelColor.HzColorLvl2Model">
+        <!--主键-->
+        <id column="PUID" jdbcType="VARCHAR" property="puid"/>
+        <!--颜色车型外键-->
+        <result column="P_MODEL_UID" jdbcType="VARCHAR" property="pModelUid"/>
+        <!--功能层外键，功能层上一层是2Y层，只针对颜色车身-->
+        <result column="P_LVL_FUNCTION" jdbcType="VARCHAR" property="pLvlFunction"/>
+        <!--颜色代码外键-->
+        <result column="P_COLOR_UID" jdbcType="VARCHAR" property="pColorUid"/>
+        <!--创建时间-->
+        <result column="CREATE_DATE" jdbcType="TIMESTAMP" property="createDate"/>
+        <!--修改时间-->
+        <result column="MODIFY_DATE" jdbcType="TIMESTAMP" property="modifyDate"/>
+        <!--创建者-->
+        <result column="CREATOR" jdbcType="VARCHAR" property="creator"/>
+        <!--修改者-->
+        <result column="MODIFIER" jdbcType="VARCHAR" property="modifier"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    PUID,
+    P_MODEL_UID,
+    P_LVL_FUNCTION,
+    P_COLOR_UID,
+    CREATE_DATE,
+    MODIFY_DATE,
+    CREATOR,
+    MODIFIER
+  </sql>
+    <!--主键筛选-->
+    <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from HZ_COLOR_LVL2_MODEL
+        where PUID = #{puid,jdbcType=VARCHAR}
+    </select>
+    <!--根据模型主键进行筛选，主要用于新增或更新时的检查-->
+    <select id="selectByModelUid" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from HZ_COLOR_LVL2_MODEL
+        where P_MODEL_UID = #{pModelUid,jdbcType=VARCHAR}
+    </select>
+    <!--根据模型主键进行筛选，主要用于新增或更新时的检查-->
+    <select id="selectByModelAndFunctionLvl" parameterType="sql.pojo.cfg.modelColor.HzColorLvl2Model" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from HZ_COLOR_LVL2_MODEL
+        where P_MODEL_UID = #{pModelUid,jdbcType=VARCHAR} and P_LVL_FUNCTION=#{pLvlFunction,jdbcType=VARCHAR}
+    </select>
+    <!--主键删除-->
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from HZ_COLOR_LVL2_MODEL
+    where PUID = #{puid,jdbcType=VARCHAR}
+  </delete>
+    <!--插入1条二级配色方案-->
+    <insert id="insert" parameterType="sql.pojo.cfg.modelColor.HzColorLvl2Model">
+    insert into HZ_COLOR_LVL2_MODEL (
+      PUID,
+      P_MODEL_UID,
+      P_LVL_FUNCTION,
+      P_COLOR_UID,
+      CREATE_DATE,
+      MODIFY_DATE,
+      CREATOR,
+      MODIFIER)
+    values (
+      #{puid,jdbcType=VARCHAR},
+      #{pModelUid,jdbcType=VARCHAR},
+      #{pLvlFunction,jdbcType=VARCHAR},
+      #{pColorUid,jdbcType=VARCHAR},
+      #{createDate,jdbcType=TIMESTAMP},
+      #{modifyDate,jdbcType=TIMESTAMP},
+      #{creator,jdbcType=VARCHAR},
+      #{modifier,jdbcType=VARCHAR}
+      )
+  </insert>
+    <!--更新二级配色方案-->
+    <update id="updateByPrimaryKey" parameterType="sql.pojo.cfg.modelColor.HzColorLvl2Model">
+    update HZ_COLOR_LVL2_MODEL
+    set
+      P_COLOR_UID = #{pColorUid,jdbcType=VARCHAR},
+      MODIFY_DATE = #{modifyDate,jdbcType=TIMESTAMP},
+      MODIFIER = #{modifier,jdbcType=VARCHAR}
+    where PUID = #{puid,jdbcType=VARCHAR}
+  </update>
+</mapper>

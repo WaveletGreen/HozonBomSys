@@ -311,3 +311,17 @@ div.fixed-table-scroll-outer {
     display: block;
     clear: both;
 }
+.pageBtn {
+    background-image:      -o-linear-gradient(top, #337ab7 0%, #265a88 100%);
+}
+.pageNum {
+    width: 40px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+.goPage {
+    float: right;
+    margin-left: 5px;
+    margin-top: 13px;
+    height: 30px;
+}

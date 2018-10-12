@@ -55,13 +55,12 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         //特性表
         registry.addViewController("/feature").setViewName("/cfg/feature/feature");
         registry.addViewController("/feature2").setViewName("/cfg/feature/feature2");
+
         //相关性表
         registry.addViewController("/relevance").setViewName("/cfg/relevance/relevance");
         registry.addViewController("/relevance2").setViewName("/cfg/relevance/relevance2");
         /**物料配置表*/
-        registry.addViewController("/materielFeature").setViewName("/cfg/materielFeature/materielFeature");
-        //特性表页面
-        registry.addViewController("/featuresList").setViewName("/cfg/features/featuresList");
+        registry.addViewController("/materielFeature").setViewName("cfg/materielFeature/materielFeature");
         //配色方案
         registry.addViewController("/modelColorCfg").setViewName("/cfg/modelColorCfg/modelColorCfg");
         //EPL页面

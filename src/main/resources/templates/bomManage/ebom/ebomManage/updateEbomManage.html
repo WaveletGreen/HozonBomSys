@@ -426,7 +426,6 @@
         });
         // 绑定dialog的确定按钮的监听事件
         $("#btnOk", window.top.document).click(function () {
-            console.log(1111);
             var bootstrapValidator = $("#ebomMainForm", window.top.document).data('bootstrapValidator');
             bootstrapValidator.validate();
             if (bootstrapValidator.isValid()) {

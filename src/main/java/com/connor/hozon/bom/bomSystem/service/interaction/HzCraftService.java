@@ -2,7 +2,7 @@ package com.connor.hozon.bom.bomSystem.service.interaction;
 
 import com.connor.hozon.bom.bomSystem.helper.PropertiesHelper;
 import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
-import com.connor.hozon.bom.bomSystem.service.iservice.interaction.IHzCraftService;
+import com.connor.hozon.bom.bomSystem.iservice.interaction.IHzCraftService;
 import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.resources.domain.dto.request.DeleteHzPbomReqDTO;
 import com.connor.hozon.bom.resources.domain.query.HzPbomTreeQuery;
@@ -1099,6 +1099,5 @@ public class HzCraftService implements IHzCraftService {
          */
         private List<HzPbomLineRecord> childrenTree = new ArrayList<>();
     }
-
 }
 
