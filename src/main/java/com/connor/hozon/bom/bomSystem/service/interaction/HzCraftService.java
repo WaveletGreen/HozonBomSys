@@ -1099,6 +1099,5 @@ public class HzCraftService implements IHzCraftService {
          */
         private List<HzPbomLineRecord> childrenTree = new ArrayList<>();
     }
-
 }
 

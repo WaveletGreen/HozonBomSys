@@ -309,6 +309,8 @@ function loadData(projectPuid) {
         sortOrder: "asc",                   //排序方式
         sortName: 'pCfg0ObjectId'
     });
+    //设置跳转的tableID，放在table初始化语句之后
+    setTargetTableId("dataTable");
 
     // function queryParam(pageReqeust) {
     //     var pageReqeust = {

@@ -586,17 +586,12 @@ function initTable1(pBomUrl,lineIds) {
                         text: '删除',
                         iconCls: 'glyphicon glyphicon-remove',
                         handler: function () {
-                            // if (this.innerText == "删除") {
-                            //     this.innerHTML = "<span class='glyphicon glyphicon-remove' aria-hidden='true'></span>取消删除";
-                            // }
-                            // else {
-                            //     this.innerHTML = "<span class='glyphicon glyphicon-remove' aria-hidden='true'></span>删除";
-                            // }
                             var rows = $table.bootstrapTable('getSelections');
                             var puids = "";
                             for (var i = 0; i < rows.length; i++) {
                                 puids += rows[i].eBomPuid + ",";
                             }
+                            ;
                             var myData = JSON.stringify({
                                 "projectId": $("#project", window.top.document).val(),
                                 "puids": puids,
@@ -640,7 +635,6 @@ function initTable1(pBomUrl,lineIds) {
                                     })
                                 }
                             });
-
                         }
                     },
                     {

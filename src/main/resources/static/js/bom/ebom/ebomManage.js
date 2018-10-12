@@ -959,6 +959,12 @@ function initTable1(eBomUrl,puids) {
         }
     });
 }
+function toPage() {
+    var pageNum = $("#pageNum").val();
+    if (pageNum) {
+        $('#ebomManageTable').bootstrapTable('selectPage', parseInt(pageNum));
+    }
+}
 function queryLoa(row) {
     var myData = JSON.stringify({
         "projectId": $("#project", window.top.document).val(),

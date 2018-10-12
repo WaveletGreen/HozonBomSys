@@ -75,6 +75,11 @@ public class HzCfg0ColorSet {
      */
     private Integer pColorIsDeleted;
 
+    /**
+     * 映射到数据库字段
+     * @param property
+     * @return
+     */
     public String reflectToDBField(String property) {
         switch (property) {
             /**
