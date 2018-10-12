@@ -125,4 +125,5 @@ public class HzSingleVehiclesBomRespDTO {
      * eBom表主键
      */
     private String eBomPuid;
+
 }
