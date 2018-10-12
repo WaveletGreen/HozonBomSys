@@ -217,12 +217,15 @@
                 select t2.puid from Hz_project_libs t2
                 <where>
                     t2.puid = #{projectId,jdbcType=VARCHAR}))
-                    <if test="singleVehiclesId != null">
-                        and P_SINGLE_VEHICLES_ID = #{singleVehiclesId,jdbcType=VARCHAR}
-                    </if>
                 </where>
                 start with t.P_EBOM_PUID = #{eBomPuids[${index}]}
+                <if test="singleVehiclesId != null">
+                    and P_SINGLE_VEHICLES_ID = #{singleVehiclesId,jdbcType=VARCHAR}
+                </if>
                 connect by nocycle prior t.P_EBOM_PUID = t.p_parent_uid
+                <if test="singleVehiclesId != null">
+                    and P_SINGLE_VEHICLES_ID = #{singleVehiclesId,jdbcType=VARCHAR}
+                </if>
                 order by CAST(t.P_SORT_NUM as FLOAT)
                 )
             </foreach>
@@ -247,12 +250,15 @@
                 select t2.puid from Hz_project_libs t2
                 <where>
                     t2.puid = #{projectId,jdbcType=VARCHAR}))
-                    <if test="singleVehiclesId != null">
-                        and P_SINGLE_VEHICLES_ID = #{singleVehiclesId,jdbcType=VARCHAR}
-                    </if>
                 </where>
                 start with t.P_EBOM_PUID = #{eBomPuids[${index}]}
+                <if test="singleVehiclesId != null">
+                    and P_SINGLE_VEHICLES_ID = #{singleVehiclesId,jdbcType=VARCHAR}
+                </if>
                 connect by nocycle prior t.P_EBOM_PUID = t.p_parent_uid
+                <if test="singleVehiclesId != null">
+                    and P_SINGLE_VEHICLES_ID = #{singleVehiclesId,jdbcType=VARCHAR}
+                </if>
             </foreach>
             )
         </if>

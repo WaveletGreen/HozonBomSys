@@ -92,6 +92,13 @@ public class HzPbomRecordDAOImpl extends BaseSQLUtil implements HzPbomRecordDAO 
     }
 
     @Override
+    public int deleteList(String puids) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("eBomPuids",Lists.newArrayList(puids.split(",")));
+        return super.delete("HzPbomRecordDAOImpl_deleteListByPuids",map);
+    }
+
+    @Override
     public int deleteList(List<DeleteHzPbomReqDTO> list) {
 
         return super.update("HzPbomRecordDAOImpl_deleteList",list);
