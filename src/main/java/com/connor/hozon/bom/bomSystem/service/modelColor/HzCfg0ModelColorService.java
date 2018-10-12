@@ -1,11 +1,21 @@
-package com.connor.hozon.bom.bomSystem.service.cfg;
+/*
+ * Copyright (c) 2018.
+ * This file was wrote by fancyears·milos·maywas @connor. Any question/bug you can post to 1243093366@qq.com.
+ * ALL RIGHTS RESERVED.
+ */
+
+package com.connor.hozon.bom.bomSystem.service.modelColor;
 
 import com.connor.hozon.bom.bomSystem.dao.modelColor.HzCfg0ModelColorDao;
 import com.connor.hozon.bom.bomSystem.dao.cfg0.HzCfg0OptionFamilyDao;
 import com.connor.hozon.bom.bomSystem.dao.modelColor.HzColorModelDao;
 import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
 import com.connor.hozon.bom.bomSystem.option.SpecialFeatureOption;
-import com.connor.hozon.bom.bomSystem.service.cfg.vwo.HzVwoManagerService;
+import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0OptionFamilyService;
+import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0Service;
+import com.connor.hozon.bom.bomSystem.service.color.HzCfg0ColorSetService;
+import com.connor.hozon.bom.bomSystem.service.main.HzCfg0MainService;
+import com.connor.hozon.bom.bomSystem.service.vwo.HzVwoManagerService;
 import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.sys.entity.User;
 import net.sf.json.JSONObject;
@@ -100,7 +110,7 @@ public class HzCfg0ModelColorService {
          */
         List<HzCfg0ColorSet> colorSets = hzCfg0ColorSetService.doGetAll();
         Map<String, HzCfg0ColorSet> mapOfColorSet = new HashMap<>();
-        colorSets.forEach(set -> mapOfColorSet.put(set.getPColorCode(), set));
+        colorSets.forEach(set -> mapOfColorSet.put(set.getpColorCode(), set));
 
         List<Map<String, String>> res = new ArrayList<>();
         colorSet.forEach(color -> {
@@ -223,7 +233,7 @@ public class HzCfg0ModelColorService {
          */
         List<HzCfg0ColorSet> colorSets = hzCfg0ColorSetService.doGetAll();
         Map<String, HzCfg0ColorSet> mapOfColorSet = new HashMap<>();
-        colorSets.forEach(set -> mapOfColorSet.put(set.getPColorCode(), set));
+        colorSets.forEach(set -> mapOfColorSet.put(set.getpColorCode(), set));
 
         List<Map<String, String>> res = new ArrayList<>();
         Map<String, HzCfg0ModelColorDetail> coach = new LinkedHashMap<>();

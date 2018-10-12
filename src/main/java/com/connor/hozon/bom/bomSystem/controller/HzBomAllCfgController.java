@@ -7,7 +7,7 @@
 package com.connor.hozon.bom.bomSystem.controller;
 
 import com.connor.hozon.bom.bomSystem.helper.DateStringHelper;
-import com.connor.hozon.bom.bomSystem.service.cfg.HzBomAllCfgService;
+import com.connor.hozon.bom.bomSystem.service.fullCfg.HzBomAllCfgService;
 import com.connor.hozon.bom.interaction.iservice.IHzConfigBomColorService;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;

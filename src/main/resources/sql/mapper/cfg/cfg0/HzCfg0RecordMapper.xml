@@ -99,7 +99,7 @@
     <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
-        from ${whichTable}
+        from HZ_CFG0_RECORD
         where PUID = #{puid,jdbcType=VARCHAR}
         order by P_CFG0_OBJECT_ID
     </select>
@@ -107,7 +107,7 @@
     <select id="selectByCodeAndDescWithMainItem" parameterType="sql.pojo.cfg.cfg0.HzCfg0Record" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
-        from ${whichTable} t
+        from HZ_CFG0_RECORD t
         where
         t.p_cfg0_family_name like '%'||#{pCfg0FamilyName,jdbcType=VARCHAR}||'%'
         and t.p_cfg0_object_id=#{pCfg0ObjectId,jdbcType=VARCHAR}
@@ -117,7 +117,7 @@
     <select id="selectByCodeAndCnDescWithMainItem" parameterType="sql.pojo.cfg.cfg0.HzCfg0Record" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
-        from ${whichTable} t
+        from HZ_CFG0_RECORD t
         where
         t.p_cfg0_family_desc like '%'||#{pCfg0FamilyDesc,jdbcType=VARCHAR}||'%'
         and t.p_cfg0_object_id=#{pCfg0ObjectId,jdbcType=VARCHAR}
@@ -147,7 +147,7 @@
         ( select
         <include refid="Base_Column_List"/>,
         ROWNUM as rowno
-        from ${whichTable} t where 1=1
+        from HZ_CFG0_RECORD t where 1=1
         <if test="param.featureValue !=null">
             and t.p_cfg0_object_id like '%'||upper(trim(#{param.featureValue}))||'%'
         </if>
@@ -183,7 +183,7 @@
     <select id="selectCfg0ListByPuids" parameterType="java.util.Map" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
-        from ${whichTable} t where
+        from HZ_CFG0_RECORD t where
         t.PUID in
         <if test="list!=null">
             (
@@ -216,7 +216,7 @@
     <select id="selectByCodeAndDesc" parameterType="sql.pojo.cfg.cfg0.HzCfg0Record" resultMap="MaterielFeatureMap">
         select
         <include refid="Base_Column_List"/>
-        from ${whichTable} t
+        from HZ_CFG0_RECORD t
         where
         t.P_CFG0_OBJECT_ID=#{pCfg0ObjectId}
         and t.P_CFG0_DESC=#{pCfg0Desc}
@@ -280,7 +280,7 @@
     <!--插入1个特性值-->
     <!--**************************************insert**************************************-->
     <insert id="insert" parameterType="sql.pojo.cfg.cfg0.HzCfg0Record">
-    insert into ${whichTable}
+    insert into HZ_CFG0_RECORD
       (
         PUID,
         P_CFG0_OBJECT_ID,
@@ -333,7 +333,7 @@
     <!--**************************************update**************************************-->
     <!--根据主键更新数据-->
     <update id="updateByPrimaryKey" parameterType="sql.pojo.cfg.cfg0.HzCfg0Record">
-        update ${whichTable}
+        update HZ_CFG0_RECORD
         <set>
             <if test="pCfg0ObjectId!=null">
                 P_CFG0_OBJECT_ID = #{pCfg0ObjectId,jdbcType=VARCHAR},

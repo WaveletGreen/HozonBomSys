@@ -123,13 +123,13 @@ function loadData() {
                 checkbox: true
             },
             {
-                field: 'PColorOfSet',
+                field: 'pColorOfSet',
                 title: '色系',
                 sortable: true,
                 sortOrder: 'asc',
             },
             {
-                field: 'PColorName',
+                field: 'pColorName',
                 title: '颜色名称',
                 align: 'center',
                 valign: 'middle',
@@ -137,7 +137,7 @@ function loadData() {
                 sortOrder: 'asc',
             },
             {
-                field: 'PColorCode',
+                field: 'pColorCode',
                 title: '颜色代码',
                 align: 'center',
                 valign: 'middle',
@@ -145,7 +145,7 @@ function loadData() {
                 sortOrder: 'asc',
             },
             {
-                field: 'PColorPlate',
+                field: 'pColorPlate',
                 title: '色板编号',
                 align: 'center',
                 valign: 'middle',
@@ -153,7 +153,7 @@ function loadData() {
                 sortOrder: 'asc',
             },
             {
-                field: 'PColorIsMultiply',
+                field: 'pColorIsMultiply',
                 title: '是否拼色',
                 align: 'center',
                 valign: 'middle',
@@ -161,7 +161,7 @@ function loadData() {
                 sortOrder: 'asc',
             },
             {
-                field: 'PColorEffectedDate',
+                field: 'pColorEffectedDate',
                 title: '生效时间',
                 align: 'center',
                 valign: 'middle',

@@ -125,7 +125,8 @@ public class SynFeatureService implements ISynFeatureService {
         records.forEach(_r -> {
             HzCfg0Record record;
             if ((record = hzCfg0Service.doSelectOneByPuid(_r.getPuid())) != null
-                    || (record = hzCfg0Service.doSelectOneAddedCfgByPuid(_r.getPuid())) != null) {
+//                    || (record = hzCfg0Service.doSelectOneAddedCfgByPuid(_r.getPuid())) != null
+                    ) {
                 toSend.add(record);
             }
         });

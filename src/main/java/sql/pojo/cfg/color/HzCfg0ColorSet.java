@@ -142,4 +142,131 @@ public class HzCfg0ColorSet {
         }
     }
 
+    public String getPuid() {
+        return puid;
+    }
+
+    public void setPuid(String puid) {
+        this.puid = puid;
+    }
+
+    public String getpColorOfSet() {
+        return pColorOfSet;
+    }
+
+    public void setpColorOfSet(String pColorOfSet) {
+        this.pColorOfSet = pColorOfSet;
+    }
+
+    public String getpColorName() {
+        return pColorName;
+    }
+
+    public void setpColorName(String pColorName) {
+        this.pColorName = pColorName;
+    }
+
+    public String getpColorCode() {
+        return pColorCode;
+    }
+
+    public void setpColorCode(String pColorCode) {
+        this.pColorCode = pColorCode;
+    }
+
+    public String getpColorComment() {
+        return pColorComment;
+    }
+
+    public void setpColorComment(String pColorComment) {
+        this.pColorComment = pColorComment;
+    }
+
+    public String getpColorIsMultiply() {
+        return pColorIsMultiply;
+    }
+
+    public void setpColorIsMultiply(String pColorIsMultiply) {
+        this.pColorIsMultiply = pColorIsMultiply;
+    }
+
+    public String getpColorPlate() {
+        return pColorPlate;
+    }
+
+    public void setpColorPlate(String pColorPlate) {
+        this.pColorPlate = pColorPlate;
+    }
+
+    public String getpColorModifier() {
+        return pColorModifier;
+    }
+
+    public void setpColorModifier(String pColorModifier) {
+        this.pColorModifier = pColorModifier;
+    }
+
+    public Date getpColorCreateDate() {
+        return pColorCreateDate;
+    }
+
+    public void setpColorCreateDate(Date pColorCreateDate) {
+        this.pColorCreateDate = pColorCreateDate;
+    }
+
+    public Date getpColorEffectedDate() {
+        return pColorEffectedDate;
+    }
+
+    public void setpColorEffectedDate(Date pColorEffectedDate) {
+        this.pColorEffectedDate = pColorEffectedDate;
+    }
+
+    public Date getpColorAbolishDate() {
+        return pColorAbolishDate;
+    }
+
+    public void setpColorAbolishDate(Date pColorAbolishDate) {
+        this.pColorAbolishDate = pColorAbolishDate;
+    }
+
+    public String getStrColorEffectedDate() {
+        return strColorEffectedDate;
+    }
+
+    public void setStrColorEffectedDate(String strColorEffectedDate) {
+        this.strColorEffectedDate = strColorEffectedDate;
+    }
+
+    public String getStrColorAbolishDate() {
+        return strColorAbolishDate;
+    }
+
+    public void setStrColorAbolishDate(String strColorAbolishDate) {
+        this.strColorAbolishDate = strColorAbolishDate;
+    }
+
+    public Date getpColorModifyDate() {
+        return pColorModifyDate;
+    }
+
+    public void setpColorModifyDate(Date pColorModifyDate) {
+        this.pColorModifyDate = pColorModifyDate;
+    }
+
+    public Integer getpColorStatus() {
+        return pColorStatus;
+    }
+
+    public void setpColorStatus(Integer pColorStatus) {
+        this.pColorStatus = pColorStatus;
+    }
+
+    public Integer getpColorIsDeleted() {
+        return pColorIsDeleted;
+    }
+
+    public void setpColorIsDeleted(Integer pColorIsDeleted) {
+        this.pColorIsDeleted = pColorIsDeleted;
+    }
 }

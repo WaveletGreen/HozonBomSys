@@ -9,6 +9,7 @@ import com.connor.hozon.bom.resources.page.Page;
 import sql.pojo.resourcesLibrary.dictionaryLibrary.HzDictionaryLibrary;
 
 import java.util.List;
+import sql.pojo.resourcesLibrary.dictionaryLibrary.HzDictionaryLibrary;
 
 /**
  * Created with IntelliJ IDEA.
@@ -57,5 +58,6 @@ public interface HzDictionaryLibraryService {
      */
     OperateResultMessageRespDTO deleteHzDictionaryLibrary(String puid);
 
+    HzDictionaryLibrary queryLibraryDTOByCfgObject(String cfgObjectId);
 
 }

@@ -1,4 +1,10 @@
-package com.connor.hozon.bom.bomSystem.service.business.cfg;
+/*
+ * Copyright (c) 2018.
+ * This file was wrote by fancyears·milos·maywas @connor. Any question/bug you can post to 1243093366@qq.com.
+ * ALL RIGHTS RESERVED.
+ */
+
+package com.connor.hozon.bom.bomSystem.service.derivative;
 
 import com.alibaba.fastjson.JSONObject;
 import com.connor.hozon.bom.bomSystem.dao.modelColor.HzCfg0ModelColorDao;
@@ -13,6 +19,11 @@ import com.connor.hozon.bom.bomSystem.dto.cfg.compose.HzComposeMFDTO;
 import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
 import com.connor.hozon.bom.bomSystem.option.SpecialFeatureOption;
 import com.connor.hozon.bom.bomSystem.service.cfg.*;
+import com.connor.hozon.bom.bomSystem.service.color.HzCfg0ColorSetService;
+import com.connor.hozon.bom.bomSystem.service.fullCfg.HzCfg0ModelService;
+import com.connor.hozon.bom.bomSystem.service.main.HzCfg0MainService;
+import com.connor.hozon.bom.bomSystem.service.model.HzCfg0ModelRecordService;
+import com.connor.hozon.bom.bomSystem.service.modelColor.HzCfg0ModelColorService;
 import com.connor.hozon.bom.bomSystem.service.project.HzSuperMaterielService;
 import com.connor.hozon.bom.common.base.entity.QueryBase;
 import com.connor.hozon.bom.common.util.user.UserInfo;
@@ -37,8 +48,6 @@ import sql.pojo.cfg.derivative.HzCfg0ModelFeature;
 import sql.pojo.cfg.model.HzCfg0ModelRecord;
 import sql.pojo.epl.HzEPLManageRecord;
 import sql.pojo.factory.HzFactory;
-import sql.pojo.interaction.HzSingleVehicleBomLineBean;
-import sql.pojo.interaction.HzSingleVehicles;
 import sql.pojo.project.HzMaterielRecord;
 
 import java.util.ArrayList;
@@ -553,19 +562,19 @@ public class HzComposeMFService {
 //            /**
 //             * 从配置中包括品牌平台车型项目等单车信息数据，包括了衍生物料和基本信息数据，不能当作返回前端的数据，因为前端需要从其他地方获取到内饰颜色等信息
 //             */
-            List<HzSingleVehicles> vehicles = hzSingleVehiclesDao.selectOrgByProjectUid(projectUid);
-            /**
-             * 从表中查询单车清单数据，一开始都是0个，需要进行差异数据对比，对比的是数量,再返回前端
-             */
-            List<HzSingleVehicles> hzSingleVehicles = hzSingleVehiclesDao.selectByProjectUid(projectUid);
-            /**
-             * 单车主配置+项目查询1条单车数据，单车主配置是配置物料特性表中的1行数据的主键
-             */
-            HzSingleVehicles hzSingleVehicle = hzSingleVehiclesDao.selectByDmbIdWithProjectUid(basics.get(i).getId(), projectUid);
-            /**
-             * 单车主配置+项目查询单车的所有2Y
-             */
-            List<HzSingleVehicleBomLineBean> hzSingleVehicleBomLineBeans = hzSingleVehicleBomLineDao.selectByProjectUidWithSv(projectUid, basics.get(i).getId());
+//            List<HzSingleVehicles> vehicles = hzSingleVehiclesDao.selectOrgByProjectUid(projectUid);
+//            /**
+//             * 从表中查询单车清单数据，一开始都是0个，需要进行差异数据对比，对比的是数量,再返回前端
+//             */
+//            List<HzSingleVehicles> hzSingleVehicles = hzSingleVehiclesDao.selectByProjectUid(projectUid);
+//            /**
+//             * 单车主配置+项目查询1条单车数据，单车主配置是配置物料特性表中的1行数据的主键
+//             */
+//            HzSingleVehicles hzSingleVehicle = hzSingleVehiclesDao.selectByDmbIdWithProjectUid(basics.get(i).getId(), projectUid);
+//            /**
+//             * 单车主配置+项目查询单车的所有2Y
+//             */
+//            List<HzSingleVehicleBomLineBean> hzSingleVehicleBomLineBeans = hzSingleVehicleBomLineDao.selectByProjectUidWithSv(projectUid, basics.get(i).getId());
 
 
             for (int i1 = 0; i1 < columns.size(); i1++) {
