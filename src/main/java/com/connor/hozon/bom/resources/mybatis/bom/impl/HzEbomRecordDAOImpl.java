@@ -1,6 +1,5 @@
 package com.connor.hozon.bom.resources.mybatis.bom.impl;
 
-import com.connor.hozon.bom.resources.domain.dto.request.DeleteHzEbomReqDTO;
 import com.connor.hozon.bom.resources.domain.query.HzBomRecycleByPageQuery;
 import com.connor.hozon.bom.resources.domain.query.HzEbomByPageQuery;
 import com.connor.hozon.bom.resources.domain.query.HzEbomTreeQuery;
@@ -98,9 +97,10 @@ public class HzEbomRecordDAOImpl extends BaseSQLUtil implements HzEbomRecordDAO 
     }
 
     @Override
-    public int deleteList(List<DeleteHzEbomReqDTO> reqDTOs) {
-
-        return super.update("HzEbomRecordDAOImpl_deleteList",reqDTOs);
+    public int deleteList(String puids) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("puids",Lists.newArrayList(puids.split(",")));
+        return super.update("HzEbomRecordDAOImpl_deleteList",map);
     }
 
     @Override

@@ -1,6 +1,5 @@
 package com.connor.hozon.bom.resources.mybatis.bom;
 
-import com.connor.hozon.bom.resources.domain.dto.request.DeleteHzEbomReqDTO;
 import com.connor.hozon.bom.resources.domain.query.HzBomRecycleByPageQuery;
 import com.connor.hozon.bom.resources.domain.query.HzEbomByPageQuery;
 import com.connor.hozon.bom.resources.domain.query.HzEbomTreeQuery;
@@ -62,10 +61,10 @@ public interface HzEbomRecordDAO {
 
     /**
      * 批量删除
-     * @param reqDTOs
+     * @param puids 主键ids 中间全部用英文逗号隔开
      * @return
      */
-    int deleteList(List<DeleteHzEbomReqDTO> reqDTOs);
+    int deleteList(String puids);
 
     int delete(String puid);
 

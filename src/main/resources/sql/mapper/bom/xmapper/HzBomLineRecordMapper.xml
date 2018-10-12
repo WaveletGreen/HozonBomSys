@@ -591,19 +591,14 @@
 
 
     <!--批量删除EBOM-->
-    <update id="HzEbomRecordDAOImpl_deleteList" parameterType="java.util.List">
-        <foreach collection="list" item="item" index="index" open="begin" close=";end;" separator=";">
+    <update id="HzEbomRecordDAOImpl_deleteList" parameterType="java.util.HashMap">
+        <foreach collection="puids" item="item" index="index" open="begin" close=";end;" separator=";">
             update HZ_BOM_LINE_RECORD
             <set>
-                <if test="item.status != null">
-                    P_EBOM_STATUS = #{item.status,jdbcType=INTEGER},
-                </if>
-                <if test="item.status == null">
-                    P_EBOM_STATUS =0,
-                </if>
-                P_UPDATE_TIME =sysdate
+                P_UPDATE_TIME =sysdate,
+                P_EBOM_STATUS = 0
             </set>
-            where PUID = #{item.puid,jdbcType=VARCHAR}
+            where PUID = #{puids[${index}]}
            </foreach>
     </update>
 
