@@ -18,7 +18,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import sql.pojo.cfg.HzCfg0ColorSet;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.*;
@@ -264,9 +263,10 @@ public class HzPbomController extends BaseController {
 
     /**
      * 合成工艺合件
-     *@Autor Fancyears·Malos
+     *
      * @param
      * @param param
+     * @Autor Fancyears·Malos
      */
     @RequestMapping(value = "/add/processCompose2", method = RequestMethod.POST)
     @ResponseBody
@@ -274,12 +274,12 @@ public class HzPbomController extends BaseController {
         return hzPbomService.simulateCraftingPart(param);
     }
 
-    @RequestMapping(value = "update/accessories",method = RequestMethod.GET)
-    public String getupdate(String projectId,String eBomPuid,Model model){
+    @RequestMapping(value = "update/accessories", method = RequestMethod.GET)
+    public String getupdate(String projectId, String eBomPuid, Model model) {
         if (eBomPuid == null) {
             return "";
         }
-        model.addAttribute("data",eBomPuid);
+        model.addAttribute("data", eBomPuid);
         return "bomManage/pbom/pbomManage/updateAccessoriesLibrary";
     }
 
@@ -290,6 +290,7 @@ public class HzPbomController extends BaseController {
      * @param
      * @param param
      * @Autor Fancyears·Malos
+     * @ImportantDesc DO NOT ERASE THIS METHOD
      */
     @RequestMapping(value = "/doGenerateProcessCompose", method = RequestMethod.POST)
     @ResponseBody
@@ -300,13 +301,13 @@ public class HzPbomController extends BaseController {
 
     @RequestMapping("/query/accessories")
     @ResponseBody
-    public JSONObject queryAccessories(String materielCode){
+    public JSONObject queryAccessories(String materielCode) {
         return hzPbomService.queryAccessories(materielCode);
     }
 
     @RequestMapping("/add/accessories")
     @ResponseBody
-    public JSONObject addAccessories(String materielCode, String puid, String projectId){
+    public JSONObject addAccessories(String materielCode, String puid, String projectId) {
         return hzPbomService.addAccessories(puid, materielCode, projectId);
     }
 }

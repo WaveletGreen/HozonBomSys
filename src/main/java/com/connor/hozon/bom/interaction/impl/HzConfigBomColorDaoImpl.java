@@ -1,6 +1,6 @@
 package com.connor.hozon.bom.interaction.impl;
 
-import com.connor.hozon.bom.bomSystem.dao.BasicDaoImpl;
+import com.connor.hozon.bom.bomSystem.impl.BasicDaoImpl;
 import com.connor.hozon.bom.interaction.dao.HzConfigBomColorDao;
 import org.springframework.context.annotation.Configuration;
 import sql.pojo.interaction.HzConfigBomColorBean;

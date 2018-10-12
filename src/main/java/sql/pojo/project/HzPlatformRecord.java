@@ -4,6 +4,9 @@ import com.connor.hozon.bom.bomSystem.service.project.IProject;
 
 import java.util.Date;
 
+/**
+ * 平台
+ */
 public class HzPlatformRecord implements IProject{
     /**
      * puid
@@ -91,11 +94,11 @@ public class HzPlatformRecord implements IProject{
         this.pPlatformLastModDate = pPlatformLastModDate;
     }
 
-    public String getpPlatformComment() {
+    public String getPPlatformComment() {
         return pPlatformComment;
     }
 
-    public void setpPlatformComment(String pPlatformComment) {
+    public void setPPlatformComment(String pPlatformComment) {
         this.pPlatformComment = pPlatformComment;
     }
 

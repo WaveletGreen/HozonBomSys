@@ -23,7 +23,7 @@ public class HzSuperMaterielService {
         return hzSuperMaterielDao.deleteByPrimaryKey(puid) > 0 ? true : false;
     }
 
-    public boolean doInsertOne(HzMaterielRecord record) {
+    public boolean doInsertOne(HzMaterielRecord record)  {
         return hzSuperMaterielDao.insert(record) > 0 ? true : false;
     }
 
@@ -35,7 +35,7 @@ public class HzSuperMaterielService {
         return hzSuperMaterielDao.selectByProjectPuid(projectPuid);
     }
 
-    public boolean doUpdateByPrimaryKey(HzMaterielRecord record) {
+    public boolean doUpdateByPrimaryKey(HzMaterielRecord record)  {
         return hzSuperMaterielDao.updateByPrimaryKey(record) > 0 ? true : false;
     }
 }

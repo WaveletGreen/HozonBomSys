@@ -3,13 +3,11 @@ package com.connor.hozon.bom.resources.service.bom.impl;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.connor.hozon.bom.bomSystem.bean.HzExFullCfgWithCfg;
-import com.connor.hozon.bom.bomSystem.dao.bom.HzBomDataDao;
 import com.connor.hozon.bom.bomSystem.dao.bom.HzBomMainRecordDao;
-import com.connor.hozon.bom.bomSystem.dao.cfg.HzFullCfgMainDao;
-import com.connor.hozon.bom.bomSystem.dao.cfg.HzFullCfgWithCfgDao;
-import com.connor.hozon.bom.bomSystem.dao.impl.bom.HzBomLineRecordDaoImpl;
+import com.connor.hozon.bom.bomSystem.dao.fullCfg.HzFullCfgMainDao;
+import com.connor.hozon.bom.bomSystem.dao.fullCfg.HzFullCfgWithCfgDao;
+import com.connor.hozon.bom.bomSystem.impl.bom.HzBomLineRecordDaoImpl;
 import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0OfBomLineService;
-import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.resources.domain.dto.request.AddHzEbomReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.request.DeleteHzEbomReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.request.SetLouReqDTO;
@@ -19,7 +17,6 @@ import com.connor.hozon.bom.resources.domain.dto.response.HzLouRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.OperateResultMessageRespDTO;
 import com.connor.hozon.bom.resources.domain.model.*;
 import com.connor.hozon.bom.resources.domain.query.*;
-import com.connor.hozon.bom.resources.enumtype.BomResourceEnum;
 import com.connor.hozon.bom.resources.mybatis.bom.HzEbomRecordDAO;
 import com.connor.hozon.bom.resources.mybatis.bom.HzMbomRecordDAO;
 import com.connor.hozon.bom.resources.mybatis.bom.HzPbomRecordDAO;
@@ -30,27 +27,17 @@ import com.connor.hozon.bom.resources.service.bom.HzMbomService;
 import com.connor.hozon.bom.resources.service.epl.HzEPLManageRecordService;
 import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.resources.util.PrivilegeUtil;
-import com.connor.hozon.bom.sys.entity.User;
-import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import share.bean.PreferenceSetting;
-import share.bean.RedisBomBean;
-import sql.pojo.HzPreferenceSetting;
 import sql.pojo.bom.HZBomMainRecord;
 import sql.pojo.bom.HzBomLineRecord;
 import sql.pojo.bom.HzMbomLineRecord;
 import sql.pojo.bom.HzPbomLineRecord;
-import sql.pojo.cfg.HzCfg0OfBomLineRecord;
-import sql.pojo.cfg.HzFullCfgMain;
-import sql.pojo.cfg.HzFullCfgWithCfg;
+import sql.pojo.cfg.fullCfg.HzCfg0OfBomLineRecord;
+import sql.pojo.cfg.fullCfg.HzFullCfgMain;
 import sql.pojo.epl.HzEPLManageRecord;
-import sql.pojo.project.HzMaterielRecord;
-import sql.redis.SerializeUtil;
 
 import java.util.*;
-
-import static com.connor.hozon.bom.resources.domain.model.HzBomSysFactory.getLevelAndRank;
 
 /**
  * Created by haozt on 2018/06/06

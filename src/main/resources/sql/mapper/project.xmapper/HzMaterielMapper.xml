@@ -40,7 +40,7 @@
     </resultMap>
 
     <!--整车衍生物料主数据-->
-    <resultMap id="HzCfg0ModelRecordMap" type="sql.pojo.cfg.HzCfg0ModelRecord">
+    <resultMap id="HzCfg0ModelRecordMap" type="sql.pojo.cfg.model.HzCfg0ModelRecord">
         <id column="PUID" jdbcType="VARCHAR" property="puid"/>
         <result column="OBJECT_NAME" jdbcType="VARCHAR" property="objectName"/>
         <result column="OBJECT_DESC" jdbcType="VARCHAR" property="objectDesc"/>

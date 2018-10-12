@@ -1,10 +1,10 @@
 package com.connor.hozon.bom.bomSystem.service.cfg;
 
-import com.connor.hozon.bom.bomSystem.dao.cfg.HzFcfgBomLvl1ListOperationDao;
-import com.connor.hozon.bom.bomSystem.service.iservice.cfg.IHzFcfgBomLvl1ListOperationService;
+import com.connor.hozon.bom.bomSystem.dao.fullCfg.HzFcfgBomLvl1ListOperationDao;
+import com.connor.hozon.bom.bomSystem.iservice.cfg.IHzFcfgBomLvl1ListOperationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sql.pojo.cfg.HzFcfgBomLvl1ListOperation;
+import sql.pojo.cfg.fullCfg.HzFcfgBomLvl1ListOperation;
 
 @Service("hzFcgBomLvl1ListOperationService")
 public class HzFcgBomLvl1ListOperationService implements IHzFcfgBomLvl1ListOperationService {

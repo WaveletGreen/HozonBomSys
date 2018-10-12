@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.connor.hozon.bom.bomSystem.dao.vwo.HzVwoInfluenceDeptDao">
+    <resultMap id="BaseResultMap" type="sql.pojo.cfg.vwo.HzVwoInfluenceDept">
+        <id column="ID" jdbcType="DECIMAL" property="id"/>
+        <result column="VWO_IDRI" jdbcType="INTEGER" property="vwoIdri"/>
+        <result column="VWO_ICBU" jdbcType="INTEGER" property="vwoIcbu"/>
+        <result column="VWO_MCC" jdbcType="INTEGER" property="vwoMcc"/>
+        <result column="VWO_EEC" jdbcType="INTEGER" property="vwoEec"/>
+        <result column="VWO_IDC" jdbcType="INTEGER" property="vwoIdc"/>
+        <result column="VWO_DIC" jdbcType="INTEGER" property="vwoDic"/>
+        <result column="VWO_VBC" jdbcType="INTEGER" property="vwoVbc"/>
+        <result column="VWO_ID" jdbcType="DECIMAL" property="vwoId"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        ID,
+        VWO_IDRI,
+        VWO_ICBU,
+        VWO_MCC,
+        VWO_EEC,
+        VWO_IDC,
+        VWO_DIC,
+        VWO_VBC,
+        VWO_ID
+  </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from HZ_VWO_INFLUENCE_DEPT
+        where ID = #{id,jdbcType=DECIMAL}
+    </select>
+    <select id="selectByVwoId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from HZ_VWO_INFLUENCE_DEPT
+        where VWO_ID = #{vwoId,jdbcType=DECIMAL}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from HZ_VWO_INFLUENCE_DEPT
+    where ID = #{id,jdbcType=DECIMAL}
+  </delete>
+    <insert id="insert" parameterType="sql.pojo.cfg.vwo.HzVwoInfluenceDept">
+        <selectKey order="BEFORE"
+                   keyColumn="id" keyProperty="id" resultType="java.lang.Long">
+            select SEQ_VWO_INFLUENCE_DEPT_ID.Nextval from dual
+        </selectKey>
+        insert into HZ_VWO_INFLUENCE_DEPT (ID, VWO_IDRI, VWO_ICBU,
+        VWO_MCC, VWO_EEC, VWO_IDC,
+        VWO_DIC, VWO_VBC, VWO_ID
+        )
+        values (#{id,jdbcType=INTEGER}, #{vwoIdri,jdbcType=INTEGER}, #{vwoIcbu,jdbcType=INTEGER},
+        #{vwoMcc,jdbcType=INTEGER}, #{vwoEec,jdbcType=INTEGER}, #{vwoIdc,jdbcType=INTEGER},
+        #{vwoDic,jdbcType=INTEGER}, #{vwoVbc,jdbcType=INTEGER}, #{vwoId,jdbcType=DECIMAL}
+        )
+    </insert>
+    <insert id="insertSelective" parameterType="sql.pojo.cfg.vwo.HzVwoInfluenceDept">
+        <selectKey order="BEFORE"
+                   keyColumn="id" keyProperty="id" resultType="java.lang.Long">
+            select SEQ_VWO_INFLUENCE_DEPT_ID.Nextval from dual
+        </selectKey>
+        insert into HZ_VWO_INFLUENCE_DEPT
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                ID,
+            </if>
+            <if test="vwoIdri != null">
+                VWO_IDRI,
+            </if>
+            <if test="vwoIcbu != null">
+                VWO_ICBU,
+            </if>
+            <if test="vwoMcc != null">
+                VWO_MCC,
+            </if>
+            <if test="vwoEec != null">
+                VWO_EEC,
+            </if>
+            <if test="vwoIdc != null">
+                VWO_IDC,
+            </if>
+            <if test="vwoDic != null">
+                VWO_DIC,
+            </if>
+            <if test="vwoVbc != null">
+                VWO_VBC,
+            </if>
+            <if test="vwoId != null">
+                VWO_ID,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="vwoIdri != null">
+                #{vwoIdri,jdbcType=INTEGER},
+            </if>
+            <if test="vwoIcbu != null">
+                #{vwoIcbu,jdbcType=INTEGER},
+            </if>
+            <if test="vwoMcc != null">
+                #{vwoMcc,jdbcType=INTEGER},
+            </if>
+            <if test="vwoEec != null">
+                #{vwoEec,jdbcType=INTEGER},
+            </if>
+            <if test="vwoIdc != null">
+                #{vwoIdc,jdbcType=INTEGER},
+            </if>
+            <if test="vwoDic != null">
+                #{vwoDic,jdbcType=INTEGER},
+            </if>
+            <if test="vwoVbc != null">
+                #{vwoVbc,jdbcType=INTEGER},
+            </if>
+            <if test="vwoId != null">
+                #{vwoId,jdbcType=DECIMAL},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="sql.pojo.cfg.vwo.HzVwoInfluenceDept">
+        update HZ_VWO_INFLUENCE_DEPT
+        <set>
+            <if test="vwoIdri != null">
+                VWO_IDRI = #{vwoIdri,jdbcType=INTEGER},
+            </if>
+            <if test="vwoIcbu != null">
+                VWO_ICBU = #{vwoIcbu,jdbcType=INTEGER},
+            </if>
+            <if test="vwoMcc != null">
+                VWO_MCC = #{vwoMcc,jdbcType=INTEGER},
+            </if>
+            <if test="vwoEec != null">
+                VWO_EEC = #{vwoEec,jdbcType=INTEGER},
+            </if>
+            <if test="vwoIdc != null">
+                VWO_IDC = #{vwoIdc,jdbcType=INTEGER},
+            </if>
+            <if test="vwoDic != null">
+                VWO_DIC = #{vwoDic,jdbcType=INTEGER},
+            </if>
+            <if test="vwoVbc != null">
+                VWO_VBC = #{vwoVbc,jdbcType=INTEGER},
+            </if>
+            <if test="vwoId != null">
+                VWO_ID = #{vwoId,jdbcType=DECIMAL},
+            </if>
+        </set>
+        where ID = #{id,jdbcType=DECIMAL}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="sql.pojo.cfg.vwo.HzVwoInfluenceDept">
+    update HZ_VWO_INFLUENCE_DEPT
+    set VWO_IDRI = #{vwoIdri,jdbcType=INTEGER},
+      VWO_ICBU = #{vwoIcbu,jdbcType=INTEGER},
+      VWO_MCC = #{vwoMcc,jdbcType=INTEGER},
+      VWO_EEC = #{vwoEec,jdbcType=INTEGER},
+      VWO_IDC = #{vwoIdc,jdbcType=INTEGER},
+      VWO_DIC = #{vwoDic,jdbcType=INTEGER},
+      VWO_VBC = #{vwoVbc,jdbcType=INTEGER},
+      VWO_ID = #{vwoId,jdbcType=DECIMAL}
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+</mapper>

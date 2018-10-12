@@ -1,7 +1,7 @@
 package com.connor.hozon.bom.bomSystem.service.cfg.vwo;
 
-import com.connor.hozon.bom.bomSystem.dao.cfg.vwo.HzVwoInfluenceUserDao;
-import com.connor.hozon.bom.bomSystem.service.iservice.cfg.vwo.IHzVwoInfluenceUserService;
+import com.connor.hozon.bom.bomSystem.dao.vwo.HzVwoInfluenceUserDao;
+import com.connor.hozon.bom.bomSystem.iservice.cfg.vwo.IHzVwoInfluenceUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sql.pojo.cfg.vwo.HzVwoInfluenceUser;

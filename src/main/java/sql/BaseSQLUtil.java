@@ -66,7 +66,7 @@ public class BaseSQLUtil implements IBaseSQLUtil {
             if (suppliers == null) {
                 result = sqlSessionTemplate.insert(by);
             } else {
-                // sqlSessionTemplate.insertOne(by, suppliers);
+                // sqlSessionTemplate.insert(by, suppliers);
                 result = sqlSessionTemplate.insert(by, suppliers);
             }
 //            sqlSessionTemplate.commit();

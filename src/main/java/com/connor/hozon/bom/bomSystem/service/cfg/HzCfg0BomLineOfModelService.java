@@ -1,9 +1,9 @@
 package com.connor.hozon.bom.bomSystem.service.cfg;
 
-import com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0BomLineOfModelDao;
-import com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0ModelDetailDao;
-import com.connor.hozon.bom.bomSystem.service.iservice.cfg.IHzFcfgBomLvl1ListOperationService;
-import com.connor.hozon.bom.bomSystem.service.iservice.project.IHzVehicleService;
+import com.connor.hozon.bom.bomSystem.dao.fullCfg.HzCfg0BomLineOfModelDao;
+import com.connor.hozon.bom.bomSystem.dao.model.HzCfg0ModelDetailDao;
+import com.connor.hozon.bom.bomSystem.iservice.cfg.IHzFcfgBomLvl1ListOperationService;
+import com.connor.hozon.bom.bomSystem.iservice.project.IHzVehicleService;
 import com.connor.hozon.bom.bomSystem.service.project.HzBrandService;
 import com.connor.hozon.bom.bomSystem.service.project.HzPlatformService;
 import com.connor.hozon.bom.bomSystem.service.project.HzProjectLibsService;
@@ -13,16 +13,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sql.pojo.cfg.*;
+import sql.pojo.cfg.fullCfg.HzCfg0BomLineOfModel;
+import sql.pojo.cfg.fullCfg.HzFcfgBomLvl1ListOperation;
+import sql.pojo.cfg.main.HzCfg0MainRecord;
+import sql.pojo.cfg.model.HzCfg0ModelDetail;
+import sql.pojo.cfg.model.HzCfg0ModelRecord;
 import sql.pojo.project.HzBrandRecord;
 import sql.pojo.project.HzPlatformRecord;
 import sql.pojo.project.HzProjectLibs;
 import sql.pojo.project.HzVehicleRecord;
-import sql.redis.SerializeUtil;
 
 import java.util.*;
-
-import static com.connor.hozon.bom.bomSystem.helper.StringHelper.checkString;
 
 /**
  * User: Fancyears·Maylos·Mayways
@@ -87,7 +88,7 @@ public class HzCfg0BomLineOfModelService {
 
     /**
      * @param bdf 数模层ID
-     * @return java.util.List<sql.pojo.cfg.HzCfg0BomLineOfModel>
+     * @return java.util.List<sql.pojo.cfg0.cfg0.HzCfg0BomLineOfModel>
      * Author: Fancyears·Maylos·Mayways
      * Description: 根据数模层的puid获取到下级的所有bom行的配置信息，包含了车型模型的信息在内
      * Date: 2018/5/21 18:28
@@ -187,7 +188,7 @@ public class HzCfg0BomLineOfModelService {
                 HzCfg0ModelDetail detail = new HzCfg0ModelDetail();
                 detail.setpModelPuid(value.getModelPuid());
                 JSONObject object = new JSONObject();
-                object.put("brand", brand.getpBrandName());
+                object.put("brand", brand.getPBrandName());
                 object.put("platform", platform.getpPlatformName());
                 object.put("vehicle", vehicle.getpVehicleName());
                 object.put("key", key);

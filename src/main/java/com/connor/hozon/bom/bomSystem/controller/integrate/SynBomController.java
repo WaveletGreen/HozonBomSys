@@ -1,7 +1,7 @@
 package com.connor.hozon.bom.bomSystem.controller.integrate;
 
 import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0OfBomLineService;
-import com.connor.hozon.bom.bomSystem.service.iservice.integrate.ISynBomService;
+import com.connor.hozon.bom.bomSystem.iservice.integrate.ISynBomService;
 import com.connor.hozon.bom.resources.domain.dto.request.EditHzMaterielReqDTO;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import sql.pojo.cfg.HzCfg0OfBomLineRecord;
 
 import java.util.ArrayList;
 import java.util.List;
