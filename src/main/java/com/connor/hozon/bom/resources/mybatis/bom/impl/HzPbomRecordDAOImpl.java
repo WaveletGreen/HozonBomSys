@@ -1,5 +1,6 @@
 package com.connor.hozon.bom.resources.mybatis.bom.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
 import com.connor.hozon.bom.resources.domain.dto.request.DeleteHzPbomReqDTO;
 import com.connor.hozon.bom.resources.domain.query.HzBomRecycleByPageQuery;
@@ -8,6 +9,7 @@ import com.connor.hozon.bom.resources.domain.query.HzPbomTreeQuery;
 import com.connor.hozon.bom.resources.mybatis.bom.HzPbomRecordDAO;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.page.PageRequest;
+import com.google.common.collect.Lists;
 import org.springframework.stereotype.Service;
 import sql.BaseSQLUtil;
 import sql.pojo.bom.HzPbomLineRecord;
@@ -233,4 +235,17 @@ public class HzPbomRecordDAOImpl extends BaseSQLUtil implements HzPbomRecordDAO 
         map.put("projectId",projectId);
         return super.executeQueryByPass(new HzPbomLineRecord(),map,"HzPbomRecordDAOImpl_queryAllBomLineIdByPuid");
     }
+
+    @Override
+    public Page<HzPbomLineRecord> getPbomTreeByPage(HzPbomByPageQuery query) {
+        PageRequest request = new PageRequest();
+        Map map = new HashMap();
+        map.put("projectId",query.getProjectId());
+        map.put("eBomPuids",Lists.newArrayList(query.geteBomPuids().split(",")));
+        request.setPageNumber(query.getPage());
+        request.setPageSize(query.getPageSize());
+        request.setFilters(map);
+        return super.findPage("HzPbomRecordDAOImpl_getHzPbomTreeByPage","HzPbomRecordDAOImpl_getHzPbomTreeTotalCount",request);
+    }
+
 }

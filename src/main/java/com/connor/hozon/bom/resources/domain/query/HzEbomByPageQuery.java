@@ -39,6 +39,32 @@ public class HzEbomByPageQuery extends DefaultPageQuery {
      */
     private String pBomLinePartResource;
 
+    /**
+     * 主键id  用来展示BOM层级结构  中间用英文逗号 隔开
+     */
+    private String puids;
+
+    /**
+     * 是否展示层级（1展示层级结构  0不展示层级结构）
+     */
+    private Integer showBomStructure;
+
+    public String getPuids() {
+        return puids;
+    }
+
+    public void setPuids(String puids) {
+        this.puids = puids;
+    }
+
+    public Integer getShowBomStructure() {
+        return showBomStructure;
+    }
+
+    public void setShowBomStructure(Integer showBomStructure) {
+        this.showBomStructure = showBomStructure;
+    }
+
     public String getpBomLinePartClass() {
         return pBomLinePartClass;
     }
