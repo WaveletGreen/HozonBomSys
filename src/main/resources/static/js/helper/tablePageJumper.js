@@ -14,10 +14,11 @@ function setTargetTableId(tableId) {
     $tableId = tableId;
 }
 
-function toPage() {
-    var pageNum = $("#pageNum").val();
+function toPage(the) {
+    let id = the.parentNode.parentNode.parentNode.childNodes[1].childNodes[1].id;
+    let pageNum = the.parentNode.nextSibling.children[0].value;
     if (pageNum && isInteger(pageNum)) {
-        $('#' + $tableId).bootstrapTable('selectPage', parseInt(pageNum));
+        $('#' + id).bootstrapTable('selectPage', parseInt(pageNum));
     }
 }
 

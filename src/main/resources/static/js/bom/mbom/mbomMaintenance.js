@@ -634,10 +634,10 @@ function initTable1(mBomUrl) {
                         handler: function () {
                             var rows = $mBomTable.bootstrapTable('getSelections');
                             var lineIds = "";
-                            var colorIds="";
+                            var colorIds = "";
                             for (var i = 0; i < rows.length; i++) {
                                 lineIds += rows[i].eBomPuid + ",";
-                                colorIds+= rows[i].colorId +","
+                                colorIds += rows[i].colorId + ","
                             }
                             ;
                             if (rows.length <= 0) {
@@ -646,7 +646,7 @@ function initTable1(mBomUrl) {
                             }
                             if (this.innerText == '显示子层') {
                                 $mBomTable.bootstrapTable('destroy');
-                                initTable11(mBomUrl,lineIds,colorIds);
+                                initTable11(mBomUrl, lineIds, colorIds);
                             }
                             if (this.innerText == '显示子层') {
                                 this.innerText = '取消显示子层'
@@ -663,7 +663,8 @@ function initTable1(mBomUrl) {
         }
     });
 }
-function initTable11(mBomUrl,lineIds,colorIds) {
+
+function initTable11(mBomUrl, lineIds, colorIds) {
     var projectPuid = $("#project", window.top.document).val();
     if (!checkIsSelectProject(projectPuid)) {
         return;
@@ -776,7 +777,7 @@ function initTable11(mBomUrl,lineIds,colorIds) {
                 }
             })
             $mBomTable.bootstrapTable({
-                url: mBomUrl+"&colorIds="+colorIds+"&eBomPuids="+lineIds+"&showBomStructure=1",
+                url: mBomUrl + "&colorIds=" + colorIds + "&eBomPuids=" + lineIds + "&showBomStructure=1",
                 method: 'GET',
                 dataType: 'json',
                 cache: false,
@@ -1259,6 +1260,7 @@ function initTable11(mBomUrl,lineIds,colorIds) {
         }
     });
 }
+
 function doQuery1() {
     //$('#eplTable').bootstrapTable('refresh');    //刷新表格
     var projectId = $("#project", window.top.document).val();
@@ -1476,10 +1478,10 @@ function initTable2(productionUrl) {
                         handler: function () {
                             var rows = $productionTable.bootstrapTable('getSelections');
                             var lineIds = "";
-                            var colorIds="";
+                            var colorIds = "";
                             for (var i = 0; i < rows.length; i++) {
                                 lineIds += rows[i].eBomPuid + ",";
-                                colorIds+= rows[i].colorId +","
+                                colorIds += rows[i].colorId + ","
                             }
                             ;
                             if (rows.length <= 0) {
@@ -1488,7 +1490,7 @@ function initTable2(productionUrl) {
                             }
                             if (this.innerText == '显示子层') {
                                 $productionTable.bootstrapTable('destroy');
-                                initTable22(productionUrl,lineIds,colorIds);
+                                initTable22(productionUrl, lineIds, colorIds);
                             }
                             if (this.innerText == '显示子层') {
                                 this.innerText = '取消显示子层'
@@ -1506,7 +1508,8 @@ function initTable2(productionUrl) {
         }
     });
 }
-function initTable22(productionUrl,lineIds,colorIds) {
+
+function initTable22(productionUrl, lineIds, colorIds) {
     var projectId = $("#project", window.top.document).val();
     var $productionTable = $("#whiteBodyProductionTable");
     // $productionTable.bootstrapTable('destroy');
@@ -1581,7 +1584,7 @@ function initTable22(productionUrl,lineIds,colorIds) {
                 }
             }
             $productionTable.bootstrapTable({
-                url: productionUrl+"&colorIds="+colorIds+"&eBomPuids="+lineIds+"&showBomStructure=1",
+                url: productionUrl + "&colorIds=" + colorIds + "&eBomPuids=" + lineIds + "&showBomStructure=1",
                 method: 'GET',
                 dataType: 'json',
                 cache: false,
@@ -1714,6 +1717,7 @@ function initTable22(productionUrl,lineIds,colorIds) {
         }
     });
 }
+
 function doQuery2() {
     //$('#eplTable').bootstrapTable('refresh');    //刷新表格
     var projectId = $("#project", window.top.document).val();
@@ -1931,10 +1935,10 @@ function initTable3(financialUrl) {
                         handler: function () {
                             var rows = $financialTable.bootstrapTable('getSelections');
                             var lineIds = "";
-                            var colorIds="";
+                            var colorIds = "";
                             for (var i = 0; i < rows.length; i++) {
                                 lineIds += rows[i].eBomPuid + ",";
-                                colorIds+= rows[i].colorId +","
+                                colorIds += rows[i].colorId + ","
                             }
                             ;
                             if (rows.length <= 0) {
@@ -1943,7 +1947,7 @@ function initTable3(financialUrl) {
                             }
                             if (this.innerText == '显示子层') {
                                 $financialTable.bootstrapTable('destroy');
-                                initTable33(financialUrl,lineIds,colorIds);
+                                initTable33(financialUrl, lineIds, colorIds);
                             }
                             if (this.innerText == '显示子层') {
                                 this.innerText = '取消显示子层'
@@ -1961,7 +1965,8 @@ function initTable3(financialUrl) {
         }
     });
 }
-function initTable33(financialUrl,lineIds,colorIds) {
+
+function initTable33(financialUrl, lineIds, colorIds) {
     var projectId = $("#project", window.top.document).val();
     var $financialTable = $("#whiteBodyFinancialTable");
     var currentProjectHead = $("#currentProjectHead", window.top.document).val();
@@ -2036,7 +2041,7 @@ function initTable33(financialUrl,lineIds,colorIds) {
                 }
             }
             $financialTable.bootstrapTable({
-                url: financialUrl+"&colorIds="+colorIds+"&eBomPuids="+lineIds+"&showBomStructure=1",
+                url: financialUrl + "&colorIds=" + colorIds + "&eBomPuids=" + lineIds + "&showBomStructure=1",
                 method: 'GET',
                 dataType: 'json',
                 cache: false,
@@ -2169,6 +2174,7 @@ function initTable33(financialUrl,lineIds,colorIds) {
         }
     });
 }
+
 function doMBom() {
     $(document).ready((function () {
         var projectId = $("#project", window.top.document).val();
@@ -2270,24 +2276,28 @@ function queryLou(row) {
 }
 
 
-function toPage() {
-    var pageNum = $("#pageNum").val();
+// function toPage(the) {
+//     var pageNum = $("#pageNum").val();
+//     if (pageNum) {
+//         $('#mbomMaintenanceTable').bootstrapTable('selectPage', parseInt(pageNum));
+//     }
+// }
+//
+// function toPage(the) {
+//     var pageNum = $("#pageNum").val();
+//     if (pageNum) {
+//         $('#whiteBodyProductionTable').bootstrapTable('selectPage', parseInt(pageNum));
+//     }
+// }
+
+function toPage(the) {
+    let id = the.parentNode.parentNode.parentNode.childNodes[1].childNodes[1].id;
+    let pageNum = the.parentNode.nextSibling.children[0].value;
     if (pageNum) {
-        $('#mbomMaintenanceTable').bootstrapTable('selectPage', parseInt(pageNum));
+        $('#' + id).bootstrapTable('selectPage', parseInt(pageNum));
     }
 }
-function toPage() {
-    var pageNum = $("#pageNum").val();
-    if (pageNum) {
-        $('#whiteBodyProductionTable').bootstrapTable('selectPage', parseInt(pageNum));
-    }
-}
-function toPage() {
-    var pageNum = $("#pageNum").val();
-    if (pageNum) {
-        $('#whiteBodyFinancialTable').bootstrapTable('selectPage', parseInt(pageNum));
-    }
-}
+
 $(document).keydown(function (event) {
     if (event.keyCode == 13) {
         $('form').each(function () {
