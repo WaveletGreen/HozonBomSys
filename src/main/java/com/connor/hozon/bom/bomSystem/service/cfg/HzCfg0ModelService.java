@@ -1,11 +1,11 @@
 package com.connor.hozon.bom.bomSystem.service.cfg;
 
-import com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0ModelDetailDao;
-import com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0ModelRecordDao;
+import com.connor.hozon.bom.bomSystem.dao.model.HzCfg0ModelDetailDao;
+import com.connor.hozon.bom.bomSystem.dao.model.HzCfg0ModelRecordDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sql.pojo.cfg.HzCfg0ModelDetail;
-import sql.pojo.cfg.HzCfg0ModelRecord;
+import sql.pojo.cfg.model.HzCfg0ModelDetail;
+import sql.pojo.cfg.model.HzCfg0ModelRecord;
 
 import java.util.List;
 
@@ -28,7 +28,7 @@ public class HzCfg0ModelService {
 
     /**
      * @param entity
-     * @return sql.pojo.cfg.HzCfg0ModelDetail
+     * @return sql.pojo.cfg0.model.HzCfg0ModelDetail
      * @Author: Fancyears·Maylos·Mayways
      * @Description: 根据模型的ID，获取到相关的详细模型数据
      * @Date: 2018/5/21 17:06
@@ -39,7 +39,7 @@ public class HzCfg0ModelService {
 
     /**
      * @param entity
-     * @return sql.pojo.cfg.HzCfg0ModelDetail
+     * @return sql.pojo.cfg0.model.HzCfg0ModelDetail
      * @Author: Fancyears·Maylos·Mayways
      * @Description: 根据模型的ID，获取到相关的详细模型数据
      * @Date: 2018/5/21 17:06
@@ -66,7 +66,7 @@ public class HzCfg0ModelService {
      * @Date: 2018/5/21 17:06
      */
     public boolean doUpdateOne(HzCfg0ModelDetail detail) {
-        return hzCfg0ModelDetailDao.updateOne(detail) == 1 ? true : false;
+        return hzCfg0ModelDetailDao.updateByPrimaryKey(detail) == 1 ? true : false;
     }
 
     /**
@@ -76,8 +76,8 @@ public class HzCfg0ModelService {
      * @Description: 执行插入1条模型详细信息数据
      * @Date: 2018/5/21 17:05
      */
-    public boolean doInsertOne(HzCfg0ModelDetail detail) {
-        return hzCfg0ModelDetailDao.insertOne(detail) > 0 ? true : false;
+    public boolean doInsert(HzCfg0ModelDetail detail) {
+        return hzCfg0ModelDetailDao.insertSelective(detail) > 0 ? true : false;
     }
 
     /**

@@ -1,8 +1,8 @@
 package com.connor.hozon.bom.bomSystem.service.cfg.vwo;
 
-import com.connor.hozon.bom.bomSystem.dao.cfg.vwo.HzVwoInfoDao;
+import com.connor.hozon.bom.bomSystem.dao.vwo.HzVwoInfoDao;
 import com.connor.hozon.bom.bomSystem.helper.DateStringHelper;
-import com.connor.hozon.bom.bomSystem.service.iservice.cfg.vwo.IHzVwoInfoService;
+import com.connor.hozon.bom.bomSystem.iservice.cfg.vwo.IHzVwoInfoService;
 import com.connor.hozon.bom.common.base.entity.QueryBase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -42,7 +42,7 @@ public class HzVwoInfoService implements IHzVwoInfoService {
      * @return
      */
     @Override
-    public Long doInsert(HzVwoInfo record) {
+    public Long doInsert(HzVwoInfo record)  {
         hzVwoInfoDao.insert(record);
         return record.getId();
     }
@@ -65,7 +65,7 @@ public class HzVwoInfoService implements IHzVwoInfoService {
      * @return
      */
     @Override
-    public boolean doUpdateByPrimaryKey(HzVwoInfo record) {
+    public boolean doUpdateByPrimaryKey(HzVwoInfo record)  {
         return hzVwoInfoDao.updateByPrimaryKey(record) > 0 ? true : false;
     }
 

@@ -1,10 +1,10 @@
 package com.connor.hozon.bom.bomSystem.service.cfg;
 
-import com.connor.hozon.bom.bomSystem.dao.cfg.HzColorModelDao;
-import com.connor.hozon.bom.bomSystem.service.iservice.cfg.IHzColorModelService;
+import com.connor.hozon.bom.bomSystem.dao.modelColor.HzColorModelDao;
+import com.connor.hozon.bom.bomSystem.iservice.cfg.IHzColorModelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sql.pojo.cfg.HzColorModel;
+import sql.pojo.cfg.modelColor.HzCfg0ModelColorDetail;
 
 import java.util.List;
 
@@ -31,7 +31,7 @@ public class HzColorModelService implements IHzColorModelService {
      * @return
      */
     @Override
-    public int doInsert(HzColorModel record) {
+    public int doInsert(HzCfg0ModelColorDetail record) {
         return hzColorModelDao.insert(record);
     }
 
@@ -42,7 +42,7 @@ public class HzColorModelService implements IHzColorModelService {
      * @return
      */
     @Override
-    public HzColorModel doSelectByPrimaryKey(String puid) {
+    public HzCfg0ModelColorDetail doSelectByPrimaryKey(String puid) {
         return hzColorModelDao.selectByPrimaryKey(puid);
     }
 
@@ -54,7 +54,7 @@ public class HzColorModelService implements IHzColorModelService {
      * @return
      */
     @Override
-    public int doUpdateByPrimaryKey(HzColorModel record) {
+    public int doUpdateByPrimaryKey(HzCfg0ModelColorDetail record) {
         return hzColorModelDao.updateByPrimaryKey(record);
     }
 
@@ -65,7 +65,7 @@ public class HzColorModelService implements IHzColorModelService {
      * @return
      */
     @Override
-    public List<HzColorModel> doSelectByModelUid(String modelUid) {
+    public List<HzCfg0ModelColorDetail> doSelectByModelUid(String modelUid) {
         return hzColorModelDao.selectByModelUid(modelUid);
     }
 
@@ -76,7 +76,7 @@ public class HzColorModelService implements IHzColorModelService {
      * @return
      */
     @Override
-    public List<HzColorModel> doSelectByModelUidWithColor(String modelUid) {
+    public List<HzCfg0ModelColorDetail> doSelectByModelUidWithColor(String modelUid) {
         return hzColorModelDao.selectByModelUidWithColor(modelUid);
     }
 
@@ -87,7 +87,7 @@ public class HzColorModelService implements IHzColorModelService {
      * @return
      */
     @Override
-    public List<HzColorModel> doSelectByModelUidWithColor2(String modelUid) {
+    public List<HzCfg0ModelColorDetail> doSelectByModelUidWithColor2(String modelUid) {
         return hzColorModelDao.selectByModelUidWithColor2(modelUid);
     }
 
@@ -99,7 +99,7 @@ public class HzColorModelService implements IHzColorModelService {
      * @return
      */
     @Override
-    public List<HzColorModel> doSelectByCfgMainUid(String projectUid) {
+    public List<HzCfg0ModelColorDetail> doSelectByCfgMainUid(String projectUid) {
         return hzColorModelDao.selectByCfgMainUid(projectUid);
     }
 
@@ -110,7 +110,7 @@ public class HzColorModelService implements IHzColorModelService {
      * @return
      */
     @Override
-    public int doInsertByBatch(List<HzColorModel> colorModels) {
+    public int doInsertByBatch(List<HzCfg0ModelColorDetail> colorModels) {
         return hzColorModelDao.insertByBatch(colorModels);
     }
 
@@ -121,7 +121,7 @@ public class HzColorModelService implements IHzColorModelService {
      * @return
      */
     @Override
-    public boolean doUpdateColorModelWithCfg(HzColorModel model) {
+    public boolean doUpdateColorModelWithCfg(HzCfg0ModelColorDetail model) {
         return hzColorModelDao.updateColorModelWithCfg(model) > 0 ? true : false;
     }
 

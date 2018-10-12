@@ -55,7 +55,7 @@ public class HzBrandService {
      * @return
      */
     public boolean doUpdateSelective(HzBrandRecord record) {
-        return hzBrandRecordDao.updateSelective(record) > 0 ? true : false;
+        return hzBrandRecordDao.updateByPrimaryKey(record) > 0 ? true : false;
     }
 
     /**
@@ -96,7 +96,7 @@ public class HzBrandService {
      */
     public boolean validate(HzBrandRecord brand) {
         //品牌代号和名称不能为空
-        if (null == brand.getpBrandCode() || null == brand.getpBrandName() || "".equals(brand.getpBrandCode()) || "".equals(brand.getpBrandName())) {
+        if (null == brand.getPBrandCode() || null == brand.getPBrandName() || "".equals(brand.getPBrandCode()) || "".equals(brand.getPBrandName())) {
             return false;
         } else return true;
     }

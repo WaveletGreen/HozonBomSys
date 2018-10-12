@@ -34,16 +34,16 @@
         </select>
     </div>
     <!--<div class="form-group">-->
-        <!--<label for="pColorEffectedDate">生效日期</label>-->
-        <!--<input class="form-control input-small" id="pColorEffectedDate" name="pColorEffectedDate"-->
-               <!--placeholder="请选择生效日期"-->
-        <!--/>-->
+    <!--<label for="pColorEffectedDate">生效日期</label>-->
+    <!--<input class="form-control input-small" id="pColorEffectedDate" name="pColorEffectedDate"-->
+    <!--placeholder="请选择生效日期"-->
+    <!--/>-->
     <!--</div>-->
     <!--<div class="form-group">-->
-        <!--<label for="pColorAbolishDate">废止日期</label>-->
-        <!--<input class="form-control input-small" id="pColorAbolishDate" name="pColorAbolishDate"-->
-               <!--placeholder="请选择废止日期"-->
-        <!--/>-->
+    <!--<label for="pColorAbolishDate">废止日期</label>-->
+    <!--<input class="form-control input-small" id="pColorAbolishDate" name="pColorAbolishDate"-->
+    <!--placeholder="请选择废止日期"-->
+    <!--/>-->
     <!--</div>-->
     <div class="form-group">
         <label for="pColorComment">备注</label>
@@ -172,24 +172,29 @@
                 if (bootstrapValidator.isValid()) {
                     var url = $("#colorForm", window.top.document).attr('action');
                     <!--其实不要puid，puid会在服务器上生成-->
-                    var myData = JSON.stringify({
-                        "pColorCode": $("#pColorCode").val(),
-                        "pColorComment": $("#pColorComment").val(),
-                        "pColorName": $("#pColorName").val(),
-                        "pColorOfSet": $("#pColorOfSet").val(),
-                        "pColorIsMultiply": $("#pColorIsMultiply").val(),
-                        "pColorPlate": $("#pColorPlate").val()
-                        /*,
-                        "strColorEffectedDate": $("#pColorEffectedDate").val(),
-                        "strColorAbolishDate": $("#pColorAbolishDate").val()*/
-                    });
+                    let data={};
+                    var _d = $("#colorForm").serializeArray();
+                    for (var p in _d) {
+                        data[_d[p].name] = _d[p].value;
+                    }
+                    // var myData = JSON.stringify({
+                    //     "pColorCode": $("#pColorCode").val(),
+                    //     "pColorComment": $("#pColorComment").val(),
+                    //     "pColorName": $("#pColorName").val(),
+                    //     "pColorOfSet": $("#pColorOfSet").val(),
+                    //     "pColorIsMultiply": $("#pColorIsMultiply").val(),
+                    //     "pColorPlate": $("#pColorPlate").val()
+                    //     /*,
+                    //     "strColorEffectedDate": $("#pColorEffectedDate").val(),
+                    //     "strColorAbolishDate": $("#pColorAbolishDate").val()*/
+                    // });
                     $.ajax({
                         contentType:
                             "application/json",
                         type:
                             'POST',
                         url: url,
-                        data: myData,
+                        data: JSON.stringify(data),
                         success:
                             function (result) {
                                 $('.modal-dialog', window.top.document).parent('div').remove()

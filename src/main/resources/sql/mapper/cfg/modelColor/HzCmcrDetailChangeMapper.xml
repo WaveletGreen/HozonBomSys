@@ -1,0 +1,372 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.connor.hozon.bom.bomSystem.dao.modelColor.HzCmcrDetailChangeDao">
+    <resultMap id="BaseResultMap" type="sql.pojo.cfg.modelColor.HzCmcrDetailChange">
+        <!--主键-->
+        <id column="CMCR_DETAIL_CG_ID" jdbcType="DECIMAL" property="cmcrDetailCgId"/>
+        <!--源数据PUID，从源数据中继承过来，外键，级联删除-->
+        <result column="CMCR_DETAIL_SRC_PUID" jdbcType="VARCHAR" property="cmcrDetailSrcPuid"/>
+        <!--特性，从源数据中继承过来，外键，不是特性值外键，删除时set null-->
+        <result column="CMCR_DETAIL_SRC_CFG_UID" jdbcType="VARCHAR" property="cmcrDetailSrcCfgUid"/>
+        <!--颜色外键，从源数据中继承过来，外键，删除时set null-->
+        <result column="CMCR_DETAIL_SRC_COLOR_UID" jdbcType="VARCHAR" property="cmcrDetailSrcColorUid"/>
+        <!--主配置UID，从源数据中继承过来，外键，级联删除-->
+        <result column="CMCR_DETAIL_SRC_CFG_MAIN_UID" jdbcType="VARCHAR" property="cmcrDetailSrcCfgMainUid"/>
+        <!--vwo主键，外键，级联删除-->
+        <result column="CMCR_DETAIL_CG_VWO_ID" jdbcType="DECIMAL" property="cmcrDetailCgVwoId"/>
+        <!--源数据的创建时间-->
+        <result column="CMCR_DETAIL_SRC_CREATE_DATE" jdbcType="TIMESTAMP" property="cmcrDetailSrcCreateDate"/>
+        <!--源数据的修改时间-->
+        <result column="CMCR_DETAIL_SRC__MODIFY_DATE" jdbcType="TIMESTAMP" property="cmcrDetailSrcModifyDate"/>
+        <!--源数据的创建者-->
+        <result column="CMCR_DETAIL_SRC_CREATOR" jdbcType="VARCHAR" property="cmcrDetailSrcCreator"/>
+        <!--源数据的修改者-->
+        <result column="CMCR_DETAIL_SRC_MODIFIER" jdbcType="VARCHAR" property="cmcrDetailSrcModifier"/>
+        <!--配色方案主数据PUID，从源数据中继承过来，外键，级联删除-->
+        <result column="CMCR_DETAIL_SRC_MODEL_PUID" jdbcType="VARCHAR" property="cmcrDetailSrcModelPuid"/>
+        <!--特性代码，万一特性删除了，还能知道是哪个特性-->
+        <result column="CMCR_DETAIL_CG_FEATURE_CODE" jdbcType="VARCHAR" property="cmcrDetailCgFeatureCode"/>
+        <!--特性名，意外同上-->
+        <result column="CMCR_DETAIL_CG_FEATURE_NAME" jdbcType="VARCHAR" property="cmcrDetailCgFeatureName"/>
+        <!--颜色代码，意外同上-->
+        <result column="CMCR_DETAIL_CG_COLOR_CODE" jdbcType="VARCHAR" property="cmcrDetailCgColorCode"/>
+        <!--颜色名称，意外同上-->
+        <result column="CMCR_DETAIL_CG_COLOR_NAME" jdbcType="VARCHAR" property="cmcrDetailCgColorName"/>
+        <!--创建时间-->
+        <result column="CMCR_DETAIL_CG_CREATE_DATE" jdbcType="TIMESTAMP" property="cmcrDetailCgCreateDate"/>
+        <!--创建者，即为操作者-->
+        <result column="CMCR_DETAIL_CG_CREATOR" jdbcType="VARCHAR" property="cmcrDetailCgCreator"/>
+        <!--修改时间-->
+        <result column="CMCR_DETAIL_CG_UPDATE_DATE" jdbcType="TIMESTAMP" property="cmcrDetailCgUpdateDate"/>
+        <!--修改者-->
+        <result column="CMCR_DETAIL_CG_UPDATER" jdbcType="VARCHAR" property="cmcrDetailCgUpdater"/>
+        <!--保留字段-->
+        <result column="CMCR_DETAIL_CG_REVERSE1" jdbcType="VARCHAR" property="cmcrDetailCgReverse1"/>
+        <!--保留字段-->
+        <result column="CMCR_DETAIL_CG_REVERSE2" jdbcType="VARCHAR" property="cmcrDetailCgReverse2"/>
+        <!--保留字段-->
+        <result column="CMCR_DETAIL_CG_REVERSE3" jdbcType="VARCHAR" property="cmcrDetailCgReverse3"/>
+        <!--保留字段-->
+        <result column="CMCR_DETAIL_CG_REVERSE4" jdbcType="VARCHAR" property="cmcrDetailCgReverse4"/>
+        <!--保留字段-->
+        <result column="CMCR_DETAIL_CG_REVERSE5" jdbcType="VARCHAR" property="cmcrDetailCgReverse5"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        CMCR_DETAIL_CG_ID,
+        CMCR_DETAIL_SRC_PUID,
+        CMCR_DETAIL_SRC_CFG_UID,
+        CMCR_DETAIL_SRC_COLOR_UID,
+        CMCR_DETAIL_SRC_CFG_MAIN_UID,
+        CMCR_DETAIL_CG_VWO_ID,
+        CMCR_DETAIL_SRC_CREATE_DATE,
+        CMCR_DETAIL_SRC__MODIFY_DATE,
+        CMCR_DETAIL_SRC_CREATOR,
+        CMCR_DETAIL_SRC_MODIFIER,
+        CMCR_DETAIL_SRC_MODEL_PUID,
+        CMCR_DETAIL_CG_FEATURE_CODE,
+        CMCR_DETAIL_CG_FEATURE_NAME,
+        CMCR_DETAIL_CG_COLOR_CODE,
+        CMCR_DETAIL_CG_COLOR_NAME,
+        CMCR_DETAIL_CG_CREATE_DATE,
+        CMCR_DETAIL_CG_CREATOR,
+        CMCR_DETAIL_CG_UPDATE_DATE,
+        CMCR_DETAIL_CG_UPDATER,
+        CMCR_DETAIL_CG_REVERSE1,
+        CMCR_DETAIL_CG_REVERSE2,
+        CMCR_DETAIL_CG_REVERSE3,
+        CMCR_DETAIL_CG_REVERSE4,
+        CMCR_DETAIL_CG_REVERSE5
+  </sql>
+    <!--**************************************select**************************************-->
+    <!--主键查询-->
+    <select id="selectByPrimaryKey" parameterType="sql.pojo.cfg.modelColor.HzCmcrDetailChange"
+            resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from ${whichTable}
+        where CMCR_DETAIL_CG_ID = #{cmcrDetailCgId,jdbcType=DECIMAL}
+    </select>
+    <!--**************************************delete**************************************-->
+    <!--主键删除-->
+    <delete id="deleteByPrimaryKey" parameterType="sql.pojo.cfg.modelColor.HzCmcrDetailChange">
+    delete from ${whichTable}
+    where CMCR_DETAIL_CG_ID = #{cmcrDetailCgId,jdbcType=DECIMAL}
+  </delete>
+    <!--**************************************insert**************************************-->
+    <!--全数据插入-->
+    <insert id="insert" parameterType="sql.pojo.cfg.modelColor.HzCmcrDetailChange">
+        insert into ${whichTable} (
+        <include refid="Base_Column_List"/>
+        )
+        values (#{cmcrDetailCgId,jdbcType=DECIMAL}, #{cmcrDetailSrcPuid,jdbcType=VARCHAR},
+        #{cmcrDetailSrcCfgUid,jdbcType=VARCHAR}, #{cmcrDetailSrcColorUid,jdbcType=VARCHAR},
+        #{cmcrDetailSrcCfgMainUid,jdbcType=VARCHAR}, #{cmcrDetailCgVwoId,jdbcType=DECIMAL},
+        #{cmcrDetailSrcCreateDate,jdbcType=TIMESTAMP}, #{cmcrDetailSrcModifyDate,jdbcType=TIMESTAMP},
+        #{cmcrDetailSrcCreator,jdbcType=VARCHAR}, #{cmcrDetailSrcModifier,jdbcType=VARCHAR},
+        #{cmcrDetailSrcModelPuid,jdbcType=VARCHAR}, #{cmcrDetailCgFeatureCode,jdbcType=VARCHAR},
+        #{cmcrDetailCgFeatureName,jdbcType=VARCHAR}, #{cmcrDetailCgColorCode,jdbcType=VARCHAR},
+        #{cmcrDetailCgColorName,jdbcType=VARCHAR}, #{cmcrDetailCgCreateDate,jdbcType=TIMESTAMP},
+        #{cmcrDetailCgCreator,jdbcType=VARCHAR}, #{cmcrDetailCgUpdateDate,jdbcType=TIMESTAMP},
+        #{cmcrDetailCgUpdater,jdbcType=VARCHAR}, #{cmcrDetailCgReverse1,jdbcType=VARCHAR},
+        #{cmcrDetailCgReverse2,jdbcType=VARCHAR}, #{cmcrDetailCgReverse3,jdbcType=VARCHAR},
+        #{cmcrDetailCgReverse4,jdbcType=VARCHAR}, #{cmcrDetailCgReverse5,jdbcType=VARCHAR}
+        )
+    </insert>
+    <!--选择插入-->
+    <insert id="insertSelective" parameterType="sql.pojo.cfg.modelColor.HzCmcrDetailChange">
+        insert into ${whichTable}
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="cmcrDetailCgId != null">
+                CMCR_DETAIL_CG_ID,
+            </if>
+            <if test="cmcrDetailSrcPuid != null">
+                CMCR_DETAIL_SRC_PUID,
+            </if>
+            <if test="cmcrDetailSrcCfgUid != null">
+                CMCR_DETAIL_SRC_CFG_UID,
+            </if>
+            <if test="cmcrDetailSrcColorUid != null">
+                CMCR_DETAIL_SRC_COLOR_UID,
+            </if>
+            <if test="cmcrDetailSrcCfgMainUid != null">
+                CMCR_DETAIL_SRC_CFG_MAIN_UID,
+            </if>
+            <if test="cmcrDetailCgVwoId != null">
+                CMCR_DETAIL_CG_VWO_ID,
+            </if>
+            <if test="cmcrDetailSrcCreateDate != null">
+                CMCR_DETAIL_SRC_CREATE_DATE,
+            </if>
+            <if test="cmcrDetailSrcModifyDate != null">
+                CMCR_DETAIL_SRC__MODIFY_DATE,
+            </if>
+            <if test="cmcrDetailSrcCreator != null">
+                CMCR_DETAIL_SRC_CREATOR,
+            </if>
+            <if test="cmcrDetailSrcModifier != null">
+                CMCR_DETAIL_SRC_MODIFIER,
+            </if>
+            <if test="cmcrDetailSrcModelPuid != null">
+                CMCR_DETAIL_SRC_MODEL_PUID,
+            </if>
+            <if test="cmcrDetailCgFeatureCode != null">
+                CMCR_DETAIL_CG_FEATURE_CODE,
+            </if>
+            <if test="cmcrDetailCgFeatureName != null">
+                CMCR_DETAIL_CG_FEATURE_NAME,
+            </if>
+            <if test="cmcrDetailCgColorCode != null">
+                CMCR_DETAIL_CG_COLOR_CODE,
+            </if>
+            <if test="cmcrDetailCgColorName != null">
+                CMCR_DETAIL_CG_COLOR_NAME,
+            </if>
+            <if test="cmcrDetailCgCreateDate != null">
+                CMCR_DETAIL_CG_CREATE_DATE,
+            </if>
+            <if test="cmcrDetailCgCreator != null">
+                CMCR_DETAIL_CG_CREATOR,
+            </if>
+            <if test="cmcrDetailCgUpdateDate != null">
+                CMCR_DETAIL_CG_UPDATE_DATE,
+            </if>
+            <if test="cmcrDetailCgUpdater != null">
+                CMCR_DETAIL_CG_UPDATER,
+            </if>
+            <if test="cmcrDetailCgReverse1 != null">
+                CMCR_DETAIL_CG_REVERSE1,
+            </if>
+            <if test="cmcrDetailCgReverse2 != null">
+                CMCR_DETAIL_CG_REVERSE2,
+            </if>
+            <if test="cmcrDetailCgReverse3 != null">
+                CMCR_DETAIL_CG_REVERSE3,
+            </if>
+            <if test="cmcrDetailCgReverse4 != null">
+                CMCR_DETAIL_CG_REVERSE4,
+            </if>
+            <if test="cmcrDetailCgReverse5 != null">
+                CMCR_DETAIL_CG_REVERSE5,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="cmcrDetailCgId != null">
+                #{cmcrDetailCgId,jdbcType=DECIMAL},
+            </if>
+            <if test="cmcrDetailSrcPuid != null">
+                #{cmcrDetailSrcPuid,jdbcType=VARCHAR},
+            </if>
+            <if test="cmcrDetailSrcCfgUid != null">
+                #{cmcrDetailSrcCfgUid,jdbcType=VARCHAR},
+            </if>
+            <if test="cmcrDetailSrcColorUid != null">
+                #{cmcrDetailSrcColorUid,jdbcType=VARCHAR},
+            </if>
+            <if test="cmcrDetailSrcCfgMainUid != null">
+                #{cmcrDetailSrcCfgMainUid,jdbcType=VARCHAR},
+            </if>
+            <if test="cmcrDetailCgVwoId != null">
+                #{cmcrDetailCgVwoId,jdbcType=DECIMAL},
+            </if>
+            <if test="cmcrDetailSrcCreateDate != null">
+                #{cmcrDetailSrcCreateDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="cmcrDetailSrcModifyDate != null">
+                #{cmcrDetailSrcModifyDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="cmcrDetailSrcCreator != null">
+                #{cmcrDetailSrcCreator,jdbcType=VARCHAR},
+            </if>
+            <if test="cmcrDetailSrcModifier != null">
+                #{cmcrDetailSrcModifier,jdbcType=VARCHAR},
+            </if>
+            <if test="cmcrDetailSrcModelPuid != null">
+                #{cmcrDetailSrcModelPuid,jdbcType=VARCHAR},
+            </if>
+            <if test="cmcrDetailCgFeatureCode != null">
+                #{cmcrDetailCgFeatureCode,jdbcType=VARCHAR},
+            </if>
+            <if test="cmcrDetailCgFeatureName != null">
+                #{cmcrDetailCgFeatureName,jdbcType=VARCHAR},
+            </if>
+            <if test="cmcrDetailCgColorCode != null">
+                #{cmcrDetailCgColorCode,jdbcType=VARCHAR},
+            </if>
+            <if test="cmcrDetailCgColorName != null">
+                #{cmcrDetailCgColorName,jdbcType=VARCHAR},
+            </if>
+            <if test="cmcrDetailCgCreateDate != null">
+                #{cmcrDetailCgCreateDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="cmcrDetailCgCreator != null">
+                #{cmcrDetailCgCreator,jdbcType=VARCHAR},
+            </if>
+            <if test="cmcrDetailCgUpdateDate != null">
+                #{cmcrDetailCgUpdateDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="cmcrDetailCgUpdater != null">
+                #{cmcrDetailCgUpdater,jdbcType=VARCHAR},
+            </if>
+            <if test="cmcrDetailCgReverse1 != null">
+                #{cmcrDetailCgReverse1,jdbcType=VARCHAR},
+            </if>
+            <if test="cmcrDetailCgReverse2 != null">
+                #{cmcrDetailCgReverse2,jdbcType=VARCHAR},
+            </if>
+            <if test="cmcrDetailCgReverse3 != null">
+                #{cmcrDetailCgReverse3,jdbcType=VARCHAR},
+            </if>
+            <if test="cmcrDetailCgReverse4 != null">
+                #{cmcrDetailCgReverse4,jdbcType=VARCHAR},
+            </if>
+            <if test="cmcrDetailCgReverse5 != null">
+                #{cmcrDetailCgReverse5,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <!--**************************************update**************************************-->
+    <!--主键选择性更新-->
+    <update id="updateByPrimaryKeySelective" parameterType="sql.pojo.cfg.modelColor.HzCmcrDetailChange">
+        update ${whichTable}
+        <set>
+            <if test="cmcrDetailSrcPuid != null">
+                CMCR_DETAIL_SRC_PUID = #{cmcrDetailSrcPuid,jdbcType=VARCHAR},
+            </if>
+            <if test="cmcrDetailSrcCfgUid != null">
+                CMCR_DETAIL_SRC_CFG_UID = #{cmcrDetailSrcCfgUid,jdbcType=VARCHAR},
+            </if>
+            <if test="cmcrDetailSrcColorUid != null">
+                CMCR_DETAIL_SRC_COLOR_UID = #{cmcrDetailSrcColorUid,jdbcType=VARCHAR},
+            </if>
+            <if test="cmcrDetailSrcCfgMainUid != null">
+                CMCR_DETAIL_SRC_CFG_MAIN_UID = #{cmcrDetailSrcCfgMainUid,jdbcType=VARCHAR},
+            </if>
+            <if test="cmcrDetailCgVwoId != null">
+                CMCR_DETAIL_CG_VWO_ID = #{cmcrDetailCgVwoId,jdbcType=DECIMAL},
+            </if>
+            <if test="cmcrDetailSrcCreateDate != null">
+                CMCR_DETAIL_SRC_CREATE_DATE = #{cmcrDetailSrcCreateDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="cmcrDetailSrcModifyDate != null">
+                CMCR_DETAIL_SRC__MODIFY_DATE = #{cmcrDetailSrcModifyDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="cmcrDetailSrcCreator != null">
+                CMCR_DETAIL_SRC_CREATOR = #{cmcrDetailSrcCreator,jdbcType=VARCHAR},
+            </if>
+            <if test="cmcrDetailSrcModifier != null">
+                CMCR_DETAIL_SRC_MODIFIER = #{cmcrDetailSrcModifier,jdbcType=VARCHAR},
+            </if>
+            <if test="cmcrDetailSrcModelPuid != null">
+                CMCR_DETAIL_SRC_MODEL_PUID = #{cmcrDetailSrcModelPuid,jdbcType=VARCHAR},
+            </if>
+            <if test="cmcrDetailCgFeatureCode != null">
+                CMCR_DETAIL_CG_FEATURE_CODE = #{cmcrDetailCgFeatureCode,jdbcType=VARCHAR},
+            </if>
+            <if test="cmcrDetailCgFeatureName != null">
+                CMCR_DETAIL_CG_FEATURE_NAME = #{cmcrDetailCgFeatureName,jdbcType=VARCHAR},
+            </if>
+            <if test="cmcrDetailCgColorCode != null">
+                CMCR_DETAIL_CG_COLOR_CODE = #{cmcrDetailCgColorCode,jdbcType=VARCHAR},
+            </if>
+            <if test="cmcrDetailCgColorName != null">
+                CMCR_DETAIL_CG_COLOR_NAME = #{cmcrDetailCgColorName,jdbcType=VARCHAR},
+            </if>
+            <if test="cmcrDetailCgCreateDate != null">
+                CMCR_DETAIL_CG_CREATE_DATE = #{cmcrDetailCgCreateDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="cmcrDetailCgCreator != null">
+                CMCR_DETAIL_CG_CREATOR = #{cmcrDetailCgCreator,jdbcType=VARCHAR},
+            </if>
+            <if test="cmcrDetailCgUpdateDate != null">
+                CMCR_DETAIL_CG_UPDATE_DATE = #{cmcrDetailCgUpdateDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="cmcrDetailCgUpdater != null">
+                CMCR_DETAIL_CG_UPDATER = #{cmcrDetailCgUpdater,jdbcType=VARCHAR},
+            </if>
+            <if test="cmcrDetailCgReverse1 != null">
+                CMCR_DETAIL_CG_REVERSE1 = #{cmcrDetailCgReverse1,jdbcType=VARCHAR},
+            </if>
+            <if test="cmcrDetailCgReverse2 != null">
+                CMCR_DETAIL_CG_REVERSE2 = #{cmcrDetailCgReverse2,jdbcType=VARCHAR},
+            </if>
+            <if test="cmcrDetailCgReverse3 != null">
+                CMCR_DETAIL_CG_REVERSE3 = #{cmcrDetailCgReverse3,jdbcType=VARCHAR},
+            </if>
+            <if test="cmcrDetailCgReverse4 != null">
+                CMCR_DETAIL_CG_REVERSE4 = #{cmcrDetailCgReverse4,jdbcType=VARCHAR},
+            </if>
+            <if test="cmcrDetailCgReverse5 != null">
+                CMCR_DETAIL_CG_REVERSE5 = #{cmcrDetailCgReverse5,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where CMCR_DETAIL_CG_ID = #{cmcrDetailCgId,jdbcType=DECIMAL}
+    </update>
+    <!--主键全更新-->
+    <update id="updateByPrimaryKey" parameterType="sql.pojo.cfg.modelColor.HzCmcrDetailChange">
+    update ${whichTable}
+    set CMCR_DETAIL_SRC_PUID = #{cmcrDetailSrcPuid,jdbcType=VARCHAR},
+      CMCR_DETAIL_SRC_CFG_UID = #{cmcrDetailSrcCfgUid,jdbcType=VARCHAR},
+      CMCR_DETAIL_SRC_COLOR_UID = #{cmcrDetailSrcColorUid,jdbcType=VARCHAR},
+      CMCR_DETAIL_SRC_CFG_MAIN_UID = #{cmcrDetailSrcCfgMainUid,jdbcType=VARCHAR},
+      CMCR_DETAIL_CG_VWO_ID = #{cmcrDetailCgVwoId,jdbcType=DECIMAL},
+      CMCR_DETAIL_SRC_CREATE_DATE = #{cmcrDetailSrcCreateDate,jdbcType=TIMESTAMP},
+      CMCR_DETAIL_SRC__MODIFY_DATE = #{cmcrDetailSrcModifyDate,jdbcType=TIMESTAMP},
+      CMCR_DETAIL_SRC_CREATOR = #{cmcrDetailSrcCreator,jdbcType=VARCHAR},
+      CMCR_DETAIL_SRC_MODIFIER = #{cmcrDetailSrcModifier,jdbcType=VARCHAR},
+      CMCR_DETAIL_SRC_MODEL_PUID = #{cmcrDetailSrcModelPuid,jdbcType=VARCHAR},
+      CMCR_DETAIL_CG_FEATURE_CODE = #{cmcrDetailCgFeatureCode,jdbcType=VARCHAR},
+      CMCR_DETAIL_CG_FEATURE_NAME = #{cmcrDetailCgFeatureName,jdbcType=VARCHAR},
+      CMCR_DETAIL_CG_COLOR_CODE = #{cmcrDetailCgColorCode,jdbcType=VARCHAR},
+      CMCR_DETAIL_CG_COLOR_NAME = #{cmcrDetailCgColorName,jdbcType=VARCHAR},
+      CMCR_DETAIL_CG_CREATE_DATE = #{cmcrDetailCgCreateDate,jdbcType=TIMESTAMP},
+      CMCR_DETAIL_CG_CREATOR = #{cmcrDetailCgCreator,jdbcType=VARCHAR},
+      CMCR_DETAIL_CG_UPDATE_DATE = #{cmcrDetailCgUpdateDate,jdbcType=TIMESTAMP},
+      CMCR_DETAIL_CG_UPDATER = #{cmcrDetailCgUpdater,jdbcType=VARCHAR},
+      CMCR_DETAIL_CG_REVERSE1 = #{cmcrDetailCgReverse1,jdbcType=VARCHAR},
+      CMCR_DETAIL_CG_REVERSE2 = #{cmcrDetailCgReverse2,jdbcType=VARCHAR},
+      CMCR_DETAIL_CG_REVERSE3 = #{cmcrDetailCgReverse3,jdbcType=VARCHAR},
+      CMCR_DETAIL_CG_REVERSE4 = #{cmcrDetailCgReverse4,jdbcType=VARCHAR},
+      CMCR_DETAIL_CG_REVERSE5 = #{cmcrDetailCgReverse5,jdbcType=VARCHAR}
+    where CMCR_DETAIL_CG_ID = #{cmcrDetailCgId,jdbcType=DECIMAL}
+  </update>
+</mapper>

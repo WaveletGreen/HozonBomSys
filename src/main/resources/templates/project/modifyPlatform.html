@@ -21,20 +21,20 @@
     <div class="form-group">
         <label for="pPlatformComment">备注</label>
         <input class="form-control" id="pPlatformComment" name="pPlatformComment" type="text"
-               placeholder="请输入备注" th:value="${platform.getpPlatformComment()}"
+               placeholder="请输入备注" th:value="${platform.getPPlatformComment()}"
         />
     </div>
     <!--品牌-->
     <div class="form-group">
         <label for="pBrandCode">品牌代码</label>
         <input class="form-control" id="pBrandCode" name="pBrandCode" type="text"
-               placeholder="需要品牌代码" th:value="${brand.getpBrandCode()}" disabled="disabled"
+               placeholder="需要品牌代码" th:value="${brand.getPBrandCode()}" disabled="disabled"
         />
     </div>
     <div class="form-group">
         <label for="pBrandName">中文品牌</label>
         <input class="form-control" id="pBrandName" name="pBrandName" type="text"
-               placeholder="需要中文品牌" th:value="${brand.getpBrandName()}" disabled="disabled"
+               placeholder="需要中文品牌" th:value="${brand.getPBrandName()}" disabled="disabled"
         />
     </div>
 </form>

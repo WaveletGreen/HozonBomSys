@@ -4,6 +4,10 @@ import com.connor.hozon.bom.bomSystem.helper.DateStringHelper;
 
 import java.util.Date;
 
+/**
+ * VWO主数据
+ *
+ */
 public class HzVwoInfo {
     /**
      * 主键

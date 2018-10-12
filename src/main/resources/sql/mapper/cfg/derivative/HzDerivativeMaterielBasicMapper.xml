@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.connor.hozon.bom.bomSystem.dao.derivative.HzDerivativeMaterielBasicDao">
+    <resultMap id="BaseResultMap" type="sql.pojo.cfg.derivative.HzDerivativeMaterielBasic">
+        <!--主键-->
+        <id column="ID" jdbcType="DECIMAL" property="id"/>
+        <!--基础车型的PUID-->
+        <result column="DMB_MODEL_UID" jdbcType="VARCHAR" property="dmbModelUid"/>
+        <!--配色模型的PUID-->
+        <result column="DMB_COLOR_MODEL_UID" jdbcType="VARCHAR" property="dmbColorModelUid"/>
+        <!--创建者-->
+        <result column="DMB_CREATOR" jdbcType="OTHER" property="dmbCreator"/>
+        <!--创建时间-->
+        <result column="DMB_CREATE_DATE" jdbcType="TIMESTAMP" property="dmbCreateDate"/>
+        <!--更新人-->
+        <result column="DMB_UPDATER" jdbcType="OTHER" property="dmbUpdater"/>
+        <!--更新时间-->
+        <result column="DMB_UPDATE_DATE" jdbcType="TIMESTAMP" property="dmbUpdateDate"/>
+        <!--项目UID-->
+        <result column="DMB_PROJECT_UID" jdbcType="VARCHAR" property="dmbProjectUid"/>
+        <!--保留字段1-->
+        <result column="DMB_MODEL_FEATURE_UID" jdbcType="VARCHAR" property="dmbModelFeatureUid"/>
+        <!--保留字段2-->
+        <result column="DMB_RESERVED_2" jdbcType="VARCHAR" property="dmbReserved2"/>
+        <!--保留字段3-->
+        <result column="DMB_RESERVED_3" jdbcType="VARCHAR" property="dmbReserved3"/>
+        <!--保留字段4-->
+        <result column="DMB_RESERVED_4" jdbcType="VARCHAR" property="dmbReserved4"/>
+        <!--保留字段5-->
+        <result column="DMB_RESERVED_5" jdbcType="VARCHAR" property="dmbReserved5"/>
+        <!--特殊的特性UID，特别是车身颜色-->
+        <result column="DMB_SPECIAL_FEATURE_UID" jdbcType="VARCHAR" property="dmbSpecialFeatureUid"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        ID,
+        DMB_MODEL_UID,
+        DMB_COLOR_MODEL_UID,
+        DMB_CREATOR,
+        DMB_CREATE_DATE,
+        DMB_UPDATER,
+        DMB_UPDATE_DATE,
+        DMB_PROJECT_UID,
+        DMB_MODEL_FEATURE_UID,
+        DMB_RESERVED_2,
+        DMB_RESERVED_3,
+        DMB_RESERVED_4,
+        DMB_RESERVED_5,
+        DMB_SPECIAL_FEATURE_UID
+  </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from HZ_DERIVATIVE_MATERIEL_BASIC
+        where ID = #{id,jdbcType=DECIMAL}
+    </select>
+    <select id="selectByProjectUid" parameterType="java.util.Map" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from HZ_DERIVATIVE_MATERIEL_BASIC t
+        where DMB_PROJECT_UID = #{basic.dmbProjectUid,jdbcType=VARCHAR}
+        order by t.id
+    </select>
+    <select id="selectByModelAndColorUid" parameterType="sql.pojo.cfg.derivative.HzDerivativeMaterielBasic"
+            resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from HZ_DERIVATIVE_MATERIEL_BASIC t
+        where DMB_MODEL_UID = #{dmbModelUid,jdbcType=VARCHAR}
+        and DMB_COLOR_MODEL_UID=#{dmbColorModelUid,jdbcType=VARCHAR}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from HZ_DERIVATIVE_MATERIEL_BASIC
+    where ID = #{id,jdbcType=DECIMAL}
+  </delete>
+    <insert id="insert" parameterType="sql.pojo.cfg.derivative.HzDerivativeMaterielBasic">
+        <selectKey order="BEFORE"
+                   keyColumn="id" keyProperty="id" resultType="java.lang.Long">
+            select seq_hz_dmb_id.Nextval from dual
+        </selectKey>
+        insert into HZ_DERIVATIVE_MATERIEL_BASIC (
+        ID,
+        DMB_MODEL_UID,
+        DMB_COLOR_MODEL_UID,
+        DMB_CREATOR,
+        DMB_CREATE_DATE,
+        DMB_UPDATER,
+        DMB_UPDATE_DATE,
+        DMB_PROJECT_UID,
+        DMB_MODEL_FEATURE_UID,
+        DMB_RESERVED_2,
+        DMB_RESERVED_3,
+        DMB_RESERVED_4,
+        DMB_RESERVED_5,
+        DMB_SPECIAL_FEATURE_UID
+        )
+        values (
+        #{id,jdbcType=DECIMAL},
+        #{dmbModelUid,jdbcType=VARCHAR},
+        #{dmbColorModelUid,jdbcType=VARCHAR},
+        #{dmbCreator,jdbcType=OTHER},
+        sysdate,
+        #{dmbUpdater,jdbcType=OTHER},
+        sysdate,
+        #{dmbProjectUid,jdbcType=VARCHAR},
+        #{dmbModelFeatureUid,jdbcType=VARCHAR},
+        #{dmbReserved2,jdbcType=VARCHAR},
+        #{dmbReserved3,jdbcType=VARCHAR},
+        #{dmbReserved4,jdbcType=VARCHAR},
+        #{dmbReserved5,jdbcType=VARCHAR},
+        #{dmbSpecialFeatureUid,jdbcType=VARCHAR}
+        )
+    </insert>
+    <insert id="insertSelective" parameterType="sql.pojo.cfg.derivative.HzDerivativeMaterielBasic">
+        <selectKey order="BEFORE"
+                   keyColumn="id" keyProperty="id" resultType="java.lang.Long">
+            select seq_hz_dmb_id.Nextval from dual
+        </selectKey>
+        insert into HZ_DERIVATIVE_MATERIEL_BASIC
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                ID,
+            </if>
+            <if test="dmbModelUid != null">
+                DMB_MODEL_UID,
+            </if>
+            <if test="dmbColorModelUid != null">
+                DMB_COLOR_MODEL_UID,
+            </if>
+            <if test="dmbCreator != null">
+                DMB_CREATOR,
+            </if>
+            DMB_CREATE_DATE,
+            <if test="dmbUpdater != null">
+                DMB_UPDATER,
+            </if>
+            DMB_UPDATE_DATE,
+            <if test="dmbProjectUid != null">
+                DMB_PROJECT_UID,
+            </if>
+            <if test="dmbModelFeatureUid != null">
+                DMB_MODEL_FEATURE_UID,
+            </if>
+            <if test="dmbReserved2 != null">
+                DMB_RESERVED_2,
+            </if>
+            <if test="dmbReserved3 != null">
+                DMB_RESERVED_3,
+            </if>
+            <if test="dmbReserved4 != null">
+                DMB_RESERVED_4,
+            </if>
+            <if test="dmbReserved5 != null">
+                DMB_RESERVED_5,
+            </if>
+            <if test="dmbSpecialFeatureUid != null">
+                DMB_SPECIAL_FEATURE_UID,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=DECIMAL},
+            </if>
+            <if test="dmbModelUid != null">
+                #{dmbModelUid,jdbcType=VARCHAR},
+            </if>
+            <if test="dmbColorModelUid != null">
+                #{dmbColorModelUid,jdbcType=VARCHAR},
+            </if>
+            <if test="dmbCreator != null">
+                #{dmbCreator,jdbcType=OTHER},
+            </if>
+            sysdate,
+            <if test="dmbUpdater != null">
+                #{dmbUpdater,jdbcType=OTHER},
+            </if>
+            sysdate,
+            <if test="dmbProjectUid != null">
+                #{dmbProjectUid,jdbcType=VARCHAR},
+            </if>
+            <if test="dmbModelFeatureUid != null">
+                #{dmbModelFeatureUid,jdbcType=VARCHAR},
+            </if>
+            <if test="dmbReserved2 != null">
+                #{dmbReserved2,jdbcType=VARCHAR},
+            </if>
+            <if test="dmbReserved3 != null">
+                #{dmbReserved3,jdbcType=VARCHAR},
+            </if>
+            <if test="dmbReserved4 != null">
+                #{dmbReserved4,jdbcType=VARCHAR},
+            </if>
+            <if test="dmbReserved5 != null">
+                #{dmbReserved5,jdbcType=VARCHAR},
+            </if>
+            <if test="dmbSpecialFeatureUid != null">
+                #{dmbSpecialFeatureUid,jdbcType=VARCHAR}
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="sql.pojo.cfg.derivative.HzDerivativeMaterielBasic">
+        update HZ_DERIVATIVE_MATERIEL_BASIC
+        <set>
+            <if test="dmbModelUid != null">
+                DMB_MODEL_UID = #{dmbModelUid,jdbcType=VARCHAR},
+            </if>
+            <if test="dmbColorModelUid != null">
+                DMB_COLOR_MODEL_UID = #{dmbColorModelUid,jdbcType=VARCHAR},
+            </if>
+            <if test="dmbCreator != null">
+                DMB_CREATOR = #{dmbCreator,jdbcType=OTHER},
+            </if>
+            <if test="dmbCreateDate != null">
+                DMB_CREATE_DATE = #{dmbCreateDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="dmbUpdater != null">
+                DMB_UPDATER = #{dmbUpdater,jdbcType=OTHER},
+            </if>
+            DMB_UPDATE_DATE = sysdate,
+            <if test="dmbModelFeatureUid != null">
+                DMB_MODEL_FEATURE_UID = #{dmbModelFeatureUid,jdbcType=VARCHAR},
+            </if>
+            <if test="dmbReserved2 != null">
+                DMB_RESERVED_2 = #{dmbReserved2,jdbcType=VARCHAR},
+            </if>
+            <if test="dmbReserved3 != null">
+                DMB_RESERVED_3 = #{dmbReserved3,jdbcType=VARCHAR},
+            </if>
+            <if test="dmbReserved4 != null">
+                DMB_RESERVED_4 = #{dmbReserved4,jdbcType=VARCHAR},
+            </if>
+            <if test="dmbReserved5 != null">
+                DMB_RESERVED_5 = #{dmbReserved5,jdbcType=VARCHAR},
+            </if>
+            <if test="dmbSpecialFeatureUid != null">
+                DMB_SPECIAL_FEATURE_UID = #{dmbSpecialFeatureUid,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where ID = #{id,jdbcType=DECIMAL}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="sql.pojo.cfg.derivative.HzDerivativeMaterielBasic">
+    update HZ_DERIVATIVE_MATERIEL_BASIC
+    set DMB_MODEL_UID = #{dmbModelUid,jdbcType=VARCHAR},
+      DMB_COLOR_MODEL_UID = #{dmbColorModelUid,jdbcType=VARCHAR},
+      DMB_CREATOR = #{dmbCreator,jdbcType=OTHER},
+      DMB_CREATE_DATE = #{dmbCreateDate,jdbcType=TIMESTAMP},
+      DMB_UPDATER = #{dmbUpdater,jdbcType=OTHER},
+      DMB_UPDATE_DATE = sysdate,
+      DMB_MODEL_FEATURE_UID = #{dmbModelFeatureUid,jdbcType=VARCHAR},
+      DMB_RESERVED_2 = #{dmbReserved2,jdbcType=VARCHAR},
+      DMB_RESERVED_3 = #{dmbReserved3,jdbcType=VARCHAR},
+      DMB_RESERVED_4 = #{dmbReserved4,jdbcType=VARCHAR},
+      DMB_RESERVED_5 = #{dmbReserved5,jdbcType=VARCHAR},
+      DMB_SPECIAL_FEATURE_UID = #{dmbSpecialFeatureUid,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+</mapper>

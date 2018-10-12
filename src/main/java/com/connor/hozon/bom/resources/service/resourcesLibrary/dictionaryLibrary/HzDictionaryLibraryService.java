@@ -6,6 +6,9 @@ import com.connor.hozon.bom.resources.domain.dto.response.HzDictionaryLibraryRes
 import com.connor.hozon.bom.resources.domain.dto.response.OperateResultMessageRespDTO;
 import com.connor.hozon.bom.resources.domain.query.HzDictionaryLibraryQuery;
 import com.connor.hozon.bom.resources.page.Page;
+import sql.pojo.resourcesLibrary.dictionaryLibrary.HzDictionaryLibrary;
+
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -16,6 +19,7 @@ import com.connor.hozon.bom.resources.page.Page;
 public interface HzDictionaryLibraryService {
     /**
      * 添加一条数据
+     *
      * @param reqDTO
      * @return
      */
@@ -23,6 +27,7 @@ public interface HzDictionaryLibraryService {
 
     /**
      * 修改一条数据
+     *
      * @param reqDTO
      * @return
      */
@@ -30,6 +35,7 @@ public interface HzDictionaryLibraryService {
 
     /**
      * 分页获取字典库数据
+     *
      * @param query
      * @return
      */
@@ -37,6 +43,7 @@ public interface HzDictionaryLibraryService {
 
     /**
      * 根据PUID查询一条数据
+     *
      * @param puid
      * @return
      */
@@ -44,8 +51,11 @@ public interface HzDictionaryLibraryService {
 
     /**
      * 根据PUID删除一条数据
+     *
      * @param puid
      * @return
      */
     OperateResultMessageRespDTO deleteHzDictionaryLibrary(String puid);
+
+
 }

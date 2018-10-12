@@ -4,6 +4,8 @@ import com.connor.hozon.bom.resources.domain.query.HzDictionaryLibraryQuery;
 import com.connor.hozon.bom.resources.page.Page;
 import sql.pojo.resourcesLibrary.dictionaryLibrary.HzDictionaryLibrary;
 
+import java.util.List;
+
 /**
  * Created with IntelliJ IDEA.
  * User: xlf

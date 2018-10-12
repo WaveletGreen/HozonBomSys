@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2018.
+ * This file was wrote by fancyears·milos·maywas @connor. Any question/bug you can post to 1243093366@qq.com.
+ * ALL RIGHTS RESERVED.
+ */
+
 package com.connor.hozon.bom.bomSystem.option;
 
 import lombok.Getter;
@@ -39,7 +45,7 @@ public enum SpecialFeatureOption {
     private String desc;
 
     // 构造方法
-    private SpecialFeatureOption(String desc) {
+    SpecialFeatureOption(String desc) {
         this.desc = desc;
     }
 }

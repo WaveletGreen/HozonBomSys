@@ -1,27 +1,25 @@
 package com.connor.hozon.bom.bomSystem.service.integrate;
 
-import com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0ModelGroupDao;
-import com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0ToModelRecordDao;
+import com.connor.hozon.bom.bomSystem.dao.derivative.HzCfg0ModelGroupDao;
+import com.connor.hozon.bom.bomSystem.dao.derivative.HzCfg0ToModelRecordDao;
 import com.connor.hozon.bom.bomSystem.dto.HzMaterielFeatureBean;
 import com.connor.hozon.bom.bomSystem.helper.IntegrateMsgDTO;
 import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
 import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0MainService;
 import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0OptionFamilyService;
 import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0Service;
-import com.connor.hozon.bom.bomSystem.service.iservice.cfg.IHzCfg0ModelFeatureService;
 import com.connor.hozon.bom.bomSystem.service.project.HzSuperMaterielService;
 import integration.base.classify.ZPPTCO003;
-import integration.base.feature.ZPPTCO002;
 import integration.logic.ConfigurableMaterialAllocation;
 import integration.option.ActionFlagOption;
-import integration.service.impl.cfg2.TransCfgService;
 import integration.service.impl.classify3.TransClassifyService;
 import net.sf.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sql.pojo.cfg.*;
+import sql.pojo.cfg.derivative.HzCfg0ToModelRecord;
+import sql.pojo.cfg.main.HzCfg0MainRecord;
 import sql.pojo.project.HzMaterielRecord;
 
 import java.util.*;

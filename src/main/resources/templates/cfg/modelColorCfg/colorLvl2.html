@@ -38,7 +38,7 @@
                     >
                         <option th:each="color:${colorList}" th:value="${color.puid}"
                                 th:selected="${color.getPuid()==line.getColorUid()? true :false}"
-                                th:text="${color.pColorCode+' -- '+color.pColorName+' -- '+color.getpColorComment()+' -- '+color.getpColorOfSet()}"
+                                th:text="${color.getPColorCode()+' -- '+color.getPColorName()+' -- '+color.getPColorComment()+' -- '+color.getPColorOfSet()}"
                         >
                         </option>
                     </select>

@@ -21,12 +21,12 @@ function loadData() {
         showToggle: true,                   //是否显示详细视图和列表视图的切换按钮
         showRefresh: true,                  //是否显示刷新按钮
         pagination: true,                   //是否显示分页（*）
-        pageNumber:1,                       //初始化加载第一页，默认第一页
+        pageNumber: 1,                       //初始化加载第一页，默认第一页
         pageSize: 10,                       //每页的记录行数（*）
-        pageList: [10, 30,50,100,500,1000],//可供选择的每页的行数（*）
+        pageList: [10, 30, 50, 100, 500, 1000],//可供选择的每页的行数（*）
         clickToSelect: true,                // 单击某一行的时候选中某一条记录
-        smartDisplay:false,
-        search:true,
+        smartDisplay: false,
+        search: true,
         sortable: true,
         sortName: 'pColorCode',
         sortOrder: 'asc',
@@ -123,13 +123,13 @@ function loadData() {
                 checkbox: true
             },
             {
-                field: 'pColorOfSet',
+                field: 'PColorOfSet',
                 title: '色系',
                 sortable: true,
                 sortOrder: 'asc',
             },
             {
-                field: 'pColorName',
+                field: 'PColorName',
                 title: '颜色名称',
                 align: 'center',
                 valign: 'middle',
@@ -137,7 +137,7 @@ function loadData() {
                 sortOrder: 'asc',
             },
             {
-                field: 'pColorCode',
+                field: 'PColorCode',
                 title: '颜色代码',
                 align: 'center',
                 valign: 'middle',
@@ -145,7 +145,7 @@ function loadData() {
                 sortOrder: 'asc',
             },
             {
-                field: 'pColorPlate',
+                field: 'PColorPlate',
                 title: '色板编号',
                 align: 'center',
                 valign: 'middle',
@@ -153,7 +153,7 @@ function loadData() {
                 sortOrder: 'asc',
             },
             {
-                field: 'pColorIsMultiply',
+                field: 'PColorIsMultiply',
                 title: '是否拼色',
                 align: 'center',
                 valign: 'middle',
@@ -161,7 +161,7 @@ function loadData() {
                 sortOrder: 'asc',
             },
             {
-                field: 'pColorEffectedDate',
+                field: 'PColorEffectedDate',
                 title: '生效时间',
                 align: 'center',
                 valign: 'middle',
@@ -220,6 +220,10 @@ function loadData() {
             // }
         ]
     });
+
+    //设置跳转的tableID，放在table初始化语句之后
+    setTargetTableId("dataTable");
+
     $table.bootstrapTable('hideColumn', 'puid');
     // $('div').hasClass('pagination').css('display','block');
     //修改——转换日期格式(时间戳转换为datetime格式)

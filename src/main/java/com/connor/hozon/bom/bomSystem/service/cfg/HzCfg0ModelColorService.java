@@ -1,9 +1,11 @@
 package com.connor.hozon.bom.bomSystem.service.cfg;
 
-import com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0ModelColorDao;
-import com.connor.hozon.bom.bomSystem.dao.cfg.HzCfg0OptionFamilyDao;
+import com.connor.hozon.bom.bomSystem.dao.modelColor.HzCfg0ModelColorDao;
+import com.connor.hozon.bom.bomSystem.dao.cfg0.HzCfg0OptionFamilyDao;
+import com.connor.hozon.bom.bomSystem.dao.modelColor.HzColorModelDao;
 import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
 import com.connor.hozon.bom.bomSystem.option.SpecialFeatureOption;
+import com.connor.hozon.bom.bomSystem.service.cfg.vwo.HzVwoManagerService;
 import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.sys.entity.User;
 import net.sf.json.JSONObject;
@@ -11,7 +13,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sql.pojo.cfg.*;
+import sql.pojo.cfg.cfg0.HzCfg0OptionFamily;
+import sql.pojo.cfg.cfg0.HzCfg0Record;
+import sql.pojo.cfg.color.HzCfg0ColorSet;
+import sql.pojo.cfg.main.HzCfg0MainRecord;
+import sql.pojo.cfg.modelColor.HzCfg0ModelColor;
+import sql.pojo.cfg.modelColor.HzCfg0ModelColorDetail;
+import sql.pojo.cfg.vwo.HzVwoInfo;
 import sql.redis.SerializeUtil;
 
 import java.util.*;
@@ -51,6 +59,13 @@ public class HzCfg0ModelColorService {
     HzCfg0MainService hzCfg0MainService;
     @Autowired
     HzCfg0Service hzCfg0Service;
+
+    @Autowired
+    HzVwoManagerService hzVwoManagerService;
+
+    @Autowired
+    HzColorModelDao hzColorModelDao;
+
     /**
      * 日志
      */
@@ -65,8 +80,8 @@ public class HzCfg0ModelColorService {
         return hzCfg0ModelColorDao.updateByPrimaryKey(color) == 1 ? true : false;
     }
 
-    public boolean doInsertOne(HzCfg0ModelColor color) {
-        return hzCfg0ModelColorDao.insertOne(color) > 0 ? true : false;
+    public boolean doInsert(HzCfg0ModelColor color) {
+        return hzCfg0ModelColorDao.insert(color) > 0 ? true : false;
     }
 
     public HzCfg0ModelColor doGetById(HzCfg0ModelColor color) {
@@ -85,7 +100,7 @@ public class HzCfg0ModelColorService {
          */
         List<HzCfg0ColorSet> colorSets = hzCfg0ColorSetService.doGetAll();
         Map<String, HzCfg0ColorSet> mapOfColorSet = new HashMap<>();
-        colorSets.forEach(set -> mapOfColorSet.put(set.getpColorCode(), set));
+        colorSets.forEach(set -> mapOfColorSet.put(set.getPColorCode(), set));
 
         List<Map<String, String>> res = new ArrayList<>();
         colorSet.forEach(color -> {
@@ -95,7 +110,7 @@ public class HzCfg0ModelColorService {
             _result.put("descOfColorModel", color.getpDescOfColorfulModel());
             _result.put("modelShell", color.getpModelShellOfColorfulModel());
             _result.put("modeColorIsMultiply", color.getpColorIsMultiply());
-            List<HzColorModel> cm = hzColorModelService.doSelectByModelUidWithColor(color.getPuid());
+            List<HzCfg0ModelColorDetail> cm = hzColorModelService.doSelectByModelUidWithColor(color.getPuid());
             //把历史数据取出来，进行分步存储
             if (null == color.getUpdateDefault() || 0 == color.getUpdateDefault()) {
                 if (null != color.getpColorfulMapBlock()) {
@@ -103,7 +118,7 @@ public class HzCfg0ModelColorService {
                     //旧数据需要进行插入，然后判断是否有历史数据，如果有历史数据，删除历史数据，插入，更新当前颜色车型的状态值为1
                     if (o instanceof HashMap) {
                         HashMap<String, String> _map = (HashMap) o;
-                        List<HzColorModel> colorList = new ArrayList<>();
+                        List<HzCfg0ModelColorDetail> colorList = new ArrayList<>();
                         int index = 0;
                         String colorUid = "-";
                         for (Map.Entry<String, String> entry : _map.entrySet()) {
@@ -112,24 +127,24 @@ public class HzCfg0ModelColorService {
                             } else {
                                 colorUid = "-";
                             }
-                            HzColorModel hzColorModel = new HzColorModel();
-                            hzColorModel.setPuid(UUIDHelper.generateUpperUid());
-                            hzColorModel.setModelUid(color.getPuid());
-                            hzColorModel.setColorUid(colorUid);
-                            hzColorModel.setCfgUid(families.get(index).getPuid());
-                            hzColorModel.setCfgMainUid(color.getpCfg0MainRecordOfMC());
-                            hzColorModel.setCreateDate(date);
-                            hzColorModel.setModifyDate(date);
-                            hzColorModel.setCreator(user.getUserName());
-                            hzColorModel.setModifier(user.getUserName());
-                            colorList.add(hzColorModel);
+                            HzCfg0ModelColorDetail hzCfg0ModelColorDetail = new HzCfg0ModelColorDetail();
+                            hzCfg0ModelColorDetail.setPuid(UUIDHelper.generateUpperUid());
+                            hzCfg0ModelColorDetail.setModelUid(color.getPuid());
+                            hzCfg0ModelColorDetail.setColorUid(colorUid);
+                            hzCfg0ModelColorDetail.setCfgUid(families.get(index).getPuid());
+                            hzCfg0ModelColorDetail.setCfgMainUid(color.getpCfg0MainRecordOfMC());
+                            hzCfg0ModelColorDetail.setCreateDate(date);
+                            hzCfg0ModelColorDetail.setModifyDate(date);
+                            hzCfg0ModelColorDetail.setCreator(user.getUserName());
+                            hzCfg0ModelColorDetail.setModifier(user.getUserName());
+                            colorList.add(hzCfg0ModelColorDetail);
                             //?，估计有bug
                             _result.put("s" + index, entry.getValue());
                             index++;
                         }
                         if (hzColorModelService.doInsertByBatch(colorList) > 0) {
                             logger.warn("批量新增配置颜色数据成功");
-                            List<HzColorModel> cms = hzColorModelService.doSelectByModelUidWithColor(color.getPuid());
+                            List<HzCfg0ModelColorDetail> cms = hzColorModelService.doSelectByModelUidWithColor(color.getPuid());
                             if (cms == null || cms.size() == 0) {
                                 for (int i = 0; i < familiesNew.size(); i++) {
                                     //添加默认值
@@ -208,10 +223,10 @@ public class HzCfg0ModelColorService {
          */
         List<HzCfg0ColorSet> colorSets = hzCfg0ColorSetService.doGetAll();
         Map<String, HzCfg0ColorSet> mapOfColorSet = new HashMap<>();
-        colorSets.forEach(set -> mapOfColorSet.put(set.getpColorCode(), set));
+        colorSets.forEach(set -> mapOfColorSet.put(set.getPColorCode(), set));
 
         List<Map<String, String>> res = new ArrayList<>();
-        Map<String, HzColorModel> coach = new LinkedHashMap<>();
+        Map<String, HzCfg0ModelColorDetail> coach = new LinkedHashMap<>();
         colorSet.forEach(color -> {
             Map<String, String> _result = new LinkedHashMap<>();
             _result.put("puid", color.getPuid());
@@ -219,8 +234,8 @@ public class HzCfg0ModelColorService {
             _result.put("descOfColorModel", color.getpDescOfColorfulModel());
             _result.put("modelShell", color.getpModelShellOfColorfulModel());
             _result.put("modeColorIsMultiply", color.getpColorIsMultiply());
-//            List<HzColorModel> cm = hzColorModelService.doSelectByModelUidWithColor(color.getPuid());
-            List<HzColorModel> cm = hzColorModelService.doSelectByModelUidWithColor2(color.getPuid());
+//            List<HzCfg0ModelColorDetail> cm = hzColorModelService.doSelectByModelUidWithColor(color.getPuid());
+            List<HzCfg0ModelColorDetail> cm = hzColorModelService.doSelectByModelUidWithColor2(color.getPuid());
             coach.clear();
             cm.forEach(c -> coach.put(c.getCfgUid(), c));
 
@@ -231,7 +246,7 @@ public class HzCfg0ModelColorService {
                     //旧数据需要进行插入，然后判断是否有历史数据，如果有历史数据，删除历史数据，插入，更新当前颜色车型的状态值为1
                     if (o instanceof HashMap) {
                         HashMap<String, String> _map = (HashMap) o;
-                        List<HzColorModel> colorList = new ArrayList<>();
+                        List<HzCfg0ModelColorDetail> colorList = new ArrayList<>();
                         int index = 0;
                         String colorUid = "-";
                         for (Map.Entry<String, String> entry : _map.entrySet()) {
@@ -240,23 +255,23 @@ public class HzCfg0ModelColorService {
                             } else {
                                 colorUid = "-";
                             }
-                            HzColorModel hzColorModel = new HzColorModel();
-                            hzColorModel.setPuid(UUIDHelper.generateUpperUid());
-                            hzColorModel.setModelUid(color.getPuid());
-                            hzColorModel.setColorUid(colorUid);
-                            hzColorModel.setCfgMainUid(color.getpCfg0MainRecordOfMC());
-                            hzColorModel.setCreateDate(date);
-                            hzColorModel.setModifyDate(date);
-                            hzColorModel.setCreator(user.getUserName());
-                            hzColorModel.setModifier(user.getUserName());
-                            colorList.add(hzColorModel);
+                            HzCfg0ModelColorDetail hzCfg0ModelColorDetail = new HzCfg0ModelColorDetail();
+                            hzCfg0ModelColorDetail.setPuid(UUIDHelper.generateUpperUid());
+                            hzCfg0ModelColorDetail.setModelUid(color.getPuid());
+                            hzCfg0ModelColorDetail.setColorUid(colorUid);
+                            hzCfg0ModelColorDetail.setCfgMainUid(color.getpCfg0MainRecordOfMC());
+                            hzCfg0ModelColorDetail.setCreateDate(date);
+                            hzCfg0ModelColorDetail.setModifyDate(date);
+                            hzCfg0ModelColorDetail.setCreator(user.getUserName());
+                            hzCfg0ModelColorDetail.setModifier(user.getUserName());
+                            colorList.add(hzCfg0ModelColorDetail);
                             //?，估计有bug
                             _result.put("s" + index, entry.getValue());
                             index++;
                         }
                         if (hzColorModelService.doInsertByBatch(colorList) > 0) {
                             logger.warn("批量新增配置颜色数据成功");
-                            List<HzColorModel> cms = hzColorModelService.doSelectByModelUidWithColor(color.getPuid());
+                            List<HzCfg0ModelColorDetail> cms = hzColorModelService.doSelectByModelUidWithColor(color.getPuid());
                             if (cms == null || cms.size() == 0) {
                                 for (int i = 0; i < familiesNew.size(); i++) {
                                     //添加默认值
@@ -290,7 +305,7 @@ public class HzCfg0ModelColorService {
                     }
                 } else {
                     //添加颜色值用于显示
-                    List<HzColorModel> list = new ArrayList<>();
+                    List<HzCfg0ModelColorDetail> list = new ArrayList<>();
                     for (int i = 0; i < familiesNew.size(); i++) {
 //                        if ("车身颜色".equals(familiesNew.get(i).getpOptionfamilyDesc())) {
 //                            vehicleColor = cm.get(i).getpColorCode();
@@ -302,7 +317,7 @@ public class HzCfg0ModelColorService {
                             _result.put("s" + i, coach.get(familiesNew.get(i).getPuid()).getpColorCode());
                         } else {
                             _result.put("s" + i, "-");
-                            HzColorModel hcm = new HzColorModel();
+                            HzCfg0ModelColorDetail hcm = new HzCfg0ModelColorDetail();
                             hcm.setColorUid("-");
                             hcm.setPuid(UUIDHelper.generateUpperUid());
                             hcm.setCreator(user.getUsername());
@@ -430,4 +445,64 @@ public class HzCfg0ModelColorService {
         }
         return object;
     }
+
+    /**
+     * 发起VOW流程
+     *
+     * @param colors    需发起VWO流程的配色方案
+     * @param projectPuid   项目ID
+     * @return
+     */
+    public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid) {
+        JSONObject result = new JSONObject();
+        User user = UserInfo.getUser();
+        //源主数据
+        List<HzCfg0ModelColor> hzCfg0ModelColors = hzCfg0ModelColorDao.selectByPuids(colors);
+        //循环查看源主数据是否以发布流程,如已发布过则直接返回错误提示
+        for(HzCfg0ModelColor hzCfg0ModelColor : hzCfg0ModelColors){
+            if(hzCfg0ModelColor.getCmcrVwoId()!=null){
+                result.put("status",false);
+                result.put("msg",hzCfg0ModelColor.getpDescOfColorfulModel()+"已发起了VWO流程");
+                return  result;
+            }
+        }
+        //源从数据
+        List<HzCfg0ModelColorDetail> hzCfg0ModelColorDetails = hzColorModelDao.selectByModelColors(hzCfg0ModelColors);
+        //最新的Vwo实体类对象
+        HzVwoInfo hzVwoInfo = hzVwoManagerService.generateVwoEntity(user, projectPuid, result);
+        //为源主数据添加VWO编码
+        for(HzCfg0ModelColor hzCfg0ModelColor : hzCfg0ModelColors){
+            hzCfg0ModelColor.setCmcrVwoId(hzVwoInfo.getId());
+        }
+        //根据源主数据生成变更后主数据
+        for(HzCfg0ModelColor hzCfg0ModelColor : hzCfg0ModelColors){
+
+        }
+        //根据源从数据生成变更后从数据
+        for(HzCfg0ModelColorDetail hzCfg0ModelColorDetail : hzCfg0ModelColorDetails){
+
+        }
+
+        //查询最近一次变更后主数据
+        //查询最近一次变更后从数据
+        //根据最近一次变更后主数据生成变更前主数据
+        //根据最近一次变更后从数据生成变更前从数据
+
+        //跟新源主数据
+        if(hzCfg0ModelColorDao.updateListData(hzCfg0ModelColors)<=0){
+            result.put("status",false);
+            result.put("msg","跟新源主数据失败");
+        }
+        //跟新变更后主数据
+        //跟新变更后从数据
+        //跟新变更前主数据
+        //跟新变更前从数据
+
+        if(result.get("status")==null){
+            result.put("status",true);
+        }
+        return result;
+    }
+
+
 }

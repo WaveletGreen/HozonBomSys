@@ -2,7 +2,7 @@ package com.connor.hozon.bom.bomSystem.service.integrate;
 
 import com.connor.hozon.bom.bomSystem.helper.IntegrateMsgDTO;
 import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
-import com.connor.hozon.bom.bomSystem.service.iservice.integrate.ISynMaterielService;
+import com.connor.hozon.bom.bomSystem.iservice.integrate.ISynMaterielService;
 import com.connor.hozon.bom.resources.domain.dto.request.EditHzMaterielReqDTO;
 import com.connor.hozon.bom.resources.domain.query.HzMaterielQuery;
 import com.connor.hozon.bom.resources.mybatis.factory.HzFactoryDAO;
@@ -15,11 +15,10 @@ import integration.service.impl.masterMaterial1.TransMasterMaterialService;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sql.pojo.cfg.HzCfg0ModelFeature;
+import sql.pojo.cfg.derivative.HzCfg0ModelFeature;
 import sql.pojo.factory.HzFactory;
 import sql.pojo.project.HzMaterielRecord;
 
-import javax.lang.model.type.ArrayType;
 import java.util.*;
 
 import static com.connor.hozon.bom.bomSystem.helper.StringHelper.checkStringIsEmpty;

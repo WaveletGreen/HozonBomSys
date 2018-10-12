@@ -2,24 +2,17 @@ package com.connor.hozon.bom.bomSystem.service.integrate;
 
 import com.connor.hozon.bom.bomSystem.helper.IntegrateMsgDTO;
 import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
-import com.connor.hozon.bom.bomSystem.service.iservice.cfg.IHzMaterielCfgService;
-import com.connor.hozon.bom.resources.controller.BaseController;
-import integration.base.feature.ZPPTCO002;
-import integration.base.productAttributes.ZPPTCI007;
+import com.connor.hozon.bom.bomSystem.iservice.cfg.IHzMaterielCfgService;
 import integration.base.productAttributes.ZPPTCO007;
-import integration.logic.Features;
 import integration.logic.VehicleBom;
 import integration.option.ActionFlagOption;
-import integration.service.impl.cfg2.TransCfgService;
 import integration.service.impl.produceAttr7.TransProductAttrService;
-import net.sf.json.JSON;
 import net.sf.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sql.pojo.cfg.HzCfg0Record;
-import sql.pojo.cfg.HzMaterielCfgBean;
+import sql.pojo.cfg.derivative.HzMaterielCfgBean;
 
 import java.util.ArrayList;
 import java.util.HashMap;

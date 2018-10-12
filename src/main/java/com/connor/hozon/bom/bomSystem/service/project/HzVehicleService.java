@@ -1,7 +1,7 @@
 package com.connor.hozon.bom.bomSystem.service.project;
 
 import com.connor.hozon.bom.bomSystem.dao.project.HzVehicleRecordDao;
-import com.connor.hozon.bom.bomSystem.service.iservice.project.IHzVehicleService;
+import com.connor.hozon.bom.bomSystem.iservice.project.IHzVehicleService;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

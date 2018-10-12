@@ -1,7 +1,6 @@
 package com.connor.hozon.bom.resources.controller.change.vwo;
 
-import com.connor.hozon.bom.bomSystem.service.cfg.vwo.HzVwoInfluenceDeptService;
-import com.connor.hozon.bom.bomSystem.service.iservice.cfg.vwo.*;
+import com.connor.hozon.bom.bomSystem.iservice.cfg.vwo.*;
 import com.connor.hozon.bom.common.base.constant.SystemStaticConst;
 import com.connor.hozon.bom.common.base.entity.QueryBase;
 import com.connor.hozon.bom.resources.mybatis.bom.HzEbomRecordDAO;
@@ -17,6 +16,7 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import sql.pojo.cfg.vwo.HzFeatureChangeBean;
 import sql.pojo.cfg.vwo.*;
 import sql.pojo.epl.HzEPLManageRecord;
 
@@ -211,6 +211,11 @@ public class HzVwoController {
         if (change != null) {
             User user = new User();
             try {
+                if (null == change.getPersonId()) {
+                    logger.error("没有选择正确的人员，可能选择了部门");
+                    result.put("status", false);
+                    result.put("msg", "没有选择正确的人员");
+                }
                 user.setId(Math.toIntExact(change.getPersonId()));
             } catch (ArithmeticException e) {
                 logger.error("没有选择正确的人员，可能选择了部门");

@@ -1,22 +1,18 @@
 package com.connor.hozon.bom.bomSystem.service.cfg;
 
-import com.connor.hozon.bom.bomSystem.dao.cfg.HzColorModelDao;
-import com.connor.hozon.bom.bomSystem.dao.cfg.relevance.HzRelevanceBasicDao;
-import com.connor.hozon.bom.bomSystem.dao.cfg.relevance.HzRelevanceRelationDao;
+import com.connor.hozon.bom.bomSystem.dao.modelColor.HzColorModelDao;
+import com.connor.hozon.bom.bomSystem.dao.relevance.HzRelevanceBasicDao;
+import com.connor.hozon.bom.bomSystem.dao.relevance.HzRelevanceRelationDao;
 import com.connor.hozon.bom.bomSystem.dto.HzFeatureQueryDTO;
 import com.connor.hozon.bom.bomSystem.dto.relevance.HzRelevanceQueryDTO;
 import com.connor.hozon.bom.bomSystem.dto.relevance.HzRelevanceQueryResultBean;
-import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0ModelService;
-import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0Service;
 import com.connor.hozon.bom.common.base.entity.QueryBase;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.ResponseBody;
-import sql.pojo.cfg.HzCfg0Record;
-import sql.pojo.cfg.HzCfg0Relevance;
-import sql.pojo.cfg.HzColorModel2;
+import sql.pojo.cfg.cfg0.HzCfg0Record;
+import sql.pojo.cfg.modelColor.HzColorModel2;
 import sql.pojo.cfg.relevance.HzRelevanceBasic;
 import sql.pojo.cfg.relevance.HzRelevanceRelation;
 

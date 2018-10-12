@@ -2,6 +2,9 @@ package sql.pojo.integration;
 
 import java.util.Date;
 
+/**
+ * 断点信息
+ */
 public class HzBreakPoint {
     /**
      * 主键
