@@ -1470,9 +1470,11 @@
             html.push('</span>');
 
             html.push('</div>',
+                '<div class="goPage"><input type="button" value="跳转" class="btn btn-primary" onclick="toPage();"></div>',
+                '<div class="goPage">跳转到第<input id="pageNum" class="pageNum" type="text">页</div>',
                 '<div class="pull-' + this.options.paginationHAlign + ' pagination">',
                 '<ul class="pagination' + sprintf(' pagination-%s', this.options.iconSize) + '">',
-                '<li class="page-pre"><a href="#">' + this.options.paginationPreText + '</a></li>');
+                '<li class="page-pre"><a href="javascript:void(0)">' + this.options.paginationPreText + '</a></li>');
 
             if (this.totalPages < 5) {
                 from = 1;
