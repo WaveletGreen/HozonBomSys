@@ -1,4 +1,4 @@
-package com.connor.hozon.bom.bomSystem.service.cfg.vwo;
+package com.connor.hozon.bom.bomSystem.service.vwo;
 
 import com.connor.hozon.bom.bomSystem.dao.vwo.HzFeatureChangeDao;
 import com.connor.hozon.bom.bomSystem.iservice.cfg.vwo.IHzFeatureChangeService;

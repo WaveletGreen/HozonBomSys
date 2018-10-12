@@ -7,9 +7,9 @@
 package com.connor.hozon.bom.bomSystem.controller;
 
 import com.connor.hozon.bom.bomSystem.helper.ProjectHelper;
-import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0MainService;
-import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0ModelRecordService;
-import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0ModelService;
+import com.connor.hozon.bom.bomSystem.service.main.HzCfg0MainService;
+import com.connor.hozon.bom.bomSystem.service.model.HzCfg0ModelRecordService;
+import com.connor.hozon.bom.bomSystem.service.fullCfg.HzCfg0ModelService;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -110,7 +110,7 @@ public class HzCfg0ModelController {
             } else {
                 fromDBDetail = new HzCfg0ModelDetail();
                 fromDBDetail.setpModelPuid(record.getPuid());
-                fromDBDetail.setpModelBrand(projectHelper.getBrand().getPBrandName());
+                fromDBDetail.setpModelBrand(projectHelper.getBrand().getpBrandName());
                 fromDBDetail.setpModelPlatform(projectHelper.getPlatform().getpPlatformName());
                 fromDBDetail.setpModelMod(projectHelper.getVehicle().getpVehicleName());
                 fromDBDetail.setpModelVersion(record.getObjectName());

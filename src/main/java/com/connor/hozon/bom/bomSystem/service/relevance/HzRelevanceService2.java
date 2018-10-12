@@ -1,4 +1,10 @@
-package com.connor.hozon.bom.bomSystem.service.cfg;
+/*
+ * Copyright (c) 2018.
+ * This file was wrote by fancyears·milos·maywas @connor. Any question/bug you can post to 1243093366@qq.com.
+ * ALL RIGHTS RESERVED.
+ */
+
+package com.connor.hozon.bom.bomSystem.service.relevance;
 
 import com.connor.hozon.bom.bomSystem.dao.modelColor.HzColorModelDao;
 import com.connor.hozon.bom.bomSystem.dao.relevance.HzRelevanceBasicDao;
@@ -6,6 +12,7 @@ import com.connor.hozon.bom.bomSystem.dao.relevance.HzRelevanceRelationDao;
 import com.connor.hozon.bom.bomSystem.dto.HzFeatureQueryDTO;
 import com.connor.hozon.bom.bomSystem.dto.relevance.HzRelevanceQueryDTO;
 import com.connor.hozon.bom.bomSystem.dto.relevance.HzRelevanceQueryResultBean;
+import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0Service;
 import com.connor.hozon.bom.common.base.entity.QueryBase;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;

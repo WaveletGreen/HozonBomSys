@@ -39,6 +39,10 @@ import java.util.*;
 
 import static com.connor.hozon.bom.bomSystem.helper.StringHelper.checkString;
 
+import com.connor.hozon.bom.resources.domain.dto.response.HzDictionaryLibraryRespDTO;
+import com.connor.hozon.bom.resources.service.resourcesLibrary.dictionaryLibrary.HzDictionaryLibraryService;
+import sql.pojo.resourcesLibrary.dictionaryLibrary.HzDictionaryLibrary;
+
 /**
  * Created by Fancyears·Maylos·Mayways
  * Description:
@@ -84,6 +88,8 @@ public class HzCfg0Controller extends ExtraIntegrate {
      */
     @Autowired
     IHzFeatureChangeService iHzFeatureChangeService;
+    @Autowired
+    HzDictionaryLibraryService hzDictionaryLibraryService;
 
     /**
      * 日志记录
@@ -117,6 +123,16 @@ public class HzCfg0Controller extends ExtraIntegrate {
         }
         model.addAttribute("entity", mainRecord);
         return "cfg/feature/addFeature";
+    }
+
+    @RequestMapping("/addPage2")
+    public String addPage2(@RequestParam("projectPuid") String projectPuid, Model model) {
+        HzCfg0MainRecord mainRecord = hzCfg0MainRecordDao.selectByProjectPuid(projectPuid);
+        if (mainRecord == null) {
+            return "error";
+        }
+        model.addAttribute("entity", mainRecord);
+        return "cfg/feature/addFeature2";
     }
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
@@ -192,15 +208,100 @@ public class HzCfg0Controller extends ExtraIntegrate {
         return result;
     }
 
+    @RequestMapping(value = "/add2", method = RequestMethod.POST)
+    @ResponseBody
+    public JSONObject add2(@RequestBody HzCfg0Record record) throws Exception {
+        JSONObject result = new JSONObject();
+        User user = UserInfo.getUser();
+
+        //获取特性值
+        String cfgObjectId = record.getpCfg0ObjectId();
+        HzDictionaryLibrary hzDictionaryLibrary = hzDictionaryLibraryService.queryLibraryDTOByCfgObject(cfgObjectId);
+        if (hzDictionaryLibrary == null || hzDictionaryLibrary.getPuid() == null) {
+            result.put("status", false);
+            result.put("msg", "<p style='color:red;'>特性值在配置字典中不存在</p>");
+            return result;
+        }
+        record.setpCfg0FamilyName(hzDictionaryLibrary.getFamillyCode().toUpperCase());
+        record.setpCfg0ObjectId(hzDictionaryLibrary.getEigenValue().toUpperCase());
+        //创建人和修改人
+        record.setCreator(user.getUserName());
+        record.setLastModifier(user.getUserName());
+        record.setCfgAbolishDate(DateStringHelper.forever());
+        //基本信息
+        record.setpCfg0FamilyDesc(hzDictionaryLibrary.getFamillyCh());
+        record.setpCfg0Desc(hzDictionaryLibrary.getValueDescCh());
+        record.setpH9featureenname(hzDictionaryLibrary.getValueDescEn());
+
+        if (!hzCfg0Service.preCheck(record)) {
+            result.put("status", false);
+            result.put("msg", "<p style='color:red;'>特性值已存在</p>");
+            return result;
+        }
+        /**生成自身的puid*/
+        record.setPuid(UUIDHelper.generateUpperUid());
+        HzCfg0OptionFamily family = new HzCfg0OptionFamily();
+        //主配置
+        family.setpOfCfg0Main(record.getpCfg0MainItemPuid());
+        //特性代码
+        family.setpOptionfamilyName(record.getpCfg0FamilyName());
+        //特性描述
+        family.setpOptionfamilyDesc(record.getpCfg0FamilyDesc());
+
+        HzCfg0OptionFamily _family = cfg0OptionFamilyService.doGetByCodeAndDescWithMain(family);
+        //检查当前项目有没有用到特定的特性
+        if (_family == null) {
+            family.setPuid(UUIDHelper.generateUpperUid());
+            //没有用到，则进行特性插入
+            if (!cfg0OptionFamilyService.doInsert(family)) {
+                result.put("status", false);
+                result.put("msg", "添加特性" + family.getpOptionfamilyName() + "失败，请联系系统管理员");
+                return result;
+            }
+        } else {
+            family = _family;
+        }
+
+        //关联到特性的UID
+        record.setpCfg0FamilyPuid(family.getPuid());
+        if (!checkString(record.getpCfg0Relevance())) {
+            record.setpCfg0Relevance("$ROOT." + record.getpCfg0FamilyName() + " = '" + record.getpCfg0ObjectId() + "'");
+        }
+        //将特性值插入到表中
+        if (hzCfg0Service.doInsertOne(record)) {
+            result.put("status", true);
+            result.put("msg", "添加特性值" + record.getpCfg0ObjectId() + "成功");
+//            //发送到SAP,走流程
+//            if (!SynMaterielService.debug) {
+//                iSynFeatureService.addFeature(Collections.singletonList(record));
+//            }
+            record = hzCfg0Service.doSelectOneByPuid(record.getPuid());
+            if (iHzFeatureChangeService.insertByCfgAfter(record) <= 0) {
+                logger.error("创建后自动同步变更后记录值失败，请联系管理员");
+            }
+            HzCfg0Record record1 = new HzCfg0Record();
+            record1.setPuid(record.getPuid());
+            if (iHzFeatureChangeService.insertByCfgBefore(record1) <= 0) {
+                logger.error("创建后自动同步变更前记录值失败，请联系管理员");
+            }
+
+
+        } else {
+            result.put("status", false);
+            result.put("msg", "添加特性值" + record.getpCfg0ObjectId() + "失败，请联系系统管理员");
+        }
+        return result;
+    }
+
     @RequestMapping("/modifyPage")
     public String modifyPage(@RequestParam("projectPuid") String puid, Model model) {
         HzCfg0Record record = hzCfg0Service.doSelectOneByPuid(puid);
         if (record == null) {
-            record = hzCfg0Service.doSelectOneAddedCfgByPuid(puid);
-            if (record == null) {
-                model.addAttribute("msg", "没有找到对应的特性数据，请重试或联系系统管理员");
-                return "errorWithEntity";
-            }
+//            record = hzCfg0Service.doSelectOneAddedCfgByPuid(puid);
+//            if (record == null) {
+            model.addAttribute("msg", "没有找到对应的特性数据，请重试或联系系统管理员");
+            return "errorWithEntity";
+//            }
         }
         model.addAttribute("entity", record);
         model.addAttribute("action", "./cfg0/modify");
@@ -266,14 +367,16 @@ public class HzCfg0Controller extends ExtraIntegrate {
                 logger.error("更新特性值" + record.getpCfg0ObjectId() + "失败");
 
             }
-        } else if (hzCfg0Service.doSelectOneAddedCfgByPuid(record.getPuid()) != null) {
-            if (hzCfg0Service.doUpdateAddedCfg(record)) {
-                result.put("msg", "更新特性值" + record.getpCfg0ObjectId() + "成功");
-            } else {
-                logger.error("更新特性值" + record.getpCfg0ObjectId() + "失败");
-                result.put("msg", "更新特性值" + record.getpCfg0ObjectId() + "失败");
-            }
-        } else {
+        }
+//        else if (hzCfg0Service.doSelectOneAddedCfgByPuid(record.getPuid()) != null) {
+//            if (hzCfg0Service.doUpdateAddedCfg(record)) {
+//                result.put("msg", "更新特性值" + record.getpCfg0ObjectId() + "成功");
+//            } else {
+//                logger.error("更新特性值" + record.getpCfg0ObjectId() + "失败");
+//                result.put("msg", "更新特性值" + record.getpCfg0ObjectId() + "失败");
+//            }
+//        }
+        else {
             result.put("msg", "更新特性值" + record.getpCfg0ObjectId() + "时发生错误，请联系系统管理员");
         }
         return result;
@@ -432,10 +535,12 @@ public class HzCfg0Controller extends ExtraIntegrate {
             record = hzCfg0Service.doSelectOneByPuid(bean.getPuid());
             record.setpCfg0Relevance(bean.getRelevanceCode());
             return hzCfg0Service.doUpdate(record);
-        } else if ((record = hzCfg0Service.doSelectOneAddedCfgByPuid(bean.getPuid())) != null) {
-            record.setpCfg0Relevance(bean.getRelevanceCode());
-            return hzCfg0Service.doUpdateAddedCfg(record);
-        } else {
+        }
+//        else if ((record = hzCfg0Service.doSelectOneAddedCfgByPuid(bean.getPuid())) != null) {
+//            record.setpCfg0Relevance(bean.getRelevanceCode());
+//            return hzCfg0Service.doUpdateAddedCfg(record);
+//        }
+        else {
             return false;
         }
     }
@@ -461,12 +566,12 @@ public class HzCfg0Controller extends ExtraIntegrate {
         } else if ("modifyPage".equals(page)) {
             HzCfg0Record record = hzCfg0Service.doSelectOneByPuid(uid);
             if (record == null) {
-                record = hzCfg0Service.doSelectOneAddedCfgByPuid(uid);
-                if (record == null) {
-                    model.addAttribute("msg", "没有找到对应的特性数据，请重试或联系系统管理员!");
-                    return "errorWithEntity";
-                }
-                record.setWhichTable("HZ_CFG0_ADD_CFG_RECORD");
+//                record = hzCfg0Service.doSelectOneAddedCfgByPuid(uid);
+//                if (record == null) {
+                model.addAttribute("msg", "没有找到对应的特性数据，请重试或联系系统管理员!");
+                return "errorWithEntity";
+//                }
+//                record.setWhichTable("HZ_CFG0_ADD_CFG_RECORD");
             } else {
                 record.setWhichTable("HZ_CFG0_RECORD");
             }
@@ -519,4 +624,18 @@ public class HzCfg0Controller extends ExtraIntegrate {
         return "stage/templateOfIntegrate";
     }
 
+    @RequestMapping("/returnCfgMsg")
+    @ResponseBody
+    public JSONObject returnCfgMsg(String cfgVal) {
+        JSONObject result = new JSONObject();
+        HzDictionaryLibrary hzDictionaryLibrary = hzDictionaryLibraryService.queryLibraryDTOByCfgObject(cfgVal);
+        if (hzDictionaryLibrary != null && hzDictionaryLibrary.getPuid() != null) {
+            JSONObject libraryJson = JSONObject.fromObject(hzDictionaryLibrary);
+            result.put("stage", true);
+            result.put("data", libraryJson);
+        } else {
+            result.put("stage", false);
+        }
+        return result;
+    }
 }

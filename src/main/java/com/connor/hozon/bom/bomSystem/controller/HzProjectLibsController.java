@@ -121,7 +121,7 @@ public class HzProjectLibsController {
             HzProjectBean bean = new HzProjectBean();
             bean.setpPuid("#");
             bean.setPuid(brand.getPuid());
-            bean.setName(brand.getPBrandName());
+            bean.setName(brand.getpBrandName());
             beans.add(bean);
         });
         //平台
@@ -243,12 +243,12 @@ public class HzProjectLibsController {
         if (!hzBrandService.validate(brand)) {
             result.put("status", -1);
         }
-        if (null == hzBrandService.doGetByBrandCode(brand.getPBrandCode())) {
+        if (null == hzBrandService.doGetByBrandCode(brand.getpBrandCode())) {
             Date date = new Date();
             brand.setPuid(UUID.randomUUID().toString());
-            brand.setPBrandCreateDate(date);
-            brand.setPBrandLastModDate(date);
-            brand.setPBrandLastModifier(user.getUsername());
+            brand.setpBrandCreateDate(date);
+            brand.setpBrandLastModDate(date);
+            brand.setpBrandLastModifier(user.getUsername());
             if (hzBrandService.doInsertOne(brand)) {
                 result.put("status", 1);
                 result.put("entity", brand);
@@ -513,8 +513,8 @@ public class HzProjectLibsController {
 //            if (null != hzBrandService.doGetByBrandCode(brand.getPBrandCode())) {
 //                result.put("status", -1);
 //            } else {
-            brand.setPBrandLastModifier(user.getUsername());
-            brand.setPBrandLastModDate(new Date());
+            brand.setpBrandLastModifier(user.getUsername());
+            brand.setpBrandLastModDate(new Date());
             if (hzBrandService.doUpdateSelective(brand)) {
                 result.put("status", 1);
                 brand = hzBrandService.doGetByPuid(brand.getPuid());

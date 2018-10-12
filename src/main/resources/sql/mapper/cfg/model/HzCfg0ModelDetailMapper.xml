@@ -121,7 +121,7 @@
       #{pModelCfgMng,jdbcType=VARCHAR}
       )
   </insert>
-    <update id="update" parameterType="sql.pojo.cfg.model.HzCfg0ModelDetail">
+    <update id="updateByPrimaryKey" parameterType="sql.pojo.cfg.model.HzCfg0ModelDetail">
     update HZ_CFG0_MODEL_DETAIL set
       P_MODEL_PUID=#{pModelPuid,jdbcType=VARCHAR},
       P_MODEL_NAME=#{pModelName,jdbcType=VARCHAR},

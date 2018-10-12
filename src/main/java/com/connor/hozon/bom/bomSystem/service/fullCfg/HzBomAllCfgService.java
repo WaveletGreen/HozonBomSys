@@ -1,4 +1,10 @@
-package com.connor.hozon.bom.bomSystem.service.cfg;
+/*
+ * Copyright (c) 2018.
+ * This file was wrote by fancyears·milos·maywas @connor. Any question/bug you can post to 1243093366@qq.com.
+ * ALL RIGHTS RESERVED.
+ */
+
+package com.connor.hozon.bom.bomSystem.service.fullCfg;
 
 import com.alibaba.fastjson.JSON;
 import com.connor.hozon.bom.bomSystem.dao.model.HzCfg0ModelDetailDao;
@@ -10,6 +16,9 @@ import com.connor.hozon.bom.bomSystem.helper.DateStringHelper;
 import com.connor.hozon.bom.bomSystem.helper.ProjectHelper;
 import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
 import com.connor.hozon.bom.bomSystem.service.bom.HzBomDataService;
+import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0Service;
+import com.connor.hozon.bom.bomSystem.service.main.HzCfg0MainService;
+import com.connor.hozon.bom.bomSystem.service.model.HzCfg0ModelRecordService;
 import com.connor.hozon.bom.bomSystem.service.project.HzBrandService;
 import com.connor.hozon.bom.bomSystem.service.project.HzPlatformService;
 import com.connor.hozon.bom.bomSystem.service.project.HzProjectLibsService;
@@ -221,7 +230,7 @@ public class HzBomAllCfgService {
         for (HzCfg0ModelRecord hzCfg0ModelRecord : hzCfg0ModelRecords) {
             JSONObject object = new JSONObject();
             object.put("modelPuid", hzCfg0ModelRecord.getPuid());
-            object.put("brand", brand.getPBrandName());
+            object.put("brand", brand.getpBrandName());
             object.put("platform", platform.getpPlatformName());
             object.put("vehicle", vehicle.getpVehicleName());
             object.put("key", hzCfg0ModelRecord.getObjectName());
@@ -834,7 +843,7 @@ public class HzBomAllCfgService {
             //平台
             modelDetail.setpModelPlatform(projectHelper.getPlatform().getpPlatformCode());
             //品牌
-            modelDetail.setpModelBrand(projectHelper.getBrand().getPBrandName());
+            modelDetail.setpModelBrand(projectHelper.getBrand().getpBrandName());
             //从TC继承过来的模型
             //模型名
             modelRecord.setObjectName(checkString(params.get("objectName")) ? params.get("objectName") : params.get("pModelVersion"));

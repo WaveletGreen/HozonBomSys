@@ -54,6 +54,8 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         registry.addViewController("/project2").setViewName("project/project2");
         //特性表
         registry.addViewController("/feature").setViewName("/cfg/feature/feature");
+        registry.addViewController("/feature2").setViewName("/cfg/feature/feature2");
+
         //相关性表
         registry.addViewController("/relevance").setViewName("/cfg/relevance/relevance");
         registry.addViewController("/relevance2").setViewName("/cfg/relevance/relevance2");

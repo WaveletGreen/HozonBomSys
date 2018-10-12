@@ -15,7 +15,6 @@ import sql.pojo.bom.HzMBomToERPBean;
 
 import java.util.*;
 
-
 @Configuration
 public class SynBomService implements ISynBomService {
     /***

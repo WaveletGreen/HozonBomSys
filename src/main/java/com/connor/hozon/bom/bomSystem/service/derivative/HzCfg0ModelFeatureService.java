@@ -1,4 +1,10 @@
-package com.connor.hozon.bom.bomSystem.service.cfg;
+/*
+ * Copyright (c) 2018.
+ * This file was wrote by fancyears·milos·maywas @connor. Any question/bug you can post to 1243093366@qq.com.
+ * ALL RIGHTS RESERVED.
+ */
+
+package com.connor.hozon.bom.bomSystem.service.derivative;
 
 import com.connor.hozon.bom.bomSystem.dao.derivative.HzCfg0ModelFeatureDao;
 import com.connor.hozon.bom.bomSystem.iservice.cfg.IHzCfg0ModelFeatureService;
@@ -7,7 +13,12 @@ import org.springframework.stereotype.Service;
 import sql.pojo.cfg.derivative.HzCfg0ModelFeature;
 
 import java.util.List;
-
+/**
+ * @Author: Fancyears·Maylos·Mayways
+ * @Date :  2018/10/12 13:12
+ * @Description: 配置配置物料特性表单个衍生物料信息修改服务层
+ * @Modified By:
+ */
 @Service("hzCfg0ModelFeatureService")
 public class HzCfg0ModelFeatureService implements IHzCfg0ModelFeatureService {
     /**

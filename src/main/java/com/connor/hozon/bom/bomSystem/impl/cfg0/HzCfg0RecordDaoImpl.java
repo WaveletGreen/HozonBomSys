@@ -37,30 +37,6 @@ public class HzCfg0RecordDaoImpl extends BasicDaoImpl<HzCfg0Record> implements H
     }
 
     @Override
-    public int deleteAddCfgByPrimaryKey(String puid) {
-        return baseSQLUtil.executeDeleteBySome(clzName + ".deleteByPrimaryKey", puid, "HZ_CFG0_ADD_CFG_RECORD");
-    }
-
-
-    @Override
-    public int insertAddCfg(HzCfg0Record record) {
-        record.setWhichTable("HZ_CFG0_ADD_CFG_RECORD");
-        return insert(record);
-    }
-
-
-    @Override
-    public int updateAddedCfgByPrimaryKey(HzCfg0Record record) {
-        record.setWhichTable("HZ_CFG0_ADD_CFG_RECORD");
-        return updateByPrimaryKey(record);
-    }
-
-    @Override
-    public int deleteAddedCfgByList(List<HzCfg0Record> records) {
-        return baseSQLUtil.executeDelete(records, clzName + ".deleteAddedCfgByList");
-    }
-
-    @Override
     public List<HzCfg0Record> selectCfg0ListByPuids(Map<String, Object> _map) {
         return baseSQLUtil.executeQueryByPass(RECORD, _map, clzName + ".selectCfg0ListByPuids");
     }
@@ -140,13 +116,6 @@ public class HzCfg0RecordDaoImpl extends BasicDaoImpl<HzCfg0Record> implements H
         return baseSQLUtil.executeQueryByPass(RECORD, params, clzName + ".selectListByProjectPuid");
     }
 
-    @Override
-    public List<HzCfg0Record> selectAddedCfgListByProjectPuid(String projectPuid) {
-        HzCfg0Record record = new HzCfg0Record();
-        record.setProjectPuid(projectPuid);
-        record.setWhichTable("HZ_CFG0_ADD_CFG_RECORD");
-        return baseSQLUtil.executeQuery(record, clzName + ".selectAddedCfgListByProjectPuid");
-    }
 
     @Override
     public List<HzMaterielFeatureBean> selectMaterielFeatureByProjectPuid(String projectPuid) {
@@ -158,14 +127,6 @@ public class HzCfg0RecordDaoImpl extends BasicDaoImpl<HzCfg0Record> implements H
         HzCfg0Record record = new HzCfg0Record();
         record.setPuid(puid);
         record.setWhichTable("HZ_CFG0_RECORD");
-        return baseSQLUtil.executeQueryById(record, clzName + ".selectByPrimaryKey");
-    }
-
-    @Override
-    public HzCfg0Record selectOneAddedCfgByPuid(String puid) {
-        HzCfg0Record record = new HzCfg0Record();
-        record.setPuid(puid);
-        record.setWhichTable("HZ_CFG0_ADD_CFG_RECORD");
         return baseSQLUtil.executeQueryById(record, clzName + ".selectByPrimaryKey");
     }
 
