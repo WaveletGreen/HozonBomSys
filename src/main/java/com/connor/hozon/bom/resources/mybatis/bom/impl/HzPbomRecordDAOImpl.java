@@ -10,6 +10,7 @@ import com.connor.hozon.bom.resources.page.PageRequest;
 import org.springframework.stereotype.Service;
 import sql.BaseSQLUtil;
 import sql.pojo.bom.HzPbomLineRecord;
+//import sql.pojo.bom.HzPbomRecord;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,13 +25,25 @@ public class HzPbomRecordDAOImpl extends BaseSQLUtil implements HzPbomRecordDAO 
 
     @Override
     public List<HzPbomLineRecord> getPbomById(Map<String, Object> map) {
-
         return super.findForList("HzPbomRecordDAOImpl_getPbomById",map);
+    }
+
+    @Override
+    public List<HzPbomLineRecord> findPbomByItemId(String itemId,String projectId){
+        Map<String,Object> map = new HashMap<>();
+        map.put("puid",itemId);
+        map.put("projectId",projectId);
+        return super.findForList("HzPbomRecordDAOImpl_getPbomByItemId",map);
     }
 
     @Override
     public int insert(HzPbomLineRecord record) {
         return super.insert("HzPbomRecordDAOImpl_insert",record);
+    }
+
+    @Override
+    public int insert2(HzPbomLineRecord record){
+        return super.insert("HzPbomRecordDAOImpl_insert2",record);
     }
 
     @Override
@@ -131,7 +144,6 @@ public class HzPbomRecordDAOImpl extends BaseSQLUtil implements HzPbomRecordDAO 
         Map<String,Object> map = new HashMap<>();
         map.put("projectId",query.getProjectId());
         map.put("puid",query.getPuid());
-        map.put("colorPart",query.getIsColorPart());
         return super.findForList("HzPbomRecordDAOImpl_getHzPbomTree",map);
     }
 
@@ -207,5 +219,5 @@ public class HzPbomRecordDAOImpl extends BaseSQLUtil implements HzPbomRecordDAO 
         map.put("projectId",projectId);
         return super.findForList("HzPbomRecordDAOImpl_getFirstLevelBomByParentId",map);
     }
-    
+
 }

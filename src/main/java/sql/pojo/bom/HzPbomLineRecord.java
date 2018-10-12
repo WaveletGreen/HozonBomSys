@@ -1,7 +1,5 @@
 package sql.pojo.bom;
 
-import io.swagger.models.auth.In;
-
 import java.util.Date;
 import java.util.Objects;
 

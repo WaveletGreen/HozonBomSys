@@ -28,6 +28,24 @@ public interface HzEbomRecordDAO {
     HzEPLManageRecord findEbomById(String puid,String projectId);
 
     /**
+     * 根据父层零件ID找父层puid
+     * @param itemId
+     * @param projectId
+     * @return
+     */
+    List<HzEPLManageRecord> findEbomByItemId(String itemId,String projectId);
+
+    int findIsHasByPuid(String puid, String projectId);
+
+    /**
+     * 逆向找父层
+     * @param projectId
+     * @param lineId
+     * @return
+     */
+    List<HzEPLManageRecord> getHzBomLineParent(String projectId,String lineId);
+
+    /**
      * 找出一条bomLine的全部子bom sql递归查找
      * @param query
      * @return
@@ -49,6 +67,8 @@ public interface HzEbomRecordDAO {
      */
     int deleteList(List<DeleteHzEbomReqDTO> reqDTOs);
 
+    int delete(String puid);
+
     /**
      * 查询回收站
      * @param query
@@ -68,6 +88,12 @@ public interface HzEbomRecordDAO {
     String findMinOrderNumWhichGreaterThanThisOrderNum(String projectId,String sortNum);
 
     int insert(HzEPLManageRecord record);
+    /**
+     * 复制层级的单条插入EBOM
+     * @param record
+     * @return
+     */
+    int insert2(HzEPLManageRecord record);
 
     int importList(List<HzImportEbomRecord> records);
 

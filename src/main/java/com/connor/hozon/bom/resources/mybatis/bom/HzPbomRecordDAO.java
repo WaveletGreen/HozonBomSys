@@ -22,12 +22,21 @@ public interface HzPbomRecordDAO {
      */
     List<HzPbomLineRecord> getPbomById(Map<String,Object> map);
 
+    List<HzPbomLineRecord> findPbomByItemId(String itemId,String projectId);
+
     /**
      * 插入 PBOM管理信息
      * @param record
      * @return
      */
     int insert(HzPbomLineRecord record);
+
+    /**
+     * 复制层级的单条插入PBOM
+     * @param record
+     * @return
+     */
+    int insert2(HzPbomLineRecord record);
 
 
     int insertList(List<HzPbomLineRecord> records);

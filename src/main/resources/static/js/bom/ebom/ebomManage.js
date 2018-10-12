@@ -54,24 +54,6 @@ function initTable(eBomUrl) {
             column.push({field: 'ck', checkbox: true});
             // column.push({field: 'puid', title: '主键'});
 
-            /* var data = result.data;
-             var nameZh = data[0];
-             var nameEn = data[1];
-             var keys = [];
-             var values;
-             for (var key in nameEn) {
-                 if (nameEn.hasOwnProperty(key)) {
-                     var json = {
-                         field: nameEn[key],
-                         title: nameZh[key],
-                         align:
-                             'center',
-                         valign:
-                             'middle'
-                     };
-                     column.push(json);
-                 }
-             }*/
             var data = result.data;
             var keys = [];
             var values;
@@ -127,8 +109,6 @@ function initTable(eBomUrl) {
                         };
                         column.push(json);
                     }
-
-
                 }
             }
             column.push({
@@ -435,6 +415,47 @@ function initTable(eBomUrl) {
                             window.Ewin.dialog({title: "导入", url: "ebom/importExcel", width: 600, height: 500})
                         }
                     },
+                    {
+                        text:'引用层级',
+                        iconCls: 'glyphicon glyphicon-copyright-mark',
+                        handler:function () {
+                            var rows = $table.bootstrapTable('getSelections');
+                            //只能选一条进行层级调整
+                            if (rows.length != 1) {
+                                window.Ewin.alert({message: '请选择一条需要引用层级的数据!'});
+                                return false;
+                            }
+                            //判断选中行是否有子层
+                            // if (rows[0].level.indexOf("Y")>0){//带“Y”
+                            //     window.Ewin.alert({message: '调整层级数据存在子层，不能调整!'});
+                            //         return false;
+                            // }
+
+                            window.Ewin.dialog({
+                                title:"层级引用",
+                                url:"ebom/updateEbomLevel?projectId=" + projectPuid
+                                    + "&puid=" + rows[0].puid + "&id="+rows[0].lineId,
+                                width:500,
+                                height:500
+                            });
+                        }
+                    },
+                    {
+                        text: '导出Excel',
+                        iconCls: 'glyphicon glyphicon-export',
+                        handler: function () {
+                            var userName = data;//表头
+                            var className = $table.bootstrapTable('getData');//返回当前页的数据
+                            var param = "userName=" + userName + "&className=" + className;
+
+                            var projectPuid = $("#project", window.top.document).val();
+                            //var eBomUrl = "ebom/getEBom/list?projectId=" + projectPuid;
+
+                            var url = "ebom/excelExport?projectId=" + projectPuid;
+                            window.location = url;
+
+                        }
+                    }
                 ],
             });
             //$table.bootstrapTable('hideColumn','puid');
