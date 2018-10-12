@@ -377,6 +377,9 @@ function gotIt(result) {
         // sortOrder: "asc",                   //排序方式
         toolbars: toolbarSetting,
     });
+
+    //设置跳转的tableID，放在table初始化语句之后
+    setTargetTableId("materielFeature");
 }
 
 function saveCompose() {
