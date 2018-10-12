@@ -607,12 +607,10 @@
            </foreach>
     </update>
 
-    <!--删除-->
+    <!--删除:HzEbomRecordDAOImpl_delete-->
     <delete id="HzEbomRecordDAOImpl_delete" parameterType="java.lang.String">
-
         delete  HZ_BOM_LINE_RECORD
         where PUID = #{puid,jdbcType=VARCHAR}
-
     </delete>
     <!--获取车身下级2Y层的总成级，需要代码进行查重-->
     <select id="selectVehicleAssembly" parameterType="java.util.Map" resultMap="BaseResultMap">

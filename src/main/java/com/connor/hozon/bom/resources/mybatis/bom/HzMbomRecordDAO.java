@@ -28,6 +28,9 @@ public interface HzMbomRecordDAO {
      * @return
      */
     int insert(HzMbomRecord record);
+
+    int insert2(HzMbomLineRecord record);
+
     /**
      * 更新MBOM维护信息
      * @param record
@@ -63,6 +66,9 @@ public interface HzMbomRecordDAO {
      */
     List<HzMbomLineRecord> findHzMbomByPuid(Map<String,Object> map);
 
+    List<HzMbomLineRecord> findMbomByItemId(String itemId,String projectId);
+
+    boolean checkItemIdIsRepeat(String projectId, String lineId);
 
     /**
      * 查询MBOM对应车型信息

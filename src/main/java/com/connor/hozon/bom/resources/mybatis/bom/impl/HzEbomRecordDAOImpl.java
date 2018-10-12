@@ -51,6 +51,30 @@ public class HzEbomRecordDAOImpl extends BaseSQLUtil implements HzEbomRecordDAO 
         return (HzEPLManageRecord) super.findForObject("HzEbomRecordDAOImpl_findEbomById",map);
     }
 
+    @Override
+    public List<HzEPLManageRecord> findEbomByItemId(String itemId, String projectId) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("puid",itemId);
+        map.put("projectId",projectId);
+        return  super.findForList("HzEbomRecordDAOImpl_findEbomByItemId",map);
+    }
+
+    @Override
+    public int findIsHasByPuid(String puid, String projectId) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("puid",puid);
+        map.put("projectId",projectId);
+        return (int) super.findForObject("HzEbomRecordDAOImpl_findIsHasByPuid",map);
+    }
+
+    @Override
+    public List<HzEPLManageRecord> getHzBomLineParent(String projectId,String lineId){
+        Map<String,Object> map = new HashMap<>();
+        map.put("projectId",projectId);
+        map.put("lineId",lineId);
+        return super.findForList("HzEbomRecordDAOImpl_getHzBomLineParent",map);
+    }
+
     /**
      * 找出一条bomLine的全部子bom
      * @param query
@@ -77,6 +101,11 @@ public class HzEbomRecordDAOImpl extends BaseSQLUtil implements HzEbomRecordDAO 
     public int deleteList(List<DeleteHzEbomReqDTO> reqDTOs) {
 
         return super.update("HzEbomRecordDAOImpl_deleteList",reqDTOs);
+    }
+
+    @Override
+    public int delete(String puid) {
+        return super.delete("HzEbomRecordDAOImpl_delete",puid);
     }
 
     @Override
@@ -116,6 +145,11 @@ public class HzEbomRecordDAOImpl extends BaseSQLUtil implements HzEbomRecordDAO 
     @Override
     public int insert(HzEPLManageRecord record) {
         return super.insert("HzEbomRecordDAOImpl_insert",record);
+    }
+
+    @Override
+    public int insert2(HzEPLManageRecord record) {
+        return super.insert("HzEbomRecordDAOImpl_insert2",record);
     }
 
     @Override

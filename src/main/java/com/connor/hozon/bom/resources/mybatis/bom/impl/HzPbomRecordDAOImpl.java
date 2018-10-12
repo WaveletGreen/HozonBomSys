@@ -27,13 +27,25 @@ public class HzPbomRecordDAOImpl extends BaseSQLUtil implements HzPbomRecordDAO 
 
     @Override
     public List<HzPbomLineRecord> getPbomById(Map<String, Object> map) {
-
         return super.findForList("HzPbomRecordDAOImpl_getPbomById",map);
+    }
+
+    @Override
+    public List<HzPbomLineRecord> findPbomByItemId(String itemId,String projectId){
+        Map<String,Object> map = new HashMap<>();
+        map.put("puid",itemId);
+        map.put("projectId",projectId);
+        return super.findForList("HzPbomRecordDAOImpl_getPbomByItemId",map);
     }
 
     @Override
     public int insert(HzPbomLineRecord record) {
         return super.insert("HzPbomRecordDAOImpl_insert",record);
+    }
+
+    @Override
+    public int insert2(HzPbomLineRecord record){
+        return super.insert("HzPbomRecordDAOImpl_insert2",record);
     }
 
     @Override
@@ -225,6 +237,7 @@ public class HzPbomRecordDAOImpl extends BaseSQLUtil implements HzPbomRecordDAO 
         map.put("projectId",projectId);
         return super.findForList("HzPbomRecordDAOImpl_getFirstLevelBomByParentId",map);
     }
+
 
 
 

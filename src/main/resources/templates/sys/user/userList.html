@@ -30,8 +30,9 @@
 </div>
 <script th:inline="javascript">
     $(function() {
+        //var url = "user/list";
         initTable();
-        $('#user-table').bootstrapTable('hideColumn', 'id');
+        //$('#user-table').bootstrapTable('hideColumn', 'id');
     });
 
     function doQuery(){
@@ -61,7 +62,9 @@
     }
 
     function initTable(){
-        $('#user-table').bootstrapTable({
+        var $table = $("#user-table");
+        $table.bootstrapTable({
+            //url: url,
             url:"user/list",
             height: $(window.parent.document).find("#wrapper").height() - 252,
             width:$(window).width(),
@@ -189,13 +192,10 @@
                         }else{
                             return '<a href="#" onclick="userControl(1,'+row.id+')" >启用</a>';
                         }
-
                     }
                 }]
         });
     }
-
-
 </script>
 </body>
 </html>

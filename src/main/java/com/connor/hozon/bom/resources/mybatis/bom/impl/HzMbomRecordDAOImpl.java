@@ -39,6 +39,11 @@ public class HzMbomRecordDAOImpl extends BaseSQLUtil implements HzMbomRecordDAO 
     }
 
     @Override
+    public int insert2(HzMbomLineRecord record){
+        return super.insert("HzMbomRecordDAOImpl_insert2",record);
+    }
+
+    @Override
     public int update(HzMbomLineRecord record) {
         if(record.getTableName() == null || "".equals(record.getTableName())){
             record.setTableName("HZ_MBOM_RECORD");
@@ -81,6 +86,22 @@ public class HzMbomRecordDAOImpl extends BaseSQLUtil implements HzMbomRecordDAO 
             map.put("tableName","HZ_MBOM_RECORD");
         }
         return  super.findForList("HzMbomRecordDAOImpl_findHzMbomByPuid",map);
+    }
+
+    @Override
+    public List<HzMbomLineRecord> findMbomByItemId(String itemId,String projectId){
+        Map<String,Object> map = new HashMap<>();
+        map.put("lineId",itemId);
+        map.put("projectId",projectId);
+        return super.findForList("HzMbomRecordDAOImpl_findMbomByItemId",map);
+    }
+
+    @Override
+    public boolean checkItemIdIsRepeat(String projectId, String lineId) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("projectId",projectId);
+        map.put("lineId",lineId);
+        return (int)super.findForObject("HzMbomRecordDAOImpl_checkItemIdIsRepeat",map)>0;
     }
 
     @Override

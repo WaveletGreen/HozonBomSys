@@ -59,7 +59,7 @@
 		AND name like concat(#{name},'%')
 		</if>
 		<if test="roleName!=null and roleName!='' "  >
-		AND role_name like concat(#{role_name},'%')
+		AND role_name like concat(#{roleName},'%')
 		</if>
 		<if test="sort!= null">
 		order by ${sort} ${order}
@@ -75,7 +75,7 @@
 			AND name like concat(#{name},'%')
 		</if>
 		<if test="roleName!=null and roleName!='' "  >
-			AND role_name like concat(#{role_name},'%')
+			AND role_name like concat(#{roleName},'%')
 		</if>
 	</select>
 
@@ -87,7 +87,7 @@
 			AND name like concat(#{name},'%')
 		</if>
 		<if test="roleName!=null and roleName!='' "  >
-			AND role_name like concat(#{role_name},'%')
+			AND role_name like concat(#{roleName},'%')
 		</if>
 		<if test="sort!= null">
 		order by ${sort} ${order}

@@ -1,0 +1,125 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+
+<link th:href="@{/css/labelColor.css}" rel="stylesheet">
+<body>
+<form id="ebomMainForm" role="form" method="post" action="ebom/update/ebomLevel">
+    <input id="puid" name="puid" type="hidden" th:value="${data.puid}"/>
+    <input id="isHas" name="isHas" type="hidden" th:value="${data.isHas}"/>
+    <!--<input id="id" name="id" type="text" th:value="${data.id}"/>-->
+    <div class="form-group">
+        <label for="lineId">新层级父层零件号<span>*</span></label>
+        <input class="form-control" id="lineId" name="lineId" type="text"
+               placeholder="请输入新层级父层零件号"/><!--th:value="${data.lineId}"-->
+    </div>
+    <div class="form-group">
+        <label for="lineNo">查找编号<span>*</span></label>
+        <input class="form-control" id="lineNo" name="lineNo" type="text"
+               placeholder="请输入新层级查找编号"/><!--th:value="${data.findNum}"-->
+    </div>
+
+</form>
+<script th:inline="javascript">
+    <![CDATA[
+    $(
+        function () {
+            $('#lineNo').on('input propertychange', function () {
+                var lineNo = $("#lineNo").val();
+                var lineNumber = $("#lineNumber").val();
+                if (lineNo != lineNumber) {
+                    $("#parentLineId").removeAttr("disabled");
+                } else {
+                    $("#parentLineId").attr({"disabled": "disabled"});
+                }
+            })
+            $('#ebomMainForm').bootstrapValidator({
+                message: 'This value is not valid',
+                feedbackIcons: {
+                    valid: 'glyphicon glyphicon-ok',
+                    invalid: 'glyphicon glyphicon-remove',
+                    validating: 'glyphicon glyphicon-refresh'
+                },
+                fields: {
+                    lineId: {
+                        message: '零件号验证失败',
+                        validators: {
+                            notEmpty: {
+                                message: '零件号不能为空'
+                            }
+                        }
+                    },
+                    lineNo: {
+                        message: '编号验证失败',
+                        validators: {
+                            stringLength: {
+                                /*长度提示*/
+                                min: 4,
+                                max: 4,
+                                message: '编号长度必须是4位数字'
+                            },
+                            //正则校验
+                            regexp: {
+                                regexp: /^[0-9]+$/, /* ^ 指的是匹配字符串开始的位置 + 匹配一个或者多个*/
+                                message: '编号只能为数字'
+                            },
+                            notEmpty: {
+                                message: '查找编号不能为空'
+                            }
+                        }
+                    },
+                }
+            });
+            // 绑定dialog的确定按钮的监听事件
+            $("#btnOk", window.top.document).click(function () {
+                var bootstrapValidator = $("#ebomMainForm", window.top.document).data('bootstrapValidator');
+                bootstrapValidator.validate();
+                if (bootstrapValidator.isValid()) {
+                    var url = $("#ebomMainForm", window.top.document).attr('action');
+                    var myData = JSON.stringify({
+                        "puid": $("#puid").val(),
+                        "lineId": $("#lineId").val(),
+                        "lineNo": $("#lineNo").val(),
+                        "projectId": $("#project", window.top.document).val(),
+                        "isHas":$("#isHas").val(),
+                        "id":$("#id").val()
+                    });
+
+                    $.ajax({
+                        contentType:
+                            "application/json",
+                        type:
+                            'POST',
+                        url: url,
+                        data: myData,
+                        success:
+                            function (result) {
+                                $('.modal-dialog', window.top.document).parent('div').remove()
+                                $('body', window.top.document).find('.modal-backdrop').remove();
+                                // jquery 调用刷新当前操作的table页面的refresh方法
+                                $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
+                                if (result.success) {
+                                    layer.msg('修改成功', {icon: 1, time: 3000})
+                                }
+                                else if (!result.success) {
+                                    window.Ewin.alert({message: result.errMsg})
+                                }
+                            },
+                        error: function (status) {
+                            window.Ewin.alert({message: status.status + ':修改数据失败!'});
+                        }
+                    });
+                }
+            });
+        })
+    $(document).keydown(function(event) {
+        if (event.keyCode == 13) {
+            $('form').each(function() {
+                event.preventDefault();
+            });
+        }
+    });
+    ]]>
+</script>
+<script th:src="@{/layer/layer.js}"></script>
+</body>
+</html>

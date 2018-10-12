@@ -12,6 +12,9 @@ import com.connor.hozon.bom.resources.domain.dto.request.AddHzEbomReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.request.DeleteHzEbomReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.request.SetLouReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.request.UpdateHzEbomReqDTO;
+import com.connor.hozon.bom.common.util.user.UserInfo;
+import com.connor.hozon.bom.resources.domain.dto.request.*;
+import com.connor.hozon.bom.resources.domain.dto.response.HzEbomLevelRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzEbomRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzLouRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.OperateResultMessageRespDTO;
@@ -70,6 +73,7 @@ public class HzEbomServiceImpl implements HzEbomService {
 
     @Autowired
     private HzEPLManageRecordService hzEPLManageRecordService;
+
     /**
      * 特性关联2Y
      */
@@ -162,6 +166,32 @@ public class HzEbomServiceImpl implements HzEbomService {
         }
     }
 
+    @Override
+    public HzEbomLevelRespDTO fingEbomLevelById(String puid, String projectId) {
+        try {
+            HzEPLManageRecord record = hzEbomRecordDAO.findEbomById(puid, projectId);
+            HzEbomLevelRespDTO respDTO = new HzEbomLevelRespDTO();
+            if (record != null) {
+                JSONArray jsonArray = new JSONArray();
+                JSONObject jsonObject = HzEbomRecordFactory.bomLineRecordTORespDTO(record);
+                jsonArray.add(jsonObject);
+                respDTO.setJsonArray(jsonArray);
+            }
+            return respDTO;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    @Override
+    public int findIsHasByPuid(String puid, String projectId) {
+        int list = hzEbomRecordDAO.findIsHasByPuid(puid, projectId);
+        if (list == 0)
+            return 0;
+        else
+            return 1;
+    }
+
     /**
      * 添加EBOM  最好使用事务
      *
@@ -172,7 +202,7 @@ public class HzEbomServiceImpl implements HzEbomService {
     public OperateResultMessageRespDTO addHzEbomRecord(AddHzEbomReqDTO reqDTO) {
         OperateResultMessageRespDTO operateResultMessageRespDTO = new OperateResultMessageRespDTO();
         try {
-            String parentId = reqDTO.getPuid();
+            String parentId = reqDTO.getPuid();//父层puid
             String lineNo = "";
             if (reqDTO.getLineNo() != null && reqDTO.getLineNo() != "") {
                 lineNo = reqDTO.getLineNo().replaceFirst("^0*", "");
@@ -197,7 +227,6 @@ public class HzEbomServiceImpl implements HzEbomService {
                     return operateResultMessageRespDTO;
                 }
 
-
                 HZBomMainRecord hzBomMainRecord = hzBomMainRecordDao.selectByProjectPuid(reqDTO.getProjectId());
 
                 ArrayList<String> puids = new ArrayList<>();
@@ -208,20 +237,13 @@ public class HzEbomServiceImpl implements HzEbomService {
                     objectMap.put("projectId", reqDTO.getProjectId());
                     List<HzEPLManageRecord> list1 = hzEbomRecordDAO.findEbom(objectMap);
                     List<HzPbomLineRecord> list2 = hzPbomRecordDAO.getPbomById(objectMap);
-//                    List<HzMbomLineRecord> list3 = hzMbomRecordDAO.findHzMbomByPuid(objectMap);
+                    List<HzMbomLineRecord> list3 = hzMbomRecordDAO.findHzMbomByPuid(objectMap);
                     String puid = "";
 
                     if (ListUtil.isNotEmpty(list1)) {
                         for (HzEPLManageRecord hzEPLManageRecord : list1) {
                             HzBomLineRecord hzBomLineRecord = HzEbomRecordFactory.addEbomDTOBomLineRecord(reqDTO);//EBOM
-                            if (hzEPLManageRecord.getIsHas().equals(0) || hzEPLManageRecord.getIsPart().equals(1)) {
-                                HzBomLineRecord hzBomLineRecord1 = new HzBomLineRecord();
-                                hzBomLineRecord1.setIsHas(1);
-                                hzBomLineRecord1.setIsPart(0);
-                                hzBomLineRecord1.setPuid(hzEPLManageRecord.getPuid());
-                                //更新数据
-                                hzBomLineRecordDao.update(hzBomLineRecord1);
-                            }
+
                             puid = UUID.randomUUID().toString();
                             puids.add(puid);
                             hzBomLineRecord.setIsPart(1);
@@ -247,20 +269,34 @@ public class HzEbomServiceImpl implements HzEbomService {
                                 StringBuffer stringBuffer = new StringBuffer(lineIndex);
                                 stringBuffer = stringBuffer.append(".10");
                                 hzBomLineRecord.setLineIndex(stringBuffer.toString());
-                                double d = Double.parseDouble(hzEPLManageRecord.getSortNum()) + 100;
-                                hzBomLineRecord.setSortNum(String.valueOf(d));
+                                //double d = Double.parseDouble(hzEPLManageRecord.getSortNum()) + 1;//100
+
+                                //找到比listEbom.get(i).getSortNum()大的最小排序号
+                                String dd = hzEbomRecordDAO.findMinOrderNumWhichGreaterThanThisOrderNum(reqDTO.getProjectId(), hzEPLManageRecord.getSortNum());
+                                if ("".equals(dd) || null == dd) {
+                                    //返回null值时，找一个listEbom.get(i).getSortNum()到listEbom.get(i).getSortNum()+1间的数据
+                                    dd = Double.parseDouble(hzEPLManageRecord.getSortNum()) + 1 + "";
+                                }
+                                //double d = Double.parseDouble(dd);
+                                String sortNum = HzBomSysFactory.generateBomSortNum(reqDTO.getProjectId(), hzEPLManageRecord.getSortNum(), dd);
+
+                                hzBomLineRecord.setSortNum(sortNum);
                             } else {//找出当前父下的所有子一层
                                 int length = lineIndex.split("\\.").length + 1;
-                                List<HzEPLManageRecord> l = new ArrayList<>();
+                                List<HzEPLManageRecord> l = new ArrayList<>();//
+                                List<HzEPLManageRecord> ll = new ArrayList<>();//拿排序号
                                 for (int k = 0; k < records.size(); k++) {
                                     int len = records.get(k).getLineIndex().split("\\.").length;
                                     if (length == len) {
                                         l.add(records.get(k));
                                     }
+                                    if(k==records.size()-1)
+                                        ll.add(records.get(k));
                                 }
                                 if (lineNo.equals("")) {//用户没有输入查找编号，默认添加到末尾位置
                                     double max = 0;
                                     HzEPLManageRecord lastRecord = new HzEPLManageRecord();
+                                    HzEPLManageRecord lastRecord2 = new HzEPLManageRecord();//拿排序号
                                     for (HzEPLManageRecord manageRecord : l) {
                                         double d = Double.parseDouble(manageRecord.getSortNum());
                                         if (max < d) {
@@ -268,18 +304,34 @@ public class HzEbomServiceImpl implements HzEbomService {
                                             lastRecord = manageRecord;
                                         }
                                     }
+
+                                    lastRecord2 = ll.get(0);
+
                                     String index = lastRecord.getLineIndex();
                                     String lineIndexExceptLastNum = index.substring(0, index.lastIndexOf("."));
                                     int lastNum = Integer.valueOf(index.split("\\.")[index.split("\\.").length - 1]);
                                     hzBomLineRecord.setLineIndex(lineIndexExceptLastNum + "." + (lastNum + 10));
-                                    String s1 = String.valueOf(max);
-                                    String s2 = hzEbomRecordDAO.findMinOrderNumWhichGreaterThanThisOrderNum(reqDTO.getProjectId(), s1);
-                                    if (s2 == null) {
-                                        hzBomLineRecord.setSortNum(String.valueOf(max + 100));
-                                    } else {
-                                        String sortNum = HzBomSysFactory.generateBomSortNum(reqDTO.getProjectId(), s1, s2);
-                                        hzBomLineRecord.setSortNum(sortNum);
-                                    }
+//                                    String s1 = String.valueOf(max);
+//                                    String s2 = hzEbomRecordDAO.findMinOrderNumWhichGreaterThanThisOrderNum(reqDTO.getProjectId(), s1);
+//                                    if (s2 == null) {
+                                        /*String dd = hzEbomRecordDAO.findMinOrderNumWhichGreaterThanThisOrderNum(reqDTO.getProjectId(),max+"");
+                                        if ("".equals(dd) || null == dd) {
+                                            //返回null值时，找一个max到max+1间的数据
+                                            dd = Double.parseDouble(max+"") + 1 + "";
+                                        }*/
+                                        String dd = hzEbomRecordDAO.findMinOrderNumWhichGreaterThanThisOrderNum(reqDTO.getProjectId(),lastRecord2.getSortNum());
+                                        if ("".equals(dd) || null == dd) {
+                                            //返回null值时，找一个max到max+1间的数据
+                                            dd = Double.parseDouble(lastRecord2.getSortNum()) + 1 + "";
+                                        }
+                                        //double d = Double.parseDouble(dd);
+                                        String sortNum = HzBomSysFactory.generateBomSortNum(reqDTO.getProjectId(), lastRecord2.getSortNum(), dd);
+                                        hzBomLineRecord.setSortNum(sortNum);//
+                                        //hzBomLineRecord.setSortNum(String.valueOf(max + 1));//100
+//                                    } else {
+//                                        String sortNum = HzBomSysFactory.generateBomSortNum(reqDTO.getProjectId(), s1, s2);
+//                                        hzBomLineRecord.setSortNum(sortNum);
+//                                    }
                                 } else {
                                     int lineNum = Integer.valueOf(lineNo);
                                     boolean find = false;
@@ -336,11 +388,39 @@ public class HzEbomServiceImpl implements HzEbomService {
                                     }
                                 }
                             }
+
+                            //判断子加父情况
+                            String lineId = hzBomLineRecord.getLineID();
+                            //先找到2Y层，在获取2Y的结构树，遍历结构树与新加零件的lineId相同则再判断其lineIndex是否是包含关系
+                            HzBomLineRecord hzBomLineRecord2Y = findParentFor2Y(reqDTO.getProjectId(),parentId);
+                            //hzBomLineRecord2Y
+                            HzEbomTreeQuery queryE = new HzEbomTreeQuery();
+                            queryE.setProjectId(reqDTO.getProjectId());
+                            queryE.setPuid(hzBomLineRecord2Y.getPuid());
+                            List<HzEPLManageRecord> ebomRecords = hzEbomRecordDAO.getHzBomLineChildren(queryE);
+                            for(int i=0;i<ebomRecords.size();i++){
+                                if(lineId.equals(ebomRecords.get(i).getLineID())){
+                                    if(hzBomLineRecord.getLineIndex().contains(ebomRecords.get(i).getLineIndex())){
+                                        operateResultMessageRespDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
+                                        operateResultMessageRespDTO.setErrMsg("当前要插入的零件已是直系父层，请查证后再添加！");
+                                        return operateResultMessageRespDTO;
+                                    }
+                                }
+                            }
+
+                            if (hzEPLManageRecord.getIsHas().equals(0) || hzEPLManageRecord.getIsPart().equals(1)) {
+                                HzBomLineRecord hzBomLineRecord1 = new HzBomLineRecord();
+                                hzBomLineRecord1.setIsHas(1);
+                                hzBomLineRecord1.setIsPart(0);
+                                hzBomLineRecord1.setPuid(hzEPLManageRecord.getPuid());
+                                //更新数据
+                                hzBomLineRecordDao.update(hzBomLineRecord1);
+                            }
+
                             hzBomLineRecordDao.insert(hzBomLineRecord);
                             hzBomLineRecord.setTableName("HZ_EBOM_REOCRD_AFTER_CHANGE");
                             hzBomLineRecordDao.insert(hzBomLineRecord);
                         }
-
                     }
 
                     List<String> stringList = hzMbomService.loadingCarPartType();
@@ -375,19 +455,42 @@ public class HzEbomServiceImpl implements HzEbomService {
                                 if (ListUtil.isEmpty(records1)) {
                                     continue;
                                 }
+
                                 if (records1.size() == 1) {
-                                    //1.1-1.1.1  1.2.2.2 -1.2.2.2.1
                                     hzPbomLineRecord.setLineIndex(lineIndex1 + "." + 10);
-                                    double d = Double.parseDouble(records1.get(0).getSortNum()) + 100;
-                                    hzPbomLineRecord.setSortNum(String.valueOf(d));
+                                    //double d = Double.parseDouble(records1.get(0).getSortNum()) + 100;
+                                    //hzPbomLineRecord.setSortNum(String.valueOf(d));
+
+                                    String dd = hzPbomRecordDAO.findMinOrderNumWhichGreaterThanThisOrderNum(reqDTO.getProjectId(),records1.get(0).getSortNum());
+                                    if ("".equals(dd) || null == dd) {
+                                        //返回null值时，找一个max到max+1间的数据
+                                        dd = Double.parseDouble(records1.get(0).getSortNum()) + 1 + "";
+                                    }
+
+                                    String sortNum = HzBomSysFactory.generateBomSortNum(reqDTO.getProjectId(), records1.get(0).getSortNum(), dd);
+                                    hzPbomLineRecord.setSortNum(sortNum);
                                 } else {
+                                    String d = "";//sort_num
                                     int length = lineIndex1.split("\\.").length + 1;
                                     List<HzPbomLineRecord> l = new ArrayList<>();
                                     for (int k = 0; k < records1.size(); k++) {
                                         int len = records1.get(k).getLineIndex().split("\\.").length;
                                         if (length == len) {
                                             l.add(records1.get(k));
+                                            if (records1.get(k).getIsHas() != 0) {
+                                                HzPbomTreeQuery query = new HzPbomTreeQuery();
+                                                query.setProjectId(reqDTO.getProjectId());
+                                                query.setPuid(records1.get(k).geteBomPuid());
+                                                List<HzPbomLineRecord> parentRecors = hzPbomRecordDAO.getHzPbomTree(query);
+                                                //l.add(parentRecors.get(parentRecors.size()-1));//层级的最后一个
+                                                d = parentRecors.get(parentRecors.size()-1).getSortNum();
+                                            }else {
+                                                d = records1.get(k).getSortNum();
+                                            }
                                         }
+                                    }
+                                    if (ListUtil.isEmpty(l)) {
+                                        continue;
                                     }
                                     if (lineNo.equals("")) {//用户没有输入查找编号，默认添加到末尾位置
                                         double max = 0;
@@ -403,10 +506,12 @@ public class HzEbomServiceImpl implements HzEbomService {
                                         String lineIndexExceptLastNum = index.substring(0, index.lastIndexOf("."));
                                         int lastNum = Integer.valueOf(index.split("\\.")[index.split("\\.").length - 1]);
                                         hzPbomLineRecord.setLineIndex(lineIndexExceptLastNum + "." + (lastNum + 10));
-                                        String s1 = String.valueOf(max);
+
+                                        //String s1 = String.valueOf(max);
+                                        String s1 = d;
                                         String s2 = hzPbomRecordDAO.findMinOrderNumWhichGreaterThanThisOrderNum(reqDTO.getProjectId(), s1);
                                         if (s2 == null) {
-                                            hzPbomLineRecord.setSortNum(String.valueOf(max + 100));
+                                            hzPbomLineRecord.setSortNum(String.valueOf((Double.parseDouble(d) + 1)));
                                         } else {
                                             String sortNum = HzBomSysFactory.generateBomSortNum(reqDTO.getProjectId(), s1, s2);
                                             hzPbomLineRecord.setSortNum(sortNum);
@@ -612,14 +717,14 @@ public class HzEbomServiceImpl implements HzEbomService {
                     respDTO.setErrMsg("当前零件号已存在,请重新添加！");
                     return respDTO;
                 }
-
+                //项目
                 HZBomMainRecord hzBomMainRecord = hzBomMainRecordDao.selectByProjectPuid(reqDTO.getProjectId());
                 if (hzBomMainRecord == null) {
                     return OperateResultMessageRespDTO.getFailResult();
                 }
                 HzBomLineRecord hzBomLineRecord = HzEbomRecordFactory.addEbomDTOBomLineRecord(reqDTO);//EBOM
                 hzBomLineRecord.setIsPart(0);
-                hzBomLineRecord.setIsHas(1);
+                hzBomLineRecord.setIsHas(0);
                 //找出全部的2y信息，新增的EBOM的层级 按2y层的最大值开始增
                 Integer maxFirstLineIndex = hzBomLineRecordDao.getMaxLineIndexFirstNum(reqDTO.getProjectId());
                 if (maxFirstLineIndex == null) {
@@ -663,13 +768,13 @@ public class HzEbomServiceImpl implements HzEbomService {
                     hzPbomLineRecord.setPuid(UUID.randomUUID().toString());
                     hzPbomLineRecord.setIs2Y(1);
                     hzPbomLineRecord.setIsDept(1);
-                    hzPbomLineRecord.setIsHas(1);
+                    hzPbomLineRecord.setIsHas(0);
                     hzPbomLineRecord.setIsPart(0);
                     Integer maxLineIndexFirstNum = hzPbomRecordDAO.getMaxLineIndexFirstNum(reqDTO.getProjectId());
                     if (maxLineIndexFirstNum == null) {
                         hzPbomLineRecord.setLineIndex("10.10");
                     } else {
-                        maxLineIndexFirstNum = +10;
+                        maxLineIndexFirstNum += 10;
                         hzPbomLineRecord.setLineIndex(maxLineIndexFirstNum + ".10");
                     }
                     hzPbomLineRecord.setBomDigifaxId(hzBomMainRecord.getPuid());
@@ -728,6 +833,7 @@ public class HzEbomServiceImpl implements HzEbomService {
                 return OperateResultMessageRespDTO.getSuccessResult();
             }
         } catch (Exception e) {
+            e.printStackTrace();
             return OperateResultMessageRespDTO.getFailResult();
         }
     }
@@ -859,21 +965,20 @@ public class HzEbomServiceImpl implements HzEbomService {
                         hzPbomRecordDAO.update(hzPbomLineRecord);
                     });
                 } else {
-                    if(record!=null){
-                        List<HzPbomLineRecord> records = new ArrayList<>();
-                        hzPbomLineRecord.setPuid(UUID.randomUUID().toString());
-                        hzPbomLineRecord.setSortNum(record.getSortNum());
-                        hzPbomLineRecord.setLineIndex(record.getLineIndex());
-                        hzPbomLineRecord.setIs2Y(record.getIs2Y());
-                        hzPbomLineRecord.setIsPart(record.getIsPart());
-                        hzPbomLineRecord.setIsHas(record.getIsHas());
-                        hzPbomLineRecord.setParentUid(record.getParentUid());
-                        hzPbomLineRecord.setIsDept(record.getIsDept());
-                        hzPbomLineRecord.seteBomPuid(record.getPuid());
-                        hzPbomLineRecord.setLinePuid(record.getLinePuid());
-                        records.add(hzPbomLineRecord);
-                        hzPbomRecordDAO.insertList(records);
-                    }
+                    List<HzPbomLineRecord> records = new ArrayList<>();
+                    hzPbomLineRecord.setPuid(UUID.randomUUID().toString());
+                    hzPbomLineRecord.setSortNum(record.getSortNum());
+                    hzPbomLineRecord.setLineIndex(record.getLineIndex());
+                    hzPbomLineRecord.setIs2Y(record.getIs2Y());
+                    hzPbomLineRecord.setIsPart(record.getIsPart());
+                    hzPbomLineRecord.setIsHas(record.getIsHas());
+                    hzPbomLineRecord.setParentUid(record.getParentUid());
+                    hzPbomLineRecord.setIsDept(record.getIsDept());
+                    hzPbomLineRecord.seteBomPuid(record.getPuid());
+                    hzPbomLineRecord.setLinePuid(record.getLinePuid());
+                    records.add(hzPbomLineRecord);
+                    hzPbomRecordDAO.insertList(records);
+                }
 
                 }
 
@@ -1014,7 +1119,6 @@ public class HzEbomServiceImpl implements HzEbomService {
 //                            hzEbomRecordDAO.insert(r);
 //                        }
 
-
                         HzEbomTreeQuery hzEbomTreeQuery = new HzEbomTreeQuery();
                         hzEbomTreeQuery.setPuid(lineRecords.get(0).getParentUid());
                         hzEbomTreeQuery.setProjectId(reqDTO.getProjectId());
@@ -1025,14 +1129,13 @@ public class HzEbomServiceImpl implements HzEbomService {
                                 HzBomLineRecord hzBomLineRecord = new HzBomLineRecord();
                                 hzBomLineRecord.setIsHas(0);
                                 hzBomLineRecord.setIsPart(1);
-                                hzBomLineRecord.setParentUid(hzEPLManageRecord.getPuid());
+                                hzBomLineRecord.setPuid(hzEPLManageRecord.getPuid());
                                 hzBomLineRecord.setStatus(1);
 //                                if (hzEPLManageRecord.getIs2Y().equals(1)) {
 //                                    hzBomLineRecord.setIs2Y(0);
 //                                }
                                 hzBomLineRecordDao.update(hzBomLineRecord);
                             }
-
                         }
                         set.add(lineRecords.get(i).getPuid());
                     }
