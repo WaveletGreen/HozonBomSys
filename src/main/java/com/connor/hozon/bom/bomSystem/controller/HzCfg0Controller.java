@@ -222,7 +222,11 @@ public class HzCfg0Controller extends ExtraIntegrate {
             result.put("msg", "<p style='color:red;'>特性值在配置字典中不存在</p>");
             return result;
         }
-        if(checkString(hzDictionaryLibrary.getFamillyCode())&&checkString(hzDictionaryLibrary.getFamillyCh()))
+        if (!checkString(hzDictionaryLibrary.getFamillyCode()) || !checkString(hzDictionaryLibrary.getFamillyCh())) {
+            result.put("status", false);
+            result.put("msg", "<p style='color:red;'>配置字典中的特性/特性名称不能为空</p>");
+            return result;
+        }
         record.setpCfg0FamilyName(hzDictionaryLibrary.getFamillyCode().toUpperCase());
         record.setpCfg0ObjectId(hzDictionaryLibrary.getEigenValue().toUpperCase());
         //创建人和修改人

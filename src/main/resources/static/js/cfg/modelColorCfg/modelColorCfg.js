@@ -27,19 +27,20 @@ $(document).ready(
     )
 );
 
-function loadData(projectPuid) {
+function loadData(_projectPuid) {
     // if (projectPuid.length <= 0) {
     //     $("#myModal").modal('show');
     //     return;
     // }
-    if (!checkIsSelectProject(projectPuid)) {
+    if (!checkIsSelectProject(_projectPuid)) {
         return;
     }
-    var $table = $("#modelColorCfgTable");
+    projectPuid = _projectPuid;
+    $table = $("#modelColorCfgTable");
     $table.bootstrapTable('destroy');
     $("#refresh").removeAttr("disabled");
     $.ajax({
-        url: "modelColor/getColumn?projectPuid=" + projectPuid,
+        url: "modelColor/getColumn?projectPuid=" + _projectPuid,
         type: "GET",
         success: function (result) {
             gotIt(result);
@@ -47,7 +48,7 @@ function loadData(projectPuid) {
     });
 }
 
-function gotIt(result){
+function gotIt(result) {
     if (result.status != 99) {
         if (result.status == 1) {
             window.Ewin.alert({message: result.msg});
