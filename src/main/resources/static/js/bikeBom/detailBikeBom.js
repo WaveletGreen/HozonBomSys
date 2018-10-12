@@ -209,7 +209,12 @@ function initTable(url) {
         }
     })
 }
-
+function toPage() {
+    var pageNum = $("#pageNum").val();
+    if (pageNum) {
+        $('#detailBikeBomTable').bootstrapTable('selectPage', parseInt(pageNum));
+    }
+}
 function initTable1(url,lineIds) {
     var projectId = $("#project", window.top.document).val();
     var $table = $("#detailBikeBomTable");
