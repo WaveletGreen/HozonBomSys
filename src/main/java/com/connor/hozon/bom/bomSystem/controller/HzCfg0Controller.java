@@ -222,6 +222,7 @@ public class HzCfg0Controller extends ExtraIntegrate {
             result.put("msg", "<p style='color:red;'>特性值在配置字典中不存在</p>");
             return result;
         }
+        if(checkString(hzDictionaryLibrary.getFamillyCode())&&checkString(hzDictionaryLibrary.getFamillyCh()))
         record.setpCfg0FamilyName(hzDictionaryLibrary.getFamillyCode().toUpperCase());
         record.setpCfg0ObjectId(hzDictionaryLibrary.getEigenValue().toUpperCase());
         //创建人和修改人
@@ -630,6 +631,8 @@ public class HzCfg0Controller extends ExtraIntegrate {
         JSONObject result = new JSONObject();
         HzDictionaryLibrary hzDictionaryLibrary = hzDictionaryLibraryService.queryLibraryDTOByCfgObject(cfgVal);
         if (hzDictionaryLibrary != null && hzDictionaryLibrary.getPuid() != null) {
+            hzDictionaryLibrary.setFailureTime(new Date());
+            hzDictionaryLibrary.setEffectTime(new Date());
             JSONObject libraryJson = JSONObject.fromObject(hzDictionaryLibrary);
             result.put("stage", true);
             result.put("data", libraryJson);
