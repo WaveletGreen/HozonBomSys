@@ -56,13 +56,6 @@ public interface HzEbomService {
     OperateResultMessageRespDTO updateHzEbomRecord(UpdateHzEbomReqDTO reqDTO);
 
     /**
-     * EBOM调整层级
-     * @param reqDTO
-     * @return
-     */
-    OperateResultMessageRespDTO updateHzEbomLevelRecord(UpdateHzEbomLeveReqDTO reqDTO);
-
-    /**
      * EBOM引用层级
      * @param reqDTO
      * @return
