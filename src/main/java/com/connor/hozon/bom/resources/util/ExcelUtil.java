@@ -5,7 +5,7 @@ import org.apache.poi.ss.formula.FormulaParseException;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellAddress;
 import org.apache.poi.ss.util.CellRangeAddress;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.poi.xssf.usermodel.*;
 import org.apache.xmlbeans.impl.piccolo.io.FileFormatException;
 
 import java.io.*;
@@ -567,4 +567,107 @@ public class ExcelUtil {
         }
 
     }
+    /**
+     * 写Excel文件
+     * @param fileName  : 下载文件名称
+     * @param title     : 标题
+     * @param dataList  : 内容
+     * @return
+     * @throws Exception
+     */
+    //public static boolean writeExcel(HttpServletResponse response, String fileName, String[] title, List<String[]> dataList) throws Exception {
+    public static boolean writeExcel(String fileName, String[] title, List<String[]> dataList) throws Exception {
+        boolean flag = false;
+        try {
+            File f = new File(ExcelUtil.class.getClassLoader().getResource("static/files/tableExport.xlsx").getFile()) ;// 声明File对象
+            //InputStream is = new FileInputStream(f);D:\HozonBomSys\target\classes\static\files
+            //InputStream is = ExcelUtil.class.getClassLoader().getResourceAsStream("./static/files/tableExport.xlsx");
+//            if(!f.exists()){
+//                return false;
+//            }
+            FileOutputStream fos = new FileOutputStream(f);
+            //InputStream is = new FileInputStream(ResourceUtils.getFile("files/tableExport.xlsx"));
+            //InputStream is = HzEbomController.class.getResourceAsStream("tableExport.xlsx");
+            XSSFWorkbook wb = new XSSFWorkbook();
+            XSSFCellStyle xssfTitleCellStyle = wb.createCellStyle();
+
+            int pageSize = 65535;
+            int listSize = dataList.size();
+            int sheetSize = 0;
+            if(listSize % pageSize == 0){
+                sheetSize = listSize/pageSize;
+            }else{
+                sheetSize = (listSize/pageSize)+1;
+            }
+
+            if(sheetSize == 0){
+                XSSFSheet sheet = wb.createSheet();
+                XSSFRow row = sheet.createRow(0);
+                row.setHeight((short) 600);//目的是想把行高设置成25px
+                row.setRowStyle(xssfTitleCellStyle);
+                sheet.setDefaultColumnWidth(20);
+                sheet.setDefaultRowHeightInPoints(20);
+                //title
+                for (int i = 0;i < title.length;i++) {
+                    XSSFCell cell = row.createCell(i);
+                    cell.setCellType(HSSFCell.CELL_TYPE_STRING);
+                    cell.setCellStyle(xssfTitleCellStyle);
+                    cell.setCellValue(title[i]);
+                }
+            }else{
+                int start = 0;
+                int end = 0;
+                for(int s=0;s<sheetSize;s++){
+                    start = s * pageSize;
+                    if(s == (sheetSize-1))
+                        end = listSize;
+                    else
+                        end = (s+1) * pageSize;
+                    XSSFSheet sheet = wb.createSheet();
+                    XSSFRow row = sheet.createRow(0);
+                    row.setHeight((short) 600);//目的是想把行高设置成25px
+                    row.setRowStyle(xssfTitleCellStyle);
+                    sheet.setDefaultColumnWidth(20);
+                    sheet.setDefaultRowHeightInPoints(20);
+                    //title
+                    for (int i = 0;i < title.length;i++) {
+                        XSSFCell cell = row.createCell(i);
+                        cell.setCellType(HSSFCell.CELL_TYPE_STRING);
+                        cell.setCellStyle(xssfTitleCellStyle);
+                        cell.setCellValue(title[i]);
+                    }
+                    //context
+                    XSSFCellStyle hssfCellStyle = wb.createCellStyle();
+                    int row_index = 1;
+                    for(int j = start;j < end;j++){
+                        XSSFRow data_row = sheet.createRow(row_index);
+                        row_index ++;
+                        String[] cellList = dataList.get(j);
+                        int len = cellList.length;
+                        for (int k=0;k<len;k++) {
+                            XSSFCell cell = data_row.createCell(k);
+                            String value = cellList[k];
+                            cell.setCellType(HSSFCell.CELL_TYPE_STRING);
+                            cell.setCellStyle(hssfCellStyle);
+                            cell.setCellValue(value);
+                        }
+                    }
+                }
+            }
+//            response.reset();
+//            response.setHeader("Content-Disposition", "attachment;filename="+ new String(fileName.getBytes(), "iso8859-1"));
+//            ServletOutputStream out = response.getOutputStream();
+            wb.write(fos);
+//            wb.write(out);
+            // 弹出下载对话框
+//            out.close();
+            fos.close();
+            //is.close();
+            flag = true;
+        } catch (Exception e) {
+            throw e;
+        }
+        return flag;
+    }
+
 }

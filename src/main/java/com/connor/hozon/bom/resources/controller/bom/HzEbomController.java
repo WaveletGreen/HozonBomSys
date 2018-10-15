@@ -12,6 +12,7 @@ import com.connor.hozon.bom.resources.domain.dto.response.HzEbomLevelRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzEbomRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.OperateResultMessageRespDTO;
 import com.connor.hozon.bom.resources.domain.query.HzEbomByPageQuery;
+import com.connor.hozon.bom.resources.domain.query.HzEbomExportQuery;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.service.bom.HzEbomService;
 import com.connor.hozon.bom.resources.util.ExcelUtil;
@@ -212,73 +213,56 @@ public class HzEbomController extends BaseController {
                 OperateResultMessageRespDTO.isSuccess(respDTO), respDTO.getErrMsg()), response);
     }
 
-    ////
-   /*@RequestMapping(value = "exportExcel",method = RequestMethod.GET)
-    public String getExportExcel(String puid,Model model){
-        //导出Excel
-        HzEbomRespDTO respDTO = new HzEbomRespDTO();
-        respDTO.setPuid(puid);
-        model.addAttribute("data",respDTO);
-        return null;
-    }*/
-
     /**
      * 下载
      */
-    @RequestMapping(value = "excelExport",method = RequestMethod.GET)
-    public void listDownLoad(HttpServletRequest request,
-                             HttpServletResponse response,
-                             HzEbomByPageQuery query
+    @RequestMapping(value = "excelExport",method = RequestMethod.POST)
+    @ResponseBody
+    public JSONObject listDownLoad(HttpServletRequest request,
+                             HttpServletResponse response
+                            , @RequestBody  List<HzEbomRespDTO> dtos
     ) {
-
-//        HzEbomByPageQuery ebomByPageQuery = query;
-//        ebomByPageQuery.setPageSize(0);
-//        try{
-//            ebomByPageQuery.setPageSize(Integer.valueOf(query.getLimit()));
-//        }catch (Exception e){
-//
-//        }
-//        Page<HzEbomRespDTO> recordRespDTOPage = hzEbomService.getHzEbomPage(ebomByPageQuery);
-//        Map<String, Object> ret = new HashMap<>();
-//        List<HzEbomRespDTO> recordRespDTOS =  recordRespDTOPage.getResult();
-//        List<Map<String,Object>> list = new ArrayList<>();
-//        Map<String,Object> map = new HashMap<>();
-//        JSONArray array = recordRespDTOS.get(0).getJsonArray();//?
-//        for(int i =0;i<array.size();i++){
-//            JSONObject object = array.getJSONObject(i);
-//            map = object;
-//            list.add(map);
-//        }
-//        ret.put("totalCount", recordRespDTOPage.getTotalCount());
-//        ret.put("result", list);
-
-
-
-        Map<String, Object> map2 = new HashMap<String, Object>();
+        boolean flag=true;
+        JSONObject result=new JSONObject();
         try {
-            //List<YeepayFenrunData> list = yeepayFenrunDataService.getInfoDownLoad(map);
-
-
-            String fileName = "tableExport.xlsx";//文件名
-            String[] title = {"订单号","创建时间"};//表头
+            //static/files/tableExport.xlsx
+            String fileName = "tableExport.xlsx";//文件名-tableExport
+            String[] title = {
+            "序号","零件号" ,"名称","层级" ,"专业" ,"级别" ,"分组号","查找编号" ,"英文名称","LOU/LOA",
+                    "单位","图号","图幅" ,"料厚" ,"材料1","材料2","材料3" ,"密度","材料标准","表面处理" ,
+                    "纹理编号/色彩编号","制造工艺","对称" ,"重要度","是否法规件","是否3C件" ,"法规件型号",
+                    "黑白灰匣子件" ,"开发类别","数据版本" ,"目标重量(kg)","预估重量(kg)","实际重量(kg)" ,
+                    "紧固件","紧固件规格","紧固件性能等级","扭矩" ,"责任工程师","供应商","供应商代码" ,
+                    "采购工程师","备注","零件分类" ,"零件来源","内外饰标识","UPC","FNA","FNA描述" ,"数量"
+                    ,"是否颜色件","状态"};//表头
             //当前页的数据
             List<String[]> dataList = new ArrayList<String[]>();
-            /*for (YeepayFenrunData yeepayFenrunData : list) {
-                String[] cellArr = new String[title.length];
-                //cellArr[0] = yeepayFenrunData.getSys_trade_no();
-                //cellArr[1] = DateUtil.getSimpleDateFormat(DateUtil.DATE_FORMAT_1).format(yeepayFenrunData.getUpdate_time());
+            String[] cellArr = new String[title.length];
+            for (HzEbomRespDTO ebomRespDTO : dtos) {
+                cellArr[0] = ebomRespDTO.getLineId();
+                cellArr[1] = ebomRespDTO.getLineNo();
                 dataList.add(cellArr);
-            }*/
-            boolean flag = ExcelUtil.writeExcel(response, fileName, title, dataList);
+            }
+            flag = ExcelUtil.writeExcel(fileName, title, dataList);
+
             if(flag){
                 LOG.info(fileName+",文件创建成功");
+                result.put("status",flag);
+                result.put("msg","成功");
+                result.put("path","./files/"+fileName);
+                //D:\HozonBomSys\src\main\resources\static\files\tableExport.xlsx
             }else{
                 LOG.info(fileName+",文件创建失败");
+                result.put("status",flag);
+                result.put("msg","失败");
+                //result.put("path","./files/"+fileName);
             }
         } catch (Exception e) {
             if(LOG.isTraceEnabled())//isErrorEnabled()
                 LOG.error(e.getMessage());
         }
+
+        return result;
     }
 
 
