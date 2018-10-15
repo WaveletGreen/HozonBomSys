@@ -31,11 +31,10 @@ public interface HzWorkService {
 
     /**
      * 根据Id查询一条数据
-     * @param projectId
      * @param puid
      * @return
      */
-    HzWorkCenterRespDTO findHzWorkByPuid(String projectId,String puid);
+    HzWorkCenterRespDTO findHzWorkByPuid(String puid);
     /**
      * 编辑一条数据
      * @param reqDTO

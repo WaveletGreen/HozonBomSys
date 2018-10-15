@@ -34,11 +34,10 @@ public class HzWorkController extends BaseController {
 
     /**
      * 获取标题
-     * @param projectId
      * @param response
      */
     @RequestMapping(value = "title",method = RequestMethod.GET)
-    public void getWorkTitel(String projectId,HttpServletResponse response){
+    public void getWorkTitle(HttpServletResponse response){
         LinkedHashMap<String, String> tableTitle = new LinkedHashMap<>();
         tableTitle.put("No","序号");
         tableTitle.put("factoryCode","工厂代码");
@@ -154,14 +153,13 @@ public class HzWorkController extends BaseController {
 
     /**
      * 跳转到修改页面
-     * @param projectId
      * @param puid
      * @param model
      * @return
      */
     @RequestMapping(value = "updateWork",method = RequestMethod.GET)
-    public String updateWrokToPage(String projectId,String puid,Model model){
-        HzWorkCenterRespDTO respDTO = hzWorkService.findHzWorkByPuid(projectId,puid);
+    public String updateWrokToPage(String puid,Model model){
+        HzWorkCenterRespDTO respDTO = hzWorkService.findHzWorkByPuid(puid);
         if(respDTO== null){
             return "";
         }

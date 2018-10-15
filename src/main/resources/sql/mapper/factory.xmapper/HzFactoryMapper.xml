@@ -26,7 +26,7 @@
        and PUID = #{puid,jdbcType=VARCHAR}
       </if>
       <if test="factoryCode != null and factoryCode !=''">
-        and P_FACTORY_CODE = #{factoryCode,jdbcType=VARCHAR}
+        and P_FACTORY_CODE = '1001'
       </if>
     </where>
   </select>
