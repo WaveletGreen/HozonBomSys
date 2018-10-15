@@ -173,6 +173,7 @@ function loadConnectedData(url) {
 
 $(document).ready(
     function () {
+        loadVwoExecuteInfo();
         $("#vwoSaveBtn").click(
             function () {
                 let data = {};
@@ -237,3 +238,137 @@ function doSelectPerson(id) {
     })
 }
 
+
+function loadVwoExecuteInfo() {
+    var $tablex = $("#executeTable");
+    $tablex.bootstrapTable('destroy');
+    //下面这一行出现了bug，前端无法识别
+    $tablex.bootstrapTable({
+        url: "getExecuteInfo?vwo=" + vwoId,
+        method: 'POST',
+        height: 350,//$(window.parent.document).find("#wrapper").height() - document.body.offsetHeight-100,
+        width: $(window).width(),
+        showToggle: false,                   //是否显示详细视图和列表视图的切换按钮
+        showRefresh: false,                  //是否显示刷新按钮
+        pagination: false,                  //是否显示分页（*）
+        clickToSelect: true,                // 单击某一行的时候选中某一条记录
+        sortName: 'exeId',
+        sortOrder: 'asc',
+        // formId: "queryConnectedData",
+        toolbars: [
+            {
+                text: '添加',
+                iconCls: 'glyphicon glyphicon-plus',
+                handler: function () {
+                    window.Ewin.dialog({
+                        title: "添加",
+                        url: "getVwoExecuteDialog?vwoId=" + vwoId,
+                        gridId: "gridId",
+                        width: 600,
+                        height: 500
+                    })
+                }
+            },
+            {
+                text: '删除',
+                iconCls: 'glyphicon glyphicon-remove',
+                handler: function () {
+                    var rows = $table.bootstrapTable('getSelections');
+                    if (rows.length == 0) {
+                        window.Ewin.alert({message: '请选择一条需要删除的数据!'});
+                        return false;
+                    }
+                    window.Ewin.confirm({title: '提示', message: '是否要删除您所选择的记录？', width: 500}).on(function (e) {
+                        if (e) {
+                            $.ajax({
+                                type: "POST",
+                                //ajax需要添加打包名
+                                url: "deleteVwoInfoChange",
+                                data: JSON.stringify(rows),
+                                contentType: "application/json",
+                                success: function (result) {
+                                    if (result.status) {
+                                        layer.msg(result.msg, {icon: 1, time: 2000})
+                                        // window.Ewin.alert({message: });
+                                        //刷新，会重新申请数据库数据
+                                    }
+                                    else {
+                                        window.Ewin.alert({message: "操作删除失败:" + result.msg});
+                                    }
+                                    $table.bootstrapTable("refresh");
+                                },
+                                error: function (info) {
+                                    window.Ewin.alert({message: "操作删除:" + info.status});
+                                }
+                            })
+                        }
+                    });
+                }
+            }
+        ],
+        /**列信息，需要预先定义好*/
+        columns: [
+            {
+                field: 'ck',
+                title: '选择',
+                checkbox: true
+            },
+            {
+                field: 'exeDept',
+                title: '部门',
+                align: 'center',
+                valign: 'middle',
+                sortable: true,
+                sortOrder: 'asc',
+            },
+            {
+                field: 'exeUser',
+                title: '人员',
+                align: 'center',
+                valign: 'middle',
+                sortable: true,
+                sortOrder: 'asc',
+            },
+            {
+                field: 'exeRole',
+                title: '角色',
+                align: 'center',
+                valign: 'middle',
+                sortable: true,
+                sortOrder: 'asc',
+            },
+            {
+                field: 'exeMission',
+                title: '任务',
+                align: 'center',
+                valign: 'middle',
+                sortable: true,
+                sortOrder: 'asc',
+            },
+            {
+                field: 'exePlanFinishDate',
+                title: '计划完成时间',
+                align: 'center',
+                valign: 'middle',
+                sortable: true,
+                sortOrder: 'asc',
+            },
+            {
+                field: 'exeStatus',
+                title: '状态',
+                align: 'center',
+                valign: 'middle',
+                sortable: true,
+                sortOrder: 'asc',
+            },
+            {
+                field: 'exeProof',
+                title: '证明',
+                align: 'center',
+                valign: 'middle',
+                sortable: true,
+                sortOrder: 'asc',
+            }
+        ]
+    });
+}
