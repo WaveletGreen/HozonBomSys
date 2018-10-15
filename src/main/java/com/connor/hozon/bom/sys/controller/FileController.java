@@ -1,9 +1,12 @@
 package com.connor.hozon.bom.sys.controller;
 
 
+import com.connor.hozon.bom.bomSystem.dao.cfg0.HzCfg0RecordDao;
+import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
 import com.connor.hozon.bom.common.util.dict.DictCache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -11,9 +14,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import sql.pojo.cfg.cfg0.HzCfg0Record;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
@@ -31,6 +37,9 @@ import static org.springframework.http.MediaType.APPLICATION_FORM_URLENCODED;
 public class FileController {
 
     private static final Logger logger = LoggerFactory.getLogger(FileController.class);
+
+    @Autowired
+    HzCfg0RecordDao hzCfg0RecordDao;
 
     //文件上传相关代码
     @RequestMapping(value = "uploadFile")
@@ -82,9 +91,15 @@ public class FileController {
     public String downloadFile(org.apache.catalina.servlet4preview.http.HttpServletRequest request, HttpServletResponse response
             , @RequestParam List<String> uids
             , @RequestParam List<String> columns
-    ) throws IOException {
-        String fileName = "ZTC_MBOM.XLSX";
-        String fileName2 = "ZTC_MBOMxxx.XLSX";
+            , @RequestParam List<String> fields
+    ) throws IOException, NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        String fileName = "static/files/EBOM导入模板.xlsx";
+        String fileName2 = "static/files/EBOM导入模板"+ UUIDHelper.generateUpperUid()+".xlsx";
+        HzCfg0Record record = hzCfg0RecordDao.selectByPrimaryKey(uids.get(0));
+        //获取反射的get方法，必须与实体类里的方法一一对应上，否则会报方法找不到错误
+        Method method = HzCfg0Record.class.getMethod("get" + fields.get(1));
+        //执行方法，相当于用get方法
+        Object oxx = method.invoke(record);
         if (fileName != null) {
             //当前是从该工程的WEB-INF//File//下获取文件(该目录可以在下面一行代码配置)然后下载到C:\\users\\downloads即本机的默认下载的目录
             String realPath = request.getServletContext().getRealPath(
@@ -92,7 +107,7 @@ public class FileController {
             URL path = getClass().getClassLoader().getResource("");//.getPath();
             File file = new File(path.getPath() + "/" + fileName);
             File ft = new File(path.getPath() + "/" + fileName2);
-            if(!ft.exists()){
+            if (!ft.exists()) {
                 ft.createNewFile();
             }
             if (file.exists()) {

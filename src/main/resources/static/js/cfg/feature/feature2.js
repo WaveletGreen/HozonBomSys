@@ -156,15 +156,17 @@ function loadData(projectPuid) {
                     let columnsOrg = $tablex.bootstrapTable("getVisibleColumns");
                     let uids = [];
                     let columns = [];
+                    let fields = [];
                     for (let i in rows) {
                         uids.push(rows[i].puid);
                     }
                     for (let i in columnsOrg) {
                         columns.push(columnsOrg[i].title);
+                        fields.push(columnsOrg[i].field);
                     }
                     DownLoadFile({
                         url: './download', //请求的url
-                        data: {uids: uids, columns: columns}//要发送的数据
+                        data: {uids: uids, columns: columns, fields: fields}//要发送的数据
                     });
                     // $.ajax({
                     //     type: "POST",
