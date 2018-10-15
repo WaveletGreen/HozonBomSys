@@ -327,7 +327,8 @@ public class HzCfg0ModelColorController {
             if (SpecialSettingOption.COLOR_MODEL_APPEND_COLORLESS) {
                 List<HzCfg0OptionFamily> withoutColor = hzCfg0OptionFamilyService.selectForColorBluePrint(mainRecord.getpCfg0OfWhichProjectPuid(), 0);
                 for (int i = 0; i < withoutColor.size(); i++) {
-                    modelColor.getMapOfCfg0().put(withoutColor.get(i).getPuid(), "-");
+                    if (null != withoutColor.get(i))
+                        modelColor.getMapOfCfg0().put(withoutColor.get(i).getPuid(), "-");
                 }
             }
             modelColor.setPuid(UUIDHelper.generateUpperUid());

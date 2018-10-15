@@ -106,7 +106,7 @@
         )
 
     </select>
-    <insert id="insertOne" parameterType="sql.pojo.cfg.modelColor.HzCfg0ModelColor">
+    <insert id="insert" parameterType="sql.pojo.cfg.modelColor.HzCfg0ModelColor">
         insert into HZ_CFG0_MODEL_COLOR_RECORD
         (
         <include refid="Base_Column_List"/>

@@ -4,7 +4,6 @@
  * ALL RIGHTS RESERVED.
  */
 
-// import getProjectUid from './js/helper/projectHelper.js'
 
 $(document).ready(
     // $("#query").click(function () {
@@ -64,29 +63,6 @@ function loadData(projectPuid) {
                     })
                 }
             },
-            // {
-            //     text: '修改',
-            //     iconCls: 'glyphicon glyphicon-pencil',
-            //     handler: function () {
-            //         var rows = $table.bootstrapTable('getSelections');
-            //         //只能选一条
-            //         if (rows.length != 1) {
-            //             window.Ewin.alert({message: '请选择一条需要修改的数据!'});
-            //             return false;
-            //         }
-            //         if (1 == rows[0].cfgIsInProcess || "1" == rows[0].cfgIsInProcess) {
-            //             window.Ewin.alert({message: rows[0].pCfg0ObjectId + '已在VWO流程中，不允许修改'});
-            //             return false;
-            //         }
-            //         window.Ewin.dialog({
-            //             title: "修改",
-            //             url: "cfg0/modifyPage?projectPuid=" + rows[0].puid,
-            //             gridId: "gridId",
-            //             width: 400,
-            //             height: 500
-            //         });
-            //     }
-            // },
             {
                 text: '删除',
                 iconCls: 'glyphicon glyphicon-remove',
@@ -123,42 +99,6 @@ function loadData(projectPuid) {
                     });
                 }
             },
-            // {
-            //     text: '发送到ERP',
-            //     iconCls: 'glyphicon glyphicon-send',
-            //     handler: function () {
-            //         var rows = $table.bootstrapTable('getSelections');
-            //         if (rows.length == 0) {
-            //             window.Ewin.alert({message: '请至少选择一条需要发送的数据!'});
-            //             return false;
-            //         }
-            //         window.Ewin.confirm({title: '提示', message: '是否要发送您所选择的记录？', width: 500}).on(function (e) {
-            //             if (e) {
-            //                 $.ajax({
-            //                     type: "POST",
-            //                     //ajax需要添加打包名
-            //                     url: "./cfg0/sendToERP",
-            //                     data: JSON.stringify(rows),
-            //                     contentType: "application/json",
-            //                     success: function (result) {
-            //                         // if (result.status) {
-            //                         // layer.msg(result.msg, {icon: 1, time: 2000});
-            //                         window.Ewin.alert({message: result, width: 800});
-            //                         //刷新，会重新申请数据库数据
-            //                         // }
-            //                         // else {
-            //                         //     window.Ewin.alert({message: "操作发送失败:" + result.msg});
-            //                         // }
-            //                         $table.bootstrapTable("refresh");
-            //                     },
-            //                     error: function (info) {
-            //                         window.Ewin.alert({message: "操作发送失败:" + info.status});
-            //                     }
-            //                 })
-            //             }
-            //         });
-            //     }
-            // },
             {
                 text: '发起VWO流程',
                 iconCls: 'glyphicon glyphicon-send',
@@ -205,7 +145,48 @@ function loadData(projectPuid) {
                         }
                     });
                 }
-            }
+            },
+            {
+                text: '下载文件',
+                iconCls: 'glyphicon glyphicon-plus',
+                handler: function () {
+                    // window.open("./download?dsd=1&dsda=2&sdasd=3", '_self');
+                    var rows = $table.bootstrapTable('getSelections');
+                    var $tablex = $("#dataTable");
+                    let columnsOrg = $tablex.bootstrapTable("getVisibleColumns");
+                    let uids = [];
+                    let columns = [];
+                    for (let i in rows) {
+                        uids.push(rows[i].puid);
+                    }
+                    for (let i in columnsOrg) {
+                        columns.push(columnsOrg[i].title);
+                    }
+                    DownLoadFile({
+                        url: './download', //请求的url
+                        data: {uids: uids, columns: columns}//要发送的数据
+                    });
+                    // $.ajax({
+                    //     type: "POST",
+                    //     //ajax需要添加打包名
+                    //     url: "./download",
+                    //     contentType: "application/json",
+                    //     success: function (result) {
+                    //         if (result) {
+                    //             layer.msg("成功", {icon: 1, time: 2000})
+                    //             // window.Ewin.alert({message: result, width: 800});
+                    //             //刷新，会重新申请数据库数据
+                    //         }
+                    //         else {
+                    //             window.Ewin.alert({message: "失败"});
+                    //         }
+                    //     },
+                    //     error: function (info) {
+                    //         window.Ewin.alert({message: "失败:" + info.status});
+                    //     }
+                    // })
+                }
+            },
         ],
         /**列信息，需要预先定义好*/
         columns: [
@@ -316,49 +297,4 @@ function loadData(projectPuid) {
         sortName: 'pCfg0ObjectId'
     });
 
-    // function queryParam(pageReqeust) {
-    //     var pageReqeust = {
-    //         page: this.pageNumber,// 起始页面
-    //         limit: this.pageSize // 页面大小
-    //     }
-    //     // if(formId!=undefined||formId!=''){
-    //     //     $.each($("#"+formId).find("input"),function(index,info){
-    //     //         param[info.name] = info.value;
-    //     //     })
-    //     // }
-    //     if (sortName != undefined) {
-    //         pageReqeust.sort = sortName;
-    //     }
-    //     if (sortOrder != null) {
-    //         pageReqeust.order = sortOrder;
-    //     }
-    //     if ($("#feature").val() != null) {
-    //         pageReqeust.feature = $("#feature").val();
-    //     }
-    //     if ($("#featureValue").val() != null) {
-    //         pageReqeust.featureValue = $("#featureValue").val();
-    //     }
-    //
-    //     if (getProjectUid() != null) {
-    //         pageReqeust.projectUid = getProjectUid();
-    //     }
-    //     console.log("-------------------------");
-    //     console.log(pageReqeust);
-    //     console.log("--------------------------");
-    //     return pageReqeust;
-    //
-    // };
-    // function queryParams(params) {
-    //     return {
-    //         limit: params.pageSize,
-    //         page: params.pageNumber,
-    //         sort: params.sortName,
-    //         order: params.sortOrder,
-    //         feature: $("#feature").val(),
-    //         featureValue: $("#featureValue").val(),
-    //         projectUid: $("#projectUid").val()
-    //     };
-    // }
-
-    // $table.bootstrapTable('hideColumn', 'puid');
 }
