@@ -1,5 +1,6 @@
 package com.connor.hozon.bom.resources.controller.change.vwo;
 
+import com.connor.hozon.bom.bomSystem.dto.vwo.HzVwoProcessDto;
 import com.connor.hozon.bom.bomSystem.iservice.cfg.vwo.IHzVWOManagerService;
 import com.connor.hozon.bom.common.base.constant.SystemStaticConst;
 import com.connor.hozon.bom.common.base.entity.QueryBase;
@@ -204,4 +205,30 @@ public class HzVwoController {
     public List<VWOUserGroupDTO> getUserAndGroupOrg() {
         return iHzVWOManagerService.getUserAndGroupOrg();
     }
+
+
+    /**
+     * 流程发布完成，将对象的状态设置为发布状态
+     *
+     * @param dto
+     * @return
+     */
+    @RequestMapping(value = "/release", method = RequestMethod.POST)
+    @ResponseBody
+    public JSONObject release(@RequestBody HzVwoProcessDto dto) {
+        return iHzVWOManagerService.release(dto.getVwoType(), dto.getProjectUid(), dto.getVwoId());
+    }
+
+    /**
+     * 流程中断，将对象的状态设置为“草稿状态”
+     *
+     * @param dto
+     * @return
+     */
+    @RequestMapping(value = "/interrupt", method = RequestMethod.POST)
+    @ResponseBody
+    public JSONObject interrupt(@RequestBody HzVwoProcessDto dto) {
+        return iHzVWOManagerService.interrupt(dto.getVwoType(), dto.getProjectUid(), dto.getVwoId());
+    }
+
 }

@@ -41,15 +41,17 @@ public interface IHzVWOManagerService {
 
     /**
      * 获取VWO详情表单
-     * @param id VWO主键
+     *
+     * @param id      VWO主键
      * @param vwoType VWO类型
-     * @param model spring model
+     * @param model   spring model
      * @return
      */
     boolean getVwoFromList(Long id, Integer vwoType, Model model);
 
     /**
      * 保存影响人员
+     *
      * @param influenceUser
      * @return
      */
@@ -57,12 +59,14 @@ public interface IHzVWOManagerService {
 
     /**
      * 获取人员和部门信息
+     *
      * @return
      */
     List<VWOUserGroupDTO> getUserAndGroupOrg();
 
     /**
      * 保存影响部门
+     *
      * @param dept
      * @return
      */
@@ -70,6 +74,7 @@ public interface IHzVWOManagerService {
 
     /**
      * 保存通知变更人员
+     *
      * @param change
      * @return
      */
@@ -77,29 +82,33 @@ public interface IHzVWOManagerService {
 
     /**
      * 获取通知变更人员
+     *
      * @param vwo
      * @param queryBase
      * @return
      */
-    Map<String,Object> getInformChangers(Long vwo, QueryBase queryBase);
+    Map<String, Object> getInformChangers(Long vwo, QueryBase queryBase);
 
     /**
      * 分页查询VWO表单数量
+     *
      * @param projectUid
      * @param queryBase
      * @return
      */
-    Map<String,Object> queryByBase(String projectUid, QueryBase queryBase);
+    Map<String, Object> queryByBase(String projectUid, QueryBase queryBase);
 
     /**
      * 获取用户详情
+     *
      * @param dto
      * @return
      */
-    Map<String,Object> getUserDetail(VWOUserGroupDTO dto);
+    Map<String, Object> getUserDetail(VWOUserGroupDTO dto);
 
     /**
      * 忘了
+     *
      * @param changes
      * @return
      */
@@ -107,6 +116,7 @@ public interface IHzVWOManagerService {
 
     /**
      * 保存基本数据
+     *
      * @param info
      * @return
      */
@@ -114,6 +124,7 @@ public interface IHzVWOManagerService {
 
     /**
      * 根据VWO ID获取一组分发与实施对象，可能没有
+     *
      * @param vwo
      * @return
      */
@@ -121,9 +132,30 @@ public interface IHzVWOManagerService {
 
     /**
      * 保存分发与实施数据
+     *
      * @param execute
      */
     JSONObject saveExecuteInfo(HzVwoExecute execute);
 
     JSONObject deleteExecuteInfo(List<HzVwoExecute> executes);
+
+    /**
+     * 发布
+     *
+     * @param type
+     * @param projectUid
+     * @param vwoId
+     * @return
+     */
+    JSONObject release(Integer type, String projectUid, Long vwoId);
+
+    /**
+     * 流程中断
+     *
+     * @param type
+     * @param projectUid
+     * @param vwoId
+     * @return
+     */
+    JSONObject interrupt(Integer type, String projectUid, Long vwoId);
 }

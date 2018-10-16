@@ -174,6 +174,16 @@ function loadConnectedData(url) {
 $(document).ready(
     function () {
         loadVwoExecuteInfo();
+        $("#release").click(
+            function () {
+                release();
+            }
+        );
+        $("#interrupt").click(
+            function () {
+                interrupt();
+            }
+        );
         $("#vwoSaveBtn").click(
             function () {
                 let data = {};
@@ -340,6 +350,20 @@ function loadVwoExecuteInfo() {
                 valign: 'middle',
                 sortable: true,
                 sortOrder: 'asc',
+                formatter: function (value, row, index) {
+                    switch (value) {
+                        case "1":
+                            return "Draft";
+                        case "2":
+                            return "EDIT";
+                        case "3":
+                            return "PROCESS";
+                        case "4":
+                            return "IMPL";
+                        case "5":
+                            return "INFO";
+                    }
+                }
             },
             {
                 field: 'exeMission',
@@ -348,6 +372,20 @@ function loadVwoExecuteInfo() {
                 valign: 'middle',
                 sortable: true,
                 sortOrder: 'asc',
+                formatter: function (value, row, index) {
+                    switch (value) {
+                        case "1":
+                            return "Draft";
+                        case "2":
+                            return "EDIT";
+                        case "3":
+                            return "PROCESS";
+                        case "4":
+                            return "IMPL";
+                        case "5":
+                            return "INFO";
+                    }
+                }
             },
             {
                 field: 'exePlanFinishDate',
@@ -385,7 +423,7 @@ function loadVwoExecuteInfo() {
  */
 function doRefreshExecuteTable() {
     $("#executeTable").bootstrapTable("refresh");
-    $('body').removeClass("modal-open");
+    undead();
 }
 
 /**
@@ -393,5 +431,73 @@ function doRefreshExecuteTable() {
  */
 function doRefreshConnectedTable() {
     $("#connectedTable").bootstrapTable("refresh");
+    undead();
+}
+
+/**
+ * 防止页面卡斯
+ */
+function undead() {
     $('body').removeClass("modal-open");
+}
+
+
+/**
+ * 发布
+ */
+function release() {
+    $.ajax({
+        contentType:
+            "application/json",
+        type:
+            'POST',
+        data: JSON.stringify(getVwoInfo()),
+        url: "release",
+        success: function (result) {
+            if (result.status) {
+                layer.msg(result.msg, {icon: 1, time: 2000})
+            }
+            else {
+                window.Ewin.alert({message: "发布失败:" + result.msg});
+            }
+            console.log(result);
+        },
+        error: function (e) {
+            console.log("连接服务器失败:" + e.status);
+        }
+    });
+}
+
+/**
+ * 中断
+ */
+function interrupt() {
+    $.ajax({
+        contentType:
+            "application/json",
+        type:
+            'POST',
+        data: JSON.stringify(getVwoInfo()),
+        url: "interrupt",
+        success: function (result) {
+            if (result.status) {
+                layer.msg(result.msg, {icon: 1, time: 2000})
+            }
+            else {
+                window.Ewin.alert({message: "中断失败:" + result.msg});
+            }
+            console.log(result);
+        },
+        error: function (e) {
+            console.log("连接服务器失败:" + e.status);
+        }
+    });
+}
+
+function getVwoInfo() {
+    let data = {};
+    data.projectUid = getProjectUid();
+    data.vwoId = $("#vwo").val();
+    data.vwoType = $("#vwoType").val();
+    return data;
 }
