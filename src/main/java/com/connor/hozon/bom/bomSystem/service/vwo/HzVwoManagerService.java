@@ -267,11 +267,12 @@ public class HzVwoManagerService implements IHzVWOManagerService {
         List<HzCfg0ModelColor> hzCfg0ModelColors = hzCfg0ModelColorDao.selectByPuids(colors);
         //循环查看源主数据是否以发布流程,如已发布过则直接返回错误提示
         for(HzCfg0ModelColor hzCfg0ModelColor : hzCfg0ModelColors){
-            if(hzCfg0ModelColor.getCmcrVwoId()!=null){
+            if(hzCfg0ModelColor.getCmcrStatus()!=null&&!"0".equals(hzCfg0ModelColor.getCmcrStatus())){
                 result.put("status",false);
                 result.put("msg",hzCfg0ModelColor.getpDescOfColorfulModel()+"已发起了VWO流程");
                 return  result;
             }
+            hzCfg0ModelColor.setCmcrStatus("10");
         }
         //源从数据
         List<HzCfg0ModelColorDetail> hzCfg0ModelColorDetails = hzColorModelDao.selectByModelColors(hzCfg0ModelColors);
@@ -400,11 +401,6 @@ public class HzVwoManagerService implements IHzVWOManagerService {
 
 
         //跟新数据库
-        //跟新源主数据
-        if(hzCfg0ModelColorDao.updateListData(hzCfg0ModelColors)<=0){
-            result.put("status",false);
-            result.put("msg","跟新源主数据失败");
-        }
         try {
             //跟新变更后主数据
             if(hzCmcrChangeDao.insertAfterList(hzCmcrChangesAfter)!=hzCmcrChangesAfter.size()){
@@ -433,6 +429,11 @@ public class HzVwoManagerService implements IHzVWOManagerService {
         }catch (Exception e){
             result.put("status",false);
             result.put("msg",e.getMessage());
+        }
+        //跟新源主数据
+        if(hzCfg0ModelColorDao.updateListData(hzCfg0ModelColors)<=0){
+            result.put("status",false);
+            result.put("msg","跟新源主数据失败");
         }
         if(result.get("status")==null){
             result.put("status",true);

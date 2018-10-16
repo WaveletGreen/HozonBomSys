@@ -251,6 +251,7 @@ public class HzCfg0ModelColorController {
                     toProcess.add(model);
                 }
             }
+            color.setCmcrStatus("0");
             return hzCfg0ModelColorService.doUpdateOne(color);
         } else return false;
     }
@@ -352,6 +353,7 @@ public class HzCfg0ModelColorController {
 
                 colorList.add(hzCfg0ModelColorDetail);
             }
+            modelColor.setCmcrStatus("0");
             hzCfg0ModelColorService.doInsert(modelColor);
             hzColorModelService.doInsertByBatch(colorList);
             result.put("status", true);
