@@ -472,8 +472,8 @@ public class HzVwoManagerService implements IHzVWOManagerService {
             HzPlatformRecord platform = hzPlatformService.doGetByPuid(vehicle.getpVehiclePertainToPlatform());
 
             hzVwoInfo.setVwoCreator(user.getUserName());
-            hzVwoInfo.setVwoCreateDate(now);
             hzVwoInfo.setProjectUid(projectUid);
+            hzVwoInfo.setVwoCreateDate(now);
             hzVwoInfo.setVwoType(1);
             hzVwoInfo.setVwoStatus(1);
             hzVwoInfo.setProjectCode(project.getpProjectCode());
