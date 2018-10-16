@@ -392,6 +392,7 @@ function saveCompose() {
             if(result.status!=false){
                 // window.Ewin.alert({message: '生成成功!'});
                 layer.msg("生成成功", {icon: 1, time: 2000});
+                doQuery();
             }else {
                 window.Ewin.alert({message: result.msg});
             }

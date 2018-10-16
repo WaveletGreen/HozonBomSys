@@ -86,7 +86,8 @@
         #{pColorUid,jdbcType=VARCHAR}
     </sql>
     <sql id="reflect">
-        P_DESC_OF_COLORFUL_MODEL = #{pDescOfColorfulModel,jdbcType=VARCHAR}
+        P_DESC_OF_COLORFUL_MODEL = #{pDescOfColorfulModel,jdbcType=VARCHAR},
+        CMCR_STATUS = #{cmcrStatus,jdbcType=VARCHAR}
     </sql>
 
     <select id="selectByMainId" parameterType="sql.pojo.cfg.modelColor.HzCfg0ModelColor"
@@ -120,10 +121,12 @@
     <insert id="insert" parameterType="sql.pojo.cfg.modelColor.HzCfg0ModelColor">
         insert into HZ_CFG0_MODEL_COLOR_RECORD
         (
-        <include refid="Base_Column_List"/>
+        <include refid="Base_Column_List"/>,
+        CMCR_STATUS
         )
         VALUES (
-        <include refid="values"/>
+        <include refid="values"/>,
+        #{cmcrStatus,jdbcType=VARCHAR}
         )
     </insert>
     <update id="updateByPrimaryKey" parameterType="sql.pojo.cfg.modelColor.HzCfg0ModelColor">
@@ -171,6 +174,12 @@
             when t.PUID=#{hzCfg0ModelColor.puid,jdbcType=VARCHAR}
             then
             #{hzCfg0ModelColor.cmcrVwoId,jdbcType=BIGINT}
+        </foreach>
+        ,t.CMCR_STATUS=
+        <foreach collection="list" item="hzCfg0ModelColor" open="case" close="end">
+            when t.PUID=#{hzCfg0ModelColor.puid,jdbcType=VARCHAR}
+            then
+            #{hzCfg0ModelColor.cmcrStatus,jdbcType=BIGINT}
         </foreach>
         where
         t.PUID in

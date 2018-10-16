@@ -37,7 +37,7 @@ public interface IHzVWOManagerService {
      * @param result     操作消息在生成器里同样有赋值
      * @return 操作消息
      */
-    HzVwoInfo generateVwoEntity(User user, String projectUid, JSONObject result);
+    HzVwoInfo generateVwoEntity(User user, String projectUid, JSONObject result,Integer type);
 
     /**
      * 获取VWO详情表单
