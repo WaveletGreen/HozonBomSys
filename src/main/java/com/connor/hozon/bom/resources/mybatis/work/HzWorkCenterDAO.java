@@ -43,17 +43,15 @@ public interface HzWorkCenterDAO {
 
     /**
      * 查询一条数据
-     * @param projectId
      * @param puid
      * @return
      */
-    HzWorkCenter findWorkCenterById(String projectId,String puid);
+    HzWorkCenter findWorkCenterById(String puid);
 
     /**
      * 查询一条数据
      * @param pWorkCode
-     * @param projectId
      * @return
      */
-    List<HzWorkCenter> findWorkCenter(String projectId, String pWorkCode);
+    List<HzWorkCenter> findWorkCenter(String pWorkCode);
 }

@@ -109,7 +109,7 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
             hzWorkProcedure.setPurpose(reqDTO.getPurpose());
             hzWorkProcedure.setState(reqDTO.getState());
             hzWorkProcedure.setPuid(UUID.randomUUID().toString());
-            List<HzWorkCenter> hzWorkCenterList = hzWorkCenterDAO.findWorkCenter(reqDTO.getProjectId(),reqDTO.getpWorkCode());
+            List<HzWorkCenter> hzWorkCenterList = hzWorkCenterDAO.findWorkCenter(reqDTO.getpWorkCode());
             if(hzWorkCenterList != null && hzWorkCenterList.size()>0){
                 hzWorkProcedure.setpWorkPuid("");
             }else {
@@ -189,7 +189,7 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
             hzWorkProcedure.setPurpose(reqDTO.getPurpose());
             hzWorkProcedure.setState(reqDTO.getState());
             hzWorkProcedure.setPuid(UUID.randomUUID().toString());
-            List<HzWorkCenter> hzWorkCenterList = hzWorkCenterDAO.findWorkCenter(reqDTO.getProjectId(),reqDTO.getpWorkCode());
+            List<HzWorkCenter> hzWorkCenterList = hzWorkCenterDAO.findWorkCenter(reqDTO.getpWorkCode());
             if(ListUtil.isNotEmpty(hzWorkCenterList)){
                 HzWorkCenter workCenter = hzWorkCenterList.get(0);
                 hzWorkProcedure.setpWorkPuid(hzWorkCenterList.get(0).getPuid());
@@ -262,7 +262,7 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
         hzWorkProcedure.setpUpdateName(user.getUserName());
         hzWorkProcedure.setPurpose(reqDTO.getPurpose());
         hzWorkProcedure.setState(reqDTO.getState());
-        List<HzWorkCenter> hzWorkCenterList = hzWorkCenterDAO.findWorkCenter(reqDTO.getProjectId(),reqDTO.getpWorkCode());
+        List<HzWorkCenter> hzWorkCenterList = hzWorkCenterDAO.findWorkCenter(reqDTO.getpWorkCode());
         if(ListUtil.isNotEmpty(hzWorkCenterList)){
             HzWorkCenter workCenter = hzWorkCenterList.get(0);
             hzWorkProcedure.setpWorkPuid(hzWorkCenterList.get(0).getPuid());
@@ -310,7 +310,7 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
         hzWorkProcedure.setpUpdateName(user.getUserName());
         hzWorkProcedure.setPurpose(reqDTO.getPurpose());
         hzWorkProcedure.setState(reqDTO.getState());
-        List<HzWorkCenter> hzWorkCenterList = hzWorkCenterDAO.findWorkCenter(reqDTO.getProjectId(),reqDTO.getpWorkCode());
+        List<HzWorkCenter> hzWorkCenterList = hzWorkCenterDAO.findWorkCenter(reqDTO.getpWorkCode());
         if(ListUtil.isNotEmpty(hzWorkCenterList)){
             HzWorkCenter workCenter = hzWorkCenterList.get(0);
             hzWorkProcedure.setpWorkPuid(hzWorkCenterList.get(0).getPuid());

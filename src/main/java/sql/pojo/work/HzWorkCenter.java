@@ -173,6 +173,25 @@ public class HzWorkCenter {
      */
     private String projectId;
 
+    private String pFactoryId;
+    private String pFactoryCode;
+
+    public String getpFactoryId() {
+        return pFactoryId;
+    }
+
+    public void setpFactoryId(String pFactoryId) {
+        this.pFactoryId = pFactoryId;
+    }
+
+    public String getpFactoryCode() {
+        return pFactoryCode;
+    }
+
+    public void setpFactoryCode(String pFactoryCode) {
+        this.pFactoryCode = pFactoryCode;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
