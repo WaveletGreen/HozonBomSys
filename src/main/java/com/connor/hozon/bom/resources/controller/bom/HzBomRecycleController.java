@@ -162,15 +162,15 @@ public class HzBomRecycleController extends BaseController {
     @RequestMapping(value = "recover",method = RequestMethod.POST)
     public void recoverHasDeletedBom(@RequestBody RecoverHzBomReqDTO recoverHzBomReqDTO, HttpServletResponse response){
         if(recoverHzBomReqDTO.getType() ==1){
-            OperateResultMessageRespDTO respDTO =hzEbomService.RecoverDeleteEbomRecord(recoverHzBomReqDTO.getProjectId(),recoverHzBomReqDTO.getPuid());
+            OperateResultMessageRespDTO respDTO =hzEbomService.recoverDeleteEbomRecord(recoverHzBomReqDTO.getProjectId(),recoverHzBomReqDTO.getPuid());
             writeAjaxJSONResponse(ResultMessageBuilder.build(OperateResultMessageRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
             return;
         }else if(recoverHzBomReqDTO.getType() ==2){
-            OperateResultMessageRespDTO respDTO = hzPbomService.RecoverDeletePbomRecord(recoverHzBomReqDTO.getProjectId(),recoverHzBomReqDTO.getPuid());
+            OperateResultMessageRespDTO respDTO = hzPbomService.recoverDeletePbomRecord(recoverHzBomReqDTO.getProjectId(),recoverHzBomReqDTO.getPuid());
             writeAjaxJSONResponse(ResultMessageBuilder.build(OperateResultMessageRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
             return;
         }else if(recoverHzBomReqDTO.getType() == 3){
-            OperateResultMessageRespDTO respDTO = hzMbomService.RecoverDeleteMbomRecord(recoverHzBomReqDTO.getProjectId(),recoverHzBomReqDTO.getPuid());
+            OperateResultMessageRespDTO respDTO = hzMbomService.recoverDeleteMbomRecord(recoverHzBomReqDTO.getProjectId(),recoverHzBomReqDTO.getPuid());
             writeAjaxJSONResponse(ResultMessageBuilder.build(OperateResultMessageRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
             return;
         }else{

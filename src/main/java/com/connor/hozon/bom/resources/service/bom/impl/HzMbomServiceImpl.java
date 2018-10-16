@@ -329,7 +329,7 @@ public class HzMbomServiceImpl implements HzMbomService{
     }
 
     @Override
-    public OperateResultMessageRespDTO RecoverDeleteMbomRecord(String projectId, String puid) {
+    public OperateResultMessageRespDTO recoverDeleteMbomRecord(String projectId, String puid) {
         OperateResultMessageRespDTO respDTO = new OperateResultMessageRespDTO();
         try {
             if (projectId == null || projectId == "" || puid == null || puid == "") {

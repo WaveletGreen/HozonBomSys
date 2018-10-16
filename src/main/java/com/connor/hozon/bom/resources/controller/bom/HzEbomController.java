@@ -3,6 +3,7 @@ package com.connor.hozon.bom.resources.controller.bom;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.connor.hozon.bom.bomSystem.impl.bom.HzBomLineRecordDaoImpl;
+import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0ModelService;
 import com.connor.hozon.bom.resources.controller.BaseController;
 import com.connor.hozon.bom.resources.domain.dto.request.AddHzEbomReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.request.DeleteHzEbomReqDTO;
@@ -27,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import springfox.documentation.RequestHandler;
 import sql.pojo.bom.HzBomLineRecord;
+import sql.pojo.cfg.model.HzCfg0ModelRecord;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -50,8 +52,10 @@ public class HzEbomController extends BaseController {
     @Autowired
     private HzBomLineRecordDaoImpl hzBomLineRecordDao;
 
+    @Autowired
+    private HzCfg0ModelService hzCfg0ModelService;
     @RequestMapping(value = "title",method = RequestMethod.GET)
-    public void getEbomTitle(HttpServletResponse response) {
+    public void getEbomTitle(String projectId,HttpServletResponse response) {
         LinkedHashMap<String, String> tableTitle = new LinkedHashMap<>();
         tableTitle.put("No","序号");
         tableTitle.put("lineId","零件号" );
@@ -106,6 +110,15 @@ public class HzEbomController extends BaseController {
         tableTitle.put("pFnaDesc","FNA描述" );
         tableTitle.put("number","数量" );
         tableTitle.put("colorPart","是否颜色件");
+        //获取该项目下的所有车型模型
+        List<HzCfg0ModelRecord> hzCfg0ModelRecords = hzCfg0ModelService.doSelectByProjectPuid(projectId);
+
+        if(ListUtil.isNotEmpty(hzCfg0ModelRecords)){
+            for(int i = 0;i<hzCfg0ModelRecords.size();i++){
+                tableTitle.put("title"+i,hzCfg0ModelRecords.get(i).getObjectName());
+
+            }
+        }
         writeAjaxJSONResponse(ResultMessageBuilder.build(tableTitle), response);
     }
     

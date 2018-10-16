@@ -189,7 +189,6 @@ public class HzEbomServiceImpl implements HzEbomService {
 
     /**
      * 添加EBOM  最好使用事务
-     *
      * @param reqDTO
      * @return
      */
@@ -1890,7 +1889,7 @@ public class HzEbomServiceImpl implements HzEbomService {
     }
 
     @Override
-    public OperateResultMessageRespDTO RecoverDeleteEbomRecord(String projectId, String puid) {
+    public OperateResultMessageRespDTO recoverDeleteEbomRecord(String projectId, String puid) {
         OperateResultMessageRespDTO respDTO = new OperateResultMessageRespDTO();
         try {
             if (projectId == null || projectId == "" || puid == null || puid == "") {

@@ -18,7 +18,7 @@ public interface HzMaterielDAO {
 
     /**
      * 插入一条数据
-     *
+     * 页面数据直接从MBOM中来 不进行插入操作
      * @param hzMaterielRecord
      * @return
      */
@@ -26,7 +26,6 @@ public interface HzMaterielDAO {
 
     /**
      * 更改一条数据
-     *
      * @param hzMaterielRecord
      * @return
      */
@@ -34,7 +33,6 @@ public interface HzMaterielDAO {
 
     /**
      * 删除一条数据
-     *
      * @param puid
      * @return
      */
@@ -42,7 +40,6 @@ public interface HzMaterielDAO {
 
     /**
      * 批量插入 内部直接调用插入 对外增加 走单个插入
-     *
      * @param hzMaterielRecords
      * @return
      */
@@ -50,7 +47,6 @@ public interface HzMaterielDAO {
 
     /**
      * 分页获取物料数据
-     *
      * @param query
      * @return
      */
@@ -58,7 +54,6 @@ public interface HzMaterielDAO {
 
     /**
      * 获取物料数据 list
-     *
      * @param query
      * @return
      */
@@ -66,7 +61,6 @@ public interface HzMaterielDAO {
 
     /**
      * 获取整车衍生物料主数据
-     *
      * @param query
      * @return
      */
@@ -74,7 +68,6 @@ public interface HzMaterielDAO {
 
     /**
      * 查询物料数据是否存在（根据外键来查询）
-     *
      * @param map
      * @return
      */
@@ -82,7 +75,6 @@ public interface HzMaterielDAO {
 
     /**
      * 根据id获取一条物料数据
-     *
      * @param query
      * @return
      */
@@ -90,7 +82,6 @@ public interface HzMaterielDAO {
 
     /**
      * 获取不同类别物料的数量
-     *
      * @param projectId
      * @param pMaterielDataType
      * @return
@@ -99,7 +90,6 @@ public interface HzMaterielDAO {
 
     /**
      * 获取整车衍生物料主数据全部
-     *
      * @param query
      * @return
      */
@@ -107,7 +97,6 @@ public interface HzMaterielDAO {
 
     /**
      * 批量更新数据
-     *
      * @param list
      * @return
      */
@@ -123,6 +112,12 @@ public interface HzMaterielDAO {
     int deleteMaterielList(List<HzMaterielRecord> list);
 
     int updateList(List<HzMaterielRecord> list);
+
+    /**
+     * 工艺路线初始化掉用
+     * @param projectId
+     * @return
+     */
     List<HzMaterielRecord> findHzMaterielForProcess(String projectId);
 
     int deleteMaterielByProjectId(String projectId);
