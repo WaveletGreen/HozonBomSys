@@ -157,7 +157,7 @@ public class HzVwoManagerService implements IHzVWOManagerService {
             } else {
                 //hzCfg0Service.doSetToProcess(localParams);
                 System.out.println("总数一致");
-                HzVwoInfo hzVwoInfo = generateVwoEntity(user, projectUid, result);
+                HzVwoInfo hzVwoInfo = generateVwoEntity(user, projectUid, result,1);
                 if (hzVwoInfo == null) {
                     return result;
                 }
@@ -277,7 +277,8 @@ public class HzVwoManagerService implements IHzVWOManagerService {
         //源从数据
         List<HzCfg0ModelColorDetail> hzCfg0ModelColorDetails = hzColorModelDao.selectByModelColors(hzCfg0ModelColors);
         //最新的Vwo实体类对象
-        HzVwoInfo hzVwoInfo = hzVwoManagerService.generateVwoEntity(user, projectPuid, result);
+        HzVwoInfo hzVwoInfo = hzVwoManagerService.generateVwoEntity(user, projectPuid, result,2);
+        hzVwoInfo.setVwoType(2);
         //为源主数据添加VWO编码
         for(HzCfg0ModelColor hzCfg0ModelColor : hzCfg0ModelColors){
             hzCfg0ModelColor.setCmcrVwoId(hzVwoInfo.getId());
@@ -435,6 +436,8 @@ public class HzVwoManagerService implements IHzVWOManagerService {
             result.put("status",false);
             result.put("msg","跟新源主数据失败");
         }
+        //新增VWO数据
+
         if(result.get("status")==null){
             result.put("status",true);
         }
@@ -457,7 +460,7 @@ public class HzVwoManagerService implements IHzVWOManagerService {
      * @return
      */
     @Override
-    public HzVwoInfo generateVwoEntity(User user, String projectUid, JSONObject result) {
+    public HzVwoInfo generateVwoEntity(User user, String projectUid, JSONObject result,Integer type) {
         Long id = -1L;
         HzVwoInfo hzVwoInfo;
         Date now = new Date();
@@ -474,7 +477,7 @@ public class HzVwoManagerService implements IHzVWOManagerService {
             hzVwoInfo.setVwoCreator(user.getUserName());
             hzVwoInfo.setProjectUid(projectUid);
             hzVwoInfo.setVwoCreateDate(now);
-            hzVwoInfo.setVwoType(1);
+            hzVwoInfo.setVwoType(type);
             hzVwoInfo.setVwoStatus(1);
             hzVwoInfo.setProjectCode(project.getpProjectCode());
             hzVwoInfo.setVehicleCode(vehicle.getpVehicleCode());
