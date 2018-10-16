@@ -43,12 +43,7 @@ function loadData(_projectPuid) {
         url: "modelColor/getColumn?projectPuid=" + _projectPuid,
         type: "GET",
         success: function (result) {
-            gotIt(result);
-        }
-    });
-}
 
-function gotIt(result) {
     if (result.status != 99) {
         if (result.status == 1) {
             window.Ewin.alert({message: result.msg});
@@ -139,8 +134,7 @@ function gotIt(result) {
             }
         }
     };
-    column.push(status);
-    $table.bootstrapTable({
+    column.push(status);$table.bootstrapTable({
         url: "modelColor/loadAll?projectPuid=" + projectPuid,
         method: 'get',
         height: $(window.parent.document).find("#wrapper").height() - 150,//$(window.parent.document).find("#wrapper").height() - document.body.offsetHeight - 45,
@@ -227,12 +221,50 @@ function gotIt(result) {
                             })
                         }
                     });
-                }
-            }
-        ]
+                }},
+                    {
+                        text: '发起VWO流程',
+                        iconCls: 'glyphicon glyphicon-remove',
+                        handler: function () {
+                            var rows = $table.bootstrapTable('getSelections');
+                            if (rows.length == 0) {
+                                window.Ewin.alert({message: '请选择一条需要发起VWO流程的数据!'});
+                                return false;
+                            }
+                            //测试数据
+                            window.Ewin.confirm({
+                                title: '提示',
+                                message: '是否要发起VWO流程？',
+                                width: 500
+                            }).on(function (e) {
+                                if (e) {
+                                    $.ajax({
+                                        type: "POST",
+                                        //ajax需要添加打包名
+                                        url: "./modelColor/getVWO?projectPuid="+projectPuid,
+                                        data: JSON.stringify(rows),
+                                        contentType: "application/json",
+                                        success: function (result) {
+                                            if (result.status) {
+                                                layer.msg("发起VWO流程成功", {icon: 1, time: 2000})
+                                                // window.Ewin.alert({message: "删除时数据成功"});
+                                                //刷新，会重新申请数据库数据
+                                            }
+                                            else {
+                                                window.Ewin.alert({message: "发起VWO流程失败:" + result.msg});
+                                            }
+                                            $table.bootstrapTable("refresh");
+                                        },
+                                        error: function (info) {
+                                            window.Ewin.alert({message: "发起VWO流程:" + info.status});
+                                        }
+                                    })
+                                }
+            });
+        }
+    }
+    ]
     });
-    //设置跳转的tableID，放在table初始化语句之后
-    setTargetTableId("materielFeature");
     // $table.bootstrapTable('hideColumn', 'puid');
-    // $table.bootstrapTable('hideColumn', 'modeColorIsMultiply');
+    // $table.bootstrapTable('hideColumn', 'modeColorIsMultiply');}
 }
