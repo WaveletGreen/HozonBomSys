@@ -3,15 +3,19 @@ package com.connor.hozon.bom.resources.controller.bom;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.connor.hozon.bom.bomSystem.impl.bom.HzBomLineRecordDaoImpl;
+import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0ModelService;
 import com.connor.hozon.bom.resources.controller.BaseController;
 import com.connor.hozon.bom.resources.domain.dto.request.AddHzEbomReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.request.DeleteHzEbomReqDTO;
+import com.connor.hozon.bom.resources.domain.dto.request.UpdateHzEbomLeveReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.request.UpdateHzEbomReqDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.HzEbomLevelRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzEbomRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.OperateResultMessageRespDTO;
 import com.connor.hozon.bom.resources.domain.query.HzEbomByPageQuery;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.service.bom.HzEbomService;
+import com.connor.hozon.bom.resources.util.ExcelUtil;
 import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.resources.util.PrivilegeUtil;
 import com.connor.hozon.bom.resources.util.ResultMessageBuilder;
@@ -22,10 +26,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import springfox.documentation.RequestHandler;
 import sql.pojo.bom.HzBomLineRecord;
+import sql.pojo.cfg.model.HzCfg0ModelRecord;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.*;
+
+import static org.hibernate.jpa.internal.QueryImpl.LOG;
 
 /**
  * \* User: xulf
@@ -43,8 +52,10 @@ public class HzEbomController extends BaseController {
     @Autowired
     private HzBomLineRecordDaoImpl hzBomLineRecordDao;
 
+    @Autowired
+    private HzCfg0ModelService hzCfg0ModelService;
     @RequestMapping(value = "title",method = RequestMethod.GET)
-    public void getEbomTitle(HttpServletResponse response) {
+    public void getEbomTitle(String projectId,HttpServletResponse response) {
         LinkedHashMap<String, String> tableTitle = new LinkedHashMap<>();
         tableTitle.put("No","序号");
         tableTitle.put("lineId","零件号" );
@@ -99,6 +110,15 @@ public class HzEbomController extends BaseController {
         tableTitle.put("pFnaDesc","FNA描述" );
         tableTitle.put("number","数量" );
         tableTitle.put("colorPart","是否颜色件");
+        //获取该项目下的所有车型模型
+        List<HzCfg0ModelRecord> hzCfg0ModelRecords = hzCfg0ModelService.doSelectByProjectPuid(projectId);
+
+        if(ListUtil.isNotEmpty(hzCfg0ModelRecords)){
+            for(int i = 0;i<hzCfg0ModelRecords.size();i++){
+                tableTitle.put("title"+i,hzCfg0ModelRecords.get(i).getObjectName());
+
+            }
+        }
         writeAjaxJSONResponse(ResultMessageBuilder.build(tableTitle), response);
     }
     
@@ -160,6 +180,51 @@ public class HzEbomController extends BaseController {
         model.addAttribute("data",respDTO);
         return "bomManage/ebom/ebomManage/addebomManage";
     }
+
+    /**
+     * EBOM-PBOM-MBOM调整层级
+     * @param projectId
+     * @param puid
+     * @param id
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "updateEbomLevel",method = RequestMethod.GET)
+    public String updateEbomLevel(String projectId,String puid,String id,Model model){
+        if(projectId == null || puid == null){
+            return "";
+        }
+        //判断勾选零件是否存在子层
+        int isHas = hzEbomService.findIsHasByPuid(puid,projectId);
+
+        //recordRespDTO传给updateEbomLevelManage界面的值，而非界面传回后台的值
+        HzEbomLevelRespDTO recordRespDTO = hzEbomService.fingEbomLevelById(puid,projectId);
+        recordRespDTO.setPuid(puid);//调整层级的当前零件puid
+        recordRespDTO.setProjectId(projectId);//项目id
+        //recordRespDTO.setLineId(object.getString("lineId"));//父层零件号
+        //recordRespDTO.setFindNum(object.getString("lineNo"));//查找编号
+        recordRespDTO.setIsHas(isHas);//判断是否有子层
+
+        model.addAttribute("data",recordRespDTO);
+        return "bomManage/ebom/ebomManage/updateEbomLevelManage";
+    }
+
+    @RequestMapping(value = "update/ebomLevel",method = RequestMethod.POST)
+    public void updateEbomLevelToDB(@RequestBody UpdateHzEbomLeveReqDTO reqDTO, HttpServletResponse response){
+        boolean b = PrivilegeUtil.writePrivilege();
+        if(!b){//管理员权限
+            writeAjaxJSONResponse(ResultMessageBuilder.build(false,"您没有权限进行当前操作！"), response);
+            return;
+        }
+
+        //OperateResultMessageRespDTO respDTO= hzEbomService.updateHzEbomLevelRecord(reqDTO);
+        //测试
+        OperateResultMessageRespDTO respDTO= hzEbomService.testbomLevelChange(reqDTO);
+
+        writeAjaxJSONResponse(ResultMessageBuilder.build(
+                OperateResultMessageRespDTO.isSuccess(respDTO), respDTO.getErrMsg()), response);
+    }
+
 
     @RequestMapping(value = "updateEbom",method = RequestMethod.GET)
     public String updateEbom(String projectId,String puid,Model model) {

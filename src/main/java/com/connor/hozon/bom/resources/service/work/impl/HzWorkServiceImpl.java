@@ -52,12 +52,13 @@ public class HzWorkServiceImpl implements HzWorkService {
             List<HzWorkCenter> list = centerPage.getResult();
             List<HzWorkCenterRespDTO> respDTOList = new ArrayList<>();
             for (HzWorkCenter center:list){
-                HzFactory hzFactory = hzFactoryDAO.findFactory(center.getpFactoryPuid(),"");
+//                HzFactory hzFactory = hzFactoryDAO.findFactory(center.getpFactoryPuid(),"");
                 HzWorkCenterRespDTO respDTO = new HzWorkCenterRespDTO();
+
                 respDTO.setNo(++num);
                 respDTO.setPuid(center.getPuid());
-                respDTO.setFactoryCode(hzFactory.getpFactoryCode());
-                respDTO.setFactoryId(hzFactory.getPuid());
+                respDTO.setFactoryCode("1001");
+//                respDTO.setFactoryId(hzFactory.getPuid());
                 respDTO.setpWorkCode(center.getpWorkCode());
                 respDTO.setpWorkDesc(center.getpWorkDesc());
                 respDTO.setpWorkType(center.getpWorkType());
@@ -235,7 +236,6 @@ public class HzWorkServiceImpl implements HzWorkService {
      */
     @Override
     public OperateResultMessageRespDTO updateHzWorkRecord(UpdateWorkCenterReqDTO reqDTO) {
-        OperateResultMessageRespDTO operateResultMessageRespDTO = new OperateResultMessageRespDTO();
         try {
             boolean b = PrivilegeUtil.writePrivilege();
             if(!b){
@@ -310,13 +310,9 @@ public class HzWorkServiceImpl implements HzWorkService {
      */
     @Override
     public OperateResultMessageRespDTO deleteHzWorkRecord(String puid) {
-        OperateResultMessageRespDTO respDTO = new OperateResultMessageRespDTO();
         try {
-            User user = UserInfo.getUser();
-            if (user.getGroupId() != 9) {
-                respDTO.setErrMsg("你当前没有权限执行此操作");
-                respDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
-                return respDTO;
+            if (!PrivilegeUtil.writePrivilege()) {
+               return OperateResultMessageRespDTO.getFailResult();
             }
             int i = hzWorkCenterDAO.delete(puid);
             if (i>0){

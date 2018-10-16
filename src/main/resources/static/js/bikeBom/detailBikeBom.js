@@ -49,6 +49,7 @@ function doQuery() {
 function initTable(url) {
     var projectId = $("#project", window.top.document).val();
     var $table = $("#detailBikeBomTable");
+    var singleVehiclesId = $("#singleVehiclesId").val();
     var column = [];
     $.ajax({
         url: "bom/title",
@@ -192,7 +193,7 @@ function initTable(url) {
                             }
                             if (this.innerText == '显示子层') {
                                 $table.bootstrapTable('destroy');
-                                initTable1(url, lineIds);
+                                initTable1(url, lineIds,singleVehiclesId);
                             }
                             if (this.innerText == '显示子层') {
                                 this.innerText = '取消显示子层'
@@ -215,7 +216,7 @@ function toPage() {
         $('#detailBikeBomTable').bootstrapTable('selectPage', parseInt(pageNum));
     }
 }
-function initTable1(url,lineIds) {
+function initTable1(url,lineIds,singleVehiclesId) {
     var projectId = $("#project", window.top.document).val();
     var $table = $("#detailBikeBomTable");
     var column = [];
@@ -279,7 +280,7 @@ function initTable1(url,lineIds) {
                 //         }
                 //     })
                 // },
-                url: url+"&eBomPuids="+lineIds+"&showBomStructure=1",
+                url: url+"&eBomPuids="+lineIds+"&showBomStructure=1"+"&singleVehiclesId="+singleVehiclesId,
                 method: 'get',
                 height: $(window.parent.document).find("#wrapper").height() - 90,
                 width: $(window).width(),

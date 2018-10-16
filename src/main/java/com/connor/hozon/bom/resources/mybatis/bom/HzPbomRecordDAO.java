@@ -5,6 +5,7 @@ import com.connor.hozon.bom.resources.domain.query.HzBomRecycleByPageQuery;
 import com.connor.hozon.bom.resources.domain.query.HzPbomByPageQuery;
 import com.connor.hozon.bom.resources.domain.query.HzPbomTreeQuery;
 import com.connor.hozon.bom.resources.page.Page;
+import lombok.Data;
 import sql.pojo.bom.HzPbomLineRecord;
 
 import java.util.List;
@@ -22,12 +23,22 @@ public interface HzPbomRecordDAO {
      */
     List<HzPbomLineRecord> getPbomById(Map<String,Object> map);
 
+    @Deprecated
+    List<HzPbomLineRecord> findPbomByItemId(String itemId,String projectId);
+
     /**
      * 插入 PBOM管理信息
      * @param record
      * @return
      */
     int insert(HzPbomLineRecord record);
+
+    /**
+     * 复制层级的单条插入PBOM
+     * @param record
+     * @return
+     */
+    int insert2(HzPbomLineRecord record);
 
 
     int insertList(List<HzPbomLineRecord> records);
@@ -44,6 +55,13 @@ public interface HzPbomRecordDAO {
      * @return
      */
     int recoverBomById(String ePuid);
+
+    /**
+     * 批量删除 直接删除数据
+     * @param puids eBomPuid  中间全部用英文逗号 隔开
+     * @return
+     */
+    int deleteList(String puids);
 
     /**
      * 批量删除

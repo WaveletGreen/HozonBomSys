@@ -767,6 +767,7 @@ function initTable1(pBomUrl,lineIds) {
 function lookLevel(result,pBomUrl) {
 
 }
+
 function queryLoa(row) {
     var myData = JSON.stringify({
         "projectId": $("#project", window.top.document).val(),

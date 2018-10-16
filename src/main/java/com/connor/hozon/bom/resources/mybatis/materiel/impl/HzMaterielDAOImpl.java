@@ -88,7 +88,7 @@ public class HzMaterielDAOImpl extends BaseSQLUtil implements HzMaterielDAO {
         Map map = new HashMap<>();
         map.put("projectId", query.getProjectId());
         map.put("pMaterielDataType", query.getpMaterielDataType());
-        map.put("pMaterielCode", query.getpMaterielCode());
+        map.put("pMaterielCode", query.getpMaterielCode().trim());
         map.put("pMaterielType", query.getpMaterielType());
         pageRequest.setFilters(map);
         return super.findPage("HzMaterialDAOImpl_findHzMaterielForPage", "HzMaterialDAOImpl_findHzMaterielTotalCount", pageRequest);

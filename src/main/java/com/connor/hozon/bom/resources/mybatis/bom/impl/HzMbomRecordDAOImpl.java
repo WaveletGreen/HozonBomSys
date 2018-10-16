@@ -39,6 +39,11 @@ public class HzMbomRecordDAOImpl extends BaseSQLUtil implements HzMbomRecordDAO 
     }
 
     @Override
+    public int insert2(HzMbomLineRecord record){
+        return super.insert("HzMbomRecordDAOImpl_insert2",record);
+    }
+
+    @Override
     public int update(HzMbomLineRecord record) {
         if(record.getTableName() == null || "".equals(record.getTableName())){
             record.setTableName("HZ_MBOM_RECORD");
@@ -61,9 +66,9 @@ public class HzMbomRecordDAOImpl extends BaseSQLUtil implements HzMbomRecordDAO 
         Map map = new HashMap();
         map.put("projectId",query.getProjectId());
         map.put("isHas",query.getIsHas());
-        map.put("pBomOfWhichDept",query.getpBomOfWhichDept());
+        map.put("pBomOfWhichDept",query.getpBomOfWhichDept().trim());
         map.put("lineIndex",query.getLineIndex());
-        map.put("lineId",query.getLineId());
+        map.put("lineId",query.getLineId().trim());
         map.put("pBomLinePartClass",query.getpBomLinePartClass());
         map.put("pBomLinePartResource",query.getpBomLinePartResource());
         map.put("tableName",MbomTableNameEnum.tableName(query.getType()));
@@ -81,6 +86,22 @@ public class HzMbomRecordDAOImpl extends BaseSQLUtil implements HzMbomRecordDAO 
             map.put("tableName","HZ_MBOM_RECORD");
         }
         return  super.findForList("HzMbomRecordDAOImpl_findHzMbomByPuid",map);
+    }
+
+    @Override
+    public List<HzMbomLineRecord> findMbomByItemId(String itemId,String projectId){
+        Map<String,Object> map = new HashMap<>();
+        map.put("lineId",itemId);
+        map.put("projectId",projectId);
+        return super.findForList("HzMbomRecordDAOImpl_findMbomByItemId",map);
+    }
+
+    @Override
+    public boolean checkItemIdIsRepeat(String projectId, String lineId) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("projectId",projectId);
+        map.put("lineId",lineId);
+        return (int)super.findForObject("HzMbomRecordDAOImpl_checkItemIdIsRepeat",map)>0;
     }
 
     @Override
@@ -366,4 +387,5 @@ public class HzMbomRecordDAOImpl extends BaseSQLUtil implements HzMbomRecordDAO 
         return super.findPage("HzMbomRecordDAOImpl_getHzMbomTreeByPage","HzMbomRecordDAOImpl_getHzMbomTreeTotalCount",request);
 
     }
+
 }

@@ -73,15 +73,15 @@ public class HzMbomServiceImpl implements HzMbomService{
     @Override
     public Page<HzMbomRecordRespDTO> findHzMbomForPage(HzMbomByPageQuery query) {
         try {
-            String level = query.getLevel();
+            String level = query.getLevel().trim();
             if (level != null && level!="") {
-                if(level.trim().toUpperCase().endsWith("Y")){
+                if(level.toUpperCase().endsWith("Y")){
                     int length = Integer.valueOf(level.replace("Y",""));
                     query.setIsHas(1);
                     query.setLineIndex(String.valueOf(length-1));
                 }else {
                     query.setIsHas(0);
-                    int length = Integer.valueOf(level.trim());
+                    int length = Integer.valueOf(level);
                     query.setLineIndex(String.valueOf(length));
                 }
             }
@@ -330,7 +330,7 @@ public class HzMbomServiceImpl implements HzMbomService{
     }
 
     @Override
-    public OperateResultMessageRespDTO RecoverDeleteMbomRecord(String projectId, String puid) {
+    public OperateResultMessageRespDTO recoverDeleteMbomRecord(String projectId, String puid) {
         OperateResultMessageRespDTO respDTO = new OperateResultMessageRespDTO();
         try {
             if (projectId == null || projectId == "" || puid == null || puid == "") {
@@ -581,6 +581,7 @@ public class HzMbomServiceImpl implements HzMbomService{
 //                                        Integer first = Integer.valueOf(firstIndex+Integer.valueOf(firstIndex));
                                         mbomRecord.setLineIndex(pbomLineRecord.getLineIndex());
                                         mbomRecord.setParentUid("");
+                                        mbomRecord.setIsHas(1);
                                         financeMboms.add(mbomRecord);
                                         productMboms.add(mbomRecord);
                                     }else if(whiteBody.getpBomLinePartResource().equals("采购件")){
@@ -728,7 +729,8 @@ public class HzMbomServiceImpl implements HzMbomService{
 
                 //判断财务型MBOM的是否具有子层
                 //PBOM过渡到财务型MBOM 有部分数据会被剪切到生产型MBOM，因此 此处需要判断
-                financeMboms = analysisMbomHasChildrenLevel(financeMboms);
+                financeMboms = analysisMbomHasChildrenLevel(financeMboms);//财务型MBOM
+                productMboms = analysisMbomHasChildrenLevel(productMboms);//生产型MBOM
 
 
                 HzMbomLineRecordVO superMbom = new HzMbomLineRecordVO();
@@ -1086,6 +1088,7 @@ public class HzMbomServiceImpl implements HzMbomService{
                     lineRecords.add(record);
                     lineRecord.setLineId(record.getLineId());
                     lineRecord.setIsColorPart(record.getIsColorPart());
+                    lineRecord.setColorId(record.getColorId());
                     u.add(lineRecord);
                 }
             }

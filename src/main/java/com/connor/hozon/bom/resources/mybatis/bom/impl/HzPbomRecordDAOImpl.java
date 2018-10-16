@@ -27,13 +27,25 @@ public class HzPbomRecordDAOImpl extends BaseSQLUtil implements HzPbomRecordDAO 
 
     @Override
     public List<HzPbomLineRecord> getPbomById(Map<String, Object> map) {
-
         return super.findForList("HzPbomRecordDAOImpl_getPbomById",map);
+    }
+
+    @Override
+    public List<HzPbomLineRecord> findPbomByItemId(String itemId,String projectId){
+        Map<String,Object> map = new HashMap<>();
+        map.put("puid",itemId);
+        map.put("projectId",projectId);
+        return super.findForList("HzPbomRecordDAOImpl_getPbomByItemId",map);
     }
 
     @Override
     public int insert(HzPbomLineRecord record) {
         return super.insert("HzPbomRecordDAOImpl_insert",record);
+    }
+
+    @Override
+    public int insert2(HzPbomLineRecord record){
+        return super.insert("HzPbomRecordDAOImpl_insert2",record);
     }
 
     @Override
@@ -80,6 +92,13 @@ public class HzPbomRecordDAOImpl extends BaseSQLUtil implements HzPbomRecordDAO 
     }
 
     @Override
+    public int deleteList(String puids) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("eBomPuids",Lists.newArrayList(puids.split(",")));
+        return super.delete("HzPbomRecordDAOImpl_deleteListByPuids",map);
+    }
+
+    @Override
     public int deleteList(List<DeleteHzPbomReqDTO> list) {
 
         return super.update("HzPbomRecordDAOImpl_deleteList",list);
@@ -92,9 +111,9 @@ public class HzPbomRecordDAOImpl extends BaseSQLUtil implements HzPbomRecordDAO 
         Map map = new HashMap();
         map.put("projectId",query.getProjectId());
         map.put("isHas",query.getIsHas());
-        map.put("pBomOfWhichDept",query.getpBomOfWhichDept());
+        map.put("pBomOfWhichDept",query.getpBomOfWhichDept().trim());
         map.put("lineIndex",query.getLineIndex());
-        map.put("lineId",query.getLineId());
+        map.put("lineId",query.getLineId().trim());
         map.put("pBomLinePartClass",query.getpBomLinePartClass());
         map.put("pBomLinePartResource",query.getpBomLinePartResource());
         request.setPageNumber(query.getPage());
@@ -225,6 +244,7 @@ public class HzPbomRecordDAOImpl extends BaseSQLUtil implements HzPbomRecordDAO 
         map.put("projectId",projectId);
         return super.findForList("HzPbomRecordDAOImpl_getFirstLevelBomByParentId",map);
     }
+
 
 
 

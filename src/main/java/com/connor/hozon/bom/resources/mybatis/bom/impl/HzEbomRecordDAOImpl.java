@@ -1,6 +1,5 @@
 package com.connor.hozon.bom.resources.mybatis.bom.impl;
 
-import com.connor.hozon.bom.resources.domain.dto.request.DeleteHzEbomReqDTO;
 import com.connor.hozon.bom.resources.domain.query.HzBomRecycleByPageQuery;
 import com.connor.hozon.bom.resources.domain.query.HzEbomByPageQuery;
 import com.connor.hozon.bom.resources.domain.query.HzEbomTreeQuery;
@@ -30,9 +29,9 @@ public class HzEbomRecordDAOImpl extends BaseSQLUtil implements HzEbomRecordDAO 
         Map map = new HashMap();
         map.put("projectId",query.getProjectId());
         map.put("isHas",query.getIsHas());
-        map.put("pBomOfWhichDept",query.getpBomOfWhichDept());
+        map.put("pBomOfWhichDept",query.getpBomOfWhichDept().trim());
         map.put("lineIndex",query.getLineIndex());
-        map.put("lineId",query.getLineId());
+        map.put("lineId",query.getLineId().trim());
         map.put("pBomLinePartClass",query.getpBomLinePartClass());
         map.put("pBomLinePartResource",query.getpBomLinePartResource());
         request.setPageNumber(query.getPage());
@@ -49,6 +48,30 @@ public class HzEbomRecordDAOImpl extends BaseSQLUtil implements HzEbomRecordDAO 
         map.put("projectId",projectId);
 
         return (HzEPLManageRecord) super.findForObject("HzEbomRecordDAOImpl_findEbomById",map);
+    }
+
+    @Override
+    public List<HzEPLManageRecord> findEbomByItemId(String itemId, String projectId) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("puid",itemId);
+        map.put("projectId",projectId);
+        return  super.findForList("HzEbomRecordDAOImpl_findEbomByItemId",map);
+    }
+
+    @Override
+    public int findIsHasByPuid(String puid, String projectId) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("puid",puid);
+        map.put("projectId",projectId);
+        return (int) super.findForObject("HzEbomRecordDAOImpl_findIsHasByPuid",map);
+    }
+
+    @Override
+    public List<HzEPLManageRecord> getHzBomLineParent(String projectId,String lineId){
+        Map<String,Object> map = new HashMap<>();
+        map.put("projectId",projectId);
+        map.put("lineId",lineId);
+        return super.findForList("HzEbomRecordDAOImpl_getHzBomLineParent",map);
     }
 
     /**
@@ -74,9 +97,15 @@ public class HzEbomRecordDAOImpl extends BaseSQLUtil implements HzEbomRecordDAO 
     }
 
     @Override
-    public int deleteList(List<DeleteHzEbomReqDTO> reqDTOs) {
+    public int deleteList(String puids) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("puids",Lists.newArrayList(puids.split(",")));
+        return super.update("HzEbomRecordDAOImpl_deleteList",map);
+    }
 
-        return super.update("HzEbomRecordDAOImpl_deleteList",reqDTOs);
+    @Override
+    public int delete(String puid) {
+        return super.delete("HzEbomRecordDAOImpl_delete",puid);
     }
 
     @Override
@@ -116,6 +145,11 @@ public class HzEbomRecordDAOImpl extends BaseSQLUtil implements HzEbomRecordDAO 
     @Override
     public int insert(HzEPLManageRecord record) {
         return super.insert("HzEbomRecordDAOImpl_insert",record);
+    }
+
+    @Override
+    public int insert2(HzEPLManageRecord record) {
+        return super.insert("HzEbomRecordDAOImpl_insert2",record);
     }
 
     @Override

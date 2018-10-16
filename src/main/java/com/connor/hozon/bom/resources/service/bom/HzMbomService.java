@@ -64,7 +64,7 @@ public interface HzMbomService {
      * 删除记录恢复
      * @return
      */
-    OperateResultMessageRespDTO RecoverDeleteMbomRecord(String projectId,String puid);
+    OperateResultMessageRespDTO recoverDeleteMbomRecord(String projectId,String puid);
 
     /**
      * 装车件类型

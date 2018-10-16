@@ -161,7 +161,6 @@ public class HzSingleVehiclesController extends BaseController {
 
     /**
      * 分页获取单车BOM 记录
-     *
      * @param query
      * @return
      */
@@ -212,6 +211,7 @@ public class HzSingleVehiclesController extends BaseController {
             _res.put("changeNum", dto.getChangeNum());
             _res.put("pFactoryCode", dto.getPFactoryCode());
             _res.put("pStockLocation",dto.getPStockLocation());
+            _res.put("singleVehiclesId",dto.getSingleVehiclesId());
             _list.add(_res);
         });
         ret.put("totalCount", page.getTotalCount());

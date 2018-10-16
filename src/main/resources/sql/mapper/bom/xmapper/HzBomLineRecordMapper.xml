@@ -591,28 +591,21 @@
 
 
     <!--批量删除EBOM-->
-    <update id="HzEbomRecordDAOImpl_deleteList" parameterType="java.util.List">
-        <foreach collection="list" item="item" index="index" open="begin" close=";end;" separator=";">
+    <update id="HzEbomRecordDAOImpl_deleteList" parameterType="java.util.HashMap">
+        <foreach collection="puids" item="item" index="index" open="begin" close=";end;" separator=";">
             update HZ_BOM_LINE_RECORD
             <set>
-                <if test="item.status != null">
-                    P_EBOM_STATUS = #{item.status,jdbcType=INTEGER},
-                </if>
-                <if test="item.status == null">
-                    P_EBOM_STATUS =0,
-                </if>
-                P_UPDATE_TIME =sysdate
+                P_UPDATE_TIME =sysdate,
+                P_EBOM_STATUS = 0
             </set>
-            where PUID = #{item.puid,jdbcType=VARCHAR}
+            where PUID = #{puids[${index}]}
            </foreach>
     </update>
 
-    <!--删除-->
+    <!--删除:HzEbomRecordDAOImpl_delete-->
     <delete id="HzEbomRecordDAOImpl_delete" parameterType="java.lang.String">
-
         delete  HZ_BOM_LINE_RECORD
         where PUID = #{puid,jdbcType=VARCHAR}
-
     </delete>
     <!--获取车身下级2Y层的总成级，需要代码进行查重-->
     <select id="selectVehicleAssembly" parameterType="java.util.Map" resultMap="BaseResultMap">

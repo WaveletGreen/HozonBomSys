@@ -1,6 +1,5 @@
 package com.connor.hozon.bom.resources.mybatis.bom;
 
-import com.connor.hozon.bom.resources.domain.dto.request.DeleteHzEbomReqDTO;
 import com.connor.hozon.bom.resources.domain.query.HzBomRecycleByPageQuery;
 import com.connor.hozon.bom.resources.domain.query.HzEbomByPageQuery;
 import com.connor.hozon.bom.resources.domain.query.HzEbomTreeQuery;
@@ -28,6 +27,24 @@ public interface HzEbomRecordDAO {
     HzEPLManageRecord findEbomById(String puid,String projectId);
 
     /**
+     * 根据父层零件ID找父层puid
+     * @param itemId
+     * @param projectId
+     * @return
+     */
+    List<HzEPLManageRecord> findEbomByItemId(String itemId,String projectId);
+
+    int findIsHasByPuid(String puid, String projectId);
+
+    /**
+     * 逆向找父层
+     * @param projectId
+     * @param lineId
+     * @return
+     */
+    List<HzEPLManageRecord> getHzBomLineParent(String projectId,String lineId);
+
+    /**
      * 找出一条bomLine的全部子bom sql递归查找
      * @param query
      * @return
@@ -44,10 +61,12 @@ public interface HzEbomRecordDAO {
 
     /**
      * 批量删除
-     * @param reqDTOs
+     * @param puids 主键ids 中间全部用英文逗号隔开
      * @return
      */
-    int deleteList(List<DeleteHzEbomReqDTO> reqDTOs);
+    int deleteList(String puids);
+
+    int delete(String puid);
 
     /**
      * 查询回收站
@@ -68,6 +87,12 @@ public interface HzEbomRecordDAO {
     String findMinOrderNumWhichGreaterThanThisOrderNum(String projectId,String sortNum);
 
     int insert(HzEPLManageRecord record);
+    /**
+     * 复制层级的单条插入EBOM
+     * @param record
+     * @return
+     */
+    int insert2(HzEPLManageRecord record);
 
     int importList(List<HzImportEbomRecord> records);
 
