@@ -192,6 +192,7 @@ function loadData(_projectPuid) {
                                 window.Ewin.alert({message: '请选择一条需要删除的数据!'});
                                 return false;
                             }
+
                             //测试数据
                             window.Ewin.confirm({
                                 title: '提示',
@@ -211,7 +212,10 @@ function loadData(_projectPuid) {
                                                 // window.Ewin.alert({message: "删除时数据成功"});
                                                 //刷新，会重新申请数据库数据
                                             }
-                                            else {
+                                            else {if (10 == rows[0].cmcrStatus || "10" == rows[0].cmcrStatus) {
+                                                window.Ewin.alert({message: rows[0].pCfg0ObjectId + '已在VWO流程中，不允许修改'});
+                                                return false;
+                                            }
                                                 window.Ewin.alert({message: "操作删除失败:" + result.msg});
                                             }
                                             $table.bootstrapTable("refresh");

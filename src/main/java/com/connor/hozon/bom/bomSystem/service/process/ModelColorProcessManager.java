@@ -33,7 +33,7 @@ public class ModelColorProcessManager implements IInterruptionCallBack, IRelease
 
     /**
      * 数据发布
-     *
+     *将src主数据的状态设置为发布状态(99)，清除vwo号
      * @param vwoId      vwo流程编号ID
      * @param projectUId 项目UID
      * @return
