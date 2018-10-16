@@ -37,7 +37,7 @@
         <result column="CMCR_RESERVE2" jdbcType="VARCHAR" property="cmcrReserve2"/>
         <result column="CMCR_RESERVE3" jdbcType="VARCHAR" property="cmcrReserve3"/>
         <result column="CMCR_RESERVE4" jdbcType="VARCHAR" property="cmcrReserve4"/>
-        <result column="CMCR_RESERVE5" jdbcType="VARCHAR" property="cmcrReserve5"/>
+        <result column="CMCR_STATUS" jdbcType="VARCHAR" property="cmcrStatus"/>
     </resultMap>
 
     <sql id="Base_Column_List">
@@ -63,7 +63,7 @@
         CMCR_RESERVE2,
         CMCR_RESERVE3,
         CMCR_RESERVE4,
-        CMCR_RESERVE5
+        CMCR_STATUS
     </sql>
     <sql id="values">
         #{puid,jdbcType=VARCHAR},

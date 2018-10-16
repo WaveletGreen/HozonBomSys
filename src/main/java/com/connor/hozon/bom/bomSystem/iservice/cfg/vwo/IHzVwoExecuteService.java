@@ -21,6 +21,7 @@ import java.util.List;
 public interface IHzVwoExecuteService {
     /**
      * 根据VWO ID查询
+     *
      * @param VwoId VWO主键
      * @return 一组分发与实施对象
      */
@@ -28,8 +29,17 @@ public interface IHzVwoExecuteService {
 
     /**
      * 增加一个发布与实施对象
+     *
      * @param execute
      * @return
      */
     boolean doInsert(HzVwoExecute execute);
+
+    /**
+     * 批量删除发布与实施数据
+     *
+     * @param executes
+     * @return
+     */
+    boolean doDeleteByBatch(List<HzVwoExecute> executes);
 }

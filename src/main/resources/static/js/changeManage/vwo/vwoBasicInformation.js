@@ -228,6 +228,10 @@ $(document).ready(
     }
 );
 
+/**
+ * 选择影响高层弹窗
+ * @param id
+ */
 function doSelectPerson(id) {
     window.Ewin.dialog({
         title: "添加",
@@ -238,14 +242,16 @@ function doSelectPerson(id) {
     })
 }
 
-
+/**
+ * 重新绘制发布与实施table
+ */
 function loadVwoExecuteInfo() {
-    var $tablex = $("#executeTable");
-    $tablex.bootstrapTable('destroy');
+    var tablex = $("#executeTable");
+    tablex.bootstrapTable('destroy');
     //下面这一行出现了bug，前端无法识别
-    $tablex.bootstrapTable({
+    tablex.bootstrapTable({
         url: "getExecuteInfo?vwo=" + vwoId,
-        method: 'POST',
+        method: 'GET',
         height: 350,//$(window.parent.document).find("#wrapper").height() - document.body.offsetHeight-100,
         width: $(window).width(),
         showToggle: false,                   //是否显示详细视图和列表视图的切换按钮
@@ -254,7 +260,7 @@ function loadVwoExecuteInfo() {
         clickToSelect: true,                // 单击某一行的时候选中某一条记录
         sortName: 'exeId',
         sortOrder: 'asc',
-        // formId: "queryConnectedData",
+        formId: "queryConnectedData",
         toolbars: [
             {
                 text: '添加',
@@ -273,7 +279,7 @@ function loadVwoExecuteInfo() {
                 text: '删除',
                 iconCls: 'glyphicon glyphicon-remove',
                 handler: function () {
-                    var rows = $table.bootstrapTable('getSelections');
+                    var rows = tablex.bootstrapTable('getSelections');
                     if (rows.length == 0) {
                         window.Ewin.alert({message: '请选择一条需要删除的数据!'});
                         return false;
@@ -283,19 +289,17 @@ function loadVwoExecuteInfo() {
                             $.ajax({
                                 type: "POST",
                                 //ajax需要添加打包名
-                                url: "deleteVwoInfoChange",
+                                url: "deleteExecuteInfo",
                                 data: JSON.stringify(rows),
                                 contentType: "application/json",
                                 success: function (result) {
                                     if (result.status) {
                                         layer.msg(result.msg, {icon: 1, time: 2000})
-                                        // window.Ewin.alert({message: });
-                                        //刷新，会重新申请数据库数据
                                     }
                                     else {
                                         window.Ewin.alert({message: "操作删除失败:" + result.msg});
                                     }
-                                    $table.bootstrapTable("refresh");
+                                    tablex.bootstrapTable("refresh");
                                 },
                                 error: function (info) {
                                     window.Ewin.alert({message: "操作删除:" + info.status});
@@ -352,6 +356,9 @@ function loadVwoExecuteInfo() {
                 valign: 'middle',
                 sortable: true,
                 sortOrder: 'asc',
+                formatter: function (value, row, index) {
+                    return changeDateFormat(value)
+                }
             },
             {
                 field: 'exeStatus',
@@ -371,4 +378,20 @@ function loadVwoExecuteInfo() {
             }
         ]
     });
+}
+
+/**
+ * 刷新发布与实施table
+ */
+function doRefreshExecuteTable() {
+    $("#executeTable").bootstrapTable("refresh");
+    $('body').removeClass("modal-open");
+}
+
+/**
+ * 刷新关联人员table
+ */
+function doRefreshConnectedTable() {
+    $("#connectedTable").bootstrapTable("refresh");
+    $('body').removeClass("modal-open");
 }

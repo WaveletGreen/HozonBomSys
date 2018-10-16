@@ -48,5 +48,14 @@ public class HzVwoExecuteService implements IHzVwoExecuteService {
         return hzVwoExecuteDao.insertSelective(execute) > 0 ? true : false;
     }
 
-
+    /**
+     * 批量删除发布与实施数据
+     *
+     * @param executes
+     * @return
+     */
+    @Override
+    public boolean doDeleteByBatch(List<HzVwoExecute> executes) {
+        return hzVwoExecuteDao.deleteByBatch(executes) > 0 ? true : false;
+    }
 }

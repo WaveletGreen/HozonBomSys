@@ -686,16 +686,40 @@ public class HzVwoManagerService implements IHzVWOManagerService {
      */
     @Override
     public JSONObject saveExecuteInfo(HzVwoExecute execute) {
-        if (null == execute)
-            return null;
         JSONObject result = new JSONObject();
-        iHzVwoExecuteService.doInsert(execute);
+        boolean success = false;
+        if (null == execute) {
+            result.put("status", success);
+            result.put("msg", "参数错误");
+            return result;
+        }
+        if (iHzVwoExecuteService.doInsert(execute)) {
+            success = true;
+            result.put("msg", "存储发布与实施数据成功");
+        } else {
+            result.put("msg", "存储发布与实施数据失败");
+        }
+        result.put("status", success);
         return result;
     }
 
     @Override
     public JSONObject deleteExecuteInfo(List<HzVwoExecute> executes) {
-        return null;
+        JSONObject result = new JSONObject();
+        boolean success = false;
+        if (null == executes || executes.size() <= 0) {
+            result.put("status", success);
+            result.put("msg", "请至少选择一条数据进行删除");
+            return result;
+        }
+        if (iHzVwoExecuteService.doDeleteByBatch(executes)) {
+            success = true;
+            result.put("msg", "删除发布与实施数据成功");
+        } else {
+            result.put("msg", "删除发布与实施数据失败");
+        }
+        result.put("status", success);
+        return result;
     }
 
     /**

@@ -39,4 +39,9 @@ public class HzVwoExecuteDaoImpl extends BasicDaoImpl<HzVwoExecute> implements H
         EXECUTE.setExeVwoId(vwoId);
         return baseSQLUtil.executeQuery(EXECUTE, clzName + ".selectByVwoId");
     }
+
+    @Override
+    public int deleteByBatch(List<HzVwoExecute> executes) {
+        return baseSQLUtil.executeDelete(executes, clzName + ".deleteByBatch");
+    }
 }

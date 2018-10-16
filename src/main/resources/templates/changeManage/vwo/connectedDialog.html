@@ -170,15 +170,17 @@
                     data: JSON.stringify(data),
                     url: "./vwo/saveInformChanger",
                     success: function (result) {
-                        $('.modal-dialog', window.top.document).parent('div').remove()
-                        $('body', window.top.document).find('.modal-backdrop').remove();
-                        $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
+                        $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doRefreshConnectedTable();
                         if (result.status) {
                             layer.msg(result.msg, {icon: 1, time: 2000});
+                            // $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.reloadSheet();//.find('#' + result.type).text(result.name);
                         }
                         else {
                             window.Ewin.alert({message: result.msg});
                         }
+                        $('.modal-dialog', window.top.document).parent('div').remove();
+                        $('body', window.top.document).find('.modal-backdrop').remove();
+                        $('body').removeClass("modal-open");
                     },
                     error: function (e) {
                         console.error("连接服务器异常:" + e.status);

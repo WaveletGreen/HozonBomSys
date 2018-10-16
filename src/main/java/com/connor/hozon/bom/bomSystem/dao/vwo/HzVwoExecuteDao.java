@@ -15,4 +15,12 @@ public interface HzVwoExecuteDao extends BasicDao<HzVwoExecute> {
      * @return 一组分发与实施对象
      */
     List<HzVwoExecute> selectByVwoId(Long vwoId);
+
+    /**
+     * 批量删除发布与实施数据
+     *
+     * @param executes 发布与实施数据
+     * @return 影响行数
+     */
+    int deleteByBatch(List<HzVwoExecute> executes);
 }

@@ -114,6 +114,32 @@ function gotIt(result) {
         };
         column.push(josn);
     }
+    var status = {
+        field: "cmcrStatus",
+        title: "状态",
+        align:
+            'center',
+        valign:
+            'middle',
+        formatter: function (value, row, index) {
+            if (value == 99 || "99" == value) {
+                return "<span style='color: #00B83F'>已生效</span>";
+            }
+            else if (value == 0 || "0" == value) {
+                return "<span style='color: #a97f89'>草稿状态</span>";
+            }
+            else if (-1 == value || "-1" == value) {
+                return "<span style='color: #9492a9'>已废止</span>";
+            }
+            else if (10 == value || "10" == value) {
+                return "<span style='color: #e69800'>VWO审核中</span>";
+            }
+            else {
+                return "<span style='color: #a90009'>未知状态</span>";
+            }
+        }
+    };
+    column.push(status);
     $table.bootstrapTable({
         url: "modelColor/loadAll?projectPuid=" + projectPuid,
         method: 'get',

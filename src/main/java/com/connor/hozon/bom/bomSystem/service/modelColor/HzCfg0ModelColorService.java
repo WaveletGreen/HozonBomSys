@@ -353,7 +353,10 @@ public class HzCfg0ModelColorService {
                     //添加默认值
                     _result.put("s" + i, "-");
                 }
+
             }
+            //添加状态
+            _result.put("cmcrStatus",color.getCmcrStatus());
             res.add(_result);
         });
 

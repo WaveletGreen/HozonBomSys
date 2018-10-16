@@ -180,10 +180,7 @@ public class HzVwoController {
     @RequestMapping(value = "saveExecuteInfo", method = RequestMethod.POST)
     @ResponseBody
     public JSONObject saveExecuteInfo(@RequestBody HzVwoExecute execute) {
-        JSONObject result = new JSONObject();
-        System.out.println();
-        iHzVWOManagerService.saveExecuteInfo(execute);
-        return result;
+        return iHzVWOManagerService.saveExecuteInfo(execute);
     }
 
     /**
@@ -195,10 +192,7 @@ public class HzVwoController {
     @RequestMapping(value = "deleteExecuteInfo", method = RequestMethod.POST)
     @ResponseBody
     public JSONObject deleteExecuteInfo(@RequestBody List<HzVwoExecute> executes) {
-        JSONObject result = new JSONObject();
-        System.out.println();
-        iHzVWOManagerService.deleteExecuteInfo(executes);
-        return result;
+        return iHzVWOManagerService.deleteExecuteInfo(executes);
     }
 
 

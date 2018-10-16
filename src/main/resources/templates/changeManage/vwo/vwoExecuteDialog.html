@@ -12,7 +12,7 @@
 <body>
 <input id="url" type="hidden" value="vwo/queryByBase"/>
 <div class="panel-body" style="padding-bottom:0px;">
-    <form class="form-horizontal" id="cntForm" role="form" method="post">
+    <form class="form-horizontal" id="exeForm" role="form" method="post">
         <fieldset>
             <div class="panel panel-default" style="margin-top: 10px;">
                 <input th:value="${vwoId}" type="hidden" id="exeVwoId" name="exeVwoId"/>
@@ -123,6 +123,7 @@
                             $("#exeDept").val(result.groupName);
                             $("#exeUser").val(result.personName);
                             $("#exeUserId").val(result.personId);
+                            bootstrapValidator.validate();
                         }
                     },
                     error: function (e) {
@@ -141,7 +142,7 @@
         }
     );
     $(function () {
-        $('#cntForm').bootstrapValidator({
+        $('#exeForm').bootstrapValidator({
             message: 'This value is not valid',
             feedbackIcons: {
                 valid: 'glyphicon glyphicon-ok',
@@ -160,14 +161,14 @@
             }
         });
         $("#btnOk", window.top.document).click(function () {
-            var bootstrapValidator = $("#cntForm", window.top.document).data('bootstrapValidator');
+            var bootstrapValidator = $("#exeForm", window.top.document).data('bootstrapValidator');
             bootstrapValidator.validate();
             //重新验证字段
             // bootstrapValidator.revalidateField("pColorAbolishDate");
             // bootstrapValidator.revalidateField("pColorEffectedDate");
             if (bootstrapValidator.isValid()) {
                 let data = {};
-                var _d = $("#cntForm").serializeArray();
+                var _d = $("#exeForm").serializeArray();
                 for (var p in _d) {
                     data[_d[p].name] = _d[p].value;
                 }
@@ -183,8 +184,11 @@
                     success: function (result) {
                         $('.modal-dialog', window.top.document).parent('div').remove();
                         $('body', window.top.document).find('.modal-backdrop').remove();
+                        //移除该样式，否则y轴滚动框将无法显示，则无法向下滚动
+                        $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doRefreshExecuteTable();
                         if (result.status) {
                             layer.msg(result.msg, {icon: 1, time: 2000});
+                            // $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.reloadSheet();//.find('#' + result.type).text(result.name);
                         }
                         else {
                             window.Ewin.alert({message: result.msg});

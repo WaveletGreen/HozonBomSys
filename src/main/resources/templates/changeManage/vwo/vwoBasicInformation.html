@@ -229,12 +229,14 @@
                                            th:value="${influenceDept.getVwoId()}"/>
                                     <table id="vwo_table1" class="table table-striped tableNormalStyle">
                                         <tr>
-                                            <td style="width: 50px"><input type="checkbox" id="vwoIdri" name="vwoIdri"
+                                            <td style="width: 50px"><input type="checkbox" id="vwoIdri"
+                                                                           name="vwoIdri"
                                                                            value="1"
                                                                            th:checked="${influenceDept.getVwoIdri()==1?true:false}"/>
                                             </td>
                                             <td><label for="vwoIdri">智能驾驶研究院</label></td>
-                                            <td style="width: 50px"><input type="checkbox" id="vwoIcbu" name="vwoIcbu"
+                                            <td style="width: 50px"><input type="checkbox" id="vwoIcbu"
+                                                                           name="vwoIcbu"
                                                                            value="1"
                                                                            th:checked="${influenceDept.getVwoIcbu()==1?true:false}"/>
                                             </td>
@@ -442,8 +444,9 @@
         $('#connectedTable').bootstrapTable('refresh');    //刷新表格
     };
 
-    function reloadSheet() {
-        window.location.reload();//刷新当前页面.
+    function reloadSheet(type, name) {
+        // window.location.reload();//刷新当前页面.
+        $("#sp_" + type).text(name);
     }
 </script>
 </body>

@@ -99,6 +99,7 @@
         <mapper resource="sql/mapper/cfg/vwo/HzVwoInfluenceUserMapper.xml"/>
         <mapper resource="sql/mapper/cfg/vwo/HzVwoInfoMapper.xml"/>
         <mapper resource="sql/mapper/cfg/vwo/HzVwoInformChangesMapper.xml"/>
+        <mapper resource="sql/mapper/cfg/vwo/HzVwoExecuteMapper.xml"/>
         <!--CODPWO表单-->
         <mapper resource="sql/mapper/change.xmapper/HzBreakPointMapper.xml"/>
 

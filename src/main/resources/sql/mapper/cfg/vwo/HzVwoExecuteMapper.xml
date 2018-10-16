@@ -73,6 +73,15 @@
     delete from HZ_VWO_EXECUTE
     where EXE_ID = #{exeId,jdbcType=DECIMAL}
   </delete>
+    <delete id="deleteByBatch" parameterType="List">
+        delete from HZ_VWO_EXECUTE
+        where EXE_ID in (
+        <foreach collection="list" item="item" index="index"
+                 separator=",">
+            #{item.exeId,jdbcType=DECIMAL}
+        </foreach>
+        )
+    </delete>
     <!--**************************************insert**************************************-->
     <insert id="insert" parameterType="sql.pojo.cfg.vwo.HzVwoExecute">
         <selectKey order="BEFORE"
