@@ -9,6 +9,7 @@ package com.connor.hozon.bom.bomSystem.service.process;
 import com.connor.hozon.bom.bomSystem.iservice.process.IFunctionDesc;
 import com.connor.hozon.bom.bomSystem.iservice.process.IInterruptionCallBack;
 import com.connor.hozon.bom.bomSystem.iservice.process.IReleaseCallBack;
+import org.springframework.context.annotation.Configuration;
 
 /**
  * @Author: Fancyears·Maylos·Maywas
@@ -16,6 +17,7 @@ import com.connor.hozon.bom.bomSystem.iservice.process.IReleaseCallBack;
  * @Date: Created in 2018/10/16 13:28
  * @Modified By:
  */
+@Configuration
 public class FeatureProcessManager implements IInterruptionCallBack, IReleaseCallBack, IFunctionDesc {
     /**
      * 中断操作
