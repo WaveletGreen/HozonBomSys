@@ -582,9 +582,7 @@ public class ExcelUtil {
             File f = new File(ExcelUtil.class.getClassLoader().getResource("static/files/tableExport.xlsx").getFile()) ;// 声明File对象
             //InputStream is = new FileInputStream(f);D:\HozonBomSys\target\classes\static\files
             //InputStream is = ExcelUtil.class.getClassLoader().getResourceAsStream("./static/files/tableExport.xlsx");
-//            if(!f.exists()){
-//                return false;
-//            }
+
             FileOutputStream fos = new FileOutputStream(f);
             //InputStream is = new FileInputStream(ResourceUtils.getFile("files/tableExport.xlsx"));
             //InputStream is = HzEbomController.class.getResourceAsStream("tableExport.xlsx");

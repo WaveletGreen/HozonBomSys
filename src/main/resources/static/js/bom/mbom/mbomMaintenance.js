@@ -197,25 +197,6 @@ function initTable1(mBomUrl) {
                 minimumCountColumns: 4,
                 //responseHandler:responseHandler, //在渲染页面数据之前执行的方法，此配置很重要!!!!!!!
                 toolbars: [
-                    /*{
-                        text: '添加',
-                        iconCls: 'glyphicon glyphicon-plus',
-                        handler: function () {
-                            var rows = $mBomTable.bootstrapTable('getSelections');
-                            //只能选一条
-                            if (rows.length != 1) {
-                                window.Ewin.alert({message: '请选择一条需要添加的数据!'});
-                                return false;
-                            }
-                            window.Ewin.dialog({
-                                title: "添加",
-                                url: "mbom/addMBom?projectId=" + projectPuid + "&eBomPuid=" + rows[0].eBomPuid,
-                                gridId: "gridId",
-                                width: 500,
-                                height: 650
-                            })
-                        }
-                    },*/
                     {
                         text: '修改',
                         iconCls: 'glyphicon glyphicon-pencil',
@@ -624,8 +605,47 @@ function initTable1(mBomUrl) {
                                 });
                             }
                         }
-                    }
+                    },
+                    {
+                        text: '导出Excel',
+                        iconCls: 'glyphicon glyphicon-export',
+                        handler: function () {
+                            //var headers = data;//表头
+                            var rows = $mBomTable.bootstrapTable('getSelections');//选中行数据
+                            if (rows.length == 0) {
+                                window.Ewin.alert({message: '请选择一条需要导出的数据!'});
+                                return false;
+                            }
+                            window.Ewin.confirm({title: '提示', message: '是否要导出选中行？', width: 500}).on(function (e) {
+                                if (e) {
+                                    $.ajax({
+                                        type: "POST",
+                                        //ajax需要添加打包名
+                                        url: "./mbom/excelExport",//??????
+                                        data: JSON.stringify(rows),
+                                        contentType: "application/json",
+                                        success: function (result) {
+                                            console.log(result);
+                                            if (result.status) {
+                                                layer.msg(result.msg, {icon: 1, time: 2000})
 
+                                                //下载EBOM导入模板
+                                                window.location.href =  result.path;//V1.1.0.log
+                                            }
+                                            else {
+                                                window.Ewin.alert({message: "操作导出失败:" + result.msg});
+                                            }
+                                            $mBomTable.bootstrapTable("refresh");
+                                        },
+                                        error: function (info) {
+                                            window.Ewin.alert({message: "操作导出:" + info.status});
+                                        }
+                                    })
+                                }
+                            });
+
+                        }
+                    }
                 ],
             });
             // $mBomTable.bootstrapTable('hideColumn', 'eBomPuid');
@@ -843,7 +863,46 @@ function initTable2(productionUrl) {
                             });
                         }
                     },
+                    {
+                        text: '导出Excel',
+                        iconCls: 'glyphicon glyphicon-export',
+                        handler: function () {
+                            //var headers = data;//表头
+                            var rows = $productionTable.bootstrapTable('getSelections');//选中行数据
+                            if (rows.length == 0) {
+                                window.Ewin.alert({message: '请选择一条需要导出的数据!'});
+                                return false;
+                            }
+                            window.Ewin.confirm({title: '提示', message: '是否要导出选中行？', width: 500}).on(function (e) {
+                                if (e) {
+                                    $.ajax({
+                                        type: "POST",
+                                        //ajax需要添加打包名
+                                        url: "./mbom/excelExport",//??????
+                                        data: JSON.stringify(rows),
+                                        contentType: "application/json",
+                                        success: function (result) {
+                                            console.log(result);
+                                            if (result.status) {
+                                                layer.msg(result.msg, {icon: 1, time: 2000})
 
+                                                //下载EBOM导入模板
+                                                window.location.href =  result.path;//V1.1.0.log
+                                            }
+                                            else {
+                                                window.Ewin.alert({message: "操作导出失败:" + result.msg});
+                                            }
+                                            $productionTable.bootstrapTable("refresh");
+                                        },
+                                        error: function (info) {
+                                            window.Ewin.alert({message: "操作导出:" + info.status});
+                                        }
+                                    })
+                                }
+                            });
+
+                        }
+                    }
                 ],
             });
             // $productionTable.bootstrapTable('hideColumn', 'eBomPuid');
@@ -1061,6 +1120,45 @@ function initTable3(financialUrl) {
                             });
                         }
                     },
+                    {
+                        text: '导出Excel',
+                        iconCls: 'glyphicon glyphicon-export',
+                        handler: function () {
+                            //var headers = data;//表头
+                            var rows = $financialTable.bootstrapTable('getSelections');//选中行数据
+                            if (rows.length == 0) {
+                                window.Ewin.alert({message: '请选择一条需要导出的数据!'});
+                                return false;
+                            }
+                            window.Ewin.confirm({title: '提示', message: '是否要导出选中行？', width: 500}).on(function (e) {
+                                if (e) {
+                                    $.ajax({
+                                        type: "POST",
+                                        //ajax需要添加打包名
+                                        url: "./mbom/excelExport",//??????
+                                        data: JSON.stringify(rows),
+                                        contentType: "application/json",
+                                        success: function (result) {
+                                            console.log(result);
+                                            if (result.status) {
+                                                layer.msg(result.msg, {icon: 1, time: 2000})
+
+                                                //下载EBOM导入模板
+                                                window.location.href =  result.path;//V1.1.0.log
+                                            }
+                                            else {
+                                                window.Ewin.alert({message: "操作导出失败:" + result.msg});
+                                            }
+                                            $financialTable.bootstrapTable("refresh");
+                                        },
+                                        error: function (info) {
+                                            window.Ewin.alert({message: "操作导出:" + info.status});
+                                        }
+                                    })
+                                }
+                            });
+                        }
+                    }
                 ],
             });
             // $financialTable.bootstrapTable('hideColumn', 'eBomPuid');

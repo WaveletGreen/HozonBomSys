@@ -177,25 +177,7 @@ function initTable(pBomUrl) {
                 showRefresh: true,                  //是否显示刷新按钮
                 //minimumCountColumns:4,
                 toolbars: [
-                    /*{
-                        text: '添加',
-                        iconCls: 'glyphicon glyphicon-plus',
-                        handler: function () {
-                            var rows = $table.bootstrapTable('getSelections');
-                            //只能选一条
-                            if (rows.length != 1) {
-                                window.Ewin.alert({message: '请选择一条需要添加的数据!'});
-                                return false;
-                            }
-                            window.Ewin.dialog({
-                                title: "添加",
-                                url: "pbom/addPbomManage?projectId=" + projectPuid + "&eBomPuid=" + rows[0].eBomPuid,
-                                gridId: "gridId",
-                                width: 500,
-                                height: 500
-                            })
-                        }
-                    },*/
+
                     {
                         text: '修改',
                         iconCls: 'glyphicon glyphicon-pencil',
@@ -328,25 +310,46 @@ function initTable(pBomUrl) {
                             // });
                         }
                     },
-                    // {
-                    //     text: '添加工艺辅料',
-                    //     iconCls: 'glyphicon glyphicon-plus',
-                    //     handler: function () {
-                    //         var rows = $table.bootstrapTable('getSelections');
-                    //         //只能选一条
-                    //         if (rows.length != 1) {
-                    //             window.Ewin.alert({message: '请选择一条需要添加的数据!'});
-                    //             return false;
-                    //         }
-                    //         window.Ewin.dialog({
-                    //             title: "添加",
-                    //             url: "pbom/addPbomManage?projectId=" + projectPuid + "&eBomPuid=" + rows[0].eBomPuid,
-                    //             gridId: "gridId",
-                    //             width: 500,
-                    //             height: 500
-                    //         })
-                    //     }
-                    // },
+                    {
+                        text: '导出Excel',
+                        iconCls: 'glyphicon glyphicon-export',
+                        handler: function () {
+                            //var headers = data;//表头
+                            var rows = $table.bootstrapTable('getSelections');//选中行数据
+                            if (rows.length == 0) {
+                                window.Ewin.alert({message: '请选择一条需要导出的数据!'});
+                                return false;
+                            }
+                            window.Ewin.confirm({title: '提示', message: '是否要导出选中行？', width: 500}).on(function (e) {
+                                if (e) {
+                                    $.ajax({
+                                        type: "POST",
+                                        //ajax需要添加打包名
+                                        url: "./pbom/excelExport",//??????
+                                        data: JSON.stringify(rows),
+                                        contentType: "application/json",
+                                        success: function (result) {
+                                            console.log(result);
+                                            if (result.status) {
+                                                layer.msg(result.msg, {icon: 1, time: 2000})
+
+                                                //下载EBOM导入模板
+                                                window.location.href =  result.path;//V1.1.0.log
+                                            }
+                                            else {
+                                                window.Ewin.alert({message: "操作导出失败:" + result.msg});
+                                            }
+                                            $table.bootstrapTable("refresh");
+                                        },
+                                        error: function (info) {
+                                            window.Ewin.alert({message: "操作导出:" + info.status});
+                                        }
+                                    })
+                                }
+                            });
+
+                        }
+                    }
                 ],
             });
             // $table.bootstrapTable('hideColumn', 'eBomPuid');

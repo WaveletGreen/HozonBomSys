@@ -8,11 +8,13 @@ import com.connor.hozon.bom.resources.domain.dto.request.AddHzPbomRecordReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.request.DeleteHzPbomReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.request.HzPbomProcessComposeReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.request.UpdateHzPbomRecordReqDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.HzEbomRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzPbomLineRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.OperateResultMessageRespDTO;
 import com.connor.hozon.bom.resources.domain.query.HzPbomByPageQuery;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.service.bom.HzPbomService;
+import com.connor.hozon.bom.resources.util.ExcelUtil;
 import com.connor.hozon.bom.resources.util.ResultMessageBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,8 +22,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import sql.pojo.cfg.HzCfg0ColorSet;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.*;
+
+import static org.hibernate.jpa.internal.QueryImpl.LOG;
 
 /**
  * Created by haozt on 2018/5/24
@@ -288,5 +293,69 @@ public class HzPbomController extends BaseController {
         return hzPbomService.doGenerateProcessCompose(param);
     }
 
+    /**
+     * 下载PBOM
+     */
+    @RequestMapping(value = "excelExport",method = RequestMethod.POST)
+    @ResponseBody
+    public JSONObject listDownLoad(
+             @RequestBody  List<HzPbomLineRespDTO> dtos
+    ) {
+        boolean flag=true;
+        JSONObject result=new JSONObject();
+        try {
+            String fileName = "tableExport.xlsx";//文件名-tableExport
+            String[] title = {
+                    "序号","零件号" ,"名称","层级" ,"专业" ,"级别" ,"分组号","查找编号" ,"英文名称","LOU/LOA",
+                    "零件分类","零部件来源","自制/采购","焊接/装配","采购单元","车间1","车间2","生产线","模具类别",
+                    "外委件","工位"
+            };//表头
+            //当前页的数据
+            List<String[]> dataList = new ArrayList<String[]>();
+            int index=1;
+            for (HzPbomLineRespDTO ebomRespDTO : dtos) {
+                String[] cellArr = new String[title.length];
+                cellArr[0] = index+"";
+                index++;
+                cellArr[1] = ebomRespDTO.getLineId();
+                cellArr[2] = ebomRespDTO.getpBomLinePartName();
+                cellArr[3] = ebomRespDTO.getLevel();
+                cellArr[4] = ebomRespDTO.getpBomOfWhichDept();
+                cellArr[5] = ebomRespDTO.getRank();
+                cellArr[6] = ebomRespDTO.getGroupNum();
+                cellArr[7] = ebomRespDTO.getLineNo();
+                cellArr[8] = ebomRespDTO.getpBomLinePartEnName();
+                cellArr[9] = ebomRespDTO.getpLouaFlag();
+                cellArr[10] = ebomRespDTO.getpBomLinePartClass();
+                cellArr[11] = ebomRespDTO.getpBomLinePartResource();
+                cellArr[12] = ebomRespDTO.getResource();
+                cellArr[13] = ebomRespDTO.getType();
+                cellArr[14] = ebomRespDTO.getBuyUnit();
+                cellArr[15] = ebomRespDTO.getWorkShop1();
+                cellArr[16] = ebomRespDTO.getWorkShop2();
+                cellArr[17] = ebomRespDTO.getProductLine();
+                cellArr[18] = ebomRespDTO.getMouldType();
+                cellArr[19] = ebomRespDTO.getOuterPart();
+                cellArr[20] = ebomRespDTO.getStation();
+                dataList.add(cellArr);
+            }
+            flag = ExcelUtil.writeExcel(fileName, title, dataList);
+
+            if(flag){
+                LOG.info(fileName+",文件创建成功");
+                result.put("status",flag);
+                result.put("msg","成功");
+                result.put("path","./files/"+fileName);
+            }else{
+                LOG.info(fileName+",文件创建失败");
+                result.put("status",flag);
+                result.put("msg","失败");
+            }
+        } catch (Exception e) {
+            if(LOG.isTraceEnabled())//isErrorEnabled()
+                LOG.error(e.getMessage());
+        }
+        return result;
+    }
 
 }

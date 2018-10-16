@@ -214,7 +214,7 @@ public class HzEbomController extends BaseController {
     }
 
     /**
-     * 下载
+     * 下载EBOM
      */
     @RequestMapping(value = "excelExport",method = RequestMethod.POST)
     @ResponseBody
@@ -234,13 +234,76 @@ public class HzEbomController extends BaseController {
                     "黑白灰匣子件" ,"开发类别","数据版本" ,"目标重量(kg)","预估重量(kg)","实际重量(kg)" ,
                     "紧固件","紧固件规格","紧固件性能等级","扭矩" ,"责任工程师","供应商","供应商代码" ,
                     "采购工程师","备注","零件分类" ,"零件来源","内外饰标识","UPC","FNA","FNA描述" ,"数量"
-                    ,"是否颜色件","状态"};//表头
+                    ,"是否颜色件"
+                    //,"状态"
+            };//表头
             //当前页的数据
             List<String[]> dataList = new ArrayList<String[]>();
-            String[] cellArr = new String[title.length];
+            int index=1;
             for (HzEbomRespDTO ebomRespDTO : dtos) {
-                cellArr[0] = ebomRespDTO.getLineId();
-                cellArr[1] = ebomRespDTO.getLineNo();
+                String[] cellArr = new String[title.length];
+                cellArr[0] = index+"";
+                index++;
+                cellArr[1] = ebomRespDTO.getLineId();
+                cellArr[2] = ebomRespDTO.getpBomLinePartName();
+                cellArr[3] = ebomRespDTO.getLevel();
+                cellArr[4] = ebomRespDTO.getpBomOfWhichDept();
+                cellArr[5] = ebomRespDTO.getRank();
+                cellArr[6] = ebomRespDTO.getGroupNum();
+                cellArr[7] = ebomRespDTO.getLineNo();
+                cellArr[8] = ebomRespDTO.getpBomLinePartEnName();
+                cellArr[9] = ebomRespDTO.getpLouaFlag();
+                cellArr[10] = ebomRespDTO.getpUnit();
+                cellArr[11] = ebomRespDTO.getpPictureNo();
+                cellArr[12] = ebomRespDTO.getpPictureSheet();
+                cellArr[13] = ebomRespDTO.getpMaterialHigh();
+                cellArr[14] = ebomRespDTO.getpMaterial1();
+                cellArr[15] = ebomRespDTO.getpMaterial2();
+                cellArr[16] = ebomRespDTO.getpMaterial3();
+                cellArr[17] = ebomRespDTO.getpDensity();
+                cellArr[18] = ebomRespDTO.getpMaterialStandard();
+                cellArr[19] = ebomRespDTO.getpSurfaceTreat();
+                cellArr[20] = ebomRespDTO.getpTextureColorNum();
+                cellArr[21] = ebomRespDTO.getpManuProcess();
+                cellArr[22] = ebomRespDTO.getpSymmetry();
+                cellArr[23] = ebomRespDTO.getpImportance();
+                cellArr[24] = ebomRespDTO.getpRegulationFlag();
+                cellArr[25] = ebomRespDTO.getP3cpartFlag();
+                cellArr[26] = ebomRespDTO.getpRegulationCode();
+                cellArr[27] = ebomRespDTO.getpBwgBoxPart();
+                cellArr[28] = ebomRespDTO.getpDevelopType();
+                cellArr[29] = ebomRespDTO.getpDataVersion();
+                cellArr[30] = ebomRespDTO.getpTargetWeight();
+                cellArr[31] = ebomRespDTO.getpFeatureWeight();
+                cellArr[32] = ebomRespDTO.getpActualWeight();
+                cellArr[33] = ebomRespDTO.getpFastener();
+                cellArr[34] = ebomRespDTO.getpFastenerStandard();
+                cellArr[35] = ebomRespDTO.getpFastenerLevel();
+                cellArr[36] = ebomRespDTO.getpTorque();
+                cellArr[37] = ebomRespDTO.getpDutyEngineer();
+                cellArr[38] = ebomRespDTO.getpSupply();
+                cellArr[39] = ebomRespDTO.getpSupplyCode();
+                cellArr[40] = ebomRespDTO.getpBuyEngineer();
+                cellArr[41] = ebomRespDTO.getpRemark();
+                cellArr[42] = ebomRespDTO.getpBomLinePartClass();
+                cellArr[43] = ebomRespDTO.getpBomLinePartResource();
+                cellArr[44] = ebomRespDTO.getpInOutSideFlag();
+                cellArr[45] = ebomRespDTO.getpUpc();
+                cellArr[46] = ebomRespDTO.getFna();
+                cellArr[47] = ebomRespDTO.getpFnaDesc();
+                cellArr[48] = ebomRespDTO.getNumber();
+                cellArr[49] = ebomRespDTO.getColorPart();
+                //1 已生效; 0 删除;  2草稿状态;  3废除状态; 4删除状态
+//                if(ebomRespDTO.getStatus()==0)
+//                    cellArr[50] = "删除";
+//                else if(ebomRespDTO.getStatus()==1)
+//                    cellArr[50] = "已生效";
+//                else if(ebomRespDTO.getStatus()==2)
+//                    cellArr[50] = "草稿状态";
+//                else if(ebomRespDTO.getStatus()==3)
+//                    cellArr[50] = "废除状态";
+//                else if(ebomRespDTO.getStatus()==4)
+//                    cellArr[50] = "删除状态";
                 dataList.add(cellArr);
             }
             flag = ExcelUtil.writeExcel(fileName, title, dataList);
@@ -250,7 +313,6 @@ public class HzEbomController extends BaseController {
                 result.put("status",flag);
                 result.put("msg","成功");
                 result.put("path","./files/"+fileName);
-                //D:\HozonBomSys\src\main\resources\static\files\tableExport.xlsx
             }else{
                 LOG.info(fileName+",文件创建失败");
                 result.put("status",flag);
