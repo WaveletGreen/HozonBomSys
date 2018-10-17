@@ -82,7 +82,7 @@ public interface HzEbomService {
      * 删除记录恢复
      * @return
      */
-    OperateResultMessageRespDTO RecoverDeleteEbomRecord(String projectId,String puid);
+    OperateResultMessageRespDTO recoverDeleteEbomRecord(String projectId,String puid);
 
 
     /**

@@ -293,6 +293,7 @@ public class BaseSQLUtil implements IBaseSQLUtil {
      */
     public int insert(final String sqlMapId, final Object object) {
 //        SqlSession session = null;
+        checkSessionStatus();
         try {
 //            SqlSessionFactory f = FactoryManager.getInstance();
 //            session = f.openSession();
@@ -318,6 +319,7 @@ public class BaseSQLUtil implements IBaseSQLUtil {
      */
     public Object findForObject(final String sqlMapId, final Object param) {
 //        SqlSession session = null;
+        checkSessionStatus();
         try {
 //            SqlSessionFactory f = FactoryManager.getInstance();
 //            session = f.openSession();
@@ -345,6 +347,7 @@ public class BaseSQLUtil implements IBaseSQLUtil {
      */
     public int update(final String sqlMapId, final Object param) {
 //        SqlSession session = null;
+        checkSessionStatus();
         try {
 //            SqlSessionFactory factory = FactoryManager.getInstance();
 //            session = factory.openSession();
@@ -362,6 +365,7 @@ public class BaseSQLUtil implements IBaseSQLUtil {
 
     public int delete(final String sqlMapId, final Object param) {
 //        SqlSession session = null;
+        checkSessionStatus();
         try {
 //            SqlSessionFactory f = FactoryManager.getInstance();
 //            session = f.openSession();
@@ -446,6 +450,7 @@ public class BaseSQLUtil implements IBaseSQLUtil {
      */
     public List findForList(final String sqlMapId, final Object param, final int offset, final int limit) {
 //        SqlSession session = null;
+        checkSessionStatus();
         try {
 //            SqlSessionFactory f = FactoryManager.getInstance();
 //            session = f.openSession();

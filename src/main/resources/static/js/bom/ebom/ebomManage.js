@@ -976,6 +976,22 @@ function initTable1(eBomUrl,puids) {
 
                         }
                     }
+                    // {
+                    //     text: '导出Excel',
+                    //     iconCls: 'glyphicon glyphicon-export',
+                    //     handler: function () {
+                    //         var userName = data;//表头
+                    //         var className = $table.bootstrapTable('getData');//返回当前页的数据
+                    //         var param = "userName=" + userName + "&className=" + className;
+                    //
+                    //         var projectPuid = $("#project", window.top.document).val();
+                    //         //var eBomUrl = "ebom/getEBom/list?projectId=" + projectPuid;
+                    //
+                    //         var url = "ebom/excelExport?projectId=" + projectPuid;
+                    //         window.location = url;
+                    //
+                    //     }
+                    // }
                 ],
             });
             //$table.bootstrapTable('hideColumn','puid');

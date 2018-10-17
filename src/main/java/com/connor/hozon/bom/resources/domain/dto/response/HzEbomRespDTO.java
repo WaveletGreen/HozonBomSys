@@ -22,6 +22,10 @@ public class HzEbomRespDTO {
 
     private String lineId;
     private String puid;
+    /**
+     * 单车用量
+     */
+    private String[] singleDosage;
 
     private String projectId;
     /**
@@ -154,6 +158,14 @@ public class HzEbomRespDTO {
     private Integer changeFlag;
 
     private String colorPart;
+
+    public String[] getSingleDosage() {
+        return singleDosage;
+    }
+
+    public void setSingleDosage(String[] singleDosage) {
+        this.singleDosage = singleDosage;
+    }
 
     public String getColorPart() {
         return colorPart;

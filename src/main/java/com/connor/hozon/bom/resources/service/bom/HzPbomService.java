@@ -107,7 +107,7 @@ public interface HzPbomService {
      *
      * @return
      */
-    OperateResultMessageRespDTO RecoverDeletePbomRecord(String projectId, String puid);
+    OperateResultMessageRespDTO recoverDeletePbomRecord(String projectId, String puid);
 
 
     OperateResultMessageRespDTO setCurrentBomAsLou(SetLouReqDTO reqDTO);

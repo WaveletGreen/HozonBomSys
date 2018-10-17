@@ -6,6 +6,7 @@ import com.connor.hozon.bom.bomSystem.dao.bom.HzBomMainRecordDao;
 import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.resources.domain.dto.request.AddHzEbomReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.request.UpdateHzEbomReqDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.HzEbomRespDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import sql.pojo.bom.HZBomMainRecord;
 import sql.pojo.bom.HzBomLineRecord;
@@ -260,5 +261,82 @@ public class HzEbomRecordFactory {
             jsonObject.put("colorPart", "");
         }
         return jsonObject;
+    }
+
+
+
+    public static HzEbomRespDTO eplRecordToEbomRespDTO(HzEPLManageRecord record){
+        HzEbomRespDTO respDTO   = new HzEbomRespDTO();
+        respDTO.setPuid(record.getPuid());
+        respDTO.setpBomOfWhichDept(record.getpBomOfWhichDept());
+        respDTO.setLineId(record.getLineID());
+        respDTO.setpBomLinePartName(record.getpBomLinePartName());
+        respDTO.setpBomLinePartClass(record.getpBomLinePartClass());
+        respDTO.setpBomLinePartEnName(record.getpBomLinePartEnName());
+        respDTO.setpBomLinePartResource( record.getpBomLinePartResource());
+        respDTO.setpFastener( record.getpFastener());
+        if(Integer.valueOf(1).equals(record.getP3cpartFlag())){
+            respDTO.setP3cpartFlag( "Y");
+        }else if(Integer.valueOf(0).equals(record.getP3cpartFlag())){
+            respDTO.setP3cpartFlag( "N");
+        }else {
+            respDTO.setP3cpartFlag( "");
+        }
+        if(Integer.valueOf(1).equals(record.getpInOutSideFlag())){
+            respDTO.setpInOutSideFlag( "内饰件");
+        }else if(Integer.valueOf(0).equals(record.getpInOutSideFlag())){
+            respDTO.setpInOutSideFlag( "外饰件");
+        }else {
+            respDTO.setpInOutSideFlag( "");
+        }
+        respDTO.setpUpc(record.getpUpc());
+        respDTO.setpFnaDesc( record.getpFnaDesc());
+        respDTO.setpUnit( record.getpUnit());
+        respDTO.setpPictureNo(record.getpPictureNo());
+        respDTO.setpPictureSheet( record.getpPictureSheet());
+        respDTO.setpMaterialHigh( record.getpMaterialHigh());
+        respDTO.setpMaterial1(record.getpMaterial1());
+        respDTO.setpMaterial2( record.getpMaterial2());
+        respDTO.setpMaterial3( record.getpMaterial3());
+        respDTO.setpDensity(record.getpDensity());
+        respDTO.setpMaterialStandard( record.getpMaterialStandard());
+        respDTO.setpSurfaceTreat( record.getpSurfaceTreat());
+        respDTO.setpTextureColorNum(record.getpTextureColorNum());
+        respDTO.setpManuProcess( record.getpManuProcess());
+        respDTO.setpSymmetry( record.getpSymmetry());
+        respDTO.setpImportance(record.getpImportance());
+        if(Integer.valueOf(1).equals(record.getpRegulationFlag())){
+            respDTO.setpRegulationFlag( "Y");
+        }else if(Integer.valueOf(0).equals(record.getpRegulationFlag())){
+            respDTO.setpRegulationFlag( "N");
+        }else {
+            respDTO.setpRegulationFlag( "");
+        }
+        respDTO.setpBwgBoxPart( record.getpBwgBoxPart());
+        respDTO.setpDevelopType(record.getpDevelopType());
+        respDTO.setpDataVersion( record.getpDataVersion());
+        respDTO.setpTargetWeight( record.getpTargetWeight());
+        respDTO.setpFeatureWeight(record.getpFeatureWeight());
+        respDTO.setpActualWeight( record.getpActualWeight());
+        respDTO.setpFastenerStandard( record.getpFastenerStandard());
+        respDTO.setpFastenerLevel(record.getpFastenerLevel());
+
+        respDTO.setpTorque( record.getpTorque());
+        respDTO.setpDutyEngineer(record.getpDutyEngineer());
+        respDTO.setpSupply( record.getpSupply());
+        respDTO.setpSupplyCode( record.getpSupplyCode());
+        respDTO.setpRemark(record.getpRemark());
+        respDTO.setpRegulationCode( record.getpRegulationCode());
+        respDTO.setNumber(record.getNumber());
+        respDTO.setpBuyEngineer(record.getpBuyEngineer());
+        if(Integer.valueOf(1).equals(record.getColorPart())){
+            respDTO.setColorPart( "Y");
+        }else if(Integer.valueOf(0).equals(record.getColorPart())){
+            respDTO.setColorPart( "N");
+        }else {
+            respDTO.setColorPart( "");
+        }
+
+        return respDTO;
     }
 }

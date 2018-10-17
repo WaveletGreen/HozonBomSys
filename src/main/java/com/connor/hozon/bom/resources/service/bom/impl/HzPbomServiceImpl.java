@@ -770,7 +770,7 @@ public class HzPbomServiceImpl implements HzPbomService {
     }
 
     @Override
-    public OperateResultMessageRespDTO RecoverDeletePbomRecord(String projectId, String puid) {
+    public OperateResultMessageRespDTO recoverDeletePbomRecord(String projectId, String puid) {
         OperateResultMessageRespDTO respDTO = new OperateResultMessageRespDTO();
         try {
             if (projectId == null || projectId == "" || puid == null || puid == "") {

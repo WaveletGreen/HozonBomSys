@@ -3,6 +3,7 @@ package com.connor.hozon.bom.resources.controller.bom;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.connor.hozon.bom.bomSystem.impl.bom.HzBomLineRecordDaoImpl;
+import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0ModelService;
 import com.connor.hozon.bom.resources.controller.BaseController;
 import com.connor.hozon.bom.resources.domain.dto.request.AddHzEbomReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.request.DeleteHzEbomReqDTO;
@@ -14,10 +15,7 @@ import com.connor.hozon.bom.resources.domain.dto.response.OperateResultMessageRe
 import com.connor.hozon.bom.resources.domain.query.HzEbomByPageQuery;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.service.bom.HzEbomService;
-import com.connor.hozon.bom.resources.util.ExcelUtil;
-import com.connor.hozon.bom.resources.util.ListUtil;
-import com.connor.hozon.bom.resources.util.PrivilegeUtil;
-import com.connor.hozon.bom.resources.util.ResultMessageBuilder;
+import com.connor.hozon.bom.resources.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import springfox.documentation.RequestHandler;
 import sql.pojo.bom.HzBomLineRecord;
+import sql.pojo.cfg.model.HzCfg0ModelRecord;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -50,8 +49,10 @@ public class HzEbomController extends BaseController {
     @Autowired
     private HzBomLineRecordDaoImpl hzBomLineRecordDao;
 
+    @Autowired
+    private HzCfg0ModelService hzCfg0ModelService;
     @RequestMapping(value = "title",method = RequestMethod.GET)
-    public void getEbomTitle(HttpServletResponse response) {
+    public void getEbomTitle(String projectId,HttpServletResponse response) {
         LinkedHashMap<String, String> tableTitle = new LinkedHashMap<>();
         tableTitle.put("No","序号");
         tableTitle.put("lineId","零件号" );
@@ -106,6 +107,13 @@ public class HzEbomController extends BaseController {
         tableTitle.put("pFnaDesc","FNA描述" );
         tableTitle.put("number","数量" );
         tableTitle.put("colorPart","是否颜色件");
+        //获取该项目下的所有车型模型
+        List<HzCfg0ModelRecord> hzCfg0ModelRecords = hzCfg0ModelService.doSelectByProjectPuid(projectId);
+        if(ListUtil.isNotEmpty(hzCfg0ModelRecords)){
+            for(int i = 0;i<hzCfg0ModelRecords.size();i++){
+                tableTitle.put("title"+i,hzCfg0ModelRecords.get(i).getObjectName()+"(用量)");
+            }
+        }
         writeAjaxJSONResponse(ResultMessageBuilder.build(tableTitle), response);
     }
     
@@ -215,65 +223,10 @@ public class HzEbomController extends BaseController {
 
     @RequestMapping(value = "updateEbom",method = RequestMethod.GET)
     public String updateEbom(String projectId,String puid,Model model) {
-        if(projectId == null || puid == null){
+        if(StringUtil.isEmpty(projectId)){
             return "";
         }
         HzEbomRespDTO recordRespDTO = hzEbomService.fingEbomById(puid,projectId);
-        JSONArray array1 = recordRespDTO.getJsonArray();
-        JSONObject object = array1.getJSONObject(0);
-        recordRespDTO.setPuid(puid);
-        recordRespDTO.setpBomOfWhichDept(object.getString("pBomOfWhichDept"));
-        recordRespDTO.setpLouaFlag(object.getString("pLouaFlag"));
-        recordRespDTO.setRank(object.getString("rank"));
-        recordRespDTO.setGroupNum(object.getString("groupNum"));
-        recordRespDTO.setLevel(object.getString("level"));
-        recordRespDTO.setLineId(object.getString("lineId"));
-        recordRespDTO.setFastener(object.getString("fastener"));
-        recordRespDTO.setpBomLinePartResource(object.getString("pBomLinePartResource"));
-        recordRespDTO.setpBomLinePartName(object.getString("pBomLinePartName"));
-        recordRespDTO.setpBomLinePartEnName(object.getString("pBomLinePartEnName"));
-        recordRespDTO.setpBomLinePartClass(object.getString("pBomLinePartClass"));
-        recordRespDTO.setP3cpartFlag(object.getString("p3cpartFlag"));
-        recordRespDTO.setpActualWeight(object.getString("pActualWeight"));
-        recordRespDTO.setpBwgBoxPart(object.getString("pBwgBoxPart"));
-        recordRespDTO.setpDataVersion(object.getString("pDataVersion"));
-        recordRespDTO.setpDensity(object.getString("pDensity"));
-        recordRespDTO.setpDevelopType(object.getString("pDevelopType"));
-        recordRespDTO.setpDutyEngineer(object.getString("pDutyEngineer"));
-        recordRespDTO.setpFastenerLevel(object.getString("pFastenerLevel"));
-        recordRespDTO.setpFastenerStandard(object.getString("pFastenerStandard"));
-        recordRespDTO.setpFeatureWeight(object.getString("pFeatureWeight"));
-        recordRespDTO.setpFnaDesc(object.getString("pFnaDesc"));
-        recordRespDTO.setFna(object.getString("fna"));
-        recordRespDTO.setpImportance(object.getString("pImportance"));
-        recordRespDTO.setpInOutSideFlag(object.getString("pInOutSideFlag"));
-        recordRespDTO.setpManuProcess(object.getString("pManuProcess"));
-        recordRespDTO.setpMaterial1(object.getString("pMaterial1"));
-        recordRespDTO.setpMaterial2(object.getString("pMaterial2"));
-        recordRespDTO.setpMaterial3(object.getString("pMaterial3"));
-        recordRespDTO.setpMaterialHigh(object.getString("pMaterialHigh"));
-        recordRespDTO.setpMaterialStandard(object.getString("pMaterialStandard"));
-        recordRespDTO.setpPictureNo(object.getString("pPictureNo"));
-        recordRespDTO.setpPictureSheet(object.getString("pPictureSheet"));
-        recordRespDTO.setpUpc(object.getString("pUpc"));
-        recordRespDTO.setpTorque(object.getString("pTorque"));
-        recordRespDTO.setpUnit(object.getString("pUnit"));
-        recordRespDTO.setpTextureColorNum(object.getString("pTextureColorNum"));
-        recordRespDTO.setpTargetWeight(object.getString("pTargetWeight"));
-        recordRespDTO.setpSymmetry(object.getString("pSymmetry"));
-        recordRespDTO.setpSurfaceTreat(object.getString("pSurfaceTreat"));
-        recordRespDTO.setpSupplyCode(object.getString("pSupplyCode"));
-        recordRespDTO.setpRemark(object.getString("pRemark"));
-        recordRespDTO.setpRegulationFlag(object.getString("pRegulationFlag"));
-        recordRespDTO.setpRegulationCode(object.getString("pRegulationCode"));
-        recordRespDTO.setProjectId(projectId);
-        recordRespDTO.setColorPart(object.getString("colorPart"));
-        recordRespDTO.setpBuyEngineer(object.getString("pBuyEngineer"));
-        if(object.getString("number") != null){
-            recordRespDTO.setNumber(object.getString("number"));
-        }else {
-            recordRespDTO.setNumber(null);
-        }
         model.addAttribute("data",recordRespDTO);
 
         return "bomManage/ebom/ebomManage/updateEbomManage";

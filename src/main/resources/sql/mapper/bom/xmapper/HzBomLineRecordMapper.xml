@@ -1,7 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.connor.hozon.bom.bomSystem.dao.bom.HzBomDataDao">
-    <resultMap id="BaseResultMap" type="sql.pojo.bom.HzBomLineRecord">
+
+    <resultMap id="SingleVehDosageMap"
+    type="sql.pojo.bom.HzBomLineRecord">
+    <result column="P_SINGLE_VEH_DOSAGE" jdbcType="BLOB"
+    property="singleVehDosage"/>
+    </resultMap>
+
+
+    <resultMap extends="SingleVehDosageMap" id="BaseResultMap" type="sql.pojo.bom.HzBomLineRecord">
         <id column="PUID" jdbcType="VARCHAR" property="puid"/>
         <result column="ID" jdbcType="DOUBLE" property="id"/>
         <result column="P_PARENT_UID" jdbcType="VARCHAR" property="parentUid"/>
@@ -136,7 +144,8 @@
     P_EWO_NO,
     P_LOU_LOA_FLAG,
     P_SORT_NUM,
-    P_COLOR_PART
+    P_COLOR_PART,
+    P_SINGLE_VEH_DOSAGE
   </sql>
 
     <sql id="Bom_Column_For_Change">
@@ -310,9 +319,9 @@
             <if test="pBomOfWhichDept != null">
                 P_BOM_OF_WHICH_DEPT = #{pBomOfWhichDept,jdbcType=VARCHAR},
             </if>
-            <!--<if test="bomLineBlock != null">-->
-                <!--P_BOM_LINE_BLOCK = #{bomLineBlock,jdbcType=VARCHAR},-->
-            <!--</if>-->
+            <if test="singleVehDosage != null">
+                P_SINGLE_VEH_DOSAGE = #{singleVehDosage,jdbcType=VARCHAR},
+            </if>
             <if test="status != null">
                 P_EBOM_STATUS = #{status,jdbcType=VARCHAR},
             </if>

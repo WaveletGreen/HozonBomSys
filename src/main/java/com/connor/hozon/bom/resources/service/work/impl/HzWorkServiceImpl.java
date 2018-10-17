@@ -55,8 +55,11 @@ public class HzWorkServiceImpl implements HzWorkService {
             for (HzWorkCenter center:list){
 //                HzFactory hzFactory = hzFactoryDAO.findFactory(center.getpFactoryPuid(),"");
                 HzWorkCenterRespDTO respDTO = new HzWorkCenterRespDTO();
+
                 respDTO.setNo(++num);
                 respDTO.setPuid(center.getPuid());
+                respDTO.setFactoryCode("1001");
+//                respDTO.setFactoryId(hzFactory.getPuid());
                 if(StringUtil.isEmpty(center.getpFactoryCode())){
                     respDTO.setFactoryCode("1001");
                 }else {
@@ -315,6 +318,8 @@ public class HzWorkServiceImpl implements HzWorkService {
     @Override
     public OperateResultMessageRespDTO deleteHzWorkRecord(String puid) {
         try {
+            if (!PrivilegeUtil.writePrivilege()) {
+               return OperateResultMessageRespDTO.getFailResult();
             if (!PrivilegeUtil.writePrivilege()) {
                 return OperateResultMessageRespDTO.getFailPrivilege();
             }
