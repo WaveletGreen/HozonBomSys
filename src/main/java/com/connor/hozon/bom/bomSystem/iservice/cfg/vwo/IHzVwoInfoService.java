@@ -1,5 +1,6 @@
 package com.connor.hozon.bom.bomSystem.iservice.cfg.vwo;
 
+import com.connor.hozon.bom.bomSystem.dto.vwo.HzVwoFormListQueryBase;
 import com.connor.hozon.bom.common.base.entity.QueryBase;
 import org.springframework.context.annotation.Configuration;
 import sql.pojo.cfg.vwo.HzVwoInfo;
@@ -55,7 +56,7 @@ public interface IHzVwoInfoService {
     /**
      * 根据分页进行查询
      */
-    List<HzVwoInfo> doSelectListByProjectUid(QueryBase queryBase, String projectUid);
+    List<HzVwoInfo> doSelectListByProjectUid(HzVwoFormListQueryBase queryBase, String projectUid);
 
     /**
      * 当前项目下的总数

@@ -1,6 +1,7 @@
 package com.connor.hozon.bom.bomSystem.service.vwo;
 
 import com.connor.hozon.bom.bomSystem.controller.vwo.HzVWOProcessController;
+import com.connor.hozon.bom.bomSystem.dto.vwo.HzVwoFormListQueryBase;
 import com.connor.hozon.bom.bomSystem.iservice.cfg.vwo.*;
 import com.connor.hozon.bom.bomSystem.dao.cfg0.HzCfg0OptionFamilyDao;
 import com.connor.hozon.bom.bomSystem.dao.cfg0.HzCfg0RecordDao;
@@ -482,7 +483,7 @@ public class HzVwoManagerService implements IHzVWOManagerService {
             hzVwoInfo.setProjectUid(projectUid);
             hzVwoInfo.setVwoCreateDate(now);
             hzVwoInfo.setVwoType(type);
-            hzVwoInfo.setVwoStatus(1);
+            hzVwoInfo.setVwoStatus(10);
             hzVwoInfo.setProjectCode(project.getpProjectCode());
             hzVwoInfo.setVehicleCode(vehicle.getpVehicleCode());
             hzVwoInfo.setPlatformCode(platform.getpPlatformCode());
@@ -791,7 +792,7 @@ public class HzVwoManagerService implements IHzVWOManagerService {
      * @return
      */
     @Override
-    public Map<String, Object> queryByBase(String projectUid, QueryBase queryBase) {
+    public Map<String, Object> queryByBase(String projectUid, HzVwoFormListQueryBase queryBase) {
         Map<String, Object> result = new HashMap<>();
         queryBase.setSort(HzVwoInfo.reflectToDBField(queryBase.getSort()));
         result.put("totalCount", iHzVwoInfoService.tellMeHowManyOfIt(projectUid));

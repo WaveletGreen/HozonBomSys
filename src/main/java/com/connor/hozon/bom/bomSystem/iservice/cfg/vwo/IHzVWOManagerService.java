@@ -1,5 +1,6 @@
 package com.connor.hozon.bom.bomSystem.iservice.cfg.vwo;
 
+import com.connor.hozon.bom.bomSystem.dto.vwo.HzVwoFormListQueryBase;
 import com.connor.hozon.bom.common.base.entity.QueryBase;
 import com.connor.hozon.bom.resources.controller.change.vwo.VWOUserGroupDTO;
 import com.connor.hozon.bom.sys.entity.User;
@@ -96,7 +97,7 @@ public interface IHzVWOManagerService {
      * @param queryBase
      * @return
      */
-    Map<String, Object> queryByBase(String projectUid, QueryBase queryBase);
+    Map<String, Object> queryByBase(String projectUid, HzVwoFormListQueryBase queryBase);
 
     /**
      * 获取用户详情

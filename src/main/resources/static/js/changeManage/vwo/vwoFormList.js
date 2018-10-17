@@ -1,15 +1,21 @@
 $(document).ready((function () {
-    initTable();
+    doQuery();
 }));
 
 function doQuery() {
-    initTable();
-    //$('#vwo_table').bootstrapTable('refresh');
+    loadData(getProjectUid());
 }
 
-function initTable() {
+//刷新
+function doRefresh(projectUid) {
+    loadData(projectUid);
+}
+
+function loadData(projectUid) {
+    if (!checkIsSelectProject(projectUid)) {
+        return;
+    }
     let url = $("#url").val();
-    let projectUid = getProjectUid();
     var $table = $("#vwo_table");
     $table.bootstrapTable('destroy');
     $table.bootstrapTable({
@@ -26,7 +32,7 @@ function initTable() {
         sidePagination: "server",          //分页方式：client客户端分页，server服务端分页（*）
         clickToSelect: true,                // 单击某一行的时候选中某一条记录
         showExport: false,
-        formId: "formId",
+        formId: "vwoFormList",
         striped: true,                      //是否显示行间隔色
         search: false,                      //是否显示表格搜索，此搜索是客户端搜索，不会进服务端
         showColumns: false,                 //是否显示所有的列

@@ -43,11 +43,11 @@ public class HzVwoInfo {
      */
     private String demandType;
     /**
-     * vwo名称
+     * vwo名称，即标题
      */
     private String vwoName;
     /**
-     * vwo状态
+     * vwo状态，1：发起状态，可进行编辑，100：进入审核状态，等待人员审核/人员正在审核,，999：已发布；899：已终止
      */
     private Integer vwoStatus;
     /**
@@ -59,7 +59,7 @@ public class HzVwoInfo {
      */
     private Date vwoExpectExecuteTime;
     /**
-     * 类型，对应的表
+     * 类型，会有相应的数据库表对应
      */
     private Integer vwoType;
     /**

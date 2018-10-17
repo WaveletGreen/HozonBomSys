@@ -1,5 +1,6 @@
 package com.connor.hozon.bom.resources.controller.change.vwo;
 
+import com.connor.hozon.bom.bomSystem.dto.vwo.HzVwoFormListQueryBase;
 import com.connor.hozon.bom.bomSystem.dto.vwo.HzVwoProcessDto;
 import com.connor.hozon.bom.bomSystem.iservice.cfg.vwo.IHzVWOManagerService;
 import com.connor.hozon.bom.common.base.constant.SystemStaticConst;
@@ -78,7 +79,7 @@ public class HzVwoController {
      */
     @RequestMapping(value = "/queryByBase", method = RequestMethod.POST)
     @ResponseBody
-    public Map<String, Object> queryByBase(@RequestParam String projectUid, QueryBase queryBase) {
+    public Map<String, Object> queryByBase(@RequestParam String projectUid, HzVwoFormListQueryBase queryBase) {
         return iHzVWOManagerService.queryByBase(projectUid, queryBase);
     }
 
