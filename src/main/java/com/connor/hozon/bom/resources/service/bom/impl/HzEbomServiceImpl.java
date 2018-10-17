@@ -7,6 +7,7 @@ import com.connor.hozon.bom.bomSystem.dao.bom.HzBomMainRecordDao;
 import com.connor.hozon.bom.bomSystem.dao.fullCfg.HzFullCfgMainDao;
 import com.connor.hozon.bom.bomSystem.dao.fullCfg.HzFullCfgWithCfgDao;
 import com.connor.hozon.bom.bomSystem.impl.bom.HzBomLineRecordDaoImpl;
+import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0ModelService;
 import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0OfBomLineService;
 import com.connor.hozon.bom.resources.domain.dto.request.*;
 import com.connor.hozon.bom.resources.domain.dto.response.HzEbomLevelRespDTO;
@@ -18,6 +19,7 @@ import com.connor.hozon.bom.resources.domain.query.*;
 import com.connor.hozon.bom.resources.mybatis.bom.HzEbomRecordDAO;
 import com.connor.hozon.bom.resources.mybatis.bom.HzMbomRecordDAO;
 import com.connor.hozon.bom.resources.mybatis.bom.HzPbomRecordDAO;
+import com.connor.hozon.bom.resources.mybatis.bom.HzSingleVehicleDosageDAO;
 import com.connor.hozon.bom.resources.mybatis.materiel.HzMaterielDAO;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.service.bom.HzEbomService;
@@ -30,13 +32,12 @@ import com.connor.hozon.bom.sys.entity.User;
 import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sql.pojo.bom.HZBomMainRecord;
-import sql.pojo.bom.HzBomLineRecord;
-import sql.pojo.bom.HzMbomLineRecord;
-import sql.pojo.bom.HzPbomLineRecord;
+import sql.pojo.bom.*;
 import sql.pojo.cfg.fullCfg.HzCfg0OfBomLineRecord;
 import sql.pojo.cfg.fullCfg.HzFullCfgMain;
+import sql.pojo.cfg.model.HzCfg0ModelRecord;
 import sql.pojo.epl.HzEPLManageRecord;
+import sql.redis.SerializeUtil;
 
 import java.util.*;
 
@@ -80,6 +81,11 @@ public class HzEbomServiceImpl implements HzEbomService {
     @Autowired
     HzFullCfgMainDao hzFullCfgMainDao;
 
+    @Autowired
+    private HzCfg0ModelService hzCfg0ModelService;
+
+    @Autowired
+    private HzSingleVehicleDosageDAO hzSingleVehicleDosageDAO;
     @Override
     public Page<HzEbomRespDTO> getHzEbomPage(HzEbomByPageQuery query) {
         try {
@@ -110,7 +116,11 @@ public class HzEbomServiceImpl implements HzEbomService {
             if (recordPage == null || recordPage.getResult() == null || recordPage.getResult().size() == 0) {
                 return new Page<>(recordPage.getPageNumber(), recordPage.getPageSize(), 0);
             }
+
+            List<HzCfg0ModelRecord> hzCfg0ModelRecords = hzCfg0ModelService.doSelectByProjectPuid(query.getProjectId());
+
             List<HzEPLManageRecord> records = recordPage.getResult();
+
             for (HzEPLManageRecord record : records) {
                 JSONObject jsonObject = HzEbomRecordFactory.bomLineRecordTORespDTO(record);
                 //获取分组号
@@ -133,6 +143,36 @@ public class HzEbomServiceImpl implements HzEbomService {
                 }
                 jsonObject.put("No", ++num);
                 jsonObject.put("groupNum",groupNum);
+                //单车用量 mmp 怎么设计感觉都不合理
+//                List<HzSingleVehicleDosage> singleVehicleDosages = hzSingleVehicleDosageDAO.findSingleVehicleByBomPuid(record.getPuid(),query.getProjectId());
+//                if(ListUtil.isNotEmpty(singleVehicleDosages) && ListUtil.isNotEmpty(hzCfg0ModelRecords)){
+//                    for(int i = 0;i<hzCfg0ModelRecords.size();i++){
+//                       for(HzSingleVehicleDosage dosage :singleVehicleDosages){
+//                           if(hzCfg0ModelRecords.get(i).getPuid().equals(dosage.getCfg0ModelPuid())){
+//                               jsonObject.put("title"+i,dosage.getDosage());
+//                               break;
+//                           }
+//                       }
+//                    }
+//                }
+
+                if(null != record.getSingleVehDosage() && ListUtil.isNotEmpty(hzCfg0ModelRecords)){
+                    byte[] singleVehDosage = record.getSingleVehDosage();
+                    Object obj = SerializeUtil.unserialize(singleVehDosage);
+                    if(obj instanceof Map){
+                        Map<String,Object> map = (Map)obj;
+                        if(map.size()>0){
+                            for(int i = 0;i<hzCfg0ModelRecords.size();i++){
+                                for(Map.Entry<String,Object> entry:map.entrySet()){
+                                    if(hzCfg0ModelRecords.get(i).getPuid().equals(entry.getKey())){
+                                        jsonObject.put("title"+i,entry.getValue());
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
                 array.add(jsonObject);
             }
             recordRespDTO.setJsonArray(array);
@@ -149,14 +189,37 @@ public class HzEbomServiceImpl implements HzEbomService {
         try {
             HzEPLManageRecord record = hzEbomRecordDAO.findEbomById(puid, projectId);
             HzEbomRespDTO respDTO = new HzEbomRespDTO();
+            List<HzCfg0ModelRecord> hzCfg0ModelRecords = hzCfg0ModelService.doSelectByProjectPuid(projectId);
             if (record != null) {
+                respDTO = HzEbomRecordFactory.eplRecordToEbomRespDTO(record);
                 JSONArray jsonArray = new JSONArray();
-                JSONObject jsonObject = HzEbomRecordFactory.bomLineRecordTORespDTO(record);
-                jsonArray.add(jsonObject);
+                if(null != record.getSingleVehDosage() && ListUtil.isNotEmpty(hzCfg0ModelRecords)){
+                    byte[] singleVehDosage = record.getSingleVehDosage();
+                    Object obj = SerializeUtil.unserialize(singleVehDosage);
+                    if(obj instanceof Map){
+                        Map<String,Object> map = (Map)obj;
+                        if(map.size()>0){
+                            for(int i = 0;i<hzCfg0ModelRecords.size();i++){
+                                for(Map.Entry<String,Object> entry:map.entrySet()){
+                                    if(hzCfg0ModelRecords.get(i).getPuid().equals(entry.getKey())){
+                                        if(null !=entry.getValue()){
+                                            JSONObject object = new JSONObject();
+                                            object.put(hzCfg0ModelRecords.get(i).getObjectName(),entry.getValue());
+                                            jsonArray.add(object);
+                                            break;
+                                        }
+//                                        jsonArray.add(new JSONObject().put("title"+i,entry.getValue()));
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
                 respDTO.setJsonArray(jsonArray);
             }
             return respDTO;
         } catch (Exception e) {
+            e.printStackTrace();
             return null;
         }
     }
@@ -885,6 +948,13 @@ public class HzEbomServiceImpl implements HzEbomService {
 
             HZBomMainRecord hzBomMainRecord = hzBomMainRecordDao.selectByProjectPuid(reqDTO.getProjectId());
             HzBomLineRecord hzBomLineRecord = HzEbomRecordFactory.updateHzEbomDTOLineRecord(reqDTO);
+            Map<String,Object> m = new HashMap<>();
+            m.put("9B17175B781C4AF7ABBE7140E64F4A4D",19.2);
+            m.put("CD3A3819E2CB427789E04F9AD61E4778",2);
+            m.put("A3EA5F3BFA994CFB8283ADCE94780793",14);
+            m.put("DFA3F4850D2A410599E364EF64F224EC",3);
+            byte [] bytes = SerializeUtil.serialize(m);
+            hzBomLineRecord.setSingleVehDosage(bytes);
             hzBomLineRecord.setBomDigifaxId(hzBomMainRecord.getPuid());
 
             //需要记录数据 变更后的数据

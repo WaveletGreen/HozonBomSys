@@ -241,6 +241,19 @@ public class HzBomLineRecord {
      */
     private Integer colorPart;
 
+    /**
+     * 单车用量
+     */
+    private byte[] singleVehDosage;
+
+    public byte[] getSingleVehDosage() {
+        return singleVehDosage;
+    }
+
+    public void setSingleVehDosage(byte[] singleVehDosage) {
+        this.singleVehDosage = singleVehDosage;
+    }
+
     public Integer getColorPart() {
         return colorPart;
     }
