@@ -319,9 +319,7 @@ public class HzWorkServiceImpl implements HzWorkService {
     public OperateResultMessageRespDTO deleteHzWorkRecord(String puid) {
         try {
             if (!PrivilegeUtil.writePrivilege()) {
-               return OperateResultMessageRespDTO.getFailResult();
-            if (!PrivilegeUtil.writePrivilege()) {
-                return OperateResultMessageRespDTO.getFailPrivilege();
+                return OperateResultMessageRespDTO.getFailResult();
             }
             int i = hzWorkCenterDAO.delete(puid);
             if (i>0){
