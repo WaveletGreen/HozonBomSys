@@ -16,16 +16,33 @@ function loadData(projectUid) {
         return;
     }
     let url = $("#url").val();
+    url += "?projectUid=" + projectUid;
+    let vwoStatus=$("#vwoStatus").val();
+    let vwoChangeType=$("#vwoChangeType").val();
+    let vwoCostBearingDept=$("#vwoCostBearingDept").val();
+    let vwoListedType=$("#vwoListedType").val();
+    if(vwoStatus!=null){
+        url+="&vwoStatus="+vwoStatus;
+    }
+    if(vwoChangeType!=null){
+        url+="&vwoChangeType="+vwoChangeType;
+    }
+    if(vwoCostBearingDept!=null){
+        url+="&vwoCostBearingDept="+vwoCostBearingDept;
+    }
+    if(vwoListedType!=null){
+        url+="&vwoListedType="+vwoListedType;
+    }
     var $table = $("#vwo_table");
     $table.bootstrapTable('destroy');
     $table.bootstrapTable({
-        url: url + "?projectUid=" + projectUid,
+        url: url,
         method: 'post',
-        height: $(window.parent.document).find("#wrapper").height() - 90,
+        height: $(window.parent.document).find("#wrapper").height() - 220,
         width: $(window).width(),
         showToggle: false,                   //是否显示详细视图和列表视图的切换按钮
         showRefresh: true,                  //是否显示刷新按钮
-        pagination: false,                   //是否显示分页（*）
+        pagination: true,                   //是否显示分页（*）
         pageSize: 20,
         pageNumber: 1,
         pageList: [20, 50, 100, 200, 500, 1000],        //可供选择的每页的行数（*）
@@ -34,10 +51,10 @@ function loadData(projectUid) {
         showExport: false,
         formId: "vwoFormList",
         striped: true,                      //是否显示行间隔色
-        search: false,                      //是否显示表格搜索，此搜索是客户端搜索，不会进服务端
         showColumns: false,                 //是否显示所有的列
         sortable: true,                     //是否启用排序
-        sortOrder: "asc",                   //排序方式
+        smartDisplay: false,
+        sortOrder: "desc",                   //排序方式
         sortName: 'id',
         //列信息，需要预先定义好
         columns: [
@@ -84,6 +101,9 @@ function loadData(projectUid) {
                 title: '预计实施时间',
                 sortable: true,
                 sortOrder: 'asc',
+                formatter: function (value, row, index) {
+                    return changeDateFormat(value)
+                }
             },
             {
                 field: 'vwoCreator',

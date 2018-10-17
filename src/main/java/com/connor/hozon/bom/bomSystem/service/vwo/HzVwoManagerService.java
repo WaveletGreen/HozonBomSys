@@ -872,18 +872,24 @@ public class HzVwoManagerService implements IHzVWOManagerService {
             result.put("msg", "请选择一个VWO表单进行操作");
             return result;
         } else {
-            HzVwoInfo fromDb = iHzVwoInfoService.doSelectByPrimaryKey(info.getId());
-            fromDb.setVwoName(info.getVwoName());
-            fromDb.setContactPhoneNum(info.getContactPhoneNum());
-            fromDb.setVwoDemandFinishTime(info.getVwoDemandFinishTime());
-//            fromDb.setStrVwoStartEffectiveTime(info.getStrVwoStartEffectiveTime());
-//            fromDb.setStrVwoEndEffectiveTime(info.getStrVwoEndEffectiveTime());
-            fromDb.setVwoProjectStage(info.getVwoProjectStage());
-            fromDb.setVwoChangeReason(info.getVwoChangeReason());
-            fromDb.setVwoStartEffectiveTime(info.getVwoStartEffectiveTime());
-            fromDb.setVwoEndEffectiveTime(info.getVwoEndEffectiveTime());
-            fromDb.setVwoConnectedVwo(info.getVwoConnectedVwo());
-            if (!iHzVwoInfoService.doUpdateByPrimaryKey(fromDb)) {
+//            HzVwoInfo fromDb = iHzVwoInfoService.doSelectByPrimaryKey(info.getId());
+//            fromDb.setVwoName(info.getVwoName());
+//            fromDb.setContactPhoneNum(info.getContactPhoneNum());
+//            fromDb.setVwoDemandFinishTime(info.getVwoDemandFinishTime());
+////            fromDb.setStrVwoStartEffectiveTime(info.getStrVwoStartEffectiveTime());
+////            fromDb.setStrVwoEndEffectiveTime(info.getStrVwoEndEffectiveTime());
+//            fromDb.setVwoProjectStage(info.getVwoProjectStage());
+//            fromDb.setVwoChangeReason(info.getVwoChangeReason());
+//            fromDb.setVwoStartEffectiveTime(info.getVwoStartEffectiveTime());
+//            fromDb.setVwoEndEffectiveTime(info.getVwoEndEffectiveTime());
+//            fromDb.setVwoConnectedVwo(info.getVwoConnectedVwo());
+//            fromDb.setVwoExpectExecuteTime(info.getVwoExpectExecuteTime());
+//            fromDb.setVwoConnectedUserDept(info.getVwoCostBearingDept());
+//            fromDb.setVwoChangeType(info.);
+//            fromDb.setVwoConnectedUserDept();
+//            fromDb.setVwoConnectedUserDept();
+//            fromDb.setVwoConnectedUserDept();
+            if (!iHzVwoInfoService.doUpdateByPrimaryKey(info)) {
                 logger.error("无法更新VWO数据,VWO ID为:" + info.getId());
                 result.put("status", false);
                 result.put("msg", "无法更新VWO数据");

@@ -6,7 +6,6 @@ import java.util.Date;
 
 /**
  * VWO主数据
- *
  */
 public class HzVwoInfo {
     /**
@@ -51,7 +50,7 @@ public class HzVwoInfo {
      */
     private Integer vwoStatus;
     /**
-     *
+     * 状态名称
      */
     private String vwoStatusName;
     /**
@@ -78,8 +77,6 @@ public class HzVwoInfo {
      * 项目代码
      */
     private String vehicleCode;
-
-
     /**
      * 联系电话
      */
@@ -160,10 +157,40 @@ public class HzVwoInfo {
             case "vwoNum":
                 return "vwo_Num";
             /**
-             * 流程创建时间
+             * VWO名称
+             */
+            case "vwoName":
+                return "vwo_Name";
+            /**
+             * 审批类型
+             */
+            case "approvalType":
+                return "VWO_APPROVAL_TYPE";
+            /**
+             * vwo需求类型
+             */
+            case "demandType":
+                return "VWO_DEMAND_TYPE";
+            /**
+             * vwo状态
+             */
+            case "vwoStatus":
+                return "VWO_STATUS";
+            /**
+             * 预计实施时间
+             */
+            case "vwoExpectExecuteTime":
+                return "VWO_EXPECT_EXECUTE_TIME";
+            /**
+             * vwo提出者
+             */
+            case "vwoCreator":
+                return "VWO_CREATOR";
+            /**
+             * 提出时间
              */
             case "vwoCreateDate":
-                return "vwo_Create_Date";
+                return "VWO_CREATE_DATE";
             default:
                 return null;
         }
@@ -191,6 +218,28 @@ public class HzVwoInfo {
                 break;
             case 5:
                 setVwoStatusName("INFO");
+                break;
+            case 10:
+                setVwoStatusName("编辑状态");
+                break;
+            //可能直接跳过该状态，直接进入100+
+            case 100:
+                setVwoStatusName("进入审核");
+                break;
+            case 101:
+                setVwoStatusName("项目经理审核");
+                break;
+            case 102:
+                setVwoStatusName("BOM经理审核");
+                break;
+            case 103:
+                setVwoStatusName("专业PMT经理审核");
+                break;
+            case 899:
+                setVwoStatusName("流程终止");
+                break;
+            case 999:
+                setVwoStatusName("已发布");
                 break;
             default:
                 setVwoStatusName(null);

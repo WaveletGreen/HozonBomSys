@@ -146,7 +146,7 @@ public class HzCfg0ModelColorController {
         List<HzCfg0OptionFamily> _columnList = hzCfg0OptionFamilyService.selectForColorBluePrint(main.getpCfg0OfWhichProjectPuid(), 1);//getFamilies(main.getpCfg0OfWhichProjectPuid(), 0, 1);
         List<HzCfg0OptionFamily> columnList = new ArrayList<>();
         /**过滤油漆车身总成*/
-        columnList.addAll(_columnList.stream().filter(c -> false == SpecialFeatureOption.YQCSCODE.getDesc().equals(c.getpOptionfamilyName()))
+        columnList.addAll(_columnList.stream().filter(c -> c != null).filter(c -> false == SpecialFeatureOption.YQCSCODE.getDesc().equals(c.getpOptionfamilyName()))
                 .collect(Collectors.toList()));
         List<HzCfg0ColorSet> colorList = hzCfg0ColorSetService.doGetAll();
         ArrayList<String> orgValue = new ArrayList<>();
@@ -544,8 +544,8 @@ public class HzCfg0ModelColorController {
 
     @RequestMapping("/getVWO")
     @ResponseBody
-    public JSONObject getVWO(@RequestBody List<HzCfg0ModelColor> colors,String projectPuid){
-        return hzCfg0ModelColorService.getVWO(colors,projectPuid);
+    public JSONObject getVWO(@RequestBody List<HzCfg0ModelColor> colors, String projectPuid) {
+        return hzCfg0ModelColorService.getVWO(colors, projectPuid);
     }
 
 }

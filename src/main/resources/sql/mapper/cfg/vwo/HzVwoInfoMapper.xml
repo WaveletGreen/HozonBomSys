@@ -166,6 +166,43 @@
         <if test="param.offset!=null">
             where temp.rowno &gt;= ${param.offset}+1
         </if>
+        <if test="param.vwoNum!=null and param.vwoNum != ''">
+            and temp.VWO_NUM=#{param.vwoNum,jdbcType=VARCHAR}
+        </if>
+        <if test="param.vwoStatus!=null and param.vwoStatus != ''">
+            and temp.VWO_STATUS=#{param.vwoStatus,jdbcType=INTEGER}
+        </if>
+        <if test="param.vwoName!=null and param.vwoName != ''">
+            and temp.VWO_NAME=#{param.vwoName,jdbcType=VARCHAR}
+        </if>
+        <if test="param.userDeptName!=null and param.userDeptName != ''">
+            and temp.USER_Dept_NAME=#{param.userDeptName,jdbcType=VARCHAR}
+        </if>
+        <if test="param.vwoCreator!=null and param.vwoCreator != ''">
+            and temp.VWO_CREATOR=#{param.vwoCreator,jdbcType=VARCHAR}
+        </if>
+        <if test="param.contactPhoneNum!=null and param.contactPhoneNum != ''">
+            and temp.CONTACT_PHONE_NUM=#{param.contactPhoneNum,jdbcType=VARCHAR}
+        </if>
+        <if test="param.vwoChangeType!=null and param.vwoChangeType != ''">
+            and temp.VWO_CHANGE_TYPE=#{param.vwoChangeType,jdbcType=INTEGER}
+        </if>
+        <if test="param.vwoCostBearingDept!=null and param.vwoCostBearingDept != ''">
+            and temp.VWO_COST_BEARING_DEPT=#{param.vwoCostBearingDept,jdbcType=VARCHAR}
+        </if>
+        <if test="param.vwoListedType!=null and param.vwoListedType != ''">
+            and temp.VWO_LISTED_TYPE=#{param.vwoListedType,jdbcType=INTEGER}
+        </if>
+        <if test="param.vwoConnectedVwo!=null and param.vwoConnectedVwo != ''">
+            and temp.VWO_CONNECTED_VWO=#{param.vwoConnectedVwo,jdbcType=VARCHAR}
+        </if>
+        <if test="param.vwoCreateDate!=null and param.vwoCreateDate != ''">
+            and to_char(temp.VWO_CREATE_DATE,'yyyy-mm-dd')=#{param.vwoCreateDate,jdbcType=VARCHAR}
+        </if>
+        <if test="param.vwoDemandFinishTime!=null and param.vwoDemandFinishTime != ''">
+            and to_char(temp.VWO_DEMAND_FINISH_TIME,'yyyy-mm-dd')=#{param.vwoDemandFinishTime,jdbcType=VARCHAR}
+        </if>
+
         <if test="param.sort!=null">
             order by ${param.sort}
         </if>

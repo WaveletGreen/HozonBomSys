@@ -26,7 +26,7 @@ public class HzVwoFormListQueryBase extends QueryBase{
     /**
      * 流程创建时间
      */
-    private Date vwoCreateDate;
+    private String vwoCreateDate;
     /**
      * vwo状态，1：发起状态，可进行编辑，100：进入审核状态，等待人员审核/人员正在审核,，999：已发布；899：已终止
      */
@@ -51,7 +51,7 @@ public class HzVwoFormListQueryBase extends QueryBase{
     /**
      * 要求完成时间
      */
-    private Date vwoDemandFinishTime;
+    private String vwoDemandFinishTime;
     /**
      * 变更类型
      */

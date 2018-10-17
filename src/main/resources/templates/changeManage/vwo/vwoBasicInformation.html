@@ -10,13 +10,13 @@
 <body>
 <!--基本信息-->
 <h4><i class="fa fa-minus-square" aria-hidden="true">基本信息</i></h4>
-<button class="btn btn-success" style="position: fixed;margin-left:95%;margin-top: 100px;z-index:99999;"
+<button class="btn btn-success" style="position: fixed;margin-left:90%;margin-top: 100px;z-index:99999;"
         id="vwoSaveBtn">保存
 </button>
-<button class="btn btn-success" style="position: fixed;margin-left:95%;margin-top: 150px;z-index:99999;"
+<button class="btn btn-success" style="position: fixed;margin-left:90%;margin-top: 150px;z-index:99999;"
         id="release">发布
 </button>
-<button class="btn btn-success" style="position: fixed;margin-left:95%;margin-top: 200px;z-index:99999;"
+<button class="btn btn-success" style="position: fixed;margin-left:90%;margin-top: 200px;z-index:99999;"
         id="interrupt">中断
 </button>
 <div class="panel-body" style="padding:0;">
@@ -24,10 +24,10 @@
         <fieldset>
             <div class="panel panel-default">
                 <div class="panel-body">
-                    <div class="col-lg-12">
+                    <div class="col-sm-12">
                         <input th:value="${vwo}" type="hidden" id="vwo" name="id"/>
                         <input th:value="${vwoType}" type="hidden" id="vwoType" name="vwoType"/>
-                        <div class="col-lg-2 col-md-2">
+                        <div class="col-lg-2 col-md-3 col-sm-4">
                             <div class="form-group after_the">
                                 <label for="vwoNum">VWO号:</label>
                                 <input class="form-control" style="width: 150px"
@@ -64,7 +64,7 @@
                                 />
                             </div>
                         </div>
-                        <div class="col-lg-2 col-md-2">
+                        <div class="col-lg-2 col-md-3 col-sm-4">
                             <div class="form-group after_the">
                                 <label for="userDeptName">部门:</label>
                                 <input class="form-control" style="width: 150px"
@@ -75,9 +75,9 @@
                                 />
                             </div>
                             <div class="form-group after_the">
-                                <label for="getVwoCreator">发起人:</label>
+                                <label for="vwoCreator">发起人:</label>
                                 <input class="form-control" style="width: 150px"
-                                       id="getVwoCreator" name="getVwoCreator"
+                                       id="vwoCreator" name="vwoCreator"
                                        type="text"
                                        disabled="disabled"
                                        th:value="${vwoInfo.getVwoCreator()}"
@@ -100,25 +100,59 @@
                                 />
                             </div>
                         </div>
-                        <div class="col-lg-2 col-md-2">
+                        <div class="col-lg-2 col-md-3 col-sm-4">
                             <div class="form-group after_the">
-                                <label for="changeType">变更类型:</label>
-                                <select class="form-control" style="width: 150px" name="" id="changeType">
-                                    <option th:selected="${vwoInfo.getVwoChangeType()==1?true:false}">正常设变</option>
-                                    <option th:selected="${vwoInfo.getVwoChangeType()==2?true:false}">简易设变</option>
+                                <label for="vwoChangeType">变更类型:</label>
+                                <select class="form-control" style="width: 150px" name="vwoChangeType" id="vwoChangeType">
+                                    <option value="-1"></option>
+                                    <option value="1" th:selected="${vwoInfo.getVwoChangeType()==1?true:false}">正常设变</option>
+                                    <option value="2" th:selected="${vwoInfo.getVwoChangeType()==2?true:false}">简易设变</option>
                                 </select>
                             </div>
                             <div class="form-group after_the">
-                                <label for="expenseDept">费用承担部门:</label>
-                                <select class="form-control" style="width: 150px" name="" id="expenseDept">
-                                    <option>车身部门</option>
+                                <label for="vwoCostBearingDept">费用承担部门:</label>
+                                <select class="form-control" style="width: 150px" name="vwoCostBearingDept" id="vwoCostBearingDept">
+                                    <option></option>
+                                    <option value="1" th:selected="${vwoInfo.getVwoCostBearingDept()=='1'?true:false}">专业审核</option>
+                                    <option value="2" th:selected="${vwoInfo.getVwoCostBearingDept()=='2'?true:false}">变更协调员</option>
+                                    <option value="3" th:selected="${vwoInfo.getVwoCostBearingDept()=='3'?true:false}">项目支持部门</option>
+                                    <option value="4" th:selected="${vwoInfo.getVwoCostBearingDept()=='4'?true:false}">财务部门</option>
+                                    <option value="5" th:selected="${vwoInfo.getVwoCostBearingDept()=='5'?true:false}">采购部门</option>
+                                    <option value="6" th:selected="${vwoInfo.getVwoCostBearingDept()=='6'?true:false}">制造部门</option>
+                                    <option value="7" th:selected="${vwoInfo.getVwoCostBearingDept()=='7'?true:false}">车身设计</option>
+                                    <option value="8" th:selected="${vwoInfo.getVwoCostBearingDept()=='8'?true:false}">底盘设计</option>
+                                    <option value="9" th:selected="${vwoInfo.getVwoCostBearingDept()=='9'?true:false}">电器设计</option>
+                                    <option value="10" th:selected="${vwoInfo.getVwoCostBearingDept()=='10'?true:false}">内外饰设计</option>
+                                    <option value="11" th:selected="${vwoInfo.getVwoCostBearingDept()=='11'?true:false}">动总集成设计</option>
+                                    <option value="12" th:selected="${vwoInfo.getVwoCostBearingDept()=='12'?true:false}">发动机设计</option>
+                                    <option value="13" th:selected="${vwoInfo.getVwoCostBearingDept()=='13'?true:false}">变速箱设计</option>
+                                    <option value="14" th:selected="${vwoInfo.getVwoCostBearingDept()=='14'?true:false}">BOM工程师</option>
+                                    <option value="15" th:selected="${vwoInfo.getVwoCostBearingDept()=='15'?true:false}">采购质量</option>
+                                    <option value="16" th:selected="${vwoInfo.getVwoCostBearingDept()=='16'?true:false}">规划部门</option>
+                                    <option value="17" th:selected="${vwoInfo.getVwoCostBearingDept()=='17'?true:false}">总布置</option>
+                                    <option value="18" th:selected="${vwoInfo.getVwoCostBearingDept()=='18'?true:false}">备件管理部门</option>
+                                    <option value="19" th:selected="${vwoInfo.getVwoCostBearingDept()=='19'?true:false}">造型</option>
+                                    <option value="20" th:selected="${vwoInfo.getVwoCostBearingDept()=='20'?true:false}">销售部门(国内+国际)</option>
+                                    <option value="21" th:selected="${vwoInfo.getVwoCostBearingDept()=='21'?true:false}">控制器或电气参数</option>
+                                    <option value="22" th:selected="${vwoInfo.getVwoCostBearingDept()=='22'?true:false}">国内法规认证</option>
+                                    <option value="23" th:selected="${vwoInfo.getVwoCostBearingDept()=='23'?true:false}">国际法规认证</option>
+                                    <option value="24" th:selected="${vwoInfo.getVwoCostBearingDept()=='24'?true:false}">售后服务部门(国内+国际)</option>
+                                    <option value="25" th:selected="${vwoInfo.getVwoCostBearingDept()=='25'?true:false}">材料部门</option>
+                                    <option value="26" th:selected="${vwoInfo.getVwoCostBearingDept()=='26'?true:false}">沿用件工程师</option>
+                                    <option value="27" th:selected="${vwoInfo.getVwoCostBearingDept()=='27'?true:false}">性能</option>
+                                    <option value="28" th:selected="${vwoInfo.getVwoCostBearingDept()=='28'?true:false}">三化</option>
+                                    <option value="29" th:selected="${vwoInfo.getVwoCostBearingDept()=='29'?true:false}">重量</option>
+                                    <option value="30" th:selected="${vwoInfo.getVwoCostBearingDept()=='30'?true:false}">平台化</option>
+                                    <option value="31" th:selected="${vwoInfo.getVwoCostBearingDept()=='31'?true:false}">CAE工程师</option>
+                                    <option value="32" th:selected="${vwoInfo.getVwoCostBearingDept()=='32'?true:false}">制造部门</option>
                                 </select>
                             </div>
                             <div class="form-group after_the">
-                                <label for="listedType">上市类型:</label>
-                                <select class="form-control" style="width: 150px" name="" id="listedType">
-                                    <option th:selected="${vwoInfo.getVwoListedType()==1?true:false}">上市前</option>
-                                    <option th:selected="${vwoInfo.getVwoListedType()==2?true:false}">上市后</option>
+                                <label for="vwoListedType">上市类型:</label>
+                                <select class="form-control" style="width: 150px" name="vwoListedType" id="vwoListedType">
+                                    <option value="-1"></option>
+                                    <option value="1" th:selected="${vwoInfo.getVwoListedType()==1?true:false}">上市前</option>
+                                    <option value="2" th:selected="${vwoInfo.getVwoListedType()==2?true:false}">上市后</option>
                                 </select>
                             </div>
                             <div class="form-group after_the">
@@ -130,7 +164,7 @@
                                 />
                             </div>
                         </div>
-                        <div class="col-lg-2 col-md-2">
+                        <div class="col-lg-2 col-md-3 col-sm-4">
                             <div class="form-group after_the">
                                 <label for="platformCode">平台:</label>
                                 <input style="width: 150px" class="form-control"
@@ -167,7 +201,7 @@
                                 />
                             </div>
                         </div>
-                        <div class="col-lg-2 col-md-2">
+                        <div class="col-lg-2 col-md-3 col-sm-4">
                             <div class="form-group after_the">
                                 <label for="vwoEndEffectiveTime">终止生效时间:</label>
                                 <input type="text" style="width: 150px" class="form-control"
@@ -183,14 +217,21 @@
                                        th:value="${vwoInfo.getVwoProjectStage()}"
                                 />
                             </div>
+                            <div class="form-group after_the">
+                                <label for="vwoExpectExecuteTime">预计实施时间:</label>
+                                <input type="text" style="width: 150px" class="form-control"
+                                       id="vwoExpectExecuteTime" name="vwoExpectExecuteTime"
+                                       th:value="${vwoInfo.getVwoExpectExecuteTime()}"
+                                />
+                            </div>
                         </div>
 
-                        <div class="col-lg-12 col-md-12">
+                        <div class="col-lg-12 col-md-12 col-sm-12">
                             <div class="form-group after_the">
                                 <table id="connectedTable" name="connectedTable"></table>
                             </div>
                         </div>
-                        <div class="col-lg-12 col-md-12">
+                        <div class="col-lg-12 col-md-12 col-sm-12">
                             <div class="form-group after_the">
                                 <label for="vwoChangeReason">原因描述:</label>
                                 <textarea rows="2" cols="30" style="width: 100%;resize:none"
@@ -331,7 +372,7 @@
 <div class="panel-body" style="padding-bottom:0px;">
     <div class="panel panel-default panel-body">
         <div class="col-lg-12 col-md-12">
-            <div class="col-lg-4 col-md-4">
+            <div class="col-lg-4 col-md-4 col-sm-4">
                 <div class="panel panel-default panel-body" style="padding-bottom:0px;">
                     <div class="panel-body">
                         <h4>BOM经理</h4>
@@ -357,7 +398,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-4 col-md-4">
+            <div class="col-lg-4 col-md-4 col-sm-4">
                 <div class="panel-body" style="padding-bottom:0px;">
                     <div class="panel panel-default">
                         <div class="panel-body">
@@ -385,7 +426,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-4 col-md-4">
+            <div class="col-lg-4 col-md-4 col-sm-4">
                 <div class="panel-body" style="padding-bottom:0px;">
                     <div class="panel panel-default">
                         <div class="panel-body">

@@ -18,11 +18,13 @@ function formatDate() {
     let vwoEndEffectiveTime = changeDateFormat2($('#vwoEndEffectiveTime').val());
     let vwoCreateDate = changeDateFormat2($('#vwoCreateDate').val());
     let vwoDemandFinishTime = changeDateFormat2($('#vwoDemandFinishTime').val());
+    let vwoExpectExecuteTime = changeDateFormat2($('#vwoExpectExecuteTime').val());
 
     $('#vwoStartEffectiveTime').val(vwoStartEffectiveTime);
     $('#vwoEndEffectiveTime').val(vwoEndEffectiveTime);
     $('#vwoCreateDate').val(vwoCreateDate);
     $('#vwoDemandFinishTime').val(vwoDemandFinishTime);
+    $('#vwoExpectExecuteTime').val(vwoExpectExecuteTime);
 
     $('#vwoStartEffectiveTime').datetimepicker({
         format: 'yyyy-mm-dd',//日期的格式
@@ -45,6 +47,16 @@ function formatDate() {
         todayBtn: true
     });
     $('#vwoDemandFinishTime').datetimepicker({
+        format: 'yyyy-mm-dd',//日期的格式
+        weekStart: 1,// 0（星期日）到6（星期六）
+        startDate: "2008-01-01",//选择器的开始日期
+        autoclose: true,//日期选择完成后是否关闭选择框
+        bootcssVer: 3,//显示向左向右的箭头
+        language: 'zh_CN',//语言
+        minView: 2,//表示日期选择的最小范围，默认是hour
+        todayBtn: true
+    });
+    $('#vwoExpectExecuteTime').datetimepicker({
         format: 'yyyy-mm-dd',//日期的格式
         weekStart: 1,// 0（星期日）到6（星期六）
         startDate: "2008-01-01",//选择器的开始日期
@@ -201,7 +213,12 @@ $(document).ready(
                     data: JSON.stringify(data),
                     url: "saveBasic",
                     success: function (result) {
-                        console.log(result);
+                        if (result.status) {
+                            layer.msg("保存成功", {icon: 1, time: 2000})
+                        }
+                        else {
+                            window.Ewin.alert({message: "保存失败"});
+                        }
                         // window.location.reload();//刷新当前页面.
                     },
                     error: function (e) {
@@ -439,6 +456,7 @@ function doRefreshConnectedTable() {
  */
 function undead() {
     $('body').removeClass("modal-open");
+    $('body').removeAttr("style");
 }
 
 
