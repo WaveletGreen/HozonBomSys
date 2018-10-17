@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.connor.hozon.bom.bomSystem.dao.vwo.HzVwoOpiPmtDao">
+    <resultMap id="BaseResultMap" type="sql.pojo.cfg.vwo.HzVwoOpiPmt">
+        <!--主键-->
+        <id column="ID" jdbcType="DECIMAL" property="id"/>
+        <!--vwo号-->
+        <result column="OPI_PMT_MNG_VWO_ID" jdbcType="DECIMAL" property="opiPmtMngVwoId"/>
+        <!--专业PMT经理意见-->
+        <result column="OPI_PMT_MNG_OPINION" jdbcType="VARCHAR" property="opiPmtMngOpinion"/>
+        <!--专业PMT经理抉择-->
+        <result column="OPI_PMT_MNG_AGREEMENT" jdbcType="DECIMAL" property="opiPmtMngAgreement"/>
+        <!--专业PMT经理抉择日期-->
+        <result column="OPI_PMT_MNG_OPTION_DATE" jdbcType="TIMESTAMP" property="opiPmtMngOptionDate"/>
+        <!--专业PMT经理备注-->
+        <result column="OPI_PMT_MNG_COMMENT" jdbcType="VARCHAR" property="opiPmtMngComment"/>
+        <!--创建时间-->
+        <result column="OPI_PMT_MNG_CREATE_DATE" jdbcType="TIMESTAMP" property="opiPmtMngCreateDate"/>
+        <!--修改时间-->
+        <result column="OPI_PMT_MNG_UPDATE_DATE" jdbcType="TIMESTAMP" property="opiPmtMngUpdateDate"/>
+        <!--创建人-->
+        <result column="OPI_PMT_MNG_CREATOR" jdbcType="VARCHAR" property="opiPmtMngCreator"/>
+        <!--修改人-->
+        <result column="OPI_PMT_MNG_UPDATER" jdbcType="VARCHAR" property="opiPmtMngUpdater"/>
+        <!--评审阶段，101：项目经理审核；102：BOM经理审核，103：专业PMT经理审核等，判断需要从vwoInfo中判断vwoStatus的状态值-->
+        <result column="OPI_PMT_MNG_STAGE" jdbcType="DECIMAL" property="opiPmtMngStage"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    ID, OPI_PMT_MNG_VWO_ID, OPI_PMT_MNG_OPINION, OPI_PMT_MNG_AGREEMENT, OPI_PMT_MNG_OPTION_DATE,
+    OPI_PMT_MNG_COMMENT, OPI_PMT_MNG_CREATE_DATE, OPI_PMT_MNG_UPDATE_DATE, OPI_PMT_MNG_CREATOR,
+    OPI_PMT_MNG_UPDATER, OPI_PMT_MNG_STAGE
+  </sql>
+    <!--**************************************select**************************************-->
+    <select id="selectByPrimaryKey" parameterType="sql.pojo.cfg.vwo.HzVwoOpiPmt" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from HZ_VWO_OPI_PMT
+        where ID = #{id,jdbcType=DECIMAL}
+    </select>
+    <!--**************************************delete**************************************-->
+    <delete id="deleteByPrimaryKey" parameterType="sql.pojo.cfg.vwo.HzVwoOpiPmt">
+    delete from HZ_VWO_OPI_PMT
+    where ID = #{id,jdbcType=DECIMAL}
+  </delete>
+    <!--**************************************insert**************************************-->
+    <insert id="insert" parameterType="sql.pojo.cfg.vwo.HzVwoOpiPmt">
+        <selectKey order="BEFORE"
+                   keyColumn="id" keyProperty="id" resultType="java.lang.Long">
+            select SEQ_VWO_OPI_PMT_ID.Nextval from dual
+        </selectKey>
+    insert into HZ_VWO_OPI_PMT (ID, OPI_PMT_MNG_VWO_ID, OPI_PMT_MNG_OPINION, 
+      OPI_PMT_MNG_AGREEMENT, OPI_PMT_MNG_OPTION_DATE, 
+      OPI_PMT_MNG_COMMENT, OPI_PMT_MNG_CREATE_DATE, 
+      OPI_PMT_MNG_UPDATE_DATE, OPI_PMT_MNG_CREATOR, 
+      OPI_PMT_MNG_UPDATER, OPI_PMT_MNG_STAGE)
+    values (#{id,jdbcType=DECIMAL}, #{opiPmtMngVwoId,jdbcType=DECIMAL}, #{opiPmtMngOpinion,jdbcType=VARCHAR}, 
+      #{opiPmtMngAgreement,jdbcType=DECIMAL}, #{opiPmtMngOptionDate,jdbcType=TIMESTAMP}, 
+      #{opiPmtMngComment,jdbcType=VARCHAR}, #{opiPmtMngCreateDate,jdbcType=TIMESTAMP}, 
+      #{opiPmtMngUpdateDate,jdbcType=TIMESTAMP}, #{opiPmtMngCreator,jdbcType=VARCHAR}, 
+      #{opiPmtMngUpdater,jdbcType=VARCHAR}, #{opiPmtMngStage,jdbcType=DECIMAL})
+  </insert>
+    <insert id="insertSelective" parameterType="sql.pojo.cfg.vwo.HzVwoOpiPmt">
+        <selectKey order="BEFORE"
+                   keyColumn="id" keyProperty="id" resultType="java.lang.Long">
+            select SEQ_VWO_OPI_PMT_ID.Nextval from dual
+        </selectKey>
+        insert into HZ_VWO_OPI_PMT
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                ID,
+            </if>
+            <if test="opiPmtMngVwoId != null">
+                OPI_PMT_MNG_VWO_ID,
+            </if>
+            <if test="opiPmtMngOpinion != null">
+                OPI_PMT_MNG_OPINION,
+            </if>
+            <if test="opiPmtMngAgreement != null">
+                OPI_PMT_MNG_AGREEMENT,
+            </if>
+            <if test="opiPmtMngOptionDate != null">
+                OPI_PMT_MNG_OPTION_DATE,
+            </if>
+            <if test="opiPmtMngComment != null">
+                OPI_PMT_MNG_COMMENT,
+            </if>
+            <if test="opiPmtMngCreateDate != null">
+                OPI_PMT_MNG_CREATE_DATE,
+            </if>
+            <if test="opiPmtMngUpdateDate != null">
+                OPI_PMT_MNG_UPDATE_DATE,
+            </if>
+            <if test="opiPmtMngCreator != null">
+                OPI_PMT_MNG_CREATOR,
+            </if>
+            <if test="opiPmtMngUpdater != null">
+                OPI_PMT_MNG_UPDATER,
+            </if>
+            <if test="opiPmtMngStage != null">
+                OPI_PMT_MNG_STAGE,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=DECIMAL},
+            </if>
+            <if test="opiPmtMngVwoId != null">
+                #{opiPmtMngVwoId,jdbcType=DECIMAL},
+            </if>
+            <if test="opiPmtMngOpinion != null">
+                #{opiPmtMngOpinion,jdbcType=VARCHAR},
+            </if>
+            <if test="opiPmtMngAgreement != null">
+                #{opiPmtMngAgreement,jdbcType=DECIMAL},
+            </if>
+            <if test="opiPmtMngOptionDate != null">
+                #{opiPmtMngOptionDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="opiPmtMngComment != null">
+                #{opiPmtMngComment,jdbcType=VARCHAR},
+            </if>
+            <if test="opiPmtMngCreateDate != null">
+                #{opiPmtMngCreateDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="opiPmtMngUpdateDate != null">
+                #{opiPmtMngUpdateDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="opiPmtMngCreator != null">
+                #{opiPmtMngCreator,jdbcType=VARCHAR},
+            </if>
+            <if test="opiPmtMngUpdater != null">
+                #{opiPmtMngUpdater,jdbcType=VARCHAR},
+            </if>
+            <if test="opiPmtMngStage != null">
+                #{opiPmtMngStage,jdbcType=DECIMAL},
+            </if>
+        </trim>
+    </insert>
+    <!--**************************************update**************************************-->
+    <update id="updateByPrimaryKeySelective" parameterType="sql.pojo.cfg.vwo.HzVwoOpiPmt">
+        update HZ_VWO_OPI_PMT
+        <set>
+            <if test="opiPmtMngVwoId != null">
+                OPI_PMT_MNG_VWO_ID = #{opiPmtMngVwoId,jdbcType=DECIMAL},
+            </if>
+            <if test="opiPmtMngOpinion != null">
+                OPI_PMT_MNG_OPINION = #{opiPmtMngOpinion,jdbcType=VARCHAR},
+            </if>
+            <if test="opiPmtMngAgreement != null">
+                OPI_PMT_MNG_AGREEMENT = #{opiPmtMngAgreement,jdbcType=DECIMAL},
+            </if>
+            <if test="opiPmtMngOptionDate != null">
+                OPI_PMT_MNG_OPTION_DATE = #{opiPmtMngOptionDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="opiPmtMngComment != null">
+                OPI_PMT_MNG_COMMENT = #{opiPmtMngComment,jdbcType=VARCHAR},
+            </if>
+            <if test="opiPmtMngCreateDate != null">
+                OPI_PMT_MNG_CREATE_DATE = #{opiPmtMngCreateDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="opiPmtMngUpdateDate != null">
+                OPI_PMT_MNG_UPDATE_DATE = #{opiPmtMngUpdateDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="opiPmtMngCreator != null">
+                OPI_PMT_MNG_CREATOR = #{opiPmtMngCreator,jdbcType=VARCHAR},
+            </if>
+            <if test="opiPmtMngUpdater != null">
+                OPI_PMT_MNG_UPDATER = #{opiPmtMngUpdater,jdbcType=VARCHAR},
+            </if>
+            <if test="opiPmtMngStage != null">
+                OPI_PMT_MNG_STAGE = #{opiPmtMngStage,jdbcType=DECIMAL},
+            </if>
+        </set>
+        where ID = #{id,jdbcType=DECIMAL}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="sql.pojo.cfg.vwo.HzVwoOpiPmt">
+    update HZ_VWO_OPI_PMT
+    set OPI_PMT_MNG_VWO_ID = #{opiPmtMngVwoId,jdbcType=DECIMAL},
+      OPI_PMT_MNG_OPINION = #{opiPmtMngOpinion,jdbcType=VARCHAR},
+      OPI_PMT_MNG_AGREEMENT = #{opiPmtMngAgreement,jdbcType=DECIMAL},
+      OPI_PMT_MNG_OPTION_DATE = #{opiPmtMngOptionDate,jdbcType=TIMESTAMP},
+      OPI_PMT_MNG_COMMENT = #{opiPmtMngComment,jdbcType=VARCHAR},
+      OPI_PMT_MNG_CREATE_DATE = #{opiPmtMngCreateDate,jdbcType=TIMESTAMP},
+      OPI_PMT_MNG_UPDATE_DATE = #{opiPmtMngUpdateDate,jdbcType=TIMESTAMP},
+      OPI_PMT_MNG_CREATOR = #{opiPmtMngCreator,jdbcType=VARCHAR},
+      OPI_PMT_MNG_UPDATER = #{opiPmtMngUpdater,jdbcType=VARCHAR},
+      OPI_PMT_MNG_STAGE = #{opiPmtMngStage,jdbcType=DECIMAL}
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+</mapper>

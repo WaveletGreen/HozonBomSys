@@ -334,6 +334,11 @@ public class HzPbomServiceImpl implements HzPbomService {
             } else {
                 jsonObject.put("buyUnit", "");
             }
+
+            if(HzCraftService.CRAFT_DEBUG){
+                jsonObject.put("lineIndex", record.getLineIndex());
+                jsonObject.put("sortNum", record.getSortNum());
+            }
             jsonArray.add(jsonObject);
             return jsonArray;
         } catch (Exception e) {

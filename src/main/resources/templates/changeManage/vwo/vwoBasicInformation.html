@@ -488,6 +488,11 @@
 <script th:src="@{/js/helper/dateFormater.js}"></script>
 <script th:src="@{/js/changeManage/vwo/vwoBasicInformation.js}"></script>
 <script th:inline="javascript">
+    var vwoInfo = [[${vwoInfo}]];
+    $(function(){
+        console.log(vwoInfo);
+        console.log("状态:"+vwoInfo.vwoStatus);
+    });
     function doQuery() {
         $('#connectedTable').bootstrapTable('refresh');    //刷新表格
     };

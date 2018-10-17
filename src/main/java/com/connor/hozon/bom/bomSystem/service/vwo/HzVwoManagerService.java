@@ -1009,9 +1009,9 @@ public class HzVwoManagerService implements IHzVWOManagerService {
         JSONObject result = new JSONObject();
         boolean status = executeProcess(new InterruptionContainer(), type, projectUid, vwoId);
         if (status) {
-            result.put("msg", "发布成功");
+            result.put("msg", "流程终止成功");
         } else {
-            result.put("msg", "发布失败");
+            result.put("msg", "流程终止失败");
         }
         result.put("status", status);
         return result;
