@@ -187,4 +187,14 @@
             #{hzCfg0ModelColor.puid,jdbcType=VARCHAR}
         </foreach>
     </update>
+
+    <update id="updateByVwoId" parameterType="sql.pojo.cfg.modelColor.HzCfg0ModelColor">
+        update
+          HZ_CFG0_MODEL_COLOR_RECORD t
+        set
+          t.CMCR_STATUS = #{cmcrStatus},
+          t.CMCR_VWO_ID = ''
+        where
+          t.CMCR_VWO_ID = #{cmcrVwoId}
+    </update>
 </mapper>

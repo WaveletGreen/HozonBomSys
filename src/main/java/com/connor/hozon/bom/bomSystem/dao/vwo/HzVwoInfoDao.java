@@ -47,4 +47,6 @@ public interface HzVwoInfoDao extends BasicDao<HzVwoInfo> {
      * @return
      */
     int tellMeHowManyOfIt(@Param("projectUid") String projectUid);
+
+    int updateByVwoId(HzVwoInfo info);
 }
