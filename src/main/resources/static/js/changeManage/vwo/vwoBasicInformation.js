@@ -464,6 +464,14 @@ function undead() {
  * 发布
  */
 function release() {
+    var vwoStatus = vwoInfo.vwoStatus;
+    if("999"==vwoStatus){
+        window.Ewin.alert({message: "该VWO已发布，不能发布"});
+        return false;
+    }else if("899"==vwoStatus){
+        window.Ewin.alert({message: "该VWO已中断，不能发布"});
+        return false;
+    }
     $.ajax({
         contentType:
             "application/json",
@@ -474,6 +482,7 @@ function release() {
         success: function (result) {
             if (result.status) {
                 layer.msg(result.msg, {icon: 1, time: 2000})
+                window.location.reload();
             }
             else {
                 window.Ewin.alert({message: "发布失败:" + result.msg});
@@ -490,6 +499,14 @@ function release() {
  * 中断
  */
 function interrupt() {
+    var vwoStatus = vwoInfo.vwoStatus;
+    if("999"==vwoStatus){
+        window.Ewin.alert({message: "该VWO已发布，不能中断"});
+        return false;
+    }else if("899"==vwoStatus){
+        window.Ewin.alert({message: "该VWO已中断，不能中断"});
+        return false;
+    }
     $.ajax({
         contentType:
             "application/json",
@@ -500,6 +517,7 @@ function interrupt() {
         success: function (result) {
             if (result.status) {
                 layer.msg(result.msg, {icon: 1, time: 2000})
+                window.location.reload();
             }
             else {
                 window.Ewin.alert({message: "中断失败:" + result.msg});
