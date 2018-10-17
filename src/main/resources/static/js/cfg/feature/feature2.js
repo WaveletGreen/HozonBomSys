@@ -72,6 +72,12 @@ function loadData(projectPuid) {
                         window.Ewin.alert({message: '请选择一条需要删除的数据!'});
                         return false;
                     }
+                    for (let i in rows) {
+                        if (1 == rows[i].cfgIsInProcess || "1" == rows[i].cfgIsInProcess) {
+                            window.Ewin.alert({message: rows[i].pCfg0ObjectId + "已在VWO流程中，不允许重复发起VWO流程"});
+                            return false;
+                        }
+                    }
                     window.Ewin.confirm({title: '提示', message: '是否要删除您所选择的记录？', width: 500}).on(function (e) {
                         if (e) {
                             $.ajax({

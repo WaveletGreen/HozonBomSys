@@ -477,4 +477,11 @@ public class HzCfg0ModelColorService {
     }
 
 
+    public boolean doRelease(HzCfg0ModelColor hzCfg0ModelColor) {
+        if(hzCfg0ModelColorDao.updateByVwoId(hzCfg0ModelColor)==1){
+            return true;
+        }else {
+            return false;
+        }
+    }
 }

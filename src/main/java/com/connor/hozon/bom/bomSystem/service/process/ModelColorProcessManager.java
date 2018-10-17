@@ -11,8 +11,11 @@ import com.connor.hozon.bom.bomSystem.iservice.process.IInterruptionCallBack;
 import com.connor.hozon.bom.bomSystem.iservice.process.IReleaseCallBack;
 import com.connor.hozon.bom.bomSystem.service.modelColor.HzCfg0ModelColorService;
 import com.connor.hozon.bom.bomSystem.service.vwo.HzVwoInfoService;
+import com.connor.hozon.bom.common.util.user.UserInfo;
+import com.connor.hozon.bom.sys.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import sql.pojo.cfg.modelColor.HzCfg0ModelColor;
 import sql.pojo.cfg.vwo.HzVwoInfo;
 
 import java.util.List;
@@ -29,6 +32,8 @@ public class ModelColorProcessManager implements IInterruptionCallBack, IRelease
     @Autowired
     HzVwoInfoService hzVwoInfoService;
 
+    @Autowired
+    HzCfg0ModelColorService hzCfg0ModelColorService;
     /**
      * 中断操作
      * 将src主数据的状态设置为草稿状态(0)，清除vwo号
@@ -40,8 +45,7 @@ public class ModelColorProcessManager implements IInterruptionCallBack, IRelease
     @Override
     public boolean interrupt(Long vwoId, String projectUId) {
         interruptionFunctionDesc();
-        HzVwoInfo info = hzVwoInfoService.doSelectByPrimaryKey(vwoId);
-        return false;
+        return updateModelColorAndVwoInfo("0",899,vwoId);
     }
 
     /**
@@ -55,8 +59,7 @@ public class ModelColorProcessManager implements IInterruptionCallBack, IRelease
     @Override
     public boolean release(Long vwoId, String projectUId) {
         releaseFunctionDesc();
-        HzVwoInfo info = hzVwoInfoService.doSelectByPrimaryKey(vwoId);
-        return false;
+        return updateModelColorAndVwoInfo("999",999,vwoId);
     }
 
 
@@ -68,5 +71,18 @@ public class ModelColorProcessManager implements IInterruptionCallBack, IRelease
     @Override
     public void releaseFunctionDesc() {
         System.out.println("执行的是" + this.getClass().getCanonicalName() + ".release回调");
+    }
+
+    public boolean updateModelColorAndVwoInfo(String cmcrStatus, Integer vwoStatus, Long vwoId){
+        User user = UserInfo.getUser();
+        HzVwoInfo info = hzVwoInfoService.doSelectByPrimaryKey(vwoId);
+        HzCfg0ModelColor hzCfg0ModelColor = new HzCfg0ModelColor();
+        hzCfg0ModelColor.setCmcrVwoId(info.getId());
+        hzCfg0ModelColor.setCmcrStatus(cmcrStatus);
+        boolean modelColorFlag = hzCfg0ModelColorService.doRelease(hzCfg0ModelColor);
+        info.setVwoFinisher(user.getLogin());
+        info.setVwoStatus(vwoStatus);
+        boolean vwoFlag = hzVwoInfoService.doRelease(info);
+        return  modelColorFlag&&vwoFlag;
     }
 }

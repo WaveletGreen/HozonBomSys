@@ -121,4 +121,16 @@ public class HzVwoInfoService implements IHzVwoInfoService {
         return hzVwoInfo;
     }
 
+    /**
+     * 配色方案vwo发布
+     * @param info
+     * @return
+     */
+    public boolean doRelease(HzVwoInfo info) {
+        if(hzVwoInfoDao.updateByVwoId(info)==1){
+            return true;
+        }else {
+            return false;
+        }
+    }
 }

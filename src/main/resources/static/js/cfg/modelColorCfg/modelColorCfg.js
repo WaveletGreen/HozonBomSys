@@ -117,7 +117,7 @@ function loadData(_projectPuid) {
                 valign:
                     'middle',
                 formatter: function (value, row, index) {
-                    if (value == 99 || "99" == value) {
+                    if (value == 999 || "999" == value) {
                         return "<span style='color: #00B83F'>已生效</span>";
                     }
                     else if (value == 0 || "0" == value) {
@@ -174,6 +174,12 @@ function loadData(_projectPuid) {
                                 window.Ewin.alert({message: '请选择一条需要修改的数据!'});
                                 return false;
                             }
+                            for (let i in rows) {
+                                if (10 == rows[i].cmcrStatus || "10" == rows[i].cmcrStatus) {
+                                    window.Ewin.alert({message: rows[i].codeOfColorModel + '已在VWO流程中，不允许修改'});
+                                    return false;
+                                }
+                            }
                             window.Ewin.dialog({
                                 title: "修改",
                                 url: "modelColor/modifyPage?puid=" + rows[0].puid,
@@ -192,7 +198,12 @@ function loadData(_projectPuid) {
                                 window.Ewin.alert({message: '请选择一条需要删除的数据!'});
                                 return false;
                             }
-
+                            for (let i in rows) {
+                                if (10 == rows[i].cmcrStatus || "10" == rows[i].cmcrStatus) {
+                                    window.Ewin.alert({message: rows[i].codeOfColorModel + '已在VWO流程中，不允许删除'});
+                                    return false;
+                                }
+                            }
                             //测试数据
                             window.Ewin.confirm({
                                 title: '提示',
@@ -212,10 +223,7 @@ function loadData(_projectPuid) {
                                                 // window.Ewin.alert({message: "删除时数据成功"});
                                                 //刷新，会重新申请数据库数据
                                             }
-                                            else {if (10 == rows[0].cmcrStatus || "10" == rows[0].cmcrStatus) {
-                                                window.Ewin.alert({message: rows[0].pCfg0ObjectId + '已在VWO流程中，不允许修改'});
-                                                return false;
-                                            }
+                                            else {
                                                 window.Ewin.alert({message: "操作删除失败:" + result.msg});
                                             }
                                             $table.bootstrapTable("refresh");
@@ -236,6 +244,12 @@ function loadData(_projectPuid) {
                             if (rows.length == 0) {
                                 window.Ewin.alert({message: '请选择一条需要发起VWO流程的数据!'});
                                 return false;
+                            }
+                            for (let i in rows) {
+                                if (10 == rows[i].cmcrStatus || "10" == rows[i].cmcrStatus) {
+                                    window.Ewin.alert({message: rows[i].codeOfColorModel + '已在VWO流程中，不允许再次发起VWO流程'});
+                                    return false;
+                                }i
                             }
                             //测试数据
                             window.Ewin.confirm({

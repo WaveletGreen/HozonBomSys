@@ -353,4 +353,15 @@
             ID = #{id,jdbcType=DECIMAL}
         </where>
     </update>
+
+    <update id="updateByVwoId" parameterType="sql.pojo.cfg.vwo.HzVwoInfo">
+        update
+          HZ_VWO_INFO t
+        set
+          t.VWO_FINISHER=#{vwoFinisher},
+          t.VWO_FINISH_DATE=sysdate,
+          t.VWO_STATUS=#{vwoStatus}
+        where
+          t.ID=#{id}
+    </update>
 </mapper>
