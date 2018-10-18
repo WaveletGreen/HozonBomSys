@@ -1,6 +1,6 @@
 package com.connor.hozon.bom.resources.service.change.impl;
 
-import com.connor.hozon.bom.resources.domain.dto.response.OperateResultMessageRespDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
 import com.connor.hozon.bom.resources.domain.query.HzEWOImpactReferenceQuery;
 import com.connor.hozon.bom.resources.mybatis.change.HzEWOImpactReferenceDAO;
 import com.connor.hozon.bom.resources.service.change.HzEWOImpactReferenceService;
@@ -44,7 +44,7 @@ public class HzEWOImpactReferenceServiceImpl implements HzEWOImpactReferenceServ
     }
 
     @Override
-    public OperateResultMessageRespDTO editHzEWOImpactReference(HzEWOImpactReference reference) {
+    public WriteResultRespDTO editHzEWOImpactReference(HzEWOImpactReference reference) {
         try{
             List<HzEWOImpactReference> insertList = new ArrayList<>();
             List<HzEWOImpactReference> updateList = new ArrayList<>();
@@ -103,8 +103,8 @@ public class HzEWOImpactReferenceServiceImpl implements HzEWOImpactReferenceServ
             }
 
         }catch (Exception e){
-            return OperateResultMessageRespDTO.getFailResult();
+            return WriteResultRespDTO.getFailResult();
         }
-        return OperateResultMessageRespDTO.getSuccessResult();
+        return WriteResultRespDTO.getSuccessResult();
     }
 }

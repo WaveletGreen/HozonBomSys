@@ -4,7 +4,7 @@ import com.connor.hozon.bom.bomSystem.impl.bom.HzBomLineRecordDaoImpl;
 import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.resources.domain.dto.request.InitiatingProcessReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzEbomRespDTO;
-import com.connor.hozon.bom.resources.domain.dto.response.OperateResultMessageRespDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
 import com.connor.hozon.bom.resources.domain.query.HzEWOChangeRecordQuery;
 import com.connor.hozon.bom.resources.domain.query.HzEbomTreeQuery;
 import com.connor.hozon.bom.resources.mybatis.bom.HzEbomRecordDAO;
@@ -47,11 +47,11 @@ public class HzEWOServiceImpl implements HzEWOService {
     @Autowired
     private OrgGroupDao orgGroupDao;
     @Override
-    public OperateResultMessageRespDTO initiatingProcessForEwoChange(InitiatingProcessReqDTO reqDTO) {
+    public WriteResultRespDTO initiatingProcessForEwoChange(InitiatingProcessReqDTO reqDTO) {
         try{
             boolean b = PrivilegeUtil.writePrivilege();//判断权限
             if(!b){
-                return OperateResultMessageRespDTO.getFailPrivilege();
+                return WriteResultRespDTO.getFailPrivilege();
             }
             String puids = reqDTO.getPuids();
             User user = UserInfo.getUser();
@@ -136,15 +136,15 @@ public class HzEWOServiceImpl implements HzEWOService {
                             });
                         }
                     }else {
-                        OperateResultMessageRespDTO respDTO = new OperateResultMessageRespDTO();
+                        WriteResultRespDTO respDTO = new WriteResultRespDTO();
                         respDTO.setErrMsg("只能对草稿状态或者删除状态的数据发起流程！");
-                        respDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
+                        respDTO.setErrCode(WriteResultRespDTO.FAILED_CODE);
                         return respDTO;
                     }
                 }else {
-                    OperateResultMessageRespDTO respDTO = new OperateResultMessageRespDTO();
+                    WriteResultRespDTO respDTO = new WriteResultRespDTO();
                     respDTO.setErrMsg("数据产生了一个错误！");
-                    respDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
+                    respDTO.setErrCode(WriteResultRespDTO.FAILED_CODE);
                     return respDTO;
                 }
             }
@@ -157,9 +157,9 @@ public class HzEWOServiceImpl implements HzEWOService {
             hzBomLineRecordDao.updateBatch(beforeList);
             hzBomLineRecordDao.updateBatch(afterList);
         }catch (Exception e){
-            return OperateResultMessageRespDTO.getFailResult();
+            return WriteResultRespDTO.getFailResult();
         }
-        return OperateResultMessageRespDTO.getSuccessResult();
+        return WriteResultRespDTO.getSuccessResult();
     }
 
     @Override
@@ -209,7 +209,7 @@ public class HzEWOServiceImpl implements HzEWOService {
 
 
     @Override
-    public OperateResultMessageRespDTO addNewItemToChangeForm(InitiatingProcessReqDTO reqDTO) {
+    public WriteResultRespDTO addNewItemToChangeForm(InitiatingProcessReqDTO reqDTO) {
         try{
             //新增一个零件到已存在的变更表单
 
@@ -221,7 +221,7 @@ public class HzEWOServiceImpl implements HzEWOService {
 
 
     @Override
-    public OperateResultMessageRespDTO deleteItemFromChangeFrom(InitiatingProcessReqDTO reqDTO) {
+    public WriteResultRespDTO deleteItemFromChangeFrom(InitiatingProcessReqDTO reqDTO) {
         return null;
     }
 

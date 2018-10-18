@@ -3,7 +3,7 @@ package com.connor.hozon.bom.resources.mybatis.resourcesLibrary.VPPSLibrary.impl
 import com.connor.hozon.bom.resources.domain.query.HzVPPSLibraryQuery;
 import com.connor.hozon.bom.resources.mybatis.resourcesLibrary.VPPSLibrary.HzVPPSLibraryDao;
 import com.connor.hozon.bom.resources.page.Page;
-import com.connor.hozon.bom.resources.page.PageRequest;
+import com.connor.hozon.bom.resources.page.PageRequestParam;
 import org.springframework.stereotype.Service;
 import sql.BaseSQLUtil;
 import sql.pojo.resourcesLibrary.VPPSLibrary.HzVPPSLibrary;
@@ -26,7 +26,7 @@ public class HzVPPSLibraryDaoImpl extends BaseSQLUtil implements HzVPPSLibraryDa
      */
     @Override
     public Page findVPPSLibraryToPage(HzVPPSLibraryQuery query){
-        PageRequest pageRequest = new PageRequest();
+        PageRequestParam pageRequestParam = new PageRequestParam();
         Map map = new HashMap();
         map.put("vppsLevel",query.getVppsLevel());
         map.put("vsgCode",query.getVsgCode());
@@ -34,10 +34,10 @@ public class HzVPPSLibraryDaoImpl extends BaseSQLUtil implements HzVPPSLibraryDa
         map.put("upc",query.getUpc());
         map.put("fna",query.getFna());
         map.put("standardPartCode",query.getStandardPartCode());
-        pageRequest.setPageNumber(query.getPage());
-        pageRequest.setPageSize(query.getPageSize());
-        pageRequest.setFilters(map);
-        return super.findPage("HzVPPSLibraryDaoImpl_select","HzVPPSLibraryDaoImpl_count",pageRequest);
+        pageRequestParam.setPageNumber(query.getPage());
+        pageRequestParam.setPageSize(query.getPageSize());
+        pageRequestParam.setFilters(map);
+        return super.findPage("HzVPPSLibraryDaoImpl_select","HzVPPSLibraryDaoImpl_count", pageRequestParam);
     }
 
     /**

@@ -4,7 +4,7 @@ import com.connor.hozon.bom.resources.domain.query.HzMaterielByPageQuery;
 import com.connor.hozon.bom.resources.domain.query.HzMaterielQuery;
 import com.connor.hozon.bom.resources.mybatis.materiel.HzMaterielDAO;
 import com.connor.hozon.bom.resources.page.Page;
-import com.connor.hozon.bom.resources.page.PageRequest;
+import com.connor.hozon.bom.resources.page.PageRequestParam;
 import com.connor.hozon.bom.resources.util.ListUtil;
 import org.springframework.stereotype.Service;
 import sql.BaseSQLUtil;
@@ -82,16 +82,16 @@ public class HzMaterielDAOImpl extends BaseSQLUtil implements HzMaterielDAO {
 
     @Override
     public Page<HzMaterielRecord> findHzMaterielForPage(HzMaterielByPageQuery query) {
-        PageRequest pageRequest = new PageRequest();
-        pageRequest.setPageNumber(query.getPage());
-        pageRequest.setPageSize(query.getPageSize());
+        PageRequestParam pageRequestParam = new PageRequestParam();
+        pageRequestParam.setPageNumber(query.getPage());
+        pageRequestParam.setPageSize(query.getPageSize());
         Map map = new HashMap<>();
         map.put("projectId", query.getProjectId());
         map.put("pMaterielDataType", query.getpMaterielDataType());
         map.put("pMaterielCode", query.getpMaterielCode().trim());
         map.put("pMaterielType", query.getpMaterielType());
-        pageRequest.setFilters(map);
-        return super.findPage("HzMaterialDAOImpl_findHzMaterielForPage", "HzMaterialDAOImpl_findHzMaterielTotalCount", pageRequest);
+        pageRequestParam.setFilters(map);
+        return super.findPage("HzMaterialDAOImpl_findHzMaterielForPage", "HzMaterialDAOImpl_findHzMaterielTotalCount", pageRequestParam);
     }
 
 

@@ -11,7 +11,7 @@ import com.connor.hozon.bom.resources.domain.dto.request.UpdateHzEbomLeveReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.request.UpdateHzEbomReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzEbomLevelRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzEbomRespDTO;
-import com.connor.hozon.bom.resources.domain.dto.response.OperateResultMessageRespDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
 import com.connor.hozon.bom.resources.domain.query.HzEbomByPageQuery;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.service.bom.HzEbomService;
@@ -23,15 +23,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import springfox.documentation.RequestHandler;
 import sql.pojo.bom.HzBomLineRecord;
 import sql.pojo.cfg.model.HzCfg0ModelRecord;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.*;
-
-import static org.hibernate.jpa.internal.QueryImpl.LOG;
 
 /**
  * \* User: xulf
@@ -114,7 +110,7 @@ public class HzEbomController extends BaseController {
                 tableTitle.put("title"+i,hzCfg0ModelRecords.get(i).getObjectName()+"(用量)");
             }
         }
-        writeAjaxJSONResponse(ResultMessageBuilder.build(tableTitle), response);
+        toJSONResponse(Result.build(tableTitle), response);
     }
     
 
@@ -208,16 +204,16 @@ public class HzEbomController extends BaseController {
     public void updateEbomLevelToDB(@RequestBody UpdateHzEbomLeveReqDTO reqDTO, HttpServletResponse response){
         boolean b = PrivilegeUtil.writePrivilege();
         if(!b){//管理员权限
-            writeAjaxJSONResponse(ResultMessageBuilder.build(false,"您没有权限进行当前操作！"), response);
+            toJSONResponse(Result.build(false,"您没有权限进行当前操作！"), response);
             return;
         }
 
-        //OperateResultMessageRespDTO respDTO= hzEbomService.updateHzEbomLevelRecord(reqDTO);
+        //WriteResultRespDTO respDTO= hzEbomService.updateHzEbomLevelRecord(reqDTO);
         //测试
-        OperateResultMessageRespDTO respDTO= hzEbomService.testbomLevelChange(reqDTO);
+        WriteResultRespDTO respDTO= hzEbomService.testbomLevelChange(reqDTO);
 
-        writeAjaxJSONResponse(ResultMessageBuilder.build(
-                OperateResultMessageRespDTO.isSuccess(respDTO), respDTO.getErrMsg()), response);
+        toJSONResponse(Result.build(
+                WriteResultRespDTO.isSuccess(respDTO), respDTO.getErrMsg()), response);
     }
 
 
@@ -240,16 +236,16 @@ public class HzEbomController extends BaseController {
     @RequestMapping(value = "add/ebom",method = RequestMethod.POST)
     public void addEbomToDB(@RequestBody AddHzEbomReqDTO reqDTO, HttpServletResponse response){
         if(reqDTO.getProjectId()==null){
-            writeAjaxJSONResponse(ResultMessageBuilder.build(false,"非法参数！"), response);
+            toJSONResponse(Result.build(false,"非法参数！"), response);
             return;
         }
         boolean b = PrivilegeUtil.writePrivilege();
         if(!b){//管理员权限
-            writeAjaxJSONResponse(ResultMessageBuilder.build(false,"您没有权限进行当前操作！"), response);
+            toJSONResponse(Result.build(false,"您没有权限进行当前操作！"), response);
             return;
         }
-        OperateResultMessageRespDTO respDTO = hzEbomService.addHzEbomRecord(reqDTO);
-        writeAjaxJSONResponse(ResultMessageBuilder.build(OperateResultMessageRespDTO.isSuccess(respDTO), respDTO.getErrMsg()), response);
+        WriteResultRespDTO respDTO = hzEbomService.addHzEbomRecord(reqDTO);
+        toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO), respDTO.getErrMsg()), response);
     }
 
 
@@ -263,11 +259,11 @@ public class HzEbomController extends BaseController {
     public void updateEbomToDB(@RequestBody UpdateHzEbomReqDTO reqDTO, HttpServletResponse response){
         boolean b = PrivilegeUtil.writePrivilege();
         if(!b){//管理员权限
-            writeAjaxJSONResponse(ResultMessageBuilder.build(false,"您没有权限进行当前操作！"), response);
+            toJSONResponse(Result.build(false,"您没有权限进行当前操作！"), response);
             return;
         }
-        OperateResultMessageRespDTO respDTO= hzEbomService.updateHzEbomRecord(reqDTO);
-        writeAjaxJSONResponse(ResultMessageBuilder.build(OperateResultMessageRespDTO.isSuccess(respDTO), respDTO.getErrMsg()), response);
+        WriteResultRespDTO respDTO= hzEbomService.updateHzEbomRecord(reqDTO);
+        toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO), respDTO.getErrMsg()), response);
     }
 
 
@@ -280,16 +276,16 @@ public class HzEbomController extends BaseController {
     @RequestMapping(value = "delete/ebom",method = RequestMethod.POST)
     public void deleteEbomToDB(@RequestBody DeleteHzEbomReqDTO reqDTO, HttpServletResponse response){
         if(reqDTO.getProjectId()==null){
-            writeAjaxJSONResponse(ResultMessageBuilder.build(false,"非法参数！"), response);
+            toJSONResponse(Result.build(false,"非法参数！"), response);
             return;
         }
         boolean b = PrivilegeUtil.writePrivilege();
         if(!b){//管理员权限
-            writeAjaxJSONResponse(ResultMessageBuilder.build(false,"您没有权限进行当前操作！"), response);
+            toJSONResponse(Result.build(false,"您没有权限进行当前操作！"), response);
             return;
         }
-        OperateResultMessageRespDTO respDTO = hzEbomService.deleteHzEbomRecordById(reqDTO);
-        writeAjaxJSONResponse(ResultMessageBuilder.build(OperateResultMessageRespDTO.isSuccess(respDTO), respDTO.getErrMsg()), response);
+        WriteResultRespDTO respDTO = hzEbomService.deleteHzEbomRecordById(reqDTO);
+        toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO), respDTO.getErrMsg()), response);
     }
 
     /**
@@ -312,12 +308,12 @@ public class HzEbomController extends BaseController {
     @RequestMapping(value = "vaild/direct",method = RequestMethod.POST)
     public void validDirect(String puids, HttpServletResponse response){
         if(puids==null){
-            writeAjaxJSONResponse(ResultMessageBuilder.build(false,"非法参数！"), response);
+            toJSONResponse(Result.build(false,"非法参数！"), response);
             return;
         }
         boolean b = PrivilegeUtil.writePrivilege();
         if(!b){//管理员权限
-            writeAjaxJSONResponse(ResultMessageBuilder.build(false,"您没有权限进行当前操作！"), response);
+            toJSONResponse(Result.build(false,"您没有权限进行当前操作！"), response);
             return;
         }
 
@@ -332,9 +328,9 @@ public class HzEbomController extends BaseController {
         }
         int i = hzBomLineRecordDao.updateBatch(list);
         if(i>0){
-            writeAjaxJSONResponse(ResultMessageBuilder.build(true,"操作成功！"), response);
+            toJSONResponse(Result.build(true,"操作成功！"), response);
         }else {
-            writeAjaxJSONResponse(ResultMessageBuilder.build(false,"操作失败！"), response);
+            toJSONResponse(Result.build(false,"操作失败！"), response);
 
         }
     }

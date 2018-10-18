@@ -1,10 +1,9 @@
 package com.connor.hozon.bom.resources.controller.file;
 
 import com.connor.hozon.bom.resources.controller.BaseController;
-import com.connor.hozon.bom.resources.domain.dto.response.OperateResultMessageRespDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
 import com.connor.hozon.bom.resources.service.file.FileUploadService;
-import com.connor.hozon.bom.resources.util.ExcelUtil;
-import com.connor.hozon.bom.resources.util.ResultMessageBuilder;
+import com.connor.hozon.bom.resources.util.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,8 +28,8 @@ public class FileUploadController extends BaseController{
     public void filesUpload (@RequestParam("file") MultipartFile file,
 
                              @RequestParam("projectId") String projectId,HttpServletResponse response){
-        OperateResultMessageRespDTO respDTO = fileUploadService.uploadEbomToDB(file,projectId);
-        writeAjaxJSONResponse(ResultMessageBuilder.build(OperateResultMessageRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
+        WriteResultRespDTO respDTO = fileUploadService.uploadEbomToDB(file,projectId);
+        toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
     }
 }
 

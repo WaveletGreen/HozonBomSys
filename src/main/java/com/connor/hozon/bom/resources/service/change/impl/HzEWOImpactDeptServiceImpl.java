@@ -5,7 +5,7 @@ import com.connor.hozon.bom.resources.domain.dto.request.EditEWOImpactDeptReqDTO
 import com.connor.hozon.bom.resources.domain.dto.request.EditImpactDeptEmpReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzEWOImpactDeptEmpRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzEWOImpactDeptRespDTO;
-import com.connor.hozon.bom.resources.domain.dto.response.OperateResultMessageRespDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
 import com.connor.hozon.bom.resources.domain.query.HzEWOImpactDeptQuery;
 import com.connor.hozon.bom.resources.mybatis.change.HzEWOImpactDeptDAO;
 import com.connor.hozon.bom.resources.mybatis.change.HzEWOImpactDeptEmpDAO;
@@ -44,7 +44,7 @@ public class HzEWOImpactDeptServiceImpl implements HzEWOImpactDeptService {
     private UserDao userDao;
 
     @Override
-    public OperateResultMessageRespDTO saveImpactDept(EditEWOImpactDeptReqDTO reqDTO) {
+    public WriteResultRespDTO saveImpactDept(EditEWOImpactDeptReqDTO reqDTO) {
         try{
             //查询 无则新增 有则选择性更新状态
             String[] deptIds = reqDTO.getDeptIds().split(",");
@@ -98,18 +98,18 @@ public class HzEWOImpactDeptServiceImpl implements HzEWOImpactDeptService {
             }
 
         }catch (Exception e){
-            return OperateResultMessageRespDTO.getFailResult();
+            return WriteResultRespDTO.getFailResult();
         }
-        return OperateResultMessageRespDTO.getSuccessResult();
+        return WriteResultRespDTO.getSuccessResult();
     }
 
     @Override
-    public OperateResultMessageRespDTO saveImpactDeptEmp(EditImpactDeptEmpReqDTO reqDTO) {
+    public WriteResultRespDTO saveImpactDeptEmp(EditImpactDeptEmpReqDTO reqDTO) {
         try{
             List<String> deptIds = Arrays.asList(reqDTO.getDeptIds().split(","));
             List<String> userIds = Arrays.asList(reqDTO.getUserIds().split(","));
             if(ListUtil.isEmpty(userIds) || ListUtil.isEmpty(deptIds) || deptIds.size() != userIds.size()){
-                return OperateResultMessageRespDTO.IllgalArgument();
+                return WriteResultRespDTO.IllgalArgument();
             }
             HzEWOImpactDeptQuery query = new HzEWOImpactDeptQuery();
             query.setProjectId(reqDTO.getProjectId());

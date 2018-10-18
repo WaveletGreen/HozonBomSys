@@ -1,12 +1,12 @@
 package com.connor.hozon.bom.resources.controller.bom;
 
-import com.connor.hozon.bom.bomSystem.service.derivative.HzComposeMFService;
+import com.connor.hozon.bom.bomSystem.service.business.cfg.HzComposeMFService;
 import com.connor.hozon.bom.resources.controller.BaseController;
 import com.connor.hozon.bom.resources.domain.dto.request.AddMbomReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.request.DeleteHzMbomReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.request.UpdateMbomReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzMbomRecordRespDTO;
-import com.connor.hozon.bom.resources.domain.dto.response.OperateResultMessageRespDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
 import com.connor.hozon.bom.resources.domain.query.HzMbomByIdQuery;
 import com.connor.hozon.bom.resources.domain.query.HzMbomByPageQuery;
 import com.connor.hozon.bom.resources.domain.query.HzPbomByPageQuery;
@@ -14,7 +14,7 @@ import com.connor.hozon.bom.resources.mybatis.bom.HzPbomRecordDAO;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.service.bom.HzMbomService;
 import com.connor.hozon.bom.resources.service.bom.HzSingleVehiclesServices;
-import com.connor.hozon.bom.resources.util.ResultMessageBuilder;
+import com.connor.hozon.bom.resources.util.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -79,7 +79,7 @@ public class HzMbomController extends BaseController {
         tableTitle.put("pFactoryCode", "工厂代码");
         tableTitle.put("pStockLocation", "发货料库存地点");
         tableTitle.put("pBomType", "BOM类型");
-        writeAjaxJSONResponse(ResultMessageBuilder.build(tableTitle), response);
+        toJSONResponse(Result.build(tableTitle), response);
     }
 
 
@@ -194,8 +194,8 @@ public class HzMbomController extends BaseController {
      */
     @RequestMapping(value = "add",method = RequestMethod.POST)
     public void addMbomToDB(@RequestBody AddMbomReqDTO reqDTO, HttpServletResponse response){
-        OperateResultMessageRespDTO respDTO = hzMbomService.insertMbomRecord(reqDTO);
-        writeAjaxJSONResponse(ResultMessageBuilder.build(OperateResultMessageRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
+        WriteResultRespDTO respDTO = hzMbomService.insertMbomRecord(reqDTO);
+        toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
     }
 
     /**
@@ -205,8 +205,8 @@ public class HzMbomController extends BaseController {
      */
     @RequestMapping(value = "update",method = RequestMethod.POST)
     public void updateMbomToDB(@RequestBody UpdateMbomReqDTO reqDTO, HttpServletResponse response){
-        OperateResultMessageRespDTO respDTO = hzMbomService.updateMbomRecord(reqDTO);
-        writeAjaxJSONResponse(ResultMessageBuilder.build(OperateResultMessageRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
+        WriteResultRespDTO respDTO = hzMbomService.updateMbomRecord(reqDTO);
+        toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
     }
 
     /**
@@ -216,13 +216,13 @@ public class HzMbomController extends BaseController {
      */
     @RequestMapping(value = "delete",method = RequestMethod.POST)
     public void deleteMbom(@RequestBody DeleteHzMbomReqDTO reqDTO, HttpServletResponse response){
-       OperateResultMessageRespDTO respDTO =  hzMbomService.deleteMbomRecord(reqDTO);
-        writeAjaxJSONResponse(ResultMessageBuilder.build(OperateResultMessageRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
+       WriteResultRespDTO respDTO =  hzMbomService.deleteMbomRecord(reqDTO);
+        toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
     }
     @RequestMapping(value = "refresh",method = RequestMethod.POST)
     public void refreshMbom(String projectId,HttpServletResponse response){
-        OperateResultMessageRespDTO resultMessageRespDTO = hzMbomService.refreshHzMbom(projectId);
-        writeAjaxJSONResponse(ResultMessageBuilder.build(OperateResultMessageRespDTO.isSuccess(resultMessageRespDTO),resultMessageRespDTO.getErrMsg()),response);
+        WriteResultRespDTO resultMessageRespDTO = hzMbomService.refreshHzMbom(projectId);
+        toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(resultMessageRespDTO),resultMessageRespDTO.getErrMsg()),response);
     }
 
     /**

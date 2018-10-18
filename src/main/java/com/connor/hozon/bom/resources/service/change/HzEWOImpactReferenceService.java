@@ -1,6 +1,6 @@
 package com.connor.hozon.bom.resources.service.change;
 
-import com.connor.hozon.bom.resources.domain.dto.response.OperateResultMessageRespDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
 import com.connor.hozon.bom.resources.domain.query.HzEWOImpactReferenceQuery;
 import sql.pojo.change.HzEWOImpactReference;
 
@@ -15,5 +15,5 @@ public interface HzEWOImpactReferenceService {
 
     List<HzEWOImpactReference> getHzEWOImpactReferences(HzEWOImpactReferenceQuery query);
 
-    OperateResultMessageRespDTO editHzEWOImpactReference(HzEWOImpactReference reference);
+    WriteResultRespDTO editHzEWOImpactReference(HzEWOImpactReference reference);
 }

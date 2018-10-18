@@ -3,7 +3,7 @@ package com.connor.hozon.bom.resources.mybatis.bom.impl;
 import com.connor.hozon.bom.resources.domain.query.HzSingleVehiclesBomByPageQuery;
 import com.connor.hozon.bom.resources.mybatis.bom.HzSingleVehiclesBomDAO;
 import com.connor.hozon.bom.resources.page.Page;
-import com.connor.hozon.bom.resources.page.PageRequest;
+import com.connor.hozon.bom.resources.page.PageRequestParam;
 import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.resources.util.StringUtil;
 import com.google.common.collect.Lists;
@@ -70,7 +70,7 @@ public class HzSingleVehiclesBomDAOImpl extends BaseSQLUtil implements HzSingleV
 
     @Override
     public Page<HzSingleVehiclesBomRecord> getHzSingleVehiclesBomByPage(HzSingleVehiclesBomByPageQuery query) {
-        PageRequest request = new PageRequest();
+        PageRequestParam request = new PageRequestParam();
         Map map = new HashMap();
         map.put("projectId",query.getProjectId());
         map.put("isHas",query.getIsHas());
@@ -88,7 +88,7 @@ public class HzSingleVehiclesBomDAOImpl extends BaseSQLUtil implements HzSingleV
 
     @Override
     public Page<HzSingleVehiclesBomRecord> getHzSingleVehiclesBomTreeByPage(HzSingleVehiclesBomByPageQuery query) {
-        PageRequest request = new PageRequest();
+        PageRequestParam request = new PageRequestParam();
         Map map = new HashMap();
         map.put("projectId",query.getProjectId());
         map.put("eBomPuids", Lists.newArrayList(query.getEBomPuids().split(",")));

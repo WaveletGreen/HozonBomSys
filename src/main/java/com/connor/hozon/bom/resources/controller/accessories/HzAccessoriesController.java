@@ -6,7 +6,7 @@ import com.connor.hozon.bom.resources.domain.query.HzAccessoriesPageQuery;
 import com.connor.hozon.bom.resources.mybatis.accessories.HzAccessoriesDAO;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.util.ListUtil;
-import com.connor.hozon.bom.resources.util.ResultMessageBuilder;
+import com.connor.hozon.bom.resources.util.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -59,7 +59,7 @@ public class HzAccessoriesController extends BaseController {
         tableTitle.put("pSupply", "供应商");
         tableTitle.put("pSupplyCode", "供应商代码");
         tableTitle.put("pRemark", "备注");
-        writeAjaxJSONResponse(ResultMessageBuilder.build(tableTitle), response);
+        toJSONResponse(Result.build(tableTitle), response);
     }
 
     /**
@@ -74,10 +74,10 @@ public class HzAccessoriesController extends BaseController {
         hzAccessoriesLib.setPuid(puid);
         int i = hzAccessoriesDAO.insert(hzAccessoriesLib);
         if (i > 0) {
-            writeAjaxJSONResponse(ResultMessageBuilder.build(true, "操作成功！"), response);
+            toJSONResponse(Result.build(true, "操作成功！"), response);
             return;
         }
-        writeAjaxJSONResponse(ResultMessageBuilder.build(false, "操作失败！"), response);
+        toJSONResponse(Result.build(false, "操作失败！"), response);
 
     }
 
@@ -92,10 +92,10 @@ public class HzAccessoriesController extends BaseController {
     public void update(@RequestBody HzAccessoriesLib hzAccessoriesLib, HttpServletResponse response) {
         int i = hzAccessoriesDAO.update(hzAccessoriesLib);
         if (i > 0) {
-            writeAjaxJSONResponse(ResultMessageBuilder.build(true, "操作成功！"), response);
+            toJSONResponse(Result.build(true, "操作成功！"), response);
             return;
         }
-        writeAjaxJSONResponse(ResultMessageBuilder.build(false, "操作失败！"), response);
+        toJSONResponse(Result.build(false, "操作失败！"), response);
 
     }
 
@@ -109,7 +109,7 @@ public class HzAccessoriesController extends BaseController {
     @RequestMapping(value = "delete", method = RequestMethod.POST)
     public void delete(@RequestBody DeleteHzAccessoriesDTO reqDTO, HttpServletResponse response) {
         if (reqDTO.getPuids() == null || reqDTO.getPuids() == "") {
-            writeAjaxJSONResponse(ResultMessageBuilder.build(false, "非法参数！"), response);
+            toJSONResponse(Result.build(false, "非法参数！"), response);
             return;
         }
         List<DeleteHzAccessoriesDTO> list = new ArrayList<>();
@@ -122,10 +122,10 @@ public class HzAccessoriesController extends BaseController {
         try {
             hzAccessoriesDAO.deleteList(list);
         } catch (Exception e) {
-            writeAjaxJSONResponse(ResultMessageBuilder.build(false, "操作失败！"), response);
+            toJSONResponse(Result.build(false, "操作失败！"), response);
             return;
         }
-        writeAjaxJSONResponse(ResultMessageBuilder.build(true, "操作成功！"), response);
+        toJSONResponse(Result.build(true, "操作成功！"), response);
 
     }
 

@@ -3,13 +3,9 @@ package com.connor.hozon.bom.resources.service.resourcesLibrary.dictionaryLibrar
 import com.connor.hozon.bom.resources.domain.dto.request.AddHzDictionaryLibraryReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.request.UpdateHzDictionaryLibraryReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzDictionaryLibraryRespDTO;
-import com.connor.hozon.bom.resources.domain.dto.response.OperateResultMessageRespDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
 import com.connor.hozon.bom.resources.domain.query.HzDictionaryLibraryQuery;
 import com.connor.hozon.bom.resources.page.Page;
-import sql.pojo.resourcesLibrary.dictionaryLibrary.HzDictionaryLibrary;
-
-import java.util.List;
-import sql.pojo.resourcesLibrary.dictionaryLibrary.HzDictionaryLibrary;
 
 /**
  * Created with IntelliJ IDEA.
@@ -24,7 +20,7 @@ public interface HzDictionaryLibraryService {
      * @param reqDTO
      * @return
      */
-    OperateResultMessageRespDTO insertHzDictionaryLibrary(AddHzDictionaryLibraryReqDTO reqDTO);
+    WriteResultRespDTO insertHzDictionaryLibrary(AddHzDictionaryLibraryReqDTO reqDTO);
 
     /**
      * 修改一条数据
@@ -32,7 +28,7 @@ public interface HzDictionaryLibraryService {
      * @param reqDTO
      * @return
      */
-    OperateResultMessageRespDTO updateHzDictionaryLibrary(UpdateHzDictionaryLibraryReqDTO reqDTO);
+    WriteResultRespDTO updateHzDictionaryLibrary(UpdateHzDictionaryLibraryReqDTO reqDTO);
 
     /**
      * 分页获取字典库数据
@@ -56,8 +52,7 @@ public interface HzDictionaryLibraryService {
      * @param puid
      * @return
      */
-    OperateResultMessageRespDTO deleteHzDictionaryLibrary(String puid);
+    WriteResultRespDTO deleteHzDictionaryLibrary(String puid);
 
-    HzDictionaryLibrary queryLibraryDTOByCfgObject(String cfgObjectId);
 
 }

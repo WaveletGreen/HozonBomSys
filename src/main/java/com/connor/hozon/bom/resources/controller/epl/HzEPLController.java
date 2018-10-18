@@ -8,7 +8,7 @@ import com.connor.hozon.bom.resources.domain.query.HzEPLByPageQuery;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.service.epl.HzEPLManageRecordService;
 import com.connor.hozon.bom.resources.util.ListUtil;
-import com.connor.hozon.bom.resources.util.ResultMessageBuilder;
+import com.connor.hozon.bom.resources.util.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -100,7 +100,7 @@ public class HzEPLController extends BaseController {
         tableTitle.put("wasterProduct", "废品");
         tableTitle.put("change", "变更");
         tableTitle.put("changeNum", "变更号");
-        writeAjaxJSONResponse(ResultMessageBuilder.build(tableTitle), response);
+        toJSONResponse(Result.build(tableTitle), response);
     }
 
 
@@ -116,10 +116,10 @@ public class HzEPLController extends BaseController {
 //        Page<HzEPLRecordRespDTO> recordRespDTOPage = hzEPLManageRecordService.getHzEPLRecordForPage(query);
 //        List<HzEPLRecordRespDTO> recordRespDTOS =  recordRespDTOPage.getResult();
 //        if (ListUtil.isEmpty(recordRespDTOS)) {
-//            writeAjaxJSONResponse(ResultMessageBuilder.build(false,"暂无数据",new Page<>(recordRespDTOPage.getPageNumber(),recordRespDTOPage.getPageSize(),0)),response);
+//            toJSONResponse(Result.build(false,"暂无数据",new Page<>(recordRespDTOPage.getPageNumber(),recordRespDTOPage.getPageSize(),0)),response);
 //            return;
 //        }
-//        writeAjaxJSONResponse(ResultMessageBuilder.build(recordRespDTOPage),response);
+//        toJSONResponse(Result.build(recordRespDTOPage),response);
 //    }
 
 
@@ -159,15 +159,15 @@ public class HzEPLController extends BaseController {
 //    @RequestMapping(value = "title",method = RequestMethod.GET)
 //    public void getEplTitle(String projectId ,HttpServletResponse response){
 //        if(projectId == null){
-//            writeAjaxJSONResponse(ResultMessageBuilder.build(false,"非法参数！"), response);
+//            toJSONResponse(Result.build(false,"非法参数！"), response);
 //            return;
 //        }
 //        JSONArray array = hzEPLManageRecordService.getEPLTittle(projectId);
 //        if(array==null){
-//            writeAjaxJSONResponse(ResultMessageBuilder.build(false,"网络错误！"), response);
+//            toJSONResponse(Result.build(false,"网络错误！"), response);
 //            return;
 //        }
-//        writeAjaxJSONResponse(ResultMessageBuilder.build(array), response);
+//        toJSONResponse(Result.build(array), response);
 //    }
 
 
@@ -247,6 +247,6 @@ public class HzEPLController extends BaseController {
 //        tableTitle.put("wasterProduct", "废品");
 //        tableTitle.put("change", "变更");
 //        tableTitle.put("changeNum", "变更号");
-//        writeAjaxJSONResponse(ResultMessageBuilder.build(tableTitle), response);
+//        toJSONResponse(Result.build(tableTitle), response);
 //    }
 }

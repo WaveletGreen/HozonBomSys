@@ -2,7 +2,7 @@ package com.connor.hozon.bom.resources.controller.dept;
 
 import com.alibaba.fastjson.JSONArray;
 import com.connor.hozon.bom.resources.controller.BaseController;
-import com.connor.hozon.bom.resources.util.ResultMessageBuilder;
+import com.connor.hozon.bom.resources.util.Result;
 import com.connor.hozon.bom.sys.dao.OrgGroupDao;
 import com.connor.hozon.bom.sys.dao.UserDao;
 import com.connor.hozon.bom.sys.entity.OrgGroup;
@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
-import java.util.prefs.BackingStoreException;
 
 /**
  * @Author: haozt
@@ -39,7 +38,7 @@ public class DeptController extends BaseController {
     @RequestMapping(value = "all",method = RequestMethod.GET)
     public void getAllDept(HttpServletResponse response){
         List<OrgGroup> list = orgGroupDao.queryAllOrgGroup();
-        writeAjaxJSONResponse(ResultMessageBuilder.build(list),response);
+        toJSONResponse(Result.build(list),response);
     }
 
     /**

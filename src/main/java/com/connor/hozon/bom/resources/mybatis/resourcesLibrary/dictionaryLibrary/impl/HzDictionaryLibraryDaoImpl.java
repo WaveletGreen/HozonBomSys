@@ -3,13 +3,12 @@ package com.connor.hozon.bom.resources.mybatis.resourcesLibrary.dictionaryLibrar
 import com.connor.hozon.bom.resources.domain.query.HzDictionaryLibraryQuery;
 import com.connor.hozon.bom.resources.mybatis.resourcesLibrary.dictionaryLibrary.HzDictionaryLibraryDao;
 import com.connor.hozon.bom.resources.page.Page;
-import com.connor.hozon.bom.resources.page.PageRequest;
+import com.connor.hozon.bom.resources.page.PageRequestParam;
 import org.springframework.stereotype.Service;
 import sql.BaseSQLUtil;
 import sql.pojo.resourcesLibrary.dictionaryLibrary.HzDictionaryLibrary;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -34,7 +33,7 @@ public class HzDictionaryLibraryDaoImpl extends BaseSQLUtil implements HzDiction
 
     @Override
     public Page findDictionaryLibraryToPage(HzDictionaryLibraryQuery query) {
-        PageRequest pageRequest = new PageRequest();
+        PageRequestParam pageRequestParam = new PageRequestParam();
         Map map = new HashMap();
         map.put("groupCode",query.getGroupCode());
         map.put("groupCh",query.getGroupCh());
@@ -42,10 +41,10 @@ public class HzDictionaryLibraryDaoImpl extends BaseSQLUtil implements HzDiction
         map.put("famillyCh",query.getFamillyCh());
         map.put("eigenValue",query.getEigenValue());
         map.put("valueDescCh",query.getValueDescCh());
-        pageRequest.setPageNumber(query.getPage());
-        pageRequest.setPageSize(query.getPageSize());
-        pageRequest.setFilters(map);
-        return super.findPage("HzDictionaryLibraryDaoImpl_select","HzDictionaryLibraryDaoImpl_count",pageRequest);
+        pageRequestParam.setPageNumber(query.getPage());
+        pageRequestParam.setPageSize(query.getPageSize());
+        pageRequestParam.setFilters(map);
+        return super.findPage("HzDictionaryLibraryDaoImpl_select","HzDictionaryLibraryDaoImpl_count", pageRequestParam);
     }
 
     @Override
