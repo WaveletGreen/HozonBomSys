@@ -471,7 +471,7 @@
                         <label for="opiBomMngOpinion">意见</label>
                         <textarea class="form-control" style="resize: none;width: 100%;" rows="2" cols="30"
                                   name="opiBomMngOpinion" id="opiBomMngOpinion"
-                                  th:value="${hzVwoOpiBom.getOpiBomMngOpinion()}"
+                                  th:text="${hzVwoOpiBom.getOpiBomMngOpinion()}"
                         >
                         </textarea>
                     </div>
@@ -509,7 +509,7 @@
                         <label for="opiPmtMngOpinion">意见</label>
                         <textarea class="form-control" style="resize: none;width: 100%;" rows="2" cols="30"
                                   name="opiPmtMngOpinion" id="opiPmtMngOpinion"
-                                  th:value="${hzVwoOpiPmt.getOpiPmtMngOpinion()}"
+                                  th:text="${hzVwoOpiPmt.getOpiPmtMngOpinion()}"
                         ></textarea>
                     </div>
                     <div class="col-lg-12 col-md-12 col-sm-12">
@@ -549,17 +549,17 @@
                                   style="resize: none;width: 100%;"
                                   id="opiProjMngOpinion" name="opiProjMngOpinion"
                                   rows="2" cols="30"
-                                  th:value="${hzVwoOpiProj.getOpiProjMngOpinion()}"
+                                  th:text="${hzVwoOpiProj.getOpiProjMngOpinion()}"
                         ></textarea>
                     </div>
                     <div class="col-lg-12 col-md-12 col-sm-12">
                         <label for="opiProjMngAgreement">结论</label>
                         <select class="form-control" name="opiProjMngAgreement" id="opiProjMngAgreement"
                         >
-                            <option th:selected="${hzVwoOpiProj.getOpiProjMngAgreement()==0?true:false}">
+                            <option value="0" th:selected="${hzVwoOpiProj.getOpiProjMngAgreement()==0?true:false}">
                                 不同意
                             </option>
-                            <option th:selected="${hzVwoOpiProj.getOpiProjMngAgreement()==1?true:false}">
+                            <option value="1" th:selected="${hzVwoOpiProj.getOpiProjMngAgreement()==1?true:false}">
                                 同意
                             </option>
                         </select>

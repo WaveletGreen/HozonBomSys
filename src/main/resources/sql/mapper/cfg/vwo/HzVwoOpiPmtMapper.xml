@@ -41,7 +41,7 @@
         select
         <include refid="Base_Column_List"/>
         from HZ_VWO_OPI_PMT
-        where ID = #{id,jdbcType=DECIMAL}
+        where OPI_PMT_MNG_VWO_ID = #{opiVwoId,jdbcType=DECIMAL}
     </select>
     <!--**************************************delete**************************************-->
     <delete id="deleteByPrimaryKey" parameterType="sql.pojo.cfg.vwo.HzVwoOpiPmt">
