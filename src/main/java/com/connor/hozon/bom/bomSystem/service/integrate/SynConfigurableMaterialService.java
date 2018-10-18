@@ -5,7 +5,7 @@ import com.connor.hozon.bom.bomSystem.dao.derivative.HzCfg0ToModelRecordDao;
 import com.connor.hozon.bom.bomSystem.dto.HzMaterielFeatureBean;
 import com.connor.hozon.bom.bomSystem.helper.IntegrateMsgDTO;
 import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
-import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0MainService;
+import com.connor.hozon.bom.bomSystem.service.main.HzCfg0MainService;
 import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0OptionFamilyService;
 import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0Service;
 import com.connor.hozon.bom.bomSystem.service.project.HzSuperMaterielService;

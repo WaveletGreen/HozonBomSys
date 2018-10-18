@@ -1,4 +1,10 @@
-package com.connor.hozon.bom.bomSystem.service.cfg;
+/*
+ * Copyright (c) 2018.
+ * This file was wrote by fancyears·milos·maywas @connor. Any question/bug you can post to 1243093366@qq.com.
+ * ALL RIGHTS RESERVED.
+ */
+
+package com.connor.hozon.bom.bomSystem.service.color;
 
 import com.connor.hozon.bom.bomSystem.dao.color.HzCfg0ColorSetDao;
 import com.connor.hozon.bom.common.base.entity.QueryBase;
@@ -9,9 +15,10 @@ import sql.pojo.cfg.color.HzCfg0ColorSet;
 import java.util.*;
 
 /**
- * Author: Fancyears·Maylos·Mayways
- * Date: 2018/5/21
- * Time: 14:42
+ * @Author: Fancyears·Maylos·Mayways
+ * @Date :  2018/10/12 13:11
+ * @Description: 颜色库服务层
+ * @Modified By:
  */
 @Service("HzCfg0ColorSetService")
 public class HzCfg0ColorSetService {
@@ -41,10 +48,10 @@ public class HzCfg0ColorSetService {
 //                    toUpdate.add(set);
 //                });
         for (HzCfg0ColorSet set : colorSet) {
-            if (set.getPColorAbolishDate() == null) {
+            if (set.getpColorAbolishDate() == null) {
                 continue;
             }
-            if (now.after(set.getPColorAbolishDate())) {
+            if (now.after(set.getpColorAbolishDate())) {
                 toUpdate.add(set);
             }
         }
@@ -59,6 +66,7 @@ public class HzCfg0ColorSetService {
 
     /**
      * 根据分页条件获取颜色
+     *
      * @param queryBase
      * @return
      */
@@ -68,6 +76,7 @@ public class HzCfg0ColorSetService {
 
     /**
      * 获取全部颜色
+     *
      * @return
      */
     public List<HzCfg0ColorSet> doGetAll() {

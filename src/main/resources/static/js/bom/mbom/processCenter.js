@@ -134,6 +134,9 @@ function initTable(url) {
                             var _table = '<p>是否要删除您所选择的记录？</p>' +
                                 '<div style="max-height: 400px;overflow:scroll;"><table class="table table-striped tableNormalStyle" >';
                             for (var index in rows) {
+                                if (rows[index].pWorkCode==null){
+                                    rows[index].pWorkCode="";
+                                }
                                 _table += '<tr><td>' + rows[index].pWorkCode + '</td></tr>';
                             }
                             _table += '</table></div>';

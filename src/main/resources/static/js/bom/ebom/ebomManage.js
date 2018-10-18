@@ -83,6 +83,7 @@ function initTable(eBomUrl) {
                             title: data[key],
                             // align: 'center',
                             valign: 'middle',
+
                             formatter: function (value, row, index) {
                                 if (value == "LOA") {
                                     return [
@@ -108,6 +109,7 @@ function initTable(eBomUrl) {
                             title: data[key],
                             // align: 'center',
                             valign: 'middle',
+
                             formatter: function (value, row, index) {
                                 if (value == "LOA") {
                                     return [
@@ -134,6 +136,7 @@ function initTable(eBomUrl) {
                 title: '状态',
                 align: 'center',
                 valign: 'middle',
+
                 formatter: function (value, row, index) {
                     if (value == 1 || "1" == value) {
                         return "<span style='color: #00B83F'>已生效</span>";
@@ -155,6 +158,13 @@ function initTable(eBomUrl) {
                     }
                 }
             })
+            // column.push({
+            //     field: '',
+            //     title: '单车用量',
+            //     align: 'center',
+            //     valign: 'middle',
+            //     colspan:'4',
+            // })
             $table.bootstrapTable({
                 url: eBomUrl,
                 method: 'GET',
@@ -486,6 +496,22 @@ function initTable(eBomUrl) {
                             }
                         }
                     },
+                    {
+                        text: '导出Excel',
+                        iconCls: 'glyphicon glyphicon-export',
+                        handler: function () {
+                            var userName = data;//表头
+                            var className = $table.bootstrapTable('getData');//返回当前页的数据
+                            var param = "userName=" + userName + "&className=" + className;
+
+                            var projectPuid = $("#project", window.top.document).val();
+                            //var eBomUrl = "ebom/getEBom/list?projectId=" + projectPuid;
+
+                            var url = "ebom/excelExport?projectId=" + projectPuid;
+                            window.location = url;
+
+                        }
+                    }
                 ],
             });
             //$table.bootstrapTable('hideColumn','puid');
@@ -894,22 +920,6 @@ function initTable1(eBomUrl,puids) {
                         }
                     },
                     {
-                        text: '取消显示子层',
-                        iconCls: 'glyphicon glyphicon-eye-open',
-                        handler: function () {
-                            if (this.innerText == '取消显示子层'){
-                                $table.bootstrapTable('destroy');
-                                initTable(eBomUrl);
-                            }
-                            if (this.innerText == '显示子层') {
-                                this.innerText = '取消显示子层'
-                            }
-                            else {
-                                this.innerText = '显示子层'
-                            }
-                        }
-                    },
-                    {
                         text:'引用层级',
                         iconCls: 'glyphicon glyphicon-copyright-mark',
                         handler:function () {
@@ -934,6 +944,38 @@ function initTable1(eBomUrl,puids) {
                             });
                         }
                     },
+                    {
+                        text: '取消显示子层',
+                        iconCls: 'glyphicon glyphicon-eye-open',
+                        handler: function () {
+                            if (this.innerText == '取消显示子层'){
+                                $table.bootstrapTable('destroy');
+                                initTable(eBomUrl);
+                            }
+                            if (this.innerText == '显示子层') {
+                                this.innerText = '取消显示子层'
+                            }
+                            else {
+                                this.innerText = '显示子层'
+                            }
+                        }
+                    },
+                    {
+                        text: '导出Excel',
+                        iconCls: 'glyphicon glyphicon-export',
+                        handler: function () {
+                            var userName = data;//表头
+                            var className = $table.bootstrapTable('getData');//返回当前页的数据
+                            var param = "userName=" + userName + "&className=" + className;
+
+                            var projectPuid = $("#project", window.top.document).val();
+                            //var eBomUrl = "ebom/getEBom/list?projectId=" + projectPuid;
+
+                            var url = "ebom/excelExport?projectId=" + projectPuid;
+                            window.location = url;
+
+                        }
+                    }
                     // {
                     //     text: '导出Excel',
                     //     iconCls: 'glyphicon glyphicon-export',

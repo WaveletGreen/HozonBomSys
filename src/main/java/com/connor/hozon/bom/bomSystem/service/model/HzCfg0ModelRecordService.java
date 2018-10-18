@@ -1,4 +1,10 @@
-package com.connor.hozon.bom.bomSystem.service.cfg;
+/*
+ * Copyright (c) 2018.
+ * This file was wrote by fancyears·milos·maywas @connor. Any question/bug you can post to 1243093366@qq.com.
+ * ALL RIGHTS RESERVED.
+ */
+
+package com.connor.hozon.bom.bomSystem.service.model;
 
 import com.connor.hozon.bom.bomSystem.dao.model.HzCfg0ModelRecordDao;
 import org.springframework.beans.factory.annotation.Autowired;

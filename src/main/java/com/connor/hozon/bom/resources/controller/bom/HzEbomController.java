@@ -3,7 +3,7 @@ package com.connor.hozon.bom.resources.controller.bom;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.connor.hozon.bom.bomSystem.impl.bom.HzBomLineRecordDaoImpl;
-import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0ModelService;
+import com.connor.hozon.bom.bomSystem.service.fullCfg.HzCfg0ModelService;
 import com.connor.hozon.bom.resources.controller.BaseController;
 import com.connor.hozon.bom.resources.domain.dto.request.AddHzEbomReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.request.DeleteHzEbomReqDTO;

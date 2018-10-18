@@ -158,4 +158,8 @@ public class HzDictionaryLibraryServiceImpl implements HzDictionaryLibraryServic
         return WriteResultRespDTO.getFailResult();
     }
 
+    @Override
+    public HzDictionaryLibrary queryLibraryDTOByCfgObject(String cfgObjectId) {
+        return hzDictionaryLibraryDao.findDictionaryLibraryOrCode(cfgObjectId);
+    }
 }

@@ -1,9 +1,16 @@
-package com.connor.hozon.bom.bomSystem.service.cfg;
+/*
+ * Copyright (c) 2018.
+ * This file was wrote by fancyears·milos·maywas @connor. Any question/bug you can post to 1243093366@qq.com.
+ * ALL RIGHTS RESERVED.
+ */
+
+package com.connor.hozon.bom.bomSystem.service.fullCfg;
 
 import com.connor.hozon.bom.bomSystem.dao.fullCfg.HzCfg0BomLineOfModelDao;
 import com.connor.hozon.bom.bomSystem.dao.model.HzCfg0ModelDetailDao;
 import com.connor.hozon.bom.bomSystem.iservice.cfg.IHzFcfgBomLvl1ListOperationService;
 import com.connor.hozon.bom.bomSystem.iservice.project.IHzVehicleService;
+import com.connor.hozon.bom.bomSystem.service.main.HzCfg0MainService;
 import com.connor.hozon.bom.bomSystem.service.project.HzBrandService;
 import com.connor.hozon.bom.bomSystem.service.project.HzPlatformService;
 import com.connor.hozon.bom.bomSystem.service.project.HzProjectLibsService;
@@ -188,7 +195,7 @@ public class HzCfg0BomLineOfModelService {
                 HzCfg0ModelDetail detail = new HzCfg0ModelDetail();
                 detail.setpModelPuid(value.getModelPuid());
                 JSONObject object = new JSONObject();
-                object.put("brand", brand.getPBrandName());
+                object.put("brand", brand.getpBrandName());
                 object.put("platform", platform.getpPlatformName());
                 object.put("vehicle", vehicle.getpVehicleName());
                 object.put("key", key);

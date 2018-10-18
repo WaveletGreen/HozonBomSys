@@ -47,19 +47,19 @@ public class HzWorkCenterDAOImpl extends BaseSQLUtil implements HzWorkCenterDAO 
     }
 
     @Override
-    public HzWorkCenter findWorkCenterById(String projectId, String puid) {
+    public HzWorkCenter findWorkCenterById(String puid) {
         Map<String,Object> map = new HashMap<>();
-        map.put("projectId",projectId);
+//        map.put("projectId",projectId);
         map.put("puid",puid);
         return (HzWorkCenter) super.findForObject("HzWorkCenterDAOImpl_selectByPrimaryKey",map);
     }
 
 
     @Override
-    public List<HzWorkCenter> findWorkCenter(String projectId, String pWorkCode) {
+    public List<HzWorkCenter> findWorkCenter(String pWorkCode) {
         Map<String,Object> map = new HashMap<>();
         map.put("pWorkCode",pWorkCode);
-        map.put("projectId",projectId);
+//        map.put("projectId",projectId);
         return super.findForList("HzWorkCenterDAOImpl_findWorkCenter",map);
     }
 

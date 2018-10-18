@@ -7,7 +7,7 @@
 package com.connor.hozon.bom.bomSystem.controller;
 
 import com.connor.hozon.bom.bomSystem.dto.relevance.HzRelevanceQueryDTO;
-import com.connor.hozon.bom.bomSystem.service.cfg.HzRelevanceService2;
+import com.connor.hozon.bom.bomSystem.service.relevance.HzRelevanceService2;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

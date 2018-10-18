@@ -20,13 +20,6 @@ public interface HzCfg0RecordDao extends BasicDao<HzCfg0Record> {
     int deleteByPrimaryKey(@Param("puid") String puid);
 
     /***
-     * 根据主键删除在Hz_Cfg0_Record表中插入1条数据的数据
-     * @param puid
-     * @return
-     */
-    int deleteAddCfgByPrimaryKey(@Param("puid") String puid);
-
-    /***
      * 根据项目的puid搜索所有的特性信息
      * @param projectPuid
      * @param queryBase
@@ -34,12 +27,6 @@ public interface HzCfg0RecordDao extends BasicDao<HzCfg0Record> {
      */
     List<HzCfg0Record> selectListByProjectPuid(@Param("projectPuid") String projectPuid, HzFeatureQueryDTO queryBase);
 
-    /***
-     * 根据项目的puid搜索所有新添加的特性信息
-     * @param projectPuid
-     * @return
-     */
-    List<HzCfg0Record> selectAddedCfgListByProjectPuid(@Param("projectPuid") String projectPuid);
 
     List<HzMaterielFeatureBean> selectMaterielFeatureByProjectPuid(@Param("projectPuid") String projectPuid);
 
@@ -50,36 +37,6 @@ public interface HzCfg0RecordDao extends BasicDao<HzCfg0Record> {
      */
     HzCfg0Record selectByPrimaryKey(@Param("puid") String puid);
 
-    /***
-     * 根据puid查找1条特性数据
-     * @param puid
-     * @return
-     */
-    HzCfg0Record selectOneAddedCfgByPuid(@Param("puid") String puid);
-
-    /**
-     * 添加内饰颜色等新加的特性，不属于产品配置器
-     *
-     * @param record
-     * @return
-     */
-    int insertAddCfg(HzCfg0Record record);
-
-    /**
-     * 更新附加表中的数据
-     *
-     * @param record
-     * @return
-     */
-    int updateAddedCfgByPrimaryKey(HzCfg0Record record);
-
-    /**
-     * 批量删除附加表中的数据
-     *
-     * @param records
-     * @return
-     */
-    int deleteAddedCfgByList(List<HzCfg0Record> records);
 
     /**
      * 批量查找特性值
