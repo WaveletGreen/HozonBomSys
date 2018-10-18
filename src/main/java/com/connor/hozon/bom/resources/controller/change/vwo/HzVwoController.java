@@ -5,6 +5,8 @@ import com.connor.hozon.bom.bomSystem.dto.vwo.HzVwoProcessDto;
 import com.connor.hozon.bom.bomSystem.iservice.cfg.vwo.IHzVWOManagerService;
 import com.connor.hozon.bom.common.base.constant.SystemStaticConst;
 import com.connor.hozon.bom.common.base.entity.QueryBase;
+import com.connor.hozon.bom.common.util.user.UserInfo;
+import com.connor.hozon.bom.sys.entity.User;
 import net.sf.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -294,4 +296,39 @@ public class HzVwoController {
         return iHzVWOManagerService.interrupt(dto.getVwoType(), dto.getProjectUid(), dto.getVwoId());
     }
 
+    @RequestMapping(value = "/saveLeaderOpinion", method = RequestMethod.POST)
+    @ResponseBody
+    public JSONObject saveLeaderOpinion(@RequestParam HzVwoInfo info,
+                                        @RequestParam HzVwoInfluenceDept dept
+                                       ) {
+        System.out.println();
+        return null;
+    }
+    @RequestMapping(value = "/saveBomLeaderOpinion", method = RequestMethod.POST)
+    @ResponseBody
+    public JSONObject saveBomLeaderOpinion(@RequestParam HzVwoOpiBom opiBom,
+                                        @RequestParam HzVwoInfluenceDept dept
+                                       ) {
+        User user= UserInfo.getUser();
+        System.out.println();
+        return null;
+    }
+    @RequestMapping(value = "/savePmtLeaderOpinion", method = RequestMethod.POST)
+    @ResponseBody
+    public JSONObject savePmtLeaderOpinion(@RequestParam HzVwoOpiBom opiBom,
+                                        @RequestParam HzVwoInfluenceDept dept
+                                       ) {
+        User user= UserInfo.getUser();
+        System.out.println();
+        return null;
+    }
+    @RequestMapping(value = "/saveProjLeaderOpinion", method = RequestMethod.POST)
+    @ResponseBody
+    public JSONObject saveProjLeaderOpinion(@RequestParam HzVwoOpiBom opiBom,
+                                        @RequestParam HzVwoInfluenceDept dept
+                                       ) {
+        User user= UserInfo.getUser();
+        System.out.println();
+        return null;
+    }
 }
