@@ -73,9 +73,19 @@ public class ModelColorProcessManager implements IInterruptionCallBack, IRelease
         System.out.println("执行的是" + this.getClass().getCanonicalName() + ".release回调");
     }
 
+    /**
+     * 根据VWOid修改配色方案的cmcrStatus和VWO流程中的vwoStatus
+     * @param cmcrStatus
+     * @param vwoStatus
+     * @param vwoId
+     * @return
+     */
     public boolean updateModelColorAndVwoInfo(String cmcrStatus, Integer vwoStatus, Long vwoId){
         User user = UserInfo.getUser();
         HzVwoInfo info = hzVwoInfoService.doSelectByPrimaryKey(vwoId);
+        if(info.getVwoStatus()==999||info.getVwoStatus()==899){
+            return false;
+        }
         HzCfg0ModelColor hzCfg0ModelColor = new HzCfg0ModelColor();
         hzCfg0ModelColor.setCmcrVwoId(info.getId());
         hzCfg0ModelColor.setCmcrStatus(cmcrStatus);

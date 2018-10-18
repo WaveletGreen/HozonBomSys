@@ -424,6 +424,12 @@ public class HzCfg0Controller extends ExtraIntegrate {
                     return result;
                 }
             }
+
+            if(record.getCfgIsInProcess()==1){
+                result.put("status", false);
+                result.put("msg","已在VWO流程中，不允许删除");
+                return result;
+            }
         }
         List<HzCfg0Record> _toDelete = new ArrayList<>();
 

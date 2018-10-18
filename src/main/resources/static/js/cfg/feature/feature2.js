@@ -74,7 +74,7 @@ function loadData(projectPuid) {
                     }
                     for (let i in rows) {
                         if (1 == rows[i].cfgIsInProcess || "1" == rows[i].cfgIsInProcess) {
-                            window.Ewin.alert({message: rows[i].pCfg0ObjectId + "已在VWO流程中，不允许重复发起VWO流程"});
+                            window.Ewin.alert({message: rows[i].pCfg0ObjectId + "已在VWO流程中，不允许删除"});
                             return false;
                         }
                     }

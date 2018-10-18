@@ -193,7 +193,7 @@
           HZ_CFG0_MODEL_COLOR_RECORD t
         set
           t.CMCR_STATUS = #{cmcrStatus},
-          t.CMCR_VWO_ID = ''
+          t.CMCR_VWO_ID = null
         where
           t.CMCR_VWO_ID = #{cmcrVwoId}
     </update>
