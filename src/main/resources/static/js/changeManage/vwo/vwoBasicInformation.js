@@ -1,4 +1,5 @@
 var vwoId = -1;
+
 $(document).ready((function () {
     // initTable(),
     formatDate();
@@ -233,7 +234,7 @@ $(document).ready(
                 }
                 ///回传VWO ID到后台
                 data3.opiVwoId = $("#vwo").val();
-                
+
                 param.bom = data;
                 param.pmt = data;
                 param.proj = data;
@@ -249,9 +250,8 @@ $(document).ready(
                 console.log("----data2----");
 
                 console.log("----data3----");
-                console.log(JSON.stringify(data3))
+                console.log(JSON.stringify(data3));
                 console.log("----data2----");
-
 
                 $.ajax({
                     contentType:
@@ -321,6 +321,56 @@ function doSelectPerson(id) {
     })
 }
 
+var vwoExeToolBar = [
+    {
+        text: '添加',
+        iconCls: 'glyphicon glyphicon-plus',
+        handler: function () {
+            window.Ewin.dialog({
+                title: "添加",
+                url: "getVwoExecuteDialog?vwoId=" + vwoId,
+                gridId: "gridId",
+                width: 600,
+                height: 500
+            })
+        }
+    },
+    {
+        text: '删除',
+        iconCls: 'glyphicon glyphicon-remove',
+        handler: function () {
+            var rows = tablex.bootstrapTable('getSelections');
+            if (rows.length == 0) {
+                window.Ewin.alert({message: '请选择一条需要删除的数据!'});
+                return false;
+            }
+            window.Ewin.confirm({title: '提示', message: '是否要删除您所选择的记录？', width: 500}).on(function (e) {
+                if (e) {
+                    $.ajax({
+                        type: "POST",
+                        //ajax需要添加打包名
+                        url: "deleteExecuteInfo",
+                        data: JSON.stringify(rows),
+                        contentType: "application/json",
+                        success: function (result) {
+                            if (result.status) {
+                                layer.msg(result.msg, {icon: 1, time: 2000})
+                            }
+                            else {
+                                window.Ewin.alert({message: "操作删除失败:" + result.msg});
+                            }
+                            tablex.bootstrapTable("refresh");
+                        },
+                        error: function (info) {
+                            window.Ewin.alert({message: "操作删除:" + info.status});
+                        }
+                    })
+                }
+            });
+        }
+    }
+]
+
 /**
  * 重新绘制发布与实施table
  */
@@ -340,55 +390,7 @@ function loadVwoExecuteInfo() {
         sortName: 'exeId',
         sortOrder: 'asc',
         formId: "queryConnectedData",
-        toolbars: [
-            {
-                text: '添加',
-                iconCls: 'glyphicon glyphicon-plus',
-                handler: function () {
-                    window.Ewin.dialog({
-                        title: "添加",
-                        url: "getVwoExecuteDialog?vwoId=" + vwoId,
-                        gridId: "gridId",
-                        width: 600,
-                        height: 500
-                    })
-                }
-            },
-            {
-                text: '删除',
-                iconCls: 'glyphicon glyphicon-remove',
-                handler: function () {
-                    var rows = tablex.bootstrapTable('getSelections');
-                    if (rows.length == 0) {
-                        window.Ewin.alert({message: '请选择一条需要删除的数据!'});
-                        return false;
-                    }
-                    window.Ewin.confirm({title: '提示', message: '是否要删除您所选择的记录？', width: 500}).on(function (e) {
-                        if (e) {
-                            $.ajax({
-                                type: "POST",
-                                //ajax需要添加打包名
-                                url: "deleteExecuteInfo",
-                                data: JSON.stringify(rows),
-                                contentType: "application/json",
-                                success: function (result) {
-                                    if (result.status) {
-                                        layer.msg(result.msg, {icon: 1, time: 2000})
-                                    }
-                                    else {
-                                        window.Ewin.alert({message: "操作删除失败:" + result.msg});
-                                    }
-                                    tablex.bootstrapTable("refresh");
-                                },
-                                error: function (info) {
-                                    window.Ewin.alert({message: "操作删除:" + info.status});
-                                }
-                            })
-                        }
-                    });
-                }
-            }
-        ],
+        toolbars: vwoExeToolBar,
         /**列信息，需要预先定义好*/
         columns: [
             {
@@ -605,27 +607,36 @@ function getFormData(formId) {
 }
 
 
-function approve(url,formId) {
-    let data = {};
-    let d = $("#" + formId).serializeArray();
-    for (let p in d) {
-        data[d[p].name] = d[p].value;
-    }
-    data.opiVwoId = $("#vwo").val();
-    $.ajax({
-        type:"POST",
-        url:url,
-        data:data,
-        success:function (result) {
-            if(result.status){
-                layer.msg(result.msg, {icon: 1, time: 2000})
-                window.location.reload();
-            }else {
-                window.Ewin.alert({message: "BOM经理评估失败:" + result.msg});
+function approve(url, formId) {
+    let isx = $("#pmtLeaderOpinion select").find("option:selected").text();
+    window.Ewin.confirm({
+        title: '提示',
+        message: '评估意见:<span style="color: red">' + isx + '</span>',
+        width: 500
+    }).on(function (e) {
+        if (e) {
+            let data = {};
+            let d = $("#" + formId).serializeArray();
+            for (let p in d) {
+                data[d[p].name] = d[p].value;
             }
-        },
-        error:function (result) {
-            
+            data.opiVwoId = $("#vwo").val();
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: data,
+                success: function (result) {
+                    if (result.status) {
+                        layer.msg(result.msg, {icon: 1, time: 2000})
+                        window.location.reload();
+                    } else {
+                        window.Ewin.alert({message: "BOM经理评估失败:" + result.msg});
+                    }
+                },
+                error: function (result) {
+
+                }
+            });
         }
     });
 }
