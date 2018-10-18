@@ -198,6 +198,15 @@ $(document).ready(
         );
         $("#vwoSaveBtn").click(
             function () {
+                var vwoStatus = vwoInfo.vwoStatus;
+                if("999"==vwoStatus){
+                    window.Ewin.alert({message: "该VWO已发布，不能保存"});
+                    return false;
+                }else if("899"==vwoStatus){
+                    window.Ewin.alert({message: "该VWO已中断，不能保存"});
+                    return false;
+                }
+
                 let data = {};
                 let _d = $("#basicInfo").serializeArray();
                 for (let p in _d) {

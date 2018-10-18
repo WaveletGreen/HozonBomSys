@@ -151,6 +151,13 @@ public class HzVwoManagerService implements IHzVWOManagerService {
         JSONObject result = new JSONObject();
 
         if (beans != null && beans.size() > 0) {
+            for(HzCfg0Record hzCfg0Record : beans){
+                if(hzCfg0Record.getCfgIsInProcess()==1){
+                    result.put("status", false);
+                    result.put("msg", "已在VWO流程中，不允许重复发起VWO流程");
+                    return result;
+                }
+            }
             List<String> puids = new ArrayList<>();
             beans.forEach(bean -> puids.add(bean.getPuid()));
             List<HzCfg0Record> lists = hzCfg0Service.doLoadListByPuids(puids);
@@ -872,6 +879,15 @@ public class HzVwoManagerService implements IHzVWOManagerService {
             result.put("msg", "请选择一个VWO表单进行操作");
             return result;
         } else {
+            if(info.getVwoStatus()==899){
+                result.put("status", false);
+                result.put("msg", "该VWO已中断，不能保存");
+                return result;
+            }else if(info.getVwoStatus()==999){
+                result.put("status", false);
+                result.put("msg", "该VWO已发布，不能保存");
+                return result;
+            }
 //            HzVwoInfo fromDb = iHzVwoInfoService.doSelectByPrimaryKey(info.getId());
 //            fromDb.setVwoName(info.getVwoName());
 //            fromDb.setContactPhoneNum(info.getContactPhoneNum());
