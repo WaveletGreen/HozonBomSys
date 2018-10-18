@@ -2,6 +2,8 @@ package com.connor.hozon.bom.resources.domain.dto.response;
 
 import com.alibaba.fastjson.JSONArray;
 
+import java.util.Map;
+
 /**
  * Created by haozt on 2018/06/06
  */
@@ -14,16 +16,25 @@ public class HzEbomRespDTO {
         return jsonArray;
     }
 
+    /**
+     * 显示单车用量
+     */
+    private Map<String,Object> map;
+
+    public Map<String, Object> getMap() {
+        return map;
+    }
+
+    public void setMap(Map<String, Object> map) {
+        this.map = map;
+    }
+
     public void setJsonArray(JSONArray jsonArray) {
         this.jsonArray = jsonArray;
     }
 
     private String lineId;
     private String puid;
-    /**
-     * 单车用量
-     */
-    private String[] singleDosage;
 
     private String projectId;
     /**
@@ -156,14 +167,6 @@ public class HzEbomRespDTO {
     private Integer changeFlag;
 
     private String colorPart;
-
-    public String[] getSingleDosage() {
-        return singleDosage;
-    }
-
-    public void setSingleDosage(String[] singleDosage) {
-        this.singleDosage = singleDosage;
-    }
 
     public String getColorPart() {
         return colorPart;

@@ -31,7 +31,7 @@ import java.util.concurrent.CountDownLatch;
 /**
  * @Author: haozt
  * @Date: 2018/8/22
- * @Description:
+ * @Description: EBOM导入Excel使用
  */
 @Service("FileUploadService")
 public class FileUploadServiceImpl implements FileUploadService {
@@ -74,7 +74,6 @@ public class FileUploadServiceImpl implements FileUploadService {
             if(!suitSize){
                 return OperateResultMessageRespDTO.fileSizeOverFlow();
             }
-            ExcelUtil.preReadCheck(file.getOriginalFilename());
             //上传文件到服务器
             String fileUrl = ExcelUtil.uploadFileToLocation(file.getBytes(),file.getOriginalFilename());
             //String textUtl = "D:\\file\\upload\\测试测试.xlsx";
@@ -233,6 +232,10 @@ public class FileUploadServiceImpl implements FileUploadService {
         return OperateResultMessageRespDTO.getSuccessResult();
     }
 
+
+
+
+    /** 下面的私有方法为:EBOM导入Excel文件（第一次导入 不包含单车用量的导入  导入单车用量时，必须先有对应的EBOM数据）**/
 
     /**
      * 将excel表格列转化为EBOM数据
@@ -698,5 +701,11 @@ public class FileUploadServiceImpl implements FileUploadService {
 
         return stringBuffer.toString();
     }
+
+
+
+    /**下面的私有方法为:导入单车用量数据**/
+
+
 
 }

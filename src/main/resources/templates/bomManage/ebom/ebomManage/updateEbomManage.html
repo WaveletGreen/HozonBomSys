@@ -351,6 +351,7 @@
             <option th:selected="${data.getColorPart()=='N'?true:false}">N</option>
         </select>
     </div>
+    <div class="form-group" th:each="_data,c:${data.getMap().keySet()}">
     <div class="form-group" th:each="_data,c:${data.jsonArray.setRelatedArray(c.index)}">
         <label class="control-label" th:text="${_data}"></label>
         <!--<input class="form-control" th:id="${data.jsonArray.get(c.index)}" th:name="${data.jsonArray.get(c.index}" type="text"-->
@@ -359,9 +360,9 @@
     </div>
     <!--<div class="form-group" th:each="_data,c:${data.get(0)}">
         <label class="control-label" th:text="${_data}"></label>
-        <input class="form-control" th:id="${data.get(1)[c.index]}" th:name="${data.get(1)[c.index]}" type="text"
-         th:value="${data.get(2)[c.index]}"      th:placeholder="${'请输入'+_data}"/>&lt;!&ndash;th:value="${entity.level}"&ndash;&gt;
-    </div>-->
+        <input class="form-control" th:id="${_data}" th:name="${_data}" type="text"
+         th:value="${data.getMap().get(_data)}"      th:placeholder="${'请输入'+_data}"/><!--th:value="${entity.level}"-->
+    </div>
 </form>
 <script th:inline="javascript">
     <![CDATA[
