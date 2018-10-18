@@ -7,7 +7,6 @@ import com.connor.hozon.bom.bomSystem.dao.vwo.HzVwoOpiProjDao;
 import com.connor.hozon.bom.bomSystem.dto.vwo.HzVwoFormListQueryBase;
 import com.connor.hozon.bom.bomSystem.iservice.cfg.vwo.*;
 import com.connor.hozon.bom.bomSystem.dao.cfg0.HzCfg0OptionFamilyDao;
-import com.connor.hozon.bom.bomSystem.dao.cfg0.HzCfg0RecordDao;
 import com.connor.hozon.bom.bomSystem.dao.modelColor.HzCfg0ModelColorDao;
 import com.connor.hozon.bom.bomSystem.dao.modelColor.HzCmcrChangeDao;
 import com.connor.hozon.bom.bomSystem.dao.modelColor.HzCmcrDetailChangeDao;
@@ -587,7 +586,7 @@ public class HzVwoManagerService implements IHzVWOManagerService {
         }
         if (hzVwoOpiPmt == null) {
             hzVwoOpiPmt = new HzVwoOpiPmt();
-            hzVwoOpiPmt.setOpiPmtMngVwoId(id);
+            hzVwoOpiPmt.setOpiVwoId(id);
             if (hzVwoOpiPmtDao.insertSelective(hzVwoOpiPmt) <= 0) {
                 logger.error("初始化VWO:" + id + "的专业PMT经理意见数据失败");
                 model.addAttribute("msg", "初始化VWO:" + id + "的专业PMT经理意见数据失败");
@@ -596,7 +595,7 @@ public class HzVwoManagerService implements IHzVWOManagerService {
         }
         if (hzVwoOpiProj == null) {
             hzVwoOpiProj = new HzVwoOpiProj();
-            hzVwoOpiProj.setOpiProjMngVwoId(id);
+            hzVwoOpiProj.setOpiVwoId(id);
             if (hzVwoOpiProjDao.insertSelective(hzVwoOpiProj) <= 0) {
                 logger.error("初始化VWO:" + id + "的项目经理意见数据失败");
                 model.addAttribute("msg", "初始化VWO:" + id + "的项目经理意见数据失败");
@@ -668,8 +667,11 @@ public class HzVwoManagerService implements IHzVWOManagerService {
     public HzVwoOpiBom getOpiOfBomMng(Long id) {
         HzVwoOpiBom hzVwoOpiBom = hzVwoOpiBomDao.selectByVwoId(id);
         if (hzVwoOpiBom == null) {
+            User user = UserInfo.getUser();
             hzVwoOpiBom = new HzVwoOpiBom();
             hzVwoOpiBom.setOpiVwoId(id);
+            hzVwoOpiBom.setOpiBomMngCreateDate(new Date());
+            hzVwoOpiBom.setOpiBomMngCreator(user.getLogin());
             if (hzVwoOpiBomDao.insertSelective(hzVwoOpiBom) <= 0) {
                 logger.error("初始化VWO:" + id + "的BOM经理意见数据失败");
             }
@@ -686,8 +688,11 @@ public class HzVwoManagerService implements IHzVWOManagerService {
     public HzVwoOpiPmt getOpiOfPmtMng(Long id) {
         HzVwoOpiPmt hzVwoOpiPmt = hzVwoOpiPmtDao.selectByVwoId(id);
         if (hzVwoOpiPmt == null) {
+            User user = UserInfo.getUser();
             hzVwoOpiPmt = new HzVwoOpiPmt();
-            hzVwoOpiPmt.setOpiPmtMngVwoId(id);
+            hzVwoOpiPmt.setOpiVwoId(id);
+            hzVwoOpiPmt.setOpiPmtMngCreateDate(new Date());
+            hzVwoOpiPmt.setOpiPmtMngCreator(user.getLogin());
             if (hzVwoOpiPmtDao.insertSelective(hzVwoOpiPmt) <= 0) {
                 logger.error("初始化VWO:" + id + "的专业PMT经理意见数据失败");
             }
@@ -703,8 +708,11 @@ public class HzVwoManagerService implements IHzVWOManagerService {
     public HzVwoOpiProj getOpiOfProjMng(Long id) {
         HzVwoOpiProj hzVwoOpiProj = hzVwoOpiProjDao.selectByVwoId(id);
         if (hzVwoOpiProj == null) {
+            User user = UserInfo.getUser();
             hzVwoOpiProj = new HzVwoOpiProj();
-            hzVwoOpiProj.setOpiProjMngVwoId(id);
+            hzVwoOpiProj.setOpiVwoId(id);
+            hzVwoOpiProj.setOpiProjMngCreateDate(new Date());
+            hzVwoOpiProj.setOpiProjMngCreator(user.getLogin());
             if (hzVwoOpiProjDao.insertSelective(hzVwoOpiProj) <= 0) {
                 logger.error("初始化VWO:" + id + "的项目经理意见数据失败");
             }
@@ -730,6 +738,100 @@ public class HzVwoManagerService implements IHzVWOManagerService {
      */
     public List<HzFeatureChangeBean> getFeatureChangeBefore(Long id) {
         return iHzFeatureChangeService.doSelectBeforeByVwoId(id);
+    }
+
+    @Override
+    public JSONObject saveBomLeaderOpinion(HzVwoOpiBom hzVwoOpiBom) {
+        JSONObject result = new JSONObject();
+        User user = UserInfo.getUser();
+        result.put("status",true);
+        //为HzVwoOpiBom对象填充数据
+        HzVwoOpiBom hzVwoOpiBomQuery = getOpiOfBomMng(hzVwoOpiBom.getOpiVwoId());
+        hzVwoOpiBom.setId(hzVwoOpiBomQuery.getId());
+        hzVwoOpiBom.setOpiBomMngUpdater(user.getLogin());
+        //修改BOM经理评估意见
+        if(hzVwoOpiBomDao.updateByPrimaryKey(hzVwoOpiBom)<=0){
+            result.put("status",false);
+            result.put("msg","BOM经理评估保存失败");
+            return result;
+        };
+        HzVwoInfo hzVwoInfo = new HzVwoInfo();
+        hzVwoInfo.setId(hzVwoOpiBom.getOpiVwoId());
+        if(hzVwoOpiBom.getOpiBomMngAgreement()==1){
+            hzVwoInfo.setVwoStatus(102);
+        }else {
+            hzVwoInfo.setVwoStatus(899);
+        }
+        //修改VWO流程状态
+        if(!iHzVwoInfoService.doUpdateByPrimaryKey(hzVwoInfo)){
+            result.put("status",false);
+            result.put("msg","VWO状态修改失败");
+            return result;
+        }
+        result.put("msg","BOM经理评估成功");
+        return result;
+    }
+
+    @Override
+    public JSONObject savePmtLeaderOpinion(HzVwoOpiPmt hzVwoOpiPmt) {
+        JSONObject result = new JSONObject();
+        User user = UserInfo.getUser();
+        result.put("status",true);
+        //为HzVwoOpiPmt对象填充数据
+        HzVwoOpiPmt hzVwoOpiPmtQuery = getOpiOfPmtMng(hzVwoOpiPmt.getOpiVwoId());
+        hzVwoOpiPmt.setId(hzVwoOpiPmtQuery.getId());
+        hzVwoOpiPmt.setOpiPmtMngUpdater(user.getLogin());
+        //修改PTM经理评估意见
+        if(hzVwoOpiPmtDao.updateByPrimaryKey(hzVwoOpiPmt)<=0){
+            result.put("status",false);
+            result.put("msg","PTM经理评估保存失败");
+            return result;
+        }
+        HzVwoInfo hzVwoInfo = new HzVwoInfo();
+        hzVwoInfo.setId(hzVwoOpiPmt.getOpiVwoId());
+        if(hzVwoOpiPmt.getOpiPmtMngAgreement()==1){
+            hzVwoInfo.setVwoStatus(103);
+        }else {
+            hzVwoInfo.setVwoStatus(899);
+        }
+        if(!iHzVwoInfoService.doUpdateByPrimaryKey(hzVwoInfo)){
+            result.put("status",false);
+            result.put("msg","VWO状态修改失败");
+            return result;
+        }
+        result.put("msg","PTM经理评估成功");
+        return result;
+    }
+
+    @Override
+    public JSONObject saveProjLeaderOpinion(HzVwoOpiProj hzVwoOpiProj) {
+        JSONObject result = new JSONObject();
+        User user = UserInfo.getUser();
+        result.put("status",true);
+        //为HzVwoOpiPmt对象填充数据
+        HzVwoOpiProj hzVwoOpiProjQuery = getOpiOfProjMng(hzVwoOpiProj.getOpiVwoId());
+        hzVwoOpiProj.setId(hzVwoOpiProjQuery.getId());
+        hzVwoOpiProj.setOpiProjMngUpdater(user.getLogin());
+        //修改PTM经理评估意见
+        if(hzVwoOpiProjDao.updateByPrimaryKey(hzVwoOpiProj)<=0){
+            result.put("status",false);
+            result.put("msg","PTM经理评估保存失败");
+            return result;
+        }
+        HzVwoInfo hzVwoInfo = new HzVwoInfo();
+        hzVwoInfo.setId(hzVwoOpiProj.getOpiVwoId());
+        if(hzVwoOpiProj.getOpiProjMngAgreement()==1){
+            hzVwoInfo.setVwoStatus(103);
+        }else {
+            hzVwoInfo.setVwoStatus(899);
+        }
+        if(!iHzVwoInfoService.doUpdateByPrimaryKey(hzVwoInfo)){
+            result.put("status",false);
+            result.put("msg","VWO状态修改失败");
+            return result;
+        }
+        result.put("msg","PTM经理评估成功");
+        return result;
     }
 
 

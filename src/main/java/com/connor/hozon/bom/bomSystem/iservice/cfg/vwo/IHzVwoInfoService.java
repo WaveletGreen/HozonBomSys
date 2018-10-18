@@ -70,4 +70,5 @@ public interface IHzVwoInfoService {
      * 生成VWO号码
      */
     HzVwoInfo generateVWONum() ;
+
 }

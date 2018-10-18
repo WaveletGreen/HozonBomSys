@@ -606,3 +606,29 @@ function getFormData(formId) {
     }
     return data3;
 }
+
+
+function approve(url,formId) {
+    let data = {};
+    let d = $("#" + formId).serializeArray();
+    for (let p in d) {
+        data[d[p].name] = d[p].value;
+    }
+    data.opiVwoId = $("#vwo").val();
+    $.ajax({
+        type:"POST",
+        url:url,
+        data:data,
+        success:function (result) {
+            if(result.status){
+                layer.msg(result.msg, {icon: 1, time: 2000})
+                window.location.reload();
+            }else {
+                window.Ewin.alert({message: "BOM经理评估失败:" + result.msg});
+            }
+        },
+        error:function (result) {
+            
+        }
+    });
+}

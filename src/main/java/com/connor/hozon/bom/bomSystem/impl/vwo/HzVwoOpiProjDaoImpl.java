@@ -28,7 +28,7 @@ public class HzVwoOpiProjDaoImpl extends BasicDaoImpl<HzVwoOpiProj> implements H
 
     @Override
     public HzVwoOpiProj selectByVwoId(Long id) {
-        PROJ.setOpiProjMngVwoId(id);
+        PROJ.setOpiVwoId(id);
         return baseSQLUtil.executeQueryById(PROJ, clzName + ".selectByVwoId");
     }
 }

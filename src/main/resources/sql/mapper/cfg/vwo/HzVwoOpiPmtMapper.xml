@@ -5,7 +5,7 @@
         <!--主键-->
         <id column="ID" jdbcType="DECIMAL" property="id"/>
         <!--vwo号-->
-        <result column="OPI_PMT_MNG_VWO_ID" jdbcType="DECIMAL" property="opiPmtMngVwoId"/>
+        <result column="OPI_PMT_MNG_VWO_ID" jdbcType="DECIMAL" property="opiVwoId"/>
         <!--专业PMT经理意见-->
         <result column="OPI_PMT_MNG_OPINION" jdbcType="VARCHAR" property="opiPmtMngOpinion"/>
         <!--专业PMT经理抉择-->
@@ -59,7 +59,7 @@
       OPI_PMT_MNG_COMMENT, OPI_PMT_MNG_CREATE_DATE,
       OPI_PMT_MNG_UPDATE_DATE, OPI_PMT_MNG_CREATOR,
       OPI_PMT_MNG_UPDATER, OPI_PMT_MNG_STAGE)
-    values (#{id,jdbcType=DECIMAL}, #{opiPmtMngVwoId,jdbcType=DECIMAL}, #{opiPmtMngOpinion,jdbcType=VARCHAR},
+    values (#{id,jdbcType=DECIMAL}, #{opiVwoId,jdbcType=DECIMAL}, #{opiPmtMngOpinion,jdbcType=VARCHAR},
       #{opiPmtMngAgreement,jdbcType=DECIMAL}, #{opiPmtMngOptionDate,jdbcType=TIMESTAMP},
       #{opiPmtMngComment,jdbcType=VARCHAR}, #{opiPmtMngCreateDate,jdbcType=TIMESTAMP},
       #{opiPmtMngUpdateDate,jdbcType=TIMESTAMP}, #{opiPmtMngCreator,jdbcType=VARCHAR},
@@ -75,7 +75,7 @@
             <if test="id != null">
                 ID,
             </if>
-            <if test="opiPmtMngVwoId != null">
+            <if test="opiVwoId != null">
                 OPI_PMT_MNG_VWO_ID,
             </if>
             <if test="opiPmtMngOpinion != null">
@@ -110,8 +110,8 @@
             <if test="id != null">
                 #{id,jdbcType=DECIMAL},
             </if>
-            <if test="opiPmtMngVwoId != null">
-                #{opiPmtMngVwoId,jdbcType=DECIMAL},
+            <if test="opiVwoId != null">
+                #{opiVwoId,jdbcType=DECIMAL},
             </if>
             <if test="opiPmtMngOpinion != null">
                 #{opiPmtMngOpinion,jdbcType=VARCHAR},
@@ -146,8 +146,8 @@
     <update id="updateByPrimaryKeySelective" parameterType="sql.pojo.cfg.vwo.HzVwoOpiPmt">
         update HZ_VWO_OPI_PMT
         <set>
-            <if test="opiPmtMngVwoId != null">
-                OPI_PMT_MNG_VWO_ID = #{opiPmtMngVwoId,jdbcType=DECIMAL},
+            <if test="opiVwoId != null">
+                OPI_PMT_MNG_VWO_ID = #{opiVwoId,jdbcType=DECIMAL},
             </if>
             <if test="opiPmtMngOpinion != null">
                 OPI_PMT_MNG_OPINION = #{opiPmtMngOpinion,jdbcType=VARCHAR},
@@ -181,7 +181,7 @@
     </update>
     <update id="updateByPrimaryKey" parameterType="sql.pojo.cfg.vwo.HzVwoOpiPmt">
     update HZ_VWO_OPI_PMT
-    set OPI_PMT_MNG_VWO_ID = #{opiPmtMngVwoId,jdbcType=DECIMAL},
+    set OPI_PMT_MNG_VWO_ID = #{opiVwoId,jdbcType=DECIMAL},
       OPI_PMT_MNG_OPINION = #{opiPmtMngOpinion,jdbcType=VARCHAR},
       OPI_PMT_MNG_AGREEMENT = #{opiPmtMngAgreement,jdbcType=DECIMAL},
       OPI_PMT_MNG_OPTION_DATE = #{opiPmtMngOptionDate,jdbcType=TIMESTAMP},
