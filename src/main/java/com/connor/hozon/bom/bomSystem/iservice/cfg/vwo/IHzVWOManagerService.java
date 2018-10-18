@@ -226,4 +226,10 @@ public interface IHzVWOManagerService {
      * @return
      */
     List<HzFeatureChangeBean> getFeatureChangeBefore(Long id);
+
+    JSONObject saveBomLeaderOpinion(HzVwoOpiBom hzVwoOpiBom);
+
+    JSONObject savePmtLeaderOpinion(HzVwoOpiPmt hzVwoOpiPmt);
+
+    JSONObject saveProjLeaderOpinion(HzVwoOpiProj hzVwoOpiProj);
 }

@@ -153,9 +153,6 @@
             <if test="opiBomMngCreateDate != null">
                 OPI_BOM_MNG_CREATE_DATE = #{opiBomMngCreateDate,jdbcType=TIMESTAMP},
             </if>
-            <if test="opiBomMngUpdateDate != null">
-                OPI_BOM_MNG_UPDATE_DATE = #{opiBomMngUpdateDate,jdbcType=TIMESTAMP},
-            </if>
             <if test="opiBomMngCreator != null">
                 OPI_BOM_MNG_CREATOR = #{opiBomMngCreator,jdbcType=VARCHAR},
             </if>
@@ -166,6 +163,7 @@
                 OPI_BOM_MNG_STAGE = #{opiBomMngStage,jdbcType=DECIMAL},
             </if>
         </set>
+            OPI_BOM_MNG_UPDATE_DATE = sysdate
         where ID = #{id,jdbcType=DECIMAL}
     </update>
     <update id="updateByPrimaryKey" parameterType="sql.pojo.cfg.vwo.HzVwoOpiBom">

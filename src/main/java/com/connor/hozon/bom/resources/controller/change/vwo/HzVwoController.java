@@ -304,31 +304,37 @@ public class HzVwoController {
         System.out.println();
         return null;
     }
+
+    /**
+     * BOM经理评估意见
+     * @param hzVwoOpiBom
+     * @return
+     */
     @RequestMapping(value = "/saveBomLeaderOpinion", method = RequestMethod.POST)
     @ResponseBody
-    public JSONObject saveBomLeaderOpinion(@RequestParam HzVwoOpiBom opiBom,
-                                        @RequestParam HzVwoInfluenceDept dept
-                                       ) {
-        User user= UserInfo.getUser();
-        System.out.println();
-        return null;
+    public JSONObject saveBomLeaderOpinion(HzVwoOpiBom hzVwoOpiBom) {
+        return iHzVWOManagerService.saveBomLeaderOpinion(hzVwoOpiBom);
     }
+
+    /**
+     * 专业PMT经理评估意见
+     * @param hzVwoOpiPmt
+     * @return
+     */
     @RequestMapping(value = "/savePmtLeaderOpinion", method = RequestMethod.POST)
     @ResponseBody
-    public JSONObject savePmtLeaderOpinion(@RequestParam HzVwoOpiBom opiBom,
-                                        @RequestParam HzVwoInfluenceDept dept
-                                       ) {
-        User user= UserInfo.getUser();
-        System.out.println();
-        return null;
+    public JSONObject savePmtLeaderOpinion(HzVwoOpiPmt hzVwoOpiPmt) {
+        return iHzVWOManagerService.savePmtLeaderOpinion(hzVwoOpiPmt);
     }
+
+    /**
+     *项目经理评估意见
+     * @param hzVwoOpiProj
+     * @return
+     */
     @RequestMapping(value = "/saveProjLeaderOpinion", method = RequestMethod.POST)
     @ResponseBody
-    public JSONObject saveProjLeaderOpinion(@RequestParam HzVwoOpiBom opiBom,
-                                        @RequestParam HzVwoInfluenceDept dept
-                                       ) {
-        User user= UserInfo.getUser();
-        System.out.println();
-        return null;
+    public JSONObject saveProjLeaderOpinion(HzVwoOpiProj hzVwoOpiProj) {
+        return iHzVWOManagerService.saveProjLeaderOpinion(hzVwoOpiProj);
     }
 }

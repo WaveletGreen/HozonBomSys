@@ -7,7 +7,7 @@ import java.util.Date;
 public class HzVwoOpiProj {
     private Long id;
 
-    private Long opiProjMngVwoId;
+    private Long opiVwoId;
 
     private String opiProjMngOpinion;
 

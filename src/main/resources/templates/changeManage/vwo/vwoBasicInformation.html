@@ -19,6 +19,15 @@
 <button class="btn btn-success" style="position: fixed;margin-left:90%;margin-top: 200px;z-index:99999;"
         id="interrupt">中断
 </button>
+<button class="btn btn-success" style="position: fixed;margin-left:90%;margin-top: 250px;z-index:99999;"
+        id="bomLeadApprove" onclick="approve('saveBomLeaderOpinion','bomLeaderOpinion')">BOM经理审批
+</button>
+<button class="btn btn-success" style="position: fixed;margin-left:90%;margin-top: 300px;z-index:99999;"
+        id="pmtLeadApprove" onclick="approve('savePmtLeaderOpinion','pmtLeaderOpinion')">PMT经理审批
+</button>
+<button class="btn btn-success" style="position: fixed;margin-left:90%;margin-top: 350px;z-index:99999;"
+        id="projLeadApprove" onclick="approve('saveProjLeaderOpinion','projLeaderOpinion')">项目经理审批
+</button>
 <div class="panel-body" style="padding:0;">
     <form class="form-horizontal" id="basicInfo" role="form" onsubmit="return false;">
         <fieldset>

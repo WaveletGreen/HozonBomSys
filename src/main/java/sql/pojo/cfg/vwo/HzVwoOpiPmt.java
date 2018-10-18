@@ -12,7 +12,7 @@ public class HzVwoOpiPmt {
     /**
      * 主键
      */
-    private Long opiPmtMngVwoId;
+    private Long opiVwoId;
     /**
      * 主键
      */
