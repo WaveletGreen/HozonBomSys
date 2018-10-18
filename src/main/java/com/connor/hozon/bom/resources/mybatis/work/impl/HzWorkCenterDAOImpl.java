@@ -33,7 +33,6 @@ public class HzWorkCenterDAOImpl extends BaseSQLUtil implements HzWorkCenterDAO 
     public Page findWorkCenterForPage(HzWorkByPageQuery query) {
         PageRequestParam pageRequestParam = new PageRequestParam();
         Map map = new HashMap();
-        map.put("projectId",query.getProjectId());
         pageRequestParam.setPageNumber(query.getPage());
         pageRequestParam.setPageSize(query.getPageSize());
         pageRequestParam.setFilters(map);

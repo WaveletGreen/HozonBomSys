@@ -1,6 +1,6 @@
 package com.connor.hozon.bom.resources.controller.bom;
 
-import com.connor.hozon.bom.bomSystem.service.business.cfg.HzComposeMFService;
+import com.connor.hozon.bom.bomSystem.service.derivative.HzComposeMFService;
 import com.connor.hozon.bom.resources.controller.BaseController;
 import com.connor.hozon.bom.resources.domain.dto.request.AddMbomReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.request.DeleteHzMbomReqDTO;
