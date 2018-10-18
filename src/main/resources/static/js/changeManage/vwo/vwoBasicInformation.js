@@ -199,10 +199,11 @@ $(document).ready(
         $("#vwoSaveBtn").click(
             function () {
                 var vwoStatus = vwoInfo.vwoStatus;
-                if("999"==vwoStatus){
+                var param = {};
+                if ("999" == vwoStatus) {
                     window.Ewin.alert({message: "该VWO已发布，不能保存"});
                     return false;
-                }else if("899"==vwoStatus){
+                } else if ("899" == vwoStatus) {
                     window.Ewin.alert({message: "该VWO已中断，不能保存"});
                     return false;
                 }
@@ -212,11 +213,32 @@ $(document).ready(
                 for (let p in _d) {
                     data[_d[p].name] = _d[p].value;
                 }
+
+                param.info = data;
+
+
                 let data2 = {};
                 let _d2 = $("#influenceDept").serializeArray();
                 for (let p in _d2) {
                     data2[_d2[p].name] = _d2[p].value;
                 }
+                param.dept = data;
+
+                //保存高层意见
+
+                let data3 = {};
+                let _d3 = $("#leaderOpinion").serializeArray();
+                for (let p in _d3) {
+                    data3[_d3[p].name] = _d3[p].value;
+                }
+                ///回传VWO ID到后台
+                data3.opiVwoId = $("#vwo").val();
+                
+                param.bom = data;
+                param.pmt = data;
+                param.proj = data;
+
+                data3.vwoStatus = vwoStatus;
 
                 console.log(data);
                 JSON.stringify(data);
@@ -224,6 +246,10 @@ $(document).ready(
                 console.log("----data2----");
                 console.log(data2);
                 JSON.stringify(data2);
+                console.log("----data2----");
+
+                console.log("----data3----");
+                console.log(JSON.stringify(data3))
                 console.log("----data2----");
 
 
@@ -254,6 +280,21 @@ $(document).ready(
                         'POST',
                     data: JSON.stringify(data2),
                     url: "saveInfluenceDept",
+                    success: function (result) {
+                        console.log(result);
+                        // window.location.reload();//刷新当前页面.
+                    },
+                    error: function (e) {
+                        console.log("连接服务器失败:" + e.status);
+                    }
+                });
+                $.ajax({
+                    contentType:
+                        "application/json",
+                    type:
+                        'POST',
+                    data: JSON.stringify(data3),
+                    url: "saveLeaderOpinion",
                     success: function (result) {
                         console.log(result);
                         // window.location.reload();//刷新当前页面.
@@ -476,10 +517,10 @@ function undead() {
  */
 function release() {
     var vwoStatus = vwoInfo.vwoStatus;
-    if("999"==vwoStatus){
+    if ("999" == vwoStatus) {
         window.Ewin.alert({message: "该VWO已发布，不能发布"});
         return false;
-    }else if("899"==vwoStatus){
+    } else if ("899" == vwoStatus) {
         window.Ewin.alert({message: "该VWO已中断，不能发布"});
         return false;
     }
@@ -511,10 +552,10 @@ function release() {
  */
 function interrupt() {
     var vwoStatus = vwoInfo.vwoStatus;
-    if("999"==vwoStatus){
+    if ("999" == vwoStatus) {
         window.Ewin.alert({message: "该VWO已发布，不能中断"});
         return false;
-    }else if("899"==vwoStatus){
+    } else if ("899" == vwoStatus) {
         window.Ewin.alert({message: "该VWO已中断，不能中断"});
         return false;
     }
@@ -547,4 +588,18 @@ function getVwoInfo() {
     data.vwoId = $("#vwo").val();
     data.vwoType = $("#vwoType").val();
     return data;
+}
+
+/**
+ * 根据form的ID。获取到表单中的数据
+ * @param formId
+ * @returns {{}}
+ */
+function getFormData(formId) {
+    let data3 = {};
+    let _d3 = $("#" + formId).serializeArray();
+    for (let p in _d3) {
+        data3[_d3[p].name] = _d3[p].value;
+    }
+    return data3;
 }
