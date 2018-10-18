@@ -15,17 +15,25 @@ $(document).ready((function () {
  * 整理日期格式
  */
 function formatDate() {
-    let vwoStartEffectiveTime = changeDateFormat2($('#vwoStartEffectiveTime').val());
-    let vwoEndEffectiveTime = changeDateFormat2($('#vwoEndEffectiveTime').val());
-    let vwoCreateDate = changeDateFormat2($('#vwoCreateDate').val());
-    let vwoDemandFinishTime = changeDateFormat2($('#vwoDemandFinishTime').val());
-    let vwoExpectExecuteTime = changeDateFormat2($('#vwoExpectExecuteTime').val());
+    let vwoStartEffectiveTime = stringToDateFormat($('#vwoStartEffectiveTime').val());
+    let vwoEndEffectiveTime = stringToDateFormat($('#vwoEndEffectiveTime').val());
+    let vwoCreateDate = stringToDateFormat($('#vwoCreateDate').val());
+    let vwoDemandFinishTime = stringToDateFormat($('#vwoDemandFinishTime').val());
+    let vwoExpectExecuteTime = stringToDateFormat($('#vwoExpectExecuteTime').val());
+
+    let opiBomMngOptionDate = stringToDateFormat($('#opiBomMngOptionDate').val());
+    let opiPmtMngOptionDate = stringToDateFormat($('#opiPmtMngOptionDate').val());
+    let opiProjMngOptionDate = stringToDateFormat($('#opiProjMngOptionDate').val());
 
     $('#vwoStartEffectiveTime').val(vwoStartEffectiveTime);
     $('#vwoEndEffectiveTime').val(vwoEndEffectiveTime);
     $('#vwoCreateDate').val(vwoCreateDate);
     $('#vwoDemandFinishTime').val(vwoDemandFinishTime);
     $('#vwoExpectExecuteTime').val(vwoExpectExecuteTime);
+
+    $('#opiBomMngOptionDate').val(opiBomMngOptionDate);
+    $('#opiPmtMngOptionDate').val(opiPmtMngOptionDate);
+    $('#opiProjMngOptionDate').val(opiProjMngOptionDate);
 
     $('#vwoStartEffectiveTime').datetimepicker({
         format: 'yyyy-mm-dd',//日期的格式
@@ -214,7 +222,8 @@ $(document).ready(
                 for (let p in _d) {
                     data[_d[p].name] = _d[p].value;
                 }
-
+                data.vwoComment=$("#vwoComment").val();
+                data.vwoStatus=vwoStatus;
                 param.info = data;
 
 
@@ -466,7 +475,7 @@ function loadVwoExecuteInfo() {
                 sortable: true,
                 sortOrder: 'asc',
                 formatter: function (value, row, index) {
-                    return changeDateFormat(value)
+                    return dateToStringFormat(value)
                 }
             },
             {
@@ -608,7 +617,7 @@ function getFormData(formId) {
 
 
 function approve(url, formId) {
-    let isx = $("#pmtLeaderOpinion select").find("option:selected").text();
+    let isx = $("#"+formId+" select").find("option:selected").text();
     window.Ewin.confirm({
         title: '提示',
         message: '评估意见:<span style="color: red">' + isx + '</span>',
@@ -627,10 +636,10 @@ function approve(url, formId) {
                 data: data,
                 success: function (result) {
                     if (result.status) {
-                        layer.msg(result.msg, {icon: 1, time: 2000})
-                        window.location.reload();
+                        layer.msg(result.msg, {icon: 1, time: 2000});
+                        setTimeout('window.location.reload()', 2000);
                     } else {
-                        window.Ewin.alert({message: "BOM经理评估失败:" + result.msg});
+                        window.Ewin.alert({message: "经理评估失败:" + result.msg});
                     }
                 },
                 error: function (result) {

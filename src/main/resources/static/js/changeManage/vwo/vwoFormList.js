@@ -102,7 +102,7 @@ function loadData(projectUid) {
                 sortable: true,
                 sortOrder: 'asc',
                 formatter: function (value, row, index) {
-                    return changeDateFormat(value)
+                    return dateToStringFormat(value)
                 }
             },
             {
@@ -117,7 +117,7 @@ function loadData(projectUid) {
                 sortable: true,
                 sortOrder: 'asc',
                 formatter: function (value, row, index) {
-                    return changeDateFormat(value)
+                    return dateToStringFormat(value)
                 }
             },
         ],
