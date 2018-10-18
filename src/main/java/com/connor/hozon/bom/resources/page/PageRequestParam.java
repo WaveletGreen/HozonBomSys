@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 分页请求信息
+ * 分页请求参数
  */
 public class PageRequestParam implements Serializable {
 

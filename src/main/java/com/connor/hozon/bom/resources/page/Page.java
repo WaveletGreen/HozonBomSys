@@ -52,49 +52,29 @@ public class Page<T> implements Serializable, Iterable<T> {
 		this.result = elements;
 	}
 
-	/**
-	 * 当前页包含的数据
-	 * 
-	 * @return 当前页数据源
-	 */
 	public List<T> getResult() {
 
 		return result;
 	}
 
-	/**
-	 * 总的数据条目数量，0表示没有数据
-	 * 
-	 * @return 总数量
-	 */
 	public int getTotalCount() {
 
 		return totalCount;
 	}
-	/**
-	 * 每一页显示的条目数
-	 * 
-	 * @return 每一页显示的条目数
-	 */
+
 	public int getPageSize() {
 
 		return pageSize;
 	}
 
-	/**
-	 * 当前页的页码
-	 * @return 当前页的页码
-	 */
+
 	public int getPageNumber() {
 
 		return pageNumber;
 	}
 
 
-	/**
-	 * 得到数据库的第一条记录号
-	 * @return
-	 */
+
 	public int getFirstResult() {
 
 		return PageUtil.getFirstResult(pageNumber, pageSize);
