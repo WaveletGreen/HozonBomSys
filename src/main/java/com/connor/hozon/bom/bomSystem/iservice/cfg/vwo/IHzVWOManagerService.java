@@ -159,4 +159,71 @@ public interface IHzVWOManagerService {
      * @return
      */
     JSONObject interrupt(Integer type, String projectUid, Long vwoId);
+
+
+    /**
+     * 获取VWO主数据
+     * @param id
+     * @return
+     */
+
+    HzVwoInfo getVwoInfo(Long id);
+
+    /**
+     * 获取影响部门
+     *
+     * @param id
+     * @return
+     */
+    HzVwoInfluenceDept getInfluenceDept(Long id);
+
+
+    /**
+     * 获取影响人员
+     *
+     * @param id
+     * @return
+     */
+     HzVwoInfluenceUser getInfluenceUser(Long id);
+
+    /**
+     * 获取BOM经理意见
+     *
+     * @param id
+     * @return
+     */
+     HzVwoOpiBom getOpiOfBomMng(Long id);
+
+
+    /**
+     * 获取专业PMT经理意见
+     *
+     * @param id
+     * @return
+     */
+    HzVwoOpiPmt getOpiOfPmtMng(Long id);
+
+    /**
+     * 获取项目经理意见
+     * @param id
+     * @return
+     */
+    HzVwoOpiProj getOpiOfProjMng(Long id);
+
+
+    /**
+     * 获取特性变更后数据
+     *
+     * @param id
+     * @return
+     */
+    List<HzFeatureChangeBean> getFeatureChangeAfter(Long id);
+
+    /**
+     * 获取特性变更前数据
+     *
+     * @param id
+     * @return
+     */
+    List<HzFeatureChangeBean> getFeatureChangeBefore(Long id);
 }

@@ -37,6 +37,12 @@
         from HZ_VWO_OPI_PMT
         where ID = #{id,jdbcType=DECIMAL}
     </select>
+    <select id="selectByVwoId" parameterType="sql.pojo.cfg.vwo.HzVwoOpiPmt" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from HZ_VWO_OPI_PMT
+        where OPI_PMT_MNG_VWO_ID = #{opiPmtMngVwoId,jdbcType=DECIMAL}
+    </select>
     <!--**************************************delete**************************************-->
     <delete id="deleteByPrimaryKey" parameterType="sql.pojo.cfg.vwo.HzVwoOpiPmt">
     delete from HZ_VWO_OPI_PMT
@@ -48,17 +54,17 @@
                    keyColumn="id" keyProperty="id" resultType="java.lang.Long">
             select SEQ_VWO_OPI_PMT_ID.Nextval from dual
         </selectKey>
-    insert into HZ_VWO_OPI_PMT (ID, OPI_PMT_MNG_VWO_ID, OPI_PMT_MNG_OPINION, 
-      OPI_PMT_MNG_AGREEMENT, OPI_PMT_MNG_OPTION_DATE, 
-      OPI_PMT_MNG_COMMENT, OPI_PMT_MNG_CREATE_DATE, 
-      OPI_PMT_MNG_UPDATE_DATE, OPI_PMT_MNG_CREATOR, 
-      OPI_PMT_MNG_UPDATER, OPI_PMT_MNG_STAGE)
-    values (#{id,jdbcType=DECIMAL}, #{opiPmtMngVwoId,jdbcType=DECIMAL}, #{opiPmtMngOpinion,jdbcType=VARCHAR}, 
-      #{opiPmtMngAgreement,jdbcType=DECIMAL}, #{opiPmtMngOptionDate,jdbcType=TIMESTAMP}, 
-      #{opiPmtMngComment,jdbcType=VARCHAR}, #{opiPmtMngCreateDate,jdbcType=TIMESTAMP}, 
-      #{opiPmtMngUpdateDate,jdbcType=TIMESTAMP}, #{opiPmtMngCreator,jdbcType=VARCHAR}, 
-      #{opiPmtMngUpdater,jdbcType=VARCHAR}, #{opiPmtMngStage,jdbcType=DECIMAL})
-  </insert>
+        insert into HZ_VWO_OPI_PMT (ID, OPI_PMT_MNG_VWO_ID, OPI_PMT_MNG_OPINION,
+        OPI_PMT_MNG_AGREEMENT, OPI_PMT_MNG_OPTION_DATE,
+        OPI_PMT_MNG_COMMENT, OPI_PMT_MNG_CREATE_DATE,
+        OPI_PMT_MNG_UPDATE_DATE, OPI_PMT_MNG_CREATOR,
+        OPI_PMT_MNG_UPDATER, OPI_PMT_MNG_STAGE)
+        values (#{id,jdbcType=DECIMAL}, #{opiPmtMngVwoId,jdbcType=DECIMAL}, #{opiPmtMngOpinion,jdbcType=VARCHAR},
+        #{opiPmtMngAgreement,jdbcType=DECIMAL}, #{opiPmtMngOptionDate,jdbcType=TIMESTAMP},
+        #{opiPmtMngComment,jdbcType=VARCHAR}, #{opiPmtMngCreateDate,jdbcType=TIMESTAMP},
+        #{opiPmtMngUpdateDate,jdbcType=TIMESTAMP}, #{opiPmtMngCreator,jdbcType=VARCHAR},
+        #{opiPmtMngUpdater,jdbcType=VARCHAR}, #{opiPmtMngStage,jdbcType=DECIMAL})
+    </insert>
     <insert id="insertSelective" parameterType="sql.pojo.cfg.vwo.HzVwoOpiPmt">
         <selectKey order="BEFORE"
                    keyColumn="id" keyProperty="id" resultType="java.lang.Long">

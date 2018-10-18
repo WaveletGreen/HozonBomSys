@@ -44,11 +44,73 @@ public class HzVwoController {
      */
     @RequestMapping(value = "/vwoFormList", method = RequestMethod.GET)
     public String getVwoFromList(@RequestParam Long id, @RequestParam Integer vwoType, Model model) {
-        if (iHzVWOManagerService.getVwoFromList(id, vwoType, model)) {
-            return "changeManage/vwo/vwoBasicInformation";
-        } else {
-            return "errorWithEntity";
+        String error = "errorWithEntity";
+        HzVwoInfo vwoInfo;
+        HzVwoInfluenceDept influenceDept;
+        HzVwoInfluenceUser influenceUser;
+        HzVwoOpiBom hzVwoOpiBom;
+        HzVwoOpiPmt hzVwoOpiPmt;
+        HzVwoOpiProj hzVwoOpiProj;
+        switch (vwoType) {
+            case 1:
+                List<HzFeatureChangeBean> after = iHzVWOManagerService.getFeatureChangeAfter(id);
+                List<HzFeatureChangeBean> before = iHzVWOManagerService.getFeatureChangeBefore(id);
+                model.addAttribute("after", after);
+                model.addAttribute("before", before);
+                break;
+            case 2:
+                break;
+            case 3:
+                break;
+            case 4:
+                break;
+            case 5:
+                break;
+            default:
+                model.addAttribute("msg", "没有对应的VWO变更");
+                return error;
         }
+        //表单数据
+        vwoInfo = iHzVWOManagerService.getVwoInfo(id);
+        influenceDept = iHzVWOManagerService.getInfluenceDept(id);
+        influenceUser = iHzVWOManagerService.getInfluenceUser(id);
+        hzVwoOpiBom = iHzVWOManagerService.getOpiOfBomMng(id);
+        hzVwoOpiPmt = iHzVWOManagerService.getOpiOfPmtMng(id);
+        hzVwoOpiProj = iHzVWOManagerService.getOpiOfProjMng(id);
+
+        if (null == influenceDept) {
+            model.addAttribute("msg", "初始化VWO:" + id + "的影响部门数据失败");
+            return error;
+        }
+        if (null == influenceUser) {
+            model.addAttribute("msg", "初始化VWO:" + id + "的影响人员数据失败");
+            return error;
+        }
+        if (null == hzVwoOpiBom) {
+            model.addAttribute("msg", "初始化VWO:" + id + "的BOM经理意见数据失败");
+            return error;
+        }
+        if (null == hzVwoOpiPmt) {
+            model.addAttribute("msg", "初始化VWO:" + id + "的专业PMT经理意见数据失败");
+            model.addAttribute("msg", "");
+            return error;
+        }
+        if (null == hzVwoOpiProj) {
+            model.addAttribute("msg", "初始化VWO:" + id + "的项目经理意见数据失败");
+            return error;
+        }
+        //数据回传
+        model.addAttribute("vwoInfo", vwoInfo);
+        model.addAttribute("href", "returnToVwoFromList");
+        model.addAttribute("url", "getInformChangers");
+        model.addAttribute("vwo", id);
+        model.addAttribute("influenceDept", influenceDept);
+        model.addAttribute("influenceUser", influenceUser);
+        model.addAttribute("vwoType", vwoType);
+        model.addAttribute("hzVwoOpiBom", hzVwoOpiBom);
+        model.addAttribute("hzVwoOpiPmt", hzVwoOpiPmt);
+        model.addAttribute("hzVwoOpiProj", hzVwoOpiProj);
+        return "changeManage/vwo/vwoBasicInformation";
     }
 
     /**

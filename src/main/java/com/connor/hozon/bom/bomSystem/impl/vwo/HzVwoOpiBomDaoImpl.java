@@ -8,6 +8,7 @@ package com.connor.hozon.bom.bomSystem.impl.vwo;
 
 import com.connor.hozon.bom.bomSystem.dao.vwo.HzVwoOpiBomDao;
 import com.connor.hozon.bom.bomSystem.impl.BasicDaoImpl;
+import org.springframework.stereotype.Service;
 import sql.pojo.cfg.vwo.HzVwoOpiBom;
 
 /**
@@ -16,5 +17,18 @@ import sql.pojo.cfg.vwo.HzVwoOpiBom;
  * @Date: Created in 2018/10/17 17:55
  * @Modified By:
  */
+@Service("hzVwoOpiBomDao")
 public class HzVwoOpiBomDaoImpl extends BasicDaoImpl<HzVwoOpiBom> implements HzVwoOpiBomDao {
+    private final static HzVwoOpiBom BOM = new HzVwoOpiBom();
+
+    public HzVwoOpiBomDaoImpl() {
+        clz = HzVwoOpiBomDao.class;
+        clzName = clz.getCanonicalName();
+    }
+
+    @Override
+    public HzVwoOpiBom selectByVwoId(Long id) {
+        BOM.setOpiVwoId(id);
+        return baseSQLUtil.executeQueryById(BOM, clzName + ".selectByVwoId");
+    }
 }

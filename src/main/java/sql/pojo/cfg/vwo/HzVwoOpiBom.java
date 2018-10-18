@@ -50,4 +50,8 @@ public class HzVwoOpiBom {
      * 主键
      */
     private Integer opiBomMngStage;
+
+    public Date getOpiBomMngOptionDate() {
+        return opiBomMngOptionDate;
+    }
 }

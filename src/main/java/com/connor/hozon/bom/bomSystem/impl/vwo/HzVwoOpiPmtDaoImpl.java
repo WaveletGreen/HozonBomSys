@@ -8,6 +8,7 @@ package com.connor.hozon.bom.bomSystem.impl.vwo;
 
 import com.connor.hozon.bom.bomSystem.dao.vwo.HzVwoOpiPmtDao;
 import com.connor.hozon.bom.bomSystem.impl.BasicDaoImpl;
+import org.springframework.stereotype.Service;
 import sql.pojo.cfg.vwo.HzVwoOpiPmt;
 
 /**
@@ -16,5 +17,18 @@ import sql.pojo.cfg.vwo.HzVwoOpiPmt;
  * @Date: Created in 2018/10/17 17:55
  * @Modified By:
  */
-public class HzVwoOpiPmtDaoImpl extends BasicDaoImpl<HzVwoOpiPmt> implements HzVwoOpiPmtDao{
+@Service("hzVwoOpiPmtDao")
+public class HzVwoOpiPmtDaoImpl extends BasicDaoImpl<HzVwoOpiPmt> implements HzVwoOpiPmtDao {
+    private final static HzVwoOpiPmt PMT = new HzVwoOpiPmt();
+
+    public HzVwoOpiPmtDaoImpl() {
+        clz = HzVwoOpiPmtDao.class;
+        clzName = clz.getCanonicalName();
+    }
+
+    @Override
+    public HzVwoOpiPmt selectByVwoId(Long id) {
+        PMT.setOpiPmtMngVwoId(id);
+        return baseSQLUtil.executeQueryById(PMT, clzName + ".selectByVwoId");
+    }
 }

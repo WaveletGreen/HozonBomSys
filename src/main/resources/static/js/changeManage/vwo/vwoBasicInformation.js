@@ -203,8 +203,21 @@ $(document).ready(
                 for (let p in _d) {
                     data[_d[p].name] = _d[p].value;
                 }
+                let data2 = {};
+                let _d2 = $("#influenceDept").serializeArray();
+                for (let p in _d2) {
+                    data2[_d2[p].name] = _d2[p].value;
+                }
+
                 console.log(data);
                 JSON.stringify(data);
+
+                console.log("----data2----");
+                console.log(data2);
+                JSON.stringify(data2);
+                console.log("----data2----");
+
+
                 $.ajax({
                     contentType:
                         "application/json",
@@ -225,17 +238,6 @@ $(document).ready(
                         console.log("连接服务器失败:" + e.status);
                     }
                 });
-
-                let data2 = {};
-                let _d2 = $("#influenceDept").serializeArray();
-                for (let p in _d2) {
-                    data2[_d2[p].name] = _d2[p].value;
-                }
-
-                console.log("----data2----");
-                console.log(data2);
-                JSON.stringify(data2);
-                console.log("----data2----");
                 $.ajax({
                     contentType:
                         "application/json",

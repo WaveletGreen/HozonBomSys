@@ -26,6 +26,12 @@
         from HZ_VWO_OPI_PROJ
         where ID = #{id,jdbcType=DECIMAL}
     </select>
+    <select id="selectByVwoId" parameterType="sql.pojo.cfg.vwo.HzVwoOpiProj" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from HZ_VWO_OPI_PROJ
+        where OPI_PROJ_MNG_VWO_ID = #{opiProjMngVwoId,jdbcType=DECIMAL}
+    </select>
     <!--**************************************delete**************************************-->
     <delete id="deleteByPrimaryKey" parameterType="sql.pojo.cfg.vwo.HzVwoOpiProj">
     delete from HZ_VWO_OPI_PROJ

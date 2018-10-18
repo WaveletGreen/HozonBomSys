@@ -1,6 +1,9 @@
 package com.connor.hozon.bom.bomSystem.service.vwo;
 
 import com.connor.hozon.bom.bomSystem.controller.vwo.HzVWOProcessController;
+import com.connor.hozon.bom.bomSystem.dao.vwo.HzVwoOpiBomDao;
+import com.connor.hozon.bom.bomSystem.dao.vwo.HzVwoOpiPmtDao;
+import com.connor.hozon.bom.bomSystem.dao.vwo.HzVwoOpiProjDao;
 import com.connor.hozon.bom.bomSystem.dto.vwo.HzVwoFormListQueryBase;
 import com.connor.hozon.bom.bomSystem.iservice.cfg.vwo.*;
 import com.connor.hozon.bom.bomSystem.dao.cfg0.HzCfg0OptionFamilyDao;
@@ -132,6 +135,13 @@ public class HzVwoManagerService implements IHzVWOManagerService {
     //特性
     @Autowired
     HzCfg0OptionFamilyDao hzCfg0OptionFamilyDao;
+
+    @Autowired
+    HzVwoOpiBomDao hzVwoOpiBomDao;
+    @Autowired
+    HzVwoOpiPmtDao hzVwoOpiPmtDao;
+    @Autowired
+    HzVwoOpiProjDao hzVwoOpiProjDao;
     /**
      * 日志
      */
@@ -533,6 +543,10 @@ public class HzVwoManagerService implements IHzVWOManagerService {
         HzVwoInfo vwoInfo = iHzVwoInfoService.doSelectByPrimaryKey(id);
         HzVwoInfluenceDept influenceDept = iHzVwoInfluenceDeptService.doSelectByVwoId(id);
         HzVwoInfluenceUser influenceUser = iHzVwoInfluenceUserService.doSelectByVwoId(id);
+        HzVwoOpiBom hzVwoOpiBom = hzVwoOpiBomDao.selectByVwoId(id);
+        HzVwoOpiPmt hzVwoOpiPmt = hzVwoOpiPmtDao.selectByVwoId(id);
+        HzVwoOpiProj hzVwoOpiProj = hzVwoOpiProjDao.selectByVwoId(id);
+
 
         //影响部门
         if (influenceDept == null) {
@@ -554,6 +568,35 @@ public class HzVwoManagerService implements IHzVWOManagerService {
                 return false;
             }
         }
+
+        if (hzVwoOpiBom == null) {
+            hzVwoOpiBom = new HzVwoOpiBom();
+            hzVwoOpiBom.setOpiVwoId(id);
+            if (hzVwoOpiBomDao.insertSelective(hzVwoOpiBom) <= 0) {
+                logger.error("初始化VWO:" + id + "的BOM经理意见数据失败");
+                model.addAttribute("msg", "初始化VWO:" + id + "的BOM经理意见数据失败");
+                return false;
+            }
+        }
+        if (hzVwoOpiPmt == null) {
+            hzVwoOpiPmt = new HzVwoOpiPmt();
+            hzVwoOpiPmt.setOpiPmtMngVwoId(id);
+            if (hzVwoOpiPmtDao.insertSelective(hzVwoOpiPmt) <= 0) {
+                logger.error("初始化VWO:" + id + "的专业PMT经理意见数据失败");
+                model.addAttribute("msg", "初始化VWO:" + id + "的专业PMT经理意见数据失败");
+                return false;
+            }
+        }
+        if (hzVwoOpiProj == null) {
+            hzVwoOpiProj = new HzVwoOpiProj();
+            hzVwoOpiProj.setOpiProjMngVwoId(id);
+            if (hzVwoOpiProjDao.insertSelective(hzVwoOpiProj) <= 0) {
+                logger.error("初始化VWO:" + id + "的项目经理意见数据失败");
+                model.addAttribute("msg", "初始化VWO:" + id + "的项目经理意见数据失败");
+                return false;
+            }
+        }
+
         model.addAttribute("vwoInfo", vwoInfo);
         model.addAttribute("href", "returnToVwoFromList");
         model.addAttribute("url", "getInformChangers");
@@ -561,8 +604,127 @@ public class HzVwoManagerService implements IHzVWOManagerService {
         model.addAttribute("influenceDept", influenceDept);
         model.addAttribute("influenceUser", influenceUser);
         model.addAttribute("vwoType", vwoType);
+        model.addAttribute("hzVwoOpiBom", hzVwoOpiBom);
+        model.addAttribute("hzVwoOpiPmt", hzVwoOpiPmt);
+        model.addAttribute("hzVwoOpiProj", hzVwoOpiProj);
         return true;
     }
+
+    public HzVwoInfo getVwoInfo(Long id) {
+        return iHzVwoInfoService.doSelectByPrimaryKey(id);
+    }
+
+    /**
+     * 获取影响部门
+     *
+     * @param id
+     * @return
+     */
+    public HzVwoInfluenceDept getInfluenceDept(Long id) {
+        HzVwoInfluenceDept influenceDept = iHzVwoInfluenceDeptService.doSelectByVwoId(id);
+        //影响部门
+        if (influenceDept == null) {
+            influenceDept = new HzVwoInfluenceDept();
+            influenceDept.setVwoId(id);
+            if (iHzVwoInfluenceDeptService.doInsert(influenceDept) <= 0) {
+                logger.error("初始化VWO:" + id + "的影响部门数据失败");
+            }
+        }
+        return influenceDept;
+    }
+
+    /**
+     * 获取影响人员
+     *
+     * @param id
+     * @return
+     */
+    public HzVwoInfluenceUser getInfluenceUser(Long id) {
+        HzVwoInfluenceUser influenceUser = iHzVwoInfluenceUserService.doSelectByVwoId(id);
+        //影响人员
+        if (influenceUser == null) {
+            influenceUser = new HzVwoInfluenceUser();
+            influenceUser.setVwoId(id);
+            if (iHzVwoInfluenceUserService.doInsert(influenceUser) <= 0) {
+                logger.error("初始化VWO:" + id + "的影响人员数据失败");
+            }
+        }
+        return influenceUser;
+    }
+
+    /**
+     * 获取BOM经理意见
+     *
+     * @param id
+     * @return
+     */
+    public HzVwoOpiBom getOpiOfBomMng(Long id) {
+        HzVwoOpiBom hzVwoOpiBom = hzVwoOpiBomDao.selectByVwoId(id);
+        if (hzVwoOpiBom == null) {
+            hzVwoOpiBom = new HzVwoOpiBom();
+            hzVwoOpiBom.setOpiVwoId(id);
+            if (hzVwoOpiBomDao.insertSelective(hzVwoOpiBom) <= 0) {
+                logger.error("初始化VWO:" + id + "的BOM经理意见数据失败");
+            }
+        }
+        return hzVwoOpiBom;
+    }
+
+    /**
+     * 获取专业PMT经理意见
+     *
+     * @param id
+     * @return
+     */
+    public HzVwoOpiPmt getOpiOfPmtMng(Long id) {
+        HzVwoOpiPmt hzVwoOpiPmt = hzVwoOpiPmtDao.selectByVwoId(id);
+        if (hzVwoOpiPmt == null) {
+            hzVwoOpiPmt = new HzVwoOpiPmt();
+            hzVwoOpiPmt.setOpiPmtMngVwoId(id);
+            if (hzVwoOpiPmtDao.insertSelective(hzVwoOpiPmt) <= 0) {
+                logger.error("初始化VWO:" + id + "的专业PMT经理意见数据失败");
+            }
+        }
+        return hzVwoOpiPmt;
+    }
+
+    /**
+     * 获取项目经理意见
+     * @param id
+     * @return
+     */
+    public HzVwoOpiProj getOpiOfProjMng(Long id) {
+        HzVwoOpiProj hzVwoOpiProj = hzVwoOpiProjDao.selectByVwoId(id);
+        if (hzVwoOpiProj == null) {
+            hzVwoOpiProj = new HzVwoOpiProj();
+            hzVwoOpiProj.setOpiProjMngVwoId(id);
+            if (hzVwoOpiProjDao.insertSelective(hzVwoOpiProj) <= 0) {
+                logger.error("初始化VWO:" + id + "的项目经理意见数据失败");
+            }
+        }
+        return hzVwoOpiProj;
+    }
+
+    /**
+     * 获取特性变更后数据
+     *
+     * @param id
+     * @return
+     */
+    public List<HzFeatureChangeBean> getFeatureChangeAfter(Long id) {
+        return iHzFeatureChangeService.doSelectAfterByVwoId(id);
+    }
+
+    /**
+     * 获取特性变更前数据
+     *
+     * @param id
+     * @return
+     */
+    public List<HzFeatureChangeBean> getFeatureChangeBefore(Long id) {
+        return iHzFeatureChangeService.doSelectBeforeByVwoId(id);
+    }
+
 
     /**
      * 保存影响人员

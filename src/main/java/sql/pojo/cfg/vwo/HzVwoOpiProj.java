@@ -27,4 +27,7 @@ public class HzVwoOpiProj {
 
     private Integer opiProjMngStage;
 
+    public Date getOpiProjMngOptionDate() {
+        return opiProjMngOptionDate;
+    }
 }
