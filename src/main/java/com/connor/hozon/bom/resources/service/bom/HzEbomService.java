@@ -1,11 +1,10 @@
 package com.connor.hozon.bom.resources.service.bom;
 
-import com.alibaba.fastjson.JSONArray;
 import com.connor.hozon.bom.resources.domain.dto.request.*;
 import com.connor.hozon.bom.resources.domain.dto.response.HzEbomLevelRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzEbomRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzLouRespDTO;
-import com.connor.hozon.bom.resources.domain.dto.response.OperateResultMessageRespDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
 import com.connor.hozon.bom.resources.domain.query.HzBomRecycleByPageQuery;
 import com.connor.hozon.bom.resources.domain.query.HzEbomByPageQuery;
 import com.connor.hozon.bom.resources.domain.query.HzEbomTreeQuery;
@@ -15,7 +14,6 @@ import sql.pojo.bom.HzBomLineRecord;
 import sql.pojo.epl.HzEPLManageRecord;
 
 import java.util.List;
-import java.util.Set;
 
 /**
  * Created by haozt on 2018/06/06
@@ -46,28 +44,28 @@ public interface HzEbomService {
      * @param reqDTO
      * @return
      */
-    OperateResultMessageRespDTO addHzEbomRecord(AddHzEbomReqDTO reqDTO);
+    WriteResultRespDTO addHzEbomRecord(AddHzEbomReqDTO reqDTO);
 
     /**
      * 更新EBOM
      * @param reqDTO
      * @return
      */
-    OperateResultMessageRespDTO updateHzEbomRecord(UpdateHzEbomReqDTO reqDTO);
+    WriteResultRespDTO updateHzEbomRecord(UpdateHzEbomReqDTO reqDTO);
 
     /**
      * EBOM引用层级
      * @param reqDTO
      * @return
      */
-    OperateResultMessageRespDTO testbomLevelChange(UpdateHzEbomLeveReqDTO reqDTO);
+    WriteResultRespDTO testbomLevelChange(UpdateHzEbomLeveReqDTO reqDTO);
 
     /**
      * 删除EBOM
      * @param reqDTO
      * @return
      */
-    OperateResultMessageRespDTO deleteHzEbomRecordById(DeleteHzEbomReqDTO reqDTO);
+    WriteResultRespDTO deleteHzEbomRecordById(DeleteHzEbomReqDTO reqDTO);
 
     /**
      * 找出当前bom的全部子bom  递归查找 bom结构树
@@ -82,7 +80,7 @@ public interface HzEbomService {
      * 删除记录恢复
      * @return
      */
-    OperateResultMessageRespDTO recoverDeleteEbomRecord(String projectId,String puid);
+    WriteResultRespDTO recoverDeleteEbomRecord(String projectId, String puid);
 
 
     /**
@@ -93,7 +91,7 @@ public interface HzEbomService {
      */
     HzBomLineRecord findParentFor2Y(String projectId,String puid);
 
-    OperateResultMessageRespDTO setCurrentBomAsLou(SetLouReqDTO reqDTO);
+    WriteResultRespDTO setCurrentBomAsLou(SetLouReqDTO reqDTO);
 
 
     HzLouRespDTO getHzLouInfoById(HzLouaQuery query);

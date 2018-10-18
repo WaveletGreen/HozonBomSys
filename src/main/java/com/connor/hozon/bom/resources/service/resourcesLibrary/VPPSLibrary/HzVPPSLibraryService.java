@@ -2,7 +2,7 @@ package com.connor.hozon.bom.resources.service.resourcesLibrary.VPPSLibrary;
 
 import com.connor.hozon.bom.resources.domain.dto.request.AddHzVPPSLibraryReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzVPPSLibraryRespDTO;
-import com.connor.hozon.bom.resources.domain.dto.response.OperateResultMessageRespDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
 import com.connor.hozon.bom.resources.domain.query.HzVPPSLibraryQuery;
 import com.connor.hozon.bom.resources.page.Page;
 
@@ -25,7 +25,7 @@ public interface HzVPPSLibraryService {
      * @param reqDTO
      * @return
      */
-    OperateResultMessageRespDTO insertHzVPPSLibrary(AddHzVPPSLibraryReqDTO reqDTO);
+    WriteResultRespDTO insertHzVPPSLibrary(AddHzVPPSLibraryReqDTO reqDTO);
 
     /**
      * 根据puid查询一条数据
@@ -39,12 +39,12 @@ public interface HzVPPSLibraryService {
      * @param reqDTO
      * @return
      */
-    OperateResultMessageRespDTO updateHzVPPSLibrary(AddHzVPPSLibraryReqDTO reqDTO);
+    WriteResultRespDTO updateHzVPPSLibrary(AddHzVPPSLibraryReqDTO reqDTO);
 
     /**
      * 根据puid删除一条数据
      * @param puid
      * @return
      */
-    OperateResultMessageRespDTO deleteHzVPPSLibrary (String puid);
+    WriteResultRespDTO deleteHzVPPSLibrary (String puid);
 }

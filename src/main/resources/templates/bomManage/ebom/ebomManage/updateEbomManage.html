@@ -352,9 +352,9 @@
         </select>
     </div>
     <div class="form-group" th:each="_data,c:${data.getMap().keySet()}">
-        <label class="control-label" th:text="${_data}"></label>
+        <label class="control-label" th:text="${_data}+'(用量)'"></label>
         <input class="form-control" th:id="${_data}" th:name="${_data}" type="text"
-         th:value="${data.getMap().get(_data)}"      th:placeholder="${'请输入'+_data}"/><!--th:value="${entity.level}"-->
+         th:value="${data.getMap().get(_data)}"      th:placeholder="${'请输入'+_data+'的单车用量'}"/><!--th:value="${entity.level}"-->
     </div>
 </form>
 <script th:inline="javascript">

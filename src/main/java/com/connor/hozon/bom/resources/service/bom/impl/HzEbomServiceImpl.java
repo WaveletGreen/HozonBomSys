@@ -13,14 +13,12 @@ import com.connor.hozon.bom.resources.domain.dto.request.*;
 import com.connor.hozon.bom.resources.domain.dto.response.HzEbomLevelRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzEbomRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzLouRespDTO;
-import com.connor.hozon.bom.resources.domain.dto.response.OperateResultMessageRespDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
 import com.connor.hozon.bom.resources.domain.model.*;
 import com.connor.hozon.bom.resources.domain.query.*;
 import com.connor.hozon.bom.resources.mybatis.bom.HzEbomRecordDAO;
 import com.connor.hozon.bom.resources.mybatis.bom.HzMbomRecordDAO;
 import com.connor.hozon.bom.resources.mybatis.bom.HzPbomRecordDAO;
-import com.connor.hozon.bom.resources.mybatis.bom.HzSingleVehicleDosageDAO;
-import com.connor.hozon.bom.resources.mybatis.materiel.HzMaterielDAO;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.service.bom.HzEbomService;
 import com.connor.hozon.bom.resources.service.bom.HzMbomService;
@@ -28,8 +26,6 @@ import com.connor.hozon.bom.resources.service.epl.HzEPLManageRecordService;
 import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.resources.util.PrivilegeUtil;
 import com.connor.hozon.bom.resources.util.StringUtil;
-import com.connor.hozon.bom.sys.entity.User;
-import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sql.pojo.bom.*;
@@ -315,8 +311,8 @@ public class HzEbomServiceImpl implements HzEbomService {
      * @return
      */
     @Override
-    public OperateResultMessageRespDTO addHzEbomRecord(AddHzEbomReqDTO reqDTO) {
-        OperateResultMessageRespDTO operateResultMessageRespDTO = new OperateResultMessageRespDTO();
+    public WriteResultRespDTO addHzEbomRecord(AddHzEbomReqDTO reqDTO) {
+        WriteResultRespDTO writeResultRespDTO = new WriteResultRespDTO();
         try {
             String parentId = reqDTO.getPuid();//父层puid
             String lineNo = "";
@@ -338,9 +334,9 @@ public class HzEbomServiceImpl implements HzEbomService {
                 if (record != null) {
                     bomLineId = record.getLineID();
                 } else {
-                    operateResultMessageRespDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
-                    operateResultMessageRespDTO.setErrMsg("当前插入对象的父结构不存在！");
-                    return operateResultMessageRespDTO;
+                    writeResultRespDTO.setErrCode(WriteResultRespDTO.FAILED_CODE);
+                    writeResultRespDTO.setErrMsg("当前插入对象的父结构不存在！");
+                    return writeResultRespDTO;
                 }
 
                 HZBomMainRecord hzBomMainRecord = hzBomMainRecordDao.selectByProjectPuid(reqDTO.getProjectId());
@@ -377,9 +373,9 @@ public class HzEbomServiceImpl implements HzEbomService {
 
                             List<HzEPLManageRecord> records = hzEbomRecordDAO.getHzBomLineChildren(query);
                             if (ListUtil.isEmpty(records)) {
-                                operateResultMessageRespDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
-                                operateResultMessageRespDTO.setErrMsg("当前插入对象的父结构不存在！");
-                                return operateResultMessageRespDTO;
+                                writeResultRespDTO.setErrCode(WriteResultRespDTO.FAILED_CODE);
+                                writeResultRespDTO.setErrMsg("当前插入对象的父结构不存在！");
+                                return writeResultRespDTO;
                             }
                             if (records.size() == 1) {//当前父没有子
                                 StringBuffer stringBuffer = new StringBuffer(lineIndex);
@@ -455,9 +451,9 @@ public class HzEbomServiceImpl implements HzEbomService {
                                     String lineIn = lineIndex + "." + lineNo;
                                     boolean b = hzEbomRecordDAO.lineIndexRepeat(reqDTO.getProjectId(), lineIn);
                                     if (b) {
-                                        operateResultMessageRespDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
-                                        operateResultMessageRespDTO.setErrMsg("当前要插入的位置已存在数据！");
-                                        return operateResultMessageRespDTO;
+                                        writeResultRespDTO.setErrCode(WriteResultRespDTO.FAILED_CODE);
+                                        writeResultRespDTO.setErrMsg("当前要插入的位置已存在数据！");
+                                        return writeResultRespDTO;
                                     }
                                     double max = Double.parseDouble(l.get(l.size() - 1).getSortNum());
                                     for (int i = 0; i < l.size() - 1; i++) {
@@ -517,9 +513,9 @@ public class HzEbomServiceImpl implements HzEbomService {
                             for(int i=0;i<ebomRecords.size();i++){
                                 if(lineId.equals(ebomRecords.get(i).getLineID())){
                                     if(hzBomLineRecord.getLineIndex().contains(ebomRecords.get(i).getLineIndex())){
-                                        operateResultMessageRespDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
-                                        operateResultMessageRespDTO.setErrMsg("当前要插入的零件已是直系父层，请查证后再添加！");
-                                        return operateResultMessageRespDTO;
+                                        writeResultRespDTO.setErrCode(WriteResultRespDTO.FAILED_CODE);
+                                        writeResultRespDTO.setErrMsg("当前要插入的零件已是直系父层，请查证后再添加！");
+                                        return writeResultRespDTO;
                                     }
                                 }
                             }
@@ -822,21 +818,21 @@ public class HzEbomServiceImpl implements HzEbomService {
 //                        }
                     }
                 }
-                return OperateResultMessageRespDTO.getSuccessResult();
+                return WriteResultRespDTO.getSuccessResult();
 
             } else {
                 //自己搭建父结构 默认为2Y层
                 boolean isRepeat = hzEbomRecordDAO.checkItemIdIsRepeat(reqDTO.getProjectId(), reqDTO.getLineId());
                 if (isRepeat) {
-                    OperateResultMessageRespDTO respDTO = new OperateResultMessageRespDTO();
-                    respDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
+                    WriteResultRespDTO respDTO = new WriteResultRespDTO();
+                    respDTO.setErrCode(WriteResultRespDTO.FAILED_CODE);
                     respDTO.setErrMsg("当前零件号已存在,请重新添加！");
                     return respDTO;
                 }
                 //项目
                 HZBomMainRecord hzBomMainRecord = hzBomMainRecordDao.selectByProjectPuid(reqDTO.getProjectId());
                 if (hzBomMainRecord == null) {
-                    return OperateResultMessageRespDTO.getFailResult();
+                    return WriteResultRespDTO.getFailResult();
                 }
                 HzBomLineRecord hzBomLineRecord = HzEbomRecordFactory.addEbomDTOBomLineRecord(reqDTO);//EBOM
                 hzBomLineRecord.setIsPart(0);
@@ -946,17 +942,17 @@ public class HzEbomServiceImpl implements HzEbomService {
 //                        hzMaterielDAO.insertList(hzMaterielRecords);
 //                    }
                 }
-                return OperateResultMessageRespDTO.getSuccessResult();
+                return WriteResultRespDTO.getSuccessResult();
             }
         } catch (Exception e) {
             e.printStackTrace();
-            return OperateResultMessageRespDTO.getFailResult();
+            return WriteResultRespDTO.getFailResult();
         }
     }
 
 
     @Override
-    public OperateResultMessageRespDTO updateHzEbomRecord(UpdateHzEbomReqDTO reqDTO) {
+    public WriteResultRespDTO updateHzEbomRecord(UpdateHzEbomReqDTO reqDTO) {
         try {
             /**
              * 业务涉及到变更 需要走流程进行审核，走流程时需要查看变更前和变更后的数据，所以需要记录变更前的数据；
@@ -967,8 +963,8 @@ public class HzEbomServiceImpl implements HzEbomService {
             if (isRepeat) {
                 HzEPLManageRecord record = hzEbomRecordDAO.findEbomById(reqDTO.getPuid(), reqDTO.getProjectId());
                 if (!record.getLineID().equals(reqDTO.getLineId())) {
-                    OperateResultMessageRespDTO respDTO = new OperateResultMessageRespDTO();
-                    respDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
+                    WriteResultRespDTO respDTO = new WriteResultRespDTO();
+                    respDTO.setErrCode(WriteResultRespDTO.FAILED_CODE);
                     respDTO.setErrMsg("非法操作,要修改的零件号已存在！");
                     return respDTO;
                 }
@@ -1002,7 +998,7 @@ public class HzEbomServiceImpl implements HzEbomService {
                 }
 //
 //            } else {
-//                return OperateResultMessageRespDTO.getFailResult();
+//                return WriteResultRespDTO.getFailResult();
 //            }
 
             HZBomMainRecord hzBomMainRecord = hzBomMainRecordDao.selectByProjectPuid(reqDTO.getProjectId());
@@ -1149,16 +1145,16 @@ public class HzEbomServiceImpl implements HzEbomService {
                 hzBomLineRecordDao.update(hzBomLineRecord);
             });
 
-            return OperateResultMessageRespDTO.getSuccessResult();
+            return WriteResultRespDTO.getSuccessResult();
 
         } catch (Exception e) {
-            return OperateResultMessageRespDTO.getFailResult();
+            return WriteResultRespDTO.getFailResult();
         }
     }
 
     @Override
-    public OperateResultMessageRespDTO testbomLevelChange(UpdateHzEbomLeveReqDTO reqDTO) {
-        OperateResultMessageRespDTO operateResultMessageRespDTO = new OperateResultMessageRespDTO();
+    public WriteResultRespDTO testbomLevelChange(UpdateHzEbomLeveReqDTO reqDTO) {
+        WriteResultRespDTO writeResultRespDTO = new WriteResultRespDTO();
         // 调层级关系
         Map<String, Object> objectMap = new HashMap<>();
         objectMap.put("lineID", reqDTO.getLineId());//页面传回来的零件ID（新父）
@@ -1171,9 +1167,9 @@ public class HzEbomServiceImpl implements HzEbomService {
         List<HzPbomLineRecord> listPbom = hzPbomRecordDAO.getPbomById(objectMap2);//新父
 
         if (ListUtil.isEmpty(listEbom)) {
-            operateResultMessageRespDTO.setErrMsg("所填父零件号不存在！");
-            operateResultMessageRespDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
-            return operateResultMessageRespDTO;
+            writeResultRespDTO.setErrMsg("所填父零件号不存在！");
+            writeResultRespDTO.setErrCode(WriteResultRespDTO.FAILED_CODE);
+            return writeResultRespDTO;
         }
 
         Map<String, Object> map = new HashMap<>();
@@ -1205,9 +1201,9 @@ public class HzEbomServiceImpl implements HzEbomService {
         String lineIn = lineIndex + "." + lineNo;
         boolean b = hzEbomRecordDAO.lineIndexRepeat(reqDTO.getProjectId(), lineIn);
         if (b) {
-            operateResultMessageRespDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
-            operateResultMessageRespDTO.setErrMsg("当前要插入的位置已存在数据！");
-            return operateResultMessageRespDTO;
+            writeResultRespDTO.setErrCode(WriteResultRespDTO.FAILED_CODE);
+            writeResultRespDTO.setErrMsg("当前要插入的位置已存在数据！");
+            return writeResultRespDTO;
         }
 
         //查选中零件的树结构ebomRecords
@@ -1231,9 +1227,9 @@ public class HzEbomServiceImpl implements HzEbomService {
         for (int i = 0; i < ebomRecords.size(); i++) {//选中零件树结构
             //reqDTO.getLineId()--listEbom.get(0).getLineID()
             if (reqDTO.getLineId().equals(ebomRecords.get(i).getLineID())) {
-                operateResultMessageRespDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
-                operateResultMessageRespDTO.setErrMsg("当前要插入的位置与勾选的结构冲突，请查证后再调整！");
-                return operateResultMessageRespDTO;
+                writeResultRespDTO.setErrCode(WriteResultRespDTO.FAILED_CODE);
+                writeResultRespDTO.setErrMsg("当前要插入的位置与勾选的结构冲突，请查证后再调整！");
+                return writeResultRespDTO;
             }
         }
 
@@ -1744,20 +1740,20 @@ public class HzEbomServiceImpl implements HzEbomService {
                 }
             }
         }
-        return OperateResultMessageRespDTO.getSuccessResult();
+        return WriteResultRespDTO.getSuccessResult();
     }
 
     @Override
-    public OperateResultMessageRespDTO deleteHzEbomRecordById(DeleteHzEbomReqDTO reqDTO) {
-        OperateResultMessageRespDTO respDTO = new OperateResultMessageRespDTO();
+    public WriteResultRespDTO deleteHzEbomRecordById(DeleteHzEbomReqDTO reqDTO) {
+        WriteResultRespDTO respDTO = new WriteResultRespDTO();
         try {
             boolean b = PrivilegeUtil.writePrivilege();
             if (!b) {
-                return OperateResultMessageRespDTO.getFailPrivilege();
+                return WriteResultRespDTO.getFailPrivilege();
             }
             if (StringUtil.isEmpty(reqDTO.getPuids()) || StringUtil.isEmpty(reqDTO.getProjectId())) {
                 respDTO.setErrMsg("非法参数！");
-                respDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
+                respDTO.setErrCode(WriteResultRespDTO.FAILED_CODE);
                 return respDTO;
             }
             String bomPuids[] = reqDTO.getPuids().trim().split(",");
@@ -1765,7 +1761,7 @@ public class HzEbomServiceImpl implements HzEbomService {
             StringBuilder sb = null;
             if (null != (sb = checkConnectWithFeature(bomPuids, reqDTO.getProjectId()))) {
                 respDTO.setErrMsg(sb.toString());
-                respDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
+                respDTO.setErrCode(WriteResultRespDTO.FAILED_CODE);
                 return respDTO;
             }
             /**
@@ -1980,10 +1976,10 @@ public class HzEbomServiceImpl implements HzEbomService {
                 }
 
             }
-            return OperateResultMessageRespDTO.getSuccessResult();
+            return WriteResultRespDTO.getSuccessResult();
         } catch (Exception e) {
             e.printStackTrace();
-            return OperateResultMessageRespDTO.getFailResult();
+            return WriteResultRespDTO.getFailResult();
         }
     }
 
@@ -2018,18 +2014,18 @@ public class HzEbomServiceImpl implements HzEbomService {
     }
 
     @Override
-    public OperateResultMessageRespDTO recoverDeleteEbomRecord(String projectId, String puid) {
-        OperateResultMessageRespDTO respDTO = new OperateResultMessageRespDTO();
+    public WriteResultRespDTO recoverDeleteEbomRecord(String projectId, String puid) {
+        WriteResultRespDTO respDTO = new WriteResultRespDTO();
         try {
             if (projectId == null || projectId == "" || puid == null || puid == "") {
-                respDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
+                respDTO.setErrCode(WriteResultRespDTO.FAILED_CODE);
                 respDTO.setErrMsg("非法参数");
                 return respDTO;
             }
             HzEPLManageRecord record = hzEbomRecordDAO.findEbomById(puid, projectId);
             if (record != null) {
                 respDTO.setErrMsg("当前要恢复对象已存在bom系统中！");
-                respDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
+                respDTO.setErrCode(WriteResultRespDTO.FAILED_CODE);
                 return respDTO;
             }
 
@@ -2037,13 +2033,13 @@ public class HzEbomServiceImpl implements HzEbomService {
             if (record != null) {
                 if (record.getLineIndex().split("\\.").length == 2) {
                     respDTO.setErrMsg("2Y层结构无法恢复！");
-                    respDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
+                    respDTO.setErrCode(WriteResultRespDTO.FAILED_CODE);
                     return respDTO;
                 }
                 HzEPLManageRecord manageRecord = hzEbomRecordDAO.findEbomById(record.getParentUid(), projectId);
                 if (manageRecord == null) {
                     respDTO.setErrMsg("当前要恢复对象的父结构不存在，无法恢复！");
-                    respDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
+                    respDTO.setErrCode(WriteResultRespDTO.FAILED_CODE);
                     return respDTO;
                 } else {
                     HzBomLineRecord bomLineRecord = new HzBomLineRecord();
@@ -2055,20 +2051,20 @@ public class HzEbomServiceImpl implements HzEbomService {
                         }
                         int i = hzBomLineRecordDao.update(bomLineRecord);
                         if (i <= 0) {
-                            return OperateResultMessageRespDTO.getFailResult();
+                            return WriteResultRespDTO.getFailResult();
                         }
                     }
                     HzBomLineRecord hzBomLineRecord = new HzBomLineRecord();
                     hzBomLineRecord.setPuid(record.getPuid());
                     int i = hzBomLineRecordDao.update(hzBomLineRecord);
                     if (i > 0) {
-                        return OperateResultMessageRespDTO.getSuccessResult();
+                        return WriteResultRespDTO.getSuccessResult();
                     }
                 }
             }
-            return OperateResultMessageRespDTO.getFailResult();
+            return WriteResultRespDTO.getFailResult();
         } catch (Exception e) {
-            return OperateResultMessageRespDTO.getFailResult();
+            return WriteResultRespDTO.getFailResult();
         }
     }
 
@@ -2093,17 +2089,17 @@ public class HzEbomServiceImpl implements HzEbomService {
     }
 
     @Override
-    public OperateResultMessageRespDTO setCurrentBomAsLou(SetLouReqDTO reqDTO) {
+    public WriteResultRespDTO setCurrentBomAsLou(SetLouReqDTO reqDTO) {
         try {
             /**
              * 设置为LOU 或者取消设置为LOU
              */
             if (reqDTO.getLineIds() == null || reqDTO.getProjectId() == null) {
-                return OperateResultMessageRespDTO.IllgalArgument();
+                return WriteResultRespDTO.IllgalArgument();
             }
             boolean b = PrivilegeUtil.writePrivilege();
             if (!b) {
-                return OperateResultMessageRespDTO.getFailPrivilege();
+                return WriteResultRespDTO.getFailPrivilege();
             }
             String[] lineIds = reqDTO.getLineIds().split(",");
             for (String lineId : lineIds) {
@@ -2171,9 +2167,9 @@ public class HzEbomServiceImpl implements HzEbomService {
                 }
 
             }
-            return OperateResultMessageRespDTO.getSuccessResult();
+            return WriteResultRespDTO.getSuccessResult();
         } catch (Exception e) {
-            return OperateResultMessageRespDTO.getFailResult();
+            return WriteResultRespDTO.getFailResult();
         }
     }
 

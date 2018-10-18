@@ -3,7 +3,7 @@ package com.connor.hozon.bom.resources.service.file.impl;
 import com.connor.hozon.bom.bomSystem.dao.bom.HzBomMainRecordDao;
 import com.connor.hozon.bom.bomSystem.impl.bom.HzBomLineRecordDaoImpl;
 import com.connor.hozon.bom.common.util.user.UserInfo;
-import com.connor.hozon.bom.resources.domain.dto.response.OperateResultMessageRespDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
 import com.connor.hozon.bom.resources.domain.model.HzPbomRecordFactory;
 import com.connor.hozon.bom.resources.mybatis.bom.HzEbomRecordDAO;
 import com.connor.hozon.bom.resources.mybatis.bom.HzPbomRecordDAO;
@@ -57,22 +57,22 @@ public class FileUploadServiceImpl implements FileUploadService {
 
     private Integer maxOrderNum = null;
     @Override
-    public OperateResultMessageRespDTO uploadEbomToDB(MultipartFile file, String projectId) {
+    public WriteResultRespDTO uploadEbomToDB(MultipartFile file, String projectId) {
         try {
             //判断权限
             boolean b = PrivilegeUtil.writePrivilege();
             if(!b){
-                return OperateResultMessageRespDTO.getFailPrivilege();
+                return WriteResultRespDTO.getFailPrivilege();
             }
             //判断文件格式
             boolean preCheck = ExcelUtil.preReadCheck(file.getOriginalFilename());
             if(!preCheck){
-                return OperateResultMessageRespDTO.fileIsNotExcel();
+                return WriteResultRespDTO.fileIsNotExcel();
             }
             //判断文件大小
             boolean suitSize = ExcelUtil.checkFileSize(file.getSize());
             if(!suitSize){
-                return OperateResultMessageRespDTO.fileSizeOverFlow();
+                return WriteResultRespDTO.fileSizeOverFlow();
             }
             //上传文件到服务器
             String fileUrl = ExcelUtil.uploadFileToLocation(file.getBytes(),file.getOriginalFilename());
@@ -82,9 +82,9 @@ public class FileUploadServiceImpl implements FileUploadService {
             this.errorCount = 0;
             String errorMsg = errorLogInfo(workbook);
             if(this.errorCount!=0){
-                OperateResultMessageRespDTO respDTO = new OperateResultMessageRespDTO();
+                WriteResultRespDTO respDTO = new WriteResultRespDTO();
                 respDTO.setErrMsg(errorMsg);
-                respDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
+                respDTO.setErrCode(WriteResultRespDTO.FAILED_CODE);
                 return  respDTO;
             }
 
@@ -218,7 +218,7 @@ public class FileUploadServiceImpl implements FileUploadService {
                     // 等待中 等子线程全部ok 继续
                     countDownLatch.await();
                 }catch (Exception e){
-                    return OperateResultMessageRespDTO.getFailResult();
+                    return WriteResultRespDTO.getFailResult();
                 }
 
             }
@@ -226,10 +226,10 @@ public class FileUploadServiceImpl implements FileUploadService {
             ExcelUtil.deleteFile();
         }catch (Exception e){
             e.printStackTrace();
-            return OperateResultMessageRespDTO.getFailResult();
+            return WriteResultRespDTO.getFailResult();
 
         }
-        return OperateResultMessageRespDTO.getSuccessResult();
+        return WriteResultRespDTO.getSuccessResult();
     }
 
 

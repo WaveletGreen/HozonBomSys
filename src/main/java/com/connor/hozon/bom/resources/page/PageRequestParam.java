@@ -7,36 +7,36 @@ import java.util.Map;
 /**
  * 分页请求信息
  */
-public class PageRequest implements Serializable {
+public class PageRequestParam implements Serializable {
 
-	private static final long serialVersionUID = 9092186838918641382L;
+	private static final long serialVersionUID = 1L;
 
 	/**
-	 * 过滤参数
+	 * 过滤条件
 	 */
 	private Map filters;
 
 	/**
-	 * 页号码,页码从1开始
+	 * 页码
 	 */
 	private int pageNumber;
 
 	/**
-	 * 分页大小
+	 * 页数
 	 */
 	private int pageSize;
 
-	public PageRequest() {
+	public PageRequestParam() {
 
 		this(0, 0, null);
 	}
 
-	public PageRequest(int pageNumber, int pageSize) {
+	public PageRequestParam(int pageNumber, int pageSize) {
 
 		this(pageNumber, pageSize, new HashMap());
 	}
 
-	public PageRequest(int pageNumber, int pageSize, Map filters) {
+	public PageRequestParam(int pageNumber, int pageSize, Map filters) {
 
 		this.pageNumber = pageNumber;
 		this.pageSize = pageSize;
@@ -73,9 +73,4 @@ public class PageRequest implements Serializable {
 		this.pageSize = pageSize;
 	}
 
-	public void setPageNumberAndSize(int start, int limit) {
-
-		this.pageSize = limit;
-		this.pageNumber = start / limit;
-	}
 }

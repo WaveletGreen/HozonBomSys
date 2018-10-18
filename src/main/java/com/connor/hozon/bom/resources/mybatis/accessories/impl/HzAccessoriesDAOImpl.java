@@ -4,7 +4,7 @@ import com.connor.hozon.bom.resources.domain.dto.request.DeleteHzAccessoriesDTO;
 import com.connor.hozon.bom.resources.domain.query.HzAccessoriesPageQuery;
 import com.connor.hozon.bom.resources.mybatis.accessories.HzAccessoriesDAO;
 import com.connor.hozon.bom.resources.page.Page;
-import com.connor.hozon.bom.resources.page.PageRequest;
+import com.connor.hozon.bom.resources.page.PageRequestParam;
 import org.springframework.stereotype.Service;
 import sql.BaseSQLUtil;
 import sql.pojo.accessories.HzAccessoriesLib;
@@ -44,7 +44,7 @@ public class HzAccessoriesDAOImpl  extends BaseSQLUtil implements HzAccessoriesD
 
     @Override
     public Page<HzAccessoriesLib> getHzAccessoriesByPage(HzAccessoriesPageQuery query) {
-        PageRequest request = new PageRequest();
+        PageRequestParam request = new PageRequestParam();
         Map map = new HashMap();
         request.setPageNumber(query.getPage());
         request.setPageSize(query.getPageSize());

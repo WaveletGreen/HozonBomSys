@@ -35,21 +35,21 @@ public interface HzMbomService {
      * @param reqDTO
      * @return
      */
-    OperateResultMessageRespDTO insertMbomRecord(AddMbomReqDTO reqDTO);
+    WriteResultRespDTO insertMbomRecord(AddMbomReqDTO reqDTO);
 
     /**
      * 编辑一条MBOM
      * @param reqDTO
      * @return
      */
-    OperateResultMessageRespDTO updateMbomRecord(UpdateMbomReqDTO reqDTO);
+    WriteResultRespDTO updateMbomRecord(UpdateMbomReqDTO reqDTO);
 
     /**
      * 删除MBOM
      * @param
      * @return
      */
-    OperateResultMessageRespDTO deleteMbomRecord(DeleteHzMbomReqDTO reqDTO);
+    WriteResultRespDTO deleteMbomRecord(DeleteHzMbomReqDTO reqDTO);
 
     /**
      * 获取MBOM树
@@ -64,7 +64,7 @@ public interface HzMbomService {
      * 删除记录恢复
      * @return
      */
-    OperateResultMessageRespDTO recoverDeleteMbomRecord(String projectId,String puid);
+    WriteResultRespDTO recoverDeleteMbomRecord(String projectId, String puid);
 
     /**
      * 装车件类型
@@ -72,7 +72,7 @@ public interface HzMbomService {
      */
     List<String> loadingCarPartType();
 
-    OperateResultMessageRespDTO setCurrentBomToLou(SetLouReqDTO reqDTO);
+    WriteResultRespDTO setCurrentBomToLou(SetLouReqDTO reqDTO);
 
     HzMbomLineRecord findParentBomUtil2Y(String projectId,String puid);
 
@@ -84,5 +84,5 @@ public interface HzMbomService {
      * @param projectId
      * @return
      */
-    OperateResultMessageRespDTO refreshHzMbom(String projectId);
+    WriteResultRespDTO refreshHzMbom(String projectId);
 }

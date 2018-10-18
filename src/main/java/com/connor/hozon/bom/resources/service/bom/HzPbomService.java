@@ -5,7 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.connor.hozon.bom.resources.domain.dto.request.*;
 import com.connor.hozon.bom.resources.domain.dto.response.HzLouRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzPbomLineRespDTO;
-import com.connor.hozon.bom.resources.domain.dto.response.OperateResultMessageRespDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
 import com.connor.hozon.bom.resources.domain.query.HzBomRecycleByPageQuery;
 import com.connor.hozon.bom.resources.domain.query.HzLouaQuery;
 import com.connor.hozon.bom.resources.domain.query.HzPbomByPageQuery;
@@ -27,7 +27,7 @@ public interface HzPbomService {
      * @param recordReqDTO
      * @return
      */
-    OperateResultMessageRespDTO insertHzPbomRecord(AddHzPbomRecordReqDTO recordReqDTO);
+    WriteResultRespDTO insertHzPbomRecord(AddHzPbomRecordReqDTO recordReqDTO);
 
     /**
      * PBOM维护 编辑 获取当前登录这信息 进行权限判断
@@ -35,7 +35,7 @@ public interface HzPbomService {
      * @param recordReqDTO
      * @return
      */
-    OperateResultMessageRespDTO updateHzPbomRecord(UpdateHzPbomRecordReqDTO recordReqDTO);
+    WriteResultRespDTO updateHzPbomRecord(UpdateHzPbomRecordReqDTO recordReqDTO);
 
     /**
      * PBOM维护 删除  获取当前登录者的信息 进行权限判断
@@ -43,7 +43,7 @@ public interface HzPbomService {
      * @param reqDTO
      * @return
      */
-    OperateResultMessageRespDTO deleteHzPbomRecordByForeignId(DeleteHzPbomReqDTO reqDTO);
+    WriteResultRespDTO deleteHzPbomRecordByForeignId(DeleteHzPbomReqDTO reqDTO);
 
     /**
      * 获取PBOM信息 工艺合件
@@ -92,7 +92,7 @@ public interface HzPbomService {
      * @param recordReqDTO
      * @return
      */
-    OperateResultMessageRespDTO andProcessCompose(AddHzPbomRecordReqDTO recordReqDTO);
+    WriteResultRespDTO andProcessCompose(AddHzPbomRecordReqDTO recordReqDTO);
 
     /**
      * 查询已删除记录
@@ -107,10 +107,10 @@ public interface HzPbomService {
      *
      * @return
      */
-    OperateResultMessageRespDTO recoverDeletePbomRecord(String projectId, String puid);
+    WriteResultRespDTO recoverDeletePbomRecord(String projectId, String puid);
 
 
-    OperateResultMessageRespDTO setCurrentBomAsLou(SetLouReqDTO reqDTO);
+    WriteResultRespDTO setCurrentBomAsLou(SetLouReqDTO reqDTO);
 
     HzPbomLineRecord findParentUtil2Y(String projectId, String puid);
 

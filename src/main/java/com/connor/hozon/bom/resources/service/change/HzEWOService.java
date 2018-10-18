@@ -3,7 +3,7 @@ package com.connor.hozon.bom.resources.service.change;
 
 import com.connor.hozon.bom.resources.domain.dto.request.InitiatingProcessReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzEbomRespDTO;
-import com.connor.hozon.bom.resources.domain.dto.response.OperateResultMessageRespDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
 import com.connor.hozon.bom.resources.domain.query.HzEWOChangeRecordQuery;
 
 import java.util.List;
@@ -20,7 +20,7 @@ public interface HzEWOService {
      * @param reqDTO
      * @return
      */
-    OperateResultMessageRespDTO initiatingProcessForEwoChange(InitiatingProcessReqDTO reqDTO);
+    WriteResultRespDTO initiatingProcessForEwoChange(InitiatingProcessReqDTO reqDTO);
 
 
     /**
@@ -35,14 +35,14 @@ public interface HzEWOService {
      * @param reqDTO
      * @return
      */
-    OperateResultMessageRespDTO addNewItemToChangeForm(InitiatingProcessReqDTO reqDTO);
+    WriteResultRespDTO addNewItemToChangeForm(InitiatingProcessReqDTO reqDTO);
 
     /**
      * 从变更表单删除零件
      * @param reqDTO
      * @return
      */
-    OperateResultMessageRespDTO deleteItemFromChangeFrom(InitiatingProcessReqDTO reqDTO);
+    WriteResultRespDTO deleteItemFromChangeFrom(InitiatingProcessReqDTO reqDTO);
 
 
 }

@@ -2,7 +2,7 @@ package com.connor.hozon.bom.resources.service.resourcesLibrary.VPPSLibrary.impl
 
 import com.connor.hozon.bom.resources.domain.dto.request.AddHzVPPSLibraryReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzVPPSLibraryRespDTO;
-import com.connor.hozon.bom.resources.domain.dto.response.OperateResultMessageRespDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
 import com.connor.hozon.bom.resources.domain.query.HzVPPSLibraryQuery;
 import com.connor.hozon.bom.resources.mybatis.resourcesLibrary.VPPSLibrary.HzVPPSLibraryDao;
 import com.connor.hozon.bom.resources.page.Page;
@@ -72,17 +72,17 @@ public class HzVPPSLibraryServiceImpl implements HzVPPSLibraryService {
      * @return
      */
     @Override
-    public OperateResultMessageRespDTO insertHzVPPSLibrary(AddHzVPPSLibraryReqDTO reqDTO) {
+    public WriteResultRespDTO insertHzVPPSLibrary(AddHzVPPSLibraryReqDTO reqDTO) {
         try {
             boolean b = PrivilegeUtil.writePrivilege();
             if (!b) {
-                return OperateResultMessageRespDTO.getFailPrivilege();
+                return WriteResultRespDTO.getFailPrivilege();
             }
             int j = hzVPPSLibraryDao.findVPPSLibraryOrCodeToCount(reqDTO.getVppsCode());
             if (j > 0){
-                OperateResultMessageRespDTO resultMessageRespDTO = new OperateResultMessageRespDTO();
+                WriteResultRespDTO resultMessageRespDTO = new WriteResultRespDTO();
                 resultMessageRespDTO.setErrMsg("对不起!您插入的VPPS代码已存在");
-                resultMessageRespDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
+                resultMessageRespDTO.setErrCode(WriteResultRespDTO.FAILED_CODE);
                 return resultMessageRespDTO;
             }
             HzVPPSLibrary library = new HzVPPSLibrary();
@@ -98,10 +98,10 @@ public class HzVPPSLibraryServiceImpl implements HzVPPSLibraryService {
             library.setStandardPartCode(reqDTO.getStandardPartCode());
             int i = hzVPPSLibraryDao.insert(library);
             if (i > 0) {
-                return OperateResultMessageRespDTO.getSuccessResult();
+                return WriteResultRespDTO.getSuccessResult();
             }
         } catch (Exception e) {
-            return OperateResultMessageRespDTO.getFailResult();
+            return WriteResultRespDTO.getFailResult();
         }
         return null;
     }
@@ -143,18 +143,18 @@ public class HzVPPSLibraryServiceImpl implements HzVPPSLibraryService {
      * @return
      */
     @Override
-    public OperateResultMessageRespDTO updateHzVPPSLibrary(AddHzVPPSLibraryReqDTO reqDTO) {
+    public WriteResultRespDTO updateHzVPPSLibrary(AddHzVPPSLibraryReqDTO reqDTO) {
         try {
             boolean b = PrivilegeUtil.writePrivilege();
             if (!b) {
-                return OperateResultMessageRespDTO.getFailPrivilege();
+                return WriteResultRespDTO.getFailPrivilege();
             }
             int j = hzVPPSLibraryDao.findVPPSLibraryOrCodeToCount(reqDTO.getVppsCode());
             HzVPPSLibrary hzVPPSLibrary = hzVPPSLibraryDao.findVPPSLibraryOrCode(reqDTO.getVppsCode());
-            OperateResultMessageRespDTO resultMessageRespDTO = new OperateResultMessageRespDTO();
+            WriteResultRespDTO resultMessageRespDTO = new WriteResultRespDTO();
             if (j > 1){
                 resultMessageRespDTO.setErrMsg("对不起!您修改的VPPS代码已存在");
-                resultMessageRespDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
+                resultMessageRespDTO.setErrCode(WriteResultRespDTO.FAILED_CODE);
                 return resultMessageRespDTO;
             }
 
@@ -175,12 +175,12 @@ public class HzVPPSLibraryServiceImpl implements HzVPPSLibraryService {
             library.setStandardPartCode(reqDTO.getStandardPartCode());
             int i = hzVPPSLibraryDao.update(library);
             if (i>0){
-                return OperateResultMessageRespDTO.getSuccessResult();
+                return WriteResultRespDTO.getSuccessResult();
             }
         } catch (Exception e) {
-            return OperateResultMessageRespDTO.getFailResult();
+            return WriteResultRespDTO.getFailResult();
         }
-        return OperateResultMessageRespDTO.getFailResult();
+        return WriteResultRespDTO.getFailResult();
     }
 
     /**
@@ -190,20 +190,20 @@ public class HzVPPSLibraryServiceImpl implements HzVPPSLibraryService {
      * @return
      */
     @Override
-    public OperateResultMessageRespDTO deleteHzVPPSLibrary(String puid) {
+    public WriteResultRespDTO deleteHzVPPSLibrary(String puid) {
         try {
             boolean b  = PrivilegeUtil.writePrivilege();
             if(!b){
-                return OperateResultMessageRespDTO.getFailPrivilege();
+                return WriteResultRespDTO.getFailPrivilege();
             }
 
             int i = hzVPPSLibraryDao.delete(puid);
             if (i>0){
-                return OperateResultMessageRespDTO.getSuccessResult();
+                return WriteResultRespDTO.getSuccessResult();
             }
         } catch (Exception e) {
-            return OperateResultMessageRespDTO.getFailResult();
+            return WriteResultRespDTO.getFailResult();
         }
-        return OperateResultMessageRespDTO.getFailResult();
+        return WriteResultRespDTO.getFailResult();
     }
 }

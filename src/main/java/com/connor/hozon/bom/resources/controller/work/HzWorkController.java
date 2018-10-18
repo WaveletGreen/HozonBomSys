@@ -4,11 +4,11 @@ import com.connor.hozon.bom.resources.controller.BaseController;
 import com.connor.hozon.bom.resources.domain.dto.request.AddWorkCenterReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.request.UpdateWorkCenterReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzWorkCenterRespDTO;
-import com.connor.hozon.bom.resources.domain.dto.response.OperateResultMessageRespDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
 import com.connor.hozon.bom.resources.domain.query.HzWorkByPageQuery;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.service.work.HzWorkService;
-import com.connor.hozon.bom.resources.util.ResultMessageBuilder;
+import com.connor.hozon.bom.resources.util.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -74,7 +74,7 @@ public class HzWorkController extends BaseController {
         tableTitle.put("pExperssion4","公式4");
         tableTitle.put("pExperssion5","公式5");
         tableTitle.put("pExperssion6","公式6");
-        writeAjaxJSONResponse(ResultMessageBuilder.build(tableTitle), response);
+        toJSONResponse(Result.build(tableTitle), response);
     }
 
     /**
@@ -175,8 +175,8 @@ public class HzWorkController extends BaseController {
      */
     @RequestMapping(value = "add",method = RequestMethod.POST)
     public void addWorkToDB(@RequestBody AddWorkCenterReqDTO reqDTO, HttpServletResponse response){
-        OperateResultMessageRespDTO respDTO = hzWorkService.insertHzWorkRecord(reqDTO);
-        writeAjaxJSONResponse(ResultMessageBuilder.build(OperateResultMessageRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
+        WriteResultRespDTO respDTO = hzWorkService.insertHzWorkRecord(reqDTO);
+        toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
     }
 
     /**
@@ -186,8 +186,8 @@ public class HzWorkController extends BaseController {
      */
     @RequestMapping(value = "update",method = RequestMethod.POST)
     public void updateWorkToDB(@RequestBody UpdateWorkCenterReqDTO reqDTO, HttpServletResponse response){
-        OperateResultMessageRespDTO respDTO = hzWorkService.updateHzWorkRecord(reqDTO);
-        writeAjaxJSONResponse(ResultMessageBuilder.build(OperateResultMessageRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
+        WriteResultRespDTO respDTO = hzWorkService.updateHzWorkRecord(reqDTO);
+        toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
     }
 
     /**
@@ -197,7 +197,7 @@ public class HzWorkController extends BaseController {
      */
     @RequestMapping(value = "delete",method = RequestMethod.POST)
     public void deleteWork(String puid,HttpServletResponse response){
-        OperateResultMessageRespDTO respDTO = hzWorkService.deleteHzWorkRecord(puid);
-        writeAjaxJSONResponse(ResultMessageBuilder.build(OperateResultMessageRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
+        WriteResultRespDTO respDTO = hzWorkService.deleteHzWorkRecord(puid);
+        toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
     }
 }

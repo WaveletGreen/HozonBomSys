@@ -1,7 +1,7 @@
 package sql;
 
 import com.connor.hozon.bom.resources.page.Page;
-import com.connor.hozon.bom.resources.page.PageRequest;
+import com.connor.hozon.bom.resources.page.PageRequestParam;
 import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -385,24 +385,24 @@ public class BaseSQLUtil implements IBaseSQLUtil {
      * 带有分页信息的查询
      *
      * @param sqlMapId    mybatis映射id
-     * @param pageRequest 分页请求参数信息 逻辑分页
+     * @param pageRequestParam 分页请求参数信息 逻辑分页
      * @return
      */
-    public Page findForPage(final String sqlMapId, final String totalMapId, PageRequest pageRequest) {
+    public Page findForPage(final String sqlMapId, final String totalMapId, PageRequestParam pageRequestParam) {
         Map filters = new HashMap();
-        filters.putAll(pageRequest.getFilters());
+        filters.putAll(pageRequestParam.getFilters());
         // 查询总数
         Number totalCount = (Number) findForObject(totalMapId, filters);
         if (totalCount == null || totalCount.intValue() <= 0) {
-            return new Page(pageRequest, 0);
+            return new Page(pageRequestParam, 0);
         }
-        if (totalCount != null && totalCount.intValue() <= (pageRequest.getPageNumber() - 1) * pageRequest.getPageSize()) {
-            return new Page(pageRequest.getPageNumber(), pageRequest.getPageSize(), totalCount.intValue(), new ArrayList(0));
+        if (totalCount != null && totalCount.intValue() <= (pageRequestParam.getPageNumber() - 1) * pageRequestParam.getPageSize()) {
+            return new Page(pageRequestParam.getPageNumber(), pageRequestParam.getPageSize(), totalCount.intValue(), new ArrayList(0));
         }
-        if(pageRequest.getPageSize() == 0){
-            pageRequest.setPageSize((int)totalCount);
+        if(pageRequestParam.getPageSize() == 0){
+            pageRequestParam.setPageSize((int)totalCount);
         }
-        Page page = new Page(pageRequest, totalCount.intValue());
+        Page page = new Page(pageRequestParam, totalCount.intValue());
         List list = findForList(sqlMapId, filters, page.getFirstResult(), page.getPageSize());
 
         page.setResult(list);
@@ -414,26 +414,26 @@ public class BaseSQLUtil implements IBaseSQLUtil {
      * 带有分页信息的查询  物理分页
      *
      * @param sqlMapId    mybatis映射id
-     * @param pageRequest 分页请求参数信息
+     * @param pageRequestParam 分页请求参数信息
      * @return
      */
-    public Page findPage(final String sqlMapId, final String totalMapId, PageRequest pageRequest) {
+    public Page findPage(final String sqlMapId, final String totalMapId, PageRequestParam pageRequestParam) {
         Map filters = new HashMap();
-        filters.putAll(pageRequest.getFilters());
+        filters.putAll(pageRequestParam.getFilters());
         // 查询总数
         Number totalCount = (Number) findForObject(totalMapId, filters);
         if (totalCount == null || totalCount.intValue() <= 0) {
-            return new Page(pageRequest, 0);
+            return new Page(pageRequestParam, 0);
         }
-        if (totalCount != null && totalCount.intValue() <= (pageRequest.getPageNumber() - 1) * pageRequest.getPageSize()) {
-            return new Page(pageRequest.getPageNumber(), pageRequest.getPageSize(), totalCount.intValue(), new ArrayList(0));
+        if (totalCount != null && totalCount.intValue() <= (pageRequestParam.getPageNumber() - 1) * pageRequestParam.getPageSize()) {
+            return new Page(pageRequestParam.getPageNumber(), pageRequestParam.getPageSize(), totalCount.intValue(), new ArrayList(0));
         }
-        if(pageRequest.getPageSize() == 0){
-            pageRequest.setPageSize((int)totalCount);
+        if(pageRequestParam.getPageSize() == 0){
+            pageRequestParam.setPageSize((int)totalCount);
         }
-        Page page = new Page(pageRequest, totalCount.intValue());
-        filters.put("offset", (pageRequest.getPageNumber() - 1) * pageRequest.getPageSize());
-        filters.put("limit", pageRequest.getPageNumber() * pageRequest.getPageSize());
+        Page page = new Page(pageRequestParam, totalCount.intValue());
+        filters.put("offset", (pageRequestParam.getPageNumber() - 1) * pageRequestParam.getPageSize());
+        filters.put("limit", pageRequestParam.getPageNumber() * pageRequestParam.getPageSize());
         List list = findForList(sqlMapId, filters);
         page.setResult(list);
         return page;

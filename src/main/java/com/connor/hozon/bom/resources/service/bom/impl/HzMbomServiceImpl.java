@@ -134,11 +134,11 @@ public class HzMbomServiceImpl implements HzMbomService{
     }
 
     @Override
-    public OperateResultMessageRespDTO insertMbomRecord(AddMbomReqDTO reqDTO) {
+    public WriteResultRespDTO insertMbomRecord(AddMbomReqDTO reqDTO) {
         try {
             boolean b = PrivilegeUtil.writePrivilege();
             if(!b){
-                return OperateResultMessageRespDTO.getFailPrivilege();
+                return WriteResultRespDTO.getFailPrivilege();
             }
             HzMbomLineRecord hzMbomRecord = new HzMbomLineRecord();
             hzMbomRecord.seteBomPuid(reqDTO.geteBomPuid());
@@ -164,24 +164,24 @@ public class HzMbomServiceImpl implements HzMbomService{
                 int i = hzMbomRecordDAO.update(hzMbomRecord);
                 if (i > 0) {
                     //什么时候发送到SAP？单独新增2Y不用ECN，修改原有的BOM结构应该有ECN，新增2Y层则不传输
-                    return OperateResultMessageRespDTO.getSuccessResult();
+                    return WriteResultRespDTO.getSuccessResult();
                 } else {
-                    return OperateResultMessageRespDTO.getFailResult();
+                    return WriteResultRespDTO.getFailResult();
                 }
             }
-            return OperateResultMessageRespDTO.getFailResult();
+            return WriteResultRespDTO.getFailResult();
         } catch (Exception e) {
-            return OperateResultMessageRespDTO.getFailResult();
+            return WriteResultRespDTO.getFailResult();
         }
     }
 
     @Override
-    public OperateResultMessageRespDTO updateMbomRecord(UpdateMbomReqDTO reqDTO) {
+    public WriteResultRespDTO updateMbomRecord(UpdateMbomReqDTO reqDTO) {
         try {
             User user = UserInfo.getUser();
             boolean b = PrivilegeUtil.writePrivilege();
             if(!b){
-                return OperateResultMessageRespDTO.getFailPrivilege();
+                return WriteResultRespDTO.getFailPrivilege();
             }
             HzMbomLineRecord record = new HzMbomLineRecord();
             record.setTableName(MbomTableNameEnum.tableName(reqDTO.getType()));
@@ -210,7 +210,7 @@ public class HzMbomServiceImpl implements HzMbomService{
                     hzFactory.setpCreateName(user.getUserName());
                     int i = hzFactoryDAO.insert(hzFactory);
                     if (i < 0) {
-                        return OperateResultMessageRespDTO.getFailResult();
+                        return WriteResultRespDTO.getFailResult();
                     }
                     record.setpFactoryId(puid);
                 } else {
@@ -229,25 +229,25 @@ public class HzMbomServiceImpl implements HzMbomService{
             if (i > 0) {
                 //更新后传输到SAP
                 //synBomService.updateByUids(record.getPuid(), record.getProjectPuid());
-                return OperateResultMessageRespDTO.getSuccessResult();
+                return WriteResultRespDTO.getSuccessResult();
             }
         } catch (Exception e) {
-            return OperateResultMessageRespDTO.getFailResult();
+            return WriteResultRespDTO.getFailResult();
         }
-        return OperateResultMessageRespDTO.getFailResult();
+        return WriteResultRespDTO.getFailResult();
     }
 
     @Override
-    public OperateResultMessageRespDTO deleteMbomRecord(DeleteHzMbomReqDTO reqDTO) {
-        OperateResultMessageRespDTO respDTO = new OperateResultMessageRespDTO();
+    public WriteResultRespDTO deleteMbomRecord(DeleteHzMbomReqDTO reqDTO) {
+        WriteResultRespDTO respDTO = new WriteResultRespDTO();
         try {
             boolean b = PrivilegeUtil.writePrivilege();
             if(!b){
-                return OperateResultMessageRespDTO.getFailPrivilege();
+                return WriteResultRespDTO.getFailPrivilege();
             }
             if (reqDTO.getPuids() == null || reqDTO.getPuids().equals("") || reqDTO.getProjectId() == null || reqDTO.getProjectId().equals("")) {
                 respDTO.setErrMsg("非法参数！");
-                respDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
+                respDTO.setErrCode(WriteResultRespDTO.FAILED_CODE);
                 return respDTO;
             }
             String bomPuids[] = reqDTO.getPuids().trim().split(",");
@@ -294,9 +294,9 @@ public class HzMbomServiceImpl implements HzMbomService{
                 }
 
             }
-            return OperateResultMessageRespDTO.getSuccessResult();
+            return WriteResultRespDTO.getSuccessResult();
         } catch (Exception e) {
-            return OperateResultMessageRespDTO.getFailResult();
+            return WriteResultRespDTO.getFailResult();
         }
     }
 
@@ -329,11 +329,11 @@ public class HzMbomServiceImpl implements HzMbomService{
     }
 
     @Override
-    public OperateResultMessageRespDTO recoverDeleteMbomRecord(String projectId, String puid) {
-        OperateResultMessageRespDTO respDTO = new OperateResultMessageRespDTO();
+    public WriteResultRespDTO recoverDeleteMbomRecord(String projectId, String puid) {
+        WriteResultRespDTO respDTO = new WriteResultRespDTO();
         try {
             if (projectId == null || projectId == "" || puid == null || puid == "") {
-                respDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
+                respDTO.setErrCode(WriteResultRespDTO.FAILED_CODE);
                 respDTO.setErrMsg("非法参数");
                 return respDTO;
             }
@@ -343,7 +343,7 @@ public class HzMbomServiceImpl implements HzMbomService{
             List<HzMbomLineRecord> records = hzMbomRecordDAO.findHzMbomByPuid(map);
             if (ListUtil.isNotEmpty(records)) {
                 respDTO.setErrMsg("当前要恢复对象已存在bom系统中！");
-                respDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
+                respDTO.setErrCode(WriteResultRespDTO.FAILED_CODE);
                 return respDTO;
             }
             map.put("status", 0);//已删除的bom
@@ -351,7 +351,7 @@ public class HzMbomServiceImpl implements HzMbomService{
             if (ListUtil.isNotEmpty(records)) {
                 if (records.get(0).getLineIndex().split("\\.").length == 2) {
                     respDTO.setErrMsg("2或者2Y层结构无法恢复！");
-                    respDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
+                    respDTO.setErrCode(WriteResultRespDTO.FAILED_CODE);
                     return respDTO;
                 }
                 Map<String, Object> map1 = new HashMap<>();
@@ -360,7 +360,7 @@ public class HzMbomServiceImpl implements HzMbomService{
                 List<HzMbomLineRecord> mbomLineRecords = hzMbomRecordDAO.findHzMbomByPuid(map1);
                 if (ListUtil.isEmpty(mbomLineRecords)) {
                     respDTO.setErrMsg("当前要恢复对象的父结构不存在，无法恢复！");
-                    respDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
+                    respDTO.setErrCode(WriteResultRespDTO.FAILED_CODE);
                     return respDTO;
                 } else {
                     if (mbomLineRecords.get(0).getIsHas().equals(0)) {
@@ -371,18 +371,18 @@ public class HzMbomServiceImpl implements HzMbomService{
                         }
                         int i = hzMbomRecordDAO.update(mbomLineRecords.get(0));
                         if (i <= 0) {
-                            return OperateResultMessageRespDTO.getFailResult();
+                            return WriteResultRespDTO.getFailResult();
                         }
                     }
                     int i = hzMbomRecordDAO.recoverBomById(records.get(0).geteBomPuid());
                     if (i > 0) {
-                        return OperateResultMessageRespDTO.getSuccessResult();
+                        return WriteResultRespDTO.getSuccessResult();
                     }
                 }
             }
-            return OperateResultMessageRespDTO.getFailResult();
+            return WriteResultRespDTO.getFailResult();
         } catch (Exception e) {
-            return OperateResultMessageRespDTO.getFailResult();
+            return WriteResultRespDTO.getFailResult();
         }
     }
 
@@ -399,14 +399,14 @@ public class HzMbomServiceImpl implements HzMbomService{
     }
 
     @Override
-    public OperateResultMessageRespDTO setCurrentBomToLou(SetLouReqDTO reqDTO) {
+    public WriteResultRespDTO setCurrentBomToLou(SetLouReqDTO reqDTO) {
         try {
             if(reqDTO.getLineIds()==null || reqDTO.getProjectId() == null){
-                return OperateResultMessageRespDTO.IllgalArgument();
+                return WriteResultRespDTO.IllgalArgument();
             }
             boolean b = PrivilegeUtil.writePrivilege();
             if(!b){
-                return OperateResultMessageRespDTO.getFailPrivilege();
+                return WriteResultRespDTO.getFailPrivilege();
             }
             String[] lineIds = reqDTO.getLineIds().split(",");
             for(String lineId:lineIds){
@@ -422,9 +422,9 @@ public class HzMbomServiceImpl implements HzMbomService{
                 }
 
             }
-            return OperateResultMessageRespDTO.getSuccessResult();
+            return WriteResultRespDTO.getSuccessResult();
         }catch (Exception e){
-            return OperateResultMessageRespDTO.getFailResult();
+            return WriteResultRespDTO.getFailResult();
         }
     }
 
@@ -486,12 +486,12 @@ public class HzMbomServiceImpl implements HzMbomService{
      */
 
     @Override
-    public OperateResultMessageRespDTO refreshHzMbom(String projectId) {
+    public WriteResultRespDTO refreshHzMbom(String projectId) {
         if(!PrivilegeUtil.writePrivilege()){
-            return OperateResultMessageRespDTO.getFailPrivilege();
+            return WriteResultRespDTO.getFailPrivilege();
         }
         if(null == projectId || ""==projectId){
-            return OperateResultMessageRespDTO.IllgalArgument();
+            return WriteResultRespDTO.IllgalArgument();
         }
         try {
             Double sortNumber = 0.0;
@@ -554,9 +554,9 @@ public class HzMbomServiceImpl implements HzMbomService{
                         b=analysisMbom(record,0,projectId,bodyOfWhiteSet,null,superMboms,fac);
                     }
                     if(!b){
-                        OperateResultMessageRespDTO respDTO  = new OperateResultMessageRespDTO();
+                        WriteResultRespDTO respDTO  = new WriteResultRespDTO();
                         respDTO.setErrMsg("BOM结构不正确，油漆车身下面必须挂有白车身总成！");
-                        respDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
+                        respDTO.setErrCode(WriteResultRespDTO.FAILED_CODE);
                         return respDTO;
                     }
                     if(ListUtil.isNotEmpty(bodyOfWhiteSet)){//白车身总成
@@ -866,7 +866,7 @@ public class HzMbomServiceImpl implements HzMbomService{
                     // 等待中 等子线程全部ok 继续
                     countDownLatch.await();
                 }catch (Exception e){
-                    return OperateResultMessageRespDTO.getFailResult();
+                    return WriteResultRespDTO.getFailResult();
                 }
             }else {
 
@@ -876,10 +876,10 @@ public class HzMbomServiceImpl implements HzMbomService{
                 hzMbomRecordDAO.deleteMbomByProjectId(projectId,MbomTableNameEnum.tableName(6));
                 hzMaterielDAO.deleteMaterielByProjectId(projectId);
             }
-            return OperateResultMessageRespDTO.getSuccessResult();
+            return WriteResultRespDTO.getSuccessResult();
         }catch (Exception e){
             e.printStackTrace();
-            return OperateResultMessageRespDTO.getFailResult();
+            return WriteResultRespDTO.getFailResult();
         }
 
     }

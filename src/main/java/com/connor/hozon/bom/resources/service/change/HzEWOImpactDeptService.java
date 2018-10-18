@@ -5,7 +5,7 @@ import com.connor.hozon.bom.resources.domain.dto.request.EditEWOImpactDeptReqDTO
 import com.connor.hozon.bom.resources.domain.dto.request.EditImpactDeptEmpReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzEWOImpactDeptEmpRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzEWOImpactDeptRespDTO;
-import com.connor.hozon.bom.resources.domain.dto.response.OperateResultMessageRespDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
 import com.connor.hozon.bom.resources.domain.query.HzEWOImpactDeptQuery;
 
 import java.util.List;
@@ -21,9 +21,9 @@ public interface HzEWOImpactDeptService {
      * @param reqDTO
      * @return
      */
-    OperateResultMessageRespDTO saveImpactDept(EditEWOImpactDeptReqDTO reqDTO);
+    WriteResultRespDTO saveImpactDept(EditEWOImpactDeptReqDTO reqDTO);
 
-    OperateResultMessageRespDTO saveImpactDeptEmp(EditImpactDeptEmpReqDTO reqDTO);
+    WriteResultRespDTO saveImpactDeptEmp(EditImpactDeptEmpReqDTO reqDTO);
 
     List<HzEWOImpactDeptRespDTO> getAllImpactDept(HzEWOImpactDeptQuery query);
 

@@ -3,7 +3,7 @@ package com.connor.hozon.bom.resources.service.resourcesLibrary.dictionaryLibrar
 import com.connor.hozon.bom.resources.domain.dto.request.AddHzDictionaryLibraryReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.request.UpdateHzDictionaryLibraryReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzDictionaryLibraryRespDTO;
-import com.connor.hozon.bom.resources.domain.dto.response.OperateResultMessageRespDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
 import com.connor.hozon.bom.resources.domain.model.HzDictionaryLibraryFactory;
 import com.connor.hozon.bom.resources.domain.query.HzDictionaryLibraryQuery;
 import com.connor.hozon.bom.resources.mybatis.resourcesLibrary.dictionaryLibrary.HzDictionaryLibraryDao;
@@ -33,26 +33,26 @@ public class HzDictionaryLibraryServiceImpl implements HzDictionaryLibraryServic
      * @return
      */
     @Override
-    public OperateResultMessageRespDTO insertHzDictionaryLibrary(AddHzDictionaryLibraryReqDTO reqDTO) {
+    public WriteResultRespDTO insertHzDictionaryLibrary(AddHzDictionaryLibraryReqDTO reqDTO) {
         try {
             boolean b  = PrivilegeUtil.writePrivilege();
             if(!b){
-                return OperateResultMessageRespDTO.getFailPrivilege();
+                return WriteResultRespDTO.getFailPrivilege();
             }
             int j = hzDictionaryLibraryDao.findDictionaryLibraryOrCodeToCount(reqDTO.getEigenValue());
-            OperateResultMessageRespDTO resultMessageRespDTO = new OperateResultMessageRespDTO();
+            WriteResultRespDTO resultMessageRespDTO = new WriteResultRespDTO();
             if (j>0){
                 resultMessageRespDTO.setErrMsg("对不起！您插入的特性值已存在");
-                resultMessageRespDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
+                resultMessageRespDTO.setErrCode(WriteResultRespDTO.FAILED_CODE);
                 return resultMessageRespDTO;
             }
             HzDictionaryLibrary library = HzDictionaryLibraryFactory.addDictionaryDTOHzDictionaryLibrary(reqDTO);
             int i = hzDictionaryLibraryDao.insert(library);
             if (i>0){
-                return OperateResultMessageRespDTO.getSuccessResult();
+                return WriteResultRespDTO.getSuccessResult();
             }
         } catch (Exception e) {
-            return OperateResultMessageRespDTO.getFailResult();
+            return WriteResultRespDTO.getFailResult();
         }
         return null;
     }
@@ -63,18 +63,18 @@ public class HzDictionaryLibraryServiceImpl implements HzDictionaryLibraryServic
      * @return
      */
     @Override
-    public OperateResultMessageRespDTO updateHzDictionaryLibrary(UpdateHzDictionaryLibraryReqDTO reqDTO) {
+    public WriteResultRespDTO updateHzDictionaryLibrary(UpdateHzDictionaryLibraryReqDTO reqDTO) {
         try {
             boolean b  = PrivilegeUtil.writePrivilege();
             if(!b){
-                return OperateResultMessageRespDTO.getFailPrivilege();
+                return WriteResultRespDTO.getFailPrivilege();
             }
             int j =hzDictionaryLibraryDao.findDictionaryLibraryOrCodeToCount(reqDTO.getEigenValue());
             HzDictionaryLibrary hzDictionaryLibrary = hzDictionaryLibraryDao.findDictionaryLibraryOrCode(reqDTO.getEigenValue());
-            OperateResultMessageRespDTO resultMessageRespDTO = new OperateResultMessageRespDTO();
+            WriteResultRespDTO resultMessageRespDTO = new WriteResultRespDTO();
             if (j >1){
                 resultMessageRespDTO.setErrMsg("对不起！您修改的特性值已存在");
-                resultMessageRespDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
+                resultMessageRespDTO.setErrCode(WriteResultRespDTO.FAILED_CODE);
                 return  resultMessageRespDTO;
             }
             if (j==1&&hzDictionaryLibrary.getPuid().equals(reqDTO.getPuid())==false){
@@ -84,12 +84,12 @@ public class HzDictionaryLibraryServiceImpl implements HzDictionaryLibraryServic
             HzDictionaryLibrary library = HzDictionaryLibraryFactory.updateDictionaryDTOHzDictionaryLibrary(reqDTO);
             int i = hzDictionaryLibraryDao.update(library);
             if (i>0){
-                return OperateResultMessageRespDTO.getSuccessResult();
+                return WriteResultRespDTO.getSuccessResult();
             }
         } catch (Exception e) {
-            return OperateResultMessageRespDTO.getFailResult();
+            return WriteResultRespDTO.getFailResult();
         }
-        return OperateResultMessageRespDTO.getFailResult();
+        return WriteResultRespDTO.getFailResult();
     }
 
     /**
@@ -142,20 +142,20 @@ public class HzDictionaryLibraryServiceImpl implements HzDictionaryLibraryServic
      * @return
      */
     @Override
-    public OperateResultMessageRespDTO deleteHzDictionaryLibrary(String puid) {
+    public WriteResultRespDTO deleteHzDictionaryLibrary(String puid) {
         try {
             boolean b  = PrivilegeUtil.writePrivilege();
             if(!b){
-                return OperateResultMessageRespDTO.getFailPrivilege();
+                return WriteResultRespDTO.getFailPrivilege();
             }
             int i = hzDictionaryLibraryDao.delete(puid);
             if (i>0){
-                return OperateResultMessageRespDTO.getSuccessResult();
+                return WriteResultRespDTO.getSuccessResult();
             }
         } catch (Exception e) {
-            return OperateResultMessageRespDTO.getFailResult();
+            return WriteResultRespDTO.getFailResult();
         }
-        return OperateResultMessageRespDTO.getFailResult();
+        return WriteResultRespDTO.getFailResult();
     }
 
 }
