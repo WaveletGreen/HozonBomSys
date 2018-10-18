@@ -252,16 +252,7 @@ $(document).ready(
                 console.log("----data3----");
                 console.log(JSON.stringify(data3));
                 console.log("----data2----");
-                // let isx = $("#pmtLeaderOpinion select").select()
-                // window.Ewin.confirm({
-                //     title: '提示',
-                //     message: '评估意见:<span style="color: red">' + (isx == '1' ? "同意" : "不同意"+"</span>"),
-                //     width: 500
-                // }).on(function (e) {
-                //     if(e){
-                //
-                //     }
-                // }
+
                 $.ajax({
                     contentType:
                         "application/json",
@@ -617,26 +608,35 @@ function getFormData(formId) {
 
 
 function approve(url, formId) {
-    let data = {};
-    let d = $("#" + formId).serializeArray();
-    for (let p in d) {
-        data[d[p].name] = d[p].value;
-    }
-    data.opiVwoId = $("#vwo").val();
-    $.ajax({
-        type: "POST",
-        url: url,
-        data: data,
-        success: function (result) {
-            if (result.status) {
-                layer.msg(result.msg, {icon: 1, time: 2000})
-                window.location.reload();
-            } else {
-                window.Ewin.alert({message: "BOM经理评估失败:" + result.msg});
+    let isx = $("#pmtLeaderOpinion select").find("option:selected").text();
+    window.Ewin.confirm({
+        title: '提示',
+        message: '评估意见:<span style="color: red">' + isx + '</span>',
+        width: 500
+    }).on(function (e) {
+        if (e) {
+            let data = {};
+            let d = $("#" + formId).serializeArray();
+            for (let p in d) {
+                data[d[p].name] = d[p].value;
             }
-        },
-        error: function (result) {
+            data.opiVwoId = $("#vwo").val();
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: data,
+                success: function (result) {
+                    if (result.status) {
+                        layer.msg(result.msg, {icon: 1, time: 2000})
+                        window.location.reload();
+                    } else {
+                        window.Ewin.alert({message: "BOM经理评估失败:" + result.msg});
+                    }
+                },
+                error: function (result) {
 
+                }
+            });
         }
     });
 }
