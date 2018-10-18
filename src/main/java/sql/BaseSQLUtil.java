@@ -9,7 +9,7 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import sql.redis.DatabaseException;
+import sql.redis.HzDBException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -276,7 +276,7 @@ public class BaseSQLUtil implements IBaseSQLUtil {
             }
             // session.commit();
         } catch (Exception e) {
-            throw new DatabaseException("SQL执行出错" + sqlMapId, e);
+            throw new HzDBException("SQL执行出错" + sqlMapId, e);
         } finally {
 //            if (session != null)
 //                session.close();
@@ -302,7 +302,7 @@ public class BaseSQLUtil implements IBaseSQLUtil {
             return result;
         } catch (Exception e) {
             logger.error("SQL执行出错: " + sqlMapId, e);
-            throw new DatabaseException("SQL执行出错" + sqlMapId, e);
+            throw new HzDBException("SQL执行出错" + sqlMapId, e);
         } finally {
 //            if (session != null)
 //                session.close();
@@ -330,7 +330,7 @@ public class BaseSQLUtil implements IBaseSQLUtil {
             }
         } catch (Exception e) {
             logger.error("SQL执行出错: " + sqlMapId, e);
-            throw new DatabaseException("SQL执行出错" + sqlMapId, e);
+            throw new HzDBException("SQL执行出错" + sqlMapId, e);
         }
         finally {
 //            if (session != null)
@@ -356,7 +356,7 @@ public class BaseSQLUtil implements IBaseSQLUtil {
             return result;
         } catch (Exception e) {
             logger.error("SQL执行出错: " + sqlMapId, e);
-            throw new DatabaseException("SQL执行出错" + sqlMapId, e);
+            throw new HzDBException("SQL执行出错" + sqlMapId, e);
         } finally {
 //            if (session != null)
 //                session.close();
@@ -374,7 +374,7 @@ public class BaseSQLUtil implements IBaseSQLUtil {
             return result;
         } catch (Exception e) {
             logger.error("SQL执行出错: " + sqlMapId, e);
-            throw new DatabaseException("SQL执行出错" + sqlMapId, e);
+            throw new HzDBException("SQL执行出错" + sqlMapId, e);
         } finally {
 //            if (session != null)
 //                session.close();
@@ -457,7 +457,7 @@ public class BaseSQLUtil implements IBaseSQLUtil {
             return sqlSessionTemplate.selectList(sqlMapId, param, new RowBounds(offset, limit));
         } catch (Exception e) {
 //            logger.error("SQL执行出错: " + sqlMapId, e);
-            throw new DatabaseException("SQL执行出错: " + sqlMapId, e);
+            throw new HzDBException("SQL执行出错: " + sqlMapId, e);
         }
 
     }

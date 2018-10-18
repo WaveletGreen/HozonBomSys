@@ -261,10 +261,6 @@ public class HzMbomController extends BaseController {
         return"bomManage/mbom/mbomMaintenance/updateFinancial";
     }
 
-    @RequestMapping(value = "111",method = RequestMethod.GET)
-    public void test(HzPbomByPageQuery query, HttpServletResponse response){
-        hzPbomRecordDAO.getPbomTreeByPage(query);
-    }
 }
 
 
