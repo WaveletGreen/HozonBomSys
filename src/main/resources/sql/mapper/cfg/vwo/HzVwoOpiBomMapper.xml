@@ -43,15 +43,15 @@
                    keyColumn="id" keyProperty="id" resultType="java.lang.Long">
             select SEQ_VWO_OPI_BOM_ID.Nextval from dual
         </selectKey>
-    insert into HZ_VWO_OPI_BOM (ID, OPI_VWO_ID, OPI_BOM_MNG_OPINION, 
-      OPI_BOM_MNG_AGREEMENT, OPI_BOM_MNG_OPTION_DATE, 
-      OPI_BOM_MNG_COMMENT, OPI_BOM_MNG_CREATE_DATE, 
-      OPI_BOM_MNG_UPDATE_DATE, OPI_BOM_MNG_CREATOR, 
+    insert into HZ_VWO_OPI_BOM (ID, OPI_VWO_ID, OPI_BOM_MNG_OPINION,
+      OPI_BOM_MNG_AGREEMENT, OPI_BOM_MNG_OPTION_DATE,
+      OPI_BOM_MNG_COMMENT, OPI_BOM_MNG_CREATE_DATE,
+      OPI_BOM_MNG_UPDATE_DATE, OPI_BOM_MNG_CREATOR,
       OPI_BOM_MNG_UPDATER, OPI_BOM_MNG_STAGE)
-    values (#{id,jdbcType=DECIMAL}, #{opiVwoId,jdbcType=DECIMAL}, #{opiBomMngOpinion,jdbcType=VARCHAR}, 
-      #{opiBomMngAgreement,jdbcType=DECIMAL}, #{opiBomMngOptionDate,jdbcType=TIMESTAMP}, 
-      #{opiBomMngComment,jdbcType=VARCHAR}, #{opiBomMngCreateDate,jdbcType=TIMESTAMP}, 
-      #{opiBomMngUpdateDate,jdbcType=TIMESTAMP}, #{opiBomMngCreator,jdbcType=VARCHAR}, 
+    values (#{id,jdbcType=DECIMAL}, #{opiVwoId,jdbcType=DECIMAL}, #{opiBomMngOpinion,jdbcType=VARCHAR},
+      #{opiBomMngAgreement,jdbcType=DECIMAL}, #{opiBomMngOptionDate,jdbcType=TIMESTAMP},
+      #{opiBomMngComment,jdbcType=VARCHAR}, #{opiBomMngCreateDate,jdbcType=TIMESTAMP},
+      #{opiBomMngUpdateDate,jdbcType=TIMESTAMP}, #{opiBomMngCreator,jdbcType=VARCHAR},
       #{opiBomMngUpdater,jdbcType=VARCHAR}, #{opiBomMngStage,jdbcType=DECIMAL})
   </insert>
     <insert id="insertSelective" parameterType="sql.pojo.cfg.vwo.HzVwoOpiBom">

@@ -1,4 +1,5 @@
 var vwoId = -1;
+
 $(document).ready((function () {
     // initTable(),
     formatDate();
@@ -233,7 +234,7 @@ $(document).ready(
                 }
                 ///回传VWO ID到后台
                 data3.opiVwoId = $("#vwo").val();
-                
+
                 param.bom = data;
                 param.pmt = data;
                 param.proj = data;
@@ -321,6 +322,56 @@ function doSelectPerson(id) {
     })
 }
 
+var vwoExeToolBar=[
+    {
+        text: '添加',
+        iconCls: 'glyphicon glyphicon-plus',
+        handler: function () {
+            window.Ewin.dialog({
+                title: "添加",
+                url: "getVwoExecuteDialog?vwoId=" + vwoId,
+                gridId: "gridId",
+                width: 600,
+                height: 500
+            })
+        }
+    },
+    {
+        text: '删除',
+        iconCls: 'glyphicon glyphicon-remove',
+        handler: function () {
+            var rows = tablex.bootstrapTable('getSelections');
+            if (rows.length == 0) {
+                window.Ewin.alert({message: '请选择一条需要删除的数据!'});
+                return false;
+            }
+            window.Ewin.confirm({title: '提示', message: '是否要删除您所选择的记录？', width: 500}).on(function (e) {
+                if (e) {
+                    $.ajax({
+                        type: "POST",
+                        //ajax需要添加打包名
+                        url: "deleteExecuteInfo",
+                        data: JSON.stringify(rows),
+                        contentType: "application/json",
+                        success: function (result) {
+                            if (result.status) {
+                                layer.msg(result.msg, {icon: 1, time: 2000})
+                            }
+                            else {
+                                window.Ewin.alert({message: "操作删除失败:" + result.msg});
+                            }
+                            tablex.bootstrapTable("refresh");
+                        },
+                        error: function (info) {
+                            window.Ewin.alert({message: "操作删除:" + info.status});
+                        }
+                    })
+                }
+            });
+        }
+    }
+]
+
 /**
  * 重新绘制发布与实施table
  */
@@ -340,55 +391,7 @@ function loadVwoExecuteInfo() {
         sortName: 'exeId',
         sortOrder: 'asc',
         formId: "queryConnectedData",
-        toolbars: [
-            {
-                text: '添加',
-                iconCls: 'glyphicon glyphicon-plus',
-                handler: function () {
-                    window.Ewin.dialog({
-                        title: "添加",
-                        url: "getVwoExecuteDialog?vwoId=" + vwoId,
-                        gridId: "gridId",
-                        width: 600,
-                        height: 500
-                    })
-                }
-            },
-            {
-                text: '删除',
-                iconCls: 'glyphicon glyphicon-remove',
-                handler: function () {
-                    var rows = tablex.bootstrapTable('getSelections');
-                    if (rows.length == 0) {
-                        window.Ewin.alert({message: '请选择一条需要删除的数据!'});
-                        return false;
-                    }
-                    window.Ewin.confirm({title: '提示', message: '是否要删除您所选择的记录？', width: 500}).on(function (e) {
-                        if (e) {
-                            $.ajax({
-                                type: "POST",
-                                //ajax需要添加打包名
-                                url: "deleteExecuteInfo",
-                                data: JSON.stringify(rows),
-                                contentType: "application/json",
-                                success: function (result) {
-                                    if (result.status) {
-                                        layer.msg(result.msg, {icon: 1, time: 2000})
-                                    }
-                                    else {
-                                        window.Ewin.alert({message: "操作删除失败:" + result.msg});
-                                    }
-                                    tablex.bootstrapTable("refresh");
-                                },
-                                error: function (info) {
-                                    window.Ewin.alert({message: "操作删除:" + info.status});
-                                }
-                            })
-                        }
-                    });
-                }
-            }
-        ],
+        toolbars: vwoExeToolBar,
         /**列信息，需要预先定义好*/
         columns: [
             {

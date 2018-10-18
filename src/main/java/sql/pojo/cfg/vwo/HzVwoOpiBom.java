@@ -51,7 +51,4 @@ public class HzVwoOpiBom {
      */
     private Integer opiBomMngStage;
 
-    public Date getOpiBomMngOptionDate() {
-        return opiBomMngOptionDate;
-    }
 }

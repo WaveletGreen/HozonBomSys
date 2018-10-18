@@ -142,7 +142,6 @@ public class HzVwoInfo {
      */
     private String vwoChangeReason;
 
-
     public static String reflectToDBField(String code) {
         switch (code) {
             /**
@@ -195,6 +194,7 @@ public class HzVwoInfo {
                 return null;
         }
     }
+
 
     /**
      * 将状态码转为前端可看的显示值
