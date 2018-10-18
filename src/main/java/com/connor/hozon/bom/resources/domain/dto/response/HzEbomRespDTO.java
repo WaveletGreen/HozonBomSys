@@ -17,8 +17,6 @@ public class HzEbomRespDTO {
     public void setJsonArray(JSONArray jsonArray) {
         this.jsonArray = jsonArray;
     }
-    /**不要吐槽为什么要这么写 实在没办法 一会这样的 一会那样的 代码都让改乱了*/
-    /**把参数提出来 单独写实体类*/
 
     private String lineId;
     private String puid;
