@@ -670,8 +670,11 @@ public class HzVwoManagerService implements IHzVWOManagerService {
             User user = UserInfo.getUser();
             hzVwoOpiBom = new HzVwoOpiBom();
             hzVwoOpiBom.setOpiVwoId(id);
-            hzVwoOpiBom.setOpiBomMngCreateDate(new Date());
+            Date date = new Date();
+            hzVwoOpiBom.setOpiBomMngCreateDate(date);
             hzVwoOpiBom.setOpiBomMngCreator(user.getLogin());
+            hzVwoOpiBom.setOpiBomMngUpdateDate(date);
+            hzVwoOpiBom.setOpiBomMngUpdater(user.getLogin());
             if (hzVwoOpiBomDao.insertSelective(hzVwoOpiBom) <= 0) {
                 logger.error("初始化VWO:" + id + "的BOM经理意见数据失败");
             }
@@ -691,8 +694,11 @@ public class HzVwoManagerService implements IHzVWOManagerService {
             User user = UserInfo.getUser();
             hzVwoOpiPmt = new HzVwoOpiPmt();
             hzVwoOpiPmt.setOpiVwoId(id);
-            hzVwoOpiPmt.setOpiPmtMngCreateDate(new Date());
+            Date date = new Date();
+            hzVwoOpiPmt.setOpiPmtMngCreateDate(date);
             hzVwoOpiPmt.setOpiPmtMngCreator(user.getLogin());
+            hzVwoOpiPmt.setOpiPmtMngUpdateDate(date);
+            hzVwoOpiPmt.setOpiPmtMngUpdater(user.getLogin());
             if (hzVwoOpiPmtDao.insertSelective(hzVwoOpiPmt) <= 0) {
                 logger.error("初始化VWO:" + id + "的专业PMT经理意见数据失败");
             }
@@ -711,8 +717,11 @@ public class HzVwoManagerService implements IHzVWOManagerService {
             User user = UserInfo.getUser();
             hzVwoOpiProj = new HzVwoOpiProj();
             hzVwoOpiProj.setOpiVwoId(id);
-            hzVwoOpiProj.setOpiProjMngCreateDate(new Date());
+            Date date = new Date();
+            hzVwoOpiProj.setOpiProjMngCreateDate(date);
             hzVwoOpiProj.setOpiProjMngCreator(user.getLogin());
+            hzVwoOpiProj.setOpiProjMngUpdateDate(date);
+            hzVwoOpiProj.setOpiProjMngUpdater(user.getLogin());
             if (hzVwoOpiProjDao.insertSelective(hzVwoOpiProj) <= 0) {
                 logger.error("初始化VWO:" + id + "的项目经理意见数据失败");
             }
