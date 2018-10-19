@@ -458,7 +458,7 @@
                         mapOfLocalData[keys[i]]=$("#"+keys[i]).val();
                     }
                     localData.updateDosage=mapOfLocalData;
-
+                   var projectId= $("#project", window.top.document).val(),
                     /*var myData = JSON.stringify({
                         "puid": $("#puid").val(),
                         "lineId": $("#lineId").val(),
@@ -519,7 +519,7 @@
                             "application/json",
                         type:
                             'POST',
-                        url: url,
+                        url: url+"?prjectId="+projectId,
                         data:  JSON.stringify(localData),
                         success:
                             function (result) {
