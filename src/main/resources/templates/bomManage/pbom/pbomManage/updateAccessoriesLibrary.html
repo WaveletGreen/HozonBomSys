@@ -1,0 +1,153 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<!--User: xulf Date: 2018/9/28 Time: 15:16-->
+<body>
+<form id="pbomManageForm" role="form" method="post" action="pbom/add/accessories">
+    <input type="hidden" id="eBomPuid" th:value="${data}">
+    <input type="hidden" id="puid">
+    <div class="form-group">
+        <label for="pMaterielCode">物料号</label>
+        <input class="form-control" id="pMaterielCode" name="pMaterielCode" type="text"
+
+               placeholder="请输入物料号"/><!--th:value="${entity.level}"-->
+    </div>
+    <div class="form-group">
+        <label for="pMaterielName">物料名称</label>
+        <input class="form-control" id="pMaterielName" name="pMaterielName" type="text"
+               disabled="disabled"
+               placeholder="请输入物料名称"/><!--th:value="${entity.level}"-->
+    </div>
+    <div class="form-group">
+        <label for="pTechnicalConditions">技术条件/牌号规格</label>
+        <input class="form-control" id="pTechnicalConditions" name="pTechnicalConditions" type="text"
+               disabled="disabled"
+               placeholder="请输入技术条件/牌号规格"/><!--th:value="${entity.level}"-->
+    </div>
+    <!--<div class="form-group">-->
+    <!--<label for="pUnit">单位</label>-->
+    <!--<select class="form-control" name="pUnit" id="pUnit" placeholder="请选择单位">-->
+    <!--<option></option>-->
+    <!--<option>EA</option> &lt;!&ndash;th:selected="${data.getResource()=='MAKE'?true:false}"&ndash;&gt;-->
+    <!--<option>Kg</option>-->
+    <!--<option>L</option>-->
+    <!--<option>mm</option>-->
+    <!--</select>-->
+    <!--</div>-->
+    <div class="form-group">
+        <label for="pMeasuringUnit">计量单位</label>
+        <input class="form-control" id="pMeasuringUnit" name="pMeasuringUnit" type="text"
+               disabled="disabled"
+               placeholder="请输入计量单位"/><!--th:value="${entity.level}"-->
+    </div>
+    <div class="form-group">
+        <label for="pMaterielPurpose">材料用途</label>
+        <input class="form-control" id="pMaterielPurpose" name="pMaterielPurpose" type="text"
+               disabled="disabled"
+               placeholder="请输入材料用途"/><!--th:value="${entity.level}"-->
+    </div>
+    <div class="form-group">
+        <label for="pDosageBicycle">单车用量</label>
+        <input class="form-control" id="pDosageBicycle" name="pDosageBicycle" type="text"
+               disabled="disabled"
+               placeholder="请输入单车用量"/><!--th:value="${entity.level}"-->
+    </div>
+    <div class="form-group">
+        <label for="pNote">备注</label>
+        <input class="form-control" id="pNote" name="pNote" type="text"
+               disabled="disabled"
+               placeholder="请输入备注"/><!--th:value="${entity.level}"-->
+    </div>
+</form>
+<script th:inline="javascript">
+    <![CDATA[
+    $(function () {
+        $("#pMaterielCode").blur(function () {
+            var pMaterielCode = $("#pMaterielCode").val();
+//ajax
+            $.ajax({
+                url: "pbom/query/accessories?materielCode="+pMaterielCode,
+                success: function (result) {
+                   $("#puid").val(result.puid);
+                   $("#pMaterielCode").val(result.pMaterielCode);
+                   $("#pMaterielName").val(result.pMaterielName);
+                    $("#pTechnicalConditions").val(result.pTechnicalConditions);
+                    $("#pMeasuringUnit").val(result.pMeasuringUnit);
+                    $("#pMaterielPurpose").val(result.pMaterielPurpose);
+                    $("#pDosageBicycle").val(result.pDosageBicycle);
+                    $("#pNote").val(result.pNote);
+                }
+            });
+        });
+        $('#pbomManageForm').bootstrapValidator({
+            message: 'This value is not valid',
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            fields: {
+                level: {
+                    message: '层级验证失败',
+                    validators: {
+                        notEmpty: {
+                            message: '层级不能为空'
+                        }
+                    }
+                },
+            }
+        });
+        // 绑定dialog的确定按钮的监听事件
+        $("#btnOk", window.top.document).click(function () {
+            var bootstrapValidator = $("#pbomManageForm", window.top.document).data('bootstrapValidator');
+            bootstrapValidator.validate();
+            if (bootstrapValidator.isValid()) {
+                var url = $("#pbomManageForm", window.top.document).attr('action');
+                var projectId = $("#project", window.top.document).val();
+                var myData = JSON.stringify({
+                    "puid": $("#eBomPuid").val(),
+                    "materielCode": $("#pMaterielCode").val(),
+                    "projectId":projectId,
+                });
+                    var puid= $("#eBomPuid").val();
+                    var materielCode= $("#pMaterielCode").val();
+
+                $.ajax({
+                    contentType:
+                        "application/json",
+                    type:
+                        'POST',
+                    url: url+"?projectId="+projectId+"&materielCode="+materielCode+"&puid="+puid,
+                    data: myData,
+                    success:
+                        function (result) {
+                            $('.modal-dialog', window.top.document).parent('div').remove()
+                            $('body', window.top.document).find('.modal-backdrop').remove();
+                            // jquery 调用刷新当前操作的table页面的refresh方法
+                            $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
+
+                            if (result.success) {
+                                layer.msg('修改成功', {icon: 1, time: 2000})
+                            }
+                            else if (!result.success) {
+                                window.Ewin.alert({message: result.errMsg})
+                            }
+                        },
+                    error: function (status) {
+                        window.Ewin.alert({message: status.status + ':修改数据失败!'});
+                    }
+                });
+            }
+        });
+    })
+    $(document).keydown(function (event) {
+        if (event.keyCode == 13) {
+            $('form').each(function () {
+                event.preventDefault();
+            });
+        }
+    });
+    ]]>
+</script>
+<script th:src="@{/layer/layer.js}"></script>
+</body>
+</html>

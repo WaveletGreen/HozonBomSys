@@ -124,6 +124,19 @@ public class HzMbomRecordRespDTO {
      */
     private Integer status;
 
+    /**
+     * 对应的颜色件id
+     */
+    private String colorId;
+
+    public String getColorId() {
+        return colorId;
+    }
+
+    public void setColorId(String colorId) {
+        this.colorId = colorId;
+    }
+
     public String getRank() {
         return rank;
     }

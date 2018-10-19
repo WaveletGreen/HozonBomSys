@@ -171,6 +171,18 @@ public class HzEPLManageRecord {
      */
     private String fna;
 
+    /**
+     * 单车用量
+     */
+    private byte[] singleVehDosage;
+
+    public byte[] getSingleVehDosage() {
+        return singleVehDosage;
+    }
+
+    public void setSingleVehDosage(byte[] singleVehDosage) {
+        this.singleVehDosage = singleVehDosage;
+    }
     private String pBomLinePartEnName;
 
     private String pBomLinePartResource;

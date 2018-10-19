@@ -1,16 +1,6 @@
 package integration.logic;
 
-import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0MainService;
-import com.connor.hozon.bom.bomSystem.service.project.HzSuperMaterielService;
 import integration.base.classify.ZPPTCI003;
-import integration.option.ActionFlagOption;
-import sql.pojo.cfg.HzCfg0MainRecord;
-import sql.pojo.project.HzMaterielRecord;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 /**
  * 可配置物料分配特性接口映射类

@@ -3,7 +3,7 @@ package com.connor.hozon.bom.resources.mybatis.work.impl;
 import com.connor.hozon.bom.resources.domain.query.HzWorkByPageQuery;
 import com.connor.hozon.bom.resources.mybatis.work.HzWorkCenterDAO;
 import com.connor.hozon.bom.resources.page.Page;
-import com.connor.hozon.bom.resources.page.PageRequest;
+import com.connor.hozon.bom.resources.page.PageRequestParam;
 import org.springframework.stereotype.Service;
 import sql.BaseSQLUtil;
 import sql.pojo.work.HzWorkCenter;
@@ -31,13 +31,12 @@ public class HzWorkCenterDAOImpl extends BaseSQLUtil implements HzWorkCenterDAO 
 
     @Override
     public Page findWorkCenterForPage(HzWorkByPageQuery query) {
-        PageRequest pageRequest = new PageRequest();
+        PageRequestParam pageRequestParam = new PageRequestParam();
         Map map = new HashMap();
-        map.put("projectId",query.getProjectId());
-        pageRequest.setPageNumber(query.getPage());
-        pageRequest.setPageSize(query.getPageSize());
-        pageRequest.setFilters(map);
-        return super.findPage("HzWorkCenterDAOImpl_findWorkCenterForPage","HzWorkCenterDAOImpl_findWorkCenterTotalCount",pageRequest);
+        pageRequestParam.setPageNumber(query.getPage());
+        pageRequestParam.setPageSize(query.getPageSize());
+        pageRequestParam.setFilters(map);
+        return super.findPage("HzWorkCenterDAOImpl_findWorkCenterForPage","HzWorkCenterDAOImpl_findWorkCenterTotalCount", pageRequestParam);
     }
 
     @Override
@@ -47,19 +46,19 @@ public class HzWorkCenterDAOImpl extends BaseSQLUtil implements HzWorkCenterDAO 
     }
 
     @Override
-    public HzWorkCenter findWorkCenterById(String projectId, String puid) {
+    public HzWorkCenter findWorkCenterById(String puid) {
         Map<String,Object> map = new HashMap<>();
-        map.put("projectId",projectId);
+//        map.put("projectId",projectId);
         map.put("puid",puid);
         return (HzWorkCenter) super.findForObject("HzWorkCenterDAOImpl_selectByPrimaryKey",map);
     }
 
 
     @Override
-    public List<HzWorkCenter> findWorkCenter(String projectId, String pWorkCode) {
+    public List<HzWorkCenter> findWorkCenter(String pWorkCode) {
         Map<String,Object> map = new HashMap<>();
         map.put("pWorkCode",pWorkCode);
-        map.put("projectId",projectId);
+//        map.put("projectId",projectId);
         return super.findForList("HzWorkCenterDAOImpl_findWorkCenter",map);
     }
 

@@ -68,9 +68,9 @@
     from HZ_WORK_CENTER
     <where>
       1=1
-      <if test="projectId != null and  projectId !=''">
-        and P_PROJECT_PUID= #{projectId,jdbcType=VARCHAR}
-      </if>
+      <!--<if test="projectId != null and  projectId !=''">-->
+        <!--and P_PROJECT_PUID= #{projectId,jdbcType=VARCHAR}-->
+      <!--</if>-->
       <if test="pWorkCode != null and  pWorkCode !=''">
         and P_WORK_CODE= #{pWorkCode,jdbcType=VARCHAR}
       </if>
@@ -86,31 +86,53 @@
   </delete>
 
     <!--分页获取工作中心主数据-->
+
   <select id="HzWorkCenterDAOImpl_findWorkCenterForPage" parameterType="java.util.HashMap" resultMap="BaseResultMap">
-      SELECT  <include refid="Base_Column_List" /> FROM
-      (SELECT  <include refid="Base_Column_List" />,ROWNUM as rn FROM
-      (SELECT  <include refid="Base_Column_List" /> FROM HZ_WORK_CENTER
-        <where>
-            <if test="projectId != null and  projectId !=''">
-                P_PROJECT_PUID= #{projectId,jdbcType=VARCHAR}
-            </if>
-            and P_STATUS=1
-        </where>
-        ORDER BY
-      P_UPDATE_TIME DESC
-      )
-      WHERE ROWNUM &lt;=#{limit,jdbcType=INTEGER}) where rn &gt;#{offset,jdbcType=INTEGER}
+    select * from
+    (select t.*,ROWNUM as rn from
+        (select
+        t.*,t1.P_FACTORY_CODE
+        from HZ_WORK_CENTER t left join HZ_FACTORY t1
+        on t.P_FACTORY_PUID = t1.PUID
+        and t.P_STATUS =1
+        and t1.P_FACTORY_STATUS <![CDATA[ <> ]]>0
+    <where>
+      1=1
+      <!--<if test="projectId != null and projectId!=''">-->
+        <!--and t.P_PERTAIN_TO_PROJECT_PUID = #{projectId,jdbcType=VARCHAR}-->
+      <!--</if>-->
+      and t.P_STATUS =1
+    </where>
+    )t
+    WHERE ROWNUM &lt;=#{limit,jdbcType=INTEGER}) where rn &gt;#{offset,jdbcType=INTEGER}
   </select>
+  <!--<select id="HzWorkCenterDAOImpl_findWorkCenterForPage" parameterType="java.util.HashMap" resultMap="BaseResultMap">-->
+      <!--SELECT  <include refid="Base_Column_List" /> FROM-->
+      <!--(SELECT  <include refid="Base_Column_List" />,ROWNUM as rn FROM-->
+      <!--(SELECT  <include refid="Base_Column_List" /> FROM HZ_WORK_CENTER-->
+        <!--<where>-->
+            <!--&lt;!&ndash;<if test="projectId != null and  projectId !=''">&ndash;&gt;-->
+                <!--&lt;!&ndash;P_PROJECT_PUID= #{projectId,jdbcType=VARCHAR}&ndash;&gt;-->
+            <!--&lt;!&ndash;</if>&ndash;&gt;-->
+<!--&#45;&#45;             and-->
+          <!--P_STATUS=1-->
+        <!--</where>-->
+        <!--ORDER BY-->
+      <!--P_UPDATE_TIME DESC-->
+      <!--)-->
+      <!--WHERE ROWNUM &lt;=#{limit,jdbcType=INTEGER}) where rn &gt;#{offset,jdbcType=INTEGER}-->
+  <!--</select>-->
 
 
-    <!--获取工作中心主数据总数-->
-    <select id="HzWorkCenterDAOImpl_findWorkCenterTotalCount" parameterType="java.util.HashMap" resultType="java.lang.Integer">
+<!--获取工作中心主数据总数-->
+  <select id="HzWorkCenterDAOImpl_findWorkCenterTotalCount" parameterType="java.util.HashMap" resultType="java.lang.Integer">
         SELECT  count(*) FROM HZ_WORK_CENTER
         <where>
-            <if test="projectId != null and  projectId !=''">
-                P_PROJECT_PUID= #{projectId,jdbcType=VARCHAR}
-            </if>
-            and P_STATUS=1
+            <!--<if test="projectId != null and  projectId !=''">-->
+                <!--P_PROJECT_PUID= #{projectId,jdbcType=VARCHAR}-->
+            <!--</if>-->
+            <!--and -->
+            P_STATUS=1
         </where>
     </select>
 <!-- 添加一条数据-->
@@ -230,9 +252,9 @@
 
         P_STATUS,
 
-      <if test="projectId != null">
-        P_PROJECT_PUID
-      </if>
+      <!--<if test="projectId != null">-->
+        <!--P_PROJECT_PUID-->
+      <!--</if>-->
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="puid != null">
@@ -346,9 +368,9 @@
         #{pUpdateName,jdbcType=VARCHAR},
       </if>
         1,
-      <if test="projectId != null">
-        #{projectId,jdbcType=INTEGER},
-      </if>
+      <!--<if test="projectId != null">-->
+        <!--#{projectId,jdbcType=INTEGER},-->
+      <!--</if>-->
     </trim>
   </insert>
 
@@ -462,9 +484,9 @@
       <if test="pUpdateName != null">
         P_UPDATE_NAME = #{pUpdateName,jdbcType=VARCHAR},
       </if>
-      <if test="projectId != null">
-        P_PROJECT_PUID = #{projectId,jdbcType=INTEGER},
-      </if>
+      <!--<if test="projectId != null">-->
+        <!--P_PROJECT_PUID = #{projectId,jdbcType=INTEGER},-->
+      <!--</if>-->
     </set>
     where PUID = #{puid,jdbcType=VARCHAR}
   </update>

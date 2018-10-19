@@ -2,7 +2,7 @@ package com.connor.hozon.bom.bomSystem.service.bom;
 
 import com.connor.hozon.bom.bomSystem.dao.bom.HzBomDataDao;
 import com.connor.hozon.bom.bomSystem.dao.bom.HzBomMainRecordDao;
-import com.connor.hozon.bom.bomSystem.dao.impl.bom.HzBomLineRecordDaoImpl;
+import com.connor.hozon.bom.bomSystem.impl.bom.HzBomLineRecordDaoImpl;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;

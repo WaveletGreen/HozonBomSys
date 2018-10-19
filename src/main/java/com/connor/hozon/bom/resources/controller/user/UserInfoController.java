@@ -3,7 +3,7 @@ package com.connor.hozon.bom.resources.controller.user;
 import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.resources.controller.BaseController;
 import com.connor.hozon.bom.resources.domain.dto.request.UpdateUserPasswordReqDTO;
-import com.connor.hozon.bom.resources.util.ResultMessageBuilder;
+import com.connor.hozon.bom.resources.util.Result;
 import com.connor.hozon.bom.sys.dao.UserDao;
 import com.connor.hozon.bom.sys.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,14 +32,14 @@ public class UserInfoController extends BaseController {
     public void updateUserPassWord(@RequestBody UpdateUserPasswordReqDTO reqDTO, HttpServletResponse response){
         User user = UserInfo.getUser();
         if(user ==null || user.getUserName() == null){
-            writeAjaxJSONResponse(ResultMessageBuilder.build(false,"当前用户不存在！"),response);
+            toJSONResponse(Result.build(false,"当前用户不存在！"),response);
             return;
         }
         Md5PasswordEncoder encoder = new Md5PasswordEncoder();
         String oldPassWord = reqDTO.getOldPassWord();
         String oldPassWordInDB = user.getPassword();
         if(!encoder.encodePassword(oldPassWord,"hyll").equals(oldPassWordInDB)){//加密 盐 最好还是随机产生
-            writeAjaxJSONResponse(ResultMessageBuilder.build(false,"原始密码输入不正确！"),response);
+            toJSONResponse(Result.build(false,"原始密码输入不正确！"),response);
             return;
         }
 
@@ -50,10 +50,10 @@ public class UserInfoController extends BaseController {
         userInfo.setPassword(newPassWord);
         int i = userDao.updatePassword(userInfo);
         if(i<=0){
-            writeAjaxJSONResponse(ResultMessageBuilder.build(false,"操作失败！"),response);
+            toJSONResponse(Result.build(false,"操作失败！"),response);
             return;
         }
-        writeAjaxJSONResponse(ResultMessageBuilder.build(true,"操作成功！"),response);
+        toJSONResponse(Result.build(true,"操作成功！"),response);
 
     }
 

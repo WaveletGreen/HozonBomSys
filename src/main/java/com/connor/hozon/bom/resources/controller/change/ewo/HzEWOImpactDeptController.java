@@ -5,11 +5,11 @@ import com.connor.hozon.bom.resources.domain.dto.request.EditEWOImpactDeptReqDTO
 import com.connor.hozon.bom.resources.domain.dto.request.EditImpactDeptEmpReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzEWOImpactDeptEmpRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzEWOImpactDeptRespDTO;
-import com.connor.hozon.bom.resources.domain.dto.response.OperateResultMessageRespDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
 import com.connor.hozon.bom.resources.domain.query.HzEWOImpactDeptQuery;
 import com.connor.hozon.bom.resources.mybatis.change.HzEWOImpactDeptDAO;
 import com.connor.hozon.bom.resources.service.change.HzEWOImpactDeptService;
-import com.connor.hozon.bom.resources.util.ResultMessageBuilder;
+import com.connor.hozon.bom.resources.util.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -39,8 +39,8 @@ public class HzEWOImpactDeptController extends BaseController {
      */
     @RequestMapping(value = "save",method = RequestMethod.POST)
     public void saveImpactDept(@RequestBody EditEWOImpactDeptReqDTO reqDTO, HttpServletResponse response){
-        OperateResultMessageRespDTO respDTO = hzEWOImpactDeptService.saveImpactDept(reqDTO);
-        writeAjaxJSONResponse(ResultMessageBuilder.build(OperateResultMessageRespDTO.isSuccess(respDTO),respDTO),response);
+        WriteResultRespDTO respDTO = hzEWOImpactDeptService.saveImpactDept(reqDTO);
+        toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO),respDTO),response);
     }
 
     /**
@@ -50,7 +50,7 @@ public class HzEWOImpactDeptController extends BaseController {
     @RequestMapping(value = "all",method = RequestMethod.GET)
     public void findAllImpactDept(HttpServletResponse response){
         List<HzEWOAllImpactDept> list = hzEWOImpactDeptDAO.findEWOAllImpactDept();
-        writeAjaxJSONResponse(ResultMessageBuilder.build(list),response);
+        toJSONResponse(Result.build(list),response);
     }
 
     /**
@@ -60,8 +60,8 @@ public class HzEWOImpactDeptController extends BaseController {
      */
     @RequestMapping(value = "save/deptEmp",method = RequestMethod.POST)
     public void saveImpactDeptEmp(@RequestBody EditImpactDeptEmpReqDTO reqDTO, HttpServletResponse response){
-        OperateResultMessageRespDTO respDTO = hzEWOImpactDeptService.saveImpactDeptEmp(reqDTO);
-        writeAjaxJSONResponse(ResultMessageBuilder.build(OperateResultMessageRespDTO.isSuccess(respDTO),respDTO),response);
+        WriteResultRespDTO respDTO = hzEWOImpactDeptService.saveImpactDeptEmp(reqDTO);
+        toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO),respDTO),response);
     }
 
 
@@ -73,11 +73,11 @@ public class HzEWOImpactDeptController extends BaseController {
     @RequestMapping(value = "get/detail",method = RequestMethod.GET)
     public void getImpactDeptDetail(HzEWOImpactDeptQuery query, HttpServletResponse response){
         if(query.getProjectId() == null || query.getEwoNo() == null){
-            writeAjaxJSONResponse(ResultMessageBuilder.build(false,"非法参数！"),response);
+            toJSONResponse(Result.build(false,"非法参数！"),response);
             return;
         }
         List<HzEWOImpactDeptRespDTO> depts = hzEWOImpactDeptService.getAllImpactDept(query);
-        writeAjaxJSONResponse(ResultMessageBuilder.build(depts),response);
+        toJSONResponse(Result.build(depts),response);
     }
 
 
@@ -89,10 +89,10 @@ public class HzEWOImpactDeptController extends BaseController {
     @RequestMapping(value = "get/detail/emp",method = RequestMethod.GET)
     public void getImpactDeptEmp(HzEWOImpactDeptQuery query, HttpServletResponse response){
         if(query.getProjectId() == null || query.getEwoNo() == null){
-            writeAjaxJSONResponse(ResultMessageBuilder.build(false,"非法参数！"),response);
+            toJSONResponse(Result.build(false,"非法参数！"),response);
             return;
         }
         List<HzEWOImpactDeptEmpRespDTO> depts = hzEWOImpactDeptService.getAllImpactDeptEmp(query);
-        writeAjaxJSONResponse(ResultMessageBuilder.build(depts),response);
+        toJSONResponse(Result.build(depts),response);
     }
 }

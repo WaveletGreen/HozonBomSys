@@ -1,12 +1,13 @@
 package com.connor.hozon.bom.bomSystem.dao.bom;
 
+import com.connor.hozon.bom.bomSystem.dao.BasicDao;
 import org.springframework.context.annotation.Configuration;
 import sql.pojo.HzPreferenceSetting;
 
 import java.util.List;
 
 @Configuration
-public interface HzPreferenceSettingDao {
+public interface HzPreferenceSettingDao extends BasicDao<HzPreferenceSetting> {
     /**
      * 根据主键删除1个首选项
      *
@@ -14,14 +15,6 @@ public interface HzPreferenceSettingDao {
      * @return
      */
     int deleteByPrimaryKey(String puid);
-
-    /**
-     * 插入1个首选项
-     *
-     * @param record
-     * @return
-     */
-    int insert(HzPreferenceSetting record);
 
     /**
      * 根据主键筛选首选项
@@ -39,14 +32,6 @@ public interface HzPreferenceSettingDao {
      */
     HzPreferenceSetting selectSettingByNameWithMainRecord(HzPreferenceSetting puid);
 
-
-    /**
-     * 更新首选项数据，包括大对象
-     *
-     * @param record
-     * @return
-     */
-    int updateByPrimaryKey(HzPreferenceSetting record);
 
     List<HzPreferenceSetting> selectSettingByTemplateName(HzPreferenceSetting setting);
 }

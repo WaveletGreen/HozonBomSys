@@ -139,15 +139,15 @@ public class AddWorkCenterReqDTO {
      */
     private String pExperssion6;
 
-    private String projectId;
+//    private String projectId;
 
-    public String getProjectId() {
-        return projectId;
-    }
-
-    public void setProjectId(String projectId) {
-        this.projectId = projectId;
-    }
+//    public String getProjectId() {
+//        return projectId;
+//    }
+//
+//    public void setProjectId(String projectId) {
+//        this.projectId = projectId;
+//    }
 
     public String getFactoryCode() {
         return factoryCode;

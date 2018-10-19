@@ -1,16 +1,6 @@
 package com.connor.hozon.bom.resources.domain.model;
 
 
-import com.connor.hozon.bom.resources.mybatis.bom.HzEbomRecordDAO;
-import com.connor.hozon.bom.resources.mybatis.bom.HzPbomRecordDAO;
-import com.connor.hozon.bom.resources.mybatis.bom.impl.HzEbomRecordDAOImpl;
-import com.connor.hozon.bom.resources.mybatis.bom.impl.HzPbomRecordDAOImpl;
-import com.connor.hozon.bom.resources.util.ListUtil;
-import org.springframework.beans.factory.annotation.Autowired;
-import sql.pojo.bom.HzPbomLineRecord;
-import sql.pojo.epl.HzEPLManageRecord;
-
-import java.util.List;
 import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -55,7 +45,7 @@ public class HzBomSysFactory {
 
 
     /**
-     * 产生一个介于两个数字之间的一个数且不能和数据库已存在的数据重复
+     * 产生一个介于两个数字之间的一个数
      * @param s1 较小数
      * @param s2 较大数
      * @return
@@ -72,37 +62,36 @@ public class HzBomSysFactory {
             double d = random.nextDouble()+d1;
             if(d<d2){
                 s = String.valueOf(d);
-                HzEbomRecordDAO hzEbomRecordDAO = new HzEbomRecordDAOImpl();
-                boolean b = hzEbomRecordDAO.sortNumRepeat(projectId,s);
-                if(!b){
-                    break;
-                }
+                break;
             }
         }
         return s;
     }
 
-    public static String resultLineId(String lineId,String projectId){
+    public static String resultLineId(String lineId){
         String result = lineId; //S00-1001  S00-1001BA  S00-1001111BA
-        int length = lineId.length();
         if(lineId.contains("-")){
             String s = lineId.substring(lineId.length()-2,lineId.length());
             Pattern p = Pattern.compile("[a-zA-Z]");
             Matcher matcher = p.matcher(s);
             if(!matcher.find()){
-                HzPbomRecordDAO hzPbomRecordDAO = new HzPbomRecordDAOImpl();
-                List<HzPbomLineRecord> nameList = hzPbomRecordDAO.getSameNameLineId(lineId,projectId);
-                if(ListUtil.isNotEmpty(nameList) && nameList.size()>1){
-                   for(HzPbomLineRecord record:nameList){
-                       String s1 = record.getLineId().substring(record.getLineId().length()-2,record.getLineId().length());
-                       Matcher matcher1 = p.matcher(s1);
-                       if(matcher1.find() && record.getLineId().length()==length+2){
-                           result = result+"AA";
-                           break;
-                       }
-                   }
-                }
+                result = lineId +"AA";
             }
+
+//            if(!matcher.find()){
+//                HzPbomRecordDAO hzPbomRecordDAO = new HzPbomRecordDAOImpl();
+//                List<HzPbomLineRecord> nameList = hzPbomRecordDAO.getSameNameLineId(lineId,projectId);
+//                if(ListUtil.isNotEmpty(nameList) && nameList.size()>1){
+//                   for(HzPbomLineRecord record:nameList){
+//                       String s1 = record.getLineId().substring(record.getLineId().length()-2,record.getLineId().length());
+//                       Matcher matcher1 = p.matcher(s1);
+//                       if(matcher1.find() && record.getLineId().length()==length+2){
+//                           result = result+"AA";
+//                           break;
+//                       }
+//                   }
+//                }
+//            }
         }
         return result;
     }

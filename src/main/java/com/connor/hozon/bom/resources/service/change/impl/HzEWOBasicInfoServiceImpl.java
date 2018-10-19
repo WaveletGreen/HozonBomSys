@@ -3,7 +3,7 @@ package com.connor.hozon.bom.resources.service.change.impl;
 import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.resources.domain.dto.request.UpdateHzEWOBasicInfoReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzEWOBasicInfoRespDTO;
-import com.connor.hozon.bom.resources.domain.dto.response.OperateResultMessageRespDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
 import com.connor.hozon.bom.resources.domain.query.HzEWOBasicInfoQuery;
 import com.connor.hozon.bom.resources.mybatis.change.HzEWOBasicInfoDAO;
 import com.connor.hozon.bom.resources.service.change.HzEWOBasicInfoService;
@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 import sql.pojo.change.HzEWOBasicInfo;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -30,7 +29,7 @@ public class HzEWOBasicInfoServiceImpl implements HzEWOBasicInfoService {
     private HzEWOBasicInfoDAO hzEWOBasicInfoDAO;
 
     @Override
-    public OperateResultMessageRespDTO updateHzEWOBasicInfo(UpdateHzEWOBasicInfoReqDTO reqDTO) {
+    public WriteResultRespDTO updateHzEWOBasicInfo(UpdateHzEWOBasicInfoReqDTO reqDTO) {
         try {
             //只有发起人才可以更改ewo表单信息
             User user = UserInfo.getUser();
@@ -40,10 +39,10 @@ public class HzEWOBasicInfoServiceImpl implements HzEWOBasicInfoService {
             if(ListUtil.isNotEmpty(infos)){
                 HzEWOBasicInfo info = infos.get(0);
                 if(info == null || !Long.valueOf(user.getId()).equals(info.getOriginatorId())){
-                    OperateResultMessageRespDTO operateResultMessageRespDTO = new OperateResultMessageRespDTO();
-                    operateResultMessageRespDTO.setErrMsg("只有流程发起人才能更改表单信息！");
-                    operateResultMessageRespDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
-                    return operateResultMessageRespDTO;
+                    WriteResultRespDTO writeResultRespDTO = new WriteResultRespDTO();
+                    writeResultRespDTO.setErrMsg("只有流程发起人才能更改表单信息！");
+                    writeResultRespDTO.setErrCode(WriteResultRespDTO.FAILED_CODE);
+                    return writeResultRespDTO;
                 }
             }
             HzEWOBasicInfo hzEWOBasicInfo = new HzEWOBasicInfo();
@@ -69,11 +68,11 @@ public class HzEWOBasicInfoServiceImpl implements HzEWOBasicInfoService {
             hzEWOBasicInfo.setVehicleCode(reqDTO.getVehicleCode());
             int i = hzEWOBasicInfoDAO.update(hzEWOBasicInfo);
             if(i<0){
-                return OperateResultMessageRespDTO.getFailResult();
+                return WriteResultRespDTO.getFailResult();
             }
-            return OperateResultMessageRespDTO.getSuccessResult();
+            return WriteResultRespDTO.getSuccessResult();
         }catch (Exception e){
-            return OperateResultMessageRespDTO.getFailResult();
+            return WriteResultRespDTO.getFailResult();
         }
     }
 

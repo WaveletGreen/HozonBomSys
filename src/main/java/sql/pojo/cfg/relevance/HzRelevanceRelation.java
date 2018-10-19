@@ -2,6 +2,9 @@ package sql.pojo.cfg.relevance;
 
 import java.util.Date;
 
+/**
+ * 相关性与各个特性值和颜色值对应关系
+ */
 public class HzRelevanceRelation {
     private Long id;
     //特性值id

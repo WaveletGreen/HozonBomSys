@@ -4,12 +4,11 @@ import com.connor.hozon.bom.resources.domain.query.HzMaterielByPageQuery;
 import com.connor.hozon.bom.resources.domain.query.HzMaterielQuery;
 import com.connor.hozon.bom.resources.mybatis.materiel.HzMaterielDAO;
 import com.connor.hozon.bom.resources.page.Page;
-import com.connor.hozon.bom.resources.page.PageRequest;
+import com.connor.hozon.bom.resources.page.PageRequestParam;
 import com.connor.hozon.bom.resources.util.ListUtil;
 import org.springframework.stereotype.Service;
 import sql.BaseSQLUtil;
-import sql.pojo.bom.HzMbomLineRecord;
-import sql.pojo.cfg.HzCfg0ModelRecord;
+import sql.pojo.cfg.model.HzCfg0ModelRecord;
 import sql.pojo.project.HzMaterielRecord;
 
 import java.util.ArrayList;
@@ -37,26 +36,62 @@ public class HzMaterielDAOImpl extends BaseSQLUtil implements HzMaterielDAO {
 
     @Override
     public int delete(String puid) {
-        return super.update("HzMaterialDAOImpl_delete", puid);
+        return super.delete("HzMaterialDAOImpl_delete", puid);
     }
 
     @Override
     public int insertList(List<HzMaterielRecord> hzMaterielRecords) {
-        return super.insert("HzMaterialDAOImpl_insertList", hzMaterielRecords);
+
+        try {
+            if (ListUtil.isNotEmpty(hzMaterielRecords)) {
+                int size = hzMaterielRecords.size();
+                //分批更新数据 一次1000条
+                int i = 0;
+                int cout = 0;
+                synchronized (this){
+                    if (size > 1000) {
+                        for (i = 0; i < size / 1000; i++) {
+                            List<HzMaterielRecord> list1 = new ArrayList<>();
+                            for (int j = 0; j < 1000; j++) {
+                                list1.add(hzMaterielRecords.get(cout));
+                                cout++;
+                            }
+
+                            super.update("HzMaterialDAOImpl_insertList",list1);
+
+                        }
+                    }
+                    if (i * 1000 < size) {
+                        List<HzMaterielRecord> list1 = new ArrayList<>();
+                        for (int j = 0; j < size - i * 1000; j++) {
+                            list1.add(hzMaterielRecords.get(cout));
+                            cout++;
+                        }
+
+                        super.update("HzMaterialDAOImpl_insertList",list1);
+
+                    }
+                }
+
+            }
+            return 1;
+        }catch (Exception e){
+            return 0;
+        }
     }
 
     @Override
     public Page<HzMaterielRecord> findHzMaterielForPage(HzMaterielByPageQuery query) {
-        PageRequest pageRequest = new PageRequest();
-        pageRequest.setPageNumber(query.getPage());
-        pageRequest.setPageSize(query.getPageSize());
+        PageRequestParam pageRequestParam = new PageRequestParam();
+        pageRequestParam.setPageNumber(query.getPage());
+        pageRequestParam.setPageSize(query.getPageSize());
         Map map = new HashMap<>();
         map.put("projectId", query.getProjectId());
         map.put("pMaterielDataType", query.getpMaterielDataType());
-        map.put("pMaterielCode", query.getpMaterielCode());
+        map.put("pMaterielCode", query.getpMaterielCode().trim());
         map.put("pMaterielType", query.getpMaterielType());
-        pageRequest.setFilters(map);
-        return super.findPage("HzMaterialDAOImpl_findHzMaterielForPage", "HzMaterialDAOImpl_findHzMaterielTotalCount", pageRequest);
+        pageRequestParam.setFilters(map);
+        return super.findPage("HzMaterialDAOImpl_findHzMaterielForPage", "HzMaterialDAOImpl_findHzMaterielTotalCount", pageRequestParam);
     }
 
 

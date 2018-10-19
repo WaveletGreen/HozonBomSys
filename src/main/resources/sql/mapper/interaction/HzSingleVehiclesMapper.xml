@@ -53,6 +53,14 @@
         <result column="SVL_RESERVED_15" jdbcType="VARCHAR" property="svlReserved15"/>
         <!--配置特性表主数据-->
         <result column="SVL_CFG_MATERIAL_UID" jdbcType="VARCHAR" property="svlCfgMaterialUid"/>
+        <!--配置特性表主数据-->
+        <result column="SVL_CREATOR" jdbcType="VARCHAR" property="svlCreator"/>
+        <!--配置特性表主数据-->
+        <result column="SVL_UPDATER" jdbcType="VARCHAR" property="svlUpdater"/>
+        <!--配置特性表主数据-->
+        <result column="SVL_CREATE_DATE" jdbcType="TIMESTAMP" property="svlCreateDate"/>
+        <!--配置特性表主数据-->
+        <result column="SVL_UPDATE_DATE" jdbcType="TIMESTAMP" property="svlUpdateDate"/>
     </resultMap>
     <!--拓展结果-->
     <resultMap id="ExWithProjectBaseResult" extends="BaseResultMap" type="sql.pojo.interaction.HzSingleVehicles">
@@ -78,40 +86,44 @@
         <result column="p_Color_Name" jdbcType="VARCHAR" property="colorName"/>
     </resultMap>
     <sql id="Base_Column_List">
-        ID,
-        SVL_PROJECT_UID,
-        SVL_DMB_ID,
-        SVL_INNER_COLOR_CODE,
-        SVL_INNER_COLOR_NAME,
-        SVL_COLOR_CODE,
-        SVL_COLOR_NAME,
-        SVL_BATTERY_CODE,
-        SVL_MOTOR_CODE,
-        SVL_RESERVED_1,
-        SVL_RESERVED_2,
-        SVL_RESERVED_3,
-        SVL_RESERVED_4,
-        SVL_RESERVED_5,
-        SVL_RESERVED_6,
-        SVL_RESERVED_7,
-        SVL_RESERVED_8,
-        SVL_RESERVED_9,
-        SVL_RESERVED_10,
-        SVL_RESERVED_11,
-        SVL_RESERVED_12,
-        SVL_RESERVED_13,
-        SVL_RESERVED_14,
-        SVL_RESERVED_15,
-        SVL_CFG_MATERIAL_UID
-    </sql>
+    ID,
+    SVL_PROJECT_UID,
+    SVL_DMB_ID,
+    SVL_INNER_COLOR_CODE,
+    SVL_INNER_COLOR_NAME,
+    SVL_COLOR_CODE,
+    SVL_COLOR_NAME,
+    SVL_BATTERY_CODE,
+    SVL_MOTOR_CODE,
+    SVL_RESERVED_1,
+    SVL_RESERVED_2,
+    SVL_RESERVED_3,
+    SVL_RESERVED_4,
+    SVL_RESERVED_5,
+    SVL_RESERVED_6,
+    SVL_RESERVED_7,
+    SVL_RESERVED_8,
+    SVL_RESERVED_9,
+    SVL_RESERVED_10,
+    SVL_RESERVED_11,
+    SVL_RESERVED_12,
+    SVL_RESERVED_13,
+    SVL_RESERVED_14,
+    SVL_RESERVED_15,
+    SVL_CFG_MATERIAL_UID,
+    SVL_CREATOR,
+    SVL_UPDATER,
+    SVL_CREATE_DATE,
+    SVL_UPDATE_DATE
+  </sql>
     <sql id="ExWithProject_Column_List">
-        p_brand_code,
-        p_brand_name,
-        p_platform_code,
-        p_platform_name,
-        p_vehicle_code,
-        p_vehicle_name
-    </sql>
+    p_brand_code,
+    p_brand_name,
+    p_platform_code,
+    p_platform_name,
+    p_vehicle_code,
+    p_vehicle_name
+  </sql>
 
 
     <!--**************************************select**************************************-->
@@ -123,11 +135,11 @@
     </select>
 
     <select id="checkExist" parameterType="java.lang.String" resultType="java.lang.Integer">
-        select
-        count(*)
-        from HZ_SINGLE_VEHICLES
-        where SVL_CFG_MATERIAL_UID =#{svlCfgMaterialUid,jdbcType=VARCHAR}
-    </select>
+    select
+    count(*)
+    from HZ_SINGLE_VEHICLES
+    where SVL_CFG_MATERIAL_UID =#{svlCfgMaterialUid,jdbcType=VARCHAR}
+  </select>
 
     <!--查询器查询，可以加多个条件，甚至加分页查询都可以-->
     <select id="selectListByInquirer" parameterType="com.connor.hozon.bom.interaction.inquirer.HzSingleVehiclesInquirer"
@@ -255,44 +267,59 @@
 
     <!--批量插入-->
     <insert id="insertList" parameterType="java.util.List">
-     insert into HZ_SINGLE_VEHICLES (ID, SVL_PROJECT_UID, SVL_DMB_ID,
-     SVL_CFG_MATERIAL_UID)
-     select SEQ_HZ_SINGLE_VEHICLES.nextval,t.* from
+        insert into HZ_SINGLE_VEHICLES (ID, SVL_PROJECT_UID, SVL_DMB_ID,
+        SVL_CFG_MATERIAL_UID,
+        SVL_CREATOR,
+        SVL_UPDATER,
+        SVL_CREATE_DATE,
+        SVL_UPDATE_DATE
+        )
+        select SEQ_HZ_SINGLE_VEHICLES.nextval,t.* from
         (
         <foreach collection="list" item="item" index="index" separator="UNION ALL">
             select
             #{item.svlProjectUid,jdbcType=VARCHAR},
             #{item.svlDmbId,jdbcType=DOUBLE},
-            #{item.svlCfgMaterialUid,jdbcType=VARCHAR}
+            #{item.svlCfgMaterialUid,jdbcType=VARCHAR},
+            #{item.svlCreator,jdbcType=VARCHAR},
+            #{item.svlUpdater,jdbcType=VARCHAR},
+            #{item.svlCreateDate,jdbcType=TIMESTAMP},
+            #{item.svlUpdateDate,jdbcType=TIMESTAMP}
             from DUAL
         </foreach>
         )t
-  </insert>
-
+    </insert>
 
 
     <insert id="insert" parameterType="sql.pojo.interaction.HzSingleVehicles">
     insert into HZ_SINGLE_VEHICLES (ID, SVL_PROJECT_UID, SVL_DMB_ID,
-      SVL_INNER_COLOR_CODE, SVL_INNER_COLOR_NAME, SVL_COLOR_CODE,
-      SVL_COLOR_NAME, SVL_BATTERY_CODE, SVL_MOTOR_CODE,
-      SVL_RESERVED_1, SVL_RESERVED_2, SVL_RESERVED_3,
-      SVL_RESERVED_4, SVL_RESERVED_5, SVL_RESERVED_6,
-      SVL_RESERVED_7, SVL_RESERVED_8, SVL_RESERVED_9,
-      SVL_RESERVED_10, SVL_RESERVED_11, SVL_RESERVED_12,
-      SVL_RESERVED_13, SVL_RESERVED_14, SVL_RESERVED_15,SVL_CFG_MATERIAL_UID
-      )
+    SVL_INNER_COLOR_CODE, SVL_INNER_COLOR_NAME, SVL_COLOR_CODE,
+    SVL_COLOR_NAME, SVL_BATTERY_CODE, SVL_MOTOR_CODE,
+    SVL_RESERVED_1, SVL_RESERVED_2, SVL_RESERVED_3,
+    SVL_RESERVED_4, SVL_RESERVED_5, SVL_RESERVED_6,
+    SVL_RESERVED_7, SVL_RESERVED_8, SVL_RESERVED_9,
+    SVL_RESERVED_10, SVL_RESERVED_11, SVL_RESERVED_12,
+    SVL_RESERVED_13, SVL_RESERVED_14, SVL_RESERVED_15,SVL_CFG_MATERIAL_UID,
+    SVL_CREATOR,
+    SVL_UPDATER,
+    SVL_CREATE_DATE,
+    SVL_UPDATE_DATE
+    )
     values (#{id,jdbcType=DECIMAL}, #{svlProjectUid,jdbcType=VARCHAR}, #{svlDmbId,jdbcType=DECIMAL},
-      #{svlInnerColorCode,jdbcType=VARCHAR}, #{svlInnerColorName,jdbcType=VARCHAR}, #{svlColorCode,jdbcType=VARCHAR},
-      #{svlColorName,jdbcType=VARCHAR}, #{svlBatteryCode,jdbcType=VARCHAR}, #{svlMotorCode,jdbcType=VARCHAR},
-      #{svlReserved1,jdbcType=VARCHAR}, #{svlReserved2,jdbcType=VARCHAR}, #{svlReserved3,jdbcType=VARCHAR},
-      #{svlReserved4,jdbcType=VARCHAR}, #{svlReserved5,jdbcType=VARCHAR}, #{svlReserved6,jdbcType=VARCHAR},
-      #{svlReserved7,jdbcType=VARCHAR}, #{svlReserved8,jdbcType=VARCHAR}, #{svlReserved9,jdbcType=VARCHAR},
-      #{svlReserved10,jdbcType=VARCHAR}, #{svlReserved11,jdbcType=VARCHAR}, #{svlReserved12,jdbcType=VARCHAR},
-      #{svlReserved13,jdbcType=VARCHAR}, #{svlReserved14,jdbcType=VARCHAR}, #{svlReserved15,jdbcType=VARCHAR},
-      #{svlCfgMaterialUid,jdbcType=VARCHAR}
-      )
+    #{svlInnerColorCode,jdbcType=VARCHAR}, #{svlInnerColorName,jdbcType=VARCHAR}, #{svlColorCode,jdbcType=VARCHAR},
+    #{svlColorName,jdbcType=VARCHAR}, #{svlBatteryCode,jdbcType=VARCHAR}, #{svlMotorCode,jdbcType=VARCHAR},
+    #{svlReserved1,jdbcType=VARCHAR}, #{svlReserved2,jdbcType=VARCHAR}, #{svlReserved3,jdbcType=VARCHAR},
+    #{svlReserved4,jdbcType=VARCHAR}, #{svlReserved5,jdbcType=VARCHAR}, #{svlReserved6,jdbcType=VARCHAR},
+    #{svlReserved7,jdbcType=VARCHAR}, #{svlReserved8,jdbcType=VARCHAR}, #{svlReserved9,jdbcType=VARCHAR},
+    #{svlReserved10,jdbcType=VARCHAR}, #{svlReserved11,jdbcType=VARCHAR}, #{svlReserved12,jdbcType=VARCHAR},
+    #{svlReserved13,jdbcType=VARCHAR}, #{svlReserved14,jdbcType=VARCHAR}, #{svlReserved15,jdbcType=VARCHAR},
+    #{svlCfgMaterialUid,jdbcType=VARCHAR},
+    #{svlCreator,jdbcType=VARCHAR},
+    #{svlUpdater,jdbcType=VARCHAR},
+    #{svlCreateDate,jdbcType=TIMESTAMP},
+    #{svlUpdateDate,jdbcType=TIMESTAMP}
+    )
   </insert>
-
 
 
     <insert id="insertSelective" parameterType="sql.pojo.interaction.HzSingleVehicles">
@@ -373,6 +400,18 @@
             <if test="svlCfgMaterialUid != null">
                 SVL_CFG_MATERIAL_UID,
             </if>
+            <if test="svlCreator != null">
+                SVL_CREATOR,
+            </if>
+            <if test="svlUpdater != null">
+                SVL_UPDATER,
+            </if>
+            <if test="svlCreateDate != null">
+                SVL_CREATE_DATE,
+            </if>
+            <if test="svlUpdateDate != null">
+                SVL_UPDATE_DATE
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -450,19 +489,20 @@
             <if test="svlCfgMaterialUid != null">
                 #{svlCfgMaterialUid,jdbcType=VARCHAR},
             </if>
+            <if test="svlCreator != null">
+                #{svlCreator,jdbcType=VARCHAR},
+            </if>
+            <if test="svlUpdater != null">
+                #{svlUpdater,jdbcType=VARCHAR},
+            </if>
+            <if test="svlCreateDate != null">
+                #{svlCreateDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="svlUpdateDate != null">
+                #{svlUpdateDate,jdbcType=TIMESTAMP}
+            </if>
         </trim>
     </insert>
-
-
-
-
-
-
-
-
-
-
-
 
 
     <!--**************************************update**************************************-->
@@ -541,35 +581,51 @@
             <if test="svlCfgMaterialUid != null">
                 SVL_CFG_MATERIAL_UID = #{svlCfgMaterialUid,jdbcType=VARCHAR},
             </if>
+            <if test="svlCreator != null">
+                SVL_CREATOR = #{svlCreator,jdbcType=VARCHAR},
+            </if>
+            <if test="svlUpdater != null">
+                SVL_UPDATER = #{svlUpdater,jdbcType=VARCHAR},
+            </if>
+            <if test="svlCreateDate != null">
+                SVL_CREATE_DATE = #{svlCreateDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="svlUpdateDate != null">
+                SVL_UPDATE_DATE = #{svlUpdateDate,jdbcType=TIMESTAMP}
+            </if>
         </set>
         where ID = #{id,jdbcType=DECIMAL}
     </update>
     <update id="updateByPrimaryKey" parameterType="sql.pojo.interaction.HzSingleVehicles">
     update HZ_SINGLE_VEHICLES
     set SVL_PROJECT_UID = #{svlProjectUid,jdbcType=VARCHAR},
-      SVL_DMB_ID = #{svlDmbId,jdbcType=DECIMAL},
-      SVL_INNER_COLOR_CODE = #{svlInnerColorCode,jdbcType=VARCHAR},
-      SVL_INNER_COLOR_NAME = #{svlInnerColorName,jdbcType=VARCHAR},
-      SVL_COLOR_CODE = #{svlColorCode,jdbcType=VARCHAR},
-      SVL_COLOR_NAME = #{svlColorName,jdbcType=VARCHAR},
-      SVL_BATTERY_CODE = #{svlBatteryCode,jdbcType=VARCHAR},
-      SVL_MOTOR_CODE = #{svlMotorCode,jdbcType=VARCHAR},
-      SVL_RESERVED_1 = #{svlReserved1,jdbcType=VARCHAR},
-      SVL_RESERVED_2 = #{svlReserved2,jdbcType=VARCHAR},
-      SVL_RESERVED_3 = #{svlReserved3,jdbcType=VARCHAR},
-      SVL_RESERVED_4 = #{svlReserved4,jdbcType=VARCHAR},
-      SVL_RESERVED_5 = #{svlReserved5,jdbcType=VARCHAR},
-      SVL_RESERVED_6 = #{svlReserved6,jdbcType=VARCHAR},
-      SVL_RESERVED_7 = #{svlReserved7,jdbcType=VARCHAR},
-      SVL_RESERVED_8 = #{svlReserved8,jdbcType=VARCHAR},
-      SVL_RESERVED_9 = #{svlReserved9,jdbcType=VARCHAR},
-      SVL_RESERVED_10 = #{svlReserved10,jdbcType=VARCHAR},
-      SVL_RESERVED_11 = #{svlReserved11,jdbcType=VARCHAR},
-      SVL_RESERVED_12 = #{svlReserved12,jdbcType=VARCHAR},
-      SVL_RESERVED_13 = #{svlReserved13,jdbcType=VARCHAR},
-      SVL_RESERVED_14 = #{svlReserved14,jdbcType=VARCHAR},
-      SVL_RESERVED_15 = #{svlReserved15,jdbcType=VARCHAR},
-      SVL_CFG_MATERIAL_UID = #{svlCfgMaterialUid,jdbcType=VARCHAR}
+    SVL_DMB_ID = #{svlDmbId,jdbcType=DECIMAL},
+    SVL_INNER_COLOR_CODE = #{svlInnerColorCode,jdbcType=VARCHAR},
+    SVL_INNER_COLOR_NAME = #{svlInnerColorName,jdbcType=VARCHAR},
+    SVL_COLOR_CODE = #{svlColorCode,jdbcType=VARCHAR},
+    SVL_COLOR_NAME = #{svlColorName,jdbcType=VARCHAR},
+    SVL_BATTERY_CODE = #{svlBatteryCode,jdbcType=VARCHAR},
+    SVL_MOTOR_CODE = #{svlMotorCode,jdbcType=VARCHAR},
+    SVL_RESERVED_1 = #{svlReserved1,jdbcType=VARCHAR},
+    SVL_RESERVED_2 = #{svlReserved2,jdbcType=VARCHAR},
+    SVL_RESERVED_3 = #{svlReserved3,jdbcType=VARCHAR},
+    SVL_RESERVED_4 = #{svlReserved4,jdbcType=VARCHAR},
+    SVL_RESERVED_5 = #{svlReserved5,jdbcType=VARCHAR},
+    SVL_RESERVED_6 = #{svlReserved6,jdbcType=VARCHAR},
+    SVL_RESERVED_7 = #{svlReserved7,jdbcType=VARCHAR},
+    SVL_RESERVED_8 = #{svlReserved8,jdbcType=VARCHAR},
+    SVL_RESERVED_9 = #{svlReserved9,jdbcType=VARCHAR},
+    SVL_RESERVED_10 = #{svlReserved10,jdbcType=VARCHAR},
+    SVL_RESERVED_11 = #{svlReserved11,jdbcType=VARCHAR},
+    SVL_RESERVED_12 = #{svlReserved12,jdbcType=VARCHAR},
+    SVL_RESERVED_13 = #{svlReserved13,jdbcType=VARCHAR},
+    SVL_RESERVED_14 = #{svlReserved14,jdbcType=VARCHAR},
+    SVL_RESERVED_15 = #{svlReserved15,jdbcType=VARCHAR},
+    SVL_CFG_MATERIAL_UID = #{svlCfgMaterialUid,jdbcType=VARCHAR}
+    SVL_CREATOR = #{svlCreator,jdbcType=VARCHAR},
+    SVL_UPDATER = #{svlUpdater,jdbcType=VARCHAR},
+    SVL_CREATE_DATE = #{svlCreateDate,jdbcType=TIMESTAMP},
+    SVL_UPDATE_DATE = #{svlUpdateDate,jdbcType=TIMESTAMP}
     where ID = #{id,jdbcType=DECIMAL}
   </update>
 
@@ -587,9 +643,21 @@
                 SVL_BATTERY_CODE = #{svlBatteryCode,jdbcType=VARCHAR},
             </if>
             <if test="svlMotorCode != null">
-                SVL_MOTOR_CODE = #{svlMotorCode,jdbcType=VARCHAR}
+                SVL_MOTOR_CODE = #{svlMotorCode,jdbcType=VARCHAR},
+            </if>
+            <if test="svlCreator != null">
+                SVL_CREATOR = #{svlCreator,jdbcType=VARCHAR},
+            </if>
+            <if test="svlUpdater != null">
+                SVL_UPDATER = #{svlUpdater,jdbcType=VARCHAR},
+            </if>
+            <if test="svlCreateDate != null">
+                SVL_CREATE_DATE = #{svlCreateDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="svlUpdateDate != null">
+                SVL_UPDATE_DATE = #{svlUpdateDate,jdbcType=TIMESTAMP}
             </if>
         </set>
         where ID = #{id,jdbcType=DOUBLE}
-  </update>
+    </update>
 </mapper>

@@ -154,26 +154,30 @@ function initTable(url) {
                                 width: 500
                             })
                             url = "singleVehicles/refresh?projectId="+$("#project", window.top.document).val();
-                            $.ajax({
-                                type: "POST",
-                                //ajax需要添加打包名
-                                url: url,
-                                // data: myData,
-                                contentType: "application/json",
-                                success: function (result) {
-                                    $('.modal-dialog', window.top.document).parent('div').remove()
-                                    $('body', window.top.document).find('.modal-backdrop').remove();
-                                    if (result.success) {
-                                        layer.msg('同步成功', {icon: 1, time: 2000})
-                                    } else if (!result.success) {
-                                        window.Ewin.alert({message: result.errMsg});
+                            setTimeout(function(){
+                                $.ajax({
+                                    type: "POST",
+                                    //ajax需要添加打包名
+                                    url: url,
+                                    // data: myData,
+                                    contentType: "application/json",
+                                    success: function (result) {
+                                        console.log($('.modal-dialog', window.top.document).parent('div'))
+                                        $('.modal-dialog', window.top.document).parent('div').remove()
+                                        $('body', window.top.document).find('.modal-backdrop').remove();
+                                        console.log($('.modal-dialog', window.top.document).parent('div'))
+                                        if (result.success) {
+                                            layer.msg('同步成功', {icon: 1, time: 2000})
+                                        } else if (!result.success) {
+                                            window.Ewin.alert({message: result.errMsg});
+                                        }
+                                        $table.bootstrapTable("refresh");
+                                    },
+                                    error: function (info) {
+                                        window.Ewin.alert({message: "操作失败:" + info.status});
                                     }
-                                    $table.bootstrapTable("refresh");
-                                },
-                                error: function (info) {
-                                    window.Ewin.alert({message: "操作失败:" + info.status});
-                                }
-                            })
+                                })
+                            }, 500)
                         }
                     });
                 }

@@ -132,6 +132,8 @@ function loadData(projectPuid) {
         sortOrder: "asc",                   //排序方式
         sortName: 'relevance'
     });
+    //设置跳转的tableID
+    setTargetTableId("dataTable");
 }
 
 $(document).ready(

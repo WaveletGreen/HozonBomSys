@@ -15,9 +15,9 @@ public class UpdateHzEbomReqDTO {
     private String projectId;
 
     /**
-     * 需要更改的内容
+     * 更改单车用量
      */
-    private Map<String,Object> updateContent;
+    private Map<String,Object> updateDosage;
 
 
     private String puid;
@@ -544,11 +544,11 @@ public class UpdateHzEbomReqDTO {
         this.projectId = projectId;
     }
 
-    public Map<String, Object> getUpdateContent() {
-        return updateContent;
+    public Map<String, Object> getUpdateDosage() {
+        return updateDosage;
     }
 
-    public void setUpdateContent(Map<String, Object> updateContent) {
-        this.updateContent = updateContent;
+    public void setUpdateDosage(Map<String, Object> updateDosage) {
+        this.updateDosage = updateDosage;
     }
 }

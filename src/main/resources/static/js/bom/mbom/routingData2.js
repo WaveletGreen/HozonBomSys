@@ -83,8 +83,7 @@ function initTable(url) {
                 pagination: true,
                 pageNumber:1,                       //初始化加载第一页，默认第一页
                 pageSize: 20,                       //每页的记录行数（*）
-                pageList: ['ALL',20,50,100,200,500,1000],        //可供选择的每页的行数（*）
-                uniqueId: "puid",                     //每一行的唯一标识，一般为主键列
+                pageList: ['ALL', 10, 20, 50, 100, 200, 500, 1000],        //可供选择的每页的行数（*）                uniqueId: "puid",                     //每一行的唯一标识，一般为主键列
                 showExport: true,
                 //exportDataType: 'all',
                 columns: column,
@@ -190,7 +189,9 @@ function initTable(url) {
                             var _table = '<p>是否要删除您所选择的记录？</p>' +
                                 '<div style="max-height: 400px;overflow:scroll;"><table class="table table-striped tableNormalStyle" >';
                             for (var index in rows) {
-                                _table += '<tr><td>' + rows[index].pMaterielDesc + '</td></tr>';
+                                var pMaterielDesc = (rows[index].pMaterielDesc == undefined ? "" : rows[index].pMaterielDesc);
+                                var pMaterielDesc = (rows[index].pMaterielDesc == null ? "" : rows[index].pMaterielDesc);
+                                _table += '<tr><td>' + pMaterielDesc + '</td></tr>';
                                 materielIds.push(rows[index].materielId);
                                 procedureDesc.push(rows[index].pProcedureDesc);
                             }
@@ -391,6 +392,13 @@ function initTable(url) {
             // $table.bootstrapTable('hideColumn', 'materielId');
         }
     })
+}
+
+function toPage() {
+    var pageNum = $("#pageNum").val();
+    if (pageNum) {
+        $('#routingDataTable').bootstrapTable('selectPage', parseInt(pageNum));
+    }
 }
 $(document).keydown(function(event) {
     if (event.keyCode == 13) {

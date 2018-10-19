@@ -40,6 +40,26 @@ public class HzPbomByPageQuery extends DefaultPageQuery {
      */
     private String pBomLinePartResource;
 
+    /**
+     * ebom 表 puid
+     * 根据此字段来获取BOM结构树
+     */
+    private String eBomPuids;
+
+    /**
+     * 是否展示层级（1展示层级结构  0不展示层级结构）
+     */
+    private Integer showBomStructure;
+
+
+    public Integer getShowBomStructure() {
+        return showBomStructure;
+    }
+
+    public void setShowBomStructure(Integer showBomStructure) {
+        this.showBomStructure = showBomStructure;
+    }
+
     public String getpBomLinePartClass() {
         return pBomLinePartClass;
     }
@@ -102,5 +122,13 @@ public class HzPbomByPageQuery extends DefaultPageQuery {
 
     public void setpBomOfWhichDept(String pBomOfWhichDept) {
         this.pBomOfWhichDept = pBomOfWhichDept;
+    }
+
+    public String geteBomPuids() {
+        return eBomPuids;
+    }
+
+    public void seteBomPuids(String eBomPuids) {
+        this.eBomPuids = eBomPuids;
     }
 }

@@ -67,8 +67,7 @@ function initTable(url) {
                 pagination: true,
                 pageNumber: 1,                                //初始化加载第一页，默认第一页
                 pageSize: 20,                                //每页的记录行数（*）
-                pageList: ['ALL', 20, 50, 100, 200, 500, 1000],   //可供选择的每页的行数（*）
-                uniqueId: "puid",                           //每一行的唯一标识，一般为主键列
+                pageList: ['ALL', 10, 20, 50, 100, 200, 500, 1000],        //可供选择的每页的行数（*）                uniqueId: "puid",                           //每一行的唯一标识，一般为主键列
                 showExport: true,
                 sortable: true,                             //是否启用排序
                 sortOrder: "asc",                           //排序方式
@@ -166,3 +165,18 @@ function initTable(url) {
         }
     })
 }
+
+function toPage() {
+    var pageNum = $("#pageNum").val();
+    if (pageNum) {
+        $('#VPPSLibraryTable').bootstrapTable('selectPage', parseInt(pageNum));
+    }
+}
+
+$(document).keydown(function(event) {
+    if (event.keyCode == 13) {
+        $('form').each(function() {
+            event.preventDefault();
+        });
+    }
+});

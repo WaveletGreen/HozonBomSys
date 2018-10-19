@@ -41,8 +41,7 @@ function initTable(){
                 pagination: true,                   //是否显示分页（*）
                 pageSize:20,
                 pageNumber:1,
-                pageList: ['ALL',20,50,100,200,500,1000],        //可供选择的每页的行数（*）
-                sidePagination : "server",          //分页方式：client客户端分页，server服务端分页（*）
+                pageList: ['ALL', 10, 20, 50, 100, 200, 500, 1000],        //可供选择的每页的行数（*）                sidePagination : "server",          //分页方式：client客户端分页，server服务端分页（*）
                 clickToSelect: true,                // 单击某一行的时候选中某一条记录
                 showExport: true,
                 formId: "formId",
@@ -145,6 +144,13 @@ function initTable(){
 
         }
     })
+}
+
+function toPage() {
+    var pageNum = $("#pageNum").val();
+    if (pageNum) {
+        $('#processAidsTable').bootstrapTable('selectPage', parseInt(pageNum));
+    }
 }
 $(document).keydown(function(event) {
     if (event.keyCode == 13) {

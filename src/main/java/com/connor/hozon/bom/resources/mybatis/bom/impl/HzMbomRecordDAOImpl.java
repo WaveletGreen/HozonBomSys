@@ -7,8 +7,9 @@ import com.connor.hozon.bom.resources.domain.query.HzMbomTreeQuery;
 import com.connor.hozon.bom.resources.enumtype.MbomTableNameEnum;
 import com.connor.hozon.bom.resources.mybatis.bom.HzMbomRecordDAO;
 import com.connor.hozon.bom.resources.page.Page;
-import com.connor.hozon.bom.resources.page.PageRequest;
+import com.connor.hozon.bom.resources.page.PageRequestParam;
 import com.connor.hozon.bom.resources.util.ListUtil;
+import com.google.common.collect.Lists;
 import org.springframework.stereotype.Service;
 import sql.BaseSQLUtil;
 import sql.pojo.bom.HzMbomLineRecord;
@@ -87,13 +88,13 @@ public class HzMbomRecordDAOImpl extends BaseSQLUtil implements HzMbomRecordDAO 
 
     @Override
     public Page<HzMbomLineRecord> findMbomForPage(HzMbomByPageQuery query) {
-        PageRequest request = new PageRequest();
+        PageRequestParam request = new PageRequestParam();
         Map map = new HashMap();
         map.put("projectId",query.getProjectId());
         map.put("isHas",query.getIsHas());
-        map.put("pBomOfWhichDept",query.getpBomOfWhichDept());
+        map.put("pBomOfWhichDept",query.getpBomOfWhichDept().trim());
         map.put("lineIndex",query.getLineIndex());
-        map.put("lineId",query.getLineId());
+        map.put("lineId",query.getLineId().trim());
         map.put("pBomLinePartClass",query.getpBomLinePartClass());
         map.put("pBomLinePartResource",query.getpBomLinePartResource());
         map.put("tableName",MbomTableNameEnum.tableName(query.getType()));
@@ -137,7 +138,7 @@ public class HzMbomRecordDAOImpl extends BaseSQLUtil implements HzMbomRecordDAO 
 
     @Override
     public Page<HzMbomLineRecord> getHzSuberMbomByPage(HzMbomByPageQuery query) {
-        PageRequest pageRequest = new PageRequest();
+        PageRequestParam pageRequestParam = new PageRequestParam();
         Map map = new HashMap();
         map.put("projectId",query.getProjectId());
         map.put("isHas",query.getIsHas());
@@ -145,10 +146,10 @@ public class HzMbomRecordDAOImpl extends BaseSQLUtil implements HzMbomRecordDAO 
         map.put("lineIndex",query.getLineIndex());
         map.put("lineId",query.getLineId());
         map.put("cfg0ModelRecordId",query.getCfg0ModelRecordId());
-        pageRequest.setPageNumber(query.getPage());
-        pageRequest.setPageSize(query.getPageSize());
-        pageRequest.setFilters(map);
-        return super.findForPage("HzMbomRecordDAOImpl_getHzSuberMbomByPage","HzMbomRecordDAOImpl_getHzSuberMbomTotalCount",pageRequest);
+        pageRequestParam.setPageNumber(query.getPage());
+        pageRequestParam.setPageSize(query.getPageSize());
+        pageRequestParam.setFilters(map);
+        return super.findForPage("HzMbomRecordDAOImpl_getHzSuberMbomByPage","HzMbomRecordDAOImpl_getHzSuberMbomTotalCount", pageRequestParam);
     }
 
     @Override
@@ -235,7 +236,7 @@ public class HzMbomRecordDAOImpl extends BaseSQLUtil implements HzMbomRecordDAO 
 
     @Override
     public Page<HzMbomLineRecord> getHzMbomRecycleRecord(HzBomRecycleByPageQuery query) {
-        PageRequest request = new PageRequest();
+        PageRequestParam request = new PageRequestParam();
         Map map = new HashMap();
         map.put("projectId",query.getProjectId());
         request.setPageNumber(query.getPage());
@@ -393,4 +394,24 @@ public class HzMbomRecordDAOImpl extends BaseSQLUtil implements HzMbomRecordDAO 
         map.put("tableName",tableName);
         return super.delete("HzMbomRecordDAOImpl_deleteMbomByProjectId",map);
     }
+
+    @Override
+    public Page<HzMbomLineRecord> getHzMbomTreeByPage(HzMbomByPageQuery query) {
+        PageRequestParam request = new PageRequestParam();
+        Map map = new HashMap();
+        map.put("projectId",query.getProjectId());
+        map.put("eBomPuids", Lists.newArrayList(query.geteBomPuids().split(",")));
+        map.put("tableName",MbomTableNameEnum.tableName(query.getType()));
+        if(ListUtil.isNotEmpty(Lists.newArrayList(query.getColorIds().split(",")))){
+            map.put("colorIds",Lists.newArrayList(query.getColorIds().split(",")));
+        }else {
+            map.put("colorIds",null);
+        }
+        request.setPageNumber(query.getPage());
+        request.setPageSize(query.getPageSize());
+        request.setFilters(map);
+        return super.findPage("HzMbomRecordDAOImpl_getHzMbomTreeByPage","HzMbomRecordDAOImpl_getHzMbomTreeTotalCount",request);
+
+    }
+
 }

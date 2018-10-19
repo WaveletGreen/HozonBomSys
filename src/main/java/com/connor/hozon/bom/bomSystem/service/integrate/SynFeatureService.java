@@ -3,7 +3,7 @@ package com.connor.hozon.bom.bomSystem.service.integrate;
 import com.connor.hozon.bom.bomSystem.helper.IntegrateMsgDTO;
 import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
 import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0Service;
-import com.connor.hozon.bom.bomSystem.service.iservice.integrate.ISynFeatureService;
+import com.connor.hozon.bom.bomSystem.iservice.integrate.ISynFeatureService;
 import integration.base.feature.ZPPTCO002;
 import integration.logic.Features;
 import integration.option.ActionFlagOption;
@@ -13,7 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sql.pojo.cfg.HzCfg0Record;
+import sql.pojo.cfg.cfg0.HzCfg0Record;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -125,7 +125,8 @@ public class SynFeatureService implements ISynFeatureService {
         records.forEach(_r -> {
             HzCfg0Record record;
             if ((record = hzCfg0Service.doSelectOneByPuid(_r.getPuid())) != null
-                    || (record = hzCfg0Service.doSelectOneAddedCfgByPuid(_r.getPuid())) != null) {
+//                    || (record = hzCfg0Service.doSelectOneAddedCfgByPuid(_r.getPuid())) != null
+                    ) {
                 toSend.add(record);
             }
         });

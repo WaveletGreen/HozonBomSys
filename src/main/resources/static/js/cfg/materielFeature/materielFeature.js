@@ -5,6 +5,11 @@ var $table = null;
 /**工具条设置*/
 var toolbarSetting = [
     {
+        text: '一键生成',
+        iconCls: 'glyphicon glyphicon-plus',
+        handler: saveCompose
+    },
+    {
         text: '添加衍生物料',
         iconCls: 'glyphicon glyphicon-plus',
         handler: addVehicleDialog
@@ -363,7 +368,7 @@ function gotIt(result) {
         showToggle: true,                   //是否显示详细视图和列表视图的切换按钮
         showRefresh: true,                  //是否显示刷新按钮
         pageSize: 10,
-        pagination: true,                   //是否显示分页（*）
+        pagination: false,                   //是否显示分页（*）
         clickToSelect: true,                // 单击某一行的时候选中某一条记录
         formId: "hide",
         /**列信息，需要预先定义好*/
@@ -372,4 +377,24 @@ function gotIt(result) {
         // sortOrder: "asc",                   //排序方式
         toolbars: toolbarSetting,
     });
+
+    //设置跳转的tableID，放在table初始化语句之后
+    setTargetTableId("materielFeature");
+}
+
+function saveCompose() {
+    $.ajax({
+        type : "GET",
+        url : "materielV2/saveCompose?projectPuid="+projectUid ,
+        success : function (result) {
+            if(result.status!=false){
+                window.Ewin.alert({message: '生成成功!'});
+            }else {
+                window.Ewin.alert({message: result.msg});
+            }
+        },
+        error : function (result) {
+            window.Ewin.alert({message: result.msg});
+        }
+    })
 }

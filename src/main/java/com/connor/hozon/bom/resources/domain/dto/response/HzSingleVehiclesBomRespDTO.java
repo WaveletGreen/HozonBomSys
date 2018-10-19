@@ -120,4 +120,10 @@ public class HzSingleVehiclesBomRespDTO {
      * 工厂
      */
     private String pFactoryCode;
+
+    /**
+     * eBom表主键
+     */
+    private String eBomPuid;
+
 }

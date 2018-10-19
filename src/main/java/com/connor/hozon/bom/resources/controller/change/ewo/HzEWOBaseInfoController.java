@@ -6,7 +6,7 @@ import com.connor.hozon.bom.resources.controller.BaseController;
 import com.connor.hozon.bom.resources.domain.dto.request.UpdateHzEWOBasicInfoReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzEWOBasicInfoRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzEbomRespDTO;
-import com.connor.hozon.bom.resources.domain.dto.response.OperateResultMessageRespDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
 import com.connor.hozon.bom.resources.domain.query.HzEWOBasicInfoQuery;
 import com.connor.hozon.bom.resources.domain.query.HzEWOChangeRecordQuery;
 import com.connor.hozon.bom.resources.domain.query.HzEWOImpactReferenceQuery;
@@ -15,7 +15,7 @@ import com.connor.hozon.bom.resources.service.change.HzEWOBasicInfoService;
 import com.connor.hozon.bom.resources.service.change.HzEWOImpactReferenceService;
 import com.connor.hozon.bom.resources.service.change.HzEWOService;
 import com.connor.hozon.bom.resources.util.ListUtil;
-import com.connor.hozon.bom.resources.util.ResultMessageBuilder;
+import com.connor.hozon.bom.resources.util.Result;
 import com.connor.hozon.bom.sys.dao.OrgGroupDao;
 import com.connor.hozon.bom.sys.dao.UserDao;
 import com.connor.hozon.bom.sys.entity.OrgGroup;
@@ -62,8 +62,8 @@ public class HzEWOBaseInfoController extends BaseController {
      */
     @RequestMapping(value = "update",method = RequestMethod.POST)
     public void updateHzEWOBaseInfo(@RequestBody UpdateHzEWOBasicInfoReqDTO reqDTO, HttpServletResponse response){
-        OperateResultMessageRespDTO respDTO = hzEWOBasicInfoService.updateHzEWOBasicInfo(reqDTO);
-        writeAjaxJSONResponse(ResultMessageBuilder.build(OperateResultMessageRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
+        WriteResultRespDTO respDTO = hzEWOBasicInfoService.updateHzEWOBasicInfo(reqDTO);
+        toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
     }
 
 
@@ -79,13 +79,13 @@ public class HzEWOBaseInfoController extends BaseController {
         }
         HzEWOBasicInfoRespDTO respDTO = hzEWOBasicInfoService.findHzEWOBasicInfo(query);
         if(respDTO == null){
-//            writeAjaxJSONResponse(ResultMessageBuilder.build(false,"暂无数据！"),response);
+//            toJSONResponse(Result.build(false,"暂无数据！"),response);
             return "";
         }
         model.addAttribute("data",respDTO);
         return "changeManage/ewo/ewoBasicInformation";
 
-//        writeAjaxJSONResponse(ResultMessageBuilder.build(respDTO),response);
+//        toJSONResponse(Result.build(respDTO),response);
     }
 
 
@@ -98,12 +98,12 @@ public class HzEWOBaseInfoController extends BaseController {
     @ResponseBody
     public JSONObject getHzEWOBasicInfoList(HzEWOBasicInfoQuery query, HttpServletResponse response){
         if(query.getProjectId() == null || query.getProjectId() == ""){
-//            writeAjaxJSONResponse(ResultMessageBuilder.build(false,"非法参数！"),response);
+//            toJSONResponse(Result.build(false,"非法参数！"),response);
             return new JSONObject();
         }
         List<HzEWOBasicInfoRespDTO> respDTOs = hzEWOBasicInfoService.findHzEWOList(query);
         if(ListUtil.isEmpty(respDTOs)){
-//            writeAjaxJSONResponse(ResultMessageBuilder.build(false,"暂无数据！"),response);
+//            toJSONResponse(Result.build(false,"暂无数据！"),response);
             return new JSONObject();
         }
         JSONObject jsonObject = new JSONObject();
@@ -181,7 +181,7 @@ public class HzEWOBaseInfoController extends BaseController {
         tableTitle.put("fna","FNA");
         tableTitle.put("pFnaDesc","FNA描述" );
         tableTitle.put("number","数量" );
-        writeAjaxJSONResponse(ResultMessageBuilder.build(tableTitle), response);
+        toJSONResponse(Result.build(tableTitle), response);
     }
     /**
      * 流程变更表单记录
@@ -277,15 +277,15 @@ public class HzEWOBaseInfoController extends BaseController {
     public void impactReferenceRecord(HzEWOImpactReferenceQuery query, HttpServletResponse response){
         if(query.getEwoNo() == null || query.getProjectId() == null
                 || query.getProjectId() == "" || query.getEwoNo() == ""){
-            writeAjaxJSONResponse(ResultMessageBuilder.build(false,"非法参数！"),response);
+            toJSONResponse(Result.build(false,"非法参数！"),response);
             return ;
         }
         List<HzEWOImpactReference> respDTOList = hzEWOImpactReferenceService.getHzEWOImpactReferences(query);
         if(ListUtil.isEmpty(respDTOList)){
-            writeAjaxJSONResponse(ResultMessageBuilder.build(false,"暂无数据！"),response);
+            toJSONResponse(Result.build(false,"暂无数据！"),response);
             return ;
         }
-        writeAjaxJSONResponse(ResultMessageBuilder.build(respDTOList),response);
+        toJSONResponse(Result.build(respDTOList),response);
     }
     /**
      * 获取全部的部门
@@ -294,7 +294,7 @@ public class HzEWOBaseInfoController extends BaseController {
     @RequestMapping(value = "all",method = RequestMethod.GET)
     public void getAllDept(HttpServletResponse response){
         List<OrgGroup> list = orgGroupDao.queryAllOrgGroup();
-        writeAjaxJSONResponse(ResultMessageBuilder.build(list),response);
+        toJSONResponse(Result.build(list),response);
     }
 
     /**
@@ -318,6 +318,6 @@ public class HzEWOBaseInfoController extends BaseController {
     @RequestMapping("allDept")
     public void findAllImpactDept(HttpServletResponse response){
         List<HzEWOAllImpactDept> list = hzEWOImpactDeptDAO.findEWOAllImpactDept();
-        writeAjaxJSONResponse(ResultMessageBuilder.build(list),response);
+        toJSONResponse(Result.build(list),response);
     }
 }

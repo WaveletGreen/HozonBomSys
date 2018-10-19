@@ -31,16 +31,16 @@
                placeholder="请输入专业"/>
     </div>
     <!--<div class="form-group">-->
-        <!--<label for="rank">级别</label>-->
-        <!--<input class="form-control" id="rank" name="rank" type="text"-->
-               <!--th:value="${data.rank}"-->
-               <!--placeholder="请输入级别"/>-->
+    <!--<label for="rank">级别</label>-->
+    <!--<input class="form-control" id="rank" name="rank" type="text"-->
+    <!--th:value="${data.rank}"-->
+    <!--placeholder="请输入级别"/>-->
     <!--</div>-->
     <!--<div class="form-group">-->
-        <!--<label for="groupNum">分组号</label>-->
-        <!--<input class="form-control" id="groupNum" name="groupNum" type="text"-->
-               <!--th:value="${data.groupNum}"-->
-               <!--placeholder="请输入分组号"/>-->
+    <!--<label for="groupNum">分组号</label>-->
+    <!--<input class="form-control" id="groupNum" name="groupNum" type="text"-->
+    <!--th:value="${data.groupNum}"-->
+    <!--placeholder="请输入分组号"/>-->
     <!--</div>-->
     <div class="form-group">
         <label for="pBomLinePartEnName">英文名称</label>
@@ -49,17 +49,17 @@
                placeholder="请输入英文名称"/>
     </div>
     <!--<div class="form-group">-->
-        <!--<label for="lineNo">查找编号</label>-->
-        <!--<input class="form-control" id="lineNo" name="lineNo" type="text" onclick="doha()"-->
-               <!--th:value="${data.lineNo}"-->
-               <!--placeholder="请输入查找编号"/>-->
+    <!--<label for="lineNo">查找编号</label>-->
+    <!--<input class="form-control" id="lineNo" name="lineNo" type="text" onclick="doha()"-->
+    <!--th:value="${data.lineNo}"-->
+    <!--placeholder="请输入查找编号"/>-->
     <!--</div>-->
     <!--<input type="hidden" id="lineNumber" th:value="${data.lineNo}">-->
     <!--<div class="form-group" id="parentNO">-->
-        <!--<label for="parentLineId">父零件号</label>-->
-        <!--<input class="form-control" id="parentLineId" name="parentLineId" type="text"-->
+    <!--<label for="parentLineId">父零件号</label>-->
+    <!--<input class="form-control" id="parentLineId" name="parentLineId" type="text"-->
 
-               <!--placeholder="请输入父零件号"/>-->
+    <!--placeholder="请输入父零件号"/>-->
     <!--</div>-->
     <div class="form-group">
         <label for="pUnit">单位</label>
@@ -351,186 +351,205 @@
             <option th:selected="${data.getColorPart()=='N'?true:false}">N</option>
         </select>
     </div>
-    <!--<div class="form-group" th:each="_data,c:${data.get(0)}">
-        <label class="control-label" th:text="${_data}"></label>
-        <input class="form-control" th:id="${data.get(1)[c.index]}" th:name="${data.get(1)[c.index]}" type="text"
-         th:value="${data.get(2)[c.index]}"      th:placeholder="${'请输入'+_data}"/>&lt;!&ndash;th:value="${entity.level}"&ndash;&gt;
-    </div>-->
+    <div class="form-group" th:each="_data,c:${data.getMap().keySet()}">
+        <label class="control-label" th:text="${_data}+'(用量)'"></label>
+        <input class="form-control" th:id="${_data}" th:name="${_data}" type="text"
+               th:value="${data.getMap().get(_data)}" th:placeholder="${'请输入'+_data+'的单车用量'}"/>
+        <!--th:value="${entity.level}"-->
+    </div>
+    <!--<div class="form-group" th:each="_data,c:${data.get(0)}">-->
+    <!--<label class="control-label" th:text="${_data}"></label>-->
+    <!--<input class="form-control" th:id="${_data}" th:name="${_data}" type="text"-->
+    <!--th:value="${data.getMap().get(_data)}"      th:placeholder="${'请输入'+_data}"/>&lt;!&ndash;th:value="${entity.level}"&ndash;&gt;-->
+    <!--</div>-->
 </form>
 <script th:inline="javascript">
     <![CDATA[
-     $(
-        (function(){
-            var level = $("#level").val();
-    //         var lineNo = $("#lineNo").val();
-    //         var lineNumber = $("#lineNumber").val();
-            if (level=="2Y") {
-                // $("#colorPart").removeAttr("disabled");
-            // } else {
-                // $("#parentLineId").removeAttr("disabled");
-                $("#colorPart").attr({"disabled": "disabled"});
-            }
-        }),
+    var data = [[${data}]];
+    $(
+        //     (function(){
+        //         var level = $("#level").val();
+        // //         var lineNo = $("#lineNo").val();
+        // //         var lineNumber = $("#lineNumber").val();
+        //         if (level=="2Y") {
+        //             // $("#colorPart").removeAttr("disabled");
+        //         // } else {
+        //             // $("#parentLineId").removeAttr("disabled");
+        //             $("#colorPart").attr({"disabled": "disabled"});
+        //         }
+        //     }),
 
         function () {
-            $("#parentLineId").attr({"disabled": "disabled"});
-            $('#lineNo').on('input propertychange', function () {
-                var lineNo = $("#lineNo").val();
-                var lineNumber = $("#lineNumber").val();
-                if (lineNo != lineNumber) {
-                    $("#parentLineId").removeAttr("disabled");
-                } else {
-                    // $("#parentLineId").removeAttr("disabled");
-                    $("#parentLineId").attr({"disabled": "disabled"});
+
+
+            var list = data.map;
+            var keys = [];
+            for (var key in list) {
+                if (list.hasOwnProperty(key)) {
+                    keys.push(key)
                 }
-            })
-        $('#ebomMainForm').bootstrapValidator({
-            message: 'This value is not valid',
-            feedbackIcons: {
-                valid: 'glyphicon glyphicon-ok',
-                invalid: 'glyphicon glyphicon-remove',
-                validating: 'glyphicon glyphicon-refresh'
-            },
-            fields: {
-                lineId: {
-                    message: '零件号验证失败',
-                    validators: {
-                        notEmpty: {
-                            message: '零件号不能为空'
-                        }
-                    }
-                },
-                pBomLinePartName: {
-                    message: '名称验证失败',
-                    validators: {
-                        notEmpty: {
-                            message: '名称不能为空'
-                        }
-                    }
-                },
-                lineNo: {
-                    message: '编号验证失败',
-                    validators: {
-                        stringLength: {
-                            /*长度提示*/
-                            min: 4,
-                            max: 4,
-                            message: '编号长度必须是4位数字'
-                        },
-                        //正则校验
-
-                        regexp: {
-
-                            regexp: /^[0-9]+$/, /* ^ 指的是匹配字符串开始的位置 + 匹配一个或者多个*/
-
-                            message: '编号只能为数字'
-
-                        },
-
-                    }
-                },
             }
-        });
-        // 绑定dialog的确定按钮的监听事件
-        $("#btnOk", window.top.document).click(function () {
-            var bootstrapValidator = $("#ebomMainForm", window.top.document).data('bootstrapValidator');
-            bootstrapValidator.validate();
-            if (bootstrapValidator.isValid()) {
-                var url = $("#ebomMainForm", window.top.document).attr('action');
-                var myData = JSON.stringify({
-                    "puid": $("#puid").val(),
-                    "lineId": $("#lineId").val(),
-                    "pBomLinePartName": $("#pBomLinePartName").val(),
-                    "level": $("#level").val(),
-                    "pBomOfWhichDept": $("#pBomOfWhichDept").val(),
-                    // "rank": $("#rank").val(),
-                    // "groupNum": $("#groupNum").val(),
-                    "pBomLinePartEnName": $("#pBomLinePartEnName").val(),
-                    "lineNo": $("#lineNo").val(),
-                    "parentLineId": $("#parentLineId").val(),
-                    "pLouaFlag": $("#pLouaFlag").val(),
-                    "pUnit": $("#pUnit").val(),
-                    "pPictureNo": $("#pPictureNo").val(),
-                    "pPictureSheet": $("#pPictureSheet").val(),
-                    "pMaterialHigh": $("#pMaterialHigh").val(),
-                    "pMaterial1": $("#pMaterial1").val(),
-                    "pMaterial2": $("#pMaterial2").val(),
-                    "pMaterial3": $("#pMaterial3").val(),
-                    "pDensity": $("#pDensity").val(),
-                    "pMaterialStandard": $("#pMaterialStandard").val(),
-                    "pSurfaceTreat": $("#pSurfaceTreat").val(),
-                    "pTextureColorNum": $("#pTextureColorNum").val(),
-                    "pManuProcess": $("#pManuProcess").val(),
-                    "pSymmetry": $("#pSymmetry").val(),
-                    "pImportance": $("#pImportance").val(),
-                    "pRegulationFlag": $("#pRegulationFlag").val(),
-                    "p3cpartFlag": $("#p3cpartFlag").val(),
-                    "pRegulationCode": $("#pRegulationCode").val(),
-                    "pBwgBoxPart": $("#pBwgBoxPart").val(),
-                    "pDevelopType": $("#pDevelopType").val(),
-                    "pDataVersion": $("#pDataVersion").val(),
-                    "pTargetWeight": $("#pTargetWeight").val(),
-                    "pFeatureWeight": $("#pFeatureWeight").val(),
-                    "pActualWeight": $("#pActualWeight").val(),
-                    "pFastener": $("#pFastener").val(),
-                    "pFastenerStandard": $("#pFastenerStandard").val(),
-                    "pFastenerLevel": $("#pFastenerLevel").val(),
-                    "pTorque": $("#pTorque").val(),
-                    "pDutyEngineer": $("#pDutyEngineer").val(),
-                    "pSupply": $("#pSupply").val(),
-                    "pSupplyCode": $("#pSupplyCode").val(),
-                    "pBuyEngineer": $("#pBuyEngineer").val(),
-                    "pRemark": $("#pRemark").val(),
-                    "pBomLinePartClass": $("#pBomLinePartClass").val(),
-                    "pBomLinePartResource": $("#pBomLinePartResource").val(),
-                    "pInOutSideFlag": $("#pInOutSideFlag").val(),
-                    "pUpc": $("#pUpc").val(),
-                    "fna": $("#fna").val(),
-                    "pFnaDesc": $("#pFnaDesc").val(),
-                    "number": $("#number").val(),
-                    "colorPart":$("#colorPart").val(),
-                    "projectId": $("#project", window.top.document).val(),
-                });
-                // var data = {};
-                // var _d = $("#ebomMainForm").serializeArray();
-                // for (var p in _d) {
-                //     data[_d[p].name] = _d[p].value;
-                // }
-                $.ajax({
-                    contentType:
-                        "application/json",
-                    type:
-                        'POST',
-                    url: url,
-                    data: myData,
-                    success:
-                        function (result) {
-                            $('.modal-dialog', window.top.document).parent('div').remove()
-                            $('body', window.top.document).find('.modal-backdrop').remove();
-                            // jquery 调用刷新当前操作的table页面的refresh方法
-                            $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
-                            /*if (result)
-                                window.Ewin.alert({message: '修改数据成功!'});
-                            else
-                                window.Ewin.alert({message: '修改数据失败!'});*/
-                            // window.Ewin.alert({message:result.errMsg});
-                            if (result.success) {
-                                layer.msg('修改成功', {icon: 1, time: 2000})
-                            }
-                            else if (!result.success) {
-                                window.Ewin.alert({message: result.errMsg})
-                            }
-                        },
-                    error: function (status) {
-                        window.Ewin.alert({message: status.status + ':修改数据失败!'});
-                    }
-                });
+
+
+            var level = $("#level").val();
+            if (level == "2Y") {
+                $("#colorPart").attr({"disabled": "disabled"});
             }
-        });
-    })
-    $(document).keydown(function(event) {
+            $('#ebomMainForm').bootstrapValidator({
+                message: 'This value is not valid',
+                feedbackIcons: {
+                    valid: 'glyphicon glyphicon-ok',
+                    invalid: 'glyphicon glyphicon-remove',
+                    validating: 'glyphicon glyphicon-refresh'
+                },
+                fields: {
+                    lineId: {
+                        message: '零件号验证失败',
+                        validators: {
+                            notEmpty: {
+                                message: '零件号不能为空'
+                            }
+                        }
+                    },
+                    pBomLinePartName: {
+                        message: '名称验证失败',
+                        validators: {
+                            notEmpty: {
+                                message: '名称不能为空'
+                            }
+                        }
+                    },
+                    // lineNo: {
+                    //     message: '编号验证失败',
+                    //     validators: {
+                    //         stringLength: {
+                    //             /*长度提示*/
+                    //             min: 4,
+                    //             max: 4,
+                    //             message: '编号长度必须是4位数字'
+                    //         },
+                    //         //正则校验
+                    //
+                    //         regexp: {
+                    //
+                    //             regexp: /^[0-9]+$/, /* ^ 指的是匹配字符串开始的位置 + 匹配一个或者多个*/
+                    //
+                    //             message: '编号只能为数字'
+                    //
+                    //         },
+                    //
+                    //     }
+                    // },
+                }
+            });
+            // 绑定dialog的确定按钮的监听事件
+            $("#btnOk", window.top.document).click(function () {
+                var bootstrapValidator = $("#ebomMainForm", window.top.document).data('bootstrapValidator');
+                bootstrapValidator.validate();
+                if (bootstrapValidator.isValid()) {
+                    var url = $("#ebomMainForm", window.top.document).attr('action');
+                    let localData={};
+                    var _d = $("#ebomMainForm").serializeArray();
+                    for (var p in _d) {
+                        localData[_d[p].name] = _d[p].value;
+                    }
+                    alert(JSON.stringify(localData))
+                    let mapOfLocalData={};
+                    for (let i in keys) {
+                        mapOfLocalData[keys[i]]=$("#"+keys[i]).val();
+                    }
+                    localData.updateDosage=mapOfLocalData;
+
+                    /*var myData = JSON.stringify({
+                        "puid": $("#puid").val(),
+                        "lineId": $("#lineId").val(),
+                        "pBomLinePartName": $("#pBomLinePartName").val(),
+                        // "level": $("#level").val(),
+                        "pBomOfWhichDept": $("#pBomOfWhichDept").val(),
+                        // "rank": $("#rank").val(),
+                        // "groupNum": $("#groupNum").val(),
+                        "pBomLinePartEnName": $("#pBomLinePartEnName").val(),
+                        // "lineNo": $("#lineNo").val(),
+                        "parentLineId": $("#parentLineId").val(),
+                        "pLouaFlag": $("#pLouaFlag").val(),
+                        "pUnit": $("#pUnit").val(),
+                        "pPictureNo": $("#pPictureNo").val(),
+                        "pPictureSheet": $("#pPictureSheet").val(),
+                        "pMaterialHigh": $("#pMaterialHigh").val(),
+                        "pMaterial1": $("#pMaterial1").val(),
+                        "pMaterial2": $("#pMaterial2").val(),
+                        "pMaterial3": $("#pMaterial3").val(),
+                        "pDensity": $("#pDensity").val(),
+                        "pMaterialStandard": $("#pMaterialStandard").val(),
+                        "pSurfaceTreat": $("#pSurfaceTreat").val(),
+                        "pTextureColorNum": $("#pTextureColorNum").val(),
+                        "pManuProcess": $("#pManuProcess").val(),
+                        "pSymmetry": $("#pSymmetry").val(),
+                        "pImportance": $("#pImportance").val(),
+                        "pRegulationFlag": $("#pRegulationFlag").val(),
+                        "p3cpartFlag": $("#p3cpartFlag").val(),
+                        "pRegulationCode": $("#pRegulationCode").val(),
+                        "pBwgBoxPart": $("#pBwgBoxPart").val(),
+                        "pDevelopType": $("#pDevelopType").val(),
+                        "pDataVersion": $("#pDataVersion").val(),
+                        "pTargetWeight": $("#pTargetWeight").val(),
+                        "pFeatureWeight": $("#pFeatureWeight").val(),
+                        "pActualWeight": $("#pActualWeight").val(),
+                        "pFastener": $("#pFastener").val(),
+                        "pFastenerStandard": $("#pFastenerStandard").val(),
+                        "pFastenerLevel": $("#pFastenerLevel").val(),
+                        "pTorque": $("#pTorque").val(),
+                        "pDutyEngineer": $("#pDutyEngineer").val(),
+                        "pSupply": $("#pSupply").val(),
+                        "pSupplyCode": $("#pSupplyCode").val(),
+                        "pBuyEngineer": $("#pBuyEngineer").val(),
+                        "pRemark": $("#pRemark").val(),
+                        "pBomLinePartClass": $("#pBomLinePartClass").val(),
+                        "pBomLinePartResource": $("#pBomLinePartResource").val(),
+                        "pInOutSideFlag": $("#pInOutSideFlag").val(),
+                        "pUpc": $("#pUpc").val(),
+                        "fna": $("#fna").val(),
+                        "pFnaDesc": $("#pFnaDesc").val(),
+                        "number": $("#number").val(),
+                        "colorPart": $("#colorPart").val(),
+                        "projectId": $("#project", window.top.document).val(),
+                    });*/
+
+                    $.ajax({
+                        contentType:
+                            "application/json",
+                        type:
+                            'POST',
+                        url: url,
+                        data:  JSON.stringify(localData),
+                        success:
+                            function (result) {
+                                $('.modal-dialog', window.top.document).parent('div').remove()
+                                $('body', window.top.document).find('.modal-backdrop').remove();
+                                // jquery 调用刷新当前操作的table页面的refresh方法
+                                $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
+                                /*if (result)
+                                    window.Ewin.alert({message: '修改数据成功!'});
+                                else
+                                    window.Ewin.alert({message: '修改数据失败!'});*/
+                                // window.Ewin.alert({message:result.errMsg});
+                                if (result.success) {
+                                    layer.msg('修改成功', {icon: 1, time: 2000})
+                                }
+                                else if (!result.success) {
+                                    window.Ewin.alert({message: result.errMsg})
+                                }
+                            },
+                        error: function (status) {
+                            window.Ewin.alert({message: status.status + ':修改数据失败!'});
+                        }
+                    });
+                }
+            });
+        })
+    $(document).keydown(function (event) {
         if (event.keyCode == 13) {
-            $('form').each(function() {
+            $('form').each(function () {
                 event.preventDefault();
             });
         }

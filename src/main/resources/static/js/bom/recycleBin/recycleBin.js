@@ -65,8 +65,7 @@ function doQuery() {
                     pagination: true,
                     pageNumber: 1,                       //初始化加载第一页，默认第一页
                     pageSize: 20,                       //每页的记录行数（*）
-                    pageList: ['ALL',20,50,100,200,500,1000],        //可供选择的每页的行数（*）
-                    columns: column,
+                    pageList: ['ALL', 10, 20, 50, 100, 200, 500, 1000],        //可供选择的每页的行数（*）                    columns: column,
                     sortOrder: "asc",                   //排序方式
                     clickToSelect: true,// 单击某一行的时候选中某一条记录
                     showColumns: true, //是否显示所有的列
@@ -426,6 +425,14 @@ function doQuery() {
 //         }
 //     });
 // }
+
+function toPage() {
+    var pageNum = $("#pageNum").val();
+    if (pageNum) {
+        $('#recycleBinTable').bootstrapTable('selectPage', parseInt(pageNum));
+    }
+}
+
 $(document).keydown(function(event) {
     if (event.keyCode == 13) {
         $('form').each(function() {

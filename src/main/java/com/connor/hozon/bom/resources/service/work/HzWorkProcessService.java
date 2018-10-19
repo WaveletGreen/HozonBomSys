@@ -4,7 +4,7 @@ import com.connor.hozon.bom.resources.domain.dto.request.AddHzProcessReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.request.ApplyMbomDataTOHzMaterielReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.request.UpdateHzProcessReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzWorkProcessRespDTO;
-import com.connor.hozon.bom.resources.domain.dto.response.OperateResultMessageRespDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
 import com.connor.hozon.bom.resources.domain.query.HzWorkProcessByPageQuery;
 import com.connor.hozon.bom.resources.page.Page;
 import sql.pojo.work.HzWorkProcedure;
@@ -23,33 +23,33 @@ public interface HzWorkProcessService {
      * @param reqDTO
      * @return
      */
-    OperateResultMessageRespDTO addHzWorkProcess(AddHzProcessReqDTO reqDTO);
+    WriteResultRespDTO addHzWorkProcess(AddHzProcessReqDTO reqDTO);
 
     /**
      * 编辑一条数据
      * @param reqDTO
      * @return
      */
-    OperateResultMessageRespDTO updateHzWorkProcess(UpdateHzProcessReqDTO reqDTO);
+    WriteResultRespDTO updateHzWorkProcess(UpdateHzProcessReqDTO reqDTO);
     /**
      * 编辑一条数据2
      * @param reqDTO
      * @return
      */
-    OperateResultMessageRespDTO updateHzWorkProcess2(UpdateHzProcessReqDTO reqDTO);
+    WriteResultRespDTO updateHzWorkProcess2(UpdateHzProcessReqDTO reqDTO);
 
     /**
      * 删除一条数据
      * @param puid
      * @return
      */
-    OperateResultMessageRespDTO deleteHzWorkProcess(String puid);
+    WriteResultRespDTO deleteHzWorkProcess(String puid);
     /**
      * 删除多条数据
      * @param datas
      * @return
      */
-    OperateResultMessageRespDTO deleteHzWorkProcesses(Map<String, List<String>> datas);
+    WriteResultRespDTO deleteHzWorkProcesses(Map<String, List<String>> datas);
 
     /**
      * 分页获取数据
@@ -64,7 +64,7 @@ public interface HzWorkProcessService {
 
     HzWorkProcessRespDTO findHzWorkProcess2(String materielId,String projectId, String procedureDesc);
 
-    OperateResultMessageRespDTO applyMbomDataToHzMaterielOneKey(ApplyMbomDataTOHzMaterielReqDTO reqDTO);
+    WriteResultRespDTO applyMbomDataToHzMaterielOneKey(ApplyMbomDataTOHzMaterielReqDTO reqDTO);
 
     int doUpdateByBatch(Map<String,Object> map);
 

@@ -55,7 +55,7 @@ public class HzBrandService {
      * @return
      */
     public boolean doUpdateSelective(HzBrandRecord record) {
-        return hzBrandRecordDao.updateSelective(record) > 0 ? true : false;
+        return hzBrandRecordDao.updateByPrimaryKey(record) > 0 ? true : false;
     }
 
     /**

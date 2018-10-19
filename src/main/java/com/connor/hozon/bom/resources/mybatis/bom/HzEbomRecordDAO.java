@@ -1,10 +1,10 @@
 package com.connor.hozon.bom.resources.mybatis.bom;
 
-import com.connor.hozon.bom.resources.domain.dto.request.DeleteHzEbomReqDTO;
 import com.connor.hozon.bom.resources.domain.query.HzBomRecycleByPageQuery;
 import com.connor.hozon.bom.resources.domain.query.HzEbomByPageQuery;
 import com.connor.hozon.bom.resources.domain.query.HzEbomTreeQuery;
 import com.connor.hozon.bom.resources.page.Page;
+import sql.pojo.bom.HzBomLineRecord;
 import sql.pojo.bom.HzImportEbomRecord;
 import sql.pojo.epl.HzEPLManageRecord;
 
@@ -62,12 +62,19 @@ public interface HzEbomRecordDAO {
 
     /**
      * 批量删除
-     * @param reqDTOs
+     * @param puids 主键ids 中间全部用英文逗号隔开
      * @return
      */
-    int deleteList(List<DeleteHzEbomReqDTO> reqDTOs);
+    int deleteList(String puids);
 
     int delete(String puid);
+
+    /**
+     * EBOM 批量更新
+     * @param records
+     * @return
+     */
+    int updateList(List<HzBomLineRecord> records);
 
     /**
      * 查询回收站
@@ -112,4 +119,14 @@ public interface HzEbomRecordDAO {
     List<HzEPLManageRecord> getSameNameLineId(String lineId,String projectId);
 
     List<HzEPLManageRecord> getPaintAndWhiteBody(String puid,String projectId);
+
+    /**
+     * 分页获取EBOM结构树
+     * @param query
+     * @return
+     */
+    Page<HzEPLManageRecord> getHzEbomTreeByPage(HzEbomByPageQuery query);
+
+
+
 }

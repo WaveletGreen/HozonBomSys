@@ -4,7 +4,7 @@ import com.connor.hozon.bom.resources.domain.dto.request.DeleteHzAccessoriesLibs
 import com.connor.hozon.bom.resources.domain.query.HzAccessoriesLibsPageQuery;
 import com.connor.hozon.bom.resources.mybatis.accessories.HzAccessoriesLibsDAO;
 import com.connor.hozon.bom.resources.page.Page;
-import com.connor.hozon.bom.resources.page.PageRequest;
+import com.connor.hozon.bom.resources.page.PageRequestParam;
 import org.springframework.stereotype.Service;
 import sql.BaseSQLUtil;
 import sql.pojo.accessories.HzAccessoriesLibs;
@@ -45,11 +45,28 @@ public class HzAccessoriesLibsDAOImpl  extends BaseSQLUtil implements HzAccessor
 
     @Override
     public Page<HzAccessoriesLibs> getHzAccessoriesByPage(HzAccessoriesLibsPageQuery query) {
-        PageRequest request = new PageRequest();
+        PageRequestParam request = new PageRequestParam();
         Map map = new HashMap();
         request.setPageNumber(query.getPage());
         request.setPageSize(query.getPageSize());
         request.setFilters(map);
         return super.findPage("HzAccessoriesLibsDAOImpl_getHzAccessoriesByPage","HzAccessoriesLibsDAOImpl_getHzAccessoriesTotalCount",request);
+    }
+
+    @Override
+    public int selectHzAccessoriesLibsByCount(String pMaterielCode) {
+        return (Integer)super.findForObject("HzAccessoriesLibsDAOImpl_findByCodeOrCount",pMaterielCode);
+    }
+
+    @Override
+    public HzAccessoriesLibs getHzAccessoriesLibsByCode(String pMaterielCode) {
+        return (HzAccessoriesLibs)super.findForObject("HzAccessoriesLibsDAOImpl_findByCode",pMaterielCode);
+    }
+
+    @Override
+    public HzAccessoriesLibs queryAccessoriesByMaterielCode(String materielCode) {
+        HzAccessoriesLibs hzAccessoriesLibs = new HzAccessoriesLibs();
+        hzAccessoriesLibs.setpMaterielCode(materielCode);
+        return super.executeQueryById(hzAccessoriesLibs, "HzAccessoriesLibsDAOImpl_queryAccessoriesByMaterielCode");
     }
 }

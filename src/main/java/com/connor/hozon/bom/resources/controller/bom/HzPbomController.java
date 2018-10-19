@@ -10,17 +10,17 @@ import com.connor.hozon.bom.resources.domain.dto.request.HzPbomProcessComposeReq
 import com.connor.hozon.bom.resources.domain.dto.request.UpdateHzPbomRecordReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzEbomRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzPbomLineRespDTO;
-import com.connor.hozon.bom.resources.domain.dto.response.OperateResultMessageRespDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
 import com.connor.hozon.bom.resources.domain.query.HzPbomByPageQuery;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.service.bom.HzPbomService;
 import com.connor.hozon.bom.resources.util.ExcelUtil;
 import com.connor.hozon.bom.resources.util.ResultMessageBuilder;
+import com.connor.hozon.bom.resources.util.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import sql.pojo.cfg.HzCfg0ColorSet;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -62,7 +62,7 @@ public class HzPbomController extends BaseController {
         tableTitle.put("mouldType", "模具类别");
         tableTitle.put("outerPart", "外委件");
         tableTitle.put("station", "工位");
-        writeAjaxJSONResponse(ResultMessageBuilder.build(tableTitle), response);
+        toJSONResponse(Result.build(tableTitle), response);
     }
 
     /**
@@ -163,21 +163,21 @@ public class HzPbomController extends BaseController {
 
     @RequestMapping(value = "insert", method = RequestMethod.POST)
     public void addPbomToDB(@RequestBody AddHzPbomRecordReqDTO reqDTO, HttpServletResponse response) {
-        OperateResultMessageRespDTO respDTO = hzPbomService.insertHzPbomRecord(reqDTO);
-        writeAjaxJSONResponse(ResultMessageBuilder.build(OperateResultMessageRespDTO.isSuccess(respDTO), respDTO.getErrMsg()), response);
+        WriteResultRespDTO respDTO = hzPbomService.insertHzPbomRecord(reqDTO);
+        toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO), respDTO.getErrMsg()), response);
     }
 
     @RequestMapping(value = "update", method = RequestMethod.POST)
     public void updatePbomRecord(@RequestBody UpdateHzPbomRecordReqDTO reqDTO, HttpServletResponse response) {
-        OperateResultMessageRespDTO respDTO = hzPbomService.updateHzPbomRecord(reqDTO);
-        writeAjaxJSONResponse(ResultMessageBuilder.build(OperateResultMessageRespDTO.isSuccess(respDTO), respDTO.getErrMsg()), response);
+        WriteResultRespDTO respDTO = hzPbomService.updateHzPbomRecord(reqDTO);
+        toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO), respDTO.getErrMsg()), response);
     }
 
 
     @RequestMapping(value = "delete", method = RequestMethod.POST)
     public void deletePbomRecord(@RequestBody DeleteHzPbomReqDTO reqDTO, HttpServletResponse response) {
-        OperateResultMessageRespDTO respDTO = hzPbomService.deleteHzPbomRecordByForeignId(reqDTO);
-        writeAjaxJSONResponse(ResultMessageBuilder.build(OperateResultMessageRespDTO.isSuccess(respDTO), respDTO.getErrMsg()), response);
+        WriteResultRespDTO respDTO = hzPbomService.deleteHzPbomRecordByForeignId(reqDTO);
+        toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO), respDTO.getErrMsg()), response);
     }
 
 
@@ -190,19 +190,19 @@ public class HzPbomController extends BaseController {
     @RequestMapping(value = "processComposeTree", method = RequestMethod.GET)
     public void findProcessComposeTree(HzPbomProcessComposeReqDTO reqDTO, HttpServletResponse response) {
         if (reqDTO == null) {
-            writeAjaxJSONResponse(ResultMessageBuilder.build(false, "非法参数！"), response);
+            toJSONResponse(Result.build(false, "非法参数！"), response);
             return;
         }
         if (reqDTO.getProjectId() == null || reqDTO.getLineId() == null) {
-            writeAjaxJSONResponse(ResultMessageBuilder.build(false, "非法参数！"), response);
+            toJSONResponse(Result.build(false, "非法参数！"), response);
             return;
         }
         JSONArray jsonArray = hzPbomService.getPbomForProcessCompose(reqDTO);
         if (jsonArray == null) {
-            writeAjaxJSONResponse(ResultMessageBuilder.build(false, "查无结果！"), response);
+            toJSONResponse(Result.build(false, "查无结果！"), response);
             return;
         }
-        writeAjaxJSONResponse(ResultMessageBuilder.build(true, jsonArray), response);
+        toJSONResponse(Result.build(true, jsonArray), response);
     }
 
     /**
@@ -214,16 +214,16 @@ public class HzPbomController extends BaseController {
     @RequestMapping(value = "detail", method = RequestMethod.GET)
     public void findPbomDetail(HzPbomProcessComposeReqDTO reqDTO, HttpServletResponse response) {
         if (reqDTO == null) {
-            writeAjaxJSONResponse(ResultMessageBuilder.build(false, "非法参数！"), response);
+            toJSONResponse(Result.build(false, "非法参数！"), response);
             return;
         }
         if (reqDTO.getProjectId() == null || reqDTO.getPuid() == null) {
-            writeAjaxJSONResponse(ResultMessageBuilder.build(false, "非法参数！"), response);
+            toJSONResponse(Result.build(false, "非法参数！"), response);
             return;
         }
 
         JSONArray object = hzPbomService.getPbomByLineId(reqDTO);
-        writeAjaxJSONResponse(ResultMessageBuilder.build(object), response);
+        toJSONResponse(Result.build(object), response);
     }
 
     @RequestMapping(value = "updataProcessOfFitting", method = RequestMethod.GET)
@@ -253,9 +253,9 @@ public class HzPbomController extends BaseController {
      */
     @RequestMapping(value = "/add/processCompose", method = RequestMethod.POST)
     public void addProcessCompose(@RequestBody AddHzPbomRecordReqDTO recordReqDTO, HttpServletResponse response) {
-        OperateResultMessageRespDTO operateResultMessageRespDTO = hzPbomService.andProcessCompose(recordReqDTO);
+        WriteResultRespDTO writeResultRespDTO = hzPbomService.andProcessCompose(recordReqDTO);
         JSONArray jsonArray = new JSONArray();
-        if (OperateResultMessageRespDTO.isSuccess(operateResultMessageRespDTO)) {
+        if (WriteResultRespDTO.isSuccess(writeResultRespDTO)) {
             HzPbomProcessComposeReqDTO reqDTO = new HzPbomProcessComposeReqDTO();
             if (recordReqDTO.getLineId() != null) {
                 reqDTO.setLineId(recordReqDTO.getLineId());
@@ -263,8 +263,8 @@ public class HzPbomController extends BaseController {
             reqDTO.setProjectId(recordReqDTO.getProjectId());
             jsonArray = hzPbomService.getPbomForProcessCompose(reqDTO);
         }
-        writeAjaxJSONResponse(ResultMessageBuilder.build(
-                OperateResultMessageRespDTO.isSuccess(operateResultMessageRespDTO), operateResultMessageRespDTO.getErrMsg(), jsonArray), response);
+        toJSONResponse(Result.build(
+                WriteResultRespDTO.isSuccess(writeResultRespDTO), writeResultRespDTO.getErrMsg(), jsonArray), response);
     }
 
     /**
@@ -280,12 +280,23 @@ public class HzPbomController extends BaseController {
         return hzPbomService.simulateCraftingPart(param);
     }
 
+    @RequestMapping(value = "update/accessories", method = RequestMethod.GET)
+    public String getupdate(String projectId, String eBomPuid, Model model) {
+        if (eBomPuid == null) {
+            return "";
+        }
+        model.addAttribute("data", eBomPuid);
+        return "bomManage/pbom/pbomManage/updateAccessoriesLibrary";
+    }
+
+
     /**
-     * 合成工艺合件
+     * 合成工艺合件操作
      *
      * @param
      * @param param
      * @Autor Fancyears·Malos
+     * @ImportantDesc DO NOT ERASE THIS METHOD
      */
     @RequestMapping(value = "/doGenerateProcessCompose", method = RequestMethod.POST)
     @ResponseBody
@@ -367,4 +378,15 @@ public class HzPbomController extends BaseController {
         return "bomManage/pbom/pbomManage/excelImport";
     }
 
+    @RequestMapping("/query/accessories")
+    @ResponseBody
+    public JSONObject queryAccessories(String materielCode) {
+        return hzPbomService.queryAccessories(materielCode);
+    }
+
+    @RequestMapping("/add/accessories")
+    @ResponseBody
+    public JSONObject addAccessories(String materielCode, String puid, String projectId) {
+        return hzPbomService.addAccessories(puid, materielCode, projectId);
+    }
 }

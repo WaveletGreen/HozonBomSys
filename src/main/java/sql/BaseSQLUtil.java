@@ -1,7 +1,7 @@
 package sql;
 
 import com.connor.hozon.bom.resources.page.Page;
-import com.connor.hozon.bom.resources.page.PageRequest;
+import com.connor.hozon.bom.resources.page.PageRequestParam;
 import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -9,7 +9,7 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import sql.redis.DatabaseException;
+import sql.redis.HzDBException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -66,7 +66,7 @@ public class BaseSQLUtil implements IBaseSQLUtil {
             if (suppliers == null) {
                 result = sqlSessionTemplate.insert(by);
             } else {
-                // sqlSessionTemplate.insertOne(by, suppliers);
+                // sqlSessionTemplate.insert(by, suppliers);
                 result = sqlSessionTemplate.insert(by, suppliers);
             }
 //            sqlSessionTemplate.commit();
@@ -276,7 +276,7 @@ public class BaseSQLUtil implements IBaseSQLUtil {
             }
             // session.commit();
         } catch (Exception e) {
-            throw new DatabaseException("SQL执行出错" + sqlMapId, e);
+            throw new HzDBException("SQL执行出错" + sqlMapId, e);
         } finally {
 //            if (session != null)
 //                session.close();
@@ -293,6 +293,7 @@ public class BaseSQLUtil implements IBaseSQLUtil {
      */
     public int insert(final String sqlMapId, final Object object) {
 //        SqlSession session = null;
+        checkSessionStatus();
         try {
 //            SqlSessionFactory f = FactoryManager.getInstance();
 //            session = f.openSession();
@@ -301,7 +302,7 @@ public class BaseSQLUtil implements IBaseSQLUtil {
             return result;
         } catch (Exception e) {
             logger.error("SQL执行出错: " + sqlMapId, e);
-            throw new DatabaseException("SQL执行出错" + sqlMapId, e);
+            throw new HzDBException("SQL执行出错" + sqlMapId, e);
         } finally {
 //            if (session != null)
 //                session.close();
@@ -318,6 +319,7 @@ public class BaseSQLUtil implements IBaseSQLUtil {
      */
     public Object findForObject(final String sqlMapId, final Object param) {
 //        SqlSession session = null;
+        checkSessionStatus();
         try {
 //            SqlSessionFactory f = FactoryManager.getInstance();
 //            session = f.openSession();
@@ -328,7 +330,7 @@ public class BaseSQLUtil implements IBaseSQLUtil {
             }
         } catch (Exception e) {
             logger.error("SQL执行出错: " + sqlMapId, e);
-            throw new DatabaseException("SQL执行出错" + sqlMapId, e);
+            throw new HzDBException("SQL执行出错" + sqlMapId, e);
         }
         finally {
 //            if (session != null)
@@ -345,6 +347,7 @@ public class BaseSQLUtil implements IBaseSQLUtil {
      */
     public int update(final String sqlMapId, final Object param) {
 //        SqlSession session = null;
+        checkSessionStatus();
         try {
 //            SqlSessionFactory factory = FactoryManager.getInstance();
 //            session = factory.openSession();
@@ -353,7 +356,7 @@ public class BaseSQLUtil implements IBaseSQLUtil {
             return result;
         } catch (Exception e) {
             logger.error("SQL执行出错: " + sqlMapId, e);
-            throw new DatabaseException("SQL执行出错" + sqlMapId, e);
+            throw new HzDBException("SQL执行出错" + sqlMapId, e);
         } finally {
 //            if (session != null)
 //                session.close();
@@ -362,6 +365,7 @@ public class BaseSQLUtil implements IBaseSQLUtil {
 
     public int delete(final String sqlMapId, final Object param) {
 //        SqlSession session = null;
+        checkSessionStatus();
         try {
 //            SqlSessionFactory f = FactoryManager.getInstance();
 //            session = f.openSession();
@@ -370,7 +374,7 @@ public class BaseSQLUtil implements IBaseSQLUtil {
             return result;
         } catch (Exception e) {
             logger.error("SQL执行出错: " + sqlMapId, e);
-            throw new DatabaseException("SQL执行出错" + sqlMapId, e);
+            throw new HzDBException("SQL执行出错" + sqlMapId, e);
         } finally {
 //            if (session != null)
 //                session.close();
@@ -381,24 +385,24 @@ public class BaseSQLUtil implements IBaseSQLUtil {
      * 带有分页信息的查询
      *
      * @param sqlMapId    mybatis映射id
-     * @param pageRequest 分页请求参数信息 逻辑分页
+     * @param pageRequestParam 分页请求参数信息 逻辑分页
      * @return
      */
-    public Page findForPage(final String sqlMapId, final String totalMapId, PageRequest pageRequest) {
+    public Page findForPage(final String sqlMapId, final String totalMapId, PageRequestParam pageRequestParam) {
         Map filters = new HashMap();
-        filters.putAll(pageRequest.getFilters());
+        filters.putAll(pageRequestParam.getFilters());
         // 查询总数
         Number totalCount = (Number) findForObject(totalMapId, filters);
         if (totalCount == null || totalCount.intValue() <= 0) {
-            return new Page(pageRequest, 0);
+            return new Page(pageRequestParam, 0);
         }
-        if (totalCount != null && totalCount.intValue() <= (pageRequest.getPageNumber() - 1) * pageRequest.getPageSize()) {
-            return new Page(pageRequest.getPageNumber(), pageRequest.getPageSize(), totalCount.intValue(), new ArrayList(0));
+        if (totalCount != null && totalCount.intValue() <= (pageRequestParam.getPageNumber() - 1) * pageRequestParam.getPageSize()) {
+            return new Page(pageRequestParam.getPageNumber(), pageRequestParam.getPageSize(), totalCount.intValue(), new ArrayList(0));
         }
-        if(pageRequest.getPageSize() == 0){
-            pageRequest.setPageSize((int)totalCount);
+        if(pageRequestParam.getPageSize() == 0){
+            pageRequestParam.setPageSize((int)totalCount);
         }
-        Page page = new Page(pageRequest, totalCount.intValue());
+        Page page = new Page(pageRequestParam, totalCount.intValue());
         List list = findForList(sqlMapId, filters, page.getFirstResult(), page.getPageSize());
 
         page.setResult(list);
@@ -410,26 +414,26 @@ public class BaseSQLUtil implements IBaseSQLUtil {
      * 带有分页信息的查询  物理分页
      *
      * @param sqlMapId    mybatis映射id
-     * @param pageRequest 分页请求参数信息
+     * @param pageRequestParam 分页请求参数信息
      * @return
      */
-    public Page findPage(final String sqlMapId, final String totalMapId, PageRequest pageRequest) {
+    public Page findPage(final String sqlMapId, final String totalMapId, PageRequestParam pageRequestParam) {
         Map filters = new HashMap();
-        filters.putAll(pageRequest.getFilters());
+        filters.putAll(pageRequestParam.getFilters());
         // 查询总数
         Number totalCount = (Number) findForObject(totalMapId, filters);
         if (totalCount == null || totalCount.intValue() <= 0) {
-            return new Page(pageRequest, 0);
+            return new Page(pageRequestParam, 0);
         }
-        if (totalCount != null && totalCount.intValue() <= (pageRequest.getPageNumber() - 1) * pageRequest.getPageSize()) {
-            return new Page(pageRequest.getPageNumber(), pageRequest.getPageSize(), totalCount.intValue(), new ArrayList(0));
+        if (totalCount != null && totalCount.intValue() <= (pageRequestParam.getPageNumber() - 1) * pageRequestParam.getPageSize()) {
+            return new Page(pageRequestParam.getPageNumber(), pageRequestParam.getPageSize(), totalCount.intValue(), new ArrayList(0));
         }
-        if(pageRequest.getPageSize() == 0){
-            pageRequest.setPageSize((int)totalCount);
+        if(pageRequestParam.getPageSize() == 0){
+            pageRequestParam.setPageSize((int)totalCount);
         }
-        Page page = new Page(pageRequest, totalCount.intValue());
-        filters.put("offset", (pageRequest.getPageNumber() - 1) * pageRequest.getPageSize());
-        filters.put("limit", pageRequest.getPageNumber() * pageRequest.getPageSize());
+        Page page = new Page(pageRequestParam, totalCount.intValue());
+        filters.put("offset", (pageRequestParam.getPageNumber() - 1) * pageRequestParam.getPageSize());
+        filters.put("limit", pageRequestParam.getPageNumber() * pageRequestParam.getPageSize());
         List list = findForList(sqlMapId, filters);
         page.setResult(list);
         return page;
@@ -446,13 +450,14 @@ public class BaseSQLUtil implements IBaseSQLUtil {
      */
     public List findForList(final String sqlMapId, final Object param, final int offset, final int limit) {
 //        SqlSession session = null;
+        checkSessionStatus();
         try {
 //            SqlSessionFactory f = FactoryManager.getInstance();
 //            session = f.openSession();
             return sqlSessionTemplate.selectList(sqlMapId, param, new RowBounds(offset, limit));
         } catch (Exception e) {
 //            logger.error("SQL执行出错: " + sqlMapId, e);
-            throw new DatabaseException("SQL执行出错: " + sqlMapId, e);
+            throw new HzDBException("SQL执行出错: " + sqlMapId, e);
         }
 
     }

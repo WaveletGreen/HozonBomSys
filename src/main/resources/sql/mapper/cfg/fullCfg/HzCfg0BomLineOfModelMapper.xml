@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (c) 2018.
+  ~ This file was wrote by fancyears·milos·maywas @connor. Any question/bug you can post to 1243093366@qq.com.
+  ~ ALL RIGHTS RESERVED.
+  -->
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.connor.hozon.bom.bomSystem.dao.fullCfg.HzCfg0BomLineOfModelDao">
+    <resultMap id="BaseResultMap"
+               type="sql.pojo.cfg.fullCfg.HzCfg0BomLineOfModel">
+        <result column="OBJECT_NAME" jdbcType="VARCHAR"
+                property="objectName"/>
+        <result column="OBJECT_DESC" jdbcType="VARCHAR"
+                property="objectDesc"/>
+        <result column="P_CFG0_OPTION_VALUE" jdbcType="VARCHAR"
+                property="pCfg0OptionValue"/>
+        <result column="P_PARSE_LOGIC_VALUE" jdbcType="DECIMAL"
+                property="pParseLogicValue"/>
+        <result column="P_CFG0_OBJECT_ID" jdbcType="VARCHAR"
+                property="pCfg0ObjectId"/>
+        <result column="P_CFG0_DESC" jdbcType="VARCHAR"
+                property="pCfg0Desc"/>
+        <result column="P_CFG0_FAMILY_NAME" jdbcType="VARCHAR"
+                property="pCfg0FamilyName"/>
+        <result column="P_H9FEATUREENNAME" jdbcType="VARCHAR"
+                property="pH9featureenname"/>
+        <result column="P_BOM_LINE_NAME" jdbcType="VARCHAR"
+                property="pBomLineName"/>
+        <result column="P_BOM_LINE_ID" jdbcType="VARCHAR"
+                property="pBomLineId"/>
+        <result column="P_BOM_OF_WHICH_DEPT" jdbcType="VARCHAR"
+                property="pBomOfWhichDept"/>
+        <result column="P_CFG0_MODEL_RECORD" jdbcType="VARCHAR"
+                property="modelPuid"/>
+        <result column="P_BOM_LINE_BLOCK" jdbcType="BLOB"
+                property="lineBlock"/>
+        <result column="p_create_name" jdbcType="VARCHAR"
+                property="creator"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        OBJECT_NAME,
+        OBJECT_DESC,
+        P_CFG0_OPTION_VALUE,
+        P_PARSE_LOGIC_VALUE,
+        P_CFG0_OBJECT_ID,
+        P_CFG0_DESC,
+        P_CFG0_FAMILY_NAME,
+        P_H9FEATUREENNAME,
+        P_BOM_LINE_NAME,
+        P_BOM_LINE_ID,
+        P_BOM_OF_WHICH_DEPT,
+        P_CFG0_MODEL_RECORD,
+        P_BOM_LINE_BLOCK,
+        p_create_name
+	</sql>
+    <!--<sql id="CFG0_OF_BOMLINE_RECORD_Column_List">-->
+        <!--PUID,-->
+        <!--P_BOMLINEPUID,-->
+        <!--P_CFG0NAME,-->
+        <!--P_CFG0FAMILYNAME,-->
+        <!--P_BOM_DIGIFAX_ID,-->
+        <!--P_BOM_LINE_NAME,-->
+        <!--P_TO_CFG0_ID_OF_BL-->
+    <!--</sql>-->
+
+    <select id="selectByModelMainId" parameterType="java.lang.String"
+            resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from GETCFG0BOMLINEOFMODEL2
+        where infodba.p_view_param.set_param(#{modelId})=#{modelId}
+    </select>
+    <!--<insert id="insertByBatch" parameterType="java.util.List">-->
+        <!--insert all-->
+        <!--<foreach collection="list" item="item" index="index"-->
+                 <!--separator=" ">-->
+            <!--into HZ_CFG0_OF_BOMLINE_RECORD (-->
+            <!--<include refid="CFG0_OF_BOMLINE_RECORD_Column_List"/>-->
+            <!--) values (-->
+            <!--<include refid="values_by_batch"/>-->
+            <!--)-->
+        <!--</foreach>-->
+        <!--select 1 from dual-->
+    <!--</insert>-->
+</mapper>

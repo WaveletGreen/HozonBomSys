@@ -2,12 +2,13 @@ package com.connor.hozon.bom.bomSystem.dao.project;
 
 import java.util.List;
 
+import com.connor.hozon.bom.bomSystem.dao.BasicDao;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.context.annotation.Configuration;
 import sql.pojo.project.HzProjectLibs;
 
 @Configuration
-public interface HzProjectLibsDao {
+public interface HzProjectLibsDao extends BasicDao<HzProjectLibs> {
 
     HzProjectLibs selectByPrimaryKey(@Param("puid") String puid);
 
@@ -15,9 +16,5 @@ public interface HzProjectLibsDao {
 
     HzProjectLibs selectByProjectCode(@Param("pProjectCode") String pProjectCode);
 
-    int insert(HzProjectLibs project);
-
     int deleteByPrimaryKey(@Param("puid") String puid);
-
-    int updateByPrimaryKey(HzProjectLibs project);
 }

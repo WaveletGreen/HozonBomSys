@@ -2,7 +2,7 @@ package com.connor.hozon.bom.resources.service.change;
 
 import com.connor.hozon.bom.resources.domain.dto.request.UpdateHzEWOBasicInfoReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzEWOBasicInfoRespDTO;
-import com.connor.hozon.bom.resources.domain.dto.response.OperateResultMessageRespDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
 import com.connor.hozon.bom.resources.domain.query.HzEWOBasicInfoQuery;
 
 import java.util.List;
@@ -18,7 +18,7 @@ public interface HzEWOBasicInfoService {
      * @param reqDTO
      * @return
      */
-    OperateResultMessageRespDTO updateHzEWOBasicInfo(UpdateHzEWOBasicInfoReqDTO reqDTO);
+    WriteResultRespDTO updateHzEWOBasicInfo(UpdateHzEWOBasicInfoReqDTO reqDTO);
 
     /**
      * 查询EWO基本信息

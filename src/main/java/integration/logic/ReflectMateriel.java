@@ -6,7 +6,7 @@ import integration.option.MRPControlOption;
 import integration.option.MaterialOption;
 import integration.option.PurchaseOption;
 import integration.service.impl.masterMaterial1.TransMasterMaterialService;
-import sql.pojo.cfg.HzCfg0ModelFeature;
+import sql.pojo.cfg.derivative.HzCfg0ModelFeature;
 import sql.pojo.project.HzMaterielRecord;
 
 import static com.connor.hozon.bom.bomSystem.helper.StringHelper.checkString;

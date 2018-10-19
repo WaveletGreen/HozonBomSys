@@ -1,5 +1,8 @@
 package sql.pojo.cfg.vwo;
 
+/**
+ * VWO影响人员
+ */
 public class HzVwoInfluenceUser {
     /**
      * 主键

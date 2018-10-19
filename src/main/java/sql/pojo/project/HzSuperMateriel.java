@@ -1,5 +1,8 @@
 package sql.pojo.project;
 
+/**
+ * 超级物料
+ */
 public class HzSuperMateriel {
     /**
      * puid

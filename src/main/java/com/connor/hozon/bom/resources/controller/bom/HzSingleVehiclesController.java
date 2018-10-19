@@ -6,14 +6,14 @@ import com.connor.hozon.bom.resources.domain.dto.request.UpdateHzSingleVehiclesR
 import com.connor.hozon.bom.resources.domain.dto.response.HzPbomLineRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzSingleVehiclesBomRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzSingleVehiclesRespDTO;
-import com.connor.hozon.bom.resources.domain.dto.response.OperateResultMessageRespDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
 import com.connor.hozon.bom.resources.domain.query.HzSingleVehiclesBomByPageQuery;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.service.bom.HzSingleVehiclesBomServices;
 import com.connor.hozon.bom.resources.service.bom.HzSingleVehiclesServices;
 import com.connor.hozon.bom.resources.util.ExcelUtil;
 import com.connor.hozon.bom.resources.util.ListUtil;
-import com.connor.hozon.bom.resources.util.ResultMessageBuilder;
+import com.connor.hozon.bom.resources.util.Result;
 import com.connor.hozon.bom.resources.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -66,7 +66,7 @@ public class HzSingleVehiclesController extends BaseController {
         title.put("vehicleCode","车型代码");
         title.put("svlMaterialCode","物料编号");
         title.put("svlMotorCode","电机型号");
-        writeAjaxJSONResponse(ResultMessageBuilder.build(title), response);
+        toJSONResponse(Result.build(title), response);
     }
     
     
@@ -85,14 +85,14 @@ public class HzSingleVehiclesController extends BaseController {
 
     @RequestMapping(value = "update",method = RequestMethod.POST)
     public void updateSingleVehicles(@RequestBody UpdateHzSingleVehiclesReqDTO reqDTO,HttpServletResponse response){
-        OperateResultMessageRespDTO respDTO = hzSingleVehiclesServices.updateSingleVehicle(reqDTO);
-        writeAjaxJSONResponse(ResultMessageBuilder.build(OperateResultMessageRespDTO.isSuccess(respDTO)),response);
+        WriteResultRespDTO respDTO = hzSingleVehiclesServices.updateSingleVehicle(reqDTO);
+        toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO)),response);
     }
 
     @RequestMapping(value = "refresh",method = RequestMethod.POST)
     public void refreshSingleVehicles(String projectId,HttpServletResponse response){
-        OperateResultMessageRespDTO respDTO = hzSingleVehiclesServices.refreshSingleVehicle(projectId);
-        writeAjaxJSONResponse(ResultMessageBuilder.build(OperateResultMessageRespDTO.isSuccess(respDTO)),response);
+        WriteResultRespDTO respDTO = hzSingleVehiclesServices.refreshSingleVehicle(projectId);
+        toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO)),response);
     }
 
     /**
@@ -164,13 +164,12 @@ public class HzSingleVehiclesController extends BaseController {
         tableTitle.put("changeNum", "变更号");
         tableTitle.put("pFactoryCode", "工厂代码");
         tableTitle.put("pStockLocation", "发货料库存地点");
-        writeAjaxJSONResponse(ResultMessageBuilder.build(tableTitle), response);
+        toJSONResponse(Result.build(tableTitle), response);
     }
 
 
     /**
      * 分页获取单车BOM 记录
-     *
      * @param query
      * @return
      */
@@ -201,6 +200,7 @@ public class HzSingleVehiclesController extends BaseController {
             Map<String, Object> _res = new HashMap<>();
             _res.put("No", dto.getNo());
             _res.put("level", dto.getLevel());
+            _res.put("eBomPuid",dto.getEBomPuid());
             _res.put("pBomOfWhichDept", dto.getPBomOfWhichDept());
             _res.put("lineId", dto.getLineId());
             _res.put("pBomLinePartName", dto.getPBomLinePartName());
@@ -220,6 +220,7 @@ public class HzSingleVehiclesController extends BaseController {
             _res.put("changeNum", dto.getChangeNum());
             _res.put("pFactoryCode", dto.getPFactoryCode());
             _res.put("pStockLocation",dto.getPStockLocation());
+            _res.put("singleVehiclesId",dto.getSingleVehiclesId());
             _list.add(_res);
         });
         ret.put("totalCount", page.getTotalCount());
@@ -231,7 +232,7 @@ public class HzSingleVehiclesController extends BaseController {
     @RequestMapping(value = "bom/refresh",method = RequestMethod.POST)
     public void refreshSingleVehiclesBOM(String projectId,HttpServletResponse response){
         hzSingleVehiclesBomServices.analysisSingleVehicles(projectId);
-        writeAjaxJSONResponse(ResultMessageBuilder.build(true),response);
+        toJSONResponse(Result.build(true),response);
     }
 
     /**

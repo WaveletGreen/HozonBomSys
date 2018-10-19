@@ -1,9 +1,13 @@
 package sql.pojo.project;
 
 import com.connor.hozon.bom.bomSystem.service.project.IProject;
+import lombok.Data;
 
 import java.util.Date;
 
+/**
+ * 品牌
+ */
 public class HzBrandRecord implements IProject{
     /**
      * puid
@@ -34,17 +38,19 @@ public class HzBrandRecord implements IProject{
      */
     private String pBrandLastModifier;
 
-    public String getPuid() {
-        return puid;
-    }
 
     @Override
     public String getCode() {
         return this.pBrandCode;
     }
 
+    @Override
+    public String getPuid() {
+        return puid;
+    }
+
     public void setPuid(String puid) {
-        this.puid = puid == null ? null : puid.trim();
+        this.puid = puid;
     }
 
     public String getpBrandCode() {

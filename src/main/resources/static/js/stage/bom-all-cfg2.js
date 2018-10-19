@@ -15,7 +15,6 @@ var cfgValArr = [];
 var modelArr = [];
 //配置管理
 var cfgmagArr = [];
-
 function doRefresh(projectUid) {
     loadData(projectUid);
 }
@@ -31,6 +30,14 @@ function loadData(projectUid) {
             'bdf': projectUid
         },
         success: function (myData) {
+            //总成零件号数组
+            partIdArr = [];
+            //配置代码数组
+            cfgValArr = [];
+            //版型数组
+            modelArr = [];
+            //配置管理
+            cfgmagArr = [];
             if (myData == null) {
                 window.Ewin.alert({message: "查无数据，请联系项目经理或管理员"});
                 return;
@@ -189,7 +196,8 @@ function loadData(projectUid) {
                     // } else
                     if (aaa == 2) {
                         partIdArr.push(dataOfModel[index]);
-                        delta = delta + "<td class='edit' id='td_part" + dataOfModel[index] + "'><div style='width: 150px;overflow: hidden' title='" + dataOfModel[index] + "'>" + dataOfModel[index] + "</div></td>";
+                        // delta = delta + "<td class='edit' id='td_part" + dataOfModel[index] + "'><div style='width: 150px;overflow: hidden' title='" + dataOfModel[index] + "'>" + dataOfModel[index] + "</div></td>";
+                        delta = delta + "<td class='edit'><div style='width: 150px;overflow: hidden' title='" + dataOfModel[index] + "' class='td_partClass'>" + dataOfModel[index] + "</div></td>";
                     } else if (aaa == 7) {
                         //往特性数组中添加数据
                         cfgValArr.push(dataOfModel[index]);
@@ -205,7 +213,8 @@ function loadData(projectUid) {
                         }
                         cfgSelect += "</select>";
                         // delta = delta + "<td class='edit'><input type='text' value='"+dataOfModel[index]+"' style='display: none'><div style='width: 150px'>" + dataOfModel[index] + "</div></td>";
-                        delta = delta + "<td class='edit' id='td_cfg" + dataOfModel[index] + "'>" + cfgSelect + "<div style='width: 150px'>" + dataOfModel[index] + "</div></td>";
+                        // delta = delta + "<td class='edit' id='td_cfg" + dataOfModel[index] + "'>" + cfgSelect + "<div style='width: 150px'>" + dataOfModel[index] + "</div></td>";
+                        delta = delta + "<td class='edit'>" + cfgSelect + "<div style='width: 150px' class='td_cfgClass'>" + dataOfModel[index] + "</div></td>";
                     } else if (aaa == 8) {
                         var colorPartId = "colorPart" + i;
                         let isColor = null;
@@ -251,13 +260,15 @@ function loadData(projectUid) {
                 $("#tr3").append("<td ><div style='width: 200px'  >" + modeli.vehicle + "</div></td>");
                 //往版型数组添加数据
                 modelArr.push(v0);
-                $("#tr4").append("<td id='td_model" + v0 + "'><div style='width: 200px'  ><a href='javascript:void(0);' onclick='Botton(\"" + v1 + "\")'>" + v0 + "</a></div></td>");
+                // $("#tr4").append("<td id='td_model" + v0 + "'><div style='width: 200px'  ><a href='javascript:void(0);' onclick='Botton(\"" + v1 + "\")'>" + v0 + "</a></div></td>");
+                $("#tr4").append("<td ><div style='width: 200px'  class='td_modelClass'><a href='javascript:void(0);' onclick='Botton(\"" + v1 + "\")'>" + v0 + "</a></div></td>");
                 $("#tr5").append("<td ><div style='width: 200px'  >" + modeli.pModelShape + "</div></td>");
                 $("#tr6").append("<td ><div style='width: 200px'  >" + modeli.pModelAnnouncement + "</div></td>");
                 $("#tr7").append("<td ><div style='width: 200px'  >" + modeli.pModelCfgDesc + "</div></td>");
                 //往配置管理数组添加数据
                 cfgmagArr.push(modeli.pModelCfgMng);
-                $("#tr8").append("<td id='td_cfgmag" + modeli.pModelCfgMng + "'><div style='width: 200px'  >" + modeli.pModelCfgMng + "</div></td>");
+                // $("#tr8").append("<td id='td_cfgmag" + modeli.pModelCfgMng + "'><div style='width: 200px'  >" + modeli.pModelCfgMng + "</div></td>");
+                $("#tr8").append("<td ><div style='width: 200px' class='td_cfgmagClass' >" + modeli.pModelCfgMng + "</div></td>");
                 $("#tr9").append("<td ><div style='width: 200px'  >" + modeli.pModelTrailNum + "</div></td>");
                 $("#tr10").append("<td ><div style='width: 200px'  >" + modeli.pModelGoodsNum + "</div></td>");
                 $("#tr11").append("<td ><div style='width: 200px'  >" + "" + "</div></td>");
@@ -301,6 +312,23 @@ function loadData(projectUid) {
                 // }
             }
             $table.addClass("table").addClass("table-striped");
+
+            var td_part_parent = $("#td_part").parent();
+            $("#td_part").remove();
+            td_part_parent.append('<input type="text" class="form-control" name="platforms" id="td_part" placeholder="请输入总成零件号" onfocus="focusQuery(this)"/>');
+
+            var td_cfg_parent = $("#td_cfg").parent();
+            $("#td_cfg").remove();
+            td_cfg_parent.append('<input type="text" class="form-control" name="modelnumber" id="td_cfg" placeholder="请输入配置代码" onfocus="focusQuery(this)"/>');
+
+            var td_model_parent = $("#td_model").parent();
+            $("#td_model").remove();
+            td_model_parent.append('<input type="text" class="form-control" name="modelyear" id="td_model" placeholder="请输入版型" onfocus="focusQuery(this)"/>');
+
+            var td_cfgmag_parent = $("#td_cfgmag").parent();
+            $("#td_cfgmag").remove();
+            td_cfgmag_parent.append('<input type="text" class="form-control" name="modelyear" id="td_cfgmag" placeholder="请输入配置管理" onfocus="focusQuery(this)"/>');
+
             $("#td_part").typeahead({
                 source: partIdArr
             });
@@ -811,6 +839,11 @@ function editorOrSave(but) {
                                             var div = $(item).find('div');
                                             $(select).hide();
                                             $(div).text($(select).find("option:selected").text());
+                                            if($(div).text()=="选配"){
+                                                $(div).css('color','#8449d6');
+                                            }else{
+                                                $(div).css('color','#43da4e');
+                                            }
                                             $(div).show();
                                             msgVal = $(select).val();
                                         } else if (index > 10) {

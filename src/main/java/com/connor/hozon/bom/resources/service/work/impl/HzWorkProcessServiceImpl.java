@@ -6,7 +6,7 @@ import com.connor.hozon.bom.resources.domain.dto.request.ApplyMbomDataTOHzMateri
 import com.connor.hozon.bom.resources.domain.dto.request.UpdateHzProcessReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzMbomRecordRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzWorkProcessRespDTO;
-import com.connor.hozon.bom.resources.domain.dto.response.OperateResultMessageRespDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
 import com.connor.hozon.bom.resources.domain.query.HzMaterielQuery;
 import com.connor.hozon.bom.resources.domain.query.HzWorkProcessByPageQuery;
 import com.connor.hozon.bom.resources.mybatis.factory.HzFactoryDAO;
@@ -18,7 +18,6 @@ import com.connor.hozon.bom.resources.service.work.HzWorkProcessService;
 import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.resources.util.PrivilegeUtil;
 import com.connor.hozon.bom.sys.entity.User;
-import org.apache.commons.collections.map.HashedMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sql.pojo.factory.HzFactory;
@@ -48,19 +47,19 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
     @Autowired
     private HzFactoryDAO hzFactoryDAO;
     @Override
-    public OperateResultMessageRespDTO addHzWorkProcess(AddHzProcessReqDTO reqDTO) {
+    public WriteResultRespDTO addHzWorkProcess(AddHzProcessReqDTO reqDTO) {
         try{
-            OperateResultMessageRespDTO respDTO = new OperateResultMessageRespDTO();
+            WriteResultRespDTO respDTO = new WriteResultRespDTO();
             User user = UserInfo.getUser();
             if(!PrivilegeUtil.writePrivilege()){
-               return OperateResultMessageRespDTO.getFailPrivilege();
+               return WriteResultRespDTO.getFailPrivilege();
             }
 
             HzWorkProcedure hzWorkProcedure = new HzWorkProcedure();
             HzWorkProcedure workProcess = hzWorkProcedureDAO.getHzWorkProcessByMaterielId(reqDTO.getMaterielId());
             if(workProcess!=null){
                 respDTO.setErrMsg("当前插入的对象已存在,编辑属性请点击修改按钮进行操作!");
-                respDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
+                respDTO.setErrCode(WriteResultRespDTO.FAILED_CODE);
                 return respDTO;
             }
             String factoryCode = reqDTO.getFactoryCode();
@@ -73,7 +72,7 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
                     hzFactory.setpFactoryCode(factoryCode);
                     int i = hzFactoryDAO.insert(hzFactory);
                     if(i<0){
-                        return OperateResultMessageRespDTO.getFailResult();
+                        return WriteResultRespDTO.getFailResult();
                     }
                 }else{
                     puid = hzFactory.getPuid();
@@ -83,12 +82,12 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
                 query.setPuid(reqDTO.getMaterielId());
                 HzMaterielRecord hzMaterielRecord = hzMaterielDAO.getHzMaterielRecord(query);
                 if(hzMaterielRecord == null){
-                    return OperateResultMessageRespDTO.getFailResult();
+                    return WriteResultRespDTO.getFailResult();
                 }
                 hzMaterielRecord.setpFactoryPuid(puid);
                 int i = hzMaterielDAO.update(hzMaterielRecord);
                 if(i<0){
-                    return OperateResultMessageRespDTO.getFailResult();
+                    return WriteResultRespDTO.getFailResult();
                 }
             }
 
@@ -109,7 +108,7 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
             hzWorkProcedure.setPurpose(reqDTO.getPurpose());
             hzWorkProcedure.setState(reqDTO.getState());
             hzWorkProcedure.setPuid(UUID.randomUUID().toString());
-            List<HzWorkCenter> hzWorkCenterList = hzWorkCenterDAO.findWorkCenter(reqDTO.getProjectId(),reqDTO.getpWorkCode());
+            List<HzWorkCenter> hzWorkCenterList = hzWorkCenterDAO.findWorkCenter(reqDTO.getpWorkCode());
             if(hzWorkCenterList != null && hzWorkCenterList.size()>0){
                 hzWorkProcedure.setpWorkPuid("");
             }else {
@@ -123,20 +122,20 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
             }
            int i =  hzWorkProcedureDAO.insert(hzWorkProcedure);
            if(i>0){
-               return OperateResultMessageRespDTO.getSuccessResult();
+               return WriteResultRespDTO.getSuccessResult();
            }
         }catch (Exception e){
-            return OperateResultMessageRespDTO.getFailResult();
+            return WriteResultRespDTO.getFailResult();
         }
 
-        return OperateResultMessageRespDTO.getFailResult();
+        return WriteResultRespDTO.getFailResult();
     }
 
     @Override
-    public OperateResultMessageRespDTO updateHzWorkProcess(UpdateHzProcessReqDTO reqDTO) {
+    public WriteResultRespDTO updateHzWorkProcess(UpdateHzProcessReqDTO reqDTO) {
         User user = UserInfo.getUser();
         if(!PrivilegeUtil.writePrivilege()){
-            return OperateResultMessageRespDTO.getFailPrivilege();
+            return WriteResultRespDTO.getFailPrivilege();
         }
         HzWorkProcedure workProcess = hzWorkProcedureDAO.getHzWorkProcessByMaterielId(reqDTO.getMaterielId());
         if(workProcess == null){
@@ -151,7 +150,7 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
                     hzFactory.setpFactoryCode(factoryCode);
                     int i = hzFactoryDAO.insert(hzFactory);
                     if(i<0){
-                        return OperateResultMessageRespDTO.getFailResult();
+                        return WriteResultRespDTO.getFailResult();
                     }
                 }else{
                     puid = hzFactory.getPuid();
@@ -161,13 +160,13 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
                 query.setPuid(reqDTO.getMaterielId());
                 HzMaterielRecord hzMaterielRecord = hzMaterielDAO.getHzMaterielRecord(query);
                 if(hzMaterielRecord == null){
-                    return OperateResultMessageRespDTO.getFailResult();
+                    return WriteResultRespDTO.getFailResult();
                 }
                 if(!puid.equals(hzMaterielRecord.getpFactoryPuid())){
                     hzMaterielRecord.setpFactoryPuid(puid);
                     int i = hzMaterielDAO.update(hzMaterielRecord);
                     if(i<0){
-                        return OperateResultMessageRespDTO.getFailResult();
+                        return WriteResultRespDTO.getFailResult();
                     }
                 }
             }
@@ -189,7 +188,7 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
             hzWorkProcedure.setPurpose(reqDTO.getPurpose());
             hzWorkProcedure.setState(reqDTO.getState());
             hzWorkProcedure.setPuid(UUID.randomUUID().toString());
-            List<HzWorkCenter> hzWorkCenterList = hzWorkCenterDAO.findWorkCenter(reqDTO.getProjectId(),reqDTO.getpWorkCode());
+            List<HzWorkCenter> hzWorkCenterList = hzWorkCenterDAO.findWorkCenter(reqDTO.getpWorkCode());
             if(ListUtil.isNotEmpty(hzWorkCenterList)){
                 HzWorkCenter workCenter = hzWorkCenterList.get(0);
                 hzWorkProcedure.setpWorkPuid(hzWorkCenterList.get(0).getPuid());
@@ -213,9 +212,9 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
             }
             int i =  hzWorkProcedureDAO.insert(hzWorkProcedure);
             if(i>0){
-                return OperateResultMessageRespDTO.getSuccessResult();
+                return WriteResultRespDTO.getSuccessResult();
             }else {
-                return OperateResultMessageRespDTO.getFailResult();
+                return WriteResultRespDTO.getFailResult();
             }
         }
         String factoryCode = reqDTO.getFactoryCode();
@@ -227,7 +226,7 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
                 hzFactory.setpFactoryCode(factoryCode);
                 int i = hzFactoryDAO.insert(hzFactory);
                 if(i<0){
-                    return OperateResultMessageRespDTO.getFailResult();
+                    return WriteResultRespDTO.getFailResult();
                 }
             }else{
                 puid = hzFactory.getPuid();
@@ -237,13 +236,13 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
             query.setPuid(reqDTO.getMaterielId());
             HzMaterielRecord hzMaterielRecord = hzMaterielDAO.getHzMaterielRecord(query);
             if(hzMaterielRecord == null){
-                return OperateResultMessageRespDTO.getFailResult();
+                return WriteResultRespDTO.getFailResult();
             }
             if(!hzMaterielRecord.getpFactoryPuid().equals(puid)){
                 hzMaterielRecord.setpFactoryPuid(puid);
                 int i = hzMaterielDAO.update(hzMaterielRecord);
                 if(i<0){
-                    return OperateResultMessageRespDTO.getFailResult();
+                    return WriteResultRespDTO.getFailResult();
                 }
             }
         }
@@ -262,7 +261,7 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
         hzWorkProcedure.setpUpdateName(user.getUserName());
         hzWorkProcedure.setPurpose(reqDTO.getPurpose());
         hzWorkProcedure.setState(reqDTO.getState());
-        List<HzWorkCenter> hzWorkCenterList = hzWorkCenterDAO.findWorkCenter(reqDTO.getProjectId(),reqDTO.getpWorkCode());
+        List<HzWorkCenter> hzWorkCenterList = hzWorkCenterDAO.findWorkCenter(reqDTO.getpWorkCode());
         if(ListUtil.isNotEmpty(hzWorkCenterList)){
             HzWorkCenter workCenter = hzWorkCenterList.get(0);
             hzWorkProcedure.setpWorkPuid(hzWorkCenterList.get(0).getPuid());
@@ -286,12 +285,12 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
         }
         int i =  hzWorkProcedureDAO.update(hzWorkProcedure);
         if(i>0){
-            return OperateResultMessageRespDTO.getSuccessResult();
+            return WriteResultRespDTO.getSuccessResult();
         }
-        return OperateResultMessageRespDTO.getFailResult();
+        return WriteResultRespDTO.getFailResult();
     }
 
-    public OperateResultMessageRespDTO updateHzWorkProcess2(UpdateHzProcessReqDTO reqDTO){
+    public WriteResultRespDTO updateHzWorkProcess2(UpdateHzProcessReqDTO reqDTO){
         User user = UserInfo.getUser();
         HzWorkProcedure hzWorkProcedure = new HzWorkProcedure();
 
@@ -310,7 +309,7 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
         hzWorkProcedure.setpUpdateName(user.getUserName());
         hzWorkProcedure.setPurpose(reqDTO.getPurpose());
         hzWorkProcedure.setState(reqDTO.getState());
-        List<HzWorkCenter> hzWorkCenterList = hzWorkCenterDAO.findWorkCenter(reqDTO.getProjectId(),reqDTO.getpWorkCode());
+        List<HzWorkCenter> hzWorkCenterList = hzWorkCenterDAO.findWorkCenter(reqDTO.getpWorkCode());
         if(ListUtil.isNotEmpty(hzWorkCenterList)){
             HzWorkCenter workCenter = hzWorkCenterList.get(0);
             hzWorkProcedure.setpWorkPuid(hzWorkCenterList.get(0).getPuid());
@@ -334,16 +333,16 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
         }
         int i =  hzWorkProcedureDAO.update2(hzWorkProcedure);
         if(i>0){
-            return OperateResultMessageRespDTO.getSuccessResult();
+            return WriteResultRespDTO.getSuccessResult();
         }
-        return OperateResultMessageRespDTO.getFailResult();
+        return WriteResultRespDTO.getFailResult();
     }
 
     @Override
-    public OperateResultMessageRespDTO deleteHzWorkProcess(String puid) {
+    public WriteResultRespDTO deleteHzWorkProcess(String puid) {
         boolean b = PrivilegeUtil.writePrivilege();
         if(!b){
-            return OperateResultMessageRespDTO.getFailPrivilege();
+            return WriteResultRespDTO.getFailPrivilege();
         }
         try{
             HzWorkProcedure workProcess = hzWorkProcedureDAO.getHzWorkProcessByMaterielId(puid);
@@ -353,22 +352,30 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
                 hzWorkProcedure.setPuid(UUID.randomUUID().toString());
                 int i =hzWorkProcedureDAO.insert(hzWorkProcedure);
                 if(i<=0){
-                    return OperateResultMessageRespDTO.getFailResult();
+                    return WriteResultRespDTO.getFailResult();
                 }
             }
             int i =hzWorkProcedureDAO.delete(puid);
             if(i>0){
-                return OperateResultMessageRespDTO.getSuccessResult();
+                return WriteResultRespDTO.getSuccessResult();
             }
-            return OperateResultMessageRespDTO.getFailResult();
+            return WriteResultRespDTO.getFailResult();
         }catch (Exception e){
-            return OperateResultMessageRespDTO.getFailResult();
+            return WriteResultRespDTO.getFailResult();
         }
     }
 
-    public OperateResultMessageRespDTO deleteHzWorkProcesses(Map<String, List<String>> datas){
+    public WriteResultRespDTO deleteHzWorkProcesses(Map<String, List<String>> datas){
         List<String> materielIds = datas.get("materielIds");
         List<String> procedureDesc = datas.get("procedureDesc");
+        if(procedureDesc.size()==0||procedureDesc==null){
+            return WriteResultRespDTO.cantDelete();
+        }
+        for(String pd : procedureDesc){
+            if(pd==null){
+                return WriteResultRespDTO.cantDelete();
+            }
+        }
         List<HzWorkProcedure> hzWorkProceduresDel = new ArrayList<HzWorkProcedure>();
         for(int i=0;i<materielIds.size();i++){
             HzWorkProcedure hzWorkProcedure = new HzWorkProcedure();
@@ -382,11 +389,11 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
                 delNum = hzWorkProcedureDAO.deleteHzWorkProcesses(hzWorkProceduresDel);
             }
             if(delNum==hzWorkProceduresDel.size()){
-                return OperateResultMessageRespDTO.getSuccessResult();
+                return WriteResultRespDTO.getSuccessResult();
             }
-            return OperateResultMessageRespDTO.getFailResult();
+            return WriteResultRespDTO.getFailResult();
         }catch (Exception e){
-            return OperateResultMessageRespDTO.getFailResult();
+            return WriteResultRespDTO.getFailResult();
         }
     }
     @Override
@@ -545,15 +552,15 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
     }
 
     @Override
-    public OperateResultMessageRespDTO applyMbomDataToHzMaterielOneKey(ApplyMbomDataTOHzMaterielReqDTO reqDTO) {
+    public WriteResultRespDTO applyMbomDataToHzMaterielOneKey(ApplyMbomDataTOHzMaterielReqDTO reqDTO) {
         List<HzMbomRecordRespDTO> respDTOList = reqDTO.getMbomRecordRespDTOS();
-        OperateResultMessageRespDTO operateResultMessageRespDTO= new OperateResultMessageRespDTO();
+        WriteResultRespDTO writeResultRespDTO = new WriteResultRespDTO();
         Integer type = reqDTO.getType();
         String projectId = reqDTO.getProjectId();
         if(type == null || projectId == null || "".equals(projectId) ){
-            operateResultMessageRespDTO.setErrMsg("非法操作！");
-            operateResultMessageRespDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
-            return operateResultMessageRespDTO;
+            writeResultRespDTO.setErrMsg("非法操作！");
+            writeResultRespDTO.setErrCode(WriteResultRespDTO.FAILED_CODE);
+            return writeResultRespDTO;
         }
         try{
             List<HzMaterielRecord> materielRecords = new ArrayList<>();
@@ -564,9 +571,9 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
                     map.put("materielResourceId",respDTO.getPuid());
                     boolean exist = hzMaterielDAO.HzMaterielIsExist(map);
                     if(exist){
-                        operateResultMessageRespDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
-                        operateResultMessageRespDTO.setErrMsg("物料号："+respDTO.getLineId()+"已存在发送记录，请检查后重新发送！");
-                        return operateResultMessageRespDTO;
+                        writeResultRespDTO.setErrCode(WriteResultRespDTO.FAILED_CODE);
+                        writeResultRespDTO.setErrMsg("物料号："+respDTO.getLineId()+"已存在发送记录，请检查后重新发送！");
+                        return writeResultRespDTO;
                     }
                     HzMaterielRecord record = new HzMaterielRecord();
                     record.setpMaterielCode(respDTO.getLineId());
@@ -581,13 +588,13 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
                 }
                 int i = hzMaterielDAO.insertList(materielRecords);
                 if(i>0){
-                    return OperateResultMessageRespDTO.getSuccessResult();
+                    return WriteResultRespDTO.getSuccessResult();
                 }
             }
         }catch (Exception e){
-            return OperateResultMessageRespDTO.getFailResult();
+            return WriteResultRespDTO.getFailResult();
         }
-        return OperateResultMessageRespDTO.getFailResult();
+        return WriteResultRespDTO.getFailResult();
     }
 
     @Override
@@ -608,6 +615,9 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
     public void initProcess(String projectId) {
         //查询所有数据类型为11、21、71的物料
         List<HzMaterielRecord> hzMaterielRecords = hzMaterielDAO.findHzMaterielForProcess(projectId);
+        if(hzMaterielRecords==null||hzMaterielRecords.size()==0){
+            return;
+        }
         //查询所有工艺路线
         List<HzWorkProcedure> hzWorkProcedures = hzWorkProcedureDAO.findHzWorkProcessByProjectId(projectId);
         List<HzMaterielRecord> hzMaterielRecordAddList = new ArrayList<HzMaterielRecord>();
@@ -617,11 +627,13 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
         while(iterator.hasNext()){
             HzMaterielRecord hzMaterielRecord = iterator.next();
             String materielCode = hzMaterielRecord.getpMaterielCode();
-            String materielCodeHead = materielCode.substring(0, 1);
-            String materielCodeHeadUp = materielCodeHead.toUpperCase();
-            if("F".equals(materielCodeHeadUp)||"Q".equals(materielCodeHeadUp)){
-                iterator.remove();
-            }
+            try {
+                String materielCodeHead = materielCode.substring(0, 1);
+                String materielCodeHeadUp = materielCodeHead.toUpperCase();
+                if("F".equals(materielCodeHeadUp)||"Q".equals(materielCodeHeadUp)){
+                    iterator.remove();
+                }
+            }catch (Exception e){ }
         }
         //找出所有没有工艺路线的物料
         for(HzMaterielRecord hzMaterielRecord : hzMaterielRecords){

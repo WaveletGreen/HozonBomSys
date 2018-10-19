@@ -1,16 +1,13 @@
 package com.connor.hozon.bom.resources.controller.work;
 
 import com.connor.hozon.bom.resources.controller.BaseController;
-import com.connor.hozon.bom.resources.domain.dto.request.AddHzProcessReqDTO;
-import com.connor.hozon.bom.resources.domain.dto.request.ApplyMbomDataTOHzMaterielReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.request.UpdateHzProcessReqDTO;
-import com.connor.hozon.bom.resources.domain.dto.response.HzMbomRecordRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzWorkProcessRespDTO;
-import com.connor.hozon.bom.resources.domain.dto.response.OperateResultMessageRespDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
 import com.connor.hozon.bom.resources.domain.query.HzWorkProcessByPageQuery;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.service.work.HzWorkProcessService;
-import com.connor.hozon.bom.resources.util.ResultMessageBuilder;
+import com.connor.hozon.bom.resources.util.Result;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -57,7 +54,7 @@ public class HzWorkProcessController2 extends BaseController {
 //        title.put("pBurn", "燃动费/废品损失");//燃动能
 //        title.put("pMachineMaterialLabor", "辅助人工/设备维修");//机物料消耗
 //        title.put("pOtherCost", "辅助折旧/辅助其他费用");//其他费用
-//        writeAjaxJSONResponse(ResultMessageBuilder.build(title), response);
+//        toJSONResponse(Result.build(title), response);
 //    }
 //
 //
@@ -92,8 +89,8 @@ public class HzWorkProcessController2 extends BaseController {
 //     */
 //    @RequestMapping(value = "add",method = RequestMethod.POST)
 //    public void addHzWorkProcessToDB(@RequestBody AddHzProcessReqDTO reqDTO, HttpServletResponse response){
-//        OperateResultMessageRespDTO respDTO = hzWorkProcessService.addHzWorkProcess(reqDTO);
-//        writeAjaxJSONResponse(ResultMessageBuilder.build(OperateResultMessageRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
+//        WriteResultRespDTO respDTO = hzWorkProcessService.addHzWorkProcess(reqDTO);
+//        toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
 //    }
 //
     /**
@@ -103,8 +100,8 @@ public class HzWorkProcessController2 extends BaseController {
      */
     @RequestMapping(value = "update2",method = RequestMethod.POST)
     public void updateHzWorkProcessToDB(@RequestBody UpdateHzProcessReqDTO reqDTO, HttpServletResponse response){
-        OperateResultMessageRespDTO respDTO = hzWorkProcessService.updateHzWorkProcess2(reqDTO);
-        writeAjaxJSONResponse(ResultMessageBuilder.build(OperateResultMessageRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
+        WriteResultRespDTO respDTO = hzWorkProcessService.updateHzWorkProcess2(reqDTO);
+        toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
     }
 
     /**
@@ -114,8 +111,8 @@ public class HzWorkProcessController2 extends BaseController {
      */
     @RequestMapping(value = "delete2",method = RequestMethod.POST)
     public void deleteHzWorkProcess(@RequestBody Map<String, List<String>> datas,HttpServletResponse response){
-        OperateResultMessageRespDTO respDTO =  hzWorkProcessService.deleteHzWorkProcesses(datas);
-        writeAjaxJSONResponse(ResultMessageBuilder.build(OperateResultMessageRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
+        WriteResultRespDTO respDTO =  hzWorkProcessService.deleteHzWorkProcesses(datas);
+        toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
     }
 
     /**
@@ -190,8 +187,8 @@ public class HzWorkProcessController2 extends BaseController {
 //        reqDTO.setMbomRecordRespDTOS(mbomRecordRespDTOS);
 //        reqDTO.setProjectId(projectId);
 //        reqDTO.setType(type);
-//        OperateResultMessageRespDTO respDTO =  hzWorkProcessService.applyMbomDataToHzMaterielOneKey(reqDTO);
-//        writeAjaxJSONResponse(ResultMessageBuilder.build(OperateResultMessageRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
+//        WriteResultRespDTO respDTO =  hzWorkProcessService.applyMbomDataToHzMaterielOneKey(reqDTO);
+//        toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
 //    }
     /**
      * 跳转到修改四大工艺的修改页面
@@ -217,9 +214,10 @@ public class HzWorkProcessController2 extends BaseController {
         return  "bomManage/mbom/routingData/updateFourProcess";
     }
 
+
     @RequestMapping(value = "add/four",method = RequestMethod.POST)
     @ResponseBody
-    public JSONObject updateWorkProcessFour(@RequestBody Map<String,Object> data){
+    public JSONObject updateWorkProcessFour(@RequestBody Map<String,Object> data) throws  Exception{
         JSONObject result = new JSONObject();
         String puids = (String)data.get("puids");
         String projectId = (String)data.get("projectId");

@@ -1,7 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.connor.hozon.bom.bomSystem.dao.bom.HzBomDataDao">
-    <resultMap id="BaseResultMap" type="sql.pojo.bom.HzBomLineRecord">
+
+    <resultMap id="SingleVehDosageMap"
+    type="sql.pojo.bom.HzBomLineRecord">
+    <result column="P_SINGLE_VEH_DOSAGE" jdbcType="BLOB"
+    property="singleVehDosage"/>
+    </resultMap>
+
+
+    <resultMap extends="SingleVehDosageMap" id="BaseResultMap" type="sql.pojo.bom.HzBomLineRecord">
         <id column="PUID" jdbcType="VARCHAR" property="puid"/>
         <result column="ID" jdbcType="DOUBLE" property="id"/>
         <result column="P_PARENT_UID" jdbcType="VARCHAR" property="parentUid"/>
@@ -136,7 +144,8 @@
     P_EWO_NO,
     P_LOU_LOA_FLAG,
     P_SORT_NUM,
-    P_COLOR_PART
+    P_COLOR_PART,
+    P_SINGLE_VEH_DOSAGE
   </sql>
 
     <sql id="Bom_Column_For_Change">
@@ -310,9 +319,9 @@
             <if test="pBomOfWhichDept != null">
                 P_BOM_OF_WHICH_DEPT = #{pBomOfWhichDept,jdbcType=VARCHAR},
             </if>
-            <!--<if test="bomLineBlock != null">-->
-                <!--P_BOM_LINE_BLOCK = #{bomLineBlock,jdbcType=VARCHAR},-->
-            <!--</if>-->
+            <if test="singleVehDosage != null">
+                P_SINGLE_VEH_DOSAGE = #{singleVehDosage,jdbcType=VARCHAR},
+            </if>
             <if test="status != null">
                 P_EBOM_STATUS = #{status,jdbcType=VARCHAR},
             </if>
@@ -541,16 +550,17 @@
     <select id="HzBomLineRecordDaoImpl_getAllBomLineRecordByProjectId" resultMap="BaseResultMap"
             parameterType="java.lang.String">
         select
-        t.
-        <include refid="Base_Column_List"/>
-        from HZ_BOM_LINE_RECORD t
-        where t.p_bom_digifax_id=(
+        <!--<include refid="Base_Column_List"/>-->
+        PUID,P_BOM_LINE_ID
+        from HZ_BOM_LINE_RECORD
+        where p_bom_digifax_id=(
         select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(
         select t2.puid from Hz_project_libs t2
         <where>
             t2.puid = #{projectId,jdbcType=VARCHAR}))
         </where>
-        and t.P_EBOM_STATUS=1
+        and P_EBOM_STATUS<![CDATA[ <> ]]>0
+        order by CAST(P_SORT_NUM as FLOAT)
     </select>
 
 
@@ -591,19 +601,14 @@
 
 
     <!--批量删除EBOM-->
-    <update id="HzEbomRecordDAOImpl_deleteList" parameterType="java.util.List">
-        <foreach collection="list" item="item" index="index" open="begin" close=";end;" separator=";">
+    <update id="HzEbomRecordDAOImpl_deleteList" parameterType="java.util.HashMap">
+        <foreach collection="puids" item="item" index="index" open="begin" close=";end;" separator=";">
             update HZ_BOM_LINE_RECORD
             <set>
-                <if test="item.status != null">
-                    P_EBOM_STATUS = #{item.status,jdbcType=INTEGER},
-                </if>
-                <if test="item.status == null">
-                    P_EBOM_STATUS =0,
-                </if>
-                P_UPDATE_TIME =sysdate
+                P_UPDATE_TIME =sysdate,
+                P_EBOM_STATUS = 0
             </set>
-            where PUID = #{item.puid,jdbcType=VARCHAR}
+            where PUID = #{puids[${index}]}
            </foreach>
     </update>
 

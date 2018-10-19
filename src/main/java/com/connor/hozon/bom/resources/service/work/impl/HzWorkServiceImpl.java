@@ -1,16 +1,16 @@
 package com.connor.hozon.bom.resources.service.work.impl;
 
-import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.resources.domain.dto.request.AddWorkCenterReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.request.UpdateWorkCenterReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzWorkCenterRespDTO;
-import com.connor.hozon.bom.resources.domain.dto.response.OperateResultMessageRespDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
 import com.connor.hozon.bom.resources.domain.query.HzWorkByPageQuery;
 import com.connor.hozon.bom.resources.mybatis.factory.HzFactoryDAO;
 import com.connor.hozon.bom.resources.mybatis.work.HzWorkCenterDAO;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.service.work.HzWorkService;
 import com.connor.hozon.bom.resources.util.PrivilegeUtil;
+import com.connor.hozon.bom.resources.util.StringUtil;
 import com.connor.hozon.bom.sys.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -47,17 +47,24 @@ public class HzWorkServiceImpl implements HzWorkService {
             if(centerPage == null || centerPage.getResult() == null){
                 return  new Page<>(centerPage.getPageNumber(),centerPage.getPageSize(),0);
             }
-            Map<String,Object> map = new HashMap<>();
-            map.put("projectId",query.getProjectId());
+//            Map<String,Object> map = new HashMap<>();
+//            map.put("projectId",query.getProjectId());
             List<HzWorkCenter> list = centerPage.getResult();
             List<HzWorkCenterRespDTO> respDTOList = new ArrayList<>();
             for (HzWorkCenter center:list){
-                HzFactory hzFactory = hzFactoryDAO.findFactory(center.getpFactoryPuid(),"");
+//                HzFactory hzFactory = hzFactoryDAO.findFactory(center.getpFactoryPuid(),"");
                 HzWorkCenterRespDTO respDTO = new HzWorkCenterRespDTO();
+
                 respDTO.setNo(++num);
                 respDTO.setPuid(center.getPuid());
-                respDTO.setFactoryCode(hzFactory.getpFactoryCode());
-                respDTO.setFactoryId(hzFactory.getPuid());
+                respDTO.setFactoryCode("1001");
+//                respDTO.setFactoryId(hzFactory.getPuid());
+                if(StringUtil.isEmpty(center.getpFactoryCode())){
+                    respDTO.setFactoryCode("1001");
+                }else {
+                    respDTO.setFactoryCode(center.getpFactoryCode());
+                }
+                respDTO.setFactoryId(center.getpFactoryId());
                 respDTO.setpWorkCode(center.getpWorkCode());
                 respDTO.setpWorkDesc(center.getpWorkDesc());
                 respDTO.setpWorkType(center.getpWorkType());
@@ -94,6 +101,7 @@ public class HzWorkServiceImpl implements HzWorkService {
             }
             return new Page<>(centerPage.getPageNumber(),centerPage.getPageSize(),centerPage.getTotalCount(),respDTOList);
         } catch (Exception e) {
+            e.printStackTrace();
             return null;
         }
     }
@@ -104,11 +112,11 @@ public class HzWorkServiceImpl implements HzWorkService {
      * @return
      */
     @Override
-    public OperateResultMessageRespDTO insertHzWorkRecord(AddWorkCenterReqDTO reqDTO) {
+    public WriteResultRespDTO insertHzWorkRecord(AddWorkCenterReqDTO reqDTO) {
         try {
             boolean b = PrivilegeUtil.writePrivilege();
             if(!b){
-                return OperateResultMessageRespDTO.getFailPrivilege();
+                return WriteResultRespDTO.getFailPrivilege();
             }
             HzWorkCenter hzWorkCenter = new HzWorkCenter();
             HzFactory hzFactory = hzFactoryDAO.findFactory("",reqDTO.getFactoryCode());
@@ -122,7 +130,7 @@ public class HzWorkServiceImpl implements HzWorkService {
                 if(i>0){
                     hzWorkCenter.setpFactoryPuid(puid);
                 }else{
-                    return OperateResultMessageRespDTO.getFailResult();
+                    return WriteResultRespDTO.getFailResult();
                 }
             }else{
                hzWorkCenter.setpFactoryPuid(hzFactory.getPuid());
@@ -161,27 +169,26 @@ public class HzWorkServiceImpl implements HzWorkService {
             hzWorkCenter.setpExperssion4(reqDTO.getpExperssion4());
             hzWorkCenter.setpExperssion5(reqDTO.getpExperssion5());
             hzWorkCenter.setpExperssion6(reqDTO.getpExperssion6());
-            hzWorkCenter.setProjectId(reqDTO.getProjectId());
+//            hzWorkCenter.setProjectId(reqDTO.getProjectId());
             int i = hzWorkCenterDAO.insert(hzWorkCenter);
             if (i>0){
-                return OperateResultMessageRespDTO.getSuccessResult();
+                return WriteResultRespDTO.getSuccessResult();
             }
         } catch (Exception e) {
-            return OperateResultMessageRespDTO.getFailResult();
+            return WriteResultRespDTO.getFailResult();
         }
-        return OperateResultMessageRespDTO.getFailResult();
+        return WriteResultRespDTO.getFailResult();
     }
 
     /**
      * 根据id查询一条数据
-     * @param projectId
      * @param puid
      * @return
      */
     @Override
-    public HzWorkCenterRespDTO findHzWorkByPuid(String projectId, String puid) {
+    public HzWorkCenterRespDTO findHzWorkByPuid(String puid) {
         try {
-            HzWorkCenter center = hzWorkCenterDAO.findWorkCenterById(projectId,puid);
+            HzWorkCenter center = hzWorkCenterDAO.findWorkCenterById(puid);
             if (center!=null){
                 HzFactory hzFactory = hzFactoryDAO.findFactory(center.getpFactoryPuid(),"");
                 HzWorkCenterRespDTO respDTO = new HzWorkCenterRespDTO();
@@ -234,12 +241,11 @@ public class HzWorkServiceImpl implements HzWorkService {
      * @return
      */
     @Override
-    public OperateResultMessageRespDTO updateHzWorkRecord(UpdateWorkCenterReqDTO reqDTO) {
-        OperateResultMessageRespDTO operateResultMessageRespDTO = new OperateResultMessageRespDTO();
+    public WriteResultRespDTO updateHzWorkRecord(UpdateWorkCenterReqDTO reqDTO) {
         try {
             boolean b = PrivilegeUtil.writePrivilege();
             if(!b){
-                return OperateResultMessageRespDTO.getFailPrivilege();
+                return WriteResultRespDTO.getFailPrivilege();
             }
             HzWorkCenter center = new HzWorkCenter();
             HzFactory hzFactory = hzFactoryDAO.findFactory("",reqDTO.getFactoryCode());
@@ -253,7 +259,7 @@ public class HzWorkServiceImpl implements HzWorkService {
                     center.setpFactoryPuid(puid);
                 }
                 else {
-                    return OperateResultMessageRespDTO.getFailResult();
+                    return WriteResultRespDTO.getFailResult();
                 }
             }
             else {
@@ -295,12 +301,12 @@ public class HzWorkServiceImpl implements HzWorkService {
             center.setpExperssion6(reqDTO.getpExperssion6());
             int i = hzWorkCenterDAO.update(center);
             if (i>0){
-                return OperateResultMessageRespDTO.getSuccessResult();
+                return WriteResultRespDTO.getSuccessResult();
             }
         } catch (Exception e) {
-            return OperateResultMessageRespDTO.getFailResult();
+            return WriteResultRespDTO.getFailResult();
         }
-        return OperateResultMessageRespDTO.getFailResult();
+        return WriteResultRespDTO.getFailResult();
     }
 
     /**
@@ -309,23 +315,19 @@ public class HzWorkServiceImpl implements HzWorkService {
      * @return
      */
     @Override
-    public OperateResultMessageRespDTO deleteHzWorkRecord(String puid) {
-        OperateResultMessageRespDTO respDTO = new OperateResultMessageRespDTO();
+    public WriteResultRespDTO deleteHzWorkRecord(String puid) {
         try {
-            User user = UserInfo.getUser();
-            if (user.getGroupId() != 9) {
-                respDTO.setErrMsg("你当前没有权限执行此操作");
-                respDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
-                return respDTO;
+            if (!PrivilegeUtil.writePrivilege()) {
+               return WriteResultRespDTO.getFailResult();
             }
             int i = hzWorkCenterDAO.delete(puid);
             if (i>0){
-                return OperateResultMessageRespDTO.getSuccessResult();
+                return WriteResultRespDTO.getSuccessResult();
             }
         } catch (Exception e) {
-            return OperateResultMessageRespDTO.getFailResult();
+            return WriteResultRespDTO.getFailResult();
         }
-        return OperateResultMessageRespDTO.getFailResult();
+        return WriteResultRespDTO.getFailResult();
     }
 
 }

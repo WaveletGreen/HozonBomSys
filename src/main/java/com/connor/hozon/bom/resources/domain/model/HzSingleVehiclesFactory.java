@@ -122,6 +122,8 @@ public class HzSingleVehiclesFactory {
         respDTO.setChange(record.getChange());
         respDTO.setChangeNum(record.getChangeNum());
         respDTO.setPStockLocation(record.getPStockLocation());
+        respDTO.setEBomPuid(record.getEBomPuid());
+        respDTO.setSingleVehiclesId(record.getSingleVehiclesId());
         if(null == record.getPFactoryId()){
             respDTO.setPFactoryCode("1001");
         }else {
