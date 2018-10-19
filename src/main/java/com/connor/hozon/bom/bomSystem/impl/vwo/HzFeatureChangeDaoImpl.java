@@ -11,7 +11,9 @@ import com.connor.hozon.bom.bomSystem.impl.BasicDaoImpl;
 import org.springframework.context.annotation.Configuration;
 import sql.pojo.cfg.vwo.HzFeatureChangeBean;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author: Fancyears·Maylos·Maywas
@@ -41,6 +43,15 @@ public class HzFeatureChangeDaoImpl extends BasicDaoImpl<HzFeatureChangeBean> im
     @Override
     public List<HzFeatureChangeBean> selectByVwoId(HzFeatureChangeBean bean) {
         return baseSQLUtil.executeQuery(bean, clzName + ".selectByVwoId");
+    }
+
+    @Override
+    public int insertList(List<HzFeatureChangeBean> hzFeatureChangeBeans) {
+        Map<String,Object> map = new HashMap<String, Object>();
+        map.put("tableName",hzFeatureChangeBeans.get(0).getTableName());
+        map.put("seqName",hzFeatureChangeBeans.get(0).getSeqName());
+        map.put("hzFeatureChangeBeans",hzFeatureChangeBeans);
+        return baseSQLUtil.executeInsert(map, clzName+".insertList");
     }
 
 

@@ -211,4 +211,44 @@
             ID = #{id,jdbcType=DECIMAL}
         </where>
     </update>
+
+    <insert id="insertList" parameterType="java.util.List">
+          insert into
+            ${tableName}
+          (<include refid="Base_Column_List"/>)
+            select ${seqName}.Nextval, A.* from(
+            <foreach collection="hzFeatureChangeBeans" index="index" item="hzFeatureChangeBean" separator="union">
+                select
+                    #{hzFeatureChangeBean.featureValueName,jdbcType=VARCHAR},
+                    #{hzFeatureChangeBean.featureValueDesc,jdbcType=VARCHAR},
+                    #{hzFeatureChangeBean.featureName,jdbcType=VARCHAR},
+                    #{hzFeatureChangeBean.featurePuid,jdbcType=VARCHAR},
+                    #{hzFeatureChangeBean.cfg0MainItemPuid,jdbcType=VARCHAR},
+                    #{hzFeatureChangeBean.h9featureenname,jdbcType=VARCHAR},
+                    #{hzFeatureChangeBean.featureDesc,jdbcType=VARCHAR},
+                    #{hzFeatureChangeBean.cfg0Relevance,jdbcType=VARCHAR},
+                    #{hzFeatureChangeBean.featureCreator,jdbcType=VARCHAR},
+                    #{hzFeatureChangeBean.featureCreateDate,jdbcType=TIMESTAMP},
+                    #{hzFeatureChangeBean.featureLastModifier,jdbcType=VARCHAR},
+                    #{hzFeatureChangeBean.featureLastModifyDate,jdbcType=TIMESTAMP},
+                    #{hzFeatureChangeBean.isFeatureSent,jdbcType=DECIMAL},
+                    #{hzFeatureChangeBean.isRelevanceSent,jdbcType=DECIMAL},
+                    #{hzFeatureChangeBean.cfgEffectedDate,jdbcType=TIMESTAMP},
+                    #{hzFeatureChangeBean.cfgAbolishDate,jdbcType=TIMESTAMP},
+                    #{hzFeatureChangeBean.cfgStatus,jdbcType=DECIMAL},
+                    #{hzFeatureChangeBean.cfgIsInProcess,jdbcType=DECIMAL},
+                    #{hzFeatureChangeBean.cfgPuid,jdbcType=VARCHAR},
+                    #{hzFeatureChangeBean.processStartDate,jdbcType=TIMESTAMP},
+                    #{hzFeatureChangeBean.processStarter,jdbcType=VARCHAR},
+                    #{hzFeatureChangeBean.processFinishDate,jdbcType=TIMESTAMP},
+                    #{hzFeatureChangeBean.processFinisher,jdbcType=VARCHAR},
+                    #{hzFeatureChangeBean.processStatus,jdbcType=INTEGER},
+                    #{hzFeatureChangeBean.changeCreateDate,jdbcType=TIMESTAMP},
+                    #{hzFeatureChangeBean.vwoId,jdbcType=DECIMAL}
+                from
+                  dual
+            </foreach>
+          )A
+
+    </insert>
 </mapper>

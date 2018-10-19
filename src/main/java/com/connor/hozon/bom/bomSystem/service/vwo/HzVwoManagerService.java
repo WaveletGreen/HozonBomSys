@@ -280,6 +280,149 @@ public class HzVwoManagerService implements IHzVWOManagerService {
     }
 
 
+    /**
+     * 特性进入vwo流程
+     *
+     * @param projectUid 项目UID
+     * @param beans      一组特性列表
+     * @return 操作消息
+     */
+    @Override
+    public JSONObject featureGetIntoVWO2(String projectUid, List<HzCfg0Record> beans) {
+        JSONObject result = new JSONObject();
+        result.put("status", true);
+        result.put("msg", "发起VWO流程成功");
+        Date now = new Date();
+        User user = UserInfo.getUser();
+        if (beans != null && beans.size() > 0) {
+            for(HzCfg0Record hzCfg0Record : beans){
+                if(hzCfg0Record.getCfgIsInProcess()==1){
+                    result.put("status", false);
+                    result.put("msg", "已在VWO流程中，不允许重复发起VWO流程");
+                    return result;
+                }
+            }
+            List<String> puids = new ArrayList<>();
+            beans.forEach(bean -> puids.add(bean.getPuid()));
+            List<HzCfg0Record> lists = hzCfg0Service.doLoadListByPuids(puids);
+            List<HzCfg0Record> localParams = lists.stream().filter(l -> l != null).collect(Collectors.toList());
+            if (beans.size() != localParams.size()) {
+                logger.error("搜索出的特性值总数与发起VWO流程的特性值的总数不一致，请检查数据核对数据是否被删除");
+                result.put("status", false);
+                result.put("msg", "搜索出的特性值总数与发起VWO流程的特性值的总数不一致，请检查数据核对数据是否被删除");
+                return result;
+            }else {
+                HzVwoInfo hzVwoInfo = generateVwoEntity(user, projectUid, result, 1);
+                if (hzVwoInfo == null) {
+                    return result;
+                }
+                List<HzFeatureChangeBean> hzFeatureChangeBeanListBefore = new ArrayList<HzFeatureChangeBean>();
+                List<HzFeatureChangeBean> hzFeatureChangeBeanListAfter = new ArrayList<HzFeatureChangeBean>();
+                List<HzCfg0Record> hzCfg0RecordList = new ArrayList<HzCfg0Record>();
+                for(HzCfg0Record hzCfg0Record : localParams){
+                    //特性ID
+                    String puid = hzCfg0Record.getPuid();
+                    //获取最近一次变更后的数据，作为本次变更的变更前数据
+                    HzFeatureChangeBean hzFeatureChangeBeanQuery = new HzFeatureChangeBean();
+                    hzFeatureChangeBeanQuery.setCfgPuid(puid);
+                    HzFeatureChangeBean hzFeatureChangeBeanBefor = iHzFeatureChangeService.doFindNewestChangeFromAfter(hzFeatureChangeBeanQuery);
+                    if(hzFeatureChangeBeanBefor!=null){
+                        hzFeatureChangeBeanListBefore.add(hzFeatureChangeBeanBefor);
+                    }
+                    //根据源数据生成变更后的数据
+                    HzFeatureChangeBean hzFeatureChangeBeanAfter = new HzFeatureChangeBean();
+                    //选项值的objectid
+                    hzFeatureChangeBeanAfter.setFeatureValueName(hzCfg0Record.getpCfg0ObjectId());
+                    //配置描述
+                    hzFeatureChangeBeanAfter.setFeatureValueDesc(hzCfg0Record.getpCfg0Desc());
+                    //选项族的名称，也是选项族的objectid
+                    hzFeatureChangeBeanAfter.setFeatureName(hzCfg0Record.getpCfg0FamilyName());
+                    //选项族的数据库puid
+                    hzFeatureChangeBeanAfter.setFeaturePuid(hzCfg0Record.getpCfg0FamilyPuid());
+                    //主配置的puid，用这个可以找到主配置的对象
+                    hzFeatureChangeBeanAfter.setCfg0MainItemPuid(hzCfg0Record.getpCfg0MainItemPuid());
+                    //特性英文名
+                    hzFeatureChangeBeanAfter.setH9featureenname(hzCfg0Record.getpH9featureenname());
+                    //族描述
+                    hzFeatureChangeBeanAfter.setFeatureDesc(hzCfg0Record.getpCfg0FamilyDesc());
+                    //相关性
+                    hzFeatureChangeBeanAfter.setCfg0Relevance(hzCfg0Record.getpCfg0Relevance());
+                    //创建人
+                    hzFeatureChangeBeanAfter.setFeatureCreator(user.getLogin());
+                    //创建日期
+                    hzFeatureChangeBeanAfter.setFeatureCreateDate(now);
+                    //最近一次修改者
+                    hzFeatureChangeBeanAfter.setFeatureLastModifier(user.getLogin());
+                    //最近一次修改日期
+                    hzFeatureChangeBeanAfter.setFeatureLastModifyDate(now);
+                    //特性是否已成功发送到SAP
+                    hzFeatureChangeBeanAfter.setIsFeatureSent(hzCfg0Record.getIsFeatureSent());
+                    //相关性是否已成功发送到SAP
+                    hzFeatureChangeBeanAfter.setIsRelevanceSent(hzCfg0Record.getIsRelevanceSent());
+                    //生效时间
+                    hzFeatureChangeBeanAfter.setCfgEffectedDate(hzCfg0Record.getCfgEffectedDate());
+                    //废止时间
+                    hzFeatureChangeBeanAfter.setCfgAbolishDate(hzCfg0Record.getCfgAbolishDate());
+                    //状态0
+                    hzFeatureChangeBeanAfter.setCfgStatus(0);
+                    //是否在流程中1
+                    hzFeatureChangeBeanAfter.setCfgIsInProcess(1);
+                    //当前的特性值的主键
+                    hzFeatureChangeBeanAfter.setCfgPuid(hzCfg0Record.getPuid());
+                    //流程发起的时间
+                    hzFeatureChangeBeanAfter.setProcessStartDate(now);
+                    //流程发起人
+                    hzFeatureChangeBeanAfter.setProcessStarter(user.getLogin());
+                    //流程状态
+                    hzFeatureChangeBeanAfter.setProcessStatus(10);
+                    //变更创建时间
+                    hzFeatureChangeBeanAfter.setChangeCreateDate(now);
+                    //vwo变更号ID
+                    hzFeatureChangeBeanAfter.setVwoId(hzVwoInfo.getId());
+                    hzFeatureChangeBeanListAfter.add(hzFeatureChangeBeanAfter);
+
+
+                    //修改源的变更数据的状态
+                    //vwoID
+                    hzCfg0Record.setVwoId(hzVwoInfo.getId());
+                    //是否在流程中
+                    hzCfg0Record.setCfgIsInProcess(1);
+                    //状态CFG_STATUS
+                    hzCfg0Record.setCfgStatus(0);
+                    hzCfg0RecordList.add(hzCfg0Record);
+                }
+                //新增变更前数据
+                if(hzFeatureChangeBeanListBefore.size()>0||hzFeatureChangeBeanListBefore!=null){
+                    if(iHzFeatureChangeService.doInsertListBefore(hzFeatureChangeBeanListBefore)<=0){
+                        result.put("status", false);
+                        result.put("msg", "新增变更前数据失败");
+                        return result;
+                    }
+                }
+                //新增变更后数据
+                if(hzFeatureChangeBeanListAfter.size()>0||hzFeatureChangeBeanListAfter!=null){
+                    if(iHzFeatureChangeService.doInsertListAfter(hzFeatureChangeBeanListAfter)<=0){
+                        result.put("status", false);
+                        result.put("msg", "新增变更后数据失败");
+                        return result;
+                    }
+                }
+                //修改源数据
+                if(hzCfg0RecordList.size()>0||hzCfg0RecordList!=null){
+                    if(hzCfg0Service.doupdateList(hzCfg0RecordList)<=0){
+                        result.put("status", false);
+                        result.put("msg", "修改源数据失败");
+                        return result;
+                    }
+                }
+            }
+        } else {
+            result.put("status", false);
+            result.put("msg", "请至少选择1个特性值发起流程");
+            return result;
+        }
+        return result;
+    }
     //配色方案进入VWO
     public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid) {
         JSONObject result = new JSONObject();
