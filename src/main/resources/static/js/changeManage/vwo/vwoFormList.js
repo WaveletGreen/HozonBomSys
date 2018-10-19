@@ -12,9 +12,9 @@ function doRefresh(projectUid) {
 }
 
 function loadData(projectUid) {
-    if (!checkIsSelectProject(projectUid)) {
-        return;
-    }
+    // if (!checkIsSelectProject(projectUid)) {
+    //     return;
+    // }
     let url = $("#url").val();
     url += "?projectUid=" + projectUid;
     let vwoStatus=$("#vwoStatus").val();

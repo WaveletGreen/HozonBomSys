@@ -183,33 +183,33 @@ function formatDate() {
  */
 function loadConnectedData(url) {
     var vwoStatus = vwoInfo.vwoStatus;
-    if(vwoStatus!=10){
+    if (vwoStatus != 10) {
         $("body input").attr('disabled', true);
         $("body select").attr('disabled', true);
         $("body textarea").attr('disabled', true);
         $("body a").each(function () {
             var aText = $(this).html();
-            $(this).after("<span>"+aText+"</span>");
+            $(this).after("<span>" + aText + "</span>");
             $(this).remove();
         });
         clearToolbars();
-        if(vwoStatus==101){
+        if (vwoStatus == 101) {
             notDisabledById("bomLeaderOpinion");
             $("#basicInfoH4").after('<button class="btn btn-success" style="position: fixed;margin-left:90%;margin-top: 100px;z-index:99999;"\n' +
                 '        id="bomLeadApprove" onclick="approve(\'saveBomLeaderOpinion\',\'bomLeaderOpinion\')">BOM经理审批\n' +
                 '</button>');
-        }else if(vwoStatus==102){
+        } else if (vwoStatus == 102) {
             notDisabledById("pmtLeaderOpinion");
             $("#basicInfoH4").after('<button class="btn btn-success" style="position: fixed;margin-left:90%;margin-top: 100px;z-index:99999;"\n' +
                 '        id="pmtLeadApprove" onclick="approve(\'savePmtLeaderOpinion\',\'pmtLeaderOpinion\')">PMT经理审批\n' +
                 '</button>');
-        }else if(vwoStatus==103){
+        } else if (vwoStatus == 103) {
             notDisabledById("projLeaderOpinion");
             $("#basicInfoH4").after('<button class="btn btn-success" style="position: fixed;margin-left:90%;margin-top: 100px;z-index:99999;"\n' +
                 '        id="projLeadApprove" onclick="approve(\'saveProjLeaderOpinion\',\'projLeaderOpinion\')">项目经理审批\n' +
                 '</button>');
         }
-    }else {
+    } else {
         disabledById('bomLeaderOpinion');
         disabledById('pmtLeaderOpinion');
         disabledById('projLeaderOpinion');
@@ -220,7 +220,6 @@ function loadConnectedData(url) {
             '        id="launch">发起\n' +
             '</button>');
     }
-
 
 
     var $table = $("#connectedTable");
@@ -318,8 +317,8 @@ $(document).ready(
                 for (let p in _d) {
                     data[_d[p].name] = _d[p].value;
                 }
-                data.vwoComment=$("#vwoComment").val();
-                data.vwoStatus=vwoStatus;
+                data.vwoComment = $("#vwoComment").val();
+                data.vwoStatus = vwoStatus;
                 param.info = data;
 
 
@@ -666,6 +665,7 @@ function launch() {
         }
     });
 }
+
 function getVwoInfo() {
     let data = {};
     data.projectUid = getProjectUid();
@@ -690,7 +690,7 @@ function getFormData(formId) {
 
 
 function approve(url, formId) {
-    let isx = $("#"+formId+" select").find("option:selected").text();
+    let isx = $("#" + formId + " select").find("option:selected").text();
     window.Ewin.confirm({
         title: '提示',
         message: '评估意见:<span style="color: red">' + isx + '</span>',
@@ -724,15 +724,25 @@ function approve(url, formId) {
 }
 
 function clearToolbars() {
-    connectedTableToolbars=[];
-    vwoExeToolBar=[];
+    connectedTableToolbars = [];
+    vwoExeToolBar = [];
 }
+
 function disabledById(id) {
-    $("#"+id+" input").attr('disabled', true);
-    $("#"+id+" select").attr('disabled', true);
-    $("#"+id+" textarea").attr('disabled', true);
+    $("#" + id + " input").attr('disabled', true);
+    $("#" + id + " select").attr('disabled', true);
+    $("#" + id + " textarea").attr('disabled', true);
 }
+
 function notDisabledById(id) {
-    $("#"+id+" select").attr('disabled', false);
-    $("#"+id+" textarea").attr('disabled', false);
+    $("#" + id + " select").attr('disabled', false);
+    $("#" + id + " textarea").attr('disabled', false);
+}
+
+/**
+ * 获取到真实
+ */
+function saveTask() {
+    console.log($(window.parent.document).contents().find(".tab-pane.fade.active.in")[0].id);
+
 }

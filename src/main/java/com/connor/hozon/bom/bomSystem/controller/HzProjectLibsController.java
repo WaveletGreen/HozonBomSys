@@ -10,6 +10,7 @@ import com.connor.hozon.bom.bomSystem.dao.bom.HzBomMainRecordDao;
 import com.connor.hozon.bom.bomSystem.dao.bom.HzPreferenceSettingDao;
 import com.connor.hozon.bom.bomSystem.dao.main.HzCfg0MainRecordDao;
 import com.connor.hozon.bom.bomSystem.dto.HzProjectBean;
+import com.connor.hozon.bom.bomSystem.dto.task.HzTaskPostDto;
 import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
 import com.connor.hozon.bom.bomSystem.iservice.project.IHzVehicleService;
 import com.connor.hozon.bom.bomSystem.service.project.HzBrandService;
@@ -711,4 +712,33 @@ public class HzProjectLibsController {
     //////////////////////////////////////////////////验证编号重复性/////////////////////////////////////////////////////////
 
 
+    @RequestMapping(value = "/loadTasks", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public JSONObject loadTasks() {
+        JSONObject result = new JSONObject();
+        List<HzTaskPostDto> dtoList = new ArrayList<>();
+        for (int i = 0; i < 10; i++) {
+            HzTaskPostDto dto = new HzTaskPostDto();
+            dto.setUrl("vwoFormList");
+            dto.setId("201");
+            dto.setText("测试用");
+            dto.setTargetId("123");
+            dto.setTargetName("VC2018000" + i);
+            dto.setTargetType(1);
+            dto.setFormType(1);
+            dto.setReserve("");
+            dto.setReserve2("");
+            dto.setReserve3("");
+            dto.setReserve4("");
+            dto.setReserve5("");
+            dto.setReserve6("");
+            dto.setReserve7("");
+            dto.setReserve8("");
+            dto.setReserve9("");
+            dto.setReserve10("");
+            dtoList.add(dto);
+        }
+        result.put("data", dtoList);
+        return result;
+    }
 }
