@@ -58,25 +58,6 @@
                                th:value="${vwoInfo.getVwoCreateDate()}"
                         />
                     </div>
-                    <div class="form-group  after_the">
-                        <label for="vwoStatus">流程状态:</label>
-                        <input class="form-control head-input-set"
-                               id="vwoStatus" name="vwoStatus"
-                               type="text"
-                               disabled="disabled"
-                               th:value="${vwoInfo.getVwoStatusName()}"
-                        />
-                    </div>
-                    <div class="form-group after_the">
-                        <label for="vwoName">标题:</label>
-                        <input class="form-control head-input-set"
-                               id="vwoName" name="vwoName"
-                               type="text"
-                               th:value="${vwoInfo.getVwoName()}"
-                        />
-                    </div>
-                </div>
-                <div class="col-lg-2 col-md-3 col-sm-4">
                     <div class="form-group after_the">
                         <label for="userDeptName">部门:</label>
                         <input class="form-control head-input-set"
@@ -86,6 +67,7 @@
                                th:value="${vwoInfo.getUserDeptName()}"
                         />
                     </div>
+
                     <div class="form-group after_the">
                         <label for="vwoCreator">发起人:</label>
                         <input class="form-control head-input-set"
@@ -93,6 +75,54 @@
                                type="text"
                                disabled="disabled"
                                th:value="${vwoInfo.getVwoCreator()}"
+                        />
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-3 col-sm-4">
+                    <div class="form-group after_the">
+                        <label for="platformCode">平台:</label>
+                        <input class="form-control head-input-set"
+                               id="platformCode" name="platformCode"
+                               type="text"
+                               disabled="disabled"
+                               th:value="${vwoInfo.getPlatformCode()}"
+                        />
+                    </div>
+                    <div class="form-group after_the">
+                        <label for="vehicleCode">车型代码:</label>
+                        <input class="form-control head-input-set"
+                               id="vehicleCode" name="vehicleCode"
+                               type="text"
+                               disabled="disabled"
+                               th:value="${vwoInfo.getVehicleCode()}"
+                        />
+                    </div>
+                    <div class="form-group after_the">
+                        <label for="projectCode">项目代码:</label>
+                        <input class="form-control head-input-set"
+                               id="projectCode" name="projectCode"
+                               type="text"
+                               disabled="disabled"
+                               th:value="${vwoInfo.getProjectCode()}"
+                        />
+                    </div>
+                    <div class="form-group  after_the">
+                        <label for="vwoStatus">流程状态:</label>
+                        <input class="form-control head-input-set"
+                               id="vwoStatus" name="vwoStatus"
+                               type="text"
+                               disabled="disabled"
+                               th:value="${vwoInfo.getVwoStatusName()}"
+                        />
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-3 col-sm-4">
+                    <div class="form-group after_the">
+                        <label for="vwoName">标题:</label>
+                        <input class="form-control head-input-set"
+                               id="vwoName" name="vwoName"
+                               type="text"
+                               th:value="${vwoInfo.getVwoName()}"
                         />
                     </div>
                     <div class="form-group after_the">
@@ -104,11 +134,53 @@
                         />
                     </div>
                     <div class="form-group after_the">
+                        <label for="vwoConnectedVwo">关联VWO号:</label>
+                        <input class="form-control head-input-set"
+                               id="vwoConnectedVwo" name="vwoConnectedVwo"
+                               type="text"
+                               th:value="${vwoInfo.getVwoConnectedVwo()}"
+                        />
+                    </div>
+                    <div class="form-group after_the">
+                        <label for="vwoProjectStage">项目所属阶段:</label>
+                        <input class="form-control head-input-set"
+                               id="vwoProjectStage" name="vwoProjectStage"
+                               type="text"
+                               th:value="${vwoInfo.getVwoProjectStage()}"
+                        />
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-3 col-sm-4">
+                    <div class="form-group after_the">
+                        <label for="vwoExpectExecuteTime">预计实施时间:</label>
+                        <input class="form-control head-input-set"
+                               id="vwoExpectExecuteTime" name="vwoExpectExecuteTime"
+                               type="date"
+                               th:attr="data-time=${vwoInfo.getVwoExpectExecuteTime()}"
+                        />
+                    </div>
+                    <div class="form-group after_the">
                         <label for="vwoDemandFinishTime">要求完成时间:</label>
                         <input class="form-control head-input-set"
                                id="vwoDemandFinishTime" name="vwoDemandFinishTime"
-                               type="text"
-                               th:value="${vwoInfo.getVwoDemandFinishTime()}"
+                               type="date"
+                               th:attr="data-time=${vwoInfo.getVwoDemandFinishTime()}"
+                        />
+                    </div>
+                    <div class="form-group after_the">
+                        <label for="vwoStartEffectiveTime">启动生效时间:</label>
+                        <input class="form-control head-input-set"
+                               id="vwoStartEffectiveTime" name="vwoStartEffectiveTime"
+                               type="date"
+                               th:attr="data-time=${vwoInfo.getVwoStartEffectiveTime()}"
+                        />
+                    </div>
+                    <div class="form-group after_the">
+                        <label for="vwoEndEffectiveTime">终止生效时间:</label>
+                        <input class="form-control head-input-set"
+                               id="vwoEndEffectiveTime" name="vwoEndEffectiveTime"
+                               type="date"
+                               th:attr="data-time=${vwoInfo.getVwoEndEffectiveTime()}"
                         />
                     </div>
                 </div>
@@ -242,77 +314,6 @@
                             <option value="2" th:selected="${vwoInfo.getVwoListedType()==2?true:false}">上市后
                             </option>
                         </select>
-                    </div>
-                    <div class="form-group after_the">
-                        <label for="vwoConnectedVwo">关联VWO号:</label>
-                        <input class="form-control head-input-set"
-                               id="vwoConnectedVwo" name="vwoConnectedVwo"
-                               type="text"
-                               th:value="${vwoInfo.getVwoConnectedVwo()}"
-                        />
-                    </div>
-                </div>
-                <div class="col-lg-2 col-md-3 col-sm-4">
-                    <div class="form-group after_the">
-                        <label for="platformCode">平台:</label>
-                        <input class="form-control head-input-set"
-                               id="platformCode" name="platformCode"
-                               type="text"
-                               disabled="disabled"
-                               th:value="${vwoInfo.getPlatformCode()}"
-                        />
-                    </div>
-                    <div class="form-group after_the">
-                        <label for="vehicleCode">车型代码:</label>
-                        <input class="form-control head-input-set"
-                               id="vehicleCode" name="vehicleCode"
-                               type="text"
-                               disabled="disabled"
-                               th:value="${vwoInfo.getVehicleCode()}"
-                        />
-                    </div>
-                    <div class="form-group after_the">
-                        <label for="projectCode">项目代码:</label>
-                        <input class="form-control head-input-set"
-                               id="projectCode" name="projectCode"
-                               type="text"
-                               disabled="disabled"
-                               th:value="${vwoInfo.getProjectCode()}"
-                        />
-                    </div>
-                    <div class="form-group after_the">
-                        <label for="vwoStartEffectiveTime">启动生效时间:</label>
-                        <input class="form-control head-input-set"
-                               id="vwoStartEffectiveTime" name="vwoStartEffectiveTime"
-                               type="text"
-                               th:value="${vwoInfo.getVwoStartEffectiveTime()}"
-                        />
-                    </div>
-                </div>
-                <div class="col-lg-2 col-md-3 col-sm-4">
-                    <div class="form-group after_the">
-                        <label for="vwoEndEffectiveTime">终止生效时间:</label>
-                        <input class="form-control head-input-set"
-                               id="vwoEndEffectiveTime" name="vwoEndEffectiveTime"
-                               type="text"
-                               th:value="${vwoInfo.getVwoEndEffectiveTime()}"
-                        />
-                    </div>
-                    <div class="form-group after_the">
-                        <label for="vwoProjectStage">项目所属阶段:</label>
-                        <input class="form-control head-input-set"
-                               id="vwoProjectStage" name="vwoProjectStage"
-                               type="text"
-                               th:value="${vwoInfo.getVwoProjectStage()}"
-                        />
-                    </div>
-                    <div class="form-group after_the">
-                        <label for="vwoExpectExecuteTime">预计实施时间:</label>
-                        <input class="form-control head-input-set"
-                               id="vwoExpectExecuteTime" name="vwoExpectExecuteTime"
-                               type="text"
-                               th:value="${vwoInfo.getVwoExpectExecuteTime()}"
-                        />
                     </div>
                 </div>
 
@@ -569,24 +570,20 @@
 </div>
 <!--分发与实施-->
 <h4><i class="fa fa-minus-square" aria-hidden="true">分发与实施</i></h4>
-<div class="panel-body" style="padding-bottom:0;">
-    <div class="panel panel-default">
-        <div class="panel-body">
-            <div class="content col-lg-12">
-                <table class="table table-striped tableNormalStyle" id="executeTable">
-                </table>
-            </div>
-        </div>
+<div class="panel panel-body panel-default">
+    <div class="col-lg-12 col-md-12 col-sm-12">
+        <table class="table table-striped tableNormalStyle" id="executeTable">
+        </table>
     </div>
 </div>
 <script th:src="@{/js/helper/dateFormater.js}"></script>
 <script th:src="@{/js/changeManage/vwo/vwoBasicInformation.js}"></script>
 <script th:inline="javascript">
     var vwoInfo = [[${vwoInfo}]];
-    $(function () {
-        console.log(vwoInfo);
-        console.log("状态:" + vwoInfo.vwoStatus);
-    });
+
+    function getVwoInfo() {
+        return vwoInfo;
+    }
 
     function doQuery() {
         $('#connectedTable').bootstrapTable('refresh');    //刷新表格

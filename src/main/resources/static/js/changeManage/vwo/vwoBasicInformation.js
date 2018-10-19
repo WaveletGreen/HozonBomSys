@@ -15,66 +15,65 @@ $(document).ready((function () {
  * 整理日期格式
  */
 function formatDate() {
-    let vwoStartEffectiveTime = stringToDateFormat($('#vwoStartEffectiveTime').val());
-    let vwoEndEffectiveTime = stringToDateFormat($('#vwoEndEffectiveTime').val());
     let vwoCreateDate = stringToDateFormat($('#vwoCreateDate').val());
-    let vwoDemandFinishTime = stringToDateFormat($('#vwoDemandFinishTime').val());
-    let vwoExpectExecuteTime = stringToDateFormat($('#vwoExpectExecuteTime').val());
+    $('#vwoCreateDate').val(vwoCreateDate);
+
+    let vwoStartEffectiveTime = stringToDateFormat($('#vwoStartEffectiveTime').data("time"));
+    let vwoEndEffectiveTime = stringToDateFormat($('#vwoEndEffectiveTime').data("time"));
+    let vwoDemandFinishTime = stringToDateFormat($('#vwoDemandFinishTime').data("time"));
+    let vwoExpectExecuteTime = stringToDateFormat($('#vwoExpectExecuteTime').data("time"));
+    $('#vwoStartEffectiveTime').val(vwoStartEffectiveTime);
+    $('#vwoEndEffectiveTime').val(vwoEndEffectiveTime);
+    $('#vwoDemandFinishTime').val(vwoDemandFinishTime);
+    $('#vwoExpectExecuteTime').val(vwoExpectExecuteTime);
 
     let opiBomMngOptionDate = stringToDateFormat($('#opiBomMngOptionDate').val());
     let opiPmtMngOptionDate = stringToDateFormat($('#opiPmtMngOptionDate').val());
     let opiProjMngOptionDate = stringToDateFormat($('#opiProjMngOptionDate').val());
-
-    $('#vwoStartEffectiveTime').val(vwoStartEffectiveTime);
-    $('#vwoEndEffectiveTime').val(vwoEndEffectiveTime);
-    $('#vwoCreateDate').val(vwoCreateDate);
-    $('#vwoDemandFinishTime').val(vwoDemandFinishTime);
-    $('#vwoExpectExecuteTime').val(vwoExpectExecuteTime);
-
     $('#opiBomMngOptionDate').val(opiBomMngOptionDate);
     $('#opiPmtMngOptionDate').val(opiPmtMngOptionDate);
     $('#opiProjMngOptionDate').val(opiProjMngOptionDate);
 
-    $('#vwoStartEffectiveTime').datetimepicker({
-        format: 'yyyy-mm-dd',//日期的格式
-        weekStart: 1,// 0（星期日）到6（星期六）
-        startDate: "2008-01-01",//选择器的开始日期
-        autoclose: true,//日期选择完成后是否关闭选择框
-        bootcssVer: 3,//显示向左向右的箭头
-        language: 'zh_CN',//语言
-        minView: 2,//表示日期选择的最小范围，默认是hour
-        todayBtn: true
-    });
-    $('#vwoEndEffectiveTime').datetimepicker({
-        format: 'yyyy-mm-dd',//日期的格式
-        weekStart: 1,// 0（星期日）到6（星期六）
-        startDate: "2008-01-01",//选择器的开始日期
-        autoclose: true,//日期选择完成后是否关闭选择框
-        bootcssVer: 3,//显示向左向右的箭头
-        language: 'zh_CN',//语言
-        minView: 2,//表示日期选择的最小范围，默认是hour
-        todayBtn: true
-    });
-    $('#vwoDemandFinishTime').datetimepicker({
-        format: 'yyyy-mm-dd',//日期的格式
-        weekStart: 1,// 0（星期日）到6（星期六）
-        startDate: "2008-01-01",//选择器的开始日期
-        autoclose: true,//日期选择完成后是否关闭选择框
-        bootcssVer: 3,//显示向左向右的箭头
-        language: 'zh_CN',//语言
-        minView: 2,//表示日期选择的最小范围，默认是hour
-        todayBtn: true
-    });
-    $('#vwoExpectExecuteTime').datetimepicker({
-        format: 'yyyy-mm-dd',//日期的格式
-        weekStart: 1,// 0（星期日）到6（星期六）
-        startDate: "2008-01-01",//选择器的开始日期
-        autoclose: true,//日期选择完成后是否关闭选择框
-        bootcssVer: 3,//显示向左向右的箭头
-        language: 'zh_CN',//语言
-        minView: 2,//表示日期选择的最小范围，默认是hour
-        todayBtn: true
-    });
+    // $('#vwoStartEffectiveTime').datetimepicker({
+    //     format: 'yyyy-mm-dd',//日期的格式
+    //     weekStart: 1,// 0（星期日）到6（星期六）
+    //     startDate: "2008-01-01",//选择器的开始日期
+    //     autoclose: true,//日期选择完成后是否关闭选择框
+    //     bootcssVer: 3,//显示向左向右的箭头
+    //     language: 'zh_CN',//语言
+    //     minView: 2,//表示日期选择的最小范围，默认是hour
+    //     todayBtn: true
+    // });
+    // $('#vwoEndEffectiveTime').datetimepicker({
+    //     format: 'yyyy-mm-dd',//日期的格式
+    //     weekStart: 1,// 0（星期日）到6（星期六）
+    //     startDate: "2008-01-01",//选择器的开始日期
+    //     autoclose: true,//日期选择完成后是否关闭选择框
+    //     bootcssVer: 3,//显示向左向右的箭头
+    //     language: 'zh_CN',//语言
+    //     minView: 2,//表示日期选择的最小范围，默认是hour
+    //     todayBtn: true
+    // });
+    // $('#vwoDemandFinishTime').datetimepicker({
+    //     format: 'yyyy-mm-dd',//日期的格式
+    //     weekStart: 1,// 0（星期日）到6（星期六）
+    //     startDate: "2008-01-01",//选择器的开始日期
+    //     autoclose: true,//日期选择完成后是否关闭选择框
+    //     bootcssVer: 3,//显示向左向右的箭头
+    //     language: 'zh_CN',//语言
+    //     minView: 2,//表示日期选择的最小范围，默认是hour
+    //     todayBtn: true
+    // });
+    // $('#vwoExpectExecuteTime').datetimepicker({
+    //     format: 'yyyy-mm-dd',//日期的格式
+    //     weekStart: 1,// 0（星期日）到6（星期六）
+    //     startDate: "2008-01-01",//选择器的开始日期
+    //     autoclose: true,//日期选择完成后是否关闭选择框
+    //     bootcssVer: 3,//显示向左向右的箭头
+    //     language: 'zh_CN',//语言
+    //     minView: 2,//表示日期选择的最小范围，默认是hour
+    //     todayBtn: true
+    // });
 }
 
 /**
@@ -297,21 +296,21 @@ $(document).ready(
                         console.log("连接服务器失败:" + e.status);
                     }
                 });
-                $.ajax({
-                    contentType:
-                        "application/json",
-                    type:
-                        'POST',
-                    data: JSON.stringify(data3),
-                    url: "saveLeaderOpinion",
-                    success: function (result) {
-                        console.log(result);
-                        // window.location.reload();//刷新当前页面.
-                    },
-                    error: function (e) {
-                        console.log("连接服务器失败:" + e.status);
-                    }
-                });
+                // $.ajax({
+                //     contentType:
+                //         "application/json",
+                //     type:
+                //         'POST',
+                //     data: JSON.stringify(data3),
+                //     url: "saveLeaderOpinion",
+                //     success: function (result) {
+                //         console.log(result);
+                //         // window.location.reload();//刷新当前页面.
+                //     },
+                //     error: function (e) {
+                //         console.log("连接服务器失败:" + e.status);
+                //     }
+                // });
             });
     }
 );
