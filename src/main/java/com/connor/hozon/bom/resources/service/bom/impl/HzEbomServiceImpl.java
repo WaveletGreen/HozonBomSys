@@ -185,53 +185,7 @@ public class HzEbomServiceImpl implements HzEbomService {
             HzEPLManageRecord record = hzEbomRecordDAO.findEbomById(puid, projectId);
             HzEbomRespDTO respDTO = new HzEbomRespDTO();
             List<HzCfg0ModelRecord> hzCfg0ModelRecords = hzCfg0ModelService.doSelectByProjectPuid(projectId);
-//            if (record != null) {
-//                respDTO = HzEbomRecordFactory.eplRecordToEbomRespDTO(record);
-//                JSONArray jsonArray = new JSONArray();
-//                if(ListUtil.isNotEmpty(hzCfg0ModelRecords)){
-//                    if(null != record.getSingleVehDosage()){
-//                        byte[] singleVehDosage = record.getSingleVehDosage();
-//                        Object obj = SerializeUtil.unserialize(singleVehDosage);
-//                        if(obj instanceof Map){
-//                            Map<String,Object> map = (Map)obj;
-//                            if(map.size()>0){
-//                                for(int i = 0;i<hzCfg0ModelRecords.size();i++){
-//                                    boolean find = false;
-//                                    JSONObject object = new JSONObject();
-//                                    for(Map.Entry<String,Object> entry:map.entrySet()){
-//                                        if(hzCfg0ModelRecords.get(i).getPuid().equals(entry.getKey())){
-//                                            find = true;
-//                                            if(null !=entry.getValue() && ""!=entry.getValue()){
-//                                                object.put(hzCfg0ModelRecords.get(i).getObjectName(),entry.getValue());
-//                                                jsonArray.add(object);
-//                                                break;
-//                                            }else {
-//                                                object.put(hzCfg0ModelRecords.get(i).getObjectName(),"");
-//                                                jsonArray.add(object);
-//                                                break;
-//                                            }
-//
-////                                        jsonArray.add(new JSONObject().put("title"+i,entry.getValue()));
-//                                        }
-//                                    }
-//                                    if(!find){
-//                                        object.put(hzCfg0ModelRecords.get(i).getObjectName(),"");
-//                                        jsonArray.add(object);
-//                                    }
-//                                }
-//                            }
-//                        }
-//                    }else {
-//                        for(HzCfg0ModelRecord cfg0ModelRecord :hzCfg0ModelRecords){
-//                            JSONObject object = new JSONObject();
-//                            object.put(cfg0ModelRecord.getObjectName(),"");
-//                            jsonArray.add(object);
-//                        }
-//                    }
-//                }
-//                respDTO.setJsonArray(jsonArray);
-//            }
-
+            
             if (record != null) {
                 respDTO = HzEbomRecordFactory.eplRecordToEbomRespDTO(record);
                 Map<String,Object> object = new HashMap<>();
