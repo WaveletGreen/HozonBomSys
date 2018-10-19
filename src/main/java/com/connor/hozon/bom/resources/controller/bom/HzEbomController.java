@@ -306,7 +306,7 @@ public class HzEbomController extends BaseController {
 //                    cellArr[50] = "删除状态";
                 dataList.add(cellArr);
             }
-            flag = ExcelUtil.writeExcel(fileName, title, dataList);
+            flag = ExcelUtil.writeExcel(fileName, title, dataList,"ebom");
 
             if(flag){
                 LOG.info(fileName+",文件创建成功");

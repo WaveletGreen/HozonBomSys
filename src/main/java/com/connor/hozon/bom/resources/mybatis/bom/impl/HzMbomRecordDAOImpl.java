@@ -14,6 +14,7 @@ import sql.BaseSQLUtil;
 import sql.pojo.bom.HzMbomLineRecord;
 import sql.pojo.bom.HzMbomLineRecordVO;
 import sql.pojo.bom.HzMbomRecord;
+import sql.pojo.bom.HzPbomLineRecord;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -49,6 +50,31 @@ public class HzMbomRecordDAOImpl extends BaseSQLUtil implements HzMbomRecordDAO 
         }
         return super.update("HzMbomRecordDAOImpl_update",record);
     }
+
+    @Override
+    public int updateInput(HzMbomLineRecord record) {
+        if(record.getTableName() == null || "".equals(record.getTableName())){
+            record.setTableName("HZ_MBOM_RECORD");
+        }
+        return super.update("HzMbomRecordDAOImpl_updateInput",record);
+    }
+
+    @Override
+    public int updateInputProduct(HzMbomLineRecord record) {
+        if(record.getTableName() == null || "".equals(record.getTableName())){
+            record.setTableName("HZ_MBOM_OF_PRODUCT");
+        }
+        return super.update("HzMbomRecordDAOImpl_updateInput",record);
+    }
+
+    @Override
+    public int updateInputFinance(HzMbomLineRecord record) {
+        if(record.getTableName() == null || "".equals(record.getTableName())){
+            record.setTableName("HZ_MBOM_OF_FINANCE");
+        }
+        return super.update("HzMbomRecordDAOImpl_updateInput",record);
+    }
+
     @Override
     public int recoverBomById(String eBomPuid) {
         return super.update("HzMbomRecordDAOImpl_recoverBomById",eBomPuid);

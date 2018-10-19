@@ -45,6 +45,8 @@ public class HzSingleVehiclesController extends BaseController {
     @Autowired
     private HzSingleVehiclesBomServices hzSingleVehiclesBomServices;
 
+    //String code="";
+
     @RequestMapping(value = "title",method = RequestMethod.GET)
     public void singleVehiclesTitle(HttpServletResponse response){
         LinkedHashMap<String, String> title = new LinkedHashMap<>();
@@ -273,7 +275,7 @@ public class HzSingleVehiclesController extends BaseController {
                 cellArr[13] = bomRespDTO.getSvlMotorCode();
                 dataList.add(cellArr);
             }
-            flag = ExcelUtil.writeExcel(fileName, title, dataList);
+            flag = ExcelUtil.writeExcel(fileName, title, dataList,"");
 
             if(flag){
                 LOG.info(fileName+",文件创建成功");
@@ -337,7 +339,7 @@ public class HzSingleVehiclesController extends BaseController {
                 cellArr[20] = bomRespDTO.getPStockLocation();
                 dataList.add(cellArr);
             }
-            flag = ExcelUtil.writeExcel(fileName, title, dataList);
+            flag = ExcelUtil.writeExcel(fileName, title, dataList,"");
 
             if(flag){
                 LOG.info(fileName+",文件创建成功");

@@ -623,7 +623,7 @@ public class FileUploadServiceImpl implements FileUploadService {
     }
 
 
-    private String errorLogInfo(Workbook workbook){
+    public String errorLogInfo(Workbook workbook){
         StringBuffer stringBuffer = new StringBuffer("文件解析失败!</br>");
         for(int numSheet = 0; numSheet < workbook.getNumberOfSheets(); numSheet++ ){
             Sheet sheet = workbook.getSheetAt(numSheet);

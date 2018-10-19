@@ -615,6 +615,13 @@ function initTable1(mBomUrl) {
                             if (rows.length == 0) {
                                 window.Ewin.alert({message: '请选择一条需要导出的数据!'});
                                 return false;
+                            }else{
+                                for (var index in rows) {
+                                    if (rows[index].status == 5 || rows[index].status == 6) {
+                                        window.Ewin.alert({message: '勾选的数据有审核中状态，审核中的数据不给导出修改!'});
+                                        return false;
+                                    }
+                                }
                             }
                             window.Ewin.confirm({title: '提示', message: '是否要导出选中行？', width: 500}).on(function (e) {
                                 if (e) {
@@ -644,6 +651,13 @@ function initTable1(mBomUrl) {
                                 }
                             });
 
+                        }
+                    },
+                    {
+                        text: '导入Excel',
+                        iconCls: 'glyphicon glyphicon-share',
+                        handler: function () {
+                            window.Ewin.dialog({title: "导入", url: "mbom/importExcel", width: 600, height: 500})
                         }
                     }
                 ],
@@ -872,6 +886,13 @@ function initTable2(productionUrl) {
                             if (rows.length == 0) {
                                 window.Ewin.alert({message: '请选择一条需要导出的数据!'});
                                 return false;
+                            }else{
+                                for (var index in rows) {
+                                    if (rows[index].status == 5 || rows[index].status == 6) {
+                                        window.Ewin.alert({message: '勾选的数据有审核中状态，审核中的数据不给导出修改!'});
+                                        return false;
+                                    }
+                                }
                             }
                             window.Ewin.confirm({title: '提示', message: '是否要导出选中行？', width: 500}).on(function (e) {
                                 if (e) {
@@ -901,6 +922,13 @@ function initTable2(productionUrl) {
                                 }
                             });
 
+                        }
+                    },
+                    {
+                        text: '导入Excel',
+                        iconCls: 'glyphicon glyphicon-share',
+                        handler: function () {
+                            window.Ewin.dialog({title: "导入", url: "mbom/importExcel2", width: 600, height: 500})
                         }
                     }
                 ],
@@ -1129,6 +1157,13 @@ function initTable3(financialUrl) {
                             if (rows.length == 0) {
                                 window.Ewin.alert({message: '请选择一条需要导出的数据!'});
                                 return false;
+                            }else{
+                                for (var index in rows) {
+                                    if (rows[index].status == 5 || rows[index].status == 6) {
+                                        window.Ewin.alert({message: '勾选的数据有审核中状态，审核中的数据不给导出修改!'});
+                                        return false;
+                                    }
+                                }
                             }
                             window.Ewin.confirm({title: '提示', message: '是否要导出选中行？', width: 500}).on(function (e) {
                                 if (e) {
@@ -1157,6 +1192,13 @@ function initTable3(financialUrl) {
                                     })
                                 }
                             });
+                        }
+                    },
+                    {
+                        text: '导入Excel',
+                        iconCls: 'glyphicon glyphicon-share',
+                        handler: function () {
+                            window.Ewin.dialog({title: "导入", url: "mbom/importExcel3", width: 600, height: 500})
                         }
                     }
                 ],

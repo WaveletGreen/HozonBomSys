@@ -1,6 +1,5 @@
 package com.connor.hozon.bom.resources.controller.bom;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.connor.hozon.bom.bomSystem.service.business.cfg.HzComposeMFService;
 import com.connor.hozon.bom.resources.controller.BaseController;
@@ -308,7 +307,7 @@ public class HzMbomController extends BaseController {
                 cellArr[23] = ebomRespDTO.getpBomType();
                 dataList.add(cellArr);
             }
-            flag = ExcelUtil.writeExcel(fileName, title, dataList);
+            flag = ExcelUtil.writeExcel(fileName, title, dataList,"mbom");
 
             if(flag){
                 LOG.info(fileName+",文件创建成功");
@@ -326,6 +325,31 @@ public class HzMbomController extends BaseController {
         }
         return result;
     }
+
+    /**
+     * 跳转到Excel导入超级MBOM页面
+     */
+    @RequestMapping(value = "importExcel",method = RequestMethod.GET)
+    public String getExcelImport(){
+        return "bomManage/mbom/mbomMaintenance/excelImport";
+    }
+
+    /**
+     * 跳转到Excel导入白车身生产MBOM页面
+     */
+    @RequestMapping(value = "importExcel2",method = RequestMethod.GET)
+    public String getExcelImport2(){
+        return "bomManage/mbom/mbomMaintenance/excelImport2";
+    }
+
+    /**
+     * 跳转到Excel导入白车身财务MBOM页面
+     */
+    @RequestMapping(value = "importExcel3",method = RequestMethod.GET)
+    public String getExcelImport3(){
+        return "bomManage/mbom/mbomMaintenance/excelImport3";
+    }
+
 }
 
 

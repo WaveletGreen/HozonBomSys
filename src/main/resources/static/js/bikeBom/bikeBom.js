@@ -187,6 +187,13 @@ function initTable(url) {
                     if (rows.length == 0) {
                         window.Ewin.alert({message: '请选择一条需要导出的数据!'});
                         return false;
+                    }else{
+                        for (var index in rows) {
+                            if (rows[index].status == 5 || rows[index].status == 6) {
+                                window.Ewin.alert({message: '勾选的数据有审核中状态，审核中的数据不给导出修改!'});
+                                return false;
+                            }
+                        }
                     }
                     window.Ewin.confirm({title: '提示', message: '是否要导出选中行？', width: 500}).on(function (e) {
                         if (e) {

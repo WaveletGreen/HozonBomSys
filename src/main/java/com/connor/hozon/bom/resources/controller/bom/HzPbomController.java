@@ -339,7 +339,7 @@ public class HzPbomController extends BaseController {
                 cellArr[20] = ebomRespDTO.getStation();
                 dataList.add(cellArr);
             }
-            flag = ExcelUtil.writeExcel(fileName, title, dataList);
+            flag = ExcelUtil.writeExcel(fileName, title, dataList,"pbom");
 
             if(flag){
                 LOG.info(fileName+",文件创建成功");
@@ -356,6 +356,15 @@ public class HzPbomController extends BaseController {
                 LOG.error(e.getMessage());
         }
         return result;
+    }
+
+    /**
+     * 跳转到Excel导入页面
+     * @return
+     */
+    @RequestMapping(value = "importExcel",method = RequestMethod.GET)
+    public String getExcelImport(){
+        return "bomManage/pbom/pbomManage/excelImport";
     }
 
 }

@@ -1,0 +1,104 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+
+<link th:href="@{/css/stage/bom-stage.css}" rel="stylesheet"/>
+<body>
+<form id="excelImportForm" role="form" method="post" action="./file/uploadMbom2">
+    <div class="form-group">
+        <label for="articleImageFile">选择文件</label>
+        <input class="form-control" id="articleImageFile" name="excelFile" type="file"
+               placeholder="请选择需要导入文件"/>
+        <div id="layout" style="display: none;margin-top: 50px;text-align: center;z-index: 100;" class="layoutLoading">
+            <img th:src="@{/img/process.gif}"/></div>
+    </div>
+</form>
+<div>
+    <div style="float: left">
+        <p><strong>温馨提醒:</strong></p>
+        <p><strong>1.这里限制上传文件大小的最大值为10MB</strong></p>
+        <p><strong>2.Excel文件格式必须正确，需严格按照模板格式导入</strong></p>
+        <p><strong>3.导入Excel文件不能有空行</strong></p>
+        <p><strong>4.Excel文件只能有一个Sheet</strong></p>
+        <p><strong>5.如有导入疑问，请联系相关责任人进行规范调整</strong></p>
+    </div>
+
+</div>
+
+<script th:inline="javascript">
+    <![CDATA[
+    $(function () {
+        $('#excelImportForm').bootstrapValidator({
+            message: 'This value is not valid',
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            articleImageFile: {
+                TABLOID_TITLE: {
+                    validators: {
+                        notEmpty: {
+                            message: '标题不能为空'
+                        },
+                        stringLength: {
+                            min: 1,
+                            max: 50,
+                            message: '标题长度必须在1到50之间'
+                        }
+                    }
+                },
+            }
+        });
+        $("#btnOk", window.top.document).click(function () {
+            var bootstrapValidator = $("#excelImportForm", window.top.document).data('bootstrapValidator');
+            bootstrapValidator.validate();
+            if (bootstrapValidator.isValid()) {
+                var formData = new FormData();
+                var name = $("#articleImageFile").val();
+                var projectId = $("#project", window.top.document).val();
+                var url = $("#excelImportForm", window.top.document).attr('action');
+                formData.append("file", $("#articleImageFile")[0].files[0]);
+                formData.append("name", name);
+                formData.append("projectId", projectId);
+                if (name == null || name == '') {
+                    window.Ewin.alert({message: '请选择要上传的文件~'});
+                    return;
+                }
+                $('#layout').show();
+                $.ajax({
+                    url: url,
+                    type: 'POST',
+                    // async: false,
+                    data: formData,
+                    // 告诉jQuery不要去处理发送的数据
+                    processData: false,
+                    // 告诉jQuery不要去设置Content-Type请求头
+                    contentType: false,
+                    success: function (result) {
+                        // $('#layout',window.top.document).hide();
+                        $('.modal-dialog', window.top.document).parent('div').remove()
+                        $('body', window.top.document).find('.modal-backdrop').remove();
+                        // jquery 调用刷新当前操作的table页面的refresh方法
+                        $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
+                        if (result.success) {
+                            layer.msg(result.errMsg, {icon: 1, time: 2000})
+                        }
+                        else if (!result.success && result.errMsg.length > 15) {
+                            var msg = "<div style='height: 50%;overflow: auto'>" + result.errMsg + "</div>"
+                            window.Ewin.confirm({title: '提示', message: msg})
+                        } else {
+                            window.Ewin.alert({message: result.errMsg})
+                        }
+                    },
+                    error: function (status) {
+                        window.Ewin.alert({message: status.status + ':导入数据失败!'});
+                    }
+                })
+            }
+        })
+    })
+
+    ]]>
+</script>
+</body>
+</html>
