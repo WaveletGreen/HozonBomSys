@@ -163,7 +163,7 @@
                 OPI_BOM_MNG_STAGE = #{opiBomMngStage,jdbcType=DECIMAL},
             </if>
         </set>
-            OPI_BOM_MNG_UPDATE_DATE = sysdate
+            ,OPI_BOM_MNG_UPDATE_DATE = sysdate
         where ID = #{id,jdbcType=DECIMAL}
     </update>
     <update id="updateByPrimaryKey" parameterType="sql.pojo.cfg.vwo.HzVwoOpiBom">

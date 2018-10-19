@@ -126,7 +126,7 @@ public class HzVwoInfoService implements IHzVwoInfoService {
      * @param info
      * @return
      */
-    public boolean doRelease(HzVwoInfo info) {
+    public boolean updateByVwoId(HzVwoInfo info) {
         if(hzVwoInfoDao.updateByVwoId(info)==1){
             return true;
         }else {

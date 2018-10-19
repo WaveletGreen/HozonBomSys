@@ -296,6 +296,12 @@ public class HzVwoController {
         return iHzVWOManagerService.interrupt(dto.getVwoType(), dto.getProjectUid(), dto.getVwoId());
     }
 
+    @RequestMapping(value = "/launch", method = RequestMethod.POST)
+    @ResponseBody
+    public JSONObject launch(@RequestBody HzVwoProcessDto dto){
+        return iHzVWOManagerService.launch(dto.getVwoType(), dto.getProjectUid(), dto.getVwoId());
+    }
+
     @RequestMapping(value = "/saveLeaderOpinion", method = RequestMethod.POST)
     @ResponseBody
     public JSONObject saveLeaderOpinion(@RequestParam HzVwoInfo info,
