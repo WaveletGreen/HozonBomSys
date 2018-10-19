@@ -1,5 +1,106 @@
 var vwoId = -1;
+var connectedTableToolbars = [
+    {
+        text: '添加',
+        iconCls: 'glyphicon glyphicon-plus',
+        handler: function () {
+            window.Ewin.dialog({
+                title: "添加",
+                url: "getUserAndGroupPage?vwoId=" + vwoId,
+                gridId: "gridId",
+                width: 600,
+                height: 500
+            })
+        }
+    },
+    {
+        text: '删除',
+        iconCls: 'glyphicon glyphicon-remove',
+        handler: function () {
+            var rows = $table.bootstrapTable('getSelections');
+            if (rows.length == 0) {
+                window.Ewin.alert({message: '请选择一条需要删除的数据!'});
+                return false;
+            }
+            window.Ewin.confirm({title: '提示', message: '是否要删除您所选择的记录？', width: 500}).on(function (e) {
+                if (e) {
+                    $.ajax({
+                        type: "POST",
+                        //ajax需要添加打包名
+                        url: "deleteVwoInfoChange",
+                        data: JSON.stringify(rows),
+                        contentType: "application/json",
+                        success: function (result) {
+                            if (result.status) {
+                                layer.msg(result.msg, {icon: 1, time: 2000})
+                                // window.Ewin.alert({message: });
+                                //刷新，会重新申请数据库数据
+                            }
+                            else {
+                                window.Ewin.alert({message: "操作删除失败:" + result.msg});
+                            }
+                            $table.bootstrapTable("refresh");
+                        },
+                        error: function (info) {
+                            window.Ewin.alert({message: "操作删除:" + info.status});
+                        }
+                    })
+                }
+            });
+        }
+    }
+];
 
+
+var vwoExeToolBar = [
+    {
+        text: '添加',
+        iconCls: 'glyphicon glyphicon-plus',
+        handler: function () {
+            window.Ewin.dialog({
+                title: "添加",
+                url: "getVwoExecuteDialog?vwoId=" + vwoId,
+                gridId: "gridId",
+                width: 600,
+                height: 500
+            })
+        }
+    },
+    {
+        text: '删除',
+        iconCls: 'glyphicon glyphicon-remove',
+        handler: function () {
+            var rows = tablex.bootstrapTable('getSelections');
+            if (rows.length == 0) {
+                window.Ewin.alert({message: '请选择一条需要删除的数据!'});
+                return false;
+            }
+            window.Ewin.confirm({title: '提示', message: '是否要删除您所选择的记录？', width: 500}).on(function (e) {
+                if (e) {
+                    $.ajax({
+                        type: "POST",
+                        //ajax需要添加打包名
+                        url: "deleteExecuteInfo",
+                        data: JSON.stringify(rows),
+                        contentType: "application/json",
+                        success: function (result) {
+                            if (result.status) {
+                                layer.msg(result.msg, {icon: 1, time: 2000})
+                            }
+                            else {
+                                window.Ewin.alert({message: "操作删除失败:" + result.msg});
+                            }
+                            tablex.bootstrapTable("refresh");
+                        },
+                        error: function (info) {
+                            window.Ewin.alert({message: "操作删除:" + info.status});
+                        }
+                    })
+                }
+            });
+        }
+    }
+];
 $(document).ready((function () {
     // initTable(),
     formatDate();
@@ -74,6 +175,47 @@ function formatDate() {
 
  */
 function loadConnectedData(url) {
+    var vwoStatus = vwoInfo.vwoStatus;
+    if(vwoStatus!=10){
+        $("body input").attr('disabled', true);
+        $("body select").attr('disabled', true);
+        $("body textarea").attr('disabled', true);
+        $("body a").each(function () {
+            var aText = $(this).html();
+            $(this).after("<span>"+aText+"</span>");
+            $(this).remove();
+        });
+        clearToolbars();
+        if(vwoStatus==101){
+            notDisabledById("bomLeaderOpinion");
+            $("#basicInfoH4").after('<button class="btn btn-success" style="position: fixed;margin-left:90%;margin-top: 100px;z-index:99999;"\n' +
+                '        id="bomLeadApprove" onclick="approve(\'saveBomLeaderOpinion\',\'bomLeaderOpinion\')">BOM经理审批\n' +
+                '</button>');
+        }else if(vwoStatus==102){
+            notDisabledById("pmtLeaderOpinion");
+            $("#basicInfoH4").after('<button class="btn btn-success" style="position: fixed;margin-left:90%;margin-top: 100px;z-index:99999;"\n' +
+                '        id="pmtLeadApprove" onclick="approve(\'savePmtLeaderOpinion\',\'pmtLeaderOpinion\')">PMT经理审批\n' +
+                '</button>');
+        }else if(vwoStatus==103){
+            notDisabledById("projLeaderOpinion");
+            $("#basicInfoH4").after('<button class="btn btn-success" style="position: fixed;margin-left:90%;margin-top: 100px;z-index:99999;"\n' +
+                '        id="projLeadApprove" onclick="approve(\'saveProjLeaderOpinion\',\'projLeaderOpinion\')">项目经理审批\n' +
+                '</button>');
+        }
+    }else {
+        disabledById('bomLeaderOpinion');
+        disabledById('pmtLeaderOpinion');
+        disabledById('projLeaderOpinion');
+        $("#basicInfoH4").after('<button class="btn btn-success" style="position: fixed;margin-left:90%;margin-top: 100px;z-index:99999;"\n' +
+            '        id="vwoSaveBtn">保存\n' +
+            '</button>');
+        $("#basicInfoH4").after('<button class="btn btn-success" style="position: fixed;margin-left:90%;margin-top: 150px;z-index:99999;"\n' +
+            '        id="launch">发起\n' +
+            '</button>');
+    }
+
+
+
     var $table = $("#connectedTable");
     $table.bootstrapTable('destroy');
     $table.bootstrapTable({
@@ -88,57 +230,7 @@ function loadConnectedData(url) {
         sortName: 'pColorCode',
         sortOrder: 'asc',
         formId: "queryConnectedData",
-        toolbars: [
-            {
-                text: '添加',
-                iconCls: 'glyphicon glyphicon-plus',
-                handler: function () {
-                    window.Ewin.dialog({
-                        title: "添加",
-                        url: "getUserAndGroupPage?vwoId=" + vwoId,
-                        gridId: "gridId",
-                        width: 600,
-                        height: 500
-                    })
-                }
-            },
-            {
-                text: '删除',
-                iconCls: 'glyphicon glyphicon-remove',
-                handler: function () {
-                    var rows = $table.bootstrapTable('getSelections');
-                    if (rows.length == 0) {
-                        window.Ewin.alert({message: '请选择一条需要删除的数据!'});
-                        return false;
-                    }
-                    window.Ewin.confirm({title: '提示', message: '是否要删除您所选择的记录？', width: 500}).on(function (e) {
-                        if (e) {
-                            $.ajax({
-                                type: "POST",
-                                //ajax需要添加打包名
-                                url: "deleteVwoInfoChange",
-                                data: JSON.stringify(rows),
-                                contentType: "application/json",
-                                success: function (result) {
-                                    if (result.status) {
-                                        layer.msg(result.msg, {icon: 1, time: 2000})
-                                        // window.Ewin.alert({message: });
-                                        //刷新，会重新申请数据库数据
-                                    }
-                                    else {
-                                        window.Ewin.alert({message: "操作删除失败:" + result.msg});
-                                    }
-                                    $table.bootstrapTable("refresh");
-                                },
-                                error: function (info) {
-                                    window.Ewin.alert({message: "操作删除:" + info.status});
-                                }
-                            })
-                        }
-                    });
-                }
-            }
-        ],
+        toolbars: connectedTableToolbars,
         /**列信息，需要预先定义好*/
         columns: [
             {
@@ -190,6 +282,11 @@ $(document).ready(
         $("#release").click(
             function () {
                 release();
+            }
+        );
+        $("#launch").click(
+            function () {
+                launch();
             }
         );
         $("#interrupt").click(
@@ -321,55 +418,6 @@ function doSelectPerson(id) {
     })
 }
 
-var vwoExeToolBar = [
-    {
-        text: '添加',
-        iconCls: 'glyphicon glyphicon-plus',
-        handler: function () {
-            window.Ewin.dialog({
-                title: "添加",
-                url: "getVwoExecuteDialog?vwoId=" + vwoId,
-                gridId: "gridId",
-                width: 600,
-                height: 500
-            })
-        }
-    },
-    {
-        text: '删除',
-        iconCls: 'glyphicon glyphicon-remove',
-        handler: function () {
-            var rows = tablex.bootstrapTable('getSelections');
-            if (rows.length == 0) {
-                window.Ewin.alert({message: '请选择一条需要删除的数据!'});
-                return false;
-            }
-            window.Ewin.confirm({title: '提示', message: '是否要删除您所选择的记录？', width: 500}).on(function (e) {
-                if (e) {
-                    $.ajax({
-                        type: "POST",
-                        //ajax需要添加打包名
-                        url: "deleteExecuteInfo",
-                        data: JSON.stringify(rows),
-                        contentType: "application/json",
-                        success: function (result) {
-                            if (result.status) {
-                                layer.msg(result.msg, {icon: 1, time: 2000})
-                            }
-                            else {
-                                window.Ewin.alert({message: "操作删除失败:" + result.msg});
-                            }
-                            tablex.bootstrapTable("refresh");
-                        },
-                        error: function (info) {
-                            window.Ewin.alert({message: "操作删除:" + info.status});
-                        }
-                    })
-                }
-            });
-        }
-    }
-]
 
 /**
  * 重新绘制发布与实施table
@@ -584,6 +632,32 @@ function interrupt() {
     });
 }
 
+/**
+ * 发起
+ */
+function launch() {
+    $.ajax({
+        contentType:
+            "application/json",
+        type:
+            'POST',
+        data: JSON.stringify(getVwoInfo()),
+        url: "launch",
+        success: function (result) {
+            if (result.status) {
+                layer.msg(result.msg, {icon: 1, time: 2000})
+                window.location.reload();
+            }
+            else {
+                window.Ewin.alert({message: "发起失败:" + result.msg});
+            }
+            console.log(result);
+        },
+        error: function (e) {
+            console.log("连接服务器失败:" + e.status);
+        }
+    });
+}
 function getVwoInfo() {
     let data = {};
     data.projectUid = getProjectUid();
@@ -608,7 +682,7 @@ function getFormData(formId) {
 
 
 function approve(url, formId) {
-    let isx = $("#pmtLeaderOpinion select").find("option:selected").text();
+    let isx = $("#"+formId+" select").find("option:selected").text();
     window.Ewin.confirm({
         title: '提示',
         message: '评估意见:<span style="color: red">' + isx + '</span>',
@@ -639,4 +713,18 @@ function approve(url, formId) {
             });
         }
     });
+}
+
+function clearToolbars() {
+    connectedTableToolbars=[];
+    vwoExeToolBar=[];
+}
+function disabledById(id) {
+    $("#"+id+" input").attr('disabled', true);
+    $("#"+id+" select").attr('disabled', true);
+    $("#"+id+" textarea").attr('disabled', true);
+}
+function notDisabledById(id) {
+    $("#"+id+" select").attr('disabled', false);
+    $("#"+id+" textarea").attr('disabled', false);
 }

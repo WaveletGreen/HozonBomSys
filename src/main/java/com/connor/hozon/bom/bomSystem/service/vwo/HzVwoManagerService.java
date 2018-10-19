@@ -758,8 +758,9 @@ public class HzVwoManagerService implements IHzVWOManagerService {
         HzVwoOpiBom hzVwoOpiBomQuery = getOpiOfBomMng(hzVwoOpiBom.getOpiVwoId());
         hzVwoOpiBom.setId(hzVwoOpiBomQuery.getId());
         hzVwoOpiBom.setOpiBomMngUpdater(user.getLogin());
+        hzVwoOpiBom.setOpiBomMngOptionDate(new Date());
         //修改BOM经理评估意见
-        if(hzVwoOpiBomDao.updateByPrimaryKey(hzVwoOpiBom)<=0){
+        if(hzVwoOpiBomDao.updateByPrimaryKeySelective(hzVwoOpiBom)<=0){
             result.put("status",false);
             result.put("msg","BOM经理评估保存失败");
             return result;
@@ -790,8 +791,9 @@ public class HzVwoManagerService implements IHzVWOManagerService {
         HzVwoOpiPmt hzVwoOpiPmtQuery = getOpiOfPmtMng(hzVwoOpiPmt.getOpiVwoId());
         hzVwoOpiPmt.setId(hzVwoOpiPmtQuery.getId());
         hzVwoOpiPmt.setOpiPmtMngUpdater(user.getLogin());
+        hzVwoOpiPmt.setOpiPmtMngOptionDate(new Date());
         //修改PTM经理评估意见
-        if(hzVwoOpiPmtDao.updateByPrimaryKey(hzVwoOpiPmt)<=0){
+        if(hzVwoOpiPmtDao.updateByPrimaryKeySelective(hzVwoOpiPmt)<=0){
             result.put("status",false);
             result.put("msg","PTM经理评估保存失败");
             return result;
@@ -821,16 +823,17 @@ public class HzVwoManagerService implements IHzVWOManagerService {
         HzVwoOpiProj hzVwoOpiProjQuery = getOpiOfProjMng(hzVwoOpiProj.getOpiVwoId());
         hzVwoOpiProj.setId(hzVwoOpiProjQuery.getId());
         hzVwoOpiProj.setOpiProjMngUpdater(user.getLogin());
+        hzVwoOpiProj.setOpiProjMngOptionDate(new Date());
         //修改PTM经理评估意见
-        if(hzVwoOpiProjDao.updateByPrimaryKey(hzVwoOpiProj)<=0){
+        if(hzVwoOpiProjDao.updateByPrimaryKeySelective(hzVwoOpiProj)<=0){
             result.put("status",false);
-            result.put("msg","PTM经理评估保存失败");
+            result.put("msg","项目经理评估保存失败");
             return result;
         }
         HzVwoInfo hzVwoInfo = new HzVwoInfo();
         hzVwoInfo.setId(hzVwoOpiProj.getOpiVwoId());
         if(hzVwoOpiProj.getOpiProjMngAgreement()==1){
-            hzVwoInfo.setVwoStatus(103);
+            hzVwoInfo.setVwoStatus(999);
         }else {
             hzVwoInfo.setVwoStatus(899);
         }
@@ -839,7 +842,20 @@ public class HzVwoManagerService implements IHzVWOManagerService {
             result.put("msg","VWO状态修改失败");
             return result;
         }
-        result.put("msg","PTM经理评估成功");
+        result.put("msg","项目经理评估成功");
+        return result;
+    }
+
+    @Override
+    public JSONObject launch(Integer type, String projectUid, Long vwoId) {
+        JSONObject result = new JSONObject();
+        boolean status = modelColorProcessManager.launch(type, projectUid, vwoId);
+        if(status){
+            result.put("msg","VWO发起成功");
+        }else {
+            result.put("msg","VWO发起失败");
+        }
+        result.put("status",status);
         return result;
     }
 

@@ -153,9 +153,6 @@
             <if test="opiProjMngCreateDate != null">
                 OPI_PROJ_MNG_CREATE_DATE = #{opiProjMngCreateDate,jdbcType=TIMESTAMP},
             </if>
-            <if test="opiProjMngUpdateDate != null">
-                OPI_PROJ_MNG_UPDATE_DATE = #{opiProjMngUpdateDate,jdbcType=TIMESTAMP},
-            </if>
             <if test="opiProjMngCreator != null">
                 OPI_PROJ_MNG_CREATOR = #{opiProjMngCreator,jdbcType=VARCHAR},
             </if>
@@ -166,6 +163,7 @@
                 OPI_PROJ_MNG_STAGE = #{opiProjMngStage,jdbcType=DECIMAL},
             </if>
         </set>
+            ,OPI_PROJ_MNG_UPDATE_DATE = sysdate
         where ID = #{id,jdbcType=DECIMAL}
     </update>
     <update id="updateByPrimaryKey" parameterType="sql.pojo.cfg.vwo.HzVwoOpiProj">
