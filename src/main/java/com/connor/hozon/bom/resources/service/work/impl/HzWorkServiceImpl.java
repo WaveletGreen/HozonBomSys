@@ -54,7 +54,6 @@ public class HzWorkServiceImpl implements HzWorkService {
             for (HzWorkCenter center:list){
 //                HzFactory hzFactory = hzFactoryDAO.findFactory(center.getpFactoryPuid(),"");
                 HzWorkCenterRespDTO respDTO = new HzWorkCenterRespDTO();
-
                 respDTO.setNo(++num);
                 respDTO.setPuid(center.getPuid());
                 respDTO.setFactoryCode("1001");

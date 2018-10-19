@@ -258,7 +258,7 @@ function loadData(projectPuid) {
                 sortOrder: 'asc',
                 //——修改——获取日期列的值进行转换
                 formatter: function (value, row, index) {
-                    return changeDateFormat(value)
+                    return dateToStringFormat(value)
                 }
             },
             {
@@ -270,7 +270,7 @@ function loadData(projectPuid) {
                 sortOrder: 'asc',
                 //——修改——获取日期列的值进行转换
                 formatter: function (value, row, index) {
-                    return changeDateFormat(value)
+                    return dateToStringFormat(value)
                 }
             },
             {

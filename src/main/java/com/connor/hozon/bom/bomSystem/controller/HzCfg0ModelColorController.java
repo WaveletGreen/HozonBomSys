@@ -91,7 +91,7 @@ public class HzCfg0ModelColorController {
         List<HzCfg0OptionFamily> _columnList = hzCfg0OptionFamilyService.selectForColorBluePrint(projectPuid, 1);//getFamilies(projectPuid, 0, 1);
         List<HzCfg0OptionFamily> columnList = new ArrayList<>();
         /**过滤油漆车身总成*/
-        columnList.addAll(_columnList.stream().filter(c -> false == SpecialFeatureOption.YQCSCODE.getDesc().equals(c.getpOptionfamilyName()))
+        columnList.addAll(_columnList.stream().filter(c->c!=null).filter(c -> false == SpecialFeatureOption.YQCSCODE.getDesc().equals(c.getpOptionfamilyName()))
                 .collect(Collectors.toList()));
         List<HzCfg0ColorSet> colorList = hzCfg0ColorSetService.doGetAll();//颜色库所有数据
         List<HzCfg0ColorSet> _colorList = new ArrayList<>(colorList);//将colorList复制到_colorList
@@ -146,7 +146,7 @@ public class HzCfg0ModelColorController {
         List<HzCfg0OptionFamily> _columnList = hzCfg0OptionFamilyService.selectForColorBluePrint(main.getpCfg0OfWhichProjectPuid(), 1);//getFamilies(main.getpCfg0OfWhichProjectPuid(), 0, 1);
         List<HzCfg0OptionFamily> columnList = new ArrayList<>();
         /**过滤油漆车身总成*/
-        columnList.addAll(_columnList.stream().filter(c -> false == SpecialFeatureOption.YQCSCODE.getDesc().equals(c.getpOptionfamilyName()))
+        columnList.addAll(_columnList.stream().filter(c ->c != null).filter(c -> false == SpecialFeatureOption.YQCSCODE.getDesc().equals(c.getpOptionfamilyName()))
                 .collect(Collectors.toList()));
         List<HzCfg0ColorSet> colorList = hzCfg0ColorSetService.doGetAll();
         ArrayList<String> orgValue = new ArrayList<>();
@@ -251,6 +251,7 @@ public class HzCfg0ModelColorController {
                     toProcess.add(model);
                 }
             }
+            color.setCmcrStatus("0");
             return hzCfg0ModelColorService.doUpdateOne(color);
         } else return false;
     }
@@ -263,8 +264,18 @@ public class HzCfg0ModelColorController {
 
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     @ResponseBody
-    public boolean deleteByBatch(@RequestBody List<HzCfg0ModelColor> colors) {
-        return hzCfg0ModelColorService.doDelete(colors) > 0 ? true : false;
+    public JSONObject deleteByBatch(@RequestBody List<HzCfg0ModelColor> colors) {
+        JSONObject result = new JSONObject();
+        for(HzCfg0ModelColor hzCfg0ModelColor : colors){
+            if("10".equals(hzCfg0ModelColor.getCmcrStatus())){
+                result.put("status",false);
+                result.put("msg",hzCfg0ModelColor.getpCodeOfColorfulModel()+"已在VWO流程中，不能删除");
+            }
+        }
+        if(result.get("status")==null){
+            result.put("status",hzCfg0ModelColorService.doDelete(colors) > 0 ? true : false);
+        }
+        return result;
     }
 
     @RequestMapping(value = "/saveColorModel", method = RequestMethod.POST)
@@ -327,7 +338,8 @@ public class HzCfg0ModelColorController {
             if (SpecialSettingOption.COLOR_MODEL_APPEND_COLORLESS) {
                 List<HzCfg0OptionFamily> withoutColor = hzCfg0OptionFamilyService.selectForColorBluePrint(mainRecord.getpCfg0OfWhichProjectPuid(), 0);
                 for (int i = 0; i < withoutColor.size(); i++) {
-                    modelColor.getMapOfCfg0().put(withoutColor.get(i).getPuid(), "-");
+                    if (null != withoutColor.get(i))
+                        modelColor.getMapOfCfg0().put(withoutColor.get(i).getPuid(), "-");
                 }
             }
             modelColor.setPuid(UUIDHelper.generateUpperUid());
@@ -351,6 +363,7 @@ public class HzCfg0ModelColorController {
 
                 colorList.add(hzCfg0ModelColorDetail);
             }
+            modelColor.setCmcrStatus("0");
             hzCfg0ModelColorService.doInsert(modelColor);
             hzColorModelService.doInsertByBatch(colorList);
             result.put("status", true);
@@ -538,5 +551,11 @@ public class HzCfg0ModelColorController {
         return result;
     }
 
+
+    @RequestMapping("/getVWO")
+    @ResponseBody
+    public JSONObject getVWO(@RequestBody List<HzCfg0ModelColor> colors,String projectPuid){
+        return hzCfg0ModelColorService.getVWO(colors,projectPuid);
+    }
 
 }

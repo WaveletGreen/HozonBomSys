@@ -284,7 +284,7 @@ public class HzCfg0Service {
                     library.setEigenValue(local.getpCfg0ObjectId());
                     library.setValueDescCh(local.getpCfg0Desc());
                     library.setValueDescEn(local.getpH9featureenname());
-                    library.setNote("");
+                    library.setNote("系统从历史数据回传");
                     if (hzDictionaryLibraryDao.insert(library) <= 0) {
                         LOGGER.error("自动同步历史特性值到配置字典失败");
                         isAllOver = false;

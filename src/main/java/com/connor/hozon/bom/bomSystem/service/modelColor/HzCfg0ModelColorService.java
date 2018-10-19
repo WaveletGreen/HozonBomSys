@@ -8,6 +8,8 @@ package com.connor.hozon.bom.bomSystem.service.modelColor;
 
 import com.connor.hozon.bom.bomSystem.dao.modelColor.HzCfg0ModelColorDao;
 import com.connor.hozon.bom.bomSystem.dao.cfg0.HzCfg0OptionFamilyDao;
+import com.connor.hozon.bom.bomSystem.dao.modelColor.HzCmcrChangeDao;
+import com.connor.hozon.bom.bomSystem.dao.modelColor.HzCmcrDetailChangeDao;
 import com.connor.hozon.bom.bomSystem.dao.modelColor.HzColorModelDao;
 import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
 import com.connor.hozon.bom.bomSystem.option.SpecialFeatureOption;
@@ -76,6 +78,10 @@ public class HzCfg0ModelColorService {
     @Autowired
     HzColorModelDao hzColorModelDao;
 
+    @Autowired
+    HzCmcrChangeDao hzCmcrChangeDao;
+    @Autowired
+    HzCmcrDetailChangeDao hzCmcrDetailChangeDao;
     /**
      * 日志
      */
@@ -224,7 +230,7 @@ public class HzCfg0ModelColorService {
         List<HzCfg0ModelColor> colorSet = hzCfg0ModelColorDao.selectAll(projectPuid);
         List<HzCfg0OptionFamily> familiesNewFromDb = hzCfg0OptionFamilyService.selectForColorBluePrint(projectPuid, 1);//.getFamilies(projectPuid, 0, 1);//hzCfg0OptionFamilyDao.selectNameByMainId2(projectPuid);
         List<HzCfg0OptionFamily> familiesNew = new ArrayList<>();
-        familiesNew.addAll(familiesNewFromDb.stream().filter(c -> false == SpecialFeatureOption.YQCSCODE.getDesc().equals(c.getpOptionfamilyName()))
+        familiesNew.addAll(familiesNewFromDb.stream().filter(c->c!=null).filter(c -> false == SpecialFeatureOption.YQCSCODE.getDesc().equals(c.getpOptionfamilyName()))
                 .collect(Collectors.toList()));
         //.forEach(c -> mapWithColor.put(c.getPuid(), c));
         HzCfg0MainRecord mainRecord = hzCfg0MainService.doGetbyProjectPuid(projectPuid);
@@ -353,7 +359,10 @@ public class HzCfg0ModelColorService {
                     //添加默认值
                     _result.put("s" + i, "-");
                 }
+
             }
+            //添加状态
+            _result.put("cmcrStatus",color.getCmcrStatus());
             res.add(_result);
         });
 
@@ -464,55 +473,15 @@ public class HzCfg0ModelColorService {
      * @return
      */
     public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid) {
-        JSONObject result = new JSONObject();
-        User user = UserInfo.getUser();
-        //源主数据
-        List<HzCfg0ModelColor> hzCfg0ModelColors = hzCfg0ModelColorDao.selectByPuids(colors);
-        //循环查看源主数据是否以发布流程,如已发布过则直接返回错误提示
-        for(HzCfg0ModelColor hzCfg0ModelColor : hzCfg0ModelColors){
-            if(hzCfg0ModelColor.getCmcrVwoId()!=null){
-                result.put("status",false);
-                result.put("msg",hzCfg0ModelColor.getpDescOfColorfulModel()+"已发起了VWO流程");
-                return  result;
-            }
-        }
-        //源从数据
-        List<HzCfg0ModelColorDetail> hzCfg0ModelColorDetails = hzColorModelDao.selectByModelColors(hzCfg0ModelColors);
-        //最新的Vwo实体类对象
-        HzVwoInfo hzVwoInfo = hzVwoManagerService.generateVwoEntity(user, projectPuid, result);
-        //为源主数据添加VWO编码
-        for(HzCfg0ModelColor hzCfg0ModelColor : hzCfg0ModelColors){
-            hzCfg0ModelColor.setCmcrVwoId(hzVwoInfo.getId());
-        }
-        //根据源主数据生成变更后主数据
-        for(HzCfg0ModelColor hzCfg0ModelColor : hzCfg0ModelColors){
-
-        }
-        //根据源从数据生成变更后从数据
-        for(HzCfg0ModelColorDetail hzCfg0ModelColorDetail : hzCfg0ModelColorDetails){
-
-        }
-
-        //查询最近一次变更后主数据
-        //查询最近一次变更后从数据
-        //根据最近一次变更后主数据生成变更前主数据
-        //根据最近一次变更后从数据生成变更前从数据
-
-        //跟新源主数据
-        if(hzCfg0ModelColorDao.updateListData(hzCfg0ModelColors)<=0){
-            result.put("status",false);
-            result.put("msg","跟新源主数据失败");
-        }
-        //跟新变更后主数据
-        //跟新变更后从数据
-        //跟新变更前主数据
-        //跟新变更前从数据
-
-        if(result.get("status")==null){
-            result.put("status",true);
-        }
-        return result;
+        return hzVwoManagerService.getVWO(colors,projectPuid);
     }
 
 
+    public boolean doRelease(HzCfg0ModelColor hzCfg0ModelColor) {
+        if(hzCfg0ModelColorDao.updateByVwoId(hzCfg0ModelColor)==1){
+            return true;
+        }else {
+            return false;
+        }
+    }
 }
