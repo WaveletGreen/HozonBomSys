@@ -132,7 +132,7 @@ public class HzBomLineRecordDaoImpl extends BaseSQLUtil {
 
     /**
      * 批量更新
-     *
+     * 走变更 这里只更新了部分字段
      * @param records
      * @return
      */

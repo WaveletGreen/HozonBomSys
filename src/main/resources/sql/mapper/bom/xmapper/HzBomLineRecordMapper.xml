@@ -550,16 +550,17 @@
     <select id="HzBomLineRecordDaoImpl_getAllBomLineRecordByProjectId" resultMap="BaseResultMap"
             parameterType="java.lang.String">
         select
-        t.
-        <include refid="Base_Column_List"/>
-        from HZ_BOM_LINE_RECORD t
-        where t.p_bom_digifax_id=(
+        <!--<include refid="Base_Column_List"/>-->
+        PUID,P_BOM_LINE_ID
+        from HZ_BOM_LINE_RECORD
+        where p_bom_digifax_id=(
         select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(
         select t2.puid from Hz_project_libs t2
         <where>
             t2.puid = #{projectId,jdbcType=VARCHAR}))
         </where>
-        and t.P_EBOM_STATUS=1
+        and P_EBOM_STATUS<![CDATA[ <> ]]>0
+        order by CAST(P_SORT_NUM as FLOAT)
     </select>
 
 

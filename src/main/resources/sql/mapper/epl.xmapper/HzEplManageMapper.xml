@@ -1459,6 +1459,27 @@
 
     </insert>
 
+
+
+    <!--导入excel单车用量 更新EBOM信息-->
+    <update id="HzEbomRecordDAOImpl_updateList" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" open="begin" close=";end;" separator=";">
+            update HZ_BOM_LINE_RECORD
+            <set>
+                P_UPDATE_TIME =sysdate,
+                <if test="item.updateName != null">
+                    P_UPDATE_NAME = #{item.updateName,jdbcType=VARCHAR},
+                </if>
+                <if test="item.singleVehDosage != null">
+                    P_SINGLE_VEH_DOSAGE = #{item.singleVehDosage,jdbcType=VARCHAR}
+                </if>
+            </set>
+            where PUID = #{item.puid,jdbcType=VARCHAR}
+        </foreach>
+    </update>
+
+
+
     <!--导入excel文件到EBOM写的批量插入-->
     <insert id="HzEbomRecordDAOImpl_importList" parameterType="java.util.List">
         insert into HZ_BOM_LINE_RECORD

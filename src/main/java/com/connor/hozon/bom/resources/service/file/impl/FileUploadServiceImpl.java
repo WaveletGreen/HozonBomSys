@@ -2,6 +2,7 @@ package com.connor.hozon.bom.resources.service.file.impl;
 
 import com.connor.hozon.bom.bomSystem.dao.bom.HzBomMainRecordDao;
 import com.connor.hozon.bom.bomSystem.impl.bom.HzBomLineRecordDaoImpl;
+import com.connor.hozon.bom.bomSystem.service.fullCfg.HzCfg0ModelService;
 import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
 import com.connor.hozon.bom.resources.domain.model.HzPbomRecordFactory;
@@ -21,8 +22,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import sql.pojo.bom.HZBomMainRecord;
+import sql.pojo.bom.HzBomLineRecord;
 import sql.pojo.bom.HzImportEbomRecord;
 import sql.pojo.bom.HzPbomLineRecord;
+import sql.pojo.cfg.model.HzCfg0ModelRecord;
+import sql.redis.SerializeUtil;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -51,6 +55,9 @@ public class FileUploadServiceImpl implements FileUploadService {
     @Autowired
     private HzMbomService hzMbomService;
 
+    @Autowired
+    private HzCfg0ModelService hzCfg0ModelService;
+
     private int errorCount = 0;
 
     private int lineIndexFirst =10;
@@ -60,8 +67,7 @@ public class FileUploadServiceImpl implements FileUploadService {
     public WriteResultRespDTO uploadEbomToDB(MultipartFile file, String projectId) {
         try {
             //判断权限
-            boolean b = PrivilegeUtil.writePrivilege();
-            if(!b){
+            if(!PrivilegeUtil.writePrivilege()){
                 return WriteResultRespDTO.getFailPrivilege();
             }
             //判断文件格式
@@ -79,8 +85,51 @@ public class FileUploadServiceImpl implements FileUploadService {
             //String textUtl = "D:\\file\\upload\\测试测试.xlsx";
             //读取excel文件
             Workbook workbook = ExcelUtil.getWorkbook(fileUrl);
+            //这里导入文件只有一个sheet
+//            for(int numSheet = 0; numSheet < workbook.getNumberOfSheets(); numSheet++ ){
+                Sheet sheet = workbook.getSheetAt(0);
+                if(null == sheet){
+                    return WriteResultRespDTO.fileError();
+                }
+                Row row = sheet.getRow(0);
+                if(row.getLastCellNum()<=3){
+                    return WriteResultRespDTO.fileFormatError();
+                }
+                if(row.getCell(4).getStringCellValue().equals("专业")){
+                    return importEbomExcelContentToDB(projectId,sheet);
+                }else {
+                    return importBomSingleVehDosageToDB(sheet,projectId);
+                }
+
+//            }
+
+
+
+        }catch (Exception e){
+            e.printStackTrace();
+            return WriteResultRespDTO.getFailResult();
+
+        }
+    }
+
+
+
+
+
+
+
+    /** 下面的私有方法为:EBOM导入Excel文件（第一次导入 不包含单车用量的导入  导入单车用量时，必须先有对应的EBOM数据）**/
+
+    /**
+     * 将EBOM excel中的内容导入到数据库
+     * @param projectId
+     * @param sheet
+     * @return
+     */
+    private WriteResultRespDTO importEbomExcelContentToDB(String projectId,Sheet sheet){
+        try {
             this.errorCount = 0;
-            String errorMsg = errorLogInfo(workbook);
+            String errorMsg = errorLogInfo(sheet);
             if(this.errorCount!=0){
                 WriteResultRespDTO respDTO = new WriteResultRespDTO();
                 respDTO.setErrMsg(errorMsg);
@@ -95,9 +144,9 @@ public class FileUploadServiceImpl implements FileUploadService {
             if(maxSortNum != null){
                 maxOrderNum = maxSortNum.intValue();
             }
-            for(int numSheet = 0; numSheet < workbook.getNumberOfSheets(); numSheet++ ){
-                Sheet sheet = workbook.getSheetAt(numSheet);
-                String sheetName = workbook.getSheetName(numSheet);//sheet 表名 就一个sheet的话 没什么卵用
+//            for(int numSheet = 0; numSheet < workbook.getNumberOfSheets(); numSheet++ ){
+//                Sheet sheet = workbook.getSheetAt(numSheet);
+//                String sheetName = workbook.getSheetName(numSheet);//sheet 表名 就一个sheet的话 没什么卵用
                 int i = 1;
                 while (i<=sheet.getLastRowNum()){
                     List<HzImportEbomRecord> list = new ArrayList<>();
@@ -142,22 +191,22 @@ public class FileUploadServiceImpl implements FileUploadService {
                     list1.add(list);
                 }
 
-            }
+//            }
 
             List<HzImportEbomRecord> records = analysisFinalExcelContent(list1,projectId);
             int j = 0;
             String s ="";
             String ss = "";
-            for(int i=0;i<records.size();i++){//设置子层的父id为当前的id
-                j = i;
-                if(records.get(i).getLevel().endsWith("Y")){//2Y - 2/3Y
-                    int level = Integer.valueOf(records.get(i).getLevel().replace("Y",""));
+            for(int m=0;m<records.size();m++){//设置子层的父id为当前的id
+                j = m;
+                if(records.get(m).getLevel().endsWith("Y")){//2Y - 2/3Y
+                    int level = Integer.valueOf(records.get(m).getLevel().replace("Y",""));
                     int lev = level+1;
                     s = String.valueOf(level);
                     ss = String.valueOf(lev);
                     for(int k =j;k<records.size();k++){
                         if(s.equals(records.get(k).getLevel()) || (ss+"Y").equals(records.get(k).getLevel())){
-                            records.get(i).setPuid(records.get(k).getParentId());
+                            records.get(m).setPuid(records.get(k).getParentId());
                             break;
                         }
                     }
@@ -227,15 +276,10 @@ public class FileUploadServiceImpl implements FileUploadService {
         }catch (Exception e){
             e.printStackTrace();
             return WriteResultRespDTO.getFailResult();
-
         }
         return WriteResultRespDTO.getSuccessResult();
     }
 
-
-
-
-    /** 下面的私有方法为:EBOM导入Excel文件（第一次导入 不包含单车用量的导入  导入单车用量时，必须先有对应的EBOM数据）**/
 
     /**
      * 将excel表格列转化为EBOM数据
@@ -626,10 +670,15 @@ public class FileUploadServiceImpl implements FileUploadService {
     }
 
 
-    private String errorLogInfo(Workbook workbook){
+    /**
+     * 解析文件内容 返回不符合规定的结果
+     * @param sheet
+     * @return
+     */
+    private String errorLogInfo(Sheet sheet){
         StringBuffer stringBuffer = new StringBuffer("文件解析失败!</br>");
-        for(int numSheet = 0; numSheet < workbook.getNumberOfSheets(); numSheet++ ){
-            Sheet sheet = workbook.getSheetAt(numSheet);
+//        for(int numSheet = 0; numSheet < workbook.getNumberOfSheets(); numSheet++ ){
+//            Sheet sheet = workbook.getSheetAt(numSheet);
             for(int rowNum = 1; rowNum <= sheet.getLastRowNum(); rowNum++){
                 String lineId=ExcelUtil.getCell(sheet.getRow(rowNum),1).getStringCellValue();
                 String level = ExcelUtil.getCell(sheet.getRow(rowNum),3).getStringCellValue();
@@ -651,10 +700,10 @@ public class FileUploadServiceImpl implements FileUploadService {
                 }
                 continue;
             }
-        }
+//        }
         if(this.errorCount == 0){
-            for(int numSheet = 0; numSheet < workbook.getNumberOfSheets(); numSheet++ ){
-                Sheet sheet = workbook.getSheetAt(numSheet);
+//            for(int numSheet = 0; numSheet < workbook.getNumberOfSheets(); numSheet++ ){
+//                Sheet sheet = workbook.getSheetAt(numSheet);
                 for(int rowNum = 1; rowNum <= sheet.getLastRowNum(); rowNum++){
                     String level = ExcelUtil.getCell(sheet.getRow(rowNum),3).getStringCellValue();
                     int lev = Integer.valueOf(level.replace("Y",""))+1;
@@ -696,7 +745,7 @@ public class FileUploadServiceImpl implements FileUploadService {
                     }
                 }
 
-            }
+//            }
         }
 
         return stringBuffer.toString();
@@ -704,8 +753,168 @@ public class FileUploadServiceImpl implements FileUploadService {
 
 
 
+
+
     /**下面的私有方法为:导入单车用量数据**/
 
 
+    /**
+     * 导入单车用量时，检查文件内容
+     * @param sheet
+     * @return 不符合规定的解析结果
+     */
+    private String singleVehiclesDosageExcelErrorMsg(List<HzBomLineRecord> list,List<HzCfg0ModelRecord> hzCfg0ModelRecords,Sheet sheet,String projectId){
+        StringBuffer stringBuffer = new StringBuffer("文件解析失败!</br>");
+
+        if(ListUtil.isEmpty(list)){
+            stringBuffer.append("未找到相关BOM信息，导入单车用量信息前，应先存在相关BOM记录!</br>");
+            this.errorCount++;
+        }
+        if(ListUtil.isEmpty(hzCfg0ModelRecords)){
+            stringBuffer.append("未找到相关版型信息，导入单车用量信息前，应先在全配置表中添加当前项目的版型信息!</br>");
+            this.errorCount++;
+        }
+        for(int rowNum = 1; rowNum <= sheet.getLastRowNum(); rowNum++){
+            String lineId=ExcelUtil.getCell(sheet.getRow(rowNum),1).getStringCellValue();
+            if(StringUtil.isEmpty(lineId)){
+                stringBuffer.append("第"+(rowNum)+"行的零件名称不能为<strong>空</strong></br>") ;
+                this.errorCount++;
+            }
+            continue;
+        }
+
+
+
+
+        if(this.errorCount == 0){
+            Row title = sheet.getRow(0);
+            short lastCellNum = title.getLastCellNum();
+            List<String> titleName = new ArrayList<>();
+            if(ListUtil.isNotEmpty(hzCfg0ModelRecords)){
+                if(lastCellNum>4){
+                    for(int i =4;i<lastCellNum;i++){//第4列以后为要导入的版型信息
+                        boolean find = false;
+                        String s = ExcelUtil.getCell(title,i).getStringCellValue();
+                        for(HzCfg0ModelRecord record :hzCfg0ModelRecords){
+                            if(s.equals(record.getObjectName())){
+                                find = true;
+                                break;
+                            }
+                        }
+                        if(!find){
+                            stringBuffer.append("当前导入文件中的<strong>"+s+"</strong>版型不存在与当前项目中!</br>");
+                            this.errorCount++;
+                        }else {
+                            titleName.add(ExcelUtil.getCell(title,i).getStringCellValue());
+                        }
+
+                    }
+                }
+                for(HzCfg0ModelRecord record :hzCfg0ModelRecords){
+                    boolean find = false;
+                    if(titleName.contains(record.getObjectName())){
+                        find = true;
+                    }
+                    if(!find){
+                        stringBuffer.append("当前项目中的<strong>"+record.getObjectName()+"</strong>版型信息未在导入文件中找到!</br>");
+                        this.errorCount++;
+                    }
+                }
+
+            }
+
+            //导入数据信息符合要求，进行数据对比
+            for(int i = 0;i<list.size();i++){
+                if(sheet.getLastRowNum()!=list.size()){
+                    stringBuffer.append("当前导入文件的BOM数据量与当前项目中的BOM数据量不匹配!+</br>") ;
+                    this.errorCount++;
+                    break;
+                }
+                Row sheetRow = sheet.getRow(i+1);
+                if(sheetRow != null){
+                    String lineId = ExcelUtil.getCell(sheet.getRow(i+1),1).getStringCellValue();
+                    if(!list.get(i).getLineID().equals(lineId)){
+                        stringBuffer.append("第"+(i+1)+"行的零件号与当前项目的第"+(i+1)+"行的零件号不匹配!") ;
+                        this.errorCount++;
+                    }
+                }
+            }
+
+        }
+        return stringBuffer.toString();
+    }
+
+
+    /**
+     * 导入单车用量
+     * @param
+     * @return
+     */
+    private WriteResultRespDTO importBomSingleVehDosageToDB(Sheet sheet,String projectId){
+        try {
+            this.errorCount = 0;
+            WriteResultRespDTO respDTO = new WriteResultRespDTO();
+            List<HzBomLineRecord> bomLineRecords = hzBomLineRecordDao.getAllBomLineRecordByProjectId(projectId);
+            List<HzCfg0ModelRecord> hzCfg0ModelRecords = hzCfg0ModelService.doSelectByProjectPuid(projectId);
+            String errorMsg = singleVehiclesDosageExcelErrorMsg(bomLineRecords,hzCfg0ModelRecords,sheet,projectId);
+            if(this.errorCount!=0){
+                respDTO.setErrMsg(errorMsg);
+                respDTO.setErrCode(WriteResultRespDTO.FAILED_CODE);
+                return  respDTO;
+            }
+
+           //存单车版型 名称和id信息
+            Map<String,String> objectMap = new HashMap<>();
+
+            for(HzCfg0ModelRecord record : hzCfg0ModelRecords){
+                objectMap.put(record.getObjectName(),record.getPuid());
+            }
+
+            //存表头信息 和对应的列数字
+            Map<Integer,String> titleMap = new HashMap<>();
+            Row title = sheet.getRow(0);
+            for(int i = 4;i<title.getLastCellNum();i++){
+                titleMap.put(i,title.getCell(i).getStringCellValue());
+            }
+
+
+//            Map<String,Object> m = new HashMap<>();
+//            m.put("9B17175B781C4AF7ABBE7140E64F4A4D",19.2);
+//            m.put("CD3A3819E2CB427789E04F9AD61E4778",2);
+//            m.put("A3EA5F3BFA994CFB8283ADCE94780793",14);
+//            m.put("DFA3F4850D2A410599E364EF64F224EC",3);
+//            byte [] bytes = SerializeUtil.serialize(m);
+
+            List<HzBomLineRecord> singleVehDosageRecords = new ArrayList<>();
+
+
+            for(int i = 0;i<bomLineRecords.size();i++){
+                HzBomLineRecord record = new HzBomLineRecord();
+                Row sheetRow = sheet.getRow(i+1);
+                if(sheetRow != null){
+                    String lineId = ExcelUtil.getCell(sheet.getRow(i+1),1).getStringCellValue();
+                    if(lineId.equals(bomLineRecords.get(i).getLineID())){
+                        record.setPuid(bomLineRecords.get(i).getPuid());
+                        Map<String,Object> map = new HashMap<>();
+                        for(int j =4;j<title.getLastCellNum();j++){
+                            String vehDosage = ExcelUtil.getCell(sheet.getRow(i+1),j).getStringCellValue();
+                            map.put(objectMap.get(titleMap.get(j)),vehDosage);
+                        }
+                        byte [] bytes = SerializeUtil.serialize(map);
+                        record.setSingleVehDosage(bytes);
+                        singleVehDosageRecords.add(record);
+                    }
+                }
+            }
+
+            int i = hzEbomRecordDAO.updateList(singleVehDosageRecords);
+            if(i!=0){
+                return WriteResultRespDTO.getSuccessResult();
+            }
+        }catch (Exception e){
+            return WriteResultRespDTO.getFailResult();
+        }
+        return WriteResultRespDTO.getFailResult();
+    }
 
 }

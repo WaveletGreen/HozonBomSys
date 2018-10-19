@@ -1,9 +1,11 @@
 package sql.pojo.bom;
 
+import sql.pojo.BasePOJO;
+
 import java.util.Date;
 import java.util.Objects;
 
-public class HzBomLineRecord {
+public class HzBomLineRecord extends BasePOJO {
 
     private Long id;
     /**
