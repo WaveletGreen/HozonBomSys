@@ -145,4 +145,9 @@ public class HzCfg0RecordDaoImpl extends BasicDaoImpl<HzCfg0Record> implements H
         return baseSQLUtil.executeQuery(record, clzName + ".selectByFamilyUidWithProject");
     }
 
+    @Override
+    public int updateList(List<HzCfg0Record> hzCfg0RecordList) {
+        return baseSQLUtil.executeUpdate(hzCfg0RecordList,clzName +".updateList");
+    }
+
 }
