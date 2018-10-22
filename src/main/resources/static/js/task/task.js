@@ -3,10 +3,12 @@
  * This file was wrote by fancyears·milos·maywas @connor. Any question/bug you can post to 1243093366@qq.com.
  * ALL RIGHTS RESERVED.
  */
+var taskData = {};
 
 $(function () {
     loadTasks();
 });
+
 
 function loadTasks() {
     $.ajax({
@@ -49,5 +51,14 @@ function loadTab(data) {
         url: data.url
     });
     $("#currentTask").data("taskData", data);
+    taskData = data;
     console.log($("#currentTask").data("taskData"));
+}
+
+function getTaskData() {
+    return taskData;
+}
+
+function clearTaskData() {
+    taskData = {};
 }

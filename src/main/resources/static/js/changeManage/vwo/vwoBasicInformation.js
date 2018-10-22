@@ -108,7 +108,6 @@ $(document).ready((function () {
     let url = "getInformChangers";
     url += "?vwo=" + vwoId;
     loadConnectedData(url);
-
     // registerBtn();
 }));
 
@@ -743,6 +742,12 @@ function notDisabledById(id) {
  * 获取到真实
  */
 function saveTask() {
-    console.log($(window.parent.document).contents().find(".tab-pane.fade.active.in")[0].id);
+    $target_div=$(window.parent.document).contents().find(".tab-pane.fade.active.in")[0].id;
+    $iframe_src=$(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].src;
+    console.log($target_div);
+    console.log($iframe_src);
 
 }
+
+var $iframe_src;
+var $target_div;

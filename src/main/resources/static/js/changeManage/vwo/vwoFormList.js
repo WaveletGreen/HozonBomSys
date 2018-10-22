@@ -1,5 +1,10 @@
 $(document).ready((function () {
-    doQuery();
+    if (window.parent.getTaskData() == null) {
+        doQuery();
+    }
+    else {
+        loadDetailTask();
+    }
 }));
 
 function doQuery() {
@@ -17,21 +22,21 @@ function loadData(projectUid) {
     // }
     let url = $("#url").val();
     url += "?projectUid=" + projectUid;
-    let vwoStatus=$("#vwoStatus").val();
-    let vwoChangeType=$("#vwoChangeType").val();
-    let vwoCostBearingDept=$("#vwoCostBearingDept").val();
-    let vwoListedType=$("#vwoListedType").val();
-    if(vwoStatus!=null){
-        url+="&vwoStatus="+vwoStatus;
+    let vwoStatus = $("#vwoStatus").val();
+    let vwoChangeType = $("#vwoChangeType").val();
+    let vwoCostBearingDept = $("#vwoCostBearingDept").val();
+    let vwoListedType = $("#vwoListedType").val();
+    if (vwoStatus != null) {
+        url += "&vwoStatus=" + vwoStatus;
     }
-    if(vwoChangeType!=null){
-        url+="&vwoChangeType="+vwoChangeType;
+    if (vwoChangeType != null) {
+        url += "&vwoChangeType=" + vwoChangeType;
     }
-    if(vwoCostBearingDept!=null){
-        url+="&vwoCostBearingDept="+vwoCostBearingDept;
+    if (vwoCostBearingDept != null) {
+        url += "&vwoCostBearingDept=" + vwoCostBearingDept;
     }
-    if(vwoListedType!=null){
-        url+="&vwoListedType="+vwoListedType;
+    if (vwoListedType != null) {
+        url += "&vwoListedType=" + vwoListedType;
     }
     var $table = $("#vwo_table");
     $table.bootstrapTable('destroy');
