@@ -227,13 +227,13 @@ public class HzVwoInfo {
                 setVwoStatusName("进入审核");
                 break;
             case 101:
-                setVwoStatusName("项目经理审核");
-                break;
-            case 102:
                 setVwoStatusName("BOM经理审核");
                 break;
-            case 103:
+            case 102:
                 setVwoStatusName("专业PMT经理审核");
+                break;
+            case 103:
+                setVwoStatusName("项目经理审核");
                 break;
             case 899:
                 setVwoStatusName("流程终止");
