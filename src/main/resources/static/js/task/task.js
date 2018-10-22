@@ -4,6 +4,9 @@
  * ALL RIGHTS RESERVED.
  */
 var taskData = {};
+var vwoForm=null;
+var ewoForm=null;
+var mwoForm=null;
 
 $(function () {
     loadTasks();
@@ -43,22 +46,69 @@ function loadTasks() {
 }
 
 function loadTab(data) {
-    console.log(data);
-    $("#tabContainer").data("tabs").addTab({
-        id: data.id,
-        text: data.text,
-        closeable: true,
-        url: data.url
-    });
-    $("#currentTask").data("taskData", data);
-    taskData = data;
-    console.log($("#currentTask").data("taskData"));
+    var showObj =$(top.document.body).find(".nav-tabs li a[href='#" + (data.targetName + data.targetId)+ "']");
+    // 增加一个页面的时候判断当前的标签页是否已经打开过了，若打开过则不再重新生成新的tab标签页，而是直接显示打开过的标签页
+    if ($(showObj).html() == undefined) {
+        $("#tabContainer").data("tabs").addTab({
+            id: data.targetName + data.targetId,
+            text: data.targetName,
+            closeable: true,
+            url: data.url
+        });
+        taskData = data;
+    }
+    switch (data.formType){
+        case 1:
+            vwoForm={};
+            vwoForm.id=data.id;
+            vwoForm.url=data.url;
+            break;
+        case 2:
+            ewoForm.id=data.id;
+            ewoForm.url=data.url;
+            break;
+        case 3:
+            mwoForm.id=data.id;
+            mwoForm.url=data.url;
+            break;
+    }
 }
 
+/**
+ * 获取VWO表单的ID和URL
+ * @returns {*}
+ */
+function getVwoForm(){
+    return vwoForm;
+}
+
+/**
+ * 获取VWO表单的ID和URL
+ * @returns {*}
+ */
+function getEwoForm(){
+    return ewoForm;
+}
+
+/**
+ * 获取VWO表单的ID和URL
+ * @returns {*}
+ */
+function getMwoForm(){
+    return mwoForm;
+}
+
+/**
+ * 获取任务对象
+ * @returns {{}}
+ */
 function getTaskData() {
     return taskData;
 }
 
+/**
+ * 置空任务对象
+ */
 function clearTaskData() {
-    taskData = {};
+    taskData = null;
 }

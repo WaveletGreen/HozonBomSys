@@ -720,10 +720,10 @@ public class HzProjectLibsController {
         for (int i = 0; i < 10; i++) {
             HzTaskPostDto dto = new HzTaskPostDto();
             dto.setUrl("vwoFormList");
-            dto.setId("434");
-            dto.setText("测试用");
+            dto.setId("81");
+            dto.setText("VC2018000"+i);
             dto.setTargetId("434");
-            dto.setTargetName("VC2018000" + i);
+            dto.setTargetName("VC2018000" + i+"VWO表单");
             dto.setTargetType(1);
             dto.setFormType(1);
             dto.setReserve("");

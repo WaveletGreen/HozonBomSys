@@ -13,8 +13,6 @@ var loadDetailTask = function () {
         if (1 == options.formType) {
             vwoLoader(options);
         }
-        window.parent.clearTaskData();
-        let optionsxa = window.parent.getTaskData();
     }
 };
 
@@ -24,7 +22,7 @@ function vwoLoader(options) {
     var $a = $('<a id="load-task-a" href="vwo/vwoFormList?id=' + options.targetId + '&vwoType=' + options.targetType + '"/>');
     $a.text(" ");
     $div.append($a).appendTo('body');
-    // $("#load-task-in-span").trigger("click");
     document.getElementById("load-task-a").click();
     $div.remove();
+    window.parent.clearTaskData();
 }

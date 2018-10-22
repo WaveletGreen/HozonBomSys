@@ -1,5 +1,6 @@
 $(document).ready((function () {
-    if (window.parent.getTaskData() == null) {
+    let taskData = window.parent.getTaskData();
+    if (taskData == null || taskData == undefined) {
         doQuery();
     }
     else {
@@ -14,6 +15,12 @@ function doQuery() {
 //刷新
 function doRefresh(projectUid) {
     loadData(projectUid);
+    let vwoFormDetail=window.parent.getVwoForm();
+    console.log(vwoFormDetail);
+    let $a=$(window.parent.document).contents().find("#tabContainer .nav-tabs .active a");
+    let $span=$(window.parent.document).contents().find("#tabContainer .nav-tabs .active span");
+    $a.attr("href","#"+vwoFormDetail.id);
+    $span.text(vwoFormDetail.url);
 }
 
 function loadData(projectUid) {
