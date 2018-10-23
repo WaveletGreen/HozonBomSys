@@ -15,6 +15,7 @@ import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
 import com.connor.hozon.bom.resources.domain.query.HzEbomByPageQuery;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.service.bom.HzEbomService;
+import com.connor.hozon.bom.resources.service.bom.HzSingleVehiclesServices;
 import com.connor.hozon.bom.resources.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -46,7 +47,7 @@ public class HzEbomController extends BaseController {
     private HzBomLineRecordDaoImpl hzBomLineRecordDao;
 
     @Autowired
-    private HzCfg0ModelService hzCfg0ModelService;
+    private HzSingleVehiclesServices hzSingleVehiclesServices;
     @RequestMapping(value = "title",method = RequestMethod.GET)
     public void getEbomTitle(String projectId,HttpServletResponse response) {
         LinkedHashMap<String, String> tableTitle = new LinkedHashMap<>();
@@ -104,12 +105,7 @@ public class HzEbomController extends BaseController {
         tableTitle.put("number","数量" );
         tableTitle.put("colorPart","是否颜色件");
         //获取该项目下的所有车型模型
-        List<HzCfg0ModelRecord> hzCfg0ModelRecords = hzCfg0ModelService.doSelectByProjectPuid(projectId);
-        if(ListUtil.isNotEmpty(hzCfg0ModelRecords)){
-            for(int i = 0;i<hzCfg0ModelRecords.size();i++){
-                tableTitle.put("title"+i,hzCfg0ModelRecords.get(i).getObjectName()+"(用量)");
-            }
-        }
+        tableTitle.putAll(hzSingleVehiclesServices.singleVehDosageTitle(projectId));
         toJSONResponse(Result.build(tableTitle), response);
     }
     
@@ -257,11 +253,6 @@ public class HzEbomController extends BaseController {
      */
     @RequestMapping(value = "update/ebom",method = RequestMethod.POST)
     public void updateEbomToDB(@RequestBody UpdateHzEbomReqDTO reqDTO, HttpServletResponse response){
-        boolean b = PrivilegeUtil.writePrivilege();
-        if(!b){//管理员权限
-            toJSONResponse(Result.build(false,"您没有权限进行当前操作！"), response);
-            return;
-        }
         WriteResultRespDTO respDTO= hzEbomService.updateHzEbomRecord(reqDTO);
         toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO), respDTO.getErrMsg()), response);
     }

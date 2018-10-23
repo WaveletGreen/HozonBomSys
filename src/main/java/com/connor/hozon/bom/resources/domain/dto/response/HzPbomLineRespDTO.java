@@ -1,5 +1,7 @@
 package com.connor.hozon.bom.resources.domain.dto.response;
 
+import com.alibaba.fastjson.JSONObject;
+
 /**
  * Created by haozt on 2018/5/25
  * PBOM出参
@@ -113,6 +115,16 @@ public class HzPbomLineRespDTO {
      * 1 已生效 0 删除  2草稿状态  3废除状态 4删除状态
      */
     private Integer status;
+    /**单车用量**/
+    private JSONObject object;
+
+    public JSONObject getObject() {
+        return object;
+    }
+
+    public void setObject(JSONObject object) {
+        this.object = object;
+    }
 
     public Integer getStatus() {
         return status;

@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.connor.hozon.bom.bomSystem.dao.bom.HzBomMainRecordDao;
 import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
+import com.connor.hozon.bom.bomSystem.service.fullCfg.HzCfg0ModelService;
 import com.connor.hozon.bom.bomSystem.service.fullCfg.HzCfg0OfBomLineService;
 import com.connor.hozon.bom.bomSystem.service.interaction.HzCraftService;
 import com.connor.hozon.bom.bomSystem.iservice.interaction.IHzCraftService;
@@ -23,9 +24,11 @@ import com.connor.hozon.bom.resources.mybatis.bom.HzMbomRecordDAO;
 import com.connor.hozon.bom.resources.mybatis.bom.HzPbomRecordDAO;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.service.bom.HzPbomService;
+import com.connor.hozon.bom.resources.service.bom.HzSingleVehiclesServices;
 import com.connor.hozon.bom.resources.service.epl.HzEPLManageRecordService;
 import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.resources.util.PrivilegeUtil;
+import com.connor.hozon.bom.resources.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,6 +36,7 @@ import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import sql.pojo.accessories.HzAccessoriesLibs;
 import sql.pojo.bom.*;
 import sql.pojo.cfg.fullCfg.HzCfg0OfBomLineRecord;
+import sql.pojo.cfg.model.HzCfg0ModelRecord;
 
 import java.util.*;
 
@@ -64,6 +68,11 @@ public class HzPbomServiceImpl implements HzPbomService {
     @Autowired
     IHzCraftService iHzCraftService;
 
+    @Autowired
+    private HzSingleVehiclesServices hzSingleVehiclesServices;
+
+    @Autowired
+    private HzCfg0ModelService hzCfg0ModelService;
     @Override
     public WriteResultRespDTO insertHzPbomRecord(AddHzPbomRecordReqDTO recordReqDTO) {
         WriteResultRespDTO respDTO = new WriteResultRespDTO();
@@ -430,7 +439,9 @@ public class HzPbomServiceImpl implements HzPbomService {
             }
             List<HzPbomLineRecord> records = recordPage.getResult();
             int num = (recordPage.getPageNumber() - 1) * recordPage.getPageSize();
-            List<HzPbomLineRespDTO> respDTOS = pbomLineRecordToRespDTOS(records, query.getProjectId(), num);
+            List<HzCfg0ModelRecord> hzCfg0ModelRecords = hzCfg0ModelService.doSelectByProjectPuid(query.getProjectId());
+
+            List<HzPbomLineRespDTO> respDTOS = pbomLineRecordToRespDTOS(records, query.getProjectId(),hzCfg0ModelRecords,num);
             return new Page<>(recordPage.getPageNumber(), recordPage.getPageSize(), recordPage.getTotalCount(), respDTOS);
         } catch (Exception e) {
             e.printStackTrace();
@@ -449,7 +460,7 @@ public class HzPbomServiceImpl implements HzPbomService {
                 HzPbomLineRecord record = records.get(0);
                 records = new ArrayList<>();
                 records.add(record);
-                List<HzPbomLineRespDTO> respDTOS = pbomLineRecordToRespDTOS(records, projectId, 0);
+                List<HzPbomLineRespDTO> respDTOS = pbomLineRecordToRespDTOS(records, projectId,null, 0);
                 return respDTOS.get(0);
             }
         } catch (Exception e) {
@@ -761,7 +772,7 @@ public class HzPbomServiceImpl implements HzPbomService {
             }
             List<HzPbomLineRecord> records = recordPage.getResult();
             int num = (recordPage.getPageNumber() - 1) * recordPage.getPageSize();
-            List<HzPbomLineRespDTO> respDTOS = pbomLineRecordToRespDTOS(records, query.getProjectId(), num);
+            List<HzPbomLineRespDTO> respDTOS = pbomLineRecordToRespDTOS(records, query.getProjectId(),null, num);
             return new Page<>(recordPage.getPageNumber(), recordPage.getPageSize(), recordPage.getTotalCount(), respDTOS);
         } catch (Exception e) {
             e.printStackTrace();
@@ -773,7 +784,7 @@ public class HzPbomServiceImpl implements HzPbomService {
     public WriteResultRespDTO recoverDeletePbomRecord(String projectId, String puid) {
         WriteResultRespDTO respDTO = new WriteResultRespDTO();
         try {
-            if (projectId == null || projectId == "" || puid == null || puid == "") {
+            if (StringUtil.isEmpty(projectId) || StringUtil.isEmpty(puid)) {
                 respDTO.setErrCode(WriteResultRespDTO.FAILED_CODE);
                 respDTO.setErrMsg("非法参数");
                 return respDTO;
@@ -912,7 +923,7 @@ public class HzPbomServiceImpl implements HzPbomService {
     }
 
 
-    private List<HzPbomLineRespDTO> pbomLineRecordToRespDTOS(List<HzPbomLineRecord> records, String projectId, int num) {
+    private List<HzPbomLineRespDTO> pbomLineRecordToRespDTOS(List<HzPbomLineRecord> records, String projectId,List<HzCfg0ModelRecord> list, int num) {
         try {
             List<HzPbomLineRespDTO> respDTOS = new ArrayList<>();
             for (HzPbomLineRecord record : records) {
@@ -933,7 +944,7 @@ public class HzPbomServiceImpl implements HzPbomService {
                     try {
                         groupNum = groupNum.split("-")[1].substring(0, 4);
                     } catch (Exception e) {
-                        groupNum = "-后面的长度不足！";
+                        groupNum = "-";
                     }
                 } else {
                     String parentId = record.getParentUid();
@@ -976,6 +987,11 @@ public class HzPbomServiceImpl implements HzPbomService {
                     respDTO.setpLouaFlag("LOU");
                 }
                 respDTO.setStatus(record.getStatus());
+                if(null != record.getSingleVehDosage()){
+                    JSONObject jsonObject = new JSONObject();
+                    jsonObject = hzSingleVehiclesServices.singleVehDosage(record.getSingleVehDosage(),list,jsonObject);
+                    respDTO.setObject(jsonObject);
+                }
                 respDTOS.add(respDTO);
             }
             return respDTOS;

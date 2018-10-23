@@ -92,10 +92,12 @@ public class FileUploadServiceImpl implements FileUploadService {
                     return WriteResultRespDTO.fileError();
                 }
                 Row row = sheet.getRow(0);
-                if(row.getLastCellNum()<=3){
+                if(row.getLastCellNum()<=4){
                     return WriteResultRespDTO.fileFormatError();
                 }
-                if(row.getCell(4).getStringCellValue().equals("专业")){
+                if(row.getCell(4).getStringCellValue().equals("专业")
+                        && row.getCell(row.getLastCellNum()-1).getStringCellValue().equals("是否颜色件")
+                        ){
                     return importEbomExcelContentToDB(projectId,sheet);
                 }else {
                     return importBomSingleVehDosageToDB(sheet,projectId);
@@ -907,14 +909,28 @@ public class FileUploadServiceImpl implements FileUploadService {
                 }
             }
 
-            int i = hzEbomRecordDAO.updateList(singleVehDosageRecords);
-            if(i!=0){
-                return WriteResultRespDTO.getSuccessResult();
+            //PBOM 同步
+            List<HzPbomLineRecord> list = new ArrayList<>();
+            if(ListUtil.isNotEmpty(singleVehDosageRecords)){
+                for(HzBomLineRecord record :singleVehDosageRecords){
+                    HzPbomLineRecord pbomLineRecord = new HzPbomLineRecord();
+                    pbomLineRecord.setSingleVehDosage(record.getSingleVehDosage());
+                    pbomLineRecord.setUpdateName(record.getUpdateName());
+                    pbomLineRecord.setBomDigifaxId(record.getBomDigifaxId());
+                    pbomLineRecord.seteBomPuid(record.getPuid());
+                    list.add(pbomLineRecord);
+                }
+                hzEbomRecordDAO.updateList(singleVehDosageRecords);
+                if(ListUtil.isNotEmpty(list)){
+                    hzPbomRecordDAO.updateList(list);
+                }
             }
+            ExcelUtil.deleteFile();
+            return WriteResultRespDTO.getSuccessResult();
         }catch (Exception e){
+            e.printStackTrace();
             return WriteResultRespDTO.getFailResult();
         }
-        return WriteResultRespDTO.getFailResult();
     }
 
 }

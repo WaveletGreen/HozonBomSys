@@ -1,6 +1,8 @@
 package com.connor.hozon.bom.resources.service.bom.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.connor.hozon.bom.bomSystem.dao.derivative.HzDerivativeMaterielBasicDao;
+import com.connor.hozon.bom.bomSystem.service.fullCfg.HzCfg0ModelService;
 import com.connor.hozon.bom.interaction.dao.HzSingleVehiclesDao;
 import com.connor.hozon.bom.resources.domain.dto.request.UpdateHzSingleVehiclesReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzSingleVehiclesRespDTO;
@@ -13,12 +15,11 @@ import com.connor.hozon.bom.resources.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sql.pojo.cfg.derivative.HzDerivativeMaterielBasic;
+import sql.pojo.cfg.model.HzCfg0ModelRecord;
 import sql.pojo.interaction.HzSingleVehicles;
+import sql.redis.SerializeUtil;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @Author: haozt
@@ -34,6 +35,9 @@ public class HzSingleVehiclesServicesImpl implements HzSingleVehiclesServices {
     @Autowired
     private HzSingleVehiclesDao hzSingleVehiclesDao;
 
+
+    @Autowired
+    private HzCfg0ModelService hzCfg0ModelService;
 
     @Override
     public List<HzSingleVehiclesRespDTO> singleVehiclesList(String projectId) {
@@ -141,6 +145,43 @@ public class HzSingleVehiclesServicesImpl implements HzSingleVehiclesServices {
             e.printStackTrace();
             return null;
         }
+    }
+
+    @Override
+    public LinkedHashMap<String, String> singleVehDosageTitle(String projectId) {
+        //获取该项目下的所有车型模型
+        List<HzCfg0ModelRecord> hzCfg0ModelRecords = hzCfg0ModelService.doSelectByProjectPuid(projectId);
+        LinkedHashMap map = new LinkedHashMap();
+        if(ListUtil.isNotEmpty(hzCfg0ModelRecords)){
+            for(int i = 0;i<hzCfg0ModelRecords.size();i++){
+                map.put("title"+i,hzCfg0ModelRecords.get(i).getObjectName()+"(单车用量)");
+            }
+        }
+        return map;
+    }
+
+    @Override
+    public JSONObject singleVehDosage(byte[] bytes, List<HzCfg0ModelRecord> list, JSONObject object) {
+        if(null == bytes){
+            return object;
+        }
+        Object obj = SerializeUtil.unserialize(bytes);
+        if(ListUtil.isNotEmpty(list)){
+            if(obj instanceof Map){
+                Map<String,Object> map = (Map)obj;
+                if(map.size()>0){
+                    for(int i = 0;i<list.size();i++){
+                        for(Map.Entry<String,Object> entry:map.entrySet()){
+                            if(list.get(i).getPuid().equals(entry.getKey())){
+                                object.put("title"+i,entry.getValue());
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return object;
     }
 
 }
