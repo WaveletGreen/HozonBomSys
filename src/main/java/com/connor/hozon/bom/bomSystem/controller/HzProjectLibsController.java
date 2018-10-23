@@ -710,35 +710,4 @@ public class HzProjectLibsController {
         return hzBrandService.doValidateCodeWithPuid(brand);
     }
     //////////////////////////////////////////////////验证编号重复性/////////////////////////////////////////////////////////
-
-
-    @RequestMapping(value = "/loadTasks", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public JSONObject loadTasks() {
-        JSONObject result = new JSONObject();
-        List<HzTaskPostDto> dtoList = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            HzTaskPostDto dto = new HzTaskPostDto();
-            dto.setUrl("vwoFormList");
-            dto.setId("81");
-            dto.setText("VC2018000"+i);
-            dto.setTargetId("434");
-            dto.setTargetName("VC2018000" + i+"VWO表单");
-            dto.setTargetType(1);
-            dto.setFormType(1);
-            dto.setReserve("");
-            dto.setReserve2("");
-            dto.setReserve3("");
-            dto.setReserve4("");
-            dto.setReserve5("");
-            dto.setReserve6("");
-            dto.setReserve7("");
-            dto.setReserve8("");
-            dto.setReserve9("");
-            dto.setReserve10("");
-            dtoList.add(dto);
-        }
-        result.put("data", dtoList);
-        return result;
-    }
 }

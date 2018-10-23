@@ -12,30 +12,30 @@
 <title>变更管理vwo</title>
 <body>
 <div class="head-btnSets">
-    <button class="btn btn-success head-func-btn" style="margin-top: 100px;"
-            id="vwoSaveBtn">保存
-    </button>
-    <button class="btn btn-success head-func-btn" style="margin-top: 150px;"
-            id="release">发布
-    </button>
-    <button class="btn btn-success head-func-btn" style="margin-top: 200px;"
-            id="interrupt">中断
-    </button>
-    <button class="btn btn-success head-func-btn" style="margin-top: 250px;"
-            id="bomLeadApprove" onclick="approve('saveBomLeaderOpinion','bomLeaderOpinion')">BOM经理审批
-    </button>
-    <button class="btn btn-success head-func-btn" style="margin-top: 300px;"
-            id="pmtLeadApprove" onclick="approve('savePmtLeaderOpinion','pmtLeaderOpinion')">PMT经理审批
-    </button>
-    <button class="btn btn-success head-func-btn" style="margin-top: 350px;"
-            id="projLeadApprove" onclick="approve('saveProjLeaderOpinion','projLeaderOpinion')">项目经理审批
-    </button>
+    <!--<button class="btn btn-success head-func-btn" style="margin-top: 100px;"-->
+            <!--id="vwoSaveBtn">保存-->
+    <!--</button>-->
+    <!--<button class="btn btn-success head-func-btn" style="margin-top: 150px;"-->
+            <!--id="release">发布-->
+    <!--</button>-->
+    <!--<button class="btn btn-success head-func-btn" style="margin-top: 200px;"-->
+            <!--id="interrupt">中断-->
+    <!--</button>-->
+    <!--<button class="btn btn-success head-func-btn" style="margin-top: 250px;"-->
+            <!--id="bomLeadApprove" onclick="approve('saveBomLeaderOpinion','bomLeaderOpinion')">BOM经理审批-->
+    <!--</button>-->
+    <!--<button class="btn btn-success head-func-btn" style="margin-top: 300px;"-->
+            <!--id="pmtLeadApprove" onclick="approve('savePmtLeaderOpinion','pmtLeaderOpinion')">PMT经理审批-->
+    <!--</button>-->
+    <!--<button class="btn btn-success head-func-btn" style="margin-top: 350px;"-->
+            <!--id="projLeadApprove" onclick="approve('saveProjLeaderOpinion','projLeaderOpinion')">项目经理审批-->
+    <!--</button>-->
     <button class="btn btn-success head-func-btn" style="margin-top: 400px;"
             id="saveTask" onclick="saveTask()">保存任务
     </button>
 </div>
 <!--基本信息-->
-<h4><i class="fa fa-minus-square" aria-hidden="true">基本信息</i></h4>
+<h4 id="basicInfoH4"><i class="fa fa-minus-square" aria-hidden="true">基本信息</i></h4>
 <div class="panel panel-default col-lg-12 col-md-12 col-sm-12" style="padding:20px;">
     <form class="form-horizontal" id="basicInfo" role="form" onsubmit="return false;">
         <fieldset>
@@ -452,8 +452,8 @@
             <!--<fieldset>-->
             <form class="form-horizontal" id="bomLeaderOpinion" role="form">
                 <div class="panel panel-default panel-body col-lg-12 col-md-12 col-sm-12">
-                    <h4>BOM经理:<a th:text="${hzVwoOpiBom.getOpiBomUserName()==null?'请选择BOM经理':hzVwoOpiBom.getOpiBomUserName()}" href="xxsdadsddsdasds?type=1"></a></h4>
-                    <input type="hidden" id='' th:value="${hzVwoOpiBom.getOpiBomUserId()}">
+                    <h4>BOM经理：<a th:text="${hzVwoOpiBom.getOpiBomMngUserName()==null?'请选择BOM经理':hzVwoOpiBom.getOpiBomMngUserName()}" onclick="doSelectBomMag(1)"></a></h4>
+                    <input type="hidden" id='' th:value="${hzVwoOpiBom.getOpiBomMngUserId()}">
                     <div class="col-lg-12 col-md-12 col-sm-12">
                         <label for="opiBomMngOpinion">意见</label>
                         <textarea class="form-control" style="resize: none;width: 100%;" rows="2" cols="30"
@@ -491,7 +491,7 @@
             <form class="form-horizontal" id="pmtLeaderOpinion" role="form">
                 <!--<fieldset>-->
                 <div class="panel panel-default panel-body col-lg-12 col-md-12 col-sm-12">
-                    <h4>专业PMT经理</h4>
+                    <h4>专业PMT经理：<a th:text="${hzVwoOpiPmt.getOpiPmtMngUserName()==null?'请选择PMT经理':hzVwoOpiPmt.getOpiPmtMngUserName()}" onclick="doSelectBomMag(2)"></a></h4>
                     <div class="col-lg-12 col-md-12 col-sm-12">
                         <label for="opiPmtMngOpinion">意见</label>
                         <textarea class="form-control" style="resize: none;width: 100%;" rows="2" cols="30"
@@ -529,7 +529,7 @@
             <!--<fieldset>-->
             <form class="form-horizontal" id="projLeaderOpinion" role="form">
                 <div class="panel panel-default panel-body col-lg-12 col-md-12 col-sm-12">
-                    <h4>项目经理</h4>
+                    <h4>项目经理：<a th:text="${hzVwoOpiProj.getOpiProjMngUserName()==null?'请选择项目经理':hzVwoOpiProj.getOpiProjMngUserName()}" onclick="doSelectBomMag(3)"></a></h4>
                     <div class="col-lg-12 col-md-12 col-sm-12">
                         <label for="opiProjMngOpinion">意见</label>
                         <textarea class="form-control"
@@ -597,6 +597,16 @@
     function reloadSheet(type, name) {
         // window.location.reload();//刷新当前页面.
         $("#sp_" + type).text(name);
+        undead();
+    }
+    function reloadSheetOption(type,name) {
+        if(type==1){
+            $("#bomLeaderOpinion").find("a").text(name);
+        }else if(type==2){
+            $("#pmtLeaderOpinion").find("a").text(name);
+        }else if(type==3){
+            $("#projLeaderOpinion").find("a").text(name);
+        }
         undead();
     }
 </script>

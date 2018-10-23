@@ -3,10 +3,10 @@
  * This file was wrote by fancyears·milos·maywas @connor. Any question/bug you can post to 1243093366@qq.com.
  * ALL RIGHTS RESERVED.
  */
-var taskData = {};
-var vwoForm=null;
-var ewoForm=null;
-var mwoForm=null;
+var taskData = null;
+var vwoForm = null;
+var ewoForm = null;
+var mwoForm = null;
 
 $(function () {
     loadTasks();
@@ -15,10 +15,11 @@ $(function () {
 
 function loadTasks() {
     $.ajax({
-        url: "./project/loadTasks",
+        url: "./task/loadTasks",
         type: "POST",
         success: function (data) {
             var _data = data.data;
+            taskData = null;
             if (_data) {
                 $("#myTasks li").remove();
                 $("#myTasks").append(
@@ -46,7 +47,11 @@ function loadTasks() {
 }
 
 function loadTab(data) {
-    var showObj =$(top.document.body).find(".nav-tabs li a[href='#" + (data.targetName + data.targetId)+ "']");
+    taskData = data;
+    if(null==taskData){
+        return;
+    }
+    var showObj = $(top.document.body).find(".nav-tabs li a[href='#" + (data.targetName + data.targetId) + "']");
     // 增加一个页面的时候判断当前的标签页是否已经打开过了，若打开过则不再重新生成新的tab标签页，而是直接显示打开过的标签页
     if ($(showObj).html() == undefined) {
         $("#tabContainer").data("tabs").addTab({
@@ -55,30 +60,30 @@ function loadTab(data) {
             closeable: true,
             url: data.url
         });
-        taskData = data;
     }
-    switch (data.formType){
+    switch (data.formType) {
         case 1:
-            vwoForm={};
-            vwoForm.id=data.id;
-            vwoForm.url=data.url;
+            vwoForm = {};
+            vwoForm.id = data.id;
+            vwoForm.url = data.url;
             break;
         case 2:
-            ewoForm.id=data.id;
-            ewoForm.url=data.url;
+            ewoForm.id = data.id;
+            ewoForm.url = data.url;
             break;
         case 3:
-            mwoForm.id=data.id;
-            mwoForm.url=data.url;
+            mwoForm.id = data.id;
+            mwoForm.url = data.url;
             break;
     }
+    $("#myCurrentTask").text(data.targetName);
 }
 
 /**
  * 获取VWO表单的ID和URL
  * @returns {*}
  */
-function getVwoForm(){
+function getVwoForm() {
     return vwoForm;
 }
 
@@ -86,7 +91,7 @@ function getVwoForm(){
  * 获取VWO表单的ID和URL
  * @returns {*}
  */
-function getEwoForm(){
+function getEwoForm() {
     return ewoForm;
 }
 
@@ -94,7 +99,7 @@ function getEwoForm(){
  * 获取VWO表单的ID和URL
  * @returns {*}
  */
-function getMwoForm(){
+function getMwoForm() {
     return mwoForm;
 }
 
