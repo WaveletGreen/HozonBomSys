@@ -108,6 +108,7 @@ $(document).ready((function () {
     let url = "getInformChangers";
     url += "?vwo=" + vwoId;
     loadConnectedData(url);
+    taskStatusHold();
     // registerBtn();
 }));
 
