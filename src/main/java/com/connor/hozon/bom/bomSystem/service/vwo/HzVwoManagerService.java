@@ -21,6 +21,7 @@ import com.connor.hozon.bom.bomSystem.service.process.ReleaseContainer;
 import com.connor.hozon.bom.bomSystem.service.project.HzPlatformService;
 import com.connor.hozon.bom.bomSystem.service.project.HzProjectLibsService;
 import com.connor.hozon.bom.bomSystem.service.project.HzVehicleService;
+import com.connor.hozon.bom.bomSystem.service.task.HzTasksService;
 import com.connor.hozon.bom.common.base.entity.QueryBase;
 import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.resources.controller.change.vwo.VWOUserGroupDTO;
@@ -47,6 +48,7 @@ import sql.pojo.epl.HzEPLManageRecord;
 import sql.pojo.project.HzPlatformRecord;
 import sql.pojo.project.HzProjectLibs;
 import sql.pojo.project.HzVehicleRecord;
+import sql.pojo.task.HzTasks;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -145,6 +147,9 @@ public class HzVwoManagerService implements IHzVWOManagerService {
 
     @Autowired
     HzVwoInfoService hzVwoInfoService;
+
+    @Autowired
+    HzTasksService hzTasksService;
     /**
      * 日志
      */
@@ -164,8 +169,8 @@ public class HzVwoManagerService implements IHzVWOManagerService {
         JSONObject result = new JSONObject();
 
         if (beans != null && beans.size() > 0) {
-            for(HzCfg0Record hzCfg0Record : beans){
-                if(hzCfg0Record.getCfgIsInProcess()==1){
+            for (HzCfg0Record hzCfg0Record : beans) {
+                if (hzCfg0Record.getCfgIsInProcess() == 1) {
                     result.put("status", false);
                     result.put("msg", "已在VWO流程中，不允许重复发起VWO流程");
                     return result;
@@ -299,8 +304,8 @@ public class HzVwoManagerService implements IHzVWOManagerService {
         Date now = new Date();
         User user = UserInfo.getUser();
         if (beans != null && beans.size() > 0) {
-            for(HzCfg0Record hzCfg0Record : beans){
-                if(hzCfg0Record.getCfgIsInProcess()==1){
+            for (HzCfg0Record hzCfg0Record : beans) {
+                if (hzCfg0Record.getCfgIsInProcess() == 1) {
                     result.put("status", false);
                     result.put("msg", "已在VWO流程中，不允许重复发起VWO流程");
                     return result;
@@ -315,7 +320,7 @@ public class HzVwoManagerService implements IHzVWOManagerService {
                 result.put("status", false);
                 result.put("msg", "搜索出的特性值总数与发起VWO流程的特性值的总数不一致，请检查数据核对数据是否被删除");
                 return result;
-            }else {
+            } else {
                 HzVwoInfo hzVwoInfo = generateVwoEntity(user, projectUid, result, 1);
                 if (hzVwoInfo == null) {
                     return result;
@@ -323,7 +328,7 @@ public class HzVwoManagerService implements IHzVWOManagerService {
 //                List<HzFeatureChangeBean> hzFeatureChangeBeanListBefore = new ArrayList<HzFeatureChangeBean>();
                 List<HzFeatureChangeBean> hzFeatureChangeBeanListAfter = new ArrayList<HzFeatureChangeBean>();
                 List<HzCfg0Record> hzCfg0RecordList = new ArrayList<HzCfg0Record>();
-                for(HzCfg0Record hzCfg0Record : localParams){
+                for (HzCfg0Record hzCfg0Record : localParams) {
                     //特性ID
                     String puid = hzCfg0Record.getPuid();
                     //获取最近一次变更后的数据，作为本次变更的变更前数据
@@ -333,7 +338,7 @@ public class HzVwoManagerService implements IHzVWOManagerService {
 //                    if(hzFeatureChangeBeanBefor!=null){
 //                        hzFeatureChangeBeanListBefore.add(hzFeatureChangeBeanBefor);
 //                    }
-                    if(hzFeatureChangeBeanBefor==null){
+                    if (hzFeatureChangeBeanBefor == null) {
                         HzFeatureChangeBean hzFeatureChangeBeanAfter = new HzFeatureChangeBean();
                         hzFeatureChangeBeanAfter.setVwoId(hzVwoInfo.getId());
                         hzFeatureChangeBeanAfter.setCfg0MainItemPuid(hzCfg0Record.getpCfg0MainItemPuid());
@@ -411,16 +416,16 @@ public class HzVwoManagerService implements IHzVWOManagerService {
 //                    }
 //                }
                 //新增变更后数据
-                if(hzFeatureChangeBeanListAfter.size()>0||hzFeatureChangeBeanListAfter!=null){
-                    if(iHzFeatureChangeService.doInsertListAfter(hzFeatureChangeBeanListAfter)<=0){
+                if (hzFeatureChangeBeanListAfter.size() > 0 || hzFeatureChangeBeanListAfter != null) {
+                    if (iHzFeatureChangeService.doInsertListAfter(hzFeatureChangeBeanListAfter) <= 0) {
                         result.put("status", false);
                         result.put("msg", "新增变更后数据失败");
                         return result;
                     }
                 }
                 //修改源数据
-                if(hzCfg0RecordList.size()>0||hzCfg0RecordList!=null){
-                    if(hzCfg0Service.doupdateList(hzCfg0RecordList)<=0){
+                if (hzCfg0RecordList.size() > 0 || hzCfg0RecordList != null) {
+                    if (hzCfg0Service.doupdateList(hzCfg0RecordList) <= 0) {
                         result.put("status", false);
                         result.put("msg", "修改源数据失败");
                         return result;
@@ -434,6 +439,7 @@ public class HzVwoManagerService implements IHzVWOManagerService {
         }
         return result;
     }
+
     //配色方案进入VWO
     public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid) {
         JSONObject result = new JSONObject();
@@ -494,16 +500,16 @@ public class HzVwoManagerService implements IHzVWOManagerService {
             result.put("msg", e.getMessage());
         }
         //筛选出第一次变更的数据,并生成主数据
-        if(hzCmcrChangesLastAfter.size()!=hzCmcrChangesLastAfterQuery.size()){
-            for(HzCmcrChange hzCmcrChangeAfterQuery : hzCmcrChangesLastAfterQuery){
-                boolean flag =false;
-                for(HzCmcrChange hzCmcrChange : hzCmcrChangesLastAfter){
-                    if(hzCmcrChangeAfterQuery.getCmcrSrcPuid().equals(hzCmcrChange.getCmcrSrcPuid())){
+        if (hzCmcrChangesLastAfter.size() != hzCmcrChangesLastAfterQuery.size()) {
+            for (HzCmcrChange hzCmcrChangeAfterQuery : hzCmcrChangesLastAfterQuery) {
+                boolean flag = false;
+                for (HzCmcrChange hzCmcrChange : hzCmcrChangesLastAfter) {
+                    if (hzCmcrChangeAfterQuery.getCmcrSrcPuid().equals(hzCmcrChange.getCmcrSrcPuid())) {
                         flag = true;
                         break;
                     }
                 }
-                if(!flag){
+                if (!flag) {
                     HzCmcrChange hzCmcrChange = new HzCmcrChange();
                     hzCmcrChange.setCmcrSrcPuid(hzCmcrChangeAfterQuery.getCmcrSrcPuid());
                     hzCmcrChange.setCmcrSrcMainCfg(hzCmcrChangeAfterQuery.getCmcrSrcMainCfg());
@@ -513,16 +519,16 @@ public class HzVwoManagerService implements IHzVWOManagerService {
             }
         }
         //筛选出第一次变更的数据,并生成从数据
-        if(hzCmcrDetailChangesLastAfter.size()!=hzCmcrDetailChangesQuery.size()){
-            for(HzCmcrDetailChange hzCmcrDetailChangeQuery : hzCmcrDetailChangesQuery){
+        if (hzCmcrDetailChangesLastAfter.size() != hzCmcrDetailChangesQuery.size()) {
+            for (HzCmcrDetailChange hzCmcrDetailChangeQuery : hzCmcrDetailChangesQuery) {
                 boolean flag = false;
-                for(HzCmcrDetailChange hzCmcrDetailChange : hzCmcrDetailChangesLastAfter){
-                    if(hzCmcrDetailChangeQuery.getCmcrDetailSrcPuid().equals(hzCmcrDetailChange.getCmcrDetailSrcPuid())){
+                for (HzCmcrDetailChange hzCmcrDetailChange : hzCmcrDetailChangesLastAfter) {
+                    if (hzCmcrDetailChangeQuery.getCmcrDetailSrcPuid().equals(hzCmcrDetailChange.getCmcrDetailSrcPuid())) {
                         flag = true;
                         break;
                     }
                 }
-                if(!flag){
+                if (!flag) {
                     HzCmcrDetailChange hzCmcrDetailChange = new HzCmcrDetailChange();
                     hzCmcrDetailChange.setCmcrDetailSrcPuid(hzCmcrDetailChangeQuery.getCmcrDetailSrcPuid());
                     hzCmcrDetailChange.setCmcrDetailSrcCfgMainUid(hzCmcrDetailChangeQuery.getCmcrDetailSrcCfgMainUid());
@@ -539,7 +545,6 @@ public class HzVwoManagerService implements IHzVWOManagerService {
 //        for (HzCmcrDetailChange hzCmcrDetailChange : hzCmcrDetailChangesLastAfter) {
 //            hzCmcrDetailChange.setCmcrDetailCgVwoId(hzVwoInfo.getId());
 //        }
-
 
 
         //根据源主数据生成变更后主数据
@@ -619,7 +624,6 @@ public class HzVwoManagerService implements IHzVWOManagerService {
 
             hzCmcrDetailChangesAfter.add(hzCmcrDetailChangeAfter);
         }
-
 
 
         //跟新数据库
@@ -752,8 +756,7 @@ public class HzVwoManagerService implements IHzVWOManagerService {
         HzVwoOpiBom hzVwoOpiBom = hzVwoOpiBomDao.selectByVwoId(id);
         HzVwoOpiPmt hzVwoOpiPmt = hzVwoOpiPmtDao.selectByVwoId(id);
         HzVwoOpiProj hzVwoOpiProj = hzVwoOpiProjDao.selectByVwoId(id);
-
-
+        HzProjectLibs project = hzProjectLibsService.doLoadProjectLibsById(vwoInfo.getProjectUid());
         //影响部门
         if (influenceDept == null) {
             influenceDept = new HzVwoInfluenceDept();
@@ -796,12 +799,15 @@ public class HzVwoManagerService implements IHzVWOManagerService {
         if (hzVwoOpiProj == null) {
             hzVwoOpiProj = new HzVwoOpiProj();
             hzVwoOpiProj.setOpiVwoId(id);
+            hzVwoOpiProj.setOpiProjMngUserName(project.getpProjectManager());
+            hzVwoOpiProj.setOpiProjMngUserId(project.getProjectManagerId());
             if (hzVwoOpiProjDao.insertSelective(hzVwoOpiProj) <= 0) {
                 logger.error("初始化VWO:" + id + "的项目经理意见数据失败");
                 model.addAttribute("msg", "初始化VWO:" + id + "的项目经理意见数据失败");
                 return false;
             }
         }
+
 
         model.addAttribute("vwoInfo", vwoInfo);
         model.addAttribute("href", "returnToVwoFromList");
@@ -908,6 +914,7 @@ public class HzVwoManagerService implements IHzVWOManagerService {
 
     /**
      * 获取项目经理意见
+     *
      * @param id
      * @return
      */
@@ -950,36 +957,37 @@ public class HzVwoManagerService implements IHzVWOManagerService {
     }
 
     @Override
-    public JSONObject saveBomLeaderOpinion(HzVwoOpiBom hzVwoOpiBom, Integer vwoType,  String projectUid) {
+    public JSONObject saveBomLeaderOpinion(HzVwoOpiBom hzVwoOpiBom, Integer vwoType, String projectUid) {
         JSONObject result = new JSONObject();
         User user = UserInfo.getUser();
-        result.put("status",true);
+        result.put("status", true);
         //为HzVwoOpiBom对象填充数据
         HzVwoOpiBom hzVwoOpiBomQuery = getOpiOfBomMng(hzVwoOpiBom.getOpiVwoId());
         hzVwoOpiBom.setId(hzVwoOpiBomQuery.getId());
         hzVwoOpiBom.setOpiBomMngUpdater(user.getLogin());
         hzVwoOpiBom.setOpiBomMngOptionDate(new Date());
         //修改BOM经理评估意见
-        if(hzVwoOpiBomDao.updateByPrimaryKeySelective(hzVwoOpiBom)<=0){
-            result.put("status",false);
-            result.put("msg","BOM经理评估保存失败");
+        if (hzVwoOpiBomDao.updateByPrimaryKeySelective(hzVwoOpiBom) <= 0) {
+            result.put("status", false);
+            result.put("msg", "BOM经理评估保存失败");
             return result;
-        };
+        }
+        ;
         HzVwoInfo hzVwoInfo = new HzVwoInfo();
         hzVwoInfo.setId(hzVwoOpiBom.getOpiVwoId());
-        if(hzVwoOpiBom.getOpiBomMngAgreement()==1){
+        if (hzVwoOpiBom.getOpiBomMngAgreement() == 1) {
             hzVwoInfo.setVwoStatus(102);
-        }else {
+        } else {
             hzVwoInfo.setVwoStatus(899);
             interrupt(vwoType, projectUid, hzVwoOpiBom.getOpiVwoId());
         }
         //修改VWO流程状态
-        if(!iHzVwoInfoService.doUpdateByPrimaryKey(hzVwoInfo)){
-            result.put("status",false);
-            result.put("msg","VWO状态修改失败");
+        if (!iHzVwoInfoService.doUpdateByPrimaryKey(hzVwoInfo)) {
+            result.put("status", false);
+            result.put("msg", "VWO状态修改失败");
             return result;
         }
-        result.put("msg","BOM经理评估成功");
+        result.put("msg", "BOM经理评估成功");
         return result;
     }
 
@@ -987,32 +995,32 @@ public class HzVwoManagerService implements IHzVWOManagerService {
     public JSONObject savePmtLeaderOpinion(HzVwoOpiPmt hzVwoOpiPmt, Integer vwoType, String projectUid) {
         JSONObject result = new JSONObject();
         User user = UserInfo.getUser();
-        result.put("status",true);
+        result.put("status", true);
         //为HzVwoOpiPmt对象填充数据
         HzVwoOpiPmt hzVwoOpiPmtQuery = getOpiOfPmtMng(hzVwoOpiPmt.getOpiVwoId());
         hzVwoOpiPmt.setId(hzVwoOpiPmtQuery.getId());
         hzVwoOpiPmt.setOpiPmtMngUpdater(user.getLogin());
         hzVwoOpiPmt.setOpiPmtMngOptionDate(new Date());
         //修改PTM经理评估意见
-        if(hzVwoOpiPmtDao.updateByPrimaryKeySelective(hzVwoOpiPmt)<=0){
-            result.put("status",false);
-            result.put("msg","PTM经理评估保存失败");
+        if (hzVwoOpiPmtDao.updateByPrimaryKeySelective(hzVwoOpiPmt) <= 0) {
+            result.put("status", false);
+            result.put("msg", "PTM经理评估保存失败");
             return result;
         }
         HzVwoInfo hzVwoInfo = new HzVwoInfo();
         hzVwoInfo.setId(hzVwoOpiPmt.getOpiVwoId());
-        if(hzVwoOpiPmt.getOpiPmtMngAgreement()==1){
+        if (hzVwoOpiPmt.getOpiPmtMngAgreement() == 1) {
             hzVwoInfo.setVwoStatus(103);
-        }else {
+        } else {
             hzVwoInfo.setVwoStatus(899);
             interrupt(vwoType, projectUid, hzVwoOpiPmt.getOpiVwoId());
         }
-        if(!iHzVwoInfoService.doUpdateByPrimaryKey(hzVwoInfo)){
-            result.put("status",false);
-            result.put("msg","VWO状态修改失败");
+        if (!iHzVwoInfoService.doUpdateByPrimaryKey(hzVwoInfo)) {
+            result.put("status", false);
+            result.put("msg", "VWO状态修改失败");
             return result;
         }
-        result.put("msg","PTM经理评估成功");
+        result.put("msg", "PTM经理评估成功");
         return result;
     }
 
@@ -1020,33 +1028,33 @@ public class HzVwoManagerService implements IHzVWOManagerService {
     public JSONObject saveProjLeaderOpinion(HzVwoOpiProj hzVwoOpiProj, Integer vwoType, String projectUid) {
         JSONObject result = new JSONObject();
         User user = UserInfo.getUser();
-        result.put("status",true);
+        result.put("status", true);
         //为HzVwoOpiPmt对象填充数据
         HzVwoOpiProj hzVwoOpiProjQuery = getOpiOfProjMng(hzVwoOpiProj.getOpiVwoId());
         hzVwoOpiProj.setId(hzVwoOpiProjQuery.getId());
         hzVwoOpiProj.setOpiProjMngUpdater(user.getLogin());
         hzVwoOpiProj.setOpiProjMngOptionDate(new Date());
         //修改PTM经理评估意见
-        if(hzVwoOpiProjDao.updateByPrimaryKeySelective(hzVwoOpiProj)<=0){
-            result.put("status",false);
-            result.put("msg","项目经理评估保存失败");
+        if (hzVwoOpiProjDao.updateByPrimaryKeySelective(hzVwoOpiProj) <= 0) {
+            result.put("status", false);
+            result.put("msg", "项目经理评估保存失败");
             return result;
         }
         HzVwoInfo hzVwoInfo = new HzVwoInfo();
         hzVwoInfo.setId(hzVwoOpiProj.getOpiVwoId());
-        if(hzVwoOpiProj.getOpiProjMngAgreement()==1){
+        if (hzVwoOpiProj.getOpiProjMngAgreement() == 1) {
             hzVwoInfo.setVwoStatus(999);
             release(vwoType, projectUid, hzVwoOpiProj.getOpiVwoId());
-        }else {
+        } else {
             hzVwoInfo.setVwoStatus(899);
             interrupt(vwoType, projectUid, hzVwoOpiProj.getOpiVwoId());
         }
-        if(!iHzVwoInfoService.doUpdateByPrimaryKey(hzVwoInfo)){
-            result.put("status",false);
-            result.put("msg","VWO状态修改失败");
+        if (!iHzVwoInfoService.doUpdateByPrimaryKey(hzVwoInfo)) {
+            result.put("status", false);
+            result.put("msg", "VWO状态修改失败");
             return result;
         }
-        result.put("msg","项目经理评估成功");
+        result.put("msg", "项目经理评估成功");
         return result;
     }
 
@@ -1054,71 +1062,86 @@ public class HzVwoManagerService implements IHzVWOManagerService {
     public JSONObject launch(Integer type, String projectUid, Long vwoId) {
         JSONObject result = new JSONObject();
         boolean status = toLaunch(type, projectUid, vwoId);
-        if(status){
-            result.put("msg","VWO发起成功");
-        }else {
-            result.put("msg","VWO发起失败");
+        if (status) {
+            result.put("msg", "VWO发起成功");
+        } else {
+            result.put("msg", "VWO发起失败");
         }
-        result.put("status",status);
+        result.put("status", status);
         return result;
     }
-    
+
     public boolean toLaunch(Integer type, String projectUid, Long vwoId) {
         User user = UserInfo.getUser();
         HzVwoInfo info = hzVwoInfoService.doSelectByPrimaryKey(vwoId);
         info.setVwoFinisher(user.getLogin());
         info.setVwoStatus(101);
         boolean vwoFlag = hzVwoInfoService.updateByVwoId(info);
+        /**发起流程之后，通知到人员*/
+        noticeUsers(info, type);
         return vwoFlag;
     }
+
+    /**
+     * 通知到人，加入任务
+     *
+     * @param info
+     * @param type
+     */
+    private void noticeUsers(HzVwoInfo info, Integer type) {
+        List<HzTasks> tasks = new ArrayList<>();
+        tasks=hzTasksService.doSelectByVwoId(info.getId());
+        
+    }
+
     @Override
     public JSONObject saveOptionUser(HzVwoOptionUserDto hzVwoOptionUserDto) {
         String name = "";
         JSONObject result = new JSONObject();
-        result.put("status",true);
-        result.put("msg","指派成功");
-        result.put("type",hzVwoOptionUserDto.getSelectId());
+        result.put("status", true);
+        result.put("msg", "指派成功");
+        result.put("type", hzVwoOptionUserDto.getSelectId());
 
         if (hzVwoOptionUserDto == null) {
             result.put("status", false);
         } else {
 
-            switch (hzVwoOptionUserDto.getSelectId()){
+            switch (hzVwoOptionUserDto.getSelectId()) {
                 case 1:
                     HzVwoOpiBom hzVwoOpiBom = new HzVwoOpiBom();
                     hzVwoOpiBom.setOpiBomMngUserId(hzVwoOptionUserDto.getSelectedUserId());
                     hzVwoOpiBom.setOpiVwoId(hzVwoOptionUserDto.getVwoId());
                     hzVwoOpiBom.setOpiBomMngUserName(hzVwoOptionUserDto.getOpiBomName());
-                    if(hzVwoOpiBomDao.updateUserByVwoId(hzVwoOpiBom)<=0){
+                    if (hzVwoOpiBomDao.updateUserByVwoId(hzVwoOpiBom) <= 0) {
                         result.put("status", false);
                         result.put("msg", "指派成员失败");
                         return result;
                     }
-                    result.put("name",hzVwoOpiBom.getOpiBomMngUserName());
+                    result.put("name", hzVwoOpiBom.getOpiBomMngUserName());
                     break;
                 case 2:
-                    HzVwoOpiPmt hzVwoOpiPmt= new HzVwoOpiPmt();
+                    HzVwoOpiPmt hzVwoOpiPmt = new HzVwoOpiPmt();
                     hzVwoOpiPmt.setOpiPmtMngUserId(hzVwoOptionUserDto.getSelectedUserId());
                     hzVwoOpiPmt.setOpiVwoId(hzVwoOptionUserDto.getVwoId());
                     hzVwoOpiPmt.setOpiPmtMngUserName(hzVwoOptionUserDto.getOpiPmtName());
-                    if(hzVwoOpiPmtDao.updateUserByVwoId(hzVwoOpiPmt)<=0){
+                    if (hzVwoOpiPmtDao.updateUserByVwoId(hzVwoOpiPmt) <= 0) {
                         result.put("status", false);
                         result.put("msg", "指派成员失败");
                         return result;
                     }
-                    result.put("name",hzVwoOpiPmt.getOpiPmtMngUserName());
+                    result.put("name", hzVwoOpiPmt.getOpiPmtMngUserName());
                     break;
                 case 3:
-                    HzVwoOpiProj hzVwoOpiProj= new HzVwoOpiProj();
+                    HzVwoOpiProj hzVwoOpiProj = new HzVwoOpiProj();
                     hzVwoOpiProj.setOpiProjMngUserId(hzVwoOptionUserDto.getSelectedUserId());
                     hzVwoOpiProj.setOpiVwoId(hzVwoOptionUserDto.getVwoId());
                     hzVwoOpiProj.setOpiProjMngUserName(hzVwoOptionUserDto.getOpiProjName());
-                    if(hzVwoOpiProjDao.updateUserByVwoId(hzVwoOpiProj)<=0){
+                    if (hzVwoOpiProjDao.updateUserByVwoId(hzVwoOpiProj) <= 0) {
                         result.put("status", false);
                         result.put("msg", "指派成员失败");
                         return result;
                     }
-                    result.put("name",hzVwoOpiProj.getOpiProjMngUserName());
+                    result.put("name", hzVwoOpiProj.getOpiProjMngUserName());
                     break;
                 default:
                     result.put("status", false);
@@ -1438,11 +1461,11 @@ public class HzVwoManagerService implements IHzVWOManagerService {
             result.put("msg", "请选择一个VWO表单进行操作");
             return result;
         } else {
-            if(info.getVwoStatus()==899){
+            if (info.getVwoStatus() == 899) {
                 result.put("status", false);
                 result.put("msg", "该VWO已中断，不能保存");
                 return result;
-            }else if(info.getVwoStatus()==999){
+            } else if (info.getVwoStatus() == 999) {
                 result.put("status", false);
                 result.put("msg", "该VWO已发布，不能保存");
                 return result;

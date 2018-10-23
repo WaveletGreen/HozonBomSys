@@ -51,4 +51,5 @@ public interface IHzTaskService {
      */
     List<HzTasks> doSelectUserFinishTasks(Long userId);
 
+    List<HzTasks> doSelectByVwoId(Long id);
 }
