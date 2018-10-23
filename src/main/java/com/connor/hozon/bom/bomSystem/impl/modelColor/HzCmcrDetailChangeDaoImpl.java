@@ -7,14 +7,11 @@
 package com.connor.hozon.bom.bomSystem.impl.modelColor;
 
 import com.connor.hozon.bom.bomSystem.dao.modelColor.HzCmcrDetailChangeDao;
-import com.connor.hozon.bom.bomSystem.dao.modelColor.HzCmcrDetailChangeDao;
 import com.connor.hozon.bom.bomSystem.impl.BasicDaoImpl;
-import com.connor.hozon.bom.bomSystem.option.ChangeCmcrOption;
+import com.connor.hozon.bom.bomSystem.option.ChangeCmcrOptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import sql.pojo.cfg.modelColor.HzCmcrChange;
-import sql.pojo.cfg.modelColor.HzCmcrDetailChange;
 import sql.pojo.cfg.modelColor.HzCmcrDetailChange;
 
 import java.util.HashMap;
@@ -216,7 +213,7 @@ public class HzCmcrDetailChangeDaoImpl extends BasicDaoImpl<HzCmcrDetailChange> 
     @Override
     public int deleteByPrimaryKey(HzCmcrDetailChange hzCmcrChange) {
         try {
-            if (ChangeCmcrOption.validateDetailTable(hzCmcrChange)) {
+            if (ChangeCmcrOptions.validateDetailTable(hzCmcrChange)) {
                 return super.deleteByPrimaryKey(hzCmcrChange);
             }
         } catch (Exception e) {
@@ -229,7 +226,7 @@ public class HzCmcrDetailChangeDaoImpl extends BasicDaoImpl<HzCmcrDetailChange> 
     @Override
     public int insert(HzCmcrDetailChange hzCmcrChange) {
         try {
-            if (ChangeCmcrOption.validateDetailTable(hzCmcrChange)) {
+            if (ChangeCmcrOptions.validateDetailTable(hzCmcrChange)) {
                 return super.insert(hzCmcrChange);
             }
         } catch (Exception e) {
@@ -242,7 +239,7 @@ public class HzCmcrDetailChangeDaoImpl extends BasicDaoImpl<HzCmcrDetailChange> 
     @Override
     public int insertSelective(HzCmcrDetailChange hzCmcrChange) {
         try {
-            if (ChangeCmcrOption.validateDetailTable(hzCmcrChange)) {
+            if (ChangeCmcrOptions.validateDetailTable(hzCmcrChange)) {
                 return super.insertSelective(hzCmcrChange);
             }
         } catch (Exception e) {
@@ -255,7 +252,7 @@ public class HzCmcrDetailChangeDaoImpl extends BasicDaoImpl<HzCmcrDetailChange> 
     @Override
     public HzCmcrDetailChange selectByPrimaryKey(HzCmcrDetailChange hzCmcrChange) {
         try {
-            if (ChangeCmcrOption.validateDetailTable(hzCmcrChange)) {
+            if (ChangeCmcrOptions.validateDetailTable(hzCmcrChange)) {
                 return super.selectByPrimaryKey(hzCmcrChange);
             }
         } catch (Exception e) {
@@ -268,7 +265,7 @@ public class HzCmcrDetailChangeDaoImpl extends BasicDaoImpl<HzCmcrDetailChange> 
     @Override
     public int updateByPrimaryKeySelective(HzCmcrDetailChange hzCmcrChange) {
         try {
-            if (ChangeCmcrOption.validateDetailTable(hzCmcrChange)) {
+            if (ChangeCmcrOptions.validateDetailTable(hzCmcrChange)) {
                 return super.updateByPrimaryKeySelective(hzCmcrChange);
             }
         } catch (Exception e) {
@@ -281,7 +278,7 @@ public class HzCmcrDetailChangeDaoImpl extends BasicDaoImpl<HzCmcrDetailChange> 
     @Override
     public int updateByPrimaryKey(HzCmcrDetailChange hzCmcrChange) {
         try {
-            if (ChangeCmcrOption.validateDetailTable(hzCmcrChange)) {
+            if (ChangeCmcrOptions.validateDetailTable(hzCmcrChange)) {
                 return super.updateByPrimaryKey(hzCmcrChange);
             }
         } catch (Exception e) {
@@ -324,8 +321,8 @@ public class HzCmcrDetailChangeDaoImpl extends BasicDaoImpl<HzCmcrDetailChange> 
             LOGGER.error("变更详情对象不能为空", e);
             throw e;
         }
-        cmcrd.setWhichTable(ChangeCmcrOption.DETAIL_AFTER_TABLE.getDesc());
-        cmcrd.setSeqName(ChangeCmcrOption.DETAIL_AFTER_SEQ.getDesc());
+        cmcrd.setWhichTable(ChangeCmcrOptions.DETAIL_AFTER_TABLE.getDesc());
+        cmcrd.setSeqName(ChangeCmcrOptions.DETAIL_AFTER_SEQ.getDesc());
     }
 
     private void preSetAfterList(List<HzCmcrDetailChange> hzCmcrDetailChangesAfter) throws Exception {
@@ -335,8 +332,8 @@ public class HzCmcrDetailChangeDaoImpl extends BasicDaoImpl<HzCmcrDetailChange> 
             throw e;
         }
         for(HzCmcrDetailChange hzCmcrDetailChange : hzCmcrDetailChangesAfter){
-            hzCmcrDetailChange.setWhichTable(ChangeCmcrOption.DETAIL_AFTER_TABLE.getDesc());
-            hzCmcrDetailChange.setSeqName(ChangeCmcrOption.DETAIL_AFTER_SEQ.getDesc());
+            hzCmcrDetailChange.setWhichTable(ChangeCmcrOptions.DETAIL_AFTER_TABLE.getDesc());
+            hzCmcrDetailChange.setSeqName(ChangeCmcrOptions.DETAIL_AFTER_SEQ.getDesc());
         }
     }
 
@@ -346,8 +343,8 @@ public class HzCmcrDetailChangeDaoImpl extends BasicDaoImpl<HzCmcrDetailChange> 
             LOGGER.error("变更对象不能为空", e);
             throw e;
         }
-        cmcrd.setWhichTable(ChangeCmcrOption.DETAIL_BEFORE_TABLE.getDesc());
-        cmcrd.setSeqName(ChangeCmcrOption.DETAIL_BEFORE_SEQ.getDesc());
+        cmcrd.setWhichTable(ChangeCmcrOptions.DETAIL_BEFORE_TABLE.getDesc());
+        cmcrd.setSeqName(ChangeCmcrOptions.DETAIL_BEFORE_SEQ.getDesc());
     }
 
     private void preSetBeforeList(List<HzCmcrDetailChange> hzCmcrDetailChangesQuery) throws Exception {
@@ -357,8 +354,8 @@ public class HzCmcrDetailChangeDaoImpl extends BasicDaoImpl<HzCmcrDetailChange> 
             throw e;
         }
         for(HzCmcrDetailChange hzCmcrDetailChange : hzCmcrDetailChangesQuery){
-            hzCmcrDetailChange.setWhichTable(ChangeCmcrOption.DETAIL_BEFORE_TABLE.getDesc());
-            hzCmcrDetailChange.setSeqName(ChangeCmcrOption.DETAIL_BEFORE_SEQ.getDesc());
+            hzCmcrDetailChange.setWhichTable(ChangeCmcrOptions.DETAIL_BEFORE_TABLE.getDesc());
+            hzCmcrDetailChange.setSeqName(ChangeCmcrOptions.DETAIL_BEFORE_SEQ.getDesc());
         }
     }
 }

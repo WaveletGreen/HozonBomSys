@@ -297,4 +297,20 @@ public class HzFeatureChangeService implements IHzFeatureChangeService {
         return hzFeatureChangeDao.selectByVwoId(bean);
     }
 
+    @Override
+    public int doInsertListBefore(List<HzFeatureChangeBean> hzFeatureChangeBeanListBefore) {
+        for(HzFeatureChangeBean hzFeatureChangeBean : hzFeatureChangeBeanListBefore){
+            setBeforeTable(hzFeatureChangeBean);
+        }
+        return hzFeatureChangeDao.insertList(hzFeatureChangeBeanListBefore);
+    }
+
+    @Override
+    public int doInsertListAfter(List<HzFeatureChangeBean> hzFeatureChangeBeanListAfter) {
+        for(HzFeatureChangeBean hzFeatureChangeBean : hzFeatureChangeBeanListAfter){
+            setAfterTable(hzFeatureChangeBean);
+        }
+        return hzFeatureChangeDao.insertList(hzFeatureChangeBeanListAfter);
+    }
+
 }

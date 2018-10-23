@@ -73,6 +73,7 @@
 .tableNormalStyle2 thead tr .bs-checkbox {
     min-width: 30px;
 }
+
 .after_the {
     margin-top: 8px;
 }
@@ -89,43 +90,18 @@
 
 }
 
-.head-input-set {
-    width: 150px;
+.search-filed-div {
+    padding-top: 15px !important;
 }
 
-.head-select-set {
-    width: 150px;
+.search-filed-div table {
+    border: 0;
 }
 
-opi-bottom-set {
-    padding-bottom: 50px;
+.search-filed-div tr {
+    border-top: 1px #cbcbcb solid;
 }
 
-opi-opiarea-set {
-    width: 100%;
-    resize: none;
+.search-filed-div tr td {
+    border: 0;
 }
-
-.head-func-btn {
-    position: fixed;
-    width: 150px;
-    z-index: 99999;
-}
-
-.head-btnSets {
-    margin-left: 90%;
-    width: 150px
-}
-
-.head-trim {
-    padding-right: 0;
-}
-
-.influence-leader {
-    padding: 0 0 15px;
-}
-
-.influence-dept {
-    padding: 0;
-}
-

@@ -10,6 +10,7 @@ import com.connor.hozon.bom.bomSystem.dao.bom.HzBomMainRecordDao;
 import com.connor.hozon.bom.bomSystem.dao.bom.HzPreferenceSettingDao;
 import com.connor.hozon.bom.bomSystem.dao.main.HzCfg0MainRecordDao;
 import com.connor.hozon.bom.bomSystem.dto.HzProjectBean;
+import com.connor.hozon.bom.bomSystem.dto.task.HzTaskPostDto;
 import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
 import com.connor.hozon.bom.bomSystem.iservice.project.IHzVehicleService;
 import com.connor.hozon.bom.bomSystem.service.project.HzBrandService;
@@ -709,6 +710,4 @@ public class HzProjectLibsController {
         return hzBrandService.doValidateCodeWithPuid(brand);
     }
     //////////////////////////////////////////////////验证编号重复性/////////////////////////////////////////////////////////
-
-
 }

@@ -50,61 +50,15 @@
         <!-- <table schema="untodo" tableName="T_USER" domainObjectName="User"
             enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"
             enableSelectByExample="false" selectByExampleQueryId="false"/> -->
-        <!--<table tableName="HZ_CFG0_OPTIONFAMILY_RECORD" domainObjectName="HzCfg0OptionFamily">-->
-        <!--<property name="useActualColumnNames" value="false"/>-->
-        <!--</table>-->
-        <!-- <table tableName="HZ_TEMPMAINRECORD" domainObjectName="HzTempMainRecord"> -->
-        <!-- <property name="useActualColumnNames" value="false" /> -->
-        <!-- </table> -->
-        <!-- <table tableName="HZ_TEMPITEMRECORD" domainObjectName="HzTempItemRecord"> -->
-        <!-- <property name="useActualColumnNames" value="false" /> -->
-        <!-- </table> -->
-        <!-- <table tableName="HZ_TEMPDOCUMENTRECORD" domainObjectName="HzTempDocumentRecord"> -->
-        <!-- <property name="useActualColumnNames" value="false" /> -->
-        <!-- </table> -->
-        <!-- <table tableName="HZ_BOM_MAIN_RECORD" domainObjectName="HZBomMainRecord"> -->
-        <!-- <property name="useActualColumnNames" value="false" /> -->
-        <!-- </table> -->
-        <!-- <table tableName="HZ_BOM_LINE_RECORD" domainObjectName="HzBomLineRecordDO"> -->
-        <!-- <property name="useActualColumnNames" value="false" /> -->
-        <!-- </table> -->
-        <!-- <table tableName="HZ_PREFERENCESETTING" domainObjectName="HzPreferenceSetting"> -->
-        <!-- <property name="useActualColumnNames" value="false" /> -->
-        <!-- </table> -->
-        <!-- <table tableName="HZ_BOM_2Y_RECORD" domainObjectName="HzBom2YEntity"> -->
-        <!-- <property name="useActualColumnNames" value="false" /> -->
-        <!-- </table> -->
-        <!-- <table tableName="HZ_CFG0_OF_BOMLINE_RECORD" -->
-        <!-- domainObjectName="HzCfg0OfBomlineRecord"> -->
-        <!-- <property name="useActualColumnNames" value="false" /> -->
-        <!-- </table> -->
-        <!-- <table tableName="HZ_CFG0_TO_MODEL_RECORD" -->
-        <!-- domainObjectName="HzCfg0ToModelRecord"> -->
-        <!-- <property name="useActualColumnNames" value="false" /> -->
-        <!-- </table> -->
-        <!-- <table tableName="HZ_CFG0_MODEL_RECORD" -->
-        <!-- domainObjectName="HzCfg0ModelRecord"> -->
-        <!-- <property name="useActualColumnNames" value="false" /> -->
-        <!-- </table> -->
-        <!-- <table tableName="HZ_CFG0_RECORD" -->
-        <!-- domainObjectName="HzCfg0Record"> -->
-        <!-- <property name="useActualColumnNames" value="false" /> -->
-        <!-- </table> -->
-        <!-- <table tableName="HZ_CFG0_MAIN_RECORD" -->
-        <!-- domainObjectName="HzCfg0MainRecord"> -->
-        <!-- <property name="useActualColumnNames" value="false" /> -->
-        <!-- </table> -->
-        <!-- <table tableName="HZ_BOM_DEPT_LEVEL" -->
-        <!-- domainObjectName="HzBomDepyLevel"> -->
-        <!-- <property name="useActualColumnNames" value="false" /> -->
-        <!-- </table> -->
-        <!--<table tableName="HZ_CFG0_COLORSET"-->
-        <!--domainObjectName="HzCfg0ColorSet">-->
-        <!--<property name="useActualColumnNames" value="false" />-->
-        <!--</table>-->
 
         <!--生成对应表及类名 schema="general" 数据库用的是Oracle,SqlServer需要去掉schema属性,MySQL则不需要去掉 -->
-        <table tableName="HZ_VWO_EXECUTE" domainObjectName="HzVwoExecute">
+        <table tableName="HZ_VWO_OPI_BOM" domainObjectName="HzVwoOpiBom">
+        <property name="useActualColumnNames" value="false" />
+        </table>
+        <table tableName="HZ_VWO_OPI_PMT" domainObjectName="HzVwoOpiPmt">
+        <property name="useActualColumnNames" value="false" />
+        </table>
+        <table tableName="HZ_VWO_OPI_PROJ" domainObjectName="HzVwoOpiProj">
         <property name="useActualColumnNames" value="false" />
         </table>
     </context>

@@ -27,4 +27,12 @@ public class HzVwoOpiProj {
 
     private Integer opiProjMngStage;
 
+    /**
+     *PTM经理ID
+     */
+    private Long opiProjMngUserId;
+    /**
+     * PTM经理用户名
+     */
+    private String opiProjMngUserName;
 }

@@ -162,7 +162,9 @@
         <include refid="VWO_Extend_Column"/>,
         ROWNUM as rowno
         from HZ_VWO_INFO t where 1=1
-        and t.PROJECT_UID=#{projectUid,jdbcType=VARCHAR}
+        <if test="projectUid!=null">
+            and t.PROJECT_UID=#{projectUid,jdbcType=VARCHAR}
+        </if>
         <if test="param.limit!=null and  param.page!=null">
             and ROWNUM &lt;= ${param.page}*${param.limit}
         </if>
@@ -218,7 +220,8 @@
         </if>
     </select>
     <select id="tellMeHowManyOfIt" parameterType="java.lang.String" resultType="java.lang.Integer">
-    select COUNT (*) from HZ_VWO_INFO where PROJECT_UID=#{projectUid}
+        select COUNT (*) from HZ_VWO_INFO
+        <if test="projectUid!=null">where PROJECT_UID=#{projectUid}</if>
     </select>
 
     <!--查询区域内最大的VWO号-->

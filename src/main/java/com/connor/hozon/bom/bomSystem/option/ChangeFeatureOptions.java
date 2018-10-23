@@ -12,5 +12,5 @@ package com.connor.hozon.bom.bomSystem.option;
  * @Date: Created in 2018/10/11 15:06
  * @Modified By:
  */
-public enum ChangeFeatureOption {
+public enum ChangeFeatureOptions {
 }

@@ -1,6 +1,7 @@
 package com.connor.hozon.bom.bomSystem.iservice.cfg.vwo;
 
 import com.connor.hozon.bom.bomSystem.dto.vwo.HzVwoFormListQueryBase;
+import com.connor.hozon.bom.bomSystem.dto.vwo.HzVwoOptionUserDto;
 import com.connor.hozon.bom.common.base.entity.QueryBase;
 import com.connor.hozon.bom.resources.controller.change.vwo.VWOUserGroupDTO;
 import com.connor.hozon.bom.sys.entity.User;
@@ -29,6 +30,14 @@ public interface IHzVWOManagerService {
      * @return 操作消息
      */
     JSONObject featureGetIntoVWO(String projectUid, List<HzCfg0Record> beans);
+    /**
+     * 特性进入vwo流程
+     *
+     * @param projectUid 项目UID
+     * @param beans      一组特性列表
+     * @return 操作消息
+     */
+    JSONObject featureGetIntoVWO2(String projectUid, List<HzCfg0Record> beans);
 
     /**
      * 产生一个最新的Vwo实体类对象
@@ -227,9 +236,13 @@ public interface IHzVWOManagerService {
      */
     List<HzFeatureChangeBean> getFeatureChangeBefore(Long id);
 
-    JSONObject saveBomLeaderOpinion(HzVwoOpiBom hzVwoOpiBom);
+    JSONObject saveBomLeaderOpinion(HzVwoOpiBom hzVwoOpiBom, Integer vwoType, String projectUid);
 
-    JSONObject savePmtLeaderOpinion(HzVwoOpiPmt hzVwoOpiPmt);
+    JSONObject savePmtLeaderOpinion(HzVwoOpiPmt hzVwoOpiPmt, Integer vwoType, String projectUid);
 
-    JSONObject saveProjLeaderOpinion(HzVwoOpiProj hzVwoOpiProj);
+    JSONObject saveProjLeaderOpinion(HzVwoOpiProj hzVwoOpiProj, Integer vwoType, String projectUid);
+
+    JSONObject launch(Integer type, String projectUid, Long vwoId);
+
+    JSONObject saveOptionUser(HzVwoOptionUserDto hzVwoOptionUserDto);
 }

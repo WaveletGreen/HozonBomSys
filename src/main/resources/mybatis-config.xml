@@ -140,6 +140,7 @@
         <mapper resource="sql/mapper/interaction/HzConfigBomColorMapper.xml"/>
         <mapper resource="sql/mapper/interaction/HzSingleVehiclesBomLineMapper.xml"/>
         <mapper resource="sql/mapper/interaction/HzSingleVehiclesMapper.xml"/>
-
+        <!--任务-->
+        <mapper resource="sql/mapper/task/HzTaskMapper.xml"/>
     </mappers>
 </configuration>

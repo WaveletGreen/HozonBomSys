@@ -1,12 +1,11 @@
 package com.connor.hozon.bom.resources.controller.change.vwo;
 
 import com.connor.hozon.bom.bomSystem.dto.vwo.HzVwoFormListQueryBase;
+import com.connor.hozon.bom.bomSystem.dto.vwo.HzVwoOptionUserDto;
 import com.connor.hozon.bom.bomSystem.dto.vwo.HzVwoProcessDto;
 import com.connor.hozon.bom.bomSystem.iservice.cfg.vwo.IHzVWOManagerService;
 import com.connor.hozon.bom.common.base.constant.SystemStaticConst;
 import com.connor.hozon.bom.common.base.entity.QueryBase;
-import com.connor.hozon.bom.common.util.user.UserInfo;
-import com.connor.hozon.bom.sys.entity.User;
 import net.sf.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -144,7 +143,7 @@ public class HzVwoController {
     @RequestMapping(value = "/queryByBase", method = RequestMethod.POST)
     @ResponseBody
     public Map<String, Object> queryByBase(@RequestParam String projectUid, HzVwoFormListQueryBase queryBase) {
-        return iHzVWOManagerService.queryByBase(projectUid, queryBase);
+        return iHzVWOManagerService.queryByBase(null, queryBase);
     }
 
     /**
@@ -226,6 +225,44 @@ public class HzVwoController {
     }
 
     /**
+     * 为评估意见选择评估人员
+     * @param vwo
+     * @param selectType
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "doSelectBomMag", method = RequestMethod.GET)
+    public String doSelectBomMag(@RequestParam Long vwo, @RequestParam Integer selectType, Model model) {
+        if (vwo == null && selectType == null) {
+            model.addAttribute("发生错误，请选择正确的VWO表单");
+            return "errorWithEntity";
+        }
+        String type = "";
+        if(selectType==1){
+            type = "opiBom";
+        }else if(selectType==2){
+            type = "opiPmt";
+        }else if(selectType==3){
+            type = "opiProj";
+        }else {
+            model.addAttribute("选择类型错误");
+            return  "errorWithEntity";
+        }
+
+        model.addAttribute("vwoId", vwo);
+        model.addAttribute("selectId", selectType);
+        model.addAttribute("typeId", type + "Id");
+        model.addAttribute("typeName", type + "Name");
+        return "changeManage/vwo/vwoSelectOptionPerson";
+    }
+
+    @RequestMapping(value = "saveOptionUser", method = RequestMethod.POST)
+    @ResponseBody
+    public JSONObject saveOptionUser(@RequestBody HzVwoOptionUserDto hzVwoOptionUserDto) {
+        return iHzVWOManagerService.saveOptionUser(hzVwoOptionUserDto);
+    }
+
+    /**
      * 获取发布与实施数据
      *
      * @param vwo
@@ -296,6 +333,12 @@ public class HzVwoController {
         return iHzVWOManagerService.interrupt(dto.getVwoType(), dto.getProjectUid(), dto.getVwoId());
     }
 
+    @RequestMapping(value = "/launch", method = RequestMethod.POST)
+    @ResponseBody
+    public JSONObject launch(@RequestBody HzVwoProcessDto dto){
+        return iHzVWOManagerService.launch(dto.getVwoType(), dto.getProjectUid(), dto.getVwoId());
+    }
+
     @RequestMapping(value = "/saveLeaderOpinion", method = RequestMethod.POST)
     @ResponseBody
     public JSONObject saveLeaderOpinion(@RequestParam HzVwoInfo info,
@@ -312,8 +355,8 @@ public class HzVwoController {
      */
     @RequestMapping(value = "/saveBomLeaderOpinion", method = RequestMethod.POST)
     @ResponseBody
-    public JSONObject saveBomLeaderOpinion(HzVwoOpiBom hzVwoOpiBom) {
-        return iHzVWOManagerService.saveBomLeaderOpinion(hzVwoOpiBom);
+    public JSONObject saveBomLeaderOpinion(HzVwoOpiBom hzVwoOpiBom, Integer vwoType, String projectUid) {
+        return iHzVWOManagerService.saveBomLeaderOpinion(hzVwoOpiBom, vwoType, projectUid);
     }
 
     /**
@@ -323,8 +366,8 @@ public class HzVwoController {
      */
     @RequestMapping(value = "/savePmtLeaderOpinion", method = RequestMethod.POST)
     @ResponseBody
-    public JSONObject savePmtLeaderOpinion(HzVwoOpiPmt hzVwoOpiPmt) {
-        return iHzVWOManagerService.savePmtLeaderOpinion(hzVwoOpiPmt);
+    public JSONObject savePmtLeaderOpinion(HzVwoOpiPmt hzVwoOpiPmt, Integer vwoType, String projectUid) {
+        return iHzVWOManagerService.savePmtLeaderOpinion(hzVwoOpiPmt, vwoType, projectUid);
     }
 
     /**
@@ -334,7 +377,7 @@ public class HzVwoController {
      */
     @RequestMapping(value = "/saveProjLeaderOpinion", method = RequestMethod.POST)
     @ResponseBody
-    public JSONObject saveProjLeaderOpinion(HzVwoOpiProj hzVwoOpiProj) {
-        return iHzVWOManagerService.saveProjLeaderOpinion(hzVwoOpiProj);
+    public JSONObject saveProjLeaderOpinion(HzVwoOpiProj hzVwoOpiProj, Integer vwoType, String projectUid) {
+        return iHzVWOManagerService.saveProjLeaderOpinion(hzVwoOpiProj, vwoType, projectUid);
     }
 }
