@@ -195,17 +195,17 @@ function loadConnectedData(url) {
         clearToolbars();
         if(vwoStatus==101){
             notDisabledById("bomLeaderOpinion");
-            $("#basicInfoH4").after('<button class="btn btn-success" style="position: fixed;margin-left:90%;margin-top: 100px;z-index:99999;"\n' +
+            $(".head-btnSets").append('<button class="btn btn-success head-func-btn" style="margin-top: 100px;z-index:99999;"\n' +
                 '        id="bomLeadApprove" onclick="approve(\'saveBomLeaderOpinion\',\'bomLeaderOpinion\')">BOM经理审批\n' +
                 '</button>');
         }else if(vwoStatus==102){
             notDisabledById("pmtLeaderOpinion");
-            $("#basicInfoH4").after('<button class="btn btn-success" style="position: fixed;margin-left:90%;margin-top: 100px;z-index:99999;"\n' +
+            $(".head-btnSets").append('<button class="btn btn-success head-func-btn" style="margin-top: 100px;z-index:99999;"\n' +
                 '        id="pmtLeadApprove" onclick="approve(\'savePmtLeaderOpinion\',\'pmtLeaderOpinion\')">PMT经理审批\n' +
                 '</button>');
         }else if(vwoStatus==103){
             notDisabledById("projLeaderOpinion");
-            $("#basicInfoH4").after('<button class="btn btn-success" style="position: fixed;margin-left:90%;margin-top: 100px;z-index:99999;"\n' +
+            $(".head-btnSets").append('<button class="btn btn-success head-func-btn" style="margin-top: 100px;z-index:99999;"\n' +
                 '        id="projLeadApprove" onclick="approve(\'saveProjLeaderOpinion\',\'projLeaderOpinion\')">项目经理审批\n' +
                 '</button>');
         }
@@ -213,15 +213,13 @@ function loadConnectedData(url) {
         disabledById('bomLeaderOpinion');
         disabledById('pmtLeaderOpinion');
         disabledById('projLeaderOpinion');
-        $("#basicInfoH4").after('<button class="btn btn-success" style="position: fixed;margin-left:90%;margin-top: 100px;z-index:99999;"\n' +
+        $(".head-btnSets").append('<button class="btn btn-success head-func-btn" style="margin-top: 100px;z-index:99999;"\n' +
             '        id="vwoSaveBtn">保存\n' +
             '</button>');
-        $("#basicInfoH4").after('<button class="btn btn-success" style="position: fixed;margin-left:90%;margin-top: 150px;z-index:99999;"\n' +
+        $(".head-btnSets").append('<button class="btn btn-success head-func-btn" style="margin-top: 150px;z-index:99999;"\n' +
             '        id="launch">发起\n' +
             '</button>');
     }
-
-
 
     var $table = $("#connectedTable");
     $table.bootstrapTable('destroy');

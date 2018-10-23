@@ -1,7 +1,7 @@
 package com.connor.hozon.bom.bomSystem.service.cfg;
 
 import com.connor.hozon.bom.bomSystem.dao.cfg0.HzCfg0OptionFamilyDao;
-import com.connor.hozon.bom.bomSystem.option.SpecialFeatureOption;
+import com.connor.hozon.bom.bomSystem.option.SpecialFeatureOptions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sql.pojo.cfg.cfg0.HzCfg0OptionFamily;
@@ -22,8 +22,8 @@ public class HzCfg0OptionFamilyService {
     private static final List<String> paramList = new ArrayList<>();
 
     static {
-        paramList.add(SpecialFeatureOption.CSNAME.getDesc());
-        paramList.add(SpecialFeatureOption.YQCSNAME.getDesc());
+        paramList.add(SpecialFeatureOptions.CSNAME.getDesc());
+        paramList.add(SpecialFeatureOptions.YQCSNAME.getDesc());
     }
 
     /**

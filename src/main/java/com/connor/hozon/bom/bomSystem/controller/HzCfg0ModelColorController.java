@@ -8,8 +8,8 @@ package com.connor.hozon.bom.bomSystem.controller;
 
 import com.connor.hozon.bom.bomSystem.impl.bom.HzBomLineRecordDaoImpl;
 import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
-import com.connor.hozon.bom.bomSystem.option.SpecialFeatureOption;
-import com.connor.hozon.bom.bomSystem.option.SpecialSettingOption;
+import com.connor.hozon.bom.bomSystem.option.SpecialFeatureOptions;
+import com.connor.hozon.bom.bomSystem.option.SpecialSettingOptions;
 import com.connor.hozon.bom.bomSystem.service.bom.HzBomDataService;
 import com.connor.hozon.bom.bomSystem.service.bom.HzBomLineRecordService;
 import com.connor.hozon.bom.bomSystem.service.cfg.*;
@@ -91,7 +91,7 @@ public class HzCfg0ModelColorController {
         List<HzCfg0OptionFamily> _columnList = hzCfg0OptionFamilyService.selectForColorBluePrint(projectPuid, 1);//getFamilies(projectPuid, 0, 1);
         List<HzCfg0OptionFamily> columnList = new ArrayList<>();
         /**过滤油漆车身总成*/
-        columnList.addAll(_columnList.stream().filter(c->c!=null).filter(c -> false == SpecialFeatureOption.YQCSCODE.getDesc().equals(c.getpOptionfamilyName()))
+        columnList.addAll(_columnList.stream().filter(c->c!=null).filter(c -> false == SpecialFeatureOptions.YQCSCODE.getDesc().equals(c.getpOptionfamilyName()))
                 .collect(Collectors.toList()));
         List<HzCfg0ColorSet> colorList = hzCfg0ColorSetService.doGetAll();//颜色库所有数据
         List<HzCfg0ColorSet> _colorList = new ArrayList<>(colorList);//将colorList复制到_colorList
@@ -146,7 +146,7 @@ public class HzCfg0ModelColorController {
         List<HzCfg0OptionFamily> _columnList = hzCfg0OptionFamilyService.selectForColorBluePrint(main.getpCfg0OfWhichProjectPuid(), 1);//getFamilies(main.getpCfg0OfWhichProjectPuid(), 0, 1);
         List<HzCfg0OptionFamily> columnList = new ArrayList<>();
         /**过滤油漆车身总成*/
-        columnList.addAll(_columnList.stream().filter(c ->c != null).filter(c -> false == SpecialFeatureOption.YQCSCODE.getDesc().equals(c.getpOptionfamilyName()))
+        columnList.addAll(_columnList.stream().filter(c ->c != null).filter(c -> false == SpecialFeatureOptions.YQCSCODE.getDesc().equals(c.getpOptionfamilyName()))
                 .collect(Collectors.toList()));
         List<HzCfg0ColorSet> colorList = hzCfg0ColorSetService.doGetAll();
         ArrayList<String> orgValue = new ArrayList<>();
@@ -321,12 +321,12 @@ public class HzCfg0ModelColorController {
             if (mainRecord != null) {
                 HzCfg0OptionFamily family = new HzCfg0OptionFamily();
                 family.setpOfCfg0Main(mainRecord.getPuid());
-                family.setpOptionfamilyName(SpecialFeatureOption.YQCSCODE.getDesc());
-                family.setpOptionfamilyDesc(SpecialFeatureOption.YQCSNAME.getDesc());
+                family.setpOptionfamilyName(SpecialFeatureOptions.YQCSCODE.getDesc());
+                family.setpOptionfamilyDesc(SpecialFeatureOptions.YQCSNAME.getDesc());
                 HzCfg0OptionFamily fromDb = hzCfg0OptionFamilyService.doGetByCodeAndDescWithMain(family);
                 if (fromDb == null) {
                     result.put("status", false);
-                    result.put("msg", "项目中特性表中没有找到特性为" + SpecialFeatureOption.YQCSCODE.getDesc() + "、特性描述为" + SpecialFeatureOption.YQCSNAME.getDesc() + "的特性");
+                    result.put("msg", "项目中特性表中没有找到特性为" + SpecialFeatureOptions.YQCSCODE.getDesc() + "、特性描述为" + SpecialFeatureOptions.YQCSNAME.getDesc() + "的特性");
                     return result;
                 } else {
                     modelColor.getMapOfCfg0().put(fromDb.getPuid(), modelColor.getpColorUid());
@@ -335,7 +335,7 @@ public class HzCfg0ModelColorController {
             /**
              * 追加无色
              */
-            if (SpecialSettingOption.COLOR_MODEL_APPEND_COLORLESS) {
+            if (SpecialSettingOptions.COLOR_MODEL_APPEND_COLORLESS) {
                 List<HzCfg0OptionFamily> withoutColor = hzCfg0OptionFamilyService.selectForColorBluePrint(mainRecord.getpCfg0OfWhichProjectPuid(), 0);
                 for (int i = 0; i < withoutColor.size(); i++) {
                     if (null != withoutColor.get(i))

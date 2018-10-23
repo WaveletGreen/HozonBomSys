@@ -12,7 +12,7 @@ import com.connor.hozon.bom.bomSystem.dao.modelColor.HzCmcrChangeDao;
 import com.connor.hozon.bom.bomSystem.dao.modelColor.HzCmcrDetailChangeDao;
 import com.connor.hozon.bom.bomSystem.dao.modelColor.HzColorModelDao;
 import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
-import com.connor.hozon.bom.bomSystem.option.SpecialFeatureOption;
+import com.connor.hozon.bom.bomSystem.option.SpecialFeatureOptions;
 import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0OptionFamilyService;
 import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0Service;
 import com.connor.hozon.bom.bomSystem.service.color.HzCfg0ColorSetService;
@@ -31,7 +31,6 @@ import sql.pojo.cfg.color.HzCfg0ColorSet;
 import sql.pojo.cfg.main.HzCfg0MainRecord;
 import sql.pojo.cfg.modelColor.HzCfg0ModelColor;
 import sql.pojo.cfg.modelColor.HzCfg0ModelColorDetail;
-import sql.pojo.cfg.vwo.HzVwoInfo;
 import sql.redis.SerializeUtil;
 
 import java.util.*;
@@ -230,7 +229,7 @@ public class HzCfg0ModelColorService {
         List<HzCfg0ModelColor> colorSet = hzCfg0ModelColorDao.selectAll(projectPuid);
         List<HzCfg0OptionFamily> familiesNewFromDb = hzCfg0OptionFamilyService.selectForColorBluePrint(projectPuid, 1);//.getFamilies(projectPuid, 0, 1);//hzCfg0OptionFamilyDao.selectNameByMainId2(projectPuid);
         List<HzCfg0OptionFamily> familiesNew = new ArrayList<>();
-        familiesNew.addAll(familiesNewFromDb.stream().filter(c->c!=null).filter(c -> false == SpecialFeatureOption.YQCSCODE.getDesc().equals(c.getpOptionfamilyName()))
+        familiesNew.addAll(familiesNewFromDb.stream().filter(c->c!=null).filter(c -> false == SpecialFeatureOptions.YQCSCODE.getDesc().equals(c.getpOptionfamilyName()))
                 .collect(Collectors.toList()));
         //.forEach(c -> mapWithColor.put(c.getPuid(), c));
         HzCfg0MainRecord mainRecord = hzCfg0MainService.doGetbyProjectPuid(projectPuid);
@@ -431,7 +430,7 @@ public class HzCfg0ModelColorService {
             List<HzCfg0OptionFamily> withColor = hzCfg0OptionFamilyService.selectForColorBluePrint(projectUid, 1);
             List<HzCfg0OptionFamily> withoutColor = hzCfg0OptionFamilyService.selectForColorBluePrint(projectUid, 0);
             Map<String, HzCfg0OptionFamily> mapWithColor = new LinkedHashMap<>();
-            withColor.stream().filter(c -> c != null).filter(c -> false == SpecialFeatureOption.YQCSCODE.getDesc().equals(c.getpOptionfamilyName()))
+            withColor.stream().filter(c -> c != null).filter(c -> false == SpecialFeatureOptions.YQCSCODE.getDesc().equals(c.getpOptionfamilyName()))
                     .collect(Collectors.toList()).forEach(c -> mapWithColor.put(c.getPuid(), c));
             if (mapWithColor.isEmpty()) {
                 object.put("status", 1);

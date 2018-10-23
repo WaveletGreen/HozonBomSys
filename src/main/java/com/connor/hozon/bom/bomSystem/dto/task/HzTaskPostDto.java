@@ -23,7 +23,7 @@ public class HzTaskPostDto {
     /**
      * tab的id
      */
-    private String id;
+    private Long id;
     /**
      * tab显示的名称
      */
@@ -35,7 +35,7 @@ public class HzTaskPostDto {
     /**
      * 目标的ID，VWO的ID时Long，如1，2，3
      */
-    private String targetId;
+    private Long targetId;
     /**
      * 目标的名，VWO的name格式未VCYYYYNNNN(20180001)
      */
