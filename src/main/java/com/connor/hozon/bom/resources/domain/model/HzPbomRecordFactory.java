@@ -5,6 +5,7 @@ import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.resources.domain.dto.request.AddHzEbomReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.request.UpdateHzEbomReqDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import sql.pojo.bom.HzBomLineRecord;
 import sql.pojo.bom.HzImportEbomRecord;
 import sql.pojo.bom.HzPbomLineRecord;
 
@@ -81,6 +82,23 @@ public class HzPbomRecordFactory {
         hzPbomLineRecord.setpBomLinePartResource(record.getpBomLinePartResource());
         hzPbomLineRecord.setSortNum(record.getSortNum());
         hzPbomLineRecord.setColorPart(record.getColorPart());
+        hzPbomLineRecord.setIsNewPart(0);
+        return hzPbomLineRecord;
+    }
+
+
+    public static HzPbomLineRecord bomLineRecordToPbomRecord(HzBomLineRecord record){
+        HzPbomLineRecord hzPbomLineRecord = new HzPbomLineRecord();
+        hzPbomLineRecord.setUpdateName(UserInfo.getUser().getUserName());
+        hzPbomLineRecord.setLineId(record.getLineID());
+        hzPbomLineRecord.setBomDigifaxId(record.getBomDigifaxId());
+        hzPbomLineRecord.setpBomLinePartClass(record.getpBomLinePartClass());
+        hzPbomLineRecord.setpBomLinePartName(record.getpBomLinePartName());
+        hzPbomLineRecord.setpBomOfWhichDept(record.getpBomOfWhichDept());
+        hzPbomLineRecord.setpBomLinePartEnName(record.getpBomLinePartEnName());
+        hzPbomLineRecord.setpBomLinePartResource(record.getpBomLinePartResource());
+        hzPbomLineRecord.setColorPart(record.getColorPart());
+        hzPbomLineRecord.setSingleVehDosage(record.getSingleVehDosage());
         hzPbomLineRecord.setIsNewPart(0);
         return hzPbomLineRecord;
     }

@@ -123,7 +123,7 @@ public class HzEbomServiceImpl implements HzEbomService {
                 String fastener = record.getpFastener();
                 String groupNum = record.getLineID();
                 try {
-                    if (fastener.equals("/") || fastener.equals("")) {
+                    if (StringUtil.isEmpty(fastener)||fastener.equals("/")) {
                         if (groupNum.contains("-")) {
                             groupNum = groupNum.split("-")[1].substring(0, 4);
                         } else {

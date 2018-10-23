@@ -50,7 +50,7 @@ public interface HzPbomRecordDAO {
     int update(HzPbomLineRecord record);
 
     /**
-     * 批量更新
+     * 批量更新 根据零件号来更新
      * @param records
      * @return
      */

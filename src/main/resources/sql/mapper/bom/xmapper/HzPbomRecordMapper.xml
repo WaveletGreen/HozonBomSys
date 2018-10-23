@@ -526,33 +526,6 @@
         <if test="item.station != null">
           P_STATION = #{item.station,jdbcType=VARCHAR},
         </if>
-        <if test="item.parentUid != null">
-          P_PARENT_UID = #{item.parentUid,jdbcType=VARCHAR},
-        </if>
-        <if test="item.bomDigifaxId != null">
-          P_BOM_DIGIFAX_ID = #{item.bomDigifaxId,jdbcType=VARCHAR},
-        </if>
-        <if test="item.lineIndex != null">
-          P_LINE_INDEX = #{item.lineIndex,jdbcType=VARCHAR},
-        </if>
-        <if test="item.isHas != null">
-          P_BOM_LINE_IS_HAS = #{item.isHas,jdbcType=INTEGER},
-        </if>
-        <if test="item.lineId != null">
-          P_BOM_LINE_ID = #{item.lineId,jdbcType=VARCHAR},
-        </if>
-        <if test="item.is2Y != null">
-          P_BOM_LINE_IS_2Y = #{item.is2Y,jdbcType=INTEGER},
-        </if>
-        <if test="item.isPart != null">
-          P_BOM_LINE_IS_PART = #{item.isPart,jdbcType=INTEGER},
-        </if>
-        <if test="item.isDept != null">
-          P_BOM_LINE_IS_DEPT = #{item.isDept,jdbcType=INTEGER},
-        </if>
-        <if test="item.pBomOfWhichDept != null">
-          P_BOM_OF_WHICH_DEPT = #{item.pBomOfWhichDept,jdbcType=VARCHAR},
-        </if>
         <if test="item.pBomLinePartName != null">
           P_BOM_LINE_PART_NAME = #{item.pBomLinePartName,jdbcType=VARCHAR},
         </if>
@@ -572,7 +545,8 @@
           P_SINGLE_VEH_DOSAGE = #{item.singleVehDosage,jdbcType=VARCHAR}
         </if>
       </set>
-      where P_E_BOM_PUID = #{item.eBomPuid,jdbcType=VARCHAR}
+      where P_BOM_LINE_ID = #{item.lineId,jdbcType=VARCHAR}
+      and P_BOM_DIGIFAX_ID=#{item.bomDigifaxId,jdbcType=VARCHAR}
       and P_PBOM_STATUS <![CDATA[ <> ]]>0
     </foreach>
   </update>

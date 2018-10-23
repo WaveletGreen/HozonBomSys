@@ -95,6 +95,9 @@ public class HzSingleVehiclesServicesImpl implements HzSingleVehiclesServices {
                 for(HzSingleVehicles vehicles1:vehicles){
                     HzSingleVehicles hzSingleVehicles = new HzSingleVehicles();
                     for(HzDerivativeMaterielBasic materielBasic : basics){
+                        if(null == vehicles1.getSvlDmbId()){
+                            vehicles1.setSvlDmbId(0L);
+                        }
                         if(vehicles1.getSvlDmbId().equals(materielBasic.getId())){
                             if(StringUtil.isEmpty(materielBasic.getDmbModelFeatureUid())){
 //                                WriteResultRespDTO respDTO = new WriteResultRespDTO();

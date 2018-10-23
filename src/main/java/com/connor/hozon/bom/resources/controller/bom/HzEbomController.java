@@ -3,7 +3,6 @@ package com.connor.hozon.bom.resources.controller.bom;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.connor.hozon.bom.bomSystem.impl.bom.HzBomLineRecordDaoImpl;
-import com.connor.hozon.bom.bomSystem.service.fullCfg.HzCfg0ModelService;
 import com.connor.hozon.bom.resources.controller.BaseController;
 import com.connor.hozon.bom.resources.domain.dto.request.AddHzEbomReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.request.DeleteHzEbomReqDTO;
@@ -13,7 +12,6 @@ import com.connor.hozon.bom.resources.domain.dto.response.HzEbomLevelRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzEbomRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
 import com.connor.hozon.bom.resources.domain.query.HzEbomByPageQuery;
-import com.connor.hozon.bom.resources.domain.query.HzEbomExportQuery;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.service.bom.HzEbomService;
 import com.connor.hozon.bom.resources.service.bom.HzSingleVehiclesServices;
@@ -22,11 +20,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import springfox.documentation.RequestHandler;
 import sql.pojo.bom.HzBomLineRecord;
-import sql.pojo.cfg.model.HzCfg0ModelRecord;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.*;
 
@@ -50,13 +45,12 @@ public class HzEbomController extends BaseController {
 
     @Autowired
     private HzSingleVehiclesServices hzSingleVehiclesServices;
-    private HzCfg0ModelService hzCfg0ModelService;
 
     LinkedHashMap<String, String> tableTitle = new LinkedHashMap<>();
 
     @RequestMapping(value = "title",method = RequestMethod.GET)
     public void getEbomTitle(String projectId,HttpServletResponse response) {
-        //LinkedHashMap<String, String> tableTitle = new LinkedHashMap<>();
+        LinkedHashMap<String, String> tableTitle = new LinkedHashMap<>();
         tableTitle.put("No","序号");
         tableTitle.put("lineId","零件号" );
         tableTitle.put("pBomLinePartName","名称" );
@@ -112,6 +106,7 @@ public class HzEbomController extends BaseController {
         tableTitle.put("colorPart","是否颜色件");
         //获取该项目下的所有车型模型
         tableTitle.putAll(hzSingleVehiclesServices.singleVehDosageTitle(projectId));
+        this.tableTitle = tableTitle;
         toJSONResponse(Result.build(tableTitle), response);
     }
     

@@ -70,7 +70,7 @@ public interface HzEbomRecordDAO {
     int delete(String puid);
 
     /**
-     * EBOM 批量更新
+     * EBOM 批量更新 根据零件号来更新
      * @param records
      * @return
      */

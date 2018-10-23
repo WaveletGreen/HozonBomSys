@@ -547,11 +547,11 @@
 
 
     <!--查询所有的bomLine信息-->
-    <select id="HzBomLineRecordDaoImpl_getAllBomLineRecordByProjectId" resultMap="BaseResultMap"
+    <select id="HzBomLineRecordDaoImpl_getBomLineRecordNumber" resultType="java.lang.Integer"
             parameterType="java.lang.String">
         select
         <!--<include refid="Base_Column_List"/>-->
-        PUID,P_BOM_LINE_ID
+        count(*)
         from HZ_BOM_LINE_RECORD
         where p_bom_digifax_id=(
         select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(
@@ -560,7 +560,6 @@
             t2.puid = #{projectId,jdbcType=VARCHAR}))
         </where>
         and P_EBOM_STATUS<![CDATA[ <> ]]>0
-        order by CAST(P_SORT_NUM as FLOAT)
     </select>
 
 
