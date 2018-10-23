@@ -183,33 +183,33 @@ function formatDate() {
  */
 function loadConnectedData(url) {
     var vwoStatus = vwoInfo.vwoStatus;
-    if (vwoStatus != 10) {
+    if(vwoStatus!=10){
         $("body input").attr('disabled', true);
         $("body select").attr('disabled', true);
         $("body textarea").attr('disabled', true);
         $("body a").each(function () {
             var aText = $(this).html();
-            $(this).after("<span>" + aText + "</span>");
+            $(this).after("<span>"+aText+"</span>");
             $(this).remove();
         });
         clearToolbars();
-        if (vwoStatus == 101) {
+        if(vwoStatus==101){
             notDisabledById("bomLeaderOpinion");
             $("#basicInfoH4").after('<button class="btn btn-success" style="position: fixed;margin-left:90%;margin-top: 100px;z-index:99999;"\n' +
                 '        id="bomLeadApprove" onclick="approve(\'saveBomLeaderOpinion\',\'bomLeaderOpinion\')">BOM经理审批\n' +
                 '</button>');
-        } else if (vwoStatus == 102) {
+        }else if(vwoStatus==102){
             notDisabledById("pmtLeaderOpinion");
             $("#basicInfoH4").after('<button class="btn btn-success" style="position: fixed;margin-left:90%;margin-top: 100px;z-index:99999;"\n' +
                 '        id="pmtLeadApprove" onclick="approve(\'savePmtLeaderOpinion\',\'pmtLeaderOpinion\')">PMT经理审批\n' +
                 '</button>');
-        } else if (vwoStatus == 103) {
+        }else if(vwoStatus==103){
             notDisabledById("projLeaderOpinion");
             $("#basicInfoH4").after('<button class="btn btn-success" style="position: fixed;margin-left:90%;margin-top: 100px;z-index:99999;"\n' +
                 '        id="projLeadApprove" onclick="approve(\'saveProjLeaderOpinion\',\'projLeaderOpinion\')">项目经理审批\n' +
                 '</button>');
         }
-    } else {
+    }else {
         disabledById('bomLeaderOpinion');
         disabledById('pmtLeaderOpinion');
         disabledById('projLeaderOpinion');
@@ -220,6 +220,7 @@ function loadConnectedData(url) {
             '        id="launch">发起\n' +
             '</button>');
     }
+
 
 
     var $table = $("#connectedTable");
@@ -703,6 +704,8 @@ function approve(url, formId) {
                 data[d[p].name] = d[p].value;
             }
             data.opiVwoId = $("#vwo").val();
+            data.vwoType = $("#vwoType").val();
+            data.projectUid = getProjectUid();
             $.ajax({
                 type: "POST",
                 url: url,
@@ -712,7 +715,7 @@ function approve(url, formId) {
                         layer.msg(result.msg, {icon: 1, time: 2000});
                         setTimeout('window.location.reload()', 2000);
                     } else {
-                        window.Ewin.alert({message: "经理评估失败:" + result.msg});
+                        window.Ewin.alert({message: "评估失败:" + result.msg});
                     }
                 },
                 error: function (result) {
