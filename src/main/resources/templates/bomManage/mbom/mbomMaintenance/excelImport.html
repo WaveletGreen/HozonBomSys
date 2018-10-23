@@ -5,11 +5,7 @@
 <!--<link th:href="@{/css/bom/eBom/excelImpart.css}" rel="stylesheet">-->
 <body>
 
-<!--<div class="form-group" id="thumbnailUploadContainer" class="col-sm-10" style="float: left; margin-right: 50px;">
-    <input id="articleImageFile" name="excelFile" type="file" class="form-control" style="width: 300px; display: inline;" />
-    <input id="saveZipButton" type="button" style="width: 60px;height: 35px;" value="上传" />
-</div>-->
-<form id="excelImportForm" role="form" method="post" action="./file/upload">
+<form id="excelImportForm" role="form" method="post" action="./file/uploadMbom">
     <div class="form-group">
         <label for="articleImageFile">选择文件</label>
         <input class="form-control" id="articleImageFile" name="excelFile" type="file"
@@ -24,46 +20,15 @@
         <p><strong>1.这里限制上传文件大小的最大值为10MB</strong></p>
         <p><strong>2.Excel文件格式必须正确，需严格按照模板格式导入</strong></p>
         <p><strong>3.导入Excel文件不能有空行</strong></p>
-        <p><strong>4.这里限制Excel文件只能有一个Sheet</strong></p>
+        <p><strong>4.Excel文件只能有一个Sheet</strong></p>
         <p><strong>5.如有导入疑问，请联系相关责任人进行规范调整</strong></p>
     </div>
-    <div class="form-group" style="float: right;">
-        <button style="font-size: 40%;width: 110px" type="button" onclick="getTemplate()"><img th:src="@{/img/excelModel.png}">
-            </br>EBOM模版
-        </button>
-    </div>
-    <div class="form-group" style="float: right">
-        <button style="font-size: 40%;width: 110px" type="button" onclick="getSingleVehTemplate()"><img th:src="@{/img/singleVehImport.png}">
-            <br>单车模板
-        </button>
-    </div>
-</div>
-<script>
-    function getTemplate() {
-        //下载EBOM导入模板
-        window.location.href =  "./files/EBOM导入模板.xlsx";//V1.1.0.log
-    }
-</script>
 
-<script>
-    function getSingleVehTemplate() {
-        window.location.href =  "./files/EBOM导入单车用量模板.xlsx";
-    }
-</script>
+</div>
 
 <script th:inline="javascript">
     <![CDATA[
     $(function () {
-        // function getTemplate(){
-        //     window.location.href="http://192.168.1.115:8080/hozon/img/EBOM导入模板.xlsx";
-        // }
-
-        // $("#btnOk").click(function () {
-        //     var div =document.getElementById("layout");
-        //     if(div.style.display=="none"){
-        //         div.style.display="block";
-        //     }
-        // })
         $('#excelImportForm').bootstrapValidator({
             message: 'This value is not valid',
             feedbackIcons: {
@@ -87,7 +52,6 @@
             }
         });
         $("#btnOk", window.top.document).click(function () {
-
             var bootstrapValidator = $("#excelImportForm", window.top.document).data('bootstrapValidator');
             bootstrapValidator.validate();
             if (bootstrapValidator.isValid()) {
@@ -142,16 +106,6 @@
         })
     })
 
-    /*function showLoading(show){
-
-        if(show){
-            document.getElementById("over").style.display = "block";
-            document.getElementById("layout").style.display = "block";
-        }else{
-            document.getElementById("over").style.display = "none";
-            document.getElementById("layout").style.display = "none";
-        }
-    }*/
     ]]>
 </script>
 </body>

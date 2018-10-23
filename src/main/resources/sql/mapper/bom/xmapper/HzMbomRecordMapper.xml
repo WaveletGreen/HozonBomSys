@@ -369,6 +369,60 @@
         </trim>
     </insert>
 
+    <!--导入更新数据-->
+    <update id="HzMbomRecordDAOImpl_updateInput" parameterType="sql.pojo.bom.HzMbomLineRecord">
+        update ${tableName}
+        <set>
+            <if test="sparePart != null">
+                P_SPARE_PART = #{sparePart,jdbcType=VARCHAR},
+            </if>
+            <if test="sparePartNum != null">
+                P_SPARE_PART_NUM = #{sparePartNum,jdbcType=VARCHAR},
+            </if>
+            <if test="processRoute != null">
+                P_PROCESS_ROUTE = #{processRoute,jdbcType=VARCHAR},
+            </if>
+            <if test="laborHour != null">
+                P_LABOR_HOUR = #{laborHour,jdbcType=VARCHAR},
+            </if>
+            <if test="rhythm != null">
+                P_RHYTHM = #{rhythm,jdbcType=VARCHAR},
+            </if>
+            <if test="solderJoint != null">
+                P_SOLDER_JOINT = #{solderJoint,jdbcType=VARCHAR},
+            </if>
+            <if test="machineMaterial != null">
+                P_MACHINE_MATERITAL = #{machineMaterial,jdbcType=VARCHAR},
+            </if>
+            <if test="standardPart != null">
+                P_STANDARD_PART = #{standardPart,jdbcType=VARCHAR},
+            </if>
+            <if test="tools != null">
+                P_TOOLS = #{tools,jdbcType=VARCHAR},
+            </if>
+            <if test="wasterProduct != null">
+                P_WASTER_PRODUCT = #{wasterProduct,jdbcType=VARCHAR},
+            </if>
+            <if test="change != null">
+                P_CHANGE = #{change,jdbcType=VARCHAR},
+            </if>
+            <if test="changeNum != null">
+                P_CHANGE_NUM = #{changeNum,jdbcType=VARCHAR},
+            </if>
+            <if test="pFactoryId != null">
+                P_FACTORY_ID = #{pFactoryId,jdbcType=VARCHAR},
+            </if>
+            <if test="pStockLocation != null">
+                P_STOCK_LOCATION = #{pStockLocation,jdbcType=VARCHAR},
+            </if>
+            <if test="pBomType != null">
+                P_BOM_TYPE = #{pBomType,jdbcType=INTEGER},
+            </if>
+        </set>
+        where P_BOM_LINE_ID = #{lineId,jdbcType=VARCHAR}
+        and P_BOM_DIGIFAX_ID = #{bomDigifaxId,jdbcType=VARCHAR}
+        and P_MBOM_STATUS <![CDATA[ <> ]]>0
+    </update>
 
     <!--更新数据-->
     <update id="HzMbomRecordDAOImpl_update" parameterType="sql.pojo.bom.HzMbomLineRecord">

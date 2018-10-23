@@ -119,6 +119,11 @@ public class HzPbomRecordDAOImpl extends BaseSQLUtil implements HzPbomRecordDAO 
     }
 
     @Override
+    public int updateInput(HzPbomLineRecord record) {
+        return super.update("HzPbomRecordDAOImpl_updateInput",record);
+    }
+
+    @Override
     public int recoverBomById(String ePuid) {
         return super.update("HzPbomRecordDAOImpl_recoverBomById",ePuid);
     }

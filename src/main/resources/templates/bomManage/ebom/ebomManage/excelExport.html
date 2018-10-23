@@ -1,0 +1,34 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+
+<link th:href="@{/css/stage/bom-stage.css}" rel="stylesheet"/>
+
+<head>
+    <!--<base href="<%=basePath%>">-->
+
+    <title></title>
+
+    <!--清除浏览器中的缓存，它和其它几句合起来用，就可以使你再次进入曾经访问过的页面时，
+        浏览器必须从服务端下载最新的内容，达到刷新的效果。-->
+    <meta http-equiv="pragma" content="no-cache">
+    <meta http-equiv="cache-control" content="no-cache">
+    <meta http-equiv="expires" content="0">
+
+</head>
+
+<body>
+<div>
+    <div class="form-group" style="float: right;">
+        <button type="button" onclick="getTemplate()">导出</button>
+    </div>
+</div>
+<script>
+    function getTemplate() {
+        //下载
+        window.location.href =  "./files/EBOM导出模板.xlsx";//V1.1.0.log
+    }
+</script>
+
+</body>
+
+</html>

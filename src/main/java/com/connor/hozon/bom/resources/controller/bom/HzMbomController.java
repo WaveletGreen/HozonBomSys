@@ -1,12 +1,14 @@
 package com.connor.hozon.bom.resources.controller.bom;
 
 import com.connor.hozon.bom.bomSystem.service.derivative.HzComposeMFService;
+import com.alibaba.fastjson.JSONObject;
 import com.connor.hozon.bom.resources.controller.BaseController;
 import com.connor.hozon.bom.resources.domain.dto.request.AddMbomReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.request.DeleteHzMbomReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.request.UpdateMbomReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzMbomRecordRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.*;
 import com.connor.hozon.bom.resources.domain.query.HzMbomByIdQuery;
 import com.connor.hozon.bom.resources.domain.query.HzMbomByPageQuery;
 import com.connor.hozon.bom.resources.domain.query.HzPbomByPageQuery;
@@ -15,6 +17,7 @@ import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.service.bom.HzMbomService;
 import com.connor.hozon.bom.resources.service.bom.HzSingleVehiclesServices;
 import com.connor.hozon.bom.resources.util.Result;
+import com.connor.hozon.bom.resources.util.ExcelUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,6 +28,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.*;
+
+import static org.hibernate.jpa.internal.QueryImpl.LOG;
 
 /**
  * \* User: xulf
@@ -259,6 +264,98 @@ public class HzMbomController extends BaseController {
         }
         model.addAttribute("data",respDTO);
         return"bomManage/mbom/mbomMaintenance/updateFinancial";
+    }
+
+    /**
+     * 下载MBOM
+     */
+    @RequestMapping(value = "excelExport",method = RequestMethod.POST)
+    @ResponseBody
+    public JSONObject listDownLoad(
+            @RequestBody  List<HzMbomRecordRespDTO> dtos
+    ) {
+        boolean flag=true;
+        JSONObject result=new JSONObject();
+        try {
+            String fileName = "tableExport.xlsx";//文件名-tableExport
+            String[] title = {
+                    "序号","零件号" ,"名称","层级" ,"专业" ,"查找编号" ,"LOU/LOA","零件分类","零部件来源",
+                    "备件","备件编号","工艺路线","人工工时","节拍","焊点","机物料","标准件","工具","废品",
+                    "变更","变更号","工厂代码","发货料库存地点","BOM类型"
+            };//表头
+            //当前页的数据
+            List<String[]> dataList = new ArrayList<String[]>();
+            int index=1;
+            for (HzMbomRecordRespDTO ebomRespDTO : dtos) {
+                String[] cellArr = new String[title.length];
+                cellArr[0] = index+"";
+                index++;
+                cellArr[1] = ebomRespDTO.getLineId();
+                cellArr[2] = ebomRespDTO.getpBomLinePartName();
+                cellArr[3] = ebomRespDTO.getLevel();
+                cellArr[4] = ebomRespDTO.getpBomOfWhichDept();
+                cellArr[5] = ebomRespDTO.getLineNo();
+                cellArr[6] = ebomRespDTO.getpLouaFlag();
+                cellArr[7] = ebomRespDTO.getpBomLinePartClass();
+                cellArr[8] = ebomRespDTO.getpBomLinePartResource();
+                cellArr[9] = ebomRespDTO.getSparePart();
+                cellArr[10] = ebomRespDTO.getSparePartNum();
+                cellArr[11] = ebomRespDTO.getProcessRoute();
+                cellArr[12] = ebomRespDTO.getLaborHour();
+                cellArr[13] = ebomRespDTO.getRhythm();
+                cellArr[14] = ebomRespDTO.getSolderJoint();
+                cellArr[15] = ebomRespDTO.getMachineMaterial();
+                cellArr[16] = ebomRespDTO.getStandardPart();
+                cellArr[17] = ebomRespDTO.getTools();
+                cellArr[18] = ebomRespDTO.getWasterProduct();
+                cellArr[19] = ebomRespDTO.getChange();
+                cellArr[20] = ebomRespDTO.getChangeNum();
+                cellArr[21] = ebomRespDTO.getpFactoryCode();
+                cellArr[22] = ebomRespDTO.getpStockLocation();
+                cellArr[23] = ebomRespDTO.getpBomType();
+                dataList.add(cellArr);
+            }
+            flag = ExcelUtil.writeExcel(fileName, title, dataList,"mbom");
+
+            if(flag){
+                LOG.info(fileName+",文件创建成功");
+                result.put("status",flag);
+                result.put("msg","成功");
+                result.put("path","./files/"+fileName);
+            }else{
+                LOG.info(fileName+",文件创建失败");
+                result.put("status",flag);
+                result.put("msg","失败");
+            }
+        } catch (Exception e) {
+            if(LOG.isTraceEnabled())//isErrorEnabled()
+                LOG.error(e.getMessage());
+        }
+        return result;
+    }
+
+    /**
+     * 跳转到Excel导入超级MBOM页面
+     */
+    @RequestMapping(value = "importExcel",method = RequestMethod.GET)
+    public String getExcelImport(){
+        return "bomManage/mbom/mbomMaintenance/excelImport";
+    }
+
+    /**
+     * 跳转到Excel导入白车身生产MBOM页面
+     */
+    @RequestMapping(value = "importExcel2",method = RequestMethod.GET)
+    public String getExcelImport2(){
+        return "bomManage/mbom/mbomMaintenance/excelImport2";
+    }
+
+    /**
+     * 跳转到Excel导入白车身财务MBOM页面
+     */
+    @RequestMapping(value = "importExcel3",method = RequestMethod.GET)
+    public String getExcelImport3(){
+        return "bomManage/mbom/mbomMaintenance/excelImport3";
     }
 
 }

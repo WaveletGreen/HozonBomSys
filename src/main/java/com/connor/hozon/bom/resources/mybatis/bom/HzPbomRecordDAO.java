@@ -58,6 +58,11 @@ public interface HzPbomRecordDAO {
 
 
     /**
+     * 导入 PBOM管理信息-修改
+     */
+    int updateInput(HzPbomLineRecord record);
+
+    /**
      * 删除PBOM管理 通过外键删除
      * @param ePuid
      * @return

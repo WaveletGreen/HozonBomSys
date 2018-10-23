@@ -357,8 +357,42 @@
       )
   </insert>
 
-
-
+  <!--导入更新-->
+  <update id="HzPbomRecordDAOImpl_updateInput" parameterType="sql.pojo.bom.HzPbomLineRecord">
+    update HZ_PBOM_RECORD
+    <set>
+      <if test="resource != null">
+        P_RESOURCE = #{resource,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        P_TYPE = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="buyUnit != null">
+        P_BUY_UNIT = #{buyUnit,jdbcType=INTEGER},
+      </if>
+      <if test="workShop1 != null">
+        P_WORK_SHOP1 = #{workShop1,jdbcType=VARCHAR},
+      </if>
+      <if test="workShop2 != null">
+        P_WORK_SHOP2 = #{workShop2,jdbcType=VARCHAR},
+      </if>
+      <if test="productLine != null">
+        P_PRODUCT_LINE = #{productLine,jdbcType=VARCHAR},
+      </if>
+      <if test="mouldType != null">
+        P_MOULD_TYPE = #{mouldType,jdbcType=VARCHAR},
+      </if>
+      <if test="outerPart != null">
+        P_OUTER_PART = #{outerPart,jdbcType=VARCHAR},
+      </if>
+      <if test="station != null">
+        P_STATION = #{station,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where P_BOM_LINE_ID = #{lineId,jdbcType=VARCHAR}
+    and P_BOM_DIGIFAX_ID = #{bomDigifaxId,jdbcType=VARCHAR}
+    and P_PBOM_STATUS <![CDATA[ <> ]]>0
+  </update>
 
   <!--更新-->
   <update id="HzPbomRecordDAOImpl_update" parameterType="sql.pojo.bom.HzPbomLineRecord">
