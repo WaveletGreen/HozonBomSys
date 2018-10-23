@@ -1,129 +1,193 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <body>
-<form id="form" role="form" method="post" th:action="${action}">
-    <input class="form-control" id="pProjectPertainToVehicle" name="pProjectPertainToVehicle" type="hidden"
-           th:value="${vehicle.getPuid()}"
-    />
+<div class="row">
+    <form id="form" role="form" method="post" th:action="${action}">
+        <div class="col-lg-12 col-md-12 col-sm-12">
+            <input class="form-control" id="pProjectPertainToVehicle" name="pProjectPertainToVehicle" type="hidden"
+                   th:value="${vehicle.getPuid()}"
+            />
+            <div class="form-group">
+                <label for="pProjectCode">项目编号</label>
+                <input class="form-control" id="pProjectCode" name="pProjectCode" type="text"
+                       placeholder="请输入项目编号"/>
+            </div>
+            <div class="form-group">
+                <label for="pProjectName">项目名称</label>
+                <input class="form-control" id="pProjectName" name="pProjectName" type="text"
+                       placeholder="请输入项目名称"/>
+            </div>
+            <div class="form-group">
+                <input id="projectManagerId" name="projectManagerId" type="hidden"
+                />
+                <label for="pProjectManager">项目经理:<a id="selectUserBtn" href="javascript:void(0)">显示组织架构</a></label>
+                <input class="form-control" id="pProjectManager" name="pProjectManager" type="text"
+                       placeholder="请选择项目经理" readonly="readonly"
+                />
+                <!--<button type="button" class="btn btn-primary select" id="selectUserBtn">显示</button>-->
+            </div>
+            <div class="form-group">
+                <label for="pProjectDetail">项目描述</label>
+                <input class="form-control" id="pProjectDetail" name="pProjectDetail" type="text"
+                       placeholder="请输入项目描述" onfocus=""
+                />
+            </div>
+            <div class="form-group">
+                <label for="pInColorCode">内饰颜色代码</label>
+                <input class="form-control" id="pInColorCode" name="pInColorCode" type="text"
+                />
+            </div>
+            <div class="form-group">
+                <label for="pInColorName">内饰颜色名称</label>
+                <input class="form-control" id="pInColorName" name="pInColorName" type="text"
+                />
+            </div>
+            <div class="form-group">
+                <label for="pColorCode">颜色代码</label>
+                <input class="form-control" id="pColorCode" name="pColorCode" type="text"
+                />
+            </div>
+            <div class="form-group">
+                <label for="pColorName">颜色名称</label>
+                <input class="form-control" id="pColorName" name="pColorName" type="text"
+                />
+            </div>
+            <div class="form-group">
+                <label for="pBatteryModel">电池型号</label>
+                <input class="form-control" id="pBatteryModel" name="pBatteryModel" type="text"
+                />
+            </div>
+            <div class="form-group">
+                <label for="pMotorModel">电机型号</label>
+                <input class="form-control" id="pMotorModel" name="pMotorModel" type="text"
+                />
+            </div>
+            <div class="form-group">
+                <label for="pVehicleShapeCode">车身形式代码</label>
+                <input class="form-control" id="pVehicleShapeCode" name="pVehicleShapeCode" type="text"
+                />
+            </div>
+            <div class="form-group">
+                <label for="pVehicleTranName">车身变形名称</label>
+                <input class="form-control" id="pVehicleTranName" name="pVehicleTranName" type="text"
+                />
+            </div>
+            <div class="form-group">
+                <label for="pModelYearCode">车型年代码</label>
+                <input class="form-control" id="pModelYearCode" name="pVehicleAnnualCode" type="text"
+                />
+            </div>
+            <div class="form-group">
+                <label for="pModelYear">车型年</label>
+                <input class="form-control" id="pModelYear" name="pModelYear" type="text"
+                />
+            </div>
+            <!--不可编辑部分-->
+            <!--车型-->
+            <div class="form-group">
+                <label for="pVehicleCode">车型代码</label>
+                <input class="form-control" id="pVehicleCode" name="pVehicleCode" type="text"
+                       th:value="${vehicle.getpVehicleCode()}" disabled="disabled"
+                />
+            </div>
+            <div class="form-group">
+                <label for="pVehicleName">车型名称</label>
+                <input class="form-control" id="pVehicleName" name="pVehicleName" type="text"
+                       th:value="${vehicle.getpVehicleName()}" disabled="disabled"
+                />
+            </div>
+            <!--平台-->
+            <div class="form-group">
+                <label for="pPlatformCode">平台代码</label>
+                <input class="form-control" id="pPlatformCode" name="pPlatformCode" type="text"
+                       th:value="${platform.getpPlatformCode()}" disabled="disabled"
+                />
+            </div>
+            <div class="form-group">
+                <label for="pPlatformName">平台名称</label>
+                <input class="form-control" id="pPlatformName" name="pPlatformName" type="text"
+                       th:value="${platform.getpPlatformName()}" disabled="disabled"
+                />
+            </div>
+            <!--品牌-->
+            <div class="form-group">
+                <label for="pBrandCode">品牌代码</label>
+                <input class="form-control" id="pBrandCode" name="pBrandCode" type="text"
+                       th:value="${brand.getpBrandCode()}" disabled="disabled"
+                />
+            </div>
+            <div class="form-group">
+                <label for="pBrandName">中文品牌</label>
+                <input class="form-control" id="pBrandName" name="pBrandName" type="text"
+                       th:value="${brand.getpBrandName()}" disabled="disabled"
+                />
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-3 col-sm-3" id="userList" style="display: none;">
+            <ul id="orgGroupTree" class="ztree" style="width:200px; overflow:auto;"></ul>
+        </div>
+    </form>
+</div>
 
-    <div class="form-group">
-        <label for="pProjectCode">项目编号</label>
-        <input class="form-control" id="pProjectCode" name="pProjectCode" type="text"
-               placeholder="请输入项目编号"/>
-    </div>
-    <div class="form-group">
-        <label for="pProjectName">项目名称</label>
-        <input class="form-control" id="pProjectName" name="pProjectName" type="text"
-               placeholder="请输入项目名称"/>
-    </div>
-    <div class="form-group">
-        <label for="pProjectManager">项目经理</label>
-        <input class="form-control" id="pProjectManager" name="pProjectManager" type="text"
-               placeholder="请输入项目名称"
-        />
-    </div>
-    <div class="form-group">
-        <label for="pProjectDetail">项目描述</label>
-        <input class="form-control" id="pProjectDetail" name="pProjectDetail" type="text"
-               placeholder="请输入项目名称"
-        />
-    </div>
-
-    <div class="form-group">
-        <label for="pInColorCode">内饰颜色代码</label>
-        <input class="form-control" id="pInColorCode" name="pInColorCode" type="text"
-        />
-    </div>
-    <div class="form-group">
-        <label for="pInColorName">内饰颜色名称</label>
-        <input class="form-control" id="pInColorName" name="pInColorName" type="text"
-        />
-    </div>
-    <div class="form-group">
-        <label for="pColorCode">颜色代码</label>
-        <input class="form-control" id="pColorCode" name="pColorCode" type="text"
-        />
-    </div>
-    <div class="form-group">
-        <label for="pColorName">颜色名称</label>
-        <input class="form-control" id="pColorName" name="pColorName" type="text"
-        />
-    </div>
-    <div class="form-group">
-        <label for="pBatteryModel">电池型号</label>
-        <input class="form-control" id="pBatteryModel" name="pBatteryModel" type="text"
-        />
-    </div>
-    <div class="form-group">
-        <label for="pMotorModel">电机型号</label>
-        <input class="form-control" id="pMotorModel" name="pMotorModel" type="text"
-        />
-    </div>
-    <div class="form-group">
-        <label for="pVehicleShapeCode">车身形式代码</label>
-        <input class="form-control" id="pVehicleShapeCode" name="pVehicleShapeCode" type="text"
-        />
-    </div>
-    <div class="form-group">
-        <label for="pVehicleTranName">车身变形名称</label>
-        <input class="form-control" id="pVehicleTranName" name="pVehicleTranName" type="text"
-        />
-    </div>
-    <div class="form-group">
-        <label for="pModelYearCode">车型年代码</label>
-        <input class="form-control" id="pModelYearCode" name="pVehicleAnnualCode" type="text"
-        />
-    </div>
-    <div class="form-group">
-        <label for="pModelYear">车型年</label>
-        <input class="form-control" id="pModelYear" name="pModelYear" type="text"
-        />
-    </div>
-
-    <!--不可编辑部分-->
-    <!--车型-->
-    <div class="form-group">
-        <label for="pVehicleCode">车型代码</label>
-        <input class="form-control" id="pVehicleCode" name="pVehicleCode" type="text"
-               th:value="${vehicle.getpVehicleCode()}" disabled="disabled"
-        />
-    </div>
-    <div class="form-group">
-        <label for="pVehicleName">车型名称</label>
-        <input class="form-control" id="pVehicleName" name="pVehicleName" type="text"
-               th:value="${vehicle.getpVehicleName()}" disabled="disabled"
-        />
-    </div>
-    <!--平台-->
-    <div class="form-group">
-        <label for="pPlatformCode">平台代码</label>
-        <input class="form-control" id="pPlatformCode" name="pPlatformCode" type="text"
-               th:value="${platform.getpPlatformCode()}" disabled="disabled"
-        />
-    </div>
-    </div>
-    <div class="form-group">
-        <label for="pPlatformName">平台名称</label>
-        <input class="form-control" id="pPlatformName" name="pPlatformName" type="text"
-               th:value="${platform.getpPlatformName()}" disabled="disabled"
-        />
-    </div>
-    <!--品牌-->
-    <div class="form-group">
-        <label for="pBrandCode">品牌代码</label>
-        <input class="form-control" id="pBrandCode" name="pBrandCode" type="text"
-               th:value="${brand.getpBrandCode()}" disabled="disabled"
-        />
-    </div>
-    <div class="form-group">
-        <label for="pBrandName">中文品牌</label>
-        <input class="form-control" id="pBrandName" name="pBrandName" type="text"
-               th:value="${brand.getpBrandName()}" disabled="disabled"
-        />
-    </div>
-</form>
 <script th:inline="javascript">
     <![CDATA[
+    var setting = {
+        check: {
+            enable: false
+        },
+        view: {
+            dblClickExpand: false,
+            showLine: true,
+            selectedMulti: false
+        },
+        data: {
+            simpleData: {
+                enable: true,
+                idKey: "uid",
+                pIdKey: "pUid",
+                rootPId: "0"
+            }
+        },
+        callback: {
+            beforeClick: function (treeId, treeNode) {
+                var zTree = $.fn.zTree.getZTreeObj('orgGroupTree');
+                if (treeNode.isParent) {
+                    zTree.expandNode(treeNode);
+                    return false;
+                } else {
+                    return true;
+                }
+            },
+            onClick: function (event, treeId, treeNode) {
+                let userId = treeNode.uid;
+                $.ajax({
+                    type: "GET",
+                    //ajax需要添加打包名
+                    url: "./vwo/getUserDetail?uid=" + userId,
+                    success: function (result) {
+                        if (result.status) {
+                            $("#projectManagerId").val(result.personId);
+                            $("#pProjectManager").val(result.personName);
+                            var bootstrapValidator = $("#form", window.top.document).data('bootstrapValidator');
+                            bootstrapValidator.revalidateField("pProjectManager");
+                        }
+                    },
+                    error: function (e) {
+                        console.error("连接服务器异常:" + e.status);
+                    }
+                });
+            }
+        }
+    };
+    $(
+        initZTree = function () {
+            $.post("./vwo/getUserAndGroup", function (info) {
+                var t = $("#orgGroupTree");
+                t = $.fn.zTree.init(t, setting, info.data);
+            })
+        }
+    );
+
     $(function () {
         $('#form').bootstrapValidator({
             message: 'This value is not valid',
@@ -160,6 +224,14 @@
                     validators: {
                         notEmpty: {
                             message: '项目名称不能为空'
+                        }
+                    }
+                },
+                pProjectManager: {
+                    message: '没有选择项目经理',
+                    validators: {
+                        notEmpty: {
+                            message: '项目经理不能为空,请选择'
                         }
                     }
                 }
@@ -225,7 +297,32 @@
                 });
             }
         });
+        $("#selectUserBtn").click(function(){
+            var selectUserBtn = $("#selectUserBtn").html();
+            if(selectUserBtn=='显示组织架构'){
+                // 设置dialog的宽度
+                $(".modal-content",window.top.document).css("width","700px");
+                // 设置form表单的宽度比
+                $(".row").find("div").eq(0).attr("class", "col-lg-8 col-md-8 col-sm-8");
+                // 显示组织架构菜单数
+                $("#orgGroupTree").parent("div").show();
+                // 将按钮改为隐藏
+                $("#selectUserBtn").html("隐藏组织架构");
+            }else{
+                // 设置dialog的宽度
+                $(".modal-content",window.top.document).css("width","500px");
+                // 设置form表单的宽度比
+                $(".row").find("div").eq(0).attr("class", "col-lg-12 col-md-12 col-sm-12");
+                // 显示组织架构菜单数
+                $("#orgGroupTree").parent("div").hide();
+                // 将按钮改为显示
+                $("#selectUserBtn").html("显示组织架构");
+            }
+        })
+
     })
+
+
     ]]>
 </script>
 <script th:src="@{/layer/layer.js}"></script>

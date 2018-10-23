@@ -50,4 +50,12 @@ public class HzVwoOpiBom {
      * 主键
      */
     private Integer opiBomMngStage;
+    /**
+     * BOM经理ID
+     */
+    private Long opiBomUserId;
+    /**
+     * BOM经理用户名
+     */
+    private String opiBomUserName;
 }
