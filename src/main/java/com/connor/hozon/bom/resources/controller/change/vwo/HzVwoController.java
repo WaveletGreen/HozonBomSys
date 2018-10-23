@@ -318,8 +318,8 @@ public class HzVwoController {
      */
     @RequestMapping(value = "/saveBomLeaderOpinion", method = RequestMethod.POST)
     @ResponseBody
-    public JSONObject saveBomLeaderOpinion(HzVwoOpiBom hzVwoOpiBom) {
-        return iHzVWOManagerService.saveBomLeaderOpinion(hzVwoOpiBom);
+    public JSONObject saveBomLeaderOpinion(HzVwoOpiBom hzVwoOpiBom, Integer vwoType, String projectUid) {
+        return iHzVWOManagerService.saveBomLeaderOpinion(hzVwoOpiBom, vwoType, projectUid);
     }
 
     /**
@@ -329,8 +329,8 @@ public class HzVwoController {
      */
     @RequestMapping(value = "/savePmtLeaderOpinion", method = RequestMethod.POST)
     @ResponseBody
-    public JSONObject savePmtLeaderOpinion(HzVwoOpiPmt hzVwoOpiPmt) {
-        return iHzVWOManagerService.savePmtLeaderOpinion(hzVwoOpiPmt);
+    public JSONObject savePmtLeaderOpinion(HzVwoOpiPmt hzVwoOpiPmt, Integer vwoType, String projectUid) {
+        return iHzVWOManagerService.savePmtLeaderOpinion(hzVwoOpiPmt, vwoType, projectUid);
     }
 
     /**
@@ -340,7 +340,7 @@ public class HzVwoController {
      */
     @RequestMapping(value = "/saveProjLeaderOpinion", method = RequestMethod.POST)
     @ResponseBody
-    public JSONObject saveProjLeaderOpinion(HzVwoOpiProj hzVwoOpiProj) {
-        return iHzVWOManagerService.saveProjLeaderOpinion(hzVwoOpiProj);
+    public JSONObject saveProjLeaderOpinion(HzVwoOpiProj hzVwoOpiProj, Integer vwoType, String projectUid) {
+        return iHzVWOManagerService.saveProjLeaderOpinion(hzVwoOpiProj, vwoType, projectUid);
     }
 }

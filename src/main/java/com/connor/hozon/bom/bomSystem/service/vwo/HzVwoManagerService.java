@@ -316,7 +316,7 @@ public class HzVwoManagerService implements IHzVWOManagerService {
                 if (hzVwoInfo == null) {
                     return result;
                 }
-                List<HzFeatureChangeBean> hzFeatureChangeBeanListBefore = new ArrayList<HzFeatureChangeBean>();
+//                List<HzFeatureChangeBean> hzFeatureChangeBeanListBefore = new ArrayList<HzFeatureChangeBean>();
                 List<HzFeatureChangeBean> hzFeatureChangeBeanListAfter = new ArrayList<HzFeatureChangeBean>();
                 List<HzCfg0Record> hzCfg0RecordList = new ArrayList<HzCfg0Record>();
                 for(HzCfg0Record hzCfg0Record : localParams){
@@ -326,8 +326,15 @@ public class HzVwoManagerService implements IHzVWOManagerService {
                     HzFeatureChangeBean hzFeatureChangeBeanQuery = new HzFeatureChangeBean();
                     hzFeatureChangeBeanQuery.setCfgPuid(puid);
                     HzFeatureChangeBean hzFeatureChangeBeanBefor = iHzFeatureChangeService.doFindNewestChangeFromAfter(hzFeatureChangeBeanQuery);
-                    if(hzFeatureChangeBeanBefor!=null){
-                        hzFeatureChangeBeanListBefore.add(hzFeatureChangeBeanBefor);
+//                    if(hzFeatureChangeBeanBefor!=null){
+//                        hzFeatureChangeBeanListBefore.add(hzFeatureChangeBeanBefor);
+//                    }
+                    if(hzFeatureChangeBeanBefor==null){
+                        HzFeatureChangeBean hzFeatureChangeBeanAfter = new HzFeatureChangeBean();
+                        hzFeatureChangeBeanAfter.setVwoId(hzVwoInfo.getId());
+                        hzFeatureChangeBeanAfter.setCfg0MainItemPuid(hzCfg0Record.getpCfg0MainItemPuid());
+                        hzFeatureChangeBeanAfter.setFeatureValueName(hzCfg0Record.getpCfg0ObjectId());
+                        hzFeatureChangeBeanListAfter.add(hzFeatureChangeBeanAfter);
                     }
                     //根据源数据生成变更后的数据
                     HzFeatureChangeBean hzFeatureChangeBeanAfter = new HzFeatureChangeBean();
@@ -391,14 +398,14 @@ public class HzVwoManagerService implements IHzVWOManagerService {
                     hzCfg0Record.setCfgStatus(0);
                     hzCfg0RecordList.add(hzCfg0Record);
                 }
-                //新增变更前数据
-                if(hzFeatureChangeBeanListBefore.size()>0||hzFeatureChangeBeanListBefore!=null){
-                    if(iHzFeatureChangeService.doInsertListBefore(hzFeatureChangeBeanListBefore)<=0){
-                        result.put("status", false);
-                        result.put("msg", "新增变更前数据失败");
-                        return result;
-                    }
-                }
+//                //新增变更前数据
+//                if(hzFeatureChangeBeanListBefore.size()>0||hzFeatureChangeBeanListBefore!=null){
+//                    if(iHzFeatureChangeService.doInsertListBefore(hzFeatureChangeBeanListBefore)<=0){
+//                        result.put("status", false);
+//                        result.put("msg", "新增变更前数据失败");
+//                        return result;
+//                    }
+//                }
                 //新增变更后数据
                 if(hzFeatureChangeBeanListAfter.size()>0||hzFeatureChangeBeanListAfter!=null){
                     if(iHzFeatureChangeService.doInsertListAfter(hzFeatureChangeBeanListAfter)<=0){
@@ -429,6 +436,10 @@ public class HzVwoManagerService implements IHzVWOManagerService {
         User user = UserInfo.getUser();
         //源主数据
         List<HzCfg0ModelColor> hzCfg0ModelColors = hzCfg0ModelColorDao.selectByPuids(colors);
+        //变更后主数据
+        List<HzCmcrChange> hzCmcrChangesAfter = new ArrayList<HzCmcrChange>();
+        //变更后从数据
+        List<HzCmcrDetailChange> hzCmcrDetailChangesAfter = new ArrayList<HzCmcrDetailChange>();
         //循环查看源主数据是否以发布流程,如已发布过则直接返回错误提示
         for (HzCfg0ModelColor hzCfg0ModelColor : hzCfg0ModelColors) {
             if (hzCfg0ModelColor.getCmcrStatus() != null && !"0".equals(hzCfg0ModelColor.getCmcrStatus())) {
@@ -447,8 +458,88 @@ public class HzVwoManagerService implements IHzVWOManagerService {
         for (HzCfg0ModelColor hzCfg0ModelColor : hzCfg0ModelColors) {
             hzCfg0ModelColor.setCmcrVwoId(hzVwoInfo.getId());
         }
+
+        //查询最近一次变更后主数据
+        List<HzCmcrChange> hzCmcrChangesLastAfterQuery = new ArrayList<HzCmcrChange>();
+        for (HzCfg0ModelColor hzCfg0ModelColor : hzCfg0ModelColors) {
+            HzCmcrChange hzCmcrChangeQuery = new HzCmcrChange();
+            hzCmcrChangeQuery.setCmcrSrcMainCfg(hzCfg0ModelColor.getpCfg0MainRecordOfMC());
+            hzCmcrChangeQuery.setCmcrSrcPuid(hzCfg0ModelColor.getPuid());
+            hzCmcrChangesLastAfterQuery.add(hzCmcrChangeQuery);
+        }
+        List<HzCmcrChange> hzCmcrChangesLastAfter = null;
+        try {
+            hzCmcrChangesLastAfter = hzCmcrChangeDao.selectLastAfter(hzCmcrChangesLastAfterQuery);
+        } catch (Exception e) {
+            result.put("status", false);
+            result.put("msg", e.getMessage());
+        }
+        //查询最近一次变更后从数据
+        List<HzCmcrDetailChange> hzCmcrDetailChangesQuery = new ArrayList<HzCmcrDetailChange>();
+        for (HzCfg0ModelColorDetail hzCfg0ModelColorDetail : hzCfg0ModelColorDetails) {
+            HzCmcrDetailChange hzCmcrDetailChange1Query = new HzCmcrDetailChange();
+            hzCmcrDetailChange1Query.setCmcrDetailSrcCfgMainUid(hzCfg0ModelColorDetail.getCfgMainUid());
+            hzCmcrDetailChange1Query.setCmcrDetailSrcPuid(hzCfg0ModelColorDetail.getPuid());
+            hzCmcrDetailChangesQuery.add(hzCmcrDetailChange1Query);
+        }
+        List<HzCmcrDetailChange> hzCmcrDetailChangesLastAfter = null;
+        try {
+            hzCmcrDetailChangesLastAfter = hzCmcrDetailChangeDao.selectLastAfter(hzCmcrDetailChangesQuery);
+        } catch (Exception e) {
+            result.put("status", false);
+            result.put("msg", e.getMessage());
+        }
+        //筛选出第一次变更的数据,并生成主数据
+        if(hzCmcrChangesLastAfter.size()!=hzCmcrChangesLastAfterQuery.size()){
+            for(HzCmcrChange hzCmcrChangeAfterQuery : hzCmcrChangesLastAfterQuery){
+                boolean flag =false;
+                for(HzCmcrChange hzCmcrChange : hzCmcrChangesLastAfter){
+                    if(hzCmcrChangeAfterQuery.getCmcrSrcPuid().equals(hzCmcrChange.getCmcrSrcPuid())){
+                        flag = true;
+                        break;
+                    }
+                }
+                if(!flag){
+                    HzCmcrChange hzCmcrChange = new HzCmcrChange();
+                    hzCmcrChange.setCmcrSrcPuid(hzCmcrChangeAfterQuery.getCmcrSrcPuid());
+                    hzCmcrChange.setCmcrSrcMainCfg(hzCmcrChangeAfterQuery.getCmcrSrcMainCfg());
+                    hzCmcrChange.setCmcrCgVwoId(hzVwoInfo.getId());
+                    hzCmcrChangesAfter.add(hzCmcrChange);
+                }
+            }
+        }
+        //筛选出第一次变更的数据,并生成从数据
+        if(hzCmcrDetailChangesLastAfter.size()!=hzCmcrDetailChangesQuery.size()){
+            for(HzCmcrDetailChange hzCmcrDetailChangeQuery : hzCmcrDetailChangesQuery){
+                boolean flag = false;
+                for(HzCmcrDetailChange hzCmcrDetailChange : hzCmcrDetailChangesLastAfter){
+                    if(hzCmcrDetailChangeQuery.getCmcrDetailSrcPuid().equals(hzCmcrDetailChange.getCmcrDetailSrcPuid())){
+                        flag = true;
+                        break;
+                    }
+                }
+                if(!flag){
+                    HzCmcrDetailChange hzCmcrDetailChange = new HzCmcrDetailChange();
+                    hzCmcrDetailChange.setCmcrDetailSrcPuid(hzCmcrDetailChangeQuery.getCmcrDetailSrcPuid());
+                    hzCmcrDetailChange.setCmcrDetailSrcCfgMainUid(hzCmcrDetailChangeQuery.getCmcrDetailSrcCfgMainUid());
+                    hzCmcrDetailChange.setCmcrDetailCgVwoId(hzVwoInfo.getId());
+                    hzCmcrDetailChangesAfter.add(hzCmcrDetailChange);
+                }
+            }
+        }
+//        //根据最近一次变更后主数据生成变更前主数据
+//        for (HzCmcrChange hzCmcrChange : hzCmcrChangesLastAfter) {
+//            hzCmcrChange.setCmcrCgVwoId(hzVwoInfo.getId());
+//        }
+//        //根据最近一次变更后从数据生成变更前从数据
+//        for (HzCmcrDetailChange hzCmcrDetailChange : hzCmcrDetailChangesLastAfter) {
+//            hzCmcrDetailChange.setCmcrDetailCgVwoId(hzVwoInfo.getId());
+//        }
+
+
+
         //根据源主数据生成变更后主数据
-        List<HzCmcrChange> hzCmcrChangesAfter = new ArrayList<HzCmcrChange>();
+
         for (HzCfg0ModelColor hzCfg0ModelColor : hzCfg0ModelColors) {
             HzCmcrChange hzCmcrChangeAfter = new HzCmcrChange();
             //VWO号
@@ -485,7 +576,7 @@ public class HzVwoManagerService implements IHzVWOManagerService {
             hzCmcrChangesAfter.add(hzCmcrChangeAfter);
         }
         //根据源从数据生成变更后从数据
-        List<HzCmcrDetailChange> hzCmcrDetailChangesAfter = new ArrayList<HzCmcrDetailChange>();
+
         for (HzCfg0ModelColorDetail hzCfg0ModelColorDetail : hzCfg0ModelColorDetails) {
             HzCmcrDetailChange hzCmcrDetailChangeAfter = new HzCmcrDetailChange();
             //源数据PUID
@@ -525,44 +616,6 @@ public class HzVwoManagerService implements IHzVWOManagerService {
             hzCmcrDetailChangesAfter.add(hzCmcrDetailChangeAfter);
         }
 
-        //查询最近一次变更后主数据
-        List<HzCmcrChange> hzCmcrChangesLastAfterQuery = new ArrayList<HzCmcrChange>();
-        for (HzCfg0ModelColor hzCfg0ModelColor : hzCfg0ModelColors) {
-            HzCmcrChange hzCmcrChangeQuery = new HzCmcrChange();
-            hzCmcrChangeQuery.setCmcrSrcMainCfg(hzCfg0ModelColor.getpCfg0MainRecordOfMC());
-            hzCmcrChangeQuery.setCmcrSrcPuid(hzCfg0ModelColor.getPuid());
-            hzCmcrChangesLastAfterQuery.add(hzCmcrChangeQuery);
-        }
-        List<HzCmcrChange> hzCmcrChangesLastAfter = null;
-        try {
-            hzCmcrChangesLastAfter = hzCmcrChangeDao.selectLastAfter(hzCmcrChangesLastAfterQuery);
-        } catch (Exception e) {
-            result.put("status", false);
-            result.put("msg", e.getMessage());
-        }
-        //查询最近一次变更后从数据
-        List<HzCmcrDetailChange> hzCmcrDetailChangesQuery = new ArrayList<HzCmcrDetailChange>();
-        for (HzCfg0ModelColorDetail hzCfg0ModelColorDetail : hzCfg0ModelColorDetails) {
-            HzCmcrDetailChange hzCmcrDetailChange1Query = new HzCmcrDetailChange();
-            hzCmcrDetailChange1Query.setCmcrDetailSrcCfgMainUid(hzCfg0ModelColorDetail.getCfgMainUid());
-            hzCmcrDetailChange1Query.setCmcrDetailSrcPuid(hzCfg0ModelColorDetail.getPuid());
-            hzCmcrDetailChangesQuery.add(hzCmcrDetailChange1Query);
-        }
-        List<HzCmcrDetailChange> hzCmcrDetailChangesLastAfter = null;
-        try {
-            hzCmcrDetailChangesLastAfter = hzCmcrDetailChangeDao.selectLastAfter(hzCmcrDetailChangesQuery);
-        } catch (Exception e) {
-            result.put("status", false);
-            result.put("msg", e.getMessage());
-        }
-        //根据最近一次变更后主数据生成变更前主数据
-        for (HzCmcrChange hzCmcrChange : hzCmcrChangesLastAfter) {
-            hzCmcrChange.setCmcrCgVwoId(hzVwoInfo.getId());
-        }
-        //根据最近一次变更后从数据生成变更前从数据
-        for (HzCmcrDetailChange hzCmcrDetailChange : hzCmcrDetailChangesLastAfter) {
-            hzCmcrDetailChange.setCmcrDetailCgVwoId(hzVwoInfo.getId());
-        }
 
 
         //跟新数据库
@@ -577,20 +630,20 @@ public class HzVwoManagerService implements IHzVWOManagerService {
                 result.put("status", false);
                 result.put("msg", "跟变更后从数据失败");
             }
-            //跟新变更前主数据
-            if (hzCmcrChangesLastAfter != null && hzCmcrChangesLastAfter.size() != 0) {
-                if (hzCmcrChangeDao.insertBeforeList(hzCmcrChangesLastAfter) != hzCmcrChangesLastAfter.size()) {
-                    result.put("status", false);
-                    result.put("msg", "跟变更前主数据失败");
-                }
-            }
-            //跟新变更前从数据
-            if (hzCmcrDetailChangesLastAfter != null && hzCmcrDetailChangesLastAfter.size() != 0) {
-                if (hzCmcrDetailChangeDao.insertDetailBeforeList(hzCmcrDetailChangesLastAfter) != hzCmcrDetailChangesLastAfter.size()) {
-                    result.put("status", false);
-                    result.put("msg", "跟变更前从数据失败");
-                }
-            }
+//            //跟新变更前主数据
+//            if (hzCmcrChangesLastAfter != null && hzCmcrChangesLastAfter.size() != 0) {
+//                if (hzCmcrChangeDao.insertBeforeList(hzCmcrChangesLastAfter) != hzCmcrChangesLastAfter.size()) {
+//                    result.put("status", false);
+//                    result.put("msg", "跟变更前主数据失败");
+//                }
+//            }
+//            //跟新变更前从数据
+//            if (hzCmcrDetailChangesLastAfter != null && hzCmcrDetailChangesLastAfter.size() != 0) {
+//                if (hzCmcrDetailChangeDao.insertDetailBeforeList(hzCmcrDetailChangesLastAfter) != hzCmcrDetailChangesLastAfter.size()) {
+//                    result.put("status", false);
+//                    result.put("msg", "跟变更前从数据失败");
+//                }
+//            }
         } catch (Exception e) {
             result.put("status", false);
             result.put("msg", e.getMessage());
@@ -893,7 +946,7 @@ public class HzVwoManagerService implements IHzVWOManagerService {
     }
 
     @Override
-    public JSONObject saveBomLeaderOpinion(HzVwoOpiBom hzVwoOpiBom) {
+    public JSONObject saveBomLeaderOpinion(HzVwoOpiBom hzVwoOpiBom, Integer vwoType,  String projectUid) {
         JSONObject result = new JSONObject();
         User user = UserInfo.getUser();
         result.put("status",true);
@@ -914,6 +967,7 @@ public class HzVwoManagerService implements IHzVWOManagerService {
             hzVwoInfo.setVwoStatus(102);
         }else {
             hzVwoInfo.setVwoStatus(899);
+            interrupt(vwoType, projectUid, hzVwoOpiBom.getOpiVwoId());
         }
         //修改VWO流程状态
         if(!iHzVwoInfoService.doUpdateByPrimaryKey(hzVwoInfo)){
@@ -926,7 +980,7 @@ public class HzVwoManagerService implements IHzVWOManagerService {
     }
 
     @Override
-    public JSONObject savePmtLeaderOpinion(HzVwoOpiPmt hzVwoOpiPmt) {
+    public JSONObject savePmtLeaderOpinion(HzVwoOpiPmt hzVwoOpiPmt, Integer vwoType, String projectUid) {
         JSONObject result = new JSONObject();
         User user = UserInfo.getUser();
         result.put("status",true);
@@ -947,6 +1001,7 @@ public class HzVwoManagerService implements IHzVWOManagerService {
             hzVwoInfo.setVwoStatus(103);
         }else {
             hzVwoInfo.setVwoStatus(899);
+            interrupt(vwoType, projectUid, hzVwoOpiPmt.getOpiVwoId());
         }
         if(!iHzVwoInfoService.doUpdateByPrimaryKey(hzVwoInfo)){
             result.put("status",false);
@@ -958,7 +1013,7 @@ public class HzVwoManagerService implements IHzVWOManagerService {
     }
 
     @Override
-    public JSONObject saveProjLeaderOpinion(HzVwoOpiProj hzVwoOpiProj) {
+    public JSONObject saveProjLeaderOpinion(HzVwoOpiProj hzVwoOpiProj, Integer vwoType, String projectUid) {
         JSONObject result = new JSONObject();
         User user = UserInfo.getUser();
         result.put("status",true);
@@ -977,8 +1032,10 @@ public class HzVwoManagerService implements IHzVWOManagerService {
         hzVwoInfo.setId(hzVwoOpiProj.getOpiVwoId());
         if(hzVwoOpiProj.getOpiProjMngAgreement()==1){
             hzVwoInfo.setVwoStatus(999);
+            release(vwoType, projectUid, hzVwoOpiProj.getOpiVwoId());
         }else {
             hzVwoInfo.setVwoStatus(899);
+            interrupt(vwoType, projectUid, hzVwoOpiProj.getOpiVwoId());
         }
         if(!iHzVwoInfoService.doUpdateByPrimaryKey(hzVwoInfo)){
             result.put("status",false);

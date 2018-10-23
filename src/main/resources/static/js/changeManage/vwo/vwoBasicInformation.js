@@ -695,6 +695,8 @@ function approve(url, formId) {
                 data[d[p].name] = d[p].value;
             }
             data.opiVwoId = $("#vwo").val();
+            data.vwoType = $("#vwoType").val();
+            data.projectUid = getProjectUid();
             $.ajax({
                 type: "POST",
                 url: url,
@@ -704,7 +706,7 @@ function approve(url, formId) {
                         layer.msg(result.msg, {icon: 1, time: 2000})
                         window.location.reload();
                     } else {
-                        window.Ewin.alert({message: "BOM经理评估失败:" + result.msg});
+                        window.Ewin.alert({message: "评估失败:" + result.msg});
                     }
                 },
                 error: function (result) {

@@ -235,11 +235,11 @@ public interface IHzVWOManagerService {
      */
     List<HzFeatureChangeBean> getFeatureChangeBefore(Long id);
 
-    JSONObject saveBomLeaderOpinion(HzVwoOpiBom hzVwoOpiBom);
+    JSONObject saveBomLeaderOpinion(HzVwoOpiBom hzVwoOpiBom, Integer vwoType, String projectUid);
 
-    JSONObject savePmtLeaderOpinion(HzVwoOpiPmt hzVwoOpiPmt);
+    JSONObject savePmtLeaderOpinion(HzVwoOpiPmt hzVwoOpiPmt, Integer vwoType, String projectUid);
 
-    JSONObject saveProjLeaderOpinion(HzVwoOpiProj hzVwoOpiProj);
+    JSONObject saveProjLeaderOpinion(HzVwoOpiProj hzVwoOpiProj, Integer vwoType, String projectUid);
 
     JSONObject launch(Integer type, String projectUid, Long vwoId);
 }

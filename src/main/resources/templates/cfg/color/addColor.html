@@ -1,6 +1,7 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <body>
+    <button id="btnAdd" class="btn btn-success" style="position: fixed;margin-left: 130%;margin-bottom: -10px;z-index:99999;">添加</button>
 <form id="colorForm" role="form" method="post" action="./colorSet/add">
     <div class="form-group">
         <label for="pColorOfSet">色系</label>
@@ -233,6 +234,10 @@
         })
     )
     ]]>
+
+    $("#btnAdd").click(function () {
+        
+    });
 </script>
 <script th:src="@{/layer/layer.js}"></script>
 </body>
