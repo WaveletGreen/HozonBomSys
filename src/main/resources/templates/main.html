@@ -1,9 +1,9 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <head th:include="include/includebase">
-    <script th:src="@{user.js}"></script>
-    <title>合众BOM管理系统</title>
 </head>
+<script th:src="@{user.js}"></script>
+<title>合众BOM管理系统</title>
 <body>
 <!--<link rel="shortcut icon" href="http://www.weather.com.cn/favicon.ico" type="image/x-icon"/>-->
 <link th:href="@{css/sb-admin.css}" rel="stylesheet"/>
@@ -15,6 +15,15 @@
         </div>
         <!-- Top Menu Items -->
         <ul class="nav navbar-right top-nav">
+            <li>
+                <a href="" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i>
+                    <font>我的工作列表:</font>
+                    <!--<mark class="caret">：</mark>-->
+                    <font id="myCurrentTask">请选择任务</font>
+                </a>
+                <ul class="dropdown-menu" id="myTasks" style="max-height: 300px;overflow-y:scroll;">
+                </ul>
+            </li>
             <li>
                 <a href="" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i>
                     <font>当前工作项目:</font>
@@ -51,10 +60,12 @@
     </nav>
     <div id="page-wrapper" style="border-radius:5px 5px 0 0;">
         <input type="hidden" id="project" value="EP10项目"/>
+        <input type="hidden" id="currentTask"/>
         <div id="tabContainer"></div>
     </div>
 </div>
 </body>
+<script th:src="@{/js/task/task.js}"></script>
 <script th:inline="javascript">
     $(document).ready(
         (function () {
@@ -145,7 +156,7 @@
                     alert(err.status);
                 }
             })
-        ))
+        ));
 
     function updatePassword() {
         window.Ewin.dialog({
@@ -168,6 +179,5 @@
             $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doRefresh(projectUid);
         }
     }
-
 </script>
 </html>

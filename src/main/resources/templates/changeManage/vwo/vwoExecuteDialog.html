@@ -112,7 +112,6 @@
                 }
             },
             onClick: function (event, treeId, treeNode) {
-                console.log(treeId);
                 let userId = treeNode.uid;
                 $.ajax({
                     type: "GET",
@@ -123,7 +122,6 @@
                             $("#exeDept").val(result.groupName);
                             $("#exeUser").val(result.personName);
                             $("#exeUserId").val(result.personId);
-                            bootstrapValidator.validate();
                         }
                     },
                     error: function (e) {

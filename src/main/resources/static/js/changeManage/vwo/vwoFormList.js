@@ -1,5 +1,11 @@
 $(document).ready((function () {
-    doQuery();
+    let taskData = window.parent.getTaskData();
+    if (taskData == null || taskData == undefined) {
+        doQuery();
+    }
+    else {
+        loadDetailTask();
+    }
 }));
 
 function doQuery() {
@@ -9,29 +15,35 @@ function doQuery() {
 //刷新
 function doRefresh(projectUid) {
     loadData(projectUid);
+    let vwoFormDetail=window.parent.getVwoForm();
+    console.log(vwoFormDetail);
+    let $a=$(window.parent.document).contents().find("#tabContainer .nav-tabs .active a");
+    let $span=$(window.parent.document).contents().find("#tabContainer .nav-tabs .active span");
+    $a.attr("href","#"+vwoFormDetail.id);
+    $span.text(vwoFormDetail.url);
 }
 
 function loadData(projectUid) {
-    if (!checkIsSelectProject(projectUid)) {
-        return;
-    }
+    // if (!checkIsSelectProject(projectUid)) {
+    //     return;
+    // }
     let url = $("#url").val();
     url += "?projectUid=" + projectUid;
-    let vwoStatus=$("#vwoStatus").val();
-    let vwoChangeType=$("#vwoChangeType").val();
-    let vwoCostBearingDept=$("#vwoCostBearingDept").val();
-    let vwoListedType=$("#vwoListedType").val();
-    if(vwoStatus!=null){
-        url+="&vwoStatus="+vwoStatus;
+    let vwoStatus = $("#vwoStatus").val();
+    let vwoChangeType = $("#vwoChangeType").val();
+    let vwoCostBearingDept = $("#vwoCostBearingDept").val();
+    let vwoListedType = $("#vwoListedType").val();
+    if (vwoStatus != null) {
+        url += "&vwoStatus=" + vwoStatus;
     }
-    if(vwoChangeType!=null){
-        url+="&vwoChangeType="+vwoChangeType;
+    if (vwoChangeType != null) {
+        url += "&vwoChangeType=" + vwoChangeType;
     }
-    if(vwoCostBearingDept!=null){
-        url+="&vwoCostBearingDept="+vwoCostBearingDept;
+    if (vwoCostBearingDept != null) {
+        url += "&vwoCostBearingDept=" + vwoCostBearingDept;
     }
-    if(vwoListedType!=null){
-        url+="&vwoListedType="+vwoListedType;
+    if (vwoListedType != null) {
+        url += "&vwoListedType=" + vwoListedType;
     }
     var $table = $("#vwo_table");
     $table.bootstrapTable('destroy');
@@ -102,7 +114,7 @@ function loadData(projectUid) {
                 sortable: true,
                 sortOrder: 'asc',
                 formatter: function (value, row, index) {
-                    return changeDateFormat(value)
+                    return dateToStringFormat(value)
                 }
             },
             {
@@ -117,7 +129,7 @@ function loadData(projectUid) {
                 sortable: true,
                 sortOrder: 'asc',
                 formatter: function (value, row, index) {
-                    return changeDateFormat(value)
+                    return dateToStringFormat(value)
                 }
             },
         ],

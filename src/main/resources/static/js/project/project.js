@@ -130,7 +130,7 @@ function addHoverDom(treeId, treeNode) {
                     window.Ewin.dialog({
                         title: "添加",
                         url: "project/addPage?id=" + treeNode.puid + "&page=project",
-                        width: 400,
+                        width: 500,
                         height: 650
                     })
                 }
@@ -228,7 +228,7 @@ function addHoverDom(treeId, treeNode) {
                     window.Ewin.dialog({
                         title: "修改项目信息",
                         url: "project/modifyPage?id=" + treeNode.puid + "&page=project",
-                        width: 400,
+                        width: 500,
                         height: 650
                     });
                 }
@@ -376,7 +376,7 @@ function changeView(data) {
     $("#pProjectCode").text(data.project.pProjectCode);
     $("#pProjectName").text(data.project.pProjectName);
     $("#pProjectManager").text(data.project.pProjectManager);
-    // $("#pProjectCreateDate").text(changeDateFormat(data.project.pProjectCreateDate));
-    // $("#pProjectDiscontinuationDate").text(changeDateFormat(data.project.pProjectDiscontinuationDate));
+    // $("#pProjectCreateDate").text(dateToStringFormat(data.project.pProjectCreateDate));
+    // $("#pProjectDiscontinuationDate").text(dateToStringFormat(data.project.pProjectDiscontinuationDate));
     $("#pProjectDetail").text(data.project.pProjectDetail);
 }

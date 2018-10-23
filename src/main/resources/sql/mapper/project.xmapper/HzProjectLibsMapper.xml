@@ -45,6 +45,8 @@
         <result column="P_VEHICLE_SHAPE_CODE" jdbcType="VARCHAR" property="pVehicleShapeCode"/>
         <!--车身变形名称-->
         <result column="P_VEHICLE_TRAN_NAME" jdbcType="VARCHAR" property="pVehicleTranName"/>
+        <!--项目经理ID-->
+        <result column="PROJECT_MANAGER_ID" jdbcType="DECIMAL" property="projectManagerId"/>
     </resultMap>
     <sql id="Base_Column_List">
         PUID,
@@ -68,7 +70,8 @@
         P_MODEL_YEAR_CODE,
         P_MODEL_YEAR,
         P_VEHICLE_SHAPE_CODE,
-        P_VEHICLE_TRAN_NAME
+        P_VEHICLE_TRAN_NAME,
+        PROJECT_MANAGER_ID
     </sql>
     <!--根据主键找项目-->
     <select id="selectByPrimaryKey" parameterType="sql.pojo.project.HzProjectLibs" resultMap="BaseResultMap">
@@ -118,7 +121,8 @@
         #{pModelYearCode,jdbcType=VARCHAR},
         #{pModelYear,jdbcType=VARCHAR},
         #{pVehicleShapeCode,jdbcType=VARCHAR},
-        #{pVehicleTranName,jdbcType=VARCHAR}
+        #{pVehicleTranName,jdbcType=VARCHAR},
+        #{projectManagerId,jdbcType=DECIMAL}
         )
     </select>
     <!--根据主键删除项目-->
@@ -146,8 +150,8 @@
       P_MODEL_YEAR_CODE = #{pModelYearCode,jdbcType=VARCHAR},
       P_MODEL_YEAR = #{pModelYear,jdbcType=VARCHAR},
       P_VEHICLE_SHAPE_CODE = #{pVehicleShapeCode,jdbcType=VARCHAR},
-      P_VEHICLE_TRAN_NAME = #{pVehicleTranName,jdbcType=VARCHAR}
-
+      P_VEHICLE_TRAN_NAME = #{pVehicleTranName,jdbcType=VARCHAR},
+      PROJECT_MANAGER_ID = #{projectManagerId,jdbcType=DECIMAL}
     where PUID = #{puid,jdbcType=VARCHAR}
     </update>
 </mapper>

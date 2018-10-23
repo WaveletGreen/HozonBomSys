@@ -3,7 +3,7 @@
  * @param cellval
  * @returns {string}
  */
-function changeDateFormat(cellval) {
+function dateToStringFormat(cellval) {
     if (cellval != null) {
         var date = new Date(parseInt(cellval));
         var month = date.getMonth() + 1 < 10 ? "0" + (date.getMonth() + 1) : date.getMonth() + 1;
@@ -26,7 +26,7 @@ function changeDateFormat(cellval) {
  * @param strDate
  * @returns {string}
  */
-function changeDateFormat2(strDate) {
+function stringToDateFormat(strDate) {
     if (strDate != null) {
         var date = new Date(Date.parse(strDate));
         if (date == null) {

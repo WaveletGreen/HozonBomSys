@@ -2,6 +2,8 @@ package sql.pojo.project;
 
 import com.connor.hozon.bom.bomSystem.service.project.IProject;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Date;
 
@@ -38,6 +40,9 @@ public class HzBrandRecord implements IProject{
      */
     private String pBrandLastModifier;
 
+    @Getter
+    @Setter
+    private Long projectManagerId;
 
     @Override
     public String getCode() {
