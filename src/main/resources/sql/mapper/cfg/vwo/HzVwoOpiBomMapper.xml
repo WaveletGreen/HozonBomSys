@@ -13,11 +13,13 @@
         <result column="OPI_BOM_MNG_CREATOR" jdbcType="VARCHAR" property="opiBomMngCreator"/>
         <result column="OPI_BOM_MNG_UPDATER" jdbcType="VARCHAR" property="opiBomMngUpdater"/>
         <result column="OPI_BOM_MNG_STAGE" jdbcType="DECIMAL" property="opiBomMngStage"/>
+        <result column="OPI_BOM_USER_ID" jdbcType="DECIMAL" property="opiBomMngUserId"/>
+        <result column="OPI_BOM_USER_NAME" jdbcType="DECIMAL" property="opiBomMngUserName"/>
     </resultMap>
     <sql id="Base_Column_List">
     ID, OPI_VWO_ID, OPI_BOM_MNG_OPINION, OPI_BOM_MNG_AGREEMENT, OPI_BOM_MNG_OPTION_DATE, 
     OPI_BOM_MNG_COMMENT, OPI_BOM_MNG_CREATE_DATE, OPI_BOM_MNG_UPDATE_DATE, OPI_BOM_MNG_CREATOR, 
-    OPI_BOM_MNG_UPDATER, OPI_BOM_MNG_STAGE
+    OPI_BOM_MNG_UPDATER, OPI_BOM_MNG_STAGE,OPI_BOM_USER_ID,OPI_BOM_USER_NAME
   </sql>
     <!--**************************************select**************************************-->
     <select id="selectByPrimaryKey" parameterType="sql.pojo.cfg.vwo.HzVwoOpiBom" resultMap="BaseResultMap">
@@ -180,4 +182,12 @@
       OPI_BOM_MNG_STAGE = #{opiBomMngStage,jdbcType=DECIMAL}
     where ID = #{id,jdbcType=DECIMAL}
   </update>
+
+    <update id="updateUserByVwoId" parameterType="sql.pojo.cfg.vwo.HzVwoOpiBom">
+        update HZ_VWO_OPI_BOM
+        set
+          OPI_BOM_USER_ID = #{opiBomMngUserId,jdbcType=DECIMAL},
+          OPI_BOM_USER_NAME = #{opiBomMngUserName,jdbcType=VARCHAR}
+        where OPI_VWO_ID = #{opiVwoId,jdbcType=DECIMAL}
+    </update>
 </mapper>

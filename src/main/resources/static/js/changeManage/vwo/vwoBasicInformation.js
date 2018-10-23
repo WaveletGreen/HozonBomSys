@@ -730,3 +730,13 @@ function notDisabledById(id) {
     $("#"+id+" select").attr('disabled', false);
     $("#"+id+" textarea").attr('disabled', false);
 }
+
+function doSelectBomMag(id) {
+    window.Ewin.dialog({
+        title: "添加",
+        url: "doSelectBomMag?vwo=" + vwoId + "&selectType=" + id,
+        gridId: "gridId",
+        width: 600,
+        height: 500
+    })
+}

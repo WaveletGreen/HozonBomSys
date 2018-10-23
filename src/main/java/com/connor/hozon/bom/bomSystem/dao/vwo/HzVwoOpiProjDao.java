@@ -7,4 +7,6 @@ import sql.pojo.cfg.vwo.HzVwoOpiProj;
 @Configuration
 public interface HzVwoOpiProjDao extends BasicDao<HzVwoOpiProj>{
     HzVwoOpiProj selectByVwoId(Long id);
+
+    int updateUserByVwoId(HzVwoOpiProj hzVwoOpiProj);
 }

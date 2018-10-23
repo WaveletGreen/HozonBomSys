@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<meta charset="UTF-8">
+<title>关联工程师表</title>
+</head>
+<body>
+<input id="url" type="hidden" value="vwo/queryByBase"/>
+<div class="panel-body" style="padding-bottom:0px;">
+    <form class="form-horizontal" id="cntForm" role="form" method="post">
+        <fieldset>
+            <div class="panel panel-default" style="margin-top: 10px;">
+                <input th:value="${vwoId}" type="hidden" id="vwoId" name="vwoId"/>
+                <input th:value="${selectId}" type="hidden" id="selectId" name="selectId"/>
+                <input th:value="${typeName}" type="hidden" id="selectOption"/>
+                <input type="hidden" id="selectedUserId" name="selectedUserId"/>
+                <div class="panel-body">
+                    <div class="col-lg-6">
+                        <label>请展开部门选择人员</label>
+                        <ul id="orgGroupTree" class="ztree" style="width:400px; overflow:auto;"></ul>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group col-lg-12">
+                            <label th:for="${typeName}">关联工程师名:</label>
+                            <input type="text" class="form-control" th:id="${typeName}" th:name="${typeName}"
+                                   placeholder="请选择工程师"
+                            />
+                        </div>
+                        <div class="form-group col-lg-12">
+                            <label>所属部门:</label>
+                            <input type="text" class="form-control" id="dept"
+                                   disabled="disabled"
+                            />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+</div>
+<script th:src="@{/js/helper/projectHelper.js}"></script>
+<script th:src="@{/js/helper/dateFormater.js}"></script>
+<script th:inline="javascript">
+    var setting = {
+        check: {
+            enable: false
+        },
+        view: {
+            dblClickExpand: false,
+            showLine: true,
+            selectedMulti: false
+        },
+        data: {
+            simpleData: {
+                enable: true,
+                idKey: "uid",
+                pIdKey: "pUid",
+                rootPId: "0"
+            }
+        },
+        callback: {
+            beforeClick: function (treeId, treeNode) {
+                var zTree = $.fn.zTree.getZTreeObj('orgGroupTree');
+                if (treeNode.isParent) {
+                    zTree.expandNode(treeNode);
+                    return false;
+                } else {
+                    return true;
+                }
+            },
+            onClick: function (event, treeId, treeNode) {
+                console.log(treeId);
+                console.log($("#selectOption").val());
+                let userId = treeNode.uid;
+                $.ajax({
+                    type: "GET",
+                    //ajax需要添加打包名
+                    url: "./vwo/getUserDetail?uid=" + userId,
+                    success: function (result) {
+                        if (result.status) {
+                            $("#dept").val(result.groupName);
+                            $("#selectedUserId").val(result.personId);
+                            $("#" + $("#selectOption").val()).val(result.personName);
+
+                        }
+                    },
+                    error: function (e) {
+                        console.error("连接服务器异常:" + e.status);
+                    }
+                });
+            }
+        }
+    };
+    $(
+        initZTree = function () {
+            $.post("./vwo/getUserAndGroup", function (info) {
+                var t = $("#orgGroupTree");
+                t = $.fn.zTree.init(t, setting, info.data);
+            })
+        }
+    );
+    $(function () {
+        $("#btnOk", window.top.document).click(function () {
+            let data = {};
+            var _d = $("#cntForm").serializeArray();
+            for (var p in _d) {
+                data[_d[p].name] = _d[p].value;
+            }
+            // console.log(data);
+            var jsonData = JSON.stringify(data);
+            $.ajax({
+                contentType:
+                    "application/json",
+                type:
+                    'POST',
+                data: jsonData,
+                url: "./vwo/saveOptionUser",
+                success: function (result) {
+                    $('.modal-dialog', window.top.document).parent('div').remove()
+                    $('body', window.top.document).find('.modal-backdrop').remove();
+                    if (result.status) {
+                        $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.reloadSheetOption(result.type,result.name);//.find('#' + result.type).text(result.name);
+                        layer.msg(result.msg, {icon: 1, time: 2000});
+                    }
+                    else {
+                        window.Ewin.alert({message: result.msg});
+                    }
+                },
+                error: function (e) {
+                    console.error("连接服务器异常:" + e.status);
+                }
+            });
+        })
+    })
+</script>
+</body>
+</html>

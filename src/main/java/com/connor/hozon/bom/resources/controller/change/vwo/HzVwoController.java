@@ -1,6 +1,7 @@
 package com.connor.hozon.bom.resources.controller.change.vwo;
 
 import com.connor.hozon.bom.bomSystem.dto.vwo.HzVwoFormListQueryBase;
+import com.connor.hozon.bom.bomSystem.dto.vwo.HzVwoOptionUserDto;
 import com.connor.hozon.bom.bomSystem.dto.vwo.HzVwoProcessDto;
 import com.connor.hozon.bom.bomSystem.iservice.cfg.vwo.IHzVWOManagerService;
 import com.connor.hozon.bom.common.base.constant.SystemStaticConst;
@@ -223,6 +224,44 @@ public class HzVwoController {
     @ResponseBody
     public JSONObject saveInfluenceUser(@RequestBody HzVwoInfluenceUser influenceUser) {
         return iHzVWOManagerService.saveInfluenceUser(influenceUser);
+    }
+
+    /**
+     * 为评估意见选择评估人员
+     * @param vwo
+     * @param selectType
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "doSelectBomMag", method = RequestMethod.GET)
+    public String doSelectBomMag(@RequestParam Long vwo, @RequestParam Integer selectType, Model model) {
+        if (vwo == null && selectType == null) {
+            model.addAttribute("发生错误，请选择正确的VWO表单");
+            return "errorWithEntity";
+        }
+        String type = "";
+        if(selectType==1){
+            type = "opiBom";
+        }else if(selectType==2){
+            type = "opiPmt";
+        }else if(selectType==3){
+            type = "opiProj";
+        }else {
+            model.addAttribute("选择类型错误");
+            return  "errorWithEntity";
+        }
+
+        model.addAttribute("vwoId", vwo);
+        model.addAttribute("selectId", selectType);
+        model.addAttribute("typeId", type + "Id");
+        model.addAttribute("typeName", type + "Name");
+        return "changeManage/vwo/vwoSelectOptionPerson";
+    }
+
+    @RequestMapping(value = "saveOptionUser", method = RequestMethod.POST)
+    @ResponseBody
+    public JSONObject saveOptionUser(@RequestBody HzVwoOptionUserDto hzVwoOptionUserDto) {
+        return iHzVWOManagerService.saveOptionUser(hzVwoOptionUserDto);
     }
 
     /**

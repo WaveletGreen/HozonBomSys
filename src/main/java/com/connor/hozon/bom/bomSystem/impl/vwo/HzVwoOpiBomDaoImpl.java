@@ -31,4 +31,9 @@ public class HzVwoOpiBomDaoImpl extends BasicDaoImpl<HzVwoOpiBom> implements HzV
         BOM.setOpiVwoId(id);
         return baseSQLUtil.executeQueryById(BOM, clzName + ".selectByVwoId");
     }
+
+    @Override
+    public int updateUserByVwoId(HzVwoOpiBom hzVwoOpiBom) {
+        return baseSQLUtil.executeUpdate(hzVwoOpiBom, clzName + ".updateUserByVwoId");
+    }
 }
