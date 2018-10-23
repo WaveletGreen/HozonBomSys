@@ -50,4 +50,12 @@ public class HzVwoOpiPmt {
      */
     private Integer opiPmtMngStage;
 
+    /**
+     *PTM经理ID
+     */
+    private Long opiPmtMngUserId;
+    /**
+     * PTM经理用户名
+     */
+    private String opiPmtMngUserName;
 }

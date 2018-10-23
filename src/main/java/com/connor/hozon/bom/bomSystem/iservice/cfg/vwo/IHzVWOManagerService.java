@@ -1,6 +1,7 @@
 package com.connor.hozon.bom.bomSystem.iservice.cfg.vwo;
 
 import com.connor.hozon.bom.bomSystem.dto.vwo.HzVwoFormListQueryBase;
+import com.connor.hozon.bom.bomSystem.dto.vwo.HzVwoOptionUserDto;
 import com.connor.hozon.bom.common.base.entity.QueryBase;
 import com.connor.hozon.bom.resources.controller.change.vwo.VWOUserGroupDTO;
 import com.connor.hozon.bom.sys.entity.User;
@@ -242,4 +243,6 @@ public interface IHzVWOManagerService {
     JSONObject saveProjLeaderOpinion(HzVwoOpiProj hzVwoOpiProj, Integer vwoType, String projectUid);
 
     JSONObject launch(Integer type, String projectUid, Long vwoId);
+
+    JSONObject saveOptionUser(HzVwoOptionUserDto hzVwoOptionUserDto);
 }

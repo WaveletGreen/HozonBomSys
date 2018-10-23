@@ -5,6 +5,7 @@ import com.connor.hozon.bom.bomSystem.dao.vwo.HzVwoOpiBomDao;
 import com.connor.hozon.bom.bomSystem.dao.vwo.HzVwoOpiPmtDao;
 import com.connor.hozon.bom.bomSystem.dao.vwo.HzVwoOpiProjDao;
 import com.connor.hozon.bom.bomSystem.dto.vwo.HzVwoFormListQueryBase;
+import com.connor.hozon.bom.bomSystem.dto.vwo.HzVwoOptionUserDto;
 import com.connor.hozon.bom.bomSystem.iservice.cfg.vwo.*;
 import com.connor.hozon.bom.bomSystem.dao.cfg0.HzCfg0OptionFamilyDao;
 import com.connor.hozon.bom.bomSystem.dao.modelColor.HzCfg0ModelColorDao;
@@ -141,6 +142,9 @@ public class HzVwoManagerService implements IHzVWOManagerService {
     HzVwoOpiPmtDao hzVwoOpiPmtDao;
     @Autowired
     HzVwoOpiProjDao hzVwoOpiProjDao;
+
+    @Autowired
+    HzVwoInfoService hzVwoInfoService;
     /**
      * 日志
      */
@@ -1049,13 +1053,79 @@ public class HzVwoManagerService implements IHzVWOManagerService {
     @Override
     public JSONObject launch(Integer type, String projectUid, Long vwoId) {
         JSONObject result = new JSONObject();
-        boolean status = modelColorProcessManager.launch(type, projectUid, vwoId);
+        boolean status = toLaunch(type, projectUid, vwoId);
         if(status){
             result.put("msg","VWO发起成功");
         }else {
             result.put("msg","VWO发起失败");
         }
         result.put("status",status);
+        return result;
+    }
+    
+    public boolean toLaunch(Integer type, String projectUid, Long vwoId) {
+        User user = UserInfo.getUser();
+        HzVwoInfo info = hzVwoInfoService.doSelectByPrimaryKey(vwoId);
+        info.setVwoFinisher(user.getLogin());
+        info.setVwoStatus(101);
+        boolean vwoFlag = hzVwoInfoService.updateByVwoId(info);
+        return vwoFlag;
+    }
+    @Override
+    public JSONObject saveOptionUser(HzVwoOptionUserDto hzVwoOptionUserDto) {
+        String name = "";
+        JSONObject result = new JSONObject();
+        result.put("status",true);
+        result.put("msg","指派成功");
+        result.put("type",hzVwoOptionUserDto.getSelectId());
+
+        if (hzVwoOptionUserDto == null) {
+            result.put("status", false);
+        } else {
+
+            switch (hzVwoOptionUserDto.getSelectId()){
+                case 1:
+                    HzVwoOpiBom hzVwoOpiBom = new HzVwoOpiBom();
+                    hzVwoOpiBom.setOpiBomMngUserId(hzVwoOptionUserDto.getSelectedUserId());
+                    hzVwoOpiBom.setOpiVwoId(hzVwoOptionUserDto.getVwoId());
+                    hzVwoOpiBom.setOpiBomMngUserName(hzVwoOptionUserDto.getOpiBomName());
+                    if(hzVwoOpiBomDao.updateUserByVwoId(hzVwoOpiBom)<=0){
+                        result.put("status", false);
+                        result.put("msg", "指派成员失败");
+                        return result;
+                    }
+                    result.put("name",hzVwoOpiBom.getOpiBomMngUserName());
+                    break;
+                case 2:
+                    HzVwoOpiPmt hzVwoOpiPmt= new HzVwoOpiPmt();
+                    hzVwoOpiPmt.setOpiPmtMngUserId(hzVwoOptionUserDto.getSelectedUserId());
+                    hzVwoOpiPmt.setOpiVwoId(hzVwoOptionUserDto.getVwoId());
+                    hzVwoOpiPmt.setOpiPmtMngUserName(hzVwoOptionUserDto.getOpiPmtName());
+                    if(hzVwoOpiPmtDao.updateUserByVwoId(hzVwoOpiPmt)<=0){
+                        result.put("status", false);
+                        result.put("msg", "指派成员失败");
+                        return result;
+                    }
+                    result.put("name",hzVwoOpiPmt.getOpiPmtMngUserName());
+                    break;
+                case 3:
+                    HzVwoOpiProj hzVwoOpiProj= new HzVwoOpiProj();
+                    hzVwoOpiProj.setOpiProjMngUserId(hzVwoOptionUserDto.getSelectedUserId());
+                    hzVwoOpiProj.setOpiVwoId(hzVwoOptionUserDto.getVwoId());
+                    hzVwoOpiProj.setOpiProjMngUserName(hzVwoOptionUserDto.getOpiProjName());
+                    if(hzVwoOpiProjDao.updateUserByVwoId(hzVwoOpiProj)<=0){
+                        result.put("status", false);
+                        result.put("msg", "指派成员失败");
+                        return result;
+                    }
+                    result.put("name",hzVwoOpiProj.getOpiProjMngUserName());
+                    break;
+                default:
+                    result.put("status", false);
+                    result.put("msg", "选项错误");
+                    return result;
+            }
+        }
         return result;
     }
 

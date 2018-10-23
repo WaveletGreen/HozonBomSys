@@ -51,11 +51,11 @@ public class HzVwoOpiBom {
      */
     private Integer opiBomMngStage;
     /**
-     * BOM经理ID
+     *BOM经理ID
      */
-    private Long opiBomUserId;
+    private Long opiBomMngUserId;
     /**
      * BOM经理用户名
      */
-    private String opiBomUserName;
+    private String opiBomMngUserName;
 }

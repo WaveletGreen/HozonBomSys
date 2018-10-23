@@ -31,4 +31,9 @@ public class HzVwoOpiPmtDaoImpl extends BasicDaoImpl<HzVwoOpiPmt> implements HzV
         PMT.setOpiVwoId(id);
         return baseSQLUtil.executeQueryById(PMT, clzName + ".selectByVwoId");
     }
+
+    @Override
+    public int updateUserByVwoId(HzVwoOpiPmt hzVwoOpiPmt) {
+        return baseSQLUtil.executeUpdate(hzVwoOpiPmt, clzName + ".updateUserByVwoId");
+    }
 }

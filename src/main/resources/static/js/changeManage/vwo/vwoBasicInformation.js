@@ -725,19 +725,17 @@ function approve(url, formId) {
 }
 
 function clearToolbars() {
-    connectedTableToolbars = [];
-    vwoExeToolBar = [];
+    connectedTableToolbars=[];
+    vwoExeToolBar=[];
 }
-
 function disabledById(id) {
-    $("#" + id + " input").attr('disabled', true);
-    $("#" + id + " select").attr('disabled', true);
-    $("#" + id + " textarea").attr('disabled', true);
+    $("#"+id+" input").attr('disabled', true);
+    $("#"+id+" select").attr('disabled', true);
+    $("#"+id+" textarea").attr('disabled', true);
 }
-
 function notDisabledById(id) {
-    $("#" + id + " select").attr('disabled', false);
-    $("#" + id + " textarea").attr('disabled', false);
+    $("#"+id+" select").attr('disabled', false);
+    $("#"+id+" textarea").attr('disabled', false);
 }
 
 /**
@@ -753,3 +751,14 @@ function saveTask() {
 
 var $iframe_src;
 var $target_div;
+
+
+function doSelectBomMag(id) {
+    window.Ewin.dialog({
+        title: "添加",
+        url: "doSelectBomMag?vwo=" + vwoId + "&selectType=" + id,
+        gridId: "gridId",
+        width: 600,
+        height: 500
+    })
+}

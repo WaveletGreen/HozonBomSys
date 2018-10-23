@@ -96,12 +96,5 @@ public class ModelColorProcessManager implements IInterruptionCallBack, IRelease
         return  modelColorFlag&&vwoFlag;
     }
 
-    public boolean launch(Integer type, String projectUid, Long vwoId) {
-        User user = UserInfo.getUser();
-        HzVwoInfo info = hzVwoInfoService.doSelectByPrimaryKey(vwoId);
-        info.setVwoFinisher(user.getLogin());
-        info.setVwoStatus(101);
-        boolean vwoFlag = hzVwoInfoService.updateByVwoId(info);
-        return vwoFlag;
-    }
+
 }
