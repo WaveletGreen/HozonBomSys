@@ -346,7 +346,7 @@ public class HzSingleVehiclesController extends BaseController {
                 LOG.info(fileName+",文件创建成功");
                 result.put("status",flag);
                 result.put("msg","成功");
-                result.put("path","./files/"+fileName);
+                result.put("path","/files/"+fileName);
             }else{
                 LOG.info(fileName+",文件创建失败");
                 result.put("status",flag);

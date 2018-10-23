@@ -1,10 +1,8 @@
 package com.connor.hozon.bom.resources.controller.file;
 
 import com.connor.hozon.bom.resources.controller.BaseController;
-import com.connor.hozon.bom.resources.domain.dto.response.OperateResultMessageRespDTO;
-import com.connor.hozon.bom.resources.service.file.*;
-import com.connor.hozon.bom.resources.util.ResultMessageBuilder;
 import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
+import com.connor.hozon.bom.resources.service.file.*;
 import com.connor.hozon.bom.resources.service.file.FileUploadService;
 import com.connor.hozon.bom.resources.util.Result;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,8 +50,8 @@ public class FileUploadController extends BaseController{
                                  @RequestParam("projectId") String projectId,HttpServletResponse response){
         //写服务
         System.out.println("uploadPbom--------");
-        OperateResultMessageRespDTO respDTO = fileUploadUpdataService.UploadPbomToDB(file,projectId);
-        writeAjaxJSONResponse(ResultMessageBuilder.build(OperateResultMessageRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
+        WriteResultRespDTO respDTO = fileUploadUpdataService.UploadPbomToDB(file,projectId);
+        toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
     }
 
     @RequestMapping(value = "/uploadMbom", method = RequestMethod.POST)
@@ -61,8 +59,8 @@ public class FileUploadController extends BaseController{
                                  @RequestParam("projectId") String projectId,HttpServletResponse response){
         //写服务
         System.out.println("uploadMbom--------");
-        OperateResultMessageRespDTO respDTO = fileUploadUpdataMbomService.UploadMbomToDB(file,projectId);
-        writeAjaxJSONResponse(ResultMessageBuilder.build(OperateResultMessageRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
+        WriteResultRespDTO respDTO = fileUploadUpdataMbomService.UploadMbomToDB(file,projectId);
+        toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
     }
 
     @RequestMapping(value = "/uploadMbom2", method = RequestMethod.POST)
@@ -70,8 +68,8 @@ public class FileUploadController extends BaseController{
                                  @RequestParam("projectId") String projectId,HttpServletResponse response){
         //写服务
         System.out.println("uploadMbom2生产--------");
-        OperateResultMessageRespDTO respDTO = fileUploadUpdataMbom2Service.UploadMbomToDB(file,projectId);
-        writeAjaxJSONResponse(ResultMessageBuilder.build(OperateResultMessageRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
+        WriteResultRespDTO respDTO = fileUploadUpdataMbom2Service.UploadMbomToDB(file,projectId);
+        toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
     }
 
     @RequestMapping(value = "/uploadMbom3", method = RequestMethod.POST)
@@ -79,8 +77,8 @@ public class FileUploadController extends BaseController{
                                  @RequestParam("projectId") String projectId,HttpServletResponse response){
         //写服务
         System.out.println("uploadMbom3财务--------");
-        OperateResultMessageRespDTO respDTO = fileUploadUpdataMbom3Service.UploadMbomToDB(file,projectId);
-        writeAjaxJSONResponse(ResultMessageBuilder.build(OperateResultMessageRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
+        WriteResultRespDTO respDTO = fileUploadUpdataMbom3Service.UploadMbomToDB(file,projectId);
+        toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
     }
 
 }

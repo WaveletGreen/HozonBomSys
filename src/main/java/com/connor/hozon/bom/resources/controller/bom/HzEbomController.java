@@ -20,10 +20,7 @@ import com.connor.hozon.bom.resources.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import springfox.documentation.RequestHandler;
 import sql.pojo.bom.HzBomLineRecord;
 import sql.pojo.cfg.model.HzCfg0ModelRecord;
@@ -52,9 +49,12 @@ public class HzEbomController extends BaseController {
 
     @Autowired
     private HzCfg0ModelService hzCfg0ModelService;
+
+    LinkedHashMap<String, String> tableTitle = new LinkedHashMap<>();
+
     @RequestMapping(value = "title",method = RequestMethod.GET)
     public void getEbomTitle(String projectId,HttpServletResponse response) {
-        LinkedHashMap<String, String> tableTitle = new LinkedHashMap<>();
+        //LinkedHashMap<String, String> tableTitle = new LinkedHashMap<>();
         tableTitle.put("No","序号");
         tableTitle.put("lineId","零件号" );
         tableTitle.put("pBomLinePartName","名称" );
@@ -219,10 +219,6 @@ public class HzEbomController extends BaseController {
 
         toJSONResponse(Result.build(
                 WriteResultRespDTO.isSuccess(respDTO), respDTO.getErrMsg()), response);
-        OperateResultMessageRespDTO respDTO= hzEbomService.testbomLevelChange(reqDTO);
-
-        writeAjaxJSONResponse(ResultMessageBuilder.build(
-                OperateResultMessageRespDTO.isSuccess(respDTO), respDTO.getErrMsg()), response);
     }
 
     /**
@@ -230,25 +226,20 @@ public class HzEbomController extends BaseController {
      */
     @RequestMapping(value = "excelExport",method = RequestMethod.POST)
     @ResponseBody
-    public JSONObject listDownLoad(HttpServletRequest request,
-                             HttpServletResponse response
-                            , @RequestBody  List<HzEbomRespDTO> dtos
+    public JSONObject listDownLoad(
+            @RequestBody  List<HzEbomRespDTO> dtos
     ) {
         boolean flag=true;
         JSONObject result=new JSONObject();
         try {
             //static/files/tableExport.xlsx
             String fileName = "tableExport.xlsx";//文件名-tableExport
-            String[] title = {
-            "序号","零件号" ,"名称","层级" ,"专业" ,"级别" ,"分组号","查找编号" ,"英文名称","LOU/LOA",
-                    "单位","图号","图幅" ,"料厚" ,"材料1","材料2","材料3" ,"密度","材料标准","表面处理" ,
-                    "纹理编号/色彩编号","制造工艺","对称" ,"重要度","是否法规件","是否3C件" ,"法规件型号",
-                    "黑白灰匣子件" ,"开发类别","数据版本" ,"目标重量(kg)","预估重量(kg)","实际重量(kg)" ,
-                    "紧固件","紧固件规格","紧固件性能等级","扭矩" ,"责任工程师","供应商","供应商代码" ,
-                    "采购工程师","备注","零件分类" ,"零件来源","内外饰标识","UPC","FNA","FNA描述" ,"数量"
-                    ,"是否颜色件"
-                    //,"状态"
-            };//表头
+            Object[] temp = tableTitle.values().toArray();
+
+            String[] title = new String[temp.length];
+            for(int i=0;i<temp.length;i++){
+                title[i] = temp[i].toString();
+            }
             //当前页的数据
             List<String[]> dataList = new ArrayList<String[]>();
             int index=1;
@@ -305,6 +296,11 @@ public class HzEbomController extends BaseController {
                 cellArr[47] = ebomRespDTO.getpFnaDesc();
                 cellArr[48] = ebomRespDTO.getNumber();
                 cellArr[49] = ebomRespDTO.getColorPart();
+                if(ebomRespDTO.getMap().size()>0){
+                    for(int i=0;i<ebomRespDTO.getMap().size();i++){
+                        cellArr[50+i] = ebomRespDTO.getMap().values().toArray()[i].toString();
+                    }
+                }
                 //1 已生效; 0 删除;  2草稿状态;  3废除状态; 4删除状态
 //                if(ebomRespDTO.getStatus()==0)
 //                    cellArr[50] = "删除";

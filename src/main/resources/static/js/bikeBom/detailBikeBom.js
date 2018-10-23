@@ -203,6 +203,56 @@ function initTable(url) {
                             }
                         }
                     },
+                    {
+                        text: '导出Excel',
+                        iconCls: 'glyphicon glyphicon-export',
+                        handler: function () {
+                            //var headers = data;//表头
+                            var rows = $table.bootstrapTable('getSelections');//选中行数据
+                            if (rows.length == 0) {
+                                window.Ewin.alert({message: '请选择一条需要导出的数据!'});
+                                return false;
+                            }else{
+                                for (var index in rows) {
+                                    if (rows[index].status == 5 || rows[index].status == 6) {
+                                        window.Ewin.alert({message: '勾选的数据有审核中状态，审核中的数据不给导出修改!'});
+                                        return false;
+                                    }
+                                }
+                            }
+                            window.Ewin.confirm({title: '提示', message: '是否要导出选中行？', width: 500}).on(function (e) {
+                                if (e) {
+                                    console.log(rows);
+                                    $.ajax({
+                                        type: "POST",
+                                        //ajax需要添加打包名
+                                        url: "excelExport2",//??????
+                                        data: JSON.stringify(rows),
+                                        contentType: "application/json",
+                                        success: function (result2) {
+                                            console.log(result2);
+                                            if (result2.status) {
+                                                layer.msg(result2.msg, {icon: 1, time: 2000})
+                                                var URL = document.URL.split("/");
+                                                var address = URL[0] + "//" + URL[2] + "/" + URL[3]+result2.path;
+                                                //下载EBOM导入模板
+                                                window.location.href = address;
+                                                // window.location.href = result2.path;
+                                                // "http://10.1.90.5:8080/hozon/files/tableExport.xlsx";
+                                            }
+                                            else {
+                                                window.Ewin.alert({message: "操作导出失败:" + result2.msg});
+                                            }
+                                            $table.bootstrapTable("refresh");
+                                        },
+                                        error: function (info) {
+                                            window.Ewin.alert({message: "操作导出:" + info.status});
+                                        }
+                                    })
+                                }
+                            });
+                        }
+                    }
                 ],
             });
             $table.bootstrapTable('hideColumn', 'id');

@@ -3,7 +3,7 @@ package com.connor.hozon.bom.resources.service.file.impl;
 import com.connor.hozon.bom.bomSystem.dao.bom.HzBomMainRecordDao;
 import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.resources.domain.dto.response.HzMbomRecordRespDTO;
-import com.connor.hozon.bom.resources.domain.dto.response.OperateResultMessageRespDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
 import com.connor.hozon.bom.resources.mybatis.bom.HzMbomRecordDAO;
 import com.connor.hozon.bom.resources.mybatis.bom.HzPbomRecordDAO;
 import com.connor.hozon.bom.resources.mybatis.factory.HzFactoryDAO;
@@ -42,22 +42,22 @@ public class FileUploadUpdataMbomServiceImpl implements FileUploadUpdataMbomServ
     private int errorCount = 0;
 
     @Override
-    public OperateResultMessageRespDTO UploadMbomToDB(MultipartFile file, String projectId) {
+    public WriteResultRespDTO UploadMbomToDB(MultipartFile file, String projectId) {
         User user = UserInfo.getUser();
         //判断权限
         boolean b = PrivilegeUtil.writePrivilege();
         if(!b){
-            return OperateResultMessageRespDTO.getFailPrivilege();
+            return WriteResultRespDTO.getFailPrivilege();
         }
         //判断文件格式(以.XLS或.XLSX结尾)
         boolean preCheck = ExcelUtil.preReadCheck(file.getOriginalFilename());
         if(!preCheck){
-            return OperateResultMessageRespDTO.fileIsNotExcel();
+            return WriteResultRespDTO.fileIsNotExcel();
         }
         //判断文件大小(0-10M)
         boolean suitSize = ExcelUtil.checkFileSize(file.getSize());
         if(!suitSize){
-            return OperateResultMessageRespDTO.fileSizeOverFlow();
+            return WriteResultRespDTO.fileSizeOverFlow();
         }
         ExcelUtil.preReadCheck(file.getOriginalFilename());
         //上传文件到服务器
@@ -69,9 +69,9 @@ public class FileUploadUpdataMbomServiceImpl implements FileUploadUpdataMbomServ
             this.errorCount = 0;
             String errorMsg = errorLogInfo(workbook);
             if(this.errorCount!=0){
-                OperateResultMessageRespDTO respDTO = new OperateResultMessageRespDTO();
+                WriteResultRespDTO respDTO = new WriteResultRespDTO();
                 respDTO.setErrMsg(errorMsg);
-                respDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
+                respDTO.setErrCode(WriteResultRespDTO.FAILED_CODE);
                 return  respDTO;
             }
             List<HzMbomLineRecord> hzMbomLineRecords = new ArrayList<>();
@@ -111,7 +111,7 @@ public class FileUploadUpdataMbomServiceImpl implements FileUploadUpdataMbomServ
                                     hzFactory.setpCreateName(user.getUserName());
                                     int j = hzFactoryDAO.insert(hzFactory);
                                     if (j < 0) {
-                                        return OperateResultMessageRespDTO.getFailResult();
+                                        return WriteResultRespDTO.getFailResult();
                                     }
                                     record.setpFactoryId(puid);
                                 } else {
@@ -145,9 +145,9 @@ public class FileUploadUpdataMbomServiceImpl implements FileUploadUpdataMbomServ
             }
         } catch (Exception e) {
             e.printStackTrace();
-            return OperateResultMessageRespDTO.getFailResult();
+            return WriteResultRespDTO.getFailResult();
         }
-        return OperateResultMessageRespDTO.getSuccessResult();
+        return WriteResultRespDTO.getSuccessResult();
     }
 
     public String errorLogInfo(Workbook workbook){
