@@ -490,6 +490,7 @@ function initTable(eBomUrl) {
                         handler: function () {
                             //var headers = data;//表头
                             var rows = $table.bootstrapTable('getSelections');//选中行数据
+                            let length=-1;
                             // var str = rows[0].title;
                             if (rows.length == 0) {
                                 window.Ewin.alert({message: '请选择一条需要导出的数据!'});
@@ -501,10 +502,10 @@ function initTable(eBomUrl) {
                                         return false;
                                     }
                                 }
+                                length==getLengthOfJson(rows[0]);
                             }
                             for(let k in rows){
                                let param={};
-                               let length=getLengthOfJson(rows[k]);
                                 for(let i =0;i<length-eBomTitleSet;i++){
                                     param[('title'+i)]=rows[k][('title'+i)];
                                 }
