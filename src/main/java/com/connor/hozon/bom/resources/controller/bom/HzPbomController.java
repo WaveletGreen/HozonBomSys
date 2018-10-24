@@ -319,7 +319,7 @@ public class HzPbomController extends BaseController {
     @RequestMapping(value = "excelExport",method = RequestMethod.POST)
     @ResponseBody
     public JSONObject listDownLoad(
-             @RequestBody  List<HzPbomLineRespDTO> dtos
+             @RequestBody  List<HzPbomLineRespDTO> dtos,HttpServletRequest request
     ) {
         boolean flag=true;
         JSONObject result=new JSONObject();
@@ -359,7 +359,7 @@ public class HzPbomController extends BaseController {
                 cellArr[20] = ebomRespDTO.getStation();
                 dataList.add(cellArr);
             }
-            flag = ExcelUtil.writeExcel(fileName, title, dataList,"pbom");
+            flag = ExcelUtil.writeExcel(fileName, title, dataList,"pbom",request);
 
             if(flag){
                 LOG.info(fileName+",文件创建成功");
