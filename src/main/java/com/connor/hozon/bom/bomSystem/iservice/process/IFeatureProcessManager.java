@@ -8,7 +8,7 @@ package com.connor.hozon.bom.bomSystem.iservice.process;
 
 /**
  * @Author: Fancyears·Maylos·Maywas
- * @Description:
+ * @Description: 特性流程管理
  * @Date: Created in 2018/10/16 13:29
  * @Modified By:
  */
