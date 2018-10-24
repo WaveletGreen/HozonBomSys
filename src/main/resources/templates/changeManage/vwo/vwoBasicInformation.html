@@ -529,7 +529,8 @@
             <!--<fieldset>-->
             <form class="form-horizontal" id="projLeaderOpinion" role="form">
                 <div class="panel panel-default panel-body col-lg-12 col-md-12 col-sm-12">
-                    <h4>项目经理：<a th:text="${hzVwoOpiProj.getOpiProjMngUserName()==null?'请选择项目经理':hzVwoOpiProj.getOpiProjMngUserName()}" onclick="doSelectBomMag(3)"></a></h4>
+                    <!--<h4>项目经理：<a th:text="${hzVwoOpiProj.getOpiProjMngUserName()==null?'请选择项目经理':hzVwoOpiProj.getOpiProjMngUserName()}" onclick="doSelectBomMag(3)"></a></h4>-->
+                    <h4>项目经理：<span th:text="${hzVwoOpiProj.getOpiProjMngUserName()}"></span></h4>
                     <div class="col-lg-12 col-md-12 col-sm-12">
                         <label for="opiProjMngOpinion">意见</label>
                         <textarea class="form-control"
