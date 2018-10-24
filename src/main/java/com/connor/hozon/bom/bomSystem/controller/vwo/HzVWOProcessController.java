@@ -41,7 +41,7 @@ public class HzVWOProcessController {
     @RequestMapping("/featureGetIntoVWO")
     @ResponseBody
     public JSONObject featureGetIntoVWO(@RequestParam String projectUid, @RequestBody List<HzCfg0Record> beans) {
-        return iHzVWOManagerService.featureGetIntoVWO(projectUid, beans);
+        return iHzVWOManagerService.featureGetIntoVWO2(projectUid, beans);
     }
 
 

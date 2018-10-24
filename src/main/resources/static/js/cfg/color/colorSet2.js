@@ -205,6 +205,13 @@ function loadData() {
                 }
             },
             {
+                field: 'csPaintMaterielCodes',
+                title: '油漆物料号集合',
+                align: 'center',
+                valign: 'middle',
+                sortable: false
+            },
+            {
                 field: 'pColorComment',
                 title: '备注',
                 align: 'center',

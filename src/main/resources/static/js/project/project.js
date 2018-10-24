@@ -130,7 +130,7 @@ function addHoverDom(treeId, treeNode) {
                     window.Ewin.dialog({
                         title: "添加",
                         url: "project/addPage?id=" + treeNode.puid + "&page=project",
-                        width: 400,
+                        width: 500,
                         height: 650
                     })
                 }
@@ -228,7 +228,7 @@ function addHoverDom(treeId, treeNode) {
                     window.Ewin.dialog({
                         title: "修改项目信息",
                         url: "project/modifyPage?id=" + treeNode.puid + "&page=project",
-                        width: 400,
+                        width: 500,
                         height: 650
                     });
                 }

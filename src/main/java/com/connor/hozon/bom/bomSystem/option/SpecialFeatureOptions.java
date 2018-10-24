@@ -14,7 +14,7 @@ import lombok.Getter;
  * @Date: Created in 2018/9/19 16:21
  * @Modified By:
  */
-public enum SpecialFeatureOption {
+public enum SpecialFeatureOptions {
     /**
      * 车身特性代码
      */
@@ -45,7 +45,7 @@ public enum SpecialFeatureOption {
     private String desc;
 
     // 构造方法
-    SpecialFeatureOption(String desc) {
+    SpecialFeatureOptions(String desc) {
         this.desc = desc;
     }
 }
