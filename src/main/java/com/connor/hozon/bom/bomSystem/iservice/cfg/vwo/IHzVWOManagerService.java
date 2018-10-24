@@ -242,7 +242,7 @@ public interface IHzVWOManagerService {
 
     JSONObject saveProjLeaderOpinion(HzVwoOpiProj hzVwoOpiProj, Integer vwoType, String projectUid);
 
-    JSONObject launch(Integer type, String projectUid, Long vwoId);
+    JSONObject launch(Integer type, String projectUid, Long vwoId,Long formId);
 
     JSONObject saveOptionUser(HzVwoOptionUserDto hzVwoOptionUserDto);
 }

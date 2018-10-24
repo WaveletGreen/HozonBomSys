@@ -51,5 +51,39 @@ public interface IHzTaskService {
      */
     List<HzTasks> doSelectUserFinishTasks(Long userId);
 
-    List<HzTasks> doSelectByVwoId(Long id);
+    /**
+     * 根据表单的ID、用户ID、具体的表单类型和变更主键，查找一组当前用户的任务
+     *
+     * @param taskFormType   表单类型,@see{com.connor.hozon.bom.bomSystem.option.TaskOptions}
+     * @param taskTargetId   目标表单ID，数据库主键，VWO/EWO/MWO主键
+     * @param taskUserId     用户ID
+     * @param taskTargetType 表单类型，@see {com.connor.hozon.bom.bomSystem.option.TaskOptions}
+     * @param status         任务状态
+     * @return
+     */
+    List<HzTasks> doSelectUserTargetTaskByType(Integer taskFormType, Integer taskTargetType, Long taskTargetId, Long taskUserId, Integer status);
+
+    /**
+     * 根据VWO主键和用户主键，获取到当前VWO变更表单该用户的任务
+     *
+     * @param vwoId      VWO ID
+     * @param userId     用户ID
+     * @param targetType 变更类型，针对VWO来说：1:特性变更；2：配色方案；3：配置物料特性表；4：全配置BOM一级清单；5：相关性
+     * @return
+     */
+    List<HzTasks> doSelectUserVWOTaskByIds(Long vwoId, Long userId, Integer targetType);
+
+    /**
+     * 批量插入任务
+     *
+     * @param list
+     * @return
+     */
+    boolean doInsertByBatch(List<HzTasks> list);
+
+    boolean doInsert(HzTasks task);
+
+
+
+    boolean doUpdateByPrimaryKeySelective(HzTasks task);
 }

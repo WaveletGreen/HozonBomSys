@@ -23,11 +23,11 @@
         <!--目标表单类型，如：1：特性变更表单，2:配色方案变更，3：配置物料特性数据变更，4：全配置BOM一级清单变更，5：相关性变更等-->
         <result column="TASK_TARGET_TYPE" jdbcType="DECIMAL" property="taskTargetType"/>
         <!--保留字段-->
-        <result column="TASK_RESERVE" jdbcType="VARCHAR" property="taskReserve"/>
-        <result column="TASK_RESERVE2" jdbcType="VARCHAR" property="taskReserve2"/>
-        <result column="TASK_RESERVE3" jdbcType="VARCHAR" property="taskReserve3"/>
-        <result column="TASK_RESERVE4" jdbcType="VARCHAR" property="taskReserve4"/>
-        <result column="TASK_RESERVE5" jdbcType="VARCHAR" property="taskReserve5"/>
+        <result column="TASK_CREATE_DATE" jdbcType="VARCHAR" property="taskCreateDate"/>
+        <result column="TASK_UPDATE_DATE" jdbcType="VARCHAR" property="taskUpdateDate"/>
+        <result column="TASK_EXECUTE_USER_NAME" jdbcType="VARCHAR" property="taskExecuteUserName"/>
+        <result column="TASK_LAUNCHER" jdbcType="VARCHAR" property="taskLauncher"/>
+        <result column="TASK_LAUNCHER_ID" jdbcType="VARCHAR" property="taskLauncherId"/>
         <result column="TASK_RESERVE6" jdbcType="VARCHAR" property="taskReserve6"/>
         <result column="TASK_RESERVE7" jdbcType="VARCHAR" property="taskReserve7"/>
         <result column="TASK_RESERVE8" jdbcType="VARCHAR" property="taskReserve8"/>
@@ -41,7 +41,7 @@
     </resultMap>
     <sql id="Base_Column_List">
     ID, TASK_USER_ID, TASK_STATUS, TASK_FORM_ID, TASK_FORM_TYPE, TASK_TARGET_ID, TASK_TARGET_TYPE, 
-    TASK_RESERVE, TASK_RESERVE2, TASK_RESERVE3, TASK_RESERVE4, TASK_RESERVE5, TASK_RESERVE6, 
+    TASK_CREATE_DATE, TASK_UPDATE_DATE, TASK_EXECUTE_USER_NAME, TASK_LAUNCHER, TASK_LAUNCHER_ID, TASK_RESERVE6,
     TASK_RESERVE7, TASK_RESERVE8, TASK_RESERVE9, TASK_RESERVE10, TASK_RESERVE11, TASK_RESERVE12, 
     TASK_RESERVE13, TASK_RESERVE14, TASK_RESERVE15
   </sql>
@@ -58,6 +58,28 @@
         from HZ_TASKS
         where TASK_STATUS = #{taskStatus,jdbcType=DECIMAL} and TASK_USER_ID=#{taskUserId,jdbcType=DECIMAL}
     </select>
+    <select id="selectUserTargetTaskByType" parameterType="sql.pojo.task.HzTasks" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from HZ_TASKS
+        <where>
+            <if test="taskUserId!=null">
+                TASK_USER_ID = #{taskUserId,jdbcType=DECIMAL}
+            </if>
+            <if test="taskFormType!=null">
+                and TASK_FORM_TYPE=#{taskFormType,jdbcType=DECIMAL}
+            </if>
+            <if test="taskTargetId!=null">
+                and TASK_TARGET_ID=#{taskTargetId,jdbcType=DECIMAL}
+            </if>
+            <if test="taskTargetType!=null">
+                and TASK_TARGET_TYPE=#{taskTargetType,jdbcType=DECIMAL}
+            </if>
+            <if test="taskStatus!=null">
+                and TASK_STATUS = #{taskStatus,jdbcType=DECIMAL}
+            </if>
+        </where>
+    </select>
     <!--**************************************delete**************************************-->
     <delete id="deleteByPrimaryKey" parameterType="sql.pojo.task.HzTasks">
     delete from HZ_TASKS
@@ -65,24 +87,86 @@
   </delete>
     <!--**************************************insert**************************************-->
     <insert id="insert" parameterType="sql.pojo.task.HzTasks">
-    insert into HZ_TASKS (ID, TASK_USER_ID, TASK_STATUS,
-      TASK_FORM_ID, TASK_FORM_TYPE, TASK_TARGET_ID, 
-      TASK_TARGET_TYPE, TASK_RESERVE, TASK_RESERVE2, 
-      TASK_RESERVE3, TASK_RESERVE4, TASK_RESERVE5, 
-      TASK_RESERVE6, TASK_RESERVE7, TASK_RESERVE8, 
-      TASK_RESERVE9, TASK_RESERVE10, TASK_RESERVE11, 
-      TASK_RESERVE12, TASK_RESERVE13, TASK_RESERVE14, 
-      TASK_RESERVE15)
-    values (#{id,jdbcType=DECIMAL}, #{taskUserId,jdbcType=DECIMAL}, #{taskStatus,jdbcType=DECIMAL}, 
-      #{taskFormId,jdbcType=DECIMAL}, #{taskFormType,jdbcType=DECIMAL}, #{taskTargetId,jdbcType=DECIMAL}, 
-      #{taskTargetType,jdbcType=DECIMAL}, #{taskReserve,jdbcType=VARCHAR}, #{taskReserve2,jdbcType=VARCHAR}, 
-      #{taskReserve3,jdbcType=VARCHAR}, #{taskReserve4,jdbcType=VARCHAR}, #{taskReserve5,jdbcType=VARCHAR}, 
-      #{taskReserve6,jdbcType=VARCHAR}, #{taskReserve7,jdbcType=VARCHAR}, #{taskReserve8,jdbcType=VARCHAR}, 
-      #{taskReserve9,jdbcType=VARCHAR}, #{taskReserve10,jdbcType=VARCHAR}, #{taskReserve11,jdbcType=VARCHAR}, 
-      #{taskReserve12,jdbcType=VARCHAR}, #{taskReserve13,jdbcType=VARCHAR}, #{taskReserve14,jdbcType=VARCHAR}, 
-      #{taskReserve15,jdbcType=VARCHAR})
-  </insert>
+        <selectKey order="BEFORE"
+                   keyColumn="id" keyProperty="id" resultType="java.lang.Long">
+            select SEQ_TASK_ID.Nextval from dual
+        </selectKey>
+        insert into HZ_TASKS (ID, TASK_USER_ID, TASK_STATUS,
+        TASK_FORM_ID, TASK_FORM_TYPE, TASK_TARGET_ID,
+        TASK_TARGET_TYPE, TASK_CREATE_DATE, TASK_UPDATE_DATE,
+        TASK_EXECUTE_USER_NAME, TASK_LAUNCHER, TASK_LAUNCHER_ID,
+        TASK_RESERVE6, TASK_RESERVE7, TASK_RESERVE8,
+        TASK_RESERVE9, TASK_RESERVE10, TASK_RESERVE11,
+        TASK_RESERVE12, TASK_RESERVE13, TASK_RESERVE14,
+        TASK_RESERVE15)
+        values (#{id,jdbcType=DECIMAL}, #{taskUserId,jdbcType=DECIMAL}, #{taskStatus,jdbcType=DECIMAL},
+        #{taskFormId,jdbcType=DECIMAL}, #{taskFormType,jdbcType=DECIMAL}, #{taskTargetId,jdbcType=DECIMAL},
+        #{taskTargetType,jdbcType=DECIMAL}, #{taskCreateDate,jdbcType=TIMESTAMP}, #{taskUpdateDate,jdbcType=TIMESTAMP},
+        #{taskExecuteUserName,jdbcType=VARCHAR}, #{taskLauncher,jdbcType=VARCHAR}, #{taskLauncherId,jdbcType=DECIMAL},
+        #{taskReserve6,jdbcType=VARCHAR}, #{taskReserve7,jdbcType=VARCHAR}, #{taskReserve8,jdbcType=VARCHAR},
+        #{taskReserve9,jdbcType=VARCHAR}, #{taskReserve10,jdbcType=VARCHAR}, #{taskReserve11,jdbcType=VARCHAR},
+        #{taskReserve12,jdbcType=VARCHAR}, #{taskReserve13,jdbcType=VARCHAR}, #{taskReserve14,jdbcType=VARCHAR},
+        #{taskReserve15,jdbcType=VARCHAR})
+    </insert>
+    <insert id="insertByBatch" parameterType="List">
+        insert into HZ_TASKS (
+        ID,
+        TASK_USER_ID,
+        TASK_STATUS,
+        TASK_FORM_ID,
+        TASK_FORM_TYPE,
+        TASK_TARGET_ID,
+        TASK_TARGET_TYPE,
+        TASK_CREATE_DATE,
+        TASK_UPDATE_DATE,
+        TASK_EXECUTE_USER_NAME,
+        TASK_LAUNCHER,
+        TASK_LAUNCHER_ID,
+        TASK_RESERVE6,
+        TASK_RESERVE7,
+        TASK_RESERVE8,
+        TASK_RESERVE9,
+        TASK_RESERVE10,
+        TASK_RESERVE11,
+        TASK_RESERVE12,
+        TASK_RESERVE13,
+        TASK_RESERVE14,
+        TASK_RESERVE15
+        )
+        select SEQ_TASK_ID.Nextval, temp.* from (
+        <foreach collection="list" index="index" item="item" separator="union">
+            select
+            #{item.taskUserId,jdbcType=DECIMAL},
+            #{item.taskStatus,jdbcType=DECIMAL},
+            #{item.taskFormId,jdbcType=DECIMAL},
+            #{item.taskFormType,jdbcType=DECIMAL},
+            #{item.taskTargetId,jdbcType=DECIMAL},
+            #{item.taskTargetType,jdbcType=DECIMAL},
+            #{item.taskCreateDate,jdbcType=TIMESTAMP},
+            #{item.taskUpdateDate,jdbcType=TIMESTAMP},
+            #{item.taskExecuteUserName,jdbcType=VARCHAR},
+            #{item.taskLauncher,jdbcType=VARCHAR},
+            #{item.taskLauncherId,jdbcType=DECIMAL},
+            #{item.taskReserve6,jdbcType=VARCHAR},
+            #{item.taskReserve7,jdbcType=VARCHAR},
+            #{item.taskReserve8,jdbcType=VARCHAR},
+            #{item.taskReserve9,jdbcType=VARCHAR},
+            #{item.taskReserve10,jdbcType=VARCHAR},
+            #{item.taskReserve11,jdbcType=VARCHAR},
+            #{item.taskReserve12,jdbcType=VARCHAR},
+            #{item.taskReserve13,jdbcType=VARCHAR},
+            #{item.taskReserve14,jdbcType=VARCHAR},
+            #{item.taskReserve15,jdbcType=VARCHAR}
+            from
+            dual
+        </foreach>
+        )temp
+    </insert>
     <insert id="insertSelective" parameterType="sql.pojo.task.HzTasks">
+        <selectKey order="BEFORE"
+                   keyColumn="id" keyProperty="id" resultType="java.lang.Long">
+            select SEQ_TASK_ID.Nextval from dual
+        </selectKey>
         insert into HZ_TASKS
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -106,20 +190,20 @@
             <if test="taskTargetType != null">
                 TASK_TARGET_TYPE,
             </if>
-            <if test="taskReserve != null">
-                TASK_RESERVE,
+            <if test="taskCreateDate != null">
+                TASK_CREATE_DATE,
             </if>
-            <if test="taskReserve2 != null">
-                TASK_RESERVE2,
+            <if test="taskUpdateDate != null">
+                TASK_UPDATE_DATE,
             </if>
-            <if test="taskReserve3 != null">
-                TASK_RESERVE3,
+            <if test="taskExecuteUserName != null">
+                TASK_EXECUTE_USER_NAME,
             </if>
-            <if test="taskReserve4 != null">
-                TASK_RESERVE4,
+            <if test="taskLauncher != null">
+                TASK_LAUNCHER,
             </if>
-            <if test="taskReserve5 != null">
-                TASK_RESERVE5,
+            <if test="taskLauncherId != null">
+                TASK_LAUNCHER_ID,
             </if>
             <if test="taskReserve6 != null">
                 TASK_RESERVE6,
@@ -174,20 +258,20 @@
             <if test="taskTargetType != null">
                 #{taskTargetType,jdbcType=DECIMAL},
             </if>
-            <if test="taskReserve != null">
-                #{taskReserve,jdbcType=VARCHAR},
+            <if test="taskCreateDate != null">
+                #{taskCreateDate,jdbcType=TIMESTAMP},
             </if>
-            <if test="taskReserve2 != null">
-                #{taskReserve2,jdbcType=VARCHAR},
+            <if test="taskUpdateDate != null">
+                #{taskUpdateDate,jdbcType=TIMESTAMP},
             </if>
-            <if test="taskReserve3 != null">
-                #{taskReserve3,jdbcType=VARCHAR},
+            <if test="taskExecuteUserName != null">
+                #{taskExecuteUserName,jdbcType=VARCHAR},
             </if>
-            <if test="taskReserve4 != null">
-                #{taskReserve4,jdbcType=VARCHAR},
+            <if test="taskLauncher != null">
+                #{taskLauncher,jdbcType=VARCHAR},
             </if>
-            <if test="taskReserve5 != null">
-                #{taskReserve5,jdbcType=VARCHAR},
+            <if test="taskLauncherId != null">
+                #{taskLauncherId,jdbcType=DECIMAL},
             </if>
             <if test="taskReserve6 != null">
                 #{taskReserve6,jdbcType=VARCHAR},
@@ -243,20 +327,20 @@
             <if test="taskTargetType != null">
                 TASK_TARGET_TYPE = #{taskTargetType,jdbcType=DECIMAL},
             </if>
-            <if test="taskReserve != null">
-                TASK_RESERVE = #{taskReserve,jdbcType=VARCHAR},
+            <if test="taskCreateDate != null">
+                TASK_CREATE_DATE = #{taskCreateDate,jdbcType=TIMESTAMP},
             </if>
-            <if test="taskReserve2 != null">
-                TASK_RESERVE2 = #{taskReserve2,jdbcType=VARCHAR},
+            <if test="taskUpdateDate != null">
+                TASK_UPDATE_DATE = #{taskUpdateDate,jdbcType=TIMESTAMP},
             </if>
-            <if test="taskReserve3 != null">
-                TASK_RESERVE3 = #{taskReserve3,jdbcType=VARCHAR},
+            <if test="taskExecuteUserName != null">
+                TASK_EXECUTE_USER_NAME = #{taskExecuteUserName,jdbcType=VARCHAR},
             </if>
-            <if test="taskReserve4 != null">
-                TASK_RESERVE4 = #{taskReserve4,jdbcType=VARCHAR},
+            <if test="taskLauncher != null">
+                TASK_LAUNCHER = #{taskLauncher,jdbcType=VARCHAR},
             </if>
-            <if test="taskReserve5 != null">
-                TASK_RESERVE5 = #{taskReserve5,jdbcType=VARCHAR},
+            <if test="taskLauncherId != null">
+                TASK_LAUNCHER_ID = #{taskLauncherId,jdbcType=DECIMAL},
             </if>
             <if test="taskReserve6 != null">
                 TASK_RESERVE6 = #{taskReserve6,jdbcType=VARCHAR},
@@ -299,11 +383,11 @@
       TASK_FORM_TYPE = #{taskFormType,jdbcType=DECIMAL},
       TASK_TARGET_ID = #{taskTargetId,jdbcType=DECIMAL},
       TASK_TARGET_TYPE = #{taskTargetType,jdbcType=DECIMAL},
-      TASK_RESERVE = #{taskReserve,jdbcType=VARCHAR},
-      TASK_RESERVE2 = #{taskReserve2,jdbcType=VARCHAR},
-      TASK_RESERVE3 = #{taskReserve3,jdbcType=VARCHAR},
-      TASK_RESERVE4 = #{taskReserve4,jdbcType=VARCHAR},
-      TASK_RESERVE5 = #{taskReserve5,jdbcType=VARCHAR},
+      TASK_CREATE_DATE = #{taskCreateDate,jdbcType=TIMESTAMP},
+      TASK_UPDATE_DATE = #{taskCreateDate,jdbcType=TIMESTAMP},
+      TASK_EXECUTE_USER_NAME = #{taskExecuteUserName,jdbcType=VARCHAR},
+      TASK_LAUNCHER = #{taskLauncher,jdbcType=VARCHAR},
+      TASK_LAUNCHER_ID = #{taskLauncherId,jdbcType=DECIMAL},
       TASK_RESERVE6 = #{taskReserve6,jdbcType=VARCHAR},
       TASK_RESERVE7 = #{taskReserve7,jdbcType=VARCHAR},
       TASK_RESERVE8 = #{taskReserve8,jdbcType=VARCHAR},
@@ -315,5 +399,16 @@
       TASK_RESERVE14 = #{taskReserve14,jdbcType=VARCHAR},
       TASK_RESERVE15 = #{taskReserve15,jdbcType=VARCHAR}
     where ID = #{id,jdbcType=DECIMAL}
+  </update>
+    <update id="updateTargetStatus" parameterType="sql.pojo.task.HzTasks">
+    update HZ_TASKS
+    set
+      TASK_STATUS = #{taskStatus,jdbcType=DECIMAL},
+      TASK_UPDATE_DATE = sysdate
+    where
+        TASK_TARGET_ID = #{taskTargetId,jdbcType=DECIMAL} and
+        TASK_TARGET_TYPE = #{taskTargetType,jdbcType=DECIMAL} and
+        TASK_FORM_TYPE = #{taskFormType,jdbcType=DECIMAL} and
+        TASK_USER_ID = #{taskUserId,jdbcType=DECIMAL}
   </update>
 </mapper>

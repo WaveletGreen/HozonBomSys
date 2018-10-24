@@ -670,6 +670,7 @@ function getVwoInfo() {
     data.projectUid = getProjectUid();
     data.vwoId = $("#vwo").val();
     data.vwoType = $("#vwoType").val();
+    data.formId=$(window.parent.document).contents().find(".tab-pane.fade.active.in")[0].id;
     return data;
 }
 

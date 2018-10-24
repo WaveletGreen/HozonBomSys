@@ -13,6 +13,7 @@ import com.connor.hozon.bom.bomSystem.dao.modelColor.HzCmcrChangeDao;
 import com.connor.hozon.bom.bomSystem.dao.modelColor.HzCmcrDetailChangeDao;
 import com.connor.hozon.bom.bomSystem.dao.modelColor.HzColorModelDao;
 import com.connor.hozon.bom.bomSystem.iservice.process.IProcess;
+import com.connor.hozon.bom.bomSystem.option.TaskOptions;
 import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0Service;
 import com.connor.hozon.bom.bomSystem.service.process.FeatureProcessManager;
 import com.connor.hozon.bom.bomSystem.service.process.InterruptionContainer;
@@ -987,9 +988,41 @@ public class HzVwoManagerService implements IHzVWOManagerService {
             result.put("msg", "VWO状态修改失败");
             return result;
         }
+        List<HzTasks> tasks = hzTasksService.doSelectUserTargetTaskByType(TaskOptions.FORM_TYPE_VWO, vwoType, hzVwoInfo.getId(), Long.valueOf(user.getId()), 1);
+        if (tasks != null && tasks.size() == 1) {
+            HzTasks task = tasks.get(0);
+            try {
+                HzTasks taskOfPmt = task.clone();
+                task.setTaskStatus(999);
+                taskOfPmt.setId((taskOfPmt.getId() + 1));
+                taskOfPmt.setTaskStatus(1);
+                if (!hzTasksService.doUpdateByPrimaryKeySelective(task)) {
+                    logger.error("更新BOM经理完成任务失败");
+                }
+                if (!hzTasksService.doUpdateByPrimaryKeySelective(taskOfPmt)) {
+                    logger.error("更新PMT经理执行任务状态失败");
+                }
+            } catch (CloneNotSupportedException e) {
+                e.printStackTrace();
+            }
+        }
         result.put("msg", "BOM经理评估成功");
         return result;
     }
+
+//    private void updateTask(Long targetId, Integer targetType, int targetFormType, int userId, int status) {
+//        Date now = new Date();
+//        HzTasks task = new HzTasks();
+//        task.setTaskUserId(Long.valueOf(userId));
+//        task.setTaskFormType(targetFormType);
+//        task.setTaskTargetType(targetType);
+//        task.setTaskTargetId(targetId);
+//        task.setTaskStatus(status);
+//        task.setTaskUpdateDate(now);
+//        if (hzTasksService.doUpdateTargetStatus(task)) {
+//            logger.error("更新任务状态失败");
+//        }
+//    }
 
     @Override
     public JSONObject savePmtLeaderOpinion(HzVwoOpiPmt hzVwoOpiPmt, Integer vwoType, String projectUid) {
@@ -1020,6 +1053,25 @@ public class HzVwoManagerService implements IHzVWOManagerService {
             result.put("msg", "VWO状态修改失败");
             return result;
         }
+        List<HzTasks> tasks = hzTasksService.doSelectUserTargetTaskByType(TaskOptions.FORM_TYPE_VWO, vwoType, hzVwoInfo.getId(), Long.valueOf(user.getId()), 1);
+        if (tasks != null && tasks.size() == 1) {
+            HzTasks task = tasks.get(0);
+            try {
+                HzTasks taskOfPmt = task.clone();
+                task.setTaskStatus(999);
+                taskOfPmt.setId((taskOfPmt.getId() + 1));
+                taskOfPmt.setTaskStatus(1);
+                if (!hzTasksService.doUpdateByPrimaryKeySelective(task)) {
+                    logger.error("更新PMT经理完成任务失败");
+                }
+                if (!hzTasksService.doUpdateByPrimaryKeySelective(taskOfPmt)) {
+                    logger.error("更新项目经理执行任务状态失败");
+                }
+            } catch (CloneNotSupportedException e) {
+                e.printStackTrace();
+            }
+        }
+//        updateTask(hzVwoOpiPmt.getOpiVwoId(), vwoType, TaskOptions.FORM_TYPE_VWO, user.getId(), 999);
         result.put("msg", "PTM经理评估成功");
         return result;
     }
@@ -1054,14 +1106,23 @@ public class HzVwoManagerService implements IHzVWOManagerService {
             result.put("msg", "VWO状态修改失败");
             return result;
         }
+        List<HzTasks> tasks = hzTasksService.doSelectUserTargetTaskByType(TaskOptions.FORM_TYPE_VWO, vwoType, hzVwoInfo.getId(), Long.valueOf(user.getId()), 1);
+        if (tasks != null && tasks.size() == 1) {
+            HzTasks task = tasks.get(0);
+            task.setTaskStatus(999);
+            if (!hzTasksService.doUpdateByPrimaryKeySelective(task)) {
+                logger.error("更新项目经理经理完成任务失败");
+            }
+        }
+//        updateTask(hzVwoOpiProj.getOpiVwoId(), vwoType, TaskOptions.FORM_TYPE_VWO, user.getId(), 999);
         result.put("msg", "项目经理评估成功");
         return result;
     }
 
     @Override
-    public JSONObject launch(Integer type, String projectUid, Long vwoId) {
+    public JSONObject launch(Integer type, String projectUid, Long vwoId, Long formId) {
         JSONObject result = new JSONObject();
-        boolean status = toLaunch(type, projectUid, vwoId);
+        boolean status = toLaunch(type, projectUid, vwoId, formId);
         if (status) {
             result.put("msg", "VWO发起成功");
         } else {
@@ -1071,14 +1132,14 @@ public class HzVwoManagerService implements IHzVWOManagerService {
         return result;
     }
 
-    public boolean toLaunch(Integer type, String projectUid, Long vwoId) {
+    public boolean toLaunch(Integer type, String projectUid, Long vwoId, Long formId) {
         User user = UserInfo.getUser();
         HzVwoInfo info = hzVwoInfoService.doSelectByPrimaryKey(vwoId);
         info.setVwoFinisher(user.getLogin());
         info.setVwoStatus(101);
         boolean vwoFlag = hzVwoInfoService.updateByVwoId(info);
         /**发起流程之后，通知到人员*/
-        noticeUsers(info, type);
+        noticeUsers(info, type, user, formId);
         return vwoFlag;
     }
 
@@ -1088,10 +1149,56 @@ public class HzVwoManagerService implements IHzVWOManagerService {
      * @param info
      * @param type
      */
-    private void noticeUsers(HzVwoInfo info, Integer type) {
-        List<HzTasks> tasks = new ArrayList<>();
-        tasks=hzTasksService.doSelectByVwoId(info.getId());
-        
+    private void noticeUsers(HzVwoInfo info, Integer type, User user, long formId) {
+        List<HzTasks> tasks = hzTasksService.doSelectUserVWOTaskByIds(info.getId(), null, type);
+        if (tasks == null || tasks.isEmpty()) {
+            HzVwoOpiBom bom = hzVwoOpiBomDao.selectByVwoId(info.getId());
+            HzVwoOpiPmt pmt = hzVwoOpiPmtDao.selectByVwoId(info.getId());
+            HzVwoOpiProj proj = hzVwoOpiProjDao.selectByVwoId(info.getId());
+            Date now = new Date();
+            HzTasks task = new HzTasks();
+
+            task.setTaskTargetId(info.getId());
+            task.setTaskTargetType(type);
+            task.setTaskFormType(TaskOptions.FORM_TYPE_VWO);
+            task.setTaskLauncher(user.getUserName());
+            task.setTaskLauncherId(Long.valueOf(user.getId()));
+            task.setTaskCreateDate(now);
+            task.setTaskUpdateDate(now);
+            task.setTaskFormId(formId);
+
+            try {
+                List<HzTasks> list = new ArrayList<>();
+                HzTasks taskOfBom = task.clone();
+                HzTasks taskOfPmt = task.clone();
+                HzTasks taskOfProj = task.clone();
+
+                taskOfBom.setTaskUserId(bom.getOpiBomMngUserId());
+                taskOfBom.setTaskStatus(1);
+
+                taskOfPmt.setTaskUserId(pmt.getOpiPmtMngUserId());
+                taskOfPmt.setTaskStatus(800);
+
+                taskOfProj.setTaskUserId(proj.getOpiProjMngUserId());
+                taskOfProj.setTaskStatus(800);
+
+                if (!hzTasksService.doInsert(taskOfBom) || !hzTasksService.doInsert(taskOfPmt) || !hzTasksService.doInsert(taskOfProj)) {
+                    logger.error("通知任务失败");
+                }
+//                list.add(taskOfBom);
+//                list.add(taskOfPmt);
+//                list.add(taskOfProj);
+                //这里批量插入插入只有2个，需要改进
+//                if (!hzTasksService.doInsertByBatch(list)) {
+//                    logger.error("通知任务失败");
+//                }
+
+            } catch (CloneNotSupportedException e) {
+                e.printStackTrace();
+            }
+
+
+        }
     }
 
     @Override

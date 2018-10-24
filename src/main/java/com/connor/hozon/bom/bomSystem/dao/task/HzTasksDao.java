@@ -20,4 +20,15 @@ public interface HzTasksDao extends BasicDao<HzTasks> {
      * @return
      */
     List<HzTasks> selectUserTasks(HzTasks tasks);
+
+    List<HzTasks> selectUserTargetTaskByType(HzTasks task);
+
+    /**
+     * 批量插入
+     * @param list
+     * @return
+     */
+    int insertByBatch(List<HzTasks> list);
+
+    int updateTargetStatus(HzTasks task);
 }
