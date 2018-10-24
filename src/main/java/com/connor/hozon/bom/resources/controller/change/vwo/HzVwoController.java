@@ -336,7 +336,7 @@ public class HzVwoController {
     @RequestMapping(value = "/launch", method = RequestMethod.POST)
     @ResponseBody
     public JSONObject launch(@RequestBody HzVwoProcessDto dto){
-        return iHzVWOManagerService.launch(dto.getVwoType(), dto.getProjectUid(), dto.getVwoId());
+        return iHzVWOManagerService.launch(dto.getVwoType(), dto.getProjectUid(), dto.getVwoId(),dto.getFormId());
     }
 
     @RequestMapping(value = "/saveLeaderOpinion", method = RequestMethod.POST)

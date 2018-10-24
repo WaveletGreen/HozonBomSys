@@ -4,17 +4,14 @@
  * ALL RIGHTS RESERVED.
  */
 
-package com.connor.hozon.bom.bomSystem.option;
+package com.connor.hozon.bom.bomSystem.iservice.process;
 
 /**
  * @Author: Fancyears·Maylos·Maywas
- * @Description:
- * @Date: Created in 2018/10/23 14:56
+ * @Description: 特性流程管理x
+ * @Date: Created in 2018/10/16 13:29
  * @Modified By:
  */
-public enum  TaskOptions2 {
-    /**
-     * VWO表单
-     */
-    FORM_TYPE_VWO;
+public interface IFeatureProcessManager {
+
 }

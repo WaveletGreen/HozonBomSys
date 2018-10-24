@@ -9,7 +9,7 @@ package sql.pojo.cfg.vwo;
 import java.util.Date;
 
 /**
- * 特性变更bean
+ * 特性变更bean x
  */
 public class HzFeatureChangeBean {
     /**

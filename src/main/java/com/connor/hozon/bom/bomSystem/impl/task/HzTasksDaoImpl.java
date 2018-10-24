@@ -21,6 +21,8 @@ import java.util.List;
  */
 @Service("hzTasksDao")
 public class HzTasksDaoImpl extends BasicDaoImpl<HzTasks> implements HzTasksDao {
+    private final static HzTasks TASKS = new HzTasks();
+
     public HzTasksDaoImpl() {
         clz = HzTasksDao.class;
         clzName = clz.getCanonicalName();
@@ -29,5 +31,20 @@ public class HzTasksDaoImpl extends BasicDaoImpl<HzTasks> implements HzTasksDao 
     @Override
     public List<HzTasks> selectUserTasks(HzTasks tasks) {
         return baseSQLUtil.executeQuery(tasks, clzName + ".selectUserTasks");
+    }
+
+    @Override
+    public List<HzTasks> selectUserTargetTaskByType(HzTasks task) {
+        return baseSQLUtil.executeQuery(task, clzName + ".selectUserTargetTaskByType");
+    }
+
+    @Override
+    public int insertByBatch(List<HzTasks> list) {
+        return baseSQLUtil.executeInsert(list, clzName + ".insertByBatch");
+    }
+
+    @Override
+    public int updateTargetStatus(HzTasks task) {
+        return baseSQLUtil.executeUpdate(task, clzName + ".updateTargetStatus");
     }
 }

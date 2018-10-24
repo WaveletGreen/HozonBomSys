@@ -16,7 +16,7 @@ import java.util.Map;
 
 /**
  * @Author: Fancyears·Maylos·Maywas
- * @Description:
+ * @Description: x
  * @Date: Created in 2018/10/10 13:28
  * @Modified By:
  */
@@ -242,7 +242,7 @@ public interface IHzVWOManagerService {
 
     JSONObject saveProjLeaderOpinion(HzVwoOpiProj hzVwoOpiProj, Integer vwoType, String projectUid);
 
-    JSONObject launch(Integer type, String projectUid, Long vwoId);
+    JSONObject launch(Integer type, String projectUid, Long vwoId,Long formId);
 
     JSONObject saveOptionUser(HzVwoOptionUserDto hzVwoOptionUserDto);
 }

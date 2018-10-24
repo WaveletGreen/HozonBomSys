@@ -80,4 +80,48 @@ public class HzTasksService implements IHzTaskService {
         return hzTasksDao.selectUserTasks(task);
     }
 
+    @Override
+    public List<HzTasks> doSelectUserTargetTaskByType(Integer taskFormType, Integer taskTargetType, Long taskTargetId, Long taskUserId, Integer status) {
+        HzTasks task = new HzTasks();
+        task.setTaskFormType(taskFormType);
+        task.setTaskTargetType(taskTargetType);
+        task.setTaskTargetId(taskTargetId);
+        task.setTaskUserId(taskUserId);
+        task.setTaskStatus(status);
+        return hzTasksDao.selectUserTargetTaskByType(task);
+    }
+
+    /**
+     * 根据VWO主键和用户主键，获取到当前VWO变更表单该用户的任务
+     *
+     * @param vwoId  VWO ID
+     * @param userId 用户ID
+     * @return
+     */
+    @Override
+    public List<HzTasks> doSelectUserVWOTaskByIds(Long vwoId, Long userId, Integer targetType) {
+        return doSelectUserTargetTaskByType(TaskOptions.FORM_TYPE_VWO, targetType, vwoId, userId, null);
+    }
+
+    /**
+     * 批量插入任务
+     *
+     * @param list
+     * @return
+     */
+    @Override
+    public boolean doInsertByBatch(List<HzTasks> list) {
+        return hzTasksDao.insertByBatch(list) > 0 ? true : false;
+    }
+
+
+    @Override
+    public boolean doInsert(HzTasks task) {
+        return hzTasksDao.insert(task) > 0 ? true : false;
+    }
+
+    @Override
+    public boolean doUpdateByPrimaryKeySelective(HzTasks task) {
+        return hzTasksDao.updateByPrimaryKeySelective(task) > 0 ? true : false;
+    }
 }
