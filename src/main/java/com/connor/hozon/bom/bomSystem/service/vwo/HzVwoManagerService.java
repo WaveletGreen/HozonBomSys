@@ -997,19 +997,15 @@ public class HzVwoManagerService implements IHzVWOManagerService {
         List<HzTasks> tasks = hzTasksService.doSelectUserTargetTaskByType(TaskOptions.FORM_TYPE_VWO, vwoType, hzVwoInfo.getId(), Long.valueOf(user.getId()), 1);
         if (tasks != null && tasks.size() == 1) {
             HzTasks task = tasks.get(0);
-            try {
-                HzTasks taskOfPmt = task.clone();
-                task.setTaskStatus(999);
-                taskOfPmt.setId((taskOfPmt.getId() + 1));
-                taskOfPmt.setTaskStatus(1);
-                if (!hzTasksService.doUpdateByPrimaryKeySelective(task)) {
-                    logger.error("更新BOM经理完成任务失败");
-                }
-                if (!hzTasksService.doUpdateByPrimaryKeySelective(taskOfPmt)) {
-                    logger.error("更新PMT经理执行任务状态失败");
-                }
-            } catch (CloneNotSupportedException e) {
-                e.printStackTrace();
+            HzTasks taskOfPmt = new HzTasks();
+            task.setTaskStatus(999);
+            taskOfPmt.setId((task.getId() + 1));
+            taskOfPmt.setTaskStatus(1);
+            if (!hzTasksService.doUpdateByPrimaryKeySelective(task)) {
+                logger.error("更新BOM经理完成任务失败");
+            }
+            if (!hzTasksService.doUpdateByPrimaryKeySelective(taskOfPmt)) {
+                logger.error("更新PMT经理执行任务状态失败");
             }
         }
         result.put("msg", "BOM经理评估成功");
@@ -1062,19 +1058,15 @@ public class HzVwoManagerService implements IHzVWOManagerService {
         List<HzTasks> tasks = hzTasksService.doSelectUserTargetTaskByType(TaskOptions.FORM_TYPE_VWO, vwoType, hzVwoInfo.getId(), Long.valueOf(user.getId()), 1);
         if (tasks != null && tasks.size() == 1) {
             HzTasks task = tasks.get(0);
-            try {
-                HzTasks taskOfPmt = task.clone();
-                task.setTaskStatus(999);
-                taskOfPmt.setId((taskOfPmt.getId() + 1));
-                taskOfPmt.setTaskStatus(1);
-                if (!hzTasksService.doUpdateByPrimaryKeySelective(task)) {
-                    logger.error("更新PMT经理完成任务失败");
-                }
-                if (!hzTasksService.doUpdateByPrimaryKeySelective(taskOfPmt)) {
-                    logger.error("更新项目经理执行任务状态失败");
-                }
-            } catch (CloneNotSupportedException e) {
-                e.printStackTrace();
+            HzTasks taskOfProj = new HzTasks();
+            task.setTaskStatus(999);
+            taskOfProj.setId((task.getId() + 1));
+            taskOfProj.setTaskStatus(1);
+            if (!hzTasksService.doUpdateByPrimaryKeySelective(task)) {
+                logger.error("更新PMT经理完成任务失败");
+            }
+            if (!hzTasksService.doUpdateByPrimaryKeySelective(taskOfProj)) {
+                logger.error("更新项目经理执行任务状态失败");
             }
         }
 //        updateTask(hzVwoOpiPmt.getOpiVwoId(), vwoType, TaskOptions.FORM_TYPE_VWO, user.getId(), 999);
@@ -1129,15 +1121,15 @@ public class HzVwoManagerService implements IHzVWOManagerService {
     public JSONObject launch(Integer type, String projectUid, Long vwoId, Long formId) {
         JSONObject result = new JSONObject();
         HzVwoOpiBom hzVwoOpiBom = hzVwoOpiBomDao.selectByVwoId(vwoId);
-        if(hzVwoOpiBom .getOpiBomMngUserId()==null){
-            result.put("msg","请指派BOM经理");
-            result.put("status",false);
+        if (hzVwoOpiBom.getOpiBomMngUserId() == null) {
+            result.put("msg", "请指派BOM经理");
+            result.put("status", false);
             return result;
         }
         HzVwoOpiPmt hzVwoOpiPmt = hzVwoOpiPmtDao.selectByVwoId(vwoId);
-        if(hzVwoOpiPmt.getOpiPmtMngUserId()==null){
-            result.put("msg","请指派PMT经理");
-            result.put("status",false);
+        if (hzVwoOpiPmt.getOpiPmtMngUserId() == null) {
+            result.put("msg", "请指派PMT经理");
+            result.put("status", false);
             return result;
         }
 //        HzVwoOpiProj hzVwoOpiProj = hzVwoOpiProjDao.selectByVwoId(vwoId);
@@ -1155,8 +1147,10 @@ public class HzVwoManagerService implements IHzVWOManagerService {
         result.put("status", status);
         return result;
     }
+
     /**
      * 发起
+     *
      * @param type
      * @param projectUid
      * @param vwoId
