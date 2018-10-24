@@ -1,6 +1,8 @@
 package sql.pojo.project;
 
 import com.connor.hozon.bom.bomSystem.service.project.IProject;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -91,6 +93,13 @@ public class HzProjectLibs implements IProject {
      * 车身变形名称
      */
     private String pVehicleTranName;
+
+    /**
+     * 项目经理ID
+     */
+    @Getter
+    @Setter
+    private Long projectManagerId;
 
     public String getpProjectOwningUser() {
         return pProjectOwningUser;

@@ -321,4 +321,8 @@ public class HzCfg0Service {
             }
         }
     }
+
+    public int doupdateList(List<HzCfg0Record> hzCfg0RecordList) {
+        return hzCfg0RecordDao.updateList(hzCfg0RecordList);
+    }
 }

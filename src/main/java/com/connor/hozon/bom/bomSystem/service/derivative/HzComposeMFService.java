@@ -17,7 +17,7 @@ import com.connor.hozon.bom.bomSystem.dto.HzMaterielFeatureBean;
 import com.connor.hozon.bom.bomSystem.dto.cfg.compose.HzComposeDelDto;
 import com.connor.hozon.bom.bomSystem.dto.cfg.compose.HzComposeMFDTO;
 import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
-import com.connor.hozon.bom.bomSystem.option.SpecialFeatureOption;
+import com.connor.hozon.bom.bomSystem.option.SpecialFeatureOptions;
 import com.connor.hozon.bom.bomSystem.service.cfg.*;
 import com.connor.hozon.bom.bomSystem.service.color.HzCfg0ColorSetService;
 import com.connor.hozon.bom.bomSystem.service.fullCfg.HzCfg0ModelService;
@@ -300,13 +300,13 @@ public class HzComposeMFService {
         HzCfg0Record local = new HzCfg0Record();
         local.setpCfg0ObjectId(modelColor.getpModelShellOfColorfulModel());
         /**强制设置为HZCSYS*/
-        local.setpCfg0FamilyName(SpecialFeatureOption.CSCODE.getDesc());
+        local.setpCfg0FamilyName(SpecialFeatureOptions.CSCODE.getDesc());
         local.setpCfg0MainItemPuid(mainRecord.getPuid());
         HzCfg0Record shell = hzCfg0Service.doSelectByCodeAndDescWithMainItem(local);
 
         if (shell == null) {
             /**强制设置为中文描述“车身颜色”*/
-            local.setpCfg0FamilyDesc(SpecialFeatureOption.CSNAME.getDesc());
+            local.setpCfg0FamilyDesc(SpecialFeatureOptions.CSNAME.getDesc());
             if ((shell = hzCfg0Service.doSelectByCodeAndCnDescWithMainItem(local)) == null) {
                 results.put("msg", "没有找到任何一个特性为'HZCSYS'、特性值为'" + modelColor.getpModelShellOfColorfulModel() + "'的特性值，请尝试添加特性值");
                 results.put("status", false);

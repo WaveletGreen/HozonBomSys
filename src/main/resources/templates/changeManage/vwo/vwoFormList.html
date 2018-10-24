@@ -8,86 +8,123 @@
 </head>
 <body>
 <input id="url" type="hidden" value="vwo/queryByBase"/>
-<div class="panel-body" style="padding-bottom:0px;">
-    <div class="panel panel-default" style="margin-top: 10px;">
-        <div class="panel-body">
-            <form class="form-inline" role="form" style="float: left; width: 100%;margin-left: 20px;" method="get"
-                  id="queryPbomManage">
-                <div class="form-group after_the">
-                    <label for="VWOnum">VWO号:&ensp;</label>
-                    <input type="text" style="width: 150px;" class="form-control" name="level" id="VWOnum"
-                           placeholder=""/>
-                </div>
-                <div class="form-group  after_the">
-                    <label for="creatTime">创建时间:&emsp;&emsp;</label>
-                    <input type="text" style="width: 150px;" class="form-control" name="pBomOfWhichDept" id="creatTime"
-                           placeholder=""/>
-                </div>
-                <div class="form-group  after_the">
-                    <label for="processState">流程状态:</label>
-                    <input type="text" style="width: 150px;" class="form-control" name="rank" id="processState"
-                           placeholder=""/>
-                </div>
-                <div class="form-group after_the">
-                    <label for="title">标题:&emsp;&emsp;&emsp;&emsp;</label>
-                    <input type="text" style="width: 150px;" class="form-control" name="groupNum" id="title"
-                           placeholder=""/>
-                </div>
-                <div class="form-group after_the">
-                    <label for="dept">部门:&emsp;&emsp;</label>
-                    <input type="text" style="width: 150px;" class="form-control" name="lineId" id="dept"
-                           placeholder=""/>
-                </div>
-                <div class="form-group after_the">
-                    <label for="initiator">发起人:&emsp;&emsp;&emsp;</label>
-                    <input type="text" style="width: 150px;" class="form-control" name="itemType" id="initiator"
-                           placeholder=""/>
-                </div>
-                <div class="form-group after_the">
-                    <label for="phone">联系电话:</label>
-                    <input type="text" style="width: 150px;" class="form-control" name="itemType" id="phone"
-                           placeholder=""/>
-                </div>
-                <div class="form-group after_the">
-                    <label for="finishTime">要求完成时间:</label>
-                    <input type="text" style="width: 150px;" class="form-control" name="itemType" id="finishTime"
-                           placeholder=""/>
-                </div>
-                <div class="form-group after_the">
-                    <label for="changeType">变更类型:</label>
-                    <input type="text" style="width: 150px;" class="form-control" name="itemType" id="changeType"
-                           placeholder=""/>
-                </div>
-                <div class="form-group after_the">
-                    <label for="expenseDept">费用承担部门:</label>
-                    <select class="form-control" style="min-width: 150px" name="" id="expenseDept">
-                        <!--<option>车身技术部门</option>-->
-                        <!--<option>电子电器技术部门</option>-->
-                        <!--<option>底盘技术部门</option>-->
-                        <!--<option>系统集成技术部门</option>-->
-                        <!--<option>内外饰技术部门</option>-->
-                        <option>车身部门</option>
-                    </select>
-                </div>
-                <div class="form-group after_the">
-                    <label for="listedType">上市类型:</label>
-                    <input type="text" style="width: 150px;" class="form-control" name="itemType" id="listedType"
-                           placeholder=""/>
-                </div>
-                <div class="form-group after_the">
-                    <label for="relevanceVWONum">关联VWO号:&ensp;</label>
-                    <input type="text" style="width: 150px;" class="form-control" name="itemType" id="relevanceVWONum"
-                           placeholder=""/>
-                </div>
-                <div class="form-group">
-                    <button type="reset" id="queryBtn1" class="btn btn-primary">重置</button>
-                </div>
-                <div class="form-group">
-                    <button type="button" id="queryBtn" onclick="doQuery();" class="btn btn-primary">查询</button>
-                </div>
-            </form>
+<div class="panel panel-body panel-default search-filed-div">
+    <form class="form-inline" role="form" method="get"
+          id="vwoFormList">
+        <div class=table-responsive">
+            <table class="table text-nowrap">
+                <tr>
+                    <td>
+                        <label for="vwoNum">VWO号:&ensp;</label>
+                        <input style="width: 150px" class="form-control" id="vwoNum" name="vwoNum"
+                               placeholder=""
+                               type="text"
+                        /></td>
+                    <td><label for="vwoCreateDate">创建时间:&emsp;&emsp;</label>
+                        <input style="width: 150px" class="form-control" id="vwoCreateDate" name="vwoCreateDate"
+                               type="date"
+                        /></td>
+                    <td><label for="vwoStatus">流程状态:</label>
+                        <select style="width: 150px" class="form-control" id="vwoStatus" name="vwoStatus">
+                            <option></option>
+                            <option value="10">
+                                编辑状态
+                            </option>
+                            <option value="100">
+                                审核中
+                            </option>
+                            <option value="899">
+                                中断
+                            </option>
+                            <option value="999">
+                                已发布
+                            </option>
+                        </select></td>
+                    <td><label for="vwoName">标题:&emsp;&emsp;&emsp;&emsp;</label>
+                        <input style="width: 150px" class="form-control" id="vwoName" name="vwoName"
+                               type="text"
+                        /></td>
+                    <td><label for="userDeptName">部门:&emsp;&emsp;</label>
+                        <input style="width: 150px" class="form-control" id="userDeptName" name="userDeptName"
+                               type="text"/></td>
+                    <td>
+                        <label for="vwoCreator">发起人:&emsp;&emsp;&emsp;</label>
+                        <input style="width: 150px" class="form-control" id="vwoCreator" name="vwoCreator"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td><label for="contactPhoneNum">联系电话:</label>
+                        <input style="width: 150px" class="form-control" id="contactPhoneNum"
+                               name="contactPhoneNum"
+                               type="text"/></td>
+                    <td><label for="vwoDemandFinishTime">要求完成时间:</label>
+                        <input style="width: 150px" class="form-control" id="vwoDemandFinishTime"
+                               name="vwoDemandFinishTime"
+                               type="date"/></td>
+                    <td><label for="vwoChangeType">变更类型:</label>
+                        <select style="width: 150px" class="form-control" id="vwoChangeType"
+                                name="vwoChangeType">
+                            <option></option>
+                            <option value="1">正常设变</option>
+                            <option value="2">简易设变</option>
+                        </select></td>
+                    <td><label for="vwoCostBearingDept">费用承担部门:</label>
+                        <select style="width: 150px" class="form-control" name="vwoCostBearingDept"
+                                id="vwoCostBearingDept">
+                            <option></option>
+                            <option value="1">智能驾驶研究院</option>
+                            <option value="2">智能座舱事业部</option>
+                            <option value="3">电动化底盘中心</option>
+                            <option value="4">电子电器中心</option>
+                            <option value="5">内外饰中心</option>
+                            <option value="6">动总集成中心</option>
+                            <option value="7">车身中心</option>
+                            <!--<option value="8">底盘设计</option>-->
+                            <!--<option value="9">电器设计</option>-->
+                            <!--<option value="10">内外饰设计</option>-->
+                            <!--<option value="11">动总集成设计</option>-->
+                            <!--<option value="12">发动机设计</option>-->
+                            <!--<option value="13">变速箱设计</option>-->
+                            <!--<option value="14">BOM工程师</option>-->
+                            <!--<option value="15">采购质量</option>-->
+                            <!--<option value="16">规划部门</option>-->
+                            <!--<option value="17">总布置</option>-->
+                            <!--<option value="18">备件管理部门</option>-->
+                            <!--<option value="19">造型</option>-->
+                            <!--<option value="20">销售部门(国内+国际)</option>-->
+                            <!--<option value="21">控制器或电气参数</option>-->
+                            <!--<option value="22">国内法规认证</option>-->
+                            <!--<option value="23">国际法规认证</option>-->
+                            <!--<option value="24">售后服务部门(国内+国际)</option>-->
+                            <!--<option value="25">材料部门</option>-->
+                            <!--<option value="26">沿用件工程师</option>-->
+                            <!--<option value="27">性能</option>-->
+                            <!--<option value="28">三化</option>-->
+                            <!--<option value="29">重量</option>-->
+                            <!--<option value="30">平台化</option>-->
+                            <!--<option value="31">CAE工程师</option>-->
+                            <!--<option value="32">制造部门</option>-->
+                        </select></td>
+                    <td><label for="vwoListedType">上市类型:</label>
+                        <select style="width: 150px" class="form-control" name="vwoListedType"
+                                id="vwoListedType">
+                            <option></option>
+                            <option value="1">上市前</option>
+                            <option value="2">上市后</option>
+                        </select></td>
+                    <td><label for="vwoConnectedVwo">关联VWO号:&ensp;</label>
+                        <input style="width: 150px" class="form-control" name="vwoConnectedVwo"
+                               id="vwoConnectedVwo"
+                               type="text"/></td>
+                    <td>
+                        <button type="reset" id="queryBtn1" class="btn btn-primary">重置</button>
+                        <button type="button" id="queryBtn" onclick="doQuery();" class="btn btn-primary">查询
+                        </button>
+                    </td>
+                </tr>
+            </table>
         </div>
-    </div>
+    </form>
 </div>
 <div class="content col-lg-12">
     <table id="vwo_table" class="table table-striped"></table>
@@ -95,5 +132,6 @@
 <script th:src="@{/js/helper/projectHelper.js}"></script>
 <script th:src="@{/js/helper/dateFormater.js}"></script>
 <script th:src="@{/js/changeManage/vwo/vwoFormList.js}"></script>
+<script th:src="@{/js/helper/taskHelper.js}"></script>
 </body>
 </html>
