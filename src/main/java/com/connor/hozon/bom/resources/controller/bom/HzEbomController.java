@@ -402,42 +402,4 @@ public class HzEbomController extends BaseController {
     public String getExcelImport(){
         return "bomManage/ebom/ebomManage/excelImport";
     }
-
-
-
-    /**
-     * 直接生效EBOM 临时用
-     * @param
-     * @param
-     * @param response
-     */
-    @RequestMapping(value = "vaild/direct",method = RequestMethod.POST)
-    public void validDirect(String puids, HttpServletResponse response){
-        if(puids==null){
-            toJSONResponse(Result.build(false,"非法参数！"), response);
-            return;
-        }
-        boolean b = PrivilegeUtil.writePrivilege();
-        if(!b){//管理员权限
-            toJSONResponse(Result.build(false,"您没有权限进行当前操作！"), response);
-            return;
-        }
-
-        String[] ps = puids.split(",");
-        List<HzBomLineRecord> list = new ArrayList<>();
-        for(String s:ps){
-            HzBomLineRecord record = new HzBomLineRecord();
-            record.setTableName("HZ_BOM_LINE_RECORD");
-            record.setPuid(s);
-            record.setStatus(1);
-            list.add(record);
-        }
-        int i = hzBomLineRecordDao.updateBatch(list);
-        if(i>0){
-            toJSONResponse(Result.build(true,"操作成功！"), response);
-        }else {
-            toJSONResponse(Result.build(false,"操作失败！"), response);
-
-        }
-    }
 }
