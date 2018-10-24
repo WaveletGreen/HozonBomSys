@@ -34,6 +34,7 @@ public class ModelColorProcessManager implements IInterruptionCallBack, IRelease
 
     @Autowired
     HzCfg0ModelColorService hzCfg0ModelColorService;
+
     /**
      * 中断操作
      * 将src主数据的状态设置为草稿状态(0)，清除vwo号
@@ -45,7 +46,7 @@ public class ModelColorProcessManager implements IInterruptionCallBack, IRelease
     @Override
     public boolean interrupt(Long vwoId, String projectUId) {
         interruptionFunctionDesc();
-        return updateModelColorAndVwoInfo("0",899,vwoId);
+        return updateModelColorAndVwoInfo("0", 899, vwoId);
     }
 
     /**
@@ -59,7 +60,7 @@ public class ModelColorProcessManager implements IInterruptionCallBack, IRelease
     @Override
     public boolean release(Long vwoId, String projectUId) {
         releaseFunctionDesc();
-        return updateModelColorAndVwoInfo("999",999,vwoId);
+        return updateModelColorAndVwoInfo("999", 999, vwoId);
     }
 
 
@@ -75,15 +76,16 @@ public class ModelColorProcessManager implements IInterruptionCallBack, IRelease
 
     /**
      * 根据VWOid修改配色方案的cmcrStatus和VWO流程中的vwoStatus
+     *
      * @param cmcrStatus
      * @param vwoStatus
      * @param vwoId
      * @return
      */
-    public boolean updateModelColorAndVwoInfo(String cmcrStatus, Integer vwoStatus, Long vwoId){
+    public boolean updateModelColorAndVwoInfo(String cmcrStatus, Integer vwoStatus, Long vwoId) {
         User user = UserInfo.getUser();
         HzVwoInfo info = hzVwoInfoService.doSelectByPrimaryKey(vwoId);
-        if(info.getVwoStatus()==999||info.getVwoStatus()==899){
+        if (info.getVwoStatus() == 999 || info.getVwoStatus() == 899) {
             return false;
         }
         HzCfg0ModelColor hzCfg0ModelColor = new HzCfg0ModelColor();
@@ -93,7 +95,7 @@ public class ModelColorProcessManager implements IInterruptionCallBack, IRelease
         info.setVwoFinisher(user.getLogin());
         info.setVwoStatus(vwoStatus);
         boolean vwoFlag = hzVwoInfoService.updateByVwoId(info);
-        return  modelColorFlag&&vwoFlag;
+        return modelColorFlag && vwoFlag;
     }
 
 
