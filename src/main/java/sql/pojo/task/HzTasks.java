@@ -15,7 +15,6 @@ import java.util.Date;
  * @Date: Created in 2018/10/10 13:29
  * @Modified By:
  */
-
 @Data
 public class HzTasks implements  Cloneable {
     /**
