@@ -77,6 +77,9 @@ public class HzCfg0ModelColor {
     @Getter
     @Setter
     private String cmcrReserve4;
+    /**
+     * 流程状态
+     */
     @Getter
     @Setter
     private String cmcrReserve5;
