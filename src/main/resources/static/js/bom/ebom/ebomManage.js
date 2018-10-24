@@ -490,7 +490,7 @@ function initTable(eBomUrl) {
                         handler: function () {
                             //var headers = data;//表头
                             var rows = $table.bootstrapTable('getSelections');//选中行数据
-                            var str = rows[0].title;
+                            // var str = rows[0].title;
                             if (rows.length == 0) {
                                 window.Ewin.alert({message: '请选择一条需要导出的数据!'});
                                 return false;
