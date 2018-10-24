@@ -12,7 +12,12 @@ import org.springframework.context.annotation.Configuration;
 import sql.pojo.cfg.fullCfg.HzFullCfgMain;
 
 import java.math.BigDecimal;
-
+/**
+ * @Author: Fancyears·Maylos·Maywas
+ * @Description: fuck
+ * @Date: Created in 2018/9/6 13:19
+ * @Modified By:
+ */
 @Configuration
 public class HzFullCfgMainDaoImpl extends BasicDaoImpl<HzFullCfgMain> implements HzFullCfgMainDao {
     private static final HzFullCfgMain HZ_FULL_CFG_MAIN = new HzFullCfgMain();

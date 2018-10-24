@@ -1,9 +1,20 @@
+/*
+ * Copyright (c) 2018.
+ * This file was wrote by fancyears·milos·maywas @connor. Any question/bug you can post to 1243093366@qq.com.
+ * ALL RIGHTS RESERVED.
+ */
+
 package com.connor.hozon.bom.bomSystem.dao.vwo;
 
 import com.connor.hozon.bom.bomSystem.dao.BasicDao;
 import org.apache.ibatis.annotations.Param;
 import sql.pojo.cfg.vwo.HzVwoInfluenceDept;
-
+/**
+ * @Author: Fancyears·Maylos·Maywas
+ * @Description: 影响部门
+ * @Date: Created in 2018/8/27 21:17
+ * @Modified By:
+ */
 public interface HzVwoInfluenceDeptDao  extends BasicDao<HzVwoInfluenceDept>{
     /**
      * 主键删除

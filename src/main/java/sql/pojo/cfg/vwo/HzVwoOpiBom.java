@@ -9,7 +9,12 @@ package sql.pojo.cfg.vwo;
 import lombok.Data;
 
 import java.util.Date;
-
+/**
+ * @Author: Fancyears·Maylos·Maywas
+ * @Description: fuck
+ * @Date: Created in 2018/10/10 13:29
+ * @Modified By:
+ */
 @Data
 public class HzVwoOpiBom {
     /**

@@ -14,9 +14,10 @@ import sql.pojo.cfg.model.HzCfg0ModelRecord;
 import java.util.List;
 
 /**
- * User: Fancyears·Maylos·Mayways
- * Date: 2018/5/22
- * Time: 14:55
+ * @Author: Fancyears·Maylos·Maywas
+ * @Description: fuck
+ * @Date: Created in 2018/5/22 14:00
+ * @Modified By:
  */
 @Service("hzCfg0modelRecordService")
 public class HzCfg0ModelRecordService {

@@ -1,12 +1,17 @@
+/*
+ * Copyright (c) 2018.
+ * This file was wrote by fancyears·milos·maywas @connor. Any question/bug you can post to 1243093366@qq.com.
+ * ALL RIGHTS RESERVED.
+ */
+
 package com.connor.hozon.bom.bomSystem.dto;
 
-/*************************************************************************************************************************
- *                                  Author: Fancyears·Maylos·Mayways
- * Date: 2018/6/1 10:51
- *
- * Description: 项目信息，包括了品牌信息和平台信息等
- *
- * ***********************************************************************************************************************/
+/**
+ * @Author: Fancyears·Maylos·Maywas
+ * @Description: 项目详情传输对象
+ * @Date: Created in 2018/9/6 13:19
+ * @Modified By:
+ */
 public class HzProjectDetailBean {
     /**
      * 项目代码

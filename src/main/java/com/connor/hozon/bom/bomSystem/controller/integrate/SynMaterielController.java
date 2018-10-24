@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2018.
+ * This file was wrote by fancyears·milos·maywas @connor. Any question/bug you can post to 1243093366@qq.com.
+ * ALL RIGHTS RESERVED.
+ */
+
 package com.connor.hozon.bom.bomSystem.controller.integrate;
 
 import com.connor.hozon.bom.bomSystem.iservice.integrate.ISynMaterielService;
@@ -13,7 +19,7 @@ import java.util.List;
 import static com.connor.hozon.bom.bomSystem.helper.StringHelper.checkString;
 
 /**
- * 同步物料主数据
+ * 同步物料主数据 x
  */
 @Controller
 @RequestMapping("/synMateriel")

@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2018.
+ * This file was wrote by fancyears·milos·maywas @connor. Any question/bug you can post to 1243093366@qq.com.
+ * ALL RIGHTS RESERVED.
+ */
+
 package com.connor.hozon.bom.bomSystem.service.integrate;
 
 import com.connor.hozon.bom.bomSystem.dao.derivative.HzCfg0ModelGroupDao;
@@ -18,7 +24,12 @@ import org.springframework.context.annotation.Configuration;
 import sql.pojo.cfg.cfg0.HzCfg0Record;
 
 import java.util.*;
-
+/**
+ * @Author: Fancyears·Maylos·Maywas
+ * @Description: fuck
+ * @Date: Created in 2018/9/6 13:19
+ * @Modified By:
+ */
 @Configuration
 public class SynRelevanceService implements ISynRelevanceService {
     @Autowired

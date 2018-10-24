@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2018.
+ * This file was wrote by fancyears·milos·maywas @connor. Any question/bug you can post to 1243093366@qq.com.
+ * ALL RIGHTS RESERVED.
+ */
+
 package com.connor.hozon.bom.bomSystem.dao.cfg0;
 
 import com.connor.hozon.bom.bomSystem.dao.BasicDao;
@@ -9,9 +15,10 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Author: Fancyears·Maylos·Mayways
- * Description: 获取到啊配置器的系统层，系统层是从TC来，不允许更改，所有的配置数据都不应该修改TC的数据为准
- * Date: 2018/5/23 9:47
+ * @Author: Fancyears·Maylos·Maywas
+ * @Description: 获取到啊配置器的系统层，系统层是从TC来，不允许更改，所有的配置数据都不应该修改TC的数据为准
+ * @Date: Created in 2018/8/27 21:17
+ * @Modified By:
  */
 @Configuration
 public interface HzCfg0OptionFamilyDao extends BasicDao<HzCfg0OptionFamily>{

@@ -14,7 +14,10 @@ import sql.pojo.cfg.cfg0.HzCfg0Record;
 import java.util.List;
 
 /**
- * 同步相关性服务
+ * @Author: Fancyears·Maylos·Maywas
+ * @Description: fuck
+ * @Date: Created in 2018/9/6 13:19
+ * @Modified By:
  */
 @Configuration
 public interface ISynRelevanceService {

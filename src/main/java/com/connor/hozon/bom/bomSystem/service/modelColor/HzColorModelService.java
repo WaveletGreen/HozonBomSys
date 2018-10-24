@@ -13,7 +13,12 @@ import org.springframework.stereotype.Service;
 import sql.pojo.cfg.modelColor.HzCfg0ModelColorDetail;
 
 import java.util.List;
-
+/**
+ * @Author: Fancyears·Maylos·Maywas
+ * @Description: fuck
+ * @Date: Created in 2018/9/6 13:19
+ * @Modified By:
+ */
 @Service("hzColorModelService")
 public class HzColorModelService implements IHzColorModelService {
     @Autowired

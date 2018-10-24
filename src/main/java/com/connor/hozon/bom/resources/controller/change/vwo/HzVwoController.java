@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2018.
+ * This file was wrote by fancyears·milos·maywas @connor. Any question/bug you can post to 1243093366@qq.com.
+ * ALL RIGHTS RESERVED.
+ */
+
 package com.connor.hozon.bom.resources.controller.change.vwo;
 
 import com.connor.hozon.bom.bomSystem.dto.vwo.HzVwoFormListQueryBase;
@@ -22,9 +28,10 @@ import java.util.Map;
 
 
 /**
- * User: Fancyears·Maylos·Mayways
- * Date: 2018/8/14
- * Time: 10:52
+ * @Author: Fancyears·Maylos·Maywas
+ * @Description: fuck
+ * @Date: Created in 2018/10/10 13:29
+ * @Modified By:
  */
 @Controller
 @RequestMapping(value = "/vwo")

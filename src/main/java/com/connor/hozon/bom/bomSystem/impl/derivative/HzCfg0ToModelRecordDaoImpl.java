@@ -12,7 +12,12 @@ import org.springframework.context.annotation.Configuration;
 import sql.pojo.cfg.derivative.HzCfg0ToModelRecord;
 
 import java.util.List;
-
+/**
+ * @Author: Fancyears·Maylos·Maywas
+ * @Description: fuck
+ * @Date: Created in 2018/9/6 13:19
+ * @Modified By:
+ */
 @Configuration
 public class HzCfg0ToModelRecordDaoImpl extends BasicDaoImpl<HzCfg0ToModelRecord> implements HzCfg0ToModelRecordDao {
     public HzCfg0ToModelRecordDaoImpl() {

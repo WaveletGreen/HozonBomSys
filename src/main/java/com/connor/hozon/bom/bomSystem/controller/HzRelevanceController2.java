@@ -15,7 +15,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-
+/**
+ * @Author: Fancyears·Maylos·Maywas
+ * @Description: 相关性表 2x
+ * @Date: Created in 2018/8/27 21:17
+ * @Modified By:
+ */
 @Controller
 @RequestMapping("/relevance")
 public class HzRelevanceController2 {

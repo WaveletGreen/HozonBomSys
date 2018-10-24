@@ -7,8 +7,8 @@ import sql.IBaseSQLUtil;
 
 /**
  * @Author: Fancyears·Maylos·Maywas
- * @Description:
- * @Date: Created in 2018/8/30 19:41
+ * @Description: 基础dao层基本实现类
+ * @Date: Created in 2018/9/6 13:19
  * @Modified By:
  */
 @Configuration

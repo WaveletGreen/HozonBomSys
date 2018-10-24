@@ -16,9 +16,10 @@ import sql.pojo.project.HzMaterielRecord;
 import java.util.List;
 
 /**
- * Created by Fancyears·Maylos·Mayways
- * Description:
- * Date: 2018/6/9 13:56
+ * @Author: Fancyears·Maylos·Maywas
+ * @Description: fuck
+ * @Date: Created in 2018/9/6 13:19
+ * @Modified By:
  */
 @Service("HzSuperMaterielDao")
 public class HzSuperMaterielDaoImpl extends BasicDaoImpl<HzMaterielRecord> implements HzSuperMaterielDao {

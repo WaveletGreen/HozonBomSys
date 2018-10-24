@@ -10,7 +10,7 @@ import lombok.Data;
 
 /**
  * @Author: Fancyears·Maylos·Maywas
- * @Description: x
+ * @Description: 任务接收对象
  * @Date: Created in 2018/10/19 17:02
  * @Modified By:
  */

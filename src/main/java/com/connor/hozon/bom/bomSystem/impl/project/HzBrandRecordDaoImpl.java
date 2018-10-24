@@ -15,13 +15,12 @@ import sql.pojo.project.HzBrandRecord;
 
 import java.util.List;
 
-/*************************************************************************************************************************
- *                                  Author: Fancyears·Maylos·Mayways
- * Date: 2018/6/1 11:17
- *
- * Description:
- *
- * ***********************************************************************************************************************/
+/**
+ * @Author: Fancyears·Maylos·Maywas
+ * @Description: fuck
+ * @Date: Created in 2018/9/6 13:19
+ * @Modified By:
+ */
 @Service("hzBrandRecordDao")
 public class HzBrandRecordDaoImpl extends BasicDaoImpl<HzBrandRecord> implements HzBrandRecordDao {
     private final static HzBrandRecord BRAND = new HzBrandRecord();
