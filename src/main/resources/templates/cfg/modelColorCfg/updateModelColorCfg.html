@@ -45,8 +45,8 @@
                         th:id="${column.getPuid()}"
                 >
                     <option th:each="color:${colorList}" th:value="${color.getPuid()}"
-                            th:text="${color.getPColorCode()+'&emsp;&emsp;'+color.getPColorName()+'&emsp;&emsp;'+color.getPColorComment()+'&emsp;&emsp;'+color.getPColorOfSet()}"
-                            th:selected="${orgValue.get((c.index))==color.getPColorCode()? true :false}"
+                            th:text="${color.getpColorCode()+'&emsp;&emsp;'+color.getpColorName()+'&emsp;&emsp;'+color.getpColorOfSet()}"
+                            th:selected="${orgValue.get((c.index))==color.getpColorCode()? true :false}"
                     >
                     </option>
                 </select>

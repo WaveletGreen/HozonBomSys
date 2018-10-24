@@ -19,15 +19,6 @@ function getLength(obj) {
     return result;
 }
 
-function getLengthOfJson(obj){
-    let result = 0;
-    if (null != obj && undefined != obj)
-        for (let i in obj) {
-            if (obj.hasOwnProperty(i))
-                result++;
-        }
-    return result;
-}
 /**
  * 获取二维JSON对象的长度
  * @param obj

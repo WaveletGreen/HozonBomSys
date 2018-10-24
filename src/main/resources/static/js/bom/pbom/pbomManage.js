@@ -46,7 +46,7 @@ function initTable(pBomUrl) {
         return;
     }
     $.ajax({
-        url: "pbom/manage/title?projectId=" + projectPuid,
+        url: "pbom/manage/title?project=" + projectPuid,
         type: "GET",
         success: function (result) {
             // lookLevel(result,pBomUrl);

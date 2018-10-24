@@ -71,4 +71,6 @@ public interface HzCfg0ModelColorDao extends BasicDao<HzCfg0ModelColor> {
      * @return
      */
     int updateListData(List<HzCfg0ModelColor> hzCfg0ModelColors);
+
+    int updateByVwoId(HzCfg0ModelColor hzCfg0ModelColor);
 }

@@ -35,7 +35,7 @@
                 <select class="form-control input-small" data-style="btn-info"
                         th:id="modelShell" th:name="modelShell">
                     <option th:each="color:${colorList2}" th:value="${color.getPuid()}"
-                            th:text="${color.getPColorCode()+' -- '+color.getPColorName()+' -- '+color.getPColorComment()+' -- '+color.getPColorOfSet()}"
+                            th:text="${color.getpColorCode()+' -- '+color.getpColorName()+' -- '+color.getpColorOfSet()}"
                     >
                     </option>
                 </select>
@@ -50,7 +50,7 @@
                 <select class="form-control input-small" th:name="${column.getPuid()}" data-style="btn-info"
                         th:id="${column.getPuid()}">
                     <option th:each="color:${colorList}" th:value="${color.puid}"
-                            th:text="${color.getPColorCode()+' -- '+color.getPColorName()+' -- '+color.getPColorComment()+' -- '+color.getPColorOfSet()}"
+                            th:text="${color.getpColorCode()+' -- '+color.getpColorName()+' -- '+color.getpColorOfSet()}"
                     >
                     </option>
 

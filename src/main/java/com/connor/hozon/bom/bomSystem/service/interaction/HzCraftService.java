@@ -663,7 +663,11 @@ public class HzCraftService implements IHzCraftService {
             //比当前排序号编号大的正统排序号，是首次导入时的临近的排序号，100进制
             String localSortNum = hzPbomRecordDAO.findMinOrderNumWhichGreaterThanThisOrderNum(projectUid, mySortNum);
             mymy = Double.parseDouble(mySortNum);
-            youryour = Double.parseDouble(localSortNum);
+            if (localSortNum != null) {
+                youryour = Double.parseDouble(localSortNum);
+            } else {
+                youryour = mymy + 100;
+            }
             double _temp = mymy;
             //需要插入到数据库中的数据
             LocalCraftTarget target = new LocalCraftTarget();
@@ -848,7 +852,9 @@ public class HzCraftService implements IHzCraftService {
                                 }
                             }
                             //克隆一份出来
-                            target.getChildrenTree().add(record.clone());
+                            HzPbomLineRecord record1=record.clone();
+                            record1.setStatus(1);
+                            target.getChildrenTree().add(record1);
                         }
                     }
                 }

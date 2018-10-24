@@ -224,6 +224,11 @@ public class HzCfg0Controller extends ExtraIntegrate {
             result.put("msg", "<p style='color:red;'>特性值在配置字典中不存在</p>");
             return result;
         }
+        if (!checkString(hzDictionaryLibrary.getFamillyCode()) || !checkString(hzDictionaryLibrary.getFamillyCh())) {
+            result.put("status", false);
+            result.put("msg", "<p style='color:red;'>配置字典中的特性/特性名称不能为空</p>");
+            return result;
+        }
         record.setpCfg0FamilyName(hzDictionaryLibrary.getFamillyCode().toUpperCase());
         record.setpCfg0ObjectId(hzDictionaryLibrary.getEigenValue().toUpperCase());
         //创建人和修改人
@@ -420,6 +425,12 @@ public class HzCfg0Controller extends ExtraIntegrate {
 //                    result.put("msg", "目前不允许删除原数据，请重试或联系系统管理员");
                     return result;
                 }
+            }
+
+            if(record.getCfgIsInProcess()==1){
+                result.put("status", false);
+                result.put("msg","已在VWO流程中，不允许删除");
+                return result;
             }
         }
         List<HzCfg0Record> _toDelete = new ArrayList<>();
@@ -632,6 +643,8 @@ public class HzCfg0Controller extends ExtraIntegrate {
         JSONObject result = new JSONObject();
         HzDictionaryLibrary hzDictionaryLibrary = hzDictionaryLibraryService.queryLibraryDTOByCfgObject(cfgVal);
         if (hzDictionaryLibrary != null && hzDictionaryLibrary.getPuid() != null) {
+            hzDictionaryLibrary.setFailureTime(new Date());
+            hzDictionaryLibrary.setEffectTime(new Date());
             JSONObject libraryJson = JSONObject.fromObject(hzDictionaryLibrary);
             result.put("stage", true);
             result.put("data", libraryJson);
