@@ -627,7 +627,7 @@ public class HzVwoManagerService implements IHzVWOManagerService {
         }
 
 
-        //跟新数据库
+        //跟新数据库 x
         try {
             //跟新变更后主数据
             if (hzCmcrChangeDao.insertAfterList(hzCmcrChangesAfter) != hzCmcrChangesAfter.size()) {
