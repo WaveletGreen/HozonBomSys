@@ -1,8 +1,13 @@
 package com.connor.hozon.bom.bomSystem.dao.modelColor;
 
 import com.connor.hozon.bom.bomSystem.dao.BasicDao;
+import org.springframework.context.annotation.Configuration;
+import sql.pojo.cfg.modelColor.HzCmcrChange;
 import sql.pojo.cfg.modelColor.HzCmcrDetailChange;
 
+import java.util.List;
+
+@Configuration
 public interface HzCmcrDetailChangeDao extends BasicDao<HzCmcrDetailChange>{
     /**
      * 插入变更后数据
@@ -99,4 +104,28 @@ public interface HzCmcrDetailChangeDao extends BasicDao<HzCmcrDetailChange>{
      * @return 影响行数
      */
     int updateDetailBeforeByPrimaryKeySelective(HzCmcrDetailChange cmcr) throws Exception;
+
+    /**
+     *批量插入变更前从数据
+     * @param hzCmcrDetailChangesAfter
+     * @return
+     * @throws Exception
+     */
+    int insertDetailAfterList(List<HzCmcrDetailChange> hzCmcrDetailChangesAfter) throws Exception;
+
+    /**
+     * 查询最近一次变更后从数据
+     * @param hzCmcrDetailChangesQuery
+     * @return
+     * @throws Exception
+     */
+    List<HzCmcrDetailChange> selectLastAfter(List<HzCmcrDetailChange> hzCmcrDetailChangesQuery)throws Exception;
+
+    /**
+     * 批量插入变更前从数据
+     * @param hzCmcrDetailChangesQuery
+     * @return
+     * @throws Exception
+     */
+    int insertDetailBeforeList(List<HzCmcrDetailChange> hzCmcrDetailChangesQuery) throws Exception;
 }

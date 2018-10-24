@@ -1,9 +1,9 @@
 /**
- * 格式化日期，根据毫秒数进行格式化
+ * 格式化日期，根据毫秒数进行格式化，时间转为字符串
  * @param cellval
  * @returns {string}
  */
-function changeDateFormat(cellval) {
+function dateToStringFormat(cellval) {
     if (cellval != null) {
         var date = new Date(parseInt(cellval));
         var month = date.getMonth() + 1 < 10 ? "0" + (date.getMonth() + 1) : date.getMonth() + 1;
@@ -22,11 +22,11 @@ function changeDateFormat(cellval) {
 };
 
 /**
- * 格式化日期，根据字符串进行格式化
+ * 格式化日期，根据字符串进行格式化，字符串转为时间
  * @param strDate
  * @returns {string}
  */
-function changeDateFormat2(strDate) {
+function stringToDateFormat(strDate) {
     if (strDate != null) {
         var date = new Date(Date.parse(strDate));
         if (date == null) {

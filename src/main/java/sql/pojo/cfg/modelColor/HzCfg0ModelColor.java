@@ -74,7 +74,7 @@ public class HzCfg0ModelColor {
     private String cmcrReserve4;
     @Getter
     @Setter
-    private String cmcrReserve5;
+    private String cmcrStatus;
 
     public HzCfg0ModelColor() {
         mapOfCfg0 = new LinkedHashMap<>();

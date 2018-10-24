@@ -307,7 +307,9 @@ function deleteVehicle() {
                 contentType: "application/json",
                 success: function (result) {
                     if (result.status) {
-                        layer.msg(result.msg, {icon: 1, time: 2000})
+                        layer.msg(result.msg, {icon: 1, time: 2000});
+                        doQuery();
+                        //$(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
                         // window.Ewin.alert({message: });
                         //刷新，会重新申请数据库数据
                     }
@@ -388,7 +390,9 @@ function saveCompose() {
         url : "materielV2/saveCompose?projectPuid="+projectUid ,
         success : function (result) {
             if(result.status!=false){
-                window.Ewin.alert({message: '生成成功!'});
+                // window.Ewin.alert({message: '生成成功!'});
+                layer.msg("生成成功", {icon: 1, time: 2000});
+                doQuery();
             }else {
                 window.Ewin.alert({message: result.msg});
             }
@@ -397,4 +401,8 @@ function saveCompose() {
             window.Ewin.alert({message: result.msg});
         }
     })
+}
+
+function doQuery() {
+    $('#materielFeature').bootstrapTable('refresh');    //刷新表格
 }

@@ -8,7 +8,7 @@ package com.connor.hozon.bom.bomSystem.iservice.process;
 
 /**
  * @Author: Fancyears·Maylos·Maywas
- * @Description: 流程中断回调 x
+ * @Description: 流程中断回调
  * @Date: Created in 2018/10/16 13:26
  * @Modified By:
  */

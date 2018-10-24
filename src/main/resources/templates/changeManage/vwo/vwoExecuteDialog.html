@@ -1,4 +1,10 @@
 <!DOCTYPE html>
+<!--
+  ~ Copyright (c) 2018.
+  ~ This file was wrote by fancyears·milos·maywas @connor. Any question/bug you can post to 1243093366@qq.com.
+  ~ ALL RIGHTS RESERVED.
+  -->
+
 <html xmlns:th="http://www.thymeleaf.org">
 <meta charset="UTF-8">
 <title>关联工程师表</title>
@@ -6,11 +12,11 @@
 <body>
 <input id="url" type="hidden" value="vwo/queryByBase"/>
 <div class="panel-body" style="padding-bottom:0px;">
-    <form class="form-horizontal" id="cntForm" role="form" method="post">
+    <form class="form-horizontal" id="exeForm" role="form" method="post">
         <fieldset>
             <div class="panel panel-default" style="margin-top: 10px;">
-                <input th:value="${vwoId}" type="hidden" id="vwoId" name="vwoId"/>
-                <input type="hidden" id="personId" name="personId"/>
+                <input th:value="${vwoId}" type="hidden" id="exeVwoId" name="exeVwoId"/>
+                <input type="hidden" id="exeUserId" name="exeUserId"/>
                 <div class="panel-body">
                     <div class="col-lg-6">
                         <label>请展开部门选择人员</label>
@@ -18,25 +24,52 @@
                     </div>
                     <div class="col-lg-6">
                         <div class="form-group col-lg-12">
-                            <label for="personName">关联工程师名:</label>
-                            <input type="text" class="form-control" name="personName" id="personName"
-                                   placeholder="请选择工程师"/>
-                        </div>
-                        <div class="form-group col-lg-12">
-                            <label for="personDeptName">所属部门:</label>
-                            <input type="text" class="form-control" name="personDeptName" id="personDeptName"
+                            <label for="exeDept">部门:</label>
+                            <input type="text" class="form-control" name="exeDept" id="exeDept"
                                    disabled="disabled"
                             />
                         </div>
                         <div class="form-group col-lg-12">
-                            <label for="partId">关联零件号:</label>
-                            <input type="text" class="form-control" name="partId" id="partId"
-                                   placeholder="请输入关联零件号"/>
+                            <label for="exeUser">人员:</label>
+                            <input type="text" class="form-control" name="exeUser" id="exeUser"
+                                   placeholder="请选择工程师"
+                            />
                         </div>
                         <div class="form-group col-lg-12">
-                            <label for="partName">关联零件名称:</label>
-                            <input type="text" class="form-control" name="partName" id="partName"
-                                   placeholder="请输入关联零件名称"/>
+                            <label for="exeRole">角色:</label>
+                            <select class="form-control input-small" data-style="btn-info" id="exeRole" name="exeRole">
+                                <option value="1">Draft</option>
+                                <option value="2">EDIT</option>
+                                <option value="3">PROCESS</option>
+                                <option value="4">IMPL</option>
+                                <option value="5">INFO</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-lg-12">
+                            <label for="exeMission">任务:</label>
+                            <select class="form-control input-small" data-style="btn-info" id="exeMission"
+                                    name="exeMission">
+                                <option value="1">Draft</option>
+                                <option value="2">EDIT</option>
+                                <option value="3">PROCESS</option>
+                                <option value="4">IMPL</option>
+                                <option value="5">INFO</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-lg-12">
+                            <label for="exePlanFinishDate">计划完成时间:</label>
+                            <input type="date" class="form-control" name="exePlanFinishDate" id="exePlanFinishDate"
+                            />
+                        </div>
+                        <div class="form-group col-lg-12">
+                            <label for="exeStatus">状态:</label>
+                            <input type="text" class="form-control" name="exeStatus" id="exeStatus"
+                            />
+                        </div>
+                        <div class="form-group col-lg-12">
+                            <label for="exeProof">证明:</label>
+                            <input type="text" class="form-control" name="exeProof" id="exeProof"
+                            />
                         </div>
                     </div>
                 </div>
@@ -79,8 +112,6 @@
                 }
             },
             onClick: function (event, treeId, treeNode) {
-                console.log(treeId);
-                $("#personName").val(treeNode.name);
                 let userId = treeNode.uid;
                 $.ajax({
                     type: "GET",
@@ -88,8 +119,9 @@
                     url: "./vwo/getUserDetail?uid=" + userId,
                     success: function (result) {
                         if (result.status) {
-                            $("#personDeptName").val(result.groupName);
-                            $("#personId").val(result.personId);
+                            $("#exeDept").val(result.groupName);
+                            $("#exeUser").val(result.personName);
+                            $("#exeUserId").val(result.personId);
                         }
                     },
                     error: function (e) {
@@ -108,7 +140,7 @@
         }
     );
     $(function () {
-        $('#cntForm').bootstrapValidator({
+        $('#exeForm').bootstrapValidator({
             message: 'This value is not valid',
             feedbackIcons: {
                 valid: 'glyphicon glyphicon-ok',
@@ -116,63 +148,41 @@
                 validating: 'glyphicon glyphicon-refresh'
             },
             fields: {
-                partId: {
-                    message: '零件号未输入',
+                exeUser: {
+                    message: '未选择人员',
                     validators: {
                         notEmpty: {
-                            message: ' 请输入正确的零件号'
+                            message: ' 请选择人员'
                         }
                     }
                 },
-                // pColorCode: {
-                //     message: '颜色代号验证失败',
-                //     validators: {
-                //         notEmpty: {
-                //             message: '颜色代号不能为空'
-                //         },
-                //         threshold: 1, //有1字符以上才发送ajax请求，（input中输入一个字符，插件会向服务器发送一次，设置限制，6字符以上才开始）
-                //         remote: {//ajax验证。server result:{"valid",true or false} 向服务发送当前input name值，获得一个json数据。例表示正确：{"valid",true}
-                //             url: 'colorSet/validateCodeWithPuid',//验证地址
-                //             message: '颜色代号已存在',//提示消息
-                //             delay: 500,//每输入一个字符，就发ajax请求，服务器压力还是太大，设置2秒发送一次ajax（默认输入一个字符，提交一次，服务器压力太大）
-                //             // *自定义提交数据，默认值提交当前input value
-                //             data: function (validator) {
-                //                 return {
-                //                     puid: $('#puid').val(),
-                //                     pColorCode: $("#pColorCode").val()
-                //                 };
-                //             },
-                //             type: 'POST'//请求方式
-                //         }
-                //     }
-                // }
             }
         });
         $("#btnOk", window.top.document).click(function () {
-            var bootstrapValidator = $("#cntForm", window.top.document).data('bootstrapValidator');
+            var bootstrapValidator = $("#exeForm", window.top.document).data('bootstrapValidator');
             bootstrapValidator.validate();
             //重新验证字段
             // bootstrapValidator.revalidateField("pColorAbolishDate");
             // bootstrapValidator.revalidateField("pColorEffectedDate");
             if (bootstrapValidator.isValid()) {
                 let data = {};
-                var _d = $("#cntForm").serializeArray();
+                var _d = $("#exeForm").serializeArray();
                 for (var p in _d) {
                     data[_d[p].name] = _d[p].value;
                 }
-                console.log(data);
-                JSON.stringify(data);
+                data.exeDept = $("#exeDept").val();
                 $.ajax({
                     contentType:
                         "application/json",
                     type:
                         'POST',
                     data: JSON.stringify(data),
-                    url: "./vwo/saveInformChanger",
+                    url: "./vwo/saveExecuteInfo",
                     success: function (result) {
                         $('.modal-dialog', window.top.document).parent('div').remove();
                         $('body', window.top.document).find('.modal-backdrop').remove();
-                        $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doRefreshConnectedTable();
+                        //移除该样式，否则y轴滚动框将无法显示，则无法向下滚动
+                        $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doRefreshExecuteTable();
                         if (result.status) {
                             layer.msg(result.msg, {icon: 1, time: 2000});
                             // $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.reloadSheet();//.find('#' + result.type).text(result.name);
