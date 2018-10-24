@@ -1061,6 +1061,24 @@ public class HzVwoManagerService implements IHzVWOManagerService {
     @Override
     public JSONObject launch(Integer type, String projectUid, Long vwoId) {
         JSONObject result = new JSONObject();
+        HzVwoOpiBom hzVwoOpiBom = hzVwoOpiBomDao.selectByVwoId(vwoId);
+        if(hzVwoOpiBom .getOpiBomMngUserId()==null){
+            result.put("msg","请指派BOM经理");
+            result.put("status",false);
+            return result;
+        }
+        HzVwoOpiPmt hzVwoOpiPmt = hzVwoOpiPmtDao.selectByVwoId(vwoId);
+        if(hzVwoOpiPmt.getOpiPmtMngUserId()==null){
+            result.put("msg","请指派PMT经理");
+            result.put("status",false);
+            return result;
+        }
+//        HzVwoOpiProj hzVwoOpiProj = hzVwoOpiProjDao.selectByVwoId(vwoId);
+//        if(hzVwoOpiProj.getOpiProjMngUserId()==null){
+//            result.put("msg","请指派项目经理");
+//            result.put("status",false);
+//            return result;
+//        }
         boolean status = toLaunch(type, projectUid, vwoId);
         if (status) {
             result.put("msg", "VWO发起成功");
@@ -1071,6 +1089,14 @@ public class HzVwoManagerService implements IHzVWOManagerService {
         return result;
     }
 
+
+    /**
+     * 发起
+     * @param type
+     * @param projectUid
+     * @param vwoId
+     * @return
+     */
     public boolean toLaunch(Integer type, String projectUid, Long vwoId) {
         User user = UserInfo.getUser();
         HzVwoInfo info = hzVwoInfoService.doSelectByPrimaryKey(vwoId);
@@ -1091,7 +1117,7 @@ public class HzVwoManagerService implements IHzVWOManagerService {
     private void noticeUsers(HzVwoInfo info, Integer type) {
         List<HzTasks> tasks = new ArrayList<>();
         tasks=hzTasksService.doSelectByVwoId(info.getId());
-        
+
     }
 
     @Override

@@ -1,7 +1,7 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <body>
-    <button id="btnAdd" class="btn btn-success" style="position: fixed;margin-left:45%;margin-top:-60px;margin-bottom: -10px;z-index:99999;">添加</button>
+    <button id="btnAdd" class="btn btn-success" style="position: fixed;margin-left:45%;margin-top:-60px;margin-bottom: -10px;z-index:99999;" onclick="add()">添加</button>
 <form id="colorForm" role="form" method="post" action="./colorSet/add">
     <div class="form-group">
         <label for="pColorOfSet">色系</label>
@@ -54,6 +54,12 @@
 </form>
     <script th:inline="javascript">
         var total = 0;
+        $("#btnAdd").click(function () {
+            // var child = '<input type="text" id="color_'+total+'" name="color_'+total+'"/>';
+            alert('a');
+            // $("#colorForm").append(child);
+            total++;
+        });
         <![CDATA[
         $(document).keydown(function (event) {
             if (event.keyCode == 13) {
@@ -232,13 +238,7 @@
                 minView: 0,//表示日期选择的最小范围，默认是hour
                 todayBtn: true
             })
-        )
-        $("#btnAdd").click(function () {
-            var child = '<input type="text" id="color_'+total+'" name="color_'+total+'"/>';
-            alert(child);
-            $("#colorForm").append(child);
-            total++;
-        });
+        );
         ]]>
 
 
