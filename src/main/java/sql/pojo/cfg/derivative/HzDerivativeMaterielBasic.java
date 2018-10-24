@@ -1,11 +1,19 @@
+/*
+ * Copyright (c) 2018.
+ * This file was wrote by fancyears·milos·maywas @connor. Any question/bug you can post to 1243093366@qq.com.
+ * ALL RIGHTS RESERVED.
+ */
+
 package sql.pojo.cfg.derivative;
 
 import lombok.Data;
 
 import java.util.Date;
-
 /**
- * 衍生物料基础信息
+ * @Author: Fancyears·Maylos·Maywas
+ * @Description: 衍生物料基础信息
+ * @Date: Created in 2018/8/10 13:55
+ * @Modified By:
  */
 @Data
 public class HzDerivativeMaterielBasic {

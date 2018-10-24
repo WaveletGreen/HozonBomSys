@@ -12,6 +12,7 @@ package sql.pojo.cfg.vwo;
  * @Date: Created in 2018/10/10 13:29
  * @Modified By:
  */
+
 public class HzVwoInfluenceDept {
     /**
      * 主键
