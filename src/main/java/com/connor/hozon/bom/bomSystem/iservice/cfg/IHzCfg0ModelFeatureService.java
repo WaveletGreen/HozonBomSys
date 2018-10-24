@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2018.
+ * This file was wrote by fancyears·milos·maywas @connor. Any question/bug you can post to 1243093366@qq.com.
+ * ALL RIGHTS RESERVED.
+ */
+
 package com.connor.hozon.bom.bomSystem.iservice.cfg;
 
 import org.apache.ibatis.annotations.Param;
@@ -6,6 +12,9 @@ import sql.pojo.cfg.derivative.HzCfg0ModelFeature;
 
 import java.util.List;
 
+/**
+ *
+ */
 @Configuration
 public interface IHzCfg0ModelFeatureService {
     /**
