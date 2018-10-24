@@ -12,7 +12,12 @@ import org.springframework.context.annotation.Configuration;
 import sql.pojo.HzPreferenceSetting;
 
 import java.util.List;
-
+/**
+ * @Author: Fancyears·Maylos·Maywas
+ * @Description: fuck
+ * @Date: Created in 2018/9/6 13:19
+ * @Modified By:
+ */
 @Configuration
 public class HzPreferenceSettingDaoImpl extends BasicDaoImpl<HzPreferenceSetting> implements HzPreferenceSettingDao {
 

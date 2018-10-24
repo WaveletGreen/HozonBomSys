@@ -13,7 +13,12 @@ import org.springframework.stereotype.Service;
 import sql.pojo.cfg.fullCfg.HzCfg0OfBomLineRecord;
 
 import java.util.List;
-
+/**
+ * @Author: Fancyears·Maylos·Maywas
+ * @Description: fuck
+ * @Date: Created in 2018/9/6 13:19
+ * @Modified By:
+ */
 @Service("hzCfg0OfBomLineService")
 public class HzCfg0OfBomLineService implements IHzCfg0OfBomLineService {
     @Autowired

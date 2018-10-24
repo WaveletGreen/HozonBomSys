@@ -10,8 +10,8 @@ import lombok.Getter;
 
 /**
  * @Author: Fancyears·Maylos·Maywas
- * @Description:
- * @Date: Created in 2018/9/19 16:21
+ * @Description: fuck
+ * @Date: Created in 2018/9/6 13:19
  * @Modified By:
  */
 public enum SpecialFeatureOptions {

@@ -9,7 +9,10 @@ package sql.pojo.cfg.vwo;
 import java.util.Date;
 
 /**
- * 特性变更bean x
+ * @Author: Fancyears·Maylos·Maywas
+ * @Description: 特性变更bean
+ * @Date: Created in 2018/10/10 13:29
+ * @Modified By:
  */
 public class HzFeatureChangeBean {
     /**

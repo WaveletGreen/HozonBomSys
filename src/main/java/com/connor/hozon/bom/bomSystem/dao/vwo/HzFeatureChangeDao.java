@@ -11,7 +11,12 @@ import org.springframework.context.annotation.Configuration;
 import sql.pojo.cfg.vwo.HzFeatureChangeBean;
 
 import java.util.List;
-
+/**
+ * @Author: Fancyears·Maylos·Maywas
+ * @Description: 特性变更dao
+ * @Date: Created in 2018/8/27 21:17
+ * @Modified By:
+ */
 @Configuration
 public interface HzFeatureChangeDao extends BasicDao<HzFeatureChangeBean> {
 

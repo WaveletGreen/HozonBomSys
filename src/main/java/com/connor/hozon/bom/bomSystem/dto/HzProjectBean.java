@@ -1,12 +1,16 @@
-package com.connor.hozon.bom.bomSystem.dto;
+/*
+ * Copyright (c) 2018.
+ * This file was wrote by fancyears·milos·maywas @connor. Any question/bug you can post to 1243093366@qq.com.
+ * ALL RIGHTS RESERVED.
+ */
 
-/*************************************************************************************************************************
- *                                  Author: Fancyears·Maylos·Mayways
- * Date: 2018/5/31 15:28
- *
- * Description:
- *
- * ***********************************************************************************************************************/
+package com.connor.hozon.bom.bomSystem.dto;
+/**
+ * @Author: Fancyears·Maylos·Maywas
+ * @Description: 项目树结构构建对象
+ * @Date: Created in 2018/9/6 13:19
+ * @Modified By:
+ */
 public class HzProjectBean {
     private String puid;
     private String pPuid;

@@ -28,6 +28,12 @@ import sql.pojo.cfg.cfg0.HzCfg0Record;
 
 import java.util.*;
 
+/**
+ * @Author: Fancyears·Maylos·Maywas
+ * @Description:
+ * @Date: Created in 2018/8/30 18:53
+ * @Modified By:
+ */
 @Controller
 @RequestMapping("/loadBom")
 public class HzLoadBomDataController {

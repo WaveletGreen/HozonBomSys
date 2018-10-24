@@ -10,14 +10,12 @@ import com.connor.hozon.bom.bomSystem.dao.main.HzCfg0MainRecordDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sql.pojo.cfg.main.HzCfg0MainRecord;
-
-/*************************************************************************************************************************
- *                                  Author: Fancyears·Maylos·Mayways
- * Date: 2018/5/31 14:00
- *
- * Description:
- *
- * ***********************************************************************************************************************/
+/**
+ * @Author: Fancyears·Maylos·Maywas
+ * @Description: fuck
+ * @Date: Created in 2018/5/31 14:00
+ * @Modified By:
+ */
 @Service("hzCfg0MainService")
 public class HzCfg0MainService {
     @Autowired
