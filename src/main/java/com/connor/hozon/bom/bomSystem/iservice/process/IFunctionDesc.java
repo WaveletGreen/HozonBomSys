@@ -8,10 +8,18 @@ package com.connor.hozon.bom.bomSystem.iservice.process;
 
 /**
  * @Author: Fancyears·Maylos·Maywas
- * @Description: 特性流程管理x
- * @Date: Created in 2018/10/16 13:29
+ * @Description: x
+ * @Date: Created in 2018/10/16 14:01
  * @Modified By:
  */
-public interface IFeatureProcessManager {
+public interface IFunctionDesc {
+    /**
+     * 中断回调描述
+     */
+    void interruptionFunctionDesc();
 
+    /**
+     * 发布回调描述
+     */
+    void releaseFunctionDesc();
 }
