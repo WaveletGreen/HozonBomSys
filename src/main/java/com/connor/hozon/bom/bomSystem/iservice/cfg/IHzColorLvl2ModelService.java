@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2018.
+ * This file was wrote by fancyears·milos·maywas @connor. Any question/bug you can post to 1243093366@qq.com.
+ * ALL RIGHTS RESERVED.
+ */
+
 package com.connor.hozon.bom.bomSystem.iservice.cfg;
 
 import org.springframework.stereotype.Service;
@@ -7,7 +13,7 @@ import java.util.List;
 
 /**
  * @Author: Fancyears·Maylos·Maywas
- * @Description:
+ * @Description: x
  * @Date: Created in 2018/8/3 11:03
  * @Modified By:
  */
