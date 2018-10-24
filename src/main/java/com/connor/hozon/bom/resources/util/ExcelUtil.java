@@ -346,7 +346,6 @@ public class ExcelUtil {
     public static boolean writeExcel(String fileName, String[] title, List<String[]> dataList, String str, HttpServletRequest request) throws Exception {
         boolean flag = false;
         try {
-            Object obj = ExcelUtil.class.getClassLoader();
             String realPath = request.getServletContext().getRealPath(
                     "//WEB-INF//classes//");
             String pathx = realPath + "static/files/tableExport.xlsx";
@@ -359,7 +358,7 @@ public class ExcelUtil {
             if (!isDownload) {
                 f = new File(pathx);
             } else {
-                f = new File(ExcelUtil.class.getClassLoader().getResource("static/files/tableExport.xlsx").getFile());// 声明File对象
+                f = new File(ExcelUtil.class./*getClassLoader().*/getResource("/static/files/tableExport.xlsx").getFile());// 声明File对象
             }
             if (f == null || !f.exists()) {
                 return false;
