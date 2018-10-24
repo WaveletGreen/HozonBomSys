@@ -1,7 +1,16 @@
+/*
+ * Copyright (c) 2018.
+ * This file was wrote by fancyears·milos·maywas @connor. Any question/bug you can post to 1243093366@qq.com.
+ * ALL RIGHTS RESERVED.
+ */
+
 package sql.pojo;
 
 /**
- * 从TC导入BOM+配置时用的首选项，BOM系统已从TC中脱离，不再需要首选项作为每一个项目的BOM表头，因此废除
+ * @Author: Fancyears·Maylos·Maywas
+ * @Description: 从TC导入BOM+配置时用的首选项，BOM系统已从TC中脱离，不再需要首选项作为每一个项目的BOM表头，因此废除
+ * @Date: Created in 2018/10/10 13:29
+ * @Modified By:
  */
 public class HzPreferenceSetting {
     private String puid;

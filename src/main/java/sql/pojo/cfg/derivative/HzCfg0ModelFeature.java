@@ -7,9 +7,11 @@
 package sql.pojo.cfg.derivative;
 
 import java.util.Date;
-
 /**
- *配置物料特性表中衍生物料，充当衍生物料主数据
+ * @Author: Fancyears·Maylos·Maywas
+ * @Description: 配置物料特性表中衍生物料，充当衍生物料主数据
+ * @Date: Created in 2018/8/10 13:55
+ * @Modified By:
  */
 public class HzCfg0ModelFeature {
     /**

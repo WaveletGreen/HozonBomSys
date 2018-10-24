@@ -7,7 +7,10 @@
 package sql.pojo.cfg.fullCfg;
 
 /**
- * 配置值与BOM行的映射关系
+ * @Author: Fancyears·Maylos·Maywas
+ * @Description: 配置值与BOM行的映射关系
+ * @Date: Created in 2018/8/10 13:55
+ * @Modified By:
  */
 public class HzCfg0OfBomLineRecord {
     /**
