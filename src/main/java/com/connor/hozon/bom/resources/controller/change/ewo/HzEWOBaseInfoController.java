@@ -320,4 +320,12 @@ public class HzEWOBaseInfoController extends BaseController {
         List<HzEWOAllImpactDept> list = hzEWOImpactDeptDAO.findEWOAllImpactDept();
         toJSONResponse(Result.build(list),response);
     }
+
+    /**
+     * 跳转到关联账户的页面
+     */
+    @RequestMapping("toPageInsertUser")
+    public String ToPageInsertUserName(String id){
+        return "changeManage/ewo/ewoSelectPerson";
+    }
 }

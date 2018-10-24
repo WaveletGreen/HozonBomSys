@@ -326,3 +326,14 @@ $(document).ready((function () {
     //     }
     // })
 }))
+
+
+function doSelectPerson(id) {
+    window.Ewin.dialog({
+        title: "添加",
+        url: "toPageInsertUser",
+        gridId: "gridId",
+        width: 600,
+        height: 500
+    })
+}
