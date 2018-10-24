@@ -4,6 +4,7 @@
  * ALL RIGHTS RESERVED.
  */
 
+
 $(document).ready(
     // $("#query").click(function () {
     loadData(getProjectUid()),
