@@ -1,54 +1,39 @@
 package com.connor.hozon.bom.sys.controller;
 
 
-import com.connor.hozon.bom.bomSystem.dao.cfg0.HzCfg0RecordDao;
-import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
 import com.connor.hozon.bom.common.util.dict.DictCache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-import sql.pojo.cfg.cfg0.HzCfg0Record;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.net.URL;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import static org.springframework.http.MediaType.APPLICATION_FORM_URLENCODED;
-
 /*
- * 类描述：实现附件上传的实现类
- * @auther linzf
- * @create 2017/8/24 0024
- */
-@Controller
+* 类描述：实现附件上传的实现类
+* @auther linzf
+* @create 2017/8/24 0024
+*/
+//@Controller
 public class FileController {
 
     private static final Logger logger = LoggerFactory.getLogger(FileController.class);
 
-    @Autowired
-    HzCfg0RecordDao hzCfg0RecordDao;
-
     //文件上传相关代码
     @RequestMapping(value = "uploadFile")
     @ResponseBody
-    public Map<String, Object> uploadFile(@RequestParam("file_data") MultipartFile file) {
-        Map<String, Object> result = new HashMap<String, Object>();
+    public Map<String,Object> uploadFile(@RequestParam("file_data") MultipartFile file) {
+        Map<String,Object> result = new HashMap<String, Object>();
         if (file.isEmpty()) {
-            result.put("success", false);
-            result.put("msg", "上传文件为空");
+            result.put("success",false);
+            result.put("msg","上传文件为空");
             return result;
         }
         // 获取文件名
@@ -58,8 +43,8 @@ public class FileController {
         String suffixName = fileName.substring(fileName.lastIndexOf("."));
         logger.info("上传的后缀名为：" + suffixName);
         // 文件上传后的路径
-        String filePath = DictCache.getDictValue("fileTempPath", "fileTempPath");
-        if (filePath == null || filePath.equalsIgnoreCase("")) {
+        String filePath = DictCache.getDictValue("fileTempPath","fileTempPath");
+        if(filePath==null||filePath.equalsIgnoreCase("")){
             filePath = "E://test//";
         }
         // 解决中文问题，liunx下中文路径，图片显示问题
@@ -71,49 +56,32 @@ public class FileController {
         }
         try {
             file.transferTo(dest);
-            result.put("msg", "上传文件成功");
-            result.put("success", true);
+            result.put("msg","上传文件成功");
+            result.put("success",true);
             return result;
         } catch (IllegalStateException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        result.put("msg", "上传文件失败");
-        result.put("success", false);
+        result.put("msg","上传文件失败");
+        result.put("success",false);
         return result;
     }
 
     //文件下载相关代码
-    @RequestMapping(value = "/download", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE
-//            ,produces = {MediaType.APPLICATION_ATOM_XML_VALUE, MediaType.APPLICATION_JSON_VALUE}
-    )
-    public String downloadFile(org.apache.catalina.servlet4preview.http.HttpServletRequest request, HttpServletResponse response
-            , @RequestParam List<String> uids
-            , @RequestParam List<String> columns
-            , @RequestParam List<String> fields
-    ) throws IOException, NoSuchMethodException, InvocationTargetException, IllegalAccessException {
-        String fileName = "static/files/EBOM导入模板.xlsx";
-        String fileName2 = "static/files/EBOM导入模板"+ UUIDHelper.generateUpperUid()+".xlsx";
-        HzCfg0Record record = hzCfg0RecordDao.selectByPrimaryKey(uids.get(0));
-        //获取反射的get方法，必须与实体类里的方法一一对应上，否则会报方法找不到错误
-        Method method = HzCfg0Record.class.getMethod("get" + fields.get(1));
-        //执行方法，相当于用get方法
-        Object oxx = method.invoke(record);
+    @RequestMapping("/download")
+    public String downloadFile(org.apache.catalina.servlet4preview.http.HttpServletRequest request, HttpServletResponse response){
+        String fileName = "FileUploadTests.java";
         if (fileName != null) {
             //当前是从该工程的WEB-INF//File//下获取文件(该目录可以在下面一行代码配置)然后下载到C:\\users\\downloads即本机的默认下载的目录
             String realPath = request.getServletContext().getRealPath(
-                    "//WEB-INF//classes//");
-            URL path = getClass().getClassLoader().getResource("");//.getPath();
-            File file = new File(path.getPath() + "/" + fileName);
-            File ft = new File(path.getPath() + "/" + fileName2);
-            if (!ft.exists()) {
-                ft.createNewFile();
-            }
+                    "//WEB-INF//");
+            File file = new File(realPath, fileName);
             if (file.exists()) {
                 response.setContentType("application/force-download");// 设置强制下载不打开
                 response.addHeader("Content-Disposition",
-                        "attachment;fileName=" + fileName);// 设置文件名
+                        "attachment;fileName=" +  fileName);// 设置文件名
                 byte[] buffer = new byte[1024];
                 FileInputStream fis = null;
                 BufferedInputStream bis = null;
@@ -139,7 +107,6 @@ public class FileController {
                     }
                     if (fis != null) {
                         try {
-                            ft.delete();
                             fis.close();
                         } catch (IOException e) {
                             e.printStackTrace();

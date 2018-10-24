@@ -1,13 +1,14 @@
 package com.connor.hozon.bom.resources.domain.dto.response;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * @Author: haozt
  * @Date: 2018/9/27
  * @Description:
  */
-@Data
 public class HzSingleVehiclesBomRespDTO {
     /**
      * 主键id
@@ -126,4 +127,269 @@ public class HzSingleVehiclesBomRespDTO {
      */
     private String eBomPuid;
 
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getLineId() {
+        return lineId;
+    }
+
+    public void setLineId(String lineId) {
+        this.lineId = lineId;
+    }
+
+    public String getpBomOfWhichDept() {
+        return pBomOfWhichDept;
+    }
+
+    public void setpBomOfWhichDept(String pBomOfWhichDept) {
+        this.pBomOfWhichDept = pBomOfWhichDept;
+    }
+    public String getPBomOfWhichDept() {
+        return pBomOfWhichDept;
+    }
+
+    public void setPBomOfWhichDept(String pBomOfWhichDept) {
+        this.pBomOfWhichDept = pBomOfWhichDept;
+    }
+
+    public String getpBomLinePartName() {
+        return pBomLinePartName;
+    }
+
+    public void setpBomLinePartName(String pBomLinePartName) {
+        this.pBomLinePartName = pBomLinePartName;
+    }
+    public String getPBomLinePartName() {
+        return pBomLinePartName;
+    }
+
+    public void setPBomLinePartName(String pBomLinePartName) {
+        this.pBomLinePartName = pBomLinePartName;
+    }
+
+    public String getpBomLinePartEnName() {
+        return pBomLinePartEnName;
+    }
+
+    public void setpBomLinePartEnName(String pBomLinePartEnName) {
+        this.pBomLinePartEnName = pBomLinePartEnName;
+    }
+    public String getPBomLinePartEnName() {
+        return pBomLinePartEnName;
+    }
+
+    public void setPBomLinePartEnName(String pBomLinePartEnName) {
+        this.pBomLinePartEnName = pBomLinePartEnName;
+    }
+
+    public String getpBomLinePartClass() {
+        return pBomLinePartClass;
+    }
+
+    public void setpBomLinePartClass(String pBomLinePartClass) {
+        this.pBomLinePartClass = pBomLinePartClass;
+    }
+    public String getPBomLinePartClass() {
+        return pBomLinePartClass;
+    }
+
+    public void setPBomLinePartClass(String pBomLinePartClass) {
+        this.pBomLinePartClass = pBomLinePartClass;
+    }
+
+    public String getpBomLinePartResource() {
+        return pBomLinePartResource;
+    }
+
+    public void setpBomLinePartResource(String pBomLinePartResource) {
+        this.pBomLinePartResource = pBomLinePartResource;
+    }
+    public String getPBomLinePartResource() {
+        return pBomLinePartResource;
+    }
+
+    public void setPBomLinePartResource(String pBomLinePartResource) {
+        this.pBomLinePartResource = pBomLinePartResource;
+    }
+
+    public String getSparePart() {
+        return sparePart;
+    }
+
+    public void setSparePart(String sparePart) {
+        this.sparePart = sparePart;
+    }
+
+    public String getSparePartNum() {
+        return sparePartNum;
+    }
+
+    public void setSparePartNum(String sparePartNum) {
+        this.sparePartNum = sparePartNum;
+    }
+
+    public String getProcessRoute() {
+        return processRoute;
+    }
+
+    public void setProcessRoute(String processRoute) {
+        this.processRoute = processRoute;
+    }
+
+    public String getLaborHour() {
+        return laborHour;
+    }
+
+    public void setLaborHour(String laborHour) {
+        this.laborHour = laborHour;
+    }
+
+    public String getRhythm() {
+        return rhythm;
+    }
+
+    public void setRhythm(String rhythm) {
+        this.rhythm = rhythm;
+    }
+
+    public String getSolderJoint() {
+        return solderJoint;
+    }
+
+    public void setSolderJoint(String solderJoint) {
+        this.solderJoint = solderJoint;
+    }
+
+    public String getMachineMaterial() {
+        return machineMaterial;
+    }
+
+    public void setMachineMaterial(String machineMaterial) {
+        this.machineMaterial = machineMaterial;
+    }
+
+    public String getStandardPart() {
+        return standardPart;
+    }
+
+    public void setStandardPart(String standardPart) {
+        this.standardPart = standardPart;
+    }
+
+    public String getTools() {
+        return tools;
+    }
+
+    public void setTools(String tools) {
+        this.tools = tools;
+    }
+
+    public String getWasterProduct() {
+        return wasterProduct;
+    }
+
+    public void setWasterProduct(String wasterProduct) {
+        this.wasterProduct = wasterProduct;
+    }
+
+    public String getChange() {
+        return change;
+    }
+
+    public void setChange(String change) {
+        this.change = change;
+    }
+
+    public String getChangeNum() {
+        return changeNum;
+    }
+
+    public void setChangeNum(String changeNum) {
+        this.changeNum = changeNum;
+    }
+
+    public String getResource() {
+        return resource;
+    }
+
+    public void setResource(String resource) {
+        this.resource = resource;
+    }
+
+    public String getpStockLocation() {
+        return pStockLocation;
+    }
+
+    public void setpStockLocation(String pStockLocation) {
+        this.pStockLocation = pStockLocation;
+    }
+
+    public String getPStockLocation() {
+        return pStockLocation;
+    }
+
+    public void setPStockLocation(String pStockLocation) {
+        this.pStockLocation = pStockLocation;
+    }
+
+    public Long getSingleVehiclesId() {
+        return singleVehiclesId;
+    }
+
+    public void setSingleVehiclesId(Long singleVehiclesId) {
+        this.singleVehiclesId = singleVehiclesId;
+    }
+
+    public String getLevel() {
+        return level;
+    }
+
+    public void setLevel(String level) {
+        this.level = level;
+    }
+
+    public Integer getNo() {
+        return No;
+    }
+
+    public void setNo(Integer no) {
+        No = no;
+    }
+
+    public String getpFactoryCode() {
+        return pFactoryCode;
+    }
+
+    public void setpFactoryCode(String pFactoryCode) {
+        this.pFactoryCode = pFactoryCode;
+    }
+    public String getPFactoryCode() {
+        return pFactoryCode;
+    }
+
+    public void setPFactoryCode(String pFactoryCode) {
+        this.pFactoryCode = pFactoryCode;
+    }
+
+    public String geteBomPuid() {
+        return eBomPuid;
+    }
+
+    public void seteBomPuid(String eBomPuid) {
+        this.eBomPuid = eBomPuid;
+    }
+    public String getEBomPuid() {
+        return eBomPuid;
+    }
+
+    public void setEBomPuid(String eBomPuid) {
+        this.eBomPuid = eBomPuid;
+    }
 }

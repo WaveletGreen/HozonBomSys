@@ -1,6 +1,8 @@
 package com.connor.hozon.bom.resources.mybatis.bom;
 
 import com.connor.hozon.bom.resources.domain.dto.request.DeleteHzMbomReqDTO;
+import com.connor.hozon.bom.resources.domain.dto.request.UpdateMbomReqDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
 import com.connor.hozon.bom.resources.domain.query.HzBomRecycleByPageQuery;
 import com.connor.hozon.bom.resources.domain.query.HzMbomByPageQuery;
 import com.connor.hozon.bom.resources.domain.query.HzMbomTreeQuery;
@@ -8,6 +10,7 @@ import com.connor.hozon.bom.resources.page.Page;
 import sql.pojo.bom.HzMbomLineRecord;
 import sql.pojo.bom.HzMbomLineRecordVO;
 import sql.pojo.bom.HzMbomRecord;
+import sql.pojo.bom.HzPbomLineRecord;
 
 import java.util.List;
 import java.util.Map;
@@ -37,6 +40,21 @@ public interface HzMbomRecordDAO {
      * @return
      */
     int update(HzMbomLineRecord record);
+
+    /**
+     * 导入修改超级MBOM
+     */
+    int updateInput(HzMbomLineRecord record);
+
+    /**
+     * 导入修改生产MBOM
+     */
+    int updateInputProduct(HzMbomLineRecord record);
+
+    /**
+     * 导入修改财务MBOM
+     */
+    int updateInputFinance(HzMbomLineRecord record);
 
     /**
      * 删除BOM恢复 通过外键恢复

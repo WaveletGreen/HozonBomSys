@@ -15,6 +15,10 @@ import java.util.regex.Pattern;
  */
 public class DateUtil {
 
+    public static String DEFAULT_PATTERN = "yyyy-MM-dd";
+    public static String TIMESTAMP_PATTERN = "yyyy-MM-dd HH:mm:ss";
+
+
     public static String getTodayTextY() {
         DateFormat df = new SimpleDateFormat("yyyy");
         return df.format(new Date());
@@ -45,11 +49,6 @@ public class DateUtil {
         return fmt.format(dt);
     }
 
-    public static String DEFAULT_PATTERN = "yyyy-MM-dd";
-    public static String TIMESTAMP_PATTERN = "yyyy-MM-dd HH:mm:ss";
-
-
-
     /**
      * 日期转换为字符串
      *
@@ -74,9 +73,7 @@ public class DateUtil {
 
     /**
      * 转换为默认格式(yyyy-MM-dd)的日期字符串
-     *
      * @param date
-     *
      * @return
      */
     public static String formatDefaultDate(Date date) {

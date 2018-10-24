@@ -77,34 +77,6 @@
         CMCR_DETAIL_CG_REVERSE4,
         CMCR_DETAIL_CG_REVERSE5
   </sql>
-    <sql id="Base_Column_List2">
-        CMCR_DETAIL_CG_ID,
-        CMCR_DETAIL_SRC_PUID,
-        CMCR_DETAIL_SRC_CFG_UID,
-        CMCR_DETAIL_SRC_COLOR_UID,
-        CMCR_DETAIL_SRC_CFG_MAIN_UID,
-        CMCR_DETAIL_CG_VWO_ID,
-        CMCR_DETAIL_SRC_CREATE_DATE,
-        CMCR_DETAIL_SRC__MODIFY_DATE,
-        CMCR_DETAIL_SRC_CREATOR,
-        CMCR_DETAIL_SRC_MODIFIER,
-        CMCR_DETAIL_SRC_MODEL_PUID,
-        CMCR_DETAIL_CG_FEATURE_CODE,
-        CMCR_DETAIL_CG_FEATURE_NAME,
-        CMCR_DETAIL_CG_COLOR_CODE,
-        CMCR_DETAIL_CG_COLOR_NAME,
-
-        CMCR_DETAIL_CG_CREATOR,
-
-        CMCR_DETAIL_CG_UPDATER,
-        CMCR_DETAIL_CG_REVERSE1,
-        CMCR_DETAIL_CG_REVERSE2,
-        CMCR_DETAIL_CG_REVERSE3,
-        CMCR_DETAIL_CG_REVERSE4,
-        CMCR_DETAIL_CG_REVERSE5,
-        CMCR_DETAIL_CG_CREATE_DATE,
-        CMCR_DETAIL_CG_UPDATE_DATE
-  </sql>
     <!--**************************************select**************************************-->
     <!--主键查询-->
     <select id="selectByPrimaryKey" parameterType="sql.pojo.cfg.modelColor.HzCmcrDetailChange"
@@ -139,31 +111,6 @@
         #{cmcrDetailCgReverse2,jdbcType=VARCHAR}, #{cmcrDetailCgReverse3,jdbcType=VARCHAR},
         #{cmcrDetailCgReverse4,jdbcType=VARCHAR}, #{cmcrDetailCgReverse5,jdbcType=VARCHAR}
         )
-    </insert>
-    <!--批量插入-->
-    <insert id="insertList" parameterType="java.util.List">
-        insert into ${whichTable} (
-        <include refid="Base_Column_List2"/>
-        )
-        select ${seqName}.Nextval, A.* ,sysdate,sysdate from (
-        <foreach collection="hzCmcrDetailChangeList" index="index" item="hzCmcrDetailChange" separator="union">
-            select
-                #{hzCmcrDetailChange.cmcrDetailSrcPuid,jdbcType=VARCHAR},
-                #{hzCmcrDetailChange.cmcrDetailSrcCfgUid,jdbcType=VARCHAR}, #{hzCmcrDetailChange.cmcrDetailSrcColorUid,jdbcType=VARCHAR},
-                #{hzCmcrDetailChange.cmcrDetailSrcCfgMainUid,jdbcType=VARCHAR}, #{hzCmcrDetailChange.cmcrDetailCgVwoId,jdbcType=DECIMAL},
-                #{hzCmcrDetailChange.cmcrDetailSrcCreateDate,jdbcType=TIMESTAMP}, #{hzCmcrDetailChange.cmcrDetailSrcModifyDate,jdbcType=TIMESTAMP},
-                #{hzCmcrDetailChange.cmcrDetailSrcCreator,jdbcType=VARCHAR}, #{hzCmcrDetailChange.cmcrDetailSrcModifier,jdbcType=VARCHAR},
-                #{hzCmcrDetailChange.cmcrDetailSrcModelPuid,jdbcType=VARCHAR}, #{hzCmcrDetailChange.cmcrDetailCgFeatureCode,jdbcType=VARCHAR},
-                #{hzCmcrDetailChange.cmcrDetailCgFeatureName,jdbcType=VARCHAR}, #{hzCmcrDetailChange.cmcrDetailCgColorCode,jdbcType=VARCHAR},
-                #{hzCmcrDetailChange.cmcrDetailCgColorName,jdbcType=VARCHAR},
-                #{hzCmcrDetailChange.cmcrDetailCgCreator,jdbcType=VARCHAR},
-                #{hzCmcrDetailChange.cmcrDetailCgUpdater,jdbcType=VARCHAR}, #{hzCmcrDetailChange.cmcrDetailCgReverse1,jdbcType=VARCHAR},
-                #{hzCmcrDetailChange.cmcrDetailCgReverse2,jdbcType=VARCHAR}, #{hzCmcrDetailChange.cmcrDetailCgReverse3,jdbcType=VARCHAR},
-                #{hzCmcrDetailChange.cmcrDetailCgReverse4,jdbcType=VARCHAR}, #{hzCmcrDetailChange.cmcrDetailCgReverse5,jdbcType=VARCHAR}
-            from
-                dual
-        </foreach>
-        )A
     </insert>
     <!--选择插入-->
     <insert id="insertSelective" parameterType="sql.pojo.cfg.modelColor.HzCmcrDetailChange">
@@ -422,28 +369,4 @@
       CMCR_DETAIL_CG_REVERSE5 = #{cmcrDetailCgReverse5,jdbcType=VARCHAR}
     where CMCR_DETAIL_CG_ID = #{cmcrDetailCgId,jdbcType=DECIMAL}
   </update>
-
-    <select id="selectLast" parameterType="java.util.List" resultMap="BaseResultMap">
-        select
-          <include refid="Base_Column_List"/>
-        from
-          ${whichTable}
-        where
-          CMCR_DETAIL_SRC_CFG_MAIN_UID = #{mainUid}
-        and
-          CMCR_DETAIL_CG_UPDATE_DATE in
-          (
-            select
-              Max(CMCR_DETAIL_CG_UPDATE_DATE)
-            from
-              ${whichTable}
-            where
-              CMCR_DETAIL_SRC_CFG_MAIN_UID = #{mainUid,jdbcType=VARCHAR}
-            and
-              CMCR_DETAIL_SRC_PUID in
-              <foreach collection="hzCmcrDetailChangeList" index="index" item="hzCmcrDetailChange" open="(" separator="," close=")">
-                    #{hzCmcrDetailChange.cmcrDetailSrcPuid, jdbcType=VARCHAR}
-              </foreach>
-          )
-    </select>
 </mapper>

@@ -5,7 +5,8 @@ import org.apache.poi.ss.formula.FormulaParseException;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellAddress;
 import org.apache.poi.ss.util.CellRangeAddress;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.poi.ss.util.CellRangeAddressList;
+import org.apache.poi.xssf.usermodel.*;
 import org.apache.xmlbeans.impl.piccolo.io.FileFormatException;
 
 import java.io.*;
@@ -124,13 +125,13 @@ public class ExcelUtil {
             workbook = new HSSFWorkbook(is);
         } else if (filePath.endsWith(EXTENSION_XLSX)) {
             workbook = new XSSFWorkbook(is);
+            //workbook = new HSSFWorkbook(is);
         }
         return workbook;
     }
 
     /**
      * 文件检查
-     *
      * @param fileName
      * @throws FileNotFoundException
      * @throws FileFormatException
@@ -141,96 +142,6 @@ public class ExcelUtil {
             return false;
         }
         return true;
-    }
-
-    /**
-     * 读取excel文件内容
-     *
-     * @param filePath
-     * @throws FileNotFoundException
-     * @throws FileFormatException
-     */
-    public static void readExcel(String filePath) throws FileNotFoundException,
-            FileFormatException {
-        // 检查
-        preReadCheck(filePath);
-        // 获取workbook对象
-        Workbook workbook = null;
-
-        try {
-            workbook = getWorkbook(filePath);
-            HSSFWorkbook wb = new HSSFWorkbook();
-            HSSFSheet s = wb.createSheet();
-
-            // 读文件 一个sheet一个sheet地读取
-            for (int numSheet = 0; numSheet < workbook.getNumberOfSheets(); numSheet++) {
-                Sheet sheet = workbook.getSheetAt(numSheet);
-
-                if (sheet == null) {
-                    continue;
-                }
-
-                int firstRowIndex = sheet.getFirstRowNum();
-                int lastRowIndex = sheet.getLastRowNum();
-                // 读取首行 即,表头
-                Row firstRow = sheet.getRow(firstRowIndex);
-                HSSFRow row = s.createRow(firstRowIndex);
-                for (int i = firstRow.getFirstCellNum(); i < firstRow
-                        .getLastCellNum(); i++) {
-                    Cell cell = firstRow.getCell(i);
-
-                    HSSFRichTextString cellValue = (HSSFRichTextString) cell
-                            .getRichStringCellValue();
-
-                    HSSFCell cell1 = row.createCell(i);
-
-                    cell1.setCellValue(cellValue);
-                }
-
-                // 读取数据行
-                for (int rowIndex = firstRowIndex + 1; rowIndex <= lastRowIndex; rowIndex++) {
-                    Row currentRow = sheet.getRow(rowIndex);// 当前行
-
-                    HSSFRow currentRow1 = s.createRow(rowIndex);
-                    int firstColumnIndex = currentRow.getFirstCellNum(); // 首列
-                    int lastColumnIndex = currentRow.getLastCellNum();// 最后一列
-                    for (int columnIndex = firstColumnIndex; columnIndex < lastColumnIndex; columnIndex++) {
-                        Cell currentCell = currentRow.getCell(columnIndex);// 当前单元格
-                        if (currentCell.getCellType() == Cell.CELL_TYPE_STRING) {
-                            HSSFRichTextString cellValue = (HSSFRichTextString) currentCell
-                                    .getRichStringCellValue();
-
-                            cellValue.getFontAtIndex(1);
-
-                            HSSFCell cell1 = currentRow1
-                                    .createCell(columnIndex);
-                            cell1.setCellValue(cellValue);
-                            HSSFRichTextString cellValue111 = (HSSFRichTextString) cell1
-                                    .getRichStringCellValue();
-                        } else {
-                            String cellValue = String.valueOf(currentCell
-                                    .getNumericCellValue());
-                            HSSFCell cell1 = currentRow1
-                                    .createCell(columnIndex);
-                            cell1.setCellValue(cellValue);
-                        }
-
-                    }
-
-                }
-
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (workbook != null) {
-                try {
-                    workbook.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
     }
 
     /**
@@ -419,4 +330,144 @@ public class ExcelUtil {
         }
 
     }
+    /**
+     * 写Excel文件
+     * @param fileName  : 下载文件名称
+     * @param title     : 标题
+     * @param dataList  : 内容
+     * @return
+     * @throws Exception
+     */
+    //public static boolean writeExcel(HttpServletResponse response, String fileName, String[] title, List<String[]> dataList) throws Exception {
+    public static boolean writeExcel(String fileName, String[] title, List<String[]> dataList,String str) throws Exception {
+        boolean flag = false;
+        try {
+            File f = new File(ExcelUtil.class.getClassLoader().getResource("static/files/tableExport.xlsx").getFile()) ;// 声明File对象
+            FileOutputStream fos = new FileOutputStream(f);
+            XSSFWorkbook wb = new XSSFWorkbook();
+            XSSFCellStyle titleCellStyle = wb.createCellStyle();
+            titleCellStyle.setBorderTop(CellStyle.BORDER_THIN);
+            titleCellStyle.setBorderBottom(CellStyle.BORDER_THIN);
+            titleCellStyle.setBorderLeft(CellStyle.BORDER_THIN);
+            titleCellStyle.setBorderRight(CellStyle.BORDER_THIN);
+            titleCellStyle.setWrapText(true);//设置自动换行
+            titleCellStyle.setAlignment(XSSFCellStyle.ALIGN_CENTER);//左右居中
+            titleCellStyle.setVerticalAlignment(XSSFCellStyle.VERTICAL_CENTER);//上下居中
+            titleCellStyle.setFillForegroundColor(IndexedColors.LIGHT_CORNFLOWER_BLUE.getIndex());
+            //IndexedColors.GREY_25_PERCENT.getIndex()
+            titleCellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+            XSSFFont font = wb.createFont();
+            font.setFontName("宋体");
+            font.setFontHeightInPoints((short) 12);// 设置字体大小
+            font.setBoldweight(XSSFFont.BOLDWEIGHT_BOLD);//字体加粗
+            titleCellStyle.setFont(font);
+
+            int pageSize = 65535;
+            int listSize = dataList.size();
+            int sheetSize = 0;
+            if(listSize % pageSize == 0){
+                sheetSize = listSize/pageSize;
+            }else{
+                sheetSize = (listSize/pageSize)+1;
+            }
+
+            if(sheetSize == 0){//没有数据
+                XSSFSheet sheet = wb.createSheet();
+                XSSFRow row = sheet.createRow(0);
+                row.setHeight((short) 600);//目的是想把行高设置成25px
+                row.setRowStyle(titleCellStyle);
+                sheet.setDefaultColumnWidth(20);
+                sheet.setDefaultRowHeightInPoints(20);
+                //title
+                for (int i = 0;i < title.length;i++) {
+                    XSSFCell cell = row.createCell(i);
+                    cell.setCellType(HSSFCell.CELL_TYPE_STRING);
+                    cell.setCellStyle(titleCellStyle);
+                    cell.setCellValue(title[i]);
+                }
+            }else{
+                int start = 0;
+                int end = 0;
+                for(int s=0;s<sheetSize;s++){
+                    start = s * pageSize;
+                    if(s == (sheetSize-1))
+                        end = listSize;
+                    else
+                        end = (s+1) * pageSize;
+                    XSSFSheet sheet = wb.createSheet();
+                    XSSFRow row = sheet.createRow(0);
+                    row.setHeight((short) 600);//目的是想把第一行行高设置成25px
+                    //row.setRowStyle(titleCellStyle);
+                    sheet.setDefaultColumnWidth(20);//宽
+                    sheet.setDefaultRowHeightInPoints(20);//高
+                    //title
+                    for (int i = 0;i < title.length;i++) {
+                        XSSFCell cell = row.createCell(i);
+                        cell.setCellType(HSSFCell.CELL_TYPE_STRING);
+                        cell.setCellStyle(titleCellStyle);
+                        cell.setCellValue(title[i]);
+                    }
+                    //context
+                    XSSFCellStyle cellStyle = wb.createCellStyle();
+                    cellStyle.setBorderTop(CellStyle.BORDER_THIN);
+                    cellStyle.setBorderBottom(CellStyle.BORDER_THIN);
+                    cellStyle.setBorderLeft(CellStyle.BORDER_THIN);
+                    cellStyle.setBorderRight(CellStyle.BORDER_THIN);
+                    int row_index = 1;
+                    for(int j = start;j < end;j++){
+                        XSSFRow data_row = sheet.createRow(row_index);
+                        row_index ++;
+                        String[] cellList = dataList.get(j);
+                        int len = cellList.length;
+                        for (int k=0;k<len;k++) {
+                            //列
+                            XSSFCell cell = data_row.createCell(k);
+                            String value = cellList[k];
+                            cell.setCellType(HSSFCell.CELL_TYPE_STRING);
+                            cell.setCellStyle(cellStyle);
+                            cell.setCellValue(value);
+                            //列中加下拉框
+                            if("pbom".equals(str)){
+                                String[] datas = new String[] {"MAKE","BUY"};
+                                String[] datas2 = new String[] {"Y","N"};
+                                XSSFDataValidationHelper dvHelper = new XSSFDataValidationHelper(sheet);
+                                XSSFDataValidationHelper dvHelper2 = new XSSFDataValidationHelper(sheet);
+                                XSSFDataValidationConstraint dvConstraint = (XSSFDataValidationConstraint) dvHelper.createExplicitListConstraint(datas);
+                                XSSFDataValidationConstraint dvConstraint2 = (XSSFDataValidationConstraint) dvHelper.createExplicitListConstraint(datas2);
+                                CellRangeAddressList addressList = new CellRangeAddressList(1, end, 12, 12);
+                                CellRangeAddressList addressList2 = new CellRangeAddressList(1, end, 13, 14);
+                                XSSFDataValidation validation = (XSSFDataValidation) dvHelper.createValidation(dvConstraint, addressList);
+                                XSSFDataValidation validation2 = (XSSFDataValidation) dvHelper2.createValidation(dvConstraint2, addressList2);
+                                // 07默认setSuppressDropDownArrow(true);
+                                // validation.setSuppressDropDownArrow(true);
+                                // validation.setShowErrorBox(true);
+                                sheet.addValidationData(validation);
+                                sheet.addValidationData(validation2);
+                            }else if("mbom".equals(str)){
+                                String[] datas = new String[] {"生产","财务"};
+                                XSSFDataValidationHelper dvHelper = new XSSFDataValidationHelper(sheet);
+                                XSSFDataValidationConstraint dvConstraint = (XSSFDataValidationConstraint) dvHelper.createExplicitListConstraint(datas);
+                                CellRangeAddressList addressList = new CellRangeAddressList(1, end, 23, 23);
+                                XSSFDataValidation validation = (XSSFDataValidation) dvHelper.createValidation(dvConstraint, addressList);
+                                sheet.addValidationData(validation);
+                            }
+
+                        }
+                    }
+                }
+            }
+
+            wb.write(fos);
+//            wb.write(out);
+            // 弹出下载对话框
+//            out.close();
+            fos.close();
+
+            flag = true;
+        } catch (Exception e) {
+            throw e;
+        }
+        return flag;
+    }
+
 }

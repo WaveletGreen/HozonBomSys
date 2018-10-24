@@ -13,35 +13,30 @@
            th:value="${entity.puid}"/>
     <div class="form-group">
         <label for="pCfg0FamilyName">特性名称<span style="color: red">*</span></label>
-        <input class="form-control" id="pCfg0FamilyName" name="pCfg0FamilyName" type="text"
-               readonly="readonly"
+        <input class="form-control" id="pCfg0FamilyName" name="pCfg0FamilyName" type="text" disabled="disabled"
+               placeholder="请输入特性名称"
         />
     </div>
     <div class="form-group">
         <label for="pCfg0FamilyDesc">特性描述<span style="color: red">*</span></label>
-        <input class="form-control" id="pCfg0FamilyDesc" name="pCfg0FamilyDesc" type="text"
-               readonly="readonly"
-        />
-        <!--disabled="disabled"-->
+        <input class="form-control" id="pCfg0FamilyDesc" name="pCfg0FamilyDesc" type="text" disabled="disabled"
+               placeholder="请输入特性描述"/>
     </div>
     <div class="form-group">
         <label for="pH9featureenname">特性英文名称</label>
-        <input class="form-control" id="pH9featureenname" name="pH9featureenname" type="text"
-               readonly="readonly"
-        />
+        <input class="form-control" id="pH9featureenname" name="pH9featureenname" type="text" disabled="disabled"
+               placeholder="请输入特性英文名称"/>
     </div>
     </div>
     <div class="form-group">
         <label for="pCfg0ObjectId">特性值/配置代码<span style="color: red">*</span></label>
         <input class="form-control" id="pCfg0ObjectId" name="pCfg0ObjectId" type="text" onblur="returnCfgMsg(this)"
-               placeholder="请输入特性值/配置代码"
-        />
+               placeholder="请输入特性值/配置代码"/>
     </div>
     <div class="form-group">
         <label for="pCfg0Desc">特性值/配置(描述)<span style="color: red">*</span></label>
         <input class="form-control" id="pCfg0Desc" name="pCfg0Desc" type="text"
-               readonly="readonly"
-        />
+               placeholder="请输入特性值/配置(描述)"/>
     </div>
     <!--<div class="form-group">-->
     <!--<label for="length">字符长度</label>-->
@@ -189,18 +184,18 @@
     function returnCfgMsg(obj) {
         var cfgVal = $(obj).val();
         $.ajax({
-            type: "GET",
-            url: "./cfg0/returnCfgMsg?cfgVal=" + cfgVal,
-            success: function (result) {
-                if (result.stage) {
+            type : "GET",
+            url : "./cfg0/returnCfgMsg?cfgVal="+cfgVal,
+            success : function (result) {
+                if(result.stage){
                     var libraryJson = result.data;
-                        $(pCfg0FamilyName).val(libraryJson.famillyCode);
-                        $(pCfg0FamilyDesc).val(libraryJson.famillyCh);
-                        $("#pH9featureenname").val(libraryJson.famillyEn);
-                        $("#pCfg0Desc").val(libraryJson.valueDescCh);
+                    $(pCfg0FamilyName).val(libraryJson.famillyCode);
+                    $(pCfg0FamilyDesc).val(libraryJson.famillyCh);
+                    $(pH9featureenname).val(libraryJson.famillyEn);
+                    $(pCfg0Desc).val(libraryJson.valueDescCh);
                 }
             },
-            error: function (result) {
+            error : function (result) {
 
             }
         });

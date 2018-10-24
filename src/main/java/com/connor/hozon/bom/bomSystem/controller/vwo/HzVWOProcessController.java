@@ -10,7 +10,10 @@ import com.connor.hozon.bom.bomSystem.iservice.cfg.vwo.IHzVWOManagerService;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import sql.pojo.cfg.cfg0.HzCfg0Record;
 
 import java.util.List;
@@ -40,5 +43,6 @@ public class HzVWOProcessController {
     public JSONObject featureGetIntoVWO(@RequestParam String projectUid, @RequestBody List<HzCfg0Record> beans) {
         return iHzVWOManagerService.featureGetIntoVWO2(projectUid, beans);
     }
+
 
 }

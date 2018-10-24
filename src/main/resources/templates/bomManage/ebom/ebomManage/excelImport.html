@@ -22,18 +22,26 @@
     <div style="float: left">
         <p><strong>温馨提醒:</strong></p>
         <p><strong>1.这里限制上传文件大小的最大值为10MB</strong></p>
-        <p><strong>2.Excel文件格式必须正确，需严格按照模板格式导入</strong></p>
-        <p><strong>3.导入Excel文件不能有空行</strong></p>
-        <p><strong>4.Excel文件只能有一个Sheet</strong></p>
-        <p><strong>5.如有导入疑问，请联系相关责任人进行规范调整</strong></p>
+        <p><strong>2.Excel文件格式必须正确，需按照模板格式导入</strong></p>
+        <p><strong>3.导入单车用量前，需先导入相应的EBOM数据</strong></p>
+        <p><strong>4.导入Excel文件不能有空行</strong></p>
+        <p><strong>5.这里限制Excel文件只能有一个Sheet</strong></p>
+        <p><strong>6.如有导入疑问，请联系相关责任人进行规范调整</strong></p>
     </div>
     <div class="form-group" style="float: right;">
-        <button type="button" onclick="getTemplate()"><img th:src="@{/img/excelModel.png}">模版下载
+        <button style="font-size: 40%;width: 110px" type="button" onclick="getTemplate()"><img th:src="@{/img/excelModel.png}">
+            </br>EBOM模版
         </button>
     </div>
+    <!--<div class="form-group" style="float: right">-->
+        <!--<button style="font-size: 40%;width: 110px" type="button" onclick="getSingleVehTemplate()"><img th:src="@{/img/singleVehImport.png}">-->
+            <!--<br>单车模板-->
+        <!--</button>-->
+    <!--</div>-->
 </div>
 <script>
     function getTemplate() {
+        //下载EBOM导入模板
         window.location.href =  "./files/EBOM导入模板.xlsx";//V1.1.0.log
     }
 </script>

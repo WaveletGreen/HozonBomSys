@@ -88,10 +88,5 @@ public class HzVwoInfoDaoImpl extends BasicDaoImpl<HzVwoInfo> implements HzVwoIn
                 clzName + ".tellMeHowManyOfIt", true);
     }
 
-    @Override
-    public int updateByVwoId(HzVwoInfo info) {
-        return baseSQLUtil.executeUpdate(info,clzName + ".updateByVwoId");
-    }
-
 
 }

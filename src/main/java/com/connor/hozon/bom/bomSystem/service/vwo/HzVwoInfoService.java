@@ -1,7 +1,6 @@
 package com.connor.hozon.bom.bomSystem.service.vwo;
 
 import com.connor.hozon.bom.bomSystem.dao.vwo.HzVwoInfoDao;
-import com.connor.hozon.bom.bomSystem.dto.vwo.HzVwoFormListQueryBase;
 import com.connor.hozon.bom.bomSystem.helper.DateStringHelper;
 import com.connor.hozon.bom.bomSystem.iservice.cfg.vwo.IHzVwoInfoService;
 import com.connor.hozon.bom.common.base.entity.QueryBase;
@@ -86,7 +85,7 @@ public class HzVwoInfoService implements IHzVwoInfoService {
      * @param queryBase
      */
     @Override
-    public List<HzVwoInfo> doSelectListByProjectUid(HzVwoFormListQueryBase queryBase, String projectUid) {
+    public List<HzVwoInfo> doSelectListByProjectUid(QueryBase queryBase, String projectUid) {
         Map<String, Object> params = new HashMap<>();
         params.put("param", queryBase);
         params.put("projectUid", projectUid);
@@ -121,16 +120,4 @@ public class HzVwoInfoService implements IHzVwoInfoService {
         return hzVwoInfo;
     }
 
-    /**
-     * 配色方案vwo发布
-     * @param info
-     * @return
-     */
-    public boolean updateByVwoId(HzVwoInfo info) {
-        if(hzVwoInfoDao.updateByVwoId(info)==1){
-            return true;
-        }else {
-            return false;
-        }
-    }
 }

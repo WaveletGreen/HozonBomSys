@@ -65,8 +65,6 @@
         <result column="VWO_CONNECTED_PART_NAME" jdbcType="VARCHAR" property="vwoConnectedPartName"/>
         <!--原因描述-->
         <result column="VWO_CHANGE_REASON" jdbcType="VARCHAR" property="vwoChangeReason"/>
-        <!--备注-->
-        <result column="VWO_COMMENT" jdbcType="VARCHAR" property="vwoComment"/>
 
     </resultMap>
     <!--字段声明-->
@@ -103,8 +101,7 @@
         VWO_CONNECTED_USER_DEPT,
         VWO_CONNECTED_PART,
         VWO_CONNECTED_PART_NAME,
-        VWO_CHANGE_REASON,
-        VWO_COMMENT
+        VWO_CHANGE_REASON
     </sql>
     <!--结果集-->
     <sql id="Values_Of_Result">
@@ -140,8 +137,7 @@
         #{vwoConnectedUserDept,jdbcType=VARCHAR},
         #{vwoConnectedPart,jdbcType=VARCHAR},
         #{vwoConnectedPartName,jdbcType=VARCHAR},
-        #{vwoChangeReason,jdbcType=VARCHAR},
-        #{vwoComment,jdbcType=VARCHAR}
+        #{vwoChangeReason,jdbcType=VARCHAR}
     </sql>
     <!--主键搜索-->
     <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
@@ -162,9 +158,7 @@
         <include refid="VWO_Extend_Column"/>,
         ROWNUM as rowno
         from HZ_VWO_INFO t where 1=1
-        <if test="projectUid!=null">
-            and t.PROJECT_UID=#{projectUid,jdbcType=VARCHAR}
-        </if>
+        and t.PROJECT_UID=#{projectUid,jdbcType=VARCHAR}
         <if test="param.limit!=null and  param.page!=null">
             and ROWNUM &lt;= ${param.page}*${param.limit}
         </if>
@@ -172,43 +166,6 @@
         <if test="param.offset!=null">
             where temp.rowno &gt;= ${param.offset}+1
         </if>
-        <if test="param.vwoNum!=null and param.vwoNum != ''">
-            and temp.VWO_NUM=#{param.vwoNum,jdbcType=VARCHAR}
-        </if>
-        <if test="param.vwoStatus!=null and param.vwoStatus != ''">
-            and temp.VWO_STATUS=#{param.vwoStatus,jdbcType=INTEGER}
-        </if>
-        <if test="param.vwoName!=null and param.vwoName != ''">
-            and temp.VWO_NAME=#{param.vwoName,jdbcType=VARCHAR}
-        </if>
-        <if test="param.userDeptName!=null and param.userDeptName != ''">
-            and temp.USER_Dept_NAME=#{param.userDeptName,jdbcType=VARCHAR}
-        </if>
-        <if test="param.vwoCreator!=null and param.vwoCreator != ''">
-            and temp.VWO_CREATOR=#{param.vwoCreator,jdbcType=VARCHAR}
-        </if>
-        <if test="param.contactPhoneNum!=null and param.contactPhoneNum != ''">
-            and temp.CONTACT_PHONE_NUM=#{param.contactPhoneNum,jdbcType=VARCHAR}
-        </if>
-        <if test="param.vwoChangeType!=null and param.vwoChangeType != ''">
-            and temp.VWO_CHANGE_TYPE=#{param.vwoChangeType,jdbcType=INTEGER}
-        </if>
-        <if test="param.vwoCostBearingDept!=null and param.vwoCostBearingDept != ''">
-            and temp.VWO_COST_BEARING_DEPT=#{param.vwoCostBearingDept,jdbcType=VARCHAR}
-        </if>
-        <if test="param.vwoListedType!=null and param.vwoListedType != ''">
-            and temp.VWO_LISTED_TYPE=#{param.vwoListedType,jdbcType=INTEGER}
-        </if>
-        <if test="param.vwoConnectedVwo!=null and param.vwoConnectedVwo != ''">
-            and temp.VWO_CONNECTED_VWO=#{param.vwoConnectedVwo,jdbcType=VARCHAR}
-        </if>
-        <if test="param.vwoCreateDate!=null and param.vwoCreateDate != ''">
-            and to_char(temp.VWO_CREATE_DATE,'yyyy-mm-dd')=#{param.vwoCreateDate,jdbcType=VARCHAR}
-        </if>
-        <if test="param.vwoDemandFinishTime!=null and param.vwoDemandFinishTime != ''">
-            and to_char(temp.VWO_DEMAND_FINISH_TIME,'yyyy-mm-dd')=#{param.vwoDemandFinishTime,jdbcType=VARCHAR}
-        </if>
-
         <if test="param.sort!=null">
             order by ${param.sort}
         </if>
@@ -220,8 +177,7 @@
         </if>
     </select>
     <select id="tellMeHowManyOfIt" parameterType="java.lang.String" resultType="java.lang.Integer">
-        select COUNT (*) from HZ_VWO_INFO
-        <if test="projectUid!=null">where PROJECT_UID=#{projectUid}</if>
+    select COUNT (*) from HZ_VWO_INFO where PROJECT_UID=#{projectUid}
     </select>
 
     <!--查询区域内最大的VWO号-->
@@ -354,24 +310,10 @@
             <if test="vwoChangeReason!=null">
                 VWO_CHANGE_REASON = #{vwoChangeReason,jdbcType=VARCHAR},
             </if>
-            <!--备注-->
-            <if test="vwoComment!=null">
-                VWO_COMMENT = #{vwoComment,jdbcType=VARCHAR},
-            </if>
 
         </set>
         <where>
             ID = #{id,jdbcType=DECIMAL}
         </where>
-    </update>
-    <update id="updateByVwoId" parameterType="sql.pojo.cfg.vwo.HzVwoInfo">
-        update
-          HZ_VWO_INFO t
-        set
-          t.VWO_FINISHER=#{vwoFinisher},
-          t.VWO_FINISH_DATE=sysdate,
-          t.VWO_STATUS=#{vwoStatus}
-        where
-          t.ID=#{id}
     </update>
 </mapper>

@@ -376,7 +376,7 @@ function changeView(data) {
     $("#pProjectCode").text(data.project.pProjectCode);
     $("#pProjectName").text(data.project.pProjectName);
     $("#pProjectManager").text(data.project.pProjectManager);
-    // $("#pProjectCreateDate").text(dateToStringFormat(data.project.pProjectCreateDate));
-    // $("#pProjectDiscontinuationDate").text(dateToStringFormat(data.project.pProjectDiscontinuationDate));
+    // $("#pProjectCreateDate").text(changeDateFormat(data.project.pProjectCreateDate));
+    // $("#pProjectDiscontinuationDate").text(changeDateFormat(data.project.pProjectDiscontinuationDate));
     $("#pProjectDetail").text(data.project.pProjectDetail);
 }

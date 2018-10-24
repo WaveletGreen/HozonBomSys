@@ -50,6 +50,19 @@ public interface HzPbomRecordDAO {
     int update(HzPbomLineRecord record);
 
     /**
+     * 批量更新 根据零件号来更新
+     * @param records
+     * @return
+     */
+    int updateList(List<HzPbomLineRecord> records);
+
+
+    /**
+     * 导入 PBOM管理信息-修改
+     */
+    int updateInput(HzPbomLineRecord record);
+
+    /**
      * 删除PBOM管理 通过外键删除
      * @param ePuid
      * @return

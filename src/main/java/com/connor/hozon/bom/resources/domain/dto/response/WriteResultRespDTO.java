@@ -14,6 +14,8 @@ public class WriteResultRespDTO {
     public static final String FILE_SIZE_OVER_FLOW ="文件过大！";
     public static final String FILE_IS_NOT_EXCEL ="传入的文件格式不是excel！";
     public static final String CANT_DELETE = "不能删除基础工艺对象";
+    public static final String FILE_FORMAT_ERROR="文件列信息不全,不进行导入操作！";
+    public static final String FILE_ERROR = "文件格式错误！";
 
     public static final Long SUCCESS_CODE = 1000L;
     public static final Long FAILED_CODE = 1001L;
@@ -96,6 +98,20 @@ public class WriteResultRespDTO {
     public static WriteResultRespDTO cantDelete(){
         WriteResultRespDTO writeResultRespDTO = new WriteResultRespDTO();
         writeResultRespDTO.setErrMsg(CANT_DELETE);
+        writeResultRespDTO.setErrCode(FAILED_CODE);
+        return writeResultRespDTO;
+    }
+
+    public static WriteResultRespDTO fileFormatError(){
+        WriteResultRespDTO writeResultRespDTO = new WriteResultRespDTO();
+        writeResultRespDTO.setErrMsg(FILE_FORMAT_ERROR);
+        writeResultRespDTO.setErrCode(FAILED_CODE);
+        return writeResultRespDTO;
+    }
+
+    public static WriteResultRespDTO fileError(){
+        WriteResultRespDTO writeResultRespDTO = new WriteResultRespDTO();
+        writeResultRespDTO.setErrMsg(FILE_ERROR);
         writeResultRespDTO.setErrCode(FAILED_CODE);
         return writeResultRespDTO;
     }

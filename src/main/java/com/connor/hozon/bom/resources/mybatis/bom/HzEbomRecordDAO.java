@@ -4,6 +4,7 @@ import com.connor.hozon.bom.resources.domain.query.HzBomRecycleByPageQuery;
 import com.connor.hozon.bom.resources.domain.query.HzEbomByPageQuery;
 import com.connor.hozon.bom.resources.domain.query.HzEbomTreeQuery;
 import com.connor.hozon.bom.resources.page.Page;
+import sql.pojo.bom.HzBomLineRecord;
 import sql.pojo.bom.HzImportEbomRecord;
 import sql.pojo.epl.HzEPLManageRecord;
 
@@ -69,6 +70,13 @@ public interface HzEbomRecordDAO {
     int delete(String puid);
 
     /**
+     * EBOM 批量更新 根据零件号来更新
+     * @param records
+     * @return
+     */
+    int updateList(List<HzBomLineRecord> records);
+
+    /**
      * 查询回收站
      * @param query
      * @return
@@ -118,4 +126,7 @@ public interface HzEbomRecordDAO {
      * @return
      */
     Page<HzEPLManageRecord> getHzEbomTreeByPage(HzEbomByPageQuery query);
+
+
+
 }
