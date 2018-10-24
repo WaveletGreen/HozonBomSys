@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2018.
+ * This file was wrote by fancyears·milos·maywas @connor. Any question/bug you can post to 1243093366@qq.com.
+ * ALL RIGHTS RESERVED.
+ */
+
 package com.connor.hozon.bom.bomSystem.service.project;
 
 import com.connor.hozon.bom.bomSystem.dao.project.HzProjectLibsDao;
@@ -10,13 +16,12 @@ import java.util.List;
 
 import static com.connor.hozon.bom.bomSystem.helper.StringHelper.checkString;
 
-/***
- *                                  Author: Fancyears·Maylos·Mayways
- * Date: 2018/5/30 14:15
- *
- * Description: 项目对象信息服务层，用于获取到项目信息，目前项目信息在BOM系统没有必要进行增删
- *
- **/
+/**
+ * @Author: Fancyears·Maylos·Maywas
+ * @Description: 项目对象信息服务层，用于获取到项目信息，目前项目信息在BOM系统没有必要进行增删
+ * @Date: Created in  2018/5/30 14:15
+ * @Modified By:
+ */
 @Service("hzProjectLibsService")
 public class HzProjectLibsService {
     @Autowired

@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2018.
+ * This file was wrote by fancyears·milos·maywas @connor. Any question/bug you can post to 1243093366@qq.com.
+ * ALL RIGHTS RESERVED.
+ */
+
 package com.connor.hozon.bom.bomSystem.iservice.cfg.vwo;
 
 import com.connor.hozon.bom.common.base.entity.QueryBase;
@@ -7,8 +13,8 @@ import java.util.List;
 
 /**
  * @Author: Fancyears·Maylos·Maywas
- * @Description: x
- * @Date: Created in 2018/8/10 13:53
+ * @Description: fuck
+ * @Date: Created in 2018/9/6 13:19
  * @Modified By:
  */
 public interface IHzVwoInfoService {

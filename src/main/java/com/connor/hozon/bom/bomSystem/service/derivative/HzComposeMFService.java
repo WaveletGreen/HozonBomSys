@@ -59,8 +59,8 @@ import static com.connor.hozon.bom.bomSystem.helper.StringHelper.checkString;
 
 /**
  * @Author: Fancyears·Maylos·Maywas
- * @Description:
- * @Date: Created in 2018/8/30 14:32
+ * @Description: fuck
+ * @Date: Created in 2018/9/6 13:19
  * @Modified By:
  */
 @Service("hzComposeMFService")

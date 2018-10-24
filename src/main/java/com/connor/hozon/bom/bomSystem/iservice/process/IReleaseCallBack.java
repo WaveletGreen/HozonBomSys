@@ -8,11 +8,10 @@ package com.connor.hozon.bom.bomSystem.iservice.process;
 
 /**
  * @Author: Fancyears·Maylos·Maywas
- * @Description: 发布数据的回调接口 x
- * @Date: Created in 2018/10/16 13:21
+ * @Description: 发布数据的回调接口
+ * @Date: Created in 2018/9/6 13:19
  * @Modified By:
  */
-
 public interface IReleaseCallBack {
     /**
      * 数据发布

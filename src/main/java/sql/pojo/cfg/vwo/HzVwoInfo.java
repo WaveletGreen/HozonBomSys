@@ -12,7 +12,10 @@ import lombok.Data;
 import java.util.Date;
 
 /**
- * VWO主数据 x
+ * @Author: Fancyears·Maylos·Maywas
+ * @Description: VWO主数据
+ * @Date: Created in 2018/10/10 13:29
+ * @Modified By:
  */
 @Data
 public class HzVwoInfo {

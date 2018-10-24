@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2018.
+ * This file was wrote by fancyears·milos·maywas @connor. Any question/bug you can post to 1243093366@qq.com.
+ * ALL RIGHTS RESERVED.
+ */
+
 /**
  * 格式化日期，根据毫秒数进行格式化
  * @param cellval

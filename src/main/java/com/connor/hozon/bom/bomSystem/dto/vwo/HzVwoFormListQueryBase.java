@@ -13,7 +13,7 @@ import java.util.Date;
 
 /**
  * @Author: Fancyears·Maylos·Maywas
- * @Description: x
+ * @Description: VWO列表页面查询助手
  * @Date: Created in 2018/10/17 9:16
  * @Modified By:
  */

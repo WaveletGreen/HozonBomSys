@@ -37,9 +37,10 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * User: Fancyears·Maylos·Mayways
- * Date: 2018/5/22
- * Time: 10:54
+ * @Author: Fancyears·Maylos·Maywas
+ * @Description: fuck
+ * @Date: Created in 2018/5/22 10:54
+ * @Modified By:
  */
 @Service("hzCfg0ModelColorService")
 public class HzCfg0ModelColorService {

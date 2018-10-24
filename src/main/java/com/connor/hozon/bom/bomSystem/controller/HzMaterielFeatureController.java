@@ -47,10 +47,12 @@ import java.util.*;
 
 import static com.connor.hozon.bom.bomSystem.helper.StringHelper.checkString;
 
+
 /**
- * Created by Fancyears·Maylos·Mayways
- * Description:
- * Date: 2018/6/8 17:03
+ * @Author: Fancyears·Maylos·Maywas
+ * @Description:
+ * @Date: Created in 2018/8/30 18:53
+ * @Modified By:
  */
 @Controller
 @RequestMapping("/materiel")
