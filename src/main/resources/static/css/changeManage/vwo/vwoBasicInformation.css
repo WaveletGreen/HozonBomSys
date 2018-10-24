@@ -25,3 +25,44 @@ button[name=paginationSwitch]{
 .hideIt{
     display:none!important;
 }
+
+
+.head-input-set {
+    width: 150px;
+}
+
+.head-select-set {
+    width: 150px;
+}
+
+opi-bottom-set {
+    padding-bottom: 50px;
+}
+
+opi-opiarea-set {
+    width: 100%;
+    resize: none;
+}
+
+.head-func-btn {
+    position: fixed;
+    width: 150px;
+    z-index: 99999;
+}
+
+.head-btnSets {
+    margin-left: 90%;
+    width: 150px
+}
+
+.head-trim {
+    padding-right: 0;
+}
+
+.influence-leader {
+    padding: 0 0 15px;
+}
+
+.influence-dept {
+    padding: 0;
+}

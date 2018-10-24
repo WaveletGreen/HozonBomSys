@@ -45,6 +45,8 @@ let localSelectedNode;
 //////////////////////////////////////
 let debug = false;
 
+var isRegisted = false;
+
 /**
  * 注册操作函数
  * @param projectId
@@ -54,9 +56,7 @@ function doRegister(projectId) {
     if (!checkIsSelectProject(projectId)) {
         return;
     }
-    $("#queryBtn1").click(function () {
-        querySrc();
-    });
+
     initZtree = function (zNodes) {
         var treeObj = $.fn.zTree.getZTreeObj("Ztree1");
         if (treeObj != null || treeObj != undefined) {
@@ -65,18 +65,24 @@ function doRegister(projectId) {
         }
         $.fn.zTree.init($("#Ztree1"), setting, zNodes);
     }
-    /**模拟合成*/
-    $("#synthetic").click(function () {
-        simulateSynthesise();
-    })
-    /**指定挂在地点*/
-    $("#synthetic1").click(function () {
-        assignPoints();
-    });
-    /***查询挂载树*/
-    $("#queryBtn2").click(function () {
-        queryAssignTree();
-    })
+    if (!isRegisted) {
+        $("#queryBtn1").click(function () {
+            querySrc();
+        });
+        /**模拟合成*/
+        $("#synthetic").click(function () {
+            simulateSynthesise();
+        });
+        /**指定挂在地点*/
+        $("#synthetic1").click(function () {
+            assignPoints();
+        });
+        /***查询挂载树*/
+        $("#queryBtn2").click(function () {
+            queryAssignTree();
+        });
+        isRegisted = true;
+    }
 }
 
 /**
@@ -643,12 +649,12 @@ function doGetTableByNode(va) {
         "<td>" + (va.station == undefined ? "" : va.station) + "</td>" +
         "</tr>" + "<tr>";
     if (undefined != va.lineIndex && null != va.lineIndex) {
-        rel += "<th>工位</th>" +
+        rel += "<th>LineIndex</th>" +
             "<td>" + (va.lineIndex == undefined ? "" : va.lineIndex) + "</td>" +
             "</tr>"
     }
     if (undefined != va.sortNum && null != va.sortNum) {
-        rel += "<th>工位</th>" +
+        rel += "<th>SortNum</th>" +
             "<td>" + (va.sortNum == undefined ? "" : va.sortNum) + "</td>" +
             "</tr>"
     }
