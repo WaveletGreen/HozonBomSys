@@ -152,7 +152,7 @@ public class HzEbomServiceImpl implements HzEbomService {
 //                    }
 //                }
 
-                if(null != record.getSingleVehDosage() ){
+                if(null != record.getSingleVehDosage() && ListUtil.isNotEmpty(hzCfg0ModelRecords)){
                     jsonObject = hzSingleVehiclesServices.singleVehDosage(record.getSingleVehDosage(),hzCfg0ModelRecords,jsonObject);
                 }
                 array.add(jsonObject);
