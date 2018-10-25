@@ -343,6 +343,7 @@ public class HzVwoManagerService implements IHzVWOManagerService {
                         hzFeatureChangeBeanAfter.setVwoId(hzVwoInfo.getId());
                         hzFeatureChangeBeanAfter.setCfg0MainItemPuid(hzCfg0Record.getpCfg0MainItemPuid());
                         hzFeatureChangeBeanAfter.setFeatureValueName(hzCfg0Record.getpCfg0ObjectId());
+                        hzFeatureChangeBeanAfter.setCfgPuid(hzCfg0Record.getPuid());
                         hzFeatureChangeBeanListAfter.add(hzFeatureChangeBeanAfter);
                     }
                     //根据源数据生成变更后的数据

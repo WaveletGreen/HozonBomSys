@@ -476,4 +476,13 @@
                 #{hzCfg0Record.puid}
             </foreach>
     </update>
+
+    <update id="updateByVwoid" parameterType="sql.pojo.cfg.cfg0.HzCfg0Record">
+        update HZ_CFG0_RECORD
+        set
+          CFG_STATUS = #{cfgStatus,jdbcType=INTEGER},
+          CFG_IS_IN_PROCESS = #{cfgIsInProcess,jdbcType=INTEGER}
+        where
+          VWO_ID = #{vwoId,jdbcType=INTEGER}
+    </update>
 </mapper>

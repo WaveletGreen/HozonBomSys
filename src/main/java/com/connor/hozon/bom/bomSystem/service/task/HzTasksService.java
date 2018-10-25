@@ -80,4 +80,9 @@ public class HzTasksService implements IHzTaskService {
         return hzTasksDao.selectUserTasks(task);
     }
 
+    @Override
+    public List<HzTasks> doSelectByVwoId(Long id) {
+        return null;
+    }
+
 }

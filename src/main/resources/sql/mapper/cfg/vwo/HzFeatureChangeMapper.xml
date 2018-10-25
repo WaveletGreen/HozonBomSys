@@ -217,7 +217,7 @@
             ${tableName}
           (<include refid="Base_Column_List"/>)
             select ${seqName}.Nextval, A.* from(
-            <foreach collection="hzFeatureChangeBeans" index="index" item="hzFeatureChangeBean" separator="union">
+            <foreach collection="hzFeatureChangeBeans" index="index" item="hzFeatureChangeBean" separator="union all">
                 select
                     #{hzFeatureChangeBean.featureValueName,jdbcType=VARCHAR},
                     #{hzFeatureChangeBean.featureValueDesc,jdbcType=VARCHAR},

@@ -12,6 +12,7 @@ import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
 import com.connor.hozon.bom.bomSystem.service.color.HzCfg0ColorSetService;
 import com.connor.hozon.bom.common.base.entity.QueryBase;
 import com.connor.hozon.bom.common.util.user.UserInfo;
+import com.connor.hozon.bom.resources.mybatis.accessories.HzAccessoriesLibsDAO;
 import com.connor.hozon.bom.sys.commen.Error;
 import com.connor.hozon.bom.sys.entity.User;
 import net.sf.json.JSONObject;
@@ -21,12 +22,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+import sql.pojo.accessories.HzAccessoriesLibs;
 import sql.pojo.cfg.color.HzCfg0ColorSet;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -40,6 +40,8 @@ public class HzCfg0ColorSetController {
     @Autowired
     HzCfg0ColorSetService colorSerService;
 
+    @Autowired
+    HzAccessoriesLibsDAO hzAccessoriesLibsDAO;
     private final static Logger logger = LoggerFactory.getLogger(HzCfg0ColorSetController.class);
 
     /**
@@ -185,6 +187,94 @@ public class HzCfg0ColorSetController {
         return result;
     }
 
+    @RequestMapping(value = "/add2", method = RequestMethod.POST)
+    @ResponseBody
+    public JSONObject add2(@RequestBody Map<String,String> map) {
+        JSONObject result = new JSONObject();
+        Date now = new Date();
+        User user = UserInfo.getUser();
+        boolean resultFromDB;
+
+        HzCfg0ColorSet set = new HzCfg0ColorSet();
+        set.setpColorOfSet(map.get("pColorOfSet"));
+        set.setpColorName(map.get("pColorName"));
+        set.setpColorCode(map.get("pColorCode"));
+        set.setpColorPlate(map.get("pColorPlate"));
+        set.setpColorIsMultiply(map.get("pColorIsMultiply"));
+        set.setpColorComment(map.get("pColorComment"));
+
+        String csPaintMaterielCodes = "";
+        List<String> materielCodeList = new ArrayList<String>();
+        for(int i=0;i<(map.size()-6);i++){
+            String materielCode = map.get("color_"+i);
+            if(materielCode==null||"".equals(materielCode)){
+                continue;
+            }
+            materielCodeList.add(materielCode);
+        }
+        if(materielCodeList!=null&&materielCodeList.size()>0){
+            List<String> csPaintMaterielUidList = hzAccessoriesLibsDAO.queryAccessoriesListByMaterielCode(materielCodeList);
+            if(csPaintMaterielUidList.size()!=materielCodeList.size()){
+                result.put("status", false);
+                result.put("msg", "油漆物料编号错误");
+                return  result;
+            }
+            Integer materielSize = csPaintMaterielUidList.size();
+            String csPaintMaterielUids = "";
+            for(int i=0;i<materielSize;i++){
+                csPaintMaterielCodes += materielCodeList.get(i);
+                csPaintMaterielUids += csPaintMaterielUidList.get(i);
+                if(materielSize>1&&i<(materielSize-1)){
+                    csPaintMaterielCodes += "<br>";
+                    csPaintMaterielUids += "|";
+                }
+            }
+            set.setCsPaintMaterielCodes(csPaintMaterielCodes);
+            set.setCsPaintMaterielUids(csPaintMaterielUids);
+        }
+        if (set.getPuid() == null || "".equals(set.getPuid())) {
+            set.setPuid(UUIDHelper.generateUpperUid());
+        }
+        //生效时间由审核完成只有更新
+        set.setpColorModifyDate(now);
+        //失效时间设置为9999
+        set.setpColorAbolishDate(DateStringHelper.forever());
+        //创建时间由数据库默认值定义
+        //  set.setpColorCreateDate(now);
+        set.setpColorModifier(user.getUserName());
+        set.setpColorStatus(0);
+
+        while (true) {
+            if (colorSerService.getById(set) == null) {
+                resultFromDB = colorSerService.doAddOne(set);
+                break;
+            } else {
+                set.setPuid(UUIDHelper.generateUpperUid());
+            }
+        }
+        if (resultFromDB) {
+            result.put("status", resultFromDB);
+            result.put("msg", "添加颜色信息:" + set.getpColorName() + "成功");
+        } else {
+            result.put("status", resultFromDB);
+            result.put("msg", "添加颜色信息:" + set.getpColorName() + "失败,请联系系统管理员");
+        }
+        return result;
+    }
+
+    @RequestMapping("checkMaterielCode")
+    @ResponseBody
+    public JSONObject checkMaterielCode(String materielCode){
+        JSONObject result = new JSONObject();
+        result.put("status",true);
+        HzAccessoriesLibs hzAccessoriesLibs = hzAccessoriesLibsDAO.queryAccessoriesByMaterielCode(materielCode);
+        if(hzAccessoriesLibs==null){
+            result.put("status",false);
+            result.put("msg","油漆物料编号错误");
+            return  result;
+        }
+        return  result;
+    }
     /**
      * @param set 颜色信息集合
      * @return net.sf.json.JSONObject

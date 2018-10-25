@@ -64,6 +64,11 @@ public class HzAccessoriesLibsDAOImpl  extends BaseSQLUtil implements HzAccessor
     }
 
     @Override
+    public List<String> queryAccessoriesListByMaterielCode(List<String> materielCodeList) {
+        return super.executeQueryByPass(new String(), materielCodeList, "HzAccessoriesLibsDAOImpl_queryAccessoriesListByMaterielCode");
+    }
+
+    @Override
     public HzAccessoriesLibs queryAccessoriesByMaterielCode(String materielCode) {
         HzAccessoriesLibs hzAccessoriesLibs = new HzAccessoriesLibs();
         hzAccessoriesLibs.setpMaterielCode(materielCode);
