@@ -14,10 +14,10 @@ import sql.pojo.project.HzProjectLibs;
 import java.util.List;
 
 /**
- * Author: Fancyears·Maylos·Mayways
- * Date: 2018/5/30
- * Time: 14:10
- * Description:
+ * @Author: Fancyears·Maylos·Maywas
+ * @Description: fuck
+ * @Date: Created in 2018/9/6 13:19
+ * @Modified By:
  */
 @Service("hzProjectLibsDao")
 public class HzProjectLibsDaoImpl extends BasicDaoImpl<HzProjectLibs> implements HzProjectLibsDao {

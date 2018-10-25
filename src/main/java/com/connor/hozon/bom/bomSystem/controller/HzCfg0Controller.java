@@ -43,10 +43,12 @@ import com.connor.hozon.bom.resources.domain.dto.response.HzDictionaryLibraryRes
 import com.connor.hozon.bom.resources.service.resourcesLibrary.dictionaryLibrary.HzDictionaryLibraryService;
 import sql.pojo.resourcesLibrary.dictionaryLibrary.HzDictionaryLibrary;
 
+
 /**
- * Created by Fancyears·Maylos·Mayways
- * Description:
- * Date: 2018/6/6 16:55
+ * @Author: Fancyears·Maylos·Maywas
+ * @Description: 特性
+ * @Date: Created in 2018/8/30 18:53
+ * @Modified By:
  */
 @Controller
 @RequestMapping("/cfg0")

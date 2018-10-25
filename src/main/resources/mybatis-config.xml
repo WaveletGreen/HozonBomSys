@@ -56,7 +56,7 @@
         <mapper resource="sql/mapper/bom/xmapper/HzBomStateMapper.xml"/>
         <mapper resource="sql/mapper/bom/xmapper/HzMBomToERPMapper.xml"/>
         <mapper resource="sql/mapper/bom/xmapper/HzSingleVehiclesBomRecordMapper.xml"/>
-        <mapper resource="sql/mapper/bom/xmapper/HzSingleVehicleDosageMapper.xml"/>
+        <!--<mapper resource="sql/mapper/bom/xmapper/HzSingleVehicleDosageMapper.xml"/>-->
 
         <!--配置-->
         <!--cfg0-->
@@ -101,6 +101,9 @@
         <mapper resource="sql/mapper/cfg/vwo/HzVwoInfoMapper.xml"/>
         <mapper resource="sql/mapper/cfg/vwo/HzVwoInformChangesMapper.xml"/>
         <mapper resource="sql/mapper/cfg/vwo/HzVwoExecuteMapper.xml"/>
+        <mapper resource="sql/mapper/cfg/vwo/HzVwoOpiBomMapper.xml"/>
+        <mapper resource="sql/mapper/cfg/vwo/HzVwoOpiPmtMapper.xml"/>
+        <mapper resource="sql/mapper/cfg/vwo/HzVwoOpiProjMapper.xml"/>
         <!--CODPWO表单-->
         <mapper resource="sql/mapper/change.xmapper/HzBreakPointMapper.xml"/>
 

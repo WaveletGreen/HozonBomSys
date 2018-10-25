@@ -5,7 +5,12 @@
  */
 
 package sql.pojo.cfg.fullCfg;
-
+/**
+ * @Author: Fancyears·Maylos·Maywas
+ * @Description: fuck
+ * @Date: Created in 2018/8/10 13:55
+ * @Modified By:
+ */
 public class HzCfg0BomLineOfModel {
 
     private String objectName;

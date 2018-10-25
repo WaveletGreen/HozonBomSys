@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (c) 2018.
+  ~ This file was wrote by fancyears·milos·maywas @connor. Any question/bug you can post to 1243093366@qq.com.
+  ~ ALL RIGHTS RESERVED.
+  -->
+
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.connor.hozon.bom.bomSystem.dao.vwo.HzVwoExecuteDao">
     <resultMap id="BaseResultMap" type="sql.pojo.cfg.vwo.HzVwoExecute">
@@ -50,9 +56,9 @@
         <result column="EXE_RESERVE10" jdbcType="VARCHAR" property="exeReserve10"/>
     </resultMap>
     <sql id="Base_Column_List">
-    EXE_ID, EXE_VWO_ID, EXE_DEPT, EXE_USER, EXE_ROLE, EXE_MISSION, EXE_PLAN_FINISH_DATE,
-    EXE_STATUS, EXE_PROOF, EXE_CREATE_DATE, EXE_CREATOR, EXE_UPDATE_DATE, EXE_UPDATER,
-    EXE_USER_ID, EXE_RESERVE2, EXE_RESERVE3, EXE_RESERVE4, EXE_RESERVE5, EXE_RESERVE6,
+    EXE_ID, EXE_VWO_ID, EXE_DEPT, EXE_USER, EXE_ROLE, EXE_MISSION, EXE_PLAN_FINISH_DATE, 
+    EXE_STATUS, EXE_PROOF, EXE_CREATE_DATE, EXE_CREATOR, EXE_UPDATE_DATE, EXE_UPDATER, 
+    EXE_USER_ID, EXE_RESERVE2, EXE_RESERVE3, EXE_RESERVE4, EXE_RESERVE5, EXE_RESERVE6, 
     EXE_RESERVE7, EXE_RESERVE8, EXE_RESERVE9, EXE_RESERVE10
   </sql>
     <!--**************************************select**************************************-->

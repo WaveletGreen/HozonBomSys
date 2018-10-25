@@ -9,7 +9,12 @@ package sql.pojo.task;
 import lombok.Data;
 
 import java.util.Date;
-
+/**
+ * @Author: Fancyears·Maylos·Maywas
+ * @Description: 任务
+ * @Date: Created in 2018/10/10 13:29
+ * @Modified By:
+ */
 @Data
 public class HzTasks implements  Cloneable {
     /**

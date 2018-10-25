@@ -13,13 +13,12 @@ import org.springframework.stereotype.Service;
 import sql.IBaseSQLUtil;
 import sql.pojo.cfg.main.HzCfg0MainRecord;
 
-/*************************************************************************************************************************
- *                                  Author: Fancyears·Maylos·Mayways
- * Date: 2018/5/31 13:41
- *
- * Description:
- *
- * ***********************************************************************************************************************/
+/**
+ * @Author: Fancyears·Maylos·Maywas
+ * @Description: fuck
+ * @Date: Created in 2018/9/6 13:19
+ * @Modified By:
+ */
 @Service("hzCfg0MainRecordDao")
 public class HzCfg0MainRecordDaoImpl extends BasicDaoImpl<HzCfg0MainRecord> implements HzCfg0MainRecordDao {
     @Autowired

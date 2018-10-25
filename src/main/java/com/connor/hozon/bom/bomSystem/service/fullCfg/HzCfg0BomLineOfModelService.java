@@ -33,9 +33,10 @@ import sql.pojo.project.HzVehicleRecord;
 import java.util.*;
 
 /**
- * User: Fancyears·Maylos·Mayways
- * Date: 2018/5/21
- * Time: 18:14
+ * @Author: Fancyears·Maylos·Maywas
+ * @Description: fuck
+ * @Date: Created in 2018/9/6 13:19
+ * @Modified By:
  */
 @Service("hzCfg0BomLineOfModelService")
 public class HzCfg0BomLineOfModelService {

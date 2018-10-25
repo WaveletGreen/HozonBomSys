@@ -22,6 +22,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import sql.pojo.bom.HzBomLineRecord;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.*;
 
@@ -219,7 +220,7 @@ public class HzEbomController extends BaseController {
     @RequestMapping(value = "excelExport",method = RequestMethod.POST)
     @ResponseBody
     public JSONObject listDownLoad(
-            @RequestBody  List<HzEbomRespDTO> dtos
+            @RequestBody  List<HzEbomRespDTO> dtos,HttpServletRequest request
     ) {
         boolean flag=true;
         JSONObject result=new JSONObject();
@@ -306,7 +307,7 @@ public class HzEbomController extends BaseController {
 //                    cellArr[50] = "删除状态";
                 dataList.add(cellArr);
             }
-            flag = ExcelUtil.writeExcel(fileName, title, dataList,"ebom");
+            flag = ExcelUtil.writeExcel(fileName, title, dataList,"ebom",request);
 
             if(flag){
                 LOG.info(fileName+",文件创建成功");

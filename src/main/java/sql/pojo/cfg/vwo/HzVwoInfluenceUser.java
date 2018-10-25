@@ -7,8 +7,12 @@
 package sql.pojo.cfg.vwo;
 
 /**
- * VWO影响人员 x
+ * @Author: Fancyears·Maylos·Maywas
+ * @Description: VWO影响人员
+ * @Date: Created in 2018/10/10 13:29
+ * @Modified By:
  */
+
 public class HzVwoInfluenceUser {
     /**
      * 主键

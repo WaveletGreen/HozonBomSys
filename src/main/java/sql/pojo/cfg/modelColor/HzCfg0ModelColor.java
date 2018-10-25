@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2018.
+ * This file was wrote by fancyears·milos·maywas @connor. Any question/bug you can post to 1243093366@qq.com.
+ * ALL RIGHTS RESERVED.
+ */
+
 package sql.pojo.cfg.modelColor;
 
 import lombok.Getter;
@@ -7,11 +13,10 @@ import java.util.Date;
 import java.util.LinkedHashMap;
 
 /**
- * Created by IntelliJ IDEA.
- * User: Fancyears·Maylos·Mayways
- * Date: 2018/5/22
- * Time: 11:23
- * 配色方案主数据
+ * @Author: Fancyears·Maylos·Maywas
+ * @Description: 配色方案主数据
+ * @Date: Created in 2018/8/10 13:55
+ * @Modified By:
  */
 public class HzCfg0ModelColor {
     /**
@@ -72,6 +77,9 @@ public class HzCfg0ModelColor {
     @Getter
     @Setter
     private String cmcrReserve4;
+    /**
+     * 流程状态
+     */
     @Getter
     @Setter
     private String cmcrStatus;

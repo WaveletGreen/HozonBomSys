@@ -1,12 +1,20 @@
+/*
+ * Copyright (c) 2018.
+ * This file was wrote by fancyears·milos·maywas @connor. Any question/bug you can post to 1243093366@qq.com.
+ * ALL RIGHTS RESERVED.
+ */
+
 package sql.pojo.cfg.fullCfg;
 
 import java.math.BigDecimal;
 import java.util.Date;
 
 import static com.connor.hozon.bom.bomSystem.helper.StringHelper.checkString;
-
 /**
- * 全配置一级BOM清单主数据
+ * @Author: Fancyears·Maylos·Maywas
+ * @Description: 全配置一级BOM清单主数据
+ * @Date: Created in 2018/8/10 13:55
+ * @Modified By:
  */
 public class HzFullCfgMain {
     private BigDecimal id;

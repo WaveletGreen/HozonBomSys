@@ -1,11 +1,18 @@
+/*
+ * Copyright (c) 2018.
+ * This file was wrote by fancyears·milos·maywas @connor. Any question/bug you can post to 1243093366@qq.com.
+ * ALL RIGHTS RESERVED.
+ */
+
 package com.connor.hozon.bom.bomSystem.dto;
 
 import java.util.Date;
 
 /**
- * Created by Fancyears·Maylos·Mayways
- * Description:
- * Date: 2018/6/8 9:13
+ * @Author: Fancyears·Maylos·Maywas
+ * @Description: 相关性助手
+ * @Date: Created in 2018/9/6 13:19
+ * @Modified By:
  */
 public class HzRelevanceBean {
     /**

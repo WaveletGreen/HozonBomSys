@@ -8,8 +8,8 @@ package com.connor.hozon.bom.bomSystem.iservice.process;
 
 /**
  * @Author: Fancyears·Maylos·Maywas
- * @Description: 流程中断回调
- * @Date: Created in 2018/10/16 13:26
+ * @Description: 中断回调
+ * @Date: Created in 2018/9/6 13:19
  * @Modified By:
  */
 public interface IInterruptionCallBack {

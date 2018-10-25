@@ -14,9 +14,10 @@ import sql.pojo.cfg.fullCfg.HzCfg0BomLineOfModel;
 import java.util.List;
 
 /**
- * User: Fancyears·Maylos·Mayways
- * Date: 2018/5/21
- * Time: 18:11
+ * @Author: Fancyears·Maylos·Maywas
+ * @Description: fuck
+ * @Date: Created in 2018/9/6 13:19
+ * @Modified By:
  */
 @Service("hzCfg0BomLineOfModelDao")
 public class HzCfg0BomLineOfModelDaoImpl extends BasicDaoImpl<HzCfg0BomLineOfModel> implements HzCfg0BomLineOfModelDao {

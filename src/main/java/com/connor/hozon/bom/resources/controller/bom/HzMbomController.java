@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.*;
 
@@ -272,7 +273,7 @@ public class HzMbomController extends BaseController {
     @RequestMapping(value = "excelExport",method = RequestMethod.POST)
     @ResponseBody
     public JSONObject listDownLoad(
-            @RequestBody  List<HzMbomRecordRespDTO> dtos
+            @RequestBody  List<HzMbomRecordRespDTO> dtos,HttpServletRequest request
     ) {
         boolean flag=true;
         JSONObject result=new JSONObject();
@@ -315,7 +316,7 @@ public class HzMbomController extends BaseController {
                 cellArr[23] = ebomRespDTO.getpBomType();
                 dataList.add(cellArr);
             }
-            flag = ExcelUtil.writeExcel(fileName, title, dataList,"mbom");
+            flag = ExcelUtil.writeExcel(fileName, title, dataList,"mbom",request);
 
             if(flag){
                 LOG.info(fileName+",文件创建成功");

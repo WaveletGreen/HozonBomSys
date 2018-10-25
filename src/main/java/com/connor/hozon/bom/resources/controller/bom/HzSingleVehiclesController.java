@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.*;
 
@@ -241,7 +242,7 @@ public class HzSingleVehiclesController extends BaseController {
     @RequestMapping(value = "excelExport",method = RequestMethod.POST)
     @ResponseBody
     public JSONObject listDownLoad(
-            @RequestBody  List<HzSingleVehiclesRespDTO> dtos
+            @RequestBody  List<HzSingleVehiclesRespDTO> dtos,HttpServletRequest request
     ) {
         boolean flag=true;
         JSONObject result=new JSONObject();
@@ -276,7 +277,7 @@ public class HzSingleVehiclesController extends BaseController {
                 cellArr[13] = bomRespDTO.getSvlMotorCode();
                 dataList.add(cellArr);
             }
-            flag = ExcelUtil.writeExcel(fileName, title, dataList,"");
+            flag = ExcelUtil.writeExcel(fileName, title, dataList,"",request);
 
             if(flag){
                 LOG.info(fileName+",文件创建成功");
@@ -301,7 +302,7 @@ public class HzSingleVehiclesController extends BaseController {
     @RequestMapping(value = "excelExport2",method = RequestMethod.POST)
     @ResponseBody
     public JSONObject listDownLoad2(
-            @RequestBody  List<HzSingleVehiclesBomRespDTO> dtos
+            @RequestBody  List<HzSingleVehiclesBomRespDTO> dtos,HttpServletRequest request
     ) {
         boolean flag=true;
         JSONObject result=new JSONObject();
@@ -340,7 +341,7 @@ public class HzSingleVehiclesController extends BaseController {
                 cellArr[20] = bomRespDTO.getPStockLocation();
                 dataList.add(cellArr);
             }
-            flag = ExcelUtil.writeExcel(fileName, title, dataList,"");
+            flag = ExcelUtil.writeExcel(fileName, title, dataList,"",request);
 
             if(flag){
                 LOG.info(fileName+",文件创建成功");

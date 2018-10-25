@@ -26,7 +26,12 @@ import sql.pojo.cfg.relevance.HzRelevanceRelation;
 import java.util.*;
 
 import static javax.swing.UIManager.get;
-
+/**
+ * @Author: Fancyears·Maylos·Maywas
+ * @Description: fuck
+ * @Date: Created in  2018/5/30 14:15
+ * @Modified By:
+ */
 @Service("hzRelevanceService2")
 public class HzRelevanceService2 {
 

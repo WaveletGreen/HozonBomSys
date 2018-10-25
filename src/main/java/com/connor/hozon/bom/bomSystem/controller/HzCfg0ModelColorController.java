@@ -42,10 +42,12 @@ import java.util.stream.Collectors;
 
 import static com.connor.hozon.bom.bomSystem.helper.StringHelper.checkString;
 
+
 /**
- * User: Fancyears·Maylos·Mayways
- * Date: 2018/5/22
- * Time: 10:52
+ * @Author: Fancyears·Maylos·Maywas
+ * @Description: 配色方案
+ * @Date: Created in 2018/8/30 18:53
+ * @Modified By:
  */
 @Controller
 @RequestMapping("/modelColor")

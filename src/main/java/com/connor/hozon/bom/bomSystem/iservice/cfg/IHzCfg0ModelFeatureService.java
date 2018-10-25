@@ -13,7 +13,10 @@ import sql.pojo.cfg.derivative.HzCfg0ModelFeature;
 import java.util.List;
 
 /**
- *
+ * @Author: Fancyears·Maylos·Maywas
+ * @Description: fuck
+ * @Date: Created in 2018/9/6 13:19
+ * @Modified By:
  */
 @Configuration
 public interface IHzCfg0ModelFeatureService {
