@@ -1074,12 +1074,15 @@ public class HzVwoManagerService implements IHzVWOManagerService {
             result.put("status",false);
             return result;
         }
-//        HzVwoOpiProj hzVwoOpiProj = hzVwoOpiProjDao.selectByVwoId(vwoId);
-//        if(hzVwoOpiProj.getOpiProjMngUserId()==null){
-//            result.put("msg","请指派项目经理");
-//            result.put("status",false);
-//            return result;
-//        }
+        HzVwoInfo vwoInfo = hzVwoInfoService.doSelectByPrimaryKey(vwoId);
+        HzProjectLibs project = hzProjectLibsService.doLoadProjectLibsById(vwoInfo.getProjectUid());
+        Long managerId = project.getProjectManagerId();
+        HzVwoOpiProj hzVwoOpiProj = hzVwoOpiProjDao.selectByVwoId(vwoId);
+        if(managerId==null||hzVwoOpiProj.getOpiProjMngUserId()==null||managerId!=hzVwoOpiProj.getOpiProjMngUserId()){
+            result.put("msg","请在主页项目中指派项目经理");
+            result.put("status",false);
+            return result;
+        }
         boolean status = toLaunch(type, projectUid, vwoId);
         if (status) {
             result.put("msg", "VWO发起成功");
