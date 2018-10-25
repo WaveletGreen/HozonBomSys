@@ -510,8 +510,8 @@ function initTable(eBomUrl) {
                                     param[('title'+i)]=rows[k][('title'+i)];
                                 }
                                 rows[k].map=param;
-                                console.log(param);
-                                console.log(rows[k]);
+                                // console.log(param);
+                                // console.log(rows[k]);
                             }
                             window.Ewin.confirm({title: '提示', message: '是否要导出选中行？', width: 500}).on(function (e) {
                                 if (e) {

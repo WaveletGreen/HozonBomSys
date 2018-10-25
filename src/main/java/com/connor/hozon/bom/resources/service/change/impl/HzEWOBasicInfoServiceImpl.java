@@ -127,6 +127,9 @@ public class HzEWOBasicInfoServiceImpl implements HzEWOBasicInfoService {
                     respDTO.setProjectId(hzEWOBasicInfo.getProjectId());
                     respDTO.setEwoNo(hzEWOBasicInfo.getEwoNo());
                     respDTO.setId(hzEWOBasicInfo.getId());
+                    respDTO.setOriginator(hzEWOBasicInfo.getOriginator());
+                    respDTO.setChangeDesc(hzEWOBasicInfo.getChangeDesc());
+                    respDTO.setReasonDesc(hzEWOBasicInfo.getReasonDesc());
                     respDTO.setFormCreateTime(DateUtil.formatTimestampDate(hzEWOBasicInfo.getFormCreateTime()));
                     ewoBasicInfoList.add(respDTO);
                 });
