@@ -9,7 +9,7 @@ import com.connor.hozon.bom.resources.service.bom.HzEbomService;
 import com.connor.hozon.bom.resources.service.bom.HzMbomService;
 import com.connor.hozon.bom.resources.service.bom.HzPbomService;
 import com.connor.hozon.bom.resources.util.ListUtil;
-import com.connor.hozon.bom.resources.util.ResultMessageBuilder;
+import com.connor.hozon.bom.resources.util.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -47,7 +47,7 @@ public class LouaContorller extends BaseController {
     @ResponseBody
     public void getHzEbomLoa(@RequestBody HzLouaQuery query, HttpServletResponse response){
         if(query.getProjectId() == null || query.getPuid() == null || query.getPuid() == "" || query.getProjectId() == ""){
-            writeAjaxJSONResponse(ResultMessageBuilder.build(false,"非法参数！"),response);
+            toJSONResponse(Result.build(false,"非法参数！"),response);
             return;
         }
          JSONObject jsonObject = new JSONObject();
@@ -94,14 +94,14 @@ public class LouaContorller extends BaseController {
             jsonObject.put("parent",new HzLoaRespDTO());
         }
         jsonObject.put("child",loaRespDTOS);
-        writeAjaxJSONResponse(ResultMessageBuilder.build(jsonObject),response);
+        toJSONResponse(Result.build(jsonObject),response);
     }
 
 
     @RequestMapping(value = "pbom",method = RequestMethod.POST)
     public void getHzPbomLoa(@RequestBody HzLouaQuery query, HttpServletResponse response){
         if(query.getProjectId() == null || query.getPuid() == null || query.getPuid() == "" || query.getProjectId() == ""){
-            writeAjaxJSONResponse(ResultMessageBuilder.build(false,"非法参数！"),response);
+            toJSONResponse(Result.build(false,"非法参数！"),response);
             return;
         }
         JSONObject jsonObject = new JSONObject();
@@ -146,13 +146,13 @@ public class LouaContorller extends BaseController {
             jsonObject.put("parent",new HzLoaRespDTO());
         }
         jsonObject.put("child",loaRespDTOS);
-        writeAjaxJSONResponse(ResultMessageBuilder.build(jsonObject),response);
+        toJSONResponse(Result.build(jsonObject),response);
     }
 
     @RequestMapping(value = "mbom",method = RequestMethod.POST)
     public void getHzMbomLoa(@RequestBody HzLouaQuery query, HttpServletResponse response){
         if(query.getProjectId() == null || query.getPuid() == null || query.getPuid() == "" || query.getProjectId() == ""){
-            writeAjaxJSONResponse(ResultMessageBuilder.build(false,"非法参数！"),response);
+            toJSONResponse(Result.build(false,"非法参数！"),response);
             return;
         }
         JSONObject jsonObject = new JSONObject();
@@ -202,19 +202,19 @@ public class LouaContorller extends BaseController {
             jsonObject.put("parent",new HzLoaRespDTO());
         }
         jsonObject.put("child",loaRespDTOS);
-        writeAjaxJSONResponse(ResultMessageBuilder.build(jsonObject),response);
+        toJSONResponse(Result.build(jsonObject),response);
     }
 
     @RequestMapping(value = "setLou",method = RequestMethod.POST)
     public void setBomAsLou(@RequestBody SetLouReqDTO reqDTO, HttpServletResponse response){
-        OperateResultMessageRespDTO respDTO = hzEbomService.setCurrentBomAsLou(reqDTO);
-        writeAjaxJSONResponse(ResultMessageBuilder.build(OperateResultMessageRespDTO.isSuccess(respDTO),respDTO),response);
+        WriteResultRespDTO respDTO = hzEbomService.setCurrentBomAsLou(reqDTO);
+        toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO),respDTO),response);
     }
 
     @RequestMapping(value = "getLou",method = RequestMethod.GET)
     public void getLou(HzLouaQuery query,HttpServletResponse response){
         if(query.getProjectId() == null || query.getPuid() == null || query.getPuid() == "" || query.getProjectId() == ""){
-            writeAjaxJSONResponse(ResultMessageBuilder.build(false,"非法参数！"),response);
+            toJSONResponse(Result.build(false,"非法参数！"),response);
             return;
         }
         JSONObject jsonObject = new JSONObject();
@@ -263,19 +263,19 @@ public class LouaContorller extends BaseController {
         }
         jsonObject.put("child",loaRespDTOS);
         jsonObject.put("config",resp);
-        writeAjaxJSONResponse(ResultMessageBuilder.build(jsonObject),response);
+        toJSONResponse(Result.build(jsonObject),response);
     }
 
     @RequestMapping(value = "setLou/pBom",method = RequestMethod.POST)
     public void setPbomAsLou(@RequestBody SetLouReqDTO reqDTO,HttpServletResponse response){
-        OperateResultMessageRespDTO respDTO = hzPbomService.setCurrentBomAsLou(reqDTO);
-        writeAjaxJSONResponse(ResultMessageBuilder.build(OperateResultMessageRespDTO.isSuccess(respDTO),respDTO),response);
+        WriteResultRespDTO respDTO = hzPbomService.setCurrentBomAsLou(reqDTO);
+        toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO),respDTO),response);
     }
 
     @RequestMapping(value = "getLou/pBom",method = RequestMethod.GET)
     public void getPbomLou(HzLouaQuery query,HttpServletResponse response){
         if(query.getProjectId() == null || query.getPuid() == null || query.getPuid() == "" || query.getProjectId() == ""){
-            writeAjaxJSONResponse(ResultMessageBuilder.build(false,"非法参数！"),response);
+            toJSONResponse(Result.build(false,"非法参数！"),response);
             return;
         }
         JSONObject jsonObject = new JSONObject();
@@ -322,19 +322,19 @@ public class LouaContorller extends BaseController {
         }
         jsonObject.put("child",loaRespDTOS);
         jsonObject.put("config",resp);
-        writeAjaxJSONResponse(ResultMessageBuilder.build(jsonObject),response);
+        toJSONResponse(Result.build(jsonObject),response);
     }
 
     @RequestMapping(value = "setLou/mBom",method = RequestMethod.POST)
     public void setMBomAsLou(@RequestBody SetLouReqDTO reqDTO,HttpServletResponse response){
-        OperateResultMessageRespDTO respDTO = hzMbomService.setCurrentBomToLou(reqDTO);
-        writeAjaxJSONResponse(ResultMessageBuilder.build(OperateResultMessageRespDTO.isSuccess(respDTO),respDTO),response);
+        WriteResultRespDTO respDTO = hzMbomService.setCurrentBomToLou(reqDTO);
+        toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO),respDTO),response);
     }
 
     @RequestMapping(value = "getLou/mBom",method = RequestMethod.GET)
     public void getMbomLou(HzLouaQuery query,HttpServletResponse response){
         if(query.getProjectId() == null || query.getPuid() == null || query.getPuid() == "" || query.getProjectId() == ""){
-            writeAjaxJSONResponse(ResultMessageBuilder.build(false,"非法参数！"),response);
+            toJSONResponse(Result.build(false,"非法参数！"),response);
             return;
         }
         JSONObject jsonObject = new JSONObject();
@@ -385,7 +385,7 @@ public class LouaContorller extends BaseController {
         }
         jsonObject.put("child",loaRespDTOS);
         jsonObject.put("config",resp);
-        writeAjaxJSONResponse(ResultMessageBuilder.build(jsonObject),response);
+        toJSONResponse(Result.build(jsonObject),response);
     }
 
 

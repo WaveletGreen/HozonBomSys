@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (c) 2018.
+  ~ This file was wrote by fancyears·milos·maywas @connor. Any question/bug you can post to 1243093366@qq.com.
+  ~ ALL RIGHTS RESERVED.
+  -->
+
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.connor.hozon.bom.bomSystem.dao.vwo.HzVwoOpiProjDao">
     <resultMap id="BaseResultMap" type="sql.pojo.cfg.vwo.HzVwoOpiProj">
@@ -50,13 +56,15 @@
       OPI_PROJ_MNG_COMMENT, OPI_PROJ_MNG_CREATE_DATE, 
       OPI_PROJ_MNG_UPDATE_DATE, OPI_PROJ_MNG_CREATOR, 
       OPI_PROJ_MNG_UPDATER, OPI_PROJ_MNG_STAGE,
-      OPI_PROJ_MNG_USER_ID,OPI_PROJ_MNG_USER_NAME)
+        OPI_PROJ_MNG_USER_ID, OPI_PROJ_MNG_USER_NAME
+        )
     values (#{id,jdbcType=DECIMAL}, #{opiVwoId,jdbcType=DECIMAL}, #{opiProjMngOpinion,jdbcType=VARCHAR},
       #{opiProjMngAgreement,jdbcType=DECIMAL}, #{opiProjMngOptionDate,jdbcType=TIMESTAMP}, 
       #{opiProjMngComment,jdbcType=VARCHAR}, #{opiProjMngCreateDate,jdbcType=TIMESTAMP}, 
       #{opiProjMngUpdateDate,jdbcType=TIMESTAMP}, #{opiProjMngCreator,jdbcType=VARCHAR}, 
       #{opiProjMngUpdater,jdbcType=VARCHAR}, #{opiProjMngStage,jdbcType=DECIMAL},
-      #{opiProjMngUserId,jdbcType=DECIMAL},#{opiProjMngUserName,jdbcType=VARCHAR})
+      #{opiProjMngUserId,jdbcType=DECIMAL}, #{opiProjMngUserName,jdbcType=VARCHAR}
+        )
   </insert>
     <insert id="insertSelective" parameterType="sql.pojo.cfg.vwo.HzVwoOpiProj">
         <selectKey order="BEFORE"
@@ -186,6 +194,7 @@
             </if>
             OPI_PROJ_MNG_UPDATE_DATE = sysdate
         </set>
+
         where ID = #{id,jdbcType=DECIMAL}
     </update>
     <update id="updateByPrimaryKey" parameterType="sql.pojo.cfg.vwo.HzVwoOpiProj">
@@ -199,7 +208,7 @@
       OPI_PROJ_MNG_UPDATE_DATE = #{opiProjMngUpdateDate,jdbcType=TIMESTAMP},
       OPI_PROJ_MNG_CREATOR = #{opiProjMngCreator,jdbcType=VARCHAR},
       OPI_PROJ_MNG_UPDATER = #{opiProjMngUpdater,jdbcType=VARCHAR},
-      OPI_PROJ_MNG_STAGE = #{opiProjMngStage,jdbcType=DECIMAL},
+      OPI_PROJ_MNG_STAGE = #{opiProjMngStage,jdbcType=DECIMAL}
       OPI_PROJ_MNG_USER_ID = #{opiProjMngUserId,jdbcType=DECIMAL},
       OPI_PROJ_MNG_USER_NAME = #{opiProjMngUserName,jdbcType=VARCHAR}
     where ID = #{id,jdbcType=DECIMAL}

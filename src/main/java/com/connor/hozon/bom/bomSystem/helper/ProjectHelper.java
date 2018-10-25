@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2018.
+ * This file was wrote by fancyears·milos·maywas @connor. Any question/bug you can post to 1243093366@qq.com.
+ * ALL RIGHTS RESERVED.
+ */
+
 package com.connor.hozon.bom.bomSystem.helper;
 
 import com.connor.hozon.bom.bomSystem.iservice.project.IHzVehicleService;
@@ -12,7 +18,12 @@ import sql.pojo.project.HzBrandRecord;
 import sql.pojo.project.HzPlatformRecord;
 import sql.pojo.project.HzProjectLibs;
 import sql.pojo.project.HzVehicleRecord;
-
+/**
+ * @Author: Fancyears·Maylos·Maywas
+ * @Description: 项目助手
+ * @Date: Created in 2018/9/6 13:19
+ * @Modified By:
+ */
 @Service("projectHelper")
 public class ProjectHelper {
     /**

@@ -7,8 +7,16 @@
 package sql.pojo.task;
 
 import lombok.Data;
+
+import java.util.Date;
+/**
+ * @Author: Fancyears·Maylos·Maywas
+ * @Description: 任务
+ * @Date: Created in 2018/10/10 13:29
+ * @Modified By:
+ */
 @Data
-public class HzTasks {
+public class HzTasks implements  Cloneable {
     /**
      *主键
      */
@@ -38,17 +46,23 @@ public class HzTasks {
      */
     private Integer taskTargetType;
     /**
-     *保留字段
+     *创建时间
      */
-    private String taskReserve;
+    private Date taskCreateDate;
+    /**
+     * 更新时间，当status=999时，即为完成时间
+     */
+    private Date taskUpdateDate;
+    /**
+     * 执行任务的用户名称
+     */
+    private String taskExecuteUserName;
+    /**
+     * 发起人
+     */
+    private String taskLauncher;
 
-    private String taskReserve2;
-
-    private String taskReserve3;
-
-    private String taskReserve4;
-
-    private String taskReserve5;
+    private Long taskLauncherId;
 
     private String taskReserve6;
 
@@ -69,4 +83,9 @@ public class HzTasks {
     private String taskReserve14;
 
     private String taskReserve15;
+
+    @Override
+    public HzTasks clone() throws CloneNotSupportedException {
+        return (HzTasks)super.clone();
+    }
 }

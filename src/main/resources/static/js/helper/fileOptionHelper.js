@@ -3,6 +3,7 @@
  * This file was wrote by fancyears·milos·maywas @connor. Any question/bug you can post to 1243093366@qq.com.
  * ALL RIGHTS RESERVED.
  */
+
 jQuery.download = function(url, method, filedir, filename){
     jQuery('<form action="'+url+'" method="'+(method||'post')+'">' +  // action请求路径及推送方法
         '<input type="text" name="filedir" value="'+filedir+'"/>' + // 文件路径

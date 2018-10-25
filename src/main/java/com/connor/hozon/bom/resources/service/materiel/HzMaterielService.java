@@ -2,7 +2,7 @@ package com.connor.hozon.bom.resources.service.materiel;
 
 import com.connor.hozon.bom.resources.domain.dto.request.EditHzMaterielReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzMaterielRespDTO;
-import com.connor.hozon.bom.resources.domain.dto.response.OperateResultMessageRespDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
 import com.connor.hozon.bom.resources.domain.query.HzMaterielByPageQuery;
 import com.connor.hozon.bom.resources.domain.query.HzMaterielQuery;
 import com.connor.hozon.bom.resources.page.Page;
@@ -18,14 +18,14 @@ public interface HzMaterielService {
      * @param editHzMaterielReqDTO
      * @return
      */
-    OperateResultMessageRespDTO editHzMateriel(EditHzMaterielReqDTO editHzMaterielReqDTO);
+    WriteResultRespDTO editHzMateriel(EditHzMaterielReqDTO editHzMaterielReqDTO);
 
     /**
      * 删除一条记录
      * @param puid
      * @return
      */
-    OperateResultMessageRespDTO deleteHzMateriel(String puid);
+    WriteResultRespDTO deleteHzMateriel(String puid);
 
     /**
      * 分页获取物料信息

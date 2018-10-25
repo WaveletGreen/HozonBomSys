@@ -10,7 +10,7 @@ import lombok.Data;
 
 /**
  * @Author: Fancyears·Maylos·Maywas
- * @Description:
+ * @Description: 忘了
  * @Date: Created in 2018/10/16 15:58
  * @Modified By:
  */
@@ -28,4 +28,9 @@ public class HzVwoProcessDto {
      * VWO主键
      */
     private Long vwoId;
+
+    /**
+     * 表单ID，该ID目前在MySql中，需要从DIV里面获取ID
+     */
+    private Long formId;
 }

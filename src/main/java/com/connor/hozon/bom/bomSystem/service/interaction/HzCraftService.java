@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2018.
+ * This file was wrote by fancyears·milos·maywas @connor. Any question/bug you can post to 1243093366@qq.com.
+ * ALL RIGHTS RESERVED.
+ */
+
 package com.connor.hozon.bom.bomSystem.service.interaction;
 
 import com.connor.hozon.bom.bomSystem.helper.PropertiesHelper;
@@ -93,7 +99,7 @@ public class HzCraftService implements IHzCraftService {
     /**
      * 调试阶段
      */
-    public static boolean CRAFT_DEBUG = true;
+    public static boolean CRAFT_DEBUG = false;
     /**
      * 插入测试，true则不进行插入
      */

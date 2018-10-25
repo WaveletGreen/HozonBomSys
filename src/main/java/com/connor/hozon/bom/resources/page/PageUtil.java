@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class PageUtils {
+public class PageUtil {
 
-	private PageUtils() {
+	private PageUtil() {
 
 	}
 
@@ -14,37 +14,8 @@ public class PageUtils {
 
 		if (pageSize <= 0)
 			throw new IllegalArgumentException(
-					"[pageSize] must great than zero");
+					"非法参数,每页显示数据不能小于0!");
 		return (pageNumber - 1) * pageSize;
-	}
-
-	public static List<Integer> generateLinkPageNumbers(int currentPageNumber,
-                                                        int lastPageNumber, int count) {
-
-		int avg = count / 2;
-
-		int startPageNumber = currentPageNumber - avg;
-		if (startPageNumber <= 0) {
-			startPageNumber = 1;
-		}
-
-		int endPageNumber = startPageNumber + count - 1;
-		if (endPageNumber > lastPageNumber) {
-			endPageNumber = lastPageNumber;
-		}
-
-		if (endPageNumber - startPageNumber < count) {
-			startPageNumber = endPageNumber - count;
-			if (startPageNumber <= 0) {
-				startPageNumber = 1;
-			}
-		}
-
-		List<Integer> result = new ArrayList();
-		for (int i = startPageNumber; i <= endPageNumber; i++) {
-			result.add(new Integer(i));
-		}
-		return result;
 	}
 
 	public static int computeLastPageNumber(int totalElements, int pageSize) {
@@ -63,8 +34,7 @@ public class PageUtils {
 			return 1;
 		}
 		if (Integer.MAX_VALUE == pageNumber
-				|| pageNumber > computeLastPageNumber(totalElements, pageSize)) { // last
-																					// page
+				|| pageNumber > computeLastPageNumber(totalElements, pageSize)) {
 			return computeLastPageNumber(totalElements, pageSize);
 		}
 		return pageNumber;
@@ -92,7 +62,6 @@ public class PageUtils {
 		for(int i = minValue; i<maxValue ;i++){
 			result.add(dataList.get(i)) ; 
 		}
-		
 		return result ; 
 	}
 }

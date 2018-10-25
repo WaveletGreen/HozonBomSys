@@ -18,7 +18,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
+/**
+ * @Author: Fancyears·Maylos·Maywas
+ * @Description: fuck
+ * @Date: Created in 2018/9/6 13:19
+ * @Modified By:
+ */
 @Service("hzCfg0RecordDao")
 public class HzCfg0RecordDaoImpl extends BasicDaoImpl<HzCfg0Record> implements HzCfg0RecordDao {
 
@@ -152,7 +157,7 @@ public class HzCfg0RecordDaoImpl extends BasicDaoImpl<HzCfg0Record> implements H
 
     @Override
     public int updateByVwoid(HzCfg0Record hzCfg0Record) {
-        return baseSQLUtil.executeUpdate(hzCfg0Record, clzName+"updateByVwoid");
+        return baseSQLUtil.executeUpdate(hzCfg0Record, clzName+".updateByVwoid");
     }
 
 }

@@ -4,25 +4,23 @@ import com.alibaba.fastjson.JSONObject;
 import com.connor.hozon.bom.resources.controller.BaseController;
 import com.connor.hozon.bom.resources.domain.dto.request.InitiatingProcessReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzEbomRespDTO;
-import com.connor.hozon.bom.resources.domain.dto.response.OperateResultMessageRespDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
 import com.connor.hozon.bom.resources.domain.query.HzEWOChangeRecordQuery;
 import com.connor.hozon.bom.resources.domain.query.HzEWOImpactReferenceQuery;
 import com.connor.hozon.bom.resources.service.change.HzEWOImpactReferenceService;
 import com.connor.hozon.bom.resources.service.change.HzEWOService;
 import com.connor.hozon.bom.resources.util.ListUtil;
-import com.connor.hozon.bom.resources.util.ResultMessageBuilder;
+import com.connor.hozon.bom.resources.util.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import sql.pojo.change.HzEWOAllImpactDept;
 import sql.pojo.change.HzEWOImpactReference;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
 
 /**
@@ -48,13 +46,13 @@ public class HzEWOController extends BaseController {
     @RequestMapping(value = "initiating/process",method = RequestMethod.POST)
     public void initiatingProcessForChange(@RequestBody InitiatingProcessReqDTO reqDTO, HttpServletResponse response){
         if(null == reqDTO.getPuids() || reqDTO.getPuids().equals("")){
-            writeAjaxJSONResponse(ResultMessageBuilder.build(false,"非法参数！"),response);
+            toJSONResponse(Result.build(false,"非法参数！"),response);
             return;
         }
 
-        OperateResultMessageRespDTO respDTO = hzEWOService.initiatingProcessForEwoChange(reqDTO);
+        WriteResultRespDTO respDTO = hzEWOService.initiatingProcessForEwoChange(reqDTO);
 
-        writeAjaxJSONResponse(ResultMessageBuilder.build(OperateResultMessageRespDTO.isSuccess(respDTO),respDTO),response);
+        toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO),respDTO),response);
     }
 
     /**
@@ -153,15 +151,15 @@ public class HzEWOController extends BaseController {
     public void impactReferenceRecord(HzEWOImpactReferenceQuery query, HttpServletResponse response){
         if(query.getEwoNo() == null || query.getProjectId() == null
                 || query.getProjectId() == "" || query.getEwoNo() == ""){
-            writeAjaxJSONResponse(ResultMessageBuilder.build(false,"非法参数！"),response);
+            toJSONResponse(Result.build(false,"非法参数！"),response);
             return ;
         }
         List<HzEWOImpactReference> respDTOList = hzEWOImpactReferenceService.getHzEWOImpactReferences(query);
         if(ListUtil.isEmpty(respDTOList)){
-            writeAjaxJSONResponse(ResultMessageBuilder.build(false,"暂无数据！"),response);
+            toJSONResponse(Result.build(false,"暂无数据！"),response);
             return ;
         }
-        writeAjaxJSONResponse(ResultMessageBuilder.build(respDTOList),response);
+        toJSONResponse(Result.build(respDTOList),response);
     }
 
 
@@ -174,11 +172,11 @@ public class HzEWOController extends BaseController {
     public void impactReferenceRecord(HzEWOImpactReference reference, HttpServletResponse response){
         if(reference.getEwoNo() == null || reference.getProjectId() == null
                 || reference.getProjectId() == "" || reference.getEwoNo() == ""){
-            writeAjaxJSONResponse(ResultMessageBuilder.build(false,"非法参数！"),response);
+            toJSONResponse(Result.build(false,"非法参数！"),response);
             return ;
         }
-        OperateResultMessageRespDTO respDTO = hzEWOImpactReferenceService.editHzEWOImpactReference(reference);
-        writeAjaxJSONResponse(ResultMessageBuilder.build(respDTO),response);
+        WriteResultRespDTO respDTO = hzEWOImpactReferenceService.editHzEWOImpactReference(reference);
+        toJSONResponse(Result.build(respDTO),response);
     }
 
 

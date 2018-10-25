@@ -4,7 +4,7 @@ package com.connor.hozon.bom.resources.service.work;
 import com.connor.hozon.bom.resources.domain.dto.request.AddWorkCenterReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.request.UpdateWorkCenterReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzWorkCenterRespDTO;
-import com.connor.hozon.bom.resources.domain.dto.response.OperateResultMessageRespDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
 import com.connor.hozon.bom.resources.domain.query.HzWorkByPageQuery;
 import com.connor.hozon.bom.resources.page.Page;
 
@@ -27,7 +27,7 @@ public interface HzWorkService {
      * @param reqDTO
      * @return
      */
-    OperateResultMessageRespDTO insertHzWorkRecord(AddWorkCenterReqDTO reqDTO);
+    WriteResultRespDTO insertHzWorkRecord(AddWorkCenterReqDTO reqDTO);
 
     /**
      * 根据Id查询一条数据
@@ -40,12 +40,12 @@ public interface HzWorkService {
      * @param reqDTO
      * @return
      */
-    OperateResultMessageRespDTO updateHzWorkRecord(UpdateWorkCenterReqDTO reqDTO);
+    WriteResultRespDTO updateHzWorkRecord(UpdateWorkCenterReqDTO reqDTO);
 
     /**
      * 删除一条数据
      * @param puid
      * @return
      */
-    OperateResultMessageRespDTO deleteHzWorkRecord(String puid);
+    WriteResultRespDTO deleteHzWorkRecord(String puid);
 }

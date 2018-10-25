@@ -15,9 +15,9 @@ import sql.pojo.cfg.color.HzCfg0ColorSet;
 import java.util.*;
 
 /**
- * @Author: Fancyears·Maylos·Mayways
- * @Date :  2018/10/12 13:11
- * @Description: 颜色库服务层
+ * @Author: Fancyears·Maylos·Maywas
+ * @Description: fuck
+ * @Date: Created in 2018/9/6 13:19
  * @Modified By:
  */
 @Service("HzCfg0ColorSetService")

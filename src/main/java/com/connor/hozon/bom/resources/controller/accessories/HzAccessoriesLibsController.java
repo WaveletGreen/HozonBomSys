@@ -3,12 +3,11 @@ package com.connor.hozon.bom.resources.controller.accessories;
 import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.resources.controller.BaseController;
 import com.connor.hozon.bom.resources.domain.dto.request.DeleteHzAccessoriesLibsDTO;
-import com.connor.hozon.bom.resources.domain.dto.response.OperateResultMessageRespDTO;
 import com.connor.hozon.bom.resources.domain.query.HzAccessoriesLibsPageQuery;
 import com.connor.hozon.bom.resources.mybatis.accessories.HzAccessoriesLibsDAO;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.util.ListUtil;
-import com.connor.hozon.bom.resources.util.ResultMessageBuilder;
+import com.connor.hozon.bom.resources.util.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -48,7 +47,7 @@ public class HzAccessoriesLibsController extends BaseController {
         tableTitle.put("pMaterielPurpose", "材料用途");
         tableTitle.put("pDosageBicycle", "单车用量");
         tableTitle.put("pNote", "备注");
-        writeAjaxJSONResponse(ResultMessageBuilder.build(tableTitle), response);
+        toJSONResponse(Result.build(tableTitle), response);
     }
 
     /**
@@ -61,7 +60,7 @@ public class HzAccessoriesLibsController extends BaseController {
     public void insert(@RequestBody HzAccessoriesLibs hzAccessoriesLibs, HttpServletResponse response) {
         int j = hzAccessoriesLibsDAO.selectHzAccessoriesLibsByCount(hzAccessoriesLibs.getpMaterielCode());
         if (j>0){
-            writeAjaxJSONResponse(ResultMessageBuilder.build(false, "对不起！您添加的物料号已存在！"), response);
+            toJSONResponse(Result.build(false, "对不起！您添加的物料号已存在！"), response);
             return;
         }
         String puid = UUID.randomUUID().toString();
@@ -69,10 +68,10 @@ public class HzAccessoriesLibsController extends BaseController {
         hzAccessoriesLibs.setpCreateName(UserInfo.getUser().getUserName());
         int i = hzAccessoriesLibsDAO.insert(hzAccessoriesLibs);
         if (i > 0) {
-            writeAjaxJSONResponse(ResultMessageBuilder.build(true, "操作成功！"), response);
+            toJSONResponse(Result.build(true, "操作成功！"), response);
             return;
         }
-        writeAjaxJSONResponse(ResultMessageBuilder.build(false, "操作失败！"), response);
+        toJSONResponse(Result.build(false, "操作失败！"), response);
     }
 
 
@@ -87,19 +86,19 @@ public class HzAccessoriesLibsController extends BaseController {
         int j = hzAccessoriesLibsDAO.selectHzAccessoriesLibsByCount(hzAccessoriesLibs.getpMaterielCode());
         HzAccessoriesLibs libs = hzAccessoriesLibsDAO.getHzAccessoriesLibsByCode(hzAccessoriesLibs.getpMaterielCode());
         if (j>1){
-            writeAjaxJSONResponse(ResultMessageBuilder.build(false, "对不起！您修改后的物料号已存在！"), response);
+            toJSONResponse(Result.build(false, "对不起！您修改后的物料号已存在！"), response);
             return;
         }else if (j==1&&libs.getPuid().equals(hzAccessoriesLibs.getPuid())==false){
-            writeAjaxJSONResponse(ResultMessageBuilder.build(false, "对不起！您修改后的物料号已存在！"), response);
+            toJSONResponse(Result.build(false, "对不起！您修改后的物料号已存在！"), response);
             return;
         }
         hzAccessoriesLibs.setpUpdateName(UserInfo.getUser().getUserName());
         int i = hzAccessoriesLibsDAO.update(hzAccessoriesLibs);
         if (i > 0) {
-            writeAjaxJSONResponse(ResultMessageBuilder.build(true, "操作成功！"), response);
+            toJSONResponse(Result.build(true, "操作成功！"), response);
             return;
         }
-        writeAjaxJSONResponse(ResultMessageBuilder.build(false, "操作失败！"), response);
+        toJSONResponse(Result.build(false, "操作失败！"), response);
 
     }
 
@@ -112,7 +111,7 @@ public class HzAccessoriesLibsController extends BaseController {
     @RequestMapping(value = "delete", method = RequestMethod.POST)
     public void delete(@RequestBody DeleteHzAccessoriesLibsDTO deleteHzAccessoriesLibsDTO, HttpServletResponse response) {
         if (deleteHzAccessoriesLibsDTO.getPuids() == null || deleteHzAccessoriesLibsDTO.getPuids() == "") {
-            writeAjaxJSONResponse(ResultMessageBuilder.build(false, "非法参数！"), response);
+            toJSONResponse(Result.build(false, "非法参数！"), response);
             return;
         }
         List<DeleteHzAccessoriesLibsDTO> list = new ArrayList<>();
@@ -125,10 +124,10 @@ public class HzAccessoriesLibsController extends BaseController {
         try {
             hzAccessoriesLibsDAO.deleteList(list);
         } catch (Exception e) {
-            writeAjaxJSONResponse(ResultMessageBuilder.build(false, "操作失败！"), response);
+            toJSONResponse(Result.build(false, "操作失败！"), response);
             return;
         }
-        writeAjaxJSONResponse(ResultMessageBuilder.build(true, "操作成功！"), response);
+        toJSONResponse(Result.build(true, "操作成功！"), response);
     }
 
     /**

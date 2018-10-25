@@ -14,6 +14,7 @@ $(function () {
 
 
 function loadTasks() {
+    console.log("加载个人任务");
     $.ajax({
         url: "./task/loadTasks",
         type: "POST",
@@ -21,10 +22,11 @@ function loadTasks() {
             var _data = data.data;
             taskData = null;
             if (_data) {
+                $("#myCurrentTask").text("请选择任务");
                 $("#myTasks li").remove();
                 $("#myTasks").append(
                     "<li>" +
-                    "<a href='javascript:void(0)' class='project' onclick='loadTab(\"" + null + "\")'>请选择任务</a>" +
+                    "<a href='javascript:void(0)' class='project' onclick='loadTab(" + JSON.stringify(null).replace(/\'/g, "\"") + ")'>请选择任务</a>" +
                     "</li>" +
                     "<li class='divider'></li>"
                 );

@@ -10,6 +10,7 @@ import com.connor.hozon.bom.resources.domain.query.HzEPLByPageQuery;
 import com.connor.hozon.bom.resources.mybatis.epl.HzEplMangeRecordDAO;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.service.epl.HzEPLManageRecordService;
+import com.connor.hozon.bom.resources.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import share.bean.PreferenceSetting;
@@ -329,13 +330,22 @@ public class HzEPLManageRecordServiceImpl implements HzEPLManageRecordService {
         Map<String,Object> map = new HashMap<>();
         map.put("projectId",projectId);
         map.put("puid",parentId);
+        if(StringUtil.isEmpty(parentId)){
+            return "-";
+        }
         HzBomLineRecord record =hzBomLineRecordDao.findBomLineByPuid(map);
         if(record == null){
             return "-";
         }
         String groupNum = record.getLineID();
         if(groupNum.contains("-")){
-            return groupNum.split("-")[1].substring(0,4);
+            try {
+                groupNum = groupNum.split("-")[1].substring(0,4);
+            }catch (Exception e){
+                groupNum="-";
+            }
+            return groupNum;
+
         }else{
             return getGroupNum(projectId,record.getParentUid());
         }
@@ -475,6 +485,7 @@ public class HzEPLManageRecordServiceImpl implements HzEPLManageRecordService {
             recordRespDTOList.add(recordRespDTO);
             return new Page<>(recordPage.getPageNumber(),recordPage.getPageSize(),recordPage.getTotalCount(),recordRespDTOList);
         }catch (Exception e){
+            e.printStackTrace();
             return null;
         }
 

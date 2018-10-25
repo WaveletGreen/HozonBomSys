@@ -3,11 +3,11 @@ package com.connor.hozon.bom.resources.controller.resourcesLibrary;
 import com.connor.hozon.bom.resources.controller.BaseController;
 import com.connor.hozon.bom.resources.domain.dto.request.AddHzVPPSLibraryReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzVPPSLibraryRespDTO;
-import com.connor.hozon.bom.resources.domain.dto.response.OperateResultMessageRespDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
 import com.connor.hozon.bom.resources.domain.query.HzVPPSLibraryQuery;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.service.resourcesLibrary.VPPSLibrary.HzVPPSLibraryService;
-import com.connor.hozon.bom.resources.util.ResultMessageBuilder;
+import com.connor.hozon.bom.resources.util.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -48,7 +48,7 @@ public class VPPSLibraryController extends BaseController {
         tableTitle.put("fna","FNA");
         tableTitle.put("fnaChDesc","FNA中文描述");
         tableTitle.put("standardPartCode","零件标准代码");
-        writeAjaxJSONResponse(ResultMessageBuilder.build(tableTitle), response);
+        toJSONResponse(Result.build(tableTitle), response);
     }
 
     /**
@@ -109,8 +109,8 @@ public class VPPSLibraryController extends BaseController {
      */
     @RequestMapping(value = "add",method = RequestMethod.POST)
     public void addVPPSLibrary(@RequestBody AddHzVPPSLibraryReqDTO dto, HttpServletResponse response){
-        OperateResultMessageRespDTO respDTO = hzVPPSLibraryService.insertHzVPPSLibrary(dto);
-        writeAjaxJSONResponse(ResultMessageBuilder.build(OperateResultMessageRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
+        WriteResultRespDTO respDTO = hzVPPSLibraryService.insertHzVPPSLibrary(dto);
+        toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
     }
 
     /**
@@ -136,8 +136,8 @@ public class VPPSLibraryController extends BaseController {
      */
     @RequestMapping(value = "update",method = RequestMethod.POST)
     public void updateVPPSLibrary(@RequestBody AddHzVPPSLibraryReqDTO dto,HttpServletResponse response){
-        OperateResultMessageRespDTO respDTO =hzVPPSLibraryService.updateHzVPPSLibrary(dto);
-        writeAjaxJSONResponse(ResultMessageBuilder.build(OperateResultMessageRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
+        WriteResultRespDTO respDTO =hzVPPSLibraryService.updateHzVPPSLibrary(dto);
+        toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
     }
 
     /**
@@ -147,7 +147,7 @@ public class VPPSLibraryController extends BaseController {
      */
     @RequestMapping(value = "delete",method = RequestMethod.POST)
     public void deleteVPPSLibrary(String puid,HttpServletResponse response){
-        OperateResultMessageRespDTO respDTO =hzVPPSLibraryService.deleteHzVPPSLibrary(puid);
-        writeAjaxJSONResponse(ResultMessageBuilder.build(OperateResultMessageRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
+        WriteResultRespDTO respDTO =hzVPPSLibraryService.deleteHzVPPSLibrary(puid);
+        toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
     }
 }

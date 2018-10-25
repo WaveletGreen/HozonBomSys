@@ -11,7 +11,12 @@ import org.springframework.context.annotation.Configuration;
 import sql.pojo.task.HzTasks;
 
 import java.util.List;
-
+/**
+ * @Author: Fancyears·Maylos·Maywas
+ * @Description: 任务dao
+ * @Date: Created in 2018/8/27 21:17
+ * @Modified By:
+ */
 @Configuration
 public interface HzTasksDao extends BasicDao<HzTasks> {
     /**
@@ -20,4 +25,22 @@ public interface HzTasksDao extends BasicDao<HzTasks> {
      * @return
      */
     List<HzTasks> selectUserTasks(HzTasks tasks);
+
+    List<HzTasks> selectUserTargetTaskByType(HzTasks task);
+
+    /**
+     * 批量插入
+     * @param list
+     * @return
+     */
+    int insertByBatch(List<HzTasks> list);
+
+    int updateTargetStatus(HzTasks task);
+
+    /**
+     * 终止任务
+     * @param task
+     * @return
+     */
+    int tasksStop(HzTasks task);
 }

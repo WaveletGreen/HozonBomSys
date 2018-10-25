@@ -3,7 +3,7 @@ package com.connor.hozon.bom.resources.mybatis.work.impl;
 import com.connor.hozon.bom.resources.domain.query.HzWorkProcessByPageQuery;
 import com.connor.hozon.bom.resources.mybatis.work.HzWorkProcedureDAO;
 import com.connor.hozon.bom.resources.page.Page;
-import com.connor.hozon.bom.resources.page.PageRequest;
+import com.connor.hozon.bom.resources.page.PageRequestParam;
 import org.springframework.stereotype.Service;
 import sql.BaseSQLUtil;
 import sql.pojo.work.HzWorkProcedure;
@@ -42,30 +42,30 @@ public class HzWorkProcedureDAOImpl  extends BaseSQLUtil implements HzWorkProced
 
     @Override
     public Page<HzWorkProcess> findHzWorkProcessByPage(HzWorkProcessByPageQuery query) {
-        PageRequest pageRequest = new PageRequest();
-        pageRequest.setPageSize(query.getPageSize());
-        pageRequest.setPageNumber(query.getPage());
+        PageRequestParam pageRequestParam = new PageRequestParam();
+        pageRequestParam.setPageSize(query.getPageSize());
+        pageRequestParam.setPageNumber(query.getPage());
         Map<String,Object> map = new HashMap<>();
         map.put("projectId",query.getProjectId());
         map.put("type",query.getType());
         map.put("pMaterielCode",query.getpMaterielCode());
         map.put("pMaterielDesc",query.getpMaterielDesc());
-        pageRequest.setFilters(map);
-        return super.findPage("HzWorkProcedureDAOImpl_findHzWorkProcessByPage","HzWorkProcedureDAOImpl_getTotalCount",pageRequest);
+        pageRequestParam.setFilters(map);
+        return super.findPage("HzWorkProcedureDAOImpl_findHzWorkProcessByPage","HzWorkProcedureDAOImpl_getTotalCount", pageRequestParam);
     }
 
     @Override
     public Page<HzWorkProcess> findHzWorkProcessByPage2(HzWorkProcessByPageQuery query) {
-        PageRequest pageRequest = new PageRequest();
-        pageRequest.setPageSize(query.getPageSize());
-        pageRequest.setPageNumber(query.getPage());
+        PageRequestParam pageRequestParam = new PageRequestParam();
+        pageRequestParam.setPageSize(query.getPageSize());
+        pageRequestParam.setPageNumber(query.getPage());
         Map<String,Object> map = new HashMap<>();
         map.put("projectId",query.getProjectId());
         map.put("type",query.getType());
         map.put("pMaterielCode",query.getpMaterielCode());
         map.put("pMaterielDesc",query.getpMaterielDesc());
-        pageRequest.setFilters(map);
-        return super.findPage("HzWorkProcedureDAOImpl_findHzWorkProcessByPage2","HzWorkProcedureDAOImpl_getTotalCount2",pageRequest);
+        pageRequestParam.setFilters(map);
+        return super.findPage("HzWorkProcedureDAOImpl_findHzWorkProcessByPage2","HzWorkProcedureDAOImpl_getTotalCount2", pageRequestParam);
     }
 
     @Override

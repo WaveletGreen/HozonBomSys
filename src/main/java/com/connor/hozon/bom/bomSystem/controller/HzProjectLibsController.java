@@ -38,15 +38,12 @@ import sql.pojo.project.HzVehicleRecord;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
-
 /**
- * <strong>Author: Fancyears·Maylos·Mayways</strong>
- * <p>
- * Date: 2018/5/30 14:27</p>
- * <p>
- * Description: 项目控制器，用于前端获取到项目信息，由项目信息驱动下面的额bom数据和配置数据</p>
+ * @Author: Fancyears·Maylos·Maywas
+ * @Description: <p>项目控制器，用于前端获取到项目信息，由项目信息驱动下面的额bom数据和配置数据</p>
+ * @Date: Created in 2018/8/30 18:53
+ * @Modified By:
  */
-
 @Controller
 @RequestMapping("/project")
 public class HzProjectLibsController {

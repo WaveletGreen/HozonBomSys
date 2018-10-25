@@ -1,9 +1,11 @@
 package sql.pojo.bom;
 
+import sql.pojo.BasePOJO;
+
 import java.util.Date;
 import java.util.Objects;
 
-public class HzBomLineRecord {
+public class HzBomLineRecord extends BasePOJO {
 
     private Long id;
     /**
@@ -240,6 +242,19 @@ public class HzBomLineRecord {
      * 颜色件 原PBOM移动到EBOM
      */
     private Integer colorPart;
+
+    /**
+     * 单车用量
+     */
+    private byte[] singleVehDosage;
+
+    public byte[] getSingleVehDosage() {
+        return singleVehDosage;
+    }
+
+    public void setSingleVehDosage(byte[] singleVehDosage) {
+        this.singleVehDosage = singleVehDosage;
+    }
 
     public Integer getColorPart() {
         return colorPart;

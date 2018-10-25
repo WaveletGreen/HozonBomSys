@@ -1,10 +1,21 @@
+/*
+ * Copyright (c) 2018.
+ * This file was wrote by fancyears·milos·maywas @connor. Any question/bug you can post to 1243093366@qq.com.
+ * ALL RIGHTS RESERVED.
+ */
+
 package com.connor.hozon.bom.bomSystem.dao.bom;
 
 import org.springframework.context.annotation.Configuration;
 import sql.pojo.bom.HzMBomToERPBean;
 
 import java.util.List;
-
+/**
+ * @Author: Fancyears·Maylos·Maywas
+ * @Description: ERP集成用的MBOM dao层，只筛选重要数据，其他不要
+ * @Date: Created in 2018/8/27 21:17
+ * @Modified By:
+ */
 @Configuration
 public interface HzMBomToERPDao {
     /**

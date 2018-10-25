@@ -3,7 +3,6 @@ package com.connor.hozon.bom.resources.controller.bom;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.connor.hozon.bom.bomSystem.impl.bom.HzBomLineRecordDaoImpl;
-import com.connor.hozon.bom.bomSystem.service.fullCfg.HzCfg0ModelService;
 import com.connor.hozon.bom.resources.controller.BaseController;
 import com.connor.hozon.bom.resources.domain.dto.request.AddHzEbomReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.request.DeleteHzEbomReqDTO;
@@ -11,25 +10,23 @@ import com.connor.hozon.bom.resources.domain.dto.request.UpdateHzEbomLeveReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.request.UpdateHzEbomReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzEbomLevelRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzEbomRespDTO;
-import com.connor.hozon.bom.resources.domain.dto.response.OperateResultMessageRespDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
 import com.connor.hozon.bom.resources.domain.query.HzEbomByPageQuery;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.service.bom.HzEbomService;
-import com.connor.hozon.bom.resources.util.ListUtil;
-import com.connor.hozon.bom.resources.util.PrivilegeUtil;
-import com.connor.hozon.bom.resources.util.ResultMessageBuilder;
+import com.connor.hozon.bom.resources.service.bom.HzSingleVehiclesServices;
+import com.connor.hozon.bom.resources.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import sql.pojo.bom.HzBomLineRecord;
-import sql.pojo.cfg.model.HzCfg0ModelRecord;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.*;
+
+import static org.hibernate.jpa.internal.QueryImpl.LOG;
 
 /**
  * \* User: xulf
@@ -48,7 +45,10 @@ public class HzEbomController extends BaseController {
     private HzBomLineRecordDaoImpl hzBomLineRecordDao;
 
     @Autowired
-    private HzCfg0ModelService hzCfg0ModelService;
+    private HzSingleVehiclesServices hzSingleVehiclesServices;
+
+    LinkedHashMap<String, String> tableTitle = new LinkedHashMap<>();
+
     @RequestMapping(value = "title",method = RequestMethod.GET)
     public void getEbomTitle(String projectId,HttpServletResponse response) {
         LinkedHashMap<String, String> tableTitle = new LinkedHashMap<>();
@@ -106,15 +106,9 @@ public class HzEbomController extends BaseController {
         tableTitle.put("number","数量" );
         tableTitle.put("colorPart","是否颜色件");
         //获取该项目下的所有车型模型
-        List<HzCfg0ModelRecord> hzCfg0ModelRecords = hzCfg0ModelService.doSelectByProjectPuid(projectId);
-
-        if(ListUtil.isNotEmpty(hzCfg0ModelRecords)){
-            for(int i = 0;i<hzCfg0ModelRecords.size();i++){
-                tableTitle.put("title"+i,hzCfg0ModelRecords.get(i).getObjectName());
-
-            }
-        }
-        writeAjaxJSONResponse(ResultMessageBuilder.build(tableTitle), response);
+        tableTitle.putAll(hzSingleVehiclesServices.singleVehDosageTitle(projectId));
+        this.tableTitle = tableTitle;
+        toJSONResponse(Result.build(tableTitle), response);
     }
     
 
@@ -208,80 +202,139 @@ public class HzEbomController extends BaseController {
     public void updateEbomLevelToDB(@RequestBody UpdateHzEbomLeveReqDTO reqDTO, HttpServletResponse response){
         boolean b = PrivilegeUtil.writePrivilege();
         if(!b){//管理员权限
-            writeAjaxJSONResponse(ResultMessageBuilder.build(false,"您没有权限进行当前操作！"), response);
+            toJSONResponse(Result.build(false,"您没有权限进行当前操作！"), response);
             return;
         }
 
-        //OperateResultMessageRespDTO respDTO= hzEbomService.updateHzEbomLevelRecord(reqDTO);
+        //WriteResultRespDTO respDTO= hzEbomService.updateHzEbomLevelRecord(reqDTO);
         //测试
-        OperateResultMessageRespDTO respDTO= hzEbomService.testbomLevelChange(reqDTO);
+        WriteResultRespDTO respDTO= hzEbomService.testbomLevelChange(reqDTO);
 
-        writeAjaxJSONResponse(ResultMessageBuilder.build(
-                OperateResultMessageRespDTO.isSuccess(respDTO), respDTO.getErrMsg()), response);
+        toJSONResponse(Result.build(
+                WriteResultRespDTO.isSuccess(respDTO), respDTO.getErrMsg()), response);
+    }
+
+    /**
+     * 下载EBOM
+     */
+    @RequestMapping(value = "excelExport",method = RequestMethod.POST)
+    @ResponseBody
+    public JSONObject listDownLoad(
+            @RequestBody  List<HzEbomRespDTO> dtos,HttpServletRequest request
+    ) {
+        boolean flag=true;
+        JSONObject result=new JSONObject();
+        try {
+            //static/files/tableExport.xlsx
+            String fileName = "tableExport.xlsx";//文件名-tableExport
+            Object[] temp = tableTitle.values().toArray();
+
+            String[] title = new String[temp.length];
+            for(int i=0;i<temp.length;i++){
+                title[i] = temp[i].toString();
+            }
+            //当前页的数据
+            List<String[]> dataList = new ArrayList<String[]>();
+            int index=1;
+            for (HzEbomRespDTO ebomRespDTO : dtos) {
+                String[] cellArr = new String[title.length];
+                cellArr[0] = index+"";
+                index++;
+                cellArr[1] = ebomRespDTO.getLineId();
+                cellArr[2] = ebomRespDTO.getpBomLinePartName();
+                cellArr[3] = ebomRespDTO.getLevel();
+                cellArr[4] = ebomRespDTO.getpBomOfWhichDept();
+                cellArr[5] = ebomRespDTO.getRank();
+                cellArr[6] = ebomRespDTO.getGroupNum();
+                cellArr[7] = ebomRespDTO.getLineNo();
+                cellArr[8] = ebomRespDTO.getpBomLinePartEnName();
+                cellArr[9] = ebomRespDTO.getpLouaFlag();
+                cellArr[10] = ebomRespDTO.getpUnit();
+                cellArr[11] = ebomRespDTO.getpPictureNo();
+                cellArr[12] = ebomRespDTO.getpPictureSheet();
+                cellArr[13] = ebomRespDTO.getpMaterialHigh();
+                cellArr[14] = ebomRespDTO.getpMaterial1();
+                cellArr[15] = ebomRespDTO.getpMaterial2();
+                cellArr[16] = ebomRespDTO.getpMaterial3();
+                cellArr[17] = ebomRespDTO.getpDensity();
+                cellArr[18] = ebomRespDTO.getpMaterialStandard();
+                cellArr[19] = ebomRespDTO.getpSurfaceTreat();
+                cellArr[20] = ebomRespDTO.getpTextureColorNum();
+                cellArr[21] = ebomRespDTO.getpManuProcess();
+                cellArr[22] = ebomRespDTO.getpSymmetry();
+                cellArr[23] = ebomRespDTO.getpImportance();
+                cellArr[24] = ebomRespDTO.getpRegulationFlag();
+                cellArr[25] = ebomRespDTO.getP3cpartFlag();
+                cellArr[26] = ebomRespDTO.getpRegulationCode();
+                cellArr[27] = ebomRespDTO.getpBwgBoxPart();
+                cellArr[28] = ebomRespDTO.getpDevelopType();
+                cellArr[29] = ebomRespDTO.getpDataVersion();
+                cellArr[30] = ebomRespDTO.getpTargetWeight();
+                cellArr[31] = ebomRespDTO.getpFeatureWeight();
+                cellArr[32] = ebomRespDTO.getpActualWeight();
+                cellArr[33] = ebomRespDTO.getpFastener();
+                cellArr[34] = ebomRespDTO.getpFastenerStandard();
+                cellArr[35] = ebomRespDTO.getpFastenerLevel();
+                cellArr[36] = ebomRespDTO.getpTorque();
+                cellArr[37] = ebomRespDTO.getpDutyEngineer();
+                cellArr[38] = ebomRespDTO.getpSupply();
+                cellArr[39] = ebomRespDTO.getpSupplyCode();
+                cellArr[40] = ebomRespDTO.getpBuyEngineer();
+                cellArr[41] = ebomRespDTO.getpRemark();
+                cellArr[42] = ebomRespDTO.getpBomLinePartClass();
+                cellArr[43] = ebomRespDTO.getpBomLinePartResource();
+                cellArr[44] = ebomRespDTO.getpInOutSideFlag();
+                cellArr[45] = ebomRespDTO.getpUpc();
+                cellArr[46] = ebomRespDTO.getFna();
+                cellArr[47] = ebomRespDTO.getpFnaDesc();
+                cellArr[48] = ebomRespDTO.getNumber();
+                cellArr[49] = ebomRespDTO.getColorPart();
+                if(ebomRespDTO.getMap().size()>0){
+                    for(int i=0;i<ebomRespDTO.getMap().size();i++){
+                        cellArr[50+i] = ebomRespDTO.getMap().values().toArray()[i].toString();
+                    }
+                }
+                //1 已生效; 0 删除;  2草稿状态;  3废除状态; 4删除状态
+//                if(ebomRespDTO.getStatus()==0)
+//                    cellArr[50] = "删除";
+//                else if(ebomRespDTO.getStatus()==1)
+//                    cellArr[50] = "已生效";
+//                else if(ebomRespDTO.getStatus()==2)
+//                    cellArr[50] = "草稿状态";
+//                else if(ebomRespDTO.getStatus()==3)
+//                    cellArr[50] = "废除状态";
+//                else if(ebomRespDTO.getStatus()==4)
+//                    cellArr[50] = "删除状态";
+                dataList.add(cellArr);
+            }
+            flag = ExcelUtil.writeExcel(fileName, title, dataList,"ebom",request);
+
+            if(flag){
+                LOG.info(fileName+",文件创建成功");
+                result.put("status",flag);
+                result.put("msg","成功");
+                result.put("path","./files/"+fileName);
+            }else{
+                LOG.info(fileName+",文件创建失败");
+                result.put("status",flag);
+                result.put("msg","失败");
+                //result.put("path","./files/"+fileName);
+            }
+        } catch (Exception e) {
+            if(LOG.isTraceEnabled())//isErrorEnabled()
+                LOG.error(e.getMessage());
+        }
+
+        return result;
     }
 
 
     @RequestMapping(value = "updateEbom",method = RequestMethod.GET)
     public String updateEbom(String projectId,String puid,Model model) {
-        if(projectId == null || puid == null){
+        if(StringUtil.isEmpty(projectId)){
             return "";
         }
         HzEbomRespDTO recordRespDTO = hzEbomService.fingEbomById(puid,projectId);
-        JSONArray array1 = recordRespDTO.getJsonArray();
-        JSONObject object = array1.getJSONObject(0);
-        recordRespDTO.setPuid(puid);
-        recordRespDTO.setpBomOfWhichDept(object.getString("pBomOfWhichDept"));
-        recordRespDTO.setpLouaFlag(object.getString("pLouaFlag"));
-        recordRespDTO.setRank(object.getString("rank"));
-        recordRespDTO.setGroupNum(object.getString("groupNum"));
-        recordRespDTO.setLevel(object.getString("level"));
-        recordRespDTO.setLineId(object.getString("lineId"));
-        recordRespDTO.setFastener(object.getString("fastener"));
-        recordRespDTO.setpBomLinePartResource(object.getString("pBomLinePartResource"));
-        recordRespDTO.setpBomLinePartName(object.getString("pBomLinePartName"));
-        recordRespDTO.setpBomLinePartEnName(object.getString("pBomLinePartEnName"));
-        recordRespDTO.setpBomLinePartClass(object.getString("pBomLinePartClass"));
-        recordRespDTO.setP3cpartFlag(object.getString("p3cpartFlag"));
-        recordRespDTO.setpActualWeight(object.getString("pActualWeight"));
-        recordRespDTO.setpBwgBoxPart(object.getString("pBwgBoxPart"));
-        recordRespDTO.setpDataVersion(object.getString("pDataVersion"));
-        recordRespDTO.setpDensity(object.getString("pDensity"));
-        recordRespDTO.setpDevelopType(object.getString("pDevelopType"));
-        recordRespDTO.setpDutyEngineer(object.getString("pDutyEngineer"));
-        recordRespDTO.setpFastenerLevel(object.getString("pFastenerLevel"));
-        recordRespDTO.setpFastenerStandard(object.getString("pFastenerStandard"));
-        recordRespDTO.setpFeatureWeight(object.getString("pFeatureWeight"));
-        recordRespDTO.setpFnaDesc(object.getString("pFnaDesc"));
-        recordRespDTO.setFna(object.getString("fna"));
-        recordRespDTO.setpImportance(object.getString("pImportance"));
-        recordRespDTO.setpInOutSideFlag(object.getString("pInOutSideFlag"));
-        recordRespDTO.setpManuProcess(object.getString("pManuProcess"));
-        recordRespDTO.setpMaterial1(object.getString("pMaterial1"));
-        recordRespDTO.setpMaterial2(object.getString("pMaterial2"));
-        recordRespDTO.setpMaterial3(object.getString("pMaterial3"));
-        recordRespDTO.setpMaterialHigh(object.getString("pMaterialHigh"));
-        recordRespDTO.setpMaterialStandard(object.getString("pMaterialStandard"));
-        recordRespDTO.setpPictureNo(object.getString("pPictureNo"));
-        recordRespDTO.setpPictureSheet(object.getString("pPictureSheet"));
-        recordRespDTO.setpUpc(object.getString("pUpc"));
-        recordRespDTO.setpTorque(object.getString("pTorque"));
-        recordRespDTO.setpUnit(object.getString("pUnit"));
-        recordRespDTO.setpTextureColorNum(object.getString("pTextureColorNum"));
-        recordRespDTO.setpTargetWeight(object.getString("pTargetWeight"));
-        recordRespDTO.setpSymmetry(object.getString("pSymmetry"));
-        recordRespDTO.setpSurfaceTreat(object.getString("pSurfaceTreat"));
-        recordRespDTO.setpSupplyCode(object.getString("pSupplyCode"));
-        recordRespDTO.setpRemark(object.getString("pRemark"));
-        recordRespDTO.setpRegulationFlag(object.getString("pRegulationFlag"));
-        recordRespDTO.setpRegulationCode(object.getString("pRegulationCode"));
-        recordRespDTO.setProjectId(projectId);
-        recordRespDTO.setColorPart(object.getString("colorPart"));
-        recordRespDTO.setpBuyEngineer(object.getString("pBuyEngineer"));
-        if(object.getString("number") != null){
-            recordRespDTO.setNumber(object.getString("number"));
-        }else {
-            recordRespDTO.setNumber(null);
-        }
         model.addAttribute("data",recordRespDTO);
 
         return "bomManage/ebom/ebomManage/updateEbomManage";
@@ -295,16 +348,16 @@ public class HzEbomController extends BaseController {
     @RequestMapping(value = "add/ebom",method = RequestMethod.POST)
     public void addEbomToDB(@RequestBody AddHzEbomReqDTO reqDTO, HttpServletResponse response){
         if(reqDTO.getProjectId()==null){
-            writeAjaxJSONResponse(ResultMessageBuilder.build(false,"非法参数！"), response);
+            toJSONResponse(Result.build(false,"非法参数！"), response);
             return;
         }
         boolean b = PrivilegeUtil.writePrivilege();
         if(!b){//管理员权限
-            writeAjaxJSONResponse(ResultMessageBuilder.build(false,"您没有权限进行当前操作！"), response);
+            toJSONResponse(Result.build(false,"您没有权限进行当前操作！"), response);
             return;
         }
-        OperateResultMessageRespDTO respDTO = hzEbomService.addHzEbomRecord(reqDTO);
-        writeAjaxJSONResponse(ResultMessageBuilder.build(OperateResultMessageRespDTO.isSuccess(respDTO), respDTO.getErrMsg()), response);
+        WriteResultRespDTO respDTO = hzEbomService.addHzEbomRecord(reqDTO);
+        toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO), respDTO.getErrMsg()), response);
     }
 
 
@@ -316,13 +369,8 @@ public class HzEbomController extends BaseController {
      */
     @RequestMapping(value = "update/ebom",method = RequestMethod.POST)
     public void updateEbomToDB(@RequestBody UpdateHzEbomReqDTO reqDTO, HttpServletResponse response){
-        boolean b = PrivilegeUtil.writePrivilege();
-        if(!b){//管理员权限
-            writeAjaxJSONResponse(ResultMessageBuilder.build(false,"您没有权限进行当前操作！"), response);
-            return;
-        }
-        OperateResultMessageRespDTO respDTO= hzEbomService.updateHzEbomRecord(reqDTO);
-        writeAjaxJSONResponse(ResultMessageBuilder.build(OperateResultMessageRespDTO.isSuccess(respDTO), respDTO.getErrMsg()), response);
+        WriteResultRespDTO respDTO= hzEbomService.updateHzEbomRecord(reqDTO);
+        toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO), respDTO.getErrMsg()), response);
     }
 
 
@@ -335,16 +383,16 @@ public class HzEbomController extends BaseController {
     @RequestMapping(value = "delete/ebom",method = RequestMethod.POST)
     public void deleteEbomToDB(@RequestBody DeleteHzEbomReqDTO reqDTO, HttpServletResponse response){
         if(reqDTO.getProjectId()==null){
-            writeAjaxJSONResponse(ResultMessageBuilder.build(false,"非法参数！"), response);
+            toJSONResponse(Result.build(false,"非法参数！"), response);
             return;
         }
         boolean b = PrivilegeUtil.writePrivilege();
         if(!b){//管理员权限
-            writeAjaxJSONResponse(ResultMessageBuilder.build(false,"您没有权限进行当前操作！"), response);
+            toJSONResponse(Result.build(false,"您没有权限进行当前操作！"), response);
             return;
         }
-        OperateResultMessageRespDTO respDTO = hzEbomService.deleteHzEbomRecordById(reqDTO);
-        writeAjaxJSONResponse(ResultMessageBuilder.build(OperateResultMessageRespDTO.isSuccess(respDTO), respDTO.getErrMsg()), response);
+        WriteResultRespDTO respDTO = hzEbomService.deleteHzEbomRecordById(reqDTO);
+        toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO), respDTO.getErrMsg()), response);
     }
 
     /**
@@ -354,43 +402,5 @@ public class HzEbomController extends BaseController {
     @RequestMapping(value = "importExcel",method = RequestMethod.GET)
     public String getExcelImport(){
         return "bomManage/ebom/ebomManage/excelImport";
-    }
-
-
-
-    /**
-     * 直接生效EBOM 临时用
-     * @param
-     * @param
-     * @param response
-     */
-    @RequestMapping(value = "vaild/direct",method = RequestMethod.POST)
-    public void validDirect(String puids, HttpServletResponse response){
-        if(puids==null){
-            writeAjaxJSONResponse(ResultMessageBuilder.build(false,"非法参数！"), response);
-            return;
-        }
-        boolean b = PrivilegeUtil.writePrivilege();
-        if(!b){//管理员权限
-            writeAjaxJSONResponse(ResultMessageBuilder.build(false,"您没有权限进行当前操作！"), response);
-            return;
-        }
-
-        String[] ps = puids.split(",");
-        List<HzBomLineRecord> list = new ArrayList<>();
-        for(String s:ps){
-            HzBomLineRecord record = new HzBomLineRecord();
-            record.setTableName("HZ_BOM_LINE_RECORD");
-            record.setPuid(s);
-            record.setStatus(1);
-            list.add(record);
-        }
-        int i = hzBomLineRecordDao.updateBatch(list);
-        if(i>0){
-            writeAjaxJSONResponse(ResultMessageBuilder.build(true,"操作成功！"), response);
-        }else {
-            writeAjaxJSONResponse(ResultMessageBuilder.build(false,"操作失败！"), response);
-
-        }
     }
 }

@@ -6,10 +6,16 @@
 
 package sql.pojo.cfg.vwo;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.Date;
 
 /**
- * 特性变更bean
+ * @Author: Fancyears·Maylos·Maywas
+ * @Description: 特性变更bean
+ * @Date: Created in 2018/8/10 13:55
+ * @Modified By:
  */
 public class HzFeatureChangeBean {
     /**
@@ -128,12 +134,17 @@ public class HzFeatureChangeBean {
      * vwo变更号ID
      */
 
-
     private Long vwoId;
     /**
      * 序列名称
      */
     private String seqName;
+    /**
+     * 变更的头部描述，分别是变更前和变更后
+     */
+    @Setter
+    @Getter
+    private String headDesc;
 
     public Long getId() {
         return id;

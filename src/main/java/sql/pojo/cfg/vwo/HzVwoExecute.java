@@ -10,11 +10,12 @@ import lombok.Data;
 
 import java.util.Date;
 /**
- * @Author: Fancyears·Maylos·Mayways
- * @Date :  2018/10/15 15:58
+ * @Author: Fancyears·Maylos·Maywas
  * @Description: VWO表单分发与实施对象
+ * @Date: Created in 2018/10/10 13:29
  * @Modified By:
  */
+
 @Data
 public class HzVwoExecute {
     /**

@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2018.
+ * This file was wrote by fancyears·milos·maywas @connor. Any question/bug you can post to 1243093366@qq.com.
+ * ALL RIGHTS RESERVED.
+ */
+
 package com.connor.hozon.bom.bomSystem.iservice.cfg.vwo;
 
 import sql.pojo.cfg.cfg0.HzCfg0Record;
@@ -7,8 +13,8 @@ import java.util.List;
 
 /**
  * @Author: Fancyears·Maylos·Maywas
- * @Description:
- * @Date: Created in 2018/8/9 19:24
+ * @Description: fuck
+ * @Date: Created in 2018/9/6 13:19
  * @Modified By:
  */
 public interface IHzFeatureChangeService {
@@ -140,4 +146,6 @@ public interface IHzFeatureChangeService {
     int doInsertListAfter(List<HzFeatureChangeBean> hzFeatureChangeBeanListAfter);
 
     List<HzFeatureChangeBean> doQueryLastTwoChange(String cfgPuid, Long vwoId);
+
+    List<HzFeatureChangeBean> doSelectCfgUidsByVwoId(Long vwoId);
 }

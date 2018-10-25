@@ -8,7 +8,6 @@ import java.util.List;
 
 /**
  * 分页信息 第一页从1开始
- * 
  */
 public class Page<T> implements Serializable, Iterable<T> {
 
@@ -24,7 +23,7 @@ public class Page<T> implements Serializable, Iterable<T> {
 
 	}
 
-	public Page(PageRequest p, int totalCount) {
+	public Page(PageRequestParam p, int totalCount) {
 
 		this(p.getPageNumber(), p.getPageSize(), totalCount);
 	}
@@ -38,10 +37,10 @@ public class Page<T> implements Serializable, Iterable<T> {
 
 		if (pageSize <= 0) {
 			throw new IllegalArgumentException(
-					"[pageSize] must great than zero");
+					"非法参数,每页显示数据不能小于0!");
 		}
 		this.pageSize = pageSize;
-		this.pageNumber = PageUtils.computePageNumber(pageNumber, pageSize,totalCount);
+		this.pageNumber = PageUtil.computePageNumber(pageNumber, pageSize,totalCount);
 		this.totalCount = totalCount;
 		setResult(result);
 	}
@@ -49,160 +48,36 @@ public class Page<T> implements Serializable, Iterable<T> {
 	public void setResult(List<T> elements) {
 
 		if (elements == null)
-			throw new IllegalArgumentException("'result' must be not null");
+			throw new IllegalArgumentException("暂无结果!");
 		this.result = elements;
 	}
 
-	/**
-	 * 当前页包含的数据
-	 * 
-	 * @return 当前页数据源
-	 */
 	public List<T> getResult() {
 
 		return result;
 	}
 
-	/**
-	 * 是否是首页（第一页），第一页页码为1
-	 * 
-	 * @return 首页标识
-	 */
-	public boolean isFirstPage() {
-
-		return getPageNumber() == 1;
-	}
-
-	/**
-	 * 是否是最后一页
-	 * 
-	 * @return 末页标识
-	 */
-	public boolean isLastPage() {
-
-		return getPageNumber() >= getLastPageNumber();
-	}
-
-	/**
-	 * 是否有下一页
-	 * 
-	 * @return 下一页标识
-	 */
-	public boolean isHasNextPage() {
-
-		return getLastPageNumber() > getPageNumber();
-	}
-
-	/**
-	 * 是否有上一页
-	 * 
-	 * @return 上一页标识
-	 */
-	public boolean isHasPreviousPage() {
-
-		return getPageNumber() > 1;
-	}
-
-	/**
-	 * 获取最后一页页码，也就是总页数
-	 * 
-	 * @return 最后一页页码
-	 */
-	public int getLastPageNumber() {
-
-		return PageUtils.computeLastPageNumber(totalCount, pageSize);
-	}
-
-	/**
-	 * 总的数据条目数量，0表示没有数据
-	 * 
-	 * @return 总数量
-	 */
 	public int getTotalCount() {
 
 		return totalCount;
 	}
 
-	/**
-	 * 获取当前页的首条数据的行编码
-	 * 
-	 * @return 当前页的首条数据的行编码
-	 */
-	public int getThisPageFirstElementNumber() {
-
-		return (getPageNumber() - 1) * getPageSize() + 1;
-	}
-
-	/**
-	 * 获取当前页的末条数据的行编码
-	 * 
-	 * @return 当前页的末条数据的行编码
-	 */
-	public int getThisPageLastElementNumber() {
-
-		int fullPage = getThisPageFirstElementNumber() + getPageSize() - 1;
-		return getTotalCount() < fullPage ? getTotalCount() : fullPage;
-	}
-
-	/**
-	 * 获取下一页编码
-	 * 
-	 * @return 下一页编码
-	 */
-	public int getNextPageNumber() {
-
-		return getPageNumber() + 1;
-	}
-
-	/**
-	 * 获取上一页编码
-	 * 
-	 * @return 上一页编码
-	 */
-	public int getPreviousPageNumber() {
-
-		return getPageNumber() - 1;
-	}
-
-	/**
-	 * 每一页显示的条目数
-	 * 
-	 * @return 每一页显示的条目数
-	 */
 	public int getPageSize() {
 
 		return pageSize;
 	}
 
-	/**
-	 * 当前页的页码
-	 * 
-	 * @return 当前页的页码
-	 */
+
 	public int getPageNumber() {
 
 		return pageNumber;
 	}
 
-	/**
-	 * 得到用于多页跳转的页码
-	 * 
-	 * @return
-	 */
-	public List<Integer> getLinkPageNumbers() {
 
-		return PageUtils.generateLinkPageNumbers(getPageNumber(),
-				getLastPageNumber(), 10);
-	}
 
-	/**
-	 * 得到数据库的第一条记录号
-	 * 
-	 * @return
-	 */
 	public int getFirstResult() {
 
-		return PageUtils.getFirstResult(pageNumber, pageSize);
+		return PageUtil.getFirstResult(pageNumber, pageSize);
 	}
 
 	public Iterator<T> iterator() {
@@ -210,7 +85,6 @@ public class Page<T> implements Serializable, Iterable<T> {
 		return (Iterator<T>) (result == null ? Collections.emptyList()
 				.iterator() : result.iterator());
 	}
-
 
     public void setTotalCount(int totalCount) {
         this.totalCount = totalCount;

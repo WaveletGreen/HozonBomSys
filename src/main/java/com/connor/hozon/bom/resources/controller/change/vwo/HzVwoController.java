@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2018.
+ * This file was wrote by fancyears·milos·maywas @connor. Any question/bug you can post to 1243093366@qq.com.
+ * ALL RIGHTS RESERVED.
+ */
+
 package com.connor.hozon.bom.resources.controller.change.vwo;
 
 import com.connor.hozon.bom.bomSystem.dto.vwo.HzVwoFormListQueryBase;
@@ -15,6 +21,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import sql.pojo.cfg.vwo.*;
+import sql.pojo.project.HzProjectLibs;
 
 import java.util.HashMap;
 import java.util.List;
@@ -22,9 +29,10 @@ import java.util.Map;
 
 
 /**
- * User: Fancyears·Maylos·Mayways
- * Date: 2018/8/14
- * Time: 10:52
+ * @Author: Fancyears·Maylos·Maywas
+ * @Description: fuck
+ * @Date: Created in 2018/10/10 13:29
+ * @Modified By:
  */
 @Controller
 @RequestMapping(value = "/vwo")
@@ -78,7 +86,6 @@ public class HzVwoController {
         hzVwoOpiBom = iHzVWOManagerService.getOpiOfBomMng(id);
         hzVwoOpiPmt = iHzVWOManagerService.getOpiOfPmtMng(id);
         hzVwoOpiProj = iHzVWOManagerService.getOpiOfProjMng(id);
-
         if (null == influenceDept) {
             model.addAttribute("msg", "初始化VWO:" + id + "的影响部门数据失败");
             return error;
@@ -131,7 +138,6 @@ public class HzVwoController {
         model.addAttribute("vwoId", vwoId);
         return "changeManage/vwo/vwoExecuteDialog";
     }
-
 
     /**
      * 分页查询
@@ -336,7 +342,7 @@ public class HzVwoController {
     @RequestMapping(value = "/launch", method = RequestMethod.POST)
     @ResponseBody
     public JSONObject launch(@RequestBody HzVwoProcessDto dto){
-        return iHzVWOManagerService.launch(dto.getVwoType(), dto.getProjectUid(), dto.getVwoId());
+        return iHzVWOManagerService.launch(dto.getVwoType(), dto.getProjectUid(), dto.getVwoId(),dto.getFormId());
     }
 
     @RequestMapping(value = "/saveLeaderOpinion", method = RequestMethod.POST)
@@ -379,5 +385,15 @@ public class HzVwoController {
     @ResponseBody
     public JSONObject saveProjLeaderOpinion(HzVwoOpiProj hzVwoOpiProj, Integer vwoType, String projectUid) {
         return iHzVWOManagerService.saveProjLeaderOpinion(hzVwoOpiProj, vwoType, projectUid);
+    }
+
+
+
+
+    /**************************特性表单****************************/
+    @RequestMapping(value = "getFeatureTable",method = RequestMethod.POST)
+    @ResponseBody
+    public Map<String, Object> getFeatureTable(@RequestParam Long vwoId){
+        return iHzVWOManagerService.getFeatureTable(vwoId);
     }
 }

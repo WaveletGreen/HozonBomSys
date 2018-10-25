@@ -1,6 +1,5 @@
 package com.connor.hozon.bom.resources.mybatis.bom.impl;
 
-import com.alibaba.fastjson.JSON;
 import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
 import com.connor.hozon.bom.resources.domain.dto.request.DeleteHzPbomReqDTO;
 import com.connor.hozon.bom.resources.domain.query.HzBomRecycleByPageQuery;
@@ -8,7 +7,7 @@ import com.connor.hozon.bom.resources.domain.query.HzPbomByPageQuery;
 import com.connor.hozon.bom.resources.domain.query.HzPbomTreeQuery;
 import com.connor.hozon.bom.resources.mybatis.bom.HzPbomRecordDAO;
 import com.connor.hozon.bom.resources.page.Page;
-import com.connor.hozon.bom.resources.page.PageRequest;
+import com.connor.hozon.bom.resources.page.PageRequestParam;
 import com.google.common.collect.Lists;
 import org.springframework.stereotype.Service;
 import sql.BaseSQLUtil;
@@ -87,6 +86,44 @@ public class HzPbomRecordDAOImpl extends BaseSQLUtil implements HzPbomRecordDAO 
     }
 
     @Override
+    public int updateList(List<HzPbomLineRecord> records) {
+        int size = records.size();
+        //分批更新数据 一次1000条
+        int i = 0;
+        int cout = 0;
+        try {
+            synchronized (this){
+                if (size > 1000) {
+                    for (i = 0; i < size / 1000; i++) {
+                        List<HzPbomLineRecord> list = new ArrayList<>();
+                        for (int j = 0; j < 1000; j++) {
+                            list.add(records.get(cout));
+                            cout++;
+                        }
+                        super.update("HzPbomRecordDAOImpl_updateList",list);
+                    }
+                }
+                if (i * 1000 < size) {
+                    List<HzPbomLineRecord> list = new ArrayList<>();
+                    for (int j = 0; j < size - i * 1000; j++) {
+                        list.add(records.get(cout));
+                        cout++;
+                    }
+                    super.update("HzPbomRecordDAOImpl_updateList",list);
+                }
+            }
+            return 1;
+        }catch (Exception e){
+            return 0;
+        }
+    }
+
+    @Override
+    public int updateInput(HzPbomLineRecord record) {
+        return super.update("HzPbomRecordDAOImpl_updateInput",record);
+    }
+
+    @Override
     public int recoverBomById(String ePuid) {
         return super.update("HzPbomRecordDAOImpl_recoverBomById",ePuid);
     }
@@ -107,7 +144,7 @@ public class HzPbomRecordDAOImpl extends BaseSQLUtil implements HzPbomRecordDAO 
 
     @Override
     public Page<HzPbomLineRecord> getHzPbomRecordByPage(HzPbomByPageQuery query) {
-        PageRequest request = new PageRequest();
+        PageRequestParam request = new PageRequestParam();
         Map map = new HashMap();
         map.put("projectId",query.getProjectId());
         map.put("isHas",query.getIsHas());
@@ -172,7 +209,7 @@ public class HzPbomRecordDAOImpl extends BaseSQLUtil implements HzPbomRecordDAO 
 
     @Override
     public Page<HzPbomLineRecord> getHzPbomRecycleRecord(HzBomRecycleByPageQuery query) {
-        PageRequest request = new PageRequest();
+        PageRequestParam request = new PageRequestParam();
         Map map = new HashMap();
         map.put("projectId",query.getProjectId());
         request.setPageNumber(query.getPage());
@@ -258,7 +295,7 @@ public class HzPbomRecordDAOImpl extends BaseSQLUtil implements HzPbomRecordDAO 
 
     @Override
     public Page<HzPbomLineRecord> getPbomTreeByPage(HzPbomByPageQuery query) {
-        PageRequest request = new PageRequest();
+        PageRequestParam request = new PageRequestParam();
         Map map = new HashMap();
         map.put("projectId",query.getProjectId());
         map.put("eBomPuids",Lists.newArrayList(query.geteBomPuids().split(",")));

@@ -16,7 +16,12 @@ import sql.pojo.cfg.modelColor.HzCfg0ModelColorDetail;
 import sql.pojo.cfg.modelColor.HzColorModel2;
 
 import java.util.List;
-
+/**
+ * @Author: Fancyears·Maylos·Maywas
+ * @Description: fuck
+ * @Date: Created in 2018/9/6 13:19
+ * @Modified By:
+ */
 @Configuration
 public class HzColorModelDaoImpl extends BasicDaoImpl<HzCfg0ModelColorDetail> implements HzColorModelDao {
     private final static HzCfg0ModelColorDetail DETAIL = new HzCfg0ModelColorDetail();

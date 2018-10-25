@@ -3,13 +3,12 @@ package com.connor.hozon.bom.resources.mybatis.epl.impl;
 import com.connor.hozon.bom.resources.domain.query.HzEPLByPageQuery;
 import com.connor.hozon.bom.resources.mybatis.epl.HzEplMangeRecordDAO;
 import com.connor.hozon.bom.resources.page.Page;
-import com.connor.hozon.bom.resources.page.PageRequest;
+import com.connor.hozon.bom.resources.page.PageRequestParam;
 import org.springframework.stereotype.Service;
 import sql.BaseSQLUtil;
 import sql.pojo.epl.HzEPLManageRecord;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -23,7 +22,7 @@ public class HzEplManageRecordDAOImpl extends BaseSQLUtil implements HzEplMangeR
 //    }
 //
 //    public Page<HzEPLManageRecord> getEPLListForPage(HzEPLByPageQuery query){
-//        PageRequest request = new PageRequest();
+//        PageRequestParam request = new PageRequestParam();
 //        Map map = new HashMap();
 //        map.put("projectId",query.getProjectId());
 //        map.put("isHas",query.getIsHas());
@@ -40,7 +39,7 @@ public class HzEplManageRecordDAOImpl extends BaseSQLUtil implements HzEplMangeR
 
     @Override
     public Page<HzEPLManageRecord> getEPLListForPage2(HzEPLByPageQuery query) {
-        PageRequest request = new PageRequest();
+        PageRequestParam request = new PageRequestParam();
         Map map = new HashMap();
         map.put("projectId",query.getProjectId());
         map.put("isHas",query.getIsHas());

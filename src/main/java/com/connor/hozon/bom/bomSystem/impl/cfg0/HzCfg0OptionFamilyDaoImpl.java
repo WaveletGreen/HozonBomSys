@@ -15,9 +15,10 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * User: Fancyears·Maylos·Mayways
- * Date: 2018/5/23
- * Time: 9:23
+ * @Author: Fancyears·Maylos·Maywas
+ * @Description: fuck
+ * @Date: Created in 2018/9/6 13:19
+ * @Modified By:
  */
 @Service("hzCfg0OptionFamilyDao")
 public class HzCfg0OptionFamilyDaoImpl extends BasicDaoImpl<HzCfg0OptionFamily> implements HzCfg0OptionFamilyDao {

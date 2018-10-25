@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2018.
+ * This file was wrote by fancyears·milos·maywas @connor. Any question/bug you can post to 1243093366@qq.com.
+ * ALL RIGHTS RESERVED.
+ */
+
 package com.connor.hozon.bom.bomSystem.dao.cfg0;
 
 import com.connor.hozon.bom.bomSystem.dao.BasicDao;
@@ -9,7 +15,12 @@ import sql.pojo.cfg.cfg0.HzCfg0Record;
 import java.util.List;
 import java.util.Map;
 
-
+/**
+ * @Author: Fancyears·Maylos·Maywas
+ * @Description: 特性基础dao层
+ * @Date: Created in 2018/8/27 21:17
+ * @Modified By:
+ */
 public interface HzCfg0RecordDao extends BasicDao<HzCfg0Record> {
 
     /***

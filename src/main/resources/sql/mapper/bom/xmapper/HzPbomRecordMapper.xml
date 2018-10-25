@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="HzPbomRecordMapper">
-  <resultMap id="HzPbomLineRecord" type="sql.pojo.bom.HzPbomLineRecord">
+
+  <resultMap id="SingleVehDosageMap"
+             type="sql.pojo.bom.HzPbomLineRecord">
+    <result column="P_SINGLE_VEH_DOSAGE" jdbcType="BLOB"
+            property="singleVehDosage"/>
+  </resultMap>
+
+  <resultMap extends="SingleVehDosageMap" id="HzPbomLineRecord" type="sql.pojo.bom.HzPbomLineRecord">
     <id column="PUID" jdbcType="VARCHAR" property="puid" />
     <result column="P_RESOURCE" jdbcType="VARCHAR" property="resource" />
     <result column="P_TYPE" jdbcType="INTEGER" property="type" />
@@ -198,7 +205,9 @@
     P_UPDATE_NAME, P_STATION,P_PARENT_UID,P_BOM_DIGIFAX_ID,P_E_BOM_PUID,
     P_LINE_INDEX,P_BOM_LINE_IS_HAS,P_BOM_LINE_PUID,P_BOM_LINE_ID,P_BOM_LINE_IS_2Y,
     P_BOM_LINE_IS_PART,P_BOM_LINE_IS_DEPT,P_BOM_OF_WHICH_DEPT,P_BOM_LINE_PART_NAME,
-    P_BOM_LINE_PART_CLASS,P_BOM_LINE_PART_EN_NAME,P_BOM_LINE_PART_RESOURCE,P_SORT_NUM,P_PBOM_STATUS,P_IS_NEW_PART)
+    P_BOM_LINE_PART_CLASS,P_BOM_LINE_PART_EN_NAME,P_BOM_LINE_PART_RESOURCE,P_SORT_NUM,P_PBOM_STATUS,P_IS_NEW_PART,
+    P_SINGLE_VEH_DOSAGE
+    )
     <foreach collection="list" item="item" index="index" separator="UNION ALL">
       select
       #{item.puid,jdbcType=VARCHAR},#{item.resource,jdbcType=VARCHAR}, #{item.colorPart,jdbcType=INTEGER},
@@ -210,7 +219,8 @@
       #{item.isHas,jdbcType=INTEGER},#{item.linePuid,jdbcType=VARCHAR}, #{item.lineId,jdbcType=VARCHAR}, #{item.is2Y,jdbcType=INTEGER},
       #{item.isPart,jdbcType=INTEGER}, #{item.isDept,jdbcType=INTEGER}, #{item.pBomOfWhichDept,jdbcType=VARCHAR},
       #{item.pBomLinePartName,jdbcType=VARCHAR}, #{item.pBomLinePartClass,jdbcType=VARCHAR}, #{item.pBomLinePartEnName,jdbcType=VARCHAR},
-      #{item.pBomLinePartResource,jdbcType=VARCHAR},#{item.sortNum,jdbcType=VARCHAR},1,#{item.isNewPart,jdbcType=INTEGER}
+      #{item.pBomLinePartResource,jdbcType=VARCHAR},#{item.sortNum,jdbcType=VARCHAR},1,#{item.isNewPart,jdbcType=INTEGER},
+      #{item.singleVehDosage,jdbcType=VARCHAR}
       from DUAL
     </foreach>
   </insert>
@@ -347,8 +357,42 @@
       )
   </insert>
 
-
-
+  <!--导入更新-->
+  <update id="HzPbomRecordDAOImpl_updateInput" parameterType="sql.pojo.bom.HzPbomLineRecord">
+    update HZ_PBOM_RECORD
+    <set>
+      <if test="resource != null">
+        P_RESOURCE = #{resource,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        P_TYPE = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="buyUnit != null">
+        P_BUY_UNIT = #{buyUnit,jdbcType=INTEGER},
+      </if>
+      <if test="workShop1 != null">
+        P_WORK_SHOP1 = #{workShop1,jdbcType=VARCHAR},
+      </if>
+      <if test="workShop2 != null">
+        P_WORK_SHOP2 = #{workShop2,jdbcType=VARCHAR},
+      </if>
+      <if test="productLine != null">
+        P_PRODUCT_LINE = #{productLine,jdbcType=VARCHAR},
+      </if>
+      <if test="mouldType != null">
+        P_MOULD_TYPE = #{mouldType,jdbcType=VARCHAR},
+      </if>
+      <if test="outerPart != null">
+        P_OUTER_PART = #{outerPart,jdbcType=VARCHAR},
+      </if>
+      <if test="station != null">
+        P_STATION = #{station,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where P_BOM_LINE_ID = #{lineId,jdbcType=VARCHAR}
+    and P_BOM_DIGIFAX_ID = #{bomDigifaxId,jdbcType=VARCHAR}
+    and P_PBOM_STATUS <![CDATA[ <> ]]>0
+  </update>
 
   <!--更新-->
   <update id="HzPbomRecordDAOImpl_update" parameterType="sql.pojo.bom.HzPbomLineRecord">
@@ -431,13 +475,81 @@
         P_BOM_LINE_PART_RESOURCE = #{pBomLinePartResource,jdbcType=VARCHAR},
       </if>
       <if test="pLouaFlag != null">
-        P_LOU_LOA_FLAG = #{pLouaFlag,jdbcType=INTEGER}
+        P_LOU_LOA_FLAG = #{pLouaFlag,jdbcType=INTEGER},
+      </if>
+      <if test="singleVehDosage != null">
+        P_SINGLE_VEH_DOSAGE = #{singleVehDosage,jdbcType=VARCHAR}
       </if>
     </set>
     where P_E_BOM_PUID = #{eBomPuid,jdbcType=VARCHAR}
     and P_PBOM_STATUS <![CDATA[ <> ]]>0
   </update>
 
+
+
+  <!--批量更新-->
+  <update id="HzPbomRecordDAOImpl_updateList" parameterType="java.util.List">
+    <foreach collection="list" item="item" index="index" open="begin" close=";end;" separator=";">
+      update HZ_PBOM_RECORD
+      <set>
+        <if test="item.resource != null">
+          P_RESOURCE = #{item.resource,jdbcType=VARCHAR},
+        </if>
+        <if test="item.colorPart != null">
+          P_COLOR_PART = #{item.colorPart,jdbcType=INTEGER},
+        </if>
+        <if test="item.type != null">
+          P_TYPE = #{item.type,jdbcType=INTEGER},
+        </if>
+        <if test="item.buyUnit != null">
+          P_BUY_UNIT = #{item.buyUnit,jdbcType=INTEGER},
+        </if>
+        <if test="item.workShop1 != null">
+          P_WORK_SHOP1 = #{item.workShop1,jdbcType=VARCHAR},
+        </if>
+        <if test="item.workShop2 != null">
+          P_WORK_SHOP2 = #{item.workShop2,jdbcType=VARCHAR},
+        </if>
+        <if test="item.productLine != null">
+          P_PRODUCT_LINE = #{item.productLine,jdbcType=VARCHAR},
+        </if>
+        <if test="item.mouldType != null">
+          P_MOULD_TYPE = #{item.mouldType,jdbcType=VARCHAR},
+        </if>
+        <if test="item.outerPart != null">
+          P_OUTER_PART = #{item.outerPart,jdbcType=VARCHAR},
+        </if>
+        P_UPDATE_TIME =sysdate,
+        <if test="item.updateName != null">
+          P_UPDATE_NAME = #{item.updateName,jdbcType=VARCHAR},
+        </if>
+        <if test="item.station != null">
+          P_STATION = #{item.station,jdbcType=VARCHAR},
+        </if>
+        <if test="item.pBomLinePartName != null">
+          P_BOM_LINE_PART_NAME = #{item.pBomLinePartName,jdbcType=VARCHAR},
+        </if>
+        <if test="item.pBomLinePartClass != null">
+          P_BOM_LINE_PART_CLASS = #{item.pBomLinePartClass,jdbcType=VARCHAR},
+        </if>
+        <if test="item.pBomLinePartEnName != null">
+          P_BOM_LINE_PART_EN_NAME = #{item.pBomLinePartEnName,jdbcType=VARCHAR},
+        </if>
+        <if test="item.pBomLinePartResource != null">
+          P_BOM_LINE_PART_RESOURCE = #{item.pBomLinePartResource,jdbcType=VARCHAR},
+        </if>
+        <if test="item.pLouaFlag != null">
+          P_LOU_LOA_FLAG = #{item.pLouaFlag,jdbcType=INTEGER},
+        </if>
+        <if test="item.singleVehDosage != null">
+          P_SINGLE_VEH_DOSAGE = #{item.singleVehDosage,jdbcType=VARCHAR}
+        </if>
+      </set>
+      where P_BOM_LINE_ID = #{item.lineId,jdbcType=VARCHAR}
+      and P_BOM_DIGIFAX_ID=#{item.bomDigifaxId,jdbcType=VARCHAR}
+      and P_PBOM_STATUS <![CDATA[ <> ]]>0
+    </foreach>
+  </update>
 
 <!--恢复一条记录-->
   <update id="HzPbomRecordDAOImpl_recoverBomById" parameterType="java.lang.String">

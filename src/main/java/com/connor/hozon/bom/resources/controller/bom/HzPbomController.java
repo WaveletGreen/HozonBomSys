@@ -8,19 +8,25 @@ import com.connor.hozon.bom.resources.domain.dto.request.AddHzPbomRecordReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.request.DeleteHzPbomReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.request.HzPbomProcessComposeReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.request.UpdateHzPbomRecordReqDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.HzEbomRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzPbomLineRespDTO;
-import com.connor.hozon.bom.resources.domain.dto.response.OperateResultMessageRespDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
 import com.connor.hozon.bom.resources.domain.query.HzPbomByPageQuery;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.service.bom.HzPbomService;
-import com.connor.hozon.bom.resources.util.ResultMessageBuilder;
+import com.connor.hozon.bom.resources.service.bom.HzSingleVehiclesServices;
+import com.connor.hozon.bom.resources.util.ExcelUtil;
+import com.connor.hozon.bom.resources.util.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.*;
+
+import static org.hibernate.jpa.internal.QueryImpl.LOG;
 
 /**
  * Created by haozt on 2018/5/24
@@ -32,8 +38,11 @@ public class HzPbomController extends BaseController {
     @Autowired
     private HzPbomService hzPbomService;
 
+    @Autowired
+    private HzSingleVehiclesServices hzSingleVehiclesServices;
+
     @RequestMapping(value = "manage/title", method = RequestMethod.GET)
-    public void getPbomLineTitle(HttpServletResponse response) {
+    public void getPbomLineTitle(String projectId,HttpServletResponse response) {
         LinkedHashMap<String, String> tableTitle = new LinkedHashMap<>();
         tableTitle.put("No", "序号");
         tableTitle.put("lineId", "零件号");
@@ -56,7 +65,9 @@ public class HzPbomController extends BaseController {
         tableTitle.put("mouldType", "模具类别");
         tableTitle.put("outerPart", "外委件");
         tableTitle.put("station", "工位");
-        writeAjaxJSONResponse(ResultMessageBuilder.build(tableTitle), response);
+        //获取该项目下的所有车型模型
+        tableTitle.putAll(hzSingleVehiclesServices.singleVehDosageTitle(projectId));
+        toJSONResponse(Result.build(tableTitle), response);
     }
 
     /**
@@ -75,6 +86,7 @@ public class HzPbomController extends BaseController {
 
         }
         Page<HzPbomLineRespDTO> respDTOPage = hzPbomService.getHzPbomRecordPage(query);
+
         List<HzPbomLineRespDTO> respDTOS = respDTOPage.getResult();
         if (respDTOS == null) {
             return new HashMap<>();
@@ -107,6 +119,9 @@ public class HzPbomController extends BaseController {
             _res.put("outerPart", dto.getOuterPart());
             _res.put("station", dto.getStation());
             _res.put("status", dto.getStatus());
+            if(null != dto.getObject()){
+                _res.putAll(dto.getObject());
+            }
             _list.add(_res);
         });
         ret.put("totalCount", respDTOPage.getTotalCount());
@@ -157,21 +172,21 @@ public class HzPbomController extends BaseController {
 
     @RequestMapping(value = "insert", method = RequestMethod.POST)
     public void addPbomToDB(@RequestBody AddHzPbomRecordReqDTO reqDTO, HttpServletResponse response) {
-        OperateResultMessageRespDTO respDTO = hzPbomService.insertHzPbomRecord(reqDTO);
-        writeAjaxJSONResponse(ResultMessageBuilder.build(OperateResultMessageRespDTO.isSuccess(respDTO), respDTO.getErrMsg()), response);
+        WriteResultRespDTO respDTO = hzPbomService.insertHzPbomRecord(reqDTO);
+        toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO), respDTO.getErrMsg()), response);
     }
 
     @RequestMapping(value = "update", method = RequestMethod.POST)
     public void updatePbomRecord(@RequestBody UpdateHzPbomRecordReqDTO reqDTO, HttpServletResponse response) {
-        OperateResultMessageRespDTO respDTO = hzPbomService.updateHzPbomRecord(reqDTO);
-        writeAjaxJSONResponse(ResultMessageBuilder.build(OperateResultMessageRespDTO.isSuccess(respDTO), respDTO.getErrMsg()), response);
+        WriteResultRespDTO respDTO = hzPbomService.updateHzPbomRecord(reqDTO);
+        toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO), respDTO.getErrMsg()), response);
     }
 
 
     @RequestMapping(value = "delete", method = RequestMethod.POST)
     public void deletePbomRecord(@RequestBody DeleteHzPbomReqDTO reqDTO, HttpServletResponse response) {
-        OperateResultMessageRespDTO respDTO = hzPbomService.deleteHzPbomRecordByForeignId(reqDTO);
-        writeAjaxJSONResponse(ResultMessageBuilder.build(OperateResultMessageRespDTO.isSuccess(respDTO), respDTO.getErrMsg()), response);
+        WriteResultRespDTO respDTO = hzPbomService.deleteHzPbomRecordByForeignId(reqDTO);
+        toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO), respDTO.getErrMsg()), response);
     }
 
 
@@ -184,19 +199,19 @@ public class HzPbomController extends BaseController {
     @RequestMapping(value = "processComposeTree", method = RequestMethod.GET)
     public void findProcessComposeTree(HzPbomProcessComposeReqDTO reqDTO, HttpServletResponse response) {
         if (reqDTO == null) {
-            writeAjaxJSONResponse(ResultMessageBuilder.build(false, "非法参数！"), response);
+            toJSONResponse(Result.build(false, "非法参数！"), response);
             return;
         }
         if (reqDTO.getProjectId() == null || reqDTO.getLineId() == null) {
-            writeAjaxJSONResponse(ResultMessageBuilder.build(false, "非法参数！"), response);
+            toJSONResponse(Result.build(false, "非法参数！"), response);
             return;
         }
         JSONArray jsonArray = hzPbomService.getPbomForProcessCompose(reqDTO);
         if (jsonArray == null) {
-            writeAjaxJSONResponse(ResultMessageBuilder.build(false, "查无结果！"), response);
+            toJSONResponse(Result.build(false, "查无结果！"), response);
             return;
         }
-        writeAjaxJSONResponse(ResultMessageBuilder.build(true, jsonArray), response);
+        toJSONResponse(Result.build(true, jsonArray), response);
     }
 
     /**
@@ -208,16 +223,16 @@ public class HzPbomController extends BaseController {
     @RequestMapping(value = "detail", method = RequestMethod.GET)
     public void findPbomDetail(HzPbomProcessComposeReqDTO reqDTO, HttpServletResponse response) {
         if (reqDTO == null) {
-            writeAjaxJSONResponse(ResultMessageBuilder.build(false, "非法参数！"), response);
+            toJSONResponse(Result.build(false, "非法参数！"), response);
             return;
         }
         if (reqDTO.getProjectId() == null || reqDTO.getPuid() == null) {
-            writeAjaxJSONResponse(ResultMessageBuilder.build(false, "非法参数！"), response);
+            toJSONResponse(Result.build(false, "非法参数！"), response);
             return;
         }
 
         JSONArray object = hzPbomService.getPbomByLineId(reqDTO);
-        writeAjaxJSONResponse(ResultMessageBuilder.build(object), response);
+        toJSONResponse(Result.build(object), response);
     }
 
     @RequestMapping(value = "updataProcessOfFitting", method = RequestMethod.GET)
@@ -247,9 +262,9 @@ public class HzPbomController extends BaseController {
      */
     @RequestMapping(value = "/add/processCompose", method = RequestMethod.POST)
     public void addProcessCompose(@RequestBody AddHzPbomRecordReqDTO recordReqDTO, HttpServletResponse response) {
-        OperateResultMessageRespDTO operateResultMessageRespDTO = hzPbomService.andProcessCompose(recordReqDTO);
+        WriteResultRespDTO writeResultRespDTO = hzPbomService.andProcessCompose(recordReqDTO);
         JSONArray jsonArray = new JSONArray();
-        if (OperateResultMessageRespDTO.isSuccess(operateResultMessageRespDTO)) {
+        if (WriteResultRespDTO.isSuccess(writeResultRespDTO)) {
             HzPbomProcessComposeReqDTO reqDTO = new HzPbomProcessComposeReqDTO();
             if (recordReqDTO.getLineId() != null) {
                 reqDTO.setLineId(recordReqDTO.getLineId());
@@ -257,8 +272,8 @@ public class HzPbomController extends BaseController {
             reqDTO.setProjectId(recordReqDTO.getProjectId());
             jsonArray = hzPbomService.getPbomForProcessCompose(reqDTO);
         }
-        writeAjaxJSONResponse(ResultMessageBuilder.build(
-                OperateResultMessageRespDTO.isSuccess(operateResultMessageRespDTO), operateResultMessageRespDTO.getErrMsg(), jsonArray), response);
+        toJSONResponse(Result.build(
+                WriteResultRespDTO.isSuccess(writeResultRespDTO), writeResultRespDTO.getErrMsg(), jsonArray), response);
     }
 
     /**
@@ -298,6 +313,79 @@ public class HzPbomController extends BaseController {
         return hzPbomService.doGenerateProcessCompose(param);
     }
 
+    /**
+     * 下载PBOM
+     */
+    @RequestMapping(value = "excelExport",method = RequestMethod.POST)
+    @ResponseBody
+    public JSONObject listDownLoad(
+             @RequestBody  List<HzPbomLineRespDTO> dtos,HttpServletRequest request
+    ) {
+        boolean flag=true;
+        JSONObject result=new JSONObject();
+        try {
+            String fileName = "tableExport.xlsx";//文件名-tableExport
+            String[] title = {
+                    "序号","零件号" ,"名称","层级" ,"专业" ,"级别" ,"分组号","查找编号" ,"英文名称","LOU/LOA",
+                    "零件分类","零部件来源","自制/采购","焊接/装配","采购单元","车间1","车间2","生产线","模具类别",
+                    "外委件","工位"
+            };//表头
+            //当前页的数据
+            List<String[]> dataList = new ArrayList<String[]>();
+            int index=1;
+            for (HzPbomLineRespDTO ebomRespDTO : dtos) {
+                String[] cellArr = new String[title.length];
+                cellArr[0] = index+"";
+                index++;
+                cellArr[1] = ebomRespDTO.getLineId();
+                cellArr[2] = ebomRespDTO.getpBomLinePartName();
+                cellArr[3] = ebomRespDTO.getLevel();
+                cellArr[4] = ebomRespDTO.getpBomOfWhichDept();
+                cellArr[5] = ebomRespDTO.getRank();
+                cellArr[6] = ebomRespDTO.getGroupNum();
+                cellArr[7] = ebomRespDTO.getLineNo();
+                cellArr[8] = ebomRespDTO.getpBomLinePartEnName();
+                cellArr[9] = ebomRespDTO.getpLouaFlag();
+                cellArr[10] = ebomRespDTO.getpBomLinePartClass();
+                cellArr[11] = ebomRespDTO.getpBomLinePartResource();
+                cellArr[12] = ebomRespDTO.getResource();
+                cellArr[13] = ebomRespDTO.getType();
+                cellArr[14] = ebomRespDTO.getBuyUnit();
+                cellArr[15] = ebomRespDTO.getWorkShop1();
+                cellArr[16] = ebomRespDTO.getWorkShop2();
+                cellArr[17] = ebomRespDTO.getProductLine();
+                cellArr[18] = ebomRespDTO.getMouldType();
+                cellArr[19] = ebomRespDTO.getOuterPart();
+                cellArr[20] = ebomRespDTO.getStation();
+                dataList.add(cellArr);
+            }
+            flag = ExcelUtil.writeExcel(fileName, title, dataList,"pbom",request);
+
+            if(flag){
+                LOG.info(fileName+",文件创建成功");
+                result.put("status",flag);
+                result.put("msg","成功");
+                result.put("path","./files/"+fileName);
+            }else{
+                LOG.info(fileName+",文件创建失败");
+                result.put("status",flag);
+                result.put("msg","失败");
+            }
+        } catch (Exception e) {
+            if(LOG.isTraceEnabled())//isErrorEnabled()
+                LOG.error(e.getMessage());
+        }
+        return result;
+    }
+
+    /**
+     * 跳转到Excel导入页面
+     * @return
+     */
+    @RequestMapping(value = "importExcel",method = RequestMethod.GET)
+    public String getExcelImport(){
+        return "bomManage/pbom/pbomManage/excelImport";
+    }
 
     @RequestMapping("/query/accessories")
     @ResponseBody

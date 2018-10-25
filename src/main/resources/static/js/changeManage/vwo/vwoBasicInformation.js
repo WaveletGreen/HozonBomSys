@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2018.
+ * This file was wrote by fancyears·milos·maywas @connor. Any question/bug you can post to 1243093366@qq.com.
+ * ALL RIGHTS RESERVED.
+ */
+
 var vwoId = -1;
 var connectedTableToolbars = [
     {
@@ -109,6 +115,7 @@ $(document).ready((function () {
     url += "?vwo=" + vwoId;
     loadConnectedData(url);
     taskStatusHold();
+    loadChangeDesc();
     // registerBtn();
 }));
 
@@ -651,7 +658,8 @@ function launch() {
         url: "launch",
         success: function (result) {
             if (result.status) {
-                layer.msg(result.msg, {icon: 1, time: 2000})
+                layer.msg(result.msg, {icon: 1, time: 2000});
+                window.top.loadTasks();
                 window.location.reload();
             }
             else {
@@ -670,6 +678,7 @@ function getVwoInfo() {
     data.projectUid = getProjectUid();
     data.vwoId = $("#vwo").val();
     data.vwoType = $("#vwoType").val();
+    data.formId=$(window.parent.document).contents().find(".tab-pane.fade.active.in")[0].id;
     return data;
 }
 
@@ -711,6 +720,7 @@ function approve(url, formId) {
                 success: function (result) {
                     if (result.status) {
                         layer.msg(result.msg, {icon: 1, time: 2000});
+                        window.top.loadTasks();
                         setTimeout('window.location.reload()', 2000);
                     } else {
                         window.Ewin.alert({message: "评估失败:" + result.msg});
@@ -761,4 +771,18 @@ function doSelectBomMag(id) {
         width: 600,
         height: 500
     })
+}
+
+
+function loadChangeDesc(){
+    let vwoType=$("#vwoType").val();
+    switch (vwoType){
+        case "1":
+                loadFeature(vwoId);
+            break;
+        case "2":
+            break;
+        case "3":
+            break;
+    }
 }

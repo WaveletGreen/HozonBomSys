@@ -15,12 +15,14 @@ import java.util.List;
 
 /**
  * @Author: Fancyears·Maylos·Maywas
- * @Description:
- * @Date: Created in 2018/10/23 14:33
+ * @Description: fuck
+ * @Date: Created in 2018/9/6 13:19
  * @Modified By:
  */
 @Service("hzTasksDao")
 public class HzTasksDaoImpl extends BasicDaoImpl<HzTasks> implements HzTasksDao {
+    private final static HzTasks TASKS = new HzTasks();
+
     public HzTasksDaoImpl() {
         clz = HzTasksDao.class;
         clzName = clz.getCanonicalName();
@@ -30,4 +32,31 @@ public class HzTasksDaoImpl extends BasicDaoImpl<HzTasks> implements HzTasksDao 
     public List<HzTasks> selectUserTasks(HzTasks tasks) {
         return baseSQLUtil.executeQuery(tasks, clzName + ".selectUserTasks");
     }
+
+    @Override
+    public List<HzTasks> selectUserTargetTaskByType(HzTasks task) {
+        return baseSQLUtil.executeQuery(task, clzName + ".selectUserTargetTaskByType");
+    }
+
+    @Override
+    public int insertByBatch(List<HzTasks> list) {
+        return baseSQLUtil.executeInsert(list, clzName + ".insertByBatch");
+    }
+
+    @Override
+    public int updateTargetStatus(HzTasks task) {
+        return baseSQLUtil.executeUpdate(task, clzName + ".updateTargetStatus");
+    }
+
+    /**
+     * 终止任务
+     *
+     * @param task
+     * @return
+     */
+    @Override
+    public int tasksStop(HzTasks task) {
+        return baseSQLUtil.executeUpdate(task, clzName + ".updateTargetStatus");
+    }
+
 }

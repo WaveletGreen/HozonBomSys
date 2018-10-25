@@ -9,8 +9,6 @@ package com.connor.hozon.bom.bomSystem.controller;
 import com.connor.hozon.bom.bomSystem.dto.task.HzTaskPostDto;
 import com.connor.hozon.bom.bomSystem.dto.task.TaskReceivedDto;
 import com.connor.hozon.bom.bomSystem.iservice.task.IHzTaskService;
-import com.connor.hozon.bom.bomSystem.option.TaskOptions;
-import com.connor.hozon.bom.bomSystem.option.TaskOptions2;
 import com.connor.hozon.bom.bomSystem.service.vwo.HzVwoInfoService;
 import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.sys.entity.Tree;
@@ -34,7 +32,7 @@ import java.util.Map;
 
 /**
  * @Author: Fancyears·Maylos·Maywas
- * @Description:
+ * @Description: 人员任务
  * @Date: Created in 2018/10/19 16:47
  * @Modified By:
  */

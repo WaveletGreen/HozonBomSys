@@ -16,7 +16,12 @@ import sql.pojo.cfg.fullCfg.HzFullCfgWithCfg;
 
 import java.math.BigDecimal;
 import java.util.List;
-
+/**
+ * @Author: Fancyears·Maylos·Maywas
+ * @Description: fuck
+ * @Date: Created in 2018/9/6 13:19
+ * @Modified By:
+ */
 @Configuration
 public class HzFullCfgModelDaoImpl extends BasicDaoImpl<HzFullCfgModel> implements HzFullCfgModelDao {
     private static final HzFullCfgModel HZ_FULL_CFG_MODEL = new HzFullCfgModel();

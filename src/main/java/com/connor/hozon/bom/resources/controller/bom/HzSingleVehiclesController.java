@@ -1,16 +1,19 @@
 package com.connor.hozon.bom.resources.controller.bom;
 
+import com.alibaba.fastjson.JSONObject;
 import com.connor.hozon.bom.resources.controller.BaseController;
 import com.connor.hozon.bom.resources.domain.dto.request.UpdateHzSingleVehiclesReqDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.HzPbomLineRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzSingleVehiclesBomRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzSingleVehiclesRespDTO;
-import com.connor.hozon.bom.resources.domain.dto.response.OperateResultMessageRespDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
 import com.connor.hozon.bom.resources.domain.query.HzSingleVehiclesBomByPageQuery;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.service.bom.HzSingleVehiclesBomServices;
 import com.connor.hozon.bom.resources.service.bom.HzSingleVehiclesServices;
+import com.connor.hozon.bom.resources.util.ExcelUtil;
 import com.connor.hozon.bom.resources.util.ListUtil;
-import com.connor.hozon.bom.resources.util.ResultMessageBuilder;
+import com.connor.hozon.bom.resources.util.Result;
 import com.connor.hozon.bom.resources.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,8 +23,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.*;
+
+import static org.hibernate.jpa.internal.QueryImpl.LOG;
 
 /**
  * Created with IntelliJ IDEA.
@@ -40,9 +46,13 @@ public class HzSingleVehiclesController extends BaseController {
     @Autowired
     private HzSingleVehiclesBomServices hzSingleVehiclesBomServices;
 
+    //String code="";
+
     @RequestMapping(value = "title",method = RequestMethod.GET)
     public void singleVehiclesTitle(HttpServletResponse response){
         LinkedHashMap<String, String> title = new LinkedHashMap<>();
+        //物料编码-svlMaterialCode
+        //基本信息-svlMaterialBasicInfo
         title.put("brandCode","品牌代码");
         title.put("brandName","中文品牌");
         title.put("colorCode","颜色代码");
@@ -57,7 +67,7 @@ public class HzSingleVehiclesController extends BaseController {
         title.put("vehicleCode","车型代码");
         title.put("svlMaterialCode","物料编号");
         title.put("svlMotorCode","电机型号");
-        writeAjaxJSONResponse(ResultMessageBuilder.build(title), response);
+        toJSONResponse(Result.build(title), response);
     }
     
     
@@ -76,14 +86,14 @@ public class HzSingleVehiclesController extends BaseController {
 
     @RequestMapping(value = "update",method = RequestMethod.POST)
     public void updateSingleVehicles(@RequestBody UpdateHzSingleVehiclesReqDTO reqDTO,HttpServletResponse response){
-        OperateResultMessageRespDTO respDTO = hzSingleVehiclesServices.updateSingleVehicle(reqDTO);
-        writeAjaxJSONResponse(ResultMessageBuilder.build(OperateResultMessageRespDTO.isSuccess(respDTO)),response);
+        WriteResultRespDTO respDTO = hzSingleVehiclesServices.updateSingleVehicle(reqDTO);
+        toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO)),response);
     }
 
     @RequestMapping(value = "refresh",method = RequestMethod.POST)
     public void refreshSingleVehicles(String projectId,HttpServletResponse response){
-        OperateResultMessageRespDTO respDTO = hzSingleVehiclesServices.refreshSingleVehicle(projectId);
-        writeAjaxJSONResponse(ResultMessageBuilder.build(OperateResultMessageRespDTO.isSuccess(respDTO)),response);
+        WriteResultRespDTO respDTO = hzSingleVehiclesServices.refreshSingleVehicle(projectId);
+        toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO)),response);
     }
 
     /**
@@ -155,7 +165,7 @@ public class HzSingleVehiclesController extends BaseController {
         tableTitle.put("changeNum", "变更号");
         tableTitle.put("pFactoryCode", "工厂代码");
         tableTitle.put("pStockLocation", "发货料库存地点");
-        writeAjaxJSONResponse(ResultMessageBuilder.build(tableTitle), response);
+        toJSONResponse(Result.build(tableTitle), response);
     }
 
 
@@ -223,6 +233,131 @@ public class HzSingleVehiclesController extends BaseController {
     @RequestMapping(value = "bom/refresh",method = RequestMethod.POST)
     public void refreshSingleVehiclesBOM(String projectId,HttpServletResponse response){
         hzSingleVehiclesBomServices.analysisSingleVehicles(projectId);
-        writeAjaxJSONResponse(ResultMessageBuilder.build(true),response);
+        toJSONResponse(Result.build(true),response);
     }
+
+    /**
+     * 下载单车BOM
+     */
+    @RequestMapping(value = "excelExport",method = RequestMethod.POST)
+    @ResponseBody
+    public JSONObject listDownLoad(
+            @RequestBody  List<HzSingleVehiclesRespDTO> dtos,HttpServletRequest request
+    ) {
+        boolean flag=true;
+        JSONObject result=new JSONObject();
+        try {
+            String fileName = "tableExport.xlsx";//文件名-tableExport
+            String[] title = {
+                    "物料编码","基本信息" ,"品牌代码","中文品牌","颜色代码","颜色名称","平台代码","平台名称",
+                    "电池型号","内饰颜色代码","内饰颜色名称","车型名称","车型代码","电机型号"
+            };//表头
+            //当前页的数据
+            List<String[]> dataList = new ArrayList<String[]>();
+            //int index=1;
+            for (HzSingleVehiclesRespDTO bomRespDTO : dtos) {
+                String[] cellArr = new String[title.length];
+                //cellArr[0] = index+"";
+                //index++;
+                cellArr[0] = bomRespDTO.getSvlMaterialCode();
+                cellArr[1] = bomRespDTO.getSvlMaterialBasicInfo();
+                cellArr[2] = bomRespDTO.getBrandCode();
+                cellArr[3] = bomRespDTO.getBrandName();
+                cellArr[4] = bomRespDTO.getColorCode();
+                cellArr[5] = bomRespDTO.getColorName();
+                cellArr[6] = bomRespDTO.getPlatformCode();
+                cellArr[7] = bomRespDTO.getPlatformName();
+                cellArr[8] = bomRespDTO.getSvlBatteryCode();
+                cellArr[9] = bomRespDTO.getSvlInnerColorCode();
+                cellArr[10] = bomRespDTO.getSvlInnerColorName();
+                //cellArr[11] = bomRespDTO.getSvlMaterialBasicInfo();
+                cellArr[11] = bomRespDTO.getVehicleName();
+                cellArr[12] = bomRespDTO.getVehicleCode();
+                //cellArr[14] = bomRespDTO.getSvlMaterialCode();
+                cellArr[13] = bomRespDTO.getSvlMotorCode();
+                dataList.add(cellArr);
+            }
+            flag = ExcelUtil.writeExcel(fileName, title, dataList,"",request);
+
+            if(flag){
+                LOG.info(fileName+",文件创建成功");
+                result.put("status",flag);
+                result.put("msg","成功");
+                result.put("path","./files/"+fileName);
+            }else{
+                LOG.info(fileName+",文件创建失败");
+                result.put("status",flag);
+                result.put("msg","失败");
+            }
+        } catch (Exception e) {
+            if(LOG.isTraceEnabled())//isErrorEnabled()
+                LOG.error(e.getMessage());
+        }
+        return result;
+    }
+
+    /**
+     * 下载单车BOM具体信息
+     */
+    @RequestMapping(value = "excelExport2",method = RequestMethod.POST)
+    @ResponseBody
+    public JSONObject listDownLoad2(
+            @RequestBody  List<HzSingleVehiclesBomRespDTO> dtos,HttpServletRequest request
+    ) {
+        boolean flag=true;
+        JSONObject result=new JSONObject();
+        try {
+            String fileName = "tableExport.xlsx";//文件名-tableExport
+            String[] title = {
+                    "序号","零件号","名称","层级","专业","零件分类","零部件来源","备件","备件编号","工艺路线",
+                    "人工工时","节拍","焊点","机物料","标准件","工具","废品","变更","变更号","工厂代码","发货料库存地点"
+            };//表头
+            //当前页的数据
+            List<String[]> dataList = new ArrayList<String[]>();
+            int index=1;
+            for (HzSingleVehiclesBomRespDTO bomRespDTO : dtos) {
+                String[] cellArr = new String[title.length];
+                cellArr[0] = index+"";
+                index++;
+                cellArr[1] = bomRespDTO.getLineId();
+                cellArr[2] = bomRespDTO.getPBomLinePartName();
+                cellArr[3] = bomRespDTO.getLevel();
+                cellArr[4] = bomRespDTO.getPBomOfWhichDept();
+                cellArr[5] = bomRespDTO.getPBomLinePartClass();
+                cellArr[6] = bomRespDTO.getPBomLinePartResource();
+                cellArr[7] = bomRespDTO.getSparePart();
+                cellArr[8] = bomRespDTO.getSparePartNum();
+                cellArr[9] = bomRespDTO.getProcessRoute();
+                cellArr[10] = bomRespDTO.getLaborHour();
+                cellArr[11] = bomRespDTO.getRhythm();
+                cellArr[12] = bomRespDTO.getSolderJoint();
+                cellArr[13] = bomRespDTO.getMachineMaterial();
+                cellArr[14] = bomRespDTO.getStandardPart();
+                cellArr[15] = bomRespDTO.getTools();
+                cellArr[16] = bomRespDTO.getWasterProduct();
+                cellArr[17] = bomRespDTO.getChange();
+                cellArr[18] = bomRespDTO.getChangeNum();
+                cellArr[19] = bomRespDTO.getPFactoryCode();
+                cellArr[20] = bomRespDTO.getPStockLocation();
+                dataList.add(cellArr);
+            }
+            flag = ExcelUtil.writeExcel(fileName, title, dataList,"",request);
+
+            if(flag){
+                LOG.info(fileName+",文件创建成功");
+                result.put("status",flag);
+                result.put("msg","成功");
+                result.put("path","/files/"+fileName);
+            }else{
+                LOG.info(fileName+",文件创建失败");
+                result.put("status",flag);
+                result.put("msg","失败");
+            }
+        } catch (Exception e) {
+            if(LOG.isTraceEnabled())//isErrorEnabled()
+                LOG.error(e.getMessage());
+        }
+        return result;
+    }
+
 }

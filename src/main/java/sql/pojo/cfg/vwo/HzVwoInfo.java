@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2018.
+ * This file was wrote by fancyears·milos·maywas @connor. Any question/bug you can post to 1243093366@qq.com.
+ * ALL RIGHTS RESERVED.
+ */
+
 package sql.pojo.cfg.vwo;
 
 import com.connor.hozon.bom.bomSystem.helper.DateStringHelper;
@@ -6,8 +12,12 @@ import lombok.Data;
 import java.util.Date;
 
 /**
- * VWO主数据
+ * @Author: Fancyears·Maylos·Maywas
+ * @Description: VWO主数据
+ * @Date: Created in 2018/10/10 13:29
+ * @Modified By:
  */
+
 @Data
 public class HzVwoInfo {
     /**

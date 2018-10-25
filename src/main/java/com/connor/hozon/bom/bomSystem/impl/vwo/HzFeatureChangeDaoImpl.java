@@ -17,8 +17,8 @@ import java.util.Map;
 
 /**
  * @Author: Fancyears·Maylos·Maywas
- * @Description:
- * @Date: Created in 2018/8/9 19:15
+ * @Description: fuck
+ * @Date: Created in 2018/9/6 13:19
  * @Modified By:
  */
 @Configuration
@@ -47,11 +47,20 @@ public class HzFeatureChangeDaoImpl extends BasicDaoImpl<HzFeatureChangeBean> im
 
     @Override
     public int insertList(List<HzFeatureChangeBean> hzFeatureChangeBeans) {
-        Map<String,Object> map = new HashMap<String, Object>();
-        map.put("tableName",hzFeatureChangeBeans.get(0).getTableName());
-        map.put("seqName",hzFeatureChangeBeans.get(0).getSeqName());
-        map.put("hzFeatureChangeBeans",hzFeatureChangeBeans);
-        return baseSQLUtil.executeInsert(map, clzName+".insertList");
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("tableName", hzFeatureChangeBeans.get(0).getTableName());
+        map.put("seqName", hzFeatureChangeBeans.get(0).getSeqName());
+        map.put("hzFeatureChangeBeans", hzFeatureChangeBeans);
+        return baseSQLUtil.executeInsert(map, clzName + ".insertList");
+    }
+    /**
+     * 根据VWO ID找到当前变更的特性UID
+     * @param bean
+     * @return
+     */
+    @Override
+    public List<HzFeatureChangeBean> selectCfgUidsByVwoId(HzFeatureChangeBean bean) {
+        return baseSQLUtil.executeQuery(bean, clzName + ".selectCfgUidsByVwoId");
     }
 
     @Override

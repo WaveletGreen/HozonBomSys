@@ -3,12 +3,10 @@ package com.connor.hozon.bom.resources.service.materiel.impl;
 import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.resources.domain.dto.request.EditHzMaterielReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzMaterielRespDTO;
-import com.connor.hozon.bom.resources.domain.dto.response.OperateResultMessageRespDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
 import com.connor.hozon.bom.resources.domain.model.HzMaterielFactory;
 import com.connor.hozon.bom.resources.domain.query.HzMaterielByPageQuery;
 import com.connor.hozon.bom.resources.domain.query.HzMaterielQuery;
-import com.connor.hozon.bom.resources.enumtype.BomResourceEnum;
-import com.connor.hozon.bom.resources.mybatis.bom.HzMbomRecordDAO;
 import com.connor.hozon.bom.resources.mybatis.factory.HzFactoryDAO;
 import com.connor.hozon.bom.resources.mybatis.materiel.HzMaterielDAO;
 import com.connor.hozon.bom.resources.page.Page;
@@ -18,8 +16,6 @@ import com.connor.hozon.bom.resources.util.StringUtil;
 import com.connor.hozon.bom.sys.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sql.pojo.bom.HzMbomLineRecord;
-import sql.pojo.cfg.model.HzCfg0ModelRecord;
 import sql.pojo.factory.HzFactory;
 import sql.pojo.project.HzMaterielRecord;
 
@@ -39,17 +35,17 @@ public class HzMaterielServiceImpl implements HzMaterielService {
     private HzFactoryDAO hzFactoryDAO;
 
     @Override
-    public OperateResultMessageRespDTO editHzMateriel(EditHzMaterielReqDTO editHzMaterielReqDTO) {
-        OperateResultMessageRespDTO respDTO = new OperateResultMessageRespDTO();
+    public WriteResultRespDTO editHzMateriel(EditHzMaterielReqDTO editHzMaterielReqDTO) {
+        WriteResultRespDTO respDTO = new WriteResultRespDTO();
         if(null == editHzMaterielReqDTO.getProjectId() || editHzMaterielReqDTO.getProjectId().equals("")){
-            respDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
+            respDTO.setErrCode(WriteResultRespDTO.FAILED_CODE);
             respDTO.setErrMsg("请选择项目！");
             return respDTO;
         }
         try{
             boolean b = PrivilegeUtil.writePrivilege();
             if(!b){
-                return OperateResultMessageRespDTO.getFailPrivilege();
+                return WriteResultRespDTO.getFailPrivilege();
             }
             HzMaterielRecord record = new HzMaterielRecord();
             User user = UserInfo.getUser();
@@ -64,7 +60,7 @@ public class HzMaterielServiceImpl implements HzMaterielService {
                     hzFactory.setpCreateName(user.getUserName());
                     int i = hzFactoryDAO.insert(hzFactory);
                     if(i<0){
-                        return OperateResultMessageRespDTO.getFailResult();
+                        return WriteResultRespDTO.getFailResult();
                     }
                     record.setpFactoryPuid(puid);
                 }else{
@@ -121,36 +117,36 @@ public class HzMaterielServiceImpl implements HzMaterielService {
             record.setpPartImportantDegree(editHzMaterielReqDTO.getpPartImportantDegree());
             int i = hzMaterielDAO.update(record);
             if(i>0){
-                return OperateResultMessageRespDTO.getSuccessResult();
+                return WriteResultRespDTO.getSuccessResult();
             }
         }catch (Exception e){
-            return OperateResultMessageRespDTO.getFailResult();
+            return WriteResultRespDTO.getFailResult();
         }
 
-        return OperateResultMessageRespDTO.getFailResult();
+        return WriteResultRespDTO.getFailResult();
     }
 
     @Override
-    public OperateResultMessageRespDTO deleteHzMateriel(String puid) {
+    public WriteResultRespDTO deleteHzMateriel(String puid) {
         try{
-            OperateResultMessageRespDTO respDTO = new OperateResultMessageRespDTO();
+            WriteResultRespDTO respDTO = new WriteResultRespDTO();
             if(StringUtil.isEmpty(puid)){
-                respDTO.setErrCode(OperateResultMessageRespDTO.FAILED_CODE);
+                respDTO.setErrCode(WriteResultRespDTO.FAILED_CODE);
                 respDTO.setErrMsg("请选择一条需要删除的数据！");
                 return respDTO;
             }
             boolean b = PrivilegeUtil.writePrivilege();
             if(!b){
-                return OperateResultMessageRespDTO.getFailPrivilege();
+                return WriteResultRespDTO.getFailPrivilege();
             }
             int i = hzMaterielDAO.delete(puid);
             if(i>0){
-                return OperateResultMessageRespDTO.getSuccessResult();
+                return WriteResultRespDTO.getSuccessResult();
             }
         }catch (Exception e){
-            return OperateResultMessageRespDTO.getFailResult();
+            return WriteResultRespDTO.getFailResult();
         }
-        return OperateResultMessageRespDTO.getFailResult();
+        return WriteResultRespDTO.getFailResult();
     }
 
     @Override

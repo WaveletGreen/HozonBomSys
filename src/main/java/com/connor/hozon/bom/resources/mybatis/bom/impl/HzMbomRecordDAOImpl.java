@@ -7,7 +7,7 @@ import com.connor.hozon.bom.resources.domain.query.HzMbomTreeQuery;
 import com.connor.hozon.bom.resources.enumtype.MbomTableNameEnum;
 import com.connor.hozon.bom.resources.mybatis.bom.HzMbomRecordDAO;
 import com.connor.hozon.bom.resources.page.Page;
-import com.connor.hozon.bom.resources.page.PageRequest;
+import com.connor.hozon.bom.resources.page.PageRequestParam;
 import com.connor.hozon.bom.resources.util.ListUtil;
 import com.google.common.collect.Lists;
 import org.springframework.stereotype.Service;
@@ -15,6 +15,7 @@ import sql.BaseSQLUtil;
 import sql.pojo.bom.HzMbomLineRecord;
 import sql.pojo.bom.HzMbomLineRecordVO;
 import sql.pojo.bom.HzMbomRecord;
+import sql.pojo.bom.HzPbomLineRecord;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -50,6 +51,31 @@ public class HzMbomRecordDAOImpl extends BaseSQLUtil implements HzMbomRecordDAO 
         }
         return super.update("HzMbomRecordDAOImpl_update",record);
     }
+
+    @Override
+    public int updateInput(HzMbomLineRecord record) {
+        if(record.getTableName() == null || "".equals(record.getTableName())){
+            record.setTableName("HZ_MBOM_RECORD");
+        }
+        return super.update("HzMbomRecordDAOImpl_updateInput",record);
+    }
+
+    @Override
+    public int updateInputProduct(HzMbomLineRecord record) {
+        if(record.getTableName() == null || "".equals(record.getTableName())){
+            record.setTableName("HZ_MBOM_OF_PRODUCT");
+        }
+        return super.update("HzMbomRecordDAOImpl_updateInput",record);
+    }
+
+    @Override
+    public int updateInputFinance(HzMbomLineRecord record) {
+        if(record.getTableName() == null || "".equals(record.getTableName())){
+            record.setTableName("HZ_MBOM_OF_FINANCE");
+        }
+        return super.update("HzMbomRecordDAOImpl_updateInput",record);
+    }
+
     @Override
     public int recoverBomById(String eBomPuid) {
         return super.update("HzMbomRecordDAOImpl_recoverBomById",eBomPuid);
@@ -62,7 +88,7 @@ public class HzMbomRecordDAOImpl extends BaseSQLUtil implements HzMbomRecordDAO 
 
     @Override
     public Page<HzMbomLineRecord> findMbomForPage(HzMbomByPageQuery query) {
-        PageRequest request = new PageRequest();
+        PageRequestParam request = new PageRequestParam();
         Map map = new HashMap();
         map.put("projectId",query.getProjectId());
         map.put("isHas",query.getIsHas());
@@ -112,7 +138,7 @@ public class HzMbomRecordDAOImpl extends BaseSQLUtil implements HzMbomRecordDAO 
 
     @Override
     public Page<HzMbomLineRecord> getHzSuberMbomByPage(HzMbomByPageQuery query) {
-        PageRequest pageRequest = new PageRequest();
+        PageRequestParam pageRequestParam = new PageRequestParam();
         Map map = new HashMap();
         map.put("projectId",query.getProjectId());
         map.put("isHas",query.getIsHas());
@@ -120,10 +146,10 @@ public class HzMbomRecordDAOImpl extends BaseSQLUtil implements HzMbomRecordDAO 
         map.put("lineIndex",query.getLineIndex());
         map.put("lineId",query.getLineId());
         map.put("cfg0ModelRecordId",query.getCfg0ModelRecordId());
-        pageRequest.setPageNumber(query.getPage());
-        pageRequest.setPageSize(query.getPageSize());
-        pageRequest.setFilters(map);
-        return super.findForPage("HzMbomRecordDAOImpl_getHzSuberMbomByPage","HzMbomRecordDAOImpl_getHzSuberMbomTotalCount",pageRequest);
+        pageRequestParam.setPageNumber(query.getPage());
+        pageRequestParam.setPageSize(query.getPageSize());
+        pageRequestParam.setFilters(map);
+        return super.findForPage("HzMbomRecordDAOImpl_getHzSuberMbomByPage","HzMbomRecordDAOImpl_getHzSuberMbomTotalCount", pageRequestParam);
     }
 
     @Override
@@ -210,7 +236,7 @@ public class HzMbomRecordDAOImpl extends BaseSQLUtil implements HzMbomRecordDAO 
 
     @Override
     public Page<HzMbomLineRecord> getHzMbomRecycleRecord(HzBomRecycleByPageQuery query) {
-        PageRequest request = new PageRequest();
+        PageRequestParam request = new PageRequestParam();
         Map map = new HashMap();
         map.put("projectId",query.getProjectId());
         request.setPageNumber(query.getPage());
@@ -371,7 +397,7 @@ public class HzMbomRecordDAOImpl extends BaseSQLUtil implements HzMbomRecordDAO 
 
     @Override
     public Page<HzMbomLineRecord> getHzMbomTreeByPage(HzMbomByPageQuery query) {
-        PageRequest request = new PageRequest();
+        PageRequestParam request = new PageRequestParam();
         Map map = new HashMap();
         map.put("projectId",query.getProjectId());
         map.put("eBomPuids", Lists.newArrayList(query.geteBomPuids().split(",")));

@@ -3,12 +3,12 @@ package com.connor.hozon.bom.resources.controller.materiel;
 import com.connor.hozon.bom.resources.controller.BaseController;
 import com.connor.hozon.bom.resources.domain.dto.request.EditHzMaterielReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzMaterielRespDTO;
-import com.connor.hozon.bom.resources.domain.dto.response.OperateResultMessageRespDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
 import com.connor.hozon.bom.resources.domain.query.HzMaterielByPageQuery;
 import com.connor.hozon.bom.resources.domain.query.HzMaterielQuery;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.service.materiel.HzMaterielService;
-import com.connor.hozon.bom.resources.util.ResultMessageBuilder;
+import com.connor.hozon.bom.resources.util.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -79,7 +79,7 @@ public class HzMaterielController  extends BaseController {
         tableTitle.put("pMrpController", "MRP控制者");
         tableTitle.put("pPartImportantDegree", "零件重要度");
         tableTitle.put("pLoosePartFlag", "散件标识");
-        writeAjaxJSONResponse(ResultMessageBuilder.build(tableTitle), response);
+        toJSONResponse(Result.build(tableTitle), response);
     }
     /**
      * 分页获取物料管理信息
@@ -166,8 +166,8 @@ public class HzMaterielController  extends BaseController {
 
     @RequestMapping(value = "add",method = RequestMethod.POST)
     public void addMaterielToDB(@RequestBody EditHzMaterielReqDTO reqDTO, HttpServletResponse response){
-        OperateResultMessageRespDTO respDTO = hzMaterielService.editHzMateriel(reqDTO);
-        writeAjaxJSONResponse(ResultMessageBuilder.build(OperateResultMessageRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
+        WriteResultRespDTO respDTO = hzMaterielService.editHzMateriel(reqDTO);
+        toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
     }
 
     /**
@@ -177,8 +177,8 @@ public class HzMaterielController  extends BaseController {
      */
     @RequestMapping(value = "update",method = RequestMethod.POST)
     public void updateMaterielToDB(@RequestBody EditHzMaterielReqDTO reqDTO, HttpServletResponse response){
-        OperateResultMessageRespDTO respDTO = hzMaterielService.editHzMateriel(reqDTO);
-        writeAjaxJSONResponse(ResultMessageBuilder.build(OperateResultMessageRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
+        WriteResultRespDTO respDTO = hzMaterielService.editHzMateriel(reqDTO);
+        toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
     }
 
     /**
@@ -188,8 +188,8 @@ public class HzMaterielController  extends BaseController {
      */
     @RequestMapping(value = "delete",method = RequestMethod.POST)
     public void deleteMateriel(String puid,HttpServletResponse response){
-        OperateResultMessageRespDTO respDTO =  hzMaterielService.deleteHzMateriel(puid);
-        writeAjaxJSONResponse(ResultMessageBuilder.build(OperateResultMessageRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
+        WriteResultRespDTO respDTO =  hzMaterielService.deleteHzMateriel(puid);
+        toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
     }
 
 }
