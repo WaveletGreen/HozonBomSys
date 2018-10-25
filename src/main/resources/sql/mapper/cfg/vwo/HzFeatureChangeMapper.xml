@@ -253,14 +253,22 @@
     </insert>
 
     <select id="doQueryLastTwoChange" parameterType="sql.pojo.cfg.vwo.HzFeatureChangeBean" resultMap="BaseResultMap">
-        select * from(
-        select t.*,ROWNUM rn from HZ_CFG0_AFTER_CHANGE_RECORD t WHERE
-        t.CFG_PUID=#{cfgPuid,jdbcType=VARCHAR}
-        and
-        t.VWO_ID &lt;= #{vwoId,jdbcType=INTEGER}
-        ORDER BY t.id DESC
-        )
-        where rn &lt; 3
-
+        select
+          <include refid="Base_Column_List"/>
+        from(
+          select
+              <include refid="Base_Column_List"/>,ROWNUM rn
+          from
+              HZ_CFG0_AFTER_CHANGE_RECORD t
+          WHERE
+              t.CFG_PUID=#{cfgPuid,jdbcType=VARCHAR}
+          and
+              t.VWO_ID &lt;= #{vwoId,jdbcType=INTEGER}
+          ORDER BY t.id DESC
+        ) te
+        where
+          te.rn &lt; 3
+        order by
+          te.id
     </select>
 </mapper>
