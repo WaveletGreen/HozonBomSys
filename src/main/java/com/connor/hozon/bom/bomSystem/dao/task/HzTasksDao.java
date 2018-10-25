@@ -36,4 +36,11 @@ public interface HzTasksDao extends BasicDao<HzTasks> {
     int insertByBatch(List<HzTasks> list);
 
     int updateTargetStatus(HzTasks task);
+
+    /**
+     * 终止任务
+     * @param task
+     * @return
+     */
+    int tasksStop(HzTasks task);
 }

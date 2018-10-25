@@ -133,7 +133,7 @@
         TASK_RESERVE15
         )
         select SEQ_TASK_ID.Nextval, temp.* from (
-        <foreach collection="list" index="index" item="item" separator="union">
+        <foreach collection="list" index="index" item="item" separator="union all">
             select
             #{item.taskUserId,jdbcType=DECIMAL},
             #{item.taskStatus,jdbcType=DECIMAL},
@@ -374,6 +374,25 @@
         </set>
         where ID = #{id,jdbcType=DECIMAL}
     </update>
+    <update id="tasksStop" parameterType="sql.pojo.task.HzTasks">
+        update HZ_TASKS
+        <set>
+            <if test="taskStatus != null">
+                TASK_STATUS = 999,
+            </if>
+        </set>
+        <where>
+            <if test="taskFormType!=null">
+                and TASK_FORM_TYPE=#{taskFormType,jdbcType=DECIMAL}
+            </if>
+            <if test="taskTargetId!=null">
+                and TASK_TARGET_ID=#{taskTargetId,jdbcType=DECIMAL}
+            </if>
+            <if test="taskTargetType!=null">
+                and TASK_TARGET_TYPE=#{taskTargetType,jdbcType=DECIMAL}
+            </if>
+        </where>
+    </update>
     <update id="updateByPrimaryKey" parameterType="sql.pojo.task.HzTasks">
     update HZ_TASKS
     set TASK_USER_ID = #{taskUserId,jdbcType=DECIMAL},
@@ -400,14 +419,28 @@
     where ID = #{id,jdbcType=DECIMAL}
   </update>
     <update id="updateTargetStatus" parameterType="sql.pojo.task.HzTasks">
-    update HZ_TASKS
-    set
-      TASK_STATUS = #{taskStatus,jdbcType=DECIMAL},
-      TASK_UPDATE_DATE = sysdate
-    where
-        TASK_TARGET_ID = #{taskTargetId,jdbcType=DECIMAL} and
-        TASK_TARGET_TYPE = #{taskTargetType,jdbcType=DECIMAL} and
-        TASK_FORM_TYPE = #{taskFormType,jdbcType=DECIMAL} and
-        TASK_USER_ID = #{taskUserId,jdbcType=DECIMAL}
-  </update>
+        update HZ_TASKS
+        <set>
+            <if test="taskStatus!=null">
+                TASK_STATUS = #{taskStatus,jdbcType=DECIMAL},
+            </if>
+            TASK_UPDATE_DATE = sysdate
+        </set>
+        <where>
+            <if test="taskTargetId!=null">
+                TASK_TARGET_ID = #{taskTargetId,jdbcType=DECIMAL}
+            </if>
+            <if test="taskTargetType!=null">
+                and TASK_TARGET_TYPE = #{taskTargetType,jdbcType=DECIMAL}
+
+            </if>
+            <if test="taskFormType!=null">
+                and TASK_FORM_TYPE = #{taskFormType,jdbcType=DECIMAL}
+
+            </if>
+            <if test="taskUserId!=null">
+                and TASK_USER_ID = #{taskUserId,jdbcType=DECIMAL}
+            </if>
+        </where>
+    </update>
 </mapper>

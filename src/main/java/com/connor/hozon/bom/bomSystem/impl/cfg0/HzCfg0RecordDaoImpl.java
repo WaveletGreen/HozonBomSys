@@ -157,7 +157,7 @@ public class HzCfg0RecordDaoImpl extends BasicDaoImpl<HzCfg0Record> implements H
 
     @Override
     public int updateByVwoid(HzCfg0Record hzCfg0Record) {
-        return baseSQLUtil.executeUpdate(hzCfg0Record, clzName+"updateByVwoid");
+        return baseSQLUtil.executeUpdate(hzCfg0Record, clzName+".updateByVwoid");
     }
 
 }

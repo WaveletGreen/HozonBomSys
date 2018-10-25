@@ -47,4 +47,16 @@ public class HzTasksDaoImpl extends BasicDaoImpl<HzTasks> implements HzTasksDao 
     public int updateTargetStatus(HzTasks task) {
         return baseSQLUtil.executeUpdate(task, clzName + ".updateTargetStatus");
     }
+
+    /**
+     * 终止任务
+     *
+     * @param task
+     * @return
+     */
+    @Override
+    public int tasksStop(HzTasks task) {
+        return baseSQLUtil.executeUpdate(task, clzName + ".updateTargetStatus");
+    }
+
 }

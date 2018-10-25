@@ -54,7 +54,7 @@ public class FeatureProcessManager implements IInterruptionCallBack, IReleaseCal
     @Override
     public boolean release(Long vwoId, String projectUId) {
         releaseFunctionDesc();
-        return updateFeatureAndVwoInfo(0,999,vwoId);
+        return updateFeatureAndVwoInfo(1,999,vwoId);
     }
 
     @Override

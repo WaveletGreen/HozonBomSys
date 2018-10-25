@@ -658,7 +658,8 @@ function launch() {
         url: "launch",
         success: function (result) {
             if (result.status) {
-                layer.msg(result.msg, {icon: 1, time: 2000})
+                layer.msg(result.msg, {icon: 1, time: 2000});
+                window.top.loadTasks();
                 window.location.reload();
             }
             else {
@@ -719,6 +720,7 @@ function approve(url, formId) {
                 success: function (result) {
                     if (result.status) {
                         layer.msg(result.msg, {icon: 1, time: 2000});
+                        window.top.loadTasks();
                         setTimeout('window.location.reload()', 2000);
                     } else {
                         window.Ewin.alert({message: "评估失败:" + result.msg});

@@ -21,6 +21,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import sql.pojo.cfg.vwo.*;
+import sql.pojo.project.HzProjectLibs;
 
 import java.util.HashMap;
 import java.util.List;
@@ -85,7 +86,6 @@ public class HzVwoController {
         hzVwoOpiBom = iHzVWOManagerService.getOpiOfBomMng(id);
         hzVwoOpiPmt = iHzVWOManagerService.getOpiOfPmtMng(id);
         hzVwoOpiProj = iHzVWOManagerService.getOpiOfProjMng(id);
-
         if (null == influenceDept) {
             model.addAttribute("msg", "初始化VWO:" + id + "的影响部门数据失败");
             return error;

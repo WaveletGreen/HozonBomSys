@@ -934,6 +934,8 @@ public class HzVwoManagerService implements IHzVWOManagerService {
     public HzVwoOpiProj getOpiOfProjMng(Long id) {
         HzVwoOpiProj hzVwoOpiProj = hzVwoOpiProjDao.selectByVwoId(id);
         if (hzVwoOpiProj == null) {
+            HzVwoInfo info = hzVwoInfoService.doSelectByPrimaryKey(id);
+            HzProjectLibs project = hzProjectLibsService.doLoadProjectLibsById(info.getProjectUid());
             User user = UserInfo.getUser();
             hzVwoOpiProj = new HzVwoOpiProj();
             hzVwoOpiProj.setOpiVwoId(id);
@@ -942,8 +944,24 @@ public class HzVwoManagerService implements IHzVWOManagerService {
             hzVwoOpiProj.setOpiProjMngCreator(user.getLogin());
             hzVwoOpiProj.setOpiProjMngUpdateDate(date);
             hzVwoOpiProj.setOpiProjMngUpdater(user.getLogin());
+            hzVwoOpiProj.setOpiProjMngUserName(project.getpProjectManager());
+            hzVwoOpiProj.setOpiProjMngUserId(project.getProjectManagerId());
             if (hzVwoOpiProjDao.insertSelective(hzVwoOpiProj) <= 0) {
                 logger.error("初始化VWO:" + id + "的项目经理意见数据失败");
+            }
+        }
+
+        if (hzVwoOpiProj.getOpiProjMngUserId() == null || !checkString(hzVwoOpiProj.getOpiProjMngUserName())) {
+            HzVwoInfo info = hzVwoInfoService.doSelectByPrimaryKey(id);
+            HzProjectLibs project = hzProjectLibsService.doLoadProjectLibsById(info.getProjectUid());
+            HzVwoOpiProj proj = new HzVwoOpiProj();
+            proj.setId(hzVwoOpiProj.getId());
+            proj.setOpiProjMngUserName(project.getpProjectManager());
+            proj.setOpiProjMngUserId(project.getProjectManagerId());
+            hzVwoOpiProj.setOpiProjMngUserName(project.getpProjectManager());
+            hzVwoOpiProj.setOpiProjMngUserId(project.getProjectManagerId());
+            if (hzVwoOpiProjDao.updateByPrimaryKeySelective(proj) <= 0) {
+                logger.error("自动指派VWO:" + id + "的项目经理失败");
             }
         }
         return hzVwoOpiProj;
@@ -1000,18 +1018,24 @@ public class HzVwoManagerService implements IHzVWOManagerService {
             result.put("msg", "VWO状态修改失败");
             return result;
         }
-        List<HzTasks> tasks = hzTasksService.doSelectUserTargetTaskByType(TaskOptions.FORM_TYPE_VWO, vwoType, hzVwoInfo.getId(), Long.valueOf(user.getId()), 1);
-        if (tasks != null && tasks.size() == 1) {
-            HzTasks task = tasks.get(0);
-            HzTasks taskOfPmt = new HzTasks();
-            task.setTaskStatus(999);
-            taskOfPmt.setId((task.getId() + 1));
-            taskOfPmt.setTaskStatus(1);
-            if (!hzTasksService.doUpdateByPrimaryKeySelective(task)) {
-                logger.error("更新BOM经理完成任务失败");
+        if (hzVwoOpiBom.getOpiBomMngAgreement() != 1) {
+            if (hzTasksService.doStopTask(TaskOptions.FORM_TYPE_VWO, vwoType, hzVwoInfo.getId())) {
+                logger.error("终止任务失败");
             }
-            if (!hzTasksService.doUpdateByPrimaryKeySelective(taskOfPmt)) {
-                logger.error("更新PMT经理执行任务状态失败");
+        } else {
+            List<HzTasks> tasks = hzTasksService.doSelectUserTargetTaskByType(TaskOptions.FORM_TYPE_VWO, vwoType, hzVwoInfo.getId(), Long.valueOf(user.getId()), 1);
+            if (tasks != null && tasks.size() == 1) {
+                HzTasks task = tasks.get(0);
+                HzTasks taskOfPmt = new HzTasks();
+                task.setTaskStatus(999);
+                taskOfPmt.setId((task.getId() + 1));
+                taskOfPmt.setTaskStatus(1);
+                if (!hzTasksService.doUpdateByPrimaryKeySelective(task)) {
+                    logger.error("更新BOM经理完成任务失败");
+                }
+                if (!hzTasksService.doUpdateByPrimaryKeySelective(taskOfPmt)) {
+                    logger.error("更新PMT经理执行任务状态失败");
+                }
             }
         }
         result.put("msg", "BOM经理评估成功");
@@ -1061,18 +1085,24 @@ public class HzVwoManagerService implements IHzVWOManagerService {
             result.put("msg", "VWO状态修改失败");
             return result;
         }
-        List<HzTasks> tasks = hzTasksService.doSelectUserTargetTaskByType(TaskOptions.FORM_TYPE_VWO, vwoType, hzVwoInfo.getId(), Long.valueOf(user.getId()), 1);
-        if (tasks != null && tasks.size() == 1) {
-            HzTasks task = tasks.get(0);
-            HzTasks taskOfProj = new HzTasks();
-            task.setTaskStatus(999);
-            taskOfProj.setId((task.getId() + 1));
-            taskOfProj.setTaskStatus(1);
-            if (!hzTasksService.doUpdateByPrimaryKeySelective(task)) {
-                logger.error("更新PMT经理完成任务失败");
+        if (hzVwoOpiPmt.getOpiPmtMngAgreement() != 1) {
+            if (hzTasksService.doStopTask(TaskOptions.FORM_TYPE_VWO, vwoType, hzVwoInfo.getId())) {
+                logger.error("终止任务失败");
             }
-            if (!hzTasksService.doUpdateByPrimaryKeySelective(taskOfProj)) {
-                logger.error("更新项目经理执行任务状态失败");
+        } else {
+            List<HzTasks> tasks = hzTasksService.doSelectUserTargetTaskByType(TaskOptions.FORM_TYPE_VWO, vwoType, hzVwoInfo.getId(), Long.valueOf(user.getId()), 1);
+            if (tasks != null && tasks.size() == 1) {
+                HzTasks task = tasks.get(0);
+                HzTasks taskOfProj = new HzTasks();
+                task.setTaskStatus(999);
+                taskOfProj.setId((task.getId() + 1));
+                taskOfProj.setTaskStatus(1);
+                if (!hzTasksService.doUpdateByPrimaryKeySelective(task)) {
+                    logger.error("更新PMT经理完成任务失败");
+                }
+                if (!hzTasksService.doUpdateByPrimaryKeySelective(taskOfProj)) {
+                    logger.error("更新项目经理执行任务状态失败");
+                }
             }
         }
 //        updateTask(hzVwoOpiPmt.getOpiVwoId(), vwoType, TaskOptions.FORM_TYPE_VWO, user.getId(), 999);
@@ -1110,12 +1140,18 @@ public class HzVwoManagerService implements IHzVWOManagerService {
             result.put("msg", "VWO状态修改失败");
             return result;
         }
-        List<HzTasks> tasks = hzTasksService.doSelectUserTargetTaskByType(TaskOptions.FORM_TYPE_VWO, vwoType, hzVwoInfo.getId(), Long.valueOf(user.getId()), 1);
-        if (tasks != null && tasks.size() == 1) {
-            HzTasks task = tasks.get(0);
-            task.setTaskStatus(999);
-            if (!hzTasksService.doUpdateByPrimaryKeySelective(task)) {
-                logger.error("更新项目经理经理完成任务失败");
+        if (hzVwoOpiProj.getOpiProjMngAgreement() != 1) {
+            if (hzTasksService.doStopTask(TaskOptions.FORM_TYPE_VWO, vwoType, hzVwoInfo.getId())) {
+                logger.error("终止任务失败");
+            }
+        } else {
+            List<HzTasks> tasks = hzTasksService.doSelectUserTargetTaskByType(TaskOptions.FORM_TYPE_VWO, vwoType, hzVwoInfo.getId(), Long.valueOf(user.getId()), 1);
+            if (tasks != null && tasks.size() == 1) {
+                HzTasks task = tasks.get(0);
+                task.setTaskStatus(999);
+                if (!hzTasksService.doUpdateByPrimaryKeySelective(task)) {
+                    logger.error("更新项目经理经理完成任务失败");
+                }
             }
         }
 //        updateTask(hzVwoOpiProj.getOpiVwoId(), vwoType, TaskOptions.FORM_TYPE_VWO, user.getId(), 999);
@@ -1142,9 +1178,9 @@ public class HzVwoManagerService implements IHzVWOManagerService {
         HzProjectLibs project = hzProjectLibsService.doLoadProjectLibsById(vwoInfo.getProjectUid());
         Long managerId = project.getProjectManagerId();
         HzVwoOpiProj hzVwoOpiProj = hzVwoOpiProjDao.selectByVwoId(vwoId);
-        if(managerId==null||hzVwoOpiProj.getOpiProjMngUserId()==null||managerId!=hzVwoOpiProj.getOpiProjMngUserId()){
-            result.put("msg","请在主页项目中指派项目经理");
-            result.put("status",false);
+        if (managerId == null || hzVwoOpiProj.getOpiProjMngUserId() == null || managerId != hzVwoOpiProj.getOpiProjMngUserId()) {
+            result.put("msg", "请在主页项目中指派项目经理");
+            result.put("status", false);
             return result;
         }
         boolean status = toLaunch(type, projectUid, vwoId, formId);
@@ -1625,9 +1661,9 @@ public class HzVwoManagerService implements IHzVWOManagerService {
         //临近的两个，前一个为变更前数据，后一个为变更后数据
         if (beans != null && !beans.isEmpty()) {
             for (int i = 0; i < beans.size(); i++) {
-                List<HzFeatureChangeBean> bs = iHzFeatureChangeService.doQueryLastTwoChange(beans.get(i).getCfgPuid(),vwoId);
-                bs.get(0).setHeadDesc(bs.get(1).getFeatureValueName()+"变更前");
-                bs.get(1).setHeadDesc(bs.get(1).getFeatureValueName()+"变更后");
+                List<HzFeatureChangeBean> bs = iHzFeatureChangeService.doQueryLastTwoChange(beans.get(i).getCfgPuid(), vwoId);
+                bs.get(0).setHeadDesc(bs.get(1).getFeatureValueName() + "变更前");
+                bs.get(1).setHeadDesc(bs.get(1).getFeatureValueName() + "变更后");
                 HzVwoFeatureTableDto before = new HzVwoFeatureTableDto(bs.get(0));
                 HzVwoFeatureTableDto after = new HzVwoFeatureTableDto(bs.get(1));
                 list.add(before);
@@ -1776,16 +1812,16 @@ public class HzVwoManagerService implements IHzVWOManagerService {
                 taskOfProj.setTaskUserId(proj.getOpiProjMngUserId());
                 taskOfProj.setTaskStatus(800);
 
-                if (!hzTasksService.doInsert(taskOfBom) || !hzTasksService.doInsert(taskOfPmt) || !hzTasksService.doInsert(taskOfProj)) {
-                    logger.error("通知任务失败");
-                }
-//                list.add(taskOfBom);
-//                list.add(taskOfPmt);
-//                list.add(taskOfProj);
-                //这里批量插入插入只有2个，需要改进
-//                if (!hzTasksService.doInsertByBatch(list)) {
+//                if (!hzTasksService.doInsert(taskOfBom) || !hzTasksService.doInsert(taskOfPmt) || !hzTasksService.doInsert(taskOfProj)) {
 //                    logger.error("通知任务失败");
 //                }
+                list.add(taskOfBom);
+                list.add(taskOfPmt);
+                list.add(taskOfProj);
+//                这里批量插入插入只有2个，需要改进
+                if (!hzTasksService.doInsertByBatch(list)) {
+                    logger.error("通知任务失败");
+                }
 
             } catch (CloneNotSupportedException e) {
                 e.printStackTrace();

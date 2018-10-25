@@ -83,7 +83,7 @@ public interface IHzTaskService {
 
     boolean doInsert(HzTasks task);
 
-
-
     boolean doUpdateByPrimaryKeySelective(HzTasks task);
+
+    boolean doStopTask(int formTypeVwo, Integer vwoType, Long id);
 }
