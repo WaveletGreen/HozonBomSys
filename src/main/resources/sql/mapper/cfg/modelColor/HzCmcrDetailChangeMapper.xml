@@ -146,7 +146,7 @@
         <include refid="Base_Column_List2"/>
         )
         select ${seqName}.Nextval, A.* ,sysdate,sysdate from (
-        <foreach collection="hzCmcrDetailChangeList" index="index" item="hzCmcrDetailChange" separator="union">
+        <foreach collection="hzCmcrDetailChangeList" index="index" item="hzCmcrDetailChange" separator="union all">
             select
                 #{hzCmcrDetailChange.cmcrDetailSrcPuid,jdbcType=VARCHAR},
                 #{hzCmcrDetailChange.cmcrDetailSrcCfgUid,jdbcType=VARCHAR}, #{hzCmcrDetailChange.cmcrDetailSrcColorUid,jdbcType=VARCHAR},
