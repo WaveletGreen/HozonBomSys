@@ -1616,16 +1616,15 @@ public class HzVwoManagerService implements IHzVWOManagerService {
 
     @Override
     public Map<String, Object> getFeatureTable(Long vwoId) {
-        Map<String, Object> result = new JSONObject();
+        Map<String, Object> result = new HashMap<>();
         List<HzFeatureChangeBean> beans = iHzFeatureChangeService.doSelectCfgUidsByVwoId(vwoId);
         List<HzVwoFeatureTableDto> list = new ArrayList<>();
         //临近的两个，前一个为变更前数据，后一个为变更后数据
         if (beans != null && !beans.isEmpty()) {
             for (int i = 0; i < beans.size(); i++) {
-                List<HzFeatureChangeBean> bs = iHzFeatureChangeService.doSelectAfterByVwoId(vwoId);
-                bs.get(0).setHeadDesc("变更前");
-                bs.get(1).setHeadDesc("变更后");
-
+                List<HzFeatureChangeBean> bs = iHzFeatureChangeService.doQueryLastTwoChange(beans.get(i).getCfgPuid(),vwoId);
+                bs.get(0).setHeadDesc(bs.get(1).getFeatureValueName()+"变更前");
+                bs.get(1).setHeadDesc(bs.get(1).getFeatureValueName()+"变更后");
                 HzVwoFeatureTableDto before = new HzVwoFeatureTableDto(bs.get(0));
                 HzVwoFeatureTableDto after = new HzVwoFeatureTableDto(bs.get(1));
                 list.add(before);
