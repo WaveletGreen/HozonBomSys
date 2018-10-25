@@ -138,4 +138,6 @@ public interface IHzFeatureChangeService {
     int doInsertListBefore(List<HzFeatureChangeBean> hzFeatureChangeBeanListBefore);
 
     int doInsertListAfter(List<HzFeatureChangeBean> hzFeatureChangeBeanListAfter);
+
+    List<HzFeatureChangeBean> doQueryLastTwoChange(String cfgPuid, Long vwoId);
 }

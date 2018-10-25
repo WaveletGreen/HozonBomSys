@@ -54,5 +54,10 @@ public class HzFeatureChangeDaoImpl extends BasicDaoImpl<HzFeatureChangeBean> im
         return baseSQLUtil.executeInsert(map, clzName+".insertList");
     }
 
+    @Override
+    public List<HzFeatureChangeBean> doQueryLastTwoChange(HzFeatureChangeBean hzFeatureChangeBean) {
+        return baseSQLUtil.executeQuery(hzFeatureChangeBean, clzName+".doQueryLastTwoChange");
+    }
+
 
 }
