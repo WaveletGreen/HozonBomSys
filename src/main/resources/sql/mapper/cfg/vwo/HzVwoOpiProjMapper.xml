@@ -56,15 +56,13 @@
       OPI_PROJ_MNG_COMMENT, OPI_PROJ_MNG_CREATE_DATE, 
       OPI_PROJ_MNG_UPDATE_DATE, OPI_PROJ_MNG_CREATOR, 
       OPI_PROJ_MNG_UPDATER, OPI_PROJ_MNG_STAGE,
-        OPI_PROJ_MNG_USER_ID, OPI_PROJ_MNG_USER_NAME
-        )
+        OPI_PROJ_MNG_USER_ID, OPI_PROJ_MNG_USER_NAME)
     values (#{id,jdbcType=DECIMAL}, #{opiVwoId,jdbcType=DECIMAL}, #{opiProjMngOpinion,jdbcType=VARCHAR},
       #{opiProjMngAgreement,jdbcType=DECIMAL}, #{opiProjMngOptionDate,jdbcType=TIMESTAMP}, 
       #{opiProjMngComment,jdbcType=VARCHAR}, #{opiProjMngCreateDate,jdbcType=TIMESTAMP}, 
       #{opiProjMngUpdateDate,jdbcType=TIMESTAMP}, #{opiProjMngCreator,jdbcType=VARCHAR}, 
       #{opiProjMngUpdater,jdbcType=VARCHAR}, #{opiProjMngStage,jdbcType=DECIMAL},
-      #{opiProjMngUserId,jdbcType=DECIMAL}, #{opiProjMngUserName,jdbcType=VARCHAR}
-        )
+      #{opiProjMngUserId,jdbcType=DECIMAL}, #{opiProjMngUserName,jdbcType=VARCHAR})
   </insert>
     <insert id="insertSelective" parameterType="sql.pojo.cfg.vwo.HzVwoOpiProj">
         <selectKey order="BEFORE"
