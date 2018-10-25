@@ -27,7 +27,7 @@
 
         <result column="OPI_PMT_MNG_USER_ID" jdbcType="DECIMAL" property="opiPmtMngUserId"/>
 
-        <result column="OPI_PMT_MNG_USER_NAME" jdbcType="DECIMAL" property="opiPmtMngUserName"/>
+        <result column="OPI_PMT_MNG_USER_NAME" jdbcType="VARCHAR" property="opiPmtMngUserName"/>
     </resultMap>
     <sql id="Base_Column_List">
     ID, OPI_PMT_MNG_VWO_ID, OPI_PMT_MNG_OPINION, OPI_PMT_MNG_AGREEMENT, OPI_PMT_MNG_OPTION_DATE,
@@ -62,12 +62,14 @@
       OPI_PMT_MNG_AGREEMENT, OPI_PMT_MNG_OPTION_DATE,
       OPI_PMT_MNG_COMMENT, OPI_PMT_MNG_CREATE_DATE,
       OPI_PMT_MNG_UPDATE_DATE, OPI_PMT_MNG_CREATOR,
-      OPI_PMT_MNG_UPDATER, OPI_PMT_MNG_STAGE)
+      OPI_PMT_MNG_UPDATER, OPI_PMT_MNG_STAGE,
+      OPI_PMT_MNG_USER_ID,OPI_PMT_MNG_USER_NAME)
     values (#{id,jdbcType=DECIMAL}, #{opiVwoId,jdbcType=DECIMAL}, #{opiPmtMngOpinion,jdbcType=VARCHAR},
       #{opiPmtMngAgreement,jdbcType=DECIMAL}, #{opiPmtMngOptionDate,jdbcType=TIMESTAMP},
       #{opiPmtMngComment,jdbcType=VARCHAR}, #{opiPmtMngCreateDate,jdbcType=TIMESTAMP},
       #{opiPmtMngUpdateDate,jdbcType=TIMESTAMP}, #{opiPmtMngCreator,jdbcType=VARCHAR},
-      #{opiPmtMngUpdater,jdbcType=VARCHAR}, #{opiPmtMngStage,jdbcType=DECIMAL})
+      #{opiPmtMngUpdater,jdbcType=VARCHAR}, #{opiPmtMngStage,jdbcType=DECIMAL},
+      #{opiPmtMngUserId,jdbcType=DECIMAL},#{opiPmtMngUserName,jdbcType=VARCHAR})
   </insert>
     <insert id="insertSelective" parameterType="sql.pojo.cfg.vwo.HzVwoOpiPmt">
         <selectKey order="BEFORE"
@@ -109,6 +111,12 @@
             <if test="opiPmtMngStage != null">
                 OPI_PMT_MNG_STAGE,
             </if>
+            <if test="opiPmtMngUserId != null">
+                OPI_PMT_MNG_USER_ID,
+            </if>
+            <if test="opiPmtMngUserName != null">
+                OPI_PMT_MNG_USER_NAME,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -144,6 +152,12 @@
             <if test="opiPmtMngStage != null">
                 #{opiPmtMngStage,jdbcType=DECIMAL},
             </if>
+            <if test="opiPmtMngUserId != null">
+                #{opiPmtMngUserId,jdbcType=DECIMAL},
+            </if>
+            <if test="opiPmtMngUserName != null">
+                #{opiPmtMngUserName,jdbcType=VARCHAR},
+            </if>
         </trim>
     </insert>
     <!--**************************************update**************************************-->
@@ -177,8 +191,14 @@
             <if test="opiPmtMngStage != null">
                 OPI_PMT_MNG_STAGE = #{opiPmtMngStage,jdbcType=DECIMAL},
             </if>
+            <if test="opiPmtMngUserId != null">
+                OPI_PMT_MNG_USER_ID = #{opiPmtMngUserId,jdbcType=DECIMAL}
+            </if>
+            <if test="opiPmtMngUserName != null">
+                OPI_PMT_MNG_USER_NAME = #{opiPmtMngUserName,jdbcType=VARCHAR}
+            </if>
+            OPI_PMT_MNG_UPDATE_DATE = sysdate
         </set>
-            ,OPI_PMT_MNG_UPDATE_DATE = sysdate
         where ID = #{id,jdbcType=DECIMAL}
     </update>
     <update id="updateByPrimaryKey" parameterType="sql.pojo.cfg.vwo.HzVwoOpiPmt">
@@ -192,7 +212,9 @@
       OPI_PMT_MNG_UPDATE_DATE = #{opiPmtMngUpdateDate,jdbcType=TIMESTAMP},
       OPI_PMT_MNG_CREATOR = #{opiPmtMngCreator,jdbcType=VARCHAR},
       OPI_PMT_MNG_UPDATER = #{opiPmtMngUpdater,jdbcType=VARCHAR},
-      OPI_PMT_MNG_STAGE = #{opiPmtMngStage,jdbcType=DECIMAL}
+      OPI_PMT_MNG_STAGE = #{opiPmtMngStage,jdbcType=DECIMAL},
+      OPI_PMT_MNG_USER_ID = #{opiPmtMngUserId,jdbcType=DECIMAL},
+      OPI_PMT_MNG_USER_NAME = #{opiPmtMngUserName,jdbcType=VARCHAR}
     where ID = #{id,jdbcType=DECIMAL}
   </update>
 
