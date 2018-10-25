@@ -115,6 +115,7 @@ $(document).ready((function () {
     url += "?vwo=" + vwoId;
     loadConnectedData(url);
     taskStatusHold();
+    loadChangeDesc();
     // registerBtn();
 }));
 
@@ -768,4 +769,18 @@ function doSelectBomMag(id) {
         width: 600,
         height: 500
     })
+}
+
+
+function loadChangeDesc(){
+    let vwoType=$("#vwoType").val();
+    switch (vwoType){
+        case "1":
+                loadFeature(vwoId);
+            break;
+        case "2":
+            break;
+        case "3":
+            break;
+    }
 }

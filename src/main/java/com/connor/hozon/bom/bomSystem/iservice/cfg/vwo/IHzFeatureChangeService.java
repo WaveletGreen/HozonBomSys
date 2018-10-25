@@ -144,4 +144,6 @@ public interface IHzFeatureChangeService {
     int doInsertListBefore(List<HzFeatureChangeBean> hzFeatureChangeBeanListBefore);
 
     int doInsertListAfter(List<HzFeatureChangeBean> hzFeatureChangeBeanListAfter);
+
+    List<HzFeatureChangeBean> doSelectCfgUidsByVwoId(Long vwoId);
 }

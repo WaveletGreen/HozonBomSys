@@ -319,4 +319,10 @@ public class HzFeatureChangeService implements IHzFeatureChangeService {
         return hzFeatureChangeDao.insertList(hzFeatureChangeBeanListAfter);
     }
 
+    @Override
+    public List<HzFeatureChangeBean> doSelectCfgUidsByVwoId(Long vwoId) {
+        HzFeatureChangeBean bean=new HzFeatureChangeBean();
+        bean.setVwoId(vwoId);
+        return hzFeatureChangeDao.selectCfgUidsByVwoId(bean);
+    }
 }

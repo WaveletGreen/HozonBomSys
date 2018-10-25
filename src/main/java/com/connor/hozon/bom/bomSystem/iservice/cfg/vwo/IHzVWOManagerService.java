@@ -251,4 +251,6 @@ public interface IHzVWOManagerService {
     JSONObject launch(Integer type, String projectUid, Long vwoId,Long formId);
 
     JSONObject saveOptionUser(HzVwoOptionUserDto hzVwoOptionUserDto);
+
+    Map<String, Object> getFeatureTable(Long vwoId);
 }

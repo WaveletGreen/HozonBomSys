@@ -10,6 +10,7 @@ import com.connor.hozon.bom.bomSystem.controller.vwo.HzVWOProcessController;
 import com.connor.hozon.bom.bomSystem.dao.vwo.HzVwoOpiBomDao;
 import com.connor.hozon.bom.bomSystem.dao.vwo.HzVwoOpiPmtDao;
 import com.connor.hozon.bom.bomSystem.dao.vwo.HzVwoOpiProjDao;
+import com.connor.hozon.bom.bomSystem.dto.vwo.HzVwoFeatureTableDto;
 import com.connor.hozon.bom.bomSystem.dto.vwo.HzVwoFormListQueryBase;
 import com.connor.hozon.bom.bomSystem.dto.vwo.HzVwoOptionUserDto;
 import com.connor.hozon.bom.bomSystem.iservice.cfg.vwo.*;
@@ -157,6 +158,12 @@ public class HzVwoManagerService implements IHzVWOManagerService {
 
     @Autowired
     HzTasksService hzTasksService;
+
+    @Autowired
+    FeatureProcessManager featureProcessManager;
+    @Autowired
+    ModelColorProcessManager modelColorProcessManager;
+
     /**
      * 日志
      */
@@ -294,7 +301,6 @@ public class HzVwoManagerService implements IHzVWOManagerService {
             return result;
         }
     }
-
 
     /**
      * 特性进入vwo流程
@@ -681,7 +687,6 @@ public class HzVwoManagerService implements IHzVWOManagerService {
     //配置物料特性表进入VWO
 
     //相关性进入VWO
-
 
     /**
      * 产生一个最新的Vwo实体类对象
@@ -1148,83 +1153,6 @@ public class HzVwoManagerService implements IHzVWOManagerService {
         return result;
     }
 
-    /**
-     * 发起
-     *
-     * @param type
-     * @param projectUid
-     * @param vwoId
-     * @return
-     */
-    public boolean toLaunch(Integer type, String projectUid, Long vwoId, Long formId) {
-        User user = UserInfo.getUser();
-        HzVwoInfo info = hzVwoInfoService.doSelectByPrimaryKey(vwoId);
-        info.setVwoFinisher(user.getLogin());
-        info.setVwoStatus(101);
-        boolean vwoFlag = hzVwoInfoService.updateByVwoId(info);
-        /**发起流程之后，通知到人员*/
-        noticeUsers(info, type, user, formId);
-        return vwoFlag;
-    }
-
-    /**
-     * 通知到人，加入任务
-     *
-     * @param info
-     * @param type
-     */
-    private void noticeUsers(HzVwoInfo info, Integer type, User user, long formId) {
-        List<HzTasks> tasks = hzTasksService.doSelectUserVWOTaskByIds(info.getId(), null, type);
-        if (tasks == null || tasks.isEmpty()) {
-            HzVwoOpiBom bom = hzVwoOpiBomDao.selectByVwoId(info.getId());
-            HzVwoOpiPmt pmt = hzVwoOpiPmtDao.selectByVwoId(info.getId());
-            HzVwoOpiProj proj = hzVwoOpiProjDao.selectByVwoId(info.getId());
-            Date now = new Date();
-            HzTasks task = new HzTasks();
-
-            task.setTaskTargetId(info.getId());
-            task.setTaskTargetType(type);
-            task.setTaskFormType(TaskOptions.FORM_TYPE_VWO);
-            task.setTaskLauncher(user.getUserName());
-            task.setTaskLauncherId(Long.valueOf(user.getId()));
-            task.setTaskCreateDate(now);
-            task.setTaskUpdateDate(now);
-            task.setTaskFormId(formId);
-
-            try {
-                List<HzTasks> list = new ArrayList<>();
-                HzTasks taskOfBom = task.clone();
-                HzTasks taskOfPmt = task.clone();
-                HzTasks taskOfProj = task.clone();
-
-                taskOfBom.setTaskUserId(bom.getOpiBomMngUserId());
-                taskOfBom.setTaskStatus(1);
-
-                taskOfPmt.setTaskUserId(pmt.getOpiPmtMngUserId());
-                taskOfPmt.setTaskStatus(800);
-
-                taskOfProj.setTaskUserId(proj.getOpiProjMngUserId());
-                taskOfProj.setTaskStatus(800);
-
-                if (!hzTasksService.doInsert(taskOfBom) || !hzTasksService.doInsert(taskOfPmt) || !hzTasksService.doInsert(taskOfProj)) {
-                    logger.error("通知任务失败");
-                }
-//                list.add(taskOfBom);
-//                list.add(taskOfPmt);
-//                list.add(taskOfProj);
-                //这里批量插入插入只有2个，需要改进
-//                if (!hzTasksService.doInsertByBatch(list)) {
-//                    logger.error("通知任务失败");
-//                }
-
-            } catch (CloneNotSupportedException e) {
-                e.printStackTrace();
-            }
-
-
-        }
-    }
-
     @Override
     public JSONObject saveOptionUser(HzVwoOptionUserDto hzVwoOptionUserDto) {
         String name = "";
@@ -1282,7 +1210,6 @@ public class HzVwoManagerService implements IHzVWOManagerService {
         }
         return result;
     }
-
 
     /**
      * 保存影响人员
@@ -1388,7 +1315,6 @@ public class HzVwoManagerService implements IHzVWOManagerService {
         }
         return beans;
     }
-
 
     /**
      * 保存影响部门
@@ -1687,20 +1613,27 @@ public class HzVwoManagerService implements IHzVWOManagerService {
         return result;
     }
 
-    /**
-     * 单独特性变更的bean
-     *
-     * @param bean
-     * @param id
-     * @param now
-     * @param user
-     */
-    private void setVwo(HzFeatureChangeBean bean, Long id, Date now, User user) {
-        bean.setVwoId(id);
-        bean.setCfgIsInProcess(1);
-        bean.setProcessStartDate(now);
-        bean.setProcessStarter(user.getUserName());
-        bean.setProcessStatus(1);
+    @Override
+    public Map<String, Object> getFeatureTable(Long vwoId) {
+        Map<String, Object> result = new JSONObject();
+        List<HzFeatureChangeBean> beans = iHzFeatureChangeService.doSelectCfgUidsByVwoId(vwoId);
+        List<HzVwoFeatureTableDto> list = new ArrayList<>();
+        //临近的两个，前一个为变更前数据，后一个为变更后数据
+        if (beans != null && !beans.isEmpty()) {
+            for (int i = 0; i < beans.size(); i++) {
+                List<HzFeatureChangeBean> bs = iHzFeatureChangeService.doSelectAfterByVwoId(vwoId);
+                bs.get(0).setHeadDesc("变更前");
+                bs.get(1).setHeadDesc("变更后");
+
+                HzVwoFeatureTableDto before = new HzVwoFeatureTableDto(bs.get(0));
+                HzVwoFeatureTableDto after = new HzVwoFeatureTableDto(bs.get(1));
+                list.add(before);
+                list.add(after);
+            }
+        }
+        result.put("totalCount", list.size());
+        result.put("result", list);
+        return result;
     }
 
     /**
@@ -1724,7 +1657,6 @@ public class HzVwoManagerService implements IHzVWOManagerService {
         return result;
     }
 
-
     /**
      * 流程中断
      *
@@ -1746,10 +1678,6 @@ public class HzVwoManagerService implements IHzVWOManagerService {
         return result;
     }
 
-    @Autowired
-    FeatureProcessManager featureProcessManager;
-    @Autowired
-    ModelColorProcessManager modelColorProcessManager;
 
     private boolean executeProcess(IProcess container, Integer type, String projectUid, Long vwoId) {
         boolean status = false;
@@ -1769,5 +1697,98 @@ public class HzVwoManagerService implements IHzVWOManagerService {
             default:
         }
         return status;
+    }
+
+    /**
+     * 单独特性变更的bean
+     *
+     * @param bean
+     * @param id
+     * @param now
+     * @param user
+     */
+    private void setVwo(HzFeatureChangeBean bean, Long id, Date now, User user) {
+        bean.setVwoId(id);
+        bean.setCfgIsInProcess(1);
+        bean.setProcessStartDate(now);
+        bean.setProcessStarter(user.getUserName());
+        bean.setProcessStatus(1);
+    }
+
+    /**
+     * 发起
+     *
+     * @param type
+     * @param projectUid
+     * @param vwoId
+     * @return
+     */
+    public boolean toLaunch(Integer type, String projectUid, Long vwoId, Long formId) {
+        User user = UserInfo.getUser();
+        HzVwoInfo info = hzVwoInfoService.doSelectByPrimaryKey(vwoId);
+        info.setVwoFinisher(user.getLogin());
+        info.setVwoStatus(101);
+        boolean vwoFlag = hzVwoInfoService.updateByVwoId(info);
+        /**发起流程之后，通知到人员*/
+        noticeUsers(info, type, user, formId);
+        return vwoFlag;
+    }
+
+    /**
+     * 通知到人，加入任务
+     *
+     * @param info
+     * @param type
+     */
+    private void noticeUsers(HzVwoInfo info, Integer type, User user, long formId) {
+        List<HzTasks> tasks = hzTasksService.doSelectUserVWOTaskByIds(info.getId(), null, type);
+        if (tasks == null || tasks.isEmpty()) {
+            HzVwoOpiBom bom = hzVwoOpiBomDao.selectByVwoId(info.getId());
+            HzVwoOpiPmt pmt = hzVwoOpiPmtDao.selectByVwoId(info.getId());
+            HzVwoOpiProj proj = hzVwoOpiProjDao.selectByVwoId(info.getId());
+            Date now = new Date();
+            HzTasks task = new HzTasks();
+
+            task.setTaskTargetId(info.getId());
+            task.setTaskTargetType(type);
+            task.setTaskFormType(TaskOptions.FORM_TYPE_VWO);
+            task.setTaskLauncher(user.getUserName());
+            task.setTaskLauncherId(Long.valueOf(user.getId()));
+            task.setTaskCreateDate(now);
+            task.setTaskUpdateDate(now);
+            task.setTaskFormId(formId);
+
+            try {
+                List<HzTasks> list = new ArrayList<>();
+                HzTasks taskOfBom = task.clone();
+                HzTasks taskOfPmt = task.clone();
+                HzTasks taskOfProj = task.clone();
+
+                taskOfBom.setTaskUserId(bom.getOpiBomMngUserId());
+                taskOfBom.setTaskStatus(1);
+
+                taskOfPmt.setTaskUserId(pmt.getOpiPmtMngUserId());
+                taskOfPmt.setTaskStatus(800);
+
+                taskOfProj.setTaskUserId(proj.getOpiProjMngUserId());
+                taskOfProj.setTaskStatus(800);
+
+                if (!hzTasksService.doInsert(taskOfBom) || !hzTasksService.doInsert(taskOfPmt) || !hzTasksService.doInsert(taskOfProj)) {
+                    logger.error("通知任务失败");
+                }
+//                list.add(taskOfBom);
+//                list.add(taskOfPmt);
+//                list.add(taskOfProj);
+                //这里批量插入插入只有2个，需要改进
+//                if (!hzTasksService.doInsertByBatch(list)) {
+//                    logger.error("通知任务失败");
+//                }
+
+            } catch (CloneNotSupportedException e) {
+                e.printStackTrace();
+            }
+
+
+        }
     }
 }

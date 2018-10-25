@@ -99,7 +99,7 @@ public class HzCraftService implements IHzCraftService {
     /**
      * 调试阶段
      */
-    public static boolean CRAFT_DEBUG = true;
+    public static boolean CRAFT_DEBUG = false;
     /**
      * 插入测试，true则不进行插入
      */

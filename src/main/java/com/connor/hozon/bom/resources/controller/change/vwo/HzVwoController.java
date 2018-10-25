@@ -139,7 +139,6 @@ public class HzVwoController {
         return "changeManage/vwo/vwoExecuteDialog";
     }
 
-
     /**
      * 分页查询
      *
@@ -386,5 +385,15 @@ public class HzVwoController {
     @ResponseBody
     public JSONObject saveProjLeaderOpinion(HzVwoOpiProj hzVwoOpiProj, Integer vwoType, String projectUid) {
         return iHzVWOManagerService.saveProjLeaderOpinion(hzVwoOpiProj, vwoType, projectUid);
+    }
+
+
+
+
+    /**************************特性表单****************************/
+    @RequestMapping(value = "getFeatureTable",method = RequestMethod.POST)
+    @ResponseBody
+    public Map<String, Object> getFeatureTable(@RequestParam Long vwoId){
+        return iHzVWOManagerService.getFeatureTable(vwoId);
     }
 }
