@@ -62,4 +62,11 @@ public class HzFeatureChangeDaoImpl extends BasicDaoImpl<HzFeatureChangeBean> im
     public List<HzFeatureChangeBean> selectCfgUidsByVwoId(HzFeatureChangeBean bean) {
         return baseSQLUtil.executeQuery(bean, clzName + ".selectCfgUidsByVwoId");
     }
+
+    @Override
+    public List<HzFeatureChangeBean> doQueryLastTwoChange(HzFeatureChangeBean hzFeatureChangeBean) {
+        return baseSQLUtil.executeQuery(hzFeatureChangeBean, clzName+".doQueryLastTwoChange");
+    }
+
+
 }

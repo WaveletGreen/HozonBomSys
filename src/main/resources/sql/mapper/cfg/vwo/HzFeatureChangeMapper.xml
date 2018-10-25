@@ -231,7 +231,7 @@
         ${tableName}
         (<include refid="Base_Column_List"/>)
         select ${seqName}.Nextval, A.* from(
-        <foreach collection="hzFeatureChangeBeans" index="index" item="hzFeatureChangeBean" separator="union">
+        <foreach collection="hzFeatureChangeBeans" index="index" item="hzFeatureChangeBean" separator="union all">
             select
             #{hzFeatureChangeBean.featureValueName,jdbcType=VARCHAR},
             #{hzFeatureChangeBean.featureValueDesc,jdbcType=VARCHAR},
@@ -265,4 +265,16 @@
         )A
 
     </insert>
+
+    <select id="doQueryLastTwoChange" parameterType="sql.pojo.cfg.vwo.HzFeatureChangeBean" resultMap="BaseResultMap">
+        select * from(
+        select t.*,ROWNUM rn from HZ_CFG0_AFTER_CHANGE_RECORD t WHERE
+        t.CFG_PUID=#{cfgPuid,jdbcType=VARCHAR}
+        and
+        t.VWO_ID &lt;= #{vwoId,jdbcType=INTEGER}
+        ORDER BY t.id DESC
+        )
+        where rn &lt; 3
+
+    </select>
 </mapper>

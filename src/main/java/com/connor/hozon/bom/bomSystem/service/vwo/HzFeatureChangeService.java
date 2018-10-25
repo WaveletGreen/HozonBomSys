@@ -325,4 +325,16 @@ public class HzFeatureChangeService implements IHzFeatureChangeService {
         bean.setVwoId(vwoId);
         return hzFeatureChangeDao.selectCfgUidsByVwoId(bean);
     }
+    /**
+     * 查询变更前的数据和当前数据
+     * @param cfgPuid
+     * @param vwoId
+     * @return
+     */
+    public List<HzFeatureChangeBean> doQueryLastTwoChange(String cfgPuid, Long vwoId){
+        HzFeatureChangeBean hzFeatureChangeBean = new HzFeatureChangeBean();
+        hzFeatureChangeBean.setCfgPuid(cfgPuid);
+        hzFeatureChangeBean.setVwoId(vwoId);
+        return hzFeatureChangeDao.doQueryLastTwoChange(hzFeatureChangeBean);
+    }
 }

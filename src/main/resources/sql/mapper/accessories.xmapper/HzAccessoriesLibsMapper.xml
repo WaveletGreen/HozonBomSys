@@ -201,4 +201,18 @@
     where
       P_MATERIEL_CODE = #{pMaterielCode, jdbcType=VARCHAR} and P_STATUS=1
   </select>
+
+  <select id="HzAccessoriesLibsDAOImpl_queryAccessoriesListByMaterielCode" parameterType="java.lang.String" resultType="java.lang.String">
+      select
+          PUID
+      from
+          HZ_ACCESSORIES_LIBS
+      where
+          P_MATERIEL_CODE in
+      <foreach collection="list" index="index" item="materielCode" open="(" separator="," close=")">
+            #{materielCode,jdbcType=VARCHAR}
+      </foreach>
+      and
+          P_STATUS = 1
+  </select>
 </mapper>

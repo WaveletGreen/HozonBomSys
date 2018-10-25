@@ -30,4 +30,6 @@ public interface HzAccessoriesLibsDAO {
     int selectHzAccessoriesLibsByCount(String pMaterielCode);
 
     HzAccessoriesLibs getHzAccessoriesLibsByCode(String pMaterielCode);
+
+    List<String> queryAccessoriesListByMaterielCode(List<String> materielCodeList);
 }

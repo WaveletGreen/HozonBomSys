@@ -45,4 +45,6 @@ public interface HzFeatureChangeDao extends BasicDao<HzFeatureChangeBean> {
      * @return
      */
     List<HzFeatureChangeBean> selectCfgUidsByVwoId(HzFeatureChangeBean bean);
+
+    List<HzFeatureChangeBean> doQueryLastTwoChange(HzFeatureChangeBean hzFeatureChangeBean);
 }

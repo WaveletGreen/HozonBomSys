@@ -8,8 +8,8 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <body>
-    <button id="btnAdd" class="btn btn-success" style="position: fixed;margin-left:45%;margin-top:-60px;margin-bottom: -10px;z-index:99999;" onclick="add()">添加</button>
-<form id="colorForm" role="form" method="post" action="./colorSet/add">
+    <button id="btnAdd" class="btn btn-success" style="position: fixed;margin-left:38%;margin-top:-60px;margin-bottom: -10px;z-index:99999;" onclick="add()">添加油漆物料</button>
+<form id="colorForm" role="form" method="post" action="./colorSet/add2">
     <div class="form-group">
         <label for="pColorOfSet">色系</label>
         <input class="form-control" id="pColorOfSet" name="pColorOfSet" type="text"
@@ -34,7 +34,7 @@
     <div class="form-group">
         <label>是否拼色</label>
         <select class="form-control input-small" data-style="btn-info"
-                id="pColorIsMultiply">
+                id="pColorIsMultiply" name="pColorIsMultiply">
             <option th:value="N" th:text="否">
             </option>
             <option th:value="Y" th:text="是">
@@ -60,14 +60,32 @@
     </div>
 </form>
     <script th:inline="javascript">
-        var total = 0;
-        $("#btnAdd").click(function () {
-            // var child = '<input type="text" id="color_'+total+'" name="color_'+total+'"/>';
-            alert('a');
-            // $("#colorForm").append(child);
-            total++;
-        });
+
+
         <![CDATA[
+        var total = 0;
+        function checkMaterielCode(inp){
+            var materielCode = $(inp).val();
+            $.ajax({
+                type : "GET",
+                url : "./colorSet/checkMaterielCode?materielCode="+materielCode,
+                success : function (result) {
+                    if(result.status){
+                        $(inp).parent().find(".valError").hide();
+                        $(inp).parent().find(".valError").text("");
+                    }else {
+                        $(inp).parent().find(".valError").text(result.msg);
+                        $(inp).parent().find(".valError").show();
+                    }
+                },
+                error : function (result) {
+                    
+                }
+            });
+        }
+        function delInput(delButtton){
+            $(delButtton).parent().remove();
+        }
         $(document).keydown(function (event) {
             if (event.keyCode == 13) {
                 $('form').each(function () {
@@ -178,6 +196,11 @@
                 });
                 // 绑定dialog的确定按钮的监听事件
                 $("#btnOk", window.top.document).click(function () {
+                    var errorSpan = $('.valError').text();
+                    if(errorSpan!=""||errorSpan.length>0){
+                        window.Ewin.alert({message: '请填写正确的油漆物料'});
+                        return false;
+                    }
                     var bootstrapValidator = $("#colorForm", window.top.document).data('bootstrapValidator');
                     bootstrapValidator.validate();
                     //重新验证字段
@@ -244,7 +267,25 @@
                 language: 'zh_CN',//语言
                 minView: 0,//表示日期选择的最小范围，默认是hour
                 todayBtn: true
-            })
+            }),
+        $("#btnAdd").click(function () {
+            var child = '<div class="form-group"><label for="pColorCode">油漆物料</label><a onclick="delInput(this)" style="float:right">删除</a>' +
+                '<br><span style="color : red;display: none" class="valError"></span>'+
+
+                '<input type="text" class="form-control" id="color_'+total+'" name="color_'+total+'" placeholder="请输入油漆物料" onblur="checkMaterielCode(this)"/>' +
+                '</div>';
+            // var child = '<div class="form-group col-lg-12"><label for="pColorCode">油漆物料</label>' +
+            //     '</div>'+
+            //     '<br><span style="color : red;display: none" class="valError"></span>'+
+            //     '<div class="col-lg-4">' +
+            //     '<a onclick="delInput(this)">删除</a>'+
+            //     '</div>'+
+            //     '<div class="col-lg-8">'+
+            //     '<input type="text" class="form-control" id="color_'+total+'" name="color_'+total+'" placeholder="请输入油漆物料" onblur="checkMaterielCode(this)"/>' +
+            //     '</div>';
+            $("#colorForm").append(child);
+            total++;
+        })
         );
         ]]>
 

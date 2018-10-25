@@ -127,4 +127,6 @@ public interface HzCfg0RecordDao extends BasicDao<HzCfg0Record> {
     List<HzCfg0Record> selectByFamilyUidWithProject(String familyUid, String projectUid);
 
     int updateList(List<HzCfg0Record> hzCfg0RecordList);
+
+    int updateByVwoid(HzCfg0Record hzCfg0Record);
 }
