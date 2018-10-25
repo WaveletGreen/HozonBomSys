@@ -10,7 +10,6 @@ import com.connor.hozon.bom.resources.page.Page;
 import sql.pojo.bom.HzMbomLineRecord;
 import sql.pojo.bom.HzMbomLineRecordVO;
 import sql.pojo.bom.HzMbomRecord;
-import sql.pojo.bom.HzPbomLineRecord;
 
 import java.util.List;
 import java.util.Map;
@@ -83,6 +82,18 @@ public interface HzMbomRecordDAO {
      * @return
      */
     List<HzMbomLineRecord> findHzMbomByPuid(Map<String,Object> map);
+
+    List<HzMbomLineRecord> findHzMbomByPuid_before(Map<String,Object> map);
+
+    int insert_before(HzMbomLineRecord record);
+
+    int update_before(HzMbomLineRecord record);
+
+    List<HzMbomLineRecord> findHzMbomByPuid_after(Map<String,Object> map);
+
+    int insert_after(HzMbomLineRecord record);
+
+    int update_after(HzMbomLineRecord record);
 
     List<HzMbomLineRecord> findMbomByItemId(String itemId,String projectId);
 

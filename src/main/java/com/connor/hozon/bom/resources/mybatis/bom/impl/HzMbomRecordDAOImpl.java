@@ -45,6 +45,36 @@ public class HzMbomRecordDAOImpl extends BaseSQLUtil implements HzMbomRecordDAO 
     }
 
     @Override
+    public List<HzMbomLineRecord> findHzMbomByPuid_before(Map<String, Object> map) {
+        return  super.findForList("HzMbomRecordDAOImpl_findHzMbomByPuid_before",map);
+    }
+
+    @Override
+    public int insert_before(HzMbomLineRecord record){
+        return super.insert("HzMbomRecordDAOImpl_insert_before",record);
+    }
+
+    @Override
+    public int update_before(HzMbomLineRecord record){
+        return super.insert("HzMbomRecordDAOImpl_update_before",record);
+    }
+
+    @Override
+    public List<HzMbomLineRecord> findHzMbomByPuid_after(Map<String, Object> map) {
+        return  super.findForList("HzMbomRecordDAOImpl_findHzMbomByPuid_after",map);
+    }
+
+    @Override
+    public int insert_after(HzMbomLineRecord record){
+        return super.insert("HzMbomRecordDAOImpl_insert_after",record);
+    }
+
+    @Override
+    public int update_after(HzMbomLineRecord record){
+        return super.insert("HzMbomRecordDAOImpl_update_after",record);
+    }
+
+    @Override
     public int update(HzMbomLineRecord record) {
         if(record.getTableName() == null || "".equals(record.getTableName())){
             record.setTableName("HZ_MBOM_RECORD");

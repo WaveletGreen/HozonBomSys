@@ -225,6 +225,19 @@ public class HzMbomLineRecord {
 
     private String factoryCode;
 
+    /**
+     * mwo编号
+     */
+    private String mwoNo;
+
+    public String getMwoNo() {
+        return mwoNo;
+    }
+
+    public void setMwoNo(String mwoNo) {
+        this.mwoNo = mwoNo;
+    }
+
     public String getFactoryCode() {
         return factoryCode;
     }
