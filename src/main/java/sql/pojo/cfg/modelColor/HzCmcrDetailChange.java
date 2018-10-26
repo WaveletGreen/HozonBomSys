@@ -97,7 +97,7 @@ public class HzCmcrDetailChange {
     /**
      * 保留字段
      */
-    private String cmcrDetailCgReverse1;
+    private String cmcrDetailCgTitle;
     /**
      * 保留字段
      */
@@ -114,6 +114,10 @@ public class HzCmcrDetailChange {
      * 保留字段
      */
     private String cmcrDetailCgReverse5;
+    /**
+     * 保留字段
+     */
+    private String cmcrDetailCgReverse6;
     /**
      * 数据库中的table名
      */

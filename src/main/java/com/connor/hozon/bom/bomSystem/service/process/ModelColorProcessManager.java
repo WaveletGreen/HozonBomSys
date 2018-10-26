@@ -11,13 +11,17 @@ import com.connor.hozon.bom.bomSystem.iservice.process.IInterruptionCallBack;
 import com.connor.hozon.bom.bomSystem.iservice.process.IReleaseCallBack;
 import com.connor.hozon.bom.bomSystem.service.modelColor.HzCfg0ModelColorService;
 import com.connor.hozon.bom.bomSystem.service.vwo.HzVwoInfoService;
+import com.connor.hozon.bom.bomSystem.service.vwo.HzVwoManagerService;
 import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.sys.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import sql.pojo.cfg.modelColor.HzCfg0ModelColor;
+import sql.pojo.cfg.modelColor.HzCmcrChange;
+import sql.pojo.cfg.modelColor.HzCmcrDetailChange;
 import sql.pojo.cfg.vwo.HzVwoInfo;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**

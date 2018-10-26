@@ -20,9 +20,11 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import sql.pojo.cfg.modelColor.HzCmcrDetailChange;
 import sql.pojo.cfg.vwo.*;
 import sql.pojo.project.HzProjectLibs;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -53,6 +55,10 @@ public class HzVwoController {
      */
     @RequestMapping(value = "/vwoFormList", method = RequestMethod.GET)
     public String getVwoFromList(@RequestParam Long id, @RequestParam Integer vwoType, Model model) {
+
+        Map<String,Object> map = new HashMap<String, Object>();
+        iHzVWOManagerService.doQueryCmcrDetailChangBefor(map,507L);
+
         String error = "errorWithEntity";
         HzVwoInfo vwoInfo;
         HzVwoInfluenceDept influenceDept;
