@@ -3,7 +3,7 @@
  * This file was wrote by fancyears·milos·maywas @connor. Any question/bug you can post to 1243093366@qq.com.
  * ALL RIGHTS RESERVED.
  */
-let column = [
+let columnOfFeature = [
     {
         field: 'headDesc',
         title: '变更类型',
@@ -58,7 +58,7 @@ let column = [
     }];
 
 function loadFeature(vwoId) {
-    var $table = $("#"+commonTableName);
+    let $table = $("#"+commonTableName);
     $table.bootstrapTable('destroy');
     $table.bootstrapTable({
         url: "getFeatureTable?vwoId=" + vwoId,
@@ -72,7 +72,7 @@ function loadFeature(vwoId) {
         clickToSelect: false,                // 单击某一行的时候选中某一条记录
         formId: "null",                      //需要定义formId，不定义的话会造成jQuery异常，随便定义一个没有的id即可
         /**列信息，需要预先定义好*/
-        columns: column,
+        columns: columnOfFeature,
         onLoadSuccess: function () {
             //加载成功时执行,渲染双行的
             renderingTableRowColor(commonTableName);

@@ -104,13 +104,15 @@ var column = [
     //     hide: false
     // }
 ];
+var $table = null;
+let projectPuid = null;
 
-function loadData(projectPuid) {
-    if (!checkIsSelectProject(projectPuid)) {
+function loadData(_projectPuid) {
+    if (!checkIsSelectProject(_projectPuid)) {
         return;
     }
-
-    var $table = $("#dataTable");
+    projectPuid = _projectPuid;
+    $table = $("#dataTable");
     if ($table == null) {
         return;
     }
@@ -138,7 +140,21 @@ function loadData(projectPuid) {
         columns: column,
         sortable: true,                     //是否启用排序
         sortOrder: "asc",                   //排序方式
-        sortName: 'relevance'
+        sortName: 'relevance',
+        //>>>>>>>>>>>>>>导出excel表格设置
+        showExport: phoneOrPc(),              //是否显示导出按钮(此方法是自己写的目的是判断终端是电脑还是手机,电脑则返回true,手机返回falsee,手机不显示按钮)
+        exportDataType: "selected",              //basic', 'all', 'selected'.
+        exportTypes: ['xlsx'],	    //导出类型
+        //exportButton: $('#btn_export'),     //为按钮btn_export  绑定导出事件  自定义导出按钮(可以不用)
+        exportOptions: {
+            //ignoreColumn: [0,0],            //忽略某一列的索引
+            fileName: '特性数据导出',              //文件名称设置
+            worksheetName: 'Sheet1',          //表格工作区名称
+            tableName: '特性数据表',
+            excelstyles: ['background-color', 'color', 'font-size', 'font-weight'],
+            //onMsoNumberFormat: DoOnMsoNumberFormat
+        }
+        //导出excel表格设置<<<<<<<<<<<<<<<<
     });
     //设置跳转的tableID
     setTargetTableId("dataTable");
@@ -160,6 +176,7 @@ $(document).ready(
         generateRelevance();
     })
 );
+
 function generateRelevance() {
     var msg = "您确定生成相关性吗！";
     var projectPuid = $("#project", window.top.document).val();

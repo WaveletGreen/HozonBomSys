@@ -180,7 +180,7 @@ var column = [
         sortOrder: 'asc',
     }
 ];
-
+var $table=null;
 $(document).ready(
     (function () {
         loadData();
@@ -192,7 +192,7 @@ $(document).ready(
 );
 
 function loadData() {
-    var $table = $("#dataTable");
+    $table= $("#dataTable");
     $table.bootstrapTable('destroy');
     $("#refreshColorSet").removeAttr("disabled");
     $table.bootstrapTable({
@@ -216,6 +216,20 @@ function loadData() {
         toolbars: toolbar,
         /**列信息，需要预先定义好*/
         columns: column,
+        //>>>>>>>>>>>>>>导出excel表格设置
+        showExport: phoneOrPc(),              //是否显示导出按钮(此方法是自己写的目的是判断终端是电脑还是手机,电脑则返回true,手机返回falsee,手机不显示按钮)
+        exportDataType: "selected",              //basic', 'all', 'selected'.
+        exportTypes: ['xlsx'],	    //导出类型
+        //exportButton: $('#btn_export'),     //为按钮btn_export  绑定导出事件  自定义导出按钮(可以不用)
+        exportOptions: {
+            //ignoreColumn: [0,0],            //忽略某一列的索引
+            fileName: '颜色库数据导出',              //文件名称设置
+            worksheetName: 'Sheet1',          //表格工作区名称
+            tableName: '颜色库数据表',
+            excelstyles: ['background-color', 'color', 'font-size', 'font-weight'],
+            //onMsoNumberFormat: DoOnMsoNumberFormat
+        }
+        //导出excel表格设置<<<<<<<<<<<<<<<<
     });
     //设置跳转的tableID，放在table初始化语句之后
     setTargetTableId("dataTable");

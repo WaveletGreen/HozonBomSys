@@ -4,7 +4,7 @@
  * ALL RIGHTS RESERVED.
  */
 
-let column = [
+let columnOfModelColor = [
     {
         field: 'codeOfColorModel',
         title: '车型颜色代码',
@@ -27,8 +27,8 @@ let column = [
 
 function loadModelColor(vwoId) {
     $.ajax({
-        url: "",
-        type: "GET",
+        url: "getModelColorTable?vwoId=" + vwoId,
+        type: "POST",
         success: function (result) {
             if (result) {
                 initTable(result);
@@ -46,11 +46,17 @@ function loadModelColor(vwoId) {
  */
 
 function initTable(data) {
-    let titles = data.title;
-    let tableData = data.data;
+    let titles = data.titleSet;
+    let after = data.changAfter;
+    let before = data.changBefor;
+    let tableData = [];
+
+    let lengthOfAfter = getLengthOfJson(after);
+    let lengthOfBefore = getLengthOfJson(before);
+    let sorter = -1;
     //存储定义的table表头
     for (let i in titles) {
-        column.push({
+        columnOfModelColor.push({
             field: "s" + i,
             title:
                 titles[i],
@@ -60,7 +66,41 @@ function initTable(data) {
                 'middle'
         })
     }
-    var $table = $("#" + commonTableName);
+    let ajson = {};
+    let bjson = {};
+    if (lengthOfAfter != lengthOfBefore) {
+        sorter = lengthOfAfter > lengthOfBefore ? lengthOfAfter : lengthOfBefore;
+    } else {
+        sorter = before;
+    }
+
+    ajson.codeOfColorModel = after[0].cmcrDetailCgCreator;
+    ajson.descOfColorModel = after[0].cmcrDetailCgId;
+    ajson.modelShell = after[0].cmcrDetailCgVwoId;
+
+    bjson.codeOfColorModel = before[0].cmcrDetailCgCreator;
+    bjson.descOfColorModel = before[0].cmcrDetailCgId;
+    bjson.modelShell = before[0].cmcrDetailCgVwoId;
+
+    for (let i = 0; i < sorter; i++) {
+        if (after.hasOwnProperty(i)) {
+            ajson['s' + i] = after[i].cmcrDetailSrcColorUid;
+        }
+        else {
+            ajson['s' + i] = "-";
+        }
+        if (before.hasOwnProperty(i)) {
+            bjson['s' + i] = before[i].cmcrDetailSrcColorUid;
+        }
+        else {
+            bjson['s' + i] = "-";
+        }
+    }
+
+    tableData.push(before);
+    tableData.push(after);
+
+    let $table = $("#" + commonTableName);
     $table.bootstrapTable('destroy');
     $table.bootstrapTable({
         // url: "getModelColorTable?vwoId=" + vwoId,
@@ -77,7 +117,7 @@ function initTable(data) {
         exportTypes: ['csv', 'txt', 'xml'],
         formId: "null",                       //需要定义formId，不定义的话会造成jQuery异常
         /**列信息，需要预先定义好*/
-        columns: column,
+        columns: columnOfModelColor,
         onLoadSuccess: function () {
             //加载成功时执行,渲染双行的
             renderingTableRowColor(commonTableName);

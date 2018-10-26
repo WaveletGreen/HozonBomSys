@@ -59,6 +59,9 @@
         <!--保留字段-->
         <result column="CMCR_DETAIL_CG_REVERSE6" jdbcType="VARCHAR" property="cmcrDetailCgReverse6"/>
     </resultMap>
+    <resultMap extends="BaseResultMap" id="VWO_Result_map" type="sql.pojo.cfg.modelColor.HzCmcrDetailChange">
+        <result column="colorCode" jdbcType="VARCHAR" property="colorCode"/>
+    </resultMap>
     <sql id="Base_Column_List">
         CMCR_DETAIL_CG_ID,
         CMCR_DETAIL_SRC_PUID,
