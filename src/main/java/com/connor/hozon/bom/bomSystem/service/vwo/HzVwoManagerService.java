@@ -504,6 +504,18 @@ public class HzVwoManagerService implements IHzVWOManagerService {
             HzCmcrDetailChange hzCmcrDetailChange1Query = new HzCmcrDetailChange();
             hzCmcrDetailChange1Query.setCmcrDetailSrcCfgMainUid(hzCfg0ModelColorDetail.getCfgMainUid());
             hzCmcrDetailChange1Query.setCmcrDetailSrcPuid(hzCfg0ModelColorDetail.getPuid());
+
+            hzCmcrDetailChange1Query.setCmcrDetailSrcModelPuid(hzCfg0ModelColorDetail.getModelUid());
+            if (hzCfg0ModelColorDetail.getCfgUid() != null) {
+                HzCfg0OptionFamily hzCfg0OptionFamilyQuery = new HzCfg0OptionFamily();
+                hzCfg0OptionFamilyQuery.setPuid(hzCfg0ModelColorDetail.getCfgUid());
+                HzCfg0OptionFamily hzCfg0OptionFamily = hzCfg0OptionFamilyDao.selectByPrimaryKey(hzCfg0OptionFamilyQuery);
+                //特性代码
+                hzCmcrDetailChange1Query.setCmcrDetailCgFeatureCode(hzCfg0OptionFamily.getpOptionfamilyName());
+                //特性名
+                hzCmcrDetailChange1Query.setCmcrDetailCgFeatureName(hzCfg0OptionFamily.getpOptionfamilyDesc());
+            }
+
             hzCmcrDetailChangesQuery.add(hzCmcrDetailChange1Query);
         }
         List<HzCmcrDetailChange> hzCmcrDetailChangesLastAfter = null;
@@ -547,6 +559,10 @@ public class HzVwoManagerService implements IHzVWOManagerService {
                     hzCmcrDetailChange.setCmcrDetailSrcPuid(hzCmcrDetailChangeQuery.getCmcrDetailSrcPuid());
                     hzCmcrDetailChange.setCmcrDetailSrcCfgMainUid(hzCmcrDetailChangeQuery.getCmcrDetailSrcCfgMainUid());
                     hzCmcrDetailChange.setCmcrDetailCgVwoId(hzVwoInfo.getId());
+                    hzCmcrDetailChange.setCmcrDetailSrcModelPuid(hzCmcrDetailChangeQuery.getCmcrDetailSrcModelPuid());
+                    hzCmcrDetailChange.setCmcrDetailCgFeatureCode(hzCmcrDetailChangeQuery.getCmcrDetailCgFeatureCode());
+                    hzCmcrDetailChange.setCmcrDetailCgFeatureName(hzCmcrDetailChangeQuery.getCmcrDetailCgFeatureName());
+                    hzCmcrDetailChange.setCmcrDetailCgTitle(hzCmcrDetailChange.getCmcrDetailCgFeatureName()+"<br>"+hzCmcrDetailChange.getCmcrDetailCgFeatureCode());
                     hzCmcrDetailChangesAfter.add(hzCmcrDetailChange);
                 }
             }
@@ -630,6 +646,8 @@ public class HzVwoManagerService implements IHzVWOManagerService {
                 hzCmcrDetailChangeAfter.setCmcrDetailCgFeatureCode(hzCfg0OptionFamily.getpOptionfamilyName());
                 //特性名
                 hzCmcrDetailChangeAfter.setCmcrDetailCgFeatureName(hzCfg0OptionFamily.getpOptionfamilyDesc());
+
+                hzCmcrDetailChangeAfter.setCmcrDetailCgTitle(hzCmcrDetailChangeAfter.getCmcrDetailCgFeatureName()+"<br>"+hzCmcrDetailChangeAfter.getCmcrDetailCgFeatureCode());
             }
             //颜色代码
             hzCmcrDetailChangeAfter.setCmcrDetailCgColorCode(hzCfg0ModelColorDetail.getpColorCode());
@@ -1829,5 +1847,71 @@ public class HzVwoManagerService implements IHzVWOManagerService {
 
 
         }
+    }
+
+    /**
+     * 查询变更前后主数据
+     * @param cmcrSrcPuid
+     * @param cmcrCgVwoId
+     * @return
+     */
+    public List<HzCmcrChange> doQueryCmcrChangeBeforAndAfter(String cmcrSrcPuid,Long cmcrCgVwoId){
+        HzCmcrChange hzCmcrChange = new HzCmcrChange();
+        hzCmcrChange.setCmcrSrcPuid(cmcrSrcPuid);
+        hzCmcrChange.setCmcrCgVwoId(cmcrCgVwoId);
+        return hzCmcrChangeDao.doQueryCmcrDetailChangeBeforAndAfter(hzCmcrChange);
+    }
+
+    /**
+     * 查询变更前后从数据
+     * @param cmcrDetailSrcPuidList
+     * @param cmcrCgVwoId
+     * @return
+     */
+    public List<HzCmcrDetailChange> doQueryCmcrDetailChangBeforAndAfter(List<String> cmcrDetailSrcPuidList, Long cmcrCgVwoId){
+        List<HzCmcrDetailChange> hzCmcrDetailChanges = new ArrayList<HzCmcrDetailChange>();
+        for(String cmcrDetailSrcPuid : cmcrDetailSrcPuidList){
+            HzCmcrDetailChange hzCmcrDetailChange = new HzCmcrDetailChange();
+            hzCmcrDetailChange.setCmcrDetailSrcPuid(cmcrDetailSrcPuid);
+            hzCmcrDetailChange.setCmcrDetailCgVwoId(cmcrCgVwoId);
+            hzCmcrDetailChanges.add(hzCmcrDetailChange);
+        }
+        return hzCmcrDetailChangeDao.doQueryCmcrDetailChangBeforAndAfter(hzCmcrDetailChanges);
+    }
+
+    public void doQueryCmcrDetailChangBefor(Map<String,Object> map, Long vwoId){
+        //无序变更前后数据
+        List<HzCmcrDetailChange> hzCmcrDetailChangeListBefor = new ArrayList<HzCmcrDetailChange>();
+        List<HzCmcrDetailChange> hzCmcrDetailChangeListAfter = new ArrayList<HzCmcrDetailChange>();
+        //顺序对应title变更前后数据
+        List<HzCmcrDetailChange> hzCmcrDetailChangeListBeforWithTitle = new ArrayList<HzCmcrDetailChange>();
+        List<HzCmcrDetailChange> hzCmcrDetailChangeListAfterWithTitle = new ArrayList<HzCmcrDetailChange>();
+        Set<String> titleSet = new LinkedHashSet<>();
+        hzCmcrDetailChangeListBefor = hzCmcrDetailChangeDao.doQueryCmcrDetailChangBefor(vwoId);
+        if(hzCmcrDetailChangeListBefor==null||hzCmcrDetailChangeListBefor.size()==0){
+            hzCmcrDetailChangeListBefor = hzCmcrDetailChangeDao.doQueryCmcrDetailChangFirst(vwoId,1);
+            hzCmcrDetailChangeListAfter = hzCmcrDetailChangeDao.doQueryCmcrDetailChangFirstAfter(vwoId);
+        }else {
+            hzCmcrDetailChangeListAfter = hzCmcrDetailChangeDao.doQueryCmcrDetailChangFirst(vwoId,0);
+        }
+
+        for(HzCmcrDetailChange hzCmcrDetailChange : hzCmcrDetailChangeListBefor){
+            titleSet.add(hzCmcrDetailChange.getCmcrDetailCgTitle());
+        }
+        for(HzCmcrDetailChange hzCmcrDetailChange : hzCmcrDetailChangeListAfter){
+            titleSet.add(hzCmcrDetailChange.getCmcrDetailCgTitle());
+        }
+
+//        for(int i=0;i<titleSet.size();i++){
+//            String titleKey = "S_"+i;
+//            for(HzCmcrDetailChange hzCmcrDetailChange : hzCmcrDetailChangeListBefor){
+//                if(hzCmcrDetailChange.getCmcrDetailCgTitle()){
+//
+//                }
+//            }
+//        }
+        map.put("changBefor",hzCmcrDetailChangeListBefor);
+        map.put("changAfter",hzCmcrDetailChangeListAfter);
+        map.put("titleSet",titleSet);
     }
 }

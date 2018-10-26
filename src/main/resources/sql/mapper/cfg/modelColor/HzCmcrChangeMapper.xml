@@ -489,4 +489,24 @@
             GROUP BY	CMCR_SRC_PUID
           )
     </select>
+
+    <select id="doQueryCmcrDetailChangeBeforAndAfter" parameterType="sql.pojo.cfg.modelColor.HzCmcrChange" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from(
+        select
+        <include refid="Base_Column_List"/>,ROWNUM rn
+        from
+        HZ_CMCR_AFTER_CHANGE t
+        WHERE
+        t.CMCR_SRC_PUID=#{cmcrSrcPuid,jdbcType=VARCHAR}
+        and
+        t.CMCR_CG_VWO_ID &lt;= #{cmcrCgVwoId,jdbcType=INTEGER}
+        ORDER BY t.CMCR_CG_ID DESC
+        ) te
+        where
+        te.rn &lt; 3
+        order by
+        te.CMCR_CG_ID
+    </select>
 </mapper>

@@ -47,7 +47,7 @@
         <!--修改者-->
         <result column="CMCR_DETAIL_CG_UPDATER" jdbcType="VARCHAR" property="cmcrDetailCgUpdater"/>
         <!--保留字段-->
-        <result column="CMCR_DETAIL_CG_REVERSE1" jdbcType="VARCHAR" property="cmcrDetailCgReverse1"/>
+        <result column="CMCR_DETAIL_CG_TITLE" jdbcType="VARCHAR" property="cmcrDetailCgTitle"/>
         <!--保留字段-->
         <result column="CMCR_DETAIL_CG_REVERSE2" jdbcType="VARCHAR" property="cmcrDetailCgReverse2"/>
         <!--保留字段-->
@@ -56,6 +56,8 @@
         <result column="CMCR_DETAIL_CG_REVERSE4" jdbcType="VARCHAR" property="cmcrDetailCgReverse4"/>
         <!--保留字段-->
         <result column="CMCR_DETAIL_CG_REVERSE5" jdbcType="VARCHAR" property="cmcrDetailCgReverse5"/>
+        <!--保留字段-->
+        <result column="CMCR_DETAIL_CG_REVERSE6" jdbcType="VARCHAR" property="cmcrDetailCgReverse6"/>
     </resultMap>
     <sql id="Base_Column_List">
         CMCR_DETAIL_CG_ID,
@@ -77,11 +79,12 @@
         CMCR_DETAIL_CG_CREATOR,
         CMCR_DETAIL_CG_UPDATE_DATE,
         CMCR_DETAIL_CG_UPDATER,
-        CMCR_DETAIL_CG_REVERSE1,
+        CMCR_DETAIL_CG_TITLE,
         CMCR_DETAIL_CG_REVERSE2,
         CMCR_DETAIL_CG_REVERSE3,
         CMCR_DETAIL_CG_REVERSE4,
-        CMCR_DETAIL_CG_REVERSE5
+        CMCR_DETAIL_CG_REVERSE5,
+        CMCR_DETAIL_CG_REVERSE6
   </sql>
     <sql id="Base_Column_List2">
         CMCR_DETAIL_CG_ID,
@@ -103,11 +106,12 @@
         CMCR_DETAIL_CG_CREATOR,
 
         CMCR_DETAIL_CG_UPDATER,
-        CMCR_DETAIL_CG_REVERSE1,
+        CMCR_DETAIL_CG_TITLE,
         CMCR_DETAIL_CG_REVERSE2,
         CMCR_DETAIL_CG_REVERSE3,
         CMCR_DETAIL_CG_REVERSE4,
         CMCR_DETAIL_CG_REVERSE5,
+        CMCR_DETAIL_CG_REVERSE6,
         CMCR_DETAIL_CG_CREATE_DATE,
         CMCR_DETAIL_CG_UPDATE_DATE
   </sql>
@@ -141,9 +145,10 @@
         #{cmcrDetailCgFeatureName,jdbcType=VARCHAR}, #{cmcrDetailCgColorCode,jdbcType=VARCHAR},
         #{cmcrDetailCgColorName,jdbcType=VARCHAR}, #{cmcrDetailCgCreateDate,jdbcType=TIMESTAMP},
         #{cmcrDetailCgCreator,jdbcType=VARCHAR}, #{cmcrDetailCgUpdateDate,jdbcType=TIMESTAMP},
-        #{cmcrDetailCgUpdater,jdbcType=VARCHAR}, #{cmcrDetailCgReverse1,jdbcType=VARCHAR},
+        #{cmcrDetailCgUpdater,jdbcType=VARCHAR}, #{cmcrDetailCgTitle,jdbcType=VARCHAR},
         #{cmcrDetailCgReverse2,jdbcType=VARCHAR}, #{cmcrDetailCgReverse3,jdbcType=VARCHAR},
-        #{cmcrDetailCgReverse4,jdbcType=VARCHAR}, #{cmcrDetailCgReverse5,jdbcType=VARCHAR}
+        #{cmcrDetailCgReverse4,jdbcType=VARCHAR}, #{cmcrDetailCgReverse5,jdbcType=VARCHAR},
+        #{cmcrDetailCgReverse6,jdbcType=VARCHAR}
         )
     </insert>
     <!--批量插入-->
@@ -163,9 +168,10 @@
                 #{hzCmcrDetailChange.cmcrDetailCgFeatureName,jdbcType=VARCHAR}, #{hzCmcrDetailChange.cmcrDetailCgColorCode,jdbcType=VARCHAR},
                 #{hzCmcrDetailChange.cmcrDetailCgColorName,jdbcType=VARCHAR},
                 #{hzCmcrDetailChange.cmcrDetailCgCreator,jdbcType=VARCHAR},
-                #{hzCmcrDetailChange.cmcrDetailCgUpdater,jdbcType=VARCHAR}, #{hzCmcrDetailChange.cmcrDetailCgReverse1,jdbcType=VARCHAR},
+                #{hzCmcrDetailChange.cmcrDetailCgUpdater,jdbcType=VARCHAR}, #{hzCmcrDetailChange.cmcrDetailCgTitle,jdbcType=VARCHAR},
                 #{hzCmcrDetailChange.cmcrDetailCgReverse2,jdbcType=VARCHAR}, #{hzCmcrDetailChange.cmcrDetailCgReverse3,jdbcType=VARCHAR},
-                #{hzCmcrDetailChange.cmcrDetailCgReverse4,jdbcType=VARCHAR}, #{hzCmcrDetailChange.cmcrDetailCgReverse5,jdbcType=VARCHAR}
+                #{hzCmcrDetailChange.cmcrDetailCgReverse4,jdbcType=VARCHAR}, #{hzCmcrDetailChange.cmcrDetailCgReverse5,jdbcType=VARCHAR},
+                #{hzCmcrDetailChange.cmcrDetailCgReverse6,jdbcType=VARCHAR}
             from
                 dual
         </foreach>
@@ -232,8 +238,8 @@
             <if test="cmcrDetailCgUpdater != null">
                 CMCR_DETAIL_CG_UPDATER,
             </if>
-            <if test="cmcrDetailCgReverse1 != null">
-                CMCR_DETAIL_CG_REVERSE1,
+            <if test="cmcrDetailCgTitle != null">
+                CMCR_DETAIL_CG_TITLE,
             </if>
             <if test="cmcrDetailCgReverse2 != null">
                 CMCR_DETAIL_CG_REVERSE2,
@@ -246,6 +252,9 @@
             </if>
             <if test="cmcrDetailCgReverse5 != null">
                 CMCR_DETAIL_CG_REVERSE5,
+            </if>
+            <if test="cmcrDetailCgReverse6 != null">
+                CMCR_DETAIL_CG_REVERSE6,
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -306,8 +315,8 @@
             <if test="cmcrDetailCgUpdater != null">
                 #{cmcrDetailCgUpdater,jdbcType=VARCHAR},
             </if>
-            <if test="cmcrDetailCgReverse1 != null">
-                #{cmcrDetailCgReverse1,jdbcType=VARCHAR},
+            <if test="cmcrDetailCgTitle != null">
+                #{cmcrDetailCgTitle,jdbcType=VARCHAR},
             </if>
             <if test="cmcrDetailCgReverse2 != null">
                 #{cmcrDetailCgReverse2,jdbcType=VARCHAR},
@@ -320,6 +329,9 @@
             </if>
             <if test="cmcrDetailCgReverse5 != null">
                 #{cmcrDetailCgReverse5,jdbcType=VARCHAR},
+            </if>
+            <if test="cmcrDetailCgReverse6 != null">
+                #{cmcrDetailCgReverse6,jdbcType=VARCHAR},
             </if>
         </trim>
     </insert>
@@ -382,8 +394,8 @@
             <if test="cmcrDetailCgUpdater != null">
                 CMCR_DETAIL_CG_UPDATER = #{cmcrDetailCgUpdater,jdbcType=VARCHAR},
             </if>
-            <if test="cmcrDetailCgReverse1 != null">
-                CMCR_DETAIL_CG_REVERSE1 = #{cmcrDetailCgReverse1,jdbcType=VARCHAR},
+            <if test="cmcrDetailCgTitle != null">
+                CMCR_DETAIL_CG_TITLE = #{cmcrDetailCgTitle,jdbcType=VARCHAR},
             </if>
             <if test="cmcrDetailCgReverse2 != null">
                 CMCR_DETAIL_CG_REVERSE2 = #{cmcrDetailCgReverse2,jdbcType=VARCHAR},
@@ -396,6 +408,9 @@
             </if>
             <if test="cmcrDetailCgReverse5 != null">
                 CMCR_DETAIL_CG_REVERSE5 = #{cmcrDetailCgReverse5,jdbcType=VARCHAR},
+            </if>
+            <if test="cmcrDetailCgReverse6 != null">
+                CMCR_DETAIL_CG_REVERSE6 = #{cmcrDetailCgReverse6,jdbcType=VARCHAR},
             </if>
         </set>
         where CMCR_DETAIL_CG_ID = #{cmcrDetailCgId,jdbcType=DECIMAL}
@@ -421,11 +436,12 @@
       CMCR_DETAIL_CG_CREATOR = #{cmcrDetailCgCreator,jdbcType=VARCHAR},
       CMCR_DETAIL_CG_UPDATE_DATE = #{cmcrDetailCgUpdateDate,jdbcType=TIMESTAMP},
       CMCR_DETAIL_CG_UPDATER = #{cmcrDetailCgUpdater,jdbcType=VARCHAR},
-      CMCR_DETAIL_CG_REVERSE1 = #{cmcrDetailCgReverse1,jdbcType=VARCHAR},
+      CMCR_DETAIL_CG_TITLE = #{cmcrDetailCgTitle,jdbcType=VARCHAR},
       CMCR_DETAIL_CG_REVERSE2 = #{cmcrDetailCgReverse2,jdbcType=VARCHAR},
       CMCR_DETAIL_CG_REVERSE3 = #{cmcrDetailCgReverse3,jdbcType=VARCHAR},
       CMCR_DETAIL_CG_REVERSE4 = #{cmcrDetailCgReverse4,jdbcType=VARCHAR},
       CMCR_DETAIL_CG_REVERSE5 = #{cmcrDetailCgReverse5,jdbcType=VARCHAR}
+      CMCR_DETAIL_CG_REVERSE6 = #{cmcrDetailCgReverse6,jdbcType=VARCHAR}
     where CMCR_DETAIL_CG_ID = #{cmcrDetailCgId,jdbcType=DECIMAL}
   </update>
 
@@ -451,5 +467,76 @@
                     #{hzCmcrDetailChange.cmcrDetailSrcPuid, jdbcType=VARCHAR}
               </foreach>
           )
+    </select>
+
+    <select id="doQueryCmcrDetailChangBeforAndAfter" parameterType="java.util.List" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from(
+            select
+              <include refid="Base_Column_List"/>,ROWNUM rn
+            from
+        HZ_CMCR_DETAIL_AFTER_CHANGE t
+            WHERE
+              t.CMCR_DETAIL_SRC_PUID in
+              <foreach collection="hzCmcrDetailChanges" index="index" item="hzCmcrDetailChange" open="(" separator="," close=")">
+                  #{hzCmcrDetailChange.cmcrDetailSrcPuid,jdbcType=VARCHAR}
+              </foreach>
+            and
+              t.CMCR_DETAIL_CG_VWO_ID &lt;= #{vwoid,jdbcType=INTEGER}
+            ORDER BY t.CMCR_DETAIL_CG_ID DESC
+        ) te
+        where
+          te.rn &lt;= #{length,jdbcType=INTEGER}
+        order by
+          te.CMCR_DETAIL_CG_ID
+    </select>
+
+    <select id="doQueryCmcrDetailChangBefor" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+          <include refid="Base_Column_List"/>
+        from
+          HZ_CMCR_DETAIL_AFTER_CHANGE
+        where
+          CMCR_DETAIL_CG_VWO_ID =
+        (select
+            max(CMCR_DETAIL_CG_VWO_ID)
+          from
+            HZ_CMCR_DETAIL_AFTER_CHANGE
+          where
+            CMCR_DETAIL_CG_VWO_ID&lt;#{vwoId,jdbcType=INTEGER}
+        )
+    </select>
+
+    <select id="doQueryCmcrDetailChangFirst" parameterType="java.util.List" resultMap="BaseResultMap">
+        select
+            <include refid="Base_Column_List"/>
+        from
+            HZ_CMCR_DETAIL_AFTER_CHANGE
+        where
+            CMCR_DETAIL_CG_VWO_ID = #{vwoId,jdbcType=INTEGER}
+            <if test="flag==1">
+                and ROWNUM&lt;(select (count(*)/2+1) from  HZ_CMCR_DETAIL_AFTER_CHANGE where CMCR_DETAIL_CG_VWO_ID = #{vwoId,jdbcType=INTEGER})
+            </if>
+            <if test="flag==2">
+                and ROWNUM&gt;(select (count(*)/2) from  HZ_CMCR_DETAIL_AFTER_CHANGE where CMCR_DETAIL_CG_VWO_ID = #{vwoId,jdbcType=INTEGER})
+            </if>
+    </select>
+
+    <select id="doQueryCmcrDetailChangFirstAfter" parameterType="java.lang.Long" resultMap="BaseResultMap">
+
+        select
+            <include refid="Base_Column_List"/>
+        from(
+                select
+                    <include refid="Base_Column_List"/>,ROWNUM rn
+                from
+                    HZ_CMCR_DETAIL_AFTER_CHANGE
+                where
+                  CMCR_DETAIL_CG_VWO_ID = #{vwoId,jdbcType=INTEGER}
+            )
+        where
+        rn&gt;(select (count(*)/2) from HZ_CMCR_DETAIL_AFTER_CHANGE where CMCR_DETAIL_CG_VWO_ID =
+        #{vwoId,jdbcType=INTEGER})
     </select>
 </mapper>

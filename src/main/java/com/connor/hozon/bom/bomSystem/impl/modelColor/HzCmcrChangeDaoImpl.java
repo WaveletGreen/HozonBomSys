@@ -198,6 +198,11 @@ public class HzCmcrChangeDaoImpl extends BasicDaoImpl<HzCmcrChange> implements H
     }
 
     @Override
+    public List<HzCmcrChange> doQueryCmcrDetailChangeBeforAndAfter(HzCmcrChange hzCmcrChange) {
+        return baseSQLUtil.executeQuery(hzCmcrChange, clzName+".doQueryCmcrDetailChangeBeforAndAfter");
+    }
+
+    @Override
     public List<HzCmcrChange> selectLastAfter(List<HzCmcrChange> hzCmcrChangesLastAfter) throws Exception{
         preSetAfterList(hzCmcrChangesLastAfter);
         return executeSelectLast(hzCmcrChangesLastAfter, "selectLastAfter");
