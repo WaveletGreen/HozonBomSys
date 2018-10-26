@@ -3,19 +3,36 @@ package sql.pojo.change;
 /**
  * @Author: haozt
  * @Date: 2018/8/20
- * @Description:
+ * @Description: 影响部门关联人员信息
  */
 public class HzEWOImpactDeptEmp {
+    /**
+     * 主键id
+     */
     private Long id;
 
+    /**
+     * 影响部门
+     */
     private Long impactDeptId;
 
+    /**
+     * 人员信息
+     */
     private Long userId;
-
+    /**
+     * 有效性标志
+     */
     private Integer validFlag;
 
+    /**
+     * ewo流程编号
+     */
     private String ewoNo;
 
+    /**
+     * 项目信息
+     */
     private String projectId;
 
     public String getEwoNo() {

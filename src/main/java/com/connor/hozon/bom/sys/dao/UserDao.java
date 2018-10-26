@@ -75,7 +75,7 @@ public interface UserDao extends GenericDao<User, QueryUser> {
 	List<User> findAllUser();
 
 	/**
-	 * 获取当前全部用户
+	 * 获取当前用户 根据id
 	 * @return
 	 *  todo by haozt on 8/21/2018
 	 */
