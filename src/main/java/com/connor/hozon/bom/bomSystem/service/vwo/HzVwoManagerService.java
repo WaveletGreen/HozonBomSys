@@ -1887,31 +1887,105 @@ public class HzVwoManagerService implements IHzVWOManagerService {
         List<HzCmcrDetailChange> hzCmcrDetailChangeListBeforWithTitle = new ArrayList<HzCmcrDetailChange>();
         List<HzCmcrDetailChange> hzCmcrDetailChangeListAfterWithTitle = new ArrayList<HzCmcrDetailChange>();
         Set<String> titleSet = new LinkedHashSet<>();
+        //查询变更前从数据（vwo号小于变更后的vwo号）
         hzCmcrDetailChangeListBefor = hzCmcrDetailChangeDao.doQueryCmcrDetailChangBefor(vwoId);
+        //查不到则是第一次变更，vwo号相同
         if(hzCmcrDetailChangeListBefor==null||hzCmcrDetailChangeListBefor.size()==0){
+            //查询变更前从数据
             hzCmcrDetailChangeListBefor = hzCmcrDetailChangeDao.doQueryCmcrDetailChangFirst(vwoId,1);
+            //查询变更后从数据
             hzCmcrDetailChangeListAfter = hzCmcrDetailChangeDao.doQueryCmcrDetailChangFirstAfter(vwoId);
         }else {
+            //查询变更后从数据
             hzCmcrDetailChangeListAfter = hzCmcrDetailChangeDao.doQueryCmcrDetailChangFirst(vwoId,0);
         }
+        //srcPuid为key的变更前从数据
+        Map<String,List<HzCmcrDetailChange>> srcPuidBeforMap = new HashMap<String,List<HzCmcrDetailChange>>();
+        //srcPuid为key的变更后从数据
+        Map<String,List<HzCmcrDetailChange>> srcPuidAfterMap = new HashMap<String,List<HzCmcrDetailChange>>();
 
         for(HzCmcrDetailChange hzCmcrDetailChange : hzCmcrDetailChangeListBefor){
+            //将变更前所有title放入set
             titleSet.add(hzCmcrDetailChange.getCmcrDetailCgTitle());
+            //根据源主数据将变更前从数据分开
+            if(srcPuidBeforMap.get(hzCmcrDetailChange.getCmcrDetailSrcModelPuid())==null){
+                srcPuidBeforMap.put(hzCmcrDetailChange.getCmcrDetailSrcModelPuid(),new ArrayList<HzCmcrDetailChange>());
+            }
+            srcPuidBeforMap.get(hzCmcrDetailChange.getCmcrDetailSrcModelPuid()).add(hzCmcrDetailChange);
         }
         for(HzCmcrDetailChange hzCmcrDetailChange : hzCmcrDetailChangeListAfter){
+            //将变更后所有title放入set
             titleSet.add(hzCmcrDetailChange.getCmcrDetailCgTitle());
+            //根据源主数据将变更后从数据分开
+            if(srcPuidAfterMap.get(hzCmcrDetailChange.getCmcrDetailSrcModelPuid())==null){
+                srcPuidAfterMap.put(hzCmcrDetailChange.getCmcrDetailSrcModelPuid(),new ArrayList<HzCmcrDetailChange>());
+            }
+            srcPuidAfterMap.get(hzCmcrDetailChange.getCmcrDetailSrcModelPuid()).add(hzCmcrDetailChange);
+        }
+        List<HzCmcrChange> hzCmcrChangeListBefor = null;
+        List<HzCmcrChange> hzCmcrChangeListAfter= null;
+        //查询变更前主数据（vwo号小于变更后的vwo号）
+        hzCmcrChangeListBefor =  hzCmcrChangeDao.doQueryCmcrChangeBefor(vwoId);
+        if(hzCmcrChangeListBefor==null||hzCmcrChangeListBefor.size()==0){
+            //查询变更前主数据
+            hzCmcrChangeListBefor = hzCmcrChangeDao.doQueryCmcrChangeBeforFirst(vwoId);
+            //查询变更后主数据
+            hzCmcrChangeListAfter = hzCmcrChangeDao.doQueryCmcrChangeAfterFirst(vwoId);
+        }else {
+            //查询变更后主数据
+            hzCmcrChangeListAfter = hzCmcrChangeDao.doQueryCmcrChangeAfter(vwoId);
+        }
+        //titel数据Map
+        Map<String,List<String>> titleMap = new HashMap<String,List<String>>();
+
+        titleMap.put("codeOfColorModel",new ArrayList<String>());
+        titleMap.put("descOfColorModel",new ArrayList<String>());
+        titleMap.put("modelShell",new ArrayList<String>());
+        for(int i=0;i<hzCmcrChangeListBefor.size();i++){
+            titleMap.get("codeOfColorModel").add(hzCmcrChangeListBefor.get(i).getCmcrSrcCodeOfColorMod()==null?"-":hzCmcrChangeListBefor.get(i).getCmcrSrcCodeOfColorMod());
+            titleMap.get("descOfColorModel").add(hzCmcrChangeListBefor.get(i).getCmcrSrcDescOfColorMod()==null?"-":hzCmcrChangeListBefor.get(i).getCmcrSrcDescOfColorMod());
+            titleMap.get("modelShell").add(hzCmcrChangeListBefor.get(i).getCmcrCgShellCode()==null?"-":hzCmcrChangeListBefor.get(i).getCmcrCgShellCode());
+            titleMap.get("codeOfColorModel").add(hzCmcrChangeListAfter.get(i).getCmcrSrcCodeOfColorMod()==null?"-":hzCmcrChangeListAfter.get(i).getCmcrSrcCodeOfColorMod());
+            titleMap.get("descOfColorModel").add(hzCmcrChangeListAfter.get(i).getCmcrSrcDescOfColorMod()==null?"-":hzCmcrChangeListAfter.get(i).getCmcrSrcDescOfColorMod());
+            titleMap.get("modelShell").add(hzCmcrChangeListAfter.get(i).getCmcrCgShellCode()==null?"-":hzCmcrChangeListAfter.get(i).getCmcrCgShellCode());
         }
 
-//        for(int i=0;i<titleSet.size();i++){
-//            String titleKey = "S_"+i;
-//            for(HzCmcrDetailChange hzCmcrDetailChange : hzCmcrDetailChangeListBefor){
-//                if(hzCmcrDetailChange.getCmcrDetailCgTitle()){
-//
-//                }
-//            }
-//        }
-        map.put("changBefor",hzCmcrDetailChangeListBefor);
-        map.put("changAfter",hzCmcrDetailChangeListAfter);
+        Iterator<String> iterator = titleSet.iterator();
+        int titleNum = 0;
+        while (iterator.hasNext()){
+            String titleKey = "S_"+titleNum;
+            titleNum++;
+            String title = iterator.next();
+            titleMap.put(titleKey,new ArrayList<String>());
+            for(int j=0;j<hzCmcrChangeListAfter.size();j++){
+                String srcPuid = hzCmcrChangeListBefor.get(j).getCmcrSrcPuid();
+                List<HzCmcrDetailChange> hzCmcrDetailChangesBefor = srcPuidBeforMap.get(srcPuid);
+                boolean beforTitleFlag = false;
+                for(HzCmcrDetailChange hzCmcrDetailChange : hzCmcrDetailChangesBefor ){
+                    if(title.equals(hzCmcrDetailChange.getCmcrDetailCgTitle())){
+                        titleMap.get(titleKey).add(hzCmcrDetailChange.getColorCode()==null?"-":hzCmcrDetailChange.getColorCode());
+                        beforTitleFlag = true;
+                        break;
+                    }
+                }
+                if(!beforTitleFlag){
+                    titleMap.get(titleKey).add("-");
+                }
+                boolean afterTitleFlag = false;
+                List<HzCmcrDetailChange> hzCmcrDetailChangesAfter = srcPuidAfterMap.get(srcPuid);
+                for(HzCmcrDetailChange hzCmcrDetailChange : hzCmcrDetailChangesAfter ){
+                    if(title.equals(hzCmcrDetailChange.getCmcrDetailCgTitle())){
+                        titleMap.get(titleKey).add(hzCmcrDetailChange.getColorCode());
+                        afterTitleFlag = true;
+                        break;
+                    }
+                }
+                if(!afterTitleFlag){
+                    titleMap.get(titleKey).add("-");
+                }
+            }
+        }
         map.put("titleSet",titleSet);
+        map.put("titleMap",titleMap);
     }
 }

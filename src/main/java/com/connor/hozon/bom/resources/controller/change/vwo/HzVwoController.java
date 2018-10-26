@@ -55,10 +55,6 @@ public class HzVwoController {
      */
     @RequestMapping(value = "/vwoFormList", method = RequestMethod.GET)
     public String getVwoFromList(@RequestParam Long id, @RequestParam Integer vwoType, Model model) {
-
-        Map<String,Object> map = new HashMap<String, Object>();
-        iHzVWOManagerService.doQueryCmcrDetailChangBefor(map,507L);
-
         String error = "errorWithEntity";
         HzVwoInfo vwoInfo;
         HzVwoInfluenceDept influenceDept;
