@@ -1,11 +1,13 @@
 /*
  * Copyright (c) 2018.
- * This file was wrote by fancyears·milos·maywas @connor. Any question/bug you can post to 1243093366@qq.com.
+ * This file was wrote by fancyears·milos·maywas @connor. Any question/bug you can't post to 1243093366@qq.com.
  * ALL RIGHTS RESERVED.
  */
-
 var vwoId = -1;
-var connectedTableToolbars = [
+/**
+ * 关联人员表的工具条设置
+ */
+var connectedTableToolbar = [
     {
         text: '添加',
         iconCls: 'glyphicon glyphicon-plus',
@@ -56,8 +58,51 @@ var connectedTableToolbars = [
         }
     }
 ];
-var commonHeight = 400;
-var commonTableName="vwo_table";
+/**
+ * 关联人员的表头设置
+ */
+var connectedTableColumn = [
+    {
+        field: 'ck',
+        title: '通知关联变更人',
+        checkbox: true
+    },
+    {
+        field: 'personName',
+        title: '关联工程师姓名',
+        align: 'center',
+        valign: 'middle',
+        sortable: true,
+        sortOrder: 'asc',
+    },
+    {
+        field: 'personDeptName',
+        title: '所属部门',
+        align: 'center',
+        valign: 'middle',
+        sortable: true,
+        sortOrder: 'asc',
+    },
+    {
+        field: 'partId',
+        title: '关联零件号',
+        align: 'center',
+        valign: 'middle',
+        sortable: true,
+        sortOrder: 'asc',
+    },
+    {
+        field: 'partName',
+        title: '关联零件名称',
+        align: 'center',
+        valign: 'middle',
+        sortable: true,
+        sortOrder: 'asc',
+    }
+];
+/**
+ * 分发与实施工具条设置
+ * */
 var vwoExeToolBar = [
     {
         text: '添加',
@@ -107,8 +152,109 @@ var vwoExeToolBar = [
         }
     }
 ];
+/**
+ * 分发与实施表头设置
+ */
+var vwoExeColumn=[
+    {
+        field: 'ck',
+        title: '选择',
+        checkbox: true
+    },
+    {
+        field: 'exeDept',
+        title: '部门',
+        align: 'center',
+        valign: 'middle',
+        sortable: true,
+        sortOrder: 'asc',
+    },
+    {
+        field: 'exeUser',
+        title: '人员',
+        align: 'center',
+        valign: 'middle',
+        sortable: true,
+        sortOrder: 'asc',
+    },
+    {
+        field: 'exeRole',
+        title: '角色',
+        align: 'center',
+        valign: 'middle',
+        sortable: true,
+        sortOrder: 'asc',
+        formatter: function (value, row, index) {
+            switch (value) {
+                case "1":
+                    return "Draft";
+                case "2":
+                    return "EDIT";
+                case "3":
+                    return "PROCESS";
+                case "4":
+                    return "IMPL";
+                case "5":
+                    return "INFO";
+            }
+        }
+    },
+    {
+        field: 'exeMission',
+        title: '任务',
+        align: 'center',
+        valign: 'middle',
+        sortable: true,
+        sortOrder: 'asc',
+        formatter: function (value, row, index) {
+            switch (value) {
+                case "1":
+                    return "Draft";
+                case "2":
+                    return "EDIT";
+                case "3":
+                    return "PROCESS";
+                case "4":
+                    return "IMPL";
+                case "5":
+                    return "INFO";
+            }
+        }
+    },
+    {
+        field: 'exePlanFinishDate',
+        title: '计划完成时间',
+        align: 'center',
+        valign: 'middle',
+        sortable: true,
+        sortOrder: 'asc',
+        formatter: function (value, row, index) {
+            return dateToStringFormat(value)
+        }
+    },
+    {
+        field: 'exeStatus',
+        title: '状态',
+        align: 'center',
+        valign: 'middle',
+        sortable: true,
+        sortOrder: 'asc',
+    },
+    {
+        field: 'exeProof',
+        title: '证明',
+        align: 'center',
+        valign: 'middle',
+        sortable: true,
+        sortOrder: 'asc',
+    }
+];
+/**变更描述表高度设置*/
+var commonHeight = 400;
+/**动态变化的变更描述表*/
+var commonTableName = "vwo_table";
+
 $(document).ready((function () {
-    // initTable(),
     formatDate();
     vwoId = $("#vwo").val();
     let url = "getInformChangers";
@@ -116,7 +262,6 @@ $(document).ready((function () {
     loadConnectedData(url);
     taskStatusHold();
     loadChangeDesc();
-    // registerBtn();
 }));
 
 /**
@@ -227,7 +372,6 @@ function loadConnectedData(url) {
             '        id="launch">发起\n' +
             '</button>');
     }
-
     var $table = $("#connectedTable");
     $table.bootstrapTable('destroy');
     $table.bootstrapTable({
@@ -242,47 +386,9 @@ function loadConnectedData(url) {
         sortName: 'pColorCode',
         sortOrder: 'asc',
         formId: "queryConnectedData",
-        toolbars: connectedTableToolbars,
+        toolbars: connectedTableToolbar,
         /**列信息，需要预先定义好*/
-        columns: [
-            {
-                field: 'ck',
-                title: '通知关联变更人',
-                checkbox: true
-            },
-            {
-                field: 'personName',
-                title: '关联工程师姓名',
-                align: 'center',
-                valign: 'middle',
-                sortable: true,
-                sortOrder: 'asc',
-            },
-            {
-                field: 'personDeptName',
-                title: '所属部门',
-                align: 'center',
-                valign: 'middle',
-                sortable: true,
-                sortOrder: 'asc',
-            },
-            {
-                field: 'partId',
-                title: '关联零件号',
-                align: 'center',
-                valign: 'middle',
-                sortable: true,
-                sortOrder: 'asc',
-            },
-            {
-                field: 'partName',
-                title: '关联零件名称',
-                align: 'center',
-                valign: 'middle',
-                sortable: true,
-                sortOrder: 'asc',
-            }
-        ]
+        columns: connectedTableColumn,
     });
 }
 
@@ -453,100 +559,7 @@ function loadVwoExecuteInfo() {
         formId: "queryConnectedData",
         toolbars: vwoExeToolBar,
         /**列信息，需要预先定义好*/
-        columns: [
-            {
-                field: 'ck',
-                title: '选择',
-                checkbox: true
-            },
-            {
-                field: 'exeDept',
-                title: '部门',
-                align: 'center',
-                valign: 'middle',
-                sortable: true,
-                sortOrder: 'asc',
-            },
-            {
-                field: 'exeUser',
-                title: '人员',
-                align: 'center',
-                valign: 'middle',
-                sortable: true,
-                sortOrder: 'asc',
-            },
-            {
-                field: 'exeRole',
-                title: '角色',
-                align: 'center',
-                valign: 'middle',
-                sortable: true,
-                sortOrder: 'asc',
-                formatter: function (value, row, index) {
-                    switch (value) {
-                        case "1":
-                            return "Draft";
-                        case "2":
-                            return "EDIT";
-                        case "3":
-                            return "PROCESS";
-                        case "4":
-                            return "IMPL";
-                        case "5":
-                            return "INFO";
-                    }
-                }
-            },
-            {
-                field: 'exeMission',
-                title: '任务',
-                align: 'center',
-                valign: 'middle',
-                sortable: true,
-                sortOrder: 'asc',
-                formatter: function (value, row, index) {
-                    switch (value) {
-                        case "1":
-                            return "Draft";
-                        case "2":
-                            return "EDIT";
-                        case "3":
-                            return "PROCESS";
-                        case "4":
-                            return "IMPL";
-                        case "5":
-                            return "INFO";
-                    }
-                }
-            },
-            {
-                field: 'exePlanFinishDate',
-                title: '计划完成时间',
-                align: 'center',
-                valign: 'middle',
-                sortable: true,
-                sortOrder: 'asc',
-                formatter: function (value, row, index) {
-                    return dateToStringFormat(value)
-                }
-            },
-            {
-                field: 'exeStatus',
-                title: '状态',
-                align: 'center',
-                valign: 'middle',
-                sortable: true,
-                sortOrder: 'asc',
-            },
-            {
-                field: 'exeProof',
-                title: '证明',
-                align: 'center',
-                valign: 'middle',
-                sortable: true,
-                sortOrder: 'asc',
-            }
-        ]
+        columns: vwoExeColumn,
     });
 }
 
@@ -735,7 +748,7 @@ function approve(url, formId) {
 }
 
 function clearToolbars() {
-    connectedTableToolbars = [];
+    connectedTableToolbar = [];
     vwoExeToolBar = [];
 }
 
@@ -783,6 +796,7 @@ function loadChangeDesc() {
             loadFeature(vwoId);
             break;
         case "2":
+            loadModelColor(vwoId);
             break;
         case "3":
             break;

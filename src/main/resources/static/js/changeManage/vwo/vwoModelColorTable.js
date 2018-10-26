@@ -30,9 +30,12 @@ function loadModelColor(vwoId) {
         url: "",
         type: "GET",
         success: function (result) {
-            if (result.status) {
-                initTable(result.data);
+            if (result) {
+                initTable(result);
             }
+        },
+        error: function (e) {
+            console.error("服务器错误:" + e.status);
         }
     })
 }
@@ -43,12 +46,14 @@ function loadModelColor(vwoId) {
  */
 
 function initTable(data) {
+    let titles = data.title;
+    let tableData = data.data;
     //存储定义的table表头
-    for (let i in data) {
+    for (let i in titles) {
         column.push({
             field: "s" + i,
             title:
-                data[i],
+                titles[i],
             align:
                 'center',
             valign:
@@ -58,8 +63,10 @@ function initTable(data) {
     var $table = $("#" + commonTableName);
     $table.bootstrapTable('destroy');
     $table.bootstrapTable({
-        url: "getModelColorTable?vwoId=" + vwoId,
-        method: "POST",
+        // url: "getModelColorTable?vwoId=" + vwoId,
+        method: "get",
+        data: tableData,
+        cache: false,
         height: commonHeight,// $(window.parent.document).find("#wrapper").height() - document.body.offsetHeight - 100,
         width: $(window).width(),
         showToggle: false,                   //是否显示详细视图和列表视图的切换按钮
@@ -67,6 +74,7 @@ function initTable(data) {
         showRefresh: false,                  //是否显示刷新按钮
         pagination: false,                   //是否显示分页（*）
         clickToSelect: false,                // 单击某一行的时候选中某一条记录
+        exportTypes: ['csv', 'txt', 'xml'],
         formId: "null",                       //需要定义formId，不定义的话会造成jQuery异常
         /**列信息，需要预先定义好*/
         columns: column,

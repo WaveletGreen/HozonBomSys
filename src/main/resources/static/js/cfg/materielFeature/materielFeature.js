@@ -9,7 +9,7 @@ var projectUid = null;
 /**目标table*/
 var $table = null;
 /**工具条设置*/
-var toolbarSetting = [
+var toolbar = [
     {
         text: '一键生成',
         iconCls: 'glyphicon glyphicon-plus',
@@ -383,7 +383,7 @@ function gotIt(result) {
         columns: column,
         // sortable: true,                     //是否启用排序
         // sortOrder: "asc",                   //排序方式
-        toolbars: toolbarSetting,
+        toolbars: toolbar,
     });
 
     //设置跳转的tableID，放在table初始化语句之后
