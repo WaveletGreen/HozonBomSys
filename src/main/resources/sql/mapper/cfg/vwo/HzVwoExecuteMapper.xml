@@ -1,0 +1,356 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.connor.hozon.bom.bomSystem.dao.vwo.HzVwoExecuteDao">
+    <resultMap id="BaseResultMap" type="sql.pojo.cfg.vwo.HzVwoExecute">
+        <!--主键-->
+        <id column="EXE_ID" jdbcType="DECIMAL" property="exeId"/>
+        <!--VWO号外键-->
+        <result column="EXE_VWO_ID" jdbcType="DECIMAL" property="exeVwoId"/>
+        <!--部门-->
+        <result column="EXE_DEPT" jdbcType="VARCHAR" property="exeDept"/>
+        <!--人员-->
+        <result column="EXE_USER" jdbcType="VARCHAR" property="exeUser"/>
+        <!--角色-->
+        <result column="EXE_ROLE" jdbcType="VARCHAR" property="exeRole"/>
+        <!--任务-->
+        <result column="EXE_MISSION" jdbcType="VARCHAR" property="exeMission"/>
+        <!--计划完成时间-->
+        <result column="EXE_PLAN_FINISH_DATE" jdbcType="TIMESTAMP" property="exePlanFinishDate"/>
+        <!--状态-->
+        <result column="EXE_STATUS" jdbcType="VARCHAR" property="exeStatus"/>
+        <!--证明-->
+        <result column="EXE_PROOF" jdbcType="VARCHAR" property="exeProof"/>
+        <!--创建时间-->
+        <result column="EXE_CREATE_DATE" jdbcType="TIMESTAMP" property="exeCreateDate"/>
+        <!--创建人-->
+        <result column="EXE_CREATOR" jdbcType="VARCHAR" property="exeCreator"/>
+        <!--更新时间-->
+        <result column="EXE_UPDATE_DATE" jdbcType="TIMESTAMP" property="exeUpdateDate"/>
+        <!--更新人-->
+        <result column="EXE_UPDATER" jdbcType="VARCHAR" property="exeUpdater"/>
+        <!--用户的id，保留，该id是在mysql中的，无法进行级联删除-->
+        <result column="EXE_USER_ID" jdbcType="DECIMAL" property="exeUserId"/>
+        <!--保留字段-->
+        <result column="EXE_RESERVE2" jdbcType="VARCHAR" property="exeReserve2"/>
+        <!--保留字段-->
+        <result column="EXE_RESERVE3" jdbcType="VARCHAR" property="exeReserve3"/>
+        <!--保留字段-->
+        <result column="EXE_RESERVE4" jdbcType="VARCHAR" property="exeReserve4"/>
+        <!--保留字段-->
+        <result column="EXE_RESERVE5" jdbcType="VARCHAR" property="exeReserve5"/>
+        <!--保留字段-->
+        <result column="EXE_RESERVE6" jdbcType="VARCHAR" property="exeReserve6"/>
+        <!--保留字段-->
+        <result column="EXE_RESERVE7" jdbcType="VARCHAR" property="exeReserve7"/>
+        <!--保留字段-->
+        <result column="EXE_RESERVE8" jdbcType="VARCHAR" property="exeReserve8"/>
+        <!--保留字段-->
+        <result column="EXE_RESERVE9" jdbcType="VARCHAR" property="exeReserve9"/>
+        <!--保留字段-->
+        <result column="EXE_RESERVE10" jdbcType="VARCHAR" property="exeReserve10"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    EXE_ID, EXE_VWO_ID, EXE_DEPT, EXE_USER, EXE_ROLE, EXE_MISSION, EXE_PLAN_FINISH_DATE, 
+    EXE_STATUS, EXE_PROOF, EXE_CREATE_DATE, EXE_CREATOR, EXE_UPDATE_DATE, EXE_UPDATER, 
+    EXE_USER_ID, EXE_RESERVE2, EXE_RESERVE3, EXE_RESERVE4, EXE_RESERVE5, EXE_RESERVE6, 
+    EXE_RESERVE7, EXE_RESERVE8, EXE_RESERVE9, EXE_RESERVE10
+  </sql>
+    <!--**************************************select**************************************-->
+    <select id="selectByPrimaryKey" parameterType="sql.pojo.cfg.vwo.HzVwoExecute" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from HZ_VWO_EXECUTE
+        where EXE_ID = #{exeId,jdbcType=DECIMAL}
+    </select>
+    <select id="selectByVwoId" parameterType="Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from HZ_VWO_EXECUTE
+        where EXE_VWO_ID = #{exeVwoId,jdbcType=DECIMAL}
+    </select>
+    <!--**************************************delete**************************************-->
+    <delete id="deleteByPrimaryKey" parameterType="sql.pojo.cfg.vwo.HzVwoExecute">
+    delete from HZ_VWO_EXECUTE
+    where EXE_ID = #{exeId,jdbcType=DECIMAL}
+  </delete>
+    <delete id="deleteByBatch" parameterType="List">
+        delete from HZ_VWO_EXECUTE
+        where EXE_ID in (
+        <foreach collection="list" item="item" index="index"
+                 separator=",">
+            #{item.exeId,jdbcType=DECIMAL}
+        </foreach>
+        )
+    </delete>
+    <!--**************************************insert**************************************-->
+    <insert id="insert" parameterType="sql.pojo.cfg.vwo.HzVwoExecute">
+        <selectKey order="BEFORE"
+                   keyColumn="EXE_ID" keyProperty="exeId" resultType="java.lang.Long">
+            select SEQ_VWO_INFLUENCE_DEPT_ID.Nextval from dual
+        </selectKey>
+        insert into HZ_VWO_EXECUTE (EXE_ID, EXE_VWO_ID, EXE_DEPT,
+        EXE_USER, EXE_ROLE, EXE_MISSION,
+        EXE_PLAN_FINISH_DATE, EXE_STATUS, EXE_PROOF,
+        EXE_CREATE_DATE, EXE_CREATOR, EXE_UPDATE_DATE,
+        EXE_UPDATER, EXE_USER_ID, EXE_RESERVE2,
+        EXE_RESERVE3, EXE_RESERVE4, EXE_RESERVE5,
+        EXE_RESERVE6, EXE_RESERVE7, EXE_RESERVE8,
+        EXE_RESERVE9, EXE_RESERVE10)
+        values (#{exeId,jdbcType=DECIMAL}, #{exeVwoId,jdbcType=DECIMAL}, #{exeDept,jdbcType=VARCHAR},
+        #{exeUser,jdbcType=VARCHAR}, #{exeRole,jdbcType=VARCHAR}, #{exeMission,jdbcType=VARCHAR},
+        #{exePlanFinishDate,jdbcType=TIMESTAMP}, #{exeStatus,jdbcType=VARCHAR}, #{exeProof,jdbcType=VARCHAR},
+        #{exeCreateDate,jdbcType=TIMESTAMP}, #{exeCreator,jdbcType=VARCHAR}, #{exeUpdateDate,jdbcType=TIMESTAMP},
+        #{exeUpdater,jdbcType=VARCHAR}, #{exeUserId,jdbcType=DECIMAL}, #{exeReserve2,jdbcType=VARCHAR},
+        #{exeReserve3,jdbcType=VARCHAR}, #{exeReserve4,jdbcType=VARCHAR}, #{exeReserve5,jdbcType=VARCHAR},
+        #{exeReserve6,jdbcType=VARCHAR}, #{exeReserve7,jdbcType=VARCHAR}, #{exeReserve8,jdbcType=VARCHAR},
+        #{exeReserve9,jdbcType=VARCHAR}, #{exeReserve10,jdbcType=VARCHAR})
+    </insert>
+    <insert id="insertSelective" parameterType="sql.pojo.cfg.vwo.HzVwoExecute">
+        insert into HZ_VWO_EXECUTE
+        <selectKey order="BEFORE"
+                   keyColumn="EXE_ID" keyProperty="exeId" resultType="java.lang.Long">
+            select SEQ_VWO_INFLUENCE_DEPT_ID.Nextval from dual
+        </selectKey>
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="exeId != null">
+                EXE_ID,
+            </if>
+            <if test="exeVwoId != null">
+                EXE_VWO_ID,
+            </if>
+            <if test="exeDept != null">
+                EXE_DEPT,
+            </if>
+            <if test="exeUser != null">
+                EXE_USER,
+            </if>
+            <if test="exeRole != null">
+                EXE_ROLE,
+            </if>
+            <if test="exeMission != null">
+                EXE_MISSION,
+            </if>
+            <if test="exePlanFinishDate != null">
+                EXE_PLAN_FINISH_DATE,
+            </if>
+            <if test="exeStatus != null">
+                EXE_STATUS,
+            </if>
+            <if test="exeProof != null">
+                EXE_PROOF,
+            </if>
+            <if test="exeCreateDate != null">
+                EXE_CREATE_DATE,
+            </if>
+            <if test="exeCreator != null">
+                EXE_CREATOR,
+            </if>
+            <if test="exeUpdateDate != null">
+                EXE_UPDATE_DATE,
+            </if>
+            <if test="exeUpdater != null">
+                EXE_UPDATER,
+            </if>
+            <if test="exeUserId != null">
+                EXE_USER_ID,
+            </if>
+            <if test="exeReserve2 != null">
+                EXE_RESERVE2,
+            </if>
+            <if test="exeReserve3 != null">
+                EXE_RESERVE3,
+            </if>
+            <if test="exeReserve4 != null">
+                EXE_RESERVE4,
+            </if>
+            <if test="exeReserve5 != null">
+                EXE_RESERVE5,
+            </if>
+            <if test="exeReserve6 != null">
+                EXE_RESERVE6,
+            </if>
+            <if test="exeReserve7 != null">
+                EXE_RESERVE7,
+            </if>
+            <if test="exeReserve8 != null">
+                EXE_RESERVE8,
+            </if>
+            <if test="exeReserve9 != null">
+                EXE_RESERVE9,
+            </if>
+            <if test="exeReserve10 != null">
+                EXE_RESERVE10,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="exeId != null">
+                #{exeId,jdbcType=DECIMAL},
+            </if>
+            <if test="exeVwoId != null">
+                #{exeVwoId,jdbcType=DECIMAL},
+            </if>
+            <if test="exeDept != null">
+                #{exeDept,jdbcType=VARCHAR},
+            </if>
+            <if test="exeUser != null">
+                #{exeUser,jdbcType=VARCHAR},
+            </if>
+            <if test="exeRole != null">
+                #{exeRole,jdbcType=VARCHAR},
+            </if>
+            <if test="exeMission != null">
+                #{exeMission,jdbcType=VARCHAR},
+            </if>
+            <if test="exePlanFinishDate != null">
+                #{exePlanFinishDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="exeStatus != null">
+                #{exeStatus,jdbcType=VARCHAR},
+            </if>
+            <if test="exeProof != null">
+                #{exeProof,jdbcType=VARCHAR},
+            </if>
+            <if test="exeCreateDate != null">
+                #{exeCreateDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="exeCreator != null">
+                #{exeCreator,jdbcType=VARCHAR},
+            </if>
+            <if test="exeUpdateDate != null">
+                #{exeUpdateDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="exeUpdater != null">
+                #{exeUpdater,jdbcType=VARCHAR},
+            </if>
+            <if test="exeUserId != null">
+                #{exeUserId,jdbcType=DECIMAL},
+            </if>
+            <if test="exeReserve2 != null">
+                #{exeReserve2,jdbcType=VARCHAR},
+            </if>
+            <if test="exeReserve3 != null">
+                #{exeReserve3,jdbcType=VARCHAR},
+            </if>
+            <if test="exeReserve4 != null">
+                #{exeReserve4,jdbcType=VARCHAR},
+            </if>
+            <if test="exeReserve5 != null">
+                #{exeReserve5,jdbcType=VARCHAR},
+            </if>
+            <if test="exeReserve6 != null">
+                #{exeReserve6,jdbcType=VARCHAR},
+            </if>
+            <if test="exeReserve7 != null">
+                #{exeReserve7,jdbcType=VARCHAR},
+            </if>
+            <if test="exeReserve8 != null">
+                #{exeReserve8,jdbcType=VARCHAR},
+            </if>
+            <if test="exeReserve9 != null">
+                #{exeReserve9,jdbcType=VARCHAR},
+            </if>
+            <if test="exeReserve10 != null">
+                #{exeReserve10,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <!--**************************************update**************************************-->
+    <update id="updateByPrimaryKeySelective" parameterType="sql.pojo.cfg.vwo.HzVwoExecute">
+        update HZ_VWO_EXECUTE
+        <set>
+            <if test="exeVwoId != null">
+                EXE_VWO_ID = #{exeVwoId,jdbcType=DECIMAL},
+            </if>
+            <if test="exeDept != null">
+                EXE_DEPT = #{exeDept,jdbcType=VARCHAR},
+            </if>
+            <if test="exeUser != null">
+                EXE_USER = #{exeUser,jdbcType=VARCHAR},
+            </if>
+            <if test="exeRole != null">
+                EXE_ROLE = #{exeRole,jdbcType=VARCHAR},
+            </if>
+            <if test="exeMission != null">
+                EXE_MISSION = #{exeMission,jdbcType=VARCHAR},
+            </if>
+            <if test="exePlanFinishDate != null">
+                EXE_PLAN_FINISH_DATE = #{exePlanFinishDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="exeStatus != null">
+                EXE_STATUS = #{exeStatus,jdbcType=VARCHAR},
+            </if>
+            <if test="exeProof != null">
+                EXE_PROOF = #{exeProof,jdbcType=VARCHAR},
+            </if>
+            <if test="exeCreateDate != null">
+                EXE_CREATE_DATE = #{exeCreateDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="exeCreator != null">
+                EXE_CREATOR = #{exeCreator,jdbcType=VARCHAR},
+            </if>
+            <if test="exeUpdateDate != null">
+                EXE_UPDATE_DATE = #{exeUpdateDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="exeUpdater != null">
+                EXE_UPDATER = #{exeUpdater,jdbcType=VARCHAR},
+            </if>
+            <if test="exeUserId != null">
+                EXE_USER_ID = #{exeUserId,jdbcType=DECIMAL},
+            </if>
+            <if test="exeReserve2 != null">
+                EXE_RESERVE2 = #{exeReserve2,jdbcType=VARCHAR},
+            </if>
+            <if test="exeReserve3 != null">
+                EXE_RESERVE3 = #{exeReserve3,jdbcType=VARCHAR},
+            </if>
+            <if test="exeReserve4 != null">
+                EXE_RESERVE4 = #{exeReserve4,jdbcType=VARCHAR},
+            </if>
+            <if test="exeReserve5 != null">
+                EXE_RESERVE5 = #{exeReserve5,jdbcType=VARCHAR},
+            </if>
+            <if test="exeReserve6 != null">
+                EXE_RESERVE6 = #{exeReserve6,jdbcType=VARCHAR},
+            </if>
+            <if test="exeReserve7 != null">
+                EXE_RESERVE7 = #{exeReserve7,jdbcType=VARCHAR},
+            </if>
+            <if test="exeReserve8 != null">
+                EXE_RESERVE8 = #{exeReserve8,jdbcType=VARCHAR},
+            </if>
+            <if test="exeReserve9 != null">
+                EXE_RESERVE9 = #{exeReserve9,jdbcType=VARCHAR},
+            </if>
+            <if test="exeReserve10 != null">
+                EXE_RESERVE10 = #{exeReserve10,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where EXE_ID = #{exeId,jdbcType=DECIMAL}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="sql.pojo.cfg.vwo.HzVwoExecute">
+    update HZ_VWO_EXECUTE
+    set EXE_VWO_ID = #{exeVwoId,jdbcType=DECIMAL},
+      EXE_DEPT = #{exeDept,jdbcType=VARCHAR},
+      EXE_USER = #{exeUser,jdbcType=VARCHAR},
+      EXE_ROLE = #{exeRole,jdbcType=VARCHAR},
+      EXE_MISSION = #{exeMission,jdbcType=VARCHAR},
+      EXE_PLAN_FINISH_DATE = #{exePlanFinishDate,jdbcType=TIMESTAMP},
+      EXE_STATUS = #{exeStatus,jdbcType=VARCHAR},
+      EXE_PROOF = #{exeProof,jdbcType=VARCHAR},
+      EXE_CREATE_DATE = #{exeCreateDate,jdbcType=TIMESTAMP},
+      EXE_CREATOR = #{exeCreator,jdbcType=VARCHAR},
+      EXE_UPDATE_DATE = #{exeUpdateDate,jdbcType=TIMESTAMP},
+      EXE_UPDATER = #{exeUpdater,jdbcType=VARCHAR},
+      EXE_USER_ID = #{exeUserId,jdbcType=DECIMAL},
+      EXE_RESERVE2 = #{exeReserve2,jdbcType=VARCHAR},
+      EXE_RESERVE3 = #{exeReserve3,jdbcType=VARCHAR},
+      EXE_RESERVE4 = #{exeReserve4,jdbcType=VARCHAR},
+      EXE_RESERVE5 = #{exeReserve5,jdbcType=VARCHAR},
+      EXE_RESERVE6 = #{exeReserve6,jdbcType=VARCHAR},
+      EXE_RESERVE7 = #{exeReserve7,jdbcType=VARCHAR},
+      EXE_RESERVE8 = #{exeReserve8,jdbcType=VARCHAR},
+      EXE_RESERVE9 = #{exeReserve9,jdbcType=VARCHAR},
+      EXE_RESERVE10 = #{exeReserve10,jdbcType=VARCHAR}
+    where EXE_ID = #{exeId,jdbcType=DECIMAL}
+  </update>
+</mapper>
