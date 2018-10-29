@@ -1893,7 +1893,7 @@ public class HzVwoManagerService implements IHzVWOManagerService {
 
     public void doQueryCmcrDetailChangBefor(Map<String, Object> map, Long vwoId) {
         //无序变更前后数据
-        List<HzCmcrDetailChange> hzCmcrDetailChangeListBefor = new ArrayList<HzCmcrDetailChange>();
+        List<HzCmcrDetailChange> hzCmcrDetailChangeListBefor = new ArrayList<>();
         List<HzCmcrDetailChange> hzCmcrDetailChangeListAfter = new ArrayList<HzCmcrDetailChange>();
         //顺序对应title变更前后数据
         List<HzCmcrDetailChange> hzCmcrDetailChangeListBeforWithTitle = new ArrayList<HzCmcrDetailChange>();
@@ -1949,7 +1949,7 @@ public class HzVwoManagerService implements IHzVWOManagerService {
         }
         //titel数据Map
         List<Map<String, String>> result = new ArrayList<>();
-        
+
         Map<String, List<String>> titleMap = new LinkedHashMap<>();
 
         titleMap.put("codeOfColorModel", new ArrayList<String>());

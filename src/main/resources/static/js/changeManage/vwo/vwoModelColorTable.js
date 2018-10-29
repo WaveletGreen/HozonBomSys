@@ -47,14 +47,7 @@ function loadModelColor(vwoId) {
 
 function initTable(data) {
     let titles = data.titleSet;
-    let after = data.changAfter;
-    let before = data.changBefor;
-    let tableData = [];
-
-    let lengthOfAfter = getLengthOfJson(after);
-    let lengthOfBefore = getLengthOfJson(before);
-    let sorter = -1;
-    //存储定义的table表头
+    let tableData = data.result;
     for (let i in titles) {
         columnOfModelColor.push({
             field: "s" + i,
@@ -66,39 +59,6 @@ function initTable(data) {
                 'middle'
         })
     }
-    let ajson = {};
-    let bjson = {};
-    if (lengthOfAfter != lengthOfBefore) {
-        sorter = lengthOfAfter > lengthOfBefore ? lengthOfAfter : lengthOfBefore;
-    } else {
-        sorter = before;
-    }
-
-    ajson.codeOfColorModel = after[0].cmcrDetailCgCreator;
-    ajson.descOfColorModel = after[0].cmcrDetailCgId;
-    ajson.modelShell = after[0].cmcrDetailCgVwoId;
-
-    bjson.codeOfColorModel = before[0].cmcrDetailCgCreator;
-    bjson.descOfColorModel = before[0].cmcrDetailCgId;
-    bjson.modelShell = before[0].cmcrDetailCgVwoId;
-
-    for (let i = 0; i < sorter; i++) {
-        if (after.hasOwnProperty(i)) {
-            ajson['s' + i] = after[i].cmcrDetailSrcColorUid;
-        }
-        else {
-            ajson['s' + i] = "-";
-        }
-        if (before.hasOwnProperty(i)) {
-            bjson['s' + i] = before[i].cmcrDetailSrcColorUid;
-        }
-        else {
-            bjson['s' + i] = "-";
-        }
-    }
-
-    tableData.push(before);
-    tableData.push(after);
 
     let $table = $("#" + commonTableName);
     $table.bootstrapTable('destroy');
@@ -114,7 +74,6 @@ function initTable(data) {
         showRefresh: false,                  //是否显示刷新按钮
         pagination: false,                   //是否显示分页（*）
         clickToSelect: false,                // 单击某一行的时候选中某一条记录
-        exportTypes: ['csv', 'txt', 'xml'],
         formId: "null",                       //需要定义formId，不定义的话会造成jQuery异常
         /**列信息，需要预先定义好*/
         columns: columnOfModelColor,

@@ -10,7 +10,7 @@ import lombok.Data;
 
 /**
  * @Author: Fancyears·Maylos·Maywas
- * @Description: 相关性查询助手
+ * @Description: 相关性查询助手，该查询助手字段定义必须与前端对应的table定义的field进行一一对应，方便Spring进行自动化
  * @Date: Created in 2018/9/7 15:12
  * @Modified By:
  */

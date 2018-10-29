@@ -29,7 +29,7 @@
             from Hz_Full_Cfg_Withcfg_Record t
             left join Hz_Bom_Line_Record t2 on t.cfg_bomline_uid=t2.puid
             left join Hz_Cfg0_Record t3 on t.cfg_cfg0_uid=t3.puid
-            left join Hz_Color_Model t5 on t3.p_cfg0_family_puid=t5.p_cfg_uid
+            left join HZ_CFG0_MODEL_COLOR_DETAIL t5 on t3.p_cfg0_family_puid=t5.p_cfg_uid
             left join Hz_Cfg0_Model_Color_Record t9 on t5.model_uid=t9.puid
             left join Hz_Cfg0_Colorset t99 on t5.p_color_uid=t99.puid
              where t.fl_cfg_version=(

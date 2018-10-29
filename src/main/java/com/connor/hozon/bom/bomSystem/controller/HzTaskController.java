@@ -32,7 +32,7 @@ import java.util.Map;
 
 /**
  * @Author: Fancyears·Maylos·Maywas
- * @Description: 人员任务
+ * @Description: 人员任务controller，依据当前登录用户，查询用户需要执行的任务集合，并返回前端，由JS进行动态绘制需要执行的任务
  * @Date: Created in 2018/10/19 16:47
  * @Modified By:
  */
@@ -52,6 +52,10 @@ public class HzTaskController {
         return false;
     }
 
+    /**
+     * 加载个人任务，依据当前登录用户，从任务表中查询出该用户关联的需要执行的任务(任务状态为1)
+     * @return 一组当前用户需要执行的的任务集合，以JSON数组回传前端，最终由JS动态绘制到右上角任务栏中
+     */
     @RequestMapping(value = "/loadTasks", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public JSONObject loadTasks() {
@@ -84,7 +88,7 @@ public class HzTaskController {
                         HzVwoInfo info = hzVwoInfoService.doSelectByPrimaryKey(task.getTaskTargetId());
                         dto.setText(info.getVwoNum());
                         dto.setTargetId(info.getId());
-                        dto.setTargetName(info.getVwoNum() + "VWO表单");
+                        dto.setTargetName(info.getVwoNum() + "表单");
                         dto.setTargetType(task.getTaskTargetType());
                         dto.setFormType(task.getTaskFormType());
                         break;
@@ -108,27 +112,6 @@ public class HzTaskController {
                 dtoList.add(dto);
             }
         }
-//        for (int i = 0; i < 10; i++) {
-//            HzTaskPostDto dto = new HzTaskPostDto();
-//            dto.setUrl("vwoFormList");
-//            dto.setId("81");
-//            dto.setText("VC2018000"+i);
-//            dto.setTargetId("434");
-//            dto.setTargetName("VC2018000" + i+"VWO表单");
-//            dto.setTargetType(1);
-//            dto.setFormType(1);
-//            dto.setReserve("");
-//            dto.setReserve2("");
-//            dto.setReserve3("");
-//            dto.setReserve4("");
-//            dto.setReserve5("");
-//            dto.setReserve6("");
-//            dto.setReserve7("");
-//            dto.setReserve8("");
-//            dto.setReserve9("");
-//            dto.setReserve10("");
-//            dtoList.add(dto);
-//        }
         result.put("data", dtoList);
         return result;
     }
