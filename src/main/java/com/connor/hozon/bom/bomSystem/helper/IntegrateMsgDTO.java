@@ -5,12 +5,16 @@
  */
 
 package com.connor.hozon.bom.bomSystem.helper;
+
+import lombok.Data;
+
 /**
  * @Author: Fancyears·Maylos·Maywas
  * @Description: 狗日的
  * @Date: Created in 2018/9/6 13:19
  * @Modified By:
  */
+@Data
 public class IntegrateMsgDTO {
     /**
      * 从SAP传回的消息
@@ -26,27 +30,4 @@ public class IntegrateMsgDTO {
      */
     private String itemId;
 
-    public String getMsg() {
-        return msg;
-    }
-
-    public void setMsg(String msg) {
-        this.msg = msg;
-    }
-
-    public String getPuid() {
-        return puid;
-    }
-
-    public void setPuid(String puid) {
-        this.puid = puid;
-    }
-
-    public String getItemId() {
-        return itemId;
-    }
-
-    public void setItemId(String itemId) {
-        this.itemId = itemId;
-    }
 }

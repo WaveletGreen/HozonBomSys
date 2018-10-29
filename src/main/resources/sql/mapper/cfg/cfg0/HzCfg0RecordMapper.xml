@@ -122,7 +122,7 @@
         and t.p_cfg0_object_id=#{pCfg0ObjectId,jdbcType=VARCHAR}
         and t.p_cfg0_main_item_puid=#{pCfg0MainItemPuid,jdbcType=VARCHAR}
     </select>
-    <select id="selectByCondition" parameterType="com.connor.hozon.bom.bomSystem.dto.HzFeatureQueryDTO"
+    <select id="selectByCondition" parameterType="com.connor.hozon.bom.bomSystem.dto.HzFeatureQueryDto"
             resultMap="BaseResultMap">
 
         select
@@ -234,7 +234,7 @@
         )
         and t.P_CFG0_FAMILY_PUID=#{pCfg0FamilyPuid,jdbcType=VARCHAR}
     </select>
-    <select id="tellMeHowManyOfThose" parameterType="com.connor.hozon.bom.bomSystem.dto.HzFeatureQueryDTO"
+    <select id="tellMeHowManyOfThose" parameterType="com.connor.hozon.bom.bomSystem.dto.HzFeatureQueryDto"
             resultType="java.lang.Integer">
         select count(*) from HZ_CFG0_RECORD t
         where t.P_CFG0_MAIN_ITEM_PUID=(

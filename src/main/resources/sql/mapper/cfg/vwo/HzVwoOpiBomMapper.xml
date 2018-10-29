@@ -106,8 +106,8 @@
             <if test="opiBomMngUserId != null">
                 OPI_BOM_USER_ID,
             </if>
-            <if test="OPI_BOM_USER_NAME != null">
-                opiBomMngUserName,
+            <if test="opiBomMngUserName != null">
+                OPI_BOM_USER_NAME,
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">

@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2018.
- * This file was wrote by fancyears·milos·maywas @connor. Any question/bug you can post to 1243093366@qq.com.
+ * This file was wrote by fancyears·milos·maywas @connor. Any question/bug you can't post to 1243093366@qq.com.
  * ALL RIGHTS RESERVED.
  */
 
@@ -55,6 +55,7 @@ public class HzVwoController {
      */
     @RequestMapping(value = "/vwoFormList", method = RequestMethod.GET)
     public String getVwoFromList(@RequestParam Long id, @RequestParam Integer vwoType, Model model) {
+
         String error = "errorWithEntity";
         HzVwoInfo vwoInfo;
         HzVwoInfluenceDept influenceDept;
@@ -234,6 +235,7 @@ public class HzVwoController {
 
     /**
      * 为评估意见选择评估人员
+     *
      * @param vwo
      * @param selectType
      * @param model
@@ -246,15 +248,15 @@ public class HzVwoController {
             return "errorWithEntity";
         }
         String type = "";
-        if(selectType==1){
+        if (selectType == 1) {
             type = "opiBom";
-        }else if(selectType==2){
+        } else if (selectType == 2) {
             type = "opiPmt";
-        }else if(selectType==3){
+        } else if (selectType == 3) {
             type = "opiProj";
-        }else {
+        } else {
             model.addAttribute("选择类型错误");
-            return  "errorWithEntity";
+            return "errorWithEntity";
         }
 
         model.addAttribute("vwoId", vwo);
@@ -343,21 +345,22 @@ public class HzVwoController {
 
     @RequestMapping(value = "/launch", method = RequestMethod.POST)
     @ResponseBody
-    public JSONObject launch(@RequestBody HzVwoProcessDto dto){
-        return iHzVWOManagerService.launch(dto.getVwoType(), dto.getProjectUid(), dto.getVwoId(),dto.getFormId());
+    public JSONObject launch(@RequestBody HzVwoProcessDto dto) {
+        return iHzVWOManagerService.launch(dto.getVwoType(), dto.getProjectUid(), dto.getVwoId(), dto.getFormId());
     }
 
     @RequestMapping(value = "/saveLeaderOpinion", method = RequestMethod.POST)
     @ResponseBody
     public JSONObject saveLeaderOpinion(@RequestParam HzVwoInfo info,
                                         @RequestParam HzVwoInfluenceDept dept
-                                       ) {
+    ) {
         System.out.println();
         return null;
     }
 
     /**
      * BOM经理评估意见
+     *
      * @param hzVwoOpiBom
      * @return
      */
@@ -369,6 +372,7 @@ public class HzVwoController {
 
     /**
      * 专业PMT经理评估意见
+     *
      * @param hzVwoOpiPmt
      * @return
      */
@@ -379,7 +383,8 @@ public class HzVwoController {
     }
 
     /**
-     *项目经理评估意见
+     * 项目经理评估意见
+     *
      * @param hzVwoOpiProj
      * @return
      */
@@ -390,12 +395,21 @@ public class HzVwoController {
     }
 
 
-
-
-    /**************************特性表单****************************/
-    @RequestMapping(value = "getFeatureTable",method = RequestMethod.POST)
+    /**************************特性变更表单****************************/
+    @RequestMapping(value = "getFeatureTable", method = RequestMethod.POST)
     @ResponseBody
-    public Map<String, Object> getFeatureTable(@RequestParam Long vwoId){
+    public Map<String, Object> getFeatureTable(@RequestParam Long vwoId) {
         return iHzVWOManagerService.getFeatureTable(vwoId);
     }
+
+
+    /**************************配色方案变更描述表单***************************/
+    @RequestMapping(value = "getModelColorTable", method = RequestMethod.POST)
+    @ResponseBody
+    public Map<String, Object> getModelColorTable(@RequestParam Long vwoId) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        iHzVWOManagerService.doQueryCmcrDetailChangBefor(map, vwoId);
+        return map;
+    }
+
 }

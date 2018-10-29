@@ -120,9 +120,9 @@ function initTable(eplUrl){
                 //minimumCountColumns:4
             });
             // $table.bootstrapTable('hideColumn', 'puid');
-            $table.bootstrapTable('hideColumn', 'rank');
-            $table.bootstrapTable('hideColumn', 'groupNum');
-            $table.bootstrapTable('hideColumn', 'level');
+            // $table.bootstrapTable('hideColumn', 'rank');
+            // $table.bootstrapTable('hideColumn', 'groupNum');
+            // $table.bootstrapTable('hideColumn', 'level');
         }
     })
 
