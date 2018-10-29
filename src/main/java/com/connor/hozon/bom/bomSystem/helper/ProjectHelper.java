@@ -10,6 +10,7 @@ import com.connor.hozon.bom.bomSystem.iservice.project.IHzVehicleService;
 import com.connor.hozon.bom.bomSystem.service.project.HzBrandService;
 import com.connor.hozon.bom.bomSystem.service.project.HzPlatformService;
 import com.connor.hozon.bom.bomSystem.service.project.HzProjectLibsService;
+import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,18 +52,22 @@ public class ProjectHelper {
     /**
      * 项目
      */
+    @Getter
     private HzProjectLibs project;
     /**
      * 车型
      */
+    @Getter
     private HzVehicleRecord vehicle;
     /**
      * 平台
      */
+    @Getter
     private HzPlatformRecord platform;
     /**
      * 品牌
      */
+    @Getter
     private HzBrandRecord brand;
 
     @Autowired
@@ -87,21 +92,5 @@ public class ProjectHelper {
         } catch (Exception e) {
             logger.error("根据项目PUID查询项目结构树出现错误", e);
         }
-    }
-
-    public HzProjectLibs getProject() {
-        return project;
-    }
-
-    public HzVehicleRecord getVehicle() {
-        return vehicle;
-    }
-
-    public HzPlatformRecord getPlatform() {
-        return platform;
-    }
-
-    public HzBrandRecord getBrand() {
-        return brand;
     }
 }

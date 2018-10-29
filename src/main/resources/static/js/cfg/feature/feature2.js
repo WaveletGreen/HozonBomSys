@@ -106,49 +106,49 @@ var toolbar = [
             });
         }
     },
-    {
-        text: '下载文件',
-        iconCls: 'glyphicon glyphicon-plus',
-        handler: function () {
-            // window.open("./download?dsd=1&dsda=2&sdasd=3", '_self');
-            var rows = $table.bootstrapTable('getSelections');
-            var $tablex = $("#dataTable");
-            let columnsOrg = $tablex.bootstrapTable("getVisibleColumns");
-            let uids = [];
-            let columns = [];
-            let fields = [];
-            for (let i in rows) {
-                uids.push(rows[i].puid);
-            }
-            for (let i in columnsOrg) {
-                columns.push(columnsOrg[i].title);
-                fields.push(columnsOrg[i].field);
-            }
-            DownLoadFile({
-                url: './download', //请求的url
-                data: {uids: uids, columns: columns, fields: fields}//要发送的数据
-            });
-            // $.ajax({
-            //     type: "POST",
-            //     //ajax需要添加打包名
-            //     url: "./download",
-            //     contentType: "application/json",
-            //     success: function (result) {
-            //         if (result) {
-            //             layer.msg("成功", {icon: 1, time: 2000})
-            //             // window.Ewin.alert({message: result, width: 800});
-            //             //刷新，会重新申请数据库数据
-            //         }
-            //         else {
-            //             window.Ewin.alert({message: "失败"});
-            //         }
-            //     },
-            //     error: function (info) {
-            //         window.Ewin.alert({message: "失败:" + info.status});
-            //     }
-            // })
-        }
-    },
+    // {
+    //     text: '下载文件',
+    //     iconCls: 'glyphicon glyphicon-plus',
+    //     handler: function () {
+    //         // window.open("./download?dsd=1&dsda=2&sdasd=3", '_self');
+    //         var rows = $table.bootstrapTable('getSelections');
+    //         var $tablex = $("#dataTable");
+    //         let columnsOrg = $tablex.bootstrapTable("getVisibleColumns");
+    //         let uids = [];
+    //         let columns = [];
+    //         let fields = [];
+    //         for (let i in rows) {
+    //             uids.push(rows[i].puid);
+    //         }
+    //         for (let i in columnsOrg) {
+    //             columns.push(columnsOrg[i].title);
+    //             fields.push(columnsOrg[i].field);
+    //         }
+    //         DownLoadFile({
+    //             url: './download', //请求的url
+    //             data: {uids: uids, columns: columns, fields: fields}//要发送的数据
+    //         });
+    //         // $.ajax({
+    //         //     type: "POST",
+    //         //     //ajax需要添加打包名
+    //         //     url: "./download",
+    //         //     contentType: "application/json",
+    //         //     success: function (result) {
+    //         //         if (result) {
+    //         //             layer.msg("成功", {icon: 1, time: 2000})
+    //         //             // window.Ewin.alert({message: result, width: 800});
+    //         //             //刷新，会重新申请数据库数据
+    //         //         }
+    //         //         else {
+    //         //             window.Ewin.alert({message: "失败"});
+    //         //         }
+    //         //     },
+    //         //     error: function (info) {
+    //         //         window.Ewin.alert({message: "失败:" + info.status});
+    //         //     }
+    //         // })
+    //     }
+    // },
 ];
 var column = [
     {

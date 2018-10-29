@@ -7,7 +7,7 @@
 package com.connor.hozon.bom.bomSystem.dao.cfg0;
 
 import com.connor.hozon.bom.bomSystem.dao.BasicDao;
-import com.connor.hozon.bom.bomSystem.dto.HzFeatureQueryDTO;
+import com.connor.hozon.bom.bomSystem.dto.HzFeatureQueryDto;
 import com.connor.hozon.bom.bomSystem.dto.HzMaterielFeatureBean;
 import org.apache.ibatis.annotations.Param;
 import sql.pojo.cfg.cfg0.HzCfg0Record;
@@ -36,7 +36,7 @@ public interface HzCfg0RecordDao extends BasicDao<HzCfg0Record> {
      * @param queryBase
      * @return
      */
-    List<HzCfg0Record> selectListByProjectPuid(@Param("projectPuid") String projectPuid, HzFeatureQueryDTO queryBase);
+    List<HzCfg0Record> selectListByProjectPuid(@Param("projectPuid") String projectPuid, HzFeatureQueryDto queryBase);
 
 
     List<HzMaterielFeatureBean> selectMaterielFeatureByProjectPuid(@Param("projectPuid") String projectPuid);
@@ -95,13 +95,13 @@ public interface HzCfg0RecordDao extends BasicDao<HzCfg0Record> {
      * @param projectPuid
      * @return
      */
-    int tellMeHowManyOfThose(HzFeatureQueryDTO projectPuid);
+    int tellMeHowManyOfThose(HzFeatureQueryDto projectPuid);
 
     /**
      * @param queryBase
      * @return
      */
-    List<HzCfg0Record> selectByCondition(HzFeatureQueryDTO queryBase);
+    List<HzCfg0Record> selectByCondition(HzFeatureQueryDto queryBase);
 
     /**
      * 用HZCSYS+特性值（从颜色中来）查找一条车身颜色特性值
