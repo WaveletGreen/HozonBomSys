@@ -85,70 +85,70 @@ public class FileController {
     }
 
     //文件下载相关代码
-    @RequestMapping(value = "/download", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE
-//            ,produces = {MediaType.APPLICATION_ATOM_XML_VALUE, MediaType.APPLICATION_JSON_VALUE}
-    )
-    public String downloadFile(org.apache.catalina.servlet4preview.http.HttpServletRequest request, HttpServletResponse response
-            , @RequestParam List<String> uids
-            , @RequestParam List<String> columns
-            , @RequestParam List<String> fields
-    ) throws IOException, NoSuchMethodException, InvocationTargetException, IllegalAccessException {
-        String fileName = "static/files/EBOM导入模板.xlsx";
-        String fileName2 = "static/files/EBOM导入模板"+ UUIDHelper.generateUpperUid()+".xlsx";
-        HzCfg0Record record = hzCfg0RecordDao.selectByPrimaryKey(uids.get(0));
-        //获取反射的get方法，必须与实体类里的方法一一对应上，否则会报方法找不到错误
-        Method method = HzCfg0Record.class.getMethod("get" + fields.get(1));
-        //执行方法，相当于用get方法
-        Object oxx = method.invoke(record);
-        if (fileName != null) {
-            //当前是从该工程的WEB-INF//File//下获取文件(该目录可以在下面一行代码配置)然后下载到C:\\users\\downloads即本机的默认下载的目录
-            String realPath = request.getServletContext().getRealPath(
-                    "//WEB-INF//classes//");
-            URL path = getClass().getClassLoader().getResource("");//.getPath();
-            File file = new File(path.getPath() + "/" + fileName);
-            File ft = new File(path.getPath() + "/" + fileName2);
-            if (!ft.exists()) {
-                ft.createNewFile();
-            }
-            if (file.exists()) {
-                response.setContentType("application/force-download");// 设置强制下载不打开
-                response.addHeader("Content-Disposition",
-                        "attachment;fileName=" + fileName);// 设置文件名
-                byte[] buffer = new byte[1024];
-                FileInputStream fis = null;
-                BufferedInputStream bis = null;
-                try {
-                    fis = new FileInputStream(file);
-                    bis = new BufferedInputStream(fis);
-                    OutputStream os = response.getOutputStream();
-                    int i = bis.read(buffer);
-                    while (i != -1) {
-                        os.write(buffer, 0, i);
-                        i = bis.read(buffer);
-                    }
-                    System.out.println("success");
-                } catch (Exception e) {
-                    e.printStackTrace();
-                } finally {
-                    if (bis != null) {
-                        try {
-                            bis.close();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                    if (fis != null) {
-                        try {
-                            ft.delete();
-                            fis.close();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-            }
-        }
-        return null;
-    }
+//    @RequestMapping(value = "/download", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE
+////            ,produces = {MediaType.APPLICATION_ATOM_XML_VALUE, MediaType.APPLICATION_JSON_VALUE}
+//    )
+//    public String downloadFile(org.apache.catalina.servlet4preview.http.HttpServletRequest request, HttpServletResponse response
+//            , @RequestParam List<String> uids
+//            , @RequestParam List<String> columns
+//            , @RequestParam List<String> fields
+//    ) throws IOException, NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+//        String fileName = "static/files/EBOM导入模板.xlsx";
+//        String fileName2 = "static/files/EBOM导入模板"+ UUIDHelper.generateUpperUid()+".xlsx";
+//        HzCfg0Record record = hzCfg0RecordDao.selectByPrimaryKey(uids.get(0));
+//        //获取反射的get方法，必须与实体类里的方法一一对应上，否则会报方法找不到错误
+//        Method method = HzCfg0Record.class.getMethod("get" + fields.get(1));
+//        //执行方法，相当于用get方法
+//        Object oxx = method.invoke(record);
+//        if (fileName != null) {
+//            //当前是从该工程的WEB-INF//File//下获取文件(该目录可以在下面一行代码配置)然后下载到C:\\users\\downloads即本机的默认下载的目录
+//            String realPath = request.getServletContext().getRealPath(
+//                    "//WEB-INF//classes//");
+//            URL path = getClass().getClassLoader().getResource("");//.getPath();
+//            File file = new File(path.getPath() + "/" + fileName);
+//            File ft = new File(path.getPath() + "/" + fileName2);
+//            if (!ft.exists()) {
+//                ft.createNewFile();
+//            }
+//            if (file.exists()) {
+//                response.setContentType("application/force-download");// 设置强制下载不打开
+//                response.addHeader("Content-Disposition",
+//                        "attachment;fileName=" + fileName);// 设置文件名
+//                byte[] buffer = new byte[1024];
+//                FileInputStream fis = null;
+//                BufferedInputStream bis = null;
+//                try {
+//                    fis = new FileInputStream(file);
+//                    bis = new BufferedInputStream(fis);
+//                    OutputStream os = response.getOutputStream();
+//                    int i = bis.read(buffer);
+//                    while (i != -1) {
+//                        os.write(buffer, 0, i);
+//                        i = bis.read(buffer);
+//                    }
+//                    System.out.println("success");
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                } finally {
+//                    if (bis != null) {
+//                        try {
+//                            bis.close();
+//                        } catch (IOException e) {
+//                            e.printStackTrace();
+//                        }
+//                    }
+//                    if (fis != null) {
+//                        try {
+//                            ft.delete();
+//                            fis.close();
+//                        } catch (IOException e) {
+//                            e.printStackTrace();
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//        return null;
+//    }
 
 }

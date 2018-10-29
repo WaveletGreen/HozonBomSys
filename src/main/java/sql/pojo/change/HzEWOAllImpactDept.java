@@ -3,11 +3,17 @@ package sql.pojo.change;
 /**
  * @Author: haozt
  * @Date: 2018/8/20
- * @Description:
+ * @Description:全部的影响部门
  */
 public class HzEWOAllImpactDept {
+    /**
+     * id
+     */
     private Long id;
 
+    /**
+     * 部门名称
+     */
     private String deptName;
 
     public Long getId() {

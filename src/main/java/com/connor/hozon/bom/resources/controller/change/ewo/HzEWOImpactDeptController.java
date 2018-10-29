@@ -10,6 +10,7 @@ import com.connor.hozon.bom.resources.domain.query.HzEWOImpactDeptQuery;
 import com.connor.hozon.bom.resources.mybatis.change.HzEWOImpactDeptDAO;
 import com.connor.hozon.bom.resources.service.change.HzEWOImpactDeptService;
 import com.connor.hozon.bom.resources.util.Result;
+import com.connor.hozon.bom.resources.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -72,7 +73,7 @@ public class HzEWOImpactDeptController extends BaseController {
      */
     @RequestMapping(value = "get/detail",method = RequestMethod.GET)
     public void getImpactDeptDetail(HzEWOImpactDeptQuery query, HttpServletResponse response){
-        if(query.getProjectId() == null || query.getEwoNo() == null){
+        if(StringUtil.isEmpty(query.getEwoNo())){
             toJSONResponse(Result.build(false,"非法参数！"),response);
             return;
         }
@@ -88,7 +89,7 @@ public class HzEWOImpactDeptController extends BaseController {
      */
     @RequestMapping(value = "get/detail/emp",method = RequestMethod.GET)
     public void getImpactDeptEmp(HzEWOImpactDeptQuery query, HttpServletResponse response){
-        if(query.getProjectId() == null || query.getEwoNo() == null){
+        if(StringUtil.isEmpty(query.getEwoNo())){
             toJSONResponse(Result.build(false,"非法参数！"),response);
             return;
         }

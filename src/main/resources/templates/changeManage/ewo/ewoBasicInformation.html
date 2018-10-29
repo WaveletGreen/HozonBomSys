@@ -10,17 +10,20 @@
 <title>变更管理ewo</title>
 </head>
 <body>
-<div class="head-btnSets">
-    <button class="btn btn-success head-func-btn" style="margin-top: 100px;"
-            id="vwoSaveBtn">保存
-    </button>
-    <button class="btn btn-success head-func-btn" style="margin-top: 150px;"
-            id="release">发布
-    </button>
-    <button class="btn btn-success head-func-btn" style="margin-top: 200px;"
-            id="interrupt">中断
-    </button>
-</div>
+<!--<div class="head-btnSets">-->
+    <!--<button class="btn btn-success head-func-btn" style="margin-top: 100px;"-->
+            <!--id="vwoSaveBtn">保存-->
+    <!--</button>-->
+    <!--<button class="btn btn-success head-func-btn" style="margin-top: 150px;"-->
+            <!--id="release">发布-->
+    <!--</button>-->
+    <!--<button class="btn btn-success head-func-btn" style="margin-top: 200px;"-->
+            <!--id="interrupt">中断-->
+    <!--</button>-->
+    <!--<button class="btn btn-success head-func-btn" style="margin-top: 400px;"-->
+            <!--id="saveTask" onclick="saveTask()">保存任务-->
+    <!--</button>-->
+<!--</div>-->
 <!--1.基本信息-->
 <h4><i class="fa fa-minus-square" aria-hidden="true">基本信息</i></h4>
 <div class="panel-body" style="padding:0px;">
@@ -31,7 +34,7 @@
 
                 <div class="col-lg-12 col-md-12" style="padding:0px;">
                     <div class="col-lg-2 col-md-2">
-                        <input type=" hidden" id="id" th:value="${data.id}">
+                        <input type="hidden" id="id" th:value="${data.id}">
                         <div class="form-group after_the">
                             <label for="ewoNo">EWO号:</label>
                             <input type="text" class="form-control" name="ewoNo" id="ewoNo"

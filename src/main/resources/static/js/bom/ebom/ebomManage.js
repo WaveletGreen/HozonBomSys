@@ -510,8 +510,8 @@ function initTable(eBomUrl) {
                                     param[('title'+i)]=rows[k][('title'+i)];
                                 }
                                 rows[k].map=param;
-                                console.log(param);
-                                console.log(rows[k]);
+                                // console.log(param);
+                                // console.log(rows[k]);
                             }
                             window.Ewin.confirm({title: '提示', message: '是否要导出选中行？', width: 500}).on(function (e) {
                                 if (e) {
@@ -1015,22 +1015,6 @@ function initTable1(eBomUrl,puids) {
                             }
                         }
                     },
-                    {
-                        text: '导出Excel',
-                        iconCls: 'glyphicon glyphicon-export',
-                        handler: function () {
-                            var userName = data;//表头
-                            var className = $table.bootstrapTable('getData');//返回当前页的数据
-                            var param = "userName=" + userName + "&className=" + className;
-
-                            var projectPuid = $("#project", window.top.document).val();
-                            //var eBomUrl = "ebom/getEBom/list?projectId=" + projectPuid;
-
-                            var url = "ebom/excelExport?projectId=" + projectPuid;
-                            window.location = url;
-
-                        }
-                    }
                     // {
                     //     text: '导出Excel',
                     //     iconCls: 'glyphicon glyphicon-export',
@@ -1046,7 +1030,64 @@ function initTable1(eBomUrl,puids) {
                     //         window.location = url;
                     //
                     //     }
-                    // }
+                    // },
+
+                    {
+                        text: '导出Excel',
+                        iconCls: 'glyphicon glyphicon-export',
+                        handler: function () {
+                            //var headers = data;//表头
+                            var rows = $table.bootstrapTable('getSelections');//选中行数据
+                            let length=-1;
+                            // var str = rows[0].title;
+                            if (rows.length == 0) {
+                                window.Ewin.alert({message: '请选择一条需要导出的数据!'});
+                                return false;
+                            }else{
+                                for (var index in rows) {
+                                    if (rows[index].status == 5 || rows[index].status == 6) {
+                                        window.Ewin.alert({message: '勾选的数据有审核中状态，审核中的数据不给导出修改!'});
+                                        return false;
+                                    }
+                                }
+                                length==getLengthOfJson(rows[0]);
+                            }
+                            for(let k in rows){
+                                let param={};
+                                for(let i =0;i<length-eBomTitleSet;i++){
+                                    param[('title'+i)]=rows[k][('title'+i)];
+                                }
+                                rows[k].map=param;
+                            }
+                            window.Ewin.confirm({title: '提示', message: '是否要导出选中行？', width: 500}).on(function (e) {
+                                if (e) {
+                                    $.ajax({
+                                        type: "POST",
+                                        //ajax需要添加打包名
+                                        url: "./ebom/excelExport",
+                                        data: (JSON.stringify(rows)),
+                                        contentType: "application/json",
+                                        success: function (result) {
+                                            console.log(result);
+                                            if (result.status) {
+                                                layer.msg(result.msg, {icon: 1, time: 2000})
+                                                //下载EBOM导入模板
+                                                window.location.href =  result.path;//V1.1.0.log
+                                            }
+                                            else {
+                                                window.Ewin.alert({message: "操作导出失败:" + result.msg});
+                                            }
+                                            $table.bootstrapTable("refresh");
+                                        },
+                                        error: function (info) {
+                                            window.Ewin.alert({message: "操作导出:" + info.status});
+                                        }
+                                    })
+                                }
+                            });
+
+                        }
+                    },
                 ],
             });
             //$table.bootstrapTable('hideColumn','puid');

@@ -111,6 +111,7 @@ public class HzMbomRecordFactory {
         respDTO.setTools(record.getTools());
         respDTO.setWasterProduct(record.getWasterProduct());
         respDTO.setChange(record.getChange());
+        respDTO.setProcessRoute(record.getProcessRoute());
         respDTO.setChangeNum(record.getChangeNum());
         if (Integer.valueOf(1).equals(record.getpLouaFlag())) {
             respDTO.setpLouaFlag("LOU");

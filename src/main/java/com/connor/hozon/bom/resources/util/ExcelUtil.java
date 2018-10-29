@@ -324,15 +324,14 @@ public class ExcelUtil {
 
 
             };
-        } else {
-            if (cell.getCellType() == Cell.CELL_TYPE_NUMERIC) {
+        }else{
+            if(cell.getCellType() == Cell.CELL_TYPE_NUMERIC){
                 cell.setCellType(Cell.CELL_TYPE_STRING);
             }
             return cell;
         }
 
     }
-
     /**
      * 写Excel文件
      *
@@ -346,21 +345,26 @@ public class ExcelUtil {
     public static boolean writeExcel(String fileName, String[] title, List<String[]> dataList, String str, HttpServletRequest request) throws Exception {
         boolean flag = false;
         try {
+//            Object obj = ExcelUtil.class.getClassLoader();
             String realPath = request.getServletContext().getRealPath(
                     "//WEB-INF//classes//");
             String pathx = realPath + "static/files/tableExport.xlsx";
             File f = null;
             //以属性文件进行控制调试阶段用到的代码
-            PropertiesHelper helper = new PropertiesHelper();
-            Properties prox = helper.load();
-            boolean isDownload = Boolean.valueOf(prox.getProperty("DOWNLOAD_FILE_DEBUG"));
-            helper.load();
-            if (!isDownload) {
-                f = new File(pathx);
-            } else {
-                f = new File(ExcelUtil.class./*getClassLoader().*/getResource("/static/files/tableExport.xlsx").getFile());// 声明File对象
-            }
+//            PropertiesHelper helper = new PropertiesHelper();
+//            Properties prox = helper.load();
+//            boolean isDownload = Boolean.valueOf(prox.getProperty("DOWNLOAD_FILE_DEBUG"));
+//            helper.load();
+//            if (!isDownload) {
+//                f = new File(pathx);
+//            } else {
+//                f = new File(ExcelUtil.class.getClassLoader().getResource("static/files/tableExport.xlsx").getFile());// 声明File对象
+//            }
+
+            f = new File(pathx);
             if (f == null || !f.exists()) {
+                f = new File(ExcelUtil.class.getClassLoader().getResource("static/files/tableExport.xlsx").getFile());
+                if(f == null || !f.exists())
                 return false;
             }
             FileOutputStream fos = new FileOutputStream(f);
@@ -476,15 +480,14 @@ public class ExcelUtil {
                     }
                 }
             }
-
             wb.write(fos);
 //            wb.write(out);
             // 弹出下载对话框
 //            out.close();
             fos.close();
-
             flag = true;
         } catch (Exception e) {
+            e.printStackTrace();
             throw e;
         }
         return flag;
