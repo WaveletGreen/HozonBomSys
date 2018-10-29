@@ -5,6 +5,8 @@
  */
 
 var projectPuid = '';
+/**动态表头*/
+var dynamicTitle = [];
 ///工具条设置
 var toolbar = [
     {
@@ -108,6 +110,13 @@ var toolbar = [
                 }
                 i
             }
+
+            var data = {};
+            data.rows = rows;
+            data.titles = dynamicTitle;
+            data.projectPuid = projectPuid;
+            console.log(JSON.stringify(data));
+            console.log(data);
             //测试数据
             window.Ewin.confirm({
                 title: '提示',
@@ -118,8 +127,8 @@ var toolbar = [
                     $.ajax({
                         type: "POST",
                         //ajax需要添加打包名
-                        url: "./modelColor/getVWO?projectPuid=" + projectPuid,
-                        data: JSON.stringify(rows),
+                        url: "./modelColor/getVWO",
+                        data: /*data*/JSON.stringify(data),
                         contentType: "application/json",
                         success: function (result) {
                             if (result.status) {
@@ -241,6 +250,7 @@ function loadData(_projectPuid) {
                         'middle'
                 };
                 column.push(josn);
+                dynamicTitle.push(data[i]);
             }
             var status = {
                 field: "cmcrStatus",
