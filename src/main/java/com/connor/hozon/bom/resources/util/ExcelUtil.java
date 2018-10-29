@@ -342,7 +342,7 @@ public class ExcelUtil {
     public static boolean writeExcel(String fileName, String[] title, List<String[]> dataList,String str) throws Exception {
         boolean flag = false;
         try {
-            File f = new File(ExcelUtil.class.getClassLoader().getResource("static/files/tableExport.xlsx").getFile()) ;// 声明File对象
+            File f = new File(ExcelUtil.class.getClassLoader().getResource("static/files/tableExport.xlsx").getFile()) ;//_EBOM.xlsx
             FileOutputStream fos = new FileOutputStream(f);
             XSSFWorkbook wb = new XSSFWorkbook();
             XSSFCellStyle titleCellStyle = wb.createCellStyle();

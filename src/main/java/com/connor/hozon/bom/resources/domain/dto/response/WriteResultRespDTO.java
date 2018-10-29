@@ -1,5 +1,8 @@
 package com.connor.hozon.bom.resources.domain.dto.response;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @Author: haozt
  * @Date: 2018/6/25
