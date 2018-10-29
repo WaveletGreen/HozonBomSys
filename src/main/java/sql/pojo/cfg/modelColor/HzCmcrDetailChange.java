@@ -126,6 +126,8 @@ public class HzCmcrDetailChange {
      * 序列名称
      */
     private String seqName;
-
+    /**
+     * 颜色代码
+     */
     private String colorCode;
 }

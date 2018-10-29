@@ -59,7 +59,8 @@
         <!--保留字段-->
         <result column="CMCR_DETAIL_CG_REVERSE6" jdbcType="VARCHAR" property="cmcrDetailCgReverse6"/>
     </resultMap>
-    <resultMap extends="BaseResultMap" id="VWO_Result_map" type="sql.pojo.cfg.modelColor.HzCmcrDetailChange">
+
+    <resultMap extends="BaseResultMap" id="VWO_Result_Map" type="sql.pojo.cfg.modelColor.HzCmcrDetailChange">
         <result column="colorCode" jdbcType="VARCHAR" property="colorCode"/>
     </resultMap>
     <sql id="Base_Column_List">
@@ -495,11 +496,12 @@
           te.CMCR_DETAIL_CG_ID
     </select>
 
-    <select id="doQueryCmcrDetailChangBefor" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    <select id="doQueryCmcrDetailChangBefor" parameterType="java.lang.Long" resultMap="VWO_Result_Map">
         select
-          <include refid="Base_Column_List"/>
+          <include refid="Base_Column_List"/>,t2.p_color_code as  colorCode
         from
-          HZ_CMCR_DETAIL_AFTER_CHANGE
+          HZ_CMCR_DETAIL_AFTER_CHANGE t
+        left join Hz_cfg0_colorset t2 on t.cmcr_detail_src_color_uid= t2.puid
         where
           CMCR_DETAIL_CG_VWO_ID =
         (select
@@ -509,27 +511,28 @@
           where
             CMCR_DETAIL_CG_VWO_ID&lt;#{vwoId,jdbcType=INTEGER}
         )
+        and
+        CMCR_DETAIL_SRC_MODEL_PUID in
+        (select distinct CMCR_DETAIL_SRC_MODEL_PUID from HZ_CMCR_DETAIL_AFTER_CHANGE where CMCR_DETAIL_CG_VWO_ID=#{vwoId,jdbcType=INTEGER})
     </select>
 
-    <select id="doQueryCmcrDetailChangFirst" parameterType="java.util.List" resultMap="BaseResultMap">
+    <select id="doQueryCmcrDetailChangFirst" parameterType="java.util.List" resultMap="VWO_Result_Map">
         select
-            <include refid="Base_Column_List"/>
+            <include refid="Base_Column_List"/>,t2.p_color_code as  colorCode
         from
-            HZ_CMCR_DETAIL_AFTER_CHANGE
+            HZ_CMCR_DETAIL_AFTER_CHANGE t
+        left join Hz_cfg0_colorset t2 on t.cmcr_detail_src_color_uid= t2.puid
         where
             CMCR_DETAIL_CG_VWO_ID = #{vwoId,jdbcType=INTEGER}
             <if test="flag==1">
                 and ROWNUM&lt;(select (count(*)/2+1) from  HZ_CMCR_DETAIL_AFTER_CHANGE where CMCR_DETAIL_CG_VWO_ID = #{vwoId,jdbcType=INTEGER})
             </if>
-            <if test="flag==2">
-                and ROWNUM&gt;(select (count(*)/2) from  HZ_CMCR_DETAIL_AFTER_CHANGE where CMCR_DETAIL_CG_VWO_ID = #{vwoId,jdbcType=INTEGER})
-            </if>
     </select>
 
-    <select id="doQueryCmcrDetailChangFirstAfter" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    <select id="doQueryCmcrDetailChangFirstAfter" parameterType="java.lang.Long" resultMap="VWO_Result_Map">
 
         select
-            <include refid="Base_Column_List"/>
+            <include refid="Base_Column_List"/>,t2.p_color_code as  colorCode
         from(
                 select
                     <include refid="Base_Column_List"/>,ROWNUM rn
@@ -537,9 +540,10 @@
                     HZ_CMCR_DETAIL_AFTER_CHANGE
                 where
                   CMCR_DETAIL_CG_VWO_ID = #{vwoId,jdbcType=INTEGER}
-            )
+            ) t
+        left join Hz_cfg0_colorset t2 on t.cmcr_detail_src_color_uid= t2.puid
         where
-        rn&gt;(select (count(*)/2) from HZ_CMCR_DETAIL_AFTER_CHANGE where CMCR_DETAIL_CG_VWO_ID =
+        t.rn&gt;(select (count(*)/2) from HZ_CMCR_DETAIL_AFTER_CHANGE where CMCR_DETAIL_CG_VWO_ID =
         #{vwoId,jdbcType=INTEGER})
     </select>
 </mapper>

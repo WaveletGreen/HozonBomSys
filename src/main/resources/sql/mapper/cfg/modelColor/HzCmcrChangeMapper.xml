@@ -509,4 +509,53 @@
         order by
         te.CMCR_CG_ID
     </select>
+
+    <select id="doQueryCmcrChangeBefor" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from
+        HZ_CMCR_AFTER_CHANGE
+        where
+        CMCR_CG_VWO_ID = (
+        select MAX(CMCR_CG_VWO_ID) from HZ_CMCR_AFTER_CHANGE where  CMCR_CG_VWO_ID&lt;#{vwoId,jdbcType=INTEGER}
+        )
+        and
+        CMCR_SRC_PUID in (
+        select CMCR_SRC_PUID from HZ_CMCR_AFTER_CHANGE where CMCR_CG_VWO_ID=#{vwoId,jdbcType=INTEGER}
+        )
+    </select>
+
+    <select id="doQueryCmcrChangeBeforFirst" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from
+        HZ_CMCR_AFTER_CHANGE
+        where
+        CMCR_CG_VWO_ID=#{vwoId,jdbcType=INTEGER}
+        and ROWNUM&lt;(select (count(*)/2+1) from HZ_CMCR_AFTER_CHANGE where CMCR_CG_VWO_ID=#{vwoId,jdbcType=INTEGER})
+    </select>
+
+    <select id="doQueryCmcrChangeAfterFirst" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from(
+            select
+            <include refid="Base_Column_List"/>,ROWNUM rn
+            from
+            HZ_CMCR_AFTER_CHANGE
+            where
+            CMCR_CG_VWO_ID=#{vwoId,jdbcType=INTEGER}
+        )
+        where
+          rn&gt;(select (count(*)/2) from HZ_CMCR_AFTER_CHANGE where CMCR_CG_VWO_ID=#{vwoId,jdbcType=INTEGER})
+    </select>
+
+    <select id="doQueryCmcrChangeAfter" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from
+        HZ_CMCR_AFTER_CHANGE
+        where
+        CMCR_CG_VWO_ID=#{vwoId,jdbcType=INTEGER}
+    </select>
 </mapper>
