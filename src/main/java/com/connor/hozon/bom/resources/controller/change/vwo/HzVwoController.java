@@ -20,11 +20,8 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import sql.pojo.cfg.modelColor.HzCmcrDetailChange;
 import sql.pojo.cfg.vwo.*;
-import sql.pojo.project.HzProjectLibs;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -248,15 +245,15 @@ public class HzVwoController {
             return "errorWithEntity";
         }
         String type = "";
-        if (selectType == 1) {
+        if(selectType==1){
             type = "opiBom";
-        } else if (selectType == 2) {
+        }else if(selectType==2){
             type = "opiPmt";
-        } else if (selectType == 3) {
+        }else if(selectType==3){
             type = "opiProj";
-        } else {
+        }else {
             model.addAttribute("选择类型错误");
-            return "errorWithEntity";
+            return  "errorWithEntity";
         }
 
         model.addAttribute("vwoId", vwo);
@@ -345,15 +342,15 @@ public class HzVwoController {
 
     @RequestMapping(value = "/launch", method = RequestMethod.POST)
     @ResponseBody
-    public JSONObject launch(@RequestBody HzVwoProcessDto dto) {
-        return iHzVWOManagerService.launch(dto.getVwoType(), dto.getProjectUid(), dto.getVwoId(), dto.getFormId());
+    public JSONObject launch(@RequestBody HzVwoProcessDto dto){
+        return iHzVWOManagerService.launch(dto.getVwoType(), dto.getProjectUid(), dto.getVwoId(),dto.getFormId());
     }
 
     @RequestMapping(value = "/saveLeaderOpinion", method = RequestMethod.POST)
     @ResponseBody
     public JSONObject saveLeaderOpinion(@RequestParam HzVwoInfo info,
                                         @RequestParam HzVwoInfluenceDept dept
-    ) {
+                                       ) {
         System.out.println();
         return null;
     }

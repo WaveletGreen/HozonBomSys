@@ -48,8 +48,8 @@
         <result column="CMCR_DETAIL_CG_UPDATER" jdbcType="VARCHAR" property="cmcrDetailCgUpdater"/>
         <!--保留字段-->
         <result column="CMCR_DETAIL_CG_TITLE" jdbcType="VARCHAR" property="cmcrDetailCgTitle"/>
-        <!--保留字段-->
-        <result column="CMCR_DETAIL_CG_REVERSE2" jdbcType="VARCHAR" property="cmcrDetailCgReverse2"/>
+        <!--对应的2Y层是否为颜色件，因为颜色件是动态回传到后台，因此需要该字段标记变更前后的颜色变化，理想情况下的变更不影响表头的变化，则该字段一直是1，否则根据动态变化会将其设置为1/0-->
+        <result column="CMCR_DETAIL_CG_IS_COLORFUL" jdbcType="INTEGER" property="cmcrDetailCgIsColorful"/>
         <!--保留字段-->
         <result column="CMCR_DETAIL_CG_REVERSE3" jdbcType="VARCHAR" property="cmcrDetailCgReverse3"/>
         <!--保留字段-->
@@ -84,7 +84,7 @@
         CMCR_DETAIL_CG_UPDATE_DATE,
         CMCR_DETAIL_CG_UPDATER,
         CMCR_DETAIL_CG_TITLE,
-        CMCR_DETAIL_CG_REVERSE2,
+        CMCR_DETAIL_CG_IS_COLORFUL,
         CMCR_DETAIL_CG_REVERSE3,
         CMCR_DETAIL_CG_REVERSE4,
         CMCR_DETAIL_CG_REVERSE5,
@@ -111,7 +111,7 @@
 
         CMCR_DETAIL_CG_UPDATER,
         CMCR_DETAIL_CG_TITLE,
-        CMCR_DETAIL_CG_REVERSE2,
+        CMCR_DETAIL_CG_IS_COLORFUL,
         CMCR_DETAIL_CG_REVERSE3,
         CMCR_DETAIL_CG_REVERSE4,
         CMCR_DETAIL_CG_REVERSE5,
@@ -150,7 +150,7 @@
         #{cmcrDetailCgColorName,jdbcType=VARCHAR}, #{cmcrDetailCgCreateDate,jdbcType=TIMESTAMP},
         #{cmcrDetailCgCreator,jdbcType=VARCHAR}, #{cmcrDetailCgUpdateDate,jdbcType=TIMESTAMP},
         #{cmcrDetailCgUpdater,jdbcType=VARCHAR}, #{cmcrDetailCgTitle,jdbcType=VARCHAR},
-        #{cmcrDetailCgReverse2,jdbcType=VARCHAR}, #{cmcrDetailCgReverse3,jdbcType=VARCHAR},
+        #{cmcrDetailCgIsColorful,jdbcType=INTEGER}, #{cmcrDetailCgReverse3,jdbcType=VARCHAR},
         #{cmcrDetailCgReverse4,jdbcType=VARCHAR}, #{cmcrDetailCgReverse5,jdbcType=VARCHAR},
         #{cmcrDetailCgReverse6,jdbcType=VARCHAR}
         )
@@ -173,7 +173,7 @@
                 #{hzCmcrDetailChange.cmcrDetailCgColorName,jdbcType=VARCHAR},
                 #{hzCmcrDetailChange.cmcrDetailCgCreator,jdbcType=VARCHAR},
                 #{hzCmcrDetailChange.cmcrDetailCgUpdater,jdbcType=VARCHAR}, #{hzCmcrDetailChange.cmcrDetailCgTitle,jdbcType=VARCHAR},
-                #{hzCmcrDetailChange.cmcrDetailCgReverse2,jdbcType=VARCHAR}, #{hzCmcrDetailChange.cmcrDetailCgReverse3,jdbcType=VARCHAR},
+                #{hzCmcrDetailChange.cmcrDetailCgIsColorful,jdbcType=INTEGER}, #{hzCmcrDetailChange.cmcrDetailCgReverse3,jdbcType=VARCHAR},
                 #{hzCmcrDetailChange.cmcrDetailCgReverse4,jdbcType=VARCHAR}, #{hzCmcrDetailChange.cmcrDetailCgReverse5,jdbcType=VARCHAR},
                 #{hzCmcrDetailChange.cmcrDetailCgReverse6,jdbcType=VARCHAR}
             from
@@ -245,8 +245,8 @@
             <if test="cmcrDetailCgTitle != null">
                 CMCR_DETAIL_CG_TITLE,
             </if>
-            <if test="cmcrDetailCgReverse2 != null">
-                CMCR_DETAIL_CG_REVERSE2,
+            <if test="cmcrDetailCgIsColorful != null">
+                CMCR_DETAIL_CG_IS_COLORFUL,
             </if>
             <if test="cmcrDetailCgReverse3 != null">
                 CMCR_DETAIL_CG_REVERSE3,
@@ -322,8 +322,8 @@
             <if test="cmcrDetailCgTitle != null">
                 #{cmcrDetailCgTitle,jdbcType=VARCHAR},
             </if>
-            <if test="cmcrDetailCgReverse2 != null">
-                #{cmcrDetailCgReverse2,jdbcType=VARCHAR},
+            <if test="cmcrDetailCgIsColorful != null">
+                #{cmcrDetailCgIsColorful,jdbcType=INTEGER},
             </if>
             <if test="cmcrDetailCgReverse3 != null">
                 #{cmcrDetailCgReverse3,jdbcType=VARCHAR},
@@ -401,8 +401,8 @@
             <if test="cmcrDetailCgTitle != null">
                 CMCR_DETAIL_CG_TITLE = #{cmcrDetailCgTitle,jdbcType=VARCHAR},
             </if>
-            <if test="cmcrDetailCgReverse2 != null">
-                CMCR_DETAIL_CG_REVERSE2 = #{cmcrDetailCgReverse2,jdbcType=VARCHAR},
+            <if test="cmcrDetailCgIsColorful != null">
+                CMCR_DETAIL_CG_IS_COLORFUL = #{cmcrDetailCgIsColorful,jdbcType=INTEGER},
             </if>
             <if test="cmcrDetailCgReverse3 != null">
                 CMCR_DETAIL_CG_REVERSE3 = #{cmcrDetailCgReverse3,jdbcType=VARCHAR},
@@ -441,7 +441,7 @@
       CMCR_DETAIL_CG_UPDATE_DATE = #{cmcrDetailCgUpdateDate,jdbcType=TIMESTAMP},
       CMCR_DETAIL_CG_UPDATER = #{cmcrDetailCgUpdater,jdbcType=VARCHAR},
       CMCR_DETAIL_CG_TITLE = #{cmcrDetailCgTitle,jdbcType=VARCHAR},
-      CMCR_DETAIL_CG_REVERSE2 = #{cmcrDetailCgReverse2,jdbcType=VARCHAR},
+      CMCR_DETAIL_CG_IS_COLORFUL = #{cmcrDetailCgIsColorful,jdbcType=INTEGER},
       CMCR_DETAIL_CG_REVERSE3 = #{cmcrDetailCgReverse3,jdbcType=VARCHAR},
       CMCR_DETAIL_CG_REVERSE4 = #{cmcrDetailCgReverse4,jdbcType=VARCHAR},
       CMCR_DETAIL_CG_REVERSE5 = #{cmcrDetailCgReverse5,jdbcType=VARCHAR}
