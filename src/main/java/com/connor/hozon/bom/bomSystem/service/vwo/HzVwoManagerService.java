@@ -503,7 +503,7 @@ public class HzVwoManagerService implements IHzVWOManagerService {
         for (HzCfg0ModelColorDetail hzCfg0ModelColorDetail : hzCfg0ModelColorDetails) {
             HzCmcrDetailChange hzCmcrDetailChange1Query = new HzCmcrDetailChange();
             hzCmcrDetailChange1Query.setCmcrDetailSrcCfgMainUid(hzCfg0ModelColorDetail.getCfgMainUid());
-            hzCmcrDetailChange1Query.setCmcrDetailSrcPuid(hzCfg0ModelColorDetail.getPuid());
+            hzCmcrDetailChange1Query.setCmcrDetailSrcPuid(hzCfg0ModelColorDetail.getModelUid());
 
             hzCmcrDetailChange1Query.setCmcrDetailSrcModelPuid(hzCfg0ModelColorDetail.getModelUid());
             if (hzCfg0ModelColorDetail.getCfgUid() != null) {
@@ -1918,7 +1918,9 @@ public class HzVwoManagerService implements IHzVWOManagerService {
 
         for (HzCmcrDetailChange hzCmcrDetailChange : hzCmcrDetailChangeListBefor) {
             //将变更前所有title放入set
-            titleSet.add(hzCmcrDetailChange.getCmcrDetailCgTitle());
+            if(hzCmcrDetailChange.getCmcrDetailCgIsColorful()!=null&&hzCmcrDetailChange.getCmcrDetailCgIsColorful()==1) {
+                titleSet.add(hzCmcrDetailChange.getCmcrDetailCgTitle());
+            }
             //根据源主数据将变更前从数据分开
             if (srcPuidBeforMap.get(hzCmcrDetailChange.getCmcrDetailSrcModelPuid()) == null) {
                 srcPuidBeforMap.put(hzCmcrDetailChange.getCmcrDetailSrcModelPuid(), new ArrayList<HzCmcrDetailChange>());
@@ -1927,7 +1929,9 @@ public class HzVwoManagerService implements IHzVWOManagerService {
         }
         for (HzCmcrDetailChange hzCmcrDetailChange : hzCmcrDetailChangeListAfter) {
             //将变更后所有title放入set
-            titleSet.add(hzCmcrDetailChange.getCmcrDetailCgTitle());
+            if(hzCmcrDetailChange.getCmcrDetailCgIsColorful()!=null&&hzCmcrDetailChange.getCmcrDetailCgIsColorful()==1) {
+                titleSet.add(hzCmcrDetailChange.getCmcrDetailCgTitle());
+            }
             //根据源主数据将变更后从数据分开
             if (srcPuidAfterMap.get(hzCmcrDetailChange.getCmcrDetailSrcModelPuid()) == null) {
                 srcPuidAfterMap.put(hzCmcrDetailChange.getCmcrDetailSrcModelPuid(), new ArrayList<HzCmcrDetailChange>());
@@ -1948,58 +1952,110 @@ public class HzVwoManagerService implements IHzVWOManagerService {
             hzCmcrChangeListAfter = hzCmcrChangeDao.doQueryCmcrChangeAfter(vwoId);
         }
         //titel数据Map
-        List<Map<String, String>> result = new ArrayList<>();
+//        List<Map<String, String>> result = new ArrayList<>();
 
-        Map<String, List<String>> titleMap = new LinkedHashMap<>();
+//        Map<String, List<String>> titleMap = new LinkedHashMap<>();
 
-        titleMap.put("codeOfColorModel", new ArrayList<String>());
-        titleMap.put("descOfColorModel", new ArrayList<String>());
-        titleMap.put("modelShell", new ArrayList<String>());
-        for (int i = 0; i < hzCmcrChangeListBefor.size(); i++) {
-            titleMap.get("codeOfColorModel").add(hzCmcrChangeListBefor.get(i).getCmcrSrcCodeOfColorMod() == null ? "-" : hzCmcrChangeListBefor.get(i).getCmcrSrcCodeOfColorMod());
-            titleMap.get("descOfColorModel").add(hzCmcrChangeListBefor.get(i).getCmcrSrcDescOfColorMod() == null ? "-" : hzCmcrChangeListBefor.get(i).getCmcrSrcDescOfColorMod());
-            titleMap.get("modelShell").add(hzCmcrChangeListBefor.get(i).getCmcrCgShellCode() == null ? "-" : hzCmcrChangeListBefor.get(i).getCmcrCgShellCode());
-            titleMap.get("codeOfColorModel").add(hzCmcrChangeListAfter.get(i).getCmcrSrcCodeOfColorMod() == null ? "-" : hzCmcrChangeListAfter.get(i).getCmcrSrcCodeOfColorMod());
-            titleMap.get("descOfColorModel").add(hzCmcrChangeListAfter.get(i).getCmcrSrcDescOfColorMod() == null ? "-" : hzCmcrChangeListAfter.get(i).getCmcrSrcDescOfColorMod());
-            titleMap.get("modelShell").add(hzCmcrChangeListAfter.get(i).getCmcrCgShellCode() == null ? "-" : hzCmcrChangeListAfter.get(i).getCmcrCgShellCode());
-        }
+//        titleMap.put("codeOfColorModel", new ArrayList<String>());
+//        titleMap.put("descOfColorModel", new ArrayList<String>());
+//        titleMap.put("modelShell", new ArrayList<String>());
+//        for (int i = 0; i < hzCmcrChangeListBefor.size(); i++) {
+//            titleMap.get("codeOfColorModel").add(hzCmcrChangeListBefor.get(i).getCmcrSrcCodeOfColorMod() == null ? "-" : hzCmcrChangeListBefor.get(i).getCmcrSrcCodeOfColorMod());
+//            titleMap.get("descOfColorModel").add(hzCmcrChangeListBefor.get(i).getCmcrSrcDescOfColorMod() == null ? "-" : hzCmcrChangeListBefor.get(i).getCmcrSrcDescOfColorMod());
+//            titleMap.get("modelShell").add(hzCmcrChangeListBefor.get(i).getCmcrCgShellCode() == null ? "-" : hzCmcrChangeListBefor.get(i).getCmcrCgShellCode());
+//            titleMap.get("codeOfColorModel").add(hzCmcrChangeListAfter.get(i).getCmcrSrcCodeOfColorMod() == null ? "-" : hzCmcrChangeListAfter.get(i).getCmcrSrcCodeOfColorMod());
+//            titleMap.get("descOfColorModel").add(hzCmcrChangeListAfter.get(i).getCmcrSrcDescOfColorMod() == null ? "-" : hzCmcrChangeListAfter.get(i).getCmcrSrcDescOfColorMod());
+//            titleMap.get("modelShell").add(hzCmcrChangeListAfter.get(i).getCmcrCgShellCode() == null ? "-" : hzCmcrChangeListAfter.get(i).getCmcrCgShellCode());
+//        }
+//
+//        Iterator<String> iterator = titleSet.iterator();
+//        int titleNum = 0;
+//        while (iterator.hasNext()) {
+//            String titleKey = "s" + titleNum;
+//            titleNum++;
+//            String title = iterator.next();
+//            titleMap.put(titleKey, new ArrayList<String>());
+//            for (int j = 0; j < hzCmcrChangeListAfter.size(); j++) {
+//                String srcPuid = hzCmcrChangeListBefor.get(j).getCmcrSrcPuid();
+//                List<HzCmcrDetailChange> hzCmcrDetailChangesBefor = srcPuidBeforMap.get(srcPuid);
+//                boolean beforTitleFlag = false;
+//                for (HzCmcrDetailChange hzCmcrDetailChange : hzCmcrDetailChangesBefor) {
+//                    if (title.equals(hzCmcrDetailChange.getCmcrDetailCgTitle())) {
+//                        titleMap.get(titleKey).add(hzCmcrDetailChange.getColorCode() == null ? "-" : hzCmcrDetailChange.getColorCode());
+//                        beforTitleFlag = true;
+//                        break;
+//                    }
+//                }
+//                if (!beforTitleFlag) {
+//                    titleMap.get(titleKey).add("-");
+//                }
+//                boolean afterTitleFlag = false;
+//                List<HzCmcrDetailChange> hzCmcrDetailChangesAfter = srcPuidAfterMap.get(srcPuid);
+//                for (HzCmcrDetailChange hzCmcrDetailChange : hzCmcrDetailChangesAfter) {
+//                    if (title.equals(hzCmcrDetailChange.getCmcrDetailCgTitle())) {
+//                        titleMap.get(titleKey).add(hzCmcrDetailChange.getColorCode());
+//                        afterTitleFlag = true;
+//                        break;
+//                    }
+//                }
+//                if (!afterTitleFlag) {
+//                    titleMap.get(titleKey).add("-");
+//                }
+//            }
+//        }
 
-        Iterator<String> iterator = titleSet.iterator();
-        int titleNum = 0;
-        while (iterator.hasNext()) {
-            String titleKey = "s" + titleNum;
-            titleNum++;
-            String title = iterator.next();
-            titleMap.put(titleKey, new ArrayList<String>());
-            for (int j = 0; j < hzCmcrChangeListAfter.size(); j++) {
-                String srcPuid = hzCmcrChangeListBefor.get(j).getCmcrSrcPuid();
-                List<HzCmcrDetailChange> hzCmcrDetailChangesBefor = srcPuidBeforMap.get(srcPuid);
+        List<Map<String,String>> result = new ArrayList<>();
+        for(int i=0;i<hzCmcrChangeListAfter.size();i++){
+            //变更前行
+            Map<String,String> beforMap = new HashMap<>();
+            //变更后行
+            Map<String,String> afterMap = new HashMap<>();
+            //变更前主数据
+            beforMap.put("codeOfColorModel",hzCmcrChangeListBefor.get(i).getCmcrSrcCodeOfColorMod() == null ? "-" : hzCmcrChangeListBefor.get(i).getCmcrSrcCodeOfColorMod());
+            beforMap.put("descOfColorModel",hzCmcrChangeListBefor.get(i).getCmcrSrcDescOfColorMod() == null ? "-" : hzCmcrChangeListBefor.get(i).getCmcrSrcDescOfColorMod());
+            beforMap.put("modelShell",hzCmcrChangeListBefor.get(i).getCmcrCgShellCode() == null ? "-" : hzCmcrChangeListBefor.get(i).getCmcrCgShellCode());
+            //变更后主数据
+            afterMap.put("codeOfColorModel",hzCmcrChangeListAfter.get(i).getCmcrSrcCodeOfColorMod() == null ? "-" : hzCmcrChangeListAfter.get(i).getCmcrSrcCodeOfColorMod());
+            afterMap.put("descOfColorModel",hzCmcrChangeListAfter.get(i).getCmcrSrcDescOfColorMod() == null ? "-" : hzCmcrChangeListAfter.get(i).getCmcrSrcDescOfColorMod());
+            afterMap.put("modelShell",hzCmcrChangeListAfter.get(i).getCmcrCgShellCode() == null ? "-" : hzCmcrChangeListAfter.get(i).getCmcrCgShellCode());
+            //根据变更前主数据id从srcPuidBeforMap中获取变更前从数据
+            String srcPuid = hzCmcrChangeListAfter.get(i).getCmcrSrcPuid();
+            List<HzCmcrDetailChange> hzCmcrDetailChangesBefor = srcPuidBeforMap.get(srcPuid);
+            List<HzCmcrDetailChange> hzCmcrDetailChangesAfter = srcPuidAfterMap.get(srcPuid);
+
+            Iterator<String> iterator = titleSet.iterator();
+            int titleNum = 0;
+            while (iterator.hasNext()){
+                String title = iterator.next();
                 boolean beforTitleFlag = false;
-                for (HzCmcrDetailChange hzCmcrDetailChange : hzCmcrDetailChangesBefor) {
+                for(HzCmcrDetailChange hzCmcrDetailChange : hzCmcrDetailChangesBefor ){
                     if (title.equals(hzCmcrDetailChange.getCmcrDetailCgTitle())) {
-                        titleMap.get(titleKey).add(hzCmcrDetailChange.getColorCode() == null ? "-" : hzCmcrDetailChange.getColorCode());
+                        beforMap.put("s" + titleNum, hzCmcrDetailChange.getColorCode() == null ? "-" : hzCmcrDetailChange.getColorCode());
                         beforTitleFlag = true;
                         break;
                     }
                 }
-                if (!beforTitleFlag) {
-                    titleMap.get(titleKey).add("-");
+                if(!beforTitleFlag){
+                    beforMap.put("s" + titleNum,"-");
                 }
+
                 boolean afterTitleFlag = false;
-                List<HzCmcrDetailChange> hzCmcrDetailChangesAfter = srcPuidAfterMap.get(srcPuid);
                 for (HzCmcrDetailChange hzCmcrDetailChange : hzCmcrDetailChangesAfter) {
                     if (title.equals(hzCmcrDetailChange.getCmcrDetailCgTitle())) {
-                        titleMap.get(titleKey).add(hzCmcrDetailChange.getColorCode());
+                        afterMap.put("s" + titleNum, hzCmcrDetailChange.getColorCode() == null ? "-" : hzCmcrDetailChange.getColorCode());
                         afterTitleFlag = true;
                         break;
                     }
                 }
-                if (!afterTitleFlag) {
-                    titleMap.get(titleKey).add("-");
+                if(!afterTitleFlag){
+                    afterMap.put("s" + titleNum,"-");
                 }
+                titleNum++;
             }
+            result.add(beforMap);
+            result.add(afterMap);
         }
         map.put("titleSet", titleSet);
-        map.put("titleMap", titleMap);
+        map.put("result", result);
     }
 }
