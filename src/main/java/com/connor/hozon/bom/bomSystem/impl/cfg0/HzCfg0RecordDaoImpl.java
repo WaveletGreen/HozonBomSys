@@ -6,7 +6,7 @@
 
 package com.connor.hozon.bom.bomSystem.impl.cfg0;
 
-import com.connor.hozon.bom.bomSystem.dto.HzFeatureQueryDTO;
+import com.connor.hozon.bom.bomSystem.dto.HzFeatureQueryDto;
 import com.connor.hozon.bom.bomSystem.dto.HzMaterielFeatureBean;
 import com.connor.hozon.bom.bomSystem.dao.cfg0.HzCfg0RecordDao;
 import com.connor.hozon.bom.bomSystem.impl.BasicDaoImpl;
@@ -18,7 +18,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
+/**
+ * @Author: Fancyears·Maylos·Maywas
+ * @Description: fuck
+ * @Date: Created in 2018/9/6 13:19
+ * @Modified By:
+ */
 @Service("hzCfg0RecordDao")
 public class HzCfg0RecordDaoImpl extends BasicDaoImpl<HzCfg0Record> implements HzCfg0RecordDao {
 
@@ -69,7 +74,7 @@ public class HzCfg0RecordDaoImpl extends BasicDaoImpl<HzCfg0Record> implements H
 
 
     @Override
-    public int tellMeHowManyOfThose(HzFeatureQueryDTO dto) {
+    public int tellMeHowManyOfThose(HzFeatureQueryDto dto) {
         List<Integer> result = baseSQLUtil.executeQueryByPass(new Integer(0), dto, clzName + ".tellMeHowManyOfThose");
         if (result == null) {
             return 0;
@@ -79,7 +84,7 @@ public class HzCfg0RecordDaoImpl extends BasicDaoImpl<HzCfg0Record> implements H
     }
 
     @Override
-    public List<HzCfg0Record> selectByCondition(HzFeatureQueryDTO queryBase) {
+    public List<HzCfg0Record> selectByCondition(HzFeatureQueryDto queryBase) {
         return baseSQLUtil.executeQueryByPass(RECORD, queryBase, clzName + ".selectByCondition");
     }
 
@@ -108,7 +113,7 @@ public class HzCfg0RecordDaoImpl extends BasicDaoImpl<HzCfg0Record> implements H
     }
 
     @Override
-    public List<HzCfg0Record> selectListByProjectPuid(String projectPuid, HzFeatureQueryDTO queryBase) {
+    public List<HzCfg0Record> selectListByProjectPuid(String projectPuid, HzFeatureQueryDto queryBase) {
         Map<String, Object> params = new HashMap<>();
         params.put("projectPuid", projectPuid);
         params.put("whichTable", "HZ_CFG0_RECORD");
@@ -143,6 +148,16 @@ public class HzCfg0RecordDaoImpl extends BasicDaoImpl<HzCfg0Record> implements H
         record.setpCfg0FamilyPuid(familyUid);
         record.setProjectPuid(projectUid);
         return baseSQLUtil.executeQuery(record, clzName + ".selectByFamilyUidWithProject");
+    }
+
+    @Override
+    public int updateList(List<HzCfg0Record> hzCfg0RecordList) {
+        return baseSQLUtil.executeUpdate(hzCfg0RecordList,clzName +".updateList");
+    }
+
+    @Override
+    public int updateByVwoid(HzCfg0Record hzCfg0Record) {
+        return baseSQLUtil.executeUpdate(hzCfg0Record, clzName+".updateByVwoid");
     }
 
 }

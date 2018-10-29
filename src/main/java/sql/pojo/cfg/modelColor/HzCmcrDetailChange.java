@@ -1,10 +1,21 @@
+/*
+ * Copyright (c) 2018.
+ * This file was wrote by fancyears·milos·maywas @connor. Any question/bug you can post to 1243093366@qq.com.
+ * ALL RIGHTS RESERVED.
+ */
+
 package sql.pojo.cfg.modelColor;
 
 import lombok.Data;
 
 import java.math.BigDecimal;
 import java.util.Date;
-
+/**
+ * @Author: Fancyears·Maylos·Maywas
+ * @Description: 配色方案变更详情数据
+ * @Date: Created in 2018/8/10 13:55
+ * @Modified By:
+ */
 @Data
 public class HzCmcrDetailChange {
     /**
@@ -86,11 +97,11 @@ public class HzCmcrDetailChange {
     /**
      * 保留字段
      */
-    private String cmcrDetailCgReverse1;
+    private String cmcrDetailCgTitle;
     /**
-     * 保留字段
+     * 对应的2Y层是否为颜色件，因为颜色件是动态回传到后台，因此需要该字段标记变更前后的颜色变化，理想情况下的变更不影响表头的变化，则该字段一直是1，否则根据动态变化会将其设置为1/0
      */
-    private String cmcrDetailCgReverse2;
+    private Integer cmcrDetailCgIsColorful;
     /**
      * 保留字段
      */
@@ -104,6 +115,10 @@ public class HzCmcrDetailChange {
      */
     private String cmcrDetailCgReverse5;
     /**
+     * 保留字段
+     */
+    private String cmcrDetailCgReverse6;
+    /**
      * 数据库中的table名
      */
     private String whichTable;
@@ -111,4 +126,8 @@ public class HzCmcrDetailChange {
      * 序列名称
      */
     private String seqName;
+    /**
+     * 颜色代码
+     */
+    private String colorCode;
 }

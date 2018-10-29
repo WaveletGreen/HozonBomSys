@@ -16,9 +16,10 @@ import sql.pojo.cfg.model.HzCfg0ModelRecord;
 import java.util.List;
 
 /**
- * User: Fancyears·Maylos·Mayways
- * Date: 2018/5/22
- * Time: 14:53
+ * @Author: Fancyears·Maylos·Maywas
+ * @Description: fuck
+ * @Date: Created in 2018/9/6 13:19
+ * @Modified By:
  */
 @Service("hzCfg0ModelRecordDao")
 public class HzCfg0ModelRecordDaoImpl extends BasicDaoImpl<HzCfg0ModelRecord> implements HzCfg0ModelRecordDao {

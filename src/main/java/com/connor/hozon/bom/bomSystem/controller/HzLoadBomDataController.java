@@ -8,7 +8,7 @@ package com.connor.hozon.bom.bomSystem.controller;
 
 import com.connor.hozon.bom.bomSystem.dao.bom.HzBomMainRecordDao;
 import com.connor.hozon.bom.bomSystem.impl.bom.HzBomLineRecordDaoImpl;
-import com.connor.hozon.bom.bomSystem.dto.HzFeatureQueryDTO;
+import com.connor.hozon.bom.bomSystem.dto.HzFeatureQueryDto;
 import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
 import com.connor.hozon.bom.bomSystem.service.bom.HzBomDataService;
 import com.connor.hozon.bom.bomSystem.service.fullCfg.HzCfg0BomLineOfModelService;
@@ -28,6 +28,12 @@ import sql.pojo.cfg.cfg0.HzCfg0Record;
 
 import java.util.*;
 
+/**
+ * @Author: Fancyears·Maylos·Maywas
+ * @Description:
+ * @Date: Created in 2018/8/30 18:53
+ * @Modified By:
+ */
 @Controller
 @RequestMapping("/loadBom")
 public class HzLoadBomDataController {
@@ -118,7 +124,7 @@ public class HzLoadBomDataController {
             model.addAttribute("msg", "请选择1个项目进行操作");
             return "errorWithEntity";
         }
-        HzFeatureQueryDTO queryBase = new HzFeatureQueryDTO();
+        HzFeatureQueryDto queryBase = new HzFeatureQueryDto();
         queryBase.setSort("P_CFG0_OBJECT_ID");
         List<HzCfg0Record> features = hzCfg0Service.doLoadCfgListByProjectPuid(projectPuid, queryBase);
         List<HzBomLineRecord> lines = hzBomDataService.doSelect2YByProjectPuid(projectPuid);

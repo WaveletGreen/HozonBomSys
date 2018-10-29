@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2018.
+ * This file was wrote by fancyears·milos·maywas @connor. Any question/bug you can post to 1243093366@qq.com.
+ * ALL RIGHTS RESERVED.
+ */
+
 package com.connor.hozon.bom.bomSystem.service.bom;
 
 import com.connor.hozon.bom.bomSystem.dao.bom.HzBomDataDao;
@@ -20,10 +26,10 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by IntelliJ IDEA.
- * User: Fancyears·Maylos·Mayways
- * Date: 2018/5/21
- * Time: 17:35
+ * @Author: Fancyears·Maylos·Maywas
+ * @Description: fuck
+ * @Date: Created in 2018/9/6 13:19
+ * @Modified By:
  */
 @Service("hzBomDataService")
 public class HzBomDataService {

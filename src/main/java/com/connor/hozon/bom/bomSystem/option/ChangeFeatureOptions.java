@@ -8,9 +8,9 @@ package com.connor.hozon.bom.bomSystem.option;
 
 /**
  * @Author: Fancyears·Maylos·Maywas
- * @Description:
- * @Date: Created in 2018/10/11 15:06
+ * @Description: fuck
+ * @Date: Created in 2018/9/6 13:19
  * @Modified By:
  */
-public enum ChangeFeatureOption {
+public enum ChangeFeatureOptions {
 }

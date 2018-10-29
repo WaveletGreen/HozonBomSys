@@ -9,7 +9,7 @@ package com.connor.hozon.bom.bomSystem.controller;
 import com.connor.hozon.bom.bomSystem.controller.integrate.ExtraIntegrate;
 import com.connor.hozon.bom.bomSystem.dao.main.HzCfg0MainRecordDao;
 import com.connor.hozon.bom.bomSystem.dao.cfg0.HzCfg0OptionFamilyDao;
-import com.connor.hozon.bom.bomSystem.dto.HzFeatureQueryDTO;
+import com.connor.hozon.bom.bomSystem.dto.HzFeatureQueryDto;
 import com.connor.hozon.bom.bomSystem.dto.HzRelevanceBean;
 import com.connor.hozon.bom.bomSystem.helper.DateStringHelper;
 import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
@@ -39,14 +39,15 @@ import java.util.*;
 
 import static com.connor.hozon.bom.bomSystem.helper.StringHelper.checkString;
 
-import com.connor.hozon.bom.resources.domain.dto.response.HzDictionaryLibraryRespDTO;
 import com.connor.hozon.bom.resources.service.resourcesLibrary.dictionaryLibrary.HzDictionaryLibraryService;
 import sql.pojo.resourcesLibrary.dictionaryLibrary.HzDictionaryLibrary;
 
+
 /**
- * Created by Fancyears·Maylos·Mayways
- * Description:
- * Date: 2018/6/6 16:55
+ * @Author: Fancyears·Maylos·Maywas
+ * @Description: 特性
+ * @Date: Created in 2018/8/30 18:53
+ * @Modified By:
  */
 @Controller
 @RequestMapping("/cfg0")
@@ -100,7 +101,7 @@ public class HzCfg0Controller extends ExtraIntegrate {
     /******************************************特性表***********************************************/
     @RequestMapping("/loadFeature")
     @ResponseBody
-    public Map<String, Object> loadCfg0(@RequestParam("projectPuid") String projectPuid, HzFeatureQueryDTO queryBase) {
+    public Map<String, Object> loadCfg0(@RequestParam("projectPuid") String projectPuid, HzFeatureQueryDto queryBase) {
         Map<String, Object> result = new HashMap<>();
         queryBase.setSort(HzCfg0Record.reflectToDBField(queryBase.getSort()));
         queryBase.setProjectUid(projectPuid);
@@ -220,6 +221,11 @@ public class HzCfg0Controller extends ExtraIntegrate {
         if (hzDictionaryLibrary == null || hzDictionaryLibrary.getPuid() == null) {
             result.put("status", false);
             result.put("msg", "<p style='color:red;'>特性值在配置字典中不存在</p>");
+            return result;
+        }
+        if (!checkString(hzDictionaryLibrary.getFamillyCode()) || !checkString(hzDictionaryLibrary.getFamillyCh())) {
+            result.put("status", false);
+            result.put("msg", "<p style='color:red;'>配置字典中的特性/特性名称不能为空</p>");
             return result;
         }
         record.setpCfg0FamilyName(hzDictionaryLibrary.getFamillyCode().toUpperCase());
@@ -418,6 +424,12 @@ public class HzCfg0Controller extends ExtraIntegrate {
 //                    result.put("msg", "目前不允许删除原数据，请重试或联系系统管理员");
                     return result;
                 }
+            }
+
+            if(record.getCfgIsInProcess()==1){
+                result.put("status", false);
+                result.put("msg","已在VWO流程中，不允许删除");
+                return result;
             }
         }
         List<HzCfg0Record> _toDelete = new ArrayList<>();
@@ -630,6 +642,8 @@ public class HzCfg0Controller extends ExtraIntegrate {
         JSONObject result = new JSONObject();
         HzDictionaryLibrary hzDictionaryLibrary = hzDictionaryLibraryService.queryLibraryDTOByCfgObject(cfgVal);
         if (hzDictionaryLibrary != null && hzDictionaryLibrary.getPuid() != null) {
+            hzDictionaryLibrary.setFailureTime(new Date());
+            hzDictionaryLibrary.setEffectTime(new Date());
             JSONObject libraryJson = JSONObject.fromObject(hzDictionaryLibrary);
             result.put("stage", true);
             result.put("data", libraryJson);

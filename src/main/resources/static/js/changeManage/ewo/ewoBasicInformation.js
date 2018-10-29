@@ -1,4 +1,5 @@
 $(document).ready((function () {
+    formatDate();
     var projectId = $("#project", window.top.document).val();
     var ewoNo = $("#ewoNo").val();
     var partDescUrl = "change/record?projectId=" + projectId + "&ewoNo=" + ewoNo;
@@ -33,27 +34,48 @@ $(document).ready((function () {
     })
 
 
-    $('#finishTime').datetimepicker({
-        format: 'yyyy-mm-dd  hh:ii:ss',//日期的格式
-        weekStart: 1,//一周开始， 0（星期日）到6（星期六）
-        startDate: "1900-01-01",//选择器的开始日期
-        autoclose: true,//日期选择完成后是否关闭选择框
-        bootcssVer: 3,//显示向左向右的箭头
-        language: 'zh_CN',//语言
-        minView: 2,//表示日期选择的最小范围，默认是hour
-        todayBtn: true
-    })
-    $('#effectTime').datetimepicker({
-        format: 'yyyy-mm-dd  hh:ii:ss',//日期的格式
-        weekStart: 1,//一周开始， 0（星期日）到6（星期六）
-        startDate: "1900-01-01",//选择器的开始日期
-        autoclose: true,//日期选择完成后是否关闭选择框
-        bootcssVer: 3,//显示向左向右的箭头
-        language: 'zh_CN',//语言
-        minView: 2,//表示日期选择的最小范围，默认是hour
-        todayBtn: true
-    })
+    // $('#finishTime').datetimepicker({
+    //     format: 'yyyy-mm-dd  hh:ii:ss',//日期的格式
+    //     weekStart: 1,//一周开始， 0（星期日）到6（星期六）
+    //     startDate: "1900-01-01",//选择器的开始日期
+    //     autoclose: true,//日期选择完成后是否关闭选择框
+    //     bootcssVer: 3,//显示向左向右的箭头
+    //     language: 'zh_CN',//语言
+    //     minView: 2,//表示日期选择的最小范围，默认是hour
+    //     todayBtn: true
+    // })
+    // $('#effectTime').datetimepicker({
+    //     format: 'yyyy-mm-dd  hh:ii:ss',//日期的格式
+    //     weekStart: 1,//一周开始， 0（星期日）到6（星期六）
+    //     startDate: "1900-01-01",//选择器的开始日期
+    //     autoclose: true,//日期选择完成后是否关闭选择框
+    //     bootcssVer: 3,//显示向左向右的箭头
+    //     language: 'zh_CN',//语言
+    //     minView: 2,//表示日期选择的最小范围，默认是hour
+    //     todayBtn: true
+    // })
 }))
+
+function formatDate() {
+    let formCreateTime = stringToDateFormat($('#formCreateTime').val());
+    $('#formCreateTime').val(formCreateTime);
+
+    let finishTime = stringToDateFormat($('#finishTime').data("time"));
+    let effectTime = stringToDateFormat($('#effectTime').data("time"));
+    // let vwoDemandFinishTime = stringToDateFormat($('#vwoDemandFinishTime').data("time"));
+    // let vwoExpectExecuteTime = stringToDateFormat($('#vwoExpectExecuteTime').data("time"));
+    $('#finishTime').val(finishTime);
+    $('#effectTime').val(vwoEndEffectiveTime);
+    // $('#vwoDemandFinishTime').val(vwoDemandFinishTime);
+    // $('#vwoExpectExecuteTime').val(vwoExpectExecuteTime);
+
+    let opiBomMngOptionDate = stringToDateFormat($('#opiBomMngOptionDate').val());
+    let opiPmtMngOptionDate = stringToDateFormat($('#opiPmtMngOptionDate').val());
+    let opiProjMngOptionDate = stringToDateFormat($('#opiProjMngOptionDate').val());
+    $('#opiBomMngOptionDate').val(opiBomMngOptionDate);
+    $('#opiPmtMngOptionDate').val(opiPmtMngOptionDate);
+    $('#opiProjMngOptionDate').val(opiProjMngOptionDate);
+}
 
 // 零件信息
 function initTable(partDescUrl) {
@@ -101,10 +123,10 @@ function initTable(partDescUrl) {
                     if (4 == value || "4" == value) {
                         return "<span style='color: #a90009'>删除状态</span>";
                     }
-                    if (value == 5 || value == "5"){
+                    if (value == 5 || value == "5") {
                         return "<span style='color: #e2ab2f'>审核中</span>"
                     }
-                    if (value == 6 || value == "6"){
+                    if (value == 6 || value == "6") {
                         return "<span style='color: #e2ab2f'>审核中</span>"
                     }
                 }
@@ -381,10 +403,10 @@ $(document).ready((function () {
     var projectId = $("#project", window.top.document).val();
     var ewoNo = $("#ewoNo").val();
     $.ajax({
-        url:"impact/reference?projectId="+projectId+"&ewoNo="+ewoNo,
-        type:"GET",
+        url: "impact/reference?projectId=" + projectId + "&ewoNo=" + ewoNo,
+        type: "GET",
         success: function (result) {
-            if (result==null){
+            if (result == null) {
                 window.Ewin.alert("查无数据,请联系管理员")
             }
             var impactAnalysisTable1 = $("#impactAnalysisTable1");
@@ -393,16 +415,16 @@ $(document).ready((function () {
             var _data = JSON.parse(data);
             var temp = "<table>";
             var tempB = "<table>"
-            for (var i=0;i<_data.length;i++){
-                if(_data[i].type == "A"){
+            for (var i = 0; i < _data.length; i++) {
+                if (_data[i].type == "A") {
 
-                    temp +="<tr><td><input "+(_data[i].checked==1?"checked=true":"")+" type='checkbox' id='ck'></td>" +
-                        "<td>"+_data[i].content+"</td></tr>"
+                    temp += "<tr><td><input " + (_data[i].checked == 1 ? "checked=true" : "") + " type='checkbox' id='ck'></td>" +
+                        "<td>" + _data[i].content + "</td></tr>"
                     temp += "</table>"
                     impactAnalysisTable1.html(temp);
-                }else {
-                    tempB +="<tr><td><input "+(_data[i].checked==1?"checked=true":"")+" type='checkbox' id='ck'></td>" +
-                        "<td>"+_data[i].content+"</td></tr>"
+                } else {
+                    tempB += "<tr><td><input " + (_data[i].checked == 1 ? "checked=true" : "") + " type='checkbox' id='ck'></td>" +
+                        "<td>" + _data[i].content + "</td></tr>"
                     tempB += "</table>"
                     impactAnalysisTable2.html(tempB);
                 }
@@ -417,25 +439,25 @@ $(document).ready((function () {
 // 相关部门
 $(document).ready((function () {
     $.ajax({
-        url:"all",
-        type:"GET",
+        url: "all",
+        type: "GET",
         success: function (result) {
             var affectDept = $("#affectDept");
             var data = JSON.stringify(result.data);
             var _data = JSON.parse(data);
             var temp = "<table>";
-            for (var i=0;i<_data.length;i++){
+            for (var i = 0; i < _data.length; i++) {
                 // if(_data[i].type == "A"){
 
-                    temp +="<tr><td><input id='"+data[i].groupCode+"'value='"+data[i].groupId+"' type='checkbox' id='ck'></td>" +
-                        "<td>"+_data[i].name+"</td></tr>"
-                    temp += "</table>"
+                temp += "<tr><td><input id='" + data[i].groupCode + "'value='" + data[i].groupId + "' type='checkbox' id='ck'></td>" +
+                    "<td>" + _data[i].name + "</td></tr>"
+                temp += "</table>"
                 affectDept.html(temp);
                 // }else {
                 //     tempB +="<tr><td><input "+(_data[i].checked==1?"checked=true":"")+" type='checkbox' id='ck'></td>" +
                 //         "<td>"+_data[i].content+"</td></tr>"
-                    // tempB += "</table>"
-                    // impactAnalysisTable2.html(tempB);
+                // tempB += "</table>"
+                // impactAnalysisTable2.html(tempB);
                 // }
 
 
@@ -445,9 +467,9 @@ $(document).ready((function () {
         }
     })
     $.ajax({
-        url:"user",
-        type:"GET",
-        success:function (result) {
+        url: "user",
+        type: "GET",
+        success: function (result) {
             var _table = $("#deptName")
             // var data = JSON.stringify(result.data);
             // var _data = JSON.parse(data);
@@ -464,25 +486,25 @@ $(document).ready((function () {
             // temp += "</table>"
             // _table.html(temp)
             $.ajax({
-                url:"allDept",
-                type:"GET",
-                success:function (data) {
+                url: "allDept",
+                type: "GET",
+                success: function (data) {
                     // var _table = $("#deptName");
                     var _data = JSON.stringify(data.data);
                     var allDept = JSON.parse(_data);
                     // var temp = "<table>";
                     // for (var i=0;i<allDept.length;i++) {
-                        // if(_data[i].type == "A"){
+                    // if(_data[i].type == "A"){
 
-                        // temp += "<tr><td id='" + allDept[i].id + "'>" + allDept[i].deptName + "</td>" +
-                        //     "<td><div id='queryName'><div class='wrapper'>" +
-                        //     "<div class='search-form'></div>" +
-                        //     "<div class='message'></div>" +
-                        //     "</div></div></td></tr>"
-                        // temp += "</table>"
-                    for(var item in allDept){
+                    // temp += "<tr><td id='" + allDept[i].id + "'>" + allDept[i].deptName + "</td>" +
+                    //     "<td><div id='queryName'><div class='wrapper'>" +
+                    //     "<div class='search-form'></div>" +
+                    //     "<div class='message'></div>" +
+                    //     "</div></div></td></tr>"
+                    // temp += "</table>"
+                    for (var item in allDept) {
                         $('#demo').append($('<div class="wrapper">\
-                          <laber>'+ allDept[item].deptName +'</laber>\
+                          <laber>' + allDept[item].deptName + '</laber>\
                           <div class="search-form"></div>\
                           <div class="message"></div>\
                         </div>'))

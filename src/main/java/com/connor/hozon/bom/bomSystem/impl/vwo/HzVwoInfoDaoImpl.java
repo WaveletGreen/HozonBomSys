@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2018.
+ * This file was wrote by fancyears·milos·maywas @connor. Any question/bug you can post to 1243093366@qq.com.
+ * ALL RIGHTS RESERVED.
+ */
+
 package com.connor.hozon.bom.bomSystem.impl.vwo;
 
 import com.connor.hozon.bom.bomSystem.dao.vwo.HzVwoInfoDao;
@@ -12,8 +18,8 @@ import java.util.Map;
 
 /**
  * @Author: Fancyears·Maylos·Maywas
- * @Description:
- * @Date: Created in 2018/8/10 13:46
+ * @Description: fuck
+ * @Date: Created in 2018/9/6 13:19
  * @Modified By:
  */
 @Configuration
@@ -86,6 +92,11 @@ public class HzVwoInfoDaoImpl extends BasicDaoImpl<HzVwoInfo> implements HzVwoIn
     public int tellMeHowManyOfIt(String projectUid) {
         return baseSQLUtil.executeQueryByPass(new Integer(-1), projectUid,
                 clzName + ".tellMeHowManyOfIt", true);
+    }
+
+    @Override
+    public int updateByVwoId(HzVwoInfo info) {
+        return baseSQLUtil.executeUpdate(info,clzName + ".updateByVwoId");
     }
 
 

@@ -1,9 +1,8 @@
 /*
  * Copyright (c) 2018.
- * This file was wrote by fancyears·milos·maywas @connor. Any question/bug you can post to 1243093366@qq.com.
+ * This file was wrote by fancyears·milos·maywas @connor. Any question/bug you can't post to 1243093366@qq.com.
  * ALL RIGHTS RESERVED.
  */
-
 package com.connor.hozon.bom.bomSystem.service.fullCfg;
 
 import com.connor.hozon.bom.bomSystem.dao.model.HzCfg0ModelDetailDao;
@@ -16,9 +15,10 @@ import sql.pojo.cfg.model.HzCfg0ModelRecord;
 import java.util.List;
 
 /**
- * User: Fancyears·Maylos·Mayways
- * Date: 2018/5/21
- * Time: 14:42
+ * @Author: Fancyears·Maylos·Maywas
+ * @Description: fuck
+ * @Date: Created in 2018/9/6 13:19
+ * @Modified By:
  */
 @Service("hzCfg0ModelService")
 public class HzCfg0ModelService {

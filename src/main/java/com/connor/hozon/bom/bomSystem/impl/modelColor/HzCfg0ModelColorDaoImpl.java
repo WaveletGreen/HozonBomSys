@@ -16,9 +16,10 @@ import sql.pojo.cfg.modelColor.HzCfg0ModelColor;
 import java.util.List;
 
 /**
- * User: Fancyears·Maylos·Mayways
- * Date: 2018/5/22
- * Time: 10:53
+ * @Author: Fancyears·Maylos·Maywas
+ * @Description: fuck
+ * @Date: Created in 2018/9/6 13:19
+ * @Modified By:
  */
 @Service("hzCfg0ModelColorDao")
 public class HzCfg0ModelColorDaoImpl extends BasicDaoImpl<HzCfg0ModelColor> implements HzCfg0ModelColorDao {
@@ -71,5 +72,10 @@ public class HzCfg0ModelColorDaoImpl extends BasicDaoImpl<HzCfg0ModelColor> impl
     public int updateListData(List<HzCfg0ModelColor> hzCfg0ModelColors) {
         return baseSQLUtil.executeUpdate(hzCfg0ModelColors,
                 clzName + ".updateListData");
+    }
+
+    @Override
+    public int updateByVwoId(HzCfg0ModelColor hzCfg0ModelColor) {
+        return baseSQLUtil.executeUpdate(hzCfg0ModelColor,clzName + ".updateByVwoId");
     }
 }

@@ -14,8 +14,8 @@ public class Result {
     public static ResultMessage build(Object data) {
         return new ResultMessage(data);
     }
-    public static ResultMessageMore build(Object data,Object externalObject ) {
-        return new ResultMessageMore(data,externalObject );
+    public static MoreResultMessage build(Object data,Object externalObject ) {
+        return new MoreResultMessage(data,externalObject );
     }
 
     public static ResultMessage build(boolean success, String errMsg) {
@@ -95,7 +95,7 @@ public class Result {
 
     }
 
-    public static class ResultMessageMore {
+    public static class MoreResultMessage {
 
         private boolean success = true;
         private String errMsg = null;
@@ -112,27 +112,16 @@ public class Result {
         }
 
 
-        public ResultMessageMore(Object data,Object externalObject) {
+        public MoreResultMessage(Object data,Object externalObject) {
             this.data = data;
             this.externalObject = externalObject;
-        }
-
-        public ResultMessageMore(boolean success, String errMsg) {
-            this.success = success;
-            this.errMsg = errMsg;
-        }
-
-        public ResultMessageMore(boolean success, String errMsg, Object data) {
-            this.success = success;
-            this.errMsg = errMsg;
-            this.data = data;
         }
 
         public boolean isSuccess() {
             return success;
         }
 
-        public ResultMessageMore setSuccess(boolean success) {
+        public MoreResultMessage setSuccess(boolean success) {
             this.success = success;
             return this;
         }
@@ -141,7 +130,7 @@ public class Result {
             return errMsg;
         }
 
-        public ResultMessageMore setErrMsg(String errMsg) {
+        public MoreResultMessage setErrMsg(String errMsg) {
             this.errMsg = errMsg;
             return this;
         }
@@ -150,7 +139,7 @@ public class Result {
             return data;
         }
 
-        public ResultMessageMore setData(Object data) {
+        public MoreResultMessage setData(Object data) {
             this.data = data;
             return this;
         }

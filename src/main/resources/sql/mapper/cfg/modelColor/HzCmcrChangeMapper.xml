@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (c) 2018.
+  ~ This file was wrote by fancyears·milos·maywas @connor. Any question/bug you can post to 1243093366@qq.com.
+  ~ ALL RIGHTS RESERVED.
+  -->
+
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.connor.hozon.bom.bomSystem.dao.modelColor.HzCmcrChangeDao">
     <resultMap id="BaseResultMap" type="sql.pojo.cfg.modelColor.HzCmcrChange">
@@ -119,6 +125,57 @@
         #{cmcrSrcCreator,jdbcType=VARCHAR}, #{cmcrSrcUpdateDate,jdbcType=TIMESTAMP}, #{cmcrSrcUpdater,jdbcType=VARCHAR},
         #{cmcrSrcCodeOfColorMod,jdbcType=VARCHAR}, #{cmcrSrcDescOfColorMod,jdbcType=VARCHAR}
         )
+    </insert>
+
+    <insert id="insertList" parameterType="java.util.List">
+        insert into ${whichTable} (
+        CMCR_CG_ID,
+        CMCR_CG_VWO_ID,
+        CMCR_CG_SHELL_CODE,
+
+        CMCR_CG_CREATOR,
+
+        CMCR_CG_UPDATER,
+        CMCR_CG_RESERVE1,
+        CMCR_CG_RESERVE2,
+        CMCR_CG_RESERVE3,
+        CMCR_CG_RESERVE4,
+        CMCR_CG_RESERVE5,
+        CMCR_CG_RESERVE6,
+        CMCR_CG_RESERVE7,
+        CMCR_CG_RESERVE8,
+        CMCR_SRC_MAIN_CFG,
+        CMCR_SRC_PUID,
+        CMCR_SRC_MODEL_SHELL,
+        CMCR_SRC_COLOR_UID,
+        CMCR_SRC_SHELL_CFG0_PUID,
+        CMCR_SRC_COLOR_IS_MULTIPLY,
+        CMCR_SRC_CREATE_DATE,
+        CMCR_SRC_CREATOR,
+        CMCR_SRC_UPDATE_DATE,
+        CMCR_SRC_UPDATER,
+        CMCR_SRC_CODE_OF_COLOR_MOD,
+        CMCR_SRC_DESC_OF_COLOR_MOD,
+        CMCR_CG_CREATE_DATE,
+        CMCR_CG_UPDATE_DATE
+        )
+        select ${seqName}.Nextval, A.* ,sysdate,sysdate from (
+        <foreach collection="hzCmcrChangeList" index="index" item="hzCmcrChange" separator="union all">
+            select
+                #{hzCmcrChange.cmcrCgVwoId,jdbcType=DECIMAL}, #{hzCmcrChange.cmcrCgShellCode,jdbcType=VARCHAR},
+                #{hzCmcrChange.cmcrCgCreator,jdbcType=VARCHAR},
+                #{hzCmcrChange.cmcrCgUpdater,jdbcType=VARCHAR}, #{hzCmcrChange.cmcrCgReserve1,jdbcType=VARCHAR}, #{hzCmcrChange.cmcrCgReserve2,jdbcType=VARCHAR},
+                #{hzCmcrChange.cmcrCgReserve3,jdbcType=VARCHAR}, #{hzCmcrChange.cmcrCgReserve4,jdbcType=VARCHAR}, #{hzCmcrChange.cmcrCgReserve5,jdbcType=VARCHAR},
+                #{hzCmcrChange.cmcrCgReserve6,jdbcType=VARCHAR}, #{hzCmcrChange.cmcrCgReserve7,jdbcType=VARCHAR}, #{hzCmcrChange.cmcrCgReserve8,jdbcType=VARCHAR},
+                #{hzCmcrChange.cmcrSrcMainCfg,jdbcType=VARCHAR}, #{hzCmcrChange.cmcrSrcPuid,jdbcType=VARCHAR}, #{hzCmcrChange.cmcrSrcModelShell,jdbcType=VARCHAR},
+                #{hzCmcrChange.cmcrSrcColorUid,jdbcType=VARCHAR}, #{hzCmcrChange.cmcrSrcShellCfg0Puid,jdbcType=VARCHAR},
+                #{hzCmcrChange.cmcrSrcColorIsMultiply,jdbcType=VARCHAR}, #{hzCmcrChange.cmcrSrcCreateDate,jdbcType=TIMESTAMP},
+                #{hzCmcrChange.cmcrSrcCreator,jdbcType=VARCHAR}, #{hzCmcrChange.cmcrSrcUpdateDate,jdbcType=TIMESTAMP}, #{hzCmcrChange.cmcrSrcUpdater,jdbcType=VARCHAR},
+                #{hzCmcrChange.cmcrSrcCodeOfColorMod,jdbcType=VARCHAR}, #{hzCmcrChange.cmcrSrcDescOfColorMod,jdbcType=VARCHAR}
+            from
+              dual
+        </foreach>
+        )A
     </insert>
     <insert id="insertSelective" parameterType="sql.pojo.cfg.modelColor.HzCmcrChange">
         <selectKey order="BEFORE"
@@ -408,4 +465,97 @@
       CMCR_SRC_DESC_OF_COLOR_MOD = #{cmcrSrcDescOfColorMod,jdbcType=VARCHAR}
     where CMCR_CG_ID = #{cmcrCgId,jdbcType=DECIMAL}
   </update>
+
+    <select id="selectLastAfter" parameterType="java.util.List" resultMap="BaseResultMap">
+        SELECT
+          <include refid="Base_Column_List"/>
+        from
+          ${whichTable}
+        where
+          CMCR_SRC_MAIN_CFG = #{mainId,jdbcType=VARCHAR}
+        and
+          CMCR_CG_UPDATE_DATE in(
+            SELECT
+            max(t.CMCR_CG_UPDATE_DATE)
+            FROM
+            HZ_CMCR_AFTER_CHANGE t
+            WHERE
+            t.CMCR_SRC_MAIN_CFG = #{mainId,jdbcType=VARCHAR}
+            AND
+            t.CMCR_SRC_PUID IN
+            <foreach collection="hzCmcrChangesLastAfter" index="index" item="hzCmcrChange" open="(" separator="," close=")">
+                  #{hzCmcrChange.cmcrSrcPuid,jdbcType=VARCHAR}
+            </foreach>
+            GROUP BY	CMCR_SRC_PUID
+          )
+    </select>
+
+    <select id="doQueryCmcrDetailChangeBeforAndAfter" parameterType="sql.pojo.cfg.modelColor.HzCmcrChange" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from(
+        select
+        <include refid="Base_Column_List"/>,ROWNUM rn
+        from
+        HZ_CMCR_AFTER_CHANGE t
+        WHERE
+        t.CMCR_SRC_PUID=#{cmcrSrcPuid,jdbcType=VARCHAR}
+        and
+        t.CMCR_CG_VWO_ID &lt;= #{cmcrCgVwoId,jdbcType=INTEGER}
+        ORDER BY t.CMCR_CG_ID DESC
+        ) te
+        where
+        te.rn &lt; 3
+        order by
+        te.CMCR_CG_ID
+    </select>
+
+    <select id="doQueryCmcrChangeBefor" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from
+        HZ_CMCR_AFTER_CHANGE
+        where
+        CMCR_CG_VWO_ID = (
+        select MAX(CMCR_CG_VWO_ID) from HZ_CMCR_AFTER_CHANGE where  CMCR_CG_VWO_ID&lt;#{vwoId,jdbcType=INTEGER}
+        )
+        and
+        CMCR_SRC_PUID in (
+        select CMCR_SRC_PUID from HZ_CMCR_AFTER_CHANGE where CMCR_CG_VWO_ID=#{vwoId,jdbcType=INTEGER}
+        )
+    </select>
+
+    <select id="doQueryCmcrChangeBeforFirst" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from
+        HZ_CMCR_AFTER_CHANGE
+        where
+        CMCR_CG_VWO_ID=#{vwoId,jdbcType=INTEGER}
+        and ROWNUM&lt;(select (count(*)/2+1) from HZ_CMCR_AFTER_CHANGE where CMCR_CG_VWO_ID=#{vwoId,jdbcType=INTEGER})
+    </select>
+
+    <select id="doQueryCmcrChangeAfterFirst" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from(
+            select
+            <include refid="Base_Column_List"/>,ROWNUM rn
+            from
+            HZ_CMCR_AFTER_CHANGE
+            where
+            CMCR_CG_VWO_ID=#{vwoId,jdbcType=INTEGER}
+        )
+        where
+          rn&gt;(select (count(*)/2) from HZ_CMCR_AFTER_CHANGE where CMCR_CG_VWO_ID=#{vwoId,jdbcType=INTEGER})
+    </select>
+
+    <select id="doQueryCmcrChangeAfter" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from
+        HZ_CMCR_AFTER_CHANGE
+        where
+        CMCR_CG_VWO_ID=#{vwoId,jdbcType=INTEGER}
+    </select>
 </mapper>

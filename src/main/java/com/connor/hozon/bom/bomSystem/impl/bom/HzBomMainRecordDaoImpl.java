@@ -14,10 +14,10 @@ import sql.IBaseSQLUtil;
 import sql.pojo.bom.HZBomMainRecord;
 
 /**
- * Author: Fancyears·Maylos·Mayways
- * Date: 2018/5/30 16:12
- * <p>
- * Description:
+ * @Author: Fancyears·Maylos·Maywas
+ * @Description: fuck
+ * @Date: Created in 2018/9/6 13:19
+ * @Modified By:
  */
 @Service("hzBomMainRecordDao")
 public class HzBomMainRecordDaoImpl extends BasicDaoImpl<HZBomMainRecord> implements HzBomMainRecordDao {

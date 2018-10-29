@@ -1,9 +1,17 @@
+<!DOCTYPE html>
+<!--
+  ~ Copyright (c) 2018.
+  ~ This file was wrote by fancyears·milos·maywas @connor. Any question/bug you can post to 1243093366@qq.com.
+  ~ ALL RIGHTS RESERVED.
+  -->
+
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <body>
-暂时用不到
+<!--暂时用不到-->
 <form id="featureForm" role="form" method="post" action="./cfg0/add">
-    <input class="form-control" id="pCfg0MainItemPuid" name="pCfg0MainItemPuid" type="hidden" th:value="${entity.puid}"/>
+    <input class="form-control" id="pCfg0MainItemPuid" name="pCfg0MainItemPuid" type="hidden"
+           th:value="${entity.puid}"/>
     <div class="form-group">
         <label for="pCfg0FamilyName">特性名称</label>
         <input class="form-control" id="pCfg0FamilyName" name="pCfg0FamilyName" type="text"
@@ -119,7 +127,7 @@
                             $('body', window.top.document).find('.modal-backdrop').remove();
                             // jquery 调用刷新当前操作的table页面的refresh方法
                             $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
-                            if(result){
+                            if (result) {
                                 // window.Ewin.alert({message: "添加特性数据成功"});
                                 layer.msg('添加特性数据成功"!', {icon: 1, time: 2000});
 

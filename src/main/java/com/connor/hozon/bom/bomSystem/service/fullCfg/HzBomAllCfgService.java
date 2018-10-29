@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2018.
- * This file was wrote by fancyears·milos·maywas @connor. Any question/bug you can post to 1243093366@qq.com.
+ * This file was wrote by fancyears·milos·maywas @connor. Any question/bug you can't post to 1243093366@qq.com.
  * ALL RIGHTS RESERVED.
  */
 
@@ -11,7 +11,7 @@ import com.connor.hozon.bom.bomSystem.dao.model.HzCfg0ModelDetailDao;
 import com.connor.hozon.bom.bomSystem.dao.fullCfg.HzFullCfgMainDao;
 import com.connor.hozon.bom.bomSystem.dao.fullCfg.HzFullCfgModelDao;
 import com.connor.hozon.bom.bomSystem.dao.fullCfg.HzFullCfgWithCfgDao;
-import com.connor.hozon.bom.bomSystem.dto.HzFeatureQueryDTO;
+import com.connor.hozon.bom.bomSystem.dto.HzFeatureQueryDto;
 import com.connor.hozon.bom.bomSystem.helper.DateStringHelper;
 import com.connor.hozon.bom.bomSystem.helper.ProjectHelper;
 import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
@@ -49,7 +49,12 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 import static com.connor.hozon.bom.bomSystem.helper.StringHelper.checkString;
-
+/**
+ * @Author: Fancyears·Maylos·Maywas
+ * @Description: fuck
+ * @Date: Created in 2018/9/6 13:19
+ * @Modified By:
+ */
 @Service("hzBomAllCfgService")
 public class HzBomAllCfgService {
 
@@ -115,7 +120,7 @@ public class HzBomAllCfgService {
      */
     public JSONObject parse(String projectPuid) {
         //搜索全部特性，并经过P_CFG0_OBJECT_ID 升序排序
-        HzFeatureQueryDTO queryBase = new HzFeatureQueryDTO();
+        HzFeatureQueryDto queryBase = new HzFeatureQueryDto();
         queryBase.setSort("P_CFG0_OBJECT_ID");
 //        QueryBase queryBase = new QueryBase();
 //        queryBase.setSort("P_CFG0_OBJECT_ID");

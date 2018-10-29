@@ -17,11 +17,11 @@ import java.util.Set;
 
 /**
  * @Author: Fancyears·Maylos·Maywas
- * @Description:
- * @Date: Created in 2018/10/11 14:57
+ * @Description: fuck
+ * @Date: Created in 2018/9/6 13:19
  * @Modified By:
  */
-public enum ChangeCmcrOption {
+public enum ChangeCmcrOptions {
     /**
      * CMCR变更后表名
      */
@@ -61,21 +61,21 @@ public enum ChangeCmcrOption {
     public final static Set<String> MAIN_TABLE_LIST;
     public final static Set<String> DETAIL_TABLE_LIST;
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(ChangeCmcrOption.class);
+    private final static Logger LOGGER = LoggerFactory.getLogger(ChangeCmcrOptions.class);
 
     static {
         MAIN_TABLE_LIST = new HashSet<>();
         DETAIL_TABLE_LIST = new HashSet<>();
 
-        MAIN_TABLE_LIST.add(ChangeCmcrOption.AFTER_TABLE.desc);
-        MAIN_TABLE_LIST.add(ChangeCmcrOption.BEFORE_TABLE.desc);
+        MAIN_TABLE_LIST.add(ChangeCmcrOptions.AFTER_TABLE.desc);
+        MAIN_TABLE_LIST.add(ChangeCmcrOptions.BEFORE_TABLE.desc);
 
-        DETAIL_TABLE_LIST.add(ChangeCmcrOption.DETAIL_AFTER_TABLE.desc);
-        DETAIL_TABLE_LIST.add(ChangeCmcrOption.DETAIL_BEFORE_TABLE.desc);
+        DETAIL_TABLE_LIST.add(ChangeCmcrOptions.DETAIL_AFTER_TABLE.desc);
+        DETAIL_TABLE_LIST.add(ChangeCmcrOptions.DETAIL_BEFORE_TABLE.desc);
     }
 
     // 构造方法
-    ChangeCmcrOption(String desc) {
+    ChangeCmcrOptions(String desc) {
         this.desc = desc;
     }
 

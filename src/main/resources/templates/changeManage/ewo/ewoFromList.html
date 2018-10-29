@@ -11,155 +11,117 @@
 <div class="panel-body" style="padding-bottom:0px;">
     <div class="panel panel-default" style="margin-top: 10px;">
         <div class="panel-body">
-            <form class="form-inline" role="form" style="float: left; width: 100%;margin-left: 20px;" method="get"
-                  id="queryPbomManage">
-                <div class="form-group after_the">
-                    <label for="VWOnum1">EWO号:&ensp;&ensp;</label>
-                    <input type="text" style="width: 150px;" class="form-control" name="level" id="VWOnum1"
-                           placeholder=""/>
+            <!--<form class="form-inline" role="form" style="float: left; width: 100%;margin-left: 20px;" method="get"-->
+                  <!--id="queryPbomManage">-->
+                <div class="col-lg-12 col-md-12">
+                    <div class="col-lg-3 col-md-3">
+                        <div class="form-group after_the">
+                            <label for="VWOnum1">EWO号:</label>
+                            <input type="text" style="width: 150px;" class="form-control" name="level" id="VWOnum1"
+                                   placeholder=""/>
+                        </div>
+                        <div class="form-group after_the">
+                            <label for="EWOnum2">创建时间:</label>
+                            <input type="text" style="width: 150px;" class="form-control" name="level" id="EWOnum2"
+                                   placeholder=""/>
+                        </div>
+                        <div class="form-group after_the">
+                            <label for="VWOnum3">流程状态:</label>
+                            <input type="text" style="width: 150px;" class="form-control" name="level" id="VWOnum3"
+                                   placeholder=""/>
+                        </div>
+                        <div class="form-group after_the">
+                            <label for="VWOnum4">标题:</label>
+                            <input type="text" style="width: 150px;" class="form-control" name="level" id="VWOnum4"
+                                   placeholder=""/>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-3">
+                        <div class="form-group after_the">
+                            <label for="VWOnum5">部门:</label>
+                            <input type="text" style="width: 150px;" class="form-control" name="level" id="VWOnum5"
+                                   placeholder=""/>
+                        </div>
+                        <div class="form-group after_the">
+                            <label for="VWOnum6">发起人:</label>
+                            <input type="text" style="width: 150px;" class="form-control" name="level" id="VWOnum6"
+                                   placeholder=""/>
+                        </div>
+                        <div class="form-group after_the">
+                            <label for="VWOnum7">联系电话:</label>
+                            <input type="text" style="width: 150px;" class="form-control" name="level" id="VWOnum7"
+                                   placeholder=""/>
+                        </div>
+                        <div class="form-group after_the">
+                            <label for="VWOnum8">要求完成时间:</label>
+                            <input type="text" style="width: 150px;" class="form-control" name="level" id="VWOnum8"
+                                   placeholder=""/>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-3">
+                        <div class="form-group after_the">
+                            <label for="VWOnum9">变更类型:</label>
+                            <select class="form-control"style="width: 150px;" name="" id="VWOnum9">
+                                <option>正常设变</option>
+                                <option>简易设变</option>
+                            </select>
+                        </div>
+                        <div class="form-group after_the">
+                            <label for="expenseDept">费用承担部门:</label>
+                            <select class="form-control" style="min-width: 150px;max-width: 150px" name="" id="expenseDept">
+                                <!--<option>车身技术部门</option>-->
+                                <!--<option>电子电器技术部门</option>-->
+                                <!--<option>底盘技术部门</option>-->
+                                <!--<option>系统集成技术部门</option>-->
+                                <!--<option>内外饰技术部门</option>-->
+                                <option>车身部门</option>
+                                <option>车身部门</option>
+                                <option>车身部门</option>
+                                <option>车身部门</option>
+                                <option>车身部门</option>
+                            </select>
+                        </div>
+                        <div class="form-group after_the">
+                            <label for="VWOnum10">上市类型:</label>
+                            <select class="form-control"style="width: 150px;" name="" id="VWOnum10">
+                                <option>上市前</option>
+                                <option>上市后</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-3">
+                        <div class="form-group after_the">
+                            <label for="VWOnum11">关联EWO号:</label>
+                            <input type="text" style="width: 150px;" class="form-control" name="level" id="VWOnum11"
+                                   placeholder=""/>
+                        </div>
+                        <div class="form-group after_the">
+                            <label for="expenseDept1">原因代码:</label>
+                            <select class="form-control" style="min-width: 150px;max-width: 150px" name="" id="expenseDept1">
+                                <option>001配置优化</option>
+                                <option>002性能提升</option>
+                                <option>003造型更改</option>
+                                <option>004设计优化</option>
+                                <option>005市场需求</option>
+                                <option>006关联变更</option>
+                                <option>007BOM及图纸更改</option>
+                                <option>008质量提升</option>
+                                <option>009工艺改进</option>
+                                <option>010VAVE</option>
+                                <option>011其他</option>
+                            </select>
+                        </div>
+                        <div class="form-group after_the">
+                            <label for="VWOnum12">原因描述:</label>
+                            <input type="text" style="width: 150px;" class="form-control" name="level" id="VWOnum12"
+                                   placeholder=""/>
+                        </div>
+                    </div>
                 </div>
-                <div class="form-group after_the">
-                    <label for="EWOnum2">创建时间:&ensp;&ensp;&ensp;&ensp;&ensp;</label>
-                    <input type="text" style="width: 150px;" class="form-control" name="level" id="EWOnum2"
-                           placeholder=""/>
-                </div>
-                <div class="form-group after_the">
-                    <label for="VWOnum3">流程状态:&ensp;&ensp;&ensp;&ensp;&ensp;</label>
-                    <input type="text" style="width: 150px;" class="form-control" name="level" id="VWOnum3"
-                           placeholder=""/>
-                </div>
-                <div class="form-group after_the">
-                    <label for="VWOnum4">标题:&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;</label>
-                    <input type="text" style="width: 150px;" class="form-control" name="level" id="VWOnum4"
-                           placeholder=""/>
-                </div>
-                <div class="form-group after_the">
-                    <label for="VWOnum5">部门:&ensp;&ensp;&ensp;&ensp;&ensp;</label>
-                    <input type="text" style="width: 150px;" class="form-control" name="level" id="VWOnum5"
-                           placeholder=""/>
-                </div>
-                <div class="form-group after_the">
-                    <label for="VWOnum6">发起人:&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;</label>
-                    <input type="text" style="width: 150px;" class="form-control" name="level" id="VWOnum6"
-                           placeholder=""/>
-                </div>
-                <div class="form-group after_the">
-                    <label for="VWOnum7">联系电话:&ensp;&ensp;&ensp;&ensp;&ensp;</label>
-                    <input type="text" style="width: 150px;" class="form-control" name="level" id="VWOnum7"
-                           placeholder=""/>
-                </div>
-                <div class="form-group after_the">
-                    <label for="VWOnum8">要求完成时间:&ensp;&ensp;&ensp;</label>
-                    <input type="text" style="width: 150px;" class="form-control" name="level" id="VWOnum8"
-                           placeholder=""/>
-                </div>
-                <div class="form-group after_the">
-                    <label for="VWOnum9">变更类型:&ensp;</label>
-                    <select class="form-control"style="width: 150px;" name="" id="VWOnum9">
-                        <option>正常设变</option>
-                        <option>简易设变</option>
-                    </select>
-                </div>
-                <div class="form-group after_the">
-                    <label for="expenseDept">费用承担部门:&ensp;</label>
-                    <select class="form-control" style="min-width: 150px;max-width: 150px" name="" id="expenseDept">
-                        <!--<option>车身技术部门</option>-->
-                        <!--<option>电子电器技术部门</option>-->
-                        <!--<option>底盘技术部门</option>-->
-                        <!--<option>系统集成技术部门</option>-->
-                        <!--<option>内外饰技术部门</option>-->
-                        <option>车身部门</option>
-                        <option>车身部门</option>
-                        <option>车身部门</option>
-                        <option>车身部门</option>
-                        <option>车身部门</option>
-                    </select>
-                </div>
-                <div class="form-group after_the">
-                    <label for="VWOnum10">上市类型:&ensp;&ensp;&ensp;&ensp;&ensp;</label>
-                    <select class="form-control"style="width: 150px;" name="" id="VWOnum10">
-                        <option>上市前</option>
-                        <option>上市后</option>
-                    </select>
-                </div>
-                <div class="form-group after_the">
-                    <label for="VWOnum11">关联EWO号:&ensp;&ensp;&ensp;&ensp;</label>
-                    <input type="text" style="width: 150px;" class="form-control" name="level" id="VWOnum11"
-                           placeholder=""/>
-                </div>
-                <div class="form-group after_the">
-                    <label for="expenseDept1">原因代码:&ensp;</label>
-                    <select class="form-control" style="min-width: 150px;max-width: 150px" name="" id="expenseDept1">
-                        <option>001配置优化</option>
-                        <option>002性能提升</option>
-                        <option>003造型更改</option>
-                        <option>004设计优化</option>
-                        <option>005市场需求</option>
-                        <option>006关联变更</option>
-                        <option>007BOM及图纸更改</option>
-                        <option>008质量提升</option>
-                        <option>009工艺改进</option>
-                        <option>010VAVE</option>
-                        <option>011其他</option>
-                    </select>
-                </div>
-                <div class="form-group after_the">
-                    <label for="VWOnum12">原因描述:&ensp;&ensp;&ensp;&ensp;&ensp;</label>
-                    <input type="text" style="width: 150px;" class="form-control" name="level" id="VWOnum12"
-                           placeholder=""/>
-                </div>
-               <!-- <div class="form-group after_the">
-                    <label for="VWOnum13">平台:&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;</label>
-                    <input type="text" style="width: 150px;" class="form-control" name="level" id="VWOnum13"
-                           placeholder=""/>
-                </div>
-                <div class="form-group after_the">
-                    <label for="VWOnum14">车型代号:&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;</label>
-                    <input type="text" style="width: 150px;" class="form-control" name="level" id="VWOnum14"
-                           placeholder=""/>
-                </div>
-                <div class="form-group after_the">
-                    <label for="VWOnum15">项目代号:&ensp;</label>
-                    <input type="text" style="width: 150px;" class="form-control" name="level" id="VWOnum15"
-                           placeholder=""/>
-                </div>
-                <div class="form-group after_the">
-                    <label for="VWOnum16">生效时间:&ensp;&ensp;&ensp;&ensp;&ensp;</label>
-                    <input type="text" style="width: 150px;" class="form-control" name="level" id="VWOnum16"
-                           placeholder=""/>
-                </div>
-                <div class="form-group after_the">
-                    <label for="VWOnum17">项目所属阶段:&ensp;</label>
-                    <input type="text" style="width: 150px;" class="form-control" name="level" id="VWOnum17"
-                           placeholder=""/>
-                </div>
-                <div class="form-group after_the">
-                    <label for="VWOnum18">关联工程师姓名:&ensp;</label>
-                    <input type="text" style="width: 150px;" class="form-control" name="level" id="VWOnum18"
-                           placeholder=""/>
-                </div>
-                <div class="form-group after_the">
-                    <label for="VWOnum19">所属部门:&ensp;</label>
-                    <input type="text" style="width: 150px;" class="form-control" name="level" id="VWOnum19"
-                           placeholder=""/>
-                </div>
-                <div class="form-group after_the">
-                    <label for="VWOnum20">关联零件号:&ensp;&ensp;&ensp;</label>
-                    <input type="text" style="width: 150px;" class="form-control" name="level" id="VWOnum20"
-                           placeholder=""/>
-                </div>
-                <div class="form-group after_the">
-                    <label for="VWOnum21">关联零件名称:&ensp;</label>
-                    <input type="text" style="width: 150px;" class="form-control" name="level" id="VWOnum21"
-                           placeholder=""/>
-                </div>-->
-                <!--<div class="form-group">-->
-                    <!--<button type="button" id="queryBtn1" onclick="doQuery();" class="btn btn-primary">重置</button>-->
-                <!--</div>-->
                 <div class="form-group">
                     <button type="button" id="queryBtn" onclick="doQuery();" class="btn btn-primary">查询</button>
                 </div>
-            </form>
+            <!--</form>-->
         </div>
     </div>
 </div>
@@ -238,5 +200,7 @@
     </table>
 </div>
 <script th:src="@{/js/changeManage/ewo/ewoFromList.js}"></script>
+<script th:src="@{/js/helper/projectHelper.js}"></script>
+<script th:src="@{/js/helper/dateFormater.js}"></script>
 </body>
 </html>

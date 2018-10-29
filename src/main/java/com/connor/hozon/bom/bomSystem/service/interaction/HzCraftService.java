@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2018.
+ * This file was wrote by fancyears·milos·maywas @connor. Any question/bug you can't post to 1243093366@qq.com.
+ * ALL RIGHTS RESERVED.
+ */
+
 package com.connor.hozon.bom.bomSystem.service.interaction;
 
 import com.connor.hozon.bom.bomSystem.helper.PropertiesHelper;
@@ -93,7 +99,7 @@ public class HzCraftService implements IHzCraftService {
     /**
      * 调试阶段
      */
-    public static boolean CRAFT_DEBUG = true;
+    public static boolean CRAFT_DEBUG = false;
     /**
      * 插入测试，true则不进行插入
      */
@@ -657,7 +663,11 @@ public class HzCraftService implements IHzCraftService {
             //比当前排序号编号大的正统排序号，是首次导入时的临近的排序号，100进制
             String localSortNum = hzPbomRecordDAO.findMinOrderNumWhichGreaterThanThisOrderNum(projectUid, mySortNum);
             mymy = Double.parseDouble(mySortNum);
-            youryour = Double.parseDouble(localSortNum);
+            if (localSortNum != null) {
+                youryour = Double.parseDouble(localSortNum);
+            } else {
+                youryour = mymy + 100;
+            }
             double _temp = mymy;
             //需要插入到数据库中的数据
             LocalCraftTarget target = new LocalCraftTarget();
@@ -842,7 +852,9 @@ public class HzCraftService implements IHzCraftService {
                                 }
                             }
                             //克隆一份出来
-                            target.getChildrenTree().add(record.clone());
+                            HzPbomLineRecord record1=record.clone();
+                            record1.setStatus(1);
+                            target.getChildrenTree().add(record1);
                         }
                     }
                 }

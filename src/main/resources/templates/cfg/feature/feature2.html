@@ -4,7 +4,6 @@
   ~ This file was wrote by fancyears·milos·maywas @connor. Any question/bug you can post to 1243093366@qq.com.
   ~ ALL RIGHTS RESERVED.
   -->
-
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:include="include/includebase"></head>
 <!--<link th:href="@{/css/stage/bom-stage.css}" rel="stylesheet"/>-->
@@ -34,13 +33,13 @@
     <table class="table table-striped tableNormalStyle" id="dataTable"></table>
 </div>
 <script th:src="@{/js/helper/dateFormater.js}"></script>
+<script th:src="@{/js/helper/fileOptionHelper.js}"></script>
 <script th:src="@{/js/helper/projectHelper.js}"></script>
 <script th:src="@{/js/cfg/feature/feature2.js}"></script>
 <script th:inline="javascript">
     function doQuery() {
         $('#dataTable').bootstrapTable('refresh');    //刷新表格
     }
-
     function doRefresh(projectUid) {
         loadData(projectUid);
     }

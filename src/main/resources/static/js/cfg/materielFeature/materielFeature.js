@@ -1,9 +1,15 @@
+/*
+ * Copyright (c) 2018.
+ * This file was wrote by fancyears·milos·maywas @connor. Any question/bug you can post to 1243093366@qq.com.
+ * ALL RIGHTS RESERVED.
+ */
+
 /*项目UID*/
 var projectUid = null;
 /**目标table*/
 var $table = null;
 /**工具条设置*/
-var toolbarSetting = [
+var toolbar = [
     {
         text: '一键生成',
         iconCls: 'glyphicon glyphicon-plus',
@@ -236,12 +242,12 @@ $(document).ready(
 );
 
 /**加载数据*/
-function loadData(projectPuid) {
+function loadData(_projectPuid) {
     //必须输入一个配置的puid
-    if (!checkIsSelectProject(projectPuid)) {
+    if (!checkIsSelectProject(_projectPuid)) {
         return;
     }
-    projectUid = projectPuid;
+    projectUid = _projectPuid;
     $table = $("#materielFeature");
     $table.bootstrapTable('destroy');
     var column = [];
@@ -307,7 +313,9 @@ function deleteVehicle() {
                 contentType: "application/json",
                 success: function (result) {
                     if (result.status) {
-                        layer.msg(result.msg, {icon: 1, time: 2000})
+                        layer.msg(result.msg, {icon: 1, time: 2000});
+                        doQuery();
+                        //$(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
                         // window.Ewin.alert({message: });
                         //刷新，会重新申请数据库数据
                     }
@@ -375,7 +383,21 @@ function gotIt(result) {
         columns: column,
         // sortable: true,                     //是否启用排序
         // sortOrder: "asc",                   //排序方式
-        toolbars: toolbarSetting,
+        toolbars: toolbar,
+        //>>>>>>>>>>>>>>导出excel表格设置
+        showExport: phoneOrPc(),              //是否显示导出按钮(此方法是自己写的目的是判断终端是电脑还是手机,电脑则返回true,手机返回falsee,手机不显示按钮)
+        exportDataType: "selected",              //basic', 'all', 'selected'.
+        exportTypes: ['xlsx'],	    //导出类型
+        //exportButton: $('#btn_export'),     //为按钮btn_export  绑定导出事件  自定义导出按钮(可以不用)
+        exportOptions: {
+            //ignoreColumn: [0,0],            //忽略某一列的索引
+            fileName: '配置物料特性数据导出',              //文件名称设置
+            worksheetName: 'Sheet1',          //表格工作区名称
+            tableName: '配置物料特性表',
+            excelstyles: ['background-color', 'color', 'font-size', 'font-weight'],
+            //onMsoNumberFormat: DoOnMsoNumberFormat
+        }
+        //导出excel表格设置<<<<<<<<<<<<<<<<
     });
 
     //设置跳转的tableID，放在table初始化语句之后
@@ -388,7 +410,9 @@ function saveCompose() {
         url : "materielV2/saveCompose?projectPuid="+projectUid ,
         success : function (result) {
             if(result.status!=false){
-                window.Ewin.alert({message: '生成成功!'});
+                // window.Ewin.alert({message: '生成成功!'});
+                layer.msg("生成成功", {icon: 1, time: 2000});
+                doQuery();
             }else {
                 window.Ewin.alert({message: result.msg});
             }
@@ -397,4 +421,8 @@ function saveCompose() {
             window.Ewin.alert({message: result.msg});
         }
     })
+}
+
+function doQuery() {
+    $('#materielFeature').bootstrapTable('refresh');    //刷新表格
 }

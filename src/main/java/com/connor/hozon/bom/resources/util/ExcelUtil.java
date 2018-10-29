@@ -1,5 +1,6 @@
 package com.connor.hozon.bom.resources.util;
 
+import com.connor.hozon.bom.bomSystem.helper.PropertiesHelper;
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.ss.formula.FormulaParseException;
 import org.apache.poi.ss.usermodel.*;
@@ -9,10 +10,12 @@ import org.apache.poi.ss.util.CellRangeAddressList;
 import org.apache.poi.xssf.usermodel.*;
 import org.apache.xmlbeans.impl.piccolo.io.FileFormatException;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.*;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Properties;
 
 /**
  * @Author: haozt
@@ -28,15 +31,11 @@ public class ExcelUtil {
     private static final long FILE_MAX_SIZE = 10485760L;//文件大小限制 最大为10MB 这里采用字节
 
 
-
-
-
-
-    public static boolean checkFileSize(long size){
-        if(size == 0L){
+    public static boolean checkFileSize(long size) {
+        if (size == 0L) {
             return false;
         }
-        if(size>FILE_MAX_SIZE){
+        if (size > FILE_MAX_SIZE) {
             return false;
         }
         return true;
@@ -45,43 +44,42 @@ public class ExcelUtil {
 
     /**
      * 写文件到指定的位置
+     *
      * @param file
      * @param fileName
      * @throws Exception
      */
-    public static String uploadFileToLocation(byte[] file,  String fileName) throws Exception {
+    public static String uploadFileToLocation(byte[] file, String fileName) throws Exception {
         File targetFile = new File(SEVER_LOCATION);
         if (!targetFile.exists()) {
             targetFile.mkdirs();
         }
         FileOutputStream out = null;
         try {
-            out = new FileOutputStream(SEVER_LOCATION+"\\" + fileName);
+            out = new FileOutputStream(SEVER_LOCATION + "\\" + fileName);
             out.write(file);
-        }finally {
-            if(out!=null){
+        } finally {
+            if (out != null) {
                 out.flush();
                 out.close();
             }
         }
-        return SEVER_LOCATION+"\\" + fileName;
+        return SEVER_LOCATION + "\\" + fileName;
     }
 
 
     /**
      * 删除文件
      *
-     * @param pathname
-     * 			文件名（包括路径）
+     * @param pathname 文件名（包括路径）
      */
-    public static void deleteFile(String pathname) throws FileNotFoundException{
+    public static void deleteFile(String pathname) throws FileNotFoundException {
 
         File file = new File(pathname);
-        if(file.isFile() && file.exists()){
+        if (file.isFile() && file.exists()) {
             file.delete();
-        }
-        else{
-            throw new FileNotFoundException("File["+ pathname +"] not exists!");
+        } else {
+            throw new FileNotFoundException("File[" + pathname + "] not exists!");
         }
 
     }
@@ -89,22 +87,24 @@ public class ExcelUtil {
 
     /**
      * 删除服务器指定位置的全部文件
+     *
      * @param
      */
-    public static void deleteFile() throws FileNotFoundException{
+    public static void deleteFile() throws FileNotFoundException {
         File file = new File(SEVER_LOCATION);
         deleteAllFile(file);
     }
 
     /**
      * 递归删除目录下的所有文件及子目录下所有文件
+     *
      * @param dir 将要删除的文件目录
      */
     private static boolean deleteAllFile(File dir) {
         if (dir.isDirectory()) {
             String[] children = dir.list();
             //递归删除目录中的子目录下
-            for (int i=0; i<children.length; i++) {
+            for (int i = 0; i < children.length; i++) {
                 boolean success = deleteAllFile(new File(dir, children[i]));
                 if (!success) {
                     return false;
@@ -132,6 +132,7 @@ public class ExcelUtil {
 
     /**
      * 文件检查
+     *
      * @param fileName
      * @throws FileNotFoundException
      * @throws FileFormatException
@@ -146,13 +147,14 @@ public class ExcelUtil {
 
     /**
      * 获取单元格
+     *
      * @param row
      * @param cellIndex
      * @return
      */
     public static Cell getCell(Row row, int cellIndex) {
-        Cell cell =row.getCell(cellIndex);
-        if(null==cell){
+        Cell cell = row.getCell(cellIndex);
+        if (null == cell) {
             return new Cell() {
                 @Override
                 public String getStringCellValue() {
@@ -332,17 +334,39 @@ public class ExcelUtil {
     }
     /**
      * 写Excel文件
-     * @param fileName  : 下载文件名称
-     * @param title     : 标题
-     * @param dataList  : 内容
+     *
+     * @param fileName : 下载文件名称
+     * @param title    : 标题
+     * @param dataList : 内容
      * @return
      * @throws Exception
      */
     //public static boolean writeExcel(HttpServletResponse response, String fileName, String[] title, List<String[]> dataList) throws Exception {
-    public static boolean writeExcel(String fileName, String[] title, List<String[]> dataList,String str) throws Exception {
+    public static boolean writeExcel(String fileName, String[] title, List<String[]> dataList, String str, HttpServletRequest request) throws Exception {
         boolean flag = false;
         try {
-            File f = new File(ExcelUtil.class.getClassLoader().getResource("static/files/tableExport.xlsx").getFile()) ;//_EBOM.xlsx
+//            Object obj = ExcelUtil.class.getClassLoader();
+            String realPath = request.getServletContext().getRealPath(
+                    "//WEB-INF//classes//");
+            String pathx = realPath + "static/files/tableExport.xlsx";
+            File f = null;
+            //以属性文件进行控制调试阶段用到的代码
+//            PropertiesHelper helper = new PropertiesHelper();
+//            Properties prox = helper.load();
+//            boolean isDownload = Boolean.valueOf(prox.getProperty("DOWNLOAD_FILE_DEBUG"));
+//            helper.load();
+//            if (!isDownload) {
+//                f = new File(pathx);
+//            } else {
+//                f = new File(ExcelUtil.class.getClassLoader().getResource("static/files/tableExport.xlsx").getFile());// 声明File对象
+//            }
+
+            f = new File(pathx);
+            if (f == null || !f.exists()) {
+                f = new File(ExcelUtil.class.getClassLoader().getResource("static/files/tableExport.xlsx").getFile());
+                if(f == null || !f.exists())
+                return false;
+            }
             FileOutputStream fos = new FileOutputStream(f);
             XSSFWorkbook wb = new XSSFWorkbook();
             XSSFCellStyle titleCellStyle = wb.createCellStyle();
@@ -365,13 +389,13 @@ public class ExcelUtil {
             int pageSize = 65535;
             int listSize = dataList.size();
             int sheetSize = 0;
-            if(listSize % pageSize == 0){
-                sheetSize = listSize/pageSize;
-            }else{
-                sheetSize = (listSize/pageSize)+1;
+            if (listSize % pageSize == 0) {
+                sheetSize = listSize / pageSize;
+            } else {
+                sheetSize = (listSize / pageSize) + 1;
             }
 
-            if(sheetSize == 0){//没有数据
+            if (sheetSize == 0) {//没有数据
                 XSSFSheet sheet = wb.createSheet();
                 XSSFRow row = sheet.createRow(0);
                 row.setHeight((short) 600);//目的是想把行高设置成25px
@@ -379,21 +403,21 @@ public class ExcelUtil {
                 sheet.setDefaultColumnWidth(20);
                 sheet.setDefaultRowHeightInPoints(20);
                 //title
-                for (int i = 0;i < title.length;i++) {
+                for (int i = 0; i < title.length; i++) {
                     XSSFCell cell = row.createCell(i);
                     cell.setCellType(HSSFCell.CELL_TYPE_STRING);
                     cell.setCellStyle(titleCellStyle);
                     cell.setCellValue(title[i]);
                 }
-            }else{
+            } else {
                 int start = 0;
                 int end = 0;
-                for(int s=0;s<sheetSize;s++){
+                for (int s = 0; s < sheetSize; s++) {
                     start = s * pageSize;
-                    if(s == (sheetSize-1))
+                    if (s == (sheetSize - 1))
                         end = listSize;
                     else
-                        end = (s+1) * pageSize;
+                        end = (s + 1) * pageSize;
                     XSSFSheet sheet = wb.createSheet();
                     XSSFRow row = sheet.createRow(0);
                     row.setHeight((short) 600);//目的是想把第一行行高设置成25px
@@ -401,7 +425,7 @@ public class ExcelUtil {
                     sheet.setDefaultColumnWidth(20);//宽
                     sheet.setDefaultRowHeightInPoints(20);//高
                     //title
-                    for (int i = 0;i < title.length;i++) {
+                    for (int i = 0; i < title.length; i++) {
                         XSSFCell cell = row.createCell(i);
                         cell.setCellType(HSSFCell.CELL_TYPE_STRING);
                         cell.setCellStyle(titleCellStyle);
@@ -414,12 +438,12 @@ public class ExcelUtil {
                     cellStyle.setBorderLeft(CellStyle.BORDER_THIN);
                     cellStyle.setBorderRight(CellStyle.BORDER_THIN);
                     int row_index = 1;
-                    for(int j = start;j < end;j++){
+                    for (int j = start; j < end; j++) {
                         XSSFRow data_row = sheet.createRow(row_index);
-                        row_index ++;
+                        row_index++;
                         String[] cellList = dataList.get(j);
                         int len = cellList.length;
-                        for (int k=0;k<len;k++) {
+                        for (int k = 0; k < len; k++) {
                             //列
                             XSSFCell cell = data_row.createCell(k);
                             String value = cellList[k];
@@ -427,9 +451,9 @@ public class ExcelUtil {
                             cell.setCellStyle(cellStyle);
                             cell.setCellValue(value);
                             //列中加下拉框
-                            if("pbom".equals(str)){
-                                String[] datas = new String[] {"MAKE","BUY"};
-                                String[] datas2 = new String[] {"Y","N"};
+                            if ("pbom".equals(str)) {
+                                String[] datas = new String[]{"MAKE", "BUY"};
+                                String[] datas2 = new String[]{"Y", "N"};
                                 XSSFDataValidationHelper dvHelper = new XSSFDataValidationHelper(sheet);
                                 XSSFDataValidationHelper dvHelper2 = new XSSFDataValidationHelper(sheet);
                                 XSSFDataValidationConstraint dvConstraint = (XSSFDataValidationConstraint) dvHelper.createExplicitListConstraint(datas);
@@ -443,8 +467,8 @@ public class ExcelUtil {
                                 // validation.setShowErrorBox(true);
                                 sheet.addValidationData(validation);
                                 sheet.addValidationData(validation2);
-                            }else if("mbom".equals(str)){
-                                String[] datas = new String[] {"生产","财务"};
+                            } else if ("mbom".equals(str)) {
+                                String[] datas = new String[]{"生产", "财务"};
                                 XSSFDataValidationHelper dvHelper = new XSSFDataValidationHelper(sheet);
                                 XSSFDataValidationConstraint dvConstraint = (XSSFDataValidationConstraint) dvHelper.createExplicitListConstraint(datas);
                                 CellRangeAddressList addressList = new CellRangeAddressList(1, end, 23, 23);
@@ -456,15 +480,14 @@ public class ExcelUtil {
                     }
                 }
             }
-
             wb.write(fos);
 //            wb.write(out);
             // 弹出下载对话框
 //            out.close();
             fos.close();
-
             flag = true;
         } catch (Exception e) {
+            e.printStackTrace();
             throw e;
         }
         return flag;

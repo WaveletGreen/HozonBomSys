@@ -499,17 +499,18 @@ function initTable(eBomUrl) {
                                         return false;
                                     }
                                 }
+                                length==getLengthOfJson(rows[0]);
                             }
                             //动态获取单车配置用量数据
                             for(let k in rows){
-                               let param ={};
-                               let length = getLengthOfJson(rows[k]);
-                                for(let i=0; i<length-eBomTitleSet; i++){
-                                    param[('title'+i)] = rows[k][('title'+i)];
+                               let param={};
+
+                                for(let i =0;i<length-eBomTitleSet;i++){
+                                    param[('title'+i)]=rows[k][('title'+i)];
                                 }
                                 rows[k].map = param;//单车配置用量写进对象的Map
-                                console.log(param);
-                                console.log(rows[k]);
+                                // console.log(param);
+                                // console.log(rows[k]);
                             }
                             window.Ewin.confirm({title: '提示', message: '是否要导出选中行？', width: 500}).on(function (e) {
                                 if (e) {

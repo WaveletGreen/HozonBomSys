@@ -3,7 +3,6 @@ package com.connor.hozon.bom.resources.controller.bom;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.connor.hozon.bom.bomSystem.impl.bom.HzBomLineRecordDaoImpl;
-import com.connor.hozon.bom.bomSystem.service.fullCfg.HzCfg0ModelService;
 import com.connor.hozon.bom.resources.controller.BaseController;
 import com.connor.hozon.bom.resources.domain.dto.request.AddHzEbomReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.request.DeleteHzEbomReqDTO;
@@ -13,17 +12,15 @@ import com.connor.hozon.bom.resources.domain.dto.response.HzEbomLevelRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzEbomRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
 import com.connor.hozon.bom.resources.domain.query.HzEbomByPageQuery;
-import com.connor.hozon.bom.resources.domain.query.HzEbomExportQuery;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.service.bom.HzEbomService;
+import com.connor.hozon.bom.resources.service.bom.HzSingleVehiclesServices;
 import com.connor.hozon.bom.resources.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import springfox.documentation.RequestHandler;
 import sql.pojo.bom.HzBomLineRecord;
-import sql.pojo.cfg.model.HzCfg0ModelRecord;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -48,13 +45,13 @@ public class HzEbomController extends BaseController {
     private HzBomLineRecordDaoImpl hzBomLineRecordDao;
 
     @Autowired
-    private HzCfg0ModelService hzCfg0ModelService;
+    private HzSingleVehiclesServices hzSingleVehiclesServices;
 
     LinkedHashMap<String, String> tableTitle = new LinkedHashMap<>();
 
     @RequestMapping(value = "title",method = RequestMethod.GET)
     public void getEbomTitle(String projectId,HttpServletResponse response) {
-        //LinkedHashMap<String, String> tableTitle = new LinkedHashMap<>();
+        LinkedHashMap<String, String> tableTitle = new LinkedHashMap<>();
         tableTitle.put("No","序号");
         tableTitle.put("lineId","零件号" );
         tableTitle.put("pBomLinePartName","名称" );
@@ -109,12 +106,8 @@ public class HzEbomController extends BaseController {
         tableTitle.put("number","数量" );
         tableTitle.put("colorPart","是否颜色件");
         //获取该项目下的所有车型模型
-        List<HzCfg0ModelRecord> hzCfg0ModelRecords = hzCfg0ModelService.doSelectByProjectPuid(projectId);
-        if(ListUtil.isNotEmpty(hzCfg0ModelRecords)){
-            for(int i = 0;i<hzCfg0ModelRecords.size();i++){
-                tableTitle.put("title"+i,hzCfg0ModelRecords.get(i).getObjectName()+"(用量)");
-            }
-        }
+        tableTitle.putAll(hzSingleVehiclesServices.singleVehDosageTitle(projectId));
+        this.tableTitle = tableTitle;
         toJSONResponse(Result.build(tableTitle), response);
     }
     
@@ -226,7 +219,9 @@ public class HzEbomController extends BaseController {
      */
     @RequestMapping(value = "excelExport",method = RequestMethod.POST)
     @ResponseBody
-    public JSONObject listDownLoad(@RequestBody  List<HzEbomRespDTO> dtos) {
+    public JSONObject listDownLoad(
+            @RequestBody  List<HzEbomRespDTO> dtos
+    ,HttpServletRequest request) {
         boolean flag=true;
         JSONObject result=new JSONObject();
         try {
@@ -302,7 +297,7 @@ public class HzEbomController extends BaseController {
                 }
                 dataList.add(cellArr);
             }
-            flag = ExcelUtil.writeExcel(fileName, title, dataList,"ebom");
+            flag = ExcelUtil.writeExcel(fileName, title, dataList,"ebom",request);
 
             if(flag){
                 LOG.info(fileName+",文件创建成功");
@@ -362,11 +357,6 @@ public class HzEbomController extends BaseController {
      */
     @RequestMapping(value = "update/ebom",method = RequestMethod.POST)
     public void updateEbomToDB(@RequestBody UpdateHzEbomReqDTO reqDTO, HttpServletResponse response){
-        boolean b = PrivilegeUtil.writePrivilege();
-        if(!b){//管理员权限
-            toJSONResponse(Result.build(false,"您没有权限进行当前操作！"), response);
-            return;
-        }
         WriteResultRespDTO respDTO= hzEbomService.updateHzEbomRecord(reqDTO);
         toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO), respDTO.getErrMsg()), response);
     }
@@ -400,43 +390,5 @@ public class HzEbomController extends BaseController {
     @RequestMapping(value = "importExcel",method = RequestMethod.GET)
     public String getExcelImport(){
         return "bomManage/ebom/ebomManage/excelImport";
-    }
-
-
-
-    /**
-     * 直接生效EBOM 临时用
-     * @param
-     * @param
-     * @param response
-     */
-    @RequestMapping(value = "vaild/direct",method = RequestMethod.POST)
-    public void validDirect(String puids, HttpServletResponse response){
-        if(puids==null){
-            toJSONResponse(Result.build(false,"非法参数！"), response);
-            return;
-        }
-        boolean b = PrivilegeUtil.writePrivilege();
-        if(!b){//管理员权限
-            toJSONResponse(Result.build(false,"您没有权限进行当前操作！"), response);
-            return;
-        }
-
-        String[] ps = puids.split(",");
-        List<HzBomLineRecord> list = new ArrayList<>();
-        for(String s:ps){
-            HzBomLineRecord record = new HzBomLineRecord();
-            record.setTableName("HZ_BOM_LINE_RECORD");
-            record.setPuid(s);
-            record.setStatus(1);
-            list.add(record);
-        }
-        int i = hzBomLineRecordDao.updateBatch(list);
-        if(i>0){
-            toJSONResponse(Result.build(true,"操作成功！"), response);
-        }else {
-            toJSONResponse(Result.build(false,"操作失败！"), response);
-
-        }
     }
 }

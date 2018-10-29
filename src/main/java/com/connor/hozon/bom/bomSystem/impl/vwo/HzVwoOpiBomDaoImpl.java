@@ -13,8 +13,8 @@ import sql.pojo.cfg.vwo.HzVwoOpiBom;
 
 /**
  * @Author: Fancyears·Maylos·Maywas
- * @Description:
- * @Date: Created in 2018/10/17 17:55
+ * @Description: fuck
+ * @Date: Created in 2018/9/6 13:19
  * @Modified By:
  */
 @Service("hzVwoOpiBomDao")
@@ -30,5 +30,10 @@ public class HzVwoOpiBomDaoImpl extends BasicDaoImpl<HzVwoOpiBom> implements HzV
     public HzVwoOpiBom selectByVwoId(Long id) {
         BOM.setOpiVwoId(id);
         return baseSQLUtil.executeQueryById(BOM, clzName + ".selectByVwoId");
+    }
+
+    @Override
+    public int updateUserByVwoId(HzVwoOpiBom hzVwoOpiBom) {
+        return baseSQLUtil.executeUpdate(hzVwoOpiBom, clzName + ".updateUserByVwoId");
     }
 }

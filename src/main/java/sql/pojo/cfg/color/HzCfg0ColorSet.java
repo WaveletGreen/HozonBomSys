@@ -1,9 +1,22 @@
+/*
+ * Copyright (c) 2018.
+ * This file was wrote by fancyears·milos·maywas @connor. Any question/bug you can post to 1243093366@qq.com.
+ * ALL RIGHTS RESERVED.
+ */
+
 package sql.pojo.cfg.color;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Date;
-
+/**
+ * @Author: Fancyears·Maylos·Maywas
+ * @Description: fuck
+ * @Date: Created in 2018/8/10 13:55
+ * @Modified By:
+ */
 @Data
 public class HzCfg0ColorSet {
     /**
@@ -74,6 +87,20 @@ public class HzCfg0ColorSet {
      * 是否删除,0删除，1现存
      */
     private Integer pColorIsDeleted;
+
+    @Getter
+    @Setter
+    /**
+     * 油漆物料号集合，以<br>进行字符串拆分
+     */
+    private String csPaintMaterielCodes;
+
+    @Getter
+    @Setter
+    /**
+     * 辅料库中的油漆物料号主键，以竖线‘|’进行字符串拆分
+     */
+    private String csPaintMaterielUids;
 
     /**
      * 映射到数据库字段

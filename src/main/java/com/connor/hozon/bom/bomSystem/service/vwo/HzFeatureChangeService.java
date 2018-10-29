@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2018.
+ * This file was wrote by fancyears·milos·maywas @connor. Any question/bug you can post to 1243093366@qq.com.
+ * ALL RIGHTS RESERVED.
+ */
+
 package com.connor.hozon.bom.bomSystem.service.vwo;
 
 import com.connor.hozon.bom.bomSystem.dao.vwo.HzFeatureChangeDao;
@@ -12,7 +18,7 @@ import java.util.List;
 
 /**
  * @Author: Fancyears·Maylos·Maywas
- * @Description:
+ * @Description: fuck
  * @Date: Created in 2018/8/9 19:25
  * @Modified By:
  */
@@ -297,4 +303,38 @@ public class HzFeatureChangeService implements IHzFeatureChangeService {
         return hzFeatureChangeDao.selectByVwoId(bean);
     }
 
+    @Override
+    public int doInsertListBefore(List<HzFeatureChangeBean> hzFeatureChangeBeanListBefore) {
+        for(HzFeatureChangeBean hzFeatureChangeBean : hzFeatureChangeBeanListBefore){
+            setBeforeTable(hzFeatureChangeBean);
+        }
+        return hzFeatureChangeDao.insertList(hzFeatureChangeBeanListBefore);
+    }
+
+    @Override
+    public int doInsertListAfter(List<HzFeatureChangeBean> hzFeatureChangeBeanListAfter) {
+        for(HzFeatureChangeBean hzFeatureChangeBean : hzFeatureChangeBeanListAfter){
+            setAfterTable(hzFeatureChangeBean);
+        }
+        return hzFeatureChangeDao.insertList(hzFeatureChangeBeanListAfter);
+    }
+
+    @Override
+    public List<HzFeatureChangeBean> doSelectCfgUidsByVwoId(Long vwoId) {
+        HzFeatureChangeBean bean=new HzFeatureChangeBean();
+        bean.setVwoId(vwoId);
+        return hzFeatureChangeDao.selectCfgUidsByVwoId(bean);
+    }
+    /**
+     * 查询变更前的数据和当前数据
+     * @param cfgPuid
+     * @param vwoId
+     * @return
+     */
+    public List<HzFeatureChangeBean> doQueryLastTwoChange(String cfgPuid, Long vwoId){
+        HzFeatureChangeBean hzFeatureChangeBean = new HzFeatureChangeBean();
+        hzFeatureChangeBean.setCfgPuid(cfgPuid);
+        hzFeatureChangeBean.setVwoId(vwoId);
+        return hzFeatureChangeDao.doQueryLastTwoChange(hzFeatureChangeBean);
+    }
 }

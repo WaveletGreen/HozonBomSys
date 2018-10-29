@@ -16,6 +16,7 @@ import com.connor.hozon.bom.resources.service.change.HzEWOImpactReferenceService
 import com.connor.hozon.bom.resources.service.change.HzEWOService;
 import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.resources.util.Result;
+import com.connor.hozon.bom.resources.util.StringUtil;
 import com.connor.hozon.bom.sys.dao.OrgGroupDao;
 import com.connor.hozon.bom.sys.dao.UserDao;
 import com.connor.hozon.bom.sys.entity.OrgGroup;
@@ -79,31 +80,26 @@ public class HzEWOBaseInfoController extends BaseController {
         }
         HzEWOBasicInfoRespDTO respDTO = hzEWOBasicInfoService.findHzEWOBasicInfo(query);
         if(respDTO == null){
-//            toJSONResponse(Result.build(false,"暂无数据！"),response);
             return "";
         }
         model.addAttribute("data",respDTO);
         return "changeManage/ewo/ewoBasicInformation";
 
-//        toJSONResponse(Result.build(respDTO),response);
     }
 
 
     /**
      * 获取EWO表单基本信息列表
      * @param query
-     * @param response
      */
     @RequestMapping(value = "infoList",method = RequestMethod.GET)
     @ResponseBody
-    public JSONObject getHzEWOBasicInfoList(HzEWOBasicInfoQuery query, HttpServletResponse response){
-        if(query.getProjectId() == null || query.getProjectId() == ""){
-//            toJSONResponse(Result.build(false,"非法参数！"),response);
+    public JSONObject getHzEWOBasicInfoList(HzEWOBasicInfoQuery query){
+        if(StringUtil.isEmpty(query.getProjectId())){
             return new JSONObject();
         }
         List<HzEWOBasicInfoRespDTO> respDTOs = hzEWOBasicInfoService.findHzEWOList(query);
         if(ListUtil.isEmpty(respDTOs)){
-//            toJSONResponse(Result.build(false,"暂无数据！"),response);
             return new JSONObject();
         }
         JSONObject jsonObject = new JSONObject();
@@ -275,8 +271,7 @@ public class HzEWOBaseInfoController extends BaseController {
      */
     @RequestMapping(value = "impact/reference",method = RequestMethod.GET)
     public void impactReferenceRecord(HzEWOImpactReferenceQuery query, HttpServletResponse response){
-        if(query.getEwoNo() == null || query.getProjectId() == null
-                || query.getProjectId() == "" || query.getEwoNo() == ""){
+        if(StringUtil.isEmpty(query.getEwoNo())|| StringUtil.isEmpty(query.getProjectId())){
             toJSONResponse(Result.build(false,"非法参数！"),response);
             return ;
         }
@@ -319,5 +314,13 @@ public class HzEWOBaseInfoController extends BaseController {
     public void findAllImpactDept(HttpServletResponse response){
         List<HzEWOAllImpactDept> list = hzEWOImpactDeptDAO.findEWOAllImpactDept();
         toJSONResponse(Result.build(list),response);
+    }
+
+    /**
+     * 跳转到关联账户的页面
+     */
+    @RequestMapping("toPageInsertUser")
+    public String ToPageInsertUserName(String id){
+        return "changeManage/ewo/ewoSelectPerson";
     }
 }

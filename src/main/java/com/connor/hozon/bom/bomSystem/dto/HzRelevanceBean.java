@@ -1,12 +1,22 @@
+/*
+ * Copyright (c) 2018.
+ * This file was wrote by fancyears·milos·maywas @connor. Any question/bug you can post to 1243093366@qq.com.
+ * ALL RIGHTS RESERVED.
+ */
+
 package com.connor.hozon.bom.bomSystem.dto;
+
+import lombok.Data;
 
 import java.util.Date;
 
 /**
- * Created by Fancyears·Maylos·Mayways
- * Description:
- * Date: 2018/6/8 9:13
+ * @Author: Fancyears·Maylos·Maywas
+ * @Description: 相关性助手
+ * @Date: Created in 2018/9/6 13:19
+ * @Modified By:
  */
+@Data
 public class HzRelevanceBean {
     /**
      * 序号
@@ -45,75 +55,4 @@ public class HzRelevanceBean {
      */
     private Integer isRelevanceSended;
 
-    public Integer getIndex() {
-        return index;
-    }
-
-    public void setIndex(Integer index) {
-        this.index = index;
-    }
-
-    public String getRelevance() {
-        return relevance;
-    }
-
-    public void setRelevance(String relevance) {
-        this.relevance = relevance;
-    }
-
-    public String getRelevanceDesc() {
-        return relevanceDesc;
-    }
-
-    public void setRelevanceDesc(String relevanceDesc) {
-        this.relevanceDesc = relevanceDesc;
-    }
-
-    public String getRelevanceCode() {
-        return relevanceCode;
-    }
-
-    public void setRelevanceCode(String relevanceCode) {
-        this.relevanceCode = relevanceCode;
-    }
-
-    public String getPuid() {
-        return puid;
-    }
-
-    public void setPuid(String puid) {
-        this.puid = puid;
-    }
-
-    public String get_table() {
-        return _table;
-    }
-
-    public void set_table(String _table) {
-        this._table = _table;
-    }
-
-    public Date getCreateDate() {
-        return createDate;
-    }
-
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
-    }
-
-    public Date getModifyDate() {
-        return modifyDate;
-    }
-
-    public void setModifyDate(Date modifyDate) {
-        this.modifyDate = modifyDate;
-    }
-
-    public Integer getIsRelevanceSended() {
-        return isRelevanceSended;
-    }
-
-    public void setIsRelevanceSended(Integer isRelevanceSended) {
-        this.isRelevanceSended = isRelevanceSended;
-    }
 }

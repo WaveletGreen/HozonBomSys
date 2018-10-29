@@ -1,14 +1,22 @@
+/*
+ * Copyright (c) 2018.
+ * This file was wrote by fancyears·milos·maywas @connor. Any question/bug you can post to 1243093366@qq.com.
+ * ALL RIGHTS RESERVED.
+ */
+
 package com.connor.hozon.bom.bomSystem.iservice.cfg.vwo;
 
+import com.connor.hozon.bom.bomSystem.dto.vwo.HzVwoFormListQueryBase;
 import com.connor.hozon.bom.common.base.entity.QueryBase;
+import org.springframework.context.annotation.Configuration;
 import sql.pojo.cfg.vwo.HzVwoInfo;
 
 import java.util.List;
 
 /**
  * @Author: Fancyears·Maylos·Maywas
- * @Description:
- * @Date: Created in 2018/8/10 13:53
+ * @Description: fuck
+ * @Date: Created in 2018/9/6 13:19
  * @Modified By:
  */
 public interface IHzVwoInfoService {
@@ -54,7 +62,7 @@ public interface IHzVwoInfoService {
     /**
      * 根据分页进行查询
      */
-    List<HzVwoInfo> doSelectListByProjectUid(QueryBase queryBase, String projectUid);
+    List<HzVwoInfo> doSelectListByProjectUid(HzVwoFormListQueryBase queryBase, String projectUid);
 
     /**
      * 当前项目下的总数
@@ -68,4 +76,5 @@ public interface IHzVwoInfoService {
      * 生成VWO号码
      */
     HzVwoInfo generateVWONum() ;
+
 }

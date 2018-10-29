@@ -4,7 +4,6 @@
   ~ This file was wrote by fancyears·milos·maywas @connor. Any question/bug you can post to 1243093366@qq.com.
   ~ ALL RIGHTS RESERVED.
   -->
-
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.connor.hozon.bom.bomSystem.dao.cfg0.HzCfg0RecordDao">
     <resultMap id="BaseResultMap" type="sql.pojo.cfg.cfg0.HzCfg0Record">
@@ -123,7 +122,7 @@
         and t.p_cfg0_object_id=#{pCfg0ObjectId,jdbcType=VARCHAR}
         and t.p_cfg0_main_item_puid=#{pCfg0MainItemPuid,jdbcType=VARCHAR}
     </select>
-    <select id="selectByCondition" parameterType="com.connor.hozon.bom.bomSystem.dto.HzFeatureQueryDTO"
+    <select id="selectByCondition" parameterType="com.connor.hozon.bom.bomSystem.dto.HzFeatureQueryDto"
             resultMap="BaseResultMap">
 
         select
@@ -235,7 +234,7 @@
         )
         and t.P_CFG0_FAMILY_PUID=#{pCfg0FamilyPuid,jdbcType=VARCHAR}
     </select>
-    <select id="tellMeHowManyOfThose" parameterType="com.connor.hozon.bom.bomSystem.dto.HzFeatureQueryDTO"
+    <select id="tellMeHowManyOfThose" parameterType="com.connor.hozon.bom.bomSystem.dto.HzFeatureQueryDto"
             resultType="java.lang.Integer">
         select count(*) from HZ_CFG0_RECORD t
         where t.P_CFG0_MAIN_ITEM_PUID=(
@@ -443,5 +442,46 @@
             </foreach>
             )
         </if>
+    </update>
+
+    <update id="updateList" parameterType="java.util.List">
+          update HZ_CFG0_RECORD
+            set VWO_ID=
+            <foreach collection="list" item="hzCfg0Record" open="case" close="end">
+                when
+                  PUID=#{hzCfg0Record.puid}
+                then
+                #{hzCfg0Record.vwoId}
+            </foreach>
+            ,
+            CFG_IS_IN_PROCESS=
+            <foreach collection="list" item="hzCfg0Record" open="case" close="end">
+                when
+                  PUID=#{hzCfg0Record.puid}
+                then
+                  #{hzCfg0Record.cfgIsInProcess}
+            </foreach>
+            ,
+            CFG_STATUS=
+            <foreach collection="list" item="hzCfg0Record" open="case" close="end">
+                when
+                  PUID=#{hzCfg0Record.puid}
+                then
+                  #{hzCfg0Record.cfgStatus}
+            </foreach>
+          where
+            PUID in
+            <foreach collection="list" item="hzCfg0Record" index="index" open="(" separator="," close=")">
+                #{hzCfg0Record.puid}
+            </foreach>
+    </update>
+
+    <update id="updateByVwoid" parameterType="sql.pojo.cfg.cfg0.HzCfg0Record">
+        update HZ_CFG0_RECORD
+        set
+          CFG_STATUS = #{cfgStatus,jdbcType=INTEGER},
+          CFG_IS_IN_PROCESS = #{cfgIsInProcess,jdbcType=INTEGER}
+        where
+          VWO_ID = #{vwoId,jdbcType=INTEGER}
     </update>
 </mapper>

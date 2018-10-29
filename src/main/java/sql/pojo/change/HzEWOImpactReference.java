@@ -38,9 +38,15 @@ public class HzEWOImpactReference {
 
     /**
      * 类型 A B
+     * A 工程师自查清单
+     * B 涉及软件/程序/数据 变更信息
      */
     private String type;
 
+    /**
+     * 前端页面勾选的影响分析 ids 进行保存或者更改
+     * 这些没进行DTO和DO之间的转化
+     */
     private String impactAnalysisIds;
 
     public String getImpactAnalysisIds() {

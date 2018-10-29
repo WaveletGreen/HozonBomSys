@@ -22,6 +22,13 @@ import java.util.Map;
 
 import static com.connor.hozon.bom.bomSystem.helper.StringHelper.checkString;
 
+
+/**
+ * @Author: Fancyears·Maylos·Maywas
+ * @Description: 全配置BOM一级清单
+ * @Date: Created in 2018/8/30 18:53
+ * @Modified By:
+ */
 @Controller
 @RequestMapping("/bomAllCfg")
 public class HzBomAllCfgController {

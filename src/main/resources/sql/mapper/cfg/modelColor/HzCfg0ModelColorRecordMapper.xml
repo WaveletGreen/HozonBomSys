@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (c) 2018.
+  ~ This file was wrote by fancyears·milos·maywas @connor. Any question/bug you can post to 1243093366@qq.com.
+  ~ ALL RIGHTS RESERVED.
+  -->
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.connor.hozon.bom.bomSystem.dao.modelColor.HzCfg0ModelColorDao">
     <resultMap id="BaseResultMap" type="sql.pojo.cfg.modelColor.HzCfg0ModelColor">
@@ -27,17 +32,28 @@
     </resultMap>
     <resultMap extends="BaseResultMap" id="ResultMapWithColorJudge"
                type="sql.pojo.cfg.modelColor.HzCfg0ModelColor">
+        <!--是否多色-->
         <result column="P_COLOR_IS_MULTIPLY" jdbcType="VARCHAR" property="pColorIsMultiply"/>
+        <!--VWO变更号的ID，外键-->
         <result column="CMCR_VWO_ID" jdbcType="BIGINT" property="cmcrVwoId"/>
+        <!--创建时间-->
         <result column="CMCR_CREATE_DATE" jdbcType="DATE" property="cmcrCreateDate"/>
+        <!--创建人-->
         <result column="CMCR_CREATOR" jdbcType="VARCHAR" property="cmcrCreator"/>
+        <!--更新时间-->
         <result column="CMCR_UPDATE_DATE" jdbcType="DATE" property="cmcrUpdateDate"/>
+        <!--更新人-->
         <result column="CMCR_UPDATER" jdbcType="VARCHAR" property="cmcrUpdater"/>
+        <!--保留-->
         <result column="CMCR_RESERVE1" jdbcType="VARCHAR" property="cmcrReserve1"/>
+        <!--保留-->
         <result column="CMCR_RESERVE2" jdbcType="VARCHAR" property="cmcrReserve2"/>
+        <!--保留-->
         <result column="CMCR_RESERVE3" jdbcType="VARCHAR" property="cmcrReserve3"/>
+        <!--保留-->
         <result column="CMCR_RESERVE4" jdbcType="VARCHAR" property="cmcrReserve4"/>
-        <result column="CMCR_RESERVE5" jdbcType="VARCHAR" property="cmcrReserve5"/>
+        <!--状态，0：草稿状态，10：在流程中，99：已发布-->
+        <result column="CMCR_STATUS" jdbcType="VARCHAR" property="cmcrStatus"/>
     </resultMap>
 
     <sql id="Base_Column_List">
@@ -63,7 +79,7 @@
         CMCR_RESERVE2,
         CMCR_RESERVE3,
         CMCR_RESERVE4,
-        CMCR_RESERVE5
+        CMCR_STATUS
     </sql>
     <sql id="values">
         #{puid,jdbcType=VARCHAR},
@@ -75,7 +91,8 @@
         #{pColorUid,jdbcType=VARCHAR}
     </sql>
     <sql id="reflect">
-        P_DESC_OF_COLORFUL_MODEL = #{pDescOfColorfulModel,jdbcType=VARCHAR}
+        P_DESC_OF_COLORFUL_MODEL = #{pDescOfColorfulModel,jdbcType=VARCHAR},
+        CMCR_STATUS = #{cmcrStatus,jdbcType=VARCHAR}
     </sql>
 
     <select id="selectByMainId" parameterType="sql.pojo.cfg.modelColor.HzCfg0ModelColor"
@@ -106,13 +123,15 @@
         )
 
     </select>
-    <insert id="insertOne" parameterType="sql.pojo.cfg.modelColor.HzCfg0ModelColor">
+    <insert id="insert" parameterType="sql.pojo.cfg.modelColor.HzCfg0ModelColor">
         insert into HZ_CFG0_MODEL_COLOR_RECORD
         (
-        <include refid="Base_Column_List"/>
+        <include refid="Base_Column_List"/>,
+        CMCR_STATUS
         )
         VALUES (
-        <include refid="values"/>
+        <include refid="values"/>,
+        #{cmcrStatus,jdbcType=VARCHAR}
         )
     </insert>
     <update id="updateByPrimaryKey" parameterType="sql.pojo.cfg.modelColor.HzCfg0ModelColor">
@@ -161,10 +180,26 @@
             then
             #{hzCfg0ModelColor.cmcrVwoId,jdbcType=BIGINT}
         </foreach>
+        ,t.CMCR_STATUS=
+        <foreach collection="list" item="hzCfg0ModelColor" open="case" close="end">
+            when t.PUID=#{hzCfg0ModelColor.puid,jdbcType=VARCHAR}
+            then
+            #{hzCfg0ModelColor.cmcrStatus,jdbcType=BIGINT}
+        </foreach>
         where
         t.PUID in
         <foreach collection="list" item="hzCfg0ModelColor" open="(" separator="," close=")">
             #{hzCfg0ModelColor.puid,jdbcType=VARCHAR}
         </foreach>
+    </update>
+
+    <update id="updateByVwoId" parameterType="sql.pojo.cfg.modelColor.HzCfg0ModelColor">
+        update
+          HZ_CFG0_MODEL_COLOR_RECORD t
+        set
+          t.CMCR_STATUS = #{cmcrStatus},
+          t.CMCR_VWO_ID = null
+        where
+          t.CMCR_VWO_ID = #{cmcrVwoId}
     </update>
 </mapper>

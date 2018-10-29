@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2018.
+ * This file was wrote by fancyears·milos·maywas @connor. Any question/bug you can post to 1243093366@qq.com.
+ * ALL RIGHTS RESERVED.
+ */
+
 package com.connor.hozon.bom.bomSystem.dao.modelColor;
 
 import com.connor.hozon.bom.bomSystem.dao.BasicDao;
@@ -8,9 +14,10 @@ import sql.pojo.cfg.modelColor.HzCfg0ModelColor;
 import java.util.List;
 
 /**
- * User: Fancyears·Maylos·Mayways
- * Date: 2018/5/22
- * Time: 10:52
+ * @Author: Fancyears·Maylos·Maywas
+ * @Description: 0.0.1版本TC同步数据用dao
+ * @Date: Created in 2018/8/27 21:17
+ * @Modified By:
  */
 @Configuration
 public interface HzCfg0ModelColorDao extends BasicDao<HzCfg0ModelColor> {
@@ -64,4 +71,6 @@ public interface HzCfg0ModelColorDao extends BasicDao<HzCfg0ModelColor> {
      * @return
      */
     int updateListData(List<HzCfg0ModelColor> hzCfg0ModelColors);
+
+    int updateByVwoId(HzCfg0ModelColor hzCfg0ModelColor);
 }

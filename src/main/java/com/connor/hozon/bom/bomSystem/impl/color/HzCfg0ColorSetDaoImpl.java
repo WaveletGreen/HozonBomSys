@@ -15,9 +15,10 @@ import sql.pojo.cfg.color.HzCfg0ColorSet;
 import java.util.List;
 
 /**
- * User: Fancyears·Maylos·Mayways
- * Date: 2018/5/21
- * Time: 14:48
+ * @Author: Fancyears·Maylos·Maywas
+ * @Description: fuck
+ * @Date: Created in 2018/9/6 13:19
+ * @Modified By:
  */
 @Service("hzCfg0ColorSetDao")
 public class HzCfg0ColorSetDaoImpl extends BasicDaoImpl<HzCfg0ColorSet> implements HzCfg0ColorSetDao {

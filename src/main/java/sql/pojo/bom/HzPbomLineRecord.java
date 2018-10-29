@@ -1,5 +1,7 @@
 package sql.pojo.bom;
 
+import lombok.Data;
+
 import java.util.Date;
 import java.util.Objects;
 
@@ -12,6 +14,7 @@ public class HzPbomLineRecord implements Cloneable{
     private Integer isDept;
     private String bomDigifaxId;
     private String linePuid;
+    @Deprecated
     private byte[] bomLineBlock;
     private Integer isPart;
     @Deprecated
@@ -140,6 +143,18 @@ public class HzPbomLineRecord implements Cloneable{
         this.isNewPart = isNewPart;
     }
 
+    /**
+     * 单车用量
+     */
+    private byte[] singleVehDosage;
+
+    public byte[] getSingleVehDosage() {
+        return singleVehDosage;
+    }
+
+    public void setSingleVehDosage(byte[] singleVehDosage) {
+        this.singleVehDosage = singleVehDosage;
+    }
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

@@ -11,7 +11,12 @@ import com.connor.hozon.bom.bomSystem.iservice.cfg.IHzFcfgBomLvl1ListOperationSe
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sql.pojo.cfg.fullCfg.HzFcfgBomLvl1ListOperation;
-
+/**
+ * @Author: Fancyears·Maylos·Maywas
+ * @Description: fuck
+ * @Date: Created in 2018/9/6 13:19
+ * @Modified By:
+ */
 @Service("hzFcgBomLvl1ListOperationService")
 public class HzFcgBomLvl1ListOperationService implements IHzFcfgBomLvl1ListOperationService {
 

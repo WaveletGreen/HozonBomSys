@@ -1,13 +1,17 @@
+/*
+ * Copyright (c) 2018.
+ * This file was wrote by fancyears·milos·maywas @connor. Any question/bug you can't post to 1243093366@qq.com.
+ * ALL RIGHTS RESERVED.
+ */
+
 package com.connor.hozon.bom.resources.controller.change.vwo;
 
-import com.connor.hozon.bom.bomSystem.iservice.cfg.vwo.*;
+import com.connor.hozon.bom.bomSystem.dto.vwo.HzVwoFormListQueryBase;
+import com.connor.hozon.bom.bomSystem.dto.vwo.HzVwoOptionUserDto;
+import com.connor.hozon.bom.bomSystem.dto.vwo.HzVwoProcessDto;
+import com.connor.hozon.bom.bomSystem.iservice.cfg.vwo.IHzVWOManagerService;
 import com.connor.hozon.bom.common.base.constant.SystemStaticConst;
 import com.connor.hozon.bom.common.base.entity.QueryBase;
-import com.connor.hozon.bom.resources.mybatis.bom.HzEbomRecordDAO;
-import com.connor.hozon.bom.sys.entity.OrgGroup;
-import com.connor.hozon.bom.sys.entity.User;
-import com.connor.hozon.bom.sys.service.OrgGroupService;
-import com.connor.hozon.bom.sys.service.UserService;
 import net.sf.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,48 +20,26 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import sql.pojo.cfg.vwo.HzFeatureChangeBean;
 import sql.pojo.cfg.vwo.*;
-import sql.pojo.epl.HzEPLManageRecord;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.connor.hozon.bom.bomSystem.helper.StringHelper.checkString;
-
 
 /**
- * User: Fancyears·Maylos·Mayways
- * Date: 2018/8/14
- * Time: 10:52
+ * @Author: Fancyears·Maylos·Maywas
+ * @Description: fuck
+ * @Date: Created in 2018/10/10 13:29
+ * @Modified By:
  */
 @Controller
 @RequestMapping(value = "/vwo")
 public class HzVwoController {
-    @Autowired
-    IHzVwoInfoService iHzVwoInfoService;
 
     @Autowired
-    IHzFeatureChangeService iHzFeatureChangeService;
+    IHzVWOManagerService iHzVWOManagerService;
 
-    @Autowired
-    IHzVwoInformChangesService iHzVwoInformChangesService;
-
-    @Autowired
-    OrgGroupService orgGroupService;
-    @Autowired
-    UserService userService;
-
-    @Autowired
-    HzEbomRecordDAO hzEbomRecordDAO;
-
-    @Autowired
-    IHzVwoInfluenceDeptService iHzVwoInfluenceDeptService;
-
-    @Autowired
-    IHzVwoInfluenceUserService iHzVwoInfluenceUserService;
     private static Logger logger = LoggerFactory.getLogger(HzVwoController.class);
 
     /**
@@ -70,47 +52,74 @@ public class HzVwoController {
      */
     @RequestMapping(value = "/vwoFormList", method = RequestMethod.GET)
     public String getVwoFromList(@RequestParam Long id, @RequestParam Integer vwoType, Model model) {
-        HzVwoInfo vwoInfo = iHzVwoInfoService.doSelectByPrimaryKey(id);
-        HzVwoInfluenceDept influenceDept = iHzVwoInfluenceDeptService.doSelectByVwoId(id);
-        HzVwoInfluenceUser influenceUser = iHzVwoInfluenceUserService.doSelectByVwoId(id);
-        if (influenceDept == null) {
-            influenceDept = new HzVwoInfluenceDept();
-            influenceDept.setVwoId(id);
-            if (iHzVwoInfluenceDeptService.doInsert(influenceDept) <= 0) {
-                logger.error("初始化VWO:" + id + "的影响部门数据失败");
-                model.addAttribute("msg", "初始化VWO:" + id + "的影响部门数据失败");
-                return "errorWithEntity";
-            }
-        }
-        if (influenceUser == null) {
-            influenceUser = new HzVwoInfluenceUser();
-            influenceUser.setVwoId(id);
-            if (iHzVwoInfluenceUserService.doInsert(influenceUser) <= 0) {
-                logger.error("初始化VWO:" + id + "的影响人员数据失败");
-                model.addAttribute("msg", "初始化VWO:" + id + "的影响人员数据失败");
-                return "errorWithEntity";
-            }
-        }
-        if (1 == vwoType) {
-            List<HzFeatureChangeBean> after = iHzFeatureChangeService.doSelectAfterByVwoId(id);
-            List<HzFeatureChangeBean> before = iHzFeatureChangeService.doSelectBeforeByVwoId(id);
-            model.addAttribute("after", after);
-            model.addAttribute("before", before);
 
-        } else if (2 == vwoType) {
-
-        } else if (3 == vwoType) {
-
-        } else {
-            model.addAttribute("msg", "没有对应的VWO变更");
-            return "errorWithEntity";
+        Map map = new HashMap();
+        iHzVWOManagerService.doQueryCmcrDetailChangBefor(map,526L);
+        String error = "errorWithEntity";
+        HzVwoInfo vwoInfo;
+        HzVwoInfluenceDept influenceDept;
+        HzVwoInfluenceUser influenceUser;
+        HzVwoOpiBom hzVwoOpiBom;
+        HzVwoOpiPmt hzVwoOpiPmt;
+        HzVwoOpiProj hzVwoOpiProj;
+        switch (vwoType) {
+            case 1:
+                List<HzFeatureChangeBean> after = iHzVWOManagerService.getFeatureChangeAfter(id);
+                List<HzFeatureChangeBean> before = iHzVWOManagerService.getFeatureChangeBefore(id);
+                model.addAttribute("after", after);
+                model.addAttribute("before", before);
+                break;
+            case 2:
+                break;
+            case 3:
+                break;
+            case 4:
+                break;
+            case 5:
+                break;
+            default:
+                model.addAttribute("msg", "没有对应的VWO变更");
+                return error;
         }
+        //表单数据
+        vwoInfo = iHzVWOManagerService.getVwoInfo(id);
+        influenceDept = iHzVWOManagerService.getInfluenceDept(id);
+        influenceUser = iHzVWOManagerService.getInfluenceUser(id);
+        hzVwoOpiBom = iHzVWOManagerService.getOpiOfBomMng(id);
+        hzVwoOpiPmt = iHzVWOManagerService.getOpiOfPmtMng(id);
+        hzVwoOpiProj = iHzVWOManagerService.getOpiOfProjMng(id);
+        if (null == influenceDept) {
+            model.addAttribute("msg", "初始化VWO:" + id + "的影响部门数据失败");
+            return error;
+        }
+        if (null == influenceUser) {
+            model.addAttribute("msg", "初始化VWO:" + id + "的影响人员数据失败");
+            return error;
+        }
+        if (null == hzVwoOpiBom) {
+            model.addAttribute("msg", "初始化VWO:" + id + "的BOM经理意见数据失败");
+            return error;
+        }
+        if (null == hzVwoOpiPmt) {
+            model.addAttribute("msg", "初始化VWO:" + id + "的专业PMT经理意见数据失败");
+            model.addAttribute("msg", "");
+            return error;
+        }
+        if (null == hzVwoOpiProj) {
+            model.addAttribute("msg", "初始化VWO:" + id + "的项目经理意见数据失败");
+            return error;
+        }
+        //数据回传
         model.addAttribute("vwoInfo", vwoInfo);
         model.addAttribute("href", "returnToVwoFromList");
         model.addAttribute("url", "getInformChangers");
         model.addAttribute("vwo", id);
         model.addAttribute("influenceDept", influenceDept);
         model.addAttribute("influenceUser", influenceUser);
+        model.addAttribute("vwoType", vwoType);
+        model.addAttribute("hzVwoOpiBom", hzVwoOpiBom);
+        model.addAttribute("hzVwoOpiPmt", hzVwoOpiPmt);
+        model.addAttribute("hzVwoOpiProj", hzVwoOpiProj);
         return "changeManage/vwo/vwoBasicInformation";
     }
 
@@ -126,6 +135,12 @@ public class HzVwoController {
         return "changeManage/vwo/vwoFormList";
     }
 
+    @RequestMapping(value = "/getVwoExecuteDialog", method = RequestMethod.GET)
+    public String getVwoExecuteDialog(@RequestParam String vwoId, Model model) {
+        model.addAttribute("vwoId", vwoId);
+        return "changeManage/vwo/vwoExecuteDialog";
+    }
+
     /**
      * 分页查询
      *
@@ -135,12 +150,8 @@ public class HzVwoController {
      */
     @RequestMapping(value = "/queryByBase", method = RequestMethod.POST)
     @ResponseBody
-    public Map<String, Object> queryByBase(@RequestParam String projectUid, QueryBase queryBase) {
-        Map<String, Object> result = new HashMap<>();
-        queryBase.setSort(HzVwoInfo.reflectToDBField(queryBase.getSort()));
-        result.put("totalCount", iHzVwoInfoService.tellMeHowManyOfIt(projectUid));
-        result.put("result", iHzVwoInfoService.doSelectListByProjectUid(queryBase, projectUid));
-        return result;
+    public Map<String, Object> queryByBase(@RequestParam String projectUid, HzVwoFormListQueryBase queryBase) {
+        return iHzVWOManagerService.queryByBase(null, queryBase);
     }
 
     /**
@@ -152,12 +163,7 @@ public class HzVwoController {
     @RequestMapping(value = "/getInformChangers", method = RequestMethod.GET)
     @ResponseBody
     public Map<String, Object> getInformChangers(@RequestParam Long vwo, QueryBase queryBase) {
-        Map<String, Object> result = new HashMap<>();
-        List<HzVwoInformChanges> list = iHzVwoInformChangesService.doSelectByVwoId(vwo);
-        Long totalCount = iHzVwoInformChangesService.tellMeHowManyOfIt(vwo);
-        result.put("totalCount", totalCount);
-        result.put("result", list);
-        return result;
+        return iHzVWOManagerService.getInformChangers(vwo, queryBase);
     }
 
     @RequestMapping(value = "/getUserAndGroupPage", method = RequestMethod.GET)
@@ -179,166 +185,31 @@ public class HzVwoController {
     @RequestMapping(value = "/getUserDetail", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public Map<String, Object> getUserDetail(VWOUserGroupDTO dto) {
-        Map<String, Object> result = new JSONObject();
-        User user = new User();
-        try {
-            user.setId(Integer.parseInt(dto.getUid()));
-        } catch (NumberFormatException e) {
-            logger.error("解析用户ID错误", e);
-        }
-        user = userService.get(user);
-        if (user == null) {
-            result.put("status", false);
-        } else {
-            result.put("status", true);
-            result.put("groupName", user.getOrgGroup().getName());
-            result.put("personId", user.getId());
-            result.put("personName", user.getUserName());
-        }
-        return result;
+        return iHzVWOManagerService.getUserDetail(dto);
     }
 
     @RequestMapping(value = "/saveInformChanger", method = RequestMethod.POST)
     @ResponseBody
     public JSONObject saveInformChanger(@RequestBody HzVwoInformChanges change) {
-        JSONObject result = new JSONObject();
-        result.put("status", false);
-        if (!checkString(change.getPartId())) {
-            logger.error("没有选择正确的人员，可能选择了部门");
-            result.put("msg", "没有选择正确的人员，可能选择了部门");
-            return result;
-        }
-        if (change != null) {
-            User user = new User();
-            try {
-                if (null == change.getPersonId()) {
-                    logger.error("没有选择正确的人员，可能选择了部门");
-                    result.put("status", false);
-                    result.put("msg", "没有选择正确的人员");
-                }
-                user.setId(Math.toIntExact(change.getPersonId()));
-            } catch (ArithmeticException e) {
-                logger.error("没有选择正确的人员，可能选择了部门");
-                result.put("status", false);
-                result.put("msg", "没有选择正确的人员");
-                return result;
-            }
-            user = userService.get(user);
-            if (user == null) {
-                result.put("status", false);
-                result.put("msg", "没有找到用户:" + change.getPersonName());
-                return result;
-            }
-
-
-            HzVwoInfo info = iHzVwoInfoService.doSelectByPrimaryKey(change.getVwoId());
-            if (info == null) {
-                result.put("status", false);
-                result.put("msg", "没有找到VWO变更号");
-                return result;
-            }
-            Map<String, Object> queryParam = new HashMap<>();
-            queryParam.put("projectId", info.getProjectUid());
-            queryParam.put("lineID", change.getPartId().trim());
-            List<HzEPLManageRecord> itemList = hzEbomRecordDAO.findEbom(queryParam);
-            if (itemList == null || itemList.size() <= 0) {
-                result.put("status", false);
-                result.put("msg", "没有找到零件,零件ID为:" + change.getPartId());
-                return result;
-            }
-
-            change.setPersonDeptId(user.getGroupId());
-            change.setPersonDeptName(user.getOrgGroup().getName());
-            change.setVwoNum(info.getVwoNum());
-            change.setPartPuid(itemList.get(0).getPuid());
-            change.setPartName(itemList.get(0).getpBomLinePartName());
-            if (iHzVwoInformChangesService.doInsert(change) <= 0) {
-                result.put("status", false);
-                result.put("msg", "更新数据失败，请联系系统管理员");
-                logger.error("插入关联数据失败");
-            }
-        }
-        result.put("status", true);
-        result.put("msg", "更新数据成功");
-        return result;
+        return iHzVWOManagerService.saveInformChanger(change);
     }
 
     @RequestMapping(value = "/deleteVwoInfoChange", method = RequestMethod.POST)
     @ResponseBody
     public JSONObject deleteVwoInfoChange(@RequestBody List<HzVwoInformChanges> changes) {
-        JSONObject result = new JSONObject();
-        result.put("status", true);
-        if (changes == null) {
-            result.put("status", false);
-            result.put("msg", "没有选择要删除的数据");
-            return result;
-
-        } else {
-            for (int i = 0; i < changes.size(); i++) {
-                if (iHzVwoInformChangesService.doDeleteByPrimaryKey(changes.get(i).getId()) <= 0) {
-                    logger.error("删除ID为" + changes.get(i).getId() + "的关联数据失败");
-                    result.put("status", false);
-                    result.put("msg", "删除关联工程师:" + changes.get(i).getPersonName() + "&emsp;&emsp;关联零件号:" + changes.get(i).getPartId() + "数据失败");
-                    return result;
-                }
-            }
-        }
-        result.put("msg", "删除关联数据成功");
-        return result;
+        return iHzVWOManagerService.deleteVwoInfoChange(changes);
     }
 
     @RequestMapping(value = "/saveBasic", method = RequestMethod.POST)
     @ResponseBody
     public JSONObject saveBasic(@RequestBody HzVwoInfo info) {
-
-        JSONObject result = new JSONObject();
-        result.put("status", true);
-        if (info == null || info.getId() == null) {
-            result.put("status", false);
-            result.put("msg", "请选择一个VWO表单进行操作");
-            return result;
-        } else {
-            HzVwoInfo fromDb = iHzVwoInfoService.doSelectByPrimaryKey(info.getId());
-            fromDb.setVwoName(info.getVwoName());
-            fromDb.setContactPhoneNum(info.getContactPhoneNum());
-            fromDb.setVwoDemandFinishTime(info.getVwoDemandFinishTime());
-//            fromDb.setStrVwoStartEffectiveTime(info.getStrVwoStartEffectiveTime());
-//            fromDb.setStrVwoEndEffectiveTime(info.getStrVwoEndEffectiveTime());
-            fromDb.setVwoProjectStage(info.getVwoProjectStage());
-            fromDb.setVwoChangeReason(info.getVwoChangeReason());
-            fromDb.setVwoStartEffectiveTime(info.getVwoStartEffectiveTime());
-            fromDb.setVwoEndEffectiveTime(info.getVwoEndEffectiveTime());
-            fromDb.setVwoConnectedVwo(info.getVwoConnectedVwo());
-            if (!iHzVwoInfoService.doUpdateByPrimaryKey(fromDb)) {
-                logger.error("无法更新VWO数据,VWO ID为:" + info.getId());
-                result.put("status", false);
-                result.put("msg", "无法更新VWO数据");
-            }
-            return result;
-        }
+        return iHzVWOManagerService.saveBasic(info);
     }
 
     @RequestMapping(value = "/saveInfluenceDept", method = RequestMethod.POST)
     @ResponseBody
     public JSONObject saveInfluenceDept(@RequestBody HzVwoInfluenceDept dept) {
-
-        JSONObject result = new JSONObject();
-        result.put("status", true);
-        if (dept == null || dept.getVwoId() == null) {
-            result.put("status", false);
-            result.put("msg", "请选择一个VWO表单进行操作");
-            return result;
-        } else {
-            HzVwoInfluenceDept fromDb = iHzVwoInfluenceDeptService.doSelectByVwoId(dept.getVwoId());
-            dept.setVwoId(fromDb.getVwoId());
-            dept.setId(fromDb.getId());
-            if (iHzVwoInfluenceDeptService.doUpdateByPrimaryKey(dept) <= 0) {
-                logger.error("无法更新VWO数据,VWO ID为:" + dept.getId());
-                result.put("status", false);
-                result.put("msg", "无法更新VWO数据");
-            }
-            return result;
-        }
+        return iHzVWOManagerService.saveInfluenceDept(dept);
     }
 
     @RequestMapping(value = "doSelectPersonPage", method = RequestMethod.GET)
@@ -358,64 +229,82 @@ public class HzVwoController {
     @RequestMapping(value = "saveInfluenceUser", method = RequestMethod.POST)
     @ResponseBody
     public JSONObject saveInfluenceUser(@RequestBody HzVwoInfluenceUser influenceUser) {
-        JSONObject result = new JSONObject();
-        String name = "";
-        if (influenceUser == null) {
-            result.put("status", false);
-        } else {
-            HzVwoInfluenceUser fromDb = iHzVwoInfluenceUserService.doSelectByVwoId(influenceUser.getVwoId());
-            if (fromDb == null) {
-                result.put("status", false);
-                result.put("msg", "没有找到影响人员原始数据");
-                return result;
-            }
-            influenceUser.setId(fromDb.getId());
-            switch (influenceUser.getSelectId()) {
-                case 1:
-                    influenceUser.setVwoProSectionChiefId(influenceUser.getSelectedUserId());
-                    name = influenceUser.getVwoProSectionChiefName();
-                    break;
-                case 2:
-                    influenceUser.setVwoChangeCoordinatorId(influenceUser.getSelectedUserId());
-                    name = influenceUser.getVwoChangeCoordinatorName();
-                    break;
-                case 3:
-                    influenceUser.setVwoVehicleBodyUserId(influenceUser.getSelectedUserId());
-                    name = influenceUser.getVwoVehicleBodyUserName();
-                    break;
-                case 4:
-                    influenceUser.setVwoChassisId(influenceUser.getSelectedUserId());
-                    name = influenceUser.getVwoChassisName();
-                    break;
-                case 5:
-                    influenceUser.setVwoElectricApplianceId(influenceUser.getSelectedUserId());
-                    name = influenceUser.getVwoElectricApplianceName();
-                    break;
-                case 6:
-                    influenceUser.setVwoIeoId(influenceUser.getSelectedUserId());
-                    name = influenceUser.getVwoIeoName();
-                    break;
-                case 7:
-                    influenceUser.setVwoProjectManagerId(influenceUser.getSelectedUserId());
-                    name = influenceUser.getVwoProjectManagerName();
-                    break;
-                default:
-                    result.put("status", false);
-                    result.put("msg", "选项错误");
-                    return result;
-            }
-            if (iHzVwoInfluenceUserService.doUpdateByPrimaryKeySelective(influenceUser) <= 0) {
-                logger.error("更新影响人员数据出错");
-                result.put("status", false);
-                result.put("msg", "更新影响人员数据出错");
-                return result;
-            }
-            result.put("msg", "更新影响人员数据成功");
-            result.put("type", influenceUser.getSelectId());
-            result.put("name", name);
-            result.put("status", true);
+        return iHzVWOManagerService.saveInfluenceUser(influenceUser);
+    }
+
+    /**
+     * 为评估意见选择评估人员
+     *
+     * @param vwo
+     * @param selectType
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "doSelectBomMag", method = RequestMethod.GET)
+    public String doSelectBomMag(@RequestParam Long vwo, @RequestParam Integer selectType, Model model) {
+        if (vwo == null && selectType == null) {
+            model.addAttribute("发生错误，请选择正确的VWO表单");
+            return "errorWithEntity";
         }
-        return result;
+        String type = "";
+        if(selectType==1){
+            type = "opiBom";
+        }else if(selectType==2){
+            type = "opiPmt";
+        }else if(selectType==3){
+            type = "opiProj";
+        }else {
+            model.addAttribute("选择类型错误");
+            return  "errorWithEntity";
+        }
+
+        model.addAttribute("vwoId", vwo);
+        model.addAttribute("selectId", selectType);
+        model.addAttribute("typeId", type + "Id");
+        model.addAttribute("typeName", type + "Name");
+        return "changeManage/vwo/vwoSelectOptionPerson";
+    }
+
+    @RequestMapping(value = "saveOptionUser", method = RequestMethod.POST)
+    @ResponseBody
+    public JSONObject saveOptionUser(@RequestBody HzVwoOptionUserDto hzVwoOptionUserDto) {
+        return iHzVWOManagerService.saveOptionUser(hzVwoOptionUserDto);
+    }
+
+    /**
+     * 获取发布与实施数据
+     *
+     * @param vwo
+     * @return
+     */
+    @RequestMapping(value = "getExecuteInfo", method = RequestMethod.GET)
+    @ResponseBody
+    public Map<String, Object> getExecuteInfo(@RequestParam Long vwo) {
+        return iHzVWOManagerService.getExecuteInfo(vwo);
+    }
+
+    /**
+     * 获取发布与实施数据
+     *
+     * @param execute
+     * @return
+     */
+    @RequestMapping(value = "saveExecuteInfo", method = RequestMethod.POST)
+    @ResponseBody
+    public JSONObject saveExecuteInfo(@RequestBody HzVwoExecute execute) {
+        return iHzVWOManagerService.saveExecuteInfo(execute);
+    }
+
+    /**
+     * 获取发布与实施数据
+     *
+     * @param executes
+     * @return
+     */
+    @RequestMapping(value = "deleteExecuteInfo", method = RequestMethod.POST)
+    @ResponseBody
+    public JSONObject deleteExecuteInfo(@RequestBody List<HzVwoExecute> executes) {
+        return iHzVWOManagerService.deleteExecuteInfo(executes);
     }
 
 
@@ -425,33 +314,101 @@ public class HzVwoController {
      * @return
      */
     public List<VWOUserGroupDTO> getUserAndGroupOrg() {
-        List<VWOUserGroupDTO> beans = new ArrayList<>();
-        List<OrgGroup> groups = orgGroupService.loadAll();
-        for (int i = 0; i < groups.size(); i++) {
-            VWOUserGroupDTO dto = new VWOUserGroupDTO();
-            dto.setUid(groups.get(i).getNode());
-            dto.setpUid(groups.get(i).getParentNode());
-            dto.setName(groups.get(i).getName());
-            dto.setDbId(groups.get(i).getGroupId());
-            beans.add(dto);
-        }
-
-        List<User> users = userService.loadAll();
-
-        for (int i = 0; i < users.size(); i++) {
-            for (int i1 = 0; i1 < beans.size(); i1++) {
-                if (null == beans.get(i1).getDbId()) {
-                    continue;
-                }
-                if (users.get(i).getGroupId() == beans.get(i1).getDbId()) {
-                    VWOUserGroupDTO dto = new VWOUserGroupDTO();
-                    dto.setName(users.get(i).getUserName());
-                    dto.setUid(String.valueOf(users.get(i).getId()));
-                    dto.setpUid(beans.get(i1).getUid());
-                    beans.add(dto);
-                }
-            }
-        }
-        return beans;
+        return iHzVWOManagerService.getUserAndGroupOrg();
     }
+
+
+    /**
+     * 流程发布完成，将对象的状态设置为发布状态
+     *
+     * @param dto
+     * @return
+     */
+    @RequestMapping(value = "/release", method = RequestMethod.POST)
+    @ResponseBody
+    public JSONObject release(@RequestBody HzVwoProcessDto dto) {
+        return iHzVWOManagerService.release(dto.getVwoType(), dto.getProjectUid(), dto.getVwoId());
+    }
+
+    /**
+     * 流程中断，将对象的状态设置为“草稿状态”
+     *
+     * @param dto
+     * @return
+     */
+    @RequestMapping(value = "/interrupt", method = RequestMethod.POST)
+    @ResponseBody
+    public JSONObject interrupt(@RequestBody HzVwoProcessDto dto) {
+        return iHzVWOManagerService.interrupt(dto.getVwoType(), dto.getProjectUid(), dto.getVwoId());
+    }
+
+    @RequestMapping(value = "/launch", method = RequestMethod.POST)
+    @ResponseBody
+    public JSONObject launch(@RequestBody HzVwoProcessDto dto){
+        return iHzVWOManagerService.launch(dto.getVwoType(), dto.getProjectUid(), dto.getVwoId(),dto.getFormId());
+    }
+
+    @RequestMapping(value = "/saveLeaderOpinion", method = RequestMethod.POST)
+    @ResponseBody
+    public JSONObject saveLeaderOpinion(@RequestParam HzVwoInfo info,
+                                        @RequestParam HzVwoInfluenceDept dept
+                                       ) {
+        System.out.println();
+        return null;
+    }
+
+    /**
+     * BOM经理评估意见
+     *
+     * @param hzVwoOpiBom
+     * @return
+     */
+    @RequestMapping(value = "/saveBomLeaderOpinion", method = RequestMethod.POST)
+    @ResponseBody
+    public JSONObject saveBomLeaderOpinion(HzVwoOpiBom hzVwoOpiBom, Integer vwoType, String projectUid) {
+        return iHzVWOManagerService.saveBomLeaderOpinion(hzVwoOpiBom, vwoType, projectUid);
+    }
+
+    /**
+     * 专业PMT经理评估意见
+     *
+     * @param hzVwoOpiPmt
+     * @return
+     */
+    @RequestMapping(value = "/savePmtLeaderOpinion", method = RequestMethod.POST)
+    @ResponseBody
+    public JSONObject savePmtLeaderOpinion(HzVwoOpiPmt hzVwoOpiPmt, Integer vwoType, String projectUid) {
+        return iHzVWOManagerService.savePmtLeaderOpinion(hzVwoOpiPmt, vwoType, projectUid);
+    }
+
+    /**
+     * 项目经理评估意见
+     *
+     * @param hzVwoOpiProj
+     * @return
+     */
+    @RequestMapping(value = "/saveProjLeaderOpinion", method = RequestMethod.POST)
+    @ResponseBody
+    public JSONObject saveProjLeaderOpinion(HzVwoOpiProj hzVwoOpiProj, Integer vwoType, String projectUid) {
+        return iHzVWOManagerService.saveProjLeaderOpinion(hzVwoOpiProj, vwoType, projectUid);
+    }
+
+
+    /**************************特性变更表单****************************/
+    @RequestMapping(value = "getFeatureTable", method = RequestMethod.POST)
+    @ResponseBody
+    public Map<String, Object> getFeatureTable(@RequestParam Long vwoId) {
+        return iHzVWOManagerService.getFeatureTable(vwoId);
+    }
+
+
+    /**************************配色方案变更描述表单***************************/
+    @RequestMapping(value = "getModelColorTable", method = RequestMethod.POST)
+    @ResponseBody
+    public Map<String, Object> getModelColorTable(@RequestParam Long vwoId) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        iHzVWOManagerService.doQueryCmcrDetailChangBefor(map, vwoId);
+        return map;
+    }
+
 }

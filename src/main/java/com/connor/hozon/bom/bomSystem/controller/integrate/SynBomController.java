@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2018.
+ * This file was wrote by fancyears·milos·maywas @connor. Any question/bug you can post to 1243093366@qq.com.
+ * ALL RIGHTS RESERVED.
+ */
+
 package com.connor.hozon.bom.bomSystem.controller.integrate;
 
 import com.connor.hozon.bom.bomSystem.service.fullCfg.HzCfg0OfBomLineService;
@@ -16,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 同步BOM数据
+ * 同步BOM数据 x
  */
 @Controller
 @RequestMapping("/synBom")

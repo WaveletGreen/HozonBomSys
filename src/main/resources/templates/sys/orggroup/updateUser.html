@@ -93,19 +93,19 @@
                         }
                     }
                 },
-                streetAddress:{
-                    message: '街道地址无效',
-                    validators: {
-                        notEmpty: {
-                            message: '街道地址不能为空'
-                        },
-                        stringLength: {
-                            min: 6,
-                            max: 30,
-                            message: '街道地址长度必须在6到30之间'
-                        }
-                    }
-                },
+                // streetAddress:{
+                //     message: '街道地址无效',
+                //     validators: {
+                //         notEmpty: {
+                //             message: '街道地址不能为空'
+                //         },
+                //         stringLength: {
+                //             min: 6,
+                //             max: 30,
+                //             message: '街道地址长度必须在6到30之间'
+                //         }
+                //     }
+                // },
                 job : {
                     message: '职位无效',
                     validators: {
@@ -177,6 +177,33 @@
                         window.Ewin.alert({message:'修改数据失败!'});
                     }
                 })
+
+
+                // var url = $("#userForm", window.top.document).attr('action');
+                // $.ajax({
+                //     contentType:
+                //         "application/json",
+                //     type:
+                //         'POST',
+                //     url: url,
+                //     data:  $("#userForm",window.top.document).serialize(),
+                //     success:
+                //         function (result) {
+                //         console.log(result)
+                //             if(result.result){
+                //                 $('.modal-dialog', window.top.document).parent('div').remove()
+                //                 $('body', window.top.document).find('.modal-backdrop').remove();
+                //                 // jquery 调用刷新当前操作的table页面的refresh方法
+                //                 $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
+                //                 layer.msg('修改成功', {icon: 1, time: 2000})
+                //                 }else{
+                //                     window.Ewin.alert({message:result.msg});
+                //                 }
+                //         },
+                //     error: function (status) {
+                //         window.Ewin.alert({message: status.status + ':修改数据失败!'});
+                //     }
+                // });
             }
         });
 

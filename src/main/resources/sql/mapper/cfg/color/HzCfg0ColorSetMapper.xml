@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (c) 2018.
+  ~ This file was wrote by fancyears·milos·maywas @connor. Any question/bug you can post to 1243093366@qq.com.
+  ~ ALL RIGHTS RESERVED.
+  -->
+
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.connor.hozon.bom.bomSystem.dao.color.HzCfg0ColorSetDao">
     <resultMap id="BaseResultMap" type="sql.pojo.cfg.color.HzCfg0ColorSet">
@@ -29,6 +35,10 @@
         <result column="P_COLOR_STATUS" jdbcType="INTEGER" property="pColorStatus"/>
         <!--可用状态-->
         <result column="P_COLOR_IS_DELETED" jdbcType="INTEGER" property="pColorIsDeleted"/>
+        <!--油漆物料号集合，以<br>进行字符串拆分-->
+        <result column="CS_PAINT_MATERIEL_CODES" jdbcType="VARCHAR" property="csPaintMaterielCodes"/>
+        <!--辅料库中的油漆物料号主键，以竖线‘|’进行字符串拆分-->
+        <result column="CS_PAINT_MATERIEL_UIDS" jdbcType="VARCHAR" property="csPaintMaterielUids"/>
     </resultMap>
     <sql id="Base_Column_List">
       PUID,
@@ -44,7 +54,9 @@
       P_COLOR_MODIFY_DATE,
       P_COLOR_MODIFIER,
       P_COLOR_STATUS,
-      P_COLOR_IS_DELETED
+      P_COLOR_IS_DELETED,
+      CS_PAINT_MATERIEL_CODES,
+      CS_PAINT_MATERIEL_UIDS
   </sql>
     <sql id="Base_Column_List_By_Batch">
         #{item.puid,jdbcType=VARCHAR}
@@ -64,7 +76,9 @@
       #{pColorModifyDate,jdbcType=VARCHAR},
       #{pColorModifier,jdbcType=VARCHAR},
       #{pColorStatus,jdbcType=VARCHAR},
-      #{pColorIsDeleted,jdbcType=VARCHAR}
+      #{pColorIsDeleted,jdbcType=VARCHAR},
+      #{csPaintMaterielCodes,jdbcType=VARCHAR},
+      #{csPaintMaterielUids,jdbcType=VARCHAR}
     </sql>
     <!--根据主键查询-->
     <select id="selectByPrimaryKey" parameterType="sql.pojo.cfg.color.HzCfg0ColorSet" resultMap="BaseResultMap">
@@ -131,7 +145,9 @@
       P_COLOR_COMMENT = #{pColorComment,jdbcType=VARCHAR},
 
       P_COLOR_MODIFY_DATE = #{pColorModifyDate,jdbcType=VARCHAR},
-      P_COLOR_MODIFIER = #{pColorModifier,jdbcType=VARCHAR}
+      P_COLOR_MODIFIER = #{pColorModifier,jdbcType=VARCHAR},
+      CS_PAINT_MATERIEL_CODES = #{csPaintMaterielCodes,jdbcType=VARCHAR},
+      CS_PAINT_MATERIEL_UIDS = #{csPaintMaterielUids,jdbcType=VARCHAR}
 
     where PUID = #{puid,jdbcType=VARCHAR}
   </update>

@@ -117,6 +117,39 @@ public class HzPbomRecordDAOImpl extends BaseSQLUtil implements HzPbomRecordDAO 
     }
 
     @Override
+    public int updateList(List<HzPbomLineRecord> records) {
+        int size = records.size();
+        //分批更新数据 一次1000条
+        int i = 0;
+        int cout = 0;
+        try {
+            synchronized (this){
+                if (size > 1000) {
+                    for (i = 0; i < size / 1000; i++) {
+                        List<HzPbomLineRecord> list = new ArrayList<>();
+                        for (int j = 0; j < 1000; j++) {
+                            list.add(records.get(cout));
+                            cout++;
+                        }
+                        super.update("HzPbomRecordDAOImpl_updateList",list);
+                    }
+                }
+                if (i * 1000 < size) {
+                    List<HzPbomLineRecord> list = new ArrayList<>();
+                    for (int j = 0; j < size - i * 1000; j++) {
+                        list.add(records.get(cout));
+                        cout++;
+                    }
+                    super.update("HzPbomRecordDAOImpl_updateList",list);
+                }
+            }
+            return 1;
+        }catch (Exception e){
+            return 0;
+        }
+    }
+
+    @Override
     public int updateInput(HzPbomLineRecord record) {
         return super.update("HzPbomRecordDAOImpl_updateInput",record);
     }

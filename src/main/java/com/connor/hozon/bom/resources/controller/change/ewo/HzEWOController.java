@@ -11,6 +11,7 @@ import com.connor.hozon.bom.resources.service.change.HzEWOImpactReferenceService
 import com.connor.hozon.bom.resources.service.change.HzEWOService;
 import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.resources.util.Result;
+import com.connor.hozon.bom.resources.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -45,7 +46,7 @@ public class HzEWOController extends BaseController {
      */
     @RequestMapping(value = "initiating/process",method = RequestMethod.POST)
     public void initiatingProcessForChange(@RequestBody InitiatingProcessReqDTO reqDTO, HttpServletResponse response){
-        if(null == reqDTO.getPuids() || reqDTO.getPuids().equals("")){
+        if(StringUtil.isEmpty(reqDTO.getPuids())){
             toJSONResponse(Result.build(false,"非法参数！"),response);
             return;
         }
@@ -61,8 +62,7 @@ public class HzEWOController extends BaseController {
     @RequestMapping(value = "change/record",method = RequestMethod.GET)
     @ResponseBody
     public JSONObject changeProcessHistory(HzEWOChangeRecordQuery query){
-        if(query.getEwoNo() == null || query.getProjectId() == null
-                || query.getProjectId() == "" || query.getEwoNo() == ""){
+        if(StringUtil.isEmpty(query.getEwoNo())||StringUtil.isEmpty(query.getProjectId())){
             return new JSONObject();
         }
         List<HzEbomRespDTO> respDTOList = hzEWOService.getEWOChangeFormRecord(query);
@@ -149,8 +149,7 @@ public class HzEWOController extends BaseController {
      */
     @RequestMapping(value = "impact/reference",method = RequestMethod.GET)
     public void impactReferenceRecord(HzEWOImpactReferenceQuery query, HttpServletResponse response){
-        if(query.getEwoNo() == null || query.getProjectId() == null
-                || query.getProjectId() == "" || query.getEwoNo() == ""){
+        if(StringUtil.isEmpty(query.getProjectId())||StringUtil.isEmpty(query.getEwoNo())){
             toJSONResponse(Result.build(false,"非法参数！"),response);
             return ;
         }
@@ -170,8 +169,7 @@ public class HzEWOController extends BaseController {
      */
     @RequestMapping(value = "impact/save",method = RequestMethod.POST)
     public void impactReferenceRecord(HzEWOImpactReference reference, HttpServletResponse response){
-        if(reference.getEwoNo() == null || reference.getProjectId() == null
-                || reference.getProjectId() == "" || reference.getEwoNo() == ""){
+        if(StringUtil.isEmpty(reference.getEwoNo())|| StringUtil.isEmpty(reference.getProjectId())){
             toJSONResponse(Result.build(false,"非法参数！"),response);
             return ;
         }

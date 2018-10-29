@@ -1,9 +1,20 @@
+/*
+ * Copyright (c) 2018.
+ * This file was wrote by fancyears·milos·maywas @connor. Any question/bug you can post to 1243093366@qq.com.
+ * ALL RIGHTS RESERVED.
+ */
+
 package sql.pojo.cfg.modelColor;
 
 import lombok.Data;
 
 import java.util.Date;
-
+/**
+ * @Author: Fancyears·Maylos·Maywas
+ * @Description:
+ * @Date: Created in 2018/8/10 13:55
+ * @Modified By:
+ */
 @Deprecated
 @Data
 public class HzCmcrDetailBeforeChange {

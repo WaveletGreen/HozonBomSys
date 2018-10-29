@@ -1,8 +1,24 @@
+/*
+ * Copyright (c) 2018.
+ * This file was wrote by fancyears·milos·maywas @connor. Any question/bug you can post to 1243093366@qq.com.
+ * ALL RIGHTS RESERVED.
+ */
+
 package com.connor.hozon.bom.bomSystem.dao.modelColor;
 
 import com.connor.hozon.bom.bomSystem.dao.BasicDao;
+import org.springframework.context.annotation.Configuration;
+import sql.pojo.cfg.modelColor.HzCmcrChange;
 import sql.pojo.cfg.modelColor.HzCmcrDetailChange;
 
+import java.util.List;
+/**
+ * @Author: Fancyears·Maylos·Maywas
+ * @Description: 基础车型详情数据变更dao层
+ * @Date: Created in 2018/8/27 21:17
+ * @Modified By:
+ */
+@Configuration
 public interface HzCmcrDetailChangeDao extends BasicDao<HzCmcrDetailChange>{
     /**
      * 插入变更后数据
@@ -99,4 +115,36 @@ public interface HzCmcrDetailChangeDao extends BasicDao<HzCmcrDetailChange>{
      * @return 影响行数
      */
     int updateDetailBeforeByPrimaryKeySelective(HzCmcrDetailChange cmcr) throws Exception;
+
+    /**
+     *批量插入变更前从数据
+     * @param hzCmcrDetailChangesAfter
+     * @return
+     * @throws Exception
+     */
+    int insertDetailAfterList(List<HzCmcrDetailChange> hzCmcrDetailChangesAfter) throws Exception;
+
+    /**
+     * 查询最近一次变更后从数据
+     * @param hzCmcrDetailChangesQuery
+     * @return
+     * @throws Exception
+     */
+    List<HzCmcrDetailChange> selectLastAfter(List<HzCmcrDetailChange> hzCmcrDetailChangesQuery)throws Exception;
+
+    /**
+     * 批量插入变更前从数据
+     * @param hzCmcrDetailChangesQuery
+     * @return
+     * @throws Exception
+     */
+    int insertDetailBeforeList(List<HzCmcrDetailChange> hzCmcrDetailChangesQuery) throws Exception;
+
+    List<HzCmcrDetailChange> doQueryCmcrDetailChangBeforAndAfter(List<HzCmcrDetailChange> hzCmcrDetailChanges);
+
+    List<HzCmcrDetailChange> doQueryCmcrDetailChangBefor(Long vwoId);
+
+    List<HzCmcrDetailChange> doQueryCmcrDetailChangFirst(Long vwoId,Integer flag);
+
+    List<HzCmcrDetailChange> doQueryCmcrDetailChangFirstAfter(Long vwoId);
 }

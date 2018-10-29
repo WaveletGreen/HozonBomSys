@@ -1,8 +1,12 @@
+/*
+ * Copyright (c) 2018.
+ * This file was wrote by fancyears·milos·maywas @connor. Any question/bug you can post to 1243093366@qq.com.
+ * ALL RIGHTS RESERVED.
+ */
+
 package com.connor.hozon.bom.bomSystem.impl.bom;
 
-import com.connor.hozon.bom.bomSystem.dao.bom.HzBomLineRecordMapper;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import sql.BaseSQLUtil;
 import sql.pojo.bom.HzBomLineRecord;
 
@@ -10,7 +14,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
+/**
+ * @Author: Fancyears·Maylos·Maywas
+ * @Description: fuck
+ * @Date: Created in 2018/9/6 13:19
+ * @Modified By:
+ */
 @Service("HzBomLineRecordDaoImpl")
 public class HzBomLineRecordDaoImpl extends BaseSQLUtil {
 
@@ -117,8 +126,8 @@ public class HzBomLineRecordDaoImpl extends BaseSQLUtil {
         return super.findForList("HzBomLineRecordDaoImpl_findBomLineIndex", map);
     }
 
-    public List<HzBomLineRecord> getAllBomLineRecordByProjectId(String projectId) {
-        return super.findForList("HzBomLineRecordDaoImpl_getAllBomLineRecordByProjectId", projectId);
+    public Integer getBomLineRecordNumber(String projectId) {
+        return (Integer) super.findForObject("HzBomLineRecordDaoImpl_getBomLineRecordNumber", projectId);
     }
 
     public List<HzBomLineRecord> getLoadingCarPartBom(String projectId) {

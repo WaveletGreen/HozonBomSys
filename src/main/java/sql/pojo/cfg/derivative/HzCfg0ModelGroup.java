@@ -7,7 +7,10 @@
 package sql.pojo.cfg.derivative;
 
 /**
- * 模型组，同步到SAP用的模型组，在BOM系统中没有与之对应的操作入口
+ * @Author: Fancyears·Maylos·Maywas
+ * @Description: 模型组，同步到SAP用的模型组，在BOM系统中没有与之对应的操作入口
+ * @Date: Created in 2018/8/10 13:55
+ * @Modified By:
  */
 public class HzCfg0ModelGroup {
     private String id;

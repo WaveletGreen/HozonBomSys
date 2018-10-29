@@ -4,7 +4,6 @@
   ~ This file was wrote by fancyears·milos·maywas @connor. Any question/bug you can post to 1243093366@qq.com.
   ~ ALL RIGHTS RESERVED.
   -->
-
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.connor.hozon.bom.bomSystem.dao.modelColor.HzColorModelDao">
     <resultMap id="BaseResultMap" type="sql.pojo.cfg.modelColor.HzCfg0ModelColorDetail">
@@ -121,14 +120,14 @@
     <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
-        from HZ_COLOR_MODEL
+        from HZ_CFG0_MODEL_COLOR_DETAIL
         where PUID = #{puid,jdbcType=VARCHAR}
     </select>
     <!--根据颜色模型-->
     <select id="selectByModelUid" parameterType="java.lang.String" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
-        from HZ_COLOR_MODEL
+        from HZ_CFG0_MODEL_COLOR_DETAIL
         where MODEL_UID = #{modelUid,jdbcType=VARCHAR}
     </select>
     <!--连接查询颜色-->
@@ -136,7 +135,7 @@
         select
         t.<include refid="Base_Column_List"/>,
         <include refid="Base_Column_List_With_Color"/>
-        from HZ_COLOR_MODEL t
+        from HZ_CFG0_MODEL_COLOR_DETAIL t
         left join Hz_Cfg0_Colorset t2 on t.p_color_uid=t2.puid
         where t.MODEL_UID = #{modelUid,jdbcType=VARCHAR} order by P_CFG_UID
     </select>
@@ -144,7 +143,7 @@
         select
         t.<include refid="Base_Column_List"/>,
         <include refid="Base_Column_List_With_Color"/>
-        from HZ_COLOR_MODEL t
+        from HZ_CFG0_MODEL_COLOR_DETAIL t
         left join Hz_Cfg0_Colorset t2 on t.p_color_uid=t2.puid
         left join Hz_Cfg0_Optionfamily_Record t3 on t.p_cfg_uid=t3.puid
         where t.MODEL_UID = #{modelUid,jdbcType=VARCHAR} order by t3.p_optionfamily_name
@@ -153,17 +152,17 @@
     <select id="selectByCfgMainUid" parameterType="java.lang.String" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
-        from HZ_COLOR_MODEL
+        from HZ_CFG0_MODEL_COLOR_DETAIL
         where P_CFG_MAIN_UID = #{cfgMainUid,jdbcType=VARCHAR}
     </select>
     <!--主键删除-->
     <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
-    delete from HZ_COLOR_MODEL
+    delete from HZ_CFG0_MODEL_COLOR_DETAIL
     where PUID = #{puid,jdbcType=VARCHAR}
   </delete>
     <!--插入-->
     <insert id="insert" parameterType="sql.pojo.cfg.modelColor.HzCfg0ModelColorDetail">
-        insert into HZ_COLOR_MODEL (
+        insert into HZ_CFG0_MODEL_COLOR_DETAIL (
         <include refid="Base_Column_List"/>
         )
         values (
@@ -183,7 +182,7 @@
         insert all
         <foreach collection="list" item="item" index="index"
                  separator=" ">
-            into HZ_COLOR_MODEL (
+            into HZ_CFG0_MODEL_COLOR_DETAIL (
             <include refid="Base_Column_List"/>
             ) values (
             <include refid="values_by_batch"/>
@@ -193,7 +192,7 @@
     </insert>
     <!--主键更新-->
     <update id="updateByPrimaryKey" parameterType="sql.pojo.cfg.modelColor.HzCfg0ModelColorDetail">
-    update HZ_COLOR_MODEL
+    update HZ_CFG0_MODEL_COLOR_DETAIL
     set MODEL_PUID = #{modelUid,jdbcType=VARCHAR},
       P_CFG_PUID = #{cfgUid,jdbcType=VARCHAR},
       P_COLOR_PUID = #{colorUid,jdbcType=VARCHAR}
@@ -201,7 +200,7 @@
   </update>
     <!--按车型和配置更新颜色，进行单点更新-->
     <update id="updateColorModelWithCfg" parameterType="sql.pojo.cfg.modelColor.HzCfg0ModelColorDetail">
-    update HZ_COLOR_MODEL
+    update HZ_CFG0_MODEL_COLOR_DETAIL
     set
       P_COLOR_UID = #{colorUid,jdbcType=VARCHAR},
       MODIFY_DATE=#{modifyDate,jdbcType=TIMESTAMP},
@@ -214,7 +213,7 @@
         <include refid="Base_Column_List2"/>
         from
         HZ_CFG0_MAIN_RECORD t join Hz_Cfg0_Model_Color_Record t2 on t.PUID = t2.P_CFG0_MAIN_RECORD_OF_MC
-        join Hz_Color_Model t3 on t2.puid = t3.model_uid
+        join HZ_CFG0_MODEL_COLOR_DETAIL t3 on t2.puid = t3.model_uid
         join Hz_Cfg0_Optionfamily_Record t4 on t3.p_cfg_uid = t4.puid
         join Hz_Cfg0_Colorset t5 on t5.puid = t3.p_color_uid
         where t.P_CFG0_OF_WHICH_PROJECT_PUID = #{projectPuid}
@@ -225,7 +224,7 @@
         select
         <include refid="Base_Column_List"/>
         from
-        HZ_COLOR_MODEL t
+        HZ_CFG0_MODEL_COLOR_DETAIL t
         where
         t.MODEL_UID in
         <foreach collection="list" index="index" item="hzCfg0ModelColor" open="(" separator="," close=")">

@@ -1,4 +1,10 @@
 <!DOCTYPE html>
+<!--
+  ~ Copyright (c) 2018.
+  ~ This file was wrote by fancyears·milos·maywas @connor. Any question/bug you can post to 1243093366@qq.com.
+  ~ ALL RIGHTS RESERVED.
+  -->
+
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:include="include/includebase">
 </head>
@@ -22,10 +28,6 @@
 <script th:src="@{/js/cfg/materielFeature/materielFeature.js}"></script>
 </body>
 <script th:inline="javascript">
-    function doQuery() {
-        $('#materielFeature').bootstrapTable('refresh');    //刷新表格
-    }
-
     function doRefresh(projectUid) {
         loadData(projectUid);
     }

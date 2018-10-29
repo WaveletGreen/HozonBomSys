@@ -14,6 +14,7 @@ import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
 import com.connor.hozon.bom.resources.domain.query.HzPbomByPageQuery;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.service.bom.HzPbomService;
+import com.connor.hozon.bom.resources.service.bom.HzSingleVehiclesServices;
 import com.connor.hozon.bom.resources.util.ExcelUtil;
 import com.connor.hozon.bom.resources.util.Result;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,10 +38,13 @@ public class HzPbomController extends BaseController {
     @Autowired
     private HzPbomService hzPbomService;
 
+    @Autowired
+    private HzSingleVehiclesServices hzSingleVehiclesServices;
+
     LinkedHashMap<String, String> tableTitle = new LinkedHashMap<>();
 
     @RequestMapping(value = "manage/title", method = RequestMethod.GET)
-    public void getPbomLineTitle(HttpServletResponse response) {
+    public void getPbomLineTitle(String projectId,HttpServletResponse response) {
         //LinkedHashMap<String, String> tableTitle = new LinkedHashMap<>();
         tableTitle.put("No", "序号");
         tableTitle.put("lineId", "零件号");
@@ -63,6 +67,8 @@ public class HzPbomController extends BaseController {
         tableTitle.put("mouldType", "模具类别");
         tableTitle.put("outerPart", "外委件");
         tableTitle.put("station", "工位");
+        //获取该项目下的所有车型模型
+        tableTitle.putAll(hzSingleVehiclesServices.singleVehDosageTitle(projectId));
         toJSONResponse(Result.build(tableTitle), response);
     }
 
@@ -82,6 +88,7 @@ public class HzPbomController extends BaseController {
 
         }
         Page<HzPbomLineRespDTO> respDTOPage = hzPbomService.getHzPbomRecordPage(query);
+
         List<HzPbomLineRespDTO> respDTOS = respDTOPage.getResult();
         if (respDTOS == null) {
             return new HashMap<>();
@@ -114,6 +121,9 @@ public class HzPbomController extends BaseController {
             _res.put("outerPart", dto.getOuterPart());
             _res.put("station", dto.getStation());
             _res.put("status", dto.getStatus());
+            if(null != dto.getObject()){
+                _res.putAll(dto.getObject());
+            }
             _list.add(_res);
         });
         ret.put("totalCount", respDTOPage.getTotalCount());
@@ -311,7 +321,7 @@ public class HzPbomController extends BaseController {
     @RequestMapping(value = "excelExport",method = RequestMethod.POST)
     @ResponseBody
     public JSONObject listDownLoad(
-             @RequestBody  List<HzPbomLineRespDTO> dtos
+             @RequestBody  List<HzPbomLineRespDTO> dtos,HttpServletRequest request
     ) {
         boolean flag=true;
         JSONObject result=new JSONObject();
@@ -352,7 +362,7 @@ public class HzPbomController extends BaseController {
                 cellArr[20] = ebomRespDTO.getStation();
                 dataList.add(cellArr);
             }
-            flag = ExcelUtil.writeExcel(fileName, title, dataList,"pbom");
+            flag = ExcelUtil.writeExcel(fileName, title, dataList,"pbom",request);
 
             if(flag){
                 LOG.info(fileName+",文件创建成功");

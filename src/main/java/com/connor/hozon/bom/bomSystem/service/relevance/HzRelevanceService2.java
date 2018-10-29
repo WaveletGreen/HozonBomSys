@@ -9,7 +9,7 @@ package com.connor.hozon.bom.bomSystem.service.relevance;
 import com.connor.hozon.bom.bomSystem.dao.modelColor.HzColorModelDao;
 import com.connor.hozon.bom.bomSystem.dao.relevance.HzRelevanceBasicDao;
 import com.connor.hozon.bom.bomSystem.dao.relevance.HzRelevanceRelationDao;
-import com.connor.hozon.bom.bomSystem.dto.HzFeatureQueryDTO;
+import com.connor.hozon.bom.bomSystem.dto.HzFeatureQueryDto;
 import com.connor.hozon.bom.bomSystem.dto.relevance.HzRelevanceQueryDTO;
 import com.connor.hozon.bom.bomSystem.dto.relevance.HzRelevanceQueryResultBean;
 import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0Service;
@@ -26,7 +26,12 @@ import sql.pojo.cfg.relevance.HzRelevanceRelation;
 import java.util.*;
 
 import static javax.swing.UIManager.get;
-
+/**
+ * @Author: Fancyears·Maylos·Maywas
+ * @Description: fuck
+ * @Date: Created in  2018/5/30 14:15
+ * @Modified By:
+ */
 @Service("hzRelevanceService2")
 public class HzRelevanceService2 {
 
@@ -62,7 +67,7 @@ public class HzRelevanceService2 {
         //搜索全部特性值，并经过P_CFG0_OBJECT_ID 升序排序
         QueryBase queryBase = new QueryBase();
         queryBase.setSort("P_CFG0_OBJECT_ID");
-         List<HzCfg0Record> hzCfg0Records = hzCfg0Service.doLoadCfgListByProjectPuid(projectPuid, new HzFeatureQueryDTO());
+         List<HzCfg0Record> hzCfg0Records = hzCfg0Service.doLoadCfgListByProjectPuid(projectPuid, new HzFeatureQueryDto());
 
         //查询该项目下所有配色方案
         List<HzColorModel2> hzColorModel2s = hzColorModelDao.selectByProjectPuid(projectPuid);

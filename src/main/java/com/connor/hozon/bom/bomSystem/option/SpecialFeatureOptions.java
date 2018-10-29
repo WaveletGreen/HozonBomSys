@@ -10,11 +10,11 @@ import lombok.Getter;
 
 /**
  * @Author: Fancyears·Maylos·Maywas
- * @Description:
- * @Date: Created in 2018/9/19 16:21
+ * @Description: fuck
+ * @Date: Created in 2018/9/6 13:19
  * @Modified By:
  */
-public enum SpecialFeatureOption {
+public enum SpecialFeatureOptions {
     /**
      * 车身特性代码
      */
@@ -45,7 +45,7 @@ public enum SpecialFeatureOption {
     private String desc;
 
     // 构造方法
-    SpecialFeatureOption(String desc) {
+    SpecialFeatureOptions(String desc) {
         this.desc = desc;
     }
 }

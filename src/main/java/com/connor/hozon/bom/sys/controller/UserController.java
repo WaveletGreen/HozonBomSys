@@ -7,6 +7,9 @@ import com.connor.hozon.bom.common.base.service.GenericService;
 import com.connor.hozon.bom.common.util.json.JsonHelper;
 import com.connor.hozon.bom.common.util.user.UserInfo;
 
+import com.connor.hozon.bom.resources.util.ListUtil;
+import com.connor.hozon.bom.resources.util.PrivilegeUtil;
+import com.connor.hozon.bom.resources.util.StringUtil;
 import com.connor.hozon.bom.sys.entity.QueryUser;
 import com.connor.hozon.bom.sys.entity.Tree;
 import com.connor.hozon.bom.sys.entity.User;
@@ -15,6 +18,7 @@ import com.connor.hozon.bom.sys.service.TreeService;
 import com.connor.hozon.bom.sys.service.UserAssociateRoleService;
 import com.connor.hozon.bom.sys.service.UserRoleService;
 import com.connor.hozon.bom.sys.service.UserService;
+import com.google.common.collect.Lists;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -75,10 +79,23 @@ public class UserController extends GenericController<User,QueryUser> {
     @ResponseBody
     public Map<String,Object> userControl(User entity) throws Exception{
         Map<String,Object> result = new HashMap<String, Object>();
+        User user = UserInfo.getUser();
+        User loginUser = userService.findByLogin(user.getLogin());
+        User u = userService.findByUserId(Long.valueOf(entity.getId()));//系统中存在用户
+        if("dcproxy".equals(u.getLogin())){
+            result.put(SystemStaticConst.RESULT,SystemStaticConst.FAIL);
+            result.put(SystemStaticConst.MSG,"dcproxy账号无法禁用！");
+            return result;
+        }
+        if(!PrivilegeUtil.hasAdministratorPrivilege(loginUser)){
+            result.put(SystemStaticConst.RESULT,SystemStaticConst.FAIL);
+            result.put(SystemStaticConst.MSG,"只有系统管理员权限账户才能禁用/启用员工账号！");
+            return result;
+        }
         if(userService.userControl(entity)){
             result.put(SystemStaticConst.RESULT,SystemStaticConst.SUCCESS);
             result.put(SystemStaticConst.MSG,"更新用户状态成功！");
-            result.put("entity",entity);
+//            result.put("entity",entity);
         }else{
             result.put(SystemStaticConst.RESULT,SystemStaticConst.FAIL);
             result.put(SystemStaticConst.MSG,"更新用户状态失败！");
@@ -126,4 +143,141 @@ public class UserController extends GenericController<User,QueryUser> {
         return getPageBaseRoot() + "/group";
     }
 
+
+
+    /**
+     * @Author haozt on 2018/10/26
+     * 功能描述:重写父类的update方法  这里进行权限判断
+     * @param entity
+     * @return
+     */
+    @RequestMapping(value = "/update",method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public Map<String,Object> update(User entity)  throws Exception{
+        User user = userService.findByLogin(entity.getLogin());//编辑的用户
+        if(null != user){
+            List<UserRole> userRoles = user.getRoles();//系统已存在的用户角色
+            User loginUser = userService.findByLogin(UserInfo.getUser().getLogin());//当前登录用户
+            if(!loginUser.getLogin().equals(user.getLogin())){
+                if(!PrivilegeUtil.hasAdministratorPrivilege(loginUser)){
+                    Map<String, Object> map = new HashMap<>();
+                    map.put(SystemStaticConst.RESULT, SystemStaticConst.FAIL);
+                    map.put(SystemStaticConst.MSG, "不具备系统管理员权限的用户不能编辑其他员工信息！");
+                    return map;
+                }else {//A系统管理员 修改  B系统管理员权限
+                    if(!"dcproxy".equals(loginUser.getLogin())){
+                        for(UserRole role:userRoles){
+                            if(PrivilegeUtil.ROLE_ADMIN.equals(role.getName())){
+                                String id = String.valueOf(role.getId());
+                                if(null !=entity.getRoleArray()){
+                                    List<String> list = Lists.newArrayList(entity.getRoleArray().split(","));
+                                    if(!list.contains(id)){
+                                        Map<String, Object> map = new HashMap<>();
+                                        map.put(SystemStaticConst.RESULT, SystemStaticConst.FAIL);
+                                        map.put(SystemStaticConst.MSG, "只有dcproxy账户才能移除其他用户的系统管理员权限！");
+                                        return map;
+                                    }
+                                }else {
+                                    Map<String, Object> map = new HashMap<>();
+                                    map.put(SystemStaticConst.RESULT, SystemStaticConst.FAIL);
+                                    map.put(SystemStaticConst.MSG, "只有dcproxy账户才能移除其他用户的系统管理员权限！");
+                                    return map;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            if("dcproxy".equals(entity.getLogin())){
+                for(UserRole role :userRoles){
+                    if(PrivilegeUtil.ROLE_ADMIN.equals(role.getName())){
+                        if(StringUtil.isEmpty(entity.getRoleArray()) ||!entity.getRoleArray().contains(String.valueOf(role.getId()))){
+                            Map<String, Object> map = new HashMap<>();
+                            map.put(SystemStaticConst.RESULT, SystemStaticConst.FAIL);
+                            map.put(SystemStaticConst.MSG, "dcproxy的系统管理员权限不能删除！");
+                            return map;
+                        }
+                    }
+                }
+            }
+            String ids = entity.getRoleArray();
+            boolean write = true;
+            if(!PrivilegeUtil.administrator()) {
+                if (StringUtil.isEmpty(ids) && ListUtil.isEmpty(userRoles)) {
+                    write = true;
+                } else if (StringUtil.isEmpty(ids) && ListUtil.isNotEmpty(userRoles)) {
+                    write = false;
+                }else if(!StringUtil.isEmpty(ids)&&ListUtil.isEmpty(userRoles)){
+                    write = false;
+                }
+                else if (ListUtil.isNotEmpty(userRoles) && !StringUtil.isEmpty(ids)) {
+                    List<String> list = Lists.newArrayList(ids.split(","));
+                    if(list.size() != userRoles.size()){
+                        write = false;
+                    }else {
+                        for(String s :list){
+                            boolean find = false;
+                            for(UserRole role :userRoles){
+                                if(s.equals(String.valueOf(role.getId()))){
+                                    find = true;
+                                    break;
+                                }
+                            }
+                            if(!find){
+                                write = false;
+                                break;
+                            }
+                        }
+                    }
+
+                }
+                if (!write) {
+                    Map<String, Object> map = new HashMap<>();
+                    map.put(SystemStaticConst.RESULT, SystemStaticConst.FAIL);
+                    map.put(SystemStaticConst.MSG, "只有系统管理员权限账户才能修改员工所属权限信息！");
+                    return map;
+                }
+            }
+        }
+        boolean success  = userService.update(entity);
+        Map<String,Object> result = new HashMap<>();
+        if(success==true){
+                result.put(SystemStaticConst.RESULT,SystemStaticConst.SUCCESS);
+            result.put(SystemStaticConst.MSG,"更新数据成功！");
+        }else{
+            result.put(SystemStaticConst.RESULT,SystemStaticConst.FAIL);
+            result.put(SystemStaticConst.MSG,"更新数据失败！");
+        }
+        return result;
+    }
+
+
+    /**
+     * 功能描述：保存数据字典数据
+     * @param entity
+     * @return
+     */
+    @RequestMapping(value = "/save",method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public Map<String,Object> save(User entity) throws Exception{
+        //新增用户时，初始密码全部为123456
+        User user = UserInfo.getUser();
+        User u = userService.findByLogin(user.getLogin());
+        if(!PrivilegeUtil.hasAdministratorPrivilege(u)){
+            Map<String,Object> map = new HashMap<>();
+            map.put(SystemStaticConst.RESULT, SystemStaticConst.FAIL);
+            map.put(SystemStaticConst.MSG,"只有系统管理员权限账户才能增加员工信息！");
+        }
+        boolean success = getService().save(entity);
+        Map<String,Object> result = new HashMap<>();
+        if(success==true){
+            result.put(SystemStaticConst.RESULT, SystemStaticConst.SUCCESS);
+            result.put(SystemStaticConst.MSG,"增加数据成功！");
+        }else{
+            result.put(SystemStaticConst.RESULT,SystemStaticConst.FAIL);
+            result.put(SystemStaticConst.MSG,"增加数据失败！");
+        }
+        return result;
+    }
 }

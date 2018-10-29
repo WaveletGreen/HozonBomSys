@@ -1,12 +1,19 @@
 $(document).ready((function () {
-    initTable();
+    doQuery();
 }))
 
+//刷新
+function doRefresh(projectUid) {
+    initTable(projectUid);
+}
 function doQuery() {
-    $('#ewo_table').bootstrapTable('refresh');
+    initTable(getProjectUid());
 }
 
-function initTable() {
+function initTable(projectUid) {
+    if (!checkIsSelectProject(projectUid)) {
+        return;
+    }
     var projectId = $("#project", window.top.document).val();
     var $table = $("#ewo_table");
     var column = [];
@@ -70,7 +77,7 @@ function initTable() {
         //         }
         //     })
         // },
-        url: "ewo/base/infoList?projectId=" + projectId,
+        url: "ewo/base/infoList?projectId=" + projectUid,
         method: 'get',
         height: $(window.parent.document).find("#wrapper").height() - 90,
         width: $(window).width(),

@@ -1,12 +1,23 @@
+/*
+ * Copyright (c) 2018.
+ * This file was wrote by fancyears·milos·maywas @connor. Any question/bug you can post to 1243093366@qq.com.
+ * ALL RIGHTS RESERVED.
+ */
+
 package sql.pojo.project;
 
 import com.connor.hozon.bom.bomSystem.service.project.IProject;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Date;
 
 /**
- * 品牌
+ * @Author: Fancyears·Maylos·Maywas
+ * @Description: 品牌
+ * @Date: Created in 2018/10/10 13:29
+ * @Modified By:
  */
 public class HzBrandRecord implements IProject{
     /**
@@ -38,6 +49,9 @@ public class HzBrandRecord implements IProject{
      */
     private String pBrandLastModifier;
 
+    @Getter
+    @Setter
+    private Long projectManagerId;
 
     @Override
     public String getCode() {

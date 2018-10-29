@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <!--User: xulf Date: 2018/7/30 Time: 15:51-->
 <head th:include="include/includebase"></head>
-<link th:href="@{/css/stage/bom-stage.css}" rel="stylesheet"/>
+<!--<link th:href="@{/css/stage/bom-stage.css}" rel="stylesheet"/>-->
 <link th:href="@{/css/autocomplete.css}" rel="stylesheet"/>
 <link th:href="@{/css/changeManage/vwo/vwoFromList.css}" rel="stylesheet"/>
 <!--<link th:href="@{/css/changeManage/ewo/ewoBasicInformation.css}" rel="stylesheet"/>-->
@@ -10,10 +10,25 @@
 <title>变更管理ewo</title>
 </head>
 <body>
+<!--<div class="head-btnSets">-->
+    <!--<button class="btn btn-success head-func-btn" style="margin-top: 100px;"-->
+            <!--id="vwoSaveBtn">保存-->
+    <!--</button>-->
+    <!--<button class="btn btn-success head-func-btn" style="margin-top: 150px;"-->
+            <!--id="release">发布-->
+    <!--</button>-->
+    <!--<button class="btn btn-success head-func-btn" style="margin-top: 200px;"-->
+            <!--id="interrupt">中断-->
+    <!--</button>-->
+    <!--<button class="btn btn-success head-func-btn" style="margin-top: 400px;"-->
+            <!--id="saveTask" onclick="saveTask()">保存任务-->
+    <!--</button>-->
+<!--</div>-->
 <!--1.基本信息-->
-<form id="basicForm" role="form" method="post" action="">
-    <h4><i class="fa fa-minus-square" aria-hidden="true">基本信息</i></h4>
-    <div class="panel-body" style="padding:0px;">
+<h4><i class="fa fa-minus-square" aria-hidden="true">基本信息</i></h4>
+<div class="panel-body" style="padding:0px;">
+    <form id="basicForm" role="form" method="post" action="">
+        <fieldset>
         <div class="panel panel-default" style="padding:0px;">
             <div class="panel-body" style="padding:0px;">
 
@@ -63,17 +78,19 @@
                     <div class="col-lg-2 col-md-2">
                         <div class="form-group after_the">
                             <label for="formCreateTime">创建时间:</label>
-                            <input type="text" class="form-control" name="formCreateTime" id="formCreateTime"
+                            <input type="text" class="form-control head-input-set" name="formCreateTime"
+                                   id="formCreateTime"
                                    th:value="${data.formCreateTime}" disabled="disabled"
-                                   placeholder="请输入创建时间"/>
+                                   placeholder="请输入创建时间"
+                            />
                         </div>
                         <div class="form-group after_the">
                             <label for="finishTime">要求完成时间:</label>
-                            <input class="form-control input-small" name="finishTime" id="finishTime"
-                                   th:value="${data.finishTime}"
-                                   placeholder="请输入要求完成时间"/>
+                            <input class="form-control head-input-set" name="finishTime" id="finishTime" type="date"
+                            th:attr="data-time=${data.getFinishTime()}"
+                            />
                         </div>
-                        <div class="form-group after_the">
+                        <div class=" form-group after_the">
                             <label for="platform">平台:</label>
                             <select class="form-control" name="platform" id="platform" placeholder="请选择平台">
                                 <option th:selected="${data.getPlatform()=='A平台'?true:false}">A平台</option>
@@ -164,9 +181,9 @@
                         </div>
                         <div class="form-group after_the">
                             <label for="effectTime">生效时间:</label>
-                            <input class="form-control input-small" name="effectTime" id="effectTime"
-                                   th:value="${data.effectTime}"
-                                   placeholder="请输入生效时间"/>
+                            <input class="form-control head-input-set" name="effectTime" id="effectTime"type="date"
+                                  th:attr="data-time=${data.getEffectTime()}"
+                                   />
                         </div>
                     </div>
 
@@ -205,40 +222,42 @@
                 </div>
             </div>
         </div>
-    </div>
-    <!--2.变更描述-->
-    <div class="panel-body" style="padding:0px;">
-        <div class="panel panel-default">
-            <div class="panel-body">
-                <div class="col-md-12 col-lg-12" style="padding:0px;">
-                    <div class="form-group after_the">
-                        <label for="changeDesc">变更描述:</label>
-                        <textarea rows="2" cols="30" id="changeDesc" name="changeDesc" class="form-control"
-                                  style="width: 100%;resize:none" placeholder="请输入变更描述"
-                                  th:text="${data.changeDesc}"></textarea>
-                    </div>
-                    <!--<div class="form-group after_the">-->
-                    <!--<label for="VWOnum1">变更前图片:</label>-->
-                    <!--<input type="file" class="form-control" name="level" id="EWOnum3"-->
-                    <!--placeholder=""/>-->
-                    <!--</div>-->
-                    <!--<div class="form-group after_the">-->
-                    <!--<label for="VWOnum1">变更后图片:</label>-->
-                    <!--<input type="file" class="form-control" name="level" id="EWOnum4"-->
-                    <!--placeholder=""/>-->
-                    <!--</div>-->
-                    <!--<div class="form-group after_the">-->
-                    <!--<label for="VWOnum1">附件:</label>-->
-                    <!--<input type="file" class="form-control" name="level" id="EWOnum5"-->
-                    <!--placeholder=""/>-->
-                    <!--</div>-->
+        </fieldset>
+    </form>
+</div>
+<!--2.变更描述-->
+<div class="panel-body" style="padding:0px;">
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="col-md-12 col-lg-12" style="padding:0px;">
+                <div class="form-group after_the">
+                    <label for="changeDesc">变更描述:</label>
+                    <textarea rows="2" cols="30" id="changeDesc" name="changeDesc" class="form-control"
+                              style="width: 100%;resize:none" placeholder="请输入变更描述"
+                              th:text="${data.changeDesc}"></textarea>
                 </div>
+                <!--<div class="form-group after_the">-->
+                <!--<label for="VWOnum1">变更前图片:</label>-->
+                <!--<input type="file" class="form-control" name="level" id="EWOnum3"-->
+                <!--placeholder=""/>-->
+                <!--</div>-->
+                <!--<div class="form-group after_the">-->
+                <!--<label for="VWOnum1">变更后图片:</label>-->
+                <!--<input type="file" class="form-control" name="level" id="EWOnum4"-->
+                <!--placeholder=""/>-->
+                <!--</div>-->
+                <!--<div class="form-group after_the">-->
+                <!--<label for="VWOnum1">附件:</label>-->
+                <!--<input type="file" class="form-control" name="level" id="EWOnum5"-->
+                <!--placeholder=""/>-->
+                <!--</div>-->
             </div>
         </div>
     </div>
-    <!--<div class="form-group">-->
-    <!--<button type="button" id="queryBtn" onclick="doSave();" class="btn btn-primary">保存</button>-->
-    <!--</div>-->
+</div>
+<!--<div class="form-group">-->
+<!--<button type="button" id="queryBtn" onclick="doSave();" class="btn btn-primary">保存</button>-->
+<!--</div>-->
 </form>
 <!--3.零件信息-->
 <h4><i class="fa fa-minus-square" aria-hidden="true">零件信息</i></h4>
@@ -2131,7 +2150,8 @@
         </div>
     </div>
 </div>
-<script th:src="@{/js/changeManage/ewo/ewoBasicInformation.js}"></script>
-<script th:src="@{/js/autocomplete.js}"></script>
+<script th:src="@{/js/helper/dateFormater.js}"></script>
+<script th:src="@{/js/changeManage/ewo/ewoBasic.js}"></script>
+<!--<script th:src="@{/js/autocomplete.js}"></script>-->
 </body>
 </html>

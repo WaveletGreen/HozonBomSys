@@ -1,7 +1,12 @@
 package com.connor.hozon.bom.bomSystem.dao.fullCfg;
 
 import sql.pojo.cfg.fullCfg.HzFcfgBomLvl1ListOperation;
-
+/**
+ * @Author: Fancyears·Maylos·Maywas
+ * @Description: 忘了
+ * @Date: Created in 2018/8/27 21:17
+ * @Modified By:
+ */
 @Deprecated
 public interface HzFcfgBomLvl1ListOperationDao {
     /**

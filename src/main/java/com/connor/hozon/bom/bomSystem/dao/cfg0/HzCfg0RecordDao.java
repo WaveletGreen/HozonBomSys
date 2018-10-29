@@ -1,7 +1,13 @@
+/*
+ * Copyright (c) 2018.
+ * This file was wrote by fancyears·milos·maywas @connor. Any question/bug you can post to 1243093366@qq.com.
+ * ALL RIGHTS RESERVED.
+ */
+
 package com.connor.hozon.bom.bomSystem.dao.cfg0;
 
 import com.connor.hozon.bom.bomSystem.dao.BasicDao;
-import com.connor.hozon.bom.bomSystem.dto.HzFeatureQueryDTO;
+import com.connor.hozon.bom.bomSystem.dto.HzFeatureQueryDto;
 import com.connor.hozon.bom.bomSystem.dto.HzMaterielFeatureBean;
 import org.apache.ibatis.annotations.Param;
 import sql.pojo.cfg.cfg0.HzCfg0Record;
@@ -9,7 +15,12 @@ import sql.pojo.cfg.cfg0.HzCfg0Record;
 import java.util.List;
 import java.util.Map;
 
-
+/**
+ * @Author: Fancyears·Maylos·Maywas
+ * @Description: 特性基础dao层
+ * @Date: Created in 2018/8/27 21:17
+ * @Modified By:
+ */
 public interface HzCfg0RecordDao extends BasicDao<HzCfg0Record> {
 
     /***
@@ -25,7 +36,7 @@ public interface HzCfg0RecordDao extends BasicDao<HzCfg0Record> {
      * @param queryBase
      * @return
      */
-    List<HzCfg0Record> selectListByProjectPuid(@Param("projectPuid") String projectPuid, HzFeatureQueryDTO queryBase);
+    List<HzCfg0Record> selectListByProjectPuid(@Param("projectPuid") String projectPuid, HzFeatureQueryDto queryBase);
 
 
     List<HzMaterielFeatureBean> selectMaterielFeatureByProjectPuid(@Param("projectPuid") String projectPuid);
@@ -84,13 +95,13 @@ public interface HzCfg0RecordDao extends BasicDao<HzCfg0Record> {
      * @param projectPuid
      * @return
      */
-    int tellMeHowManyOfThose(HzFeatureQueryDTO projectPuid);
+    int tellMeHowManyOfThose(HzFeatureQueryDto projectPuid);
 
     /**
      * @param queryBase
      * @return
      */
-    List<HzCfg0Record> selectByCondition(HzFeatureQueryDTO queryBase);
+    List<HzCfg0Record> selectByCondition(HzFeatureQueryDto queryBase);
 
     /**
      * 用HZCSYS+特性值（从颜色中来）查找一条车身颜色特性值
@@ -114,4 +125,8 @@ public interface HzCfg0RecordDao extends BasicDao<HzCfg0Record> {
      * @return
      */
     List<HzCfg0Record> selectByFamilyUidWithProject(String familyUid, String projectUid);
+
+    int updateList(List<HzCfg0Record> hzCfg0RecordList);
+
+    int updateByVwoid(HzCfg0Record hzCfg0Record);
 }

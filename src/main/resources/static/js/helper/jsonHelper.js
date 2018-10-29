@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2018.
+ * This file was wrote by fancyears·milos·maywas @connor. Any question/bug you can post to 1243093366@qq.com.
+ * ALL RIGHTS RESERVED.
+ */
+
 /**
  * 简单的获取JSON对象的长度
  * @param obj
@@ -13,6 +19,11 @@ function getLength(obj) {
     return result;
 }
 
+/**
+ * 获取当前JSON的长度
+ * @param obj
+ * @returns {number}
+ */
 function getLengthOfJson(obj){
     let result = 0;
     if (null != obj && undefined != obj)

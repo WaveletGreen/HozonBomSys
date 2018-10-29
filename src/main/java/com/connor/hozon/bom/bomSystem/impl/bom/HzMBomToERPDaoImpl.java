@@ -15,7 +15,12 @@ import sql.IBaseSQLUtil;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+/**
+ * @Author: Fancyears·Maylos·Maywas
+ * @Description: fuck
+ * @Date: Created in 2018/9/6 13:19
+ * @Modified By:
+ */
 @Configuration
 public class HzMBomToERPDaoImpl implements HzMBomToERPDao {
     @Autowired

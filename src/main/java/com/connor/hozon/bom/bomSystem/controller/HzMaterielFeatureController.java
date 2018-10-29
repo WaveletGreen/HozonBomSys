@@ -9,7 +9,7 @@ package com.connor.hozon.bom.bomSystem.controller;
 import com.connor.hozon.bom.bomSystem.controller.integrate.ExtraIntegrate;
 import com.connor.hozon.bom.bomSystem.dao.modelColor.HzCfg0ModelColorDao;
 import com.connor.hozon.bom.bomSystem.dao.derivative.HzCfg0ToModelRecordDao;
-import com.connor.hozon.bom.bomSystem.dto.HzFeatureQueryDTO;
+import com.connor.hozon.bom.bomSystem.dto.HzFeatureQueryDto;
 import com.connor.hozon.bom.bomSystem.dto.HzMaterielFeatureBean;
 import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
 import com.connor.hozon.bom.bomSystem.service.cfg.*;
@@ -47,10 +47,12 @@ import java.util.*;
 
 import static com.connor.hozon.bom.bomSystem.helper.StringHelper.checkString;
 
+
 /**
- * Created by Fancyears·Maylos·Mayways
- * Description:
- * Date: 2018/6/8 17:03
+ * @Author: Fancyears·Maylos·Maywas
+ * @Description:
+ * @Date: Created in 2018/8/30 18:53
+ * @Modified By:
  */
 @Controller
 @RequestMapping("/materiel")
@@ -492,7 +494,7 @@ public class HzMaterielFeatureController extends ExtraIntegrate {
     public String addVehicleModelPage(@RequestParam String projectPuid, Model model) {
         if (checkString(projectPuid)) {
             HzCfg0MainRecord hzCfg0MainRecord = hzCfg0MainService.doGetbyProjectPuid(projectPuid);
-            List<HzCfg0Record> cfg0s = hzCfg0Service.doLoadCfgListByProjectPuid(projectPuid, new HzFeatureQueryDTO());
+            List<HzCfg0Record> cfg0s = hzCfg0Service.doLoadCfgListByProjectPuid(projectPuid, new HzFeatureQueryDto());
             Map<String, List<HzCfg0Record>> _map = new HashMap<>();
             cfg0s.forEach(cfg -> {
                 String id = cfg.getpCfg0FamilyDesc() + "\t" + cfg.getpCfg0FamilyName();
@@ -534,7 +536,7 @@ public class HzMaterielFeatureController extends ExtraIntegrate {
 
 
             HzCfg0MainRecord hzCfg0MainRecord = hzCfg0MainService.doGetbyProjectPuid(projectPuid);
-            List<HzCfg0Record> cfg0s = hzCfg0Service.doLoadCfgListByProjectPuid(projectPuid, new HzFeatureQueryDTO());
+            List<HzCfg0Record> cfg0s = hzCfg0Service.doLoadCfgListByProjectPuid(projectPuid, new HzFeatureQueryDto());
             Map<String, List<HzCfg0Record>> _map = new HashMap<>();
             cfg0s.forEach(cfg -> {
                 String id = cfg.getpCfg0FamilyDesc() + "\t" + cfg.getpCfg0FamilyName();
