@@ -503,9 +503,9 @@ public class HzVwoManagerService implements IHzVWOManagerService {
         for (HzCfg0ModelColorDetail hzCfg0ModelColorDetail : hzCfg0ModelColorDetails) {
             HzCmcrDetailChange hzCmcrDetailChange1Query = new HzCmcrDetailChange();
             hzCmcrDetailChange1Query.setCmcrDetailSrcCfgMainUid(hzCfg0ModelColorDetail.getCfgMainUid());
-            hzCmcrDetailChange1Query.setCmcrDetailSrcPuid(hzCfg0ModelColorDetail.getModelUid());
-
+            hzCmcrDetailChange1Query.setCmcrDetailSrcPuid(hzCfg0ModelColorDetail.getPuid());
             hzCmcrDetailChange1Query.setCmcrDetailSrcModelPuid(hzCfg0ModelColorDetail.getModelUid());
+
             if (hzCfg0ModelColorDetail.getCfgUid() != null) {
                 HzCfg0OptionFamily hzCfg0OptionFamilyQuery = new HzCfg0OptionFamily();
                 hzCfg0OptionFamilyQuery.setPuid(hzCfg0ModelColorDetail.getCfgUid());
@@ -670,6 +670,12 @@ public class HzVwoManagerService implements IHzVWOManagerService {
 
         //跟新数据库
         try {
+
+            //跟新源主数据
+            if (hzCfg0ModelColorDao.updateListData(hzCfg0ModelColors) <= 0) {
+                result.put("status", false);
+                result.put("msg", "跟新源主数据失败");
+            }
             //跟新变更后主数据
             if (hzCmcrChangeDao.insertAfterList(hzCmcrChangesAfter) != hzCmcrChangesAfter.size()) {
                 result.put("status", false);
@@ -698,11 +704,7 @@ public class HzVwoManagerService implements IHzVWOManagerService {
             result.put("status", false);
             result.put("msg", e.getMessage());
         }
-        //跟新源主数据
-        if (hzCfg0ModelColorDao.updateListData(hzCfg0ModelColors) <= 0) {
-            result.put("status", false);
-            result.put("msg", "跟新源主数据失败");
-        }
+
         //新增VWO数据
 
         if (result.get("status") == null) {
@@ -2011,9 +2013,9 @@ public class HzVwoManagerService implements IHzVWOManagerService {
             //变更后行
             Map<String,String> afterMap = new HashMap<>();
             //变更前主数据
-            beforMap.put("codeOfColorModel",hzCmcrChangeListBefor.get(i).getCmcrSrcCodeOfColorMod() == null ? "-" : hzCmcrChangeListBefor.get(i).getCmcrSrcCodeOfColorMod());
-            beforMap.put("descOfColorModel",hzCmcrChangeListBefor.get(i).getCmcrSrcDescOfColorMod() == null ? "-" : hzCmcrChangeListBefor.get(i).getCmcrSrcDescOfColorMod());
-            beforMap.put("modelShell",hzCmcrChangeListBefor.get(i).getCmcrCgShellCode() == null ? "-" : hzCmcrChangeListBefor.get(i).getCmcrCgShellCode());
+            beforMap.put("codeOfColorModel",hzCmcrChangeListBefor.get(i).getCmcrSrcCodeOfColorMod() == null ? "" : hzCmcrChangeListBefor.get(i).getCmcrSrcCodeOfColorMod());
+            beforMap.put("descOfColorModel",hzCmcrChangeListBefor.get(i).getCmcrSrcDescOfColorMod() == null ? "" : hzCmcrChangeListBefor.get(i).getCmcrSrcDescOfColorMod());
+            beforMap.put("modelShell",hzCmcrChangeListBefor.get(i).getCmcrCgShellCode() == null ? "" : hzCmcrChangeListBefor.get(i).getCmcrCgShellCode());
             //变更后主数据
             afterMap.put("codeOfColorModel",hzCmcrChangeListAfter.get(i).getCmcrSrcCodeOfColorMod() == null ? "-" : hzCmcrChangeListAfter.get(i).getCmcrSrcCodeOfColorMod());
             afterMap.put("descOfColorModel",hzCmcrChangeListAfter.get(i).getCmcrSrcDescOfColorMod() == null ? "-" : hzCmcrChangeListAfter.get(i).getCmcrSrcDescOfColorMod());

@@ -72,7 +72,7 @@
       #{cmcrDetailCgCreateDate,jdbcType=TIMESTAMP}, #{cmcrDetailCgCreator,jdbcType=OTHER}, 
       #{cmcrDetailCgUpdateDate,jdbcType=TIMESTAMP}, #{cmcrDetailCgUpdater,jdbcType=OTHER}, 
       #{cmcrDetailCgReverse1,jdbcType=VARCHAR}, #{cmcrDetailCgIsColorful,jdbcType=VARCHAR},
-      #{cmcrDetailCgReverse3,jdbcType=VARCHAR}, #{cmcrDetailCgReverse4,jdbcType=VARCHAR}, 
+      #{cmcrDetailCgReverse3,jdbcType=VARCHAR}, #{cmcrDetailCgReverse4,jdbcType=VARCHAR},
       #{cmcrDetailCgReverse5,jdbcType=VARCHAR}, #{cmcrDetailSrcPuid,jdbcType=VARCHAR}, 
       #{cmcrDetailSrcCfgUid,jdbcType=VARCHAR}, #{cmcrDetailSrcColorUid,jdbcType=VARCHAR}, 
       #{cmcrDetailSrcCfgMainUid,jdbcType=VARCHAR}, #{cmcrDetailSrcCreateDate,jdbcType=TIMESTAMP}, 
