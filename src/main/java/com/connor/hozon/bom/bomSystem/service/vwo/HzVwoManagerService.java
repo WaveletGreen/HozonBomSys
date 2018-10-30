@@ -503,7 +503,7 @@ public class HzVwoManagerService implements IHzVWOManagerService {
         for (HzCfg0ModelColorDetail hzCfg0ModelColorDetail : hzCfg0ModelColorDetails) {
             HzCmcrDetailChange hzCmcrDetailChange1Query = new HzCmcrDetailChange();
             hzCmcrDetailChange1Query.setCmcrDetailSrcCfgMainUid(hzCfg0ModelColorDetail.getCfgMainUid());
-            hzCmcrDetailChange1Query.setCmcrDetailSrcPuid(hzCfg0ModelColorDetail.getModelUid());
+            hzCmcrDetailChange1Query.setCmcrDetailSrcPuid(hzCfg0ModelColorDetail.getPuid());
 
             hzCmcrDetailChange1Query.setCmcrDetailSrcModelPuid(hzCfg0ModelColorDetail.getModelUid());
             if (hzCfg0ModelColorDetail.getCfgUid() != null) {
@@ -670,15 +670,20 @@ public class HzVwoManagerService implements IHzVWOManagerService {
 
         //跟新数据库
         try {
+            //跟新源主数据
+            if (hzCfg0ModelColorDao.updateListData(hzCfg0ModelColors) <= 0) {
+                result.put("status", false);
+                result.put("msg", "跟新源主数据失败");
+            }
             //跟新变更后主数据
             if (hzCmcrChangeDao.insertAfterList(hzCmcrChangesAfter) != hzCmcrChangesAfter.size()) {
                 result.put("status", false);
-                result.put("msg", "跟变更后主数据失败");
+                result.put("msg", "变更后主数据失败");
             }
             //跟新变更后从数据
             if (hzCmcrDetailChangeDao.insertDetailAfterList(hzCmcrDetailChangesAfter) != hzCmcrDetailChangesAfter.size()) {
                 result.put("status", false);
-                result.put("msg", "跟变更后从数据失败");
+                result.put("msg", "变更后从数据失败");
             }
 //            //跟新变更前主数据
 //            if (hzCmcrChangesLastAfter != null && hzCmcrChangesLastAfter.size() != 0) {
@@ -697,11 +702,6 @@ public class HzVwoManagerService implements IHzVWOManagerService {
         } catch (Exception e) {
             result.put("status", false);
             result.put("msg", e.getMessage());
-        }
-        //跟新源主数据
-        if (hzCfg0ModelColorDao.updateListData(hzCfg0ModelColors) <= 0) {
-            result.put("status", false);
-            result.put("msg", "跟新源主数据失败");
         }
         //新增VWO数据
 
@@ -1895,49 +1895,9 @@ public class HzVwoManagerService implements IHzVWOManagerService {
         //无序变更前后数据
         List<HzCmcrDetailChange> hzCmcrDetailChangeListBefor = new ArrayList<>();
         List<HzCmcrDetailChange> hzCmcrDetailChangeListAfter = new ArrayList<HzCmcrDetailChange>();
-        //顺序对应title变更前后数据
-        List<HzCmcrDetailChange> hzCmcrDetailChangeListBeforWithTitle = new ArrayList<HzCmcrDetailChange>();
-        List<HzCmcrDetailChange> hzCmcrDetailChangeListAfterWithTitle = new ArrayList<HzCmcrDetailChange>();
         Set<String> titleSet = new LinkedHashSet<>();
-        //查询变更前从数据（vwo号小于变更后的vwo号）
-        hzCmcrDetailChangeListBefor = hzCmcrDetailChangeDao.doQueryCmcrDetailChangBefor(vwoId);
-        //查不到则是第一次变更，vwo号相同
-        if (hzCmcrDetailChangeListBefor == null || hzCmcrDetailChangeListBefor.size() == 0) {
-            //查询变更前从数据
-            hzCmcrDetailChangeListBefor = hzCmcrDetailChangeDao.doQueryCmcrDetailChangFirst(vwoId, 1);
-            //查询变更后从数据
-            hzCmcrDetailChangeListAfter = hzCmcrDetailChangeDao.doQueryCmcrDetailChangFirstAfter(vwoId);
-        } else {
-            //查询变更后从数据
-            hzCmcrDetailChangeListAfter = hzCmcrDetailChangeDao.doQueryCmcrDetailChangFirst(vwoId, 0);
-        }
-        //srcPuid为key的变更前从数据
-        Map<String, List<HzCmcrDetailChange>> srcPuidBeforMap = new HashMap<String, List<HzCmcrDetailChange>>();
-        //srcPuid为key的变更后从数据
-        Map<String, List<HzCmcrDetailChange>> srcPuidAfterMap = new HashMap<String, List<HzCmcrDetailChange>>();
 
-        for (HzCmcrDetailChange hzCmcrDetailChange : hzCmcrDetailChangeListBefor) {
-            //将变更前所有title放入set
-            if(hzCmcrDetailChange.getCmcrDetailCgIsColorful()!=null&&hzCmcrDetailChange.getCmcrDetailCgIsColorful()==1) {
-                titleSet.add(hzCmcrDetailChange.getCmcrDetailCgTitle());
-            }
-            //根据源主数据将变更前从数据分开
-            if (srcPuidBeforMap.get(hzCmcrDetailChange.getCmcrDetailSrcModelPuid()) == null) {
-                srcPuidBeforMap.put(hzCmcrDetailChange.getCmcrDetailSrcModelPuid(), new ArrayList<HzCmcrDetailChange>());
-            }
-            srcPuidBeforMap.get(hzCmcrDetailChange.getCmcrDetailSrcModelPuid()).add(hzCmcrDetailChange);
-        }
-        for (HzCmcrDetailChange hzCmcrDetailChange : hzCmcrDetailChangeListAfter) {
-            //将变更后所有title放入set
-            if(hzCmcrDetailChange.getCmcrDetailCgIsColorful()!=null&&hzCmcrDetailChange.getCmcrDetailCgIsColorful()==1) {
-                titleSet.add(hzCmcrDetailChange.getCmcrDetailCgTitle());
-            }
-            //根据源主数据将变更后从数据分开
-            if (srcPuidAfterMap.get(hzCmcrDetailChange.getCmcrDetailSrcModelPuid()) == null) {
-                srcPuidAfterMap.put(hzCmcrDetailChange.getCmcrDetailSrcModelPuid(), new ArrayList<HzCmcrDetailChange>());
-            }
-            srcPuidAfterMap.get(hzCmcrDetailChange.getCmcrDetailSrcModelPuid()).add(hzCmcrDetailChange);
-        }
+
         List<HzCmcrChange> hzCmcrChangeListBefor = null;
         List<HzCmcrChange> hzCmcrChangeListAfter = null;
         //查询变更前主数据（vwo号小于变更后的vwo号）
@@ -1951,6 +1911,60 @@ public class HzVwoManagerService implements IHzVWOManagerService {
             //查询变更后主数据
             hzCmcrChangeListAfter = hzCmcrChangeDao.doQueryCmcrChangeAfter(vwoId);
         }
+
+        for(int i=0;i<hzCmcrChangeListBefor.size();i++) {
+            List<HzCmcrDetailChange> beforChange = new ArrayList<>();
+            List<HzCmcrDetailChange> afterChange = new ArrayList<HzCmcrDetailChange>();
+            //查询变更前从数据（vwo号小于变更后的vwo号）
+            beforChange = hzCmcrDetailChangeDao.doQueryCmcrDetailChangBefor(hzCmcrChangeListBefor.get(i));
+            //查不到则是第一次变更，vwo号相同
+            if (beforChange == null || beforChange.size() == 0) {
+                //查询变更前从数据
+                beforChange = hzCmcrDetailChangeDao.doQueryCmcrDetailChangFirst(hzCmcrChangeListBefor.get(i));
+                //查询变更后从数据
+                afterChange = hzCmcrDetailChangeDao.doQueryCmcrDetailChangFirstAfter(hzCmcrChangeListAfter.get(i));
+            } else {
+                //查询变更后从数据
+                afterChange = hzCmcrDetailChangeDao.doQueryCmcrDetailChangAfter(hzCmcrChangeListAfter.get(i));
+            }
+            for(HzCmcrDetailChange hzCmcrDetailChange : beforChange){
+                hzCmcrDetailChangeListBefor.add(hzCmcrDetailChange);
+            }
+            for(HzCmcrDetailChange  hzCmcrDetailChange : afterChange){
+                hzCmcrDetailChangeListAfter.add(hzCmcrDetailChange);
+            }
+        }
+        //srcPuid为key的变更前从数据
+        Map<String, List<HzCmcrDetailChange>> srcPuidBeforMap = new HashMap<String, List<HzCmcrDetailChange>>();
+        //srcPuid为key的变更后从数据
+        Map<String, List<HzCmcrDetailChange>> srcPuidAfterMap = new HashMap<String, List<HzCmcrDetailChange>>();
+
+        for (HzCmcrDetailChange hzCmcrDetailChange : hzCmcrDetailChangeListBefor) {
+            //将变更前所有title放入set
+            if(hzCmcrDetailChange.getCmcrDetailCgIsColorful()==null||hzCmcrDetailChange.getCmcrDetailCgIsColorful()==0) {
+                continue;
+            }
+            titleSet.add(hzCmcrDetailChange.getCmcrDetailCgTitle());
+            //根据源主数据将变更前从数据分开
+            if (srcPuidBeforMap.get(hzCmcrDetailChange.getCmcrDetailSrcModelPuid()) == null) {
+                srcPuidBeforMap.put(hzCmcrDetailChange.getCmcrDetailSrcModelPuid(), new ArrayList<HzCmcrDetailChange>());
+            }
+            srcPuidBeforMap.get(hzCmcrDetailChange.getCmcrDetailSrcModelPuid()).add(hzCmcrDetailChange);
+        }
+        for (HzCmcrDetailChange hzCmcrDetailChange : hzCmcrDetailChangeListAfter) {
+            //将变更后所有title放入set
+            if(hzCmcrDetailChange.getCmcrDetailCgIsColorful()==null||hzCmcrDetailChange.getCmcrDetailCgIsColorful()==0) {
+                continue;
+            }
+            titleSet.add(hzCmcrDetailChange.getCmcrDetailCgTitle());
+            //根据源主数据将变更后从数据分开
+            if (srcPuidAfterMap.get(hzCmcrDetailChange.getCmcrDetailSrcModelPuid()) == null) {
+                srcPuidAfterMap.put(hzCmcrDetailChange.getCmcrDetailSrcModelPuid(), new ArrayList<HzCmcrDetailChange>());
+            }
+            srcPuidAfterMap.get(hzCmcrDetailChange.getCmcrDetailSrcModelPuid()).add(hzCmcrDetailChange);
+        }
+
+
         //titel数据Map
 //        List<Map<String, String>> result = new ArrayList<>();
 
