@@ -109,6 +109,14 @@
         from ${tableName}
         where VWO_ID = #{vwoId,jdbcType=DECIMAL}
     </select>
+    <select id="selectCfgUidsByVwoId" parameterType="sql.pojo.cfg.vwo.HzFeatureChangeBean" resultMap="BaseResultMap">
+        select distinct(temp.CFG_PUID) from (
+            select distinct(t.cfg_puid) CFG_PUID,t.id from
+              HZ_CFG0_AFTER_CHANGE_RECORD t
+                where t.VWO_ID = #{vwoId,jdbcType=DECIMAL}
+                and t.cfg_puid is not null
+                order by t.id) temp
+    </select>
 
 
     <!--查询区域内最大的VWO号-->
@@ -219,42 +227,62 @@
     </update>
 
     <insert id="insertList" parameterType="java.util.List">
-          insert into
-            ${tableName}
-          (<include refid="Base_Column_List"/>)
-            select ${seqName}.Nextval, A.* from(
-            <foreach collection="hzFeatureChangeBeans" index="index" item="hzFeatureChangeBean" separator="union">
-                select
-                    #{hzFeatureChangeBean.featureValueName,jdbcType=VARCHAR},
-                    #{hzFeatureChangeBean.featureValueDesc,jdbcType=VARCHAR},
-                    #{hzFeatureChangeBean.featureName,jdbcType=VARCHAR},
-                    #{hzFeatureChangeBean.featurePuid,jdbcType=VARCHAR},
-                    #{hzFeatureChangeBean.cfg0MainItemPuid,jdbcType=VARCHAR},
-                    #{hzFeatureChangeBean.h9featureenname,jdbcType=VARCHAR},
-                    #{hzFeatureChangeBean.featureDesc,jdbcType=VARCHAR},
-                    #{hzFeatureChangeBean.cfg0Relevance,jdbcType=VARCHAR},
-                    #{hzFeatureChangeBean.featureCreator,jdbcType=VARCHAR},
-                    #{hzFeatureChangeBean.featureCreateDate,jdbcType=TIMESTAMP},
-                    #{hzFeatureChangeBean.featureLastModifier,jdbcType=VARCHAR},
-                    #{hzFeatureChangeBean.featureLastModifyDate,jdbcType=TIMESTAMP},
-                    #{hzFeatureChangeBean.isFeatureSent,jdbcType=DECIMAL},
-                    #{hzFeatureChangeBean.isRelevanceSent,jdbcType=DECIMAL},
-                    #{hzFeatureChangeBean.cfgEffectedDate,jdbcType=TIMESTAMP},
-                    #{hzFeatureChangeBean.cfgAbolishDate,jdbcType=TIMESTAMP},
-                    #{hzFeatureChangeBean.cfgStatus,jdbcType=DECIMAL},
-                    #{hzFeatureChangeBean.cfgIsInProcess,jdbcType=DECIMAL},
-                    #{hzFeatureChangeBean.cfgPuid,jdbcType=VARCHAR},
-                    #{hzFeatureChangeBean.processStartDate,jdbcType=TIMESTAMP},
-                    #{hzFeatureChangeBean.processStarter,jdbcType=VARCHAR},
-                    #{hzFeatureChangeBean.processFinishDate,jdbcType=TIMESTAMP},
-                    #{hzFeatureChangeBean.processFinisher,jdbcType=VARCHAR},
-                    #{hzFeatureChangeBean.processStatus,jdbcType=INTEGER},
-                    #{hzFeatureChangeBean.changeCreateDate,jdbcType=TIMESTAMP},
-                    #{hzFeatureChangeBean.vwoId,jdbcType=DECIMAL}
-                from
-                  dual
-            </foreach>
-          )A
+        insert into
+        ${tableName}
+        (<include refid="Base_Column_List"/>)
+        select ${seqName}.Nextval, A.* from(
+        <foreach collection="hzFeatureChangeBeans" index="index" item="hzFeatureChangeBean" separator="union all">
+            select
+            #{hzFeatureChangeBean.featureValueName,jdbcType=VARCHAR},
+            #{hzFeatureChangeBean.featureValueDesc,jdbcType=VARCHAR},
+            #{hzFeatureChangeBean.featureName,jdbcType=VARCHAR},
+            #{hzFeatureChangeBean.featurePuid,jdbcType=VARCHAR},
+            #{hzFeatureChangeBean.cfg0MainItemPuid,jdbcType=VARCHAR},
+            #{hzFeatureChangeBean.h9featureenname,jdbcType=VARCHAR},
+            #{hzFeatureChangeBean.featureDesc,jdbcType=VARCHAR},
+            #{hzFeatureChangeBean.cfg0Relevance,jdbcType=VARCHAR},
+            #{hzFeatureChangeBean.featureCreator,jdbcType=VARCHAR},
+            #{hzFeatureChangeBean.featureCreateDate,jdbcType=TIMESTAMP},
+            #{hzFeatureChangeBean.featureLastModifier,jdbcType=VARCHAR},
+            #{hzFeatureChangeBean.featureLastModifyDate,jdbcType=TIMESTAMP},
+            #{hzFeatureChangeBean.isFeatureSent,jdbcType=DECIMAL},
+            #{hzFeatureChangeBean.isRelevanceSent,jdbcType=DECIMAL},
+            #{hzFeatureChangeBean.cfgEffectedDate,jdbcType=TIMESTAMP},
+            #{hzFeatureChangeBean.cfgAbolishDate,jdbcType=TIMESTAMP},
+            #{hzFeatureChangeBean.cfgStatus,jdbcType=DECIMAL},
+            #{hzFeatureChangeBean.cfgIsInProcess,jdbcType=DECIMAL},
+            #{hzFeatureChangeBean.cfgPuid,jdbcType=VARCHAR},
+            #{hzFeatureChangeBean.processStartDate,jdbcType=TIMESTAMP},
+            #{hzFeatureChangeBean.processStarter,jdbcType=VARCHAR},
+            #{hzFeatureChangeBean.processFinishDate,jdbcType=TIMESTAMP},
+            #{hzFeatureChangeBean.processFinisher,jdbcType=VARCHAR},
+            #{hzFeatureChangeBean.processStatus,jdbcType=INTEGER},
+            #{hzFeatureChangeBean.changeCreateDate,jdbcType=TIMESTAMP},
+            #{hzFeatureChangeBean.vwoId,jdbcType=DECIMAL}
+            from
+            dual
+        </foreach>
+        )A
 
     </insert>
+
+    <select id="doQueryLastTwoChange" parameterType="sql.pojo.cfg.vwo.HzFeatureChangeBean" resultMap="BaseResultMap">
+        select
+          <include refid="Base_Column_List"/>
+        from(
+          select
+              <include refid="Base_Column_List"/>,ROWNUM rn
+          from
+              HZ_CFG0_AFTER_CHANGE_RECORD t
+          WHERE
+              t.CFG_PUID=#{cfgPuid,jdbcType=VARCHAR}
+          and
+              t.VWO_ID &lt;= #{vwoId,jdbcType=INTEGER}
+          ORDER BY t.id DESC
+        ) te
+        where
+          te.rn &lt; 3
+        order by
+          te.id
+    </select>
 </mapper>

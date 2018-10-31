@@ -167,14 +167,14 @@
             bootstrapValidator.validate();
             if(bootstrapValidator.isValid()){
                 $.post($("#userForm",window.top.document).attr('action'),$("#userForm",window.top.document).serialize(),function(e){
+                    $('.modal-dialog', window.top.document).parent('div').remove()
+                    $('body', window.top.document).find('.modal-backdrop').remove();
+                    // jquery 调用刷新当前操作的table页面的refresh方法
+                    $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
                     if(e.result){
-                        $('.modal-dialog', window.top.document).parent('div').remove()
-                        $('body', window.top.document).find('.modal-backdrop').remove();
-                        // jquery 调用刷新当前操作的table页面的refresh方法
-                        $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
-                        window.Ewin.alert({message:'修改数据成功!'});
+                        layer.msg('修改成功', {icon: 1, time: 2000})
                     }else{
-                        window.Ewin.alert({message:'修改数据失败!'});
+                        window.Ewin.alert({message:e.msg});
                     }
                 })
             }

@@ -9,17 +9,18 @@
                 <input type="text" class="form-control" name="userName" id="userName"  placeholder="请输入名字" />
             </div>
             <div class="form-group">
-                <label for="login">账号:</label>
+                <label for="login">账号/登录名:</label>
                 <input type="text" class="form-control" name="login" id="login"  placeholder="请输入账号" />
             </div>
+
             <div class="form-group" >
-                <label for="password">密码:</label>
-                <input type="password" class="form-control" name="password" id="password"  placeholder="请输入密码" />
+                <label for="password">密码(初始密码:123456):</label>
+                <input type="password" class="form-control" name="password" id="password" value="123456"  disabled />
             </div>
-            <div class="form-group" >
-                <label for="repassword">核对密码:</label>
-                <input type="password" class="form-control" name="repassword" id="repassword"  placeholder="请输入密码" />
-            </div>
+            <!--<div class="form-group" >-->
+                <!--<label for="repassword">核对密码:</label>-->
+                <!--<input type="password" class="form-control" name="repassword" id="repassword"  placeholder="请输入密码" />-->
+            <!--</div>-->
             <!--<div id="distpicker" class="form-inline">
                 <label for="province">省:</label>
                 <select name="province" id="province" class="form-control"></select>
@@ -49,6 +50,13 @@
         <div class="col-md-3" style="margin-top: 10px;display: none;">
             <ul id="groupZtree" class="ztree" style="width:200px; overflow:auto;"></ul>
         </div>
+    </div>
+
+    <br>
+    <div class="form-group" style="color: #0f0f0f">
+        <label>温馨提醒:</label>
+        <p>1.所有用户的初始密码为:<strong>123456</strong></p>
+        <p>2.创建账号后,请及时修改密码</p>
     </div>
 </form>
 <script th:inline="javascript">
@@ -100,69 +108,70 @@
                         }
                     }
                 },
-                password: {
-                    message:'密码无效',
-                    validators: {
-                        notEmpty: {
-                            message: '密码不能为空'
-                        },
-                        stringLength: {
-                            min: 6,
-                            max: 30,
-                            message: '用户名长度必须在6到30之间'
-                        },
-                        identical: {//相同
-                            field: 'password', //需要进行比较的input name值
-                            message: '两次密码不一致'
-                        },
-                        different: {//不能和用户名相同
-                            field: 'login',//需要进行比较的input name值
-                            message: '不能和用户名相同'
-                        },
-                        regexp: {
-                            regexp: /^[a-zA-Z0-9_\.]+$/,
-                            message: '密码必须是数字字母和下划线不能有特殊符号！'
-                        }
-                    }
-                },
-                repassword: {
-                    message: '密码无效',
-                    validators: {
-                        notEmpty: {
-                            message: '密码不能为空'
-                        },
-                        stringLength: {
-                            min: 6,
-                            max: 30,
-                            message: '用户名长度必须在6到30之间'
-                        },
-                        identical: {//相同
-                            field: 'password',
-                            message: '两次密码不一致'
-                        },
-                        different: {//不能和用户名相同
-                            field: 'login',
-                            message: '不能和用户名相同'
-                        },
-                        regexp: {//匹配规则
-                            regexp: /^[a-zA-Z0-9_\.]+$/,
-                            message: '密码必须是数字字母和下划线不能有特殊符号！'
-                        }
-                    }
-                },
-                streetAddress:{
-                    message: '街道地址无效',
-                    validators: {
-                        notEmpty: {
-                            message: '街道地址不能为空'
-                        },
-                        stringLength: {
-                            min: 6,
-                            max: 30,
-                            message: '街道地址长度必须在6到30之间'
-                        }
-                    }
-                },
+
+                // password: {
+                //     message:'密码无效',
+                //     validators: {
+                //         notEmpty: {
+                //             message: '密码不能为空'
+                //         },
+                //         stringLength: {
+                //             min: 6,
+                //             max: 30,
+                //             message: '用户名长度必须在6到30之间'
+                //         },
+                //         identical: {//相同
+                //             field: 'password', //需要进行比较的input name值
+                //             message: '两次密码不一致'
+                //         },
+                //         different: {//不能和用户名相同
+                //             field: 'login',//需要进行比较的input name值
+                //             message: '不能和用户名相同'
+                //         },
+                //         regexp: {
+                //             regexp: /^[a-zA-Z0-9_\.]+$/,
+                //             message: '密码必须是数字字母和下划线不能有特殊符号！'
+                //         }
+                //     }
+                // },
+                // repassword: {
+                //     message: '密码无效',
+                //     validators: {
+                //         notEmpty: {
+                //             message: '密码不能为空'
+                //         },
+                //         stringLength: {
+                //             min: 6,
+                //             max: 30,
+                //             message: '用户名长度必须在6到30之间'
+                //         },
+                //         identical: {//相同
+                //             field: 'password',
+                //             message: '两次密码不一致'
+                //         },
+                //         different: {//不能和用户名相同
+                //             field: 'login',
+                //             message: '不能和用户名相同'
+                //         },
+                //         regexp: {//匹配规则
+                //             regexp: /^[a-zA-Z0-9_\.]+$/,
+                //             message: '密码必须是数字字母和下划线不能有特殊符号！'
+                //         }
+                //     }
+                // },
+                // streetAddress:{
+                //     message: '街道地址无效',
+                //     validators: {
+                //         notEmpty: {
+                //             message: '街道地址不能为空'
+                //         },
+                //         stringLength: {
+                //             min: 6,
+                //             max: 30,
+                //             message: '街道地址长度必须在6到30之间'
+                //         }
+                //     }
+                // },
                 job : {
                     message: '职位无效',
                     validators: {
@@ -224,14 +233,14 @@
             bootstrapValidator.validate();
             if(bootstrapValidator.isValid()){
                 $.post($("#userForm",window.top.document).attr('action'),$("#userForm",window.top.document).serialize(),function(e){
+                    $('.modal-dialog', window.top.document).parent('div').remove()
+                    $('body', window.top.document).find('.modal-backdrop').remove();
+                    // jquery 调用刷新当前操作的table页面的refresh方法
+                    $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
                     if(e.result){
-                        $('.modal-dialog', window.top.document).parent('div').remove()
-                        $('body', window.top.document).find('.modal-backdrop').remove();
-                        // jquery 调用刷新当前操作的table页面的refresh方法
-                        $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
-                        window.Ewin.alert({message:'增加数据成功!'});
+                        layer.msg('操作成功', {icon: 1, time: 2000})
                     }else{
-                        window.Ewin.alert({message:'增加数据失败!'});
+                        window.Ewin.alert({message:e.msg});
                     }
                 })
             }

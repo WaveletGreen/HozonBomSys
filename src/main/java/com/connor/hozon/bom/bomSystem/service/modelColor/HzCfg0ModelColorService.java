@@ -470,10 +470,11 @@ public class HzCfg0ModelColorService {
      *
      * @param colors    需发起VWO流程的配色方案
      * @param projectPuid   项目ID
+     * @param dynamicTitle
      * @return
      */
-    public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid) {
-        return hzVwoManagerService.getVWO(colors,projectPuid);
+    public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, ArrayList<String> dynamicTitle) {
+        return hzVwoManagerService.getVWO(colors,projectPuid,dynamicTitle);
     }
 
 

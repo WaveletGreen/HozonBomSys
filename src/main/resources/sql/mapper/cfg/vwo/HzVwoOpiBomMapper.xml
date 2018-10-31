@@ -20,7 +20,7 @@
         <result column="OPI_BOM_MNG_UPDATER" jdbcType="VARCHAR" property="opiBomMngUpdater"/>
         <result column="OPI_BOM_MNG_STAGE" jdbcType="DECIMAL" property="opiBomMngStage"/>
         <result column="OPI_BOM_USER_ID" jdbcType="DECIMAL" property="opiBomMngUserId"/>
-        <result column="OPI_BOM_USER_NAME" jdbcType="DECIMAL" property="opiBomMngUserName"/>
+        <result column="OPI_BOM_USER_NAME" jdbcType="VARCHAR" property="opiBomMngUserName"/>
     </resultMap>
     <sql id="Base_Column_List">
     ID, OPI_VWO_ID, OPI_BOM_MNG_OPINION, OPI_BOM_MNG_AGREEMENT, OPI_BOM_MNG_OPTION_DATE, 
@@ -55,12 +55,13 @@
       OPI_BOM_MNG_AGREEMENT, OPI_BOM_MNG_OPTION_DATE,
       OPI_BOM_MNG_COMMENT, OPI_BOM_MNG_CREATE_DATE,
       OPI_BOM_MNG_UPDATE_DATE, OPI_BOM_MNG_CREATOR,
-      OPI_BOM_MNG_UPDATER, OPI_BOM_MNG_STAGE)
+      OPI_BOM_MNG_UPDATER, OPI_BOM_MNG_STAGE,OPI_BOM_USER_ID,OPI_BOM_USER_NAME)
     values (#{id,jdbcType=DECIMAL}, #{opiVwoId,jdbcType=DECIMAL}, #{opiBomMngOpinion,jdbcType=VARCHAR},
       #{opiBomMngAgreement,jdbcType=DECIMAL}, #{opiBomMngOptionDate,jdbcType=TIMESTAMP},
       #{opiBomMngComment,jdbcType=VARCHAR}, #{opiBomMngCreateDate,jdbcType=TIMESTAMP},
       #{opiBomMngUpdateDate,jdbcType=TIMESTAMP}, #{opiBomMngCreator,jdbcType=VARCHAR},
-      #{opiBomMngUpdater,jdbcType=VARCHAR}, #{opiBomMngStage,jdbcType=DECIMAL})
+      #{opiBomMngUpdater,jdbcType=VARCHAR}, #{opiBomMngStage,jdbcType=DECIMAL},
+      #{opiBomMngUserId,jdbcType=DECIMAL},#{opiBomMngUserName,jdbcType=VARCHAR})
   </insert>
     <insert id="insertSelective" parameterType="sql.pojo.cfg.vwo.HzVwoOpiBom">
         <selectKey order="BEFORE"
@@ -102,6 +103,12 @@
             <if test="opiBomMngStage != null">
                 OPI_BOM_MNG_STAGE,
             </if>
+            <if test="opiBomMngUserId != null">
+                OPI_BOM_USER_ID,
+            </if>
+            <if test="opiBomMngUserName != null">
+                OPI_BOM_USER_NAME,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -137,6 +144,12 @@
             <if test="opiBomMngStage != null">
                 #{opiBomMngStage,jdbcType=DECIMAL},
             </if>
+            <if test="opiBomMngUserId != null">
+                #{opiBomMngUserId,jdbcType=DECIMAL},
+            </if>
+            <if test="opiBomMngUserName != null">
+                #{opiBomMngUserName,jdbcType=VARCHAR},
+            </if>
         </trim>
     </insert>
     <!--**************************************update**************************************-->
@@ -170,8 +183,14 @@
             <if test="opiBomMngStage != null">
                 OPI_BOM_MNG_STAGE = #{opiBomMngStage,jdbcType=DECIMAL},
             </if>
+            <if test="opiBomMngUserId != null">
+                OPI_BOM_USER_ID  = #{opiBomMngUserId,jdbcType=DECIMAL},
+            </if>
+            <if test="opiBomMngUserName != null">
+                OPI_BOM_USER_NAME = #{opiBomMngUserName,jdbcType=VARCHAR},
+            </if>
+            OPI_BOM_MNG_UPDATE_DATE = sysdate
         </set>
-            ,OPI_BOM_MNG_UPDATE_DATE = sysdate
         where ID = #{id,jdbcType=DECIMAL}
     </update>
     <update id="updateByPrimaryKey" parameterType="sql.pojo.cfg.vwo.HzVwoOpiBom">
@@ -185,7 +204,9 @@
       OPI_BOM_MNG_UPDATE_DATE = #{opiBomMngUpdateDate,jdbcType=TIMESTAMP},
       OPI_BOM_MNG_CREATOR = #{opiBomMngCreator,jdbcType=VARCHAR},
       OPI_BOM_MNG_UPDATER = #{opiBomMngUpdater,jdbcType=VARCHAR},
-      OPI_BOM_MNG_STAGE = #{opiBomMngStage,jdbcType=DECIMAL}
+      OPI_BOM_MNG_STAGE = #{opiBomMngStage,jdbcType=DECIMAL},
+      OPI_BOM_USER_ID = #{opiBomMngUserId,jdbcType=DECIMAL},
+      OPI_BOM_USER_NAME = #{opiBomMngUserName,jdbcType=VARCHAR}
     where ID = #{id,jdbcType=DECIMAL}
   </update>
 

@@ -5,7 +5,7 @@ import java.util.Objects;
 /**
  * @Author: haozt
  * @Date: 2018/8/20
- * @Description:
+ * @Description: 影响部门
  */
 public class HzEWOImpactDept {
     private Long id;

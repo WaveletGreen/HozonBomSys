@@ -9,7 +9,7 @@ package com.connor.hozon.bom.bomSystem.controller;
 import com.connor.hozon.bom.bomSystem.controller.integrate.ExtraIntegrate;
 import com.connor.hozon.bom.bomSystem.dao.main.HzCfg0MainRecordDao;
 import com.connor.hozon.bom.bomSystem.dao.cfg0.HzCfg0OptionFamilyDao;
-import com.connor.hozon.bom.bomSystem.dto.HzFeatureQueryDTO;
+import com.connor.hozon.bom.bomSystem.dto.HzFeatureQueryDto;
 import com.connor.hozon.bom.bomSystem.dto.HzRelevanceBean;
 import com.connor.hozon.bom.bomSystem.helper.DateStringHelper;
 import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
@@ -39,7 +39,6 @@ import java.util.*;
 
 import static com.connor.hozon.bom.bomSystem.helper.StringHelper.checkString;
 
-import com.connor.hozon.bom.resources.domain.dto.response.HzDictionaryLibraryRespDTO;
 import com.connor.hozon.bom.resources.service.resourcesLibrary.dictionaryLibrary.HzDictionaryLibraryService;
 import sql.pojo.resourcesLibrary.dictionaryLibrary.HzDictionaryLibrary;
 
@@ -102,7 +101,7 @@ public class HzCfg0Controller extends ExtraIntegrate {
     /******************************************特性表***********************************************/
     @RequestMapping("/loadFeature")
     @ResponseBody
-    public Map<String, Object> loadCfg0(@RequestParam("projectPuid") String projectPuid, HzFeatureQueryDTO queryBase) {
+    public Map<String, Object> loadCfg0(@RequestParam("projectPuid") String projectPuid, HzFeatureQueryDto queryBase) {
         Map<String, Object> result = new HashMap<>();
         queryBase.setSort(HzCfg0Record.reflectToDBField(queryBase.getSort()));
         queryBase.setProjectUid(projectPuid);

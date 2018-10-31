@@ -110,7 +110,7 @@ public class HzBomAllCfgController {
     }
 
     /**
-     * 保存版本数据
+     * 保存版本数据，对当前全配置BOM一级清单进行升大版本操作
      *
      * @param params
      * @return
@@ -140,7 +140,8 @@ public class HzBomAllCfgController {
     }
 
     /**
-     * 升小版本
+     * 升小版本，为全配置BOM一级清单进行当前版本+0.1小版本状态
+     * 仅仅是升级小版本，不是升级为大版本，升级大版本{@link HzBomAllCfgController#}
      *
      * @param projectUid
      * @return
@@ -152,7 +153,7 @@ public class HzBomAllCfgController {
     }
 
 
-@RequestMapping(value = "saveBomLinePiont", method = RequestMethod.POST)
+    @RequestMapping(value = "saveBomLinePiont", method = RequestMethod.POST)
     @ResponseBody
     public JSONObject saveBomLinePiont(@RequestBody Map<String, Map<String, String>> dataMap) {
         return hzBomAllCfgService.saveBomLinePiont(dataMap);

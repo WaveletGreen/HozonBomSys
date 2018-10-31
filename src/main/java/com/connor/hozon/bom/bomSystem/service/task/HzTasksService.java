@@ -124,4 +124,14 @@ public class HzTasksService implements IHzTaskService {
     public boolean doUpdateByPrimaryKeySelective(HzTasks task) {
         return hzTasksDao.updateByPrimaryKeySelective(task) > 0 ? true : false;
     }
+
+    @Override
+    public boolean doStopTask(int formType, Integer targetType, Long targetId) {
+        HzTasks task=new HzTasks();
+        task.setTaskFormType(formType);
+        task.setTaskTargetType(targetType);
+        task.setTaskTargetId(targetId);
+        task.setTaskStatus(999);
+        return hzTasksDao.updateTargetStatus(task)>0?true:false;
+    }
 }

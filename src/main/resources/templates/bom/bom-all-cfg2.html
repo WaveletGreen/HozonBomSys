@@ -14,6 +14,8 @@
         <button class="btn btn-default" id="setVersion" type="button">设置版本</button>
         <button class="btn btn-default" id="setStage" type="button">设置阶段</button>
         <button class="btn btn-default" id="release" type="button">发布</button>
+        <button class="btn btn-default" onclick="javascript:table2excel('cfg0Table','全配置BOM一级清单')">导出Excel(Alpha)</button>
+        <!--<button class="btn btn-default" id="export">导出Excel(Testing)</button>-->
         <!--<button class="btn btn-default" id="reflect2Y" type="button">特性关联2Y层</button>-->
         <!--<button class="btn btn-default" id="save" type="button" onclick="save()">保存</button>-->
     </div>
@@ -51,6 +53,8 @@
 
 </body>
 <script th:src="@{/js/helper/projectHelper.js}"></script>
+<script th:src="@{/js/helper/tableExportToExcle.js}"></script>
+<script th:src="@{/js/jquery/jquery.table2excel.min.js}"></script>
 <script th:src="@{/js/stage/bom-all-cfg2.js}"></script>
 <script th:inline="javascript">
     var focuseId = "";

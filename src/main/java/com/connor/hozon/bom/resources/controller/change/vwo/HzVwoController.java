@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2018.
- * This file was wrote by fancyears·milos·maywas @connor. Any question/bug you can post to 1243093366@qq.com.
+ * This file was wrote by fancyears·milos·maywas @connor. Any question/bug you can't post to 1243093366@qq.com.
  * ALL RIGHTS RESERVED.
  */
 
@@ -85,7 +85,6 @@ public class HzVwoController {
         hzVwoOpiBom = iHzVWOManagerService.getOpiOfBomMng(id);
         hzVwoOpiPmt = iHzVWOManagerService.getOpiOfPmtMng(id);
         hzVwoOpiProj = iHzVWOManagerService.getOpiOfProjMng(id);
-
         if (null == influenceDept) {
             model.addAttribute("msg", "初始化VWO:" + id + "的影响部门数据失败");
             return error;
@@ -138,7 +137,6 @@ public class HzVwoController {
         model.addAttribute("vwoId", vwoId);
         return "changeManage/vwo/vwoExecuteDialog";
     }
-
 
     /**
      * 分页查询
@@ -233,6 +231,7 @@ public class HzVwoController {
 
     /**
      * 为评估意见选择评估人员
+     *
      * @param vwo
      * @param selectType
      * @param model
@@ -357,6 +356,7 @@ public class HzVwoController {
 
     /**
      * BOM经理评估意见
+     *
      * @param hzVwoOpiBom
      * @return
      */
@@ -368,6 +368,7 @@ public class HzVwoController {
 
     /**
      * 专业PMT经理评估意见
+     *
      * @param hzVwoOpiPmt
      * @return
      */
@@ -378,7 +379,8 @@ public class HzVwoController {
     }
 
     /**
-     *项目经理评估意见
+     * 项目经理评估意见
+     *
      * @param hzVwoOpiProj
      * @return
      */
@@ -387,4 +389,23 @@ public class HzVwoController {
     public JSONObject saveProjLeaderOpinion(HzVwoOpiProj hzVwoOpiProj, Integer vwoType, String projectUid) {
         return iHzVWOManagerService.saveProjLeaderOpinion(hzVwoOpiProj, vwoType, projectUid);
     }
+
+
+    /**************************特性变更表单****************************/
+    @RequestMapping(value = "getFeatureTable", method = RequestMethod.POST)
+    @ResponseBody
+    public Map<String, Object> getFeatureTable(@RequestParam Long vwoId) {
+        return iHzVWOManagerService.getFeatureTable(vwoId);
+    }
+
+
+    /**************************配色方案变更描述表单***************************/
+    @RequestMapping(value = "getModelColorTable", method = RequestMethod.POST)
+    @ResponseBody
+    public Map<String, Object> getModelColorTable(@RequestParam Long vwoId) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        iHzVWOManagerService.doQueryCmcrDetailChangBefor(map, vwoId);
+        return map;
+    }
+
 }

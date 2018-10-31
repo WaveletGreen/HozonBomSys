@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2018.
- * This file was wrote by fancyears·milos·maywas @connor. Any question/bug you can post to 1243093366@qq.com.
+ * This file was wrote by fancyears·milos·maywas @connor. Any question/bug you can't post to 1243093366@qq.com.
  * ALL RIGHTS RESERVED.
  */
 
@@ -200,6 +200,36 @@ public class HzCmcrDetailChangeDaoImpl extends BasicDaoImpl<HzCmcrDetailChange> 
         preSetBeforeList(hzCmcrDetailChangeList);
         return executeInsertList(hzCmcrDetailChangeList, "insertList");
     }
+
+    @Override
+    public List<HzCmcrDetailChange> doQueryCmcrDetailChangBeforAndAfter(List<HzCmcrDetailChange> hzCmcrDetailChanges) {
+        Map<String,Object> map = new HashMap<String,Object>();
+        map.put("length",hzCmcrDetailChanges.size()*2);
+        map.put("vwoid",hzCmcrDetailChanges.get(0).getCmcrDetailCgVwoId());
+        map.put("hzCmcrDetailChanges",hzCmcrDetailChanges);
+        return baseSQLUtil.executeQueryByPass(new HzCmcrDetailChange(), map, "doQueryCmcrDetailChangBeforAndAfter");
+    }
+
+    @Override
+    public List<HzCmcrDetailChange> doQueryCmcrDetailChangBefor(Long vwoId) {
+        return baseSQLUtil.executeQueryByPass(new HzCmcrDetailChange(), vwoId, "doQueryCmcrDetailChangBefor");
+    }
+
+    @Override
+    public List<HzCmcrDetailChange> doQueryCmcrDetailChangFirst(Long vwoId,Integer flag) {
+        Map<String,Object> map = new HashMap<String,Object>();
+        map.put("vwoId",vwoId);
+        if(flag!=0){
+            map.put("flag",flag);
+        }
+        return baseSQLUtil.executeQueryByPass(new HzCmcrDetailChange(), map, "doQueryCmcrDetailChangFirst");
+    }
+
+    @Override
+    public List<HzCmcrDetailChange> doQueryCmcrDetailChangFirstAfter(Long vwoId) {
+        return baseSQLUtil.executeQueryByPass(new HzCmcrDetailChange(), vwoId, "doQueryCmcrDetailChangFirstAfter");
+    }
+
 
     private List<HzCmcrDetailChange> executeSelectLast(List<HzCmcrDetailChange> hzCmcrDetailChangeList, String by) {
         Map<String,Object> map = new HashMap<String, Object>();

@@ -15,6 +15,8 @@ import net.sf.json.JSONObject;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.ui.Model;
 import sql.pojo.cfg.cfg0.HzCfg0Record;
+import sql.pojo.cfg.modelColor.HzCmcrChange;
+import sql.pojo.cfg.modelColor.HzCmcrDetailChange;
 import sql.pojo.cfg.vwo.*;
 
 import java.util.List;
@@ -251,4 +253,12 @@ public interface IHzVWOManagerService {
     JSONObject launch(Integer type, String projectUid, Long vwoId,Long formId);
 
     JSONObject saveOptionUser(HzVwoOptionUserDto hzVwoOptionUserDto);
+
+    Map<String, Object> getFeatureTable(Long vwoId);
+
+    List<HzCmcrChange> doQueryCmcrChangeBeforAndAfter(String cmcrSrcPuid, Long cmcrCgVwoId);
+
+    List<HzCmcrDetailChange> doQueryCmcrDetailChangBeforAndAfter(List<String> cmcrDetailSrcPuidList, Long cmcrCgVwoId);
+
+    void doQueryCmcrDetailChangBefor(Map<String,Object> map, Long vwoId);
 }

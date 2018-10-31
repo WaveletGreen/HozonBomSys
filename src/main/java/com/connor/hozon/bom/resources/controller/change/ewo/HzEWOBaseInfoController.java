@@ -91,7 +91,6 @@ public class HzEWOBaseInfoController extends BaseController {
     /**
      * 获取EWO表单基本信息列表
      * @param query
-     * @param response
      */
     @RequestMapping(value = "infoList",method = RequestMethod.GET)
     @ResponseBody

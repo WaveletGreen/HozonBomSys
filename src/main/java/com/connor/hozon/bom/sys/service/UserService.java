@@ -1,6 +1,7 @@
 package com.connor.hozon.bom.sys.service;
 
 
+import com.connor.hozon.bom.common.base.constant.SystemStaticConst;
 import com.connor.hozon.bom.common.base.dao.GenericDao;
 import com.connor.hozon.bom.common.base.entity.Page;
 import com.connor.hozon.bom.common.base.service.GenericService;
@@ -57,6 +58,10 @@ public class UserService extends GenericService<User, QueryUser> {
 	@Override
 	public boolean save(User entity) throws Exception {
 		entity.setAddress(entity.getProvince()+entity.getCity()+entity.getDistrict()+entity.getStreetAddress());
+		//过滤前端密码
+		if(!SystemStaticConst.ORIGINAL_PASSWORD.equals(entity.getPassword())){
+			entity.setPassword(SystemStaticConst.ORIGINAL_PASSWORD);//初始密码全部为123456
+		}
 		entity.setPassword(UserInfo.encode(entity.getPassword()));
 		entity.setState("1");
 		entity.packagingRoles(entity.getRoleArray());
@@ -123,4 +128,15 @@ public class UserService extends GenericService<User, QueryUser> {
 		return userDao.findByLogin(login);
 	}
 
+	/**
+	 * 根据id 获取用户信息
+	 * @param id
+	 * @return
+	 */
+	public User findByUserId(Long id){
+		if(id == null){
+			return null;
+		}
+		return userDao.findUserById(id);
+	}
 }

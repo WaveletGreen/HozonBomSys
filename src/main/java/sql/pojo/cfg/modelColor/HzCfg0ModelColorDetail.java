@@ -9,7 +9,7 @@ package sql.pojo.cfg.modelColor;
 import java.util.Date;
 /**
  * @Author: Fancyears·Maylos·Maywas
- * @Description: 配色方案详情
+ * @Description: 配色方案详情bean
  * @Date: Created in 2018/8/10 13:55
  * @Modified By:
  */

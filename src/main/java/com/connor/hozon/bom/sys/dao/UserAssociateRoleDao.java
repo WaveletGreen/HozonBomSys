@@ -5,10 +5,12 @@ import com.connor.hozon.bom.common.base.dao.GenericDao;
 import com.connor.hozon.bom.sys.entity.QueryUserAssociateRole;
 import com.connor.hozon.bom.sys.entity.User;
 import com.connor.hozon.bom.sys.entity.UserAssociateRole;
+import org.springframework.stereotype.Service;
 
 /**
  *@author linzf
  **/
+@Service("userAssociateRoleDao")
 public interface UserAssociateRoleDao extends GenericDao<UserAssociateRole, QueryUserAssociateRole> {
 
     /**

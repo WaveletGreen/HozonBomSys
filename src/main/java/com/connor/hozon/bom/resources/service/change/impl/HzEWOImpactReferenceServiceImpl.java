@@ -39,6 +39,7 @@ public class HzEWOImpactReferenceServiceImpl implements HzEWOImpactReferenceServ
             }
             return references;
         }catch (Exception e){
+            e.printStackTrace();
             return null;
         }
     }

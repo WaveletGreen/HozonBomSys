@@ -139,4 +139,12 @@ public interface HzCmcrDetailChangeDao extends BasicDao<HzCmcrDetailChange>{
      * @throws Exception
      */
     int insertDetailBeforeList(List<HzCmcrDetailChange> hzCmcrDetailChangesQuery) throws Exception;
+
+    List<HzCmcrDetailChange> doQueryCmcrDetailChangBeforAndAfter(List<HzCmcrDetailChange> hzCmcrDetailChanges);
+
+    List<HzCmcrDetailChange> doQueryCmcrDetailChangBefor(Long vwoId);
+
+    List<HzCmcrDetailChange> doQueryCmcrDetailChangFirst(Long vwoId,Integer flag);
+
+    List<HzCmcrDetailChange> doQueryCmcrDetailChangFirstAfter(Long vwoId);
 }

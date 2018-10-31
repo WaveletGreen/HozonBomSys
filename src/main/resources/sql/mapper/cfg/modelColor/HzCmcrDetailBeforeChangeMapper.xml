@@ -19,7 +19,7 @@
     <result column="CMCR_DETAIL_CG_UPDATE_DATE" jdbcType="TIMESTAMP" property="cmcrDetailCgUpdateDate" />
     <result column="CMCR_DETAIL_CG_UPDATER" jdbcType="OTHER" property="cmcrDetailCgUpdater" />
     <result column="CMCR_DETAIL_CG_REVERSE1" jdbcType="VARCHAR" property="cmcrDetailCgReverse1" />
-    <result column="CMCR_DETAIL_CG_REVERSE2" jdbcType="VARCHAR" property="cmcrDetailCgReverse2" />
+    <result column="CMCR_DETAIL_CG_REVERSE2" jdbcType="VARCHAR" property="cmcrDetailCgIsColorful" />
     <result column="CMCR_DETAIL_CG_REVERSE3" jdbcType="VARCHAR" property="cmcrDetailCgReverse3" />
     <result column="CMCR_DETAIL_CG_REVERSE4" jdbcType="VARCHAR" property="cmcrDetailCgReverse4" />
     <result column="CMCR_DETAIL_CG_REVERSE5" jdbcType="VARCHAR" property="cmcrDetailCgReverse5" />
@@ -71,8 +71,8 @@
       #{cmcrDetailCgColorCode,jdbcType=OTHER}, #{cmcrDetailCgColorName,jdbcType=OTHER}, 
       #{cmcrDetailCgCreateDate,jdbcType=TIMESTAMP}, #{cmcrDetailCgCreator,jdbcType=OTHER}, 
       #{cmcrDetailCgUpdateDate,jdbcType=TIMESTAMP}, #{cmcrDetailCgUpdater,jdbcType=OTHER}, 
-      #{cmcrDetailCgReverse1,jdbcType=VARCHAR}, #{cmcrDetailCgReverse2,jdbcType=VARCHAR}, 
-      #{cmcrDetailCgReverse3,jdbcType=VARCHAR}, #{cmcrDetailCgReverse4,jdbcType=VARCHAR}, 
+      #{cmcrDetailCgReverse1,jdbcType=VARCHAR}, #{cmcrDetailCgIsColorful,jdbcType=VARCHAR},
+      #{cmcrDetailCgReverse3,jdbcType=VARCHAR}, #{cmcrDetailCgReverse4,jdbcType=VARCHAR},
       #{cmcrDetailCgReverse5,jdbcType=VARCHAR}, #{cmcrDetailSrcPuid,jdbcType=VARCHAR}, 
       #{cmcrDetailSrcCfgUid,jdbcType=VARCHAR}, #{cmcrDetailSrcColorUid,jdbcType=VARCHAR}, 
       #{cmcrDetailSrcCfgMainUid,jdbcType=VARCHAR}, #{cmcrDetailSrcCreateDate,jdbcType=TIMESTAMP}, 
@@ -116,7 +116,7 @@
       <if test="cmcrDetailCgReverse1 != null">
         CMCR_DETAIL_CG_REVERSE1,
       </if>
-      <if test="cmcrDetailCgReverse2 != null">
+      <if test="cmcrDetailCgIsColorful != null">
         CMCR_DETAIL_CG_REVERSE2,
       </if>
       <if test="cmcrDetailCgReverse3 != null">
@@ -190,8 +190,8 @@
       <if test="cmcrDetailCgReverse1 != null">
         #{cmcrDetailCgReverse1,jdbcType=VARCHAR},
       </if>
-      <if test="cmcrDetailCgReverse2 != null">
-        #{cmcrDetailCgReverse2,jdbcType=VARCHAR},
+      <if test="cmcrDetailCgIsColorful != null">
+        #{cmcrDetailCgIsColorful,jdbcType=VARCHAR},
       </if>
       <if test="cmcrDetailCgReverse3 != null">
         #{cmcrDetailCgReverse3,jdbcType=VARCHAR},
@@ -264,8 +264,8 @@
       <if test="cmcrDetailCgReverse1 != null">
         CMCR_DETAIL_CG_REVERSE1 = #{cmcrDetailCgReverse1,jdbcType=VARCHAR},
       </if>
-      <if test="cmcrDetailCgReverse2 != null">
-        CMCR_DETAIL_CG_REVERSE2 = #{cmcrDetailCgReverse2,jdbcType=VARCHAR},
+      <if test="cmcrDetailCgIsColorful != null">
+        CMCR_DETAIL_CG_REVERSE2 = #{cmcrDetailCgIsColorful,jdbcType=VARCHAR},
       </if>
       <if test="cmcrDetailCgReverse3 != null">
         CMCR_DETAIL_CG_REVERSE3 = #{cmcrDetailCgReverse3,jdbcType=VARCHAR},
@@ -318,7 +318,7 @@
       CMCR_DETAIL_CG_UPDATE_DATE = #{cmcrDetailCgUpdateDate,jdbcType=TIMESTAMP},
       CMCR_DETAIL_CG_UPDATER = #{cmcrDetailCgUpdater,jdbcType=OTHER},
       CMCR_DETAIL_CG_REVERSE1 = #{cmcrDetailCgReverse1,jdbcType=VARCHAR},
-      CMCR_DETAIL_CG_REVERSE2 = #{cmcrDetailCgReverse2,jdbcType=VARCHAR},
+      CMCR_DETAIL_CG_REVERSE2 = #{cmcrDetailCgIsColorful,jdbcType=VARCHAR},
       CMCR_DETAIL_CG_REVERSE3 = #{cmcrDetailCgReverse3,jdbcType=VARCHAR},
       CMCR_DETAIL_CG_REVERSE4 = #{cmcrDetailCgReverse4,jdbcType=VARCHAR},
       CMCR_DETAIL_CG_REVERSE5 = #{cmcrDetailCgReverse5,jdbcType=VARCHAR},

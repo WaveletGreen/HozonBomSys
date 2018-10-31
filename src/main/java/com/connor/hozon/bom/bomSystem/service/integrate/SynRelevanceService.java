@@ -7,7 +7,7 @@
 package com.connor.hozon.bom.bomSystem.service.integrate;
 
 import com.connor.hozon.bom.bomSystem.dao.derivative.HzCfg0ModelGroupDao;
-import com.connor.hozon.bom.bomSystem.dto.HzFeatureQueryDTO;
+import com.connor.hozon.bom.bomSystem.dto.HzFeatureQueryDto;
 import com.connor.hozon.bom.bomSystem.dto.HzRelevanceBean;
 import com.connor.hozon.bom.bomSystem.helper.IntegrateMsgDTO;
 import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
@@ -52,7 +52,7 @@ public class SynRelevanceService implements ISynRelevanceService {
      */
     @Override
     public JSONObject synAllByProjectPuid(String projectPuid) throws Exception {
-        List<HzCfg0Record> list = hzCfg0Service.doLoadCfgListByProjectPuid(projectPuid, new HzFeatureQueryDTO());
+        List<HzCfg0Record> list = hzCfg0Service.doLoadCfgListByProjectPuid(projectPuid, new HzFeatureQueryDto());
         List<HzRelevanceBean> beans = new ArrayList<>();
         if (list != null && list.size() > 0) {
             sortData(list, beans);
