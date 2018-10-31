@@ -30,10 +30,11 @@ import java.util.*;
 
 /**
  * @Author: Fancyears·Maylos·Maywas
- * @Description:
+ * @Description: 预研时用到的controller，已不再符合正式业务要求，可以删除
  * @Date: Created in 2018/8/30 18:53
  * @Modified By:
  */
+@Deprecated
 @Controller
 @RequestMapping("/loadBom")
 public class HzLoadBomDataController {

@@ -7,10 +7,11 @@
 package com.connor.hozon.bom.bomSystem.controller;
 
 import com.connor.hozon.bom.bomSystem.dao.bom.HzBomMainRecordDao;
-import com.connor.hozon.bom.bomSystem.dao.bom.HzPreferenceSettingDao;
 import com.connor.hozon.bom.bomSystem.dao.main.HzCfg0MainRecordDao;
 import com.connor.hozon.bom.bomSystem.dto.HzProjectBean;
-import com.connor.hozon.bom.bomSystem.dto.task.HzTaskPostDto;
+import com.connor.hozon.bom.bomSystem.helper.DateStringHelper;
+import com.connor.hozon.bom.bomSystem.helper.ProjectHelper;
+import com.connor.hozon.bom.bomSystem.helper.PropertiesHelper;
 import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
 import com.connor.hozon.bom.bomSystem.iservice.project.IHzVehicleService;
 import com.connor.hozon.bom.bomSystem.service.project.HzBrandService;
@@ -28,7 +29,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import sql.pojo.HzPreferenceSetting;
 import sql.pojo.bom.HZBomMainRecord;
 import sql.pojo.cfg.main.HzCfg0MainRecord;
 import sql.pojo.project.HzBrandRecord;
@@ -37,10 +37,14 @@ import sql.pojo.project.HzProjectLibs;
 import sql.pojo.project.HzVehicleRecord;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.util.*;
+
+import static com.connor.hozon.bom.bomSystem.helper.StringHelper.checkString;
+
 /**
  * @Author: Fancyears·Maylos·Maywas
- * @Description: <p>项目控制器，用于前端获取到项目信息，由项目信息驱动下面的额bom数据和配置数据</p>
+ * @Description: 项目controller，用于前端获取到项目信息，由项目信息驱动下面的额bom数据和配置数据
  * @Date: Created in 2018/8/30 18:53
  * @Modified By:
  */
@@ -48,36 +52,38 @@ import java.util.*;
 @RequestMapping("/project")
 public class HzProjectLibsController {
     /***项目服务*/
-    private final HzProjectLibsService hzProjectLibsService;
-    /***品牌服务*/
-    private final HzBrandService hzBrandService;
-    /***平台服务*/
-    private final HzPlatformService hzPlatformService;
-    /***车型服务*/
-    private final IHzVehicleService hzVehicleService;
-    /***日志*/
-    private final Logger logger;
-
     @Autowired
-    private final HzPreferenceSettingDao hzPreferenceSettingDao;
+    HzProjectLibsService hzProjectLibsService;
+    /***品牌服务*/
+    @Autowired
+    HzBrandService hzBrandService;
+    /***平台服务*/
+    @Autowired
+    HzPlatformService hzPlatformService;
+    /***车型服务*/
+    @Autowired
+    IHzVehicleService hzVehicleService;
+    //    /***首选项dao层，目前首选项已经不再使用，只是保留了预研时的结构*/
+    //    @Autowired
+    //    HzPreferenceSettingDao hzPreferenceSettingDao;
+    /*** 主配置dao层*/
     @Autowired
     HzCfg0MainRecordDao hzCfg0MainRecordDao;
+    /*** BOM主数据层*/
     @Autowired
     HzBomMainRecordDao hzBomMainRecordDao;
-
+    /***项目助手*/
     @Autowired
-    public HzProjectLibsController(HzProjectLibsService hzProjectLibsService, HzBrandService hzBrandService, HzPlatformService hzPlatformService, IHzVehicleService hzVehicleService, HzPreferenceSettingDao hzPreferenceSettingDao) {
-        this.hzProjectLibsService = hzProjectLibsService;
-        this.hzBrandService = hzBrandService;
-        this.hzPlatformService = hzPlatformService;
-        this.hzVehicleService = hzVehicleService;
-        this.hzPreferenceSettingDao = hzPreferenceSettingDao;
-        logger = LoggerFactory.getLogger(this.getClass());
-    }
+    ProjectHelper projectHelper;
+    /***日志*/
+    private static final Logger logger = LoggerFactory.getLogger(HzProjectLibsController.class);
+    /*** session过时时间，默认为30分钟，不知道是否能生效*/
+    private static int TIME_OUT = 30 * 60;
 
     /**
      * 加载所有项目
      *
+     * @param request 由spring自动传入，不用传
      * @return 所有项目
      */
     @RequestMapping(value = "/loadAll", method = RequestMethod.GET)
@@ -95,18 +101,25 @@ public class HzProjectLibsController {
         }
         result.put("data", hzProjectLibsService.doLoadAllProjectLibs());
         result.put("brand", hzBrandService.doGetAllBrand());
-        request.getSession().setMaxInactiveInterval(30 * 60);
+        PropertiesHelper helper = new PropertiesHelper();
+        try {
+            Properties properties = helper.load();
+            TIME_OUT = Integer.parseInt(properties.getProperty("SESSION_OUT"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        request.getSession().setMaxInactiveInterval(TIME_OUT);
         return result;
     }
 
     /**
-     * 功能描述：直接加载整个菜单树的数据(且必须要有管理员权限才可以加载该菜单树的数据)
+     * 直接加载整个菜单树的数据(且必须要有管理员权限才可以加载该菜单树的数据)
      *
-     * @return 树形结构
+     * @return 项目树形结构数据，需要用zTree进行初始化即可
      */
     @RequestMapping(value = "/loadProjectTree", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public Map<String, Object> loadUserTree() {
+    public Map<String, Object> loadProjectTree() {
         Map<String, Object> result = new HashMap<>();
         List<HzProjectBean> beans = new ArrayList<>();
 
@@ -155,7 +168,7 @@ public class HzProjectLibsController {
     }
 
     /***
-     * 根据项目的puid，获取到项目的详细信息，包含了品牌，平台等信息
+     * 根据项目的puid，获取到项目的详细信息，包含了品牌，平台等项目结构树信息
      * @param puid 项目的puid
      * @return 项目的详细信息
      */
@@ -163,10 +176,11 @@ public class HzProjectLibsController {
     @ResponseBody
     public Map<String, Object> getProjectDetailById(@RequestParam String puid) {
         Map<String, Object> result = new HashMap<>();
-        HzProjectLibs project = hzProjectLibsService.doLoadProjectLibsById(puid);
-        HzVehicleRecord vehicle = hzVehicleService.doGetByPuid(project.getpProjectPertainToVehicle());
-        HzPlatformRecord platform = hzPlatformService.doGetByPuid(vehicle.getpVehiclePertainToPlatform());
-        HzBrandRecord brand = hzBrandService.doGetByPuid(platform.getpPertainToBrandPuid());
+        projectHelper.doGetProjectTreeByProjectId(puid);
+        HzProjectLibs project = projectHelper.getProject();
+        HzVehicleRecord vehicle = projectHelper.getVehicle();
+        HzPlatformRecord platform = projectHelper.getPlatform();
+        HzBrandRecord brand = projectHelper.getBrand();
         result.put("project", project);
         result.put("vehicle", vehicle);
         result.put("platform", platform);
@@ -175,11 +189,11 @@ public class HzProjectLibsController {
     }
 
     /***
-     * 添加的操作页，根据3大类别进行分类
+     * 添加的操作页，根据四大类别进行分类
      * @param id puid，可以是品牌/平台的puid，直接添加在对应的节点上，添加品牌不用传puid
-     * @param page 添加的页面标识
-     * @param model model
-     * @return 具体的指向页，如果不符合要求，则返回error页
+     * @param page 添加的页面标识，分别传入brand/platform/vehicle/project用于标识品牌/平台/车型/项目，用于跳转到不同的添加页面
+     * @param model model 不用传
+     * @return 具体的指向页，如果不符合要求，则返回errorWithEntity页
      */
     @RequestMapping(value = "/addPage")
     public String addPage(@RequestParam String id, @RequestParam String page, Model model) {
@@ -187,17 +201,17 @@ public class HzProjectLibsController {
             return "error";
         try {
             switch (page) {
-                //加入品牌
+                //跳转添加品牌页面
                 case "brand":
                     model.addAttribute("action", "./project/addBrand");
                     return "project/addBrand";
-                //加平台
+                //跳转添加平台页面
                 case "platform":
                     HzBrandRecord brand_p = hzBrandService.doGetByPuid(id);
                     model.addAttribute("brand", brand_p);
                     model.addAttribute("action", "./project/addPlatform");
                     return "project/addPlatform";
-                //加入车型
+                //跳转添加车型页面
                 case "vehicle":
                     HzPlatformRecord platform_v = hzPlatformService.doGetByPuid(id);
                     HzBrandRecord brand_v = hzBrandService.doGetByPuid(platform_v.getpPertainToBrandPuid());
@@ -205,7 +219,7 @@ public class HzProjectLibsController {
                     model.addAttribute("platform", platform_v);
                     model.addAttribute("action", "./project/addVehicle");
                     return "project/addVehicle";
-                //加入项目
+                //跳转添加项目页面
                 case "project":
                     HzVehicleRecord vehicle = hzVehicleService.doGetByPuid(id);
                     HzPlatformRecord platform = hzPlatformService.doGetByPuid(vehicle.getpVehiclePertainToPlatform());
@@ -230,8 +244,8 @@ public class HzProjectLibsController {
 
     /***
      * 添加品牌
-     * @param brand 品牌对象
-     * @return 数据信息，添加成功则连同品牌一起返回和标识符，反之则只返回标识符
+     * @param brand 品牌对象，该对象应该从前端页面收受了一定的用户输入
+     * @return 数据信息，添加成功则品牌和标识符一起返回，反之则只返回标识符
      */
     @RequestMapping(value = "/addBrand", method = RequestMethod.POST)
     @ResponseBody
@@ -259,6 +273,12 @@ public class HzProjectLibsController {
         return result;
     }
 
+    /**
+     * 添加平台
+     *
+     * @param platform 平台对象，该对象应该从前端页面收受了一定的用户输入
+     * @return 只有平台对象成功添加，返回一个平台对象供zTree绘制新的树节点，否则返回失败标识
+     */
     @RequestMapping(value = "/addPlatform", method = RequestMethod.POST)
     @ResponseBody
     public JSONObject addPlatform(@RequestBody HzPlatformRecord platform) {
@@ -285,6 +305,12 @@ public class HzProjectLibsController {
         return result;
     }
 
+    /**
+     * 添加车型
+     *
+     * @param vehicle 车型对象，该对象应该从前端页面收受了一定的用户输入
+     * @return 只有车型对象成功添加，返回一个车型对象供zTree绘制新的树节点，否则返回失败标识
+     */
     @RequestMapping(value = "/addVehicle", method = RequestMethod.POST)
     @ResponseBody
     public JSONObject addVehicle(@RequestBody HzVehicleRecord vehicle) {
@@ -314,6 +340,12 @@ public class HzProjectLibsController {
         return result;
     }
 
+    /**
+     * 添加项目，由于继承了预研阶段的结构，因此添加项目的时候将自动多关联数模层、首选项和配置主数据
+     *
+     * @param project 项目对象，该对象应该从前端页面收受了一定的用户输入
+     * @return
+     */
     @RequestMapping(value = "/addProject", method = RequestMethod.POST)
     @ResponseBody
     public JSONObject addProject(@RequestBody HzProjectLibs project) {
@@ -332,14 +364,11 @@ public class HzProjectLibsController {
             project.setpProjectOwningUser(user.getUsername());
             project.setpProjectLastModifier(user.getUsername());
             //设置失效年份为9999年12月31日23时59分59秒
-            Calendar calendar = Calendar.getInstance();
-            calendar.set(9999, 11, 31, 23, 59, 59);
-            project.setpProjectDiscontinuationDate(calendar.getTime());
+            project.setpProjectDiscontinuationDate(DateStringHelper.forever());
             if (hzProjectLibsService.doInsertOne(project)) {
 
                 int status1 = 0;
                 int status2 = 0;
-                int status3 = 0;
                 //自动添加数模层和主配置
                 {
 
@@ -352,7 +381,8 @@ public class HzProjectLibsController {
                     hzBomMainRecord.setPuid(UUIDHelper.generateUpperUid());
                     hzBomMainRecord.setPostDate(now);
                     hzBomMainRecord.setPoster(user.getUserName());
-                    hzBomMainRecord.setBomDigifax(project.getpProjectCode() + "的数模层");
+                    hzBomMainRecord.setBomDigifax("BOM系统自动创建:" + project.getpProjectCode() + "的数模层");
+                    //由于不是从TC中来，因此原始的TC UID将不存在，只能街截取首16位
                     hzBomMainRecord.setBomOrgPuid(hzBomMainRecord.getPuid().substring(0, 15));
                     hzBomMainRecord.setpCfg0LastModDate(now);
                     hzBomMainRecord.setpCfg0OfWhichProjectPuid(project.getPuid());
@@ -365,7 +395,7 @@ public class HzProjectLibsController {
                     hzCfg0MainRecord.setpCfg0OfWhichProject(project.getpProjectName() == null ? project.getpProjectCode() : project.getpProjectName());
                     hzCfg0MainRecord.setpCfg0OfWhichProjectPuid(project.getPuid());
                     hzCfg0MainRecord.setpCfg0OrgPuid(hzCfg0MainRecord.getPuid().substring(0, 15));
-                    hzCfg0MainRecord.setpItemName(project.getpProjectCode() + "的主配置");
+                    hzCfg0MainRecord.setpItemName("BOM系统自动创建:" + project.getpProjectCode() + "的主配置");
                     hzCfg0MainRecord.setPostDate(now);
                     hzCfg0MainRecord.setPoster(user.getUserName());
                     hzCfg0MainRecord.setpCfg0OrgPoster(user.getUserName());
@@ -375,51 +405,49 @@ public class HzProjectLibsController {
                     //同步插入数模层和主配置
                     if (hzCfg0MainRecordDao.insert(hzCfg0MainRecord) > 0) {
                         result.put("dxgMainMsg", "自动创建关联数模层成功");
-                        status2 = 1;
+                        status1 = 1;
                     } else {
                         result.put("dxgMainMsg", "自动创建关联数模层失败，请联系系统管理员");
-                        status2 = 0;
+                        status1 = 0;
                     }
                     if (hzBomMainRecordDao.insert(hzBomMainRecord) > 0) {
                         result.put("cfgMsg", "自动创建主配置数据成功");
-                        status3 = 1;
+                        status2 = 1;
                     } else {
                         result.put("cfgMsg", "自动创建主配置数据失败，请联系系统管理员");
-                        status3 = 0;
+                        status2 = 0;
                     }
-                    //首选项
-                    HzPreferenceSetting setting = new HzPreferenceSetting();
-                    setting.setSettingName("Hz_ExportBomPreferenceRedis");
-
-                    HzPreferenceSetting thisSetting;
-                    List<HzPreferenceSetting> list = hzPreferenceSettingDao.selectSettingByTemplateName(setting);
-                    if (list == null || list.size() <= 0) {
-                        result.put("settingMsg", "自动创建首选项模板失败，请保证HZ_PREFERENCESETTING表包含Hz_ExportBomPreferenceRedis首选项模板");
-                        status1 = 0;
-                    } else {
-                        thisSetting = list.get(0);
-                        thisSetting.setBomMainRecordPuid(hzBomMainRecord.getPuid());
-                        thisSetting.setPuid(UUIDHelper.generateUpperUid());
-                        thisSetting.setSettingName("Hz_ExportBomPreferenceRedis_" + project.getpProjectCode());
-                        if (status2 == 1) {
-                            if (hzPreferenceSettingDao.insert(thisSetting) > 0) {
-                                result.put("settingMsg", "自动创建首选项模板成功");
-                                status1 = 1;
-                            } else {
-                                result.put("settingMsg", "自动创建首选项模板失败，请保证HZ_PREFERENCESETTING表包含Hz_ExportBomPreferenceRedis首选项模板");
-                                status1 = 0;
-                            }
-                        } else {
-                            result.put("settingMsg", "自动创建首选项模板失败，请保证HZ_PREFERENCESETTING表包含Hz_ExportBomPreferenceRedis首选项模板");
-                            status1 = 0;
-                        }
-
-                    }
+//                    //首选项
+//                    HzPreferenceSetting setting = new HzPreferenceSetting();
+//                    setting.setSettingName("Hz_ExportBomPreferenceRedis");
+//
+//                    HzPreferenceSetting thisSetting;
+//                    List<HzPreferenceSetting> list = hzPreferenceSettingDao.selectSettingByTemplateName(setting);
+//                    if (list == null || list.size() <= 0) {
+//                        result.put("settingMsg", "自动创建首选项模板失败，请保证HZ_PREFERENCESETTING表包含Hz_ExportBomPreferenceRedis首选项模板");
+//                        status1 = 0;
+//                    } else {
+//                        thisSetting = list.get(0);
+//                        thisSetting.setBomMainRecordPuid(hzBomMainRecord.getPuid());
+//                        thisSetting.setPuid(UUIDHelper.generateUpperUid());
+//                        thisSetting.setSettingName("Hz_ExportBomPreferenceRedis_" + project.getpProjectCode());
+//                        if (status2 == 1) {
+//                            if (hzPreferenceSettingDao.insert(thisSetting) > 0) {
+//                                result.put("settingMsg", "自动创建首选项模板成功");
+//                                status1 = 1;
+//                            } else {
+//                                result.put("settingMsg", "自动创建首选项模板失败，请保证HZ_PREFERENCESETTING表包含Hz_ExportBomPreferenceRedis首选项模板");
+//                                status1 = 0;
+//                            }
+//                        } else {
+//                            result.put("settingMsg", "自动创建首选项模板失败，请保证HZ_PREFERENCESETTING表包含Hz_ExportBomPreferenceRedis首选项模板");
+//                            status1 = 0;
+//                        }
+//                    }
                 }
                 result.put("status", 1);
                 result.put("status1", status1);
                 result.put("status2", status2);
-                result.put("status3", status3);
                 result.put("entity", project);
             } else {
                 result.put("status", -1);
@@ -508,20 +536,15 @@ public class HzProjectLibsController {
             result.put("status", -1);
         }
         if (null != hzBrandService.doGetByPuid(brand.getPuid())) {
-//            if (null != hzBrandService.doGetByBrandCode(brand.getPBrandCode())) {
-//                result.put("status", -1);
-//            } else {
             brand.setpBrandLastModifier(user.getUsername());
             brand.setpBrandLastModDate(new Date());
             if (hzBrandService.doUpdateSelective(brand)) {
                 result.put("status", 1);
                 brand = hzBrandService.doGetByPuid(brand.getPuid());
-//                brand.setPBrandCreateDate(new Date());
                 result.put("entity", brand);
             } else {
                 result.put("status", -1);
             }
-//            }
         } else {
             result.put("status", 0);
         }
@@ -542,21 +565,15 @@ public class HzProjectLibsController {
             result.put("status", -1);
         }
         if (null != hzPlatformService.doGetByPuid(platform.getPuid())) {
-//            if (null != hzPlatformService.doGetByPlatformCode(platform.getpPlatformCode())) {
-//                result.put("status", -1);
-//            } else {
             platform.setpPlatformLastModDate(new Date());
             platform.setpPlatformLastModifier(user.getUsername());
             if (hzPlatformService.doUpdate(platform)) {
                 result.put("status", 1);
-//                platform.setpPlatformCreateDate(new Date());
-//                platform.setpPertainToBrandPuid("");
                 platform = hzPlatformService.doGetByPuid(platform.getPuid());
                 result.put("entity", platform);
             } else {
                 result.put("status", -1);
             }
-//            }
         } else {
             result.put("status", 0);
         }
@@ -577,21 +594,15 @@ public class HzProjectLibsController {
             result.put("status", -1);
         }
         if (null != hzVehicleService.doGetByPuid(vehicle.getPuid())) {
-//            if (null != hzProjectLibsService.doGetByProjectCode(project.getpProjectCode())) {
-//                result.put("status", -1);
-//            } else {
             vehicle.setpVehicleLastModDate(new Date());
             vehicle.setpVehicleLastModifier(user.getUsername());
             if (hzVehicleService.doUpdateByPuid(vehicle)) {
                 result.put("status", 1);
                 vehicle = hzVehicleService.doGetByPuid(vehicle.getPuid());
-                //不能传空值，空值可能来源于数据库
-//                hzProjectLibsService.toDTO(project);
                 result.put("entity", vehicle);
             } else {
                 result.put("status", -1);
             }
-//            }
         } else {
             result.put("status", 0);
         }
@@ -611,20 +622,15 @@ public class HzProjectLibsController {
             result.put("status", -1);
         }
         if (null != hzProjectLibsService.doLoadProjectLibsById(project.getPuid())) {
-//            if (null != hzProjectLibsService.doGetByProjectCode(project.getpProjectCode())) {
-//                result.put("status", -1);
-//            } else {
             project.setpProjectLastModDate(new Date());
             if (hzProjectLibsService.doUpdateByPrimaryKey(project)) {
                 result.put("status", 1);
                 project = hzProjectLibsService.doLoadProjectLibsById(project.getPuid());
                 //不能传空值，空值可能来源于数据库
-//                hzProjectLibsService.toDTO(project);
                 result.put("entity", project);
             } else {
                 result.put("status", -1);
             }
-//            }
         } else {
             result.put("status", 0);
         }
@@ -635,13 +641,13 @@ public class HzProjectLibsController {
      * 根据类型和主键进行删除
      *
      * @param puid 主键
-     * @param type 类型，分别是brand，plaatform和project
+     * @param type 类型，分别是brand，plaatform，vehicle和project
      * @return
      */
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     @ResponseBody
     public boolean delete(@RequestParam String puid, @RequestParam String type) {
-        if (null == puid || type == null || "".equals(puid) || "".equals(type)) {
+        if (checkString(puid) || checkString(type)) {
             return false;
         }
         switch (type) {
@@ -660,10 +666,12 @@ public class HzProjectLibsController {
     //////////////////////////////////////////////////验证编号重复性/////////////////////////////////////////////////////////
 
     /**
-     * 项目编号查重
+     * 项目编号查重，查重条件是项目代码{@link HzProjectLibs#pProjectCode}
+     * <p>
+     * 若已存在的项目更换了项目代码，需要对更换后的代码进行查重，已存在代码则不允许更换代码，反之只进行更新项目代码操作
      *
      * @param project 项目对象
-     * @return
+     * @return 返回的对象是JSON对象，用于前端表单验证是否通过
      */
     @RequestMapping(value = "/validateProjectCodeWithPuid", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
@@ -672,10 +680,12 @@ public class HzProjectLibsController {
     }
 
     /**
-     * 车型代号查重
+     * 车型代号查重，查重条件是车型代码{@link HzVehicleRecord#pVehicleCode}
+     * <p>
+     * 若已存在的车型更换了车型代码，需要对更换后的代码进行查重，已存在代码则不允许更换代码，反之只进行更新车型代码操作
      *
      * @param vehicle 车型对象
-     * @return
+     * @return 返回的对象是JSON对象，用于前端表单验证是否通过
      */
     @RequestMapping(value = "/validateVehicleCodeWithPuid", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
@@ -684,9 +694,11 @@ public class HzProjectLibsController {
     }
 
     /**
-     * 查重平台编号
+     * 查重平台编号，查重的条件是平台的代码{@link HzPlatformRecord#pPlatformCode}
+     * <p>
+     * 当若已存在的平台更换了平台代码，需要对更换后的代码进行查重，已存在代码则不允许更换代码，反之只进行更新平台代码操作
      *
-     * @param platform 平台对象
+     * @param platform 返回的对象是JSON对象，用于前端表单验证是否通过
      * @return
      */
     @RequestMapping(value = "/validatePlatformCodeWithPuid", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -696,10 +708,10 @@ public class HzProjectLibsController {
     }
 
     /**
-     * 查重品牌编号
+     * 查重品牌编号，查重的条件是品牌的代码{@link HzBrandRecord#pBrandCode}
      *
      * @param brand 品牌对象
-     * @return
+     * @return 返回的对象是JSON对象，用于前端表单验证是否通过
      */
     @RequestMapping(value = "/validateBrandCodeWithPuid", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody

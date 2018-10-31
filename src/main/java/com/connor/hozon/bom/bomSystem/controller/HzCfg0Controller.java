@@ -45,7 +45,7 @@ import sql.pojo.resourcesLibrary.dictionaryLibrary.HzDictionaryLibrary;
 
 /**
  * @Author: Fancyears·Maylos·Maywas
- * @Description: 特性
+ * @Description: 特性controller
  * @Date: Created in 2018/8/30 18:53
  * @Modified By:
  */
@@ -126,7 +126,8 @@ public class HzCfg0Controller extends ExtraIntegrate {
     public String addPage(@RequestParam("projectPuid") String projectPuid, Model model) {
         HzCfg0MainRecord mainRecord = hzCfg0MainRecordDao.selectByProjectPuid(projectPuid);
         if (mainRecord == null) {
-            return "error";
+            model.addAttribute("msg","请选择一个项目进行操作");
+            return "errorWithEntity";
         }
         model.addAttribute("entity", mainRecord);
         return "cfg/feature/addFeature";

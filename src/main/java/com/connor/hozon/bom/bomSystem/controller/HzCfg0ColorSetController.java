@@ -36,7 +36,7 @@ import static com.connor.hozon.bom.bomSystem.helper.StringHelper.checkString;
 
 /**
  * @Author: Fancyears·Maylos·Maywas
- * @Description: 颜色库
+ * @Description: 颜色库controller
  * @Date: Created in 2018/8/30 18:53
  * @Modified By:
  */

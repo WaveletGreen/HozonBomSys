@@ -456,19 +456,6 @@ $(document).ready(
                 param.proj = data;
 
                 data3.vwoStatus = vwoStatus;
-
-                console.log(data);
-                JSON.stringify(data);
-
-                console.log("----data2----");
-                console.log(data2);
-                JSON.stringify(data2);
-                console.log("----data2----");
-
-                console.log("----data3----");
-                console.log(JSON.stringify(data3));
-                console.log("----data2----");
-
                 $.ajax({
                     contentType:
                         "application/json",
@@ -483,7 +470,6 @@ $(document).ready(
                         else {
                             window.Ewin.alert({message: "保存失败"});
                         }
-                        // window.location.reload();//刷新当前页面.
                     },
                     error: function (e) {
                         console.log("连接服务器失败:" + e.status);
@@ -497,28 +483,11 @@ $(document).ready(
                     data: JSON.stringify(data2),
                     url: "saveInfluenceDept",
                     success: function (result) {
-                        console.log(result);
-                        // window.location.reload();//刷新当前页面.
                     },
                     error: function (e) {
                         console.log("连接服务器失败:" + e.status);
                     }
                 });
-                // $.ajax({
-                //     contentType:
-                //         "application/json",
-                //     type:
-                //         'POST',
-                //     data: JSON.stringify(data3),
-                //     url: "saveLeaderOpinion",
-                //     success: function (result) {
-                //         console.log(result);
-                //         // window.location.reload();//刷新当前页面.
-                //     },
-                //     error: function (e) {
-                //         console.log("连接服务器失败:" + e.status);
-                //     }
-                // });
             });
     }
 );

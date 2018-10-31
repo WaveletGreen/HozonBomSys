@@ -17,9 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import sql.pojo.cfg.fullCfg.HzFullCfgMain;
 import sql.pojo.cfg.main.HzCfg0MainRecord;
 import sql.pojo.cfg.model.HzCfg0ModelDetail;
-import sql.pojo.interaction.HzConfigBomColorBean;
 
-import java.util.List;
 import java.util.Map;
 
 import static com.connor.hozon.bom.bomSystem.helper.StringHelper.checkString;
@@ -41,22 +39,18 @@ public class HzBomAllCfgController {
     @Autowired
     IHzConfigBomColorService iHzConfigBomColorService;
 
-//    /**
-//     * 失效
-//     * @param data
-//     * @return
-//     */
-//    @RequestMapping("/saveBom")
-//    public JSONObject saveBom(@RequestParam Map<String, String> data) {
-//        return new JSONObject();
-//    }
-
+    /**
+     * 获取添加基础车型页面
+     * @param projectPuid 项目UID
+     * @param model 不用传
+     * @return
+     */
     @RequestMapping("/addVehicleModelPage2")
     public String addVehicleModelPage2(@RequestParam String projectPuid, Model model) {
         if (checkString(projectPuid)) {
-            HzCfg0ModelDetail detail=new HzCfg0ModelDetail();
+            HzCfg0ModelDetail detail = new HzCfg0ModelDetail();
             HzCfg0MainRecord mainRecord = new HzCfg0MainRecord();
-            hzBomAllCfgService.initAddingPageParams(projectPuid, detail,mainRecord);
+            hzBomAllCfgService.initAddingPageParams(projectPuid, detail, mainRecord);
             model.addAttribute("hzCfg0ModelDetail", detail);
             model.addAttribute("cfgmain", mainRecord);
             model.addAttribute("action", "./materiel/addVehicleModel2");
@@ -69,7 +63,8 @@ public class HzBomAllCfgController {
 
     /**
      * 全配置BOM一级清单页面初始化
-     * @param bdf
+     *
+     * @param bdf 项目UID
      * @return
      */
     @RequestMapping("/loadCfg0BomLineOfModel")
@@ -80,6 +75,7 @@ public class HzBomAllCfgController {
 
     /**
      * 保存2Y层对应的各数据
+     *
      * @param bomLinePuid
      * @param cfgPuid
      * @param colorPart
@@ -95,6 +91,7 @@ public class HzBomAllCfgController {
 
     /**
      * 保存所有打点图
+     *
      * @param data
      * @return
      */
@@ -106,6 +103,7 @@ public class HzBomAllCfgController {
 
     /**
      * 删除车辆模型
+     *
      * @param modelId
      * @return
      */
@@ -133,7 +131,6 @@ public class HzBomAllCfgController {
             return "errorWithEntity";
         }
         String releaseDate = fullCfgMain.getEffectiveDate() == null ? "" : DateStringHelper.dateToString(fullCfgMain.getEffectiveDate());
-//        model.addAttribute("entity", fullCfgMain);
         model.addAttribute("releaseDate", releaseDate);
         if (setName != null && "version".equals(setName)) {
             Integer stage = fullCfgMain.getStage();
@@ -147,7 +144,8 @@ public class HzBomAllCfgController {
             model.addAttribute("action", "./bomAllCfg/setStage");
             return "bom/setStagePage";
         }
-        return "";
+        model.addAttribute("msg", "发生未知错误");
+        return "errorWithEntity";
     }
 
     /**
@@ -194,11 +192,13 @@ public class HzBomAllCfgController {
     }
 
 
-/**
+    /**
      * 保存2Y层对应的打点图
+     *
      * @param dataMap
      * @return
-     */@RequestMapping(value = "saveBomLinePiont", method = RequestMethod.POST)
+     */
+    @RequestMapping(value = "saveBomLinePiont", method = RequestMethod.POST)
     @ResponseBody
     public JSONObject saveBomLinePiont(@RequestBody Map<String, Map<String, String>> dataMap) {
         return hzBomAllCfgService.saveBomLinePiont(dataMap);

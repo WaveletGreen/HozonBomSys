@@ -250,6 +250,7 @@ public class HzCfg0ModelColorService {
             _result.put("descOfColorModel", color.getpDescOfColorfulModel());
             _result.put("modelShell", color.getpModelShellOfColorfulModel());
             _result.put("modeColorIsMultiply", color.getpColorIsMultiply());
+            _result.put("vwoNum", String.valueOf(color.getCmcrVwoId()));
 //            List<HzCfg0ModelColorDetail> cm = hzColorModelService.doSelectByModelUidWithColor(color.getPuid());
             List<HzCfg0ModelColorDetail> cm = hzColorModelService.doSelectByModelUidWithColor2(color.getPuid());
             coach.clear();

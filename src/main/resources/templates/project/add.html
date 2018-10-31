@@ -242,8 +242,6 @@
         $("#btnOk", window.top.document).click(function () {
             var bootstrapValidator = $("#form", window.top.document).data('bootstrapValidator');
             bootstrapValidator.validate();
-            // bootstrapValidator.revalidateField("pProjectCode");
-
             if (bootstrapValidator.isValid()) {
                 var url = $("#form", window.top.document).attr('action');
                 <!--其实不要puid，puid会在服务器上生成-->
@@ -252,9 +250,6 @@
                 for (var p in _d) {
                     data[_d[p].name] = _d[p].value;
                 }
-                // data.pProjectPertainToPlatform=$("#pProjectPertainToPlatform").val();
-                console.log(data);
-                console.log(JSON.stringify(data));
                 $.ajax({
                     type:
                         'POST',
@@ -276,13 +271,12 @@
                                     pPuid: entity.pProjectPertainToVehicle,
                                     name: entity.pProjectName
                                 });
-                                if (result.status1 == 0 || result.status2 == 0 || result.status3 == 0) {
-                                    window.Ewin.alert({message: result.settingMsg + "<br>" + result.dxgMainMsg + "<br>" + result.cfgMsg});
+                                if (result.status1 == 0 || result.status2 == 0) {
+                                    window.Ewin.alert({message: "<br>" + result.dxgMainMsg + "<br>" + result.cfgMsg});
                                 }
                                 else {
                                     layer.msg('添加项目成功', {icon: 1, time: 2000})
                                 }
-                                // window.Ewin.alert({message: "添加项目成功"});
                             }
                             else if (result.status == 0) {
                                 window.Ewin.alert({message: "已存在的项目代码，请修改或者更换项目代码"});
@@ -320,10 +314,7 @@
                 $("#selectUserBtn").html("显示组织架构");
             }
         })
-
     })
-
-
     ]]>
 </script>
 <script th:src="@{/layer/layer.js}"></script>

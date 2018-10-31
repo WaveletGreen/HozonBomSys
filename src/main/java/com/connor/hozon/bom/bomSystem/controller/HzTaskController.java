@@ -39,13 +39,22 @@ import java.util.Map;
 @Controller
 @RequestMapping("task")
 public class HzTaskController {
+    /**任务服务层*/
     @Autowired
     IHzTaskService iHzTaskService;
+    /***前端网址树*/
     @Autowired
     TreeService treeService;
+    /**VWO变更表单服务层*/
     @Autowired
     HzVwoInfoService hzVwoInfoService;
 
+    /***
+     * 保存任务，已废除，不再使用该独立方法作为保存任务的作用
+     * @param dto 接收的任务对象
+     * @return 不应当用该返回值作为保存任务成功的标志，因为方法已废除
+     */
+    @Deprecated
     @RequestMapping("saveTask")
     public boolean saveTask(@RequestBody TaskReceivedDto dto) {
         iHzTaskService.saveTask(dto);
@@ -54,6 +63,7 @@ public class HzTaskController {
 
     /**
      * 加载个人任务，依据当前登录用户，从任务表中查询出该用户关联的需要执行的任务(任务状态为1)
+     *
      * @return 一组当前用户需要执行的的任务集合，以JSON数组回传前端，最终由JS动态绘制到右上角任务栏中
      */
     @RequestMapping(value = "/loadTasks", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -92,8 +102,10 @@ public class HzTaskController {
                         dto.setTargetType(task.getTaskTargetType());
                         dto.setFormType(task.getTaskFormType());
                         break;
+                    //预留给EWO表单用
                     case 2:
                         break;
+                    //预留该MWO表单用
                     case 3:
                         break;
                     default:
