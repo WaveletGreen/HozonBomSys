@@ -39,22 +39,40 @@ public class HzBomAllCfgController {
     @Autowired
     IHzConfigBomColorService iHzConfigBomColorService;
 
-    @RequestMapping("/saveBom")
-    public JSONObject saveBom(@RequestParam Map<String, String> data) {
-        return new JSONObject();
-    }
+//    /**
+//     * 失效
+//     * @param data
+//     * @return
+//     */
+//    @RequestMapping("/saveBom")
+//    public JSONObject saveBom(@RequestParam Map<String, String> data) {
+//        return new JSONObject();
+//    }
 
 //    @RequestMapping("/savePoint")
 //    public JSONObject savePoint(@RequestBody Map<String, Map<String,String>> data){
 //        return new JSONObject();
 //    }
 
+    /**
+     * 全配置BOM一级清单页面初始化
+     * @param bdf
+     * @return
+     */
     @RequestMapping("/loadCfg0BomLineOfModel")
     @ResponseBody
     public JSONObject loadCfg0BomLineOfModel(@RequestParam String bdf) {
         return hzBomAllCfgService.parse(bdf);
     }
 
+    /**
+     * 保存2Y层对应的各数据
+     * @param bomLinePuid
+     * @param cfgPuid
+     * @param colorPart
+     * @param msgVal
+     * @return
+     */
     @RequestMapping("/saveOneRow")
     @ResponseBody
     public JSONObject saveOneRow(String bomLinePuid, String cfgPuid, Integer colorPart, String msgVal) {
@@ -62,12 +80,22 @@ public class HzBomAllCfgController {
         return hzBomAllCfgService.saveOneRow(bomLinePuid, cfgPuid, colorPart, msgVal);
     }
 
+    /**
+     * 保存所有打点图
+     * @param data
+     * @return
+     */
     @RequestMapping("/savePoint")
     @ResponseBody
     public JSONObject savePoint(@RequestBody Map<String, Map<String, String>> data) {
         return hzBomAllCfgService.savePoint(data);
     }
 
+    /**
+     * 删除车辆模型
+     * @param modelId
+     * @return
+     */
     @RequestMapping("/deleteModel")
     @ResponseBody
     public JSONObject deleteModel(@RequestParam String modelId) {
@@ -152,7 +180,12 @@ public class HzBomAllCfgController {
     }
 
 
-@RequestMapping(value = "saveBomLinePiont", method = RequestMethod.POST)
+    /**
+     * 保存2Y层对应的打点图
+     * @param dataMap
+     * @return
+     */
+    @RequestMapping(value = "saveBomLinePiont", method = RequestMethod.POST)
     @ResponseBody
     public JSONObject saveBomLinePiont(@RequestBody Map<String, Map<String, String>> dataMap) {
         return hzBomAllCfgService.saveBomLinePiont(dataMap);

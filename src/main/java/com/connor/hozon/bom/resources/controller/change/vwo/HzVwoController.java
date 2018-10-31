@@ -340,6 +340,11 @@ public class HzVwoController {
         return iHzVWOManagerService.interrupt(dto.getVwoType(), dto.getProjectUid(), dto.getVwoId());
     }
 
+    /**
+     * vwo发起
+     * @param dto
+     * @return
+     */
     @RequestMapping(value = "/launch", method = RequestMethod.POST)
     @ResponseBody
     public JSONObject launch(@RequestBody HzVwoProcessDto dto){

@@ -40,6 +40,10 @@ public class HzRelevanceController {
     @Autowired
     HzCfg0OptionFamilyDao hzCfg0OptionFamilyDao;
 
+    /**
+     * 生成相关性
+     * @return
+     */
     @RequestMapping("/generateRelevance")
     @ResponseBody
     public JSONObject generateRelevance() {

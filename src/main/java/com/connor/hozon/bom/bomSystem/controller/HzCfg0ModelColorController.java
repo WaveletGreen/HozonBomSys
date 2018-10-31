@@ -82,12 +82,23 @@ public class HzCfg0ModelColorController {
 
     }
 
+    /**
+     * 获取配色方案页面表格所有数据
+     * @param projectPuid
+     * @return
+     */
     @RequestMapping(value = "/loadAll", method = RequestMethod.GET)
     @ResponseBody
     public Map<String, Object> loadAll(@RequestParam String projectPuid) {
         return hzCfg0ModelColorService.doLoadAll2(projectPuid);
     }
 
+    /**
+     * 跳转到配色方案添加页面
+     * @param projectPuid
+     * @param model
+     * @return
+     */
     @RequestMapping(value = "/addPage", method = RequestMethod.GET)
     public String addPage(@RequestParam String projectPuid, Model model) {
         List<HzCfg0OptionFamily> _columnList = hzCfg0OptionFamilyService.selectForColorBluePrint(projectPuid, 1);//getFamilies(projectPuid, 0, 1);
@@ -133,6 +144,12 @@ public class HzCfg0ModelColorController {
         return "cfg/modelColorCfg/addModelColorCfg";
     }
 
+    /**
+     *跳转到配色方案修改页面
+     * @param puid
+     * @param model
+     * @return
+     */
     @RequestMapping(value = "/modifyPage", method = RequestMethod.GET)
     public String modifyPage(String puid, Model model) {
         HzCfg0ModelColor currentModel = new HzCfg0ModelColor();
@@ -204,6 +221,11 @@ public class HzCfg0ModelColorController {
         return "cfg/modelColorCfg/updateModelColorCfg";
     }
 
+    /**
+     * 修改配色方案
+     * @param form
+     * @return
+     */
     @RequestMapping(value = "/updateColorModel", method = RequestMethod.POST)
     @ResponseBody
     public boolean updateColorModel(@RequestBody LinkedHashMap<String, String> form) {
@@ -258,12 +280,23 @@ public class HzCfg0ModelColorController {
         } else return false;
     }
 
+    /**
+     *
+     * 获取配色方案所有表头
+     * @param projectPuid
+     * @return
+     */
     @RequestMapping(value = "/getColumn", method = RequestMethod.GET)
     @ResponseBody
     public JSONObject getColumn(@RequestParam String projectPuid) {
         return hzCfg0ModelColorService.getColumnOnlyColor(projectPuid);
     }
 
+    /**
+     * 删除配色方案
+     * @param colors
+     * @return
+     */
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     @ResponseBody
     public JSONObject deleteByBatch(@RequestBody List<HzCfg0ModelColor> colors) {
@@ -280,6 +313,11 @@ public class HzCfg0ModelColorController {
         return result;
     }
 
+    /**
+     * 添加新增的配色方案
+     * @param form
+     * @return
+     */
     @RequestMapping(value = "/saveColorModel", method = RequestMethod.POST)
     @ResponseBody
     public JSONObject saveColorModel(@RequestBody LinkedHashMap<String, String> form) {
@@ -554,6 +592,11 @@ public class HzCfg0ModelColorController {
     }
 
 
+    /**
+     * 对配色方案发起流程
+     * @param params
+     * @return
+     */
     @RequestMapping("/getVWO")
     @ResponseBody
     public JSONObject getVWO(@RequestBody Map<String, Object> params) {
