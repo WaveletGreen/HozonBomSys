@@ -17,7 +17,6 @@ function doQuery() {
             type: "GET",
             success: function (result) {
                 var column = [];
-                column.push({field: 'puid', title: '主键'});
                 column.push({field: 'ck', checkbox: true});
                 /*var data = result.data;
                 var nameZh = data[0];
@@ -113,7 +112,7 @@ function doQuery() {
                     // ],
                 });
                 //$table.bootstrapTable('hideColumn','puid');
-                $table.bootstrapTable('hideColumn', 'puid');
+                // $table.bootstrapTable('hideColumn', 'puid');
                 $table.bootstrapTable('hideColumn', 'groupNum');
                 $table.bootstrapTable('hideColumn', 'rank');
             }
