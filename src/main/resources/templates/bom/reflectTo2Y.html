@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!--该页面为一阶段紧急使用功能，已废除-->
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <body>
@@ -8,13 +9,10 @@
             <div class="form-group" th:each="feature,index:${features}">
                 <input type="hidden" th:name="${feature.getpCfg0ObjectId()}" id="pModelPuid"
                        th:value="${feature.getPuid()}"/>
-                <!--for="pModelName"-->
                 <label th:text="${feature.getpCfg0FamilyDesc()}+'-'+${feature.getpCfg0Desc()}+'&emsp;&emsp;'+${feature.getpCfg0FamilyName()+'-'+feature.getpCfg0ObjectId()}"></label>
                 <select class="form-control input-small" data-style="btn-info" th:name="'s'+${index.index}">
                     <option th:each="line:${lines}" th:value="${line.getPuid()}" th:text="${line.getLineID()}"></option>
                 </select>
-                <!--<input class="form-control" id="pModelName" name="pModelName" type="text"-->
-                <!--/>-->
             </div>
         </div>
     </div>
@@ -23,30 +21,8 @@
 <script th:inline="javascript">
     <![CDATA[
     $(function () {
-        // $('#form').bootstrapValidator({
-        //     message: 'This value is not valid',
-        //     feedbackIcons: {
-        //         valid: 'glyphicon glyphicon-ok',
-        //         invalid: 'glyphicon glyphicon-remove',
-        //         validating: 'glyphicon glyphicon-refresh'
-        //     },
-        //     fields: {
-        //         pModelName: {
-        //             message: '模型名称验证失败',
-        //             validators: {
-        //                 notEmpty: {
-        //                     message: '模型名称不能为空'
-        //                 }
-        //             }
-        //         }
-        //     }
-        //
-        // });
         // 绑定dialog的确定按钮的监听事件
         $("#btnOk", window.top.document).click(function () {
-            // var bootstrapValidator = $("#form", window.top.document).data('bootstrapValidator');
-            // bootstrapValidator.validate();
-            // if (bootstrapValidator.isValid()) {
             var url = $("#form", window.top.document).attr('action');
             var projectPuid = $("#project", window.top.document).val();
             <!--其实不要puid，puid会在服务器上生成-->
@@ -58,29 +34,6 @@
                     data[_d[p].name] = _d[p].value;
                 }
             }
-            // var sort = {};
-
-            // for (var i in data) {
-            //     console.log(data[i]);
-            //     if (!$.isEmptyObject(sort)) {
-            //         for (var j in sort) {
-            //             console.log("-----------");
-            //             console.log(data[i]);
-            //             console.log(sort[j]);
-            //             console.log("-----------");
-            //             if (sort[j] == data[i]) {
-            //                 window.Ewin.alert({message: "特性值存在重复关联的2Y"});
-            //                 return;
-            //             }
-            //         }
-            //     }
-            //     else {
-            //         // window.Ewin.alert({message: "特性值存在重复关联的2Y"});
-            //         // return;
-            //         sort['s'+i] = data[i];
-            //     }
-            // }
-            console.log(data);
             $.ajax({
                 contentType:
                     "application/json",
@@ -92,15 +45,12 @@
                     function (result) {
                         $('.modal-dialog', window.top.document).parent('div').remove();
                         $('body', window.top.document).find('.modal-backdrop').remove();
-                        // jquery 调用刷新当前操作的table页面的refresh方法
-                        // $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
                         window.Ewin.alert({message: result.msg});
                     },
                 error: function (status) {
                     window.Ewin.alert({message: status.status + ':添加数据失败!'});
                 }
             });
-            // }
         });
     })
     ]]>

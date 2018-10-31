@@ -30,25 +30,23 @@ public class ProjectHelper {
     /**
      * 项目服务层
      */
-    final
+    @Autowired
     HzProjectLibsService projectLibsService;
     /**
      * 车型服务层
      */
-    final
+    @Autowired
     IHzVehicleService hzVehicleService;
     /**
      * 平台服务层
      */
-    final
+    @Autowired
     HzPlatformService hzPlatformService;
     /**
      * 品牌服务层
      */
-    final
+    @Autowired
     HzBrandService brandService;
-
-    private final Logger logger = LoggerFactory.getLogger(ProjectHelper.class);
     /**
      * 项目
      */
@@ -70,12 +68,10 @@ public class ProjectHelper {
     @Getter
     private HzBrandRecord brand;
 
+    private final Logger logger = LoggerFactory.getLogger(ProjectHelper.class);
+
     @Autowired
-    public ProjectHelper(HzProjectLibsService projectLibsService, IHzVehicleService hzVehicleService, HzPlatformService hzPlatformService, HzBrandService brandService) {
-        this.projectLibsService = projectLibsService;
-        this.hzVehicleService = hzVehicleService;
-        this.hzPlatformService = hzPlatformService;
-        this.brandService = brandService;
+    public ProjectHelper() {
     }
 
     /**

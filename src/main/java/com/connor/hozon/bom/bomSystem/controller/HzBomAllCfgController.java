@@ -15,6 +15,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import sql.pojo.cfg.fullCfg.HzFullCfgMain;
+import sql.pojo.cfg.main.HzCfg0MainRecord;
+import sql.pojo.cfg.model.HzCfg0ModelDetail;
 import sql.pojo.interaction.HzConfigBomColorBean;
 
 import java.util.List;
@@ -44,10 +46,21 @@ public class HzBomAllCfgController {
         return new JSONObject();
     }
 
-//    @RequestMapping("/savePoint")
-//    public JSONObject savePoint(@RequestBody Map<String, Map<String,String>> data){
-//        return new JSONObject();
-//    }
+    @RequestMapping("/addVehicleModelPage2")
+    public String addVehicleModelPage2(@RequestParam String projectPuid, Model model) {
+        if (checkString(projectPuid)) {
+            HzCfg0ModelDetail detail=new HzCfg0ModelDetail();
+            HzCfg0MainRecord mainRecord = new HzCfg0MainRecord();
+            hzBomAllCfgService.initAddingPageParams(projectPuid, detail,mainRecord);
+            model.addAttribute("hzCfg0ModelDetail", detail);
+            model.addAttribute("cfgmain", mainRecord);
+            model.addAttribute("action", "./materiel/addVehicleModel2");
+            return "bom/addModel2";
+        } else {
+            model.addAttribute("msg", "请选择项目再操作");
+            return "errorWithEntity";
+        }
+    }
 
     @RequestMapping("/loadCfg0BomLineOfModel")
     @ResponseBody
@@ -58,7 +71,7 @@ public class HzBomAllCfgController {
     @RequestMapping("/saveOneRow")
     @ResponseBody
     public JSONObject saveOneRow(String bomLinePuid, String cfgPuid, Integer colorPart, String msgVal) {
-        List<HzConfigBomColorBean> beans = iHzConfigBomColorService.doSelectBy2YUidWithProject(bomLinePuid, "1c128c60-84a2-4076-9b1c-f7093e56e4df");
+//        List<HzConfigBomColorBean> beans = iHzConfigBomColorService.doSelectBy2YUidWithProject(bomLinePuid, "1c128c60-84a2-4076-9b1c-f7093e56e4df");
         return hzBomAllCfgService.saveOneRow(bomLinePuid, cfgPuid, colorPart, msgVal);
     }
 

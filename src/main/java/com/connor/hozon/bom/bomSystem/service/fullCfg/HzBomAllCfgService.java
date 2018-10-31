@@ -31,6 +31,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import sql.pojo.bom.HzBomLineRecord;
 import sql.pojo.cfg.cfg0.HzCfg0Record;
 import sql.pojo.cfg.fullCfg.HzFullCfgMain;
@@ -49,6 +52,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 import static com.connor.hozon.bom.bomSystem.helper.StringHelper.checkString;
+
 /**
  * @Author: Fancyears·Maylos·Maywas
  * @Description: fuck
@@ -97,6 +101,7 @@ public class HzBomAllCfgService {
     HzCfg0MainService hzCfg0MainService;
     @Autowired
     ProjectHelper projectHelper;
+
     private static final String[] selfDesc =
             {
                     "operationType"/*操作类型*/,
@@ -340,6 +345,19 @@ public class HzBomAllCfgService {
         return respond;
     }
 
+    /**
+     * 初始化添加列信息的项目信息树结构和主配置参数
+     * @param projectPuid 项目UID
+     * @param detail 基础车型的详情，主要接收项目树结构数据，并不做其他处理
+     * @param mainRecord 主配置对象
+     */
+    public void initAddingPageParams(String projectPuid, HzCfg0ModelDetail detail, HzCfg0MainRecord mainRecord) {
+        projectHelper.doGetProjectTreeByProjectId(projectPuid);
+        detail.setpModelBrand(projectHelper.getBrand().getpBrandName());
+        detail.setpModelPlatform(projectHelper.getPlatform().getpPlatformName());
+        detail.setpModelVehicle(projectHelper.getVehicle().getpVehicleName());
+        mainRecord.setPuid(hzCfg0MainService.doGetbyProjectPuid(projectPuid).getPuid());
+    }
 
     /**
      * 表单初始化
