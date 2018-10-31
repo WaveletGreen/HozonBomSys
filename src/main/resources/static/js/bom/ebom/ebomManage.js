@@ -45,10 +45,7 @@ function initTable(eBomUrl) {
         type: "GET",
         success: function (result) {
             var column = [];
-            // column.push({field: 'eBomPuid', title: 'puid'});
             column.push({field: 'ck', checkbox: true});
-            // column.push({field: 'puid', title: '主键'});
-
             /* var data = result.data;
              var nameZh = data[0];
              var nameEn = data[1];
@@ -153,13 +150,6 @@ function initTable(eBomUrl) {
                     }
                 }
             })
-            // column.push({
-            //     field: '',
-            //     title: '单车用量',
-            //     align: 'center',
-            //     valign: 'middle',
-            //     colspan:'4',
-            // })
             $table.bootstrapTable({
                 url: eBomUrl,
                 method: 'GET',
@@ -536,38 +526,10 @@ function initTable(eBomUrl) {
                                     })
                                 }
                             });
-
                         }
                     },
-
-                    /*{
-                        text: '下载文件',
-                        iconCls: 'glyphicon glyphicon-plus',
-                        handler: function () {
-                            // window.open("./download?dsd=1&dsda=2&sdasd=3", '_self');
-                            var rows = $table.bootstrapTable('getSelections');
-                            var $tablex = $("#dataTable");
-                            let columnsOrg = $tablex.bootstrapTable("getVisibleColumns");
-                            let uids = [];
-                            let columns = [];
-                            let fields = [];
-                            for (let i in rows) {
-                                uids.push(rows[i].puid);
-                            }
-                            for (let i in columnsOrg) {
-                                columns.push(columnsOrg[i].title);
-                                fields.push(columnsOrg[i].field);
-                            }
-                            DownLoadFile({
-                                url: './download', //请求的url
-                                data: {uids: uids, columns: columns, fields: fields}//要发送的数据
-                            });
-                        }
-                    },*/
                 ],
             });
-            //$table.bootstrapTable('hideColumn','puid');
-            // $table.bootstrapTable('hideColumn', 'puid');
             $table.bootstrapTable('hideColumn', 'groupNum');
             $table.bootstrapTable('hideColumn', 'rank');
         }
@@ -578,7 +540,6 @@ function initTable1(eBomUrl,puids) {
     if (!checkIsSelectProject(projectPuid)) {
         return;
     }
-    //var eBomUrl ="ebom/getEBom/list?projectId=" + projectPuid
     var $table = $("#ebomManageTable");
     var column = [];
     $.ajax({
@@ -586,10 +547,7 @@ function initTable1(eBomUrl,puids) {
         type: "GET",
         success: function (result) {
             var column = [];
-            // column.push({field: 'eBomPuid', title: 'puid'});
             column.push({field: 'ck', checkbox: true});
-            // column.push({field: 'puid', title: '主键'});
-
             /* var data = result.data;
              var nameZh = data[0];
              var nameEn = data[1];
@@ -1086,8 +1044,6 @@ function initTable1(eBomUrl,puids) {
                     },
                 ],
             });
-            //$table.bootstrapTable('hideColumn','puid');
-            // $table.bootstrapTable('hideColumn', 'puid');
             $table.bootstrapTable('hideColumn', 'groupNum');
             $table.bootstrapTable('hideColumn', 'rank');
         }

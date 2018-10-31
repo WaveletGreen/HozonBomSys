@@ -20,7 +20,6 @@ function initTable(){
         type: "GET",
         success: function (result) {
             var column = [];
-            // column.push({field: 'puid', title: 'Puid'});
             column.push({field: 'ck', checkbox: true, Width: 50});
             var data = result.data;
             var keys = [];

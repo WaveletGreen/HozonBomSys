@@ -56,7 +56,6 @@ function initTable(url) {
         type: "GET",
         success: function (result) {
             var column = [];
-            // column.push({field: 'id', title: '主键'});
             column.push({field: 'ck', checkbox: true, width: 50});
             // column.push({
             //     field: 'ewoNo',
@@ -94,23 +93,6 @@ function initTable(url) {
             }
             ;
             $table.bootstrapTable({
-                // ajax: function (request) {
-                //     $.ajax({
-                //         url: "ewo/base/infoList?projectId=" + projectId,
-                //         success: function (result) {
-                //             // var data = JSON.stringify(result);
-                //             // var msg = JSON.parse(data);
-                //             // console.log(msg);
-                //             request.success({
-                //                 row: result
-                //             });
-                //             $table.bootstrapTable('load', result);
-                //         },
-                //         error: function () {
-                //             window.Ewin.alert("操作错误")
-                //         }
-                //     })
-                // },
                 url: url,
                 method: 'get',
                 height: $(window.parent.document).find("#wrapper").height() - 90,
@@ -222,7 +204,6 @@ function initTable(url) {
                             }
                             window.Ewin.confirm({title: '提示', message: '是否要导出选中行？', width: 500}).on(function (e) {
                                 if (e) {
-                                    console.log(rows);
                                     $.ajax({
                                         type: "POST",
                                         //ajax需要添加打包名
@@ -230,7 +211,6 @@ function initTable(url) {
                                         data: JSON.stringify(rows),
                                         contentType: "application/json",
                                         success: function (result2) {
-                                            console.log(result2);
                                             if (result2.status) {
                                                 layer.msg(result2.msg, {icon: 1, time: 2000})
                                                 var URL = document.URL.split("/");
@@ -275,7 +255,6 @@ function initTable1(url,lineIds,singleVehiclesId) {
         type: "GET",
         success: function (result) {
             var column = [];
-            // column.push({field: 'id', title: '主键'});
             column.push({field: 'ck', checkbox: true, width: 50});
             // column.push({
             //     field: 'ewoNo',
@@ -313,23 +292,6 @@ function initTable1(url,lineIds,singleVehiclesId) {
             }
             ;
             $table.bootstrapTable({
-                // ajax: function (request) {
-                //     $.ajax({
-                //         url: "ewo/base/infoList?projectId=" + projectId,
-                //         success: function (result) {
-                //             // var data = JSON.stringify(result);
-                //             // var msg = JSON.parse(data);
-                //             // console.log(msg);
-                //             request.success({
-                //                 row: result
-                //             });
-                //             $table.bootstrapTable('load', result);
-                //         },
-                //         error: function () {
-                //             window.Ewin.alert("操作错误")
-                //         }
-                //     })
-                // },
                 url: url+"&eBomPuids="+lineIds+"&showBomStructure=1"+"&singleVehiclesId="+singleVehiclesId,
                 method: 'get',
                 height: $(window.parent.document).find("#wrapper").height() - 90,
@@ -444,7 +406,6 @@ function initTable1(url,lineIds,singleVehiclesId) {
                                         data: JSON.stringify(rows),
                                         contentType: "application/json",
                                         success: function (result) {
-                                            console.log(result);
                                             if (result.status) {
                                                 layer.msg(result.msg, {icon: 1, time: 2000})
 

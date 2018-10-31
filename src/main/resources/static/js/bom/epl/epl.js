@@ -40,7 +40,6 @@ function initTable(eplUrl){
     }
     var $table = $("#eplTable");
     var column = [];
-    //var eplUrl = "epl/record?projectId="+projectPuid;
     var eplTitleUrl = "epl/epl/title";
     $.ajax({
         url:eplTitleUrl,
