@@ -52,6 +52,7 @@ public class HzVwoController {
      */
     @RequestMapping(value = "/vwoFormList", method = RequestMethod.GET)
     public String getVwoFromList(@RequestParam Long id, @RequestParam Integer vwoType, Model model) {
+
         String error = "errorWithEntity";
         HzVwoInfo vwoInfo;
         HzVwoInfluenceDept influenceDept;
@@ -339,6 +340,11 @@ public class HzVwoController {
         return iHzVWOManagerService.interrupt(dto.getVwoType(), dto.getProjectUid(), dto.getVwoId());
     }
 
+    /**
+     * vwo发起
+     * @param dto
+     * @return
+     */
     @RequestMapping(value = "/launch", method = RequestMethod.POST)
     @ResponseBody
     public JSONObject launch(@RequestBody HzVwoProcessDto dto){

@@ -472,6 +472,11 @@ public class HzMaterielFeatureController extends ExtraIntegrate {
         return _result;
     }
 
+    /**
+     * 修改超级物料特性
+     * @param superMateriel
+     * @return
+     */
     @RequestMapping("/updateSuperMateriel")
     @ResponseBody
     public boolean updateSuperMateriel(@RequestBody HzMaterielRecord superMateriel) {
