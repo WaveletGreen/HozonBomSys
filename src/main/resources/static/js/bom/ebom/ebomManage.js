@@ -510,8 +510,6 @@ function initTable(eBomUrl) {
                                     param[('title'+i)]=rows[k][('title'+i)];
                                 }
                                 rows[k].map=param;
-                                // console.log(param);
-                                // console.log(rows[k]);
                             }
                             window.Ewin.confirm({title: '提示', message: '是否要导出选中行？', width: 500}).on(function (e) {
                                 if (e) {
@@ -522,7 +520,6 @@ function initTable(eBomUrl) {
                                         data: (JSON.stringify(rows)),
                                         contentType: "application/json",
                                         success: function (result) {
-                                            console.log(result);
                                             if (result.status) {
                                                 layer.msg(result.msg, {icon: 1, time: 2000})
                                                 //下载EBOM导入模板
@@ -1068,7 +1065,6 @@ function initTable1(eBomUrl,puids) {
                                         data: (JSON.stringify(rows)),
                                         contentType: "application/json",
                                         success: function (result) {
-                                            console.log(result);
                                             if (result.status) {
                                                 layer.msg(result.msg, {icon: 1, time: 2000})
                                                 //下载EBOM导入模板
