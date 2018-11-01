@@ -450,7 +450,7 @@
             <form class="form-horizontal" id="bomLeaderOpinion" role="form">
                 <div class="panel panel-default panel-body col-lg-12 col-md-12 col-sm-12">
                     <h4>BOM经理：<a th:text="${hzVwoOpiBom.getOpiBomMngUserName()==null?'请选择BOM经理':hzVwoOpiBom.getOpiBomMngUserName()}" onclick="doSelectBomMag(1)"></a></h4>
-                    <input type="hidden" id='' th:value="${hzVwoOpiBom.getOpiBomMngUserId()}">
+                    <input type="hidden" id='BomUserId' th:value="${hzVwoOpiBom.getOpiBomMngUserId()}">
                     <div class="col-lg-12 col-md-12 col-sm-12">
                         <label for="opiBomMngOpinion">意见</label>
                         <textarea class="form-control" style="resize: none;width: 100%;" rows="2" cols="30"
@@ -489,6 +489,7 @@
                 <!--<fieldset>-->
                 <div class="panel panel-default panel-body col-lg-12 col-md-12 col-sm-12">
                     <h4>专业PMT经理：<a th:text="${hzVwoOpiPmt.getOpiPmtMngUserName()==null?'请选择PMT经理':hzVwoOpiPmt.getOpiPmtMngUserName()}" onclick="doSelectBomMag(2)"></a></h4>
+                    <input type="hidden" id='PmtUserId' th:value="${hzVwoOpiPmt.getOpiPmtMngUserId()}">
                     <div class="col-lg-12 col-md-12 col-sm-12">
                         <label for="opiPmtMngOpinion">意见</label>
                         <textarea class="form-control" style="resize: none;width: 100%;" rows="2" cols="30"
@@ -528,6 +529,7 @@
                 <div class="panel panel-default panel-body col-lg-12 col-md-12 col-sm-12">
                     <!--<h4>项目经理：<a th:text="${hzVwoOpiProj.getOpiProjMngUserName()==null?'请选择项目经理':hzVwoOpiProj.getOpiProjMngUserName()}" onclick="doSelectBomMag(3)"></a></h4>-->
                     <h4>项目经理：<span th:text="${hzVwoOpiProj.getOpiProjMngUserName()}"></span></h4>
+                    <input type="hidden" id='ProjUserId' th:value="${hzVwoOpiProj.getOpiProjMngUserId()}">
                     <div class="col-lg-12 col-md-12 col-sm-12">
                         <label for="opiProjMngOpinion">意见</label>
                         <textarea class="form-control"
@@ -587,6 +589,7 @@
 <script th:src="@{/js/changeManage/vwo/vwoBasicInformation.js}"></script>
 <script th:inline="javascript">
     var vwoInfo = [[${vwoInfo}]];
+    var user = [[${user}]];
     function doQuery() {
         $('#connectedTable').bootstrapTable('refresh');    //刷新表格
     };

@@ -270,7 +270,7 @@ function loadData(_projectPuid) {
                         return "<span style='color: #9492a9'>已废止</span>";
                     }
                     else if (10 == value || "10" == value) {
-                        return "<span style='color: #e69800'>VWO审核中<br>"+row.cmcrVwoNum+"</span>";
+                        return "<span style='color: #e69800'>VWO审核中<br>("+row.cmcrVwoNum+")</span>";
                     }
                     else {
                         return "<span style='color: #a90009'>未知状态</span>";

@@ -51,7 +51,7 @@
         <result column="IS_SENT" jdbcType="INTEGER" property="isSent"/>
     </resultMap>
     <resultMap extends="BaseResultMap"  id="VwoMap" type="sql.pojo.cfg.cfg0.HzCfg0Record">
-        <result column="vwoNum" jdbcType="INTEGER" property="vwoNum"/>
+        <result column="vwoNum" jdbcType="VARCHAR" property="vwoNum"/>
     </resultMap>
     <!--基础列信息-->
     <sql id="Base_Column_List">
@@ -147,10 +147,10 @@
         <include refid="Base_Column_List"/>,vwoNum,ROWNUM as rown
         from
         ( select
-        <include refid="Base_Column_List"/>,t2.VWO_NUM as vwoNum
+        <include refid="Base_Column_List"/>,t2.VWO_NUM as vwoNum,
         ROWNUM as rowno
         from HZ_CFG0_RECORD t
-        join HZ_VWO_INFO t2 on t2.ID = t.VWO_ID
+        left join HZ_VWO_INFO t2 on t2.ID = t.VWO_ID
         where 1=1
         <if test="param.featureValue !=null">
             and t.p_cfg0_object_id like '%'||upper(trim(#{param.featureValue}))||'%'

@@ -335,6 +335,7 @@ function formatDate() {
  */
 function loadConnectedData(url) {
     var vwoStatus = vwoInfo.vwoStatus;
+    alert(user);
     if (vwoStatus != 10) {
         $("body input").attr('disabled', true);
         $("body select").attr('disabled', true);
@@ -346,21 +347,30 @@ function loadConnectedData(url) {
         });
         clearToolbars();
         if (vwoStatus == 101) {
-            notDisabledById("bomLeaderOpinion");
-            $(".head-btnSets").append('<button class="btn btn-success head-func-btn" style="margin-top: 100px;z-index:99999;"\n' +
-                '        id="bomLeadApprove" onclick="approve(\'saveBomLeaderOpinion\',\'bomLeaderOpinion\')">BOM经理审批\n' +
-                '</button>');
-        } else if (vwoStatus == 102) {
-            notDisabledById("pmtLeaderOpinion");
-            $(".head-btnSets").append('<button class="btn btn-success head-func-btn" style="margin-top: 100px;z-index:99999;"\n' +
-                '        id="pmtLeadApprove" onclick="approve(\'savePmtLeaderOpinion\',\'pmtLeaderOpinion\')">PMT经理审批\n' +
-                '</button>');
-        } else if (vwoStatus == 103) {
-            notDisabledById("projLeaderOpinion");
-            $(".head-btnSets").append('<button class="btn btn-success head-func-btn" style="margin-top: 100px;z-index:99999;"\n' +
-                '        id="projLeadApprove" onclick="approve(\'saveProjLeaderOpinion\',\'projLeaderOpinion\')">项目经理审批\n' +
-                '</button>');
+            var bomUser = $("#BomUserId").val();
+            if (user ==bomUser) {
+                notDisabledById("bomLeaderOpinion");
+                $(".head-btnSets").append('<button class="btn btn-success head-func-btn" style="margin-top: 100px;z-index:99999;"\n' +
+                    '        id="bomLeadApprove" onclick="approve(\'saveBomLeaderOpinion\',\'bomLeaderOpinion\')">BOM经理审批\n' +
+                    '</button>');
+            }
         }
+        } else if (vwoStatus == 102) {
+            var pmtUser = $("#PmtUserId").val();
+            if(user==pmtUser) {
+                notDisabledById("pmtLeaderOpinion");
+                $(".head-btnSets").append('<button class="btn btn-success head-func-btn" style="margin-top: 100px;z-index:99999;"\n' +
+                    '        id="pmtLeadApprove" onclick="approve(\'savePmtLeaderOpinion\',\'pmtLeaderOpinion\')">PMT经理审批\n' +
+                    '</button>');
+            }
+        } else if (vwoStatus == 103) {
+            var projUser = $("#ProjUserId").val();
+            if(user==projUser) {
+                notDisabledById("projLeaderOpinion");
+                $(".head-btnSets").append('<button class="btn btn-success head-func-btn" style="margin-top: 100px;z-index:99999;"\n' +
+                    '        id="projLeadApprove" onclick="approve(\'saveProjLeaderOpinion\',\'projLeaderOpinion\')">项目经理审批\n' +
+                    '</button>');
+            }
     } else {
         disabledById('bomLeaderOpinion');
         disabledById('pmtLeaderOpinion');

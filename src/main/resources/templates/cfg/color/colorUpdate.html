@@ -73,6 +73,26 @@
 <script th:inline="javascript">
 
     <![CDATA[
+    var total = 0;
+    function checkMaterielCode(inp){
+        var materielCode = $(inp).val();
+        $.ajax({
+            type : "GET",
+            url : "./colorSet/checkMaterielCode?materielCode="+materielCode,
+            success : function (result) {
+                if(result.status){
+                    $(inp).parent().find(".valError").hide();
+                    $(inp).parent().find(".valError").text("");
+                }else {
+                    $(inp).parent().find(".valError").text(result.msg);
+                    $(inp).parent().find(".valError").show();
+                }
+            },
+            error : function (result) {
+
+            }
+        });
+    }
     $(
         function () {
             $('#colorForm').bootstrapValidator({
@@ -177,26 +197,39 @@
             });
             // 绑定dialog的确定按钮的监听事件
             $("#btnOk", window.top.document).click(function () {
+                var errorSpan = $('.valError').text();
+                if(errorSpan!=""||errorSpan.length>0){
+                    window.Ewin.alert({message: '请填写正确的油漆物料'});
+                    return false;
+                }
                 var bootstrapValidator = $("#colorForm", window.top.document).data('bootstrapValidator');
                 bootstrapValidator.validate();
                 //重新验证字段
                /* bootstrapValidator.revalidateField("strColorEffectedDate");
                 bootstrapValidator.revalidateField("strColorAbolishDate");*/
                 if (bootstrapValidator.isValid()) {
+                    // var url = $("#colorForm", window.top.document).attr('action');
+                    // var myData = JSON.stringify({
+                    //     "pColorCode": $("#pColorCode").val(),
+                    //     "pColorComment": $("#pColorComment").val(),
+                    //     "pColorName": $("#pColorName").val(),
+                    //     "pColorOfSet": $("#pColorOfSet").val(),
+                    //     "puid": $("#puid").val(),
+                    //     "pColorIsMultiply": $("#pColorIsMultiply").val(),
+                    //     "pColorPlate": $("#pColorPlate").val()
+                    //     /*,
+                    //     "strColorEffectedDate": $("#strColorEffectedDate").val(),
+                    //     "strColorAbolishDate": $("#strColorAbolishDate").val()*/
+                    //
+                    // });
                     var url = $("#colorForm", window.top.document).attr('action');
-                    var myData = JSON.stringify({
-                        "pColorCode": $("#pColorCode").val(),
-                        "pColorComment": $("#pColorComment").val(),
-                        "pColorName": $("#pColorName").val(),
-                        "pColorOfSet": $("#pColorOfSet").val(),
-                        "puid": $("#puid").val(),
-                        "pColorIsMultiply": $("#pColorIsMultiply").val(),
-                        "pColorPlate": $("#pColorPlate").val()
-                        /*,
-                        "strColorEffectedDate": $("#strColorEffectedDate").val(),
-                        "strColorAbolishDate": $("#strColorAbolishDate").val()*/
-
-                    });
+                    <!--其实不要puid，puid会在服务器上生成-->
+                    let data={};
+                    data[puid]=$("#puid").val();
+                    var _d = $("#colorForm").serializeArray();
+                    for (var p in _d) {
+                        data[_d[p].name] = _d[p].value;
+                    }
                     $.ajax({
                         contentType:
                             "application/json",
@@ -215,11 +248,11 @@
                                 }
                                 else {
                                     // layer.msg(result.msg, {icon: 1, time: 2000})
-                                    window.Ewin.alert({message: +result.msg+'修改数据失败!'});
+                                    window.Ewin.alert({message: result.msg+'修改数据失败!'});
                                 }
 
                             },
-                        data: myData,
+                        data: JSON.stringify(data),
                         error: function (status) {
                             window.Ewin.alert({message: status.status + ':修改数据失败!'});
                         }
@@ -249,25 +282,25 @@
             todayHighlight: true, //今天是否高亮显示
             todayBtn: true
         }),
-    $("#btnAdd").click(function () {
-        var child = '<div class="form-group"><label for="pColorCode">油漆物料</label><a onclick="delInput(this)" style="float:right">删除</a>' +
-            '<br><span style="color : red;display: none" class="valError"></span>'+
+        $("#btnAdd").click(function () {
+            var child = '<div class="form-group"><label for="pColorCode">油漆物料</label><a onclick="delInput(this)" style="float:right">删除</a>' +
+                '<br><span style="color : red;display: none" class="valError"></span>'+
 
-            '<input type="text" class="form-control" id="color_'+total+'" name="color_'+total+'" placeholder="请输入油漆物料" onblur="checkMaterielCode(this)"/>' +
-            '</div>';
-        // var child = '<div class="form-group col-lg-12"><label for="pColorCode">油漆物料</label>' +
-        //     '</div>'+
-        //     '<br><span style="color : red;display: none" class="valError"></span>'+
-        //     '<div class="col-lg-4">' +
-        //     '<a onclick="delInput(this)">删除</a>'+
-        //     '</div>'+
-        //     '<div class="col-lg-8">'+
-        //     '<input type="text" class="form-control" id="color_'+total+'" name="color_'+total+'" placeholder="请输入油漆物料" onblur="checkMaterielCode(this)"/>' +
-        //     '</div>';
-        $("#colorForm").append(child);
-        total++;
-    })
-    )
+                '<input type="text" class="form-control" id="color_'+total+'" name="color_'+total+'" placeholder="请输入油漆物料" onblur="checkMaterielCode(this)"/>' +
+                '</div>';
+            // var child = '<div class="form-group col-lg-12"><label for="pColorCode">油漆物料</label>' +
+            //     '</div>'+
+            //     '<br><span style="color : red;display: none" class="valError"></span>'+
+            //     '<div class="col-lg-4">' +
+            //     '<a onclick="delInput(this)">删除</a>'+
+            //     '</div>'+
+            //     '<div class="col-lg-8">'+
+            //     '<input type="text" class="form-control" id="color_'+total+'" name="color_'+total+'" placeholder="请输入油漆物料" onblur="checkMaterielCode(this)"/>' +
+            //     '</div>';
+            $("#colorForm").append(child);
+            total++;
+        })
+    );
     ]]>
 </script>
 <script th:src="@{/layer/layer.js}"></script>
