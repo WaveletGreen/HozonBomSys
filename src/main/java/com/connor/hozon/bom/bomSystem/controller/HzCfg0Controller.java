@@ -48,6 +48,7 @@ import sql.pojo.resourcesLibrary.dictionaryLibrary.HzDictionaryLibrary;
  * @Description: 特性controller
  * 配置管理controller的所有返回消息字段key都是msg
  * 配置管理controller的所有返回成功标志字段key都是status
+ * 如发现不一致需要特殊处理
  * @Date: Created in 2018/8/30 18:53
  * @Modified By:
  */

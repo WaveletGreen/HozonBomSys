@@ -21,6 +21,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * @Description: 相关性表controller
  * 配置管理controller的所有返回消息字段key都是msg
  * 配置管理controller的所有返回成功标志字段key都是status
+ * 如发现不一致需要特殊处理
+ * 已完成注释
  * @Date: Created in 2018/8/27 21:17
  * @Modified By:
  */

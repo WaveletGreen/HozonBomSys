@@ -48,46 +48,48 @@ import static com.connor.hozon.bom.bomSystem.helper.StringHelper.checkString;
  * @Description: 配色方案controller
  * 配置管理controller的所有返回消息字段key都是msg
  * 配置管理controller的所有返回成功标志字段key都是status
+ * 如发现不一致需要特殊处理
  * @Date: Created in 2018/8/30 18:53
  * @Modified By:
  */
 @Controller
 @RequestMapping("/modelColor")
 public class HzCfg0ModelColorController {
-    private final HzCfg0ModelColorService hzCfg0ModelColorService;
-    private final HzCfg0OptionFamilyService hzCfg0OptionFamilyService;
-    private final HzCfg0ColorSetService hzCfg0ColorSetService;
-    private final HzCfg0MainService hzCfg0MainService;
+    /***颜色车型主数据服务，主数据除了油漆车身总成和车身颜色关联之外，不关联任务其他的特性颜色，需要从其详情service中查询*/
+    @Autowired
+    HzCfg0ModelColorService hzCfg0ModelColorService;
+    /***特性服务层，该特性是项目级别的而不是公司级别的，因此每一个项目只要添加过特性值，都将会存在至少1条特性存在*/
+    @Autowired
+    HzCfg0OptionFamilyService hzCfg0OptionFamilyService;
+    /***颜色库服务*/
+    @Autowired
+    HzCfg0ColorSetService hzCfg0ColorSetService;
+    /***主配置*/
+    @Autowired
+    HzCfg0MainService hzCfg0MainService;
+    /***颜色车型详情服务层，精确到每一个配色方案的所有特性下的颜色*/
     @Autowired
     IHzColorModelService hzColorModelService;
-    @Autowired
-    HzBomLineRecordService hzBomLineRecordService;
-    @Autowired
-    HzBomDataService hzBomDataService;
+    //    /***EBOM服务*/
+    //    @Autowired
+    //    HzBomLineRecordService hzBomLineRecordService;
+    //    @Autowired
+    //    HzBomDataService hzBomDataService;
     @Autowired
     HzColorLvl2ModelService hzColorLvl2ModelService;
+    /***EBOM服务*/
     @Autowired
     HzEbomRecordDAO hzEbomRecordDAO;
-
+    /***EBOM服务，上面那个太啰嗦了*/
     @Autowired
     HzBomLineRecordDaoImpl bomLineRecordDao;
-
-    private Logger logger;
-
-    @Autowired
-    public HzCfg0ModelColorController(HzCfg0ModelColorService hzCfg0ModelColorService, HzCfg0OptionFamilyService hzCfg0OptionFamilyService, HzCfg0ColorSetService hzCfg0ColorSetService, HzCfg0MainService hzCfg0MainService) {
-        this.hzCfg0MainService = hzCfg0MainService;
-        logger = LoggerFactory.getLogger(this.getClass());
-        this.hzCfg0ModelColorService = hzCfg0ModelColorService;
-        this.hzCfg0OptionFamilyService = hzCfg0OptionFamilyService;
-        this.hzCfg0ColorSetService = hzCfg0ColorSetService;
-
-    }
+    /*** 日志*/
+    private final static Logger logger = LoggerFactory.getLogger(HzCfg0ModelColorController.class);
 
     /**
-     * 获取配色方案页面表格所有数据
+     * 获取配色方案页面表格所有数据，配色方案数据量少，不采用分页更加简单
      *
-     * @param projectPuid       项目id
+     * @param projectPuid 项目id
      * @return
      */
     @RequestMapping(value = "/loadAll", method = RequestMethod.GET)
@@ -99,7 +101,7 @@ public class HzCfg0ModelColorController {
     /**
      * 跳转到配色方案添加页面
      *
-     * @param projectPuid       项目id
+     * @param projectPuid 项目id
      * @param model
      * @return
      */
@@ -151,7 +153,7 @@ public class HzCfg0ModelColorController {
     /**
      * 跳转到配色方案修改页面
      *
-     * @param puid          配色方案id
+     * @param puid  配色方案id
      * @param model
      * @return
      */
@@ -227,7 +229,7 @@ public class HzCfg0ModelColorController {
     }
 
     /**
-     * 修改配色方案
+     * 修改配色方案，由于配色方案的title是动态的，不适合用bean来接收，因此入参也是不确定的，只能用Map进行数据接收
      *
      * @param form
      * @return
@@ -289,7 +291,7 @@ public class HzCfg0ModelColorController {
     /**
      * 获取配色方案所有表头
      *
-     * @param projectPuid       项目id
+     * @param projectPuid 项目id
      * @return
      */
     @RequestMapping(value = "/getColumn", method = RequestMethod.GET)
@@ -301,7 +303,7 @@ public class HzCfg0ModelColorController {
     /**
      * 删除配色方案
      *
-     * @param colors        需删除的配色方案模型
+     * @param colors 需删除的配色方案模型
      * @return
      */
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
@@ -581,6 +583,14 @@ public class HzCfg0ModelColorController {
         return result;
     }
 
+    /**
+     * 删除单挑二级配色方案，
+     * 作为二级配色方案前端服务，二级配色方案没有从配色方案中进行关联，虽然没有才用二级配色方案，功能还需要保留
+     *
+     * @param modelUid 颜色车型UID
+     * @param puid     二级配色方案主键
+     * @return
+     */
     @RequestMapping("deleteFromServer")
     @ResponseBody
     public JSONObject deleteFromServer(@RequestParam String modelUid, @RequestParam String puid) {
@@ -601,10 +611,17 @@ public class HzCfg0ModelColorController {
 
 
     /**
-     * 对配色方案发起流程
+     * 对配色方案发起流程，发起流程时，同时需要传入当前的配色方案的title给后台做变更前后的title对比，不能简单的就对某个配色方案直接
+     * 发起VWO变更，变更的复杂性源自于全配置BOM一级清单的不确定性
+     * <p>
+     * 所需的入参
+     * <p>
+     * {@code key=rows} 的数据存放在Map中，该数据Map的所有key都需要与{@link HzCfg0ModelColor}的字段至少对应一个，特别时puid必须存在
+     * <p>
+     * {@code key=titles}的数据即为变更前后的表头做差异性对比的
      *
-     * @param params    配色方案数据
-     * @return
+     * @param params 配色方案数据
+     * @return 成功与否标志和消息
      */
     @RequestMapping("/getVWO")
     @ResponseBody
@@ -614,7 +631,6 @@ public class HzCfg0ModelColorController {
         for (int i = 0; i < x.size(); i++) {
             rows.add((HzCfg0ModelColor) JSONObject.toBean(JSONObject.fromObject(x.get(i)), HzCfg0ModelColor.class));
         }
-        System.out.println(rows.get(0).getPuid());
         ArrayList<String> dynamicTitle = (ArrayList<String>) params.get("titles");
         String projectPuid = (String) params.get("projectPuid");
         return hzCfg0ModelColorService.getVWO(rows, projectPuid, dynamicTitle);

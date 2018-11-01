@@ -36,17 +36,17 @@ import java.util.Map;
 @Controller
 @RequestMapping(value = "/vwo")
 public class HzVwoController {
-
+    /***VWO表单服务层*/
     @Autowired
     IHzVWOManagerService iHzVWOManagerService;
-
+    /***日志*/
     private static Logger logger = LoggerFactory.getLogger(HzVwoController.class);
 
     /**
      * 详情页面
      *
-     * @param id               vwoid
-     * @param vwoType       发起vwo的类型，1为特性，2为配色方案
+     * @param id      vwoid
+     * @param vwoType 发起vwo的类型，1为特性，2为配色方案
      * @param model
      * @return
      */
@@ -142,8 +142,8 @@ public class HzVwoController {
     /**
      * 分页查询
      *
-     * @param projectUid        项目id
-     * @param queryBase         查询基本对象
+     * @param projectUid 项目id
+     * @param queryBase  查询基本对象
      * @return
      */
     @RequestMapping(value = "/queryByBase", method = RequestMethod.POST)
@@ -245,15 +245,15 @@ public class HzVwoController {
             return "errorWithEntity";
         }
         String type = "";
-        if(selectType==1){
+        if (selectType == 1) {
             type = "opiBom";
-        }else if(selectType==2){
+        } else if (selectType == 2) {
             type = "opiPmt";
-        }else if(selectType==3){
+        } else if (selectType == 3) {
             type = "opiProj";
-        }else {
+        } else {
             model.addAttribute("选择类型错误");
-            return  "errorWithEntity";
+            return "errorWithEntity";
         }
 
         model.addAttribute("vwoId", vwo);
@@ -342,20 +342,21 @@ public class HzVwoController {
 
     /**
      * vwo发起
-     * @param dto       vwo数据中间对象
+     *
+     * @param dto vwo数据中间对象
      * @return
      */
     @RequestMapping(value = "/launch", method = RequestMethod.POST)
     @ResponseBody
-    public JSONObject launch(@RequestBody HzVwoProcessDto dto){
-        return iHzVWOManagerService.launch(dto.getVwoType(), dto.getProjectUid(), dto.getVwoId(),dto.getFormId());
+    public JSONObject launch(@RequestBody HzVwoProcessDto dto) {
+        return iHzVWOManagerService.launch(dto.getVwoType(), dto.getProjectUid(), dto.getVwoId(), dto.getFormId());
     }
 
     @RequestMapping(value = "/saveLeaderOpinion", method = RequestMethod.POST)
     @ResponseBody
     public JSONObject saveLeaderOpinion(@RequestParam HzVwoInfo info,
                                         @RequestParam HzVwoInfluenceDept dept
-                                       ) {
+    ) {
         System.out.println();
         return null;
     }
@@ -363,7 +364,7 @@ public class HzVwoController {
     /**
      * BOM经理评估意见
      *
-     * @param hzVwoOpiBom       bom经理评估意见对象
+     * @param hzVwoOpiBom bom经理评估意见对象
      * @return
      */
     @RequestMapping(value = "/saveBomLeaderOpinion", method = RequestMethod.POST)
@@ -375,7 +376,7 @@ public class HzVwoController {
     /**
      * 专业PMT经理评估意见
      *
-     * @param hzVwoOpiPmt       专业PMT经理评估意见对象
+     * @param hzVwoOpiPmt 专业PMT经理评估意见对象
      * @return
      */
     @RequestMapping(value = "/savePmtLeaderOpinion", method = RequestMethod.POST)

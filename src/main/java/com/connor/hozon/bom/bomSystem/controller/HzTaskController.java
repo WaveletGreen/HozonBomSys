@@ -22,6 +22,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * @Description: 人员任务controller，依据当前登录用户，查询用户需要执行的任务集合，并返回前端，由JS进行动态绘制需要执行的任务
  * 配置管理controller的所有返回消息字段key都是msg
  * 配置管理controller的所有返回成功标志字段key都是status
+ * 如发现不一致需要特殊处理
+ * 已完成注释
  * @Date: Created in 2018/10/19 16:47
  * @Modified By:
  */

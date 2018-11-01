@@ -6,16 +6,16 @@
 
 package com.connor.hozon.bom.bomSystem.controller;
 
-import com.alibaba.fastjson.JSONObject;
 import com.connor.hozon.bom.bomSystem.controller.integrate.ExtraIntegrate;
-import com.connor.hozon.bom.bomSystem.dao.modelColor.HzCfg0ModelColorDao;
 import com.connor.hozon.bom.bomSystem.dao.derivative.HzCfg0ToModelRecordDao;
+import com.connor.hozon.bom.bomSystem.dao.modelColor.HzCfg0ModelColorDao;
 import com.connor.hozon.bom.bomSystem.dto.cfg.compose.HzComposeDelDto;
 import com.connor.hozon.bom.bomSystem.dto.cfg.compose.HzComposeMFDTO;
 import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
-import com.connor.hozon.bom.bomSystem.service.derivative.HzComposeMFService;
-import com.connor.hozon.bom.bomSystem.service.cfg.*;
 import com.connor.hozon.bom.bomSystem.iservice.cfg.IHzCfg0ModelFeatureService;
+import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0OptionFamilyService;
+import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0Service;
+import com.connor.hozon.bom.bomSystem.service.derivative.HzComposeMFService;
 import com.connor.hozon.bom.bomSystem.service.fullCfg.HzBomAllCfgService;
 import com.connor.hozon.bom.bomSystem.service.integrate.SynMaterielService;
 import com.connor.hozon.bom.bomSystem.service.main.HzCfg0MainService;
@@ -27,6 +27,7 @@ import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.resources.mybatis.factory.HzFactoryDAO;
 import com.connor.hozon.bom.sys.entity.User;
 import integration.option.ActionFlagOption;
+import net.sf.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,8 +38,8 @@ import sql.pojo.cfg.cfg0.HzCfg0Record;
 import sql.pojo.cfg.derivative.HzCfg0ModelFeature;
 import sql.pojo.cfg.derivative.HzCfg0ToModelRecord;
 import sql.pojo.cfg.main.HzCfg0MainRecord;
-import sql.pojo.cfg.modelColor.HzCfg0ModelColor;
 import sql.pojo.cfg.model.HzCfg0ModelRecord;
+import sql.pojo.cfg.modelColor.HzCfg0ModelColor;
 import sql.pojo.factory.HzFactory;
 import sql.pojo.project.HzMaterielRecord;
 
@@ -52,6 +53,7 @@ import static com.connor.hozon.bom.bomSystem.helper.StringHelper.checkString;
  * @Description: 配置物料特性表
  * 配置管理controller的所有返回消息字段key都是msg
  * 配置管理controller的所有返回成功标志字段key都是status
+ * 如发现不一致需要特殊处理
  * @Date: Created in 2018/8/30 18:53
  * @Modified By:
  */
@@ -79,7 +81,7 @@ public class HzMaterielFeatureV2Controller extends ExtraIntegrate {
     /*** 配置主模型服务层*/
     @Autowired
     HzCfg0MainService hzCfg0MainService;
-    /*** 模型特性数据服务*/
+    /*** 衍生物料详情数据服务*/
     @Autowired
     IHzCfg0ModelFeatureService hzCfg0ModelFeatureService;
     /*** 工厂*/
@@ -101,7 +103,7 @@ public class HzMaterielFeatureV2Controller extends ExtraIntegrate {
     private static Logger logger = LoggerFactory.getLogger(HzMaterielFeatureV2Controller.class);
 
     /**
-     * 根据项目的puid，获取到配置物料特性表的列设置
+     * 根据项目的puid，获取到配置物料特性表的列设置，配置物料特性表title与配色方案一样动态产生
      *
      * @param projectPuid 项目puid
      * @return 列信息
@@ -137,13 +139,16 @@ public class HzMaterielFeatureV2Controller extends ExtraIntegrate {
     }
 
     /**
-     * 根据车型模型进行更新数据
+     * 修改衍生物料基础数据
      *
-     * @param puid               车型模型puid
-     * @param puidOfModelFeature 车型特性的puid
-     * @param page               申请页面
-     * @param model
-     * @return
+     * @param projectUid         项目UID
+     * @param puid               基本车型模型puid
+     * @param puidOfModelFeature 衍生物料的详情数据，一开始时需要将衍生物料基础数据传到SAP(去你妈的SAP)，所以做了一个详情表
+     *                           但是现在只能作为一个附加的表作为保留表存在数据库中，这个表已经不再存储衍生物料详情数据
+     *                           其puidOfModelFeature字段对应上的时衍生物料主数据主键
+     * @param page               申请页面，目前只能申请"model"页面，不能再申请"superMateriel"修改超级物料号页面
+     *                           超级物料号可以直接从基本数据中继承并修改
+     * @return 修改衍生物料基础数据页面
      */
     @RequestMapping("/modifyPage")
     public String modPage(@RequestParam String projectUid, @RequestParam String puid, @RequestParam String puidOfModelFeature, @RequestParam String page, Model model) {
@@ -174,7 +179,7 @@ public class HzMaterielFeatureV2Controller extends ExtraIntegrate {
             model.addAttribute("action", "./materielV2/updateModelBasic");
             return "cfg/materielFeature/updateModelBasic";
         }
-        //修改超级物料
+        //修改超级物料，不再使用
         else if ("superMateriel".equals(page)) {
             HzCfg0MainRecord mainRecord = hzCfg0MainService.doGetByPrimaryKey(puid);
             if (mainRecord != null) {
@@ -195,7 +200,14 @@ public class HzMaterielFeatureV2Controller extends ExtraIntegrate {
         return "errorWithEntity";
     }
 
-
+    /**
+     * 添加单个衍生物料数据
+     * 在返回页面前，先检查是否选中了项目，并且项目下是否添加<strong>至少1个</strong>配色方案:N，<strong>至少1个基础车型:M</strong>
+     * 衍生物料最大数量为配色方案个数=N*M
+     *
+     * @param projectUid 项目UID，主键
+     * @return 添加单个衍生物料页面
+     */
     @RequestMapping(value = "/composePage", method = RequestMethod.GET)
     public String composePage(@RequestParam String projectUid, Model model) {
         if (!checkString(projectUid)) {
@@ -221,6 +233,10 @@ public class HzMaterielFeatureV2Controller extends ExtraIntegrate {
         return "cfg/materielFeature/add";
     }
 
+    /**
+     * @param hzComposeMFDTO
+     * @return
+     */
     @RequestMapping(value = "/saveCompose", method = RequestMethod.POST)
     @ResponseBody
     public JSONObject saveCompose(@RequestBody HzComposeMFDTO hzComposeMFDTO) {
@@ -235,6 +251,12 @@ public class HzMaterielFeatureV2Controller extends ExtraIntegrate {
         return result;
     }
 
+    /**
+     * 删除衍生物料
+     *
+     * @param delDtos 一组衍生物料数据，衍生物料数据中至少包含puidOfModelFeature字段，以该字段作为主键进行删除操作
+     * @return
+     */
     @RequestMapping(value = "/deleteCompose", method = RequestMethod.POST)
     @ResponseBody
     public JSONObject deleteCompose(@RequestBody List<HzComposeDelDto> delDtos) {
@@ -249,23 +271,44 @@ public class HzMaterielFeatureV2Controller extends ExtraIntegrate {
         return result;
     }
 
-
+    /**
+     * 加载所有的衍生物料数据，这些衍生物料数据title需要配合{@link HzMaterielFeatureV2Controller#getColumn2(String)}进行使用
+     * 只有定义了title的字段才能准确的由bootstrap table自动匹配到各个单元格中
+     *
+     * @param projectPuid 项目UID
+     * @return
+     */
     @RequestMapping(value = "/loadComposes", method = RequestMethod.GET)
     @ResponseBody
     public Map<String, Object> loadComposes(@RequestParam String projectPuid) {
         return hzComposeMFService.loadComposes(projectPuid, new QueryBase());
     }
 
+    /**
+     * 一键生成所有衍生物料按钮功能，因为一键生成功能有点繁琐，所以一键生成过程中可能出现验证不通过的情况，但是实际数据已保存到数据库中
+     * 一旦发现数据验证不通过，则需要手动删除已经生成的衍生物料并从全配置BOM一级清单中重新配对配置-2Y-基础车型的打点图关系，直到成功为止
+     *
+     * @param projectPuid 当前项目的UID
+     * @return
+     */
     @RequestMapping("/saveCompose")
     @ResponseBody
     public JSONObject saveCompose(String projectPuid) {
         return hzComposeMFService.saveCompose3(projectPuid);
     }
 
-
+    /**
+     * 修改
+     * @param pCfg0ModelBasicDetail
+     * @param puid
+     * @param projectUid
+     * @param superMateriel
+     * @param modelFeature
+     * @return
+     */
     @RequestMapping("/updateModelBasic")
     @ResponseBody
-    public net.sf.json.JSONObject updateModelBasic(
+    public JSONObject updateModelBasic(
             @RequestParam String pCfg0ModelBasicDetail,
             @RequestParam String puid,
             @RequestParam String projectUid,
@@ -358,14 +401,16 @@ public class HzMaterielFeatureV2Controller extends ExtraIntegrate {
         return _result;
     }
 
+
     /**
-     * 修改超级物料特性
+     * 修改超级物料特性，已废除，不再使用
      *
      * @param superMateriel
      * @return
      */
     @RequestMapping("/updateSuperMateriel")
     @ResponseBody
+    @Deprecated
     public boolean updateSuperMateriel(@RequestBody HzMaterielRecord superMateriel) {
         if (superMateriel == null)
             return false;
@@ -382,7 +427,12 @@ public class HzMaterielFeatureV2Controller extends ExtraIntegrate {
         return false;
     }
 
-
+    /**
+     * 已废除，不再使用
+     * @param params
+     * @return
+     */
+    @Deprecated
     @RequestMapping("/addVehicleModel")
     @ResponseBody
     public boolean addVehicleModel(@RequestBody Map<String, String> params) {
@@ -458,13 +508,25 @@ public class HzMaterielFeatureV2Controller extends ExtraIntegrate {
         }
     }
 
+    /**
+     * 已废除，不再使用
+     * @param params
+     * @return
+     */
+    @Deprecated
     @RequestMapping("/addVehicleModel2")
     @ResponseBody
-    public net.sf.json.JSONObject addVehicleModel2(@RequestBody Map<String, String> params) {
+    public JSONObject addVehicleModel2(@RequestBody Map<String, String> params) {
         return hzBomAllCfgService.addVehicleModel(params);
     }
 
-
+    /**
+     * 已废除，不再使用
+     * @param puidOfModelFeatures
+     * @param model
+     * @return
+     */
+    @Deprecated
     @RequestMapping("/addToSAP")
     public String addToSAP(String[] puidOfModelFeatures, Model model) {
         List<HzCfg0ModelFeature> features = new ArrayList<HzCfg0ModelFeature>();
@@ -477,6 +539,13 @@ public class HzMaterielFeatureV2Controller extends ExtraIntegrate {
         return "stage/templateOfIntegrate";
     }
 
+    /**
+     * 已废除，不再使用
+     * @param puidOfModelFeatures
+     * @param model
+     * @return
+     */
+    @Deprecated
     @RequestMapping("/deleteToSAP")
     public String deleteToSAP(String[] puidOfModelFeatures, Model model) {
         List<HzCfg0ModelFeature> HCMfeatures = new ArrayList<HzCfg0ModelFeature>();
