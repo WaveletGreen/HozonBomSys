@@ -108,6 +108,10 @@ public class HzCfg0Record {
      */
     private Long vwoId;
     /**
+     * vwo号
+     */
+    private Long vwoNum;
+    /**
      * 配置字典对应的特性值UID
      */
     @Getter

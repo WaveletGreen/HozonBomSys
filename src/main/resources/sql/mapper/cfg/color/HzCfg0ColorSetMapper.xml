@@ -147,7 +147,11 @@
       P_COLOR_MODIFY_DATE = #{pColorModifyDate,jdbcType=VARCHAR},
       P_COLOR_MODIFIER = #{pColorModifier,jdbcType=VARCHAR},
       CS_PAINT_MATERIEL_CODES = #{csPaintMaterielCodes,jdbcType=VARCHAR},
-      CS_PAINT_MATERIEL_UIDS = #{csPaintMaterielUids,jdbcType=VARCHAR}
+      CS_PAINT_MATERIEL_UIDS = #{csPaintMaterielUids,jdbcType=VARCHAR},
+
+      CS_PAINT_MATERIEL_CODES=#{csPaintMaterielCodes,jdbcType=VARCHAR},
+      CS_PAINT_MATERIEL_UIDS=#{csPaintMaterielUids,jdbcType=VARCHAR}
+
 
     where PUID = #{puid,jdbcType=VARCHAR}
   </update>

@@ -226,7 +226,7 @@ var column = [
             }
             if (value == 0 || "0" == value) {
                 if (1 == row.cfgIsInProcess || "1" == row.cfgIsInProcess) {
-                    return "<span style='color: #e69800'>VWO审核中</span>";
+                    return "<span style='color: #e69800'>VWO审核中<br>("+row.vwoNum+")</span>";
                 }
                 else {
                     return "<span style='color: #a97f89'>草稿状态</span>";
