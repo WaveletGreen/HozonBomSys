@@ -7,45 +7,19 @@
 package com.connor.hozon.bom.bomSystem.controller;
 
 import com.connor.hozon.bom.bomSystem.controller.integrate.ExtraIntegrate;
-import com.connor.hozon.bom.bomSystem.dao.modelColor.HzCfg0ModelColorDao;
 import com.connor.hozon.bom.bomSystem.dao.derivative.HzCfg0ToModelRecordDao;
-import com.connor.hozon.bom.bomSystem.dto.HzFeatureQueryDto;
-import com.connor.hozon.bom.bomSystem.dto.HzMaterielFeatureBean;
-import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
-import com.connor.hozon.bom.bomSystem.service.cfg.*;
+import com.connor.hozon.bom.bomSystem.dao.modelColor.HzCfg0ModelColorDao;
+import com.connor.hozon.bom.bomSystem.iservice.cfg.IHzCfg0ModelFeatureService;
+import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0OptionFamilyService;
+import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0Service;
 import com.connor.hozon.bom.bomSystem.service.fullCfg.HzBomAllCfgService;
 import com.connor.hozon.bom.bomSystem.service.integrate.SynMaterielService;
-import com.connor.hozon.bom.bomSystem.iservice.cfg.IHzCfg0ModelFeatureService;
 import com.connor.hozon.bom.bomSystem.service.main.HzCfg0MainService;
 import com.connor.hozon.bom.bomSystem.service.model.HzCfg0ModelRecordService;
 import com.connor.hozon.bom.bomSystem.service.modelColor.HzCfg0ModelColorService;
 import com.connor.hozon.bom.bomSystem.service.project.*;
-import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.resources.mybatis.factory.HzFactoryDAO;
-import com.connor.hozon.bom.sys.entity.User;
-import integration.option.ActionFlagOption;
-import net.sf.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import sql.pojo.cfg.cfg0.HzCfg0Record;
-import sql.pojo.cfg.derivative.HzCfg0ToModelRecord;
-import sql.pojo.cfg.main.HzCfg0MainRecord;
-import sql.pojo.cfg.model.HzCfg0ModelDetail;
-import sql.pojo.cfg.derivative.HzCfg0ModelFeature;
-import sql.pojo.cfg.model.HzCfg0ModelRecord;
-import sql.pojo.factory.HzFactory;
-import sql.pojo.project.*;
-
-import java.util.*;
-
-import static com.connor.hozon.bom.bomSystem.helper.StringHelper.checkString;
 
 
 /**
