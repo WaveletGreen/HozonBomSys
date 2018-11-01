@@ -35,8 +35,8 @@ import java.util.*;
  * @Modified By:
  */
 @Deprecated
-@Controller
-@RequestMapping("/loadBom")
+//@Controller
+//@RequestMapping("/loadBom")
 public class HzLoadBomDataController {
     private final HzCfg0BomLineOfModelService hzCfg0BomLineOfModelService;
     @Autowired

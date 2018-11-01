@@ -11,6 +11,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Date;
+
 /**
  * @Author: Fancyears·Maylos·Maywas
  * @Description: fuck
@@ -87,23 +88,22 @@ public class HzCfg0ColorSet {
      * 是否删除,0删除，1现存
      */
     private Integer pColorIsDeleted;
-
-    @Getter
-    @Setter
     /**
      * 油漆物料号集合，以<br>进行字符串拆分
      */
-    private String csPaintMaterielCodes;
-
     @Getter
     @Setter
+    private String csPaintMaterielCodes;
     /**
-     * 辅料库中的油漆物料号主键，以竖线‘|’进行字符串拆分
+     * 辅料库中的油漆物料号主键，以竖线'|'进行字符串拆分
      */
+    @Getter
+    @Setter
     private String csPaintMaterielUids;
 
     /**
      * 映射到数据库字段
+     *
      * @param property
      * @return
      */

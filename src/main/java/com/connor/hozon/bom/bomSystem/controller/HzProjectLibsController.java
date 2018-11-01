@@ -45,6 +45,8 @@ import static com.connor.hozon.bom.bomSystem.helper.StringHelper.checkString;
 /**
  * @Author: Fancyears·Maylos·Maywas
  * @Description: 项目controller，用于前端获取到项目信息，由项目信息驱动下面的额bom数据和配置数据
+ * 配置管理controller的所有返回消息字段key都是msg
+ * 配置管理controller的所有返回成功标志字段key都是status
  * @Date: Created in 2018/8/30 18:53
  * @Modified By:
  */

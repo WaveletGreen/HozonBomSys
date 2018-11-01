@@ -50,6 +50,8 @@ import static com.connor.hozon.bom.bomSystem.helper.StringHelper.checkString;
 /**
  * @Author: Fancyears·Maylos·Maywas
  * @Description: 配置物料特性表
+ * 配置管理controller的所有返回消息字段key都是msg
+ * 配置管理controller的所有返回成功标志字段key都是status
  * @Date: Created in 2018/8/30 18:53
  * @Modified By:
  */

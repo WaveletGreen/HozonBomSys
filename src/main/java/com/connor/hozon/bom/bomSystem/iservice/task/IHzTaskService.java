@@ -7,6 +7,7 @@
 package com.connor.hozon.bom.bomSystem.iservice.task;
 
 import com.connor.hozon.bom.bomSystem.dto.task.TaskReceivedDto;
+import net.sf.json.JSONObject;
 import org.springframework.context.annotation.Configuration;
 import sql.pojo.task.HzTasks;
 
@@ -86,4 +87,6 @@ public interface IHzTaskService {
     boolean doUpdateByPrimaryKeySelective(HzTasks task);
 
     boolean doStopTask(int formTypeVwo, Integer vwoType, Long id);
+
+    JSONObject loadUserTask();
 }

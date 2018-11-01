@@ -54,8 +54,8 @@ import static com.connor.hozon.bom.bomSystem.helper.StringHelper.checkString;
  * @Date: Created in 2018/8/30 18:53
  * @Modified By:
  */
-@Controller
-@RequestMapping("/materiel")
+//@Controller
+//@RequestMapping("/materiel")
 @Deprecated
 public class HzMaterielFeatureController extends ExtraIntegrate {
     /**

@@ -46,6 +46,8 @@ import static com.connor.hozon.bom.bomSystem.helper.StringHelper.checkString;
 /**
  * @Author: Fancyears·Maylos·Maywas
  * @Description: 配色方案controller
+ * 配置管理controller的所有返回消息字段key都是msg
+ * 配置管理controller的所有返回成功标志字段key都是status
  * @Date: Created in 2018/8/30 18:53
  * @Modified By:
  */
@@ -84,6 +86,7 @@ public class HzCfg0ModelColorController {
 
     /**
      * 获取配色方案页面表格所有数据
+     *
      * @param projectPuid
      * @return
      */
@@ -95,6 +98,7 @@ public class HzCfg0ModelColorController {
 
     /**
      * 跳转到配色方案添加页面
+     *
      * @param projectPuid
      * @param model
      * @return
@@ -145,7 +149,8 @@ public class HzCfg0ModelColorController {
     }
 
     /**
-     *跳转到配色方案修改页面
+     * 跳转到配色方案修改页面
+     *
      * @param puid
      * @param model
      * @return
@@ -223,6 +228,7 @@ public class HzCfg0ModelColorController {
 
     /**
      * 修改配色方案
+     *
      * @param form
      * @return
      */
@@ -281,8 +287,8 @@ public class HzCfg0ModelColorController {
     }
 
     /**
-     *
      * 获取配色方案所有表头
+     *
      * @param projectPuid
      * @return
      */
@@ -294,6 +300,7 @@ public class HzCfg0ModelColorController {
 
     /**
      * 删除配色方案
+     *
      * @param colors
      * @return
      */
@@ -315,6 +322,7 @@ public class HzCfg0ModelColorController {
 
     /**
      * 添加新增的配色方案
+     *
      * @param form
      * @return
      */
@@ -594,21 +602,22 @@ public class HzCfg0ModelColorController {
 
     /**
      * 对配色方案发起流程
+     *
      * @param params
      * @return
      */
     @RequestMapping("/getVWO")
     @ResponseBody
     public JSONObject getVWO(@RequestBody Map<String, Object> params) {
-        List<HzCfg0ModelColor> rows =new ArrayList<>();
-        List<HashMap<String,String>> x = (List<HashMap<String, String>>) params.get("rows");
+        List<HzCfg0ModelColor> rows = new ArrayList<>();
+        List<HashMap<String, String>> x = (List<HashMap<String, String>>) params.get("rows");
         for (int i = 0; i < x.size(); i++) {
-            rows.add((HzCfg0ModelColor) JSONObject.toBean(JSONObject.fromObject(x.get(i)),HzCfg0ModelColor.class));
+            rows.add((HzCfg0ModelColor) JSONObject.toBean(JSONObject.fromObject(x.get(i)), HzCfg0ModelColor.class));
         }
         System.out.println(rows.get(0).getPuid());
         ArrayList<String> dynamicTitle = (ArrayList<String>) params.get("titles");
         String projectPuid = (String) params.get("projectPuid");
-        return hzCfg0ModelColorService.getVWO(rows, projectPuid,dynamicTitle);
+        return hzCfg0ModelColorService.getVWO(rows, projectPuid, dynamicTitle);
     }
 
 }

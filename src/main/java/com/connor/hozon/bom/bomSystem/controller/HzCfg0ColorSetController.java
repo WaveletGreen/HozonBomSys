@@ -13,7 +13,6 @@ import com.connor.hozon.bom.bomSystem.service.color.HzCfg0ColorSetService;
 import com.connor.hozon.bom.common.base.entity.QueryBase;
 import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.resources.mybatis.accessories.HzAccessoriesLibsDAO;
-import com.connor.hozon.bom.sys.commen.Error;
 import com.connor.hozon.bom.sys.entity.User;
 import net.sf.json.JSONObject;
 import org.slf4j.Logger;
@@ -22,7 +21,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import sql.pojo.accessories.HzAccessoriesLibs;
 import sql.pojo.cfg.color.HzCfg0ColorSet;
 
@@ -37,6 +39,8 @@ import static com.connor.hozon.bom.bomSystem.helper.StringHelper.checkString;
 /**
  * @Author: Fancyears·Maylos·Maywas
  * @Description: 颜色库controller
+ * 配置管理controller的所有返回消息字段key都是msg
+ * 配置管理controller的所有返回成功标志字段key都是status
  * @Date: Created in 2018/8/30 18:53
  * @Modified By:
  */
@@ -44,24 +48,25 @@ import static com.connor.hozon.bom.bomSystem.helper.StringHelper.checkString;
 @RequestMapping("/colorSet")
 public class HzCfg0ColorSetController {
 
+    /***颜色库服务*/
     @Autowired
     HzCfg0ColorSetService colorSerService;
-
+    /***工艺辅料库dao*/
     @Autowired
     HzAccessoriesLibsDAO hzAccessoriesLibsDAO;
+    /***日志*/
     private final static Logger logger = LoggerFactory.getLogger(HzCfg0ColorSetController.class);
 
     /**
-     * @param
-     * @return 颜色对象map
-     * @Author: Fancyears·Maylos·Mayways
-     * @Description: 搜索出所有的颜色对象
-     * @Date: 2018/5/21 15:53
+     * 颜色库分页查询
+     *
+     * @param queryBase 分页描述对象，采用bootstrap table自带的分页，从前端table定义分页对象。
+     *                  采用POST方法回传的是普通JSON对象包含{@link QueryBase}的各个字段即可
+     * @return 一组颜色对象
      */
     @RequestMapping(value = "/queryAll2", method = RequestMethod.POST)
     @ResponseBody
     public Map<String, Object> queryAll2(QueryBase queryBase) {
-        System.out.println();
         return colorSerService.queryAll2(queryBase);
     }
 
@@ -72,12 +77,11 @@ public class HzCfg0ColorSetController {
     }
 
     /**
+     * 先判断是否有颜色信息，有则返回页面给予更新，没有则返回错误页面
+     *
      * @param entity 颜色对象
-     * @param model  spring的model
-     * @return java.lang.String
-     * @Author: Fancyears·Maylos·Mayways
-     * @Description: 先判断是否有颜色信息，有则返回页面给予更新，没有则返回错误页面
-     * @Date: 2018/5/21 15:52
+     * @param model  不用传
+     * @return 错误页面/更新页面
      */
     @RequestMapping(value = "/update", method = RequestMethod.GET)
     public String update(HzCfg0ColorSet entity, Model model) {
@@ -87,18 +91,15 @@ public class HzCfg0ColorSetController {
             model.addAttribute("entity", entity);
             return "cfg/color/colorUpdate";
         } else {
-            Error error = new Error();
-            error.setMsg("查找不到颜色信息:" + entity.getpColorName());
-            model.addAttribute("entity", error);
-            return "error";
+            model.addAttribute("msg", "查找不到颜色信息:" + entity.getpColorName());
+            return "errorWithEntity";
         }
     }
 
     /**
+     * 获取添加颜色信息的页面
+     *
      * @return 一个添加颜色信息的前端页面
-     * @Author: Fancyears·Maylos·Mayways
-     * @Description: 获取添加颜色信息的页面
-     * @Date: 2018/5/21 15:51
      */
     @RequestMapping(value = "/addPage", method = RequestMethod.GET)
     public String addPage() {
@@ -106,12 +107,12 @@ public class HzCfg0ColorSetController {
     }
 
     /**
+     * 更新颜色对象，该方法已废除，因为无法更新油漆物料号在颜色对象上
+     *
      * @param set 颜色对象
-     * @return java.lang.Boolean
-     * @Author: Fancyears·Maylos·Mayways
-     * @Description: 更新一个颜色对象的信息
-     * @Date: 2018/5/21 15:51
+     * @return
      */
+    @Deprecated
     @RequestMapping(value = "/updateWithEntity", method = RequestMethod.POST)
     @ResponseBody
     public Boolean update(@RequestBody HzCfg0ColorSet set) {
@@ -136,12 +137,12 @@ public class HzCfg0ColorSetController {
     }
 
     /**
-     * @param set
-     * @return net.sf.json.JSONObject
-     * @Author: Fancyears·Maylos·Mayways
-     * @Description: 添加一个颜色信息
-     * @Date: 2018/5/21 15:50
+     * 添加一个颜色信息，需要油漆物料号，该方法已废除
+     *
+     * @param set 颜色对象
+     * @return 添加成功与否标志和消息
      */
+    @Deprecated
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     @ResponseBody
     public JSONObject add(@RequestBody HzCfg0ColorSet set) {
@@ -194,9 +195,23 @@ public class HzCfg0ColorSetController {
         return result;
     }
 
+    /**
+     * 添加一个颜色，由于颜色在添加的时候可以添加油漆物料号，因此在添加过程中需要验证油漆物料号正确性
+     *
+     * @param map 该入参的key需要为{@link HzCfg0ColorSet} 的字段
+     *            {@link HzCfg0ColorSet#pColorCode}
+     *            {@link HzCfg0ColorSet#pColorName}
+     *            {@link HzCfg0ColorSet#pColorOfSet}
+     *            {@link HzCfg0ColorSet#pColorPlate}
+     *            {@link HzCfg0ColorSet#pColorIsMultiply}
+     *            {@link HzCfg0ColorSet#pColorComment}
+     *            除此之外的数据都将成为油漆物料并拼接在{@link HzCfg0ColorSet#csPaintMaterielCodes}字段上
+     *            油漆物料的UID需要经过验证并回传UID，拼接在{@link HzCfg0ColorSet#csPaintMaterielUids}字段上用于未来验证
+     * @return 添加成功与否标识和消息
+     */
     @RequestMapping(value = "/add2", method = RequestMethod.POST)
     @ResponseBody
-    public JSONObject add2(@RequestBody Map<String,String> map) {
+    public JSONObject add2(@RequestBody Map<String, String> map) {
         JSONObject result = new JSONObject();
         Date now = new Date();
         User user = UserInfo.getUser();
@@ -212,26 +227,26 @@ public class HzCfg0ColorSetController {
 
         String csPaintMaterielCodes = "";
         List<String> materielCodeList = new ArrayList<String>();
-        for(int i=0;i<(map.size()-6);i++){
-            String materielCode = map.get("color_"+i);
-            if(materielCode==null||"".equals(materielCode)){
+        for (int i = 0; i < (map.size() - 6); i++) {
+            String materielCode = map.get("color_" + i);
+            if (materielCode == null || "".equals(materielCode)) {
                 continue;
             }
             materielCodeList.add(materielCode);
         }
-        if(materielCodeList!=null&&materielCodeList.size()>0){
+        if (materielCodeList != null && materielCodeList.size() > 0) {
             List<String> csPaintMaterielUidList = hzAccessoriesLibsDAO.queryAccessoriesListByMaterielCode(materielCodeList);
-            if(csPaintMaterielUidList.size()!=materielCodeList.size()){
+            if (csPaintMaterielUidList.size() != materielCodeList.size()) {
                 result.put("status", false);
                 result.put("msg", "油漆物料编号错误");
-                return  result;
+                return result;
             }
             Integer materielSize = csPaintMaterielUidList.size();
             String csPaintMaterielUids = "";
-            for(int i=0;i<materielSize;i++){
+            for (int i = 0; i < materielSize; i++) {
                 csPaintMaterielCodes += materielCodeList.get(i);
                 csPaintMaterielUids += csPaintMaterielUidList.get(i);
-                if(materielSize>1&&i<(materielSize-1)){
+                if (materielSize > 1 && i < (materielSize - 1)) {
                     csPaintMaterielCodes += "<br>";
                     csPaintMaterielUids += "|";
                 }
@@ -269,25 +284,31 @@ public class HzCfg0ColorSetController {
         return result;
     }
 
+    /**
+     * 验证油漆物料号，每一个颜色都关联n个油漆物料号，每个油漆物料号{@code materielCode}都需要经过验证才允许通过验证
+     *
+     * @param materielCode 油漆物料号
+     * @return 验证通过与否标识和消息
+     */
     @RequestMapping("checkMaterielCode")
     @ResponseBody
-    public JSONObject checkMaterielCode(String materielCode){
+    public JSONObject checkMaterielCode(String materielCode) {
         JSONObject result = new JSONObject();
-        result.put("status",true);
+        result.put("status", true);
         HzAccessoriesLibs hzAccessoriesLibs = hzAccessoriesLibsDAO.queryAccessoriesByMaterielCode(materielCode);
-        if(hzAccessoriesLibs==null){
-            result.put("status",false);
-            result.put("msg","油漆物料编号错误");
-            return  result;
+        if (hzAccessoriesLibs == null) {
+            result.put("status", false);
+            result.put("msg", "油漆物料编号错误");
+            return result;
         }
-        return  result;
+        return result;
     }
+
     /**
+     * 删除一组颜色信息
+     *
      * @param set 颜色信息集合
-     * @return net.sf.json.JSONObject
-     * @Author: Fancyears·Maylos·Mayways
-     * @Description: 删除一组颜色信息
-     * @Date: 2018/5/21 15:50
+     * @return 成功/失败标志和消息
      */
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     @ResponseBody
@@ -307,7 +328,12 @@ public class HzCfg0ColorSetController {
         return result;
     }
 
-
+    /**
+     * 验证颜色代码是否存在，当颜色代码存在时则前端验证不允许通过，反之验证通过
+     *
+     * @param set 颜色对象，该对象必须存在的颜色代码，否则验证不通过
+     * @return 前端验证数据，依赖bootstrap验证规则，由bootstrap自动解析
+     */
     @RequestMapping(value = "/validateCodeWithPuid", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public JSONObject validateCodeWithPuid(HzCfg0ColorSet set) {

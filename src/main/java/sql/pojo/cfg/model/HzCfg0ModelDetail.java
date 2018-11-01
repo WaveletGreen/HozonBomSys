@@ -76,7 +76,6 @@ public class HzCfg0ModelDetail {
     /**
      * 版型
      */
-    @Deprecated
     private String pModelVersion;
     /**
      * 老司机位置

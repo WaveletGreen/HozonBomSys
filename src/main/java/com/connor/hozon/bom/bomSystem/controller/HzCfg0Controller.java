@@ -46,6 +46,8 @@ import sql.pojo.resourcesLibrary.dictionaryLibrary.HzDictionaryLibrary;
 /**
  * @Author: Fancyears·Maylos·Maywas
  * @Description: 特性controller
+ * 配置管理controller的所有返回消息字段key都是msg
+ * 配置管理controller的所有返回成功标志字段key都是status
  * @Date: Created in 2018/8/30 18:53
  * @Modified By:
  */
@@ -101,6 +103,7 @@ public class HzCfg0Controller extends ExtraIntegrate {
     /******************************************特性表***********************************************/
     /**
      * 特性页面初始化显示
+     *
      * @param projectPuid
      * @param queryBase
      * @return
@@ -126,7 +129,7 @@ public class HzCfg0Controller extends ExtraIntegrate {
     public String addPage(@RequestParam("projectPuid") String projectPuid, Model model) {
         HzCfg0MainRecord mainRecord = hzCfg0MainRecordDao.selectByProjectPuid(projectPuid);
         if (mainRecord == null) {
-            model.addAttribute("msg","请选择一个项目进行操作");
+            model.addAttribute("msg", "请选择一个项目进行操作");
             return "errorWithEntity";
         }
         model.addAttribute("entity", mainRecord);
@@ -135,6 +138,7 @@ public class HzCfg0Controller extends ExtraIntegrate {
 
     /**
      * 跳转到添加页面
+     *
      * @param projectPuid
      * @param model
      * @return
@@ -224,6 +228,7 @@ public class HzCfg0Controller extends ExtraIntegrate {
 
     /**
      * 添加特性
+     *
      * @param record
      * @return
      * @throws Exception
@@ -320,6 +325,7 @@ public class HzCfg0Controller extends ExtraIntegrate {
 
     /**
      * 跳转到修改页面
+     *
      * @param puid
      * @param model
      * @return
@@ -341,6 +347,7 @@ public class HzCfg0Controller extends ExtraIntegrate {
 
     /**
      * 修改特性
+     *
      * @param record
      * @return
      */
@@ -420,6 +427,7 @@ public class HzCfg0Controller extends ExtraIntegrate {
 
     /**
      * 删除特性
+     *
      * @param records
      * @return
      * @throws Exception
@@ -462,9 +470,9 @@ public class HzCfg0Controller extends ExtraIntegrate {
                 }
             }
 
-            if(record.getCfgIsInProcess()==1){
+            if (record.getCfgIsInProcess() == 1) {
                 result.put("status", false);
-                result.put("msg","已在VWO流程中，不允许删除");
+                result.put("msg", "已在VWO流程中，不允许删除");
                 return result;
             }
         }
@@ -672,6 +680,12 @@ public class HzCfg0Controller extends ExtraIntegrate {
         return "stage/templateOfIntegrate";
     }
 
+    /**
+     * 根据特性值(code)查询配置字典中的特性，特性从配置字典中继承且无法修改，也达到了验证特性值的作用
+     *
+     * @param cfgVal 特性值
+     * @return 验证成功则返回true和字典库中的数据，否则只返回false
+     */
     @RequestMapping("/returnCfgMsg")
     @ResponseBody
     public JSONObject returnCfgMsg(String cfgVal) {

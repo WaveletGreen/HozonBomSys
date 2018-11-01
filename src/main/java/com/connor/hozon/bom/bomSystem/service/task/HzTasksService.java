@@ -7,14 +7,25 @@
 package com.connor.hozon.bom.bomSystem.service.task;
 
 import com.connor.hozon.bom.bomSystem.dao.task.HzTasksDao;
+import com.connor.hozon.bom.bomSystem.dto.task.HzTaskPostDto;
 import com.connor.hozon.bom.bomSystem.dto.task.TaskReceivedDto;
 import com.connor.hozon.bom.bomSystem.iservice.task.IHzTaskService;
 import com.connor.hozon.bom.bomSystem.option.TaskOptions;
+import com.connor.hozon.bom.bomSystem.service.vwo.HzVwoInfoService;
+import com.connor.hozon.bom.common.util.user.UserInfo;
+import com.connor.hozon.bom.sys.entity.Tree;
+import com.connor.hozon.bom.sys.entity.User;
+import com.connor.hozon.bom.sys.service.TreeService;
+import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import sql.pojo.cfg.vwo.HzVwoInfo;
 import sql.pojo.task.HzTasks;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author: Fancyears·Maylos·Maywas
@@ -24,9 +35,15 @@ import java.util.List;
  */
 @Service("hzTaskService")
 public class HzTasksService implements IHzTaskService {
+    /***任务dao层*/
     @Autowired
     HzTasksDao hzTasksDao;
-
+    /***前端网址树服务层*/
+    @Autowired
+    TreeService treeService;
+    /**VWO变更表单服务层*/
+    @Autowired
+    HzVwoInfoService hzVwoInfoService;
     /**
      * 发起流程之后，保存task
      *
@@ -133,5 +150,66 @@ public class HzTasksService implements IHzTaskService {
         task.setTaskTargetId(targetId);
         task.setTaskStatus(999);
         return hzTasksDao.updateTargetStatus(task)>0?true:false;
+    }
+
+    @Override
+    public JSONObject loadUserTask() {
+        User user = UserInfo.getUser();
+        JSONObject result = new JSONObject();
+        List<HzTaskPostDto> dtoList = new ArrayList<>();
+        List<HzTasks> tasks = doSelectUserExecutingTasks(Long.valueOf(user.getId()));
+        Tree tree = new Tree();
+        if (tasks != null && !tasks.isEmpty()) {
+            Map<Integer, Tree> maoOfForm = new HashMap<>();
+            Tree dbTree = null;
+            for (int i = 0; i < tasks.size(); i++) {
+                HzTasks task = tasks.get(i);
+                tree.setId(task.getTaskFormId());
+                //缓存树地址
+                if (maoOfForm.containsKey(tree.getId())) {
+                    dbTree = maoOfForm.get(tree.getId());
+                } else {
+                    dbTree = treeService.get(tree);
+                }
+                HzTaskPostDto dto = new HzTaskPostDto();
+                if (dbTree != null) {
+                    //设置URL
+                    dto.setUrl(dbTree.getUrl());
+                    //设置表单ID
+                    dto.setId(dbTree.getId());
+                }
+                switch (task.getTaskFormType()) {
+                    case 1:
+                        HzVwoInfo info = hzVwoInfoService.doSelectByPrimaryKey(task.getTaskTargetId());
+                        dto.setText(info.getVwoNum());
+                        dto.setTargetId(info.getId());
+                        dto.setTargetName(info.getVwoNum() + "表单");
+                        dto.setTargetType(task.getTaskTargetType());
+                        dto.setFormType(task.getTaskFormType());
+                        break;
+                    //预留给EWO表单用
+                    case 2:
+                        break;
+                    //预留该MWO表单用
+                    case 3:
+                        break;
+                    default:
+                        break;
+                }
+                dto.setReserve("");
+                dto.setReserve2("");
+                dto.setReserve3("");
+                dto.setReserve4("");
+                dto.setReserve5("");
+                dto.setReserve6("");
+                dto.setReserve7("");
+                dto.setReserve8("");
+                dto.setReserve9("");
+                dto.setReserve10("");
+                dtoList.add(dto);
+            }
+        }
+        result.put("data", dtoList);
+        return result;
     }
 }

@@ -26,6 +26,8 @@ import static com.connor.hozon.bom.bomSystem.helper.StringHelper.checkString;
 /**
  * @Author: Fancyears·Maylos·Maywas
  * @Description: 全配置BOM一级清单
+ *   配置管理controller的所有返回消息字段key都是msg
+ * 配置管理controller的所有返回成功标志字段key都是status
  * @Date: Created in 2018/8/30 18:53
  * @Modified By:
  */
@@ -34,7 +36,7 @@ import static com.connor.hozon.bom.bomSystem.helper.StringHelper.checkString;
 public class HzBomAllCfgController {
 
     @Autowired
-    private HzBomAllCfgService hzBomAllCfgService;
+    HzBomAllCfgService hzBomAllCfgService;
 
     @Autowired
     IHzConfigBomColorService iHzConfigBomColorService;
