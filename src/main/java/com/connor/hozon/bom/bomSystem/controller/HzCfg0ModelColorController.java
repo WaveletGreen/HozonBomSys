@@ -87,7 +87,7 @@ public class HzCfg0ModelColorController {
     /**
      * 获取配色方案页面表格所有数据
      *
-     * @param projectPuid
+     * @param projectPuid       项目id
      * @return
      */
     @RequestMapping(value = "/loadAll", method = RequestMethod.GET)
@@ -99,7 +99,7 @@ public class HzCfg0ModelColorController {
     /**
      * 跳转到配色方案添加页面
      *
-     * @param projectPuid
+     * @param projectPuid       项目id
      * @param model
      * @return
      */
@@ -151,7 +151,7 @@ public class HzCfg0ModelColorController {
     /**
      * 跳转到配色方案修改页面
      *
-     * @param puid
+     * @param puid          配色方案id
      * @param model
      * @return
      */
@@ -289,7 +289,7 @@ public class HzCfg0ModelColorController {
     /**
      * 获取配色方案所有表头
      *
-     * @param projectPuid
+     * @param projectPuid       项目id
      * @return
      */
     @RequestMapping(value = "/getColumn", method = RequestMethod.GET)
@@ -301,7 +301,7 @@ public class HzCfg0ModelColorController {
     /**
      * 删除配色方案
      *
-     * @param colors
+     * @param colors        需删除的配色方案模型
      * @return
      */
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
@@ -603,7 +603,7 @@ public class HzCfg0ModelColorController {
     /**
      * 对配色方案发起流程
      *
-     * @param params
+     * @param params    配色方案数据
      * @return
      */
     @RequestMapping("/getVWO")

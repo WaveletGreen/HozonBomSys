@@ -45,8 +45,8 @@ public class HzVwoController {
     /**
      * 详情页面
      *
-     * @param id
-     * @param vwoType
+     * @param id               vwoid
+     * @param vwoType       发起vwo的类型，1为特性，2为配色方案
      * @param model
      * @return
      */
@@ -142,8 +142,8 @@ public class HzVwoController {
     /**
      * 分页查询
      *
-     * @param projectUid
-     * @param queryBase
+     * @param projectUid        项目id
+     * @param queryBase         查询基本对象
      * @return
      */
     @RequestMapping(value = "/queryByBase", method = RequestMethod.POST)
@@ -342,7 +342,7 @@ public class HzVwoController {
 
     /**
      * vwo发起
-     * @param dto
+     * @param dto       vwo数据中间对象
      * @return
      */
     @RequestMapping(value = "/launch", method = RequestMethod.POST)
@@ -363,7 +363,7 @@ public class HzVwoController {
     /**
      * BOM经理评估意见
      *
-     * @param hzVwoOpiBom
+     * @param hzVwoOpiBom       bom经理评估意见对象
      * @return
      */
     @RequestMapping(value = "/saveBomLeaderOpinion", method = RequestMethod.POST)
@@ -375,7 +375,7 @@ public class HzVwoController {
     /**
      * 专业PMT经理评估意见
      *
-     * @param hzVwoOpiPmt
+     * @param hzVwoOpiPmt       专业PMT经理评估意见对象
      * @return
      */
     @RequestMapping(value = "/savePmtLeaderOpinion", method = RequestMethod.POST)
@@ -385,7 +385,7 @@ public class HzVwoController {
     }
 
     /**
-     * 项目经理评估意见
+     * 项目经理评估意见         项目经理评估意见对象
      *
      * @param hzVwoOpiProj
      * @return

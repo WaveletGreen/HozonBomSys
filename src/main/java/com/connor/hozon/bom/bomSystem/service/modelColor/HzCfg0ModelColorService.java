@@ -364,6 +364,8 @@ public class HzCfg0ModelColorService {
             }
             //添加状态
             _result.put("cmcrStatus",color.getCmcrStatus());
+            _result.put("cmcrVwoNum",color.getCmcrVwoNum());
+
             res.add(_result);
         });
 
