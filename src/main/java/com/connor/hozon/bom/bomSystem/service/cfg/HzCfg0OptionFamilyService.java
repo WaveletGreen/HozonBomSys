@@ -54,6 +54,17 @@ public class HzCfg0OptionFamilyService {
     }
 
     /**
+     * 主键删除
+     * @param uid
+     * @return
+     */
+    public boolean doDeleteByPrimaryKey(String uid) {
+        HzCfg0OptionFamily family=new HzCfg0OptionFamily();
+        family.setPuid(uid);
+        return hzCfg0OptionFamilyDao.deleteByPrimaryKey(family) > 0 ? true : false;
+    }
+
+    /**
      * 在当前项目找出带颜色/不带颜色的特性，不能排除2特性值分别带颜色和不带颜色，因此会发生重复，需要进行排重
      *
      * @param projectUid 项目UID
@@ -248,6 +259,7 @@ public class HzCfg0OptionFamilyService {
 
     /**
      * 选择性更新项目下的特性
+     *
      * @param family 特性对象
      * @return
      */
