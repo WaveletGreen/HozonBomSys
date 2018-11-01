@@ -335,7 +335,6 @@ function formatDate() {
  */
 function loadConnectedData(url) {
     var vwoStatus = vwoInfo.vwoStatus;
-    alert(user);
     if (vwoStatus != 10) {
         $("body input").attr('disabled', true);
         $("body select").attr('disabled', true);
