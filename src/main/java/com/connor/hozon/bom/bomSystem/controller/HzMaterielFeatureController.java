@@ -179,7 +179,7 @@ public class HzMaterielFeatureController extends ExtraIntegrate {
     /**
      * 单独添加列信息
      *
-     * @param column
+     * @param column    列信息
      */
     private void appendColumn(List<String> column) {
         //添加中文描述
@@ -474,7 +474,7 @@ public class HzMaterielFeatureController extends ExtraIntegrate {
 
     /**
      * 修改超级物料特性
-     * @param superMateriel
+     * @param superMateriel     修改的超级物料信息
      * @return
      */
     @RequestMapping("/updateSuperMateriel")

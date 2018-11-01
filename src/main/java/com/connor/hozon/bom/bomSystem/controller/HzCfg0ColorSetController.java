@@ -23,6 +23,7 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.spring.web.json.Json;
 import sql.pojo.accessories.HzAccessoriesLibs;
 import sql.pojo.cfg.color.HzCfg0ColorSet;
 
@@ -133,6 +134,75 @@ public class HzCfg0ColorSetController {
         set.setpColorModifier(user.getUserName());
         set.setpColorModifyDate(now);
         return colorSerService.doUpdate(set);
+    }
+    @RequestMapping(value = "/updateWithEntity2", method = RequestMethod.POST)
+    @ResponseBody
+    public JSONObject update2(@RequestBody Map<String,String> map) {
+        JSONObject result = new JSONObject();
+        Date now = new Date();
+        User user = UserInfo.getUser();
+        /*try
+        {
+            set.setpColorAbolishDate(DateStringHelper.stringToDate2(set.getStrColorAbolishDate()));
+            set.setpColorEffectedDate(DateStringHelper.stringToDate2(set.getStrColorEffectedDate()));
+        } catch (ParseException e) {
+            e.printStackTrace();
+            logger.error("从字符串解析时间失败", e);
+        }
+        if (now.before(set.getpColorAbolishDate())) {
+            set.setpColorStatus(1);
+        } else {
+            set.setpColorStatus(0);
+        }*/
+
+        HzCfg0ColorSet set = new HzCfg0ColorSet();
+        set.setpColorOfSet(map.get("pColorOfSet"));
+        set.setpColorName(map.get("pColorName"));
+        set.setpColorCode(map.get("pColorCode"));
+        set.setpColorPlate(map.get("pColorPlate"));
+        set.setpColorIsMultiply(map.get("pColorIsMultiply"));
+        set.setpColorComment(map.get("pColorComment"));
+
+        String csPaintMaterielCodes = "";
+        List<String> materielCodeList = new ArrayList<String>();
+        for(int i=0;i<(map.size()-6);i++){
+            String materielCode = map.get("color_"+i);
+            if(materielCode==null||"".equals(materielCode)){
+                continue;
+            }
+            materielCodeList.add(materielCode);
+        }
+        if(materielCodeList!=null&&materielCodeList.size()>0){
+            List<String> csPaintMaterielUidList = hzAccessoriesLibsDAO.queryAccessoriesListByMaterielCode(materielCodeList);
+            if(csPaintMaterielUidList.size()!=materielCodeList.size()){
+                result.put("status", false);
+                result.put("msg", "油漆物料编号错误");
+                return  result;
+            }
+            Integer materielSize = csPaintMaterielUidList.size();
+            String csPaintMaterielUids = "";
+            for(int i=0;i<materielSize;i++){
+                csPaintMaterielCodes += materielCodeList.get(i);
+                csPaintMaterielUids += csPaintMaterielUidList.get(i);
+                if(materielSize>1&&i<(materielSize-1)){
+                    csPaintMaterielCodes += "<br>";
+                    csPaintMaterielUids += "|";
+                }
+            }
+            set.setCsPaintMaterielCodes(csPaintMaterielCodes);
+            set.setCsPaintMaterielUids(csPaintMaterielUids);
+        }
+
+        set.setpColorModifier(user.getUserName());
+        set.setpColorModifyDate(now);
+        if(colorSerService.doUpdate(set)){
+            result.put("status",true);
+            result.put("msg", "颜色库修改成功");
+        }else {
+            result.put("status",false);
+            result.put("msg", "颜色库修改失败");
+        }
+        return result;
     }
 
     /**

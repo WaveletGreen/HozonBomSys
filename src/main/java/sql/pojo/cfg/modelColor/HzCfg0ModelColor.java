@@ -46,8 +46,12 @@ public class HzCfg0ModelColor {
     private String pShellCfg0Puid;
     @Getter
     @Setter
-    //VWO变更号
+    //VWO变更id
     private Long cmcrVwoId;
+    @Getter
+    @Setter
+    //VWO变更号
+    private String cmcrVwoNum;
     //创建时间
     @Getter
     @Setter
