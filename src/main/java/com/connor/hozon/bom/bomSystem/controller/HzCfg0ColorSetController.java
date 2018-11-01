@@ -156,6 +156,7 @@ public class HzCfg0ColorSetController {
         }*/
 
         HzCfg0ColorSet set = new HzCfg0ColorSet();
+        set.setPuid(map.get("puid"));
         set.setpColorOfSet(map.get("pColorOfSet"));
         set.setpColorName(map.get("pColorName"));
         set.setpColorCode(map.get("pColorCode"));
@@ -165,7 +166,7 @@ public class HzCfg0ColorSetController {
 
         String csPaintMaterielCodes = "";
         List<String> materielCodeList = new ArrayList<String>();
-        for(int i=0;i<(map.size()-6);i++){
+        for(int i=0;i<(map.size()-7);i++){
             String materielCode = map.get("color_"+i);
             if(materielCode==null||"".equals(materielCode)){
                 continue;
@@ -176,7 +177,7 @@ public class HzCfg0ColorSetController {
             List<String> csPaintMaterielUidList = hzAccessoriesLibsDAO.queryAccessoriesListByMaterielCode(materielCodeList);
             if(csPaintMaterielUidList.size()!=materielCodeList.size()){
                 result.put("status", false);
-                result.put("msg", "油漆物料编号错误");
+                result.put("msg", "油漆物料编号重复或错误");
                 return  result;
             }
             Integer materielSize = csPaintMaterielUidList.size();
