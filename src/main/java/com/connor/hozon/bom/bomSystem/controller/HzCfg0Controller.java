@@ -55,13 +55,15 @@ import sql.pojo.resourcesLibrary.dictionaryLibrary.HzDictionaryLibrary;
 @Controller
 @RequestMapping("/cfg0")
 public class HzCfg0Controller extends ExtraIntegrate {
+    /***特性值服务*/
     @Autowired
     HzCfg0Service hzCfg0Service;
+    /***主配置Dao层*/
     @Autowired
     HzCfg0MainRecordDao hzCfg0MainRecordDao;
+    /***项目下的特性，值针对当前项目的特性，更高一层的是字典库*/
     @Autowired
     HzCfg0OptionFamilyDao hzCfg0OptionFamilyDao;
-
     /**
      * 同步特性
      */
@@ -553,8 +555,15 @@ public class HzCfg0Controller extends ExtraIntegrate {
 
 
     /******************************************相关性**********************************************/
+    /**
+     * 加载相关性，一阶段相关性没有颜色，所以相关性都直接由特性按照规则拼接而成
+     *
+     * @param projectPuid 项目UID
+     * @return
+     */
     @RequestMapping("/loadRelevance")
     @ResponseBody
+    @Deprecated
     public Map<String, Object> loadRelevance(@RequestParam("projectPuid") String projectPuid) {
         Map<String, Object> result = new HashMap<>();
         List<HzRelevanceBean> _list = new ArrayList<>();
@@ -566,8 +575,15 @@ public class HzCfg0Controller extends ExtraIntegrate {
         return result;
     }
 
+    /**
+     * 加载相关性，一阶段相关性没有颜色，所以相关性都直接由特性按照规则拼接而成
+     *
+     * @param projectPuid 项目UID
+     * @return
+     */
     @RequestMapping("/loadRelevance2")
     @ResponseBody
+    @Deprecated
     public Map<String, Object> loadRelevance2(@RequestParam("projectPuid") String projectPuid) {
         Map<String, Object> result = new HashMap<>();
         List<HzRelevanceBean> _list = new ArrayList<>();
@@ -579,6 +595,10 @@ public class HzCfg0Controller extends ExtraIntegrate {
         return result;
     }
 
+    /**
+     * @param bean
+     * @return
+     */
     @RequestMapping(value = "/relModify", method = RequestMethod.POST)
     @ResponseBody
     public boolean relOption(@RequestBody HzRelevanceBean bean) {
@@ -645,6 +665,12 @@ public class HzCfg0Controller extends ExtraIntegrate {
         return "cfg/relevance/mergeRelevance";
     }
 
+    /**
+     * @param beans
+     * @param model
+     * @return
+     * @throws Exception
+     */
     @RequestMapping(value = "/sendRelToERP", method = RequestMethod.POST)
     public String sendRelToERP(@RequestBody List<HzRelevanceBean> beans, Model model) throws Exception {
         //清空上次传输的内容
@@ -663,6 +689,12 @@ public class HzCfg0Controller extends ExtraIntegrate {
         return "stage/templateOfIntegrate";
     }
 
+    /**
+     * @param beans
+     * @param model
+     * @return
+     * @throws Exception
+     */
     @RequestMapping(value = "/sendRelToERPDelete", method = RequestMethod.POST)
     public String sendRelToERPDelete(@RequestBody List<HzRelevanceBean> beans, Model model) throws Exception {
         //清空上次传输的内容

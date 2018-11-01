@@ -49,6 +49,7 @@ import static com.connor.hozon.bom.bomSystem.helper.StringHelper.checkString;
  * 配置管理controller的所有返回消息字段key都是msg
  * 配置管理controller的所有返回成功标志字段key都是status
  * 如发现不一致需要特殊处理
+ * 已完成注释
  * @Date: Created in 2018/8/30 18:53
  * @Modified By:
  */
@@ -422,7 +423,14 @@ public class HzCfg0ModelColorController {
         return result;
     }
 
+    /**
+     * 获取二级配色方案页面，这个页面是用alert进行模式框弹出而不是dialog
+     * @param modelUid 配色模型UID
+     * @param projectUid 项目UID
+     * @return 二级配色方案页面
+     */
     @RequestMapping(value = "/setLvl2ColorPage", method = RequestMethod.GET)
+    @Deprecated
     public String setLvl2ColorPage(@RequestParam("modelUid") String modelUid, @RequestParam("projectUid") String projectUid, Model model) {
 //        List<HzBomLineRecordDO> lineRecords = hzBomDataService.doSelectVehicleAssembly("车身", projectUid, null);
 //        List<HzBomLineRecordDO> lineRecords2 = hzBomDataService.doSelectVehicleAssembly("车身", projectUid, modelUid);
@@ -459,8 +467,15 @@ public class HzCfg0ModelColorController {
         }
     }
 
+    /**
+     * 保存二级配色方案，二级配色方案已废除，二级配色方案的操作作为参考操作内容存在而非当作正式业务存在，即所有的二级配色方案相关方法都不应当发布
+     *
+     * @param params
+     * @return
+     */
     @RequestMapping(value = "/saveColorLvl2", method = RequestMethod.POST)
     @ResponseBody
+    @Deprecated
     public JSONObject saveColorLvl2(@RequestBody Map<String, String> params) {
         User user = UserInfo.getUser();
         Date date = new Date();
@@ -557,6 +572,15 @@ public class HzCfg0ModelColorController {
         }
     }
 
+    /**
+     * 校验二级配色方案关联的零件
+     * 通过校验，只需要输入零件号，校验成功则会返回零件的完整信息，理论上采用Map<String,Object>效果会好一点，因为JSONObject不能存储null
+     * 倘若通过零件号找到多个对象，只取首位对象的数据传到前端，并由前端自动匹配到相应的输入框中
+     *
+     * @param lineId     零件号
+     * @param projectUid 项目UID
+     * @return 找到的零件号完整信息
+     */
     @RequestMapping("checkItemId")
     @ResponseBody
     public JSONObject checkItemId(@RequestParam String lineId, @RequestParam String projectUid) {
@@ -593,6 +617,7 @@ public class HzCfg0ModelColorController {
      */
     @RequestMapping("deleteFromServer")
     @ResponseBody
+    @Deprecated
     public JSONObject deleteFromServer(@RequestParam String modelUid, @RequestParam String puid) {
         HzColorLvl2Model model = new HzColorLvl2Model();
         JSONObject result = new JSONObject();

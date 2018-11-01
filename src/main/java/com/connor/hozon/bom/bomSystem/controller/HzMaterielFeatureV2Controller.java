@@ -54,6 +54,7 @@ import static com.connor.hozon.bom.bomSystem.helper.StringHelper.checkString;
  * 配置管理controller的所有返回消息字段key都是msg
  * 配置管理controller的所有返回成功标志字段key都是status
  * 如发现不一致需要特殊处理
+ * 已完成注释
  * @Date: Created in 2018/8/30 18:53
  * @Modified By:
  */
@@ -255,6 +256,8 @@ public class HzMaterielFeatureV2Controller extends ExtraIntegrate {
 
     /**
      * 删除衍生物料
+     * <p>
+     * 删除衍生物料实际上根据主键删除即可，所以传到该方法的应该包含某个衍生物料的主键
      *
      * @param delDtos 一组衍生物料数据，衍生物料数据中至少包含puidOfModelFeature字段，以该字段作为主键进行删除操作
      * @return
@@ -302,10 +305,10 @@ public class HzMaterielFeatureV2Controller extends ExtraIntegrate {
     /**
      * 保存衍生物料基本信息
      *
-     * @param projectUid
-     * @param superMateriel
-     * @param modelFeature
-     * @return
+     * @param projectUid    项目UID
+     * @param superMateriel 超级物料号
+     * @param modelFeature  衍生物料详情数据，该部分数据已经不再存储发送到SAP的数据，只存储了基本信息和工厂数据而已了
+     * @return 保存成功与否标识和消息
      */
     @RequestMapping("/saveModelBasic")
     @ResponseBody

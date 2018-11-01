@@ -10,9 +10,21 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Date;
+
 /**
  * @Author: Fancyears·Maylos·Maywas
- * @Description: fuck
+ * @Description: 起名为Cfg0是由于TC中配置管理中前缀是Cfg0，沿用TC的命名，到后来不再沿用TC，改采用英文Feature来标识特性
+ * <p>
+ * 值：Cfg0=featureValue来标识特性值
+ * <p>
+ * 族：Cfg0OptionFamily=feature依旧沿用TC的命名，用来标识族，在BOM系统中为特性(=族)
+ * <p>
+ * 组：在TC中组为更上一层的结构，是特性的父层
+ * <p>
+ * 一阶段的时候没有为组单独建一张表造成的组为游离态的尴尬地步
+ * 二阶段为特性建立了字典库，所有项目下的特性都来源于字典库。
+ * 字典库存在一个弊端：字典库可以已特性值为基础随意创建字典项目，即所有的数据都以特性值为标准，特性值是唯一的，
+ * 但是特性值依旧没有父层的约束，有可能造成'组->特性->特性值'不在一个相对由约束的属性结构树下
  * @Date: Created in 2018/8/10 13:55
  * @Modified By:
  */
@@ -147,7 +159,6 @@ public class HzCfg0Record {
     @Getter
     @Setter
     private String cfgReverse6;
-
 
 
     public static String reflectToDBField(String property) {
