@@ -12,6 +12,7 @@ import com.connor.hozon.bom.bomSystem.dto.vwo.HzVwoProcessDto;
 import com.connor.hozon.bom.bomSystem.iservice.cfg.vwo.IHzVWOManagerService;
 import com.connor.hozon.bom.common.base.constant.SystemStaticConst;
 import com.connor.hozon.bom.common.base.entity.QueryBase;
+import com.connor.hozon.bom.common.util.user.UserInfo;
 import net.sf.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -118,6 +119,8 @@ public class HzVwoController {
         model.addAttribute("hzVwoOpiBom", hzVwoOpiBom);
         model.addAttribute("hzVwoOpiPmt", hzVwoOpiPmt);
         model.addAttribute("hzVwoOpiProj", hzVwoOpiProj);
+
+        model.addAttribute("user",UserInfo.getUser().getId());
         return "changeManage/vwo/vwoBasicInformation";
     }
 
