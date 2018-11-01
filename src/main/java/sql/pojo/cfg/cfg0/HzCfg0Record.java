@@ -110,7 +110,7 @@ public class HzCfg0Record {
     /**
      * vwo号
      */
-    private Long vwoNum;
+    private String vwoNum;
     /**
      * 配置字典对应的特性值UID
      */
@@ -380,4 +380,11 @@ public class HzCfg0Record {
         this.vwoId = vwoId;
     }
 
+    public String getVwoNum() {
+        return vwoNum;
+    }
+
+    public void setVwoNum(String vwoNum) {
+        this.vwoNum = vwoNum;
+    }
 }
