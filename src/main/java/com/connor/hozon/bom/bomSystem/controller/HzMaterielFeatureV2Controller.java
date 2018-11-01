@@ -176,7 +176,7 @@ public class HzMaterielFeatureV2Controller extends ExtraIntegrate {
             model.addAttribute("projectUid", projectUid);
             model.addAttribute("superMateriel", sm == null ? "" : sm.getpMaterielCode());
 
-            model.addAttribute("action", "./materielV2/updateModelBasic");
+            model.addAttribute("action", "./materielV2/saveModelBasic");
             return "cfg/materielFeature/updateModelBasic";
         }
         //修改超级物料，不再使用
@@ -234,7 +234,9 @@ public class HzMaterielFeatureV2Controller extends ExtraIntegrate {
     }
 
     /**
-     * @param hzComposeMFDTO
+     * 保存1条衍生物料数据
+     *
+     * @param hzComposeMFDTO 前端接收的衍生物料数据
      * @return
      */
     @RequestMapping(value = "/saveCompose", method = RequestMethod.POST)
@@ -298,35 +300,23 @@ public class HzMaterielFeatureV2Controller extends ExtraIntegrate {
     }
 
     /**
-     * 修改
-     * @param pCfg0ModelBasicDetail
-     * @param puid
+     * 保存衍生物料基本信息
+     *
      * @param projectUid
      * @param superMateriel
      * @param modelFeature
      * @return
      */
-    @RequestMapping("/updateModelBasic")
+    @RequestMapping("/saveModelBasic")
     @ResponseBody
-    public JSONObject updateModelBasic(
-            @RequestParam String pCfg0ModelBasicDetail,
-            @RequestParam String puid,
+    public JSONObject saveModelBasic(
             @RequestParam String projectUid,
             @RequestParam String superMateriel,
             @RequestBody HzCfg0ModelFeature modelFeature
     ) {
-        net.sf.json.JSONObject _result = new net.sf.json.JSONObject();
-        HzCfg0ModelRecord modelRecord = new HzCfg0ModelRecord();
-        modelRecord.setPuid(puid);
-        modelRecord.setpCfg0ModelBasicDetail(pCfg0ModelBasicDetail);
+        JSONObject _result = new JSONObject();
         Date now = new Date();
         User user = UserInfo.getUser();
-        boolean result = hzCfg0ModelRecordService.doUpdateBasic(modelRecord);
-        if (result == false) {
-            _result.put("status", false);
-            _result.put("msg", "更新模型信息失败");
-            return _result;
-        }
 
         if (modelFeature.getPuid() == null || "".equals(modelFeature.getPuid())) {
             modelFeature.setPuid(UUID.randomUUID().toString());
@@ -429,6 +419,7 @@ public class HzMaterielFeatureV2Controller extends ExtraIntegrate {
 
     /**
      * 已废除，不再使用
+     *
      * @param params
      * @return
      */
@@ -510,6 +501,7 @@ public class HzMaterielFeatureV2Controller extends ExtraIntegrate {
 
     /**
      * 已废除，不再使用
+     *
      * @param params
      * @return
      */
@@ -522,6 +514,7 @@ public class HzMaterielFeatureV2Controller extends ExtraIntegrate {
 
     /**
      * 已废除，不再使用
+     *
      * @param puidOfModelFeatures
      * @param model
      * @return
@@ -541,6 +534,7 @@ public class HzMaterielFeatureV2Controller extends ExtraIntegrate {
 
     /**
      * 已废除，不再使用
+     *
      * @param puidOfModelFeatures
      * @param model
      * @return
