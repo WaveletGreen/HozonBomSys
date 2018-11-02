@@ -82,7 +82,8 @@
                         $('body', window.top.document).find('.modal-backdrop').remove();
                         var entity = e.entity;
                         zTree.addNodes(selectNode, {node:entity.node, parentNode:entity.parentNode, name:entity.name,groupId:entity.groupId,groupCode:entity.groupCode });
-                        window.Ewin.alert({message:'增加数据成功!'});
+                        // window.Ewin.alert({message:'增加数据成功!'});
+                        layer.msg('添加成功', {icon: 1, time: 2000})
                     }else{
                         window.Ewin.alert({message:'增加数据失败!'});
                     }
@@ -92,5 +93,6 @@
     })
     ]]>
 </script>
+<script th:src="@{/layer/layer.js}"></script>
 </body>
 </html>
