@@ -26,24 +26,13 @@ function doQuery() {
 function initTable(url) {
     var  $table =  $("#processCenterTable");
     var projectId =  $("#project", window.top.document).val();
-    //var url = "work/record?projectId="+projectId;
     var  column = [];
     $.ajax({
         url:"work/title",
         type:"GET",
         success:function(result){
             var column = [];
-            // column.push({field: 'puid', title: 'puid'});
             column.push({field: 'ck', checkbox: true, Width: 50});
-            /*column.push({field: '',
-                title: '序号',
-                formatter: function (value, row, index) {
-                    return index+1;},
-                align:
-                    'center',
-                valign:
-                    'middle'
-            });*/
             var data = result.data;
             var keys = [];
             var values;
@@ -76,19 +65,14 @@ function initTable(url) {
                 pageSize: 20,                        //每页的记录行数（*）
                 pageList: ['ALL', 10, 20, 50, 100, 200, 500, 1000],        //可供选择的每页的行数（*）                uniqueId: "puid",                   //每一行的唯一标识，一般为主键列
                 showExport: true,
-                //exportDataType: 'all',
                 columns: column,
                 sortable: true,                     //是否启用排序
                 sortOrder: "asc",                   //排序方式
                 clickToSelect: true,               //单击某一行的时候选中某一条记录
                 striped: true,                      //是否显示行间隔色
-                //search: true,                      //是否显示表格搜索，此搜索是客户端搜索，不会进服务端
                 showColumns: true,                 //是否显示所有的列
-                /*fixedColumns: true,
-                fixedNumber:1,*/
                 showToggle: false,                 //是否显示详细视图和列表视图的切换按钮
                 showRefresh: true,                 //是否显示刷新按钮
-                //minimumCountColumns: 4,
                 toolbars: [
                     {
                         text: '添加',
@@ -221,7 +205,6 @@ function initTable(url) {
                     }
                 ],
             });
-            // $table.bootstrapTable('hideColumn', 'puid');
         }
     })
 }

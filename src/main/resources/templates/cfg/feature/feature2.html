@@ -4,10 +4,11 @@
   ~ This file was wrote by fancyears·milos·maywas @connor. Any question/bug you can post to 1243093366@qq.com.
   ~ ALL RIGHTS RESERVED.
   -->
+<!--特性表页面-->
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:include="include/includebase"></head>
 <!--<link th:href="@{/css/stage/bom-stage.css}" rel="stylesheet"/>-->
-<title>Hz-特性表</title>
+<title>特性表</title>
 <body class="content-body">
 <div class="panel-body">
     <div class="content col-lg-12">
@@ -40,7 +41,6 @@
     function doQuery() {
         $('#dataTable').bootstrapTable('refresh');    //刷新表格
     }
-
     function doRefresh(projectUid) {
         loadData(projectUid);
     }

@@ -85,19 +85,14 @@ function initTable(url) {
                 pageSize: 20,                       //每页的记录行数（*）
                 pageList: ['ALL', 10, 20, 50, 100, 200, 500, 1000],        //可供选择的每页的行数（*）                uniqueId: "puid",                     //每一行的唯一标识，一般为主键列
                 showExport: true,
-                //exportDataType: 'all',
                 columns: column,
                 sortable: true,                     //是否启用排序
                 sortOrder: "asc",                   //排序方式
                 clickToSelect: true,// 单击某一行的时候选中某一条记录
                 striped: true, //是否显示行间隔色
-                //search: true, //是否显示表格搜索，此搜索是客户端搜索，不会进服务端
                 showColumns: true, //是否显示所有的列
-                /*fixedColumns: true,
-                fixedNumber:1,*/
                 showToggle: false,                   //是否显示详细视图和列表视图的切换按钮
                 showRefresh: true,                  //是否显示刷新按钮
-                //minimumCountColumns: 4,
                 toolbars: [
                     /*{
                         text: '添加',
@@ -373,23 +368,8 @@ function initTable(url) {
                                     })
                                 }
                     }*/
-                    // ,
-                    // {
-                    //     text: '选取数据',
-                    //     iconCls: 'glyphicon glyphicon-save',
-                    //     handler: function () {
-                    //         window.Ewin.dialog({
-                    //             title: "选取数据",
-                    //             url: "work/process/getMBom",
-                    //             gridId: "gridId",
-                    //             width: 500,
-                    //             height:650
-                    //         })
-                    //     }
-                    // },
                 ],
             });
-            // $table.bootstrapTable('hideColumn', 'materielId');
         }
     })
 }

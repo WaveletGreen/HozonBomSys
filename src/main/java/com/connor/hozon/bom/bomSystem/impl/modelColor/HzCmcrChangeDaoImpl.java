@@ -198,6 +198,31 @@ public class HzCmcrChangeDaoImpl extends BasicDaoImpl<HzCmcrChange> implements H
     }
 
     @Override
+    public List<HzCmcrChange> doQueryCmcrDetailChangeBeforAndAfter(HzCmcrChange hzCmcrChange) {
+        return baseSQLUtil.executeQuery(hzCmcrChange, clzName+".doQueryCmcrDetailChangeBeforAndAfter");
+    }
+
+    @Override
+    public List<HzCmcrChange> doQueryCmcrChangeBefor(Long vwoId) {
+        return baseSQLUtil.executeQueryByPass(new HzCmcrChange(), vwoId, clzName+".doQueryCmcrChangeBefor");
+    }
+
+    @Override
+    public List<HzCmcrChange> doQueryCmcrChangeBeforFirst(Long vwoId) {
+        return baseSQLUtil.executeQueryByPass(new HzCmcrChange(), vwoId, clzName+".doQueryCmcrChangeBeforFirst");
+    }
+
+    @Override
+    public List<HzCmcrChange> doQueryCmcrChangeAfterFirst(Long vwoId) {
+        return baseSQLUtil.executeQueryByPass(new HzCmcrChange(), vwoId, clzName+".doQueryCmcrChangeAfterFirst");
+    }
+
+    @Override
+    public List<HzCmcrChange> doQueryCmcrChangeAfter(Long vwoId) {
+        return baseSQLUtil.executeQueryByPass(new HzCmcrChange(), vwoId, clzName+".doQueryCmcrChangeAfter");
+    }
+
+    @Override
     public List<HzCmcrChange> selectLastAfter(List<HzCmcrChange> hzCmcrChangesLastAfter) throws Exception{
         preSetAfterList(hzCmcrChangesLastAfter);
         return executeSelectLast(hzCmcrChangesLastAfter, "selectLastAfter");

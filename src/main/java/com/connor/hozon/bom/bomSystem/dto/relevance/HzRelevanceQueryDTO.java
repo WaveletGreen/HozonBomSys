@@ -6,12 +6,15 @@
 
 package com.connor.hozon.bom.bomSystem.dto.relevance;
 
+import lombok.Data;
+
 /**
  * @Author: Fancyears·Maylos·Maywas
- * @Description: 相关性查询助手
+ * @Description: 相关性查询助手，该查询助手字段定义必须与前端对应的table定义的field进行一一对应，方便Spring进行自动化
  * @Date: Created in 2018/9/7 15:12
  * @Modified By:
  */
+@Data
 public class HzRelevanceQueryDTO {
     /**
      * 项目UID
@@ -65,67 +68,4 @@ public class HzRelevanceQueryDTO {
         }
     }
 
-    public String getProjectUid() {
-        return projectUid;
-    }
-
-    public void setProjectUid(String projectUid) {
-        this.projectUid = projectUid;
-    }
-
-    public String getFeatureCode() {
-        return featureCode;
-    }
-
-    public void setFeatureCode(String featureCode) {
-        this.featureCode = featureCode;
-    }
-
-    public String getFeatureValueCode() {
-        return featureValueCode;
-    }
-
-    public void setFeatureValueCode(String featureValueCode) {
-        this.featureValueCode = featureValueCode;
-    }
-
-    public String getSort() {
-        return sort;
-    }
-
-    public void setSort(String sort) {
-        this.sort = sort;
-    }
-
-    public String getOrder() {
-        return order;
-    }
-
-    public void setOrder(String order) {
-        this.order = order;
-    }
-
-    public Integer getLimit() {
-        return limit;
-    }
-
-    public void setLimit(Integer limit) {
-        this.limit = limit;
-    }
-
-    public Integer getPage() {
-        return page;
-    }
-
-    public void setPage(Integer page) {
-        this.page = page;
-    }
-
-    public Integer getOffset() {
-        return offset;
-    }
-
-    public void setOffset(Integer offset) {
-        this.offset = offset;
-    }
 }

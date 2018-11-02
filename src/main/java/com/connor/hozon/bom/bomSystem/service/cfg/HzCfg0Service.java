@@ -7,7 +7,7 @@
 package com.connor.hozon.bom.bomSystem.service.cfg;
 
 import com.connor.hozon.bom.bomSystem.dao.cfg0.HzCfg0RecordDao;
-import com.connor.hozon.bom.bomSystem.dto.HzFeatureQueryDTO;
+import com.connor.hozon.bom.bomSystem.dto.HzFeatureQueryDto;
 import com.connor.hozon.bom.bomSystem.dto.HzMaterielFeatureBean;
 import com.connor.hozon.bom.bomSystem.dto.HzRelevanceBean;
 import com.connor.hozon.bom.bomSystem.helper.DateStringHelper;
@@ -75,7 +75,7 @@ public class HzCfg0Service {
      * @param queryBase
      * @return
      */
-    public List<HzCfg0Record> doLoadCfgListByProjectPuid(String projectPuid, HzFeatureQueryDTO queryBase) {
+    public List<HzCfg0Record> doLoadCfgListByProjectPuid(String projectPuid, HzFeatureQueryDto queryBase) {
         return hzCfg0RecordDao.selectListByProjectPuid(projectPuid, queryBase);
     }
 
@@ -149,7 +149,7 @@ public class HzCfg0Service {
         List<HzCfg0Record> records = null;
         List<HzCfg0Record> needToUpdate = new ArrayList<>();
         if ("HZ_CFG0_RECORD".equals(_table)) {
-            records = doLoadCfgListByProjectPuid(projectPuid, new HzFeatureQueryDTO());
+            records = doLoadCfgListByProjectPuid(projectPuid, new HzFeatureQueryDto());
         }
 //        else if ("HZ_CFG0_ADD_CFG_RECORD".equals(_table)) {
 //            records = doLoadAddedCfgListByProjectPuid(projectPuid);
@@ -215,7 +215,7 @@ public class HzCfg0Service {
      * @param dto
      * @return
      */
-    public int tellMeHowManyOfThose(HzFeatureQueryDTO dto) {
+    public int tellMeHowManyOfThose(HzFeatureQueryDto dto) {
         return hzCfg0RecordDao.tellMeHowManyOfThose(dto);
     }
 
@@ -232,7 +232,7 @@ public class HzCfg0Service {
         return hzCfg0RecordDao.setToProcess(params);
     }
 
-    public List<HzCfg0Record> doLoadByCondition(HzFeatureQueryDTO queryBase) {
+    public List<HzCfg0Record> doLoadByCondition(HzFeatureQueryDto queryBase) {
         return hzCfg0RecordDao.selectByCondition(queryBase);
     }
 
@@ -273,7 +273,7 @@ public class HzCfg0Service {
         //关键字段为空，则同步同步历史数据到配置字典中
         if (null == mainRecord.getFeatureSynDicFlag() || 0 == mainRecord.getFeatureSynDicFlag()) {
             Map<String, HzDictionaryLibrary> libraryMap = new HashMap<>();
-            List<HzCfg0Record> records = hzCfg0RecordDao.selectListByProjectPuid(projectUid, new HzFeatureQueryDTO());
+            List<HzCfg0Record> records = hzCfg0RecordDao.selectListByProjectPuid(projectUid, new HzFeatureQueryDto());
 //            List<HzCfg0OptionFamily> families = hzCfg0OptionFamilyService.doSelectNameByMap(projectUid, null, false);
             //以特性值为基准，查找配置字典中的特性值数据，但是特性不匹配的话，则强制增加特性，并记录特性
             for (int i = 0; i < records.size(); i++) {

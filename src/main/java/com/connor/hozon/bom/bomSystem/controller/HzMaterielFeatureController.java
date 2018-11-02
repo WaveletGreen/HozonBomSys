@@ -9,7 +9,7 @@ package com.connor.hozon.bom.bomSystem.controller;
 import com.connor.hozon.bom.bomSystem.controller.integrate.ExtraIntegrate;
 import com.connor.hozon.bom.bomSystem.dao.modelColor.HzCfg0ModelColorDao;
 import com.connor.hozon.bom.bomSystem.dao.derivative.HzCfg0ToModelRecordDao;
-import com.connor.hozon.bom.bomSystem.dto.HzFeatureQueryDTO;
+import com.connor.hozon.bom.bomSystem.dto.HzFeatureQueryDto;
 import com.connor.hozon.bom.bomSystem.dto.HzMaterielFeatureBean;
 import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
 import com.connor.hozon.bom.bomSystem.service.cfg.*;
@@ -472,6 +472,11 @@ public class HzMaterielFeatureController extends ExtraIntegrate {
         return _result;
     }
 
+    /**
+     * 修改超级物料特性
+     * @param superMateriel
+     * @return
+     */
     @RequestMapping("/updateSuperMateriel")
     @ResponseBody
     public boolean updateSuperMateriel(@RequestBody HzMaterielRecord superMateriel) {
@@ -490,78 +495,78 @@ public class HzMaterielFeatureController extends ExtraIntegrate {
         return false;
     }
 
-    @RequestMapping("/addVehicleModelPage")
-    public String addVehicleModelPage(@RequestParam String projectPuid, Model model) {
-        if (checkString(projectPuid)) {
-            HzCfg0MainRecord hzCfg0MainRecord = hzCfg0MainService.doGetbyProjectPuid(projectPuid);
-            List<HzCfg0Record> cfg0s = hzCfg0Service.doLoadCfgListByProjectPuid(projectPuid, new HzFeatureQueryDTO());
-            Map<String, List<HzCfg0Record>> _map = new HashMap<>();
-            cfg0s.forEach(cfg -> {
-                String id = cfg.getpCfg0FamilyDesc() + "\t" + cfg.getpCfg0FamilyName();
-                if (_map.containsKey(id)) {
-                    _map.get(id).add(cfg);
-                } else {
-                    List<HzCfg0Record> record = new ArrayList<>();
-                    HzCfg0Record empty = new HzCfg0Record();
-                    empty.setPuid("");
-                    empty.setpCfg0ObjectId("-");
-                    record.add(empty);
-                    record.add(cfg);
-                    _map.put(id, record);
-                }
-            });
+//    @RequestMapping("/addVehicleModelPage")
+//    public String addVehicleModelPage(@RequestParam String projectPuid, Model model) {
+//        if (checkString(projectPuid)) {
+//            HzCfg0MainRecord hzCfg0MainRecord = hzCfg0MainService.doGetbyProjectPuid(projectPuid);
+//            List<HzCfg0Record> cfg0s = hzCfg0Service.doLoadCfgListByProjectPuid(projectPuid, new HzFeatureQueryDto());
+//            Map<String, List<HzCfg0Record>> _map = new HashMap<>();
+//            cfg0s.forEach(cfg -> {
+//                String id = cfg.getpCfg0FamilyDesc() + "\t" + cfg.getpCfg0FamilyName();
+//                if (_map.containsKey(id)) {
+//                    _map.get(id).add(cfg);
+//                } else {
+//                    List<HzCfg0Record> record = new ArrayList<>();
+//                    HzCfg0Record empty = new HzCfg0Record();
+//                    empty.setPuid("");
+//                    empty.setpCfg0ObjectId("-");
+//                    record.add(empty);
+//                    record.add(cfg);
+//                    _map.put(id, record);
+//                }
+//            });
+//
+//            model.addAttribute("cfgmain", hzCfg0MainRecord);
+//            model.addAttribute("_map", _map);
+//            model.addAttribute("action", "./materiel/addVehicleModel");
+//            return "cfg/materielFeature/addModel";
+//        } else {
+//            model.addAttribute("msg", "请选择项目再操作");
+//            return "errorWithEntity";
+//        }
+//    }
 
-            model.addAttribute("cfgmain", hzCfg0MainRecord);
-            model.addAttribute("_map", _map);
-            model.addAttribute("action", "./materiel/addVehicleModel");
-            return "cfg/materielFeature/addModel";
-        } else {
-            model.addAttribute("msg", "请选择项目再操作");
-            return "errorWithEntity";
-        }
-    }
-
-    @RequestMapping("/addVehicleModelPage2")
-    public String addVehicleModelPage2(@RequestParam String projectPuid, Model model) {
-        if (checkString(projectPuid)) {
-            HzProjectLibs project = hzProjectLibsService.doLoadProjectLibsById(projectPuid);
-            HzVehicleRecord vehicle = hzVehicleService.doGetByPuid(project.getpProjectPertainToVehicle());
-            HzPlatformRecord platform = hzPlatformService.doGetByPuid(vehicle.getpVehiclePertainToPlatform());
-            HzBrandRecord brand = hzBrandService.doGetByPuid(platform.getpPertainToBrandPuid());
-            HzCfg0ModelDetail hzCfg0ModelDetail = new HzCfg0ModelDetail();
-            hzCfg0ModelDetail.setpModelBrand(brand.getpBrandName());
-            hzCfg0ModelDetail.setpModelPlatform(platform.getpPlatformName());
-            hzCfg0ModelDetail.setpModelVehicle(vehicle.getpVehicleName());
-            model.addAttribute("hzCfg0ModelDetail", hzCfg0ModelDetail);
-
-
-            HzCfg0MainRecord hzCfg0MainRecord = hzCfg0MainService.doGetbyProjectPuid(projectPuid);
-            List<HzCfg0Record> cfg0s = hzCfg0Service.doLoadCfgListByProjectPuid(projectPuid, new HzFeatureQueryDTO());
-            Map<String, List<HzCfg0Record>> _map = new HashMap<>();
-            cfg0s.forEach(cfg -> {
-                String id = cfg.getpCfg0FamilyDesc() + "\t" + cfg.getpCfg0FamilyName();
-                if (_map.containsKey(id)) {
-                    _map.get(id).add(cfg);
-                } else {
-                    List<HzCfg0Record> record = new ArrayList<>();
-                    HzCfg0Record empty = new HzCfg0Record();
-                    empty.setPuid("");
-                    empty.setpCfg0ObjectId("-");
-                    record.add(empty);
-                    record.add(cfg);
-                    _map.put(id, record);
-                }
-            });
-
-            model.addAttribute("cfgmain", hzCfg0MainRecord);
-            model.addAttribute("_map", _map);
-            model.addAttribute("action", "./materiel/addVehicleModel2");
-            return "cfg/materielFeature/addModel2";
-        } else {
-            model.addAttribute("msg", "请选择项目再操作");
-            return "errorWithEntity";
-        }
-    }
+//    @RequestMapping("/initAddingPageParams")
+//    public String initAddingPageParams(@RequestParam String projectPuid, Model model) {
+//        if (checkString(projectPuid)) {
+//            HzProjectLibs project = hzProjectLibsService.doLoadProjectLibsById(projectPuid);
+//            HzVehicleRecord vehicle = hzVehicleService.doGetByPuid(project.getpProjectPertainToVehicle());
+//            HzPlatformRecord platform = hzPlatformService.doGetByPuid(vehicle.getpVehiclePertainToPlatform());
+//            HzBrandRecord brand = hzBrandService.doGetByPuid(platform.getpPertainToBrandPuid());
+//            HzCfg0ModelDetail hzCfg0ModelDetail = new HzCfg0ModelDetail();
+//            hzCfg0ModelDetail.setpModelBrand(brand.getpBrandName());
+//            hzCfg0ModelDetail.setpModelPlatform(platform.getpPlatformName());
+//            hzCfg0ModelDetail.setpModelVehicle(vehicle.getpVehicleName());
+//            model.addAttribute("hzCfg0ModelDetail", hzCfg0ModelDetail);
+//
+//
+//            HzCfg0MainRecord hzCfg0MainRecord = hzCfg0MainService.doGetbyProjectPuid(projectPuid);
+//            List<HzCfg0Record> cfg0s = hzCfg0Service.doLoadCfgListByProjectPuid(projectPuid, new HzFeatureQueryDto());
+//            Map<String, List<HzCfg0Record>> _map = new HashMap<>();
+//            cfg0s.forEach(cfg -> {
+//                String id = cfg.getpCfg0FamilyDesc() + "\t" + cfg.getpCfg0FamilyName();
+//                if (_map.containsKey(id)) {
+//                    _map.get(id).add(cfg);
+//                } else {
+//                    List<HzCfg0Record> record = new ArrayList<>();
+//                    HzCfg0Record empty = new HzCfg0Record();
+//                    empty.setPuid("");
+//                    empty.setpCfg0ObjectId("-");
+//                    record.add(empty);
+//                    record.add(cfg);
+//                    _map.put(id, record);
+//                }
+//            });
+//
+//            model.addAttribute("cfgmain", hzCfg0MainRecord);
+//            model.addAttribute("_map", _map);
+//            model.addAttribute("action", "./materiel/addVehicleModel2");
+//            return "cfg/materielFeature/addModel2";
+//        } else {
+//            model.addAttribute("msg", "请选择项目再操作");
+//            return "errorWithEntity";
+//        }
+//    }
 
     @RequestMapping("/addVehicleModel")
     @ResponseBody

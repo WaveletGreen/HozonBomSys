@@ -42,7 +42,7 @@
         join Hz_Bom_Line_Record t41 on t30.cfg_bomline_uid=t41.puid
         join Hz_Cfg0_Model_Color_Record t40 on t.dmb_color_model_uid=t40.puid
         join Hz_Cfg0_Model_Record t50 on t.dmb_model_uid=t50.puid
-        join Hz_Color_Model t60 on t60.model_uid=t.dmb_color_model_uid and t60.p_cfg_uid=t21.puid
+        join HZ_CFG0_MODEL_COLOR_DETAIL t60 on t60.model_uid=t.dmb_color_model_uid and t60.p_cfg_uid=t21.puid
         join Hz_Cfg0_Colorset t70 on t60.p_color_uid=t70.puid
         where t.id = #{dmbId,jdbcType=DECIMAL} and t.dmb_project_uid=#{projectUid,jdbcType=VARCHAR}
         group by (

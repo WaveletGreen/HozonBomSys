@@ -71,17 +71,7 @@ function initTable1(mBomUrl) {
         type: "GET",
         success: function (result) {
             var column = [];
-            // column.push({field: 'eBomPuid', title: 'puid'});
             column.push({field: 'ck', checkbox: true, Width: 50});
-            // column.push({field: '',
-            //     title: '序号',
-            //     formatter: function (value, row, index) {
-            //         return index+1;},
-            //     align:
-            //         'center',
-            //     valign:
-            //         'middle'
-            // });
             var data = result.data;
             var keys = [];
             var values;
@@ -183,20 +173,15 @@ function initTable1(mBomUrl) {
                 pageSize: 20,                       //每页的记录行数（*）
                 pageList: ['ALL', 10, 20, 50, 100, 200, 500, 1000],        //可供选择的每页的行数（*）                uniqueId: "puid",                     //每一行的唯一标识，一般为主键列
                 showExport: true,
-                //exportDataType: 'all',
                 columns: column,
                 sortable: true,                     //是否启用排序
                 sortOrder: "asc",                   //排序方式
                 clickToSelect: true,// 单击某一行的时候选中某一条记录
                 striped: true, //是否显示行间隔色
-                //search: true, //是否显示表格搜索，此搜索是客户端搜索，不会进服务端
                 showColumns: true, //是否显示所有的列
-                /*fixedColumns: true,
-                fixedNumber:1,*/
                 showToggle: false,                   //是否显示详细视图和列表视图的切换按钮
                 showRefresh: true,                  //是否显示刷新按钮
                 minimumCountColumns: 4,
-                //responseHandler:responseHandler, //在渲染页面数据之前执行的方法，此配置很重要!!!!!!!
                 toolbars: [
                     /*{
                         text: '添加',
@@ -682,7 +667,6 @@ function initTable1(mBomUrl) {
                                         data: JSON.stringify(rows),
                                         contentType: "application/json",
                                         success: function (result) {
-                                            console.log(result);
                                             if (result.status) {
                                                 layer.msg(result.msg, {icon: 1, time: 2000})
 
@@ -712,7 +696,6 @@ function initTable1(mBomUrl) {
                     }
                 ],
             });
-            // $mBomTable.bootstrapTable('hideColumn', 'eBomPuid');
             $mBomTable.bootstrapTable('hideColumn', 'level');
         }
     });
@@ -846,20 +829,15 @@ function initTable11(mBomUrl, lineIds, colorIds) {
                 pageSize: 20,                       //每页的记录行数（*）
                 pageList: ['ALL', 10, 20, 50, 100, 200, 500, 1000],        //可供选择的每页的行数（*）                uniqueId: "puid",                     //每一行的唯一标识，一般为主键列
                 showExport: true,
-                //exportDataType: 'all',
                 columns: column,
                 sortable: true,                     //是否启用排序
                 sortOrder: "asc",                   //排序方式
                 clickToSelect: true,// 单击某一行的时候选中某一条记录
                 striped: true, //是否显示行间隔色
-                //search: true, //是否显示表格搜索，此搜索是客户端搜索，不会进服务端
                 showColumns: true, //是否显示所有的列
-                /*fixedColumns: true,
-                fixedNumber:1,*/
                 showToggle: false,                   //是否显示详细视图和列表视图的切换按钮
                 showRefresh: true,                  //是否显示刷新按钮
                 minimumCountColumns: 4,
-                //responseHandler:responseHandler, //在渲染页面数据之前执行的方法，此配置很重要!!!!!!!
                 toolbars: [
                     /*{
                         text: '添加',
@@ -1333,7 +1311,6 @@ function initTable11(mBomUrl, lineIds, colorIds) {
                                         data: JSON.stringify(rows),
                                         contentType: "application/json",
                                         success: function (result) {
-                                            console.log(result);
                                             if (result.status) {
                                                 layer.msg(result.msg, {icon: 1, time: 2000})
 
@@ -1363,7 +1340,6 @@ function initTable11(mBomUrl, lineIds, colorIds) {
                     }
                 ],
             });
-            // $mBomTable.bootstrapTable('hideColumn', 'eBomPuid');
             $mBomTable.bootstrapTable('hideColumn', 'level');
         }
     });
@@ -1486,20 +1462,15 @@ function initTable2(productionUrl) {
                 pageSize: 20,                       //每页的记录行数（*）
                 pageList: ['ALL', 10, 20, 50, 100, 200, 500, 1000],        //可供选择的每页的行数（*）                uniqueId: "puid",                     //每一行的唯一标识，一般为主键列
                 showExport: true,
-                //exportDataType: 'all',
                 columns: column,
                 sortable: true,                     //是否启用排序
                 sortOrder: "asc",                   //排序方式
                 clickToSelect: true,// 单击某一行的时候选中某一条记录
                 striped: true, //是否显示行间隔色
-                //search: true, //是否显示表格搜索，此搜索是客户端搜索，不会进服务端
                 showColumns: true, //是否显示所有的列
-                /*fixedColumns: true,
-                fixedNumber:1,*/
                 showToggle: false,                   //是否显示详细视图和列表视图的切换按钮
                 showRefresh: true,                  //是否显示刷新按钮
                 minimumCountColumns: 4,
-                //responseHandler:responseHandler, //在渲染页面数据之前执行的方法，此配置很重要!!!!!!!
                 toolbars: [
                     {
                         text: '修改',
@@ -1634,7 +1605,6 @@ function initTable2(productionUrl) {
                                         data: JSON.stringify(rows),
                                         contentType: "application/json",
                                         success: function (result) {
-                                            console.log(result);
                                             if (result.status) {
                                                 layer.msg(result.msg, {icon: 1, time: 2000})
 
@@ -1664,7 +1634,6 @@ function initTable2(productionUrl) {
                     }
                 ],
             });
-            // $productionTable.bootstrapTable('hideColumn', 'eBomPuid');
             $productionTable.bootstrapTable('hideColumn', 'level');
         }
     });
@@ -1760,20 +1729,15 @@ function initTable22(productionUrl, lineIds, colorIds) {
                 pageSize: 20,                       //每页的记录行数（*）
                 pageList: ['ALL', 10, 20, 50, 100, 200, 500, 1000],        //可供选择的每页的行数（*）                uniqueId: "puid",                     //每一行的唯一标识，一般为主键列
                 showExport: true,
-                //exportDataType: 'all',
                 columns: column,
                 sortable: true,                     //是否启用排序
                 sortOrder: "asc",                   //排序方式
                 clickToSelect: true,// 单击某一行的时候选中某一条记录
                 striped: true, //是否显示行间隔色
-                //search: true, //是否显示表格搜索，此搜索是客户端搜索，不会进服务端
                 showColumns: true, //是否显示所有的列
-                /*fixedColumns: true,
-                fixedNumber:1,*/
                 showToggle: false,                   //是否显示详细视图和列表视图的切换按钮
                 showRefresh: true,                  //是否显示刷新按钮
                 minimumCountColumns: 4,
-                //responseHandler:responseHandler, //在渲染页面数据之前执行的方法，此配置很重要!!!!!!!
                 toolbars: [
                     {
                         text: '修改',
@@ -1896,7 +1860,6 @@ function initTable22(productionUrl, lineIds, colorIds) {
                                         data: JSON.stringify(rows),
                                         contentType: "application/json",
                                         success: function (result) {
-                                            console.log(result);
                                             if (result.status) {
                                                 layer.msg(result.msg, {icon: 1, time: 2000})
 
@@ -1926,7 +1889,6 @@ function initTable22(productionUrl, lineIds, colorIds) {
                     }
                 ],
             });
-            // $productionTable.bootstrapTable('hideColumn', 'eBomPuid');
             $productionTable.bootstrapTable('hideColumn', 'level');
         }
     });
@@ -2011,7 +1973,6 @@ function initTable3(financialUrl) {
                             // align: 'center',
                             valign: 'middle',
                             formatter: function (value, row, index) {
-                                // console.log(row)
                                 if (value == "LOA") {
                                     return [
                                         '<a href="javascript:void(0)" onclick="queryLoa(' + row.eBomPuid + ')">' + value + '</a>'
@@ -2049,20 +2010,15 @@ function initTable3(financialUrl) {
                 pageSize: 20,                       //每页的记录行数（*）
                 pageList: ['ALL', 10, 20, 50, 100, 200, 500, 1000],        //可供选择的每页的行数（*）                uniqueId: "puid",                     //每一行的唯一标识，一般为主键列
                 showExport: true,
-                //exportDataType: 'all',
                 columns: column,
                 sortable: true,                     //是否启用排序
                 sortOrder: "asc",                   //排序方式
                 clickToSelect: true,// 单击某一行的时候选中某一条记录
                 striped: true, //是否显示行间隔色
-                //search: true, //是否显示表格搜索，此搜索是客户端搜索，不会进服务端
                 showColumns: true, //是否显示所有的列
-                /*fixedColumns: true,
-                fixedNumber:1,*/
                 showToggle: false,                   //是否显示详细视图和列表视图的切换按钮
                 showRefresh: true,                  //是否显示刷新按钮
                 minimumCountColumns: 4,
-                //responseHandler:responseHandler, //在渲染页面数据之前执行的方法，此配置很重要!!!!!!!
                 toolbars: [
                     {
                         text: '修改',
@@ -2197,7 +2153,6 @@ function initTable3(financialUrl) {
                                         data: JSON.stringify(rows),
                                         contentType: "application/json",
                                         success: function (result) {
-                                            console.log(result);
                                             if (result.status) {
                                                 layer.msg(result.msg, {icon: 1, time: 2000})
 
@@ -2285,7 +2240,6 @@ function initTable33(financialUrl, lineIds, colorIds) {
                             // align: 'center',
                             valign: 'middle',
                             formatter: function (value, row, index) {
-                                // console.log(row)
                                 if (value == "LOA") {
                                     return [
                                         '<a href="javascript:void(0)" onclick="queryLoa(' + row.eBomPuid + ')">' + value + '</a>'
@@ -2459,7 +2413,6 @@ function initTable33(financialUrl, lineIds, colorIds) {
                                         data: JSON.stringify(rows),
                                         contentType: "application/json",
                                         success: function (result) {
-                                            console.log(result);
                                             if (result.status) {
                                                 layer.msg(result.msg, {icon: 1, time: 2000})
 
@@ -2488,7 +2441,6 @@ function initTable33(financialUrl, lineIds, colorIds) {
                     }
                 ],
             });
-            // $financialTable.bootstrapTable('hideColumn', 'eBomPuid');
         }
     });
 }
@@ -2593,20 +2545,6 @@ function queryLou(row) {
     })
 }
 
-
-// function toPage(the) {
-//     var pageNum = $("#pageNum").val();
-//     if (pageNum) {
-//         $('#mbomMaintenanceTable').bootstrapTable('selectPage', parseInt(pageNum));
-//     }
-// }
-//
-// function toPage(the) {
-//     var pageNum = $("#pageNum").val();
-//     if (pageNum) {
-//         $('#whiteBodyProductionTable').bootstrapTable('selectPage', parseInt(pageNum));
-//     }
-// }
 
 function toPage(the) {
     let id = the.parentNode.parentNode.parentNode.childNodes[1].childNodes[1].id;

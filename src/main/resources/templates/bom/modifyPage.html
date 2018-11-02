@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+    <meta charset="UTF-8">
+    <title>修改模型基本属性</title>
+</head>
 <body>
 <form id="form" role="form" method="post" action="./model/saveModelData">
     <div class="row">
@@ -66,25 +70,6 @@
                 <input class="form-control" id="pModelGoodsNum" name="pModelGoodsNum" type="text"
                        placeholder="请输入商品号" th:value="${entity.getpModelGoodsNum()}"/>
             </div>
-            <!--<div class="form-group">-->
-            <!--<label for="objectName">模型名</label>-->
-            <!--<input class="form-control" id="objectName" name="objectName" type="text"-->
-            <!--th:value="${entity.getObjectName()}"-->
-            <!--/>-->
-            <!--</div>-->
-            <!--<div class="form-group">-->
-            <!--<label for="objectDesc">模型描述</label>-->
-            <!--<input class="form-control" id="objectDesc" name="objectDesc" type="text"-->
-            <!--th:value="${entity.getObjectDesc()}"-->
-
-            <!--/>-->
-            <!--</div>-->
-            <!--<div class="form-group">-->
-            <!--<label for="pCfg0ModelBasicDetail">模型基本信息</label>-->
-            <!--<input class="form-control" id="pCfg0ModelBasicDetail" name="pCfg0ModelBasicDetail" type="text"-->
-            <!--th:value="${entity.getpCfg0ModelBasicDetail()}"-->
-            <!--/>-->
-            <!--</div>-->
         </div>
     </div>
 </form>

@@ -223,9 +223,9 @@ $(document).ready((function () {
                 fixedNumber: 1 ,//固定列数*/
                 minimumCountColumns: 4,//设置最小列数
             });
-            $table.bootstrapTable('hideColumn', 'puid');
-            $table.bootstrapTable('hideColumn', 'level');
-            $table.bootstrapTable('hideColumn', 'groupNum');
+            // $table.bootstrapTable('hideColumn', 'puid');
+            // $table.bootstrapTable('hideColumn', 'level');
+            // $table.bootstrapTable('hideColumn', 'groupNum');
         }
     })
 }))

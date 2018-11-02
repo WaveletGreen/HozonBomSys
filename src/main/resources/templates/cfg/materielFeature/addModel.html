@@ -4,11 +4,14 @@
   ~ This file was wrote by fancyears·milos·maywas @connor. Any question/bug you can post to 1243093366@qq.com.
   ~ ALL RIGHTS RESERVED.
   -->
-
+<!--一阶段添加基础车型模型源自于配置物料特性表，二阶段添加基础车型模型直接从全配置BOM一级清单中进行，因此该页面废除-->
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+    <meta charset="UTF-8">
+    <title>添加基础车型模型</title>
+</head>
 <body>
-<meta charset=utf-8/>
 <form class="form-horizontal" id="form" role="form" method="post" th:action="${action}">
     <div class="form-group col-lg-10">
         <input class="form-control" id="pCfg0ModelOfMainRecord" name="pCfg0ModelOfMainRecord" type="hidden"

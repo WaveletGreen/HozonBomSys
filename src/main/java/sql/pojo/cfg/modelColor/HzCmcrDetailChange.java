@@ -97,11 +97,11 @@ public class HzCmcrDetailChange {
     /**
      * 保留字段
      */
-    private String cmcrDetailCgReverse1;
+    private String cmcrDetailCgTitle;
     /**
-     * 保留字段
+     * 对应的2Y层是否为颜色件，因为颜色件是动态回传到后台，因此需要该字段标记变更前后的颜色变化，理想情况下的变更不影响表头的变化，则该字段一直是1，否则根据动态变化会将其设置为1/0
      */
-    private String cmcrDetailCgReverse2;
+    private Integer cmcrDetailCgIsColorful;
     /**
      * 保留字段
      */
@@ -115,6 +115,10 @@ public class HzCmcrDetailChange {
      */
     private String cmcrDetailCgReverse5;
     /**
+     * 保留字段
+     */
+    private String cmcrDetailCgReverse6;
+    /**
      * 数据库中的table名
      */
     private String whichTable;
@@ -122,4 +126,8 @@ public class HzCmcrDetailChange {
      * 序列名称
      */
     private String seqName;
+    /**
+     * 颜色代码
+     */
+    private String colorCode;
 }

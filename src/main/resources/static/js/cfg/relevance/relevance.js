@@ -4,6 +4,13 @@
  * ALL RIGHTS RESERVED.
  */
 
+/**
+ *
+ * 相关性已只能手动触发生成，不再使用1.0.0版本的逻辑
+ *
+ * 该js已废除，使用relevance2.js代替正式业务，下一个版本即将删除该JS文件
+ *
+ */
 function loadData() {
     var $table = $("#dataTable");
     $table.bootstrapTable('destroy');

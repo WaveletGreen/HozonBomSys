@@ -47,15 +47,20 @@
         <!--修改者-->
         <result column="CMCR_DETAIL_CG_UPDATER" jdbcType="VARCHAR" property="cmcrDetailCgUpdater"/>
         <!--保留字段-->
-        <result column="CMCR_DETAIL_CG_REVERSE1" jdbcType="VARCHAR" property="cmcrDetailCgReverse1"/>
-        <!--保留字段-->
-        <result column="CMCR_DETAIL_CG_REVERSE2" jdbcType="VARCHAR" property="cmcrDetailCgReverse2"/>
+        <result column="CMCR_DETAIL_CG_TITLE" jdbcType="VARCHAR" property="cmcrDetailCgTitle"/>
+        <!--对应的2Y层是否为颜色件，因为颜色件是动态回传到后台，因此需要该字段标记变更前后的颜色变化，理想情况下的变更不影响表头的变化，则该字段一直是1，否则根据动态变化会将其设置为1/0-->
+        <result column="CMCR_DETAIL_CG_IS_COLORFUL" jdbcType="INTEGER" property="cmcrDetailCgIsColorful"/>
         <!--保留字段-->
         <result column="CMCR_DETAIL_CG_REVERSE3" jdbcType="VARCHAR" property="cmcrDetailCgReverse3"/>
         <!--保留字段-->
         <result column="CMCR_DETAIL_CG_REVERSE4" jdbcType="VARCHAR" property="cmcrDetailCgReverse4"/>
         <!--保留字段-->
         <result column="CMCR_DETAIL_CG_REVERSE5" jdbcType="VARCHAR" property="cmcrDetailCgReverse5"/>
+        <!--保留字段-->
+        <result column="CMCR_DETAIL_CG_REVERSE6" jdbcType="VARCHAR" property="cmcrDetailCgReverse6"/>
+    </resultMap>
+    <resultMap extends="BaseResultMap" id="VWO_Result_map" type="sql.pojo.cfg.modelColor.HzCmcrDetailChange">
+        <result column="colorCode" jdbcType="VARCHAR" property="colorCode"/>
     </resultMap>
     <sql id="Base_Column_List">
         CMCR_DETAIL_CG_ID,
@@ -77,11 +82,12 @@
         CMCR_DETAIL_CG_CREATOR,
         CMCR_DETAIL_CG_UPDATE_DATE,
         CMCR_DETAIL_CG_UPDATER,
-        CMCR_DETAIL_CG_REVERSE1,
-        CMCR_DETAIL_CG_REVERSE2,
+        CMCR_DETAIL_CG_TITLE,
+        CMCR_DETAIL_CG_IS_COLORFUL,
         CMCR_DETAIL_CG_REVERSE3,
         CMCR_DETAIL_CG_REVERSE4,
-        CMCR_DETAIL_CG_REVERSE5
+        CMCR_DETAIL_CG_REVERSE5,
+        CMCR_DETAIL_CG_REVERSE6
   </sql>
     <sql id="Base_Column_List2">
         CMCR_DETAIL_CG_ID,
@@ -103,11 +109,12 @@
         CMCR_DETAIL_CG_CREATOR,
 
         CMCR_DETAIL_CG_UPDATER,
-        CMCR_DETAIL_CG_REVERSE1,
-        CMCR_DETAIL_CG_REVERSE2,
+        CMCR_DETAIL_CG_TITLE,
+        CMCR_DETAIL_CG_IS_COLORFUL,
         CMCR_DETAIL_CG_REVERSE3,
         CMCR_DETAIL_CG_REVERSE4,
         CMCR_DETAIL_CG_REVERSE5,
+        CMCR_DETAIL_CG_REVERSE6,
         CMCR_DETAIL_CG_CREATE_DATE,
         CMCR_DETAIL_CG_UPDATE_DATE
   </sql>
@@ -141,9 +148,10 @@
         #{cmcrDetailCgFeatureName,jdbcType=VARCHAR}, #{cmcrDetailCgColorCode,jdbcType=VARCHAR},
         #{cmcrDetailCgColorName,jdbcType=VARCHAR}, #{cmcrDetailCgCreateDate,jdbcType=TIMESTAMP},
         #{cmcrDetailCgCreator,jdbcType=VARCHAR}, #{cmcrDetailCgUpdateDate,jdbcType=TIMESTAMP},
-        #{cmcrDetailCgUpdater,jdbcType=VARCHAR}, #{cmcrDetailCgReverse1,jdbcType=VARCHAR},
-        #{cmcrDetailCgReverse2,jdbcType=VARCHAR}, #{cmcrDetailCgReverse3,jdbcType=VARCHAR},
-        #{cmcrDetailCgReverse4,jdbcType=VARCHAR}, #{cmcrDetailCgReverse5,jdbcType=VARCHAR}
+        #{cmcrDetailCgUpdater,jdbcType=VARCHAR}, #{cmcrDetailCgTitle,jdbcType=VARCHAR},
+        #{cmcrDetailCgIsColorful,jdbcType=INTEGER}, #{cmcrDetailCgReverse3,jdbcType=VARCHAR},
+        #{cmcrDetailCgReverse4,jdbcType=VARCHAR}, #{cmcrDetailCgReverse5,jdbcType=VARCHAR},
+        #{cmcrDetailCgReverse6,jdbcType=VARCHAR}
         )
     </insert>
     <!--批量插入-->
@@ -152,7 +160,7 @@
         <include refid="Base_Column_List2"/>
         )
         select ${seqName}.Nextval, A.* ,sysdate,sysdate from (
-        <foreach collection="hzCmcrDetailChangeList" index="index" item="hzCmcrDetailChange" separator="union">
+        <foreach collection="hzCmcrDetailChangeList" index="index" item="hzCmcrDetailChange" separator="union all">
             select
                 #{hzCmcrDetailChange.cmcrDetailSrcPuid,jdbcType=VARCHAR},
                 #{hzCmcrDetailChange.cmcrDetailSrcCfgUid,jdbcType=VARCHAR}, #{hzCmcrDetailChange.cmcrDetailSrcColorUid,jdbcType=VARCHAR},
@@ -163,9 +171,10 @@
                 #{hzCmcrDetailChange.cmcrDetailCgFeatureName,jdbcType=VARCHAR}, #{hzCmcrDetailChange.cmcrDetailCgColorCode,jdbcType=VARCHAR},
                 #{hzCmcrDetailChange.cmcrDetailCgColorName,jdbcType=VARCHAR},
                 #{hzCmcrDetailChange.cmcrDetailCgCreator,jdbcType=VARCHAR},
-                #{hzCmcrDetailChange.cmcrDetailCgUpdater,jdbcType=VARCHAR}, #{hzCmcrDetailChange.cmcrDetailCgReverse1,jdbcType=VARCHAR},
-                #{hzCmcrDetailChange.cmcrDetailCgReverse2,jdbcType=VARCHAR}, #{hzCmcrDetailChange.cmcrDetailCgReverse3,jdbcType=VARCHAR},
-                #{hzCmcrDetailChange.cmcrDetailCgReverse4,jdbcType=VARCHAR}, #{hzCmcrDetailChange.cmcrDetailCgReverse5,jdbcType=VARCHAR}
+                #{hzCmcrDetailChange.cmcrDetailCgUpdater,jdbcType=VARCHAR}, #{hzCmcrDetailChange.cmcrDetailCgTitle,jdbcType=VARCHAR},
+                #{hzCmcrDetailChange.cmcrDetailCgIsColorful,jdbcType=INTEGER}, #{hzCmcrDetailChange.cmcrDetailCgReverse3,jdbcType=VARCHAR},
+                #{hzCmcrDetailChange.cmcrDetailCgReverse4,jdbcType=VARCHAR}, #{hzCmcrDetailChange.cmcrDetailCgReverse5,jdbcType=VARCHAR},
+                #{hzCmcrDetailChange.cmcrDetailCgReverse6,jdbcType=VARCHAR}
             from
                 dual
         </foreach>
@@ -232,11 +241,11 @@
             <if test="cmcrDetailCgUpdater != null">
                 CMCR_DETAIL_CG_UPDATER,
             </if>
-            <if test="cmcrDetailCgReverse1 != null">
-                CMCR_DETAIL_CG_REVERSE1,
+            <if test="cmcrDetailCgTitle != null">
+                CMCR_DETAIL_CG_TITLE,
             </if>
-            <if test="cmcrDetailCgReverse2 != null">
-                CMCR_DETAIL_CG_REVERSE2,
+            <if test="cmcrDetailCgIsColorful != null">
+                CMCR_DETAIL_CG_IS_COLORFUL,
             </if>
             <if test="cmcrDetailCgReverse3 != null">
                 CMCR_DETAIL_CG_REVERSE3,
@@ -246,6 +255,9 @@
             </if>
             <if test="cmcrDetailCgReverse5 != null">
                 CMCR_DETAIL_CG_REVERSE5,
+            </if>
+            <if test="cmcrDetailCgReverse6 != null">
+                CMCR_DETAIL_CG_REVERSE6,
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -306,11 +318,11 @@
             <if test="cmcrDetailCgUpdater != null">
                 #{cmcrDetailCgUpdater,jdbcType=VARCHAR},
             </if>
-            <if test="cmcrDetailCgReverse1 != null">
-                #{cmcrDetailCgReverse1,jdbcType=VARCHAR},
+            <if test="cmcrDetailCgTitle != null">
+                #{cmcrDetailCgTitle,jdbcType=VARCHAR},
             </if>
-            <if test="cmcrDetailCgReverse2 != null">
-                #{cmcrDetailCgReverse2,jdbcType=VARCHAR},
+            <if test="cmcrDetailCgIsColorful != null">
+                #{cmcrDetailCgIsColorful,jdbcType=INTEGER},
             </if>
             <if test="cmcrDetailCgReverse3 != null">
                 #{cmcrDetailCgReverse3,jdbcType=VARCHAR},
@@ -320,6 +332,9 @@
             </if>
             <if test="cmcrDetailCgReverse5 != null">
                 #{cmcrDetailCgReverse5,jdbcType=VARCHAR},
+            </if>
+            <if test="cmcrDetailCgReverse6 != null">
+                #{cmcrDetailCgReverse6,jdbcType=VARCHAR},
             </if>
         </trim>
     </insert>
@@ -382,11 +397,11 @@
             <if test="cmcrDetailCgUpdater != null">
                 CMCR_DETAIL_CG_UPDATER = #{cmcrDetailCgUpdater,jdbcType=VARCHAR},
             </if>
-            <if test="cmcrDetailCgReverse1 != null">
-                CMCR_DETAIL_CG_REVERSE1 = #{cmcrDetailCgReverse1,jdbcType=VARCHAR},
+            <if test="cmcrDetailCgTitle != null">
+                CMCR_DETAIL_CG_TITLE = #{cmcrDetailCgTitle,jdbcType=VARCHAR},
             </if>
-            <if test="cmcrDetailCgReverse2 != null">
-                CMCR_DETAIL_CG_REVERSE2 = #{cmcrDetailCgReverse2,jdbcType=VARCHAR},
+            <if test="cmcrDetailCgIsColorful != null">
+                CMCR_DETAIL_CG_IS_COLORFUL = #{cmcrDetailCgIsColorful,jdbcType=INTEGER},
             </if>
             <if test="cmcrDetailCgReverse3 != null">
                 CMCR_DETAIL_CG_REVERSE3 = #{cmcrDetailCgReverse3,jdbcType=VARCHAR},
@@ -396,6 +411,9 @@
             </if>
             <if test="cmcrDetailCgReverse5 != null">
                 CMCR_DETAIL_CG_REVERSE5 = #{cmcrDetailCgReverse5,jdbcType=VARCHAR},
+            </if>
+            <if test="cmcrDetailCgReverse6 != null">
+                CMCR_DETAIL_CG_REVERSE6 = #{cmcrDetailCgReverse6,jdbcType=VARCHAR},
             </if>
         </set>
         where CMCR_DETAIL_CG_ID = #{cmcrDetailCgId,jdbcType=DECIMAL}
@@ -421,11 +439,12 @@
       CMCR_DETAIL_CG_CREATOR = #{cmcrDetailCgCreator,jdbcType=VARCHAR},
       CMCR_DETAIL_CG_UPDATE_DATE = #{cmcrDetailCgUpdateDate,jdbcType=TIMESTAMP},
       CMCR_DETAIL_CG_UPDATER = #{cmcrDetailCgUpdater,jdbcType=VARCHAR},
-      CMCR_DETAIL_CG_REVERSE1 = #{cmcrDetailCgReverse1,jdbcType=VARCHAR},
-      CMCR_DETAIL_CG_REVERSE2 = #{cmcrDetailCgReverse2,jdbcType=VARCHAR},
+      CMCR_DETAIL_CG_TITLE = #{cmcrDetailCgTitle,jdbcType=VARCHAR},
+      CMCR_DETAIL_CG_IS_COLORFUL = #{cmcrDetailCgIsColorful,jdbcType=INTEGER},
       CMCR_DETAIL_CG_REVERSE3 = #{cmcrDetailCgReverse3,jdbcType=VARCHAR},
       CMCR_DETAIL_CG_REVERSE4 = #{cmcrDetailCgReverse4,jdbcType=VARCHAR},
       CMCR_DETAIL_CG_REVERSE5 = #{cmcrDetailCgReverse5,jdbcType=VARCHAR}
+      CMCR_DETAIL_CG_REVERSE6 = #{cmcrDetailCgReverse6,jdbcType=VARCHAR}
     where CMCR_DETAIL_CG_ID = #{cmcrDetailCgId,jdbcType=DECIMAL}
   </update>
 
@@ -451,5 +470,127 @@
                     #{hzCmcrDetailChange.cmcrDetailSrcPuid, jdbcType=VARCHAR}
               </foreach>
           )
+    </select>
+
+    <select id="doQueryCmcrDetailChangBeforAndAfter" parameterType="java.util.List" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from(
+            select
+              <include refid="Base_Column_List"/>,ROWNUM rn
+            from
+        HZ_CMCR_DETAIL_AFTER_CHANGE t
+            WHERE
+              t.CMCR_DETAIL_SRC_PUID in
+              <foreach collection="hzCmcrDetailChanges" index="index" item="hzCmcrDetailChange" open="(" separator="," close=")">
+                  #{hzCmcrDetailChange.cmcrDetailSrcPuid,jdbcType=VARCHAR}
+              </foreach>
+            and
+              t.CMCR_DETAIL_CG_VWO_ID &lt;= #{vwoid,jdbcType=INTEGER}
+            ORDER BY t.CMCR_DETAIL_CG_ID DESC
+        ) te
+        where
+          te.rn &lt;= #{length,jdbcType=INTEGER}
+        order by
+          te.CMCR_DETAIL_CG_ID
+    </select>
+
+    <select id="doQueryCmcrDetailChangBefor" parameterType="sql.pojo.cfg.modelColor.HzCmcrChange" resultMap="VWO_Result_map">
+        select
+          <include refid="Base_Column_List"/>,t2.p_color_code as colorCode
+        from
+          HZ_CMCR_DETAIL_AFTER_CHANGE t
+        LEFT JOIN Hz_cfg0_colorset t2 ON t.cmcr_detail_src_color_uid = t2.puid
+        where
+          CMCR_DETAIL_CG_VWO_ID =
+        (select
+            max(CMCR_DETAIL_CG_VWO_ID)
+          from
+            (select CMCR_DETAIL_CG_VWO_ID from HZ_CMCR_DETAIL_AFTER_CHANGE where
+                CMCR_DETAIL_CG_VWO_ID&lt;#{cmcrCgVwoId,jdbcType=INTEGER}
+                and
+                CMCR_DETAIL_SRC_MODEL_PUID=#{cmcrSrcPuid,jdbcType=VARCHAR}
+            )
+          )
+        and
+          CMCR_DETAIL_SRC_MODEL_PUID=#{cmcrSrcPuid,jdbcType=VARCHAR}
+        and
+          CMCR_DETAIL_SRC_CFG_UID is not null
+    </select>
+
+    <select id="doQueryCmcrDetailChangFirst" parameterType="sql.pojo.cfg.modelColor.HzCmcrChange" resultMap="VWO_Result_map">
+        select
+            <include refid="Base_Column_List"/>,t2.p_color_code as colorCode
+        from
+            HZ_CMCR_DETAIL_AFTER_CHANGE t
+        LEFT JOIN Hz_cfg0_colorset t2 ON t.cmcr_detail_src_color_uid = t2.puid
+        where
+            CMCR_DETAIL_CG_VWO_ID = #{cmcrCgVwoId,jdbcType=INTEGER}
+        and
+            CMCR_DETAIL_SRC_MODEL_PUID=#{cmcrSrcPuid,jdbcType=VARCHAR}
+        and
+            CMCR_DETAIL_SRC_CFG_UID is null
+    </select>
+    <!--<select id="doQueryCmcrDetailChangFirst" parameterType="sql.pojo.cfg.modelColor.HzCmcrChange" resultMap="VWO_Result_map">-->
+        <!--select-->
+            <!--<include refid="Base_Column_List"/>,t2.p_color_code as colorCode-->
+        <!--from-->
+            <!--HZ_CMCR_DETAIL_AFTER_CHANGE t-->
+        <!--LEFT JOIN Hz_cfg0_colorset t2 ON t.cmcr_detail_src_color_uid = t2.puid-->
+        <!--where-->
+            <!--CMCR_DETAIL_CG_VWO_ID = #{vwoId,jdbcType=INTEGER}-->
+            <!--<if test="flag==1">-->
+                <!--and ROWNUM&lt;(select (count(*)/2+1) from  HZ_CMCR_DETAIL_AFTER_CHANGE where CMCR_DETAIL_CG_VWO_ID = #{vwoId,jdbcType=INTEGER})-->
+            <!--</if>-->
+            <!--<if test="flag==2">-->
+                <!--and ROWNUM&gt;(select (count(*)/2) from  HZ_CMCR_DETAIL_AFTER_CHANGE where CMCR_DETAIL_CG_VWO_ID = #{vwoId,jdbcType=INTEGER})-->
+            <!--</if>-->
+    <!--</select>-->
+
+    <select id="doQueryCmcrDetailChangFirstAfter" parameterType="sql.pojo.cfg.modelColor.HzCmcrChange" resultMap="VWO_Result_map">
+
+        select
+            <include refid="Base_Column_List"/>,t2.p_color_code as colorCode
+        from(
+                select
+                    <include refid="Base_Column_List"/>
+                from
+                    HZ_CMCR_DETAIL_AFTER_CHANGE
+                where
+                  CMCR_DETAIL_CG_VWO_ID = #{cmcrCgVwoId,jdbcType=INTEGER}
+                and
+                  CMCR_DETAIL_SRC_CFG_UID is not NULL
+                and
+                  CMCR_DETAIL_SRC_MODEL_PUID=#{cmcrSrcPuid,jdbcType=VARCHAR}
+            ) t
+        LEFT JOIN Hz_cfg0_colorset t2 ON t.cmcr_detail_src_color_uid = t2.puid
+    </select>
+    <!--<select id="doQueryCmcrDetailChangFirstAfter" parameterType="java.lang.Long" resultMap="BaseResultMap">-->
+
+        <!--select-->
+            <!--<include refid="Base_Column_List"/>-->
+        <!--from(-->
+                <!--select-->
+                    <!--<include refid="Base_Column_List"/>,ROWNUM rn-->
+                <!--from-->
+                    <!--HZ_CMCR_DETAIL_AFTER_CHANGE-->
+                <!--where-->
+                  <!--CMCR_DETAIL_CG_VWO_ID = #{vwoId,jdbcType=INTEGER}-->
+            <!--)-->
+        <!--where-->
+        <!--rn&gt;(select (count(*)/2) from HZ_CMCR_DETAIL_AFTER_CHANGE where CMCR_DETAIL_CG_VWO_ID =-->
+        <!--#{vwoId,jdbcType=INTEGER})-->
+    <!--</select>-->
+
+    <select id="doQueryCmcrDetailChangAfter" parameterType="sql.pojo.cfg.modelColor.HzCmcrChange" resultMap="VWO_Result_map">
+        select
+        <include refid="Base_Column_List"/>,t2.p_color_code as colorCode
+        from
+        HZ_CMCR_DETAIL_AFTER_CHANGE t
+        LEFT JOIN Hz_cfg0_colorset t2 ON t.cmcr_detail_src_color_uid = t2.puid
+        where
+        CMCR_DETAIL_CG_VWO_ID = #{cmcrCgVwoId,jdbcType=INTEGER}
+        and
+        CMCR_DETAIL_SRC_MODEL_PUID=#{cmcrSrcPuid,jdbcType=VARCHAR}
     </select>
 </mapper>

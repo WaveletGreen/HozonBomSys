@@ -14,8 +14,7 @@
         <button class="btn btn-default" id="setVersion" type="button">设置版本</button>
         <button class="btn btn-default" id="setStage" type="button">设置阶段</button>
         <button class="btn btn-default" id="release" type="button">发布</button>
-        <!--<button class="btn btn-default" id="reflect2Y" type="button">特性关联2Y层</button>-->
-        <!--<button class="btn btn-default" id="save" type="button" onclick="save()">保存</button>-->
+        <button class="btn btn-default" onclick="javascript:table2excel('cfg0Table','全配置BOM一级清单')">导出Excel(Alpha)</button>
     </div>
     <div class="panel panel-default" style="margin-top: 50px;">
         <div class="panel-body col-md-12">
@@ -41,7 +40,7 @@
                     <button type="button" id="searchBtn" onclick="query(this)" class="btn btn-primary">搜索</button>
                 </div>
             </form>
-            <div class="content col-lg-12" style="overflow: auto;max-height: 550px">
+            <div class="content col-lg-12" style="overflow: auto;max-height: 550px;padding-top:20px ">
                 <table class="table table-striped" id="cfg0Table" style="min-width: 1920px;"></table>
             </div>
         </div>
@@ -51,32 +50,15 @@
 
 </body>
 <script th:src="@{/js/helper/projectHelper.js}"></script>
+<script th:src="@{/js/helper/tableExportToExcle.js}"></script>
+<script th:src="@{/js/jquery/jquery.table2excel.min.js}"></script>
 <script th:src="@{/js/stage/bom-all-cfg2.js}"></script>
 <script th:inline="javascript">
     var focuseId = "";
     var focuseClass = ""
     function doQuery() {
         $("#myButton").trigger('click');
-        // $('#dataTable').bootstrapTable('refresh');    //刷新表格
     }
-    
-    // function focusQuery(self) {
-    //     focuseId = $(self).attr("id");
-    // }
-    // function query(but) {
-    //     if(tdId!=""){
-    //         $('#' + tdId).css("background-color", "#ffffff");
-    //     }
-    //     var focuseVal = $("#"+focuseId).val();
-    //     if(focuseVal!==""&&focuseVal!=null){
-    //         tdId = focuseId+focuseVal;
-    //         if($('#' + tdId)){
-    //             document.getElementById(tdId).scrollIntoView(true);
-    //             $('#' + tdId).find("div").css("background-color", "red");
-    //             alert(1)
-    //         }
-    //     }
-    // }
     function focusQuery(self) {
         focuseId = $(self).attr("id");
     }

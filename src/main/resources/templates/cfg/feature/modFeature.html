@@ -4,10 +4,14 @@
   ~ This file was wrote by fancyears·milos·maywas @connor. Any question/bug you can post to 1243093366@qq.com.
   ~ ALL RIGHTS RESERVED.
   -->
-
+<!--一阶段可单独在当前项目添加特性，二阶段已从配置字典中获取，从而移除单独修改特性功能，因此该页面将废除-->
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <link th:href="@{/css/labelColor.css}" rel="stylesheet">
+<head>
+    <meta charset="UTF-8">
+    <title>修改特性(已废除)</title>
+</head>
 <body>
 <form id="featureForm" role="form" method="post" th:action="${action}">
     <input class="form-control" id="puid" name="puid" type="hidden" th:value="${entity.puid}"/>

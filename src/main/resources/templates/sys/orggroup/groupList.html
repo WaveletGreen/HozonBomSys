@@ -64,7 +64,8 @@
                         $.post("./group/remove", {groupId: treeNode.groupId}, function (e) {
                             if (e.result) {
                                 zTree.removeNode(treeNode);
-                                window.Ewin.alert({message: e.msg});
+                                // window.Ewin.alert({message: e.msg});
+                                layer.msg('删除成功', {icon: 1, time: 2000})
                             } else {
                                 window.Ewin.alert({message: e.msg});
                             }
@@ -278,5 +279,6 @@
 
 
 </script>
+<script th:src="@{/layer/layer.js}"></script>
 </body>
 </html>

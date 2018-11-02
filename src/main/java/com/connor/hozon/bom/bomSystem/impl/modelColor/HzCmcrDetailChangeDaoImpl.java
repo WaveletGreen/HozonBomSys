@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2018.
- * This file was wrote by fancyears·milos·maywas @connor. Any question/bug you can post to 1243093366@qq.com.
+ * This file was wrote by fancyears·milos·maywas @connor. Any question/bug you can't post to 1243093366@qq.com.
  * ALL RIGHTS RESERVED.
  */
 
@@ -12,6 +12,7 @@ import com.connor.hozon.bom.bomSystem.option.ChangeCmcrOptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import sql.pojo.cfg.modelColor.HzCmcrChange;
 import sql.pojo.cfg.modelColor.HzCmcrDetailChange;
 
 import java.util.HashMap;
@@ -200,6 +201,36 @@ public class HzCmcrDetailChangeDaoImpl extends BasicDaoImpl<HzCmcrDetailChange> 
         preSetBeforeList(hzCmcrDetailChangeList);
         return executeInsertList(hzCmcrDetailChangeList, "insertList");
     }
+
+    @Override
+    public List<HzCmcrDetailChange> doQueryCmcrDetailChangBeforAndAfter(List<HzCmcrDetailChange> hzCmcrDetailChanges) {
+        Map<String,Object> map = new HashMap<String,Object>();
+        map.put("length",hzCmcrDetailChanges.size()*2);
+        map.put("vwoid",hzCmcrDetailChanges.get(0).getCmcrDetailCgVwoId());
+        map.put("hzCmcrDetailChanges",hzCmcrDetailChanges);
+        return baseSQLUtil.executeQueryByPass(new HzCmcrDetailChange(), map, "doQueryCmcrDetailChangBeforAndAfter");
+    }
+
+    @Override
+    public List<HzCmcrDetailChange> doQueryCmcrDetailChangBefor(HzCmcrChange hzCmcrChange) {
+        return baseSQLUtil.executeQueryByPass(new HzCmcrDetailChange(), hzCmcrChange, "doQueryCmcrDetailChangBefor");
+    }
+
+    @Override
+    public List<HzCmcrDetailChange> doQueryCmcrDetailChangFirst(HzCmcrChange hzCmcrChange) {
+        return baseSQLUtil.executeQueryByPass(new HzCmcrDetailChange(), hzCmcrChange, "doQueryCmcrDetailChangFirst");
+    }
+
+    @Override
+    public List<HzCmcrDetailChange> doQueryCmcrDetailChangFirstAfter(HzCmcrChange hzCmcrChange) {
+        return baseSQLUtil.executeQueryByPass(new HzCmcrDetailChange(), hzCmcrChange, "doQueryCmcrDetailChangFirstAfter");
+    }
+
+    @Override
+    public List<HzCmcrDetailChange> doQueryCmcrDetailChangAfter(HzCmcrChange hzCmcrChange) {
+        return baseSQLUtil.executeQueryByPass(new HzCmcrDetailChange(), hzCmcrChange, "doQueryCmcrDetailChangAfter");
+    }
+
 
     private List<HzCmcrDetailChange> executeSelectLast(List<HzCmcrDetailChange> hzCmcrDetailChangeList, String by) {
         Map<String,Object> map = new HashMap<String, Object>();
