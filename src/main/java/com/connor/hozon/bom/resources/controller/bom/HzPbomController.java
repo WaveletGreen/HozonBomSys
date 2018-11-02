@@ -41,9 +41,11 @@ public class HzPbomController extends BaseController {
     @Autowired
     private HzSingleVehiclesServices hzSingleVehiclesServices;
 
+    LinkedHashMap<String, String> tableTitle = new LinkedHashMap<>();
+
     @RequestMapping(value = "manage/title", method = RequestMethod.GET)
     public void getPbomLineTitle(String projectId,HttpServletResponse response) {
-        LinkedHashMap<String, String> tableTitle = new LinkedHashMap<>();
+        //LinkedHashMap<String, String> tableTitle = new LinkedHashMap<>();
         tableTitle.put("No", "序号");
         tableTitle.put("lineId", "零件号");
         tableTitle.put("pBomLinePartName", "名称");
@@ -325,11 +327,12 @@ public class HzPbomController extends BaseController {
         JSONObject result=new JSONObject();
         try {
             String fileName = "tableExport.xlsx";//文件名-tableExport
-            String[] title = {
-                    "序号","零件号" ,"名称","层级" ,"专业" ,"级别" ,"分组号","查找编号" ,"英文名称","LOU/LOA",
-                    "零件分类","零部件来源","自制/采购","焊接/装配","采购单元","车间1","车间2","生产线","模具类别",
-                    "外委件","工位"
-            };//表头
+            Object[] temp = tableTitle.values().toArray();
+            //表头
+            String[] title = new String[temp.length];
+            for(int i=0;i<temp.length;i++){
+                title[i] = temp[i].toString();
+            }
             //当前页的数据
             List<String[]> dataList = new ArrayList<String[]>();
             int index=1;

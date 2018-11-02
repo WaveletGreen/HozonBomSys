@@ -1,4 +1,4 @@
-var eBomTitleSet=52;
+var eBomTitleSet=52;//50个属性+勾选框列和序号列
 $(document).ready((function () {
     var projectPuid = $("#project", window.top.document).val();
     var eBomUrl = "ebom/getEBom/list?projectId=" + projectPuid;
@@ -492,14 +492,18 @@ function initTable(eBomUrl) {
                                         return false;
                                     }
                                 }
-                                length==getLengthOfJson(rows[0]);
+                                length=getLengthOfJson(rows[0]);
                             }
+                            //动态获取单车配置用量数据
                             for(let k in rows){
                                let param={};
+
                                 for(let i =0;i<length-eBomTitleSet;i++){
                                     param[('title'+i)]=rows[k][('title'+i)];
                                 }
-                                rows[k].map=param;
+                                rows[k].map = param;//单车配置用量写进对象的Map
+                                // console.log(param);
+                                // console.log(rows[k]);
                             }
                             window.Ewin.confirm({title: '提示', message: '是否要导出选中行？', width: 500}).on(function (e) {
                                 if (e) {
@@ -526,8 +530,10 @@ function initTable(eBomUrl) {
                                     })
                                 }
                             });
+
                         }
                     },
+
                 ],
             });
             $table.bootstrapTable('hideColumn', 'groupNum');
@@ -970,23 +976,6 @@ function initTable1(eBomUrl,puids) {
                             }
                         }
                     },
-                    // {
-                    //     text: '导出Excel',
-                    //     iconCls: 'glyphicon glyphicon-export',
-                    //     handler: function () {
-                    //         var userName = data;//表头
-                    //         var className = $table.bootstrapTable('getData');//返回当前页的数据
-                    //         var param = "userName=" + userName + "&className=" + className;
-                    //
-                    //         var projectPuid = $("#project", window.top.document).val();
-                    //         //var eBomUrl = "ebom/getEBom/list?projectId=" + projectPuid;
-                    //
-                    //         var url = "ebom/excelExport?projectId=" + projectPuid;
-                    //         window.location = url;
-                    //
-                    //     }
-                    // },
-
                     {
                         text: '导出Excel',
                         iconCls: 'glyphicon glyphicon-export',
@@ -1005,7 +994,7 @@ function initTable1(eBomUrl,puids) {
                                         return false;
                                     }
                                 }
-                                length==getLengthOfJson(rows[0]);
+                                length=getLengthOfJson(rows[0]);
                             }
                             for(let k in rows){
                                 let param={};
@@ -1039,9 +1028,8 @@ function initTable1(eBomUrl,puids) {
                                     })
                                 }
                             });
-
                         }
-                    },
+                    }
                 ],
             });
             $table.bootstrapTable('hideColumn', 'groupNum');

@@ -122,6 +122,19 @@ public class HzPbomLineRecord implements Cloneable{
 
     private Integer isNewPart;
 
+    /**
+     * mwo编号
+     */
+    private String mwoNo;
+
+    public String getMwoNo() {
+        return mwoNo;
+    }
+
+    public void setMwoNo(String mwoNo) {
+        this.mwoNo = mwoNo;
+    }
+
     public Integer getIsNewPart() {
         return isNewPart;
     }

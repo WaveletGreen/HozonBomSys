@@ -19,6 +19,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.inject.Inject;
 import java.util.HashMap;
@@ -101,18 +102,22 @@ public class OrgGroupController extends GenericController<OrgGroup,QueryOrgGroup
     }
 
     @RequestMapping(value="/updateGroupPage")
+    //@ResponseBody
     public String updateGroupPage(OrgGroup entity,Model model) throws Exception {
         entity = orgGroupService.get(entity);
         entity.setOrgGroup(orgGroupService.findByNode(entity.getParentNode()));
         model.addAttribute("entity",entity);
-        return getPageBaseRoot()+UPDATEPAGE;
+        //return getPageBaseRoot()+UPDATEPAGE;
+        return "sys/orggroup/update";
     }
 
     @RequestMapping(value="/addGroupPage")
+    //@ResponseBody
     public String addPage(OrgGroup entity,Model model) throws Exception {
         entity = orgGroupService.get(entity);
         model.addAttribute("entity",entity);
-        return getPageBaseRoot()+ADDPAGE;
+        //return getPageBaseRoot()+ADDPAGE;
+        return "sys/orggroup/add";
     }
 
     /**
