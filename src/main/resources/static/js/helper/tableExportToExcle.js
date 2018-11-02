@@ -13,11 +13,12 @@ function getExplorer() {
     //Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.140 Safari/537.36 Edge/17.17134
     //"Mozilla/5.0 (Windows NT 10.0; WOW64; Trident/7.0; .NET4.0C; .NET4.0E; .NET CLR 2.0.50727; .NET CLR 3.0.30729; .NET CLR 3.5.30729; rv:11.0) like Gecko"
     //"Mozilla/5.0 (Windows NT 10.0; WOW64; Trident/7.0; .NET4.0C; .NET4.0E; .NET CLR 2.0.50727; .NET CLR 3.0.30729; .NET CLR 3.5.30729; rv:11.0) like Gecko"
-    if (explorer.indexOf("Trident") >= 0) {
+ /*   if (explorer.indexOf("Trident") >= 0) {
         return 'ie';
     }
     //firefox
-    else if (explorer.indexOf("Firefox") >= 0) {
+    else*/
+    if (explorer.indexOf("Firefox") >= 0) {
         return 'Firefox';
     }
     //Chrome
@@ -33,7 +34,7 @@ function getExplorer() {
         return 'Safari';
     }
 
-    else if (window.navigator.userAgent.indexOf('Trident') > 0 && window.navigator.userAgent.indexOf('compatible') < 0) {
+    else if (explorer.indexOf('Trident') > 0 && explorer.indexOf('compatible') < 0) {
         return 'ie';
     }
 }
