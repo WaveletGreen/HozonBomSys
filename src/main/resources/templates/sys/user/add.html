@@ -17,10 +17,15 @@
                 <label for="password">密码(初始密码:123456):</label>
                 <input type="password" class="form-control" name="password" id="password" value="123456"  disabled />
             </div>
-            <!--<div class="form-group" >-->
-                <!--<label for="repassword">核对密码:</label>-->
-                <!--<input type="password" class="form-control" name="repassword" id="repassword"  placeholder="请输入密码" />-->
-            <!--</div>-->
+            <div class="form-group" >
+                <label for="email">邮箱:</label>
+                <input type="email" class="form-control" name="email" id="email"  placeholder="请输入邮箱" />
+            </div>
+            <div class="form-group" >
+                <label for="userNo">工号:</label>
+                <input type="text" class="form-control" name="userNo" id="userNo"  placeholder="请输入工号" />
+            </div>
+
             <!--<div id="distpicker" class="form-inline">
                 <label for="province">省:</label>
                 <select name="province" id="province" class="form-control"></select>
@@ -109,31 +114,27 @@
                     }
                 },
 
-                // password: {
-                //     message:'密码无效',
-                //     validators: {
-                //         notEmpty: {
-                //             message: '密码不能为空'
-                //         },
-                //         stringLength: {
-                //             min: 6,
-                //             max: 30,
-                //             message: '用户名长度必须在6到30之间'
-                //         },
-                //         identical: {//相同
-                //             field: 'password', //需要进行比较的input name值
-                //             message: '两次密码不一致'
-                //         },
-                //         different: {//不能和用户名相同
-                //             field: 'login',//需要进行比较的input name值
-                //             message: '不能和用户名相同'
-                //         },
-                //         regexp: {
-                //             regexp: /^[a-zA-Z0-9_\.]+$/,
-                //             message: '密码必须是数字字母和下划线不能有特殊符号！'
-                //         }
-                //     }
-                // },
+                email: {
+                    message:'',
+                    validators: {
+                        notEmpty: {
+                            message: '邮箱不能为空'
+                        },
+                        regexp: {
+                            // regexp: /^[a-zA-Z0-9_\.]+$/,
+                            regexp:/^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$/,
+                            message: '邮箱格式不对(例如:xxxx@xx.xxx,xxx.xxxx@xx.xxx.xxx)！'
+                        }
+                    }
+                },
+                userNo: {
+                    message:'工号无效',
+                    validators: {
+                        notEmpty: {
+                            message: '工号不能为空'
+                        },
+                    }
+                },
                 // repassword: {
                 //     message: '密码无效',
                 //     validators: {
@@ -247,11 +248,11 @@
         });
 
         // 加载bootstrap的省市区的下拉菜单
-        $("#distpicker").distpicker({
-            province: "福建省",
-            city: "福州市",
-            district: "晋安区"
-        });
+        // $("#distpicker").distpicker({
+        //     province: "福建省",
+        //     city: "福州市",
+        //     district: "晋安区"
+        // });
 
         $.fn.checkbox({
             url:"user/loadRoles",
