@@ -48,7 +48,14 @@ public class User implements UserDetails {
     private String roleArray;
     // 所在分组的集合
     private OrgGroup orgGroup;
-
+    /**
+     * 邮箱
+     */
+    private String email;
+    /**
+     * 员工工号
+     */
+    private String userNo;
     public static String reflectToDBField(String code) {
         switch (code) {
             case "userName":
@@ -264,4 +271,20 @@ public class User implements UserDetails {
         this.setRoles(roles);
     }
 
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getUserNo() {
+        return userNo;
+    }
+
+    public void setUserNo(String userNo) {
+        this.userNo = userNo;
+    }
 }

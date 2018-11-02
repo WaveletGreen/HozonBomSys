@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+    <meta charset="UTF-8">
+    <title>设置大版本</title>
+</head>
 <body>
 <div style="max-width: 450px;max-height: 450px;">
     <form id="form" role="form" method="post" th:action="${action}">
@@ -45,7 +49,6 @@
 <script th:inline="javascript">
     <![CDATA[
     $(function () {
-        // 绑定dialog的确定按钮的监听事件
         $("#btnOk", window.top.document).click(function () {
             var url = $("#form", window.top.document).attr('action');
             var projectPuid = $("#project", window.top.document).val();
@@ -82,7 +85,6 @@
                     window.Ewin.alert({message: status.status + ':设置阶段数据失败!'});
                 }
             });
-            // }
         });
     })
     ]]>

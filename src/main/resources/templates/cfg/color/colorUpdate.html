@@ -7,6 +7,10 @@
 
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+    <meta charset="UTF-8">
+    <title>修改颜色基础信息</title>
+</head>
 <body>
 <form id="colorForm" role="form" method="post" action="./colorSet/updateWithEntity">
     <input id="puid" name="puid" type="hidden" th:value="${entity.puid}"/>

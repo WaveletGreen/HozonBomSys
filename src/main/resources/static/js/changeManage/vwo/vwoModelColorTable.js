@@ -77,9 +77,8 @@ function initTable(data) {
         formId: "null",                       //需要定义formId，不定义的话会造成jQuery异常
         /**列信息，需要预先定义好*/
         columns: columnOfModelColor,
-        onLoadSuccess: function () {
-            //加载成功时执行,渲染双行的
-            renderingTableRowColor(commonTableName);
-        },
+
     });
+    //加载成功时执行,渲染双行的
+    renderingTableRowColor(commonTableName);
 }

@@ -56,7 +56,6 @@ function initTable(url) {
         type: "GET",
         success: function (result) {
             var column = [];
-            // column.push({field: 'id', title: '主键'});
             column.push({field: 'ck', checkbox: true, width: 50});
             // column.push({
             //     field: 'ewoNo',
@@ -94,23 +93,6 @@ function initTable(url) {
             }
             ;
             $table.bootstrapTable({
-                // ajax: function (request) {
-                //     $.ajax({
-                //         url: "ewo/base/infoList?projectId=" + projectId,
-                //         success: function (result) {
-                //             // var data = JSON.stringify(result);
-                //             // var msg = JSON.parse(data);
-                //             // console.log(msg);
-                //             request.success({
-                //                 row: result
-                //             });
-                //             $table.bootstrapTable('load', result);
-                //         },
-                //         error: function () {
-                //             window.Ewin.alert("操作错误")
-                //         }
-                //     })
-                // },
                 url: url,
                 method: 'get',
                 height: $(window.parent.document).find("#wrapper").height() - 90,
@@ -222,15 +204,13 @@ function initTable(url) {
                             }
                             window.Ewin.confirm({title: '提示', message: '是否要导出选中行？', width: 500}).on(function (e) {
                                 if (e) {
-                                    console.log(rows);
                                     $.ajax({
                                         type: "POST",
                                         //ajax需要添加打包名
-                                        url: "excelExport2",//
+                                        url: "excelExport2",//??????
                                         data: JSON.stringify(rows),
                                         contentType: "application/json",
                                         success: function (result2) {
-                                            console.log(result2);
                                             if (result2.status) {
                                                 layer.msg(result2.msg, {icon: 1, time: 2000})
                                                 var URL = document.URL.split("/");
@@ -275,7 +255,6 @@ function initTable1(url,lineIds,singleVehiclesId) {
         type: "GET",
         success: function (result) {
             var column = [];
-            // column.push({field: 'id', title: '主键'});
             column.push({field: 'ck', checkbox: true, width: 50});
             // column.push({
             //     field: 'ewoNo',
@@ -310,25 +289,9 @@ function initTable1(url,lineIds,singleVehiclesId) {
                     };
                     column.push(json);
                 }
-            };
+            }
+            ;
             $table.bootstrapTable({
-                // ajax: function (request) {
-                //     $.ajax({
-                //         url: "ewo/base/infoList?projectId=" + projectId,
-                //         success: function (result) {
-                //             // var data = JSON.stringify(result);
-                //             // var msg = JSON.parse(data);
-                //             // console.log(msg);
-                //             request.success({
-                //                 row: result
-                //             });
-                //             $table.bootstrapTable('load', result);
-                //         },
-                //         error: function () {
-                //             window.Ewin.alert("操作错误")
-                //         }
-                //     })
-                // },
                 url: url+"&eBomPuids="+lineIds+"&showBomStructure=1"+"&singleVehiclesId="+singleVehiclesId,
                 method: 'get',
                 height: $(window.parent.document).find("#wrapper").height() - 90,
@@ -417,52 +380,6 @@ function initTable1(url,lineIds,singleVehiclesId) {
                             }
                         }
                     },
-                    // {
-                    //     text: '导出Excel',
-                    //     iconCls: 'glyphicon glyphicon-export',
-                    //     handler: function () {
-                    //         //var headers = data;//表头
-                    //         var rows = $table.bootstrapTable('getSelections');//选中行数据
-                    //         if (rows.length == 0) {
-                    //             window.Ewin.alert({message: '请选择一条需要导出的数据!'});
-                    //             return false;
-                    //         }else{
-                    //             for (var index in rows) {
-                    //                 if (rows[index].status == 5 || rows[index].status == 6) {
-                    //                     window.Ewin.alert({message: '勾选的数据有审核中状态，审核中的数据不给导出修改!'});
-                    //                     return false;
-                    //                 }
-                    //             }
-                    //         }
-                    //         window.Ewin.confirm({title: '提示', message: '是否要导出选中行？', width: 500}).on(function (e) {
-                    //             if (e) {
-                    //                 $.ajax({
-                    //                     type: "POST",
-                    //                     //ajax需要添加打包名
-                    //                     url: "./singleVehicles/excelExport2",//??????
-                    //                     data: JSON.stringify(rows),
-                    //                     contentType: "application/json",
-                    //                     success: function (result) {
-                    //                         console.log(result);
-                    //                         if (result.status) {
-                    //                             layer.msg(result.msg, {icon: 1, time: 2000})
-                    //
-                    //                             //下载EBOM导入模板
-                    //                             window.location.href = result.path;//V1.1.0.log
-                    //                         }
-                    //                         else {
-                    //                             window.Ewin.alert({message: "操作导出失败:" + result.msg});
-                    //                         }
-                    //                         $table.bootstrapTable("refresh");
-                    //                     },
-                    //                     error: function (info) {
-                    //                         window.Ewin.alert({message: "操作导出:" + info.status});
-                    //                     }
-                    //                 })
-                    //             }
-                    //         });
-                    //     }
-                    // },
                     {
                         text: '导出Excel',
                         iconCls: 'glyphicon glyphicon-export',
@@ -482,26 +399,21 @@ function initTable1(url,lineIds,singleVehiclesId) {
                             }
                             window.Ewin.confirm({title: '提示', message: '是否要导出选中行？', width: 500}).on(function (e) {
                                 if (e) {
-                                    console.log(rows);
                                     $.ajax({
                                         type: "POST",
                                         //ajax需要添加打包名
-                                        url: "excelExport2",//
+                                        url: "./singleVehicles/excelExport2",//??????
                                         data: JSON.stringify(rows),
                                         contentType: "application/json",
-                                        success: function (result2) {
-                                            console.log(result2);
-                                            if (result2.status) {
-                                                layer.msg(result2.msg, {icon: 1, time: 2000})
-                                                var URL = document.URL.split("/");
-                                                var address = URL[0] + "//" + URL[2] + "/" + URL[3]+result2.path;
+                                        success: function (result) {
+                                            if (result.status) {
+                                                layer.msg(result.msg, {icon: 1, time: 2000})
+
                                                 //下载EBOM导入模板
-                                                window.location.href = address;
-                                                // window.location.href = result2.path;
-                                                // "http://10.1.90.5:8080/hozon/files/tableExport.xlsx";
+                                                window.location.href = result.path;//V1.1.0.log
                                             }
                                             else {
-                                                window.Ewin.alert({message: "操作导出失败:" + result2.msg});
+                                                window.Ewin.alert({message: "操作导出失败:" + result.msg});
                                             }
                                             $table.bootstrapTable("refresh");
                                         },

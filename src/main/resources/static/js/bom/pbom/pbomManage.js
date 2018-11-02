@@ -49,21 +49,8 @@ function initTable(pBomUrl) {
         url: "pbom/manage/title?project=" + projectPuid,
         type: "GET",
         success: function (result) {
-            // lookLevel(result,pBomUrl);
             var column = [];
-            // column.push({field: 'eBomPuid', title: '主键'});
             column.push({field: 'ck', checkbox: true, Width: 50});
-            // column.push({
-            //     field: '',
-            //     title: '序号',
-            //     formatter: function (value, row, index) {
-            //         return index + 1;
-            //     },
-            //     align:
-            //         'center',
-            //     valign:
-            //         'middle'
-            // });
             var data = result.data;
             var keys = [];
             var values;
@@ -165,19 +152,14 @@ function initTable(pBomUrl) {
                 pageSize: 20,                       //每页的记录行数（*）
                 pageList: ['ALL', 10, 20, 50, 100, 200, 500, 1000],        //可供选择的每页的行数（*）                uniqueId: "puid",                     //每一行的唯一标识，一般为主键列
                 showExport: true,
-                //exportDataType: 'all',
                 columns: column,
                 sortable: true,                     //是否启用排序
                 sortOrder: "asc",                   //排序方式
                 clickToSelect: true,// 单击某一行的时候选中某一条记录
                 striped: true, //是否显示行间隔色
-                //search: true, //是否显示表格搜索，此搜索是客户端搜索，不会进服务端
                 showColumns: true, //是否显示所有的列
-                /*fixedColumns: true,
-                fixedNumber:1,*/
                 showToggle: false,                   //是否显示详细视图和列表视图的切换按钮
                 showRefresh: true,                  //是否显示刷新按钮
-                //minimumCountColumns:4,
                 toolbars: [
                     /*{
                         text: '添加',
@@ -420,7 +402,6 @@ function initTable(pBomUrl) {
                                         data: JSON.stringify(rows),
                                         contentType: "application/json",
                                         success: function (result) {
-                                            console.log(result);
                                             if (result.status) {
                                                 layer.msg(result.msg, {icon: 1, time: 2000})
 
@@ -498,7 +479,6 @@ function initTable(pBomUrl) {
                     // }
                 ],
             });
-            // $table.bootstrapTable('hideColumn', 'eBomPuid');
             $table.bootstrapTable('hideColumn', 'level');
             $table.bootstrapTable('hideColumn', 'groupNum');
             $table.bootstrapTable('hideColumn', 'pBomLinePartEnName');
@@ -632,19 +612,14 @@ function initTable1(pBomUrl,lineIds) {
                 pageSize: 20,                       //每页的记录行数（*）
                 pageList: ['ALL', 10, 20, 50, 100, 200, 500, 1000],        //可供选择的每页的行数（*）                uniqueId: "puid",                     //每一行的唯一标识，一般为主键列
                 showExport: true,
-                //exportDataType: 'all',
                 columns: column,
                 sortable: true,                     //是否启用排序
                 sortOrder: "asc",                   //排序方式
                 clickToSelect: true,// 单击某一行的时候选中某一条记录
                 striped: true, //是否显示行间隔色
-                //search: true, //是否显示表格搜索，此搜索是客户端搜索，不会进服务端
                 showColumns: true, //是否显示所有的列
-                /*fixedColumns: true,
-                fixedNumber:1,*/
                 showToggle: false,                   //是否显示详细视图和列表视图的切换按钮
                 showRefresh: true,                  //是否显示刷新按钮
-                //minimumCountColumns:4,
                 toolbars: [
                     /*{
                         text: '添加',
@@ -883,7 +858,6 @@ function initTable1(pBomUrl,lineIds) {
                                         data: JSON.stringify(rows),
                                         contentType: "application/json",
                                         success: function (result) {
-                                            console.log(result);
                                             if (result.status) {
                                                 layer.msg(result.msg, {icon: 1, time: 2000})
 
@@ -913,7 +887,6 @@ function initTable1(pBomUrl,lineIds) {
                     }
                 ],
             });
-            // $table.bootstrapTable('hideColumn', 'eBomPuid');
             $table.bootstrapTable('hideColumn', 'level');
             $table.bootstrapTable('hideColumn', 'groupNum');
             $table.bootstrapTable('hideColumn', 'pBomLinePartEnName');

@@ -142,9 +142,11 @@ public interface HzCmcrDetailChangeDao extends BasicDao<HzCmcrDetailChange>{
 
     List<HzCmcrDetailChange> doQueryCmcrDetailChangBeforAndAfter(List<HzCmcrDetailChange> hzCmcrDetailChanges);
 
-    List<HzCmcrDetailChange> doQueryCmcrDetailChangBefor(Long vwoId);
+    List<HzCmcrDetailChange> doQueryCmcrDetailChangBefor(HzCmcrChange hzCmcrChange);
 
-    List<HzCmcrDetailChange> doQueryCmcrDetailChangFirst(Long vwoId,Integer flag);
+    List<HzCmcrDetailChange> doQueryCmcrDetailChangFirst(HzCmcrChange hzCmcrChange);
 
-    List<HzCmcrDetailChange> doQueryCmcrDetailChangFirstAfter(Long vwoId);
+    List<HzCmcrDetailChange> doQueryCmcrDetailChangFirstAfter(HzCmcrChange hzCmcrChange);
+
+    List<HzCmcrDetailChange> doQueryCmcrDetailChangAfter(HzCmcrChange hzCmcrChange);
 }

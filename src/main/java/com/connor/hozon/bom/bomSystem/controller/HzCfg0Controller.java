@@ -99,6 +99,12 @@ public class HzCfg0Controller extends ExtraIntegrate {
 
 
     /******************************************特性表***********************************************/
+    /**
+     * 特性页面初始化显示
+     * @param projectPuid
+     * @param queryBase
+     * @return
+     */
     @RequestMapping("/loadFeature")
     @ResponseBody
     public Map<String, Object> loadCfg0(@RequestParam("projectPuid") String projectPuid, HzFeatureQueryDto queryBase) {
@@ -126,6 +132,12 @@ public class HzCfg0Controller extends ExtraIntegrate {
         return "cfg/feature/addFeature";
     }
 
+    /**
+     * 跳转到添加页面
+     * @param projectPuid
+     * @param model
+     * @return
+     */
     @RequestMapping("/addPage2")
     public String addPage2(@RequestParam("projectPuid") String projectPuid, Model model) {
         HzCfg0MainRecord mainRecord = hzCfg0MainRecordDao.selectByProjectPuid(projectPuid);
@@ -209,6 +221,12 @@ public class HzCfg0Controller extends ExtraIntegrate {
         return result;
     }
 
+    /**
+     * 添加特性
+     * @param record
+     * @return
+     * @throws Exception
+     */
     @RequestMapping(value = "/add2", method = RequestMethod.POST)
     @ResponseBody
     public JSONObject add2(@RequestBody HzCfg0Record record) throws Exception {
@@ -299,6 +317,12 @@ public class HzCfg0Controller extends ExtraIntegrate {
         return result;
     }
 
+    /**
+     * 跳转到修改页面
+     * @param puid
+     * @param model
+     * @return
+     */
     @RequestMapping("/modifyPage")
     public String modifyPage(@RequestParam("projectPuid") String puid, Model model) {
         HzCfg0Record record = hzCfg0Service.doSelectOneByPuid(puid);
@@ -314,6 +338,11 @@ public class HzCfg0Controller extends ExtraIntegrate {
         return "cfg/feature/modFeature";
     }
 
+    /**
+     * 修改特性
+     * @param record
+     * @return
+     */
     @RequestMapping(value = "/modify", method = RequestMethod.POST)
     @ResponseBody
     public JSONObject modify(@RequestBody HzCfg0Record record) {
@@ -388,6 +417,12 @@ public class HzCfg0Controller extends ExtraIntegrate {
         return result;
     }
 
+    /**
+     * 删除特性
+     * @param records
+     * @return
+     * @throws Exception
+     */
     @RequestMapping(value = "/deleteByPuid", method = RequestMethod.POST)
     @ResponseBody
     public JSONObject deleteByPuid(@RequestBody List<HzCfg0Record> records) throws Exception {

@@ -19,3 +19,15 @@
     流程终止之后，需要回到开始节点，需要重新发一遍
     先从界面上修改数据，存储在中间表中，自动填写到V/E/M表单中,表单中只填写变更的内容，其他数据要手填，填完之后才能发起流程,
     当前显示的是发布状态，可以查询草稿状态，审批不通过，返回原来的状态，审批通过之后将草稿状态变为发布状态，删除中间表数据
+
+7.前端缓存对象
+    //是一个jQuery对象
+    var parent=$(but).parent();
+    //jQuery对象jQuery获取方法data()方法
+    var lineUid=parent.data("uid-coach");
+    //jQuery对象jQuery获取方法attr()方法
+    var lineUid2=parent.attr("data-uid-coach");
+    //DOM对象传统获取方式 getAttribute
+    var lineUid3=parent[0].getAttribute("data-uid-coach");
+    //JS 通过dataset属性访问，需要注意的是，dataset中大小写的问题。带连字符连接的名称在使用的时候需要命名驼峰化。例如data-my-name对应的是dataset.myName的值
+    var lineUid3=parent[0].dataset.uidCoach;

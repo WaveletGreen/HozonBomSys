@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+    <meta charset="UTF-8">
+    <title>设置阶段</title>
+</head>
 <body>
 <div style="max-width: 450px;max-height: 450px;">
     <form id="form" role="form" method="post" th:action="${action}">
@@ -91,8 +95,6 @@
                     function (result) {
                         $('.modal-dialog', window.top.document).parent('div').remove();
                         $('body', window.top.document).find('.modal-backdrop').remove();
-                        // $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.loadData();
-                        // jquery 调用刷新当前操作的table页面的refresh方法
                         if (result.status) {
                             $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doRefresh(getProjectUid());
                             layer.msg(result.msg, {icon: 1, time: 2000});
@@ -104,7 +106,6 @@
                     window.Ewin.alert({message: status.status + ':设置阶段数据失败!'});
                 }
             });
-            // }
         });
     })
     ]]>

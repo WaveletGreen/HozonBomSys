@@ -12,6 +12,7 @@ import com.connor.hozon.bom.bomSystem.option.ChangeCmcrOptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import sql.pojo.cfg.modelColor.HzCmcrChange;
 import sql.pojo.cfg.modelColor.HzCmcrDetailChange;
 
 import java.util.HashMap;
@@ -211,23 +212,23 @@ public class HzCmcrDetailChangeDaoImpl extends BasicDaoImpl<HzCmcrDetailChange> 
     }
 
     @Override
-    public List<HzCmcrDetailChange> doQueryCmcrDetailChangBefor(Long vwoId) {
-        return baseSQLUtil.executeQueryByPass(new HzCmcrDetailChange(), vwoId, "doQueryCmcrDetailChangBefor");
+    public List<HzCmcrDetailChange> doQueryCmcrDetailChangBefor(HzCmcrChange hzCmcrChange) {
+        return baseSQLUtil.executeQueryByPass(new HzCmcrDetailChange(), hzCmcrChange, "doQueryCmcrDetailChangBefor");
     }
 
     @Override
-    public List<HzCmcrDetailChange> doQueryCmcrDetailChangFirst(Long vwoId,Integer flag) {
-        Map<String,Object> map = new HashMap<String,Object>();
-        map.put("vwoId",vwoId);
-        if(flag!=0){
-            map.put("flag",flag);
-        }
-        return baseSQLUtil.executeQueryByPass(new HzCmcrDetailChange(), map, "doQueryCmcrDetailChangFirst");
+    public List<HzCmcrDetailChange> doQueryCmcrDetailChangFirst(HzCmcrChange hzCmcrChange) {
+        return baseSQLUtil.executeQueryByPass(new HzCmcrDetailChange(), hzCmcrChange, "doQueryCmcrDetailChangFirst");
     }
 
     @Override
-    public List<HzCmcrDetailChange> doQueryCmcrDetailChangFirstAfter(Long vwoId) {
-        return baseSQLUtil.executeQueryByPass(new HzCmcrDetailChange(), vwoId, "doQueryCmcrDetailChangFirstAfter");
+    public List<HzCmcrDetailChange> doQueryCmcrDetailChangFirstAfter(HzCmcrChange hzCmcrChange) {
+        return baseSQLUtil.executeQueryByPass(new HzCmcrDetailChange(), hzCmcrChange, "doQueryCmcrDetailChangFirstAfter");
+    }
+
+    @Override
+    public List<HzCmcrDetailChange> doQueryCmcrDetailChangAfter(HzCmcrChange hzCmcrChange) {
+        return baseSQLUtil.executeQueryByPass(new HzCmcrDetailChange(), hzCmcrChange, "doQueryCmcrDetailChangAfter");
     }
 
 

@@ -16,6 +16,8 @@
 		<result property="streetAddress" column="street_address"/>
 		<result property="state" column="state"/>
 		<result property="type" column="type"/>
+		<result property="email" column="email"/>
+		<result property="userNo" column="user_no"/>
 		<result property="lastLoginDate" column="last_login_date"/>
 		<association property="orgGroup" javaType="com.connor.hozon.bom.sys.entity.OrgGroup" column="group_id">
 			<id property="groupId" column="group_id"/>
@@ -44,6 +46,8 @@
 		<result property="streetAddress" column="street_address"/>
 		<result property="state" column="state"/>
 		<result property="type" column="type"/>
+		<result property="email" column="email"/>
+		<result property="userNo" column="user_no"/>
 		<result property="lastLoginDate" column="last_login_date"/>
 		<collection property="roles"  ofType="com.connor.hozon.bom.sys.entity.UserRole" javaType="java.util.ArrayList">
 			<result column="user_role_id" property="id" jdbcType="VARCHAR" />
@@ -59,7 +63,7 @@
 
 	<!-- 根据账号来获取用户信息 -->
 	<select id="findByLogin" parameterType="java.lang.String" resultMap="UserLoginMap">
-		select u.*,ur.id as user_role_id,ur.name,ur.role_name from user u inner join user_associate_role uar on u.id = uar.user_id inner join user_role ur on uar.role_id = ur.id where u.login = #{login}
+		select u.*,ur.id as user_role_id,ur.name,ur.role_name from user u left join user_associate_role uar on u.id = uar.user_id left join user_role ur on uar.role_id = ur.id where u.login = #{login}
 	</select>
 	<!-- 根据账号来获取用户信息 -->
 	<select id="loadAll" resultMap="UserLoginMap">
@@ -68,7 +72,7 @@
 
 	<!-- 更新用户的最迟登陆时间 -->
      <update id="updateLogin" parameterType="com.connor.hozon.bom.sys.entity.User">
-		 update user set last_login_date = #{lastLoginDate} where id=#{id}
+		 update user set last_login_date = now() where id=#{id}
 	 </update>
 
 	<!--根据主键获取对象-->
@@ -79,13 +83,26 @@
 
 	<!--保存-->
 	<insert id="save" parameterType="com.connor.hozon.bom.sys.entity.User" useGeneratedKeys="true" keyProperty="id">
-		INSERT INTO user(login,password,user_name,address,job,group_id,birth_date,city,district,province,street_address,state,type,last_login_date)
-		VALUES(#{login},#{password},#{userName},#{address},#{job},#{orgGroup.groupId},#{birthDate},#{city},#{district},#{province},#{streetAddress},#{state},#{type},#{lastLoginDate})
+		INSERT INTO user
+		(
+		login,password,user_name,address,job,group_id,birth_date,
+		city,district,province,street_address,state,type,last_login_date,
+		email,user_no
+		)
+		VALUES
+		(
+		#{login},#{password},#{userName},#{address},#{job},
+		#{orgGroup.groupId},#{birthDate},#{city},#{district},#{province},#{streetAddress},#{state},#{type},now(),
+		#{email},#{userNo}
+		)
 	</insert>
 
 	<!--修改-->
 	<update id="update" parameterType="com.connor.hozon.bom.sys.entity.User">
-		UPDATE user SET user_name=#{userName},address=#{address},job=#{job},group_id=#{orgGroup.groupId},birth_date=#{birthDate},city=#{city},district=#{district},province=#{province},street_address=#{streetAddress}
+		UPDATE user SET user_name=#{userName},address=#{address},job=#{job},
+		group_id=#{orgGroup.groupId},birth_date=#{birthDate},city=#{city},
+		district=#{district},province=#{province},street_address=#{streetAddress},
+		email =#{email},user_no=#{userNo}
 		WHERE id=#{id}
 	</update>
 
