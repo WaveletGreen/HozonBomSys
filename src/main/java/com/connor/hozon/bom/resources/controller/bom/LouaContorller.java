@@ -387,6 +387,4 @@ public class LouaContorller extends BaseController {
         jsonObject.put("config",resp);
         toJSONResponse(Result.build(jsonObject),response);
     }
-
-
 }
