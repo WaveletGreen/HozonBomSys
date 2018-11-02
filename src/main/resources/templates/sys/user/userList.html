@@ -109,8 +109,10 @@
                             if (e) {
                                 $.post("user/removeBath",{json:JSON.stringify(rows)},function(e){
                                     if(e.result){
-                                        window.Ewin.alert({message:e.msg});
+                                        layer.msg('删除成功!', {icon: 1, time: 2000})
                                         doQuery();
+                                    }else {
+                                        window.Ewin.alert({message:e.msg});
                                     }
                                 });
                             }

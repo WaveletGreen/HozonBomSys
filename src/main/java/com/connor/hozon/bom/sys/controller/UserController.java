@@ -1,6 +1,7 @@
 package com.connor.hozon.bom.sys.controller;
 
 
+import com.alibaba.fastjson.JSON;
 import com.connor.hozon.bom.common.base.constant.SystemStaticConst;
 import com.connor.hozon.bom.common.base.controller.GenericController;
 import com.connor.hozon.bom.common.base.service.GenericService;
@@ -19,6 +20,7 @@ import com.connor.hozon.bom.sys.service.UserAssociateRoleService;
 import com.connor.hozon.bom.sys.service.UserRoleService;
 import com.connor.hozon.bom.sys.service.UserService;
 import com.google.common.collect.Lists;
+import net.sf.json.JSONObject;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,10 +30,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.inject.Inject;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.lang.reflect.ParameterizedType;
+import java.util.*;
 
 /*
 * 类描述：用户维护controller
@@ -78,11 +78,27 @@ public class UserController extends GenericController<User,QueryUser> {
      */
     @RequestMapping(value="/userControl",method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public Map<String,Object> userControl(User entity) throws Exception{
+    public Map<String,Object> userControl(User entity){
         Map<String,Object> result = new HashMap<String, Object>();
         User user = UserInfo.getUser();
         User loginUser = userService.findByLogin(user.getLogin());
-        User u = userService.findByUserId(Long.valueOf(entity.getId()));//系统中存在用户
+        if(StringUtil.isEmpty(entity.getState())){
+            result.put(SystemStaticConst.RESULT,SystemStaticConst.FAIL);
+            result.put(SystemStaticConst.MSG,"非法参数！");
+            return result;
+        }
+        User u = null;
+        if(entity.getState().equals("1")){//启用账户
+            u= userService.findByUserId(Long.valueOf(entity.getId()),"0");//系统中存在用户
+
+        }else {//禁用账户
+            u= userService.findByUserId(Long.valueOf(entity.getId()),"1");//系统中存在用户
+        }
+        if(null == u){
+            result.put(SystemStaticConst.RESULT,SystemStaticConst.FAIL);
+            result.put(SystemStaticConst.MSG,"用户不存在！");
+            return result;
+        }
         if("dcproxy".equals(u.getLogin())){
             result.put(SystemStaticConst.RESULT,SystemStaticConst.FAIL);
             result.put(SystemStaticConst.MSG,"dcproxy账号无法禁用！");
@@ -166,7 +182,7 @@ public class UserController extends GenericController<User,QueryUser> {
                     map.put(SystemStaticConst.MSG, "不具备系统管理员权限的用户不能编辑其他员工信息！");
                     return map;
                 }else {//A系统管理员 修改  B系统管理员权限
-                    if(!"dcproxy".equals(loginUser.getLogin())){
+                    if(!SystemStaticConst.DCPROXY.equals(loginUser.getLogin())){
                         for(UserRole role:userRoles){
                             if(PrivilegeUtil.ROLE_ADMIN.equals(role.getName())){
                                 String id = String.valueOf(role.getId());
@@ -190,7 +206,7 @@ public class UserController extends GenericController<User,QueryUser> {
                 }
             }
 
-            if("dcproxy".equals(entity.getLogin())){
+            if(SystemStaticConst.DCPROXY.equals(entity.getLogin())){
                 for(UserRole role :userRoles){
                     if(PrivilegeUtil.ROLE_ADMIN.equals(role.getName())){
                         if(StringUtil.isEmpty(entity.getRoleArray()) ||!entity.getRoleArray().contains(String.valueOf(role.getId()))){
@@ -283,4 +299,33 @@ public class UserController extends GenericController<User,QueryUser> {
     }
 
 
+    /**
+     * 功能描述：删除用户
+     * @param json
+     * @return
+     */
+    @RequestMapping(value = "/removeBath",method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public Map<String,Object> removeBath(String json) throws Exception{
+        Map<String,Object> result = new HashMap<String, Object>();
+        com.alibaba.fastjson.JSONArray array = com.alibaba.fastjson.JSONObject.parseArray(json);
+        String login = "";
+        for(int i=0;i<array.size();i++){
+            com.alibaba.fastjson.JSONObject object = array.getJSONObject(i);
+            if(object.containsKey("login")){
+                login = object.getString("login");
+                break;
+            }
+        }
+
+        if(SystemStaticConst.DCPROXY.equals(login)){
+            result.put(SystemStaticConst.RESULT,SystemStaticConst.FAIL);
+            result.put(SystemStaticConst.MSG,"无法删除"+SystemStaticConst.DCPROXY+"账户！");
+            return result;
+        }
+        userService.removeBath((List<User>) JsonHelper.toList(json,(Class <User>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0]));
+        result.put(SystemStaticConst.RESULT,SystemStaticConst.SUCCESS);
+        result.put(SystemStaticConst.MSG,"删除数据成功！");
+        return result;
+    }
 }

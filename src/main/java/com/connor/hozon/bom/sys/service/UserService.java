@@ -18,7 +18,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  *@author linzf
@@ -133,10 +135,13 @@ public class UserService extends GenericService<User, QueryUser> {
 	 * @param id
 	 * @return
 	 */
-	public User findByUserId(Long id){
+	public User findByUserId(Long id,String state){
 		if(id == null){
 			return null;
 		}
-		return userDao.findUserById(id);
+		Map<String,Object> map = new HashMap<>();
+		map.put("id",id);
+		map.put("state",state);
+		return userDao.findUserById(map);
 	}
 }

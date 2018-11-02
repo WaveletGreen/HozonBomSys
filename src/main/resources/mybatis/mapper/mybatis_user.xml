@@ -318,6 +318,6 @@
 	</select>
 
     <select id="findUserById" resultMap="UserMap">
-		select  * FROM user  where state = 1 and  id=#{id}
+		select  * FROM user  where state = #{state} and  id=#{id}
 	</select>
 </mapper>
