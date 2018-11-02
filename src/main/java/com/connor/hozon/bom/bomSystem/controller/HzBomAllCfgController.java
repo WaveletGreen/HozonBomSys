@@ -57,7 +57,7 @@ public class HzBomAllCfgController {
             hzBomAllCfgService.initAddingPageParams(projectPuid, detail, mainRecord);
             model.addAttribute("hzCfg0ModelDetail", detail);
             model.addAttribute("cfgmain", mainRecord);
-            model.addAttribute("action", "./materiel/addVehicleModel2");
+            model.addAttribute("action", "./materielV2/addVehicleModel2");
             return "bom/addModel2";
         } else {
             model.addAttribute("msg", "请选择项目再操作");

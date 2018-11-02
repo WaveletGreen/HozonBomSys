@@ -1,4 +1,4 @@
-var eBomTitleSet=52;//50个属性+勾选框列和序号列
+var eBomTitleSet = 52;//50个属性+勾选框列和序号列
 $(document).ready((function () {
     var projectPuid = $("#project", window.top.document).val();
     var eBomUrl = "ebom/getEBom/list?projectId=" + projectPuid;
@@ -423,9 +423,9 @@ function initTable(eBomUrl) {
                     },
 
                     {
-                        text:'引用层级',
+                        text: '引用层级',
                         iconCls: 'glyphicon glyphicon-copyright-mark',
-                        handler:function () {
+                        handler: function () {
                             var rows = $table.bootstrapTable('getSelections');
                             //只能选一条进行层级调整
                             if (rows.length != 1) {
@@ -439,11 +439,11 @@ function initTable(eBomUrl) {
                             // }
 
                             window.Ewin.dialog({
-                                title:"层级引用",
-                                url:"ebom/updateEbomLevel?projectId=" + projectPuid
-                                + "&puid=" + rows[0].puid + "&id="+rows[0].lineId,
-                                width:500,
-                                height:500
+                                title: "层级引用",
+                                url: "ebom/updateEbomLevel?projectId=" + projectPuid
+                                + "&puid=" + rows[0].puid + "&id=" + rows[0].lineId,
+                                width: 500,
+                                height: 500
                             });
                         }
                     },
@@ -464,7 +464,7 @@ function initTable(eBomUrl) {
                             }
                             if (this.innerText == '显示子层') {
                                 $table.bootstrapTable('destroy');
-                                initTable1(eBomUrl,puids)
+                                initTable1(eBomUrl, puids)
                             }
                             if (this.innerText == '显示子层') {
                                 this.innerText = '取消显示子层'
@@ -480,26 +480,32 @@ function initTable(eBomUrl) {
                         handler: function () {
                             //var headers = data;//表头
                             var rows = $table.bootstrapTable('getSelections');//选中行数据
-                            let length=-1;
+                            let length = -1;
                             // var str = rows[0].title;
                             if (rows.length == 0) {
                                 window.Ewin.alert({message: '请选择一条需要导出的数据!'});
                                 return false;
-                            }else{
+                            } else {
                                 for (var index in rows) {
                                     if (rows[index].status == 5 || rows[index].status == 6) {
                                         window.Ewin.alert({message: '勾选的数据有审核中状态，审核中的数据不给导出修改!'});
                                         return false;
                                     }
+                                    rows[index].map = {};
                                 }
-                                length=getLengthOfJson(rows[0]);
+                                length = getLengthOfJson(rows[0]);
                             }
                             //动态获取单车配置用量数据
-                            for(let k in rows){
-                               let param={};
+                            for (let k in rows) {
+                                let param = {};
 
-                                for(let i =0;i<length-eBomTitleSet;i++){
-                                    param[('title'+i)]=rows[k][('title'+i)];
+                                for (let i = 0; i < length - eBomTitleSet; i++) {
+                                    if (undefined == rows[k][('title' + i)] || "" == rows[k][('title' + i)] || null == rows[k][('title' + i)]) {
+                                        param[('title' + i)] = "";
+                                    }
+                                    else {
+                                        param[('title' + i)] = rows[k][('title' + i)];
+                                    }
                                 }
                                 rows[k].map = param;//单车配置用量写进对象的Map
                                 // console.log(param);
@@ -517,7 +523,7 @@ function initTable(eBomUrl) {
                                             if (result.status) {
                                                 layer.msg(result.msg, {icon: 1, time: 2000})
                                                 //下载EBOM导入模板
-                                                window.location.href =  result.path;//V1.1.0.log
+                                                window.location.href = result.path;//V1.1.0.log
                                             }
                                             else {
                                                 window.Ewin.alert({message: "操作导出失败:" + result.msg});
@@ -541,7 +547,8 @@ function initTable(eBomUrl) {
         }
     });
 }
-function initTable1(eBomUrl,puids) {
+
+function initTable1(eBomUrl, puids) {
     var projectPuid = $("#project", window.top.document).val();
     if (!checkIsSelectProject(projectPuid)) {
         return;
@@ -658,7 +665,7 @@ function initTable1(eBomUrl,puids) {
                 }
             })
             $table.bootstrapTable({
-                url: eBomUrl+"&puids="+puids+"&showBomStructure=1",
+                url: eBomUrl + "&puids=" + puids + "&showBomStructure=1",
                 method: 'GET',
                 dataType: 'json',
                 //cache: false,
@@ -936,9 +943,9 @@ function initTable1(eBomUrl,puids) {
                         }
                     },
                     {
-                        text:'引用层级',
+                        text: '引用层级',
                         iconCls: 'glyphicon glyphicon-copyright-mark',
-                        handler:function () {
+                        handler: function () {
                             var rows = $table.bootstrapTable('getSelections');
                             //只能选一条进行层级调整
                             if (rows.length != 1) {
@@ -952,11 +959,11 @@ function initTable1(eBomUrl,puids) {
                             // }
 
                             window.Ewin.dialog({
-                                title:"层级引用",
-                                url:"ebom/updateEbomLevel?projectId=" + projectPuid
-                                    + "&puid=" + rows[0].puid + "&id="+rows[0].lineId,
-                                width:500,
-                                height:500
+                                title: "层级引用",
+                                url: "ebom/updateEbomLevel?projectId=" + projectPuid
+                                + "&puid=" + rows[0].puid + "&id=" + rows[0].lineId,
+                                width: 500,
+                                height: 500
                             });
                         }
                     },
@@ -964,7 +971,7 @@ function initTable1(eBomUrl,puids) {
                         text: '取消显示子层',
                         iconCls: 'glyphicon glyphicon-eye-open',
                         handler: function () {
-                            if (this.innerText == '取消显示子层'){
+                            if (this.innerText == '取消显示子层') {
                                 $table.bootstrapTable('destroy');
                                 initTable(eBomUrl);
                             }
@@ -982,26 +989,32 @@ function initTable1(eBomUrl,puids) {
                         handler: function () {
                             //var headers = data;//表头
                             var rows = $table.bootstrapTable('getSelections');//选中行数据
-                            let length=-1;
+                            let length = -1;
                             // var str = rows[0].title;
                             if (rows.length == 0) {
                                 window.Ewin.alert({message: '请选择一条需要导出的数据!'});
                                 return false;
-                            }else{
+                            } else {
                                 for (var index in rows) {
                                     if (rows[index].status == 5 || rows[index].status == 6) {
                                         window.Ewin.alert({message: '勾选的数据有审核中状态，审核中的数据不给导出修改!'});
                                         return false;
                                     }
+                                    rows[index].map = {};
                                 }
-                                length=getLengthOfJson(rows[0]);
+                                length = getLengthOfJson(rows[0]);
                             }
-                            for(let k in rows){
-                                let param={};
-                                for(let i =0;i<length-eBomTitleSet;i++){
-                                    param[('title'+i)]=rows[k][('title'+i)];
+                            for (let k in rows) {
+                                let param = {};
+                                for (let i = 0; i < length - eBomTitleSet; i++) {
+                                    if (undefined == rows[k][('title' + i)] || "" == rows[k][('title' + i)] || null == rows[k][('title' + i)]) {
+                                        param[('title' + i)] = "";
+                                    }
+                                    else {
+                                        param[('title' + i)] = rows[k][('title' + i)];
+                                    }
                                 }
-                                rows[k].map=param;
+                                rows[k].map = param;
                             }
                             window.Ewin.confirm({title: '提示', message: '是否要导出选中行？', width: 500}).on(function (e) {
                                 if (e) {
@@ -1015,7 +1028,7 @@ function initTable1(eBomUrl,puids) {
                                             if (result.status) {
                                                 layer.msg(result.msg, {icon: 1, time: 2000})
                                                 //下载EBOM导入模板
-                                                window.location.href =  result.path;//V1.1.0.log
+                                                window.location.href = result.path;//V1.1.0.log
                                             }
                                             else {
                                                 window.Ewin.alert({message: "操作导出失败:" + result.msg});
@@ -1037,12 +1050,14 @@ function initTable1(eBomUrl,puids) {
         }
     });
 }
+
 function toPage() {
     var pageNum = $("#pageNum").val();
     if (pageNum) {
         $('#ebomManageTable').bootstrapTable('selectPage', parseInt(pageNum));
     }
 }
+
 function queryLoa(row) {
     var myData = JSON.stringify({
         "projectId": $("#project", window.top.document).val(),
