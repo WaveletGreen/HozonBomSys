@@ -80,5 +80,5 @@ function initTable(data) {
 
     });
     //加载成功时执行,渲染双行的
-    renderingTableRowColor(commonTableName);
+    changeTableRendering(commonTableName);
 }

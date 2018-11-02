@@ -7,6 +7,7 @@
 package com.connor.hozon.bom.bomSystem.iservice.task;
 
 import com.connor.hozon.bom.bomSystem.dto.task.TaskReceivedDto;
+import net.sf.json.JSONObject;
 import org.springframework.context.annotation.Configuration;
 import sql.pojo.task.HzTasks;
 
@@ -81,9 +82,32 @@ public interface IHzTaskService {
      */
     boolean doInsertByBatch(List<HzTasks> list);
 
+    /**
+     * 插入一个任务
+     * @param task
+     * @return
+     */
     boolean doInsert(HzTasks task);
 
+    /**
+     * 选择性更新任务数据
+     * @param task
+     * @return
+     */
     boolean doUpdateByPrimaryKeySelective(HzTasks task);
 
+    /**
+     * 停止表单的所有任务
+     * @param formTypeVwo 表单类型
+     * @param vwoType 表单目标类型
+     * @param id 变更表单的ID
+     * @return
+     */
     boolean doStopTask(int formTypeVwo, Integer vwoType, Long id);
+
+    /**
+     * 加载当前用户下的所有任务
+     * @return
+     */
+    JSONObject loadUserTask();
 }

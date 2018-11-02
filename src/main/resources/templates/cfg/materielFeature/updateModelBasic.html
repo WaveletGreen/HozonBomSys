@@ -214,6 +214,13 @@
 </form>
 <script th:inline="javascript">
     <![CDATA[
+    $(document).keydown(function (event) {
+        if (event.keyCode == 13) {
+            $('form').each(function () {
+                event.preventDefault();
+            });
+        }
+    });
     $(function () {
         $('#form').bootstrapValidator({
             message: 'This value is not valid',
@@ -231,17 +238,17 @@
             var url = $("#form", window.top.document).attr('action');
             var data = {};
             url += "?" +
-                "puid=" + $("#puid").val() +
-                "&pCfg0ModelBasicDetail=" + $("#pCfg0ModelBasicDetail").val() +
-                "&projectUid=" + $("#projectUid").val() +
+                // "puid=" + $("#puid").val() +
+                // "&pCfg0ModelBasicDetail=" + $("#pFeatureSingleVehicleCode").val() +
+                "projectUid=" + $("#projectUid").val() +
                 "&superMateriel=" + $("#superMateriel").val()
             ;
             var _d = $("#form").serializeArray();
             for (var p in _d) {
                 data[_d[p].name] = _d[p].value;
             }
-            data.puid = $("#puid").val();
-            data.pCfg0ModelBasicDetail = $("#pCfg0ModelBasicDetail").val();
+            // data.puid = $("#puid").val();
+            // data.pCfg0ModelBasicDetail = $("#pCfg0ModelBasicDetail").val();
             console.log(data);
             $.ajax({
                 contentType:

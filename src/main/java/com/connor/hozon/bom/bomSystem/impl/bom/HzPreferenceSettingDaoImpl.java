@@ -18,6 +18,7 @@ import java.util.List;
  * @Date: Created in 2018/9/6 13:19
  * @Modified By:
  */
+@Deprecated
 @Configuration
 public class HzPreferenceSettingDaoImpl extends BasicDaoImpl<HzPreferenceSetting> implements HzPreferenceSettingDao {
 

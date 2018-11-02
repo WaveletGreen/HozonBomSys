@@ -253,7 +253,7 @@ function loadData(_projectPuid) {
     var column = [];
     $("#refresh").removeAttr("disabled");
     $.ajax({
-        url: "materiel/loadColumnByProjectPuid2?projectPuid=" + projectUid,
+        url: "materielV2/loadColumnByProjectPuid2?projectPuid=" + projectUid,
         type: "GET",
         success: gotIt
     });
@@ -286,7 +286,7 @@ function modifyBasicDataDialog() {
     window.Ewin.dialog({
         // 这个puid就是车型模型的puid，直接修改了车型模型的基本信息（在bom系统维护的字段）
         title: "修改基本信息",
-        url: "materiel/modifyPage?projectUid=" + projectUid + "&puid=" + rows[0].puid + "&puidOfModelFeature=" + rows[0].puidOfModelFeature + "&page=model",
+        url: "materielV2/modifyPage?projectUid=" + projectUid + "&puid=" + rows[0].puid + "&puidOfModelFeature=" + rows[0].puidOfModelFeature + "&page=model",
         gridId: "gridId",
         width: 350,
         height: 450

@@ -27,7 +27,7 @@ import sql.pojo.resourcesLibrary.dictionaryLibrary.HzDictionaryLibrary;
 import java.util.*;
 /**
  * @Author: Fancyears·Maylos·Maywas
- * @Description: fuck
+ * @Description: 特性服务层，起名为Cfg0是由于TC中配置管理中前缀是Cfg0，沿用TC的命名，到后来不再沿用TC，改采用英文Feature来标识特性
  * @Date: Created in 2018/9/6 13:19
  * @Modified By:
  */

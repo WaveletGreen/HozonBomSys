@@ -16,7 +16,7 @@ public class Author {
     /**
      * 同步删除已发送到ERP的数据
      */
-    public final static boolean SYN_DELETE = true;
+    public final static boolean SYN_DELETE = false;
 
     public Author() {
     }
