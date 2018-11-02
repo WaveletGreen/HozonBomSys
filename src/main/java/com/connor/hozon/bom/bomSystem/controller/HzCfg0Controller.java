@@ -66,16 +66,6 @@ public class HzCfg0Controller extends ExtraIntegrate {
     /***项目下的特性，值针对当前项目的特性，更高一层的是字典库*/
     @Autowired
     HzCfg0OptionFamilyService cfg0OptionFamilyService;
-    //    /**
-    //     * 特性传输服务
-    //     */
-    //    @Autowired
-    //    TransCfgService transCfgService;
-    //    /***
-    //     * 相关性传输服务
-    //     */
-    //    @Autowired
-    //    TransOptionsService transOptionsService;
     /*** 特性变更服务，特性的变更数据交由该服务进行操作，实际做操作的还是当前controller*/
     @Autowired
     IHzFeatureChangeService iHzFeatureChangeService;
@@ -99,32 +89,11 @@ public class HzCfg0Controller extends ExtraIntegrate {
         queryBase.setSort(HzCfg0Record.reflectToDBField(queryBase.getSort()));
         queryBase.setProjectUid(projectPuid);
         List<HzCfg0Record> records = hzCfg0Service.doLoadCfgListByProjectPuid(projectPuid, queryBase);
-        //        List<HzCfg0Record> list=hzCfg0Service.doLoadByCondition(queryBase);
         int totalCount = hzCfg0Service.tellMeHowManyOfThose(queryBase);
-        //        records.addAll(hzCfg0Service.doLoadAddedCfgListByProjectPuid(projectPuid));
-        //        int totalCount = hzCfg0Service.tellMeHowManyOfThose(projectPuid);
         result.put("totalCount", totalCount);
         result.put("result", records);
         hzCfg0Service.synDictionaryAfterOption(projectPuid);
         return result;
-    }
-
-    /**
-     * 获取添加特性页面，已废除，采用{@link HzCfg0Controller#addPage2(String, Model)}代替
-     *
-     * @param projectPuid 项目UID
-     * @return 添加特性页面
-     */
-    @RequestMapping("/addPage")
-    @Deprecated
-    public String addPage(@RequestParam("projectPuid") String projectPuid, Model model) {
-        HzCfg0MainRecord mainRecord = hzCfg0MainRecordDao.selectByProjectPuid(projectPuid);
-        if (mainRecord == null) {
-            model.addAttribute("msg", "请选择一个项目进行操作");
-            return "errorWithEntity";
-        }
-        model.addAttribute("entity", mainRecord);
-        return "cfg/feature/addFeature";
     }
 
     /**
@@ -141,89 +110,6 @@ public class HzCfg0Controller extends ExtraIntegrate {
         }
         model.addAttribute("entity", mainRecord);
         return "cfg/feature/addFeature2";
-    }
-
-    /**
-     * 已废除
-     * 该方法可以直接添加特性到数据库中，缺少配置字典的约束，请采用{@link HzCfg0Controller#add2(HzCfg0Record)}代替
-     *
-     * @param record
-     * @return
-     * @throws Exception
-     */
-
-    @RequestMapping(value = "/add", method = RequestMethod.POST)
-    @ResponseBody
-    @Deprecated
-    public JSONObject add(@RequestBody HzCfg0Record record) throws Exception {
-        JSONObject result = new JSONObject();
-        User user = UserInfo.getUser();
-
-        record.setpCfg0FamilyName(record.getpCfg0FamilyName().toUpperCase());
-        record.setpCfg0ObjectId(record.getpCfg0ObjectId().toUpperCase());
-        //创建人和修改人
-        record.setCreator(user.getUserName());
-        record.setLastModifier(user.getUserName());
-        record.setCfgAbolishDate(DateStringHelper.forever());
-        if (!hzCfg0Service.preCheck(record)) {
-            result.put("status", false);
-            result.put("msg", "<p style='color:red;'>特性值已存在</p>");
-            return result;
-        }
-        /**生成自身的puid*/
-        record.setPuid(UUIDHelper.generateUpperUid());
-
-        HzCfg0OptionFamily family = new HzCfg0OptionFamily();
-        //主配置
-        family.setpOfCfg0Main(record.getpCfg0MainItemPuid());
-        //特性代码
-        family.setpOptionfamilyName(record.getpCfg0FamilyName());
-        //特性描述
-        family.setpOptionfamilyDesc(record.getpCfg0FamilyDesc());
-
-        HzCfg0OptionFamily _family = cfg0OptionFamilyService.doGetByCodeAndDescWithMain(family);
-        //检查当前项目有没有用到特定的特性
-        if (_family == null) {
-            family.setPuid(UUIDHelper.generateUpperUid());
-            //没有用到，则进行特性插入
-            if (!cfg0OptionFamilyService.doInsert(family)) {
-                result.put("status", false);
-                result.put("msg", "添加特性" + family.getpOptionfamilyName() + "失败，请联系系统管理员");
-                return result;
-            }
-        } else {
-            family = _family;
-        }
-
-        //关联到特性的UID
-        record.setpCfg0FamilyPuid(family.getPuid());
-        if (!checkString(record.getpCfg0Relevance())) {
-            record.setpCfg0Relevance("$ROOT." + record.getpCfg0FamilyName() + " = '" + record.getpCfg0ObjectId() + "'");
-        }
-        //将特性值插入到表中
-        if (hzCfg0Service.doInsertOne(record)) {
-            result.put("status", true);
-            result.put("msg", "添加特性值" + record.getpCfg0ObjectId() + "成功");
-//            //发送到SAP,走流程
-//            if (!SynMaterielService.debug) {
-//                iSynFeatureService.addFeature(Collections.singletonList(record));
-//            }
-            record = hzCfg0Service.doSelectOneByPuid(record.getPuid());
-            if (iHzFeatureChangeService.insertByCfgAfter(record) <= 0) {
-                logger.error("创建后自动同步变更后记录值失败，请联系管理员");
-            }
-            HzCfg0Record record1 = new HzCfg0Record();
-            record1.setPuid(record.getPuid());
-            if (iHzFeatureChangeService.insertByCfgBefore(record1) <= 0) {
-                logger.error("创建后自动同步变更前记录值失败，请联系管理员");
-            }
-
-
-        } else {
-            result.put("status", false);
-            result.put("msg", "添加特性值" + record.getpCfg0ObjectId() + "失败，请联系系统管理员");
-        }
-        return result;
     }
 
     /**
@@ -325,111 +211,6 @@ public class HzCfg0Controller extends ExtraIntegrate {
         } else {
             result.put("status", false);
             result.put("msg", "添加特性值" + record.getpCfg0ObjectId() + "失败，请联系系统管理员");
-        }
-        return result;
-    }
-
-    /**
-     * 已不再使用，跳转到修改页面，如果值不能再修改，则特性没有必要走变更的表单，走审核即可，实际上却需要走表单，什么脑回路
-     * <p>
-     * 新的特性不再允许修改特性数据，因为特性来源于配置字典，即便是修改了配置字典也不允许修改特性数据
-     *
-     * @param puid 特性值UID
-     * @return 特性修改页面
-     */
-    @Deprecated
-    @RequestMapping("/modifyPage")
-    public String modifyPage(@RequestParam("projectPuid") String puid, Model model) {
-        HzCfg0Record record = hzCfg0Service.doSelectOneByPuid(puid);
-        if (record == null) {
-//            record = hzCfg0Service.doSelectOneAddedCfgByPuid(puid);
-//            if (record == null) {
-            model.addAttribute("msg", "没有找到对应的特性数据，请重试或联系系统管理员");
-            return "errorWithEntity";
-//            }
-        }
-        model.addAttribute("entity", record);
-        model.addAttribute("action", "./cfg0/modify");
-        return "cfg/feature/modFeature";
-    }
-
-    /**
-     * 已不再使用，修改特性，保存修改后特特性值数据
-     *
-     * @param record 特性对象
-     * @return
-     */
-    @RequestMapping(value = "/modify", method = RequestMethod.POST)
-    @ResponseBody
-    @Deprecated
-    public JSONObject modify(@RequestBody HzCfg0Record record) {
-        JSONObject result = new JSONObject();
-        User user = UserInfo.getUser();
-        result.put("status", true);
-        if (record == null || "".equalsIgnoreCase(record.getPuid()) || null == record.getPuid()) {
-            result.put("status", false);
-            result.put("msg", "没有选择任何1条数据，请选择1条数据");
-            return result;
-        }
-        record.setpCfg0FamilyName(record.getpCfg0FamilyName().toUpperCase());
-        record.setpCfg0ObjectId(record.getpCfg0ObjectId().toUpperCase());
-        record.setLastModifier(user.getUserName());
-
-        if (!hzCfg0Service.preCheck(record)) {
-            result.put("status", false);
-            result.put("msg", "已存在的特性值");
-            return result;
-        }
-
-        if (!checkString(record.getpCfg0Relevance())) {
-            record.setpCfg0Relevance("$ROOT." + record.getpCfg0FamilyName() + " = '" + record.getpCfg0ObjectId() + "'");
-        }
-        if (hzCfg0Service.doSelectOneByPuid(record.getPuid()) != null) {
-            if (hzCfg0Service.doUpdate(record)) {
-                //重新取回一遍数据
-                record = hzCfg0Service.doSelectOneByPuid(record.getPuid());
-                result.put("msg", "更新特性值" + record.getpCfg0ObjectId() + "成功");
-                HzFeatureChangeBean after = new HzFeatureChangeBean();
-                after.setCfgPuid(record.getPuid());
-                after = iHzFeatureChangeService.doSelectAfterByPk(after);
-                if (after == null) {
-                    if (iHzFeatureChangeService.insertByCfgAfter(record) <= 0) {
-                        logger.error("更新" + record.getpCfg0ObjectId() + "变更后记录数据失败，请联系系统管理员");
-                    }
-                    HzFeatureChangeBean before = new HzFeatureChangeBean();
-                    before.setCfgPuid(record.getPuid());
-                    before = iHzFeatureChangeService.doSelectBeforeByPk(before);
-                    if (before == null) {
-                        HzCfg0Record localRecord = new HzCfg0Record();
-                        localRecord.setPuid(record.getPuid());
-                        if (iHzFeatureChangeService.insertByCfgBefore(localRecord) <= 0) {
-                            logger.error("更新" + record.getpCfg0ObjectId() + "变更前记录数据失败，请联系系统管理员");
-                        }
-                    }
-                } else {
-                    //先取回所有需要存储的数据
-                    iHzFeatureChangeService.reflect(record, after);
-                    //再进行更新
-                    if (!iHzFeatureChangeService.doUpdateAfterByPk(after)) {
-                        logger.error("更新" + record.getpCfg0ObjectId() + "变更后记录数据失败，请联系系统管理员");
-                    }
-                }
-            } else {
-                result.put("msg", "更新特性值" + record.getpCfg0ObjectId() + "失败");
-                logger.error("更新特性值" + record.getpCfg0ObjectId() + "失败");
-
-            }
-        }
-//        else if (hzCfg0Service.doSelectOneAddedCfgByPuid(record.getPuid()) != null) {
-//            if (hzCfg0Service.doUpdateAddedCfg(record)) {
-//                result.put("msg", "更新特性值" + record.getpCfg0ObjectId() + "成功");
-//            } else {
-//                logger.error("更新特性值" + record.getpCfg0ObjectId() + "失败");
-//                result.put("msg", "更新特性值" + record.getpCfg0ObjectId() + "失败");
-//            }
-//        }
-        else {
-            result.put("msg", "更新特性值" + record.getpCfg0ObjectId() + "时发生错误，请联系系统管理员");
         }
         return result;
     }
@@ -576,6 +357,213 @@ public class HzCfg0Controller extends ExtraIntegrate {
     }
 
     /**********************************************废除方法****************************************/
+
+    /**
+     * 获取添加特性页面，已废除，采用{@link HzCfg0Controller#addPage2(String, Model)}代替
+     *
+     * @param projectPuid 项目UID
+     * @return 添加特性页面
+     */
+    @RequestMapping("/addPage")
+    @Deprecated
+    public String addPage(@RequestParam("projectPuid") String projectPuid, Model model) {
+        HzCfg0MainRecord mainRecord = hzCfg0MainRecordDao.selectByProjectPuid(projectPuid);
+        if (mainRecord == null) {
+            model.addAttribute("msg", "请选择一个项目进行操作");
+            return "errorWithEntity";
+        }
+        model.addAttribute("entity", mainRecord);
+        return "cfg/feature/addFeature";
+    }
+
+    /**
+     * 已不再使用，跳转到修改页面，如果值不能再修改，则特性没有必要走变更的表单，走审核即可，实际上却需要走表单，什么脑回路
+     * <p>
+     * 新的特性不再允许修改特性数据，因为特性来源于配置字典，即便是修改了配置字典也不允许修改特性数据
+     *
+     * @param puid 特性值UID
+     * @return 特性修改页面
+     */
+    @Deprecated
+    @RequestMapping("/modifyPage")
+    public String modifyPage(@RequestParam("projectPuid") String puid, Model model) {
+        HzCfg0Record record = hzCfg0Service.doSelectOneByPuid(puid);
+        if (record == null) {
+//            record = hzCfg0Service.doSelectOneAddedCfgByPuid(puid);
+//            if (record == null) {
+            model.addAttribute("msg", "没有找到对应的特性数据，请重试或联系系统管理员");
+            return "errorWithEntity";
+//            }
+        }
+        model.addAttribute("entity", record);
+        model.addAttribute("action", "./cfg0/modify");
+        return "cfg/feature/modFeature";
+    }
+
+    /**
+     * 已废除
+     * 该方法可以直接添加特性到数据库中，缺少配置字典的约束，请采用{@link HzCfg0Controller#add2(HzCfg0Record)}代替
+     *
+     * @param record
+     * @return
+     * @throws Exception
+     */
+
+    @RequestMapping(value = "/add", method = RequestMethod.POST)
+    @ResponseBody
+    @Deprecated
+    public JSONObject add(@RequestBody HzCfg0Record record) throws Exception {
+        JSONObject result = new JSONObject();
+        User user = UserInfo.getUser();
+
+        record.setpCfg0FamilyName(record.getpCfg0FamilyName().toUpperCase());
+        record.setpCfg0ObjectId(record.getpCfg0ObjectId().toUpperCase());
+        //创建人和修改人
+        record.setCreator(user.getUserName());
+        record.setLastModifier(user.getUserName());
+        record.setCfgAbolishDate(DateStringHelper.forever());
+        if (!hzCfg0Service.preCheck(record)) {
+            result.put("status", false);
+            result.put("msg", "<p style='color:red;'>特性值已存在</p>");
+            return result;
+        }
+        /**生成自身的puid*/
+        record.setPuid(UUIDHelper.generateUpperUid());
+
+        HzCfg0OptionFamily family = new HzCfg0OptionFamily();
+        //主配置
+        family.setpOfCfg0Main(record.getpCfg0MainItemPuid());
+        //特性代码
+        family.setpOptionfamilyName(record.getpCfg0FamilyName());
+        //特性描述
+        family.setpOptionfamilyDesc(record.getpCfg0FamilyDesc());
+
+        HzCfg0OptionFamily _family = cfg0OptionFamilyService.doGetByCodeAndDescWithMain(family);
+        //检查当前项目有没有用到特定的特性
+        if (_family == null) {
+            family.setPuid(UUIDHelper.generateUpperUid());
+            //没有用到，则进行特性插入
+            if (!cfg0OptionFamilyService.doInsert(family)) {
+                result.put("status", false);
+                result.put("msg", "添加特性" + family.getpOptionfamilyName() + "失败，请联系系统管理员");
+                return result;
+            }
+        } else {
+            family = _family;
+        }
+
+        //关联到特性的UID
+        record.setpCfg0FamilyPuid(family.getPuid());
+        if (!checkString(record.getpCfg0Relevance())) {
+            record.setpCfg0Relevance("$ROOT." + record.getpCfg0FamilyName() + " = '" + record.getpCfg0ObjectId() + "'");
+        }
+        //将特性值插入到表中
+        if (hzCfg0Service.doInsertOne(record)) {
+            result.put("status", true);
+            result.put("msg", "添加特性值" + record.getpCfg0ObjectId() + "成功");
+//            //发送到SAP,走流程
+//            if (!SynMaterielService.debug) {
+//                iSynFeatureService.addFeature(Collections.singletonList(record));
+//            }
+            record = hzCfg0Service.doSelectOneByPuid(record.getPuid());
+            if (iHzFeatureChangeService.insertByCfgAfter(record) <= 0) {
+                logger.error("创建后自动同步变更后记录值失败，请联系管理员");
+            }
+            HzCfg0Record record1 = new HzCfg0Record();
+            record1.setPuid(record.getPuid());
+            if (iHzFeatureChangeService.insertByCfgBefore(record1) <= 0) {
+                logger.error("创建后自动同步变更前记录值失败，请联系管理员");
+            }
+
+
+        } else {
+            result.put("status", false);
+            result.put("msg", "添加特性值" + record.getpCfg0ObjectId() + "失败，请联系系统管理员");
+        }
+        return result;
+    }
+
+    /**
+     * 已不再使用，修改特性，保存修改后特特性值数据
+     *
+     * @param record 特性对象
+     * @return
+     */
+    @RequestMapping(value = "/modify", method = RequestMethod.POST)
+    @ResponseBody
+    @Deprecated
+    public JSONObject modify(@RequestBody HzCfg0Record record) {
+        JSONObject result = new JSONObject();
+        User user = UserInfo.getUser();
+        result.put("status", true);
+        if (record == null || "".equalsIgnoreCase(record.getPuid()) || null == record.getPuid()) {
+            result.put("status", false);
+            result.put("msg", "没有选择任何1条数据，请选择1条数据");
+            return result;
+        }
+        record.setpCfg0FamilyName(record.getpCfg0FamilyName().toUpperCase());
+        record.setpCfg0ObjectId(record.getpCfg0ObjectId().toUpperCase());
+        record.setLastModifier(user.getUserName());
+
+        if (!hzCfg0Service.preCheck(record)) {
+            result.put("status", false);
+            result.put("msg", "已存在的特性值");
+            return result;
+        }
+
+        if (!checkString(record.getpCfg0Relevance())) {
+            record.setpCfg0Relevance("$ROOT." + record.getpCfg0FamilyName() + " = '" + record.getpCfg0ObjectId() + "'");
+        }
+        if (hzCfg0Service.doSelectOneByPuid(record.getPuid()) != null) {
+            if (hzCfg0Service.doUpdate(record)) {
+                //重新取回一遍数据
+                record = hzCfg0Service.doSelectOneByPuid(record.getPuid());
+                result.put("msg", "更新特性值" + record.getpCfg0ObjectId() + "成功");
+                HzFeatureChangeBean after = new HzFeatureChangeBean();
+                after.setCfgPuid(record.getPuid());
+                after = iHzFeatureChangeService.doSelectAfterByPk(after);
+                if (after == null) {
+                    if (iHzFeatureChangeService.insertByCfgAfter(record) <= 0) {
+                        logger.error("更新" + record.getpCfg0ObjectId() + "变更后记录数据失败，请联系系统管理员");
+                    }
+                    HzFeatureChangeBean before = new HzFeatureChangeBean();
+                    before.setCfgPuid(record.getPuid());
+                    before = iHzFeatureChangeService.doSelectBeforeByPk(before);
+                    if (before == null) {
+                        HzCfg0Record localRecord = new HzCfg0Record();
+                        localRecord.setPuid(record.getPuid());
+                        if (iHzFeatureChangeService.insertByCfgBefore(localRecord) <= 0) {
+                            logger.error("更新" + record.getpCfg0ObjectId() + "变更前记录数据失败，请联系系统管理员");
+                        }
+                    }
+                } else {
+                    //先取回所有需要存储的数据
+                    iHzFeatureChangeService.reflect(record, after);
+                    //再进行更新
+                    if (!iHzFeatureChangeService.doUpdateAfterByPk(after)) {
+                        logger.error("更新" + record.getpCfg0ObjectId() + "变更后记录数据失败，请联系系统管理员");
+                    }
+                }
+            } else {
+                result.put("msg", "更新特性值" + record.getpCfg0ObjectId() + "失败");
+                logger.error("更新特性值" + record.getpCfg0ObjectId() + "失败");
+
+            }
+        }
+//        else if (hzCfg0Service.doSelectOneAddedCfgByPuid(record.getPuid()) != null) {
+//            if (hzCfg0Service.doUpdateAddedCfg(record)) {
+//                result.put("msg", "更新特性值" + record.getpCfg0ObjectId() + "成功");
+//            } else {
+//                logger.error("更新特性值" + record.getpCfg0ObjectId() + "失败");
+//                result.put("msg", "更新特性值" + record.getpCfg0ObjectId() + "失败");
+//            }
+//        }
+        else {
+            result.put("msg", "更新特性值" + record.getpCfg0ObjectId() + "时发生错误，请联系系统管理员");
+        }
+        return result;
+    }
+
     /**
      * 已废除
      *

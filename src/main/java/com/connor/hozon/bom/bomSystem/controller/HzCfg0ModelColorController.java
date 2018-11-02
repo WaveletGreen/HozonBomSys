@@ -42,7 +42,6 @@ import java.util.stream.Collectors;
 
 import static com.connor.hozon.bom.bomSystem.helper.StringHelper.checkString;
 
-
 /**
  * @Author: Fancyears·Maylos·Maywas
  * @Description: 配色方案controller
@@ -71,11 +70,7 @@ public class HzCfg0ModelColorController {
     /***颜色车型详情服务层，精确到每一个配色方案的所有特性下的颜色*/
     @Autowired
     IHzColorModelService hzColorModelService;
-    //    /***EBOM服务*/
-    //    @Autowired
-    //    HzBomLineRecordService hzBomLineRecordService;
-    //    @Autowired
-    //    HzBomDataService hzBomDataService;
+    /***二级配色方案服务层，不再使用二级配色方案*/
     @Autowired
     HzColorLvl2ModelService hzColorLvl2ModelService;
     /***EBOM服务*/
@@ -424,8 +419,99 @@ public class HzCfg0ModelColorController {
     }
 
     /**
+     * 校验二级配色方案关联的零件
+     * 通过校验，只需要输入零件号，校验成功则会返回零件的完整信息，理论上采用Map<String,Object>效果会好一点，因为JSONObject不能存储null
+     * 倘若通过零件号找到多个对象，只取首位对象的数据传到前端，并由前端自动匹配到相应的输入框中
+     *
+     * @param lineId     零件号
+     * @param projectUid 项目UID
+     * @return 找到的零件号完整信息
+     */
+    @RequestMapping("checkItemId")
+    @ResponseBody
+    public JSONObject checkItemId(@RequestParam String lineId, @RequestParam String projectUid) {
+        JSONObject result = new JSONObject();
+        Map<String, Object> queryParam = new HashMap<>();
+        queryParam.put("projectId", projectUid);
+        queryParam.put("lineID", lineId.trim());
+        List<HzEPLManageRecord> itemList = hzEbomRecordDAO.findEbom(queryParam);
+        result.put("status", true);
+        if (itemList == null || itemList.size() <= 0) {
+            result.put("status", false);
+            result.put("msg", "没有找到零件");
+        } else {
+            itemList.get(0).getPuid();
+            //如果不设置时间不为null则会报错
+            if (itemList.get(0).getpUpdateTime() == null) {
+                itemList.get(0).setpUpdateTime(new Date());
+            }
+            if (itemList.get(0).getpCreateTime() == null) {
+                itemList.get(0).setpCreateTime(new Date());
+            }
+            result.put("item", itemList.get(0));
+        }
+        return result;
+    }
+
+    /**
+     * 对配色方案发起流程，发起流程时，同时需要传入当前的配色方案的title给后台做变更前后的title对比，不能简单的就对某个配色方案直接
+     * 发起VWO变更，变更的复杂性源自于全配置BOM一级清单的不确定性
+     * <p>
+     * 所需的入参
+     * <p>
+     * {@code key=rows} 的数据存放在Map中，该数据Map的所有key都需要与{@link HzCfg0ModelColor}的字段至少对应一个，特别时puid必须存在
+     * <p>
+     * {@code key=titles}的数据即为变更前后的表头做差异性对比的
+     *
+     * @param params 配色方案数据
+     * @return 成功与否标志和消息
+     */
+    @RequestMapping("/getVWO")
+    @ResponseBody
+    public JSONObject getVWO(@RequestBody Map<String, Object> params) {
+        List<HzCfg0ModelColor> rows = new ArrayList<>();
+        List<HashMap<String, String>> x = (List<HashMap<String, String>>) params.get("rows");
+        for (int i = 0; i < x.size(); i++) {
+            rows.add((HzCfg0ModelColor) JSONObject.toBean(JSONObject.fromObject(x.get(i)), HzCfg0ModelColor.class));
+        }
+        ArrayList<String> dynamicTitle = (ArrayList<String>) params.get("titles");
+        String projectPuid = (String) params.get("projectPuid");
+        return hzCfg0ModelColorService.getVWO(rows, projectPuid, dynamicTitle);
+    }
+
+    /**********************************************废除方法****************************************/
+
+    /**
+     * 删除单挑二级配色方案，
+     * 作为二级配色方案前端服务，二级配色方案没有从配色方案中进行关联，虽然没有才用二级配色方案，功能还需要保留
+     *
+     * @param modelUid 颜色车型UID
+     * @param puid     二级配色方案主键
+     * @return
+     */
+    @RequestMapping("deleteFromServer")
+    @ResponseBody
+    @Deprecated
+    public JSONObject deleteFromServer(@RequestParam String modelUid, @RequestParam String puid) {
+        HzColorLvl2Model model = new HzColorLvl2Model();
+        JSONObject result = new JSONObject();
+        model.setpLvlFunction(puid);
+        model.setpModelUid(modelUid);
+        HzColorLvl2Model fromDb = hzColorLvl2ModelService.doSelectByModelAndFunctionLvl(model);
+        if (null == fromDb) {
+            //随便删
+            result.put("status", 1);
+        } else {
+            hzColorLvl2ModelService.doDeleteByPrimaryKey(fromDb.getPuid());
+            result.put("status", 2);
+        }
+        return result;
+    }
+
+    /**
      * 获取二级配色方案页面，这个页面是用alert进行模式框弹出而不是dialog
-     * @param modelUid 配色模型UID
+     *
+     * @param modelUid   配色模型UID
      * @param projectUid 项目UID
      * @return 二级配色方案页面
      */
@@ -572,93 +658,6 @@ public class HzCfg0ModelColorController {
         }
     }
 
-    /**
-     * 校验二级配色方案关联的零件
-     * 通过校验，只需要输入零件号，校验成功则会返回零件的完整信息，理论上采用Map<String,Object>效果会好一点，因为JSONObject不能存储null
-     * 倘若通过零件号找到多个对象，只取首位对象的数据传到前端，并由前端自动匹配到相应的输入框中
-     *
-     * @param lineId     零件号
-     * @param projectUid 项目UID
-     * @return 找到的零件号完整信息
-     */
-    @RequestMapping("checkItemId")
-    @ResponseBody
-    public JSONObject checkItemId(@RequestParam String lineId, @RequestParam String projectUid) {
-        JSONObject result = new JSONObject();
-        Map<String, Object> queryParam = new HashMap<>();
-        queryParam.put("projectId", projectUid);
-        queryParam.put("lineID", lineId.trim());
-        List<HzEPLManageRecord> itemList = hzEbomRecordDAO.findEbom(queryParam);
-        result.put("status", true);
-        if (itemList == null || itemList.size() <= 0) {
-            result.put("status", false);
-            result.put("msg", "没有找到零件");
-        } else {
-            itemList.get(0).getPuid();
-            //如果不设置时间不为null则会报错
-            if (itemList.get(0).getpUpdateTime() == null) {
-                itemList.get(0).setpUpdateTime(new Date());
-            }
-            if (itemList.get(0).getpCreateTime() == null) {
-                itemList.get(0).setpCreateTime(new Date());
-            }
-            result.put("item", itemList.get(0));
-        }
-        return result;
-    }
-
-    /**
-     * 删除单挑二级配色方案，
-     * 作为二级配色方案前端服务，二级配色方案没有从配色方案中进行关联，虽然没有才用二级配色方案，功能还需要保留
-     *
-     * @param modelUid 颜色车型UID
-     * @param puid     二级配色方案主键
-     * @return
-     */
-    @RequestMapping("deleteFromServer")
-    @ResponseBody
-    @Deprecated
-    public JSONObject deleteFromServer(@RequestParam String modelUid, @RequestParam String puid) {
-        HzColorLvl2Model model = new HzColorLvl2Model();
-        JSONObject result = new JSONObject();
-        model.setpLvlFunction(puid);
-        model.setpModelUid(modelUid);
-        HzColorLvl2Model fromDb = hzColorLvl2ModelService.doSelectByModelAndFunctionLvl(model);
-        if (null == fromDb) {
-            //随便删
-            result.put("status", 1);
-        } else {
-            hzColorLvl2ModelService.doDeleteByPrimaryKey(fromDb.getPuid());
-            result.put("status", 2);
-        }
-        return result;
-    }
-
-
-    /**
-     * 对配色方案发起流程，发起流程时，同时需要传入当前的配色方案的title给后台做变更前后的title对比，不能简单的就对某个配色方案直接
-     * 发起VWO变更，变更的复杂性源自于全配置BOM一级清单的不确定性
-     * <p>
-     * 所需的入参
-     * <p>
-     * {@code key=rows} 的数据存放在Map中，该数据Map的所有key都需要与{@link HzCfg0ModelColor}的字段至少对应一个，特别时puid必须存在
-     * <p>
-     * {@code key=titles}的数据即为变更前后的表头做差异性对比的
-     *
-     * @param params 配色方案数据
-     * @return 成功与否标志和消息
-     */
-    @RequestMapping("/getVWO")
-    @ResponseBody
-    public JSONObject getVWO(@RequestBody Map<String, Object> params) {
-        List<HzCfg0ModelColor> rows = new ArrayList<>();
-        List<HashMap<String, String>> x = (List<HashMap<String, String>>) params.get("rows");
-        for (int i = 0; i < x.size(); i++) {
-            rows.add((HzCfg0ModelColor) JSONObject.toBean(JSONObject.fromObject(x.get(i)), HzCfg0ModelColor.class));
-        }
-        ArrayList<String> dynamicTitle = (ArrayList<String>) params.get("titles");
-        String projectPuid = (String) params.get("projectPuid");
-        return hzCfg0ModelColorService.getVWO(rows, projectPuid, dynamicTitle);
-    }
+    /**********************************************废除方法****************************************/
 
 }

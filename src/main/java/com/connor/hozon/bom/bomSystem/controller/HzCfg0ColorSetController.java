@@ -108,38 +108,9 @@ public class HzCfg0ColorSetController {
         return "cfg/color/addColor";
     }
 
-    /**
-     * 更新颜色对象，该方法已废除，因为无法更新油漆物料号在颜色对象上
-     *
-     * @param set 颜色对象
-     * @return
-     */
-    @Deprecated
-    @RequestMapping(value = "/updateWithEntity", method = RequestMethod.POST)
-    @ResponseBody
-    public Boolean update(@RequestBody HzCfg0ColorSet set) {
-        Date now = new Date();
-        User user = UserInfo.getUser();
-        /*try
-        {
-            set.setpColorAbolishDate(DateStringHelper.stringToDate2(set.getStrColorAbolishDate()));
-            set.setpColorEffectedDate(DateStringHelper.stringToDate2(set.getStrColorEffectedDate()));
-        } catch (ParseException e) {
-            e.printStackTrace();
-            logger.error("从字符串解析时间失败", e);
-        }
-        if (now.before(set.getpColorAbolishDate())) {
-            set.setpColorStatus(1);
-        } else {
-            set.setpColorStatus(0);
-        }*/
-        set.setpColorModifier(user.getUserName());
-        set.setpColorModifyDate(now);
-        return colorSerService.doUpdate(set);
-    }
     @RequestMapping(value = "/updateWithEntity2", method = RequestMethod.POST)
     @ResponseBody
-    public JSONObject update2(@RequestBody Map<String,String> map) {
+    public JSONObject update2(@RequestBody Map<String, String> map) {
         JSONObject result = new JSONObject();
         Date now = new Date();
         User user = UserInfo.getUser();
@@ -168,26 +139,26 @@ public class HzCfg0ColorSetController {
 
         String csPaintMaterielCodes = "";
         List<String> materielCodeList = new ArrayList<String>();
-        for(int i=0;i<(map.size()-7);i++){
-            String materielCode = map.get("color_"+i);
-            if(materielCode==null||"".equals(materielCode)){
+        for (int i = 0; i < (map.size() - 7); i++) {
+            String materielCode = map.get("color_" + i);
+            if (materielCode == null || "".equals(materielCode)) {
                 continue;
             }
             materielCodeList.add(materielCode);
         }
-        if(materielCodeList!=null&&materielCodeList.size()>0){
+        if (materielCodeList != null && materielCodeList.size() > 0) {
             List<String> csPaintMaterielUidList = hzAccessoriesLibsDAO.queryAccessoriesListByMaterielCode(materielCodeList);
-            if(csPaintMaterielUidList.size()!=materielCodeList.size()){
+            if (csPaintMaterielUidList.size() != materielCodeList.size()) {
                 result.put("status", false);
                 result.put("msg", "油漆物料编号重复或错误");
-                return  result;
+                return result;
             }
             Integer materielSize = csPaintMaterielUidList.size();
             String csPaintMaterielUids = "";
-            for(int i=0;i<materielSize;i++){
+            for (int i = 0; i < materielSize; i++) {
                 csPaintMaterielCodes += materielCodeList.get(i);
                 csPaintMaterielUids += csPaintMaterielUidList.get(i);
-                if(materielSize>1&&i<(materielSize-1)){
+                if (materielSize > 1 && i < (materielSize - 1)) {
                     csPaintMaterielCodes += "<br>";
                     csPaintMaterielUids += "|";
                 }
@@ -198,71 +169,12 @@ public class HzCfg0ColorSetController {
 
         set.setpColorModifier(user.getUserName());
         set.setpColorModifyDate(now);
-        if(colorSerService.doUpdate(set)){
-            result.put("status",true);
+        if (colorSerService.doUpdate(set)) {
+            result.put("status", true);
             result.put("msg", "颜色库修改成功");
-        }else {
-            result.put("status",false);
-            result.put("msg", "颜色库修改失败");
-        }
-        return result;
-    }
-
-    /**
-     * 添加一个颜色信息，需要油漆物料号，该方法已废除
-     *
-     * @param set 颜色对象
-     * @return 添加成功与否标志和消息
-     */
-    @Deprecated
-    @RequestMapping(value = "/add", method = RequestMethod.POST)
-    @ResponseBody
-    public JSONObject add(@RequestBody HzCfg0ColorSet set) {
-        JSONObject result = new JSONObject();
-        Date now = new Date();
-        User user = UserInfo.getUser();
-        boolean resultFromDB;
-        if (set.getPuid() == null || "".equals(set.getPuid())) {
-            set.setPuid(UUIDHelper.generateUpperUid());
-        }
-        /*try {
-
-            set.setpColorEffectedDate(DateStringHelper.stringToDate2(set.getStrColorEffectedDate()));
-            if (set.getpColorAbolishDate() == null) {
-                set.setpColorAbolishDate(new Date());
-            }
-            if (set.getpColorEffectedDate().after(set.getpColorAbolishDate())) {
-                set.setpColorStatus(0);
-            } else {
-                set.setpColorStatus(1);
-            }
-        } catch (ParseException e) {
-            e.printStackTrace();
-            logger.error("从字符串解析时间失败", e);
-        }*/
-        //生效时间由审核完成只有更新
-        set.setpColorModifyDate(now);
-        //失效时间设置为9999
-        set.setpColorAbolishDate(DateStringHelper.forever());
-        //创建时间由数据库默认值定义
-        //  set.setpColorCreateDate(now);
-        set.setpColorModifier(user.getUserName());
-        set.setpColorStatus(0);
-
-        while (true) {
-            if (colorSerService.getById(set) == null) {
-                resultFromDB = colorSerService.doAddOne(set);
-                break;
-            } else {
-                set.setPuid(UUIDHelper.generateUpperUid());
-            }
-        }
-        if (resultFromDB) {
-            result.put("status", resultFromDB);
-            result.put("msg", "添加颜色信息:" + set.getpColorName() + "成功");
         } else {
-            result.put("status", resultFromDB);
-            result.put("msg", "添加颜色信息:" + set.getpColorName() + "失败,请联系系统管理员");
+            result.put("status", false);
+            result.put("msg", "颜色库修改失败");
         }
         return result;
     }
@@ -427,4 +339,96 @@ public class HzCfg0ColorSetController {
         }
         return result;
     }
+
+    /**********************************************废除方法****************************************/
+    /**
+     * 更新颜色对象，该方法已废除，因为无法更新油漆物料号在颜色对象上
+     *
+     * @param set 颜色对象
+     * @return
+     */
+    @Deprecated
+    @RequestMapping(value = "/updateWithEntity", method = RequestMethod.POST)
+    @ResponseBody
+    public Boolean update(@RequestBody HzCfg0ColorSet set) {
+        Date now = new Date();
+        User user = UserInfo.getUser();
+        /*try
+        {
+            set.setpColorAbolishDate(DateStringHelper.stringToDate2(set.getStrColorAbolishDate()));
+            set.setpColorEffectedDate(DateStringHelper.stringToDate2(set.getStrColorEffectedDate()));
+        } catch (ParseException e) {
+            e.printStackTrace();
+            logger.error("从字符串解析时间失败", e);
+        }
+        if (now.before(set.getpColorAbolishDate())) {
+            set.setpColorStatus(1);
+        } else {
+            set.setpColorStatus(0);
+        }*/
+        set.setpColorModifier(user.getUserName());
+        set.setpColorModifyDate(now);
+        return colorSerService.doUpdate(set);
+    }
+
+    /**
+     * 添加一个颜色信息，需要油漆物料号，该方法已废除
+     *
+     * @param set 颜色对象
+     * @return 添加成功与否标志和消息
+     */
+    @Deprecated
+    @RequestMapping(value = "/add", method = RequestMethod.POST)
+    @ResponseBody
+    public JSONObject add(@RequestBody HzCfg0ColorSet set) {
+        JSONObject result = new JSONObject();
+        Date now = new Date();
+        User user = UserInfo.getUser();
+        boolean resultFromDB;
+        if (set.getPuid() == null || "".equals(set.getPuid())) {
+            set.setPuid(UUIDHelper.generateUpperUid());
+        }
+        /*try {
+
+            set.setpColorEffectedDate(DateStringHelper.stringToDate2(set.getStrColorEffectedDate()));
+            if (set.getpColorAbolishDate() == null) {
+                set.setpColorAbolishDate(new Date());
+            }
+            if (set.getpColorEffectedDate().after(set.getpColorAbolishDate())) {
+                set.setpColorStatus(0);
+            } else {
+                set.setpColorStatus(1);
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+            logger.error("从字符串解析时间失败", e);
+        }*/
+        //生效时间由审核完成只有更新
+        set.setpColorModifyDate(now);
+        //失效时间设置为9999
+        set.setpColorAbolishDate(DateStringHelper.forever());
+        //创建时间由数据库默认值定义
+        //  set.setpColorCreateDate(now);
+        set.setpColorModifier(user.getUserName());
+        set.setpColorStatus(0);
+
+        while (true) {
+            if (colorSerService.getById(set) == null) {
+                resultFromDB = colorSerService.doAddOne(set);
+                break;
+            } else {
+                set.setPuid(UUIDHelper.generateUpperUid());
+            }
+        }
+        if (resultFromDB) {
+            result.put("status", resultFromDB);
+            result.put("msg", "添加颜色信息:" + set.getpColorName() + "成功");
+        } else {
+            result.put("status", resultFromDB);
+            result.put("msg", "添加颜色信息:" + set.getpColorName() + "失败,请联系系统管理员");
+        }
+        return result;
+    }
+    /**********************************************废除方法****************************************/
+
 }

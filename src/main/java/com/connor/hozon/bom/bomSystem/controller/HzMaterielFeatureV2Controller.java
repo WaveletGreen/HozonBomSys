@@ -315,8 +315,8 @@ public class HzMaterielFeatureV2Controller extends ExtraIntegrate {
     public JSONObject saveModelBasic(
             @RequestParam String projectUid,
             @RequestParam String superMateriel,
-            @RequestBody HzCfg0ModelFeature modelFeature
-    ) {
+            @RequestBody HzCfg0ModelFeature modelFeature)
+    {
         JSONObject _result = new JSONObject();
         Date now = new Date();
         User user = UserInfo.getUser();
@@ -395,6 +395,7 @@ public class HzMaterielFeatureV2Controller extends ExtraIntegrate {
     }
 
 
+    /**********************************************废除方法****************************************/
     /**
      * 修改超级物料特性，已废除，不再使用
      *
@@ -554,5 +555,7 @@ public class HzMaterielFeatureV2Controller extends ExtraIntegrate {
         addToModel(object, model);
         return "stage/templateOfIntegrate";
     }
+    /**********************************************废除方法****************************************/
+
 
 }
