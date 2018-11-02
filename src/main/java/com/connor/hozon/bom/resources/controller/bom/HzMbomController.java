@@ -52,6 +52,7 @@ public class HzMbomController extends BaseController {
     HzSingleVehiclesServices hzSingleVehiclesServices;
     @Autowired
     HzPbomRecordDAO hzPbomRecordDAO;
+    LinkedHashMap<String, String> tableTitle = new LinkedHashMap<>();
     /**
      * MBOM管理标题
      *
@@ -59,7 +60,7 @@ public class HzMbomController extends BaseController {
      */
     @RequestMapping(value = "manage/title", method = RequestMethod.GET)
     public void mbomTitle(HttpServletResponse response) {
-        LinkedHashMap<String, String> tableTitle = new LinkedHashMap<>();
+        //LinkedHashMap<String, String> tableTitle = new LinkedHashMap<>();
         tableTitle.put("No", "序号");
         tableTitle.put("lineId", "零件号");
         tableTitle.put("pBomLinePartName", "名称");
@@ -273,17 +274,24 @@ public class HzMbomController extends BaseController {
     @RequestMapping(value = "excelExport",method = RequestMethod.POST)
     @ResponseBody
     public JSONObject listDownLoad(
-            @RequestBody  List<HzMbomRecordRespDTO> dtos,HttpServletRequest request
-    ) {
+            @RequestBody  List<HzMbomRecordRespDTO> dtos
+    ,HttpServletRequest request) {
         boolean flag=true;
         JSONObject result=new JSONObject();
         try {
             String fileName = "tableExport.xlsx";//文件名-tableExport
-            String[] title = {
+            //表头
+            Object[] temp = tableTitle.values().toArray();
+
+            String[] title = new String[temp.length];
+            for(int i=0;i<temp.length;i++){
+                title[i] = temp[i].toString();
+            }
+            /*String[] title = {
                     "序号","零件号" ,"名称","层级" ,"专业" ,"查找编号" ,"LOU/LOA","零件分类","零部件来源",
                     "备件","备件编号","工艺路线","人工工时","节拍","焊点","机物料","标准件","工具","废品",
                     "变更","变更号","工厂代码","发货料库存地点","BOM类型"
-            };//表头
+            };*/
             //当前页的数据
             List<String[]> dataList = new ArrayList<String[]>();
             int index=1;
@@ -294,8 +302,8 @@ public class HzMbomController extends BaseController {
                 cellArr[1] = ebomRespDTO.getLineId();
                 cellArr[2] = ebomRespDTO.getpBomLinePartName();
                 cellArr[3] = ebomRespDTO.getLevel();
-                cellArr[4] = ebomRespDTO.getpBomOfWhichDept();
-                cellArr[5] = ebomRespDTO.getLineNo();
+                cellArr[4] = ebomRespDTO.getRank();
+                cellArr[5] = ebomRespDTO.getpBomOfWhichDept();
                 cellArr[6] = ebomRespDTO.getpLouaFlag();
                 cellArr[7] = ebomRespDTO.getpBomLinePartClass();
                 cellArr[8] = ebomRespDTO.getpBomLinePartResource();
@@ -322,7 +330,7 @@ public class HzMbomController extends BaseController {
                 LOG.info(fileName+",文件创建成功");
                 result.put("status",flag);
                 result.put("msg","成功");
-                result.put("path","./files/"+fileName);
+                result.put("path","./files/tableExport.xlsx");
             }else{
                 LOG.info(fileName+",文件创建失败");
                 result.put("status",flag);

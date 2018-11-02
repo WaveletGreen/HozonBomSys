@@ -5,6 +5,7 @@ import com.connor.hozon.bom.resources.domain.dto.request.DeleteHzPbomReqDTO;
 import com.connor.hozon.bom.resources.domain.query.HzBomRecycleByPageQuery;
 import com.connor.hozon.bom.resources.domain.query.HzPbomByPageQuery;
 import com.connor.hozon.bom.resources.domain.query.HzPbomTreeQuery;
+import com.connor.hozon.bom.resources.enumtype.MbomTableNameEnum;
 import com.connor.hozon.bom.resources.mybatis.bom.HzPbomRecordDAO;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.page.PageRequestParam;
@@ -30,6 +31,11 @@ public class HzPbomRecordDAOImpl extends BaseSQLUtil implements HzPbomRecordDAO 
     }
 
     @Override
+    public List<HzPbomLineRecord> getPbomById_before(Map<String, Object> map) {
+        return super.findForList("HzPbomRecordDAOImpl_getPbomById_before",map);
+    }
+
+    @Override
     public List<HzPbomLineRecord> findPbomByItemId(String itemId,String projectId){
         Map<String,Object> map = new HashMap<>();
         map.put("puid",itemId);
@@ -45,6 +51,31 @@ public class HzPbomRecordDAOImpl extends BaseSQLUtil implements HzPbomRecordDAO 
     @Override
     public int insert2(HzPbomLineRecord record){
         return super.insert("HzPbomRecordDAOImpl_insert2",record);
+    }
+
+    @Override
+    public int insert_before(HzPbomLineRecord record) {
+        return super.insert("HzPbomRecordDAOImpl_insert_before",record);
+    }
+
+    @Override
+    public int update_before(HzPbomLineRecord record) {
+        return super.update("HzPbomRecordDAOImpl_update_before",record);
+    }
+
+    @Override
+    public List<HzPbomLineRecord> getPbomById_after(Map<String, Object> map) {
+        return super.findForList("HzPbomRecordDAOImpl_getPbomById_after",map);
+    }
+
+    @Override
+    public int insert_after(HzPbomLineRecord record) {
+        return super.insert("HzPbomRecordDAOImpl_insert_after",record);
+    }
+
+    @Override
+    public int update_after(HzPbomLineRecord record) {
+        return super.update("HzPbomRecordDAOImpl_update_after",record);
     }
 
     @Override

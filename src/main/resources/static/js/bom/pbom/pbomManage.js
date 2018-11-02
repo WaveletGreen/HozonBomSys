@@ -428,6 +428,54 @@ function initTable(pBomUrl) {
                         handler: function () {
                             window.Ewin.dialog({title: "导入", url: "pbom/importExcel", width: 600, height: 500})
                         }
+                    },
+                    {
+                        text: '发起流程',
+                        iconCls: 'glyphicon glyphicon-log-out',
+                        handler: function () {
+                            var rows = $table.bootstrapTable('getSelections');
+                            var puids = "";
+                            for (var i = 0; i < rows.length; i++) {
+                                puids += rows[i].puid + ",";
+                            };
+                            var myData = JSON.stringify({
+                                "projectId": $("#project", window.top.document).val(),
+                                "puids": puids,
+                            });
+                            if (rows.length == 0) {
+                                window.Ewin.alert({message: '请选择一条需要变更的数据!'});
+                                return false;
+                            }
+                            // else {
+                            //     for (var i = 0; i < rows.length; i++) {
+                            //         if (rows[i].status != 4 && rows[i].status != 2) {
+                            //             window.Ewin.alert({message: '请选择状态为草稿状态或删除状态的数据!'});
+                            //             return false;
+                            //         }
+                            //     }
+                            // }
+                            $.ajax({
+                                type: "POST",
+                                // ajax需要添加打包名
+                                url: "mwo/initiating/process",//?
+                                data: myData,
+                                contentType: "application/json",
+                                success: function (result) {
+                                    if (result.success) {
+                                        layer.msg('发起流程成功', {icon: 1, time: 2000})
+                                    } else if (!result.success) {
+                                        window.Ewin.alert({message: result.errMsg});
+                                    }
+                                    $table.bootstrapTable("refresh");
+                                },
+                                error: function (info) {
+                                    window.Ewin.alert({message: ":" + info.status});
+                                }
+                            })
+                        }
+                    },
+                    {
+
                     }
                 ],
             });

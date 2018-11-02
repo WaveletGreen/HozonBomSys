@@ -40,6 +40,20 @@ public interface HzPbomRecordDAO {
      */
     int insert2(HzPbomLineRecord record);
 
+    /**
+     * 获取pbom_before信息 根据项目id puid或者零件号
+     */
+    List<HzPbomLineRecord> getPbomById_before(Map<String,Object> map);
+
+    int insert_before(HzPbomLineRecord record);
+
+    int update_before(HzPbomLineRecord record);
+
+    List<HzPbomLineRecord> getPbomById_after(Map<String,Object> map);
+
+    int insert_after(HzPbomLineRecord record);
+
+    int update_after(HzPbomLineRecord record);
 
     int insertList(List<HzPbomLineRecord> records);
     /**
@@ -153,4 +167,6 @@ public interface HzPbomRecordDAO {
      * @return
      */
     Page<HzPbomLineRecord> getPbomTreeByPage(HzPbomByPageQuery query);
+
+
 }

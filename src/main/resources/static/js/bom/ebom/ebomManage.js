@@ -1,4 +1,4 @@
-var eBomTitleSet=52;
+var eBomTitleSet=52;//50个属性+勾选框列和序号列
 $(document).ready((function () {
     var projectPuid = $("#project", window.top.document).val();
     var eBomUrl = "ebom/getEBom/list?projectId=" + projectPuid;
@@ -45,7 +45,10 @@ function initTable(eBomUrl) {
         type: "GET",
         success: function (result) {
             var column = [];
+            // column.push({field: 'eBomPuid', title: 'puid'});
             column.push({field: 'ck', checkbox: true});
+            // column.push({field: 'puid', title: '主键'});
+
             /* var data = result.data;
              var nameZh = data[0];
              var nameEn = data[1];
@@ -478,10 +481,7 @@ function initTable(eBomUrl) {
                         text: '导出Excel',
                         iconCls: 'glyphicon glyphicon-export',
                         handler: function () {
-                            //var headers = data;//表头
                             var rows = $table.bootstrapTable('getSelections');//选中行数据
-                            let length=-1;
-                            // var str = rows[0].title;
                             if (rows.length == 0) {
                                 window.Ewin.alert({message: '请选择一条需要导出的数据!'});
                                 return false;
@@ -494,8 +494,10 @@ function initTable(eBomUrl) {
                                 }
                                 length==getLengthOfJson(rows[0]);
                             }
+                            //动态获取单车配置用量数据
                             for(let k in rows){
                                let param={};
+
                                 for(let i =0;i<length-eBomTitleSet;i++){
                                     param[('title'+i)]=rows[k][('title'+i)];
                                 }
@@ -528,8 +530,11 @@ function initTable(eBomUrl) {
                             });
                         }
                     },
+
                 ],
             });
+            //$table.bootstrapTable('hideColumn','puid');
+            // $table.bootstrapTable('hideColumn', 'puid');
             $table.bootstrapTable('hideColumn', 'groupNum');
             $table.bootstrapTable('hideColumn', 'rank');
         }
@@ -970,23 +975,6 @@ function initTable1(eBomUrl,puids) {
                             }
                         }
                     },
-                    // {
-                    //     text: '导出Excel',
-                    //     iconCls: 'glyphicon glyphicon-export',
-                    //     handler: function () {
-                    //         var userName = data;//表头
-                    //         var className = $table.bootstrapTable('getData');//返回当前页的数据
-                    //         var param = "userName=" + userName + "&className=" + className;
-                    //
-                    //         var projectPuid = $("#project", window.top.document).val();
-                    //         //var eBomUrl = "ebom/getEBom/list?projectId=" + projectPuid;
-                    //
-                    //         var url = "ebom/excelExport?projectId=" + projectPuid;
-                    //         window.location = url;
-                    //
-                    //     }
-                    // },
-
                     {
                         text: '导出Excel',
                         iconCls: 'glyphicon glyphicon-export',
@@ -1005,12 +993,12 @@ function initTable1(eBomUrl,puids) {
                                         return false;
                                     }
                                 }
-                                length==getLengthOfJson(rows[0]);
                             }
                             for(let k in rows){
-                                let param={};
-                                for(let i =0;i<length-eBomTitleSet;i++){
-                                    param[('title'+i)]=rows[k][('title'+i)];
+                                let param ={};
+                                let length = getLengthOfJson(rows[k]);
+                                for(let i=0; i<length-eBomTitleSet; i++){
+                                    param[('title'+i)] = rows[k][('title'+i)];
                                 }
                                 rows[k].map=param;
                             }
@@ -1039,9 +1027,8 @@ function initTable1(eBomUrl,puids) {
                                     })
                                 }
                             });
-
                         }
-                    },
+                    }
                 ],
             });
             $table.bootstrapTable('hideColumn', 'groupNum');

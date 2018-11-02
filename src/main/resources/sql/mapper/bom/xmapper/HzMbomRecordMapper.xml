@@ -11,7 +11,7 @@
         <result column="P_LABOR_HOUR" jdbcType="VARCHAR" property="laborHour"/>
         <result column="P_RHYTHM" jdbcType="VARCHAR" property="rhythm"/>
         <result column="P_SOLDER_JOINT" jdbcType="VARCHAR" property="solderJoint"/>
-        <result column="P_MACHINE_MATERIAL" jdbcType="VARCHAR" property="machineMaterial"/>
+        <result column="P_MACHINE_MATERITAL" jdbcType="VARCHAR" property="machineMaterial"/>
         <result column="P_STANDARD_PART" jdbcType="VARCHAR" property="standardPart"/>
         <result column="P_TOOLS" jdbcType="VARCHAR" property="tools"/>
         <result column="P_WASTER_PRODUCT" jdbcType="VARCHAR" property="wasterProduct"/>
@@ -59,6 +59,7 @@
         <result column="P_CFG0_MODEL_BASIC_DETAIL" jdbcType="VARCHAR" property="cfg0ModelBasicDetail"/>
 
         <result column="P_FACTORY_CODE" jdbcType="VARCHAR" property="factoryCode" />
+        <result column="P_MWO_NO" jdbcType="VARCHAR" property="mwoNo"/>
     </resultMap>
 
 
@@ -203,6 +204,55 @@
         </where>
 </select>
 
+    <select id="HzMbomRecordDAOImpl_findHzMbomByPuid_before" resultMap="MbomResultMap" parameterType="java.util.HashMap">
+        select t.* from  HZ_MBOM_REOCRD_BEFORE_CHANGE t
+        where t.p_bom_digifax_id=(
+        select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(
+        select t2.puid from Hz_project_libs t2
+        <where>
+            1=1
+            <if test="projectId != null and  projectId!='' ">
+                and t2.puid=#{projectId,jdbcType=VARCHAR}))
+            </if>
+            <if test="lineId != null and  lineId!='' ">
+                and t.P_BOM_LINE_ID = #{lineId,jdbcType=VARCHAR}
+            </if>
+            <if test="pPuid != null and  pPuid!='' ">
+                and t.P_BOM_PUID = #{pPuid,jdbcType=VARCHAR}
+            </if>
+            <if test="status != null ">
+                and t.P_MBOM_STATUS = #{status,jdbcType=INTEGER}
+            </if>
+            <if test="status == null  ">
+                and t.P_MBOM_STATUS <![CDATA[ <> ]]>0
+            </if>
+        </where>
+    </select>
+
+    <select id="HzMbomRecordDAOImpl_findHzMbomByPuid_after" resultMap="MbomResultMap" parameterType="java.util.HashMap">
+        select t.* from  HZ_MBOM_REOCRD_AFTER_CHANGE t
+        where t.p_bom_digifax_id=(
+        select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(
+        select t2.puid from Hz_project_libs t2
+        <where>
+            1=1
+            <if test="projectId != null and  projectId!='' ">
+                and t2.puid=#{projectId,jdbcType=VARCHAR}))
+            </if>
+            <if test="lineId != null and  lineId!='' ">
+                and t.P_BOM_LINE_ID = #{lineId,jdbcType=VARCHAR}
+            </if>
+            <if test="pPuid != null and  pPuid!='' ">
+                and t.P_BOM_PUID = #{pPuid,jdbcType=VARCHAR}
+            </if>
+            <if test="status != null ">
+                and t.P_MBOM_STATUS = #{status,jdbcType=INTEGER}
+            </if>
+            <if test="status == null  ">
+                and t.P_MBOM_STATUS <![CDATA[ <> ]]>0
+            </if>
+        </where>
+    </select>
 
     <!--批量插入 同步EBOM数据-->
     <insert id="HzMbomRecordDAOImpl_insertList" useGeneratedKeys="false" parameterType="java.util.List">
@@ -368,6 +418,168 @@
             </if>
         </trim>
     </insert>
+
+    <insert id="HzMbomRecordDAOImpl_insert_before" parameterType="sql.pojo.bom.HzMbomRecord">
+        insert into HZ_MBOM_REOCRD_BEFORE_CHANGE
+        (
+        PUID,P_SPARE_PART,P_SPARE_PART_NUM,P_PROCESS_ROUTE,P_LABOR_HOUR,P_RHYTHM,P_SOLDER_JOINT,
+        P_MACHINE_MATERITAL,P_STANDARD_PART,P_TOOLS,P_WASTER_PRODUCT,P_CHANGE,P_CHANGE_NUM,
+        P_BOM_PUID,P_MBOM_STATUS,P_CREATE_TIME,P_UPDATE_TIME,P_CREATE_NAME,P_UPDATE_NAME,P_PARENT_UID,
+        P_BOM_DIGIFAX_ID,P_LINE_INDEX,P_BOM_LINE_IS_HAS,P_BOM_LINE_PUID,P_BOM_LINE_ID,P_BOM_LINE_IS_2Y,
+        P_BOM_LINE_IS_PART,P_BOM_LINE_IS_DEPT,P_BOM_OF_WHICH_DEPT,P_BOM_LINE_PART_NAME,P_BOM_LINE_PART_CLASS,
+        P_BOM_LINE_PART_EN_NAME,P_BOM_LINE_PART_RESOURCE,P_BOM_TYPE,P_STOCK_LOCATION,P_FACTORY_ID,
+        P_MWO_NO
+        )values (
+        #{puid,jdbcType=VARCHAR},#{sparePart,jdbcType=VARCHAR},#{sparePartNum,jdbcType=VARCHAR},
+        #{processRoute,jdbcType=VARCHAR},#{laborHour,jdbcType=VARCHAR},#{rhythm,jdbcType=VARCHAR},
+        #{solderJoint,jdbcType=VARCHAR},#{machineMaterial,jdbcType=VARCHAR},#{standardPart,jdbcType=VARCHAR},
+        #{tools,jdbcType=VARCHAR},#{wasterProduct,jdbcType=VARCHAR},#{change,jdbcType=VARCHAR},
+        #{changeNum,jdbcType=VARCHAR},#{eBomPuid,jdbcType=VARCHAR},#{status,jdbcType=VARCHAR},
+        #{createTime,jdbcType=DATE},#{updateTime,jdbcType=DATE},#{createName,jdbcType=VARCHAR},
+        #{updateName,jdbcType=VARCHAR},#{parentUid,jdbcType=VARCHAR},#{bomDigifaxId,jdbcType=VARCHAR},
+        #{lineIndex,jdbcType=VARCHAR},#{isHas,jdbcType=INTEGER},#{linePuid,jdbcType=VARCHAR},
+        #{lineId,jdbcType=VARCHAR},#{is2Y,jdbcType=INTEGER},#{isPart,jdbcType=INTEGER},
+        #{isDept,jdbcType=INTEGER},#{pBomOfWhichDept,jdbcType=VARCHAR},#{pBomLinePartName,jdbcType=VARCHAR},
+        #{pBomLinePartClass,jdbcType=VARCHAR},#{pBomLinePartEnName,jdbcType=VARCHAR},#{pBomLinePartResource,jdbcType=VARCHAR},
+        #{pBomType,jdbcType=INTEGER},#{pStockLocation,jdbcType=VARCHAR},#{pFactoryId,jdbcType=VARCHAR},
+        #{mwoNo,jdbcType=VARCHAR}
+      )
+    </insert>
+
+    <insert id="HzMbomRecordDAOImpl_insert_after" parameterType="sql.pojo.bom.HzMbomRecord">
+        insert into HZ_MBOM_REOCRD_AFTER_CHANGE
+        (
+        PUID,P_SPARE_PART,P_SPARE_PART_NUM,P_PROCESS_ROUTE,P_LABOR_HOUR,P_RHYTHM,P_SOLDER_JOINT,
+        P_MACHINE_MATERITAL,P_STANDARD_PART,P_TOOLS,P_WASTER_PRODUCT,P_CHANGE,P_CHANGE_NUM,
+        P_BOM_PUID,P_MBOM_STATUS,P_CREATE_TIME,P_UPDATE_TIME,P_CREATE_NAME,P_UPDATE_NAME,P_PARENT_UID,
+        P_BOM_DIGIFAX_ID,P_LINE_INDEX,P_BOM_LINE_IS_HAS,P_BOM_LINE_PUID,P_BOM_LINE_ID,P_BOM_LINE_IS_2Y,
+        P_BOM_LINE_IS_PART,P_BOM_LINE_IS_DEPT,P_BOM_OF_WHICH_DEPT,P_BOM_LINE_PART_NAME,P_BOM_LINE_PART_CLASS,
+        P_BOM_LINE_PART_EN_NAME,P_BOM_LINE_PART_RESOURCE,P_BOM_TYPE,P_STOCK_LOCATION,P_FACTORY_ID,
+        P_MWO_NO
+        )values (
+        #{puid,jdbcType=VARCHAR},#{sparePart,jdbcType=VARCHAR},#{sparePartNum,jdbcType=VARCHAR},
+        #{processRoute,jdbcType=VARCHAR},#{laborHour,jdbcType=VARCHAR},#{rhythm,jdbcType=VARCHAR},
+        #{solderJoint,jdbcType=VARCHAR},#{machineMaterial,jdbcType=VARCHAR},#{standardPart,jdbcType=VARCHAR},
+        #{tools,jdbcType=VARCHAR},#{wasterProduct,jdbcType=VARCHAR},#{change,jdbcType=VARCHAR},
+        #{changeNum,jdbcType=VARCHAR},#{eBomPuid,jdbcType=VARCHAR},#{status,jdbcType=VARCHAR},
+        #{createTime,jdbcType=DATE},#{updateTime,jdbcType=DATE},#{createName,jdbcType=VARCHAR},
+        #{updateName,jdbcType=VARCHAR},#{parentUid,jdbcType=VARCHAR},#{bomDigifaxId,jdbcType=VARCHAR},
+        #{lineIndex,jdbcType=VARCHAR},#{isHas,jdbcType=INTEGER},#{linePuid,jdbcType=VARCHAR},
+        #{lineId,jdbcType=VARCHAR},#{is2Y,jdbcType=INTEGER},#{isPart,jdbcType=INTEGER},
+        #{isDept,jdbcType=INTEGER},#{pBomOfWhichDept,jdbcType=VARCHAR},#{pBomLinePartName,jdbcType=VARCHAR},
+        #{pBomLinePartClass,jdbcType=VARCHAR},#{pBomLinePartEnName,jdbcType=VARCHAR},#{pBomLinePartResource,jdbcType=VARCHAR},
+        #{pBomType,jdbcType=INTEGER},#{pStockLocation,jdbcType=VARCHAR},#{pFactoryId,jdbcType=VARCHAR},
+        #{mwoNo,jdbcType=VARCHAR}
+      )
+    </insert>
+
+    <update id="HzMbomRecordDAOImpl_update_before" parameterType="sql.pojo.bom.HzMbomLineRecord">
+        update HZ_MBOM_REOCRD_BEFORE_CHANGE
+        <set>
+            <if test="sparePart != null">
+                P_SPARE_PART = #{sparePart,jdbcType=VARCHAR},
+            </if>
+            <if test="sparePartNum != null">
+                P_SPARE_PART_NUM = #{sparePartNum,jdbcType=VARCHAR},
+            </if>
+            <if test="processRoute != null">
+                P_PROCESS_ROUTE = #{processRoute,jdbcType=VARCHAR},
+            </if>
+            <if test="laborHour != null">
+                P_LABOR_HOUR = #{laborHour,jdbcType=VARCHAR},
+            </if>
+            <if test="rhythm != null">
+                P_RHYTHM = #{rhythm,jdbcType=VARCHAR},
+            </if>
+            <if test="solderJoint != null">
+                P_SOLDER_JOINT = #{solderJoint,jdbcType=VARCHAR},
+            </if>
+            <if test="machineMaterial != null">
+                P_MACHINE_MATERITAL = #{machineMaterial,jdbcType=VARCHAR},
+            </if>
+            <if test="standardPart != null">
+                P_STANDARD_PART = #{standardPart,jdbcType=VARCHAR},
+            </if>
+            <if test="tools != null">
+                P_TOOLS = #{tools,jdbcType=VARCHAR},
+            </if>
+            <if test="wasterProduct != null">
+                P_WASTER_PRODUCT = #{wasterProduct,jdbcType=VARCHAR},
+            </if>
+            <if test="change != null">
+                P_CHANGE = #{change,jdbcType=VARCHAR},
+            </if>
+            <if test="changeNum != null">
+                P_CHANGE_NUM = #{changeNum,jdbcType=VARCHAR},
+            </if>
+            <if test="pBomType != null">
+                P_BOM_TYPE = #{pBomType,jdbcType=INTEGER},
+            </if>
+            <if test="pStockLocation != null">
+                P_STOCK_LOCATION = #{pStockLocation,jdbcType=VARCHAR},
+            </if>
+            <if test="pFactoryId != null">
+                P_FACTORY_ID = #{pFactoryId,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where P_BOM_LINE_ID = #{lineId,jdbcType=VARCHAR}
+        and P_BOM_DIGIFAX_ID = #{bomDigifaxId,jdbcType=VARCHAR}
+        and (P_MBOM_STATUS <![CDATA[ <> ]]>5 and P_MBOM_STATUS <![CDATA[ <> ]]>6)
+    </update>
+
+    <update id="HzMbomRecordDAOImpl_update_after" parameterType="sql.pojo.bom.HzMbomLineRecord">
+        update HZ_MBOM_REOCRD_AFTER_CHANGE
+        <set>
+            <if test="sparePart != null">
+                P_SPARE_PART = #{sparePart,jdbcType=VARCHAR},
+            </if>
+            <if test="sparePartNum != null">
+                P_SPARE_PART_NUM = #{sparePartNum,jdbcType=VARCHAR},
+            </if>
+            <if test="processRoute != null">
+                P_PROCESS_ROUTE = #{processRoute,jdbcType=VARCHAR},
+            </if>
+            <if test="laborHour != null">
+                P_LABOR_HOUR = #{laborHour,jdbcType=VARCHAR},
+            </if>
+            <if test="rhythm != null">
+                P_RHYTHM = #{rhythm,jdbcType=VARCHAR},
+            </if>
+            <if test="solderJoint != null">
+                P_SOLDER_JOINT = #{solderJoint,jdbcType=VARCHAR},
+            </if>
+            <if test="machineMaterial != null">
+                P_MACHINE_MATERITAL = #{machineMaterial,jdbcType=VARCHAR},
+            </if>
+            <if test="standardPart != null">
+                P_STANDARD_PART = #{standardPart,jdbcType=VARCHAR},
+            </if>
+            <if test="tools != null">
+                P_TOOLS = #{tools,jdbcType=VARCHAR},
+            </if>
+            <if test="wasterProduct != null">
+                P_WASTER_PRODUCT = #{wasterProduct,jdbcType=VARCHAR},
+            </if>
+            <if test="change != null">
+                P_CHANGE = #{change,jdbcType=VARCHAR},
+            </if>
+            <if test="changeNum != null">
+                P_CHANGE_NUM = #{changeNum,jdbcType=VARCHAR},
+            </if>
+            <if test="pBomType != null">
+                P_BOM_TYPE = #{pBomType,jdbcType=INTEGER},
+            </if>
+            <if test="pStockLocation != null">
+                P_STOCK_LOCATION = #{pStockLocation,jdbcType=VARCHAR},
+            </if>
+            <if test="pFactoryId != null">
+                P_FACTORY_ID = #{pFactoryId,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where P_BOM_LINE_ID = #{lineId,jdbcType=VARCHAR}
+        and P_BOM_DIGIFAX_ID = #{bomDigifaxId,jdbcType=VARCHAR}
+        and (P_MBOM_STATUS <![CDATA[ <> ]]>5 and P_MBOM_STATUS <![CDATA[ <> ]]>6)
+    </update>
 
     <!--导入更新数据-->
     <update id="HzMbomRecordDAOImpl_updateInput" parameterType="sql.pojo.bom.HzMbomLineRecord">
