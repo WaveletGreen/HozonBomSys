@@ -493,9 +493,9 @@ function initTable(pBomUrl) {
                             })
                         }
                     },
-                    {
-
-                    }
+                    // {
+                    //
+                    // }
                 ],
             });
             // $table.bootstrapTable('hideColumn', 'eBomPuid');
