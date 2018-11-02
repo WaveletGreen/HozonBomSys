@@ -4,6 +4,9 @@ package com.connor.hozon.bom.sys.controller;
 import com.connor.hozon.bom.common.base.constant.SystemStaticConst;
 import com.connor.hozon.bom.common.base.controller.GenericController;
 import com.connor.hozon.bom.common.base.service.GenericService;
+import com.connor.hozon.bom.common.util.json.JsonHelper;
+import com.connor.hozon.bom.resources.util.ListUtil;
+import com.connor.hozon.bom.resources.util.StringUtil;
 import com.connor.hozon.bom.sys.entity.QueryUserRole;
 import com.connor.hozon.bom.sys.entity.Tree;
 import com.connor.hozon.bom.sys.entity.UserRole;
@@ -18,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.inject.Inject;
+import java.lang.reflect.ParameterizedType;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -69,7 +73,41 @@ public class RoleController extends GenericController<UserRole,QueryUserRole> {
         result.put("data",treeMapper.treesToTressDTOs(treeList));
         return result;
     }
-    
-    
+
+    /**
+     * 功能描述：实现批量删除数据字典的记录
+     * @param json
+     * @return
+     */
+    @RequestMapping(value = "/removeBath",method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public Map<String,Object> removeBath(String json) throws Exception{
+        Map<String,Object> result = new HashMap<String, Object>();
+        com.alibaba.fastjson.JSONArray array = com.alibaba.fastjson.JSONObject.parseArray(json);
+        String id = "";
+        for(int i=0;i<array.size();i++){
+            com.alibaba.fastjson.JSONObject object = array.getJSONObject(i);
+            if(object.containsKey("id")){
+                id = object.getString("id");
+                break;
+            }
+        }
+        if(StringUtil.isEmpty(id)){
+            result.put(SystemStaticConst.RESULT,SystemStaticConst.FAIL);
+            result.put(SystemStaticConst.MSG,"非法参数！");
+            return result;
+        }
+
+        Integer count = userRoleService.getUserRoleReferenceCount(Long.valueOf(id));
+        if(count!=null){
+            result.put(SystemStaticConst.RESULT,SystemStaticConst.FAIL);
+            result.put(SystemStaticConst.MSG,"当前要删除的权限信息正在被用户所引用,无法删除！");
+            return result;
+        }
+        getService().removeBath((List<UserRole>) JsonHelper.toList(json,(Class <UserRole>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0]));
+        result.put(SystemStaticConst.RESULT,SystemStaticConst.SUCCESS);
+        result.put(SystemStaticConst.MSG,"删除数据成功！");
+        return result;
+    }
 
 }

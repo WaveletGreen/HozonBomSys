@@ -29,6 +29,11 @@
 		WHERE ur.id=#{id}
 	</select>
 
+	<!--删除角色信息时查询引用关系数量-->
+	<select id="getUserRoleReferenceCount" resultType="java.lang.Integer">
+		SELECT count(id) from user_role t1  INNER JOIN user_associate_role t2  WHERE t1.id = t2.role_id and t1.id = #{id};
+	</select>
+
 	<!--根据主键获取对象-->
 	<select id="get" parameterType="com.connor.hozon.bom.sys.entity.UserRole" resultMap="UserRoleTreeMap">
 		SELECT ur.* FROM user_role ur WHERE ur.id=#{id}

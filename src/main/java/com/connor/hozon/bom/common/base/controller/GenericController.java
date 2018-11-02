@@ -151,7 +151,7 @@ public abstract class GenericController<T, Q extends QueryBase> {
 		return result;
 	}
 
-	/**88
+	/**
 	 * 功能描述：获取数据字典的分页的数据
 	 * @param entity
 	 * @return

@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 /**
  * @author linzf
  **/
@@ -44,5 +46,14 @@ public class OrgGroupService extends GenericService<OrgGroup, QueryOrgGroup> {
 	 */
 	public OrgGroup findByNode(String node) {
 		return orgGroupDao.findByNode(node);
+	}
+
+	/**
+	 * 查询部门下面的人员数量
+	 * @param id
+	 * @return
+	 */
+	public Integer findOrgGroupUserCount(Long id){
+		return orgGroupDao.queryOrgGroupUserCount(id);
 	}
 }
