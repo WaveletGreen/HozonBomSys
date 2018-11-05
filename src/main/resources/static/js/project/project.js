@@ -49,7 +49,7 @@ $(document).ready(
                             break;
                         }
                     }
-                    console.log("加载项目成功");
+                    // console.log("加载项目成功");
                 }
                 if (auth) {
                     $("#fastOption").removeAttr("hidden");
