@@ -6,10 +6,12 @@ import com.connor.hozon.bom.sys.entity.QueryRoleAssociateTree;
 import com.connor.hozon.bom.sys.entity.RoleAssociateTree;
 import com.connor.hozon.bom.sys.entity.Tree;
 import com.connor.hozon.bom.sys.entity.UserRole;
+import org.springframework.stereotype.Service;
 
 /**
  *@author linzf
  **/
+@Service("roleAssociateTreeDao")
 public interface RoleAssociateTreeDao extends GenericDao<RoleAssociateTree, QueryRoleAssociateTree> {
 
     /**

@@ -91,4 +91,13 @@ public class UserRoleService extends GenericService<UserRole, QueryUserRole> {
 		}
 		return super.update(entity);
 	}
+
+	public boolean saveRoleWritePrivilege(UserRole userRole) {
+		try {
+			return super.update(userRole);
+		}catch (Exception e){
+			e.printStackTrace();
+			return false;
+		}
+	}
 }

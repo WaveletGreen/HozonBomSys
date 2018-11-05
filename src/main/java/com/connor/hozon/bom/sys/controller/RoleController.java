@@ -16,6 +16,7 @@ import com.connor.hozon.bom.sys.service.UserRoleService;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -110,4 +111,44 @@ public class RoleController extends GenericController<UserRole,QueryUserRole> {
         return result;
     }
 
+
+
+    /**
+     * 功能描述：跳转到开通用户写权限页面
+     * @param entity
+     * @param model
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "/writePrivilege",method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_VALUE)
+    public String openWritePrivilege(UserRole entity, Model model) throws Exception {
+        entity = getService().get(entity);
+        model.addAttribute("entity",entity);
+        String path=getPageBaseRoot()+"/writePrivilege";
+        return path;
+    }
+
+
+
+    /**
+     * 功能描述:保存用户权限信息
+     * @param entity
+     * @return
+     */
+    @RequestMapping(value = "/savePrivilege",method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public Map<String,Object> saveWritePrivilege(UserRole entity){
+        boolean success  = userRoleService.saveRoleWritePrivilege(entity);
+        Map<String,Object> result = new HashMap<String, Object>();
+
+        if(success){
+            result.put(SystemStaticConst.RESULT,SystemStaticConst.SUCCESS);
+            result.put(SystemStaticConst.MSG,"更新数据成功！");
+            result.put("entity",entity);
+        }else{
+            result.put(SystemStaticConst.RESULT,SystemStaticConst.FAIL);
+            result.put(SystemStaticConst.MSG,"更新数据失败！");
+        }
+        return result;
+    }
 }

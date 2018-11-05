@@ -4,12 +4,14 @@ package com.connor.hozon.bom.sys.dao;
 import com.connor.hozon.bom.common.base.dao.GenericDao;
 import com.connor.hozon.bom.sys.entity.QueryUserRole;
 import com.connor.hozon.bom.sys.entity.UserRole;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 /**
  *@author linzf
  **/
+@Service("userRoleDao")
 public interface UserRoleDao extends GenericDao<UserRole, QueryUserRole> {
 
     /**

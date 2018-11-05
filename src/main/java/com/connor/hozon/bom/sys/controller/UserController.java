@@ -259,7 +259,7 @@ public class UserController extends GenericController<User,QueryUser> {
         }
         boolean success  = userService.update(entity);
         Map<String,Object> result = new HashMap<>();
-        if(success==true){
+        if(success){
                 result.put(SystemStaticConst.RESULT,SystemStaticConst.SUCCESS);
             result.put(SystemStaticConst.MSG,"更新数据成功！");
         }else{
@@ -288,7 +288,7 @@ public class UserController extends GenericController<User,QueryUser> {
         }
         boolean success = getService().save(entity);
         Map<String,Object> result = new HashMap<>();
-        if(success==true){
+        if(success){
             result.put(SystemStaticConst.RESULT, SystemStaticConst.SUCCESS);
             result.put(SystemStaticConst.MSG,"增加数据成功！");
         }else{
