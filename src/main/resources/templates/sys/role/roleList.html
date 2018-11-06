@@ -36,8 +36,8 @@
     }
 
     // 开通账号写权限
-    function openWritePrivilege(id){
-        window.Ewin.dialog({title: '开通写权限', url:"role/writePrivilege?id="+id,width:700,height:310});
+    function openEdit(id){
+        window.Ewin.dialog({title: '开通写权限', url:"role/openEdit?id="+id,width:700,height:310});
     }
 
     function initTable(){
@@ -83,14 +83,17 @@
                             return false;
                         }
                         window.Ewin.confirm({title:'提示',message:'是否要删除您所选择的记录？',width:500}).on(function (e) {
+                            console.log(e)
                             if (e) {
                                 $.post("./role/removeBath",{json:JSON.stringify(rows)},function(e){
                                    if(e.result){
                                        // window.Ewin.alert({message:e.msg});
+                                       console.log(e);
                                        layer.msg('删除成功', {icon: 1, time: 2000})
                                        doQuery();
                                    }else {
                                        window.Ewin.alert({message:e.msg});
+
                                    }
                                 });
                             }
@@ -131,12 +134,15 @@
                     // sortable : true
                 },
                 {
-                    field : 'openWritePrivilege',
+                    field : 'openEdit',
                     title : '开通写权限',
                     align : 'center',
                     valign : 'middle',
                     formatter: function (value,row,index) {
-                        return '<a href="#" onclick="openWritePrivilege('+row.id+')" >开通</a>';
+                        if(row.name=='ROLE_ADMIN'){
+                            return '<a>无需开通</a>';
+                        }
+                        return '<a href="#" onclick="openEdit('+row.id+')" >开通</a>';
                     }
                 }
             ]

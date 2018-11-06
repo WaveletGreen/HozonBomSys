@@ -201,7 +201,6 @@
                     align : 'center',
                     valign : 'middle',
                     formatter: function (value, row, index) {
-                        console.log(row)
                         if(row.state=='1'){
                             return '<a href="#" onclick="userControl(0,'+row.id+')" >禁用</a>';
                         }else{

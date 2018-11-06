@@ -15,49 +15,28 @@ import java.io.PrintWriter;
  * Date: 2018/5/22
  */
 public abstract class BaseController {
-
-    protected PrintWriter getPrintWriter(HttpServletResponse response) {
-        if (response == null)
-            return null;
-
+    /**
+     * JSON 格式数据返回
+     * @param obj 返回数据
+     * @param response
+     */
+    protected void toJSONResponse(Object obj,HttpServletResponse response){
+        response.setContentType("application/json;charset=UTF-8");
+        if(response == null){
+            return;
+        }
         PrintWriter writer = null;
         try {
             writer = response.getWriter();
         } catch (Exception e) {
             e.printStackTrace();
-        }
-        return writer;
-    }
-
-    /**
-     * JSON格式数据返回
-     * @param writer
-     */
-    protected void toJSONResponse(Object responseObj, PrintWriter writer) {
-        if (writer == null || responseObj == null)
             return;
-
+        }
         try {
-            writer.write(JSON.toJSONString(responseObj, SerializerFeature.DisableCircularReferenceDetect));
+            writer.write(JSON.toJSONString(obj, SerializerFeature.DisableCircularReferenceDetect));
         } finally {
             writer.flush();
             writer.close();
         }
-    }
-
-    /**
-     * JSON格式数据返回
-     * @param responseObj
-     * @param response
-     */
-    protected void toJSONResponse(Object responseObj, HttpServletResponse response) {
-        response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
-        response.setHeader("Pragma", "no-cache");
-        response.setHeader("Access-Control-Allow-Origin", "*");
-        response.setDateHeader("Expires", 0);
-        response.setCharacterEncoding("UTF-8");
-        response.setContentType("application/json;charset=UTF-8");
-        PrintWriter writer = getPrintWriter(response);
-        toJSONResponse(responseObj, writer);
     }
 }
