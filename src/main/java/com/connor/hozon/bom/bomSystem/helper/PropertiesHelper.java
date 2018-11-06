@@ -21,8 +21,16 @@ public class PropertiesHelper {
     public final static String SRC = "myresource.properties";
 
     public Properties load() throws IOException {
+        return execute(SRC);
+    }
+
+    public Properties load(String fileName) throws IOException {
+        return execute(fileName);
+    }
+
+    public Properties execute(String src) throws IOException {
         properties = new Properties();
-        InputStream in = getClass().getClassLoader().getResourceAsStream(SRC);
+        InputStream in = getClass().getClassLoader().getResourceAsStream(src);
         properties.load(in);
         in.close();
         return properties;
