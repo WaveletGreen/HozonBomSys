@@ -117,9 +117,9 @@
                 email: {
                     message:'',
                     validators: {
-                        notEmpty: {
-                            message: '邮箱不能为空'
-                        },
+                        // notEmpty: {
+                        //     message: '邮箱不能为空'
+                        // },
                         regexp: {
                             // regexp: /^[a-zA-Z0-9_\.]+$/,
                             regexp:/^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$/,
@@ -127,14 +127,14 @@
                         }
                     }
                 },
-                userNo: {
-                    message:'工号无效',
-                    validators: {
-                        notEmpty: {
-                            message: '工号不能为空'
-                        },
-                    }
-                },
+                // userNo: {
+                //     message:'工号无效',
+                //     validators: {
+                //         notEmpty: {
+                //             message: '工号不能为空'
+                //         },
+                //     }
+                // },
                 // repassword: {
                 //     message: '密码无效',
                 //     validators: {

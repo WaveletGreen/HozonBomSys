@@ -15,6 +15,7 @@ import com.connor.hozon.bom.sys.dao.OrgGroupDao;
 import com.connor.hozon.bom.sys.dao.UserDao;
 import com.connor.hozon.bom.sys.entity.OrgGroup;
 import com.connor.hozon.bom.sys.entity.User;
+import com.connor.hozon.bom.sys.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sql.pojo.change.HzEWOAllImpactDept;
@@ -41,7 +42,7 @@ public class HzEWOImpactDeptServiceImpl implements HzEWOImpactDeptService {
     private OrgGroupDao orgGroupDao;
 
     @Autowired
-    private UserDao userDao;
+    private UserService userService;
 
     @Override
     public WriteResultRespDTO saveImpactDept(EditEWOImpactDeptReqDTO reqDTO) {
@@ -202,7 +203,7 @@ public class HzEWOImpactDeptServiceImpl implements HzEWOImpactDeptService {
                         if(emp.getImpactDeptId().equals(hzEWOAllImpactDept.getId())){
                             respDTO.setUserId(emp.getUserId());
                             respDTO.setChecked(1);
-                            User user = userDao.findUserById(emp.getUserId());
+                            User user = userService.findByUserId(emp.getUserId(),"1");
                             if(user!=null){
                                 respDTO.setUserName(user.getUserName());
                                 respDTO.setLogin(user.getUsername());

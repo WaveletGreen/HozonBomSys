@@ -88,7 +88,7 @@ public abstract class GenericController<T, Q extends QueryBase> {
 	public Map<String,Object> save(T entity) throws Exception{
 		boolean success = getService().save(entity);
 		Map<String,Object> result = new HashMap<String, Object>();
-		if(success==true){
+		if(success){
 			result.put(SystemStaticConst.RESULT, SystemStaticConst.SUCCESS);
 			result.put(SystemStaticConst.MSG,"增加数据成功！");
 			result.put("entity",entity);
@@ -109,7 +109,7 @@ public abstract class GenericController<T, Q extends QueryBase> {
 	public Map<String,Object> update(T entity)  throws Exception{
 		boolean success  = getService().update(entity);
 		Map<String,Object> result = new HashMap<String, Object>();
-		if(success==true){
+		if(success){
 			result.put(SystemStaticConst.RESULT,SystemStaticConst.SUCCESS);
 			result.put(SystemStaticConst.MSG,"更新数据成功！");
 			result.put("entity",entity);
@@ -151,7 +151,7 @@ public abstract class GenericController<T, Q extends QueryBase> {
 		return result;
 	}
 
-	/**88
+	/**
 	 * 功能描述：获取数据字典的分页的数据
 	 * @param entity
 	 * @return

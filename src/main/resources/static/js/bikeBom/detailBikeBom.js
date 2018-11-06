@@ -255,7 +255,7 @@ function initTable(url) {
                     }
                 ],
             });
-            $table.bootstrapTable('hideColumn', 'id');
+            // $table.bootstrapTable('hideColumn', 'id');
 
         }
     })
@@ -515,7 +515,7 @@ function initTable1(url,lineIds,singleVehiclesId) {
                     }
                 ],
             });
-            $table.bootstrapTable('hideColumn', 'id');
+            // $table.bootstrapTable('hideColumn', 'id');
 
         }
     })

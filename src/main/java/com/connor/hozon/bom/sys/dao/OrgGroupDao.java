@@ -38,4 +38,11 @@ public interface OrgGroupDao extends GenericDao<OrgGroup, QueryOrgGroup> {
 	OrgGroup queryOrgGroupById(Long groupId);
 
 	List<OrgGroup> queryAllOrgGroup();
+
+	/**
+	 * 查询部门下面的人员数量
+	 * @param groupId
+	 * @return
+	 */
+	Integer queryOrgGroupUserCount(Long groupId);
 }
