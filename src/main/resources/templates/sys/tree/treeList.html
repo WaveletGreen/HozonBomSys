@@ -16,7 +16,7 @@
         var sObj = $("#" + treeNode.tId + "_span");
         if (treeNode.editNameFlag || $("#addBtn_" + treeNode.tId).length > 0) return;
         var addStr = "<span class='button remove' id='removeBtn_" + treeNode.tId + "' title='删除菜单' onfocus='this.blur();'></span>";
-        addStr += "<span class='button add' id='addBtn_" + treeNode.tId + "' title='添加菜单'></span>";
+        addStr += "<span class='button add' id='addBtn_" + treeNode.tId + "' title='添加子菜单'></span>";
         addStr += "<span class='button edit' id='editBtn_" + treeNode.tId + "' title='修改菜单'></span>";
         if (treeNode.isParent) {
             addStr += "<span class='button add' id='addParentBtn_" + treeNode.tId + "' title='添加顶层菜单'></span>";
