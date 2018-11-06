@@ -8,6 +8,7 @@ package com.connor.hozon.bom.bomSystem.dao.vwo;
 
 import com.connor.hozon.bom.bomSystem.dao.BasicDao;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.context.annotation.Configuration;
 import sql.pojo.cfg.vwo.HzVwoInformChanges;
 
 import java.util.List;
@@ -17,6 +18,7 @@ import java.util.List;
  * @Date: Created in 2018/8/27 21:17
  * @Modified By:
  */
+@Configuration
 public interface HzVwoInformChangesDao extends BasicDao<HzVwoInformChanges> {
     /**
      * 主键删除

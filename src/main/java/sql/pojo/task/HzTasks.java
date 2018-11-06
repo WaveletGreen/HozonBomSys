@@ -84,6 +84,8 @@ public class HzTasks implements  Cloneable {
 
     private String taskReserve15;
 
+    private Integer antherStatus;
+
     @Override
     public HzTasks clone() throws CloneNotSupportedException {
         return (HzTasks)super.clone();

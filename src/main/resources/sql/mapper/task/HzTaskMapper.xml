@@ -441,6 +441,9 @@
             <if test="taskUserId!=null">
                 and TASK_USER_ID = #{taskUserId,jdbcType=DECIMAL}
             </if>
+            <if test="antherStatus!=null">
+                and TASK_STATUS = #{antherStatus,jdbcType=DECIMAL}
+            </if>
         </where>
     </update>
 </mapper>

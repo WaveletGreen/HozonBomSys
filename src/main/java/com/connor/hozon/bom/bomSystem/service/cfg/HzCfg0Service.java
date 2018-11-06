@@ -18,6 +18,7 @@ import com.connor.hozon.bom.resources.mybatis.resourcesLibrary.dictionaryLibrary
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 import sql.pojo.cfg.main.HzCfg0MainRecord;
 import sql.pojo.cfg.cfg0.HzCfg0OptionFamily;
@@ -36,6 +37,7 @@ public class HzCfg0Service {
     /**
      * 特性值dao层
      */
+
     @Autowired
     HzCfg0RecordDao hzCfg0RecordDao;
     /**

@@ -20,7 +20,6 @@ import sql.pojo.cfg.vwo.HzVwoInfluenceUser;
  * @Modified By:
  */
 @Configuration
-
 public class HzVwoInfluenceUserDaoImpl extends BasicDaoImpl<HzVwoInfluenceUser> implements HzVwoInfluenceUserDao {
 
     private static final HzVwoInfluenceUser USER = new HzVwoInfluenceUser();

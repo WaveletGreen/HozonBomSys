@@ -17,6 +17,8 @@ import com.connor.hozon.bom.sys.entity.Tree;
 import com.connor.hozon.bom.sys.entity.User;
 import com.connor.hozon.bom.sys.service.TreeService;
 import net.sf.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sql.pojo.cfg.vwo.HzVwoInfo;
@@ -41,9 +43,15 @@ public class HzTasksService implements IHzTaskService {
     /***前端网址树服务层*/
     @Autowired
     TreeService treeService;
-    /**VWO变更表单服务层*/
+    /**
+     * VWO变更表单服务层
+     */
     @Autowired
     HzVwoInfoService hzVwoInfoService;
+
+
+    private final static Logger LOGGER = LoggerFactory.getLogger(HzTasksService.class);
+
     /**
      * 发起流程之后，保存task
      *
@@ -144,12 +152,22 @@ public class HzTasksService implements IHzTaskService {
 
     @Override
     public boolean doStopTask(int formType, Integer targetType, Long targetId) {
-        HzTasks task=new HzTasks();
+        HzTasks task = new HzTasks();
         task.setTaskFormType(formType);
         task.setTaskTargetType(targetType);
         task.setTaskTargetId(targetId);
-        task.setTaskStatus(999);
-        return hzTasksDao.updateTargetStatus(task)>0?true:false;
+        //当前任务先完成
+        task.setTaskStatus(TaskOptions.TASK_STATUS_FINISHED);
+        task.setAntherStatus(TaskOptions.TASK_STATUS_EXECUTING);
+
+        if (hzTasksDao.updateTargetStatus(task) <= 0) {
+            LOGGER.error("更新当前任务为完成状态失败:formType=" + formType + "\ttargetType=" + targetType + "\ttargetId=" + targetId);
+            return false;
+        }
+        task.setTaskStatus(TaskOptions.TASK_STATUS_BE_FINISHED);
+        task.setAntherStatus(TaskOptions.TASK_STATUS_TRACKING);
+
+        return hzTasksDao.updateTargetStatus(task) > 0 ? true : false;
     }
 
     @Override

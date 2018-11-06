@@ -15,7 +15,8 @@ import javax.xml.ws.ServiceMode;
 import java.util.ArrayList;
 import java.util.List;
 
-@Service("hzBreakPointService")
+//@Service("hzBreakPointService")
+@Configuration
 public class HzBreakPointServiceImpl implements HzBreakPointService {
     @Autowired
     private HzBreakPointDao breakPointDao;
