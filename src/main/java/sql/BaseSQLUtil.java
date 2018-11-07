@@ -19,9 +19,10 @@ import java.util.Map;
 @Service("baseSQLUtil")
 public class BaseSQLUtil implements IBaseSQLUtil {
     private static final Logger logger = LoggerFactory.getLogger(BaseSQLUtil.class);
-    private static SqlSession session ;
-
+    private static SqlSession session;
     private static SqlSessionTemplate sqlSessionTemplate;
+    //    锁对象，保证能进入双重校验锁结构语句
+    private Object obj = new Object();
 
     static {
         SqlSessionFactory f = FactoryManager.getInstance();
@@ -32,7 +33,7 @@ public class BaseSQLUtil implements IBaseSQLUtil {
 
     private void checkSessionStatus() {
         if (sqlSessionTemplate == null) {
-            synchronized (sqlSessionTemplate) {
+            synchronized (obj) {
                 if (sqlSessionTemplate == null) {
                     SqlSessionFactory f = FactoryManager.getInstance();
                     sqlSessionTemplate = new SqlSessionTemplate(f);
@@ -331,8 +332,7 @@ public class BaseSQLUtil implements IBaseSQLUtil {
         } catch (Exception e) {
             logger.error("SQL执行出错: " + sqlMapId, e);
             throw new HzDBException("SQL执行出错" + sqlMapId, e);
-        }
-        finally {
+        } finally {
 //            if (session != null)
 //                session.close();
         }
@@ -384,7 +384,7 @@ public class BaseSQLUtil implements IBaseSQLUtil {
     /**
      * 带有分页信息的查询
      *
-     * @param sqlMapId    mybatis映射id
+     * @param sqlMapId         mybatis映射id
      * @param pageRequestParam 分页请求参数信息 逻辑分页
      * @return
      */
@@ -399,8 +399,8 @@ public class BaseSQLUtil implements IBaseSQLUtil {
         if (totalCount != null && totalCount.intValue() <= (pageRequestParam.getPageNumber() - 1) * pageRequestParam.getPageSize()) {
             return new Page(pageRequestParam.getPageNumber(), pageRequestParam.getPageSize(), totalCount.intValue(), new ArrayList(0));
         }
-        if(pageRequestParam.getPageSize() == 0){
-            pageRequestParam.setPageSize((int)totalCount);
+        if (pageRequestParam.getPageSize() == 0) {
+            pageRequestParam.setPageSize((int) totalCount);
         }
         Page page = new Page(pageRequestParam, totalCount.intValue());
         List list = findForList(sqlMapId, filters, page.getFirstResult(), page.getPageSize());
@@ -413,7 +413,7 @@ public class BaseSQLUtil implements IBaseSQLUtil {
     /**
      * 带有分页信息的查询  物理分页
      *
-     * @param sqlMapId    mybatis映射id
+     * @param sqlMapId         mybatis映射id
      * @param pageRequestParam 分页请求参数信息
      * @return
      */
@@ -428,8 +428,8 @@ public class BaseSQLUtil implements IBaseSQLUtil {
         if (totalCount != null && totalCount.intValue() <= (pageRequestParam.getPageNumber() - 1) * pageRequestParam.getPageSize()) {
             return new Page(pageRequestParam.getPageNumber(), pageRequestParam.getPageSize(), totalCount.intValue(), new ArrayList(0));
         }
-        if(pageRequestParam.getPageSize() == 0){
-            pageRequestParam.setPageSize((int)totalCount);
+        if (pageRequestParam.getPageSize() == 0) {
+            pageRequestParam.setPageSize((int) totalCount);
         }
         Page page = new Page(pageRequestParam, totalCount.intValue());
         filters.put("offset", (pageRequestParam.getPageNumber() - 1) * pageRequestParam.getPageSize());

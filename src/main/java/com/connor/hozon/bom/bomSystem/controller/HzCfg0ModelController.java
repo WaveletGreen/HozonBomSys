@@ -148,36 +148,4 @@ public class HzCfg0ModelController {
         return "bom/modifyPage";
     }
 
-    /**
-     * 测试用部分
-     *
-     * @param controller
-     */
-    @Deprecated
-    private static void saveModelDetailToDB(@NotNull HzCfg0ModelController controller) {
-        HzCfg0ModelDetail detail = new HzCfg0ModelDetail();
-        detail.setpModelPuid("046adedc-09b2-43ca-a49c-a99d47c9fa3e");
-        detail.setpModelName("setpModelName");
-        detail.setpModelDesc("setpModelDesc");
-        detail.setpModelSaleArea("setpModelSaleArea");
-        detail.setpModelBrand("setpModelBrand");
-        detail.setpModelVehicle("setpModelVehicle");
-        detail.setpModelPlatform("setpModelPlatform");
-        detail.setpModelMod("setpModelMod");
-        detail.setpModelAnnual("setpModelAnnual");
-        detail.setpModelVersion("setpModelVersion");
-        detail.setpModelTransform("setpModelTransform");
-        detail.setpModelDriverPosition("setpModelDriverPosition");
-        detail.setpModelMembers("setpModelMembers");
-        detail.setpModelShape("setpModelShape");
-        detail.setpModelAnnouncement("setpModelAnnouncement");
-        detail.setpModelPowers("setpModelPowers");
-        detail.setpModelCfgVersion("setpModelCfgVersion");
-        detail.setpModelCfgDesc("setpModelCfgDesc");
-        detail.setpModelTrailNum("setpModelTrailNum");
-        detail.setpModelGoodsNum("setpModelGoodsNum");
-        controller.saveModelData(detail);
-        System.out.println();
-    }
-
 }

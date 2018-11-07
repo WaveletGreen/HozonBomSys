@@ -9,6 +9,7 @@ package com.connor.hozon.bom.bomSystem.impl.bom;
 import com.connor.hozon.bom.bomSystem.dao.bom.HzBomDataDao;
 import com.connor.hozon.bom.bomSystem.impl.BasicDaoImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Service;
 import sql.BaseSQLUtil;
 import sql.pojo.HzPreferenceSetting;
@@ -23,7 +24,8 @@ import java.util.Map;
  * @Date: Created in 2018/9/6 13:19
  * @Modified By:
  */
-@Service("hzBomDataDao")
+//@Service("hzBomDataDao2")
+@Configuration
 public class HzBomDataDaoImpl extends BasicDaoImpl<HzBomLineRecord> implements HzBomDataDao {
     private static final HzBomLineRecord RECORD = new HzBomLineRecord();
 

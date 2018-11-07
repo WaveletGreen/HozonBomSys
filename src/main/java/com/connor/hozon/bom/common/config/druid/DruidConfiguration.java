@@ -76,7 +76,7 @@ public class DruidConfiguration {
     @Value("${spring.datasource.filters}")
     private String filters;
 
-    @Value("{spring.datasource.connectionProperties}")
+    @Value("${spring.datasource.connectionProperties}")
     private String connectionProperties;
 
     @Bean     //声明其为Bean实例
@@ -127,7 +127,7 @@ public class DruidConfiguration {
         servletRegistrationBean.addInitParameter("deny","192.168.1.73");
         //登录查看信息的账号密码.
         servletRegistrationBean.addInitParameter("loginUsername","admin");
-        servletRegistrationBean.addInitParameter("loginPassword","hyll-2.0");
+        servletRegistrationBean.addInitParameter("loginPassword","administrator");
         //是否能够重置数据.
         servletRegistrationBean.addInitParameter("resetEnable","true");
         return servletRegistrationBean;

@@ -4,10 +4,10 @@
 <form id="roleForm"  role="form" method="post" action="role/update">
     <div class="row">
         <div class="col-md-7">
-            <input type="hidden" name="id" id="roleId" th:value="${entity.id}" />
+            <input type="hidden" name="id" id="roleId" th:value="${entity.id}" disabled />
             <div class="form-group" >
                 <label for="name">权限代码:</label>
-                <input type="text" class="form-control" name="name" id="name"th:value="${entity.name}"  placeholder="请输入权限代码" />
+                <input type="text" class="form-control" name="name" id="name"th:value="${entity.name}"  placeholder="请输入权限代码"/>
             </div>
             <div class="form-group" >
                 <label for="roleName">权限名称:</label>
@@ -108,7 +108,8 @@
                         $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
                         // window.Ewin.alert({message:'修改数据成功!'});
                         layer.msg('修改成功', {icon: 1, time: 2000})
-                    }else{
+                    }
+                    else{
                         window.Ewin.alert({message:'修改数据失败!'});
                     }
                 })

@@ -155,7 +155,7 @@ var vwoExeToolBar = [
 /**
  * 分发与实施表头设置
  */
-var vwoExeColumn=[
+var vwoExeColumn = [
     {
         field: 'ck',
         title: '选择',
@@ -347,16 +347,15 @@ function loadConnectedData(url) {
         clearToolbars();
         if (vwoStatus == 101) {
             var bomUser = $("#BomUserId").val();
-            if (user ==bomUser) {
+            if (user == bomUser) {
                 notDisabledById("bomLeaderOpinion");
                 $(".head-btnSets").append('<button class="btn btn-success head-func-btn" style="margin-top: 100px;z-index:99999;"\n' +
                     '        id="bomLeadApprove" onclick="approve(\'saveBomLeaderOpinion\',\'bomLeaderOpinion\')">BOM经理审批\n' +
                     '</button>');
             }
-        }
         } else if (vwoStatus == 102) {
             var pmtUser = $("#PmtUserId").val();
-            if(user==pmtUser) {
+            if (user == pmtUser) {
                 notDisabledById("pmtLeaderOpinion");
                 $(".head-btnSets").append('<button class="btn btn-success head-func-btn" style="margin-top: 100px;z-index:99999;"\n' +
                     '        id="pmtLeadApprove" onclick="approve(\'savePmtLeaderOpinion\',\'pmtLeaderOpinion\')">PMT经理审批\n' +
@@ -364,13 +363,15 @@ function loadConnectedData(url) {
             }
         } else if (vwoStatus == 103) {
             var projUser = $("#ProjUserId").val();
-            if(user==projUser) {
+            if (user == projUser) {
                 notDisabledById("projLeaderOpinion");
                 $(".head-btnSets").append('<button class="btn btn-success head-func-btn" style="margin-top: 100px;z-index:99999;"\n' +
                     '        id="projLeadApprove" onclick="approve(\'saveProjLeaderOpinion\',\'projLeaderOpinion\')">项目经理审批\n' +
                     '</button>');
             }
-    } else {
+        }
+    }
+    else {
         disabledById('bomLeaderOpinion');
         disabledById('pmtLeaderOpinion');
         disabledById('projLeaderOpinion');

@@ -8,7 +8,6 @@ package com.connor.hozon.bom.bomSystem.controller;
 
 import com.connor.hozon.bom.bomSystem.helper.DateStringHelper;
 import com.connor.hozon.bom.bomSystem.service.fullCfg.HzBomAllCfgService;
-import com.connor.hozon.bom.interaction.iservice.IHzConfigBomColorService;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -38,9 +37,6 @@ public class HzBomAllCfgController {
     /***全配置BOM一级清单服务*/
     @Autowired
     HzBomAllCfgService hzBomAllCfgService;
-//    /***特性与BOM行对应的服务*/
-//    @Autowired
-//    IHzConfigBomColorService iHzConfigBomColorService;
 
     /**
      * 获取添加基础车型页面
@@ -57,7 +53,7 @@ public class HzBomAllCfgController {
             hzBomAllCfgService.initAddingPageParams(projectPuid, detail, mainRecord);
             model.addAttribute("hzCfg0ModelDetail", detail);
             model.addAttribute("cfgmain", mainRecord);
-            model.addAttribute("action", "./materiel/addVehicleModel2");
+            model.addAttribute("action", "./materielV2/addVehicleModel2");
             return "bom/addModel2";
         } else {
             model.addAttribute("msg", "请选择项目再操作");
@@ -89,7 +85,6 @@ public class HzBomAllCfgController {
     @RequestMapping("/saveOneRow")
     @ResponseBody
     public JSONObject saveOneRow(String bomLinePuid, String cfgPuid, Integer colorPart, String msgVal) {
-//        List<HzConfigBomColorBean> beans = iHzConfigBomColorService.doSelectBy2YUidWithProject(bomLinePuid, "1c128c60-84a2-4076-9b1c-f7093e56e4df");
         return hzBomAllCfgService.saveOneRow(bomLinePuid, cfgPuid, colorPart, msgVal);
     }
 
@@ -178,8 +173,9 @@ public class HzBomAllCfgController {
 
     /**
      * 查询所有以关联2Y层的特性和当前2Y层关联的特性，实现前端特性选择下拉列表的动态效果
+     *
      * @param projectPuid 项目UID
-     * @param bomLineId 2Y层主键
+     * @param bomLineId   2Y层主键
      * @return
      */
     @RequestMapping("query2YCfg")

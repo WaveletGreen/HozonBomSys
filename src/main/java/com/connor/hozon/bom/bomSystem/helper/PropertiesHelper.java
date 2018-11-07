@@ -18,7 +18,7 @@ import java.util.Properties;
  */
 public class PropertiesHelper {
     private Properties properties;
-    public final static String SRC = "resource.properties";
+    public final static String SRC = "myresource.properties";
 
     public Properties load() throws IOException {
         properties = new Properties();

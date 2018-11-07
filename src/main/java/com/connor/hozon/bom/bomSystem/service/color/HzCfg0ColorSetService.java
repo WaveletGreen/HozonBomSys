@@ -20,14 +20,10 @@ import java.util.*;
  * @Date: Created in 2018/9/6 13:19
  * @Modified By:
  */
-@Service("HzCfg0ColorSetService")
+@Service
 public class HzCfg0ColorSetService {
-    private final HzCfg0ColorSetDao hzCfg0ColorSetDao;
-
     @Autowired
-    public HzCfg0ColorSetService(HzCfg0ColorSetDao hzCfg0ColorSetDao) {
-        this.hzCfg0ColorSetDao = hzCfg0ColorSetDao;
-    }
+    private HzCfg0ColorSetDao hzCfg0ColorSetDao;
 
     /**
      * @param queryBase

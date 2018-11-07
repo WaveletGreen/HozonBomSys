@@ -121,8 +121,8 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         registry.addViewController("/workFrom").setViewName("/changeManage/workFrom");
         //变更管理CODPWO表单
         registry.addViewController("/codpwoFromList").setViewName("/changeManage/codpwo/codpwoFromList");
-
-
+        //临时变更表单
+        registry.addViewController("/1111").setViewName("/updateLog/1111");
 
 
 

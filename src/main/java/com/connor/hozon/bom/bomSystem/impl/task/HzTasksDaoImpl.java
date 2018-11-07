@@ -8,6 +8,7 @@ package com.connor.hozon.bom.bomSystem.impl.task;
 
 import com.connor.hozon.bom.bomSystem.dao.task.HzTasksDao;
 import com.connor.hozon.bom.bomSystem.impl.BasicDaoImpl;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Service;
 import sql.pojo.task.HzTasks;
 
@@ -19,7 +20,8 @@ import java.util.List;
  * @Date: Created in 2018/9/6 13:19
  * @Modified By:
  */
-@Service("hzTasksDao")
+//@Service("hzTasksDao")
+@Configuration
 public class HzTasksDaoImpl extends BasicDaoImpl<HzTasks> implements HzTasksDao {
     private final static HzTasks TASKS = new HzTasks();
 

@@ -21,16 +21,17 @@ function loadTasks() {
         success: function (data) {
             var _data = data.data;
             taskData = null;
+            let count = 0;
             if (_data) {
-                $("#myCurrentTask").text("请选择任务");
                 $("#myTasks li").remove();
-                $("#myTasks").append(
-                    "<li>" +
-                    "<a href='javascript:void(0)' class='project' onclick='loadTab(" + JSON.stringify(null).replace(/\'/g, "\"") + ")'>请选择任务</a>" +
-                    "</li>" +
-                    "<li class='divider'></li>"
-                );
-
+                if ((null != _data || _data != undefined) && _data.length != 0) {
+                    $("#myTasks").append(
+                        "<li>" +
+                        "<a href='javascript:void(0)' class='project' onclick='loadTab(" + JSON.stringify(null).replace(/\'/g, "\"") + ")'>取消选择任务</a>" +
+                        "</li>" +
+                        "<li class='divider'></li>"
+                    );
+                }
                 for (var i in _data) {
                     $("#myTasks").append(
                         "<li>" +
@@ -38,8 +39,15 @@ function loadTasks() {
                         "</li>" +
                         "<li class='divider'></li>"
                     );
+                    count++;
                 }
-                console.log("加载项目成功");
+                $("#myCurrentTask").html("");
+                if (count == 0) {
+                    $("#myCurrentTask").append("<span style='color: gray'>任务数:无</span>");
+                }
+                else {
+                    $("#myCurrentTask").append("<span style='color: red'>任务数:" + count + "</span>");
+                }
             }
         },
         error: function (err) {
@@ -50,7 +58,28 @@ function loadTasks() {
 
 function loadTab(data) {
     taskData = data;
-    if(null==taskData){
+    if (null == taskData) {
+        $.ajax({
+            url: "./task/loadTasks",
+            type: "POST",
+            success: function (data) {
+                var _data = data.data;
+                taskData = null;
+                let count = 0;
+                if (_data) {
+                    for (var i in _data) {
+                        count++;
+                    }
+                    $("#myCurrentTask").html("");
+                    if (count == 0) {
+                        $("#myCurrentTask").append("<span style='color: gray'>任务数:无</span>");
+                    }
+                    else {
+                        $("#myCurrentTask").append("<span style='color: red'>任务数:" + count + "</span>");
+                    }
+                }
+            },
+        });
         return;
     }
     var showObj = $(top.document.body).find(".nav-tabs li a[href='#" + (data.targetName + data.targetId) + "']");
