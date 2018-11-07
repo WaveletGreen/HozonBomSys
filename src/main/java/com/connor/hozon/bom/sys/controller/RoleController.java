@@ -161,6 +161,25 @@ public class RoleController extends GenericController<UserRole,QueryUserRole> {
     }
 
 
+    /**
+     * 功能描述：更新数据字典数据
+     * @param entity
+     * @return
+     */
+    @RequestMapping(value = "/update",method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public Map<String,Object> update(@RequestBody UserRole entity)  throws Exception{
+        boolean success  = userRoleService.update(entity);
+        Map<String,Object> result = new HashMap<>();
+        if(success){
+            result.put(SystemStaticConst.RESULT,SystemStaticConst.SUCCESS);
+            result.put(SystemStaticConst.MSG,"操作成功！");
+        }else{
+            result.put(SystemStaticConst.RESULT,SystemStaticConst.FAIL);
+            result.put(SystemStaticConst.MSG,"操作失败，请稍后重试！");
+        }
+        return result;
+    }
 
     /**
      * 功能描述:保存用户权限信息

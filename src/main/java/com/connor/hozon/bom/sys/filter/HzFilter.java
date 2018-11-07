@@ -2,7 +2,11 @@ package com.connor.hozon.bom.sys.filter;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
 import com.connor.hozon.bom.resources.util.Result;
+import com.connor.hozon.bom.resources.util.ResultUtil;
+import com.connor.hozon.bom.sys.service.UserRolePrivilegeService;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
@@ -19,17 +23,14 @@ import java.util.List;
 @WebFilter(filterName = "HzFilter",urlPatterns = "/*")
 public class HzFilter implements Filter {
     /**
-     * 所有的需要过滤的url 放到一个文件里面
-     * 配置拦截器 进行接口操作的时候 判断是否在过滤内容中
-     * 是的话 则进行拦截
-     */
-    /**
      * 要过滤的url路径
      */
     private List<String> urlList;
 
+    @Autowired
+    private UserRolePrivilegeService userRolePrivilegeService;
     @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
+    public void init(FilterConfig filterConfig) {
         try{
             InputStream inputStream = HzFilter.class.getResourceAsStream("/hz_bom_privilege_url.properties");
             String line;
@@ -58,27 +59,33 @@ public class HzFilter implements Filter {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         String url = ((HttpServletRequest)servletRequest).getRequestURI();
         if(urlList.contains(url)){
-            servletResponse.setContentType("text/html;charset=UTF-8");
-            PrintWriter writer = servletResponse.getWriter();
-
-            try {
+            WriteResultRespDTO resultRespDTO = userRolePrivilegeService.hasPrivilege(url,urlList);
+            if(WriteResultRespDTO.isSuccess(resultRespDTO)){
+                filterChain.doFilter(servletRequest,servletResponse);
+            }else {
+                servletResponse.setContentType("text/html;charset=UTF-8");
+                PrintWriter writer = servletResponse.getWriter();
+                try {
 //                Map<String,Object> map = new HashMap<>();
 //                map.put(SystemStaticConst.RESULT,SystemStaticConst.FAIL);
 //                map.put(SystemStaticConst.MSG,"暂无权限！");
 //                writer.write(JSON.toJSONString(map,SerializerFeature.DisableCircularReferenceDetect));
-                writer.write(JSON.toJSONString(Result.build(false,"暂无权限！"),SerializerFeature.DisableCircularReferenceDetect));
-
-            }finally {
-               writer.flush();
-               writer.close();
+                    writer.write(JSON.toJSONString(ResultUtil.result(false,resultRespDTO.getErrMsg()),SerializerFeature.DisableCircularReferenceDetect));
+                }finally {
+                    writer.flush();
+                    writer.close();
+                }
+                return;
             }
-            return;
-        };
+        }
         filterChain.doFilter(servletRequest,servletResponse);
     }
 
     @Override
     public void destroy() {
-
+        if(urlList != null){
+            urlList.clear();
+            urlList = null;
+        }
     }
 }
