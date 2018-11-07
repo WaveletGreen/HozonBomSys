@@ -1,36 +1,49 @@
 /*
  * Copyright (c) 2018.
- * This file was wrote by fancyears·milos·maywas @connor. Any question/bug you can post to 1243093366@qq.com.
+ * This file was wrote by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
  * ALL RIGHTS RESERVED.
  */
 
 package com.connor.hozon.bom.bomSystem.controller;
 
-import com.alibaba.fastjson.JSONObject;
 import com.connor.hozon.bom.bomSystem.controller.integrate.ExtraIntegrate;
-import com.connor.hozon.bom.bomSystem.dao.modelColor.HzCfg0ModelColorDao;
 import com.connor.hozon.bom.bomSystem.dao.derivative.HzCfg0ToModelRecordDao;
+import com.connor.hozon.bom.bomSystem.dao.modelColor.HzCfg0ModelColorDao;
 import com.connor.hozon.bom.bomSystem.dto.cfg.compose.HzComposeDelDto;
 import com.connor.hozon.bom.bomSystem.dto.cfg.compose.HzComposeMFDTO;
-import com.connor.hozon.bom.bomSystem.service.derivative.HzComposeMFService;
-import com.connor.hozon.bom.bomSystem.service.cfg.*;
+import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
 import com.connor.hozon.bom.bomSystem.iservice.cfg.IHzCfg0ModelFeatureService;
+import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0OptionFamilyService;
+import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0Service;
+import com.connor.hozon.bom.bomSystem.service.derivative.HzComposeMFService;
+import com.connor.hozon.bom.bomSystem.service.fullCfg.HzBomAllCfgService;
+import com.connor.hozon.bom.bomSystem.service.integrate.SynMaterielService;
 import com.connor.hozon.bom.bomSystem.service.main.HzCfg0MainService;
 import com.connor.hozon.bom.bomSystem.service.model.HzCfg0ModelRecordService;
 import com.connor.hozon.bom.bomSystem.service.modelColor.HzCfg0ModelColorService;
 import com.connor.hozon.bom.bomSystem.service.project.HzSuperMaterielService;
 import com.connor.hozon.bom.common.base.entity.QueryBase;
+import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.resources.mybatis.factory.HzFactoryDAO;
+import com.connor.hozon.bom.sys.entity.User;
+import integration.option.ActionFlagOption;
+import net.sf.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import sql.pojo.cfg.modelColor.HzCfg0ModelColor;
+import sql.pojo.cfg.cfg0.HzCfg0Record;
+import sql.pojo.cfg.derivative.HzCfg0ModelFeature;
+import sql.pojo.cfg.derivative.HzCfg0ToModelRecord;
+import sql.pojo.cfg.main.HzCfg0MainRecord;
 import sql.pojo.cfg.model.HzCfg0ModelRecord;
+import sql.pojo.cfg.modelColor.HzCfg0ModelColor;
+import sql.pojo.factory.HzFactory;
 import sql.pojo.project.HzMaterielRecord;
 
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static com.connor.hozon.bom.bomSystem.helper.StringHelper.checkString;
 
@@ -38,67 +51,164 @@ import static com.connor.hozon.bom.bomSystem.helper.StringHelper.checkString;
 /**
  * @Author: Fancyears·Maylos·Maywas
  * @Description: 配置物料特性表
+ * 配置管理controller的所有返回消息字段key都是msg
+ * 配置管理controller的所有返回成功标志字段key都是status
+ * 如发现不一致需要特殊处理
+ * 已完成注释
  * @Date: Created in 2018/8/30 18:53
  * @Modified By:
  */
 @Controller
 @RequestMapping("/materielV2")
 public class HzMaterielFeatureV2Controller extends ExtraIntegrate {
-    /**
-     * 族层服务
-     */
+    /*** 族层服务*/
     @Autowired
     HzCfg0OptionFamilyService hzCfg0OptionFamilyService;
-    /**
-     * 车身颜色服务
-     */
+    /*** 车身颜色服务*/
     @Autowired
     HzCfg0ModelColorService hzCfg0ModelColorService;
-    /**
-     * 颜色车型dao层
-     */
+    /*** 颜色车型dao层*/
     @Autowired
     HzCfg0ModelColorDao hzCfg0ModelColorDao;
-    /**
-     * 配置值服务层
-     */
+    /*** 配置值服务层*/
     @Autowired
     HzCfg0Service hzCfg0Service;
-    /**
-     * 超级物料服务层
-     */
+    /*** 超级物料服务层*/
     @Autowired
     HzSuperMaterielService hzSuperMaterielService;
-    /**
-     * 车型模型服务层
-     */
+    /*** 车型模型服务层*/
     @Autowired
     HzCfg0ModelRecordService hzCfg0ModelRecordService;
-    /**
-     * 配置主模型服务层
-     */
+    /*** 配置主模型服务层*/
     @Autowired
     HzCfg0MainService hzCfg0MainService;
-    /**
-     * 模型特性数据服务
-     */
+    /*** 衍生物料详情数据服务*/
     @Autowired
     IHzCfg0ModelFeatureService hzCfg0ModelFeatureService;
-    /**
-     * 工厂
-     */
+    /*** 工厂*/
     @Autowired
     HzFactoryDAO hzFactoryDAO;
-    /**
-     * 配置-模型关系
-     */
+    /*** 配置-模型关系，该关系已废除*/
     @Autowired
     HzCfg0ToModelRecordDao hzCfg0ToModelRecordDao;
-
+    /***配置物料特性服务层，已集成在一个新的服务上*/
     @Autowired
     HzComposeMFService hzComposeMFService;
+    /*** 同步物料接口服务*/
+    @Autowired
+    private SynMaterielService synMaterielService;
+    /***全配置BOM一级清单服务层*/
+    @Autowired
+    HzBomAllCfgService hzBomAllCfgService;
+    /***日志*/
+    private static Logger logger = LoggerFactory.getLogger(HzMaterielFeatureV2Controller.class);
+
+    /**
+     * 根据项目的puid，获取到配置物料特性表的列设置，配置物料特性表title与配色方案一样动态产生
+     *
+     * @param projectPuid 项目puid
+     * @return 列信息
+     */
+    @RequestMapping("/loadColumnByProjectPuid2")
+    @ResponseBody
+    public Map<String, Object> getColumn2(@RequestParam("projectPuid") String projectPuid) {
+        Map<String, Object> result = new HashMap<>();
+        List<String> column = new ArrayList<>();
+        List<String> _result;
+        if ((_result = hzCfg0OptionFamilyService.getColumnNew2(projectPuid, "<br/>")) != null) {
+            column.addAll(_result);
+            //附加列信息
+            // appendColumn(column);
+            result.put("status", true);
+            result.put("data", column);
+        } else {
+            result.put("status", false);
+        }
+        return result;
+    }
+
+    /**
+     * 单独添加列信息
+     *
+     * @param column
+     */
+    private void appendColumn(List<String> column) {
+        //添加中文描述
+        column.add("中文描述");
+        //添加单车配置吗
+        column.add("单车配置码");
+    }
+
+    /**
+     * 修改衍生物料基础数据
+     *
+     * @param projectUid         项目UID
+     * @param puid               基本车型模型puid
+     * @param puidOfModelFeature 衍生物料的详情数据，一开始时需要将衍生物料基础数据传到SAP(去你妈的SAP)，所以做了一个详情表
+     *                           但是现在只能作为一个附加的表作为保留表存在数据库中，这个表已经不再存储衍生物料详情数据
+     *                           其puidOfModelFeature字段对应上的时衍生物料主数据主键
+     * @param page               申请页面，目前只能申请"model"页面，不能再申请"superMateriel"修改超级物料号页面
+     *                           超级物料号可以直接从基本数据中继承并修改
+     * @return 修改衍生物料基础数据页面
+     */
+    @RequestMapping("/modifyPage")
+    public String modPage(@RequestParam String projectUid, @RequestParam String puid, @RequestParam String puidOfModelFeature, @RequestParam String page, Model model) {
+        //啥也不做
+        if (page == null || puid == null)
+            ;
+            //修改基本信息
+        else if ("model".equals(page)) {
+            HzCfg0ModelRecord modelRecord = hzCfg0ModelRecordService.doGetById(puid);
+            HzCfg0ModelFeature hzCfg0ModelFeature;
+            //判断是否为空
+            if (puidOfModelFeature == null || "".equals(puidOfModelFeature))
+                hzCfg0ModelFeature = new HzCfg0ModelFeature();
+            else
+                hzCfg0ModelFeature = hzCfg0ModelFeatureService.doSelectByPrimaryKeyWithFactoryCode(puidOfModelFeature);
+            //没有找到
+            if (hzCfg0ModelFeature == null)
+                hzCfg0ModelFeature = new HzCfg0ModelFeature();
+
+            HzMaterielRecord sm = hzSuperMaterielService.doSelectByProjectPuid(projectUid);
 
 
+            model.addAttribute("entity", modelRecord);
+            model.addAttribute("modelFeature", hzCfg0ModelFeature);
+            model.addAttribute("projectUid", projectUid);
+            model.addAttribute("superMateriel", sm == null ? "" : sm.getpMaterielCode());
+
+            model.addAttribute("action", "./materielV2/saveModelBasic");
+            return "cfg/materielFeature/updateModelBasic";
+        }
+        //修改超级物料，不再使用
+        else if ("superMateriel".equals(page)) {
+            HzCfg0MainRecord mainRecord = hzCfg0MainService.doGetByPrimaryKey(puid);
+            if (mainRecord != null) {
+                HzMaterielRecord superMateriel = hzSuperMaterielService.doSelectByProjectPuid(mainRecord.getpCfg0OfWhichProjectPuid());
+                if (superMateriel == null) {
+                    superMateriel = new HzMaterielRecord();
+                }
+                //设置项目puid
+                if (superMateriel.getpPertainToProjectPuid() == null || "".equals(superMateriel.getpPertainToProjectPuid())) {
+                    superMateriel.setpPertainToProjectPuid(mainRecord.getpCfg0OfWhichProjectPuid());
+                }
+                model.addAttribute("entity", superMateriel);
+                model.addAttribute("action", "./materielV2/updateSuperMateriel");
+                return "cfg/materielFeature/updateSuperMateriel";
+            }
+        }
+        model.addAttribute("msg", "找不到选中行的详细数据，请联系管理员");
+        return "errorWithEntity";
+    }
+
+    /**
+     * 添加单个衍生物料数据
+     * 在返回页面前，先检查是否选中了项目，并且项目下是否添加<strong>至少1个</strong>配色方案:N，<strong>至少1个基础车型:M</strong>
+     * 衍生物料最大数量为配色方案个数=N*M
+     *
+     * @param projectUid 项目UID，主键
+     * @return 添加单个衍生物料页面
+     */
     @RequestMapping(value = "/composePage", method = RequestMethod.GET)
     public String composePage(@RequestParam String projectUid, Model model) {
         if (!checkString(projectUid)) {
@@ -124,6 +234,12 @@ public class HzMaterielFeatureV2Controller extends ExtraIntegrate {
         return "cfg/materielFeature/add";
     }
 
+    /**
+     * 保存1条衍生物料数据
+     *
+     * @param hzComposeMFDTO 前端接收的衍生物料数据
+     * @return
+     */
     @RequestMapping(value = "/saveCompose", method = RequestMethod.POST)
     @ResponseBody
     public JSONObject saveCompose(@RequestBody HzComposeMFDTO hzComposeMFDTO) {
@@ -138,6 +254,14 @@ public class HzMaterielFeatureV2Controller extends ExtraIntegrate {
         return result;
     }
 
+    /**
+     * 删除衍生物料
+     * <p>
+     * 删除衍生物料实际上根据主键删除即可，所以传到该方法的应该包含某个衍生物料的主键
+     *
+     * @param delDtos 一组衍生物料数据，衍生物料数据中至少包含puidOfModelFeature字段，以该字段作为主键进行删除操作
+     * @return
+     */
     @RequestMapping(value = "/deleteCompose", method = RequestMethod.POST)
     @ResponseBody
     public JSONObject deleteCompose(@RequestBody List<HzComposeDelDto> delDtos) {
@@ -152,16 +276,286 @@ public class HzMaterielFeatureV2Controller extends ExtraIntegrate {
         return result;
     }
 
-
+    /**
+     * 加载所有的衍生物料数据，这些衍生物料数据title需要配合{@link HzMaterielFeatureV2Controller#getColumn2(String)}进行使用
+     * 只有定义了title的字段才能准确的由bootstrap table自动匹配到各个单元格中
+     *
+     * @param projectPuid 项目UID
+     * @return
+     */
     @RequestMapping(value = "/loadComposes", method = RequestMethod.GET)
     @ResponseBody
     public Map<String, Object> loadComposes(@RequestParam String projectPuid) {
         return hzComposeMFService.loadComposes(projectPuid, new QueryBase());
     }
 
+    /**
+     * 一键生成所有衍生物料按钮功能，因为一键生成功能有点繁琐，所以一键生成过程中可能出现验证不通过的情况，但是实际数据已保存到数据库中
+     * 一旦发现数据验证不通过，则需要手动删除已经生成的衍生物料并从全配置BOM一级清单中重新配对配置-2Y-基础车型的打点图关系，直到成功为止
+     *
+     * @param projectPuid 当前项目的UID
+     * @return
+     */
     @RequestMapping("/saveCompose")
     @ResponseBody
-    public JSONObject saveCompose(String projectPuid){
+    public JSONObject saveCompose(String projectPuid) {
         return hzComposeMFService.saveCompose3(projectPuid);
     }
+
+    /**
+     * 保存衍生物料基本信息
+     *
+     * @param projectUid    项目UID
+     * @param superMateriel 超级物料号
+     * @param modelFeature  衍生物料详情数据，该部分数据已经不再存储发送到SAP的数据，只存储了基本信息和工厂数据而已了
+     * @return 保存成功与否标识和消息
+     */
+    @RequestMapping("/saveModelBasic")
+    @ResponseBody
+    public JSONObject saveModelBasic(
+            @RequestParam String projectUid,
+            @RequestParam String superMateriel,
+            @RequestBody HzCfg0ModelFeature modelFeature)
+    {
+        JSONObject _result = new JSONObject();
+        Date now = new Date();
+        User user = UserInfo.getUser();
+
+        if (modelFeature.getPuid() == null || "".equals(modelFeature.getPuid())) {
+            modelFeature.setPuid(UUID.randomUUID().toString());
+            if (hzCfg0ModelFeatureService.doInsert(modelFeature)) {
+                _result.put("status", true);
+                _result.put("msg", "新增衍生物料基本数据成功");
+            } else {
+                _result.put("status", false);
+                _result.put("msg", "新增衍生物料基本数据失败");
+            }
+        } else if (null != (hzCfg0ModelFeatureService.doSelectByPrimaryKey(modelFeature.getModelFeaturePuid()))) {
+            modelFeature.setPuid(modelFeature.getModelFeaturePuid());
+            modelFeature.setMaterielType("A001");
+            HzFactory factory = hzFactoryDAO.findFactory("", checkString(modelFeature.getFactoryCode()) ? modelFeature.getFactoryCode() : "1001");
+            HzFactory factory1001 = hzFactoryDAO.findFactory(null, "1001");
+            if (factory == null) {
+                logger.warn("自动创建工厂" + modelFeature.getFactoryCode());
+                factory = new HzFactory();
+                factory.setpFactoryCode(modelFeature.getFactoryCode());
+                factory.setPuid(UUIDHelper.generateUpperUid());
+                factory.setpCreateTime(now);
+                factory.setpCreateName(user.getUsername());
+                factory.setpUpdateTime(now);
+                factory.setpUpdateName(user.getUsername());
+                factory.setpFactoryDesc("由系统进行自动创建");
+                if (hzFactoryDAO.insert(factory) < 0) {
+                    logger.error("自动创建工厂" + modelFeature.getFactoryCode() + "失败");
+                    _result.put("status", false);
+                    _result.put("msg", "没有找到工厂" + modelFeature.getFactoryCode());
+                    return _result;
+                }
+            }
+            modelFeature.setFactoryCode(factory == null ? factory1001.getPuid() : factory.getPuid());
+            if (hzCfg0ModelFeatureService.doUpdateByPrimaryKey(modelFeature)) {
+                _result.put("status", true);
+                _result.put("msg", "更新衍生物料基本数据成功");
+            } else {
+                _result.put("status", false);
+                _result.put("msg", "更新衍生物料基本数据失败");
+            }
+
+            /**
+             * 更新超级物料
+             */
+            HzMaterielRecord sm = hzSuperMaterielService.doSelectByProjectPuid(projectUid);
+            if (checkString(superMateriel)) {
+                if (null == sm) {
+                    logger.warn("没有超级物料号，进行申请");
+                    sm = new HzMaterielRecord();
+                    sm.setpMaterielCode(superMateriel);
+                    sm.setPuid(UUIDHelper.generateUpperUid());
+                    sm.setpFactoryPuid(factory == null ? factory1001.getPuid() : factory.getPuid());
+                    sm.setpPertainToProjectPuid(projectUid);
+                    if (!hzSuperMaterielService.doInsertOne(sm)) {
+                        logger.error("存储超级物料号失败");
+                    }
+                }
+                if (!superMateriel.equals(sm.getpMaterielCode())) {
+                    logger.warn("已有超级物料号，进行更新超级物料号");
+                    sm.setpMaterielCode(superMateriel);
+                    if (!hzSuperMaterielService.doUpdateByPrimaryKey(sm)) {
+                        logger.error("更新超级物料号失败");
+                    }
+                }
+            }
+            return _result;
+        } else {
+            _result.put("status", false);
+            _result.put("msg", "没有找到衍生物料" + modelFeature.getMaterialCode());
+
+        }
+        return _result;
+    }
+
+
+    /**********************************************废除方法****************************************/
+    /**
+     * 修改超级物料特性，已废除，不再使用
+     *
+     * @param superMateriel
+     * @return
+     */
+    @RequestMapping("/updateSuperMateriel")
+    @ResponseBody
+    @Deprecated
+    public boolean updateSuperMateriel(@RequestBody HzMaterielRecord superMateriel) {
+        if (superMateriel == null)
+            return false;
+        if (superMateriel.getpPertainToProjectPuid() == null || "".equals(superMateriel.getpPertainToProjectPuid()))
+            return false;
+        HzMaterielRecord sm = hzSuperMaterielService.doSelectByProjectPuid(superMateriel.getpPertainToProjectPuid());
+        if (sm == null && (superMateriel.getPuid() == null || "".equals(superMateriel.getPuid()))) {
+            superMateriel.setPuid(UUID.randomUUID().toString());
+            return hzSuperMaterielService.doInsertOne(superMateriel);
+        } else if (sm != null) {
+            superMateriel.setPuid(sm.getPuid());
+            return hzSuperMaterielService.doUpdateByPrimaryKey(superMateriel);
+        }
+        return false;
+    }
+
+    /**
+     * 已废除，不再使用
+     *
+     * @param params
+     * @return
+     */
+    @Deprecated
+    @RequestMapping("/addVehicleModel")
+    @ResponseBody
+    public boolean addVehicleModel(@RequestBody Map<String, String> params) {
+        if (params != null) {
+            if (!params.containsKey("pCfg0ModelOfMainRecord")) {
+                return false;
+            } else {
+                HzCfg0ModelRecord modelRecord = new HzCfg0ModelRecord();
+                HzCfg0ModelFeature modelDetail = new HzCfg0ModelFeature();
+                List<HzCfg0ToModelRecord> toInsert = new ArrayList<>();
+                //生成UID
+                modelRecord.setPuid(UUIDHelper.generateUpperUid());
+                //生成UID
+                modelDetail.setPuid(UUIDHelper.generateUpperUid());
+                //设置归属车型
+                modelDetail.setpPertainToModel(modelRecord.getPuid());
+                for (String key : params.keySet()) {
+                    String value = params.get(key);
+                    if ("pCfg0ModelOfMainRecord".equals(key)) {
+                        //设置归属主配置
+                        modelRecord.setpCfg0ModelOfMainRecord(params.get("pCfg0ModelOfMainRecord"));
+                    } else if ("objectName".equals(key)) {
+                        //设置车型名
+                        modelRecord.setObjectName(params.get("objectName"));
+                    } else if ("objectDesc".equals(key)) {
+                        //设置车型描述
+                        modelRecord.setObjectDesc(params.get("objectDesc"));
+                    } else if ("pCfg0ModelBasicDetail".equals(key)) {
+                        //设置基本信息代码
+                        modelRecord.setpCfg0ModelBasicDetail(params.get("pCfg0ModelBasicDetail"));
+                    } else if ("pFeatureCnDesc".equals(key)) {
+                        //中文描述
+                        modelDetail.setpFeatureCnDesc(params.get("pFeatureCnDesc"));
+                    } else if ("pFeatureSingleVehicleCode".equals(key)) {
+                        //设置单车配置码
+                        modelDetail.setpFeatureSingleVehicleCode(params.get("pFeatureSingleVehicleCode"));
+                    } else {
+                        HzCfg0Record addedRecord = hzCfg0Service.doSelectOneByPuid(value);
+                        HzCfg0ToModelRecord hzCfg0ToModelRecord = new HzCfg0ToModelRecord();
+                        if (addedRecord == null) {
+//                            try {
+//                                throw new Exception("无法找到特性值，请检查数据");
+//                            } catch (Exception e) {
+//                                e.printStackTrace();
+//                                return false;
+//                            }
+                            continue;
+                        } else {
+                            hzCfg0ToModelRecord.setpCfg0IdRecord(addedRecord.getPuid());
+                            hzCfg0ToModelRecord.setpCfg0ModelRecord(modelRecord.getPuid());
+                            hzCfg0ToModelRecord.setpCfg0OptionValue(addedRecord.getpCfg0ObjectId());
+                            hzCfg0ToModelRecord.setpOfCfg0MainRecord(modelRecord.getpCfg0ModelOfMainRecord());
+                            hzCfg0ToModelRecord.setPuid(UUIDHelper.generateUpperUid());
+                            hzCfg0ToModelRecord.setpParseLogicValue(1);
+                            //插入数据
+                            toInsert.add(hzCfg0ToModelRecord);
+//                            hzCfg0ToModelRecordDao.insert(hzCfg0ToModelRecord);
+                        }
+                    }
+                }
+
+                //没有设置归属的颜色车型
+                hzCfg0ModelRecordService.doInsert(Collections.singletonList(modelRecord));
+                hzCfg0ModelFeatureService.doInsert(modelDetail);
+                for (int i = 0; i < toInsert.size(); i++) {
+                    hzCfg0ToModelRecordDao.insert(toInsert.get(i));
+                }
+                //发送到SAP?
+            }
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * 已废除，不再使用
+     *
+     * @param params
+     * @return
+     */
+    @Deprecated
+    @RequestMapping("/addVehicleModel2")
+    @ResponseBody
+    public JSONObject addVehicleModel2(@RequestBody Map<String, String> params) {
+        return hzBomAllCfgService.addVehicleModel(params);
+    }
+
+    /**
+     * 已废除，不再使用
+     *
+     * @param puidOfModelFeatures
+     * @param model
+     * @return
+     */
+    @Deprecated
+    @RequestMapping("/addToSAP")
+    public String addToSAP(String[] puidOfModelFeatures, Model model) {
+        List<HzCfg0ModelFeature> features = new ArrayList<HzCfg0ModelFeature>();
+        for (String puidOfModelFeature : puidOfModelFeatures) {
+            HzCfg0ModelFeature feature = hzCfg0ModelFeatureService.doSelectByPrimaryKey(puidOfModelFeature);
+            features.add(feature);
+        }
+        net.sf.json.JSONObject object = synMaterielService.tranMateriel2(features, ActionFlagOption.ADD, "HZ_CFG0_MODEL_FEATURE", "MATERIAL_CODE");
+        addToModel(object, model);
+        return "stage/templateOfIntegrate";
+    }
+
+    /**
+     * 已废除，不再使用
+     *
+     * @param puidOfModelFeatures
+     * @param model
+     * @return
+     */
+    @Deprecated
+    @RequestMapping("/deleteToSAP")
+    public String deleteToSAP(String[] puidOfModelFeatures, Model model) {
+        List<HzCfg0ModelFeature> HCMfeatures = new ArrayList<HzCfg0ModelFeature>();
+        for (String puidOfModelFeature : puidOfModelFeatures) {
+            HzCfg0ModelFeature feature = hzCfg0ModelFeatureService.doSelectByPrimaryKey(puidOfModelFeature);
+            HCMfeatures.add(feature);
+        }
+        net.sf.json.JSONObject object = synMaterielService.tranMateriel2(HCMfeatures, ActionFlagOption.DELETE, "HZ_CFG0_MODEL_FEATURE", "MATERIAL_CODE");
+        addToModel(object, model);
+        return "stage/templateOfIntegrate";
+    }
+    /**********************************************废除方法****************************************/
+
+
 }

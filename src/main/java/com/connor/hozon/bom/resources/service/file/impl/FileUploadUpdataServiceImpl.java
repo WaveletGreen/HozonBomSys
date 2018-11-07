@@ -19,9 +19,7 @@ import sql.pojo.bom.HzImportEbomRecord;
 import sql.pojo.bom.HzPbomLineRecord;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Service("FileUploadUpdataService")
 public class FileUploadUpdataServiceImpl implements FileUploadUpdataService {
@@ -73,15 +71,67 @@ public class FileUploadUpdataServiceImpl implements FileUploadUpdataService {
                 return  respDTO;
             }
             List<HzPbomLineRecord> hzPbomLineRecords = new ArrayList<>();
-            int a = workbook.getNumberOfSheets();
             for(int numSheet = 0; numSheet < workbook.getNumberOfSheets(); numSheet++ ){
                 Sheet sheet = workbook.getSheetAt(numSheet);
-                String sheetName = workbook.getSheetName(numSheet);//sheet 表名 就一个sheet的话 没什么卵用
+                //String sheetName = workbook.getSheetName(numSheet);//sheet 表名 就一个sheet的话 没什么卵用
                 int i = 1;
-                int aa = sheet.getLastRowNum();
+                Map map = new HashMap();
                 while (i<=sheet.getLastRowNum()){
-                    //List<HzImportEbomRecord> list = new ArrayList<>();
-                    for(int rowNum = i; rowNum <= sheet.getLastRowNum(); rowNum++){
+                    //基准行
+                    String item_id = ExcelUtil.getCell(sheet.getRow(i),1).getStringCellValue();
+                    String zzcg = ExcelUtil.getCell(sheet.getRow(i),12).getStringCellValue();
+                    String type = ExcelUtil.getCell(sheet.getRow(i),13).getStringCellValue();
+                    String buyUnit = ExcelUtil.getCell(sheet.getRow(i),14).getStringCellValue();
+                    String cj1 = ExcelUtil.getCell(sheet.getRow(i),15).getStringCellValue();
+                    String cj2 = ExcelUtil.getCell(sheet.getRow(i),16).getStringCellValue();
+                    String scx = ExcelUtil.getCell(sheet.getRow(i),17).getStringCellValue();
+                    String mjlx = ExcelUtil.getCell(sheet.getRow(i),18).getStringCellValue();
+                    String wwj = ExcelUtil.getCell(sheet.getRow(i),19).getStringCellValue();
+                    String gw = ExcelUtil.getCell(sheet.getRow(i),20).getStringCellValue();
+
+                    for(int rowNum = i+1; rowNum <= sheet.getLastRowNum(); rowNum++){
+                        String item_ids = ExcelUtil.getCell(sheet.getRow(rowNum),1).getStringCellValue();
+                        if(item_ids.equals(item_id)){
+                            //自制/采购、焊接/装配、采购单元、车间1、车间2、生产线、模具类别、外委件、工位
+                            String zzcgs = ExcelUtil.getCell(sheet.getRow(rowNum),12).getStringCellValue();
+                            String types = ExcelUtil.getCell(sheet.getRow(rowNum),13).getStringCellValue();
+                            String buyUnits = ExcelUtil.getCell(sheet.getRow(rowNum),14).getStringCellValue();
+                            String cj1s = ExcelUtil.getCell(sheet.getRow(rowNum),15).getStringCellValue();
+                            String cj2s = ExcelUtil.getCell(sheet.getRow(rowNum),16).getStringCellValue();
+                            String scxs = ExcelUtil.getCell(sheet.getRow(rowNum),17).getStringCellValue();
+                            String mjlxs = ExcelUtil.getCell(sheet.getRow(rowNum),18).getStringCellValue();
+                            String wwjs = ExcelUtil.getCell(sheet.getRow(rowNum),19).getStringCellValue();
+                            String gws = ExcelUtil.getCell(sheet.getRow(rowNum),20).getStringCellValue();
+                            if(!zzcgs.equals(zzcg)||!types.equals(type)||!buyUnits.equals(buyUnit)||!cj1s.equals(cj1)||
+                                    !cj2s.equals(cj2)||!scxs.equals(scx)||!mjlxs.equals(mjlx)||!wwjs.equals(wwj)||
+                                    !gws.equals(gw)){
+                                map.put(item_ids,"");
+                            }
+                        }
+                        //i++;
+                    }
+                    i++;
+                }
+                if(map.size()>0){
+                    //返回零件号
+                    //List<String> list = new ArrayList<>();
+                    StringBuffer stringBuffer = new StringBuffer("PBOM导入文件解析失败!</br>");
+                    Iterator iter = map.entrySet().iterator();
+                    while (iter.hasNext()) {
+                        Map.Entry entry = (Map.Entry) iter.next();
+                        //list.add(entry.getKey().toString());
+                        stringBuffer.append("零件号：<strong>"+entry.getKey().toString()+"</strong>修改不同步！！！</br>");
+                    }
+
+                    WriteResultRespDTO respDTO = new WriteResultRespDTO();
+                    respDTO.setErrMsg(stringBuffer.toString());
+                    respDTO.setErrCode(WriteResultRespDTO.FAILED_CODE);
+                    return  respDTO;
+                }else{
+                    //while (i<=sheet.getLastRowNum()){
+                    Map<String, Object> beforeMap = new HashMap<>();//before表记录冲突
+                    Map<String, Object> afterMap = new HashMap<>();//after表记录冲突
+                    for(int rowNum = 1; rowNum <= sheet.getLastRowNum(); rowNum++){
                         Row sheetRow = sheet.getRow(rowNum);
                         if(sheetRow != null){
                             //HzPbomLineRecord record = excelObjectToRecord(sheet,rowNum);
@@ -119,15 +169,65 @@ public class FileUploadUpdataServiceImpl implements FileUploadUpdataService {
 
                             hzPbomLineRecords.add(record);
                             //修改之前保存原数据到before记录表(插入或更新)
+                            Map<String, Object> m = new HashMap<>();
+                            m.put("lineId", ExcelUtil.getCell(sheet.getRow(rowNum),1).getStringCellValue());
+                            m.put("projectId", projectId);
+                            List<HzPbomLineRecord> pbomRecord_old = hzPbomRecordDAO.getPbomById(m);
+                            List<HzPbomLineRecord> pbomRecord_before = hzPbomRecordDAO.getPbomById_before(m);
+                            List<HzPbomLineRecord> pbomRecord_after = hzPbomRecordDAO.getPbomById_after(m);
 
-                            //updateInput
-                            hzPbomRecordDAO.updateInput(hzPbomLineRecords.get(i-1));
-                            //修改后数据保存到after记录表(插入或更新)
+                            if(!beforeMap.containsKey(ExcelUtil.getCell(sheet.getRow(rowNum),1).getStringCellValue())){
+                                beforeMap.put(ExcelUtil.getCell(sheet.getRow(rowNum),1).getStringCellValue(),"");
+                                //找before记录表是否有记录
+                                if(pbomRecord_before.size()==0){
+                                    //插入before记录表
+                                    hzPbomRecordDAO.insert_before(pbomRecord_old.get(0));
+                                }else {
+                                    for(int j=0;j<pbomRecord_before.size();j++){
+                                        //更新before记录表
+                                        if(StringUtil.isEmpty(pbomRecord_before.get(j).getMwoNo())){
+                                            hzPbomRecordDAO.update_before(pbomRecord_old.get(0));
+                                            break;
+                                        }else {
+                                            if(j==pbomRecord_before.size()-1){
+                                                //只有走过流程的记录，则也执行插入before记录表操作
+                                                hzPbomRecordDAO.insert_before(pbomRecord_old.get(0));
+                                            }
+                                        }
+                                    }
+                                }
+                            }
 
-                            i++;
+                            //更新操作--updateInput
+                            hzPbomRecordDAO.updateInput(hzPbomLineRecords.get(rowNum-1));
+                            if(!afterMap.containsKey(ExcelUtil.getCell(sheet.getRow(rowNum),1).getStringCellValue())){
+                                afterMap.put(ExcelUtil.getCell(sheet.getRow(rowNum),1).getStringCellValue(),"");
+                                pbomRecord_old = hzPbomRecordDAO.getPbomById(m);
+                                //修改后数据保存到after记录表(插入或更新)
+                                if(pbomRecord_after.size()==0){
+                                    //插入after记录表
+                                    hzPbomRecordDAO.insert_after(pbomRecord_old.get(0));
+                                }else {
+                                    for(int j=0;j<pbomRecord_after.size();j++){
+                                        //更新after记录表
+                                        if(StringUtil.isEmpty(pbomRecord_after.get(j).getMwoNo())){
+                                            hzPbomRecordDAO.update_after(pbomRecord_old.get(0));
+                                            break;
+                                        }else {
+                                            if(j==pbomRecord_after.size()-1){
+                                                //只有走过流程的记录，则也执行插入after记录表操作
+                                                hzPbomRecordDAO.insert_after(pbomRecord_old.get(0));
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            //i++;
                         }
                     }
+                    //}
                 }
+
             }
         } catch (Exception e) {
             e.printStackTrace();

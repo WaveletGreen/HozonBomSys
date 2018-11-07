@@ -13,5 +13,6 @@ public class SystemStaticConst {
      * 初始密码默认为123456
      */
     public final static String ORIGINAL_PASSWORD = "123456";
+    public final static String DCPROXY="dcproxy";
 
 }

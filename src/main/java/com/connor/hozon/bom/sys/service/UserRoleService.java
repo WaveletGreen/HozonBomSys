@@ -43,6 +43,14 @@ public class UserRoleService extends GenericService<UserRole, QueryUserRole> {
 	}
 
 	/**
+	 * 查询当前角色权限的引用关系
+	 * @param id 角色id
+	 * @return
+	 */
+	public Integer getUserRoleReferenceCount(Long id){
+		return userRoleDao.getUserRoleReferenceCount(id);
+	}
+	/**
 	 * 功能描述：删除角色数据
 	 * @param entityList
 	 * @return
@@ -82,5 +90,14 @@ public class UserRoleService extends GenericService<UserRole, QueryUserRole> {
 			roleAssociateTreeDao.save(new RoleAssociateTree(entity.getId(),tree.getId()));
 		}
 		return super.update(entity);
+	}
+
+	public boolean saveRoleWritePrivilege(UserRole userRole) {
+		try {
+			return super.update(userRole);
+		}catch (Exception e){
+			e.printStackTrace();
+			return false;
+		}
 	}
 }

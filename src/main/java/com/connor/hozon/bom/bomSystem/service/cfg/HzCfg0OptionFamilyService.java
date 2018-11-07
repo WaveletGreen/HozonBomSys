@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2018.
- * This file was wrote by fancyears·milos·maywas @connor. Any question/bug you can post to 1243093366@qq.com.
+ * This file was wrote by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
  * ALL RIGHTS RESERVED.
  */
 
@@ -51,6 +51,17 @@ public class HzCfg0OptionFamilyService {
      */
     public List<HzCfg0OptionFamily> doGetCfg0OptionFamilyListByProjectPuid2(String mainId) {
         return hzCfg0OptionFamilyDao.selectNameByMainId2(mainId);
+    }
+
+    /**
+     * 主键删除
+     * @param uid
+     * @return
+     */
+    public boolean doDeleteByPrimaryKey(String uid) {
+        HzCfg0OptionFamily family=new HzCfg0OptionFamily();
+        family.setPuid(uid);
+        return hzCfg0OptionFamilyDao.deleteByPrimaryKey(family) > 0 ? true : false;
     }
 
     /**
@@ -248,6 +259,7 @@ public class HzCfg0OptionFamilyService {
 
     /**
      * 选择性更新项目下的特性
+     *
      * @param family 特性对象
      * @return
      */

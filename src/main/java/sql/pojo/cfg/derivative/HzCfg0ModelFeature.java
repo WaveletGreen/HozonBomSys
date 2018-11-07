@@ -1,15 +1,17 @@
 /*
  * Copyright (c) 2018.
- * This file was wrote by fancyears·milos·maywas @connor. Any question/bug you can post to 1243093366@qq.com.
+ * This file was wrote by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
  * ALL RIGHTS RESERVED.
  */
 
 package sql.pojo.cfg.derivative;
 
 import java.util.Date;
+
 /**
  * @Author: Fancyears·Maylos·Maywas
- * @Description: 配置物料特性表中衍生物料，充当衍生物料主数据
+ * @Description: 配置物料特性表中衍生物料，充当衍生物料详情数据
+ * <strong>目前衍生物料详情数据已不再存储，只能充当一张保留表的作用</strong>
  * @Date: Created in 2018/8/10 13:55
  * @Modified By:
  */

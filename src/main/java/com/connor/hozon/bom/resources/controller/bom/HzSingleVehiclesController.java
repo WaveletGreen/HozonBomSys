@@ -242,15 +242,16 @@ public class HzSingleVehiclesController extends BaseController {
     @RequestMapping(value = "excelExport",method = RequestMethod.POST)
     @ResponseBody
     public JSONObject listDownLoad(
-            @RequestBody  List<HzSingleVehiclesRespDTO> dtos,HttpServletRequest request
-    ) {
+            @RequestBody  List<HzSingleVehiclesRespDTO> dtos
+    ,HttpServletRequest request) {
         boolean flag=true;
         JSONObject result=new JSONObject();
         try {
             String fileName = "tableExport.xlsx";//文件名-tableExport
             String[] title = {
-                    "物料编码","基本信息" ,"品牌代码","中文品牌","颜色代码","颜色名称","平台代码","平台名称",
-                    "电池型号","内饰颜色代码","内饰颜色名称","车型名称","车型代码","电机型号"
+                    "物料编号","基本信息" ,"品牌代码","中文品牌","平台代码","平台名称",
+                    "车型代码","车型名称","内饰颜色代码","内饰颜色名称",
+                    "颜色代码","颜色名称","电池型号","电机型号"
             };//表头
             //当前页的数据
             List<String[]> dataList = new ArrayList<String[]>();
@@ -263,17 +264,15 @@ public class HzSingleVehiclesController extends BaseController {
                 cellArr[1] = bomRespDTO.getSvlMaterialBasicInfo();
                 cellArr[2] = bomRespDTO.getBrandCode();
                 cellArr[3] = bomRespDTO.getBrandName();
-                cellArr[4] = bomRespDTO.getColorCode();
-                cellArr[5] = bomRespDTO.getColorName();
-                cellArr[6] = bomRespDTO.getPlatformCode();
-                cellArr[7] = bomRespDTO.getPlatformName();
-                cellArr[8] = bomRespDTO.getSvlBatteryCode();
-                cellArr[9] = bomRespDTO.getSvlInnerColorCode();
-                cellArr[10] = bomRespDTO.getSvlInnerColorName();
-                //cellArr[11] = bomRespDTO.getSvlMaterialBasicInfo();
-                cellArr[11] = bomRespDTO.getVehicleName();
-                cellArr[12] = bomRespDTO.getVehicleCode();
-                //cellArr[14] = bomRespDTO.getSvlMaterialCode();
+                cellArr[4] = bomRespDTO.getPlatformCode();
+                cellArr[5] = bomRespDTO.getPlatformName();
+                cellArr[6] = bomRespDTO.getVehicleCode();
+                cellArr[7] = bomRespDTO.getVehicleName();
+                cellArr[8] = bomRespDTO.getSvlInnerColorCode();
+                cellArr[9] = bomRespDTO.getSvlInnerColorName();
+                cellArr[10] = bomRespDTO.getColorCode();
+                cellArr[11] = bomRespDTO.getColorName();
+                cellArr[12] = bomRespDTO.getSvlBatteryCode();
                 cellArr[13] = bomRespDTO.getSvlMotorCode();
                 dataList.add(cellArr);
             }
@@ -302,8 +301,8 @@ public class HzSingleVehiclesController extends BaseController {
     @RequestMapping(value = "excelExport2",method = RequestMethod.POST)
     @ResponseBody
     public JSONObject listDownLoad2(
-            @RequestBody  List<HzSingleVehiclesBomRespDTO> dtos,HttpServletRequest request
-    ) {
+            @RequestBody  List<HzSingleVehiclesBomRespDTO> dtos
+    ,HttpServletRequest request) {
         boolean flag=true;
         JSONObject result=new JSONObject();
         try {

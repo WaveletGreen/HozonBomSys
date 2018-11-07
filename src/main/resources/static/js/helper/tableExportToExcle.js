@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2018.
- * This file was wrote by fancyears·milos·maywas @connor. Any question/bug you can't post to 1243093366@qq.com.
+ * This file was wrote by fancyears·milos·malvis @connor. Any question/bug you can't post to 1243093366@qq.com.
  * ALL RIGHTS RESERVED.
  */
 
@@ -13,11 +13,12 @@ function getExplorer() {
     //Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.140 Safari/537.36 Edge/17.17134
     //"Mozilla/5.0 (Windows NT 10.0; WOW64; Trident/7.0; .NET4.0C; .NET4.0E; .NET CLR 2.0.50727; .NET CLR 3.0.30729; .NET CLR 3.5.30729; rv:11.0) like Gecko"
     //"Mozilla/5.0 (Windows NT 10.0; WOW64; Trident/7.0; .NET4.0C; .NET4.0E; .NET CLR 2.0.50727; .NET CLR 3.0.30729; .NET CLR 3.5.30729; rv:11.0) like Gecko"
-    if (explorer.indexOf("Trident") >= 0) {
+ /*   if (explorer.indexOf("Trident") >= 0) {
         return 'ie';
     }
     //firefox
-    else if (explorer.indexOf("Firefox") >= 0) {
+    else*/
+    if (explorer.indexOf("Firefox") >= 0) {
         return 'Firefox';
     }
     //Chrome
@@ -33,7 +34,7 @@ function getExplorer() {
         return 'Safari';
     }
 
-    else if (window.navigator.userAgent.indexOf('Trident') > 0 && window.navigator.userAgent.indexOf('compatible') < 0) {
+    else if (explorer.indexOf('Trident') > 0 && explorer.indexOf('compatible') < 0) {
         return 'ie';
     }
 }
@@ -41,7 +42,7 @@ function getExplorer() {
 /**
  * 将页面上的表格拷贝到excle中，并完成下载操作
  * @param tableid
- * @param name
+ * @param name 下载的文件名称
  */
 function table2excel(tableid, name) {
     //不支持IE浏览器下在，也不支持EDGE下载

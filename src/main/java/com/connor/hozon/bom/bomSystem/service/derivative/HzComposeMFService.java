@@ -1,12 +1,11 @@
 /*
  * Copyright (c) 2018.
- * This file was wrote by fancyears·milos·maywas @connor. Any question/bug you can post to 1243093366@qq.com.
+ * This file was wrote by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
  * ALL RIGHTS RESERVED.
  */
 
 package com.connor.hozon.bom.bomSystem.service.derivative;
 
-import com.alibaba.fastjson.JSONObject;
 import com.connor.hozon.bom.bomSystem.dao.modelColor.HzCfg0ModelColorDao;
 import com.connor.hozon.bom.bomSystem.dao.derivative.HzDerivativeMaterielBasicDao;
 import com.connor.hozon.bom.bomSystem.dao.derivative.HzDerivativeMaterielDetailDao;
@@ -32,6 +31,7 @@ import com.connor.hozon.bom.interaction.dao.HzSingleVehiclesDao;
 import com.connor.hozon.bom.resources.mybatis.bom.HzEbomRecordDAO;
 import com.connor.hozon.bom.resources.mybatis.factory.HzFactoryDAO;
 import com.connor.hozon.bom.sys.entity.User;
+import net.sf.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

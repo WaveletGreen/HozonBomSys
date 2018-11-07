@@ -19,6 +19,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.inject.Inject;
 import java.util.HashMap;
@@ -101,18 +102,22 @@ public class OrgGroupController extends GenericController<OrgGroup,QueryOrgGroup
     }
 
     @RequestMapping(value="/updateGroupPage")
+    //@ResponseBody
     public String updateGroupPage(OrgGroup entity,Model model) throws Exception {
         entity = orgGroupService.get(entity);
         entity.setOrgGroup(orgGroupService.findByNode(entity.getParentNode()));
         model.addAttribute("entity",entity);
-        return getPageBaseRoot()+UPDATEPAGE;
+        //return getPageBaseRoot()+UPDATEPAGE;
+        return "sys/orggroup/update";
     }
 
     @RequestMapping(value="/addGroupPage")
+    //@ResponseBody
     public String addPage(OrgGroup entity,Model model) throws Exception {
         entity = orgGroupService.get(entity);
         model.addAttribute("entity",entity);
-        return getPageBaseRoot()+ADDPAGE;
+        //return getPageBaseRoot()+ADDPAGE;
+        return "sys/orggroup/add";
     }
 
     /**
@@ -144,6 +149,45 @@ public class OrgGroupController extends GenericController<OrgGroup,QueryOrgGroup
         result.put("data",orgGroupList);
         return result;
     }
+
+
+    /**
+     * 功能描述：实现批量删除数据字典的记录
+     * @param entity
+     * @return
+     */
+    @RequestMapping(value = "/remove",method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public Map<String,Object> remove(OrgGroup entity) throws Exception{
+        Map<String,Object> result = new HashMap<String, Object>();
+        if(null == Long.valueOf(entity.getGroupId())){
+            result.put(SystemStaticConst.RESULT,SystemStaticConst.FAIL);
+            result.put(SystemStaticConst.MSG,"非法参数！");
+            return result;
+        }
+        try {
+            Integer count =  orgGroupService.findOrgGroupUserCount(entity.getGroupId());
+            if(count!=null){
+                result.put(SystemStaticConst.RESULT,SystemStaticConst.FAIL);
+                result.put(SystemStaticConst.MSG,"当前部门下存在人员信息,无法删除！");
+                return result;
+            }
+            boolean b = getService().delete(entity);
+            if(b){
+                result.put(SystemStaticConst.RESULT,SystemStaticConst.SUCCESS);
+                result.put(SystemStaticConst.MSG,"删除数据成功！");
+            }else {
+                result.put(SystemStaticConst.RESULT,SystemStaticConst.FAIL);
+                result.put(SystemStaticConst.MSG,"删除数据失败！");
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            result.put(SystemStaticConst.RESULT,SystemStaticConst.FAIL);
+            result.put(SystemStaticConst.MSG,"删除数据失败！");
+        }
+        return result;
+    }
+
 
     private String getMaxNode(String node,String parentNode){
         String max_node = "";

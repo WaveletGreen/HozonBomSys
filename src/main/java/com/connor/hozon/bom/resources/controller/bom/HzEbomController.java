@@ -220,8 +220,8 @@ public class HzEbomController extends BaseController {
     @RequestMapping(value = "excelExport",method = RequestMethod.POST)
     @ResponseBody
     public JSONObject listDownLoad(
-            @RequestBody  List<HzEbomRespDTO> dtos,HttpServletRequest request
-    ) {
+            @RequestBody  List<HzEbomRespDTO> dtos
+    ,HttpServletRequest request) {
         boolean flag=true;
         JSONObject result=new JSONObject();
         try {
@@ -290,21 +290,11 @@ public class HzEbomController extends BaseController {
                 cellArr[48] = ebomRespDTO.getNumber();
                 cellArr[49] = ebomRespDTO.getColorPart();
                 if(ebomRespDTO.getMap().size()>0){
+                    //动态获取单车配置用量表头
                     for(int i=0;i<ebomRespDTO.getMap().size();i++){
                         cellArr[50+i] = ebomRespDTO.getMap().values().toArray()[i].toString();
                     }
                 }
-                //1 已生效; 0 删除;  2草稿状态;  3废除状态; 4删除状态
-//                if(ebomRespDTO.getStatus()==0)
-//                    cellArr[50] = "删除";
-//                else if(ebomRespDTO.getStatus()==1)
-//                    cellArr[50] = "已生效";
-//                else if(ebomRespDTO.getStatus()==2)
-//                    cellArr[50] = "草稿状态";
-//                else if(ebomRespDTO.getStatus()==3)
-//                    cellArr[50] = "废除状态";
-//                else if(ebomRespDTO.getStatus()==4)
-//                    cellArr[50] = "删除状态";
                 dataList.add(cellArr);
             }
             flag = ExcelUtil.writeExcel(fileName, title, dataList,"ebom",request);
@@ -313,18 +303,16 @@ public class HzEbomController extends BaseController {
                 LOG.info(fileName+",文件创建成功");
                 result.put("status",flag);
                 result.put("msg","成功");
-                result.put("path","./files/"+fileName);
+                result.put("path","./files/tableExport.xlsx");
             }else{
                 LOG.info(fileName+",文件创建失败");
                 result.put("status",flag);
                 result.put("msg","失败");
-                //result.put("path","./files/"+fileName);
             }
         } catch (Exception e) {
             if(LOG.isTraceEnabled())//isErrorEnabled()
                 LOG.error(e.getMessage());
         }
-
         return result;
     }
 

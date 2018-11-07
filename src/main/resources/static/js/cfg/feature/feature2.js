@@ -1,8 +1,11 @@
 /*
  * Copyright (c) 2018.
- * This file was wrote by fancyears·milos·maywas @connor. Any question/bug you can't post to 1243093366@qq.com.
+ * This file was wrote by fancyears·milos·malvis @connor. Any question/bug you can't post to 1243093366@qq.com.
  * ALL RIGHTS RESERVED.
  */
+var $table=null;
+var projectPuid=null;
+
 var toolbar = [
     {
         text: '添加',
@@ -105,51 +108,9 @@ var toolbar = [
                 }
             });
         }
-    },
-    // {
-    //     text: '下载文件',
-    //     iconCls: 'glyphicon glyphicon-plus',
-    //     handler: function () {
-    //         // window.open("./download?dsd=1&dsda=2&sdasd=3", '_self');
-    //         var rows = $table.bootstrapTable('getSelections');
-    //         var $tablex = $("#dataTable");
-    //         let columnsOrg = $tablex.bootstrapTable("getVisibleColumns");
-    //         let uids = [];
-    //         let columns = [];
-    //         let fields = [];
-    //         for (let i in rows) {
-    //             uids.push(rows[i].puid);
-    //         }
-    //         for (let i in columnsOrg) {
-    //             columns.push(columnsOrg[i].title);
-    //             fields.push(columnsOrg[i].field);
-    //         }
-    //         DownLoadFile({
-    //             url: './download', //请求的url
-    //             data: {uids: uids, columns: columns, fields: fields}//要发送的数据
-    //         });
-    //         // $.ajax({
-    //         //     type: "POST",
-    //         //     //ajax需要添加打包名
-    //         //     url: "./download",
-    //         //     contentType: "application/json",
-    //         //     success: function (result) {
-    //         //         if (result) {
-    //         //             layer.msg("成功", {icon: 1, time: 2000})
-    //         //             // window.Ewin.alert({message: result, width: 800});
-    //         //             //刷新，会重新申请数据库数据
-    //         //         }
-    //         //         else {
-    //         //             window.Ewin.alert({message: "失败"});
-    //         //         }
-    //         //     },
-    //         //     error: function (info) {
-    //         //         window.Ewin.alert({message: "失败:" + info.status});
-    //         //     }
-    //         // })
-    //     }
-    // },
+    }
 ];
+
 var column = [
     {
         field: 'ck',
@@ -255,8 +216,7 @@ $(document).ready(
         }
     )
 );
-var $table=null;
-var projectPuid=null;
+
 /***
  * 加载数据，异步操作，方便调用
  */
@@ -269,10 +229,10 @@ function loadData(_projectPuid) {
     if ($table == null)
         return;
     /**设置项目*/
-    $("#projectUid").val(_projectPuid);
+    $("#projectUid").val(projectPuid);
     $table.bootstrapTable('destroy');
     $table.bootstrapTable({
-        url: "cfg0/loadFeature?projectPuid=" + _projectPuid,
+        url: "cfg0/loadFeature?projectPuid=" + projectPuid,
         method: "GET",
         // queryParams: queryParams,
         height: $(window.parent.document).find("#wrapper").height() - 150,// $(window.parent.document).find("#wrapper").height() - document.body.offsetHeight - 100,

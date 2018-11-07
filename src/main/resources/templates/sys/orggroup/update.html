@@ -84,7 +84,8 @@
                         // 更新菜单节点的信息
                         selectNode.name = entity.name;
                         zTree.updateNode(selectNode);
-                        window.Ewin.alert({message:'修改数据成功!'});
+                        // window.Ewin.alert({message:'修改数据成功!'});
+                        layer.msg('修改成功', {icon: 1, time: 2000})
                     }else{
                         window.Ewin.alert({message:'修改数据失败!'});
                     }
@@ -94,5 +95,6 @@
     })
     ]]>
 </script>
+<script th:src="@{/layer/layer.js}"></script>
 </body>
 </html>

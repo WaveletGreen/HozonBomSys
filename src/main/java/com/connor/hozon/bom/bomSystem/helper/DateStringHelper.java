@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2018.
- * This file was wrote by fancyears·milos·maywas @connor. Any question/bug you can post to 1243093366@qq.com.
+ * This file was wrote by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
  * ALL RIGHTS RESERVED.
  */
 
@@ -103,13 +103,6 @@ public class DateStringHelper {
             return null;
         }
     }
-
-
-//    public static void main(String[] args) throws ParseException {
-//        Date date = stringToDate2("2018-07-04 05:00");
-//        String xxx = dateToString3(new Date());
-//        System.out.println(date);
-//    }
 
     /**
      * 永久时间点

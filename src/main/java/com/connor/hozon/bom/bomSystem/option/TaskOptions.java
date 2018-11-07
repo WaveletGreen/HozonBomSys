@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2018.
- * This file was wrote by fancyears·milos·maywas @connor. Any question/bug you can post to 1243093366@qq.com.
+ * This file was wrote by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
  * ALL RIGHTS RESERVED.
  */
 
@@ -38,7 +38,11 @@ public class TaskOptions {
      */
     public static final int TASK_STATUS_TRACKING = 800;
     /**
+     * 任务状态：被动完成状态，非当前用户完成，受制于其他用户进行终止或者完成造成
+     */
+    public static final int TASK_STATUS_BE_FINISHED = 998;
+    /**
      * 任务状态：完成阶段，不需要通知
      */
-    public static final int TASK_STATUS_FINISHED = 900;
+    public static final int TASK_STATUS_FINISHED = 999;
 }

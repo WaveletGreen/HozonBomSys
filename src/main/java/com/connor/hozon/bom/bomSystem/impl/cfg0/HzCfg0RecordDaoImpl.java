@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2018.
- * This file was wrote by fancyears·milos·maywas @connor. Any question/bug you can post to 1243093366@qq.com.
+ * This file was wrote by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
  * ALL RIGHTS RESERVED.
  */
 
@@ -11,6 +11,8 @@ import com.connor.hozon.bom.bomSystem.dto.HzMaterielFeatureBean;
 import com.connor.hozon.bom.bomSystem.dao.cfg0.HzCfg0RecordDao;
 import com.connor.hozon.bom.bomSystem.impl.BasicDaoImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Service;
 import sql.pojo.cfg.cfg0.HzCfg0Record;
 
@@ -24,7 +26,8 @@ import java.util.Map;
  * @Date: Created in 2018/9/6 13:19
  * @Modified By:
  */
-@Service("hzCfg0RecordDao")
+//@Service("hzCfg0RecordDao")
+@Configuration
 public class HzCfg0RecordDaoImpl extends BasicDaoImpl<HzCfg0Record> implements HzCfg0RecordDao {
 
     private final static HzCfg0Record RECORD = new HzCfg0Record();

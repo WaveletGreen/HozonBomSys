@@ -12,8 +12,8 @@
                         <input type="text" class="form-control" name="userName" id="userName"  placeholder="请输入名字" />
                     </div>
                     <div class="form-group">
-                        <label for="login">账号:</label>
-                        <input type="text" class="form-control" name="login" id="login"  placeholder="请输入账号" />
+                        <label for="login">账号(登录名):</label>
+                        <input type="text" class="form-control" name="login" id="login"  placeholder="请输入账号(登录名)" />
                     </div>
                     <div class="form-group">
                         <label for="job">职位:</label>
@@ -109,8 +109,10 @@
                             if (e) {
                                 $.post("user/removeBath",{json:JSON.stringify(rows)},function(e){
                                     if(e.result){
-                                        window.Ewin.alert({message:e.msg});
+                                        layer.msg('删除成功!', {icon: 1, time: 2000})
                                         doQuery();
+                                    }else {
+                                        window.Ewin.alert({message:e.msg});
                                     }
                                 });
                             }
@@ -158,6 +160,18 @@
                     valign : 'middle',
                     sortable : true
                 },
+                {
+                    field : 'email',
+                    title : '邮箱',
+                    align : 'center',
+                    valign : 'middle',
+                },
+                {
+                    field : 'userNo',
+                    title : '工号',
+                    align : 'center',
+                    valign : 'middle',
+                },
                 /*{
                     field : 'address',
                     title : '用户地址',
@@ -187,6 +201,7 @@
                     align : 'center',
                     valign : 'middle',
                     formatter: function (value, row, index) {
+                        console.log(row)
                         if(row.state=='1'){
                             return '<a href="#" onclick="userControl(0,'+row.id+')" >禁用</a>';
                         }else{

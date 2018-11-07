@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2018.
- * This file was wrote by fancyears·milos·maywas @connor. Any question/bug you can post to 1243093366@qq.com.
+ * This file was wrote by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
  * ALL RIGHTS RESERVED.
  */
 
@@ -18,11 +18,19 @@ import java.util.Properties;
  */
 public class PropertiesHelper {
     private Properties properties;
-    public final static String SRC = "resource.properties";
+    public final static String SRC = "myresource.properties";
 
     public Properties load() throws IOException {
+        return execute(SRC);
+    }
+
+    public Properties load(String fileName) throws IOException {
+        return execute(fileName);
+    }
+
+    public Properties execute(String src) throws IOException {
         properties = new Properties();
-        InputStream in = getClass().getClassLoader().getResourceAsStream(SRC);
+        InputStream in = getClass().getClassLoader().getResourceAsStream(src);
         properties.load(in);
         in.close();
         return properties;

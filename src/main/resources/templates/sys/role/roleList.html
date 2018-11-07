@@ -35,6 +35,11 @@
         $('#role-table').bootstrapTable('refresh');    //刷新表格
     }
 
+    // 开通账号写权限
+    function openWritePrivilege(id){
+        window.Ewin.dialog({title: '开通写权限', url:"role/writePrivilege?id="+id,width:700,height:310});
+    }
+
     function initTable(){
         $('#role-table').bootstrapTable({
             url:"role/list",
@@ -81,8 +86,11 @@
                             if (e) {
                                 $.post("./role/removeBath",{json:JSON.stringify(rows)},function(e){
                                    if(e.result){
-                                       window.Ewin.alert({message:e.msg});
+                                       // window.Ewin.alert({message:e.msg});
+                                       layer.msg('删除成功', {icon: 1, time: 2000})
                                        doQuery();
+                                   }else {
+                                       window.Ewin.alert({message:e.msg});
                                    }
                                 });
                             }
@@ -121,9 +129,20 @@
                     align : 'center',
                     valign : 'middle',
                     // sortable : true
-                }]
+                },
+                {
+                    field : 'openWritePrivilege',
+                    title : '启用编辑',
+                    align : 'center',
+                    valign : 'middle',
+                    formatter: function (value,row,index) {
+                        return '<a href="#" onclick="openWritePrivilege('+row.id+')" >启用</a>';
+                    }
+                }
+            ]
         });
     }
 </script>
+<script th:src="@{/layer/layer.js}"></script>
 </body>
 </html>

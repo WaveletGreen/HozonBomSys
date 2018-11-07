@@ -28,6 +28,14 @@
                 <label for="job">职位:</label>
                 <input type="text" class="form-control" name="job" id="job"  th:value="${entity.job}"  placeholder="请输入职位" />
             </div>
+            <div class="form-group" >
+                <label for="email">邮箱:</label>
+                <input type="email" class="form-control" name="email" id="email" th:value="${entity.email}"  placeholder="请输入邮箱" />
+            </div>
+            <div class="form-group" >
+                <label for="userNo">工号:</label>
+                <input type="text" class="form-control" name="userNo" id="userNo" th:value="${entity.userNo}" placeholder="请输入工号" />
+            </div>
             <div class="form-inline">
                 <label for="groupName">所属部门:</label>
                 <input type="hidden" name="id"  th:value="${entity.id}" />
@@ -93,19 +101,19 @@
                         }
                     }
                 },
-                streetAddress:{
-                    message: '街道地址无效',
-                    validators: {
-                        notEmpty: {
-                            message: '街道地址不能为空'
-                        },
-                        stringLength: {
-                            min: 6,
-                            max: 30,
-                            message: '街道地址长度必须在6到30之间'
-                        }
-                    }
-                },
+                // streetAddress:{
+                //     message: '街道地址无效',
+                //     validators: {
+                //         notEmpty: {
+                //             message: '街道地址不能为空'
+                //         },
+                //         stringLength: {
+                //             min: 6,
+                //             max: 30,
+                //             message: '街道地址长度必须在6到30之间'
+                //         }
+                //     }
+                // },
                 job : {
                     message: '职位无效',
                     validators: {
@@ -126,7 +134,20 @@
                             message: '部门不能为空'
                         }
                     }
-                }
+                },
+                email: {
+                    message:'邮箱无效',
+                    validators: {
+                    //     notEmpty: {
+                    //         message: '邮箱不能为空'
+                    //     },
+                        emailAddress: {
+                            message: '邮箱地址格式有误'
+                        }
+                    }
+                },
+
+
             }
         })
 

@@ -4,6 +4,9 @@ package com.connor.hozon.bom.sys.controller;
 import com.connor.hozon.bom.common.base.constant.SystemStaticConst;
 import com.connor.hozon.bom.common.base.controller.GenericController;
 import com.connor.hozon.bom.common.base.service.GenericService;
+import com.connor.hozon.bom.common.util.json.JsonHelper;
+import com.connor.hozon.bom.resources.util.ListUtil;
+import com.connor.hozon.bom.resources.util.StringUtil;
 import com.connor.hozon.bom.sys.entity.QueryUserRole;
 import com.connor.hozon.bom.sys.entity.Tree;
 import com.connor.hozon.bom.sys.entity.UserRole;
@@ -13,11 +16,13 @@ import com.connor.hozon.bom.sys.service.UserRoleService;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.inject.Inject;
+import java.lang.reflect.ParameterizedType;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -69,7 +74,81 @@ public class RoleController extends GenericController<UserRole,QueryUserRole> {
         result.put("data",treeMapper.treesToTressDTOs(treeList));
         return result;
     }
-    
-    
 
+    /**
+     * 功能描述：实现批量删除数据字典的记录
+     * @param json
+     * @return
+     */
+    @RequestMapping(value = "/removeBath",method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public Map<String,Object> removeBath(String json) throws Exception{
+        Map<String,Object> result = new HashMap<String, Object>();
+        com.alibaba.fastjson.JSONArray array = com.alibaba.fastjson.JSONObject.parseArray(json);
+        String id = "";
+        for(int i=0;i<array.size();i++){
+            com.alibaba.fastjson.JSONObject object = array.getJSONObject(i);
+            if(object.containsKey("id")){
+                id = object.getString("id");
+                break;
+            }
+        }
+        if(StringUtil.isEmpty(id)){
+            result.put(SystemStaticConst.RESULT,SystemStaticConst.FAIL);
+            result.put(SystemStaticConst.MSG,"非法参数！");
+            return result;
+        }
+
+        Integer count = userRoleService.getUserRoleReferenceCount(Long.valueOf(id));
+        if(count!=null){
+            result.put(SystemStaticConst.RESULT,SystemStaticConst.FAIL);
+            result.put(SystemStaticConst.MSG,"当前要删除的权限信息正在被用户所引用,无法删除！");
+            return result;
+        }
+        getService().removeBath((List<UserRole>) JsonHelper.toList(json,(Class <UserRole>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0]));
+        result.put(SystemStaticConst.RESULT,SystemStaticConst.SUCCESS);
+        result.put(SystemStaticConst.MSG,"删除数据成功！");
+        return result;
+    }
+
+
+
+    /**
+     * 功能描述：跳转到开通用户写权限页面
+     * @param entity
+     * @param model
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "/writePrivilege",method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_VALUE)
+    public String openWritePrivilege(UserRole entity, Model model) throws Exception {
+        entity = getService().get(entity);
+        model.addAttribute("entity",entity);
+        String path=getPageBaseRoot()+"/writePrivilege";
+        return path;
+    }
+
+
+
+    /**
+     * 功能描述:保存用户权限信息
+     * @param entity
+     * @return
+     */
+    @RequestMapping(value = "/savePrivilege",method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public Map<String,Object> saveWritePrivilege(UserRole entity){
+        boolean success  = userRoleService.saveRoleWritePrivilege(entity);
+        Map<String,Object> result = new HashMap<String, Object>();
+
+        if(success){
+            result.put(SystemStaticConst.RESULT,SystemStaticConst.SUCCESS);
+            result.put(SystemStaticConst.MSG,"更新数据成功！");
+            result.put("entity",entity);
+        }else{
+            result.put(SystemStaticConst.RESULT,SystemStaticConst.FAIL);
+            result.put(SystemStaticConst.MSG,"更新数据失败！");
+        }
+        return result;
+    }
 }

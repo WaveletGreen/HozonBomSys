@@ -1,17 +1,16 @@
 <!DOCTYPE html>
 <!--
   ~ Copyright (c) 2018.
-  ~ This file was wrote by fancyears·milos·maywas @connor. Any question/bug you can post to 1243093366@qq.com.
+  ~ This file was wrote by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
   ~ ALL RIGHTS RESERVED.
   -->
 
-<html xmlns:th="http://www.thymeleaf.org">
-<head th:include="include/includebase">
-</head>
+<html xmlns:th="http://www.thymeleaf.org"
+      lang="zh-cmn-Hans"
+>
+<head th:include="include/includebase"></head>
 <meta charset="UTF-8">
-<!--<link th:href="@{/css/stage/bom-stage.css}" rel="stylesheet"/>-->
 <title>配色方案</title>
-</head>
 <body class="content-body">
 <div class="panel-body">
     <div class="content col-lg-4">
@@ -24,7 +23,7 @@
         <table class="table table-striped tableNormalStyle" id="modelColorCfgTable"></table>
     </div>
 </div>
-<script th:src="@{/js/helper/projectHelper.js}"></script>
+<script charset="utf-8" th:src="@{/js/helper/projectHelper.js}"></script>
 <script th:src="@{/js/cfg/modelColorCfg/modelColorCfg.js}"></script>
 <!--<script th:src="@{/js/helper/modelColorFastOption.js}"></script>-->
 </body>
