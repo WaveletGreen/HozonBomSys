@@ -3,9 +3,11 @@ package share.bean;
 /***
  * bom行对应的配置项的bean
  *
+ * 已废除，不在从TC中集成配置项和BOM行有关的任何数据
  * @author Administrator
  *
  */
+@Deprecated
 public class Cfg0OfBomline {
     /**
      * 组族
