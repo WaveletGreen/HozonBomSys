@@ -57,15 +57,17 @@ public class UserService extends GenericService<User, QueryUser> {
 	 */
 	@Override
 	public boolean save(User entity) throws Exception {
-		entity.setAddress(entity.getProvince()+entity.getCity()+entity.getDistrict()+entity.getStreetAddress());
+//		entity.setAddress(entity.getProvince()+entity.getCity()+entity.getDistrict()+entity.getStreetAddress());
 		//过滤前端密码
 		if(!SystemStaticConst.ORIGINAL_PASSWORD.equals(entity.getPassword())){
 			entity.setPassword(SystemStaticConst.ORIGINAL_PASSWORD);//初始密码全部为123456
 		}
+
 		entity.setPassword(UserInfo.encode(entity.getPassword()));
 		entity.setState("1");
 		entity.packagingRoles(entity.getRoleArray());
 		List<UserRole> userRoleList = entity.getRoles();
+		entity.setGroupId(entity.getOrgGroup().getGroupId());
 		boolean success = userDao.save(entity)>0;
 		if(success){
 			if(userRoleList.size()>0){

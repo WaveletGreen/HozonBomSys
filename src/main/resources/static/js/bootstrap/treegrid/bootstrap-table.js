@@ -3006,10 +3006,21 @@
 
     // BOOTSTRAP TABLE PLUGIN DEFINITION
     // =======================
+    /**
+     *BootStrap Table实现server分页序号连续显示功能
+     * @param params
+     * @returns {number}
+     */
+    BootstrapTable.prototype.getIndex = function (params) {
+        //this.options.pageSize：每页条数：10,20,50...
+        //this.options.pageNumber:第几页：1,2,3...
+        return this.options.pageSize * (this.options.pageNumber-1) + 1;
+        //return this.options.pageSize * this.options.pageNumber + 1;
+    };
 
     var allowedMethods = [
         'getOptions',
-        'getSelections', 'getAllSelections', 'getData',
+        'getSelections', 'getAllSelections', 'getData', 'getIndex',
         'load', 'append', 'prepend', 'remove', 'removeAll',
         'insertRow', 'updateRow', 'updateCell', 'updateByUniqueId', 'removeByUniqueId',
         'getRowByUniqueId', 'showRow', 'hideRow', 'getHiddenRows',
