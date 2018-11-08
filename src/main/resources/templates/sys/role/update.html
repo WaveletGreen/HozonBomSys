@@ -7,7 +7,7 @@
             <input type="hidden" name="id" id="roleId" th:value="${entity.id}" disabled />
             <div class="form-group" >
                 <label for="name">权限代码:</label>
-                <input type="text" class="form-control" name="name" id="name"th:value="${entity.name}"  placeholder="请输入权限代码" disabled/>
+                <input type="text" class="form-control" name="name" id="name"th:value="${entity.name}"  placeholder="请输入权限代码"/>
             </div>
             <div class="form-group" >
                 <label for="roleName">权限名称:</label>
@@ -26,6 +26,12 @@
         // if ($("#roleId").val()==1){
         //     $("input").attr({"disabled": "disabled"});
         // }
+        let name = [[${entity.name}]];
+        console.log(name)
+        if(name == 'ROLE_ADMIN'){
+            $("#name").attr("disabled","disabled");
+            $("#roleName").attr("disabled","disabled");
+        }
         $('#roleForm').bootstrapValidator({
             message: 'This value is not valid',
             feedbackIcons: {
@@ -69,6 +75,10 @@
         // 绑定dialog的确定按钮的监听事件
         $("#btnOk",window.top.document).click(function() {
             var t = $.fn.zTree.getZTreeObj("roleZtree");
+            if(t == null ){
+                window.Ewin.alert({message:'您当前还没有权限进行此操作!'})
+                return;
+            }
             var nodes = t.getCheckedNodes(true);
             var treeArray = "";
             for(var i=0;i<nodes.length;i++){

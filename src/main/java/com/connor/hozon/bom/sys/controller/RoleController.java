@@ -5,10 +5,13 @@ import com.connor.hozon.bom.common.base.constant.SystemStaticConst;
 import com.connor.hozon.bom.common.base.controller.GenericController;
 import com.connor.hozon.bom.common.base.service.GenericService;
 import com.connor.hozon.bom.common.util.json.JsonHelper;
+import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.resources.util.ListUtil;
+import com.connor.hozon.bom.resources.util.PrivilegeUtil;
 import com.connor.hozon.bom.resources.util.StringUtil;
 import com.connor.hozon.bom.sys.entity.QueryUserRole;
 import com.connor.hozon.bom.sys.entity.Tree;
+import com.connor.hozon.bom.sys.entity.User;
 import com.connor.hozon.bom.sys.entity.UserRole;
 import com.connor.hozon.bom.sys.mapper.TreeMapper;
 import com.connor.hozon.bom.sys.service.TreeService;
@@ -17,6 +20,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -75,6 +79,34 @@ public class RoleController extends GenericController<UserRole,QueryUserRole> {
         return result;
     }
 
+
+
+
+    /**
+     * 功能描述：根据用户的权限去加载角色是否写权限树
+     * @return
+     */
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @RequestMapping(value = "/loadRoleWriteTree",method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public Map<String,Object> loadRoleWriteTree(UserRole entity){
+        entity = userRoleService.getUserWriteRoleAssociate(entity);
+        List<Tree> treeList = treeService.query(null);
+        if(entity!=null){
+            for(Tree tree:entity.getTreeList()){
+                treeList.stream().forEach(t->{
+                    if(t.getId() == tree.getId()){
+                        t.setChecked(true);
+                    }
+                });
+            }
+        }
+        Map<String,Object> result = new HashMap<>();
+        result.put(SystemStaticConst.RESULT, SystemStaticConst.SUCCESS);
+        result.put("data",treeMapper.treesToTressDTOs(treeList));
+        return result;
+    }
+
     /**
      * 功能描述：实现批量删除数据字典的记录
      * @param json
@@ -120,11 +152,11 @@ public class RoleController extends GenericController<UserRole,QueryUserRole> {
      * @return
      * @throws Exception
      */
-    @RequestMapping(value = "/writePrivilege",method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_VALUE)
-    public String openWritePrivilege(UserRole entity, Model model) throws Exception {
+    @RequestMapping(value = "/openEdit",method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_VALUE)
+    public String openEdit(UserRole entity, Model model) throws Exception {
         entity = getService().get(entity);
         model.addAttribute("entity",entity);
-        String path=getPageBaseRoot()+"/writePrivilege";
+        String path=getPageBaseRoot()+"/roleEdit";
         return path;
     }
 
@@ -137,17 +169,20 @@ public class RoleController extends GenericController<UserRole,QueryUserRole> {
      */
     @RequestMapping(value = "/savePrivilege",method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public Map<String,Object> saveWritePrivilege(UserRole entity){
+    public Map<String,Object> saveWritePrivilege(@RequestBody UserRole entity){
+        User user = UserInfo.getUser();
+        Map<String,Object> result = new HashMap<>();
+        if(!PrivilegeUtil.hasAdministratorPrivilege(user)){
+            result.put(SystemStaticConst.RESULT,SystemStaticConst.FAIL);
+            result.put(SystemStaticConst.MSG,"不具备系统管理员权限的用户不能进行此操作！");
+        }
         boolean success  = userRoleService.saveRoleWritePrivilege(entity);
-        Map<String,Object> result = new HashMap<String, Object>();
-
         if(success){
             result.put(SystemStaticConst.RESULT,SystemStaticConst.SUCCESS);
-            result.put(SystemStaticConst.MSG,"更新数据成功！");
-            result.put("entity",entity);
+            result.put(SystemStaticConst.MSG,"操作成功！");
         }else{
             result.put(SystemStaticConst.RESULT,SystemStaticConst.FAIL);
-            result.put(SystemStaticConst.MSG,"更新数据失败！");
+            result.put(SystemStaticConst.MSG,"操作失败,请稍后重试！");
         }
         return result;
     }

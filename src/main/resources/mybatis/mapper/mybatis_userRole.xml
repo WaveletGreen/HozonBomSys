@@ -29,6 +29,15 @@
 		WHERE ur.id=#{id}
 	</select>
 
+
+
+
+	<select id="getUserWriteRoleAssociate" parameterType="com.connor.hozon.bom.sys.entity.UserRole" resultMap="UserRoleTreeMap">
+		SELECT ur.*,t.id as tree_id,t.code,t.icon,t.name as tree_name,t.p_id,t.tree_order,t.url,t.state FROM user_role ur inner join role_write_associate_tree rat on ur.id = rat.role_id inner join tree t on rat.tree_id = t.id
+		WHERE ur.id=#{id}
+	</select>
+
+
 	<!--删除角色信息时查询引用关系数量-->
 	<select id="getUserRoleReferenceCount" resultType="java.lang.Integer">
 		SELECT count(id) from user_role t1  INNER JOIN user_associate_role t2  WHERE t1.id = t2.role_id and t1.id = #{id};
@@ -89,7 +98,7 @@
 		SELECT id,name,role_name FROM user_role
 		WHERE 1=1
 		<if test="name!=null and name!='' "  >
-			AND name like concat(#{name},'%')
+			AND name = #{name}
 		</if>
 		<if test="roleName!=null and roleName!='' "  >
 			AND role_name like concat(#{roleName},'%')

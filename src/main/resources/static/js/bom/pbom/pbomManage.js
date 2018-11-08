@@ -239,6 +239,7 @@ function initTable(pBomUrl) {
                                             else {
                                                 window.Ewin.alert({message: ":" + result.errMsg});
                                             }*/
+                                            console.log(result)
                                             if (result.success) {
                                                 layer.msg('删除成功', {icon: 1, time: 2000})
                                             } else if (!result.success) {
