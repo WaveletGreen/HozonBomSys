@@ -1,0 +1,130 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<!--User: xulf Date: 2018/11/8 Time: 10:48-->
+<link th:href="@{/css/labelColor.css}" rel="stylesheet">
+<body>
+<form id="addEwoFromListForm" role="form" method="post" action="">
+    <div class="form-group">
+        <label for="ewoNo">变更单号<span>*</span></label>
+        <input class="form-control" id="ewoNo" name="ewoNo" type="text"
+               placeholder="请输入变更单号"/>
+    </div>
+    <div class="form-group">
+        <label for="dept">部门<span>*</span></label>
+        <input class="form-control" id="dept" name="dept" type="text"
+               placeholder="请输入部门"/>
+    </div>
+    <div class="form-group">
+        <label for="changeType">变更类型<span>*</span></label>
+        <input class="form-control" id="changeType" name="changeType" type="text"
+               placeholder="请输入变更类型"/>
+    </div>
+    <div class="form-group">
+        <label for="reasonCode">原因类型<span>*</span></label>
+        <input class="form-control" id="reasonCode" name="reasonCode" type="text"
+               placeholder="请输入原因类型"/>
+    </div>
+    <div class="form-group">
+        <label for="title">标题<span>*</span></label>
+        <input class="form-control" id="title" name="title" type="text"
+               placeholder="请输入标题"/>
+    </div>
+</form>
+<script th:inline="javascript">
+    <![CDATA[
+    var data = [[${data}]];
+    $(function () {
+            var list = data.map;
+            var keys = [];
+            for (var key in list) {
+                if (list.hasOwnProperty(key)) {
+                    keys.push(key)
+                }
+            }
+            var level = data.level;
+            if (level == "2Y") {
+                $("#colorPart").attr({"disabled": "disabled"});
+            }
+            $('#addEwoFromListForm').bootstrapValidator({
+                message: 'This value is not valid',
+                feedbackIcons: {
+                    valid: 'glyphicon glyphicon-ok',
+                    invalid: 'glyphicon glyphicon-remove',
+                    validating: 'glyphicon glyphicon-refresh'
+                },
+                fields: {
+                    lineId: {
+                        message: '零件号验证失败',
+                        validators: {
+                            notEmpty: {
+                                message: '零件号不能为空'
+                            }
+                        }
+                    },
+                    pBomLinePartName: {
+                        message: '名称验证失败',
+                        validators: {
+                            notEmpty: {
+                                message: '名称不能为空'
+                            }
+                        }
+                    },
+                }
+            });
+            // 绑定dialog的确定按钮的监听事件
+            $("#btnOk", window.top.document).click(function () {
+                var bootstrapValidator = $("#addEwoFromListForm", window.top.document).data('bootstrapValidator');
+                bootstrapValidator.validate();
+                if (bootstrapValidator.isValid()) {
+                    var url = $("#addEwoFromListForm", window.top.document).attr('action');
+                    let localData={};
+                    var _d = $("#addEwoFromListForm").serializeArray();
+                    for (var p in _d) {
+                        localData[_d[p].name] = _d[p].value;
+                    }
+                    let mapOfLocalData={};
+                    for (let i in keys) {
+                        mapOfLocalData[keys[i]]=$("#"+keys[i]).val();
+                    }
+                    localData.updateDosage=mapOfLocalData;
+                    localData.projectId = $("#project", window.top.document).val();
+                    // var projectId= $("#project", window.top.document).val();
+                    $.ajax({
+                        contentType:
+                            "application/json",
+                        type:
+                            'POST',
+                        url: url,
+                        data:  JSON.stringify(localData),
+                        success:
+                            function (result) {
+                                $('.modal-dialog', window.top.document).parent('div').remove()
+                                $('body', window.top.document).find('.modal-backdrop').remove();
+                                // jquery 调用刷新当前操作的table页面的refresh方法
+                                $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
+                                if (result.success) {
+                                    layer.msg('修改成功', {icon: 1, time: 2000})
+                                }
+                                else if (!result.success) {
+                                    window.Ewin.alert({message: result.errMsg})
+                                }
+                            },
+                        error: function (status) {
+                            window.Ewin.alert({message: status.status + ':修改数据失败!'});
+                        }
+                    });
+                }
+            });
+        })
+    $(document).keydown(function (event) {
+        if (event.keyCode == 13) {
+            $('form').each(function () {
+                event.preventDefault();
+            });
+        }
+    });
+    ]]>
+</script>
+<script th:src="@{/layer/layer.js}"></script>
+</body>
+</html>
