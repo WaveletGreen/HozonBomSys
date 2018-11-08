@@ -1,0 +1,462 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="HzWorkListRecordMapper">
+	<resultMap type="sql.pojo.workList.HzWorkListRecord" id="BaseResultMap">
+        <id column="ID" jdbcType="INTEGER" property="id" />
+		<result column="CHANGE_NUM" jdbcType="VARCHAR" property="changeNum" />
+		<result column="LAUNCHER" jdbcType="VARCHAR" property="launcher" />
+		<result column="LAUNCHER_ID" jdbcType="VARCHAR" property="launcherId" />
+		<result column="LAUNCHER_DEP" jdbcType="VARCHAR" property="launcherDep" />
+		<result column="LAUNCHER_CONTACT" jdbcType="VARCHAR" property="launcherContact" />
+		<result column="AUDITER" jdbcType="VARCHAR" property="auditer" />
+		<result column="AUDITER_ID" jdbcType="VARCHAR" property="auditerId" />
+		<result column="LAUNCH_TIME" jdbcType="DATE" property="launchTime" />
+		<result column="UPDATE_TIME" jdbcType="DATE" property="updateTime" />
+		<result column="STATUS" jdbcType="INTEGER" property="status" />
+		<result column="CHANGE_TYPE" jdbcType="VARCHAR" property="changeType" />
+		<result column="IS_RELEVANCE_CHANGE" jdbcType="VARCHAR" property="isRelevanceChange" />
+		<result column="MARKET_TYPE" jdbcType="VARCHAR" property="marketType" />
+		<result column="PROJECT_STAGE" jdbcType="VARCHAR" property="projectStage" />
+		<result column="NOTE" jdbcType="VARCHAR" property="note" />
+		<result column="RESERVE1" jdbcType="VARCHAR" property="reserve1" />
+        <result column="RESERVE2" jdbcType="VARCHAR" property="reserve2" />
+        <result column="RESERVE3" jdbcType="VARCHAR" property="reserve3" />
+        <result column="RESERVE4" jdbcType="VARCHAR" property="reserve4" />
+        <result column="RESERVE5" jdbcType="VARCHAR" property="reserve5" />
+        <result column="RESERVE6" jdbcType="VARCHAR" property="reserve6" />
+        <result column="RESERVE7" jdbcType="VARCHAR" property="reserve7" />
+        <result column="RESERVE8" jdbcType="VARCHAR" property="reserve8" />
+        <result column="RESERVE9" jdbcType="VARCHAR" property="reserve9" />
+        <result column="RESERVE10" jdbcType="VARCHAR" property="reserve10" />
+	</resultMap>
+
+	<!-- 增加 -->
+	<insert id="HzWorkListDAOImpl_insert" parameterType="sql.pojo.workList.HzWorkListRecord">
+        insert into HZ_WORK_LIST
+        (
+        CHANGE_NUM,LAUNCHER,LAUNCHER_ID,LAUNCHER_DEP,LAUNCHER_CONTACT,AUDITER,
+		AUDITER_ID,LAUNCH_TIME,UPDATE_TIME,STATUS,CHANGE_TYPE,IS_RELEVANCE_CHANGE,
+		MARKET_TYPE,PROJECT_STAGE,NOTE
+        )values(
+        #{changeNum,jdbcType=VARCHAR},#{launcher,jdbcType=VARCHAR},
+        #{launcherId,jdbcType=VARCHAR},#{launcherDep,jdbcType=VARCHAR},
+        #{launcherContact,jdbcType=VARCHAR},#{auditer,jdbcType=VARCHAR},
+        #{auditerId,jdbcType=VARCHAR},sysdate,sysdate,
+        #{status,jdbcType=INTEGER},#{changeType,jdbcType=VARCHAR},
+        #{isRelevanceChange,jdbcType=VARCHAR},#{marketType,jdbcType=VARCHAR},
+        #{projectStage,jdbcType=VARCHAR},#{note,jdbcType=VARCHAR}
+      )
+    </insert>
+
+	<!-- 更新 -->
+	<update id="HzWorkListDAOImpl_update" parameterType="sql.pojo.workList.HzWorkListRecord">
+		update HZ_WORK_LIST
+		<set>
+			<if test="changeNum != null">
+				CHANGE_NUM = #{changeNum,jdbcType=VARCHAR},
+			</if>
+			<if test="launcher != null">
+				LAUNCHER = #{launcher,jdbcType=VARCHAR},
+			</if>
+			<if test="launcherId != null">
+				LAUNCHER_ID = #{launcherId,jdbcType=VARCHAR},
+			</if>
+			<if test="launcherDep != null">
+				LAUNCHER_DEP = #{launcherDep,jdbcType=VARCHAR},
+			</if>
+			<if test="launcherContact != null">
+				LAUNCHER_CONTACT = #{launcherContact,jdbcType=VARCHAR},
+			</if>
+			<if test="auditer != null">
+				AUDITER = #{auditer,jdbcType=VARCHAR},
+			</if>
+			<if test="auditerId != null">
+				AUDITER_ID = #{auditerId,jdbcType=VARCHAR},
+			</if>
+			<if test="launchTime != null">
+				LAUNCH_TIME = #{launchTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateTime != null">
+				UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="status != null">
+				STATUS = #{status,jdbcType=INTEGER},
+			</if>
+			<if test="changeType != null">
+				CHANGE_TYPE = #{changeType,jdbcType=VARCHAR},
+			</if>
+			<if test="isRelevanceChange != null">
+				IS_RELEVANCE_CHANGE = #{isRelevanceChange,jdbcType=VARCHAR},
+			</if>
+			<if test="marketType != null">
+				MARKET_TYPE = #{marketType,jdbcType=VARCHAR},
+			</if>
+			<if test="projectStage != null">
+				PROJECT_STAGE = #{projectStage,jdbcType=VARCHAR},
+			</if>
+			<if test="note != null">
+				NOTE = #{note,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where ID = #{id,jdbcType=INTEGER}
+	</update>
+
+	<!-- 查找所有 -->
+	<select id="HzWorkListDAOImpl_findWorkListAll" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+		select  * FROM HZ_WORK_LIST
+	</select>
+
+	<!-- 条件查询 -->
+	<select id="HzWorkListDAOImpl_findWorkList" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+		SELECT * from HZ_WORK_LIST
+		where 1=1
+		<if test="changeNum != null and changeNum!=''">
+			and CHANGE_NUM = #{changeNum,jdbcType=VARCHAR}
+		</if>
+		<if test="launcher != null and launcher!=''">
+			and LAUNCHER = #{launcher,jdbcType=VARCHAR}
+		</if>
+		<!--发起时间比较-->
+		<if test="launchTime != null and launchTime!=''">
+			<!--and (LAUNCH_TIME between to_date('2018-11-07 18:24:17','yyyy-mm-dd hh24:mi:ss') and to_date('2018-11-09 18:24:17','yyyy-mm-dd hh24:mi:ss'))-->
+			and (LAUNCH_TIME between to_date(#{time1,jdbcType=VARCHAR},'yyyy-mm-dd hh24:mi:ss')
+							  and to_date(#{time2,jdbcType=VARCHAR},'yyyy-mm-dd hh24:mi:ss'))
+		</if>
+		and STATUS <![CDATA[ <> ]]>0
+		order by CAST(ID as FLOAT)
+	</select>
+
+
+	<!--根据主键获取对象-->
+	<select id="get" parameterType="sql.pojo.workList.HzWorkListRecord" resultMap="BaseResultMap">
+		select u.*,og.existing_num,og.group_code,og.name,og.node,og.num,og.parent_node from userRecord u inner join org_group og on u.group_id = og.group_id
+		WHERE id=#{id}
+	</select>
+
+	<insert id="save" parameterType="sql.pojo.workList.HzWorkListRecord">
+		<!--oracle插入数据返回主键到外键-->
+		<selectKey resultType="java.lang.Integer" order="BEFORE" keyProperty="id">
+			SELECT SEQ_HZ_USERRECORD.Nextval as ID from DUAL
+		</selectKey>
+
+		insert into USERRECORD
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			ID,
+			<if test="login != null">
+				LOGIN,
+			</if>
+			<if test="password != null">
+				PASSWORD,
+			</if>
+			<if test="userName != null">
+				USER_NAME,
+			</if>
+			<if test="address != null">
+				ADDRESS,
+			</if>
+			<if test="job != null">
+				JOB,
+			</if>
+			<if test="groupId != null">
+				GROUP_ID,
+			</if>
+			<if test="city != null">
+				CITY,
+			</if>
+			<if test="district != null">
+				DISTRICT,
+			</if>
+			<if test="province != null">
+				PROVINCE,
+			</if>
+			<if test="streetAddress != null">
+				STREET_ADDRESS,
+			</if>
+			<if test="state != null">
+				STATE,
+			</if>
+			<if test="type != null">
+				TYPE,
+			</if>
+			LAST_LOGIN_DATE,
+			<if test="email != null">
+				EMAIL,
+			</if>
+			<if test="userNo != null">
+				USER_NO,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<!--SEQ_HZ_USERRECORD.nextval,-->
+			#{id,jdbcType=OTHER},
+			<if test="login != null">
+				#{login,jdbcType=OTHER},
+			</if>
+			<if test="password != null">
+				#{password,jdbcType=OTHER},
+			</if>
+			<if test="userName != null">
+				#{userName,jdbcType=OTHER},
+			</if>
+			<if test="address != null">
+				#{address,jdbcType=OTHER},
+			</if>
+			<if test="job != null">
+				#{job,jdbcType=OTHER},
+			</if>
+			<if test="groupId != null">
+				#{groupId,jdbcType=DECIMAL},
+			</if>
+			<if test="city != null">
+				#{city,jdbcType=OTHER},
+			</if>
+			<if test="district != null">
+				#{district,jdbcType=OTHER},
+			</if>
+			<if test="province != null">
+				#{province,jdbcType=OTHER},
+			</if>
+			<if test="streetAddress != null">
+				#{streetAddress,jdbcType=OTHER},
+			</if>
+			<if test="state != null">
+				#{state,jdbcType=OTHER},
+			</if>
+			<if test="type != null">
+				#{type,jdbcType=OTHER},
+			</if>
+			sysdate,
+			<if test="email != null">
+				#{email,jdbcType=OTHER},
+			</if>
+			<if test="userNo != null">
+				#{userNo,jdbcType=OTHER}
+			</if>
+		</trim>
+	</insert>
+
+	<!--删除-->
+	<delete id="delete" parameterType="sql.pojo.workList.HzWorkListRecord">
+		 DELETE FROM userRecord WHERE id=#{id}
+	</delete>
+
+	<!--分页查询组织架构底下的用户-->
+	<select id="findGroupUserByPage" parameterType="com.connor.hozon.bom.sys.entity.QueryUser" resultMap="UserMap">
+		select * from(
+		select u.*,og.existing_num,og.group_code,og.name,og.node,og.num,og.parent_node
+		,rownum as rn
+		from
+		userRecord u inner join org_group og on u.group_id = og.group_id
+		WHERE 1=1
+		<if test="userName!=null and userName!='' ">
+			AND u.user_name like concat(#{userName},'%')
+		</if>
+		AND og.parent_node like concat(#{orgGroup.parentNode},'%')<if test="orgGroup!=null">
+			<if test="orgGroup.parentNode!=null and orgGroup.parentNode!='' ">
+                  AND og.parent_node like concat(#{orgGroup.parentNode},'%')
+			</if>
+			<if test="orgGroup.node!=null and orgGroup.node!='' ">
+				AND og.node like concat(#{orgGroup.node},'%')
+			</if>
+		</if>
+		<if test="sort!= null and sort!='' ">
+			order by ${sort} ${order}
+		</if>
+		)u
+		where 1=1
+		<!--limit #{offset},#{limit}-->
+		<if test="offset!=null">
+			and u.rn &gt;= ${offset}+1
+		</if>
+		<if test="limit!=null and  page!=null">
+			and u.rn &lt;= ${page}*${limit}
+		</if>
+
+	</select>
+
+	<!--统计组织架构底下的用户-->
+	<select id="countGroupUser" parameterType="com.connor.hozon.bom.sys.entity.QueryUser" resultType="int">
+		select count(1) from userRecord u inner join org_group og on u.group_id = og.group_id
+		WHERE 1=1
+		<if test="userName!=null and userName!='' ">
+			AND u.user_name like concat(#{userName},'%')
+		</if>
+		<if test="orgGroup!=null">
+			<if test="orgGroup.parentNode!=null and orgGroup.parentNode!='' ">
+				AND og.parent_node like concat(#{orgGroup.parentNode},'%')
+			</if>
+			<if test="orgGroup.node!=null and orgGroup.node!='' ">
+				AND og.node like concat(#{orgGroup.node},'%')
+			</if>
+		</if>
+	</select>
+
+	<!--分页查询-->
+	<select id="findByPage" parameterType="com.connor.hozon.bom.sys.entity.QueryUser" resultMap="UserMap">
+		select * from(
+		select u.*,og.existing_num,og.group_code,og.name,og.node,og.num,og.parent_node
+		,rownum as rn
+		from userRecord u inner join org_group og on u.group_id = og.group_id
+		WHERE 1=1
+		<if test="login!=null and login!='' ">
+		AND u.login=#{login}
+		</if>
+		<if test="password!=null and password!='' ">
+		AND u.password=#{password}
+		</if>
+		<if test="userName!=null and userName!='' ">
+		AND u.user_name=#{userName}
+		</if>
+		<if test="address!=null and address!='' ">
+		AND u.address=#{address}
+		</if>
+		<if test="job!=null and job!='' ">
+		AND u.job=#{job}
+		</if>
+		<if test="groupId!=null and groupId!='' ">
+		AND u.group_id=#{groupId}
+		</if>
+		<if test="birthDate!=null and birthDate!='' ">
+		AND u.birth_date=#{birthDate}
+		</if>
+		<if test="city!=null and city!='' ">
+		AND u.city=#{city}
+		</if>
+		<if test="district!=null and district!='' ">
+		AND u.district=#{district}
+		</if>
+		<if test="province!=null and province!='' ">
+		AND u.province=#{province}
+		</if>
+		<if test="streetAddress!=null and streetAddress!='' ">
+		AND u.street_address=#{streetAddress}
+		</if>
+		<if test="state!=null and state!='' ">
+		AND u.state=#{state}
+		</if>
+		<if test="type!=null and type!='' ">
+		AND u.type=#{type}
+		</if>
+		<if test="lastLoginDate!=null and lastLoginDate!='' ">
+		AND u.last_login_date=#{lastLoginDate}
+		</if>
+		<if test="sort!= null and sort!='' ">
+		order by ${sort} ${order}
+		</if>
+		)u
+		where 1=1
+		<!--limit #{offset},#{limit}-->
+		<if test="offset!=null">
+			and u.rn &gt;= ${offset}+1
+		</if>
+		<if test="limit!=null and  page!=null">
+			and u.rn &lt;= ${page}*${limit}
+		</if>
+
+	</select>
+
+	<!--统计-->
+	<select id="count" parameterType="com.connor.hozon.bom.sys.entity.QueryUser" resultType="int">
+		SELECT count(*) FROM userRecord
+		WHERE 1=1
+		<if test="login!=null and login!='' ">
+			AND login=#{login}
+		</if>
+		<if test="password!=null and password!='' ">
+			AND password=#{password}
+		</if>
+		<if test="userName!=null and userName!='' ">
+			AND user_name=#{userName}
+		</if>
+		<if test="address!=null and address!='' ">
+			AND address=#{address}
+		</if>
+		<if test="job!=null and job!='' ">
+			AND job=#{job}
+		</if>
+		<if test="groupId!=null and groupId!='' ">
+			AND group_id=#{groupId}
+		</if>
+		<if test="birthDate!=null and birthDate!='' ">
+			AND birth_date=#{birthDate}
+		</if>
+		<if test="city!=null and city!='' ">
+			AND city=#{city}
+		</if>
+		<if test="district!=null and district!='' ">
+			AND district=#{district}
+		</if>
+		<if test="province!=null and province!='' ">
+			AND province=#{province}
+		</if>
+		<if test="streetAddress!=null and streetAddress!='' ">
+			AND street_address=#{streetAddress}
+		</if>
+		<if test="state!=null and state!='' ">
+			AND state=#{state}
+		</if>
+		<if test="type!=null and type!='' ">
+			AND type=#{type}
+		</if>
+		<if test="lastLoginDate!=null and lastLoginDate!='' ">
+			AND last_login_date=#{lastLoginDate}
+		</if>
+		<if test="sort!= null and sort!='' ">
+			order by ${sort} ${order}
+		</if>
+	</select>
+
+	<!--查询-->
+	<select id="query" parameterType="com.connor.hozon.bom.sys.entity.QueryUser" resultMap="UserMap">
+		SELECT id,login,password,user_name,address,job,group_id,birth_date,city,district,province,street_address,state,type,last_login_date FROM userRecord
+		WHERE 1=1
+		<if test="login!=null and login!='' ">
+			AND login=#{login}
+		</if>
+		<if test="password!=null and password!='' ">
+			AND password=#{password}
+		</if>
+		<if test="userName!=null and userName!='' ">
+			AND user_name=#{userName}
+		</if>
+		<if test="address!=null and address!='' ">
+			AND address=#{address}
+		</if>
+		<if test="job!=null and job!='' ">
+			AND job=#{job}
+		</if>
+		<if test="groupId!=null and groupId!='' ">
+			AND group_id=#{groupId}
+		</if>
+		<if test="birthDate!=null and birthDate!='' ">
+			AND birth_date=#{birthDate}
+		</if>
+		<if test="city!=null and city!='' ">
+			AND city=#{city}
+		</if>
+		<if test="district!=null and district!='' ">
+			AND district=#{district}
+		</if>
+		<if test="province!=null and province!='' ">
+			AND province=#{province}
+		</if>
+		<if test="streetAddress!=null and streetAddress!='' ">
+			AND street_address=#{streetAddress}
+		</if>
+		<if test="state!=null and state!='' ">
+			AND state=#{state}
+		</if>
+		<if test="type!=null and type!='' ">
+			AND type=#{type}
+		</if>
+		<if test="lastLoginDate!=null and lastLoginDate!='' ">
+			AND last_login_date=#{lastLoginDate}
+		</if>
+		<if test="sort!= null and sort!='' ">
+			order by ${sort} ${order}
+		</if>
+	</select>
+
+
+
+</mapper>
