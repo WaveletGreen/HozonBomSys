@@ -105,6 +105,11 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
 
 
 
+        //代办事项
+        registry.addViewController("/untreated").setViewName("/myListJob/untreated/untreated");
+
+
+
 
 
         //变更管理VWO表单
