@@ -10,6 +10,7 @@ import com.connor.hozon.bom.sys.entity.Tree;
 import com.connor.hozon.bom.sys.entity.User;
 import com.connor.hozon.bom.sys.entity.UserRole;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,11 +25,14 @@ import java.util.Set;
  */
 @Service("userRolePrivilegeService")
 @Transactional(rollbackFor={IllegalArgumentException.class})
+@Component
 public class UserRolePrivilegeService {
     @Autowired
+    @SuppressWarnings("SpringJavaAutowiringInspection")
     private UserRoleDao userRoleDao;
 
     @Autowired
+    @SuppressWarnings("SpringJavaAutowiringInspection")
     private UserService userService;
 
     /**
