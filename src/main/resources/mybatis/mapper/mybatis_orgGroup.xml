@@ -11,7 +11,7 @@
         <result property="parentNode" column="parent_node"/>
     </resultMap>
 
-    <!-- 根据父节点来查询最大的节点的值 -->
+    <!-- 1根据父节点来查询最大的节点的值 -->
     <select id="getMaxOrgGroup" parameterType="java.lang.String" resultType="java.lang.String">
 		select max(o.node) from org_group o where o.parent_node = #{parentNode}
 	</select>

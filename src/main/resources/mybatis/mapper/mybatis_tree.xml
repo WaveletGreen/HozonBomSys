@@ -12,7 +12,7 @@
 		<result property="state" column="state"/>
 	</resultMap>
 
-	<!-- 加载用户的菜单树的数据 -->
+	<!-- 1加载用户的菜单树的数据 -->
 	<select id="loadUserTree" resultMap="TreeMap" parameterType="com.connor.hozon.bom.sys.entity.User">
 		select DISTINCT t.*  from tree t inner join role_associate_tree rat on t.id = rat.tree_id
 		inner join user_role ur on rat.role_id = ur.id where ur.id in
