@@ -11,6 +11,7 @@
         <result property="parentNode" column="parent_node"/>
     </resultMap>
 
+
     <!-- 1根据父节点来查询最大的节点的值 -->
     <select id="getMaxOrgGroup" parameterType="java.lang.String" resultType="java.lang.String">
 		select max(o.node) from org_group o where o.parent_node = #{parentNode}
@@ -150,4 +151,15 @@
 	<select id="queryAllOrgGroup"  resultMap="OrgGroupMap">
 		SELECT group_id,existing_num,group_code,name,node,num,parent_node FROM org_group
 	</select>
+
+
+    <!--获取部门下的人员数量-->
+    <select id="queryOrgGroupUserCount"  resultType="java.lang.Integer">
+        SELECT count(*) from USERRECORD t1 INNER join
+        org_group t2
+        on
+        t1.group_id = t2.group_id
+        AND t1.group_id = #{groupId}
+    </select>
+
 </mapper>

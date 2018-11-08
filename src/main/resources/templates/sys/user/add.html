@@ -115,14 +115,14 @@
                 },
 
                 email: {
-                    message:'',
+                    message:'邮箱格式不对',
                     validators: {
                         // notEmpty: {
                         //     message: '邮箱不能为空'
                         // },
                         regexp: {
                             // regexp: /^[a-zA-Z0-9_\.]+$/,
-                            regexp:/^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$/,
+                            regexp:/^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+.){1,63}[a-z0-9]+$/,
                             message: '邮箱格式不对(例如:xxxx@xx.xxx,xxx.xxxx@xx.xxx.xxx)！'
                         }
                     }

@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2018.
- * This file was wrote by fancyears·milos·maywas @connor. Any question/bug you can post to 1243093366@qq.com.
+ * This file was wrote by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
  * ALL RIGHTS RESERVED.
  */
 /**
@@ -14,6 +14,15 @@ function renderingTableRowColor(tableId) {
         let cl = randomColor();
         tableId.rows[i].setAttribute("style", "background: " + cl + ";");
         tableId.rows[i + 1].setAttribute("style", "background: " + cl + ";");
+    }
+}
+function changeTableRendering(tableId) {
+    var tableId = document.getElementById(tableId);
+    for (var i = 1; i < tableId.rows.length; i += 2) {
+        // if(tableId.rows[i].cells[0].innerHTML=="变更前" ){
+        // let cl = randomColor();
+        tableId.rows[i].setAttribute("style", "background: #fcff4e;");
+        tableId.rows[i + 1].setAttribute("style", "background: #75ff78");
     }
 }
 

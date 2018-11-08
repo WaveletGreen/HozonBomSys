@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2018.
- * This file was wrote by fancyears·milos·maywas @connor. Any question/bug you can post to 1243093366@qq.com.
+ * This file was wrote by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
  * ALL RIGHTS RESERVED.
  */
 
@@ -36,4 +36,6 @@ public interface HzDerivativeMaterielBasicDao extends BasicDao<HzDerivativeMater
      * @return
      */
     HzDerivativeMaterielBasic selectByModelAndColorUid(String modelUid, String colorModel);
+
+    List<HzDerivativeMaterielBasic> selectByPuids(List<String> puids);
 }

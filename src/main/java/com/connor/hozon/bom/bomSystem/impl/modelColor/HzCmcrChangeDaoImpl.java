@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2018.
- * This file was wrote by fancyears·milos·maywas @connor. Any question/bug you can post to 1243093366@qq.com.
+ * This file was wrote by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
  * ALL RIGHTS RESERVED.
  */
 
@@ -11,6 +11,7 @@ import com.connor.hozon.bom.bomSystem.impl.BasicDaoImpl;
 import com.connor.hozon.bom.bomSystem.option.ChangeCmcrOptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Service;
 import sql.pojo.cfg.modelColor.HzCmcrChange;
 
@@ -24,7 +25,8 @@ import java.util.Map;
  * @Date: Created in 2018/9/6 13:19
  * @Modified By:
  */
-@Service("hzCmcrChange")
+//@Service("hzCmcrChange")
+@Configuration
 public class HzCmcrChangeDaoImpl extends BasicDaoImpl<HzCmcrChange> implements HzCmcrChangeDao {
 
     private final static HzCmcrChange CHANGE_POJO = new HzCmcrChange();
@@ -44,7 +46,6 @@ public class HzCmcrChangeDaoImpl extends BasicDaoImpl<HzCmcrChange> implements H
     public Long insertAfter(HzCmcrChange cmcr) throws Exception {
         preSetAfter(cmcr);
         return executeInsert(cmcr, "insert");
-
     }
 
 
@@ -69,7 +70,6 @@ public class HzCmcrChangeDaoImpl extends BasicDaoImpl<HzCmcrChange> implements H
     public Long insertAfterSelective(HzCmcrChange cmcr) throws Exception {
         preSetAfter(cmcr);
         return executeInsert(cmcr, "insertSelective");
-
     }
 
     /**

@@ -5,6 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.embedded.ConfigurableEmbeddedServletContainer;
 import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomizer;
+import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.boot.web.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -13,9 +14,9 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
  * 需要告知扫描的包名
  * 启动事物扫描
  */
-@SpringBootApplication(scanBasePackages = {"sql", "integration.service", "com.connor.hozon"})
+@SpringBootApplication(
+        scanBasePackages = {"sql", "integration.service", "com.connor.hozon"})
 @EnableTransactionManagement
-//@ServletComponentScan
 public class HzBomSysApplication extends SpringBootServletInitializer {
 
     @Override

@@ -171,8 +171,7 @@
                         'POST',
                     url: url,
                     data: myData,
-                    success:
-                        function (result) {
+                    success:function (result) {
                             $('.modal-dialog', window.top.document).parent('div').remove()
                             $('body', window.top.document).find('.modal-backdrop').remove();
                             // jquery 调用刷新当前操作的table页面的refresh方法

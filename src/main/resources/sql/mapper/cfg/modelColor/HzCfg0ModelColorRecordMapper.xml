@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
   ~ Copyright (c) 2018.
-  ~ This file was wrote by fancyears·milos·maywas @connor. Any question/bug you can post to 1243093366@qq.com.
+  ~ This file was wrote by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
   ~ ALL RIGHTS RESERVED.
   -->
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
@@ -56,6 +56,9 @@
         <result column="CMCR_STATUS" jdbcType="VARCHAR" property="cmcrStatus"/>
     </resultMap>
 
+    <resultMap extends="ResultMapWithColorJudge" id="VwoMap" type="sql.pojo.cfg.modelColor.HzCfg0ModelColor">
+        <result column="cmcrVwoNum" jdbcType="VARCHAR" property="cmcrVwoNum"/>
+    </resultMap>
     <sql id="Base_Column_List">
         PUID,
         P_CFG0_MAIN_RECORD_OF_MC,
@@ -108,14 +111,16 @@
         <include refid="Base_Column_List"/>
         from HZ_CFG0_MODEL_COLOR_RECORD where PUID=#{puid,jdbcType=VARCHAR}
     </select>
-    <select id="selectAll" resultMap="ResultMapWithColorJudge">
+    <select id="selectAll" resultMap="VwoMap">
         select
         t.
         <include refid="Base_Column_List"/>,
         t2.
-        <include refid="Color_Is_Multiply"/>
+        <include refid="Color_Is_Multiply"/>,
+        t3.VWO_NUM as cmcrVwoNum
         from HZ_CFG0_MODEL_COLOR_RECORD t
         left join HZ_CFG0_COLORSET t2 on p_model_shell=t2.p_color_code
+        left join HZ_VWO_INFO t3 on t3.ID = t.CMCR_VWO_ID
         where t.p_cfg0_main_record_of_mc=
         (select puid
         from hz_cfg0_main_record t3

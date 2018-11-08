@@ -30,11 +30,11 @@
             </div>
             <div class="form-group" >
                 <label for="email">邮箱:</label>
-                <input type="email" class="form-control" name="email" id="email"  placeholder="请输入邮箱" />
+                <input type="email" class="form-control" name="email" id="email" th:value="${entity.email}"  placeholder="请输入邮箱" />
             </div>
             <div class="form-group" >
                 <label for="userNo">工号:</label>
-                <input type="text" class="form-control" name="userNo" id="userNo"  placeholder="请输入工号" />
+                <input type="text" class="form-control" name="userNo" id="userNo" th:value="${entity.userNo}" placeholder="请输入工号" />
             </div>
             <div class="form-inline">
                 <label for="groupName">所属部门:</label>
@@ -138,24 +138,15 @@
                 email: {
                     message:'邮箱无效',
                     validators: {
-                        notEmpty: {
-                            message: '邮箱不能为空'
-                        },
-                        regexp: {
-                            // regexp: /^[a-zA-Z0-9_\.]+$/,
-                            regexp:/^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$/,
-                            message: '邮箱格式不对(例如:xxxx@xx.xxx,xxx.xxxx@xx.xxx.xxx)！'
+                    //     notEmpty: {
+                    //         message: '邮箱不能为空'
+                    //     },
+                        emailAddress: {
+                            message: '邮箱地址格式有误'
                         }
                     }
                 },
-                userNo: {
-                    message:'工号无效',
-                    validators: {
-                        notEmpty: {
-                            message: '工号不能为空'
-                        },
-                    }
-                }
+
 
             }
         })

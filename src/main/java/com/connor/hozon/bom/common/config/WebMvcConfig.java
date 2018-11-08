@@ -1,9 +1,15 @@
 package com.connor.hozon.bom.common.config;
 
+import com.connor.hozon.bom.sys.filter.HzFilter;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.filter.DelegatingFilterProxy;
 import org.springframework.web.servlet.config.annotation.PathMatchConfigurer;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+
+import javax.servlet.Filter;
 
 /**
  * 类描述：springMVC的配置，在这里直接注册了调用的所有页面注册信息
@@ -105,6 +111,11 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
 
 
 
+        //代办事项
+        registry.addViewController("/untreated").setViewName("/myListJob/untreated/untreated");
+
+
+
 
 
         //变更管理VWO表单
@@ -121,8 +132,8 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         registry.addViewController("/workFrom").setViewName("/changeManage/workFrom");
         //变更管理CODPWO表单
         registry.addViewController("/codpwoFromList").setViewName("/changeManage/codpwo/codpwoFromList");
-
-
+        //临时变更表单
+        registry.addViewController("/1111").setViewName("/updateLog/1111");
 
 
 

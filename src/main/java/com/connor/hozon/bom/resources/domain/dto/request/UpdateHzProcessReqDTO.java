@@ -11,6 +11,10 @@ public class UpdateHzProcessReqDTO {
      */
     private String factoryCode;
     /**
+     * 编号
+     */
+    private Integer no;
+    /**
      * 用途
      */
     private String purpose;
@@ -72,6 +76,12 @@ public class UpdateHzProcessReqDTO {
     private String controlCode;
 
     private String projectId;
+
+    private Object pMaterielCode;
+
+    private Object pMaterielDesc;
+
+    private Boolean ck;
 
     public String getProjectId() {
         return projectId;
@@ -207,5 +217,37 @@ public class UpdateHzProcessReqDTO {
 
     public void setControlCode(String controlCode) {
         this.controlCode = controlCode;
+    }
+
+    public Integer getNo() {
+        return no;
+    }
+
+    public void setNo(Integer no) {
+        this.no = no;
+    }
+
+    public Object getpMaterielCode() {
+        return pMaterielCode;
+    }
+
+    public void setpMaterielCode(Object pMaterielCode) {
+        this.pMaterielCode = pMaterielCode;
+    }
+
+    public Object getpMaterielDesc() {
+        return pMaterielDesc;
+    }
+
+    public void setpMaterielDesc(Object pMaterielDesc) {
+        this.pMaterielDesc = pMaterielDesc;
+    }
+
+    public Boolean getCk() {
+        return ck;
+    }
+
+    public void setCk(Boolean ck) {
+        this.ck = ck;
     }
 }

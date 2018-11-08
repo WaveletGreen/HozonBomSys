@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2018.
- * This file was wrote by fancyears·milos·maywas @connor. Any question/bug you can post to 1243093366@qq.com.
+ * This file was wrote by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
  * ALL RIGHTS RESERVED.
  */
 
@@ -36,14 +36,13 @@ public class SynBomController extends ExtraIntegrate {
     @Autowired
     HzCfg0OfBomLineService hzCfg0OfBomLineService;
 
-    /*   */
-
     /**
      * 根据项目同步所有数据
      *
      * @param projectUid
      * @return
-     *//*
+     */
+    /*
     @RequestMapping("/synAllBomByProjectPuid")
     @ResponseBody
     public JSONObject synAllBomByProjectPuid(@RequestParam("projectUid") String projectUid) {

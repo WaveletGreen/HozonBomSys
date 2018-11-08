@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2018.
- * This file was wrote by fancyears·milos·maywas @connor. Any question/bug you can post to 1243093366@qq.com.
+ * This file was wrote by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
  * ALL RIGHTS RESERVED.
  */
 
@@ -250,6 +250,7 @@ public class HzCfg0ModelColorService {
             _result.put("descOfColorModel", color.getpDescOfColorfulModel());
             _result.put("modelShell", color.getpModelShellOfColorfulModel());
             _result.put("modeColorIsMultiply", color.getpColorIsMultiply());
+            _result.put("vwoNum", String.valueOf(color.getCmcrVwoId()));
 //            List<HzCfg0ModelColorDetail> cm = hzColorModelService.doSelectByModelUidWithColor(color.getPuid());
             List<HzCfg0ModelColorDetail> cm = hzColorModelService.doSelectByModelUidWithColor2(color.getPuid());
             coach.clear();
@@ -363,6 +364,8 @@ public class HzCfg0ModelColorService {
             }
             //添加状态
             _result.put("cmcrStatus",color.getCmcrStatus());
+            _result.put("cmcrVwoNum",color.getCmcrVwoNum());
+
             res.add(_result);
         });
 

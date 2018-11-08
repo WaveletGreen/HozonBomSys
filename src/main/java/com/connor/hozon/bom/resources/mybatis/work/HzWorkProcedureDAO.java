@@ -43,4 +43,6 @@ public interface HzWorkProcedureDAO {
     List<String> queryProcessDescsByPuid(List<String> puidList);
 
     int deleteHzWorkProcesses(List<HzWorkProcedure> hzWorkProceduresDel);
+
+    List<HzWorkProcedure> queryProcedures(List<HzWorkProcedure> hzWorkProcedureList);
 }

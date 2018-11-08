@@ -674,12 +674,7 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
     }
 
     @Override
-    public List<String> queryProcessDesc(String puids) {
-        List<String> puidList = new ArrayList<String>();
-        String[] puidsArr = puids.split(",");
-        for(String puid : puidsArr){
-            puidList.add(puid);
-        }
+    public List<String> queryProcessDesc( List<String> puidList) {
         List<String> processDescList = hzWorkProcedureDAO.queryProcessDescsByPuid(puidList);
         List<String> processDescHeadList = new ArrayList<String>();
         if(processDescList!=null&&processDescList.size()>0){
@@ -690,5 +685,10 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
             }
         }
         return processDescHeadList;
+    }
+
+    @Override
+    public List<HzWorkProcedure> queryProcedures(List<HzWorkProcedure> hzWorkProcedureList) {
+        return hzWorkProcedureDAO.queryProcedures(hzWorkProcedureList);
     }
 }

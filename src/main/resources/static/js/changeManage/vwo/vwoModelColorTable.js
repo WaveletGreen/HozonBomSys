@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2018.
- * This file was wrote by fancyears·milos·maywas @connor. Any question/bug you can post to 1243093366@qq.com.
+ * This file was wrote by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
  * ALL RIGHTS RESERVED.
  */
 
@@ -80,5 +80,5 @@ function initTable(data) {
 
     });
     //加载成功时执行,渲染双行的
-    renderingTableRowColor(commonTableName);
+    changeTableRendering(commonTableName);
 }

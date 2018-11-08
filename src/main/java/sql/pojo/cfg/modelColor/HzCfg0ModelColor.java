@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2018.
- * This file was wrote by fancyears·milos·maywas @connor. Any question/bug you can post to 1243093366@qq.com.
+ * This file was wrote by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
  * ALL RIGHTS RESERVED.
  */
 
@@ -46,8 +46,12 @@ public class HzCfg0ModelColor {
     private String pShellCfg0Puid;
     @Getter
     @Setter
-    //VWO变更号
+    //VWO变更id
     private Long cmcrVwoId;
+    @Getter
+    @Setter
+    //VWO变更号
+    private String cmcrVwoNum;
     //创建时间
     @Getter
     @Setter

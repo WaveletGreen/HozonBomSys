@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
   ~ Copyright (c) 2018.
-  ~ This file was wrote by fancyears·milos·maywas @connor. Any question/bug you can post to 1243093366@qq.com.
+  ~ This file was wrote by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
   ~ ALL RIGHTS RESERVED.
   -->
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
@@ -291,4 +291,16 @@
       DMD_FEATURE_VALUE = #{dmdFeatureValue,jdbcType=VARCHAR}
     where ID = #{id,jdbcType=DECIMAL}
   </update>
+
+    <select id="selectByBasics" parameterType="java.util.List" resultMap="BaseResultMap">
+        select
+          <include refid="Base_Column_List"/>
+        from
+          HZ_DERIVATIVE_MATERIEL_DETAIL
+        where
+        DMD_DMB_ID in
+        <foreach collection="list" index="index" item="hzDerivativeMaterielBasic" open="(" separator="," close=")">
+            #{hzDerivativeMaterielBasic.id,jdbcType=DECIMAL}
+        </foreach>
+    </select>
 </mapper>

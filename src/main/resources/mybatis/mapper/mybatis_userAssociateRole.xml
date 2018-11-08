@@ -11,7 +11,7 @@
 		DELETE FROM user_associate_role WHERE user_id=#{id}
 	</delete>
 
-	<!--根据主键获取对象-->
+	<!--x根据主键获取对象-->
 	<select id="get" parameterType="com.connor.hozon.bom.sys.entity.UserAssociateRole" resultMap="UserAssociateRoleMap">
 		SELECT user_id,role_id FROM user_associate_role 
 		WHERE 

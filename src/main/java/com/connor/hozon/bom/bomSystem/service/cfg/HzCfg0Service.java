@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2018.
- * This file was wrote by fancyears·milos·maywas @connor. Any question/bug you can post to 1243093366@qq.com.
+ * This file was wrote by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
  * ALL RIGHTS RESERVED.
  */
 
@@ -18,6 +18,7 @@ import com.connor.hozon.bom.resources.mybatis.resourcesLibrary.dictionaryLibrary
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 import sql.pojo.cfg.main.HzCfg0MainRecord;
 import sql.pojo.cfg.cfg0.HzCfg0OptionFamily;
@@ -27,7 +28,7 @@ import sql.pojo.resourcesLibrary.dictionaryLibrary.HzDictionaryLibrary;
 import java.util.*;
 /**
  * @Author: Fancyears·Maylos·Maywas
- * @Description: fuck
+ * @Description: 特性服务层，起名为Cfg0是由于TC中配置管理中前缀是Cfg0，沿用TC的命名，到后来不再沿用TC，改采用英文Feature来标识特性
  * @Date: Created in 2018/9/6 13:19
  * @Modified By:
  */
@@ -36,6 +37,7 @@ public class HzCfg0Service {
     /**
      * 特性值dao层
      */
+
     @Autowired
     HzCfg0RecordDao hzCfg0RecordDao;
     /**

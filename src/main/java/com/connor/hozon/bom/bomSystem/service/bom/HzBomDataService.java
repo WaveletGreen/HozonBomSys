@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2018.
- * This file was wrote by fancyears·milos·maywas @connor. Any question/bug you can post to 1243093366@qq.com.
+ * This file was wrote by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
  * ALL RIGHTS RESERVED.
  */
 
@@ -23,7 +23,6 @@ import sql.redis.SerializeUtil;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @Author: Fancyears·Maylos·Maywas
@@ -84,6 +83,7 @@ public class HzBomDataService {
         return array;
     }
 
+    @Deprecated
     public JSONArray load(String bdf) {
         List<HzBomLineRecord> result = null;
         HzBomLineRecord bomLineRecord = new HzBomLineRecord();

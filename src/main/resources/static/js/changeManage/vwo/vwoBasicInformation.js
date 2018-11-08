@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2018.
- * This file was wrote by fancyears·milos·maywas @connor. Any question/bug you can't post to 1243093366@qq.com.
+ * This file was wrote by fancyears·milos·malvis @connor. Any question/bug you can't post to 1243093366@qq.com.
  * ALL RIGHTS RESERVED.
  */
 var vwoId = -1;
@@ -155,7 +155,7 @@ var vwoExeToolBar = [
 /**
  * 分发与实施表头设置
  */
-var vwoExeColumn=[
+var vwoExeColumn = [
     {
         field: 'ck',
         title: '选择',
@@ -346,22 +346,32 @@ function loadConnectedData(url) {
         });
         clearToolbars();
         if (vwoStatus == 101) {
-            notDisabledById("bomLeaderOpinion");
-            $(".head-btnSets").append('<button class="btn btn-success head-func-btn" style="margin-top: 100px;z-index:99999;"\n' +
-                '        id="bomLeadApprove" onclick="approve(\'saveBomLeaderOpinion\',\'bomLeaderOpinion\')">BOM经理审批\n' +
-                '</button>');
+            var bomUser = $("#BomUserId").val();
+            if (user == bomUser) {
+                notDisabledById("bomLeaderOpinion");
+                $(".head-btnSets").append('<button class="btn btn-success head-func-btn" style="margin-top: 100px;z-index:99999;"\n' +
+                    '        id="bomLeadApprove" onclick="approve(\'saveBomLeaderOpinion\',\'bomLeaderOpinion\')">BOM经理审批\n' +
+                    '</button>');
+            }
         } else if (vwoStatus == 102) {
-            notDisabledById("pmtLeaderOpinion");
-            $(".head-btnSets").append('<button class="btn btn-success head-func-btn" style="margin-top: 100px;z-index:99999;"\n' +
-                '        id="pmtLeadApprove" onclick="approve(\'savePmtLeaderOpinion\',\'pmtLeaderOpinion\')">PMT经理审批\n' +
-                '</button>');
+            var pmtUser = $("#PmtUserId").val();
+            if (user == pmtUser) {
+                notDisabledById("pmtLeaderOpinion");
+                $(".head-btnSets").append('<button class="btn btn-success head-func-btn" style="margin-top: 100px;z-index:99999;"\n' +
+                    '        id="pmtLeadApprove" onclick="approve(\'savePmtLeaderOpinion\',\'pmtLeaderOpinion\')">PMT经理审批\n' +
+                    '</button>');
+            }
         } else if (vwoStatus == 103) {
-            notDisabledById("projLeaderOpinion");
-            $(".head-btnSets").append('<button class="btn btn-success head-func-btn" style="margin-top: 100px;z-index:99999;"\n' +
-                '        id="projLeadApprove" onclick="approve(\'saveProjLeaderOpinion\',\'projLeaderOpinion\')">项目经理审批\n' +
-                '</button>');
+            var projUser = $("#ProjUserId").val();
+            if (user == projUser) {
+                notDisabledById("projLeaderOpinion");
+                $(".head-btnSets").append('<button class="btn btn-success head-func-btn" style="margin-top: 100px;z-index:99999;"\n' +
+                    '        id="projLeadApprove" onclick="approve(\'saveProjLeaderOpinion\',\'projLeaderOpinion\')">项目经理审批\n' +
+                    '</button>');
+            }
         }
-    } else {
+    }
+    else {
         disabledById('bomLeaderOpinion');
         disabledById('pmtLeaderOpinion');
         disabledById('projLeaderOpinion');
@@ -456,19 +466,6 @@ $(document).ready(
                 param.proj = data;
 
                 data3.vwoStatus = vwoStatus;
-
-                console.log(data);
-                JSON.stringify(data);
-
-                console.log("----data2----");
-                console.log(data2);
-                JSON.stringify(data2);
-                console.log("----data2----");
-
-                console.log("----data3----");
-                console.log(JSON.stringify(data3));
-                console.log("----data2----");
-
                 $.ajax({
                     contentType:
                         "application/json",
@@ -483,7 +480,6 @@ $(document).ready(
                         else {
                             window.Ewin.alert({message: "保存失败"});
                         }
-                        // window.location.reload();//刷新当前页面.
                     },
                     error: function (e) {
                         console.log("连接服务器失败:" + e.status);
@@ -497,28 +493,11 @@ $(document).ready(
                     data: JSON.stringify(data2),
                     url: "saveInfluenceDept",
                     success: function (result) {
-                        console.log(result);
-                        // window.location.reload();//刷新当前页面.
                     },
                     error: function (e) {
                         console.log("连接服务器失败:" + e.status);
                     }
                 });
-                // $.ajax({
-                //     contentType:
-                //         "application/json",
-                //     type:
-                //         'POST',
-                //     data: JSON.stringify(data3),
-                //     url: "saveLeaderOpinion",
-                //     success: function (result) {
-                //         console.log(result);
-                //         // window.location.reload();//刷新当前页面.
-                //     },
-                //     error: function (e) {
-                //         console.log("连接服务器失败:" + e.status);
-                //     }
-                // });
             });
     }
 );

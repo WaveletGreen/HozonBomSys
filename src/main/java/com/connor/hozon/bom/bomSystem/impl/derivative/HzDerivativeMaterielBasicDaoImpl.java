@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2018.
- * This file was wrote by fancyears·milos·maywas @connor. Any question/bug you can't post to 1243093366@qq.com.
+ * This file was wrote by fancyears·milos·malvis @connor. Any question/bug you can't post to 1243093366@qq.com.
  * ALL RIGHTS RESERVED.
  */
 
@@ -51,5 +51,10 @@ public class HzDerivativeMaterielBasicDaoImpl extends BasicDaoImpl<HzDerivativeM
         BASIC.setDmbModelUid(modelUid);
         BASIC.setDmbColorModelUid(colorModel);
         return baseSQLUtil.executeQueryById(BASIC, clz.getCanonicalName() + ".selectByModelAndColorUid");
+    }
+
+    @Override
+    public List<HzDerivativeMaterielBasic> selectByPuids(List<String> puids) {
+        return baseSQLUtil.executeQueryByPass(new HzDerivativeMaterielBasic(), puids, clz.getCanonicalName() +".selectByPuids");
     }
 }

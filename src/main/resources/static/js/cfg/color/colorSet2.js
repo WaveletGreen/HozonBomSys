@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2018.
- * This file was wrote by fancyears·milos·maywas @connor. Any question/bug you can post to 1243093366@qq.com.
+ * This file was wrote by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
  * ALL RIGHTS RESERVED.
  */
 /**工具条设置*/
@@ -207,7 +207,7 @@ function loadData() {
         pageList: [10, 30, 50, 100, 500, 1000],//可供选择的每页的行数（*）
         clickToSelect: true,                // 单击某一行的时候选中某一条记录
         smartDisplay: false,
-        search: true,
+        search: false,
         sortable: true,
         sortName: 'pColorCode',
         sortOrder: 'asc',

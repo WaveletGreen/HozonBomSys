@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2018.
- * This file was wrote by fancyears·milos·maywas @connor. Any question/bug you can't post to 1243093366@qq.com.
+ * This file was wrote by fancyears·milos·malvis @connor. Any question/bug you can't post to 1243093366@qq.com.
  * ALL RIGHTS RESERVED.
  */
 
@@ -8,6 +8,7 @@ package com.connor.hozon.bom.bomSystem.impl.relevance;
 
 import com.connor.hozon.bom.bomSystem.impl.BasicDaoImpl;
 import com.connor.hozon.bom.bomSystem.dao.relevance.HzRelevanceRelationDao;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Service;
 import sql.pojo.cfg.relevance.HzRelevanceRelation;
 
@@ -19,7 +20,8 @@ import java.util.List;
  * @Date: Created in 2018/9/6 13:19
  * @Modified By:
  */
-@Service
+//@Service
+@Configuration
 public class HzRelevanceRelationDaoImpl extends BasicDaoImpl<HzRelevanceRelation> implements HzRelevanceRelationDao {
     private final static HzRelevanceRelation RELATION = new HzRelevanceRelation();
 

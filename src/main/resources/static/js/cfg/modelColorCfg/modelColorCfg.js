@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2018.
- * This file was wrote by fancyears·milos·maywas @connor. Any question/bug you can post to 1243093366@qq.com.
+ * This file was wrote by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
  * ALL RIGHTS RESERVED.
  */
 
@@ -270,7 +270,7 @@ function loadData(_projectPuid) {
                         return "<span style='color: #9492a9'>已废止</span>";
                     }
                     else if (10 == value || "10" == value) {
-                        return "<span style='color: #e69800'>VWO审核中</span>";
+                        return "<span style='color: #e69800'>VWO审核中<br>("+row.cmcrVwoNum+")</span>";
                     }
                     else {
                         return "<span style='color: #a90009'>未知状态</span>";

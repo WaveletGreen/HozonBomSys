@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
   ~ Copyright (c) 2018.
-  ~ This file was wrote by fancyears·milos·maywas @connor. Any question/bug you can post to 1243093366@qq.com.
+  ~ This file was wrote by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
   ~ ALL RIGHTS RESERVED.
   -->
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
@@ -440,6 +440,9 @@
             </if>
             <if test="taskUserId!=null">
                 and TASK_USER_ID = #{taskUserId,jdbcType=DECIMAL}
+            </if>
+            <if test="antherStatus!=null">
+                and TASK_STATUS = #{antherStatus,jdbcType=DECIMAL}
             </if>
         </where>
     </update>

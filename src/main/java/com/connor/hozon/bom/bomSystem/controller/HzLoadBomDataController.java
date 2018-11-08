@@ -1,41 +1,41 @@
 /*
  * Copyright (c) 2018.
- * This file was wrote by fancyears·milos·maywas @connor. Any question/bug you can post to 1243093366@qq.com.
+ * This file was wrote by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
  * ALL RIGHTS RESERVED.
  */
 
 package com.connor.hozon.bom.bomSystem.controller;
 
 import com.connor.hozon.bom.bomSystem.dao.bom.HzBomMainRecordDao;
-import com.connor.hozon.bom.bomSystem.impl.bom.HzBomLineRecordDaoImpl;
 import com.connor.hozon.bom.bomSystem.dto.HzFeatureQueryDto;
 import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
+import com.connor.hozon.bom.bomSystem.impl.bom.HzBomLineRecordDaoImpl;
+import com.connor.hozon.bom.bomSystem.iservice.cfg.IHzCfg0OfBomLineService;
 import com.connor.hozon.bom.bomSystem.service.bom.HzBomDataService;
+import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0Service;
 import com.connor.hozon.bom.bomSystem.service.fullCfg.HzCfg0BomLineOfModelService;
 import com.connor.hozon.bom.bomSystem.service.fullCfg.HzCfg0ModelService;
-import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0Service;
-import com.connor.hozon.bom.bomSystem.iservice.cfg.IHzCfg0OfBomLineService;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import sql.pojo.bom.HZBomMainRecord;
 import sql.pojo.bom.HzBomLineRecord;
-import sql.pojo.cfg.fullCfg.HzCfg0OfBomLineRecord;
 import sql.pojo.cfg.cfg0.HzCfg0Record;
+import sql.pojo.cfg.fullCfg.HzCfg0OfBomLineRecord;
 
 import java.util.*;
 
 /**
  * @Author: Fancyears·Maylos·Maywas
- * @Description:
+ * @Description: 预研时用到的controller，已不再符合正式业务要求，可以删除
  * @Date: Created in 2018/8/30 18:53
  * @Modified By:
  */
-@Controller
-@RequestMapping("/loadBom")
+@Deprecated
+//@Controller
+//@RequestMapping("/loadBom")
 public class HzLoadBomDataController {
     private final HzCfg0BomLineOfModelService hzCfg0BomLineOfModelService;
     @Autowired
@@ -79,7 +79,6 @@ public class HzLoadBomDataController {
     @RequestMapping(value = "/loadColumns", method = RequestMethod.POST)
     @ResponseBody
     public JSONArray loadColumns(@RequestParam String projectPuid) {
-
         return hzBomDataService.doLoadColumns(projectPuid);
     }
 
