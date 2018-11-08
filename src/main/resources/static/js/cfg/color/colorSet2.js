@@ -207,7 +207,7 @@ function loadData() {
         pageList: [10, 30, 50, 100, 500, 1000],//可供选择的每页的行数（*）
         clickToSelect: true,                // 单击某一行的时候选中某一条记录
         smartDisplay: false,
-        search: true,
+        search: false,
         sortable: true,
         sortName: 'pColorCode',
         sortOrder: 'asc',
