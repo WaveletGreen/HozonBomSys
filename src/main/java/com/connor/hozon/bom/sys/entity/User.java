@@ -62,6 +62,8 @@ public class User implements UserDetails {
                 return "user_name";
             case "groupId":
                 return "group_Id";
+            case "id":
+                return "id";
             default:
                 return null;
         }

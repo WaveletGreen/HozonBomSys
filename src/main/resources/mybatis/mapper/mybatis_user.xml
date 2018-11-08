@@ -1,226 +1,226 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.connor.hozon.bom.sys.dao.UserDao">
-	<resultMap type="com.connor.hozon.bom.sys.entity.User" id="UserMap">
-		<id column="ID" jdbcType="INTEGER" property="id" />
-		<result column="LOGIN" jdbcType="OTHER" property="login" />
-		<result column="PASSWORD" jdbcType="OTHER" property="password" />
-		<result column="USER_NAME" jdbcType="OTHER" property="userName" />
-		<result column="ADDRESS" jdbcType="OTHER" property="address" />
-		<result column="JOB" jdbcType="OTHER" property="job" />
-		<result column="GROUP_ID" jdbcType="DOUBLE" property="groupId" />
-		<result column="BIRTH_DATE" jdbcType="DATE" property="birthDate" />
-		<result column="CITY" jdbcType="OTHER" property="city" />
-		<result column="DISTRICT" jdbcType="OTHER" property="district" />
-		<result column="PROVINCE" jdbcType="OTHER" property="province" />
-		<result column="STREET_ADDRESS" jdbcType="OTHER" property="streetAddress" />
-		<result column="STATE" jdbcType="OTHER" property="state" />
-		<result column="TYPE" jdbcType="OTHER" property="type" />
-		<result column="LAST_LOGIN_DATE" jdbcType="DATE" property="lastLoginDate" />
-		<result column="EMAIL" jdbcType="OTHER" property="email" />
-		<result column="USER_NO" jdbcType="OTHER" property="userNo" />
+    <resultMap type="com.connor.hozon.bom.sys.entity.User" id="UserMap">
+        <id column="ID" jdbcType="INTEGER" property="id"/>
+        <result column="LOGIN" jdbcType="VARCHAR" property="login"/>
+        <result column="PASSWORD" jdbcType="VARCHAR" property="password"/>
+        <result column="USER_NAME" jdbcType="VARCHAR" property="userName"/>
+        <result column="ADDRESS" jdbcType="VARCHAR" property="address"/>
+        <result column="JOB" jdbcType="VARCHAR" property="job"/>
+        <result column="GROUP_ID" jdbcType="DOUBLE" property="groupId"/>
+        <result column="BIRTH_DATE" jdbcType="DATE" property="birthDate"/>
+        <result column="CITY" jdbcType="VARCHAR" property="city"/>
+        <result column="DISTRICT" jdbcType="VARCHAR" property="district"/>
+        <result column="PROVINCE" jdbcType="VARCHAR" property="province"/>
+        <result column="STREET_ADDRESS" jdbcType="VARCHAR" property="streetAddress"/>
+        <result column="STATE" jdbcType="VARCHAR" property="state"/>
+        <result column="TYPE" jdbcType="VARCHAR" property="type"/>
+        <result column="LAST_LOGIN_DATE" jdbcType="DATE" property="lastLoginDate"/>
+        <result column="EMAIL" jdbcType="VARCHAR" property="email"/>
+        <result column="USER_NO" jdbcType="VARCHAR" property="userNo"/>
 
-		<!--<id property="id" column="id"/>
-		<result property="login" column="login"/>
-		<result property="password" column="password"/>
-		<result property="userName" column="user_name"/>
-		<result property="address" column="address"/>
-		<result property="job" column="job"/>
-		<result property="groupId" column="group_id"/>
-		<result property="birthDate" column="birth_date"/>
-		<result property="city" column="city"/>
-		<result property="district" column="district"/>
-		<result property="province" column="province"/>
-		<result property="streetAddress" column="street_address"/>
-		<result property="state" column="state"/>
-		<result property="type" column="type"/>
-		<result property="email" column="email"/>
-		<result property="userNo" column="user_no"/>
-		<result property="lastLoginDate" column="last_login_date"/>-->
-		<association property="orgGroup" javaType="com.connor.hozon.bom.sys.entity.OrgGroup" column="group_id">
-			<id property="groupId" column="group_id"/>
-			<result property="existingNum" column="existing_num"/>
-			<result property="groupCode" column="group_code"/>
-			<result property="name" column="name"/>
-			<result property="node" column="node"/>
-			<result property="num" column="num"/>
-			<result property="parentNode" column="parent_node"/>
-		</association>
-	</resultMap>
+        <!--<id property="id" column="id"/>
+        <result property="login" column="login"/>
+        <result property="password" column="password"/>
+        <result property="userName" column="user_name"/>
+        <result property="address" column="address"/>
+        <result property="job" column="job"/>
+        <result property="groupId" column="group_id"/>
+        <result property="birthDate" column="birth_date"/>
+        <result property="city" column="city"/>
+        <result property="district" column="district"/>
+        <result property="province" column="province"/>
+        <result property="streetAddress" column="street_address"/>
+        <result property="state" column="state"/>
+        <result property="type" column="type"/>
+        <result property="email" column="email"/>
+        <result property="userNo" column="user_no"/>
+        <result property="lastLoginDate" column="last_login_date"/>-->
+        <association property="orgGroup" javaType="com.connor.hozon.bom.sys.entity.OrgGroup" column="group_id">
+            <id property="groupId" jdbcType="DECIMAL" column="group_id"/>
+            <result property="existingNum" jdbcType="DECIMAL" column="existing_num"/>
+            <result property="groupCode" jdbcType="VARCHAR" column="group_code"/>
+            <result property="name" jdbcType="VARCHAR" column="name"/>
+            <result property="node" jdbcType="VARCHAR" column="node"/>
+            <result property="num" jdbcType="DECIMAL" column="num"/>
+            <result property="parentNode" jdbcType="VARCHAR" column="parent_node"/>
+        </association>
+    </resultMap>
 
-	<!-- 包含角色信息的map -->
-	<resultMap type="com.connor.hozon.bom.sys.entity.User" id="UserLoginMap">
-		<id property="id" column="id"/>
-		<result property="login" column="login"/>
-		<result property="password" column="password"/>
-		<result property="userName" column="user_name"/>
-		<result property="address" column="address"/>
-		<result property="job" column="job"/>
-		<result property="groupId" column="group_id"/>
-		<result property="birthDate" column="birth_date"/>
-		<result property="city" column="city"/>
-		<result property="district" column="district"/>
-		<result property="province" column="province"/>
-		<result property="streetAddress" column="street_address"/>
-		<result property="state" column="state"/>
-		<result property="type" column="type"/>
-		<result property="email" column="email"/>
-		<result property="userNo" column="user_no"/>
-		<result property="lastLoginDate" column="last_login_date"/>
-		<collection property="roles"  ofType="com.connor.hozon.bom.sys.entity.UserRole" javaType="java.util.ArrayList">
-			<result column="user_role_id" property="id" jdbcType="VARCHAR" />
-			<result column="name" property="name" jdbcType="VARCHAR" />
-			<result column="role_name" property="roleName" jdbcType="VARCHAR" />
-		</collection>
-	</resultMap>
+    <!-- 包含角色信息的map -->
+    <resultMap type="com.connor.hozon.bom.sys.entity.User" id="UserLoginMap">
+        <id property="id" column="id"/>
+        <result property="login" column="login"/>
+        <result property="password" column="password"/>
+        <result property="userName" column="user_name"/>
+        <result property="address" column="address"/>
+        <result property="job" column="job"/>
+        <result property="groupId" column="group_id"/>
+        <result property="birthDate" column="birth_date"/>
+        <result property="city" column="city"/>
+        <result property="district" column="district"/>
+        <result property="province" column="province"/>
+        <result property="streetAddress" column="street_address"/>
+        <result property="state" column="state"/>
+        <result property="type" column="type"/>
+        <result property="email" column="email"/>
+        <result property="userNo" column="user_no"/>
+        <result property="lastLoginDate" column="last_login_date"/>
+        <collection property="roles" ofType="com.connor.hozon.bom.sys.entity.UserRole" javaType="java.util.ArrayList">
+            <result column="user_role_id" property="id" jdbcType="VARCHAR"/>
+            <result column="name" property="name" jdbcType="VARCHAR"/>
+            <result column="role_name" property="roleName" jdbcType="VARCHAR"/>
+        </collection>
+    </resultMap>
 
-	<!-- 更新用户状态为可用或者不可用 -->
-	<update id="userControl" parameterType="com.connor.hozon.bom.sys.entity.User">
+    <!-- 更新用户状态为可用或者不可用 -->
+    <update id="userControl" parameterType="com.connor.hozon.bom.sys.entity.User">
 		update userRecord set state = #{state} where id=#{id}
 	</update>
 
-	<!-- 1根据账号来获取用户信息 -->
-	<select id="findByLogin" parameterType="java.lang.String" resultMap="UserLoginMap">
+    <!-- 1根据账号来获取用户信息 -->
+    <select id="findByLogin" parameterType="java.lang.String" resultMap="UserLoginMap">
 		select u.*,ur.id as user_role_id,ur.name,ur.role_name from userRecord u left join user_associate_role uar on u.id = uar.user_id left join user_role ur on uar.role_id = ur.id where u.login = #{login}
 	</select>
-	<!-- 根据账号来获取用户信息 -->
-	<select id="loadAll" resultMap="UserLoginMap">
+    <!-- 根据账号来获取用户信息 -->
+    <select id="loadAll" resultMap="UserLoginMap">
 		select u.*,ur.id as user_role_id,ur.name,ur.role_name from userRecord u inner join
 		user_associate_role uar on u.id = uar.user_id inner join user_role ur on uar.role_id = ur.id
 	</select>
 
-	<!-- 更新用户的最迟登陆时间 -->
-     <update id="updateLogin" parameterType="com.connor.hozon.bom.sys.entity.User">
+    <!-- 更新用户的最迟登陆时间 -->
+    <update id="updateLogin" parameterType="com.connor.hozon.bom.sys.entity.User">
 		 update userRecord set last_login_date = now() where id=#{id}
 	 </update>
 
-	<!--根据主键获取对象-->
-	<select id="get" parameterType="com.connor.hozon.bom.sys.entity.User" resultMap="UserMap">
+    <!--根据主键获取对象-->
+    <select id="get" parameterType="com.connor.hozon.bom.sys.entity.User" resultMap="UserMap">
 		select u.*,og.existing_num,og.group_code,og.name,og.node,og.num,og.parent_node from userRecord u inner join org_group og on u.group_id = og.group_id
 		WHERE id=#{id}
 	</select>
 
-	<!--保存-->
-	<!--<insert id="save" parameterType="com.connor.hozon.bom.sys.entity.User">-->
-		<!--INSERT INTO userRecord-->
-		<!--(id,login,password,user_name,address,job,group_id,birth_date,-->
-		<!--city,district,province,street_address,state,type,last_login_date,-->
-		<!--email,user_no-->
-		<!--)VALUES(-->
-		<!--SEQ_HZ_USERRECORD.nextval,-->
-		<!--#{login},#{password},#{userName},#{address},#{job},-->
-		<!--#{orgGroup.groupId},#{birthDate,jdbcType=DATE},#{city,jdbcType=VARCHAR},-->
-		<!--#{district,jdbcType=VARCHAR},#{province,jdbcType=VARCHAR},-->
-		<!--#{streetAddress,jdbcType=VARCHAR},#{state},#{type,jdbcType=VARCHAR},sysdate,-->
-		<!--#{email},#{userNo}-->
-		<!--)-->
-	<!--</insert>-->
+    <!--保存-->
+    <!--<insert id="save" parameterType="com.connor.hozon.bom.sys.entity.User">-->
+    <!--INSERT INTO userRecord-->
+    <!--(id,login,password,user_name,address,job,group_id,birth_date,-->
+    <!--city,district,province,street_address,state,type,last_login_date,-->
+    <!--email,user_no-->
+    <!--)VALUES(-->
+    <!--SEQ_HZ_USERRECORD.nextval,-->
+    <!--#{login},#{password},#{userName},#{address},#{job},-->
+    <!--#{orgGroup.groupId},#{birthDate,jdbcType=DATE},#{city,jdbcType=VARCHAR},-->
+    <!--#{district,jdbcType=VARCHAR},#{province,jdbcType=VARCHAR},-->
+    <!--#{streetAddress,jdbcType=VARCHAR},#{state},#{type,jdbcType=VARCHAR},sysdate,-->
+    <!--#{email},#{userNo}-->
+    <!--)-->
+    <!--</insert>-->
 
-	<insert id="save" parameterType="com.connor.hozon.bom.sys.entity.User">
-		<!--oracle插入数据返回主键到外键-->
-		<selectKey resultType="java.lang.Integer" order="BEFORE" keyProperty="id">
-			SELECT SEQ_HZ_USERRECORD.Nextval as ID from DUAL
-		</selectKey>
+    <insert id="save" parameterType="com.connor.hozon.bom.sys.entity.User">
+        <!--oracle插入数据返回主键到外键-->
+        <selectKey resultType="java.lang.Integer" order="BEFORE" keyProperty="id">
+            SELECT SEQ_HZ_USERRECORD.Nextval as ID from DUAL
+        </selectKey>
 
-		insert into USERRECORD
-		<trim prefix="(" suffix=")" suffixOverrides=",">
-			ID,
-			<if test="login != null">
-				LOGIN,
-			</if>
-			<if test="password != null">
-				PASSWORD,
-			</if>
-			<if test="userName != null">
-				USER_NAME,
-			</if>
-			<if test="address != null">
-				ADDRESS,
-			</if>
-			<if test="job != null">
-				JOB,
-			</if>
-			<if test="groupId != null">
-				GROUP_ID,
-			</if>
-			<if test="city != null">
-				CITY,
-			</if>
-			<if test="district != null">
-				DISTRICT,
-			</if>
-			<if test="province != null">
-				PROVINCE,
-			</if>
-			<if test="streetAddress != null">
-				STREET_ADDRESS,
-			</if>
-			<if test="state != null">
-				STATE,
-			</if>
-			<if test="type != null">
-				TYPE,
-			</if>
-			LAST_LOGIN_DATE,
-			<if test="email != null">
-				EMAIL,
-			</if>
-			<if test="userNo != null">
-				USER_NO,
-			</if>
-		</trim>
-		<trim prefix="values (" suffix=")" suffixOverrides=",">
-			<!--SEQ_HZ_USERRECORD.nextval,-->
-			#{id,jdbcType=OTHER},
-			<if test="login != null">
-				#{login,jdbcType=OTHER},
-			</if>
-			<if test="password != null">
-				#{password,jdbcType=OTHER},
-			</if>
-			<if test="userName != null">
-				#{userName,jdbcType=OTHER},
-			</if>
-			<if test="address != null">
-				#{address,jdbcType=OTHER},
-			</if>
-			<if test="job != null">
-				#{job,jdbcType=OTHER},
-			</if>
-			<if test="groupId != null">
-				#{groupId,jdbcType=DECIMAL},
-			</if>
-			<if test="city != null">
-				#{city,jdbcType=OTHER},
-			</if>
-			<if test="district != null">
-				#{district,jdbcType=OTHER},
-			</if>
-			<if test="province != null">
-				#{province,jdbcType=OTHER},
-			</if>
-			<if test="streetAddress != null">
-				#{streetAddress,jdbcType=OTHER},
-			</if>
-			<if test="state != null">
-				#{state,jdbcType=OTHER},
-			</if>
-			<if test="type != null">
-				#{type,jdbcType=OTHER},
-			</if>
-			sysdate,
-			<if test="email != null">
-				#{email,jdbcType=OTHER},
-			</if>
-			<if test="userNo != null">
-				#{userNo,jdbcType=OTHER}
-			</if>
-		</trim>
-	</insert>
+        insert into USERRECORD
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            ID,
+            <if test="login != null">
+                LOGIN,
+            </if>
+            <if test="password != null">
+                PASSWORD,
+            </if>
+            <if test="userName != null">
+                USER_NAME,
+            </if>
+            <if test="address != null">
+                ADDRESS,
+            </if>
+            <if test="job != null">
+                JOB,
+            </if>
+            <if test="groupId != null">
+                GROUP_ID,
+            </if>
+            <if test="city != null">
+                CITY,
+            </if>
+            <if test="district != null">
+                DISTRICT,
+            </if>
+            <if test="province != null">
+                PROVINCE,
+            </if>
+            <if test="streetAddress != null">
+                STREET_ADDRESS,
+            </if>
+            <if test="state != null">
+                STATE,
+            </if>
+            <if test="type != null">
+                TYPE,
+            </if>
+            LAST_LOGIN_DATE,
+            <if test="email != null">
+                EMAIL,
+            </if>
+            <if test="userNo != null">
+                USER_NO,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <!--SEQ_HZ_USERRECORD.nextval,-->
+            #{id,jdbcType=VARCHAR},
+            <if test="login != null">
+                #{login,jdbcType=VARCHAR},
+            </if>
+            <if test="password != null">
+                #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="userName != null">
+                #{userName,jdbcType=VARCHAR},
+            </if>
+            <if test="address != null">
+                #{address,jdbcType=VARCHAR},
+            </if>
+            <if test="job != null">
+                #{job,jdbcType=VARCHAR},
+            </if>
+            <if test="groupId != null">
+                #{groupId,jdbcType=DECIMAL},
+            </if>
+            <if test="city != null">
+                #{city,jdbcType=VARCHAR},
+            </if>
+            <if test="district != null">
+                #{district,jdbcType=VARCHAR},
+            </if>
+            <if test="province != null">
+                #{province,jdbcType=VARCHAR},
+            </if>
+            <if test="streetAddress != null">
+                #{streetAddress,jdbcType=VARCHAR},
+            </if>
+            <if test="state != null">
+                #{state,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null">
+                #{type,jdbcType=VARCHAR},
+            </if>
+            sysdate,
+            <if test="email != null">
+                #{email,jdbcType=VARCHAR},
+            </if>
+            <if test="userNo != null">
+                #{userNo,jdbcType=VARCHAR}
+            </if>
+        </trim>
+    </insert>
 
 
-	<!--修改-->
-	<update id="update" parameterType="com.connor.hozon.bom.sys.entity.User">
+    <!--修改-->
+    <update id="update" parameterType="com.connor.hozon.bom.sys.entity.User">
 		UPDATE userRecord SET user_name=#{userName},address=#{address,jdbcType=VARCHAR},job=#{job},
 		group_id=#{orgGroup.groupId},birth_date=#{birthDate,jdbcType=VARCHAR},city=#{city,jdbcType=VARCHAR},
 		district=#{district,jdbcType=VARCHAR},province=#{province,jdbcType=VARCHAR},street_address=#{streetAddress,jdbcType=VARCHAR},
@@ -228,243 +228,247 @@
 		WHERE id=#{id}
 	</update>
 
-	<!--删除-->
-	<delete id="delete" parameterType="com.connor.hozon.bom.sys.entity.User">
+    <!--删除-->
+    <delete id="delete" parameterType="com.connor.hozon.bom.sys.entity.User">
 		 DELETE FROM userRecord WHERE id=#{id}
 	</delete>
 
-	<!--分页查询组织架构底下的用户-->
-	<select id="findGroupUserByPage" parameterType="com.connor.hozon.bom.sys.entity.QueryUser" resultMap="UserMap">
-		select * from(
-		select u.*,og.existing_num,og.group_code,og.name,og.node,og.num,og.parent_node
-		,rownum as rn
-		from
-		userRecord u inner join org_group og on u.group_id = og.group_id
-		WHERE 1=1
-		<if test="userName!=null and userName!='' ">
-			AND u.user_name like concat(#{userName},'%')
-		</if>
-		AND og.parent_node like concat(#{orgGroup.parentNode},'%')<if test="orgGroup!=null">
-			<if test="orgGroup.parentNode!=null and orgGroup.parentNode!='' ">
-                  AND og.parent_node like concat(#{orgGroup.parentNode},'%')
-			</if>
-			<if test="orgGroup.node!=null and orgGroup.node!='' ">
-				AND og.node like concat(#{orgGroup.node},'%')
-			</if>
-		</if>
-		<if test="sort!= null and sort!='' ">
-			order by ${sort} ${order}
-		</if>
-		)u
-		where 1=1
-		<!--limit #{offset},#{limit}-->
-		<if test="offset!=null">
-			and u.rn &gt;= ${offset}+1
-		</if>
-		<if test="limit!=null and  page!=null">
-			and u.rn &lt;= ${page}*${limit}
-		</if>
+    <!--分页查询组织架构底下的用户-->
+    <select id="findGroupUserByPage" parameterType="com.connor.hozon.bom.sys.entity.QueryUser" resultMap="UserMap">
+        select * from(
+        select u.*,og.existing_num,og.group_code,og.name,og.node,og.num,og.parent_node
+        ,rownum as rn
+        from
+        userRecord u inner join org_group og on u.group_id = og.group_id
+        WHERE 1=1
+        <if test="userName!=null and userName!='' ">
+            AND u.user_name like concat(#{userName},'%')
+        </if>
 
-		<!--and  ROWNUM &lt;=#{limit,jdbcType=INTEGER})
-		where  rn &gt;#{offset,jdbcType=INTEGER}-->
+        <if test="orgGroup!=null">
+            <!-- AND og.parent_node like concat(#{orgGroup.parentNode},'%')-->
+            <if test="orgGroup.parentNode!=null and orgGroup.parentNode!='' ">
+                AND og.parent_node like concat(#{orgGroup.parentNode},'%')
+            </if>
+            <if test="orgGroup.node!=null and orgGroup.node!='' ">
+                AND og.node like concat(#{orgGroup.node},'%')
+            </if>
+        </if>
+        <if test="sort!= null and sort!='' ">
+            order by ${sort} ${order}
+        </if>
+        )u
+        where 1=1
+        <!--limit #{offset},#{limit}-->
+        <if test="offset!=null">
+            and u.rn &gt;= ${offset}+1
+        </if>
+        <if test="limit!=null and  page!=null">
+            and u.rn &lt;= ${page}*${limit}
+        </if>
 
-	</select>
+        <!--and  ROWNUM &lt;=#{limit,jdbcType=INTEGER})
+        where  rn &gt;#{offset,jdbcType=INTEGER}-->
 
-	<!--统计组织架构底下的用户-->
-	<select id="countGroupUser" parameterType="com.connor.hozon.bom.sys.entity.QueryUser" resultType="int">
-		select count(1) from userRecord u inner join org_group og on u.group_id = og.group_id
-		WHERE 1=1
-		<if test="userName!=null and userName!='' ">
-			AND u.user_name like concat(#{userName},'%')
-		</if>
-		<if test="orgGroup!=null">
-			<if test="orgGroup.parentNode!=null and orgGroup.parentNode!='' ">
-				AND og.parent_node like concat(#{orgGroup.parentNode},'%')
-			</if>
-			<if test="orgGroup.node!=null and orgGroup.node!='' ">
-				AND og.node like concat(#{orgGroup.node},'%')
-			</if>
-		</if>
-	</select>
+    </select>
 
-	<!--分页查询-->
-	<select id="findByPage" parameterType="com.connor.hozon.bom.sys.entity.QueryUser" resultMap="UserMap">
-		select * from(
-		select u.*,og.existing_num,og.group_code,og.name,og.node,og.num,og.parent_node
-		,rownum as rn
-		from userRecord u inner join org_group og on u.group_id = og.group_id
-		WHERE 1=1
-		<if test="login!=null and login!='' ">
-		AND u.login=#{login}
-		</if>
-		<if test="password!=null and password!='' ">
-		AND u.password=#{password}
-		</if>
-		<if test="userName!=null and userName!='' ">
-		AND u.user_name=#{userName}
-		</if>
-		<if test="address!=null and address!='' ">
-		AND u.address=#{address}
-		</if>
-		<if test="job!=null and job!='' ">
-		AND u.job=#{job}
-		</if>
-		<if test="groupId!=null and groupId!='' ">
-		AND u.group_id=#{groupId}
-		</if>
-		<if test="birthDate!=null and birthDate!='' ">
-		AND u.birth_date=#{birthDate}
-		</if>
-		<if test="city!=null and city!='' ">
-		AND u.city=#{city}
-		</if>
-		<if test="district!=null and district!='' ">
-		AND u.district=#{district}
-		</if>
-		<if test="province!=null and province!='' ">
-		AND u.province=#{province}
-		</if>
-		<if test="streetAddress!=null and streetAddress!='' ">
-		AND u.street_address=#{streetAddress}
-		</if>
-		<if test="state!=null and state!='' ">
-		AND u.state=#{state}
-		</if>
-		<if test="type!=null and type!='' ">
-		AND u.type=#{type}
-		</if>
-		<if test="lastLoginDate!=null and lastLoginDate!='' ">
-		AND u.last_login_date=#{lastLoginDate}
-		</if>
-		<if test="sort!= null and sort!='' ">
-		order by ${sort} ${order}
-		</if>
-		)u
-		where 1=1
-		<!--limit #{offset},#{limit}-->
-		<if test="offset!=null">
-			and u.rn &gt;= ${offset}+1
-		</if>
-		<if test="limit!=null and  page!=null">
-			and u.rn &lt;= ${page}*${limit}
-		</if>
-		<!--limit #{offset},#{limit}-->
+    <!--统计组织架构底下的用户-->
+    <select id="countGroupUser" parameterType="com.connor.hozon.bom.sys.entity.QueryUser" resultType="int">
+        select count(1) from userRecord u inner join org_group og on u.group_id = og.group_id
+        WHERE 1=1
+        <if test="userName!=null and userName!='' ">
+            AND u.user_name like concat(#{userName},'%')
+        </if>
+        <if test="orgGroup!=null">
+            <if test="orgGroup.parentNode!=null and orgGroup.parentNode!='' ">
+                AND og.parent_node like concat(#{orgGroup.parentNode},'%')
+            </if>
+            <if test="orgGroup.node!=null and orgGroup.node!='' ">
+                AND og.node like concat(#{orgGroup.node},'%')
+            </if>
+        </if>
+    </select>
 
-	</select>
+    <!--分页查询-->
+    <select id="findByPage" parameterType="com.connor.hozon.bom.sys.entity.QueryUser" resultMap="UserMap">
+        select * from(
+        select u.*,og.existing_num,og.group_code,og.name,og.node,og.num,og.parent_node
+        ,rownum as rn
+        from userRecord u inner join org_group og on u.group_id = og.group_id
+        WHERE 1=1
+        <if test="login!=null and login!='' ">
+            AND u.login=#{login}
+        </if>
+        <if test="password!=null and password!='' ">
+            AND u.password=#{password}
+        </if>
+        <if test="userName!=null and userName!='' ">
+            AND u.user_name=#{userName}
+        </if>
+        <if test="address!=null and address!='' ">
+            AND u.address=#{address}
+        </if>
+        <if test="job!=null and job!='' ">
+            AND u.job=#{job}
+        </if>
+        <if test="groupId!=null and groupId!='' ">
+            AND u.group_id=#{groupId}
+        </if>
+        <if test="birthDate!=null and birthDate!='' ">
+            AND u.birth_date=#{birthDate}
+        </if>
+        <if test="city!=null and city!='' ">
+            AND u.city=#{city}
+        </if>
+        <if test="district!=null and district!='' ">
+            AND u.district=#{district}
+        </if>
+        <if test="province!=null and province!='' ">
+            AND u.province=#{province}
+        </if>
+        <if test="streetAddress!=null and streetAddress!='' ">
+            AND u.street_address=#{streetAddress}
+        </if>
+        <if test="state!=null and state!='' ">
+            AND u.state=#{state}
+        </if>
+        <if test="type!=null and type!='' ">
+            AND u.type=#{type}
+        </if>
+        <if test="lastLoginDate!=null and lastLoginDate!='' ">
+            AND u.last_login_date=#{lastLoginDate}
+        </if>
+        <if test="sort!= null and sort!='' ">
+            order by ${sort} ${order}
+        </if>
+        )u
+        where 1=1
+        <!--limit #{offset},#{limit}-->
+        <if test="offset!=null">
+            and u.rn &gt;= ${offset}+1
+        </if>
+        <if test="limit!=null and  page!=null">
+            and u.rn &lt;= ${page}*${limit}
+        </if>
+        <!--limit #{offset},#{limit}-->
 
-	<!--统计-->
-	<select id="count" parameterType="com.connor.hozon.bom.sys.entity.QueryUser" resultType="int">
-		SELECT count(*) FROM userRecord
-		WHERE 1=1
-		<if test="login!=null and login!='' ">
-			AND login=#{login}
-		</if>
-		<if test="password!=null and password!='' ">
-			AND password=#{password}
-		</if>
-		<if test="userName!=null and userName!='' ">
-			AND user_name=#{userName}
-		</if>
-		<if test="address!=null and address!='' ">
-			AND address=#{address}
-		</if>
-		<if test="job!=null and job!='' ">
-			AND job=#{job}
-		</if>
-		<if test="groupId!=null and groupId!='' ">
-			AND group_id=#{groupId}
-		</if>
-		<if test="birthDate!=null and birthDate!='' ">
-			AND birth_date=#{birthDate}
-		</if>
-		<if test="city!=null and city!='' ">
-			AND city=#{city}
-		</if>
-		<if test="district!=null and district!='' ">
-			AND district=#{district}
-		</if>
-		<if test="province!=null and province!='' ">
-			AND province=#{province}
-		</if>
-		<if test="streetAddress!=null and streetAddress!='' ">
-			AND street_address=#{streetAddress}
-		</if>
-		<if test="state!=null and state!='' ">
-			AND state=#{state}
-		</if>
-		<if test="type!=null and type!='' ">
-			AND type=#{type}
-		</if>
-		<if test="lastLoginDate!=null and lastLoginDate!='' ">
-			AND last_login_date=#{lastLoginDate}
-		</if>
-		<if test="sort!= null and sort!='' ">
-			order by ${sort} ${order}
-		</if>
-	</select>
+    </select>
 
-	<!--查询-->
-	<select id="query" parameterType="com.connor.hozon.bom.sys.entity.QueryUser" resultMap="UserMap">
-		SELECT id,login,password,user_name,address,job,group_id,birth_date,city,district,province,street_address,state,type,last_login_date FROM userRecord
-		WHERE 1=1
-		<if test="login!=null and login!='' ">
-			AND login=#{login}
-		</if>
-		<if test="password!=null and password!='' ">
-			AND password=#{password}
-		</if>
-		<if test="userName!=null and userName!='' ">
-			AND user_name=#{userName}
-		</if>
-		<if test="address!=null and address!='' ">
-			AND address=#{address}
-		</if>
-		<if test="job!=null and job!='' ">
-			AND job=#{job}
-		</if>
-		<if test="groupId!=null and groupId!='' ">
-			AND group_id=#{groupId}
-		</if>
-		<if test="birthDate!=null and birthDate!='' ">
-			AND birth_date=#{birthDate}
-		</if>
-		<if test="city!=null and city!='' ">
-			AND city=#{city}
-		</if>
-		<if test="district!=null and district!='' ">
-			AND district=#{district}
-		</if>
-		<if test="province!=null and province!='' ">
-			AND province=#{province}
-		</if>
-		<if test="streetAddress!=null and streetAddress!='' ">
-			AND street_address=#{streetAddress}
-		</if>
-		<if test="state!=null and state!='' ">
-			AND state=#{state}
-		</if>
-		<if test="type!=null and type!='' ">
-			AND type=#{type}
-		</if>
-		<if test="lastLoginDate!=null and lastLoginDate!='' ">
-			AND last_login_date=#{lastLoginDate}
-		</if>
-		<if test="sort!= null and sort!='' ">
-			order by ${sort} ${order}
-		</if>
-	</select>
+    <!--统计-->
+    <select id="count" parameterType="com.connor.hozon.bom.sys.entity.QueryUser" resultType="int">
+        SELECT count(*) FROM userRecord
+        WHERE 1=1
+        <if test="login!=null and login!='' ">
+            AND login=#{login}
+        </if>
+        <if test="password!=null and password!='' ">
+            AND password=#{password}
+        </if>
+        <if test="userName!=null and userName!='' ">
+            AND user_name=#{userName}
+        </if>
+        <if test="address!=null and address!='' ">
+            AND address=#{address}
+        </if>
+        <if test="job!=null and job!='' ">
+            AND job=#{job}
+        </if>
+        <if test="groupId!=null and groupId!='' ">
+            AND group_id=#{groupId}
+        </if>
+        <if test="birthDate!=null and birthDate!='' ">
+            AND birth_date=#{birthDate}
+        </if>
+        <if test="city!=null and city!='' ">
+            AND city=#{city}
+        </if>
+        <if test="district!=null and district!='' ">
+            AND district=#{district}
+        </if>
+        <if test="province!=null and province!='' ">
+            AND province=#{province}
+        </if>
+        <if test="streetAddress!=null and streetAddress!='' ">
+            AND street_address=#{streetAddress}
+        </if>
+        <if test="state!=null and state!='' ">
+            AND state=#{state}
+        </if>
+        <if test="type!=null and type!='' ">
+            AND type=#{type}
+        </if>
+        <if test="lastLoginDate!=null and lastLoginDate!='' ">
+            AND last_login_date=#{lastLoginDate}
+        </if>
+        <if test="sort!= null and sort!='' ">
+            order by ${sort} ${order}
+        </if>
+    </select>
+
+    <!--查询-->
+    <select id="query" parameterType="com.connor.hozon.bom.sys.entity.QueryUser" resultMap="UserMap">
+        SELECT
+        id,login,password,user_name,address,job,group_id,birth_date,city,district,province,street_address,state,type,last_login_date
+        FROM userRecord
+        WHERE 1=1
+        <if test="login!=null and login!='' ">
+            AND login=#{login}
+        </if>
+        <if test="password!=null and password!='' ">
+            AND password=#{password}
+        </if>
+        <if test="userName!=null and userName!='' ">
+            AND user_name=#{userName}
+        </if>
+        <if test="address!=null and address!='' ">
+            AND address=#{address}
+        </if>
+        <if test="job!=null and job!='' ">
+            AND job=#{job}
+        </if>
+        <if test="groupId!=null and groupId!='' ">
+            AND group_id=#{groupId}
+        </if>
+        <if test="birthDate!=null and birthDate!='' ">
+            AND birth_date=#{birthDate}
+        </if>
+        <if test="city!=null and city!='' ">
+            AND city=#{city}
+        </if>
+        <if test="district!=null and district!='' ">
+            AND district=#{district}
+        </if>
+        <if test="province!=null and province!='' ">
+            AND province=#{province}
+        </if>
+        <if test="streetAddress!=null and streetAddress!='' ">
+            AND street_address=#{streetAddress}
+        </if>
+        <if test="state!=null and state!='' ">
+            AND state=#{state}
+        </if>
+        <if test="type!=null and type!='' ">
+            AND type=#{type}
+        </if>
+        <if test="lastLoginDate!=null and lastLoginDate!='' ">
+            AND last_login_date=#{lastLoginDate}
+        </if>
+        <if test="sort!= null and sort!='' ">
+            order by ${sort} ${order}
+        </if>
+    </select>
 
 
-	<!-- 更新用户 登录密码  haozt on 7/23/2018-->
-	<update id="updatePassword" parameterType="com.connor.hozon.bom.sys.entity.User">
+    <!-- 更新用户 登录密码  haozt on 7/23/2018-->
+    <update id="updatePassword" parameterType="com.connor.hozon.bom.sys.entity.User">
 		 update userRecord set password = #{password} where id=#{id}
 	 </update>
 
-	<select id="findUserByGroupId" parameterType="java.lang.String" resultMap="UserMap">
+    <select id="findUserByGroupId" parameterType="java.lang.String" resultMap="UserMap">
 		select  * FROM userRecord  where group_id = #{groupId}
 	</select>
 
-	<select id="findAllUser" resultMap="UserMap">
+    <select id="findAllUser" resultMap="UserMap">
 		select  * FROM userRecord  where state = 1
 	</select>
 

@@ -155,7 +155,7 @@
 
     <!--获取部门下的人员数量-->
     <select id="queryOrgGroupUserCount"  resultType="java.lang.Integer">
-        SELECT count(*) from user t1 INNER join
+        SELECT count(*) from USERRECORD t1 INNER join
         org_group t2
         on
         t1.group_id = t2.group_id
