@@ -38,7 +38,6 @@ public class HzFilter implements Filter {
             while(line!=null){
                 buffer.append(line);
                 line = reader.readLine();
-
             }
             String paths = buffer.toString();
             String[] filePath = paths.split(",");
@@ -47,7 +46,7 @@ public class HzFilter implements Filter {
                 urlList.add(path);
             }
             reader.close();
-//            inputStream.close();
+            inputStream.close();
         }catch (Exception e){
             e.printStackTrace();
         }
