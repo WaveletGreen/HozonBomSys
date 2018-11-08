@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2018.
- * This file was wrote by fancyears·milos·maywas @connor. Any question/bug you can post to 1243093366@qq.com.
+ * This file was wrote by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
  * ALL RIGHTS RESERVED.
  */
 
@@ -46,7 +46,6 @@ public class HzCmcrChangeDaoImpl extends BasicDaoImpl<HzCmcrChange> implements H
     public Long insertAfter(HzCmcrChange cmcr) throws Exception {
         preSetAfter(cmcr);
         return executeInsert(cmcr, "insert");
-
     }
 
 
@@ -71,7 +70,6 @@ public class HzCmcrChangeDaoImpl extends BasicDaoImpl<HzCmcrChange> implements H
     public Long insertAfterSelective(HzCmcrChange cmcr) throws Exception {
         preSetAfter(cmcr);
         return executeInsert(cmcr, "insertSelective");
-
     }
 
     /**

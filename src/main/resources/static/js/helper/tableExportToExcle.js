@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2018.
- * This file was wrote by fancyears·milos·maywas @connor. Any question/bug you can't post to 1243093366@qq.com.
+ * This file was wrote by fancyears·milos·malvis @connor. Any question/bug you can't post to 1243093366@qq.com.
  * ALL RIGHTS RESERVED.
  */
 
@@ -42,7 +42,7 @@ function getExplorer() {
 /**
  * 将页面上的表格拷贝到excle中，并完成下载操作
  * @param tableid
- * @param name
+ * @param name 下载的文件名称
  */
 function table2excel(tableid, name) {
     //不支持IE浏览器下在，也不支持EDGE下载

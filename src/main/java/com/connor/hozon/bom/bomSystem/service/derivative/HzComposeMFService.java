@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2018.
- * This file was wrote by fancyears·milos·maywas @connor. Any question/bug you can post to 1243093366@qq.com.
+ * This file was wrote by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
  * ALL RIGHTS RESERVED.
  */
 
@@ -642,15 +642,15 @@ public class HzComposeMFService {
         List<HzComposeMFDTO> composes = new ArrayList<HzComposeMFDTO>();
 
         //组合车型和颜色
-        for(HzCfg0ModelColor colorModel: colorModels){
-            for(HzCfg0ModelRecord model : models){
+        for (HzCfg0ModelColor colorModel : colorModels) {
+            for (HzCfg0ModelRecord model : models) {
                 HzComposeMFDTO hzComposeMFDTO = new HzComposeMFDTO();
                 hzComposeMFDTO.setProjectUid(projectPuid);
                 hzComposeMFDTO.setModelUid(model.getPuid());
                 hzComposeMFDTO.setColorModel(colorModel.getPuid());
                 hzComposeMFService.saveCompose2(hzComposeMFDTO, result);
-                boolean status = (boolean)result.get("status");
-                if(status==false){
+                boolean status = (boolean) result.get("status");
+                if (status == false) {
                     return result;
                 }
             }

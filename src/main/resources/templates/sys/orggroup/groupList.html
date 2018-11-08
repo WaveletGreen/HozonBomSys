@@ -173,6 +173,7 @@
             pageSize: 10,
             clickToSelect: true,// 单击某一行的时候选中某一条记录
             showToggle: false,  //是否显示详细视图和列表视图的切换按钮
+            toolbars:[],
             /*toolbars: [
                 {
                     text: '添加',
@@ -235,7 +236,9 @@
                     field: '',
                     title: '序号',
                     formatter: function (value, row, index) {
-                        return index + 1;
+                        //return index + 1;
+                        var temp = $('#group-user-table').bootstrapTable("getIndex");//返回（pageSize * (pageNumber-1) + 1）
+                        return temp + index;
                     }
                 },
                 /*{

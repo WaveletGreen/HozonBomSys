@@ -341,7 +341,6 @@ public class ExcelUtil {
      * @return
      * @throws Exception
      */
-    //public static boolean writeExcel(HttpServletResponse response, String fileName, String[] title, List<String[]> dataList) throws Exception {
     public static boolean writeExcel(String fileName, String[] title, List<String[]> dataList, String str, HttpServletRequest request) throws Exception {
         boolean flag = false;
         try {
