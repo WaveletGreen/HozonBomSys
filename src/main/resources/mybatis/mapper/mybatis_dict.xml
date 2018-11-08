@@ -12,7 +12,7 @@
 	<sql id="Base_Column_List">
 		code,text,type,value,is_load
 	</sql>
-	<!--根据主键获取对象-->
+	<!--1根据主键获取对象-->
 	<select id="get" parameterType="com.connor.hozon.bom.sys.entity.Dict" resultMap="DictMap">
 		SELECT id,code,text,type,value,is_load FROM dict 
 		WHERE id=#{id}

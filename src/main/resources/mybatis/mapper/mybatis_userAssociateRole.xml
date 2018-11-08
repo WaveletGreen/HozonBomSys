@@ -6,7 +6,7 @@
 		<result property="roleId" column="role_id"/>
 	</resultMap>
 
-	<!--根据用户的ID来删除用户的权限数据-->
+	<!--1根据用户的ID来删除用户的权限数据-->
 	<delete id="removeUserRole" parameterType="com.connor.hozon.bom.sys.entity.User">
 		DELETE FROM user_associate_role WHERE user_id=#{id}
 	</delete>

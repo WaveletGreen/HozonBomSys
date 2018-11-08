@@ -43,7 +43,7 @@
 		SELECT count(id) from user_role t1  INNER JOIN user_associate_role t2  WHERE t1.id = t2.role_id and t1.id = #{id};
 	</select>
 
-	<!--根据主键获取对象-->
+	<!--1根据主键获取对象-->
 	<select id="get" parameterType="com.connor.hozon.bom.sys.entity.UserRole" resultMap="UserRoleTreeMap">
 		SELECT ur.* FROM user_role ur WHERE ur.id=#{id}
 	</select>
@@ -109,7 +109,7 @@
 		SELECT id,name,role_name FROM user_role
 		WHERE 1=1
 		<if test="name!=null and name!='' "  >
-			AND name = #{name}
+			AND name like concat(#{name},'%')
 		</if>
 		<if test="roleName!=null and roleName!='' "  >
 			AND role_name like concat(#{roleName},'%')

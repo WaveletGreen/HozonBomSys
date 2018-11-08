@@ -79,7 +79,7 @@
 		update userRecord set state = #{state} where id=#{id}
 	</update>
 
-	<!-- 根据账号来获取用户信息 -->
+	<!-- 1根据账号来获取用户信息 -->
 	<select id="findByLogin" parameterType="java.lang.String" resultMap="UserLoginMap">
 		select u.*,ur.id as user_role_id,ur.name,ur.role_name from userRecord u left join user_associate_role uar on u.id = uar.user_id left join user_role ur on uar.role_id = ur.id where u.login = #{login}
 	</select>
