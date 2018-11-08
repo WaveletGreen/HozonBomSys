@@ -77,8 +77,9 @@ public class HzFilter implements Filter {
                 }
                 return;
             }
+        }else {
+            filterChain.doFilter(servletRequest,servletResponse);
         }
-        filterChain.doFilter(servletRequest,servletResponse);
     }
 
     @Override
