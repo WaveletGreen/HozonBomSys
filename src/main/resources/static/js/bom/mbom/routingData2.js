@@ -141,15 +141,31 @@ function initTable(url) {
                                 window.Ewin.alert({message:'请先选择工艺路线'})
                                 return false;
                             }
+
+                            for (var i = 0; i < rows.length; i++) {
+                                for (var j = i+1; j < rows.length; j++) {
+                                    if(rows[i].materielId==rows[j].materielId){
+                                        window.Ewin.alert({message: '请不要选择重复物料!'});
+                                        return false;
+                                    }
+                                }
+                            };
+
+
                             var puids = "";
+                            var processDescList = "";
                             for (var i = 0; i < rows.length; i++) {
                                 puids += rows[i].materielId + ",";
+                                processDescList += rows[i].pProcedureDesc+",";
                             };
-                            var myData = JSON.stringify({
-                                "projectId": $("#project", window.top.document).val(),
-                                "puids": puids
 
-                            });
+
+                            // var myData = JSON.stringify({
+                            //     "projectId": $("#project", window.top.document).val(),
+                            //     "puids": puids,
+                            //     "type" : type,
+                            //     "rows" : rowsJson
+                            // });
                             if (rows.length < 1) {
                                 window.Ewin.alert({message: '请至少选择一条需要修改的数据!'});
                                 return false;
@@ -157,9 +173,10 @@ function initTable(url) {
                             window.Ewin.dialog({
                                 title: "修改四大工艺",
                                 // url: "work/process/updateWorkProcess?projectId="+projectId+"&materielId="+rows[0].materielId,
-                                url:"work/process/four2?projectId="+projectId+"&puids="+puids+"&type="+type,
+                                url:"work/process/four2?projectId="+projectId+"&puids="+puids+"&type="+type+"&processDescs="+processDescList,
+                                // url:"work/process/four2",
                                 gridId: "gridId",
-                                // data:myData,
+                                contentType: "application/json",
                                 width: 350,
                                 height: 300,
                                 // onReady:function () {

@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <!--User: xulf Date: 2018/9/17 Time: 14:52-->
@@ -56,6 +57,9 @@
 </form>
 <script th:inline="javascript">
     <![CDATA[
+    var error = [[${error}]];
+    var hzWorkProcedures = [[${hzWorkProcedures}]];
+    var hzWorkProceduresJson = JSON.stringify(hzWorkProcedures);
     $(function () {
         var types = $("#types").val();
         if (types =="1"){
@@ -133,12 +137,17 @@
         $("#btnOk", window.top.document).click(function () {
             var bootstrapValidator = $("#fourProcessForm", window.top.document).data('bootstrapValidator');
             bootstrapValidator.validate();
+            if(error!=null&&error!=""){
+                window.Ewin.alert({message:'请先选择工艺路线'})
+                return false;
+            }
             if (bootstrapValidator.isValid()) {
                 var url = $("#fourProcessForm ", window.top.document).attr('action');
                 var myData = JSON.stringify({
                     "puids": $("#puids").val(),
                     "projectId":$("#project", window.top.document).val(),
                     "routing":arr,
+                    "hzWorkProceduresJson" : hzWorkProceduresJson
                 });
                 $.ajax({
                     contentType:

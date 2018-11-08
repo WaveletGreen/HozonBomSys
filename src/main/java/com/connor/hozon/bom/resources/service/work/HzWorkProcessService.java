@@ -74,5 +74,7 @@ public interface HzWorkProcessService {
 
     int deleteHzWorkProcessByMaterielIds(List<HzWorkProcedure> hzWorkProceduresDel);
 
-    List<String> queryProcessDesc(String puids);
+    List<String> queryProcessDesc( List<String> puidList);
+
+    List<HzWorkProcedure> queryProcedures(List<HzWorkProcedure> hzWorkProcedureList);
 }

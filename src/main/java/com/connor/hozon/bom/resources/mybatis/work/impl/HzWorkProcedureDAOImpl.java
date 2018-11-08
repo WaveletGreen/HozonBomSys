@@ -124,4 +124,9 @@ public class HzWorkProcedureDAOImpl  extends BaseSQLUtil implements HzWorkProced
         return super.executeDelete(hzWorkProceduresDel, "HzWorkProcedureDAOImpl_deleteHzWorkProcesses");
     }
 
+    @Override
+    public List<HzWorkProcedure> queryProcedures(List<HzWorkProcedure> hzWorkProcedureList) {
+        return super.executeQueryByPass(new HzWorkProcedure(),hzWorkProcedureList, "HzWorkProcedureDAOImpl_queryProcedures");
+    }
+
 }

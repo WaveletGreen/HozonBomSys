@@ -259,4 +259,16 @@
       DMB_SPECIAL_FEATURE_UID = #{dmbSpecialFeatureUid,jdbcType=VARCHAR}
     where ID = #{id,jdbcType=DECIMAL}
   </update>
+
+    <select id="selectByPuids" parameterType="java.util.List" resultMap="BaseResultMap">
+        select
+          <include refid="Base_Column_List"/>
+        from
+          HZ_DERIVATIVE_MATERIEL_BASIC
+        where
+        ID in
+        <foreach collection="list" index="index" item="hzDerivativeMaterielBasic" open="(" separator="," close=")">
+              #{hzDerivativeMaterielBasic,jdbcType=DECIMAL}
+        </foreach>
+    </select>
 </mapper>

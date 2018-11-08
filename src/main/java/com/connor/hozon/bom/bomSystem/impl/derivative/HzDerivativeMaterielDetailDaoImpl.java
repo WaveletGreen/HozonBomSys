@@ -9,6 +9,7 @@ package com.connor.hozon.bom.bomSystem.impl.derivative;
 import com.connor.hozon.bom.bomSystem.impl.BasicDaoImpl;
 import com.connor.hozon.bom.bomSystem.dao.derivative.HzDerivativeMaterielDetailDao;
 import org.springframework.context.annotation.Configuration;
+import sql.pojo.cfg.derivative.HzDerivativeMaterielBasic;
 import sql.pojo.cfg.derivative.HzDerivativeMaterielDetail;
 
 import java.util.List;
@@ -37,6 +38,11 @@ public class HzDerivativeMaterielDetailDaoImpl
     @Override
     public List<HzDerivativeMaterielDetail> selectByBasicWithCfg(HzDerivativeMaterielDetail detail) {
         return baseSQLUtil.executeQuery(detail, clz.getCanonicalName() + ".selectByBasicWithCfg");
+    }
+
+    @Override
+    public List<HzDerivativeMaterielDetail> selectByBasics(List<HzDerivativeMaterielBasic> hzDerivativeMaterielBasics) {
+        return baseSQLUtil.executeQueryByPass(new HzDerivativeMaterielDetail(), hzDerivativeMaterielBasics, clz.getCanonicalName() + ".selectByBasics");
     }
 
 }

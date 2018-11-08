@@ -8,6 +8,8 @@
 var projectUid = null;
 /**目标table*/
 var $table = null;
+/**动态表头**/
+ var dynamicTitle = [];
 /**工具条设置*/
 var toolbar = [
     {
@@ -49,6 +51,11 @@ var toolbar = [
         text: '删除衍生物料',
         iconCls: 'glyphicon glyphicon-pencil',
         handler: deleteVehicle
+    },
+    {
+        text: '发起变更表单',
+        iconCls: 'glyphicon glyphicon-pencil',
+        handler: launchChangeForm
     }
 
     // ,
@@ -332,6 +339,53 @@ function deleteVehicle() {
     })
 }
 
+/******发起变更表单****/
+function launchChangeForm() {
+    var rows = $table.bootstrapTable('getSelections');
+    if (rows.length == 0) {
+        window.Ewin.alert({message: '请选择一条需要发起VWO流程的数据!'});
+        return false;
+    }
+    var data = {};
+    data.rows = rows;
+    var puids = [];
+    for(var i=0;i<rows.length;i++){
+        puids.push(rows[i].basicId);
+    }
+    data.puids = puids;
+    data.titles = dynamicTitle;
+    data.projectPuid = projectUid;
+    window.Ewin.confirm({
+        title: '提示',
+        message: '是否要发起VWO流程？',
+        width: 500
+    }).on(function (e) {
+        if (e) {
+            $.ajax({
+                type: "POST",
+                //ajax需要添加打包名
+                url: "./materielV2/getVWO",
+                data: /*data*/JSON.stringify(data),
+                contentType: "application/json",
+                success: function (result) {
+                    if (result.status) {
+                        layer.msg("发起VWO流程成功", {icon: 1, time: 2000})
+                        // window.Ewin.alert({message: "删除时数据成功"});
+                        //刷新，会重新申请数据库数据
+                    }
+                    else {
+                        window.Ewin.alert({message: "发起VWO流程失败:" + result.msg});
+                    }
+                    $table.bootstrapTable("refresh");
+                },
+                error: function (info) {
+                    window.Ewin.alert({message: "发起VWO流程:" + info.status});
+                }
+            })
+        }
+    });
+}
+
 /**成功从后台获取数据*/
 function gotIt(result) {
     if (!result.status) {
@@ -367,6 +421,7 @@ function gotIt(result) {
                 'middle'
         };
         column.push(josn);
+        dynamicTitle.push(data[i]);
     }
     $table.bootstrapTable({
         url: "materielV2/loadComposes?projectPuid=" + projectUid,

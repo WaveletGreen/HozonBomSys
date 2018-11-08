@@ -12,6 +12,7 @@ import com.connor.hozon.bom.resources.domain.query.HzWorkProcessByPageQuery;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.service.work.HzWorkProcessService;
 import com.connor.hozon.bom.resources.util.Result;
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -265,7 +266,7 @@ public class HzWorkProcessController extends BaseController {
         List<Map<String, Object>> _list = new ArrayList<>();
         list.forEach(dto -> {
             Map<String, Object> _res = new HashMap<>();
-            _res.put("No", dto.getNo());
+            _res.put("no", dto.getNo());
             _res.put("materielId", dto.getMaterielId());
             _res.put("pMaterielCode", dto.getpMaterielCode());
             _res.put("pMaterielDesc", dto.getpMaterielDesc());
@@ -296,10 +297,29 @@ public class HzWorkProcessController extends BaseController {
      * 跳转到修改四大工艺的修改页面
      * @return
      */
-    @RequestMapping(value = "four2",method = RequestMethod.GET)
-    public String updateWorkProcessFourToPage(String puids,String projectId,String type, Model model){
-
-        List<String> processDescHeadList = hzWorkProcessService.queryProcessDesc(puids);
+    @RequestMapping(value = "/four2", method = RequestMethod.GET)
+    public String updateWorkProcessFourToPage(String puids,String projectId,String type, String processDescs, Model model){
+        List<String> puidList = new ArrayList<String>();
+        List<HzWorkProcedure> hzWorkProcedureList = new ArrayList<HzWorkProcedure>();
+        String[] puidsArr = puids.split(",");
+        String[] processDescArr = processDescs.split(",");
+        for(int i=0;i<puidsArr.length;i++){
+            for(int j=i+1;j<puidsArr.length;j++){
+                if(puidsArr[i].equals(puidsArr[j])){
+                    model.addAttribute("error","请不要选择重复物料");
+                }
+            }
+        }
+        for(int i=0;i<puidsArr.length;i++){
+            puidList.add(puidsArr[i]);
+            HzWorkProcedure hzWorkProcedure = new HzWorkProcedure();
+            hzWorkProcedure.setMaterielId(puidsArr[i]);
+            hzWorkProcedure.setpProcedureDesc("null".equals(processDescArr[i])?null:processDescArr[i]);
+            hzWorkProcedureList.add(hzWorkProcedure);
+        }
+        List<String> processDescHeadList = hzWorkProcessService.queryProcessDesc(puidList);
+        List<HzWorkProcedure> hzWorkProcedures = hzWorkProcessService.queryProcedures(hzWorkProcedureList);
+        model.addAttribute("hzWorkProcedures",hzWorkProcedures);
         model.addAttribute("data",puids);
         model.addAttribute("type",type);
         for(String processDescHead : processDescHeadList){
@@ -324,13 +344,17 @@ public class HzWorkProcessController extends BaseController {
         String puids = (String)data.get("puids");
         String projectId = (String)data.get("projectId");
         List<String> routings = (List<String>)data.get("routing");
+        String hzWorkProceduresJson = (String) data.get("hzWorkProceduresJson");
+
+        JSONArray json = JSONArray.fromObject(hzWorkProceduresJson);
+        List<HzWorkProcedure> hzWorkProcedureList= (List<HzWorkProcedure>)JSONArray.toCollection(json, HzWorkProcedure.class);
 
         String[] puidArr = puids.split(",");
 
         List<HzWorkProcedure> hzWorkProceduresAdd = new ArrayList<HzWorkProcedure>();
         for(int i=0;i<puidArr.length;i++){
             for(String routing : routings){
-                HzWorkProcedure hzWorkProcedure1 = new HzWorkProcedure();
+                HzWorkProcedure hzWorkProcedure1 = hzWorkProcedureList.get(i).clone();
                 String puid1 = UUID.randomUUID().toString();
                 hzWorkProcedure1.setPuid(puid1);
                 hzWorkProcedure1.setMaterielId(puidArr[i]);
@@ -338,7 +362,7 @@ public class HzWorkProcessController extends BaseController {
                 hzWorkProcedure1.setpFactoryId("1001");
                 hzWorkProcedure1.setpProcedureDesc(routing+"-时间维度");
 
-                HzWorkProcedure hzWorkProcedure2 = new HzWorkProcedure();
+                HzWorkProcedure hzWorkProcedure2 = hzWorkProcedureList.get(i).clone();
                 String puid2 = UUID.randomUUID().toString();
                 hzWorkProcedure2.setPuid(puid2);
                 hzWorkProcedure2.setMaterielId(puidArr[i]);
