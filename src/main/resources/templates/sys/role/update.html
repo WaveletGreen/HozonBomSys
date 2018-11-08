@@ -27,7 +27,7 @@
         //     $("input").attr({"disabled": "disabled"});
         // }
         let name = [[${entity.name}]];
-        console.log(name)
+
         if(name == 'ROLE_ADMIN'){
             $("#name").attr("disabled","disabled");
             $("#roleName").attr("disabled","disabled");
@@ -88,7 +88,7 @@
                     treeArray =  treeArray + "," + nodes[i].id
                 }
             }
-            $("#treeArray").attr("value",treeArray);
+            // $("#treeArray").attr("value",treeArray);
             // 此段是为防止需要点击两次按钮来实现验证的方法，若不添加此处的放行，那么我们将要点击两次确定按钮才可以提交验证
             var name = $("#name").val();
             // 判断当前的code又值，且当前不存在错误验证方可放开该字段的验证
@@ -100,19 +100,53 @@
             var bootstrapValidator = $("#roleForm", window.top.document).data('bootstrapValidator');
             bootstrapValidator.validate();
             if(bootstrapValidator.isValid()){
-                $.post($("#roleForm",window.top.document).attr('action'),$("#roleForm",window.top.document).serialize(),function(e){
-                    if(e.result){
-                        $('.modal-dialog', window.top.document).parent('div').remove()
-                        $('body', window.top.document).find('.modal-backdrop').remove();
-                        // jquery 调用刷新当前操作的table页面的refresh方法
-                        $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
-                        // window.Ewin.alert({message:'修改数据成功!'});
-                        layer.msg('修改成功', {icon: 1, time: 2000})
+
+                var url = $("#roleForm", window.top.document).attr('action');
+                var data = JSON.stringify({
+                    "id":$("#roleId").val(),
+                    "name": $("#name").val(),
+                    "roleName": $("#roleName").val(),
+                    "treeArray":treeArray
+                });
+                console.log(data);
+                $.ajax({
+                    contentType:
+                        "application/json",
+                    type:
+                        'POST',
+                    url: url,
+                    data: data,
+                    success:
+                        function (res) {
+                            if(res.result){
+                                $('.modal-dialog', window.top.document).parent('div').remove()
+                                $('body', window.top.document).find('.modal-backdrop').remove();
+                                // jquery 调用刷新当前操作的table页面的refresh方法
+                                $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
+                                // window.Ewin.alert({message:'修改数据成功!'});
+                                layer.msg(res.msg, {icon: 1, time: 2000})
+                            }else{
+                                window.Ewin.alert({message:res.msg});
+                            }
+                        },
+                    error: function (status) {
+                        window.Ewin.alert({message: status.status + ':修改数据失败!'});
                     }
-                    else{
-                        window.Ewin.alert({message:'修改数据失败!'});
-                    }
-                })
+                });
+
+                // $.post($("#roleForm",window.top.document).attr('action'),$("#roleForm",window.top.document).serialize(),function(e){
+                //     if(e.result){
+                //         $('.modal-dialog', window.top.document).parent('div').remove()
+                //         $('body', window.top.document).find('.modal-backdrop').remove();
+                //         // jquery 调用刷新当前操作的table页面的refresh方法
+                //         $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
+                //         // window.Ewin.alert({message:'修改数据成功!'});
+                //         layer.msg('修改成功', {icon: 1, time: 2000})
+                //     }
+                //     else{
+                //         window.Ewin.alert({message:'修改数据失败!'});
+                //     }
+                // })
             }
         });
 

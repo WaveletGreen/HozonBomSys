@@ -20,7 +20,7 @@ import java.util.Properties;
 /**
  * @Author: haozt
  * @Date: 2018/8/21
- * @Description:
+ * @Description:excel 操作工具类
  */
 public class ExcelUtil {
     private static final String EXTENSION_XLS = "xls";
