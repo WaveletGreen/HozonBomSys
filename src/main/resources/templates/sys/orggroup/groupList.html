@@ -235,7 +235,9 @@
                     field: '',
                     title: '序号',
                     formatter: function (value, row, index) {
-                        return index + 1;
+                        //return index + 1;
+                        var temp = $('#group-user-table').bootstrapTable("getIndex");//返回（pageSize * (pageNumber-1) + 1）
+                        return temp + index;
                     }
                 },
                 /*{

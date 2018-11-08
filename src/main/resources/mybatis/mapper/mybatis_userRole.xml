@@ -49,7 +49,7 @@
 	</select>
 
 	<!--保存-->
-	<insert id="save" parameterType="com.connor.hozon.bom.sys.entity.UserRole" useGeneratedKeys="true" keyProperty="id">
+	<insert id="save" parameterType="com.connor.hozon.bom.sys.entity.UserRole" useGeneratedKeys="false" keyProperty="id">
 		INSERT INTO user_role(name,role_name)
 		VALUES(#{name},#{roleName})
 	</insert>
@@ -67,7 +67,8 @@
 
 	<!--分页查询-->
 	<select id="findByPage" parameterType="com.connor.hozon.bom.sys.entity.QueryUserRole" resultMap="UserRoleMap">
-		SELECT id,name,role_name FROM user_role
+		select * from(
+		SELECT id,name,role_name,rownum as rn FROM user_role
 		WHERE 1=1
 		<if test="name!=null and name!='' "  >
 		AND name like concat(#{name},'%')
@@ -78,7 +79,17 @@
 		<if test="sort!= null">
 		order by ${sort} ${order}
 		</if>
-		limit #{offset},#{limit}
+		)u
+		where 1=1
+		<!--limit #{offset},#{limit}-->
+		<if test="offset!=null">
+			and u.rn &gt;= ${offset}+1
+		</if>
+		<if test="limit!=null and  page!=null">
+			and u.rn &lt;= ${page}*${limit}
+		</if>
+		<!--limit #{offset},#{limit}-->
+
 	</select>
 
 	<!--统计-->

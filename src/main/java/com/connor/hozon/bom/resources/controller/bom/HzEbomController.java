@@ -219,9 +219,7 @@ public class HzEbomController extends BaseController {
      */
     @RequestMapping(value = "excelExport",method = RequestMethod.POST)
     @ResponseBody
-    public JSONObject listDownLoad(
-            @RequestBody  List<HzEbomRespDTO> dtos
-    ,HttpServletRequest request) {
+    public JSONObject listDownLoad(@RequestBody  List<HzEbomRespDTO> dtos, HttpServletRequest request) {
         boolean flag=true;
         JSONObject result=new JSONObject();
         try {

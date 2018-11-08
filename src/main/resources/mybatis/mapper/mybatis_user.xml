@@ -2,7 +2,25 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.connor.hozon.bom.sys.dao.UserDao">
 	<resultMap type="com.connor.hozon.bom.sys.entity.User" id="UserMap">
-		<id property="id" column="id"/>
+		<id column="ID" jdbcType="INTEGER" property="id" />
+		<result column="LOGIN" jdbcType="OTHER" property="login" />
+		<result column="PASSWORD" jdbcType="OTHER" property="password" />
+		<result column="USER_NAME" jdbcType="OTHER" property="userName" />
+		<result column="ADDRESS" jdbcType="OTHER" property="address" />
+		<result column="JOB" jdbcType="OTHER" property="job" />
+		<result column="GROUP_ID" jdbcType="DOUBLE" property="groupId" />
+		<result column="BIRTH_DATE" jdbcType="DATE" property="birthDate" />
+		<result column="CITY" jdbcType="OTHER" property="city" />
+		<result column="DISTRICT" jdbcType="OTHER" property="district" />
+		<result column="PROVINCE" jdbcType="OTHER" property="province" />
+		<result column="STREET_ADDRESS" jdbcType="OTHER" property="streetAddress" />
+		<result column="STATE" jdbcType="OTHER" property="state" />
+		<result column="TYPE" jdbcType="OTHER" property="type" />
+		<result column="LAST_LOGIN_DATE" jdbcType="DATE" property="lastLoginDate" />
+		<result column="EMAIL" jdbcType="OTHER" property="email" />
+		<result column="USER_NO" jdbcType="OTHER" property="userNo" />
+
+		<!--<id property="id" column="id"/>
 		<result property="login" column="login"/>
 		<result property="password" column="password"/>
 		<result property="userName" column="user_name"/>
@@ -18,7 +36,7 @@
 		<result property="type" column="type"/>
 		<result property="email" column="email"/>
 		<result property="userNo" column="user_no"/>
-		<result property="lastLoginDate" column="last_login_date"/>
+		<result property="lastLoginDate" column="last_login_date"/>-->
 		<association property="orgGroup" javaType="com.connor.hozon.bom.sys.entity.OrgGroup" column="group_id">
 			<id property="groupId" column="group_id"/>
 			<result property="existingNum" column="existing_num"/>
@@ -58,67 +76,175 @@
 
 	<!-- 更新用户状态为可用或者不可用 -->
 	<update id="userControl" parameterType="com.connor.hozon.bom.sys.entity.User">
-		update user set state = #{state} where id=#{id}
+		update userRecord set state = #{state} where id=#{id}
 	</update>
 
 	<!-- 根据账号来获取用户信息 -->
 	<select id="findByLogin" parameterType="java.lang.String" resultMap="UserLoginMap">
-		select u.*,ur.id as user_role_id,ur.name,ur.role_name from user u left join user_associate_role uar on u.id = uar.user_id left join user_role ur on uar.role_id = ur.id where u.login = #{login}
+		select u.*,ur.id as user_role_id,ur.name,ur.role_name from userRecord u left join user_associate_role uar on u.id = uar.user_id left join user_role ur on uar.role_id = ur.id where u.login = #{login}
 	</select>
 	<!-- 根据账号来获取用户信息 -->
 	<select id="loadAll" resultMap="UserLoginMap">
-		select u.*,ur.id as user_role_id,ur.name,ur.role_name from user u inner join user_associate_role uar on u.id = uar.user_id inner join user_role ur on uar.role_id = ur.id
+		select u.*,ur.id as user_role_id,ur.name,ur.role_name from userRecord u inner join
+		user_associate_role uar on u.id = uar.user_id inner join user_role ur on uar.role_id = ur.id
 	</select>
 
 	<!-- 更新用户的最迟登陆时间 -->
      <update id="updateLogin" parameterType="com.connor.hozon.bom.sys.entity.User">
-		 update user set last_login_date = now() where id=#{id}
+		 update userRecord set last_login_date = now() where id=#{id}
 	 </update>
 
 	<!--根据主键获取对象-->
 	<select id="get" parameterType="com.connor.hozon.bom.sys.entity.User" resultMap="UserMap">
-		select u.*,og.existing_num,og.group_code,og.name,og.node,og.num,og.parent_node from user u inner join org_group og on u.group_id = og.group_id
+		select u.*,og.existing_num,og.group_code,og.name,og.node,og.num,og.parent_node from userRecord u inner join org_group og on u.group_id = og.group_id
 		WHERE id=#{id}
 	</select>
 
 	<!--保存-->
-	<insert id="save" parameterType="com.connor.hozon.bom.sys.entity.User" useGeneratedKeys="true" keyProperty="id">
-		INSERT INTO user
-		(
-		login,password,user_name,address,job,group_id,birth_date,
-		city,district,province,street_address,state,type,last_login_date,
-		email,user_no
-		)
-		VALUES
-		(
-		#{login},#{password},#{userName},#{address},#{job},
-		#{orgGroup.groupId},#{birthDate},#{city},#{district},#{province},#{streetAddress},#{state},#{type},now(),
-		#{email},#{userNo}
-		)
+	<!--<insert id="save" parameterType="com.connor.hozon.bom.sys.entity.User">-->
+		<!--INSERT INTO userRecord-->
+		<!--(id,login,password,user_name,address,job,group_id,birth_date,-->
+		<!--city,district,province,street_address,state,type,last_login_date,-->
+		<!--email,user_no-->
+		<!--)VALUES(-->
+		<!--SEQ_HZ_USERRECORD.nextval,-->
+		<!--#{login},#{password},#{userName},#{address},#{job},-->
+		<!--#{orgGroup.groupId},#{birthDate,jdbcType=DATE},#{city,jdbcType=VARCHAR},-->
+		<!--#{district,jdbcType=VARCHAR},#{province,jdbcType=VARCHAR},-->
+		<!--#{streetAddress,jdbcType=VARCHAR},#{state},#{type,jdbcType=VARCHAR},sysdate,-->
+		<!--#{email},#{userNo}-->
+		<!--)-->
+	<!--</insert>-->
+
+	<insert id="save" parameterType="com.connor.hozon.bom.sys.entity.User">
+		<!--oracle插入数据返回主键到外键-->
+		<selectKey resultType="java.lang.Integer" order="BEFORE" keyProperty="id">
+			SELECT SEQ_HZ_USERRECORD.Nextval as ID from DUAL
+		</selectKey>
+
+		insert into USERRECORD
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			ID,
+			<if test="login != null">
+				LOGIN,
+			</if>
+			<if test="password != null">
+				PASSWORD,
+			</if>
+			<if test="userName != null">
+				USER_NAME,
+			</if>
+			<if test="address != null">
+				ADDRESS,
+			</if>
+			<if test="job != null">
+				JOB,
+			</if>
+			<if test="groupId != null">
+				GROUP_ID,
+			</if>
+			<if test="city != null">
+				CITY,
+			</if>
+			<if test="district != null">
+				DISTRICT,
+			</if>
+			<if test="province != null">
+				PROVINCE,
+			</if>
+			<if test="streetAddress != null">
+				STREET_ADDRESS,
+			</if>
+			<if test="state != null">
+				STATE,
+			</if>
+			<if test="type != null">
+				TYPE,
+			</if>
+			LAST_LOGIN_DATE,
+			<if test="email != null">
+				EMAIL,
+			</if>
+			<if test="userNo != null">
+				USER_NO,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<!--SEQ_HZ_USERRECORD.nextval,-->
+			#{id,jdbcType=OTHER},
+			<if test="login != null">
+				#{login,jdbcType=OTHER},
+			</if>
+			<if test="password != null">
+				#{password,jdbcType=OTHER},
+			</if>
+			<if test="userName != null">
+				#{userName,jdbcType=OTHER},
+			</if>
+			<if test="address != null">
+				#{address,jdbcType=OTHER},
+			</if>
+			<if test="job != null">
+				#{job,jdbcType=OTHER},
+			</if>
+			<if test="groupId != null">
+				#{groupId,jdbcType=DECIMAL},
+			</if>
+			<if test="city != null">
+				#{city,jdbcType=OTHER},
+			</if>
+			<if test="district != null">
+				#{district,jdbcType=OTHER},
+			</if>
+			<if test="province != null">
+				#{province,jdbcType=OTHER},
+			</if>
+			<if test="streetAddress != null">
+				#{streetAddress,jdbcType=OTHER},
+			</if>
+			<if test="state != null">
+				#{state,jdbcType=OTHER},
+			</if>
+			<if test="type != null">
+				#{type,jdbcType=OTHER},
+			</if>
+			sysdate,
+			<if test="email != null">
+				#{email,jdbcType=OTHER},
+			</if>
+			<if test="userNo != null">
+				#{userNo,jdbcType=OTHER}
+			</if>
+		</trim>
 	</insert>
+
 
 	<!--修改-->
 	<update id="update" parameterType="com.connor.hozon.bom.sys.entity.User">
-		UPDATE user SET user_name=#{userName},address=#{address},job=#{job},
-		group_id=#{orgGroup.groupId},birth_date=#{birthDate},city=#{city},
-		district=#{district},province=#{province},street_address=#{streetAddress},
+		UPDATE userRecord SET user_name=#{userName},address=#{address,jdbcType=VARCHAR},job=#{job},
+		group_id=#{orgGroup.groupId},birth_date=#{birthDate,jdbcType=VARCHAR},city=#{city,jdbcType=VARCHAR},
+		district=#{district,jdbcType=VARCHAR},province=#{province,jdbcType=VARCHAR},street_address=#{streetAddress,jdbcType=VARCHAR},
 		email =#{email},user_no=#{userNo}
 		WHERE id=#{id}
 	</update>
 
 	<!--删除-->
 	<delete id="delete" parameterType="com.connor.hozon.bom.sys.entity.User">
-		 DELETE FROM user WHERE id=#{id}
+		 DELETE FROM userRecord WHERE id=#{id}
 	</delete>
 
 	<!--分页查询组织架构底下的用户-->
 	<select id="findGroupUserByPage" parameterType="com.connor.hozon.bom.sys.entity.QueryUser" resultMap="UserMap">
-		select u.*,og.existing_num,og.group_code,og.name,og.node,og.num,og.parent_node from user u inner join org_group og on u.group_id = og.group_id
+		select * from(
+		select u.*,og.existing_num,og.group_code,og.name,og.node,og.num,og.parent_node
+		,rownum as rn
+		from
+		userRecord u inner join org_group og on u.group_id = og.group_id
 		WHERE 1=1
 		<if test="userName!=null and userName!='' ">
 			AND u.user_name like concat(#{userName},'%')
 		</if>
-		<if test="orgGroup!=null">
+		AND og.parent_node like concat(#{orgGroup.parentNode},'%')<if test="orgGroup!=null">
 			<if test="orgGroup.parentNode!=null and orgGroup.parentNode!='' ">
                   AND og.parent_node like concat(#{orgGroup.parentNode},'%')
 			</if>
@@ -129,12 +255,24 @@
 		<if test="sort!= null and sort!='' ">
 			order by ${sort} ${order}
 		</if>
-		limit #{offset},#{limit}
+		)u
+		where 1=1
+		<!--limit #{offset},#{limit}-->
+		<if test="offset!=null">
+			and u.rn &gt;= ${offset}+1
+		</if>
+		<if test="limit!=null and  page!=null">
+			and u.rn &lt;= ${page}*${limit}
+		</if>
+
+		<!--and  ROWNUM &lt;=#{limit,jdbcType=INTEGER})
+		where  rn &gt;#{offset,jdbcType=INTEGER}-->
+
 	</select>
 
 	<!--统计组织架构底下的用户-->
 	<select id="countGroupUser" parameterType="com.connor.hozon.bom.sys.entity.QueryUser" resultType="int">
-		select count(1) from user u inner join org_group og on u.group_id = og.group_id
+		select count(1) from userRecord u inner join org_group og on u.group_id = og.group_id
 		WHERE 1=1
 		<if test="userName!=null and userName!='' ">
 			AND u.user_name like concat(#{userName},'%')
@@ -151,7 +289,10 @@
 
 	<!--分页查询-->
 	<select id="findByPage" parameterType="com.connor.hozon.bom.sys.entity.QueryUser" resultMap="UserMap">
-		select u.*,og.existing_num,og.group_code,og.name,og.node,og.num,og.parent_node from user u inner join org_group og on u.group_id = og.group_id
+		select * from(
+		select u.*,og.existing_num,og.group_code,og.name,og.node,og.num,og.parent_node
+		,rownum as rn
+		from userRecord u inner join org_group og on u.group_id = og.group_id
 		WHERE 1=1
 		<if test="login!=null and login!='' ">
 		AND u.login=#{login}
@@ -198,12 +339,22 @@
 		<if test="sort!= null and sort!='' ">
 		order by ${sort} ${order}
 		</if>
-		limit #{offset},#{limit}
+		)u
+		where 1=1
+		<!--limit #{offset},#{limit}-->
+		<if test="offset!=null">
+			and u.rn &gt;= ${offset}+1
+		</if>
+		<if test="limit!=null and  page!=null">
+			and u.rn &lt;= ${page}*${limit}
+		</if>
+		<!--limit #{offset},#{limit}-->
+
 	</select>
 
 	<!--统计-->
 	<select id="count" parameterType="com.connor.hozon.bom.sys.entity.QueryUser" resultType="int">
-		SELECT count(*) FROM user
+		SELECT count(*) FROM userRecord
 		WHERE 1=1
 		<if test="login!=null and login!='' ">
 			AND login=#{login}
@@ -254,7 +405,7 @@
 
 	<!--查询-->
 	<select id="query" parameterType="com.connor.hozon.bom.sys.entity.QueryUser" resultMap="UserMap">
-		SELECT id,login,password,user_name,address,job,group_id,birth_date,city,district,province,street_address,state,type,last_login_date FROM user
+		SELECT id,login,password,user_name,address,job,group_id,birth_date,city,district,province,street_address,state,type,last_login_date FROM userRecord
 		WHERE 1=1
 		<if test="login!=null and login!='' ">
 			AND login=#{login}
@@ -306,18 +457,18 @@
 
 	<!-- 更新用户 登录密码  haozt on 7/23/2018-->
 	<update id="updatePassword" parameterType="com.connor.hozon.bom.sys.entity.User">
-		 update user set password = #{password} where id=#{id}
+		 update userRecord set password = #{password} where id=#{id}
 	 </update>
 
 	<select id="findUserByGroupId" parameterType="java.lang.String" resultMap="UserMap">
-		select  * FROM user  where group_id = #{groupId}
+		select  * FROM userRecord  where group_id = #{groupId}
 	</select>
 
 	<select id="findAllUser" resultMap="UserMap">
-		select  * FROM user  where state = 1
+		select  * FROM userRecord  where state = 1
 	</select>
 
     <select id="findUserById" resultMap="UserMap">
-		select  * FROM user  where state = #{state} and  id=#{id}
+		select  * FROM userRecord  where state = #{state} and  id=#{id}
 	</select>
 </mapper>
