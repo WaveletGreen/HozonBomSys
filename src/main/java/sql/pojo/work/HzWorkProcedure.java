@@ -297,4 +297,33 @@ public class HzWorkProcedure {
     public String getpFactoryId() {
         return pFactoryId;
     }
+
+    public HzWorkProcedure clone(){
+        HzWorkProcedure hzWorkProcedure = new HzWorkProcedure();
+        hzWorkProcedure.setPuid(this.getPuid());
+        hzWorkProcedure.setpWorkPuid(this.getpWorkPuid());
+        hzWorkProcedure.setpProcedureCode(this.getpProcedureCode());
+        hzWorkProcedure.setpProcedureDesc(this.getpProcedureDesc());
+        hzWorkProcedure.setpDirectLabor(this.getpDirectLabor());
+        hzWorkProcedure.setpIndirectLabor(this.getpIndirectLabor());
+        hzWorkProcedure.setpMachineLabor(this.getpMachineLabor());
+        hzWorkProcedure.setpBurn(this.getpBurn());
+        hzWorkProcedure.setpMachineMaterialLabor(this.getpMachineMaterialLabor());
+        hzWorkProcedure.setpOtherCost(this.getpOtherCost());
+        hzWorkProcedure.setpCount(this.getpCount());
+        hzWorkProcedure.setpCreateTime(this.getpCreateTime());
+        hzWorkProcedure.setpUpdateTime(this.getpUpdateTime());
+        hzWorkProcedure.setpCreateName(this.getpCreateName());
+        hzWorkProcedure.setpUpdateName(this.getpUpdateName());
+        hzWorkProcedure.setpStatus(this.getpStatus());
+        hzWorkProcedure.setProjectId(this.getProjectId());
+        hzWorkProcedure.setMaterielId(this.getMaterielId());
+        hzWorkProcedure.setPurpose(this.getPurpose());
+        hzWorkProcedure.setpMaterielCode(this.getpMaterielCode());
+        hzWorkProcedure.setpMaterielDesc(this.getpMaterielDesc());
+        hzWorkProcedure.setState(this.getState());
+        hzWorkProcedure.setControlCode(this.getControlCode());
+        hzWorkProcedure.setpFactoryId(this.getpFactoryId());
+        return hzWorkProcedure;
+    }
 }

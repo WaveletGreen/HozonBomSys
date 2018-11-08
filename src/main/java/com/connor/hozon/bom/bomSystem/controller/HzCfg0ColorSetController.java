@@ -108,6 +108,13 @@ public class HzCfg0ColorSetController {
         return "cfg/color/addColor";
     }
 
+
+
+    /**
+     * 更新一个颜色对象的信息
+     * @param map
+     * @return
+     */
     @RequestMapping(value = "/updateWithEntity2", method = RequestMethod.POST)
     @ResponseBody
     public JSONObject update2(@RequestBody Map<String, String> map) {
@@ -179,19 +186,11 @@ public class HzCfg0ColorSetController {
         return result;
     }
 
+
     /**
-     * 添加一个颜色，由于颜色在添加的时候可以添加油漆物料号，因此在添加过程中需要验证油漆物料号正确性
-     *
-     * @param map 该入参的key需要为{@link HzCfg0ColorSet} 的字段
-     *            {@link HzCfg0ColorSet#pColorCode}
-     *            {@link HzCfg0ColorSet#pColorName}
-     *            {@link HzCfg0ColorSet#pColorOfSet}
-     *            {@link HzCfg0ColorSet#pColorPlate}
-     *            {@link HzCfg0ColorSet#pColorIsMultiply}
-     *            {@link HzCfg0ColorSet#pColorComment}
-     *            除此之外的数据都将成为油漆物料并拼接在{@link HzCfg0ColorSet#csPaintMaterielCodes}字段上
-     *            油漆物料的UID需要经过验证并回传UID，拼接在{@link HzCfg0ColorSet#csPaintMaterielUids}字段上用于未来验证
-     * @return 添加成功与否标识和消息
+     * 添加一个颜色信息
+     * @param map
+     * @return
      */
     @RequestMapping(value = "/add2", method = RequestMethod.POST)
     @ResponseBody

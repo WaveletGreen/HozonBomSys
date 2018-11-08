@@ -8,6 +8,8 @@ package com.connor.hozon.bom.bomSystem.controller;
 
 import com.connor.hozon.bom.bomSystem.controller.integrate.ExtraIntegrate;
 import com.connor.hozon.bom.bomSystem.dao.derivative.HzCfg0ToModelRecordDao;
+import com.connor.hozon.bom.bomSystem.dao.derivative.HzDerivativeMaterielBasicDao;
+import com.connor.hozon.bom.bomSystem.dao.derivative.HzDerivativeMaterielDetailDao;
 import com.connor.hozon.bom.bomSystem.dao.modelColor.HzCfg0ModelColorDao;
 import com.connor.hozon.bom.bomSystem.dto.cfg.compose.HzComposeDelDto;
 import com.connor.hozon.bom.bomSystem.dto.cfg.compose.HzComposeMFDTO;
@@ -37,6 +39,8 @@ import org.springframework.web.bind.annotation.*;
 import sql.pojo.cfg.cfg0.HzCfg0Record;
 import sql.pojo.cfg.derivative.HzCfg0ModelFeature;
 import sql.pojo.cfg.derivative.HzCfg0ToModelRecord;
+import sql.pojo.cfg.derivative.HzDerivativeMaterielBasic;
+import sql.pojo.cfg.derivative.HzDerivativeMaterielDetail;
 import sql.pojo.cfg.main.HzCfg0MainRecord;
 import sql.pojo.cfg.model.HzCfg0ModelRecord;
 import sql.pojo.cfg.modelColor.HzCfg0ModelColor;
@@ -100,6 +104,10 @@ public class HzMaterielFeatureV2Controller extends ExtraIntegrate {
     /***全配置BOM一级清单服务层*/
     @Autowired
     HzBomAllCfgService hzBomAllCfgService;
+    @Autowired
+    HzDerivativeMaterielBasicDao hzDerivativeMaterielBasicDao;
+    @Autowired
+    HzDerivativeMaterielDetailDao hzDerivativeMaterielDetailDao;
     /***日志*/
     private static Logger logger = LoggerFactory.getLogger(HzMaterielFeatureV2Controller.class);
 
@@ -394,6 +402,19 @@ public class HzMaterielFeatureV2Controller extends ExtraIntegrate {
         return _result;
     }
 
+    @RequestMapping("/getVWO")
+    @ResponseBody
+    public JSONObject getVWO(@RequestBody Map<String, Object> params){
+        JSONObject result = new JSONObject();
+//        List<HashMap<String, String>> rows = (List<HashMap<String, String>>) params.get("rows");
+        //基本信息basicId
+        List<String> puids = (List<String>)params.get("puids");
+        //查询主数据
+        List<HzDerivativeMaterielBasic> hzDerivativeMaterielBasics = hzDerivativeMaterielBasicDao.selectByPuids(puids);
+        //查询从数据
+        List<HzDerivativeMaterielDetail> hzDerivativeMaterielDetails = hzDerivativeMaterielDetailDao.selectByBasics(hzDerivativeMaterielBasics);
+        return result;
+    }
 
     /**********************************************废除方法****************************************/
     /**

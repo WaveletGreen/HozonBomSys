@@ -52,4 +52,9 @@ public class HzDerivativeMaterielBasicDaoImpl extends BasicDaoImpl<HzDerivativeM
         BASIC.setDmbColorModelUid(colorModel);
         return baseSQLUtil.executeQueryById(BASIC, clz.getCanonicalName() + ".selectByModelAndColorUid");
     }
+
+    @Override
+    public List<HzDerivativeMaterielBasic> selectByPuids(List<String> puids) {
+        return baseSQLUtil.executeQueryByPass(new HzDerivativeMaterielBasic(), puids, clz.getCanonicalName() +".selectByPuids");
+    }
 }

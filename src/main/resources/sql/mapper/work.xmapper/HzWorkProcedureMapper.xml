@@ -551,18 +551,51 @@
   <insert id="HzWorkProcedureDAOImpl_insertHzWorkProcedures" parameterType="java.util.List">
       insert into
           HZ_WORK_PROCEDURE
-      (PUID, P_PROJECT_PUID, P_PROCEDURE_DESC, P_MATERIEL_PUID, P_FACTORYID)
+      (PUID, P_WORK_PUID, P_PROCEDURE_CODE, P_PROCEDURE_DESC, P_DIRECT_LABOR, P_INDIRECT_LABOR,
+      P_MACHINE_LABOR, P_BURN, P_MACHINE_MATERIAL_LABOR, P_OTHER_COST, P_COUNT,
+      P_CREATE_TIME, P_UPDATE_TIME, P_CREATE_NAME, P_UPDATE_NAME, P_STATUS,P_PROJECT_PUID,
+      P_MATERIEL_PUID,
+      P_PURPOSE, P_STATE, P_CONTROL_CODE, P_MATERIEL_CODE, P_MATERIEL_DESC,P_FACTORYID)
       <foreach collection="list" index="index" item="hzWorkProcedure" separator="union" open="(" close=")">
         select
           #{hzWorkProcedure.puid, jdbcType=VARCHAR},
-          #{hzWorkProcedure.projectId, jdbcType=VARCHAR},
+          #{hzWorkProcedure.pWorkPuid, jdbcType=VARCHAR},
+          #{hzWorkProcedure.pProcedureCode, jdbcType=VARCHAR},
           #{hzWorkProcedure.pProcedureDesc, jdbcType=VARCHAR},
+          #{hzWorkProcedure.pDirectLabor, jdbcType=VARCHAR},
+          #{hzWorkProcedure.pIndirectLabor, jdbcType=VARCHAR},
+          #{hzWorkProcedure.pMachineLabor, jdbcType=VARCHAR},
+          #{hzWorkProcedure.pBurn, jdbcType=VARCHAR},
+          #{hzWorkProcedure.pMachineMaterialLabor, jdbcType=VARCHAR},
+          #{hzWorkProcedure.pOtherCost, jdbcType=VARCHAR},
+          #{hzWorkProcedure.pCount, jdbcType=INTEGER},
+          #{hzWorkProcedure.pCreateTime, jdbcType=DATE},
+          #{hzWorkProcedure.pUpdateTime, jdbcType=DATE},
+          #{hzWorkProcedure.pCreateName, jdbcType=VARCHAR},
+          #{hzWorkProcedure.pUpdateName, jdbcType=VARCHAR},
+          #{hzWorkProcedure.pStatus, jdbcType=INTEGER},
+          #{hzWorkProcedure.projectId, jdbcType=VARCHAR},
           #{hzWorkProcedure.materielId, jdbcType=VARCHAR},
+          #{hzWorkProcedure.purpose, jdbcType=VARCHAR},
+          #{hzWorkProcedure.state, jdbcType=VARCHAR},
+          #{hzWorkProcedure.controlCode, jdbcType=VARCHAR},
+          #{hzWorkProcedure.pMaterielCode, jdbcType=VARCHAR},
+          #{hzWorkProcedure.pMaterielDesc, jdbcType=VARCHAR},
         (select PUID from HZ_FACTORY where P_FACTORY_CODE = #{hzWorkProcedure.pFactoryId, jdbcType=VARCHAR})
-
         from
           dual
       </foreach>
+      <!--<foreach collection="list" index="index" item="hzWorkProcedure" separator="union" open="(" close=")">-->
+        <!--select-->
+          <!--#{hzWorkProcedure.puid, jdbcType=VARCHAR},-->
+          <!--#{hzWorkProcedure.projectId, jdbcType=VARCHAR},-->
+          <!--#{hzWorkProcedure.pProcedureDesc, jdbcType=VARCHAR},-->
+          <!--#{hzWorkProcedure.materielId, jdbcType=VARCHAR},-->
+        <!--(select PUID from HZ_FACTORY where P_FACTORY_CODE = #{hzWorkProcedure.pFactoryId, jdbcType=VARCHAR})-->
+
+        <!--from-->
+          <!--dual-->
+      <!--</foreach>-->
   </insert>
 
   <select id="HzWorkProcedureDAOImpl_findHzWorkProcessByProjectId" parameterType="java.lang.String" resultMap="BaseResultMap">
@@ -611,4 +644,20 @@
         (select PUID from HZ_WORK_PROCEDURE where P_MATERIEL_PUID = #{hzWorkProcedure.materielId,jdbcType=VARCHAR} and P_PROCEDURE_DESC=#{hzWorkProcedure.pProcedureDesc,jdbcType=VARCHAR})
       </foreach>
   </delete>
+
+  <select id="HzWorkProcedureDAOImpl_queryProcedures" parameterType="java.util.List" resultMap="BaseResultMap">
+    select
+        <include refid="Base_Column_List"/>
+    from
+        HZ_WORK_PROCEDURE
+    where
+    <foreach collection="list" item="hzWorkProcedure" index="index" separator=" or ">
+      (
+      P_MATERIEL_PUID = #{hzWorkProcedure.materielId, jdbcType=VARCHAR}
+      <if test="hzWorkProcedure.pProcedureDesc!=null">
+        and P_PROCEDURE_DESC = #{hzWorkProcedure.pProcedureDesc, jdbcType=VARCHAR}
+      </if>
+      )
+      </foreach>
+  </select>
 </mapper>

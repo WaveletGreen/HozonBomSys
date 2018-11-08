@@ -291,4 +291,16 @@
       DMD_FEATURE_VALUE = #{dmdFeatureValue,jdbcType=VARCHAR}
     where ID = #{id,jdbcType=DECIMAL}
   </update>
+
+    <select id="selectByBasics" parameterType="java.util.List" resultMap="BaseResultMap">
+        select
+          <include refid="Base_Column_List"/>
+        from
+          HZ_DERIVATIVE_MATERIEL_DETAIL
+        where
+        DMD_DMB_ID in
+        <foreach collection="list" index="index" item="hzDerivativeMaterielBasic" open="(" separator="," close=")">
+            #{hzDerivativeMaterielBasic.id,jdbcType=DECIMAL}
+        </foreach>
+    </select>
 </mapper>
