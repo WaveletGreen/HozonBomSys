@@ -1,9 +1,3 @@
-/**
- * Created with IntelliJ IDEA.
- * User: xlf
- * Date: 2018/11/8
- * Time: 15:17
- */
 
 $(document).ready((function () {
     doQuery();
@@ -26,10 +20,8 @@ function initTable(projectUid) {
     if (!checkIsSelectProject(projectUid)) {
         return;
     }
-
     var projectId = $("#project", window.top.document).val();
-    var $table = $("#untreatedTable");
-    $table.bootstrapTable("destroy");
+    var $table = $("#applicationTable");
     var column = [];
     // $.ajax({
     //     url: "ebom/title?projectId=" + projectPuid,
@@ -90,7 +82,7 @@ function initTable(projectUid) {
         //         }
         //     })
         // },
-        url: "worklist/base/infoList?projectId=" + projectUid +"&flag=1",
+        url: "worklist/base/infoList?projectId=" + projectUid +"&flag=3",
         method: 'get',
         height: $(window.parent.document).find("#wrapper").height() - 90,
         width: $(window).width(),
@@ -103,8 +95,8 @@ function initTable(projectUid) {
         sidePagination: "server",          //分页方式：client客户端分页，server服务端分页（*）
         clickToSelect: true,                // 单击某一行的时候选中某一条记录
         showExport: false,
-        formId: "queryUntreated",
-        columns: column,                     //列信 息，需要预先定义好
+        formId: "formId",
+        columns: column,                     //列信息，需要预先定义好
         sortable: false,                     //是否启用排序
         sortOrder: "asc",                   //排序方式
         striped: true,                      //是否显示行间隔色

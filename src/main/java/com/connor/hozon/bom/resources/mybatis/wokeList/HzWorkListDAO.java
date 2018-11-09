@@ -1,5 +1,6 @@
 package com.connor.hozon.bom.resources.mybatis.wokeList;
 
+import com.connor.hozon.bom.resources.domain.query.HzWorkListBasicInfoQuery;
 import sql.pojo.workList.HzWorkListRecord;
 
 import java.util.List;
@@ -13,5 +14,9 @@ public interface HzWorkListDAO {
 
     List<HzWorkListRecord> findWorkList(Map<String,Object> map);
 
+    List<HzWorkListRecord> findHzWorkListBasicInfoList(HzWorkListBasicInfoQuery query);
 
+    List<HzWorkListRecord> findHzWorkListBasicInfoList1(HzWorkListBasicInfoQuery query);
+    List<HzWorkListRecord> findHzWorkListBasicInfoList2(HzWorkListBasicInfoQuery query);
+    List<HzWorkListRecord> findHzWorkListBasicInfoList3(HzWorkListBasicInfoQuery query);
 }

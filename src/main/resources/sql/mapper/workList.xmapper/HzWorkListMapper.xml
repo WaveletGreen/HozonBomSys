@@ -10,15 +10,15 @@
 		<result column="LAUNCHER_CONTACT" jdbcType="VARCHAR" property="launcherContact" />
 		<result column="AUDITER" jdbcType="VARCHAR" property="auditer" />
 		<result column="AUDITER_ID" jdbcType="VARCHAR" property="auditerId" />
-		<result column="LAUNCH_TIME" jdbcType="DATE" property="launchTime" />
-		<result column="UPDATE_TIME" jdbcType="DATE" property="updateTime" />
+		<result column="LAUNCH_TIME" jdbcType="TIMESTAMP" property="launchTime" />
+		<result column="UPDATE_TIME" jdbcType="TIMESTAMP" property="updateTime" />
 		<result column="STATUS" jdbcType="INTEGER" property="status" />
 		<result column="CHANGE_TYPE" jdbcType="VARCHAR" property="changeType" />
 		<result column="IS_RELEVANCE_CHANGE" jdbcType="VARCHAR" property="isRelevanceChange" />
 		<result column="MARKET_TYPE" jdbcType="VARCHAR" property="marketType" />
 		<result column="PROJECT_STAGE" jdbcType="VARCHAR" property="projectStage" />
 		<result column="NOTE" jdbcType="VARCHAR" property="note" />
-		<result column="RESERVE1" jdbcType="VARCHAR" property="reserve1" />
+		<result column="PROJECT_ID" jdbcType="VARCHAR" property="projectId" />
         <result column="RESERVE2" jdbcType="VARCHAR" property="reserve2" />
         <result column="RESERVE3" jdbcType="VARCHAR" property="reserve3" />
         <result column="RESERVE4" jdbcType="VARCHAR" property="reserve4" />
@@ -36,7 +36,7 @@
         (
         CHANGE_NUM,LAUNCHER,LAUNCHER_ID,LAUNCHER_DEP,LAUNCHER_CONTACT,AUDITER,
 		AUDITER_ID,LAUNCH_TIME,UPDATE_TIME,STATUS,CHANGE_TYPE,IS_RELEVANCE_CHANGE,
-		MARKET_TYPE,PROJECT_STAGE,NOTE
+		MARKET_TYPE,PROJECT_STAGE,NOTE,PROJECT_ID
         )values(
         #{changeNum,jdbcType=VARCHAR},#{launcher,jdbcType=VARCHAR},
         #{launcherId,jdbcType=VARCHAR},#{launcherDep,jdbcType=VARCHAR},
@@ -44,7 +44,8 @@
         #{auditerId,jdbcType=VARCHAR},sysdate,sysdate,
         #{status,jdbcType=INTEGER},#{changeType,jdbcType=VARCHAR},
         #{isRelevanceChange,jdbcType=VARCHAR},#{marketType,jdbcType=VARCHAR},
-        #{projectStage,jdbcType=VARCHAR},#{note,jdbcType=VARCHAR}
+        #{projectStage,jdbcType=VARCHAR},#{note,jdbcType=VARCHAR},
+        #{projectId,jdbcType=VARCHAR}
       )
     </insert>
 
@@ -97,6 +98,9 @@
 			<if test="note != null">
 				NOTE = #{note,jdbcType=VARCHAR},
 			</if>
+			<if test="projectId != null">
+				PROJECT_ID = #{projectId,jdbcType=VARCHAR},
+			</if>
 		</set>
 		where ID = #{id,jdbcType=INTEGER}
 	</update>
@@ -126,6 +130,95 @@
 		order by CAST(ID as FLOAT)
 	</select>
 
+	<select id="HzWorkListDAOImpl_findHzWorkListBasicInfoList" parameterType="java.util.HashMap" resultMap="BaseResultMap">
+		select * from HZ_WORK_LIST
+		<where>
+			1=1
+			<if test="id != null">
+				and ID = #{id,jdbcType=INTEGER}
+			</if>
+		</where>
+	</select>
+
+	<select id="HzWorkListDAOImpl_findHzWorkListBasicInfoList1" parameterType="java.util.Map" resultMap="BaseResultMap">
+		select *
+		from HZ_WORK_LIST
+		<where>
+			1=1
+			<if test="id != null">
+				and ID = #{id,jdbcType=INTEGER}
+			</if>
+			<if test="changeNum != null and changeNum!=''">
+				and CHANGE_NUM = #{changeNum,jdbcType=VARCHAR}
+			</if>
+			<if test="projectId != null and projectId !='' ">
+				and PROJECT_ID = #{projectId,jdbcType=VARCHAR}
+			</if>
+			<!--发起时间比较-->
+			<if test="launchTimeStart != null and launchTimeStart !=''">
+				<!--and (LAUNCH_TIME between to_date('2018-11-07 18:24:17','yyyy-mm-dd hh24:mi:ss') and to_date('2018-11-09 18:24:17','yyyy-mm-dd hh24:mi:ss'))-->
+				and (LAUNCH_TIME between to_date(#{launchTimeStart,jdbcType=VARCHAR},'yyyy-mm-dd hh24:mi:ss')
+				and to_date(#{launchTimeEnd,jdbcType=VARCHAR},'yyyy-mm-dd hh24:mi:ss'))
+			</if>
+			<!--接口人是自己-->
+			and AUDITER = #{auditer,jdbcType=VARCHAR}
+			<!--状态：进行中的变更单-->
+
+		</where>
+	</select>
+
+    <select id="HzWorkListDAOImpl_findHzWorkListBasicInfoList2" parameterType="java.util.HashMap" resultMap="BaseResultMap">
+        select *
+        from HZ_WORK_LIST
+        <where>
+            1=1
+            <if test="id != null">
+                and ID = #{id,jdbcType=INTEGER}
+            </if>
+            <if test="changeNum != null and changeNum!=''">
+                and CHANGE_NUM = #{changeNum,jdbcType=VARCHAR}
+            </if>
+            <if test="projectId != null and projectId !='' ">
+                and PROJECT_ID = #{projectId,jdbcType=VARCHAR}
+            </if>
+			<!--发起时间比较-->
+			<if test="launchTime != null and launchTime!=''">
+				<!--and (LAUNCH_TIME between to_date('2018-11-07 18:24:17','yyyy-mm-dd hh24:mi:ss') and to_date('2018-11-09 18:24:17','yyyy-mm-dd hh24:mi:ss'))-->
+				and (LAUNCH_TIME between to_date(#{time1,jdbcType=VARCHAR},'yyyy-mm-dd hh24:mi:ss')
+				and to_date(#{time2,jdbcType=VARCHAR},'yyyy-mm-dd hh24:mi:ss'))
+			</if>
+			<!--接口人是自己-->
+			and AUDITER = #{auditer,jdbcType=VARCHAR}
+			<!--状态：已完成的变更单-->
+
+        </where>
+    </select>
+
+    <select id="HzWorkListDAOImpl_findHzWorkListBasicInfoList3" parameterType="java.util.HashMap" resultMap="BaseResultMap">
+        select *
+        from HZ_WORK_LIST
+        <where>
+            1=1
+            <if test="id != null">
+                and ID = #{id,jdbcType=INTEGER}
+            </if>
+            <if test="changeNum != null and changeNum!=''">
+                and CHANGE_NUM = #{changeNum,jdbcType=VARCHAR}
+            </if>
+            <if test="projectId != null and projectId !='' ">
+                and PROJECT_ID = #{projectId,jdbcType=VARCHAR}
+            </if>
+			<!--发起时间比较-->
+			<if test="launchTime != null and launchTime!=''">
+				<!--and (LAUNCH_TIME between to_date('2018-11-07 18:24:17','yyyy-mm-dd hh24:mi:ss') and to_date('2018-11-09 18:24:17','yyyy-mm-dd hh24:mi:ss'))-->
+				and (LAUNCH_TIME between to_date(#{time1,jdbcType=VARCHAR},'yyyy-mm-dd hh24:mi:ss')
+				and to_date(#{time2,jdbcType=VARCHAR},'yyyy-mm-dd hh24:mi:ss'))
+			</if>
+			<!--所有发起人是自己-->
+			and LAUNCHER = #{launcher,jdbcType=VARCHAR}
+
+        </where>
+    </select>
 
 	<!--根据主键获取对象-->
 	<select id="get" parameterType="sql.pojo.workList.HzWorkListRecord" resultMap="BaseResultMap">
@@ -241,7 +334,7 @@
 	</delete>
 
 	<!--分页查询组织架构底下的用户-->
-	<select id="findGroupUserByPage" parameterType="com.connor.hozon.bom.sys.entity.QueryUser" resultMap="UserMap">
+	<select id="findGroupUserByPage" parameterType="com.connor.hozon.bom.sys.entity.QueryUser" resultMap="BaseResultMap">
 		select * from(
 		select u.*,og.existing_num,og.group_code,og.name,og.node,og.num,og.parent_node
 		,rownum as rn
@@ -292,7 +385,7 @@
 	</select>
 
 	<!--分页查询-->
-	<select id="findByPage" parameterType="com.connor.hozon.bom.sys.entity.QueryUser" resultMap="UserMap">
+	<select id="findByPage" parameterType="com.connor.hozon.bom.sys.entity.QueryUser" resultMap="BaseResultMap">
 		select * from(
 		select u.*,og.existing_num,og.group_code,og.name,og.node,og.num,og.parent_node
 		,rownum as rn
@@ -407,8 +500,9 @@
 	</select>
 
 	<!--查询-->
-	<select id="query" parameterType="com.connor.hozon.bom.sys.entity.QueryUser" resultMap="UserMap">
-		SELECT id,login,password,user_name,address,job,group_id,birth_date,city,district,province,street_address,state,type,last_login_date FROM userRecord
+	<select id="query" parameterType="com.connor.hozon.bom.sys.entity.QueryUser" resultMap="BaseResultMap">
+		SELECT id,login,password,user_name,address,job,group_id,birth_date,city,district,
+		province,street_address,state,type,last_login_date FROM userRecord
 		WHERE 1=1
 		<if test="login!=null and login!='' ">
 			AND login=#{login}

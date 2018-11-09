@@ -1,11 +1,8 @@
-package sql.pojo.workList;
+package com.connor.hozon.bom.resources.domain.dto.response;
 
 import java.util.Date;
 
-/**
- * 我的工作列表全字段
- */
-public class HzWorkListRecord {
+public class HzWorkListBasicInfoRespDTO {
     /**
      * 主键
      */
@@ -41,11 +38,11 @@ public class HzWorkListRecord {
     /**
      *发起时间
      */
-    private Date launchTime;
+    private String launchTime;
     /**
      *更新时间
      */
-    private Date updateTime;
+    private String updateTime;
     /**
      *状态
      */
@@ -148,19 +145,19 @@ public class HzWorkListRecord {
         this.auditerId = auditerId;
     }
 
-    public Date getLaunchTime() {
+    public String getLaunchTime() {
         return launchTime;
     }
 
-    public void setLaunchTime(Date launchTime) {
+    public void setLaunchTime(String launchTime) {
         this.launchTime = launchTime;
     }
 
-    public Date getUpdateTime() {
+    public String getUpdateTime() {
         return updateTime;
     }
 
-    public void setUpdateTime(Date updateTime) {
+    public void setUpdateTime(String updateTime) {
         this.updateTime = updateTime;
     }
 

@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<!--User: xulf Date: 2018/11/8 Time: 14:11-->
+
 <head th:include="include/includebase"></head>
 <link th:href="@{/css/myListJob/untreated/untreated.css}" rel="stylesheet"/>
 <meta charset="UTF-8">
-<title>待办事项</title>
+<title>我的申请</title>
 </head>
 <body>
 <div class="panel-body" style="padding-bottom:0px;">
@@ -13,23 +13,19 @@
             <form class="form-inline" role="form" style="float: left; width: 100%;margin-left: 20px;" method="get"id="queryUntreated">
                 <div class="form-group">
                     <label for="VWOnum1">变更单号:</label>
-                    <input type="text" style="width: 150px;" class="form-control" name="changeNum" id="VWOnum1"
+                    <input type="text" style="width: 150px;" class="form-control" name="level" id="VWOnum1"
                            placeholder="请输入变更单号"/>
                 </div>
-                <!--<div class="form-group">-->
-                    <!--<label for="VWOnum1">部门:</label>-->
-                    <!--<input type="text" style="width: 150px;" class="form-control" name="level" id="VWOnum2"-->
-                           <!--placeholder="请输入部门"/>-->
-                <!--</div>-->
+
                 <div class="form-group">
                     <label for="VWOnum1">发起人:</label>
-                    <input type="text" style="width: 150px;" class="form-control" name="launcher" id="VWOnum3"
+                    <input type="text" style="width: 150px;" class="form-control" name="level" id="VWOnum3"
                            placeholder="请输入发起人"/>
                 </div>
                 <div class="form-group">
                     <label for="VWOnum1">开始日期:</label>
-                    <input class="form-control head-input-set" name="launchTimeStart" id="startdate" type="date"/>~
-                    <input class="form-control head-input-set" name="launchTimeEnd" id="enddate" type="date"/>
+                    <input class="form-control head-input-set" name="startdate" id="startdate" type="date"/>~
+                    <input class="form-control head-input-set" name="startdate" id="enddate" type="date"/>
                 </div>
                 <div class="form-group">
                     <button type="button" id="queryBtn" onclick="doQuery();" class="btn btn-primary">查询</button>
@@ -39,10 +35,10 @@
     </div>
 </div>
 <div class="content col-lg-12">
-    <table id="untreatedTable" class="table table-striped tableNormalStyle">
+    <table id="applicationTable" class="table table-striped tableNormalStyle">
     </table>
 </div>
 <script th:src="@{/js/helper/dateFormater.js}"></script>
-<script th:src="@{/js/myListJob/untreated/untreated.js}"></script>
+<script th:src="@{/js/myListJob/untreated/application/application.js}"></script>
 </body>
 </html>
