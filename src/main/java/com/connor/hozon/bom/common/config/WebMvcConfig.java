@@ -109,7 +109,8 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         registry.addViewController("/untreated").setViewName("/myListJob/untreated/untreated");
 
 
-
+        //变更表单
+        registry.addViewController("/changeForm").setViewName("/change/changeForm/changeForm");
 
 
         //变更管理VWO表单
