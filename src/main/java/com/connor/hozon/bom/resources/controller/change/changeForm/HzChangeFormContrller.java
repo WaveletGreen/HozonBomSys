@@ -25,4 +25,9 @@ public class HzChangeFormContrller {
 
         return "change/changeForm/updateChangeForm";
     }
+    @RequestMapping(value = "ToChangeOrder",method = RequestMethod.GET)
+    public String getToChangeOrderToPage(){
+
+        return "change/ChangeOrder/ChangeOrder";
+    }
 }

@@ -187,5 +187,5 @@ function initTable(projectUid) {
     // })
 }
 function queryLou(id) {
-    window.location.href="ewo/base/info?id="+id;
+    window.location.href="change/ToChangeOrder?id="+id;
 }
