@@ -108,7 +108,7 @@ public class HzEbomController extends BaseController {
         //获取该项目下的所有车型模型
         tableTitle.putAll(hzSingleVehiclesServices.singleVehDosageTitle(projectId));
         this.tableTitle = tableTitle;
-        toJSONResponse(ResultUtil.result(tableTitle), response);
+        toJSONResponse(Result.build(tableTitle), response);
     }
     
 

@@ -3,7 +3,7 @@ package com.connor.hozon.bom.sys.filter;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
-import com.connor.hozon.bom.resources.util.ResultUtil;
+import com.connor.hozon.bom.resources.util.Result;
 import com.connor.hozon.bom.sys.service.UserRolePrivilegeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
@@ -68,7 +68,7 @@ public class HzFilter implements Filter {
 //                map.put(SystemStaticConst.RESULT,SystemStaticConst.FAIL);
 //                map.put(SystemStaticConst.MSG,"暂无权限！");
 //                writer.write(JSON.toJSONString(map,SerializerFeature.DisableCircularReferenceDetect));
-                    writer.write(JSON.toJSONString(ResultUtil.result(false,resultRespDTO.getErrMsg()),SerializerFeature.DisableCircularReferenceDetect));
+                    writer.write(JSON.toJSONString(Result.build(false,resultRespDTO.getErrMsg()),SerializerFeature.DisableCircularReferenceDetect));
                 }finally {
                     writer.flush();
                     writer.close();

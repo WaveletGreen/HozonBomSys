@@ -17,7 +17,6 @@ import com.connor.hozon.bom.resources.service.bom.HzPbomService;
 import com.connor.hozon.bom.resources.service.bom.HzSingleVehiclesServices;
 import com.connor.hozon.bom.resources.util.ExcelUtil;
 import com.connor.hozon.bom.resources.util.Result;
-import com.connor.hozon.bom.resources.util.ResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -182,7 +181,7 @@ public class HzPbomController extends BaseController {
     @RequestMapping(value = "update", method = RequestMethod.POST)
     public void updatePbomRecord(@RequestBody UpdateHzPbomRecordReqDTO reqDTO, HttpServletResponse response) {
         WriteResultRespDTO respDTO = hzPbomService.updateHzPbomRecord(reqDTO);
-        toJSONResponse(ResultUtil.result(WriteResultRespDTO.isSuccess(respDTO), respDTO.getErrMsg()), response);
+        toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO), respDTO.getErrMsg()), response);
     }
 
 

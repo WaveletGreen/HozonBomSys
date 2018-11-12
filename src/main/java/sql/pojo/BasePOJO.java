@@ -27,6 +27,16 @@ public abstract class BasePOJO {
      */
     private String updateName;
 
+    /**
+     * 创建人ID
+     */
+    private Long createId;
+
+    /**
+     * 更新人ID
+     */
+    private  Long updateId;
+
     public Date getCreateTime() {
         return createTime;
     }
@@ -57,5 +67,21 @@ public abstract class BasePOJO {
 
     public void setUpdateName(String updateName) {
         this.updateName = updateName;
+    }
+
+    public Long getCreateId() {
+        return createId;
+    }
+
+    public void setCreateId(Long createId) {
+        this.createId = createId;
+    }
+
+    public Long getUpdateId() {
+        return updateId;
+    }
+
+    public void setUpdateId(Long updateId) {
+        this.updateId = updateId;
     }
 }
