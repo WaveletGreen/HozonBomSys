@@ -53,7 +53,11 @@ public class HzChangeController extends BaseController {
 
         return "change/ChangeOrder/ChangeOrder";
     }
+    @RequestMapping(value = "ToUntreatedForm",method = RequestMethod.GET)
+    public String getToUntreatedFormToPage(){
 
+        return "myListJob/untreated/untreatedForm";
+    }
     @RequestMapping(value = "add",method = RequestMethod.POST)
     public void addChangeFrom(@RequestBody EditHzChangeOrderReqDTO reqDTO, HttpServletResponse response){
         WriteResultRespDTO resultRespDTO = hzChangeService.insertChangeOrderRecord(reqDTO);
