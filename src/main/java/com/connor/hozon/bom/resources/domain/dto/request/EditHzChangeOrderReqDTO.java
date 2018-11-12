@@ -58,6 +58,16 @@ public class EditHzChangeOrderReqDTO {
      */
     private String changeNo;
 
+
+
+    public String getChangeNo() {
+        return changeNo;
+    }
+
+    public void setChangeNo(String changeNo) {
+        this.changeNo = changeNo;
+    }
+
     public Long getId() {
         return id;
     }

@@ -13,15 +13,18 @@ $(document).ready((function () {
 function doRefresh(projectUid) {
     initTable(projectUid);
 }
+
 function doQuery() {
     initTable(getProjectUid());
 }
+
 function formatDate() {
     let startdate = stringToDateFormat($('#startdate').data("time"));
     let enddate = stringToDateFormat($('#enddate').data("time"));
     $('#startdate').val(finishTime);
     $('#enddate').val(vwoEndEffectiveTime);
 }
+
 function initTable(projectUid) {
     if (!checkIsSelectProject(projectUid)) {
         return;
@@ -31,29 +34,40 @@ function initTable(projectUid) {
     var column = [];
     column.push({field: 'ck', checkbox: true, width: 50});
     column.push({
-        field: 'ewoNo',
-        title: '变更单号',
-        align: 'center',
-        valign: 'middle',
+        field: '',
+        title: '序号',
         formatter: function (value, row, index) {
-            var id = row.id
-            return [
-                // '<a href="ewo/base/info?id='+id +'">' + value + '</a>'
-                '<a href="javascript:void(0)" onclick="queryLou(' + id + ')">' + value + '</a>'
-            ].join("");
+            //return index+1;
+            var temp = $('#changeFormTable').bootstrapTable("getIndex");//返回（pageSize * (pageNumber-1) + 1）
+            return temp + index;
         }
-    });
-    column.push({field: 'formCreateTime', title: '创建时间', align: 'center', valign: 'middle'});
+    }),
+        column.push({
+            field: 'changeNo',
+            title: '变更单号',
+            align: 'center',
+            valign: 'middle',
+            formatter: function (value, row, index) {
+                var id = row.id
+                return [
+                    // '<a href="ewo/base/info?id='+id +'">' + value + '</a>'
+                    '<a href="javascript:void(0)" onclick="queryLou(' + id + ')">' + value + '</a>'
+                ].join("");
+            }
+        });
+    column.push({field: 'createTime', title: '创建时间', align: 'center', valign: 'middle'});
+    column.push({field: 'originTime', title: '流程发起时间', align: 'center', valign: 'middle'});
     column.push({field: 'dept', title: '部门', align: 'center', valign: 'middle'});
     column.push({field: 'originator', title: '发起人', align: 'center', valign: 'middle'});
-    column.push({field: 'reasonCode', title: '联系电话', align: 'center', valign: 'middle'});
-    column.push({field: 'title', title: '变更单状态', align: 'center', valign: 'middle'});
+    column.push({field: 'createName', title: '表单创建者', align: 'center', valign: 'middle'});
+    column.push({field: 'tel', title: '联系电话', align: 'center', valign: 'middle'});
+    column.push({field: 'state', title: '变更单状态', align: 'center', valign: 'middle'});
     column.push({field: 'changeType', title: '变更类型', align: 'center', valign: 'middle'});
-    column.push({field: 'originator', title: '是否关联变更', align: 'center', valign: 'middle'});
-    column.push({field: 'originator', title: '上市类型', align: 'center', valign: 'middle'});
-    column.push({field: 'originator', title: '项目所属阶段', align: 'center', valign: 'middle'});
-    column.push({field: 'originator', title: '备注', align: 'center', valign: 'middle'});
-    column.push({field: 'originator', title: '变更状态', align: 'center', valign: 'middle'});
+    column.push({field: 'relationChangeNo', title: '是否关联变更', align: 'center', valign: 'middle'});
+    column.push({field: 'marketType', title: '上市类型', align: 'center', valign: 'middle'});
+    column.push({field: 'projectStage', title: '项目所属阶段', align: 'center', valign: 'middle'});
+    column.push({field: 'remark', title: '备注', align: 'center', valign: 'middle'});
+    // column.push({field: 'state', title: '变更状态', align: 'center', valign: 'middle'});
     // $.ajax({
     //     url: "ebom/title?projectId=" + projectPuid,
     //     type: "GET",
@@ -76,7 +90,7 @@ function initTable(projectUid) {
     //     }
     // };
     $table.bootstrapTable({
-        url: "ewo/base/infoList?projectId=" + projectUid,
+        url: "change/order/list?projectId=" + projectUid,
         method: 'get',
         height: $(window.parent.document).find("#wrapper").height() - 90,
         width: $(window).width(),
@@ -134,15 +148,15 @@ function initTable(projectUid) {
                 iconCls: 'glyphicon glyphicon-remove',
                 handler: function () {
                     var rows = $table.bootstrapTable('getSelections');
-                    var puids = "";
-                    for (var i = 0 ; i<rows.length;i++){
-                        puids += rows[i].puid+",";
-                    };
-                    var myData = JSON.stringify({
-                        "puids":puids,
-                    });
+                    // var puids = "";
+                    // for (var i = 0 ; i<rows.length;i++){
+                    //     puids += rows[i].puid+",";
+                    // };
+                    // var myData = JSON.stringify({
+                    //     "puids":puids,
+                    // });
                     if (rows.length == 0) {
-                        window.Ewin.alert({message: '请至少选择一条需要删除的数据!'});
+                        window.Ewin.alert({message: '请选择一条需要删除的数据!'});
                         return false;
                     }
                     var _table = '<p>是否要删除您所选择的记录？</p>' +
@@ -151,14 +165,14 @@ function initTable(projectUid) {
                         _table += '<tr><td>' + rows[index].pLineId + '</td></tr>';
                     }
                     _table += '</table></div>';
-                    window.Ewin.confirm({title: '提示', message: _table, width: 500}).on(function (e) {
+                    window.Ewin.confirm({title: '提示', message: "确定要删除数据么", width: 500}).on(function (e) {
                         if (e) {
                             $.ajax({
                                 type: "POST",
                                 //ajax需要添加打包名
-                                url: "accessories/delete",
-                                data: myData,
-                                contentType: "application/json",
+                                url: "change/delete?id=" + row[0].id,
+                                // data: myData,
+                                // contentType: "application/json",
                                 success: function (result) {
                                     /*if (result.status) {
                                         window.Ewin.alert({message: result.errMsg});
@@ -166,10 +180,11 @@ function initTable(projectUid) {
                                     }
                                     else {
                                         window.Ewin.alert({message: ":" + result.errMsg});
-                                    }*/if (result.success) {
+                                    }*/
+                                    if (result.success) {
                                         layer.msg('删除成功', {icon: 1, time: 2000})
                                     }
-                                    else if(!result.success){
+                                    else if (!result.success) {
                                         window.Ewin.alert({message: result.errMsg})
                                     }
                                     //window.Ewin.alert({message: result.errMsg});
@@ -189,6 +204,7 @@ function initTable(projectUid) {
     //     }
     // })
 }
+
 function queryLou(id) {
-    window.location.href="change/ToChangeOrder?id="+id;
+    window.location.href = "change/ToChangeOrder?id=" + id;
 }
