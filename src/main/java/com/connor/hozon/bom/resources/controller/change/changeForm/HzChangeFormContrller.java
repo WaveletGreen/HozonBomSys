@@ -30,4 +30,9 @@ public class HzChangeFormContrller {
 
         return "change/ChangeOrder/ChangeOrder";
     }
+    @RequestMapping(value = "ToUntreatedForm",method = RequestMethod.GET)
+    public String getToUntreatedFormToPage(){
+
+        return "myListJob/untreated/untreatedForm";
+    }
 }
