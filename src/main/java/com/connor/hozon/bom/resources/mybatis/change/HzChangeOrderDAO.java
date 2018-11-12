@@ -29,4 +29,19 @@ public interface HzChangeOrderDAO {
      */
     int deleteById(Long id);
 
+    /**
+     * 检查变更单号是否重复
+     * @param changeNo
+     * @return
+     */
+    boolean changeNoExist(String changeNo);
+
+    /**
+     * 查询变更清单 根据id
+     * @param id
+     * @return
+     */
+    HzChangeOrderRecord findHzChangeOrderRecordById(Long id);
+
+
 }
