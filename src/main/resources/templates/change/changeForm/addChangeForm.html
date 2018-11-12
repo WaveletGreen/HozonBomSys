@@ -1,0 +1,139 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<!--User: xulf Date: 2018/11/9 Time: 10:12-->
+<link th:href="@{/css/labelColor.css}" rel="stylesheet">
+<body>
+<form id="changeForm" role="form" method="post" action="ebom/update/ebom">
+    <div class="form-group">
+        <label for="lineId1">变更单号<span>*</span></label>
+        <input class="form-control" id="lineId1" name="lineId" type="text"
+               placeholder="请输入变更单号"/>
+    </div>
+    <!--<div class="form-group">-->
+        <!--<label for="lineId">创建时间<span>*</span></label>-->
+        <!--<input class="form-control" id="lineId2" name="lineId" type="text"-->
+               <!--placeholder="请输入零件号"/>-->
+    <!--</div>-->
+    <!--<div class="form-group">-->
+        <!--<label for="lineId3">部门</label>-->
+        <!--<input class="form-control" id="lineId3" name="lineId" type="text"-->
+               <!--placeholder="请输入部门"/>-->
+    <!--</div>-->
+    <!--<div class="form-group">-->
+        <!--<label for="lineId">发起人<span>*</span></label>-->
+        <!--<input class="form-control" id="lineId4" name="lineId" type="text"-->
+               <!--placeholder="请输入发起人"/>-->
+    <!--</div>-->
+    <div class="form-group">
+        <label for="lineId5">联系电话</label>
+        <input class="form-control" id="lineId5" name="lineId" type="text"
+               placeholder="请输入联系电话"/>
+    </div>
+    <div class="form-group">
+        <label for="lineId6">变更单状态<span>*</span></label>
+        <select class="form-control" name="pPictureSheet" id="lineId6" placeholder="请选择变更单状态">
+            <option>进行中</option>
+            <option>完成</option>
+            <option>取消</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="lineId7">变更类型</label>
+        <input class="form-control" id="lineId7" name="lineId" type="text"
+               placeholder="请输入变更类型"/>
+    </div>
+    <div class="form-group">
+        <label for="lineId8">是否关联变更</label>
+        <input class="form-control" id="lineId8" name="lineId" type="text"
+               placeholder="请输入关联变更号"/>
+    </div>
+    <div class="form-group">
+        <label for="lineId9">上市类型</label>
+        <select class="form-control" name="pPictureSheet" id="lineId9" placeholder="请选择上市类型">
+            <option>上市前</option>
+            <option>上市后</option>
+        </select>
+    </div>
+</form>
+<script th:inline="javascript">
+    <![CDATA[
+    $(function () {
+            $('#changeForm').bootstrapValidator({
+                message: 'This value is not valid',
+                feedbackIcons: {
+                    valid: 'glyphicon glyphicon-ok',
+                    invalid: 'glyphicon glyphicon-remove',
+                    validating: 'glyphicon glyphicon-refresh'
+                },
+                fields: {
+                    lineId: {
+                        message: '零件号验证失败',
+                        validators: {
+                            notEmpty: {
+                                message: '零件号不能为空'
+                            }
+                        }
+                    },
+                }
+            });
+            // 绑定dialog的确定按钮的监听事件
+            $("#btnOk", window.top.document).click(function () {
+                var bootstrapValidator = $("#changeForm", window.top.document).data('bootstrapValidator');
+                bootstrapValidator.validate();
+                if (bootstrapValidator.isValid()) {
+                    var url = $("#changeForm", window.top.document).attr('action');
+                    // var projectId= $("#project", window.top.document).val();
+                    var myData = JSON.stringify({
+                        "puid": $("#puid").val(),
+                        "puid": $("#puid").val(),
+                        "puid": $("#puid").val(),
+                        "puid": $("#puid").val(),
+                        "puid": $("#puid").val(),
+                        "puid": $("#puid").val(),
+                    });
+
+                    $.ajax({
+                        contentType:
+                            "application/json",
+                        type:
+                            'POST',
+                        url: url,
+                        data:  JSON.stringify(localData),
+                        success:
+                            function (result) {
+                                $('.modal-dialog', window.top.document).parent('div').remove()
+                                $('body', window.top.document).find('.modal-backdrop').remove();
+                                // jquery 调用刷新当前操作的table页面的refresh方法
+                                $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
+                                /*if (result)
+                                    window.Ewin.alert({message: '修改数据成功!'});
+                                else
+                                    window.Ewin.alert({message: '修改数据失败!'});*/
+                                // window.Ewin.alert({message:result.errMsg});
+                                if (result.success) {
+                                    layer.msg('修改成功', {icon: 1, time: 2000})
+                                }
+                                else if (!result.success) {
+                                    window.Ewin.alert({message: result.errMsg})
+                                }
+                            },
+                        error: function (status) {
+                            window.Ewin.alert({message: status.status + ':修改数据失败!'});
+                        }
+                    });
+                }
+            });
+        })
+    $(document).keydown(function (event) {
+        if (event.keyCode == 13) {
+            $('form').each(function () {
+                event.preventDefault();
+            });
+        }
+    });
+    ]]>
+</script>
+<script th:src="@{/layer/layer.js}"></script>
+<script th:src="@{/js/helper/dateFormater.js}"></script>
+</body>
+</html>
