@@ -147,9 +147,4 @@ public class HzChangeServiceImpl implements HzChangeService {
         }
         return null;
     }
-
-    @Override
-    public HzChangeOrderRespDTO findHzChangeOrderRecordById(Long id) {
-        return null;
-    }
 }

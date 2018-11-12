@@ -5,7 +5,7 @@
     <id column="ID" jdbcType="DOUBLE" property="id" />
     <result column="CHANGE_NO" jdbcType="VARCHAR" property="changeNo" />
     <result column="CREATE_ID" jdbcType="DOUBLE" property="createId" />
-    <result column="CREATE_TIME" jdbcType="DATE" property="createTime" />
+    <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
     <result column="CREATE_NO" jdbcType="VARCHAR" property="createNo" />
     <result column="ORIGINATOR_ID" jdbcType="DOUBLE" property="originatorId" />
     <result column="ORIGIN_TIME" jdbcType="TIMESTAMP" property="originTime" />
@@ -44,18 +44,18 @@
       HAS_RELATED_CHANGE, RELATION_CHANGE_NO, MARKET_TYPE, 
       PROJECT_STAGE, REMARK, STATE, 
       UPDATE_TIME, UPDATE_ID,PROJECT_ID,DEPT_ID,IS_FROM_TC)
-    values (select SEQ_HZ_CHANGE_ORDER_RECORD.nextval, #{changeNo,jdbcType=VARCHAR}, #{createId,jdbcType=DOUBLE},
+    values (SEQ_HZ_CHANGE_ORDER_RECORD.nextval, #{changeNo,jdbcType=VARCHAR}, #{createId,jdbcType=DOUBLE},
       sysdate, #{createNo,jdbcType=VARCHAR}, #{tel,jdbcType=VARCHAR}, #{changeType,jdbcType=VARCHAR},
       #{hasRelatedChange,jdbcType=INTEGER}, #{relationChangeNo,jdbcType=VARCHAR}, #{marketType,jdbcType=INTEGER},
       #{projectStage,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{state,jdbcType=INTEGER},
-      sysdate, #{updateId,jdbcType=DOUBLE}，#{projectId,jdbcType=VARCHAR},#{deptId,jdbcType=DOUBLE},#{fromTc,jdbcType=INTEGER})
+      sysdate, #{updateId,jdbcType=DOUBLE},#{projectId,jdbcType=VARCHAR},#{deptId,jdbcType=DOUBLE},#{fromTc,jdbcType=INTEGER})
   </insert>
 
   <!--update-->
   <update id="HzChangeOrderDAOImpl_update" parameterType="sql.pojo.change.HzChangeOrderRecord">
     update HZ_CHANGE_ORDER_RECORD
     <set>
-      <if test="changeNo != null">
+      <if test="changeNo!= null">
         CHANGE_NO = #{changeNo,jdbcType=VARCHAR},
       </if>
       <if test="originatorId != null">
@@ -122,13 +122,13 @@
     select * FROM
     (SELECT u.*,rownum as rn from
     (SELECT
-        t1.*, T2.USER_NAME as createName,
+        t1.*, T2.USER_NAME as CREATE_NAME,
         t3.USER_NAME as ORIGINATOR,
-        t4. NAME as deptName
+        t4. NAME as DEPT_NAME
     FROM
         HZ_CHANGE_ORDER_RECORD t1
     LEFT JOIN USERRECORD t2 ON t1.CREATE_ID = t2. ID
-    JOIN USERRECORD t3 ON t1.ORIGINATOR_ID = t3. ID
+    LEFT JOIN USERRECORD t3 ON t1.ORIGINATOR_ID = t3. ID
     JOIN ORG_GROUP t4 ON t1.dept_ID = t4. GROUP_ID
     <where>
       1=1
@@ -158,7 +158,7 @@
     FROM
     HZ_CHANGE_ORDER_RECORD t1
     LEFT JOIN USERRECORD t2 ON t1.CREATE_ID = t2. ID
-    JOIN USERRECORD t3 ON t1.ORIGINATOR_ID = t3. ID
+    left JOIN USERRECORD t3 ON t1.ORIGINATOR_ID = t3. ID
     JOIN ORG_GROUP t4 ON t1.dept_ID = t4. GROUP_ID
     <where>
       1=1

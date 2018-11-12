@@ -95,7 +95,13 @@ public class HzChangeController extends BaseController {
         if(StringUtil.isEmpty(query.getProjectId())){
             return new JSONObject();
         }
-        Page<HzChangeOrderRespDTO> page = hzChangeService.getHzChangeOrderPage(query);
+        HzChangeOrderByPageQuery pageQuery = query;
+        try {
+            pageQuery.setPageSize(Integer.valueOf(query.getLimit()));
+        }catch (Exception e){
+
+        }
+        Page<HzChangeOrderRespDTO> page = hzChangeService.getHzChangeOrderPage(pageQuery);
         if(ListUtil.isEmpty(page.getResult())){
             return new JSONObject();
         }

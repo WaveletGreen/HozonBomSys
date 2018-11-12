@@ -16,7 +16,7 @@ public class HzChangeOrderFactory {
     public static HzChangeOrderRecord reqDTOChangeRecord(EditHzChangeOrderReqDTO reqDTO){
         HzChangeOrderRecord record = new HzChangeOrderRecord();
         User user = UserInfo.getUser();
-        record.setChangeNo(reqDTO.getCreateNo());
+        record.setChangeNo(reqDTO.getChangeNo());
         record.setChangeType(reqDTO.getChangeType());
         record.setCreateNo(reqDTO.getCreateNo());
         record.setId(reqDTO.getId());
