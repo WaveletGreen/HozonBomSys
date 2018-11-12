@@ -29,7 +29,7 @@ function initTable(projectUid) {
 
     var projectId = $("#project", window.top.document).val();
     var $table = $("#untreatedTable");
-    $table.bootstrapTable("destroy");
+    $table.bootstrapTable("destroy");//查询时刷新表单用
     var column = [];
     // $.ajax({
     //     url: "ebom/title?projectId=" + projectPuid,

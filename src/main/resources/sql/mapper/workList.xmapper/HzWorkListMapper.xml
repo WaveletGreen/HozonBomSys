@@ -130,6 +130,7 @@
 		order by CAST(ID as FLOAT)
 	</select>
 
+	<!---->
 	<select id="HzWorkListDAOImpl_findHzWorkListBasicInfoList" parameterType="java.util.HashMap" resultMap="BaseResultMap">
 		select * from HZ_WORK_LIST
 		<where>
@@ -140,6 +141,7 @@
 		</where>
 	</select>
 
+	<!--待办事项列表-->
 	<select id="HzWorkListDAOImpl_findHzWorkListBasicInfoList1" parameterType="java.util.Map" resultMap="BaseResultMap">
 		select *
 		from HZ_WORK_LIST
@@ -150,6 +152,9 @@
 			</if>
 			<if test="changeNum != null and changeNum!=''">
 				and CHANGE_NUM = #{changeNum,jdbcType=VARCHAR}
+			</if>
+			<if test="launcher != null and launcher!=''">
+				and LAUNCHER = #{launcher,jdbcType=VARCHAR}
 			</if>
 			<if test="projectId != null and projectId !='' ">
 				and PROJECT_ID = #{projectId,jdbcType=VARCHAR}
@@ -167,6 +172,7 @@
 		</where>
 	</select>
 
+	<!--已处理事项列表-->
     <select id="HzWorkListDAOImpl_findHzWorkListBasicInfoList2" parameterType="java.util.HashMap" resultMap="BaseResultMap">
         select *
         from HZ_WORK_LIST
@@ -178,14 +184,17 @@
             <if test="changeNum != null and changeNum!=''">
                 and CHANGE_NUM = #{changeNum,jdbcType=VARCHAR}
             </if>
+			<if test="launcher != null and launcher!=''">
+				and LAUNCHER = #{launcher,jdbcType=VARCHAR}
+			</if>
             <if test="projectId != null and projectId !='' ">
                 and PROJECT_ID = #{projectId,jdbcType=VARCHAR}
             </if>
 			<!--发起时间比较-->
-			<if test="launchTime != null and launchTime!=''">
+			<if test="launchTimeStart != null and launchTimeStart!=''">
 				<!--and (LAUNCH_TIME between to_date('2018-11-07 18:24:17','yyyy-mm-dd hh24:mi:ss') and to_date('2018-11-09 18:24:17','yyyy-mm-dd hh24:mi:ss'))-->
-				and (LAUNCH_TIME between to_date(#{time1,jdbcType=VARCHAR},'yyyy-mm-dd hh24:mi:ss')
-				and to_date(#{time2,jdbcType=VARCHAR},'yyyy-mm-dd hh24:mi:ss'))
+				and (LAUNCH_TIME between to_date(#{launchTimeStart,jdbcType=VARCHAR},'yyyy-mm-dd hh24:mi:ss')
+				and to_date(#{launchTimeEnd,jdbcType=VARCHAR},'yyyy-mm-dd hh24:mi:ss'))
 			</if>
 			<!--接口人是自己-->
 			and AUDITER = #{auditer,jdbcType=VARCHAR}
@@ -194,6 +203,7 @@
         </where>
     </select>
 
+	<!--我的申请列表-->
     <select id="HzWorkListDAOImpl_findHzWorkListBasicInfoList3" parameterType="java.util.HashMap" resultMap="BaseResultMap">
         select *
         from HZ_WORK_LIST
@@ -205,14 +215,15 @@
             <if test="changeNum != null and changeNum!=''">
                 and CHANGE_NUM = #{changeNum,jdbcType=VARCHAR}
             </if>
+
             <if test="projectId != null and projectId !='' ">
                 and PROJECT_ID = #{projectId,jdbcType=VARCHAR}
             </if>
 			<!--发起时间比较-->
-			<if test="launchTime != null and launchTime!=''">
+			<if test="launchTimeStart != null and launchTimeStart!=''">
 				<!--and (LAUNCH_TIME between to_date('2018-11-07 18:24:17','yyyy-mm-dd hh24:mi:ss') and to_date('2018-11-09 18:24:17','yyyy-mm-dd hh24:mi:ss'))-->
-				and (LAUNCH_TIME between to_date(#{time1,jdbcType=VARCHAR},'yyyy-mm-dd hh24:mi:ss')
-				and to_date(#{time2,jdbcType=VARCHAR},'yyyy-mm-dd hh24:mi:ss'))
+				and (LAUNCH_TIME between to_date(#{launchTimeStart,jdbcType=VARCHAR},'yyyy-mm-dd hh24:mi:ss')
+				and to_date(#{launchTimeEnd,jdbcType=VARCHAR},'yyyy-mm-dd hh24:mi:ss'))
 			</if>
 			<!--所有发起人是自己-->
 			and LAUNCHER = #{launcher,jdbcType=VARCHAR}
@@ -220,18 +231,11 @@
         </where>
     </select>
 
-	<!--根据主键获取对象-->
-	<select id="get" parameterType="sql.pojo.workList.HzWorkListRecord" resultMap="BaseResultMap">
-		select u.*,og.existing_num,og.group_code,og.name,og.node,og.num,og.parent_node from userRecord u inner join org_group og on u.group_id = og.group_id
-		WHERE id=#{id}
-	</select>
-
 	<insert id="save" parameterType="sql.pojo.workList.HzWorkListRecord">
 		<!--oracle插入数据返回主键到外键-->
 		<selectKey resultType="java.lang.Integer" order="BEFORE" keyProperty="id">
 			SELECT SEQ_HZ_USERRECORD.Nextval as ID from DUAL
 		</selectKey>
-
 		insert into USERRECORD
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			ID,
@@ -252,18 +256,6 @@
 			</if>
 			<if test="groupId != null">
 				GROUP_ID,
-			</if>
-			<if test="city != null">
-				CITY,
-			</if>
-			<if test="district != null">
-				DISTRICT,
-			</if>
-			<if test="province != null">
-				PROVINCE,
-			</if>
-			<if test="streetAddress != null">
-				STREET_ADDRESS,
 			</if>
 			<if test="state != null">
 				STATE,
@@ -300,18 +292,6 @@
 			<if test="groupId != null">
 				#{groupId,jdbcType=DECIMAL},
 			</if>
-			<if test="city != null">
-				#{city,jdbcType=OTHER},
-			</if>
-			<if test="district != null">
-				#{district,jdbcType=OTHER},
-			</if>
-			<if test="province != null">
-				#{province,jdbcType=OTHER},
-			</if>
-			<if test="streetAddress != null">
-				#{streetAddress,jdbcType=OTHER},
-			</if>
 			<if test="state != null">
 				#{state,jdbcType=OTHER},
 			</if>
@@ -333,157 +313,15 @@
 		 DELETE FROM userRecord WHERE id=#{id}
 	</delete>
 
-	<!--分页查询组织架构底下的用户-->
-	<select id="findGroupUserByPage" parameterType="com.connor.hozon.bom.sys.entity.QueryUser" resultMap="BaseResultMap">
-		select * from(
-		select u.*,og.existing_num,og.group_code,og.name,og.node,og.num,og.parent_node
-		,rownum as rn
-		from
-		userRecord u inner join org_group og on u.group_id = og.group_id
-		WHERE 1=1
-		<if test="userName!=null and userName!='' ">
-			AND u.user_name like concat(#{userName},'%')
-		</if>
-		AND og.parent_node like concat(#{orgGroup.parentNode},'%')<if test="orgGroup!=null">
-			<if test="orgGroup.parentNode!=null and orgGroup.parentNode!='' ">
-                  AND og.parent_node like concat(#{orgGroup.parentNode},'%')
-			</if>
-			<if test="orgGroup.node!=null and orgGroup.node!='' ">
-				AND og.node like concat(#{orgGroup.node},'%')
-			</if>
-		</if>
-		<if test="sort!= null and sort!='' ">
-			order by ${sort} ${order}
-		</if>
-		)u
-		where 1=1
-		<!--limit #{offset},#{limit}-->
-		<if test="offset!=null">
-			and u.rn &gt;= ${offset}+1
-		</if>
-		<if test="limit!=null and  page!=null">
-			and u.rn &lt;= ${page}*${limit}
-		</if>
-
-	</select>
-
-	<!--统计组织架构底下的用户-->
-	<select id="countGroupUser" parameterType="com.connor.hozon.bom.sys.entity.QueryUser" resultType="int">
-		select count(1) from userRecord u inner join org_group og on u.group_id = og.group_id
-		WHERE 1=1
-		<if test="userName!=null and userName!='' ">
-			AND u.user_name like concat(#{userName},'%')
-		</if>
-		<if test="orgGroup!=null">
-			<if test="orgGroup.parentNode!=null and orgGroup.parentNode!='' ">
-				AND og.parent_node like concat(#{orgGroup.parentNode},'%')
-			</if>
-			<if test="orgGroup.node!=null and orgGroup.node!='' ">
-				AND og.node like concat(#{orgGroup.node},'%')
-			</if>
-		</if>
-	</select>
-
-	<!--分页查询-->
-	<select id="findByPage" parameterType="com.connor.hozon.bom.sys.entity.QueryUser" resultMap="BaseResultMap">
-		select * from(
-		select u.*,og.existing_num,og.group_code,og.name,og.node,og.num,og.parent_node
-		,rownum as rn
-		from userRecord u inner join org_group og on u.group_id = og.group_id
-		WHERE 1=1
-		<if test="login!=null and login!='' ">
-		AND u.login=#{login}
-		</if>
-		<if test="password!=null and password!='' ">
-		AND u.password=#{password}
-		</if>
-		<if test="userName!=null and userName!='' ">
-		AND u.user_name=#{userName}
-		</if>
-		<if test="address!=null and address!='' ">
-		AND u.address=#{address}
-		</if>
-		<if test="job!=null and job!='' ">
-		AND u.job=#{job}
-		</if>
-		<if test="groupId!=null and groupId!='' ">
-		AND u.group_id=#{groupId}
-		</if>
-		<if test="birthDate!=null and birthDate!='' ">
-		AND u.birth_date=#{birthDate}
-		</if>
-		<if test="city!=null and city!='' ">
-		AND u.city=#{city}
-		</if>
-		<if test="district!=null and district!='' ">
-		AND u.district=#{district}
-		</if>
-		<if test="province!=null and province!='' ">
-		AND u.province=#{province}
-		</if>
-		<if test="streetAddress!=null and streetAddress!='' ">
-		AND u.street_address=#{streetAddress}
-		</if>
-		<if test="state!=null and state!='' ">
-		AND u.state=#{state}
-		</if>
-		<if test="type!=null and type!='' ">
-		AND u.type=#{type}
-		</if>
-		<if test="lastLoginDate!=null and lastLoginDate!='' ">
-		AND u.last_login_date=#{lastLoginDate}
-		</if>
-		<if test="sort!= null and sort!='' ">
-		order by ${sort} ${order}
-		</if>
-		)u
-		where 1=1
-		<!--limit #{offset},#{limit}-->
-		<if test="offset!=null">
-			and u.rn &gt;= ${offset}+1
-		</if>
-		<if test="limit!=null and  page!=null">
-			and u.rn &lt;= ${page}*${limit}
-		</if>
-
-	</select>
-
 	<!--统计-->
 	<select id="count" parameterType="com.connor.hozon.bom.sys.entity.QueryUser" resultType="int">
-		SELECT count(*) FROM userRecord
+		SELECT count(*) FROM HZ_WORK_LIST
 		WHERE 1=1
-		<if test="login!=null and login!='' ">
-			AND login=#{login}
-		</if>
-		<if test="password!=null and password!='' ">
-			AND password=#{password}
-		</if>
 		<if test="userName!=null and userName!='' ">
 			AND user_name=#{userName}
 		</if>
 		<if test="address!=null and address!='' ">
 			AND address=#{address}
-		</if>
-		<if test="job!=null and job!='' ">
-			AND job=#{job}
-		</if>
-		<if test="groupId!=null and groupId!='' ">
-			AND group_id=#{groupId}
-		</if>
-		<if test="birthDate!=null and birthDate!='' ">
-			AND birth_date=#{birthDate}
-		</if>
-		<if test="city!=null and city!='' ">
-			AND city=#{city}
-		</if>
-		<if test="district!=null and district!='' ">
-			AND district=#{district}
-		</if>
-		<if test="province!=null and province!='' ">
-			AND province=#{province}
-		</if>
-		<if test="streetAddress!=null and streetAddress!='' ">
-			AND street_address=#{streetAddress}
 		</if>
 		<if test="state!=null and state!='' ">
 			AND state=#{state}
@@ -491,66 +329,9 @@
 		<if test="type!=null and type!='' ">
 			AND type=#{type}
 		</if>
-		<if test="lastLoginDate!=null and lastLoginDate!='' ">
-			AND last_login_date=#{lastLoginDate}
-		</if>
 		<if test="sort!= null and sort!='' ">
 			order by ${sort} ${order}
 		</if>
 	</select>
-
-	<!--查询-->
-	<select id="query" parameterType="com.connor.hozon.bom.sys.entity.QueryUser" resultMap="BaseResultMap">
-		SELECT id,login,password,user_name,address,job,group_id,birth_date,city,district,
-		province,street_address,state,type,last_login_date FROM userRecord
-		WHERE 1=1
-		<if test="login!=null and login!='' ">
-			AND login=#{login}
-		</if>
-		<if test="password!=null and password!='' ">
-			AND password=#{password}
-		</if>
-		<if test="userName!=null and userName!='' ">
-			AND user_name=#{userName}
-		</if>
-		<if test="address!=null and address!='' ">
-			AND address=#{address}
-		</if>
-		<if test="job!=null and job!='' ">
-			AND job=#{job}
-		</if>
-		<if test="groupId!=null and groupId!='' ">
-			AND group_id=#{groupId}
-		</if>
-		<if test="birthDate!=null and birthDate!='' ">
-			AND birth_date=#{birthDate}
-		</if>
-		<if test="city!=null and city!='' ">
-			AND city=#{city}
-		</if>
-		<if test="district!=null and district!='' ">
-			AND district=#{district}
-		</if>
-		<if test="province!=null and province!='' ">
-			AND province=#{province}
-		</if>
-		<if test="streetAddress!=null and streetAddress!='' ">
-			AND street_address=#{streetAddress}
-		</if>
-		<if test="state!=null and state!='' ">
-			AND state=#{state}
-		</if>
-		<if test="type!=null and type!='' ">
-			AND type=#{type}
-		</if>
-		<if test="lastLoginDate!=null and lastLoginDate!='' ">
-			AND last_login_date=#{lastLoginDate}
-		</if>
-		<if test="sort!= null and sort!='' ">
-			order by ${sort} ${order}
-		</if>
-	</select>
-
-
 
 </mapper>

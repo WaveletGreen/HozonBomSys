@@ -9,13 +9,21 @@ public class HzWorkListBasicInfoQuery {
 
     private int flag;//标识：1-待办事项，2-已处理事项，3-我的申请
 
-    //private String launcher;//发起人
+    private String launcher;//发起人
 
     private String launchTimeStart;//发起日期的起始
     private String launchTimeEnd;//发起日期的结束
 
     //private String auditer;//接口人（审批人）
 
+
+    public String getLauncher() {
+        return launcher;
+    }
+
+    public void setLauncher(String launcher) {
+        this.launcher = launcher;
+    }
 
     public String getLaunchTimeStart() {
         return launchTimeStart;

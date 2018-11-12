@@ -2,9 +2,7 @@ package com.connor.hozon.bom.resources.controller.change.worklist;
 
 import com.alibaba.fastjson.JSONObject;
 import com.connor.hozon.bom.resources.controller.BaseController;
-import com.connor.hozon.bom.resources.domain.dto.response.HzEWOBasicInfoRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzWorkListBasicInfoRespDTO;
-import com.connor.hozon.bom.resources.domain.query.HzEWOBasicInfoQuery;
 import com.connor.hozon.bom.resources.domain.query.HzWorkListBasicInfoQuery;
 import com.connor.hozon.bom.resources.service.change.HzWorkListBasicInfoService;
 import com.connor.hozon.bom.resources.util.ListUtil;

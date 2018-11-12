@@ -22,6 +22,7 @@ function initTable(projectUid) {
     }
     var projectId = $("#project", window.top.document).val();
     var $table = $("#handledTable");
+    $table.bootstrapTable("destroy");//查询时刷新表单用
     var column = [];
     // $.ajax({
     //     url: "ebom/title?projectId=" + projectPuid,
@@ -95,7 +96,7 @@ function initTable(projectUid) {
         sidePagination: "server",          //分页方式：client客户端分页，server服务端分页（*）
         clickToSelect: true,                // 单击某一行的时候选中某一条记录
         showExport: false,
-        formId: "formId",
+        formId: "queryHandled",
         columns: column,                     //列信息，需要预先定义好
         sortable: false,                     //是否启用排序
         sortOrder: "asc",                   //排序方式

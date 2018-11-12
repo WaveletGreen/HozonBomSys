@@ -45,7 +45,7 @@ public class HzWorkListDAOImpl extends BaseSQLUtil implements HzWorkListDAO {
         map.put("id",query.getId());
         map.put("changeNum",query.getChangeNum());
         map.put("projectId",query.getProjectId());
-        //map.put("launcher",query.getLauncher());
+        map.put("launcher",query.getLauncher());
         map.put("launchTimeStart",query.getLaunchTimeStart());
         map.put("launchTimeEnd",query.getLaunchTimeEnd());
         User user = UserInfo.getUser();
@@ -60,8 +60,9 @@ public class HzWorkListDAOImpl extends BaseSQLUtil implements HzWorkListDAO {
         map.put("id",query.getId());
         map.put("changeNum",query.getChangeNum());
         map.put("projectId",query.getProjectId());
-        //map.put("launcher",query.getLauncher());
-        //map.put("launchTime",query.getLaunchTime());
+        map.put("launcher",query.getLauncher());
+        map.put("launchTimeStart",query.getLaunchTimeStart());
+        map.put("launchTimeEnd",query.getLaunchTimeEnd());
         User user = UserInfo.getUser();
         map.put("auditer",user.getLogin());//接口人
         return  super.findForList("HzWorkListDAOImpl_findHzWorkListBasicInfoList2",map);
@@ -73,8 +74,9 @@ public class HzWorkListDAOImpl extends BaseSQLUtil implements HzWorkListDAO {
         map.put("id",query.getId());
         map.put("changeNum",query.getChangeNum());
         map.put("projectId",query.getProjectId());
-//        map.put("launcher",query.getLauncher());
-        //map.put("launchTime",query.getLaunchTime());
+        //map.put("launcher",query.getLauncher());
+        map.put("launchTimeStart",query.getLaunchTimeStart());
+        map.put("launchTimeEnd",query.getLaunchTimeEnd());
         User user = UserInfo.getUser();
         map.put("launcher",user.getLogin());//发起人
         return  super.findForList("HzWorkListDAOImpl_findHzWorkListBasicInfoList3",map);
