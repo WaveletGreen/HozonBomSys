@@ -1,5 +1,7 @@
 package com.connor.hozon.bom.resources.mybatis.change;
 
+import com.connor.hozon.bom.resources.domain.query.HzChangeOrderByPageQuery;
+import com.connor.hozon.bom.resources.page.Page;
 import sql.pojo.change.HzChangeOrderRecord;
 
 /**
@@ -43,5 +45,11 @@ public interface HzChangeOrderDAO {
      */
     HzChangeOrderRecord findHzChangeOrderRecordById(Long id);
 
+    /**
+     * 分页获取表单记录
+     * @param query
+     * @return
+     */
+    Page<HzChangeOrderRecord> findHzChangeOrderRecordByPage(HzChangeOrderByPageQuery query);
 
 }

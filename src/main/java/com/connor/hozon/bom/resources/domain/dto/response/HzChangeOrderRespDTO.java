@@ -75,6 +75,12 @@ public class HzChangeOrderRespDTO {
      */
     private String createTime;
 
+    /**
+     * 部门名称
+     */
+    private String deptName;
+
+
     public Long getId() {
         return id;
     }
@@ -202,4 +208,13 @@ public class HzChangeOrderRespDTO {
     public void setCreateTime(String createTime) {
         this.createTime = createTime;
     }
+
+    public String getDeptName() {
+        return deptName;
+    }
+
+    public void setDeptName(String deptName) {
+        this.deptName = deptName;
+    }
+
 }

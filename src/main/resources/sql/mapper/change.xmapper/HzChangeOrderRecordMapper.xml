@@ -22,6 +22,11 @@
     <result column="PROJECT_ID" jdbcType="VARCHAR" property="projectId" />
     <result column="DEPT_ID" jdbcType="DOUBLE" property="deptId" />
     <result column="IS_FROM_TC" jdbcType="INTEGER" property="fromTc" />
+
+
+    <result column="CREATE_NAME" jdbcType="VARCHAR" property="createName" />
+    <result column="DEPT_NAME" jdbcType="VARCHAR" property="deptName" />
+    <result column="ORIGINATOR" jdbcType="VARCHAR" property="originator" />
   </resultMap>
 
   <sql id="Base_Column_List">
@@ -111,4 +116,66 @@
         from HZ_CHANGE_ORDER_RECORD
         where CHANGE_NO = #{changeNo,jdbcType=VARCHAR}
     </select>
+
+
+  <select id="HzChangeOrderDAOImpl_findHzChangeOrderRecordByPage" parameterType="java.util.HashMap" resultMap="BaseResultMap">
+    select * FROM
+    (SELECT u.*,rownum as rn from
+    (SELECT
+        t1.*, T2.USER_NAME as createName,
+        t3.USER_NAME as ORIGINATOR,
+        t4. NAME as deptName
+    FROM
+        HZ_CHANGE_ORDER_RECORD t1
+    LEFT JOIN USERRECORD t2 ON t1.CREATE_ID = t2. ID
+    JOIN USERRECORD t3 ON t1.ORIGINATOR_ID = t3. ID
+    JOIN ORG_GROUP t4 ON t1.dept_ID = t4. GROUP_ID
+    <where>
+      1=1
+      <if test="projectId != null">
+        and t1.PROJECT_ID = #{projectId,jdbcType=VARCHAR}
+      </if>
+      <if test="changeNo != null">
+        and t1.CHANGE_NO=#{changeNo,jdbcType=VARCHAR}
+      </if>
+      <if test="createName != null">
+        and t2.user_name = #{createName,jdbcType=VARCHAR}
+      </if>
+      <if test="originator != null and isHas==1">
+        and t3.user_name = #{originator,jdbcType=VARCHAR}
+      </if>
+      <if test="state != null" >
+        and t1.STATE=#{state,jdbcType=INTEGER}
+      </if>
+      )u
+    </where>
+    WHERE ROWNUM &lt;=#{limit,jdbcType=INTEGER}) where rn &gt;#{offset,jdbcType=INTEGER}
+  </select>
+
+
+  <select id="HzChangeOrderDAOImpl_findHzChangeOrderTotalCount" parameterType="java.util.HashMap" resultType="java.lang.Integer">
+   SELECT count(*)
+    FROM
+    HZ_CHANGE_ORDER_RECORD t1
+    LEFT JOIN USERRECORD t2 ON t1.CREATE_ID = t2. ID
+    JOIN USERRECORD t3 ON t1.ORIGINATOR_ID = t3. ID
+    JOIN ORG_GROUP t4 ON t1.dept_ID = t4. GROUP_ID
+    <where>
+      1=1
+      <if test="projectId != null">
+        and t1.PROJECT_ID = #{projectId,jdbcType=VARCHAR}
+      </if>
+      <if test="changeNo != null">
+        and t1.CHANGE_NO=#{changeNo,jdbcType=VARCHAR}
+      </if>
+      <if test="createName != null">
+        and t2.user_name = #{createName,jdbcType=VARCHAR}
+      </if>
+      <if test="originator != null and isHas==1">
+        and t3.user_name = #{originator,jdbcType=VARCHAR}
+      </if>
+      <if test="state != null" >
+        and t1.STATE=#{state,jdbcType=INTEGER}
+      </if>
+  </select>
 </mapper>

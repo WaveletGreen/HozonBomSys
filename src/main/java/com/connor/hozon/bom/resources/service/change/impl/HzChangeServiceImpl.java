@@ -16,6 +16,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sql.pojo.change.HzChangeOrderRecord;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @Author: haozt
  * @Date: 2018/11/12
@@ -114,6 +117,34 @@ public class HzChangeServiceImpl implements HzChangeService {
 
     @Override
     public Page<HzChangeOrderRespDTO> getHzChangeOrderPage(HzChangeOrderByPageQuery query) {
+        try {
+            List<HzChangeOrderRespDTO> respDTOS = new ArrayList<>();
+            Page<HzChangeOrderRecord> page = hzChangeOrderDAO.findHzChangeOrderRecordByPage(query);
+            if (page == null || page.getResult() == null || page.getResult().size() == 0) {
+                return new Page<>(page.getPageNumber(), page.getPageSize(), 0);
+            }
+            List<HzChangeOrderRecord> records = page.getResult();
+            for(HzChangeOrderRecord record :records){
+                respDTOS.add(HzChangeOrderFactory.changeOrderRecordToRespDTO(record));
+            }
+            return new Page<>(page.getPageNumber(), page.getPageSize(), page.getTotalCount(), respDTOS);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Page<>(query.getPage(), query.getPageSize(), 0);
+        }
+    }
+
+    @Override
+    public HzChangeOrderRespDTO getHzChangeOrderRecordById(Long id) {
+        try {
+           HzChangeOrderRecord record = hzChangeOrderDAO.findHzChangeOrderRecordById(id);
+           if(record != null){
+               return HzChangeOrderFactory.changeOrderRecordToRespDTO(record);
+           }
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
         return null;
     }
 }

@@ -4,10 +4,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.connor.hozon.bom.resources.controller.BaseController;
 import com.connor.hozon.bom.resources.domain.dto.request.EditHzChangeOrderReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzChangeOrderRespDTO;
-import com.connor.hozon.bom.resources.domain.dto.response.HzEWOBasicInfoRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
 import com.connor.hozon.bom.resources.domain.query.HzChangeOrderByPageQuery;
-import com.connor.hozon.bom.resources.domain.query.HzEWOBasicInfoQuery;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.service.change.HzChangeService;
 import com.connor.hozon.bom.resources.util.ListUtil;
@@ -15,6 +13,7 @@ import com.connor.hozon.bom.resources.util.Result;
 import com.connor.hozon.bom.resources.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -42,8 +41,11 @@ public class HzChangeController extends BaseController {
         return "change/changeForm/addChangeForm";
     }
     @RequestMapping(value = "updatePage",method = RequestMethod.GET)
-    public String getUpdateChangeFormToPage(){
-
+    public String getUpdateChangeFormToPage(Long id, Model model){
+        HzChangeOrderRespDTO respDTO = hzChangeService.getHzChangeOrderRecordById(id);
+        if(respDTO != null){
+            model.addAttribute("data",respDTO);
+        }
         return "change/changeForm/updateChangeForm";
     }
     @RequestMapping(value = "ToChangeOrder",method = RequestMethod.GET)
@@ -73,6 +75,11 @@ public class HzChangeController extends BaseController {
     }
 
 
+    @RequestMapping(value = "exist",method = RequestMethod.GET)
+    public void deleteChangeFrom(String changeNo, HttpServletResponse response){
+        WriteResultRespDTO resultRespDTO = hzChangeService.changeNoExist(changeNo);
+        toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(resultRespDTO),resultRespDTO.getErrMsg()),response);
+    }
 
     /**
      * 获取EWO表单基本信息列表
@@ -97,21 +104,17 @@ public class HzChangeController extends BaseController {
             object.put("changeType",hzChangeOrderRespDTO.getChangeType());
             object.put("createName",hzChangeOrderRespDTO.getCreateName());
             object.put("originator",hzChangeOrderRespDTO.getOriginator());
-            object.put("Y",hzChangeOrderRespDTO.getHasRelatedChange());
             object.put("id",hzChangeOrderRespDTO.getId());
             object.put("marketType",hzChangeOrderRespDTO.getMarketType());
-
+            object.put("createNo",hzChangeOrderRespDTO.getChangeNo());
             object.put("tel",hzChangeOrderRespDTO.getTel());
             object.put("state",hzChangeOrderRespDTO.getState());
             object.put("relationChangeNo",hzChangeOrderRespDTO.getRelationChangeNo());
             object.put("originTime",hzChangeOrderRespDTO.getOriginTime());
             object.put("createTime",hzChangeOrderRespDTO.getCreateTime());
             object.put("remark",hzChangeOrderRespDTO.getRemark());
-
-            object.put("N",hzChangeOrderRespDTO.getHasRelatedChange());
             object.put("projectState",hzChangeOrderRespDTO.getProjectStage());
-           
-
+            object.put("deptName",hzChangeOrderRespDTO.getDeptName());
             list.add(object);
         });
         jsonObject.put("result",list);

@@ -53,6 +53,11 @@ public class EditHzChangeOrderReqDTO {
      */
     private String projectId;
 
+    /**
+     * 变更号
+     */
+    private String changeNo;
+
     public Long getId() {
         return id;
     }

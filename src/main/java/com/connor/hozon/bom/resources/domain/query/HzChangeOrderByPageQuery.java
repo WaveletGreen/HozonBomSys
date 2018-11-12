@@ -31,7 +31,7 @@ public class HzChangeOrderByPageQuery extends DefaultPageQuery {
     /**
      *当前变更表单状态（1 已完成 2进行中 3已取消）
      */
-    private String state;
+    private Integer state;
 
     /**
      * 表单创建者

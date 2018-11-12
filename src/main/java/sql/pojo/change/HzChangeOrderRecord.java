@@ -19,6 +19,11 @@ public class HzChangeOrderRecord extends BasePOJO {
      * 部门id
      */
     private Long deptId;
+
+    /**
+     * 部门名称
+     */
+    private String deptName;
     /**
      *变更号
      */
@@ -31,6 +36,11 @@ public class HzChangeOrderRecord extends BasePOJO {
      *流程发起人
      */
     private Long originatorId;
+
+    /**
+     * 流程发起人姓名
+     */
+    private String originator;
     /**
      *流程发起时间
      */
@@ -77,6 +87,15 @@ public class HzChangeOrderRecord extends BasePOJO {
      * 表单信息是否同步自TC
      */
     private Integer fromTc;
+
+    public String getOriginator() {
+        return originator;
+    }
+
+    public void setOriginator(String originator) {
+        this.originator = originator;
+    }
+
     public Long getId() {
         return id;
     }
@@ -91,6 +110,14 @@ public class HzChangeOrderRecord extends BasePOJO {
 
     public void setDeptId(Long deptId) {
         this.deptId = deptId;
+    }
+
+    public String getDeptName() {
+        return deptName;
+    }
+
+    public void setDeptName(String deptName) {
+        this.deptName = deptName;
     }
 
     public String getChangeNo() {
