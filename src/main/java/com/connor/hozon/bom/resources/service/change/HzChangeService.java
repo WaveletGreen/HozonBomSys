@@ -46,4 +46,11 @@ public interface HzChangeService {
      * @return
      */
     Page<HzChangeOrderRespDTO> getHzChangeOrderPage(HzChangeOrderByPageQuery query);
+
+    /**
+     * 找一条
+     * @param id
+     * @return
+     */
+    HzChangeOrderRespDTO findHzChangeOrderRecordById(Long id);
 }

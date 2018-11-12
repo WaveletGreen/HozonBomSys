@@ -15,6 +15,7 @@ import com.connor.hozon.bom.resources.util.Result;
 import com.connor.hozon.bom.resources.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -42,8 +43,11 @@ public class HzChangeController extends BaseController {
         return "change/changeForm/addChangeForm";
     }
     @RequestMapping(value = "updatePage",method = RequestMethod.GET)
-    public String getUpdateChangeFormToPage(){
-
+    public String getUpdateChangeFormToPage(Long id,Model model){
+        HzChangeOrderRespDTO respDTO = hzChangeService.findHzChangeOrderRecordById(id);
+        if(respDTO != null){
+            model.addAttribute("data",respDTO);
+        }
         return "change/changeForm/updateChangeForm";
     }
     @RequestMapping(value = "ToChangeOrder",method = RequestMethod.GET)
@@ -51,7 +55,11 @@ public class HzChangeController extends BaseController {
 
         return "change/ChangeOrder/ChangeOrder";
     }
+    @RequestMapping(value = "ToUntreatedForm",method = RequestMethod.GET)
+    public String getToUntreatedFormToPage(){
 
+        return "myListJob/untreated/untreatedForm";
+    }
     @RequestMapping(value = "add",method = RequestMethod.POST)
     public void addChangeFrom(@RequestBody EditHzChangeOrderReqDTO reqDTO, HttpServletResponse response){
         WriteResultRespDTO resultRespDTO = hzChangeService.insertChangeOrderRecord(reqDTO);
@@ -108,7 +116,6 @@ public class HzChangeController extends BaseController {
             object.put("createTime",hzChangeOrderRespDTO.getCreateTime());
             object.put("remark",hzChangeOrderRespDTO.getRemark());
 
-            object.put("N",hzChangeOrderRespDTO.getHasRelatedChange());
             object.put("projectState",hzChangeOrderRespDTO.getProjectStage());
            
 

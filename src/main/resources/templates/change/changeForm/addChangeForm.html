@@ -3,10 +3,10 @@
 <!--User: xulf Date: 2018/11/9 Time: 10:12-->
 <link th:href="@{/css/labelColor.css}" rel="stylesheet">
 <body>
-<form id="changeForm" role="form" method="post" action="ebom/update/ebom">
+<form id="changeForm" role="form" method="post" action="change/add">
     <div class="form-group">
-        <label for="lineId1">变更单号<span>*</span></label>
-        <input class="form-control" id="lineId1" name="lineId" type="text"
+        <label for="changeNo">变更单号<span>*</span></label>
+        <input class="form-control" id="changeNo" name="changeNo" type="text"
                placeholder="请输入变更单号"/>
     </div>
     <!--<div class="form-group">-->
@@ -25,34 +25,44 @@
                <!--placeholder="请输入发起人"/>-->
     <!--</div>-->
     <div class="form-group">
-        <label for="lineId5">联系电话</label>
-        <input class="form-control" id="lineId5" name="lineId" type="text"
+        <label for="tel">联系电话</label>
+        <input class="form-control" id="tel" name="tel" type="text"
                placeholder="请输入联系电话"/>
     </div>
     <div class="form-group">
-        <label for="lineId6">变更单状态<span>*</span></label>
-        <select class="form-control" name="pPictureSheet" id="lineId6" placeholder="请选择变更单状态">
+        <label for="state">变更单状态<span>*</span></label>
+        <select class="form-control" name="state" id="state" placeholder="请选择变更单状态">
             <option>进行中</option>
             <option>完成</option>
             <option>取消</option>
         </select>
     </div>
     <div class="form-group">
-        <label for="lineId7">变更类型</label>
-        <input class="form-control" id="lineId7" name="lineId" type="text"
+        <label for="changeType">变更类型</label>
+        <input class="form-control" id="changeType" name="changeType" type="text"
                placeholder="请输入变更类型"/>
     </div>
     <div class="form-group">
-        <label for="lineId8">是否关联变更</label>
-        <input class="form-control" id="lineId8" name="lineId" type="text"
+        <label for="relationChangeNo">是否关联变更</label>
+        <input class="form-control" id="relationChangeNo" name="relationChangeNo" type="text"
                placeholder="请输入关联变更号"/>
     </div>
     <div class="form-group">
-        <label for="lineId9">上市类型</label>
-        <select class="form-control" name="pPictureSheet" id="lineId9" placeholder="请选择上市类型">
+        <label for="marketType">上市类型</label>
+        <select class="form-control" name="marketType" id="marketType" placeholder="请选择上市类型">
             <option>上市前</option>
             <option>上市后</option>
         </select>
+    </div>
+    <div class="form-group">
+        <label for="projectStage">项目所属阶段</label>
+        <input class="form-control" id="projectStage" name="projectStage" type="text"
+               placeholder="请输入项目所属阶段"/>
+    </div>
+    <div class="form-group">
+        <label for="remark">备注</label>
+        <input class="form-control" id="remark" name="remark" type="text"
+               placeholder="请输入备注"/>
     </div>
 </form>
 <script th:inline="javascript">
@@ -66,11 +76,11 @@
                     validating: 'glyphicon glyphicon-refresh'
                 },
                 fields: {
-                    lineId: {
-                        message: '零件号验证失败',
+                    changeNo: {
+                        message: '变更单号验证失败',
                         validators: {
                             notEmpty: {
-                                message: '零件号不能为空'
+                                message: '变更单号不能为空'
                             }
                         }
                     },
@@ -84,12 +94,16 @@
                     var url = $("#changeForm", window.top.document).attr('action');
                     // var projectId= $("#project", window.top.document).val();
                     var myData = JSON.stringify({
-                        "puid": $("#puid").val(),
-                        "puid": $("#puid").val(),
-                        "puid": $("#puid").val(),
-                        "puid": $("#puid").val(),
-                        "puid": $("#puid").val(),
-                        "puid": $("#puid").val(),
+                        "changeNo": $("#changeNo").val(),
+                        "tel": $("#tel").val(),
+                        "state": $("state").val(),
+                        "changeType": $("#changeType").val(),
+                        "relationChangeNo": $("#relationChangeNo").val(),
+                        "marketType": $("#marketType").val(),
+                        "projectStage": $("#projectStage").val(),
+                        "remark": $("#remark").val(),
+
+                        "projectId":$("#project", window.top.document).val(),
                     });
 
                     $.ajax({
@@ -98,7 +112,7 @@
                         type:
                             'POST',
                         url: url,
-                        data:  JSON.stringify(localData),
+                        data:  myData,
                         success:
                             function (result) {
                                 $('.modal-dialog', window.top.document).parent('div').remove()

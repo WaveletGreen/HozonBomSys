@@ -116,4 +116,9 @@ public class HzChangeServiceImpl implements HzChangeService {
     public Page<HzChangeOrderRespDTO> getHzChangeOrderPage(HzChangeOrderByPageQuery query) {
         return null;
     }
+
+    @Override
+    public HzChangeOrderRespDTO findHzChangeOrderRecordById(Long id) {
+        return null;
+    }
 }
