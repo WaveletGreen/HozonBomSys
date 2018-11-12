@@ -177,5 +177,6 @@
       <if test="state != null" >
         and t1.STATE=#{state,jdbcType=INTEGER}
       </if>
+      </where>
   </select>
 </mapper>
