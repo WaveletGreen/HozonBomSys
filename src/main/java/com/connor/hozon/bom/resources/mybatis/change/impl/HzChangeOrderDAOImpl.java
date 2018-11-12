@@ -27,4 +27,14 @@ public class HzChangeOrderDAOImpl extends BaseSQLUtil implements HzChangeOrderDA
 
         return super.delete("HzChangeOrderDAOImpl_deleteById",id);
     }
+
+    @Override
+    public boolean changeNoExist(String changeNo) {
+        return (int)super.findForObject("HzChangeOrderDAOImpl_changeNoExist",changeNo)>0;
+    }
+
+    @Override
+    public HzChangeOrderRecord findHzChangeOrderRecordById(Long id) {
+        return (HzChangeOrderRecord)super.findForObject("HzChangeOrderDAOImpl_findHzChangeOrderRecordById",id);
+    }
 }
