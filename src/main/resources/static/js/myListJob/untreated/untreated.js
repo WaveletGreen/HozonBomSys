@@ -202,7 +202,7 @@ function initTable(projectUid) {
     // })
 }
 function queryLou(id) {
-    window.location.href="change/ToChangeOrder?id="+id;
+    window.location.href="change/ToUntreatedForm?id="+id;
 }
 // function basic() {
 //     window.Ewin.dialog({

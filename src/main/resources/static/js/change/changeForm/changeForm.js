@@ -51,6 +51,9 @@ function initTable(projectUid) {
     column.push({field: 'changeType', title: '变更类型', align: 'center', valign: 'middle'});
     column.push({field: 'originator', title: '是否关联变更', align: 'center', valign: 'middle'});
     column.push({field: 'originator', title: '上市类型', align: 'center', valign: 'middle'});
+    column.push({field: 'originator', title: '项目所属阶段', align: 'center', valign: 'middle'});
+    column.push({field: 'originator', title: '备注', align: 'center', valign: 'middle'});
+    column.push({field: 'originator', title: '变更状态', align: 'center', valign: 'middle'});
     // $.ajax({
     //     url: "ebom/title?projectId=" + projectPuid,
     //     type: "GET",
