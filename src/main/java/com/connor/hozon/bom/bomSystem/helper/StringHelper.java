@@ -5,6 +5,7 @@
  */
 
 package com.connor.hozon.bom.bomSystem.helper;
+
 /**
  * @Author: Fancyears·Maylos·Maywas
  * @Description: 字符串检查助手
@@ -47,6 +48,10 @@ public class StringHelper {
      * @return
      */
     public static boolean checkStringIsEmpty(String str) {
+        /**必须检查是否为空才行，否则有几率报异常*/
+        if (str == null) {
+            return false;
+        }
         if (str.length() <= 0) {
             return true;
         } else {

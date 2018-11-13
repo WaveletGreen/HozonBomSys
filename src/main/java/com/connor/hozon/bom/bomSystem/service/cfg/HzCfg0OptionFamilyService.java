@@ -55,11 +55,12 @@ public class HzCfg0OptionFamilyService {
 
     /**
      * 主键删除
+     *
      * @param uid
      * @return
      */
     public boolean doDeleteByPrimaryKey(String uid) {
-        HzCfg0OptionFamily family=new HzCfg0OptionFamily();
+        HzCfg0OptionFamily family = new HzCfg0OptionFamily();
         family.setPuid(uid);
         return hzCfg0OptionFamilyDao.deleteByPrimaryKey(family) > 0 ? true : false;
     }
@@ -137,6 +138,13 @@ public class HzCfg0OptionFamilyService {
         return sortFamiliesCode(families, def);
     }
 
+    /**
+     * 将车身颜色特性提前打首位
+     *
+     * @param families
+     * @param def
+     * @return
+     */
     private List<String> sortFamiliesCode(List<HzCfg0OptionFamily> families, String def) {
         List<String> result = new ArrayList<>();
         families.stream().filter(f -> f != null).collect(Collectors.toList()).forEach(f -> {
@@ -225,6 +233,14 @@ public class HzCfg0OptionFamilyService {
         return result;
     }
 
+    /**
+     * 将项目下的所有特性查询出来，车身颜色和油漆车身总成放在前两位，其余都经过特性NAME排序
+     *
+     * @param projectUid
+     * @param start
+     * @param end
+     * @return
+     */
     public List<HzCfg0OptionFamily> getFamilies(String projectUid, int start, int end) {
         paramMap.put("isIn", false);
         paramMap.put("list", paramList);

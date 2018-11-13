@@ -16,6 +16,7 @@ import sql.pojo.cfg.modelColor.HzCfg0ModelColorDetail;
 import sql.pojo.cfg.modelColor.HzColorModel2;
 
 import java.util.List;
+
 /**
  * @Author: Fancyears·Maylos·Maywas
  * @Description: fuck

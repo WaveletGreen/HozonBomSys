@@ -2,13 +2,13 @@ package com.connor.hozon.bom.sys.service;
 
 import com.connor.hozon.bom.common.base.dao.GenericDao;
 import com.connor.hozon.bom.common.base.service.GenericService;
+import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.sys.dao.RoleAssociateTreeDao;
+import com.connor.hozon.bom.sys.dao.RoleWriteAssociateTreeDao;
 import com.connor.hozon.bom.sys.dao.UserRoleDao;
 
-import com.connor.hozon.bom.sys.entity.QueryUserRole;
-import com.connor.hozon.bom.sys.entity.RoleAssociateTree;
-import com.connor.hozon.bom.sys.entity.Tree;
-import com.connor.hozon.bom.sys.entity.UserRole;
+import com.connor.hozon.bom.sys.entity.*;
+import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,6 +28,9 @@ public class UserRoleService extends GenericService<UserRole, QueryUserRole> {
 	@SuppressWarnings("SpringJavaAutowiringInspection")
 	private RoleAssociateTreeDao roleAssociateTreeDao;
 
+	@Autowired
+	@SuppressWarnings("SpringJavaAutowiringInspection")
+	private RoleWriteAssociateTreeDao roleWriteAssociateTreeDao;
 	@Override
 	protected GenericDao<UserRole, QueryUserRole> getDao() {
 		return userRoleDao;
@@ -42,6 +45,15 @@ public class UserRoleService extends GenericService<UserRole, QueryUserRole> {
 		return userRoleDao.getUserRoleAssociate(entity);
 	}
 
+
+	/**
+	 * 功能描述：获取用户写权限菜单数据
+	 * @param entity
+	 * @return
+	 */
+	public UserRole getUserWriteRoleAssociate(UserRole entity){
+		return userRoleDao.getUserWriteRoleAssociate(entity);
+	}
 	/**
 	 * 查询当前角色权限的引用关系
 	 * @param id 角色id
@@ -92,9 +104,20 @@ public class UserRoleService extends GenericService<UserRole, QueryUserRole> {
 		return super.update(entity);
 	}
 
+	/**
+	 * 保存设定的用户权限信息
+	 * @param userRole
+	 * @return
+	 */
 	public boolean saveRoleWritePrivilege(UserRole userRole) {
 		try {
-			return super.update(userRole);
+			userRole.packagingTrees(userRole.getTreeArray());
+			List<String> list = Lists.newArrayList(userRole.getTreeArray().split(","));
+			roleWriteAssociateTreeDao.removeTreeByRoleId(userRole);
+			for(String s:list){
+				roleWriteAssociateTreeDao.save(new RoleWriteAssociateTree(userRole.getId(),Long.valueOf(s)));
+			}
+			return true;
 		}catch (Exception e){
 			e.printStackTrace();
 			return false;

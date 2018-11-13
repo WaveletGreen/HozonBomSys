@@ -46,7 +46,6 @@ public class HzCmcrChangeDaoImpl extends BasicDaoImpl<HzCmcrChange> implements H
     public Long insertAfter(HzCmcrChange cmcr) throws Exception {
         preSetAfter(cmcr);
         return executeInsert(cmcr, "insert");
-
     }
 
 
@@ -71,7 +70,6 @@ public class HzCmcrChangeDaoImpl extends BasicDaoImpl<HzCmcrChange> implements H
     public Long insertAfterSelective(HzCmcrChange cmcr) throws Exception {
         preSetAfter(cmcr);
         return executeInsert(cmcr, "insertSelective");
-
     }
 
     /**

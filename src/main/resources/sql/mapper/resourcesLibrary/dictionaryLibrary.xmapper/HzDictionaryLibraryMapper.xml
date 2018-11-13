@@ -274,7 +274,7 @@
                 and FAMILLY_CODE like CONCAT(CONCAT('%',#{famillyCode,jdbcType=VARCHAR}),'%')
             </if>
             <if test="famillyCh != null and famillyCh !=''">
-                and FAMILLYCH like CONCAT(CONCAT('%',#{famillyCh,jdbcType=VARCHAR}),'%')
+                and FAMILLY_CH like CONCAT(CONCAT('%',#{famillyCh,jdbcType=VARCHAR}),'%')
             </if>
             <if test="eigenValue !=null and eigenValue !=''">
                 and EIGEN_VALUE like CONCAT(CONCAT('%',#{eigenValue,jdbcType=VARCHAR}),'%')

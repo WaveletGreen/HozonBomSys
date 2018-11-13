@@ -23,11 +23,11 @@ public class User implements UserDetails {
         super();
     }
 
-    public User(int id) {
+    public User(Integer id) {
         this.id = id;
     }
 
-    private int id;
+    private Integer id;
     private String login;
     private String password;
     private String userName;
@@ -62,6 +62,8 @@ public class User implements UserDetails {
                 return "user_name";
             case "groupId":
                 return "group_Id";
+            case "id":
+                return "id";
             default:
                 return null;
         }
@@ -84,11 +86,11 @@ public class User implements UserDetails {
         this.roleArray = roleArray;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

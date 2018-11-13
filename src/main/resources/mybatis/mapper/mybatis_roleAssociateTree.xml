@@ -6,7 +6,7 @@
 		<result property="treeId" column="tree_id"/>
 	</resultMap>
 
-	<!-- 根据菜单ID来删除关联的菜单数据 -->
+	<!-- 1根据菜单ID来删除关联的菜单数据 -->
 	<delete id="removeTreeByTreeId" parameterType="com.connor.hozon.bom.sys.entity.Tree">
 		delete from role_associate_tree where tree_id = #{id}
 	</delete>
@@ -41,7 +41,8 @@
 
 	<!--分页查询-->
 	<select id="findByPage" parameterType="com.connor.hozon.bom.sys.entity.QueryRoleAssociateTree" resultMap="RoleAssociateTreeMap">
-		SELECT role_id,tree_id FROM role_associate_tree
+		select * from(
+		SELECT role_id,tree_id,rownum as rn FROM role_associate_tree
 		WHERE 1=1
 		<if test="roleId!=null and roleId!='' "  >
 		AND role_id=#{roleId}
@@ -52,7 +53,17 @@
 		<if test="sort!= null">
 		order by ${sort} ${order}
 		</if>
-		limit #{offset},#{limit}
+		)u
+		where 1=1
+		<!--limit #{offset},#{limit}-->
+		<if test="offset!=null">
+			and u.rn &gt;= ${offset}+1
+		</if>
+		<if test="limit!=null and  page!=null">
+			and u.rn &lt;= ${page}*${limit}
+		</if>
+		<!--limit #{offset},#{limit}-->
+
 	</select>
 
 	<!--统计-->

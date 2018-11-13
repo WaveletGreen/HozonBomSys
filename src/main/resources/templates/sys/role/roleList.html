@@ -36,8 +36,8 @@
     }
 
     // 开通账号写权限
-    function openWritePrivilege(id){
-        window.Ewin.dialog({title: '开通写权限', url:"role/writePrivilege?id="+id,width:700,height:310});
+    function openEdit(id){
+        window.Ewin.dialog({title: '开通写权限', url:"role/openEdit?id="+id,width:700,height:310});
     }
 
     function initTable(){
@@ -106,7 +106,9 @@
                     field: '',
                     title: '序号',
                     formatter: function (value, row, index) {
-                        return index+1;
+                        //return index+1;
+                        var temp = $('#role-table').bootstrapTable("getIndex");//返回（pageSize * (pageNumber-1) + 1）
+                        return temp + index;
                     }
                 },
                 // {
@@ -131,12 +133,15 @@
                     // sortable : true
                 },
                 {
-                    field : 'openWritePrivilege',
-                    title : '启用编辑',
+                    field : 'openEdit',
+                    title : '开通写权限',
                     align : 'center',
                     valign : 'middle',
                     formatter: function (value,row,index) {
-                        return '<a href="#" onclick="openWritePrivilege('+row.id+')" >启用</a>';
+                        if(row.name=='ROLE_ADMIN'){
+                            return '<a>无需开通</a>';
+                        }
+                        return '<a href="#" onclick="openEdit('+row.id+')" >开通</a>';
                     }
                 }
             ]

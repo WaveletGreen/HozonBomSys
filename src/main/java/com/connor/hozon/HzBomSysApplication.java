@@ -2,7 +2,6 @@ package com.connor.hozon;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.embedded.ConfigurableEmbeddedServletContainer;
 import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomizer;
@@ -18,7 +17,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @SpringBootApplication(
         scanBasePackages = {"sql", "integration.service", "com.connor.hozon"})
 @EnableTransactionManagement
-//@ServletComponentScan
 public class HzBomSysApplication extends SpringBootServletInitializer {
 
     @Override

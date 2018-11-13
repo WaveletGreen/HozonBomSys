@@ -7,143 +7,85 @@ import com.alibaba.fastjson.serializer.SerializerFeature;
  * Created by haozt on 2018/5/22
  */
 public class Result {
-    public static ResultMessage build() {
-        return new ResultMessage();
+    private boolean success = true;
+    private String errMsg = null;
+    private Object data = null;
+    private Object obj = null;
+
+    public Result() {
     }
 
-    public static ResultMessage build(Object data) {
-        return new ResultMessage(data);
-    }
-    public static MoreResultMessage build(Object data,Object externalObject ) {
-        return new MoreResultMessage(data,externalObject );
+    public Result(Object data) {
+        this.data = data;
     }
 
-    public static ResultMessage build(boolean success, String errMsg) {
-        return new ResultMessage(success, errMsg);
+    public Result(boolean success, String errMsg) {
+        this.success = success;
+        this.errMsg = errMsg;
     }
 
-    public static ResultMessage build(boolean success, int errCode,String errMsg) {
-        return new ResultMessage(success, errCode,errMsg);
+    public Result(boolean success, String errMsg, Object data) {
+        this.success = success;
+        this.errMsg = errMsg;
+        this.data = data;
     }
 
-    public static ResultMessage build(boolean success, String errMsg, Object data) {
-        return new ResultMessage(success, errMsg, data);
+    public Result(Object data, Object obj) {
+        this.data = data;
+        this.obj = obj;
     }
 
-    public static class ResultMessage {
 
-        private boolean success = true;
-        private String errMsg = null;
-        private int errCode = 0;
-        private Object data = null;
-
-        public ResultMessage() {
-
-        }
-
-        public ResultMessage(Object data) {
-            this.data = data;
-        }
-
-        public ResultMessage(boolean success, String errMsg) {
-            this.success = success;
-            this.errMsg = errMsg;
-        }
-
-        public ResultMessage(boolean success, int errCode,String errMsg) {
-            this.success = success;
-            this.errMsg = errMsg;
-            this.errCode = errCode;
-        }
-
-        public ResultMessage(boolean success, String errMsg, Object data) {
-            this.success = success;
-            this.errMsg = errMsg;
-            this.data = data;
-        }
-
-        public Integer getErrCode() {
-            return errCode;
-        }
-
-        public boolean isSuccess() {
-            return success;
-        }
-
-        public ResultMessage setSuccess(boolean success) {
-            this.success = success;
-            return this;
-        }
-
-        public String getErrMsg() {
-            return errMsg;
-        }
-
-        public ResultMessage setErrMsg(String errMsg) {
-            this.errMsg = errMsg;
-            return this;
-        }
-
-        public Object getData() {
-            return data;
-        }
-
-        public ResultMessage setData(Object data) {
-            this.data = data;
-            return this;
-        }
-
+    public static Result build(){
+        return new Result();
     }
 
-    public static class MoreResultMessage {
+    public static Result build(Object data){
+        return new Result(data);
+    }
 
-        private boolean success = true;
-        private String errMsg = null;
-        private Object data = null;
+    public static Result build(boolean success, String errMsg){
+        return new Result(success,errMsg);
+    }
 
-        private Object externalObject = null;
+    public static Result build(Object data, Object obj){
+        return new Result(data,obj);
+    }
 
-        public Object getExternalObject() {
-            return externalObject;
-        }
+    public static Result build(boolean success, String errMsg,Object obj){
+        return new Result(success,errMsg,obj);
+    }
 
-        public void setExternalObject(Object externalObject) {
-            this.externalObject = externalObject;
-        }
+    public Object getObj() {
+        return obj;
+    }
 
+    public void setObj(Object obj) {
+        this.obj = obj;
+    }
 
-        public MoreResultMessage(Object data,Object externalObject) {
-            this.data = data;
-            this.externalObject = externalObject;
-        }
+    public boolean isSuccess() {
+        return success;
+    }
 
-        public boolean isSuccess() {
-            return success;
-        }
+    public void setSuccess(boolean success) {
+        this.success = success;
+    }
 
-        public MoreResultMessage setSuccess(boolean success) {
-            this.success = success;
-            return this;
-        }
+    public String getErrMsg() {
+        return errMsg;
+    }
 
-        public String getErrMsg() {
-            return errMsg;
-        }
+    public void setErrMsg(String errMsg) {
+        this.errMsg = errMsg;
+    }
 
-        public MoreResultMessage setErrMsg(String errMsg) {
-            this.errMsg = errMsg;
-            return this;
-        }
+    public Object getData() {
+        return data;
+    }
 
-        public Object getData() {
-            return data;
-        }
-
-        public MoreResultMessage setData(Object data) {
-            this.data = data;
-            return this;
-        }
-
+    public void setData(Object data) {
+        this.data = data;
     }
 
 }

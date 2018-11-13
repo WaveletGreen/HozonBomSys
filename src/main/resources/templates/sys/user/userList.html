@@ -128,7 +128,9 @@
                     field: '',
                     title: '序号',
                     formatter: function (value, row, index) {
-                        return index+1;
+                        var temp = $table.bootstrapTable("getIndex");//返回（pageSize * (pageNumber-1) + 1）
+                        return temp + index;
+                        //return index+1;
                     }
                 },
                 // {
@@ -201,7 +203,6 @@
                     align : 'center',
                     valign : 'middle',
                     formatter: function (value, row, index) {
-                        console.log(row)
                         if(row.state=='1'){
                             return '<a href="#" onclick="userControl(0,'+row.id+')" >禁用</a>';
                         }else{
@@ -211,6 +212,8 @@
                 }]
         });
     }
+
+
 </script>
 </body>
 </html>

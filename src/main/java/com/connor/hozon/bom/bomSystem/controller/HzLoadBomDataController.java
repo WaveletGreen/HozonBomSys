@@ -79,7 +79,6 @@ public class HzLoadBomDataController {
     @RequestMapping(value = "/loadColumns", method = RequestMethod.POST)
     @ResponseBody
     public JSONArray loadColumns(@RequestParam String projectPuid) {
-
         return hzBomDataService.doLoadColumns(projectPuid);
     }
 

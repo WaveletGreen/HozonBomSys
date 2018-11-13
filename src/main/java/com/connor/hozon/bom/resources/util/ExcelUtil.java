@@ -20,7 +20,7 @@ import java.util.Properties;
 /**
  * @Author: haozt
  * @Date: 2018/8/21
- * @Description:
+ * @Description:excel 操作工具类
  */
 public class ExcelUtil {
     private static final String EXTENSION_XLS = "xls";
@@ -341,7 +341,6 @@ public class ExcelUtil {
      * @return
      * @throws Exception
      */
-    //public static boolean writeExcel(HttpServletResponse response, String fileName, String[] title, List<String[]> dataList) throws Exception {
     public static boolean writeExcel(String fileName, String[] title, List<String[]> dataList, String str, HttpServletRequest request) throws Exception {
         boolean flag = false;
         try {

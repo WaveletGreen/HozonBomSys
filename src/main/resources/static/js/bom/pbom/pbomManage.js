@@ -474,6 +474,9 @@ function initTable(pBomUrl) {
                             })
                         }
                     },
+                    // {
+                    //
+                    // }
                 ],
             });
             $table.bootstrapTable('hideColumn', 'level');
