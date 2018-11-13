@@ -23,6 +23,7 @@ import com.connor.hozon.bom.resources.service.RefreshMbomThread;
 import com.connor.hozon.bom.resources.service.bom.HzMbomService;
 import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.resources.util.PrivilegeUtil;
+import com.connor.hozon.bom.resources.util.StringUtil;
 import com.connor.hozon.bom.sys.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -240,16 +241,10 @@ public class HzMbomServiceImpl implements HzMbomService{
 
     @Override
     public WriteResultRespDTO deleteMbomRecord(DeleteHzMbomReqDTO reqDTO) {
-        WriteResultRespDTO respDTO = new WriteResultRespDTO();
         try {
-            boolean b = PrivilegeUtil.writePrivilege();
-            if(!b){
-                return WriteResultRespDTO.getFailPrivilege();
-            }
-            if (reqDTO.getPuids() == null || reqDTO.getPuids().equals("") || reqDTO.getProjectId() == null || reqDTO.getProjectId().equals("")) {
-                respDTO.setErrMsg("非法参数！");
-                respDTO.setErrCode(WriteResultRespDTO.FAILED_CODE);
-                return respDTO;
+
+            if (StringUtil.isEmpty(reqDTO.getPuids()) || StringUtil.isEmpty(reqDTO.getProjectId())) {
+                return WriteResultRespDTO.IllgalArgument();
             }
             String bomPuids[] = reqDTO.getPuids().trim().split(",");
             //需要判断层级关系 并更改层级关系
@@ -262,20 +257,19 @@ public class HzMbomServiceImpl implements HzMbomService{
                 List<HzMbomLineRecord> lineRecords = hzMbomRecordDAO.getHzMbomTree(treeQuery);//自己
                 Set<String> set = new HashSet<>();//去除重复
                 if (ListUtil.isNotEmpty(lineRecords)) {
-                    for (int i = 0; i < lineRecords.size(); i++) {
-                        HzMbomTreeQuery hzMbomTreeQuery = new HzMbomTreeQuery();
-                        hzMbomTreeQuery.setPuid(lineRecords.get(0).getParentUid());
-                        hzMbomTreeQuery.setProjectId(reqDTO.getProjectId());
-                        List<HzMbomLineRecord> records = hzMbomRecordDAO.getHzMbomTree(hzMbomTreeQuery);//父亲
-                        if (ListUtil.isNotEmpty(records)) {
-                            if (records.size() - lineRecords.size() == 1) {
-                                HzMbomLineRecord hzMbomLineRecord = records.get(0);
-                                hzMbomLineRecord.setIsHas(0);
-                                hzMbomLineRecord.setIsPart(1);
-                                hzMbomRecordDAO.update(hzMbomLineRecord);
-                            }
-
+                    HzMbomTreeQuery hzMbomTreeQuery = new HzMbomTreeQuery();
+                    hzMbomTreeQuery.setPuid(lineRecords.get(0).getParentUid());
+                    hzMbomTreeQuery.setProjectId(reqDTO.getProjectId());
+                    List<HzMbomLineRecord> records = hzMbomRecordDAO.getHzMbomTree(hzMbomTreeQuery);//父亲
+                    if (ListUtil.isNotEmpty(records)) {
+                        if (records.size() - lineRecords.size() == 1) {
+                            HzMbomLineRecord hzMbomLineRecord = records.get(0);
+                            hzMbomLineRecord.setIsHas(0);
+                            hzMbomLineRecord.setIsPart(1);
+                            hzMbomRecordDAO.update(hzMbomLineRecord);
                         }
+                    }
+                    for (int i = 0; i < lineRecords.size(); i++) {
                         set.add(lineRecords.get(i).geteBomPuid());
                     }
                 }
@@ -289,9 +283,9 @@ public class HzMbomServiceImpl implements HzMbomService{
                 if (ListUtil.isNotEmpty(list)) {
                     hzMbomRecordDAO.deleteList(list);//mabatis 做批量更新时 返回值为-1 所以这里根据异常情况来判断成功与否
                     //将删除数据发送到SAP
-                    List<String> puids = new ArrayList<>();
-                    list.stream().filter(l -> l.getPuid() != null).forEach(l -> puids.add(l.getPuid()));
-                    synBomService.deleteByUids(reqDTO.getProjectId(), puids);
+//                    List<String> puids = new ArrayList<>();
+//                    list.stream().filter(l -> l.getPuid() != null).forEach(l -> puids.add(l.getPuid()));
+//                    synBomService.deleteByUids(reqDTO.getProjectId(), puids);
                 }
 
             }
