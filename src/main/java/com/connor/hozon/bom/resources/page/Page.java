@@ -1,13 +1,10 @@
 package com.connor.hozon.bom.resources.page;
 
-import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 
 /**
- * 分页信息 第一页从1开始
+ * 分页工具类
  */
 public class Page<T> {
 
