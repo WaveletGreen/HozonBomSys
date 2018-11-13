@@ -10,19 +10,19 @@
                placeholder="请输入变更单号"/>
     </div>
     <!--<div class="form-group">-->
-        <!--<label for="lineId">创建时间<span>*</span></label>-->
-        <!--<input class="form-control" id="lineId2" name="lineId" type="text"-->
-               <!--placeholder="请输入零件号"/>-->
+    <!--<label for="lineId">创建时间<span>*</span></label>-->
+    <!--<input class="form-control" id="lineId2" name="lineId" type="text"-->
+    <!--placeholder="请输入零件号"/>-->
     <!--</div>-->
     <!--<div class="form-group">-->
-        <!--<label for="lineId3">部门</label>-->
-        <!--<input class="form-control" id="lineId3" name="lineId" type="text"-->
-               <!--placeholder="请输入部门"/>-->
+    <!--<label for="lineId3">部门</label>-->
+    <!--<input class="form-control" id="lineId3" name="lineId" type="text"-->
+    <!--placeholder="请输入部门"/>-->
     <!--</div>-->
     <!--<div class="form-group">-->
-        <!--<label for="lineId">发起人<span>*</span></label>-->
-        <!--<input class="form-control" id="lineId4" name="lineId" type="text"-->
-               <!--placeholder="请输入发起人"/>-->
+    <!--<label for="lineId">发起人<span>*</span></label>-->
+    <!--<input class="form-control" id="lineId4" name="lineId" type="text"-->
+    <!--placeholder="请输入发起人"/>-->
     <!--</div>-->
     <div class="form-group">
         <label for="tel">联系电话</label>
@@ -68,76 +68,94 @@
 <script th:inline="javascript">
     <![CDATA[
     $(function () {
-            $('#changeForm').bootstrapValidator({
-                message: 'This value is not valid',
-                feedbackIcons: {
-                    valid: 'glyphicon glyphicon-ok',
-                    invalid: 'glyphicon glyphicon-remove',
-                    validating: 'glyphicon glyphicon-refresh'
-                },
-                fields: {
-                    changeNo: {
-                        message: '变更单号验证失败',
-                        validators: {
-                            notEmpty: {
-                                message: '变更单号不能为空'
-                            }
-                        }
-                    },
-                }
-            });
-            // 绑定dialog的确定按钮的监听事件
-            $("#btnOk", window.top.document).click(function () {
-                var bootstrapValidator = $("#changeForm", window.top.document).data('bootstrapValidator');
-                bootstrapValidator.validate();
-                if (bootstrapValidator.isValid()) {
-                    var url = $("#changeForm", window.top.document).attr('action');
-                    // var projectId= $("#project", window.top.document).val();
-                    var myData = JSON.stringify({
-                        "changeNo": $("#changeNo").val(),
-                        "tel": $("#tel").val(),
-                        "state": $("state").val(),
-                        "changeType": $("#changeType").val(),
-                        "relationChangeNo": $("#relationChangeNo").val(),
-                        "marketType": $("#marketType").val(),
-                        "projectStage": $("#projectStage").val(),
-                        "remark": $("#remark").val(),
-
-                        "projectId":$("#project", window.top.document).val(),
-                    });
-
-                    $.ajax({
-                        contentType:
-                            "application/json",
-                        type:
-                            'POST',
-                        url: url,
-                        data:  myData,
-                        success:
-                            function (result) {
-                                $('.modal-dialog', window.top.document).parent('div').remove()
-                                $('body', window.top.document).find('.modal-backdrop').remove();
-                                // jquery 调用刷新当前操作的table页面的refresh方法
-                                $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
-                                /*if (result)
-                                    window.Ewin.alert({message: '修改数据成功!'});
-                                else
-                                    window.Ewin.alert({message: '修改数据失败!'});*/
-                                // window.Ewin.alert({message:result.errMsg});
-                                if (result.success) {
-                                    layer.msg('修改成功', {icon: 1, time: 2000})
-                                }
-                                else if (!result.success) {
-                                    window.Ewin.alert({message: result.errMsg})
+        $('#changeForm').bootstrapValidator({
+            message: 'This value is not valid',
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            fields: {
+                changeNo: {
+                    message: '变更单号验证失败',
+                    validators: {
+                        notEmpty: {
+                            message: '变更单号不能为空'
+                        },
+                        stringLength: {
+                            min: 12,
+                            max: 12,
+                            message: '变更单号长度必须是12位'
+                        },
+                        threshold: 12,
+                        remote: {//ajax验证。server result:{"valid",true or false} 向服务发送当前input name值，获得一个json数据。例表示正确：{"valid",true}
+                            url: "change/exist",//验证地址
+                            data: function (validator) {// 获取需要传送到后台的验证的数据
+                                return {
+                                    changeNo: $('#changeNo').val()
                                 }
                             },
-                        error: function (status) {
-                            window.Ewin.alert({message: status.status + ':修改数据失败!'});
-                        }
-                    });
+                            message: '变更单号已存在',//提示消息
+                            // delay :  500,
+                            type: 'POST'//请求方式，
+                        },
+                    }
+
                 }
-            });
-        })
+            }
+        });
+        // 绑定dialog的确定按钮的监听事件
+        $("#btnOk", window.top.document).click(function () {
+            var bootstrapValidator = $("#changeForm", window.top.document).data('bootstrapValidator');
+            bootstrapValidator.validate();
+            if (bootstrapValidator.isValid()) {
+                var url = $("#changeForm", window.top.document).attr('action');
+                // var projectId= $("#project", window.top.document).val();
+                var myData = JSON.stringify({
+                    "changeNo": $("#changeNo").val(),
+                    "tel": $("#tel").val(),
+                    "state": $("state").val(),
+                    "changeType": $("#changeType").val(),
+                    "relationChangeNo": $("#relationChangeNo").val(),
+                    "marketType": $("#marketType").val(),
+                    "projectStage": $("#projectStage").val(),
+                    "remark": $("#remark").val(),
+
+                    "projectId": $("#project", window.top.document).val(),
+                });
+
+                $.ajax({
+                    contentType:
+                        "application/json",
+                    type:
+                        'POST',
+                    url: url,
+                    data: myData,
+                    success:
+                        function (result) {
+                            $('.modal-dialog', window.top.document).parent('div').remove()
+                            $('body', window.top.document).find('.modal-backdrop').remove();
+                            // jquery 调用刷新当前操作的table页面的refresh方法
+                            $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
+                            /*if (result)
+                                window.Ewin.alert({message: '修改数据成功!'});
+                            else
+                                window.Ewin.alert({message: '修改数据失败!'});*/
+                            // window.Ewin.alert({message:result.errMsg});
+                            if (result.success) {
+                                layer.msg('修改成功', {icon: 1, time: 2000})
+                            }
+                            else if (!result.success) {
+                                window.Ewin.alert({message: result.errMsg})
+                            }
+                        },
+                    error: function (status) {
+                        window.Ewin.alert({message: status.status + ':修改数据失败!'});
+                    }
+                });
+            }
+        });
+    })
     $(document).keydown(function (event) {
         if (event.keyCode == 13) {
             $('form').each(function () {
@@ -145,6 +163,17 @@
             });
         }
     });
+    // $("#changeNo").blur(function() {
+    //     var changeNo = $("#changeNo").val();
+    //     $.ajax({
+    //         url:"change/exist?changeNo="+changeNo,
+    //         success : function(result){
+    //             if (!result.success){
+    //                 window.Ewin.alert({message:'您输入的变更单号已存在'})
+    //             }
+    //         }
+    //     })
+    // })
     ]]>
 </script>
 <script th:src="@{/layer/layer.js}"></script>

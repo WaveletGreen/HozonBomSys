@@ -7,3 +7,11 @@
 .after_the {
     margin-top: 8px;
 }
+.tableNormalStyle tr td {
+    /* 	调整单个单元格的大小 */
+    min-width: 100px;
+    white-space: nowrap;
+}
+.tableNormalStyle tr .bs-checkbox {
+    min-width: 50px;!important;
+}
