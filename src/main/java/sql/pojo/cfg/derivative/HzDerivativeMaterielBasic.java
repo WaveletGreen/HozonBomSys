@@ -71,4 +71,7 @@ public class HzDerivativeMaterielBasic {
     private String dmbReserved5;
 
     private String dmbSpecialFeatureUid;
+
+    private Integer dmbStatus;
+
 }

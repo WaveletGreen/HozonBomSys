@@ -78,6 +78,11 @@
         <mapper resource="sql/mapper/cfg/derivative/HzDerivativeMaterielBasicMapper.xml"/>
         <mapper resource="sql/mapper/cfg/derivative/HzDerivativeMaterielDetailMapper.xml"/>
         <mapper resource="sql/mapper/cfg/derivative/HzMaterielCfgBeanMapper.xml"/>
+        <!--derivative变更 -->
+        <mapper resource="sql/mapper/cfg/derivative/HzMDBasicChangeBeanMapper.xml"/>
+        <mapper resource="sql/mapper/cfg/derivative/HzMDDetailChangeBeanMapper.xml"/>
+
+
         <!--fullCfg-->
         <mapper resource="sql/mapper/cfg/fullCfg/HzCfg0BomLineOfModelMapper.xml"/>
         <mapper resource="sql/mapper/cfg/fullCfg/HzCfg0OfBomLineRecordMapper.xml"/>
@@ -85,6 +90,10 @@
         <mapper resource="sql/mapper/cfg/fullCfg/HzFullCfgMainMapper.xml"/>
         <mapper resource="sql/mapper/cfg/fullCfg/HzFullCfgModelMapper.xml"/>
         <mapper resource="sql/mapper/cfg/fullCfg/HzFullCfgWithCfgMapper.xml"/>
+        <!--fullCfg变更-->
+        <mapper resource="sql/mapper/cfg/fullCfg/HzFullCfgMainChangeMapper.xml"/>
+        <mapper resource="sql/mapper/cfg/fullCfg/HzFullCfgModelChangeMapper.xml"/>
+        <mapper resource="sql/mapper/cfg/fullCfg/HzFullCfgWithCfgChangeMapper.xml"/>
         <!--main-->
         <mapper resource="sql/mapper/cfg/main/HzCfg0MainRecordMapper.xml"/>
         <!--model-->

@@ -423,6 +423,28 @@ function gotIt(result) {
         column.push(josn);
         dynamicTitle.push(data[i]);
     }
+    column.push(
+    {
+        field: 'cfgStatus',
+            title: '状态',
+        align: 'center',
+        valign: 'middle',
+        formatter: function (value, row, index) {
+            var status = row.status;
+        if (status == 999 || "999" == status) {
+            return "<span style='color: #00B83F'>已生效</span>";
+        }
+        if (status == 10 || "10" == status) {
+                return "<span style='color: #e69800'>VWO审核中</span>";
+        }
+        if (0 == status|| "0" == status||"null" == status || "" == status) {
+            return "<span style='color: #a97f89'>草稿状态</span>";
+        }
+        else {
+            return "<span style='color: #a90009'>未知状态</span>";
+        }
+    }
+    });
     $table.bootstrapTable({
         url: "materielV2/loadComposes?projectPuid=" + projectUid,
         method: 'get',

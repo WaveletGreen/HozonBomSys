@@ -209,4 +209,15 @@ public class HzBomAllCfgController {
     public JSONObject saveBomLinePiont(@RequestBody Map<String, Map<String, String>> dataMap) {
         return hzBomAllCfgService.saveBomLinePiont(dataMap);
     }
+
+    /**
+     * 发起变更表单
+     * @param projectId 项目id
+     * @return
+     */
+    @RequestMapping("getVwo")
+    @ResponseBody
+    public JSONObject getVwo(String projectId){
+        return hzBomAllCfgService.getVwo(projectId);
+    }
 }

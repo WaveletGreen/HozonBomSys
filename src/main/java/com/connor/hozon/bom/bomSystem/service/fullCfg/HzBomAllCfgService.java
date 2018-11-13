@@ -7,10 +7,8 @@
 package com.connor.hozon.bom.bomSystem.service.fullCfg;
 
 import com.alibaba.fastjson.JSON;
+import com.connor.hozon.bom.bomSystem.dao.fullCfg.*;
 import com.connor.hozon.bom.bomSystem.dao.model.HzCfg0ModelDetailDao;
-import com.connor.hozon.bom.bomSystem.dao.fullCfg.HzFullCfgMainDao;
-import com.connor.hozon.bom.bomSystem.dao.fullCfg.HzFullCfgModelDao;
-import com.connor.hozon.bom.bomSystem.dao.fullCfg.HzFullCfgWithCfgDao;
 import com.connor.hozon.bom.bomSystem.dto.HzFeatureQueryDto;
 import com.connor.hozon.bom.bomSystem.helper.DateStringHelper;
 import com.connor.hozon.bom.bomSystem.helper.ProjectHelper;
@@ -36,9 +34,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import sql.pojo.bom.HzBomLineRecord;
 import sql.pojo.cfg.cfg0.HzCfg0Record;
-import sql.pojo.cfg.fullCfg.HzFullCfgMain;
-import sql.pojo.cfg.fullCfg.HzFullCfgModel;
-import sql.pojo.cfg.fullCfg.HzFullCfgWithCfg;
+import sql.pojo.cfg.fullCfg.*;
 import sql.pojo.cfg.main.HzCfg0MainRecord;
 import sql.pojo.cfg.model.HzCfg0ModelDetail;
 import sql.pojo.cfg.model.HzCfg0ModelRecord;
@@ -102,6 +98,13 @@ public class HzBomAllCfgService {
     @Autowired
     ProjectHelper projectHelper;
 
+    /**变更**/
+    @Autowired
+    HzFullCfgMainChangeDao hzFullCfgMainChangeDao;
+    @Autowired
+    HzFullCfgModelChangeDao hzFullCfgModelChangeDao;
+    @Autowired
+    HzFullCfgWithCfgChangeDao hzFullCfgWithCfgChangeDao;
     private static final String[] selfDesc =
             {
                     "operationType"/*操作类型*/,
@@ -335,6 +338,7 @@ public class HzBomAllCfgService {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         mainJson.put("effectiveDate", hzFullCfgMain.getEffectiveDate() == null ? "" : sdf.format(hzFullCfgMain.getEffectiveDate()));
 
+        mainJson.put("status",hzFullCfgMain.getStatus());
 
         respond.put("data", _data);
         respond.put("model", _model);
@@ -958,5 +962,61 @@ public class HzBomAllCfgService {
             respons.put("updateFlag", false);
         }
         return respons;
+    }
+
+    public JSONObject getVwo(String projectId) {
+        JSONObject result = new JSONObject();
+        //main表数据集
+        HzFullCfgMain hzFullCfgMain = hzFullCfgMainDao.selectByProjectId(projectId);
+        //获取该项目下的所有车型模型
+        List<HzFullCfgModel> hzFullCfgModels = hzFullCfgModelDao.selectByMainPuid(hzFullCfgMain.getId());
+        //搜素所属有2Y层
+        List<HzFullCfgWithCfg> hzFullCfgWithCfgs = hzFullCfgWithCfgDao.selectByMainID(hzFullCfgMain.getId());
+
+        //变更主数据集合
+        HzFullCfgMainChange hzFullCfgMainChange = new HzFullCfgMainChange();
+        hzFullCfgMainChange.srcSetChange(hzFullCfgMain);
+        //变更车型模型集合
+        List<HzFullCfgModelChange> hzFullCfgModelChanges = new ArrayList<HzFullCfgModelChange>();
+        for(HzFullCfgModel hzFullCfgModel : hzFullCfgModels){
+            HzFullCfgModelChange hzFullCfgModelChange = new HzFullCfgModelChange();
+            hzFullCfgModelChange.srcSetChange(hzFullCfgModel);
+            hzFullCfgModelChanges.add(hzFullCfgModelChange );
+        }
+        //变更2Y层数据
+        List<HzFullCfgWithCfgChange> hzFullCfgWithCfgChanges = new ArrayList<HzFullCfgWithCfgChange>();
+        for(HzFullCfgWithCfg hzFullCfgWithCfg : hzFullCfgWithCfgs){
+            HzFullCfgWithCfgChange hzFullCfgWithCfgChange = new HzFullCfgWithCfgChange();
+            hzFullCfgWithCfgChange.srcSetChange(hzFullCfgWithCfg);
+            hzFullCfgWithCfgChanges.add(hzFullCfgWithCfgChange);
+        }
+
+        //跟新变更主数据
+        int insertMainNum = hzFullCfgMainChangeDao.insert(hzFullCfgMainChange);
+        if(insertMainNum<=0){
+            result.put("status",false);
+            result.put("msg","跟新变更主数据失败");
+            return result;
+        }
+        //跟新变更车型模型
+        int insertMidelNum = hzFullCfgModelChangeDao.insertList(hzFullCfgModelChanges);
+        if(insertMidelNum<=0){
+            result.put("status",false);
+            result.put("msg","跟新变更车型模型数据失败");
+            return result;
+        }
+        //跟新变更2Y层数据
+        int insertWithCfgNum = hzFullCfgWithCfgChangeDao.insertList(hzFullCfgWithCfgChanges);
+        if(insertWithCfgNum<=0){
+            result.put("status",false);
+            result.put("msg","跟新变更2Y层数据失败");
+            return result;
+        }
+        //跟新主数据变更状态
+        hzFullCfgMain.setStatus("变更流程中");
+        hzFullCfgMainDao.updateByPrimaryKey(hzFullCfgMain);
+        result.put("status",true);
+        result.put("msg","发起变更成功");
+        return result;
     }
 }

@@ -7,9 +7,7 @@
 package com.connor.hozon.bom.bomSystem.controller;
 
 import com.connor.hozon.bom.bomSystem.controller.integrate.ExtraIntegrate;
-import com.connor.hozon.bom.bomSystem.dao.derivative.HzCfg0ToModelRecordDao;
-import com.connor.hozon.bom.bomSystem.dao.derivative.HzDerivativeMaterielBasicDao;
-import com.connor.hozon.bom.bomSystem.dao.derivative.HzDerivativeMaterielDetailDao;
+import com.connor.hozon.bom.bomSystem.dao.derivative.*;
 import com.connor.hozon.bom.bomSystem.dao.modelColor.HzCfg0ModelColorDao;
 import com.connor.hozon.bom.bomSystem.dto.cfg.compose.HzComposeDelDto;
 import com.connor.hozon.bom.bomSystem.dto.cfg.compose.HzComposeMFDTO;
@@ -37,10 +35,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import sql.pojo.cfg.cfg0.HzCfg0Record;
-import sql.pojo.cfg.derivative.HzCfg0ModelFeature;
-import sql.pojo.cfg.derivative.HzCfg0ToModelRecord;
-import sql.pojo.cfg.derivative.HzDerivativeMaterielBasic;
-import sql.pojo.cfg.derivative.HzDerivativeMaterielDetail;
+import sql.pojo.cfg.derivative.*;
 import sql.pojo.cfg.main.HzCfg0MainRecord;
 import sql.pojo.cfg.model.HzCfg0ModelRecord;
 import sql.pojo.cfg.modelColor.HzCfg0ModelColor;
@@ -108,6 +103,12 @@ public class HzMaterielFeatureV2Controller extends ExtraIntegrate {
     HzDerivativeMaterielBasicDao hzDerivativeMaterielBasicDao;
     @Autowired
     HzDerivativeMaterielDetailDao hzDerivativeMaterielDetailDao;
+    /**主数据变更**/
+    @Autowired
+    HzDMBasicChangeDao hzDMBasicChangeDao;
+    /**从数据变更**/
+    @Autowired
+    HzDMDetailChangeDao hzDMDetailChangeDao;
     /***日志*/
     private static Logger logger = LoggerFactory.getLogger(HzMaterielFeatureV2Controller.class);
 
@@ -402,6 +403,11 @@ public class HzMaterielFeatureV2Controller extends ExtraIntegrate {
         return _result;
     }
 
+    /**
+     * 衍生物料变更
+     * @param params
+     * @return
+     */
     @RequestMapping("/getVWO")
     @ResponseBody
     public JSONObject getVWO(@RequestBody Map<String, Object> params){
@@ -413,6 +419,43 @@ public class HzMaterielFeatureV2Controller extends ExtraIntegrate {
         List<HzDerivativeMaterielBasic> hzDerivativeMaterielBasics = hzDerivativeMaterielBasicDao.selectByPuids(puids);
         //查询从数据
         List<HzDerivativeMaterielDetail> hzDerivativeMaterielDetails = hzDerivativeMaterielDetailDao.selectByBasics(hzDerivativeMaterielBasics);
+
+        //根据主数据生成变更主数据
+        List<HzDMBasicChangeBean> hzDMBasicChangeBeans = new ArrayList<HzDMBasicChangeBean>();
+        for(HzDerivativeMaterielBasic hzDerivativeMaterielBasic : hzDerivativeMaterielBasics){
+            HzDMBasicChangeBean hzDMBasicChangeBean = new HzDMBasicChangeBean();
+            hzDMBasicChangeBean.setFormId(1L);
+            hzDMBasicChangeBean.srcSetChange(hzDerivativeMaterielBasic);
+            hzDMBasicChangeBeans.add(hzDMBasicChangeBean);
+        }
+        int basicInsertNum = hzDMBasicChangeDao.insertList(hzDMBasicChangeBeans);
+        if(basicInsertNum<hzDMBasicChangeBeans.size()){
+            result.put("status",false);
+            result.put("msg","跟新变更主数据失败");
+            return result;
+        }
+        //根据从数据生成变更从数据
+        List<HzDMDetailChangeBean> hzDMDetailChangeBeans = new ArrayList<HzDMDetailChangeBean>();
+        for(HzDerivativeMaterielDetail hzDerivativeMaterielDetail : hzDerivativeMaterielDetails){
+            HzDMDetailChangeBean hzDMDetailChangeBean = new HzDMDetailChangeBean();
+            hzDMDetailChangeBean.setFormId(1L);
+            hzDMDetailChangeBean.srcSetChange(hzDerivativeMaterielDetail );
+            hzDMDetailChangeBeans.add(hzDMDetailChangeBean);
+        }
+        int detialnum = hzDMDetailChangeDao.insertList(hzDMDetailChangeBeans);
+        if(detialnum<hzDMDetailChangeBeans.size()){
+            result.put("status",false);
+            result.put("msg","跟新变更主数据失败");
+            return result;
+        }
+
+        //修改源主数据状态为在流程表单中
+        for(HzDerivativeMaterielBasic hzDerivativeMaterielBasic : hzDerivativeMaterielBasics){
+            hzDerivativeMaterielBasic.setDmbStatus(10);
+        }
+        int srcBasicUpdateNum = hzDerivativeMaterielBasicDao.updateByBasicList(hzDerivativeMaterielBasics);
+        result.put("status",true);
+        result.put("msg","发起VWO流程成功");
         return result;
     }
 
