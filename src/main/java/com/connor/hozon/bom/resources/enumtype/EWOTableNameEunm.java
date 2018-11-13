@@ -14,9 +14,7 @@ public enum EWOTableNameEunm {
         this.tableName = tableName;
     }
 
-    /**
-     * 零件来源信息
-     */
+
     private String tableName;
 
     public String getTableName() {
