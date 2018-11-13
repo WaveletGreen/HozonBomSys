@@ -94,7 +94,7 @@
   </update>
 
   <!--delete-->
-  <delete id="HzChangeOrderDAOImpl_deleteById" parameterType="java.lang.Double">
+  <delete id="HzChangeOrderDAOImpl_deleteById" parameterType="java.lang.Long">
     delete from HZ_CHANGE_ORDER_RECORD
     where ID = #{id,jdbcType=DOUBLE}
   </delete>
@@ -102,7 +102,7 @@
 
 
 <!--select-->
-  <select id="HzChangeOrderDAOImpl_findHzChangeOrderRecordById" parameterType="java.lang.Double" resultMap="BaseResultMap">
+  <select id="HzChangeOrderDAOImpl_findHzChangeOrderRecordById" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />
     from HZ_CHANGE_ORDER_RECORD
