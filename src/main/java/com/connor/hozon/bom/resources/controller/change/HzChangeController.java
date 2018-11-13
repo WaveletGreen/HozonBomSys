@@ -82,11 +82,17 @@ public class HzChangeController extends BaseController {
     @RequestMapping(value = "exist",method = RequestMethod.GET)
     public void deleteChangeFrom(String changeNo, HttpServletResponse response){
         WriteResultRespDTO resultRespDTO = hzChangeService.changeNoExist(changeNo);
-        toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(resultRespDTO),resultRespDTO.getErrMsg()),response);
+        JSONObject object = new JSONObject();
+        if(WriteResultRespDTO.isSuccess(resultRespDTO)){
+            object.put("valid",true);
+        }else {
+            object.put("valid",false);
+        }
+        toJSONResponse(object,response);
     }
 
     /**
-     * 获取EWO表单基本信息列表
+     * 获取变更表单列表
      * @param query
      */
     @RequestMapping(value = "order/list",method = RequestMethod.GET)

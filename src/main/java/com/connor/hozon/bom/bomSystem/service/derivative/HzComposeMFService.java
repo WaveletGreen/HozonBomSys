@@ -607,6 +607,14 @@ public class HzComposeMFService {
             _result.put("modeBasicDetail", feature.getpFeatureSingleVehicleCode());
             _result.put("modeBasicDetailDesc", feature.getpFeatureCnDesc());
             _result.put("cfg0MainPuid", modelRecord.getpCfg0ModelOfMainRecord());
+//            if(basics.get(i).getDmbStatus()==null||basics.get(i).getDmbStatus()==0){
+//                _result.put("status","草稿状态");
+//            }else if(basics.get(i).getDmbStatus()==10){
+//                _result.put("status","在流程表单中");
+//            }else if(basics.get(i).getDmbStatus()==999){
+//                _result.put("status","已发布");
+//            }
+            _result.put("status",basics.get(i).getDmbStatus());
             list.add(_result);
         }
         result.put("result", list);

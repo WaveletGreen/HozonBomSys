@@ -179,4 +179,13 @@
       </if>
       </where>
   </select>
+
+  <select id="HzChangeOrderDAOImpl_findHzChangeOrderRecordByProjectId" parameterType="java.lang.String" resultMap="BaseResultMap">
+      select
+        <include refid="Base_Column_List"/>
+      from
+        HZ_CHANGE_ORDER_RECORD
+      where
+        PROJECT_ID = #{projectUid,jdbcType=VARCHAR}
+  </select>
 </mapper>

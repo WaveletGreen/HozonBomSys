@@ -25,7 +25,7 @@ $(document).ready(function () {
                         window.Ewin.alert({message: data.errMsg});
                         return;
                     }
-                    var zNodes = data.externalObject;
+                    var zNodes = data.obj;
                     initZtree(zNodes);
                 },
             });
@@ -386,7 +386,7 @@ $(document).ready(function () {
                                         },
                                     }
                                 };
-                                var zNodes = data.externalObject;
+                                var zNodes = data.obj;
 
                                 $(document).ready(function () {
                                     $.fn.zTree.init($("#Ztree3"), setting, zNodes);
@@ -575,7 +575,7 @@ $(document).ready(function () {
                             },
                         }
                     };
-                    var zNodes = data.externalObject;
+                    var zNodes = data.obj;
 
                     $(document).ready(function () {
                         $.fn.zTree.init($("#Ztree3"), setting, zNodes);
