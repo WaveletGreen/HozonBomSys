@@ -22,6 +22,7 @@ import com.connor.hozon.bom.bomSystem.service.project.HzPlatformService;
 import com.connor.hozon.bom.bomSystem.service.project.HzProjectLibsService;
 import com.connor.hozon.bom.bomSystem.service.project.HzVehicleService;
 import com.connor.hozon.bom.common.util.user.UserInfo;
+import com.connor.hozon.bom.resources.mybatis.change.HzChangeOrderDAO;
 import com.connor.hozon.bom.sys.entity.User;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -38,6 +39,7 @@ import sql.pojo.cfg.fullCfg.*;
 import sql.pojo.cfg.main.HzCfg0MainRecord;
 import sql.pojo.cfg.model.HzCfg0ModelDetail;
 import sql.pojo.cfg.model.HzCfg0ModelRecord;
+import sql.pojo.change.HzChangeOrderRecord;
 import sql.pojo.project.HzBrandRecord;
 import sql.pojo.project.HzPlatformRecord;
 import sql.pojo.project.HzProjectLibs;
@@ -99,6 +101,8 @@ public class HzBomAllCfgService {
     ProjectHelper projectHelper;
 
     /**变更**/
+    @Autowired
+    HzChangeOrderDAO hzChangeOrderDAO;
     @Autowired
     HzFullCfgMainChangeDao hzFullCfgMainChangeDao;
     @Autowired
@@ -1018,5 +1022,9 @@ public class HzBomAllCfgService {
         result.put("status",true);
         result.put("msg","发起变更成功");
         return result;
+    }
+
+    public List<HzChangeOrderRecord> getChangeFroms(String projectUid) {
+        return hzChangeOrderDAO.findHzChangeOrderRecordByProjectId(projectUid);
     }
 }

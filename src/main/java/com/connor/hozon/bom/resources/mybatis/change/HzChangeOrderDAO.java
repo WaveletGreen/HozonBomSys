@@ -4,6 +4,8 @@ import com.connor.hozon.bom.resources.domain.query.HzChangeOrderByPageQuery;
 import com.connor.hozon.bom.resources.page.Page;
 import sql.pojo.change.HzChangeOrderRecord;
 
+import java.util.List;
+
 /**
  * @Author: haozt
  * @Date: 2018/11/12
@@ -52,4 +54,5 @@ public interface HzChangeOrderDAO {
      */
     Page<HzChangeOrderRecord> findHzChangeOrderRecordByPage(HzChangeOrderByPageQuery query);
 
+    List<HzChangeOrderRecord> findHzChangeOrderRecordByProjectId(String projectUid);
 }

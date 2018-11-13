@@ -488,16 +488,24 @@ $(document).ready(
                 });
             }),
             $("#getVwo").click(function () {
-                $.ajax({
-                    type : "GET",
-                    url : "bomAllCfg/getVwo?projectId="+getProjectUid(),
-                    success : function (result) {
-                        window.location.reload();
-                    },
-                    error : function (result) {
-
-                    }
+                window.Ewin.dialog({
+                    // 这个puid就是车型模型的puid，直接修改了车型模型的基本信息（在bom系统维护的字段）
+                    title: "选择变更表单",
+                    url: "bomAllCfg/setChangeFromPage?projectUid=" + getProjectUid(),
+                    gridId: "gridId",
+                    width: 450,
+                    height: 450
                 });
+                // $.ajax({
+                //     type : "GET",
+                //     url : "bomAllCfg/getVwo?projectId="+getProjectUid(),
+                //     success : function (result) {
+                //         window.location.reload();
+                //     },
+                //     error : function (result) {
+                //
+                //     }
+                // });
             })
         // ,
         // $("#export").click(function(){

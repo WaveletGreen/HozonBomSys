@@ -16,7 +16,9 @@ import org.springframework.web.bind.annotation.*;
 import sql.pojo.cfg.fullCfg.HzFullCfgMain;
 import sql.pojo.cfg.main.HzCfg0MainRecord;
 import sql.pojo.cfg.model.HzCfg0ModelDetail;
+import sql.pojo.change.HzChangeOrderRecord;
 
+import java.util.List;
 import java.util.Map;
 
 import static com.connor.hozon.bom.bomSystem.helper.StringHelper.checkString;
@@ -210,6 +212,15 @@ public class HzBomAllCfgController {
         return hzBomAllCfgService.saveBomLinePiont(dataMap);
     }
 
+    /**
+     * 选择变更表单
+     */
+    @RequestMapping("setChangeFromPage")
+    public String setChangeFrom(String projectUid, Model model){
+        List<HzChangeOrderRecord> hzChangeOrderRecordList = hzBomAllCfgService.getChangeFroms(projectUid);
+        model.addAttribute("changeFroms",hzChangeOrderRecordList);
+        return "bom/setChangeFrom";
+    }
     /**
      * 发起变更表单
      * @param projectId 项目id
