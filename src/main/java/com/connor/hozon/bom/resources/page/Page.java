@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * 分页信息 第一页从1开始
  */
-public class Page<T> implements Serializable, Iterable<T> {
+public class Page<T> {
 
 	protected List<T> result;
 
@@ -34,22 +34,14 @@ public class Page<T> implements Serializable, Iterable<T> {
 	}
 
 	public Page(int pageNumber, int pageSize, int totalCount, List<T> result) {
-
-		if (pageSize <= 0) {
-			throw new IllegalArgumentException(
-					"非法参数,每页显示数据不能小于0!");
-		}
 		this.pageSize = pageSize;
-		this.pageNumber = PageUtil.computePageNumber(pageNumber, pageSize,totalCount);
+		this.pageNumber = pageNumber;
 		this.totalCount = totalCount;
 		setResult(result);
 	}
 
-	public void setResult(List<T> elements) {
-
-		if (elements == null)
-			throw new IllegalArgumentException("暂无结果!");
-		this.result = elements;
+	public void setResult(List<T> list) {
+		this.result = list;
 	}
 
 	public List<T> getResult() {
@@ -76,15 +68,9 @@ public class Page<T> implements Serializable, Iterable<T> {
 
 
 	public int getFirstResult() {
-
-		return PageUtil.getFirstResult(pageNumber, pageSize);
+		return (pageNumber - 1) * pageSize;
 	}
 
-	public Iterator<T> iterator() {
-
-		return (Iterator<T>) (result == null ? Collections.emptyList()
-				.iterator() : result.iterator());
-	}
 
     public void setTotalCount(int totalCount) {
         this.totalCount = totalCount;

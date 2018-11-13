@@ -864,7 +864,6 @@ public class HzMbomServiceImpl implements HzMbomService{
                     thread.start();
                 }
                 try {
-                    // 等待中 等子线程全部ok 继续
                     countDownLatch.await();
                 }catch (Exception e){
                     return WriteResultRespDTO.getFailResult();
