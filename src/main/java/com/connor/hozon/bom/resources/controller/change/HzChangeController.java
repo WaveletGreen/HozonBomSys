@@ -79,9 +79,9 @@ public class HzChangeController extends BaseController {
     }
 
 
-    @RequestMapping(value = "exist",method = RequestMethod.GET)
+    @RequestMapping(value = "exist",method = RequestMethod.POST)
     public void deleteChangeFrom(String changeNo, HttpServletResponse response){
-        WriteResultRespDTO resultRespDTO = hzChangeService.changeNoExist(changeNo);
+        WriteResultRespDTO resultRespDTO = hzChangeService.changeNoExist(changeNo.trim());
         JSONObject object = new JSONObject();
         if(WriteResultRespDTO.isSuccess(resultRespDTO)){
             object.put("valid",true);
