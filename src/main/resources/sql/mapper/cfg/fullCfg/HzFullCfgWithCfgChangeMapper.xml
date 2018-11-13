@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.connor.hozon.bom.bomSystem.dao.fullCfg.HzFullCfgWithCfgChangeDao">
+  <resultMap id="BaseResultMap" type="sql.pojo.cfg.fullCfg.HzFullCfgWithCfgChange">
+    <id column="ID" jdbcType="DECIMAL" property="id" />
+    <result column="CFG_CFG0_UID" jdbcType="VARCHAR" property="cfgCfg0Uid" />
+    <result column="CFG_BOMLINE_UID" jdbcType="VARCHAR" property="cfgBomlineUid" />
+    <result column="FL_CFG_CREATE_DATE" jdbcType="DATE" property="flCfgCreateDate" />
+    <result column="FL_CFG_UPDATE_DATE" jdbcType="DATE" property="flCfgUpdateDate" />
+    <result column="FL_CFG_CREATOR" jdbcType="VARCHAR" property="flCfgCreator" />
+    <result column="FL_CFG_UPDATOR" jdbcType="VARCHAR" property="flCfgUpdator" />
+    <result column="FL_CFG_CREATE_DATE_CHANGE" jdbcType="DATE" property="flCfgCreateDateChange" />
+    <result column="FL_CFG_UPDATE_DATE_CHANGE" jdbcType="DATE" property="flCfgUpdateDateChange" />
+    <result column="FL_CFG_CREATOR_CHANGE" jdbcType="VARCHAR" property="flCfgCreatorChange" />
+    <result column="FL_CFG_UPDATOR_CHANGE" jdbcType="VARCHAR" property="flCfgUpdatorChange" />
+    <result column="FL_CFG_BOMLINE_NAME" jdbcType="VARCHAR" property="flCfgBomlineName" />
+    <result column="FL_CFG_VERSION" jdbcType="DECIMAL" property="flCfgVersion" />
+    <result column="FL_OPERATION_TYPE" jdbcType="VARCHAR" property="flOperationType" />
+    <result column="FL_COMMENT" jdbcType="VARCHAR" property="flComment" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ID, CFG_CFG0_UID, CFG_BOMLINE_UID, FL_CFG_CREATE_DATE, FL_CFG_UPDATE_DATE, FL_CFG_CREATOR, 
+    FL_CFG_UPDATOR, FL_CFG_CREATE_DATE_CHANGE, FL_CFG_UPDATE_DATE_CHANGE, FL_CFG_CREATOR_CHANGE, 
+    FL_CFG_UPDATOR_CHANGE, FL_CFG_BOMLINE_NAME, FL_CFG_VERSION, FL_OPERATION_TYPE, FL_COMMENT
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.math.BigDecimal" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from HZ_FC_WITHCFG_RECORD_CHANGE
+    where ID = #{id,jdbcType=DECIMAL}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.math.BigDecimal">
+    delete from HZ_FC_WITHCFG_RECORD_CHANGE
+    where ID = #{id,jdbcType=DECIMAL}
+  </delete>
+  <insert id="insert" parameterType="sql.pojo.cfg.fullCfg.HzFullCfgWithCfgChange">
+    insert into HZ_FC_WITHCFG_RECORD_CHANGE (ID, CFG_CFG0_UID, CFG_BOMLINE_UID, 
+      FL_CFG_CREATE_DATE, FL_CFG_UPDATE_DATE, FL_CFG_CREATOR, 
+      FL_CFG_UPDATOR, FL_CFG_CREATE_DATE_CHANGE, FL_CFG_UPDATE_DATE_CHANGE, 
+      FL_CFG_CREATOR_CHANGE, FL_CFG_UPDATOR_CHANGE, FL_CFG_BOMLINE_NAME, 
+      FL_CFG_VERSION, FL_OPERATION_TYPE, FL_COMMENT
+      )
+    values (#{id,jdbcType=DECIMAL}, #{cfgCfg0Uid,jdbcType=VARCHAR}, #{cfgBomlineUid,jdbcType=VARCHAR}, 
+      #{flCfgCreateDate,jdbcType=DATE}, #{flCfgUpdateDate,jdbcType=DATE}, #{flCfgCreator,jdbcType=VARCHAR},
+      #{flCfgUpdator,jdbcType=VARCHAR}, #{flCfgCreateDateChange,jdbcType=DATE}, #{flCfgUpdateDateChange,jdbcType=DATE},
+      #{flCfgCreatorChange,jdbcType=VARCHAR}, #{flCfgUpdatorChange,jdbcType=VARCHAR}, #{flCfgBomlineName,jdbcType=VARCHAR},
+      #{flCfgVersion,jdbcType=DECIMAL}, #{flOperationType,jdbcType=DECIMAL}, #{flComment,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="sql.pojo.cfg.fullCfg.HzFullCfgWithCfgChange">
+    insert into HZ_FC_WITHCFG_RECORD_CHANGE
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="cfgCfg0Uid != null">
+        CFG_CFG0_UID,
+      </if>
+      <if test="cfgBomlineUid != null">
+        CFG_BOMLINE_UID,
+      </if>
+      <if test="flCfgCreateDate != null">
+        FL_CFG_CREATE_DATE,
+      </if>
+      <if test="flCfgUpdateDate != null">
+        FL_CFG_UPDATE_DATE,
+      </if>
+      <if test="flCfgCreator != null">
+        FL_CFG_CREATOR,
+      </if>
+      <if test="flCfgUpdator != null">
+        FL_CFG_UPDATOR,
+      </if>
+      <if test="flCfgCreateDateChange != null">
+        FL_CFG_CREATE_DATE_CHANGE,
+      </if>
+      <if test="flCfgUpdateDateChange != null">
+        FL_CFG_UPDATE_DATE_CHANGE,
+      </if>
+      <if test="flCfgCreatorChange != null">
+        FL_CFG_CREATOR_CHANGE,
+      </if>
+      <if test="flCfgUpdatorChange != null">
+        FL_CFG_UPDATOR_CHANGE,
+      </if>
+      <if test="flCfgBomlineName != null">
+        FL_CFG_BOMLINE_NAME,
+      </if>
+      <if test="flCfgVersion != null">
+        FL_CFG_VERSION,
+      </if>
+      <if test="flOperationType != null">
+        FL_OPERATION_TYPE,
+      </if>
+      <if test="flComment != null">
+        FL_COMMENT,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=DECIMAL},
+      </if>
+      <if test="cfgCfg0Uid != null">
+        #{cfgCfg0Uid,jdbcType=VARCHAR},
+      </if>
+      <if test="cfgBomlineUid != null">
+        #{cfgBomlineUid,jdbcType=VARCHAR},
+      </if>
+      <if test="flCfgCreateDate != null">
+        #{flCfgCreateDate,jdbcType=DATE},
+      </if>
+      <if test="flCfgUpdateDate != null">
+        #{flCfgUpdateDate,jdbcType=DATE},
+      </if>
+      <if test="flCfgCreator != null">
+        #{flCfgCreator,jdbcType=VARCHAR},
+      </if>
+      <if test="flCfgUpdator != null">
+        #{flCfgUpdator,jdbcType=VARCHAR},
+      </if>
+      <if test="flCfgCreateDateChange != null">
+        #{flCfgCreateDateChange,jdbcType=DATE},
+      </if>
+      <if test="flCfgUpdateDateChange != null">
+        #{flCfgUpdateDateChange,jdbcType=DATE},
+      </if>
+      <if test="flCfgCreatorChange != null">
+        #{flCfgCreatorChange,jdbcType=VARCHAR},
+      </if>
+      <if test="flCfgUpdatorChange != null">
+        #{flCfgUpdatorChange,jdbcType=VARCHAR},
+      </if>
+      <if test="flCfgBomlineName != null">
+        #{flCfgBomlineName,jdbcType=VARCHAR},
+      </if>
+      <if test="flCfgVersion != null">
+        #{flCfgVersion,jdbcType=DECIMAL},
+      </if>
+      <if test="flOperationType != null">
+        #{flOperationType,jdbcType=DECIMAL},
+      </if>
+      <if test="flComment != null">
+        #{flComment,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="sql.pojo.cfg.fullCfg.HzFullCfgWithCfgChange">
+    update HZ_FC_WITHCFG_RECORD_CHANGE
+    <set>
+      <if test="cfgCfg0Uid != null">
+        CFG_CFG0_UID = #{cfgCfg0Uid,jdbcType=VARCHAR},
+      </if>
+      <if test="cfgBomlineUid != null">
+        CFG_BOMLINE_UID = #{cfgBomlineUid,jdbcType=VARCHAR},
+      </if>
+      <if test="flCfgCreateDate != null">
+        FL_CFG_CREATE_DATE = #{flCfgCreateDate,jdbcType=DATE},
+      </if>
+      <if test="flCfgUpdateDate != null">
+        FL_CFG_UPDATE_DATE = #{flCfgUpdateDate,jdbcType=DATE},
+      </if>
+      <if test="flCfgCreator != null">
+        FL_CFG_CREATOR = #{flCfgCreator,jdbcType=VARCHAR},
+      </if>
+      <if test="flCfgUpdator != null">
+        FL_CFG_UPDATOR = #{flCfgUpdator,jdbcType=VARCHAR},
+      </if>
+      <if test="flCfgCreateDateChange != null">
+        FL_CFG_CREATE_DATE_CHANGE = #{flCfgCreateDateChange,jdbcType=DATE},
+      </if>
+      <if test="flCfgUpdateDateChange != null">
+        FL_CFG_UPDATE_DATE_CHANGE = #{flCfgUpdateDateChange,jdbcType=DATE},
+      </if>
+      <if test="flCfgCreatorChange != null">
+        FL_CFG_CREATOR_CHANGE = #{flCfgCreatorChange,jdbcType=VARCHAR},
+      </if>
+      <if test="flCfgUpdatorChange != null">
+        FL_CFG_UPDATOR_CHANGE = #{flCfgUpdatorChange,jdbcType=VARCHAR},
+      </if>
+      <if test="flCfgBomlineName != null">
+        FL_CFG_BOMLINE_NAME = #{flCfgBomlineName,jdbcType=VARCHAR},
+      </if>
+      <if test="flCfgVersion != null">
+        FL_CFG_VERSION = #{flCfgVersion,jdbcType=DECIMAL},
+      </if>
+      <if test="flOperationType != null">
+        FL_OPERATION_TYPE = #{flOperationType,jdbcType=DECIMAL},
+      </if>
+      <if test="flComment != null">
+        FL_COMMENT = #{flComment,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="sql.pojo.cfg.fullCfg.HzFullCfgWithCfgChange">
+    update HZ_FC_WITHCFG_RECORD_CHANGE
+    set CFG_CFG0_UID = #{cfgCfg0Uid,jdbcType=VARCHAR},
+      CFG_BOMLINE_UID = #{cfgBomlineUid,jdbcType=VARCHAR},
+      FL_CFG_CREATE_DATE = #{flCfgCreateDate,jdbcType=DATE},
+      FL_CFG_UPDATE_DATE = #{flCfgUpdateDate,jdbcType=DATE},
+      FL_CFG_CREATOR = #{flCfgCreator,jdbcType=VARCHAR},
+      FL_CFG_UPDATOR = #{flCfgUpdator,jdbcType=VARCHAR},
+      FL_CFG_CREATE_DATE_CHANGE = #{flCfgCreateDateChange,jdbcType=DATE},
+      FL_CFG_UPDATE_DATE_CHANGE = #{flCfgUpdateDateChange,jdbcType=DATE},
+      FL_CFG_CREATOR_CHANGE = #{flCfgCreatorChange,jdbcType=VARCHAR},
+      FL_CFG_UPDATOR_CHANGE = #{flCfgUpdatorChange,jdbcType=VARCHAR},
+      FL_CFG_BOMLINE_NAME = #{flCfgBomlineName,jdbcType=VARCHAR},
+      FL_CFG_VERSION = #{flCfgVersion,jdbcType=DECIMAL},
+      FL_OPERATION_TYPE = #{flOperationType,jdbcType=DECIMAL},
+      FL_COMMENT = #{flComment,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+
+  <insert id="insertList" parameterType="java.util.List">
+    insert into
+      HZ_FC_WITHCFG_RECORD_CHANGE
+    (<include refid="Base_Column_List"/> )
+    select SEQ_HZ_FC_WITHCFG_CHANGE.NEXTVAL, A.* from (
+    <foreach collection="list" index="index" item="hzFullCfgWithCfgChange" separator="union">
+      select
+        #{hzFullCfgWithCfgChange.cfgCfg0Uid,jdbcType=VARCHAR},
+        #{hzFullCfgWithCfgChange.cfgBomlineUid,jdbcType=VARCHAR},
+        #{hzFullCfgWithCfgChange.flCfgCreateDate,jdbcType=DATE},
+        #{hzFullCfgWithCfgChange.flCfgUpdateDate,jdbcType=DATE},
+        #{hzFullCfgWithCfgChange.flCfgCreator,jdbcType=VARCHAR},
+        #{hzFullCfgWithCfgChange.flCfgUpdator,jdbcType=VARCHAR},
+        #{hzFullCfgWithCfgChange.flCfgCreateDateChange,jdbcType=DATE},
+        #{hzFullCfgWithCfgChange.flCfgUpdateDateChange,jdbcType=DATE},
+        #{hzFullCfgWithCfgChange.flCfgCreatorChange,jdbcType=VARCHAR},
+        #{hzFullCfgWithCfgChange.flCfgUpdatorChange,jdbcType=VARCHAR},
+        #{hzFullCfgWithCfgChange.flCfgBomlineName,jdbcType=VARCHAR},
+        #{hzFullCfgWithCfgChange.flCfgVersion,jdbcType=DECIMAL},
+        #{hzFullCfgWithCfgChange.flOperationType,jdbcType=DECIMAL},
+        #{hzFullCfgWithCfgChange.flComment,jdbcType=VARCHAR}
+      from
+        dual
+    </foreach>
+    )A
+  </insert>
+</mapper>

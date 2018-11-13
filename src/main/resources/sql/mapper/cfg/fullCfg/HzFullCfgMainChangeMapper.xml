@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.connor.hozon.bom.bomSystem.dao.fullCfg.HzFullCfgMainChangeDao">
+  <resultMap id="BaseResultMap" type="sql.pojo.cfg.fullCfg.HzFullCfgMainChange">
+    <result column="ID" jdbcType="DECIMAL" property="id" />
+    <result column="PROJECT_UID" jdbcType="VARCHAR" property="projectUid" />
+    <result column="STATUS" jdbcType="OTHER" property="status" />
+    <result column="STAGE" jdbcType="DECIMAL" property="stage" />
+    <result column="VERSION" jdbcType="OTHER" property="version" />
+    <result column="EFFECTIVE_DATE" jdbcType="TIMESTAMP" property="effectiveDate" />
+    <result column="CREATE_DATE" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="UPDATE_DATE" jdbcType="TIMESTAMP" property="updateDate" />
+    <result column="CREATOR" jdbcType="OTHER" property="creator" />
+    <result column="UPDATER" jdbcType="OTHER" property="updater" />
+    <result column="CREATE_DATE_CHANGE" jdbcType="TIMESTAMP" property="createDateChange" />
+    <result column="UPDATE_DATE_CHANGE" jdbcType="TIMESTAMP" property="updateDateChange" />
+    <result column="CREATOR_CHANGE" jdbcType="OTHER" property="creatorChange" />
+    <result column="UPDATER_CHANGE" jdbcType="OTHER" property="updaterChange" />
+    <result column="FM_IS_RELEASE" jdbcType="DECIMAL" property="fmIsRelease" />
+  </resultMap>
+  <insert id="insert" parameterType="sql.pojo.cfg.fullCfg.HzFullCfgMainChange">
+    <selectKey keyProperty="id" order="BEFORE" resultType="Integer">
+        select SEQ_HZ_FC_MAIN_RECORD_CHANGE.NEXTVAL from dual
+    </selectKey>
+    insert into HZ_FULL_CFG_MAIN_RECORD_CHANGE (ID, PROJECT_UID, STATUS, 
+      STAGE, VERSION, EFFECTIVE_DATE, 
+      CREATE_DATE, UPDATE_DATE, CREATOR, 
+      UPDATER, CREATE_DATE_CHANGE, UPDATE_DATE_CHANGE, 
+      CREATOR_CHANGE, UPDATER_CHANGE, FM_IS_RELEASE
+      )
+    values ( #{id,jdbcType=DECIMAL}, #{projectUid,jdbcType=VARCHAR}, #{status,jdbcType=OTHER},
+      #{stage,jdbcType=DECIMAL}, #{version,jdbcType=OTHER}, #{effectiveDate,jdbcType=TIMESTAMP}, 
+      #{createDate,jdbcType=TIMESTAMP}, #{updateDate,jdbcType=TIMESTAMP}, #{creator,jdbcType=OTHER}, 
+      #{updater,jdbcType=OTHER}, #{createDateChange,jdbcType=TIMESTAMP}, #{updateDateChange,jdbcType=TIMESTAMP}, 
+      #{creatorChange,jdbcType=OTHER}, #{updaterChange,jdbcType=OTHER}, #{fmIsRelease,jdbcType=DECIMAL}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="sql.pojo.cfg.fullCfg.HzFullCfgMainChange">
+    insert into HZ_FULL_CFG_MAIN_RECORD_CHANGE
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="projectUid != null">
+        PROJECT_UID,
+      </if>
+      <if test="status != null">
+        STATUS,
+      </if>
+      <if test="stage != null">
+        STAGE,
+      </if>
+      <if test="version != null">
+        VERSION,
+      </if>
+      <if test="effectiveDate != null">
+        EFFECTIVE_DATE,
+      </if>
+      <if test="createDate != null">
+        CREATE_DATE,
+      </if>
+      <if test="updateDate != null">
+        UPDATE_DATE,
+      </if>
+      <if test="creator != null">
+        CREATOR,
+      </if>
+      <if test="updater != null">
+        UPDATER,
+      </if>
+      <if test="createDateChange != null">
+        CREATE_DATE_CHANGE,
+      </if>
+      <if test="updateDateChange != null">
+        UPDATE_DATE_CHANGE,
+      </if>
+      <if test="creatorChange != null">
+        CREATOR_CHANGE,
+      </if>
+      <if test="updaterChange != null">
+        UPDATER_CHANGE,
+      </if>
+      <if test="fmIsRelease != null">
+        FM_IS_RELEASE,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=DECIMAL},
+      </if>
+      <if test="projectUid != null">
+        #{projectUid,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=OTHER},
+      </if>
+      <if test="stage != null">
+        #{stage,jdbcType=DECIMAL},
+      </if>
+      <if test="version != null">
+        #{version,jdbcType=OTHER},
+      </if>
+      <if test="effectiveDate != null">
+        #{effectiveDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createDate != null">
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDate != null">
+        #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creator != null">
+        #{creator,jdbcType=OTHER},
+      </if>
+      <if test="updater != null">
+        #{updater,jdbcType=OTHER},
+      </if>
+      <if test="createDateChange != null">
+        #{createDateChange,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDateChange != null">
+        #{updateDateChange,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creatorChange != null">
+        #{creatorChange,jdbcType=OTHER},
+      </if>
+      <if test="updaterChange != null">
+        #{updaterChange,jdbcType=OTHER},
+      </if>
+      <if test="fmIsRelease != null">
+        #{fmIsRelease,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+</mapper>

@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.connor.hozon.bom.bomSystem.dao.fullCfg.HzFullCfgModelChangeDao">
+  <resultMap id="BaseResultMap" type="sql.pojo.cfg.fullCfg.HzFullCfgModelChange">
+    <result column="ID" jdbcType="DECIMAL" property="id" />
+    <result column="MOD_MODEL_UID" jdbcType="VARCHAR" property="modModelUid" />
+    <result column="MOD_CFG0_UID" jdbcType="VARCHAR" property="modCfg0Uid" />
+    <result column="MOD_POINT_TYPE" jdbcType="DECIMAL" property="modPointType" />
+    <result column="FL_MOD_CREATE_DATE" jdbcType="DATE" property="flModCreateDate" />
+    <result column="FL_MOD_UPDATE_DATE" jdbcType="DATE" property="flModUpdateDate" />
+    <result column="FL_MOD_CREATOR" jdbcType="OTHER" property="flModCreator" />
+    <result column="FL_MOD_LAST_UPDATER" jdbcType="OTHER" property="flModLastUpdater" />
+    <result column="FL_MOD_CREATE_DATE_CHANGE" jdbcType="DATE" property="flModCreateDateChange" />
+    <result column="FL_MOD_UPDATE_DATE_CHANGE" jdbcType="DATE" property="flModUpdateDateChange" />
+    <result column="FL_MOD_CREATOR_CHANGE" jdbcType="OTHER" property="flModCreatorChange" />
+    <result column="FL_MOD_LAST_UPDATER_CHANGE" jdbcType="OTHER" property="flModLastUpdaterChange" />
+    <result column="FL_MOD_VERSION" jdbcType="DECIMAL" property="flModVersion" />
+    <result column="FL_MODEL_BOMLINE_UID" jdbcType="VARCHAR" property="flModelBomlineUid" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+      ID,
+      MOD_MODEL_UID,
+      MOD_CFG0_UID,
+      MOD_POINT_TYPE,
+      FL_MOD_CREATE_DATE,
+      FL_MOD_UPDATE_DATE,
+      FL_MOD_CREATOR,
+      FL_MOD_LAST_UPDATER,
+      FL_MOD_CREATE_DATE_CHANGE,
+      FL_MOD_UPDATE_DATE_CHANGE,
+      FL_MOD_CREATOR_CHANGE,
+      FL_MOD_LAST_UPDATER_CHANGE,
+      FL_MOD_VERSION, FL_MODEL_BOMLINE_UID
+  </sql>
+
+  <insert id="insert" parameterType="sql.pojo.cfg.fullCfg.HzFullCfgModelChange">
+    insert into HZ_FC_MODEL_RECORD_CHANGE (ID, MOD_MODEL_UID, MOD_CFG0_UID, 
+      MOD_POINT_TYPE, FL_MOD_CREATE_DATE, FL_MOD_UPDATE_DATE, 
+      FL_MOD_CREATOR, FL_MOD_LAST_UPDATER, FL_MOD_CREATE_DATE_CHANGE, 
+      FL_MOD_UPDATE_DATE_CHANGE, FL_MOD_CREATOR_CHANGE, 
+      FL_MOD_LAST_UPDATER_CHANGE, FL_MOD_VERSION, FL_MODEL_BOMLINE_UID
+      )
+    values (#{id,jdbcType=DECIMAL}, #{modModelUid,jdbcType=VARCHAR}, #{modCfg0Uid,jdbcType=VARCHAR}, 
+      #{modPointType,jdbcType=DECIMAL}, #{flModCreateDate,jdbcType=DATE}, #{flModUpdateDate,jdbcType=DATE},
+      #{flModCreator,jdbcType=OTHER}, #{flModLastUpdater,jdbcType=OTHER}, #{flModCreateDateChange,jdbcType=DATE},
+      #{flModUpdateDateChange,jdbcType=DATE}, #{flModCreatorChange,jdbcType=OTHER},
+      #{flModLastUpdaterChange,jdbcType=OTHER}, #{flModVersion,jdbcType=DECIMAL}, #{flModelBomlineUid,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="sql.pojo.cfg.fullCfg.HzFullCfgModelChange">
+    insert into HZ_FC_MODEL_RECORD_CHANGE
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="modModelUid != null">
+        MOD_MODEL_UID,
+      </if>
+      <if test="modCfg0Uid != null">
+        MOD_CFG0_UID,
+      </if>
+      <if test="modPointType != null">
+        MOD_POINT_TYPE,
+      </if>
+      <if test="flModCreateDate != null">
+        FL_MOD_CREATE_DATE,
+      </if>
+      <if test="flModUpdateDate != null">
+        FL_MOD_UPDATE_DATE,
+      </if>
+      <if test="flModCreator != null">
+        FL_MOD_CREATOR,
+      </if>
+      <if test="flModLastUpdater != null">
+        FL_MOD_LAST_UPDATER,
+      </if>
+      <if test="flModCreateDateChange != null">
+        FL_MOD_CREATE_DATE_CHANGE,
+      </if>
+      <if test="flModUpdateDateChange != null">
+        FL_MOD_UPDATE_DATE_CHANGE,
+      </if>
+      <if test="flModCreatorChange != null">
+        FL_MOD_CREATOR_CHANGE,
+      </if>
+      <if test="flModLastUpdaterChange != null">
+        FL_MOD_LAST_UPDATER_CHANGE,
+      </if>
+      <if test="flModVersion != null">
+        FL_MOD_VERSION,
+      </if>
+      <if test="flModelBomlineUid != null">
+        FL_MODEL_BOMLINE_UID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=DECIMAL},
+      </if>
+      <if test="modModelUid != null">
+        #{modModelUid,jdbcType=VARCHAR},
+      </if>
+      <if test="modCfg0Uid != null">
+        #{modCfg0Uid,jdbcType=VARCHAR},
+      </if>
+      <if test="modPointType != null">
+        #{modPointType,jdbcType=DECIMAL},
+      </if>
+      <if test="flModCreateDate != null">
+        #{flModCreateDate,jdbcType=DATE},
+      </if>
+      <if test="flModUpdateDate != null">
+        #{flModUpdateDate,jdbcType=DATE},
+      </if>
+      <if test="flModCreator != null">
+        #{flModCreator,jdbcType=OTHER},
+      </if>
+      <if test="flModLastUpdater != null">
+        #{flModLastUpdater,jdbcType=OTHER},
+      </if>
+      <if test="flModCreateDateChange != null">
+        #{flModCreateDateChange,jdbcType=DATE},
+      </if>
+      <if test="flModUpdateDateChange != null">
+        #{flModUpdateDateChange,jdbcType=DATE},
+      </if>
+      <if test="flModCreatorChange != null">
+        #{flModCreatorChange,jdbcType=OTHER},
+      </if>
+      <if test="flModLastUpdaterChange != null">
+        #{flModLastUpdaterChange,jdbcType=OTHER},
+      </if>
+      <if test="flModVersion != null">
+        #{flModVersion,jdbcType=DECIMAL},
+      </if>
+      <if test="flModelBomlineUid != null">
+        #{flModelBomlineUid,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+  <insert id="insertList" parameterType="java.util.List">
+    insert into
+      HZ_FC_MODEL_RECORD_CHANGE
+    (<include refid="Base_Column_List"/> )
+    select SEQ_HZ_FC_MODEL_RECORD_CHANGE.NEXTVAL, A.* from (
+    <foreach collection="list" index="index" item="hzFullCfgModelChange" separator="union">
+      select
+        #{hzFullCfgModelChange.modModelUid,jdbcType=VARCHAR},
+        #{hzFullCfgModelChange.modCfg0Uid,jdbcType=VARCHAR},
+        #{hzFullCfgModelChange.modPointType,jdbcType=DECIMAL},
+        #{hzFullCfgModelChange.flModCreateDate,jdbcType=DATE},
+        #{hzFullCfgModelChange.flModUpdateDate,jdbcType=DATE},
+        #{hzFullCfgModelChange.flModCreator,jdbcType=OTHER},
+        #{hzFullCfgModelChange.flModLastUpdater,jdbcType=OTHER},
+        #{hzFullCfgModelChange.flModCreateDateChange,jdbcType=DATE},
+        #{hzFullCfgModelChange.flModUpdateDateChange,jdbcType=DATE},
+        #{hzFullCfgModelChange.flModCreatorChange,jdbcType=OTHER},
+        #{hzFullCfgModelChange.flModLastUpdaterChange,jdbcType=OTHER},
+        #{hzFullCfgModelChange.flModVersion,jdbcType=DECIMAL},
+        #{hzFullCfgModelChange.flModelBomlineUid,jdbcType=VARCHAR}
+      from
+        dual
+    </foreach>
+    )A
+  </insert>
+
+</mapper>

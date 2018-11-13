@@ -9,6 +9,7 @@ import sql.BaseSQLUtil;
 import sql.pojo.change.HzChangeOrderRecord;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -63,5 +64,10 @@ public class HzChangeOrderDAOImpl extends BaseSQLUtil implements HzChangeOrderDA
         map.put("state",query.getState());
         pageRequestParam.setFilters(map);
         return super.findPage("HzChangeOrderDAOImpl_findHzChangeOrderRecordByPage","HzChangeOrderDAOImpl_findHzChangeOrderTotalCount",pageRequestParam);
+    }
+
+    @Override
+    public List<HzChangeOrderRecord> findHzChangeOrderRecordByProjectId(String projectUid) {
+        return super.findForList("HzChangeOrderDAOImpl_findHzChangeOrderRecordByProjectId",projectUid);
     }
 }
