@@ -57,7 +57,7 @@ function initTable(projectUid) {
         });
     column.push({field: 'createTime', title: '创建时间', align: 'center', valign: 'middle'});
     column.push({field: 'originTime', title: '流程发起时间', align: 'center', valign: 'middle'});
-    column.push({field: 'dept', title: '部门', align: 'center', valign: 'middle'});
+    column.push({field: 'deptName', title: '部门', align: 'center', valign: 'middle'});
     column.push({field: 'originator', title: '发起人', align: 'center', valign: 'middle'});
     column.push({field: 'createName', title: '表单创建者', align: 'center', valign: 'middle'});
     column.push({field: 'tel', title: '联系电话', align: 'center', valign: 'middle'});
