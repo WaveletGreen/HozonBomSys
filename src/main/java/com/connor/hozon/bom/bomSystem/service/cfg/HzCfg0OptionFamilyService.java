@@ -150,13 +150,20 @@ public class HzCfg0OptionFamilyService {
         families.stream().filter(f -> f != null).collect(Collectors.toList()).forEach(f -> {
             StringBuilder sb = new StringBuilder();
             if ("车身颜色".equals(f.getpOptionfamilyDesc())) {
-                String localTemp = result.get(0);
+                String localTemp = null;
                 sb.append(f.getpOptionfamilyDesc() == null ? f.getpOptionfamilyName() : f.getpOptionfamilyDesc());
                 sb.append(def);
                 sb.append(f.getpOptionfamilyName() == null ? "" : f.getpOptionfamilyName());
                 //交换一下位置
-                result.set(0, sb.toString());
-                result.add(localTemp);
+                if(!result.isEmpty()){
+                    localTemp=result.get(0);
+                    result.set(0, sb.toString());
+                    result.add(localTemp);
+                }
+                else{
+                    result.add(sb.toString());
+                }
+
             } else {
                 sb.append(f.getpOptionfamilyDesc() == null ? f.getpOptionfamilyName() : f.getpOptionfamilyDesc());
                 sb.append(def);

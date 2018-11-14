@@ -24,6 +24,7 @@ import com.connor.hozon.bom.bomSystem.service.modelColor.HzCfg0ModelColorService
 import com.connor.hozon.bom.bomSystem.service.project.HzSuperMaterielService;
 import com.connor.hozon.bom.common.base.entity.QueryBase;
 import com.connor.hozon.bom.common.util.user.UserInfo;
+import com.connor.hozon.bom.resources.mybatis.change.HzChangeOrderDAO;
 import com.connor.hozon.bom.resources.mybatis.factory.HzFactoryDAO;
 import com.connor.hozon.bom.sys.entity.User;
 import integration.option.ActionFlagOption;
@@ -39,6 +40,7 @@ import sql.pojo.cfg.derivative.*;
 import sql.pojo.cfg.main.HzCfg0MainRecord;
 import sql.pojo.cfg.model.HzCfg0ModelRecord;
 import sql.pojo.cfg.modelColor.HzCfg0ModelColor;
+import sql.pojo.change.HzChangeOrderRecord;
 import sql.pojo.factory.HzFactory;
 import sql.pojo.project.HzMaterielRecord;
 
@@ -109,6 +111,8 @@ public class HzMaterielFeatureV2Controller extends ExtraIntegrate {
     /**从数据变更**/
     @Autowired
     HzDMDetailChangeDao hzDMDetailChangeDao;
+    @Autowired
+    HzChangeOrderDAO hzChangeOrderDAO;
     /***日志*/
     private static Logger logger = LoggerFactory.getLogger(HzMaterielFeatureV2Controller.class);
 
@@ -457,6 +461,26 @@ public class HzMaterielFeatureV2Controller extends ExtraIntegrate {
         result.put("status",true);
         result.put("msg","发起VWO流程成功");
         return result;
+    }
+
+    @RequestMapping("/setChangeFromPage")
+    public String setChangeFromPage(String projectUid, String puids, String titles, Model model){
+        List<String> puidList = new ArrayList<>();
+        List<String> titleList = new ArrayList<>();
+        String[] puidArr = puids.split(",");
+        String[] titleArr = titles.split(",");
+        for(String puid : puidArr){
+            puidList.add(puid);
+        }
+        for(String title : titleArr){
+            titleList.add(title);
+        }
+
+        List<HzChangeOrderRecord> hzChangeOrderRecordList = hzChangeOrderDAO.findHzChangeOrderRecordByProjectId(projectUid);
+        model.addAttribute("changeFroms",hzChangeOrderRecordList);
+        model.addAttribute("titles",titleList);
+        model.addAttribute("puids",puidList);
+        return  "cfg/materielFeature/MaterieFeatureSetChangeFrom";
     }
 
     /**********************************************废除方法****************************************/

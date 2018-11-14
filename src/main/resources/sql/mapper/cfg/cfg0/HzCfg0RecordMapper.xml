@@ -147,10 +147,10 @@
         <include refid="Base_Column_List"/>,vwoNum,ROWNUM as rown
         from
         ( select
-        <include refid="Base_Column_List"/>,t2.VWO_NUM as vwoNum,
+        <include refid="Base_Column_List"/>,t2.CHANGE_NO as vwoNum,
         ROWNUM as rowno
         from HZ_CFG0_RECORD t
-        left join HZ_VWO_INFO t2 on t2.ID = t.CHANGE_ORDER_ID
+        left join HZ_CHANGE_ORDER_RECORD t2 on t2.ID = t.CHANGE_ORDER_ID
         where 1=1
         <if test="param.featureValue !=null">
             and t.p_cfg0_object_id like '%'||upper(trim(#{param.featureValue}))||'%'
