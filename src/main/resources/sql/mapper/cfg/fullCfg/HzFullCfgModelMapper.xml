@@ -253,10 +253,32 @@
         </foreach>
     </update>
 
+    <update id="updateByHzFullCfgModelListCfg" parameterType="java.util.List">
+        update HZ_FULL_CFG_MODEL_RECORD
+        set MOD_CFG0_UID =
+        <foreach collection="list" item="hzFullCfgModel" open="case" close="end">
+            when MOD_MODEL_UID = #{hzFullCfgModel.modModelUid,jdbcType=VARCHAR} and
+            FL_MODEL_BOMLINE_UID = #{hzFullCfgModel.flModelBomlineUid,jdbcType=VARCHAR}
+            then
+            #{hzFullCfgModel.modCfg0Uid,jdbcType=VARCHAR}
+        </foreach>,
+        where MOD_MODEL_UID in
+        <foreach collection="list" item="hzFullCfgModel" open="(" separator="," close=")">
+            #{hzFullCfgModel.modModelUid,jdbcType=VARCHAR}
+        </foreach>
+        and
+        FL_MODEL_BOMLINE_UID in
+        <foreach collection="list" item="hzFullCfgModel" open="(" separator="," close=")">
+            #{hzFullCfgModel.flModelBomlineUid,jdbcType=VARCHAR}
+        </foreach>
+    </update>
+
     <update id="updateByBomLinePuid" parameterType="sql.pojo.cfg.fullCfg.HzFullCfgWithCfg">
       update HZ_FULL_CFG_MODEL_RECORD
       set MOD_CFG0_UID = #{cfgCfg0Uid,jdbcType=VARCHAR}
       where
       FL_MODEL_BOMLINE_UID = #{cfgBomlineUid,jdbcType=VARCHAR}
   </update>
+
+
 </mapper>

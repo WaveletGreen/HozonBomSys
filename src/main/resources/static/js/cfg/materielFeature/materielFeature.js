@@ -350,7 +350,7 @@ function launchChangeForm() {
     let msg = "<div style='max-height: 350px;overflow: -moz-scrollbars-vertical'>";
     for (let i in rows) {
         if (0 != rows[i].status || "0" != rows[i].status) {
-            window.Ewin.alert({message: rows[i].pCfg0ObjectId + "该衍生物料不是草稿状态，不能发起变更"});
+            window.Ewin.alert({message: rows[i].modeBasicDetail + "该衍生物料不是草稿状态，不能发起变更"});
             return false;
         }
         msg += "<p>" + rows[i].pCfg0ObjectId + "-" + rows[i].pCfg0Desc + "</p>";
