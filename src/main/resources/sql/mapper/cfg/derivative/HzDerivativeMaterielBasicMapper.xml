@@ -38,6 +38,10 @@
         <result column="DMB_SPECIAL_FEATURE_UID" jdbcType="VARCHAR" property="dmbSpecialFeatureUid"/>
         <!--状态-->
         <result column="DMB_STATUS" jdbcType="DECIMAL" property="dmbStatus"/>
+        <!--变更单ID-->
+        <result column="CHANGE_ORDER_UID" jdbcType="DECIMAL" property="changeOrderId"/>
+        <!--变更单NO-->
+        <result column="CHANGE_ORDER_NO" jdbcType="VARCHAR" property="changeOrderNo"/>
     </resultMap>
     <sql id="Base_Column_List">
         ID,
@@ -64,8 +68,24 @@
     </select>
     <select id="selectByProjectUid" parameterType="java.util.Map" resultMap="BaseResultMap">
         select
-        <include refid="Base_Column_List"/>
+            t.ID,
+            t.DMB_MODEL_UID,
+            t.DMB_COLOR_MODEL_UID,
+            t.DMB_CREATOR,
+            t.DMB_CREATE_DATE,
+            t.DMB_UPDATER,
+            t.DMB_UPDATE_DATE,
+            t.DMB_PROJECT_UID,
+            t.DMB_MODEL_FEATURE_UID,
+            t.DMB_RESERVED_2,
+            t.DMB_RESERVED_3,
+            t.DMB_RESERVED_4,
+            t.DMB_RESERVED_5,
+            t.DMB_SPECIAL_FEATURE_UID,
+            t.DMB_STATUS,
+            t2.CHANGE_NO as CHANGE_ORDER_NO
         from HZ_DERIVATIVE_MATERIEL_BASIC t
+        left join HZ_CHANGE_ORDER_RECORD t2 on t2.ID = t.CHANGE_ORDER_UID
         where DMB_PROJECT_UID = #{basic.dmbProjectUid,jdbcType=VARCHAR}
         order by t.id
     </select>
@@ -281,17 +301,35 @@
         from
           HZ_DERIVATIVE_MATERIEL_BASIC
         where
-        ID in
+        DMB_MODEL_UID in
         <foreach collection="list" index="index" item="hzDerivativeMaterielBasic" open="(" separator="," close=")">
-              #{hzDerivativeMaterielBasic,jdbcType=DECIMAL}
+              #{hzDerivativeMaterielBasic,jdbcType=VARCHAR}
         </foreach>
     </select>
 
     <update id="updateByBasicList" parameterType="java.util.List">
          update HZ_DERIVATIVE_MATERIEL_BASIC
-         set
-         <foreach collection="list" index="index" item="hzDerivativeMaterielBasic">
-             DMB_STATUS = #{hzDerivativeMaterielBasic.dmbStatus,jdbcType=DECIMAL}
+         set DMB_STATUS =
+         <foreach collection="list" index="index" item="hzDerivativeMaterielBasic" open="case" close="end">
+             when
+                ID = #{hzDerivativeMaterielBasic.id,jdbcType=DECIMAL}
+             then
+                #{hzDerivativeMaterielBasic.dmbStatus,jdbcType=DECIMAL}
+         </foreach>
+        where
+        ID in
+        <foreach collection="list" index="index" item="hzDerivativeMaterielBasic" open="(" separator="," close=")">
+            #{hzDerivativeMaterielBasic.id,jdbcType=DECIMAL}
+        </foreach>
+    </update>
+    <update id="updateByBasicListChangId" parameterType="java.util.List">
+         update HZ_DERIVATIVE_MATERIEL_BASIC
+         set CHANGE_ORDER_UID =
+         <foreach collection="list" index="index" item="hzDerivativeMaterielBasic" open="case" close="end">
+             when
+                ID = #{hzDerivativeMaterielBasic.id,jdbcType=DECIMAL}
+             then
+                #{hzDerivativeMaterielBasic.changeOrderId,jdbcType=DECIMAL}
          </foreach>
         where
         ID in
