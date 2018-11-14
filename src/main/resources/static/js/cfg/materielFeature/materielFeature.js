@@ -361,27 +361,49 @@ function launchChangeForm() {
         width: 500
     }).on(function (e) {
         if (e) {
-            $.ajax({
-                type: "POST",
-                //ajax需要添加打包名
-                url: "./materielV2/getVWO",
-                data: /*data*/JSON.stringify(data),
-                contentType: "application/json",
-                success: function (result) {
-                    if (result.status) {
-                        layer.msg("发起VWO流程成功", {icon: 1, time: 2000})
-                        // window.Ewin.alert({message: "删除时数据成功"});
-                        //刷新，会重新申请数据库数据
-                    }
-                    else {
-                        window.Ewin.alert({message: "发起VWO流程失败:" + result.msg});
-                    }
-                    $table.bootstrapTable("refresh");
-                },
-                error: function (info) {
-                    window.Ewin.alert({message: "发起VWO流程:" + info.status});
+            var puids = "";
+            for(let i in rows){
+                puids += rows[i].puid;
+                if(i<rows.length-1){
+                    puids+=",";
                 }
-            })
+            }
+            var titles = "";
+            for(let i in dynamicTitle){
+                titles += dynamicTitle[i];
+                if(i<dynamicTitle.length-1){
+                    titles+=",";
+                }
+            }
+            window.Ewin.dialog({
+                // 这个puid就是车型模型的puid，直接修改了车型模型的基本信息（在bom系统维护的字段）
+                title: "选择变更表单",
+                url: "./materielV2/setChangeFromPage?projectUid="+getProjectUid()+"&puids="+puids+"&titles="+titles,
+                gridId: "gridId",
+                width: 450,
+                height: 450
+            });
+            // $.ajax({
+            //     type: "POST",
+            //     //ajax需要添加打包名
+            //     url: "./materielV2/getVWO",
+            //     data: /*data*/JSON.stringify(data),
+            //     contentType: "application/json",
+            //     success: function (result) {
+            //         if (result.status) {
+            //             layer.msg("发起VWO流程成功", {icon: 1, time: 2000})
+            //             // window.Ewin.alert({message: "删除时数据成功"});
+            //             //刷新，会重新申请数据库数据
+            //         }
+            //         else {
+            //             window.Ewin.alert({message: "发起VWO流程失败:" + result.msg});
+            //         }
+            //         $table.bootstrapTable("refresh");
+            //     },
+            //     error: function (info) {
+            //         window.Ewin.alert({message: "发起VWO流程:" + info.status});
+            //     }
+            // })
         }
     });
 }

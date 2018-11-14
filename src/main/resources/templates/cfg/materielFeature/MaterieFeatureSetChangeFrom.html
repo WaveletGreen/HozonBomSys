@@ -7,7 +7,7 @@
 </head>
 <body>
 <div style="max-width: 450px;max-height: 450px;">
-    <form id="form" role="form" method="post" >
+    <form id="form" role="form" method="post" ">
         <div class="row">
             <div class="col-md-12">
                 <div class="form-group">
@@ -26,22 +26,22 @@
 </div>
 <script th:inline="javascript">
     <![CDATA[
-    var rows = [[${rows}]];
-    var titles = [[${titles}]];
+    var puids = [[${puids}]];
+    var titles = [[${titles}]]
     var projectPuid = getProjectUid();
     $(function () {
         // 绑定dialog的确定按钮的监听事件
         $("#btnOk", window.top.document).click(function () {
             var data = {};
             var changeFromId = $("#stage option:selected").val();
-            data.rows = rows;
+            data.puids = puids;
             data.titles = titles;
             data.projectPuid = projectPuid;
             data.changeFromId = changeFromId;
+            alert(JSON.stringify(data));
             $.ajax({
-                type: "POST",
-                //ajax需要添加打包名
-                url: "./modelColor/getVWO",
+                type : "POST",
+                url: "./materielV2/getVWO",
                 data: JSON.stringify(data),
                 contentType: "application/json",
                 success: function (result) {
@@ -52,9 +52,6 @@
                     if (result.status) {
                         layer.msg(result.msg, {icon: 1, time: 2000});
                     }
-                    // window.Ewin.alert({message: result, width: 800});
-                    //刷新，会重新申请数据库数据
-                    // }
                     else {
                         window.Ewin.alert({message: result.msg});
                     }
@@ -63,7 +60,7 @@
                 error: function (info) {
                     window.Ewin.alert({message: "操作发送失败:" + info.status});
                 }
-            })
+            });
         });
     })
     ]]>
