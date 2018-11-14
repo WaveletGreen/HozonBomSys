@@ -117,10 +117,10 @@
         <include refid="Base_Column_List"/>,
         t2.
         <include refid="Color_Is_Multiply"/>,
-        t3.VWO_NUM as cmcrVwoNum
+        t3.CHANGE_NO as cmcrVwoNum
         from HZ_CFG0_MODEL_COLOR_RECORD t
         left join HZ_CFG0_COLORSET t2 on p_model_shell=t2.p_color_code
-        left join HZ_VWO_INFO t3 on t3.ID = t.CMCR_CHANGE_ORDER_UID
+        left join HZ_CHANGE_ORDER_RECORD t3 on t3.ID = t.CMCR_CHANGE_ORDER_UID
         where t.p_cfg0_main_record_of_mc=
         (select puid
         from hz_cfg0_main_record t3

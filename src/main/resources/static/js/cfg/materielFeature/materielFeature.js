@@ -343,9 +343,19 @@ function deleteVehicle() {
 function launchChangeForm() {
     var rows = $table.bootstrapTable('getSelections');
     if (rows.length == 0) {
-        window.Ewin.alert({message: '请选择一条需要发起VWO流程的数据!'});
+        window.Ewin.alert({message: '请选择一条需要发起变更的数据!'});
         return false;
     }
+
+    let msg = "<div style='max-height: 350px;overflow: -moz-scrollbars-vertical'>";
+    for (let i in rows) {
+        if (0 != rows[i].status || "0" != rows[i].status) {
+            window.Ewin.alert({message: rows[i].pCfg0ObjectId + "该衍生物料不是草稿状态，不能发起变更"});
+            return false;
+        }
+        msg += "<p>" + rows[i].pCfg0ObjectId + "-" + rows[i].pCfg0Desc + "</p>";
+    }
+
     var data = {};
     data.rows = rows;
     var puids = [];
@@ -357,7 +367,7 @@ function launchChangeForm() {
     data.projectPuid = projectUid;
     window.Ewin.confirm({
         title: '提示',
-        message: '是否要发起VWO流程？',
+        message: '是否要发起变更？',
         width: 500
     }).on(function (e) {
         if (e) {
