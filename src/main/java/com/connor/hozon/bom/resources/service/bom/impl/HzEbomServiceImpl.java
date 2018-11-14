@@ -741,30 +741,7 @@ public class HzEbomServiceImpl implements HzEbomService {
             String lineId = "";
             if (bomLineRecord != null) {
                 lineId = bomLineRecord.getLineID();
-//                bomLineMap.put("tableName", "HZ_EBOM_REOCRD_BEFORE_CHANGE");
-//                List<HzBomLineRecord> records = hzBomLineRecordDao.findBomListForChange(bomLineMap);
-//                bomLineRecord.setTableName("HZ_EBOM_REOCRD_BEFORE_CHANGE");
-//                if (bomLineRecord.getEwoNo() != null && !bomLineRecord.getEwoNo().equals("1")) {
-//                    bomLineRecord.setEwoNo(null);
-//                }
-//                if (ListUtil.isEmpty(records)) {//不存在时 添加进去
-//                    hzBomLineRecordDao.insert(bomLineRecord);
-//                } else {//存在记录 查看是否都有产生流程历史记录
-//                    boolean insert = true;
-//                    for (HzBomLineRecord record : records) {
-//                        if (record.getEwoNo() == null || record.getEwoNo().equals("")) {
-//                            insert = false;
-//                            break;
-//                        }
-//                    }
-//                    if (insert) {
-//                        hzBomLineRecordDao.insert(bomLineRecord);
-//                    }
                 }
-//
-//            } else {
-//                return WriteResultRespDTO.getFailResult();
-//            }
 
             HZBomMainRecord hzBomMainRecord = hzBomMainRecordDao.selectByProjectPuid(reqDTO.getProjectId());
             HzBomLineRecord hzBomLineRecord = HzEbomRecordFactory.updateHzEbomDTOLineRecord(reqDTO);
@@ -782,48 +759,6 @@ public class HzEbomServiceImpl implements HzEbomService {
                 hzBomLineRecord.setSingleVehDosage(bytes);
             }
             hzBomLineRecord.setBomDigifaxId(hzBomMainRecord.getPuid());
-
-            //需要记录数据 变更后的数据
-//            bomLineMap.put("tableName", "HZ_EBOM_REOCRD_AFTER_CHANGE");
-//            List<HzBomLineRecord> rs = hzBomLineRecordDao.findBomListForChange(bomLineMap);
-//            HzBomLineRecord h = hzBomLineRecord;
-//            if (ListUtil.isEmpty(rs)) {
-//                h.setTableName("HZ_EBOM_REOCRD_AFTER_CHANGE");
-//                h.setPuid(reqDTO.getPuid());
-//                h.setLineIndex(bomLineRecord.getLineIndex());
-//                h.setSortNum(bomLineRecord.getSortNum());
-//                h.setIsHas(bomLineRecord.getIsHas());
-//                h.setIs2Y(bomLineRecord.getIs2Y());
-//                h.setIsPart(bomLineRecord.getIsPart());
-//                h.setLinePuid(bomLineRecord.getLinePuid());
-//                hzBomLineRecordDao.insert(h);
-//            } else {
-//                boolean update = false;
-//                Long id = 0L;
-//                for (HzBomLineRecord r : rs) {
-//                    if (r.getEwoNo() != null && "1".equals(r.getEwoNo())) {
-//                        r.setEwoNo(null);
-//                    }
-//                    if (r.getEwoNo() == null || r.getEwoNo().equals("")) {
-//                        id = r.getId();
-//                        update = true;
-//                        break;
-//                    }
-//                }
-//
-//                if (update) {
-//                    h.setLineIndex(bomLineRecord.getLineIndex());
-//                    h.setSortNum(bomLineRecord.getSortNum());
-//                    if (id != 0L) {
-//                        h.setEwoNo("1");
-//                        h.setTableName("HZ_EBOM_REOCRD_AFTER_CHANGE");
-//                        h.setPuid(reqDTO.getPuid());
-//                        hzBomLineRecordDao.update(h);
-//                    }
-//
-//                }
-
-//            }
 
             hzBomLineRecord.setTableName(null);
 //                hzBomLineRecordDao.update(hzBomLineRecord);
@@ -1683,52 +1618,6 @@ public class HzEbomServiceImpl implements HzEbomService {
                 }
 
 
-                        //将删除数据在历史记录表里做备份,删除前的数据状态也要做记录
-
-//                        Map<String, Object> after = new HashMap<>();
-//                        after.put("tableName", "HZ_EBOM_REOCRD_AFTER_CHANGE");
-//                        after.put("puid", lineRecords.get(i).getPuid());
-//                        after.put("projectId", reqDTO.getProjectId());
-//
-//                        Map<String, Object> before = new HashMap<>();
-//                        before.put("tableName", "HZ_EBOM_REOCRD_BEFORE_CHANGE");
-//                        before.put("puid", lineRecords.get(i).getPuid());
-//                        before.put("projectId", reqDTO.getProjectId());
-//
-//                        HzBomLineRecord record = hzBomLineRecordDao.findBomLineByPuid(after);
-//                        HzBomLineRecord beforeRecord = hzBomLineRecordDao.findBomLineByPuid(before);
-//                        if (beforeRecord == null) {//不存在 记录添加进去
-//                            HzEPLManageRecord be = lineRecords.get(i);
-//                            be.setTableName("HZ_EBOM_REOCRD_BEFORE_CHANGE");
-//                            hzEbomRecordDAO.insert(be);
-//                        } else {//存在记录 查看是否都有产生流程历史记录
-//                            if (beforeRecord.getEwoNo() != null && !beforeRecord.getEwoNo().equals("")) {
-//                                HzEPLManageRecord be = lineRecords.get(i);
-//                                be.setTableName("HZ_EBOM_REOCRD_BEFORE_CHANGE");
-//                                hzEbomRecordDAO.insert(be);
-//                            }
-//                        }
-//
-//                        if (record != null && record.getEwoNo() != null && record.getEwoNo().equals("1")) {
-//                            if (!record.getStatus().equals(4)) {
-//                                record.setTableName("HZ_EBOM_REOCRD_AFTER_CHANGE");
-//                                record.setStatus(4);//删除状态
-//                                hzBomLineRecordDao.update(record);
-//                            }
-//                        } else if (record != null && (null == record.getEwoNo() || "".equals(record.getEwoNo()))) {
-//                            if (!record.getStatus().equals(4)) {
-//                                record.setTableName("HZ_EBOM_REOCRD_AFTER_CHANGE");
-//                                record.setStatus(4);//删除状态
-//                                hzBomLineRecordDao.update(record);
-//                            }
-//                        } else if (record == null) {
-//                            HzEPLManageRecord r = lineRecords.get(i);
-//                            r.setTableName("HZ_EBOM_REOCRD_AFTER_CHANGE");
-//                            r.setStatus(4);
-//                            hzEbomRecordDAO.insert(r);
-//                        }
-
-
                 StringBuffer eBomBuffer = new StringBuffer();
                 StringBuffer pBomBuffer = new StringBuffer();
 
@@ -1967,6 +1856,17 @@ public class HzEbomServiceImpl implements HzEbomService {
             return null;
         }
     }
+
+
+
+    @Override
+    public WriteResultRespDTO dataToChangeOrder(AddDataToChangeOrderReqDTO reqDTO) {
+
+        return null;
+    }
+
+
+
 
     /**
      * 检查是否关联特性

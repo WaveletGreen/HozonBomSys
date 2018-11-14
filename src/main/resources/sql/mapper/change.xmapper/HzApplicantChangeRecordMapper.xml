@@ -21,7 +21,7 @@
     insert into HZ_APPLICANT_CHANGE_RECORD (ID, APPLICANT_ID, APPLICANT_TIME, 
       ORDER_ID, TABLE_NAME)
     values (SEQ_HZ_APPLICANT_CHANGE_RECORD.nextval, #{applicantId,jdbcType=DOUBLE}, sysdate,
-      #{orderId,jdbcType=DOUBEL}, #{tableName,jdbcType=VARCHAR})
+      #{orderId,jdbcType=DOUBLE}, #{tableName,jdbcType=VARCHAR})
   </insert>
 
 
