@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<!--User: xulf Date: 2018/11/14 Time: 15:20-->
+<body>
+<div style="max-width: 450px;max-height: 450px;">
+    <form id="form" role="form" method="post" th:action="${action}">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label for="stage">阶段</label>
+                    <select class="form-control" id="stage" name="stage">
+                        <option th:each="model:${changeFroms}"
+                                th:value="${model.getId()}"
+                                th:text="${model.getChangeNo()}"
+                        >
+                        </option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<script th:inline="javascript">
+    <![CDATA[
+    var rows = [[${beans}]];
+    var projectPuid = getProjectUid();
+    $(function () {
+        // 绑定dialog的确定按钮的监听事件
+        $("#btnOk", window.top.document).click(function () {
+            var changeFromId = $("#stage option:selected").val();
+            $.ajax({
+                type: "POST",
+                //ajax需要添加打包名
+                url: "./vwoProcess/featureGetIntoVWO?projectUid="+projectPuid+"&changeFromId="+changeFromId,
+                data: JSON.stringify(rows),
+                contentType: "application/json",
+                success: function (result) {
+                    $('.modal-dialog', window.top.document).parent('div').remove()
+                    $('body', window.top.document).find('.modal-backdrop').remove();
+                    $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
+                    // if (result.status) {
+                    if (result.status) {
+                        layer.msg(result.msg, {icon: 1, time: 2000});
+                    }
+                    // window.Ewin.alert({message: result, width: 800});
+                    //刷新，会重新申请数据库数据
+                    // }
+                    else {
+                        window.Ewin.alert({message: result.msg});
+                    }
+                    $table.bootstrapTable("refresh");
+                },
+                error: function (info) {
+                    window.Ewin.alert({message: "操作发送失败:" + info.status});
+                }
+            })
+        });
+    })
+    ]]>
+</script>
+<script th:src="@{/layer/layer.js}"></script>
+</body>
+</html>
