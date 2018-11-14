@@ -4,27 +4,26 @@
 <!--User: xulf Date: 2018/11/14 Time: 13:55-->
 <body>
 <div style="max-width: 450px;max-height: 450px;">
-    <form id="form" role="form" method="post" th:action="${action}">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="form-group">
-                    <label for="stage">阶段</label>
-                    <select class="form-control" id="stage" name="stage">
-                        <option th:each="model:${changeFroms}"
-                                th:value="${model.getId()}"
-                                th:text="${model.getChangeNo()}"
-                        >
-                        </option>
-                    </select>
-                </div>
-            </div>
-        </div>
-    </form>
+    vkgchgc jhvcgvcig
+    <!--<form id="form" role="form" method="post" th:action="${action}">-->
+        <!--<div class="row">-->
+            <!--<div class="col-md-12">-->
+                <!--<div class="form-group">-->
+                    <!--<label for="stage">阶段</label>-->
+                    <!--<select class="form-control" id="stage" name="stage">-->
+                        <!--<option th:each="model:${changeFroms}"-->
+                                <!--th:value="${model.getId()}"-->
+                                <!--th:text="${model.getChangeNo()}"-->
+                        <!--&gt;-->
+                        <!--</option>-->
+                    <!--</select>-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
+    <!--</form>-->
 </div>
 <script th:inline="javascript">
     <![CDATA[
-    var rows = [[${beans}]];
-    var projectPuid = getProjectUid();
     $(function () {
         // 绑定dialog的确定按钮的监听事件
         $("#btnOk", window.top.document).click(function () {

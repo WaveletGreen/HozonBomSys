@@ -9,6 +9,7 @@ import com.connor.hozon.bom.resources.domain.dto.response.HzEbomLevelRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzEbomRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
 import com.connor.hozon.bom.resources.domain.query.HzEbomByPageQuery;
+import com.connor.hozon.bom.resources.mybatis.change.HzChangeOrderDAO;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.service.bom.HzEbomService;
 import com.connor.hozon.bom.resources.service.bom.HzSingleVehiclesServices;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import sql.pojo.bom.HzBomLineRecord;
+import sql.pojo.change.HzChangeOrderRecord;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -39,10 +41,10 @@ public class HzEbomController extends BaseController {
     private HzEbomService hzEbomService;
 
     @Autowired
-    private HzBomLineRecordDaoImpl hzBomLineRecordDao;
+    private HzSingleVehiclesServices hzSingleVehiclesServices;
 
     @Autowired
-    private HzSingleVehiclesServices hzSingleVehiclesServices;
+    private HzChangeOrderDAO hzChangeOrderDAO;
 
     LinkedHashMap<String, String> tableTitle = new LinkedHashMap<>();
 
@@ -383,6 +385,18 @@ public class HzEbomController extends BaseController {
         return "bomManage/ebom/ebomManage/excelImport";
     }
 
-
+    /**
+     * 跳转到EBOM选择变更单
+     * @return
+     */
+    @RequestMapping(value = "order/choose",method = RequestMethod.GET)
+    public String getOrderChooseToPage(String projectId,String puids,Model model){
+        List<HzChangeOrderRecord> records = hzChangeOrderDAO.findHzChangeOrderRecordByProjectId(projectId);
+        if(ListUtil.isNotEmpty(records)){
+            model.addAttribute("data",records);
+            model.addAttribute("puids",puids);
+        }
+        return "bomManage/ebom/ebomManage/ebomSetChangeForm";
+    }
 
 }
