@@ -687,15 +687,22 @@ public class HzBomAllCfgService {
                 HzFullCfgModel hzFullCfgModel = new HzFullCfgModel();
                 hzFullCfgModel.setModModelUid(modelKey);
                 hzFullCfgModel.setFlModelBomlineUid(cfgKey);
+
+                HzFullCfgWithCfg hzFullCfgWithCfg = new HzFullCfgWithCfg();
+                hzFullCfgWithCfg.setCfgBomlineUid(cfgKey);
+                HzFullCfgWithCfg hzFullCfgWithCfg1 = hzFullCfgWithCfgChangeDao.selectBy2Yid(hzFullCfgWithCfg);
+                hzFullCfgModel.setModCfg0Uid(hzFullCfgWithCfg1.getCfgCfg0Uid());
                 hzFullCfgModel.setModPointType(point);
                 hzFullCfgModels.add(hzFullCfgModel);
             }
         }
         int updataNumber = 0;
+        int updataNumber2 = 0;
         if (hzFullCfgModels.size() > 0) {
             updataNumber = hzFullCfgModelDao.updateByHzFullCfgModelList(hzFullCfgModels);
+            updataNumber2 = hzFullCfgModelDao.updateByHzFullCfgModelListCfg(hzFullCfgModels);
         }
-        if (hzFullCfgModels.size() == updataNumber) {
+        if (hzFullCfgModels.size() == updataNumber&&hzFullCfgModels.size()==updataNumber2) {
             respons.put("updateFlag", true);
         } else {
             respons.put("updateFlag", false);

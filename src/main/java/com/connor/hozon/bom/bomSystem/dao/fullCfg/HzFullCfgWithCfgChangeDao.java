@@ -2,6 +2,7 @@ package com.connor.hozon.bom.bomSystem.dao.fullCfg;
 
 
 import org.springframework.context.annotation.Configuration;
+import sql.pojo.cfg.fullCfg.HzFullCfgWithCfg;
 import sql.pojo.cfg.fullCfg.HzFullCfgWithCfgChange;
 
 import java.math.BigDecimal;
@@ -22,4 +23,6 @@ public interface HzFullCfgWithCfgChangeDao {
     int updateByPrimaryKey(HzFullCfgWithCfgChange record);
 
     int insertList(List<HzFullCfgWithCfgChange> hzFullCfgWithCfgChanges);
+
+    HzFullCfgWithCfg selectBy2Yid(HzFullCfgWithCfg hzFullCfgWithCfg);
 }

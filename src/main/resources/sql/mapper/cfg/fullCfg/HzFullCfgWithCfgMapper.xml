@@ -275,4 +275,13 @@
             (select CFG_CFG0_UID from HZ_FULL_CFG_WITHCFG_RECORD where CFG_BOMLINE_UID = #{cfgBomlineUid,jdbcType=VARCHAR}) = #{cfgCfg0Uid,jdbcType=VARCHAR}
           )
     </update>
+
+    <select id="selectBy2Yid" parameterType="sql.pojo.cfg.fullCfg.HzFullCfgWithCfg" resultMap="BaseResultMap">
+        select
+          <include refid="Base_Column_List"/>
+        from
+        HZ_FULL_CFG_WITHCFG_RECORD
+        where
+        CFG_BOMLINE_UID = {hzFullCfgWithCfg.cfgBomlineUid,jdbcType=VARCHAR}
+    </select>
 </mapper>
