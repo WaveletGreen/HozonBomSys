@@ -476,8 +476,8 @@ public class HzCfg0ModelColorService {
      * @param dynamicTitle
      * @return
      */
-    public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, ArrayList<String> dynamicTitle) {
-        return hzVwoManagerService.getVWO(colors,projectPuid,dynamicTitle);
+    public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, ArrayList<String> dynamicTitle, Long changeFromId) {
+        return hzVwoManagerService.getVWO(colors,projectPuid,dynamicTitle, changeFromId);
     }
 
 

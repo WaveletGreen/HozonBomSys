@@ -3,7 +3,7 @@
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <head>
     <meta charset="UTF-8">
-    <title>设置阶段</title>
+    <title>选择变更表单</title>
 </head>
 <body>
 <div style="max-width: 450px;max-height: 450px;">
@@ -29,37 +29,25 @@
     $(function () {
         // 绑定dialog的确定按钮的监听事件
         $("#btnOk", window.top.document).click(function () {
-            var url = $("#form", window.top.document).attr('action');
-            var projectPuid = $("#project", window.top.document).val();
-            <!--其实不要puid，puid会在服务器上生成-->
-            var data = {};
-            data.projectPuid = projectPuid;
-            var _d = $("#form").serializeArray();
-            for (var p in _d) {
-                if (_d.hasOwnProperty(p)) {
-                    data[_d[p].name] = _d[p].value;
-                }
-            }
+            var changeFromId = $("#stage option:selected").val();
             $.ajax({
-                contentType:
-                    "application/json",
                 type:
                     'POST',
-                url: url,
-                data: JSON.stringify(data),
+                url: "bomAllCfg/getVwo?projectId="+getProjectUid()+"&changeFromId="+changeFromId,
                 success:
                     function (result) {
-                        $('.modal-dialog', window.top.document).parent('div').remove();
+                        $('.modal-dialog', window.top.document).parent('div').remove()
                         $('body', window.top.document).find('.modal-backdrop').remove();
+                        $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
                         if (result.status) {
-                            $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doRefresh(getProjectUid());
-                            layer.msg(result.msg, {icon: 1, time: 2000});
-                        } else {
+                            layer.msg(result.msg, {icon: 1, time: 2000})
+                        }
+                        else {
                             window.Ewin.alert({message: result.msg});
                         }
                     },
                 error: function (status) {
-                    window.Ewin.alert({message: status.status + ':设置阶段数据失败!'});
+                    window.Ewin.alert({message: status.status + ':变更失败!'});
                 }
             });
         });

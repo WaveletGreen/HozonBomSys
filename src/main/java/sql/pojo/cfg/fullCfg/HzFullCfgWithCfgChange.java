@@ -9,6 +9,12 @@ import java.util.Date;
 public class HzFullCfgWithCfgChange {
     private BigDecimal id;
 
+    //变更表单ID
+    private Integer changeOrderId;
+
+    //变更主表id
+    private Integer mainID;
+
     private String cfgCfg0Uid;
 
     private String cfgBomlineUid;
@@ -44,6 +50,22 @@ public class HzFullCfgWithCfgChange {
 
     public void setId(BigDecimal id) {
         this.id = id;
+    }
+
+    public Integer getChangeOrderId() {
+        return changeOrderId;
+    }
+
+    public void setChangeOrderId(Integer changeOrderId) {
+        this.changeOrderId = changeOrderId;
+    }
+
+    public Integer getMainID() {
+        return mainID;
+    }
+
+    public void setMainID(Integer mainID) {
+        this.mainID = mainID;
     }
 
     public String getCfgCfg0Uid() {

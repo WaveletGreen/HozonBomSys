@@ -105,7 +105,7 @@ public class HzRelevanceService2 {
                     //拼接相关性
                     String relevance = "";
                     String relevanceDesc = "";
-                    String relevanceCode = "$ROOT." + hzCfg0Record.getpCfg0FamilyName() + " = '" + hzCfg0Record.getpCfg0ObjectId();
+                    String relevanceCode = "$ROOT." + hzCfg0Record.getpCfg0FamilyName() + " = '" + hzCfg0Record.getpCfg0ObjectId()+"'";
                     if("-".equals(key)){
                         //拼接相关性
                         relevance = hzCfg0Record.getpCfg0FamilyName() + "-" + hzCfg0Record.getpCfg0ObjectId();

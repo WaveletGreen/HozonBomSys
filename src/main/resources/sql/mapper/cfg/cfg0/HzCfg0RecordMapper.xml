@@ -27,7 +27,7 @@
         <result column="CFG_ABOLISH_DATE" jdbcType="TIMESTAMP" property="cfgAbolishDate"/>
         <result column="CFG_STATUS" jdbcType="INTEGER" property="cfgStatus"/>
         <result column="CFG_IS_IN_PROCESS" jdbcType="INTEGER" property="cfgIsInProcess"/>
-        <result column="VWO_ID" jdbcType="DECIMAL" property="vwoId"/>
+        <result column="CHANGE_ORDER_ID" jdbcType="DECIMAL" property="vwoId"/>
         <!--新增-->
         <result column="CFG_DIC_LIB_UID" jdbcType="VARCHAR" property="cfgDicLibUid"/>
         <result column="CFG_REVERSE_2" jdbcType="VARCHAR" property="cfgReverse2"/>
@@ -74,7 +74,7 @@
         CFG_ABOLISH_DATE,
         CFG_STATUS,
         CFG_IS_IN_PROCESS,
-        VWO_ID,
+        CHANGE_ORDER_ID,
         CFG_DIC_LIB_UID,
         CFG_REVERSE_2,
         CFG_REVERSE_3,
@@ -150,7 +150,7 @@
         <include refid="Base_Column_List"/>,t2.VWO_NUM as vwoNum,
         ROWNUM as rowno
         from HZ_CFG0_RECORD t
-        left join HZ_VWO_INFO t2 on t2.ID = t.VWO_ID
+        left join HZ_VWO_INFO t2 on t2.ID = t.CHANGE_ORDER_ID
         where 1=1
         <if test="param.featureValue !=null">
             and t.p_cfg0_object_id like '%'||upper(trim(#{param.featureValue}))||'%'
@@ -301,7 +301,7 @@
         CFG_ABOLISH_DATE,
         CFG_STATUS,
         CFG_IS_IN_PROCESS,
-        VWO_ID,
+        CHANGE_ORDER_ID,
         CFG_DIC_LIB_UID,
         CFG_REVERSE_2,
         CFG_REVERSE_3,
@@ -379,7 +379,7 @@
                 CFG_IS_IN_PROCESS = #{cfgIsInProcess,jdbcType=INTEGER},
             </if>
             <if test="vwoId!=null">
-                VWO_ID = #{vwoId,jdbcType=DECIMAL},
+                CHANGE_ORDER_ID = #{vwoId,jdbcType=DECIMAL},
             </if>
             <if test="cfgDicLibUid!=null">
                 CFG_DIC_LIB_UID = #{cfgDicLibUid,jdbcType=VARCHAR},
@@ -451,7 +451,7 @@
 
     <update id="updateList" parameterType="java.util.List">
           update HZ_CFG0_RECORD
-            set VWO_ID=
+            set CHANGE_ORDER_ID=
             <foreach collection="list" item="hzCfg0Record" open="case" close="end">
                 when
                   PUID=#{hzCfg0Record.puid}
@@ -487,6 +487,18 @@
           CFG_STATUS = #{cfgStatus,jdbcType=INTEGER},
           CFG_IS_IN_PROCESS = #{cfgIsInProcess,jdbcType=INTEGER}
         where
-          VWO_ID = #{vwoId,jdbcType=INTEGER}
+          CHANGE_ORDER_ID = #{vwoId,jdbcType=INTEGER}
     </update>
+
+    <select id="selectByPuids" parameterType="java.util.List" resultMap="BaseResultMap">
+      select
+        <include refid="Base_Column_List"/>
+      from
+        HZ_CFG0_RECORD
+      where
+        PUID in
+        <foreach collection="list" index="index" item="puid" open="(" separator="," close=")">
+            #{puid,jdbcType=VARCHAR}
+        </foreach>
+    </select>
 </mapper>
