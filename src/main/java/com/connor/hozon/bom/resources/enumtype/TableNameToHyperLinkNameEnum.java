@@ -14,10 +14,6 @@ public enum TableNameToHyperLinkNameEnum {
 
     ;
 
-
-
-
-
     private String tableName;
 
     private String linkName;

@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="HzAuditorChangeRecordMapper">
+  <resultMap id="BaseResultMap" type="sql.pojo.change.HzAuditorChangeRecord">
+    <id column="ID" jdbcType="DOUBLE" property="id" />
+    <result column="AUDITOR_ID" jdbcType="DOUBLE" property="auditorId" />
+    <result column="AUDIT_TIME" jdbcType="TIMESTAMP" property="auditTime" />
+    <result column="AUDIT_RESULT" jdbcType="DOUBLE" property="auditResult" />
+    <result column="AUDIT_SUGG" jdbcType="VARCHAR" property="auditSugg" />
+    <result column="ORDER_ID" jdbcType="DOUBLE" property="orderId" />
+    <result column="TABLE_NAME" jdbcType="VARCHAR" property="tableName" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    ID, AUDITOR_ID, AUDIT_TIME, AUDIT_RESULT, AUDIT_SUGG, ORDER_ID, TABLE_NAME
+  </sql>
+
+
+
+
+
+  <!--insert-->
+  <insert id="HzAuditorChangeDAOImpl_insert" parameterType="sql.pojo.change.HzAuditorChangeRecord">
+    insert into HZ_AUDITOR_CHANGE_RECORD (ID, AUDITOR_ID,
+      ORDER_ID,
+      TABLE_NAME)
+    values (SEQ_HZ_AUDITOR_CHANGE_RECORD.nextval, #{auditorId,jdbcType=DOUBLE},
+       #{orderId,jdbcType=DOUBLE},
+      #{tableName,jdbcType=VARCHAR})
+  </insert>
+
+
+  <insert id="insertSelective" parameterType="sql.pojo.change.HzAuditorChangeRecord">
+    insert into HZ_AUDITOR_CHANGE_RECORD
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="auditorId != null">
+        AUDITOR_ID,
+      </if>
+      <if test="auditTime != null">
+        AUDIT_TIME,
+      </if>
+      <if test="auditResult != null">
+        AUDIT_RESULT,
+      </if>
+      <if test="auditSugg != null">
+        AUDIT_SUGG,
+      </if>
+      <if test="orderId != null">
+        ORDER_ID,
+      </if>
+      <if test="tableName != null">
+        TABLE_NAME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=DECIMAL},
+      </if>
+      <if test="auditorId != null">
+        #{auditorId,jdbcType=DECIMAL},
+      </if>
+      <if test="auditTime != null">
+        #{auditTime,jdbcType=DATE},
+      </if>
+      <if test="auditResult != null">
+        #{auditResult,jdbcType=DECIMAL},
+      </if>
+      <if test="auditSugg != null">
+        #{auditSugg,jdbcType=VARCHAR},
+      </if>
+      <if test="orderId != null">
+        #{orderId,jdbcType=DECIMAL},
+      </if>
+      <if test="tableName != null">
+        #{tableName,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+
+  <!--update-->
+  <update id="updateByPrimaryKeySelective" parameterType="sql.pojo.change.HzAuditorChangeRecord">
+    update HZ_AUDITOR_CHANGE_RECORD
+    <set>
+      <if test="auditorId != null">
+        AUDITOR_ID = #{auditorId,jdbcType=DECIMAL},
+      </if>
+      <if test="auditTime != null">
+        AUDIT_TIME = #{auditTime,jdbcType=DATE},
+      </if>
+      <if test="auditResult != null">
+        AUDIT_RESULT = #{auditResult,jdbcType=DECIMAL},
+      </if>
+      <if test="auditSugg != null">
+        AUDIT_SUGG = #{auditSugg,jdbcType=VARCHAR},
+      </if>
+      <if test="orderId != null">
+        ORDER_ID = #{orderId,jdbcType=DECIMAL},
+      </if>
+      <if test="tableName != null">
+        TABLE_NAME = #{tableName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+
+  <update id="updateByPrimaryKey" parameterType="sql.pojo.change.HzAuditorChangeRecord">
+    update HZ_AUDITOR_CHANGE_RECORD
+    set AUDITOR_ID = #{auditorId,jdbcType=DECIMAL},
+      AUDIT_TIME = #{auditTime,jdbcType=DATE},
+      AUDIT_RESULT = #{auditResult,jdbcType=DECIMAL},
+      AUDIT_SUGG = #{auditSugg,jdbcType=VARCHAR},
+      ORDER_ID = #{orderId,jdbcType=DECIMAL},
+      TABLE_NAME = #{tableName,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+
+  <!--delete-->
+  <delete id="deleteByPrimaryKey" parameterType="java.math.BigDecimal">
+    delete from HZ_AUDITOR_CHANGE_RECORD
+    where ID = #{id,jdbcType=DECIMAL}
+  </delete>
+
+  <!--select-->
+  <select id="selectByPrimaryKey" parameterType="java.math.BigDecimal" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from HZ_AUDITOR_CHANGE_RECORD
+    where ID = #{id,jdbcType=DECIMAL}
+  </select>
+</mapper>
