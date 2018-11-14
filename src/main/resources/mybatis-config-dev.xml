@@ -139,6 +139,11 @@
         <mapper resource="sql/mapper/change.xmapper/HzEWOImpactDeptEmpMapper.xml"/>
         <mapper resource="sql/mapper/change.xmapper/HzEWOImpactDeptMapper.xml"/>
         <mapper resource="sql/mapper/change.xmapper/HzChangeOrderRecordMapper.xml"/>
+
+        <mapper resource="sql/mapper/change.xmapper/HzApplicantChangeRecordMapper.xml"/>
+        <mapper resource="sql/mapper/change.xmapper/HzAuditorChangeRecordMapper.xml"/>
+        <mapper resource="sql/mapper/change.xmapper/HzChangeDataRecordMapper.xml"/>
+
         <!--字典库-->
         <mapper resource="sql/mapper/resourcesLibrary/dictionaryLibrary.xmapper/HzDictionaryLibraryMapper.xml"/>
         <!--VPPS库-->

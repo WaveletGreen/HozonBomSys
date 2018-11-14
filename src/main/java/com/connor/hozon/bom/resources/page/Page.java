@@ -62,8 +62,6 @@ public class Page<T> {
 		return pageNumber;
 	}
 
-
-
 	public int getFirstResult() {
 		return (pageNumber - 1) * pageSize;
 	}

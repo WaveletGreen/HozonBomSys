@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="HzChangeDataRecordMapper">
+  <resultMap id="BaseResultMap" type="sql.pojo.change.HzChangeDataRecord">
+    <id column="ID" jdbcType="DOUBLE" property="id" />
+    <result column="PUID" jdbcType="VARCHAR" property="puid" />
+    <result column="APPLICANT_ID" jdbcType="DOUBLE" property="applicantId" />
+    <result column="AUDITOR_ID" jdbcType="DOUBLE" property="auditorId" />
+    <result column="ORDER_ID" jdbcType="DOUBLE" property="orderId" />
+    <result column="TABLE_NAME" jdbcType="VARCHAR" property="tableName" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    ID, PUID, APPLICANT_ID, AUDITOR_ID, ORDER_ID, TABLE_NAME
+  </sql>
+
+
+  <!--insert-->
+  <insert id="HzChangeDataRecordDAOImpl_insert" parameterType="sql.pojo.change.HzChangeDataRecord">
+    insert into HZ_CHANGE_DATA_RECORD (ID, PUID, APPLICANT_ID, 
+      AUDITOR_ID, ORDER_ID, TABLE_NAME
+      )
+    values (SEQ_HZ_CHANGE_DATA_RECORD.nextval, #{puid,jdbcType=VARCHAR}, #{applicantId,jdbcType=DOUBLE},
+      #{auditorId,jdbcType=DOUBLE}, #{orderId,jdbcType=DOUBLE}, #{tableName,jdbcType=VARCHAR}
+      )
+  </insert>
+
+
+  <insert id="HzChangeDataRecordDAOImpl_insertList" parameterType="java.util.List">
+    insert into HZ_CHANGE_DATA_RECORD (ID, PUID, APPLICANT_ID,
+      AUDITOR_ID, ORDER_ID, TABLE_NAME
+      )
+    select SEQ_HZ_CHANGE_DATA_RECORD.nextval,t.* from
+    (
+    <foreach collection="list" item="item" index="index" separator="UNION ALL">
+      select
+      #{item.puid,jdbcType=VARCHAR},
+      #{item.applicantId,jdbcType=DOUBLE},
+      #{item.auditorId,jdbcType=DOUBLE},
+      #{item.orderId,jdbcType=DOUBLE},
+      #{item.tableName,jdbcType=VARCHAR}
+      from DUAL
+    </foreach>
+    )t
+  </insert>
+
+
+  <insert id="insertSelective" parameterType="sql.pojo.change.HzChangeDataRecord">
+    insert into HZ_CHANGE_DATA_RECORD
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="puid != null">
+        PUID,
+      </if>
+      <if test="applicantId != null">
+        APPLICANT_ID,
+      </if>
+      <if test="auditorId != null">
+        AUDITOR_ID,
+      </if>
+      <if test="orderId != null">
+        ORDER_ID,
+      </if>
+      <if test="tableName != null">
+        TABLE_NAME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=DECIMAL},
+      </if>
+      <if test="puid != null">
+        #{puid,jdbcType=VARCHAR},
+      </if>
+      <if test="applicantId != null">
+        #{applicantId,jdbcType=DECIMAL},
+      </if>
+      <if test="auditorId != null">
+        #{auditorId,jdbcType=DECIMAL},
+      </if>
+      <if test="orderId != null">
+        #{orderId,jdbcType=DECIMAL},
+      </if>
+      <if test="tableName != null">
+        #{tableName,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+
+  <!--update-->
+  <update id="updateByPrimaryKeySelective" parameterType="sql.pojo.change.HzChangeDataRecord">
+    update HZ_CHANGE_DATA_RECORD
+    <set>
+      <if test="puid != null">
+        PUID = #{puid,jdbcType=VARCHAR},
+      </if>
+      <if test="applicantId != null">
+        APPLICANT_ID = #{applicantId,jdbcType=DECIMAL},
+      </if>
+      <if test="auditorId != null">
+        AUDITOR_ID = #{auditorId,jdbcType=DECIMAL},
+      </if>
+      <if test="orderId != null">
+        ORDER_ID = #{orderId,jdbcType=DECIMAL},
+      </if>
+      <if test="tableName != null">
+        TABLE_NAME = #{tableName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+
+  <update id="updateByPrimaryKey" parameterType="sql.pojo.change.HzChangeDataRecord">
+    update HZ_CHANGE_DATA_RECORD
+    set PUID = #{puid,jdbcType=VARCHAR},
+      APPLICANT_ID = #{applicantId,jdbcType=DECIMAL},
+      AUDITOR_ID = #{auditorId,jdbcType=DECIMAL},
+      ORDER_ID = #{orderId,jdbcType=DECIMAL},
+      TABLE_NAME = #{tableName,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+
+  <!--delete-->
+  <delete id="deleteByPrimaryKey" parameterType="java.math.BigDecimal">
+    delete from HZ_CHANGE_DATA_RECORD
+    where ID = #{id,jdbcType=DECIMAL}
+  </delete>
+
+  <!--select-->
+  <select id="selectByPrimaryKey" parameterType="java.math.BigDecimal" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from HZ_CHANGE_DATA_RECORD
+    where ID = #{id,jdbcType=DECIMAL}
+  </select>
+
+</mapper>

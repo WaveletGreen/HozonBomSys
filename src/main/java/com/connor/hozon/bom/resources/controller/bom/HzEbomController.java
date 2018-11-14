@@ -4,14 +4,12 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.connor.hozon.bom.bomSystem.impl.bom.HzBomLineRecordDaoImpl;
 import com.connor.hozon.bom.resources.controller.BaseController;
-import com.connor.hozon.bom.resources.domain.dto.request.AddHzEbomReqDTO;
-import com.connor.hozon.bom.resources.domain.dto.request.DeleteHzEbomReqDTO;
-import com.connor.hozon.bom.resources.domain.dto.request.UpdateHzEbomLeveReqDTO;
-import com.connor.hozon.bom.resources.domain.dto.request.UpdateHzEbomReqDTO;
+import com.connor.hozon.bom.resources.domain.dto.request.*;
 import com.connor.hozon.bom.resources.domain.dto.response.HzEbomLevelRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzEbomRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
 import com.connor.hozon.bom.resources.domain.query.HzEbomByPageQuery;
+import com.connor.hozon.bom.resources.mybatis.change.HzChangeOrderDAO;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.service.bom.HzEbomService;
 import com.connor.hozon.bom.resources.service.bom.HzSingleVehiclesServices;
@@ -21,6 +19,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import sql.pojo.bom.HzBomLineRecord;
+import sql.pojo.change.HzChangeOrderRecord;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -42,10 +41,10 @@ public class HzEbomController extends BaseController {
     private HzEbomService hzEbomService;
 
     @Autowired
-    private HzBomLineRecordDaoImpl hzBomLineRecordDao;
+    private HzSingleVehiclesServices hzSingleVehiclesServices;
 
     @Autowired
-    private HzSingleVehiclesServices hzSingleVehiclesServices;
+    private HzChangeOrderDAO hzChangeOrderDAO;
 
     LinkedHashMap<String, String> tableTitle = new LinkedHashMap<>();
 
@@ -200,11 +199,6 @@ public class HzEbomController extends BaseController {
 
     @RequestMapping(value = "update/ebomLevel",method = RequestMethod.POST)
     public void updateEbomLevelToDB(@RequestBody UpdateHzEbomLeveReqDTO reqDTO, HttpServletResponse response){
-        boolean b = PrivilegeUtil.writePrivilege();
-        if(!b){//管理员权限
-            toJSONResponse(Result.build(false,"您没有权限进行当前操作！"), response);
-            return;
-        }
 
         //WriteResultRespDTO respDTO= hzEbomService.updateHzEbomLevelRecord(reqDTO);
         //测试
@@ -337,11 +331,6 @@ public class HzEbomController extends BaseController {
             toJSONResponse(Result.build(false,"非法参数！"), response);
             return;
         }
-        boolean b = PrivilegeUtil.writePrivilege();
-        if(!b){//管理员权限
-            toJSONResponse(Result.build(false,"您没有权限进行当前操作！"), response);
-            return;
-        }
         WriteResultRespDTO respDTO = hzEbomService.addHzEbomRecord(reqDTO);
         toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO), respDTO.getErrMsg()), response);
     }
@@ -372,12 +361,18 @@ public class HzEbomController extends BaseController {
             toJSONResponse(Result.build(false,"非法参数！"), response);
             return;
         }
-        boolean b = PrivilegeUtil.writePrivilege();
-        if(!b){//管理员权限
-            toJSONResponse(Result.build(false,"您没有权限进行当前操作！"), response);
-            return;
-        }
         WriteResultRespDTO respDTO = hzEbomService.deleteHzEbomRecordById(reqDTO);
+        toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO), respDTO.getErrMsg()), response);
+    }
+
+    /**
+     * EBOM发起变更数据到变更单
+     * @param reqDTO
+     * @param response
+     */
+    @RequestMapping(value = "data/change",method = RequestMethod.POST)
+    public void ebomDataToChangeOrder(@RequestBody AddDataToChangeOrderReqDTO reqDTO, HttpServletResponse response){
+        WriteResultRespDTO respDTO = hzEbomService.dataToChangeOrder(reqDTO);
         toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO), respDTO.getErrMsg()), response);
     }
 
@@ -389,4 +384,19 @@ public class HzEbomController extends BaseController {
     public String getExcelImport(){
         return "bomManage/ebom/ebomManage/excelImport";
     }
+
+    /**
+     * 跳转到EBOM选择变更单
+     * @return
+     */
+    @RequestMapping(value = "order/choose",method = RequestMethod.GET)
+    public String getOrderChooseToPage(String projectId,String puids,Model model){
+        List<HzChangeOrderRecord> records = hzChangeOrderDAO.findHzChangeOrderRecordByProjectId(projectId);
+        if(ListUtil.isNotEmpty(records)){
+            model.addAttribute("data",records);
+            model.addAttribute("puids",puids);
+        }
+        return "bomManage/ebom/ebomManage/ebomSetChangeForm";
+    }
+
 }

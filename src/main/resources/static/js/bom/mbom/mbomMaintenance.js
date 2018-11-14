@@ -693,7 +693,77 @@ function initTable1(mBomUrl) {
                         handler: function () {
                             window.Ewin.dialog({title: "导入", url: "mbom/importExcel", width: 600, height: 500})
                         }
-                    }
+                    },
+                    {
+                        text: '发起流程',
+                        iconCls: 'glyphicon glyphicon-log-out',
+                        handler: function () {
+                            var rows = $mBomTable.bootstrapTable('getSelections');
+                            var puids = "";
+                            for (var i = 0; i < rows.length; i++) {
+                                puids += rows[i].puid + ",";
+                            }
+                            ;
+                            // var myData = JSON.stringify({
+                            //     "projectId": $("#project", window.top.document).val(),
+                            //     "puids": puids,
+                            // });
+                            if (rows.length == 0) {
+                                window.Ewin.alert({message: '请选择一条需要变更的数据!'});
+                                return false;
+                            }
+                            else {
+                                for (var i = 0; i < rows.length; i++) {
+                                    if (rows[i].status != 4 && rows[i].status != 2) {
+                                        window.Ewin.alert({message: '只能选择状态为草稿状态或删除状态的数据发起流程!'});
+                                        return false;
+                                    }
+                                }
+                            }
+                            window.Ewin.dialog({
+                                title: "选择变更表单",
+                                url: "",
+                                gridId: "gridId",
+                                width: 450,
+                                height: 450
+                            });
+                            // var _table = '<p>是否要删除您所选择的记录？</p>' +
+                            //     '<div style="max-height: 400px;overflow:scroll;"><table class="table table-striped tableNormalStyle" >';
+                            // for (var index in rows) {
+                            //     _table += '<tr><td>' + rows[index].lineId + '</td></tr>';
+                            // }
+                            // _table += '</table></div>';
+                            // window.Ewin.confirm({title: '提示', message: _table, width: 500}).on(function (e) {
+                            //     if (e) {
+                            // $.ajax({
+                            //     type: "POST",
+                            //     // ajax需要添加打包名
+                            //     url: "ewo/initiating/process",
+                            //     data: myData,
+                            //     contentType: "application/json",
+                            //     success: function (result) {
+                            //         // if (result.status) {
+                            //         //     window.Ewin.alert({message: result.errMsg});
+                            //         //     //刷新，会重新申请数据库数据
+                            //         // }
+                            //         // else {
+                            //         //     window.Ewin.alert({messabge: + result.errMsg});
+                            //         // }
+                            //         if (result.success) {
+                            //             layer.msg('发起流程成功', {icon: 1, time: 2000})
+                            //         } else if (!result.success) {
+                            //             window.Ewin.alert({message: result.errMsg});
+                            //         }
+                            //         $table.bootstrapTable("refresh");
+                            //     },
+                            //     error: function (info) {
+                            //         window.Ewin.alert({message: ":" + info.status});
+                            //     }
+                            // })
+                            //     }
+                            // });
+                        }
+                    },
                 ],
             });
             $mBomTable.bootstrapTable('hideColumn', 'level');
@@ -1337,7 +1407,77 @@ function initTable11(mBomUrl, lineIds, colorIds) {
                         handler: function () {
                             window.Ewin.dialog({title: "导入", url: "mbom/importExcel", width: 600, height: 500})
                         }
-                    }
+                    },
+                    {
+                        text: '发起流程',
+                        iconCls: 'glyphicon glyphicon-log-out',
+                        handler: function () {
+                            var rows = $mBomTable.bootstrapTable('getSelections');
+                            var puids = "";
+                            for (var i = 0; i < rows.length; i++) {
+                                puids += rows[i].puid + ",";
+                            }
+                            ;
+                            // var myData = JSON.stringify({
+                            //     "projectId": $("#project", window.top.document).val(),
+                            //     "puids": puids,
+                            // });
+                            if (rows.length == 0) {
+                                window.Ewin.alert({message: '请选择一条需要变更的数据!'});
+                                return false;
+                            }
+                            else {
+                                for (var i = 0; i < rows.length; i++) {
+                                    if (rows[i].status != 4 && rows[i].status != 2) {
+                                        window.Ewin.alert({message: '只能选择状态为草稿状态或删除状态的数据发起流程!'});
+                                        return false;
+                                    }
+                                }
+                            }
+                            window.Ewin.dialog({
+                                title: "选择变更表单",
+                                url: "",
+                                gridId: "gridId",
+                                width: 450,
+                                height: 450
+                            });
+                            // var _table = '<p>是否要删除您所选择的记录？</p>' +
+                            //     '<div style="max-height: 400px;overflow:scroll;"><table class="table table-striped tableNormalStyle" >';
+                            // for (var index in rows) {
+                            //     _table += '<tr><td>' + rows[index].lineId + '</td></tr>';
+                            // }
+                            // _table += '</table></div>';
+                            // window.Ewin.confirm({title: '提示', message: _table, width: 500}).on(function (e) {
+                            //     if (e) {
+                            // $.ajax({
+                            //     type: "POST",
+                            //     // ajax需要添加打包名
+                            //     url: "ewo/initiating/process",
+                            //     data: myData,
+                            //     contentType: "application/json",
+                            //     success: function (result) {
+                            //         // if (result.status) {
+                            //         //     window.Ewin.alert({message: result.errMsg});
+                            //         //     //刷新，会重新申请数据库数据
+                            //         // }
+                            //         // else {
+                            //         //     window.Ewin.alert({messabge: + result.errMsg});
+                            //         // }
+                            //         if (result.success) {
+                            //             layer.msg('发起流程成功', {icon: 1, time: 2000})
+                            //         } else if (!result.success) {
+                            //             window.Ewin.alert({message: result.errMsg});
+                            //         }
+                            //         $table.bootstrapTable("refresh");
+                            //     },
+                            //     error: function (info) {
+                            //         window.Ewin.alert({message: ":" + info.status});
+                            //     }
+                            // })
+                            //     }
+                            // });
+                        }
+                    },
                 ],
             });
             $mBomTable.bootstrapTable('hideColumn', 'level');
@@ -1631,7 +1771,77 @@ function initTable2(productionUrl) {
                         handler: function () {
                             window.Ewin.dialog({title: "导入", url: "mbom/importExcel2", width: 600, height: 500})
                         }
-                    }
+                    },
+                    {
+                        text: '发起流程',
+                        iconCls: 'glyphicon glyphicon-log-out',
+                        handler: function () {
+                            var rows = $productionTable.bootstrapTable('getSelections');
+                            var puids = "";
+                            for (var i = 0; i < rows.length; i++) {
+                                puids += rows[i].puid + ",";
+                            }
+                            ;
+                            // var myData = JSON.stringify({
+                            //     "projectId": $("#project", window.top.document).val(),
+                            //     "puids": puids,
+                            // });
+                            if (rows.length == 0) {
+                                window.Ewin.alert({message: '请选择一条需要变更的数据!'});
+                                return false;
+                            }
+                            else {
+                                for (var i = 0; i < rows.length; i++) {
+                                    if (rows[i].status != 4 && rows[i].status != 2) {
+                                        window.Ewin.alert({message: '只能选择状态为草稿状态或删除状态的数据发起流程!'});
+                                        return false;
+                                    }
+                                }
+                            }
+                            window.Ewin.dialog({
+                                title: "选择变更表单",
+                                url: "",
+                                gridId: "gridId",
+                                width: 450,
+                                height: 450
+                            });
+                            // var _table = '<p>是否要删除您所选择的记录？</p>' +
+                            //     '<div style="max-height: 400px;overflow:scroll;"><table class="table table-striped tableNormalStyle" >';
+                            // for (var index in rows) {
+                            //     _table += '<tr><td>' + rows[index].lineId + '</td></tr>';
+                            // }
+                            // _table += '</table></div>';
+                            // window.Ewin.confirm({title: '提示', message: _table, width: 500}).on(function (e) {
+                            //     if (e) {
+                            // $.ajax({
+                            //     type: "POST",
+                            //     // ajax需要添加打包名
+                            //     url: "ewo/initiating/process",
+                            //     data: myData,
+                            //     contentType: "application/json",
+                            //     success: function (result) {
+                            //         // if (result.status) {
+                            //         //     window.Ewin.alert({message: result.errMsg});
+                            //         //     //刷新，会重新申请数据库数据
+                            //         // }
+                            //         // else {
+                            //         //     window.Ewin.alert({messabge: + result.errMsg});
+                            //         // }
+                            //         if (result.success) {
+                            //             layer.msg('发起流程成功', {icon: 1, time: 2000})
+                            //         } else if (!result.success) {
+                            //             window.Ewin.alert({message: result.errMsg});
+                            //         }
+                            //         $table.bootstrapTable("refresh");
+                            //     },
+                            //     error: function (info) {
+                            //         window.Ewin.alert({message: ":" + info.status});
+                            //     }
+                            // })
+                            //     }
+                            // });
+                        }
+                    },
                 ],
             });
             $productionTable.bootstrapTable('hideColumn', 'level');
@@ -1886,7 +2096,77 @@ function initTable22(productionUrl, lineIds, colorIds) {
                         handler: function () {
                             window.Ewin.dialog({title: "导入", url: "mbom/importExcel2", width: 600, height: 500})
                         }
-                    }
+                    },
+                    {
+                        text: '发起流程',
+                        iconCls: 'glyphicon glyphicon-log-out',
+                        handler: function () {
+                            var rows = $productionTable.bootstrapTable('getSelections');
+                            var puids = "";
+                            for (var i = 0; i < rows.length; i++) {
+                                puids += rows[i].puid + ",";
+                            }
+                            ;
+                            // var myData = JSON.stringify({
+                            //     "projectId": $("#project", window.top.document).val(),
+                            //     "puids": puids,
+                            // });
+                            if (rows.length == 0) {
+                                window.Ewin.alert({message: '请选择一条需要变更的数据!'});
+                                return false;
+                            }
+                            else {
+                                for (var i = 0; i < rows.length; i++) {
+                                    if (rows[i].status != 4 && rows[i].status != 2) {
+                                        window.Ewin.alert({message: '只能选择状态为草稿状态或删除状态的数据发起流程!'});
+                                        return false;
+                                    }
+                                }
+                            }
+                            window.Ewin.dialog({
+                                title: "选择变更表单",
+                                url: "",
+                                gridId: "gridId",
+                                width: 450,
+                                height: 450
+                            });
+                            // var _table = '<p>是否要删除您所选择的记录？</p>' +
+                            //     '<div style="max-height: 400px;overflow:scroll;"><table class="table table-striped tableNormalStyle" >';
+                            // for (var index in rows) {
+                            //     _table += '<tr><td>' + rows[index].lineId + '</td></tr>';
+                            // }
+                            // _table += '</table></div>';
+                            // window.Ewin.confirm({title: '提示', message: _table, width: 500}).on(function (e) {
+                            //     if (e) {
+                            // $.ajax({
+                            //     type: "POST",
+                            //     // ajax需要添加打包名
+                            //     url: "ewo/initiating/process",
+                            //     data: myData,
+                            //     contentType: "application/json",
+                            //     success: function (result) {
+                            //         // if (result.status) {
+                            //         //     window.Ewin.alert({message: result.errMsg});
+                            //         //     //刷新，会重新申请数据库数据
+                            //         // }
+                            //         // else {
+                            //         //     window.Ewin.alert({messabge: + result.errMsg});
+                            //         // }
+                            //         if (result.success) {
+                            //             layer.msg('发起流程成功', {icon: 1, time: 2000})
+                            //         } else if (!result.success) {
+                            //             window.Ewin.alert({message: result.errMsg});
+                            //         }
+                            //         $table.bootstrapTable("refresh");
+                            //     },
+                            //     error: function (info) {
+                            //         window.Ewin.alert({message: ":" + info.status});
+                            //     }
+                            // })
+                            //     }
+                            // });
+                        }
+                    },
                 ],
             });
             $productionTable.bootstrapTable('hideColumn', 'level');
@@ -2178,7 +2458,77 @@ function initTable3(financialUrl) {
                         handler: function () {
                             window.Ewin.dialog({title: "导入", url: "mbom/importExcel3", width: 600, height: 500})
                         }
-                    }
+                    },
+                    {
+                        text: '发起流程',
+                        iconCls: 'glyphicon glyphicon-log-out',
+                        handler: function () {
+                            var rows = $financialTable.bootstrapTable('getSelections');
+                            var puids = "";
+                            for (var i = 0; i < rows.length; i++) {
+                                puids += rows[i].puid + ",";
+                            }
+                            ;
+                            // var myData = JSON.stringify({
+                            //     "projectId": $("#project", window.top.document).val(),
+                            //     "puids": puids,
+                            // });
+                            if (rows.length == 0) {
+                                window.Ewin.alert({message: '请选择一条需要变更的数据!'});
+                                return false;
+                            }
+                            else {
+                                for (var i = 0; i < rows.length; i++) {
+                                    if (rows[i].status != 4 && rows[i].status != 2) {
+                                        window.Ewin.alert({message: '只能选择状态为草稿状态或删除状态的数据发起流程!'});
+                                        return false;
+                                    }
+                                }
+                            }
+                            window.Ewin.dialog({
+                                title: "选择变更表单",
+                                url: "",
+                                gridId: "gridId",
+                                width: 450,
+                                height: 450
+                            });
+                            // var _table = '<p>是否要删除您所选择的记录？</p>' +
+                            //     '<div style="max-height: 400px;overflow:scroll;"><table class="table table-striped tableNormalStyle" >';
+                            // for (var index in rows) {
+                            //     _table += '<tr><td>' + rows[index].lineId + '</td></tr>';
+                            // }
+                            // _table += '</table></div>';
+                            // window.Ewin.confirm({title: '提示', message: _table, width: 500}).on(function (e) {
+                            //     if (e) {
+                            // $.ajax({
+                            //     type: "POST",
+                            //     // ajax需要添加打包名
+                            //     url: "ewo/initiating/process",
+                            //     data: myData,
+                            //     contentType: "application/json",
+                            //     success: function (result) {
+                            //         // if (result.status) {
+                            //         //     window.Ewin.alert({message: result.errMsg});
+                            //         //     //刷新，会重新申请数据库数据
+                            //         // }
+                            //         // else {
+                            //         //     window.Ewin.alert({messabge: + result.errMsg});
+                            //         // }
+                            //         if (result.success) {
+                            //             layer.msg('发起流程成功', {icon: 1, time: 2000})
+                            //         } else if (!result.success) {
+                            //             window.Ewin.alert({message: result.errMsg});
+                            //         }
+                            //         $table.bootstrapTable("refresh");
+                            //     },
+                            //     error: function (info) {
+                            //         window.Ewin.alert({message: ":" + info.status});
+                            //     }
+                            // })
+                            //     }
+                            // });
+                        }
+                    },
                 ],
             });
             // $financialTable.bootstrapTable('hideColumn', 'eBomPuid');
@@ -2438,7 +2788,77 @@ function initTable33(financialUrl, lineIds, colorIds) {
                         handler: function () {
                             window.Ewin.dialog({title: "导入", url: "mbom/importExcel3", width: 600, height: 500})
                         }
-                    }
+                    },
+                    {
+                        text: '发起流程',
+                        iconCls: 'glyphicon glyphicon-log-out',
+                        handler: function () {
+                            var rows = $financialTable.bootstrapTable('getSelections');
+                            var puids = "";
+                            for (var i = 0; i < rows.length; i++) {
+                                puids += rows[i].puid + ",";
+                            }
+                            ;
+                            // var myData = JSON.stringify({
+                            //     "projectId": $("#project", window.top.document).val(),
+                            //     "puids": puids,
+                            // });
+                            if (rows.length == 0) {
+                                window.Ewin.alert({message: '请选择一条需要变更的数据!'});
+                                return false;
+                            }
+                            else {
+                                for (var i = 0; i < rows.length; i++) {
+                                    if (rows[i].status != 4 && rows[i].status != 2) {
+                                        window.Ewin.alert({message: '只能选择状态为草稿状态或删除状态的数据发起流程!'});
+                                        return false;
+                                    }
+                                }
+                            }
+                            window.Ewin.dialog({
+                                title: "选择变更表单",
+                                url: "",
+                                gridId: "gridId",
+                                width: 450,
+                                height: 450
+                            });
+                            // var _table = '<p>是否要删除您所选择的记录？</p>' +
+                            //     '<div style="max-height: 400px;overflow:scroll;"><table class="table table-striped tableNormalStyle" >';
+                            // for (var index in rows) {
+                            //     _table += '<tr><td>' + rows[index].lineId + '</td></tr>';
+                            // }
+                            // _table += '</table></div>';
+                            // window.Ewin.confirm({title: '提示', message: _table, width: 500}).on(function (e) {
+                            //     if (e) {
+                            // $.ajax({
+                            //     type: "POST",
+                            //     // ajax需要添加打包名
+                            //     url: "ewo/initiating/process",
+                            //     data: myData,
+                            //     contentType: "application/json",
+                            //     success: function (result) {
+                            //         // if (result.status) {
+                            //         //     window.Ewin.alert({message: result.errMsg});
+                            //         //     //刷新，会重新申请数据库数据
+                            //         // }
+                            //         // else {
+                            //         //     window.Ewin.alert({messabge: + result.errMsg});
+                            //         // }
+                            //         if (result.success) {
+                            //             layer.msg('发起流程成功', {icon: 1, time: 2000})
+                            //         } else if (!result.success) {
+                            //             window.Ewin.alert({message: result.errMsg});
+                            //         }
+                            //         $table.bootstrapTable("refresh");
+                            //     },
+                            //     error: function (info) {
+                            //         window.Ewin.alert({message: ":" + info.status});
+                            //     }
+                            // })
+                            //     }
+                            // });
+                        }
+                    },
                 ],
             });
         }
