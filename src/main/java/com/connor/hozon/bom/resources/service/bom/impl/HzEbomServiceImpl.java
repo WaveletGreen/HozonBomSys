@@ -38,6 +38,8 @@ import com.connor.hozon.bom.sys.entity.User;
 import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import sql.pojo.bom.*;
 import sql.pojo.cfg.fullCfg.HzCfg0OfBomLineRecord;
 import sql.pojo.cfg.fullCfg.HzFullCfgMain;
@@ -54,6 +56,7 @@ import java.util.*;
  * Created by haozt on 2018/06/06
  */
 @Service("HzEbomService")
+@Transactional(rollbackFor={IllegalArgumentException.class})
 public class HzEbomServiceImpl implements HzEbomService {
 
     @Autowired
@@ -1881,6 +1884,7 @@ public class HzEbomServiceImpl implements HzEbomService {
 
 
     @Override
+    @Transactional
     public WriteResultRespDTO dataToChangeOrder(AddDataToChangeOrderReqDTO reqDTO) {
         if(StringUtil.isEmpty(reqDTO.getPuids()) || StringUtil.isEmpty(reqDTO.getProjectId())
                 || null == reqDTO.getOrderId()){
@@ -1985,6 +1989,7 @@ public class HzEbomServiceImpl implements HzEbomService {
             }
         }catch (Exception e){
             e.printStackTrace();
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return WriteResultRespDTO.getFailResult();
         }
         return WriteResultRespDTO.getSuccessResult();

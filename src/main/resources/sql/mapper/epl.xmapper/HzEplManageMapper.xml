@@ -1839,9 +1839,9 @@
         )
         <foreach collection="list" item="item" index="index" separator="UNION ALL">
             select
-            #{item.puid,jdbcType=VARCHAR},#{item.parentId,jdbcType=VARCHAR},#{item.bomDigifaxId,jdbcType=VARCHAR},
+            #{item.puid,jdbcType=VARCHAR},#{item.parentUid,jdbcType=VARCHAR},#{item.bomDigifaxId,jdbcType=VARCHAR},
             #{item.lineIndex,jdbcType=VARCHAR},#{item.isHas,jdbcType=INTEGER},#{item.linePuid,jdbcType=VARCHAR},
-            #{item.lineId,jdbcType=VARCHAR},#{item.is2Y,jdbcType=INTEGER},#{item.isPart,jdbcType=INTEGER},
+            #{item.lineID,jdbcType=VARCHAR},#{item.is2Y,jdbcType=INTEGER},#{item.isPart,jdbcType=INTEGER},
             #{item.sortNum,jdbcType=VARCHAR},#{item.pBomOfWhichDept,jdbcType=VARCHAR},#{item.pBomLinePartName,jdbcType=VARCHAR},
             #{item.pBomLinePartClass,jdbcType=VARCHAR},#{item.pBomLinePartEnName,jdbcType=VARCHAR},
             #{item.pBomLinePartResource,jdbcType=VARCHAR}, #{item.pFnaInfo,jdbcType=VARCHAR},#{item.status,jdbcType=INTEGER},
