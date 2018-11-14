@@ -493,8 +493,8 @@ public class HzEbomServiceImpl implements HzEbomService {
                             }
 
                             hzBomLineRecordDao.insert(hzBomLineRecord);
-                            hzBomLineRecord.setTableName("HZ_EBOM_REOCRD_AFTER_CHANGE");
-                            hzBomLineRecordDao.insert(hzBomLineRecord);
+//                            hzBomLineRecord.setTableName("HZ_EBOM_REOCRD_AFTER_CHANGE");
+//                            hzBomLineRecordDao.insert(hzBomLineRecord);
                         }
                     }
 
@@ -690,8 +690,8 @@ public class HzEbomServiceImpl implements HzEbomService {
                 hzBomLineRecord.setBomDigifaxId(hzBomMainRecord.getPuid());
                 hzBomLineRecordDao.insert(hzBomLineRecord);
 
-                hzBomLineRecord.setTableName("HZ_EBOM_REOCRD_AFTER_CHANGE");
-                hzBomLineRecordDao.insert(hzBomLineRecord);
+//                hzBomLineRecord.setTableName("HZ_EBOM_REOCRD_AFTER_CHANGE");
+//                hzBomLineRecordDao.insert(hzBomLineRecord);
 
                 List<String> stringList = hzMbomService.loadingCarPartType();
                 if (stringList.contains(reqDTO.getpBomLinePartResource())) {
@@ -782,7 +782,7 @@ public class HzEbomServiceImpl implements HzEbomService {
             }
             hzBomLineRecord.setBomDigifaxId(hzBomMainRecord.getPuid());
 
-            hzBomLineRecord.setTableName(null);
+//            hzBomLineRecord.setTableName(null);
 //                hzBomLineRecordDao.update(hzBomLineRecord);
             Map<String, Object> map = new HashMap<>();
             map.put("projectId", reqDTO.getProjectId());
@@ -1166,7 +1166,6 @@ public class HzEbomServiceImpl implements HzEbomService {
                         newRecord.setNumber(ebomRecords.get(j).getNumber());
                         newRecord.setpBuyEngineer(ebomRecords.get(j).getpBuyEngineer());
                         newRecord.setTableName(ebomRecords.get(j).getTableName());
-                        newRecord.setEwoNo(ebomRecords.get(j).getEwoNo());
                         newRecord.setpLouaFlag(ebomRecords.get(j).getpLouaFlag());
                         hzEbomRecordDAO.insert2(newRecord);
                     }
@@ -1478,10 +1477,10 @@ public class HzEbomServiceImpl implements HzEbomService {
     public WriteResultRespDTO deleteHzEbomRecordById(DeleteHzEbomReqDTO reqDTO) {
         WriteResultRespDTO respDTO = new WriteResultRespDTO();
         try {
-            boolean b = PrivilegeUtil.writePrivilege();
-            if (!b) {
-                return WriteResultRespDTO.getFailPrivilege();
-            }
+//            boolean b = PrivilegeUtil.writePrivilege();
+//            if (!b) {
+//                return WriteResultRespDTO.getFailPrivilege();
+//            }
             if (StringUtil.isEmpty(reqDTO.getPuids()) || StringUtil.isEmpty(reqDTO.getProjectId())) {
                 respDTO.setErrMsg("非法参数！");
                 respDTO.setErrCode(WriteResultRespDTO.FAILED_CODE);
@@ -1572,7 +1571,7 @@ public class HzEbomServiceImpl implements HzEbomService {
                                         hzBomLineRecord.setIsHas(0);
                                         hzBomLineRecord.setIsPart(1);
                                         hzBomLineRecord.setPuid(manageRecord.getPuid());
-                                        hzBomLineRecord.setStatus(1);
+                                        hzBomLineRecord.setStatus(2);
                                         hzBomLineRecordDao.update(hzBomLineRecord);
                                     }
                                     String currentPuid = ""; //找出应用关系所对应的puid
@@ -1782,10 +1781,10 @@ public class HzEbomServiceImpl implements HzEbomService {
             if (reqDTO.getLineIds() == null || reqDTO.getProjectId() == null) {
                 return WriteResultRespDTO.IllgalArgument();
             }
-            boolean b = PrivilegeUtil.writePrivilege();
-            if (!b) {
-                return WriteResultRespDTO.getFailPrivilege();
-            }
+//            boolean b = PrivilegeUtil.writePrivilege();
+//            if (!b) {
+//                return WriteResultRespDTO.getFailPrivilege();
+//            }
             String[] lineIds = reqDTO.getLineIds().split(",");
             for (String lineId : lineIds) {
                 Map<String, Object> map = new HashMap<>();
@@ -1813,7 +1812,7 @@ public class HzEbomServiceImpl implements HzEbomService {
                                     hzBomLineRecord.setpLouaFlag(0);
                                 }
                                 hzBomLineRecord.setPuid(records.get(i).getPuid());
-                                hzBomLineRecord.setTableName("HZ_BOM_LINE_RECORD");
+//                                hzBomLineRecord.setTableName("HZ_BOM_LINE_RECORD");
                                 set.add(hzBomLineRecord);
                             }
 
@@ -1825,7 +1824,7 @@ public class HzEbomServiceImpl implements HzEbomService {
                         } else {
                             record1.setpLouaFlag(1);
                         }
-                        record1.setTableName("HZ_BOM_LINE_RECORD");
+//                        record1.setTableName("HZ_BOM_LINE_RECORD");
                         list1.add(record1);
                     });
 
@@ -1894,7 +1893,7 @@ public class HzEbomServiceImpl implements HzEbomService {
             //获取审核人信息
             Long auditorId = reqDTO.getAuditorId();
             //数据库表名
-            String tableName = ChangeTableNameEnum.HZ_EBOM.getTableName();
+            String tableName = ChangeTableNameEnum.HZ_EBOM_AFTER.getTableName();
             //获取数据信息
             List<String> puids = Lists.newArrayList(reqDTO.getPuids().split(","));
 
@@ -1904,8 +1903,23 @@ public class HzEbomServiceImpl implements HzEbomService {
             //查询EBOM表数据 保存历史记录
             List<HzEPLManageRecord> records = hzEbomRecordDAO.getEbomRecordsByPuids(reqDTO.getPuids(),reqDTO.getProjectId());
             if(ListUtil.isNotEmpty(records)){
-                map.put("ebom",records);
+                map.put("ebomAfter",records);
             }
+
+            //修改发起流程后状态值
+            List<HzBomLineRecord> bomLineRecords = new ArrayList<>();
+            for(HzEPLManageRecord record:records){
+                HzBomLineRecord lineRecord = HzEbomRecordFactory.eplRecordToBomLineRecord(record);
+                if(Integer.valueOf(2).equals(record.getStatus())){//草稿状态---->审核状态
+                    lineRecord.setStatus(5);
+                }else if(Integer.valueOf(4).equals(record.getStatus())){// 删除状态----->审核状态
+                    lineRecord.setStatus(6);
+                }
+                lineRecord.setTableName(ChangeTableNameEnum.HZ_EBOM.getTableName());
+                bomLineRecords.add(lineRecord);
+            }
+
+            map.put("ebomBefore",bomLineRecords);
             //保存以上获取信息
             //变更数据
             List<HzChangeDataRecord> dataRecords = new ArrayList<>();
@@ -1942,8 +1956,11 @@ public class HzEbomServiceImpl implements HzEbomService {
                     @Override
                     public void action() {
                         switch (entry.getKey()){
-                            case "ebom":
+                            case "ebomAfter":
                                 hzEbomRecordDAO.insertList((List<HzEPLManageRecord>) entry.getValue(),tableName);
+                                break;
+                            case "ebomBefore":
+                                hzEbomRecordDAO.updateList((List<HzBomLineRecord>) entry.getValue());
                                 break;
                             case "changeData":
                                 hzChangeDataRecordDAO.insertList((List<HzChangeDataRecord>) entry.getValue());
@@ -1954,6 +1971,7 @@ public class HzEbomServiceImpl implements HzEbomService {
                             case "auditor" :
                                 hzAuditorChangeDAO.insert((HzAuditorChangeRecord) entry.getValue());
                                 break;
+                            default:break;
                         }
                     }
                 };

@@ -3,6 +3,7 @@ package com.connor.hozon.bom.resources.controller.bom;
 import com.connor.hozon.bom.bomSystem.service.derivative.HzComposeMFService;
 import com.alibaba.fastjson.JSONObject;
 import com.connor.hozon.bom.resources.controller.BaseController;
+import com.connor.hozon.bom.resources.domain.dto.request.AddDataToChangeOrderReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.request.AddMbomReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.request.DeleteHzMbomReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.request.UpdateMbomReqDTO;
@@ -367,6 +368,18 @@ public class HzMbomController extends BaseController {
         return "bomManage/mbom/mbomMaintenance/excelImport3";
     }
 
+
+
+    /**
+     * EBOM发起变更数据到变更单
+     * @param reqDTO
+     * @param response
+     */
+    @RequestMapping(value = "data/change",method = RequestMethod.POST)
+    public void mbomDataToChangeOrder(@RequestBody AddDataToChangeOrderReqDTO reqDTO, HttpServletResponse response){
+        WriteResultRespDTO respDTO = new WriteResultRespDTO();
+        toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO), respDTO.getErrMsg()), response);
+    }
 }
 
 

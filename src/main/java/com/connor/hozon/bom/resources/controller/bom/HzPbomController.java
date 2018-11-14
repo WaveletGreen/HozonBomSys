@@ -4,10 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.connor.hozon.bom.resources.controller.BaseController;
 
-import com.connor.hozon.bom.resources.domain.dto.request.AddHzPbomRecordReqDTO;
-import com.connor.hozon.bom.resources.domain.dto.request.DeleteHzPbomReqDTO;
-import com.connor.hozon.bom.resources.domain.dto.request.HzPbomProcessComposeReqDTO;
-import com.connor.hozon.bom.resources.domain.dto.request.UpdateHzPbomRecordReqDTO;
+import com.connor.hozon.bom.resources.domain.dto.request.*;
 import com.connor.hozon.bom.resources.domain.dto.response.HzEbomRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzPbomLineRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
@@ -400,5 +397,17 @@ public class HzPbomController extends BaseController {
     @ResponseBody
     public JSONObject addAccessories(String materielCode, String puid, String projectId) {
         return hzPbomService.addAccessories(puid, materielCode, projectId);
+    }
+
+
+    /**
+     * EBOM发起变更数据到变更单
+     * @param reqDTO
+     * @param response
+     */
+    @RequestMapping(value = "data/change",method = RequestMethod.POST)
+    public void mbomDataToChangeOrder(@RequestBody AddDataToChangeOrderReqDTO reqDTO, HttpServletResponse response){
+        WriteResultRespDTO respDTO = new WriteResultRespDTO();
+        toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO), respDTO.getErrMsg()), response);
     }
 }

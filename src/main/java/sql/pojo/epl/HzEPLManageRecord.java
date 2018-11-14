@@ -269,11 +269,18 @@ public class HzEPLManageRecord {
 
     private String tableName;
 
-    private String ewoNo;
+    /**
+     * 变更表单id
+     */
+    private Integer orderId;
 
     private Integer pLouaFlag;
 
     private String sortNum;
+
+    private String revision;
+
+    private Date effectTime;
 
     @Override
     public boolean equals(Object o) {
@@ -297,13 +304,6 @@ public class HzEPLManageRecord {
         this.sortNum = sortNum;
     }
 
-    public String getEwoNo() {
-        return ewoNo;
-    }
-
-    public void setEwoNo(String ewoNo) {
-        this.ewoNo = ewoNo;
-    }
 
     public Integer getpLouaFlag() {
         return pLouaFlag;
@@ -967,5 +967,29 @@ public class HzEPLManageRecord {
 
     public void setpRegulationCode(String pRegulationCode) {
         this.pRegulationCode = pRegulationCode;
+    }
+
+    public Integer getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(Integer orderId) {
+        this.orderId = orderId;
+    }
+
+    public String getRevision() {
+        return revision;
+    }
+
+    public void setRevision(String revision) {
+        this.revision = revision;
+    }
+
+    public Date getEffectTime() {
+        return effectTime;
+    }
+
+    public void setEffectTime(Date effectTime) {
+        this.effectTime = effectTime;
     }
 }
