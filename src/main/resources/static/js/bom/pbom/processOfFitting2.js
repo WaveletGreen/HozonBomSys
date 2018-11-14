@@ -178,7 +178,7 @@ $(function () {
                                         url: "pbom/detail?lineId=" + localSelectedNode.lineId + "&projectId=" + projectId,
                                         type: "GET",
                                         success: function (data) {
-                                            var result = data.externalObject;
+                                            var result = data.obj;
                                             var lineId = localSelectedNode.lineId;
                                             var titleName = result[0];
                                             var titleEName = result[1];

@@ -57,7 +57,7 @@ function initTable(projectUid) {
         });
     column.push({field: 'createTime', title: '创建时间', align: 'center', valign: 'middle'});
     column.push({field: 'originTime', title: '流程发起时间', align: 'center', valign: 'middle'});
-    column.push({field: 'dept', title: '部门', align: 'center', valign: 'middle'});
+    column.push({field: 'deptName', title: '部门', align: 'center', valign: 'middle'});
     column.push({field: 'originator', title: '发起人', align: 'center', valign: 'middle'});
     column.push({field: 'createName', title: '表单创建者', align: 'center', valign: 'middle'});
     column.push({field: 'tel', title: '联系电话', align: 'center', valign: 'middle'});
@@ -129,14 +129,14 @@ function initTable(projectUid) {
                 iconCls: 'glyphicon glyphicon-pencil',
                 handler: function () {
                     var rows = $table.bootstrapTable('getSelections');
-                    //只能选一条
-                    // if (rows.length != 1) {
-                    //     window.Ewin.alert({message: '请选择一条需要修改的数据!'});
-                    //     return false;
-                    // }
+                    // 只能选一条
+                    if (rows.length != 1) {
+                        window.Ewin.alert({message: '请选择一条需要修改的数据!'});
+                        return false;
+                    }
                     window.Ewin.dialog({
                         title: "修改",
-                        url: "change/updatePage",
+                        url: "change/updatePage?id="+rows[0].id,
                         gridId: "gridId",
                         width: 500,
                         height: 500
@@ -168,9 +168,9 @@ function initTable(projectUid) {
                     window.Ewin.confirm({title: '提示', message: "确定要删除数据么", width: 500}).on(function (e) {
                         if (e) {
                             $.ajax({
-                                type: "POST",
+                                type: "DELETE",
                                 //ajax需要添加打包名
-                                url: "change/delete?id=" + row[0].id,
+                                url: "change/delete?id=" + rows[0].id,
                                 // data: myData,
                                 // contentType: "application/json",
                                 success: function (result) {

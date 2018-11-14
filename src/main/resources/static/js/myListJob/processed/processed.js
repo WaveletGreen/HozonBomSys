@@ -1,20 +1,26 @@
 /**
  * Created with IntelliJ IDEA.
  * User: xlf
- * Date: 2018/11/8
- * Time: 15:17
+ * Date: 2018/11/13
+ * Time: 10:22
  */
 
 $(document).ready((function () {
-    doQuery();
+    var projectId = $("#project", window.top.document).val();
+    var url ="ewo/base/infoList?projectId="+projectId;
+    initTable(url);
 }))
 
 //刷新
-function doRefresh(projectUid) {
-    initTable(projectUid);
-}
+// function doRefresh(projectUid) {
+//     initTable(projectUid);
+// }
 function doQuery() {
-    initTable(getProjectUid());
+    // initTable(getProjectUid());
+    var projectId = $("#project", window.top.document).val();
+    var url ="ewo/base/infoList?projectId="+projectId;
+    initTable(url);
+    $('#processedTable').bootstrapTable('destroy');
 }
 function formatDate() {
     let startdate = stringToDateFormat($('#startdate').data("time"));
@@ -22,12 +28,12 @@ function formatDate() {
     $('#startdate').val(finishTime);
     $('#enddate').val(vwoEndEffectiveTime);
 }
-function initTable(projectUid) {
-    if (!checkIsSelectProject(projectUid)) {
-        return;
-    }
+function initTable(url) {
+    // if (!checkIsSelectProject(projectUid)) {
+    //     return;
+    // }
     var projectId = $("#project", window.top.document).val();
-    var $table = $("#untreatedTable");
+    var $table = $("#processedTable");
     var column = [];
     // $.ajax({
     //     url: "ebom/title?projectId=" + projectPuid,
@@ -54,6 +60,7 @@ function initTable(projectUid) {
     column.push({field: 'reasonCode', title: '原因类型', align: 'center', valign: 'middle'});
     column.push({field: 'title', title: '标题', align: 'center', valign: 'middle'});
     column.push({field: 'originator', title: '流程发起人', align: 'center', valign: 'middle'});
+    column.push({field: 'originator', title: '项目', align: 'center', valign: 'middle'})
     // var data = result.data;
     // var keys = [];
     // var values;
@@ -88,7 +95,7 @@ function initTable(projectUid) {
         //         }
         //     })
         // },
-        url: "ewo/base/infoList?projectId=" + projectUid,
+        url: url,
         method: 'get',
         height: $(window.parent.document).find("#wrapper").height() - 90,
         width: $(window).width(),
@@ -202,7 +209,7 @@ function initTable(projectUid) {
     // })
 }
 function queryLou(id) {
-    window.location.href="untreated/ToUntreatedForm?id="+id;
+    window.location.href="processed/ToProcessedForm?id="+id;
 }
 // function basic() {
 //     window.Ewin.dialog({
@@ -212,4 +219,3 @@ function queryLou(id) {
 //         width: 800,
 //         height: 500
 //     })
-// }

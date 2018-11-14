@@ -49,15 +49,14 @@ public class HzChangeController extends BaseController {
         return "change/changeForm/updateChangeForm";
     }
     @RequestMapping(value = "ToChangeOrder",method = RequestMethod.GET)
-    public String getToChangeOrderToPage(){
-
+    public String getToChangeOrderToPage(Long id,Model model){
+        HzChangeOrderRespDTO respDTO = hzChangeService.getHzChangeOrderRecordById(id);
+        if(respDTO != null){
+            model.addAttribute("data",respDTO);
+        }
         return "change/ChangeOrder/ChangeOrder";
     }
-    @RequestMapping(value = "ToUntreatedForm",method = RequestMethod.GET)
-    public String getToUntreatedFormToPage(){
 
-        return "myListJob/untreated/untreatedForm";
-    }
     @RequestMapping(value = "add",method = RequestMethod.POST)
     public void addChangeFrom(@RequestBody EditHzChangeOrderReqDTO reqDTO, HttpServletResponse response){
         WriteResultRespDTO resultRespDTO = hzChangeService.insertChangeOrderRecord(reqDTO);
@@ -79,14 +78,20 @@ public class HzChangeController extends BaseController {
     }
 
 
-    @RequestMapping(value = "exist",method = RequestMethod.GET)
+    @RequestMapping(value = "exist",method = RequestMethod.POST)
     public void deleteChangeFrom(String changeNo, HttpServletResponse response){
-        WriteResultRespDTO resultRespDTO = hzChangeService.changeNoExist(changeNo);
-        toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(resultRespDTO),resultRespDTO.getErrMsg()),response);
+        WriteResultRespDTO resultRespDTO = hzChangeService.changeNoExist(changeNo.trim());
+        JSONObject object = new JSONObject();
+        if(WriteResultRespDTO.isSuccess(resultRespDTO)){
+            object.put("valid",true);
+        }else {
+            object.put("valid",false);
+        }
+        toJSONResponse(object,response);
     }
 
     /**
-     * 获取EWO表单基本信息列表
+     * 获取变更表单列表
      * @param query
      */
     @RequestMapping(value = "order/list",method = RequestMethod.GET)
