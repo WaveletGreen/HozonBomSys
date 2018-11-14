@@ -456,7 +456,7 @@ function initTable(pBomUrl) {
                             }
                             window.Ewin.dialog({
                                 title: "选择变更表单",
-                                url: "?projectId="+projectPuid+"&puids="+puids,
+                                url: "pbom/order/choose?projectId="+projectPuid+"&puids="+puids,
                                 gridId: "gridId",
                                 width: 450,
                                 height: 450
@@ -919,7 +919,7 @@ function initTable1(pBomUrl,lineIds) {
                             }
                             window.Ewin.dialog({
                                 title: "选择变更表单",
-                                url: "?projectId="+projectPuid+"&puids="+puids,
+                                url: "pbom/order/choose?projectId="+projectPuid+"&puids="+puids,
                                 gridId: "gridId",
                                 width: 450,
                                 height: 450
