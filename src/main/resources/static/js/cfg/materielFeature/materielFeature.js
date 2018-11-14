@@ -437,7 +437,7 @@ function gotIt(result) {
         if (status == 10 || "10" == status) {
                 return "<span style='color: #e69800'>VWO审核中</span>";
         }
-        if (0 == status|| "0" == status||"null" == status || "" == status) {
+        if (0 == status|| "0" == status||"null" == status || null == status) {
             return "<span style='color: #a97f89'>草稿状态</span>";
         }
         else {

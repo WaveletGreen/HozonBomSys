@@ -45,7 +45,7 @@ public interface IHzVWOManagerService {
      * @param beans      一组特性列表
      * @return 操作消息
      */
-    JSONObject featureGetIntoVWO2(String projectUid, List<HzCfg0Record> beans);
+    JSONObject featureGetIntoVWO2(String projectUid, List<HzCfg0Record> beans,Long changeFromId);
 
     /**
      * 产生一个最新的Vwo实体类对象

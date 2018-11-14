@@ -3,6 +3,8 @@
 <mapper namespace="com.connor.hozon.bom.bomSystem.dao.fullCfg.HzFullCfgModelChangeDao">
   <resultMap id="BaseResultMap" type="sql.pojo.cfg.fullCfg.HzFullCfgModelChange">
     <result column="ID" jdbcType="DECIMAL" property="id" />
+    <result column="CHANGE_ORDER_UID" jdbcType="DECIMAL" property="changeOrderId" />
+    <result column="FL_MAIN_ID" jdbcType="DECIMAL" property="mainID" />
     <result column="MOD_MODEL_UID" jdbcType="VARCHAR" property="modModelUid" />
     <result column="MOD_CFG0_UID" jdbcType="VARCHAR" property="modCfg0Uid" />
     <result column="MOD_POINT_TYPE" jdbcType="DECIMAL" property="modPointType" />
@@ -20,6 +22,8 @@
 
   <sql id="Base_Column_List">
       ID,
+      CHANGE_ORDER_UID,
+      FL_MAIN_ID,
       MOD_MODEL_UID,
       MOD_CFG0_UID,
       MOD_POINT_TYPE,
@@ -147,6 +151,8 @@
     select SEQ_HZ_FC_MODEL_RECORD_CHANGE.NEXTVAL, A.* from (
     <foreach collection="list" index="index" item="hzFullCfgModelChange" separator="union">
       select
+        #{hzFullCfgModelChange.changeOrderId,jdbcType=DECIMAL},
+        #{hzFullCfgModelChange.mainID,jdbcType=DECIMAL},
         #{hzFullCfgModelChange.modModelUid,jdbcType=VARCHAR},
         #{hzFullCfgModelChange.modCfg0Uid,jdbcType=VARCHAR},
         #{hzFullCfgModelChange.modPointType,jdbcType=DECIMAL},

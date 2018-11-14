@@ -3,6 +3,7 @@
 <mapper namespace="com.connor.hozon.bom.bomSystem.dao.fullCfg.HzFullCfgMainChangeDao">
   <resultMap id="BaseResultMap" type="sql.pojo.cfg.fullCfg.HzFullCfgMainChange">
     <result column="ID" jdbcType="DECIMAL" property="id" />
+    <result column="CHANGE_ORDER_UID" jdbcType="DECIMAL" property="changeOrderId" />
     <result column="PROJECT_UID" jdbcType="VARCHAR" property="projectUid" />
     <result column="STATUS" jdbcType="OTHER" property="status" />
     <result column="STAGE" jdbcType="DECIMAL" property="stage" />
@@ -22,13 +23,13 @@
     <selectKey keyProperty="id" order="BEFORE" resultType="Integer">
         select SEQ_HZ_FC_MAIN_RECORD_CHANGE.NEXTVAL from dual
     </selectKey>
-    insert into HZ_FULL_CFG_MAIN_RECORD_CHANGE (ID, PROJECT_UID, STATUS, 
+    insert into HZ_FULL_CFG_MAIN_RECORD_CHANGE (ID, CHANGE_ORDER_UID, PROJECT_UID, STATUS,
       STAGE, VERSION, EFFECTIVE_DATE, 
       CREATE_DATE, UPDATE_DATE, CREATOR, 
       UPDATER, CREATE_DATE_CHANGE, UPDATE_DATE_CHANGE, 
       CREATOR_CHANGE, UPDATER_CHANGE, FM_IS_RELEASE
       )
-    values ( #{id,jdbcType=DECIMAL}, #{projectUid,jdbcType=VARCHAR}, #{status,jdbcType=OTHER},
+    values ( #{id,jdbcType=DECIMAL},#{changeOrderId,jdbcType=DECIMAL}, #{projectUid,jdbcType=VARCHAR}, #{status,jdbcType=OTHER},
       #{stage,jdbcType=DECIMAL}, #{version,jdbcType=OTHER}, #{effectiveDate,jdbcType=TIMESTAMP}, 
       #{createDate,jdbcType=TIMESTAMP}, #{updateDate,jdbcType=TIMESTAMP}, #{creator,jdbcType=OTHER}, 
       #{updater,jdbcType=OTHER}, #{createDateChange,jdbcType=TIMESTAMP}, #{updateDateChange,jdbcType=TIMESTAMP}, 
@@ -40,6 +41,9 @@
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         ID,
+      </if>
+      <if test="changeOrderId != null">
+        CHANGE_ORDER_UID,
       </if>
       <if test="projectUid != null">
         PROJECT_UID,
