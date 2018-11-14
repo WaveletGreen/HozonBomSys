@@ -89,5 +89,5 @@ function initTable(url) {
 }
 
 function queryLou(id) {
-    window.location.href = "change/ToUntreatedForm?id=" + id;
+    window.location.href = "myApplication/ToMyApplicationForm?id=" + id;
 }
