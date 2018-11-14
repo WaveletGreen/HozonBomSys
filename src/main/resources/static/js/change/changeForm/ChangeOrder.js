@@ -5,3 +5,6 @@
  * Time: 9:26
  */
 
+$(document).ready((function () {
+
+}))

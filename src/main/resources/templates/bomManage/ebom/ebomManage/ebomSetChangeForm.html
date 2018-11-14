@@ -4,23 +4,22 @@
 <!--User: xulf Date: 2018/11/14 Time: 13:55-->
 <body>
 <div style="max-width: 450px;max-height: 450px;">
-    vkgchgc jhvcgvcig
-    <!--<form id="form" role="form" method="post" th:action="${action}">-->
-        <!--<div class="row">-->
-            <!--<div class="col-md-12">-->
-                <!--<div class="form-group">-->
-                    <!--<label for="stage">阶段</label>-->
-                    <!--<select class="form-control" id="stage" name="stage">-->
-                        <!--<option th:each="model:${changeFroms}"-->
-                                <!--th:value="${model.getId()}"-->
-                                <!--th:text="${model.getChangeNo()}"-->
-                        <!--&gt;-->
-                        <!--</option>-->
-                    <!--</select>-->
-                <!--</div>-->
-            <!--</div>-->
-        <!--</div>-->
-    <!--</form>-->
+    <form id="form" role="form" method="post" action="">
+        <div class="row">
+            <div class="col-md-12">
+                <input id="puids" type="hidden" th:value="${puids}">
+                <div class="form-group">
+                    <label for="stage">阶段</label>
+                    <select class="form-control" id="stage" name="stage">
+                        <option th:each="model:${data}"
+                                th:value="${model.getId()}"
+                                th:text="${model.getChangeNo()}">
+                        </option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </form>
 </div>
 <script th:inline="javascript">
     <![CDATA[
@@ -28,12 +27,12 @@
         // 绑定dialog的确定按钮的监听事件
         $("#btnOk", window.top.document).click(function () {
             var changeFromId = $("#stage option:selected").val();
+            var projectId = $("#project", window.top.document).val();
+            var puids = $("#puids").val();
             $.ajax({
                 type: "POST",
                 //ajax需要添加打包名
-                url: "./vwoProcess/featureGetIntoVWO?projectUid="+projectPuid+"&changeFromId="+changeFromId,
-                data: JSON.stringify(rows),
-                contentType: "application/json",
+                url: "",
                 success: function (result) {
                     $('.modal-dialog', window.top.document).parent('div').remove()
                     $('body', window.top.document).find('.modal-backdrop').remove();

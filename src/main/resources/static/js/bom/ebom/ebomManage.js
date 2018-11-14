@@ -978,7 +978,7 @@ function initTable1(eBomUrl, puids) {
                             }
                             window.Ewin.dialog({
                                 title: "选择变更表单",
-                                url: "?projectId="+projectPuid+"&puids="+puids,
+                                url: "ebom/order/choose?projectId="+projectPuid+"&puids="+puids,
                                 gridId: "gridId",
                                 width: 450,
                                 height: 450
