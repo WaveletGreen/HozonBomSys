@@ -9,6 +9,7 @@ import com.connor.hozon.bom.bomSystem.dao.fullCfg.HzFullCfgWithCfgDao;
 import com.connor.hozon.bom.bomSystem.impl.bom.HzBomLineRecordDaoImpl;
 import com.connor.hozon.bom.bomSystem.service.fullCfg.HzCfg0ModelService;
 import com.connor.hozon.bom.bomSystem.service.fullCfg.HzCfg0OfBomLineService;
+import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.resources.domain.dto.request.*;
 import com.connor.hozon.bom.resources.domain.dto.response.HzEbomLevelRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzEbomRespDTO;
@@ -16,9 +17,15 @@ import com.connor.hozon.bom.resources.domain.dto.response.HzLouRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
 import com.connor.hozon.bom.resources.domain.model.*;
 import com.connor.hozon.bom.resources.domain.query.*;
+import com.connor.hozon.bom.resources.enumtype.ChangeTableNameEnum;
+import com.connor.hozon.bom.resources.executors.ExecutorServices;
 import com.connor.hozon.bom.resources.mybatis.bom.HzEbomRecordDAO;
 import com.connor.hozon.bom.resources.mybatis.bom.HzMbomRecordDAO;
 import com.connor.hozon.bom.resources.mybatis.bom.HzPbomRecordDAO;
+import com.connor.hozon.bom.resources.mybatis.change.HzApplicantChangeDAO;
+import com.connor.hozon.bom.resources.mybatis.change.HzAuditorChangeDAO;
+import com.connor.hozon.bom.resources.mybatis.change.HzChangeDataRecordDAO;
+import com.connor.hozon.bom.resources.mybatis.change.HzChangeOrderDAO;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.service.bom.HzEbomService;
 import com.connor.hozon.bom.resources.service.bom.HzMbomService;
@@ -27,12 +34,17 @@ import com.connor.hozon.bom.resources.service.epl.HzEPLManageRecordService;
 import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.resources.util.PrivilegeUtil;
 import com.connor.hozon.bom.resources.util.StringUtil;
+import com.connor.hozon.bom.sys.entity.User;
+import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sql.pojo.bom.*;
 import sql.pojo.cfg.fullCfg.HzCfg0OfBomLineRecord;
 import sql.pojo.cfg.fullCfg.HzFullCfgMain;
 import sql.pojo.cfg.model.HzCfg0ModelRecord;
+import sql.pojo.change.HzApplicantChangeRecord;
+import sql.pojo.change.HzAuditorChangeRecord;
+import sql.pojo.change.HzChangeDataRecord;
 import sql.pojo.epl.HzEPLManageRecord;
 import sql.redis.SerializeUtil;
 
@@ -84,6 +96,16 @@ public class HzEbomServiceImpl implements HzEbomService {
 
     @Autowired
     private HzCfg0ModelService hzCfg0ModelService;
+
+    @Autowired
+    private HzChangeDataRecordDAO hzChangeDataRecordDAO;
+
+    @Autowired
+    private HzApplicantChangeDAO hzApplicantChangeDAO;
+
+    @Autowired
+    private HzAuditorChangeDAO hzAuditorChangeDAO;
+
     @Override
     public Page<HzEbomRespDTO> getHzEbomPage(HzEbomByPageQuery query) {
         try {
@@ -1861,8 +1883,93 @@ public class HzEbomServiceImpl implements HzEbomService {
 
     @Override
     public WriteResultRespDTO dataToChangeOrder(AddDataToChangeOrderReqDTO reqDTO) {
+        if(StringUtil.isEmpty(reqDTO.getPuids()) || StringUtil.isEmpty(reqDTO.getProjectId())
+                || null == reqDTO.getOrderId()){
+            return WriteResultRespDTO.IllgalArgument();
+        }
+        try {
+            //获取申请人信息
+            User user = UserInfo.getUser();
+            Long applicantId = Long.valueOf(user.getId());
+            //获取审核人信息
+            Long auditorId = reqDTO.getAuditorId();
+            //数据库表名
+            String tableName = ChangeTableNameEnum.HZ_EBOM.getTableName();
+            //获取数据信息
+            List<String> puids = Lists.newArrayList(reqDTO.getPuids().split(","));
 
-        return null;
+            //统计操作数据
+            Map<String,Object> map = new HashMap<>();
+
+            //查询EBOM表数据 保存历史记录
+            List<HzEPLManageRecord> records = hzEbomRecordDAO.getEbomRecordsByPuids(reqDTO.getPuids(),reqDTO.getProjectId());
+            if(ListUtil.isNotEmpty(records)){
+                map.put("ebom",records);
+            }
+            //保存以上获取信息
+            //变更数据
+            List<HzChangeDataRecord> dataRecords = new ArrayList<>();
+            for(String puid:puids){
+                HzChangeDataRecord record = new HzChangeDataRecord();
+                record.setApplicantId(applicantId);
+                record.setAuditorId(auditorId);
+                record.setOrderId(reqDTO.getOrderId());
+                record.setPuid(puid);
+                record.setTableName(tableName);
+                dataRecords.add(record);
+            }
+            map.put("changeData",dataRecords);
+            //申请人
+            HzApplicantChangeRecord applicantChangeRecord = new HzApplicantChangeRecord();
+            applicantChangeRecord.setApplicantId(applicantId);
+            applicantChangeRecord.setOrderId(reqDTO.getOrderId());
+            applicantChangeRecord.setTableName(tableName);
+
+            map.put("applicant",applicantChangeRecord);
+            //审核人
+            HzAuditorChangeRecord auditorChangeRecord = new HzAuditorChangeRecord();
+            auditorChangeRecord.setAuditorId(auditorId);
+            auditorChangeRecord.setOrderId(reqDTO.getOrderId());
+            auditorChangeRecord.setTableName(tableName);
+
+            map.put("auditor",auditorChangeRecord);
+
+
+            //启动线程进行插入操作
+            List<ExecutorServices> services = new ArrayList<>();
+            for(Map.Entry<String,Object> entry:map.entrySet()){
+                ExecutorServices executorServices = new ExecutorServices(map.size()) {
+                    @Override
+                    public void action() {
+                        switch (entry.getKey()){
+                            case "ebom":
+                                hzEbomRecordDAO.insertList((List<HzEPLManageRecord>) entry.getValue(),tableName);
+                                break;
+                            case "changeData":
+                                hzChangeDataRecordDAO.insertList((List<HzChangeDataRecord>) entry.getValue());
+                                break;
+                            case "applicant":
+                                hzApplicantChangeDAO.insert((HzApplicantChangeRecord) entry.getValue());
+                                break;
+                            case "auditor" :
+                                hzAuditorChangeDAO.insert((HzAuditorChangeRecord) entry.getValue());
+                                break;
+                        }
+                    }
+                };
+                services.add(executorServices);
+            }
+
+            if(ListUtil.isNotEmpty(services)){
+                for(ExecutorServices s:services){
+                    s.execute();
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            return WriteResultRespDTO.getFailResult();
+        }
+        return WriteResultRespDTO.getSuccessResult();
     }
 
 

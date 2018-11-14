@@ -184,6 +184,44 @@ public class HzEbomRecordDAOImpl extends BaseSQLUtil implements HzEbomRecordDAO 
     }
 
     @Override
+    public int insertList(List<HzEPLManageRecord> records,String tableName) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("tableName",tableName);
+        int size = records.size();
+        //分批插入数据 一次1000条
+        int i = 0;
+        int cout = 0;
+        try {
+            synchronized (this){
+                if (size > 1000) {
+                    for (i = 0; i < size / 1000; i++) {
+                        List<HzEPLManageRecord> list = new ArrayList<>();
+                        for (int j = 0; j < 1000; j++) {
+                            list.add(records.get(cout));
+                            cout++;
+                        }
+                        map.put("list",list);//map key相同 value会被替代
+                        super.insert("HzEbomRecordDAOImpl_insertList",map);
+                    }
+                }
+                if (i * 1000 < size) {
+                    List<HzEPLManageRecord> list = new ArrayList<>();
+                    for (int j = 0; j < size - i * 1000; j++) {
+                        list.add(records.get(cout));
+                        cout++;
+                    }
+                    map.put("list",list);
+                    super.insert("HzEbomRecordDAOImpl_insertList",map);
+                }
+            }
+            return 1;
+        }catch (Exception e){
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    @Override
     public int insert2(HzEPLManageRecord record) {
         return super.insert("HzEbomRecordDAOImpl_insert2",record);
     }
@@ -217,6 +255,7 @@ public class HzEbomRecordDAOImpl extends BaseSQLUtil implements HzEbomRecordDAO 
             }
             return 1;
         }catch (Exception e){
+            e.printStackTrace();
             return 0;
         }
 
@@ -263,6 +302,14 @@ public class HzEbomRecordDAOImpl extends BaseSQLUtil implements HzEbomRecordDAO 
     }
 
     @Override
+    public List<HzEPLManageRecord> getEbomRecordsByPuids(String puids, String projectId) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("puids",Lists.newArrayList(puids.split(",")));
+        map.put("projectId",projectId);
+        return super.findForList("HzEbomRecordDAOImpl_getEbomRecordsByPuids",map);
+    }
+
+    @Override
     public Page<HzEPLManageRecord> getHzEbomTreeByPage(HzEbomByPageQuery query) {
         PageRequestParam request = new PageRequestParam();
         Map map = new HashMap();
@@ -274,5 +321,4 @@ public class HzEbomRecordDAOImpl extends BaseSQLUtil implements HzEbomRecordDAO 
         return super.findPage("HzEbomRecordDAOImpl_getHzEbomTreeByPage","HzEbomRecordDAOImpl_getHzEbomTreeTotalCount",request);
 
     }
-
 }

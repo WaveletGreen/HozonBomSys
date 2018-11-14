@@ -2,6 +2,8 @@ package com.connor.hozon.bom.resources.mybatis.change;
 
 import sql.pojo.change.HzChangeDataRecord;
 
+import java.util.List;
+
 /**
  * @Author: haozt
  * @Date: 2018/11/14
@@ -14,4 +16,11 @@ public interface HzChangeDataRecordDAO {
      * @return
      */
     int insert(HzChangeDataRecord record);
+
+    /**
+     * 批量插入记录
+     * @param records
+     * @return
+     */
+    int insertList(List<HzChangeDataRecord> records);
 }

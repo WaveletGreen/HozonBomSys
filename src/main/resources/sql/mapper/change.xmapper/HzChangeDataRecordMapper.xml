@@ -25,6 +25,26 @@
       )
   </insert>
 
+
+  <insert id="HzChangeDataRecordDAOImpl_insertList" parameterType="java.util.List">
+    insert into HZ_CHANGE_DATA_RECORD (ID, PUID, APPLICANT_ID,
+      AUDITOR_ID, ORDER_ID, TABLE_NAME
+      )
+    select SEQ_HZ_CHANGE_DATA_RECORD.nextval,t.* from
+    (
+    <foreach collection="list" item="item" index="index" separator="UNION ALL">
+      select
+      #{item.puid,jdbcType=VARCHAR},
+      #{item.applicantId,jdbcType=DOUBLE},
+      #{item.auditorId,jdbcType=DOUBLE},
+      #{item.orderId,jdbcType=DOUBLE},
+      #{item.tableName,jdbcType=VARCHAR}
+      from DUAL
+    </foreach>
+    )t
+  </insert>
+
+
   <insert id="insertSelective" parameterType="sql.pojo.change.HzChangeDataRecord">
     insert into HZ_CHANGE_DATA_RECORD
     <trim prefix="(" suffix=")" suffixOverrides=",">
