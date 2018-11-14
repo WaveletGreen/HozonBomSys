@@ -187,5 +187,7 @@
         HZ_CHANGE_ORDER_RECORD
       where
         PROJECT_ID = #{projectUid,jdbcType=VARCHAR}
+        and
+        STATE = 2
   </select>
 </mapper>

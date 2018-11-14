@@ -460,6 +460,7 @@ $(document).ready(
                     width: 450,
                     height: 450
                 });
+                undead();
             }),
             $("#release").click(function () {
                 window.Ewin.confirm({title: '提示', message: '您确定需要升小版本吗？', width: 500}).on(function (e) {

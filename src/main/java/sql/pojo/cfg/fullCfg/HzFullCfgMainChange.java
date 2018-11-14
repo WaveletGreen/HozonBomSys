@@ -8,6 +8,8 @@ import java.util.Date;
 
 public class HzFullCfgMainChange {
     private Integer id;
+    //变更表单ID
+    private Integer changeOrderId;
     //项目外键
     private String projectUid;
     //状态
@@ -39,6 +41,14 @@ public class HzFullCfgMainChange {
 
     public Integer getId() {
         return id;
+    }
+
+    public Integer getChangeOrderId() {
+        return changeOrderId;
+    }
+
+    public void setChangeOrderId(Integer changeOrderId) {
+        this.changeOrderId = changeOrderId;
     }
 
     public void setId(Integer id) {

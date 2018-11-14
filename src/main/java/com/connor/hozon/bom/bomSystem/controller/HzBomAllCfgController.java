@@ -228,7 +228,7 @@ public class HzBomAllCfgController {
      */
     @RequestMapping("getVwo")
     @ResponseBody
-    public JSONObject getVwo(String projectId){
-        return hzBomAllCfgService.getVwo(projectId);
+    public JSONObject getVwo(String projectId, Integer changeFromId){
+        return hzBomAllCfgService.getVwo(projectId, changeFromId);
     }
 }

@@ -310,7 +310,7 @@ public class HzVwoManagerService implements IHzVWOManagerService {
      * @return 操作消息
      */
     @Override
-    public JSONObject featureGetIntoVWO2(String projectUid, List<HzCfg0Record> beans) {
+    public JSONObject featureGetIntoVWO2(String projectUid, List<HzCfg0Record> beans, Long changeFromId) {
         JSONObject result = new JSONObject();
         result.put("status", true);
         result.put("msg", "发起VWO流程成功");
@@ -334,10 +334,7 @@ public class HzVwoManagerService implements IHzVWOManagerService {
                 result.put("msg", "搜索出的特性值总数与发起VWO流程的特性值的总数不一致，请检查数据核对数据是否被删除");
                 return result;
             } else {
-                HzVwoInfo hzVwoInfo = generateVwoEntity(user, projectUid, result, 1);
-                if (hzVwoInfo == null) {
-                    return result;
-                }
+//                HzVwoInfo hzVwoInfo = generateVwoEntity(user, projectUid, result, 1);
 //                List<HzFeatureChangeBean> hzFeatureChangeBeanListBefore = new ArrayList<HzFeatureChangeBean>();
                 List<HzFeatureChangeBean> hzFeatureChangeBeanListAfter = new ArrayList<HzFeatureChangeBean>();
                 List<HzCfg0Record> hzCfg0RecordList = new ArrayList<HzCfg0Record>();
@@ -353,7 +350,7 @@ public class HzVwoManagerService implements IHzVWOManagerService {
 //                    }
                     if (hzFeatureChangeBeanBefor == null) {
                         HzFeatureChangeBean hzFeatureChangeBeanAfter = new HzFeatureChangeBean();
-                        hzFeatureChangeBeanAfter.setVwoId(hzVwoInfo.getId());
+                        hzFeatureChangeBeanAfter.setVwoId(changeFromId);
                         hzFeatureChangeBeanAfter.setCfg0MainItemPuid(hzCfg0Record.getpCfg0MainItemPuid());
                         hzFeatureChangeBeanAfter.setFeatureValueName(hzCfg0Record.getpCfg0ObjectId());
                         hzFeatureChangeBeanAfter.setCfgPuid(hzCfg0Record.getPuid());
@@ -408,13 +405,13 @@ public class HzVwoManagerService implements IHzVWOManagerService {
                     //变更创建时间
                     hzFeatureChangeBeanAfter.setChangeCreateDate(now);
                     //vwo变更号ID
-                    hzFeatureChangeBeanAfter.setVwoId(hzVwoInfo.getId());
+                    hzFeatureChangeBeanAfter.setVwoId(changeFromId);
                     hzFeatureChangeBeanListAfter.add(hzFeatureChangeBeanAfter);
 
 
                     //修改源的变更数据的状态
                     //vwoID
-                    hzCfg0Record.setVwoId(hzVwoInfo.getId());
+                    hzCfg0Record.setVwoId(changeFromId);
                     //是否在流程中
                     hzCfg0Record.setCfgIsInProcess(1);
                     //状态CFG_STATUS
@@ -455,7 +452,7 @@ public class HzVwoManagerService implements IHzVWOManagerService {
     }
 
     //配色方案进入VWO
-    public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, ArrayList<String> dynamicTitle) {
+    public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, ArrayList<String> dynamicTitle, Long changeFromId) {
         JSONObject result = new JSONObject();
         User user = UserInfo.getUser();
         //源主数据
@@ -480,7 +477,7 @@ public class HzVwoManagerService implements IHzVWOManagerService {
         hzVwoInfo.setVwoType(2);
         //为源主数据添加VWO编码
         for (HzCfg0ModelColor hzCfg0ModelColor : hzCfg0ModelColors) {
-            hzCfg0ModelColor.setCmcrVwoId(hzVwoInfo.getId());
+            hzCfg0ModelColor.setCmcrVwoId(changeFromId);
         }
 
         //查询最近一次变更后主数据
@@ -539,7 +536,7 @@ public class HzVwoManagerService implements IHzVWOManagerService {
                     HzCmcrChange hzCmcrChange = new HzCmcrChange();
                     hzCmcrChange.setCmcrSrcPuid(hzCmcrChangeAfterQuery.getCmcrSrcPuid());
                     hzCmcrChange.setCmcrSrcMainCfg(hzCmcrChangeAfterQuery.getCmcrSrcMainCfg());
-                    hzCmcrChange.setCmcrCgVwoId(hzVwoInfo.getId());
+                    hzCmcrChange.setCmcrCgVwoId(changeFromId);
                     hzCmcrChangesAfter.add(hzCmcrChange);
                 }
             }
@@ -558,7 +555,7 @@ public class HzVwoManagerService implements IHzVWOManagerService {
                     HzCmcrDetailChange hzCmcrDetailChange = new HzCmcrDetailChange();
                     hzCmcrDetailChange.setCmcrDetailSrcPuid(hzCmcrDetailChangeQuery.getCmcrDetailSrcPuid());
                     hzCmcrDetailChange.setCmcrDetailSrcCfgMainUid(hzCmcrDetailChangeQuery.getCmcrDetailSrcCfgMainUid());
-                    hzCmcrDetailChange.setCmcrDetailCgVwoId(hzVwoInfo.getId());
+                    hzCmcrDetailChange.setCmcrDetailCgVwoId(changeFromId);
                     hzCmcrDetailChange.setCmcrDetailSrcModelPuid(hzCmcrDetailChangeQuery.getCmcrDetailSrcModelPuid());
                     hzCmcrDetailChange.setCmcrDetailCgFeatureCode(hzCmcrDetailChangeQuery.getCmcrDetailCgFeatureCode());
                     hzCmcrDetailChange.setCmcrDetailCgFeatureName(hzCmcrDetailChangeQuery.getCmcrDetailCgFeatureName());
@@ -587,7 +584,7 @@ public class HzVwoManagerService implements IHzVWOManagerService {
         for (HzCfg0ModelColor hzCfg0ModelColor : hzCfg0ModelColors) {
             HzCmcrChange hzCmcrChangeAfter = new HzCmcrChange();
             //VWO号
-            hzCmcrChangeAfter.setCmcrCgVwoId(hzVwoInfo.getId());
+            hzCmcrChangeAfter.setCmcrCgVwoId(changeFromId);
             //车身颜色代码
             hzCmcrChangeAfter.setCmcrCgShellCode(hzCfg0ModelColor.getpModelShellOfColorfulModel());
             //创建者
@@ -632,7 +629,7 @@ public class HzVwoManagerService implements IHzVWOManagerService {
             //主配置UID
             hzCmcrDetailChangeAfter.setCmcrDetailSrcCfgMainUid(hzCfg0ModelColorDetail.getCfgMainUid());
             //vwo主键
-            hzCmcrDetailChangeAfter.setCmcrDetailCgVwoId(hzVwoInfo.getId());
+            hzCmcrDetailChangeAfter.setCmcrDetailCgVwoId(changeFromId);
             //源数据的创建时间
             hzCmcrDetailChangeAfter.setCmcrDetailSrcCreateDate(hzCfg0ModelColorDetail.getCreateDate());
             //源数据的修改时间

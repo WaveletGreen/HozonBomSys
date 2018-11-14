@@ -6,6 +6,7 @@
 
 package com.connor.hozon.bom.bomSystem.controller;
 
+import com.connor.hozon.bom.bomSystem.dao.modelColor.HzCfg0ModelColorDao;
 import com.connor.hozon.bom.bomSystem.impl.bom.HzBomLineRecordDaoImpl;
 import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
 import com.connor.hozon.bom.bomSystem.option.SpecialFeatureOptions;
@@ -20,6 +21,7 @@ import com.connor.hozon.bom.bomSystem.service.modelColor.HzCfg0ModelColorService
 import com.connor.hozon.bom.bomSystem.service.modelColor.HzColorLvl2ModelService;
 import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.resources.mybatis.bom.HzEbomRecordDAO;
+import com.connor.hozon.bom.resources.mybatis.change.HzChangeOrderDAO;
 import com.connor.hozon.bom.sys.entity.User;
 import net.sf.json.JSONObject;
 import org.slf4j.Logger;
@@ -35,6 +37,7 @@ import sql.pojo.cfg.main.HzCfg0MainRecord;
 import sql.pojo.cfg.modelColor.HzCfg0ModelColor;
 import sql.pojo.cfg.modelColor.HzCfg0ModelColorDetail;
 import sql.pojo.cfg.modelColor.HzColorLvl2Model;
+import sql.pojo.change.HzChangeOrderRecord;
 import sql.pojo.epl.HzEPLManageRecord;
 
 import java.util.*;
@@ -79,6 +82,10 @@ public class HzCfg0ModelColorController {
     /***EBOM服务，上面那个太啰嗦了*/
     @Autowired
     HzBomLineRecordDaoImpl bomLineRecordDao;
+    @Autowired
+    HzChangeOrderDAO hzChangeOrderDAO;
+    @Autowired
+    HzCfg0ModelColorDao hzCfg0ModelColorDao;
     /*** 日志*/
     private final static Logger logger = LoggerFactory.getLogger(HzCfg0ModelColorController.class);
 
@@ -476,7 +483,31 @@ public class HzCfg0ModelColorController {
         }
         ArrayList<String> dynamicTitle = (ArrayList<String>) params.get("titles");
         String projectPuid = (String) params.get("projectPuid");
-        return hzCfg0ModelColorService.getVWO(rows, projectPuid, dynamicTitle);
+        Long changeFromId = Long.valueOf((String)params.get("changeFromId"));
+        return hzCfg0ModelColorService.getVWO(rows, projectPuid, dynamicTitle, changeFromId);
+    }
+
+    @RequestMapping("/setChangeFromPage")
+    public String setChangeFromPage(String projectUid, String puids, String titles, Model model){
+        List<HzCfg0ModelColor> puidList = new ArrayList<>();
+        List<String> titleList = new ArrayList<>();
+        String[] puidArr = puids.split(",");
+        String[] titleArr = titles.split(",");
+        for(String puid : puidArr){
+            HzCfg0ModelColor hzCfg0ModelColor = new HzCfg0ModelColor();
+            hzCfg0ModelColor.setPuid(puid);
+            puidList.add(hzCfg0ModelColor);
+        }
+        for(String title : titleArr){
+            titleList.add(title);
+        }
+        List<HzCfg0ModelColor> rows = hzCfg0ModelColorDao.selectByPuids(puidList);
+        List<HzChangeOrderRecord> hzChangeOrderRecordList = hzChangeOrderDAO.findHzChangeOrderRecordByProjectId(projectUid);
+//        model.addAttribute("beans",beans);
+        model.addAttribute("changeFroms",hzChangeOrderRecordList);
+        model.addAttribute("titles",titleList);
+        model.addAttribute("rows",rows);
+        return "cfg/modelColorCfg/modelColorSetChangeFrom";
     }
 
     /**********************************************废除方法****************************************/

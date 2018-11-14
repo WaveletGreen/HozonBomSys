@@ -24,6 +24,7 @@ import com.connor.hozon.bom.bomSystem.service.project.HzVehicleService;
 import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.resources.mybatis.change.HzChangeOrderDAO;
 import com.connor.hozon.bom.sys.entity.User;
+import io.swagger.models.auth.In;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.slf4j.Logger;
@@ -968,7 +969,7 @@ public class HzBomAllCfgService {
         return respons;
     }
 
-    public JSONObject getVwo(String projectId) {
+    public JSONObject getVwo(String projectId, Integer changeFromId) {
         JSONObject result = new JSONObject();
         //main表数据集
         HzFullCfgMain hzFullCfgMain = hzFullCfgMainDao.selectByProjectId(projectId);
@@ -980,11 +981,14 @@ public class HzBomAllCfgService {
         //变更主数据集合
         HzFullCfgMainChange hzFullCfgMainChange = new HzFullCfgMainChange();
         hzFullCfgMainChange.srcSetChange(hzFullCfgMain);
+        hzFullCfgMainChange.setChangeOrderId(changeFromId);
         //变更车型模型集合
         List<HzFullCfgModelChange> hzFullCfgModelChanges = new ArrayList<HzFullCfgModelChange>();
         for(HzFullCfgModel hzFullCfgModel : hzFullCfgModels){
             HzFullCfgModelChange hzFullCfgModelChange = new HzFullCfgModelChange();
             hzFullCfgModelChange.srcSetChange(hzFullCfgModel);
+            hzFullCfgModelChange.setChangeOrderId(changeFromId);
+            hzFullCfgModelChange.setMainID(hzFullCfgMainChange.getId());
             hzFullCfgModelChanges.add(hzFullCfgModelChange );
         }
         //变更2Y层数据
@@ -992,6 +996,8 @@ public class HzBomAllCfgService {
         for(HzFullCfgWithCfg hzFullCfgWithCfg : hzFullCfgWithCfgs){
             HzFullCfgWithCfgChange hzFullCfgWithCfgChange = new HzFullCfgWithCfgChange();
             hzFullCfgWithCfgChange.srcSetChange(hzFullCfgWithCfg);
+            hzFullCfgWithCfgChange.setChangeOrderId(changeFromId);
+            hzFullCfgWithCfgChange.setMainID(hzFullCfgMainChange.getId());
             hzFullCfgWithCfgChanges.add(hzFullCfgWithCfgChange);
         }
 
