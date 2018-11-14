@@ -7,7 +7,8 @@ package com.connor.hozon.bom.resources.enumtype;
  */
 public enum  ChangeTableNameEnum {
 
-    HZ_EBOM("HZ_EBOM_REOCRD_AFTER_CHANGE"),
+    HZ_EBOM_AFTER("HZ_EBOM_REOCRD_AFTER_CHANGE"),
+    HZ_EBOM("HZ_BOM_LINE_RECORD"),
     ;
 
     /**

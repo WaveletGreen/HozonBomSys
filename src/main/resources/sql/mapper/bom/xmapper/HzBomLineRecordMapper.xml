@@ -74,8 +74,12 @@
         <result column="P_BUY_ENGINEER" jdbcType="INTEGER" property="pBuyEngineer"/>
         <!--针对配色方案的颜色库对应的UID-->
         <result column="COLOR_UID" jdbcType="VARCHAR" property="colorUid"/>
-        <result column="P_EWO_NO" jdbcType="VARCHAR" property="ewoNo"/>
+
+        <result column="P_ORDER_ID" jdbcType="DOUBLE" property="orderId"/>
         <result column="P_LOU_LOA_FLAG" jdbcType="INTEGER" property="pLouaFlag"/>
+
+        <result column="P_REVISION" jdbcType="VARCHAR" property="revision"/>
+        <result column="P_EFFECT_TIME" jdbcType="TIMESTAMP" property="effectTime"/>
     </resultMap>
     <!--<resultMap extends="BaseResultMap" id="ResultMapWithBLOBs"-->
                <!--type="sql.pojo.bom.HzBomLineRecord">-->
@@ -141,11 +145,13 @@
     P_REGULATION_CODE,
     P_NUMBER,
     P_BUY_ENGINEER,
-    P_EWO_NO,
+    P_ORDER_ID,
     P_LOU_LOA_FLAG,
     P_SORT_NUM,
     P_COLOR_PART,
-    P_SINGLE_VEH_DOSAGE
+    P_SINGLE_VEH_DOSAGE,
+    P_REVISION,
+    P_EFFECT_TIME
   </sql>
 
     <sql id="Bom_Column_For_Change">
@@ -159,7 +165,8 @@
     P_MANU_PROCESS, P_SYMMETRY, P_IMPORTANCE, P_REGULATION_FLAG, P_BWG_BOX_PART, P_DEVELOP_TYPE,
     P_DATA_VERSION, P_TARGET_WEIGHT, P_FEATURE_WEIGHT, P_ACTUAL_WEIGHT, P_FASTENER_STANDARD,
     P_FASTENER_LEVEL, P_TORQUE, P_DUTY_ENGINEER, P_SUPPLY, P_SUPPLY_CODE, P_REMARK, P_REGULATION_CODE,P_NUMBER,
-    P_BUY_ENGINEER,P_EWO_NO,P_SORT_NUM,P_COLOR_PART
+    P_BUY_ENGINEER,P_EWO_NO,P_SORT_NUM,P_COLOR_PART, P_REVISION,
+    P_EFFECT_TIME,P_SINGLE_VEH_DOSAGE,P_ORDER_ID
   </sql>
     <!--<sql id="Blob_Column_List">P_BOM_LINE_BLOCK</sql>-->
     <sql id="Color_Column">P_COLOR_UID</sql>
@@ -449,8 +456,8 @@
             <if test="pBuyEngineer != null">
                 P_BUY_ENGINEER = #{pBuyEngineer,jdbcType=VARCHAR},
             </if>
-            <if test="ewoNo != null">
-                P_EWO_NO = #{ewoNo,jdbcType=VARCHAR},
+            <if test="orderId != null">
+                P_ORDER_ID = #{orderId,jdbcType=DOUBLE},
             </if>
             <if test="colorPart != null">
                 P_COLOR_PART = #{colorPart,jdbcType=INTEGER}
@@ -458,9 +465,6 @@
         </set>
         <where>
             PUID = #{puid,jdbcType=VARCHAR}
-            <if test='ewoNo == "1" '>
-                and (P_EWO_NO is null or P_EWO_NO ='1')
-            </if>
         </where>
     </update>
 
@@ -474,12 +478,6 @@
         t2.p_cfg0_of_which_project_puid=#{projectId,jdbcType=VARCHAR}
         )
         and PUID=#{puid,jdbcType=VARCHAR}
-        <if test="ewoNo != null">
-            and P_EWO_NO = #{ewoNo,jdbcType=VARCHAR}
-        </if>
-        <if test="ewoNo == null">
-            and (P_EWO_NO is null  or P_EWO_NO='1')
-        </if>
         and P_EBOM_STATUS<![CDATA[ <> ]]>0
     </select>
 
@@ -508,9 +506,6 @@
         where
         t2.p_cfg0_of_which_project_puid=#{projectId,jdbcType=VARCHAR}
         )
-        <if test="ewoNo != null">
-          and P_EWO_NO = #{ewoNo,jdbcType=VARCHAR}
-        </if>
         <if test="puid != null">
             and PUID=#{puid,jdbcType=VARCHAR}
         </if>
@@ -673,9 +668,6 @@
                     P_EBOM_STATUS = #{item.status,jdbcType=INTEGER},
                 </if>
                 P_UPDATE_TIME =sysdate,
-                <if test="item.ewoNo != null">
-                    P_EWO_NO = #{item.ewoNo,jdbcType=VARCHAR},
-                </if>
                 <if test="item.pLouaFlag != null">
                     P_LOU_LOA_FLAG = #{item.pLouaFlag,jdbcType=VARCHAR}
                 </if>

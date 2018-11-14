@@ -230,9 +230,9 @@ public class HzBomLineRecord extends BasePOJO {
     private String tableName;
 
     /**
-     * ewo编号
+     * 变更单id
      */
-    private String ewoNo;
+    private Integer orderId;
 
     private String sortNum;
 
@@ -247,6 +247,16 @@ public class HzBomLineRecord extends BasePOJO {
      * 单车用量
      */
     private byte[] singleVehDosage;
+
+    /**
+     * 生效时间
+     */
+    private Date effectTime;
+
+    /**
+     * 版本
+     */
+    private String revision;
 
     public byte[] getSingleVehDosage() {
         return singleVehDosage;
@@ -308,13 +318,7 @@ public class HzBomLineRecord extends BasePOJO {
         this.id = id;
     }
 
-    public String getEwoNo() {
-        return ewoNo;
-    }
 
-    public void setEwoNo(String ewoNo) {
-        this.ewoNo = ewoNo;
-    }
 
     public String getTableName() {
         return tableName;
@@ -830,5 +834,30 @@ public class HzBomLineRecord extends BasePOJO {
 
     public void setColorUid(String colorUid) {
         this.colorUid = colorUid;
+    }
+
+
+    public Integer getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(Integer orderId) {
+        this.orderId = orderId;
+    }
+
+    public Date getEffectTime() {
+        return effectTime;
+    }
+
+    public void setEffectTime(Date effectTime) {
+        this.effectTime = effectTime;
+    }
+
+    public String getRevision() {
+        return revision;
+    }
+
+    public void setRevision(String revision) {
+        this.revision = revision;
     }
 }

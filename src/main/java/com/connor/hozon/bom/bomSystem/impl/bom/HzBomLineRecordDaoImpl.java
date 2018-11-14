@@ -20,7 +20,7 @@ import java.util.Map;
  * @Date: Created in 2018/9/6 13:19
  * @Modified By:
  */
-@Service("HzBomLineRecordDaoImpl")
+@Service("hzBomLineRecordDao")
 public class HzBomLineRecordDaoImpl extends BaseSQLUtil {
 
     /**

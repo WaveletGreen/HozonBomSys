@@ -28,4 +28,9 @@ public class AddDataToChangeOrderReqDTO {
      * 项目id
      */
     private String projectId;
+
+    /**
+     *  类型 1 生产 6 财务
+     */
+    private Integer type;
 }
