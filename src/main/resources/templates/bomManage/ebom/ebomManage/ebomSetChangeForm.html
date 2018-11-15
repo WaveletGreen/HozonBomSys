@@ -24,6 +24,7 @@
                     <ul id="orgGroupTree" class="ztree" style="width:400px; overflow:auto;"></ul>
                 </div>
                 <div class="col-lg-6">
+                    <input id="typeId" type="hidden">
                     <div class="form-group col-lg-12">
                         <label>指派人员审批:</label>
                         <input type="text" class="form-control" id="typeName" name="typeName"
@@ -84,6 +85,7 @@
                             // $("#selectedUserId").val(result.personId);
                             // $("#" + $("#selectOption").val()).val(result.personName);
                             $("#typeName").val(result.personName);
+                            $("#typeId").val(result.personId);
                         }
                     },
                     error: function (e) {
@@ -107,6 +109,7 @@
             var changeFromId = $("#stage option:selected").val();
             var projectId = $("#project", window.top.document).val();
             var puids = $("#puids").val();
+            var typeId = $("#typeId").val();
             var myData = JSON.stringify({
                 "puids":puids ,
                 "orderId": changeFromId,
