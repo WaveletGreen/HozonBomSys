@@ -61,6 +61,7 @@ var columnOfFeature1 = [
 $(document).ready((function () {
 
 }))
+
 function skip(type) {
     if(type=='feature'){
         // $.ajax({

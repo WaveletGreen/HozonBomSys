@@ -722,7 +722,7 @@ function initTable1(mBomUrl) {
                             }
                             window.Ewin.dialog({
                                 title: "选择变更表单",
-                                url: "",
+                                url: "mbom/order/choose?projectId="+projectPuid+"&puids="+puids+"&type="+0,
                                 gridId: "gridId",
                                 width: 450,
                                 height: 450
@@ -1436,7 +1436,7 @@ function initTable11(mBomUrl, lineIds, colorIds) {
                             }
                             window.Ewin.dialog({
                                 title: "选择变更表单",
-                                url: "",
+                                url: "mbom/order/choose?projectId="+projectPuid+"&puids="+puids+"&type="+0,
                                 gridId: "gridId",
                                 width: 450,
                                 height: 450
@@ -1800,7 +1800,7 @@ function initTable2(productionUrl) {
                             }
                             window.Ewin.dialog({
                                 title: "选择变更表单",
-                                url: "",
+                                url: "mbom/order/choose?projectId="+projectId+"&puids="+puids+"&type="+1,
                                 gridId: "gridId",
                                 width: 450,
                                 height: 450
@@ -2125,7 +2125,7 @@ function initTable22(productionUrl, lineIds, colorIds) {
                             }
                             window.Ewin.dialog({
                                 title: "选择变更表单",
-                                url: "",
+                                url: "mbom/order/choose?projectId="+projectId+"&puids="+puids+"&type="+1,
                                 gridId: "gridId",
                                 width: 450,
                                 height: 450
@@ -2487,7 +2487,7 @@ function initTable3(financialUrl) {
                             }
                             window.Ewin.dialog({
                                 title: "选择变更表单",
-                                url: "",
+                                url: "mbom/order/choose?projectId="+projectId+"&puids="+puids+"&type="+6,
                                 gridId: "gridId",
                                 width: 450,
                                 height: 450
@@ -2817,7 +2817,7 @@ function initTable33(financialUrl, lineIds, colorIds) {
                             }
                             window.Ewin.dialog({
                                 title: "选择变更表单",
-                                url: "",
+                                url: "mbom/order/choose?projectId="+projectId+"&puids="+puids+"&type="+6,
                                 gridId: "gridId",
                                 width: 450,
                                 height: 450

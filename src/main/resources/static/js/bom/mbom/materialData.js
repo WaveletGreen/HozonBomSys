@@ -67,6 +67,32 @@ function initTable(url) {
                     column.push(json);
                 }
             }
+            column.push({
+                field: 'status',
+                title: '状态',
+                align: 'center',
+                valign: 'middle',
+                formatter: function (value, row, index) {
+                    if (value == 1 || "1" == value) {
+                        return "<span style='color: #00B83F'>已生效</span>";
+                    }
+                    if (value == 2 || "2" == value) {
+                        return "<span style='color: #ff7cf4'>草稿状态</span>";
+                    }
+                    if (3 == value || "3" == value) {
+                        return "<span style='color: #9492a9'>废除状态</span>";
+                    }
+                    if (4 == value || "4" == value) {
+                        return "<span style='color: #a90009'>删除状态</span>";
+                    }
+                    if (value == 5 || value == "5") {
+                        return "<span style='color: #e2ab2f'>审核中</span>"
+                    }
+                    if (value == 6 || value == "6") {
+                        return "<span style='color: #e2ab2f'>审核中</span>"
+                    }
+                }
+            })
             $table.bootstrapTable({
                     url: url,
                     method: 'GET',
@@ -283,17 +309,17 @@ function initTable(url) {
                                     window.Ewin.alert({message: '请选择一条需要变更的数据!'});
                                     return false;
                                 }
-                                else {
-                                    for (var i = 0; i < rows.length; i++) {
-                                        if (rows[i].status != 4 && rows[i].status != 2) {
-                                            window.Ewin.alert({message: '只能选择状态为草稿状态或删除状态的数据发起流程!'});
-                                            return false;
-                                        }
-                                    }
-                                }
+                                // else {
+                                //     for (var i = 0; i < rows.length; i++) {
+                                //         if (rows[i].status != 4 && rows[i].status != 2) {
+                                //             window.Ewin.alert({message: '只能选择状态为草稿状态或删除状态的数据发起流程!'});
+                                //             return false;
+                                //         }
+                                //     }
+                                // }
                                 window.Ewin.dialog({
                                     title: "选择变更表单",
-                                    url: "",
+                                    url: "materiel/order/choose?projectId="+projectId+"&puids="+puids,
                                     gridId: "gridId",
                                     width: 450,
                                     height: 450

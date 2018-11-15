@@ -6,8 +6,10 @@ import com.connor.hozon.bom.resources.domain.dto.response.HzMaterielRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
 import com.connor.hozon.bom.resources.domain.query.HzMaterielByPageQuery;
 import com.connor.hozon.bom.resources.domain.query.HzMaterielQuery;
+import com.connor.hozon.bom.resources.mybatis.change.HzChangeOrderDAO;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.service.materiel.HzMaterielService;
+import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.resources.util.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import sql.pojo.change.HzChangeOrderRecord;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.*;
@@ -31,6 +34,8 @@ public class HzMaterielController  extends BaseController {
 
     @Autowired
     private HzMaterielService hzMaterielService;
+    @Autowired
+    private HzChangeOrderDAO hzChangeOrderDAO;
     @RequestMapping("type")
     @ResponseBody
     public Map<String,Object> getMaterielType(){
@@ -190,6 +195,20 @@ public class HzMaterielController  extends BaseController {
     public void deleteMateriel(String puid,HttpServletResponse response){
         WriteResultRespDTO respDTO =  hzMaterielService.deleteHzMateriel(puid);
         toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
+    }
+
+    /**
+     * 跳转到物料数据选择变更单
+     * @return
+     */
+    @RequestMapping(value = "order/choose",method = RequestMethod.GET)
+    public String getOrderChooseToPage(String projectId,String puids,Model model){
+        List<HzChangeOrderRecord> records = hzChangeOrderDAO.findHzChangeOrderRecordByProjectId(projectId);
+        if(ListUtil.isNotEmpty(records)){
+            model.addAttribute("data",records);
+            model.addAttribute("puids",puids);
+        }
+        return "bomManage/mbom/materialData/materialSetChangeForm";
     }
 
 }
