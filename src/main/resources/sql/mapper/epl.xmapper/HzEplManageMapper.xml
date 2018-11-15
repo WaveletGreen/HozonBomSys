@@ -1844,7 +1844,7 @@
             #{item.lineID,jdbcType=VARCHAR},#{item.is2Y,jdbcType=INTEGER},#{item.isPart,jdbcType=INTEGER},
             #{item.sortNum,jdbcType=VARCHAR},#{item.pBomOfWhichDept,jdbcType=VARCHAR},#{item.pBomLinePartName,jdbcType=VARCHAR},
             #{item.pBomLinePartClass,jdbcType=VARCHAR},#{item.pBomLinePartEnName,jdbcType=VARCHAR},
-            #{item.pBomLinePartResource,jdbcType=VARCHAR}, #{item.pFnaInfo,jdbcType=VARCHAR},#{item.status,jdbcType=INTEGER},
+            #{item.pBomLinePartResource,jdbcType=VARCHAR}, #{item.fna,jdbcType=VARCHAR},#{item.status,jdbcType=INTEGER},
             sysdate,sysdate, #{item.pFastener,jdbcType=VARCHAR}, #{item.p3cpartFlag,jdbcType=INTEGER}, #{item.pInOutSideFlag,jdbcType=INTEGER},
             #{item.pUpc,jdbcType=VARCHAR}, #{item.pFnaDesc,jdbcType=VARCHAR}, #{item.pCreateName,jdbcType=VARCHAR},
             #{item.pUpdateName,jdbcType=VARCHAR}, #{item.pUnit,jdbcType=VARCHAR}, #{item.pPictureNo,jdbcType=VARCHAR},
