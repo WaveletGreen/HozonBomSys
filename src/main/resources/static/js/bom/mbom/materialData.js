@@ -309,14 +309,14 @@ function initTable(url) {
                                     window.Ewin.alert({message: '请选择一条需要变更的数据!'});
                                     return false;
                                 }
-                                else {
-                                    for (var i = 0; i < rows.length; i++) {
-                                        if (rows[i].status != 4 && rows[i].status != 2) {
-                                            window.Ewin.alert({message: '只能选择状态为草稿状态或删除状态的数据发起流程!'});
-                                            return false;
-                                        }
-                                    }
-                                }
+                                // else {
+                                //     for (var i = 0; i < rows.length; i++) {
+                                //         if (rows[i].status != 4 && rows[i].status != 2) {
+                                //             window.Ewin.alert({message: '只能选择状态为草稿状态或删除状态的数据发起流程!'});
+                                //             return false;
+                                //         }
+                                //     }
+                                // }
                                 window.Ewin.dialog({
                                     title: "选择变更表单",
                                     url: "materiel/order/choose?projectId="+projectId+"&puids="+puids,
