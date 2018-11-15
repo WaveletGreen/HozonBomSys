@@ -95,3 +95,14 @@ function skip(type) {
         });
     }
 }
+
+
+// function OnToTeXing() {
+//     window.Ewin.dialog({
+//         title: "添加",
+//         url:"../change/texing",
+//         gridId: "gridId",
+//         width: 950,
+//         height: 600
+//     })
+// }

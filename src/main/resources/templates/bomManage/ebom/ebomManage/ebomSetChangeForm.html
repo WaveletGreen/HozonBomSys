@@ -95,14 +95,12 @@
             }
         }
     };
-    $(
-        initZTree = function () {
-            $.post("vwo/getUserAndGroup", function (info) {
-                var t = $("#orgGroupTree");
-                t = $.fn.zTree.init(t, setting, info.data);
-            })
-        }
-    );
+    $(initZTree = function () {
+        $.post("vwo/getUserAndGroup", function (info) {
+            var t = $("#orgGroupTree");
+            t = $.fn.zTree.init(t, setting, info.data);
+        })
+    });
     $(function () {
         // 绑定dialog的确定按钮的监听事件
         $("#btnOk", window.top.document).click(function () {
@@ -111,10 +109,10 @@
             var puids = $("#puids").val();
             var typeId = $("#typeId").val();
             var myData = JSON.stringify({
-                "puids":puids ,
+                "puids": puids,
                 "orderId": changeFromId,
-                "projectId":projectId,
-                "auditorId":typeId
+                "projectId": projectId,
+                "auditorId": typeId
             });
             var url = $("#form", window.top.document).attr('action');
 
@@ -123,7 +121,7 @@
                 type: "POST",
                 //ajax需要添加打包名
                 url: url,
-                data:myData,
+                data: myData,
                 success: function (result) {
                     $('.modal-dialog', window.top.document).parent('div').remove()
                     $('body', window.top.document).find('.modal-backdrop').remove();

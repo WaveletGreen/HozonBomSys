@@ -54,7 +54,7 @@ public class HzChangeController extends BaseController {
         if(respDTO != null){
             model.addAttribute("data",respDTO);
         }
-        return "change/ChangeOrder/ChangeOrder";
+        return "change/changeOrder/changeOrder";
     }
 
     @RequestMapping(value = "add",method = RequestMethod.POST)
@@ -135,4 +135,10 @@ public class HzChangeController extends BaseController {
         jsonObject.put("result",list);
         return jsonObject;
     }
+    /*@RequestMapping(value = "texing")
+    public String getToChangeTableToPage(){
+
+        return "change/changeOrder/changeFeatureTable";
+    }*/
+
 }
