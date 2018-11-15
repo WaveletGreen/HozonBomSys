@@ -114,50 +114,16 @@
         <div class="panel-body">
             <div class="content col-lg-12" style="padding:0px;">
                 <table class="table table-striped tableNormalStyle" id="routingDaTable">
-                    <tr>
-                        <th>零件号</th>
-                        <th>名称</th>
-                        <th>层级</th>
-                        <th>专业</th>
-                        <th>是否法规件</th>
-                        <th>开发类别</th>
-                    </tr>
-                    <tr style="background-color: #b7bc31">
-                        <td>S00-1001</td>
-                        <td>油漆车身</td>
-                        <td>2Y</td>
-                        <td>车身</td>
-                        <td>Y</td>
-                        <td>A</td>
-                    </tr>
-                    <tr style="background-color: #6bbc38">
-                        <td>S00-1001</td>
-                        <td>油漆车身</td>
-                        <td>2Y</td>
-                        <td>车身</td>
-                        <td>Y</td>
-                        <td>A</td>
-                    </tr>
-                    <tr style="background-color: #b7bc31">
-                        <td>S00-1001</td>
-                        <td>油漆车身</td>
-                        <td>2Y</td>
-                        <td>车身</td>
-                        <td>Y</td>
-                        <td>A</td>
-                    </tr>
-                    <tr style="background-color: #6bbc38">
-                        <td>S00-1001</td>
-                        <td>油漆车身</td>
-                        <td>2Y</td>
-                        <td>车身</td>
-                        <td>Y</td>
-                        <td>A</td>
-                    </tr>
+                    <tr><td><a onclick="skip('feature')">特性变更</a></td></tr>
                 </table>
             </div>
         </div>
     </div>
 </div>
+<script th:src="@{/js/helper/dateFormater.js}"></script>
+<script th:src="@{/js/helper/taskHelper.js}"></script>
+<script th:src="@{/js/helper/jsonHelper.js}"></script>
+<script th:src="@{/js/helper/renderingTableColorHelper.js}"></script>
+<script th:src="@{/js/change/changeForm/ChangeOrder.js}"></script>
 </body>
 </html>

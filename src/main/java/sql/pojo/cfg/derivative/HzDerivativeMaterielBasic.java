@@ -74,4 +74,8 @@ public class HzDerivativeMaterielBasic {
 
     private Integer dmbStatus;
 
+    //变更表单ID
+    private Integer changeOrderId;
+
+    private String changeOrderNo;
 }
