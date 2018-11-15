@@ -7,7 +7,7 @@ import com.connor.hozon.bom.resources.domain.dto.response.HzChangeOrderRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
 import com.connor.hozon.bom.resources.domain.query.HzChangeOrderByPageQuery;
 import com.connor.hozon.bom.resources.page.Page;
-import com.connor.hozon.bom.resources.service.change.HzChangeService;
+import com.connor.hozon.bom.resources.service.change.HzChangeOrderService;
 import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.resources.util.Result;
 import com.connor.hozon.bom.resources.util.StringUtil;
@@ -33,7 +33,7 @@ import java.util.List;
 public class HzChangeController extends BaseController {
 
     @Autowired
-    private HzChangeService hzChangeService;
+    private HzChangeOrderService hzChangeOrderService;
 
     @RequestMapping(value = "addPage",method = RequestMethod.GET)
     public String getAddChangeFormToPage(){
@@ -42,7 +42,7 @@ public class HzChangeController extends BaseController {
     }
     @RequestMapping(value = "updatePage",method = RequestMethod.GET)
     public String getUpdateChangeFormToPage(Long id, Model model){
-        HzChangeOrderRespDTO respDTO = hzChangeService.getHzChangeOrderRecordById(id);
+        HzChangeOrderRespDTO respDTO = hzChangeOrderService.getHzChangeOrderRecordById(id);
         if(respDTO != null){
             model.addAttribute("data",respDTO);
         }
@@ -50,7 +50,7 @@ public class HzChangeController extends BaseController {
     }
     @RequestMapping(value = "ToChangeOrder",method = RequestMethod.GET)
     public String getToChangeOrderToPage(Long id,Model model){
-        HzChangeOrderRespDTO respDTO = hzChangeService.getHzChangeOrderRecordById(id);
+        HzChangeOrderRespDTO respDTO = hzChangeOrderService.getHzChangeOrderRecordById(id);
         if(respDTO != null){
             model.addAttribute("data",respDTO);
         }
@@ -59,7 +59,7 @@ public class HzChangeController extends BaseController {
 
     @RequestMapping(value = "add",method = RequestMethod.POST)
     public void addChangeFrom(@RequestBody EditHzChangeOrderReqDTO reqDTO, HttpServletResponse response){
-        WriteResultRespDTO resultRespDTO = hzChangeService.insertChangeOrderRecord(reqDTO);
+        WriteResultRespDTO resultRespDTO = hzChangeOrderService.insertChangeOrderRecord(reqDTO);
         toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(resultRespDTO),resultRespDTO.getErrMsg()),response);
     }
 
@@ -67,20 +67,20 @@ public class HzChangeController extends BaseController {
 
     @RequestMapping(value = "update",method = RequestMethod.POST)
     public void updateChangeFrom(@RequestBody EditHzChangeOrderReqDTO reqDTO, HttpServletResponse response){
-        WriteResultRespDTO resultRespDTO = hzChangeService.updateChangeOrderRecord(reqDTO);
+        WriteResultRespDTO resultRespDTO = hzChangeOrderService.updateChangeOrderRecord(reqDTO);
         toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(resultRespDTO),resultRespDTO.getErrMsg()),response);
     }
 
     @RequestMapping(value = "delete",method = RequestMethod.DELETE)
     public void deleteChangeFrom(Long id, HttpServletResponse response){
-        WriteResultRespDTO resultRespDTO = hzChangeService.deleteChangeOrderById(id);
+        WriteResultRespDTO resultRespDTO = hzChangeOrderService.deleteChangeOrderById(id);
         toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(resultRespDTO),resultRespDTO.getErrMsg()),response);
     }
 
 
     @RequestMapping(value = "exist",method = RequestMethod.POST)
     public void deleteChangeFrom(String changeNo, HttpServletResponse response){
-        WriteResultRespDTO resultRespDTO = hzChangeService.changeNoExist(changeNo.trim());
+        WriteResultRespDTO resultRespDTO = hzChangeOrderService.changeNoExist(changeNo.trim());
         JSONObject object = new JSONObject();
         if(WriteResultRespDTO.isSuccess(resultRespDTO)){
             object.put("valid",true);
@@ -106,7 +106,7 @@ public class HzChangeController extends BaseController {
         }catch (Exception e){
 
         }
-        Page<HzChangeOrderRespDTO> page = hzChangeService.getHzChangeOrderPage(pageQuery);
+        Page<HzChangeOrderRespDTO> page = hzChangeOrderService.getHzChangeOrderPage(pageQuery);
         if(ListUtil.isEmpty(page.getResult())){
             return new JSONObject();
         }

@@ -2,6 +2,8 @@ package sql.pojo.change;
 
 import lombok.Data;
 
+import java.util.Date;
+
 /**
  * @Author: haozt
  * @Date: 2018/11/13
@@ -34,4 +36,18 @@ public class HzChangeDataRecord {
      */
     private String tableName;
 
+    /**
+     * 审核人
+     */
+    private String auditor;
+
+    /**
+     * 申请人
+     */
+    private String applicant;
+
+    /**
+     * 申请时间
+     */
+    private Date applicantTime;
 }

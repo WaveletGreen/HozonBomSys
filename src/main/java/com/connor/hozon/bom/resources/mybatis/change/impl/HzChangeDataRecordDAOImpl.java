@@ -1,5 +1,8 @@
 package com.connor.hozon.bom.resources.mybatis.change.impl;
 
+import com.connor.hozon.bom.resources.domain.query.HzChangeDataQuery;
+import com.connor.hozon.bom.resources.enumtype.ChangeTableNameEnum;
+import com.connor.hozon.bom.resources.enumtype.TableNameToHyperLinkNameEnum;
 import com.connor.hozon.bom.resources.mybatis.change.HzChangeDataRecordDAO;
 import com.connor.hozon.bom.resources.util.ListUtil;
 import org.springframework.stereotype.Service;
@@ -7,7 +10,9 @@ import sql.BaseSQLUtil;
 import sql.pojo.change.HzChangeDataRecord;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author: haozt
@@ -56,5 +61,19 @@ public class HzChangeDataRecordDAOImpl extends BaseSQLUtil implements HzChangeDa
             e.printStackTrace();
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public List<HzChangeDataRecord> getChangeDataTableName(HzChangeDataQuery query) {
+
+        return super.findForList("HzChangeDataRecordDAOImpl_getChangeDataTableName",query);
+    }
+
+    @Override
+    public List<String> getChangeDataPuids(HzChangeDataQuery query) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("tableName",query.getTableName());
+        map.put("orderId",query.getOrderId());
+        return super.findForList("HzChangeDataRecordDAOImpl_getChangeDataPuids",map);
     }
 }

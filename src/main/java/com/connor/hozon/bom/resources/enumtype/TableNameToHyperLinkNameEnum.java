@@ -42,7 +42,7 @@ public enum TableNameToHyperLinkNameEnum {
 
 
     /**
-     * MWO表名
+     * 获取超链接名
      * @param tableName 数据库表名
      * @return
      */
@@ -50,6 +50,20 @@ public enum TableNameToHyperLinkNameEnum {
         for(TableNameToHyperLinkNameEnum t: TableNameToHyperLinkNameEnum.values()) {
             if(t.getTableName().equals(tableName)) {
                 return t.getLinkName();
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 获取表名
+     * @param linkName 超链接名
+     * @return
+     */
+    public static String getTableName(String linkName) {
+        for(TableNameToHyperLinkNameEnum t: TableNameToHyperLinkNameEnum.values()) {
+            if(t.getLinkName().equals(linkName)) {
+                return t.getTableName();
             }
         }
         return null;

@@ -1,6 +1,7 @@
 package com.connor.hozon.bom.resources.mybatis.bom;
 
 import com.connor.hozon.bom.resources.domain.query.HzBomRecycleByPageQuery;
+import com.connor.hozon.bom.resources.domain.query.HzChangeDataDetailQuery;
 import com.connor.hozon.bom.resources.domain.query.HzEbomByPageQuery;
 import com.connor.hozon.bom.resources.domain.query.HzEbomTreeQuery;
 import com.connor.hozon.bom.resources.page.Page;
@@ -129,10 +130,8 @@ public interface HzEbomRecordDAO {
 
     /**
      * 查询获取puids 所对应的BOM Line
-     * @param puids
-     * @param projectId
      * @return
      */
-    List<HzEPLManageRecord> getEbomRecordsByPuids(String puids,String projectId);
+    List<HzEPLManageRecord> getEbomRecordsByPuids(HzChangeDataDetailQuery query);
 
 }

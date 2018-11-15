@@ -1,5 +1,6 @@
 package com.connor.hozon.bom.resources.mybatis.change;
 
+import com.connor.hozon.bom.resources.domain.query.HzChangeDataQuery;
 import sql.pojo.change.HzChangeDataRecord;
 
 import java.util.List;
@@ -23,4 +24,14 @@ public interface HzChangeDataRecordDAO {
      * @return
      */
     int insertList(List<HzChangeDataRecord> records);
+
+    /**
+     * 获取变更表单 表名
+     * @param query
+     * @return
+     */
+    List<HzChangeDataRecord> getChangeDataTableName(HzChangeDataQuery query);
+
+
+    List<String> getChangeDataPuids(HzChangeDataQuery query);
 }

@@ -33,7 +33,7 @@ public interface HzEbomService {
      * @param projectId
      * @return
      */
-    HzEbomRespDTO fingEbomById(String puid,String projectId);
+    HzEbomRespDTO fingEbomById(String puid, String projectId);
 
     HzEbomLevelRespDTO fingEbomLevelById(String puid, String projectId);
 
