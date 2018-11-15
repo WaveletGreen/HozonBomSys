@@ -135,10 +135,10 @@ public class HzChangeController extends BaseController {
         jsonObject.put("result",list);
         return jsonObject;
     }
-    @RequestMapping(value = "texing")
+    /*@RequestMapping(value = "texing")
     public String getToChangeTableToPage(){
 
-        return "changeFeatureTable";
-    }
+        return "change/changeOrder/changeFeatureTable";
+    }*/
 
 }
