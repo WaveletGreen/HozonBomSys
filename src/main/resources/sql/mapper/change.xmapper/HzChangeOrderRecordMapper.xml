@@ -51,7 +51,7 @@
     values (SEQ_HZ_CHANGE_ORDER_RECORD.nextval, #{changeNo,jdbcType=VARCHAR}, #{createId,jdbcType=DOUBLE},
       sysdate, #{createNo,jdbcType=VARCHAR}, #{tel,jdbcType=VARCHAR}, #{changeType,jdbcType=VARCHAR},
       #{hasRelatedChange,jdbcType=INTEGER}, #{relationChangeNo,jdbcType=VARCHAR}, #{marketType,jdbcType=INTEGER},
-      #{projectStage,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{state,jdbcType=INTEGER},
+      #{projectStage,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 2,
       sysdate, #{updateId,jdbcType=DOUBLE},#{projectId,jdbcType=VARCHAR},#{deptId,jdbcType=DOUBLE},#{fromTc,jdbcType=INTEGER})
   </insert>
 

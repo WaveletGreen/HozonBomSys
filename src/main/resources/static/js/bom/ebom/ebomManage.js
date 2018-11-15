@@ -279,7 +279,9 @@ function initTable(eBomUrl) {
                                         data: myData,
                                         contentType: "application/json",
                                         success: function (result) {
-                                            result = JSON.parse(result);
+                                            if(typeof (result) == 'string'){
+                                                result = JSON.parse(result);
+                                            }
                                             if (result.success) {
                                                 layer.msg('删除成功', {icon: 1, time: 2000})
                                             } else if (!result.success) {

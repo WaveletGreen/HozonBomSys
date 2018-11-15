@@ -2011,8 +2011,11 @@ public class HzEbomServiceImpl implements HzEbomService {
      */
     private StringBuilder checkConnectWithFeature(String[] puids, String projectUid) {
         HzFullCfgMain hzFullCfgMain = hzFullCfgMainDao.selectByProjectId(projectUid);
-        HzExFullCfgWithCfg cfg = null;
         StringBuilder sb = null;
+        if(hzFullCfgMain == null){
+            return sb;
+        }
+        HzExFullCfgWithCfg cfg = null;
         for (int i = 0; i < puids.length; i++) {
             if (null != (cfg = hzFullCfgWithCfgDao.selectByBLOutWithCfgAndBL(hzFullCfgMain.getId(), puids[i]))) {
                 if (cfg.getCfg() == null) {
