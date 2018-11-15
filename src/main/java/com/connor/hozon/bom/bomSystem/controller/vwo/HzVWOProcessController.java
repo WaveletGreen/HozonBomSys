@@ -68,4 +68,9 @@ public class HzVWOProcessController {
         model.addAttribute("changeFroms",hzChangeOrderRecordList);
         return "cfg/feature/featureSetChangeFrom";
     }
+
+    @RequestMapping("/changeDetails")
+    public String changeDetails(){
+        return "";
+    }
 }
