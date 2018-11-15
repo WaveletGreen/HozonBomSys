@@ -51,6 +51,8 @@ import sql.pojo.epl.HzEPLManageRecord;
 import sql.redis.SerializeUtil;
 
 import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * Created by haozt on 2018/06/06
@@ -58,6 +60,8 @@ import java.util.*;
 @Service("HzEbomService")
 @Transactional(rollbackFor={IllegalArgumentException.class})
 public class HzEbomServiceImpl implements HzEbomService {
+
+//    private ExecutorService pool = Executors.newFixedThreadPool(5);
 
     @Autowired
     private HzEbomRecordDAO hzEbomRecordDAO;

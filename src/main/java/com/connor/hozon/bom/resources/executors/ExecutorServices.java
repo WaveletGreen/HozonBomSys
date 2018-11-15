@@ -41,7 +41,8 @@ public  class ExecutorServices{
     }
 
     public  void execute(){
-        pool.submit(new Runnable() {
+        //execute 无返回值 无法判断线程的执行情况 submit方法 有返回值 可以判断每个线程执行结果
+        pool.execute(new Runnable() {
             @Override
             public void run() {
                 action();
