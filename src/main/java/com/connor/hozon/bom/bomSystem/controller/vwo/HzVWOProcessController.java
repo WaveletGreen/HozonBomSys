@@ -66,7 +66,11 @@ public class HzVWOProcessController {
         List<HzChangeOrderRecord> hzChangeOrderRecordList = hzChangeOrderDAO.findHzChangeOrderRecordByProjectId(projectUid);
         model.addAttribute("beans",beans);
         model.addAttribute("changeFroms",hzChangeOrderRecordList);
-        model.addAttribute("type","feature");
         return "cfg/feature/featureSetChangeFrom";
+    }
+
+    @RequestMapping("/changeDetails")
+    public String changeDetails(){
+        return "";
     }
 }

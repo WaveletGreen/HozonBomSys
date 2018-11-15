@@ -615,6 +615,7 @@ public class HzComposeMFService {
 //                _result.put("status","已发布");
 //            }
             _result.put("status",basics.get(i).getDmbStatus());
+            _result.put("changeOrderNo",basics.get(i).getChangeOrderNo());
             list.add(_result);
         }
         result.put("result", list);

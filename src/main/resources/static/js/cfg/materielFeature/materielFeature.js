@@ -349,7 +349,7 @@ function launchChangeForm() {
 
     let msg = "<div style='max-height: 350px;overflow: -moz-scrollbars-vertical'>";
     for (let i in rows) {
-        if (0 != rows[i].status || "0" != rows[i].status) {
+        if (0 != rows[i].status && "0" != rows[i].status && null != rows[i].status && "null" != rows[i].status) {
             window.Ewin.alert({message: rows[i].modeBasicDetail + "该衍生物料不是草稿状态，不能发起变更"});
             return false;
         }
@@ -467,7 +467,7 @@ function gotIt(result) {
             return "<span style='color: #00B83F'>已生效</span>";
         }
         if (status == 10 || "10" == status) {
-                return "<span style='color: #e69800'>VWO审核中</span>";
+                return "<span style='color: #e69800'>VWO审核中("+row.changeOrderNo+")</span>";
         }
         if (0 == status|| "0" == status||"null" == status || null == status) {
             return "<span style='color: #a97f89'>草稿状态</span>";

@@ -419,6 +419,8 @@ public class HzMaterielFeatureV2Controller extends ExtraIntegrate {
 //        List<HashMap<String, String>> rows = (List<HashMap<String, String>>) params.get("rows");
         //基本信息basicId
         List<String> puids = (List<String>)params.get("puids");
+        //变更表单Id
+        Integer changeFromId = Integer.valueOf((String)params.get("changeFromId"));
         //查询主数据
         List<HzDerivativeMaterielBasic> hzDerivativeMaterielBasics = hzDerivativeMaterielBasicDao.selectByPuids(puids);
         //查询从数据
@@ -453,11 +455,13 @@ public class HzMaterielFeatureV2Controller extends ExtraIntegrate {
             return result;
         }
 
-        //修改源主数据状态为在流程表单中
+        //修改源主数据
         for(HzDerivativeMaterielBasic hzDerivativeMaterielBasic : hzDerivativeMaterielBasics){
             hzDerivativeMaterielBasic.setDmbStatus(10);
+            hzDerivativeMaterielBasic.setChangeOrderId(changeFromId);
         }
         int srcBasicUpdateNum = hzDerivativeMaterielBasicDao.updateByBasicList(hzDerivativeMaterielBasics);
+        int srcBasicUpdateChangIdNum = hzDerivativeMaterielBasicDao.updateByBasicListChangId(hzDerivativeMaterielBasics);
         result.put("status",true);
         result.put("msg","发起VWO流程成功");
         return result;

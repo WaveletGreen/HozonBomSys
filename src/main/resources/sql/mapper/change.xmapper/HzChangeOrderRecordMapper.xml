@@ -23,10 +23,14 @@
     <result column="DEPT_ID" jdbcType="DOUBLE" property="deptId" />
     <result column="IS_FROM_TC" jdbcType="INTEGER" property="fromTc" />
 
-
     <result column="CREATE_NAME" jdbcType="VARCHAR" property="createName" />
     <result column="DEPT_NAME" jdbcType="VARCHAR" property="deptName" />
+
+    <result column="CREATE_NAME_TC" jdbcType="VARCHAR" property="createNameTC" />
+    <result column="DEPT_NAME_TC" jdbcType="VARCHAR" property="deptNameTC" />
+
     <result column="ORIGINATOR" jdbcType="VARCHAR" property="originator" />
+
   </resultMap>
 
   <sql id="Base_Column_List">
@@ -122,9 +126,9 @@
     select * FROM
     (SELECT u.*,rownum as rn from
     (SELECT
-        t1.*, T2.USER_NAME as CREATE_NAME,
+        t1.*, T2.USER_NAME as CREATE_NAME_TC,
         t3.USER_NAME as ORIGINATOR,
-        t4. NAME as DEPT_NAME
+        t4. NAME as DEPT_NAME_TC
     FROM
         HZ_CHANGE_ORDER_RECORD t1
     LEFT JOIN USERRECORD t2 ON t1.CREATE_ID = t2. ID

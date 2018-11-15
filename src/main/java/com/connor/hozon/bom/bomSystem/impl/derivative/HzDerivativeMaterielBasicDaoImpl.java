@@ -62,4 +62,9 @@ public class HzDerivativeMaterielBasicDaoImpl extends BasicDaoImpl<HzDerivativeM
     public int updateByBasicList(List<HzDerivativeMaterielBasic> hzDerivativeMaterielBasics) {
         return baseSQLUtil.executeUpdate(hzDerivativeMaterielBasics, clz.getCanonicalName()+".updateByBasicList");
     }
+
+    @Override
+    public int updateByBasicListChangId(List<HzDerivativeMaterielBasic> hzDerivativeMaterielBasics) {
+        return baseSQLUtil.executeUpdate(hzDerivativeMaterielBasics, clz.getCanonicalName()+".updateByBasicListChangId");
+    }
 }

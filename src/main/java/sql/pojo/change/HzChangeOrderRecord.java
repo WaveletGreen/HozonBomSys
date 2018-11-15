@@ -88,6 +88,16 @@ public class HzChangeOrderRecord extends BasePOJO {
      */
     private Integer fromTc;
 
+
+    /**
+     * 部门名称 来自TC
+     */
+    private String deptNameTC;
+    /**
+     * 创建者 来自TC
+     */
+    private String createNameTC;
+
     public String getOriginator() {
         return originator;
     }
@@ -230,5 +240,21 @@ public class HzChangeOrderRecord extends BasePOJO {
 
     public void setFromTc(Integer fromTc) {
         this.fromTc = fromTc;
+    }
+
+    public String getDeptNameTC() {
+        return deptNameTC;
+    }
+
+    public void setDeptNameTC(String deptNameTC) {
+        this.deptNameTC = deptNameTC;
+    }
+
+    public String getCreateNameTC() {
+        return createNameTC;
+    }
+
+    public void setCreateNameTC(String createNameTC) {
+        this.createNameTC = createNameTC;
     }
 }
