@@ -17,7 +17,7 @@
 
 
   <!--insert-->
-  <insert id="insert" parameterType="sql.pojo.change.HzApplicantChangeRecord">
+  <insert id="HzApplicantChangeDAOImpl_insert" parameterType="sql.pojo.change.HzApplicantChangeRecord">
     insert into HZ_APPLICANT_CHANGE_RECORD (ID, APPLICANT_ID, APPLICANT_TIME, 
       ORDER_ID, TABLE_NAME)
     values (SEQ_HZ_APPLICANT_CHANGE_RECORD.nextval, #{applicantId,jdbcType=DOUBLE}, sysdate,

@@ -54,7 +54,7 @@ public class HzChangeDataRecordDAOImpl extends BaseSQLUtil implements HzChangeDa
             return 1;
         }catch (Exception e){
             e.printStackTrace();
-            throw e;
+            throw new RuntimeException(e);
         }
     }
 }

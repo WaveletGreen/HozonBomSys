@@ -140,7 +140,8 @@ public class HzEbomRecordDAOImpl extends BaseSQLUtil implements HzEbomRecordDAO 
             }
             return 1;
         }catch (Exception e){
-            return 0;
+            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 
@@ -184,7 +185,7 @@ public class HzEbomRecordDAOImpl extends BaseSQLUtil implements HzEbomRecordDAO 
     }
 
     @Override
-    public int insertList(List<HzEPLManageRecord> records,String tableName) {
+    public int insertList(List<HzEPLManageRecord> records,String tableName){
         Map<String,Object> map = new HashMap<>();
         map.put("tableName",tableName);
         int size = records.size();
@@ -217,7 +218,7 @@ public class HzEbomRecordDAOImpl extends BaseSQLUtil implements HzEbomRecordDAO 
             return 1;
         }catch (Exception e){
             e.printStackTrace();
-            throw e;
+            throw new RuntimeException(e);
         }
     }
 
