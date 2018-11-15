@@ -113,10 +113,11 @@
             var myData = JSON.stringify({
                 "puids":puids ,
                 "orderId": changeFromId,
-                "projectId":projectId
+                "projectId":projectId,
+                "auditorId":typeId
             });
             var url = $("#form", window.top.document).attr('action');
-            var typeName = $("#typeName").val();
+
             $.ajax({
                 contentType: "application/json",
                 type: "POST",
