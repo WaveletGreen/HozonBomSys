@@ -1,12 +1,10 @@
 package com.connor.hozon.bom.resources.service.change;
 
-import com.connor.hozon.bom.resources.domain.dto.response.HzChangeDataDetailRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzChangeDataRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzEbomRespDTO;
 import com.connor.hozon.bom.resources.domain.query.HzChangeDataQuery;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * @Author: haozt

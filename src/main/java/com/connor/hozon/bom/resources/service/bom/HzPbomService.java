@@ -137,4 +137,11 @@ public interface HzPbomService {
      */
     JSONObject doGenerateProcessCompose(Map<String, Object> param);
 
+
+    /**
+     * PBOM数据  到变更表单
+     * @param reqDTO
+     * @return
+     */
+    WriteResultRespDTO dataToChangeOrder(AddDataToChangeOrderReqDTO reqDTO);
 }

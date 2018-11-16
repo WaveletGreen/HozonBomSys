@@ -110,12 +110,13 @@ public class HzChangeDataController extends BaseController {
         return "change/ChangeOrder/changeEbomTable";
     }
 
-    @RequestMapping(value = "ebom",method = RequestMethod.GET)
+    @RequestMapping(value = "ebom/data",method = RequestMethod.GET)
     @ResponseBody
-    public List<Map<String, Object>> getChangeDataDetail(HzChangeDataQuery query){
+    public Map<String, Object> getChangeDataDetail(HzChangeDataQuery query){
         query.setOrderId(1L);
         query.setProjectId("1c128c60-84a2-4076-9b1c-f7093e56e4df");
         List<HzEbomRespDTO> list = hzChangeDataService.getChangeDataRecordForEBOM(query);
+        Map<String, Object> ret = new HashMap<>();
         if(ListUtil.isNotEmpty(list)){
             List<Map<String, Object>> _list = new ArrayList<>();
             list.forEach(dto -> {
@@ -172,7 +173,8 @@ public class HzChangeDataController extends BaseController {
                 _res.put("colorPart",dto.getColorPart());
                 _list.add(_res);
             });
-            return _list;
+            ret.put("result", _list);
+            return ret;
         }
         return null;
     }
