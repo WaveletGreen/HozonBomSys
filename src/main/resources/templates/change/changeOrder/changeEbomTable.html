@@ -10,6 +10,11 @@
 <div class="panel-body" style="padding:0px;">
     <div class="panel panel-default">
         <div class="panel-body">
+            <div class="panel-body" style="padding-bottom: 0;">
+                <form class="form-inline" role="form" style="float: left; width: 100%;margin-left: 20px;" method="get"
+                      id="ebomChangeData">
+                </form>
+            </div>
             <div class="content col-lg-12 col-md-12" style="padding:0px;">
                 <table class="table table-striped tableNormalStyle" id="ebom_table">
                 </table>
@@ -27,13 +32,13 @@
         var $table = $("#ebom_table");
         var column = [];
         $.ajax({
-            url: "title",
+            url: "../../../change/data/ebom/title?projectId=" + projectId,
             type: "GET",
             success: function (result) {
                 var column = [];
                 var data = result.data;
-                var keys = [];
-                var values;
+                // var keys = [];
+                // var values;
                 for (var key in data) {
                     if (data.hasOwnProperty(key)) {
                         var json = {
@@ -48,9 +53,11 @@
                     }
                 }
                 $table.bootstrapTable({
-                    url: "change/data/ebom",
+                    url: "../../../change/data/ebom" ,
+                    method: 'GET',
                     height: $(window.parent.document).find("#wrapper").height() - 252,
                     width: $(window).width(),
+                    formId: "ebomChangeData",
                     showColumns: false,
                     pagination: false,
                     clickToSelect: false,// 单击某一行的时候选中某一条记录
