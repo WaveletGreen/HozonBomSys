@@ -130,4 +130,8 @@ public class HzCmcrDetailChange {
      * 颜色代码
      */
     private String colorCode;
+    /**
+     *变更主表ID
+     */
+    private Integer cmcrCgChangeId;
 }

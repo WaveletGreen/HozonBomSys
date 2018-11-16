@@ -134,4 +134,8 @@ public class HzCmcrChange {
      * 序列名称
      */
     private String seqName;
+    /**
+     * 变更状态，0为审核中，1为生效
+     */
+    private Integer cmcrChangeStatus;
 }

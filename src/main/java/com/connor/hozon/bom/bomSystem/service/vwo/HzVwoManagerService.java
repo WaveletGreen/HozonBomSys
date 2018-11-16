@@ -537,6 +537,8 @@ public class HzVwoManagerService implements IHzVWOManagerService {
                     hzCmcrChange.setCmcrSrcPuid(hzCmcrChangeAfterQuery.getCmcrSrcPuid());
                     hzCmcrChange.setCmcrSrcMainCfg(hzCmcrChangeAfterQuery.getCmcrSrcMainCfg());
                     hzCmcrChange.setCmcrCgVwoId(changeFromId);
+                    //变更状态
+                    hzCmcrChange.setCmcrChangeStatus(1);
                     hzCmcrChangesAfter.add(hzCmcrChange);
                 }
             }
@@ -613,7 +615,8 @@ public class HzVwoManagerService implements IHzVWOManagerService {
             hzCmcrChangeAfter.setCmcrSrcCodeOfColorMod(hzCfg0ModelColor.getpCodeOfColorfulModel());
             //颜色车型描述
             hzCmcrChangeAfter.setCmcrSrcDescOfColorMod(hzCfg0ModelColor.getpDescOfColorfulModel());
-
+            //变更状态
+            hzCmcrChangeAfter.setCmcrChangeStatus(0);
             hzCmcrChangesAfter.add(hzCmcrChangeAfter);
         }
         //根据源从数据生成变更后从数据
@@ -1900,10 +1903,11 @@ public class HzVwoManagerService implements IHzVWOManagerService {
         //查询变更前主数据（vwo号小于变更后的vwo号）
         hzCmcrChangeListBefor = hzCmcrChangeDao.doQueryCmcrChangeBefor(vwoId);
         if (hzCmcrChangeListBefor == null || hzCmcrChangeListBefor.size() == 0) {
-            //查询变更前主数据
-            hzCmcrChangeListBefor = hzCmcrChangeDao.doQueryCmcrChangeBeforFirst(vwoId);
-            //查询变更后主数据
-            hzCmcrChangeListAfter = hzCmcrChangeDao.doQueryCmcrChangeAfterFirst(vwoId);
+//            //查询变更前主数据
+//            hzCmcrChangeListBefor = hzCmcrChangeDao.doQueryCmcrChangeBeforFirst(vwoId);
+//            //查询变更后主数据
+//            hzCmcrChangeListAfter = hzCmcrChangeDao.doQueryCmcrChangeAfterFirst(vwoId);
+            return;
         } else {
             //查询变更后主数据
             hzCmcrChangeListAfter = hzCmcrChangeDao.doQueryCmcrChangeAfter(vwoId);

@@ -58,6 +58,8 @@
         <result column="CMCR_DETAIL_CG_REVERSE5" jdbcType="VARCHAR" property="cmcrDetailCgReverse5"/>
         <!--保留字段-->
         <result column="CMCR_DETAIL_CG_REVERSE6" jdbcType="VARCHAR" property="cmcrDetailCgReverse6"/>
+        <!--变更主表ID-->
+        <result column="CMCR_CG_CHANGE_ID" jdbcType="DECIMAL" property="cmcrCgChangeId"/>
     </resultMap>
     <resultMap extends="BaseResultMap" id="VWO_Result_map" type="sql.pojo.cfg.modelColor.HzCmcrDetailChange">
         <result column="colorCode" jdbcType="VARCHAR" property="colorCode"/>
@@ -87,7 +89,8 @@
         CMCR_DETAIL_CG_REVERSE3,
         CMCR_DETAIL_CG_REVERSE4,
         CMCR_DETAIL_CG_REVERSE5,
-        CMCR_DETAIL_CG_REVERSE6
+        CMCR_DETAIL_CG_REVERSE6,
+        CMCR_CG_CHANGE_ID
   </sql>
     <sql id="Base_Column_List2">
         CMCR_DETAIL_CG_ID,
@@ -115,6 +118,7 @@
         CMCR_DETAIL_CG_REVERSE4,
         CMCR_DETAIL_CG_REVERSE5,
         CMCR_DETAIL_CG_REVERSE6,
+        CMCR_CG_CHANGE_ID,
         CMCR_DETAIL_CG_CREATE_DATE,
         CMCR_DETAIL_CG_UPDATE_DATE
   </sql>
@@ -151,7 +155,7 @@
         #{cmcrDetailCgUpdater,jdbcType=VARCHAR}, #{cmcrDetailCgTitle,jdbcType=VARCHAR},
         #{cmcrDetailCgIsColorful,jdbcType=INTEGER}, #{cmcrDetailCgReverse3,jdbcType=VARCHAR},
         #{cmcrDetailCgReverse4,jdbcType=VARCHAR}, #{cmcrDetailCgReverse5,jdbcType=VARCHAR},
-        #{cmcrDetailCgReverse6,jdbcType=VARCHAR}
+        #{cmcrDetailCgReverse6,jdbcType=VARCHAR},#{cmcrCgChangeId,jdbcType=DECIMAL}
         )
     </insert>
     <!--批量插入-->
@@ -174,7 +178,7 @@
                 #{hzCmcrDetailChange.cmcrDetailCgUpdater,jdbcType=VARCHAR}, #{hzCmcrDetailChange.cmcrDetailCgTitle,jdbcType=VARCHAR},
                 #{hzCmcrDetailChange.cmcrDetailCgIsColorful,jdbcType=INTEGER}, #{hzCmcrDetailChange.cmcrDetailCgReverse3,jdbcType=VARCHAR},
                 #{hzCmcrDetailChange.cmcrDetailCgReverse4,jdbcType=VARCHAR}, #{hzCmcrDetailChange.cmcrDetailCgReverse5,jdbcType=VARCHAR},
-                #{hzCmcrDetailChange.cmcrDetailCgReverse6,jdbcType=VARCHAR}
+                #{hzCmcrDetailChange.cmcrDetailCgReverse6,jdbcType=VARCHAR},#{cmcrCgChangeId,jdbcType=DECIMAL}
             from
                 dual
         </foreach>
@@ -259,6 +263,9 @@
             <if test="cmcrDetailCgReverse6 != null">
                 CMCR_DETAIL_CG_REVERSE6,
             </if>
+            <if test="cmcrCgChangeId != null">
+                CMCR_CG_CHANGE_ID,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="cmcrDetailCgId != null">
@@ -335,6 +342,9 @@
             </if>
             <if test="cmcrDetailCgReverse6 != null">
                 #{cmcrDetailCgReverse6,jdbcType=VARCHAR},
+            </if>
+            <if test="CMCR_CG_CHANGE_ID != null">
+                #{cmcrCgChangeId,jdbcType=DECIMAL},
             </if>
         </trim>
     </insert>
@@ -415,6 +425,9 @@
             <if test="cmcrDetailCgReverse6 != null">
                 CMCR_DETAIL_CG_REVERSE6 = #{cmcrDetailCgReverse6,jdbcType=VARCHAR},
             </if>
+            <if test="cmcrCgChangeId != null">
+                CMCR_CG_CHANGE_ID = #{cmcrCgChangeId,jdbcType=DECIMAL},
+            </if>
         </set>
         where CMCR_DETAIL_CG_ID = #{cmcrDetailCgId,jdbcType=DECIMAL}
     </update>
@@ -443,8 +456,9 @@
       CMCR_DETAIL_CG_IS_COLORFUL = #{cmcrDetailCgIsColorful,jdbcType=INTEGER},
       CMCR_DETAIL_CG_REVERSE3 = #{cmcrDetailCgReverse3,jdbcType=VARCHAR},
       CMCR_DETAIL_CG_REVERSE4 = #{cmcrDetailCgReverse4,jdbcType=VARCHAR},
-      CMCR_DETAIL_CG_REVERSE5 = #{cmcrDetailCgReverse5,jdbcType=VARCHAR}
-      CMCR_DETAIL_CG_REVERSE6 = #{cmcrDetailCgReverse6,jdbcType=VARCHAR}
+      CMCR_DETAIL_CG_REVERSE5 = #{cmcrDetailCgReverse5,jdbcType=VARCHAR},
+      CMCR_DETAIL_CG_REVERSE6 = #{cmcrDetailCgReverse6,jdbcType=VARCHAR},
+      CMCR_CG_CHANGE_ID = #{cmcrCgChangeId,jdbcType=DECIMAL}
     where CMCR_DETAIL_CG_ID = #{cmcrDetailCgId,jdbcType=DECIMAL}
   </update>
 
