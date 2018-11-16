@@ -27,7 +27,7 @@
         var $table = $("#ebom_table");
         var column = [];
         $.ajax({
-            url: "",
+            url: "title",
             type: "GET",
             success: function (result) {
                 var column = [];
@@ -48,7 +48,7 @@
                     }
                 }
                 $table.bootstrapTable({
-                    url: "",
+                    url: "change/data/ebom",
                     height: $(window.parent.document).find("#wrapper").height() - 252,
                     width: $(window).width(),
                     showColumns: false,

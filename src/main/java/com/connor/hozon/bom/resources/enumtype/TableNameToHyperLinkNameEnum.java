@@ -10,7 +10,7 @@ public enum TableNameToHyperLinkNameEnum {
     /**
      * EBOM
      */
-    HZ_EBOM("HZ_EBOM_REOCRD_AFTER_CHANGE","EBOM设变数据详情"),//EBOM
+    HZ_EBOM("HZ_EBOM_REOCRD_AFTER_CHANGE","EBOM管理"),//EBOM
 
     ;
 
