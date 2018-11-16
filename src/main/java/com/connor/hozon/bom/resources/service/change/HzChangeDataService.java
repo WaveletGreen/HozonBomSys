@@ -20,7 +20,6 @@ public interface HzChangeDataService {
      * @param query
      * @return
      */
-    @Deprecated
     List<HzChangeDataRespDTO> getChangeDataHyperRecord(HzChangeDataQuery query);
 
     /**

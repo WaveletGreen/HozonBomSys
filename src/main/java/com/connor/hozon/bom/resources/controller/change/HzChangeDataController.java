@@ -94,11 +94,22 @@ public class HzChangeDataController extends BaseController {
         toJSONResponse(Result.build(tableTitle), response);
     }
 
+    @RequestMapping(value = "order/hyper",method = RequestMethod.GET)
+    public void getChangeOrderData(HzChangeDataQuery query,HttpServletResponse response){
+        List<HzChangeDataRespDTO> respDTOS = hzChangeDataService.getChangeDataHyperRecord(query);
+        if(ListUtil.isNotEmpty(respDTOS)){
+            toJSONResponse(respDTOS,response);
+            return;
+        }
+        toJSONResponse(null,response);
+    }
+
 
     @RequestMapping(value = "ebom/page")
     public String ebomDataTOPage(Model model,String projectId,Long orderId){
         return "change/ChangeOrder/changeEbomTable";
     }
+
     @RequestMapping(value = "ebom",method = RequestMethod.GET)
     @ResponseBody
     public List<Map<String, Object>> getChangeDataDetail(HzChangeDataQuery query){
