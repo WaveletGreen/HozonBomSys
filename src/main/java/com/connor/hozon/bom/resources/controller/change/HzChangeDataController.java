@@ -11,6 +11,7 @@ import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.resources.util.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -89,14 +90,20 @@ public class HzChangeDataController extends BaseController {
         tableTitle.put("colorPart","是否颜色件");
 
         //获取该项目下的所有车型模型
-        tableTitle.putAll(hzSingleVehiclesServices.singleVehDosageTitle(projectId));
+        tableTitle.putAll(hzSingleVehiclesServices.singleVehDosageTitle("1c128c60-84a2-4076-9b1c-f7093e56e4df"));
         toJSONResponse(Result.build(tableTitle), response);
     }
 
 
-    @RequestMapping(value = "detail",method = RequestMethod.GET)
+    @RequestMapping(value = "ebom/page")
+    public String ebomDataTOPage(Model model,String projectId,Long orderId){
+        return "change/ChangeOrder/changeEbomTable";
+    }
+    @RequestMapping(value = "ebom",method = RequestMethod.GET)
     @ResponseBody
     public List<Map<String, Object>> getChangeDataDetail(HzChangeDataQuery query){
+        query.setOrderId(1L);
+        query.setProjectId("1c128c60-84a2-4076-9b1c-f7093e56e4df");
         List<HzEbomRespDTO> list = hzChangeDataService.getChangeDataRecordForEBOM(query);
         if(ListUtil.isNotEmpty(list)){
             List<Map<String, Object>> _list = new ArrayList<>();
