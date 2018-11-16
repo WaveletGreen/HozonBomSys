@@ -1660,7 +1660,7 @@ public class HzEbomServiceImpl implements HzEbomService {
                 }
 
                 if (ListUtil.isNotEmpty(willBeDeletedPuidsForPbom)) {
-                    hzPbomRecordDAO.deleteList(pBomBuffer.toString());
+                    hzPbomRecordDAO.deleteByPuids(pBomBuffer.toString());
                 }
 
             }
@@ -1897,12 +1897,6 @@ public class HzEbomServiceImpl implements HzEbomService {
             respDTO.setErrMsg("请选择变更表单！");
             return respDTO;
         }
-        if(null == reqDTO.getAuditorId()){
-            respDTO.setErrCode(WriteResultRespDTO.FAILED_CODE);
-            respDTO.setErrMsg("请选择审核人员！");
-            return respDTO;
-        }
-
         try {
             //获取申请人信息
             User user = UserInfo.getUser();

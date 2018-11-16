@@ -24,7 +24,7 @@ public class HzChangeDataDetailQuery {
     /**
      * 状态标志位（1 已生效 0 删除  2草稿状态  3废除状态 4删除状态 5草稿状态->审核中   6删除状态->审核中）
      */
-    private Integer state;
+    private Integer status;
 
     /**
      * 是否存在版本
@@ -40,4 +40,14 @@ public class HzChangeDataDetailQuery {
      * 变更表单id
      */
     private Long orderId;
+
+    /**
+     * 版本号
+     */
+    private String revisionNo;
+
+    /**
+     * 单条数据的puid
+     */
+    private String puid;
 }

@@ -308,15 +308,30 @@ public class HzEbomRecordDAOImpl extends BaseSQLUtil implements HzEbomRecordDAO 
         Map<String,Object> map = new HashMap<>();
         map.put("puids", query.getPuids());
         map.put("projectId",query.getProjectId());
-        if(!query.getRevision()){
-            map.put("revision",null);
+        if(null!=query.getRevision()){
+            map.put("revision",query.getRevision()?"":null);
         }else {
-            map.put("revision","");
+            map.put("revision",null);
         }
-        map.put("state",query.getState());
+        map.put("status",query.getStatus());
         map.put("tableName",query.getTableName());
         map.put("orderId",query.getOrderId());
         return super.findForList("HzEbomRecordDAOImpl_getEbomRecordsByPuids",map);
+    }
+
+    @Override
+    public HzEPLManageRecord getEBomRecordByPuidAndRevision(HzChangeDataDetailQuery query) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("puids", query.getPuids());
+        map.put("projectId",query.getProjectId());
+        if(null != query.getRevision()){
+            map.put("revision",query.getRevision()?null:query.getRevisionNo());
+        }else {
+            map.put("revision",null);
+        }
+        map.put("status",query.getStatus());
+        map.put("tableName",query.getTableName());
+        return (HzEPLManageRecord)super.findForObject("HzEbomRecordDAOImpl_getEBomRecordByPuidAndRevision",map);
     }
 
     @Override

@@ -47,7 +47,7 @@ public class HzPbomController extends BaseController {
 
     @RequestMapping(value = "manage/title", method = RequestMethod.GET)
     public void getPbomLineTitle(String projectId,HttpServletResponse response) {
-        //LinkedHashMap<String, String> tableTitle = new LinkedHashMap<>();
+        LinkedHashMap<String, String> tableTitle = new LinkedHashMap<>();
         tableTitle.put("No", "序号");
         tableTitle.put("lineId", "零件号");
         tableTitle.put("pBomLinePartName", "名称");
@@ -71,6 +71,7 @@ public class HzPbomController extends BaseController {
         tableTitle.put("station", "工位");
         //获取该项目下的所有车型模型
         tableTitle.putAll(hzSingleVehiclesServices.singleVehDosageTitle(projectId));
+        this.tableTitle = tableTitle;
         toJSONResponse(Result.build(tableTitle), response);
     }
 
@@ -412,7 +413,7 @@ public class HzPbomController extends BaseController {
      */
     @RequestMapping(value = "data/change",method = RequestMethod.POST)
     public void mbomDataToChangeOrder(@RequestBody AddDataToChangeOrderReqDTO reqDTO, HttpServletResponse response){
-        WriteResultRespDTO respDTO = new WriteResultRespDTO();
+        WriteResultRespDTO respDTO = hzPbomService.dataToChangeOrder(reqDTO);
         toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO), respDTO.getErrMsg()), response);
     }
 
