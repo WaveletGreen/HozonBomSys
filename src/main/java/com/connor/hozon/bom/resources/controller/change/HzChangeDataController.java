@@ -113,8 +113,8 @@ public class HzChangeDataController extends BaseController {
     @RequestMapping(value = "ebom/data",method = RequestMethod.GET)
     @ResponseBody
     public Map<String, Object> getChangeDataDetail(HzChangeDataQuery query){
-        query.setOrderId(1L);
-        query.setProjectId("1c128c60-84a2-4076-9b1c-f7093e56e4df");
+//        query.setOrderId(1L);
+//        query.setProjectId("1c128c60-84a2-4076-9b1c-f7093e56e4df");
         List<HzEbomRespDTO> list = hzChangeDataService.getChangeDataRecordForEBOM(query);
         Map<String, Object> ret = new HashMap<>();
         if(ListUtil.isNotEmpty(list)){
